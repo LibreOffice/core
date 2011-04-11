@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.1//EN" "http://www.netbeans.org/dtds/filesystem-1_1.dtd">
+<filesystem>
+    <folder name="Templates">
+        <attr name="SystemFileSystem.localizingBundle" stringvalue="org.openoffice.netbeans.modules.office.resources.Bundle"/>
+
+        <folder name="OfficeScripting">
+            <attr name="SystemFileSystem.localizingBundle" stringvalue="org.openoffice.netbeans.modules.office.resources.Bundle"/>
+            <folder name="Parcel">
+                <attr boolvalue="true" name="template"/>
+                <attr name="SystemFileSystem.localizingBundle" stringvalue="org.openoffice.netbeans.modules.office.resources.Bundle"/>
+                <attr name="SystemFileSystem.icon" urlvalue="nbresloc:/org/openoffice/netbeans/modules/office/resources/OfficeIcon.gif"/>
+                <attr name="templateWizardURL" urlvalue="nbresloc:/org/openoffice/netbeans/modules/office/resources/EmptyParcel.html"/>
+                <attr name="templateWizardIterator" newvalue="org.openoffice.netbeans.modules.office.wizard.ParcelContentsIterator"/>
+                <folder name="Contents">
+                    <file name="parcel-descriptor.xml" url="templates/EmptyParcelDescriptor.xml_"/>
+                    <!-- file name="Empty.java" url="templates/Empty.java_"/ -->
+                </folder>
+            </folder>
+            <folder name="EmptyScript">
+                <attr name="SystemFileSystem.localizingBundle" stringvalue="org.openoffice.netbeans.modules.office.resources.Bundle"/>
+                <file name="Empty.java" url="templates/Empty.java_">
+                    <attr name="template" boolvalue="true"/>
+                    <attr name="SystemFileSystem.localizingBundle" stringvalue="org.openoffice.netbeans.modules.office.resources.Bundle"/>
+                    <attr name="templateWizardIterator" newvalue="org.openoffice.netbeans.modules.office.wizard.JavaScriptIterator"/>
+                </file>
+                <file name="Empty.bsh" url="templates/Empty.bsh_">
+                    <attr name="template" boolvalue="true"/>
+                    <attr name="SystemFileSystem.localizingBundle" stringvalue="org.openoffice.netbeans.modules.office.resources.Bundle"/>
+                </file>
+            </folder>
+        </folder>
+        <attr boolvalue="true" name="Ant/OfficeScripting"/>
+        <attr boolvalue="true" name="OfficeScripting/Other"/>
+
+    <!-- OpenOfficeDoc FileSystem BEGIN: -->
+        <!-- Uncomment to enable writable mounting of Office Documents
+        <folder name="Mount">
+          <attr name="org-netbeans-core-ExLocalFileSystem.settings/org-openoffice-netbeans-modules-office-resources-OpenOfficeDocFileSystem.settings"
+              boolvalue="true"/>
+          <attr name="org-openoffice-netbeans-modules-office-resources-OpenOfficeDocFileSystem.settings/VCS"
+              boolvalue="true"/>
+
+          <file name="org-openoffice-netbeans-modules-office-resources-OpenOfficeDocFileSystem.settings"
+            url="OpenOfficeDocFileSystem.settings">
+              <attr name="template"
+                boolvalue="true"/>
+            <attr name="SystemFileSystem.localizingBundle"
+                stringvalue="org.openoffice.netbeans.modules.office.resources.Bundle"/>
+            <attr name="SystemFileSystem.icon"
+                urlvalue="nbresloc:/org/openoffice/netbeans/modules/office/resources/OpenOfficeDocFileSystemIcon.png"/>
+            <attr name="templateWizardIterator"
+                methodvalue="org.netbeans.core.ui.MountNode.iterator"/>
+            <attr name="templateWizardURL"
+                urlvalue="nbresloc:/org/openoffice/netbeans/modules/office/resources/OpenOfficeDocFileSystem.html"/>
+          </file>
+           </folder>
+        -->
+        <!-- OpenOfficeDoc FileSystem END: -->
+    </folder>
+
+    <folder name="Services">
+        <folder name="MIMEResolver">
+          <file name="org-netbeans-modules-office-mime-resolver.xml" url="mime-resolver.xml">
+            <attr name="SystemFileSystem.localizingBundle" stringvalue="org.openoffice.netbeans.modules.office.resources.Bundle"/>
+            <attr name="SystemFileSystem.icon" urlvalue="nbresloc:/org/openoffice/netbeans/modules/office/resources/OfficeIcon.gif"/>
+          </file>
+        </folder>
+        <file name="org-openoffice-netbeans-modules-office-resources-OfficeSettings.settings" url="OfficeSettings.settings">
+            <attr name="SystemFileSystem.localizingBundle" stringvalue="org.openoffice.netbeans.modules.office.resources.Bundle"/>
+            <attr name="SystemFileSystem.icon" urlvalue="nbresloc:/org/openoffice/netbeans/modules/office/resources/OfficeIcon.gif"/>
+        </file>
+    </folder>
+
+    <folder name="Menu">
+        <folder name="Help">
+            <attr name="submit-feedback-link.url/office-scripting.url" boolvalue="true"/>
+            <file name="office-scripting.url" url="office-scripting.url">
+                <attr name="SystemFileSystem.localizingBundle" stringvalue="org.openoffice.netbeans.modules.office.resources.Bundle"/>
+                <attr name="SystemFileSystem.icon" urlvalue="nbresloc:/org/openoffice/netbeans/modules/office/resources/webLink.gif"/>
+            </file>
+        </folder>
+    </folder>
+
+    <folder name="UI">
+        <folder name="Services">
+            <folder name="IDEConfiguration">
+                <folder name="ServerAndExternalToolSettings">
+                    <file name="org-openoffice-netbeans-modules-office-resources-OfficeSettings.shadow">
+                      <attr name="originalFile" stringvalue="Services/org-openoffice-netbeans-modules-office-resources-OfficeSettings.settings"/>
+                    </file>
+                </folder>
+            </folder>
+        </folder>
+    </folder>
+
+    <attr boolvalue="true" name="Templates/Services"/>
+</filesystem>

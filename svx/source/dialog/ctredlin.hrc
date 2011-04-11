@@ -1,0 +1,75 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include <svx/svxids.hrc> // ->SID_REDLIN_FILTER_PAGE
+                      // ->SID_REDLIN_VIEW_PAGE
+
+#define TP_FILTER       11
+#define TP_VIEW         12
+
+#define LB_DATE         1
+#define DF_DATE         2
+#define TF_DATE         3
+#define LB_AUTOR        4
+#define ED_RANGE        5
+#define IB_CLOCK        6
+#define BTN_REF         7
+#define CB_DATE         8
+#define CB_AUTOR        9
+#define CB_RANGE        10
+#define FT_DATE2        12
+#define DF_DATE2        13
+#define TF_DATE2        14
+#define IB_CLOCK2       15
+#define STR_FILTER      16
+#define STR_ACTION      17
+#define LB_ACTION       18
+#define CB_COMMENT      19
+#define ED_COMMENT      20
+
+#define HG_VIEW         1
+#define DG_VIEW         2
+#define PB_ACCEPT       3
+#define PB_ACCEPTALL    4
+#define PB_REJECT       5
+#define PB_REJECTALL    6
+#define PB_UNDO         7
+#define STR_VIEW        8
+
+#define STR_TITLE1      1
+#define STR_TITLE2      2
+#define STR_TITLE3      3
+#define STR_TITLE4      4
+#define STR_TITLE5      5
+//IAccessibility2 Implementation 2009-----
+#define STR_DATE_COMBOX 6
+#define STR_DATE_SPIN   7
+#define STR_DATE_SPIN1  8
+#define STR_DATE_TIME_SPIN 9
+#define STR_DATE_TIME_SPIN1 10
+#define STR_TREE            11
+//-----IAccessibility2 Implementation 2009

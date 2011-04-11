@@ -1,0 +1,337 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "validate.hrc"
+
+TabDialog TAB_DLG_VALIDATION
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 289 , 176 ) ;
+    Moveable = TRUE ;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        Size = MAP_APPFONT ( 260 , 135 ) ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = TP_VALIDATION_VALUES ;
+                PageResID = TP_VALIDATION_VALUES ;
+                Text [ en-US ] = "Criteria";
+            };
+            PageItem
+            {
+                Identifier = TP_VALIDATION_INPUTHELP ;
+                PageResID = TP_VALIDATION_INPUTHELP ;
+                Text [ en-US ] = "Input Help" ;
+            };
+            PageItem
+            {
+                Identifier = TP_VALIDATION_ERROR ;
+                PageResID = TP_VALIDATION_ERROR ;
+                Text [ en-US ] = "Error Alert" ;
+            };
+        };
+    };
+    Text [ en-US ] = "Validity" ;
+};
+
+#define OFFSET_X    30
+
+TabPage TP_VALIDATION_VALUES
+{
+    HelpID = "sc:TabPage:TP_VALIDATION_VALUES";
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Text [ en-US ] = "Values" ;
+    FixedText FT_ALLOW
+    {
+        Pos = MAP_APPFONT ( 6 , 16 ) ;
+        Size = MAP_APPFONT ( 70 - OFFSET_X , 8 ) ;
+        Text [ en-US ] = "~Allow" ;
+    };
+    ListBox LB_ALLOW
+    {
+        HelpID = "sc:ListBox:TP_VALIDATION_VALUES:LB_ALLOW";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 80 - OFFSET_X , 14 ) ;
+        Size = MAP_APPFONT ( 90 , 80 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "All values" ; SC_VALIDDLG_ALLOW_ANY ; > ;
+            < "Whole Numbers" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
+            < "Decimal" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
+            < "Date" ; SC_VALIDDLG_ALLOW_DATE ; > ;
+            < "Time" ; SC_VALIDDLG_ALLOW_TIME ; > ;
+            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
+            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
+            < "Text length" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
+        };
+    };
+    FixedText FT_VALUE
+    {
+        Pos = MAP_APPFONT ( 6 , 58 ) ;
+        Size = MAP_APPFONT ( 70 - OFFSET_X , 8 ) ;
+        Text [ en-US ] = "~Data" ;
+    };
+    ListBox LB_VALUE
+    {
+        HelpID = "sc:ListBox:TP_VALIDATION_VALUES:LB_VALUE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 80 - OFFSET_X , 56 ) ;
+        Size = MAP_APPFONT ( 90 , 90 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+         // Reihenfolge entspricht enum ScConditionMode
+        StringList [ en-US ] =
+        {
+            < "equal" ; SC_VALIDDLG_DATA_EQUAL ; > ;
+            < "less than" ; SC_VALIDDLG_DATA_LESS ; > ;
+            < "greater than" ; SC_VALIDDLG_DATA_GREATER ; > ;
+            < "less than or equal" ; SC_VALIDDLG_DATA_EQLESS ; > ;
+            < "greater than or equal to" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
+            < "not equal" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
+            < "between" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
+            < "not between" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
+        };
+    };
+    FixedText FT_MIN
+    {
+        Pos = MAP_APPFONT ( 6 , 76 ) ;
+        Size = MAP_APPFONT ( 70 - OFFSET_X , 8 ) ;
+        Text [ en-US ] = "~Minimum" ;
+    };
+    Edit EDT_MIN
+    {
+        HelpID = "sc:Edit:TP_VALIDATION_VALUES:EDT_MIN";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 80 - OFFSET_X , 74 ) ;
+        Size = MAP_APPFONT ( 90 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    MultiLineEdit EDT_LIST
+    {
+        HelpID = "sc:MultiLineEdit:TP_VALIDATION_VALUES:EDT_LIST";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 80 - OFFSET_X , 74 ) ;
+        Size = MAP_APPFONT ( 174 + OFFSET_X , 105 ) ;
+        VScroll = TRUE ;
+        IgnoreTab = TRUE ;
+    };
+    FixedText FT_MAX
+    {
+        Pos = MAP_APPFONT ( 6 , 92 ) ;
+        Size = MAP_APPFONT ( 70 - OFFSET_X , 8 ) ;
+        Text [ en-US ] = "Ma~ximum" ;
+    };
+    Edit EDT_MAX
+    {
+        HelpID = "sc:Edit:TP_VALIDATION_VALUES:EDT_MAX";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 80 - OFFSET_X , 90 ) ;
+        Size = MAP_APPFONT ( 90 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    CheckBox TSB_ALLOW_BLANKS
+    {
+        Pos = MAP_APPFONT ( 80 - OFFSET_X , 30 ) ;
+        Size = MAP_APPFONT ( 174 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Allow ~blank cells" ;
+    };
+    CheckBox CB_SHOWLIST
+    {
+        Pos = MAP_APPFONT ( 80 - OFFSET_X , 44 ) ;
+        Size = MAP_APPFONT ( 174 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Show selection ~list" ;
+    };
+    CheckBox CB_SORTLIST
+    {
+        Pos = MAP_APPFONT ( 90 - OFFSET_X , 58 ) ;
+        Size = MAP_APPFONT ( 164 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Sor~t entries ascending" ;
+    };
+    FixedText FT_SOURCEHINT
+    {
+        Pos = MAP_APPFONT ( 80 , 90 ) ;
+        Size = MAP_APPFONT ( 174 , 64 ) ;
+        WordBreak = TRUE ;
+        Text [ en-US ] = "A valid source can only consist of a contiguous selection of rows and columns, or a formula that results in an area or array.";
+    };
+    ImageButton RB_VALIDITY_REF
+    {
+        HelpID = "sc:ImageButton:TP_VALIDATION_VALUES:RB_VALIDITY_REF";
+        Pos = MAP_APPFONT ( 142 , 73 ) ;
+        Size = MAP_APPFONT ( 13 , 14 ) ;
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Shrink" ;
+    };
+};
+
+TabPage TP_VALIDATION_INPUTHELP
+{
+    HelpID = "sc:TabPage:TP_VALIDATION_INPUTHELP";
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Text = "Eingabehilfe" ;
+    TriStateBox TSB_HELP
+    {
+        HelpID = "sc:TriStateBox:TP_VALIDATION_INPUTHELP:TSB_HELP";
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 248 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Show input help when cell is selected" ;
+    };
+    FixedLine FL_CONTENT
+    {
+        Pos = MAP_APPFONT ( 6 , 22 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Contents" ;
+    };
+    FixedText FT_TITLE
+    {
+        Pos = MAP_APPFONT ( 12 , 35 ) ;
+        Size = MAP_APPFONT ( 64 , 8 ) ;
+        Text [ en-US ] = "~Title" ;
+    };
+    FixedText FT_INPUTHELP
+    {
+        Pos = MAP_APPFONT ( 12 , 53 ) ;
+        Size = MAP_APPFONT ( 64 , 8 ) ;
+        Text [ en-US ] = "~Input help" ;
+    };
+    Edit EDT_TITLE
+    {
+        HelpID = "sc:Edit:TP_VALIDATION_INPUTHELP:EDT_TITLE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 80 , 33 ) ;
+        Size = MAP_APPFONT ( 171 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    MultiLineEdit EDT_INPUTHELP
+    {
+        HelpID = "sc:MultiLineEdit:TP_VALIDATION_INPUTHELP:EDT_INPUTHELP";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 80 , 51 ) ;
+        Size = MAP_APPFONT ( 171 , 128 ) ;
+        TabStop = TRUE ;
+        VScroll = TRUE ;
+        IgnoreTab = TRUE ;
+    };
+};
+
+TabPage TP_VALIDATION_ERROR
+{
+    HelpID = "sc:TabPage:TP_VALIDATION_ERROR";
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    FixedLine FL_CONTENT
+    {
+        Pos = MAP_APPFONT ( 6 , 22 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Contents" ;
+    };
+    TriStateBox TSB_SHOW
+    {
+        HelpID = "sc:TriStateBox:TP_VALIDATION_ERROR:TSB_SHOW";
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 248 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Show error ~message when invalid values are entered" ;
+    };
+    MultiLineEdit EDT_ERROR
+    {
+        HelpID = "sc:MultiLineEdit:TP_VALIDATION_ERROR:EDT_ERROR";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 80 , 69 ) ;
+        Size = MAP_APPFONT ( 171 , 110 ) ;
+        TabStop = TRUE ;
+        VScroll = TRUE ;
+        IgnoreTab = TRUE ;
+    };
+    Edit EDT_TITLE
+    {
+        HelpID = "sc:Edit:TP_VALIDATION_ERROR:EDT_TITLE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 80 , 51 ) ;
+        Size = MAP_APPFONT ( 171 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_ERROR
+    {
+        Pos = MAP_APPFONT ( 12 , 71 ) ;
+        Size = MAP_APPFONT ( 64 , 8 ) ;
+        Text [ en-US ] = "~Error message" ;
+    };
+    FixedText FT_TITLE
+    {
+        Pos = MAP_APPFONT ( 12 , 53 ) ;
+        Size = MAP_APPFONT ( 64 , 8 ) ;
+        Text [ en-US ] = "~Title" ;
+    };
+    FixedText FT_ACTION
+    {
+        Pos = MAP_APPFONT ( 12 , 35 ) ;
+        Size = MAP_APPFONT ( 64 , 8 ) ;
+        Text [ en-US ] = "~Action" ;
+    };
+    ListBox LB_ACTION
+    {
+        HelpID = "sc:ListBox:TP_VALIDATION_ERROR:LB_ACTION";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 80 , 33 ) ;
+        Size = MAP_APPFONT ( 107 , 76 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+         // Reihenfolge entspricht enum ScValidErrorStyle
+        StringList [ en-US ] =
+        {
+            < "Stop" ; Default ; > ;
+            < "Warning" ; Default ; > ;
+            < "Information" ; Default ; > ;
+            < "Macro" ; Default ; > ;
+        };
+    };
+    PushButton BTN_SEARCH
+    {
+        HelpID = "sc:PushButton:TP_VALIDATION_ERROR:BTN_SEARCH";
+        Pos = MAP_APPFONT ( 191 , 32 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Browse..." ;
+    };
+    Text [ en-US ] = "Error Alert" ;
+};

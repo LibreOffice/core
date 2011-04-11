@@ -1,0 +1,27 @@
+#ifndef com_sun_star_chart2_SubIncrement_idl
+#define com_sun_star_chart2_SubIncrement_idl
+
+//=============================================================================
+
+module com {  module sun {  module star {  module chart2 {
+
+//=============================================================================
+
+struct SubIncrement
+{
+    /** should contain nothing for <em>auto</em>, or an integer value
+        for an explicit interval count.
+     */
+    any         IntervalCount;
+
+    /** should contain nothing for <em>auto</em>, or a boolean value
+        for an explicit setting.
+     */
+    any         PostEquidistant;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

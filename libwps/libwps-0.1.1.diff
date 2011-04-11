@@ -1,0 +1,93 @@
+*** misc/libwps-0.1.1/src/lib/WPSListener.h	Thu Nov 29 20:58:57 2007
+--- misc/build/libwps-0.1.1/src/lib/WPSListener.h	Sun Dec  2 20:54:35 2007
+***************
+*** 39,45 ****
+  	virtual ~WPSListener();
+  
+  	bool isUndoOn() { return m_isUndoOn; }
+! 	void setUndoOn(bool isUndoOn) { m_isUndoOn = isUndoOn; }
+  
+  	std::list<WPSPageSpan> &m_pageList;
+  	
+--- 39,45 ----
+  	virtual ~WPSListener();
+  
+  	bool isUndoOn() { return m_isUndoOn; }
+! 	void setUndoOn(bool undoOn) { m_isUndoOn = undoOn; }
+  
+  	std::list<WPSPageSpan> &m_pageList;
+  	
+*** misc/libwps-0.1.1/src/lib/WPSContentListener.cpp	Thu Nov 29 20:58:57 2007
+--- misc/build/libwps-0.1.1/src/lib/WPSContentListener.cpp	Sun Dec  2 21:09:11 2007
+***************
+*** 36,62 ****
+  #define LIBWPS_MAX std::max
+  #endif
+  
+- namespace {
+- 
+- WPXString doubleToString(const double value)
+- {
+-   WPXString tempString;
+-   tempString.sprintf("%.4f", value);
+-   std::string decimalPoint(localeconv()->decimal_point);
+-   if ((decimalPoint.size() == 0) || (decimalPoint == "."))
+-     return tempString;
+-   std::string stringValue(tempString.cstr());
+-   if (!stringValue.empty())
+-   {
+-     std::string::size_type pos;
+-     while ((pos = stringValue.find(decimalPoint)) != std::string::npos)
+-           stringValue.replace(pos,decimalPoint.size(),".");
+-   }
+-   return WPXString(stringValue.c_str());
+- }
+- 
+- } // namespace
+- 
+  _WPSContentParsingState::_WPSContentParsingState() :
+  	m_textAttributeBits(0),
+  	m_fontSize(12.0f/*WP6_DEFAULT_FONT_SIZE*/), // FIXME ME!!!!!!!!!!!!!!!!!!! HELP WP6_DEFAULT_FONT_SIZE
+--- 36,41 ----
+***************
+*** 578,585 ****
+  		_closePageSpan();
+  }
+  
+- const float WPS_DEFAULT_SUPER_SUB_SCRIPT = 58.0f; 
+- 
+  void WPSContentListener::_openSpan()
+  {
+  	if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
+--- 557,562 ----
+***************
+*** 622,639 ****
+  	}
+  
+  	WPXPropertyList propList;
+!  	if (attributeBits & WPS_SUPERSCRIPT_BIT) {
+! 		WPXString sSuperScript("super ");
+! 		sSuperScript.append(doubleToString(WPS_DEFAULT_SUPER_SUB_SCRIPT));
+! 		sSuperScript.append("%");
+! 		propList.insert("style:text-position", sSuperScript);
+! 	}
+!  	else if (attributeBits & WPS_SUBSCRIPT_BIT) {
+! 		WPXString sSubScript("sub ");
+! 		sSubScript.append(doubleToString(WPS_DEFAULT_SUPER_SUB_SCRIPT));
+! 		sSubScript.append("%");
+! 		propList.insert("style:text-position", sSubScript);
+! 	}
+  	if (attributeBits & WPS_ITALICS_BIT)
+  		propList.insert("fo:font-style", "italic");
+  	if (attributeBits & WPS_BOLD_BIT)
+--- 599,608 ----
+  	}
+  
+  	WPXPropertyList propList;
+!  	if (m_ps->m_textAttributeBits & WPS_SUPERSCRIPT_BIT)
+! 		propList.insert("style:text-position", "super 58%");
+!  	else if (m_ps->m_textAttributeBits & WPS_SUBSCRIPT_BIT)
+! 		propList.insert("style:text-position", "sub 58%");
+  	if (attributeBits & WPS_ITALICS_BIT)
+  		propList.insert("fo:font-style", "italic");
+  	if (attributeBits & WPS_BOLD_BIT)

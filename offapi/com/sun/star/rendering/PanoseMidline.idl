@@ -1,0 +1,52 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_rendering_PanoseMidline_idl__
+#define __com_sun_star_rendering_PanoseMidline_idl__
+
+module com { module sun { module star { module rendering {
+
+constants PanoseMidline
+{
+    const byte ANYTHING=0;
+    const byte NO_FIT=1;
+    const byte STANDARD_TRIMMED=2;
+    const byte STANDARD_POINTED=3;
+    const byte STANDARD_SERIFED=4;
+    const byte HIGH_TRIMMER=5;
+    const byte HIGH_POINTED=6;
+    const byte HIGH_SERIFED=7;
+    const byte CONSTANT_TRIMMED=8;
+    const byte CONSTANT_POINTED=9;
+    const byte CONSTANT_SERIFED=10;
+    const byte LOW_TRIMMED=11;
+    const byte LOW_POINTED=12;
+    const byte LOW_SERIFED=13;
+};
+
+}; }; }; };
+
+#endif

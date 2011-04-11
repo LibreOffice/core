@@ -1,0 +1,12 @@
+    <node oor:name="writer_globaldocument_StarOffice_XML_Writer_GlobalDocument" oor:op="replace" >
+        <prop oor:name="DetectService"><value>com.sun.star.text.FormatDetector</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>sxg</value></prop>
+        <prop oor:name="MediaType"><value>application/vnd.sun.xml.writer.global</value></prop>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>writer_globaldocument_StarOffice_XML_Writer_GlobalDocument</value></prop>
+        <prop oor:name="UIName">
+            <value>Writer 6.0 Master Document</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"><value>Writer/Global 6.0</value></prop>
+    </node>

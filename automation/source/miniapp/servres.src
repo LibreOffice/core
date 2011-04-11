@@ -1,0 +1,233 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include "servres.hrc"
+#include "servuid.hxx"
+ModalDialog GROSSER_TEST_DLG
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    HelpID = UID_GROSSER_TEST_DLG ;
+    Pos = MAP_APPFONT ( 14 , 7 ) ;
+    Size = MAP_APPFONT ( 273 , 110 ) ;
+    Text = "Groﬂer Testdialog" ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    CheckBox 1
+    {
+        HelpID = UID_CheckBox ;
+        Pos = MAP_APPFONT ( 9 , 17 ) ;
+        Size = MAP_APPFONT ( 55 , 12 ) ;
+        Text = "CheckBox" ;
+        TabStop = TRUE ;
+    };
+    TriStateBox 1
+    {
+        HelpID = UID_TriStateBox ;
+        Pos = MAP_APPFONT ( 9 , 29 ) ;
+        Size = MAP_APPFONT ( 62 , 12 ) ;
+        Text = "TriStateBox" ;
+        TabStop = TRUE ;
+    };
+    OKButton 1
+    {
+        HelpID = "hid1" ;
+        Pos = MAP_APPFONT ( 132 , 92 ) ;
+        Size = MAP_APPFONT ( 64 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    TimeField 1
+    {
+        Border = TRUE ;
+        HelpID = UID_TimeField ;
+        Pos = MAP_APPFONT ( 9 , 92 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Spin = TRUE ;
+    };
+    MultiLineEdit 1
+    {
+        Border = TRUE ;
+        HelpID = UID_MultiLineEdit ;
+        Pos = MAP_APPFONT ( 172 , 6 ) ;
+        Size = MAP_APPFONT ( 94 , 48 ) ;
+        Text = "MultiLineEdit" ;
+        TabStop = TRUE ;
+        VScroll = TRUE ;
+    };
+    GroupBox 1
+    {
+        Pos = MAP_APPFONT ( 9 , 42 ) ;
+        Size = MAP_APPFONT ( 58 , 44 ) ;
+        Text = "GroupBox" ;
+        Group = TRUE ;
+    };
+    RadioButton 2
+    {
+        HelpID = UID_RadioButton2 ;
+        Pos = MAP_APPFONT ( 16 , 68 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Text = "Radio2" ;
+        TabStop = TRUE ;
+    };
+    RadioButton 1
+    {
+        HelpID = UID_RadioButton1 ;
+        Pos = MAP_APPFONT ( 16 , 54 ) ;
+        Size = MAP_APPFONT ( 42 , 12 ) ;
+        Text = "Radio1" ;
+        TabStop = TRUE ;
+    };
+    MultiListBox 1
+    {
+        Border = TRUE ;
+        HelpID = UID_MultiListBox ;
+        Pos = MAP_APPFONT ( 76 , 6 ) ;
+        Size = MAP_APPFONT ( 86 , 48 ) ;
+        TabStop = TRUE ;
+        StringList =
+        {
+            < "MultiListBox" ; Default ; > ;
+            < "Zeile 2" ; Default ; > ;
+            < "Zeile 3" ; Default ; > ;
+            < "Zeile 4" ; Default ; > ;
+            < "Zeile 5" ; Default ; > ;
+            < "Zeile 6" ; Default ; > ;
+            < "Zeile 7" ; Default ; > ;
+            < "Zeile 8" ; Default ; > ;
+            < "Zeile 9" ; Default ; > ;
+            < "Zeile 10" ; Default ; > ;
+        };
+    };
+    ComboBox 1
+    {
+        HelpID = UID_ComboBox ;
+        Pos = MAP_APPFONT ( 76 , 58 ) ;
+        Size = MAP_APPFONT ( 86 , 55 ) ;
+        Text = "ComboBox" ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        AutoHScroll = TRUE ;
+        StringList =
+        {
+            "ComboBox" ;
+            "Erster" ;
+            "Zweiter" ;
+            "Dritter" ;
+        };
+    };
+    DateBox 1
+    {
+        HelpID = UID_DateBox ;
+        Pos = MAP_APPFONT ( 76 , 72 ) ;
+        Size = MAP_APPFONT ( 86 , 54 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        AutoHScroll = TRUE ;
+        StringList =
+        {
+            "1.1.91" ;
+            "2.2.92" ;
+            "3.3.93" ;
+        };
+    };
+    FixedText 1
+    {
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 19 , 6 ) ;
+        Size = MAP_APPFONT ( 39 , 9 ) ;
+        Text = "FixedText" ;
+        Center = TRUE ;
+    };
+    CancelButton 1
+    {
+        Pos = MAP_APPFONT ( 202 , 92 ) ;
+        Size = MAP_APPFONT ( 64 , 12 ) ;
+        TabStop = TRUE ;
+    };
+};
+Menu MENU_CLIENT
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = IDM_FILE ;
+            HelpID = IDM_FILE_HELP ;
+            Text = "~File" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = IDM_FILE_OPEN_TEST ;
+                        HelpID = IDM_FILE_OPEN_TEST_HELP ;
+                        Text = "~Open Test Window" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = 4 ;
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = IDM_FILE_EXIT ;
+                        HelpID = IDM_FILE_EXIT_HELP ;
+                        Text = "~Beenden" ;
+                        AccelKey = KeyCode
+                        {
+                            Code = KEY_F4 ;
+                            Modifier2 = TRUE ;
+                        };
+                    };
+                };
+            };
+        };
+        MenuItem
+        {
+            Identifier = IDM_TEST ;
+            Text = "~Test" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = IDM_TEST_GROSS ;
+                        Text = "~Groﬂer Testdialog" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = IDM_SYS_DLG ;
+                        Text = "~Sysdialoge" ;
+                    };
+                };
+            };
+        };
+    };
+};
+

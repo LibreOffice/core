@@ -1,0 +1,307 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_beans_XIntrospectionAccess_idl__
+#define __com_sun_star_beans_XIntrospectionAccess_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/beans/Property.idl>
+
+#include <com/sun/star/container/NoSuchElementException.idl>
+
+#include <com/sun/star/reflection/XIdlMethod.idl>
+
+#include <com/sun/star/lang/NoSuchMethodException.idl>
+
+#include <com/sun/star/reflection/XIdlClass.idl>
+
+#include <com/sun/star/beans/IllegalTypeException.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module beans {
+
+//=============================================================================
+
+/** represents the result of an introspection operation done by
+    the inspect method of <type scope="com::sun::star::beans">
+    XIntrospection</type>.
+
+    <p>This interface gives information about an object's
+    properties and methods as detected in the introspection
+    process. It's not possible to access properties or call
+    methods directly using this interface but it provides
+    access to other interfaces to do so.
+    See <member scope="com::sun::star::beans">
+    XIntrospectionAccess::queryAdapter()</member></p>
+
+    <p>The <type>XExactName</type> interface has to be supported
+    in order to implement inaccurate name access for all objects
+    which implement the <type scope="com::sun::star::container">
+    XNameAccess</type> interface or <type>XPropertySet</type>.</p>
+
+    <p>The <type>XMaterialHolder</type> interface has to be
+    supported to give access to the inspected object.</p>
+
+        @see XPropertySet
+        @see com::sun::star::beans::XExactName
+ */
+published interface XIntrospectionAccess: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** returns information about which method concepts described in
+        the <type>MethodConcept</type> constants group are supported
+        by this <type>XIntrospectionAccess</type> implementation.
+
+        <p>The minimum supported concepts should be:</p>
+
+        <ul>
+            <li> <const>MethodConcept::PROPERTY</const>, </li>
+            <li> <const>MethodConcept::LISTENER</const>, </li>
+            <li> <const>MethodConcept::ENUMERATION</const>, </li>
+            <li> <const>MethodConcept::NAMECONTAINER</const></li>
+            <li> <const>MethodConcept::INDEXCONTAINER</const>; </li>
+        </ul>
+
+        @returns
+            zero or more constants of the <type>MethodConcept</type>
+            constants group combined by an arithmetical or-operation.
+     */
+    long getSuppliedMethodConcepts();
+
+    //-------------------------------------------------------------------------
+    /** returns information about which property concepts described in
+        the <type>PropertyConcept</type> constants group are supported
+        by this <type>XIntrospectionAccess</type> implementation.
+
+        <p>The minimum supported concepts should be:</p>
+
+        <ul>
+            <li> <const>PropertyConcept::PROPERTYSET</const>, </li>
+            <li> <const>PropertyConcept::ATTRIBUTES</const> and </li>
+            <li> <const>PropertyConcept::METHODS</const>.  </li>
+        </ul>
+
+        @returns
+            zero or more constants of the <type>PropertyConcept</type>
+            constants group.combined by an arithmetical or-operation.
+     */
+    long getSuppliedPropertyConcepts();
+
+    //-------------------------------------------------------------------------
+    /** returns information about a property if a property with
+        the demanded name exists and if it accords to one of the
+        demanded <type>PropertyConcept</type>s. The information
+        is provided as <type>Property</type> struct.
+
+        @returns
+            A <type>Property</type> struct providing
+            information about the demanded property,
+            if a corresponding property exists.
+
+        @param aName
+            the name of the property.
+
+        @param nPropertyConcepts
+            zero or more constants of the <type>PropertyConcept
+            </type> constants group combined by an arithmetical
+            or-operation.
+
+        @throws NoSuchElementException
+            when a property with the demanded name doesn't exist
+            or if it accords to a wrong <type>PropertyConcept
+            </type>.
+     */
+    com::sun::star::beans::Property getProperty( [in] string aName,
+             [in] long nPropertyConcepts )
+            raises( com::sun::star::container::NoSuchElementException );
+
+    //-------------------------------------------------------------------------
+    /** allows to ask if a property with the demanded name exists
+        and if it accords to one of the demanded <type>
+        PropertyConcept</type>s.
+
+        @returns
+            <TRUE/> if the property exists and accords to one of
+            the demanded <type>PropertyConcept</type>s, otherwise
+            <FALSE/> is returned.
+
+        @param aName
+            the name of the property.
+
+        @param nPropertyConcepts
+            zero or more constants of the <type>PropertyConcept
+            </type> constants group combined by an arithmetical
+            or-operation.
+     */
+    boolean hasProperty( [in] string aName,
+             [in] long nPropertyConcepts );
+
+    //-------------------------------------------------------------------------
+    /** returns a sequence of properties of the introspected object
+
+        @returns
+            all properties of the introspected object which accord
+            to the demanded <type>PropertyConcept</type>s.
+
+        @param nPropertyConcepts
+            zero or more constants of the <type>PropertyConcept
+            </type> constants group combined by an arithmetical
+            or-operation.
+     */
+    sequence<com::sun::star::beans::Property> getProperties(
+                [in] long nPropertyConcepts );
+
+    //-------------------------------------------------------------------------
+    /** returns information about a method if a method with
+        the demanded name exists and if it accords to one of
+        the demanded MethodConcepts. The information is
+        provided as <type scope="com::sun::star::reflection">
+        XIdlMethod</type>.
+
+        @returns
+            A <type scope="com::sun::star::reflection">
+            XIdlMethod</type> providing information about and
+            access to the demanded method if a corresponding
+            method exists.
+
+        @param aName
+            the name of the method.
+
+        @param nMethodConcepts
+            zero or more constants of the <type>MethodConcept
+            </type> constants group combined by an arithmetical
+            or-operation.
+
+        @throws NoSuchElementException
+            when a method with the demanded name doesn't exist
+            or if it accords to a wrong <type>MethodConcept</type>.
+     */
+    com::sun::star::reflection::XIdlMethod getMethod( [in] string aName,
+             [in] long nMethodConcepts )
+            raises( com::sun::star::lang::NoSuchMethodException );
+
+    //-------------------------------------------------------------------------
+    /** allows to ask if a method with the demanded name exists
+        and if it accords to one of the demanded <type>MethodConcept
+        </type>s.
+
+        @returns
+            <TRUE/> if the method exists and accords to one of
+            the demanded <type>MethodConcept</type>s, otherwise
+            <FALSE/> is returned.
+
+        @param aName
+            the name of the method.
+
+        @param nMethodConcepts
+            zero or more constants of the <type>MethodConcept
+            </type> constants group combined by an arithmetical
+            or-operation.
+     */
+    boolean hasMethod( [in] string aName,
+             [in] long nMethodConcepts );
+
+    //-------------------------------------------------------------------------
+    /** returns a sequence of methods of the introspected object.
+
+        @returns
+            all methods of the introspected object which accord
+            to the demanded <type>MethodConcept</type>s.
+
+        @param nMethodConcepts
+            zero or more constants of the <type>MethodConcept
+            </type> constants group combined by an arithmetical
+            or-operation.
+     */
+    sequence<com::sun::star::reflection::XIdlMethod> getMethods(
+            [in] long nMethodConcepts );
+
+    //-------------------------------------------------------------------------
+    /** returns the listener types supported by the introspected
+        object.
+
+        <p>If the introspected object has the methods
+        <code>addFooListener( XFooListener xFoo )</code> and
+        <code>removeFooListener( XFooListener xFoo )</code>
+        the type of XFooListener will be one of the elements
+        in the returned sequence.
+
+        @returns
+            a sequence of the types of listener interfaces
+            which are supported by the introspected object.
+     */
+    sequence<type> getSupportedListeners();
+
+    //-------------------------------------------------------------------------
+    /** creates an adapter that implements an interface with the
+        specified type.
+
+        <p>To access properties, query for the <type>XPropertySet
+        </type> interface. If the <type>XPropertySet</type> can
+        be queried, the <type>XFastPropertySet</type> interface
+        must be supported too.  </p>
+
+        <p>If the introspected object implements a name container,
+        the introspection should return the <type scope=
+        "com::sun::star::container">XNameAccess</type> and <type
+        scope="com::sun::star::container">XNameContainer</type>
+        interfaces.</p>
+
+        <p>If the introspected object implements an index container,
+        the introspection should return the <type scope=
+        "com::sun::star::container">XIndexAccess</type> and <type
+        scope="com::sun::star::container">XIndexContainer</type>
+        interfaces.</p>
+
+        <p>If the introspected object implements an enumeration
+        container, the introspection should return the <type scope=
+        "com::sun::star::container">XEnumerationAccess</type>
+        interface.</p>
+
+        <p>If the introspected object implements the <type scope=
+        "com::sun::star::reflection">XIdlArray</type> interface,
+        the introspection should return this.</p>
+
+        <p>To implement inaccurate name access, at all objects,
+        which implement the <type scope="com::sun::star::container">
+        XNameAccess</type> or <type>XPropertySet</type> interface,
+        the <type>XExactName</type> interface has to be supported.
+        </p>
+
+        @see com::sun::star::beans::XExactName
+     */
+    com::sun::star::uno::XInterface queryAdapter( [in] type aInterfaceType )
+            raises( com::sun::star::beans::IllegalTypeException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

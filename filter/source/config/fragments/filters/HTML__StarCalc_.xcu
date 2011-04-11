@@ -1,0 +1,10 @@
+    <node oor:name="HTML (StarCalc)" oor:op="replace">
+        <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN USEOPTIONS</value></prop>
+        <prop oor:name="UIComponent"><value>com.sun.star.comp.Calc.FilterOptionsDialog</value></prop>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="UserData"><value></value></prop>
+        <prop oor:name="FileFormatVersion"><value>0</value></prop>
+        <prop oor:name="Type"><value>writer_web_HTML</value></prop>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
+    </node>

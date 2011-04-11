@@ -1,0 +1,43 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _DBACCESS_UI_DIRECTSQL_HRC_
+#define _DBACCESS_UI_DIRECTSQL_HRC_
+
+#define FL_SQL           1
+#define FT_SQL           2
+#define ME_SQL           3
+#define PB_EXECUTE       4
+#define FT_HISTORY       5
+#define LB_HISTORY       6
+#define FL_STATUS        7
+#define ME_STATUS        8
+#define FL_BUTTONS       9
+#define PB_HELP         10
+#define PB_CLOSE        11
+
+#endif // _DBACCESS_UI_DIRECTSQL_HRC_

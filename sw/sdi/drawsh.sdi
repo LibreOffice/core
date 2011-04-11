@@ -1,0 +1,477 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+interface TextDraw : TextDrawBase
+[
+    uuid = "626DE480-111A-101D-9757-6E74207A7520"
+]
+{
+    SID_ATTR_LINEEND_STYLE
+    [
+        SlotType = SfxBoolItem ;
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = DisableState ;
+        Export = FALSE;
+    ]
+
+    SID_ATTR_LINE_STYLE
+    [
+        Export = FALSE;
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_LINE_DASH
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_DASH_LIST
+    [
+        StateMethod = GetDrawAttrState ;
+    ]
+
+    SID_LINEEND_LIST
+    [
+        StateMethod = GetDrawAttrState ;
+    ]
+
+    SID_COLOR_TABLE
+    [
+        StateMethod = GetDrawAttrState ;
+    ]
+
+    SID_GRADIENT_LIST
+    [
+        StateMethod = GetDrawAttrState ;
+    ]
+
+    SID_HATCH_LIST
+    [
+        StateMethod = GetDrawAttrState ;
+    ]
+
+    SID_BITMAP_LIST
+    [
+        StateMethod = GetDrawAttrState ;
+    ]
+
+    SID_ATTR_LINE_WIDTH
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        Export = FALSE;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_LINE_COLOR
+    [
+        Export = FALSE;
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_FILL_STYLE
+    [
+        Export = FALSE;
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_FILL_COLOR
+    [
+        Export = FALSE;
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_FILL_GRADIENT
+    [
+        Export = FALSE;
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_FILL_HATCH
+    [
+        Export = FALSE;
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_FILL_BITMAP
+    [
+        Export = FALSE;
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTRIBUTES_LINE
+    [
+        ExecMethod = ExecDrawDlg ;
+        StateMethod = DisableState ;
+    ]
+
+    SID_ATTRIBUTES_AREA
+    [
+        ExecMethod = ExecDrawDlg ;
+        StateMethod = DisableState ;
+    ]
+
+    FN_DRAWTEXT_ATTR_DLG
+    [
+        ExecMethod = ExecDrawDlg ;
+        StateMethod = DisableState ;
+    ]
+
+    FN_FLIP_VERT_GRAFIC
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_FLIP_HORZ_GRAFIC
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_OBJECT_ROTATE
+    [
+        Export = FALSE;
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_BEZIER_EDIT
+    [
+        Export = FALSE;
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FONTWORK
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_OBJECT_HELL
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_OBJECT_HEAVEN
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TOOL_HIERARCHIE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_EXTRUSION_TOOGLE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_TILT_DOWN
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_TILT_UP
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_TILT_LEFT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_TILT_RIGHT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_DEPTH_FLOATER
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_DEPTH_DIALOG
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_DIRECTION_FLOATER
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_LIGHTING_FLOATER
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_SURFACE_FLOATER
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_3D_COLOR
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_DEPTH
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_DIRECTION
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_PROJECTION
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_LIGHTING_DIRECTION
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_LIGHTING_INTENSITY
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_SURFACE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FONTWORK_SHAPE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FONTWORK_SHAPE_TYPE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FONTWORK_ALIGNMENT_FLOATER
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FONTWORK_CHARACTER_SPACING_FLOATER
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FONTWORK_ALIGNMENT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FONTWORK_SAME_LETTER_HEIGHTS
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FONTWORK_CHARACTER_SPACING
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FONTWORK_KERN_CHARACTER_PAIRS
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FONTWORK_CHARACTER_SPACING_DIALOG
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_INSERT_GRAPHIC
+    [
+        StateMethod = StateDisableItems ;
+    ]
+    SID_TWAIN_SELECT
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+    SID_TWAIN_TRANSFER
+    [
+        StateMethod = StateDisableItems ;
+    ]
+}
+
+shell SwDrawShell : SwDrawBaseShell
+{
+        import TextDraw [Automation];
+
+     // no export
+
+    SID_FORMTEXT_STYLE
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+
+    SID_FORMTEXT_ADJUST
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+
+    SID_FORMTEXT_DISTANCE
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+
+    SID_FORMTEXT_START
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FORMTEXT_MIRROR
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+
+    SID_FORMTEXT_HIDEFORM
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FORMTEXT_OUTLINE
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FORMTEXT_SHDWXVAL
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FORMTEXT_SHADOW
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FORMTEXT_SHDWCOLOR
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FORMTEXT_SHDWYVAL
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FORMTEXT_STDFORM
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_FORMAT_FOOTNOTE_DLG // status()
+    [
+        ExecMethod = Execute;
+    ]
+
+    SID_OPEN_XML_FILTERSETTINGS // ole : no, status : ?
+    [
+        ExecMethod = Execute ;
+    ]
+
+    FN_WORDCOUNT_DIALOG
+    [
+        ExecMethod = Execute;
+    ]
+
+       FN_NUMBERING_OUTLINE_DLG   // status(final|play)
+    [
+        ExecMethod = Execute ;
+    ]
+}
+
+

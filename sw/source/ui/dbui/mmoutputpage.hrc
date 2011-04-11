@@ -1,0 +1,103 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _MAILMERGEOUTPUTTYPEPAGE_HRC
+#define _MAILMERGEOUTPUTTYPEPAGE_HRC
+
+#define FI_HEADER                1
+#define FI_OPTIONS               2
+#define RB_SAVESTARTDOC          3
+#define RB_SAVEMERGEDDOC         4
+#define RB_PRINT                 5
+#define RB_SENDMAIL              6
+#define FL_SEPARATOR             7
+#define PB_SAVESTARTDOC          8
+#define RB_SAVEASONE             12
+#define RB_SAVEINDIVIDUAL        13
+
+#define RB_FROM                  15
+#define NF_FROM                  16
+#define FT_TO                    17
+#define NF_TO                    18
+#define PB_SAVENOW               19
+
+#define FT_PRINT                 21
+#define LB_PRINT                 22
+#define PB_PRINTERSETTINGS       23
+#define RB_PRINTALL              24
+#define RB_PRINTCURRENT          25
+#define PB_PRINTNOW              26
+#define ST_SAVESTART             27
+#define ST_SAVEMERGED            28
+#define ST_PRINT                 29
+#define ST_SENDMAIL              30
+
+#define FT_MAILTO                   31
+#define LB_MAILTO                   32
+#define PB_COPYTO                   33
+#define FT_SUBJECT                  34
+#define ED_SUBJECT                  35
+#define FT_SENDAS                   36
+#define LB_SENDAS                   37
+#define PB_SENDAS                   38
+#define RB_SENDALL                  39
+#define PB_SENDDOCUMENTS            40
+
+#define FI_DESCRIPTION              41
+#define FT_CC                       42
+#define ED_CC                       43
+#define FT_BCC                      44
+#define ED_BCC                      45
+#define PB_OK                       47
+#define PB_CANCEL                   48
+#define PB_HELP                     49
+#define FI_NOTE                     50
+#define FT_ATTACHMENT               51
+#define ED_ATTACHMENT               52
+#define ST_DEFAULTATTACHMENT        53
+#define ST_SUBJECTQUERY             54
+#define ST_NOSUBJECT                55
+#define ST_NOATTACHMENTNAME         56
+#define ST_CONFIGUREMAIL            57
+
+#define IM_QUERY                    58
+#define FI_QUERY                    59
+#define ED_TEXT                     60
+
+#define MM_DOCTYPE_OOO              1
+#define MM_DOCTYPE_PDF              2
+#define MM_DOCTYPE_WORD             3
+#define MM_DOCTYPE_HTML             4
+#define MM_DOCTYPE_TEXT             5
+
+
+#define IM_WARNING                  1
+#define FI_WARNING                  2
+#define FT_FILENAME                 3
+#define ED_FILENAME                 4
+
+#endif
+

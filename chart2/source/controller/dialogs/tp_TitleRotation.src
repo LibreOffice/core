@@ -1,0 +1,93 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "HelpIds.hrc"
+#include "TabPages.hrc"
+
+TabPage TP_ALIGNMENT
+{
+    Hide = TRUE ;
+    HelpID = HID_SCH_ALIGNMENT ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Control CTR_DIAL
+    {
+        HelpId = HID_SCH_ALIGNMENT_CTR_DIAL ;
+        Pos = MAP_APPFONT ( 12 , 14  ) ;
+        Size = MAP_APPFONT ( 43 , 43 ) ;
+        Text = "ABCD" ;
+    };
+    TriStateBox BTN_TXTSTACKED
+    {
+        HelpId = HID_SCH_ALIGNMENT_STACKED ;
+        Pos = MAP_APPFONT ( 139 , 14  ) ;
+        Size = MAP_APPFONT ( 116 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Ve~rtically stacked";
+    };
+    FixedText FT_DEGREES
+    {
+        Pos = MAP_APPFONT ( 93 , 32  ) ;
+        Size = MAP_APPFONT ( 162 , 8 ) ;
+        Text [ en-US ] = "~Degrees" ;
+    };
+    NumericField NF_ORIENT
+    {
+        HelpId = HID_SCH_ALIGNMENT_DEGREES ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 61 , 30  ) ;
+        Size = MAP_APPFONT ( 28 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        StrictFormat = TRUE ;
+        SpinSize = 5 ;
+        Minimum = 0 ;
+        Maximum = 359 ;
+    };
+    FixedLine FL_ALIGN
+    {
+        Pos = MAP_APPFONT ( 6 , 3  ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Text orientation" ;
+    };
+    FixedText FT_TEXTDIR
+    {
+        Pos = MAP_APPFONT ( 12 , 65 ) ;
+        Size = MAP_APPFONT ( 64 , 8 ) ;
+        Text [ en-US ] = "Te~xt direction" ;
+    };
+    ListBox LB_TEXTDIR
+    {
+        HelpId = HID_SCH_TEXTDIRECTION_TITLE ;
+        Pos = MAP_APPFONT ( 78 , 63 ) ;
+        Size = MAP_APPFONT ( 170 , 100 ) ;
+        Border = TRUE;
+        TabStop = TRUE;
+        DropDown = TRUE;
+    };
+};

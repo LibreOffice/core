@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="TargetChooser" dlg:left="136" dlg:top="72" dlg:width="201" dlg:height="119" dlg:closeable="true" dlg:moveable="true">
+ <dlg:bulletinboard>
+  <dlg:menulist dlg:id="ListBox" dlg:tab-index="0" dlg:left="80" dlg:top="18" dlg:width="113" dlg:height="14" dlg:spin="true" dlg:linecount="3">
+   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.UNO:SelectionChanged" script:language="UNO"/>
+  </dlg:menulist>
+  <dlg:text dlg:id="ComboLabel" dlg:left="74" dlg:top="7" dlg:width="82" dlg:height="9" dlg:value="Import %FILENAME as"/>
+  <dlg:fixedline dlg:id="FixedLine1" dlg:left="-2" dlg:top="93" dlg:width="204" dlg:height="2"/>
+  <dlg:button dlg:id="HelpButton" dlg:tab-index="1" dlg:left="4" dlg:top="100" dlg:width="50" dlg:height="14" dlg:value="Help" dlg:button-type="help"/>
+  <dlg:button dlg:id="ImportButton" dlg:tab-index="2" dlg:left="93" dlg:top="100" dlg:width="50" dlg:height="14" dlg:default="true" dlg:value="Import" dlg:button-type="ok"/>
+  <dlg:button dlg:id="CancelButton" dlg:tab-index="3" dlg:left="146" dlg:top="100" dlg:width="50" dlg:height="14" dlg:value="Cancel" dlg:button-type="cancel"/>
+  <dlg:img dlg:id="ImpressImage" dlg:left="4" dlg:top="8" dlg:width="60" dlg:height="70" dlg:src="file:///x:/thb/pdf.png"/>
+  <dlg:text dlg:id="InfoWriter" dlg:left="80" dlg:top="38" dlg:width="114" dlg:height="42" dlg:value="Choose &apos;Text Document&apos; to edit major parts of the text. The document might look different because of reformatting." dlg:multiline="true"/>
+  <dlg:text dlg:id="InfoImpress" dlg:left="80" dlg:top="38" dlg:width="114" dlg:height="42" dlg:value="Choose &apos;Presentation&apos; to edit the slides of a presentation in PDF format." dlg:multiline="true"/>
+  <dlg:text dlg:id="InfoDraw" dlg:left="80" dlg:top="38" dlg:width="114" dlg:height="42" dlg:value="Choose &apos;Drawing&apos; to edit minor details of the PDF document. This option is best to preserve the layout." dlg:multiline="true"/>
+  <dlg:text dlg:id="ListBoxWriter" dlg:left="0" dlg:top="0" dlg:width="114" dlg:height="9" dlg:value="Item 1"/>
+  <dlg:text dlg:id="ListBoxImpress" dlg:left="0" dlg:top="10" dlg:width="114" dlg:height="9" dlg:value="Item 2"/>
+  <dlg:text dlg:id="ListBoxDraw" dlg:left="0" dlg:top="20" dlg:width="114" dlg:height="9" dlg:value="Item 3"/>
+ </dlg:bulletinboard>
+</dlg:window>

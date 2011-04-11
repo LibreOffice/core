@@ -1,0 +1,106 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_script_XLibraryAccess_idl__
+#define __com_sun_star_script_XLibraryAccess_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module script {
+
+//=============================================================================
+/** provides access to additional scripting code.
+
+    <p>This code is organized in modules and these modules contain
+    the functions. It is possible to get just the code from a function,
+    but you can also get the whole code of a module with all functions in it.</p>
+    @deprecated
+ */
+published interface XLibraryAccess: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** returns <TRUE/>, if the function is accessible through this library;
+        otherwise it returns <FALSE/>.
+
+                @param aFunctionName
+                the fully qualified name of a funtion.
+                (e.g., "UtilLibrary.ModuleDate.FunctionCurrentDate")
+     */
+    boolean isFunction( [in] string aFunctionName );
+
+    //-------------------------------------------------------------------------
+    /** returns <TRUE/> if a fully qualified function name begins with this name.
+
+                @param aPathName
+                a part of a function name (e.g., "UtilLibrary").
+     */
+    boolean isValidPath( [in] string aPathName );
+
+    //-------------------------------------------------------------------------
+    /** Return all module names which contain code.
+         e.g., { "UtilLibrary.ModuleDate", "UtilLibrary.Output", ... }
+     */
+    sequence<string> getModuleNames();
+
+    //-------------------------------------------------------------------------
+    /** get the source code of a module.
+     */
+    string getModuleSource( [in] string aModulName );
+
+    //-------------------------------------------------------------------------
+    /** Get the hole compiled code of a module.
+
+        @param ModuleName the full qualified name of a module.
+                            (e.g., "UtilLibrary.ModuleDate")
+        @return         an empty sequence, if this module is not found or the
+                            code is not compiled.
+     */
+    sequence<byte> getModuleCode( [in] string aModuleName );
+
+    //-------------------------------------------------------------------------
+    /** get the source code of a function.
+     */
+    string getFunctionSource( [in] string aFunctionName );
+
+    //-------------------------------------------------------------------------
+    /** Get the compiled code of a function.
+
+        @param FunctionName the full qualified name of a function.
+                            (e.g., "UtilLibrary.ModuleDate.Function.CurrentDate")
+        @return         an empty sequence, if this function is not found.
+     */
+    sequence<byte> getFunctionCode( [in] string FunctionName );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

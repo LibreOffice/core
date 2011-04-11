@@ -1,0 +1,140 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_container_XStringKeyMap_idl__
+#define __com_sun_star_container_XStringKeyMap_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+#include <com/sun/star/container/ElementExistException.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/container/NoSuchElementException.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module container {
+
+//=============================================================================
+
+/** maps strings to anys.
+
+    @since OOo 2.3
+ */
+
+interface XStringKeyMap
+{
+    //-------------------------------------------------------------------------
+    /** reads data from the map.
+
+        @param aKey
+                The key string which should be searched for.
+
+        @return
+                the value matching aKey.
+
+        @throws com::sun::star::container::NoSuchElementException
+                if an element under aKey does not exist.
+     */
+    any getValue( [in] string aKey )
+        raises( com::sun::star::container::NoSuchElementException );
+
+
+    //-------------------------------------------------------------------------
+    /** checks for element existence.
+
+        @param aKey
+                The key string which should be searched for.
+
+        @return
+                true if an element with key aKey exists.
+     */
+    boolean hasValue( [in] string aKey );
+
+
+    //-------------------------------------------------------------------------
+    /** writes data to the map.
+
+        @param aKey
+                The key string which should be used to store the value.
+
+        @param aValue
+                The value that should be stored.
+
+        @throws com::sun::star::lang::IllegalArgumentException
+                if the element could not be inserted.
+
+        @throws com::sun::star::container::ElementExistException
+                if there is already a value stored under the key aKey.
+     */
+    void insertValue( [in] string aKey, [in] any aValue )
+        raises( com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::container::ElementExistException );
+
+
+    //-------------------------------------------------------------------------
+    /** the number of elements in the map.
+     */
+    [attribute, readonly] long Count;
+
+
+    //-------------------------------------------------------------------------
+    /** obtains the key of an element by index.
+
+        @param nIndex
+                is the index of the element.
+
+        @return
+                the key string matching the given index.
+
+        @throws com::sun::star::lang::IndexOutOfBoundsException
+                if the specified index is greater than the number of
+                elements
+     */
+    string getKeyByIndex( [in] long nIndex )
+        raises( com::sun::star::lang::IndexOutOfBoundsException );
+
+
+    //-------------------------------------------------------------------------
+    /** obtains the value of an element by index.
+
+        @param nIndex
+                is the index of the key.
+
+        @return
+                the value matching the given index.
+
+        @throws com::sun::star::lang::IndexOutOfBoundsException
+                if the specified index is greater than the number of
+                elements
+     */
+    any getValueByIndex( [in] long nIndex )
+        raises( com::sun::star::lang::IndexOutOfBoundsException );
+};
+
+}; }; }; };
+
+#endif

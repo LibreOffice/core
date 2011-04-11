@@ -1,0 +1,5 @@
+us	UnoControls	: LIBXSLT:libxslt cppuhelper offuh tools NULL
+us	UnoControls								usr1	-	all	us_mkout NULL
+us	UnoControls\source\base					nmake	-	all	us_base NULL
+us	UnoControls\source\controls				nmake	-	all	us_ctrls NULL
+us	UnoControls\util						nmake	-	all	us_util us_base us_ctrls NULL

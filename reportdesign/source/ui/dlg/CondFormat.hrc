@@ -1,0 +1,85 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef RPTUI_CONDFORMAT_HRC
+#define RPTUI_CONDFORMAT_HRC
+
+#define CHECKBOX_HEIGHT      8
+#define FIXEDTEXT_WIDTH     60
+#define FIXEDTEXT_HEIGHT     8
+#define EDIT_WIDTH          75
+#define RELATED_CONTROLS     4
+#define UNRELATED_CONTROLS   7
+#define EDIT_HEIGHT         12
+#define BUTTON_HEIGHT       14
+#define BUTTON_WIDTH        50
+#define COND_TYPE_WIDTH     50
+#define COND_OP_WIDTH       75
+#define OPERATOR_SEP_WIDTH  15
+#define SCROLLBAR_WIDTH     8
+#define IMAGE_BUTTON_WIDTH  12
+#define IMAGE_BUTTON_HEIGHT 14
+
+
+#define FL_FORMAT                   1
+#define FL_CONDITION_HEADER         2
+#define CRTL_FORMAT_PREVIEW         3
+#define TB_FORMAT                   4
+#define LB_COND_TYPE                5
+#define LB_OP                       6
+#define ED_CONDITION_LHS            7
+#define FT_AND                      8
+#define PB_OK                       9
+#define PB_CANCEL                   10
+#define PB_HELP                     11
+#define FL_SEPARATOR1               12
+#define ED_CONDITION_RHS            13
+#define CT_CONDITION                14
+#define CT_DEFAULT                  15
+#define CT_CONDITION_1              16
+#define CT_CONDITION_2              17
+#define SB_ALL_CONDITIONS           18
+#define WND_COND_PLAYGROUND         19
+#define BTN_MOVE_UP                 20
+#define BTN_MOVE_DOWN               21
+#define BTN_ADD_CONDITION           22
+#define BTN_REMOVE_CONDITION        23
+
+#define ROW_0_POS       ( RELATED_CONTROLS )
+#define ROW_0_HEIGTH    ( FIXEDTEXT_HEIGHT )
+#define ROW_1_POS       ( ROW_0_POS + ROW_0_HEIGTH + UNRELATED_CONTROLS )
+#define ROW_1_HEIGTH    ( EDIT_HEIGHT )
+#define ROW_2_POS       ( ROW_1_POS + ROW_1_HEIGTH + UNRELATED_CONTROLS )
+#define ROW_2_HEIGHT    ( 3 * FIXEDTEXT_HEIGHT )
+#define ROW_3_POS       ( ROW_2_POS + ROW_2_HEIGHT + RELATED_CONTROLS )
+#define ROW_3_HEIGHT    ( IMAGE_BUTTON_HEIGHT )
+
+#define CONDITION_WIDTH     ( 6*UNRELATED_CONTROLS + COND_TYPE_WIDTH + COND_OP_WIDTH + 2*EDIT_WIDTH + OPERATOR_SEP_WIDTH )
+#define COND_DLG_WIDTH      ( CONDITION_WIDTH + SCROLLBAR_WIDTH + UNRELATED_CONTROLS )
+#define CONDITION_HEIGHT    ( ROW_3_POS + ROW_3_HEIGHT )
+#define COND_DLG_HEIGHT     ( CONDITION_HEIGHT + 3*RELATED_CONTROLS + BUTTON_HEIGHT + 1 )
+
+#endif // RPTUI_PAGENUMBER_HRC

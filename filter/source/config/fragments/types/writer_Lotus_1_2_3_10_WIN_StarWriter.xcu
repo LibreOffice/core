@@ -1,0 +1,12 @@
+    <node oor:name="writer_Lotus_1_2_3_10_WIN_StarWriter" oor:op="replace" >
+        <prop oor:name="DetectService"><value>com.sun.star.comp.sfx2.BinaryFormatDetector</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>wk1 wks</value></prop>
+        <prop oor:name="MediaType"/>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>Lotus 1-2-3 1.0 (WIN) (StarWriter)</value></prop>
+        <prop oor:name="UIName">
+            <value>Lotus 1-2-3 1.0 (WIN) (%productname% %formatversion% Writer)</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"/>
+    </node>

@@ -1,0 +1,11 @@
+--- misc/libwpd-0.9.1/src/lib/WP5GraphicsInformationPacket.h	2011-01-24 09:50:48.131106590 +0000
++++ misc/build/libwpd-0.9.1/src/lib/WP5GraphicsInformationPacket.h	2011-01-24 09:51:17.676174074 +0000
+@@ -37,7 +37,7 @@
+ 	~WP5GraphicsInformationPacket();
+ 	void _readContents(WPXInputStream *input, WPXEncryption *encryption, uint32_t dataSize);
+ 	const std::vector<WPXBinaryData *> &getImages() const { return m_images; }
+-	const WPXBinaryData *getImage( unsigned long imageIndex ) const { if (imageIndex < m_images.size()) return m_images[imageIndex]; return NULL; }
++	const WPXBinaryData *getImage( unsigned long imageIndex ) const { if (imageIndex < m_images.size()) return m_images[imageIndex]; return 0; }
+ 
+ private:
+ 	std::vector<WPXBinaryData *> m_images;

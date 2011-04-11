@@ -1,0 +1,225 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "CustomAnimationPane.hrc"
+#include "CustomAnimation.hrc"
+#include "helpids.h"
+
+Control DLG_CUSTOMANIMATIONPANE
+{
+    OutputSize = TRUE;
+    DialogControl = TRUE;
+    Border = FALSE;
+
+    Size = MAP_APPFONT( 160, 300 );
+    Text [ en-US ] = "Custom Animation";
+
+    FixedLine FL_EFFECT
+    {
+        OutputSize = TRUE;
+        Size = MAP_APPFONT( 260, 8 );
+
+        Text [ en-US ] = "Effect";
+    };
+
+    PushButton PB_ADD_EFFECT
+    {
+        HelpId = HID_SD_CUSTOMANIMATIONPANE_PB_ADD_EFFECT;
+        OutputSize = TRUE;
+        TabStop = TRUE;
+        Size = MAP_APPFONT( 50, 14 );
+
+        Text [ en-US ] = "~Add...";
+    };
+
+    PushButton PB_CHANGE_EFFECT
+    {
+        HelpId = HID_SD_CUSTOMANIMATIONPANE_PB_CHANGE_EFFECT;
+        OutputSize = TRUE;
+        TabStop = TRUE;
+        Size = MAP_APPFONT( 50, 14 );
+
+        Text [ en-US ] = "~Change...";
+    };
+
+    PushButton PB_REMOVE_EFFECT
+    {
+        HelpId = HID_SD_CUSTOMANIMATIONPANE_PB_REMOVE_EFFECT;
+        OutputSize = TRUE;
+        TabStop = TRUE;
+        Size = MAP_APPFONT( 50, 14 );
+
+        Text [ en-US ] = "~Remove";
+    };
+
+    FixedLine FL_MODIFY
+    {
+        OutputSize = TRUE;
+        Size = MAP_APPFONT( 260, 8 );
+
+        Text [ en-US ] = "Modify effect";
+    };
+
+    FixedText FT_START
+    {
+        OutputSize = TRUE;
+        Size = MAP_APPFONT( 42, 8 );
+
+        Text [ en-US ] = "~Start";
+    };
+
+    ListBox LB_START
+    {
+        HelpId = HID_SD_CUSTOMANIMATIONPANE_LB_START;
+        Size = MAP_APPFONT ( 120 , 48 );
+        TabStop = TRUE ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+
+        StringList [ en-US ] =
+        {
+            < "On click" ; > ;
+            < "With previous" ; > ;
+            < "After previous" ; > ;
+        };
+    };
+
+    FixedText FT_PROPERTY
+    {
+        OutputSize = TRUE;
+        Size = MAP_APPFONT( 42, 8 );
+
+        Text [ en-US ] = "Property";
+    };
+
+    ListBox LB_PROPERTY
+    {
+        HelpId = HID_SD_CUSTOMANIMATIONPANE_LB_PROPERTY;
+        Size = MAP_APPFONT ( 120 , 48 );
+        TabStop = TRUE ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+    };
+
+    PushButton PB_PROPERTY_MORE
+    {
+        HelpId = HID_SD_CUSTOMANIMATIONPANE_PB_PROPERTY_MORE;
+        OutputSize = TRUE;
+        TabStop = TRUE;
+        Size = MAP_APPFONT( 16, 14 );
+
+        Text [ en-US ] = "~...";
+
+        QuickHelpText [en-US ] = "Effect Options";
+    };
+
+    FixedText FT_SPEED
+    {
+        OutputSize = TRUE;
+        Size = MAP_APPFONT( 42, 8 );
+
+        Text [ en-US ] = "Sp~eed";
+    };
+
+    ComboBox CB_SPEED
+    {
+        HelpId = HID_SD_CUSTOMANIMATIONPANE_CB_SPEED;
+        Size = MAP_APPFONT ( 120 , 48 );
+        TabStop = TRUE ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+    };
+
+    Control CT_CUSTOM_ANIMATION_LIST
+    {
+        HelpId = HID_SD_CUSTOMANIMATIONPANE_CT_CUSTOM_ANIMATION_LIST;
+        TabStop = TRUE;
+        Border = TRUE;
+    };
+
+    FixedText FT_CHANGE_ORDER
+    {
+        OutputSize = TRUE;
+        Size = MAP_APPFONT( 42, 8 );
+
+        Text [ en-US ] = "Change order:";
+    };
+
+    PushButton PB_MOVE_UP
+    {
+        HelpId = HID_SD_CUSTOMANIMATIONPANE_PB_MOVE_UP;
+        OutputSize = TRUE;
+        TabStop = TRUE;
+        Size = MAP_APPFONT( 16, 14 );
+    };
+
+    PushButton PB_MOVE_DOWN
+    {
+        HelpId = HID_SD_CUSTOMANIMATIONPANE_PB_MOVE_DOWN;
+        OutputSize = TRUE;
+        TabStop = TRUE;
+        Size = MAP_APPFONT( 16, 14 );
+    };
+
+    FixedLine FL_SEPERATOR1
+    {
+        OutputSize = TRUE;
+        Size = MAP_APPFONT( 8, 8 );
+    };
+
+    PushButton PB_PLAY
+    {
+        HelpId = HID_SD_CUSTOMANIMATIONPANE_PB_PLAY;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE;
+
+        Text [ en-US ] = "~Play";
+    };
+
+    PushButton PB_SLIDE_SHOW
+    {
+        HelpId = HID_SD_CUSTOMANIMATIONPANE_PB_SLIDE_SHOW;
+        Size = MAP_APPFONT ( 80 , 14 ) ;
+        TabStop = TRUE;
+
+        Text [ en-US ] = "Slide Sho~w";
+    };
+
+    FixedLine FL_SEPERATOR2
+    {
+        Size = MAP_APPFONT( 8, 8 );
+    };
+
+    CheckBox CB_AUTOPREVIEW
+    {
+        HelpId = HID_SD_CUSTOMANIMATIONPANE_CB_AUTOPREVIEW;
+        Size = MAP_APPFONT ( 120 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Automatic pre~view" ;
+    };
+};
+

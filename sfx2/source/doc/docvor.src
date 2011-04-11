@@ -1,0 +1,263 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include <sfx2/sfx.hrc>
+#include "doc.hrc"
+#include "docvor.hrc"
+#include "helpid.hrc"
+// pragma ----------------------------------------------------------------
+
+// DLG_ORGANIZE ----------------------------------------------------------
+
+#define MASKCOLOR   MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; }
+
+ModalDialog DLG_ORGANIZE
+{
+    HelpId = CMD_SID_ORGANIZER ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 271 , 162 ) ;
+    Text [ en-US ] = "Template Management" ;
+    Moveable = TRUE ;
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 205 , 43 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 205 , 6 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text [ en-US ] = "Close" ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    PushButton BTN_FILES
+    {
+        HelpID = "sfx2:PushButton:DLG_ORGANIZE:BTN_FILES";
+        Pos = MAP_APPFONT ( 205 , 143 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text [ en-US ] = "~File..." ;
+        TabStop = TRUE ;
+    };
+    PushButton BTN_ADDRESSTEMPLATE
+    {
+        HelpID = "sfx2:PushButton:DLG_ORGANIZE:BTN_ADDRESSTEMPLATE";
+        Pos = MAP_APPFONT ( 205 , 124 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text [ en-US ] = "~Address Book..." ;
+    };
+    ListBox LB_LEFT_TYP
+    {
+        HelpID = "sfx2:ListBox:DLG_ORGANIZE:LB_LEFT_TYP";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 3 , 144 ) ;
+        Size = MAP_APPFONT ( 94 , 55 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        CurPos = 0 ;
+        StringList [ en-US ] =
+        {
+            < "Templates" ; Default ; > ;
+            < "Documents" ; Default ; > ;
+        };
+    };
+    ListBox LB_RIGHT_TYP
+    {
+        HelpID = "sfx2:ListBox:DLG_ORGANIZE:LB_RIGHT_TYP";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 103 , 144 ) ;
+        Size = MAP_APPFONT ( 94 , 55 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        CurPos = 1 ;
+        StringList [ en-US ] =
+        {
+            < "Templates" ; Default ; > ;
+            < "Documents" ; Default ; > ;
+        };
+    };
+    Control LB_LEFT
+    {
+        HelpId = HID_CTL_ORGANIZER_LEFT ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 3 , 6 ) ;
+        Size = MAP_APPFONT ( 94 , 132 ) ;
+        TabStop = TRUE ;
+        ClipChildren = TRUE ;
+    };
+    Control LB_RIGHT
+    {
+        HelpId = HID_CTL_ORGANIZER_RIGHT ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 103 , 6 ) ;
+        Size = MAP_APPFONT ( 94 , 132 ) ;
+        TabStop = TRUE ;
+        ClipChildren = TRUE ;
+    };
+    Accelerator ACC_EDIT
+    {
+        ItemList =
+        {
+            AcceleratorItem
+            {
+                Identifier = ID_NEW ;
+                Key = KeyCode
+                {
+                    Code = KEY_INSERT ;
+                };
+            };
+            AcceleratorItem
+            {
+                Identifier = ID_DELETE ;
+                Key = KeyCode
+                {
+                    Code = KEY_DELETE ;
+                };
+            };
+        };
+    };
+    MenuButton BTN_EDIT
+    {
+        HelpID = "sfx2:MenuButton:DLG_ORGANIZE:BTN_EDIT";
+        Pos = MAP_APPFONT ( 205 , 23 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text [ en-US ] = "Commands" ;
+        TabStop = TRUE ;
+        ButtonMenu = Menu
+        {
+            ItemList =
+            {
+                MenuItem
+                {
+                    Identifier = ID_NEW ;
+                    HelpId = HID_ORGANIZE_NEW ;
+                    Text [ en-US ] = "~New" ;
+                    AccelKey = KeyCode
+                    {
+                        Code = KEY_INSERT ;
+                    };
+                };
+                MenuItem
+                {
+                    Identifier = ID_DELETE ;
+                    HelpId = HID_ORGANIZE_DELETE ;
+                    Text [ en-US ] = "~Delete" ;
+                    AccelKey = KeyCode
+                    {
+                        Code = KEY_DELETE ;
+                    };
+                };
+                MenuItem
+                {
+                    Identifier = ID_EDIT ;
+                    HelpId = HID_ORGANIZE_EDIT ;
+                    Text [ en-US ] = "~Edit" ;
+                };
+                MenuItem
+                {
+                    Separator = TRUE ;
+                };
+                MenuItem
+                {
+                    Identifier = ID_COPY_FROM ;
+                    HelpId = HID_ORGANIZE_COPY_FROM ;
+                    Text [ en-US ] = "Import Template..." ;
+                };
+                MenuItem
+                {
+                    Identifier = ID_COPY_TO ;
+                    HelpId = HID_ORGANIZE_COPY_TO ;
+                    Text [ en-US ] = "Export Template..." ;
+                };
+                MenuItem
+                {
+                    Separator = TRUE ;
+                };
+                MenuItem
+                {
+                    Identifier = ID_PRINT ;
+                    HelpId = HID_ORGANIZE_PRINT ;
+                    Text [ en-US ] = "~Print" ;
+                };
+                MenuItem
+                {
+                    Identifier = ID_PRINTER_SETUP ;
+                    HelpId = HID_ORGANIZE_PRINTER_SETUP ;
+                    Text [ en-US ] = "Printer Settings..." ;
+                };
+                MenuItem
+                {
+                    Separator = TRUE ;
+                };
+                MenuItem
+                {
+                    Identifier = ID_RESCAN ;
+                    HelpId = HID_ORGANIZE_RESCAN ;
+                    Text [ en-US ] = "Update" ;
+                };
+                MenuItem
+                {
+                    Separator = TRUE ;
+                };
+                MenuItem
+                {
+                    Identifier = ID_DEFAULT_TEMPLATE ;
+                    HelpId = HID_ORGANIZE_STDTEMPLATE_ADD ;
+                    Text [ en-US ] = "Set As Default Template" ;
+                };
+                MenuItem
+                {
+                    Identifier = ID_RESET_DEFAULT_TEMPLATE ;
+                    HelpId = HID_ORGANIZE_STDTEMPLATE_DEL ;
+                    Text [ en-US ] = "Reset Default Template" ;
+                };
+            };
+        };
+    };
+    Image IMG_OPENED_FOLDER
+    {
+        MASKCOLOR ;
+        ImageBitmap = Bitmap { File = "folderop.bmp" ; } ;
+    };
+    Image IMG_CLOSED_FOLDER
+    {
+        MASKCOLOR ;
+        ImageBitmap = Bitmap { File = "foldercl.bmp" ; } ;
+    };
+    Image IMG_OPENED_DOC
+    {
+        MASKCOLOR ;
+        ImageBitmap = Bitmap { File = "doccl.bmp" ; } ;
+    };
+    Image IMG_CLOSED_DOC
+    {
+        MASKCOLOR ;
+        ImageBitmap = Bitmap { File = "doccl.bmp" ; } ;
+    };
+};

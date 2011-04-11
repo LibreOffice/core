@@ -1,0 +1,665 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+interface TextDrawText
+[
+    uuid = "CA0C4280-293D-11D1-89CB-008029E4B0B1"
+]
+{
+    SID_SELECTALL  // api:
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = NoState ;
+    ]
+
+    SID_CUT  // api:
+    [
+        ExecMethod = ExecClpbrd ;
+        StateMethod = StateClpbrd ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_COPY // api:
+    [
+        ExecMethod = ExecClpbrd ;
+        StateMethod = StateClpbrd ;
+    ]
+
+    SID_PASTE   // api:
+    [
+        ExecMethod = ExecClpbrd ;
+        StateMethod = StateClpbrd ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_PASTE_SPECIAL  // api:
+    [
+        StateMethod = StateClpbrd ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+        SID_CLIPBOARD_FORMAT_ITEMS  // api:
+        [
+                StateMethod = StateClpbrd ;
+                DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        ]
+
+    FN_ESCAPE // api:
+    [
+        ExecMethod = ExecDraw ;
+    ]
+
+    SID_UNDO // api:
+    [
+        ExecMethod = ExecUndo ;
+        StateMethod = StateUndo ;
+
+                ToolBoxConfig , MenuConfig , AccelConfig;
+    ]
+
+    SID_REDO // api:
+    [
+        ExecMethod = ExecUndo ;
+        StateMethod = StateUndo ;
+    ]
+
+    SID_REPEAT // api:
+    [
+        ExecMethod = ExecUndo ;
+        StateMethod = StateUndo ;
+    ]
+    SID_GETUNDOSTRINGS
+    [
+        StateMethod = StateUndo ;
+    ]
+
+    SID_GETREDOSTRINGS
+    [
+        StateMethod = StateUndo ;
+    ]
+
+    FN_FORMAT_RESET  // api:
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_CHARMAP // api:
+    [
+        ExecMethod = ExecDraw ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_INSERT_STRING
+    [
+            ExecMethod = ExecDraw ;
+            StateMethod = NoState ;
+            DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_INSERT_SOFT_HYPHEN // status(final|play)
+        [
+                ExecMethod = ExecDraw ;
+                StateMethod = NoState ;
+                DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        ]
+        FN_INSERT_HARDHYPHEN // status()
+        [
+                ExecMethod = ExecDraw ;
+                StateMethod = NoState ;
+                DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        ]
+        FN_INSERT_HARD_SPACE // status(final|play)
+        [
+                ExecMethod = ExecDraw ;
+                StateMethod = NoState ;
+                DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        ]
+    SID_INSERT_RLM
+    [
+                ExecMethod = ExecDraw ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_INSERT_LRM
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_INSERT_ZWSP
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_INSERT_ZWNBSP
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_WEIGHT // api:
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTxtCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_POSTURE // api:
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTxtCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_UNDERLINE // api:
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTxtCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_OVERLINE // api:
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTxtCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_CONTOUR
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTxtCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_SHADOWED
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTxtCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_STRIKEOUT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTxtCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_PARA_ADJUST_LEFT // api:
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_PARA_ADJUST_CENTER // api:
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_PARA_ADJUST_RIGHT // api:
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_PARA_ADJUST_BLOCK // api:
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_PARA_LINESPACE_10 // api:
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_PARA_LINESPACE_15 // api:
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_PARA_LINESPACE_20 // api:
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_PARA_LEFT_TO_RIGHT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_PARA_RIGHT_TO_LEFT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+        SID_TEXTDIRECTION_LEFT_TO_RIGHT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_TEXTDIRECTION_TOP_TO_BOTTOM
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_VERTICALTEXT_STATE
+    [
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_CTLFONT_STATE
+    [
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_CHAR_DLG  // api:
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_CHAR_DLG_FOR_PARAGRAPH
+    [
+        ExecMethod = Execute ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_PARA_DLG // api:
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_SET_SUPER_SCRIPT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_SET_SUB_SCRIPT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FONTWORK  // api:
+    [
+        ExecMethod = ExecFontWork ;
+        StateMethod = StateFontWork ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+
+    SID_FORMTEXT_STYLE // api:
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FORMTEXT_ADJUST  // api:
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FORMTEXT_DISTANCE // api:
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FORMTEXT_START  // api:
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+
+    SID_FORMTEXT_MIRROR // api:
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+
+    SID_FORMTEXT_HIDEFORM   // api:
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FORMTEXT_OUTLINE // api:
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FORMTEXT_SHADOW  // api:
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FORMTEXT_SHDWCOLOR // api:
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FORMTEXT_SHDWXVAL  // api:
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FORMTEXT_SHDWYVAL  // api:
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FORMTEXT_STDFORM // api:
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_THESAURUS // api:
+    [
+        ExecMethod = ExecDrawLingu ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+        SID_HANGUL_HANJA_CONVERSION  // api:
+        [
+                ExecMethod = ExecDrawLingu ;
+                StateMethod = GetState ;
+                DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        ]
+
+        SID_CHINESE_CONVERSION  // api:
+        [
+                ExecMethod = ExecDrawLingu ;
+                StateMethod = GetState ;
+                DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        ]
+
+    FN_DRAWTEXT_ATTR_DLG
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_STYLE_CATALOG  // ole(no) api(play/rec)
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+    SID_AUTOSPELL_CHECK
+    [
+        ExecMethod = Execute;
+        StateMethod = GetDrawTxtCtrlState
+    ]
+
+    SID_SEARCH_DLG
+    [
+        StateMethod = StateDisableItems
+    ]
+
+    SID_HYPERLINK_SETLINK  // status()
+    [
+        ExecMethod = Execute ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_HYPERLINK_GETLINK // status()
+    [
+        StateMethod = StateInsert ;
+    ]
+    SID_TRANSLITERATE_SENTENCE_CASE
+    [
+        ExecMethod = ExecTransliteration;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_TRANSLITERATE_TITLE_CASE
+    [
+        ExecMethod = ExecTransliteration;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_TRANSLITERATE_TOGGLE_CASE
+    [
+        ExecMethod = ExecTransliteration;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_TRANSLITERATE_ROTATE_CASE
+    [
+        ExecMethod = ExecRotateTransliteration;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_TRANSLITERATE_UPPER
+    [
+        ExecMethod = ExecTransliteration;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_TRANSLITERATE_LOWER
+    [
+        ExecMethod = ExecTransliteration;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_TRANSLITERATE_HALFWIDTH
+    [
+        ExecMethod = ExecTransliteration;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_TRANSLITERATE_FULLWIDTH
+    [
+        ExecMethod = ExecTransliteration;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_TRANSLITERATE_HIRAGANA
+    [
+        ExecMethod = ExecTransliteration;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_TRANSLITERATE_KATAGANA
+    [
+        ExecMethod = ExecTransliteration;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_LANGUAGE_STATUS
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";  // e.g. disable for read-only documents
+    ]
+
+    SID_THES
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";  // e.g. disable for read-only documents
+    ]
+
+       FN_FORMAT_FOOTNOTE_DLG // status()
+    [
+        ExecMethod = Execute ;
+    ]
+
+    SID_OPEN_XML_FILTERSETTINGS // ole : no, status : ?
+    [
+        ExecMethod = Execute ;
+    ]
+
+    FN_WORDCOUNT_DIALOG
+    [
+        ExecMethod = Execute;
+    ]
+
+       FN_NUMBERING_OUTLINE_DLG   // status(final|play)
+    [
+        ExecMethod = Execute ;
+    ]
+
+    SID_INSERT_GRAPHIC
+    [
+        StateMethod = StateDisableItems ;
+    ]
+    SID_TWAIN_SELECT
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+    SID_TWAIN_TRANSFER
+    [
+        StateMethod = StateDisableItems ;
+    ]
+}
+
+interface TextDrawFont
+[ uuid = "074C35E0-11EF-101D-9757-6E74207A7520"; ]
+{
+    SID_ATTR_CHAR_FONT // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTxtCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_FONTHEIGHT // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTxtCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_COLOR // api:
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTxtCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_CHAR_WORDLINEMODE // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTxtCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_CHAR_RELIEF
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTxtCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_CHAR_LANGUAGE // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTxtCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_CHAR_KERNING // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTxtCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_CHAR_AUTOKERN // // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTxtCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_CHAR_ESCAPEMENT // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTxtCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_SCALEWIDTH // status()
+    [
+        ExecMethod = Execute ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+}
+
+
+
+shell SwDrawTextShell
+{
+        import TextDrawText[Automation];
+        import TextDrawFont ".DrawFont";
+}
+

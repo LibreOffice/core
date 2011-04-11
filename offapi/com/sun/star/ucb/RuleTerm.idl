@@ -1,0 +1,79 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_ucb_RuleTerm_idl__
+#define __com_sun_star_ucb_RuleTerm_idl__
+
+
+//=============================================================================
+
+module com { module sun { module star { module ucb {
+
+//=============================================================================
+/** describes a term.
+
+    <p>A term is used to select objects to which a rule should apply.
+*/
+published struct RuleTerm
+{
+    //-------------------------------------------------------------------------
+    /** the name of the property used to match the term.
+    */
+    string Property;
+
+    //-------------------------------------------------------------------------
+    /** the value of the property used to compare with the document
+        property.
+    */
+    any Operand;
+
+    //-------------------------------------------------------------------------
+    /** the operator used to compare the property of the document with
+        the given value (e.g. "contains" or "greater equal").
+
+        <p>The value can be one of the <type>RuleOperator</type> constants.
+    */
+    short Operator;
+
+    //-------------------------------------------------------------------------
+    /** this flag indicates whether a string "operand" shall be compared
+        case sensitive.
+    */
+    boolean CaseSensitive;
+
+    //-------------------------------------------------------------------------
+    /** this flag indicates whether a string "operand" shall be treated
+        as a regular expression.
+    */
+    boolean RegularExpression;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

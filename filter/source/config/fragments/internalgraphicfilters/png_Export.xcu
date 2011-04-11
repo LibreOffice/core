@@ -1,0 +1,10 @@
+    <node oor:name="png_Export" oor:op="replace"  >
+        <prop oor:name="Type"><value>png_Portable_Network_Graphic</value></prop>
+        <prop oor:name="FormatName"><value>SVEPNG</value></prop>
+        <prop oor:name="RealFilterName"/>
+        <prop oor:name="UIComponent"><value>com.sun.star.svtools.SvFilterOptionsDialog</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">PNG - Portable Network Graphic</value>
+        </prop>
+        <prop oor:name="Flags"><value>EXPORT</value></prop>
+    </node>

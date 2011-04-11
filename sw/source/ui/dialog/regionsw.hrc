@@ -1,0 +1,114 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _REGIONSW_HRC
+#define _REGIONSW_HRC
+
+#include "dialog.hrc"
+
+
+#define CB_DDE                  1
+#define CB_DISMISS              2
+#define CB_END_AT_TXTEND        3
+#define CB_END_NUM              4
+#define CB_FILE                 5
+#define CB_FTN_AT_TXTEND        6
+#define CB_FTN_NUM              7
+#define CB_HIDE                 8
+#define CB_PASSWD               9
+#define CB_PROTECT             10
+#define CB_FTN_NUM_FMT         11
+#define CB_END_NUM_FMT         12
+#define ED_CONDITION           13
+#define ED_END_PREFIX          14
+#define ED_END_SUFFIX          15
+#define ED_FILE                16
+#define ED_FTN_PREFIX          17
+#define ED_FTN_SUFFIX          18
+#define ED_RANAME              19
+#define ED_RNAME               20
+#define FT_CONDITION           21
+#define FL_EDIT_OPTIONS        22
+#define FLD_END_OFFSET         23
+#define FLD_FTN_OFFSET         24
+#define FT_DDE                 25
+#define FT_END_OFFSET          26
+#define FT_END_PREFIX          27
+#define FT_END_SUFFIX          28
+#define FT_FILE                29
+#define FT_FTN_OFFSET          30
+#define FT_FTN_PREFIX          31
+#define FT_FTN_SUFFIX          32
+#define FT_RNAME               33
+#define FT_SUBREG              34
+#define LB_END_NUMVIEW         36
+#define LB_FTN_NUMVIEW         37
+#define LB_SUBREG              38
+#define PB_CANCEL              39
+#define PB_FILE                40
+#define PB_HELP                41
+#define PB_OK                  42
+#define PB_OPTIONS             43
+#define PB_SAVED               44
+#define ST_INSERT              45
+#define TLB_SECTION            46
+#define FL_NAME                47
+#define FL_LINK                48
+#define FL_PROTECT             49
+#define FL_HIDE                50
+#define PB_PASSWD              51
+#define FL_END                 52
+#define FL_FTN                 53
+#define IL_BITMAPS              54
+// #114856# edit in readonly sections
+#define FL_PROPERTIES           56
+#define CB_EDIT_IN_READONLY     57
+
+/* global resources */
+#define STR_REG_DUPLICATE       (RC_REGIONSW_BEGIN+6)
+#define STR_INFO_DUPLICATE      (RC_REGIONSW_BEGIN+7)
+
+#define MD_INS_REGION           (RC_REGIONSW_BEGIN+8)
+#define MD_EDIT_REGION          (RC_REGIONSW_BEGIN+9)
+#define QB_CONNECT              (RC_REGIONSW_BEGIN+10)
+#define REG_WRONG_PASSWORD      (RC_REGIONSW_BEGIN+11)
+#define REG_WRONG_PASSWD_REPEAT (RC_REGIONSW_BEGIN+12)
+
+//ImageList elements
+#define BMP_HIDE            1
+#define BMP_NO_HIDE         2
+#define BMP_PROT_HIDE       3
+#define BMP_PROT_NO_HIDE    4
+
+//SwSectionIndentTabPage
+#define FL_INDENT           1
+#define FT_BEFORE           2
+#define MF_BEFORE           3
+#define FT_AFTER            4
+#define MF_AFTER            5
+#define WIN_PREVIEW         6
+
+#endif

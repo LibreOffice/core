@@ -1,0 +1,238 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _OSL_PIPE_DECL_HXX_
+#define _OSL_PIPE_DECL_HXX_
+
+#include <osl/pipe.h>
+#   include <osl/security.hxx>
+#include <rtl/ustring.hxx>
+
+namespace osl {
+
+class StreamPipe;
+
+/** Represents a pipe.
+*/
+class Pipe
+{
+protected:
+    oslPipe m_handle;
+
+public:
+
+    /** Does not create a pipe. Use assignment operator to
+        make this a useable pipe.
+    */
+    inline Pipe();
+
+    /** Creates an insecure pipe that is accessible for all users.
+        @param strName
+        @param Options
+    */
+    inline Pipe(const ::rtl::OUString& strName, oslPipeOptions Options);
+
+    /** Creates a secure pipe that access depends on the umask settings.
+        @param strName
+        @param Options
+        @param Security
+    */
+    inline Pipe(const ::rtl::OUString& strName, oslPipeOptions Options,const Security & rSecurity);
+
+    /** Copy constructor.
+    */
+    inline Pipe(const Pipe& pipe);
+
+    /** Constructs a Pipe reference without acquiring the handle
+    */
+    inline Pipe( oslPipe pipe, __sal_NoAcquire noacquire );
+
+    /** Creates pipe as wrapper around the underlying oslPipe.
+        @param Pipe
+    */
+    inline Pipe(oslPipe Pipe);
+
+    /** Destructor. Destroys the underlying oslPipe.
+    */
+    inline ~Pipe();
+
+    inline sal_Bool SAL_CALL is() const;
+
+    /** Creates an insecure pipe that is accessible for all users
+        with the given attributes.
+        If the pipe was already created, the old one will be discarded.
+        @param strName
+        @param Options
+        @param Security
+        @return True if socket was successfully created.
+    */
+    inline sal_Bool create( const ::rtl::OUString & strName,
+                            oslPipeOptions Options, const Security &rSec );
+
+    /** Creates a secure that access rights depend on the umask settings
+        with the given attributes.
+
+        If socket was already created, the old one will be discarded.
+        @param strName
+        @param Options
+        @return True if socket was successfully created.
+    */
+    inline sal_Bool create( const ::rtl::OUString & strName, oslPipeOptions Options = osl_Pipe_OPEN );
+
+    /** releases the underlying handle
+     */
+    inline void SAL_CALL clear();
+
+    /** Assignment operator. If pipe was already created, the old one will
+        be discarded.
+    */
+    inline Pipe& SAL_CALL operator= (const Pipe& pipe);
+
+    /** Assignment operator. If pipe was already created, the old one will
+        be discarded.
+    */
+    inline Pipe& SAL_CALL operator= (const oslPipe pipe );
+
+    /** Checks if the pipe is valid.
+        @return True if the object represents a valid pipe.
+    */
+    inline sal_Bool SAL_CALL isValid() const;
+
+    inline sal_Bool SAL_CALL operator==( const Pipe& rPipe ) const;
+
+    /** Closes the pipe.
+    */
+    inline void SAL_CALL close();
+
+    /** Accept connection on an existing pipe
+    */
+    inline oslPipeError SAL_CALL accept(StreamPipe& Connection);
+
+
+    /** Delivers a constant decribing the last error for the pipe system.
+        @return ENONE if no error occurred, invalid_PipeError if
+        an unknown (unmapped) error occurred, otherwise an enum describing the
+        error.
+    */
+    inline oslPipeError SAL_CALL getError() const;
+
+    inline oslPipe SAL_CALL getHandle() const;
+};
+
+/** A pipe to send or receive a stream of data.
+*/
+class StreamPipe : public Pipe
+{
+public:
+
+    /** Creates an unattached pipe. You must attach the pipe to an oslPipe
+        e.g. by using the operator=(oslPipe), before you can use the stream-
+        functionality of the object.
+    */
+    inline StreamPipe();
+
+    /** Creates pipe as wrapper around the underlying oslPipe.
+        @param Pipe
+    */
+    inline StreamPipe(oslPipe Pipe);
+
+    /** Copy constructor.
+        @param Pipe
+    */
+    inline StreamPipe(const StreamPipe& Pipe);
+
+    /** Creates a pipe.
+        @param strName
+        @param Options
+    */
+    inline StreamPipe(const ::rtl::OUString& strName, oslPipeOptions Options = osl_Pipe_OPEN);
+
+    /** Creates a pipe.
+        @param strName
+        @param Options
+        @param rSec
+    */
+    inline StreamPipe(const ::rtl::OUString& strName, oslPipeOptions Options, const Security &rSec );
+
+    /** Constructs a Pipe reference without acquiring the handle
+    */
+    inline StreamPipe( oslPipe pipe, __sal_NoAcquire noacquire );
+
+    /** Attaches the oslPipe to this object. If the object
+        already was attached to an oslPipe, the old one will
+        be closed and destroyed.
+        @param Pipe.
+    */
+    inline StreamPipe & SAL_CALL operator=(oslPipe Pipe);
+
+    /** Assignment operator
+    */
+    inline StreamPipe& SAL_CALL operator=(const Pipe& pipe);
+
+    /** Tries to receives BytesToRead data from the connected pipe,
+
+        @param pBuffer [out] Points to a buffer that will be filled with the received
+        data.
+        @param BytesToRead [in] The number of bytes to read. pBuffer must have at least
+        this size.
+        @return the number of received bytes.
+    */
+    inline sal_Int32 SAL_CALL recv(void* pBuffer, sal_Int32 BytesToRead) const;
+
+    /** Tries to sends BytesToSend data from the connected pipe.
+
+        @param pBuffer [in] Points to a buffer that contains the send-data.
+        @param BytesToSend [in] The number of bytes to send. pBuffer must have at least
+        this size.
+        @return the number of transfered bytes.
+    */
+    inline sal_Int32 SAL_CALL send(const void* pBuffer, sal_Int32 BytesToSend) const;
+
+    /** Retrieves n bytes from the stream and copies them into pBuffer.
+        The method avoids incomplete reads due to packet boundaries.
+        @param pBuffer receives the read data.
+        @param n the number of bytes to read. pBuffer must be large enough
+        to hold the n bytes!
+        @return the number of read bytes. The number will only be smaller than
+        n if an exceptional condition (e.g. connection closed) occurs.
+    */
+    inline sal_Int32 SAL_CALL read(void* pBuffer, sal_Int32 n) const;
+
+    /** Writes n bytes from pBuffer to the stream. The method avoids
+        incomplete writes due to packet boundaries.
+        @param pBuffer contains the data to be written.
+        @param n the number of bytes to write.
+        @return the number of written bytes. The number will only be smaller than
+        n if an exceptional condition (e.g. connection closed) occurs.
+    */
+    sal_Int32 SAL_CALL write(const void* pBuffer, sal_Int32 n) const;
+};
+
+}
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

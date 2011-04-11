@@ -1,0 +1,449 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+interface Window
+[
+    Automation = FALSE ;
+]
+{
+    SID_HYPERLINK_DIALOG
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_RUBY_DIALOG
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_NAVIGATOR // status(final|play)
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_TASKPANE // status(final|play)
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_SHOW_BROWSER // ole(no) api(final/play/rec)
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_BROWSER // ole(no) api()
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_VIEW_DATA_SOURCE_BROWSER// ole(no) api()
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_PARTWIN // ole(no) api()
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_MAIL_CHILDWIN // ole(no) api()
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_TIPWINDOW
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_SEARCH_DLG // ole(no) api(final/play/rec)
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_TOGGLESTATUSBAR // ole(no) api(final/play/rec)
+    [
+        ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
+    ]
+    SID_RECORDMACRO // ole(no) api(final/play/norec)
+    [
+        ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
+    ]
+    SID_STOP_RECORDING // ole(no) api(final/play/norec)
+    [
+        ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
+    ]
+    SID_STYLE_DESIGNER // ole(no) api(final/play/rec)
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_RECORDING_FLOATWINDOW // ole(no) api(final/play/rec)
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+
+    // Pre-defined docking window slots (usable by internal docking windows)
+    SID_DOCKWIN_0
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_1
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_2
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_3
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_4
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_5
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_6
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_7
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_8
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_9
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+/*  Be careful!
+    You also have to make changes in:
+    - sfx2/sdi/sfx.sdi
+    - sfx2/source/dialog/dockwin.cxx
+    - sfx2/sdi/frmslots.sdi
+    - sfx2/inc/sfx2/sfxsids.hrc
+
+    SID_DOCKWIN_10
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_11
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_12
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_13
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_14
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_15
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_16
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_17
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_18
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_19
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_20
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_21
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_22
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_23
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_24
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_25
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_26
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_27
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_28
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    SID_DOCKWIN_29
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+*/
+    // Window.GetFrameWindow( "Name" )
+    SID_FILLFRAME
+    [
+        ExecMethod = ExecView_Impl;
+    ]
+
+    // Only for Designers: Slot must be present
+    SID_STYLE_NEW
+    [
+    ]
+
+    // Only for Designers: Slot must be present
+    SID_STYLE_DRAGHIERARCHIE
+    [
+    ]
+    SID_CLEARHISTORY // ole(no) api(final/play/rec)
+    [
+        ExecMethod = ExecHistory_Impl ;
+        StateMethod = StateHistory_Impl ;
+    ]
+    SID_UNDO // ole(no) api(final/play/rec)
+    [
+        ExecMethod = ExecHistory_Impl ;
+        StateMethod = StateHistory_Impl ;
+    ]
+    SID_REDO // ole(no) api(final/play/rec)
+    [
+        ExecMethod = ExecHistory_Impl ;
+        StateMethod = StateHistory_Impl ;
+    ]
+    SID_REPEAT // ole(no) api(final/play/rec)
+    [
+        ExecMethod = ExecHistory_Impl ;
+        StateMethod = StateHistory_Impl ;
+    ]
+    SID_CURRENT_URL // ole(no) api(no)
+    [
+        StateMethod = MiscState_Impl ;
+    ]
+    // Stringlist mit den Verben( SFX only )
+    SID_OBJECT // ole(no) api(no)
+    [
+        StateMethod = GetState_Impl ;
+        ExecMethod = ExecView_Impl ;
+    ]
+    SID_TERMINATE_INPLACEACTIVATION
+    [
+        ExecMethod = ExecView_Impl ;
+    ]
+}
+
+interface BrowseWindow : Window
+[
+    Automation = FALSE ;
+]
+{
+    SID_ACTIVATE // ole(no) api(final/play/rec)
+    [
+        // Implementations in Subclasses
+    ]
+    SID_NEWWINDOW // ole(no) api(play/rec)
+    [
+        ExecMethod = ExecView_Impl ;
+        StateMethod = StateView_Impl ;
+    ]
+    SID_EDITDOC // ole(?opt) api(play/rec)
+    [
+        ExecMethod = ExecReload_Impl ;
+        StateMethod = StateReload_Impl ;
+    ]
+    SID_RELOAD // ole(?opt) api(play/rec)
+    [
+        ExecMethod = ExecReload_Impl ;
+        StateMethod = StateReload_Impl ;
+    ]
+    SID_VIEWSHELL // ole(no) api(no)
+    [
+        ExecMethod = ExecView_Impl ;
+        StateMethod = StateView_Impl ;
+    ]
+    SID_VIEWSHELL0 // ole(no) api(no)
+    [
+        ExecMethod = ExecView_Impl ;
+        StateMethod = StateView_Impl ;
+    ]
+    SID_VIEWSHELL1 // ole(no) api(no)
+    [
+        ExecMethod = ExecView_Impl ;
+        StateMethod = StateView_Impl ;
+    ]
+    SID_VIEWSHELL2 // ole(no) api(no)
+    [
+        ExecMethod = ExecView_Impl ;
+        StateMethod = StateView_Impl ;
+    ]
+    SID_VIEWSHELL3 // ole(no) api(no)
+    [
+        ExecMethod = ExecView_Impl ;
+        StateMethod = StateView_Impl ;
+    ]
+    SID_VIEWSHELL4 // ole(no) api(no)
+    [
+        ExecMethod = ExecView_Impl ;
+        StateMethod = StateView_Impl ;
+    ]
+}
+
+interface TopWindow : BrowseWindow
+[
+    Automation = FALSE ;
+]
+{
+    SID_NEWDOCDIRECT // ole(no) api(no)
+    [
+        ExecMethod = Exec_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+    SID_WIN_FULLSCREEN // ole(no) api(final/play/rec)
+    [
+        ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
+    ]
+    SID_FRAMETITLE // ole(no) api(play/rec)
+    [
+        StateMethod = StateView_Impl ;
+    ]
+    SID_CLOSEWIN // ole(no) api(final/play/rec)
+    [
+        ExecMethod = Exec_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+    SID_BROWSE_FORWARD // ole(no) api()
+    [
+        ExecMethod = INetExecute_Impl ;
+        StateMethod = INetState_Impl ;
+    ]
+    SID_BROWSE_BACKWARD // ole(no) api()
+    [
+        ExecMethod = INetExecute_Impl ;
+        StateMethod = INetState_Impl ;
+    ]
+    SID_CREATELINK // ole(no) api()
+    [
+        ExecMethod = INetExecute_Impl ;
+        StateMethod = INetState_Impl ;
+    ]
+    SID_FOCUSURLBOX // ole(no) api(final/play/rec)
+    [
+        ExecMethod = INetExecute_Impl ;
+        StateMethod = INetState_Impl ;
+    ]
+}
+
+ //=========================================================================
+
+shell SfxViewFrame
+{
+    import TopWindow [Automation];
+
+    SID_FORMATMENUSTATE
+    [
+        StateMethod = MiscState_Impl ;
+    ]
+
+    SID_ACTIVATE // ole(no) api(final/play/rec)
+    [
+        ExecMethod = Exec_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+
+    SID_SHOWPOPUPS
+    [
+        ExecMethod = Exec_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+}
+

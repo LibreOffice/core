@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Hidden=false
+Icon=oasis-spreadsheet-template
+Type=MimeType
+Patterns=*.ots
+MimeType=application/vnd.oasis.opendocument.spreadsheet-template
+Comment=OpenDocument Spreadsheet Template

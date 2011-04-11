@@ -1,0 +1,128 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "app.hrc"
+#include "sdpreslt.hrc"
+#include "sdcommands.h"
+
+ModalDialog DLG_PRESLT
+{
+    HelpID = CMD_SID_PRESENTATION_LAYOUT ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 212 , 185 ) ;
+    Moveable = TRUE ;
+    FixedText FT_LAYOUT
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 110 , 10 ) ;
+        Text [ en-US ] = "~Select a slide design" ;
+    };
+    Control VS_LAYOUT
+    {
+        Border = TRUE ;
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 14 ) ;
+        Size = MAP_APPFONT ( 144 , 141 ) ;
+        TabStop = TRUE ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 156 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 156 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    CheckBox CBX_MASTER_PAGE
+    {
+        HelpID = "sd:CheckBox:DLG_PRESLT:CBX_MASTER_PAGE";
+        Pos = MAP_APPFONT ( 6 , 158 ) ;
+        Size = MAP_APPFONT ( 120 , 12 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Exchange background page" ;
+    };
+    CheckBox CBX_CHECK_MASTERS
+    {
+        HelpID = "sd:CheckBox:DLG_PRESLT:CBX_CHECK_MASTERS";
+        Pos = MAP_APPFONT ( 6 , 170 ) ;
+        Size = MAP_APPFONT ( 140 , 12 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Delete unused backgrounds";
+    };
+    PushButton BTN_LOAD
+    {
+        HelpID = "sd:PushButton:DLG_PRESLT:BTN_LOAD";
+        Pos = MAP_APPFONT ( 156 , 155 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Load..." ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 156 , 53 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    Text [ en-US ] = "Slide Design" ;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

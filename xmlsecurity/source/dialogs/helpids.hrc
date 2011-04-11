@@ -1,0 +1,55 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _XMLSEC_HELPIDS_HRC
+#define _XMLSEC_HELPIDS_HRC
+
+// include ---------------------------------------------------------------
+
+#include <svl/solar.hrc>
+
+// Help-Ids --------------------------------------------------------------
+
+#define HID_XMLSEC_TP_MACROSEC                         "XMLSECURITY_HID_XMLSEC_TP_MACROSEC"
+#define HID_XMLSEC_TP_SECLEVEL                         "XMLSECURITY_HID_XMLSEC_TP_SECLEVEL"
+#define HID_XMLSEC_TP_TRUSTSOURCES                     "XMLSECURITY_HID_XMLSEC_TP_TRUSTSOURCES"
+#define HID_XMLSEC_DLG_CERTVIEWER                      "XMLSECURITY_HID_XMLSEC_DLG_CERTVIEWER"
+#define HID_XMLSEC_TP_GENERAL                          "XMLSECURITY_HID_XMLSEC_TP_GENERAL"
+#define HID_XMLSEC_TP_DETAILS                          "XMLSECURITY_HID_XMLSEC_TP_DETAILS"
+#define HID_XMLSEC_TP_CERTPATH                         "XMLSECURITY_HID_XMLSEC_TP_CERTPATH"
+#define HID_XMLSEC_DLG_DIGSIG                          "XMLSECURITY_HID_XMLSEC_DLG_DIGSIG"
+#define HID_XMLSEC_TP_MACROWARN                        "XMLSECURITY_HID_XMLSEC_TP_MACROWARN"
+#define HID_XMLSEC_DLG_CERTCHOOSER                     "XMLSECURITY_HID_XMLSEC_DLG_CERTCHOOSER"
+#define HID_XMLSEC_CTRL_TRUSTSOURCES                   "XMLSECURITY_HID_XMLSEC_CTRL_TRUSTSOURCES"
+#define HID_XMLSEC_CTRL_ELEMENTS                       "XMLSECURITY_HID_XMLSEC_CTRL_ELEMENTS"
+#define HID_XMLSEC_CTRL_VIEWSIGNATURES                 "XMLSECURITY_HID_XMLSEC_CTRL_VIEWSIGNATURES"
+#define HID_XMLSEC_CTRL_SIGNATURESDLG                  "XMLSECURITY_HID_XMLSEC_CTRL_SIGNATURESDLG"
+#define HID_XMLSEC_CTRL_CHOOSESIGNATURES               "XMLSECURITY_HID_XMLSEC_CTRL_CHOOSESIGNATURES"
+#define HID_XMLSEC_TREE_SIGNATURESDLG                  "XMLSECURITY_HID_XMLSEC_TREE_SIGNATURESDLG"
+
+#endif // #ifndef _XMLSEC_HELPIDS_HRC
+

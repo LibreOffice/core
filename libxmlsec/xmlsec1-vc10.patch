@@ -1,0 +1,15 @@
+--- misc/build/xmlsec1-1.2.14/win32/Makefile.msvc.old	2010-10-20 00:49:04.671875000 +0200
++++ misc/build/xmlsec1-1.2.14/win32/Makefile.msvc	2010-10-20 00:49:23.406250000 +0200
+@@ -351,7 +351,11 @@
+ !if "$(DEBUG)" == "1"
+ LDFLAGS 		= $(LDFLAGS) /DEBUG
+ !else
+-LDFLAGS 		= $(LDFLAGS) /OPT:NOWIN98
++!if "$(_NMAKE_VER)" >= "10.00.30319.01"
++LDFLAGS = $(LDFLAGS)
++!else
++LDFLAGS = $(LDFLAGS) /OPT:NOWIN98
++!endif
+ !endif
+ 
+ SOLIBS 			= $(LIBS) libxml2.lib 

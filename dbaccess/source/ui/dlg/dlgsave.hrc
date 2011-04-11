@@ -1,0 +1,53 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef DBAUI_DLGSAVE_HRC
+#define DBAUI_DLGSAVE_HRC
+
+// defines ------------------------------------------------------------------
+
+#define PB_OK                       1
+#define PB_CANCEL                   1
+#define PB_HELP                     1
+
+#define ET_CATALOG                  1
+#define ET_SCHEMA                   2
+#define ET_TITLE                    3
+
+#define FT_DESCRIPTION              1
+#define FT_CATALOG                  2
+#define FT_SCHEMA                   3
+#define FT_TITLE                    4
+
+#define STR_TBL_LABEL                       1
+#define STR_VW_LABEL                        2
+#define STR_QRY_LABEL                       3
+#define STR_TITLE_RENAME                    4
+#define STR_TITLE_PASTE_AS                  6
+
+#endif // DBAUI_DLGSAVE_HRC
+

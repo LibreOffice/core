@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="TypeDetection" oor:package="org.openoffice.Office">
+ <node oor:name="Types">
+  <node oor:name="TypeDetection6FileFormat" oor:op="replace">
+   <prop oor:name="UIName">
+   <value xml:lang="x-no-translate">TypeDetection 6 FileFormat</value>
+   <value xml:lang="en-US">TypeDetection 6 FileFormat</value>
+   </prop>
+   <prop oor:name="Data">
+    <value>1,,,,,,</value>
+   </prop>
+  </node>
+ </node>
+ <node oor:name="Filters">
+  <node oor:name="TypeDetection6FileFormat" oor:op="replace">
+   <prop oor:name="UIName">
+       <value xml:lang="x-no-translate">FilterFactory 6 FileFormat</value>
+       <value xml:lang="en-US">FilterFactory 6 FileFormat</value>
+   </prop>
+   <prop oor:name="Data">
+    <value>0,TypeDetection6FileFormat,,,,,</value>
+   </prop>
+  </node>
+ </node>
+</oor:component-data>

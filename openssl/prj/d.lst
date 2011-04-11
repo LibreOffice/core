@@ -1,0 +1,11 @@
+mkdir: %_DEST%\inc%_EXT%\external
+mkdir: %_DEST%\inc%_EXT%\external\openssl
+..\version.mk %_DEST%\inc%_EXT%\external\openssl\version.mk
+..\%__SRC%\inc\*.h %_DEST%\inc%_EXT%\external\openssl
+..\%__SRC%\lib\ssleay32.lib %_DEST%\lib%_EXT%\ssleay32.lib
+..\%__SRC%\bin\ssleay32.dll %_DEST%\bin%_EXT%\ssleay32.dll
+..\%__SRC%\lib\libeay32.lib %_DEST%\lib%_EXT%\libeay32.lib
+..\%__SRC%\bin\libeay32.dll %_DEST%\bin%_EXT%\libeay32.dll
+..\%__SRC%\lib\libcrypto.a %_DEST%\lib%_EXT%\libcrypto.a
+..\%__SRC%\lib\libssl.a %_DEST%\lib%_EXT%\libssl.a
+ 

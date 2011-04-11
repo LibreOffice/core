@@ -1,0 +1,5 @@
+..\%__SRC%\class\unoil.jar %_DEST%\bin%_EXT%\unoil.jar
+..\%__SRC%\bin\cli_oootypes.dll %_DEST%\bin%_EXT%\cli_oootypes.dll
+..\%__SRC%\bin\cli_oootypes.config %_DEST%\bin%_EXT%\cli_oootypes.config
+..\%__SRC%\bin\policy*.dll %_DEST%\bin%_EXT%\policy*.dll
+..\%__SRC%\bin\clioootypesversion.mk %_DEST%\bin%_EXT%\clioootypesversion.mk 

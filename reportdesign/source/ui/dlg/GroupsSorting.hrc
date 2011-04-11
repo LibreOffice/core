@@ -1,0 +1,69 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef RPTUI_GROUPSSORTING_HRC
+#define RPTUI_GROUPSSORTING_HRC
+
+#define FT_HEADER           (1)
+#define LST_HEADERLST       (2)
+#define FT_FOOTER           (3)
+#define LST_FOOTERLST       (4)
+#define FT_GROUPON          (5)
+#define LST_GROUPONLST      (6)
+#define FT_GROUPINTERVAL    (7)
+#define ED_GROUPINTERVALLST (8)
+#define FT_KEEPTOGETHER     (9)
+#define LST_KEEPTOGETHERLST (10)
+#define PB_OK               (11)
+#define PB_CANCEL           (12)
+#define PB_HELP             (13)
+#define WND_CONTROL         (14)
+#define HELP_FIELD          (15)
+#define FT_ORDER            (16)
+#define LST_ORDER           (17)
+#define FL_SEPARATOR1       (18)
+#define FT_MOVELABEL        (19)
+#define PB_UP               (20)
+#define PB_DOWN             (21)
+#define FL_SEPARATOR2       (22)
+#define FL_SEPARATOR3       (23)
+#define TB_TOOLBOX                      (27)
+
+
+#define CHECKBOX_HEIGHT      8
+#define FIXEDTEXT_HEIGHT     8
+#define FIXEDTEXT_WIDTH     60
+#define RELATED_CONTROLS     4
+#define UNRELATED_CONTROLS   7
+#define EDIT_HEIGHT         12
+#define BUTTON_HEIGHT       14
+#define BUTTON_WIDTH        50
+#define BROWSER_HEIGHT      75
+#define PAGE_WIDTH          120
+#define PAGE_HEIGHT         ( 13*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT + 11*FIXEDTEXT_HEIGHT )
+#define LISTBOX_WIDTH       PAGE_WIDTH - 4*UNRELATED_CONTROLS - FIXEDTEXT_WIDTH
+
+#endif // RPTUI_GROUPSSORTING_HRC

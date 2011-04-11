@@ -1,0 +1,11 @@
+xmrg xmerge : solenv unoil javaunohelper LIBXSLT:libxslt NULL
+xmrg xmerge                        usr1  - all xmrg_mkout NULL
+xmrg xmerge\inc                    nmake - all xmrg_inc NULL
+xmrg xmerge\source\xmerge          nmake - all xmrg_xmerge xmrg_inc NULL
+xmrg xmerge\source\bridge          nmake - all xmrg_bridge xmrg_xmerge xmrg_inc NULL
+xmrg xmerge\source\aportisdoc      nmake - all xmrg_aportis xmrg_xmerge xmrg_inc NULL
+xmrg xmerge\source\pexcel          nmake - all xmrg_pexcel xmrg_xmerge xmrg_inc NULL
+xmrg xmerge\source\pocketword      nmake - all xmrg_pword xmrg_xmerge xmrg_inc NULL
+xmrg xmerge\source\htmlsoff        nmake - all xmrg_htmlsoff xmrg_inc NULL
+xmrg xmerge\source\activesync      nmake - all xmrg_activesync xmrg_inc NULL
+xmrg xmerge\util                   nmake - all xmrg_util xmrg_xmerge xmrg_bridge xmrg_aportis xmrg_pexcel xmrg_pword NULL

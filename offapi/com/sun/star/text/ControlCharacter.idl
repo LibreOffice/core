@@ -1,0 +1,94 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_ControlCharacter_idl__
+#define __com_sun_star_text_ControlCharacter_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+// DocMerge from idl: constants com::sun::star::text::ControlCharacter
+/** These constants are the codes for inserting control characters
+        using <method>XSimpleText::insertControlCharacter</method> interface.
+ */
+published constants ControlCharacter
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::text::ControlCharacter::PARAGRAPH_BREAK
+    /** This control character starts a new paragraph.
+     */
+    const short PARAGRAPH_BREAK = 0;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::text::ControlCharacter::LINE_BREAK
+    /** This control character starts a new line in a paragraph.
+     */
+    const short LINE_BREAK = 1;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::text::ControlCharacter::HARD_HYPHEN
+    /** This control character equals a dash but prevents this
+                position from being hyphenated.
+     */
+    const short HARD_HYPHEN = 2;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::text::ControlCharacter::SOFT_HYPHEN
+    /** This control character defines a special position as a
+                hyphenation point. If a word containing a soft hyphen
+                must be split at the end of a line, then this position
+                is preferred.
+     */
+    const short SOFT_HYPHEN = 3;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::text::ControlCharacter::HARD_SPACE
+    /** This control character is used to link two words and
+                prevents this concatenation from being hyphenated.
+                It is printed as a space.
+     */
+    const short HARD_SPACE = 4;
+
+    //-------------------------------------------------------------------------
+    /** This control character appends a new paragraph.
+    */
+    const short APPEND_PARAGRAPH = 5;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

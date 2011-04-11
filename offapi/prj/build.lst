@@ -1,0 +1,109 @@
+oa	offapi	:	udkapi idlc solenv NULL
+oa	offapi									usr1	-	all	oa_mkout NULL
+oa	offapi\com\sun\star\script				nmake	-	all	oa_script oa_embed NULL
+oa	offapi\com\sun\star\script\browse	nmake	-	all	oa_sfbrowse NULL
+oa	offapi\com\sun\star\script\provider	nmake	-	all	oa_sfprovider NULL
+oa	offapi\com\sun\star\script\vba		nmake	-	all	oa_script_vba NULL
+oa	offapi\com\sun\star\auth				nmake	-	all	oa_auth NULL
+oa	offapi\com\sun\star\accessibility       nmake	-	all	oa_accessibility oa_awt NULL
+oa	offapi\com\sun\star\awt					nmake	-	all	oa_awt NULL
+oa	offapi\com\sun\star\awt\tree			nmake	-	all	oa_awttree NULL
+oa	offapi\com\sun\star\awt\grid			nmake	-	all	oa_awtgrid NULL
+oa	offapi\com\sun\star\awt\tab				nmake	-	all	oa_awttab NULL
+oa	offapi\com\sun\star\chart				nmake	-	all	oa_chart NULL
+oa	offapi\com\sun\star\chart2       		nmake	-	all	oa_chart2 NULL
+oa	offapi\com\sun\star\chart2\data       	nmake	-	all	oa_chart2_data NULL
+oa	offapi\com\sun\star\configuration		nmake	-	all	oa_config NULL
+oa	offapi\com\sun\star\configuration\bootstrap	nmake	-	all	oa_configbootstrap NULL
+oa	offapi\com\sun\star\configuration\backend	nmake	-	all	oa_configbackend NULL
+oa	offapi\com\sun\star\configuration\backend\xml	nmake	-	all	oa_configbackend_xml NULL
+oa	offapi\com\sun\star\datatransfer		nmake	-	all	oa_datatransfer NULL
+oa	offapi\com\sun\star\datatransfer\clipboard			nmake	-	all	oa_datatrans_clip NULL
+oa	offapi\com\sun\star\datatransfer\dnd	nmake	-	all	oa_datatrans_dnd oa_awt NULL
+oa	offapi\com\sun\star\deployment				nmake	-	all	oa_deployment oa_ucb oa_xml_input NULL
+oa	offapi\com\sun\star\deployment\test			nmake	-	all	oa_deploymenttest oa_ucb  NULL
+oa	offapi\com\sun\star\deployment\ui			nmake	-	all	oa_deployment_ui oa_awt oa_ui_dialogs NULL
+oa	offapi\com\sun\star\document			nmake	-	all	oa_docu oa_embed NULL
+oa	offapi\com\sun\star\drawing				nmake	-	all	oa_draw NULL
+oa	offapi\com\sun\star\drawing\framework	nmake	-	all	oa_draw_framework NULL
+oa	offapi\com\sun\star\embed				nmake	-	all	oa_embed NULL
+oa	offapi\com\sun\star\form				nmake	-	all	oa_form oa_inspection NULL
+oa	offapi\com\sun\star\form\component		nmake	-	all	oa_fcomp oa_form oa_form_submission NULL
+oa	offapi\com\sun\star\form\inspection     nmake   -   all	oa_finsp oa_fcomp oa_inspection NULL
+oa	offapi\com\sun\star\form\binding        nmake	-	all	oa_form_binding oa_fcomp NULL
+oa	offapi\com\sun\star\form\validation     nmake   -   all oa_form_validation oa_form_binding NULL
+oa	offapi\com\sun\star\form\submission     nmake   -   all oa_form_submission NULL
+oa	offapi\com\sun\star\form\control		nmake	-	all	oa_fcontr oa_form_submission NULL
+oa  offapi\com\sun\star\form\runtime        nmake   -   all oa_fruntime oa_fcomp NULL
+oa	offapi\com\sun\star\xforms				nmake	-	all	oa_xforms oa_xsd oa_form_submission NULL
+oa	offapi\com\sun\star\formula				nmake	-	all	oa_formula NULL
+oa	offapi\com\sun\star\frame\status		nmake	-	all	oa_frame_status NULL
+oa	offapi\com\sun\star\frame				nmake	-	all	oa_frame NULL
+oa	offapi\com\sun\star\gallery				nmake	-	all	oa_gallery NULL
+oa	offapi\com\sun\star\graphic				nmake	-	all	oa_graphic NULL
+oa	offapi\com\sun\star\i18n				nmake	-	all	oa_i18n NULL
+oa	offapi\com\sun\star\installation		nmake	-	all	oa_inst NULL
+oa	offapi\com\sun\star\ldap			    nmake	-	all	oa_ldap NULL
+oa	offapi\com\sun\star\linguistic2			nmake	-	all	oa_ling2 NULL
+oa  offapi\com\sun\star\logging             nmake   -   all oa_logging NULL
+oa	offapi\com\sun\star\mail    			nmake	-	all	oa_mail NULL
+oa	offapi\com\sun\star\media				nmake	-	all	oa_media NULL
+oa	offapi\com\sun\star\mozilla				nmake	-	all	oa_mozilla NULL
+oa	offapi\com\sun\star\oooimprovement		nmake	-	all	oa_oooimprovement NULL
+oa	offapi\com\sun\star\packages			nmake	-	all	oa_packages NULL
+oa	offapi\com\sun\star\packages\manifest	nmake	-	all	oa_manifest NULL
+oa	offapi\com\sun\star\packages\zip	    nmake	-	all	oa_zippackage NULL
+oa	offapi\com\sun\star\plugin				nmake	-	all	oa_plug NULL
+oa	offapi\com\sun\star\presentation		nmake	-	all	oa_pres NULL
+oa	offapi\com\sun\star\animations			nmake	-	all oa_animations oa_pres NULL
+oa	offapi\com\sun\star\presentation\textfield		nmake	-	all	oa_prestextfield NULL
+oa	offapi\com\sun\star\resource			nmake	-	all	oa_resrc NULL
+oa	offapi\com\sun\star\xml\sax				nmake	-	all	oa_sax NULL
+oa	offapi\com\sun\star\xml					nmake	-	all	oa_xml NULL
+oa	offapi\com\sun\star\xml\input			nmake	-	all	oa_xml_input oa_sax NULL
+oa	offapi\com\sun\star\xml\dom				nmake	-	all	oa_xml_dom oa_sax NULL
+oa	offapi\com\sun\star\xml\xpath			nmake	-	all	oa_xml_xpath oa_xml_dom NULL
+oa	offapi\com\sun\star\xml\dom\views			nmake	-	all	oa_xml_views NULL
+oa	offapi\com\sun\star\xml\dom\events			nmake	-	all	oa_xml_events oa_xml_views oa_xml_dom NULL
+oa	offapi\com\sun\star\scanner				nmake	-	all	oa_scan NULL
+oa	offapi\com\sun\star\setup				nmake	-	all	oa_setup NULL
+oa	offapi\com\sun\star\sheet				nmake	-	all	oa_sheet NULL
+oa  offapi\com\sun\star\smarttags           nmake   -   all oa_smarttags NULL
+oa  offapi\com\sun\star\style               nmake   -   all oa_style NULL
+oa	offapi\com\sun\star\svg					nmake	-	all	oa_svg NULL
+oa	offapi\com\sun\star\sync				nmake	-	all	oa_sync NULL
+oa	offapi\com\sun\star\sync2				nmake	-	all	oa_sync2 NULL
+oa	offapi\com\sun\star\system				nmake	-	all	oa_system NULL
+oa	offapi\com\sun\star\table				nmake	-	all	oa_table oa_form_binding NULL
+oa	offapi\com\sun\star\task				nmake	-	all	oa_task NULL
+oa	offapi\com\sun\star\text				nmake	-	all	oa_text NULL
+oa	offapi\com\sun\star\text\textfield		nmake	-	all	oa_textfield NULL
+oa  offapi\com\sun\star\text\textfield\docinfo     nmake   -   all oa_docinfo NULL
+oa  offapi\com\sun\star\text\fieldmaster    nmake   -   all oa_fieldmaster NULL
+oa	offapi\com\sun\star\ucb					nmake	-	all	oa_ucb NULL
+oa	offapi\com\sun\star\util				nmake	-	all	oa_putil NULL
+oa	offapi\com\sun\star\view				nmake	-	all	oa_view NULL
+oa	offapi\com\sun\star\report				nmake	-	all	oa_report NULL
+oa	offapi\com\sun\star\report\inspection	nmake	-	all	oa_reportins oa_report  NULL
+oa	offapi\com\sun\star\report\meta	        nmake	-	all	oa_reportmeta oa_report  NULL
+oa	offapi\com\sun\star\sdbcx				nmake	-	all	oa_sdbcx NULL
+oa	offapi\com\sun\star\sdbc				nmake	-	all	oa_sdbc NULL
+oa	offapi\com\sun\star\sdb					nmake	-	all	oa_sdb NULL
+oa	offapi\com\sun\star\sdb\tools           nmake	-	all	oa_sdbtools NULL
+oa  offapi\com\sun\star\sdb\application     nmake   -   all oa_sdbapp NULL
+oa	offapi\com\sun\star\image				nmake	-	all	oa_image NULL
+oa  offapi\com\sun\star\xsd                 nmake   -   all oa_xsd NULL
+oa  offapi\com\sun\star\inspection          nmake   -   all oa_inspection NULL
+oa	offapi\com\sun\star\ui  				nmake	-	all	oa_ui NULL
+oa	offapi\com\sun\star\ui\dialogs			nmake	-	all	oa_ui_dialogs NULL
+oa	offapi\com\sun\star  				    nmake	-	all	oa_starme NULL
+oa	offapi\com\sun\star\security            nmake	-	all	oa_security NULL
+oa	offapi\com\sun\star\xml\crypto\sax     	nmake	-	all	oa_crypto_sax oa_wrapper oa_csax NULL
+oa	offapi\com\sun\star\xml\crypto     	    nmake	-	all	oa_crypto oa_wrapper oa_security NULL
+oa	offapi\com\sun\star\xml\csax     	    nmake	-	all	oa_csax oa_sax NULL
+oa	offapi\com\sun\star\xml\wrapper		    nmake	-	all	oa_wrapper oa_sax NULL
+oa	offapi\com\sun\star\geometry		    nmake	-	all	oa_geometry NULL
+oa	offapi\com\sun\star\rendering	        nmake	-	all oa_rendering oa_geometry NULL
+oa	offapi\com\sun\star\rdf	                nmake	-	all oa_rdf  oa_datatransfer oa_text NULL
+oa	offapi\com\sun\star\office              nmake	-	all oa_office oa_text NULL
+oa  offapi\util                             nmake   -   all oa_util oa_auth oa_awt oa_awttree oa_awtgrid oa_awttab oa_chart oa_chart2 oa_chart2_data oa_config oa_configbootstrap oa_configbackend oa_configbackend_xml oa_datatrans_clip oa_datatrans_dnd oa_datatransfer oa_docu oa_draw oa_draw_framework oa_embed oa_fcomp oa_finsp oa_fcontr oa_fieldmaster oa_form oa_xforms oa_formula oa_frame oa_i18n oa_inst oa_ldap oa_ling2 oa_logging oa_mail oa_media oa_mozilla oa_packages oa_manifest oa_zippackage oa_plug oa_pres oa_animations oa_putil oa_resrc oa_sax oa_xml_input oa_scan oa_sdb oa_sdbtools oa_sdbapp oa_sdbc oa_sdbcx oa_setup oa_sheet oa_style oa_svg oa_sync oa_sync2 oa_system oa_table oa_task oa_text oa_textfield oa_docinfo oa_ucb oa_view oa_xml oa_xml_dom oa_xml_xpath oa_xml_views oa_xml_events oa_image oa_xsd oa_inspection oa_ui oa_ui_dialogs oa_accessibility oa_form_binding oa_form_validation oa_form_submission oa_fruntime oa_geometry oa_rendering oa_sfprovider oa_sfbrowse oa_deployment oa_deploymenttest oa_deployment_ui oa_frame_status oa_gallery oa_graphic oa_security oa_crypto_sax oa_crypto oa_csax oa_wrapper oa_script oa_smarttags oa_report oa_reportins oa_reportmeta oa_rdf oa_oooimprovement oa_office oa_prestextfield oa_starme oa_script_vba NULL

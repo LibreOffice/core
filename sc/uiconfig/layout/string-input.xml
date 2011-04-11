@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This is a template.  i18n translation is not performed in-place;
+     i18n translated XML files are generated from this template by
+     transex3/layout/tralay.  !-->
+
+<modaldialog sizeable="true" closeable="false" moveable="true" output-size="true" id="RID_SCDLG_STRINPUT" sv-look="true" xmlns="http://openoffice.org/2007/layout" xmlns:cnt="http://openoffice.org/2007/layout/container" title="Insert String">
+    <vbox spacing="5" border="5">
+        <fixedtext id="FT_LABEL" label="FT-LABEL"/>
+        <edit has_border="true" id="ED_INPUT" tabstop="true"/>
+    <dialogbuttonhbox border="5" spacing="5">
+            <okbutton defbutton="true" id="BTN_OK" tabstop="true"/>
+            <cancelbutton id="BTN_CANCEL" tabstop="true"/>
+            <helpbutton id="BTN_HELP" tabstop="true"/>
+    </dialogbuttonhbox>
+    </vbox>
+</modaldialog>

@@ -1,0 +1,83 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "dbu_uno.hrc"
+
+String STR_CTW_NO_VIEWS_SUPPORT
+{
+    Text [ en-US ] = "The destination database does not support views.";
+};
+
+String STR_CTW_NO_PRIMARY_KEY_SUPPORT
+{
+    Text [ en-US ] = "The destination database does not support primary keys.";
+};
+
+String STR_CTW_INVALID_DATA_ACCESS_DESCRIPTOR
+{
+    Text [ en-US ] = "no data access descriptor found, or no data access descriptor able to provide all necessary information";
+};
+
+String STR_CTW_ONLY_TABLES_AND_QUERIES_SUPPORT
+{
+    Text [ en-US ] = "Only tables and queries are supported at the moment.";
+};
+
+String STR_CTW_COPY_SOURCE_NEEDS_BOOKMARKS
+{
+    Text [ en-US ] = "The copy source's result set must support bookmarks.";
+};
+
+String STR_CTW_UNSUPPORTED_COLUMN_TYPE
+{
+    Text [ en-US ] = "Unsupported source column type ($type$) at column position $pos$.";
+};
+
+String STR_CTW_ILLEGAL_PARAMETER_COUNT
+{
+    Text [ en-US ] = "Illegal number of initialization parameters.";
+};
+
+String STR_CTW_ERROR_DURING_INITIALIZATION
+{
+    Text [ en-US ] = "An error occurred during initialization.";
+};
+
+String STR_CTW_ERROR_UNSUPPORTED_SETTING
+{
+    Text [ en-US ] = "Unsupported setting in the copy source descriptor: $name$.";
+};
+
+String STR_CTW_ERROR_NO_QUERY
+{
+    Text [ en-US ] = "To copy a query, your connection must be able to provide queries.";
+};
+
+String STR_CTW_ERROR_INVALID_INTERACTIONHANDLER
+{
+    Text [ en-US ] = "The given interaction handler is invalid.";
+};

@@ -1,0 +1,126 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _LABEL_HRC
+#define _LABEL_HRC
+
+#include "envelp.hrc"
+
+// local resources *********************************************************
+
+#define TXT_WRITING   1
+#define BOX_ADDR      2
+#define EDT_WRITING   3
+#define FT_DATABASE   4
+#define LB_DATABASE   5
+#define FT_TABLE      6
+#define LB_TABLE      7
+#define FL_WRITING   8
+#define BTN_CONT      9
+#define BTN_SHEET    10
+#define TXT_MAKE     11
+#define BOX_MAKE     12
+#define TXT_TYPE     13
+#define BOX_TYPE     14
+#define INF_FORMAT   15
+#define FL_FORMAT   16
+#define FT_DBFIELD   17
+#define LB_DBFIELD   18
+#define BTN_INSERT   19
+#define BTN_SYNC     20
+
+#define RB_FROM_AUTO_TEXT       1
+#define RB_FROM_EDIT            2
+#define LB_AUTO_TEXT            3
+#define FT_AUTO_TEXT_GROUP      4
+#define LB_AUTO_TEXT_GROUP      5
+#define ED_TEXT                 6
+#define FL_CONTENT                          7
+#define WIN_EXAMPLE             8
+#define ST_VISCARD_GROUP        10
+
+#define FL_DATA                         30
+#define FT_NAME                 31
+#define ED_FIRSTNAME            32
+#define ED_NAME                 33
+#define ED_SHORTCUT             34
+#define FT_STREET               35
+#define ED_STREET               36
+#define FT_ZIPCITY              37
+#define ED_ZIP                  38
+#define ED_CITY                 39
+#define FT_COUNTRYSTATE         40
+#define ED_COUNTRY              41
+#define FT_TITLEPROF            42
+#define ED_PROFESSION           43
+#define ED_TITLE                44
+
+#define ED_PHONE                46
+#define ED_MOBILE               47
+
+#define ED_FAX                  49
+#define FT_WWWMAIL              50
+#define ED_WWW                  51
+#define ED_MAIL                 52
+#define ED_STATE                53
+#define FT_COMP                 54
+#define ED_COMP                 55
+#define FT_COMP_EXT             56
+#define ED_COMP_EXT             57
+#define FT_SLOGAN               58
+#define ED_SLOGAN               59
+#define FT_POSITION             60
+#define ED_POSITION             61
+
+#define ST_BUSINESSCARDDLG      62
+#define ST_FIRSTPAGE_LAB        63
+#define ST_FIRSTPAGE_BC         64
+
+#define FT_NAME_2               65
+#define ED_FIRSTNAME_2          66
+#define ED_NAME_2               67
+#define ED_SHORTCUT_2           68
+
+#define FT_PHONE_MOBILE         70
+//#define FT_PHONE              71
+//#define FT_MOBILE             72
+#define FT_FAX                  73
+
+// global resources ********************************************************
+#define STR_DOC_TITLE           (RC_LABEL_BEGIN)
+#define STR_CUSTOM              (RC_LABEL_BEGIN + 1)
+
+// overflow check ********************************************************
+
+#define LABEL_ACT_END  STR_CUSTOM
+
+#if LABEL_ACT_END > RC_LABEL_END
+#error Resource-Ueberlauf in #file, #line
+#endif
+
+#endif
+

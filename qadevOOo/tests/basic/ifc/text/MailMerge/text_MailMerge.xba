@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="text_MailMerge" script:language="StarBasic">
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+'*************************************************************************
+' This Interface/Service test depends on the following GLOBAL variables,
+' which must be specified in the object creation:
+
+'	Global cMailMerge_DocumentURL as String
+'   cMailMerge_DocumentURL must be a valid Document URL
+
+'*************************************************************************
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.text.MailMerge
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+
+    PropertyTester.TestProperty("DataSourceName")
+
+	Dim DataCommandTypes(2) as Integer
+	DataCommandTypes(0) = com.sun.star.sdb.CommandType.TABLE
+	DataCommandTypes(1) = com.sun.star.sdb.CommandType.QUERY
+	DataCommandTypes(2) = com.sun.star.sdb.CommandType.COMMAND
+    PropertyTester.TestProperty("CommandType", DataCommandTypes())
+
+    PropertyTester.TestProperty("Command")
+
+    PropertyTester.TestProperty("ResultSet")
+
+    PropertyTester.TestProperty("ActiveConnection")
+
+    PropertyTester.TestProperty("Selection", Array(Array(2,4), Array(1,3)))
+    
+    PropertyTester.TestProperty("EscapeProcessing", )
+
+    PropertyTester.TestProperty("Filter")
+
+    PropertyTester.TestProperty("DocumentURL", Array(cMailMerge_DocumentURL))
+
+    PropertyTester.TestProperty("Model")
+
+    PropertyTester.TestProperty("OutputType")
+
+    PropertyTester.TestProperty("SinglePrintJobs")
+
+    PropertyTester.TestProperty("OutputURL", Array(ConvertToURL(utils.getUserPath())))
+
+    PropertyTester.TestProperty("FileNameFromColumn")
+
+    PropertyTester.TestProperty("FileNamePrefix")
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+
+</script:module>

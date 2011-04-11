@@ -1,0 +1,121 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_io_XMarkableStream_idl__
+#define __com_sun_star_io_XMarkableStream_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/io/IOException.idl>
+
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module io {
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::io::XMarkableStream
+/** makes it possible to set and remove seekable marks to a stream.
+ */
+published interface XMarkableStream: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::XMarkableStream::createMark
+    /** creates a mark of the current postion and returns an identifier to it.
+     */
+    long createMark()
+            raises( com::sun::star::io::IOException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::XMarkableStream::deleteMark
+    /** deletes the mark that you previously created with
+        <member>XMarkableStream::createMark</member>.
+
+        <p>It is an error to delete a mark if other marks after this
+        exist.  In this case, for reasons of robustness, the
+        implementation must delete this mark and all others after
+        this mark.  </p>
+     */
+    void deleteMark( [in] long Mark )
+            raises( com::sun::star::io::IOException,
+                    com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::XMarkableStream::jumpToMark
+    /** jumps to a previously created mark.
+     */
+    void jumpToMark( [in] long nMark )
+            raises( com::sun::star::io::IOException,
+                    com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+
+    /** jumps to the furthest position of the stream.
+        <p> In the inputstream case, a subsequent read call returns
+        data, that was never read or skipped over before. In the
+        outputstream case, a subsequent write call will add
+        new data at the end of the stream without overwriting existing data.
+     */
+    void jumpToFurthest()
+            raises( com::sun::star::io::IOException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::io::XMarkableStream::offsetToMark
+    /** @returns
+            the offset from the current stream position to the
+            mark ("current position" - "mark position").
+
+        @param nMark
+            identifies the mark which is used as a base
+            to calculate the offset of the current position.
+
+        @throws IllegalArgumentException
+            if the mark does not exist or is deleted.
+
+        @throws IOException
+            if an I/O error has occurred.
+     */
+    long offsetToMark( [in] long nMark )
+            raises( com::sun::star::io::IOException,
+                    com::sun::star::lang::IllegalArgumentException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

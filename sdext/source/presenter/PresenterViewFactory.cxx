@@ -1,0 +1,656 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sdext.hxx"
+
+#include "PresenterViewFactory.hxx"
+#include "PresenterPaneContainer.hxx"
+#include "PresenterHelper.hxx"
+#include "PresenterHelpView.hxx"
+#include "PresenterNotesView.hxx"
+#include "PresenterSlideShowView.hxx"
+#include "PresenterSlidePreview.hxx"
+#include "PresenterSlideSorter.hxx"
+#include "PresenterToolBar.hxx"
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/framework/ResourceId.hpp>
+#include <com/sun/star/drawing/framework/XControllerManager.hpp>
+#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
+#include <com/sun/star/drawing/XDrawPages.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/drawing/XSlideSorterBase.hpp>
+#include <com/sun/star/presentation/XSlideShow.hpp>
+#include <com/sun/star/presentation/XSlideShowView.hpp>
+#include <cppuhelper/compbase1.hxx>
+#include <boost/bind.hpp>
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::drawing::framework;
+using ::rtl::OUString;
+
+#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
+
+namespace sdext { namespace presenter {
+
+const ::rtl::OUString PresenterViewFactory::msCurrentSlidePreviewViewURL(
+    A2S("private:resource/view/Presenter/CurrentSlidePreview"));
+const ::rtl::OUString PresenterViewFactory::msNextSlidePreviewViewURL(
+    A2S("private:resource/view/Presenter/NextSlidePreview"));
+const ::rtl::OUString PresenterViewFactory::msNotesViewURL(
+    A2S("private:resource/view/Presenter/Notes"));
+const ::rtl::OUString PresenterViewFactory::msToolBarViewURL(
+    A2S("private:resource/view/Presenter/ToolBar"));
+const ::rtl::OUString PresenterViewFactory::msSlideSorterURL(
+    A2S("private:resource/view/Presenter/SlideSorter"));
+const ::rtl::OUString PresenterViewFactory::msHelpViewURL(
+    A2S("private:resource/view/Presenter/Help"));
+
+
+
+//===== SimpleView ============================================================
+
+namespace {
+
+typedef ::cppu::WeakComponentImplHelper1 <XView> SimpleViewInterfaceBase;
+
+class SimpleView
+    : private ::cppu::BaseMutex,
+      public SimpleViewInterfaceBase
+{
+public:
+    SimpleView (const Reference<XResourceId>& rxViewId)
+        : SimpleViewInterfaceBase(m_aMutex),mxResourceId(rxViewId) {};
+    virtual ~SimpleView (void) {};
+
+    // XView
+
+    virtual Reference<XResourceId> SAL_CALL getResourceId (void) throw (RuntimeException)
+    { return mxResourceId; };
+
+private:
+    Reference<XResourceId> mxResourceId;
+};
+
+
+
+/** By default the PresenterSlidePreview shows the preview of the current
+    slide.  This adapter class makes it display the preview of the next
+    slide.
+*/
+class NextSlidePreview : public PresenterSlidePreview
+{
+public:
+    NextSlidePreview (
+        const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+        const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
+        const css::uno::Reference<css::drawing::framework::XPane>& rxAnchorPane,
+        const ::rtl::Reference<PresenterController>& rpPresenterController)
+        : PresenterSlidePreview(rxContext, rxViewId, rxAnchorPane, rpPresenterController)
+    {
+    }
+    virtual ~NextSlidePreview (void) {}
+    virtual void SAL_CALL setCurrentPage (
+        const css::uno::Reference<css::drawing::XDrawPage>& rxSlide)
+        throw (css::uno::RuntimeException)
+    {
+        Reference<presentation::XSlideShowController> xSlideShowController (
+            mpPresenterController->GetSlideShowController());
+        Reference<drawing::XDrawPage> xSlide;
+        if (xSlideShowController.is())
+        {
+            const sal_Int32 nCount (xSlideShowController->getSlideCount());
+            sal_Int32 nNextSlideIndex (-1);
+            if (xSlideShowController->getCurrentSlide() == rxSlide)
+            {
+                nNextSlideIndex = xSlideShowController->getNextSlideIndex();
+            }
+            else
+            {
+                for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
+                {
+                    if (rxSlide == Reference<drawing::XDrawPage>(
+                        xSlideShowController->getSlideByIndex(nIndex), UNO_QUERY))
+                    {
+                        nNextSlideIndex = nIndex + 1;
+                    }
+                }
+            }
+            if (nNextSlideIndex >= 0)
+            {
+                if (nNextSlideIndex < nCount)
+                {
+                    xSlide = Reference<drawing::XDrawPage>(
+                        xSlideShowController->getSlideByIndex(nNextSlideIndex),
+                         UNO_QUERY);
+                }
+            }
+        }
+        PresenterSlidePreview::setCurrentPage(xSlide);
+    }
+};
+
+} // end of anonymous namespace
+
+
+
+
+//===== PresenterViewFactory ==============================================
+
+PresenterViewFactory::PresenterViewFactory (
+    const Reference<uno::XComponentContext>& rxContext,
+    const Reference<frame::XController>& rxController,
+    const ::rtl::Reference<PresenterController>& rpPresenterController)
+    : PresenterViewFactoryInterfaceBase(m_aMutex),
+      mxComponentContext(rxContext),
+      mxConfigurationController(),
+      mxControllerWeak(rxController),
+      mpPresenterController(rpPresenterController),
+      mpResourceCache()
+{
+}
+
+
+
+
+Reference<drawing::framework::XResourceFactory> PresenterViewFactory::Create (
+    const Reference<uno::XComponentContext>& rxContext,
+    const Reference<frame::XController>& rxController,
+    const ::rtl::Reference<PresenterController>& rpPresenterController)
+{
+    rtl::Reference<PresenterViewFactory> pFactory (
+        new PresenterViewFactory(rxContext,rxController,rpPresenterController));
+    pFactory->Register(rxController);
+    return Reference<drawing::framework::XResourceFactory>(
+        static_cast<XWeak*>(pFactory.get()), UNO_QUERY);
+}
+
+
+
+
+void PresenterViewFactory::Register (const Reference<frame::XController>& rxController)
+{
+    try
+    {
+        // Get the configuration controller.
+        Reference<XControllerManager> xCM (rxController, UNO_QUERY_THROW);
+        mxConfigurationController = xCM->getConfigurationController();
+        if ( ! mxConfigurationController.is())
+        {
+            throw RuntimeException();
+        }
+        else
+        {
+            mxConfigurationController->addResourceFactory(msCurrentSlidePreviewViewURL, this);
+            mxConfigurationController->addResourceFactory(msNextSlidePreviewViewURL, this);
+            mxConfigurationController->addResourceFactory(msNotesViewURL, this);
+            mxConfigurationController->addResourceFactory(msToolBarViewURL, this);
+            mxConfigurationController->addResourceFactory(msSlideSorterURL, this);
+            mxConfigurationController->addResourceFactory(msHelpViewURL, this);
+        }
+    }
+    catch (RuntimeException&)
+    {
+        OSL_ASSERT(false);
+        if (mxConfigurationController.is())
+            mxConfigurationController->removeResourceFactoryForReference(this);
+        mxConfigurationController = NULL;
+
+        throw;
+    }
+}
+
+
+
+
+PresenterViewFactory::~PresenterViewFactory (void)
+{
+}
+
+
+
+
+void SAL_CALL PresenterViewFactory::disposing (void)
+    throw (RuntimeException)
+{
+    if (mxConfigurationController.is())
+        mxConfigurationController->removeResourceFactoryForReference(this);
+    mxConfigurationController = NULL;
+
+    if (mpResourceCache.get() != NULL)
+    {
+        // Dispose all views in the cache.
+        ResourceContainer::const_iterator iView (mpResourceCache->begin());
+        ResourceContainer::const_iterator iEnd (mpResourceCache->end());
+        for ( ; iView!=iEnd; ++iView)
+        {
+            try
+            {
+                Reference<lang::XComponent> xComponent (iView->second.first, UNO_QUERY);
+                if (xComponent.is())
+                    xComponent->dispose();
+            }
+            catch (lang::DisposedException&)
+            {
+            }
+        }
+        mpResourceCache.reset();
+    }
+}
+
+
+
+
+//----- XViewFactory ----------------------------------------------------------
+
+Reference<XResource> SAL_CALL PresenterViewFactory::createResource (
+    const Reference<XResourceId>& rxViewId)
+    throw (RuntimeException)
+{
+    ThrowIfDisposed();
+
+    Reference<XResource> xView;
+
+    if (rxViewId.is())
+    {
+        Reference<XPane> xAnchorPane (
+            mxConfigurationController->getResource(rxViewId->getAnchor()),
+            UNO_QUERY_THROW);
+        xView = GetViewFromCache(rxViewId, xAnchorPane);
+        if (xView == NULL)
+            xView = CreateView(rxViewId, xAnchorPane);
+
+        // Activate the view.
+        PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
+            mpPresenterController->GetPaneContainer()->FindPaneId(rxViewId->getAnchor()));
+        if (pDescriptor.get() != NULL)
+            pDescriptor->SetActivationState(true);
+    }
+
+    return xView;
+}
+
+
+
+
+void SAL_CALL PresenterViewFactory::releaseResource (const Reference<XResource>& rxView)
+    throw (RuntimeException)
+{
+    ThrowIfDisposed();
+
+    if ( ! rxView.is())
+        return;
+
+    // Deactivate the view.
+    PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
+        mpPresenterController->GetPaneContainer()->FindPaneId(
+            rxView->getResourceId()->getAnchor()));
+    if (pDescriptor.get() != NULL)
+        pDescriptor->SetActivationState(false);
+
+    // Dispose only views that we can not put into the cache.
+    CachablePresenterView* pView = dynamic_cast<CachablePresenterView*>(rxView.get());
+    if (pView == NULL || mpResourceCache.get()==NULL)
+    {
+        try
+        {
+            if (pView != NULL)
+                pView->ReleaseView();
+            Reference<lang::XComponent> xComponent (rxView, UNO_QUERY);
+            if (xComponent.is())
+                xComponent->dispose();
+        }
+        catch (lang::DisposedException&)
+        {
+            // Do not let disposed exceptions get out.  It might be interpreted
+            // as coming from the factory, which would then be removed from the
+            // drawing framework.
+        }
+    }
+    else
+    {
+        // Put cachable views in the cache.
+        Reference<XResourceId> xViewId (rxView->getResourceId());
+        if (xViewId.is())
+        {
+            Reference<XPane> xAnchorPane (
+                mxConfigurationController->getResource(xViewId->getAnchor()),
+                UNO_QUERY_THROW);
+            (*mpResourceCache)[xViewId->getResourceURL()]
+                = ViewResourceDescriptor(Reference<XView>(rxView, UNO_QUERY), xAnchorPane);
+            pView->DeactivatePresenterView();
+        }
+    }
+}
+
+
+
+
+//-----------------------------------------------------------------------------
+
+Reference<XResource> PresenterViewFactory::GetViewFromCache(
+    const Reference<XResourceId>& rxViewId,
+    const Reference<XPane>& rxAnchorPane) const
+{
+    if (mpResourceCache.get() == NULL)
+        return NULL;
+
+    try
+    {
+        const OUString sResourceURL (rxViewId->getResourceURL());
+
+        // Can we use a view from the cache?
+        ResourceContainer::const_iterator iView (mpResourceCache->find(sResourceURL));
+        if (iView != mpResourceCache->end())
+        {
+            // The view is in the container but it can only be used if
+            // the anchor pane is the same now as it was at creation of
+            // the view.
+            if (iView->second.second == rxAnchorPane)
+            {
+                CachablePresenterView* pView
+                    = dynamic_cast<CachablePresenterView*>(iView->second.first.get());
+                if (pView != NULL)
+                    pView->ActivatePresenterView();
+                return Reference<XResource>(iView->second.first, UNO_QUERY);
+            }
+
+            // Right view, wrong pane.  Create a new view.
+        }
+    }
+    catch (RuntimeException&)
+    {
+    }
+    return NULL;
+}
+
+
+
+
+Reference<XResource> PresenterViewFactory::CreateView(
+    const Reference<XResourceId>& rxViewId,
+    const Reference<XPane>& rxAnchorPane)
+{
+    Reference<XView> xView;
+
+    try
+    {
+        const OUString sResourceURL (rxViewId->getResourceURL());
+
+        if (sResourceURL.equals(msCurrentSlidePreviewViewURL))
+        {
+            xView = CreateSlideShowView(rxViewId);
+        }
+        else if (sResourceURL.equals(msNotesViewURL))
+        {
+            xView = CreateNotesView(rxViewId, rxAnchorPane);
+        }
+        else if (sResourceURL.equals(msNextSlidePreviewViewURL))
+        {
+            xView = CreateSlidePreviewView(rxViewId, rxAnchorPane);
+        }
+        else if (sResourceURL.equals(msToolBarViewURL))
+        {
+            xView = CreateToolBarView(rxViewId);
+        }
+        else if (sResourceURL.equals(msSlideSorterURL))
+        {
+            xView = CreateSlideSorterView(rxViewId);
+        }
+        else if (sResourceURL.equals(msHelpViewURL))
+        {
+            xView = CreateHelpView(rxViewId);
+        }
+
+        // Activate it.
+        CachablePresenterView* pView = dynamic_cast<CachablePresenterView*>(xView.get());
+        if (pView != NULL)
+            pView->ActivatePresenterView();
+    }
+    catch (RuntimeException&)
+    {
+        xView = NULL;
+    }
+
+    return Reference<XResource>(xView, UNO_QUERY);
+}
+
+
+
+
+Reference<XView> PresenterViewFactory::CreateSlideShowView(
+    const Reference<XResourceId>& rxViewId) const
+{
+    Reference<XView> xView;
+
+    if ( ! mxConfigurationController.is())
+        return xView;
+    if ( ! mxComponentContext.is())
+        return xView;
+
+    try
+    {
+        rtl::Reference<PresenterSlideShowView> pShowView (
+            new PresenterSlideShowView(
+                mxComponentContext,
+                rxViewId,
+                Reference<frame::XController>(mxControllerWeak),
+                mpPresenterController));
+        pShowView->LateInit();
+        xView = Reference<XView>(pShowView.get());
+    }
+    catch (RuntimeException&)
+    {
+        xView = NULL;
+    }
+
+    return xView;
+}
+
+
+
+
+Reference<XView> PresenterViewFactory::CreateSlidePreviewView(
+    const Reference<XResourceId>& rxViewId,
+    const Reference<XPane>& rxAnchorPane) const
+{
+    Reference<XView> xView;
+
+    if ( ! mxConfigurationController.is())
+        return xView;
+    if ( ! mxComponentContext.is())
+        return xView;
+
+    try
+    {
+        xView = Reference<XView>(
+            static_cast<XWeak*>(new NextSlidePreview(
+                mxComponentContext,
+                rxViewId,
+                rxAnchorPane,
+                mpPresenterController)),
+            UNO_QUERY_THROW);
+    }
+    catch (RuntimeException&)
+    {
+        xView = NULL;
+    }
+
+    return xView;
+}
+
+
+
+
+Reference<XView> PresenterViewFactory::CreateToolBarView(
+    const Reference<XResourceId>& rxViewId) const
+{
+    return new PresenterToolBarView(
+        mxComponentContext,
+        rxViewId,
+        Reference<frame::XController>(mxControllerWeak),
+        mpPresenterController);
+}
+
+
+
+
+Reference<XView> PresenterViewFactory::CreateNotesView(
+    const Reference<XResourceId>& rxViewId,
+    const Reference<XPane>& rxAnchorPane) const
+{
+    (void)rxAnchorPane;
+    Reference<XView> xView;
+
+    if ( ! mxConfigurationController.is())
+        return xView;
+    if ( ! mxComponentContext.is())
+        return xView;
+
+    try
+    {
+        xView = Reference<XView>(static_cast<XWeak*>(
+            new PresenterNotesView(
+                mxComponentContext,
+                rxViewId,
+                Reference<frame::XController>(mxControllerWeak),
+                mpPresenterController)),
+            UNO_QUERY_THROW);
+    }
+    catch (RuntimeException&)
+    {
+        xView = NULL;
+    }
+
+    return xView;
+}
+
+
+
+
+Reference<XView> PresenterViewFactory::CreateSlideSorterView(
+    const Reference<XResourceId>& rxViewId) const
+{
+    Reference<XView> xView;
+
+    if ( ! mxConfigurationController.is())
+        return xView;
+    if ( ! mxComponentContext.is())
+        return xView;
+
+    try
+    {
+        rtl::Reference<PresenterSlideSorter> pView (
+            new PresenterSlideSorter(
+                mxComponentContext,
+                rxViewId,
+                Reference<frame::XController>(mxControllerWeak),
+                mpPresenterController));
+        PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
+            mpPresenterController->GetPaneContainer()->FindPaneId(rxViewId->getAnchor()));
+        if (pDescriptor.get() != NULL)
+            pDescriptor->maActivator = ::boost::bind(
+                &PresenterSlideSorter::SetActiveState, pView.get(), _1);
+        xView = pView.get();
+    }
+    catch (RuntimeException&)
+    {
+        xView = NULL;
+    }
+
+    return xView;
+}
+
+
+
+
+Reference<XView> PresenterViewFactory::CreateHelpView(
+    const Reference<XResourceId>& rxViewId) const
+{
+    return Reference<XView>(new PresenterHelpView(
+        mxComponentContext,
+        rxViewId,
+        Reference<frame::XController>(mxControllerWeak),
+        mpPresenterController));
+}
+
+
+
+
+
+void PresenterViewFactory::ThrowIfDisposed (void) const
+    throw (::com::sun::star::lang::DisposedException)
+{
+    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    {
+        throw lang::DisposedException (
+            OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "PresenterViewFactory object has already been disposed")),
+            const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
+    }
+}
+
+
+
+
+//===== CachablePresenterView =================================================
+
+CachablePresenterView::CachablePresenterView (void)
+    : mbIsPresenterViewActive(true)
+{
+}
+
+
+
+
+void CachablePresenterView::ActivatePresenterView (void)
+{
+    mbIsPresenterViewActive = true;
+}
+
+
+
+
+void CachablePresenterView::DeactivatePresenterView (void)
+{
+    mbIsPresenterViewActive = false;
+}
+
+
+
+
+void CachablePresenterView::ReleaseView (void)
+{
+}
+
+
+
+} }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

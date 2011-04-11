@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="sdbc_XParameters" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+'*************************************************************************
+' This Interface/Service test depends on the following GLOBAL variables,
+' which must be specified in the object creation:
+
+'     - Global paramTypes As Variant
+'       Array of Strings which describes the types of the query parameters
+
+'*************************************************************************
+
+
+
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.sdbc.XParameters
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim i As Integer
+
+    for i = 0 to ubound(paramTypes())
+        if (paramTypes(i) = "boolean") OR (paramTypes(i) = "byte") OR (paramTypes(i) = "short") OR _
+           (paramTypes(i) = "int") OR (paramTypes(i) = "long") OR (paramTypes(i) = "float") OR _
+           (paramTypes(i) = "double") OR (paramTypes(i) = "string") OR (paramTypes(i) = "bytes") OR _
+           (paramTypes(i) = "date") OR (paramTypes(i) = "time") OR (paramTypes(i) = "timestamp") OR _
+           (paramTypes(i) = "binarystream") OR (paramTypes(i) = "characterstream") then
+           
+            bOK = true
+            oObj.setNull(i + 1, paramTypes(i))
+            Test.MethodTested("setNull()", bOK)
+        elseif paramTypes(i) = "ref" then
+            Out.Log("Don't know how to test this :(")
+'            bOK = true
+'            oObj.setObjectNull(i)
+'            Test.MethodTested("setNull()", bOK)
+        end if
+
+           
+        if paramTypes(i) = "boolean" then
+            Test.StartMethod("setBoolean()")
+            bOK = true
+            oObj.setBoolean(i + 1, true)
+            Test.MethodTested("setBoolean()", bOK)
+        elseif paramTypes(i) = "byte" then
+            Test.StartMethod("setByte()")
+            bOK = true
+            oObj.setByte(i + 1, 5)
+            Test.MethodTested("setByte()", bOK)
+        elseif paramTypes(i) = "short" then
+            Test.StartMethod("setShort()")
+            bOK = true
+            oObj.setShort(i + 1, 6)
+            Test.MethodTested("setShort()", bOK)
+        elseif paramTypes(i) = "int" then
+            Test.StartMethod("setInt()")
+            bOK = true
+            oObj.setInt(i + 1, 234)
+            Test.MethodTested("setInt()", bOK)
+        elseif paramTypes(i) = "long" then
+            Test.StartMethod("setLong()")
+            bOK = true
+            oObj.setLong(i + 1, 34656)
+            Test.MethodTested("setLong()", bOK)
+        elseif paramTypes(i) = "float" then
+            Test.StartMethod("setFloat()")
+            bOK = true
+            oObj.setFloat(i + 1, 98.765)
+            Test.MethodTested("setFloat()", bOK)
+        elseif paramTypes(i) = "double" then
+            Test.StartMethod("setDouble()")
+            bOK = true
+            oObj.setDouble(i + 1, 54.432)
+            Test.MethodTested("setDouble()", bOK)
+        elseif paramTypes(i) = "string" then
+            Test.StartMethod("setString()")
+            bOK = true
+            oObj.setString(i + 1, "XParameters")
+            Test.MethodTested("setString()", bOK)
+        elseif paramTypes(i) = "bytes" then
+            Test.StartMethod("setBytes()")
+            bOK = true
+            oObj.setBytes(i + 1, Array(1,2,3))
+            Test.MethodTested("setBytes()", bOK)
+        elseif paramTypes(i) = "date" then
+            Dim dat As new com.sun.star.util.Date
+        
+            Test.StartMethod("setDate()")
+            bOK = true
+            oObj.setDate(i + 1, dat)
+            Test.MethodTested("setDate()", bOK)
+        elseif paramTypes(i) = "time" then
+            Dim tim As new com.sun.star.util.Time
+
+            Test.StartMethod("setTime()")
+            bOK = true
+            oObj.setTime(i + 1, tim)
+            Test.MethodTested("setTime()", bOK)
+        elseif paramTypes(i) = "timestamp" then
+            Dim timstmp As new com.sun.star.util.DateTime
+
+            Test.StartMethod("setTimestamp()")
+            bOK = true
+            oObj.setTimestamp(i + 1, timstmp)
+            Test.MethodTested("setTimestamp()", bOK)
+        elseif paramTypes(i) = "binarystream" then
+            Test.StartMethod("setBinaryStream()")
+            bOK = true
+            oObj.setBinaryStream(i + 1, ceateUnoService("com.sun.star.io.Pipe"))
+            Test.MethodTested("setBinaryStream()", bOK)
+        elseif paramTypes(i) = "characterstream" then
+            Test.StartMethod("setCharacterStream()")
+            bOK = true
+            oObj.setCharacterStream(i + 1, ceateUnoService("com.sun.star.io.Pipe"))
+            Test.MethodTested("setCharacterStream()", bOK)
+        elseif paramTypes(i) = "object" then
+            Test.StartMethod("setObject()")
+            bOK = true
+            oObj.setObject(i + 1, ceateUnoService("com.sun.star.io.Pipe"))
+            Test.MethodTested("setObject()", bOK)
+        elseif paramTypes(i) = "objectwithinfo" then
+            Out.Log("Don't know how to test this type :(")
+'            Test.StartMethod("setObjectWithInfo()")
+'            bOK = true
+'            oObj.setObjectWithInfo()
+'            bOK = bOK AND false
+'            Test.MethodTested("setObjectWithInfo()", bOK)
+        elseif paramTypes(i) = "ref" then
+            Out.Log("Don't know how to test this type :(")
+'            Test.StartMethod("setRef()")
+'            bOK = true
+'            oObj.setRef()
+'            bOK = bOK AND false
+'            Test.MethodTested("setRef()", bOK)
+        elseif paramTypes(i) = "blob" then
+            Out.Log("Don't know how to test this type :(")
+'            Test.StartMethod("setBlob()")
+'            bOK = true
+'            oObj.setBlob()
+'            bOK = bOK AND false
+'            Test.MethodTested("setBlob()", bOK)
+        elseif paramTypes(i) = "clob" then
+            Out.Log("Don't know how to test this type :(")
+'            Test.StartMethod("setClob()")
+'            bOK = true
+'            oObj.setClob()
+'            bOK = bOK AND false
+'            Test.MethodTested("setClob()", bOK)
+        elseif paramTypes(i) = "array" then
+            Out.Log("Don't know how to test this type :(")
+'            Test.StartMethod("setArray()")
+'            bOK = true
+'            oObj.setArray()
+'            bOK = bOK AND false
+'            Test.MethodTested("setArray()", bOK)
+        end if
+    next i
+
+    Test.StartMethod("clearParameters()")
+    bOK = true
+    oObj.clearParameters()
+    Test.MethodTested("clearParameters()", bOK)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

@@ -1,0 +1,83 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include <svx/svxids.hrc>
+#include "globals.hrc"
+#include "cmdid.h"
+#include "web.hrc"
+#include "helpid.h"
+#include "cfgid.h"
+
+String STR_HUMAN_SWWEBDOC_NAME
+{
+    Text [ en-US ] = "HTML" ;
+};
+String STR_WRITER_WEBDOC_FULLTYPE_40
+{
+    Text [ en-US ] = "%PRODUCTNAME 4.0 HTML" ;
+};
+String STR_WRITER_WEBDOC_FULLTYPE_50
+{
+    Text [ en-US ] = "%PRODUCTNAME 5.0 HTML" ;
+};
+String STR_WRITER_WEBDOC_FULLTYPE
+{
+    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION HTML Document";
+};
+String STR_SHELLNAME_WEBTEXT
+{
+    Text [ en-US ] = "Text/Web" ;
+};
+String STR_SHELLNAME_WEBFRAME
+{
+    Text [ en-US ] = "Frame/Web" ;
+};
+String RID_WEBTOOLS_TOOLBOX
+{
+    Text [ en-US ] = "Main Toolbar/Web" ;
+};
+/*************************************************************************
+    Textleiste
+*************************************************************************/
+String RID_WEBTEXT_TOOLBOX
+{
+    Text [ en-US ] = "Text Object Bar/Web" ;
+};
+String RID_WEBFRAME_TOOLBOX
+{
+    Text [ en-US ] = "Frame Object Bar/Web" ;
+};
+String RID_WEBGRAPHIC_TOOLBOX
+{
+    Text [ en-US ] = "Graphics Object Bar/Web" ;
+};
+String RID_WEBOLE_TOOLBOX
+{
+    Text [ en-US ] = "Object/Web" ;
+};
+
+

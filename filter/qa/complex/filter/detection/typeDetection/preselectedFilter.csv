@@ -1,0 +1,6 @@
+fileAlias;FilterName;FilterOptions;FilterData;expectedFileType
+text1;%SO6productname %SO6formatversion Textdokument;;;writer_Text_encoded:writer_Text
+csv1;%SO6productname %SO6formatversion Textdokument;;;writer_Text_encoded:writer_Text
+csv1;Text - txt - csv (StarCalc);;;calc_Text_txt_csv_StarCalc
+csv2;%SO6productname %SO6formatversion Textdokument;;;writer_Text_encoded:writer_Text
+csv2;Text - txt - csv (StarCalc);;;calc_Text_txt_csv_StarCalc

@@ -1,0 +1,101 @@
+/*************************************************************************
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+************************************************************************/
+
+#ifndef __com_sun_star_sdb_application_ApplicationController_idl__
+#define __com_sun_star_sdb_application_ApplicationController_idl__
+
+#include <com/sun/star/frame/Controller.idl>
+#include <com/sun/star/ui/XContextMenuInterception.idl>
+#include <com/sun/star/awt/XUserInputInterception.idl>
+#include <com/sun/star/view/XSelectionSupplier.idl>
+#include <com/sun/star/frame/XTitle.idl>
+#include <com/sun/star/frame/XTitleChangeBroadcaster.idl>
+#include <com/sun/star/sdb/application/XDatabaseDocumentUI.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module sdb { module application {
+
+//=============================================================================
+
+/** is the default controller implementation for OpenOffice.org's database application.
+ */
+service DefaultViewController
+{
+    /** defines basic controller functionality
+    */
+    service ::com::sun::star::frame::Controller;
+
+    /** allows intercepting context menu requests done by the user
+
+        <p>The <member scope="::com::sun::star::ui">ContextMenuExecuteEvent::Selection</member> member
+        of the event passed to an interceptor will <em>not</em> be the controller itself
+        (though the controller also supports the <a href="#XSelectionSupplier"><code>XSelectionSupplier</code></a>
+        interface), but a component which describes the current selection of the very window where the context
+        menu was requested.</p>
+
+        <p>In OpenOffice.org's database application, database objects such as tables, queries, forms,
+        reports are displayed in a tree-like fashion. Currently, only context menu requests on this tree view
+        can be intercepted using the <code>XContextMenuInterception</code> interface. Context menu requests
+        in other places cannot be intercepted.</p>
+
+        <p>For the aforementioned tree view, the selection supplied by the <code>ContextMenuEvent::Selection</code>
+        component is an array of <type>NamedDatabaseObject</type> instances.</p>
+    */
+    interface ::com::sun::star::ui::XContextMenuInterception;
+
+    /** allows intercepting user input done by the user
+    */
+    interface ::com::sun::star::awt::XUserInputInterception;
+
+    /** <a name="XSelectionSupplier"></a>
+        provides access to the current selection inside the application window, and allows to change it
+        programmatically
+
+        <p>The selection is an array of <type>NamedDatabaseObject</type> instances.</p>
+    */
+    interface ::com::sun::star::view::XSelectionSupplier;
+
+    /** allows to retrieve and set the title which of the component
+    */
+    interface ::com::sun::star::frame::XTitle;
+
+    /** allows being notified about changes in the component's title
+    */
+    interface ::com::sun::star::frame::XTitleChangeBroadcaster;
+
+    /** allows programmatic access to aspects of the application's user interface.
+    */
+    interface XDatabaseDocumentUI;
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+//=============================================================================
+
+#endif

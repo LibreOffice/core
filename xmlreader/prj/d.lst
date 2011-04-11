@@ -1,0 +1,10 @@
+mkdir: %_DEST%\inc%_EXT%\xmlreader
+mkdir: %_DEST%\inc%_EXT%\xmlreader\detail
+..\%__SRC%\bin\xmlreader.dll %_DEST%\bin%_EXT%\xmlreader.dll
+..\%__SRC%\lib\ixmlreader.lib %_DEST%\lib%_EXT%\ixmlreader.lib
+..\%__SRC%\lib\libxmlreader.dylib %_DEST%\lib%_EXT%\libxmlreader.dylib
+..\%__SRC%\lib\libxmlreader.so %_DEST%\lib%_EXT%\libxmlreader.so
+..\inc\xmlreader\detail\xmlreaderdllapi.hxx %_DEST%\inc%_EXT%\xmlreader\detail\xmlreaderdllapi.hxx
+..\inc\xmlreader\pad.hxx %_DEST%\inc%_EXT%\xmlreader\pad.hxx
+..\inc\xmlreader\span.hxx %_DEST%\inc%_EXT%\xmlreader\span.hxx
+..\inc\xmlreader\xmlreader.hxx %_DEST%\inc%_EXT%\xmlreader\xmlreader.hxx

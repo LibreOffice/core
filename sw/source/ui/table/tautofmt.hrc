@@ -1,0 +1,78 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef SW_TAUTOFMT_HRC
+#define SW_TAUTOFMT_HRC
+
+#include "table.hrc"
+// allgemein
+#define BTN_OK          100
+#define BTN_CANCEL      102
+#define BTN_HELP        103
+#define BTN_MORE        104
+#define BTN_ADD         105
+#define BTN_REMOVE      106
+#define BTN_RENAME      107
+#define FT_LABEL        110
+#define FL_FRAME        111
+#define STR_BTN_CLOSE   200
+
+// Autoformat
+#define LB_FORMAT       1
+#define FL_FORMAT               9
+#define FL_FORMATS               29
+#define WND_PREVIEW     19
+#define BTN_NUMFORMAT   20
+#define BTN_BORDER      21
+#define BTN_FONT        23
+#define BTN_PATTERN     24
+#define BTN_ALIGNMENT   25
+//#define BTN_ADJUST        26
+#define STR_ADD_TITLE   100
+#define STR_ADD_LABEL   101
+#define STR_DEL_TITLE   102
+#define STR_DEL_MSG     103
+#define STR_INVALID_AFNAME 104
+#define STR_RENAME_TITLE    105
+    // Autoformat-Preview:
+#define STR_JAN         121
+#define STR_FEB         122
+#define STR_MAR         123
+#define STR_NORTH       124
+#define STR_MID         125
+#define STR_SOUTH       126
+#define STR_SUM         127
+
+// Gruppierung setzen/aufheben:
+#define BTN_GROUP_COLS  1
+#define BTN_GROUP_ROWS  3
+#define STR_GROUP       1
+#define STR_UNGROUP     2
+
+
+#define ED_INPUT       1
+
+#endif

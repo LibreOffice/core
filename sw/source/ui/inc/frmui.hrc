@@ -1,0 +1,144 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _FRMUI_HRC
+#define _FRMUI_HRC
+
+#include "rcid.hrc"
+#include "globals.hrc"
+
+#define DLG_FRMOPT              (RC_FRMDLG_BEGIN +  1)
+#define DLG_PATTERN             (RC_FRMDLG_BEGIN +  2)
+#define DLG_BORDER              (RC_FRMDLG_BEGIN +  3)
+#define DLG_COLUMN              (RC_FRMDLG_BEGIN +  4)
+#define DLG_FOOTNOTE            (RC_FRMDLG_BEGIN +  5)
+#define DLG_INSERT_FOOTNOTE     (RC_FRMDLG_BEGIN +  6)
+
+#define DLG_VIEW_HEADER         (RC_FRMDLG_BEGIN +  8)
+#define DLG_FORMAT_COLUMN       (RC_FRMDLG_BEGIN + 10)
+#define DLG_CAPTION             (RC_FRMDLG_BEGIN + 11)
+#define DLG_SEQUENCE_OPTION     (RC_FRMDLG_BEGIN + 12)
+
+#define TP_FOOTNOTEOPTION       (RC_FRMDLG_BEGIN + 12)
+#define TP_ENDNOTEOPTION        (RC_FRMDLG_BEGIN + 13)
+
+#define STR_PATTERN_BRD         (RC_FRMDLG_BEGIN + 13)
+#define STR_SHPATTERN           (RC_FRMDLG_BEGIN + 14)
+#define STR_LNPATTERN           (RC_FRMDLG_BEGIN + 15)
+#define STR_FRMUI_BORDER        (RC_FRMDLG_BEGIN + 16)
+#define STR_FRMUI_PATTERN       (RC_FRMDLG_BEGIN + 17)
+#define STR_FRMUI_WRAP          (RC_FRMDLG_BEGIN + 18)
+
+#define BMP_PORTRAIT            (RC_FRMDLG_BEGIN + 16)
+#define BMP_LANDSCAPE           (RC_FRMDLG_BEGIN + 17)
+#define BMP_BEGIN               (RC_FRMDLG_BEGIN + 18)
+#define BMP_WRAP                (BMP_BEGIN)
+#define BMP_LEFT                (BMP_BEGIN+1)
+#define BMP_RIGHT               (BMP_BEGIN+2)
+#define BMP_OPAQUE              (BMP_BEGIN+3)
+#define BMP_OPAQUET             (BMP_BEGIN+4)
+#define BMP_NOWRAP              (BMP_BEGIN+5)
+
+#define BMP_END                 (BMP_NOWRAP)
+
+#define MN_OPTION               (BMP_END + 1)
+#define MN_COLUMN               (BMP_END + 2)
+#define MN_PAPERSZ              (BMP_END + 3)
+#define MN_BACKGROUND           (BMP_END + 4)
+
+#define STR_BACKGROUND          (BMP_END + 6)
+#define MN_FOOTNOTE             (BMP_END + 7)
+
+#define STR_FRMDLG_BEGIN        (MN_FOOTNOTE + 1)
+
+#define STR_TOPPRT              (STR_FRMDLG_BEGIN + 1)
+//#define STR_FROMBOTTOM          (STR_FRMDLG_BEGIN + 2)
+//#define STR_FROMTOP             (STR_FRMDLG_BEGIN + 3)
+//#define STR_BELOW                 (STR_FRMDLG_BEGIN + 4)
+/*
+#define STR_LEFT                (STR_FRMDLG_BEGIN + 5)
+#define STR_RIGHT               (STR_FRMDLG_BEGIN + 6)
+#define STR_FROMLEFT            (STR_FRMDLG_BEGIN + 7)
+#define STR_MIR_LEFT            (STR_FRMDLG_BEGIN + 8)
+#define STR_MIR_RIGHT           (STR_FRMDLG_BEGIN + 9)
+#define STR_MIR_FROMLEFT        (STR_FRMDLG_BEGIN + 10)
+*/
+
+#define STR_BORDER              (STR_FRMDLG_BEGIN + 16)
+#define STR_COLUMN              (STR_FRMDLG_BEGIN + 17)
+#define STR_PARA                (STR_FRMDLG_BEGIN + 18)
+#define STR_CHAR                (STR_FRMDLG_BEGIN + 19)
+
+/*
+#define STR_FRAME              (STR_FRMDLG_BEGIN + 20)
+#define STR_PRTAREA             (STR_FRMDLG_BEGIN + 21)
+#define STR_REL_PG_LEFT         (STR_FRMDLG_BEGIN + 22)
+#define STR_REL_PG_RIGHT        (STR_FRMDLG_BEGIN + 23)
+#define STR_REL_FRM_LEFT        (STR_FRMDLG_BEGIN + 24)
+#define STR_REL_FRM_RIGHT       (STR_FRMDLG_BEGIN + 25)
+#define STR_MIR_REL_PG_LEFT     (STR_FRMDLG_BEGIN + 26)
+#define STR_MIR_REL_PG_RIGHT    (STR_FRMDLG_BEGIN + 27)
+#define STR_MIR_REL_FRM_LEFT    (STR_FRMDLG_BEGIN + 28)
+#define STR_MIR_REL_FRM_RIGHT   (STR_FRMDLG_BEGIN + 29)
+#define STR_REL_PG_FRAME        (STR_FRMDLG_BEGIN + 30)
+#define STR_REL_PG_PRTAREA      (STR_FRMDLG_BEGIN + 31)
+#define STR_REL_BASE            (STR_FRMDLG_BEGIN + 32)
+#define STR_REL_CHAR            (STR_FRMDLG_BEGIN + 33)
+#define STR_REL_ROW             (STR_FRMDLG_BEGIN + 34)
+#define STR_REL_BORDER          (STR_FRMDLG_BEGIN + 35)
+#define STR_REL_PRTAREA         (STR_FRMDLG_BEGIN + 36)
+#define STR_FLY_REL_PG_LEFT     (STR_FRMDLG_BEGIN + 37)
+#define STR_FLY_REL_PG_RIGHT    (STR_FRMDLG_BEGIN + 38)
+#define STR_FLY_REL_PG_FRAME    (STR_FRMDLG_BEGIN + 39)
+#define STR_FLY_REL_PG_PRTAREA  (STR_FRMDLG_BEGIN + 40)
+#define STR_FLY_MIR_REL_PG_LEFT     (STR_FRMDLG_BEGIN + 41)
+#define STR_FLY_MIR_REL_PG_RIGHT    (STR_FRMDLG_BEGIN + 42)
+#define STR_FLY_MIR_REL_PG_FRAME    (STR_FRMDLG_BEGIN + 43)
+#define STR_FLY_MIR_REL_PG_PRTAREA  (STR_FRMDLG_BEGIN + 44)*/
+
+#define STR_OLE_INSERT          (STR_FRMDLG_BEGIN + 45)
+#define STR_OLE_EDIT            (STR_FRMDLG_BEGIN + 46)
+#define STR_COLL_HEADER         (STR_FRMDLG_BEGIN + 47)
+
+#define MSG_COLUMN_ERR_BOUNDWIDTH  (STR_FRMDLG_BEGIN + 48)
+#define STR_EDIT_GRF            (STR_FRMDLG_BEGIN + 49)
+
+#define STR_LINE_TOP            (STR_FRMDLG_BEGIN + 50)
+#define STR_LINE_BOTTOM         (STR_FRMDLG_BEGIN + 51)
+#define STR_LINE_CENTER         (STR_FRMDLG_BEGIN + 52)
+#define STR_CHAR_TOP            (STR_FRMDLG_BEGIN + 53)
+#define STR_CHAR_BOTTOM         (STR_FRMDLG_BEGIN + 54)
+#define STR_CHAR_CENTER         (STR_FRMDLG_BEGIN + 55)
+
+#define FRMDLG_ACT_END                  STR_CHAR_CENTER
+
+#if FRMDLG_ACT_END > RC_FRMDLG_END
+#error Resource-Id Ueberlauf in #file, #line
+#endif
+
+
+#endif // FRMUI_HRC

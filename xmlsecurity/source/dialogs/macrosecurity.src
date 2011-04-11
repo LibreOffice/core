@@ -1,0 +1,241 @@
+﻿/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "dialogs.hrc"
+#include "helpids.hrc"
+
+TabDialog RID_XMLSECTP_MACROSEC
+{
+    HelpID = HID_XMLSEC_TP_MACROSEC;
+    Size = MAP_APPFONT( TD_WIDTH, TD_HEIGHT );
+    OutputSize = TRUE;
+    Closeable = TRUE;
+    Moveable = TRUE;
+    SVLook = TRUE;
+
+    Text [ en-US ] = "Macro Security";
+    TabControl 1
+    {
+        Pos = MAP_APPFONT( TD_SP_INNERBORDER_LEFT, TD_SP_INNERBORDER_TOP );
+        Size = MAP_APPFONT( TP_WIDTH, TP_HEIGHT+RIDDER_HEIGHT );
+        SVLook = TRUE ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = RID_XMLSECTP_SECLEVEL;
+                Text [ en-US ] = "Security Level";
+            };
+            PageItem
+            {
+                Identifier = RID_XMLSECTP_TRUSTSOURCES;
+                Text [ en-US ] = "Trusted Sources";
+            };
+        };
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT( MS_COL_H, CV_ROW_A );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        DefButton = TRUE;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT( MS_COL_F, CV_ROW_A );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT( MS_COL_D, CV_ROW_A );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+    };
+    PushButton BTN_RESET
+    {
+        Pos = MAP_APPFONT( MS_COL_B, CV_ROW_A );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text [ en-US ] = "Reset";
+    };
+};
+
+TabPage RID_XMLSECTP_SECLEVEL
+{
+    HelpId = HID_XMLSEC_TP_SECLEVEL;
+    Size = MAP_APPFONT( TP_WIDTH, TP_HEIGHT );
+    OutputSize = TRUE;
+    Hide = TRUE;
+    SVLook = TRUE;
+    FixedLine FL_SECLEVEL
+    {
+        Pos = MAP_APPFONT( SL_COL_0, SL_ROW_0 );
+        Size = MAP_APPFONT( SL_COL_3-SL_COL_0, RSC_CD_FIXEDLINE_HEIGHT );
+        Hide = TRUE;
+    };
+    FixedImage FI_SEC_READONLY
+    {
+        Pos = MAP_APPFONT( SL_COL_1 - 7, SL_ROW_0 + 4 );
+        Size = MAP_APPFONT( 6, 6 );
+    };
+    RadioButton RB_VERYHIGH
+    {
+        HelpID = "xmlsecurity:RadioButton:RID_XMLSECTP_SECLEVEL:RB_VERYHIGH";
+        Pos = MAP_APPFONT( SL_COL_1, SL_ROW_0 );
+        Size = MAP_APPFONT( SL_COL_2-SL_COL_1, RSC_BIG_RADIOBUTTON );
+        WordBreak = TRUE;
+        Text [ en-US ] = "~Very high.\nOnly macros from trusted file locations are allowed to run. All other macros, regardless whether signed or not, are disabled.";
+    };
+    RadioButton RB_HIGH
+    {
+        HelpID = "xmlsecurity:RadioButton:RID_XMLSECTP_SECLEVEL:RB_HIGH";
+        Pos = MAP_APPFONT( SL_COL_1, SL_ROW_1 );
+        Size = MAP_APPFONT( SL_COL_2-SL_COL_1, RSC_BIG_RADIOBUTTON );
+        WordBreak = TRUE;
+        Text [ en-US ] = "H~igh.\nOnly signed macros from trusted sources are allowed to run. Unsigned macros are disabled.";
+    };
+    RadioButton RB_MEDIUM
+    {
+        HelpID = "xmlsecurity:RadioButton:RID_XMLSECTP_SECLEVEL:RB_MEDIUM";
+        Pos = MAP_APPFONT( SL_COL_1, SL_ROW_2 );
+        Size = MAP_APPFONT( SL_COL_2-SL_COL_1, RSC_BIG_RADIOBUTTON );
+        WordBreak = TRUE;
+        Text [ en-US ] = "~Medium.\nConfirmation required before executing macros from untrusted sources.";
+    };
+    RadioButton RB_LOW
+    {
+        HelpID = "xmlsecurity:RadioButton:RID_XMLSECTP_SECLEVEL:RB_LOW";
+        Pos = MAP_APPFONT( SL_COL_1, SL_ROW_3 );
+        Size = MAP_APPFONT( SL_COL_2-SL_COL_1, SL_ROW_4-SL_ROW_3 );
+        WordBreak = TRUE;
+        Text [ en-US ] = "~Low (not recommended).\nAll macros will be executed without confirmation. Use this setting only if you are certain that all documents that will be opened are safe.";
+    };
+};
+
+TabPage RID_XMLSECTP_TRUSTSOURCES
+{
+    HelpId = HID_XMLSEC_TP_TRUSTSOURCES;
+    Size = MAP_APPFONT( TP_WIDTH, TP_HEIGHT );
+    OutputSize = TRUE;
+    Hide = TRUE;
+    SVLook = TRUE;
+    FixedLine FL_TRUSTCERT
+    {
+        Pos = MAP_APPFONT( TS_COL_0, TS_ROW_0 );
+        Size = MAP_APPFONT( TS_COL_8-TS_COL_0, RSC_CD_FIXEDLINE_HEIGHT );
+        Text [ en-US ] = "Trusted certificates";
+    };
+    FixedImage FI_TRUSTCERT_RO
+    {
+        Pos = MAP_APPFONT( TS_COL_1 - 7, TS_ROW_1 );
+        Size = MAP_APPFONT( 6, 6 );
+    };
+    Control LB_TRUSTCERT
+    {
+        HelpId = HID_XMLSEC_CTRL_TRUSTSOURCES;
+        Pos = MAP_APPFONT( TS_COL_1, TS_ROW_1 );
+        Size = MAP_APPFONT( TS_COL_7-TS_COL_1, RSC_CD_TABLISTBOX_HEIGHT );
+        SVLook = TRUE;
+        Border = TRUE;
+    };
+    String STR_HEADERBAR
+    {
+        Text [ en-US ] = "Issued to\tIssued by\tExpiration date";
+    };
+    PushButton PB_ADD_TRUSTCERT
+    {
+        HelpID = "xmlsecurity:PushButton:RID_XMLSECTP_TRUSTSOURCES:PB_ADD_TRUSTCERT";
+        Pos = MAP_APPFONT( TS_COL_2, TS_ROW_2 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text [ en-US ] = "Add...";
+    };
+    PushButton PB_VIEW_TRUSTCERT
+    {
+        HelpID = "xmlsecurity:PushButton:RID_XMLSECTP_TRUSTSOURCES:PB_VIEW_TRUSTCERT";
+        Pos = MAP_APPFONT( TS_COL_4, TS_ROW_2 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text [ en-US ] = "View...";
+    };
+    PushButton PB_REMOVE_TRUSTCERT
+    {
+        HelpID = "xmlsecurity:PushButton:RID_XMLSECTP_TRUSTSOURCES:PB_REMOVE_TRUSTCERT";
+        Pos = MAP_APPFONT( TS_COL_6, TS_ROW_2 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text [ en-US ] = "Remove";
+    };
+    FixedLine FL_TRUSTFILELOC
+    {
+        Pos = MAP_APPFONT( TS_COL_0, TS_ROW_3 );
+        Size = MAP_APPFONT( TS_COL_8-TS_COL_0, RSC_CD_FIXEDLINE_HEIGHT );
+        Text [ en-US ] = "Trusted file locations";
+    };
+    FixedText FI_TRUSTFILELOC
+    {
+        Pos = MAP_APPFONT( TS_COL_1, TS_ROW_4 );
+        Size = MAP_APPFONT( TS_COL_7-TS_COL_1, 3*RSC_CD_FIXEDLINE_HEIGHT );
+        WordBreak = TRUE;
+        Text [ en-US ] = "Document macros are always executed if they have been opened from one of the following locations.";
+    };
+    FixedImage FI_TRUSTFILE_RO
+    {
+        Pos = MAP_APPFONT( TS_COL_1 - 7, TS_ROW_5 );
+        Size = MAP_APPFONT( 6, 6 );
+    };
+    ListBox LB_TRUSTFILELOC
+    {
+        HelpID = "xmlsecurity:ListBox:RID_XMLSECTP_TRUSTSOURCES:LB_TRUSTFILELOC";
+        Pos = MAP_APPFONT( TS_COL_1, TS_ROW_5 );
+        Size = MAP_APPFONT( TS_COL_7-TS_COL_1, TS_ROW_6-TS_ROW_5 );
+        SVLook = TRUE;
+        Border = TRUE;
+        VScroll = TRUE;
+        Sort = TRUE;
+    };
+    PushButton FL_ADD_TRUSTFILELOC
+    {
+        HelpID = "xmlsecurity:PushButton:RID_XMLSECTP_TRUSTSOURCES:FL_ADD_TRUSTFILELOC";
+        Pos = MAP_APPFONT( TS_COL_4, TS_ROW_7 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text [ en-US ] = "Add...";
+    };
+    PushButton FL_REMOVE_TRUSTFILELOC
+    {
+        HelpID = "xmlsecurity:PushButton:RID_XMLSECTP_TRUSTSOURCES:FL_REMOVE_TRUSTFILELOC";
+        Pos = MAP_APPFONT( TS_COL_6, TS_ROW_7 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text [ en-US ] = "Remove";
+    };
+};
+String RID_XMLSECTP_READONLY_CONFIG_TIP
+{
+    Text [ en-US ] = "This setting is protected by the Administrator";
+};
+Image RID_XMLSECTP_LOCK
+{
+    ImageBitmap = Bitmap
+    {
+        File = "lock.bmp";
+    };
+    MaskColor = Color { Red=0xffff; Green=0x0000; Blue=0xffff; };
+};

@@ -1,0 +1,331 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_i18n_XTransliteration_idl__
+#define __com_sun_star_i18n_XTransliteration_idl__
+
+#include <com/sun/star/lang/Locale.idl>
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/i18n/TransliterationModules.idl>
+#include <com/sun/star/i18n/TransliterationModulesNew.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module i18n {
+
+//=============================================================================
+
+/**
+    Character conversions like case folding or Hiragana to Katakana.
+
+    <p> Transliteration is a character to character conversion but it is
+    not always a one to one mapping between characters. Transliteration
+    modules are primarily used by collation, and search and replace
+    modules to perform approximate search. It can also be used to format
+    the numbers in different numbering systems. <p/>
+
+    <p> In order to select transliteration modules for different
+    purposes, they are classified with attributes of
+    <type>TransliterationType</type>. <p/>
+
+    <p> For Western languages there would be three transliteration
+    modules available to compare two mixed case strings: upper to lower,
+    lower to upper, and ignore case. </p>
+
+    <p> A typical calling sequence of transliteration is
+        <ol>
+            <li> getAvailableModules() </li>
+            <li> loadModulesByImplNames() </li>
+            <li> equals() </li>
+        </ol>
+    or another one is
+        <ol>
+            <li> loadModule() </li>
+            <li> transliterate() </li>
+        </ol>
+    </p>
+
+*/
+
+/* comment:
+ * 0.
+ * All the IGNORE-type functionalities (Range, equals) are based on mapping.
+ * except equals() method in IGNORE_CASE, which is based on Locale-independent
+ * case folding
+ * ( This second assumption is very complicated and may cause confusion of use)
+ *
+ * 1.
+ * We are assuming Upper to Lower mapping as one of transliteration.
+ * The mapping depends on Locale.
+ * Upper <-> Lower methods are just wrappers to provide equals() and Range()
+ *
+ * 2.
+ * equals() in IGNORE_CASE module is locale-independent and
+ * we don't provide locale-sensitive ones.
+ * The reason we provided locale-independent ones is that IGNORE_CASE is mainly
+ * dedicated to StarOffice internal code.
+ *
+ * 3.
+ * TransliterationModules is used just for convenience without calling
+ * getAvailableModule.
+ *
+ * 4.
+ * Implementation name in the methods below is not the same as
+ * the true implementation name registered.
+ * In particular, for generic modules:"UPPERCASE_LOWERCASE",
+ * "LOWERCASE_UPPERCASE", "IGNORE_CASE", there is no registered name.
+ */
+
+
+published interface XTransliteration: com::sun::star::uno::XInterface
+{
+
+    //------------------------------------------------------------------------
+    /** Unique ASCII name to identify a module. This name is used
+        to get its localized name for menus, dialogs etc. The behavior
+        is undefined for <const>TransliterationType::CASCADE</const>
+        modules.
+     */
+    string  getName();
+
+    //------------------------------------------------------------------------
+    /** Return the attribute(s) associated with this transliteration
+        object, as defined in <type>TransliterationType</type>. The
+        value is determined by the transliteration modules. For example,
+        for UPPERCASE_LOWERCASE, a ONE_TO_ONE is returned, for
+        IGNORE_CASE, IGNORE is returned.
+     */
+    short   getType();
+
+    //------------------------------------------------------------------------
+    /** Load instance of predefined module - old style method.
+     */
+    void    loadModule( [in] TransliterationModules eModType,
+                        [in] ::com::sun::star::lang::Locale aLocale );
+
+    //------------------------------------------------------------------------
+    /** Load a sequence of instances of predefined modules - supersedes
+        method <member>XTransliteration::loadModule()</member>.
+     */
+    void    loadModuleNew(  [in] sequence <TransliterationModulesNew> aModType,
+                            [in] ::com::sun::star::lang::Locale aLocale );
+
+    //------------------------------------------------------------------------
+    /** Load instance of UNO registered module.
+
+        <p> Each transliteration module is registered under a different
+        service name. The convention for the service name is
+        com.sun.star.i18n.Transliteration.l10n.{implName}. The
+        {implName} is a unique name used to identify a module. The
+        implName is used to get a localized name for the transliteration
+        module. The implName is used in locale data to list the
+        available transliteration modules for the locale. There are some
+        transliteration modules that are always available. The names of
+        those modules are listed as enum
+        <type>TransliterationModules</type> names. For modules not
+        listed there it is possible to load them directly by their
+        implName.
+
+        @param aImplName
+            The module's {implName} under which it is registered with
+            com.sun.star.i18n.Transliteration.l10n.{implName}.
+     */
+    void    loadModuleByImplName(   [in] string aImplName,
+                                    [in] ::com::sun::star::lang::Locale aLocale );
+
+    //------------------------------------------------------------------------
+    /** Load a sequence of instances of transliteration modules.
+        Output of one module is fed as input to the next module in
+        the sequence. The object created by this call has
+        <type>TransliterationType</type> CASCADE and IGNORE types.
+
+        @param aImplNameList
+            Only IGNORE type modules can be specified.
+    */
+    void    loadModulesByImplNames( [in] sequence <string> aImplNameList,
+                                    [in] ::com::sun::star::lang::Locale aLocale );
+
+    //------------------------------------------------------------------------
+    /** List the available transliteration modules for a given locale.
+        It can be filtered based on its type.
+
+        @param nType
+            A bitmask field of values defined in
+            <type>TransliterationType</type>
+    */
+    sequence<string>    getAvailableModules(
+                            [in] ::com::sun::star::lang::Locale aLocale,
+                            [in] short nType );
+
+
+    //------------------------------------------------------------------------
+    /** Transliterate a substring. This method can be called if the
+        object doesn't have <type>TransliterationType</type> IGNORE
+        attribute.
+
+        @param aStr
+            The input string.
+
+        @param nStartPos
+            Start position within aStr from where transliteration starts.
+
+        @param nCount
+            Number of code points to be transliterated.
+
+        @param rOffset
+            To find the grapheme of input string corresponding to the
+            grapheme of output string, rOffset provides the offset array
+            whose index is the offset of output string, the element
+            containing the position within the input string before
+            transliteration.
+     */
+    string  transliterate(  [in] string aInStr, [in] long nStartPos,
+                            [in] long nCount, [out] sequence <long> rOffset );
+
+    //------------------------------------------------------------------------
+    /** @deprecated
+        For internal use, this method is supported to get the
+        "transliteration", which equals() is based on.
+     */
+    string  folding(    [in] string aInStr, [in] long nStartPos,
+                        [in] long nCount, [out] sequence <long> rOffset );
+
+    //------------------------------------------------------------------------
+    /** Match two substrings and find if they are equivalent as per this
+        transliteration.
+
+        <p> This method can be called if the object has
+        <type>TransliterationType</type> IGNORE attribute. </p>
+
+        <p> Returns the number of matched code points in any case, even if
+        strings are not equal, for example: <br/>
+        equals( "a", 0, 1, nMatch1, "aaa", 0, 3, nMatch2 ) <br/>
+        returns <FALSE/> and nMatch:=1 and nMatch2:=1 <br/>
+        equals( "aab", 0, 3, nMatch1, "aaa", 0, 3, nMatch2 ) <br/>
+        returns <FALSE/> and nMatch:=2 and nMatch2:=2 <br/> </p>
+
+        @param aStr1
+            First string to match.
+
+        @param nPos1
+            Start position within aStr1.
+
+        @param nCount1
+            Number of code points to use of aStr1.
+
+        @param rMatch1
+            Returns number of matched code points in aStr1.
+
+        @param aStr2
+            Second string to match.
+
+        @param nPos2
+            Start position within aStr2.
+
+        @param nCount2
+            Number of code points to use of aStr2.
+
+        @param rMatch2
+            Returns number of matched code points in aStr2.
+
+        @returns
+            <TRUE/> if the substrings are equal per this
+            transliteration <br/>
+            <FALSE/> else.
+     */
+
+    boolean equals( [in] string aStr1, [in] long nPos1, [in] long nCount1,
+                    [out] long rMatch1,
+                    [in] string aStr2, [in] long nPos2, [in] long nCount2,
+                    [out] long rMatch2 );
+
+    //------------------------------------------------------------------------
+    /** Transliterate one set of characters to another.
+
+        <p> This method is intended for getting corresponding ranges and
+        can be called if the object has <type>TransliterationType</type>
+        IGNORE attribute. </p>
+
+        <p> For example: generic CASE_IGNORE transliterateRange( "a", "i" )
+        returns {"A","I","a","i"}, transliterateRange( "a", "a" )
+        returns {"A","A","a","a"}. </p>
+
+        <p> Use this transliteration to create regular expressions like
+        [a-i] --> [A-Ia-i]. </p>
+
+        @returns
+            String sequence containing corresponding transliterated
+            pairs of characters to represent a range.
+     */
+    sequence <string>   transliterateRange( [in] string aStr1, [in] string aStr2 );
+
+    //------------------------------------------------------------------------
+    /** Compare 2 substrings as per this transliteration. It translates both
+        substrings before comparing them.
+
+        @param aStr1
+            First string.
+
+        @param nOff1
+            Offset (from 0) of the first substring.
+
+        @param nLen1
+            Length (from offset) of the first substring.
+
+        @param aStr2
+            Second string.
+
+        @param nOff2
+            Offset (from 0) of the second substring.
+
+        @param nLen2
+            Length (from offset) of the second substring.
+
+        @returns
+            1 if the first substring is greater than the second substring <br/>
+            0 if the first substring is equal to the second substring <br/>
+            -1 if the first substring is less than the second substring
+    */
+    long    compareSubstring(   [in] string aStr1, [in] long nOff1, [in] long nLen1,
+                                [in] string aStr2, [in] long nOff2, [in] long nLen2 );
+
+    //------------------------------------------------------------------------
+    /** Compare 2 strings as per this transliteration. It translates both
+        strings before comparing them.
+
+        @returns
+            1 if the first string is greater than the second string <br/>
+            0 if the first string is equal to the second string <br/>
+            -1 if the first string is less than the second string
+    */
+    long    compareString( [in] string aStr1, [in] string aStr2 );
+
+};
+
+//=============================================================================
+}; }; }; };
+
+#endif

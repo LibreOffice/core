@@ -1,0 +1,125 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_xmloff.hxx"
+#include <xmloff/xmluconv.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <com/sun/star/uno/Any.hxx>
+
+#include <com/sun/star/awt/Rectangle.hdl>
+#include "XMLRectangleMembersHandler.hxx"
+#include <xmloff/xmltypes.hxx>
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
+
+XMLRectangleMembersHdl::XMLRectangleMembersHdl( sal_Int32 nType )
+: mnType( nType )
+{
+}
+
+XMLRectangleMembersHdl::~XMLRectangleMembersHdl()
+{
+}
+
+sal_Bool XMLRectangleMembersHdl::importXML(
+    const OUString& rStrImpValue,
+    Any& rValue,
+    const SvXMLUnitConverter& rUnitConverter ) const
+{
+    awt::Rectangle aRect( 0, 0, 0, 0 );
+    if( rValue.hasValue() )
+        rValue >>= aRect;
+
+    sal_Int32 nValue;
+
+    if( rUnitConverter.convertMeasure( nValue, rStrImpValue ) )
+    {
+        switch( mnType )
+        {
+            case XML_TYPE_RECTANGLE_LEFT :
+                aRect.X = nValue;
+                break;
+            case XML_TYPE_RECTANGLE_TOP :
+                aRect.Y = nValue;
+                break;
+            case XML_TYPE_RECTANGLE_WIDTH :
+                aRect.Width = nValue;
+                break;
+            case XML_TYPE_RECTANGLE_HEIGHT :
+                aRect.Height = nValue;
+                break;
+        }
+
+        rValue <<= aRect;
+        return sal_True;
+    }
+
+    return sal_False;
+}
+
+sal_Bool XMLRectangleMembersHdl::exportXML(
+    OUString& rStrExpValue,
+    const Any& rValue,
+    const SvXMLUnitConverter& rUnitConverter ) const
+{
+    awt::Rectangle aRect( 0, 0, 0, 0 );
+    rValue >>= aRect;
+
+    sal_Int32 nValue;
+
+    switch( mnType )
+    {
+        case XML_TYPE_RECTANGLE_LEFT :
+            nValue = aRect.X;
+            break;
+        case XML_TYPE_RECTANGLE_TOP :
+            nValue = aRect.Y;
+            break;
+        case XML_TYPE_RECTANGLE_WIDTH :
+            nValue = aRect.Width;
+            break;
+        case XML_TYPE_RECTANGLE_HEIGHT :
+            nValue = aRect.Height;
+            break;
+        default:
+            nValue = 0;  // TODO What value should this be?
+            break;
+    }
+
+    rtl::OUStringBuffer sBuffer;
+    rUnitConverter.convertMeasure( sBuffer, nValue );
+    rStrExpValue = sBuffer.makeStringAndClear();
+    return sal_True;
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

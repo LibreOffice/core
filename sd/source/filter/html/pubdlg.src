@@ -1,0 +1,864 @@
+ /*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "helpids.h"
+#include "pubdlg.hrc"
+
+ModalDialog DLG_PUBLISHING
+{
+    HelpID = "sd:ModalDialog:DLG_PUBLISHING";
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 272 , 190 ) ;
+    Text [ en-US ] = "HTML Export" ;
+    Moveable = TRUE ;
+
+    /////////////////////////////
+    // Page 1, choose a design //
+    /////////////////////////////
+
+    FixedBitmap PAGE1_BMP
+    {
+        OutputSize = TRUE ;
+        Scale = TRUE;
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 6 , 4 ) ;
+        Size = MAP_APPFONT ( 256 , 29 ) ;
+        Fixed = Bitmap { File = "pubdlg1.bmp" ; };
+    };
+
+    FixedLine PAGE1_TITEL
+    {
+        Pos = MAP_APPFONT ( 6 , 38 ) ;
+        Size = MAP_APPFONT ( 258 , 8 ) ;
+        Text [ en-US ] = "Assign design";
+    };
+
+    RadioButton PAGE1_NEW_DESIGN
+    {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE1_NEW_DESIGN";
+        Pos = MAP_APPFONT( 12, 50 );
+        Size = MAP_APPFONT( 153, 10 );
+        Text [ en-US ] = "New design";
+    };
+
+    RadioButton PAGE1_OLD_DESIGN
+    {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE1_OLD_DESIGN";
+        Pos = MAP_APPFONT( 12, 63 );
+        Size = MAP_APPFONT( 153, 10 );
+        Text [ en-US ] = "Existing design";
+    };
+
+    ListBox PAGE1_DESIGNS
+    {
+        HelpID = "sd:ListBox:DLG_PUBLISHING:PAGE1_DESIGNS";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 21 , 75 ) ;
+        Size = MAP_APPFONT ( 144 , 63 ) ;
+        TabStop = TRUE ;
+        VScroll = TRUE ;
+    };
+
+    PushButton PAGE1_DEL_DESIGN
+    {
+        HelpID = "sd:PushButton:DLG_PUBLISHING:PAGE1_DEL_DESIGN";
+        Pos = MAP_APPFONT ( 168 , 75 ) ;
+        Size = MAP_APPFONT ( 92 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+        Text [ en-US ] = "Delete Selected Design";
+    };
+
+    FixedText PAGE1_DESC
+    {
+        Pos = MAP_APPFONT ( 12 , 142 ) ;
+        Size = MAP_APPFONT ( 258 , 8 ) ;
+        Text [ en-US ] = "Select an existing design or create a new one";
+    };
+
+
+    ////////////////////////////////
+    // Page 2, type of publishing //
+    ////////////////////////////////
+
+    FixedBitmap PAGE2_BMP
+    {
+        OutputSize = TRUE ;
+        Scale = TRUE;
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 6 , 4 ) ;
+        Size = MAP_APPFONT ( 256 , 29 ) ;
+        Fixed = Bitmap { File = "pubdlg1.bmp" ; };
+    };
+
+    FixedLine PAGE2_TITEL
+    {
+        Pos = MAP_APPFONT ( 6, 38 ) ;
+        Size = MAP_APPFONT ( 124, 8 ) ;
+        Text [ en-US ] = "Publication type";
+    };
+
+    RadioButton PAGE2_STANDARD
+    {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE2_STANDARD";
+        Pos = MAP_APPFONT( 12, 50 );
+        Size = MAP_APPFONT( 116, 10 );
+        Text [ en-US ] = "Standard H~TML format";
+    };
+
+    RadioButton PAGE2_FRAMES
+    {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE2_FRAMES";
+        Pos = MAP_APPFONT( 12, 63 );
+        Size = MAP_APPFONT( 116, 10 );
+        Text [ en-US ] = "Standard HTML with ~frames";
+    };
+
+    RadioButton PAGE2_KIOSK
+    {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE2_KIOSK";
+        Pos = MAP_APPFONT( 12, 76 );
+        Size = MAP_APPFONT( 116, 10 );
+        Text [ en-US ] = "~Automatic";
+    };
+
+    RadioButton PAGE2_WEBCAST
+    {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE2_WEBCAST";
+        Pos = MAP_APPFONT( 12, 89 );
+        Size = MAP_APPFONT( 116, 10 );
+        Text [ en-US ] = "~WebCast";
+    };
+
+    FixedBitmap PAGE2_NOFRAMES_FB
+    {
+        Pos = MAP_APPFONT( 21, 102 );
+        Scale = TRUE;
+        Size = MAP_APPFONT( 60, 50 );
+        Fixed = Bitmap { File = "pubdes.bmp"; };
+        OutputSize = TRUE ;
+        Border = TRUE;
+    };
+
+    FixedBitmap PAGE2_FRAMES_FB
+    {
+        Pos = MAP_APPFONT( 21, 102 );
+        Scale = TRUE;
+        Size = MAP_APPFONT( 60, 50 );
+        Fixed = Bitmap { File = "pubdes2.bmp"; };
+        OutputSize = TRUE ;
+        Border = TRUE;
+    };
+
+    FixedBitmap PAGE2_KIOSK_FB
+    {
+        Pos = MAP_APPFONT( 21, 102 );
+        Scale = TRUE;
+        Size = MAP_APPFONT( 60, 50 );
+        Fixed = Bitmap { File = "pubdes3.bmp"; };
+        OutputSize = TRUE ;
+        Border = TRUE;
+    };
+
+    FixedBitmap PAGE2_WEBCAST_FB
+    {
+        Pos = MAP_APPFONT( 21, 102 );
+        Scale = TRUE;
+        Size = MAP_APPFONT( 60, 50 );
+        Fixed = Bitmap { File = "pubdes4.bmp"; };
+        OutputSize = TRUE ;
+        Border = TRUE;
+    };
+
+    //////////////////////////////
+    // Special options for html //
+    //////////////////////////////
+
+    FixedLine PAGE2_TITEL_HTML
+    {
+        Pos = MAP_APPFONT( 138, 38 );
+        Size = MAP_APPFONT( 128, 8 );
+        Text [ en-US ] = "Options";
+    };
+
+    CheckBox PAGE2_CONTENT
+    {
+        HelpID = "sd:CheckBox:DLG_PUBLISHING:PAGE2_CONTENT";
+        Pos = MAP_APPFONT( 144, 49 );
+        Size = MAP_APPFONT( 116, 10 );
+        Text [ en-US ] = "Create title page";
+    };
+
+    FixedLine PAGE2_VERT
+    {
+        Pos = MAP_APPFONT ( 132 , 49  ) ;
+        Size = MAP_APPFONT ( 4, 109 ) ;
+        Vert = TRUE;
+    };
+
+    CheckBox PAGE2_NOTES
+    {
+        HelpID = "sd:CheckBox:DLG_PUBLISHING:PAGE2_NOTES";
+        Pos = MAP_APPFONT( 144, 63 );
+        Size = MAP_APPFONT( 116, 10 );
+        Text [ en-US ] = "Show notes";
+    };
+
+    ///////////////////////////////
+    // Special options for kiosk //
+    ///////////////////////////////
+
+    FixedLine PAGE2_TITEL_KIOSK
+    {
+        Pos = MAP_APPFONT( 138, 38 );
+        Size = MAP_APPFONT( 128, 8 );
+        Text [ en-US ] = "Advance slides" ;
+    };
+
+    RadioButton PAGE2_CHG_DEFAULT
+    {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE2_CHG_DEFAULT";
+        Pos = MAP_APPFONT ( 144 , 49 ) ;
+        Size = MAP_APPFONT ( 116 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~As stated in document" ;
+    };
+
+    RadioButton PAGE2_CHG_AUTO
+    {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE2_CHG_AUTO";
+        Pos = MAP_APPFONT ( 144 , 63 ) ;
+        Size = MAP_APPFONT ( 116 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Automatic" ;
+    };
+
+    FixedText PAGE2_DURATION_TXT
+    {
+        Pos = MAP_APPFONT ( 154, 77 ) ;
+        Size = MAP_APPFONT ( 40, 10 ) ;
+        Text [ en-US ] = "~Slide view time:" ;
+    };
+
+    TimeField PAGE2_DURATION_TMF
+    {
+        HelpID = "sd:TimeField:DLG_PUBLISHING:PAGE2_DURATION_TMF";
+        Pos = MAP_APPFONT ( 196, 76 ) ;
+        Size = MAP_APPFONT ( 48, 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Duration = TRUE ;
+        StrictFormat = TRUE ;
+        Maximum = Time
+        {
+            Hour = 23 ;
+            Minute = 59 ;
+            Second = 59 ;
+        };
+        Last = Time
+        {
+            Hour = 23 ;
+            Minute = 59 ;
+            Second = 59 ;
+        };
+        QuickHelpText [ en-US ] = "~Duration of page";
+    };
+
+    CheckBox PAGE2_ENDLESS
+    {
+        HelpID = "sd:CheckBox:DLG_PUBLISHING:PAGE2_ENDLESS";
+        Pos = MAP_APPFONT ( 154, 91 );
+        Size = MAP_APPFONT ( 108, 10 );
+        Text [ en-US ] = "~Endless" ;
+    };
+
+    /////////////////////////////////
+    // Special options for WebCast //
+    /////////////////////////////////
+
+    FixedLine PAGE2_TITEL_WEBCAST
+    {
+        Pos = MAP_APPFONT( 138, 38 );
+        Size = MAP_APPFONT( 128, 8 );
+        Text [ en-US ] = "WebCast" ;
+    };
+
+    RadioButton PAGE2_ASP
+    {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE2_ASP";
+        Pos = MAP_APPFONT( 144, 49 );
+        Size = MAP_APPFONT( 116, 10 );
+        Text [ en-US ] = "~Active Server Pages (ASP)";
+    };
+
+    RadioButton PAGE2_PERL
+    {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE2_PERL";
+        Pos = MAP_APPFONT( 144, 63 );
+        Size = MAP_APPFONT( 116, 10 );
+        Text [ en-US ] = "Perl" ;
+    };
+
+    FixedText PAGE2_INDEX_TXT
+    {
+        Pos = MAP_APPFONT( 154, 76 );
+        Size = MAP_APPFONT( 105, 10 );
+        Text [ en-US ] = "~URL for listeners";
+    };
+
+    Edit PAGE2_INDEX
+    {
+        HelpID = "sd:Edit:DLG_PUBLISHING:PAGE2_INDEX";
+        BORDER = TRUE;
+        Pos = MAP_APPFONT( 154, 88 );
+        Size  = MAP_APPFONT( 105, 12 );
+        Left = TRUE;
+    };
+
+    FixedText PAGE2_URL_TXT
+    {
+        Pos  = MAP_APPFONT( 154, 104 );
+        Size = MAP_APPFONT( 105, 10 );
+        Text [ en-US ] = "URL for ~presentation:";
+    };
+
+    Edit PAGE2_URL
+    {
+        HelpID = "sd:Edit:DLG_PUBLISHING:PAGE2_URL";
+        BORDER = TRUE;
+        Pos = MAP_APPFONT( 154, 116 );
+        Size = MAP_APPFONT( 105, 12 );
+        LEFT = TRUE;
+    };
+
+    FixedText PAGE2_CGI_TXT
+    {
+        Pos  = MAP_APPFONT( 154, 132 );
+        Size = MAP_APPFONT( 105, 10 );
+        Text [ en-US ] = "URL for ~Perl scripts:";
+    };
+
+    Edit PAGE2_CGI
+    {
+        HelpID = "sd:Edit:DLG_PUBLISHING:PAGE2_CGI";
+        BORDER = TRUE;
+        Pos = MAP_APPFONT( 154, 144 );
+        Size = MAP_APPFONT( 105, 12 );
+        LEFT = TRUE;
+    };
+
+
+    /////////////////////////////////////////////////////////
+    // Page 3, Misc Options, Picture Format and Resolution //
+    /////////////////////////////////////////////////////////
+
+    FixedBitmap PAGE3_BMP
+    {
+        OutputSize = TRUE ;
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 6 , 4 ) ;
+        Size = MAP_APPFONT ( 256 , 29 ) ;
+        Scale = TRUE;
+        Fixed = Bitmap { File = "pubdlg2.bmp" ; };
+    };
+
+    ////////////////////
+    // Picture Format //
+    ////////////////////
+
+    FixedLine PAGE3_TITEL_1
+    {
+        Pos = MAP_APPFONT ( 6, 38 ) ;
+        Size = MAP_APPFONT ( 124, 8 ) ;
+        Text [ en-US ] = "Save graphics as";
+    };
+
+    RadioButton PAGE3_PNG
+    {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE3_PNG";
+        Pos = MAP_APPFONT( 12, 49 );
+        Size = MAP_APPFONT( 116, 10 );
+        Text [ en-US ] = "~PNG";
+    };
+
+    RadioButton PAGE3_GIF
+    {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE3_GIF";
+        Pos = MAP_APPFONT( 12, 63 );
+        Size = MAP_APPFONT( 116, 10 );
+        Text [ en-US ] = "~GIF";
+    };
+
+    RadioButton PAGE3_JPG
+    {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE3_JPG";
+        Pos = MAP_APPFONT( 12, 77 );
+        Size = MAP_APPFONT( 116, 10 );
+        Text [ en-US ] = "~JPG";
+    };
+
+    ComboBox PAGE3_QUALITY
+    {
+        HelpID = "sd:ComboBox:DLG_PUBLISHING:PAGE3_QUALITY";
+        Pos = MAP_APPFONT( 18, 91 );
+        Size = MAP_APPFONT( 28, 70 );
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+
+    FixedText PAGE3_QUALITY_TXT
+    {
+        Pos = MAP_APPFONT( 49, 93 );
+        Size = MAP_APPFONT( 79, 10 );
+        Text [ en-US ] = "Quality";
+    };
+
+    FixedLine PAGE3_VERT
+    {
+        Pos = MAP_APPFONT ( 132 , 49  ) ;
+        Size = MAP_APPFONT ( 4, 65 ) ;
+        Vert = TRUE;
+    };
+
+    ////////////////
+    // Resolution //
+    ////////////////
+
+    FixedLine PAGE3_TITEL_2
+    {
+        Pos = MAP_APPFONT( 138, 38 );
+        Size = MAP_APPFONT( 128, 8 );
+        Text [ en-US ] = "Monitor resolution";
+    };
+
+    RadioButton PAGE3_RESOLUTION_1
+    {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE3_RESOLUTION_1";
+        Pos = MAP_APPFONT( 144, 49 );
+        Size = MAP_APPFONT( 116, 10 );
+        Text [ en-US ] = "Low resolution (~640x480 pixels)";
+    };
+
+    RadioButton PAGE3_RESOLUTION_2
+    {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE3_RESOLUTION_2";
+        Pos = MAP_APPFONT( 144, 63 );
+        Size = MAP_APPFONT( 116, 10 );
+        Text [ en-US ] = "Medium resolution (~800x600 pixels)";
+    };
+
+    RadioButton PAGE3_RESOLUTION_3
+    {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE3_RESOLUTION_3";
+        Pos = MAP_APPFONT ( 144, 77 ) ;
+        Size = MAP_APPFONT ( 116 , 10 ) ;
+        Text [ en-US ] = "High resolution (~1024x768 pixels)";
+    };
+
+    ////////////////
+    // Resolution //
+    ////////////////
+
+    FixedLine PAGE3_TITEL_3
+    {
+        Pos = MAP_APPFONT( 6, 114 );
+        Size = MAP_APPFONT( 258, 8 );
+        Text [ en-US ] = "Effects";
+    };
+
+    CheckBox PAGE3_SLD_SOUND
+    {
+        HelpID = "sd:CheckBox:DLG_PUBLISHING:PAGE3_SLD_SOUND";
+        Pos = MAP_APPFONT ( 12, 125 );
+        Size = MAP_APPFONT ( 252, 10 );
+        Text [ en-US ] = "~Export sounds when slide advances" ;
+    };
+
+    CheckBox PAGE3_HIDDEN_SLIDES
+    {
+        HelpID = "sd:CheckBox:DLG_PUBLISHING:PAGE3_HIDDEN_SLIDES";
+        Pos = MAP_APPFONT ( 12, 138 );
+        Size = MAP_APPFONT ( 252, 10 );
+        Text [ en-US ] = "Export ~hidden slides" ;
+    };
+
+    ////////////////////////////////////////
+    // Page 4, information for titel page //
+    ////////////////////////////////////////
+
+    FixedBitmap PAGE4_BMP
+    {
+        OutputSize = TRUE ;
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 6 , 4 ) ;
+        Size = MAP_APPFONT ( 256 , 29 ) ;
+        Fixed = Bitmap { File = "pubdlg3.bmp" ; };
+    };
+
+    FixedLine PAGE4_TITEL_1
+    {
+        Pos = MAP_APPFONT ( 6 , 38 ) ;
+        Size = MAP_APPFONT ( 258 , 8 ) ;
+        Text [ en-US ] = "Information for the title page";
+    };
+
+    FixedText PAGE4_AUTHOR_TXT
+    {
+        Pos = MAP_APPFONT ( 12, 51 );
+        Size = MAP_APPFONT ( 121, 8 );
+        Text [ en-US ] = "~Author";
+    };
+
+    Edit PAGE4_AUTHOR
+    {
+        HelpID = "sd:Edit:DLG_PUBLISHING:PAGE4_AUTHOR";
+        BORDER = TRUE ;
+        Pos = MAP_APPFONT ( 136, 49 );
+        Size = MAP_APPFONT ( 128, 12 );
+        LEFT = TRUE;
+    };
+
+    FixedText PAGE4_EMAIL_TXT
+    {
+        Pos = MAP_APPFONT ( 12, 67 );
+        Size = MAP_APPFONT ( 121, 8 );
+        Text [ en-US ] = "E-~mail address";
+    };
+
+    Edit PAGE4_EMAIL_EDIT
+    {
+        HelpID = "sd:Edit:DLG_PUBLISHING:PAGE4_EMAIL_EDIT";
+        BORDER = TRUE ;
+        Pos = MAP_APPFONT ( 136 , 65 ) ;
+        Size = MAP_APPFONT ( 128 , 12 ) ;
+        LEFT = TRUE ;
+    };
+
+    FixedText PAGE4_WWW_TXT
+    {
+        Pos = MAP_APPFONT ( 12, 83 );
+        Size = MAP_APPFONT ( 121, 8 );
+        Text [ en-US ] = "Your hom~epage";
+    };
+
+    Edit PAGE4_WWW_EDIT
+    {
+        HelpID = "sd:Edit:DLG_PUBLISHING:PAGE4_WWW_EDIT";
+        BORDER = TRUE ;
+        Pos = MAP_APPFONT ( 136, 81 ) ;
+        Size = MAP_APPFONT ( 128, 12 ) ;
+        LEFT = TRUE ;
+    };
+
+    FixedText PAGE4_TITEL_2
+    {
+        Pos = MAP_APPFONT ( 12 , 99 ) ;
+        Size = MAP_APPFONT ( 121 , 8 ) ;
+        Text [ en-US ] = "Additional ~information";
+    };
+
+    MultiLineEdit PAGE4_MISC
+    {
+        HelpID = "sd:MultiLineEdit:DLG_PUBLISHING:PAGE4_MISC";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 136, 97 ) ;
+        Size = MAP_APPFONT ( 128 , 45 ) ;
+        TabStop = TRUE ;
+        VScroll = TRUE ;
+        IgnoreTab = TRUE ;
+    };
+
+    CheckBox PAGE4_DOWNLOAD
+    {
+        HelpID = "sd:CheckBox:DLG_PUBLISHING:PAGE4_DOWNLOAD";
+        Pos = MAP_APPFONT ( 12 , 149 ) ;
+        Size = MAP_APPFONT ( 252 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Link to a copy of the ~original presentation";
+    };
+
+    CheckBox PAGE4_CREATED
+    {
+        HelpID = "sd:CheckBox:DLG_PUBLISHING:PAGE4_CREATED";
+        Pos = MAP_APPFONT ( 12 , 152 ) ;
+        Size = MAP_APPFONT ( 252 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Note: 'Created with %PRODUCTNAME'";
+    };
+
+    /////////////////////
+    // Page 5, Buttons //
+    /////////////////////
+
+    FixedBitmap PAGE5_BMP
+    {
+        OutputSize = TRUE ;
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 6 , 4 ) ;
+        Size = MAP_APPFONT ( 256 , 29 ) ;
+        Fixed = Bitmap { File = "pubdlg4.bmp" ; };
+    };
+
+    FixedLine PAGE5_TITEL
+    {
+        Pos = MAP_APPFONT ( 6 , 38 ) ;
+        Size = MAP_APPFONT ( 258 , 8 ) ;
+        Text [ en-US ] = "Select button style";
+    };
+
+    CheckBox PAGE5_TEXTONLY
+    {
+        HelpID = "sd:CheckBox:DLG_PUBLISHING:PAGE5_TEXTONLY";
+        Pos = MAP_APPFONT ( 12, 50 );
+        Size = MAP_APPFONT ( 243, 10 );
+        Text [ en-US ] = "~Text only";
+    };
+
+    Control PAGE5_BUTTONS
+    {
+        Border = TRUE ;
+        TabStop = TRUE;
+        Pos = MAP_APPFONT ( 12, 63 ) ;
+        Size = MAP_APPFONT ( 243, 95 ) ;
+    };
+
+    /////////////////////////
+    // Page 6, colorscheme //
+    /////////////////////////
+
+    FixedBitmap PAGE6_BMP
+    {
+        OutputSize = TRUE ;
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 6 , 4 ) ;
+        Size = MAP_APPFONT ( 256 , 29 ) ;
+        Fixed = Bitmap { File = "pubdlg5.bmp" ; };
+    };
+
+    FixedLine PAGE6_TITEL
+    {
+        Pos = MAP_APPFONT ( 6 , 38 ) ;
+        Size = MAP_APPFONT ( 258 , 8 ) ;
+        Text [ en-US ] = "Select color scheme";
+    };
+
+    RadioButton PAGE6_DOCCOLORS
+    {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE6_DOCCOLORS";
+        Pos = MAP_APPFONT( 12, 50 );
+        Size = MAP_APPFONT( 246, 10 );
+        Text [ en-US ] = "~Apply color scheme from document";
+    };
+
+    RadioButton PAGE6_DEFAULT
+    {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE6_DEFAULT";
+        Pos = MAP_APPFONT( 12, 63 );
+        Size = MAP_APPFONT( 246, 10 );
+        Text [ en-US ] = "Use ~browser colors";
+    };
+
+    RadioButton PAGE6_USER
+    {
+        HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE6_USER";
+        Pos = MAP_APPFONT( 12, 76 );
+        Size = MAP_APPFONT( 246, 10 );
+        Text [ en-US ] = "~Use custom color scheme";
+    };
+
+    PushButton PAGE6_TEXT
+    {
+        HelpID = "sd:PushButton:DLG_PUBLISHING:PAGE6_TEXT";
+        Pos = MAP_APPFONT( 21, 89 );
+        Size = MAP_APPFONT( 72, 14 );
+        Text [ en-US ] = "Text";
+    };
+
+    PushButton PAGE6_LINK
+    {
+        HelpID = "sd:PushButton:DLG_PUBLISHING:PAGE6_LINK";
+        Pos = MAP_APPFONT( 21, 106 );
+        Size = MAP_APPFONT( 72, 14 );
+        Text [ en-US ] = "Hyper~link";
+    };
+
+    PushButton PAGE6_ALINK
+    {
+        HelpID = "sd:PushButton:DLG_PUBLISHING:PAGE6_ALINK";
+        Pos = MAP_APPFONT( 21, 123 );
+        Size = MAP_APPFONT( 72, 14 );
+        Text [ en-US ] = "Active Li~nk";
+    };
+
+    PushButton PAGE6_VLINK
+    {
+        HelpID = "sd:PushButton:DLG_PUBLISHING:PAGE6_VLINK";
+        Pos = MAP_APPFONT( 21, 140 );
+        Size = MAP_APPFONT( 72, 14 );
+        Text [ en-US ] = "~Visited Link";
+    };
+
+    Control PAGE6_PREVIEW
+    {
+        Pos = MAP_APPFONT( 96, 89 );
+        Size = MAP_APPFONT( 100, 64 );
+        Border = TRUE;
+    };
+
+    PushButton PAGE6_BACK
+    {
+        HelpID = "sd:PushButton:DLG_PUBLISHING:PAGE6_BACK";
+        Pos = MAP_APPFONT( 199, 89 );
+        Size = MAP_APPFONT( 60, 14 );
+        Text [ en-US ] = "Bac~kground";
+    };
+
+    // generell
+
+    FixedLine BOTTOM_LINE
+    {
+        Pos = MAP_APPFONT ( 1 , 162 ) ;
+        Size = MAP_APPFONT ( 272, 4) ;
+    };
+
+    PushButton BUT_LAST
+    {
+        HelpID = "sd:PushButton:DLG_PUBLISHING:BUT_LAST";
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 112 , 170 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "<< Back" ;
+    };
+
+    PushButton BUT_NEXT
+    {
+        HelpID = "sd:PushButton:DLG_PUBLISHING:BUT_NEXT";
+        DefButton = TRUE ;
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 165 , 170 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Next >>" ;
+    };
+
+    OKButton BUT_FINISH
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 218 , 170 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Create" ;
+    };
+
+    CancelButton BUT_CANCEL
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 59 , 170 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BUT_HELP
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 170 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+};
+
+ModalDialog DLG_DESIGNNAME
+{
+    HelpID = HID_SD_HTMLEXPORT_DLG_DNAME;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 160 , 40 ) ;
+    Moveable = TRUE ;
+
+    Edit EDT_NAME
+    {
+        HelpID = "sd:Edit:DLG_DESIGNNAME:EDT_NAME";
+        BORDER = TRUE ;
+        Pos = MAP_APPFONT ( 4, 4 );
+        Size = MAP_APPFONT ( 152, 14 );
+        LEFT = TRUE;
+    };
+
+    OKButton BTN_SAVE
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 25 , 22 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Save";
+    };
+
+    CancelButton BTN_NOSAVE
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 80 , 22 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Do Not Save";
+    };
+    Text [ en-US ] = "Name HTML Design";
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

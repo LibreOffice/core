@@ -1,0 +1,114 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_linguistic2_ConversionPropertyType_idl__
+#define __com_sun_star_linguistic2_ConversionPropertyType_idl__
+
+//=============================================================================
+
+module com { module sun { module star { module linguistic2 {
+
+//=============================================================================
+/** specifies the property type of an entry in a conversion dictionary.
+
+    @see    com::sun::star::linguistic2::XConversionDictionary
+    @see    com::sun::star::linguistic2::XConversionPropertyType
+
+    @since OOo 2.0
+*/
+constants ConversionPropertyType
+{
+    /** There is no property type defined or available
+    */
+    const short NOT_DEFINED = 0;
+
+    /** Any word that does not fit into any of the other properties
+    */
+    const short OTHER       = 1;
+
+    /** A word or term that is transliterated or used from a non-Chinese language
+    */
+    const short FOREIGN     = 2;
+
+    /** The first name (given name) of a person
+    */
+    const short FIRST_NAME  = 3;
+
+    /** The last name (family name) of a person
+    */
+    const short LAST_NAME   = 4;
+
+    /** The academic or social title of a person
+    */
+    const short TITLE       = 5;
+
+    /** The status of a situation
+    */
+    const short STATUS      = 6;
+
+    /** The name of a location or place
+    */
+    const short PLACE_NAME  = 7;
+
+    /** The description of a business
+    */
+    const short BUSINESS    = 8;
+
+    /** An adjective
+    */
+    const short ADJECTIVE   = 9;
+
+    /** A term that is used to literally describe a circumstance
+    */
+    const short IDIOM       = 10;
+
+    /** An abbreviation
+    */
+    const short ABBREVIATION    = 11;
+
+    /** A numeric word
+    */
+    const short NUMERICAL   = 12;
+
+    /** A noun
+    */
+    const short NOUN        = 13;
+
+    /** A verb
+    */
+    const short VERB        = 14;
+
+    /** The name of a product or a company
+    */
+    const short BRAND_NAME  = 15;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

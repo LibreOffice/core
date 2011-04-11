@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************ -->
+<!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Configuration" oor:package="org.openoffice.ucb" xml:lang="en-US"> <info>
+		<author>ABI</author>
+		<desc >Contains components and templates used for UCB configuration related data. </desc>
+	</info>
+	<templates>
+		<group oor:name="ContentProviderData">
+			<info>
+				<desc>Contains data describing the configuration parameters of a Content Provider.</desc>
+			</info>
+			<prop oor:name="ServiceName" oor:type="xs:string">
+				<info>
+					<desc>Specifies the name of the UNO service to be used to instantiate the UCP.</desc>
+				</info>
+			</prop>
+			<prop oor:name="URLTemplate" oor:type="xs:string">
+				<info>
+					<desc>Contains the URL template.</desc>
+				</info>
+			</prop>
+			<prop oor:name="Arguments" oor:type="xs:string">
+				<info>
+					<desc>Contains additional arguments for UCP creation.</desc>
+				</info>
+			</prop>
+		</group>
+		<group oor:name="ContentProvidersDataSecondaryKeys">
+			<info>
+				<desc>Specifies secondary keys for Content Provider configuration data.</desc>
+			</info>
+			<set oor:name="ProviderData" oor:node-type="ContentProviderData">
+				<info>
+					<desc>Specifies a set of Content Provider configuration data for the UCB.</desc>
+				</info>
+			</set>
+		</group>
+		<group oor:name="ContentProvidersDataPrimaryKeys">
+			<info>
+				<desc>Specifies primary keys for Content Provider configuration data.</desc>
+			</info>
+			<set oor:name="SecondaryKeys" oor:node-type="ContentProvidersDataSecondaryKeys">
+				<info>
+					<desc>Specifies a set of secondary keys for Content Provider configuration for the UCB.</desc>
+				</info>
+			</set>
+		</group>
+	</templates>
+	<component>
+		<set oor:name="ContentProviders" oor:node-type="ContentProvidersDataPrimaryKeys">
+			<info>
+				<desc>Contains a root entry for Content Provider configurations.</desc>
+			</info>
+		</set>
+	</component>
+</oor:component-schema>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,126 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_beans_XMultiPropertyState_idl__
+#define __com_sun_star_beans_XMultiPropertyState_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/beans/PropertyState.idl>
+#include <com/sun/star/beans/UnknownPropertyException.idl>
+#include <com/sun/star/lang/WrappedTargetException.idl>
+#include <com/sun/star/beans/XPropertyStateChangeListener.idl>
+
+
+//=============================================================================
+
+module com { module sun { module star { module beans {
+
+//=============================================================================
+/** makes it possible to query information about the state of
+    one or more properties.
+
+    <p>The state of a property contains information about the source of
+    the value, e.g. the object itself, a default or a stylesheet.
+    For more information see <type>PropertyState</type>.
+*/
+published interface XMultiPropertyStates: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** @returns
+            a sequence of the states of the properties which are specified
+            by their names.
+
+        <p>The order of the states is correlating to the order of the
+        given property names.
+
+        @param aPropertyName
+            specifies the names of the properties. All names must be unique.
+            This sequence must be alphabetically sorted.
+    */
+    sequence<com::sun::star::beans::PropertyState> getPropertyStates(
+            [in] sequence<string> aPropertyName )
+        raises( com::sun::star::beans::UnknownPropertyException );
+
+    //-------------------------------------------------------------------------
+    /** sets all properties to their default values.
+
+        <p>Each value depends on the implementation of this interface.
+        If it is a bound property, you must change the value before
+        the change events are fired.  If it is a constrained property, you
+        must fire the vetoable event before you change the property value.
+        </p>
+    */
+    void setAllPropertiesToDefault();
+
+    //-------------------------------------------------------------------------
+    /** sets the specified properties to their default values.
+
+        <p>Each value depends on the implementation of this interface.
+        If it is a bound property, you must change the value before
+        the change events are fired.  If it is a constrained property, you
+        must fire the vetoable event before you change the property value. </p>
+
+        @param aPropertyName
+            specifies the names of the properties. All names must be unique.
+            This sequence must be alphabetically sorted.
+
+        @throws UnknownPropertyException
+            if one of the properties does not exist.
+    */
+    void setPropertiesToDefault( [in] sequence<string> aPropertyNames )
+            raises( com::sun::star::beans::UnknownPropertyException );
+
+    //-------------------------------------------------------------------------
+    /** @returns
+            the default values of the propertes with the specified names.
+
+        <p>If no default exists, is not known, or is void,
+        then the return type at the corresponding position in the
+        sequence returned is <atom>void</atom>. </p>
+
+        @param aPropertyName
+            specifies the names of the properties. All names must be unique.
+            This sequence must be alphabetically sorted.
+
+        @throws UnknownPropertyException
+            if one of the propertes does not exist.
+
+        @throws  com::sun::star::lang::WrappedTargetException
+            if the implementation has an internal reason for the exception.
+            In this case the original exception is wrapped into that
+            <type scope="com::sun::star::lang">WrappedTargetException</type>.
+    */
+    sequence<any> getPropertyDefaults(
+                [in] sequence<string> aPropertyNames )
+            raises( com::sun::star::beans::UnknownPropertyException,
+                    com::sun::star::lang::WrappedTargetException );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

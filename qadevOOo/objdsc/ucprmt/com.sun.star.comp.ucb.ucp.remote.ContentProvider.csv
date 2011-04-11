@@ -1,0 +1,5 @@
+"ContentProvider";"com::sun::star::ucb::XParameterizedContentProvider";"registerInstance()"
+"ContentProvider";"com::sun::star::ucb::XParameterizedContentProvider";"deregisterInstance()"
+"ContentProvider";"com::sun::star::ucb::XContentProvider";"queryContent()"
+"ContentProvider";"com::sun::star::ucb::XContentProvider";"compareContentIds()"
+"ContentProvider";"com::sun::star::ucb::XContentIdentifierFactory#optional";"createContentIdentifier()"

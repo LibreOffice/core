@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<parcel language="BeanShell" xmlns:parcel="scripting.dtd">
+
+    <script language="BeanShell">
+        <locale lang="en">
+            <displayname value="Capitalise"/>
+            <description>
+                Change the case of a selection, or current word from upper case, to first char upper case, to all lower case to upper case...
+            </description>
+        </locale>
+        <functionname value="capitalise.bsh"/>
+        <logicalname value="Capitalise.BeanShell"/>
+    </script>
+
+</parcel>

@@ -1,0 +1,988 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_slideshow.hxx"
+
+// must be first
+#include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
+#include <canvas/verbosetrace.hxx>
+
+#include <com/sun/star/animations/AnimationCalcMode.hpp>
+#include <comphelper/sequence.hxx>
+
+#include "activitiesfactory.hxx"
+#include "smilfunctionparser.hxx"
+#include "accumulation.hxx"
+#include "activityparameters.hxx"
+#include "interpolation.hxx"
+#include "tools.hxx"
+#include "simplecontinuousactivitybase.hxx"
+#include "discreteactivitybase.hxx"
+#include "continuousactivitybase.hxx"
+#include "continuouskeytimeactivitybase.hxx"
+
+#include <boost/bind.hpp>
+#include <boost/optional.hpp>
+
+#include <cmath> // for modf
+#include <vector>
+#include <algorithm>
+
+using namespace com::sun::star;
+
+namespace slideshow {
+namespace internal {
+
+namespace {
+
+/** Traits template, to take formula application only for ValueType = double
+ */
+template<typename ValueType> struct FormulaTraits
+{
+    static ValueType getPresentationValue(
+        const ValueType& rVal, const ExpressionNodeSharedPtr& )
+    {
+        return rVal;
+    }
+};
+
+/// Specialization for ValueType = double
+template<> struct FormulaTraits<double>
+{
+    static double getPresentationValue(
+        double const& rVal, ExpressionNodeSharedPtr const& rFormula )
+    {
+        return rFormula ? (*rFormula)(rVal) : rVal;
+    }
+};
+
+// Various ActivityBase specializations for different animator types
+// =================================================================
+
+/** FromToBy handler
+
+    Provides the Activity specializations for FromToBy
+    animations (e.g. those without a values list).
+
+    This template makes heavy use of SFINAE, only one of
+    the perform*() methods will compile for each of the
+    base classes.
+
+    Note that we omit the virtual keyword on the perform()
+    overrides on purpose; those that actually do override
+    baseclass virtual methods inherit the property, and
+    the others won't increase our vtable. What's more,
+    having all perform() method in the vtable actually
+    creates POIs for them, which breaks the whole SFINAE
+    concept (IOW, this template won't compile any longer).
+
+    @tpl BaseType
+    Base class to use for this activity. Only
+    ContinuousActivityBase and DiscreteActivityBase are
+    supported here.
+
+    @tpl AnimationType
+    Type of the Animation to call.
+*/
+template<class BaseType, typename AnimationType>
+class FromToByActivity : public BaseType
+{
+public:
+    typedef typename AnimationType::ValueType           ValueType;
+    typedef boost::optional<ValueType>                  OptionalValueType;
+
+private:
+    // some compilers don't inline whose definition they haven't
+    // seen before the call site...
+    ValueType getPresentationValue( const ValueType& rVal ) const
+    {
+        return FormulaTraits<ValueType>::getPresentationValue( rVal, mpFormula);
+    }
+
+public:
+    /** Create FromToByActivity.
+
+        @param rFrom
+        From this value, the animation starts
+
+        @param rTo
+        With this value, the animation ends
+
+        @param rBy
+        With this value, the animation increments the start value
+
+        @param rParms
+        Standard Activity parameter struct
+
+        @param rAnim
+        Shared ptr to AnimationType
+
+        @param rInterpolator
+        Interpolator object to be used for lerping between
+        start and end value (need to be passed, since it
+        might contain state, e.g. interpolation direction
+        for HSL color space).
+
+        @param bCumulative
+        Whether repeated animations should cumulate the
+        value, or start fresh each time.
+    */
+    FromToByActivity(
+        const OptionalValueType&                      rFrom,
+        const OptionalValueType&                      rTo,
+        const OptionalValueType&                      rBy,
+        const ActivityParameters&                     rParms,
+        const ::boost::shared_ptr< AnimationType >&   rAnim,
+        const Interpolator< ValueType >&              rInterpolator,
+        bool                                          bCumulative )
+        : BaseType( rParms ),
+          maFrom( rFrom ),
+          maTo( rTo ),
+          maBy( rBy ),
+          mpFormula( rParms.mpFormula ),
+          maStartValue(),
+          maEndValue(),
+          mpAnim( rAnim ),
+          maInterpolator( rInterpolator ),
+          mbDynamicStartValue( false ),
+          mbCumulative( bCumulative )
+    {
+        ENSURE_OR_THROW( mpAnim, "Invalid animation object" );
+
+        ENSURE_OR_THROW(
+            rTo || rBy,
+            "From and one of To or By, or To or By alone must be valid" );
+    }
+
+    virtual void startAnimation()
+    {
+        if (this->isDisposed() || !mpAnim)
+            return;
+        BaseType::startAnimation();
+
+        // start animation
+        mpAnim->start( BaseType::getShape(),
+                       BaseType::getShapeAttributeLayer() );
+
+        // setup start and end value. Determine animation
+        // start value only when animation actually
+        // started up (this order is part of the Animation
+        // interface contract)
+        const ValueType aAnimationStartValue( mpAnim->getUnderlyingValue() );
+
+        // first of all, determine general type of
+        // animation, by inspecting which of the FromToBy values
+        // are actually valid.
+        // See http://www.w3.org/TR/smil20/animation.html#AnimationNS-FromToBy
+        // for a definition
+        if( maFrom )
+        {
+            // From-to or From-by animation. According to
+            // SMIL spec, the To value takes precedence
+            // over the By value, if both are specified
+            if( maTo )
+            {
+                // From-To animation
+                maStartValue = *maFrom;
+                maEndValue = *maTo;
+            }
+            else if( maBy )
+            {
+                // From-By animation
+                maStartValue = *maFrom;
+                maEndValue = maStartValue + *maBy;
+            }
+        }
+        else
+        {
+            // By or To animation. According to SMIL spec,
+            // the To value takes precedence over the By
+            // value, if both are specified
+            if( maTo )
+            {
+                // To animation
+
+                // According to the SMIL spec
+                // (http://www.w3.org/TR/smil20/animation.html#animationNS-ToAnimation),
+                // the to animation interpolates between
+                // the _running_ underlying value and the to value (as the end value)
+                mbDynamicStartValue = true;
+                maEndValue = *maTo;
+            }
+            else if( maBy )
+            {
+                // By animation
+                maStartValue = aAnimationStartValue;
+                maEndValue = maStartValue + *maBy;
+            }
+        }
+    }
+
+    virtual void endAnimation()
+    {
+        // end animation
+        if (mpAnim)
+            mpAnim->end();
+    }
+
+    /// perform override for ContinuousActivityBase
+    void perform( double nModifiedTime, sal_uInt32 nRepeatCount ) const
+    {
+        if (this->isDisposed() || !mpAnim)
+            return;
+        (*mpAnim)(
+            getPresentationValue(
+                accumulate( maEndValue,
+                            mbCumulative * nRepeatCount, // means: mbCumulative ? nRepeatCount : 0,
+                            maInterpolator( (mbDynamicStartValue
+                                             ? mpAnim->getUnderlyingValue()
+                                             : maStartValue),
+                                            maEndValue,
+                                            nModifiedTime ) ) ) );
+    }
+
+    using BaseType::perform;
+
+    /// perform override for DiscreteActivityBase base
+    void perform( sal_uInt32 nFrame, sal_uInt32 nRepeatCount ) const
+    {
+        if (this->isDisposed() || !mpAnim)
+            return;
+        (*mpAnim)(
+            getPresentationValue(
+                accumulate( maEndValue, mbCumulative ? nRepeatCount : 0,
+                            lerp( maInterpolator,
+                                  (mbDynamicStartValue
+                                   ? mpAnim->getUnderlyingValue()
+                                   : maStartValue),
+                                  maEndValue,
+                                  nFrame,
+                                  BaseType::getNumberOfKeyTimes() ) ) ) );
+    }
+
+    using BaseType::isAutoReverse;
+
+    virtual void performEnd()
+    {
+        // xxx todo: good guess
+        if (mpAnim)
+        {
+            if (isAutoReverse())
+                (*mpAnim)( getPresentationValue( maStartValue ) );
+            else
+                (*mpAnim)( getPresentationValue( maEndValue ) );
+        }
+    }
+
+    /// Disposable:
+    virtual void dispose()
+    {
+        mpAnim.reset();
+        BaseType::dispose();
+    }
+
+private:
+    const OptionalValueType                 maFrom;
+    const OptionalValueType                 maTo;
+    const OptionalValueType                 maBy;
+
+    ExpressionNodeSharedPtr                 mpFormula;
+
+    ValueType                               maStartValue;
+    ValueType                               maEndValue;
+
+    ::boost::shared_ptr< AnimationType >    mpAnim;
+    Interpolator< ValueType >               maInterpolator;
+    bool                                    mbDynamicStartValue;
+    bool                                    mbCumulative;
+};
+
+
+/** Generate Activity corresponding to given FromToBy values
+
+    @tpl BaseType
+    BaseType to use for deriving the Activity from
+
+    @tpl AnimationType
+    Subtype of the Animation object (e.g. NumberAnimation)
+*/
+template<class BaseType, typename AnimationType>
+AnimationActivitySharedPtr createFromToByActivity(
+    const uno::Any&                                          rFromAny,
+    const uno::Any&                                          rToAny,
+    const uno::Any&                                          rByAny,
+    const ActivityParameters&                                rParms,
+    const ::boost::shared_ptr< AnimationType >&              rAnim,
+    const Interpolator< typename AnimationType::ValueType >& rInterpolator,
+    bool                                                     bCumulative,
+    const ShapeSharedPtr&                                    rShape,
+    const ::basegfx::B2DVector&                              rSlideBounds )
+{
+    typedef typename AnimationType::ValueType           ValueType;
+    typedef boost::optional<ValueType>                  OptionalValueType;
+
+    OptionalValueType aFrom;
+    OptionalValueType aTo;
+    OptionalValueType aBy;
+
+    ValueType aTmpValue;
+
+    if( rFromAny.hasValue() )
+    {
+        ENSURE_OR_THROW(
+            extractValue( aTmpValue, rFromAny, rShape, rSlideBounds ),
+            "createFromToByActivity(): Could not extract from value" );
+        aFrom.reset(aTmpValue);
+    }
+    if( rToAny.hasValue() )
+    {
+        ENSURE_OR_THROW(
+            extractValue( aTmpValue, rToAny, rShape, rSlideBounds ),
+            "createFromToByActivity(): Could not extract to value" );
+        aTo.reset(aTmpValue);
+    }
+    if( rByAny.hasValue() )
+    {
+        ENSURE_OR_THROW(
+            extractValue( aTmpValue, rByAny, rShape, rSlideBounds ),
+            "createFromToByActivity(): Could not extract by value" );
+        aBy.reset(aTmpValue);
+    }
+
+    return AnimationActivitySharedPtr(
+        new FromToByActivity<BaseType, AnimationType>(
+            aFrom,
+            aTo,
+            aBy,
+            rParms,
+            rAnim,
+            rInterpolator,
+            bCumulative ) );
+}
+
+/* The following table shows which animator combines with
+   which Activity type:
+
+   NumberAnimator:  all
+   PairAnimation:   all
+   ColorAnimation:  all
+   StringAnimation: DiscreteActivityBase
+   BoolAnimation:   DiscreteActivityBase
+*/
+
+/** Values handler
+
+    Provides the Activity specializations for value lists
+    animations.
+
+    This template makes heavy use of SFINAE, only one of
+    the perform*() methods will compile for each of the
+    base classes.
+
+    Note that we omit the virtual keyword on the perform()
+    overrides on purpose; those that actually do override
+    baseclass virtual methods inherit the property, and
+    the others won't increase our vtable. What's more,
+    having all perform() method in the vtable actually
+    creates POIs for them, which breaks the whole SFINAE
+    concept (IOW, this template won't compile any longer).
+
+    @tpl BaseType
+    Base class to use for this activity. Only
+    ContinuousKeyTimeActivityBase and DiscreteActivityBase
+    are supported here. For values animation without key
+    times, the client must emulate key times by providing
+    a vector of equally spaced values between 0 and 1,
+    with the same number of entries as the values vector.
+
+    @tpl AnimationType
+    Type of the Animation to call.
+*/
+template<class BaseType, typename AnimationType>
+class ValuesActivity : public BaseType
+{
+public:
+    typedef typename AnimationType::ValueType   ValueType;
+    typedef std::vector<ValueType>              ValueVectorType;
+
+private:
+    // some compilers don't inline methods whose definition they haven't
+    // seen before the call site...
+    ValueType getPresentationValue( const ValueType& rVal ) const
+    {
+        return FormulaTraits<ValueType>::getPresentationValue(
+            rVal, mpFormula );
+    }
+
+public:
+    /** Create ValuesActivity.
+
+        @param rValues
+        Value vector to cycle animation through
+
+        @param rParms
+        Standard Activity parameter struct
+
+        @param rAnim
+        Shared ptr to AnimationType
+
+        @param rInterpolator
+        Interpolator object to be used for lerping between
+        start and end value (need to be passed, since it
+        might contain state, e.g. interpolation direction
+        for HSL color space).
+
+        @param bCumulative
+        Whether repeated animations should cumulate the
+        value, or start afresh each time.
+    */
+    ValuesActivity(
+        const ValueVectorType&                      rValues,
+        const ActivityParameters&                   rParms,
+        const boost::shared_ptr<AnimationType>&     rAnim,
+        const Interpolator< ValueType >&            rInterpolator,
+        bool                                        bCumulative )
+        : BaseType( rParms ),
+          maValues( rValues ),
+          mpFormula( rParms.mpFormula ),
+          mpAnim( rAnim ),
+          maInterpolator( rInterpolator ),
+          mbCumulative( bCumulative )
+    {
+        ENSURE_OR_THROW( mpAnim, "Invalid animation object" );
+        ENSURE_OR_THROW( !rValues.empty(), "Empty value vector" );
+    }
+
+    virtual void startAnimation()
+    {
+        if (this->isDisposed() || !mpAnim)
+            return;
+        BaseType::startAnimation();
+
+        // start animation
+        mpAnim->start( BaseType::getShape(),
+                       BaseType::getShapeAttributeLayer() );
+    }
+
+    virtual void endAnimation()
+    {
+        // end animation
+        if (mpAnim)
+            mpAnim->end();
+    }
+
+    /// perform override for ContinuousKeyTimeActivityBase base
+    void perform( sal_uInt32    nIndex,
+                  double        nFractionalIndex,
+                  sal_uInt32    nRepeatCount ) const
+    {
+        if (this->isDisposed() || !mpAnim)
+            return;
+        ENSURE_OR_THROW( nIndex+1 < maValues.size(),
+                          "ValuesActivity::perform(): index out of range" );
+
+        // interpolate between nIndex and nIndex+1 values
+        (*mpAnim)(
+            getPresentationValue(
+                accumulate( maValues.back(),
+                            mbCumulative ? nRepeatCount : 0,
+                            maInterpolator( maValues[ nIndex ],
+                                            maValues[ nIndex+1 ],
+                                            nFractionalIndex ) ) ) );
+    }
+
+    using BaseType::perform;
+
+    /// perform override for DiscreteActivityBase base
+    void perform( sal_uInt32 nFrame, sal_uInt32 nRepeatCount ) const
+    {
+        if (this->isDisposed() || !mpAnim)
+            return;
+        ENSURE_OR_THROW( nFrame < maValues.size(),
+                          "ValuesActivity::perform(): index out of range" );
+
+        // this is discrete, thus no lerp here.
+        (*mpAnim)(
+            getPresentationValue(
+                accumulate( maValues.back(),
+                            mbCumulative ? nRepeatCount : 0,
+                            maValues[ nFrame ] ) ) );
+    }
+
+    virtual void performEnd()
+    {
+        // xxx todo: good guess
+        if (mpAnim)
+            (*mpAnim)( getPresentationValue( maValues.back() ) );
+    }
+
+    /// Disposable:
+    virtual void dispose()
+    {
+        mpAnim.reset();
+        BaseType::dispose();
+    }
+
+private:
+    ValueVectorType                         maValues;
+
+    ExpressionNodeSharedPtr                 mpFormula;
+
+    boost::shared_ptr<AnimationType>        mpAnim;
+    Interpolator< ValueType >               maInterpolator;
+    bool                                    mbCumulative;
+};
+
+/** Generate Activity corresponding to given Value vector
+
+    @tpl BaseType
+    BaseType to use for deriving the Activity from
+
+    @tpl AnimationType
+    Subtype of the Animation object (e.g. NumberAnimation)
+*/
+template<class BaseType, typename AnimationType>
+AnimationActivitySharedPtr createValueListActivity(
+    const uno::Sequence<uno::Any>&                            rValues,
+    const ActivityParameters&                                 rParms,
+    const boost::shared_ptr<AnimationType>&                   rAnim,
+    const Interpolator<typename AnimationType::ValueType>&    rInterpolator,
+    bool                                                      bCumulative,
+    const ShapeSharedPtr&                                     rShape,
+    const ::basegfx::B2DVector&                               rSlideBounds )
+{
+    typedef typename AnimationType::ValueType   ValueType;
+    typedef std::vector<ValueType>              ValueVectorType;
+
+    ValueVectorType aValueVector;
+    aValueVector.reserve( rValues.getLength() );
+
+    for( ::std::size_t i=0, nLen=rValues.getLength(); i<nLen; ++i )
+    {
+        ValueType aValue;
+        ENSURE_OR_THROW(
+            extractValue( aValue, rValues[i], rShape, rSlideBounds ),
+            "createValueListActivity(): Could not extract values" );
+        aValueVector.push_back( aValue );
+    }
+
+    return AnimationActivitySharedPtr(
+        new ValuesActivity<BaseType, AnimationType>(
+            aValueVector,
+            rParms,
+            rAnim,
+            rInterpolator,
+            bCumulative ) );
+}
+
+/** Generate Activity for given XAnimate, corresponding to given Value vector
+
+    @tpl AnimationType
+    Subtype of the Animation object (e.g. NumberAnimation)
+
+    @param rParms
+    Common activity parameters
+
+    @param xNode
+    XAnimate node, to retrieve animation values from
+
+    @param rAnim
+    Actual animation to operate with (gets called with the
+    time-dependent values)
+
+    @param rInterpolator
+    Interpolator object to be used for lerping between
+    start and end values (need to be passed, since it
+    might contain state, e.g. interpolation direction
+    for HSL color space).
+*/
+template<typename AnimationType>
+AnimationActivitySharedPtr createActivity(
+    const ActivitiesFactory::CommonParameters&               rParms,
+    const uno::Reference< animations::XAnimate >&            xNode,
+    const ::boost::shared_ptr< AnimationType >&              rAnim,
+    const Interpolator< typename AnimationType::ValueType >& rInterpolator
+    = Interpolator< typename AnimationType::ValueType >() )
+{
+    // setup common parameters
+    // =======================
+
+    ActivityParameters aActivityParms( rParms.mpEndEvent,
+                                       rParms.mrEventQueue,
+                                       rParms.mrActivitiesQueue,
+                                       rParms.mnMinDuration,
+                                       rParms.maRepeats,
+                                       rParms.mnAcceleration,
+                                       rParms.mnDeceleration,
+                                       rParms.mnMinNumberOfFrames,
+                                       rParms.mbAutoReverse );
+
+    // is a formula given?
+    const ::rtl::OUString& rFormulaString( xNode->getFormula() );
+    if( rFormulaString.getLength() )
+    {
+        // yep, parse and pass to ActivityParameters
+        try
+        {
+            aActivityParms.mpFormula =
+                SmilFunctionParser::parseSmilFunction(
+                    rFormulaString,
+                    calcRelativeShapeBounds(
+                        rParms.maSlideBounds,
+                        rParms.mpShape->getBounds() ) );
+        }
+        catch( ParseError& )
+        {
+            // parse error, thus no formula
+            OSL_FAIL( "createActivity(): Error parsing formula string" );
+        }
+    }
+
+    // are key times given?
+    const uno::Sequence< double >& aKeyTimes( xNode->getKeyTimes() );
+    if( aKeyTimes.hasElements() )
+    {
+        // yes, convert them from Sequence< double >
+        aActivityParms.maDiscreteTimes.resize( aKeyTimes.getLength() );
+        comphelper::sequenceToArray(
+            &aActivityParms.maDiscreteTimes[0],
+            aKeyTimes ); // saves us some temporary vectors
+    }
+
+    // values sequence given?
+    const sal_Int32 nValueLen( xNode->getValues().getLength() );
+    if( nValueLen )
+    {
+        // Value list activity
+        // ===================
+
+        // fake keytimes, if necessary
+        if( !aKeyTimes.hasElements() )
+        {
+            // create a dummy vector of key times,
+            // with aValues.getLength equally spaced entries.
+            for( sal_Int32 i=0; i<nValueLen; ++i )
+                aActivityParms.maDiscreteTimes.push_back( double(i)/nValueLen );
+        }
+
+        // determine type of animation needed here:
+        // Value list activities are possible with
+        // ContinuousKeyTimeActivityBase and DiscreteActivityBase
+        // specializations
+        const sal_Int16 nCalcMode( xNode->getCalcMode() );
+
+        switch( nCalcMode )
+        {
+            case animations::AnimationCalcMode::DISCRETE:
+            {
+                // since DiscreteActivityBase suspends itself
+                // between the frames, create a WakeupEvent for it.
+                aActivityParms.mpWakeupEvent.reset(
+                    new WakeupEvent(
+                        rParms.mrEventQueue.getTimer(),
+                        rParms.mrActivitiesQueue ) );
+
+                AnimationActivitySharedPtr pActivity(
+                    createValueListActivity< DiscreteActivityBase >(
+                        xNode->getValues(),
+                        aActivityParms,
+                        rAnim,
+                        rInterpolator,
+                        xNode->getAccumulate(),
+                        rParms.mpShape,
+                        rParms.maSlideBounds ) );
+
+                // WakeupEvent and DiscreteActivityBase need circular
+                // references to the corresponding other object.
+                aActivityParms.mpWakeupEvent->setActivity( pActivity );
+
+                return pActivity;
+            }
+
+            default:
+                OSL_FAIL( "createActivity(): unexpected case" );
+                // FALLTHROUGH intended
+            case animations::AnimationCalcMode::PACED:
+                // FALLTHROUGH intended
+            case animations::AnimationCalcMode::SPLINE:
+                // FALLTHROUGH intended
+            case animations::AnimationCalcMode::LINEAR:
+                return createValueListActivity< ContinuousKeyTimeActivityBase >(
+                    xNode->getValues(),
+                    aActivityParms,
+                    rAnim,
+                    rInterpolator,
+                    xNode->getAccumulate(),
+                    rParms.mpShape,
+                    rParms.maSlideBounds );
+        }
+    }
+    else
+    {
+        // FromToBy activity
+        // =================
+
+        // determine type of animation needed here:
+        // FromToBy activities are possible with
+        // ContinuousActivityBase and DiscreteActivityBase
+        // specializations
+        const sal_Int16 nCalcMode( xNode->getCalcMode() );
+
+        switch( nCalcMode )
+        {
+            case animations::AnimationCalcMode::DISCRETE:
+            {
+                // fake keytimes, if necessary
+                if( !aKeyTimes.hasElements() )
+                {
+                    // create a dummy vector of 2 key times
+                    const ::std::size_t nLen( 2 );
+                    for( ::std::size_t i=0; i<nLen; ++i )
+                        aActivityParms.maDiscreteTimes.push_back( double(i)/nLen );
+                }
+
+                // since DiscreteActivityBase suspends itself
+                // between the frames, create a WakeupEvent for it.
+                aActivityParms.mpWakeupEvent.reset(
+                    new WakeupEvent(
+                        rParms.mrEventQueue.getTimer(),
+                        rParms.mrActivitiesQueue ) );
+
+                AnimationActivitySharedPtr pActivity(
+                    createFromToByActivity< DiscreteActivityBase >(
+                        xNode->getFrom(),
+                        xNode->getTo(),
+                        xNode->getBy(),
+                        aActivityParms,
+                        rAnim,
+                        rInterpolator,
+                        xNode->getAccumulate(),
+                        rParms.mpShape,
+                        rParms.maSlideBounds ) );
+
+                // WakeupEvent and DiscreteActivityBase need circular
+                // references to the corresponding other object.
+                aActivityParms.mpWakeupEvent->setActivity( pActivity );
+
+                return pActivity;
+            }
+
+            default:
+                OSL_FAIL( "createActivity(): unexpected case" );
+                // FALLTHROUGH intended
+            case animations::AnimationCalcMode::PACED:
+                // FALLTHROUGH intended
+            case animations::AnimationCalcMode::SPLINE:
+                // FALLTHROUGH intended
+            case animations::AnimationCalcMode::LINEAR:
+                return createFromToByActivity< ContinuousActivityBase >(
+                    xNode->getFrom(),
+                    xNode->getTo(),
+                    xNode->getBy(),
+                    aActivityParms,
+                    rAnim,
+                    rInterpolator,
+                    xNode->getAccumulate(),
+                    rParms.mpShape,
+                    rParms.maSlideBounds );
+        }
+    }
+}
+
+/** Simple activity for ActivitiesFactory::createSimpleActivity
+
+    @tpl Direction
+    Determines direction of value generator. A 1 yields a
+    forward direction, starting with 0.0 and ending with
+    1.0. A 0 yields a backward direction, starting with
+    1.0 and ending with 0.0
+*/
+template<int Direction>
+class SimpleActivity : public ContinuousActivityBase
+{
+public:
+    /** Create SimpleActivity.
+
+        @param rParms
+        Standard Activity parameter struct
+    */
+    SimpleActivity( const ActivityParameters&       rParms,
+                    const NumberAnimationSharedPtr& rAnim ) :
+        ContinuousActivityBase( rParms ),
+        mpAnim( rAnim )
+    {
+        ENSURE_OR_THROW( mpAnim, "Invalid animation object" );
+    }
+
+    virtual void startAnimation()
+    {
+        if (this->isDisposed() || !mpAnim)
+            return;
+        ContinuousActivityBase::startAnimation();
+
+        // start animation
+        mpAnim->start( getShape(),
+                       getShapeAttributeLayer() );
+    }
+
+    virtual void endAnimation()
+    {
+        // end animation
+        if (mpAnim)
+            mpAnim->end();
+    }
+
+    using SimpleContinuousActivityBase::perform;
+
+    /// perform override for ContinuousActivityBase
+    virtual void perform( double nModifiedTime, sal_uInt32 ) const
+    {
+        if (this->isDisposed() || !mpAnim)
+            return;
+        // no cumulation, simple [0,1] range
+        (*mpAnim)( 1.0 - Direction + nModifiedTime*(2.0*Direction - 1.0) );
+    }
+
+    virtual void performEnd()
+    {
+        // xxx todo: review
+        if (mpAnim)
+            (*mpAnim)( 1.0*Direction );
+    }
+
+    /// Disposable:
+    virtual void dispose()
+    {
+        mpAnim.reset();
+        ContinuousActivityBase::dispose();
+    }
+
+private:
+    NumberAnimationSharedPtr    mpAnim;
+};
+
+} // anon namespace
+
+
+AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
+    const CommonParameters&                        rParms,
+    const NumberAnimationSharedPtr&                rAnim,
+    const uno::Reference< animations::XAnimate >&  xNode )
+{
+    // forward to appropriate template instantiation
+    return createActivity( rParms, xNode, rAnim );
+}
+
+AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
+    const CommonParameters&                        rParms,
+    const EnumAnimationSharedPtr&                  rAnim,
+    const uno::Reference< animations::XAnimate >&  xNode )
+{
+    // forward to appropriate template instantiation
+    return createActivity( rParms, xNode, rAnim );
+}
+
+AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
+    const CommonParameters&                        rParms,
+    const ColorAnimationSharedPtr&                 rAnim,
+    const uno::Reference< animations::XAnimate >&  xNode )
+{
+    // forward to appropriate template instantiation
+    return createActivity( rParms, xNode, rAnim );
+}
+
+AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
+    const CommonParameters&                            rParms,
+    const HSLColorAnimationSharedPtr&                  rAnim,
+    const uno::Reference< animations::XAnimateColor >& xNode )
+{
+    // forward to appropriate template instantiation
+    return createActivity( rParms,
+                           uno::Reference< animations::XAnimate >(
+                               xNode, uno::UNO_QUERY_THROW ),
+                           rAnim,
+                           // Direction==true means clockwise in SMIL API
+                           Interpolator< HSLColor >( !xNode->getDirection() ) );
+}
+
+AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
+    const CommonParameters&                        rParms,
+    const PairAnimationSharedPtr&                  rAnim,
+    const uno::Reference< animations::XAnimate >&  xNode )
+{
+    // forward to appropriate template instantiation
+    return createActivity( rParms, xNode, rAnim );
+}
+
+AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
+    const CommonParameters&                        rParms,
+    const StringAnimationSharedPtr&                rAnim,
+    const uno::Reference< animations::XAnimate >&  xNode )
+{
+    // forward to appropriate template instantiation
+    return createActivity( rParms, xNode, rAnim );
+}
+
+AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
+    const CommonParameters&                        rParms,
+    const BoolAnimationSharedPtr&                  rAnim,
+    const uno::Reference< animations::XAnimate >&  xNode )
+{
+    // forward to appropriate template instantiation
+    return createActivity( rParms, xNode, rAnim );
+}
+
+AnimationActivitySharedPtr ActivitiesFactory::createSimpleActivity(
+    const CommonParameters&         rParms,
+    const NumberAnimationSharedPtr& rAnim,
+    bool                            bDirectionForward )
+{
+    ActivityParameters aActivityParms( rParms.mpEndEvent,
+                                       rParms.mrEventQueue,
+                                       rParms.mrActivitiesQueue,
+                                       rParms.mnMinDuration,
+                                       rParms.maRepeats,
+                                       rParms.mnAcceleration,
+                                       rParms.mnDeceleration,
+                                       rParms.mnMinNumberOfFrames,
+                                       rParms.mbAutoReverse );
+
+    if( bDirectionForward )
+        return AnimationActivitySharedPtr(
+            new SimpleActivity<1>( aActivityParms, rAnim ) );
+    else
+        return AnimationActivitySharedPtr(
+            new SimpleActivity<0>( aActivityParms, rAnim ) );
+}
+
+} // namespace internal
+} // namespace presentation
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

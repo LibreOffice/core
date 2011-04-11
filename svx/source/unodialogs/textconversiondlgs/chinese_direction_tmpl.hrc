@@ -1,0 +1,51 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _TEXTCONVERSIONDLGS_CHINESE_DIRECTION_HRC
+#define _TEXTCONVERSIONDLGS_CHINESE_DIRECTION_HRC
+
+#include "chinese_direction_ids.hrc"
+
+#ifndef _SVT_CONTROLDIMS_HRC_
+#include <svtools/controldims.hrc>
+#endif
+
+#define DIRECTION_RADIOBUTTONS( D_XPOS, D_YPOS, D_FULLWIDTH ) \
+RadioButton RB_TO_SIMPLIFIED \
+{ \
+    Pos = MAP_APPFONT( D_XPOS, D_YPOS ); \
+    Size = MAP_APPFONT ( D_FULLWIDTH, RSC_CD_RADIOBUTTON_HEIGHT ) ; \
+    Text [ en-US ] = "~Traditional Chinese to simplified Chinese"; \
+}; \
+RadioButton RB_TO_TRADITIONAL \
+{ \
+    Pos = MAP_APPFONT( D_XPOS, D_YPOS + RSC_CD_RADIOBUTTON_HEIGHT+RSC_SP_CTRL_GROUP_Y ); \
+    Size = MAP_APPFONT ( D_FULLWIDTH, RSC_CD_RADIOBUTTON_HEIGHT ) ; \
+    Text [ en-US ] = "~Simplified Chinese to traditional Chinese"; \
+};
+
+#endif

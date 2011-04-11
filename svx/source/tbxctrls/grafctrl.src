@@ -1,0 +1,192 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "grafctrl.hrc"
+#include <svx/dialogs.hrc>
+#include "helpid.hrc"
+#include <svx/svxids.hrc>
+
+FloatingWindow RID_SVXTBX_GRFFILTER
+{
+    HelpId = HID_GRFFILTER;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Text [ en-US ] = "Filters" ;
+    ToolBox TBX_GRFFILTER
+    {
+        SVLook = TRUE ;
+        MenuStrings = TRUE ;
+        Align = BOXALIGN_TOP;
+        LineCount = 3;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = SID_GRFFILTER_INVERT ;
+                HelpID = HID_GRFFILTER_INVERT ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_GRFFILTER_SMOOTH ;
+                HelpID = HID_GRFFILTER_SMOOTH ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_GRFFILTER_SHARPEN ;
+                HelpID = HID_GRFFILTER_SHARPEN ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_GRFFILTER_REMOVENOISE ;
+                HelpID = HID_GRFFILTER_REMOVENOISE ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_BREAK ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_GRFFILTER_SOLARIZE ;
+                HelpId = HID_GRFFILTER_SOLARIZE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_GRFFILTER_SEPIA ;
+                HelpId = HID_GRFFILTER_SEPIA ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_GRFFILTER_POSTER ;
+                HelpId = HID_GRFFILTER_POSTER ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_GRFFILTER_POPART ;
+                HelpId = HID_GRFFILTER_POPART ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_BREAK ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_GRFFILTER_SOBEL ;
+                HelpId = HID_GRFFILTER_SOBEL ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_GRFFILTER_EMBOSS ;
+                HelpId = HID_GRFFILTER_EMBOSS ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_GRFFILTER_MOSAIC ;
+                HelpId = HID_GRFFILTER_MOSAIC ;
+            };
+        };
+    };
+};
+
+// -----------
+// - Strings -
+// -----------
+
+String RID_SVXSTR_UNDO_GRAFMODE
+{
+    Text [ en-US ] = "Graphics Mode";
+};
+String RID_SVXSTR_UNDO_GRAFRED
+{
+    Text [ en-US ] = "Red";
+};
+String RID_SVXSTR_UNDO_GRAFGREEN
+{
+    Text [ en-US ] = "Green";
+};
+String RID_SVXSTR_UNDO_GRAFBLUE
+{
+    Text [ en-US ] = "Blue";
+};
+String RID_SVXSTR_UNDO_GRAFLUMINANCE
+{
+    Text [ en-US ] = "Brightness";
+};
+String RID_SVXSTR_UNDO_GRAFCONTRAST
+{
+    Text [ en-US ] = "Contrast";
+};
+String RID_SVXSTR_UNDO_GRAFGAMMA
+{
+    Text [ en-US ] = "Gamma";
+};
+String RID_SVXSTR_UNDO_GRAFTRANSPARENCY
+{
+    Text [ en-US ] = "Transparency";
+};
+String RID_SVXSTR_GRAFCROP
+{
+    Text [ en-US ] = "Crop";
+};
+
+// ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

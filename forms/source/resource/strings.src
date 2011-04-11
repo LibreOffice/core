@@ -1,0 +1,161 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _FRM_RESOURCE_HRC_
+#include "frm_resource.hrc"
+#endif
+
+String RID_BASELISTBOX_ERROR_FILLLIST
+{
+    Text [ en-US ] = "The contents of a combo box or list field could not be determined.";
+};
+
+String RID_STR_IMPORT_GRAPHIC
+{
+    Text [ en-US ] = "Insert graphics" ;
+};
+
+String RID_STR_CONTROL_SUBSTITUTED_NAME
+{
+    Text [ en-US ] = "substituted";
+};
+
+String RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN
+{
+    Text [ en-US ] = "An error occurred while this control was being loaded. It was therefore replaced with a placeholder.";
+};
+
+String RID_STR_READERROR
+{
+    Text [ en-US ] = "Error reading data from database" ;
+};
+
+String RID_STR_CONNECTERROR
+{
+    Text [ en-US ] = "Connection failed" ;
+};
+
+String RID_ERR_LOADING_FORM
+{
+    Text [ en-US ] = "The data content could not be loaded.";
+};
+
+String RID_ERR_REFRESHING_FORM
+{
+    Text [ en-US ] = "The data content could not be updated";
+};
+
+String RID_STR_ERR_INSERTRECORD
+{
+    Text [ en-US ] = "Error inserting the new record";
+};
+
+String RID_STR_ERR_UPDATERECORD
+{
+    Text [ en-US ] = "Error updating the current record";
+};
+
+String RID_STR_ERR_DELETERECORD
+{
+    Text [ en-US ] = "Error deleting the current record";
+};
+
+String RID_STR_ERR_DELETERECORDS
+{
+    Text [ en-US ] = "Error deleting the specified records";
+};
+
+String RID_STR_NEED_NON_NULL_OBJECT
+{
+    Text [ en-US ] = "The object cannot be NULL.";
+};
+
+String RID_STR_OPEN_GRAPHICS
+{
+    Text [ en-US ] = "Insert graphics from...";
+};
+
+String RID_STR_CLEAR_GRAPHICS
+{
+    Text [ en-US ] = "Remove graphics";
+};
+
+
+String RID_STR_INVALIDSTREAM
+{
+    Text [ en-US ] = "The given stream is invalid.";
+};
+
+String RID_STR_SYNTAXERROR
+{
+    Text [ en-US ] = "Syntax error in query expression" ;
+};
+
+String RID_STR_INCOMPATIBLE_TYPES
+{
+    Text [ en-US ] = "The value types supported by the binding cannot be used for exchanging data with this control.";
+};
+
+String RID_STR_LABEL_RECORD
+{
+    Text [ en-US ] = "Record";
+};
+
+String RID_STR_INVALID_VALIDATOR
+{
+    Text [ en-US ] = "The control is connected to an external value binding, which at the same time acts as validator. You need to revoke the value binding, before you can set a new validator.";
+};
+
+String RID_STR_LABEL_OF
+{
+    Text [ en-US ] = "of";
+};
+
+String RID_STR_QUERY_SAVE_MODIFIED_ROW
+{
+    Text [ en-US ] = "The content of the current form has been modified.\nDo you want to save your changes?";
+};
+String RID_STR_COULD_NOT_SET_ORDER
+{
+    Text [ en-US ] = "Error setting the sort criteria";
+};
+String RID_STR_COULD_NOT_SET_FILTER
+{
+    Text [ en-US ] = "Error setting the filter criteria";
+};
+String RID_STR_FEATURE_REQUIRES_PARAMETERS
+{
+    Text [ en-US ] = "To execute this function, parameters are needed.";
+};
+String RID_STR_FEATURE_NOT_EXECUTABLE
+{
+    Text [ en-US ] = "This function cannot be executed, but is only for status queries.";
+};
+String RID_STR_FEATURE_UNKNOWN
+{
+    Text [ en-US ] = "Unknown function.";
+};

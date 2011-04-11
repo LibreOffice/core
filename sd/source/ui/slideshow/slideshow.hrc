@@ -1,0 +1,56 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef SD_SLIDESHOW_HRC_
+#define SD_SLIDESHOW_HRC_
+
+#define CM_PREV_SLIDE   1
+#define CM_NEXT_SLIDE   2
+#define CM_GOTO         3
+#define CM_SCREEN       4
+#define CM_SCREEN_BLACK 5
+#define CM_SCREEN_WHITE 6
+#define CM_ENDSHOW      7
+#define CM_FIRST_SLIDE  8
+#define CM_LAST_SLIDE   9
+
+//CM for extra presenter UI
+#define CM_ERASE_ALLINK 10
+#define CM_COLOR_PEN    11
+#define CM_WIDTH_PEN    12
+#define CM_WIDTH_PEN_VERY_THIN  13
+#define CM_WIDTH_PEN_THIN   14
+#define CM_WIDTH_PEN_NORMAL 15
+#define CM_WIDTH_PEN_THICK  16
+#define CM_WIDTH_PEN_VERY_THICK 17
+#define CM_PEN_MODE 18
+#define CM_ERASE_MODE 19
+#define CM_POINTER_OPTION 20
+
+#define CM_SLIDES       21      // this must be the last id!
+
+#endif

@@ -1,0 +1,122 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_ucb_ListAction_idl__
+#define __com_sun_star_ucb_ListAction_idl__
+
+
+//=============================================================================
+
+module com { module sun { module star { module ucb {
+
+//=============================================================================
+/** This struct contains information needed in the notifications of a
+    <type>XDynamicResultSet</type>.
+
+    @see ListEvent
+*/
+
+published struct ListAction
+{
+    //-------------------------------------------------------------------------
+    /** The position where something has happened (index begins with
+        <code>1</code> as usual with JDBC ).
+
+        <p>Its value does not necessary indicate the new position in the new
+        <type scope="com::sun::star::sdbc">XResultSet</type>, but a position
+        while doing the changes step by step beginning with the old
+        <type scope="com::sun::star::sdbc">XResultSet</type>.
+    */
+    long Position;
+
+    //-------------------------------------------------------------------------
+    /** The count of involved rows.
+    */
+    long Count;
+
+
+    //-------------------------------------------------------------------------
+    /** specifies the kind of modification happened to all assigned rows.
+
+        <p>The value of the other members of this struct depend on the value
+        of this member:
+
+        <table border=1>
+        <tr align=left> <th>ListActionType</th>
+                        <th>Position</th>
+                        <th>Count</th>
+                        <th>ActionInfo</th></tr>
+
+        <tr align=left> <td>WELCOME</td>
+                        <td>n/a</td>
+                        <td>n/a</td>
+                        <td><type>WelcomeDynamicResultSetStruct</type> required</td></tr>
+
+        <tr align=left> <td>CLEARED</td>
+                        <td>n/a</td>
+                        <td>n/a</td>
+                        <td>n/a</td></tr>
+
+        <tr align=left> <td>INSERTED</td>
+                        <td>required 1-x</td>
+                        <td>required 1-x</td>
+                        <td>allowed but not required... @todo </td></tr>
+
+        <tr align=left> <td>REMOVED</td>
+                        <td>required 1-x</td>
+                        <td>required 1-x</td>
+                        <td>n/a</td></tr>
+
+        <tr align=left> <td>MOVED</td>
+                        <td>required 1-x</td>
+                        <td>required 1-x</td>
+                        <td>type long required</td></tr>
+
+        <tr align=left> <td>PROPERTIES_CHANGED</td>
+                        <td>required 1-x</td>
+                        <td>required 1-x</td>
+                        <td>allowed but not required... @todo</td></tr>
+        </table>
+
+        <p>The value for this member can be one of the
+        <type>ListActionType</type> constants group.
+    */
+    long ListActionType;
+
+    //-------------------------------------------------------------------------
+    /** depending on the content of <member>ListAction::ListActionType</member>
+        the <member>ListAction::ActionInfo</member> could contain additional
+        information about the changes happened (see table above).
+    */
+
+    any ActionInfo;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

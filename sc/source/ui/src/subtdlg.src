@@ -1,0 +1,245 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "subtdlg.hrc"
+
+TabPage RID_SCPAGE_SUBT_OPTIONS
+{
+    HelpId = HID_SCPAGE_SUBT_OPTIONS ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Hide = TRUE ;
+    FixedLine FL_GROUP
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Groups";
+    };
+    CheckBox BTN_PAGEBREAK
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_SUBT_OPTIONS:BTN_PAGEBREAK";
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 239 , 10 ) ;
+        Text [ en-US ] = "~Page break between groups" ;
+        TabStop = TRUE ;
+    };
+    CheckBox BTN_CASE
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_SUBT_OPTIONS:BTN_CASE";
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Size = MAP_APPFONT ( 239 , 10 ) ;
+        Text [ en-US ] = "~Case sensitive" ;
+        TabStop = TRUE ;
+    };
+    CheckBox BTN_SORT
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_SUBT_OPTIONS:BTN_SORT";
+        Pos = MAP_APPFONT ( 12 , 42 ) ;
+        Size = MAP_APPFONT ( 239 , 10 ) ;
+        Text [ en-US ] = "Pre-~sort area according to groups" ;
+        TabStop = TRUE ;
+    };
+    CheckBox BTN_FORMATS
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_SUBT_OPTIONS:BTN_FORMATS";
+        Pos = MAP_APPFONT ( 12 , 101 ) ;
+        Size = MAP_APPFONT ( 239 , 10 ) ;
+        Text [ en-US ] = "I~nclude formats" ;
+        TabStop = TRUE ;
+    };
+    CheckBox BTN_USERDEF
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_SUBT_OPTIONS:BTN_USERDEF";
+        Pos = MAP_APPFONT ( 12 , 115 ) ;
+        Size = MAP_APPFONT ( 239 , 10 ) ;
+        Text [ en-US ] = "C~ustom sort order" ;
+        TabStop = TRUE ;
+    };
+    ListBox LB_USERDEF
+    {
+        HelpID = "sc:ListBox:RID_SCPAGE_SUBT_OPTIONS:LB_USERDEF";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 20 , 127 ) ;
+        Size = MAP_APPFONT ( 231 , 90 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    RadioButton BTN_ASCENDING
+    {
+        HelpID = "sc:RadioButton:RID_SCPAGE_SUBT_OPTIONS:BTN_ASCENDING";
+        Pos = MAP_APPFONT ( 12 , 69 ) ;
+        Size = MAP_APPFONT ( 239 , 10 ) ;
+        Text [ en-US ] = "~Ascending" ;
+        TabStop = TRUE ;
+    };
+    RadioButton BTN_DESCENDING
+    {
+        HelpID = "sc:RadioButton:RID_SCPAGE_SUBT_OPTIONS:BTN_DESCENDING";
+        Pos = MAP_APPFONT ( 12 , 83 ) ;
+        Size = MAP_APPFONT ( 239 , 10 ) ;
+        Text [ en-US ] = "D~escending" ;
+        TabStop = TRUE ;
+    };
+    FixedLine FL_SORT
+    {
+        Pos = MAP_APPFONT ( 6 , 58 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Sort" ;
+    };
+};
+
+
+TabPage RID_SUBTBASE
+{
+     // Die Elemente haben hart vergebene Hilfe-IDs, weil automatisch generierte
+     // aus den Ableitungen nicht in der HID-Liste auftauchen wuerden
+    HelpId = HID_SCPAGE_SUBT_GROUP ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Hide = TRUE ;
+    FixedText FT_GROUP
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 121 , 8 ) ;
+        Text [ en-US ] = "~Group by" ;
+    };
+    ListBox LB_GROUP
+    {
+        HelpId = HID_SC_SUBT_GROUP ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 14 ) ;
+        Size = MAP_APPFONT ( 121 , 90 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    FixedText FT_COLUMNS
+    {
+        Pos = MAP_APPFONT ( 6 , 32 ) ;
+        Size = MAP_APPFONT ( 121 , 8 ) ;
+        Text [ en-US ] = "~Calculate subtotals for" ;
+    };
+    Control WND_COLUMNS
+    {
+        HelpId = HID_SC_SUBT_COLS ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 43 ) ;
+        Size = MAP_APPFONT ( 121 , 136 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_FUNCTIONS
+    {
+        Pos = MAP_APPFONT ( 133 , 32 ) ;
+        Size = MAP_APPFONT ( 121 , 8 ) ;
+        Text [ en-US ] = "Use ~function" ;
+    };
+    ListBox LB_FUNCTIONS
+    {
+        HelpId = HID_SC_SUBT_FUNC ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 133 , 43 ) ;
+        Size = MAP_APPFONT ( 121 , 136 ) ;
+        TabStop = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "Sum" ; Default ; > ;
+            < "Count" ; Default ; > ;
+            < "Average" ; Default ; > ;
+            < "Max" ; Default ; > ;
+            < "Min" ; Default ; > ;
+            < "Product" ; Default ; > ;
+            < "Count (numbers only)" ; Default ; > ;
+            < "StDev (Sample)" ; Default ; > ;
+            < "StDevP (Population)" ; Default ; > ;
+            < "Var (Sample)" ; Default ; > ;
+            < "VarP (Population)" ; Default ; > ;
+        };
+    };
+};
+
+ // "Control" braucht immer eigene HelpId - ansonsten aus RID_SUBTBASE kopiert
+
+TabPage RID_SCPAGE_SUBT_GROUP1 < RID_SUBTBASE
+{
+    HelpId = HID_SCPAGE_SUBT_GROUP1 ;
+};
+
+TabPage RID_SCPAGE_SUBT_GROUP2 < RID_SUBTBASE
+{
+    HelpId = HID_SCPAGE_SUBT_GROUP2 ;
+};
+
+TabPage RID_SCPAGE_SUBT_GROUP3 < RID_SUBTBASE
+{
+    HelpId = HID_SCPAGE_SUBT_GROUP3 ;
+};
+
+TabDialog RID_SCDLG_SUBTOTALS
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 294 , 176 ) ;
+    Text [ en-US ] = "Subtotals" ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 3 , 3 ) ;
+        Size = MAP_APPFONT ( 240 , 150 ) ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = PAGE_GROUP1 ;
+                Text [ en-US ] = "1st Group" ;
+            };
+            PageItem
+            {
+                Identifier = PAGE_GROUP2 ;
+                Text [ en-US ] = "2nd Group" ;
+            };
+            PageItem
+            {
+                Identifier = PAGE_GROUP3 ;
+                Text [ en-US ] = "3rd Group" ;
+            };
+            PageItem
+            {
+                Identifier = PAGE_OPTIONS ;
+                Text [ en-US ] = "Options" ;
+            };
+        };
+    };
+    PushButton BTN_REMOVE
+    {
+        Pos = MAP_APPFONT ( 143 , 160 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Text [ en-US ] = "~Delete" ;
+        TabStop = TRUE ;
+    };
+};

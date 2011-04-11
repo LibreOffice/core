@@ -1,0 +1,83 @@
+ /*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "t602filter.hrc"
+
+String T602FILTER_STR_IMPORT_DIALOG_TITLE
+{
+    Text [ en-US ] = "Settings for T602 import";
+};
+
+String T602FILTER_STR_ENCODING_LABEL
+{
+    Text [ en-US ] = "Encoding";
+};
+
+String T602FILTER_STR_ENCODING_AUTO
+{
+    Text [ en-US ] = "Automatic";
+};
+
+String T602FILTER_STR_ENCODING_CP852
+{
+    Text [ en-US ] = "CP852 (Latin2)";
+};
+
+String T602FILTER_STR_ENCODING_CP895
+{
+    Text [ en-US ] = "CP895 (KEYB2CS, Kamenicky)";
+};
+
+String T602FILTER_STR_ENCODING_KOI8CS2
+{
+    Text [ en-US ] = "KOI8 CS2";
+};
+
+String T602FILTER_STR_CYRILLIC_MODE
+{
+    Text [ en-US ] = "Mode for Russian language (Cyrillic)";
+};
+
+String T602FILTER_STR_REFORMAT_TEXT
+{
+    Text [ en-US ] = "Reformat the text";
+};
+
+String T602FILTER_STR_DOT_COMMANDS
+{
+    Text [ en-US ] = "Display dot commands";
+};
+
+String T602FILTER_STR_CANCEL_BUTTON
+{
+    Text [ en-US ] = "Cancel";
+};
+
+String T602FILTER_STR_OK_BUTTON
+{
+    Text [ en-US ] = "OK";
+};

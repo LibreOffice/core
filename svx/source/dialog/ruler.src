@@ -1,0 +1,148 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include <svx/dialogs.hrc>
+#include "ruler.hrc"
+
+Menu RID_SVXMN_RULER
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = ID_MM ;
+            Checkable = TRUE ;
+            Text [ en-US ] = "Millimeter" ;
+        };
+        MenuItem
+        {
+            Identifier = ID_CM ;
+            Checkable = TRUE ;
+            Text [ en-US ] = "Centimeter" ;
+        };
+        MenuItem
+        {
+            Identifier = ID_M ;
+            Checkable = TRUE ;
+            Text [ en-US ] = "Meter" ;
+        };
+        MenuItem
+        {
+            Identifier = ID_KM ;
+            Checkable = TRUE ;
+            Text [ en-US ] = "Kilometer" ;
+        };
+        MenuItem
+        {
+            Identifier = ID_INCH ;
+            Checkable = TRUE ;
+            Text [ en-US ] = "Inch" ;
+        };
+        MenuItem
+        {
+            Identifier = ID_FOOT ;
+            Checkable = TRUE ;
+            /* ### ATTENTION: New text in Resource? Feet : Feet */
+            Text [ en-US ] = "Foot" ;
+        };
+        MenuItem
+        {
+            Identifier = ID_MILE ;
+            Checkable = TRUE ;
+            Text [ en-US ] = "Miles" ;
+        };
+        MenuItem
+        {
+            Identifier = ID_POINT ;
+            Checkable = TRUE ;
+            Text [ en-US ] = "Point" ;
+        };
+        MenuItem
+        {
+            Identifier = ID_PICA ;
+            Checkable = TRUE ;
+            Text [ en-US ] = "Pica" ;
+        };
+        MenuItem
+        {
+            Identifier = ID_CHAR ;
+            Checkable = TRUE ;
+            Text[ en-US ] = "Char" ;
+        };
+        MenuItem
+        {
+            Identifier = ID_LINE ;
+            Checkable = TRUE ;
+            Text[ en-US ] = "Line" ;
+        };
+    };
+};
+String RID_SVXSTR_RULER_TAB_LEFT
+{
+    Text [ en-US ] = "Left" ;
+};
+String RID_SVXSTR_RULER_TAB_RIGHT
+{
+    Text [ en-US ] = "Right" ;
+};
+String RID_SVXSTR_RULER_TAB_DECIMAL
+{
+    Text [ en-US ] = "Decimal" ;
+};
+String RID_SVXSTR_RULER_TAB_CENTER
+{
+    Text [ en-US ] = "Center" ;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

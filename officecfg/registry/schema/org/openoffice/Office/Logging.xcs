@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************ -->
+<!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Logging" oor:package="org.openoffice.Office" xml:lang="en-US">
+  <info>
+    <author>FS</author>
+    <desc >Contains preferences the Logger components.</desc>
+  </info>
+  <templates>
+    <group oor:name="LoggerSettings">
+      <info>
+        <desc>contains preferences for a single Logger.</desc>
+      </info>
+      <prop oor:name="LogLevel" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Specifies the log level of the logger.</desc>
+        </info>
+        <value>2147483647</value>
+      </prop>
+      <prop oor:name="DefaultHandler" oor:type="xs:string" oor:nillable="true">
+        <info>
+          <desc>Specifies the UNO service name of the default handler for the logger.</desc>
+        </info>
+        <value>com.sun.star.logging.FileHandler</value>
+      </prop>
+      <group oor:name="HandlerSettings" oor:extensible="true">
+        <info>
+          <desc>Specifies the settings for the default handler (DefaultHandler property) of
+            the logger. Plain properties below the HandlerSettings node are passed to
+            the log handler upon creation, as sequence of NamedValues.</desc>
+        </info>
+        <prop oor:name="FileURL" oor:type="xs:string">
+          <info>
+            <desc>Specifies the file URL for the log handler. The default value here will expand to a file
+            with the same name as the logger for which the handler is used, with extension &quot;.log&quot;.
+            It will be located in the user's OOo data folder.</desc>
+          </info>
+          <value>$(userurl)/$(loggername).log</value>
+        </prop>
+      </group>
+      <prop oor:name="DefaultFormatter" oor:type="xs:string" oor:nillable="true">
+        <info>
+          <desc>Specifies the UNO service name of the default formatter for the logger.</desc>
+        </info>
+        <value>com.sun.star.logging.PlainTextFormatter</value>
+      </prop>
+      <group oor:name="FormatterSettings" oor:extensible="true">
+        <info>
+          <desc>Specifies the settings for the default formatter (DefaultFormatter property) of
+            the logger. Plain properties below the FormatterSettings node are passed to
+            the log formatter upon creation, as sequence of NamedValues.</desc>
+        </info>
+      </group>
+    </group>
+  </templates>
+  <component>
+    <group oor:name="OOoImprovement">
+      <info>
+		<author>b_michaelsen</author>
+        <desc>specifies settings for the logging of userinterface events.</desc>
+      </info>
+      <prop oor:name="EnablingAllowed" oor:type="xs:boolean">
+        <info>
+          <desc>only if this is true, usage tracking is allowed and its options will be shown
+          </desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="LogPath" oor:type="xs:string">
+        <info>
+          <desc>directory where the logs will get saved
+          </desc>
+        </info>
+        <value>$(user)/temp/Feedback</value>
+      </prop>
+      <prop oor:name="IdleTimeout" oor:type="xs:int">
+        <info>
+          <desc>idle time in minutes. If two log event are separated by a longer
+          time, the log will be rotated.</desc>
+        </info>
+        <value>180</value>
+      </prop>
+    </group>
+    <set oor:name="Settings" oor:node-type="LoggerSettings">
+      <info>
+        <desc>contains the settings for all known loggers in OpenOffice.org.</desc>
+      </info>
+    </set>
+  </component>
+</oor:component-schema>

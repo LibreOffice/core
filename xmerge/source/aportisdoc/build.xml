@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ #*************************************************************************
+ #
+  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+
+  Copyright 2000, 2010 Oracle and/or its affiliates.
+
+  OpenOffice.org - a multi-platform office productivity suite
+
+  This file is part of OpenOffice.org.
+
+  OpenOffice.org is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License version 3
+  only, as published by the Free Software Foundation.
+
+  OpenOffice.org is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU Lesser General Public License version 3 for more details
+  (a copy is included in the LICENSE file that accompanied this code).
+
+  You should have received a copy of the GNU Lesser General Public License
+  version 3 along with OpenOffice.org.  If not, see
+  <http://www.openoffice.org/license.html>
+  for a copy of the LGPLv3 License.
+
+ #*************************************************************************
+ -->
+
+<project name="aportisdoc" default="all" basedir=".">
+
+    <property file="../inc/antbuild.properties"/>
+
+    <path id="classpath">
+        <pathelement location="${build.dir}/xmerge.jar"/>
+    </path>
+
+
+    <target name="init" >
+        <mkdir dir="${target.dir}"/>
+    </target>
+
+    <!-- compile java sources in ${package} -->
+    <target name="compile" depends="init">
+        <javac srcdir="${src.dir}"
+               destdir="${target.dir}"
+               debug="${debug}"
+               deprecation="${deprecation}"
+               optimize="${optimize}">
+            <classpath refid="classpath"/>
+        </javac>
+    </target>
+
+    <!-- package to jar -->
+    <target name="jar" depends="compile">
+        <jar destfile="${target.jar}">
+            <fileset dir="${target.dir}"
+                     includes="**/*.class" />
+            <metainf dir="${basedir}">
+                <filename name="converter.xml"/>
+            </metainf>
+         </jar>
+    </target>
+
+    <!-- clean up -->
+    <target name="clean">
+        <delete dir="${class.dir}"/>
+        <delete file="${target.jar}"/>
+    </target>
+
+    <target name="all" depends="jar">
+    </target>
+
+</project>
+

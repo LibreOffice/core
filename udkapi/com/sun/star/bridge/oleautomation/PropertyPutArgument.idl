@@ -1,0 +1,70 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_bridge_oleautomation_PropertyPutArgument_idl__
+#define __com_sun_star_bridge_oleautomation_PropertyPutArgument_idl__
+
+
+module com {  module sun {  module star {  module bridge {  module oleautomation {
+
+/** contains a value that is used as argument in a &quot;property put&quot
+    operation on a Automation object.
+    <p>
+    If a Automation object is converted into a UNO object by a scripting
+    bridge, such as
+    <type scope="com::sun::star::bridge::oleautomation">BridgeSupplier</type>,
+    then it is accessed through the
+    <type scope="com::sun::star::script">XInvocation</type> interface.
+    The methods
+    <member scope="com::sun::star::script">XInvocation::setValue</member>
+    and
+    <member scope="com::sun::star::script">XInvocation::getValue</member>
+    are used to access properties which do not have additional
+    arguments. To access a property with additional arguments, the
+    method
+    <member scope="com::sun::star::script">XInvocation::invoke</member>
+    has to be used. The method implementation must decide, if the
+    property is to be written or read so it can perform the proper
+    operation on the Automation object. To make this decision, the
+    caller has to provide the information if the current call is
+    intended to be a write or read operation. This is done by
+    providing either instances of <type>PropertyPutArgument</type> or
+    <type>PropertyGetArgument</type> as arguments to
+    <member scope="com::sun::star::script">XInvocation::Invoke</member>.
+
+    @since OOo 1.1.2
+*/
+struct PropertyPutArgument
+{
+    /** contains the actual argument.
+     */
+    any Value;
+};
+
+}; }; }; }; };
+
+
+#endif

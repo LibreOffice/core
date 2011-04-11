@@ -1,0 +1,23 @@
+mkdir: %COMMON_DEST%\bin%_EXT%\hid
+mkdir: %_DEST%\pck%_EXT%
+..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
+..\%__SRC%\bin\*.zip %_DEST%\pck%_EXT%\*.zip
+ ..\%__SRC%\bin\wzi*.res %_DEST%\bin%_EXT%\wzi*.res
+..\%__SRC%\bin\dbw*.res %_DEST%\bin%_EXT%\dbw*.res
+..\%__SRC%\bin\tpl*.res %_DEST%\bin%_EXT%\tpl*.res
+..\%__SRC%\bin\imp*.res %_DEST%\bin%_EXT%\imp*.res
+..\%__SRC%\bin\wwz*.res %_DEST%\bin%_EXT%\wwz*.res
+..\%__SRC%\bin\eur*.res %_DEST%\bin%_EXT%\eur*.res
+..\%__SRC%\bin\cal*.res %_DEST%\bin%_EXT%\cal*.res
+..\%__SRC%\bin\com*.res %_DEST%\bin%_EXT%\com*.res
+REM ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
+
+..\%__SRC%\class\*.jar %_DEST%\bin%_EXT%\*.jar
+..\%__SRC%\misc\agenda.component %_DEST%\xml%_EXT%\agenda.component
+..\%__SRC%\misc\fax.component %_DEST%\xml%_EXT%\fax.component
+..\%__SRC%\misc\form.component %_DEST%\xml%_EXT%\form.component
+..\%__SRC%\misc\letter.component %_DEST%\xml%_EXT%\letter.component
+..\%__SRC%\misc\query.component %_DEST%\xml%_EXT%\query.component
+..\%__SRC%\misc\report.component %_DEST%\xml%_EXT%\report.component
+..\%__SRC%\misc\table.component %_DEST%\xml%_EXT%\table.component
+..\%__SRC%\misc\web.component %_DEST%\xml%_EXT%\web.component

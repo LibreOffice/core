@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="24.000000px"
+   height="24.000000px"
+   id="svg1288"
+   sodipodi:version="0.32"
+   inkscape:version="0.41+cvs"
+   sodipodi:docbase="/home/jimmac/Desktop/kde-uglies"
+   sodipodi:docname="lc_symbolshapes.quad-bevel.svg"
+   inkscape:export-filename="/home/jimmac/Desktop/kde-uglies/lc_arrowshapes.circular-arrow.png"
+   inkscape:export-xdpi="82.500000"
+   inkscape:export-ydpi="82.500000">
+  <defs
+     id="defs3">
+    <linearGradient
+       id="linearGradient2080">
+      <stop
+         id="stop2082"
+         offset="0.0000000"
+         style="stop-color:#8d8d8d;stop-opacity:1.0000000;" />
+      <stop
+         id="stop2084"
+         offset="1.0000000"
+         style="stop-color:#f0f0f0;stop-opacity:1.0000000;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient2218">
+      <stop
+         style="stop-color:#a2a2a2;stop-opacity:1.0000000;"
+         offset="0.0000000"
+         id="stop2220" />
+      <stop
+         style="stop-color:#f0f0f0;stop-opacity:1.0000000;"
+         offset="1.0000000"
+         id="stop2222" />
+    </linearGradient>
+    <linearGradient
+       y2="49.646511"
+       x2="-3.7979760"
+       y1="55.719353"
+       x1="-18.948881"
+       gradientTransform="matrix(0.000000,1.192114,-1.192114,0.000000,100.8265,26.12576)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient2302"
+       xlink:href="#linearGradient2218"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="73.594872"
+       x2="-3.4154124"
+       y1="78.034874"
+       x1="-20.173084"
+       gradientTransform="matrix(0.000000,1.155211,-1.136763,0.000000,96.70109,25.77759)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient2330"
+       xlink:href="#linearGradient2218"
+       inkscape:collect="always" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="0.21568627"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="11.313708"
+     inkscape:cx="25.442582"
+     inkscape:cy="9.8217213"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:grid-bbox="true"
+     inkscape:document-units="px"
+     inkscape:window-width="785"
+     inkscape:window-height="646"
+     inkscape:window-x="469"
+     inkscape:window-y="309" />
+  <metadata
+     id="metadata4">
+    <rdf:RDF
+       id="RDF5">
+      <cc:Work
+         rdf:about=""
+         id="Work6">
+        <dc:format
+           id="format7">image/svg+xml</dc:format>
+        <dc:type
+           id="type9"
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer">
+    <rect
+       style="opacity:0.18857141;color:#000000;fill:#000000;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000;visibility:visible;display:inline;overflow:visible;font-family:Bitstream Vera Sans"
+       id="rect2338"
+       width="20.818239"
+       height="21.156092"
+       x="2.3629940"
+       y="2.4176047" />
+    <rect
+       y="1.5337212"
+       x="1.5674988"
+       height="21.156092"
+       width="20.818239"
+       id="rect2328"
+       style="font-family:Bitstream Vera Sans;overflow:visible;display:inline;visibility:visible;stroke-opacity:1.0000000;stroke-dashoffset:0.0000000;stroke-dasharray:none;stroke-miterlimit:4.0000000;marker-end:none;marker-mid:none;marker-start:none;marker:none;stroke-linejoin:miter;stroke-linecap:butt;stroke-width:0.99999994;stroke:#000000;fill-rule:evenodd;fill-opacity:1.0000000;fill:url(#linearGradient2330);color:#000000;opacity:1.0000000" />
+    <path
+       d="M 6.0356727,6.0744085 L 17.917572,6.0744085 L 17.917572,18.149136 L 6.0356727,18.149136 L 6.0356727,6.0744085 z M 2.5641131,2.5465095 L 21.389131,2.5465095 L 21.389131,21.677033 L 2.5641131,21.677033 L 2.5641131,2.5465095 z M 21.301593,2.7867956 L 17.854447,6.2339413 M 2.6516505,2.7867956 L 6.0104079,6.3223297 M 6.0987963,18.166369 L 2.5632622,21.613515 M 17.766059,18.166369 L 21.213204,21.613515"
+       style="opacity:0.88000000;color:#000000;fill:none;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#ffffff;stroke-width:1.0000004;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000;marker:none;marker-start:none;marker-mid:none;marker-end:none;visibility:visible;display:inline;overflow:visible;font-family:Bitstream Vera Sans"
+       id="rect1298" />
+  </g>
+</svg>

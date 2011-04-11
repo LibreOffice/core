@@ -1,0 +1,176 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "xmlfiltertabpagexslt.hrc"
+#include "xmlfilterhelpids.hrc"
+
+#define TAB_PAGE_WIDTH  260
+#define TAB_PAGE_HEIGHT 120
+
+#define SPACING         3
+
+#define FIRST_ROW_X         6
+#define FIRST_ROW_Y         6
+#define FIRST_ROW_WIDTH     75
+
+#define SECOND_ROW_X        (FIRST_ROW_X + FIRST_ROW_WIDTH + SPACING)
+#define SECOND_ROW_Y        6
+#define SECOND_ROW_WIDTH    (TAB_PAGE_WIDTH - SECOND_ROW_X - 2*SPACING)
+#define BROWSE_WIDTH        50
+
+#define EDIT_OFFSET         1
+#define FIXED_TEXT_OFFSET   2
+
+#define ROW_HEIGHT          14
+
+
+TabPage RID_XML_FILTER_TABPAGE_XSLT
+{
+    HelpId                  = HID_XML_FILTER_TABPAGE_XSLT;
+    Hide                    = TRUE;
+    Size                    = MAP_APPFONT ( TAB_PAGE_WIDTH , TAB_PAGE_HEIGHT );
+    Text [ en-US ] = "Transformation";
+
+    // DocType --------------------------------------------------------
+
+    FixedText FT_XML_DOCTYPE
+    {
+        Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 0 * ROW_HEIGHT + 0 * SPACING + FIXED_TEXT_OFFSET + EDIT_OFFSET ) ;
+        Size                = MAP_APPFONT ( FIRST_ROW_WIDTH , 8 ) ;
+        Text [ en-US ]  = "DocType";
+    };
+
+    Edit ED_XML_DOCTYPE
+    {
+        Pos                 = MAP_APPFONT ( SECOND_ROW_X , SECOND_ROW_Y + 0 * ROW_HEIGHT + 0 * SPACING + EDIT_OFFSET ) ;
+        Size                = MAP_APPFONT ( SECOND_ROW_WIDTH - SPACING - BROWSE_WIDTH, 12 ) ;
+        HelpId              = HID_XML_FILTER_DOCTYPE;
+        Border              = TRUE;
+    };
+
+    // DTD/Schema -----------------------------------------------------
+
+    FixedText FT_XML_DTD_SCHEMA
+    {
+        Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 1 * ROW_HEIGHT + 1 * SPACING + FIXED_TEXT_OFFSET + EDIT_OFFSET ) ;
+        Size                = MAP_APPFONT ( FIRST_ROW_WIDTH , 8 ) ;
+        Text [ en-US ]  = "DTD";
+    };
+
+    ComboBox ED_XML_DTD_SCHEMA
+    {
+        Pos                 = MAP_APPFONT ( SECOND_ROW_X , SECOND_ROW_Y + 1 * ROW_HEIGHT + 1 * SPACING + EDIT_OFFSET ) ;
+        Size                = MAP_APPFONT ( SECOND_ROW_WIDTH - SPACING - BROWSE_WIDTH, 12 ) ;
+        HelpId              = HID_XML_FILTER_DTD;
+        Border              = TRUE;
+        DropDown            = FALSE ;
+    };
+
+    PushButton ED_XML_DTD_SCHEMA_BROWSE
+    {
+        Pos                 = MAP_APPFONT ( SECOND_ROW_X + SECOND_ROW_WIDTH - BROWSE_WIDTH , FIRST_ROW_Y + 1 * ROW_HEIGHT + 1 * SPACING ) ;
+        Size                = MAP_APPFONT ( BROWSE_WIDTH , 14 ) ;
+        HelpId              = HID_XML_FILTER_DTD_BROWSE;
+        Text [ en-US ]  = "Browse...";
+    };
+
+    // Export XSLT ----------------------------------------------------
+
+    FixedText FT_XML_EXPORT_XSLT
+    {
+        Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 2 * ROW_HEIGHT + 2 * SPACING + FIXED_TEXT_OFFSET + EDIT_OFFSET ) ;
+        Size                = MAP_APPFONT ( FIRST_ROW_WIDTH, 8 ) ;
+        Text [ en-US ]  = "XSLT for export";
+    };
+
+    ComboBox ED_XML_EXPORT_XSLT
+    {
+        Pos                 = MAP_APPFONT ( SECOND_ROW_X , FIRST_ROW_Y + 2 * ROW_HEIGHT + 2 * SPACING + EDIT_OFFSET ) ;
+        Size                = MAP_APPFONT ( SECOND_ROW_WIDTH - SPACING - BROWSE_WIDTH , 12 ) ;
+        HelpId              = HID_XML_FILTER_EXPORT_XSLT;
+        Border              = TRUE;
+    };
+
+    PushButton PB_XML_EXPORT_XSLT_BROWSE
+    {
+        Pos                 = MAP_APPFONT ( SECOND_ROW_X + SECOND_ROW_WIDTH - BROWSE_WIDTH , FIRST_ROW_Y + 2 * ROW_HEIGHT + 2 * SPACING ) ;
+        Size                = MAP_APPFONT ( BROWSE_WIDTH , 14 ) ;
+        HelpId              = HID_XML_FILTER_EXPORT_XSLT_BROWSE;
+        Text [ en-US ]  = "Browse...";
+    };
+
+    // Import XSLT ----------------------------------------------------
+
+    FixedText FT_XML_IMPORT_XSLT
+    {
+        Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 3 * ROW_HEIGHT + 3 * SPACING + FIXED_TEXT_OFFSET + EDIT_OFFSET ) ;
+        Size                = MAP_APPFONT ( FIRST_ROW_WIDTH , 8 ) ;
+        Text [ en-US ]  = "XSLT for import";
+    };
+
+    ComboBox ED_XML_IMPORT_XSLT
+    {
+        Pos                 = MAP_APPFONT ( SECOND_ROW_X , FIRST_ROW_Y + 3 * ROW_HEIGHT + 3 * SPACING + EDIT_OFFSET ) ;
+        Size                = MAP_APPFONT ( SECOND_ROW_WIDTH - SPACING - BROWSE_WIDTH , 12 ) ;
+        HelpId              = HID_XML_FILTER_IMPORT_XSLT;
+        Border              = TRUE;
+    };
+
+    PushButton PB_XML_IMPORT_XSLT_BROWSE
+    {
+        Pos                 = MAP_APPFONT ( SECOND_ROW_X + SECOND_ROW_WIDTH - BROWSE_WIDTH , FIRST_ROW_Y + 3 * ROW_HEIGHT + 3 * SPACING ) ;
+        Size                = MAP_APPFONT ( BROWSE_WIDTH , 14 ) ;
+        HelpId              = HID_XML_FILTER_IMPORT_XSLT_BROWSE;
+        Text [ en-US ]  = "Browse...";
+    };
+
+    // Import Template ------------------------------------------------
+
+    FixedText FT_XML_IMPORT_TEMPLATE
+    {
+        Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 4 * ROW_HEIGHT + 4 * SPACING + FIXED_TEXT_OFFSET + EDIT_OFFSET ) ;
+        Size                = MAP_APPFONT ( FIRST_ROW_WIDTH , 8 ) ;
+        Text [ en-US ]  = "Template for import";
+    };
+
+    ComboBox ED_XML_IMPORT_TEMPLATE
+    {
+        Pos                 = MAP_APPFONT ( SECOND_ROW_X , FIRST_ROW_Y + 4 * ROW_HEIGHT + 4 * SPACING + EDIT_OFFSET ) ;
+        Size                = MAP_APPFONT ( SECOND_ROW_WIDTH - SPACING - BROWSE_WIDTH , 12 ) ;
+        HelpId              = HID_XML_FILTER_IMPORT_TEMPLATE;
+        Border              = TRUE;
+    };
+
+    PushButton PB_XML_IMPORT_TEMPLATE_BROWSE
+    {
+        Pos                 = MAP_APPFONT ( SECOND_ROW_X + SECOND_ROW_WIDTH - BROWSE_WIDTH , FIRST_ROW_Y + 4 * ROW_HEIGHT + 4 * SPACING ) ;
+        Size                = MAP_APPFONT ( BROWSE_WIDTH , 14 ) ;
+        HelpId              = HID_XML_FILTER_IMPORT_TEMPLATE_BROWSE;
+        Text [ en-US ]  = "Browse...";
+    };
+};
+

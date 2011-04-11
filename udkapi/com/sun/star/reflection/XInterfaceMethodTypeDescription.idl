@@ -1,0 +1,84 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_reflection_XInterfaceMethodTypeDescription_idl__
+#define __com_sun_star_reflection_XInterfaceMethodTypeDescription_idl__
+
+#include <com/sun/star/reflection/XInterfaceMemberTypeDescription.idl>
+
+#include <com/sun/star/reflection/XTypeDescription.idl>
+
+#include <com/sun/star/reflection/XMethodParameter.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module reflection {
+
+//=============================================================================
+
+/** Reflects an interface method type.
+    The type class of this type is TypeClass_INTERFACE_METHOD.
+*/
+published interface XInterfaceMethodTypeDescription: com::sun::star::reflection::XInterfaceMemberTypeDescription
+{
+    /** Returns the method's return type.
+
+        @return
+                method's return type
+    */
+    com::sun::star::reflection::XTypeDescription getReturnType();
+
+    /** Returns true, if this method is declared oneway.
+
+        @return
+                true, if this method is declared oneway
+    */
+    boolean isOneway();
+
+    /** Returns all parameters of the method in order of IDL declaration.
+
+        @return
+                method parameters
+    */
+    sequence<com::sun::star::reflection::XMethodParameter> getParameters();
+
+    /** Returns declared exceptions that may occur upon invocations of the method.
+
+        @return
+                declared exceptions of method
+    */
+    sequence<com::sun::star::reflection::XTypeDescription> getExceptions();
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

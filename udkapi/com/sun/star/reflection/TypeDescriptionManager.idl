@@ -1,0 +1,111 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_reflection_TypeDescriptionManager_idl__
+#define __com_sun_star_reflection_TypeDescriptionManager_idl__
+
+#include <com/sun/star/container/XHierarchicalNameAccess.idl>
+#include <com/sun/star/container/XSet.idl>
+#include <com/sun/star/lang/XInitialization.idl>
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/reflection/XTypeDescriptionEnumerationAccess.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module reflection {
+
+//=============================================================================
+
+/** This service manages type descriptions and acts as a central access point
+    to every type description.  It delegates calls for demanded types to
+    subsequent
+    <type scope="com::sun::star::reflection">TypeDescriptionProvider</type>s
+    and may cache type descriptions.<br>
+    Using cppuhelper's bootstrapping routines bootstrapping an initial
+    component context, there is a singleton accessable via key
+    "/singletons/com.sun.star.reflection.theTypeDescriptionManager".
+    This singleton object is hooked into the C UNO runtime typelib and
+    lives until the context is shut down.<br>
+
+    @see com::sun::star::reflection::TypeDescriptionProvider
+    @see com::sun::star::reflection::XTypeDescription
+*/
+published service TypeDescriptionManager
+{
+    /** Interface to retrieve type descriptions.
+
+        <ul>
+            <li>Names are given in dotted notation, for example
+            <code>"com.sun.star.uno.XInterface"</code>.</li>
+
+            <li>Sequence types are accessible via
+            <code>"[]<var>ComponentType</var>"</code></li>
+
+            <li>Instantiated polymorphic struct types are accessible via
+            <code>"<var>StructType</var>&lt;<!--
+            --><var>Parameter</var><sub>1</sub>,&hellip;,<!--
+            --><var>Parameter</var><sub><var>n</var></sub>&gt;"</code>.</li>
+
+            <li>Members of interface types are accessible via
+            <code>"<var>InterfaceType</var>::<var>Member</var>"</code>.</li>
+        </ul>
+
+        <p>The returned values are of interface type
+        <type>XTypeDescription</type>.</p>
+
+        <p>Even though the name of this interface suggests that the used type
+        names are hierarchic, this need not be the case.  (For example, consider
+        the names of instantiated polymorphic struct types, like
+        <code>"Struct&lt;long&gt;"</code>.)</p>
+    */
+    interface com::sun::star::container::XHierarchicalNameAccess;
+
+    /** You can manually add or remove a providers via this interface.
+    */
+    interface com::sun::star::container::XSet;
+
+    /** Interface to signal shutdown to the manager.<br>
+        This signals all providers to shut down, because usually each provider
+        references its manager, listening for disposing events.
+    */
+    [optional] interface com::sun::star::lang::XComponent;
+
+    /** Interface for creating enumerations for type descriptions supported
+        by this <type>TypeDescriptionManager</type>
+
+    @since OOo 1.1.2
+    */
+    [optional] interface XTypeDescriptionEnumerationAccess;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

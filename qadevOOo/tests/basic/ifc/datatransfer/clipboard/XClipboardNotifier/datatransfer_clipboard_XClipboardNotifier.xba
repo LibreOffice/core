@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="datatransfer_clipboard_XClipboardNotifier" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+
+Dim iCB1_changedContents As Integer
+Dim iCB2_changedContents As Integer
+Dim bListenerWasCalled As Boolean
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.datatransfer.clipboard.XClipboardNotifier
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim oListener1 As Object
+    Dim oListener2 As Object
+    Dim iTime As Integer
+
+    iCB1_changedContents = 0 : iCB2_changedContents = 0
+
+    oListener1 = createUNOListener("CB1_", "com.sun.star.datatransfer.clipboard.XClipboardListener")
+    oListener2 = createUNOListener("CB2_", "com.sun.star.datatransfer.clipboard.XClipboardListener")
+
+    Test.StartMethod("addClipboardListener()")
+    bOK = true
+    Out.Log("Adding two listeners...")
+    oObj.addClipboardListener(oListener1)
+    oObj.addClipboardListener(oListener2)
+    if (bPerformInteractiveTests) then
+        bListenerWasCalled = false
+        MsgBox("After closing this window try to copy something into clipboard... You have aprox. 10 sec. for this...")
+        iTime = 0
+        while ((NOT bListenerWasCalled) AND (iTime &lt; 10))
+            wait 1000
+            iTime = iTime + 1
+        wend
+        if (NOT bListenerWasCalled) then
+            Out.Log("No listener was called in 10 sec!")
+            MsgBox("No listener was called in 10 sec!")
+            bOK = false
+        else
+            MsgBox("Listener was called!")
+            bOK = bOK AND (iCB1_changedContents = 1) AND (iCB2_changedContents = 1)
+        end if
+    else
+        Out.Log("This is an interactive test. To test this use parameter PERFORMINTERACTIVETESTS in ini file.")
+    end if
+    Test.MethodTested("addClipboardListener()", bOK)
+
+    Test.StartMethod("removeClipboardListener()")
+    bOK = true
+    iCB1_changedContents = 0 : iCB2_changedContents = 0
+
+    Out.Log("Removing second listener...")
+    oObj.removeClipboardListener(oListener2)
+    if (bPerformInteractiveTests) then
+        bListenerWasCalled = false
+        MsgBox("Repeat again: After closing this window try to copy something into clipboard... You have aprox. 10 sec. for this...")
+        iTime = 0
+        while ((NOT bListenerWasCalled) AND (iTime &lt; 10))
+            wait 1000
+            iTime = iTime + 1
+        wend
+        if (NOT bListenerWasCalled) then
+            Out.Log("No listener was called in 10 sec!")
+            MsgBox("No listener was called in 10 sec!")
+            bOK = false
+        else
+            MsgBox("Listener was called!")
+            bOK = bOK AND (iCB1_changedContents = 1) AND (iCB2_changedContents = 0)
+        end if
+    else
+        Out.Log("This is an interactive test. To test this use parameter PERFORMINTERACTIVETESTS in ini file.")
+    end if
+    Test.MethodTested("removeClipboardListener()", bOK)
+
+    Out.Log("Removing first listener...")
+    oObj.removeClipboardListener(oListener1)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+
+Sub CB1_changedContents(event As Object)
+    iCB1_changedContents = iCB1_changedContents + 1
+    Out.Log("CB1_changedContents() was called!")
+    bListenerWasCalled = true
+End Sub
+
+Sub CB2_changedContents(event As Object)
+    iCB2_changedContents = iCB2_changedContents + 1
+    Out.Log("CB2_changedContents() was called!")
+    bListenerWasCalled = true
+End Sub
+</script:module>

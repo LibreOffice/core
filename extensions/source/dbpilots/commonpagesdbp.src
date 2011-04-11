@@ -1,0 +1,226 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _EXTENSIONS_DBP_DBPRESID_HRC_
+#include "dbpresid.hrc"
+#endif
+
+TabPage RID_PAGE_TABLESELECTION
+{
+    HelpID = "extensions:TabPage:RID_PAGE_TABLESELECTION";
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
+    Text [ en-US ] = "Data";
+
+    FixedLine FL_DATA
+    {
+        Pos = MAP_APPFONT ( 4 , 3  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 8 , 8 ) ;
+        Text [ en-US ]  = "Data";
+    };
+    FixedText FT_EXPLANATION
+    {
+        Pos = MAP_APPFONT ( 7 , 15  ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10 , WINDOW_SIZE_Y - 21 ) ;
+        WordBreak = TRUE;
+        Group = TRUE;
+        Text [ en-US ] = "Currently, the form the control belongs to is not (or not completely) bound to a data source.\n\nPlease choose a data source and a table.\n\n\nPlease note that the settings made on this page will take effect immediately upon leaving the page.";
+    };
+    FixedText FT_DATASOURCE
+    {
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 , 15  ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10 , 8) ;
+        Group = TRUE;
+        Text [ en-US ] = "~Data source:";
+    };
+    ListBox LB_DATASOURCE
+    {
+        HelpID = "extensions:ListBox:RID_PAGE_TABLESELECTION:LB_DATASOURCE";
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 , 26  ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 27 , 14 ) ;
+        SVLook = TRUE ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+        AutoHScroll = TRUE ;
+    };
+
+    PushButton PB_FORMDATASOURCE
+    {
+        HelpID = "extensions:PushButton:RID_PAGE_TABLESELECTION:PB_FORMDATASOURCE";
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 + WINDOW_HALF_SIZE_X - 24 , 25  ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
+        Text [ en-US ] = "~...";
+    };
+
+    FixedText FT_TABLE
+    {
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3, 46 ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 14 , 8) ;
+        Group = TRUE;
+        Text [ en-US ] = "~Table / Query:";
+    };
+    ListBox LB_TABLE
+    {
+        HelpID = "extensions:ListBox:RID_PAGE_TABLESELECTION:LB_TABLE";
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3, 57  ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10 , WINDOW_SIZE_Y - 6 - 57 ) ;
+        SVLook = TRUE ;
+        Border = TRUE ;
+        Sort = TRUE;
+        AutoHScroll = TRUE ;
+    };
+
+    Image IMG_TABLE
+    {
+        ImageBitmap = Bitmap { File = "sx03188.bmp"; };
+        MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+    };
+
+    Image IMG_QUERY
+    {
+        ImageBitmap = Bitmap { File = "sx03202.bmp"; };
+        MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+    };
+};
+
+TabPage RID_PAGE_OPTION_DBFIELD
+{
+    HelpID = "extensions:TabPage:RID_PAGE_OPTION_DBFIELD";
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
+    Text [ en-US ] = "Database Field";
+
+    FixedLine FL_DATABASEFIELD_EXPL
+    {
+        Pos = MAP_APPFONT ( 4 , 3  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 8 , 8 ) ;
+    };
+    FixedText FT_DATABASEFIELD_EXPL
+    {
+        Pos = MAP_APPFONT ( 7 , 15  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 14, 16 ) ;
+        WordBreak = TRUE;
+    };
+    FixedText FT_DATABASEFIELD_QUEST
+    {
+        Pos = MAP_APPFONT ( 7 , 34  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 14, 16 ) ;
+        WordBreak = TRUE;
+        Text [ en-US ] = "Do you want to save the value in a database field?";
+    };
+    RadioButton RB_STOREINFIELD_YES
+    {
+        HelpID = "extensions:RadioButton:RID_PAGE_OPTION_DBFIELD:RB_STOREINFIELD_YES";
+        Pos = MAP_APPFONT ( 7 , 53  ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 20, 10 ) ;
+        Group = TRUE;
+        TabStop = TRUE;
+        Text [ en-US ] = "~Yes, I want to save it in the following database field:";
+    };
+    ListBox LB_STOREINFIELD
+    {
+        HelpID = "extensions:ListBox:RID_PAGE_OPTION_DBFIELD:LB_STOREINFIELD";
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 23, 51 ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 30, 14 ) ;
+        TabStop = TRUE;
+        SVLook = TRUE ;
+        Border = TRUE ;
+        DropDown = TRUE;
+        AutoHScroll = TRUE ;
+    };
+    RadioButton RB_STOREINFIELD_NO
+    {
+        HelpID = "extensions:RadioButton:RID_PAGE_OPTION_DBFIELD:RB_STOREINFIELD_NO";
+        Pos = MAP_APPFONT ( 7 , 68 ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 14, 10 ) ;
+        TabStop = FALSE;
+        Text [ en-US ] = "~No, I only want to save the value in the form.";
+    };
+};
+
+TabPage RID_PAGE_FORM_DATASOURCE_STATUS
+{
+    HelpID = "extensions:TabPage:RID_PAGE_FORM_DATASOURCE_STATUS";
+    FixedLine FL_FORMSETINGS
+    {
+        Pos = MAP_APPFONT ( 4 , 3  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 8 , 8 ) ;
+        Text [ en-US ] = "Form";
+    };
+    FixedText FT_FORMDATASOURCELABEL
+    {
+        Pos = MAP_APPFONT ( 7 , 15 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Text [ en-US ] = "Data source";
+    };
+    FixedText FT_FORMDATASOURCE
+    {
+        Pos = MAP_APPFONT ( 7 + 60 + 3 , 15 ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X / 2 - 80 - 3 , 19 ) ;
+        WordBreak = TRUE;
+    };
+
+    FixedText FT_FORMCONTENTTYPELABEL
+    {
+        Pos = MAP_APPFONT ( WINDOW_SIZE_X / 2 + 3, 15 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Text [ en-US ] = "Content type";
+    };
+    FixedText FT_FORMCONTENTTYPE
+    {
+        Pos = MAP_APPFONT ( WINDOW_SIZE_X / 2 + 3 + 60 , 15 ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - ( WINDOW_SIZE_X / 2 + 3 + 60 ) - 7 , 8 ) ;
+    };
+
+    FixedText FT_FORMTABLELABEL
+    {
+        Pos = MAP_APPFONT ( WINDOW_SIZE_X / 2 + 3, 26 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Text [ en-US ] = "Content";
+    };
+    FixedText FT_FORMTABLE
+    {
+        Pos = MAP_APPFONT ( WINDOW_SIZE_X / 2 + 3 + 60 , 26 ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - ( WINDOW_SIZE_X / 2 + 3 + 60 ) - 7 , 8 ) ;
+    };
+};
+
+String RID_STR_TYPE_TABLE
+{
+    Text [ en-US ] = "Table";
+};
+
+String RID_STR_TYPE_QUERY
+{
+    Text [ en-US ] = "Query";
+};
+
+String RID_STR_TYPE_COMMAND
+{
+    Text [ en-US ] = "SQL command";
+};
+

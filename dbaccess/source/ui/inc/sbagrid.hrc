@@ -1,0 +1,107 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef DBACCESS_SBA_GRID_HRC
+#define DBACCESS_SBA_GRID_HRC
+
+//----------------Menueitems-------------------------------------------------
+// Tabelle
+#define SBA_WHICHID_START       100
+// Zeilenhoehe
+#define SBA_DEF_ROWHEIGHT       (SBA_WHICHID_START+131) // SbaColRowSizeItem
+
+#define SBA_DEF_RANGEFONT       (SBA_WHICHID_START+132) // RangeItem
+#define SBA_DEF_FONT            (SBA_WHICHID_START+133) // SvxFontItem
+#define SBA_DEF_FONTHEIGHT      (SBA_WHICHID_START+134) // SvxFontHeightItem
+#define SBA_DEF_FONTCOLOR       (SBA_WHICHID_START+135) // SvxColorItem
+#define SBA_DEF_FONTWEIGHT      (SBA_WHICHID_START+136) // SvxWeightItem
+#define SBA_DEF_POSTURE         (SBA_WHICHID_START+137) // SvxPostureItem
+#define SBA_DEF_SHADOWED        (SBA_WHICHID_START+138) // SvxShadowedItem
+#define SBA_DEF_CONTOUR         (SBA_WHICHID_START+139) // SvxContourItem
+#define SBA_DEF_CROSSEDOUT      (SBA_WHICHID_START+140) // SvxCrossedOutItem
+#define SBA_DEF_UNDERLINE       (SBA_WHICHID_START+141) // SvxUnderlineItem
+#define SBA_DEF_LANGUAGE        (SBA_WHICHID_START+142) // SvxLanguageItem
+
+// Spalten
+// Formatierung
+#define SBA_DEF_RANGEFORMAT     (SBA_WHICHID_START+143) // RangeItem
+#define SBA_DEF_FMTVALUE        (SBA_WHICHID_START+144) // SfxULONG, Format
+
+// Ausrichtung
+#define SBA_ATTR_ALIGN_HOR_JUSTIFY  (SBA_WHICHID_START + 145) //  SvxHorJustifyItem
+
+// Spaltenbreite
+#define SBA_DEF_FLTCOLWIDTH         (SBA_WHICHID_START + 146) // SbaColRowSizeItem
+// Feldtyp
+#define SBA_DEF_FLTTYPE             (SBA_WHICHID_START + 147) // DataFieldTypeItem
+// Feldlänge
+#define SBA_DEF_FLTLENGTH           (SBA_WHICHID_START + 148) // SfxUInt32Item
+// Eingabe erforderlich
+#define SBA_DEF_FLTREQUIRED         (SBA_WHICHID_START + 149) // SfxBoolItem
+// Position in der Tabelle, Abfrage
+#define SBA_DEF_FLTPOS              (SBA_WHICHID_START + 150) // SfxUInt16Item
+// Name der zugehoerigen Tabelle
+#define SBA_DEF_FLTTABLE            (SBA_WHICHID_START + 151) // SfxStringItem
+// Spalte ausblenden
+#define SBA_DEF_FLTHIDE             (SBA_WHICHID_START + 152) // SfxBoolItem
+
+// Ausrichtung
+#define SBA_ATTR_ALIGN_HOR_JUSTIFY  (SBA_WHICHID_START + 145) //  SvxHorJustifyItem
+
+// Spaltenbreite
+#define SBA_DEF_FLTCOLWIDTH         (SBA_WHICHID_START + 146) // SbaColRowSizeItem
+// Feldtyp
+#define SBA_DEF_FLTTYPE             (SBA_WHICHID_START + 147) // DataFieldTypeItem
+// Feldlänge
+#define SBA_DEF_FLTLENGTH           (SBA_WHICHID_START + 148) // SfxUInt32Item
+// Eingabe erforderlich
+#define SBA_DEF_FLTREQUIRED         (SBA_WHICHID_START + 149) // SfxBoolItem
+// Position in der Tabelle, Abfrage
+#define SBA_DEF_FLTPOS              (SBA_WHICHID_START + 150) // SfxUInt16Item
+// Name der zugehoerigen Tabelle
+#define SBA_DEF_FLTTABLE            (SBA_WHICHID_START + 151) // SfxStringItem
+// Spalte ausblenden
+#define SBA_DEF_FLTHIDE             (SBA_WHICHID_START + 152) // SfxBoolItem
+// Kommentar zum Feld
+#define SBA_DEF_FLTCOMMENT          (SBA_WHICHID_START + 153) // SfxStringItem
+// default wert
+#define SBA_DEF_FLTDEFAULT          (SBA_WHICHID_START + 154) // SfxStringItem
+// Primärschluessel
+#define SBA_DEF_FLTPRIMARY          (SBA_WHICHID_START + 155) // SfxBoolItem
+// table properties
+#define SBA_DEF_TABLEPROP           (SBA_WHICHID_START + 156) // SfxString
+#define SBA_DEF_SORT                (SBA_WHICHID_START + 157) // SfxString
+#define SBA_DEF_FILTER              (SBA_WHICHID_START + 158) // SfxString
+#define SBA_DEF_FILTERAPPLIED       (SBA_WHICHID_START + 159) // SfxBool
+#define SBA_DEF_ROWHEIGHT_DEFAULT   (SBA_WHICHID_START + 160) // SfxBool
+// the col has a default width ?
+#define SBA_DEF_FLTCOLWIDTH_DEFAULT (SBA_WHICHID_START + 161) // SfxBool
+#define SBA_DEF_WORDLINEMODE        (SBA_WHICHID_START + 162) // SfxBool
+
+
+
+#endif // DBACCESS_SBA_GRID_HRC

@@ -1,0 +1,127 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include "sc.hrc"
+#include "dwfunctr.hrc"
+
+ // pragma ----------------------------------------------------------------
+
+ // RID_SVXDLG_CALCFUNC --------------------------------------------------
+DockingWindow FID_FUNCTION_BOX
+{
+    Border = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Sizeable = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Dockable = TRUE ;
+    EnableResizing = TRUE ;
+    Size = MAP_APPFONT ( 130 , 160 ) ;
+    HelpId = HID_FUNCTION_BOX ;
+    ListBox CB_CAT
+    {
+        HelpID = "sc:ListBox:FID_FUNCTION_BOX:CB_CAT";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 20 , 4 ) ;
+        Size = MAP_APPFONT ( 56 , 80 ) ;
+        DropDown = TRUE ;
+        AutoSize = TRUE ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        AutoHScroll = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "Last Used" ; Default ; > ;
+            < "All" ; Default ; > ;
+            < "Database" ; Default ; > ;
+            < "Date&Time" ; Default ; > ;
+            < "Financial" ; Default ; > ;
+            < "Information" ; Default ; > ;
+            < "Logical" ; Default ; > ;
+            < "Mathematical" ; Default ; > ;
+            < "Array" ; Default ; > ;
+            < "Statistical" ; Default ; > ;
+            < "Spreadsheet" ; Default ; > ;
+            < "Text" ; Default ; > ;
+            < "Add-in" ; Default ; > ;
+        };
+    };
+    ListBox DDLB_FUNC
+    {
+        HelpID = "sc:ListBox:FID_FUNCTION_BOX:DDLB_FUNC";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 103 , 4 ) ;
+        Size = MAP_APPFONT ( 56 , 80 ) ;
+        Hide = TRUE ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        AutoHScroll = TRUE ;
+    };
+    ListBox LB_FUNC
+    {
+        HelpID = "sc:ListBox:FID_FUNCTION_BOX:LB_FUNC";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 3 , 19 ) ;
+        Size = MAP_APPFONT ( 72 , 90 ) ;
+        TabStop = TRUE ;
+        AutoHScroll = TRUE ;
+    };
+    FixedText FI_FUNCDESC
+    {
+        WordBreak = TRUE ;
+        Border = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 3 , 115 ) ;
+        Size = MAP_APPFONT ( 72 , 40 ) ;
+    };
+    Control FT_SPLIT
+    {
+        Pos = MAP_APPFONT ( 3 , 110 ) ;
+        Size = MAP_APPFONT ( 72 , 3 ) ;
+    };
+    ImageButton IMB_INSERT
+    {
+        HelpID = "sc:ImageButton:FID_FUNCTION_BOX:IMB_INSERT";
+        Pos = MAP_APPFONT ( 3 , 4 ) ;
+        Size = MAP_APPFONT ( 13 , 13 ) ;
+        TabStop = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "fx.png";
+            };
+            MaskColor = STD_MASKCOLOR;
+        };
+        DefButton = TRUE ;
+        QuickHelpText [ en-US ] = "Insert Function into calculation sheet" ;
+    };
+    Text [ en-US ] = "Functions" ;
+};
+ // ********************************************************************** EOF

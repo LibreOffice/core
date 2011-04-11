@@ -1,0 +1,158 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _RESIDS_HRC
+#define _RESIDS_HRC
+
+#define RID_OK              1
+#define RID_CANCEL          2
+#define RID_FILENAME        3
+#define RID_PATHNAME        4
+#define RID_FILELIST        5
+#define RID_DIRSLIST        6
+#define RID_FIND            7
+#define RID_REPLACE         8
+//#define RID_ICON          9
+//#define RID_EDITFIELD     10
+#define RID_TEXT            11
+//#define RID_FRAME1        12
+//#define RID_FRAME2        13
+#define RID_VERSIONSTRING   14
+#define RID_FIXEDTEXT1      15
+#define RID_FIXEDTEXT2      16
+
+
+// OptionsDialog
+#define RES_TC_OPTIONS     20
+
+// GenericOptions
+#define RID_TP_GEN         30
+#define RID_FL_AREA        31
+#define RID_CB_AREA        32
+#define RID_PB_NEW_AREA    33
+#define RID_PD_DEL_AREA    34
+#define RID_FL_VALUE       35
+#define RID_CB_VALUE       36
+#define RID_PB_SELECT_FILE 37
+#define RID_PB_NEW_VALUE   38
+#define RID_PB_DEL_VALUE   39
+
+// ProfileOptions
+#define RID_TP_PRO         40
+#define RID_FL_PROFILE     41
+#define RID_CB_PROFILE     42
+#define RID_PB_NEW_PROFILE 43
+#define RID_PD_DEL_PROFILE 44
+#define FL_DIRECTORIES     45
+#define LOG_TEXT           46
+#define BASIS_TEXT         47
+#define HID_CHECK          48
+#define LOG_NAME           49
+#define BASIS_NAME         50
+#define HID_NAME           51
+#define LOG_SET            52
+#define BASIS_SET          53
+#define HID_SET            54
+#define CB_AUTORELOAD      55
+#define CB_AUTOSAVE        56
+#define CB_STOPONSYNTAXERRORS 57
+
+// Crashreporter Options
+#define RID_TP_CRA         50
+#define FL_CRASHREPORT     51
+#define CB_USEPROXY        52
+#define FT_CRHOST          53
+#define ED_CRHOST          54
+#define FT_CRPORT          55
+#define NF_CRPORT          56
+#define CB_ALLOWCONTACT    57
+#define FT_EMAIL           58
+#define ED_EMAIL           59
+
+// MiscOptions
+#define RID_TP_MIS         60
+#define FL_COMMUNICATION   61
+#define FT_HOST            62
+#define ED_HOST            63
+#define FT_TTPORT          64
+#define NF_TTPORT          65
+#define FT_UNOPORT         66
+#define NF_UNOPORT         67
+#define FL_OTHER           68
+#define TIMEOUT_TEXT       69
+#define SERVER_TIMEOUT     70
+#define FT_LRU             71
+#define TF_MAX_LRU         72
+#define FT_PROGDIR         73
+#define ED_PROGDIR         74
+#define PB_PROGDIR         75
+
+
+// Font Settings
+#define RID_TP_FON         70
+#define FT_FONTNAME        71
+#define CB_FONTNAME        72
+#define FT_FONTSTYLE       73
+#define CB_FONTSTYLE       74
+#define FT_FONTSIZE        75
+#define MB_FONTSIZE        76
+#define FT_PREVIEW         77
+
+// DisplayHId
+#define RID_TB_CONF        80
+#define RID_FT_CONTROLS    81
+#define RID_MLB_CONTROLS   82
+#define RID_FT_SLOTS       83
+#define RID_MLB_SLOTS      84
+#define RID_PB_KOPIEREN    85
+#define RID_PB_BENENNEN    86
+#define RID_PB_SELECTALL   87
+#define RID_OK_CLOSE       88
+
+
+// BreakpointWindow
+#define IMGID_BRKENABLED        30838
+#define IMGID_BRKDISABLED       30839
+#define IMGID_STEPMARKER        30840
+#define IMGID_ERRORMARKER       30841
+
+
+// Edit Variables
+#define RID_FT_NAME             100
+#define RID_FT_CONTENT          101
+#define RID_FT_NEW_CONTENT      102
+#define RID_FT_NAME_VALUE       103
+#define RID_FT_CONTENT_VALUE    104
+
+#define RID_RB_NEW_BOOL_T       105
+#define RID_RB_NEW_BOOL_F       106
+#define RID_NF_NEW_INTEGER      107
+#define RID_NF_NEW_LONG         108
+#define RID_ED_NEW_STRING       109
+
+#endif
+

@@ -1,0 +1,77 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_uri_UriReferenceFactory_idl__
+#define __com_sun_star_uri_UriReferenceFactory_idl__
+
+module com { module sun { module star { module uri {
+
+published interface XUriReferenceFactory;
+
+/**
+   creates URI references.
+
+   <p>See <a href="http://www.ietf.org/rfc/rfc2396.txt">RFC&nbsp;2396</a> for a
+   description of URI references and related terms.</p>
+
+   <p>For parsing absolute URI references, this service tries to use a
+   scheme-specific parser.  Such a scheme-specific parser will typically enforce
+   additional restrictions during parsing, and will typically return objects
+   that support extra, scheme-specific interfaces in addition to
+   <type scope="com::sun::star::uri">XUriReference</type>.  If no such parser
+   is found, and for relative URI references, a generic parser is used, which
+   returns objects that only support
+   <type scope="com::sun::star::uri">XUriReference</type>.</p>
+
+   <p>Locating a scheme-specific parser works as follows:  A scheme consists of
+   Latin captial letters
+   &ldquo;<code>A</code>&rdquo;&ndash;&ldquo;<code>Z</code>&rdquo;, Latin small
+   letters &ldquo;<code>a</code>&rdquo;&ndash;&ldquo;<code>z</code>&rdquo;,
+   digits &ldquo;<code>0</code>&rdquo;&ndash;&ldquo;<code>9</code>&rdquo;,
+   &ldquo;<code>+</code>&rdquo;, &ldquo;<code>-</code>&rdquo;, and
+   &ldquo;<code>.</code>&rdquo;.  A scheme&nbsp;<var>s</var> is transformed into
+   a string&nbsp;<var>s</var>&prime; character-by-character, by translating
+   Lating capital letters to their small counterparts, translating
+   &ldquo;<code>+</code>&rdquo; to &ldquo;<code>PLUS</code>&rdquo;,
+   &ldquo;<code>-</code>&rdquo; to &ldquo;<code>HYPHEN</code>&rdquo;,
+   &ldquo;<code>.</code>&rdquo; to &ldquo;<code>DOT</code>&rdquo;, and copying
+   Latin small letters and digits unchanged.  If the component context used
+   while creating this <code>UriReferenceFactory</code> instance offers a
+   service manager, and there is a service available at that service manager
+   whose name is the concatenation of
+   &ldquo;<code>com.sun.star.uri.UriSchemeParser_</code>&rdquo; and
+   <var>s</var>&prime;, then that service is used.  It is an error if that
+   service does not support
+   <type scope="com::sun::star::uri">XUriSchemeParser</type>.</p>
+
+   @since OOo 2.0
+ */
+published service UriReferenceFactory: XUriReferenceFactory;
+
+}; }; }; };
+
+#endif

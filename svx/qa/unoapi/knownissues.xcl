@@ -1,0 +1,90 @@
+### i85263 ###
+svx.SvxShape::com::sun::star::drawing::TextProperties::TextWritingMode
+svx.SvxShapeConnector::com::sun::star::drawing::TextProperties::TextWritingMode
+# -> disbaled in svx.sce
+
+### i46736 ###
+svx.AccessibleImageBullet
+# -> disbaled in svx.sce
+
+### i85501 ### 
+svx.SvxGraphCtrlAccessibleContext
+# -> disbaled in svx.sce
+
+### i85539 ###
+svx.AccessiblePresentationShape
+# -> disbaled in svx.sce
+
+### i85476 ###
+svx.SvxUnoText::com::sun::star::text::XTextRangeMover
+
+### i85478 ###
+svx.SvxUnoTextRange::com::sun::star::text::XTextRange
+
+### i35965 ###
+svx.SvxGraphCtrlAccessibleContext::com::sun::star::accessibility::XAccessibleEventBroadcaster
+
+### i85479 ###
+svx.AccessiblePageShape::com::sun::star::accessibility::XAccessibleEventBroadcaster
+
+### i85481 ###
+svx.SvxUnoTextCursor::com::sun::star::beans::XMultiPropertyStates
+
+### i58108 ###
+svx.SvxUnoText::com::sun::star::text::XTextRangeCompare
+
+### i38623 ###
+svx.SvxUnoTextCursor::com::sun::star::text::XTextRange
+
+### i73993 ###
+svx.SvxUnoTextContent::com::sun::star::style::ParagraphProperties
+svx.SvxUnoTextCursor::com::sun::star::style::ParagraphProperties
+svx.SvxUnoTextRange::com::sun::star::style::ParagraphProperties
+svx.SvxGraphicObject::com::sun::star::style::ParagraphProperties
+svx.SvxShape::com::sun::star::style::ParagraphProperties
+svx.SvxShapeCircle::com::sun::star::style::ParagraphProperties
+svx.SvxShapeConnector::com::sun::star::style::ParagraphProperties
+svx.SvxShapeDimensioning::com::sun::star::style::ParagraphProperties
+svx.SvxShapePolyPolygon::com::sun::star::style::ParagraphProperties
+svx.SvxShapePolyPolygonBezier::com::sun::star::style::ParagraphProperties
+
+### i23461 ###
+svx.SvxDrawPage::com::sun::star::drawing::XMasterPageTarget
+
+### i85485 ###
+svx.SvxShapeDimensioning::com::sun::star::drawing::XShape
+
+### i58125 ###
+svx.SvxGraphicObject::com::sun::star::drawing::GraphicObjectShape
+
+### i87698 ###
+svx.SvxShapeDimensioning::com::sun::star::drawing::TextProperties
+
+### i87746 	###
+svx.SvxGraphicObject
+svx.SvxShapeCircle
+svx.SvxShapeControl
+svx.SvxShapeDimensioning
+svx.SvxShapeGroup
+svx.SvxShapePolyPolygon
+svx.SvxShapePolyPolygonBezier
+
+### i88543 ###
+svx.SvxUnoTextRange::com::sun::star::beans::XPropertySet
+
+### i90294 ###
+svx.GraphicExporter
+# -> disbaled in svx.sce
+
+### i98339 ###
+svx.AccessibleControlShape
+# -> disbaled in svx.sce
+
+### i111114 ###
+svx.AccessiblePresentationOLEShape::com::sun::star::accessibility::XAccessibleComponent
+
+### i111169 ###
+svx.AccessiblePageShape::com::sun::star::accessibility::XAccessibleComponent
+
+### i114642 ###
+svx.SvxUnoTextContent::com::sun::star::style::CharacterProperties

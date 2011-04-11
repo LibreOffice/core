@@ -1,0 +1,109 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "globals.hrc"
+#include "utlui.hrc"
+#include "helpid.h"
+#include "gloslst.hrc"
+
+ModalDialog DLG_GLOSSARY_DECIDE_DLG
+{
+    HelpID = HID_DLG_GLOSS_DECIDE ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 161 , 67 ) ;
+    Text [ en-US ] = "Select AutoText:" ;
+    Moveable = TRUE ;
+    FixedLine FL_GLOSS
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 93 , 8 ) ;
+        Text [ en-US ] = "AutoText - Group" ;
+    };
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 105 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 105 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 105 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+    };
+    ListBox LB_LIST
+    {
+        HelpID = "sw:ListBox:DLG_GLOSSARY_DECIDE_DLG:LB_LIST";
+        Pos = MAP_APPFONT ( 12 , 15 ) ;
+        Size = MAP_APPFONT ( 81 , 40 ) ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+    };
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

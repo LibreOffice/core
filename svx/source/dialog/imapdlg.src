@@ -1,0 +1,364 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include "helpid.hrc"
+#include "imapdlg.hrc"
+ // pragma ----------------------------------------------------------------
+
+ // RID_SVXDLG_IMAP ----------------------------------------------------
+ModelessDialog RID_SVXDLG_IMAP
+{
+    HelpID = "svx:ModelessDialog:RID_SVXDLG_IMAP";
+    OutputSize = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 270 , 213 ) ;
+    Sizeable = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    ToolBox TBX_IMAPDLG1
+    {
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        HelpId = HID_IMAPDLG_TOOLBOX ;
+
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = TBI_APPLY ;
+                HelpId = HID_IMAPDLG_APPLY ;
+                Text [ en-US ] = "Apply" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_OPEN ;
+                HelpId = HID_IMAPDLG_OPEN ;
+                Text [ en-US ] = "Open..." ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_SAVEAS ;
+                HelpId = HID_IMAPDLG_SAVEAS ;
+
+                Text [ en-US ] = "Save..." ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_SELECT ;
+                HelpId = HID_IMAPDLG_SELECT ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+                Text [ en-US ] = "Select" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_RECT ;
+                HelpId = HID_IMAPDLG_RECT ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+                Text [ en-US ] = "Rectangle" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_CIRCLE ;
+                HelpId = HID_IMAPDLG_CIRCLE ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+                Text [ en-US ] = "Ellipse" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_POLY ;
+                HelpId = HID_IMAPDLG_POLY ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+                Text [ en-US ] = "Polygon" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_FREEPOLY ;
+                HelpId = HID_IMAPDLG_FREEPOLY ;
+                Text [ en-US ] = "Freeform Polygon" ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_POLYEDIT ;
+                HelpId = HID_IMAPDLG_POLYEDIT ;
+                Text [ en-US ] = "Edit Points" ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_POLYMOVE ;
+                HelpId = HID_IMAPDLG_POLYMOVE ;
+                Text [ en-US ] = "Move Points" ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_POLYINSERT ;
+                HelpId = HID_IMAPDLG_POLYINSERT ;
+                Text [ en-US ] = "Insert Points" ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_POLYDELETE ;
+                HelpId = HID_IMAPDLG_POLYDELETE ;
+                Text [ en-US ] = "Delete Points" ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_UNDO ;
+                HelpId = HID_IMAPDLG_UNDO ;
+                Text [ en-US ] = "Undo " ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_REDO ;
+                HelpId = HID_IMAPDLG_REDO ;
+                Text [ en-US ] = "Redo" ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_ACTIVE ;
+                HelpId = HID_IMAPDLG_ACTIVE ;
+                Text [ en-US ] = "Active" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_MACRO ;
+                HelpId = HID_IMAPDLG_MACRO ;
+                Text [ en-US ] = "Macro..." ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_PROPERTY ;
+                HelpId = HID_IMAPDLG_PROPERTY ;
+                Text [ en-US ] = "Properties..." ;
+            };
+        };
+    };
+
+    FixedText FT_URL
+    {
+        Pos = MAP_APPFONT ( 6 , 25 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
+        Text [ en-US ] = "Address:" ;
+    };
+    ComboBox CBB_URL
+    {
+        HelpID = "svx:ComboBox:RID_SVXDLG_IMAP:CBB_URL";
+        Pos = MAP_APPFONT ( 39 , 23 ) ;
+        Size = MAP_APPFONT ( 225 , 69 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        AutoSize = TRUE ;
+        AutoHScroll = TRUE ;
+    };
+    FixedText FT_TEXT
+    {
+        Pos = MAP_APPFONT ( 6 , 43 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
+        Text [ en-US ] = "Text:" ;
+    };
+    Edit EDT_TEXT
+    {
+        HelpID = "svx:Edit:RID_SVXDLG_IMAP:EDT_TEXT";
+        Border = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 39 , 41 ) ;
+        Size = MAP_APPFONT ( 143 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+    };
+    Text [ en-US ] = "ImageMap Editor" ;
+
+    FixedText RID_SVXCTL_FT_TARGET
+    {
+        Pos = MAP_APPFONT ( 188 , 43 ) ;
+        Size = MAP_APPFONT ( 22 , 12 ) ;
+        Text [ en-US ] = "Frame:" ;
+    };
+     // nur temporaer
+    ComboBox RID_SVXCTL_CBB_TARGET
+    {
+        HelpID = "svx:ComboBox:RID_SVXDLG_IMAP:RID_SVXCTL_CBB_TARGET";
+        Border = TRUE ;
+        Sort = TRUE ;
+        Pos = MAP_APPFONT ( 213 , 41 ) ;
+        Size = MAP_APPFONT ( 51 , 50 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        HScroll = TRUE ;
+    };
+
+
+#define IMAPDLG_IDLIST \
+        IdList =            \
+        {                   \
+            TBI_APPLY ; \
+            TBI_OPEN ;  \
+            TBI_SAVEAS ;    \
+            TBI_SELECT ;    \
+            TBI_RECT ;  \
+            TBI_CIRCLE ;    \
+            TBI_POLY ;  \
+            TBI_FREEPOLY ;  \
+            TBI_POLYEDIT ;  \
+            TBI_POLYMOVE ; \
+            TBI_POLYINSERT ;    \
+            TBI_POLYDELETE ;    \
+            TBI_UNDO ;  \
+            TBI_REDO ;  \
+            TBI_ACTIVE ; \
+            TBI_MACRO ; \
+            TBI_PROPERTY ; \
+        };                 \
+        IdCount = { 17 ; };
+
+    ImageList IL_IMAPDLG
+    {
+        Prefix = "id";
+        MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; } ;
+        IMAPDLG_IDLIST
+    };
+};
+
+Control RID_SVXCTL_IMAP
+{
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 6 , 56 ) ;
+    HelpId = HID_IMAPDLG_GRAPHWND ;
+};
+
+/******************************************************************************/
+Menu RID_SVXMN_IMAP
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = MN_URL ;
+            Text [ en-US ] = "Description..." ;
+        };
+        MenuItem
+        {
+            Identifier = MN_MACRO ;
+            Text [ en-US ] = "~Macro..." ;
+        };
+        MenuItem
+        {
+            Identifier = MN_ACTIVATE ;
+            Text [ en-US ] = "Active" ;
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = MN_POSITION ;
+            Text [ en-US ] = "Arrange" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = MN_FRAME_TO_TOP ;
+                        Text [ en-US ] = "Bring to Front" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_MOREFRONT ;
+                        Text [ en-US ] = "Bring ~Forward" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_MOREBACK ;
+                        Text [ en-US ] = "Send Back~ward" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_FRAME_TO_BOTTOM ;
+                        Text [ en-US ] = "~Send to Back" ;
+                    };
+                };
+            };
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = MN_MARK_ALL ;
+            Text [ en-US ] = "Select ~All" ;
+        };
+        MenuItem
+        {
+            Identifier = MN_DELETE1 ;
+            Text [ en-US ] = "~Delete" ;
+        };
+    };
+};
+
+/******************************************************************************/
+
+String STR_IMAPDLG_SAVE
+{
+    Text [ en-US ] = "The ImageMap has been modified.\nDo you want to save the changes?";
+};
+
+String STR_IMAPDLG_MODIFY
+{
+    Text [ en-US ] = "The ImageMap has been modified.\nDo you want to save the changes?" ;
+};

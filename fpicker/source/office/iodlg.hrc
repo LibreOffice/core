@@ -1,0 +1,90 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _SVTOOLS_IODLGIMPL_HRC
+#define _SVTOOLS_IODLGIMPL_HRC
+
+#include "svtools/svtools.hrc"
+#include "svtools/helpid.hrc"
+
+// ModalDialog DLG_SVT_EXPLORERFILE
+
+#define FT_EXPLORERFILE_CURRENTPATH         10
+#define BTN_EXPLORERFILE_NEWFOLDER          11
+#define BTN_EXPLORERFILE_LISTVIEW           12
+#define BTN_EXPLORERFILE_DETAILSVIEW        13
+#define BTN_EXPLORERFILE_UP                 14
+#define BTN_EXPLORERFILE_STANDARD           15
+#define BTN_EXPLORERFILE_OPEN               16
+#define BTN_EXPLORERFILE_CANCEL             17
+#define BTN_EXPLORERFILE_HELP               18
+
+#define IMG_FILEDLG_BTN_UP                  10
+#define IMG_FILEDLG_BTN_STD                 11
+#define IMG_FILEDLG_CREATEFOLDER            14
+
+#define CTL_EXPLORERFILE_FILELIST           20
+
+#define FT_EXPLORERFILE_FILENAME            30
+#define ED_EXPLORERFILE_FILENAME            31
+#define FT_EXPLORERFILE_SHARED_LISTBOX      32
+#define LB_EXPLORERFILE_SHARED_LISTBOX      33
+#define FT_EXPLORERFILE_FILETYPE            34
+#define LB_EXPLORERFILE_FILETYPE            35
+
+#define CB_EXPLORERFILE_READONLY            40
+#define CB_EXPLORERFILE_PASSWORD            41
+#define CB_AUTO_EXTENSION                   42
+#define CB_OPTIONS                          43
+
+// -----------------------------------------------
+
+#define STR_EXPLORERFILE_OPEN               1
+#define STR_EXPLORERFILE_SAVE               2
+#define STR_EXPLORERFILE_BUTTONSAVE         3
+#define STR_PATHNAME                        4
+#define STR_PATHSELECT                      5
+#define STR_BUTTONSELECT                    6
+#define STR_ACTUALVERSION                   7
+#define STR_PREVIEW             8
+
+// DLG_SVT_QUERYFOLDERNAME -----------------------
+
+#define FT_SVT_QUERYFOLDERNAME_DLG_NAME     10
+#define ED_SVT_QUERYFOLDERNAME_DLG_NAME     11
+#define FL_SVT_QUERYFOLDERNAME_DLG_NAME     12
+#define BT_SVT_QUERYFOLDERNAME_DLG_OK       13
+#define BT_SVT_QUERYFOLDERNAME_DLG_CANCEL   14
+#define BT_SVT_QUERYFOLDERNAME_DLG_HELP     15
+
+// -----------------------------------------------
+
+#define SID_SFX_START                       5000
+#define SID_OPENURL                     (SID_SFX_START + 596)
+
+#endif
+

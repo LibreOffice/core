@@ -1,0 +1,100 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_WritingMode2_idl__
+#define __com_sun_star_text_WritingMode2_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+/** this set of constants describes different writing directions
+
+    <p>In addition to numerous explicit writing directions, it allows allows to specify to take the writing
+    direction from the object's context.</p>
+ */
+published constants WritingMode2
+{
+    //-------------------------------------------------------------------------
+
+    /** text within lines is written left-to-right. Lines and blocks are placed
+        top-to-bottom.
+        <p>
+        Typically, this is the writing mode for normal "alphabetic" text.
+     */
+    const short LR_TB = 0;
+
+    //-------------------------------------------------------------------------
+
+    /** text within a line are written right-to-left. Lines and blocks are
+        placed top-to-bottom.
+        <p>
+        Typically, this writing mode is used in Arabic and Hebrew text.
+     */
+    const short RL_TB = 1;
+
+    //-------------------------------------------------------------------------
+
+    /** text within a line is written top-to-bottom. Lines and blocks are
+        placed right-to-left.
+        <p>
+        Typically, this writing mode is used in Chinese and Japanese text.
+     */
+    const short TB_RL = 2;
+
+    //-------------------------------------------------------------------------
+
+    /** text within a line is written top-to-bottom. Lines and blocks are
+        placed left-to-right.
+        <p>
+        Typically, this writing mode is used in Mongolian text.
+     */
+    const short TB_LR = 3;
+
+    //-------------------------------------------------------------------------
+
+    /** obtain writing mode from the current page.
+
+        <p>May not be used in page styles.</p>
+
+        @deprecated
+            Use <member>CONTEXT</member> instead.
+    */
+    const short PAGE = 4;
+
+    /** obtain actual writing mode from the context of the object.
+    */
+    const short CONTEXT = 4;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

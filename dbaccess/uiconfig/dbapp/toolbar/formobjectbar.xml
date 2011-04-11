@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
+ <toolbar:toolbaritem xlink:href=".uno:DBFormOpen" toolbar:helpid="helpid:12286" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:DBFormEdit" toolbar:helpid="helpid:12285" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:DBFormDelete" toolbar:helpid="helpid:12283" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:DBFormRename" toolbar:helpid="helpid:12284" toolbar:text="" />
+</toolbar:toolbar>

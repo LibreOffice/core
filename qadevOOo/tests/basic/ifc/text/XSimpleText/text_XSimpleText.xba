@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="text_XSimpleText" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.text.XSimpleText
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim oCursor As Object
+    Dim oPosCursor As Variant
+    Dim cIfcShortName As String
+    Dim bOK As Boolean
+    Dim oldString, newString As String
+
+    cIfcShortName = "XSimpleText"
+
+    Test.StartMethod("createTextCursor()")
+    bOK = true
+    oCursor = oObj.createTextCursor()
+    bOK = bOK AND NOT (isNull(oCursor))
+    bOK = bOK AND hasUnoInterfaces(oCursor, "com.sun.star.text.XTextCursor")
+    Test.MethodTested("createTextCursor()", bOK)
+
+    Test.StartMethod("createTextCursorByRange()")
+    bOK = true
+    oPosCursor = oObj.createTextCursorbyRange(oCursor)
+    bOK = bOK AND NOT isNull(oPosCursor)
+    bOK = bOK AND hasUnoInterfaces(oPosCursor, "com.sun.star.text.XTextCursor")
+    Test.MethodTested("createTextCursorByRange()", bOK)
+
+    Test.StartMethod("insertString()")
+    bOK = true
+    oldString = oObj.String
+    Out.Log("String before inserting:'" + oldString + "'")
+    oCursor.gotoStart(false)
+    oObj.insertString(oCursor, cIfcShortName, false)
+    Dim newStr As String
+    newStr = oObj.String
+    Out.Log("String content after inserting:'" + newStr + "'")
+    Dim expectedStr As String
+    expectedStr = cIfcShortName + oldString
+    Out.Log("Expected string:'" + expectedStr + "'")
+    bOK = bOK AND (expectedStr = newStr)
+    oObj.setString(oldString)
+    Test.MethodTested("insertString()", bOK)
+
+    ' some cursor navigation to verify if controlcharacters have benn inserted:)
+    Test.StartMethod("insertControlCharacter()")
+    bOK = true
+    oldString = oObj.getString()
+    newString = "XSimpleText"
+    Out.Log("Set string to '" + newString + "'")
+    oObj.setString(newString)
+    Out.Log("Current string content of object: '" + oObj.getString() + "'")
+    oCursor.gotoStart(false)
+    Out.Log("Insert control characters...")
+'    oObj.insertControlCharacter(oCursor, com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK, false)
+    oObj.insertControlCharacter(oCursor, com.sun.star.text.ControlCharacter.LINE_BREAK, false)
+    Out.Log("Now string content of object: '" + oObj.getString() + "'")
+    Dim breakPos As Integer
+    breakPos = inStr(oObj.getString(), chr(10))
+    Out.Log("Line break found at " + breakPos)
+    bOK = bOK AND breakPos > 0
+    oObj.String = oldString
+    Out.Log("Return string to old state:'" + oObj.getString() + "'" )
+    Test.MethodTested("insertControlCharacter()", bOK)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

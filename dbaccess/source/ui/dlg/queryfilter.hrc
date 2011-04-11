@@ -1,0 +1,64 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef DBAUI_QUERYFILTER_HRC
+#define DBAUI_QUERYFILTER_HRC
+
+#ifndef _DBU_DLG_HRC_
+#include "dbu_dlg.hrc"
+#endif
+
+#define FT_WHEREFIELD   1
+#define FT_WHERECOMP    2
+#define FT_WHEREVALUE   3
+#define FT_WHEREOPER    4
+
+#define LB_WHEREFIELD1  1
+#define LB_WHERECOMP1   2
+#define LB_WHEREFIELD2  3
+#define LB_WHERECOMP2   4
+#define LB_WHEREFIELD3  5
+#define LB_WHERECOMP3   6
+#define LB_WHERECOND2   7
+#define LB_WHERECOND3   8
+
+#define FL_FIELDS               1
+
+#define ET_WHEREVALUE1  1
+#define ET_WHEREVALUE2  2
+#define ET_WHEREVALUE3  3
+
+#define STR_NOENTRY     1
+#define STR_NOENTRY2    2
+#define STR_DEFAULT     3
+#define STR_COMPARE_OPERATORS 4
+
+#define BT_OK           1
+#define BT_CANCEL       2
+#define BT_HELP         3
+
+#endif // DBAUI_QUERYFILTER_HRC
+

@@ -1,0 +1,23 @@
+UDK_3_0_0 {
+global:
+    GetVersionInfo;
+    getHangul2HanjaData;
+    getHangul2HanjaIndex;
+    getHangul2HanjaIndexCount;
+    getHanja2HangulIndex;
+    getHanja2HangulData;
+    getSTC_CharIndex_S2T;
+    getSTC_CharData_S2T;
+    getSTC_CharIndex_S2V;
+    getSTC_CharData_S2V;
+    getSTC_CharIndex_T2S;
+    getSTC_CharData_T2S;
+    getSTC_WordData;
+    getSTC_WordEntry_S2T;
+    getSTC_WordIndex_S2T;
+    getSTC_WordEntry_T2S;
+    getSTC_WordIndex_T2S;
+
+local:
+    *;
+};

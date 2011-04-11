@@ -1,0 +1,266 @@
+### i86545 ###
+toolkit.AccessibleToolBoxItem::com::sun::star::accessibility::XAccessibleText
+
+### i30818 ###
+toolkit.AccessibleToolBox::com::sun::star::accessibility::XAccessibleEventBroadcaster
+
+### i68852 ###
+toolkit.TabControllerModel::com::sun::star::io::XPersistObject
+
+### i79111 ###
+toolkit.UnoControlButtonModel::com::sun::star::awt::UnoControlButtonModel
+
+### i79110 ###
+toolkit.UnoControlCheckBoxModel::com::sun::star::awt::UnoControlCheckBoxModel
+
+### i84314 ###
+toolkit.UnoControlImageControlModel::com::sun::star::awt::UnoControlImageControlModel
+
+### i86542 ###
+toolkit.UnoControlProgressBarModel::com::sun::star::awt::UnoControlProgressBarModel
+
+### i86543 ###
+toolkit.UnoControlRadioButtonModel::com::sun::star::awt::UnoControlRadioButtonModel
+
+### i79098 ###
+toolkit.UnoControlScrollBarModel::com::sun::star::awt::UnoControlScrollBarModel
+
+### i86544 ###
+toolkit.UnoTreeModel::com::sun::star::awt::tree::TreeControlModel
+
+### i74011 ###
+toolkit.UnoControlDateField::com::sun::star::awt::XWindow
+toolkit.UnoSpinButtonControl::com::sun::star::awt::XWindow
+toolkit.UnoControlPatternField::com::sun::star::awt::XWindow
+toolkit.UnoControlRadioButton::com::sun::star::awt::XWindow
+toolkit.UnoControlButton::com::sun::star::awt::XWindow
+toolkit.UnoControlTimeField::com::sun::star::awt::XWindow
+toolkit.UnoControlFormattedField::com::sun::star::awt::XWindow
+toolkit.UnoControlContainer::com::sun::star::awt::XWindow
+toolkit.UnoControlGroupBox::com::sun::star::awt::XWindow
+toolkit.UnoControlFixedText::com::sun::star::awt::XWindow
+toolkit.UnoControlListBox::com::sun::star::awt::XWindow
+toolkit.UnoControlImageControl::com::sun::star::awt::XWindow
+toolkit.UnoControlDialog::com::sun::star::awt::XWindow
+toolkit.UnoControlEdit::com::sun::star::awt::XWindow
+toolkit.UnoControlCurrencyField::com::sun::star::awt::XWindow
+toolkit.UnoControlFileControl::com::sun::star::awt::XWindow
+toolkit.UnoControlComboBox::com::sun::star::awt::XWindow
+toolkit.UnoControlNumericField::com::sun::star::awt::XWindow
+toolkit.UnoControlCheckBox::com::sun::star::awt::XWindow
+toolkit.UnoScrollBarControl::com::sun::star::awt::XWindow
+
+### i86296 ###
+toolkit.UnoControlContainerModel::com::sun::star::awt::UnoControlContainerModel
+
+### i86297 ###
+toolkit.UnoControlFixedTextModel::com::sun::star::awt::UnoControlFixedTextModel
+
+### i86299 ###
+toolkit.UnoTreeModel::com::sun::star::awt::UnoControlModel
+
+### i86300 ###
+toolkit.UnoTreeModel::com::sun::star::beans::XMultiPropertySet
+
+### i86007 ###
+toolkit.AccessibleButton
+# -> disabled in toolkit.sce
+
+### i86008 ### 
+toolkit.AccessibleComboBox
+# -> disabled in toolkit.sce
+
+### i86110 ###
+toolkit.AccessibleEdit
+toolkit.AccessibleList
+toolkit.AccessibleListBox
+toolkit.AccessibleListItem
+toolkit.AccessibleRadioButton
+# -> disabled in toolkit.sce
+
+### i86009 ###
+toolkit.AccessibleMenuItem
+# -> disabled in toolkit.sce
+
+### i86107 ###
+toolkit.AccessibleRadioButton
+# -> disabled in toolkit.sce
+
+### i86287 ###
+toolkit.AccessibleToolBox
+# -> disabled in toolkit.sce
+
+### i86011 ###
+toolkit.UnoControlFileControl
+# -> disabled in toolkit.sce
+
+### i86013 ###
+toolkit.UnoControlFormattedField
+# -> disabled in toolkit.sce
+
+### i86019 ###
+toolkit.UnoControlListBox
+# -> disabled in toolkit.sce
+
+### i86020 ###
+toolkit.UnoSimpleAnimationControl
+# -> disabled in toolkit.sce
+
+### i86021 ###
+toolkit.UnoSimpleAnimationControlModel
+# -> disabled in toolkit.sce
+
+### i86022 ###
+toolkit.UnoThrobberControl
+# -> disabled in toolkit.sce
+
+### i86023 ###
+toolkit.UnoThrobberControlModel
+# -> disabled in toolkit.sce
+
+### i86298 ###
+toolkit.UnoTreeControl
+# -> disabled in toolkit.sce
+
+### i52607 ###
+toolkit.AccessiblePopupMenu
+# -> disabled in toolkit.sce
+
+### i86660 ###
+toolkit.UnoControlDateField::com::sun::star::awt::XView
+toolkit.UnoSpinButtonControl::com::sun::star::awt::XView
+toolkit.UnoControlPatternField::com::sun::star::awt::XView
+toolkit.UnoControlRadioButton::com::sun::star::awt::XView
+toolkit.UnoControlButton::com::sun::star::awt::XView
+toolkit.UnoControlTimeField::com::sun::star::awt::XView
+toolkit.UnoControlFormattedField::com::sun::star::awt::XView
+toolkit.UnoControlGroupBox::com::sun::star::awt::XView
+toolkit.UnoControlContainer::com::sun::star::awt::XView
+toolkit.UnoControlFixedText::com::sun::star::awt::XView
+toolkit.UnoControlListBox::com::sun::star::awt::XView
+toolkit.UnoControlEdit::com::sun::star::awt::XView
+toolkit.UnoControlImageControl::com::sun::star::awt::XView
+toolkit.UnoControlDialog::com::sun::star::awt::XView
+toolkit.UnoThrobberControl::com::sun::star::awt::XView
+toolkit.UnoControlFileControl::com::sun::star::awt::XView
+toolkit.UnoControlCurrencyField::com::sun::star::awt::XView
+toolkit.UnoSimpleAnimationControl::com::sun::star::awt::XView
+toolkit.UnoControlComboBox::com::sun::star::awt::XView
+toolkit.UnoControlNumericField::com::sun::star::awt::XView
+toolkit.UnoControlCheckBox::com::sun::star::awt::XView
+toolkit.UnoScrollBarControl::com::sun::star::awt::XView
+
+
+### i87757 ###
+toolkit.AccessibleFixedText::com::sun::star::accessibility::XAccessibleText
+
+### i37643 ###
+toolkit.AccessibleStatusBarItem::com::sun::star::accessibility::XAccessibleEventBroadcaster
+
+### i87864 ###
+toolkit.UnoControlContainerModel::com::sun::star::lang::XComponent
+toolkit.UnoTreeModel::com::sun::star::lang::XComponent
+toolkit.UnoControlTimeFieldModel::com::sun::star::lang::XComponent
+toolkit.UnoControlDateField::com::sun::star::lang::XComponent
+toolkit.UnoControlButtonModel::com::sun::star::lang::XComponent
+toolkit.UnoControlPatternFieldModel::com::sun::star::lang::XComponent
+toolkit.UnoSpinButtonControl::com::sun::star::lang::XComponent
+toolkit.UnoControlDateFieldModel::com::sun::star::lang::XComponent
+toolkit.UnoControlPatternField::com::sun::star::lang::XComponent
+toolkit.UnoControlRadioButtonModel::com::sun::star::lang::XComponent
+toolkit.UnoControlFormattedFieldModel::com::sun::star::lang::XComponent
+toolkit.UnoControlRadioButton::com::sun::star::lang::XComponent
+toolkit.UnoControlButton::com::sun::star::lang::XComponent
+toolkit.UnoControlTimeField::com::sun::star::lang::XComponent
+toolkit.UnoControlFormattedField::com::sun::star::lang::XComponent
+toolkit.UnoControlFixedLineModel::com::sun::star::lang::XComponent
+toolkit.UnoControlDialogModel::com::sun::star::lang::XComponent
+toolkit.UnoControlFileControlModel::com::sun::star::lang::XComponent
+toolkit.UnoControlGroupBox::com::sun::star::lang::XComponent
+toolkit.UnoControlContainer::com::sun::star::lang::XComponent
+toolkit.UnoControlFixedText::com::sun::star::lang::XComponent
+toolkit.UnoControlListBox::com::sun::star::lang::XComponent
+toolkit.UnoControlCheckBoxModel::com::sun::star::lang::XComponent
+toolkit.UnoThrobberControlModel::com::sun::star::lang::XComponent
+toolkit.UnoControlEditModel::com::sun::star::lang::XComponent
+toolkit.UnoControlEdit::com::sun::star::lang::XComponent
+toolkit.UnoControlImageControl::com::sun::star::lang::XComponent
+toolkit.UnoControlDialog::com::sun::star::lang::XComponent
+toolkit.UnoControlGroupBoxModel::com::sun::star::lang::XComponent
+toolkit.UnoControlImageControlModel::com::sun::star::lang::XComponent
+toolkit.UnoControlNumericFieldModel::com::sun::star::lang::XComponent
+toolkit.UnoSimpleAnimationControlModel::com::sun::star::lang::XComponent
+toolkit.UnoThrobberControl::com::sun::star::lang::XComponent
+toolkit.UnoControlFileControl::com::sun::star::lang::XComponent
+toolkit.UnoControlCurrencyField::com::sun::star::lang::XComponent
+toolkit.UnoControlComboBoxModel::com::sun::star::lang::XComponent
+toolkit.UnoSimpleAnimationControl::com::sun::star::lang::XComponent
+toolkit.UnoControlComboBox::com::sun::star::lang::XComponent
+toolkit.UnoControlNumericField::com::sun::star::lang::XComponent
+toolkit.UnoControlScrollBarModel::com::sun::star::lang::XComponent
+toolkit.UnoControlProgressBarModel::com::sun::star::lang::XComponent
+toolkit.UnoControlListBoxModel::com::sun::star::lang::XComponent
+toolkit.UnoControlFixedTextModel::com::sun::star::lang::XComponent
+toolkit.UnoSpinButtonControlModel::com::sun::star::lang::XComponent
+toolkit.UnoControlCurrencyFieldModel::com::sun::star::lang::XComponent
+toolkit.UnoControlCheckBox::com::sun::star::lang::XComponent
+toolkit.UnoScrollBarControl::com::sun::star::lang::XComponent
+
+### i89415 ###
+toolkit.UnoControlContainer::com::sun::star::awt::XControl
+
+### i89417 ###
+toolkit.UnoControlContainer::com::sun::star::accessibility::XAccessible
+
+### i89418 ###
+toolkit.UnoSpinButtonControl::com::sun::star::awt::XSpinValue
+
+### i88332 ###
+toolkit.AccessibleCheckBox
+# -> disabled in toolkit.sce
+
+### i88605 ###
+toolkit.AccessibleToolBoxItem
+# -> disabled in toolkit.sce
+
+### i89019 ###
+toolkit.AccessibleWindow::com::sun::star::accessibility::XAccessibleEventBroadcaster
+
+### i90354 ###
+toolkit.AccessibleScrollBar::com::sun::star::accessibility::XAccessibleComponent
+
+### i90356 ###
+toolkit.UnoScrollBarControl::com::sun::star::awt::XScrollBar
+
+### i94344 ###
+toolkit.AccessibleTabPage::com::sun::star::accessibility::XAccessibleText
+
+### i109643 ###
+toolkit.AccessibleMenu::com::sun::star::accessibility::XAccessibleValue
+toolkit.AccessibleMenuBar::com::sun::star::accessibility::XAccessibleEventBroadcaster
+toolkit.AccessibleMenuBar::com::sun::star::accessibility::XAccessibleSelection
+
+### i111113 ###
+toolkit.AccessibleStatusBarItem::com::sun::star::accessibility::XAccessibleComponent
+toolkit.AccessibleStatusBarItem::com::sun::star::accessibility::XAccessibleContext
+
+### i111195 ###
+toolkit.AccessibleScrollBar::com::sun::star::accessibility::XAccessibleValue
+
+### i113489 ###
+toolkit.AccessibleMenu::com::sun::star::accessibility::XAccessibleText
+toolkit.AccessibleMenuBar::com::sun::star::accessibility::XAccessibleComponent
+toolkit.AccessibleMenuSeparator::com::sun::star::accessibility::XAccessibleComponent
+
+### i114213 ###
+toolkit.AccessibleMenu::com::sun::star::accessibility::XAccessibleSelection
+
+### i114636 ###
+toolkit.AccessibleScrollBar::com::sun::star::accessibility::XAccessibleAction
+toolkit.AccessibleScrollBar::com::sun::star::accessibility::XAccessibleContext
+
+### fd#35666 ###
+toolkit.UnoControlDialogModel::com::sun::star::io::XPersistObject
+
+### fd#35772 ###
+toolkit.Toolkit::com::sun::star::awt::XMessageBoxFactory

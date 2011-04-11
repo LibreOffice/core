@@ -1,0 +1,30 @@
+# A collection of tiny macros to test VBA compatibility
+# These macros all set the option vbasupport 1
+
+[i75443]
+option vbasupport 1
+
+Sub Main
+    Dim a(0)
+    Dim b(0)
+    b(0) = "b"
+    a(0) = b
+    MsgBox a(0)(0)
+End Sub
+
+
+[i79918]
+option vbasupport 1
+
+Sub Main
+    # the following are valid in ooo-basic and MS VBA
+    tester 1,2
+    tester (1,2)
+    tester (1,(2+2+3))
+    # this is valid in VBA but fails in ooo-basic
+    tester (1+2),3
+End Sub
+
+function tester ( param1 as variant, param2 as variant )
+    msgbox "param1 " & param1 & " param2 " & param2
+end function

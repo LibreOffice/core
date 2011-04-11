@@ -1,0 +1,518 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "cmdid.h"
+#include "utlui.hrc"
+#include "navipi.hrc"
+#include "helpid.h"
+#include "access.hrc"
+
+Window DLG_NAVIGATION_PI
+{
+    HelpID = HID_NAVIGATION_PI ;
+    OutputSize = TRUE ;
+    DialogControl = TRUE ;
+    SVLook = TRUE ;
+     // Size = MAP_PIXEL( 235, 195 );
+     // ZoomInOutputSize = MAP_PIXEL(235, 56);
+    Size = MAP_PIXEL ( 282 , 59 ) ;
+     //    Closeable = TRUE ;
+     //    Zoomable = TRUE ;
+     //    Moveable = TRUE ;
+     // ZoomIn = FALSE;
+    Hide = TRUE ;
+     //    HideWhenDeactivate = TRUE ;
+     //    Sizeable = TRUE ;
+     //    EnableResizing = TRUE ;
+     //    Dockable = TRUE ;
+     //    Sizeable = TRUE ;
+    Text [ en-US ] = "Navigator" ;
+    ExtraData =
+    {
+        198;
+    };
+    /************************************************************************************
+    Toolbox ab 323 x
+************************************************************************************/
+#define NAVI_IDLIST \
+        IdList =                                    \
+        {                                           \
+            FN_UP ;                   \
+            FN_DOWN ;                \
+            FN_SELECT_HEADER ;      \
+            FN_SELECT_FOOTER ;      \
+            FN_SELECT_FOOTNOTE ;    \
+            FN_SHOW_CONTENT_BOX ;       \
+            FN_SHOW_ROOT ;      \
+            FN_ITEM_UP ;        \
+            FN_ITEM_DOWN ;      \
+            FN_ITEM_LEFT ;      \
+            FN_ITEM_RIGHT ;     \
+            FN_DROP_REGION ;    \
+            FN_OUTLINE_LEVEL ;    \
+            FN_SELECT_SET_AUTO_BOOKMARK ; \
+            FN_DROP_REGION_LINK ;   \
+            FN_DROP_REGION_COPY ;   \
+            FN_GLOBAL_SWITCH ;         \
+            FN_GLOBAL_EDIT ;           \
+            FN_GLOBAL_UPDATE ;         \
+            FN_GLOBAL_OPEN ;           \
+            FN_GLOBAL_SAVE_CONTENT ;     \
+            FN_CREATE_NAVIGATION ;       \
+        };                                               \
+        IdCount = { 21 ; };
+
+    ImageList IL_CONTENT
+    {
+        Prefix = "sc";
+        MaskColor = IMAGE_MASK_COLOR ;
+        NAVI_IDLIST
+    };
+    Toolbox TB_CONTENT
+    {
+        Pos = MAP_PIXEL ( 5 , 5 ) ;
+        Size = MAP_PIXEL ( 300 , 47 ) ;
+        LineCount = 2 ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = FN_GLOBAL_SWITCH ;
+                HelpID = HID_NAVI_TBX17 ;
+                Text [ en-US ] = "Toggle" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_CREATE_NAVIGATION ;
+                HelpID = HID_NAVI_TBX24 ;
+                Text [ en-US ] = "Navigation" ;
+                DropDown = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_UP ;
+                 //                 ItemBitmap = Bitmap { File = "navup.bmp"; };
+                HelpID = HID_NAVI_TBX2 ;
+                Text [ en-US ] = "Back" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_DOWN ;
+                 //                 ItemBitmap = Bitmap { File = "navdn.bmp"; };
+                HelpID = HID_NAVI_TBX3 ;
+                Text [ en-US ] = "Forward" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_DROP_REGION ;
+                HelpID = HID_NAVI_TBX4 ;
+                DropDown = TRUE ;
+                Text [ en-US ] = "Drag Mode" ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_ITEM_UP ;
+                 //                 ItemBitmap = Bitmap { File = "navchup.bmp"; };
+                HelpID = HID_NAVI_TBX5 ;
+                Text [ en-US ] = "Promote Chapter" ;
+                 //HelpText[english_us-wrong] = "Move chapter down";//"Move chapter up"
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_ITEM_DOWN ;
+                 //                 ItemBitmap = Bitmap { File = "navchdn.bmp"; };
+                HelpID = HID_NAVI_TBX6 ;
+                Text [ en-US ] = "Demote Chapter" ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_BREAK ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_SHOW_CONTENT_BOX ;
+                HelpID = HID_NAVI_TBX7 ;
+                Text [ en-US ] = "List Box On/Off" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_SHOW_ROOT ;
+                HelpID = HID_NAVI_TBX8 ;
+                Text [ en-US ] = "Content View" ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_SELECT_SET_AUTO_BOOKMARK ;
+                HelpID = HID_NAVI_TBX9 ;
+                 //                 ItemBitmap = Bitmap { File = "navstmp.bmp"; };
+                Text [ en-US ] = "Set Reminder" ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_SELECT_HEADER ;
+                 //                 ItemBitmap = Bitmap { File = "navhead.bmp"; };
+                HelpID = HID_NAVI_TBX10 ;
+                Text [ en-US ] = "Header" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_SELECT_FOOTER ;
+                 //                 ItemBitmap = Bitmap { File = "navfoot.bmp"; };
+                HelpID = HID_NAVI_TBX11 ;
+                Text [ en-US ] = "Footer" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_SELECT_FOOTNOTE ;
+                 //                 ItemBitmap = Bitmap { File = "navnote.bmp"; };
+                HelpID = HID_NAVI_TBX12 ;
+                Text [ en-US ] = "Anchor<->Text" ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_OUTLINE_LEVEL ;
+                HelpID = HID_NAVI_TBX13 ;
+                Text [ en-US ] = "Heading Levels Shown" ;
+                DropDown = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_ITEM_LEFT ;
+                HelpID = HID_NAVI_TBX14 ;
+                 //                 ItemBitmap = Bitmap { File = "navchlf.bmp"; };
+                Text [ en-US ] = "Promote Level" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_ITEM_RIGHT ;
+                 //                 ItemBitmap = Bitmap { File = "navchrg.bmp"; };
+                HelpID = HID_NAVI_TBX15 ;
+                Text [ en-US ] = "Demote Level" ;
+            };
+        };
+    };
+    ToolBox TB_GLOBAL
+    {
+        Pos = MAP_PIXEL ( 5 , 5 ) ;
+        Size = MAP_PIXEL ( 300 , 47 ) ;
+        LineCount = 1 ;
+        Hide = TRUE ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = FN_GLOBAL_SWITCH ;
+                HelpID = HID_NAVI_TBX17 ;
+                Text [ en-US ] = "Toggle" ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_GLOBAL_EDIT ;
+                HelpID = HID_NAVI_TBX18 ;
+                Text [ en-US ] = "Edit" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_GLOBAL_UPDATE ;
+                HelpID = HID_NAVI_TBX19 ;
+                Text [ en-US ] = "Update" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_GLOBAL_OPEN ;
+                HelpID = HID_NAVI_TBX20 ;
+                Text [ en-US ] = "Insert" ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_GLOBAL_SAVE_CONTENT ;
+                HelpID = HID_NAVI_TBX21 ;
+                Text [ en-US ] = "Save Contents as well" ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_ITEM_UP ;
+                HelpID = HID_NAVI_TBX22 ;
+                Text [ en-US ] = "Move Up" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_ITEM_DOWN ;
+                HelpID = HID_NAVI_TBX23 ;
+                Text [ en-US ] = "Move Down" ;
+            };
+        };
+    };
+    /* TreeListBox */
+    Control TL_CONTENT
+    {
+        HelpID = HID_NAVI_CONTENT ;
+        Border = TRUE ;
+        Pos = MAP_PIXEL ( 5 , 62 ) ;
+        Size = MAP_PIXEL ( 274 , 112 ) ;
+        TabStop = TRUE ;
+        ClipChildren = TRUE ;
+        Hide = TRUE ;
+    };
+    Control TL_GLOBAL
+    {
+        HelpID = HID_NAVI_GLOBAL ;
+        Border = TRUE ;
+        Pos = MAP_PIXEL ( 5 , 34 ) ;
+        Size = MAP_PIXEL ( 274 , 112 ) ;
+        TabStop = TRUE ;
+        ClipChildren = TRUE ;
+        Hide = TRUE ;
+    };
+    ListBox LB_DOCS
+    {
+        Border = TRUE ;
+        Pos = MAP_PIXEL ( 5 , 115 ) ;
+        Size = MAP_APPFONT ( 150 , 50 ) ;
+        DropDown = TRUE ;
+    };
+    NumericField NF_PAGE
+    {
+        Border = TRUE ;
+        Pos = MAP_PIXEL ( 50 , 29 ) ;
+        Size = MAP_PIXEL ( 34 , 20 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        First = 1 ;
+         // Outline als Default
+        Maximum = 5 ;
+        Last = 5 ;
+        Value = 5 ;
+    };
+    String ST_OUTLINE_LEVEL
+    {
+        Text [ en-US ] = "Outline Level" ;
+    };
+    String ST_DRAGMODE
+    {
+        Text [ en-US ] = "Drag Mode" ;
+    };
+    String ST_HYPERLINK
+    {
+        Text [ en-US ] = "Insert as Hyperlink" ;
+    };
+    String ST_LINK_REGION
+    {
+        Text [ en-US ] = "Insert as Link" ;
+    };
+    String ST_COPY_REGION
+    {
+        Text [ en-US ] = "Insert as Copy" ;
+    };
+    String ST_DISPLAY
+    {
+        Text [ en-US ] = "Display" ;
+    };
+    String ST_ACTIVE_VIEW
+    {
+        Text [ en-US ] = "Active Window" ;
+    };
+    String ST_HIDDEN
+    {
+        Text [ en-US ] = "hidden" ;
+    };
+    String ST_ACTIVE
+    {
+        Text [ en-US ] = "active" ;
+    };
+    String ST_INACTIVE
+    {
+        Text [ en-US ] = "inactive" ;
+    };
+    String ST_EDIT_ENTRY
+    {
+        Text [ en-US ] = "Edit..." ;
+    };
+    String ST_UPDATE
+    {
+        Text [ en-US ] = "~Update" ;
+    };
+    String ST_EDIT_CONTENT
+    {
+        Text [ en-US ] = "Edit" ;
+    };
+    String ST_EDIT_LINK
+    {
+        Text [ en-US ] = "Edit link";
+    };
+    String ST_INSERT
+    {
+        Text [ en-US ] = "Insert" ;
+    };
+    String ST_INDEX
+    {
+        Text [ en-US ] = "~Index";
+    };
+    String ST_FILE
+    {
+        Text [ en-US ] = "File" ;
+    };
+    String ST_NEW_FILE
+    {
+        Text [ en-US ] = "New Document" ;
+    };
+    String ST_TEXT
+    {
+        Text [ en-US ] = "Text" ;
+    };
+    String ST_DELETE
+    {
+        Text [ en-US ] = "Delete" ;
+    };
+    String ST_DELETE_ENTRY
+    {
+        Text [ en-US ] = "~Delete" ;
+    };
+    String ST_UPDATE_SEL
+    {
+        Text [ en-US ] = "Selection" ;
+    };
+    String ST_UPDATE_INDEX
+    {
+        Text [ en-US ] = "Indexes" ;
+    };
+    String ST_UPDATE_LINK
+    {
+        Text [ en-US ] = "Links" ;
+    };
+    String ST_UPDATE_ALL
+    {
+        Text [ en-US ] = "All" ;
+    };
+    String ST_REMOVE_INDEX
+    {
+        Text [ en-US ] = "~Remove Index" ;
+    };
+    String ST_REMOVE_TBL_PROTECTION
+    {
+        Text [ en-US ] = "~Unprotect" ;
+    };
+    String ST_INVISIBLE
+    {
+        Text [ en-US ] = "hidden";
+    };
+    String ST_BROKEN_LINK
+    {
+        Text [ en-US ] = "File not found: ";
+    };
+    String ST_RENAME
+    {
+        Text [ en-US ] = "~Rename";
+    };
+    String ST_READONLY_IDX
+    {
+        Text [ en-US ] = "Read-~only";
+    };
+    String ST_POSTIT_SHOW
+    {
+        Text [ en-US ] = "Show All";
+    };
+    String ST_POSTIT_HIDE
+    {
+        Text [ en-US ] = "Hide All";
+    };
+    String ST_POSTIT_DELETE
+    {
+        Text [ en-US ] = "Delete All";
+    };
+};
+#define NAVI_ENTRY_IDS \
+    IdList =           \
+    {                  \
+        20000 ;        \
+        20001 ;        \
+        20002 ;        \
+        20003 ;        \
+        20004 ;        \
+        20005 ;        \
+        20006 ;        \
+        20007 ;        \
+        20008 ;        \
+        20009 ;        \
+        20010 ;        \
+        20011 ;        \
+    };                 \
+    IdCount = { 12 ; };
+
+ImageList IMG_NAVI_ENTRYBMP
+{
+    Prefix = "nc";
+    MaskColor = IMAGE_MASK_COLOR ;
+    NAVI_ENTRY_IDS
+};
+
+
+//IAccessibility2 Implementation 2009-----
+String STR_ACCESS_TL_GLOBAL
+{
+    Text [ en-US ] = "Global View";
+};
+String STR_ACCESS_TL_CONTENT
+{
+    Text [ en-US ] = "Content View";
+};
+//-----IAccessibility2 Implementation 2009

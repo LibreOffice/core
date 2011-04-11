@@ -1,0 +1,212 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _RPTUI_SLOTID_HRC_
+#define _RPTUI_SLOTID_HRC_
+
+#include <svx/svxids.hrc>
+
+#define SID_PAGEHEADERFOOTER                    ( SID_RPTUI_START +   0 )
+#define SID_REPORTHEADERFOOTER                  ( SID_RPTUI_START +   1 )
+#define SID_SORTINGANDGROUPING                  ( SID_RPTUI_START +   2 )
+#define SID_INSERT_FLD_PGNUMBER                 ( SID_RPTUI_START +   3 )
+#define SID_CONDITIONALFORMATTING               ( SID_RPTUI_START +   4 )
+#define SID_PAGEDIALOG                          ( SID_RPTUI_START +   5 )
+#define SID_SETCONTROLDEFAULTS                  ( SID_RPTUI_START +   6 )
+#define SID_INSERTBREAK                         ( SID_RPTUI_START +   7 )
+#define SID_PAGEHEADER_WITHOUT_UNDO             ( SID_RPTUI_START +   8 )
+#define SID_PAGEFOOTER_WITHOUT_UNDO             ( SID_RPTUI_START +   9 )
+#define SID_REPORTHEADER_WITHOUT_UNDO           ( SID_RPTUI_START +  10 )
+#define SID_REPORTFOOTER_WITHOUT_UNDO           ( SID_RPTUI_START +  11 )
+#define SID_SELECT_REPORT                       ( SID_RPTUI_START +  12 )
+#define SID_GROUPHEADER_WITHOUT_UNDO            ( SID_RPTUI_START +  13 )
+#define SID_GROUPHEADER                         ( SID_RPTUI_START +  14 )
+#define SID_GROUPFOOTER_WITHOUT_UNDO            ( SID_RPTUI_START +  15 )
+#define SID_GROUPFOOTER                         ( SID_RPTUI_START +  16 )
+#define SID_GROUP_REMOVE                        ( SID_RPTUI_START +  17 )
+#define SID_GROUP_APPEND                        ( SID_RPTUI_START +  18 )
+#define SID_EXECUTE_REPORT                      ( SID_RPTUI_START +  19 )
+#define SID_DATETIME                            ( SID_RPTUI_START +  20 )
+#define SID_ESCAPE                              ( SID_RPTUI_START +  21 )
+#define SID_ADD_CONTROL_PAIR                    ( SID_RPTUI_START +  22 )
+#define SID_SPLIT_POSITION                      ( SID_RPTUI_START +  23 )
+#define SID_PROPERTYBROWSER_LAST_PAGE           ( SID_RPTUI_START +  24 )
+// free
+
+#define SID_DRAWTBX_CS_BASIC1                   ( SID_RPTUI_START +  26 )
+#define SID_DRAWTBX_CS_BASIC2                   ( SID_RPTUI_START +  27 )
+#define SID_DRAWTBX_CS_BASIC3                   ( SID_RPTUI_START +  28 )
+#define SID_DRAWTBX_CS_BASIC4                   ( SID_RPTUI_START +  29 )
+#define SID_DRAWTBX_CS_BASIC5                   ( SID_RPTUI_START +  30 )
+#define SID_DRAWTBX_CS_BASIC6                   ( SID_RPTUI_START +  31 )
+#define SID_DRAWTBX_CS_BASIC7                   ( SID_RPTUI_START +  32 )
+#define SID_DRAWTBX_CS_BASIC8                   ( SID_RPTUI_START +  33 )
+#define SID_DRAWTBX_CS_BASIC9                   ( SID_RPTUI_START +  34 )
+#define SID_DRAWTBX_CS_BASIC10                  ( SID_RPTUI_START +  35 )
+#define SID_DRAWTBX_CS_BASIC11                  ( SID_RPTUI_START +  36 )
+#define SID_DRAWTBX_CS_BASIC12                  ( SID_RPTUI_START +  37 )
+#define SID_DRAWTBX_CS_BASIC13                  ( SID_RPTUI_START +  38 )
+#define SID_DRAWTBX_CS_BASIC14                  ( SID_RPTUI_START +  39 )
+#define SID_DRAWTBX_CS_BASIC15                  ( SID_RPTUI_START +  40 )
+#define SID_DRAWTBX_CS_BASIC16                  ( SID_RPTUI_START +  41 )
+#define SID_DRAWTBX_CS_BASIC17                  ( SID_RPTUI_START +  42 )
+#define SID_DRAWTBX_CS_BASIC18                  ( SID_RPTUI_START +  43 )
+#define SID_DRAWTBX_CS_BASIC19                  ( SID_RPTUI_START +  44 )
+#define SID_DRAWTBX_CS_BASIC20                  ( SID_RPTUI_START +  45 )
+#define SID_DRAWTBX_CS_BASIC21                  ( SID_RPTUI_START +  46 )
+#define SID_DRAWTBX_CS_BASIC22                  ( SID_RPTUI_START +  47 )
+#define SID_DRAWTBX_CS_SYMBOL1                  ( SID_RPTUI_START +  48 )
+#define SID_DRAWTBX_CS_SYMBOL2                  ( SID_RPTUI_START +  49 )
+#define SID_DRAWTBX_CS_SYMBOL3                  ( SID_RPTUI_START +  50 )
+#define SID_DRAWTBX_CS_SYMBOL4                  ( SID_RPTUI_START +  51 )
+#define SID_DRAWTBX_CS_SYMBOL5                  ( SID_RPTUI_START +  52 )
+#define SID_DRAWTBX_CS_SYMBOL6                  ( SID_RPTUI_START +  53 )
+#define SID_DRAWTBX_CS_SYMBOL7                  ( SID_RPTUI_START +  54 )
+#define SID_DRAWTBX_CS_SYMBOL8                  ( SID_RPTUI_START +  55 )
+#define SID_DRAWTBX_CS_SYMBOL9                  ( SID_RPTUI_START +  56 )
+#define SID_DRAWTBX_CS_SYMBOL10                 ( SID_RPTUI_START +  57 )
+#define SID_DRAWTBX_CS_SYMBOL11                 ( SID_RPTUI_START +  58 )
+#define SID_DRAWTBX_CS_SYMBOL12                 ( SID_RPTUI_START +  59 )
+#define SID_DRAWTBX_CS_SYMBOL13                 ( SID_RPTUI_START +  60 )
+#define SID_DRAWTBX_CS_SYMBOL14                 ( SID_RPTUI_START +  61 )
+#define SID_DRAWTBX_CS_SYMBOL15                 ( SID_RPTUI_START +  62 )
+#define SID_DRAWTBX_CS_SYMBOL16                 ( SID_RPTUI_START +  63 )
+#define SID_DRAWTBX_CS_SYMBOL17                 ( SID_RPTUI_START +  64 )
+#define SID_DRAWTBX_CS_SYMBOL18                 ( SID_RPTUI_START +  65 )
+#define SID_DRAWTBX_CS_ARROW1                   ( SID_RPTUI_START +  66 )
+#define SID_DRAWTBX_CS_ARROW2                   ( SID_RPTUI_START +  67 )
+#define SID_DRAWTBX_CS_ARROW3                   ( SID_RPTUI_START +  68 )
+#define SID_DRAWTBX_CS_ARROW4                   ( SID_RPTUI_START +  69 )
+#define SID_DRAWTBX_CS_ARROW5                   ( SID_RPTUI_START +  70 )
+#define SID_DRAWTBX_CS_ARROW6                   ( SID_RPTUI_START +  71 )
+#define SID_DRAWTBX_CS_ARROW7                   ( SID_RPTUI_START +  72 )
+#define SID_DRAWTBX_CS_ARROW8                   ( SID_RPTUI_START +  73 )
+#define SID_DRAWTBX_CS_ARROW9                   ( SID_RPTUI_START +  74 )
+#define SID_DRAWTBX_CS_ARROW10                  ( SID_RPTUI_START +  75 )
+#define SID_DRAWTBX_CS_ARROW11                  ( SID_RPTUI_START +  76 )
+#define SID_DRAWTBX_CS_ARROW12                  ( SID_RPTUI_START +  77 )
+#define SID_DRAWTBX_CS_ARROW13                  ( SID_RPTUI_START +  78 )
+#define SID_DRAWTBX_CS_ARROW14                  ( SID_RPTUI_START +  79 )
+#define SID_DRAWTBX_CS_ARROW15                  ( SID_RPTUI_START +  80 )
+#define SID_DRAWTBX_CS_ARROW16                  ( SID_RPTUI_START +  81 )
+#define SID_DRAWTBX_CS_ARROW17                  ( SID_RPTUI_START +  82 )
+#define SID_DRAWTBX_CS_ARROW18                  ( SID_RPTUI_START +  83 )
+#define SID_DRAWTBX_CS_ARROW19                  ( SID_RPTUI_START +  84 )
+#define SID_DRAWTBX_CS_ARROW20                  ( SID_RPTUI_START +  85 )
+#define SID_DRAWTBX_CS_ARROW21                  ( SID_RPTUI_START +  86 )
+#define SID_DRAWTBX_CS_ARROW22                  ( SID_RPTUI_START +  87 )
+#define SID_DRAWTBX_CS_ARROW23                  ( SID_RPTUI_START +  88 )
+#define SID_DRAWTBX_CS_ARROW24                  ( SID_RPTUI_START +  89 )
+#define SID_DRAWTBX_CS_ARROW25                  ( SID_RPTUI_START +  90 )
+#define SID_DRAWTBX_CS_ARROW26                  ( SID_RPTUI_START +  91 )
+#define SID_DRAWTBX_CS_STAR1                    ( SID_RPTUI_START +  92 )
+#define SID_DRAWTBX_CS_STAR2                    ( SID_RPTUI_START +  93 )
+#define SID_DRAWTBX_CS_STAR3                    ( SID_RPTUI_START +  94 )
+#define SID_DRAWTBX_CS_STAR4                    ( SID_RPTUI_START +  95 )
+#define SID_DRAWTBX_CS_STAR5                    ( SID_RPTUI_START +  96 )
+#define SID_DRAWTBX_CS_STAR6                    ( SID_RPTUI_START +  97 )
+#define SID_DRAWTBX_CS_STAR7                    ( SID_RPTUI_START +  98 )
+#define SID_DRAWTBX_CS_STAR8                    ( SID_RPTUI_START +  99 )
+#define SID_DRAWTBX_CS_STAR9                    ( SID_RPTUI_START +  100 )
+#define SID_DRAWTBX_CS_STAR10                   ( SID_RPTUI_START +  101 )
+#define SID_DRAWTBX_CS_STAR11                   ( SID_RPTUI_START +  102 )
+#define SID_DRAWTBX_CS_STAR12                   ( SID_RPTUI_START +  103 )
+#define SID_DRAWTBX_CS_FLOWCHART1               ( SID_RPTUI_START +  104 )
+#define SID_DRAWTBX_CS_FLOWCHART2               ( SID_RPTUI_START +  105 )
+#define SID_DRAWTBX_CS_FLOWCHART3               ( SID_RPTUI_START +  106 )
+#define SID_DRAWTBX_CS_FLOWCHART4               ( SID_RPTUI_START +  107 )
+#define SID_DRAWTBX_CS_FLOWCHART5               ( SID_RPTUI_START +  108 )
+#define SID_DRAWTBX_CS_FLOWCHART6               ( SID_RPTUI_START +  109 )
+#define SID_DRAWTBX_CS_FLOWCHART7               ( SID_RPTUI_START +  110 )
+#define SID_DRAWTBX_CS_FLOWCHART8               ( SID_RPTUI_START +  111 )
+#define SID_DRAWTBX_CS_FLOWCHART9               ( SID_RPTUI_START +  112 )
+#define SID_DRAWTBX_CS_FLOWCHART10              ( SID_RPTUI_START +  113 )
+#define SID_DRAWTBX_CS_FLOWCHART11              ( SID_RPTUI_START +  114 )
+#define SID_DRAWTBX_CS_FLOWCHART12              ( SID_RPTUI_START +  115 )
+#define SID_DRAWTBX_CS_FLOWCHART13              ( SID_RPTUI_START +  116 )
+#define SID_DRAWTBX_CS_FLOWCHART14              ( SID_RPTUI_START +  117 )
+#define SID_DRAWTBX_CS_FLOWCHART15              ( SID_RPTUI_START +  118 )
+#define SID_DRAWTBX_CS_FLOWCHART16              ( SID_RPTUI_START +  119 )
+#define SID_DRAWTBX_CS_FLOWCHART17              ( SID_RPTUI_START +  120 )
+#define SID_DRAWTBX_CS_FLOWCHART18              ( SID_RPTUI_START +  121 )
+#define SID_DRAWTBX_CS_FLOWCHART19              ( SID_RPTUI_START +  122 )
+#define SID_DRAWTBX_CS_FLOWCHART20              ( SID_RPTUI_START +  123 )
+#define SID_DRAWTBX_CS_FLOWCHART21              ( SID_RPTUI_START +  124 )
+#define SID_DRAWTBX_CS_FLOWCHART22              ( SID_RPTUI_START +  125 )
+#define SID_DRAWTBX_CS_FLOWCHART23              ( SID_RPTUI_START +  126 )
+#define SID_DRAWTBX_CS_FLOWCHART24              ( SID_RPTUI_START +  127 )
+#define SID_DRAWTBX_CS_FLOWCHART25              ( SID_RPTUI_START +  128 )
+#define SID_DRAWTBX_CS_FLOWCHART26              ( SID_RPTUI_START +  129 )
+#define SID_DRAWTBX_CS_FLOWCHART27              ( SID_RPTUI_START +  130 )
+#define SID_DRAWTBX_CS_FLOWCHART28              ( SID_RPTUI_START +  131 )
+#define SID_DRAWTBX_CS_CALLOUT1                 ( SID_RPTUI_START +  132 )
+#define SID_DRAWTBX_CS_CALLOUT2                 ( SID_RPTUI_START +  133 )
+#define SID_DRAWTBX_CS_CALLOUT3                 ( SID_RPTUI_START +  134 )
+#define SID_DRAWTBX_CS_CALLOUT4                 ( SID_RPTUI_START +  135 )
+#define SID_DRAWTBX_CS_CALLOUT5                 ( SID_RPTUI_START +  136 )
+#define SID_DRAWTBX_CS_CALLOUT6                 ( SID_RPTUI_START +  137 )
+#define SID_DRAWTBX_CS_CALLOUT7                 ( SID_RPTUI_START +  138 )
+
+#define SID_RPT_TEXTDOCUMENT                    ( SID_RPTUI_START +  139 )
+#define SID_RPT_SPREADSHEET                     ( SID_RPTUI_START +  140 )
+#define SID_RPT_SHOWREPORTEXPLORER              ( SID_RPTUI_START +  141 )
+#define SID_RPT_NEW_FUNCTION                    ( SID_RPTUI_START +  142 )
+
+#define SID_OBJECT_SMALLESTWIDTH                ( SID_RPTUI_START +  143 )
+#define SID_OBJECT_SMALLESTHEIGHT               ( SID_RPTUI_START +  144 )
+#define SID_OBJECT_GREATESTWIDTH                ( SID_RPTUI_START +  145 )
+#define SID_OBJECT_GREATESTHEIGHT               ( SID_RPTUI_START +  146 )
+#define SID_OBJECT_RESIZING                     ( SID_RPTUI_START +  147 )
+#define SID_ARRANGEMENU                         ( SID_RPTUI_START +  148 )
+#define SID_SELECTALL_IN_SECTION                ( SID_RPTUI_START +  149 )
+
+#define SID_ICON_GROUP                          ( SID_RPTUI_START +  150 )
+#define SID_ICON_DETAIL                         ( SID_RPTUI_START +  151 )
+
+#define SID_SECTION_ALIGN                       ( SID_RPTUI_START +  152 )
+#define SID_SECTION_ALIGN_LEFT                  ( SID_RPTUI_START +  153 )
+#define SID_SECTION_ALIGN_CENTER                ( SID_RPTUI_START +  154 )
+#define SID_SECTION_ALIGN_RIGHT                 ( SID_RPTUI_START +  155 )
+#define SID_SECTION_ALIGN_UP                    ( SID_RPTUI_START +  156 )
+#define SID_SECTION_ALIGN_MIDDLE                ( SID_RPTUI_START +  157 )
+#define SID_SECTION_ALIGN_DOWN                  ( SID_RPTUI_START +  158 )
+
+#define SID_NEXT_MARK                           ( SID_RPTUI_START +  159 )
+#define SID_PREV_MARK                           ( SID_RPTUI_START +  160 )
+
+#define SID_SELECT_ALL_LABELS                   ( SID_RPTUI_START +  161 )
+#define SID_SELECT_ALL_EDITS                    ( SID_RPTUI_START +  162 )
+
+#define SID_SECTION_SHRINK                      ( SID_RPTUI_START +  163 )
+#define SID_SECTION_SHRINK_TOP                  ( SID_RPTUI_START +  164 )
+#define SID_SECTION_SHRINK_BOTTOM               ( SID_RPTUI_START +  165 )
+#define SID_SECTION_SHRINK_MENU                 ( SID_RPTUI_START +  166 )
+
+#define SID_COLLAPSE_SECTION                    ( SID_RPTUI_START +  167 )
+#define SID_EXPAND_SECTION                      ( SID_RPTUI_START +  168 )
+
+#endif // _RPTUI_SLOTID_HRC_

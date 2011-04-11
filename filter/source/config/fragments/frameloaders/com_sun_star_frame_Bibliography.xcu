@@ -1,0 +1,3 @@
+    <node oor:name="com.sun.star.frame.Bibliography" oor:op="replace"  >
+        <prop oor:name="Types"><value>component_Bibliography</value></prop>
+    </node>

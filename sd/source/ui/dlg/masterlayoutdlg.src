@@ -1,0 +1,115 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include <dialogs.hrc>
+#include <masterlayoutdlg.hrc>
+#include <strings.hrc>
+
+ModalDialog RID_SD_DLG_MASTER_LAYOUT
+{
+    HelpID = "sd:ModalDialog:RID_SD_DLG_MASTER_LAYOUT";
+    Size = MAP_APPFONT( 89 , 92 );
+    OutputSize = TRUE;
+    SVLook   = TRUE;
+    Moveable = TRUE;
+    CloseAble = TRUE;
+    FixedLine FL_PLACEHOLDERS
+    {
+        Pos = MAP_APPFONT( 3, 3 );
+        Size = MAP_APPFONT( 83, 10 );
+
+        Text [ en-US ] = "Placeholders";
+    };
+
+    CheckBox CB_HEADER
+    {
+        HelpID = "sd:CheckBox:RID_SD_DLG_MASTER_LAYOUT:CB_HEADER";
+        Pos = MAP_APPFONT( 6, 16 );
+        Size = MAP_APPFONT( 134 , 10 );
+        TabStop = TRUE;
+
+        Text [ en-US ] = "Header";
+    };
+
+    CheckBox CB_DATE
+    {
+        HelpID = "sd:CheckBox:RID_SD_DLG_MASTER_LAYOUT:CB_DATE";
+        Pos = MAP_APPFONT( 6, 29 );
+        Size = MAP_APPFONT( 134 , 10 );
+        TabStop = TRUE;
+
+        Text [ en-US ] = "Date/time";
+    };
+
+    CheckBox CB_FOOTER
+    {
+        HelpID = "sd:CheckBox:RID_SD_DLG_MASTER_LAYOUT:CB_FOOTER";
+        Pos = MAP_APPFONT( 6, 42 );
+        Size = MAP_APPFONT( 134 , 10 );
+        TabStop = TRUE;
+
+        Text [ en-US ] = "Footer";
+    };
+
+    CheckBox CB_PAGE_NUMBER
+    {
+        HelpID = "sd:CheckBox:RID_SD_DLG_MASTER_LAYOUT:CB_PAGE_NUMBER";
+        Pos = MAP_APPFONT( 6, 55 );
+        Size = MAP_APPFONT( 134 , 10 );
+        TabStop = TRUE;
+
+        Text [ en-US ] = "Page number";
+    };
+
+    OKButton BT_OK
+    {
+        Pos = MAP_APPFONT( 3, 71 );
+        Size = MAP_APPFONT( 40 , 14 );
+        TabStop = TRUE;
+    };
+
+    CancelButton BT_CANCEL
+    {
+        Pos = MAP_APPFONT( 46, 71 );
+        Size = MAP_APPFONT( 40 , 14 );
+        TabStop = TRUE;
+    };
+
+    String STR_SLIDE_NUMBER
+    {
+        Text [ en-US ] = "Slide number";
+    };
+
+    String STR_MASTER_LAYOUT_TITLE
+    {
+        Text [ en-US ] = "Master Elements";
+    };
+};
+
+
+
+

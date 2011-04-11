@@ -1,0 +1,157 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_registry_DefaultRegistry_idl__
+#define __com_sun_star_registry_DefaultRegistry_idl__
+
+#include <com/sun/star/registry/XSimpleRegistry.idl>
+#include <com/sun/star/lang/XInitialization.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module registry {
+
+//=============================================================================
+
+// DocMerge from xml: service com::sun::star::registry::NestedRegistry
+/** supports a shared view on two different registries. The registry
+    files will be opened in two different modes, registry1 will be opened with read/write
+    rights and registry2 will be opened read-only.
+    In the context of this service, the functions <code>open</code>, <code>close</code>,
+    and <code>destroy</code> from <type>XSimpleRegistry</type> are not supported and
+    throw an exception if they are used.
+    <dl>
+    <dt>Functions of <type>XSimpleRegistry</type>:
+    <dl>
+    <dt>    <b>getURL</b>
+    </dt>
+    <dd> returns the name of registry1.
+
+    </dd>
+    <dt>    <b>isValid</b>
+    </dt>
+    <dd> checks if registry1 is valid. If the interface is not <NULL/>
+    then registry1 should always be valid.
+
+    </dd>
+    <dt>    <b>isReadOnly</b>
+    </dt>
+    <dd> checks if registry1 has write protection.
+    </dd>
+    <dt>    <b>mergeKey</b>
+    </dt>
+    <dd> merges all information from the specified registry in registry1.
+
+    </dd>
+    <dt>    <b>getRootKey</b>
+    </dt>
+    <dd> returns a virtual rootkey of both registries.
+    </dd>
+    </dl>
+
+    <br>
+
+    </dt>
+    <dt>Functions of <type>XRegistryKey</type>:
+    <dl>
+    <dt> <b>openKey</b>
+    </dt>
+    <dd> returns a virtual key which is specified in registy1 or registry2.
+
+    </dd>
+    <dt> <b>deleteKey</b>
+    </dt>
+    <dd> deletes the key only if it is present in registry1.
+
+    </dd>
+    <dt> <b>setLongValue, setAsciiValue, setStringValue, setBinaryValue</b>
+    </dt>
+    <dd> sets the value at the specified key in registry1.
+
+    </dd>
+    <dt> <b>getLongValue, getAsciiValue, getStringValue, getBinaryValue</b>
+    </dt>
+    <dd> returns the value at the specified key in registry1, or if
+    the value is not present in registry1, it will return the value of registry2.
+
+    </dd>
+    <dt> <b>openKeys</b>
+    </dt>
+    <dd> returns a sequence of all subkeys in both registries.
+
+    </dd>
+    <dt> <b>getKeyNames</b>
+    </dt>
+    <dd> returns a sequence with the names of all subkeys in both
+    registries.
+
+    </dd>
+    <dt>
+    <br>
+    <b>Note: all write functions only work on registry1.</b>
+    </dt>
+    </dl>
+    </dt>
+    </dl>
+    <br>
+    How to initialize the registries:<br>
+    Use a sequence of <type>XSimpleRegistry</type> with two elements. The first element must be
+    the registry which is opened with read/write rights and the second element must be
+    the read-only one.<br>
+    Two different ways are possible:<br>
+    <ul>
+    <li> use <method scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</method> to
+    create an instance of this service where the value of the any parameter must be the sequence with
+    the two open registries.
+    <li> use the initialize function of the <type scope="com::sun::star::lang">XInitialization</type> interface where the value of the
+    any parameter must be the sequence with the two open registries.
+    </ul>
+    <br>
+
+
+    Guarantees:
+    <ul>
+    <li>-thread safe</li>
+    </ul>
+ */
+published service NestedRegistry
+{
+    // DocMerge: empty anyway
+    interface com::sun::star::registry::XSimpleRegistry;
+
+    // DocMerge: empty anyway
+    interface com::sun::star::lang::XInitialization;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

@@ -1,0 +1,236 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+interface Documents
+[
+    uuid = "61753B60-1114-101D-B8ED-3273768855A7" ;
+]
+{
+    SID_NEWDOC // ole(opt) api(final/play/rec)
+    [
+        ExecMethod = NewDocExec_Impl ;
+    ]
+    SID_OPENDOC // ole(no) api(final/play/rec)
+    [
+        ExecMethod = OpenDocExec_Impl ;
+    ]
+    SID_OPENHYPERLINK // ole(no) api(final/play/rec)
+    [
+        ExecMethod = OpenDocExec_Impl ;
+    ]
+    SID_OPENURL // ole(no) api(no)
+    [
+        ExecMethod = OpenDocExec_Impl ;
+    ]
+    SID_OPENTEMPLATE // ole(no) api(final/play/rec)
+    [
+        ExecMethod = OpenDocExec_Impl ;
+    ]
+    SID_CLOSEDOCS // ole(req) api(final/play/rec)
+    [
+        ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
+    ]
+    SID_SAVEDOCS // ole(no) api(final/play/rec)
+    [
+        ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
+    ]
+}
+
+ //=========================================================================
+interface Document
+[
+    Automation = FALSE ;
+]
+{
+    SID_DOCTITLE // ole(opt) api(final/norec)
+    [
+        ExecMethod = ExecProps_Impl ;
+        StateMethod = StateProps_Impl ;
+    ]
+    SID_DOCPATH // ole(req) api(final/play/norec)
+    [
+        ExecMethod = ExecProps_Impl ;
+        StateMethod = StateProps_Impl ;
+    ]
+    SID_DOCFULLNAME // ole(req) api(final/play/norec)
+    [
+        ExecMethod = ExecProps_Impl ;
+        StateMethod = StateProps_Impl ;
+    ]
+    SID_CLOSEDOC // ole(req) api(final/play/rec)
+    [
+        ExecMethod = ExecFile_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+    SID_CLOSING // ole(no) api(final/play/norec)
+    [
+        StateMethod = StateProps_Impl ;
+    ]
+    SID_ACTIVATE // ole(no) api(final/play/norec)
+    [
+        ExecMethod = ExecView_Impl ;
+        StateMethod = StateView_Impl ;
+    ]
+}
+
+interface OfficeDocument : Document
+[
+    Automation = FALSE
+]
+{
+    SID_DOCINFO_AUTHOR // ole(opt) api(todo)
+    [
+        ExecMethod = ExecProps_Impl ;
+        StateMethod = StateProps_Impl ;
+    ]
+    SID_DOCINFO_COMMENTS // ole(opt) api(todo)
+    [
+        ExecMethod = ExecProps_Impl ;
+        StateMethod = StateProps_Impl ;
+    ]
+    SID_DOCINFO_KEYWORDS // ole(opt) api(todo)
+    [
+        ExecMethod = ExecProps_Impl ;
+        StateMethod = StateProps_Impl ;
+    ]
+    SID_DOC_READONLY // ole(opt) api(final/play/norec)
+    [
+        ExecMethod = ExecProps_Impl ;
+        StateMethod = StateProps_Impl ;
+    ]
+    SID_DOC_SAVED // ole(req) api(final/play/norec)
+    [
+        ExecMethod = ExecProps_Impl ;
+        StateMethod = StateProps_Impl ;
+    ]
+    SID_DOC_MODIFIED // ole(no) api(final/noplay/norec)
+    [
+        StateMethod = GetState_Impl ;
+    ]
+    SID_MODIFIED // ole(no) api(final/noplay/norec)
+    [
+        ExecMethod = ExecProps_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+    SID_SAVEDOC // ole(req) api(final/play/rec)
+    [
+        ExecMethod = ExecFile_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+    SID_SAVEASDOC // ole(req) api(final/play/rec)
+    [
+        ExecMethod = ExecFile_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+    SID_DOCTEMPLATE // ole(no) api(final/play/rec)
+    [
+        ExecMethod = ExecFile_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+    SID_PRINTDOC //ole(req) api(final/play/norec)
+    [
+        ExecMethod = PrintExec_Impl ;
+        StateMethod = NoState ;
+    ]
+    SID_PRINTOUT // ole(opt) api(final/play/norec)
+    [
+        ExecMethod = PrintExec_Impl ;
+        StateMethod = PrintState_Impl ;
+    ]
+    SID_DOC_LOADING // ole(no) api(final/play/norec)
+    [
+        StateMethod = StateProps_Impl ;
+    ]
+    SID_IMG_LOADING // ole(no) api(final/play/norec)
+    [
+        StateMethod = StateProps_Impl ;
+    ]
+    SID_VERSION
+    [
+        ExecMethod = ExecFile_Impl;
+        StateMethod = GetState_Impl;
+    ]
+    SID_SIGNATURE
+    [
+        ExecMethod = ExecFile_Impl;
+        StateMethod = GetState_Impl;
+    ]
+    SID_MACRO_SIGNATURE
+    [
+        ExecMethod = ExecFile_Impl;
+        StateMethod = GetState_Impl;
+    ]
+}
+
+ //=========================================================================
+
+shell SfxObjectShell
+{
+    import OfficeDocument [Automation];
+
+    SID_DOCINFO // ole(no) api(final/play)
+    [
+        ExecMethod = ExecFile_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+    SID_DOCINFO_TITLE // ole(no) api(final/play/rec)
+    [
+        StateMethod = GetState_Impl ;
+    ]
+    SID_EXPORTDOC
+    [
+        ExecMethod = ExecFile_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+    SID_EXPORTDOCASPDF
+    [
+        ExecMethod = ExecFile_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+    SID_DIRECTEXPORTDOCASPDF
+    [
+        ExecMethod = ExecFile_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+    SID_SAVE_VERSION_ON_CLOSE
+    [
+        ExecMethod = ExecFile_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+    SID_SIGNATURE
+    [
+        ExecMethod = ExecFile_Impl;
+        StateMethod = GetState_Impl;
+    ]
+    SID_MACRO_SIGNATURE
+    [
+            ExecMethod = ExecFile_Impl;
+            StateMethod = GetState_Impl;
+    ]
+} ;

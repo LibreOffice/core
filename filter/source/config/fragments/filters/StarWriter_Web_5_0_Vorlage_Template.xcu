@@ -1,0 +1,10 @@
+    <node oor:name="StarWriter/Web 5.0 Vorlage/Template" oor:op="replace">
+        <prop oor:name="Flags"><value>IMPORT TEMPLATE TEMPLATEPATH OWN ALIEN 3RDPARTYFILTER</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="FilterService"><value>com.sun.star.comp.office.BF_MigrateFilter</value></prop>
+        <prop oor:name="UserData"><value>CSW5VWEB</value></prop>
+        <prop oor:name="FileFormatVersion"><value>5050</value></prop>
+        <prop oor:name="Type"><value>writer_web_StarWriterWeb_50_VorlageTemplate</value></prop>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="DocumentService"><value>com.sun.star.text.WebDocument</value></prop>
+    </node>

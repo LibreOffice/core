@@ -1,0 +1,98 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define RB_1            1
+#define RB_2            2
+#define RB_3            3
+#define RB_4            4
+#define RB_5            5
+#define FT_1            6
+#define FT_2            7
+#define FT_3            8
+#define FT_4            9
+#define FT_5            10
+#define FI_1            11
+#define FI_2            12
+#define FI_3            13
+#define FI_4            14
+#define FI_5            15
+//#define FL_LEVEL        16
+
+#define FT_COLL         20
+#define LB_COLL         21
+#define FT_NUMBER       22
+#define LB_NUMBER       23
+#define FT_DELIM        24
+#define FT_DELIM_BEVOR  25
+#define FT_DELIM_AFTER  26
+#define ED_DELIM_BEVOR  27
+#define ED_DELIM_AFTER  28
+#define CB_COMPLETE     29
+#define FL_NUMBER       30
+
+#define LB_ALIGN        31
+#define FL_ALIGN        33
+
+#define FT_START        40
+#define ED_START        41
+#define FL_START        42
+
+#define BT_OK           100
+#define BT_CANCEL       101
+#define BT_HELP         102
+#define BT_FORM         103
+#define BT_RESET        104
+#define FL_FORM         105
+#define LB_FORM         106
+#define ED_FORM         107
+#define FT_ALL_LEVEL    108
+#define NF_ALL_LEVEL    109
+
+#define MN_FORM     110
+#define MN_FORM1        111
+#define MN_FORMBASE     MN_FORM1
+#define MN_FORM2        112
+#define MN_FORM3        113
+#define MN_FORM4        114
+#define MN_FORM5        115
+#define MN_FORM6        116
+#define MN_FORM7        117
+#define MN_FORM8        118
+#define MN_FORM9        119
+#define MN_SAVE         120
+
+#define FL_LEVEL                130
+#define LB_LEVEL        131
+#define WIN_PREVIEW     132
+#define FT_SUFFIX       134
+#define ED_SUFFIX       135
+#define FT_PREFIX       136
+#define ED_PREFIX       137
+#define ST_NO_COLL      138
+
+#define ST_FORM         140
+#define FT_CHARFMT      141
+#define LB_CHARFMT      141

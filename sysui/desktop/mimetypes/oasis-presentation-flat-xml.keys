@@ -1,0 +1,10 @@
+application/vnd.oasis.opendocument.presentation-flat-xml
+	description=OpenDocument Presentation (Flat XML)
+	default_action_type=application
+	short_list_application_ids_for_novice_user_level=
+	short_list_application_ids_for_intermediate_user_level=
+	short_list_application_ids_for_advanced_user_level=
+	category=Documents/Presentation
+	use_category_default=yes
+	icon_filename=oasis-presentation
+

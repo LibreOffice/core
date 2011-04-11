@@ -1,0 +1,293 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "chinese_dictionarydialog.hrc"
+#include "chinese_translationdialog.hrc"
+
+#include <svtools/controldims.hrc>
+
+#define DIRECTION_RADIOBUTTONS( D_XPOS, D_YPOS, D_FULLWIDTH ) \
+RadioButton RB_TO_SIMPLIFIED \
+{ \
+    Pos = MAP_APPFONT( D_XPOS, D_YPOS ); \
+    Size = MAP_APPFONT ( D_FULLWIDTH, RSC_CD_RADIOBUTTON_HEIGHT ) ; \
+    Text [ en-US ] = "~Traditional Chinese to simplified Chinese"; \
+}; \
+RadioButton RB_TO_TRADITIONAL \
+{ \
+    Pos = MAP_APPFONT( D_XPOS, D_YPOS + RSC_CD_RADIOBUTTON_HEIGHT+RSC_SP_CTRL_GROUP_Y ); \
+    Size = MAP_APPFONT ( D_FULLWIDTH, RSC_CD_RADIOBUTTON_HEIGHT ) ; \
+    Text [ en-US ] = "~Simplified Chinese to traditional Chinese"; \
+};
+
+//-----------------------------------------------------------------------------
+//defines for positions and sizes:
+
+#define FULL_WIDTH (245)
+#define FULL_HEIGHT (165)
+
+#define ROW_1 (RSC_SP_DLG_INNERBORDER_TOP)
+#define ROW_2 (ROW_1+RSC_CD_RADIOBUTTON_HEIGHT+RSC_SP_CTRL_GROUP_Y)
+#define ROW_3 (ROW_2+RSC_CD_RADIOBUTTON_HEIGHT+RSC_SP_CTRL_GROUP_Y)
+#define ROW_4 (ROW_3+RSC_CD_CHECKBOX_HEIGHT+RSC_SP_CTRL_GROUP_Y)
+#define ROW_5 (ROW_4+RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_DESC_Y)
+#define ROW_6 (ROW_5+RSC_CD_TEXTBOX_HEIGHT+RSC_SP_CTRL_DESC_Y)
+
+#define ROW_5a (ROW_5+RSC_CD_PUSHBUTTON_HEIGHT+RSC_SP_CTRL_DESC_Y)
+#define ROW_5b (ROW_5a+RSC_CD_PUSHBUTTON_HEIGHT+RSC_SP_CTRL_DESC_Y)
+
+#define ROW_8 (FULL_HEIGHT-RSC_SP_DLG_INNERBORDER_BOTTOM-RSC_CD_PUSHBUTTON_HEIGHT)
+#define ROW_7 (ROW_8-RSC_CD_FIXEDLINE_HEIGHT-2)
+
+#define LIST_HEIGHT (ROW_7-RSC_SP_CTRL_Y-ROW_6)
+
+#define COL_WIDTH 60
+#define BUTTONCOL_WIDTH 40
+#define COL_1 (RSC_SP_DLG_INNERBORDER_LEFT+RSC_SP_FLGR_SPACE_X)
+#define COL_2 (COL_1+COL_WIDTH+1)
+#define COL_3 (COL_2+COL_WIDTH+1)
+#define COL_4 (FULL_WIDTH-RSC_SP_DLG_INNERBORDER_RIGHT-BUTTONCOL_WIDTH)
+
+#define REST_COL_WIDTH (COL_4-COL_3-RSC_SP_CTRL_GROUP_X)
+
+//-----------------------------------------------------------------------------
+
+ModalDialog DLG_CHINESEDICTIONARY
+{
+    HelpID = "svx:ModalDialog:DLG_CHINESEDICTIONARY";
+    //HelpId = ;
+    Size = MAP_APPFONT( FULL_WIDTH, FULL_HEIGHT );
+    OutputSize = TRUE;
+    Closeable = TRUE ;
+    Moveable = TRUE ;
+    SVLook = TRUE;
+
+    Text [ en-US ] = "Edit Dictionary";
+
+    DIRECTION_RADIOBUTTONS( COL_1, ROW_1, FULL_WIDTH - COL_1 - RSC_SP_DLG_INNERBORDER_RIGHT )
+
+    CheckBox CB_REVERSE
+    {
+        HelpID = "svx:CheckBox:DLG_CHINESEDICTIONARY:CB_REVERSE";
+        Pos = MAP_APPFONT ( COL_1, ROW_3 ) ;
+        Size = MAP_APPFONT ( FULL_WIDTH - COL_1 - RSC_SP_DLG_INNERBORDER_RIGHT , RSC_CD_CHECKBOX_HEIGHT ) ;
+
+        Text [ en-US ] = "Reverse mapping";
+    };
+
+    FixedText FT_TERM
+    {
+        Pos = MAP_APPFONT ( COL_1 , ROW_4 ) ;
+        Size = MAP_APPFONT ( COL_WIDTH, RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Text [ en-US ] = "Term";
+    };
+    Edit ED_TERM
+    {
+        HelpID = "svx:Edit:DLG_CHINESEDICTIONARY:ED_TERM";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( COL_1 , ROW_5 ) ;
+        Size = MAP_APPFONT ( COL_WIDTH , RSC_CD_TEXTBOX_HEIGHT ) ;
+    };
+
+
+    FixedText FT_MAPPING
+    {
+        Pos = MAP_APPFONT ( COL_2 , ROW_4 ) ;
+        Size = MAP_APPFONT ( COL_WIDTH, RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Text [ en-US ] = "Mapping";
+    };
+    Edit ED_MAPPING
+    {
+        HelpID = "svx:Edit:DLG_CHINESEDICTIONARY:ED_MAPPING";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( COL_2 , ROW_5 ) ;
+        Size = MAP_APPFONT ( COL_WIDTH , RSC_CD_TEXTBOX_HEIGHT ) ;
+    };
+
+    FixedText FT_PROPERTY
+    {
+        Pos = MAP_APPFONT ( COL_3 , ROW_4 ) ;
+        Size = MAP_APPFONT ( REST_COL_WIDTH, RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Text [ en-US ] = "Property";
+    };
+    ListBox LB_PROPERTY
+    {
+        HelpID = "svx:ListBox:DLG_CHINESEDICTIONARY:LB_PROPERTY";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( COL_3 , ROW_5 ) ;
+        Size = MAP_APPFONT ( REST_COL_WIDTH , RSC_CD_TEXTBOX_HEIGHT ) ;
+        DropDown = TRUE ;
+
+        stringlist [ en-US ] =
+        {
+            < "Other" ; Default ; > ;
+            < "Foreign" ; > ;
+            < "First name" ; > ;
+            < "Last name" ; > ;
+            < "Title" ; > ;
+            < "Status" ; > ;
+            < "Place name" ; > ;
+            < "Business" ; > ;
+            < "Adjective" ; > ;
+            < "Idiom" ; > ;
+            < "Abbreviation" ; > ;
+            < "Numerical" ; > ;
+            < "Noun" ; > ;
+            < "Verb" ; > ;
+            < "Brand name" ; > ;
+        };
+    };
+
+    Control CT_MAPPINGLIST
+    {
+        Pos = MAP_APPFONT ( COL_1, ROW_6 ) ;
+        Size = MAP_APPFONT ( COL_4 - COL_1 - RSC_SP_CTRL_GROUP_X, LIST_HEIGHT ) ;
+        TabStop = TRUE ;
+    };
+
+    PushButton PB_ADD
+    {
+        HelpID = "svx:PushButton:DLG_CHINESEDICTIONARY:PB_ADD";
+        Pos = MAP_APPFONT( COL_4, ROW_5 );
+        Size = MAP_APPFONT( BUTTONCOL_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT );
+
+        Text [ en-US ] = "~Add";
+    };
+    PushButton PB_MODIFY
+    {
+        HelpID = "svx:PushButton:DLG_CHINESEDICTIONARY:PB_MODIFY";
+        Pos = MAP_APPFONT( COL_4, ROW_5a );
+        Size = MAP_APPFONT( BUTTONCOL_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT );
+
+        Text [ en-US ] = "~Modify";
+    };
+    PushButton PB_DELETE
+    {
+        HelpID = "svx:PushButton:DLG_CHINESEDICTIONARY:PB_DELETE";
+        Pos = MAP_APPFONT( COL_4, ROW_5b );
+        Size = MAP_APPFONT( BUTTONCOL_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT );
+
+        Text [ en-US ] = "~Delete";
+    };
+
+    FixedLine FL_BOTTOMLINE
+    {
+        Pos = MAP_APPFONT ( 0 , ROW_7 ) ;
+        Size = MAP_APPFONT ( FULL_WIDTH, RSC_CD_FIXEDLINE_HEIGHT ) ;
+    };
+
+    BUTTONS_OK_CANCEL_HELP_ABREAST( FULL_WIDTH - RSC_SP_DLG_INNERBORDER_RIGHT, ROW_8 )
+};
+
+//-----------------------------------------------------------------------------
+//defines for positions and sizes:
+
+#define T_FULL_WIDTH (220)
+#define T_FULL_HEIGHT (120)
+#define T_EDITBUTTON_WIDTH (75)
+
+#define T_COL_1 (RSC_SP_DLG_INNERBORDER_LEFT)
+#define T_COL_2 (T_COL_1+RSC_SP_FLGR_SPACE_X)
+#define T_COL_3 (T_COL_2+RSC_SP_CHK_TEXTINDENT)
+#define T_COL_4 (T_FULL_WIDTH-RSC_SP_DLG_INNERBORDER_RIGHT-T_EDITBUTTON_WIDTH)
+
+#define T_ROW_1 (RSC_SP_DLG_INNERBORDER_TOP)
+#define T_ROW_2 (T_ROW_1+RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_CTRL_GROUP_Y)
+#define T_ROW_3 (T_ROW_2+RSC_CD_RADIOBUTTON_HEIGHT+RSC_SP_CTRL_GROUP_Y)
+#define T_ROW_4 (T_ROW_3+RSC_CD_RADIOBUTTON_HEIGHT+RSC_SP_CTRL_DESC_Y)
+#define T_ROW_5 (T_ROW_4+RSC_CD_CHECKBOX_HEIGHT+RSC_SP_CTRL_Y)
+#define T_ROW_6 (T_ROW_5+RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_CTRL_GROUP_Y)
+
+#define T_ROW_8 (T_FULL_HEIGHT-RSC_SP_DLG_INNERBORDER_BOTTOM-RSC_CD_PUSHBUTTON_HEIGHT)
+#define T_ROW_7 (T_ROW_8-RSC_CD_FIXEDLINE_HEIGHT-2)
+
+//-----------------------------------------------------------------------------
+
+ModalDialog DLG_CHINESETRANSLATION
+{
+    HelpID = "svx:ModalDialog:DLG_CHINESETRANSLATION";
+    //HelpId = ;
+    Size = MAP_APPFONT( T_FULL_WIDTH, T_FULL_HEIGHT );
+    OutputSize = TRUE;
+    Closeable = TRUE ;
+    Moveable = TRUE ;
+    SVLook = TRUE;
+
+    Text [ en-US ] = "Chinese Conversion";
+
+    FixedLine FL_DIRECTION
+    {
+        Pos = MAP_APPFONT ( T_COL_1 , T_ROW_1 ) ;
+        Size = MAP_APPFONT ( T_FULL_WIDTH - T_COL_1 - RSC_SP_DLG_INNERBORDER_RIGHT, RSC_CD_FIXEDLINE_HEIGHT ) ;
+        Text [ en-US ] = "Conversion direction";
+    };
+
+    DIRECTION_RADIOBUTTONS( T_COL_2, T_ROW_2, (T_FULL_WIDTH - T_COL_2 - RSC_SP_DLG_INNERBORDER_RIGHT) )
+
+    CheckBox CB_USE_VARIANTS
+    {
+        HelpID = "svx:CheckBox:DLG_CHINESETRANSLATION:CB_USE_VARIANTS";
+        Pos = MAP_APPFONT( T_COL_3, T_ROW_4 );
+        Size = MAP_APPFONT ( T_FULL_WIDTH - T_COL_3 - RSC_SP_DLG_INNERBORDER_RIGHT, RSC_CD_CHECKBOX_HEIGHT ) ;
+
+        Text [ en-US ] = "~Use Taiwan, Hong Kong SAR, and Macao SAR character variants";
+    };
+
+    FixedLine FL_COMMONTERMS
+    {
+        Pos = MAP_APPFONT ( T_COL_1 , T_ROW_5 ) ;
+        Size = MAP_APPFONT ( T_FULL_WIDTH - T_COL_1 - RSC_SP_DLG_INNERBORDER_RIGHT, RSC_CD_FIXEDLINE_HEIGHT ) ;
+        Text [ en-US ] = "Common terms";
+    };
+
+    CheckBox CB_TRANSLATE_COMMONTERMS
+    {
+        HelpID = "svx:CheckBox:DLG_CHINESETRANSLATION:CB_TRANSLATE_COMMONTERMS";
+        Pos = MAP_APPFONT( T_COL_2, T_ROW_6 );
+        Size = MAP_APPFONT ( T_COL_4 - T_COL_2, RSC_CD_CHECKBOX_HEIGHT ) ;
+
+        Text [ en-US ] = "Translate ~common terms";
+    };
+
+    PushButton PB_EDITTERMS
+    {
+        HelpID = "svx:PushButton:DLG_CHINESETRANSLATION:PB_EDITTERMS";
+        Pos = MAP_APPFONT( T_COL_4, T_ROW_6-(RSC_CD_PUSHBUTTON_HEIGHT-RSC_CD_CHECKBOX_HEIGHT)/2 );
+        Size = MAP_APPFONT( T_EDITBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+
+        Text [ en-US ] = "~Edit Terms...";
+    };
+
+    FixedLine T_FL_BOTTOMLINE
+    {
+        Pos = MAP_APPFONT ( 0 , T_ROW_7 ) ;
+        Size = MAP_APPFONT ( T_FULL_WIDTH, RSC_CD_FIXEDLINE_HEIGHT ) ;
+    };
+
+    BUTTONS_OK_CANCEL_HELP_ABREAST( T_FULL_WIDTH - RSC_SP_DLG_INNERBORDER_RIGHT, T_ROW_8 )
+};
+
