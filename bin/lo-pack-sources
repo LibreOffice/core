@@ -235,6 +235,18 @@ sub run_autoreconf($$)
             "cd - >/dev/null 2>&1") && die "Error: autoreconf failed: $!\n";
 }
 
+sub generate_version_file($$$)
+{
+    my ($dir, $piece, $release_version) = @_;
+
+    # FIXME: crazy hacks to copy libreoffice-build without too big and useless subdirectories and to show a progress
+    open (VERFILE, ">$dir/$piece.ver") || die "Can't open $dir/lo-$piece.ver: $!\n";
+
+    print VERFILE "lo_bootstrap_ver=$release_version\n";
+
+    close VERFILE;
+}
+
 sub release_lo_build($)
 {
     my ($lo_build_dir) = @_;
@@ -419,6 +431,7 @@ sub prepare_lo_piece_tarball($$$$$)
     my $temp_dir = copy_lo_piece_to_tempdir($piece_dir, $piece, $piece_tarball_name);
     generate_lo_piece_changelog($piece_dir, "$temp_dir/$piece_tarball_name", $piece);
     run_autoreconf("$temp_dir/$piece_tarball_name", $piece) if ($piece eq 'bootstrap');
+    generate_version_file("$temp_dir/$piece_tarball_name", $piece, $release_version) if ($piece eq 'bootstrap');
     release_lo_piece($temp_dir, $piece_tarball_name);
     generate_md5($temp_dir, $piece_tarball_name, ".tar.bz2") if (defined $md5);
 
