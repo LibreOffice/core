@@ -71,11 +71,11 @@ $(call gb_Jar_get_target,%) : $(call gb_JavaClassSet_get_target,$(call gb_Jar_ge
 # adds jar files to DeliverLogTarget
 # adds dependency for outdir target to workdir target (pattern rule for delivery is in Package.mk)
 define gb_Jar_Jar
-$(call gb_Jar_get_target,$(1)) : CLASSPATH := $(value XCLASSPATH)
 $(call gb_Jar_get_target,$(1)) : MANIFEST :=
 $(call gb_Jar_get_target,$(1)) : JARCLASSPATH :=
 $(call gb_Jar_get_target,$(1)) : PACKAGEROOTS :=
 $(call gb_JavaClassSet_JavaClassSet,$(call gb_Jar_get_classsetname,$(1)),$(2))
+$(call gb_JavaClassSet_set_classpath,$(call gb_Jar_get_classsetname,$(1)),$(value XCLASSPATH))
 $(eval $(call gb_Module_register_target,$(call gb_Jar_get_outdir_target,$(1)),$(call gb_Jar_get_clean_target,$(1))))
 $(call gb_Deliver_add_deliverable,$(call gb_Jar_get_outdir_target,$(1)),$(call gb_Jar_get_target,$(1)))
 $(call gb_Jar_get_outdir_target,$(1)) : $(call gb_Jar_get_target,$(1))
@@ -96,9 +96,8 @@ define gb_Jar_add_sourcefiles
 $(foreach sourcefile,$(2),$(call gb_Jar_add_sourcefile,$(1),$(sourcefile)))
 endef
 
-# don't forward it to ClassSet; the ClassSet "inherits" the classpath from the Jar
 define gb_JarTest_set_classpath
-$(call gb_Jar_get_target,$(1)) : CLASSPATH := $(2)
+$(call gb_JavaClassSet_set_classpath,$(call gb_Jar_get_classsetname,$(1)),$(2))
 endef
 
 # JARCLASSPATH is the class path that is written to the manifest of the jar
@@ -118,14 +117,28 @@ endef
 
 # remember: classpath is "inherited" to ClassSet
 define gb_Jar_add_jar
-$(call gb_Jar_get_target,$(1)) : CLASSPATH := $$(CLASSPATH)$(gb_CLASSPATHSEP)$(2)
 $(call gb_JavaClassSet_add_jar,$(call gb_Jar_get_classsetname,$(1)),$(2))
+endef
 
+define gb_Jar_add_system_jar
+$(call gb_JavaClassSet_add_system_jar,$(call gb_Jar_get_classsetname,$(1)),$(2))
 endef
 
 # specify jars with imported modules
 define gb_Jar_add_jars
-$(foreach jar,$(2),$(call gb_Jar_add_jar,$(1),$(jar)))
+$(call gb_JavaClassSet_add_jars,$(call gb_Jar_get_classsetname,$(1)),$(2))
+endef
+
+define gb_Jar_add_system_jars
+$(call gb_JavaClassSet_add_system_jars,$(call gb_Jar_get_classsetname,$(1)),$(2))
+endef
+
+define gb_Jar_use_external
+$(call gb_JavaClassSet_use_external,$(call gb_Jar_get_classsetname,$(1)),$(2))
+endef
+
+define gb_Jar_use_externals
+$(call gb_JavaClassSet_use_externals,$(call gb_Jar_get_classsetname,$(1)),$(2))
 endef
 
 # possible directories for jar files containing UNO services 
