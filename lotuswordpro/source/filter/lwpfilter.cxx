@@ -82,6 +82,8 @@
 #include <tools/stream.hxx>
 #include <sfx2/docfile.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 using namespace ::cppu;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
@@ -109,31 +111,19 @@ LWPFilterReader::~LWPFilterReader()
 sal_Bool LWPFilterReader::filter( const Sequence< PropertyValue >& aDescriptor )
     throw( RuntimeException )
 {
-    uno::Reference< XInputStream> xInputStream;
     ::rtl::OUString sURL;
     for( sal_Int32 i = 0; i < aDescriptor.getLength(); i++ )
     {
-        if( aDescriptor[i].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream")) )
-            aDescriptor[i].Value >>= xInputStream;
+        //Note we should attempt to use "InputStream" if it exists first!
         if( aDescriptor[i].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("URL")) )
             aDescriptor[i].Value >>= sURL;
     }
-
-    if ( !xInputStream.is() )
-    {
-        OSL_ASSERT( 0 );
-        return sal_False;
-    }
-
-    OString sFileName;
-    sFileName = ::rtl::OUStringToOString(sURL, RTL_TEXTENCODING_INFO_ASCII);
 
     SvFileStream inputStream( sURL, STREAM_READ );
     if ( inputStream.IsEof() || ( inputStream.GetError() != SVSTREAM_OK ) )
         return sal_False;
 
-
-    return (ReadWordproFile( &inputStream ,m_DocumentHandler) == 0);
+    return (ReadWordproFile(inputStream, m_DocumentHandler) == 0);
 }
 
 void LWPFilterReader::cancel() throw (com::sun::star::uno::RuntimeException)
@@ -332,41 +322,39 @@ Sequence< OUString> LWPFilterImportFilter::getSupportedServiceNames( void ) thro
 #include "bento.hxx"
 using namespace OpenStormBento;
 #include "explode.hxx"
- sal_Bool Decompress(SvStream *pCompressed, SvStream * & pDecompressed)
+ sal_Bool Decompress(SvStream *pCompressed, SvStream * & pOutDecompressed)
 {
     pCompressed->Seek(0);
-    pDecompressed = new SvMemoryStream(4096, 4096);
+    std::auto_ptr<SvStream> aDecompressed(new SvMemoryStream(4096, 4096));
     unsigned char buffer[512];
     pCompressed->Read(buffer, 16);
-    pDecompressed->Write(buffer, 16);
+    aDecompressed->Write(buffer, 16);
 
-    LwpSvStream * pLwpStream = new LwpSvStream(pCompressed);
+    boost::scoped_ptr<LwpSvStream> aLwpStream(new LwpSvStream(pCompressed));
     LtcBenContainer* pBentoContainer;
-    /*ULONG ulRet = */ BenOpenContainer(pLwpStream, &pBentoContainer);
-    LtcUtBenValueStream * pWordProData = (LtcUtBenValueStream *)pBentoContainer->FindValueStreamWithPropertyName("WordProData");
+    sal_uLong ulRet = BenOpenContainer(aLwpStream.get(), &pBentoContainer);
+    if (ulRet != BenErr_OK)
+        return sal_False;
+
+    boost::scoped_ptr<LtcUtBenValueStream> aWordProData((LtcUtBenValueStream *)pBentoContainer->FindValueStreamWithPropertyName("WordProData"));
+
+    if (!aWordProData.get())
+        return sal_False;
 
     // decompressing
-    Decompression decompress(pWordProData, pDecompressed);
+    Decompression decompress(aWordProData.get(), aDecompressed.get());
     if (0!= decompress.explode())
-    {
-        delete pDecompressed;
-        pDecompressed = NULL;
-        delete pWordProData;
-        delete pLwpStream;
         return sal_False;
-    }
 
-    sal_uInt32 nPos = pWordProData->GetSize();
+    sal_uInt32 nPos = aWordProData->GetSize();
     nPos += 0x10;
 
     pCompressed->Seek(nPos);
     while (sal_uInt32 iRead = pCompressed->Read(buffer, 512))
-    {
-        pDecompressed->Write(buffer, iRead);
-    }
+        aDecompressed->Write(buffer, iRead);
 
-    delete pWordProData;
-    delete pLwpStream;
+    //transfer ownership of aDecompressed's ptr
+    pOutDecompressed = aDecompressed.release();
     return sal_True;
 }
 
@@ -410,40 +398,38 @@ using namespace OpenStormBento;
     }
     return bCompressed;
 }
-int ReadWordproFile(SvStream* pStream, uno::Reference<XDocumentHandler>& xHandler)
+int ReadWordproFile(SvStream &rStream, uno::Reference<XDocumentHandler>& xHandler)
 {
     try
     {
-        LwpSvStream *pLwpSvStream = NULL;
-        SvStream * pDecompressed = NULL;
-        if ( GetLwpSvStream(pStream, pLwpSvStream) && pLwpSvStream)
+        LwpSvStream *pRawLwpSvStream = NULL;
+        boost::scoped_ptr<LwpSvStream> aLwpSvStream;
+        boost::scoped_ptr<LwpSvStream> aCompressedLwpSvStream;
+        boost::scoped_ptr<SvStream> aDecompressed;
+        if (GetLwpSvStream(&rStream, pRawLwpSvStream) && pRawLwpSvStream)
         {
-            pDecompressed = pLwpSvStream->GetStream();
+            SvStream *pDecompressed = pRawLwpSvStream->GetStream();
+            if (pDecompressed)
+            {
+                aDecompressed.reset(pDecompressed);
+                aCompressedLwpSvStream.reset(pRawLwpSvStream->GetCompressedStream());
+            }
         }
-        if (!pLwpSvStream)
+
+        if (!pRawLwpSvStream)
         {
             // nothing returned, fail when uncompressing
             return 1;
         }
 
-        IXFStream *pStrm = new XFSaxStream(xHandler);
-        Lwp9Reader reader(pLwpSvStream, pStrm);
+        aLwpSvStream.reset(pRawLwpSvStream);
+
+        boost::scoped_ptr<IXFStream> pStrm(new XFSaxStream(xHandler));
+        Lwp9Reader reader(aLwpSvStream.get(), pStrm.get());
         //Reset all static objects,because this function may be called many times.
         XFGlobalReset();
         reader.Read();
 
-        // added by
-
-        if (pDecompressed)
-        {
-            delete pDecompressed;
-            LwpSvStream * pTemp = pLwpSvStream->GetCompressedStream();
-            delete pTemp;
-        }
-        delete pLwpSvStream;
-        // end added by
-
-        delete pStrm;
         return 0;
     }
     catch (...)

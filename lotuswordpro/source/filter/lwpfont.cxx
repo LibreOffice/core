@@ -247,7 +247,8 @@ void LwpFontTableEntry::RegisterFontDecl()
 }
 
 LwpFontTable::LwpFontTable()
-    : m_pFontEntries(NULL)
+    : m_nCount(0)
+    , m_pFontEntries(NULL)
 {}
 
 void LwpFontTable::Read(LwpObjectStream *pStrm)
@@ -267,10 +268,8 @@ void LwpFontTable::Read(LwpObjectStream *pStrm)
 
 OUString LwpFontTable::GetFaceName(sal_uInt16 index) //index: start from 1
 {
-    assert(index>0);
-    if (index < 1)//add for fix crash
-        return OUString();
-    return m_pFontEntries[index-1].GetFaceName();
+    assert(index <= m_nCount && index > 0);
+    return (index <= m_nCount && index > 0) ? m_pFontEntries[index-1].GetFaceName() : OUString();
 }
 
 LwpFontTable::~LwpFontTable()
@@ -398,7 +397,9 @@ void LwpFontNameManager::Read(LwpObjectStream *pStrm)
 void    LwpFontNameManager::Override(sal_uInt16 index, XFFont* pFont)
     //index: start from 1
 {
-    if(index<1) return;
+    if (index > m_nCount || index < 1)
+        return ;
+
     m_pFontNames[index-1].Override(pFont);
     if(m_pFontNames[index-1].IsFaceNameOverridden())
         pFont->SetFontName(m_FontTbl.GetFaceName(m_pFontNames[index-1].GetFaceID()));
@@ -436,7 +437,9 @@ void LwpFontAttrManager::Read(LwpObjectStream *pStrm) {
 void    LwpFontAttrManager::Override(sal_uInt16 index, XFFont* pFont)
     //index: start from 1
 {
-    if(index<1) return;
+    if (index > m_nCount || index < 1)
+        return ;
+
     m_pFontAttrs[index-1].Override(pFont);
 }
 

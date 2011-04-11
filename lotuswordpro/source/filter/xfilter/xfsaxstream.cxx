@@ -94,23 +94,27 @@ XFSaxStream::~XFSaxStream()
 
 void        XFSaxStream::StartDocument()
 {
-    m_aHandler->startDocument();
+    if (m_aHandler.is())
+        m_aHandler->startDocument();
 }
 
 void        XFSaxStream::EndDocument()
 {
-    m_aHandler->endDocument();
+    if (m_aHandler.is())
+        m_aHandler->endDocument();
 }
 
 void        XFSaxStream::StartElement(const rtl::OUString& oustr)
 {
-    m_aHandler->startElement( oustr, m_pAttrList->GetAttributeList() );
+    if (m_aHandler.is())
+        m_aHandler->startElement( oustr, m_pAttrList->GetAttributeList() );
     m_pAttrList->Clear();
 }
 
 void        XFSaxStream::EndElement(const rtl::OUString& oustr)
 {
-    m_aHandler->endElement(oustr);
+    if (m_aHandler.is())
+        m_aHandler->endElement(oustr);
 
     if( m_pAttrList )
         m_pAttrList->Clear();
@@ -118,7 +122,8 @@ void        XFSaxStream::EndElement(const rtl::OUString& oustr)
 
 void        XFSaxStream::Characters(const rtl::OUString& oustr)
 {
-    m_aHandler->characters(oustr);
+    if (m_aHandler.is())
+        m_aHandler->characters(oustr);
 }
 
 IXFAttrList*    XFSaxStream::GetAttrList()

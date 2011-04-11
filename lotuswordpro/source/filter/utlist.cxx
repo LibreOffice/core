@@ -59,10 +59,11 @@ namespace OpenStormBento
 {
 
 CUtListElmt::CUtListElmt(pCUtList pList)
+    : cpNext(NULL)
+    , cpPrev(NULL)
 {
-    if (pList == NULL)
-        cpNext = NULL;
-    else InsertAfter(pList->GetLast());
+    if (pList != NULL)
+        InsertAfter(pList->GetLast());
 }
 
 CUtListElmt::~CUtListElmt()

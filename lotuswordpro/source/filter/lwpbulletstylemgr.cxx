@@ -547,7 +547,9 @@ rtl::OUString LwpBulletStyleMgr::GetDivisionName()
         LwpObjectID* pID = pDoc->GetDivInfoID();
         if (!pID->IsNull())
         {
-            aRet = static_cast<LwpDivInfo*>(pID->obj(VO_DIVISIONINFO))->GetDivName();
+            LwpDivInfo *pInfo = dynamic_cast<LwpDivInfo*>(pID->obj(VO_DIVISIONINFO));
+            if (pInfo)
+                aRet = pInfo->GetDivName();
         }
     }
 
@@ -562,7 +564,7 @@ rtl::OUString LwpBulletStyleMgr::GetSectionName(LwpPara* pPara)
         return rtl::OUString();
     }
 
-    LwpStory* pStory = static_cast<LwpStory*>(pStoryID->obj(VO_STORY));
+    LwpStory* pStory = dynamic_cast<LwpStory*>(pStoryID->obj(VO_STORY));
     if (!pStory)
     {
         return rtl::OUString();

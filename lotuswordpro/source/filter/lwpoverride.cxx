@@ -612,8 +612,6 @@ void LwpIndentOverride::OverrideRelative(sal_uInt16 relative)
 
 void LwpSpacingOverride::Override(LwpSpacingOverride* other)
 {
-//    if (IsAlwaysOverridden())
-//      other->SetAlways(IsAlways());//To be done
     if (other)
     {
         m_pSpacing->Override(other->GetSpacing());

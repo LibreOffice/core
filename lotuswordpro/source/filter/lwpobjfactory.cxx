@@ -110,44 +110,28 @@
 LwpObjectFactory::LwpObjectFactory(LwpSvStream* pSvStream)
     : m_nNumObjs(0), m_pSvStream(pSvStream)
 {
-    m_ObjList.clear();
+    m_IdToObjList.clear();
 }
 
 LwpObjectFactory::~LwpObjectFactory()
 {
-//  m_pMgr = NULL;
-    if(!m_ObjList.empty())
+    if(!m_IdToObjList.empty())
         ClearObjectMap();
 }
 
-/**
- * @descr       create the single object factory
-*/
-/*
-LwpObjectFactory* LwpObjectFactory::Instance(LwpSvStream* pStream)
-{
-    if(m_pMgr == NULL)
-    {
-        if(pStream)
-        {
-            m_pMgr = new LwpObjectFactory(pStream);
-        }
-    }
-    return(m_pMgr);
-}*/
 /**
  * @descr       clear object map and delete all objects
 */
 void LwpObjectFactory::ClearObjectMap()
 {
-    LwpObjMap::iterator it = m_ObjList.begin();
-    while( it!=m_ObjList.end() )
+    LwpIdToObjMap::iterator it = m_IdToObjList.begin();
+    while( it!=m_IdToObjList.end() )
     {
-        delete (*it).second;
-        (*it).second = NULL;
+        delete it->second;
+        it->second = NULL;
         ++it;
     }
-    m_ObjList.clear();
+    m_IdToObjList.clear();
 }
 /**
  * @descr       read the index manager
@@ -713,7 +697,7 @@ LwpObject* LwpObjectFactory::CreateObject(sal_uInt32 type, LwpObjectHeader &objH
     if(newObj)
     {
         newObj->QuickRead();
-        m_ObjList.insert(LwpObjMap::value_type(*objHdr.GetID(), newObj));
+        m_IdToObjList.insert(LwpIdToObjMap::value_type(*objHdr.GetID(), newObj));
     }
 
     return(newObj);
@@ -730,12 +714,22 @@ LwpObject* LwpObjectFactory::QueryObject(const LwpObjectID &objID)
         //Read the object from file
         sal_uInt32 nStreamOffset = m_IndexMgr.GetObjOffset(objID);
         if(nStreamOffset == BAD_OFFSET) //does not find the offset in index manager
+            return NULL;
+
+        sal_Int64 nDesiredPos = nStreamOffset + LwpSvStream::LWP_STREAM_BASE;
+        if (nDesiredPos != m_pSvStream->Seek(nDesiredPos))
+            return NULL;
+        LwpObjectHeader objHdr;
+        if (!objHdr.Read(*m_pSvStream))
+            return NULL;
+
+        LwpObjectID* pId = objHdr.GetID();
+        if (pId && (*pId != objID))
         {
+            OSL_FAIL("apparently incorrect objid, invalidating");
             return NULL;
         }
-        m_pSvStream->Seek( nStreamOffset + LwpSvStream::LWP_STREAM_BASE );
-        LwpObjectHeader objHdr;
-        objHdr.Read(*m_pSvStream);
+
         obj = CreateObject(objHdr.GetTag(), objHdr);
     }
     return obj;
@@ -746,8 +740,8 @@ LwpObject* LwpObjectFactory::QueryObject(const LwpObjectID &objID)
 */
 LwpObject* LwpObjectFactory::FindObject(const LwpObjectID &objID)
 {
-    LwpObjMap::const_iterator it =  m_ObjList.find(objID);
-    if (it != m_ObjList.end()) {
+    LwpIdToObjMap::const_iterator it =  m_IdToObjList.find(objID);
+    if (it != m_IdToObjList.end()) {
         return((*it).second);
     }
     else
@@ -761,7 +755,7 @@ LwpObject* LwpObjectFactory::FindObject(const LwpObjectID &objID)
 void LwpObjectFactory::ReleaseObject(const LwpObjectID &objID)
 {
     LwpObject* obj = FindObject( objID );
-    m_ObjList.erase(objID);
+    m_IdToObjList.erase(objID);
     if( obj )
         delete obj;
 }

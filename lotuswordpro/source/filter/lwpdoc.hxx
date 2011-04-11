@@ -89,6 +89,8 @@ public:
     ~LwpDocument();
 
 private:
+    LwpFoundry* m_pOwnedFoundry;
+
     //Data members in file format
     LwpObjectID m_DocSockID;
     sal_uInt16 m_nFlags;
@@ -185,7 +187,7 @@ private:
     void MaxNumberOfPages(sal_uInt16& nNumPages);
     void XFConvertFrameInPage(XFContentContainer* pCont);
     void ChangeStyleName();
-    sal_Bool IsSkippedDivision();//add by
+    sal_Bool IsSkippedDivision();
 };
 
 inline sal_Bool LwpDocument::IsChildDoc()
