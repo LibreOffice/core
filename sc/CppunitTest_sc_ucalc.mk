@@ -29,8 +29,21 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sc_ucalc))
 
+$(eval $(call gb_CppunitTest_add_package_headers,sc_ucalc,sc_qa_unit))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_ucalc, \
     sc/qa/unit/ucalc \
+))
+
+$(eval $(call gb_CppunitTest_set_args,sc_ucalc,\
+	--headless \
+	--invisible \
+	"-env:UNO_TYPES=$(foreach binrdb,udkapi.rdb types.rdb,\
+		file://$(if $(filter WNT,$(OS)),/)$(OUTDIR)/bin/$(binrdb))" \
+    "-env:UNO_SERVICES=$(foreach rdb,$(OUTDIR)/xml/ure/services.rdb $(WORKDIR)/CustomTarget/sc/qa/unit/services.rdb,\
+		file://$(if $(filter WNT,$(OS)),/)$(rdb))" \
+	$(foreach dir,URE_INTERNAL_LIB_DIR OOO_BASE_DIR BRAND_BASE_DIR, \
+		-env:$(dir)=file://$(if $(filter WNT,$(OS)),/$(OUTDIR)/bin,$(OUTDIR)/lib)) \
 ))
 
 $(eval $(call gb_CppunitTest_add_library_objects,sc_ucalc,sc))
