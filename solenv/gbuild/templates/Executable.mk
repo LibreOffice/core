@@ -31,9 +31,9 @@ $(eval $(call gb_Executable_set_include,EXEC,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Executable_set_cxxflags,EXEC,\
-    $$(CXXFLAGS) \
-))
+#$(eval $(call gb_Executable_add_defs,EXEC,\
+#	-Dfoo \
+#))
 
 $(eval $(call gb_Executable_add_linked_libs,EXEC,\
     $(gb_STDLIBS) \

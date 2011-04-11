@@ -98,8 +98,8 @@ gb_CxxObject__command_dep =
 endif
 
 # Only enable PCH if the PCH_CXXFLAGS and the PCH_DEFS (from the linktarget)
-# are the same as the CXXFLAGS and DEFS we want to use for this object. This
-# should usually be the case.  The DEFS/CXXFLAGS would have too be manually
+# are the same as the T_CXXFLAGS and DEFS we want to use for this object. This
+# should usually be the case.  The DEFS/T_CXXFLAGS would have too be manually
 # overridden for one object file for them to differ.  PCH_CXXFLAGS/PCH_DEFS
 # should never be overridden on an object -- they should be the same as for the
 # whole linktarget. In general it should be cleaner to use a static library
@@ -108,16 +108,16 @@ endif
 define gb_CxxObject__set_pchflags
 ifeq ($(gb_ENABLE_PCH),$(true))
 ifneq ($(strip $$(PCH_NAME)),)
-ifeq ($$(sort $$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_EXCEPTIONFLAGS)),$$(sort $$(CXXFLAGS) $$(DEFS)))
+ifeq ($$(sort $$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_EXCEPTIONFLAGS)),$$(sort $$(T_CXXFLAGS) $$(DEFS)))
 $$@ : PCHFLAGS := $$(call gb_PrecompiledHeader_get_enableflags,$$(PCH_NAME))
 else
-ifeq ($$(sort $$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_NOEXCEPTIONFLAGS)),$$(sort $$(CXXFLAGS) $$(DEFS)))
+ifeq ($$(sort $$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_NOEXCEPTIONFLAGS)),$$(sort $$(T_CXXFLAGS) $$(DEFS)))
 $$@ : PCHFLAGS := $$(call gb_NoexPrecompiledHeader_get_enableflags,$$(PCH_NAME))
 else
 $$(info No precompiled header available for $$*.)
 $$(info precompiled header flags (  ex) : $$(sort $$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_EXCEPTIONFLAGS)))
 $$(info precompiled header flags (noex) : $$(sort $$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_NOEXCEPTIONFLAGS)))
-$$(info .           object flags        : $$(sort $$(CXXFLAGS) $$(DEFS)))
+$$(info .           object flags        : $$(sort $$(T_CXXFLAGS) $$(DEFS)))
 $$@ : PCHFLAGS := 
 endif
 endif
@@ -224,9 +224,6 @@ gb_ObjCxxObject_ObjCxxObject =
 
 
 # LinkTarget class
-
-# need an alias for global CXXFLAGS in gb_LinkTarget_add_exception_object etc.
-gb_CXXFLAGS_TOO := $(CXXFLAGS)
 
 gb_LinkTarget_DEFAULTDEFS := $(gb_GLOBALDEFS)
 # defined by platform
@@ -341,12 +338,9 @@ $(call gb_LinkTarget_get_headers_target,%) : $(call gb_LinkTarget_get_external_h
 # linktarget. This for example means that you cannot build a single object
 # alone, because then you would directly depend on the object.
 #
-# A note about flags: here the global variable CFLAGS is overridden by a target
-# local variable of the same name.  The $(CFLAGS) on the rhs refers to the
-# global variable.  (same thing for OBJCXXFLAGS)
-# CXXFLAGS is slightly different, because it is not set at the link target,
-# but only when using gb_LinkTarget_add_{no,}exception_object etc., to
-# provide a mechanism that disables optimization for a specific file.
+# A note about flags: because the overriding the global variables with a target
+# local variable of the same name is considered obscure, the target local
+# variables have a T_ prefix.
 define gb_LinkTarget_LinkTarget
 $(call gb_LinkTarget_get_clean_target,$(1)) : AUXTARGETS :=
 $(call gb_LinkTarget_get_external_headers_target,$(1)) : SELF := $(1)
@@ -360,12 +354,12 @@ $(call gb_LinkTarget_get_target,$(1)) : OBJCXXOBJECTS :=
 $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : GENCXXOBJECTS :=
 $(call gb_LinkTarget_get_headers_target,$(1)) \
-$(call gb_LinkTarget_get_target,$(1)) : override CFLAGS := $$(gb_LinkTarget_CFLAGS) $(CFLAGS)
+$(call gb_LinkTarget_get_target,$(1)) : T_CFLAGS := $$(gb_LinkTarget_CFLAGS) $(CFLAGS)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
-$(call gb_LinkTarget_get_target,$(1)) : override CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
+$(call gb_LinkTarget_get_target,$(1)) : T_CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PCH_CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS) $(CXXFLAGS)
-$(call gb_LinkTarget_get_target,$(1)) : override OBJCXXFLAGS := $$(gb_LinkTarget_OBJCXXFLAGS) $(OBJCXXFLAGS)
+$(call gb_LinkTarget_get_target,$(1)) : T_OBJCXXFLAGS := $$(gb_LinkTarget_OBJCXXFLAGS) $(OBJCXXFLAGS)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : DEFS := $$(gb_LinkTarget_DEFAULTDEFS)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
@@ -396,10 +390,10 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : COBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : CXXOBJECTS := 
 $(call gb_LinkTarget_get_dep_target,$(1)) : OBJCXXOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXOBJECTS :=
-$(call gb_LinkTarget_get_dep_target,$(1)) : override CFLAGS := $$(gb_LinkTarget_CFLAGS) $(CFLAGS)
-$(call gb_LinkTarget_get_dep_target,$(1)) : override CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
+$(call gb_LinkTarget_get_dep_target,$(1)) : T_CFLAGS := $$(gb_LinkTarget_CFLAGS) $(CFLAGS)
+$(call gb_LinkTarget_get_dep_target,$(1)) : T_CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS) $(CXXFLAGS)
-$(call gb_LinkTarget_get_dep_target,$(1)) : override OBJCXXFLAGS := $$(gb_LinkTarget_OBJCXXFLAGS) $(OBJCXXFLAGS)
+$(call gb_LinkTarget_get_dep_target,$(1)) : T_OBJCXXFLAGS := $$(gb_LinkTarget_OBJCXXFLAGS) $(OBJCXXFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : DEFS := $$(gb_LinkTarget_DEFAULTDEFS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_DEFS := $$(gb_LinkTarget_DEFAULTDEFS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE := $$(gb_LinkTarget_INCLUDE)
@@ -408,6 +402,17 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : TARGETTYPE :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_NAME :=
 endif
 
+endef
+
+define gb_LinkTarget_add_defs
+$(call gb_LinkTarget_get_headers_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : DEFS += $(2)
+$(call gb_LinkTarget_get_headers_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : PCH_DEFS += $(2)
+ifeq ($(gb_FULLDEPS),$(true))
+$(call gb_LinkTarget_get_dep_target,$(1)) : DEFS += $(2)
+$(call gb_LinkTarget_get_dep_target,$(1)) : PCH_DEFS += $(2)
+endif
 endef
 
 define gb_LinkTarget_set_defs
@@ -423,30 +428,57 @@ endif
 
 endef
 
-define gb_LinkTarget_set_cflags
-$(call gb_LinkTarget_get_target,$(1)) : override CFLAGS := $(2)
+define gb_LinkTarget_add_cflags
+$(call gb_LinkTarget_get_target,$(1)) : T_CFLAGS += $(2)
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_LinkTarget_get_dep_target,$(1)) : override CFLAGS := $(2)
+$(call gb_LinkTarget_get_dep_target,$(1)) : T_CFLAGS += $(2)
 endif
 
 endef
 
+define gb_LinkTarget_set_cflags
+$(call gb_LinkTarget_get_target,$(1)) : T_CFLAGS := $(2)
+ifeq ($(gb_FULLDEPS),$(true))
+$(call gb_LinkTarget_get_dep_target,$(1)) : T_CFLAGS := $(2)
+endif
+
+endef
+
+define gb_LinkTarget_add_cxxflags
+$(call gb_LinkTarget_get_headers_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : T_CXXFLAGS += $(2)
+$(call gb_LinkTarget_get_headers_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : PCH_CXXFLAGS += $(2)
+ifeq ($(gb_FULLDEPS),$(true))
+$(call gb_LinkTarget_get_dep_target,$(1)) : T_CXXFLAGS += $(2)
+$(call gb_LinkTarget_get_dep_target,$(1)) : PCH_CXXFLAGS += $(2)
+endif
+endef
+
+# maybe should deprecate this...
 define gb_LinkTarget_set_cxxflags
 $(call gb_LinkTarget_get_headers_target,$(1)) \
-$(call gb_LinkTarget_get_target,$(1)) : override CXXFLAGS := $(2)
+$(call gb_LinkTarget_get_target,$(1)) : T_CXXFLAGS := $(2)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PCH_CXXFLAGS := $(2)
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_LinkTarget_get_dep_target,$(1)) : override CXXFLAGS := $(2)
+$(call gb_LinkTarget_get_dep_target,$(1)) : T_CXXFLAGS := $(2)
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_CXXFLAGS := $(2)
 endif
 
 endef
 
-define gb_LinkTarget_set_objcxxflags
-$(call gb_LinkTarget_get_target,$(1)) : override OBJCXXFLAGS := $(2)
+define gb_LinkTarget_add_objcxxflags
+$(call gb_LinkTarget_get_target,$(1)) : T_OBJCXXFLAGS += $(2)
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_LinkTarget_get_dep_target,$(1)) : override OBJCXXFLAGS := $(2)
+$(call gb_LinkTarget_get_dep_target,$(1)) : T_OBJCXXFLAGS += $(2)
+endif
+endef
+
+define gb_LinkTarget_set_objcxxflags
+$(call gb_LinkTarget_get_target,$(1)) : T_OBJCXXFLAGS := $(2)
+ifeq ($(gb_FULLDEPS),$(true))
+$(call gb_LinkTarget_get_dep_target,$(1)) : T_OBJCXXFLAGS := $(2)
 endif
 
 endef
@@ -511,7 +543,7 @@ $(call gb_LinkTarget_get_clean_target,$(1)) : COBJECTS += $(2)
 
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_CObject_get_target,$(2))
 $(call gb_CObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
-$(call gb_CObject_get_target,$(2)) : override CFLAGS += $(3)
+$(call gb_CObject_get_target,$(2)) : T_CFLAGS += $(3)
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : COBJECTS += $(2)
@@ -526,7 +558,7 @@ $(call gb_LinkTarget_get_clean_target,$(1)) : CXXOBJECTS += $(2)
 
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_CxxObject_get_target,$(2))
 $(call gb_CxxObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
-$(call gb_CxxObject_get_target,$(2)) : override CXXFLAGS += $(3)
+$(call gb_CxxObject_get_target,$(2)) : T_CXXFLAGS += $(3)
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : CXXOBJECTS += $(2)
@@ -541,7 +573,7 @@ $(call gb_LinkTarget_get_clean_target,$(1)) : OBJCXXOBJECTS += $(2)
 
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_ObjCxxObject_get_target,$(2))
 $(call gb_ObjCxxObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
-$(call gb_ObjCxxObject_get_target,$(2)) : override OBJCXXFLAGS += $(3)
+$(call gb_ObjCxxObject_get_target,$(2)) : T_OBJCXXFLAGS += $(3)
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : OBJCXXOBJECTS += $(2)
@@ -556,7 +588,7 @@ $(call gb_LinkTarget_get_clean_target,$(1)) : GENCXXOBJECTS += $(2)
 
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_GenCxxObject_get_target,$(2))
 $(call gb_GenCxxObject_get_source,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
-$(call gb_GenCxxObject_get_target,$(2)) : override CXXFLAGS += $(3) $(gb_CXXFLAGS_TOO)
+$(call gb_GenCxxObject_get_target,$(2)) : T_CXXFLAGS += $(3) $(CXXFLAGS)
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXOBJECTS += $(2)
@@ -566,11 +598,11 @@ endif
 endef
 
 define gb_LinkTarget_add_noexception_object
-$(call gb_LinkTarget_add_cxxobject,$(1),$(2),$(gb_LinkTarget_NOEXCEPTIONFLAGS) $(gb_CXXFLAGS_TOO))
+$(call gb_LinkTarget_add_cxxobject,$(1),$(2),$(gb_LinkTarget_NOEXCEPTIONFLAGS) $(CXXFLAGS))
 endef
 
 define gb_LinkTarget_add_exception_object
-$(call gb_LinkTarget_add_cxxobject,$(1),$(2),$(gb_LinkTarget_EXCEPTIONFLAGS) $(gb_CXXFLAGS_TOO))
+$(call gb_LinkTarget_add_cxxobject,$(1),$(2),$(gb_LinkTarget_EXCEPTIONFLAGS) $(CXXFLAGS))
 endef
 
 define gb_LinkTarget_add_cobjects

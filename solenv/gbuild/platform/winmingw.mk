@@ -239,12 +239,13 @@ $(call gb_Output_announce,$(2),$(true),C  ,3)
 $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
     $(gb_CC) \
-        $(DEFS) $(CFLAGS) \
+		$(DEFS) \
+		$(T_CFLAGS) \
         -c $(3) \
         -o $(1) \
         -I$(dir $(3)) \
         $(INCLUDE))
-$(call gb_CObject__command_deponcompile,$(1),$(2),$(3),$(DEFS),$(CFLAGS),$(INCLUDE))
+$(call gb_CObject__command_deponcompile,$(1),$(2),$(3),$(DEFS),$(T_CFLAGS),$(INCLUDE))
 endef
 
 
@@ -277,12 +278,13 @@ $(call gb_Output_announce,$(2),$(true),CXX,3)
 $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
     $(gb_CXX) \
-        $(DEFS) $(CXXFLAGS) \
+		$(DEFS) \
+		$(T_CXXFLAGS) \
         -c $(3) \
         -o $(1) \
         -I$(dir $(3)) \
         $(INCLUDE_STL) $(INCLUDE))
-$(call gb_CxxObject__command_deponcompile,$(1),$(2),$(3),$(DEFS),$(CXXFLAGS),$(INCLUDE_STL) $(INCLUDE))
+$(call gb_CxxObject__command_deponcompile,$(1),$(2),$(3),$(DEFS),$(T_CXXFLAGS),$(INCLUDE_STL) $(INCLUDE))
 endef
 
 
