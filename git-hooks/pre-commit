@@ -151,6 +151,16 @@ while (my $file = <FILES>) {
     }
 }
 
+# run 'msgcat --nowrap' when committing *.po files
+open(FILES, "git diff-index --cached --name-only $against |") || die "Cannot run git diff-index.";
+while (my $file = <FILES>) {
+    chomp($file);
+    if ($file =~ /\.po$/) {
+        system("msgcat --no-wrap $file > $file.KQnBbK6wQE;mv $file.KQnBbK6wQE $file;");
+        system("git add $file");
+    }
+}
+
 # be strict about tabs - we don't want them at all, setup your editor
 # correctly ;-)
 my $err_ext = "";
