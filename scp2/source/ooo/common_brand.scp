@@ -793,23 +793,6 @@ File gid_Brand_File_Lib_Mingwm10
 End
 #endif
 
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_Brand_File_Lib_Msvcr80
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Brand_Dir_Program;
-#ifndef _DEBUG_RUNTIME
-    Name = "msvcr80.dll";
-#else
-    Name = "msvcr80d.dll";
-#endif
-End
-#endif
-#endif
-#endif
-
 #if defined(WNT) && defined( _gcc3 )
 
 #if defined(MINGW_GCCDLL)
@@ -834,57 +817,6 @@ End
 
 #endif
 
-#endif
-
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_Brand_File_Lib_Msvcp80
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Brand_Dir_Program;
-#ifndef _DEBUG_RUNTIME
-    Name = "msvcp80.dll";
-#else
-    Name = "msvcp80d.dll";
-#endif
-End
-#endif
-#endif
-#endif
-
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_Brand_File_Lib_Msvcm80
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Brand_Dir_Program;
-#ifndef _DEBUG_RUNTIME
-    Name = "msvcm80.dll";
-#else
-    Name = "msvcm80d.dll";
-#endif
-End
-#endif
-#endif
-#endif
-
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_Brand_File_Msvcm80crt_Manifest
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Brand_Dir_Program;
-#ifndef _DEBUG_RUNTIME
-    Name = "Microsoft.VC80.CRT.manifest";
-#else
-    Name = "Microsoft.VC80.DebugCRT.manifest";
-#endif
-End
-#endif
-#endif
 #endif
 
 // Profiles
