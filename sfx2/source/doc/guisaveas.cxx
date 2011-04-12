@@ -303,7 +303,7 @@ public:
                                 sal_Bool bSetStandardName,
                                 ::rtl::OUString& aSuggestedName,
                                 sal_Bool bPreselectPassword,
-                                const ::rtl::OUString& aSuggestedDir,
+                                ::rtl::OUString& aSuggestedDir,
                                 sal_Int16 nDialog,
                                 const ::rtl::OUString& rStandardDir,
                                 const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList
@@ -809,7 +809,7 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
                                             sal_Bool bSetStandardName,
                                             ::rtl::OUString& aSuggestedName,
                                             sal_Bool bPreselectPassword,
-                                            const ::rtl::OUString& aSuggestedDir,
+                                            ::rtl::OUString& aSuggestedDir,
                                             sal_Int16 nDialog,
                                             const ::rtl::OUString& rStandardDir,
                                             const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList)
@@ -1017,6 +1017,7 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     INetURLObject aURL( pFileDlg->GetPath() );
     // the path should be provided outside since it might be used for further calls to the dialog
     aSuggestedName = aURL.GetName( INetURLObject::DECODE_WITH_CHARSET );
+       aSuggestedDir = pFileDlg->GetDisplayDirectory();
 
     // old filter options should be cleared in case different filter is used
 
@@ -1504,10 +1505,8 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
         sal_Bool bExit = sal_False;
         while ( !bExit )
         {
+            // in case the dialog is opened a second time the folder should be the same as previously navigated to by the user, not what was handed over by initial parameters
             bUseFilterOptions = aModelData.OutputFileDialog( nStoreMode, aFilterProps, bSetStandardName, aSuggestedName, bPreselectPassword, aSuggestedDir, nDialog, sStandardDir, aBlackList );
-
-            // in case the dialog is opend a second time the folder should be the same as before, not what was handed over by parameters
-            aSuggestedDir = ::rtl::OUString();
             if ( nStoreMode == SAVEAS_REQUESTED )
             {
                 // in case of saving check filter for possible alien warning
