@@ -40,10 +40,6 @@ INCPRE+=-I$(SOLARINCDIR)$/mozilla$/nspr
 CDEFS+=-DOJI
 .ENDIF
 
-.IF "$(DISABLE_XAW)" != ""
-CDEFS+=-DDISABLE_XAW
-.ENDIF
-
 .IF "$(WITH_MOZILLA)" != "NO"
 
 .IF "$(GUIBASE)"=="aqua"

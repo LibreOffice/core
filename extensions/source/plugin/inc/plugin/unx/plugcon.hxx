@@ -58,11 +58,7 @@ extern "C" {
 #if defined USE_MOTIF
 #include <Xm/DrawingA.h>
 #else
-#  if defined DISABLE_XAW
-#     include <X11/Composite.h>
-#  else
-#     include <X11/Xaw/Label.h>
-#  endif
+#include <X11/Composite.h>
 #endif
 #include <X11/Xatom.h>
 #ifndef XP_UNIX

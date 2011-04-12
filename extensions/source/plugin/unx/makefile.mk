@@ -50,10 +50,6 @@ CDEFS+=-DOJI
 
 .IF "$(WITH_MOZILLA)" != "NO"
 
-.IF "$(DISABLE_XAW)" == "TRUE"
-CDEFS+=-DDISABLE_XAW
-.ENDIF
-
 SLOFILES=\
     $(SLO)$/nppapi.obj		\
     $(SLO)$/sysplug.obj		\
@@ -74,9 +70,6 @@ APP1STDLIBS= $(SALLIB)
 .IF "$(OS)"=="SOLARIS" || "$(OS)"=="SCO"
 APP1STDLIBS+=-lXm -lXt $(X11LINK_DYNAMIC) -ldl
 .ELSE
-.IF "$(DISABLE_XAW)" != "TRUE"
-APP1STDLIBS+=-lXaw 
-.ENDIF
 .IF "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD" || "$(OS)"=="OPENBSD" || "$(OS)"=="DRAGONFLY"
 APP1STDLIBS+= -lXt -lXext -lX11
 .ELIF "$(OS)"=="AIX"

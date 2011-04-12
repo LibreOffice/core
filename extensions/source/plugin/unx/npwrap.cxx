@@ -125,11 +125,7 @@ Widget createSubWidget( char* /*pPluginText*/, Widget shell, XLIB_Window aParent
         xmDrawingAreaWidgetClass,
 #else
         "",
-#  if defined DISABLE_XAW
         compositeWidgetClass,
-#  else
-        labelWidgetClass,
-#  endif
 #endif
           shell,
         XtNwidth, 200,
