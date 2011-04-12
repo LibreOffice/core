@@ -102,7 +102,7 @@ endif
 # these are libraries built by OOo, but only a few of them
 # all other libraries built by OOo and all platform libraries (exceptions see below) are used without an import library
 # we link against their dlls in gcc format directly
-gb_Library_NOILIBFILENAMES:= graphite_dll icule icuuc
+gb_Library_NOILIBFILENAMES:= icule icuuc
 
 gb_Library_FILENAMES := $(filter-out $(foreach lib,$(gb_Library_NOILIBFILENAMES),$(lib):%),$(gb_Library_FILENAMES))
 gb_Library_FILENAMES += $(foreach lib,$(gb_Library_NOILIBFILENAMES),$(lib):$(lib)$(gb_Library_PLAINEXT))
