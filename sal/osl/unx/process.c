@@ -376,6 +376,16 @@ static oslSocket receiveFdPipe(int PipeFD)
     OSL_TRACE("receiveFdPipe : writing back %i",nRetCode);
     nRead=write(PipeFD,&nRetCode,sizeof(nRetCode));
 
+    if ( nRead < 0 )
+    {
+        OSL_TRACE("write failed (%s)", strerror(errno));
+    }
+    else if ( nRead != sizeof(nRetCode) )
+    {
+        // TODO: Handle this case.
+        OSL_TRACE("partial write: wrote %d out of %d)", nRead, sizeof(nRetCode));
+    }
+
 #if defined(IOCHANNEL_TRANSFER_BSD_RENO)
     free(cmptr);
 #endif
