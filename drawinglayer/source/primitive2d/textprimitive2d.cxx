@@ -254,7 +254,7 @@ namespace drawinglayer
             mbFilled(bFilled),
             mnWidthToFill(nWidthToFill)
         {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
             const xub_StrLen aStringLength(getText().Len());
             OSL_ENSURE(aStringLength >= getTextPosition() && aStringLength >= getTextPosition() + getTextLength(),
                 "TextSimplePortionPrimitive2D with text out of range (!)");
