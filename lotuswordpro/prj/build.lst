@@ -3,3 +3,4 @@ wp	lotuswordpro			usr1	-	all	lwp_mkout NULL
 wp	lotuswordpro\source\filter	nmake	-	all	lwp_filter NULL
 wp	lotuswordpro\source\filter\xfilter	nmake	-	all	lwp_xfilter NULL
 wp	lotuswordpro\util		nmake	-	all	lwp_util lwp_filter lwp_xfilter NULL
+wp	lotuswordpro\qa\cppunit		nmake	-	all	lwp_qa_cppunit lwp_util NULL
