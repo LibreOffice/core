@@ -209,6 +209,10 @@ AC_ARG_ENABLE(cairo,
 AC_ARG_WITH(system-cairo,
 [  --with-system-cairo      Use Cairo libraries already on system
 ],,)
+AC_ARG_ENABLE(cairo-canvas,
+[  --disable-cairo-canvas  Determines whether to build the Cairo canvas on
+                          platforms where Cairo is available.
+],,enable_cairo_canvas=yes)
 AC_ARG_ENABLE(librsvg,
 [  --enable-librsvg        Determines whether to use librsvg library on
                           platforms where librsvg is available.
@@ -5782,6 +5786,12 @@ AC_SUBST(BUILD_PIXMAN)
 AC_SUBST(SYSTEM_CAIRO)
 AC_SUBST(CAIRO_CFLAGS)
 AC_SUBST(CAIRO_LIBS)
+
+ENABLE_CAIRO_CANVAS="FALSE"
+if test "$enable_cairo_canvas" = "yes" -a "$ENABLE_CAIRO" = "TRUE" ; then
+   ENABLE_CAIRO_CANVAS="TRUE"
+fi
+AC_SUBST(ENABLE_CAIRO_CANVAS)
 
 dnl ===================================================================
 dnl Check whether the librsvg libraries are available.

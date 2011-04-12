@@ -49,7 +49,7 @@ SCPDEFS+=-DSYSTEM_AGG
 PARFILES= canvascommons.par		\
           vclcanvas.par
 
-.IF "$(ENABLE_CAIRO)" == "TRUE"
+.IF "$(ENABLE_CAIRO_CANVAS)" == "TRUE"
 PARFILES+= cairocanvas.par
 .ENDIF
 .IF "$(ENABLE_DIRECTX)" != ""
