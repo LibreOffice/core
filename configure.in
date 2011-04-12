@@ -6821,12 +6821,12 @@ if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE" ; then
    qt_incdirs="$QT4INC /usr/include/qt4 /usr/include $x_includes"
    qt_libdirs="$QT4LIB /usr/lib $x_libraries"
 
-   kde_incdirs="/usr/include $x_includes"
-   kde_libdirs="/usr/lib $x_libraries"
+   kde_incdirs="/usr/include /usr/include/kde4 $x_includes"
+   kde_libdirs="/usr/lib /usr/lib/kde4 /usr/lib/kde4/devel $x_libraries"
 
    if test "$host_cpu" = "x86_64" ; then
       qt_libdirs="$qt_libdirs /usr/lib64/qt4 /usr/lib64/qt /usr/lib64"
-      kde_libdirs="$kde_libdirs /usr/lib64 /usr/lib64/kde4"
+      kde_libdirs="$kde_libdirs /usr/lib64 /usr/lib64/kde4 /usr/lib64/kde4/devel"
    fi
 
    if test -n "$QTDIR" ; then
@@ -6855,7 +6855,7 @@ if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE" ; then
       fi
    fi
    if test -n "$KDE4DIR" ; then
-      kde_incdirs="$KDE4DIR/include $kde_incdirs"
+      kde_incdirs="$KDE4DIR/include $KDE4DIR/include/kde4 $kde_incdirs"
       if test "$host_cpu" != "x86_64" ; then
          kde_libdirs="$KDE4DIR/lib $kde_libdirs"
       else
