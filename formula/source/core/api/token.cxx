@@ -135,14 +135,19 @@ bool FormulaToken::IsMatrixFunction() const
 
 bool FormulaToken::IsExternalRef() const
 {
+    bool bRet = false;
     switch (eType)
     {
         case svExternalSingleRef:
         case svExternalDoubleRef:
         case svExternalName:
-            return true;
+            bRet = true;
+            break;
+        default:
+            bRet = false;
+            break;
     }
-    return false;
+    return bRet;
 }
 
 bool FormulaToken::operator==( const FormulaToken& rToken ) const

@@ -722,6 +722,7 @@ OpCode FormulaCompiler::GetEnglishOpCode( const String& rName ) const
 
 bool FormulaCompiler::IsOpCodeVolatile( OpCode eOp )
 {
+    bool bRet = false;
     switch (eOp)
     {
         // no parameters:
@@ -739,9 +740,13 @@ bool FormulaCompiler::IsOpCodeVolatile( OpCode eOp )
         case ocIndirectXL:
             // ocOffset results in indirect references.
         case ocOffset:
-            return true;
+            bRet = true;
+            break;
+        default:
+            bRet = false;
+            break;
     }
-    return false;
+    return bRet;
 }
 
 // Remove quotes, escaped quotes are unescaped.
