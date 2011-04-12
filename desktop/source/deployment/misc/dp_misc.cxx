@@ -142,6 +142,23 @@ bool existsOfficePipe()
     return pipe.is();
 }
 
+//get modification time
+static bool getModifyTimeTargetFile(const OUString &rFileURL, TimeValue &rTime)
+{
+    ::osl::DirectoryItem item;
+    if (::osl::DirectoryItem::get(rFileURL, item) != ::osl::File::E_None)
+        return false;
+
+    ::osl::FileStatus stat(FileStatusMask_ModifyTime|FileStatusMask_Type|FileStatusMask_LinkTargetURL);
+    if (item.getFileStatus(stat) != ::osl::File::E_None)
+        return false;
+
+    if( stat.getFileType() == ::osl::FileStatus::Link )
+        return getModifyTimeTargetFile(stat.getLinkTargetURL(), rTime);
+
+    rTime = stat.getModifyTime();
+    return true;
+}
 
 //Returns true if the Folder was more recently modified then
 //the lastsynchronized file. That is the repository needs to
@@ -180,15 +197,12 @@ bool compareExtensionFolderWithLastSynchronizedFile(
 
     //compare the modification time of the extension folder and the last
     //modified file
-    ::osl::FileStatus statFolder(FileStatusMask_ModifyTime);
-    ::osl::FileStatus statFile(FileStatusMask_ModifyTime);
-    if (itemExtFolder.getFileStatus(statFolder) == ::osl::File::E_None)
+    TimeValue timeFolder;
+    if (getModifyTimeTargetFile(folderURL, timeFolder))
     {
-        if (itemFile.getFileStatus(statFile) == ::osl::File::E_None)
+        TimeValue timeFile;
+        if (getModifyTimeTargetFile(fileURL, timeFile))
         {
-            TimeValue timeFolder = statFolder.getModifyTime();
-            TimeValue timeFile = statFile.getModifyTime();
-
             if (timeFile.Seconds < timeFolder.Seconds)
                 bNeedsSync = true;
         }
@@ -203,6 +217,7 @@ bool compareExtensionFolderWithLastSynchronizedFile(
         OSL_ASSERT(0);
         bNeedsSync = true;
     }
+
     return bNeedsSync;
 }
 
