@@ -67,7 +67,6 @@ XFTabStyle::XFTabStyle()
 
 void    XFTabStyle::ToXml(IXFStream *pStrm)
 {
-    assert(m_fLength>0);
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 

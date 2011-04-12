@@ -269,14 +269,11 @@ sal_uInt8 LwpObjectStream::QuickReaduInt8()
  */
 void LwpObjectStream::SkipExtra()
 {
-    sal_uInt16 extra;
+    sal_uInt16 extra(0);
 
     QuickRead(&extra, sizeof(extra));
     while (extra != 0)
-    {
-        assert(false);
         QuickRead(&extra, sizeof(extra));
-    }
 }
 /**
  * @descr  check if extra bytes

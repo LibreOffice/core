@@ -509,7 +509,7 @@ BenError LtcBenContainer::CreateGraphicStream(SvStream * &pStream, const char *p
         nLen += GetSvStreamSize(pS) ;
     }
 
-    assert(nLen > 0);
+    OSL_ENSURE(nLen > 0, "expected a non-0 length");
     char * pBuf = new char[nLen];
     assert(pBuf != NULL);
     char * pPointer = pBuf;
