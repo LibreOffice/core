@@ -32,12 +32,10 @@ $(eval $(call gb_Module_add_targets,sc,\
 	Package_uiconfig \
 	Package_xml \
 ))
-#	CppunitTest_sc_ucalc \
 
 $(eval $(call gb_Module_add_check_targets,sc,\
 	CppunitTest_sc_ucalc \
 	Package_qa_unit \
 ))
-
 
 # vim: set noet ts=4 sw=4:
