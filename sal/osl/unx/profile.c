@@ -274,6 +274,7 @@ static oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, o
 sal_Bool SAL_CALL osl_closeProfile(oslProfile Profile)
 {
     osl_TProfileImpl* pProfile = (osl_TProfileImpl*)Profile;
+    osl_TProfileImpl* pTmpProfile;
 
 #ifdef TRACE_OSL_PROFILE
     OSL_TRACE("In  osl_closeProfile\n");
@@ -303,22 +304,22 @@ sal_Bool SAL_CALL osl_closeProfile(oslProfile Profile)
 
     if ( ! ( pProfile->m_Flags & osl_Profile_READLOCK ) && ( pProfile->m_Flags & FLG_MODIFIED ) )
     {
-        pProfile = acquireProfile(Profile,sal_True);
+        pTmpProfile = acquireProfile(Profile,sal_True);
 
-        if ( pProfile != 0 )
+        if ( pTmpProfile != 0 )
         {
-            sal_Bool bRet = storeProfile(pProfile, sal_True);
+            sal_Bool bRet = storeProfile(pTmpProfile, sal_True);
             OSL_ASSERT(bRet);
             (void)bRet;
         }
     }
     else
     {
-        pProfile = acquireProfile(Profile,sal_False);
+        pTmpProfile = acquireProfile(Profile,sal_False);
     }
 
 
-    if ( pProfile == 0 )
+    if ( pTmpProfile == 0 )
     {
         pthread_mutex_unlock(&(pProfile->m_AccessLock));
 #ifdef TRACE_OSL_PROFILE
@@ -326,6 +327,8 @@ sal_Bool SAL_CALL osl_closeProfile(oslProfile Profile)
 #endif
         return sal_False;
     }
+
+    pProfile = pTmpProfile;
 
     if (pProfile->m_pFile != NULL)
         closeFileImpl(pProfile->m_pFile,pProfile->m_Flags);
