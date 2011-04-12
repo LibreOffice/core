@@ -219,7 +219,8 @@ public:
     virtual void setUp();
     virtual void tearDown();
 
-    bool testLoad(const rtl::OUString &rFilter, const rtl::OUString &rURL);
+    void recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL, bool bExpected);
+    bool load(const rtl::OUString &rFilter, const rtl::OUString &rURL);
 
     void testCollator();
     void testInput();
@@ -469,7 +470,7 @@ void Test::testCSV()
     }
 }
 
-bool Test::testLoad(const rtl::OUString &rFilter, const rtl::OUString &rURL)
+bool Test::load(const rtl::OUString &rFilter, const rtl::OUString &rURL)
 {
     SfxFilter aFilter(
         rFilter,
@@ -482,21 +483,36 @@ bool Test::testLoad(const rtl::OUString &rFilter, const rtl::OUString &rURL)
     return xDocShRef->DoLoad(&aSrcMed);
 }
 
+void Test::recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL, bool bExpected)
+{
+    osl::Directory aDir(rURL);
+
+    CPPUNIT_ASSERT(osl::FileBase::E_None == aDir.open());
+    osl::DirectoryItem aItem;
+    osl::FileStatus aFileStatus(FileStatusMask_FileURL|FileStatusMask_Type);
+    while (aDir.getNextItem(aItem) == osl::FileBase::E_None)
+    {
+        aItem.getFileStatus(aFileStatus);
+        rtl::OUString sURL = aFileStatus.getFileURL();
+        if (aFileStatus.getFileType() == osl::FileStatus::Directory)
+            recursiveScan(rFilter, sURL, bExpected);
+        else
+        {
+            bool bRes = load(rFilter, sURL);
+            rtl::OString aRes(rtl::OUStringToOString(sURL, osl_getThreadTextEncoding()));
+            CPPUNIT_ASSERT_MESSAGE(aRes.getStr(), bRes == bExpected);
+        }
+    }
+    CPPUNIT_ASSERT(osl::FileBase::E_None == aDir.close());
+}
+
 void Test::testCVEs()
 {
-    bool bResult;
+    recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
+        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/qa/unit/data/qpro/pass")), true);
 
-    bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
-        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/qa/unit/CVE/CVE-2007-5745-1.wb2")));
-    CPPUNIT_ASSERT_MESSAGE("CVE-2007-5745 regression", bResult == true);
-
-    bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
-        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/qa/unit/CVE/CVE-2007-5745-2.wb2")));
-    CPPUNIT_ASSERT_MESSAGE("CVE-2007-5745 regression", bResult == true);
-
-    bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
-        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/qa/unit/CVE/CVE-2007-5747-1.wb2")));
-    CPPUNIT_ASSERT_MESSAGE("CVE-2007-5747 regression", bResult == false);
+    recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
+        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/qa/unit/data/qpro/fail")), false);
 }
 
 template<typename Evaluator>
