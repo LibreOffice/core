@@ -350,11 +350,7 @@ CairoWrapper::CairoWrapper()
     if( !XQueryExtension( GetX11SalData()->GetDisplay()->GetDisplay(), "RENDER", &nDummy, &nDummy, &nDummy ) )
         return;
 
-#ifdef MACOSX
-    OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( "libcairo.2.dylib" ));
-#else
     OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( "libcairo.so.2" ));
-#endif
     mpCairoLib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_DEFAULT );
     if( !mpCairoLib )
         return;
