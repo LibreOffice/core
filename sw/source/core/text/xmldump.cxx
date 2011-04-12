@@ -43,6 +43,77 @@ class XmlPortionDumper:public SwPortionHandler
   private:
     xmlTextWriterPtr writer;
     sal_uInt16 ofs;
+
+    const char* getTypeName( sal_uInt16 nType )
+    {
+        switch ( nType )
+        {
+            case POR_LIN: return "POR_LIN";
+            case POR_FLYCNT: return "POR_FLYCNT";
+
+            case POR_HOLE: return "POR_HOLE";
+            case POR_TMPEND: return "POR_TMPEND";
+            case POR_BRK: return "POR_BRK";
+            case POR_KERN: return "POR_KERN";
+            case POR_ARROW: return "POR_ARROW";
+            case POR_MULTI: return "POR_MULTI";
+            case POR_HIDDEN_TXT: return "POR_HIDDEN_TXT";
+            case POR_CONTROLCHAR: return "POR_CONTROLCHAR";
+
+            case POR_TXT: return "POR_TXT";
+            case POR_LAY: return "POR_LAY";
+            case POR_PARA: return "POR_PARA";
+            case POR_URL: return "POR_URL";
+            case POR_HNG: return "POR_HNG";
+
+            case POR_DROP: return "POR_DROP";
+            case POR_TOX: return "POR_TOX";
+            case POR_ISOTOX: return "POR_ISOTOX";
+            case POR_REF: return "POR_REF";
+            case POR_ISOREF: return "POR_ISOREF";
+            case POR_META: return "POR_META";
+
+            case POR_EXP: return "POR_EXP";
+            case POR_BLANK: return "POR_BLANK";
+            case POR_POSTITS: return "POR_POSTITS";
+
+            case POR_HYPH: return "POR_HYPH";
+            case POR_HYPHSTR: return "POR_HYPHSTR";
+            case POR_SOFTHYPH: return "POR_SOFTHYPH";
+            case POR_SOFTHYPHSTR: return "POR_SOFTHYPHSTR";
+            case POR_SOFTHYPH_COMP: return "POR_SOFTHYPH_COMP";
+
+            case POR_FLD: return "POR_FLD";
+            case POR_HIDDEN: return "POR_HIDDEN";
+            case POR_QUOVADIS: return "POR_QUOVADIS";
+            case POR_ERGOSUM: return "POR_ERGOSUM";
+            case POR_COMBINED: return "POR_COMBINED";
+            case POR_FTN: return "POR_FTN";
+
+            case POR_FTNNUM: return "POR_FTNNUM";
+            case POR_NUMBER: return "POR_NUMBER";
+            case POR_BULLET: return "POR_BULLET";
+            case POR_GRFNUM: return "POR_GRFNUM";
+
+            case POR_GLUE: return "POR_GLUE";
+
+            case POR_MARGIN: return "POR_MARGIN";
+
+            case POR_FIX: return "POR_FIX";
+            case POR_FLY: return "POR_FLY";
+
+            case POR_TAB: return "POR_TAB";
+
+            case POR_TABRIGHT: return "POR_TABRIGHT";
+            case POR_TABCENTER: return "POR_TABCENTER";
+            case POR_TABDECIMAL: return "POR_TABDECIMAL";
+
+            case POR_TABLEFT: return "POR_TABLEFT";
+            default:
+                return "Unknown";
+        }
+    }
+
   public:
 
     XmlPortionDumper( xmlTextWriterPtr some_writer ):writer( some_writer ), ofs( 0 )
@@ -69,7 +140,7 @@ class XmlPortionDumper:public SwPortionHandler
                                            "%i", ( int ) nLength );
         xmlTextWriterWriteFormatAttribute( writer,
                                            BAD_CAST( "nType" ),
-                                           "%i", ( int ) nType );
+                                           "%s", getTypeName( nType ) );
         xmlTextWriterEndElement( writer );
     }
 
@@ -91,7 +162,7 @@ class XmlPortionDumper:public SwPortionHandler
                                            "%i", ( int ) nLength );
         xmlTextWriterWriteFormatAttribute( writer,
                                            BAD_CAST( "nType" ),
-                                           "%i", ( int ) nType );
+                                           "%s", getTypeName( nType ) );
         rtl::OUString sText( rText );
         rtl::OString sText8 =::rtl::OUStringToOString( sText,
                                                        RTL_TEXTENCODING_UTF8 );
