@@ -27,7 +27,6 @@
 
 # vars needed from the env/calling makefile
 
-# CVER
 # DEBUG
 # GBUILDDIR
 # INPATH

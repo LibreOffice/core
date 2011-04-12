@@ -80,8 +80,6 @@ endif
 
 gb_COMPILERDEFS := \
 	-DGCC \
-	-D$(CVER) \
-	-DCVER=$(CVER) \
 	-DGLIBC=2 \
 	-DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) \
 	-DCPPU_ENV=gcc3 \

@@ -119,19 +119,11 @@
 .INCLUDE : unxbsda.mk
 .ENDIF
 
-.IF "$(COM)$(CVER)$(OS)$(CPU)" == "GCCC295NETBSDI"
-.INCLUDE : unxbsdi.mk
-.ENDIF
-
-.IF "$(COM)$(CVER)$(OS)$(CPU)" == "GCCC300NETBSDI"
-.INCLUDE : unxbsdi2.mk
-.ENDIF
-
-.IF "$(COM)$(CVER)$(OS)$(CPU)" == "GCCC341NETBSDI"
+.IF "$(COM)$(OS)$(CPU)" == "GCCNETBSDI"
 .INCLUDE : unxbsdi3.mk
 .ENDIF
 
-.IF "$(COM)$(CVER)$(OS)$(CPU)" == "GCCC341NETBSDX"
+.IF "$(COM)$(OS)$(CPU)" == "GCCNETBSDX"
 .INCLUDE : unxbsdx3.mk
 .ENDIF
 

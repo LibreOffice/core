@@ -56,7 +56,7 @@ my ( $CALL_CDECL, $COMMON_OUTDIR, $BMP_WRITES_FLAG,
      $BUILD_SOSL_RELEASE);
 #
 # Platform dependent constant values.
-my ( $BIG_SVX, $COM, $ARCH, $CPU, $CPUNAME, $CVER, $GLIBC, $GUI, $GUIBASE,
+my ( $BIG_SVX, $COM, $ARCH, $CPU, $CPUNAME, $GLIBC, $GUI, $GUIBASE,
       $GVER, $OS, $OSVERSION, $OUTPATH, $INPATH, $PATH_SEPERATOR,
       $DYNAMIC_CRT, $SET_EXCEPTIONS, $use_shl_versions, $CDPATHx, $JRELIBDIR,
       $JRETOOLKITDIR, $JRETHREADDIR,
@@ -226,7 +226,6 @@ if ( $platform =~ m/solaris/ )
    }
 
    $COM            = "GCC";
-   $CVER           = "C300";
    $BIG_SVX        = "TRUE";
    $COMPATH        = '@COMPATH@';
    $GUI            = "UNX";
@@ -284,7 +283,6 @@ elsif ( $platform =~ m/netbsd/ )
      exit 1;
    }
    # General NetBSD settings:
-      $CVER           = "C341";
       $OUTPATH        = $OUTPATH."3";
       $BIG_SVX        = "TRUE";
       $COM            = "GCC";
@@ -299,7 +297,6 @@ elsif ( $platform =~ m/netbsd/ )
 elsif ( $platform =~ m/kfreebsd/ )
 {
 # General GNU/kFreeBSD settings:
-      $CVER           = "C341";
       $BIG_SVX        = "TRUE";
       $COM            = "GCC";
       $COMPATH        = '@COMPATH@';
@@ -341,7 +338,6 @@ elsif ( $platform =~ m/freebsd/ )
 {     $BIG_SVX        = "TRUE";
       $COM            = "GCC";
       $COMPATH        = '@COMPATH@';
-      $CVER           = "C300";
       $GUI            = "UNX";
       $GUIBASE        = "unx";
       $GVER           = "VCL";
@@ -382,14 +378,12 @@ elsif ( $platform =~ m/freebsd/ )
    {  print "Unsupported FreeBSD architecture: $platform \n";
          exit 1;
    }
-      $CVER        = "C341";
       $INPATH         = $OUTPATH.$PROEXT;
 }
 elsif ( $platform =~ m/openbsd/ )
 {     $BIG_SVX        = "TRUE";
       $COM            = "GCC";
       $COMPATH        = '@COMPATH@';
-      $CVER           = "C300";
       $GUI            = "UNX";
       $GUIBASE        = "unx";
       $GVER           = "VCL";
@@ -419,13 +413,11 @@ elsif ( $platform =~ m/openbsd/ )
    {  print "Unsupported OpenBSD architecture: $platform \n";
          exit 1;
    }
-      $CVER        = "C341";
       $INPATH         = $OUTPATH.$PROEXT;
 }
 elsif ( $platform =~ m/linux/ )
 {
 # General Linux settings:
-      $CVER           = "C341";
       $BIG_SVX        = "TRUE";
       $COM            = "GCC";
       $COMPATH        = '@COMPATH@';
@@ -679,7 +671,6 @@ elsif ( $platform =~ m/cygwin/ )
       $COMPATH        = PathFormat('@COMPATH@/bin');
       $COMPATH        =~ s/\/bin$//i;
       $COM            = "GCC";
-      $CVER           = "C341";
       $OUTPATH        = "wntgcci";
       $INPATH         = $OUTPATH.$PROEXT;
       $ATL_INCLUDE = '$SOLARVER'.$ds.'$INPATH'.$ds."inc".$ds."external".$ds."mingw".$ds."include".$ds."atl". " ".'$PSDK_HOME'.$ds."include".$ds."atl";
@@ -692,13 +683,6 @@ elsif ( $platform =~ m/cygwin/ )
       $OUTPATH        = "wntmscx@COMEX@" if $CL_X64;
       $INPATH         = $OUTPATH.$PROEXT;
       $COMEX          = '@COMEX@';
-      if ( "@COMEX@" eq "12" ) {
-          $CVER        = "M1500";
-      } elsif ( "@COMEX@" eq "13" ) {
-          $CVER        = "M1600";
-      } else {                   # Unsupported
-          die "Unsupported compiler version.\n";
-      }
       if ( "@DISABLE_ACTIVEX@" ) {
           $ATL_LIB     = $PSDK_HOME.$ds."lib"; # Doesn't exist for VSE
           $ATL_INCLUDE = $PSDK_HOME.$ds."include".$ds."atl";
@@ -742,7 +726,6 @@ elsif ( $platform =~ m/os2/ )
       print "Setting OS/2 gcc 3.3.5 specific values... \n";
       $outfile        = "os2env.set.sh";
       $COM            = "GCC";
-      $CVER           = "C300";
       $OUTPATH        = "os2gcci";
       $INPATH         = $OUTPATH.$PROEXT;
       $COMEX          = '@COMEX@';
@@ -778,7 +761,6 @@ elsif ( $platform =~ m/darwin/ )
           $CPUNAME        = "INTEL";
           $OUTPATH        = "unxmacxi";
       }
-      $CVER           = "C341";
       $GUI            = "UNX";
       $GVER           = "VCL";
       $INPATH         = $OUTPATH.$PROEXT;
@@ -809,7 +791,6 @@ elsif ( $platform =~ m/dragonfly/ )
      exit 1;
    }
    # General DragonFly settings:
-      $CVER           = "C341";
       $BIG_SVX        = "TRUE";
       $COM            = "GCC";
       $COMPATH        = '@COMPATH@';
@@ -834,7 +815,6 @@ elsif ( $platform =~ m/aix/ )
    $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."native_threads";
    $BIG_SVX        = "TRUE";
    $COM            = "GCC";
-   $CVER           = "C300";
    $COMPATH        = '@COMPATH@';
    $GUI            = "UNX";
    $GUIBASE        = "unx";
@@ -1683,7 +1663,6 @@ ToFile( "COM",               $COM,               "e" );
 ToFile( "COMPATH",           $COMPATH,           "e" );
 ToFile( "CPU",               $CPU,               "e" );
 ToFile( "CPUNAME",           $CPUNAME,           "e" );
-ToFile( "CVER",              $CVER,              "e" );
 ToFile( "GUI",               $GUI,               "e" );
 ToFile( "GLIBC",             $GLIBC,             "e" );
 ToFile( "GUIBASE",           $GUIBASE,           "e" );
