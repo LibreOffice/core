@@ -316,7 +316,7 @@ private:
  *      pRightMost : SmCaretPosGraphEntry*
  *
  * Prior to a Visit call:
- *  pRightMost: A pointer to right most position infront of the current line entry.
+ *  pRightMost: A pointer to right most position in front of the current line entry.
  *
  * After a Visit call:
  *  pRightMost: A pointer to the right most position in the called line entry, if no there's

@@ -376,7 +376,7 @@ SmNodeList::iterator SmCursor::FindPositionInLineList(SmNodeList* pLineList, SmC
 
         }
     }
-    //If we didn't find pSelectedNode, it must be because the caret is infront of the line
+    //If we didn't find pSelectedNode, it must be because the caret is in front of the line
     return pLineList->begin();
 }
 
@@ -416,7 +416,7 @@ SmCaretPos SmCursor::PatchLineList(SmNodeList* pLineList, SmNodeList::iterator a
         --aIter;
         aIter = pLineList->erase(aIter);
         delete prev;
-        //Return caret pos infront of aIter
+        //Return caret pos in front of aIter
         if(aIter != pLineList->begin())
             --aIter; //Thus find node before aIter
         if(aIter == pLineList->begin())
@@ -434,7 +434,7 @@ SmCaretPos SmCursor::PatchLineList(SmNodeList* pLineList, SmNodeList::iterator a
     }
 
     //If we didn't do anything return
-    if(!prev) //return an invalid to indicate we're infront of line
+    if(!prev) //return an invalid to indicate we're in front of line
         return SmCaretPos();
     if(prev->GetType() == NTEXT)
         return SmCaretPos(prev, ((SmTextNode*)prev)->GetText().Len());

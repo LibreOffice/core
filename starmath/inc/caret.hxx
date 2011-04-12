@@ -40,7 +40,7 @@ struct SmCaretPos{
     SmNode* pSelectedNode;
     /** Index within the selected node
      *
-     * 0: Position infront of a node
+     * 0: Position in front of a node
      * 1: Position after a node or after first char in SmTextNode
      * n: Position after n char in SmTextNode
      *
@@ -290,13 +290,13 @@ private:
  *
  * A caret position in OpenOffice Math is representated by an instance of SmCaretPos.
  * That is a caret position is a node and an index related to this node. For most nodes the
- * index 0, means caret is infront of this node, the index 1 means caret is after this node.
+ * index 0, means caret is in front of this node, the index 1 means caret is after this node.
  * For SmTextNode the index is the caret position after the specified number of characters,
  * imagine an SmTextNode with the number 1337. The index 3 in such SmTextNode would mean a
  * caret placed right before 7, e.g. "133|7".
  *
  * For SmExpressionNode, SmBinHorNode and SmUnHorNode the only legal index is 0, which means
- *  infront of the node. Actually the index 0 may only because for the first caret position
+ * in front of the node. Actually the index 0 may only because for the first caret position
  * in a visual line. From the example above, consider the following subtree that constitutes
  * a visual line:
  *

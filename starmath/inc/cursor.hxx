@@ -171,7 +171,7 @@ public:
     /** Create sub-/super script
      *
      * If there's a selection, it will be move into the appropriate sub-/super scription
-     * of the node infront of it. If there's no node infront of position (or the selection),
+     * of the node in front of it. If there's no node in front of position (or the selection),
      * a sub-/super scription of a new SmPlaceNode will be made.
      *
      * If there's is an existing subscription of the node, the caret will be moved into it,
@@ -333,7 +333,7 @@ private:
 
     /** Find an iterator pointing to the node in pLineList following aCaretPos
      *
-     * If aCaretPos::pSelectedNode cannot be found it is assumed that it's infront of pLineList,
+     * If aCaretPos::pSelectedNode cannot be found it is assumed that it's in front of pLineList,
      * thus not an element in pLineList. In this case this method returns an iterator to the
      * first element in pLineList.
      *
@@ -353,7 +353,7 @@ private:
      * removed.
      *
      * @returns A caret position equivalent to one selecting the node before aIter, the method returns
-     *          an invalid SmCaretPos to indicate placement infront of the line.
+     *          an invalid SmCaretPos to indicate placement in front of the line.
      */
      static SmCaretPos PatchLineList(SmNodeList* pLineList, SmNodeList::iterator aIter);
 

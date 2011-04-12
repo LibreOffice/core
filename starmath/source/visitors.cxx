@@ -679,7 +679,7 @@ void SmDrawingVisitor::Visit( SmRootSymbolNode* pNode )
     Rectangle  aBar( aBarPos, Size( nBarWidth, nBarHeight ) );
     //! avoid GROWING AND SHRINKING of drawn rectangle when constantly
     //! increasing zoomfactor.
-    //  This is done by shifting it's output-position to a point that
+    //  This is done by shifting its output-position to a point that
     //  corresponds exactly to a pixel on the output device.
     Point  aDrawPos( rDev.PixelToLogic( rDev.LogicToPixel( aBar.TopLeft( ) ) ) );
     aBar.SetPos( aDrawPos );
@@ -732,7 +732,7 @@ void SmDrawingVisitor::Visit( SmRectangleNode* pNode )
 
     //! avoid GROWING AND SHRINKING of drawn rectangle when constantly
     //! increasing zoomfactor.
-    //  This is done by shifting it's output-position to a point that
+    //  This is done by shifting its output-position to a point that
     //  corresponds exactly to a pixel on the output device.
     Point  aPos ( rDev.PixelToLogic( rDev.LogicToPixel( aTmp.TopLeft( ) ) ) );
     aTmp.SetPos( aPos );
@@ -790,12 +790,12 @@ SmSetSelectionVisitor::SmSetSelectionVisitor( SmCaretPos startPos, SmCaretPos en
 
     //Assume that pTree is a SmTableNode
     OSL_ENSURE(pTree->GetType() == NTABLE, "pTree should be a SmTableNode!");
-    //Visit root node, this is special as this node cannot be selected, but it's children can!
+    //Visit root node, this is special as this node cannot be selected, but its children can!
     if(pTree->GetType() == NTABLE){
-        //Change state if StartPos is infront of this node
+        //Change state if StartPos is in front of this node
         if( StartPos.pSelectedNode == pTree && StartPos.Index == 0 )
             IsSelecting = !IsSelecting;
-        //Change state if EndPos is infront of this node
+        //Change state if EndPos is in front of this node
         if( EndPos.pSelectedNode == pTree && EndPos.Index == 0 )
             IsSelecting = !IsSelecting;
         OSL_ENSURE(!IsSelecting, "Caret positions needed to set IsSelecting about, shouldn't be possible!");
@@ -832,10 +832,10 @@ void SmSetSelectionVisitor::SetSelectedOnAll( SmNode* pSubTree, bool IsSelected 
 }
 
 void SmSetSelectionVisitor::DefaultVisit( SmNode* pNode ) {
-    //Change state if StartPos is infront of this node
+    //Change state if StartPos is in front of this node
     if( StartPos.pSelectedNode == pNode && StartPos.Index == 0 )
         IsSelecting = !IsSelecting;
-    //Change state if EndPos is infront of this node
+    //Change state if EndPos is in front of this node
     if( EndPos.pSelectedNode == pNode && EndPos.Index == 0 )
         IsSelecting = !IsSelecting;
 
@@ -857,7 +857,7 @@ void SmSetSelectionVisitor::DefaultVisit( SmNode* pNode ) {
     //If state changed
     if( ChangedState )
     {
-        //Select this node and all of it's children
+        //Select this node and all of its children
         //(Make exception for SmBracebodyNode)
         if( pNode->GetType() != NBRACEBODY ||
             !pNode->GetParent() ||
@@ -887,10 +887,10 @@ void SmSetSelectionVisitor::DefaultVisit( SmNode* pNode ) {
 }
 
 void SmSetSelectionVisitor::VisitCompositionNode( SmNode* pNode ) {
-    //Change state if StartPos is infront of this node
+    //Change state if StartPos is in front of this node
     if( StartPos.pSelectedNode == pNode && StartPos.Index == 0 )
         IsSelecting = !IsSelecting;
-    //Change state if EndPos is infront of this node
+    //Change state if EndPos is in front of this node
     if( EndPos.pSelectedNode == pNode && EndPos.Index == 0 )
         IsSelecting = !IsSelecting;
 
@@ -995,8 +995,8 @@ SmCaretPosGraphBuildingVisitor::SmCaretPosGraphBuildingVisitor( SmNode* pRootNod
         while( it.Next( ) ){
             //There's a special invariant between this method and the Visit( SmLineNode* )
             //Usually pRightMost may not be NULL, to avoid this pRightMost should here be
-            //set to a new SmCaretPos infront of it.Current( ), however, if it.Current( ) is
-            //an instance of SmLineNode we let SmLineNode create this position infront of
+            //set to a new SmCaretPos in front of it.Current( ), however, if it.Current( ) is
+            //an instance of SmLineNode we let SmLineNode create this position in front of
             //the visual line.
             //The argument for doing this is that we now don't have to worry about SmLineNode
             //being a visual line composition node. Thus, no need for yet another special case
@@ -1162,7 +1162,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmSubSupNode* pNode )
 
 /** Build caret position for SmOperNode
  *
- * If first child is an SmSubSupNode we will ignore it's
+ * If first child is an SmSubSupNode we will ignore its
  * body, as this body is a SmMathSymbol, for SUM, INT or similar
  * that shouldn't be subject to modification.
  * If first child is not a SmSubSupNode, ignore it completely
@@ -1225,7 +1225,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmOperNode* pNode )
     SmNode* pChild;
     SmCaretPosGraphEntry *childLeft;
     if( pSubSup && ( pChild = pSubSup->GetSubSup( LSUP ) ) ) {
-        //Create position infront of pChild
+        //Create position in front of pChild
         childLeft = pGraph->Add( SmCaretPos( pChild, 0 ), left );
         //Visit pChild
         pRightMost = childLeft;
@@ -1234,7 +1234,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmOperNode* pNode )
         pRightMost->SetRight( bodyLeft );
     }
     if( pSubSup && ( pChild = pSubSup->GetSubSup( LSUB ) ) ) {
-        //Create position infront of pChild
+        //Create position in front of pChild
         childLeft = pGraph->Add( SmCaretPos( pChild, 0 ), left );
         //Visit pChild
         pRightMost = childLeft;
@@ -1243,7 +1243,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmOperNode* pNode )
         pRightMost->SetRight( bodyLeft );
     }
     if( pSubSup && ( pChild = pSubSup->GetSubSup( CSUP ) ) ) {//TO
-        //Create position infront of pChild
+        //Create position in front of pChild
         childLeft = pGraph->Add( SmCaretPos( pChild, 0 ), left );
         //Visit pChild
         pRightMost = childLeft;
@@ -1252,7 +1252,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmOperNode* pNode )
         pRightMost->SetRight( bodyLeft );
     }
     if( pSubSup && ( pChild = pSubSup->GetSubSup( CSUB ) ) ) { //FROM
-        //Create position infront of pChild
+        //Create position in front of pChild
         childLeft = pGraph->Add( SmCaretPos( pChild, 0 ), left );
         //Visit pChild
         pRightMost = childLeft;
@@ -1261,7 +1261,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmOperNode* pNode )
         pRightMost->SetRight( bodyLeft );
     }
     if( pSubSup && ( pChild = pSubSup->GetSubSup( RSUP ) ) ) {
-        //Create position infront of pChild
+        //Create position in front of pChild
         childLeft = pGraph->Add( SmCaretPos( pChild, 0 ), left );
         //Visit pChild
         pRightMost = childLeft;
@@ -1270,7 +1270,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmOperNode* pNode )
         pRightMost->SetRight( bodyLeft );
     }
     if( pSubSup && ( pChild = pSubSup->GetSubSup( RSUB ) ) ) {
-        //Create position infront of pChild
+        //Create position in front of pChild
         childLeft = pGraph->Add( SmCaretPos( pChild, 0 ), left );
         //Visit pChild
         pRightMost = childLeft;
@@ -1370,7 +1370,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmBinVerNode* pNode )
 
     //Set left
     left = pRightMost;
-    OSL_ENSURE( pRightMost, "There must be a position infront of this" );
+    OSL_ENSURE( pRightMost, "There must be a position in front of this" );
 
     //Create right
     right = pGraph->Add( SmCaretPos( pNode, 1 ) );
@@ -1617,7 +1617,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmRootNode* pNode )
                         *bodyRight;
 
     //Get left and save it
-    OSL_ENSURE( pRightMost, "There must be a position infront of this" );
+    OSL_ENSURE( pRightMost, "There must be a position in front of this" );
     left = pRightMost;
 
     //Create body left

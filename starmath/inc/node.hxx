@@ -585,7 +585,7 @@ public:
 
 /** Root symbol node
  *
- * Root symbol node used by SmRootNode to create the root symbol, infront of
+ * Root symbol node used by SmRootNode to create the root symbol, in front of
  * the line with the line above. I don't think this node should be used for
  * anything else.
  */
