@@ -49,6 +49,12 @@ using namespace psp;
     #ifndef FC_FAMILYLANG       // TODO: remove when baseline moves to fc>=2.2.97
         #define FC_FAMILYLANG "familylang"
     #endif
+    #ifndef FC_CAPABILITY       // TODO: remove when baseline moves to fc>=2.2.97
+        #define FC_CAPABILITY "capability"
+    #endif
+    #ifndef FC_STYLELANG        // TODO: remove when baseline moves to fc>=2.2.97
+        #define FC_STYLELANG "stylelang"
+    #endif
     #ifndef FC_HINT_STYLE       // TODO: remove when baseline moves to fc>=2.2.91
         #define FC_HINT_STYLE  "hintstyle"
         #define FC_HINT_NONE   0
