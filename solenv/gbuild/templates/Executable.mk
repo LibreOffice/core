@@ -42,4 +42,7 @@ $(eval $(call gb_Executable_add_linked_libs,EXEC,\
 $(eval $(call gb_Executable_add_exception_objects,EXEC,\
 ))
 
+$(eval $(call gb_Executable_set_targettype_gui,EXEC,\
+))
+
 # vim: set noet sw=4 ts=4:

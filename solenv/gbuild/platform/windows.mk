@@ -194,12 +194,11 @@ gb_LinkTarget_LDFLAGS := \
     -MACHINE:IX86 \
     -NODEFAULTLIB \
     -OPT:NOREF \
-    -SUBSYSTEM:CONSOLE \
     -safeseh \
     -nxcompat \
     -dynamicbase \
     $(patsubst %,-LIBPATH:%,$(filter-out .,$(subst ;, ,$(subst \,/,$(ILIB))))) \
-
+	
 gb_DEBUG_CFLAGS := -Zi
 
 # this does not use CFLAGS so it is not overridable
@@ -433,6 +432,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
         $(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
         $(if $(filter StaticLibrary,$(TARGETTYPE)),$(gb_StaticLibrary_TARGETTYPEFLAGS)) \
         $(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
+		$(if $(filter YES,$(gb_Executable_TARGETGUI)), -SUBSYSTEM:WINDOWS, -SUBSYSTEM:CONSOLE) \
 		$(T_LDFLAGS) \
         @$${RESPONSEFILE} \
         $(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib))) \
@@ -599,6 +599,7 @@ endef
 gb_Executable_EXT := .exe
 gb_Executable_TARGETTYPEFLAGS := -RELEASE -BASE:0x1b000000 -OPT:NOREF -INCREMENTAL:NO -DEBUG
 gb_Executable_get_rpath :=
+gb_Executable_TARGETGUI := 
 
 define gb_Executable_Executable_platform
 $(call gb_LinkTarget_set_auxtargets,$(2),\

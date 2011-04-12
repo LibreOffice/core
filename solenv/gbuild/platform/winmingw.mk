@@ -155,7 +155,6 @@ gb_NoexPrecompiledHeader_NOEXCEPTIONFLAGS := $(gb_LinkTarget_NOEXCEPTIONFLAGS)
 gb_LinkTarget_LDFLAGS := \
     --export-all-symbols \
     --kill-at \
-    --subsystem console \
     --exclude-libs ALL \
     --enable-stdcall-fixup \
     --enable-runtime-pseudo-reloc-v2 \
@@ -397,6 +396,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
         $(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) " > $${RESPONSEFILE} && \
     $(gb_LINK) \
         $(gb_Executable_TARGETTYPEFLAGS) \
+		$(if $(filter YES,$(gb_Executable_TARGETGUI)), --subsystem windows, --subsystem console) \
 		$(T_LDFLAGS) \
         $(gb_MINGWLIBDIR)/crt2.o \
         $(MINGW_CLIB_DIR)/crtbegin.o \
@@ -591,7 +591,7 @@ gb_Executable_EXT := .exe
 gb_Executable_TARGETTYPEFLAGS :=
 gb_Executable_get_rpath :=
 gb_Executable_Executable_platform =
-
+gb_Executable_TARGETGUI :=
 
 # CppunitTest class
 

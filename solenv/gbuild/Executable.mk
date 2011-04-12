@@ -47,6 +47,7 @@ $(call gb_Executable__Executable_impl,$(1),Executable/$(1)$(gb_Executable_EXT))
 endef
 
 define gb_Executable__Executable_impl
+$(call gb_Executable_set_targettype_gui,$(2))
 $(call gb_LinkTarget_LinkTarget,$(2))
 $(call gb_LinkTarget_set_targettype,$(2),Executable)
 $(call gb_Executable_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2))
@@ -56,6 +57,11 @@ $$(eval $$(call gb_Module_register_target,$(call gb_Executable_get_target,$(1)),
 $(call gb_Deliver_add_deliverable,$(call gb_Executable_get_target,$(1)),$(call gb_LinkTarget_get_target,$(2)))
 
 endef
+
+define gb_Executable_set_targettype_gui
+$(call gb_Executable_get_target,$(1)) : gb_Executable_TARGETGUI := $(2)
+endef
+
 
 define gb_Executable_forward_to_Linktarget
 gb_Executable_$(1) = $$(call gb_LinkTarget_$(1),Executable/$$(1)$$(gb_Executable_EXT),$$(2),$$(3))
