@@ -86,7 +86,7 @@ public:
 
     virtual css::uno::Reference< css::frame::XModel >  getDocModel() { return mxModel; }
     // XUnoTunnel
-    virtual ::sal_Int64 getSomething(const css::uno::Sequence<sal_Int8 >& rId ) throw(css::uno::RuntimeException);
+    virtual ::sal_Int64 SAL_CALL getSomething(const css::uno::Sequence<sal_Int8 >& rId ) throw(css::uno::RuntimeException);
 };
 
 #endif /* SC_VBA_WORKBOOK_HXX */
