@@ -44,6 +44,7 @@ class ScDocument;
 
 class ScDBData : public ScDataObject, public ScRefreshTimer
 {
+friend class ScDBCollection;
 private:
     // DBParam
     String          aName;
@@ -214,6 +215,7 @@ public:
     virtual sal_Bool        IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) const;
             ScDBData*   GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Bool bStartOnly) const;
             ScDBData*   GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
+            ScDBData*   GetFilterDBAtTable(SCTAB nTab) const;
             ScDBData*   GetDBNearCursor(SCCOL nCol, SCROW nRow, SCTAB nTab );
 
     sal_Bool    SearchName( const String& rName, sal_uInt16& rIndex ) const;

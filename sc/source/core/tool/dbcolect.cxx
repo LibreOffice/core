@@ -820,6 +820,27 @@ ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCO
     return NULL;
 }
 
+ScDBData* ScDBCollection::GetFilterDBAtTable(SCTAB nTab) const
+{
+    ScDBData* pDataEmpty = NULL;
+    if (pItems)
+    {
+        for (sal_uInt16 i = 0; i < nCount; i++)
+        {
+            ScDBData* pDBTemp = (ScDBData*)pItems[i];
+            if ( pDBTemp->nTable == nTab )
+            {
+                sal_Bool bFilter = pDBTemp->HasAutoFilter() || pDBTemp->HasQueryParam();
+
+                if ( bFilter )
+                    return pDBTemp;
+            }
+        }
+    }
+
+    return pDataEmpty;
+}
+
 sal_Bool ScDBCollection::SearchName( const String& rName, sal_uInt16& rIndex ) const
 {
     if (rtl::OUString(rName)==rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME)))
