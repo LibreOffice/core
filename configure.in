@@ -394,11 +394,6 @@ AC_ARG_ENABLE(neon,
         [Disable neon and the compilation of webdav binding.]),
 ,)
 
-AC_ARG_ENABLE(Xaw,
-    AS_HELP_STRING([--disable-Xaw],
-        [Disables the use of Xaw for the Netscape/Mozilla plugin.]),
-,)
-
 AC_ARG_ENABLE(check-only,
     AS_HELP_STRING([--enable-check-only],
         [Use this option option if you just want to check your environment.
@@ -5351,23 +5346,11 @@ AC_SUBST(XAU_LIBS)
 
 if test "$_os" != "WINNT" -a "$_os" != "OS2" -a "$_os" != "Darwin"; then
    dnl ===================================================================
-   dnl Check for using Xaw
+   dnl Check for Composite.h for mozilla plugin
    dnl ===================================================================
-   AC_MSG_CHECKING([whether to use Xaw])
-   if test "$enable_Xaw" = "no"; then
-       DISABLE_XAW=TRUE
-       AC_MSG_RESULT([no])
-       AC_CHECK_HEADERS(X11/Composite.h,[],[AC_MSG_ERROR([Xt include headers not found])],
-         [#include <X11/Intrinsic.h>])
-   else
-       AC_MSG_RESULT([yes])
-       AC_CHECK_HEADERS(X11/Xaw/Label.h,[],[AC_MSG_ERROR([Xaw include headers not found])],
-         [#include <X11/Intrinsic.h>])
-       AC_CHECK_LIB(Xaw, main, [],
-           [AC_MSG_ERROR(Xaw library not found or functional)], [])
-   fi
+   AC_CHECK_HEADERS(X11/Composite.h,[],[AC_MSG_ERROR([Xt include headers not found])],
+     [#include <X11/Intrinsic.h>])
 fi
-AC_SUBST(DISABLE_XAW)
 
 
 dnl ===================================================================
