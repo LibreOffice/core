@@ -40,7 +40,7 @@ $(eval $(call gb_CppunitTest_set_args,sc_ucalc,\
 	--invisible \
 	"-env:UNO_TYPES=$(foreach binrdb,udkapi.rdb types.rdb,\
 		file://$(if $(filter WNT,$(OS)),/)$(OUTDIR)/bin/$(binrdb))" \
-    "-env:UNO_SERVICES=$(foreach rdb,$(OUTDIR)/xml/ure/services.rdb $(WORKDIR)/CustomTarget/sc/qa/unit/services.rdb,\
+	"-env:UNO_SERVICES=$(foreach rdb,$(OUTDIR)/xml/ure/services.rdb $(WORKDIR)/CustomTarget/sc/qa/unit/services.rdb,\
 		file://$(if $(filter WNT,$(OS)),/)$(rdb))" \
 	$(foreach dir,URE_INTERNAL_LIB_DIR OOO_BASE_DIR BRAND_BASE_DIR, \
 		-env:$(dir)=file://$(if $(filter WNT,$(OS)),/$(OUTDIR)/bin,$(OUTDIR)/lib)) \
