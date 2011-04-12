@@ -2084,13 +2084,16 @@ ScFormatFilterPlugin &ScFormatFilter::Get()
     if (plugin != NULL)
         return *plugin;
 
+    ::rtl::OUString sFilterLib(RTL_CONSTASCII_USTRINGPARAM(SVLIBRARY("scfilt")));
     static ::osl::Module aModule;
-    if ( aModule.loadRelative( &thisModule,
-                   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "scfilt" ) ) ) ) )
+    bool bLoaded = aModule.loadRelative(&thisModule, sFilterLib);
+    if (!bLoaded)
+        bLoaded = aModule.load(sFilterLib);
+    if (bLoaded)
     {
-    oslGenericFunction fn = aModule.getFunctionSymbol( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScFilterCreate" )) );
-    if (fn != NULL)
-        plugin = reinterpret_cast<FilterFn>(fn)();
+        oslGenericFunction fn = aModule.getFunctionSymbol( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScFilterCreate" )) );
+        if (fn != NULL)
+            plugin = reinterpret_cast<FilterFn>(fn)();
     }
     if (plugin == NULL)
         plugin = new ScFormatFilterMissing();

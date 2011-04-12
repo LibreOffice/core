@@ -266,8 +266,7 @@ public:
     CPPUNIT_TEST(testGraphicsInGroup);
     CPPUNIT_TEST(testStreamValid);
     CPPUNIT_TEST(testFunctionLists);
-    // fdo#36128 disabled for now because it fails
-    //CPPUNIT_TEST(testCVEs);
+    CPPUNIT_TEST(testCVEs);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -488,15 +487,15 @@ void Test::testCVEs()
     bool bResult;
 
     bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
-        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/CVE/CVE-2007-5745-1.wb2")));
+        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/qa/unit/CVE/CVE-2007-5745-1.wb2")));
     CPPUNIT_ASSERT_MESSAGE("CVE-2007-5745 regression", bResult == true);
 
     bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
-        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/CVE/CVE-2007-5745-2.wb2")));
+        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/qa/unit/CVE/CVE-2007-5745-2.wb2")));
     CPPUNIT_ASSERT_MESSAGE("CVE-2007-5745 regression", bResult == true);
 
     bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
-        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/CVE/CVE-2007-5747-1.wb2")));
+        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/qa/unit/CVE/CVE-2007-5747-1.wb2")));
     CPPUNIT_ASSERT_MESSAGE("CVE-2007-5747 regression", bResult == false);
 }
 
