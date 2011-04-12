@@ -372,7 +372,7 @@ gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
 
 ifneq ($(gb_DEBUGLEVEL),0)
 gb_LinkTarget_CXXFLAGS += -finline-limit=0 -fno-inline -fno-default-inline
-gb_LinkTarget_CFLAGS += -finline-limit=0 -fno-inline -fno-default-inline
+gb_LinkTarget_CFLAGS += -finline-limit=0 -fno-inline 
 endif
 
 ifeq ($(gb_SYMBOL),$(true))
