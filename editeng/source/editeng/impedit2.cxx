@@ -3817,10 +3817,10 @@ EditPaM ImpEditEngine::GetPaM( ParaPortion* pPortion, Point aDocPos, sal_Bool bS
 
     if ( !pLine ) // may happen only in the range of SA!
     {
-        #ifdef DBG_UTIL
-         const SvxULSpaceItem& rULSpace =(const SvxULSpaceItem&)pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_ULSPACE );
-         OSL_ENSURE( nY+GetYValue( rULSpace.GetLower() ) >= aDocPos.Y() , "Index in no line, GetPaM ?" );
-        #endif
+#if OSL_DEBUG_LEVEL > 0
+        const SvxULSpaceItem& rULSpace =(const SvxULSpaceItem&)pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_ULSPACE );
+        OSL_ENSURE( nY+GetYValue( rULSpace.GetLower() ) >= aDocPos.Y() , "Index in no line, GetPaM ?" );
+#endif
         aPaM.SetIndex( pPortion->GetNode()->Len() );
         return aPaM;
     }
