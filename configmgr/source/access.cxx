@@ -2230,13 +2230,13 @@ bool Access::thisIs(int what) {
     osl::MutexGuard g(*lock_);
     rtl::Reference< Node > p(getNode());
     Node::Kind k(p->kind());
-    return k != Node::KIND_PROPERTY && k != Node::KIND_LOCALIZED_VALUE &&
+    return (k != Node::KIND_PROPERTY && k != Node::KIND_LOCALIZED_VALUE &&
         ((what & IS_GROUP) == 0 || k == Node::KIND_GROUP) &&
         ((what & IS_SET) == 0 || k == Node::KIND_SET) &&
         ((what & IS_EXTENSIBLE) == 0 || k != Node::KIND_GROUP ||
          dynamic_cast< GroupNode * >(p.get())->isExtensible()) &&
         ((what & IS_GROUP_MEMBER) == 0 ||
-         getParentNode()->kind() == Node::KIND_GROUP) ||
+         getParentNode()->kind() == Node::KIND_GROUP)) ||
         ((what & IS_SET_MEMBER) == 0 ||
          getParentNode()->kind() == Node::KIND_SET) ||
         ((what & IS_UPDATE) == 0 || getRootAccess()->isUpdate());
