@@ -243,9 +243,7 @@ int BasicApp::Main( )
 
     try
     {
-#ifdef _USE_UNO
     uno::Reference< XContentProviderManager > xUcb = InitializeUCB();
-#endif
 
     {
         DirEntry aIniPath( Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ) );

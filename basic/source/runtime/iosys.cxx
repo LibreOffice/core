@@ -171,8 +171,6 @@ void SbiStream::MapError()
     }
 }
 
-#ifdef _USE_UNO
-
 // TODO: Code is copied from daemons2/source/uno/asciiEncoder.cxx
 
 ::rtl::OUString findUserInDescription( const ::rtl::OUString& aDescription )
@@ -205,15 +203,11 @@ void SbiStream::MapError()
     return user;
 }
 
-#endif
-
-
 // Hack for #83750
 sal_Bool runsInSetup( void );
 
 sal_Bool needSecurityRestrictions( void )
 {
-#ifdef _USE_UNO
     static sal_Bool bNeedInit = sal_True;
     static sal_Bool bRetVal = sal_True;
 
@@ -290,9 +284,6 @@ sal_Bool needSecurityRestrictions( void )
     }
 
     return bRetVal;
-#else
-    return sal_False;
-#endif
 }
 
 // Returns sal_True if UNO is available, otherwise the old file
@@ -300,7 +291,6 @@ sal_Bool needSecurityRestrictions( void )
 // #89378 New semantic: Don't just ask for UNO but for UCB
 sal_Bool hasUno( void )
 {
-#ifdef _USE_UNO
     static sal_Bool bNeedInit = sal_True;
     static sal_Bool bRetVal = sal_True;
 
@@ -326,9 +316,6 @@ sal_Bool hasUno( void )
         }
     }
     return bRetVal;
-#else
-    return sal_False;
-#endif
 }
 
 
@@ -420,8 +407,6 @@ void OslStream::SetSize( sal_uIntPtr nSize )
     maFile.setSize( (sal_uInt64)nSize );
 }
 
-
-#ifdef _USE_UNO
 
 class UCBStream : public SvStream
 {
@@ -585,7 +570,6 @@ void    UCBStream::SetSize( sal_uIntPtr nSize )
     SetError( ERRCODE_IO_GENERAL );
 }
 
-#endif
 
 // Oeffnen eines Streams
 SbError SbiStream::Open
@@ -601,7 +585,6 @@ SbError SbiStream::Open
     String aStr( rName, gsl_getSystemTextEncoding() );
     String aNameStr = getFullPath( aStr );
 
-#ifdef _USE_UNO
     if( hasUno() )
     {
         Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
@@ -646,7 +629,6 @@ SbError SbiStream::Open
         }
     }
 
-#endif
     if( !pStrm )
     {
         pStrm = new OslStream( aNameStr, nStrmMode );
