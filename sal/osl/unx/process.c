@@ -544,8 +544,9 @@ static void ChildStatusProc(void *pData)
                 if (stdError[1] != -1) close( stdError[1] );
             }
 
-            pid=execv(data.m_pszArgs[0], (sal_Char **)data.m_pszArgs);
-
+            // No need to check the return value of execv. If we return from
+            // it, an error has occurred.
+            execv(data.m_pszArgs[0], (sal_Char **)data.m_pszArgs);
         }
 
         OSL_TRACE("Failed to exec, errno=%d (%s)\n", errno, strerror(errno));
