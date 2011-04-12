@@ -868,7 +868,7 @@ File gid_File_Dl_Stlport
     Name = SCP2_URE_DL_NORMAL("stlport_sunpro");
 #endif
 #endif
-#elif defined WNT && (defined(M1500) || defined (M1600) )
+#elif defined WNT && ((_MSC_VER == 1500) || (_MSC_VER == 1600))
 #if defined _DEBUG_RUNTIME
     Name = SCP2_URE_DL_NORMAL("stlport_vc71_stldebug45");
 #else
