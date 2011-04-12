@@ -364,7 +364,7 @@ bool SvxOle2Shape::getPropertyValueImpl( const ::rtl::OUString& rName, const Sfx
                 // usage. Removed it, former fallback is used now
                 if ( pProperty->nWID == OWN_ATTR_OLEMODEL || pProperty->nWID == OWN_ATTR_OLE_EMBEDDED_OBJECT )
                 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
                     const sal_Bool bSuccess(pObj->AddOwnLightClient());
                     OSL_ENSURE( bSuccess, "An object without client is provided!" );
 #else
