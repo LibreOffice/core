@@ -2746,51 +2746,51 @@ fi
 dnl ===================================================================
 dnl Checks for what the default STL should be
 dnl ===================================================================
-   AC_MSG_CHECKING([Whether building STLPort library makes sense])
-   BUILD_STLPORT="no"
-   if test "$_os" = "Linux"; then
-     case "$host_cpu" in
-       i?86)
-     case "$host_os" in k*bsd*-gnu*)
-         BUILD_STLPORT="no"
+AC_MSG_CHECKING([Whether building STLPort library makes sense])
+BUILD_STLPORT="no"
+if test "$_os" = "Linux"; then
+  case "$host_cpu" in
+    i?86)
+      case "$host_os" in k*bsd*-gnu*)
+        BUILD_STLPORT="no"
         ;;
-     *)
-             BUILD_STLPORT="yes"
+      *)
+        BUILD_STLPORT="yes"
         ;;
       esac
-         ;;
-       *)
-         BUILD_STLPORT="no"
-         ;;
-     esac
-   elif test "$_os" = "SunOS"; then
-      BUILD_STLPORT="yes"
-   elif test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
-      BUILD_STLPORT="yes"
-   elif test "$_os" = "OS2"; then
-      BUILD_STLPORT="yes"
-   elif test "$_os" = "FreeBSD"; then
-      BUILD_STLPORT="yes"
-   fi
-   if test "$BUILD_STLPORT" = "yes" ; then
-      AC_MSG_RESULT([yes])
-   else
-      AC_MSG_RESULT([no])
-   fi
+      ;;
+    *)
+      BUILD_STLPORT="no"
+      ;;
+  esac
+elif test "$_os" = "SunOS"; then
+   BUILD_STLPORT="yes"
+elif test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
+   BUILD_STLPORT="yes"
+elif test "$_os" = "OS2"; then
+   BUILD_STLPORT="yes"
+elif test "$_os" = "FreeBSD"; then
+   BUILD_STLPORT="yes"
+fi
+if test "$BUILD_STLPORT" = "yes" ; then
+   AC_MSG_RESULT([yes])
+else
+   AC_MSG_RESULT([no])
+fi
 
-   AC_MSG_CHECKING([Whether STLPort library will be actually built])
-   if test "$with_stlport" = "auto" -o "$BUILD_STLPORT" = "no"; then
-      with_stlport=$BUILD_STLPORT
-   fi
-   if test "$with_stlport" = "yes" ; then
-      AC_MSG_RESULT([yes])
-	  WITH_STLPORT=YES
-	  SCPDEFS="$SCPDEFS -DWITH_STLPORT"
-	  BUILD_TYPE="$BUILD_TYPE STLPORT"
-   else
-      WITH_STLPORT=NO
-      AC_MSG_RESULT([no])
-   fi
+AC_MSG_CHECKING([Whether STLPort library will be actually built])
+if test "$with_stlport" = "auto" -o "$BUILD_STLPORT" = "no"; then
+   with_stlport=$BUILD_STLPORT
+fi
+if test "$with_stlport" = "yes" ; then
+   AC_MSG_RESULT([yes])
+       WITH_STLPORT=YES
+       SCPDEFS="$SCPDEFS -DWITH_STLPORT"
+       BUILD_TYPE="$BUILD_TYPE STLPORT"
+else
+   WITH_STLPORT=NO
+   AC_MSG_RESULT([no])
+fi
 
 AC_SUBST(WITH_STLPORT)
 
@@ -6678,6 +6678,17 @@ AS_IF([test "x$enable_ext_scripting_python" = "xyes"], [
 ])
 AC_SUBST(ENABLE_SCRIPTING_PYTHON)
 
+supports_multilib=
+case "$host_cpu" in
+   x86_64 | powerpc64 | s390x)
+      if test "$SIZEOF_LONG" = "8"; then
+          supports_multilib="yes"
+      fi
+      ;;
+   *)
+      ;;
+esac
+
 dnl ===================================================================
 dnl Check whether the Qt3 and KDE3 libraries are available.
 dnl ===================================================================
@@ -6689,7 +6700,7 @@ if test "$_os" != "OpenBSD"; then
 fi
 if test "$test_kde" = "yes" -a "$ENABLE_KDE" = "TRUE" ; then
     dnl Search paths for Qt3 and KDE3
-    if test "$host_cpu" != "x86_64" ; then
+    if test -z "$supports_multilib" ; then
         qt_incdirs="$QTINC /usr/local/qt/include /usr/include/qt /usr/include /usr/X11R6/include/X11/qt /usr/X11R6/include/qt /usr/lib/qt3/include /usr/lib/qt/include /usr/share/qt3/include /usr/local/include/X11/qt3 $x_includes"
         qt_libdirs="$QTLIB /usr/local/qt/lib /usr/lib/qt /usr/lib /usr/X11R6/lib/X11/qt /usr/X11R6/lib/qt /usr/lib/qt3/lib /usr/lib/qt/lib /usr/share/qt3/lib /usr/local/lib/qt3 $x_libraries"
     else
@@ -6698,13 +6709,13 @@ if test "$test_kde" = "yes" -a "$ENABLE_KDE" = "TRUE" ; then
     fi
     if test -n "$QTDIR" ; then
         qt_incdirs="$QTDIR/include $qt_incdirs"
-        if test "$host_cpu" != "x86_64" ; then
+        if test -z "$supports_multilib" ; then
             qt_libdirs="$QTDIR/lib $qt_libdirs"
         else
             qt_libdirs="$QTDIR/lib64 $QTDIR/lib $qt_libdirs"
         fi
     fi
-    if test "$host_cpu" != "x86_64" ; then
+    if test -z "$supports_multilib" ; then
         kde_incdirs="/usr/lib/kde/include /usr/local/kde/include /usr/local/include /usr/kde/include /usr/include/kde /opt/kde3/include /opt/kde/include $x_includes"
         kde_libdirs="/usr/lib/kde/lib /usr/local/kde/lib /usr/kde/lib /usr/lib/kde /usr/lib/kde3 /usr/X11R6/lib /usr/local/lib /opt/kde3/lib /opt/kde/lib /usr/X11R6/kde/lib /usr/lib $x_libraries"
     else
@@ -6713,7 +6724,7 @@ if test "$test_kde" = "yes" -a "$ENABLE_KDE" = "TRUE" ; then
     fi
     if test -n "$KDEDIR" ; then
         kde_incdirs="$KDEDIR/include $kde_incdirs"
-        if test "$host_cpu" != "x86_64" ; then
+        if test -z "$supports_multilib" ; then
             kde_libdirs="$KDEDIR/lib $kde_libdirs"
         else
             kde_libdirs="$KDEDIR/lib64 $KDEDIR/lib $kde_libdirs"
@@ -6824,14 +6835,14 @@ if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE" ; then
    kde_incdirs="/usr/include /usr/include/kde4 $x_includes"
    kde_libdirs="/usr/lib /usr/lib/kde4 /usr/lib/kde4/devel $x_libraries"
 
-   if test "$host_cpu" = "x86_64" ; then
+   if test -n "$supports_multilib" ; then
       qt_libdirs="$qt_libdirs /usr/lib64/qt4 /usr/lib64/qt /usr/lib64"
       kde_libdirs="$kde_libdirs /usr/lib64 /usr/lib64/kde4 /usr/lib64/kde4/devel"
    fi
 
    if test -n "$QTDIR" ; then
       qt_incdirs="$QTDIR/include $qt_incdirs"
-      if test "$host_cpu" != "x86_64" ; then
+      if test -z "$supports_multilib" ; then
          qt_libdirs="$QTDIR/lib $qt_libdirs"
       else
          qt_libdirs="$QTDIR/lib64 $QTDIR/lib $qt_libdirs"
@@ -6839,7 +6850,7 @@ if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE" ; then
    fi
    if test -n "$QT4DIR" ; then
       qt_incdirs="$QT4DIR/include $qt_incdirs"
-      if test "$host_cpu" != "x86_64" ; then
+      if test -z "$supports_multilib" ; then
          qt_libdirs="$QT4DIR/lib $qt_libdirs"
       else
          qt_libdirs="$QT4DIR/lib64 $QT4DIR/lib $qt_libdirs"
@@ -6848,7 +6859,7 @@ if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE" ; then
 
    if test -n "$KDEDIR" ; then
       kde_incdirs="$KDEDIR/include $kde_incdirs"
-      if test "$host_cpu" != "x86_64" ; then
+      if test -z "$supports_multilib" ; then
          kde_libdirs="$KDEDIR/lib $kde_libdirs"
       else
          kde_libdirs="$KDEDIR/lib64 $KDEDIR/lib $kde_libdirs"
@@ -6856,7 +6867,7 @@ if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE" ; then
    fi
    if test -n "$KDE4DIR" ; then
       kde_incdirs="$KDE4DIR/include $KDE4DIR/include/kde4 $kde_incdirs"
-      if test "$host_cpu" != "x86_64" ; then
+      if test -z "$supports_multilib" ; then
          kde_libdirs="$KDE4DIR/lib $kde_libdirs"
       else
          kde_libdirs="$KDE4DIR/lib64 $KDE4DIR/lib $kde_libdirs"
