@@ -547,21 +547,21 @@ static sal_Bool performTest(
             try {
                 xLBT->getRaiseAttr1();
                 bRet &= check(false, "getRaiseAttr1 did not throw");
-            } catch (RuntimeException &) {
+            } catch (const RuntimeException &) {
             } catch (...) {
                 bRet &= check(false, "getRaiseAttr1 threw wrong type");
             }
             try {
                 xLBT->setRaiseAttr1(0);
                 bRet &= check(false, "setRaiseAttr1 did not throw");
-            } catch (IllegalArgumentException &) {
+            } catch (const IllegalArgumentException &) {
             } catch (...) {
                 bRet &= check(false, "setRaiseAttr1 threw wrong type");
             }
             try {
                 xLBT->getRaiseAttr2();
                 bRet &= check(false, "getRaiseAttr2 did not throw");
-            } catch (IllegalArgumentException &) {
+            } catch (const IllegalArgumentException &) {
             } catch (...) {
                 bRet &= check(false, "getRaiseAttr2 threw wrong type");
             }
@@ -907,7 +907,7 @@ static sal_Bool performTest(
         // available in Java, while the server is, the logic is reversed here:
         try {
             xBT2->testConstructorsService(xContext);
-        } catch (BadConstructorArguments &) {
+        } catch (const BadConstructorArguments &) {
             bRet = false;
         }
         if (!noCurrentContext) {
@@ -947,7 +947,7 @@ static sal_Bool raiseOnewayException( const Reference < XBridgeTest > & xLBT )
         //        When it flies, it must contain the correct elements.
         xLBT->raiseRuntimeExceptionOneway( sCompare, x );
     }
-    catch( RuntimeException & e )
+    catch( const RuntimeException & e )
     {
         bReturn = (
 #if OSL_DEBUG_LEVEL == 0
@@ -975,14 +975,14 @@ static sal_Bool raiseException( const Reference< XBridgeTest > & xLBT )
                     5, OUSTR(STRING_TEST_CONSTANT),
                     xLBT->getInterface() );
             }
-            catch (IllegalArgumentException aExc)
+            catch (const IllegalArgumentException &rExc)
             {
-                if (aExc.ArgumentPosition == 5 &&
+                if (rExc.ArgumentPosition == 5 &&
 #if OSL_DEBUG_LEVEL == 0
                     // java stack traces trash Message
-                    aExc.Message.compareToAscii( STRING_TEST_CONSTANT ) == 0 &&
+                    rExc.Message.compareToAscii( STRING_TEST_CONSTANT ) == 0 &&
 #endif
-                    aExc.Context == xLBT->getInterface())
+                    rExc.Context == xLBT->getInterface())
                 {
 #ifdef COMPCHECK
                     //When we check if a new compiler still works then we must not call
@@ -1022,7 +1022,7 @@ static sal_Bool raiseException( const Reference< XBridgeTest > & xLBT )
             xLBT->setRuntimeException( 0xcafebabe );
         }
     }
-    catch (Exception & rExc)
+    catch (const Exception & rExc)
     {
         if (rExc.Context == xLBT->getInterface()
 #if OSL_DEBUG_LEVEL == 0
@@ -1236,7 +1236,7 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
                 Reference< XInterface >() );
         }
     }
-    catch (Exception & exc)
+    catch (const Exception & exc)
     {
         OString cstr( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
         fprintf( stderr, "exception occurred: %s\n", cstr.getStr() );
