@@ -33,8 +33,7 @@ $(eval $(call gb_Library_set_include,spa,\
     -I$(OUTDIR)/inc/stl \
 ))
 
-$(eval $(call gb_Library_set_defs,spa,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,spa,\
     -DSPA_DLLIMPLEMENTATION \
 ))
 

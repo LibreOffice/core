@@ -36,13 +36,8 @@ $(eval $(call gb_Library_set_include,cairocanvas,\
 	-I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,cairocanvas,\
-	$$(DEFS) \
-))
-
 ifneq ($(strip $(VERBOSE)$(verbose)),)
-$(eval $(call gb_Library_set_defs,cairocanvas,\
-	$$(DEFS) \
+$(eval $(call gb_Library_add_defs,cairocanvas,\
 	-DVERBOSE \
 ))
 endif

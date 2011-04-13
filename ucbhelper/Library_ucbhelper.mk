@@ -38,8 +38,7 @@ $(eval $(call gb_Library_set_include,ucbhelper,\
 	-I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,ucbhelper,\
-	$$(DEFS) \
+$(eval $(call gb_Library_add_defs,ucbhelper,\
 	-DUCBHELPER_DLLIMPLEMENTATION \
 ))
 

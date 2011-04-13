@@ -36,14 +36,12 @@ $(eval $(call gb_Library_set_include,directx9canvas,\
 	-I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,directx9canvas,\
-	$$(DEFS) \
+$(eval $(call gb_Library_add_defs,directx9canvas,\
 	-DDIRECTX_VERSION=0x0900 \
 ))
 
 ifneq ($(strip $(VERBOSE)$(verbose)),)
-$(eval $(call gb_Library_set_defs,directx9canvas,\
-	$$(DEFS) \
+$(eval $(call gb_Library_add_defs,directx9canvas,\
 	-DVERBOSE \
 ))
 endif

@@ -115,8 +115,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
     vcl/unx/generic/window/salobj \
 ))
 
-$(eval $(call gb_Library_set_defs,vclplug_gen,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,vclplug_gen,\
     -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
     -DVCLPLUG_GEN_IMPLEMENTATION \
 ))
@@ -124,8 +123,7 @@ $(eval $(call gb_Library_set_defs,vclplug_gen,\
 
 ## handle RandR 
 ifneq ($(ENABLE_RANDR),)
-$(eval $(call gb_Library_set_defs,vclplug_gen,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,vclplug_gen,\
     -DUSE_RANDR \
 ))
 ifeq ($(XRANDR_DLOPEN),FALSE)
@@ -137,8 +135,7 @@ $(eval $(call gb_Library_add_libs,vclplug_gen,\
     $(XRANDR_LIBS) \
 ))
 else
-$(eval $(call gb_Library_set_defs,vclplug_gen,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,vclplug_gen,\
     -DXRANDR_DLOPEN \
 ))
 endif
@@ -148,8 +145,7 @@ endif
 ifneq ($(USE_XINERAMA),NO)
 ifneq ($(OS),SOLARIS)
 # not Solaris
-$(eval $(call gb_Library_set_defs,vclplug_gen,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,vclplug_gen,\
     -DUSE_XINERAMA_XORG \
 ))
 ifeq ($(XINERAMA_LINK),dynamic)
@@ -163,8 +159,7 @@ $(eval $(call gb_Library_add_libs,vclplug_gen,\
 endif
 else
 # Solaris
-$(eval $(call gb_Library_set_defs,vclplug_gen,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,vclplug_gen,\
     -DUSE_XINERAMA_XSUN \
 ))
 ifeq ($(USE_XINERAMA_VERSION),Xorg)
@@ -184,8 +179,7 @@ endif
 
 ## handle Render linking
 ifeq ($(XRENDER_LINK),YES)
-$(eval $(call gb_Library_set_defs,vclplug_gen,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,vclplug_gen,\
     -DXRENDER_LINK \
 ))
 $(eval $(call gb_Library_add_libs,vclplug_gen,\

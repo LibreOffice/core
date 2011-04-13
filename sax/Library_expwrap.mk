@@ -35,10 +35,6 @@ $(eval $(call gb_Library_set_include,expwrap,\
 	-I$(SRCDIR)/sax/inc \
 ))
 
-$(eval $(call gb_Library_set_defs,expwrap,\
-	$$(DEFS) \
-))
-
 $(eval $(call gb_Library_add_linked_libs,expwrap,\
 	sal \
 	cppu \

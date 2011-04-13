@@ -39,8 +39,7 @@ $(eval $(call gb_Library_set_include,basegfx,\
 	-I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,basegfx,\
-	$$(DEFS) \
+$(eval $(call gb_Library_add_defs,basegfx,\
 	-DBASEGFX_DLLIMPLEMENTATION \
 ))
 

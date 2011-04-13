@@ -36,13 +36,8 @@ $(eval $(call gb_Library_set_include,simplecanvas,\
 	-I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,simplecanvas,\
-	$$(DEFS) \
-))
-
 ifneq ($(strip $(VERBOSE)$(verbose)),)
-$(eval $(call gb_Library_set_defs,simplecanvas,\
-	$$(DEFS) \
+$(eval $(call gb_Library_add_defs,simplecanvas,\
 	-DVERBOSE \
 ))
 endif

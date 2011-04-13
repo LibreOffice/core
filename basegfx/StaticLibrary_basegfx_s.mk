@@ -44,8 +44,7 @@ $(eval $(call gb_StaticLibrary_set_include,basegfx_s,\
 # this means that all code of this static library will end in a dll
 # thus the _DLL define must be set to avoid link problems with stlport symbols
 # the BASEGFX_STATICLIBRARY define will expand all BASEGFX_DLLPRIVATE/PUBLIC macros to nothing
-$(eval $(call gb_StaticLibrary_set_defs,basegfx_s,\
-	$$(DEFS) \
+$(eval $(call gb_StaticLibrary_add_defs,basegfx_s,\
 	-DBASEGFX_STATICLIBRARY \
 	-D_DLL \
 ))

@@ -35,10 +35,6 @@ $(eval $(call gb_Library_set_include,fastsax,\
 	-I$(SRCDIR)/sax/inc \
 ))
 
-$(eval $(call gb_Library_set_defs,fastsax,\
-	$$(DEFS) \
-))
-
 $(eval $(call gb_Library_add_linked_libs,fastsax,\
 	sal \
 	cppu \
@@ -49,8 +45,7 @@ $(eval $(call gb_Library_add_linked_libs,fastsax,\
 ))
 
 ifeq ($(SYSTEM_ZLIB),YES)
-$(eval $(call gb_Library_set_defs,fastsax,\
-	$$(DEFS) \
+$(eval $(call gb_Library_add_defs,fastsax,\
 	-DSYSTEM_ZLIB \
 ))
 endif

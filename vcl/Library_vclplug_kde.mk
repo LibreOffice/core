@@ -42,8 +42,7 @@ $(eval $(call gb_Library_set_include,vclplug_kde,\
     $$(KDE_CFLAGS) \
 ))
 
-$(eval $(call gb_Library_set_defs,vclplug_kde,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,vclplug_kde,\
     -DVCLPLUG_KDE_IMPLEMENTATION \
 ))
 

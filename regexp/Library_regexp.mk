@@ -34,8 +34,7 @@ $(eval $(call gb_Library_set_include,i18nregexp,\
 	-I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,i18nregexp,\
-	$$(DEFS) \
+$(eval $(call gb_Library_add_defs,i18nregexp,\
 	-DREGEXP_DLLIMPLEMENTATION \
 ))
 

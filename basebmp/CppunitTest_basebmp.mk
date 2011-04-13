@@ -48,8 +48,4 @@ $(eval $(call gb_CppunitTest_add_linked_libs,basebmp_test, \
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,basebmp_test,\
-	$$(INCLUDE) \
-))
-
 # vim: set noet sw=4 ts=4:

@@ -52,8 +52,7 @@ $(eval $(call gb_Library_set_include,utl,\
 
 # add any additional definitions to be set for compilation here
 # (e.g. -DLIB_DLLIMPLEMENTATION)
-$(eval $(call gb_Library_set_defs,utl,\
-	$$(DEFS) \
+$(eval $(call gb_Library_add_defs,utl,\
 	-DUNOTOOLS_DLLIMPLEMENTATION \
 ))
 

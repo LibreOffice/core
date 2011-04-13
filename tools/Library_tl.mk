@@ -41,8 +41,7 @@ $(eval $(call gb_Library_set_include,tl,\
     -I$(OUTDIR)/inc/stl \
 ))
 
-$(eval $(call gb_Library_set_defs,tl,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,tl,\
     -DTOOLS_DLLIMPLEMENTATION \
     -DVCL \
 ))

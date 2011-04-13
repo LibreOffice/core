@@ -42,15 +42,13 @@ $(eval $(call gb_Library_set_include,vclplug_gtk,\
     $$(GTK_CFLAGS) \
 ))
 
-$(eval $(call gb_Library_set_defs,vclplug_gtk,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,vclplug_gtk,\
     -DVCLPLUG_GTK_IMPLEMENTATION \
     -DVERSION=\"$(UPD)$(LAST_MINOR)\" \
 ))
 
 ifneq ($(ENABLE_DBUS),)
-$(eval $(call gb_Library_set_defs,vclplug_gtk,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,vclplug_gtk,\
     -DENABLE_DBUS \
 ))
 $(eval $(call gb_Library_add_libs,vclplug_gtk,\

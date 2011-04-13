@@ -37,8 +37,7 @@ $(eval $(call gb_Library_set_include,sax,\
 	-I$(SRCDIR)/sax/inc \
 ))
 
-$(eval $(call gb_Library_set_defs,sax,\
-	$$(DEFS) \
+$(eval $(call gb_Library_add_defs,sax,\
 	-DSAX_DLLIMPLEMENTATION \
 ))
 

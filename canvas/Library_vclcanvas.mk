@@ -36,13 +36,8 @@ $(eval $(call gb_Library_set_include,vclcanvas,\
 	-I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,vclcanvas,\
-	$$(DEFS) \
-))
-
 ifneq ($(strip $(VERBOSE)$(verbose)),)
-$(eval $(call gb_Library_set_defs,vclcanvas,\
-	$$(DEFS) \
+$(eval $(call gb_Library_add_defs,vclcanvas,\
 	-DVERBOSE \
 ))
 endif

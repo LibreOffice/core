@@ -41,8 +41,7 @@ $(eval $(call gb_Library_set_include,desktop_detector,\
     -I$(OUTDIR)/inc \
 ))
 
-$(eval $(call gb_Library_set_defs,desktop_detector,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,desktop_detector,\
     -DDESKTOP_DETECTOR_IMPLEMENTATION \
 ))
 

@@ -36,8 +36,7 @@ $(eval $(call gb_Library_set_include,basebmp,\
 	-I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,basebmp,\
-	$$(DEFS) \
+$(eval $(call gb_Library_add_defs,basebmp,\
 	-DBASEBMP_DLLIMPLEMENTATION \
 ))
 
