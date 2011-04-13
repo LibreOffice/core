@@ -35,6 +35,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     forms \
     framework \
     lotuswordpro \
+    oox \
     padmin \
     sfx2 \
     sot \
