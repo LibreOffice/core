@@ -56,7 +56,7 @@ void tLog::initialize( const ::rtl::OString& name ) {
             ret = m_logfile->open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
         }
         else  {
-            ret = m_logfile->setPos( Pos_End, 0 );
+            ret = m_logfile->setPos( osl_Pos_End, 0 );
         }
         return ret;
     }
