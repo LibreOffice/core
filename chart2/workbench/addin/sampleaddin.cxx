@@ -71,7 +71,7 @@ sal_Bool SAL_CALL component_writeInfo(
 
             return sal_True;
         }
-        catch( registry::InvalidRegistryException& )
+        catch( const registry::InvalidRegistryException& )
         {
             OSL_FAIL( "### InvalidRegistryException!" );
         }
@@ -163,7 +163,7 @@ sal_Bool SampleAddIn::getLogicalPosition( uno::Reference< drawing::XShape >& xAx
                     bRet = sal_True;
                 }
             }
-            catch( beans::UnknownPropertyException )
+            catch( const beans::UnknownPropertyException& )
             {
                 // the shape xAxis was no chart axis
             }
