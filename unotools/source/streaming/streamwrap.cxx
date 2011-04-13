@@ -116,16 +116,8 @@ void SAL_CALL OInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip) throw( star
     ::osl::MutexGuard aGuard( m_aMutex );
     checkError();
 
-#ifdef DBG_UTIL
-    sal_uInt32 nCurrentPos = m_pSvStream->Tell();
-#endif
-
     m_pSvStream->SeekRel(nBytesToSkip);
     checkError();
-
-#ifdef DBG_UTIL
-    nCurrentPos = m_pSvStream->Tell();
-#endif
 }
 
 //------------------------------------------------------------------------------
