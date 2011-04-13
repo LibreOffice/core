@@ -650,8 +650,8 @@ void Components::parseFiles(
                 css::uno::Reference< css::uno::XInterface >());
         }
         osl::FileStatus stat(
-            FileStatusMask_Type | FileStatusMask_FileName |
-            FileStatusMask_FileURL);
+            osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName |
+            osl_FileStatus_Mask_FileURL);
         if (i.getFileStatus(stat) != osl::FileBase::E_None) {
             throw css::uno::RuntimeException(
                 (rtl::OUString(
@@ -742,8 +742,8 @@ void Components::parseXcdFiles(int layer, rtl::OUString const & url) {
                 css::uno::Reference< css::uno::XInterface >());
         }
         osl::FileStatus stat(
-            FileStatusMask_Type | FileStatusMask_FileName |
-            FileStatusMask_FileURL);
+            osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName |
+            osl_FileStatus_Mask_FileURL);
         if (i.getFileStatus(stat) != osl::FileBase::E_None) {
             throw css::uno::RuntimeException(
                 (rtl::OUString(

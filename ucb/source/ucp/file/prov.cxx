@@ -321,8 +321,8 @@ FileProvider::compareContentIds(
         if ( error != osl::FileBase::E_None )
             return iComp;
 
-        osl::FileStatus aStatus1( FileStatusMask_FileURL );
-        osl::FileStatus aStatus2( FileStatusMask_FileURL );
+        osl::FileStatus aStatus1( osl_FileStatus_Mask_FileURL );
+        osl::FileStatus aStatus2( osl_FileStatus_Mask_FileURL );
         error = aItem1.getFileStatus( aStatus1 );
         if ( error == osl::FileBase::E_None )
             error = aItem2.getFileStatus( aStatus2 );

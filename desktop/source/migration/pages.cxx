@@ -179,7 +179,7 @@ LicensePage::LicensePage( svt::OWizardMachine* parent, const ResId& resid, const
     {
         DirectoryItem d;
         DirectoryItem::get(rLicensePath, d);
-        FileStatus fs(FileStatusMask_FileSize);
+        FileStatus fs(osl_FileStatus_Mask_FileSize);
         d.getFileStatus(fs);
         sal_uInt64 nBytesRead = 0;
         sal_uInt64 nPosition = 0;

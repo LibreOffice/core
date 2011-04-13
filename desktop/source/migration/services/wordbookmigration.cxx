@@ -114,7 +114,7 @@ namespace migration
             ::osl::DirectoryItem aItem;
             while ( aDir.getNextItem( aItem ) == ::osl::FileBase::E_None )
             {
-                ::osl::FileStatus aFileStatus( FileStatusMask_Type | FileStatusMask_FileURL );
+                ::osl::FileStatus aFileStatus( osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL );
                 if ( aItem.getFileStatus( aFileStatus ) == ::osl::FileBase::E_None )
                 {
                     if ( aFileStatus.getFileType() == ::osl::FileStatus::Directory )

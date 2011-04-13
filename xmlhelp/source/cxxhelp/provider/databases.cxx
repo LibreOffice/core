@@ -435,7 +435,7 @@ const std::vector< rtl::OUString >& Databases::getModuleList( const rtl::OUStrin
         osl::Directory dirFile( dirName );
 
         osl::DirectoryItem aDirItem;
-        osl::FileStatus    aStatus( FileStatusMask_FileName );
+        osl::FileStatus    aStatus( osl_FileStatus_Mask_FileName );
 
         sal_Int32 idx;
 
@@ -445,7 +445,7 @@ const std::vector< rtl::OUString >& Databases::getModuleList( const rtl::OUStrin
         while( dirFile.getNextItem( aDirItem ) == osl::FileBase::E_None &&
                aDirItem.getFileStatus( aStatus ) == osl::FileBase::E_None )
         {
-            if( ! aStatus.isValid( FileStatusMask_FileName ) )
+            if( ! aStatus.isValid( osl_FileStatus_Mask_FileName ) )
                 continue;
 
             fileName = aStatus.getFileName();
@@ -1296,7 +1296,7 @@ void Databases::cascadingStylesheet( const rtl::OUString& Language,
 
             osl::DirectoryItem aDirItem;
             osl::File aFile( fileURL );
-            osl::FileStatus aStatus( FileStatusMask_FileSize );
+            osl::FileStatus aStatus( osl_FileStatus_Mask_FileSize );
 
             if( osl::FileBase::E_None == osl::DirectoryItem::get( fileURL,aDirItem ) &&
                 osl::FileBase::E_None == aFile.open( osl_File_OpenFlag_Read )        &&

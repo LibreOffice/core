@@ -124,7 +124,7 @@ namespace
                     ::osl::FileBase::RC result = ::osl::DirectoryItem::get( sProductDirCandidate + ::rtl::OUString::createFromAscii( pProfileRegistry ), aRegistryItem );
                     if ( result == ::osl::FileBase::E_None  )
                     {
-                        ::osl::FileStatus aStatus( FileStatusMask_Validate );
+                        ::osl::FileStatus aStatus( osl_FileStatus_Mask_Validate );
                         result = aRegistryItem.getFileStatus( aStatus );
                         if ( result == ::osl::FileBase::E_None  )
                         {

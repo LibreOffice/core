@@ -3326,9 +3326,9 @@ sal_Bool SfxMedium::SetWritableForUserOnly( const ::rtl::OUString& aURL )
     ::osl::DirectoryItem aDirItem;
     if ( ::osl::DirectoryItem::get( aURL, aDirItem ) == ::osl::FileBase::E_None )
     {
-        ::osl::FileStatus aFileStatus( FileStatusMask_Attributes );
+        ::osl::FileStatus aFileStatus( osl_FileStatus_Mask_Attributes );
         if ( aDirItem.getFileStatus( aFileStatus ) == osl::FileBase::E_None
-          && aFileStatus.isValid( FileStatusMask_Attributes ) )
+          && aFileStatus.isValid( osl_FileStatus_Mask_Attributes ) )
         {
             sal_uInt64 nAttributes = aFileStatus.getAttributes();
 

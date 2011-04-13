@@ -753,15 +753,15 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
     }
 
     osl::Directory aDirectory( url );
-    osl::FileStatus aFileStatus( FileStatusMask_FileName | FileStatusMask_FileSize | FileStatusMask_FileURL );
+    osl::FileStatus aFileStatus( osl_FileStatus_Mask_FileName | osl_FileStatus_Mask_FileSize | osl_FileStatus_Mask_FileURL );
     if( osl::Directory::E_None == aDirectory.open() )
     {
         int idx_ = 0;
         rtl::OUString aFileUrl, aFileName;
         while( aDirectory.getNextItem( aDirItem ) == osl::FileBase::E_None &&
                aDirItem.getFileStatus( aFileStatus ) == osl::FileBase::E_None &&
-               aFileStatus.isValid( FileStatusMask_FileURL ) &&
-               aFileStatus.isValid( FileStatusMask_FileName ) )
+               aFileStatus.isValid( osl_FileStatus_Mask_FileURL ) &&
+               aFileStatus.isValid( osl_FileStatus_Mask_FileName ) )
           {
             aFileUrl = aFileStatus.getFileURL();
             aFileName = aFileStatus.getFileName();
@@ -777,7 +777,7 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
                 ( str[idx_ + 3] == 'e' || str[idx_ + 3] == 'E' )    &&
                 ( str[idx_ + 4] == 'e' || str[idx_ + 4] == 'E' ) )
               {
-                OSL_ENSURE( aFileStatus.isValid( FileStatusMask_FileSize ),
+                OSL_ENSURE( aFileStatus.isValid( osl_FileStatus_Mask_FileSize ),
                             "invalid file size" );
 
                 rtl::OUString baseName = aFileName.copy(0,idx_).toAsciiLowerCase();

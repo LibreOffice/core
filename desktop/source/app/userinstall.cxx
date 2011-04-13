@@ -171,7 +171,7 @@ namespace desktop {
         FileBase::RC err;
         DirectoryItem aDirItem;
         DirectoryItem::get(srcUnqPath, aDirItem);
-        FileStatus aFileStatus(FileStatusMask_All);
+        FileStatus aFileStatus(osl_FileStatus_Mask_All);
         aDirItem.getFileStatus(aFileStatus);
 
         if( aFileStatus.getFileType() == FileStatus::Directory)

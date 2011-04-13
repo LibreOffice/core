@@ -320,7 +320,7 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
             DirectoryItem aDirItem;
             if (DirectoryItem::get(aLicenseURL, aDirItem) != FileBase::E_None)
                 return makeAny(sal_False);
-            FileStatus aStatus(FileStatusMask_All);
+            FileStatus aStatus(osl_FileStatus_Mask_All);
             if (aDirItem.getFileStatus(aStatus) != FileBase::E_None)
                 return makeAny(sal_False);
             TimeValue aTimeVal = aStatus.getModifyTime();
@@ -442,7 +442,7 @@ LicenseDialog::LicenseDialog(const ::rtl::OUString & aLicensePath, ResMgr *pResM
     {
         DirectoryItem d;
         DirectoryItem::get(aLicensePath, d);
-        FileStatus fs(FileStatusMask_FileSize);
+        FileStatus fs(osl_FileStatus_Mask_FileSize);
         d.getFileStatus(fs);
         sal_uInt64 nBytesRead = 0;
         sal_uInt64 nPosition = 0;

@@ -689,7 +689,7 @@ void implRemoveDirRecursive( const String& aDirPath )
     FileBase::RC nRet = DirectoryItem::get( aDirPath, aItem );
     sal_Bool bExists = (nRet == FileBase::E_None);
 
-    FileStatus aFileStatus( FileStatusMask_Type );
+    FileStatus aFileStatus( osl_FileStatus_Mask_Type );
     nRet = aItem.getFileStatus( aFileStatus );
     FileStatus::Type aType = aFileStatus.getFileType();
     sal_Bool bFolder = isFolder( aType );
@@ -716,7 +716,7 @@ void implRemoveDirRecursive( const String& aDirPath )
             break;
 
         // Handle flags
-        FileStatus aFileStatus2( FileStatusMask_Type | FileStatusMask_FileURL );
+        FileStatus aFileStatus2( osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL );
         nRet = aItem2.getFileStatus( aFileStatus2 );
         ::rtl::OUString aPath = aFileStatus2.getFileURL();
 
@@ -845,7 +845,7 @@ RTLFUNC(FileLen)
         {
             DirectoryItem aItem;
             DirectoryItem::get( getFullPathUNC( aStr ), aItem );
-            FileStatus aFileStatus( FileStatusMask_FileSize );
+            FileStatus aFileStatus( osl_FileStatus_Mask_FileSize );
             aItem.getFileStatus( aFileStatus );
             nLen = (sal_Int32)aFileStatus.getFileSize();
         }
@@ -2459,7 +2459,7 @@ String getDirectoryPath( String aPathStr )
     FileBase::RC nRet = DirectoryItem::get( aPathStr, aItem );
     if( nRet == FileBase::E_None )
     {
-        FileStatus aFileStatus( FileStatusMask_Type );
+        FileStatus aFileStatus( osl_FileStatus_Mask_Type );
         nRet = aItem.getFileStatus( aFileStatus );
         if( nRet == FileBase::E_None )
         {
@@ -2470,7 +2470,7 @@ String getDirectoryPath( String aPathStr )
             }
             else if( aType == FileStatus::Link )
             {
-                FileStatus aFileStatus2( FileStatusMask_LinkTargetURL );
+                FileStatus aFileStatus2( osl_FileStatus_Mask_LinkTargetURL );
                 nRet = aItem.getFileStatus( aFileStatus2 );
                 if( nRet == FileBase::E_None )
                     aRetStr = getDirectoryPath( aFileStatus2.getLinkTargetURL() );
@@ -2817,7 +2817,7 @@ RTLFUNC(Dir)
                         }
 
                         // Handle flags
-                        FileStatus aFileStatus( FileStatusMask_Type | FileStatusMask_FileName );
+                        FileStatus aFileStatus( osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName );
                         nRet = aItem.getFileStatus( aFileStatus );
 
                         // Only directories?
@@ -2917,7 +2917,7 @@ RTLFUNC(GetAttr)
         {
             DirectoryItem aItem;
             DirectoryItem::get( getFullPathUNC( rPar.Get(1)->GetString() ), aItem );
-            FileStatus aFileStatus( FileStatusMask_Attributes | FileStatusMask_Type );
+            FileStatus aFileStatus( osl_FileStatus_Mask_Attributes | osl_FileStatus_Mask_Type );
             aItem.getFileStatus( aFileStatus );
             sal_uInt64 nAttributes = aFileStatus.getAttributes();
             sal_Bool bReadOnly = (nAttributes & Attribute_ReadOnly) != 0;
@@ -2969,7 +2969,7 @@ RTLFUNC(FileDateTime)
         {
             DirectoryItem aItem;
             DirectoryItem::get( getFullPathUNC( aPath ), aItem );
-            FileStatus aFileStatus( FileStatusMask_ModifyTime );
+            FileStatus aFileStatus( osl_FileStatus_Mask_ModifyTime );
             aItem.getFileStatus( aFileStatus );
             TimeValue aTimeVal = aFileStatus.getModifyTime();
             oslDateTime aDT;

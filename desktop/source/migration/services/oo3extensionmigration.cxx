@@ -140,7 +140,7 @@ OO3ExtensionMigration::~OO3ExtensionMigration()
 void OO3ExtensionMigration::scanUserExtensions( const ::rtl::OUString& sSourceDir, TStringVector& aMigrateExtensions )
 {
     osl::Directory    aScanRootDir( sSourceDir );
-    osl::FileStatus   fs(FileStatusMask_Type | FileStatusMask_FileURL);
+    osl::FileStatus   fs(osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL);
     osl::FileBase::RC nRetCode = aScanRootDir.open();
     if ( nRetCode == osl::Directory::E_None )
     {
@@ -187,7 +187,7 @@ OO3ExtensionMigration::ScanResult OO3ExtensionMigration::scanExtensionFolder( co
     {
         // work through directory contents...
         osl::DirectoryItem item;
-        osl::FileStatus fs(FileStatusMask_Type | FileStatusMask_FileURL);
+        osl::FileStatus fs(osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL);
         TStringVector aDirectories;
         while ((aDir.getNextItem(item) == osl::FileBase::E_None ) &&
                ( aResult == SCANRESULT_NOTFOUND ))

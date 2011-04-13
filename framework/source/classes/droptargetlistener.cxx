@@ -225,7 +225,7 @@ void DropTargetListener::implts_OpenFile( const String& rFilePath )
     if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( rFilePath, aFileURL ) )
         aFileURL = rFilePath;
 
-    ::osl::FileStatus aStatus( FileStatusMask_FileURL );
+    ::osl::FileStatus aStatus( osl_FileStatus_Mask_FileURL );
     ::osl::DirectoryItem aItem;
     if( ::osl::FileBase::E_None == ::osl::DirectoryItem::get( aFileURL, aItem ) &&
         ::osl::FileBase::E_None == aItem.getFileStatus( aStatus ) )

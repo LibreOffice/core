@@ -94,7 +94,7 @@ namespace {
         if (osl::DirectoryItem::get(rPhysicalUrl, aItem) ==
             osl::FileBase::E_None)
         {
-            osl::FileStatus aStatus( FileStatusMask_Type );
+            osl::FileStatus aStatus( osl_FileStatus_Mask_Type );
             if (aItem.getFileStatus(aStatus) == osl::FileBase::E_None)
                 switch (aStatus.getFileType())
                 {

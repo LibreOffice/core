@@ -544,7 +544,7 @@ bool hasNoFolder(OUString const & folderUrl)
         osl::File::RC rcNext = osl::File::E_None;
         while ( (rcNext = dir.getNextItem(i)) == osl::File::E_None)
         {
-            osl::FileStatus stat(FileStatusMask_Type);
+            osl::FileStatus stat(osl_FileStatus_Mask_Type);
             if (i.getFileStatus(stat) == osl::File::E_None)
             {
                 if (stat.getFileType() == osl::FileStatus::Directory)
@@ -596,7 +596,7 @@ void removeFolder(OUString const & folderUrl)
         ::osl::File::RC rcNext = ::osl::File::E_None;
         while ( (rcNext = dir.getNextItem(i)) == ::osl::File::E_None)
         {
-            ::osl::FileStatus stat(FileStatusMask_Type | FileStatusMask_FileURL);
+            ::osl::FileStatus stat(osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL);
             if (i.getFileStatus(stat) == ::osl::File::E_None)
             {
                 ::osl::FileStatus::Type t = stat.getFileType();

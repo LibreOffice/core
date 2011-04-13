@@ -644,7 +644,7 @@ strings_vr MigrationImpl::getAllFiles(const OUString& baseURL) const
 
         // work through directory contents...
         DirectoryItem item;
-        FileStatus fs(FileStatusMask_Type | FileStatusMask_FileURL);
+        FileStatus fs(osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL);
         while (dir.getNextItem(item) == FileBase::E_None)
         {
             if (item.getFileStatus(fs) == FileBase::E_None)

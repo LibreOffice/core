@@ -478,8 +478,8 @@ static bool needsSynchronization(
 
     //compare the modification time of the extension folder and the last
     //modified file
-    ::osl::FileStatus statUser(FileStatusMask_ModifyTime);
-    ::osl::FileStatus statBase(FileStatusMask_ModifyTime);
+    ::osl::FileStatus statUser(osl_FileStatus_Mask_ModifyTime);
+    ::osl::FileStatus statBase(osl_FileStatus_Mask_ModifyTime);
     if (itemUserFile.getFileStatus(statUser) == ::osl::File::E_None)
     {
         if (itemBaseFile.getFileStatus(statBase) == ::osl::File::E_None)
@@ -612,9 +612,9 @@ throw()
             bool bExcludeFiles = excludeTmpFilesAndFolders(srcUnqPath);
             if (aDir.open() == osl::FileBase::E_None)
             {
-                sal_Int32 n_Mask = FileStatusMask_FileURL |
-                                   FileStatusMask_FileName |
-                                   FileStatusMask_Type;
+                sal_Int32 n_Mask = osl_FileStatus_Mask_FileURL |
+                                   osl_FileStatus_Mask_FileName |
+                                   osl_FileStatus_Mask_Type;
 
                 osl::DirectoryItem aDirItem;
                 while( err == osl::FileBase::E_None && ( next = aDir.getNextItem( aDirItem ) ) == osl::FileBase::E_None )
@@ -623,19 +623,19 @@ throw()
                     sal_Bool bFilter = false;
                     osl::FileStatus aFileStatus( n_Mask );
                     aDirItem.getFileStatus( aFileStatus );
-                    if( aFileStatus.isValid( FileStatusMask_Type ) )
+                    if( aFileStatus.isValid( osl_FileStatus_Mask_Type ) )
                         IsDoc = aFileStatus.getFileType() == osl::FileStatus::Regular;
 
                     // Getting the information for the next recursive copy
                     sal_Int32 newTypeToCopy = IsDoc ? -1 : +1;
 
                     rtl::OUString newSrcUnqPath;
-                    if( aFileStatus.isValid( FileStatusMask_FileURL ) )
+                    if( aFileStatus.isValid( osl_FileStatus_Mask_FileURL ) )
                         newSrcUnqPath = aFileStatus.getFileURL();
 
                     rtl::OUString newDstUnqPath = dstUnqPath;
                     rtl::OUString tit;
-                    if( aFileStatus.isValid( FileStatusMask_FileName ) )
+                    if( aFileStatus.isValid( osl_FileStatus_Mask_FileName ) )
                     {
                         ::rtl::OUString aFileName = aFileStatus.getFileName();
                         tit = rtl::Uri::encode( aFileName,
@@ -2972,7 +2972,7 @@ String GetURL_Impl(
                                                 RTL_TEXTENCODING_UTF8, true );
     String        aFileURL = aURL.GetMainURL(INetURLObject::NO_DECODE);
 
-    ::osl::FileStatus aStatus( FileStatusMask_FileURL );
+    ::osl::FileStatus aStatus( osl_FileStatus_Mask_FileURL );
     ::osl::DirectoryItem aItem;
     if( ::osl::FileBase::E_None == ::osl::DirectoryItem::get( aFileURL, aItem ) &&
         ::osl::FileBase::E_None == aItem.getFileStatus( aStatus ) )

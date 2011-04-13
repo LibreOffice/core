@@ -299,7 +299,7 @@ bool BackendImpl::PackageImpl::extensionContainsCompiledHelp()
         while ((errorNext = helpFolder.getNextItem(item)) == ::osl::File::E_None)
         {
             //No find the language folders
-            ::osl::FileStatus stat(FileStatusMask_Type | FileStatusMask_FileName |FileStatusMask_FileURL);
+            ::osl::FileStatus stat(osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName |osl_FileStatus_Mask_FileURL);
             if (item.getFileStatus(stat) == ::osl::File::E_None)
             {
                 if (stat.getFileType() != ::osl::FileStatus::Directory)
