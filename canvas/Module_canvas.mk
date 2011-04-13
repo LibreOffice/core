@@ -53,7 +53,7 @@ $(eval $(call gb_Module_add_targets,canvas,\
 endif
 endif
 
-ifneq ($(strip $(ENABLE_CAIRO)),)
+ifneq ($(strip $(ENABLE_CAIRO_CANVAS)),)
 $(eval $(call gb_Module_add_targets,canvas,\
 	Library_cairocanvas \
 ))
