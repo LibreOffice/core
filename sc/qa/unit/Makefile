@@ -45,7 +45,7 @@ services.rdb :
 	echo '<?xml version="1.0"?><components xmlns="http://openoffice.org/2010/uno-components">' > $@
 	$(gb_AWK) -- \
 		'/^<\?xml version.*/ { next; } \
-		{ gsub(/vnd.sun.star.expand:\$$OOO_BASE_DIR\/program/, "vnd.sun.star.expand:$$OOO_BASE_DIR",$$0); print; }' \
+		{ gsub(/vnd.sun.star.expand:\$$OOO_BASE_DIR\/program/, "vnd.sun.star.expand:$$OOO_BASE_DIR",$$0); gsub(/vnd.sun.star.expand:\$$BRAND_BASE_DIR\/program/, "vnd.sun.star.expand:$$BRAND_BASE_DIR",$$0); print; }' \
 		$^ >> $@
 	echo '</components>' >> $@
 
