@@ -222,6 +222,11 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
     return *this;
 }
 
+SCTAB ScDBData::GetTable() const
+{
+    return nTable;
+}
+
 bool ScDBData::operator== (const ScDBData& rData) const
 {
     //  Daten, die nicht in den Params sind
@@ -828,7 +833,7 @@ ScDBData* ScDBCollection::GetFilterDBAtTable(SCTAB nTab) const
         for (sal_uInt16 i = 0; i < nCount; i++)
         {
             ScDBData* pDBTemp = (ScDBData*)pItems[i];
-            if ( pDBTemp->nTable == nTab )
+            if ( pDBTemp->GetTable() == nTab )
             {
                 sal_Bool bFilter = pDBTemp->HasAutoFilter() || pDBTemp->HasQueryParam();
 

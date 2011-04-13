@@ -769,8 +769,8 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
                 bRowFiltered = mpFilteredRows->getValue(nRow);
 
-         if (!bRowFiltered)
-         {
+                if (!bRowFiltered)
+                {
                     switch (eCellType)
                     {
                         case CELLTYPE_VALUE:
@@ -958,28 +958,28 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
         else if ( eFillCmd == FILL_SIMPLE )         // Auffuellen mit Muster
         {
             if ((eFillDir == FILL_TO_BOTTOM)||(eFillDir == FILL_TO_TOP))
-          {
-          long nBegin = 0;
-          long nEnd = 0;
-          if (nEndY > nRow1)
-          {
-              nBegin = nRow2+1;
-              nEnd = nEndY;
-          }
-          else
-          {
-              nBegin = nEndY;
-              nEnd = nRow1 -1;
-          }
+            {
+                long nBegin = 0;
+                long nEnd = 0;
+                if (nEndY > nRow1)
+                {
+                    nBegin = nRow2+1;
+                    nEnd = nEndY;
+                }
+                else
+                {
+                    nBegin = nEndY;
+                    nEnd = nRow1 -1;
+                }
 
                 long nNonFiltered = CountNonFilteredRows(nBegin, nEnd);
                 long nFiltered = nEnd + 1 - nBegin - nNonFiltered;
 
-          if (nIndex >0)
+                if (nIndex > 0)
                     nIndex = nIndex - nFiltered;
-          else
+                else
                     nIndex = nIndex + nFiltered;
-          }
+            }
 
             long nPosIndex = nIndex;
             while ( nPosIndex < 0 )

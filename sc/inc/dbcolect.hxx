@@ -44,7 +44,6 @@ class ScDocument;
 
 class ScDBData : public ScDataObject, public ScRefreshTimer
 {
-friend class ScDBCollection;
 private:
     // DBParam
     String          aName;
@@ -123,6 +122,7 @@ public:
 
             bool        operator== (const ScDBData& rData) const;
 
+            SCTAB       GetTable() const;
             const String& GetName() const               { return aName; }
             void        GetName(String& rName) const    { rName = aName; }
             void        SetName(const String& rName)    { aName = rName; }
