@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -24,7 +24,7 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-	
+
 $(eval $(call gb_Library_Library,lng))
 
 $(eval $(call gb_Library_add_package_headers,lng,linguistic_inc))
@@ -39,9 +39,8 @@ $(eval $(call gb_Library_set_include,lng,\
 	-I$(SRCDIR)/linguistic/inc/pch \
 	-I$(OUTDIR)/inc/offuh \
 ))
-	
-$(eval $(call gb_Library_set_defs,lng,\
-	$$(DEFS) \
+
+$(eval $(call gb_Library_add_defs,lng,\
 	-DLNG_DLLIMPLEMENTATION \
 ))
 

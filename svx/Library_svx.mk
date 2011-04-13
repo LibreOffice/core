@@ -37,8 +37,7 @@ $(eval $(call gb_Library_set_include,svx,\
     -I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,svx,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,svx,\
     -DSVX_DLLIMPLEMENTATION \
     -DBOOST_SPIRIT_USE_OLD_NAMESPACE \
 ))

@@ -38,8 +38,7 @@ $(eval $(call gb_Library_set_include,qstart_gtk,\
     $(filter -I%,$(GTK_CFLAGS)) \
 ))
 
-$(eval $(call gb_Library_set_defs,qstart_gtk,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,qstart_gtk,\
     -DDLL_NAME=$(notdir $(call gb_Library_get_target,sfx2)) \
     -DENABLE_QUICKSTART_APPLET \
 ))

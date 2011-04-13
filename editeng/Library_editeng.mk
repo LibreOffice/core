@@ -38,14 +38,12 @@ $(eval $(call gb_Library_set_include,editeng,\
     -I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,editeng,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,editeng,\
     -DEDITENG_DLLIMPLEMENTATION \
 ))
 
 ifneq ($(strip $(EDITDEBUG)),)
-$(eval $(call gb_Library_set_defs,editeng,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,editeng,\
     -DEDITDEBUG \
 ))
 endif

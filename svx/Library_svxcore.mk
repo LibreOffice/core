@@ -51,8 +51,7 @@ $(eval $(call gb_Library_set_include,svxcore,\
 #CFLAGS+= -DUNICODE -D_UNICODE
 #.ENDIF
 
-$(eval $(call gb_Library_set_defs,svxcore,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,svxcore,\
     -DSVX_DLLIMPLEMENTATION \
     -DBOOST_SPIRIT_USE_OLD_NAMESPACE \
 ))

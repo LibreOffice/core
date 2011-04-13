@@ -42,8 +42,7 @@ $(eval $(call gb_Library_set_include,vbahelper,\
     -I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,vbahelper,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,vbahelper,\
     -DVBAHELPER_DLLIMPLEMENTATION \
 ))
 

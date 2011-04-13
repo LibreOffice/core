@@ -36,10 +36,6 @@ $(eval $(call gb_Library_set_include,textconversiondlgs,\
     -I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,textconversiondlgs,\
-    $$(DEFS) \
-))
-
 $(eval $(call gb_Library_add_linked_libs,textconversiondlgs,\
     comphelper \
     cppuhelper \
