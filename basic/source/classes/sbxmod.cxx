@@ -1017,8 +1017,22 @@ sal_Bool SbModule::IsVBACompat() const
 
 void SbModule::SetVBACompat( sal_Bool bCompat )
 {
-    mbVBACompat = bCompat;
+    if( mbVBACompat != bCompat )
+    {
+        mbVBACompat = bCompat;
+        // initialize VBA document API
+        if( mbVBACompat ) try
+        {
+            StarBASIC* pBasic = static_cast< StarBASIC* >( GetParent() );
+            uno::Reference< lang::XMultiServiceFactory > xFactory( getDocumentModel( pBasic ), uno::UNO_QUERY_THROW );
+            xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAGlobals" ) ) );
+        }
+        catch( Exception& )
+        {
+        }
+    }
 }
+
 // Ausfuehren eines BASIC-Unterprogramms
 sal_uInt16 SbModule::Run( SbMethod* pMeth )
 {
