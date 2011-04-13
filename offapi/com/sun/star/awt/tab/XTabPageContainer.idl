@@ -47,7 +47,7 @@ published interface XTabPageContainer
         @returns
             the number of tab pages.
     */
-    long getTabPageCount();
+    short getTabPageCount();
 
     //-------------------------------------------------------------------------
 

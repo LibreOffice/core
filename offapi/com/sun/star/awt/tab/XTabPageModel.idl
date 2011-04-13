@@ -76,7 +76,7 @@ published interface XTabPageModel
 
     /** specifies a tooltip text that should be displayed in the tab bar.
     */
-    [attribute] string Tooltip;
+    [attribute] string ToolTip;
 };
 
 

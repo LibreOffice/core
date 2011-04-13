@@ -34,6 +34,8 @@
 
 module com {  module sun {  module star {  module awt {  module tab {
 
+published interface XTabPageModel;
+
 //=============================================================================
 
 /** specifies an interface for a UnoControlTabPageContainerModel.
@@ -44,6 +46,21 @@ published interface XTabPageContainerModel
 {
     interface com::sun::star::container::XIndexContainer;
     interface com::sun::star::container::XContainer;
+
+    /** creates a TabPageModel which can be inserted into the container.
+        @param TabPageID
+            the id of the tab page
+    */
+    XTabPageModel createTabPage( [in] short TabPageID );
+
+    /** creates a TabPageModel which can be inserted into the container, by loading it from a user interface
+        resource file.
+        @param TabPageID
+            the id of the tab page
+        @param ResourceURL
+            the URL of the user interface resource to load
+    */
+    XTabPageModel loadTabPage( [in] short TabPageID, [in] string ResourceURL );
 };
 
 //=============================================================================
