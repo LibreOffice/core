@@ -390,7 +390,7 @@ sal_uIntPtr OslStream::PutData( const void* pData, sal_uIntPtr nSize )
 sal_uIntPtr OslStream::SeekPos( sal_uIntPtr nPos )
 {
     if( nPos == STREAM_SEEK_TO_END )
-        maFile.setPos( Pos_End, 0 );
+        maFile.setPos( osl_Pos_End, 0 );
     else
         maFile.setPos( osl_Pos_Absolut, (sal_uInt64)nPos );
     sal_uInt64 nRealPos(0);

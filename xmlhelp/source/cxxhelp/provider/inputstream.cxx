@@ -208,7 +208,7 @@ XInputStream_impl::getLength(
     if( err != osl::FileBase::E_None )
         throw io::IOException();
 
-    err = m_aFile.setPos( Pos_End, 0 );
+    err = m_aFile.setPos( osl_Pos_End, 0 );
     if( err != osl::FileBase::E_None )
         throw io::IOException();
 
