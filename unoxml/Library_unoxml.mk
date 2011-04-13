@@ -34,10 +34,6 @@ $(eval $(call gb_Library_set_include,unoxml,\
     -I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,unoxml,\
-    $$(DEFS) \
-))
-
 $(eval $(call gb_Library_add_linked_libs,unoxml,\
     ucbhelper \
     sax \

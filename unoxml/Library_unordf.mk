@@ -34,10 +34,6 @@ $(eval $(call gb_Library_set_include,unordf,\
     -I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,unordf,\
-    $$(DEFS) \
-))
-
 $(eval $(call gb_Library_add_linked_libs,unordf,\
     cppuhelper \
     cppu \
