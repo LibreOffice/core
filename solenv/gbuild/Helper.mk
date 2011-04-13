@@ -143,6 +143,12 @@ define gb_Helper_register_executables
 ifeq ($$(filter $(1),$$(gb_Executable_VALIDGROUPS)),)
 $$(eval $$(call gb_Output_error,$(1) is not a valid group for executables. Valid groups are: $$(gb_Executable_VALIDGROUPS)))
 endif
+$(foreach group,$(gb_Executable_VALIDGROUPS),\
+ $(foreach target,$(2),\
+  $(if $(filter $(target),$(gb_Executable_$(group))),\
+   $(call gb_Output_error,gb_Helper_register_executables: already registered: $(target)))))
+$(if $(filter-out $(words $(2)),$(words $(sort $(2)))),\
+ $(call gb_Output_error,gb_Helper_register_executables: contains duplicates: $(2)))
 
 gb_Executable_$(1) += $(2)
 
@@ -152,6 +158,12 @@ define gb_Helper_register_libraries
 ifeq ($$(filter $(1),$$(gb_Library_VALIDGROUPS)),)
 $$(eval $$(call gb_Output_error,$(1) is not a valid group for libraries. Valid groups are: $$(gb_Library_VALIDGROUPS)))
 endif
+$(foreach group,$(gb_Library_VALIDGROUPS),\
+ $(foreach target,$(2),\
+  $(if $(filter $(target),$(gb_Library_$(group))),\
+   $(call gb_Output_error,gb_Helper_register_libraries: already registered: $(target)))))
+$(if $(filter-out $(words $(2)),$(words $(sort $(2)))),\
+ $(call gb_Output_error,gb_Helper_register_libraries: contains duplicates: $(2)))
 
 gb_Library_$(1) += $(2)
 
@@ -161,6 +173,12 @@ define gb_Helper_register_static_libraries
 ifeq ($$(filter $(1),$$(gb_StaticLibrary_VALIDGROUPS)),)
 $$(eval $$(call gb_Output_error,$(1) is not a valid group for static libraries. Valid groups are: $$(gb_StaticLibrary_VALIDGROUPS)))
 endif
+$(foreach group,$(gb_StaticLibrary_VALIDGROUPS),\
+ $(foreach target,$(2),\
+  $(if $(filter $(target),$(gb_StaticLibrary_$(group))),\
+   $(call gb_Output_error,gb_Helper_register_static_libraries: already registered: $(target)))))
+$(if $(filter-out $(words $(2)),$(words $(sort $(2)))),\
+ $(call gb_Output_error,gb_Helper_register_static_libraries: contains duplicates: $(2)))
 
 gb_StaticLibrary_$(1) += $(2)
 
