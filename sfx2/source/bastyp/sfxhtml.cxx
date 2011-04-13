@@ -80,14 +80,11 @@ SfxHTMLParser::SfxHTMLParser( SvStream& rStream, sal_Bool bIsNewDoc,
     pMedium( pMed ), pDLMedium( 0 ),
     nMetaTags( 0 )
 {
-    DBG_ASSERT( RTL_TEXTENCODING_DONTKNOW == GetSrcEncoding( ),
+    DBG_ASSERT( RTL_TEXTENCODING_UTF8 == GetSrcEncoding( ),
                 "SfxHTMLParser::SfxHTMLParser: From where comes ZS?" );
+
     DBG_ASSERT( !IsSwitchToUCS2(),
                 "SfxHTMLParser::SfxHTMLParser: Switch to UCS2?" );
-
-    // Altough the real default encoding is ISO8859-1, we use MS-1252
-    // as default encoding.
-    SetSrcEncoding( GetExtendedCompatibilityTextEncoding(  RTL_TEXTENCODING_ISO_8859_1 ) );
 
     // If the file starts with a BOM, switch to UCS2.
     SetSwitchToUCS2( sal_True );
