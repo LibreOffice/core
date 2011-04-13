@@ -282,6 +282,8 @@ public:
     // 'SwFlyFrmFmt *' after calls to this function. The casting is now done in this function.)
     virtual const SwFlyFrmFmt *GetFmt() const;
     virtual       SwFlyFrmFmt *GetFmt();
+
+    virtual void dumpAsXml( xmlTextWriterPtr writer ) { SwLayoutFrm::dumpAsXml( writer ); };
 };
 #endif
 

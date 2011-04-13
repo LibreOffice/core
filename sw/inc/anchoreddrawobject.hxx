@@ -193,6 +193,10 @@ class SW_DLLPUBLIC SwAnchoredDrawObject : public SwAnchoredObject
 
         // new Loop control
         void ValidateThis() { mbValidPos = true; }
+
+        /** The element name to show in the XML dump.
+          */
+        virtual const char* getElementName( ) { return "SwAnchoredDrawObject"; }
 };
 
 #endif

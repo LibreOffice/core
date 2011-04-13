@@ -35,6 +35,8 @@
 #include "porlin.hxx"
 #include "porlay.hxx"
 #include "portxt.hxx"
+#include "sortedobjs.hxx"
+#include <anchoredobject.hxx>
 #include <libxml/xmlwriter.h>
 #include <SwPortionHandler.hxx>
 
@@ -283,6 +285,22 @@ void SwFrm::dumpAsXml( xmlTextWriterPtr writer )
 
         dumpAsXmlAttributes( writer );
 
+        // Dump Anchored objects if any
+        SwSortedObjs* pAnchored = GetDrawObjs();
+        if ( pAnchored && pAnchored->Count( ) > 0 )
+        {
+            xmlTextWriterStartElement( writer, BAD_CAST( "anchored" ) );
+
+            for ( sal_uInt32 i = 0, len = pAnchored->Count(); i < len; i++ )
+            {
+                SwAnchoredObject* pObject = (*pAnchored)[i];
+                pObject->dumpAsXml( writer );
+            }
+
+            xmlTextWriterEndElement( writer );
+        }
+
+        // Dump the children
         if ( IsTxtFrm(  ) )
         {
             SwTxtFrm *pTxtFrm = ( SwTxtFrm * ) this;
@@ -326,6 +344,21 @@ void SwFrm::dumpChildrenAsXml( xmlTextWriterPtr writer )
     {
         pFrm->dumpAsXml( writer );
     }
+}
+
+void SwAnchoredObject::dumpAsXml( xmlTextWriterPtr writer )
+{
+    bool bCreateWriter = ( NULL == writer );
+    if ( bCreateWriter )
+        writer = lcl_createDefaultWriter();
+
+    xmlTextWriterStartElement( writer, BAD_CAST( getElementName() ) );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "ptr" ), "%p", this );
+    xmlTextWriterEndElement( writer );
+
+
+    if ( bCreateWriter )
+        lcl_freeWriter( writer );
 }
 
 void SwTxtFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )

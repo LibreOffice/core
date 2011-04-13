@@ -31,6 +31,7 @@
 #include <tools/rtti.hxx>
 #include <swtypes.hxx>
 #include <swrect.hxx>
+#include <libxml/xmlwriter.h>
 
 class SdrObject;
 class SwFrm;
@@ -551,6 +552,15 @@ class SW_DLLPUBLIC SwAnchoredObject
             @return Point - determined relative position
         */
         Point GetRelPosToLine() const;
+
+        /** Dump a bunch of useful data to an XML representation to ease
+            layout understanding, debugging and testing.
+          */
+        virtual void dumpAsXml( xmlTextWriterPtr pWriter );
+
+        /** The element name to show in the XML dump.
+          */
+        virtual const char* getElementName( ) { return "SwAnchoredObject"; }
 };
 
 // ============================================================================
