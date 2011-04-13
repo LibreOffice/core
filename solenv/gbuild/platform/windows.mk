@@ -422,6 +422,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(call gb_Helper_convert_native,$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
+		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),$(shell cat $(extraobjectlist))) \
 		$(PCHOBJS))) && \
 	$(gb_LINK) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
@@ -429,7 +430,6 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
 		$(LDFLAGS) \
 		@$${RESPONSEFILE} \
-		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),@$(extraobjectlist)) \
 		$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib))) \
 		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_filename,$(lib))) \
 		$(if $(DLLTARGET),-out:$(DLLTARGET) -implib:$(1),-out:$(1)); RC=$$?; rm $${RESPONSEFILE} \
