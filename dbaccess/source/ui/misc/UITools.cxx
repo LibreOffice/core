@@ -227,10 +227,10 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
         if (xComponent.is() && _rEvtLst.is())
             xComponent->addEventListener(_rEvtLst);
     }
-    catch(SQLContext& e) { aInfo = SQLExceptionInfo(e); }
-    catch(SQLWarning& e) { aInfo = SQLExceptionInfo(e); }
-    catch(SQLException& e) { aInfo = SQLExceptionInfo(e); }
-    catch(constException&) { OSL_FAIL("SbaTableQueryBrowser::OnExpandEntry: could not connect - unknown exception!"); }
+    catch(const SQLContext& e) { aInfo = SQLExceptionInfo(e); }
+    catch(const SQLWarning& e) { aInfo = SQLExceptionInfo(e); }
+    catch(const SQLException& e) { aInfo = SQLExceptionInfo(e); }
+    catch(const Exception&) { OSL_FAIL("SbaTableQueryBrowser::OnExpandEntry: could not connect - unknown exception!"); }
 
     return aInfo;
 }
