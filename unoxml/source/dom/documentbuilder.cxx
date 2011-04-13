@@ -83,7 +83,7 @@ namespace DOM
                 Content aContent(sSystemId, aEnvironment);
 
                 is.aInputStream = aContent.openStream();
-            } catch (com::sun::star::uno::Exception) {
+            } catch (const com::sun::star::uno::Exception&) {
                 OSL_FAIL("exception in default entity resolver");
                 is.aInputStream = Reference< XInputStream >();
             }
