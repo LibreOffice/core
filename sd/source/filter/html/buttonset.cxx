@@ -183,7 +183,7 @@ void ButtonSetImpl::scanForButtonSets( const OUString& rPath )
         osl::DirectoryItem aItem;
         while( aDirectory.getNextItem( aItem, 2211 ) == osl::FileBase::E_None )
         {
-            osl::FileStatus aStatus( FileStatusMask_FileName|FileStatusMask_FileURL );
+            osl::FileStatus aStatus( osl_FileStatus_Mask_FileName|osl_FileStatus_Mask_FileURL );
             if( aItem.getFileStatus( aStatus ) == osl::FileBase::E_None )
             {
                 OUString sFileName( aStatus.getFileName() );
