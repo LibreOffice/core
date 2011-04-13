@@ -207,27 +207,14 @@ namespace svt { namespace table
         TableCell const tableCell( i_tableControl.hitTest( i_event.GetPosPixel() ) );
         if ( tableCell.nRow >= 0 )
         {
-            bool bSetCursor = false;
             if ( i_tableControl.getSelEngine()->GetSelectionMode() == NO_SELECTION )
-            {
-                bSetCursor = true;
-            }
-            else
-            {
-                if ( !i_tableControl.isRowSelected( tableCell.nRow ) )
-                {
-                    handled = i_tableControl.getSelEngine()->SelMouseButtonDown( i_event );
-                }
-                else
-                {
-                    bSetCursor = true;
-                }
-            }
-
-            if ( bSetCursor )
             {
                 i_tableControl.activateCell( tableCell.nColumn, tableCell.nRow );
                 handled = true;
+            }
+            else
+            {
+                handled = i_tableControl.getSelEngine()->SelMouseButtonDown( i_event );
             }
         }
 

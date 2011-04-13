@@ -29,6 +29,9 @@
 #include "comphelper/anycompare.hxx"
 
 /** === begin UNO includes === **/
+#include <com/sun/star/util/Date.hpp>
+#include <com/sun/star/util/Time.hpp>
+#include <com/sun/star/util/DateTime.hpp>
 /** === end UNO includes === **/
 
 //......................................................................................................................
@@ -63,8 +66,127 @@ namespace comphelper
     using ::com::sun::star::uno::TypeClass_TYPE;
     using ::com::sun::star::uno::TypeClass_ENUM;
     using ::com::sun::star::uno::TypeClass_INTERFACE;
+    using ::com::sun::star::uno::TypeClass_STRUCT;
     using ::com::sun::star::i18n::XCollator;
+    using ::com::sun::star::util::Date;
+    using ::com::sun::star::util::Time;
+    using ::com::sun::star::util::DateTime;
     /** === end UNO using === **/
+
+    //==================================================================================================================
+    //= DatePredicateLess
+    //==================================================================================================================
+    class DatePredicateLess : public IKeyPredicateLess
+    {
+    public:
+        virtual bool isLess( ::com::sun::star::uno::Any const & _lhs, ::com::sun::star::uno::Any const & _rhs ) const
+        {
+            Date lhs, rhs;
+            if  (   !( _lhs >>= lhs )
+                ||  !( _rhs >>= rhs )
+                )
+                throw ::com::sun::star::lang::IllegalArgumentException();
+
+            if ( lhs.Year < rhs.Year )
+                return true;
+            if ( lhs.Year > rhs.Year )
+                return false;
+
+            if ( lhs.Month < rhs.Month )
+                return true;
+            if ( lhs.Month > rhs.Month )
+                return false;
+
+            if ( lhs.Day < rhs.Day )
+                return true;
+            return false;
+        }
+    };
+
+    //==================================================================================================================
+    //= TimePredicateLess
+    //==================================================================================================================
+    class TimePredicateLess : public IKeyPredicateLess
+    {
+    public:
+        virtual bool isLess( ::com::sun::star::uno::Any const & _lhs, ::com::sun::star::uno::Any const & _rhs ) const
+        {
+            Time lhs, rhs;
+            if  (   !( _lhs >>= lhs )
+                ||  !( _rhs >>= rhs )
+                )
+                throw ::com::sun::star::lang::IllegalArgumentException();
+
+            if ( lhs.Hours < rhs.Hours )
+                return true;
+            if ( lhs.Hours > rhs.Hours )
+                return false;
+
+            if ( lhs.Minutes < rhs.Minutes )
+                return true;
+            if ( lhs.Minutes > rhs.Minutes )
+                return false;
+
+            if ( lhs.Seconds < rhs.Seconds )
+                return true;
+            if ( lhs.Seconds > rhs.Seconds )
+                return false;
+
+            if ( lhs.HundredthSeconds < rhs.HundredthSeconds )
+                return true;
+            return false;
+        }
+    };
+
+    //==================================================================================================================
+    //= DateTimePredicateLess
+    //==================================================================================================================
+    class DateTimePredicateLess : public IKeyPredicateLess
+    {
+    public:
+        virtual bool isLess( ::com::sun::star::uno::Any const & _lhs, ::com::sun::star::uno::Any const & _rhs ) const
+        {
+            DateTime lhs, rhs;
+            if  (   !( _lhs >>= lhs )
+                ||  !( _rhs >>= rhs )
+                )
+                throw ::com::sun::star::lang::IllegalArgumentException();
+
+            if ( lhs.Year < rhs.Year )
+                return true;
+            if ( lhs.Year > rhs.Year )
+                return false;
+
+            if ( lhs.Month < rhs.Month )
+                return true;
+            if ( lhs.Month > rhs.Month )
+                return false;
+
+            if ( lhs.Day < rhs.Day )
+                return true;
+            if ( lhs.Day > rhs.Day )
+                return false;
+
+            if ( lhs.Hours < rhs.Hours )
+                return true;
+            if ( lhs.Hours > rhs.Hours )
+                return false;
+
+            if ( lhs.Minutes < rhs.Minutes )
+                return true;
+            if ( lhs.Minutes > rhs.Minutes )
+                return false;
+
+            if ( lhs.Seconds < rhs.Seconds )
+                return true;
+            if ( lhs.Seconds > rhs.Seconds )
+                return false;
+
+            if ( lhs.HundredthSeconds < rhs.HundredthSeconds )
+                return true;
+            return false;
+        }
+    };
 
     //------------------------------------------------------------------------------------------------------------------
     ::std::auto_ptr< IKeyPredicateLess > getStandardLessPredicate( Type const & i_type, Reference< XCollator > const & i_collator )
@@ -119,6 +241,14 @@ namespace comphelper
             break;
         case TypeClass_INTERFACE:
             pComparator.reset( new InterfacePredicateLess() );
+            break;
+        case TypeClass_STRUCT:
+            if ( i_type.equals( ::cppu::UnoType< Date >::get() ) )
+                pComparator.reset( new DatePredicateLess() );
+            else if ( i_type.equals( ::cppu::UnoType< Time >::get() ) )
+                pComparator.reset( new TimePredicateLess() );
+            else if ( i_type.equals( ::cppu::UnoType< DateTime >::get() ) )
+                pComparator.reset( new DateTimePredicateLess() );
             break;
         default:
             break;
