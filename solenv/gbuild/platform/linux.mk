@@ -278,8 +278,8 @@ endif
 
 gb_Library_PLAINLIBS_NONE += \
     dl \
-    freetype \
 	fontconfig \
+    freetype \
     m \
     pthread \
     ICE \

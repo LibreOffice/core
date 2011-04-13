@@ -52,11 +52,11 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	ucbhelper \
     unotools \
     unoxml \
+    vbahelper \
     vcl \
     xmloff \
 	xmlreader \
 	xmlscript \
-    vbahelper \
 ))
 
 # vim: set noet ts=4 sw=4:
