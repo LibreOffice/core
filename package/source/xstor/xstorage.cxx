@@ -318,9 +318,9 @@ OStorage_Impl::~OStorage_Impl()
             try {
                 m_pAntiImpl->InternalDispose( sal_False );
             }
-            catch ( uno::Exception& aException )
+            catch ( const uno::Exception& rException )
             {
-                AddLog( aException.Message );
+                AddLog( rException.Message );
                 AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception" ) ) );
             }
             m_pAntiImpl = NULL;
@@ -334,9 +334,9 @@ OStorage_Impl::~OStorage_Impl()
                 if ( xTmp.is() )
                     try {
                         pStorageIter->m_pPointer->InternalDispose( sal_False );
-                    } catch( uno::Exception& aException )
+                    } catch( const uno::Exception& rException )
                     {
-                        AddLog( aException.Message );
+                        AddLog( rException.Message );
                         AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception" ) ) );
                     }
             }
@@ -395,10 +395,10 @@ OStorage_Impl::~OStorage_Impl()
                     m_xStream = uno::Reference< io::XStream >();
                 }
             }
-            catch( uno::Exception& aException )
+            catch( const uno::Exception& rException )
             {
                 AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception" ) ) );
-                AddLog( aException.Message );
+                AddLog( rException.Message );
             }
         }
     }
@@ -415,7 +415,7 @@ void OStorage_Impl::AddLog( const ::rtl::OUString& aMessage )
             if ( aContext.is() )
                 m_xLogRing.set( aContext.getSingleton( "com.sun.star.logging.DocumentIOLogRing" ), uno::UNO_QUERY_THROW );
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
             // No log
         }
@@ -444,10 +444,10 @@ void OStorage_Impl::RemoveReadOnlyWrap( OStorage& aStorage )
         {
             try {
                 pStorageIter->m_pPointer->InternalDispose( sal_False );
-            } catch( uno::Exception& aException )
+            } catch( const uno::Exception& rException )
             {
                 AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception" ) ) );
-                AddLog( aException.Message );
+                AddLog( rException.Message );
             }
 
             OStorageList_Impl::iterator pIterToDelete( pStorageIter );
@@ -619,7 +619,7 @@ void OStorage_Impl::ReadRelInfoIfNecessary()
 
             m_nRelInfoStatus = RELINFO_CHANGED_STREAM_READ;
         }
-        catch( uno::Exception )
+        catch( const uno::Exception& )
         {
             m_nRelInfoStatus = RELINFO_CHANGED_BROKEN;
         }
@@ -684,9 +684,9 @@ void OStorage_Impl::ReadContents()
                 m_aChildrenList.push_back( pNewElement );
             }
         }
-        catch( container::NoSuchElementException& aNoSuchElementException )
+        catch( const container::NoSuchElementException& rNoSuchElementException )
         {
-            AddLog( aNoSuchElementException.Message );
+            AddLog( rNoSuchElementException.Message );
             AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "NoSuchElement" ) ) );
 
             OSL_FAIL( "hasMoreElements() implementation has problems!\n" );
@@ -754,9 +754,9 @@ void OStorage_Impl::CopyToStorage( const uno::Reference< embed::XStorage >& xDes
                 if ( xEncr.is() )
                     xEncr->setEncryptionData( GetCommonRootEncryptionData().getAsConstNamedValueList() );
             }
-            catch( packages::NoEncryptionException& aNoEncryptionException )
+            catch( const packages::NoEncryptionException& rNoEncryptionException )
             {
-                AddLog( aNoEncryptionException.Message );
+                AddLog( rNoEncryptionException.Message );
                 AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "No Encryption" ) ) );
             }
         }
@@ -924,9 +924,9 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                 aCommonEncryptionData = GetCommonRootEncryptionData();
                 bHasCommonEncryptionData = sal_True;
             }
-            catch( packages::NoEncryptionException& aNoEncryptionException )
+            catch( const packages::NoEncryptionException& rNoEncryptionException )
             {
-                AddLog( aNoEncryptionException.Message );
+                AddLog( rNoEncryptionException.Message );
                 AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "No Encryption" ) ) );
             }
 
@@ -979,9 +979,9 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseCommonStoragePasswordEncryption" ) ),
                     uno::Any( (sal_Bool) sal_True ) );
             }
-            catch( packages::WrongPasswordException& aWrongPasswordException )
+            catch( const packages::WrongPasswordException& rWrongPasswordException )
             {
-                AddLog( aWrongPasswordException.Message );
+                AddLog( rWrongPasswordException.Message );
                 AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Handled exception" ) ) );
 
                 // If the common storage password does not allow to open the stream
@@ -1273,7 +1273,7 @@ void OStorage_Impl::Commit()
         {
             xChangesBatch->commitChanges();
         }
-        catch( lang::WrappedTargetException& r )
+        catch( const lang::WrappedTargetException& r )
         {
             // the wrapped UseBackupException means that the target medium can be corrupted
             embed::UseBackupException aException;
@@ -1973,9 +1973,9 @@ OStorage::~OStorage()
             try {
                 dispose();
             }
-            catch( uno::RuntimeException& aRuntimeException )
+            catch( const uno::RuntimeException& rRuntimeException )
             {
-                m_pImpl->AddLog( aRuntimeException.Message );
+                m_pImpl->AddLog( rRuntimeException.Message );
                 m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Handled exception" ) ) );
             }
         }
@@ -2039,9 +2039,9 @@ void SAL_CALL OStorage::InternalDispose( sal_Bool bNotifyImpl )
 
                         try {
                             xTmp->dispose();
-                        } catch( uno::Exception& aException )
+                        } catch( const uno::Exception& rException )
                         {
-                            m_pImpl->AddLog( aException.Message );
+                            m_pImpl->AddLog( rException.Message );
                             m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception" ) ) );
                         }
                     }
@@ -2421,39 +2421,39 @@ void SAL_CALL OStorage::copyToStorage( const uno::Reference< embed::XStorage >& 
     try {
         m_pImpl->CopyToStorage( xDest, sal_False );
     }
-    catch( embed::InvalidStorageException& aInvalidStorageException )
+    catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        m_pImpl->AddLog( aInvalidStorageException.Message );
+        m_pImpl->AddLog( rInvalidStorageException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( lang::IllegalArgumentException& aIllegalArgumentException )
+    catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        m_pImpl->AddLog( aIllegalArgumentException.Message );
+        m_pImpl->AddLog( rIllegalArgumentException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( embed::StorageWrappedTargetException& aStorageWrappedTargetException )
+    catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        m_pImpl->AddLog( aStorageWrappedTargetException.Message );
+        m_pImpl->AddLog( rStorageWrappedTargetException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( io::IOException& aIOException )
+    catch( const io::IOException& rIOException )
     {
-        m_pImpl->AddLog( aIOException.Message );
+        m_pImpl->AddLog( rIOException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::RuntimeException& aRuntimeException )
+    catch( const uno::RuntimeException& rRuntimeException )
     {
-        m_pImpl->AddLog( aRuntimeException.Message );
+        m_pImpl->AddLog( rRuntimeException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::Exception& aException )
+    catch( const uno::Exception& rException )
     {
-          m_pImpl->AddLog( aException.Message );
+          m_pImpl->AddLog( rException.Message );
           m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
           uno::Any aCaught( ::cppu::getCaughtException() );
@@ -2512,45 +2512,45 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openStreamElement(
             MakeLinkToSubComponent_Impl( xStreamComponent );
         }
     }
-    catch( embed::InvalidStorageException& aInvalidStorageException )
+    catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        m_pImpl->AddLog( aInvalidStorageException.Message );
+        m_pImpl->AddLog( rInvalidStorageException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( lang::IllegalArgumentException& aIllegalArgumentException )
+    catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        m_pImpl->AddLog( aIllegalArgumentException.Message );
+        m_pImpl->AddLog( rIllegalArgumentException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( packages::WrongPasswordException& aWrongPasswordException )
+    catch( const packages::WrongPasswordException& rWrongPasswordException )
     {
-        m_pImpl->AddLog( aWrongPasswordException.Message );
+        m_pImpl->AddLog( rWrongPasswordException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( embed::StorageWrappedTargetException& aStorageWrappedTargetException )
+    catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        m_pImpl->AddLog( aStorageWrappedTargetException.Message );
+        m_pImpl->AddLog( rStorageWrappedTargetException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( io::IOException& aIOException )
+    catch( const io::IOException& rIOException )
     {
-        m_pImpl->AddLog( aIOException.Message );
+        m_pImpl->AddLog( rIOException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::RuntimeException& aRuntimeException )
+    catch( const uno::RuntimeException& rRuntimeException )
     {
-        m_pImpl->AddLog( aRuntimeException.Message );
+        m_pImpl->AddLog( rRuntimeException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::Exception& aException )
+    catch( const uno::Exception& rException )
     {
-          m_pImpl->AddLog( aException.Message );
+          m_pImpl->AddLog( rException.Message );
           m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
           uno::Any aCaught( ::cppu::getCaughtException() );
@@ -2693,39 +2693,39 @@ uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
             MakeLinkToSubComponent_Impl( xStorageComponent );
         }
     }
-    catch( embed::InvalidStorageException& aInvalidStorageException )
+    catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        m_pImpl->AddLog( aInvalidStorageException.Message );
+        m_pImpl->AddLog( rInvalidStorageException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( lang::IllegalArgumentException& aIllegalArgumentException )
+    catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        m_pImpl->AddLog( aIllegalArgumentException.Message );
+        m_pImpl->AddLog( rIllegalArgumentException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( embed::StorageWrappedTargetException& aStorageWrappedTargetException )
+    catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        m_pImpl->AddLog( aStorageWrappedTargetException.Message );
+        m_pImpl->AddLog( rStorageWrappedTargetException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( io::IOException& aIOException )
+    catch( const io::IOException& rIOException )
     {
-        m_pImpl->AddLog( aIOException.Message );
+        m_pImpl->AddLog( rIOException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::RuntimeException& aRuntimeException )
+    catch( const uno::RuntimeException& rRuntimeException )
     {
-        m_pImpl->AddLog( aRuntimeException.Message );
+        m_pImpl->AddLog( rRuntimeException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::Exception& aException )
+    catch( const uno::Exception& rException )
     {
-          m_pImpl->AddLog( aException.Message );
+          m_pImpl->AddLog( rException.Message );
           m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
           uno::Any aCaught( ::cppu::getCaughtException() );
@@ -2771,45 +2771,45 @@ uno::Reference< io::XStream > SAL_CALL OStorage::cloneStreamElement( const ::rtl
             throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
         return xResult;
     }
-    catch( embed::InvalidStorageException& aInvalidStorageException )
+    catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        m_pImpl->AddLog( aInvalidStorageException.Message );
+        m_pImpl->AddLog( rInvalidStorageException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( lang::IllegalArgumentException& aIllegalArgumentException )
+    catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        m_pImpl->AddLog( aIllegalArgumentException.Message );
+        m_pImpl->AddLog( rIllegalArgumentException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( packages::WrongPasswordException& aWrongPasswordException )
+    catch( const packages::WrongPasswordException& rWrongPasswordException )
     {
-        m_pImpl->AddLog( aWrongPasswordException.Message );
+        m_pImpl->AddLog( rWrongPasswordException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( io::IOException& aIOException )
+    catch( const io::IOException& rIOException )
     {
-        m_pImpl->AddLog( aIOException.Message );
+        m_pImpl->AddLog( rIOException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( embed::StorageWrappedTargetException& aStorageWrappedTargetException )
+    catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        m_pImpl->AddLog( aStorageWrappedTargetException.Message );
+        m_pImpl->AddLog( rStorageWrappedTargetException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::RuntimeException& aRuntimeException )
+    catch( const uno::RuntimeException& rRuntimeException )
     {
-        m_pImpl->AddLog( aRuntimeException.Message );
+        m_pImpl->AddLog( rRuntimeException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::Exception& aException )
+    catch( const uno::Exception& rException )
     {
-          m_pImpl->AddLog( aException.Message );
+          m_pImpl->AddLog( rException.Message );
           m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
           uno::Any aCaught( ::cppu::getCaughtException() );
@@ -2859,39 +2859,39 @@ void SAL_CALL OStorage::copyLastCommitTo(
     {
         m_pImpl->CopyLastCommitTo( xTargetStorage );
     }
-    catch( embed::InvalidStorageException& aInvalidStorageException )
+    catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        m_pImpl->AddLog( aInvalidStorageException.Message );
+        m_pImpl->AddLog( rInvalidStorageException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( lang::IllegalArgumentException& aIllegalArgumentException )
+    catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        m_pImpl->AddLog( aIllegalArgumentException.Message );
+        m_pImpl->AddLog( rIllegalArgumentException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( embed::StorageWrappedTargetException& aStorageWrappedTargetException )
+    catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        m_pImpl->AddLog( aStorageWrappedTargetException.Message );
+        m_pImpl->AddLog( rStorageWrappedTargetException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( io::IOException& aIOException )
+    catch( const io::IOException& rIOException )
     {
-        m_pImpl->AddLog( aIOException.Message );
+        m_pImpl->AddLog( rIOException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::RuntimeException& aRuntimeException )
+    catch( const uno::RuntimeException& rRuntimeException )
     {
-        m_pImpl->AddLog( aRuntimeException.Message );
+        m_pImpl->AddLog( rRuntimeException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::Exception& aException )
+    catch( const uno::Exception& rException )
     {
-          m_pImpl->AddLog( aException.Message );
+          m_pImpl->AddLog( rException.Message );
           m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
           uno::Any aCaught( ::cppu::getCaughtException() );
@@ -2959,39 +2959,39 @@ void SAL_CALL OStorage::copyStorageElementLastCommitTo(
         else
             throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() ); // TODO: general_error
     }
-    catch( embed::InvalidStorageException& aInvalidStorageException )
+    catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        m_pImpl->AddLog( aInvalidStorageException.Message );
+        m_pImpl->AddLog( rInvalidStorageException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( lang::IllegalArgumentException& aIllegalArgumentException )
+    catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        m_pImpl->AddLog( aIllegalArgumentException.Message );
+        m_pImpl->AddLog( rIllegalArgumentException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( io::IOException& aIOException )
+    catch( const io::IOException& rIOException )
     {
-        m_pImpl->AddLog( aIOException.Message );
+        m_pImpl->AddLog( rIOException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( embed::StorageWrappedTargetException& aStorageWrappedTargetException )
+    catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        m_pImpl->AddLog( aStorageWrappedTargetException.Message );
+        m_pImpl->AddLog( rStorageWrappedTargetException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::RuntimeException& aRuntimeException )
+    catch( const uno::RuntimeException& rRuntimeException )
     {
-        m_pImpl->AddLog( aRuntimeException.Message );
+        m_pImpl->AddLog( rRuntimeException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::Exception& aException )
+    catch( const uno::Exception& rException )
     {
-          m_pImpl->AddLog( aException.Message );
+          m_pImpl->AddLog( rException.Message );
           m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
           uno::Any aCaught( ::cppu::getCaughtException() );
@@ -3029,33 +3029,33 @@ sal_Bool SAL_CALL OStorage::isStreamElement( const ::rtl::OUString& aElementName
     {
         pElement = m_pImpl->FindElement( aElementName );
     }
-    catch( embed::InvalidStorageException& aInvalidStorageException )
+    catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        m_pImpl->AddLog( aInvalidStorageException.Message );
+        m_pImpl->AddLog( rInvalidStorageException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( lang::IllegalArgumentException& aIllegalArgumentException )
+    catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        m_pImpl->AddLog( aIllegalArgumentException.Message );
+        m_pImpl->AddLog( rIllegalArgumentException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( container::NoSuchElementException& aNoSuchElementException )
+    catch( const container::NoSuchElementException& rNoSuchElementException )
     {
-        m_pImpl->AddLog( aNoSuchElementException.Message );
+        m_pImpl->AddLog( rNoSuchElementException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::RuntimeException& aRuntimeException )
+    catch( const uno::RuntimeException& rRuntimeException )
     {
-        m_pImpl->AddLog( aRuntimeException.Message );
+        m_pImpl->AddLog( rRuntimeException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::Exception& aException )
+    catch( const uno::Exception& rException )
     {
-          m_pImpl->AddLog( aException.Message );
+          m_pImpl->AddLog( rException.Message );
           m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
           uno::Any aCaught( ::cppu::getCaughtException() );
@@ -3098,33 +3098,33 @@ sal_Bool SAL_CALL OStorage::isStorageElement( const ::rtl::OUString& aElementNam
     {
         pElement = m_pImpl->FindElement( aElementName );
     }
-    catch( embed::InvalidStorageException& aInvalidStorageException )
+    catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        m_pImpl->AddLog( aInvalidStorageException.Message );
+        m_pImpl->AddLog( rInvalidStorageException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( lang::IllegalArgumentException& aIllegalArgumentException )
+    catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        m_pImpl->AddLog( aIllegalArgumentException.Message );
+        m_pImpl->AddLog( rIllegalArgumentException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( container::NoSuchElementException& aNoSuchElementException )
+    catch( const container::NoSuchElementException& rNoSuchElementException )
     {
-        m_pImpl->AddLog( aNoSuchElementException.Message );
+        m_pImpl->AddLog( rNoSuchElementException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::RuntimeException& aRuntimeException )
+    catch( const uno::RuntimeException& rRuntimeException )
     {
-        m_pImpl->AddLog( aRuntimeException.Message );
+        m_pImpl->AddLog( rRuntimeException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::Exception& aException )
+    catch( const uno::Exception& rException )
     {
-          m_pImpl->AddLog( aException.Message );
+          m_pImpl->AddLog( rException.Message );
           m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
           uno::Any aCaught( ::cppu::getCaughtException() );
@@ -3180,45 +3180,45 @@ void SAL_CALL OStorage::removeElement( const ::rtl::OUString& aElementName )
         m_pImpl->m_bIsModified = sal_True;
         m_pImpl->m_bBroadcastModified = sal_True;
     }
-    catch( embed::InvalidStorageException& aInvalidStorageException )
+    catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        m_pImpl->AddLog( aInvalidStorageException.Message );
+        m_pImpl->AddLog( rInvalidStorageException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( lang::IllegalArgumentException& aIllegalArgumentException )
+    catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        m_pImpl->AddLog( aIllegalArgumentException.Message );
+        m_pImpl->AddLog( rIllegalArgumentException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( container::NoSuchElementException& aNoSuchElementException )
+    catch( const container::NoSuchElementException& rNoSuchElementException )
     {
-        m_pImpl->AddLog( aNoSuchElementException.Message );
+        m_pImpl->AddLog( rNoSuchElementException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( io::IOException& aIOException )
+    catch( const io::IOException& rIOException )
     {
-        m_pImpl->AddLog( aIOException.Message );
+        m_pImpl->AddLog( rIOException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( embed::StorageWrappedTargetException& aStorageWrappedTargetException )
+    catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        m_pImpl->AddLog( aStorageWrappedTargetException.Message );
+        m_pImpl->AddLog( rStorageWrappedTargetException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::RuntimeException& aRuntimeException )
+    catch( const uno::RuntimeException& rRuntimeException )
     {
-        m_pImpl->AddLog( aRuntimeException.Message );
+        m_pImpl->AddLog( rRuntimeException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::Exception& aException )
+    catch( const uno::Exception& rException )
     {
-          m_pImpl->AddLog( aException.Message );
+          m_pImpl->AddLog( rException.Message );
           m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
           uno::Any aCaught( ::cppu::getCaughtException() );
@@ -3279,51 +3279,51 @@ void SAL_CALL OStorage::renameElement( const ::rtl::OUString& aElementName, cons
         m_pImpl->m_bIsModified = sal_True;
         m_pImpl->m_bBroadcastModified = sal_True;
     }
-    catch( embed::InvalidStorageException& aInvalidStorageException )
+    catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        m_pImpl->AddLog( aInvalidStorageException.Message );
+        m_pImpl->AddLog( rInvalidStorageException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( lang::IllegalArgumentException& aIllegalArgumentException )
+    catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        m_pImpl->AddLog( aIllegalArgumentException.Message );
+        m_pImpl->AddLog( rIllegalArgumentException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( container::NoSuchElementException& aNoSuchElementException )
+    catch( const container::NoSuchElementException& rNoSuchElementException )
     {
-        m_pImpl->AddLog( aNoSuchElementException.Message );
+        m_pImpl->AddLog( rNoSuchElementException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( container::ElementExistException& aElementExistException )
+    catch( const container::ElementExistException& rElementExistException )
     {
-        m_pImpl->AddLog( aElementExistException.Message );
+        m_pImpl->AddLog( rElementExistException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( io::IOException& aIOException )
+    catch( const io::IOException& rIOException )
     {
-        m_pImpl->AddLog( aIOException.Message );
+        m_pImpl->AddLog( rIOException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( embed::StorageWrappedTargetException& aStorageWrappedTargetException )
+    catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        m_pImpl->AddLog( aStorageWrappedTargetException.Message );
+        m_pImpl->AddLog( rStorageWrappedTargetException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::RuntimeException& aRuntimeException )
+    catch( const uno::RuntimeException& rRuntimeException )
     {
-        m_pImpl->AddLog( aRuntimeException.Message );
+        m_pImpl->AddLog( rRuntimeException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::Exception& aException )
+    catch( const uno::Exception& rException )
     {
-          m_pImpl->AddLog( aException.Message );
+          m_pImpl->AddLog( rException.Message );
           m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
           uno::Any aCaught( ::cppu::getCaughtException() );
@@ -3387,51 +3387,51 @@ void SAL_CALL OStorage::copyElementTo(  const ::rtl::OUString& aElementName,
 
         m_pImpl->CopyStorageElement( pElement, xDest, aNewName, sal_False );
     }
-    catch( embed::InvalidStorageException& aInvalidStorageException )
+    catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        m_pImpl->AddLog( aInvalidStorageException.Message );
+        m_pImpl->AddLog( rInvalidStorageException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( lang::IllegalArgumentException& aIllegalArgumentException )
+    catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        m_pImpl->AddLog( aIllegalArgumentException.Message );
+        m_pImpl->AddLog( rIllegalArgumentException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( container::NoSuchElementException& aNoSuchElementException )
+    catch( const container::NoSuchElementException& rNoSuchElementException )
     {
-        m_pImpl->AddLog( aNoSuchElementException.Message );
+        m_pImpl->AddLog( rNoSuchElementException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( container::ElementExistException& aElementExistException )
+    catch( const container::ElementExistException& rElementExistException )
     {
-        m_pImpl->AddLog( aElementExistException.Message );
+        m_pImpl->AddLog( rElementExistException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( embed::StorageWrappedTargetException& aStorageWrappedTargetException )
+    catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        m_pImpl->AddLog( aStorageWrappedTargetException.Message );
+        m_pImpl->AddLog( rStorageWrappedTargetException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( io::IOException& aIOException )
+    catch( const io::IOException& rIOException )
     {
-        m_pImpl->AddLog( aIOException.Message );
+        m_pImpl->AddLog( rIOException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::RuntimeException& aRuntimeException )
+    catch( const uno::RuntimeException& rRuntimeException )
     {
-        m_pImpl->AddLog( aRuntimeException.Message );
+        m_pImpl->AddLog( rRuntimeException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::Exception& aException )
+    catch( const uno::Exception& rException )
     {
-          m_pImpl->AddLog( aException.Message );
+          m_pImpl->AddLog( rException.Message );
           m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
           uno::Any aCaught( ::cppu::getCaughtException() );
@@ -3499,51 +3499,51 @@ void SAL_CALL OStorage::moveElementTo(  const ::rtl::OUString& aElementName,
         m_pImpl->m_bIsModified = sal_True;
         m_pImpl->m_bBroadcastModified = sal_True;
     }
-    catch( embed::InvalidStorageException& aInvalidStorageException )
+    catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        m_pImpl->AddLog( aInvalidStorageException.Message );
+        m_pImpl->AddLog( rInvalidStorageException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( lang::IllegalArgumentException& aIllegalArgumentException )
+    catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        m_pImpl->AddLog( aIllegalArgumentException.Message );
+        m_pImpl->AddLog( rIllegalArgumentException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( container::NoSuchElementException& aNoSuchElementException )
+    catch( const container::NoSuchElementException& rNoSuchElementException )
     {
-        m_pImpl->AddLog( aNoSuchElementException.Message );
+        m_pImpl->AddLog( rNoSuchElementException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( container::ElementExistException& aElementExistException )
+    catch( const container::ElementExistException& rElementExistException )
     {
-        m_pImpl->AddLog( aElementExistException.Message );
+        m_pImpl->AddLog( rElementExistException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( embed::StorageWrappedTargetException& aStorageWrappedTargetException )
+    catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        m_pImpl->AddLog( aStorageWrappedTargetException.Message );
+        m_pImpl->AddLog( rStorageWrappedTargetException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( io::IOException& aIOException )
+    catch( const io::IOException& rIOException )
     {
-        m_pImpl->AddLog( aIOException.Message );
+        m_pImpl->AddLog( rIOException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::RuntimeException& aRuntimeException )
+    catch( const uno::RuntimeException& rRuntimeException )
     {
-        m_pImpl->AddLog( aRuntimeException.Message );
+        m_pImpl->AddLog( rRuntimeException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::Exception& aException )
+    catch( const uno::Exception& rException )
     {
-          m_pImpl->AddLog( aException.Message );
+          m_pImpl->AddLog( rException.Message );
           m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
           uno::Any aCaught( ::cppu::getCaughtException() );
@@ -3610,51 +3610,51 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStream(
             MakeLinkToSubComponent_Impl( xStreamComponent );
         }
     }
-    catch( embed::InvalidStorageException& aInvalidStorageException )
+    catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        m_pImpl->AddLog( aInvalidStorageException.Message );
+        m_pImpl->AddLog( rInvalidStorageException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( lang::IllegalArgumentException& aIllegalArgumentException )
+    catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        m_pImpl->AddLog( aIllegalArgumentException.Message );
+        m_pImpl->AddLog( rIllegalArgumentException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( packages::NoEncryptionException& aNoEncryptionException )
+    catch( const packages::NoEncryptionException& rNoEncryptionException )
     {
-        m_pImpl->AddLog( aNoEncryptionException.Message );
+        m_pImpl->AddLog( rNoEncryptionException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( packages::WrongPasswordException& aWrongPasswordException )
+    catch( const packages::WrongPasswordException& rWrongPasswordException )
     {
-        m_pImpl->AddLog( aWrongPasswordException.Message );
+        m_pImpl->AddLog( rWrongPasswordException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( embed::StorageWrappedTargetException& aStorageWrappedTargetException )
+    catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        m_pImpl->AddLog( aStorageWrappedTargetException.Message );
+        m_pImpl->AddLog( rStorageWrappedTargetException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( io::IOException& aIOException )
+    catch( const io::IOException& rIOException )
     {
-        m_pImpl->AddLog( aIOException.Message );
+        m_pImpl->AddLog( rIOException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::RuntimeException& aRuntimeException )
+    catch( const uno::RuntimeException& rRuntimeException )
     {
-        m_pImpl->AddLog( aRuntimeException.Message );
+        m_pImpl->AddLog( rRuntimeException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::Exception& aException )
+    catch( const uno::Exception& rException )
     {
-          m_pImpl->AddLog( aException.Message );
+          m_pImpl->AddLog( rException.Message );
           m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
           uno::Any aCaught( ::cppu::getCaughtException() );
@@ -3706,51 +3706,51 @@ uno::Reference< io::XStream > SAL_CALL OStorage::cloneEncryptedStream(
             throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
         return xResult;
     }
-    catch( embed::InvalidStorageException& aInvalidStorageException )
+    catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        m_pImpl->AddLog( aInvalidStorageException.Message );
+        m_pImpl->AddLog( rInvalidStorageException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( lang::IllegalArgumentException& aIllegalArgumentException )
+    catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        m_pImpl->AddLog( aIllegalArgumentException.Message );
+        m_pImpl->AddLog( rIllegalArgumentException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( packages::NoEncryptionException& aNoEncryptionException )
+    catch( const packages::NoEncryptionException& rNoEncryptionException )
     {
-        m_pImpl->AddLog( aNoEncryptionException.Message );
+        m_pImpl->AddLog( rNoEncryptionException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( packages::WrongPasswordException& aWrongPasswordException )
+    catch( const packages::WrongPasswordException& rWrongPasswordException )
     {
-        m_pImpl->AddLog( aWrongPasswordException.Message );
+        m_pImpl->AddLog( rWrongPasswordException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( io::IOException& aIOException )
+    catch( const io::IOException& rIOException )
     {
-        m_pImpl->AddLog( aIOException.Message );
+        m_pImpl->AddLog( rIOException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( embed::StorageWrappedTargetException& aStorageWrappedTargetException )
+    catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        m_pImpl->AddLog( aStorageWrappedTargetException.Message );
+        m_pImpl->AddLog( rStorageWrappedTargetException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::RuntimeException& aRuntimeException )
+    catch( const uno::RuntimeException& rRuntimeException )
     {
-        m_pImpl->AddLog( aRuntimeException.Message );
+        m_pImpl->AddLog( rRuntimeException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::Exception& aException )
+    catch( const uno::Exception& rException )
     {
-          m_pImpl->AddLog( aException.Message );
+          m_pImpl->AddLog( rException.Message );
           m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
           uno::Any aCaught( ::cppu::getCaughtException() );
@@ -3824,45 +3824,45 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getPlainRawStreamElement(
         xTempOut->closeOutput();
         xSeek->seek( 0 );
     }
-    catch( embed::InvalidStorageException& aInvalidStorageException )
+    catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        m_pImpl->AddLog( aInvalidStorageException.Message );
+        m_pImpl->AddLog( rInvalidStorageException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( lang::IllegalArgumentException& aIllegalArgumentException )
+    catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        m_pImpl->AddLog( aIllegalArgumentException.Message );
+        m_pImpl->AddLog( rIllegalArgumentException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( container::NoSuchElementException& aNoSuchElementException )
+    catch( const container::NoSuchElementException& rNoSuchElementException )
     {
-        m_pImpl->AddLog( aNoSuchElementException.Message );
+        m_pImpl->AddLog( rNoSuchElementException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( embed::StorageWrappedTargetException& aStorageWrappedTargetException )
+    catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        m_pImpl->AddLog( aStorageWrappedTargetException.Message );
+        m_pImpl->AddLog( rStorageWrappedTargetException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( io::IOException& aIOException )
+    catch( const io::IOException& rIOException )
     {
-        m_pImpl->AddLog( aIOException.Message );
+        m_pImpl->AddLog( rIOException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::RuntimeException& aRuntimeException )
+    catch( const uno::RuntimeException& rRuntimeException )
     {
-        m_pImpl->AddLog( aRuntimeException.Message );
+        m_pImpl->AddLog( rRuntimeException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::Exception& aException )
+    catch( const uno::Exception& rException )
     {
-          m_pImpl->AddLog( aException.Message );
+          m_pImpl->AddLog( rException.Message );
           m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
           uno::Any aCaught( ::cppu::getCaughtException() );
@@ -3938,51 +3938,51 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getRawEncrStreamElement(
         xSeek->seek( 0 );
 
     }
-    catch( embed::InvalidStorageException& aInvalidStorageException )
+    catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        m_pImpl->AddLog( aInvalidStorageException.Message );
+        m_pImpl->AddLog( rInvalidStorageException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( lang::IllegalArgumentException& aIllegalArgumentException )
+    catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        m_pImpl->AddLog( aIllegalArgumentException.Message );
+        m_pImpl->AddLog( rIllegalArgumentException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( packages::NoEncryptionException& aNoEncryptionException )
+    catch( const packages::NoEncryptionException& rNoEncryptionException )
     {
-        m_pImpl->AddLog( aNoEncryptionException.Message );
+        m_pImpl->AddLog( rNoEncryptionException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( container::NoSuchElementException& aNoSuchElementException )
+    catch( const container::NoSuchElementException& rNoSuchElementException )
     {
-        m_pImpl->AddLog( aNoSuchElementException.Message );
+        m_pImpl->AddLog( rNoSuchElementException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( embed::StorageWrappedTargetException& aStorageWrappedTargetException )
+    catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        m_pImpl->AddLog( aStorageWrappedTargetException.Message );
+        m_pImpl->AddLog( rStorageWrappedTargetException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( io::IOException& aIOException )
+    catch( const io::IOException& rIOException )
     {
-        m_pImpl->AddLog( aIOException.Message );
+        m_pImpl->AddLog( rIOException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::RuntimeException& aRuntimeException )
+    catch( const uno::RuntimeException& rRuntimeException )
     {
-        m_pImpl->AddLog( aRuntimeException.Message );
+        m_pImpl->AddLog( rRuntimeException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::Exception& aException )
+    catch( const uno::Exception& rException )
     {
-          m_pImpl->AddLog( aException.Message );
+          m_pImpl->AddLog( rException.Message );
           m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
           uno::Any aCaught( ::cppu::getCaughtException() );
@@ -4035,51 +4035,51 @@ void SAL_CALL OStorage::insertRawEncrStreamElement( const ::rtl::OUString& aStre
 
         m_pImpl->InsertRawStream( aStreamName, xInStream );
     }
-    catch( embed::InvalidStorageException& aInvalidStorageException )
+    catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        m_pImpl->AddLog( aInvalidStorageException.Message );
+        m_pImpl->AddLog( rInvalidStorageException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( lang::IllegalArgumentException& aIllegalArgumentException )
+    catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        m_pImpl->AddLog( aIllegalArgumentException.Message );
+        m_pImpl->AddLog( rIllegalArgumentException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( packages::NoRawFormatException& aNoRawFormatException )
+    catch( const packages::NoRawFormatException& rNoRawFormatException )
     {
-        m_pImpl->AddLog( aNoRawFormatException.Message );
+        m_pImpl->AddLog( rNoRawFormatException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( container::ElementExistException& aElementExistException )
+    catch( const container::ElementExistException& rElementExistException )
     {
-        m_pImpl->AddLog( aElementExistException.Message );
+        m_pImpl->AddLog( rElementExistException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( embed::StorageWrappedTargetException& aStorageWrappedTargetException )
+    catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        m_pImpl->AddLog( aStorageWrappedTargetException.Message );
+        m_pImpl->AddLog( rStorageWrappedTargetException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( io::IOException& aIOException )
+    catch( const io::IOException& rIOException )
     {
-        m_pImpl->AddLog( aIOException.Message );
+        m_pImpl->AddLog( rIOException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::RuntimeException& aRuntimeException )
+    catch( const uno::RuntimeException& rRuntimeException )
     {
-        m_pImpl->AddLog( aRuntimeException.Message );
+        m_pImpl->AddLog( rRuntimeException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::Exception& aException )
+    catch( const uno::Exception& rException )
     {
-          m_pImpl->AddLog( aException.Message );
+          m_pImpl->AddLog( rException.Message );
           m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
           uno::Any aCaught( ::cppu::getCaughtException() );
@@ -4123,27 +4123,27 @@ void SAL_CALL OStorage::commit()
         if ( m_pImpl->m_pParent && m_pImpl->m_pParent->m_pAntiImpl )
             xParentModif = (util::XModifiable*)m_pImpl->m_pParent->m_pAntiImpl;
     }
-    catch( io::IOException& aIOException )
+    catch( const io::IOException& rIOException )
     {
-        m_pImpl->AddLog( aIOException.Message );
+        m_pImpl->AddLog( rIOException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( embed::StorageWrappedTargetException& aStorageWrappedTargetException )
+    catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        m_pImpl->AddLog( aStorageWrappedTargetException.Message );
+        m_pImpl->AddLog( rStorageWrappedTargetException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::RuntimeException& aRuntimeException )
+    catch( const uno::RuntimeException& rRuntimeException )
     {
-        m_pImpl->AddLog( aRuntimeException.Message );
+        m_pImpl->AddLog( rRuntimeException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::Exception& aException )
+    catch( const uno::Exception& rException )
     {
-        m_pImpl->AddLog( aException.Message );
+        m_pImpl->AddLog( rException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
         uno::Any aCaught( ::cppu::getCaughtException() );
@@ -4197,27 +4197,27 @@ void SAL_CALL OStorage::revert()
         m_pImpl->m_bIsModified = sal_False;
         m_pImpl->m_bBroadcastModified = sal_True;
     }
-    catch( io::IOException& aIOException )
+    catch( const io::IOException& rIOException )
     {
-        m_pImpl->AddLog( aIOException.Message );
+        m_pImpl->AddLog( rIOException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( embed::StorageWrappedTargetException& aStorageWrappedTargetException )
+    catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        m_pImpl->AddLog( aStorageWrappedTargetException.Message );
+        m_pImpl->AddLog( rStorageWrappedTargetException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::RuntimeException& aRuntimeException )
+    catch( const uno::RuntimeException& rRuntimeException )
     {
-        m_pImpl->AddLog( aRuntimeException.Message );
+        m_pImpl->AddLog( rRuntimeException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::Exception& aException )
+    catch( const uno::Exception& rException )
     {
-        m_pImpl->AddLog( aException.Message );
+        m_pImpl->AddLog( rException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
         uno::Any aCaught( ::cppu::getCaughtException() );
@@ -4392,27 +4392,27 @@ uno::Any SAL_CALL OStorage::getByName( const ::rtl::OUString& aName )
         else
             aResult <<= openStreamElement( aName, embed::ElementModes::READ );
     }
-    catch( container::NoSuchElementException& aNoSuchElementException )
+    catch( const container::NoSuchElementException& rNoSuchElementException )
     {
-        m_pImpl->AddLog( aNoSuchElementException.Message );
+        m_pImpl->AddLog( rNoSuchElementException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( lang::WrappedTargetException& aWrappedTargetException )
+    catch( const lang::WrappedTargetException& rWrappedTargetException )
     {
-        m_pImpl->AddLog( aWrappedTargetException.Message );
+        m_pImpl->AddLog( rWrappedTargetException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::RuntimeException& aRuntimeException )
+    catch( const uno::RuntimeException& rRuntimeException )
     {
-        m_pImpl->AddLog( aRuntimeException.Message );
+        m_pImpl->AddLog( rRuntimeException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch ( uno::Exception& aException )
+    catch( const uno::Exception& rException )
     {
-           m_pImpl->AddLog( aException.Message );
+           m_pImpl->AddLog( rException.Message );
            m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
            uno::Any aCaught( ::cppu::getCaughtException() );
@@ -4444,15 +4444,15 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OStorage::getElementNames()
     {
         return m_pImpl->GetElementNames();
     }
-    catch( uno::RuntimeException& aRuntimeException )
+    catch( const uno::RuntimeException& rRuntimeException )
     {
-        m_pImpl->AddLog( aRuntimeException.Message );
+        m_pImpl->AddLog( rRuntimeException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch ( uno::Exception& aException )
+    catch ( const uno::Exception& rException )
     {
-           m_pImpl->AddLog( aException.Message );
+           m_pImpl->AddLog( rException.Message );
            m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
            uno::Any aCaught( ::cppu::getCaughtException() );
@@ -4490,15 +4490,15 @@ sal_Bool SAL_CALL OStorage::hasByName( const ::rtl::OUString& aName )
     {
         pElement = m_pImpl->FindElement( aName );
     }
-    catch( uno::RuntimeException& aRuntimeException )
+    catch( const uno::RuntimeException& rRuntimeException )
     {
-        m_pImpl->AddLog( aRuntimeException.Message );
+        m_pImpl->AddLog( rRuntimeException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch ( uno::Exception& aException )
+    catch ( const uno::Exception& rException )
     {
-           m_pImpl->AddLog( aException.Message );
+           m_pImpl->AddLog( rException.Message );
            m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
            uno::Any aCaught( ::cppu::getCaughtException() );
@@ -4547,15 +4547,15 @@ sal_Bool SAL_CALL OStorage::hasElements()
     {
         return ( m_pImpl->GetChildrenList().size() != 0 );
     }
-    catch( uno::RuntimeException& aRuntimeException )
+    catch( const uno::RuntimeException& rRuntimeException )
     {
-        m_pImpl->AddLog( aRuntimeException.Message );
+        m_pImpl->AddLog( rRuntimeException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch ( uno::Exception& aException )
+    catch( const uno::Exception& rException )
     {
-           m_pImpl->AddLog( aException.Message );
+           m_pImpl->AddLog( rException.Message );
            m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
            uno::Any aCaught( ::cppu::getCaughtException() );
@@ -4587,15 +4587,15 @@ void SAL_CALL OStorage::dispose()
     {
         InternalDispose( sal_True );
     }
-    catch( uno::RuntimeException& aRuntimeException )
+    catch( const uno::RuntimeException& rRuntimeException )
     {
-        m_pImpl->AddLog( aRuntimeException.Message );
+        m_pImpl->AddLog( rRuntimeException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch ( uno::Exception& aException )
+    catch( const uno::Exception& rException )
     {
-           m_pImpl->AddLog( aException.Message );
+           m_pImpl->AddLog( rException.Message );
            m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
            uno::Any aCaught( ::cppu::getCaughtException() );
@@ -4676,15 +4676,15 @@ void SAL_CALL OStorage::removeEncryption()
         try {
             m_pImpl->ReadContents();
         }
-        catch ( uno::RuntimeException& aRuntimeException )
+        catch ( const uno::RuntimeException& rRuntimeException )
         {
-            m_pImpl->AddLog( aRuntimeException.Message );
+            m_pImpl->AddLog( rRuntimeException.Message );
             m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
             throw;
         }
-        catch ( uno::Exception& aException )
+        catch ( const uno::Exception& rException )
         {
-            m_pImpl->AddLog( aException.Message );
+            m_pImpl->AddLog( rException.Message );
             m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
             uno::Any aCaught( ::cppu::getCaughtException() );
@@ -4709,9 +4709,9 @@ void SAL_CALL OStorage::removeEncryption()
             m_pImpl->m_bHasCommonEncryptionData = sal_False;
             m_pImpl->m_aCommonEncryptionData.clear();
         }
-        catch( uno::Exception& aException )
+        catch( const uno::Exception& rException )
         {
-            m_pImpl->AddLog( aException.Message );
+            m_pImpl->AddLog( rException.Message );
             m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
             OSL_FAIL( "The call must not fail, it is pretty simple!" );
@@ -4750,15 +4750,15 @@ void SAL_CALL OStorage::setEncryptionData( const uno::Sequence< beans::NamedValu
         try {
             m_pImpl->ReadContents();
         }
-        catch ( uno::RuntimeException& aRuntimeException )
+        catch ( const uno::RuntimeException& rRuntimeException )
         {
-            m_pImpl->AddLog( aRuntimeException.Message );
+            m_pImpl->AddLog( rRuntimeException.Message );
             m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
             throw;
         }
-        catch ( uno::Exception& aException )
+        catch ( const uno::Exception& rException )
         {
-            m_pImpl->AddLog( aException.Message );
+            m_pImpl->AddLog( rException.Message );
             m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
             uno::Any aCaught( ::cppu::getCaughtException() );
@@ -4781,9 +4781,9 @@ void SAL_CALL OStorage::setEncryptionData( const uno::Sequence< beans::NamedValu
             m_pImpl->m_bHasCommonEncryptionData = sal_True;
             m_pImpl->m_aCommonEncryptionData = aEncryptionMap;
         }
-        catch( uno::Exception& aException )
+        catch( const uno::Exception& rException )
         {
-            m_pImpl->AddLog( aException.Message );
+            m_pImpl->AddLog( rException.Message );
             m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
             throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
@@ -4951,15 +4951,15 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const ::rtl::OUString& aPropertyNa
         {
             m_pImpl->ReadContents();
         }
-        catch ( uno::RuntimeException& aRuntimeException )
+        catch ( const uno::RuntimeException& rRuntimeException )
         {
-            m_pImpl->AddLog( aRuntimeException.Message );
+            m_pImpl->AddLog( rRuntimeException.Message );
             m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
             throw;
         }
-        catch ( uno::Exception& aException )
+        catch ( const uno::Exception& rException )
         {
-            m_pImpl->AddLog( aException.Message );
+            m_pImpl->AddLog( rException.Message );
             m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
             uno::Any aCaught( ::cppu::getCaughtException() );
@@ -5013,15 +5013,15 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const ::rtl::OUString& aPropertyNa
 
                 return xPackPropSet->getPropertyValue( aPropertyName );
             }
-            catch ( uno::RuntimeException& aRuntimeException )
+            catch ( const uno::RuntimeException& rRuntimeException )
             {
-                m_pImpl->AddLog( aRuntimeException.Message );
+                m_pImpl->AddLog( rRuntimeException.Message );
                 m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
                 throw;
             }
-            catch ( uno::Exception& aException )
+            catch ( const uno::Exception& rException )
             {
-                m_pImpl->AddLog( aException.Message );
+                m_pImpl->AddLog( rException.Message );
                 m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
                 uno::Any aCaught( ::cppu::getCaughtException() );
@@ -5143,9 +5143,9 @@ sal_Bool SAL_CALL OStorage::hasByID(  const ::rtl::OUString& sID )
         getRelationshipByID( sID );
         return sal_True;
     }
-    catch( container::NoSuchElementException& aNoSuchElementException )
+    catch( const container::NoSuchElementException& rNoSuchElementException )
     {
-        m_pImpl->AddLog( aNoSuchElementException.Message );
+        m_pImpl->AddLog( rNoSuchElementException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception" ) ) );
     }
 
@@ -5563,45 +5563,45 @@ void SAL_CALL OStorage::insertStreamElementDirect(
 
         pElement->m_pStream->InsertStreamDirectly( xInStream, aProps );
     }
-    catch( embed::InvalidStorageException& aInvalidStorageException )
+    catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        m_pImpl->AddLog( aInvalidStorageException.Message );
+        m_pImpl->AddLog( rInvalidStorageException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( lang::IllegalArgumentException& aIllegalArgumentException )
+    catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        m_pImpl->AddLog( aIllegalArgumentException.Message );
+        m_pImpl->AddLog( rIllegalArgumentException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( container::ElementExistException& aElementExistException )
+    catch( const container::ElementExistException& rElementExistException )
     {
-        m_pImpl->AddLog( aElementExistException.Message );
+        m_pImpl->AddLog( rElementExistException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( embed::StorageWrappedTargetException& aStorageWrappedTargetException )
+    catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        m_pImpl->AddLog( aStorageWrappedTargetException.Message );
+        m_pImpl->AddLog( rStorageWrappedTargetException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( io::IOException& aIOException )
+    catch( const io::IOException& rIOException )
     {
-        m_pImpl->AddLog( aIOException.Message );
+        m_pImpl->AddLog( rIOException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::RuntimeException& aRuntimeException )
+    catch( const uno::RuntimeException& rRuntimeException )
     {
-        m_pImpl->AddLog( aRuntimeException.Message );
+        m_pImpl->AddLog( rRuntimeException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::Exception& aException )
+    catch( const uno::Exception& rException )
     {
-          m_pImpl->AddLog( aException.Message );
+          m_pImpl->AddLog( rException.Message );
           m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
           uno::Any aCaught( ::cppu::getCaughtException() );
@@ -5663,51 +5663,51 @@ void SAL_CALL OStorage::copyElementDirectlyTo(
         uno::Reference< embed::XStorage > xStorDest( xDest, uno::UNO_QUERY_THROW );
         m_pImpl->CopyStorageElement( pElement, xStorDest, aNewName, sal_True );
     }
-    catch( embed::InvalidStorageException& aInvalidStorageException )
+    catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        m_pImpl->AddLog( aInvalidStorageException.Message );
+        m_pImpl->AddLog( rInvalidStorageException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( lang::IllegalArgumentException& aIllegalArgumentException )
+    catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        m_pImpl->AddLog( aIllegalArgumentException.Message );
+        m_pImpl->AddLog( rIllegalArgumentException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( container::NoSuchElementException& aNoSuchElementException )
+    catch( const container::NoSuchElementException& rNoSuchElementException )
     {
-        m_pImpl->AddLog( aNoSuchElementException.Message );
+        m_pImpl->AddLog( rNoSuchElementException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( container::ElementExistException& aElementExistException )
+    catch( const container::ElementExistException& rElementExistException )
     {
-        m_pImpl->AddLog( aElementExistException.Message );
+        m_pImpl->AddLog( rElementExistException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( embed::StorageWrappedTargetException& aStorageWrappedTargetException )
+    catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        m_pImpl->AddLog( aStorageWrappedTargetException.Message );
+        m_pImpl->AddLog( rStorageWrappedTargetException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( io::IOException& aIOException )
+    catch( const io::IOException& rIOException )
     {
-        m_pImpl->AddLog( aIOException.Message );
+        m_pImpl->AddLog( rIOException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::RuntimeException& aRuntimeException )
+    catch( const uno::RuntimeException& rRuntimeException )
     {
-        m_pImpl->AddLog( aRuntimeException.Message );
+        m_pImpl->AddLog( rRuntimeException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::Exception& aException )
+    catch( const uno::Exception& rException )
     {
-          m_pImpl->AddLog( aException.Message );
+          m_pImpl->AddLog( rException.Message );
           m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
           uno::Any aCaught( ::cppu::getCaughtException() );
@@ -5745,39 +5745,39 @@ void SAL_CALL OStorage::writeAndAttachToStream( const uno::Reference< io::XStrea
     {
         m_pImpl->m_pSwitchStream->CopyAndSwitchPersistenceTo( xStream );
     }
-    catch( embed::InvalidStorageException& aInvalidStorageException )
+    catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        m_pImpl->AddLog( aInvalidStorageException.Message );
+        m_pImpl->AddLog( rInvalidStorageException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( lang::IllegalArgumentException& aIllegalArgumentException )
+    catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        m_pImpl->AddLog( aIllegalArgumentException.Message );
+        m_pImpl->AddLog( rIllegalArgumentException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( embed::StorageWrappedTargetException& aStorageWrappedTargetException )
+    catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        m_pImpl->AddLog( aStorageWrappedTargetException.Message );
+        m_pImpl->AddLog( rStorageWrappedTargetException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( io::IOException& aIOException )
+    catch( const io::IOException& rIOException )
     {
-        m_pImpl->AddLog( aIOException.Message );
+        m_pImpl->AddLog( rIOException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::RuntimeException& aRuntimeException )
+    catch( const uno::RuntimeException& rRuntimeException )
     {
-        m_pImpl->AddLog( aRuntimeException.Message );
+        m_pImpl->AddLog( rRuntimeException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::Exception& aException )
+    catch( const uno::Exception& rException )
     {
-          m_pImpl->AddLog( aException.Message );
+          m_pImpl->AddLog( rException.Message );
           m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
           uno::Any aCaught( ::cppu::getCaughtException() );
@@ -5831,39 +5831,39 @@ void SAL_CALL OStorage::attachToURL( const ::rtl::OUString& sURL,
             m_pImpl->m_pSwitchStream->SwitchPersistenceTo( xStream );
         }
     }
-    catch( embed::InvalidStorageException& aInvalidStorageException )
+    catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        m_pImpl->AddLog( aInvalidStorageException.Message );
+        m_pImpl->AddLog( rInvalidStorageException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( lang::IllegalArgumentException& aIllegalArgumentException )
+    catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        m_pImpl->AddLog( aIllegalArgumentException.Message );
+        m_pImpl->AddLog( rIllegalArgumentException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( embed::StorageWrappedTargetException& aStorageWrappedTargetException )
+    catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        m_pImpl->AddLog( aStorageWrappedTargetException.Message );
+        m_pImpl->AddLog( rStorageWrappedTargetException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( io::IOException& aIOException )
+    catch( const io::IOException& rIOException )
     {
-        m_pImpl->AddLog( aIOException.Message );
+        m_pImpl->AddLog( rIOException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::RuntimeException& aRuntimeException )
+    catch( const uno::RuntimeException& rRuntimeException )
     {
-        m_pImpl->AddLog( aRuntimeException.Message );
+        m_pImpl->AddLog( rRuntimeException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::Exception& aException )
+    catch( const uno::Exception& rException )
     {
-          m_pImpl->AddLog( aException.Message );
+          m_pImpl->AddLog( rException.Message );
           m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
           uno::Any aCaught( ::cppu::getCaughtException() );
@@ -5920,57 +5920,57 @@ uno::Any SAL_CALL OStorage::getElementPropertyValue( const ::rtl::OUString& aEle
         pElement->m_pStorage->ReadContents();
         return uno::makeAny( pElement->m_pStorage->m_aMediaType );
     }
-    catch( embed::InvalidStorageException& aInvalidStorageException )
+    catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        m_pImpl->AddLog( aInvalidStorageException.Message );
+        m_pImpl->AddLog( rInvalidStorageException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( lang::IllegalArgumentException& aIllegalArgumentException )
+    catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        m_pImpl->AddLog( aIllegalArgumentException.Message );
+        m_pImpl->AddLog( rIllegalArgumentException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( container::NoSuchElementException& aNoSuchElementException )
+    catch( const container::NoSuchElementException& rNoSuchElementException )
     {
-        m_pImpl->AddLog( aNoSuchElementException.Message );
+        m_pImpl->AddLog( rNoSuchElementException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( beans::UnknownPropertyException& aUnknownPropertyException )
+    catch( const beans::UnknownPropertyException& rUnknownPropertyException )
     {
-        m_pImpl->AddLog( aUnknownPropertyException.Message );
+        m_pImpl->AddLog( rUnknownPropertyException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( beans::PropertyVetoException& aPropertyVetoException )
+    catch( const beans::PropertyVetoException& rPropertyVetoException )
     {
-        m_pImpl->AddLog( aPropertyVetoException.Message );
+        m_pImpl->AddLog( rPropertyVetoException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( embed::StorageWrappedTargetException& aStorageWrappedTargetException )
+    catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        m_pImpl->AddLog( aStorageWrappedTargetException.Message );
+        m_pImpl->AddLog( rStorageWrappedTargetException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( io::IOException& aIOException )
+    catch( const io::IOException& rIOException )
     {
-        m_pImpl->AddLog( aIOException.Message );
+        m_pImpl->AddLog( rIOException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::RuntimeException& aRuntimeException )
+    catch( const uno::RuntimeException& rRuntimeException )
     {
-        m_pImpl->AddLog( aRuntimeException.Message );
+        m_pImpl->AddLog( rRuntimeException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::Exception& aException )
+    catch( const uno::Exception& rException )
     {
-          m_pImpl->AddLog( aException.Message );
+          m_pImpl->AddLog( rException.Message );
           m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
           uno::Any aCaught( ::cppu::getCaughtException() );
@@ -6016,45 +6016,45 @@ void SAL_CALL OStorage::copyStreamElementData( const ::rtl::OUString& aStreamNam
         if ( xNonconstRef != xTargetStream )
             throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() ); // if the stream reference is set it must not be changed!
     }
-    catch( embed::InvalidStorageException& aInvalidStorageException )
+    catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        m_pImpl->AddLog( aInvalidStorageException.Message );
+        m_pImpl->AddLog( rInvalidStorageException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( lang::IllegalArgumentException& aIllegalArgumentException )
+    catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        m_pImpl->AddLog( aIllegalArgumentException.Message );
+        m_pImpl->AddLog( rIllegalArgumentException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( packages::WrongPasswordException& aWrongPasswordException )
+    catch( const packages::WrongPasswordException& rWrongPasswordException )
     {
-        m_pImpl->AddLog( aWrongPasswordException.Message );
+        m_pImpl->AddLog( rWrongPasswordException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( io::IOException& aIOException )
+    catch( const io::IOException& rIOException )
     {
-        m_pImpl->AddLog( aIOException.Message );
+        m_pImpl->AddLog( rIOException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( embed::StorageWrappedTargetException& aStorageWrappedTargetException )
+    catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        m_pImpl->AddLog( aStorageWrappedTargetException.Message );
+        m_pImpl->AddLog( rStorageWrappedTargetException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::RuntimeException& aRuntimeException )
+    catch( const uno::RuntimeException& rRuntimeException )
     {
-        m_pImpl->AddLog( aRuntimeException.Message );
+        m_pImpl->AddLog( rRuntimeException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::Exception& aException )
+    catch( const uno::Exception& rException )
     {
-          m_pImpl->AddLog( aException.Message );
+          m_pImpl->AddLog( rException.Message );
           m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
           uno::Any aCaught( ::cppu::getCaughtException() );
