@@ -108,7 +108,7 @@ void SpellDialogChildWindow::InvalidateSpellDialog (void)
 
     // Close the spell check dialog when there are no more sentences to
     // check.
-    if (aResult.size() == 0)
+    if (aResult.empty())
     {
         SfxBoolItem aItem (SID_SPELL_DIALOG, sal_False);
         GetBindings().GetDispatcher()->Execute(

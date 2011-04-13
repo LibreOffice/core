@@ -36,6 +36,7 @@ class SdPage;
 class SvxShape;
 class SdAnimationInfo;
 class SdrObject;
+class SdrPathObj;
 
 namespace sd {
 
@@ -76,6 +77,8 @@ public:
     static void UpdateSoundEffect( SvxShape* pShape, SdAnimationInfo* pInfo );
     static ::rtl::OUString GetSoundFile( SvxShape* pShape );
     static sal_Bool GetSoundOn( SvxShape* pShape );
+
+    static void SetAnimationPath( SvxShape* pShape, SdrPathObj* pPathObj );
 };
 
 } // end of namespace sd
