@@ -489,7 +489,9 @@ void FormulaCompiler::OpCodeMap::putOpCode( const String & rStr, const OpCode eO
     DBG_ASSERT( 0 < eOp && sal_uInt16(eOp) < mnSymbols, "OpCodeMap::putOpCode: OpCode out of range");
     if (0 < eOp && sal_uInt16(eOp) < mnSymbols)
     {
-        DBG_ASSERT( (mpTable[eOp].Len() == 0) || (mpTable[eOp] == rStr) || (eOp == ocCurrency),
+        DBG_ASSERT( (mpTable[eOp].Len() == 0) || (mpTable[eOp] == rStr) ||
+            (eOp == ocCurrency) || (eOp == ocSep) || (eOp == ocArrayColSep) ||
+            (eOp == ocArrayRowSep),
             ByteString( "OpCodeMap::putOpCode: reusing OpCode ").
             Append( ByteString::CreateFromInt32( sal_Int32( eOp))).Append( " (").
             Append( ByteString( rStr, RTL_TEXTENCODING_ASCII_US)).Append( ')').GetBuffer());
