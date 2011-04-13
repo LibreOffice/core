@@ -47,8 +47,8 @@ $(eval $(call gb_Library_set_include,vcl,\
     -I$(OUTDIR)/inc \
 ))
 ifeq ($(GUIBASE),unx)
-$(eval $(call gb_Library_set_cxxflags,vcl,\
-    $$(CXXFLAGS) \
+$(eval $(call gb_Library_set_include,vcl,\
+	$$(INCLUDE) \
     $$(FREETYPE_CFLAGS) \
 ))
 endif
@@ -88,9 +88,8 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
 endif
 
 ifeq ($(GUIBASE),aqua)
-$(eval $(call gb_Library_set_cxxflags,vcl,\
-    $$(CXXFLAGS) \
-    $$(OBJCXXFLAGS) \
+$(eval $(call gb_Library_add_cxxflags,vcl,\
+    $(gb_OBJCXXFLAGS) \
 ))
 ifeq ($(ENABLE_CAIRO),TRUE)
 $(eval $(call gb_Library_set_defs,vcl,\
@@ -445,8 +444,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/glyphs/graphite_serverfont \
 ))
 ifeq ($(SYSTEM_GRAPHITE),YES)
-$(eval $(call gb_Library_set_ldflags,vcl,\
-    $$(LDFLAGS) \
+$(eval $(call gb_Library_add_libs,vcl,\
     $(GRAPHITE_LIBS) \
 ))
 else
@@ -473,13 +471,11 @@ endif
 
 ifeq ($(OS),SOLARIS)
 ifeq ($(CPUNAME)$(CPU),SPARCU)
-$(eval $(call gb_Library_set_ldflags,vcl,\
-    $$(LDFLAGS) \
+$(eval $(call gb_Library_add_ldflags,vcl,\
     -R/usr/sfw/lib/64 \
 ))
 else
-$(eval $(call gb_Library_set_ldflags,vcl,\
-    $$(LDFLAGS) \
+$(eval $(call gb_Library_add_ldflags,vcl,\
     -R/usr/sfw/lib \
 ))
 endif
@@ -489,8 +485,7 @@ ifeq ($(GUIBASE),aqua)
 $(eval $(call gb_Library_add_linked_libs,vcl,\
     AppleRemote \
 ))
-$(eval $(call gb_Library_set_ldflags,vcl,\
-    $$(LDFLAGS) \
+$(eval $(call gb_Library_add_libs,vcl,\
     -framework QuickTime \
     -framework Cocoa \
     -framework Carbon \
@@ -499,8 +494,7 @@ $(eval $(call gb_Library_set_ldflags,vcl,\
 endif
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_set_ldflags,vcl,\
-    $$(LDFLAGS) \
+$(eval $(call gb_Library_add_ldflags,vcl,\
     /ENTRY:LibMain@12 \
 ))
 $(eval $(call gb_Library_add_linked_libs,vcl,\

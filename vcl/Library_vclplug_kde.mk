@@ -37,8 +37,8 @@ $(eval $(call gb_Library_set_include,vclplug_kde,\
     -I$(OUTDIR)/inc \
 ))
 
-$(eval $(call gb_Library_set_cxxflags,vclplug_kde,\
-    $$(CXXFLAGS) \
+$(eval $(call gb_Library_set_include,vclplug_kde,\
+	$$(INCLUDE) \
     $$(KDE_CFLAGS) \
 ))
 
@@ -47,9 +47,8 @@ $(eval $(call gb_Library_set_defs,vclplug_kde,\
     -DVCLPLUG_KDE_IMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_set_ldflags,vclplug_kde,\
-    $$(KDE_LIBS)\
-    $$(LDFLAGS) \
+$(eval $(call gb_Library_add_libs,vclplug_kde,\
+    $$(KDE_LIBS) \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,vclplug_kde,\
