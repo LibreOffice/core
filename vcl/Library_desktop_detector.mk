@@ -55,8 +55,6 @@ $(eval $(call gb_Library_add_linked_libs,desktop_detector,\
     basegfx \
     comphelper \
     cppuhelper \
-    icuuc \
-    icule \
     i18nisolang1 \
     i18npaper \
     i18nutil \
@@ -71,6 +69,11 @@ $(eval $(call gb_Library_add_linked_libs,desktop_detector,\
     ICE \
 	$(gb_STDLIBS) \
 ))
+
+$(call gb_Library_use_externals,desktop_detector,\
+	icule \
+	icuuc \
+)
 
 $(eval $(call gb_Library_add_exception_objects,desktop_detector,\
     vcl/unx/generic/desktopdetect/desktopdetector \

@@ -68,8 +68,6 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
     basegfx \
     comphelper \
     cppuhelper \
-    icuuc \
-    icule \
     i18nisolang1 \
     i18npaper \
     i18nutil \
@@ -80,6 +78,11 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
     vos3 \
     $(gb_STDLIBS) \
 ))
+
+$(call gb_Library_use_externals,vcl,\
+	icule \
+	icuuc \
+)
 
 ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_add_linked_libs,vcl,\

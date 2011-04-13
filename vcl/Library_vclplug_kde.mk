@@ -61,8 +61,6 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_kde,\
     basegfx \
     comphelper \
     cppuhelper \
-    icuuc \
-    icule \
     i18nisolang1 \
     i18npaper \
     i18nutil \
@@ -76,6 +74,11 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_kde,\
     SM \
     ICE \
 ))
+
+$(call gb_Library_use_externals,vclplug_kde,\
+	icule \
+	icuuc \
+)
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_kde,\
     vcl/unx/kde/kdedata \

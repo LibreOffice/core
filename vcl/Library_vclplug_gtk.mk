@@ -73,8 +73,6 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_gtk,\
     basegfx \
     comphelper \
     cppuhelper \
-    icuuc \
-    icule \
     i18nisolang1 \
     i18npaper \
     i18nutil \
@@ -89,6 +87,11 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_gtk,\
     ICE \
     $(gb_STDLIBS) \
 ))
+
+$(call gb_Library_use_externals,vclplug_gtk,\
+	icule \
+	icuuc \
+)
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_gtk,\
     vcl/unx/gtk/a11y/atkaction \

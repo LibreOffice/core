@@ -52,8 +52,6 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_svp,\
     basebmp \
     comphelper \
     cppuhelper \
-    icuuc \
-    icule \
     i18nisolang1 \
     i18npaper \
     i18nutil \
@@ -68,6 +66,11 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_svp,\
     ICE \
     $(gb_STDLIBS) \
 ))
+
+$(call gb_Library_use_externals,vclplug_svp,\
+	icule \
+	icuuc \
+)
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_svp,\
     vcl/unx/generic/printergfx/bitmap_gfx \
