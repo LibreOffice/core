@@ -159,7 +159,7 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
    if (aSystemDicts.open() == osl::FileBase::E_None)
    {
        osl::DirectoryItem aItem;
-       osl::FileStatus aFileStatus(FileStatusMask_FileURL);
+       osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileURL);
        while (aSystemDicts.getNextItem(aItem) == osl::FileBase::E_None)
        {
            aItem.getFileStatus(aFileStatus);

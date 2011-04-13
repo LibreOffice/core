@@ -991,7 +991,7 @@ namespace basctl
             if ( aFileURL.getLength() )
             {
                 ::osl::DirectoryItem aFileItem;
-                ::osl::FileStatus aFileStatus( FileStatusMask_FileURL );
+                ::osl::FileStatus aFileStatus( osl_FileStatus_Mask_FileURL );
                 OSL_VERIFY( ::osl::DirectoryItem::get( aFileURL, aFileItem ) == ::osl::FileBase::E_None );
                 OSL_VERIFY( aFileItem.getFileStatus( aFileStatus ) == ::osl::FileBase::E_None );
                 ::rtl::OUString aCanonicalFileURL( aFileStatus.getFileURL() );

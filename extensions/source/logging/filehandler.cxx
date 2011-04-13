@@ -191,7 +191,7 @@ namespace logging
             // check whether the log file already exists
             ::osl::DirectoryItem aFileItem;
             ::osl::DirectoryItem::get( m_sFileURL, aFileItem );
-            ::osl::FileStatus aStatus( FileStatusMask_Validate );
+            ::osl::FileStatus aStatus( osl_FileStatus_Mask_Validate );
             if ( ::osl::FileBase::E_None == aFileItem.getFileStatus( aStatus ) )
                 ::osl::File::remove( m_sFileURL );
 

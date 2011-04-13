@@ -816,7 +816,7 @@ UpdateCheck::initialize(const uno::Sequence< beans::NamedValue >& rValues,
             osl::DirectoryItem aDirectoryItem;
             if( osl::DirectoryItem::E_None == osl::DirectoryItem::get(aLocalFileName, aDirectoryItem) )
             {
-                osl::FileStatus aFileStatus(FileStatusMask_FileSize);
+                osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileSize);
                 if( osl::DirectoryItem::E_None == aDirectoryItem.getFileStatus(aFileStatus) )
                 {
                     sal_Int64 nDownloadSize = aModel.getDownloadSize();
