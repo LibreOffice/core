@@ -136,7 +136,6 @@ $(eval $(call gb_Library_add_exception_objects,vbaobj,\
 ifneq (,$(filter LINUX DRAGONFLY OPENBSD FREEBSD NETBSD, $(OS)))
 $(eval $(call gb_Library_set_ldflags,vbaobj,\
 	$$(LDFLAGS) \
-	-Wl$(COMMA)-O1 \
 	-Wl$(COMMA)-z$(COMMA)noexecstack \
 ))
 endif
