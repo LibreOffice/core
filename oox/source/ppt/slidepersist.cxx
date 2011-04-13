@@ -192,7 +192,7 @@ void SlidePersist::createBackground( const XmlFilterBase& rFilterBase )
                 rFilterBase.getGraphicHelper(), oox::drawingml::FillProperties::DEFAULT_IDS, 0, nPhClr );
             xPagePropSet->setPropertyValue( sBackground, Any( xPropertySet ) );
         }
-        catch( Exception )
+        catch( const Exception& )
         {
         }
     }
@@ -315,7 +315,7 @@ void SlidePersist::applyTextStyles( const XmlFilterBase& rFilterBase )
                 }
             }
         }
-        catch( Exception& )
+        catch( const Exception& )
         {
         }
     }

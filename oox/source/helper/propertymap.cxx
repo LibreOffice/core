@@ -377,7 +377,7 @@ void PropertyMap::dump( Reference< XPropertySet > rXPropSet )
 
         try {
             lclDumpAnyValue (rXPropSet->getPropertyValue( props [i].Name ));
-        } catch(Exception e) {
+        } catch(const Exception& e) {
             fprintf (stderr,"unable to get '%s' value\n", USS(props [i].Name));
         }
     }
