@@ -320,10 +320,13 @@ void SgaObjectBmp::ReadData( SvStream& rIn, sal_uInt16& rReadVersion )
 // ------------------
 // - SgaObjectSound -
 // ------------------
+DBG_NAME(SgaObjectSound)
 
 SgaObjectSound::SgaObjectSound() :
     eSoundType( SOUND_STANDARD )
 {
+    DBG_CTOR(SgaObjectSound,NULL);
+
 }
 
 // ------------------------------------------------------------------------
@@ -331,6 +334,8 @@ SgaObjectSound::SgaObjectSound() :
 SgaObjectSound::SgaObjectSound( const INetURLObject& rURL ) :
     eSoundType( SOUND_STANDARD )
 {
+    DBG_CTOR(SgaObjectSound,NULL);
+
     if( FileExists( rURL ) )
     {
         aURL = rURL;
@@ -345,6 +350,8 @@ SgaObjectSound::SgaObjectSound( const INetURLObject& rURL ) :
 
 SgaObjectSound::~SgaObjectSound()
 {
+
+    DBG_DTOR(SgaObjectSound,NULL);
 }
 
 // ------------------------------------------------------------------------
@@ -453,10 +460,13 @@ SgaObjectSvDraw::SgaObjectSvDraw( const FmFormModel& rModel, const INetURLObject
 }
 
 // ------------------------------------------------------------------------
+DBG_NAME(SvxGalleryDrawModel)
 
 SvxGalleryDrawModel::SvxGalleryDrawModel()
 : mpFormModel( 0 )
 {
+    DBG_CTOR(SvxGalleryDrawModel,NULL);
+
     const String sFactoryURL(RTL_CONSTASCII_USTRINGPARAM("sdraw"));
 
     mxDoc = SfxObjectShell::CreateObjectByFactoryName( sFactoryURL );
@@ -484,6 +494,8 @@ SvxGalleryDrawModel::~SvxGalleryDrawModel()
 {
     if( mxDoc.Is() )
         mxDoc->DoClose();
+
+    DBG_DTOR(SvxGalleryDrawModel,NULL);
 }
 
 // ------------------------------------------------------------------------

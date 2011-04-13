@@ -31,20 +31,26 @@
 #include <tools/stream.hxx>
 #include <tools/zcodec.hxx>
 #include "codec.hxx"
+#include <tools/debug.hxx>
 
 // ----------------
 // - GalleryCodec -
 // ----------------
+DBG_NAME(GalleryCodec)
 
 GalleryCodec::GalleryCodec( SvStream& rIOStm ) :
     rStm( rIOStm )
 {
+    DBG_CTOR(GalleryCodec,NULL);
+
 }
 
 // -----------------------------------------------------------------------------
 
 GalleryCodec::~GalleryCodec()
 {
+
+    DBG_DTOR(GalleryCodec,NULL);
 }
 
 // -----------------------------------------------------------------------------

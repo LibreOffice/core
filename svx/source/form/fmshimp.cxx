@@ -1569,7 +1569,7 @@ void FmXFormShell::ExecuteSearch()
         aContextNames.swap( aValidContexts );
     }
 
-    if (m_aSearchForms.size() == 0)
+    if (m_aSearchForms.empty() )
     {   // es gibt keine Controls, die alle Bedingungen fuer eine Suche erfuellen
         ErrorBox(NULL, WB_OK, SVX_RESSTR(RID_STR_NODATACONTROLS)).Execute();
         return;
@@ -2571,7 +2571,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
     strFieldList.EraseTrailingChars(';');
     sFieldDisplayNames.EraseTrailingChars(';');
 
-    if (!pfmscContextInfo->arrFields.size())
+    if (pfmscContextInfo->arrFields.empty())
     {
         pfmscContextInfo->arrFields.clear();
         pfmscContextInfo->xCursor = NULL;
@@ -3741,7 +3741,7 @@ void FmXFormShell::viewDeactivated( FmFormView& _rCurrentView, sal_Bool _bDeacti
         // move all events from our queue to a new one, omit the events for the deactivated
         // page
         ::std::queue< FmLoadAction > aNewEvents;
-        while ( m_aLoadingPages.size() )
+        while ( !m_aLoadingPages.empty() )
         {
             FmLoadAction aAction = m_aLoadingPages.front();
             m_aLoadingPages.pop();

@@ -66,7 +66,7 @@ namespace sdr
             std::vector< ViewObjectContact* > aLocalVOCList(maViewObjectContactVector);
             maViewObjectContactVector.clear();
 
-            while(aLocalVOCList.size())
+            while(!aLocalVOCList.empty())
             {
                 ViewObjectContact* pCandidate = aLocalVOCList.back();
                 aLocalVOCList.pop_back();

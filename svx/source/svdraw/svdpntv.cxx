@@ -308,7 +308,7 @@ SdrPaintView::~SdrPaintView()
 #endif
 
     // delete existing SdrPaintWindows
-    while(maPaintWindows.size())
+    while(!maPaintWindows.empty())
     {
         delete maPaintWindows.back();
         maPaintWindows.pop_back();

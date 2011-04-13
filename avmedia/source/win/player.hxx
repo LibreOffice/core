@@ -30,9 +30,10 @@
 
 #include "wincommon.hxx"
 
-#ifndef _COM_SUN_STAR_MEDIA_XPLAYER_HDL_
 #include "com/sun/star/media/XPlayer.hdl"
-#endif
+
+#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/basemutex.hxx>
 
 struct IGraphBuilder;
 struct IBaseFilter;
@@ -52,9 +53,11 @@ namespace avmedia { namespace win {
 // ----------
 // - Player -
 // ----------
+typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::media::XPlayer,
+                                          ::com::sun::star::lang::XServiceInfo > Player_BASE;
 
-class Player : public ::cppu::WeakImplHelper2< ::com::sun::star::media::XPlayer,
-                                               ::com::sun::star::lang::XServiceInfo >
+class Player :  public cppu::BaseMutex,
+                public Player_BASE
 {
 public:
 
@@ -95,6 +98,9 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
+    // ::cppu::OComponentHelper
+    virtual void SAL_CALL disposing(void);
+
 private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMgr;
@@ -111,8 +117,11 @@ private:
     IVideoWindow*           mpVW;
     IDDrawExclModeVideo*    mpEV;
     long                    mnUnmutedVolume;
+    int                     mnFrameWnd;
+
     sal_Bool                mbMuted;
     sal_Bool                mbLooping;
+    sal_Bool                mbAddWindow;
 
     void                    ImplLayoutVideoWindow();
 };

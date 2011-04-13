@@ -69,6 +69,9 @@
 #include "svx/svdstr.hrc"   // Objektname
 #include "svdoutlinercache.hxx"
 
+#include "svx/xflclit.hxx"
+#include "svx/xflhtit.hxx"
+#include "svx/xlnclit.hxx"
 
 #include <svl/asiancfg.hxx>
 #include "editeng/fontitem.hxx"
@@ -210,6 +213,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     pItemPool->SetPoolDefaultItem( SdrTextWordWrapItem( sal_False ) );
 
     SetTextDefaults();
+
     pLayerAdmin=new SdrLayerAdmin;
     pLayerAdmin->SetModel(this);
     ImpSetUIUnit();
@@ -2165,6 +2169,18 @@ const ::com::sun::star::uno::Sequence< sal_Int8 >& SdrModel::getUnoTunnelImpleme
         }
     }
     return *pSeq;
+}
+
+void SdrModel::SetDrawingLayerPoolDefaults()
+{
+    const String aNullStr;
+    const Color aNullLineCol(COL_DEFAULT_SHAPE_STROKE);
+    const Color aNullFillCol(COL_DEFAULT_SHAPE_FILLING);
+    const XHatch aNullHatch(aNullLineCol);
+
+    pItemPool->SetPoolDefaultItem( XFillColorItem(aNullStr,aNullFillCol) );
+    pItemPool->SetPoolDefaultItem( XFillHatchItem(pItemPool,aNullHatch) );
+    pItemPool->SetPoolDefaultItem( XLineColorItem(aNullStr,aNullLineCol) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

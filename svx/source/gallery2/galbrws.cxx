@@ -57,16 +57,21 @@ public:
 };
 
 // -----------------------------------------------------------------------------
+DBG_NAME(GallerySplitter)
 
 GallerySplitter::GallerySplitter( Window* pParent, const ResId& rResId ) :
     Splitter( pParent, rResId )
 {
+    DBG_CTOR(GallerySplitter,NULL);
+
 }
 
 // -----------------------------------------------------------------------------
 
 GallerySplitter::~GallerySplitter()
 {
+
+    DBG_DTOR(GallerySplitter,NULL);
 }
 
 // -----------------------------------------------------------------------------
@@ -80,10 +85,13 @@ void GallerySplitter::DataChanged( const DataChangedEvent& rDCEvt )
 // -------------------------
 // - SvxGalleryChildWindow -
 // -------------------------
+DBG_NAME(GalleryChildWindow)
 
 GalleryChildWindow::GalleryChildWindow( Window* _pParent, sal_uInt16 nId, SfxBindings* pBindings, SfxChildWinInfo* pInfo ) :
     SfxChildWindow( _pParent, nId )
 {
+    DBG_CTOR(GalleryChildWindow,NULL);
+
     pWindow = new GalleryBrowser( pBindings, this, _pParent, GAL_RESID( RID_SVXDLG_GALLERYBROWSER ) );
     eChildAlignment = SFX_ALIGN_TOP;
     ( (GalleryBrowser*) pWindow )->Initialize( pInfo );
@@ -93,6 +101,8 @@ GalleryChildWindow::GalleryChildWindow( Window* _pParent, sal_uInt16 nId, SfxBin
 
 GalleryChildWindow::~GalleryChildWindow()
 {
+
+    DBG_DTOR(GalleryChildWindow,NULL);
 }
 
 // -----------------------------------------------------------------------------
@@ -102,11 +112,14 @@ SFX_IMPL_DOCKINGWINDOW( GalleryChildWindow, SID_GALLERY )
 // ------------------
 // - GalleryBrowser -
 // ------------------
+DBG_NAME(GalleryBrowser)
 
 GalleryBrowser::GalleryBrowser( SfxBindings* _pBindings, SfxChildWindow* pCW,
                                 Window* pParent, const ResId& rResId ) :
     SfxDockingWindow( _pBindings, pCW, pParent, rResId )
 {
+    DBG_CTOR(GalleryBrowser,NULL);
+
     mpGallery = Gallery::GetGalleryInstance();
     mpBrowser1 = new GalleryBrowser1( this, GAL_RESID( GALLERY_BROWSER1 ), mpGallery );
     mpSplitter = new GallerySplitter( this, GAL_RESID( GALLERY_SPLITTER ) );
@@ -132,6 +145,8 @@ GalleryBrowser::~GalleryBrowser()
     delete mpBrowser2;
     delete mpSplitter;
     delete mpBrowser1;
+
+    DBG_DTOR(GalleryBrowser,NULL);
 }
 
 // -----------------------------------------------------------------------------

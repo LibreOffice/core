@@ -282,7 +282,6 @@ const Rectangle& SdrObjGroup::GetCurrentBoundRect() const
     // <--
 }
 
-
 const Rectangle& SdrObjGroup::GetSnapRect() const
 {
     // --> OD 2007-02-01 #144962#

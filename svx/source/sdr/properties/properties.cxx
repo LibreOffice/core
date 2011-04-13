@@ -32,6 +32,7 @@
 #include <svl/itemset.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svditer.hxx>
+#include <svx/xfillit0.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -182,6 +183,35 @@ namespace sdr
         {
             return 0;
         }
+
+        void CleanupFillProperties( SfxItemSet& rItemSet )
+        {
+            const bool bFillBitmap = rItemSet.GetItemState(XATTR_FILLBITMAP, sal_False) == SFX_ITEM_SET;
+            const bool bFillGradient = rItemSet.GetItemState(XATTR_FILLGRADIENT, sal_False) == SFX_ITEM_SET;
+            const bool bFillHatch = rItemSet.GetItemState(XATTR_FILLHATCH, sal_False) == SFX_ITEM_SET;
+            if( bFillBitmap || bFillGradient || bFillHatch )
+            {
+                const XFillStyleItem* pFillStyleItem = dynamic_cast< const XFillStyleItem* >( rItemSet.GetItem(XATTR_FILLSTYLE) );
+                if( pFillStyleItem )
+                {
+                    if( bFillBitmap && (pFillStyleItem->GetValue() != XFILL_BITMAP) )
+                    {
+                        rItemSet.ClearItem( XATTR_FILLBITMAP );
+                    }
+
+                    if( bFillGradient && (pFillStyleItem->GetValue() != XFILL_GRADIENT) )
+                    {
+                        rItemSet.ClearItem( XATTR_FILLGRADIENT );
+                    }
+
+                    if( bFillHatch && (pFillStyleItem->GetValue() != XFILL_HATCH) )
+                    {
+                        rItemSet.ClearItem( XATTR_FILLHATCH );
+                    }
+                }
+            }
+        }
+
     } // end of namespace properties
 } // end of namespace sdr
 

@@ -573,6 +573,14 @@ static XMLTransformerActionInit aActionTable[] =
     ENTRY1( TABLE, SOURCE_SERVICE, XML_ETACTION_PROC_ATTRS,
             OOO_SOURCE_SERVICE_ACTIONS ),
 
+    // fix id strings in old animation elements
+    ENTRY1( PRESENTATION, DIM, XML_ETACTION_PROC_ATTRS, OOO_ANIMATION_ACTIONS ),
+    ENTRY1( PRESENTATION, PLAY, XML_ETACTION_PROC_ATTRS, OOO_ANIMATION_ACTIONS ),
+    ENTRY1( PRESENTATION, SHOW_TEXT, XML_ETACTION_PROC_ATTRS, OOO_ANIMATION_ACTIONS ),
+    ENTRY1( PRESENTATION, SHOW_SHAPE, XML_ETACTION_PROC_ATTRS, OOO_ANIMATION_ACTIONS ),
+    ENTRY1( PRESENTATION, HIDE_TEXT, XML_ETACTION_PROC_ATTRS, OOO_ANIMATION_ACTIONS ),
+    ENTRY1( PRESENTATION, HIDE_SHAPE, XML_ETACTION_PROC_ATTRS, OOO_ANIMATION_ACTIONS ),
+
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ETACTION_EOT )
 };
 
@@ -755,6 +763,9 @@ static XMLTransformerActionInit aShapeActionTable[] =
     ENTRY2( CHART, LEGEND_POSITION, XML_ATACTION_RENAME_ATTRIBUTE,
             RENAME_ENTRY( XML_LEFT, XML_START ),
             RENAME_ENTRY( XML_RIGHT, XML_END )),
+    ENTRY0( DRAW, ID, XML_ATACTION_SHAPEID ),
+    ENTRY0( DRAW, START_SHAPE, XML_ATACTION_SHAPEID ),
+    ENTRY0( DRAW, END_SHAPE, XML_ATACTION_SHAPEID ),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
@@ -778,6 +789,7 @@ static XMLTransformerActionInit aConnectorActionTable[] =
     ENTRY1Q( FORM, ID, XML_ATACTION_RENAME,
                     XML_NAMESPACE_DRAW, XML_CONTROL ),
     ENTRY1( XLINK, HREF, XML_ATACTION_URI_OOO, sal_True ),
+    ENTRY0( DRAW, ID, XML_ATACTION_SHAPEID ),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
@@ -1033,6 +1045,14 @@ static XMLTransformerActionInit aSourceServiceActionTable[] =
 {
     ENTRY1Q( TABLE, USERNAME, XML_ATACTION_RENAME,
                         XML_NAMESPACE_TABLE, XML_USER_NAME ),
+    ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
+};
+
+// OOO_ANIMATION_ACTIONS
+static XMLTransformerActionInit aAnimationsActionTable[] =
+{
+    ENTRY0( DRAW, SHAPE_ID, XML_ATACTION_SHAPEID ),
+    ENTRY0( PRESENTATION, PATH_ID, XML_ATACTION_SHAPEID ),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
@@ -1776,6 +1796,10 @@ XMLTransformerActions *OOo2OasisTransformer::GetUserDefinedActions(
                 case OOO_SCRIPT_ACTIONS:
                     m_aActions[OOO_SCRIPT_ACTIONS] =
                         new XMLTransformerActions( aScriptActionTable );
+                    break;
+                case OOO_ANIMATION_ACTIONS:
+                    m_aActions[OOO_ANIMATION_ACTIONS] =
+                        new XMLTransformerActions( aAnimationsActionTable );
                     break;
             }
         }

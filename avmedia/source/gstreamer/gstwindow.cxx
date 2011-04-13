@@ -271,7 +271,7 @@ value in sequence of arguments" );
 
         if( pParentWindow )
         {
-            meZoomLevel = media::ZoomLevel_ORIGINAL;
+            meZoomLevel = media::ZoomLevel_FIT_TO_WINDOW;
 
             mpPlayerWindow = new PlayerChildWindow( pParentWindow );
             mpPlayerWindow->SetBackground( Color( COL_BLACK ) );
