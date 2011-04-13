@@ -258,6 +258,36 @@ endef
 endif # SYSTEM_CAIRO
 
 
+ifeq ($(SYSTEM_GRAPHITE),YES)
+
+#check for building with stlport, but graphite was not built with stlport
+define gb_LinkTarget__use_graphite
+ifneq ($(USE_SYSTEM_STL),YES)
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DADAPT_EXT_STL \
+)
+endif
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(GRAPHITE_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(GRAPHITE_LIBS))
+endef
+
+else # !SYSTEM_GRAPHITE
+
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+    graphite \
+))
+define gb_LinkTarget__use_graphite
+$(call gb_LinkTarget_add_linked_static_libs,$(1),\
+    graphite \
+)
+endef
+
+endif # SYSTEM_GRAPHITE
+
+
 ifeq ($(SYSTEM_ICU),YES)
 
 define gb_LinkTarget__use_icuuc
