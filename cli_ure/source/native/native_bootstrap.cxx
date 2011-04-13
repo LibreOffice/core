@@ -57,7 +57,7 @@ namespace cli_ure {
     WCHAR * resolveLink(WCHAR * path);
 }
 
-#define INSTALL_PATH L"Software\\OpenOffice.org\\UNO\\InstallPath"
+#define INSTALL_PATH L"Software\\LibreOffice\\UNO\\InstallPath"
 #define BASIS_LINK L"\\basis-link"
 #define URE_LINK L"\\ure-link"
 #define URE_BIN L"\\bin"
