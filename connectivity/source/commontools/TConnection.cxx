@@ -59,7 +59,7 @@ void OMetaConnection::disposing()
             Reference< XInterface > xStatement( i->get() );
             ::comphelper::disposeComponent( xStatement );
         }
-        catch (DisposedException)
+        catch (const DisposedException&)
         {
         }
     }

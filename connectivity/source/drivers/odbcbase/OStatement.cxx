@@ -62,9 +62,9 @@ using namespace ::comphelper;
     {                                   \
         THROW_SQL(nRetCode);            \
     }                                   \
-    catch(SQLException&)                \
+    catch(const SQLException&)              \
     {                                   \
-        OSL_FAIL("Exception in odbc catched"); \
+        OSL_FAIL("Exception in odbc caught"); \
     }
 #endif
 
@@ -269,7 +269,7 @@ SQLLEN OStatement_Base::getRowCount () throw( SQLException)
     try {
         THROW_SQL(N3SQLRowCount(m_aStatementHandle,&numRows));
     }
-    catch (SQLException&)
+    catch (const SQLException&)
     {
     }
     return numRows;
@@ -305,7 +305,7 @@ sal_Bool OStatement_Base::lockIfNecessary (const ::rtl::OUString& sql) throw( SQ
             SQLINTEGER nLock = SQL_CONCUR_LOCK;
             THROW_SQL(N3SQLSetStmtAttr(m_aStatementHandle, SQL_CONCURRENCY,(SQLPOINTER)(sal_IntPtr)nLock,SQL_IS_UINTEGER));
         }
-        catch (SQLWarning& warn)
+        catch (const SQLWarning& warn)
         {
             // Catch any warnings and place on the warning stack
             setWarning (warn);
@@ -346,7 +346,7 @@ sal_Int32 OStatement_Base::getColumnCount () throw( SQLException)
     try {
         THROW_SQL(N3SQLNumResultCols(m_aStatementHandle,&numCols));
     }
-    catch (SQLException&)
+    catch (const SQLException&)
     {
     }
     return numCols;
@@ -380,7 +380,7 @@ sal_Bool SAL_CALL OStatement_Base::execute( const ::rtl::OUString& sql ) throw(S
     try {
         THROW_SQL(N3SQLExecDirect(m_aStatementHandle, (SDB_ODBC_CHAR*)aSql.getStr(),aSql.getLength()));
     }
-    catch (SQLWarning& ex) {
+    catch (const SQLWarning& ex) {
 
         // Save pointer to warning and save with ResultSet
         // object once it is created.
@@ -617,7 +617,7 @@ sal_Bool SAL_CALL OStatement_Base::getMoreResults(  ) throw(SQLException, Runtim
     try {
         hasResultSet = N3SQLMoreResults(m_aStatementHandle) == SQL_SUCCESS;
     }
-    catch (SQLWarning &ex) {
+    catch (const SQLWarning &ex) {
 
         // Save pointer to warning and save with ResultSet
         // object once it is created.
@@ -1148,7 +1148,7 @@ SQLUINTEGER OStatement_Base::getCursorProperties(SQLINTEGER _nCursorType,sal_Boo
 
         OTools::GetInfo(getOwnConnection(),getConnectionHandle(),nAskFor,nValueLen,NULL);
     }
-    catch(Exception&)
+    catch(const Exception&)
     { // we don't want our result destroy here
         nValueLen = 0;
     }

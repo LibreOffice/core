@@ -122,7 +122,7 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
         m_pRowStatusArray = new SQLUSMALLINT[1]; // the default value
         N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_STATUS_PTR,m_pRowStatusArray,SQL_IS_POINTER);
     }
-    catch(Exception&)
+    catch(const Exception&)
     { // we don't want our result destroy here
     }
     SQLINTEGER nCurType = 0;
@@ -134,7 +134,7 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
             (nValueLen & SQL_CA2_CRC_EXACT) != SQL_CA2_CRC_EXACT)
             m_pSkipDeletedSet = new OSkipDeletedSet(this);
     }
-    catch(Exception&)
+    catch(const Exception&)
     { // we don't want our result destroy here
     }
     try
@@ -143,7 +143,7 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
         OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,SQL_GETDATA_EXTENSIONS,nValueLen,NULL);
         m_bFetchData = !((SQL_GD_ANY_ORDER & nValueLen) == SQL_GD_ANY_ORDER && nCurType != SQL_CURSOR_FORWARD_ONLY);
     }
-    catch(Exception&)
+    catch(const Exception&)
     { // we don't want our result destroy here
         m_bFetchData = sal_True;
     }
@@ -155,7 +155,7 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
             m_bUseFetchScroll = ( N3SQLGetFunctions(m_aConnectionHandle,SQL_API_SQLFETCHSCROLL,&nSupported) == SQL_SUCCESS && nSupported == 1 );
         }
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         m_bUseFetchScroll = sal_False;
     }
@@ -546,7 +546,7 @@ sal_Int64 SAL_CALL OResultSet::getLong( sal_Int32 columnIndex ) throw(SQLExcepti
         const ORowSetValue& aValue = getValue(columnIndex,SQL_C_SBIGINT,&nRet,sizeof nRet);
         return (&aValue == &m_aEmptyValue) ? nRet : (sal_Int64)aValue;
     }
-    catch(SQLException&)
+    catch(const SQLException&)
     {
         nRet = getString(columnIndex).toInt64();
     }
@@ -873,7 +873,7 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
     {
         OTools::ThrowException(m_pStatement->getOwnConnection(),nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     }
-    catch(SQLException e)
+    catch(const SQLException&)
     {
         nRet = unbind();
         throw;
@@ -1260,7 +1260,7 @@ Sequence< sal_Int32 > SAL_CALL OResultSet::deleteRows( const  Sequence<  Any >& 
                 *pRet = 1;
             }
         }
-        catch(SQLException&)
+        catch(const SQLException&)
         {
             *pRet = 0;
         }
@@ -1351,7 +1351,7 @@ sal_Bool  OResultSet::isBookmarkable() const
             break;
         }
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         return sal_False;
     }

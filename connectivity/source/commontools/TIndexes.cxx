@@ -107,7 +107,7 @@ sdbcx::ObjectType OIndexesHelper::createObject(const ::rtl::OUString& _rName)
                         bPrimarKeyIndex = xRow->getString(6) == aName;
                     }
                 }
-                catch(Exception)
+                catch(const Exception&)
                 {
                 }
                 OIndexHelper* pRet = new OIndexHelper(m_pTable,aName,aQualifier,bUnique,

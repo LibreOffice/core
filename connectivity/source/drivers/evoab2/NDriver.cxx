@@ -71,12 +71,15 @@ void OEvoabDriver::disposing()
     for (OWeakRefArray::iterator i = m_xConnections.begin(); m_xConnections.end() != i; ++i)
     {
         Reference< XComponent > xComp(i->get(), UNO_QUERY);
-        if (xComp.is()) {
-            try {
-            xComp->dispose();
+        if (xComp.is())
+        {
+            try
+            {
+                xComp->dispose();
             }
-            catch (com::sun::star::lang::DisposedException e) {
-             xComp.clear();
+            catch (const com::sun::star::lang::DisposedException&)
+            {
+                xComp.clear();
             }
         }
     }

@@ -643,7 +643,7 @@ String ODbaseTable::getEntry(OConnection* _pConnection,const ::rtl::OUString& _s
         }
         xDir->beforeFirst(); // move back to before first record
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         OSL_ASSERT(0);
     }
@@ -700,7 +700,7 @@ void ODbaseTable::refreshIndexes()
                         aVector.push_back(aURL.getBase());
                     }
                 }
-                catch(Exception&) // an exception is thrown when no file exists
+                catch(const Exception&) // an exception is thrown when no file exists
                 {
                 }
             }
@@ -1064,7 +1064,7 @@ sal_Bool ODbaseTable::CreateImpl()
             delete pFileStream;
         }
     }
-    catch(Exception&) // an exception is thrown when no file exists
+    catch(const Exception&) // an exception is thrown when no file exists
     {
     }
 
@@ -1081,7 +1081,7 @@ sal_Bool ODbaseTable::CreateImpl()
             Content aContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>());
             aContent.executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")),bool2any( sal_True ) );
         }
-        catch(Exception&) // an exception is thrown when no file exists
+        catch(const Exception&) // an exception is thrown when no file exists
         {
         }
         return sal_False;
@@ -1098,7 +1098,7 @@ sal_Bool ODbaseTable::CreateImpl()
         {
             bMemoAlreadyExists = aMemo1Content.isDocument();
         }
-        catch(Exception&) // an exception is thrown when no file exists
+        catch(const Exception&) // an exception is thrown when no file exists
         {
         }
         if (bMemoAlreadyExists)
@@ -1455,7 +1455,7 @@ sal_Bool ODbaseTable::Drop_Static(const ::rtl::OUString& _sUrl,sal_Bool _bHasMem
                         _pIndexes->dropByIndex(--i);
                     }
                 }
-                catch(SQLException)
+                catch(const SQLException&)
                 {
                 }
             }
@@ -1467,7 +1467,7 @@ sal_Bool ODbaseTable::Drop_Static(const ::rtl::OUString& _sUrl,sal_Bool _bHasMem
                 ::ucbhelper::Content aDeleteContent( aURL.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment > () );
                 aDeleteContent.executeCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")), makeAny( sal_Bool( sal_True ) ) );
             }
-            catch(Exception&)
+            catch(const Exception&)
             {
                 // silently ignore this ....
             }
@@ -1979,11 +1979,11 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,c
                 break;
             }
         }
-        catch( SQLException&  )
+        catch( const SQLException&  )
         {
             throw;
         }
-        catch ( Exception& )
+        catch ( const Exception& )
         {
             m_pColumns->getByIndex(i) >>= xCol;
             OSL_ENSURE( xCol.is(), "ODbaseTable::UpdateBuffer column is null!" );
@@ -2333,7 +2333,7 @@ namespace
             if(aValues.getLength() && aValues[0].hasValue())
                 throw Exception();
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
             throw ElementExistException(newName,NULL);
         }

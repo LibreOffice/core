@@ -809,7 +809,7 @@ void SAL_CALL java_sql_ResultSet::updateBinaryStream( sal_Int32 columnIndex, con
             }
         }
     }
-    catch(Exception)
+    catch(const Exception&)
     {
         ::dbtools::throwFeatureNotImplementedException( "XRowUpdate::updateBinaryStream", *this );
     }
@@ -841,7 +841,7 @@ void SAL_CALL java_sql_ResultSet::updateCharacterStream( sal_Int32 columnIndex, 
             }
         }
     }
-    catch(Exception)
+    catch(const Exception&)
     {
         ::dbtools::throwFeatureNotImplementedException( "XRowUpdate::updateCharacterStream", *this );
     }
@@ -899,7 +899,7 @@ void SAL_CALL java_sql_ResultSet::updateNumericObject( sal_Int32 columnIndex, co
             }
         }
     }
-    catch(Exception)
+    catch(const Exception&)
     {
         updateObject( columnIndex,x);
     }
@@ -1061,7 +1061,7 @@ void java_sql_ResultSet::getFastPropertyValue(
                 break;
         }
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
     }
 }

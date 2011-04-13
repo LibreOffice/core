@@ -90,7 +90,7 @@ SAL_DLLPUBLIC_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStor
         {
             xFlush->flush();
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
             OSL_FAIL( "NativeStorageAccess::close: caught an exception while flushing!" );
         }
@@ -171,7 +171,7 @@ jint read_from_storage_stream( JNIEnv * env, jobject /*obj_this*/, jstring name,
         {
             nBytesRead = xIn->readBytes(aData,1);
         }
-        catch(Exception& e)
+        catch(const Exception& e)
         {
             StorageContainer::throwJavaException(e,env);
             return -1;
@@ -249,7 +249,7 @@ jint read_from_storage_stream_into_buffer( JNIEnv * env, jobject /*obj_this*/,js
         {
             nBytesRead = xIn->readBytes(aData, len);
         }
-        catch(Exception& e)
+        catch(const Exception& e)
         {
             StorageContainer::throwJavaException(e,env);
             return -1;
@@ -317,7 +317,7 @@ SAL_DLLPUBLIC_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStor
         {
             nBytesRead = xIn->readBytes(aData, 4);
         }
-        catch(Exception& e)
+        catch(const Exception& e)
         {
             StorageContainer::throwJavaException(e,env);
             return -1;
@@ -464,7 +464,7 @@ void write_to_storage_stream_from_buffer( JNIEnv* env, jobject /*obj_this*/, jst
                     "No OutputStream");
         }
     }
-    catch(Exception& e)
+    catch(const Exception& e)
     {
         OSL_FAIL("Exception caught! : write [BII)V");
         StorageContainer::throwJavaException(e,env);
@@ -523,9 +523,9 @@ void write_to_storage_stream( JNIEnv* env, jobject /*obj_this*/, jstring name, j
                     "No OutputStream");
         }
     }
-    catch(Exception& e)
+    catch(const Exception& e)
     {
-        OSL_FAIL("Exception catched! : writeBytes(aData);");
+        OSL_FAIL("Exception caught! : writeBytes(aData);");
         StorageContainer::throwJavaException(e,env);
     }
 }

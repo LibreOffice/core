@@ -183,15 +183,15 @@ SAL_DLLPUBLIC_EXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNa
 
                     } while (tmpLongVal > 0);
                 }
-                catch(Exception& )
+                catch(const Exception&)
                 {
                 }
 
                 return n - tmpLongVal;
             }
-            catch(Exception& e)
+            catch(const Exception& e)
             {
-                OSL_FAIL("Exception catched! : skip();");
+                OSL_FAIL("Exception caught! : skip();");
                 StorageContainer::throwJavaException(e,env);
             }
         }
@@ -232,9 +232,9 @@ SAL_DLLPUBLIC_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNat
 #endif
             return nAvailable;
         }
-        catch(Exception& e)
+        catch(const Exception& e)
         {
-           OSL_FAIL("Exception caught! : available();");
+            OSL_FAIL("Exception caught! : available();");
             StorageContainer::throwJavaException(e,env);
         }
     }
@@ -276,9 +276,9 @@ SAL_DLLPUBLIC_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNat
         {
             nBytesRead = xIn->readBytes(aData,nLen);
         }
-        catch(Exception& e)
+        catch(const Exception& e)
         {
-            OSL_FAIL("Exception catched! : skip();");
+            OSL_FAIL("Exception caught! : skip();");
             StorageContainer::throwJavaException(e,env);
         }
 

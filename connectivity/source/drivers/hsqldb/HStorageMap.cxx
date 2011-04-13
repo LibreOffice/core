@@ -79,21 +79,19 @@ namespace connectivity
                     {
                         ::comphelper::disposeComponent(m_xOutputStream);
                     }
-                    catch(DisposedException&)
+                    catch(const DisposedException&)
                     {
                     }
-                    catch(const Exception& e)
+                    catch(const Exception&)
                     {
-                        OSL_UNUSED( e );
                         OSL_FAIL("Could not dispose OutputStream");
                     }
                     m_xOutputStream.clear();
                 }
             }
-            catch(Exception& ex)
+            catch(const Exception&)
             {
-                OSL_UNUSED( ex );
-                OSL_FAIL("Exception catched!");
+                OSL_FAIL("Exception caught!");
             }
         }
         // -----------------------------------------------------------------------------
@@ -245,7 +243,7 @@ namespace connectivity
                             xTrans->commit();
                     }
                 }
-                catch(Exception&)
+                catch(const Exception&)
                 {
                 }
                 rMap.erase(aFind);
@@ -281,7 +279,7 @@ namespace connectivity
                             {
                                 pHelper.reset(new StreamHelper(aStoragePair.first.first->openStreamElement(sName,_nMode)));
                             }
-                            catch(Exception& )
+                            catch(const Exception&)
                             {
                                 ::rtl::OUString sStrippedName = removeOldURLPrefix(sOrgName);
 
@@ -292,7 +290,7 @@ namespace connectivity
                                     {
                                        bIsStream = aStoragePair.first.first->isStreamElement(sStrippedName);
                                     }
-                                    catch(Exception& )
+                                    catch(const Exception&)
                                     {
                                         bIsStream = sal_False;
                                     }
@@ -303,7 +301,7 @@ namespace connectivity
                             }
                             aFind->second.second.insert(TStreamMap::value_type(sName,pHelper));
                         }
-                        catch(Exception& e)
+                        catch(const Exception& e)
                         {
 #if OSL_DEBUG_LEVEL > 0
                             ::rtl::OString sMessage( "[HSQLDB-SDBC] caught an exception while opening a stream\n" );
