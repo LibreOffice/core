@@ -1091,6 +1091,7 @@ void ScTable::TakeNote( SCCOL nCol, SCROW nRow, ScPostIt*& rpNote )
                 mxUninitNotes.reset( new ScAddress2DVec );
             mxUninitNotes->push_back( ScAddress2D( nCol, nRow ) );
         }
+        InvalidateTableArea();
     }
     else
         DELETEZ( rpNote );
