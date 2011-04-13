@@ -139,7 +139,7 @@ sal_Int32 SAL_CALL OSLInputStreamWrapper::available() throw( stario::NotConnecte
         throw stario::NotConnectedException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
 
     sal_uInt64 nDummy = 0;
-    eError = m_pFile->setPos(Pos_End, nDummy);
+    eError = m_pFile->setPos(osl_Pos_End, nDummy);
     if (eError != FileBase::E_None)
        throw stario::NotConnectedException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
 
