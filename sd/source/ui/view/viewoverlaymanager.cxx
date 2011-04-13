@@ -554,7 +554,9 @@ bool ViewOverlayManager::CreateTags()
 {
     bool bChanges = false;
 
-    SdPage* pPage = mrBase.GetMainViewShell()->getCurrentPage();
+    ::boost::shared_ptr<ViewShell> aMainShell = mrBase.GetMainViewShell();
+
+    SdPage* pPage = aMainShell.get() ? aMainShell->getCurrentPage() : NULL;
 
     if( pPage && !pPage->IsMasterPage() && (pPage->GetPageKind() == PK_STANDARD) )
     {
