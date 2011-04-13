@@ -1689,7 +1689,7 @@ Regexpr::regex_compile()
             sal_Unicode tmp = translit->transliterateChar2Char(c);
             BUF_PUSH(tmp);
             (*pending_exact)++;
-        } catch (const ::com::sun::star::i18n::MultipleCharsOutputException& e) {
+        } catch (const ::com::sun::star::i18n::MultipleCharsOutputException&) {
             ::rtl::OUString o2( translit->transliterateChar2String( c));
             sal_Int32 len2 = o2.getLength();
             const sal_Unicode * k2 = o2.getStr();
@@ -2934,7 +2934,7 @@ Regexpr::set_list_bit(sal_Unicode c, sal_Unicode *b)
     try {
         sal_Unicode tmp = translit->transliterateChar2Char(c);
         b[tmp / BYTEWIDTH] |= 1 << (tmp % BYTEWIDTH);
-    } catch (const ::com::sun::star::i18n::MultipleCharsOutputException& e) {
+    } catch (const ::com::sun::star::i18n::MultipleCharsOutputException&) {
         ::rtl::OUString o2( translit->transliterateChar2String( c));
         sal_Int32 len2 = o2.getLength();
         const sal_Unicode * k2 = o2.getStr();
