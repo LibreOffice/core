@@ -234,27 +234,27 @@ sal_Int32 SchXMLWrapper::ImportStream(
             }
         }
     }
-    catch( xml::sax::SAXParseException&)
+    catch(const xml::sax::SAXParseException&)
     {
         if( bEncrypted )
             return ERRCODE_SFX_WRONGPASSWORD;
         return ERRCODE_SFX_GENERAL;
     }
-    catch( xml::sax::SAXException&)
+    catch(const xml::sax::SAXException&)
     {
         if( bEncrypted )
             return ERRCODE_SFX_WRONGPASSWORD;
         return ERRCODE_SFX_GENERAL;
     }
-    catch( io::IOException&)
+    catch(const io::IOException&)
     {
         return ERRCODE_SFX_GENERAL;
     }
-    catch( packages::zip::ZipIOException& )
+    catch(const packages::zip::ZipIOException&)
     {
         return ERRCODE_IO_BROKENPACKAGE;
     }
-    catch( uno::Exception&)
+    catch(const uno::Exception&)
     {
         return ERRCODE_SFX_GENERAL;
     }
@@ -388,7 +388,7 @@ sal_Bool SchXMLWrapper::ExportStream(
                 rOutputStream->Commit();
         }
     }
-    catch( uno::Exception )
+    catch(const uno::Exception&)
     {
     }
 
@@ -481,7 +481,7 @@ sal_Bool SchXMLWrapper::Export()
         // graphics resolver has to be destroyed this way!
         SvXMLGraphicHelper::Destroy( pGraphicHelper );
     }
-    catch( uno::Exception)
+    catch(const uno::Exception&)
     {
     }
 
