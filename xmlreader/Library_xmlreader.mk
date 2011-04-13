@@ -35,8 +35,7 @@ $(eval $(call gb_Library_set_include,xmlreader,\
 	-I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,xmlreader,\
-	$$(DEFS) \
+$(eval $(call gb_Library_add_defs,xmlreader,\
 	-DOOO_DLLIMPLEMENTATION_XMLREADER \
 ))
 
