@@ -208,6 +208,25 @@ void GtkSalDisplay::screenSizeChanged( GdkScreen* pScreen )
 
 void GtkSalDisplay::monitorsChanged( GdkScreen* pScreen )
 {
+    /* Caution: since we support the _NET_WM_FULLSCREEN_MONITORS property now and
+       the EWMH spec says, the index used for that needs to be that of the
+       Xinerama extension, we need to ensure that the order of m_aXineramaScreens is actually intact.
+
+       gdk_screen_get_monitor_geometry however has a different sort order that has a default monitor number
+       Xinerama returns the default monitor as 0.
+       That means if we fill in the multiple montors vector from gdk, we'll get the wrong order unless
+       the default monitor is incidentally the same (number 0).
+
+       Given that XRandR (which is what gdk_screen_get_monitor_geometry is based on) is
+       supposed to replace Xinerama, this is bound to get a problem at some time again,
+       unfortunately there does not currently seem to be a way to map the returns of xinerama to
+       that of randr. Currently getting Xinerama values again works with updated values, given
+       a new enough Xserver.
+    */
+    InitXinerama();
+    (void)pScreen;
+
+    #if 0
     if( pScreen )
     {
         if( gdk_display_get_n_screens(m_pGdkDisplay) == 1 )
@@ -234,6 +253,7 @@ void GtkSalDisplay::monitorsChanged( GdkScreen* pScreen )
             }
         }
     }
+    #endif
 }
 
 extern "C"
@@ -244,6 +264,9 @@ extern "C"
 int GtkSalDisplay::GetDefaultMonitorNumber() const
 {
     int n = 0;
+
+    // currently disabled, see remarks in monitorsChanged
+#if 0
     GdkScreen* pScreen = gdk_display_get_screen( m_pGdkDisplay, m_nDefaultScreen );
 #if GTK_CHECK_VERSION(2,20,0)
     n = gdk_screen_get_primary_monitor(pScreen);
@@ -255,6 +278,7 @@ int GtkSalDisplay::GetDefaultMonitorNumber() const
 #endif
     if( n >= 0 && size_t(n) < m_aXineramaScreenIndexMap.size() )
         n = m_aXineramaScreenIndexMap[n];
+#endif
     return n;
 }
 
