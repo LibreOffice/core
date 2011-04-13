@@ -194,7 +194,7 @@ bool PrinterInfoManager::checkPrintersChanged( bool bWait )
         }
         else
         {
-            FileStatus aStatus( FileStatusMask_ModifyTime );
+            FileStatus aStatus( osl_FileStatus_Mask_ModifyTime );
             if( aItem.getFileStatus( aStatus ) )
                 bChanged = true; // unlikely but not impossible
             else
@@ -370,7 +370,7 @@ void PrinterInfoManager::initialize()
 
 
         FileBase::getFileURLFromSystemPath( aFile.PathToFileName(), aUniPath );
-        FileStatus aStatus( FileStatusMask_ModifyTime );
+        FileStatus aStatus( osl_FileStatus_Mask_ModifyTime );
         DirectoryItem aItem;
 
         // setup WatchFile list

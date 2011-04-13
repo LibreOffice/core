@@ -630,7 +630,7 @@ long FreetypeManager::AddFontDir( const String& rUrlName )
     rtl_TextEncoding theEncoding = osl_getThreadTextEncoding();
     while( (rcOSL = aDir.getNextItem( aDirItem, 20 )) == osl::FileBase::E_None )
     {
-        osl::FileStatus aFileStatus( FileStatusMask_FileURL );
+        osl::FileStatus aFileStatus( osl_FileStatus_Mask_FileURL );
         rcOSL = aDirItem.getFileStatus( aFileStatus );
 
         ::rtl::OUString aUSytemPath;

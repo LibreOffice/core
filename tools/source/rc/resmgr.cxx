@@ -242,7 +242,7 @@ void ResMgrContainer::init()
             DirectoryItem aItem;
             while( aDir.getNextItem( aItem ) == FileBase::E_None )
             {
-                FileStatus aStatus(FileStatusMask_FileName);
+                FileStatus aStatus(osl_FileStatus_Mask_FileName);
                 if( aItem.getFileStatus( aStatus ) == FileBase::E_None )
                 {
                     OUString aFileName = aStatus.getFileName();

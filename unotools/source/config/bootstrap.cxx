@@ -233,9 +233,9 @@ bool implNormalizeURL(OUString & _sURL, osl::DirectoryItem& aDirItem)
 
     OSL_PRECOND(aDirItem.is(), "Opened DirItem required");
 
-    static const sal_uInt32 cFileStatusMask = FileStatusMask_FileURL;
+    static const sal_uInt32 cosl_FileStatus_Mask = osl_FileStatus_Mask_FileURL;
 
-    FileStatus aFileStatus(cFileStatusMask);
+    FileStatus aFileStatus(cosl_FileStatus_Mask);
 
     if (aDirItem.getFileStatus(aFileStatus) != DirectoryItem::E_None)
         return false;

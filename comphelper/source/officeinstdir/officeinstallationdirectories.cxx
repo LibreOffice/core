@@ -67,7 +67,7 @@ static bool makeCanonicalFileURL( rtl::OUString & rURL )
         if ( osl::DirectoryItem::get( aNormalizedURL, aDirItem )
                 == osl::DirectoryItem::E_None )
         {
-            osl::FileStatus aFileStatus( FileStatusMask_FileURL );
+            osl::FileStatus aFileStatus( osl_FileStatus_Mask_FileURL );
 
             if ( aDirItem.getFileStatus( aFileStatus )
                     == osl::DirectoryItem::E_None )

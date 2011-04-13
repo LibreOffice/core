@@ -229,7 +229,7 @@ static bool is_dir( ByteString const& name )
     FileBase::getFileURLFromSystemPath( sFileURL, sFileURL );
     if( DirectoryItem::get( sFileURL, aItem ) == FileBase::E_None )
     {
-        FileStatus aStatus(FileStatusMask_Type);
+        FileStatus aStatus(osl_FileStatus_Mask_Type);
         if( aItem.getFileStatus( aStatus ) == FileBase::E_None )
         {
             if( aStatus.getFileType() == FileStatus::Directory )

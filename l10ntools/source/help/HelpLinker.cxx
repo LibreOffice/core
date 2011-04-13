@@ -1162,10 +1162,10 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
     aTreeFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/help.tree"));
     osl::DirectoryItem aTreeFileItem;
     osl::FileBase::RC rcGet = osl::DirectoryItem::get( aTreeFileURL, aTreeFileItem );
-    osl::FileStatus aFileStatus( FileStatusMask_FileSize );
+    osl::FileStatus aFileStatus( osl_FileStatus_Mask_FileSize );
     if( rcGet == osl::FileBase::E_None &&
         aTreeFileItem.getFileStatus( aFileStatus ) == osl::FileBase::E_None &&
-        aFileStatus.isValid( FileStatusMask_FileSize ) )
+        aFileStatus.isValid( osl_FileStatus_Mask_FileSize ) )
     {
         sal_uInt64 ret, len = aFileStatus.getFileSize();
         char* s = new char[ int(len) ];  // the buffer to hold the installed files

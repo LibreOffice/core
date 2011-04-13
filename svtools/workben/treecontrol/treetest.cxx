@@ -218,7 +218,7 @@ void DirectoryTree::fillNode( const Reference< XMutableTreeNode >& xNode )
         if( aDirectory.open() == osl::Directory::E_None )
         {
             osl::DirectoryItem aItem;
-            osl::FileStatus fs( FileStatusMask_Type | FileStatusMask_FileURL);
+            osl::FileStatus fs( osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL);
             while( aDirectory.getNextItem( aItem, 0xffffffff ) == osl::Directory::E_None )
             {
                 if (aItem.getFileStatus(fs) == osl::FileBase::E_None)

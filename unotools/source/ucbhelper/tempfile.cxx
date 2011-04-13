@@ -259,7 +259,7 @@ void CreateTempName_Impl( String& rName, sal_Bool bKeep, sal_Bool bDir = sal_Tru
                  // but if there is a folder with such name proceed further
 
                  DirectoryItem aTmpItem;
-                 FileStatus aTmpStatus( FileStatusMask_Type );
+                 FileStatus aTmpStatus( osl_FileStatus_Mask_Type );
                  if ( DirectoryItem::get( aTmp, aTmpItem ) != FileBase::E_None
                    || aTmpItem.getFileStatus( aTmpStatus ) != FileBase::E_None
                    || aTmpStatus.getFileType() != FileStatus::Directory )
@@ -324,7 +324,7 @@ umask(old_mode);
                 // but if there is a folder with such name proceed further
 
                 DirectoryItem aTmpItem;
-                FileStatus aTmpStatus( FileStatusMask_Type );
+                FileStatus aTmpStatus( osl_FileStatus_Mask_Type );
                 if ( DirectoryItem::get( aTmp, aTmpItem ) != FileBase::E_None
                   || aTmpItem.getFileStatus( aTmpStatus ) != FileBase::E_None
                   || aTmpStatus.getFileType() != FileStatus::Directory )

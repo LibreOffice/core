@@ -2441,7 +2441,7 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
 
             while( aFontDir.getNextItem( aDirItem, 10 ) == osl::FileBase::E_None )
             {
-                osl::FileStatus aFileStatus( FileStatusMask_FileURL );
+                osl::FileStatus aFileStatus( osl_FileStatus_Mask_FileURL );
                 rcOSL = aDirItem.getFileStatus( aFileStatus );
                 if ( rcOSL == osl::FileBase::E_None )
                     AddTempDevFont( pFontList, aFileStatus.getFileURL(), aEmptyString );

@@ -401,7 +401,7 @@ static osl::FileBase::RC resolveLink( const rtl::OUString& i_rURL, rtl::OUString
 
     if( ( aRet = osl::DirectoryItem::get( i_rURL, aLinkItem ) ) == osl::FileBase::E_None )
     {
-        osl::FileStatus aStatus( FileStatusMask_FileName | FileStatusMask_Type | FileStatusMask_LinkTargetURL );
+        osl::FileStatus aStatus( osl_FileStatus_Mask_FileName | osl_FileStatus_Mask_Type | osl_FileStatus_Mask_LinkTargetURL );
         if( ( aRet = aLinkItem.getFileStatus( aStatus ) ) == osl::FileBase::E_None )
         {
             if( aStatus.getFileType() == osl::FileStatus::Link )
@@ -443,7 +443,7 @@ void PPDParser::scanPPDDir( const String& rDir )
         INetURLObject aPPDDir(rDir);
         while( aDir.getNextItem( aItem ) == osl::FileBase::E_None )
         {
-            osl::FileStatus aStatus( FileStatusMask_FileName );
+            osl::FileStatus aStatus( osl_FileStatus_Mask_FileName );
             if( aItem.getFileStatus( aStatus ) == osl::FileBase::E_None )
             {
                 rtl::OUStringBuffer aURLBuf( rDir.Len() + 64 );

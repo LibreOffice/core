@@ -108,8 +108,8 @@ void padmin::FindFiles( const String& rDirectory, ::std::list< String >& rResult
     DirectoryItem aItem;
     while( aDir.getNextItem( aItem ) == FileBase::E_None )
     {
-        FileStatus aStatus( FileStatusMask_FileName         |
-                            FileStatusMask_Type
+        FileStatus aStatus( osl_FileStatus_Mask_FileName            |
+                            osl_FileStatus_Mask_Type
                             );
         if( aItem.getFileStatus( aStatus ) == FileBase::E_None )
         {

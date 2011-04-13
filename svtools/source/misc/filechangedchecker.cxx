@@ -67,7 +67,7 @@ bool FileChangedChecker::getCurrentModTime(TimeValue& o_rValue) const
 
     // Retrieve the status - we are only interested in last File
     // Modified time
-    osl::FileStatus aStatus( FileStatusMask_ModifyTime );
+    osl::FileStatus aStatus( osl_FileStatus_Mask_ModifyTime );
     if( osl::FileBase::E_None != aItem.getFileStatus(aStatus) )
         return false;
 

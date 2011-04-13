@@ -106,13 +106,13 @@ INetURLObject LockFileCommon::ResolveLinks( const INetURLObject& aDocURL )
         // there is currently no UCB functionality to resolve the symbolic links;
         // since the lock files are used only for local file systems the osl functionality is used directly
 
-        ::osl::FileStatus aStatus( FileStatusMask_Type | FileStatusMask_LinkTargetURL );
+        ::osl::FileStatus aStatus( osl_FileStatus_Mask_Type | osl_FileStatus_Mask_LinkTargetURL );
         ::osl::DirectoryItem aItem;
         if ( ::osl::FileBase::E_None == ::osl::DirectoryItem::get( aURLToCheck, aItem )
           && aItem.is() && ::osl::FileBase::E_None == aItem.getFileStatus( aStatus ) )
         {
-            if ( aStatus.isValid( FileStatusMask_Type )
-              && aStatus.isValid( FileStatusMask_LinkTargetURL )
+            if ( aStatus.isValid( osl_FileStatus_Mask_Type )
+              && aStatus.isValid( osl_FileStatus_Mask_LinkTargetURL )
               && aStatus.getFileType() == ::osl::FileStatus::Link )
             {
                 aURLToCheck = aStatus.getLinkTargetURL();
