@@ -46,8 +46,7 @@ $(eval $(call gb_Library_set_include,sw,\
     -I$(OUTDIR)/inc \
 ))
 
-$(eval $(call gb_Library_set_defs,sw,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,sw,\
     -DSW_DLLIMPLEMENTATION \
 ))
 
