@@ -392,7 +392,7 @@ sal_uIntPtr OslStream::SeekPos( sal_uIntPtr nPos )
     if( nPos == STREAM_SEEK_TO_END )
         maFile.setPos( Pos_End, 0 );
     else
-        maFile.setPos( Pos_Absolut, (sal_uInt64)nPos );
+        maFile.setPos( osl_Pos_Absolut, (sal_uInt64)nPos );
     sal_uInt64 nRealPos(0);
     maFile.getPos( nRealPos );
     return sal::static_int_cast<sal_uIntPtr>(nRealPos);

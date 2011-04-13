@@ -85,7 +85,7 @@ sal_Bool ReconnectingFile::reconnect()
 {
     ::osl::FileBase::RC nRes = ::osl::FileBase::E_NETWORK;
 
-    if ( uHow == Pos_Absolut && uPos > 0 )
+    if ( uHow == osl_Pos_Absolut && uPos > 0 )
     {
         if ( m_bDisconnect )
         {
