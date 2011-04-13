@@ -863,6 +863,11 @@ void AccessibleSlideSorterView::Implementation::UpdateChildren (void)
 
     // Create new children for the modified visible range.
     maPageObjects.resize(mrSlideSorter.GetModel().GetPageCount());
+
+    // No Visible children
+    if (mnFirstVisibleChild == -1 && mnLastVisibleChild == -1)
+        return;
+
     for (sal_Int32 nIndex(mnFirstVisibleChild); nIndex<=mnLastVisibleChild; ++nIndex)
         GetAccessibleChild(nIndex);
 }
