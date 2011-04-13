@@ -37,7 +37,6 @@
 #pragma warning(pop)
 #endif
 #include <malloc.h>
-#include "internal/dbgmacros.hxx"
 #include "internal/registry.hxx"
 
 #if defined _MSC_VER

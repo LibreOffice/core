@@ -51,11 +51,11 @@ CBaseReader( DocumentName )
     #endif
     )
     {
-        ENSURE(false, ex.what());
+        OSL_ENSURE(false, ex.what());
     }
     catch(...)
     {
-        ENSURE(false, "Unknown error");
+        OSL_ENSURE(false, "Unknown error");
     }
 }
 
@@ -73,11 +73,11 @@ try
     #endif
     )
     {
-        ENSURE(false, ex.what());
+        OSL_ENSURE(false, ex.what());
     }
     catch(...)
     {
-        ENSURE(false, "Unknown error");
+        OSL_ENSURE(false, "Unknown error");
     }
 }
 

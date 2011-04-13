@@ -385,7 +385,7 @@ HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance(
     if ( CLSID_PROPERTY_HANDLER == m_Clsid )
         pUnk = static_cast<IPropertyStore*>( new CPropertyHdl() );
 
-    POST_CONDITION(pUnk != 0, "Could not create COM object");
+    OSL_POSTCOND(pUnk != 0, "Could not create COM object");
 
     if (0 == pUnk)
         return E_OUTOFMEMORY;

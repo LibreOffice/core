@@ -31,7 +31,6 @@
 
 
 #include "internal/config.hxx"
-#include "internal/dbgmacros.hxx"
 #include "internal/utilities.hxx"
 
 //-----------------------------
@@ -85,7 +84,7 @@ std::wstring GetResString(int ResId)
     int rc = LoadStringW( GetModuleHandleW(MODULE_NAME), ResId, szResStr, sizeof(szResStr) );
 
     OutputDebugStringFormat( "GetResString: read %d chars\n", rc );
-    ENSURE(rc, "String resource not found");
+    OSL_ENSURE(rc, "String resource not found");
 
     return std::wstring(szResStr);
 }
