@@ -1575,7 +1575,7 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
         {
             xInfoSet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Version" )), uno::makeAny( aVersion ) );
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
         }
     }
@@ -1988,7 +1988,7 @@ uno::Reference< frame::XUntitledNumbers > ODatabaseDocument::impl_getUntitledHel
     {
         sModuleId = m_xModuleManager->identify( _xComponent );
     }
-    catch(uno::Exception)
+    catch(const uno::Exception&)
     {
     }
     uno::Reference< frame::XUntitledNumbers > xNumberedControllers;

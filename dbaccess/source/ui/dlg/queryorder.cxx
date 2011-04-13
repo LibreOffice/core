@@ -283,7 +283,7 @@ void DlgOrderCrit::EnableLines()
                 else
                     sOrder += ::dbtools::quoteName(sQuote,sName);
             }
-            catch(Exception)
+            catch(const Exception&)
             {
             }
             if(m_aValueList[i]->GetSelectEntryPos())

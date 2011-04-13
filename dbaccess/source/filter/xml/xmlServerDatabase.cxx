@@ -156,7 +156,7 @@ OXMLServerDatabase::OXMLServerDatabase( ODBFilter& rImport,
         {
             xDataSource->setPropertyValue(PROPERTY_URL,makeAny(sURL.makeStringAndClear()));
         }
-        catch(Exception)
+        catch(const Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }

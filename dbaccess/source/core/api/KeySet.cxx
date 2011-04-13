@@ -129,7 +129,7 @@ OKeySet::~OKeySet()
     {
         ::comphelper::disposeComponent(m_xStatement);
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         m_xStatement = NULL;
     }
@@ -764,7 +764,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const ::rtl::OUString
                 }
             }
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
             OSL_FAIL("Could not execute GeneratedKeys() stmt");
         }
@@ -886,7 +886,7 @@ void OKeySet::tryRefetch(const ORowSetRow& _rInsertRow,bool bRefetch)
             OSL_ENSURE(m_xSet.is(),"No resultset form statement!");
             bRefetch = m_xSet->next();
         }
-        catch(Exception)
+        catch(const Exception&)
         {
             bRefetch = false;
         }

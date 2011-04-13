@@ -96,7 +96,7 @@ namespace
                     if ( aState != PropertyState_DEFAULT_VALUE )
                         break;
                 }
-                catch(Exception)
+                catch(const Exception&)
                 {
                     OSL_FAIL( "lcl_isPropertySetDefaulted: Exception caught!" );
                 }
@@ -325,7 +325,7 @@ ObjectType OTableContainer::appendObject( const ::rtl::OUString& _rForName, cons
             }
         }
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         throw;
     }
@@ -430,7 +430,7 @@ void OTableContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElement
             m_xTableDefinitions->removeByName(_sElementName);
         }
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         m_bInDrop = sal_False;
         throw;

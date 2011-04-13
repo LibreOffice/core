@@ -1189,7 +1189,7 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
                 exportCollection(xCollection,XML_TOKEN_INVALID,XML_TOKEN_INVALID,sal_False,aMemFunc);
             }
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
@@ -1323,9 +1323,9 @@ void ODBExport::GetViewSettings(Sequence<PropertyValue>& aProps)
                 }
                 aProps[nLength].Value <<= aQueries;
             }
-            catch(Exception)
+            catch(const Exception&)
             {
-                OSL_FAIL("ODBExport::GetViewSettings: Exception catched!");
+                OSL_FAIL("ODBExport::GetViewSettings: Exception caught!");
             }
         }
     }
@@ -1350,7 +1350,7 @@ void ODBExport::GetConfigurationSettings(Sequence<PropertyValue>& aProps)
                 aProps[nLength].Value = aValue;
             }
         }
-        catch(Exception)
+        catch(const Exception&)
         {
             OSL_FAIL("Could not access layout information from the data source!");
         }

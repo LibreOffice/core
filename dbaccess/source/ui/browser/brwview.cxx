@@ -125,7 +125,7 @@ void UnoDataBrowserView::Construct(const Reference< ::com::sun::star::awt::XCont
 
         OSL_ENSURE(m_pVclControl != NULL, "UnoDataBrowserView::Construct : no real grid control !");
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         ::comphelper::disposeComponent(m_xGrid);
         throw;
@@ -151,7 +151,7 @@ UnoDataBrowserView::~UnoDataBrowserView()
         ::comphelper::disposeComponent(m_xGrid);
         ::comphelper::disposeComponent(m_xMe);
     }
-    catch(Exception)
+    catch(const Exception&)
     {}
 
     DBG_DTOR(UnoDataBrowserView,NULL);

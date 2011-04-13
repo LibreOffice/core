@@ -82,7 +82,7 @@ OXMLLogin::OXMLLogin( ODBFilter& rImport,
                         {
                             xDataSource->setPropertyValue(PROPERTY_USER,makeAny(sValue));
                         }
-                        catch(Exception)
+                        catch(const Exception&)
                         {
                             DBG_UNHANDLED_EXCEPTION();
                         }
@@ -93,7 +93,7 @@ OXMLLogin::OXMLLogin( ODBFilter& rImport,
                     {
                         xDataSource->setPropertyValue(PROPERTY_ISPASSWORDREQUIRED,makeAny((sValue == s_sTRUE ? sal_True : sal_False)));
                     }
-                    catch(Exception)
+                    catch(const Exception&)
                     {
                         DBG_UNHANDLED_EXCEPTION();
                     }
@@ -113,14 +113,14 @@ OXMLLogin::OXMLLogin( ODBFilter& rImport,
                     {
                         Reference< XDataSource>(xDataSource,UNO_QUERY_THROW)->setLoginTimeout(sValue.toInt32());
                     }
-                    catch(Exception)
+                    catch(const Exception&)
                     {
                         DBG_UNHANDLED_EXCEPTION();
                     }
                     break;
             }
         }
-        catch(Exception)
+        catch(const Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }

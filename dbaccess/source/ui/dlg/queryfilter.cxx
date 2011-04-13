@@ -189,7 +189,7 @@ DlgFilterCrit::DlgFilterCrit(Window * pParent,
         fillLines(aValues);
 
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         FreeResource();
         throw;
@@ -365,7 +365,7 @@ sal_Bool DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rCom
             }
         }
     }
-    catch(Exception)
+    catch(const Exception&)
     {
     }
 
@@ -846,7 +846,7 @@ void DlgFilterCrit::BuildWherePart()
         m_xQueryComposer->setStructuredFilter(aFilter);
         m_xQueryComposer->setStructuredHavingClause(aHaving);
     }
-    catch(Exception)
+    catch(const Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }

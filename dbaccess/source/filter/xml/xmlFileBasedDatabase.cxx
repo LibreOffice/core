@@ -117,7 +117,7 @@ OXMLFileBasedDatabase::OXMLFileBasedDatabase( ODBFilter& rImport,
         {
             xDataSource->setPropertyValue(PROPERTY_URL,makeAny(sURL));
         }
-        catch(Exception)
+        catch(const Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }

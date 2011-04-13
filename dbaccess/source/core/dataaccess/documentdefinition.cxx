@@ -431,7 +431,7 @@ namespace dbaccess
         OSL_ENSURE( aAlternativeClassID == _rClassId, "ODocumentDefinition::GetDocumentServiceFromMediaType: failed, this approach is *not* equivalent (2)!" );
 #endif
     }
-    catch ( Exception& )
+    catch ( const Exception& )
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -496,7 +496,7 @@ void ODocumentDefinition::closeObject()
             if ( xCloseable.is() )
                 xCloseable->close(sal_True);
         }
-        catch(Exception)
+        catch(const Exception&)
         {
         }
         m_xEmbeddedObject = NULL;
@@ -681,7 +681,7 @@ namespace
                 {
                     m_aOriginalSize = m_xVisObject->getVisualAreaSize( Aspects::MSOLE_CONTENT );
                 }
-                catch ( Exception& )
+                catch ( const Exception& )
                 {
                     OSL_FAIL( "PreserveVisualAreaSize::PreserveVisualAreaSize: caught an exception!" );
                 }
@@ -696,7 +696,7 @@ namespace
                 {
                     m_xVisObject->setVisualAreaSize( Aspects::MSOLE_CONTENT, m_aOriginalSize );
                 }
-                catch ( Exception& )
+                catch ( const Exception& )
                 {
                     OSL_FAIL( "PreserveVisualAreaSize::~PreserveVisualAreaSize: caught an exception!" );
                 }
@@ -728,7 +728,7 @@ namespace
                 m_xLayoutManager->lock();
 
             }
-            catch( Exception& )
+            catch( const Exception& )
             {
                 OSL_FAIL( "LayoutManagerLock::LayoutManagerLock: caught an exception!" );
             }
@@ -742,7 +742,7 @@ namespace
                 if ( m_xLayoutManager.is() )
                     m_xLayoutManager->unlock();
             }
-            catch( Exception& )
+            catch( const Exception& )
             {
                 OSL_FAIL( "LayoutManagerLock::~LayoutManagerLock: caught an exception!" );
             }
@@ -1251,7 +1251,7 @@ void ODocumentDefinition::onCommandInsert( const ::rtl::OUString& _sURL, const R
                     if ( xCloseable.is() )
                         xCloseable->close(sal_True);
                 }
-                catch(Exception)
+                catch(const Exception&)
                 {
                 }
                 m_xEmbeddedObject = NULL;
@@ -1343,7 +1343,7 @@ sal_Bool ODocumentDefinition::save(sal_Bool _bApprove)
             notifyDataSourceModified();
         }
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         OSL_FAIL("ODocumentDefinition::save: caught an Exception (tried to let the InteractionHandler handle it)!");
     }
@@ -1436,7 +1436,7 @@ sal_Bool ODocumentDefinition::saveAs()
                             Reference< XNameContainer > xNameContainer( m_xParentContainer, UNO_QUERY_THROW );
                             xNameContainer->insertByName( sOldName, makeAny( xComponent ) );
                         }
-                        catch(Exception&)
+                        catch(const Exception&)
                         {
                             DBG_UNHANDLED_EXCEPTION();
                         }
@@ -1452,7 +1452,7 @@ sal_Bool ODocumentDefinition::saveAs()
         }
 
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         OSL_FAIL("ODocumentDefinition::save: caught an Exception (tried to let the InteractionHandler handle it)!");
     }
@@ -1808,7 +1808,7 @@ void ODocumentDefinition::onCommandPreview(Any& _rImage)
                 _rImage = xTransfer->getTransferData( aFlavor );
             }
         }
-        catch( Exception )
+        catch( const Exception& )
         {
         }
     }
@@ -1911,7 +1911,7 @@ Reference< XComponent > ODocumentDefinition::impl_openUI_nolck_throw( bool _bFor
             nObjectType, sName, _bForEditing
         );
     }
-    catch( RuntimeException& ) { throw; }
+    catch( const RuntimeException& ) { throw; }
     catch( const Exception& )
     {
         throw WrappedTargetException(
@@ -1958,7 +1958,7 @@ void SAL_CALL ODocumentDefinition::store(  ) throw (WrappedTargetException, Runt
     {
         impl_store_throw();
     }
-    catch( RuntimeException& ) { throw; }
+    catch( const RuntimeException& ) { throw; }
     catch( const Exception& )
     {
         throw WrappedTargetException(
@@ -1975,7 +1975,7 @@ void SAL_CALL ODocumentDefinition::store(  ) throw (WrappedTargetException, Runt
     {
         bSuccess = impl_close_throw();
     }
-    catch( RuntimeException& ) { throw; }
+    catch( const RuntimeException& ) { throw; }
     catch( const Exception& )
     {
         throw WrappedTargetException(

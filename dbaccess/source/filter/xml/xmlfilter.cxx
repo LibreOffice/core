@@ -908,7 +908,7 @@ void ODBFilter::setPropertyInfo()
         {
             xDataSource->setPropertyValue(PROPERTY_INFO,makeAny(aInfo));
         }
-        catch(Exception)
+        catch(const Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }

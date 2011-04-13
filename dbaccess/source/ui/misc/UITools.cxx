@@ -162,7 +162,7 @@ SQLExceptionInfo createConnection(  const ::rtl::OUString& _rsDataSourceName,
     {
         xProp.set(_xDatabaseContext->getByName(_rsDataSourceName),UNO_QUERY);
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
     }
     SQLExceptionInfo aInfo;
@@ -190,7 +190,7 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
         bPwdReq = ::cppu::any2bool(_xDataSource->getPropertyValue(PROPERTY_ISPASSWORDREQUIRED));
         _xDataSource->getPropertyValue(PROPERTY_USER) >>= sUser;
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         OSL_FAIL("createConnection: error while retrieving data source properties!");
     }
@@ -230,7 +230,7 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
     catch(SQLContext& e) { aInfo = SQLExceptionInfo(e); }
     catch(SQLWarning& e) { aInfo = SQLExceptionInfo(e); }
     catch(SQLException& e) { aInfo = SQLExceptionInfo(e); }
-    catch(Exception&) { OSL_FAIL("SbaTableQueryBrowser::OnExpandEntry: could not connect - unknown exception!"); }
+    catch(constException&) { OSL_FAIL("SbaTableQueryBrowser::OnExpandEntry: could not connect - unknown exception!"); }
 
     return aInfo;
 }
@@ -777,7 +777,7 @@ sal_Bool checkDataSourceAvailable(const ::rtl::OUString& _sDataSourceName,const 
             {
                 bRet = xDataBaseContext->getByName(_sDataSourceName).hasValue();
             }
-            catch(Exception)
+            catch(const Exception&)
             {
             }
         }

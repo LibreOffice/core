@@ -97,7 +97,7 @@ void OColumnPeer::setColumn(const Reference< XPropertySet>& _xColumn)
                 _xColumn->getPropertyValue(PROPERTY_PRECISION)      >>= nPrecision;
                 _xColumn->getPropertyValue(PROPERTY_ISAUTOINCREMENT)    >>= bAutoIncrement;
             }
-            catch(Exception)
+            catch(const Exception&)
             {
             }
 

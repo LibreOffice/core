@@ -77,7 +77,7 @@ OXMLConnectionResource::OXMLConnectionResource( ODBFilter& rImport,
                 {
                     xDataSource->setPropertyValue(PROPERTY_URL,makeAny(sValue));
                 }
-                catch(Exception)
+                catch(const Exception&)
                 {
                     DBG_UNHANDLED_EXCEPTION();
                 }

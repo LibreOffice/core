@@ -252,7 +252,7 @@ OAppDetailPageHelper::~OAppDetailPageHelper()
         if ( xCloseable.is() )
             xCloseable->close(sal_True);
     }
-    catch(Exception)
+    catch(const Exception&)
     {
         OSL_FAIL("Exception thrown while disposing preview frame!");
     }
@@ -1167,7 +1167,7 @@ void OAppDetailPageHelper::showPreview( const ::rtl::OUString& _sDataSourceName,
                     xFrames->append(m_xFrame);
                 }
             }
-            catch(Exception)
+            catch(const Exception&)
             {
             }
         }

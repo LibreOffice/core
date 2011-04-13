@@ -342,7 +342,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
             xMeta = getMetaData();
             bCase = xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers();
         }
-        catch(SQLException&)
+        catch(const SQLException&)
         {
         }
         Reference< XNameContainer > xTableDefinitions(_rDB.getTables(),UNO_QUERY);
@@ -533,7 +533,7 @@ void OConnection::disposing()
         if (m_xMasterConnection.is())
             m_xMasterConnection->close();
     }
-    catch(Exception)
+    catch(const Exception&)
     {
     }
     m_xMasterConnection = NULL;
@@ -734,7 +734,7 @@ Reference< XTablesSupplier > OConnection::getMasterTables()
             if ( xMeta.is() )
                 m_xMasterTables = ::dbtools::getDataDefinitionByURLAndConnection( xMeta->getURL(), m_xMasterConnection, m_aContext.getLegacyServiceFactory() );
         }
-        catch(SQLException&)
+        catch(const SQLException&)
         {
         }
     }

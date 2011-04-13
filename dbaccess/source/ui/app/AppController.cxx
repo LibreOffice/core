@@ -446,7 +446,7 @@ void SAL_CALL OApplicationController::disposing()
             m_xModel.clear();
         }
     }
-    catch(Exception)
+    catch(const Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -468,10 +468,10 @@ sal_Bool OApplicationController::Construct(Window* _pParent)
         getContainer()->Construct();
         bSuccess = sal_True;
     }
-    catch(SQLException&)
+    catch(const SQLException&)
     {
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         OSL_FAIL("OApplicationController::Construct : the construction of UnoDataBrowserView failed !");
     }

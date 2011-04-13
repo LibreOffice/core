@@ -373,7 +373,7 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
         m_xCollator = Reference< XCollator >( getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.Collator")) ), UNO_QUERY_THROW );
         m_xCollator->loadDefaultCollator( Application::GetSettings().GetLocale(), 0 );
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         OSL_FAIL("SbaTableQueryBrowser::Construct: could not create (or start listening at) the database context!");
     }
@@ -858,7 +858,7 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
             }
         }
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
         return sal_False;
@@ -1279,7 +1279,7 @@ SvLBoxEntry* SbaTableQueryBrowser::getObjectEntry(const ::rtl::OUString& _rDataS
                                     }
                                 }
                             }
-                            catch(Exception&)
+                            catch(const Exception&)
                             {
                                 OSL_FAIL("SbaTableQueryBrowser::populateTree: could not fill the tree");
                             }
@@ -2034,7 +2034,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue
                     {
                         OSL_FAIL("Object already disposed!");
                     }
-                    catch(Exception&)
+                    catch(const Exception&)
                     {
                         OSL_FAIL("SbaTableQueryBrowser::Execute(ID_BROWSER_?): could not clone the cursor!");
                     }
@@ -2200,7 +2200,7 @@ void SbaTableQueryBrowser::populateTree(const Reference<XNameAccess>& _xNameAcce
             }
         }
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         OSL_FAIL("SbaTableQueryBrowser::populateTree: could not fill the tree");
     }
@@ -2498,7 +2498,7 @@ sal_Bool SbaTableQueryBrowser::implLoadAnything(const ::rtl::OUString& _rDataSou
             DBG_UNHANDLED_EXCEPTION();
         }
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -2771,7 +2771,7 @@ bool SbaTableQueryBrowser::implSelect( SvLBoxEntry* _pEntry )
             xRowSetProps->setPropertyValue(PROPERTY_DATASOURCENAME,Any());
             xRowSetProps->setPropertyValue(PROPERTY_ACTIVE_CONNECTION,Any());
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
             // reset the values
             xRowSetProps->setPropertyValue(PROPERTY_DATASOURCENAME,Any());
@@ -3107,7 +3107,7 @@ void SbaTableQueryBrowser::unloadAndCleanup( sal_Bool _bDisposeConnection )
         else
             OSL_FAIL("SbaTableQueryBrowser::unloadAndCleanup: something strange happended!");
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         OSL_FAIL("SbaTableQueryBrowser::unloadAndCleanup: could not reset the form");
     }
@@ -3218,7 +3218,7 @@ void SbaTableQueryBrowser::impl_initialize()
             if ( xFormMultiSet.is() )
                 xFormMultiSet->setPropertyValues(aProperties, aValues);
         }
-        catch(Exception)
+        catch(const Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
@@ -3485,7 +3485,7 @@ IMPL_LINK( SbaTableQueryBrowser, OnTreeEntryCompare, const SvSortData*, _pSortDa
         {
             nCompareResult = m_xCollator->compareString(sLeftText, sRightText);
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
         }
     }
