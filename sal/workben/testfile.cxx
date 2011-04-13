@@ -1197,7 +1197,7 @@ void FilePointerTest( void )
         rFile.setSize( 5000 );
 
         printf( "Set the FilePointer at the end of the file (5000)\n" );
-        rc=rFile.setPos( Pos_End,0 );
+        rc=rFile.setPos( osl_Pos_End,0 );
         print_error( rtl::OString( "SetPos" ), rc );
 
         rc=rFile.getPos( filepointer );

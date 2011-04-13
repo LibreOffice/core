@@ -3627,17 +3627,17 @@ namespace osl_File
             nError1 = testFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             //the file size is smaller than 100
-            nError1 = testFile.setPos( Pos_End,  -100 );
+            nError1 = testFile.setPos( osl_Pos_End,  -100 );
             CPPUNIT_ASSERT_MESSAGE( "should return error", ::osl::FileBase::E_INVAL == nError1 );
 
-             nError1 = testFile.setPos( Pos_End, -53 );
+             nError1 = testFile.setPos( osl_Pos_End, -53 );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             nError1 = testFile.read( buffer_read, 1, nCount_read );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             nError1 = testFile.close( );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
-            CPPUNIT_ASSERT_MESSAGE( "test for setPos function: test for Pos_End, set the position to end, test if the first char in file is correct",
+            CPPUNIT_ASSERT_MESSAGE( "test for setPos function: test for osl_Pos_End, set the position to end, test if the first char in file is correct",
                                      buffer_read[0] == pBuffer_Char[0] );
         }
 
@@ -3759,7 +3759,7 @@ namespace osl_File
             nError1 = testFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
-             nError1 = testFile.setPos( Pos_End, 0 );
+             nError1 = testFile.setPos( osl_Pos_End, 0 );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             nError1 = testFile.isEndOfFile( pEOF );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
@@ -3859,7 +3859,7 @@ namespace osl_File
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
             //get the file size;
-             nError1 = testFile.setPos( Pos_End, 0 );
+             nError1 = testFile.setPos( osl_Pos_End, 0 );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
              nError1 = testFile.getPos( nFilePointer );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
@@ -3887,7 +3887,7 @@ namespace osl_File
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
             //get the file size;
-             nError1 = testFile.setPos( Pos_End, 0 );
+             nError1 = testFile.setPos( osl_Pos_End, 0 );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
              nError1 = testFile.getPos( nFilePointer );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
@@ -4241,7 +4241,7 @@ namespace osl_File
         //check if is the new file
         File newFile( aTmpName4 );
         newFile.open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Read );
-        newFile.setPos( Pos_End, 0 );
+        newFile.setPos( osl_Pos_End, 0 );
         //      CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
         sal_uInt64     nFilePointer;
         nError1 = newFile.getPos( nFilePointer );
