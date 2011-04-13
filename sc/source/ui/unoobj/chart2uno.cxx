@@ -1065,7 +1065,7 @@ Reference< chart2::data::XLabeledDataSequence > lcl_createLabeledDataSequenceFro
             if ( xContext.is() )
             {
                 xResult.set( xContext->getServiceManager()->createInstanceWithContext(
-                    ::rtl::OUString::createFromAscii( "com.sun.star.chart2.data.LabeledDataSequence" ),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.data.LabeledDataSequence")),
                         xContext ), uno::UNO_QUERY_THROW );
             }
             if ( bHasValues )
