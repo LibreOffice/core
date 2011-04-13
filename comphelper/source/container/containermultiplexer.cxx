@@ -118,7 +118,7 @@ namespace comphelper
         }
         catch(const Exception&)
         {
-            OSL_FAIL("Exceptiopn catched!");
+            OSL_FAIL("Exceptiopn caught!");
         }
         ::comphelper::decrement(m_refCount);
     }
