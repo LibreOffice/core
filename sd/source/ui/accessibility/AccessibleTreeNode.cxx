@@ -134,8 +134,11 @@ void SAL_CALL AccessibleTreeNode::disposing (void)
     // probably are by now more or less dead and we must not call them to
     // unregister.
 
-    comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( mnClientId, *this );
-    mnClientId = 0;
+    if (mnClientId != 0)
+    {
+        comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( mnClientId, *this );
+        mnClientId = 0;
+    }
 }
 
 
@@ -361,9 +364,10 @@ void SAL_CALL AccessibleTreeNode::addEventListener(
         }
         else
         {
-            if ( ! mnClientId)
+            if (mnClientId == 0)
                 mnClientId = comphelper::AccessibleEventNotifier::registerClient();
-            comphelper::AccessibleEventNotifier::addEventListener(mnClientId, rxListener);
+            if (mnClientId != 0)
+                comphelper::AccessibleEventNotifier::addEventListener(mnClientId, rxListener);
         }
     }
 }
@@ -387,8 +391,11 @@ void SAL_CALL AccessibleTreeNode::removeEventListener(
             // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
             // and at least to us not firing any events anymore, in case somebody calls
             // NotifyAccessibleEvent, again
-            comphelper::AccessibleEventNotifier::revokeClient( mnClientId );
-            mnClientId = 0;
+            if (mnClientId != 0)
+            {
+                comphelper::AccessibleEventNotifier::revokeClient( mnClientId );
+                mnClientId = 0;
+            }
         }
     }
 }
