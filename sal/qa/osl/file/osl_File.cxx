@@ -3608,14 +3608,14 @@ namespace osl_File
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
              nError1 = testFile.setPos( osl_Pos_Absolut, sizeof( pBuffer_Char ) - 2 );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
-             nError1 = testFile.setPos( Pos_Current, 0);
+             nError1 = testFile.setPos( osl_Pos_Current, 0);
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             nError1 = testFile.read( buffer_read, 1, nCount_read );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             nError1 = testFile.close( );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
-            CPPUNIT_ASSERT_MESSAGE( "test for setPos function: test for Pos_Current, set the position to end, test if the ( end -1 ) char in file is correct",
+            CPPUNIT_ASSERT_MESSAGE( "test for setPos function: test for osl_Pos_Current, set the position to end, test if the ( end -1 ) char in file is correct",
                                      buffer_read[0] == pBuffer_Char[sizeof( pBuffer_Char ) - 2] );
         }
 
@@ -3788,7 +3788,7 @@ namespace osl_File
             {
                 nError1 = testFile.isEndOfFile( pEOF );
                 CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
-                nError1 = testFile.setPos( Pos_Current, 1 );
+                nError1 = testFile.setPos( osl_Pos_Current, 1 );
                 CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             }
              nError1 = testFile.getPos( nFilePointer );
