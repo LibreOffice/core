@@ -63,8 +63,7 @@ endef
 define gb_StaticLibrary__StaticLibrary_impl
 $(call gb_LinkTarget_LinkTarget,$(2))
 $(call gb_LinkTarget_set_targettype,$(2),StaticLibrary)
-$(call gb_LinkTarget_set_defs,$(2),\
-    $$(DEFS) \
+$(call gb_LinkTarget_add_defs,$(2),\
     $(gb_StaticLibrary_DEFS) \
 )
 $(call gb_StaticLibrary_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2))

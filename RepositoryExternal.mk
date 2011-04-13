@@ -39,8 +39,7 @@
 ifeq ($(SYSTEM_ZLIB),YES)
 
 define gb_LinkTarget__use_zlib
-$(call gb_LinkTarget_set_defs,$(1),\
-	$$(DEFS) \
+$(call gb_LinkTarget_add_defs,$(1),\
 	-DSYSTEM_ZLIB \
 )
 $(call gb_LinkTarget_add_libs,$(1),-lz)
@@ -90,8 +89,7 @@ ifeq ($(SYSTEM_EXPAT),YES)
 define gb_LinkTarget__use_expat
 $(if $(2),,$(error gb_LinkTarget__use_expat needs additional parameter))
 
-$(call gb_LinkTarget_set_defs,$(1),\
-	$$(DEFS) \
+$(call gb_LinkTarget_add_defs,$(1),\
 	-DSYSTEM_EXPAT \
 )
 
@@ -110,8 +108,7 @@ define gb_LinkTarget__use_expat
 $(if $(2),,$(error gb_LinkTarget__use_expat needs additional parameter))
 
 $(if $(filter-out ascii_expat_xmlparse,$(2)),\
-	$(call gb_LinkTarget_set_defs,$(1),\
-		$$(DEFS) \
+	$(call gb_LinkTarget_add_defs,$(1),\
 		-DXML_UNICODE \
 ))
 
@@ -136,8 +133,7 @@ endef
 ifeq ($(SYSTEM_LIBXML),YES)
 
 define gb_LinkTarget__use_libxml2
-$(call gb_LinkTarget_set_defs,$(1),\
-	$$(DEFS) \
+$(call gb_LinkTarget_add_defs,$(1),\
 	-DSYSTEM_LIBXML \
 )
 $(call gb_LinkTarget_set_include,$(1),\
@@ -190,8 +186,7 @@ endif # SYSTEM_LIBXSLT
 ifeq ($(SYSTEM_REDLAND),YES)
 
 define gb_LinkTarget__use_librdf
-$(call gb_LinkTarget_set_defs,$(1),\
-	$$(DEFS) \
+$(call gb_LinkTarget_add_defs,$(1),\
 	-DSYSTEM_REDLAND \
 )
 $(call gb_LinkTarget_set_include,$(1),\

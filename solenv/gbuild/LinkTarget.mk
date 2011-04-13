@@ -423,6 +423,10 @@ endif
 endef
 
 define gb_LinkTarget_set_defs
+ifeq (,)
+$$(call gb_Output_error,\
+ gb_LinkTarget_set_defs: use gb_LinkTarget_add_defs instead.)
+else
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : DEFS := $(2)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
@@ -431,6 +435,7 @@ $(call gb_LinkTarget_get_target,$(1)) : PCH_DEFS := $(2)
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : DEFS := $(2)
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_DEFS := $(2)
+endif
 endif
 
 endef
@@ -444,9 +449,14 @@ endif
 endef
 
 define gb_LinkTarget_set_cflags
+ifeq (,)
+$$(call gb_Output_error,\
+ gb_LinkTarget_set_cflags: use gb_LinkTarget_add_cflags instead.)
+else
 $(call gb_LinkTarget_get_target,$(1)) : T_CFLAGS := $(2)
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : T_CFLAGS := $(2)
+endif
 endif
 
 endef
@@ -462,8 +472,11 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_CXXFLAGS += $(2)
 endif
 endef
 
-# maybe should deprecate this...
 define gb_LinkTarget_set_cxxflags
+ifeq (,)
+$$(call gb_Output_error,\
+ gb_LinkTarget_set_cxxflags: use gb_LinkTarget_add_cxxflags instead.)
+else
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : T_CXXFLAGS := $(2)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
@@ -471,6 +484,7 @@ $(call gb_LinkTarget_get_target,$(1)) : PCH_CXXFLAGS := $(2)
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : T_CXXFLAGS := $(2)
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_CXXFLAGS := $(2)
+endif
 endif
 
 endef
@@ -483,9 +497,14 @@ endif
 endef
 
 define gb_LinkTarget_set_objcxxflags
+ifeq (,)
+$$(call gb_Output_error,\
+ gb_LinkTarget_set_objcxxflags: use gb_LinkTarget_add_objcxxflags instead.)
+else
 $(call gb_LinkTarget_get_target,$(1)) : T_OBJCXXFLAGS := $(2)
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : T_OBJCXXFLAGS := $(2)
+endif
 endif
 
 endef
@@ -512,6 +531,7 @@ define gb_LinkTarget_add_ldflags
 $(call gb_LinkTarget_get_target,$(1)) : T_LDFLAGS += $(2)
 endef
 
+# real use in RepositoryExternal.mk
 define gb_LinkTarget_set_ldflags
 $(call gb_LinkTarget_get_target,$(1)) : T_LDFLAGS := $(2)
 endef
