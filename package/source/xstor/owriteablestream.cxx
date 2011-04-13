@@ -99,7 +99,7 @@ void StaticAddLog( const ::rtl::OUString& aMessage )
             xLogRing->logString( aMessage );
         }
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
         // No log
     }
@@ -121,9 +121,9 @@ void SetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPropertySet >&
     try {
         xPropertySet->setPropertyValue( aString_EncryptionKey, uno::makeAny( aKey ) );
     }
-    catch ( uno::Exception& aException )
+    catch ( const uno::Exception& rException )
     {
-        ::package::StaticAddLog( aException.Message );
+        ::package::StaticAddLog( rException.Message );
         ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Can't set encryption") ) );
         OSL_FAIL( "Can't write encryption related properties!\n" );
         throw io::IOException(); // TODO
@@ -141,9 +141,9 @@ uno::Any GetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPropertySe
     try {
         return xPropertySet->getPropertyValue( aString_EncryptionKey );
     }
-    catch ( uno::Exception& aException )
+    catch ( const uno::Exception& rException )
     {
-        ::package::StaticAddLog( aException.Message );
+        ::package::StaticAddLog( rException.Message );
         ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Can't get encryption property" ) ) );
 
         OSL_FAIL( "Can't get encryption related properties!\n" );
@@ -185,9 +185,9 @@ sal_Bool KillFile( const ::rtl::OUString& aURL, const uno::Reference< lang::XMul
             bRet = sal_True;
         }
     }
-    catch( uno::Exception& aException )
+    catch( const uno::Exception& rException )
     {
-        ::package::StaticAddLog( aException.Message );
+        ::package::StaticAddLog( rException.Message );
         ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception") ) );
     }
 
@@ -213,9 +213,9 @@ const sal_Int32 n_ConstBufferSize = 32000;
         uno::Any aUrl = xTempFile->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Uri") ) );
         aUrl >>= aTempURL;
     }
-    catch ( uno::Exception& aException )
+    catch ( const uno::Exception& rException )
     {
-        ::package::StaticAddLog( aException.Message );
+        ::package::StaticAddLog( rException.Message );
         ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception") ) );
     }
 
@@ -296,7 +296,7 @@ void OWriteStream_Impl::CleanCacheStream()
             if ( xInputCache.is() )
                 xInputCache->closeInput();
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {}
 
         try
@@ -305,7 +305,7 @@ void OWriteStream_Impl::CleanCacheStream()
             if ( xOutputCache.is() )
                 xOutputCache->closeOutput();
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {}
 
         m_xCacheStream = uno::Reference< io::XStream >();
@@ -324,7 +324,7 @@ void OWriteStream_Impl::AddLog( const ::rtl::OUString& aMessage )
             if ( aContext.is() )
                 m_xLogRing.set( aContext.getSingleton( "com.sun.star.logging.DocumentIOLogRing" ), uno::UNO_QUERY_THROW );
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
             // No log
         }
@@ -478,9 +478,9 @@ void OWriteStream_Impl::DisposeWrappers()
         try {
             m_pAntiImpl->dispose();
         }
-        catch ( uno::RuntimeException& aRuntimeException )
+        catch ( const uno::RuntimeException& rRuntimeException )
         {
-            AddLog( aRuntimeException.Message );
+            AddLog( rRuntimeException.Message );
             AddLog( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(OSL_LOG_PREFIX "Quiet exception") ) );
         }
 
@@ -543,17 +543,17 @@ uno::Reference< lang::XMultiServiceFactory > OWriteStream_Impl::GetServiceFactor
                     throw io::IOException(); // TODO:
             }
         }
-        catch( packages::WrongPasswordException& aWrongPasswordException )
+        catch( const packages::WrongPasswordException& rWrongPasswordException )
         {
-            AddLog( aWrongPasswordException.Message );
+            AddLog( rWrongPasswordException.Message );
             AddLog( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow") ) );
 
             KillFile( aTempURL, GetServiceFactory() );
             throw;
         }
-        catch( uno::Exception& aException )
+        catch( const uno::Exception& rException )
         {
-            AddLog( aException.Message );
+            AddLog( rException.Message );
             AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow") ) );
 
             KillFile( aTempURL, GetServiceFactory() );
@@ -637,14 +637,14 @@ uno::Reference< lang::XMultiServiceFactory > OWriteStream_Impl::GetServiceFactor
                             throw io::IOException(); // TODO:
                     }
                 }
-                catch( packages::WrongPasswordException& )
+                catch( const packages::WrongPasswordException& )
                 {
                     KillFile( m_aTempURL, GetServiceFactory() );
                     m_aTempURL = ::rtl::OUString();
 
                     throw;
                 }
-                catch( uno::Exception& )
+                catch( const uno::Exception& )
                 {
                     KillFile( m_aTempURL, GetServiceFactory() );
                     m_aTempURL = ::rtl::OUString();
@@ -681,10 +681,10 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetTempFileAsStream()
             {
                 xTempStream = xTempAccess->openFileReadWrite( m_aTempURL );
             }
-            catch( uno::Exception& aException )
+            catch( const uno::Exception& rException )
             {
-        AddLog( aException.Message );
-        AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception" ) ) );
+                AddLog( rException.Message );
+                AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception" ) ) );
             }
         }
     }
@@ -726,9 +726,9 @@ uno::Reference< io::XInputStream > OWriteStream_Impl::GetTempFileAsInputStream()
             {
                 xInputStream = xTempAccess->openFileRead( m_aTempURL );
             }
-            catch( uno::Exception& aException )
+            catch( const uno::Exception& rException )
             {
-                AddLog( aException.Message );
+                AddLog( rException.Message );
                 AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception" ) ) );
             }
         }
@@ -875,7 +875,7 @@ void OWriteStream_Impl::Commit()
         {
             xInStream.set( static_cast< io::XInputStream* >( new OSelfTerminateFileStream( GetServiceFactory(), m_aTempURL ) ), uno::UNO_QUERY );
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
         }
 
@@ -1083,9 +1083,9 @@ void OWriteStream_Impl::ReadRelInfoIfNecessary()
             m_xOrigRelInfoStream = uno::Reference< io::XInputStream >();
             m_nRelInfoStatus = RELINFO_READ;
         }
-        catch( uno::Exception& aException )
+        catch( const uno::Exception& rException )
         {
-            AddLog( aException.Message );
+            AddLog( rException.Message );
             AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception" ) ) );
 
             m_nRelInfoStatus = RELINFO_BROKEN;
@@ -1105,7 +1105,7 @@ void OWriteStream_Impl::ReadRelInfoIfNecessary()
 
             m_nRelInfoStatus = RELINFO_CHANGED_STREAM_READ;
         }
-        catch( uno::Exception )
+        catch( const uno::Exception& )
         {
             m_nRelInfoStatus = RELINFO_CHANGED_BROKEN;
         }
@@ -1153,9 +1153,9 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::ReadPackageStreamProper
             try {
                 aResult[nInd].Value = xPropSet->getPropertyValue( aResult[nInd].Name );
             }
-            catch( uno::Exception& aException )
+            catch( const uno::Exception& rException )
             {
-                AddLog( aException.Message );
+                AddLog( rException.Message );
                 AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception" ) ) );
 
                 OSL_FAIL( "A property can't be retrieved!\n" );
@@ -1274,7 +1274,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
             m_bHasCachedEncryptionData = sal_True;
             m_aEncryptionData = aEncryptionData;
         }
-        catch( packages::WrongPasswordException& )
+        catch( const packages::WrongPasswordException& )
         {
             // retry with different encoding
             SetEncryptionKeyProperty_Impl( xPropertySet, aEncryptionData.getUnpackedValueOrDefault( PACKAGE_ENCRYPTIONDATA_SHA1MS1252, uno::Sequence< sal_Int8 >() ) );
@@ -1297,16 +1297,16 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
                         m_pParent->m_bIsModified = sal_True;
                 }
             }
-            catch( packages::WrongPasswordException& aWrongPasswordException )
+            catch( const packages::WrongPasswordException& rWrongPasswordException )
             {
                 SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< sal_Int8 >() );
-                AddLog( aWrongPasswordException.Message );
+                AddLog( rWrongPasswordException.Message );
                 AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
                 throw;
             }
-            catch ( uno::Exception& aException )
+            catch ( const uno::Exception& rException )
             {
-                AddLog( aException.Message );
+                AddLog( rException.Message );
                 AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception" ) ) );
 
                 OSL_FAIL( "Can't write encryption related properties!\n" );
@@ -1314,11 +1314,11 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
                 throw io::IOException(); // TODO:
             }
         }
-        catch( uno::Exception& aException )
+        catch( const uno::Exception& rException )
         {
             SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< sal_Int8 >() );
 
-            AddLog( aException.Message );
+            AddLog( rException.Message );
             AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
             throw;
         }
@@ -1349,9 +1349,9 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
         {
             aGlobalEncryptionData = GetCommonRootEncryptionData();
         }
-        catch( packages::NoEncryptionException& aNoEncryptionException )
+        catch( const packages::NoEncryptionException& rNoEncryptionException )
         {
-            AddLog( aNoEncryptionException.Message );
+            AddLog( rNoEncryptionException.Message );
             AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
             throw packages::WrongPasswordException();
@@ -1586,9 +1586,9 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
         {
             aGlobalEncryptionData = GetCommonRootEncryptionData();
         }
-        catch( packages::NoEncryptionException& aNoEncryptionException )
+        catch( const packages::NoEncryptionException& rNoEncryptionException )
         {
-            AddLog( aNoEncryptionException.Message );
+            AddLog( rNoEncryptionException.Message );
             AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "No Element" ) ) );
 
             throw packages::WrongPasswordException();
@@ -1659,7 +1659,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
                 SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< sal_Int8 >() );
             }
         }
-        catch( packages::WrongPasswordException& aWrongPasswordException )
+        catch( const packages::WrongPasswordException& rWrongPasswordException )
         {
             SetEncryptionKeyProperty_Impl( xPropertySet, aEncryptionData.getUnpackedValueOrDefault( PACKAGE_ENCRYPTIONDATA_SHA1MS1252, uno::Sequence< sal_Int8 >() ) );
             try {
@@ -1669,24 +1669,24 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
                 {
                     OSL_FAIL( "Encrypted ZipStream must already have input stream inside!\n" );
                     SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< sal_Int8 >() );
-                    AddLog( aWrongPasswordException.Message );
+                    AddLog( rWrongPasswordException.Message );
                     AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
                     throw;
                 }
             }
-            catch( uno::Exception& aException )
+            catch( const uno::Exception& rException )
             {
                 SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< sal_Int8 >() );
-                AddLog( aException.Message );
+                AddLog( rException.Message );
                 AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
                 throw;
             }
         }
-        catch( uno::Exception& aException )
+        catch( const uno::Exception& rException )
         {
             OSL_FAIL( "Can't open encrypted stream!\n" );
             SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< sal_Int8 >() );
-            AddLog( aException.Message );
+            AddLog( rException.Message );
             AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
             throw;
         }
@@ -1861,9 +1861,9 @@ OWriteStream::~OWriteStream()
             try {
                 dispose();
             }
-            catch( uno::RuntimeException& aRuntimeException )
+            catch( const uno::RuntimeException& rRuntimeException )
             {
-                m_pImpl->AddLog( aRuntimeException.Message );
+                m_pImpl->AddLog( rRuntimeException.Message );
                 m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception" ) ) );
             }
         }
@@ -1946,7 +1946,7 @@ void OWriteStream::CopyToStreamInternally_Impl( const uno::Reference< io::XStrea
     try {
         ::comphelper::OStorageHelper::CopyInputToOutput( m_xInStream, xDestOutStream );
     }
-    catch ( uno::Exception& e )
+    catch ( const uno::Exception& e )
     {
         eThrown = e;
         bThrown = sal_True;
@@ -1957,9 +1957,9 @@ void OWriteStream::CopyToStreamInternally_Impl( const uno::Reference< io::XStrea
     try {
         m_xSeekable->seek( nCurPos );
     }
-    catch ( uno::Exception& aException )
+    catch ( const uno::Exception& rException )
     {
-        m_pImpl->AddLog( aException.Message );
+        m_pImpl->AddLog( rException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception" ) ) );
 
         // TODO: set the stoream in invalid state or dispose
@@ -2633,9 +2633,9 @@ void SAL_CALL OWriteStream::dispose()
                     m_pImpl->Revert();
                 }
             }
-            catch( uno::Exception& aException )
+            catch( const uno::Exception& rException )
             {
-                m_pImpl->AddLog( aException.Message );
+                m_pImpl->AddLog( rException.Message );
                 m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
                 uno::Any aCaught( ::cppu::getCaughtException() );
@@ -2778,9 +2778,9 @@ sal_Bool SAL_CALL OWriteStream::hasByID(  const ::rtl::OUString& sID )
         getRelationshipByID( sID );
         return sal_True;
     }
-    catch( container::NoSuchElementException& aNoSuchElementException )
+    catch( const container::NoSuchElementException& rNoSuchElementException )
     {
-        m_pImpl->AddLog( aNoSuchElementException.Message );
+        m_pImpl->AddLog( rNoSuchElementException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "No Element" ) ) );
     }
 
@@ -3487,27 +3487,27 @@ void SAL_CALL OWriteStream::commit()
         // when the storage is commited the parent is modified
         ModifyParentUnlockMutex_Impl( aGuard );
     }
-    catch( io::IOException& aIOException )
+    catch( const io::IOException& rIOException )
     {
-        m_pImpl->AddLog( aIOException.Message );
+        m_pImpl->AddLog( rIOException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( embed::StorageWrappedTargetException& aStorageWrappedTargetException )
+    catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        m_pImpl->AddLog( aStorageWrappedTargetException.Message );
+        m_pImpl->AddLog( rStorageWrappedTargetException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::RuntimeException& aRuntimeException )
+    catch( const uno::RuntimeException& rRuntimeException )
     {
-        m_pImpl->AddLog( aRuntimeException.Message );
+        m_pImpl->AddLog( rRuntimeException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::Exception& aException )
+    catch( const uno::Exception& rException )
     {
-        m_pImpl->AddLog( aException.Message );
+        m_pImpl->AddLog( rException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
         uno::Any aCaught( ::cppu::getCaughtException() );
@@ -3551,27 +3551,27 @@ void SAL_CALL OWriteStream::revert()
     try {
         m_pImpl->Revert();
     }
-    catch( io::IOException& aIOException )
+    catch( const io::IOException& rIOException )
     {
-        m_pImpl->AddLog( aIOException.Message );
+        m_pImpl->AddLog( rIOException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( embed::StorageWrappedTargetException& aStorageWrappedTargetException )
+    catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        m_pImpl->AddLog( aStorageWrappedTargetException.Message );
+        m_pImpl->AddLog( rStorageWrappedTargetException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::RuntimeException& aRuntimeException )
+    catch( const uno::RuntimeException& rRuntimeException )
     {
-        m_pImpl->AddLog( aRuntimeException.Message );
+        m_pImpl->AddLog( rRuntimeException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
         throw;
     }
-    catch( uno::Exception& aException )
+    catch( const uno::Exception& rException )
     {
-        m_pImpl->AddLog( aException.Message );
+        m_pImpl->AddLog( rException.Message );
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
         uno::Any aCaught( ::cppu::getCaughtException() );
