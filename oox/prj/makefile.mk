@@ -25,29 +25,16 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+PRJ=..
+TARGET=prj
 
-PRJNAME=oox
-TARGET=dump
-AUTOSEG=true
+.INCLUDE : settings.mk
 
-ENABLE_EXCEPTIONS=TRUE
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
+.ENDIF
 
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  settings.mk
-.INCLUDE: $(PRJ)$/util$/makefile.pmk
-
-# --- Files --------------------------------------------------------
-
-SLOFILES =							\
-        $(SLO)$/biffdumper.obj		\
-        $(SLO)$/dffdumper.obj		\
-        $(SLO)$/dumperbase.obj		\
-        $(SLO)$/oledumper.obj		\
-        $(SLO)$/pptxdumper.obj		\
-        $(SLO)$/xlsbdumper.obj
-
-# --- Targets -------------------------------------------------------
-
-.INCLUDE :  target.mk
+all:
+    cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog

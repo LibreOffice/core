@@ -1,19 +1,3 @@
 oox	oox : cppu cppuhelper comphelper filter sal offapi sax basegfx svx xmlscript tools vcl BOOST:boost OPENSSL:openssl LIBXSLT:libxslt NULL
 oox	oox				usr1	-   all	oox_mkout NULL
-oox	oox\prj				get	-   all	oox_prj NULL
-oox	oox\source\token		nmake	-   all	oox_token NULL
-oox	oox\source\helper		nmake	-   all	oox_helper oox_token NULL
-oox	oox\source\core			nmake	-   all	oox_core oox_token NULL
-oox	oox\source\ole			nmake	-   all	oox_ole oox_token NULL
-oox	oox\source\docprop		nmake	-   all	oox_docprop oox_token NULL
-oox	oox\source\drawingml		nmake	-   all	oox_drawingml oox_token NULL
-oox	oox\source\drawingml\diagram	nmake	-   all	oox_diagram oox_token NULL
-oox	oox\source\drawingml\chart	nmake	-   all	oox_chart oox_token NULL
-oox	oox\source\drawingml\table	nmake	-   all	oox_table oox_token NULL
-oox	oox\source\ppt			nmake	-   all	oox_ppt oox_token NULL
-oox	oox\source\vml			nmake	-   all	oox_vml oox_token NULL
-oox	oox\source\xls			nmake	-   all	oox_xls oox_token NULL
-oox	oox\source\dump			nmake	-   all	oox_dump oox_token NULL
-oox	oox\source\shape		nmake   -   all oox_shape oox_token NULL
-oox	oox\source\export		nmake   -   all oox_export oox_token NULL
-oox	oox\util			nmake   -   all oox_util oox_token oox_helper oox_core oox_ole oox_vml oox_drawingml oox_diagram oox_chart oox_table oox_ppt oox_xls oox_dump oox_export oox_shape oox_docprop NULL
+oox	oox\prj				nmake	-   all	oox_prj NULL

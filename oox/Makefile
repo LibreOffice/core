@@ -25,32 +25,14 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
-PRJNAME=oox
-TARGET=vml
-AUTOSEG=true
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-ENABLE_EXCEPTIONS=TRUE
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  settings.mk
-.INCLUDE: $(PRJ)$/util$/makefile.pmk
-
-# --- Files --------------------------------------------------------
-
-SLOFILES =	\
-        $(SLO)$/vmldrawing.obj            \
-        $(SLO)$/vmldrawingfragment.obj    \
-        $(SLO)$/vmlformatting.obj         \
-        $(SLO)$/vmlinputstream.obj        \
-        $(SLO)$/vmlshape.obj              \
-        $(SLO)$/vmlshapecontainer.obj     \
-        $(SLO)$/vmlshapecontext.obj       \
-        $(SLO)$/vmltextbox.obj            \
-        $(SLO)$/vmltextboxcontext.obj
-
-# --- Targets -------------------------------------------------------
-
-.INCLUDE :  target.mk
+# vim: set noet sw=4 ts=4:
