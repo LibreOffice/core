@@ -222,8 +222,8 @@ gb_LinkTarget_CFLAGS += -finline-limit=0 -fno-inline -fno-default-inline
 endif
 
 ifeq ($(gb_SYMBOL),$(true))
-gb_LinkTarget_CXXFLAGS += -ggdb3
-gb_LinkTarget_CFLAGS += -ggdb3
+gb_LinkTarget_CXXFLAGS += -ggdb2
+gb_LinkTarget_CFLAGS += -ggdb2
 endif
 
 gb_LinkTarget_INCLUDE := $(filter-out %/stl, $(subst -I. , ,$(SOLARINC)))
