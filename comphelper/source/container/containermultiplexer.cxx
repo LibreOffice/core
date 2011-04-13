@@ -153,7 +153,7 @@ namespace comphelper
             }
             catch(const Exception&)
             {
-                OSL_FAIL("Exception catched!");
+                OSL_FAIL("Exception caught!");
             }
             m_xContainer = NULL;
             m_pListener = NULL;
