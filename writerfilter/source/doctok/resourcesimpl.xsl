@@ -238,7 +238,7 @@ using namespace ::std;
       resolveNoAuto(rHandler);
     </xsl:if>
     <xsl:text>
-      } catch (Exception &amp; e) {
+      } catch (const Exception &amp; e) {
          clog &lt;&lt; e.getText() &lt;&lt; endl;
       }
     }
@@ -483,7 +483,7 @@ using namespace ::std;
                {
                    rHandler.entry(n, pEntry);
                }
-               catch (ExceptionOutOfBounds e)
+               catch (const ExceptionOutOfBounds&amp;)
                {                
                }
            }
