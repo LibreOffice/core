@@ -160,7 +160,7 @@ void ZipFile::writeLocalHeader(ZipEntry *e)
 
     if(!isError())
     {
-        mnRC = mrFile.setPos( Pos_Absolut, e->offset );
+        mnRC = mrFile.setPos( osl_Pos_Absolut, e->offset );
 
         writeLong(zf_LFHSIGValue);                              // magic number
         writeShort(zf_Vers(1, 0));                              // extract version
@@ -180,7 +180,7 @@ void ZipFile::writeLocalHeader(ZipEntry *e)
             OSL_ASSERT( nWritten == (sal_uInt64)e->name.getLength() );
             if( !isError() )
             {
-                mnRC = mrFile.setPos( Pos_Absolut, e->endOffset );
+                mnRC = mrFile.setPos( osl_Pos_Absolut, e->endOffset );
             }
         }
     }
