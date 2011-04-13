@@ -69,9 +69,9 @@ sub standardize_summary($)
 
 sub load_git_log($$$$) 
 {
-    my ($pdata, $repo_dir, $piece, $pgit_args) = @_;
+    my ($pdata, $repo_dir, $piece, $git_command) = @_;
 
-    my $cmd = "cd $repo_dir && git rev-list --pretty=medium " . join ' ', @{$pgit_args};
+    my $cmd = "cd $repo_dir; $git_command";
     my $commit_id;
     my $summary;
 
@@ -146,7 +146,7 @@ sub get_repo_name($)
 
 sub load_data($$$$)
 {
-    my ($pdata, $top_dir, $piece, $pgit_args) = @_;
+    my ($pdata, $top_dir, $piece, $git_command) = @_;
 
     if (defined $piece) {
         my $piece_dir;
@@ -155,11 +155,11 @@ sub load_data($$$$)
         } else {
             $piece_dir = "$top_dir/clone/$piece";
         }
-        load_git_log($pdata, $piece_dir, $piece, $pgit_args);
+        load_git_log($pdata, $piece_dir, $piece, $git_command);
     } else {
-        load_git_log($pdata, $top_dir, $main_repo, $pgit_args);
+        load_git_log($pdata, $top_dir, $main_repo, $git_command);
         foreach my $piece (@pieces) {
-            load_git_log($pdata, "$top_dir/clone/$piece", $piece, $pgit_args);
+            load_git_log($pdata, "$top_dir/clone/$piece", $piece, $git_command);
         }
     }
 }
@@ -298,7 +298,7 @@ sub usage()
 {
     print "This script generates LO git commit summary\n\n" .
           
-          "Usage: lo-commit-stat [--help] [--no-pieces] [--piece=<piece>] --log-suffix=<string> topdir [git_log_param...]\n\n" .
+          "Usage: lo-commit-stat [--help] [--no-pieces] [--piece=<piece>] --log-suffix=<string> topdir [git_arg...]\n\n" .
 
           "Options:\n" .
           "     --help          print this help\n" .
@@ -308,11 +308,15 @@ sub usage()
           "                     commit-log-<branch>-<log-name-suffix>.log; the branch name\n" .
           "                     is detected autoamtically\n" .
           "     --bugs          print just bug fixes\n" .
+          "     --rev-list      use \"git rev-list\" instead of \"git log\"; useful to check\n" .
+          "                     differences between branches\n" .
           "      topdir         directory with the libreoffice/bootstrap clone; the piece repos\n" .
           "                     must be cloned in the main-repo-root/clone/<piece> subdirectories\n" .
-          "      git_log_param  extra parameters passed to the git log command to define\n" .
-          "                     the area of interest , e.g. --after=\"2010-09-27\" or\n" .
-          "                     TAG..HEAD or origin/master ^origin/libreoffice-3-3";
+          "      git_arg        extra parameters passed to the git command to define\n" .
+          "                     the area of interest; The default command is \"git log\" and\n" .
+          "                     parameters might be, for example, --after=\"2010-09-27\" or\n" .
+          "                     TAG..HEAD; with the option --rev-list, useful might be, for,\n" .
+          "                     example origin/master ^origin/libreoffice-3-3\n";
 }
 
 
@@ -328,6 +332,7 @@ my $top_dir;
 my $log_prefix = "commit-log";
 my $log_suffix;
 my $log;
+my $git_command = "git log";
 my @git_args;
 my %data;
 my %print_filters = ();
@@ -345,6 +350,8 @@ foreach my $arg (@ARGV) {
     } elsif ($arg eq '--bugs') {
         $print_filters{'bug'} = 1;
         $log_prefix = "bugfixes"
+    } elsif ($arg eq '--rev-list') {
+        $git_command = "git rev-list --pretty=medium"
     } else {
         if (! defined $top_dir) {
             $top_dir=$arg;
@@ -354,13 +361,15 @@ foreach my $arg (@ARGV) {
     }
 }
 
+$git_command .= " " . join ' ', @git_args if (@git_args);
+
 (defined $top_dir) || die "Error: top direcotry is not defined\n";
 (-d "$top_dir") || die "Error: not a directory: $top_dir\n";
 (-f "$top_dir/.git/config") || die "Error: can't find $top_dir/.git/config\n";
 
 (defined $log_suffix) || die "Error: define log suffix using --log-suffix=<string>\n";
 
-load_data(\%data, $top_dir,$piece, \@git_args);
+load_data(\%data, $top_dir,$piece, $git_command);
 
 $log = open_log_file($log_prefix, $log_suffix, $top_dir);
 print_stat(\%data, \%print_filters, $log);
