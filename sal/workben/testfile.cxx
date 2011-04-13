@@ -193,7 +193,7 @@ sal_Bool Initialize( void )
     uBytesRequested=aStatus.getFileSize();
 
     // read ini-File
-    rc=pFile->setPos( Pos_Absolut, 0 );
+    rc=pFile->setPos( osl_Pos_Absolut, 0 );
     pBuffer=(sal_Char*) rtl_allocateMemory( (sal_uInt32) (uBytesRequested+1)*sizeof(sal_Char) );
     rtl_zeroMemory( pBuffer, (sal_uInt32)(uBytesRequested+1)*sizeof(sal_Char) );
 
@@ -846,7 +846,7 @@ void FileWriteAndReadTest( void )
     // move the filepointer to the beginning
     //----------------------------------------------------
 
-    rc=pFile->setPos( Pos_Absolut , 0 );
+    rc=pFile->setPos( osl_Pos_Absolut , 0 );
     print_error( rtl::OString( "Set FilePointer to the beginning of the file" ), rc );
 
     printf( "\n" );

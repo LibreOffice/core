@@ -3457,7 +3457,7 @@ namespace osl_File
 
             nError1 = testFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
             nError2 = testFile.write( buffer_write, 30, nCount_write );
-             ::osl::FileBase::RC nError4 = testFile.setPos( Pos_Absolut, 0 );
+             ::osl::FileBase::RC nError4 = testFile.setPos( osl_Pos_Absolut, 0 );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError4 );
             nError3 = testFile.read( buffer_read, 10, nCount_read );
 
@@ -3531,7 +3531,7 @@ namespace osl_File
 
             nError2 = testFile.close( );
 
-             nError3 = testFile.setPos( Pos_Absolut, 0 );
+             nError3 = testFile.setPos( osl_Pos_Absolut, 0 );
 
             CPPUNIT_ASSERT_MESSAGE( "test for close function: manipulate a file after it has been closed",
                                      ( ::osl::FileBase::E_None == nError2 ) &&
@@ -3588,14 +3588,14 @@ namespace osl_File
 
             nError1 = testFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
-             nError1 = testFile.setPos( Pos_Absolut, 26 );
+             nError1 = testFile.setPos( osl_Pos_Absolut, 26 );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             nError1 = testFile.read( buffer_read, 1, nCount_read );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             nError1 = testFile.close( );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
-            CPPUNIT_ASSERT_MESSAGE( "test for setPos function: test for Pos_Absolut, set the position to 26, test if the 26th char in file is correct",
+            CPPUNIT_ASSERT_MESSAGE( "test for setPos function: test for osl_Pos_Absolut, set the position to 26, test if the 26th char in file is correct",
                                      buffer_read[0] == pBuffer_Char[26] );
         }
 
@@ -3606,7 +3606,7 @@ namespace osl_File
 
             nError1 = testFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
-             nError1 = testFile.setPos( Pos_Absolut, sizeof( pBuffer_Char ) - 2 );
+             nError1 = testFile.setPos( osl_Pos_Absolut, sizeof( pBuffer_Char ) - 2 );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
              nError1 = testFile.setPos( Pos_Current, 0);
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
@@ -3695,7 +3695,7 @@ namespace osl_File
             nError1 = testFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
-             nError1 = testFile.setPos( Pos_Absolut, 26 );
+             nError1 = testFile.setPos( osl_Pos_Absolut, 26 );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
              nError1 = testFile.getPos( nFilePointer );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
@@ -3781,7 +3781,7 @@ namespace osl_File
             nError1 = testFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
-             nError1 = testFile.setPos( Pos_Absolut, 0 );
+             nError1 = testFile.setPos( osl_Pos_Absolut, 0 );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             *pEOF = sal_False;
              while ( !( *pEOF ) )
@@ -3974,7 +3974,7 @@ namespace osl_File
             nError1 = testFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
-             nError1 = testFile.setPos( Pos_Absolut, 26 );
+             nError1 = testFile.setPos( osl_Pos_Absolut, 26 );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             nError1 = testFile.read( buffer_read, 26, nCount_read );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
@@ -4034,7 +4034,7 @@ namespace osl_File
              nError1 = testFile.getPos( nFilePointer );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             //reset pointer to the begining;
-             nError1 = testFile.setPos( Pos_Absolut, 0 );
+             nError1 = testFile.setPos( osl_Pos_Absolut, 0 );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             nError1 = testFile.read( buffer_read, 10, nCount_read );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );

@@ -1003,11 +1003,6 @@ public:
         return (RC) Error;
     }
 
-
-    #define Pos_Absolut osl_Pos_Absolut
-    #define Pos_Current osl_Pos_Current
-    #define Pos_End     osl_Pos_End
-
     /** Set the internal position pointer of an open file.
 
         @param uHow [in]
