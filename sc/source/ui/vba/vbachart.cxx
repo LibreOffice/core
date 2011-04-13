@@ -96,7 +96,7 @@ ScVbaChart::getName() throw (css::uno::RuntimeException)
     {
         xProps->getPropertyValue( CHART_NAME ) >>= sName;
     }
-    catch( uno::Exception & ) // swallow exceptions
+    catch( const uno::Exception & ) // swallow exceptions
     {
     }
     return sName;
@@ -220,7 +220,7 @@ ScVbaChart::getChartType() throw ( uno::RuntimeException, script::BasicErrorExce
             nChartType = getMarkerType(xlRadarMarkers, xlRadar);
         }
     }
-    catch (uno::Exception& )
+    catch ( const uno::Exception& )
     {
         throw script::BasicErrorException( rtl::OUString(), uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
     }
@@ -547,7 +547,7 @@ try
                 break;
         }
     }
-    catch ( uno::Exception& )
+    catch ( const uno::Exception& )
     {
         throw script::BasicErrorException( rtl::OUString(), uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
     }
@@ -630,7 +630,7 @@ ScVbaChart::setSourceData( const css::uno::Reference< ::ooo::vba::excel::XRange 
                 setPlotBy( xlRows );
         }
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception&)
     {
         throw script::BasicErrorException( rtl::OUString(), uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
     }
@@ -673,7 +673,7 @@ ScVbaChart::setPlotBy( ::sal_Int32 _nPlotBy ) throw (css::script::BasicErrorExce
                 throw script::BasicErrorException( rtl::OUString(), uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
         }
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception&)
     {
         throw script::BasicErrorException( rtl::OUString(), uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
     }
@@ -695,7 +695,7 @@ ScVbaChart::getPlotBy(  ) throw (script::BasicErrorException, uno::RuntimeExcept
             return xlRows;
         }
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception&)
     {
         throw script::BasicErrorException( rtl::OUString(), uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
     }
@@ -711,7 +711,7 @@ ScVbaChart::setDiagram( const rtl::OUString& _sDiagramType ) throw( script::Basi
         mxChartDocument->setDiagram( xDiagram );
         mxDiagramPropertySet.set( xDiagram, uno::UNO_QUERY_THROW );
     }
-    catch ( uno::Exception& )
+    catch ( const uno::Exception& )
     {
         throw script::BasicErrorException( rtl::OUString(), uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
     }
@@ -827,7 +827,7 @@ ScVbaChart::getHasTitle(  ) throw (script::BasicErrorException, uno::RuntimeExce
     {
         mxChartPropertySet->getPropertyValue(HASMAINTITLE) >>= bHasTitle;
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception&)
     {
         throw script::BasicErrorException( rtl::OUString(), uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
     }
@@ -841,7 +841,7 @@ ScVbaChart::setHasTitle( ::sal_Bool bTitle ) throw (script::BasicErrorException,
     {
         mxChartPropertySet->setPropertyValue(HASMAINTITLE, uno::makeAny( bTitle ));
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception&)
     {
         throw script::BasicErrorException( rtl::OUString(), uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
     }
@@ -856,7 +856,7 @@ ScVbaChart::getHasLegend(  ) throw (script::BasicErrorException, uno::RuntimeExc
     {
         mxChartPropertySet->getPropertyValue(HASLEGEND) >>= bHasLegend;
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception&)
     {
         throw script::BasicErrorException( rtl::OUString(), uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
     }
@@ -870,7 +870,7 @@ ScVbaChart::setHasLegend( ::sal_Bool bLegend ) throw (script::BasicErrorExceptio
     {
         mxChartPropertySet->setPropertyValue(HASLEGEND, uno::makeAny(bLegend));
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception&)
     {
         throw script::BasicErrorException( rtl::OUString(), uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
     }
@@ -961,7 +961,7 @@ ScVbaChart::getSolidType(sal_Int32 _nDeep, sal_Int32 _nVertiStacked, sal_Int32 _
             }
         }
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception&)
     {
         throw script::BasicErrorException( rtl::OUString(), uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
     }
@@ -984,7 +984,7 @@ ScVbaChart::getStockUpDownValue(sal_Int32 _nUpDown, sal_Int32 _nNotUpDown) throw
             return _nNotUpDown;
         }
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception&)
     {
         rtl::OUString aTemp;    // temporary needed for g++ 3.3.5
         script::BasicErrorException( aTemp, uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
@@ -1002,7 +1002,7 @@ ScVbaChart::hasMarkers() throw ( script::BasicErrorException )
         mxDiagramPropertySet->getPropertyValue(SYMBOLTYPE) >>= nSymbol;
         bHasMarkers = nSymbol != chart::ChartSymbolType::NONE;
     }
-    catch ( uno::Exception& )
+    catch (const uno::Exception&)
     {
         rtl::OUString aTemp;    // temporary needed for g++ 3.3.5
         script::BasicErrorException( aTemp, uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
@@ -1050,7 +1050,7 @@ ScVbaChart::isSeriesIndexValid(sal_Int32 _seriesindex) throw( script::BasicError
             }
         }
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception&)
     {
         throw script::BasicErrorException( rtl::OUString(), uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
     }
