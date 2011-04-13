@@ -69,6 +69,7 @@ $(eval $(call gb_Library_add_linked_libs,desktop_detector,\
     Xext \
     SM \
     ICE \
+	$(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,desktop_detector,\
