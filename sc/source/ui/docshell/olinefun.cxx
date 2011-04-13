@@ -392,6 +392,8 @@ sal_Bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, sal_Bool bColumns, sal_uInt1
                                     bColumns, nLevel ) );
     }
 
+    pDoc->IncSizeRecalcLevel( nTab );
+
     ScSubOutlineIterator aIter( pArray );                   // alle Eintraege
     ScOutlineEntry* pEntry;
     while ((pEntry=aIter.GetNext()) != NULL)
@@ -420,11 +422,19 @@ sal_Bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, sal_Bool bColumns, sal_uInt1
             if ( bColumns )
                 pDoc->ShowCol( static_cast<SCCOL>(i), nTab, bShow );
             else
-                if ( !bShow || !pDoc->RowFiltered( i,nTab ) )
-                    pDoc->ShowRow( i, nTab, bShow );
+            {
+                // show several rows together, don't show filtered rows
+                SCROW nFilterEnd = i;
+                bool bFiltered = pDoc->RowFiltered( i, nTab, NULL, &nFilterEnd );
+                nFilterEnd = std::min( nThisEnd, nFilterEnd );
+                if ( !bShow || !bFiltered )
+                    pDoc->ShowRows( i, nFilterEnd, nTab, bShow );
+                i = nFilterEnd;
+            }
         }
     }
 
+    pDoc->DecSizeRecalcLevel( nTab );
     pDoc->UpdatePageBreaks( nTab );
 
     if (bPaint)
@@ -478,6 +488,8 @@ sal_Bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, sal_Bool b
                                         pUndoDoc, pUndoTab, sal_True ) );
         }
 
+        pDoc->IncSizeRecalcLevel( nTab );
+
         //  Spalten
 
         nMin=MAXCOL;
@@ -518,9 +530,17 @@ sal_Bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, sal_Bool b
             }
         }
         for ( i=nMin; i<=nMax; i++ )
-            if ( !pDoc->RowFiltered( i,nTab ) )             // weggefilterte nicht einblenden
-                pDoc->ShowRow( i, nTab, sal_True );
+        {
+            // show several rows together, don't show filtered rows
+            SCROW nFilterEnd = i;
+            bool bFiltered = pDoc->RowFiltered( i, nTab, NULL, &nFilterEnd );
+            nFilterEnd = std::min( nMax, nFilterEnd );
+            if ( !bFiltered )
+                pDoc->ShowRows( i, nFilterEnd, nTab, sal_True );
+            i = nFilterEnd;
+        }
 
+        pDoc->DecSizeRecalcLevel( nTab );
         pDoc->UpdatePageBreaks( nTab );
 
         rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID | PAINT_LEFT | PAINT_TOP );
@@ -590,6 +610,8 @@ sal_Bool ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, sal_Bool b
                                         pUndoDoc, pUndoTab, sal_False ) );
         }
 
+        pDoc->IncSizeRecalcLevel( nTab );
+
         //  Spalten
 
         nCount = pColArray->GetCount(nColLevel);
@@ -616,6 +638,7 @@ sal_Bool ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, sal_Bool b
                 HideOutline( nTab, sal_False, nRowLevel, i, sal_False, sal_False, bApi );
         }
 
+        pDoc->DecSizeRecalcLevel( nTab );
         pDoc->UpdatePageBreaks( nTab );
 
         rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID | PAINT_LEFT | PAINT_TOP );
@@ -671,6 +694,8 @@ sal_Bool ScOutlineDocFunc::ShowOutline( SCTAB nTab, sal_Bool bColumns, sal_uInt1
 
 //! HideCursor();
 
+    pDoc->IncSizeRecalcLevel( nTab );
+
     pEntry->SetHidden(sal_False);
     SCCOLROW i;
     for ( i = nStart; i <= nEnd; i++ )
@@ -678,8 +703,15 @@ sal_Bool ScOutlineDocFunc::ShowOutline( SCTAB nTab, sal_Bool bColumns, sal_uInt1
         if ( bColumns )
             pDoc->ShowCol( static_cast<SCCOL>(i), nTab, sal_True );
         else
-            if ( !pDoc->RowFiltered( i,nTab ) )             // weggefilterte nicht einblenden
-                pDoc->ShowRow( i, nTab, sal_True );
+        {
+            // show several rows together, don't show filtered rows
+            SCROW nFilterEnd = i;
+            bool bFiltered = pDoc->RowFiltered( i, nTab, NULL, &nFilterEnd );
+            nFilterEnd = std::min( nEnd, nFilterEnd );
+            if ( !bFiltered )
+                pDoc->ShowRows( i, nFilterEnd, nTab, sal_True );
+            i = nFilterEnd;
+        }
     }
 
     ScSubOutlineIterator aIter( pArray, nLevel, nEntry );
@@ -689,18 +721,17 @@ sal_Bool ScOutlineDocFunc::ShowOutline( SCTAB nTab, sal_Bool bColumns, sal_uInt1
         {
             SCCOLROW nSubStart = pEntry->GetStart();
             SCCOLROW nSubEnd   = pEntry->GetEnd();
-            for ( i = nSubStart; i <= nSubEnd; i++ )
-            {
-                if ( bColumns )
+            if ( bColumns )
+                for ( i = nSubStart; i <= nSubEnd; i++ )
                     pDoc->ShowCol( static_cast<SCCOL>(i), nTab, sal_False );
-                else
-                    pDoc->ShowRow( i, nTab, sal_False );
-            }
+            else
+                pDoc->ShowRows( nSubStart, nSubEnd, nTab, sal_False );
         }
     }
 
     pArray->SetVisibleBelow( nLevel, nEntry, sal_True, sal_True );
 
+    pDoc->DecSizeRecalcLevel( nTab );
     pDoc->InvalidatePageBreaks(nTab);
     pDoc->UpdatePageBreaks( nTab );
 
@@ -755,18 +786,19 @@ sal_Bool ScOutlineDocFunc::HideOutline( SCTAB nTab, sal_Bool bColumns, sal_uInt1
 
 //! HideCursor();
 
+    pDoc->IncSizeRecalcLevel( nTab );
+
     pEntry->SetHidden(sal_True);
     SCCOLROW i;
-    for ( i = nStart; i <= nEnd; i++ )
-    {
-        if ( bColumns )
+    if ( bColumns )
+        for ( i = nStart; i <= nEnd; i++ )
             pDoc->ShowCol( static_cast<SCCOL>(i), nTab, sal_False );
-        else
-            pDoc->ShowRow( i, nTab, sal_False );
-    }
+    else
+        pDoc->ShowRows( nStart, nEnd, nTab, sal_False );
 
     pArray->SetVisibleBelow( nLevel, nEntry, sal_False );
 
+    pDoc->DecSizeRecalcLevel( nTab );
     pDoc->InvalidatePageBreaks(nTab);
     pDoc->UpdatePageBreaks( nTab );
 

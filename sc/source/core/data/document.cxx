@@ -5308,6 +5308,7 @@ ScRowBreakIterator* ScDocument::GetRowBreakIterator(SCTAB nTab) const
 void ScDocument::EnableUndo( bool bVal )
 {
     GetUndoManager()->EnableUndo(bVal);
+    if( pDrawLayer ) pDrawLayer->EnableUndo(bVal);
     mbUndoEnabled = bVal;
 }
 
