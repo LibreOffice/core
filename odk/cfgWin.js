@@ -2,8 +2,8 @@
 // examples of the Office Development Kit. The script duplicates the template
 // script and inserts the variables into the copied script.
 // The Script was developed for the operating systems Microsoft Windows.
-var regKeyOfficeCurrentUser = "HKEY_CURRENT_USER\\Software\\OpenOffice.org\\UNO\\InstallPath\\";
-var regKeyOfficeLocaleMachine = "HKEY_LOCAL_MACHINE\\Software\\OpenOffice.org\\UNO\\InstallPath\\";
+var regKeyOfficeCurrentUser = "HKEY_CURRENT_USER\\Software\\LibreOffice\\UNO\\InstallPath\\";
+var regKeyOfficeLocaleMachine = "HKEY_LOCAL_MACHINE\\Software\\LibreOffice\\UNO\\InstallPath\\";
 var regKeyDotNetInstallRoot = "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\.NETFramework\\InstallRoot";
 var regKeyDotNet1_1 = "HKLM\\Software\\Microsoft\\.NETFramework\\policy\\v1.1\\4322";
 var sDirDotNet1_1 = "v1.1.4322";
