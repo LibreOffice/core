@@ -256,9 +256,9 @@ void PropagateEvent_Impl( SfxObjectShell *pDoc, rtl::OUString aEventName, const 
             {
                 xEvents->replaceByName( aEventName, aEventData );
             }
-            catch( ::com::sun::star::lang::IllegalArgumentException )
+            catch( const ::com::sun::star::lang::IllegalArgumentException& )
             { DBG_ERRORFILE( "PropagateEvents_Impl: caught IllegalArgumentException" ); }
-            catch( ::com::sun::star::container::NoSuchElementException )
+            catch( const ::com::sun::star::container::NoSuchElementException& )
             { DBG_ERRORFILE( "PropagateEvents_Impl: caught NoSuchElementException" ); }
         }
         else {

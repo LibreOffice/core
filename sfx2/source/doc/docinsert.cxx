@@ -235,7 +235,7 @@ IMPL_LINK( DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, EMPTYARG 
                     }
                 }
             }
-            catch( IllegalArgumentException ){}
+            catch( const IllegalArgumentException& ){}
         }
 
         if ( SFXWB_EXPORT == ( m_nDlgFlags & SFXWB_EXPORT ) )
@@ -247,7 +247,7 @@ IMPL_LINK( DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, EMPTYARG 
                 if ( aValue >>= bSelection )
                     m_pItemSet->Put( SfxBoolItem( SID_SELECTION, bSelection ) );
             }
-            catch( IllegalArgumentException )
+            catch( const IllegalArgumentException& )
             {
                 OSL_FAIL( "FileDialogHelper_Impl::execute: caught an IllegalArgumentException!" );
             }
@@ -268,7 +268,7 @@ IMPL_LINK( DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, EMPTYARG 
                     if ( ( aValue >>= bReadOnly ) && bReadOnly )
                         m_pItemSet->Put( SfxBoolItem( SID_DOC_READONLY, bReadOnly ) );
                 }
-                catch( IllegalArgumentException )
+                catch( const IllegalArgumentException& )
                 {
                     OSL_FAIL( "FileDialogHelper_Impl::execute: caught an IllegalArgumentException!" );
                 }
@@ -286,7 +286,7 @@ IMPL_LINK( DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, EMPTYARG 
                     // open a special version; 0 == current version
                     m_pItemSet->Put( SfxInt16Item( SID_VERSION, (short)nVersion ) );
             }
-            catch( IllegalArgumentException ){}
+            catch( const IllegalArgumentException& ){}
         }
     }
 

@@ -211,7 +211,7 @@ void SvxOpenGraphicDialog::EnableLink( sal_Bool  state  )
         {
             mpImpl->xCtrlAcc->enableControl( ExtendedFilePickerElementIds::CHECKBOX_LINK, state );
         }
-        catch(IllegalArgumentException)
+        catch(const IllegalArgumentException&)
         {
 #ifdef DBG_UTIL
             OSL_FAIL( "Cannot enable \"link\" checkbox" );
@@ -230,7 +230,7 @@ void SvxOpenGraphicDialog::AsLink(sal_Bool  bState)
             Any aAny; aAny <<= bState;
             mpImpl->xCtrlAcc->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, aAny );
         }
-        catch(IllegalArgumentException)
+        catch(const IllegalArgumentException&)
         {
 #ifdef DBG_UTIL
             OSL_FAIL( "Cannot check \"link\" checkbox" );
@@ -251,7 +251,7 @@ sal_Bool SvxOpenGraphicDialog::IsAsLink() const
             return aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_False;
         }
     }
-    catch(IllegalArgumentException)
+    catch(const IllegalArgumentException&)
     {
 #ifdef DBG_UTIL
         OSL_FAIL( "Cannot access \"link\" checkbox" );

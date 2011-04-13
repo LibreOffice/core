@@ -205,7 +205,7 @@ void Copy( const uno::Reference < document::XStandaloneDocumentInfo >& rSource, 
                 // it is possible that the propertysets from XML and binary files differ; we shouldn't break then
                 xTarget->setPropertyValue( pProps[i].Name, aValue );
             }
-            catch ( uno::Exception& ) {}
+            catch ( const uno::Exception& ) {}
         }
 
         sal_Int16 nCount = rSource->getUserFieldCount();
@@ -218,7 +218,7 @@ void Copy( const uno::Reference < document::XStandaloneDocumentInfo >& rSource, 
             rTarget->setUserFieldValue( nInd, aPropVal );
         }
     }
-    catch ( uno::Exception& ) {}
+    catch ( const uno::Exception& ) {}
 }
 
 class MixedPropertySetInfo : public ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertySetInfo >
@@ -401,9 +401,9 @@ void SfxDocumentInfoObject_Impl::Reset(uno::Reference<document::XDocumentPropert
                     xPropContainer->addProperty(name,
                         beans::PropertyAttribute::REMOVEABLE,
                         uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(""))));
-                } catch (uno::RuntimeException) {
+                } catch (const uno::RuntimeException&) {
                     throw;
-                } catch (uno::Exception) {
+                } catch (const uno::Exception&) {
                     // ignore
                 }
             }
@@ -1082,9 +1082,9 @@ sal_Int16 SAL_CALL  SfxDocumentInfoObject::getUserFieldCount() throw( ::com::sun
         try {
             xPropSet->getPropertyValue(name) >>= val;
             return val;
-        } catch (uno::RuntimeException &) {
+        } catch (const uno::RuntimeException &) {
             throw;
-        } catch (uno::Exception &) {
+        } catch (const uno::Exception &) {
             return ::rtl::OUString(); // ignore
         }
     } else
@@ -1115,26 +1115,26 @@ void  SAL_CALL SfxDocumentInfoObject::setUserFieldName(sal_Int16 nIndex, const :
                 xPropContainer->addProperty(aName,
                     beans::PropertyAttribute::REMOVEABLE, value);
                 _pImp->m_UserDefined[nIndex] = aName;
-            } catch (beans::UnknownPropertyException) {
+            } catch (const beans::UnknownPropertyException&) {
                 try {
                     xPropContainer->addProperty(aName,
                         beans::PropertyAttribute::REMOVEABLE,
                         uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(""))));
                     _pImp->m_UserDefined[nIndex] = aName;
-                } catch (beans::PropertyExistException) {
+                } catch (const beans::PropertyExistException&) {
                     _pImp->m_UserDefined[nIndex] = aName;
                     // ignore
                 }
-            } catch (beans::PropertyExistException) {
+            } catch (const beans::PropertyExistException&) {
                 try {
                     xPropContainer->addProperty(name,
                         beans::PropertyAttribute::REMOVEABLE, value);
-                } catch (beans::PropertyExistException) {
+                } catch (const beans::PropertyExistException&) {
                     // bugger...
                 }
-            } catch (uno::RuntimeException &) {
+            } catch (const uno::RuntimeException &) {
                 throw;
-            } catch (uno::Exception &) {
+            } catch (const uno::Exception &) {
                 // ignore everything else; xPropSet _may_ be corrupted
             }
         }
@@ -1162,19 +1162,19 @@ void SAL_CALL  SfxDocumentInfoObject::setUserFieldValue( sal_Int16 nIndex, const
             if (value != aAny) {
                 xPropSet->setPropertyValue(name, aAny);
             }
-        } catch (beans::UnknownPropertyException) {
+        } catch (const beans::UnknownPropertyException&) {
             try {
                 // someone removed it, add it back again
                 xPropContainer->addProperty(name,
                     beans::PropertyAttribute::REMOVEABLE, aAny);
-            } catch (uno::RuntimeException &) {
+            } catch (const uno::RuntimeException &) {
                 throw;
-            } catch (uno::Exception &) {
+            } catch (const uno::Exception &) {
                 // ignore everything else
             }
-        } catch (uno::RuntimeException &) {
+        } catch (const uno::RuntimeException &) {
             throw;
-        } catch (uno::Exception &) {
+        } catch (const uno::Exception &) {
             // ignore everything else
         }
     }
@@ -1293,7 +1293,7 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::loadFromURL(const ::rtl::OUStrin
             _pImp->Reset(_pImp->m_xDocProps);
             bOK = sal_True;
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
         }
     }
@@ -1333,15 +1333,15 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::storeIntoURL(const ::rtl::OUStri
             _pImp->m_xDocProps->storeToStorage(xStorage, medium);
             bOK = sal_True;
         }
-        catch( io::IOException & )
+        catch( const io::IOException & )
         {
             throw;
         }
-        catch( uno::RuntimeException& )
+        catch( const uno::RuntimeException& )
         {
             throw;
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
         }
     }

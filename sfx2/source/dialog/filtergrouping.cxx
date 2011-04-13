@@ -972,7 +972,7 @@ namespace sfx2
             if ( !_rFirstNonEmpty.getLength() )
                 _rFirstNonEmpty = sUIName;
         }
-        catch( IllegalArgumentException )
+        catch( const IllegalArgumentException& )
         {
 #ifdef DBG_UTIL
             ByteString aMsg( "Could not append DefaultFilter" );
@@ -996,7 +996,7 @@ namespace sfx2
                 if ( !_rFirstNonEmpty.getLength() )
                     _rFirstNonEmpty = sUIName;
             }
-            catch( IllegalArgumentException )
+            catch( const IllegalArgumentException& )
             {
     #ifdef DBG_UTIL
                 ByteString aMsg( "Could not append Filter" );
@@ -1108,7 +1108,7 @@ namespace sfx2
                 {
                     xFilterGroupManager->appendFilterGroup( ::rtl::OUString(), aFilters );
                 }
-                catch( IllegalArgumentException )
+                catch( const IllegalArgumentException& )
                 {
                 }
             }
@@ -1128,7 +1128,7 @@ namespace sfx2
                 {
                     xFilterGroupManager->appendFilterGroup( ::rtl::OUString(), aFilters );
                 }
-                catch( IllegalArgumentException )
+                catch( const IllegalArgumentException& )
                 {
                 }
             }
@@ -1150,7 +1150,7 @@ namespace sfx2
                         _rFirstNonEmpty = sUIName;
 
                 }
-                catch( IllegalArgumentException )
+                catch( const IllegalArgumentException& )
                 {
         #ifdef DBG_UTIL
                     ByteString aMsg( "Could not append Filter" );
@@ -1172,7 +1172,7 @@ namespace sfx2
                         _rFirstNonEmpty = sUIName;
 
                 }
-                catch( IllegalArgumentException )
+                catch( const IllegalArgumentException& )
                 {
         #ifdef DBG_UTIL
                     ByteString aMsg( "Could not append Filter" );

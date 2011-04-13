@@ -840,7 +840,7 @@ void SfxVirtualMenu::InsertAddOnsMenuItem( Menu* pMenu )
     {
         pAddonMenu = framework::AddonMenuManager::CreateAddonMenu( xFrame );
     }
-    catch ( ::com::sun::star::lang::WrappedTargetException )
+    catch ( const ::com::sun::star::lang::WrappedTargetException& )
     {
     }
 

@@ -416,7 +416,7 @@ void SfxMedium::AddLog( const ::rtl::OUString& aMessage )
             if ( aContext.is() )
                 pImp->m_xLogRing.set( aContext.getSingleton( "com.sun.star.logging.DocumentIOLogRing" ), UNO_QUERY_THROW );
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {}
     }
 
@@ -475,7 +475,7 @@ void SfxMedium::CheckFileDate( const util::DateTime& aInitDate )
                     SetError( ERRCODE_ABORT, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
                 }
             }
-            catch ( uno::Exception& )
+            catch ( const uno::Exception& )
             {}
         }
     }
@@ -500,7 +500,7 @@ util::DateTime SfxMedium::GetInitFileDate( sal_Bool bIgnoreOldValue )
             aContent.getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DateModified" )) ) >>= pImp->m_aDateTime;
             pImp->m_bGotDateTime = sal_True;
         }
-        catch ( ::com::sun::star::uno::Exception& )
+        catch ( const ::com::sun::star::uno::Exception& )
         {
         }
     }
@@ -526,7 +526,7 @@ Reference < XContent > SfxMedium::GetContent() const
             {
                 pImp->aContent = ::ucbhelper::Content( xContent, xEnv );
             }
-            catch ( Exception& )
+            catch ( const Exception& )
             {
             }
         }
@@ -560,7 +560,7 @@ Reference < XContent > SfxMedium::GetContent() const
             Any aAny = pImp->aContent.getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BaseURI" )) );
             aAny >>= aBaseURL;
         }
-        catch ( ::com::sun::star::uno::Exception& )
+        catch ( const ::com::sun::star::uno::Exception& )
         {
         }
 
@@ -890,7 +890,7 @@ void SfxMedium::SetEncryptionDataToStorage_Impl()
             {
                 ::comphelper::OStorageHelper::SetCommonStorageEncryptionData( pImp->xStorage, aEncryptionData );
             }
-            catch( uno::Exception& )
+            catch( const uno::Exception& )
             {
                 OSL_FAIL( "It must be possible to set a common password for the storage" );
                 // TODO/LATER: set the error code in case of problem
@@ -1067,7 +1067,7 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
                     ::ucbhelper::Content aContent( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv );
                     aContent.getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsReadOnly" ) ) ) >>= bContentReadonly;
                 }
-                catch( uno::Exception )
+                catch( const uno::Exception& )
                 {}
 
 #if EXTRA_ACL_CHECK
@@ -1120,7 +1120,7 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
                                 {
                                     bResult = aLockFile.CreateOwnLockFile();
                                 }
-                                catch ( ucb::InteractiveIOException& e )
+                                catch ( const ucb::InteractiveIOException& e )
                                 {
                                     // exception means that the lock file can not be successfuly accessed
                                     // in this case it should be ignored if system file locking is anyway active
@@ -1152,7 +1152,7 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
                                         }
                                     }
                                 }
-                                catch ( uno::Exception& )
+                                catch ( const uno::Exception& )
                                 {
                                     // exception means that the lock file can not be successfuly accessed
                                     // in this case it should be ignored if system file locking is anyway active
@@ -1183,7 +1183,9 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
                                     // impossibility to get data is no real problem
                                     aData = aLockFile.GetLockData();
                                 }
-                                catch( uno::Exception ) {}
+                                catch( const uno::Exception& )
+                                {
+                                }
 
                                 sal_Bool bOwnLock = sal_False;
 
@@ -1216,7 +1218,7 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
                                 bHandleSysLocked = sal_False;
                             }
                         }
-                        catch( uno::Exception& )
+                        catch( const uno::Exception& )
                         {
                         }
                     } while( !bResult && bUIStatus == LOCK_UI_TRY );
@@ -1247,7 +1249,7 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
         if ( bResult && DocNeedsFileDateCheck() )
             GetInitFileDate( sal_True );
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
         OSL_FAIL( "Unexpected problem by locking, high probability, that the content could not be created" );
     }
@@ -1328,7 +1330,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( sal_Bool bCreateTempIf
                             ::comphelper::OStorageHelper::GetStorageFactory()->createInstanceWithArguments( aArgs ),
                             uno::UNO_QUERY );
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
         // impossibility to create the storage is no error
     }
@@ -1441,7 +1443,7 @@ uno::Reference< embed::XStorage > SfxMedium::GetZipStorageToSign_Impl( sal_Bool 
                 pImp->m_xZipStorage = ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream( ZIP_STORAGE_FORMAT_STRING, pImp->xInputStream );
             }
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
             OSL_FAIL( "No possibility to get readonly version of storage from medium!\n" );
         }
@@ -1460,7 +1462,7 @@ void SfxMedium::CloseZipStorage_Impl()
     {
         try {
             pImp->m_xZipStorage->dispose();
-        } catch( uno::Exception& )
+        } catch( const uno::Exception& )
         {}
 
         pImp->m_xZipStorage = uno::Reference< embed::XStorage >();
@@ -1478,7 +1480,7 @@ void SfxMedium::CloseStorage()
         {
             try {
                 xComp->dispose();
-            } catch( uno::Exception& )
+            } catch( const uno::Exception& )
             {
                 OSL_FAIL( "Medium's storage is already disposed!\n" );
             }
@@ -1536,7 +1538,7 @@ sal_Bool SfxMedium::UseBackupToRestore_Impl( ::ucbhelper::Content& aOriginalCont
         aOriginalContent.writeStream( aOrigInput, sal_True );
         return sal_True;
     }
-    catch( Exception& )
+    catch( const Exception& )
     {
         // in case of failure here the backup file should not be removed
         // TODO/LATER: a message should be used to let user know about the backup
@@ -1568,7 +1570,7 @@ sal_Bool SfxMedium::StorageCommit_Impl()
                     CloseZipStorage_Impl();
                     bResult = sal_True;
                 }
-                catch ( embed::UseBackupException& aBackupExc )
+                catch ( const embed::UseBackupException& aBackupExc )
                 {
                     // since the temporary file is created always now, the scenario is close to be impossible
                     if ( !pImp->pTempFile )
@@ -1595,7 +1597,7 @@ sal_Bool SfxMedium::StorageCommit_Impl()
                             SetError( ERRCODE_IO_GENERAL, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
                     }
                 }
-                catch ( uno::Exception& )
+                catch ( const uno::Exception& )
                 {
                     //TODO/LATER: improve error handling
                     SetError( ERRCODE_IO_GENERAL, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
@@ -1621,11 +1623,11 @@ sal_Bool SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
     {
         aOriginalContent = ::ucbhelper::Content( aDest.GetMainURL( INetURLObject::NO_DECODE ), xComEnv );
     }
-    catch ( ::com::sun::star::ucb::CommandAbortedException& )
+    catch ( const ::com::sun::star::ucb::CommandAbortedException& )
     {
         eError = ERRCODE_ABORT;
     }
-    catch ( ::com::sun::star::ucb::CommandFailedException& )
+    catch ( const ::com::sun::star::ucb::CommandFailedException& )
     {
         eError = ERRCODE_ABORT;
     }
@@ -1689,15 +1691,15 @@ sal_Bool SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
                     bResult = sal_True;
                 }
             }
-            catch ( ::com::sun::star::ucb::CommandAbortedException& )
+            catch ( const ::com::sun::star::ucb::CommandAbortedException& )
             {
                 eError = ERRCODE_ABORT;
             }
-            catch ( ::com::sun::star::ucb::CommandFailedException& )
+            catch ( const ::com::sun::star::ucb::CommandFailedException& )
             {
                 eError = ERRCODE_ABORT;
             }
-            catch ( ::com::sun::star::ucb::InteractiveIOException& r )
+            catch ( const ::com::sun::star::ucb::InteractiveIOException& r )
             {
                 if ( r.Code == IOErrorCode_ACCESS_DENIED )
                     eError = ERRCODE_IO_ACCESSDENIED;
@@ -1708,7 +1710,7 @@ sal_Bool SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
                 else
                     eError = ERRCODE_IO_GENERAL;
             }
-            catch ( ::com::sun::star::uno::Exception& )
+            catch ( const ::com::sun::star::uno::Exception& )
             {
                 eError = ERRCODE_IO_GENERAL;
             }
@@ -1793,7 +1795,7 @@ sal_Bool SfxMedium::TryDirectTransfer( const ::rtl::OUString& aURL, SfxItemSet& 
 
                     return sal_True;
                 }
-                catch( uno::Exception& )
+                catch( const uno::Exception& )
                 {}
             }
         }
@@ -1868,7 +1870,7 @@ void SfxMedium::Transfer_Impl()
                             pImp->pTempFile = NULL;
                         }
                     }
-                    catch( Exception& )
+                    catch( const Exception& )
                     {}
                 }
                }
@@ -1916,7 +1918,7 @@ void SfxMedium::Transfer_Impl()
                     xTrans->commit();
 
             }
-            catch ( uno::Exception& )
+            catch ( const uno::Exception& )
             {
                 //TODO/MBA: error handling
             }
@@ -2000,15 +2002,15 @@ void SfxMedium::Transfer_Impl()
                     if (!aTransferContent.transferContent( aSourceContent, ::ucbhelper::InsertOperation_COPY, aFileName, nNameClash ))
                         eError = ERRCODE_IO_GENERAL;
                 }
-                catch ( ::com::sun::star::ucb::CommandAbortedException& )
+                catch ( const ::com::sun::star::ucb::CommandAbortedException& )
                 {
                     eError = ERRCODE_ABORT;
                 }
-                catch ( ::com::sun::star::ucb::CommandFailedException& )
+                catch ( const ::com::sun::star::ucb::CommandFailedException& )
                 {
                     eError = ERRCODE_ABORT;
                 }
-                catch ( ::com::sun::star::ucb::InteractiveIOException& r )
+                catch ( const ::com::sun::star::ucb::InteractiveIOException& r )
                 {
                     if ( r.Code == IOErrorCode_ACCESS_DENIED )
                         eError = ERRCODE_IO_ACCESSDENIED;
@@ -2019,7 +2021,7 @@ void SfxMedium::Transfer_Impl()
                     else
                         eError = ERRCODE_IO_GENERAL;
                 }
-                catch ( ::com::sun::star::uno::Exception& )
+                catch ( const ::com::sun::star::uno::Exception& )
                 {
                     eError = ERRCODE_IO_GENERAL;
                 }
@@ -2070,7 +2072,7 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalCont
                 pImp->m_bRemoveBackup = sal_True;
             }
         }
-        catch( Exception& )
+        catch( const Exception& )
         {}
     }
 
@@ -2157,7 +2159,7 @@ void SfxMedium::DoBackup_Impl()
                         pImp->m_bRemoveBackup = sal_False;
                     }
                 }
-                catch ( ::com::sun::star::uno::Exception& )
+                catch ( const ::com::sun::star::uno::Exception& )
                 {
                 }
             }
@@ -2682,7 +2684,7 @@ void SfxMedium::UnlockFile( sal_Bool bReleaseLockStream )
                 if ( xOutStream.is() )
                     xOutStream->closeOutput();
             }
-            catch( uno::Exception& )
+            catch( const uno::Exception& )
             {}
         }
 
@@ -2698,7 +2700,7 @@ void SfxMedium::UnlockFile( sal_Bool bReleaseLockStream )
             // TODO/LATER: A warning could be shown in case the file is not the own one
             aLockFile.RemoveFile();
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {}
     }
 }
@@ -2731,7 +2733,7 @@ void SfxMedium::CloseAndReleaseStreams_Impl()
             if ( xOutToClose.is() )
                 xOutToClose->closeOutput();
         }
-        catch ( uno::Exception& )
+        catch ( const uno::Exception& )
         {
         }
     }
@@ -3127,7 +3129,7 @@ SvKeyValueIterator* SfxMedium::GetHeaderAttributes_Impl()
 
                 pImp->xAttributes->Append( SvKeyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("content-type")), aContentType ) );
             }
-            catch ( ::com::sun::star::uno::Exception& )
+            catch ( const ::com::sun::star::uno::Exception& )
             {
             }
         }
@@ -3168,7 +3170,7 @@ const uno::Sequence < util::RevisionTag >& SfxMedium::GetVersionList( bool _bNoR
             {
                 pImp->aVersions = xReader->load( GetStorage() );
             }
-            catch ( uno::Exception& )
+            catch ( const uno::Exception& )
             {
             }
         }
@@ -3190,7 +3192,7 @@ uno::Sequence < util::RevisionTag > SfxMedium::GetVersionList( const uno::Refere
         {
             return xReader->load( xStorage );
         }
-        catch ( uno::Exception& )
+        catch ( const uno::Exception& )
         {
         }
     }
@@ -3279,7 +3281,7 @@ sal_Bool SfxMedium::SaveVersionList_Impl( sal_Bool /*bUseXML*/ )
                 xWriter->store( GetStorage(), pImp->aVersions );
                 return sal_True;
             }
-            catch ( uno::Exception& )
+            catch ( const uno::Exception& )
             {
             }
         }
@@ -3392,7 +3394,7 @@ void SfxMedium::CreateTempFile( sal_Bool bReplace )
                     }
                 }
             }
-            catch( uno::Exception& )
+            catch( const uno::Exception& )
             {}
 
             if ( bTransferSuccess )
@@ -3492,7 +3494,7 @@ void SfxMedium::CreateTempFileNoCopy()
                         pImp->aCharset = pCharset->m_sValue;
                 }
             }
-            catch ( ::com::sun::star::uno::Exception& )
+            catch ( const ::com::sun::star::uno::Exception& )
             {
             }
         }
@@ -3595,7 +3597,7 @@ sal_Bool SfxMedium::SignContents_Impl( sal_Bool bScriptingContent, const ::rtl::
                         }
                     }
                 }
-                catch ( uno::Exception& )
+                catch ( const uno::Exception& )
                 {
                     OSL_FAIL( "Couldn't use signing functionality!\n" );
                 }
@@ -3611,7 +3613,7 @@ sal_Bool SfxMedium::SignContents_Impl( sal_Bool bScriptingContent, const ::rtl::
                     else
                         xSigner->showDocumentContentSignatures( GetZipStorageToSign_Impl(), uno::Reference< io::XInputStream >() );
                 }
-                catch( uno::Exception& )
+                catch( const uno::Exception& )
                 {
                     OSL_FAIL( "Couldn't use signing functionality!\n" );
                 }
@@ -3679,7 +3681,7 @@ sal_Bool SfxMedium::IsOpen() const
                         aResult = aNewTempFileURL;
                     }
                 }
-                catch( uno::Exception& )
+                catch( const uno::Exception& )
                 {}
             }
         }
@@ -3766,7 +3768,7 @@ sal_Bool SfxMedium::CallApproveHandler( const uno::Reference< task::XInteraction
                         pImp->xStorage = xStorage;
                         aResult = aNewURL;
                     }
-                    catch( uno::Exception& )
+                    catch( const uno::Exception& )
                     {}
                 }
 
@@ -3828,7 +3830,7 @@ sal_Bool SfxMedium::SwitchDocumentToFile( ::rtl::OUString aURL )
                     pImp->xStorage = xStorage;
                     bResult = sal_True;
                 }
-                catch( uno::Exception& )
+                catch( const uno::Exception& )
                 {}
             }
 
