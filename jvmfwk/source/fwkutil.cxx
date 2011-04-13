@@ -330,7 +330,7 @@ jfw::FileStatus checkFileURL(const rtl::OUString & sURL)
     File::RC rc_item = DirectoryItem::get(sURL, item);
     if (File::E_None == rc_item)
     {
-        osl::FileStatus status(FileStatusMask_Validate);
+        osl::FileStatus status(osl_FileStatus_Mask_Validate);
 
         File::RC rc_stat = item.getFileStatus(status);
         if (File::E_None == rc_stat)

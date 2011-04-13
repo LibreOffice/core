@@ -831,9 +831,9 @@ OUString resolveDirPath(const OUString & path)
     DirectoryItem item;
     if (DirectoryItem::get(sResolved, item) == File::E_None)
     {
-        FileStatus status(FileStatusMask_Type |
-                          FileStatusMask_LinkTargetURL |
-                          FileStatusMask_FileURL);
+        FileStatus status(osl_FileStatus_Mask_Type |
+                          osl_FileStatus_Mask_LinkTargetURL |
+                          osl_FileStatus_Mask_FileURL);
 
         if (item.getFileStatus(status) == File::E_None
             && status.getFileType() == FileStatus::Directory)
@@ -865,9 +865,9 @@ OUString resolveFilePath(const OUString & path)
     DirectoryItem item;
     if (DirectoryItem::get(sResolved, item) == File::E_None)
     {
-        FileStatus status(FileStatusMask_Type |
-                          FileStatusMask_LinkTargetURL |
-                          FileStatusMask_FileURL);
+        FileStatus status(osl_FileStatus_Mask_Type |
+                          osl_FileStatus_Mask_LinkTargetURL |
+                          osl_FileStatus_Mask_FileURL);
         if (item.getFileStatus(status) == File::E_None
             && status.getFileType() == FileStatus::Regular)
         {
@@ -1157,7 +1157,7 @@ bool makeDriveLetterSame(OUString * fileURL)
     DirectoryItem item;
     if (DirectoryItem::get(*fileURL, item) == File::E_None)
     {
-        FileStatus status(FileStatusMask_FileURL);
+        FileStatus status(osl_FileStatus_Mask_FileURL);
         if (item.getFileStatus(status) == File::E_None)
         {
             *fileURL = status.getFileURL();
@@ -1246,7 +1246,7 @@ void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
                     File::RC errNext = File::E_None;
                     while( (errNext = aCollectionDir.getNextItem(curIt)) == File::E_None)
                     {
-                        FileStatus aStatus(FileStatusMask_FileURL);
+                        FileStatus aStatus(osl_FileStatus_Mask_FileURL);
                         File::RC errStatus = File::E_None;
                         if ((errStatus = curIt.getFileStatus(aStatus)) != File::E_None)
                         {

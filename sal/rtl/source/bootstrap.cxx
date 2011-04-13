@@ -353,7 +353,7 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
 {
     OUString base_ini( getIniFileName_Impl() );
     // normalize path
-    FileStatus status( FileStatusMask_FileURL );
+    FileStatus status( osl_FileStatus_Mask_FileURL );
     DirectoryItem dirItem;
     if (DirectoryItem::E_None == DirectoryItem::get( base_ini, dirItem ) &&
         DirectoryItem::E_None == dirItem.getFileStatus( status ))
@@ -645,7 +645,7 @@ rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open (
     OUString iniName( pIniName );
 
     // normalize path
-    FileStatus status( FileStatusMask_FileURL );
+    FileStatus status( osl_FileStatus_Mask_FileURL );
     DirectoryItem dirItem;
     if (DirectoryItem::E_None != DirectoryItem::get( iniName, dirItem ) ||
         DirectoryItem::E_None != dirItem.getFileStatus( status ))

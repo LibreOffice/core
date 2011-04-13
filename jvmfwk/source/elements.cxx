@@ -750,9 +750,9 @@ jfw::FileStatus NodeJava::checkSettingsFileStatus() const
     if (File::E_None == rc)
     {
         ::osl::FileStatus stat(
-            FileStatusMask_Validate
-            | FileStatusMask_CreationTime
-            | FileStatusMask_ModifyTime);
+            osl_FileStatus_Mask_Validate
+            | osl_FileStatus_Mask_CreationTime
+            | osl_FileStatus_Mask_ModifyTime);
         File::RC rc_stat = item.getFileStatus(stat);
         if (File::E_None == rc_stat)
         {

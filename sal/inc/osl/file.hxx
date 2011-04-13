@@ -677,18 +677,6 @@ public:
 
 // -----------------------------------------------------------------------------
 
-#define FileStatusMask_Type             osl_FileStatus_Mask_Type
-#define FileStatusMask_Attributes       osl_FileStatus_Mask_Attributes
-#define FileStatusMask_CreationTime     osl_FileStatus_Mask_CreationTime
-#define FileStatusMask_AccessTime       osl_FileStatus_Mask_AccessTime
-#define FileStatusMask_ModifyTime       osl_FileStatus_Mask_ModifyTime
-#define FileStatusMask_FileSize         osl_FileStatus_Mask_FileSize
-#define FileStatusMask_FileName         osl_FileStatus_Mask_FileName
-#define FileStatusMask_FileURL          osl_FileStatus_Mask_FileURL
-#define FileStatusMask_LinkTargetURL    osl_FileStatus_Mask_LinkTargetURL
-#define FileStatusMask_All              osl_FileStatus_Mask_All
-#define FileStatusMask_Validate         osl_FileStatus_Mask_Validate
-
 #define Attribute_ReadOnly     osl_File_Attribute_ReadOnly
 #define Attribute_Hidden       osl_File_Attribute_Hidden
 #define Attribute_Executable   osl_File_Attribute_Executable
@@ -783,7 +771,7 @@ public:
     */
     inline Type getFileType() const
     {
-        return (_aStatus.uValidFields & FileStatusMask_Type) ?  (Type) _aStatus.eType : Unknown;
+        return (_aStatus.uValidFields & osl_FileStatus_Mask_Type) ?  (Type) _aStatus.eType : Unknown;
     }
 
     /** Get the file attributes.

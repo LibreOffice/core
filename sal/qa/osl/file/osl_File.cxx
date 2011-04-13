@@ -2424,7 +2424,7 @@ namespace osl_FileStatus
         // test code.
         void ctors_001( )
         {
-             ::osl::FileStatus   rFileStatus( FileStatusMask_All );
+             ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_All );
             nError1 = rItem.getFileStatus( rFileStatus );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             aUStr = rFileStatus.getFileName( );
@@ -2504,35 +2504,35 @@ namespace osl_FileStatus
         void check_FileStatus(::osl::FileStatus const& _aStatus)
             {
                 rtl::OString sStat;
-                if (_aStatus.isValid(FileStatusMask_Type))
+                if (_aStatus.isValid(osl_FileStatus_Mask_Type))
                 {
                     sStat += "type ";
                 }
-                if (_aStatus.isValid(FileStatusMask_Attributes))
+                if (_aStatus.isValid(osl_FileStatus_Mask_Attributes))
                 {
                     sStat += "attributes ";
                 }
-                if (_aStatus.isValid(FileStatusMask_CreationTime))
+                if (_aStatus.isValid(osl_FileStatus_Mask_CreationTime))
                 {
                     sStat += "ctime ";
                 }
-                if (_aStatus.isValid(FileStatusMask_AccessTime))
+                if (_aStatus.isValid(osl_FileStatus_Mask_AccessTime))
                 {
                     sStat += "atime ";
                 }
-                if (_aStatus.isValid(FileStatusMask_ModifyTime))
+                if (_aStatus.isValid(osl_FileStatus_Mask_ModifyTime))
                 {
                     sStat += "mtime ";
                 }
-                if (_aStatus.isValid(FileStatusMask_FileSize))
+                if (_aStatus.isValid(osl_FileStatus_Mask_FileSize))
                 {
                     sStat += "filesize ";
                 }
-                if (_aStatus.isValid(FileStatusMask_FileName))
+                if (_aStatus.isValid(osl_FileStatus_Mask_FileName))
                 {
                     sStat += "filename ";
                 }
-                if (_aStatus.isValid(FileStatusMask_FileURL))
+                if (_aStatus.isValid(osl_FileStatus_Mask_FileURL))
                 {
                     sStat += "fileurl ";
                 }
@@ -2542,10 +2542,10 @@ namespace osl_FileStatus
         void isValid_002( )
         {
             createTestFile( aTmpName6 );
-            sal_uInt32 mask_file = ( FileStatusMask_Type | FileStatusMask_Attributes |
-                                   FileStatusMask_CreationTime | FileStatusMask_AccessTime |
-                                   FileStatusMask_ModifyTime   | FileStatusMask_FileSize   |
-                                   FileStatusMask_FileName     | FileStatusMask_FileURL) ;
+            sal_uInt32 mask_file = ( osl_FileStatus_Mask_Type | osl_FileStatus_Mask_Attributes |
+                                   osl_FileStatus_Mask_CreationTime | osl_FileStatus_Mask_AccessTime |
+                                   osl_FileStatus_Mask_ModifyTime   | osl_FileStatus_Mask_FileSize   |
+                                   osl_FileStatus_Mask_FileName     | osl_FileStatus_Mask_FileURL) ;
              ::osl::FileStatus   rFileStatus( mask_file );
                 ::osl::FileBase::RC nError1 = ::osl::DirectoryItem::get( aTmpName6, rItem_file );
             nError1 = rItem_file.getFileStatus( rFileStatus );
@@ -2561,7 +2561,7 @@ namespace osl_FileStatus
                 check_FileStatus(rFileStatus);
             deleteTestFile( aTmpName6 );
 
-                // CPPUNIT_ASSERT_MESSAGE( "test for isValid function: regular file mask fields test, #FileStatusMask_CreationTime# should be valid field for regular file, but feedback is invalid",
+                // CPPUNIT_ASSERT_MESSAGE( "test for isValid function: regular file mask fields test, #osl_FileStatus_Mask_CreationTime# should be valid field for regular file, but feedback is invalid",
                 //                      ( sal_True == bOk ) );
         }
 
@@ -2597,13 +2597,13 @@ namespace osl_FileStatus
             while (1) {
                 nError1 = testDirectory.getNextItem( rItem_link, 4 );
                 if (::osl::FileBase::E_None == nError1) {
-                    sal_uInt32 mask_link = FileStatusMask_FileName | FileStatusMask_LinkTargetURL;
+                    sal_uInt32 mask_link = osl_FileStatus_Mask_FileName | osl_FileStatus_Mask_LinkTargetURL;
                     ::osl::FileStatus   rFileStatus( mask_link );
                     rItem_link.getFileStatus( rFileStatus );
                     if ( compareFileName( rFileStatus.getFileName( ), aFileName) == sal_True )
                     {
                         //printf("find the link file");
-                        if ( sal_True == rFileStatus.isValid( FileStatusMask_LinkTargetURL ) )
+                        if ( sal_True == rFileStatus.isValid( osl_FileStatus_Mask_LinkTargetURL ) )
                         {
                             bOk = sal_True;
                             break;
@@ -2624,7 +2624,7 @@ namespace osl_FileStatus
 
         void isValid_004( )
         {
-            sal_uInt32 mask_file_all = FileStatusMask_All;
+            sal_uInt32 mask_file_all = osl_FileStatus_Mask_All;
              ::osl::FileStatus   rFileStatus_all( mask_file_all );
                 ::osl::FileBase::RC nError1 = rItem_file.getFileStatus( rFileStatus_all );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
@@ -2633,7 +2633,7 @@ namespace osl_FileStatus
 // LLA: this is wrong
 //          sal_Bool bOk1 = rFileStatus_all.isValid( mask_file_all );
 
-            sal_uInt32 mask_file_val = FileStatusMask_Validate;
+            sal_uInt32 mask_file_val = osl_FileStatus_Mask_Validate;
              ::osl::FileStatus   rFileStatus_val( mask_file_val );
             nError1 = rItem_file.getFileStatus( rFileStatus_val );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
@@ -2705,7 +2705,7 @@ namespace osl_FileStatus
         // test code.
         void getFileType_001( )
         {
-             ::osl::FileStatus   rFileStatus( FileStatusMask_Type | FileStatusMask_FileName );
+             ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName );
             nError1 = m_aItem_1.getFileStatus( rFileStatus );
             CPPUNIT_ASSERT_MESSAGE("getFileStatus failed", ::osl::FileBase::E_None == nError1 );
 
@@ -2715,11 +2715,11 @@ namespace osl_FileStatus
         void check_FileType(osl::FileStatus const& _rFileStatus )
         {
             sal_Bool bOK = sal_False;
-                if ( _rFileStatus.isValid(FileStatusMask_FileName))
+                if ( _rFileStatus.isValid(osl_FileStatus_Mask_FileName))
                 {
                     rtl::OUString suFilename = _rFileStatus.getFileName();
 
-                    if ( _rFileStatus.isValid(FileStatusMask_Type))
+                    if ( _rFileStatus.isValid(osl_FileStatus_Mask_Type))
                     {
                         osl::FileStatus::Type eType = _rFileStatus.getFileType( );
 
@@ -2743,7 +2743,7 @@ namespace osl_FileStatus
 
         void getFileType_002( )
         {
-             ::osl::FileStatus   rFileStatus( FileStatusMask_Type | FileStatusMask_FileName );
+             ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName );
                 nError1 = m_aItem_2.getFileStatus( rFileStatus );
 
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
@@ -2767,12 +2767,12 @@ namespace osl_FileStatus
 // LLA:             CPPUNIT_ASSERT_MESSAGE("get Socket type file failed", ::osl::FileBase::E_None == nError1 );
 // LLA:
 // LLA:             //check for File type
-// LLA:             ::osl::FileStatus   rFileStatus( FileStatusMask_Type );
+// LLA:             ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_Type );
 // LLA:
 // LLA:             nError1 = m_aSocketItem.getFileStatus( rFileStatus );
 // LLA:             CPPUNIT_ASSERT_MESSAGE("getFileStatus failed", ::osl::FileBase::E_None == nError1 );
 // LLA:
-// LLA:             if (rFileStatus.isValid( FileStatusMask_Type ))
+// LLA:             if (rFileStatus.isValid( osl_FileStatus_Mask_Type ))
 // LLA:             {
 // LLA:                 osl::FileStatus::Type eType = rFileStatus.getFileType( );
 // LLA:                 printFileType(eType);
@@ -2791,7 +2791,7 @@ namespace osl_FileStatus
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
             //check for File type
-             ::osl::FileStatus   rFileStatus( FileStatusMask_Type );
+             ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_Type );
   nError1 = m_aLinkItem.getFileStatus( rFileStatus );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
@@ -2807,11 +2807,11 @@ namespace osl_FileStatus
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
             //check for File type
-             ::osl::FileStatus   rFileStatus( FileStatusMask_Type );
+             ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_Type );
             nError1 = m_aSpecialItem.getFileStatus( rFileStatus );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
-            if (rFileStatus.isValid(FileStatusMask_Type))
+            if (rFileStatus.isValid(osl_FileStatus_Mask_Type))
             {
                 osl::FileStatus::Type eType = rFileStatus.getFileType( );
 
@@ -2872,7 +2872,7 @@ namespace osl_FileStatus
         {
             changeFileMode( aTypeURL, S_IRUSR | S_IRGRP | S_IROTH );
 
-              ::osl::FileStatus   rFileStatus( FileStatusMask_Attributes );
+              ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_Attributes );
             nError = rItem.getFileStatus( rFileStatus );
             CPPUNIT_ASSERT( nError == FileBase::E_None );
 
@@ -2894,7 +2894,7 @@ namespace osl_FileStatus
 #if ( defined UNX )
             changeFileMode( aTypeURL, S_IXUSR | S_IXGRP | S_IXOTH );
 
-              ::osl::FileStatus   rFileStatus( FileStatusMask_Attributes );
+              ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_Attributes );
             nError = rItem.getFileStatus( rFileStatus );
             CPPUNIT_ASSERT( nError == FileBase::E_None );
 
@@ -2910,7 +2910,7 @@ namespace osl_FileStatus
         {
             changeFileMode( aTypeURL, S_IWUSR | S_IWGRP | S_IWOTH );
 
-              ::osl::FileStatus   rFileStatus( FileStatusMask_Attributes );
+              ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_Attributes );
             nError = rItem.getFileStatus( rFileStatus );
             CPPUNIT_ASSERT( nError == FileBase::E_None );
 
@@ -2930,7 +2930,7 @@ namespace osl_FileStatus
         void getAttributes_004( )
         {
             sal_Int32 test_Attributes = Attribute_Hidden;
-              ::osl::FileStatus   rFileStatus( FileStatusMask_Attributes );
+              ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_Attributes );
             nError = rItem_hidden.getFileStatus( rFileStatus );
             CPPUNIT_ASSERT( nError == FileBase::E_None );
             test_Attributes &= rFileStatus.getAttributes( );
@@ -2944,7 +2944,7 @@ namespace osl_FileStatus
             ::rtl::OUString aUserHiddenFileURL (RTL_CONSTASCII_USTRINGPARAM("file:///c:/AUTOEXEC.BAT"));
             nError = ::osl::DirectoryItem::get( aUserHiddenFileURL, rItem_hidden );
             CPPUNIT_ASSERT_MESSAGE("get item fail", nError == FileBase::E_None );
-              ::osl::FileStatus   rFileStatus( FileStatusMask_Attributes );
+              ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_Attributes );
             nError = rItem_hidden.getFileStatus( rFileStatus );
             CPPUNIT_ASSERT( nError == FileBase::E_None );
 
@@ -2996,7 +2996,7 @@ namespace osl_FileStatus
             TimeValue *pTV_access = NULL;
             CPPUNIT_ASSERT( ( pTV_access = ( TimeValue* )malloc( sizeof( TimeValue ) ) ) != NULL );
 
-              ::osl::FileStatus   rFileStatus( FileStatusMask_AccessTime );
+              ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_AccessTime );
             nError = rItem.getFileStatus( rFileStatus );
             sal_Bool bOk = osl_getSystemTime( pTV_current );
             CPPUNIT_ASSERT( sal_True == bOk && nError == FileBase::E_None );
@@ -3046,7 +3046,7 @@ namespace osl_FileStatus
             //get instance item and filestatus
             nError = ::osl::DirectoryItem::get( aTypeURL, rItem );
             CPPUNIT_ASSERT( nError == FileBase::E_None );
-            ::osl::FileStatus   rFileStatus( FileStatusMask_ModifyTime );
+            ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_ModifyTime );
             nError = rItem.getFileStatus( rFileStatus );
             CPPUNIT_ASSERT( nError == FileBase::E_None );
 
@@ -3099,7 +3099,7 @@ namespace osl_FileStatus
         // test code.
         void getFileSize_001( )
         {
-              ::osl::FileStatus   rFileStatus( FileStatusMask_FileSize );
+              ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_FileSize );
             nError = rItem.getFileStatus( rFileStatus );
             CPPUNIT_ASSERT( nError == FileBase::E_None );
 
@@ -3119,7 +3119,7 @@ namespace osl_FileStatus
 
             nError = ::osl::DirectoryItem::get( aTypeURL, rItem );
             CPPUNIT_ASSERT( nError == FileBase::E_None );
-              ::osl::FileStatus   rFileStatus( FileStatusMask_FileSize );
+              ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_FileSize );
             nError = rItem.getFileStatus( rFileStatus );
             CPPUNIT_ASSERT( nError == FileBase::E_None );
             sal_uInt64 uFileSize = rFileStatus.getFileSize( );
@@ -3162,7 +3162,7 @@ namespace osl_FileStatus
         // test code.
         void getFileName_001( )
         {
-              ::osl::FileStatus   rFileStatus( FileStatusMask_FileName );
+              ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_FileName );
             nError = rItem.getFileStatus( rFileStatus );
             CPPUNIT_ASSERT( nError == FileBase::E_None );
 
@@ -3204,7 +3204,7 @@ namespace osl_FileStatus
         // test code.
         void getFileURL_001( )
         {
-              ::osl::FileStatus   rFileStatus( FileStatusMask_FileURL );
+              ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_FileURL );
             nError = rItem.getFileStatus( rFileStatus );
             CPPUNIT_ASSERT( nError == FileBase::E_None );
 
@@ -3264,7 +3264,7 @@ namespace osl_FileStatus
             nError = ::osl::DirectoryItem::get( aLnkURL1, rItem );
             CPPUNIT_ASSERT_MESSAGE( "in getting link file item", nError == FileBase::E_None );
 
-              ::osl::FileStatus   rFileStatus( FileStatusMask_LinkTargetURL );
+              ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_LinkTargetURL );
             nError = rItem.getFileStatus( rFileStatus );
             CPPUNIT_ASSERT_MESSAGE( "in getting link file status", nError == FileBase::E_None );
             ::rtl::OUString aFileURL = rFileStatus.getLinkTargetURL( );
@@ -4552,7 +4552,7 @@ namespace osl_File
             nError1 = ::osl::DirectoryItem::get( aTmpName6, rItem );
             CPPUNIT_ASSERT( nError1 == FileBase::E_None);
             //get the file attributes
-              ::osl::FileStatus   rFileStatus( FileStatusMask_Attributes );
+              ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_Attributes );
             nError1 = rItem.getFileStatus( rFileStatus );
             CPPUNIT_ASSERT( nError1 == FileBase::E_None );
 
@@ -4566,7 +4566,7 @@ namespace osl_File
             nError1 = ::osl::DirectoryItem::get( aTmpName6, rItem );
             CPPUNIT_ASSERT( nError1 == FileBase::E_None);
             //get the file attributes
-              ::osl::FileStatus   rFileStatus( FileStatusMask_Attributes );
+              ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_Attributes );
             nError1 = rItem.getFileStatus( rFileStatus );
             CPPUNIT_ASSERT( nError1 == FileBase::E_None );
             //here the file has 2 Attributes: FILE_ATTRIBUTE_READONLY and FILE_ATTRIBUTE_NORMAL,
@@ -4593,7 +4593,7 @@ namespace osl_File
             nError1 = ::osl::DirectoryItem::get( aTmpName6, rItem );
             CPPUNIT_ASSERT( nError1 == FileBase::E_None);
             //get the file attributes
-              ::osl::FileStatus rFileStatus( FileStatusMask_Attributes );
+              ::osl::FileStatus rFileStatus( osl_FileStatus_Mask_Attributes );
             nError1 = rItem.getFileStatus( rFileStatus );
             CPPUNIT_ASSERT( nError1 == FileBase::E_None );
 
@@ -4660,17 +4660,17 @@ namespace osl_File
             nError1 = ::osl::DirectoryItem::get( aTmpName6, rItem );
             CPPUNIT_ASSERT_MESSAGE( errorToStr( nError1 ).getStr(), nError1 == FileBase::E_None);
 
-              ::osl::FileStatus   rFileStatus( FileStatusMask_AccessTime );
+              ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_AccessTime );
             nError1 = rItem.getFileStatus( rFileStatus );
             CPPUNIT_ASSERT_MESSAGE( errorToStr( nError1 ).getStr(),nError1 == FileBase::E_None );
             *pTV_access = rFileStatus.getAccessTime( );
 
-              ::osl::FileStatus   rFileStatus1( FileStatusMask_CreationTime );
+              ::osl::FileStatus   rFileStatus1( osl_FileStatus_Mask_CreationTime );
             nError1 = rItem.getFileStatus( rFileStatus1 );
             CPPUNIT_ASSERT_MESSAGE( errorToStr( nError1 ).getStr(), nError1 == FileBase::E_None );
             *pTV_creation = rFileStatus1.getCreationTime( );
 
-              ::osl::FileStatus   rFileStatus2( FileStatusMask_ModifyTime );
+              ::osl::FileStatus   rFileStatus2( osl_FileStatus_Mask_ModifyTime );
             nError1 = rItem.getFileStatus( rFileStatus2 );
             CPPUNIT_ASSERT_MESSAGE( errorToStr( nError1 ).getStr(), nError1 == FileBase::E_None );
             *pTV_modify = rFileStatus2.getModifyTime( );
@@ -4855,7 +4855,7 @@ namespace osl_DirectoryItem
             CPPUNIT_ASSERT( FileBase::E_None == nError1 );
 
             ::osl::DirectoryItem    copyItem( rItem ); //copy constructor
-              ::osl::FileStatus   rFileStatus( FileStatusMask_FileName );
+              ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_FileName );
             nError1 = copyItem.getFileStatus( rFileStatus );
             CPPUNIT_ASSERT( nError1 == FileBase::E_None );
 
@@ -4872,7 +4872,7 @@ namespace osl_DirectoryItem
 
             ::osl::DirectoryItem    copyItem;
             copyItem = rItem;               //assinment operator
-              ::osl::FileStatus   rFileStatus( FileStatusMask_FileName );
+              ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_FileName );
             nError1 = copyItem.getFileStatus( rFileStatus );
             CPPUNIT_ASSERT( nError1 == FileBase::E_None );
 
@@ -4964,7 +4964,7 @@ namespace osl_DirectoryItem
             nError2 = ::osl::DirectoryItem::get( aTmpName6, rItem );
 
             //check the file name
-              ::osl::FileStatus   rFileStatus( FileStatusMask_FileName );
+              ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_FileName );
             nError1 = rItem.getFileStatus( rFileStatus );
             CPPUNIT_ASSERT( nError1 == FileBase::E_None );
 
@@ -5033,7 +5033,7 @@ namespace osl_DirectoryItem
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
             //check the file name
-              ::osl::FileStatus   rFileStatus( FileStatusMask_FileName );
+              ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_FileName );
             nError2 = rItem.getFileStatus( rFileStatus );
 
             CPPUNIT_ASSERT_MESSAGE( "test for getFileStatus function: get file status and check filename",
@@ -5048,7 +5048,7 @@ namespace osl_DirectoryItem
             nError1 = ::osl::DirectoryItem::get( aTmpName6, rItem );
 
             //check the file name
-              ::osl::FileStatus   rFileStatus( FileStatusMask_FileName );
+              ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_FileName );
             nError2 = rItem.getFileStatus( rFileStatus );
 
             CPPUNIT_ASSERT_MESSAGE( "test for getFileStatus function: file not existed",
@@ -5063,7 +5063,7 @@ namespace osl_DirectoryItem
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
             //check the file name
-              ::osl::FileStatus   rFileStatus( FileStatusMask_FileName );
+              ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_FileName );
             nError2 = rItem.getFileStatus( rFileStatus );
 
             CPPUNIT_ASSERT_MESSAGE( "test for getFileStatus function: get directory information",
@@ -5416,7 +5416,7 @@ namespace osl_Directory
             nError1 = testDirectory.getNextItem( rItem, 1 );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             //check the file name of first Item
-              ::osl::FileStatus   rFileStatusFirst( FileStatusMask_FileName );
+              ::osl::FileStatus   rFileStatusFirst( osl_FileStatus_Mask_FileName );
             nError1 = rItem.getFileStatus( rFileStatusFirst );
 
             //get second Item
@@ -5431,7 +5431,7 @@ namespace osl_Directory
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
             //check the file name again
-              ::osl::FileStatus   rFileStatus( FileStatusMask_FileName );
+              ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_FileName );
             nError1 = rItem.getFileStatus( rFileStatus );
             //close a directory
             nError1 = testDirectory.close( );
@@ -5534,7 +5534,7 @@ namespace osl_Directory
             sal_Bool            bOk1 = sal_False;
             sal_Bool bOk2 = sal_False;
             sal_Bool bOk3 = sal_False;
-              ::osl::FileStatus   rFileStatus( FileStatusMask_FileName );
+              ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_FileName );
             for ( int nCount = 0; nCount < 3; nCount++ )
             {
                 //get three Items
@@ -5630,7 +5630,7 @@ namespace osl_Directory
             while (1) {
                 nError1 = testDirectory.getNextItem( rItem, 4 );
                 if (::osl::FileBase::E_None == nError1) {
-                    ::osl::FileStatus   rFileStatus( FileStatusMask_FileName | FileStatusMask_Type );
+                    ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_FileName | osl_FileStatus_Mask_Type );
                     rItem.getFileStatus( rFileStatus );
                     if ( compareFileName( rFileStatus.getFileName( ), aFileName) == sal_True )
                     {

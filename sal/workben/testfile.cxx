@@ -129,7 +129,7 @@ sal_Bool testLineBreak( sal_Char *pCount , sal_uInt64 nLen , sal_uInt32 *cLineBr
 sal_Bool Initialize( void )
 {
     DirectoryItem   aItem;
-    FileStatus      aStatus( FileStatusMask_All );
+    FileStatus      aStatus( osl_FileStatus_Mask_All );
     rtl_uString     *strExeFileURL=NULL;
     oslProcessError ProcessError;
 
@@ -1110,7 +1110,7 @@ void FileSizeTest( void )
 
         if ( rc == FileBase::E_None )
         {
-            FileStatus rStatus( FileStatusMask_FileSize  );
+            FileStatus rStatus( osl_FileStatus_Mask_FileSize  );
             rc=aItem.getFileStatus( rStatus );
             print_error( rtl::OString( "Get FileStatus" ), rc );
 
@@ -1239,7 +1239,7 @@ void verifyFileAttributes( void )
 {
     FileBase::RC    rc;
     DirectoryItem   aItem;
-    FileStatus rStatus( FileStatusMask_Attributes  );
+    FileStatus rStatus( osl_FileStatus_Mask_Attributes  );
 
     printf( "\nVerify:\n" );
 
@@ -1497,7 +1497,7 @@ void FileTimeTest( void )
     // Verify
     //--------------------------------------------------
 
-    FileStatus rStatus( FileStatusMask_CreationTime | FileStatusMask_AccessTime | FileStatusMask_ModifyTime);
+    FileStatus rStatus( osl_FileStatus_Mask_CreationTime | osl_FileStatus_Mask_AccessTime | osl_FileStatus_Mask_ModifyTime);
 
     printf( "\nVerify:\n" );
 
@@ -1588,7 +1588,7 @@ void DirectoryItemTest( void )
     rc=DirectoryItem::get( dir1 , aItem );
     print_error( rtl::OString( "GetDirectoryItem" ), rc );
 
-    pStatus=new FileStatus( FileStatusMask_All );
+    pStatus=new FileStatus( osl_FileStatus_Mask_All );
     rc=aItem.getFileStatus( *pStatus );
 
     if ( rc==FileBase::E_None )
@@ -1626,7 +1626,7 @@ void DirectoryItemTest( void )
     rc=DirectoryItem::get( file1 , aItem );
     print_error( rtl::OString( "GetDirectoryItem" ), rc );
 
-    pStatus=new FileStatus( FileStatusMask_All );
+    pStatus=new FileStatus( osl_FileStatus_Mask_All );
     rc=aItem.getFileStatus( *pStatus );
 
     if ( rc==FileBase::E_None )
@@ -1682,7 +1682,7 @@ void DirectoryItemTest( void )
         rc=DirectoryItem::get( file1 , aItem );
         print_error( rtl::OString( "GetDirectoryItem" ), rc );
 
-        pStatus=new FileStatus( FileStatusMask_All );
+        pStatus=new FileStatus( osl_FileStatus_Mask_All );
         rc=aItem.getFileStatus( *pStatus );
 
         if ( rc==FileBase::E_None )
@@ -1741,7 +1741,7 @@ void DirectoryItemTest( void )
         while( rc==FileBase::E_None )
         {
 
-            FileStatus rStatus( FileStatusMask_All );
+            FileStatus rStatus( osl_FileStatus_Mask_All );
             aItem.getFileStatus( rStatus );
 
             str=rStatus.getFileName();
@@ -1766,7 +1766,7 @@ void DirectoryItemTest( void )
             rc=pDir->reset();
             rc=pDir->getNextItem( aItem );
 
-            FileStatus rStatus( FileStatusMask_All );
+            FileStatus rStatus( osl_FileStatus_Mask_All );
             aItem.getFileStatus( rStatus );
 
             str1[i]=rStatus.getFileName();
@@ -1945,7 +1945,7 @@ void DirectoryFileStatusTest( void )
 
     if ( rc==FileBase::E_None )
     {
-        pStatus=new FileStatus( FileStatusMask_All );
+        pStatus=new FileStatus( osl_FileStatus_Mask_All );
         rc=aItem.getFileStatus( *pStatus );
 
         FileStatusTest( pStatus );
@@ -1984,7 +1984,7 @@ void FileFileStatusTest( void )
 
     if ( rc==FileBase::E_None )
     {
-        pStatus=new FileStatus( FileStatusMask_All );
+        pStatus=new FileStatus( osl_FileStatus_Mask_All );
         rc=aItem.getFileStatus( *pStatus );
 
         FileStatusTest( pStatus );
@@ -2023,7 +2023,7 @@ void VolumeFileStatusTest( void )
 
     if ( rc==FileBase::E_None )
     {
-        pStatus=new FileStatus( FileStatusMask_All) ;
+        pStatus=new FileStatus( osl_FileStatus_Mask_All) ;
         rc=aItem.getFileStatus( *pStatus );
 
         FileStatusTest( pStatus );
