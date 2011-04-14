@@ -114,7 +114,7 @@ void SAL_CALL OSLInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip) throw( st
     m_pFile->getPos(nCurrentPos);
 
     sal_uInt64 nNewPos = nCurrentPos + nBytesToSkip;
-    FileBase::RC eError = m_pFile->setPos(osl_osl_Pos_Absolut, nNewPos);
+    FileBase::RC eError = m_pFile->setPos(osl_Pos_Absolut, nNewPos);
     if (eError != FileBase::E_None)
     {
         throw stario::NotConnectedException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
