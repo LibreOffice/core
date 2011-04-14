@@ -172,8 +172,8 @@ testcase tDataNavigatorSubmission
     dim sLine as String
     
     Line Input #1, sLine
-    if sLine <> "<?xml version=""1.0""?>" then
-        warnlog "the first line in the xml document should <?xml version=""1.0""?> but it is " + sLine
+    if sLine <> "<?xml version=""1.0"" encoding=""UTF-8""?>" then
+        warnlog "the first line in the xml document should <?xml version=""1.0"" encoding=""UTF-8""?> but it is " + sLine
     endif
     Line Input #1, sLine
     if sLine <> "<instanceData><element1/></instanceData>" then
