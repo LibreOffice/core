@@ -184,7 +184,7 @@ my_components = \
     vclcanvas \
     wpft \
     wpgfilter \
-    writerfilter \
+    component/writerfilter/util/writerfilter \
     xcr \
     xmlfa \
     xmlfd \
