@@ -521,7 +521,7 @@ Bitmap ExportDialog::GetGraphicBitmap( SvStream& rInputStream )
     Bitmap aRet;
     Graphic aGraphic;
     GraphicFilter aFilter( sal_False );
-    if ( aFilter.ImportGraphic( aGraphic, String(), rInputStream, GRFILTER_FORMAT_NOTFOUND, NULL, 0, static_cast<WMF_APMFILEHEADER*>(NULL) ) == GRFILTER_OK )
+    if ( aFilter.ImportGraphic( aGraphic, String(), rInputStream, GRFILTER_FORMAT_NOTFOUND, NULL, 0, NULL ) == GRFILTER_OK )
     {
         aRet = aGraphic.GetBitmap();
     }
