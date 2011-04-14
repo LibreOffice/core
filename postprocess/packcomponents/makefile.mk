@@ -134,7 +134,7 @@ my_components = \
     odfflatxml \
     offacc \
     oooimprovecore \
-    oox \
+    component/oox/util/oox \
     package2 \
     pcr \
     pdffilter \
