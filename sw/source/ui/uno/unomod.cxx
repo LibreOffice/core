@@ -782,6 +782,12 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
                 aOpt.setBrowseMode( bVal );
                 pView->GetWrtShell().ApplyViewOptions( aOpt );
                 pView->RecheckBrowseMode();
+
+                // must be set in mpViewOption as this will overwrite settings in _post!
+                mpViewOption->setBrowseMode( bVal );
+
+                // disable multiple layout
+                pView->GetDocShell()->ToggleBrowserMode(bVal, pView );
             }
         }
         break;
