@@ -49,6 +49,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     cppcanvas \
     cui \
     dbtools \
+    doctok \
     drawinglayer \
     editeng \
     for \
@@ -65,7 +66,9 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     msfilter \
     msword \
     oox \
+    ooxml \
     qstart_gtk \
+    resourcemodel \
     sax \
     sb \
     sc \
@@ -92,6 +95,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     utl \
     vbahelper \
     vcl \
+    writerfilter \
     xcr \
     xo \
     xof \
@@ -134,6 +138,7 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     productregistration \
     vbaobj \
     vbaswobj \
+    writerfilter_uno \
 ))
 
 

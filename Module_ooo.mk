@@ -49,6 +49,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     unoxml \
     xmloff \
     vbahelper \
+    writerfilter \
 ))
 
 # these have only migrated subsequentcheck for now

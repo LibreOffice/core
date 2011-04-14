@@ -147,6 +147,8 @@ gb_Library_FILENAMES := $(patsubst salhelper:libsalhelper%,salhelper:libuno_salh
 
 endif
 
+gb_Library_FILENAMES := $(patsubst writerfilter_uno:writerfilter_uno%,writerfilter_uno:writerfilter%,$(gb_Library_FILENAMES))
+
 # we do not require a known rule for these, when using system libs
 
 ifeq ($(SYSTEM_LIBXML),YES)
