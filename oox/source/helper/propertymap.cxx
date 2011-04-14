@@ -684,7 +684,7 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
             return "aParameter";
         } else if( value >>= longValue ) {
             printLevel (level);
-            fprintf (stderr,"Any aAny ((long) %ld);\n", longValue);
+            fprintf (stderr,"Any aAny ((sal_Int32) %ld);\n", longValue);
             return "aAny";
         } else if( value >>= intValue )
             fprintf (stderr,"%"SAL_PRIdINT32"            (hex: %"SAL_PRIxUINT32")\n", intValue, intValue);
