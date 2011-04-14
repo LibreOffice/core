@@ -39,6 +39,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	linguistic \
     padmin \
 	regexp \
+	reportdesign \
 	sax \
     sfx2 \
     sot \
