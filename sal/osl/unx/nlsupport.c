@@ -942,6 +942,16 @@ void _imp_getProcessLocale( rtl_Locale ** ppLocale )
  set the current process locale
  *****************************************************************************/
 
+static int
+_setenv (const char* name, const char* value)
+{
+#if defined( AIX )
+    return setenv (name, value, 1);
+#else
+    return setenv (name, value);
+#endif
+}
+
 int _imp_setProcessLocale( rtl_Locale * pLocale )
 {
     char locale_buf[64];
@@ -950,32 +960,14 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
     if( NULL != _compose_locale( pLocale, locale_buf, 64 ) )
     {
         /* only change env vars that exist already */
-        if( getenv( "LC_ALL" ) ) {
-#if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX ) || \
-    defined( AIX ) || defined( OPENBSD ) || defined( DRAGONFLY )
-            setenv( "LC_ALL", locale_buf, 1);
-#else
-            setenv( "LC_ALL", locale_buf );
-#endif
-        }
+        if( getenv( "LC_ALL" ) )
+            _setenv( "LC_ALL", locale_buf );
 
-        if( getenv( "LC_CTYPE" ) ) {
-#if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX ) || \
-    defined( AIX ) || defined( OPENBSD ) || defined( DRAGONFLY )
-            setenv("LC_CTYPE", locale_buf, 1 );
-#else
-            setenv( "LC_CTYPE", locale_buf );
-#endif
-        }
+        if( getenv( "LC_CTYPE" ) )
+            _setenv("LC_CTYPE", locale_buf );
 
-        if( getenv( "LANG" ) ) {
-#if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX ) || \
-    defined( AIX ) || defined( OPENBSD) || defined( DRAGONFLY )
-            setenv("LC_CTYPE", locale_buf, 1 );
-#else
-            setenv( "LANG", locale_buf );
-#endif
-        }
+        if( getenv( "LANG" ) )
+            _setenv( "LANG", locale_buf );
     }
 
     return 0;
