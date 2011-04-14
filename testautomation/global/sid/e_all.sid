@@ -204,6 +204,7 @@ ViewToolbarsInsertFormula .uno:InsertFormula
 ViewToolbarsCustomize .uno:ConfigureDialog
 ViewToolbarsPreviewbar .uno:AvailableToolbars?Toolbar:string=previewbar
 ViewToolbarsDrawObjectbar .uno:AvailableToolbars?Toolbar:string=drawobjectbar
+ViewToolbarsReset SYM:.cmd:RestoreVisibility
 
 ' **** Writer
 ViewRuler .uno:Ruler

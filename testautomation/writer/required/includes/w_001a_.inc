@@ -88,22 +88,23 @@ testcase tFileProperties
     Kontext "TabDokumentinfo"
     Call DialogTest (TabDokumentinfo)
 
+    Kontext
+    printlog " Switch to Tabpage 'Security'"
+    active.SetPage TabSecurityProperties
+    Kontext "TabSecurityProperties"
+    Call DialogTest ( TabSecurityProperties)
+    printlog " Click button 'Protect...'"
+    Protect.click
+    kontext "PasswordDLG"
+    Call DialogTest (PasswordDLG)
+    printlog " Cancel dialog 'Password'"
+    PasswordDLG.cancel
 
-    Warnlog "#i95523# - FileProperties - Tabpage 'User Defined' has changed. - Adaption of testcases needed."
-    '    printlog " Switch to Tabpage 'User defined'"
-    '    Kontext
-    '    active.SetPage TabBenutzer
-    '    Kontext "TabBenutzer"
-    '    Call DialogTest ( TabBenutzer )
-
-    '    Wait 500
-
-    '    Infofelder.Click
-    '    printlog " Click 'Infofields'"
-    '    Kontext "InfonamenBearbeiten"
-    '    printlog " Close upcoming dialog with 'Cancel'"
-    '    Call DialogTest (InfonamenBearbeiten)
-    '    InfonamenBearbeiten.Cancel
+    Kontext
+    printlog " Switch to Tabpage 'User defined'"
+    active.SetPage TabCustomProperties
+    Kontext "TabCustomProperties"
+    Call DialogTest ( TabCustomProperties )
 
     printlog " Switch to Tabpage 'Internet'"
     Kontext

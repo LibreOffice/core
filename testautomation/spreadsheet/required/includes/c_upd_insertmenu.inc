@@ -1204,7 +1204,7 @@ testcase tInsertObjectFormular
             Kontext "SelectionMath"
             call DialogTest (SelectionMath)
         catch
-            qaerrorlog "#i93427# Math Selection Dialog is not available"
+            warnlog "Math Selection Dialog is not available"
         endcatch
     end if
     '/// Close Formular with 'Esc'

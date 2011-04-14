@@ -29,7 +29,7 @@
 '*
 '* short description :
 '*
-'*********************************************************************
+'\*********************************************************************
 
 '  Dateiname.SetText ConvertPath (gTesttoolPath + "global\input\graf_inp\enter.bmp")
 '  Inhalt.SetText ConvertPath (gTesttoolPath + "graphics\required\input\leer.sxd") 

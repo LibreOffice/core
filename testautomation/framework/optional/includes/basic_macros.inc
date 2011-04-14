@@ -351,7 +351,7 @@ testcase tMakro_Dialog
         printlog( "Select the last item in the treelist" )
         kontext "Makro"
         hSelectTheLastNode( MakroAus )
-
+        WaitSlot(2000)
         printlog( "Delete the new module" )
         Loeschen.Click()
 

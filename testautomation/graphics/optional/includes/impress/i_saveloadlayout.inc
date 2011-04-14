@@ -29,7 +29,7 @@
 '*
 '* short description: Save & Load testing of Layout -templates.
 '*
-'**************************************************************************************
+'\**************************************************************************************
 
 testcase tSaveLoadLayoutEmpty
     Dim NewFileDir as String

@@ -66,6 +66,7 @@ sub hStatusIn ( sTestAppArea as String, sTestname as String, optional sName as S
     gErrorSum = getErrorCount()      ' not 0! if you run 2-times status in/out in one bas-file!
     gWarningSum = getWarningCount()
     gQaErrorSum = getQaErrorCount()
+    gAssertionSum = 0
     
     ' make sure we have everything to update the status-Database.
     gDatabasePath = getDatabasePath(privateDatabasePath)
@@ -109,6 +110,60 @@ sub hStatusOut ( optional NoKill as Boolean )
     PrintLog Chr(13) + "* - End of the test - *"
     Printlog "Date : " + Date() + "   Time: " + Time()
     Printlog "Duration : " + sLocalTestDuration
+    ' Output assertion count message only in nonpro version
+    if (NOT isProduct) then
+        if (gAssertionSum > 0) then
+            warnlog " ** " + gAssertionSum + " Assertions"
+        else
+            printlog " ** " + gAssertionSum + " Assertions"
+        endif
+    endif
+end sub
+
+sub hGetNonproAssertions(sName as string, sDuration as string)
+    Dim sResultFilePath as string
+    dim fList(15000) as string
+    dim i, a as integer
+    dim aCount as integer
+    dim x
+    dim soutput as string
+    dim xlist(15000) as string
+
+    if (bDebugVersion = true) then
+        'Get the path to the RESULT directory and put resultfile into array
+        sResultFilePath = GetIniValue (gTesttoolIni, gTTProfileName , "LogBaseDir") + gPathSigne + Left(gTestname, Len(gTestname)-4) + ".res"
+        listRead(fList, sResultFilePath, "UTF8")
+        for i=1 to listcount(fList(0))
+            'Go through whole file, but only last testrun counts
+            if (left(fList(i),1,1) = "0") then
+                'Line starting with 0 indicates start of new testrun: reset counters
+                aCount=0
+                listalldelete(xlist())
+            endif 
+            if (left(fList(i),1,1) = "6") then
+                'Assertion found like:
+                '5;~global\system\includes\master.inc;533;12;65535;"Dial
+                '0   1: file                          2:Line        5:Text
+                x = split(fList(i), ";")
+                aCount=aCount+1
+                sOutput =          sName _
+                        + Chr(9) + sDuration _
+                        + Chr(9) + "4" _
+                        + Chr(9) + mid(fRemoveLineBreaks(x(5)),2, len(fRemoveLineBreaks(x(5)))-2) _
+                        + Chr(9) + x(2) _
+                        + Chr(9) + "No Revision found" _
+                        + Chr(9) + fgetFileName(x(1)) _
+                        + Chr(9) 
+                ListAppend (xlist(), sOutput)
+            endif 
+        next i
+        'Update global message list
+        for i = gAssertionSum +1 to listcount(xlist)
+            ListAppend (glsStatusPage(), xlist(i))
+        next i
+        'Update global assertion counter
+        gAssertionSum = aCount 
+    endif 
 end sub
 
 sub hStatusAddTestcase()
@@ -139,7 +194,7 @@ sub hStatusAddTestcase()
     '///+ duration => the duration of the testcase
 
     sTestcaseDuration = wielange(gTestcaseStart, 1)     '(2)
-    sTestcaseStart    = convertDateToDatabase(gTestcaseStart) + " " + convertTimeToDatabase(gTestcaseStart) ' TODO: ask HDE/TBO
+    sTestcaseStart    = convertDateToDatabase(gTestcaseStart) + " " + convertTimeToDatabase(gTestcaseStart)
     
     sTCname = GetTestcaseName  ' testtool basic command
         iCut = Instr ( sTCname, "(" )
@@ -177,7 +232,7 @@ sub hStatusAddTestcase()
     endif
     
     ' generate status line for testcase and append to global array
-    '/// iErrorLevel: 0: no faults; 1: Warning; 2: Error; 3: qaError ///'
+    '/// iErrorLevel: 0: no faults; 1: Warning; 2: Error; 3: qaError; 4: Assertion ///'
     iErrorLevel = -1
 'D    printlog "Iall: " + iAllErrorCount + " W:" + iWarningCount + " E: " + iErrorCount
     for i = 0 to iAllErrorCount
@@ -215,6 +270,7 @@ sub hStatusAddTestcase()
     gErrorSum = getErrorCount()
     gQaErrorSum = getQaErrorCount()
     gWarningSum = getWarningCount()
+    hGetNonproAssertions(sTCname, sTestcaseDuration) ' workaround to get assertions count
 end sub
 
 sub hStatusWriteOutputFirstFile ()
@@ -234,6 +290,7 @@ sub hStatusWriteOutputFirstFile ()
     dim sTemp as string
     dim sFileName as string
     dim slVersion() as string
+    dim iDebug as integer
     dim ilVersion as integer
     dim sVersionCWS as string
     dim iPosA as integer
@@ -261,7 +318,7 @@ sub hStatusWriteOutputFirstFile ()
     '///+ 13 cws name => if it is the master: 'Master' else the name of the childworkspace
     '///+ 14 source tree => 
     '///+ 15 product => 
-    '///+ 16 builder => 
+    '///+ 16 debug => 
     '///+ 17 checksum => 
     '///+ data => 
 
@@ -307,6 +364,12 @@ sub hStatusWriteOutputFirstFile ()
         sUsername = gReturnAddress
     endif
 
+    if (isProduct()) then
+        iDebug = 0
+    else
+        iDebug = 1
+    endif
+
     ListAppend ( lTestrun(), "fileformat=0.2"             )
     ListAppend ( lTestrun(), "product=" + sProduct        )
     ListAppend ( lTestrun(), "sourcetree=" + sSource      )
@@ -323,6 +386,7 @@ sub hStatusWriteOutputFirstFile ()
     ListAppend ( lTestrun(), "testname=" + gTestName      )                        '(10) ' generated in hStatusIn
     ListAppend ( lTestrun(), "cws=" + sVersionCWS         )
     ListAppend ( lTestrun(), "ooolanguage=" + iSprache    )                        '(9)
+    ListAppend ( lTestrun(), "debug=" + iDebug            )                        
     ListAppend ( lTestrun(), "checksum=" + "")
 '    ListAppend ( lTestrun(), "data=" + )
     

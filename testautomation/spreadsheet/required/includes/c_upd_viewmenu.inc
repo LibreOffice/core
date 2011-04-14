@@ -173,8 +173,12 @@ testcase tViewToolbars
     TabCustomizeMenu.Cancel
     '/// Reset toolbars by 'View - Toolbars -  Reset'
     printlog " Reset toolbars by 'View - Toolbars -  Reset'"
+    Kontext "DocumentCalc"
+    DocumentCalc.UseMenu 'Selecting Menubar
+    hMenuSelectNr(3) 'Using third entry on Menubar (VIEW)
+    hMenuSelectNr(3) 'Using third entry on menu (TOOLBARS)
+    hMenuFindSelect(22, true, 22) 'Using last entry on menu (RESET)
 '    ViewToolbarsReset
-    qaerrorlog "Reset not possible because of #i84544"
     '/// Close document
     printlog " Close starting document"
     call hCloseDocument
