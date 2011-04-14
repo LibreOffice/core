@@ -72,11 +72,11 @@ oslMutex SAL_CALL osl_createMutex()
     pthread_mutexattr_init(&aMutexAttr);
 
     nRet = pthread_mutexattr_settype(&aMutexAttr, PTHREAD_MUTEX_RECURSIVE);
-
-    nRet = pthread_mutex_init(&(pMutex->mutex), &aMutexAttr);
+    if( nRet == 0 )
+        nRet = pthread_mutex_init(&(pMutex->mutex), &aMutexAttr);
     if ( nRet != 0 )
     {
-        OSL_TRACE("osl_createMutex : mutex init failed. Errno: %d; %s\n",
+        OSL_TRACE("osl_createMutex : mutex init/setattr failed. Errno: %d; %s\n",
                   nRet, strerror(nRet));
 
         free(pMutex);
