@@ -73,7 +73,7 @@ void ScUnoListenerCalls::ExecuteAndClear()
             {
                 aEntry.xListener->modified( aEntry.aEvent );
             }
-            catch ( uno::RuntimeException )
+            catch ( const uno::RuntimeException& )
             {
                 // the listener is an external object and may throw a RuntimeException
                 // for reasons we don't know
