@@ -35,6 +35,7 @@
 #include "serialization_urlencoded.hxx"
 
 #include <osl/file.hxx>
+#include <tools/diagnose_ex.h>
 #include <unotools/processfactory.hxx>
 #include <ucbhelper/content.hxx>
 
@@ -58,7 +59,8 @@ CSubmission::SubmissionResult CSubmissionPut::submit(const CSS::uno::Reference< 
     CSS::uno::Reference< XCommandEnvironment > aEnvironment;
     auto_ptr< CSerialization > apSerialization(createSerialization(aInteractionHandler,aEnvironment));
 
-    try {
+    try
+    {
         ucbhelper::Content aContent(m_aURLObj.GetMainURL(INetURLObject::NO_DECODE), aEnvironment);
 
         // insert serialized data to content -> PUT
@@ -68,10 +70,10 @@ CSubmission::SubmissionResult CSubmissionPut::submit(const CSS::uno::Reference< 
 
         // no content as a result of put...
 
-    } catch (Exception&)
+    }
+    catch ( const Exception& )
     {
-        // XXX
-        OSL_ENSURE(sal_False, "Exception during UCB operatration.");
+        DBG_UNHANDLED_EXCEPTION();
         return UNKNOWN_ERROR;
     }
 

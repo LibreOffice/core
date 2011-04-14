@@ -85,16 +85,13 @@ public class XMLFormSettings extends complexlib.ComplexTestCase
         // create a simple structure in the DOM tree: an element with two attributes
         String[] modelNames = m_document.getXFormModelNames();
         m_defaultModel = m_document.getXFormModel( modelNames[0] );
-        Instance defaultInstance = m_defaultModel.getDefaultInstance();
+        final Instance defaultInstance = m_defaultModel.getDefaultInstance();
+        // remove the default root node
+        defaultInstance.removeNode( "instanceData" );
+        // create test structures
         XNode stringElement = defaultInstance.createElement( "stringElement" );
         XNode booleanAttrib = defaultInstance.createAttribute( stringElement, "booleanAttribute", "true" );
         XNode dateAttrib = defaultInstance.createAttribute( stringElement, "dateAttribute" );
-
-        // when it comes to saving and loading, only one child of the root element of the instance
-        // is handled (is this a bug? see xmloff/source/xforms/XFormsInstanceContext.cxx, method
-        // CreateChildContext).
-        // So, we remove the default node of the instance which it has all the time
-        defaultInstance.removeNode( "instanceData" );
 
         assure( "booleanAttrib's parent is wrong",
             UnoRuntime.areSame( stringElement, booleanAttrib.getParentNode() ) );

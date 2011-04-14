@@ -343,7 +343,7 @@ public class StyleApplier
                         String[] sPropList = JavaTools.ArrayoutofString(scurline, ":");
                         String sPropValue = sPropList[1];
                         sPropValue = sPropValue.trim();
-                        if (sPropValue.indexOf("#") > 0)
+                        if (sPropValue.indexOf("#") > -1)
                         {
                             sPropValue = JavaTools.replaceSubString(sPropValue, PropertyNames.EMPTY_STRING, PropertyNames.SEMI_COLON);
                             sPropValue = JavaTools.replaceSubString(sPropValue, PropertyNames.EMPTY_STRING, PropertyNames.SPACE);
