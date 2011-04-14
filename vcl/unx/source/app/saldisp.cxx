@@ -1290,10 +1290,10 @@ XubString SalDisplay::GetKeyName( sal_uInt16 nKeyCode ) const
             nKeySym = GetServerVendor() == vendor_sun ? SunXK_Cut   : XK_L10;
             break;
         case KEY_ADD:
-            nKeySym = XK_plus;
+            aCustomKeyName = '+';
             break;
         case KEY_SUBTRACT:
-            nKeySym = XK_minus;
+            aCustomKeyName = '-';
             break;
         case KEY_MULTIPLY:
             nKeySym = XK_asterisk;

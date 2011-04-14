@@ -95,8 +95,6 @@ namespace vcl_sal {
         { XK_Control_R, "Ctrl" },
         { XK_Escape, "Esc" },
         { XK_space, "Space" },
-        { XK_minus, "-" },
-        { XK_plus, "+" }
     };
 
     static const struct KeysymNameReplacement aImplReplacements_Turkish[] =
@@ -152,8 +150,6 @@ namespace vcl_sal {
         { SunXK_Paste, "Einsetzen" },
         { SunXK_Find,  "Suchen" },
         { SunXK_Cut,   "Ausschneiden" },
-        { XK_minus, "-" },
-        { XK_plus, "+" }
     };
 
     static const struct KeysymNameReplacement aImplReplacements_French[] =
@@ -184,8 +180,6 @@ namespace vcl_sal {
         { SunXK_Paste, "Coller" },
         { SunXK_Find,  "Cher." },
         { SunXK_Cut,   "Couper" },
-        { XK_minus, "-" },
-        { XK_plus, "+" }
     };
 
     static const struct KeysymNameReplacement aImplReplacements_Italian[] =
@@ -215,8 +209,6 @@ namespace vcl_sal {
         { SunXK_Paste, "Incolla" },
         { SunXK_Find,  "Trova" },
         { SunXK_Cut,   "Taglia" },
-        { XK_minus, "-" },
-        { XK_plus, "+" }
     };
 
     static const struct KeysymNameReplacement aImplReplacements_Dutch[] =
@@ -241,8 +233,6 @@ namespace vcl_sal {
         { SunXK_Paste, "Paste" },
         { SunXK_Find,  "Find" },
         { SunXK_Cut,   "Cut" },
-        { XK_minus, "-" },
-        { XK_plus, "+" }
     };
 
     static const struct KeysymNameReplacement aImplReplacements_Norwegian[] =
@@ -268,8 +258,6 @@ namespace vcl_sal {
         { SunXK_Paste, "Lim" },
         { SunXK_Find,  "Søk" },
         { SunXK_Cut,   "Klipp" },
-        { XK_minus, "-" },
-        { XK_plus, "+" }
     };
 
     static const struct KeysymNameReplacement aImplReplacements_Swedish[] =
@@ -296,8 +284,6 @@ namespace vcl_sal {
         { SunXK_Paste, "Klistra in" },
         { SunXK_Find,  "Sök" },
         { SunXK_Cut,   "Klipp ut" },
-        { XK_minus, "-" },
-        { XK_plus, "+" }
     };
 
     static const struct KeysymNameReplacement aImplReplacements_Portuguese[] =
@@ -322,8 +308,6 @@ namespace vcl_sal {
         { SunXK_Paste, "Paste" },
         { SunXK_Find,  "Find" },
         { SunXK_Cut,   "Cut" },
-        { XK_minus, "-" },
-        { XK_plus, "+" }
     };
 
     static const struct KeysymNameReplacement aImplReplacements_Spanish[] =
@@ -354,8 +338,6 @@ namespace vcl_sal {
         { SunXK_Paste, "Pegar" },
         { SunXK_Find,  "Buscar" },
         { SunXK_Cut,   "Cortar" },
-        { XK_minus, "-" },
-        { XK_plus, "+" }
     };
 
     static const struct KeyboardReplacements aKeyboards[] =
