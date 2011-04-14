@@ -626,6 +626,10 @@ define gb_LinkTarget_add_exception_objects
 $(foreach obj,$(2),$(call gb_LinkTarget_add_exception_object,$(1),$(obj)))
 endef
 
+define gb_LinkTarget_add_generated_cxxobjects
+$(foreach obj,$(2),$(call gb_LinkTarget_add_generated_cxx_object,$(1),$(obj),$(3)))
+endef
+
 define gb_LinkTarget_add_generated_exception_object
 $(call gb_LinkTarget_add_generated_cxx_object,$(1),$(2),$(gb_LinkTarget_EXCEPTIONFLAGS))
 endef
