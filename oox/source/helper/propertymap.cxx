@@ -27,6 +27,7 @@
  ************************************************************************/
 
 #include "oox/helper/propertymap.hxx"
+#include "oox/helper/helper.hxx"
 
 #if OSL_DEBUG_LEVEL > 0
 # include <cstdio>
@@ -42,8 +43,14 @@ using ::com::sun::star::text::WritingMode;
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
+#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
+#include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <osl/mutex.hxx>
 #include "oox/token/propertynames.hxx"
@@ -272,6 +279,17 @@ Reference< XPropertySet > PropertyMap::makePropertySet() const
 static void lclDumpAnyValue( Any value)
 {
         OUString strValue;
+        Sequence< OUString > strArray;
+        Sequence< Any > anyArray;
+        Sequence< PropertyValue > propArray;
+        Sequence< Sequence< PropertyValue > > propArrayArray;
+        Sequence< EnhancedCustomShapeAdjustmentValue > adjArray;
+        Sequence< EnhancedCustomShapeSegment > segArray;
+        Sequence< EnhancedCustomShapeParameterPair > ppArray;
+        EnhancedCustomShapeSegment segment;
+        EnhancedCustomShapeParameterPair pp;
+        EnhancedCustomShapeParameter par;
+        HomogenMatrix3 aMatrix;
         sal_Int32 intValue = 0;
         sal_uInt32 uintValue = 0;
         sal_Int16 int16Value = 0;
@@ -287,7 +305,59 @@ static void lclDumpAnyValue( Any value)
 
         if( value >>= strValue )
             fprintf (stderr,"\"%s\"\n", USS( strValue ) );
-        else if( value >>= intValue )
+        else if( value >>= strArray ) {
+            fprintf (stderr,"%s\n", USS(value.getValueTypeName()));
+            for( int i=0; i<strArray.getLength(); i++ )
+                fprintf (stderr,"\t\t\t[%3d] \"%s\"\n", i, USS( strArray[i] ) );
+        } else if( value >>= propArray ) {
+            fprintf (stderr,"%s\n", USS(value.getValueTypeName()));
+            for( int i=0; i<propArray.getLength(); i++ ) {
+                fprintf (stderr,"\t\t\t[%3d] %s (%s) ", i, USS( propArray[i].Name ), USS(propArray[i].Value.getValueTypeName()) );
+                lclDumpAnyValue( propArray[i].Value );
+            }
+        } else if( value >>= propArrayArray ) {
+            fprintf (stderr,"%s\n", USS(value.getValueTypeName()));
+            for( int i=0; i<propArrayArray.getLength(); i++ ) {
+                fprintf (stderr,"\t\t\t[%3d] ", i);
+                lclDumpAnyValue( makeAny (propArrayArray[i]) );
+            }
+        } else if( value >>= anyArray ) {
+            fprintf (stderr,"%s\n", USS(value.getValueTypeName()));
+            for( int i=0; i<anyArray.getLength(); i++ ) {
+                fprintf (stderr,"\t\t\t[%3d] (%s) ", i, USS(value.getValueTypeName()) );
+                lclDumpAnyValue( anyArray[i] );
+            }
+        } else if( value >>= adjArray ) {
+            fprintf (stderr,"%s\n", USS(value.getValueTypeName()));
+            for( int i=0; i<adjArray.getLength(); i++ ) {
+                fprintf (stderr,"\t\t\t[%3d] (%s) ", i, USS(adjArray[i].Value.getValueTypeName()) );
+                lclDumpAnyValue( adjArray[i].Value );
+            }
+        } else if( value >>= segArray ) {
+            fprintf (stderr,"%s\n", USS(value.getValueTypeName()));
+            for( int i=0; i<segArray.getLength(); i++ ) {
+                fprintf (stderr,"\t\t\t[%3d] ", i );
+                lclDumpAnyValue( makeAny( segArray[i] ) );
+            }
+        } else if( value >>= ppArray ) {
+            fprintf (stderr,"%s\n", USS(value.getValueTypeName()));
+            for( int i=0; i<ppArray.getLength(); i++ ) {
+                fprintf (stderr,"\t\t\t[%3d] ", i );
+                lclDumpAnyValue( makeAny( ppArray[i] ) );
+            }
+        } else if( value >>= segment ) {
+            fprintf (stderr,"Command: %d Count: %d\n", segment.Command, segment.Count);
+        } else if( value >>= pp ) {
+            fprintf (stderr,"First: ");
+            lclDumpAnyValue( makeAny (pp.First) );
+            fprintf (stderr,"\t\t\t      Second: ");
+            lclDumpAnyValue( makeAny (pp.Second) );
+        } else if( value >>= par ) {
+            fprintf (stderr,"Parameter (%s): ", USS(par.Value.getValueTypeName()));
+            lclDumpAnyValue( par.Value );
+        } else if( value >>= aMatrix ) {
+            fprintf (stderr,"Matrix\n%f %f %f\n%f %f %f\n%f %f %f\n", aMatrix.Line1.Column1, aMatrix.Line1.Column2, aMatrix.Line1.Column3, aMatrix.Line2.Column1, aMatrix.Line2.Column2, aMatrix.Line2.Column3, aMatrix.Line3.Column1, aMatrix.Line3.Column2, aMatrix.Line3.Column3);
+        } else if( value >>= intValue )
             fprintf (stderr,"%"SAL_PRIdINT32"            (hex: %"SAL_PRIxUINT32")\n", intValue, intValue);
         else if( value >>= uintValue )
             fprintf (stderr,"%"SAL_PRIdINT32"            (hex: %"SAL_PRIxUINT32")\n", uintValue, uintValue);
@@ -301,15 +371,19 @@ static void lclDumpAnyValue( Any value)
             fprintf (stderr,"%d            (bool)\n", boolValue);
         else if( value >>= xNumRule ) {
             fprintf (stderr, "XIndexReplace\n");
-            for (int k=0; k<xNumRule->getCount(); k++) {
-                Sequence< PropertyValue > aBulletPropSeq;
-                fprintf (stderr, "level %d\n", k);
-                if (xNumRule->getByIndex (k) >>= aBulletPropSeq) {
-                    for (int j=0; j<aBulletPropSeq.getLength(); j++) {
-                        fprintf(stderr, "%46s = ", USS (aBulletPropSeq[j].Name));
-                        lclDumpAnyValue (aBulletPropSeq[j].Value);
+            if (xNumRule.is()) {
+                for (int k=0; k<xNumRule->getCount(); k++) {
+                    Sequence< PropertyValue > aBulletPropSeq;
+                    fprintf (stderr, "level %d\n", k);
+                    if (xNumRule->getByIndex (k) >>= aBulletPropSeq) {
+                        for (int j=0; j<aBulletPropSeq.getLength(); j++) {
+                            fprintf(stderr, "%46s = ", USS (aBulletPropSeq[j].Name));
+                            lclDumpAnyValue (aBulletPropSeq[j].Value);
+                        }
                     }
                 }
+            } else {
+                fprintf (stderr, "empty reference\n");
             }
         } else if( value >>= aWritingMode )
             fprintf (stderr, "%d writing mode\n", aWritingMode);
@@ -377,7 +451,7 @@ void PropertyMap::dump( Reference< XPropertySet > rXPropSet )
 
         try {
             lclDumpAnyValue (rXPropSet->getPropertyValue( props [i].Name ));
-        } catch(const Exception& e) {
+        } catch (const Exception& e) {
             fprintf (stderr,"unable to get '%s' value\n", USS(props [i].Name));
         }
     }
@@ -386,6 +460,635 @@ void PropertyMap::dump( Reference< XPropertySet > rXPropSet )
 void PropertyMap::dump()
 {
     dump( Reference< XPropertySet >( makePropertySet(), UNO_QUERY ) );
+}
+
+static void printLevel (int level)
+{
+    for (int i=0; i<level; i++)
+        fprintf (stderr, "    ");
+}
+
+static const char* lclDumpAnyValueCode( Any value, int level = 0)
+{
+    static OUString sVoid = CREATE_OUSTRING("void");
+    OUString strValue;
+    Sequence< OUString > strArray;
+    Sequence< Any > anyArray;
+    Sequence< PropertyValue > propArray;
+    Sequence< Sequence< PropertyValue > > propArrayArray;
+    Sequence< EnhancedCustomShapeAdjustmentValue > adjArray;
+    Sequence< EnhancedCustomShapeSegment > segArray;
+    Sequence< EnhancedCustomShapeParameterPair > ppArray;
+    EnhancedCustomShapeSegment segment;
+    EnhancedCustomShapeParameterPair pp;
+    EnhancedCustomShapeParameter par;
+    awt::Rectangle rect;
+    sal_Int32 intValue = 0;
+    sal_uInt32 uintValue = 0;
+    sal_Int16 int16Value = 0;
+    sal_uInt16 uint16Value = 0;
+    long longValue;
+    float floatValue = 0;
+    bool boolValue = false;
+    LineSpacing spacing;
+//         RectanglePoint pointValue;
+    WritingMode aWritingMode;
+    TextVerticalAdjust aTextVertAdj;
+    TextHorizontalAdjust aTextHorizAdj;
+    Reference< XIndexReplace > xNumRule;
+
+        if( value >>= strValue )
+            fprintf (stderr,"\"%s\"\n", USS( strValue ) );
+        else if( value >>= strArray ) {
+            printLevel (level);
+            fprintf (stderr,"Sequence< OUString > aStringSequence (%d);\n", strArray.getLength());
+            for( int i=0; i<strArray.getLength(); i++ ) {
+                printLevel (level);
+                fprintf (stderr,"aStringSequence[%d] = CREATE_OUSTRING (\"%s\");\n", i, USS( strArray[i] ) );
+            }
+            return "aStringSequence";
+        } else if( value >>= propArray ) {
+            printLevel (level);
+            fprintf (stderr,"Sequence< PropertyValue > aPropSequence (%d);\n", propArray.getLength());
+            for( int i=0; i<propArray.getLength(); i++ ) {
+                printLevel (level);
+                fprintf (stderr, "{\n");
+                printLevel (level + 1);
+                fprintf (stderr, "aPropSequence [%d].Name = CREATE_OUSTRING (\"%s\");\n", i, USS( propArray[i].Name ));
+                const char *var = lclDumpAnyValueCode( propArray[i].Value, level + 1 );
+                printLevel (level + 1);
+                fprintf (stderr, "aPropSequence [%d].Value = makeAny (%s);\n", i, var);
+                printLevel (level);
+                fprintf (stderr, "}\n");
+            }
+            return "aPropSequence";
+        } else if( value >>= propArrayArray ) {
+            printLevel (level);
+            fprintf (stderr,"Sequence< Sequence < PropertyValue > > aPropSequenceSequence (%d);\n", propArrayArray.getLength());
+            for( int i=0; i<propArrayArray.getLength(); i++ ) {
+                printLevel (level);
+                fprintf (stderr, "{\n");
+                const char *var = lclDumpAnyValueCode( makeAny (propArrayArray[i]), level + 1 );
+                printLevel (level + 1);
+                fprintf (stderr, "aPropSequenceSequence [%d] = %s;\n", i, var);
+                printLevel (level);
+                fprintf (stderr, "}\n");
+            }
+            return "aPropSequenceSequence";
+        } else if( value >>= anyArray ) {
+            fprintf (stderr,"%s\n", USS(value.getValueTypeName()));
+            for( int i=0; i<anyArray.getLength(); i++ ) {
+                fprintf (stderr,"\t\t\t[%3d] (%s) ", i, USS(value.getValueTypeName()) );
+                lclDumpAnyValue( anyArray[i] );
+            }
+        } else if( value >>= adjArray ) {
+            printLevel (level);
+            fprintf (stderr,"Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (%d);\n", adjArray.getLength());
+            for( int i=0; i<adjArray.getLength(); i++ ) {
+                printLevel (level);
+                fprintf (stderr, "{\n");
+                const char *var = lclDumpAnyValueCode( makeAny (adjArray[i].Value), level + 1 );
+                printLevel (level + 1);
+                fprintf (stderr, "aAdjSequence [%d].Value = %s;\n", i, var);
+                printLevel (level);
+                fprintf (stderr, "}\n");
+            }
+            return "aAdjSequence";
+        } else if( value >>= segArray ) {
+            printLevel (level);
+            fprintf (stderr, "Sequence< EnhancedCustomShapeSegment > aSegmentSeq (%d);\n", segArray.getLength());
+            for( int i=0; i<segArray.getLength(); i++ ) {
+                printLevel (level);
+                fprintf (stderr, "{\n");
+                const char *var = lclDumpAnyValueCode (makeAny (segArray[i]), level + 1);
+                printLevel (level + 1);
+                fprintf (stderr, "aSegmentSeq [%d] = %s;\n", i, var);
+                printLevel (level);
+                fprintf (stderr, "}\n");
+            }
+            return "aSegmentSeq";
+        } else if( value >>= ppArray ) {
+            printLevel (level);
+            fprintf (stderr, "Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (%d);\n", ppArray.getLength());
+            for( int i=0; i<ppArray.getLength(); i++ ) {
+                printLevel (level);
+                fprintf (stderr, "{\n");
+                const char *var = lclDumpAnyValueCode (makeAny (ppArray[i]), level + 1);
+                printLevel (level + 1);
+                fprintf (stderr, "aParameterPairSeq [%d] = %s;\n", i, var);
+                printLevel (level);
+                fprintf (stderr, "}\n");
+            }
+            return "aParameterPairSeq";
+        } else if( value >>= segment ) {
+            printLevel (level);
+            fprintf (stderr, "EnhancedCustomShapeSegment aSegment;\n");
+            printLevel (level);
+            // TODO: use EnhancedCustomShapeSegmentCommand constants
+            fprintf (stderr, "aSegment.Command = %d;\n", segment.Command);
+            printLevel (level);
+            fprintf (stderr, "aSegment.Count = %d;\n", segment.Count);
+            return "aSegment";
+        } else if( value >>= pp ) {
+            printLevel (level);
+            fprintf (stderr, "EnhancedCustomShapeParameterPair aParameterPair;\n");
+            printLevel (level);
+            fprintf (stderr, "{\n");
+            if (!pp.First.Value.getValueTypeName().equals(sVoid)) {
+                const char* var = lclDumpAnyValueCode( makeAny (pp.First), level + 1 );
+                printLevel (level + 1);
+                fprintf (stderr, "aParameterPair.First = %s;\n", var);
+            } else {
+                printLevel (level + 1);
+                fprintf (stderr, "EnhancedCustomShapeParameter aParameter;\n");
+                printLevel (level + 1);
+                fprintf (stderr, "aParameterPair.First = aParameter;\n");
+            }
+            printLevel (level);
+            fprintf (stderr, "}\n");
+
+            printLevel (level);
+            fprintf (stderr, "{\n");
+            if (!pp.Second.Value.getValueTypeName().equals(sVoid)) {
+                const char* var = lclDumpAnyValueCode( makeAny (pp.Second), level + 1 );
+                printLevel (level + 1);
+                fprintf (stderr, "aParameterPair.Second = %s;\n", var);
+            } else {
+                printLevel (level + 1);
+                fprintf (stderr, "EnhancedCustomShapeParameter aParameter;\n");
+                printLevel (level + 1);
+                fprintf (stderr, "aParameterPair.Second = aParameter;\n");
+            }
+            printLevel (level);
+            fprintf (stderr, "}\n");
+            return "aParameterPair";
+        } else if( value >>= par ) {
+            printLevel (level);
+            fprintf (stderr,"EnhancedCustomShapeParameter aParameter;\n");
+            const char* var = lclDumpAnyValueCode( par.Value, level );
+            printLevel (level);
+            fprintf (stderr,"aParameter.Value = %s;\n", var);
+            const char* type;
+            switch (par.Type) {
+                case EnhancedCustomShapeParameterType::NORMAL:
+                    type = "EnhancedCustomShapeParameterType::NORMAL";
+                    break;
+                case EnhancedCustomShapeParameterType::EQUATION:
+                    type = "EnhancedCustomShapeParameterType::EQUATION";
+                    break;
+                case EnhancedCustomShapeParameterType::ADJUSTMENT:
+                    type = "EnhancedCustomShapeParameterType::ADJUSTMENT";
+                    break;
+                case EnhancedCustomShapeParameterType::LEFT:
+                    type = "EnhancedCustomShapeParameterType::LEFT";
+                    break;
+                case EnhancedCustomShapeParameterType::TOP:
+                    type = "EnhancedCustomShapeParameterType::TOP";
+                    break;
+                case EnhancedCustomShapeParameterType::RIGHT:
+                    type = "EnhancedCustomShapeParameterType::RIGHT";
+                    break;
+                case EnhancedCustomShapeParameterType::BOTTOM:
+                    type = "EnhancedCustomShapeParameterType::BOTTOM";
+                    break;
+                case EnhancedCustomShapeParameterType::XSTRETCH:
+                    type = "EnhancedCustomShapeParameterType::XSTRETCH";
+                    break;
+                case EnhancedCustomShapeParameterType::YSTRETCH:
+                    type = "EnhancedCustomShapeParameterType::YSTRETCH";
+                    break;
+                case EnhancedCustomShapeParameterType::HASSTROKE:
+                    type = "EnhancedCustomShapeParameterType::HASSTROKE";
+                    break;
+                case EnhancedCustomShapeParameterType::HASFILL:
+                    type = "EnhancedCustomShapeParameterType::HASFILL";
+                    break;
+                case EnhancedCustomShapeParameterType::WIDTH:
+                    type = "EnhancedCustomShapeParameterType::WIDTH";
+                    break;
+                case EnhancedCustomShapeParameterType::HEIGHT:
+                    type = "EnhancedCustomShapeParameterType::HEIGHT";
+                    break;
+                case EnhancedCustomShapeParameterType::LOGWIDTH:
+                    type = "EnhancedCustomShapeParameterType::LOGWIDTH";
+                    break;
+                case EnhancedCustomShapeParameterType::LOGHEIGHT:
+                    type = "EnhancedCustomShapeParameterType::LOGHEIGHT";
+                    break;
+                default:
+                    type = "unknown";
+                    break;
+            }
+            printLevel (level);
+            fprintf (stderr,"aParameter.Type = %s;\n", type);
+            return "aParameter";
+        } else if( value >>= longValue ) {
+            printLevel (level);
+            fprintf (stderr,"Any aAny ((long) %ld);\n", longValue);
+            return "aAny";
+        } else if( value >>= intValue )
+            fprintf (stderr,"%"SAL_PRIdINT32"            (hex: %"SAL_PRIxUINT32")\n", intValue, intValue);
+        else if( value >>= uintValue )
+            fprintf (stderr,"%"SAL_PRIdINT32"            (hex: %"SAL_PRIxUINT32")\n", uintValue, uintValue);
+        else if( value >>= int16Value )
+            fprintf (stderr,"%d            (hex: %x)\n", int16Value, int16Value);
+        else if( value >>= uint16Value )
+            fprintf (stderr,"%d            (hex: %x)\n", uint16Value, uint16Value);
+        else if( value >>= floatValue )
+            fprintf (stderr,"%f\n", floatValue);
+        else if( value >>= boolValue ) {
+            if (boolValue)
+                return "Any ((sal_Bool) sal_True)";
+            else
+                return "Any ((sal_Bool) sal_False)";
+        } else if( value >>= xNumRule ) {
+            fprintf (stderr, "XIndexReplace\n");
+            for (int k=0; k<xNumRule->getCount(); k++) {
+                Sequence< PropertyValue > aBulletPropSeq;
+                fprintf (stderr, "level %d\n", k);
+                if (xNumRule->getByIndex (k) >>= aBulletPropSeq) {
+                    for (int j=0; j<aBulletPropSeq.getLength(); j++) {
+                        fprintf(stderr, "%46s = ", USS (aBulletPropSeq[j].Name));
+                        lclDumpAnyValue (aBulletPropSeq[j].Value);
+                    }
+                }
+            }
+        } else if( value >>= aWritingMode )
+            fprintf (stderr, "%d writing mode\n", aWritingMode);
+        else if( value >>= aTextVertAdj ) {
+            const char* s = "uknown";
+            switch( aTextVertAdj ) {
+            case TextVerticalAdjust_TOP:
+                s = "top";
+                break;
+            case TextVerticalAdjust_CENTER:
+                s = "center";
+                break;
+            case TextVerticalAdjust_BOTTOM:
+                s = "bottom";
+                break;
+            case TextVerticalAdjust_BLOCK:
+                s = "block";
+                break;
+            case TextVerticalAdjust_MAKE_FIXED_SIZE:
+                s = "make_fixed_size";
+                break;
+        }
+        fprintf (stderr, "%s\n", s);
+    } else if( value >>= aTextHorizAdj ) {
+        const char* s = "uknown";
+        switch( aTextHorizAdj ) {
+            case TextHorizontalAdjust_LEFT:
+                s = "left";
+                break;
+            case TextHorizontalAdjust_CENTER:
+                s = "center";
+                break;
+            case TextHorizontalAdjust_RIGHT:
+                s = "right";
+                break;
+            case TextHorizontalAdjust_BLOCK:
+                s = "block";
+                break;
+            case TextHorizontalAdjust_MAKE_FIXED_SIZE:
+                s = "make_fixed_size";
+                break;
+        }
+        fprintf (stderr, "%s\n", s);
+    } else if( value >>= spacing ) {
+        fprintf (stderr, "mode: %d value: %d\n", spacing.Mode, spacing.Height);
+    } else if( value >>= rect ) {
+            printLevel (level);
+            fprintf (stderr, "awt::Rectangle aRectangle;\n");
+            printLevel (level);
+            fprintf (stderr, "aRectangle.X = %d;\n", rect.X);
+            printLevel (level);
+            fprintf (stderr, "aRectangle.Y = %d;\n", rect.Y);
+            printLevel (level);
+            fprintf (stderr, "aRectangle.Width = %d;\n", rect.Width);
+            printLevel (level);
+            fprintf (stderr, "aRectangle.Height = %d;\n", rect.Height);
+            return "aRectangle";
+    } else if( value.isExtractableTo(::getCppuType((const sal_Int32*)0))) {
+        fprintf (stderr,"is extractable to int32\n");
+    }
+//         else if( value >>= pointValue )
+//             fprintf (stderr,"%d            (RectanglePoint)\n", pointValue);
+        else
+      fprintf (stderr,"???           <unhandled type %s>\n", USS(value.getValueTypeName()));
+
+        return "";
+}
+
+void PropertyMap::dumpCode( Reference< XPropertySet > rXPropSet )
+{
+    Reference< XPropertySetInfo > info = rXPropSet->getPropertySetInfo ();
+    Sequence< Property > props = info->getProperties ();
+    const OUString sType = CREATE_OUSTRING( "Type" );
+
+    OSL_TRACE("dump props, len: %d", props.getLength ());
+
+    for (int i=0; i < props.getLength (); i++) {
+
+        // ignore Type, it is set elsewhere
+        if (props[i].Name.equals (sType))
+            continue;
+
+        OString name = OUStringToOString( props [i].Name, RTL_TEXTENCODING_UTF8);
+        int level = 1;
+
+        try {
+            const char* var = lclDumpAnyValueCode (rXPropSet->getPropertyValue (props [i].Name), level);
+            printLevel (level);
+            fprintf (stderr,"aPropertyMap [PROP_%s] <<= %s;\n\n", name.getStr(), var);
+        } catch (const Exception& e) {
+            fprintf (stderr,"unable to get '%s' value\n", USS(props [i].Name));
+        }
+    }
+}
+
+void PropertyMap::dumpCode()
+{
+    dumpCode( Reference< XPropertySet >( makePropertySet(), UNO_QUERY ) );
+    PropertyMap aPropertyMap;
+    Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (2);
+    {
+        Any aAny ((long) 18000);
+        aAdjSequence [0].Value = aAny;
+    }
+    {
+        Any aAny ((long) 10000);
+        aAdjSequence [1].Value = aAny;
+    }
+    aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
+
+    Sequence< OUString > aStringSequence (15);
+    aStringSequence[0] = CREATE_OUSTRING ("min(width,height)");
+    aStringSequence[1] = CREATE_OUSTRING ("20000*width/?0 ");
+    aStringSequence[2] = CREATE_OUSTRING ("if(0-$0 ,0,if(20000-$0 ,$0 ,20000))");
+    aStringSequence[3] = CREATE_OUSTRING ("if(0-$1 ,0,if(?1 -$1 ,$1 ,?1 ))");
+    aStringSequence[4] = CREATE_OUSTRING ("?0 *?3 /20000");
+    aStringSequence[5] = CREATE_OUSTRING ("width+0-?4 ");
+    aStringSequence[6] = CREATE_OUSTRING ("height*?2 /40000");
+    aStringSequence[7] = CREATE_OUSTRING ("height/2");
+    aStringSequence[8] = CREATE_OUSTRING ("?7 +0-?6 ");
+    aStringSequence[9] = CREATE_OUSTRING ("?7 +?6 -0");
+    aStringSequence[10] = CREATE_OUSTRING ("height/2");
+    aStringSequence[11] = CREATE_OUSTRING ("?8 *?4 /?10 ");
+    aStringSequence[12] = CREATE_OUSTRING ("?5 +?11 -0");
+    aStringSequence[13] = CREATE_OUSTRING ("height");
+    aStringSequence[14] = CREATE_OUSTRING ("width");
+    aPropertyMap [PROP_Equations] <<= aStringSequence;
+
+    Sequence< Sequence < PropertyValue > > aPropSequenceSequence (2);
+    {
+        Sequence< PropertyValue > aPropSequence (4);
+        {
+            aPropSequence [0].Name = CREATE_OUSTRING ("Position");
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((long) 8);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aPropSequence [0].Value = makeAny (aParameterPair);
+        }
+        {
+            aPropSequence [1].Name = CREATE_OUSTRING ("RangeYMaximum");
+            EnhancedCustomShapeParameter aParameter;
+            Any aAny ((long) 20000);
+            aParameter.Value = aAny;
+            aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+            aPropSequence [1].Value = makeAny (aParameter);
+        }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("RangeYMinimum");
+            EnhancedCustomShapeParameter aParameter;
+            Any aAny ((long) 0);
+            aParameter.Value = aAny;
+            aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+            aPropSequence [2].Value = makeAny (aParameter);
+        }
+        {
+            aPropSequence [3].Name = CREATE_OUSTRING ("RefY");
+            Any aAny ((long) 0);
+            aPropSequence [3].Value = makeAny (aAny);
+        }
+        aPropSequenceSequence [0] = aPropSequence;
+    }
+    {
+        Sequence< PropertyValue > aPropSequence (4);
+        {
+            aPropSequence [0].Name = CREATE_OUSTRING ("Position");
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((long) 5);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.Second = aParameter;
+            }
+            aPropSequence [0].Value = makeAny (aParameterPair);
+        }
+        {
+            aPropSequence [1].Name = CREATE_OUSTRING ("RangeXMaximum");
+            EnhancedCustomShapeParameter aParameter;
+            Any aAny ((long) 1);
+            aParameter.Value = aAny;
+            aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+            aPropSequence [1].Value = makeAny (aParameter);
+        }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("RangeXMinimum");
+            EnhancedCustomShapeParameter aParameter;
+            Any aAny ((long) 0);
+            aParameter.Value = aAny;
+            aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+            aPropSequence [2].Value = makeAny (aParameter);
+        }
+        {
+            aPropSequence [3].Name = CREATE_OUSTRING ("RefX");
+            Any aAny ((long) 1);
+            aPropSequence [3].Value = makeAny (aAny);
+        }
+        aPropSequenceSequence [1] = aPropSequence;
+    }
+    aPropertyMap [PROP_Handles] <<= aPropSequenceSequence;
+
+    aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+
+    aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+
+    Sequence< PropertyValue > aPropSequence (2);
+    {
+        aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
+        Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (7);
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((long) 8);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [0] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((long) 5);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((long) 8);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [1] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((long) 5);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [2] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((long) 14);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((long) 7);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [3] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((long) 5);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((long) 13);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [4] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((long) 5);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((long) 9);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [5] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((long) 9);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [6] = aParameterPair;
+        }
+        aPropSequence [0].Value = makeAny (aParameterPairSeq);
+    }
+    {
+        aPropSequence [1].Name = CREATE_OUSTRING ("Segments");
+        Sequence< EnhancedCustomShapeSegment > aSegmentSeq (4);
+        {
+            EnhancedCustomShapeSegment aSegment;
+            aSegment.Command = 1;
+            aSegment.Count = 1;
+            aSegmentSeq [0] = aSegment;
+        }
+        {
+            EnhancedCustomShapeSegment aSegment;
+            aSegment.Command = 2;
+            aSegment.Count = 6;
+            aSegmentSeq [1] = aSegment;
+        }
+        {
+            EnhancedCustomShapeSegment aSegment;
+            aSegment.Command = 4;
+            aSegment.Count = 0;
+            aSegmentSeq [2] = aSegment;
+        }
+        {
+            EnhancedCustomShapeSegment aSegment;
+            aSegment.Command = 5;
+            aSegment.Count = 0;
+            aSegmentSeq [3] = aSegment;
+        }
+        aPropSequence [1].Value = makeAny (aSegmentSeq);
+    }
+    aPropertyMap [PROP_Path] <<= aPropSequence;
+
+    awt::Rectangle aRectangle;
+    aRectangle.X = 0;
+    aRectangle.Y = 0;
+    aRectangle.Width = 1050480;
+    aRectangle.Height = 456840;
+    aPropertyMap [PROP_ViewBox] <<= aRectangle;
 }
 #endif
 
