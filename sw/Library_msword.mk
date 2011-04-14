@@ -38,6 +38,7 @@ $(eval $(call gb_Library_set_include,msword,\
     -I$(WORKDIR)/inc/sw/sdi \
     -I$(WORKDIR)/Misc/sw/ \
     $$(INCLUDE) \
+	$(if $(filter YES,$(SYSTEM_LIBXML)),$(LIBXML_CFLAGS)) \
     -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc/sw \
 ))
