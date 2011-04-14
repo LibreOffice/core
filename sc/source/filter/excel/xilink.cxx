@@ -44,6 +44,9 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 
 using ::std::vector;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 
 // ============================================================================
 // *** Helper classes ***
@@ -284,7 +287,61 @@ sal_uInt16 XclImpTabInfo::GetCurrentIndex( sal_uInt16 nCreatedId, sal_uInt16 nMa
 
 // External names =============================================================
 
-XclImpExtName::XclImpExtName( const XclImpSupbook& rSupbook, XclImpStream& rStrm, XclSupbookType eSubType, ExcelToSc* pFormulaConv )
+XclImpExtName::MOper::MOper(XclImpStream& rStrm) :
+    mxCached(new ScMatrix(0,0))
+{
+    SCSIZE nLastCol = rStrm.ReaduInt8();
+    SCSIZE nLastRow = rStrm.ReaduInt16();
+    mxCached->Resize(nLastCol+1, nLastRow+1);
+    for (SCSIZE nRow = 0; nRow <= nLastRow; ++nRow)
+    {
+        for (SCSIZE nCol = 0; nCol <= nLastCol; ++nCol)
+        {
+            sal_uInt8 nOp;
+            rStrm >> nOp;
+            switch (nOp)
+            {
+                case 0x01:
+                {
+                    double fVal = rStrm.ReadDouble();
+                    mxCached->PutDouble(fVal, nCol, nRow);
+                }
+                break;
+                case 0x02:
+                {
+                    OUString aStr = rStrm.ReadUniString();
+                    mxCached->PutString(aStr, nCol, nRow);
+                }
+                break;
+                case 0x04:
+                {
+                    bool bVal = rStrm.ReaduInt8();
+                    mxCached->PutBoolean(bVal, nCol, nRow);
+                    rStrm.Ignore(7);
+                }
+                break;
+                case 0x10:
+                {
+                    sal_uInt8 nErr = rStrm.ReaduInt8();
+                    // TODO: Map the error code from xls to calc.
+                    mxCached->PutError(nErr, nCol, nRow);
+                    rStrm.Ignore(7);
+                }
+                break;
+                default:
+                    rStrm.Ignore(8);
+            }
+        }
+    }
+}
+
+const ScMatrix& XclImpExtName::MOper::GetCache() const
+{
+    return *mxCached;
+}
+
+XclImpExtName::XclImpExtName( const XclImpSupbook& rSupbook, XclImpStream& rStrm, XclSupbookType eSubType, ExcelToSc* pFormulaConv ) :
+    mpMOper(NULL)
 {
     sal_uInt16 nFlags;
     sal_uInt8 nLen;
@@ -312,36 +369,45 @@ XclImpExtName::XclImpExtName( const XclImpSupbook& rSupbook, XclImpStream& rStrm
         meType = ::get_flagvalue( nFlags, EXC_EXTN_OLE, xlExtOLE, xlExtDDE );
     }
 
-    if( (meType == xlExtDDE) && (rStrm.GetRecLeft() > 1) )
-        mxDdeMatrix.reset( new XclImpCachedMatrix( rStrm ) );
-
-    if (meType == xlExtName)
+    switch (meType)
     {
-        // TODO: For now, only global external names are supported.  In future
-        // we should extend this to supporting per-sheet external names.
-        if (mnStorageId == 0)
-        {
-            if (pFormulaConv)
+        case xlExtDDE:
+            if (rStrm.GetRecLeft() > 1)
+                mxDdeMatrix.reset(new XclImpCachedMatrix(rStrm));
+        break;
+        case xlExtName:
+            // TODO: For now, only global external names are supported.  In future
+            // we should extend this to supporting per-sheet external names.
+            if (mnStorageId == 0)
             {
-                const ScTokenArray* pArray = NULL;
-                sal_uInt16 nFmlaLen;
-                rStrm >> nFmlaLen;
-                vector<String> aTabNames;
-                sal_uInt16 nCount = rSupbook.GetTabCount();
-                aTabNames.reserve(nCount);
-                for (sal_uInt16 i = 0; i < nCount; ++i)
-                    aTabNames.push_back(rSupbook.GetTabName(i));
+                if (pFormulaConv)
+                {
+                    const ScTokenArray* pArray = NULL;
+                    sal_uInt16 nFmlaLen;
+                    rStrm >> nFmlaLen;
+                    vector<String> aTabNames;
+                    sal_uInt16 nCount = rSupbook.GetTabCount();
+                    aTabNames.reserve(nCount);
+                    for (sal_uInt16 i = 0; i < nCount; ++i)
+                        aTabNames.push_back(rSupbook.GetTabName(i));
 
-                pFormulaConv->ConvertExternName(pArray, rStrm, nFmlaLen, rSupbook.GetXclUrl(), aTabNames);
-                if (pArray)
-                    mxArray.reset(pArray->Clone());
+                    pFormulaConv->ConvertExternName(pArray, rStrm, nFmlaLen, rSupbook.GetXclUrl(), aTabNames);
+                    if (pArray)
+                        mxArray.reset(pArray->Clone());
+                }
             }
-        }
+        break;
+        case xlExtOLE:
+            mpMOper = new MOper(rStrm);
+        break;
+        default:
+            ;
     }
 }
 
 XclImpExtName::~XclImpExtName()
 {
+    delete mpMOper;
 }
 
 void XclImpExtName::CreateDdeData( ScDocument& rDoc, const String& rApplic, const String& rTopic ) const
@@ -359,6 +425,124 @@ void XclImpExtName::CreateExtNameData( ScDocument& rDoc, sal_uInt16 nFileId ) co
 
     ScExternalRefManager* pRefMgr = rDoc.GetExternalRefManager();
     pRefMgr->storeRangeNameTokens(nFileId, maName, *mxArray);
+}
+
+namespace {
+
+/**
+ * Decompose the name into sheet name and range name.  An OLE link name is
+ * always formatted like this [ !Sheet1!R1C1:R5C2 ] and it always uses R1C1
+ * notation.
+ */
+bool extractSheetAndRange(const OUString& rName, OUString& rSheet, OUString& rRange)
+{
+    sal_Int32 n = rName.getLength();
+    const sal_Unicode* p = rName.getStr();
+    OUStringBuffer aBuf;
+    bool bInSheet = true;
+    for (sal_Int32 i = 0; i < n; ++i, ++p)
+    {
+        if (i == 0)
+        {
+            // first character must be '!'.
+            if (*p != '!')
+                return false;
+            continue;
+        }
+
+        if (*p == '!')
+        {
+            // sheet name to range separator.
+            if (!bInSheet)
+                return false;
+            rSheet = aBuf.makeStringAndClear();
+            bInSheet = false;
+            continue;
+        }
+
+        aBuf.append(*p);
+    }
+
+    rRange = aBuf.makeStringAndClear();
+    return true;
+}
+
+}
+
+bool XclImpExtName::CreateOleData(ScDocument& rDoc, const OUString& rUrl,
+                                  sal_uInt16& rFileId, OUString& rTabName, ScRange& rRange) const
+{
+    if (!mpMOper)
+        return false;
+
+    OUString aSheet, aRangeStr;
+    if (!extractSheetAndRange(maName, aSheet, aRangeStr))
+        return false;
+
+    ScRange aRange;
+    sal_uInt16 nRes = aRange.ParseAny(aRangeStr, &rDoc, formula::FormulaGrammar::CONV_XL_R1C1);
+    if ((nRes & SCA_VALID) != SCA_VALID)
+        return false;
+
+    if (aRange.aStart.Tab() != aRange.aEnd.Tab())
+        // We don't support multi-sheet range for this.
+        return false;
+
+    const ScMatrix& rCache = mpMOper->GetCache();
+    SCSIZE nC, nR;
+    rCache.GetDimensions(nC, nR);
+    if (!nC || !nR)
+        // cache matrix is empty.
+        return false;
+
+    ScExternalRefManager* pRefMgr = rDoc.GetExternalRefManager();
+    sal_uInt16 nFileId = pRefMgr->getExternalFileId(rUrl);
+    ScExternalRefCache::TableTypeRef xTab = pRefMgr->getCacheTable(nFileId, aSheet, true, NULL);
+    if (!xTab)
+        // cache table creation failed.
+        return false;
+
+    xTab->setWholeTableCached();
+    for (SCSIZE i = 0; i < nR; ++i)
+    {
+        for (SCSIZE j = 0; j < nC; ++j)
+        {
+            SCCOL nCol = aRange.aStart.Col() + j;
+            SCROW nRow = aRange.aStart.Row() + i;
+
+            ScMatrixValue aVal = rCache.Get(j, i);
+            switch (aVal.nType)
+            {
+                case SC_MATVAL_BOOLEAN:
+                {
+                    bool b = aVal.GetBoolean();
+                    ScExternalRefCache::TokenRef pToken(new formula::FormulaDoubleToken(b ? 1.0 : 0.0));
+                    xTab->setCell(nCol, nRow, pToken, 0, false);
+                }
+                break;
+                case SC_MATVAL_VALUE:
+                {
+                    ScExternalRefCache::TokenRef pToken(new formula::FormulaDoubleToken(aVal.fVal));
+                    xTab->setCell(nCol, nRow, pToken, 0, false);
+                }
+                break;
+                case SC_MATVAL_STRING:
+                {
+                    const String& rStr = aVal.GetString();
+                    ScExternalRefCache::TokenRef pToken(new formula::FormulaStringToken(rStr));
+                    xTab->setCell(nCol, nRow, pToken, 0, false);
+                }
+                break;
+                default:
+                    ;
+            }
+        }
+    }
+
+    rFileId = nFileId;
+    rTabName = aSheet;
+    rRange = aRange;
+    return true;
 }
 
 bool XclImpExtName::HasFormulaTokens() const

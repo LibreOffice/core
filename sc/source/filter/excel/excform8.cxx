@@ -42,8 +42,50 @@
 #include "externalrefmgr.hxx"
 
 #include <vector>
+#include <cstring>
 
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 using ::std::vector;
+
+namespace {
+
+/**
+ * Extract a file path from OLE link path.  An OLE link path is expected to
+ * be in the following format:
+ *
+ * Excel.Sheet.8 \3 [file path]
+ */
+bool extractFilePath(const OUString& rUrl, OUString& rPath)
+{
+    const char* prefix = "Excel.Sheet.8\3";
+    size_t nPrefixLen = ::std::strlen(prefix);
+
+    sal_Int32 n = rUrl.getLength();
+    if (n <= static_cast<sal_Int32>(nPrefixLen))
+        // needs to have the specified prefix.
+        return false;
+
+    OUStringBuffer aBuf;
+    const sal_Unicode* p = rUrl.getStr();
+    for (size_t i = 0; i < static_cast<size_t>(n); ++i, ++p)
+    {
+        if (i < nPrefixLen)
+        {
+            sal_Unicode pc = static_cast<sal_Unicode>(*prefix++);
+            if (pc != *p)
+                return false;
+
+            continue;
+        }
+        aBuf.append(*p);
+    }
+
+    rPath = aBuf.makeStringAndClear();
+    return true;
+}
+
+}
 
 ExcelToSc8::ExternalTabInfo::ExternalTabInfo() :
     mnFileId(0), mbExternal(false)
@@ -92,6 +134,20 @@ bool ExcelToSc8::Read3DTabReference( sal_uInt16 nIxti, SCTAB& rFirstTab, SCTAB& 
     return GetExternalFileIdFromXti(nIxti, rExtInfo.mnFileId);
 }
 
+bool ExcelToSc8::HandleOleLink(sal_uInt16 nXtiIndex, const XclImpExtName& rExtName, ExternalTabInfo& rExtInfo)
+{
+    const String* pUrl = rLinkMan.GetSupbookUrl(nXtiIndex);
+    if (!pUrl)
+        return false;
+
+    OUString aPath;
+    if (!extractFilePath(*pUrl, aPath))
+        // file path extraction failed.
+        return false;
+
+    OUString aFileUrl = ScGlobal::GetAbsDocName(aPath, GetDocShell());
+    return rExtName.CreateOleData(GetDoc(), aFileUrl, rExtInfo.mnFileId, rExtInfo.maTabName, rExtInfo.maRange);
+}
 
 // if bAllowArrays is false stream seeks to first byte after <nFormulaLen>
 // otherwise it will seek to the first byte past additional content after <nFormulaLen>
@@ -682,8 +738,29 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                                 aStack << aPool.Store( ocEuroConvert, String() );
                             }
                         break;
-
-                        default:    // OLE link
+                        case xlExtOLE:
+                        {
+                            ExternalTabInfo aExtInfo;
+                            if (HandleOleLink(nXtiIndex, *pExtName, aExtInfo))
+                            {
+                                if (aExtInfo.maRange.aStart == aExtInfo.maRange.aEnd)
+                                {
+                                    // single cell
+                                    aSRD.InitAddress(aExtInfo.maRange.aStart);
+                                    aStack << aPool.StoreExtRef(aExtInfo.mnFileId, aExtInfo.maTabName, aSRD);
+                                }
+                                else
+                                {
+                                    // range
+                                    aCRD.InitRange(aExtInfo.maRange);
+                                    aStack << aPool.StoreExtRef(aExtInfo.mnFileId, aExtInfo.maTabName, aCRD);
+                                }
+                            }
+                            else
+                                aStack << aPool.Store(ocNoName, pExtName->GetName());
+                        }
+                        break;
+                        default:
                         {
                             aPool << ocBad;
                             aPool >> aStack;
