@@ -24,7 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_dbui.hxx"
 #include "dsmeta.hxx"
 #include <connectivity/DriversConfig.hxx>
 #include "dsntypes.hxx"

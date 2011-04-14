@@ -24,7 +24,7 @@
  *
  ************************************************************************/
 
-#include "precompiled_dbaccess.hxx"
+#include "precompiled_dbui.hxx"
 
 #include "dbaundomanager.hxx"
 
