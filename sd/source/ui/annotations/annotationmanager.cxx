@@ -1215,11 +1215,6 @@ SdPage* AnnotationManagerImpl::GetLastPage()
 
 SdPage* AnnotationManagerImpl::GetCurrentPage()
 {
-/*
-    ::boost::shared_ptr<DrawViewShell> pDrawViewShell(::boost::dynamic_pointer_cast<DrawViewShell>(mrBase.GetMainViewShell()));
-    if (pDrawViewShell.get() != NULL)
-        return pDrawViewShell->GetActualPage();
-*/
     return mrBase.GetMainViewShell()->getCurrentPage();
 }
 

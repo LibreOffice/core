@@ -513,32 +513,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                             aNewAttr.Put( *pPoolItem );
                     }
                     break;
-/* #i35937#
-                    case FN_NUM_BULLET_ON:
-                    {
-                        if (aEditAttr.GetItemState(EE_PARA_BULLETSTATE) == SFX_ITEM_ON)
-                        {
-                            SfxUInt16Item aBulletState((const SfxUInt16Item&) aEditAttr.Get(EE_PARA_BULLETSTATE));
-
-                            if (aBulletState.GetValue() != 0)
-                            {
-                                // Ausschalten
-                                aNewAttr.Put(SfxUInt16Item(EE_PARA_BULLETSTATE, 0));
-                            }
-                            else
-                            {
-                                // Einschalten
-                                aNewAttr.Put(SfxUInt16Item(EE_PARA_BULLETSTATE, 1));
-                            }
-                        }
-                        else
-                        {
-                            // Einschalten
-                            aNewAttr.Put(SfxUInt16Item(EE_PARA_BULLETSTATE, 1));
-                        }
-                    }
-                    break;
-*/
+// #i35937# removed need for FN_NUM_BULLET_ON handling
                 }
 
                 rReq.Done( aNewAttr );

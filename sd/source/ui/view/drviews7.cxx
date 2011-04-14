@@ -1417,9 +1417,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                             default:
                                 break;
                         }
-
-                        // #i25616# bFoundObjNoLine = sal_True;
-                        // #i25616# bFoundObjNoArea = sal_True;
                         break;
                     case OBJ_TABLE:
                         bFoundTable = true;

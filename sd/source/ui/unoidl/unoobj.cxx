@@ -544,17 +544,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                     EffectMigration::SetAnimationSpeed( mpShape, eSpeed );
                     break;
                 }
-/* TODO??       case WID_ISANIMATION:
-                {
-
-                    sal_Bool bIsAnimation;
-                    if(!(aValue >>= bIsAnimation))
-                        throw lang::IllegalArgumentException();
-
-                    pInfo->mbIsMovie = bIsAnimation;
-                    break;
-                }
-*/
+// TODO: WID_ISANIMATION
                 case WID_BOOKMARK:
                 {
                     OUString aString;
@@ -568,11 +558,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                     ::cppu::any2enum< presentation::ClickAction >( pInfo->meClickAction, aValue);
                     break;
 
-/* todo?
-                case WID_PLAYFULL:
-                    pInfo->mbPlayFull = ::cppu::any2bool(aValue);
-                    break;
-*/
+// TODO: WID_PLAYFULL:
                 case WID_SOUNDFILE:
                 {
                     OUString aString;
@@ -590,17 +576,6 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                     EffectMigration::UpdateSoundEffect( mpShape, pInfo );
                     break;
                 }
-/*
-                case WID_BLUESCREEN:
-                {
-                    sal_Int32 nColor;
-                    if(!(aValue >>= nColor))
-                        throw lang::IllegalArgumentException();
-
-                    pInfo->maBlueScreen.SetColor( nColor );
-                    break;
-                }
-*/
                 case WID_VERB:
                 {
                     sal_Int32 nVerb = 0;
@@ -656,36 +631,8 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                 case WID_MASTERDEPEND:
                     SetMasterDepend( ::cppu::any2bool(aValue) );
                     break;
-/* todo
-                case WID_ANIMPATH:
-                {
-                    uno::Reference< drawing::XShape > xShape;
-                    aValue >>= xShape;
 
-                    SdrObject* pObj = NULL;
-                    if(xShape.is())
-                        pObj = GetSdrObjectFromXShape( xShape );
-
-                    if( pObj == NULL || !pObj->ISA( SdrPathObj ) )
-                        throw lang::IllegalArgumentException();
-
-                    pInfo->mpPathObj = (SdrPathObj*)pObj;
-
-                    SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():NULL;
-                    if( pDoc )
-                    {
-                        pInfo = pDoc->GetAnimationInfo(pObj);
-                        if( pInfo == NULL )
-                        {
-                            pInfo = new SdAnimationInfo(pDoc);
-                            pObj->InsertUserData( pInfo );
-                        }
-                        pInfo->mbInvisibleInPresentation = sal_True;
-                    }
-
-                    break;
-                }
-*/
+// TODO: WID_ANIMPATH
                 case WID_IMAGEMAP:
                 {
                     SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():NULL;

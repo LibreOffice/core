@@ -1454,14 +1454,6 @@ void SlideshowImpl::displayCurrentSlide (const bool bSkipAllMainSequenceEffects)
 
 void SlideshowImpl::endPresentation()
 {
-/*
-    if( maPresSettings.mbMouseAsPen)
-    {
-        Reference< XMultiServiceFactory > xDocFactory(mpDoc->getUnoModel(), UNO_QUERY );
-        if( xDocFactory.is() )
-            mxShow->registerUserPaintPolygons(xDocFactory);
-    }
-*/
     if( !mnEndShowEvent )
         mnEndShowEvent = Application::PostUserEvent( LINK(this, SlideshowImpl, endPresentationHdl) );
 }

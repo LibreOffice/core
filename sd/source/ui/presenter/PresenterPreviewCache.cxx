@@ -388,13 +388,6 @@ void PresenterPreviewCache::PresenterCacheContext::NotifyPreviewCreation (
 bool PresenterPreviewCache::PresenterCacheContext::IsIdle (void)
 {
     return true;
-    /*
-    sal_Int32 nIdleState (tools::IdleDetection::GetIdleState(NULL));
-    if (nIdleState == tools::IdleDetection::IDET_IDLE)
-        return true;
-    else
-        return false;
-    */
 }
 
 

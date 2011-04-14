@@ -825,10 +825,6 @@ void SlotManager::GetClipboardState ( SfxItemSet& rSet)
 void SlotManager::GetStatusBarState (SfxItemSet& rSet)
 {
     // Seitenanzeige und Layout
-    /*
-    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_STATUS_PAGE ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_STATUS_LAYOUT ) )
-    */
     SdPage* pPage      = NULL;
     SdPage* pFirstPage = NULL;
     sal_uInt16  nFirstPage;

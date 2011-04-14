@@ -374,14 +374,6 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
                         bE3dCompoundObject = sal_True;
                 }
             }
-            /* Kann wohl raus, da jedes(?) Objekt Text enthalten kann
-            if( !bText )
-            {
-                rSet.DisableItem( SID_CHAR_DLG );
-                rSet.DisableItem( SID_PARA_DLG );
-                rSet.DisableItem( SID_CHARMAP );
-            }
-            */
             if( bLine && !bText && !bDrawObj &&!b3dObj)
             {
                 rSet.DisableItem( SID_ATTR_FILL_STYLE );

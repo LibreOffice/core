@@ -110,14 +110,6 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
     List* pCustomShowList = mpDoc->GetCustomShowList(); // No Create
 
     sal_Bool bStartWithActualPage = SD_MOD()->GetSdOptions( mpDoc->GetDocumentType() )->IsStartWithActualPage();
-/* change in behaviour, even when always start with current page is enabled, range settings are
-            still used
-    if( bStartWithActualPage )
-    {
-        aFirstPage = pViewSh->GetActualPage()->GetName();
-        pCustomShowList = NULL;
-    }
-*/
     if( !aFirstPage.Len() && pPage )
         aFirstPage = pPage->GetName();
 

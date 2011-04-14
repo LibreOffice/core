@@ -890,17 +890,6 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     Graphic aGraphic;
                     sal_uLong nGrFormat = 0;
 
-// (wg. Selection Manager bei Trustet Solaris)
-#ifndef SOLARIS
-/*
-                    if( aDataHelper.GetGraphic( SOT_FORMATSTR_ID_SVXB, aGraphic ) )
-                        nGrFormat = SOT_FORMATSTR_ID_SVXB;
-                    else if( aDataHelper.GetGraphic( FORMAT_GDIMETAFILE, aGraphic ) )
-                        nGrFormat = SOT_FORMAT_GDIMETAFILE;
-                    else if( aDataHelper.GetGraphic( FORMAT_BITMAP, aGraphic ) )
-                        nGrFormat = SOT_FORMAT_BITMAP;
-*/
-#endif
 
                     // insert replacement image ( if there is one ) into the object helper
                     if ( nGrFormat )

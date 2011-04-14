@@ -263,9 +263,6 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_STYLE_FAMILY2 );
                 }
             }
-/* GrabFocus moved to stylist
-            pWin->GrabFocus();
-*/
         break;
 
         case SID_STYLE_WATERCAN:
@@ -476,45 +473,6 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                         SfxItemSet& rAttr = pStyleSheet->GetItemSet();
 
-/* #i35937#
-                        if ( rAttr.GetItemState( EE_PARA_LRSPACE ) == SFX_ITEM_ON )
-                        {
-                            // SvxLRSpaceItem hart gesetzt: NumBulletItem anpassen
-                            if ( aOriSet.GetItemState( EE_PARA_LRSPACE ) != SFX_ITEM_ON ||
-                                    (const SvxLRSpaceItem&) aOriSet.Get( EE_PARA_LRSPACE ) !=
-                                    (const SvxLRSpaceItem&) rAttr.Get( EE_PARA_LRSPACE ) )
-                            {
-                                SvxNumBulletItem aNumBullet( (const SvxNumBulletItem&) rAttr.Get(EE_PARA_NUMBULLET) );
-
-                                sal_uInt16 nLevel = 0;
-                                if( (ePO >= PO_OUTLINE_2) && (ePO <= PO_OUTLINE_9) )
-                                    nLevel = (sal_uInt16)(ePO - PO_OUTLINE_1 + 1);
-
-                                EditEngine::ImportBulletItem( aNumBullet, nLevel, NULL,
-                                                        &(const SvxLRSpaceItem&) rAttr.Get( EE_PARA_LRSPACE ) );
-
-                                // the numbering bullet item is not valid in styles Outline 2 to Outline 9
-                                if( nLevel != 0 )
-                                {
-                                    // so put it into Outline 1 then..
-                                    String sStyleName((SdResId(STR_PSEUDOSHEET_OUTLINE)));
-                                    sStyleName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " 1" ) );
-                                    SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( sStyleName, SD_STYLE_FAMILY_PSEUDO);
-
-                                    if(pFirstStyleSheet)
-                                    {
-                                        pFirstStyleSheet->GetItemSet().Put( aNumBullet);
-                                        SdStyleSheet* pRealSheet = ((SdStyleSheet*)pFirstStyleSheet)->GetRealStyleSheet();
-                                        pRealSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
-                                    }
-                                }
-                                else
-                                {
-                                    ( (SfxItemSet&) rAttr).Put( aNumBullet );
-                                }
-                            }
-                        }
-*/
                         // check for unique names of named items for xml
                         if( rAttr.GetItemState( XATTR_FILLBITMAP ) == SFX_ITEM_SET )
                         {

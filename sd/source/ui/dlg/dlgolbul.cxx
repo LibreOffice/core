@@ -132,17 +132,6 @@ OutlineBulletDlg::OutlineBulletDlg(
         aInputSet.Put(*pItem, EE_PARA_NUMBULLET);
     }
 
-    /* debug
-    if( SFX_ITEM_SET == aInputSet.GetItemState(EE_PARA_NUMBULLET, sal_False, &pItem ))
-    {
-        SvxNumRule& rItem = *((SvxNumBulletItem*)pItem)->GetNumRule();
-        for( int i = 0; i < 9; i++ )
-        {
-            SvxNumberFormat aNumberFormat = rItem.GetLevel(i);
-        }
-    }
-    */
-
     if(bTitle && aInputSet.GetItemState(EE_PARA_NUMBULLET,sal_True) == SFX_ITEM_ON )
     {
         SvxNumBulletItem* pItem = (SvxNumBulletItem*)aInputSet.GetItem(EE_PARA_NUMBULLET,sal_True);
@@ -215,15 +204,9 @@ const SfxItemSet* OutlineBulletDlg::GetOutputItemSet() const
     {
         SdBulletMapper::MapFontsInNumRule( *((SvxNumBulletItem*)pItem)->GetNumRule(), *pOutputSet );
 
-/* #i35937#
-        SfxUInt16Item aBulletState( EE_PARA_BULLETSTATE, 1 );
-        pOutputSet->Put(aBulletState);
-*/
+// #i35937 - removed EE_PARA_BULLETSTATE setting
     }
 
-/* #i35937#
-    SdBulletMapper::PostMapNumBulletForDialog( *pOutputSet );
-*/
 
     if(bTitle && pOutputSet->GetItemState(EE_PARA_NUMBULLET,sal_True) == SFX_ITEM_ON )
     {

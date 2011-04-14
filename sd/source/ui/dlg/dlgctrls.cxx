@@ -80,23 +80,6 @@ void FadeEffectLB::Fill()
     SelectEntryPos(0);
 }
 
-// -----------------------------------------------------------------------------
-
-/*
-void FadeEffectLB::SelectEffect( presentation::FadeEffect eFE )
-{
-    sal_Bool bFound = sal_False;
-
-    for( long i = 0, nCount = sizeof( aEffects ) / sizeof( FadeEffectPair ); ( i < nCount ) && !bFound; i++ )
-    {
-        if( aEffects[ i ].meFE == eFE )
-        {
-            SelectEntryPos( (sal_uInt16) i );
-            bFound = sal_True;
-        }
-    }
-}
-*/
 
 // -----------------------------------------------------------------------------
 

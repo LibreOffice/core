@@ -136,18 +136,6 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
 
         if (!pArgs || pArgs->Count() == 1 || pArgs->Count() == 2 )
         {
-            if (pArgs && pArgs->Count() == 2)
-            {
-                // We have been called with a request that contains two
-                // arguments.  One was used as preselected layout in a
-                // dialog.  We could select that layout in the
-                // layout panel instead.
-                /*
-                    SFX_REQUEST_ARG (rRequest, pNewAutoLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, sal_False);
-                    eNewAutoLayout = (AutoLayout) pNewAutoLayout->GetValue
-                    ();
-                */
-            }
 
             // Make the layout menu visible in the tool pane.
             SfxBoolItem aMakeToolPaneVisible (ID_VAL_ISVISIBLE, sal_True);

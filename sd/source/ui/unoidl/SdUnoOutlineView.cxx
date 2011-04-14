@@ -149,44 +149,6 @@ Reference< drawing::XDrawPage > SAL_CALL SdUnoOutlineView::getCurrentPage (void)
     return xPage;
 }
 
-
-
-/*
-// Return sal_True, value change
-sal_Bool SdUnoOutlineView::convertFastPropertyValue (
-    Any & rConvertedValue,
-    Any & rOldValue,
-    sal_Int32 nHandle,
-    const Any& rValue)
-    throw ( com::sun::star::lang::IllegalArgumentException)
-{
-    sal_Bool bResult = sal_False;
-
-    switch( nHandle )
-    {
-        case DrawController::PROPERTY_CURRENTPAGE:
-            {
-                Reference< drawing::XDrawPage > xOldPage( getCurrentPage() );
-                Reference< drawing::XDrawPage > xNewPage;
-                ::cppu::convertPropertyValue( xNewPage, rValue );
-                if( xOldPage != xNewPage )
-                {
-                    rConvertedValue <<= xNewPage;
-                    rOldValue <<= xOldPage;
-                    bResult = sal_True;
-                }
-            }
-            break;
-
-        default:
-            break;
-    }
-
-    return bResult;
-}
-*/
-
-
 void SdUnoOutlineView::setFastPropertyValue (
     sal_Int32 nHandle,
         const Any& rValue)

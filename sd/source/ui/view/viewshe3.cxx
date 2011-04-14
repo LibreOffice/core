@@ -240,19 +240,6 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     const SfxItemSet* pArgs = rRequest.GetArgs();
     if (! pArgs)
     {
-/*
-        // Make the layout menu visible in the tool pane.
-        const ViewShellBase& rBase (GetViewShellBase());
-        if (rBase.GetMainViewShell()!=NULL
-            && rBase.GetMainViewShell()->GetShellType()!=ViewShell::ST_OUTLINE
-            && rBase.GetMainViewShell()->GetShellType()!=ViewShell::ST_DRAW)
-        {
-            framework::FrameworkHelper::Instance(GetViewShellBase())->RequestTaskPanel(
-                framework::FrameworkHelper::msLayoutTaskPanelURL,
-                false);
-        }
-*/
-
         // AutoLayouts muessen fertig sein
         pDocument->StopWorkStartupDelay();
 

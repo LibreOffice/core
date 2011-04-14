@@ -533,21 +533,6 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
             }
         }
 
-/* #i35937#
-        if (aAttrSet.GetItemState(EE_PARA_BULLETSTATE) == SFX_ITEM_ON)
-        {
-            SfxUInt16Item aBulletState((const SfxUInt16Item&) aAttrSet.Get(EE_PARA_BULLETSTATE));
-
-            if (aBulletState.GetValue() != 0)
-            {
-                rSet.Put(SfxBoolItem(FN_NUM_BULLET_ON, sal_True));
-            }
-            else
-            {
-                rSet.Put(SfxBoolItem(FN_NUM_BULLET_ON, sal_False));
-            }
-        }
-*/
         sal_uInt16 nLineSpace = (sal_uInt16) ( (const SvxLineSpacingItem&) aAttrSet.
                             Get( EE_PARA_SBL ) ).GetPropLineSpace();
         switch( nLineSpace )

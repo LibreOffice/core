@@ -342,13 +342,7 @@ bool AnnotationTag::MouseButtonDown( const MouseEvent& rMEvt, SmartHdl& /*rHdl*/
         mrView.getSmartTags().select( xTag );
         bRet = true;
     }
-    /*
-    if( rMEvt.IsLeft() && (rMEvt.GetClicks() == 2) )
-    {
-        // double click;
-        return true;
-    }
-    else */
+
     if( rMEvt.IsLeft() && !rMEvt.IsRight() )
     {
         Window* pWindow = mrView.GetViewShell()->GetActiveWindow();
@@ -414,25 +408,7 @@ bool AnnotationTag::KeyInput( const KeyEvent& rKEvt )
 /** returns true if the SmartTag consumes this event. */
 bool AnnotationTag::RequestHelp( const HelpEvent& /*rHEvt*/ )
 {
-/*
-    ::Window* pWindow = mrView.GetViewShell()->GetActiveWindow();
-    if( mxAnnotation.is() && pWindow )
-    {
-        OUString aHelpText( mrManager.GetHelpText( mxAnnotation ) );
 
-        RealPoint2D aPosition( mxAnnotation->getPosition() );
-        Point aPos( pWindow->LogicToPixel( Point( static_cast<long>(aPosition.X * 100.0), static_cast<long>(aPosition.Y * 100.0) ) ) );
-
-        Rectangle aRect( aPos, maSize );
-
-        if (Help::IsBalloonHelpEnabled())
-            Help::ShowBalloon( pWindow, aPos, aRect, aHelpText);
-        else if (Help::IsQuickHelpEnabled())
-            Help::ShowQuickHelp( pWindow, aRect, aHelpText);
-
-        return true;
-   }
-*/
    return false;
 }
 

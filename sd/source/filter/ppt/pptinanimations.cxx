@@ -1372,25 +1372,8 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
         }
     }
 
-/* todo
-    Reference< XAudio > xAudio( xNode, UNO_QUERY );
-    if( xAudio.is() )
-    {
-        if( rSet.hasProperty( DFF_ANIM_ENDAFTERSLIDE ) )
-        {
-            sal_Int16 nEndAfterSlide = 0;
-            if( rSet.getProperty( DFF_ANIM_ENDAFTERSLIDE ) >>= nEndAfterSlide )
-                xAudio->setEndAfterSlide( nEndAfterSlide );
-        }
 
-        if( rSet.hasProperty( DFF_ANIM_VOLUME ) )
-        {
-            double fVolume = 1.0;
-            rSet.getProperty( DFF_ANIM_VOLUME ) >>= fVolume;
-            xAudio->setVolume( fVolume );
-        }
-    }
-*/
+// TODO: DFF_ANIM_ENDAFTERSLIDE / DFF_ANIM_VOLUME handling. git history has sample code
     Reference< XAnimateColor > xColor( xNode, UNO_QUERY );
     if( xColor.is() )
     {

@@ -229,24 +229,6 @@ sal_Int32 FocusManager::GetFocusedPageIndex (void) const
 }
 
 
-
-/*
-void FocusManager::FocusPage (sal_Int32 nPageIndex)
-{
-    if (nPageIndex != mnPageIndex)
-    {
-        // Hide the focus while switching it to the specified page.
-        FocusHider aHider (*this);
-        mnPageIndex = nPageIndex;
-    }
-
-    if (HasFocus() && !IsFocusShowing())
-        ShowFocus();
-}
-*/
-
-
-
 void FocusManager::SetFocusedPage (const model::SharedPageDescriptor& rpDescriptor)
 {
     if (rpDescriptor.get() != NULL)

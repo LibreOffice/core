@@ -228,11 +228,6 @@ void SdTPAction::Construct()
             {
                 pGrafObj = (SdrGrafObj*) pObj;
             }
-//          // VCXControl ?
-//          else if( pObj->IsA( TYPE( VCSbxDrawObject ) ) )
-//          {
-//              bDisableAll = sal_True;
-//          }
         }
     }
     if( pGrafObj )

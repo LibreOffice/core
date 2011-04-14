@@ -181,14 +181,6 @@ void FuPoor::ForceScroll(const Point& aPixPos)
     if ( !mpView->IsDragHelpLine() && !mpView->IsSetPageOrg() &&
             !SlideShow::IsRunning( mpViewShell->GetViewShellBase() ) )
     {
-/*      Size aSize = mpWindow->GetSizePixel();
-        short dx = 0, dy = 0;
-
-        if ( aPixPos.X() <= 0              ) dx = -1;
-        if ( aPixPos.X() >= aSize.Width()  ) dx =  1;
-        if ( aPixPos.Y() <= 0              ) dy = -1;
-        if ( aPixPos.Y() >= aSize.Height() ) dy =  1;
-*/
         Point aPos = mpWindow->OutputToScreenPixel(aPixPos);
         const Rectangle& rRect = mpViewShell->GetAllWindowRect();
 
