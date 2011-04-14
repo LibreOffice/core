@@ -1589,19 +1589,6 @@ void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nAnz, sal_uInt8 nMinParamCo
             }
         }
 
-        // FIXME: ideally we'd want to import all missing args, but this
-        // conflicts with lots of fn's understanding of nParams - we need
-        // a function table, and pre-call argument normalisation 1st.
-        sal_Int16 nLastRemovable = nLast - nMinParamCount;
-
-        // skip missing parameters at end of parameter list
-        while( nSkipEnd < nLastRemovable &&
-               aPool.IsSingleOp( eParam[ nSkipEnd + 1 ], ocMissing ) )
-            nSkipEnd++;
-
-//      fprintf (stderr, "Fn %d nSkipEnd %d nLast %d nMinParamCnt %d %d\n",
-//               eId, nSkipEnd, nLast, nMinParamCount, nLastRemovable);
-
         // [Parameter{;Parameter}]
         if( nLast > nSkipEnd )
         {
