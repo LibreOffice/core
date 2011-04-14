@@ -389,8 +389,10 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
             aPropSet.setProperty( PROP_CustomShapeGeometry, aSeq );
             OSL_TRACE("created ooxml preset");
 
+#ifdef DEBUG
             aPropertyMap.dump();
             aPropertyMap.dumpCode();
+#endif
         } else {
             //const uno::Reference < drawing::XShape > xShape( xPropSet, UNO_QUERY );
             Reference< drawing::XEnhancedCustomShapeDefaulter > xDefaulter( xShape, UNO_QUERY );
