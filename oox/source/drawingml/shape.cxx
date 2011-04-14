@@ -198,7 +198,7 @@ void Shape::addShape(
 
 void Shape::applyShapeReference( const Shape& rReferencedShape )
 {
-    mpTextBody = TextBodyPtr( new TextBody( *rReferencedShape.mpTextBody.get() ) );
+    mpTextBody = TextBodyPtr( rReferencedShape.mpTextBody.get() ? new TextBody( *rReferencedShape.mpTextBody.get() ) : new TextBody() );
     maShapeProperties = rReferencedShape.maShapeProperties;
     mpLinePropertiesPtr = LinePropertiesPtr( new LineProperties( *rReferencedShape.mpLinePropertiesPtr.get() ) );
     mpFillPropertiesPtr = FillPropertiesPtr( new FillProperties( *rReferencedShape.mpFillPropertiesPtr.get() ) );
