@@ -30,10 +30,12 @@
 
 #include <sal/types.h>
 
+#include <WriterFilterDllApi.hxx>
+
 namespace writerfilter {
 namespace resourcemodel {
 
-class Fraction
+class WRITERFILTER_DLLPUBLIC Fraction
 {
 public:
     explicit Fraction(sal_Int32 nNumerator, sal_Int32 nDenominator = 1);

@@ -1,4 +1,4 @@
-#************************************************************************
+#*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
@@ -23,30 +23,18 @@
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
-# ***********************************************************************/
-PRJ=..$/..
-PRJNAME=writerfilter
-TARGET=filter
-GEN_HID=TRUE
+#*************************************************************************
 
-ENABLE_EXCEPTIONS=TRUE
-
-# --- Settings ----------------------------------
+PRJ=..
+TARGET=prj
 
 .INCLUDE : settings.mk
-.INCLUDE :  $(PRJ)$/inc$/writerfilter.mk
 
-# --- Files -------------------------------------
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
+.ENDIF
 
-SLOFILES=           $(SLO)$/WriterFilter.obj \
-                    $(SLO)$/WriterFilterDetection.obj \
-                    $(SLO)$/ImportFilter.obj \
-                    $(SLO)$/RtfFilter.obj
-
-
-# --- Targets ----------------------------------
-
-.INCLUDE : target.mk
-
-
-
+all:
+    cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog

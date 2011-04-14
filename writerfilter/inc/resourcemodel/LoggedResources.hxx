@@ -54,7 +54,7 @@ private:
     string msPrefix;
 };
 
-class LoggedStream : public Stream
+class WRITERFILTER_DLLPUBLIC LoggedStream : public Stream
 {
 public:
     explicit LoggedStream(TagLogger::Pointer_t pLogger, const string & sPrefix);
@@ -94,7 +94,7 @@ protected:
     LoggedResourcesHelper mHelper;
 };
 
-class LoggedProperties : public Properties
+class WRITERFILTER_DLLPUBLIC LoggedProperties : public Properties
 {
 public:
     explicit LoggedProperties(TagLogger::Pointer_t pLogger, const string & sPrefix);
@@ -110,7 +110,7 @@ protected:
     LoggedResourcesHelper mHelper;
 };
 
-class LoggedTable : public Table
+class WRITERFILTER_DLLPUBLIC LoggedTable : public Table
 {
 public:
     explicit LoggedTable(TagLogger::Pointer_t pLogger, const string & sPrefix);
