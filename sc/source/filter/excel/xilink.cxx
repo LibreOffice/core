@@ -700,9 +700,9 @@ void XclImpSupbook::ReadExternname( XclImpStream& rStrm, ExcelToSc* pFormulaConv
 const XclImpExtName* XclImpSupbook::GetExternName( sal_uInt16 nXclIndex ) const
 {
     DBG_ASSERT( nXclIndex > 0, "XclImpSupbook::GetExternName - index must be >0" );
-    if (meType == EXC_SBTYPE_SELF || nXclIndex >= maExtNameList.size())
+    if (meType == EXC_SBTYPE_SELF || nXclIndex > maExtNameList.size())
         return NULL;
-    return &maExtNameList.at( nXclIndex - 1 );
+    return &maExtNameList[nXclIndex-1];
 }
 
 bool XclImpSupbook::GetLinkData( String& rApplic, String& rTopic ) const
