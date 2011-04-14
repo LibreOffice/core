@@ -94,6 +94,7 @@ public:
     DECL_LINK(SelectionChangeListener, void*);
     DECL_LINK(BroadcastSelectionChange, void*);
     DECL_LINK(FocusChangeListener, void*);
+    DECL_LINK(VisibilityChangeListener, void*);
     DECL_LINK(UpdateChildrenCallback, void*);
 
 private:
@@ -975,7 +976,7 @@ void AccessibleSlideSorterView::Implementation::ConnectListeners (void)
     mrSlideSorter.GetController().GetFocusManager().AddFocusChangeListener(
         LINK(this,AccessibleSlideSorterView::Implementation,FocusChangeListener));
     mrSlideSorter.GetView().AddVisibilityChangeListener(
-        LINK(this,AccessibleSlideSorterView::Implementation,UpdateChildrenCallback));
+        LINK(this,AccessibleSlideSorterView::Implementation,VisibilityChangeListener));
 }
 
 
@@ -988,7 +989,7 @@ void AccessibleSlideSorterView::Implementation::ReleaseListeners (void)
     mrSlideSorter.GetController().GetSelectionManager()->RemoveSelectionChangeListener(
         LINK(this,AccessibleSlideSorterView::Implementation,SelectionChangeListener));
     mrSlideSorter.GetView().RemoveVisibilityChangeListener(
-        LINK(this,AccessibleSlideSorterView::Implementation,UpdateChildrenCallback));
+        LINK(this,AccessibleSlideSorterView::Implementation,VisibilityChangeListener));
 
     if (mpWindow != NULL)
         mpWindow->RemoveEventListener(
@@ -1131,6 +1132,15 @@ IMPL_LINK(AccessibleSlideSorterView::Implementation, UpdateChildrenCallback, voi
     mnUpdateChildrenUserEventId = 0;
     UpdateChildren();
 
+    return 1;
+}
+
+
+
+
+IMPL_LINK(AccessibleSlideSorterView::Implementation, VisibilityChangeListener, void*, EMPTYARG )
+{
+    UpdateChildren();
     return 1;
 }
 
