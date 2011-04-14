@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_reportdesign.hxx"
+#include "precompiled_rptxml.hxx"
 #include "xmlGroup.hxx"
 #include "xmlSection.hxx"
 #include "xmlFunction.hxx"

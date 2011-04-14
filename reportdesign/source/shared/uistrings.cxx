@@ -24,12 +24,13 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_reportdesign.hxx"
+#include "precompiled_rptui.hxx"
 
 #include "uistrings.hrc"
 
 namespace rptui
 {
+
 #include "stringconstants.cxx"
     IMPLEMENT_CONSTASCII_USTRING(PROPERTY_REPORTNAME            , "ReportName");
     IMPLEMENT_CONSTASCII_USTRING(CFG_REPORTDESIGNER             , "SunReportBuilder");

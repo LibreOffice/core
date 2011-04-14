@@ -24,6 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#include "precompiled_reportdesign.hxx"
 #include "Shape.hxx"
 
 #include <com/sun/star/beans/NamedValue.hpp>

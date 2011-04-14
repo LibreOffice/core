@@ -24,11 +24,10 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#include "precompiled_reportdesign.hxx"
 #include "ReportComponent.hxx"
 
-#ifndef REPORTDESIGN_SHARED_CORESTRINGS_HRC
 #include "corestrings.hrc"
-#endif
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

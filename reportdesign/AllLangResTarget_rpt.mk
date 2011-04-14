@@ -2,9 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
-# OpenOffice.org - a multi-platform office productivity suite
+# OpenOffice.org - a multi-platdbam office productivity suite
 #
 # This file is part of OpenOffice.org.
 #
@@ -14,33 +14,34 @@
 #
 # OpenOffice.org is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Lesser General Public License version 3 for more details
+# MERCHANTABILITY or FITNESS dba A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License version 3 dba more details
 # (a copy is included in the LICENSE file that accompanied this code).
 #
 # You should have received a copy of the GNU Lesser General Public License
 # version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
-# for a copy of the LGPLv3 License.
+# dba a copy of the LGPLv3 License.
 #
 #*************************************************************************
 
-PRJ=..$/..$/..
-PRJINC=$(PRJ)$/source
-PRJNAME=reportdesign
-TARGET=core_misc
-ENABLE_EXCEPTIONS=TRUE
+$(eval $(call gb_AllLangResTarget_AllLangResTarget,rpt))
 
-# --- Settings -----------------------------------------------------
-.INCLUDE :  settings.mk
-.INCLUDE : $(PRJ)$/util$/dll.pmk
+$(eval $(call gb_AllLangResTarget_set_reslocation,rpt,reportdesign))
 
-# --- Files --------------------------------------------------------
+$(eval $(call gb_AllLangResTarget_add_srs,rpt,reportdesign/rpt))
 
-SLOFILES=	$(SLO)$/conditionalexpression.obj \
-            $(SLO)$/conditionupdater.obj \
-            $(SLO)$/reportformula.obj
+$(eval $(call gb_SrsTarget_SrsTarget,reportdesign/rpt))
 
-# --- Targets ----------------------------------
+$(eval $(call gb_SrsTarget_set_include,reportdesign/rpt,\
+	$$(INCLUDE) \
+	-I$(OUTDIR)/inc \
+	-I$(SRCDIR)/reportdesign/source/core/inc \
+	-I$(SRCDIR)/reportdesign/inc \
+))
 
-.INCLUDE :  target.mk
+$(eval $(call gb_SrsTarget_add_files,reportdesign/rpt,\
+	reportdesign/source/core/resource/strings.src \
+))
+
+# vim: set noet sw=4 ts=4:

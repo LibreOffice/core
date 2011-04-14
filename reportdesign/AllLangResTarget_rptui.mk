@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,24 +25,32 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..
-PRJINC=$(PRJ)$/source
-PRJNAME=reportdesign
-TARGET=core_resource
-ENABLE_EXCEPTIONS=TRUE
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_AllLangResTarget_AllLangResTarget,rptui))
 
-.INCLUDE :  settings.mk
-.INCLUDE : $(PRJ)$/util$/dll.pmk
+$(eval $(call gb_AllLangResTarget_set_reslocation,rptui,reportdesign))
 
-# --- Files --------------------------------------------------------
+$(eval $(call gb_AllLangResTarget_add_srs,rptui,reportdesign/rptui))
 
-SRS1NAME=core_strings
-SRC1FILES= \
-    strings.src 	\
+$(eval $(call gb_SrsTarget_SrsTarget,reportdesign/rptui))
 
-SLOFILES=	$(SLO)$/core_resource.obj \
+$(eval $(call gb_SrsTarget_set_include,reportdesign/rptui,\
+	$$(INCLUDE) \
+	-I$(OUTDIR)/inc \
+	-I$(WORKDIR)/inc/reportdesign \
+	-I$(SRCDIR)/reportdesign/source/ui/inc \
+	-I$(SRCDIR)/reportdesign/inc \
+))
 
-# --- Targets ----------------------------------
 
-.INCLUDE :  target.mk
+$(eval $(call gb_SrsTarget_add_files,reportdesign/rptui,\
+	reportdesign/source/ui/dlg/dlgpage.src	\
+	reportdesign/source/ui/dlg/PageNumber.src	\
+	reportdesign/source/ui/dlg/DateTime.src	\
+	reportdesign/source/ui/dlg/CondFormat.src	\
+	reportdesign/source/ui/dlg/Navigator.src	\
+	reportdesign/source/ui/dlg/GroupsSorting.src \
+	reportdesign/source/ui/inspection/inspection.src \
+	reportdesign/source/ui/report/report.src \
+))
+
+# vim: set noet sw=4 ts=4:

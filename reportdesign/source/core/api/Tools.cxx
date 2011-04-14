@@ -24,10 +24,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#include "precompiled_reportdesign.hxx"
 #include "Tools.hxx"
-#ifndef REPORTDESIGN_CORE_RESOURCE_HRC_
 #include "core_resource.hrc"
-#endif
 #include "core_resource.hxx"
 #include <comphelper/property.hxx>
 

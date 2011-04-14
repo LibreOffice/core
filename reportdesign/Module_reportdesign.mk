@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,38 +25,19 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..
-PRJINC=$(PRJ)$/source
-PRJNAME=reportdesign
-TARGET=uimisc
+$(eval $(call gb_Module_Module,reportdesign))
 
-VISIBILITY_HIDDEN=TRUE
+$(eval $(call gb_Module_add_targets,reportdesign,\
+	AllLangResTarget_rpt\
+	AllLangResTarget_rptui\
+	Library_rpt\
+	Library_rptxml\
+	Library_rptui\
+	Package_uiconfig \
+	Package_xml \
+))
 
-# --- Settings ----------------------------------
-
-.INCLUDE : settings.mk
-# .INCLUDE : $(PRJ)$/util$/dll.pmk
-
-# --- Files -------------------------------------
-
-# ... resource files ............................
-
-# ... object files ............................
-
-EXCEPTIONSFILES=	\
-        $(SLO)$/RptUndo.obj					\
-        $(SLO)$/ColorListener.obj			\
-        $(SLO)$/UITools.obj					\
-        $(SLO)$/rptuiservices.obj			\
-        $(SLO)$/toolboxcontroller.obj		\
-        $(SLO)$/statusbarcontroller.obj		\
-        $(SLO)$/FunctionHelper.obj
-
-
-SLOFILES=	\
-        $(EXCEPTIONSFILES)
-
-# --- Targets ----------------------------------
-
-.INCLUDE : target.mk
-
+$(eval $(call gb_Module_add_subsequentcheck_targets,reportdesign,\
+	JunitTest_reportdesign_complex \
+))
+# vim: set noet ts=4 sw=4:

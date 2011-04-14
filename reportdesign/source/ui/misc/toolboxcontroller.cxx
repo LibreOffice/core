@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_reportdesign.hxx"
+#include "precompiled_rptui.hxx"
 #include "toolboxcontroller.hxx"
 #include <com/sun/star/ui/ImageType.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>

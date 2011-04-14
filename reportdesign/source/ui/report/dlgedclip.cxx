@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_reportdesign.hxx"
+#include "precompiled_rptui.hxx"
 #include "dlgedclip.hxx"
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/datatransfer/XMimeContentType.hpp>

@@ -25,28 +25,16 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..
-PRJINC=$(PRJ)$/source
-PRJNAME=reportdesign
-TARGET=core_sdr
-ENABLE_EXCEPTIONS=TRUE
-# --- Settings -----------------------------------------------------
-.INCLUDE :  settings.mk
-.INCLUDE : $(PRJ)$/util$/dll.pmk
+PRJ=..
+TARGET=prj
 
-# --- Files --------------------------------------------------------
+.INCLUDE : settings.mk
 
-SLOFILES=	$(SLO)$/RptModel.obj			\
-            $(SLO)$/RptPage.obj				\
-            $(SLO)$/UndoActions.obj			\
-            $(SLO)$/RptObject.obj			\
-            $(SLO)$/RptObjectListener.obj	\
-            $(SLO)$/ModuleHelper.obj		\
-            $(SLO)$/PropertyForward.obj		\
-            $(SLO)$/ReportDrawPage.obj		\
-            $(SLO)$/ReportUndoFactory.obj   \
-            $(SLO)$/UndoEnv.obj \
-            $(SLO)$/formatnormalizer.obj
-# --- Targets ----------------------------------
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
+.ENDIF
 
-.INCLUDE :  target.mk
+all:
+	cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog

@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_reportdesign.hxx"
+#include "precompiled_rptui.hxx"
 #include "ReportComponentHandler.hxx"
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/sequence.hxx>

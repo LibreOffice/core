@@ -26,7 +26,7 @@
  ************************************************************************/
 
 
-#include "precompiled_reportdesign.hxx"
+#include "precompiled_rptui.hxx"
 #include "FunctionHelper.hxx"
 #include <tools/debug.hxx>
 

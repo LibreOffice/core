@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,29 +25,24 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..
-PRJINC=$(PRJ)$/source
-PRJNAME=reportdesign
-TARGET=ui_inspection
-ENABLE_EXCEPTIONS=TRUE
-VISIBILITY_HIDDEN=TRUE
+$(eval $(call gb_JunitTest_JunitTest,reportdesign_complex))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_JunitTest_add_sourcefiles,reportdesign_complex,\
+	reportdesign/qa/complex/reportdesign/ReportDesignerTest \
+	reportdesign/qa/complex/reportdesign/TestDocument \
+	reportdesign/qa/complex/reportdesign/FileURL \
+))
 
-.INCLUDE :  settings.mk
+$(eval $(call gb_JunitTest_add_jars,reportdesign_complex,\
+	$(OUTDIR)/bin/OOoRunner.jar \
+	$(OUTDIR)/bin/ridl.jar \
+	$(OUTDIR)/bin/test.jar \
+	$(OUTDIR)/bin/unoil.jar \
+	$(OUTDIR)/bin/jurt.jar \
+))
 
-# --- Files --------------------------------------------------------
+$(eval $(call gb_JunitTest_add_classes,reportdesign_complex,\
+	complex.reportdesign.ReportDesignerTest \
+))
 
-SLOFILES=\
-    $(SLO)$/DefaultInspection.obj		\
-    $(SLO)$/ReportComponentHandler.obj	\
-    $(SLO)$/GeometryHandler.obj			\
-    $(SLO)$/DataProviderHandler.obj		\
-    $(SLO)$/metadata.obj
-
-
-SRS1NAME=$(TARGET)
-SRC1FILES =  inspection.src
-# --- Targets ----------------------------------
-
-.INCLUDE :  target.mk
+# vim: set noet reportdesign=4 ts=4:

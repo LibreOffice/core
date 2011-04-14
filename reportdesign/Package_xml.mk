@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,38 +25,5 @@
 #
 #*************************************************************************
 
-.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
-nothing .PHONY:
-.ELSE
-
-PRJ = ../../..
-PRJNAME = reportdesign
-TARGET = qa_complex_reportdesign
-
-.IF "$(OOO_JUNIT_JAR)" != ""
-PACKAGE = complex/reportdesign
-
-# here store only Files which contain a @Test
-JAVATESTFILES = \
-    ReportDesignerTest.java
-
-# put here all other files
-JAVAFILES = $(JAVATESTFILES) \
-    TestDocument.java \
-    FileURL.java
-
-JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar
-EXTRAJARFILES = $(OOO_JUNIT_JAR)
-
-# Sample how to debug
-# JAVAIFLAGS=-Xdebug  -Xrunjdwp:transport=dt_socket,server=y,address=9003,suspend=y
-
-.END
-
-.INCLUDE: settings.mk
-.INCLUDE: target.mk
-.INCLUDE: installationtest.mk
-
-ALLTAR : javatest
-
-.END
+$(eval $(call gb_Package_Package,reportdesign_xml,$(SRCDIR)/reportdesign/prj))
+$(eval $(call gb_Package_add_file,reportdesign_xml,prj/rpt.xml,rpt.xml))

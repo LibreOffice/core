@@ -24,15 +24,12 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#include "precompiled_reportdesign.hxx"
 #include "ImageControl.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
-#ifndef REPORTDESIGN_SHARED_CORESTRINGS_HRC
 #include "corestrings.hrc"
-#endif
-#ifndef REPORTDESIGN_CORE_RESOURCE_HRC_
 #include "core_resource.hrc"
-#endif
 #include "core_resource.hxx"
 #include <comphelper/sequence.hxx>
 #include "Tools.hxx"

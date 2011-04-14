@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_reportdesign.hxx"
+#include "precompiled_rptui.hxx"
 #include "DateTime.hxx"
 #ifndef RPTUI_DATETIME_HRC
 #include "DateTime.hrc"

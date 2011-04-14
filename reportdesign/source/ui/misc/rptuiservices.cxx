@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "precompiled_reportdesign.hxx"
+#include "precompiled_rptui.hxx"
 #include <cppuhelper/factory.hxx>
 #include <osl/diagnose.h>
 #include <cppuhelper/implementationentry.hxx>
