@@ -78,7 +78,7 @@ using namespace com::sun::star;
 
 namespace {
 
-static char const sHTML_O_Hidden_False[] = "sal_False";
+static char const sHTML_O_Hidden_False[] = "FALSE";
 
 }
 
