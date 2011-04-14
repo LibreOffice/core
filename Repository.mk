@@ -44,6 +44,8 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     AppleRemote \
+	adabas \
+	adabasui \
 	agg \
     avmedia \
 	basebmp \
@@ -52,10 +54,19 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	canvastools \
 	cppcanvas \
     cui \
+	dba \
+	dbaxml \
+	dbmm \
+	dbui \
+	dbpool \
+	dbtools \
     desktop_detector \
     drawinglayer \
     editeng \
     eggtray \
+	file \
+	for \
+	forui \
     fwe \
     fwi \
     fwk \
@@ -66,9 +77,16 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     lng \
     msfilter \
     msword \
+	odbc \
+	odbcbase \
     qstart_gtk \
+	rpt \
+	rptui \
+	rptxml \
     sax \
     sb \
+	sdbc \
+	sdbt \
     sfx \
     sm \
     smd \

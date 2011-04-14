@@ -116,6 +116,7 @@ $(eval $(foreach method,\
     add_generated_exception_objects \
 	add_cflags \
     set_cflags \
+	set_yaccflags \
 	add_cxxflags \
     set_cxxflags \
 	add_objcxxflags \
