@@ -144,7 +144,7 @@ static const char * ExportedTextAttributes[TEXT_ATTRIBUTE_LAST] =
     "CharStrikeout",        // TEXT_ATTRIBUTE_STRIKETHROUGH
     "CharUnderline",        // TEXT_ATTRIBUTE_UNDERLINE
     "CharWeight",           // TEXT_ATTRIBUTE_WEIGHT
-    // --> OD 2010-03-05 #i92233#
+    // #i92233#
     "MMToPixelRatio",       // TEXT_ATTRIBUTE_MM_TO_PIXEL_RATIO
     // <--
     "ParaAdjust",           // TEXT_ATTRIBUTE_JUSTIFICATION

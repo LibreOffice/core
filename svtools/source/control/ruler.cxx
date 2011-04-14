@@ -1679,7 +1679,7 @@ sal_Bool Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest,
     }
     nHitBottom = mnVirHeight+(RULER_OFF*2);
 
-    // --> FME 2004-08-05 #i32608#
+    // #i32608#
     pHitTest->nAryPos = 0;
     pHitTest->mnDragSize = 0;
     pHitTest->bSize = sal_False;

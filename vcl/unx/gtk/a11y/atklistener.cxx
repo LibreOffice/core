@@ -364,7 +364,7 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
             break;
         }
 
-        // --> OD 2009-05-26 #i92103#
+        // #i92103#
         case accessibility::AccessibleEventId::LISTBOX_ENTRY_EXPANDED:
         {
             AtkObject *pChild = getObjFromAny( aEvent.NewValue );

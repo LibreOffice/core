@@ -1541,7 +1541,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
                         {
                             if( mpLogClusters[ c ] == i )
                             {
-                                // --> HDU/FME 2005-10-25 #i55716# skip WORDJOINER
+                                // #i55716#
                                 if( rArgs.mpStr[ c ] == 0x2060 )
                                     mpOutGlyphs[ i + rVisualItem.mnMinGlyphPos ] = 1;
                                 else
@@ -1557,7 +1557,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
                         {
                             if( mpLogClusters[ c ] == i )
                             {
-                                // --> HDU/FME 2005-10-25 #i55716# skip WORDJOINER
+                                // #i55716#
                                 if( rArgs.mpStr[ c ] == 0x2060 )
                                     mpOutGlyphs[ i + rVisualItem.mnMinGlyphPos ] = 1;
                                 else

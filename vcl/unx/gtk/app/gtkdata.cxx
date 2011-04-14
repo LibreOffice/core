@@ -465,7 +465,7 @@ GdkCursor *GtkSalDisplay::getCursor( PointerStyle ePointerStyle )
             MAKE_CURSOR( POINTER_AIRBRUSH, airbrush_ );
             MAKE_CURSOR( POINTER_TEXT_VERTICAL, vertcurs_ );
 
-            // --> FME 2004-07-30 #i32329# Enhanced table selection
+            // #i32329#
             MAKE_CURSOR( POINTER_TAB_SELECT_S, tblsels_ );
             MAKE_CURSOR( POINTER_TAB_SELECT_E, tblsele_ );
             MAKE_CURSOR( POINTER_TAB_SELECT_SE, tblselse_ );
@@ -473,7 +473,7 @@ GdkCursor *GtkSalDisplay::getCursor( PointerStyle ePointerStyle )
             MAKE_CURSOR( POINTER_TAB_SELECT_SW, tblselsw_ );
             // <--
 
-            // --> FME 2004-08-16 #i20119# Paintbrush tool
+            // #i20119#
             MAKE_CURSOR( POINTER_PAINTBRUSH, paintbrush_ );
             // <--
 

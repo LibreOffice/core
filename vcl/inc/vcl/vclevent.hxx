@@ -154,7 +154,7 @@ namespace com { namespace sun { namespace star {
 #define VCLEVENT_ROADMAP_ITEMSELECTED       1171
 #define VCLEVENT_TOOLBOX_FORMATCHANGED      1172        // request new layout
 #define VCLEVENT_COMBOBOX_SETTEXT           1173
-// --> OD 2009-04-01 #i92103#
+// #i92103#
 #define VCLEVENT_ITEM_EXPANDED              1174
 #define VCLEVENT_ITEM_COLLAPSED             1175
 // <--

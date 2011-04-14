@@ -126,7 +126,7 @@ typedef sal_uInt16 PointerStyle;
 #define POINTER_TEXT_VERTICAL           ((PointerStyle)86)
 #define POINTER_PIVOT_DELETE            ((PointerStyle)87)
 
-// --> FME 2004-07-30 #i32329# Enhanced table selection
+// #i32329#
 #define POINTER_TAB_SELECT_S            ((PointerStyle)88)
 #define POINTER_TAB_SELECT_E            ((PointerStyle)89)
 #define POINTER_TAB_SELECT_SE           ((PointerStyle)90)
@@ -134,7 +134,7 @@ typedef sal_uInt16 PointerStyle;
 #define POINTER_TAB_SELECT_SW           ((PointerStyle)92)
 // <--
 
-// --> FME 2004-08-16 #i20119# Paintbrush tool
+// #i20119#
 #define POINTER_PAINTBRUSH              ((PointerStyle)93)
 // <--
 

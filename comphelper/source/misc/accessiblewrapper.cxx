@@ -241,7 +241,7 @@ namespace comphelper
             case AccessibleEventId::TABLE_ROW_DESCRIPTION_CHANGED:
             case AccessibleEventId::TABLE_ROW_HEADER_CHANGED:
             case AccessibleEventId::TABLE_SUMMARY_CHANGED:
-            // --> PB 2006-03-21 #130798# EventId TEXT_SELECTION_CHANGED was missed
+            // #130798#
             // these Ids are also missed: SUB_WINDOW_OF_RELATION_CHANGED & TEXT_ATTRIBUTE_CHANGED
             case AccessibleEventId::TEXT_SELECTION_CHANGED:
             // <--
