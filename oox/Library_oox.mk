@@ -366,17 +366,10 @@ $(eval $(call oox_GenTarget_GenTarget,namespaces,namespace,namespaces.txt))
 $(eval $(call oox_GenTarget_GenTarget,properties,property,))
 $(eval $(call oox_GenTarget_GenTarget,tokens,token,tokenhash.gperf))
 
-$(call gb_Package_get_target,oox_tokens) :| $(OUTDIR)/inc/oox/namespaces.txt
-$(call gb_Package_get_clean_target,oox_tokens) : oox_ns_clean
 $(call gb_Library_get_clean_target,oox) : oox_clean
 
 oox_clean :
 	rm -rf $(WORKDIR)/oox
-oox_ns_clean :
-	rm -rf $(OUTDIR)/inc/oox/namespaces.txt
-.PHONY: oox_clean oox_ns_clean
-
-$(OUTDIR)/inc/oox/namespaces.txt : $(oox_MISC)/namespaces.txt
-	cp $< $@
+.PHONY: oox_clean
 
 # vim: set noet ts=4 sw=4:

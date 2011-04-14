@@ -15,8 +15,8 @@
 # Portions created by the Initial Developer are Copyright (C) 2010 the
 # Initial Developer. All Rights Reserved.
 #
-# Major Contributor(s): 
-# 
+# Major Contributor(s):
+#
 # For minor contributions see the git repository.
 #
 # Alternatively, the contents of this file may be used under the terms of
@@ -25,13 +25,9 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,oox))
+$(eval $(call gb_Package_Package,oox_generated,$(WORKDIR)/oox))
 
-$(eval $(call gb_Module_add_targets,oox,\
-    Library_oox \
-    Package_inc \
-    Package_generated \
-    Package_tokens \
-))
+$(eval $(call gb_Package_add_file,oox_generated,inc/oox/namespaces.txt,misc/namespaces.txt))
+$(eval $(call gb_Package_add_file,oox_generated,inc/oox/token/tokens.hxx,inc/oox/token/tokens.hxx))
 
 # vim: set noet ts=4 sw=4:
