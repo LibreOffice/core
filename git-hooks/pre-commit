@@ -154,7 +154,7 @@ while (my $file = <FILES>) {
 open(FILES, "git diff-index --cached --name-only $against |") || die "Cannot run git diff-index.";
 while (my $file = <FILES>) {
     chomp($file);
-    if ($file =~ /\.po$/) {
+    if ($file =~ /\.po$/ && -e $file) {
         system("msgcat --no-wrap $file > $file.KQnBbK6wQE;mv $file.KQnBbK6wQE $file;");
         system("git add $file");
     }
