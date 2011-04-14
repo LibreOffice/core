@@ -59,6 +59,7 @@ public class CopyTableWizard extends CRMBasedTestCase
 {
 
     private DatabaseApplication source;
+    private DbaseDatabase destinationDB = null;
     private DatabaseApplication dest;
 
     public CopyTableWizard()
@@ -73,6 +74,9 @@ public class CopyTableWizard extends CRMBasedTestCase
     public void after()
     {
         dest.store();
+        if ( destinationDB != null )
+            destinationDB.close();
+        destinationDB = null;
         super.after();
     }
 
@@ -83,8 +87,9 @@ public class CopyTableWizard extends CRMBasedTestCase
         try
         {
             createTestCase();
-            source = new DatabaseApplication(this.m_database.getDatabase());
-            dest = new DatabaseApplication(new DbaseDatabase(getMSF()));
+            source = new DatabaseApplication(m_database.getDatabase());
+            destinationDB = new DbaseDatabase( getMSF() );
+            dest = new DatabaseApplication( destinationDB );
         }
         catch (java.lang.Exception ex)
         {
