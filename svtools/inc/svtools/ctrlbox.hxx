@@ -31,6 +31,7 @@
 
 #include "svtools/svtdllapi.h"
 
+#include <tools/string.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/image.hxx>
@@ -55,6 +56,8 @@ typedef ::std::vector< ImplFontNameListData* > ImplFontList;
 #define CHANGE_LINE2               ( ( sal_uInt16 ) 2 )
 #define CHANGE_DIST                ( ( sal_uInt16 ) 4 )
 #define ADAPT_DIST                 ( ( sal_uInt16 ) 8 )
+
+
 
 /*************************************************************************
 
@@ -461,8 +464,9 @@ private:
     Image           maImagePrinterFont;
     Image           maImageBitmapFont;
     Image           maImageScalableFont;
-    sal_Bool            mbWYSIWYG;
-    sal_Bool            mbSymbols;
+    sal_Bool        mbWYSIWYG;
+    sal_Bool        mbSymbols;
+    String         maFontMRUEntriesFile;
 
 #ifdef _CTRLBOX_CXX
     SVT_DLLPRIVATE void         ImplCalcUserItemSize();
@@ -472,6 +476,8 @@ private:
     void            InitBitmaps( void );
 protected:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    void            LoadMRUEntries( const String& aFontMRUEntriesFile, xub_Unicode cSep = ';' );
+    void            SaveMRUEntries( const String& aFontMRUEntriesFile, xub_Unicode cSep = ';' ) const;
 public:
                     FontNameBox( Window* pParent,
                                  WinBits nWinStyle = WB_SORT );
@@ -489,6 +495,8 @@ public:
     sal_Bool            IsSymbolsEnabled() const { return mbSymbols; }
 
 private:
+    void            InitFontMRUEntriesFile();
+
     // declared as private because some compilers would generate the default functions
                     FontNameBox( const FontNameBox& );
     FontNameBox&    operator =( const FontNameBox& );

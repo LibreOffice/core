@@ -31,8 +31,10 @@
 
 #define _CTRLBOX_CXX
 #include <tools/debug.hxx>
+#include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/field.hxx>
+#include <vcl/helper.hxx>
 #include <sal/macros.h>
 #include <comphelper/processfactory.hxx>
 #include <unotools/charclass.hxx>
@@ -48,6 +50,10 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
+#if OSL_DEBUG_LEVEL > 1
+#include <cstdio>
+#endif
+
 #define IMGINNERTEXTSPACE 2
 #define IMGOUTERTEXTSPACE 5
 #define EXTRAFONTSIZE 5
@@ -56,7 +62,10 @@
 #define TWIPS_TO_PT100(val) (val * 5)
 #define PT100_TO_TWIPS(val) (val / 5)
 
+#define FONTNAMEBOXMRUENTRIESFILE "/user/config/fontnameboxmruentries"
+
 using namespace ::com::sun::star;
+using namespace psp;
 
 // ========================================================================
 // ColorListBox
@@ -986,6 +995,7 @@ FontNameBox::FontNameBox( Window* pParent, WinBits nWinStyle ) :
     mpFontList = NULL;
     mbWYSIWYG = sal_False;
     mbSymbols = sal_False;
+    InitFontMRUEntriesFile();
 }
 
 // -------------------------------------------------------------------
@@ -997,12 +1007,14 @@ FontNameBox::FontNameBox( Window* pParent, const ResId& rResId ) :
     mpFontList = NULL;
     mbWYSIWYG = sal_False;
     mbSymbols = sal_False;
+    InitFontMRUEntriesFile();
 }
 
 // -------------------------------------------------------------------
 
 FontNameBox::~FontNameBox()
 {
+    SaveMRUEntries (maFontMRUEntriesFile);
     ImplDestroyFontList();
 }
 
@@ -1014,6 +1026,63 @@ void FontNameBox::DataChanged( const DataChangedEvent& rDCEvt )
 
     if( rDCEvt.GetType() == DATACHANGED_SETTINGS && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
         InitBitmaps();
+}
+
+// -------------------------------------------------------------------
+
+void FontNameBox::SaveMRUEntries( const String& aFontMRUEntriesFile, xub_Unicode cSep ) const
+{
+    ByteString aEntries =  ByteString( GetMRUEntries( cSep ), RTL_TEXTENCODING_UTF8 );
+
+    if( ! aEntries.Len() || ! aFontMRUEntriesFile.Len() )
+        return;
+
+    SvFileStream aStream;
+    aStream.Open( aFontMRUEntriesFile, STREAM_WRITE | STREAM_TRUNC );
+    if( ! (aStream.IsOpen() && aStream.IsWritable()) )
+    {
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "FontNameBox::SaveMRUEntries: opening mru entries file %s failed\n", ByteString(aFontMRUEntriesFile , RTL_TEXTENCODING_UTF8 ).GetBuffer() );
+#endif
+        return;
+    }
+
+    aStream.SetLineDelimiter( LINEEND_LF );
+    aStream.WriteLine( aEntries );
+    aStream.WriteLine( ByteString() );
+}
+
+// -------------------------------------------------------------------
+
+void FontNameBox::LoadMRUEntries( const String& aFontMRUEntriesFile, xub_Unicode cSep )
+{
+    if( ! aFontMRUEntriesFile.Len() )
+        return;
+
+    SvFileStream aStream( aFontMRUEntriesFile, STREAM_READ );
+    if( ! aStream.IsOpen() )
+    {
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "FontNameBox::LoadMRUEntries: opening mru entries file %s failed\n", ByteString( aFontMRUEntriesFile, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
+#endif
+        return;
+    }
+
+    ByteString aLine;
+    aStream.ReadLine( aLine );
+    XubString aEntries = XubString( aLine, RTL_TEXTENCODING_UTF8 );
+    SetMRUEntries( aEntries, cSep );
+}
+
+// ------------------------------------------------------------------
+
+void FontNameBox::InitFontMRUEntriesFile()
+{
+    maFontMRUEntriesFile = getOfficePath( UserPath );
+    if( maFontMRUEntriesFile.Len() )
+    {
+        maFontMRUEntriesFile.AppendAscii( FONTNAMEBOXMRUENTRIESFILE );
+    }
 }
 
 // -------------------------------------------------------------------
@@ -1045,6 +1114,8 @@ void FontNameBox::Fill( const FontList* pList )
 {
     // store old text and clear box
     XubString aOldText = GetText();
+    XubString rEntries = GetMRUEntries();
+    sal_Bool bLoadFromFile = ! rEntries.Len();
     Clear();
 
     ImplDestroyFontList();
@@ -1069,6 +1140,11 @@ void FontNameBox::Fill( const FontList* pList )
             }
         }
     }
+
+    if ( bLoadFromFile )
+        LoadMRUEntries (maFontMRUEntriesFile);
+    else
+        SetMRUEntries( rEntries );
 
     ImplCalcUserItemSize();
 
