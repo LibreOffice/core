@@ -2943,11 +2943,7 @@ void ScInterpreter::ScGetPivotData()
         // there must be an even number of args
         //      target, ref, then field/item pairs
         if( (nParamCount % 2) == 1)
-        {
-            // if not, append an extra fake parameter to compensate for it.
-            PushString(ScGlobal::GetEmptyString());
-            ++nParamCount;
-        }
+            goto failed;
 
         bool bOldSyntax = false;
         if ( nParamCount == 2 )
