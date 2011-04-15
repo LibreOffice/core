@@ -61,10 +61,21 @@ $(eval $(call gb_Library_add_linked_libs,oox,\
     vcl \
     xo \
     xcr \
-    $(if $(filter WNT,$(GUI)),$(if $(filter YES,$(SYSTEM_OPENSSL)),openssl,opensslt)) \
     $(if $(filter SOLARIS,$(OS)),dl nsl socket) \
     $(gb_STDLIBS) \
 ))
+
+ifeq ($(SYSTEM_OPENSSL),YES)
+$(eval $(call gb_Library_add_linked_libs,oox,\
+    crypto \
+    ssl \
+))
+else
+$(eval $(call gb_Library_add_linked_static_libs,oox,\
+    crypto \
+    ssl \
+))
+endif
 
 $(eval $(call gb_Library_set_ldflags,oox,\
 	$$(LDFLAGS) \
