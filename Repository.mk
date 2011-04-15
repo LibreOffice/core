@@ -153,9 +153,11 @@ $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
 ))
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+    crypto \
     jpeglib \
     ooopathutils \
     salcpprt \
+    ssl \
     vclmain \
     zlib \
 ))
