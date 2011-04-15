@@ -25,30 +25,16 @@
 #
 #*************************************************************************
 
-PRJ=				..$/..$/..
-PRJINC=				$(PRJ)$/source
-PRJNAME=			chart2
-TARGET=				chcaccessibility
+PRJ=..
+TARGET=prj
 
-ENABLE_EXCEPTIONS=	TRUE
-VISIBILITY_HIDDEN=TRUE
+.INCLUDE : settings.mk
 
-# --- Settings -----------------------------------------------------
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
+.ENDIF
 
-.INCLUDE: settings.mk
-
-# --- export library -------------------------------------------------
-
-#object files to build and link together to lib $(SLB)$/$(TARGET).lib
-SLOFILES=	$(SLO)$/AccessibleChartView.obj		\
-            $(SLO)$/ChartElementFactory.obj		\
-            $(SLO)$/AccessibleBase.obj	\
-            $(SLO)$/AccessibleChartElement.obj \
-            $(SLO)$/AccessibleChartShape.obj \
-            $(SLO)$/AccessibleTextHelper.obj \
-            $(SLO)$/AccessibleViewForwarder.obj
-
-# --- Targets -----------------------------------------------------------------
-
-.INCLUDE: target.mk
-
+all:
+    cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog

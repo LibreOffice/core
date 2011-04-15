@@ -27,6 +27,15 @@
 
 $(eval $(call gb_Module_Module,chart2))
 
+$(eval $(call gb_Module_add_targets,chart2,\
+    AllLangResTarget_chartcontroller \
+    Library_chartcontroller \
+    Library_chartmodel \
+    Library_charttools \
+    Library_chartview \
+    Package_uiconfig \
+))
+
 $(eval $(call gb_Module_add_subsequentcheck_targets,chart2,\
     JunitTest_chart2_unoapi \
 ))
