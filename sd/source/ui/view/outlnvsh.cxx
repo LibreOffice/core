@@ -2099,11 +2099,9 @@ void OutlineViewShell::VisAreaChanged(const Rectangle& rRect)
             (static_cast< ::com::sun::star::uno::XWeak*>(pDocumentView),
                 ::com::sun::star::uno::UNO_QUERY);
     }
-    else
-    {
-        OSL_TRACE ("OutlineViewShell::CreateAccessibleDocumentView: no controller");
-        return ViewShell::CreateAccessibleDocumentView (pWindow);
-    }
+
+    OSL_TRACE ("OutlineViewShell::CreateAccessibleDocumentView: no controller");
+    return ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >();
 }
 
 
