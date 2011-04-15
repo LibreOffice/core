@@ -32,10 +32,6 @@ TARGET=soltools_giparser
 TARGETTYPE=CUI
 ENABLE_EXCEPTIONS=TRUE
 
-.IF "$(GUI)" == "OS2"
-STL_OS2_BUILDING=1
-.ENDIF
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE : $(PRJ)$/util$/makefile.pmk

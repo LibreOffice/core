@@ -85,17 +85,6 @@ $(LIB$(TNR)TARGET) :	$(LIB$(TNR)FILES) \
     @nm `cat $(LIB$(TNR)TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .ENDIF
 
-.ELIF "$(GUI)"=="OS2"
-    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) $@ $(LIB$(TNR)FILES) $(LIB$(TNR)OBJFILES)
-    @+-$(RM) $(@:s/.lib/.lin/)
-.IF "$(LIB$(TNR)OBJFILES)"!=""    
-    @+$(TYPE) $(mktmp $(LIB$(TNR)OBJFILES)) > $(null,$(LIB$(TNR)OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
-.ENDIF          # "$(LIB$(TNR)OBJFILES)"!=""    
-.IF "$(LIB$(TNR)FILES)"!=""    
-    @-$(TYPE) $(foreach,i,$(LIB$(TNR)FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
-.ENDIF          # "$(LIB$(TNR)FILES)"!=""    
-    @+$(ECHONL)
-
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"

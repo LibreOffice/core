@@ -32,7 +32,7 @@ LIBSMKREV!:="$$Revision: 1.134.2.3 $$"
 .INCLUDE .IGNORE : ucbhelper/version.mk
 .INCLUDE .IGNORE : connectivity/version.mk
 
-.IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
+.IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC")
 
 # No ODMA on UNX
 ODMA_LIB_LIB=
@@ -344,7 +344,7 @@ UNOPKGAPPLIB=-lunopkgapp
 TESTLIB=-ltest
 XMLREADERLIB=-lxmlreader
 
-.ELSE				# ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
+.ELSE				# ("$(GUI)"=="UNX" || "$(COM)"=="GCC")
 
 ODMA_LIB_LIB=odma_lib.lib
 AWTLIB*=jawt.lib
@@ -364,11 +364,7 @@ LDAPBERLIB=ldapber.lib
 CPPULIB=icppu.lib
 CPPUHELPERLIB=icppuhelper.lib
 UCBHELPERLIB=iucbhelper.lib
-.IF "$(GUI)"=="OS2"
-OPENSSLLIB=ssl.lib crypto.lib
-.ELSE
 OPENSSLLIB=ssleay32.lib libeay32.lib
-.ENDIF
 ODBCLIB=iodbc.lib
 ODBCBASELIB=iodbcbase.lib
 DBFILELIB=ifile.lib
@@ -474,11 +470,7 @@ HELPLINKERLIB=ihelplinker.lib
 JVMACCESSLIB = ijvmaccess.lib
 CPPUNITLIB = icppunit_dll.lib
 XSLTLIB = libxslt.lib $(LIBXML2LIB)
-.IF "$(GUI)"=="OS2"
-REDLANDLIB = raptor.a rasqal.a rdf.a $(LIBXML2LIB) $(OPENSSLLIB) pthread.lib
-.ELSE
 REDLANDLIB = librdf.lib
-.ENDIF
 
 JVMFWKLIB = ijvmfwk.lib
 
@@ -522,4 +514,4 @@ TESTLIB=itest.lib
 BOOSTTHREADLIB=boostthread.lib
 XMLREADERLIB=ixmlreader.lib
 
-.ENDIF              # ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
+.ENDIF              # ("$(GUI)"=="UNX" || "$(COM)"=="GCC")

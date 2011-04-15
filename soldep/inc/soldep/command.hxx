@@ -57,9 +57,6 @@ enum ExeType
 #ifdef WNT
 #define COMMAND_SHELL   "4nt.exe"
 #endif
-#ifdef OS2
-#define COMMAND_SHELL  "4os2.exe"
-#endif
 #ifdef UNX
 #define COMMAND_SHELL   "csh"
 #endif

@@ -542,17 +542,9 @@ bool LibDump::CheckDataBase()
         char *pTmp = "defs\\";
 
         FILE *fp;
-#ifdef OS2
-        _mkdir ("defs", 0777);
-#else
         _mkdir ("defs");
-#endif
         strcpy(cBName,pTmp);
-#ifdef OS2
-        strcat(cBName,"gcc");
-#else
         strcat(cBName,getenv ("COMP_ENV"));
-#endif
 
         fp = fopen (cBName,"r");
         if (fp)

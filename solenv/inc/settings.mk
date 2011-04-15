@@ -571,7 +571,7 @@ ROUT=$(OUTPATH).tlk
 .ENDIF
 
 .IF "$(PRJ)"!="."
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.IF "$(GUI)"=="WNT"
 PATH_IN_MODULE:=\
     $(subst,$(normpath $(shell @+cd $(PRJ) && pwd $(PWDFLAGS)))/, $(PWD))
 .ELSE			# "$(GUI)"=="WNT"
@@ -698,7 +698,7 @@ PROCESSOUT*:=$(MISC)
 # Makros fuer die Librarynamen des Solar
 .INCLUDE : libs.mk
 
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.IF "$(GUI)"=="WNT"
 VERSIONOBJ=$(SLO)/_version.obj
 .ENDIF
 
@@ -706,11 +706,11 @@ VERSIONOBJ=$(SLO)/_version.obj
 VERSIONOBJ=$(SLO)/_version.o
 .ENDIF
 
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.IF "$(GUI)"=="WNT"
 WINVERSIONNAMES=$(UNIXVERSIONNAMES)
 .ENDIF			# "$(GUI)"=="WNT"
 
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
 SHELLLIB=-lgdi32 -lshell32 -ladvapi32 -lcomdlg32
 .ELSE
@@ -875,10 +875,6 @@ SCPDEFS+=-DCCNUMVER=$(CCNUMVER)
 .IF "$(COM)"=="GCC"
 SCPDEFS+=-DSHORTSTDCPP3=$(SHORTSTDCPP3) -DSHORTSTDC3=$(SHORTSTDC3)
 .ENDIF			# "$(SHORTSTDCPP3)"!=""
-# extend library path for OS/2 gcc/wlink
-.IF "$(GUI)"=="OS2"
-LIB:=$(LB);$(SLB);$(ILIB)
-.ENDIF
 
 
 UNOIDLDEFS+=-DSUPD=$(UPD) -DUPD=$(UPD)
@@ -889,7 +885,7 @@ UNOIDLINC+=-I. -I.. -I$(PRJ) -I$(PRJ)/inc -I$(PRJ)/$(INPATH)/idl -I$(OUT)/inc -I
 
 CDEFS= -D$(OS) -D$(GUI) -D$(GVER) -D$(COM) -D$(CPUNAME)
 
-.IF "$(USE_DEBUG_RUNTIME)" != "" && "$(GUI)"!="OS2"
+.IF "$(USE_DEBUG_RUNTIME)" != ""
 CDEFS+=-D_DEBUG_RUNTIME
 .ENDIF
 
@@ -1014,10 +1010,6 @@ LNTFLAGSOUTOBJ=-os
 
 .IF "$(GUI)" == "UNX"
 .INCLUDE : unx.mk
-.ENDIF
-
-.IF "$(GUI)" == "OS2"
-.INCLUDE : os2.mk
 .ENDIF
 
 .IF "$(OOO_LIBRARY_PATH_VAR)" != ""

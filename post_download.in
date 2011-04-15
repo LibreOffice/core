@@ -27,9 +27,6 @@ case "$build_os" in
     darwin*) # Mac OS X
         _os=Darwin
         ;;
-    os2*)
-        _os=OS2
-        ;;
     freebsd*)
         _os=FreeBSD
         ;;

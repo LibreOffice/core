@@ -149,33 +149,6 @@ FIND=find
 LS=ls
 ECHON=echo -n
 ECHONL=echo
-.ELIF "$(GUI)"=="OS2"
-SED*=sed
-SORT*=sort
-PERL*=perl
-TYPE=cat
-CDD=@cd
-COPY*=$(SHELL) /c copy /b
-COPYRECURSE=/s
-COPYUPDATE=/u
-DELAY=sleep
-ECHON*=echos
-ECHONL=+echo.
-AWK*=awk
-GNUCOPY*=cp
-GNUPATCH*=gnupatch
-GNUMAKE*=make
-TOUCH=touch /c
-#YD rename doesn't work across different drives!
-RENAME=mv
-MKDIR=+md
-MKDIRHIER=+md /s
-GREP=grep
-FIND=find
-LS=ls
-DUMPBIN=echo
-4nt_force_shell:=+
-
 .ENDIF			# "$(GUI)"=="UNX"
 
 # (Global) Set if not set before

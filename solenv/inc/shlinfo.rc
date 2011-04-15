@@ -27,13 +27,6 @@
 
 #define VER_FIRSTYEAR	2010
 
-
-#if defined(OS2)
-
-#define OS2_VERSION "hello world"
-
-#else
-
 #include <windows.h>
 #include "version.hrc"
 
@@ -82,5 +75,3 @@ VS_VERSION_INFO versioninfo
 			value "Translation", 0x0409, 1252
 		}
 	}
-
-#endif // OS2

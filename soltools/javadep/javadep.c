@@ -39,7 +39,7 @@
 #include <ctype.h>
 #include <limits.h>
 
-#if defined(UNX) || defined(OS2)
+#if defined(UNX)
 #include <unistd.h>
 #include <netinet/in.h>     /* ntohl(), ntohs() */
 #elif defined(WNT)
@@ -53,10 +53,6 @@
                         (((x) & 0x0000ff00) <<  8) | (((x) & 0x000000ff) << 24))
 
 #define ntohs(x)    ((((x) >> 8) & 0xff) | (((x) & 0xff) << 8))
-#endif
-
-#if defined(OS2)
-#define CDECL
 #endif
 
 /* max. length of line in response file */
@@ -105,10 +101,10 @@ enum { NGROW_INIT = 10, NGROW = 2 };
 
 static char     *pprogname  = "javadep";
 static char     csep        = ';';
-#if defined (UNX) || defined(OS2)
+#if defined (UNX)
 #define CDECL
 static char     cpathsep    = '/';
-#elif defined (WNT) || defined(OS2)
+#elif defined (WNT)
 static char     cpathsep    = '\\';
 #endif
 static FILE     *pfsout     = NULL;
@@ -302,7 +298,7 @@ add_to_dependencies(struct growable *pdep,
             }
 
             /* get the canonical path */
-#if defined (UNX) || defined(OS2)
+#if defined (UNX)
             if ( !(realpath(pclass_file, cnp_class_file)
                 && realpath(path, cnp_str) ) ) {
                 err_quit("can't get the canonical path");

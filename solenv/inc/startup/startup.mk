@@ -42,9 +42,7 @@ OS_variable_needed
 
 # Customize macro definitions based on seting of OS.
 # This must come before the default macro definitions which follow.
-.IF "$(OS)" == "OS2"
-.INCLUDE: $(INCFILENAME:d)OS2/macros.mk
-.ELIF "$(OS)" == "WNT"
+.IF "$(OS)" == "WNT"
 .INCLUDE: $(INCFILENAME:d)wnt/macros.mk
 .END
 

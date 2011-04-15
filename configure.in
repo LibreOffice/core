@@ -1460,14 +1460,6 @@ case "$host_os" in
             enable_systray=no
         fi
         ;;
-    os2*)
-        test_cups=no
-        test_randr=no
-        test_gtk=no
-        test_cairo=no
-        test_freetype=no
-        _os=OS2
-        ;;
     freebsd*)
         test_gtk=yes
         build_gstreamer=yes
@@ -2767,8 +2759,6 @@ elif test "$_os" = "SunOS"; then
    BUILD_STLPORT="yes"
 elif test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
    BUILD_STLPORT="yes"
-elif test "$_os" = "OS2"; then
-   BUILD_STLPORT="yes"
 elif test "$_os" = "FreeBSD"; then
    BUILD_STLPORT="yes"
 fi
@@ -3194,9 +3184,6 @@ you must use the "--with-jdk-home" configure option explicitly])
         if test "$_os" = "WINNT"; then
           JAVA_HOME=`echo $JAVA_HOME | $SED "s,\.[[eE]][[xX]][[eE]]$,,"`
         fi
-        if test "$_os" = "OS2"; then
-          JAVA_HOME=`echo $JAVA_HOME | $SED "s,\.[[eE]][[xX]][[eE]]$,,"`
-        fi
       fi
    else
       AC_MSG_ERROR([JAVA not found. You need at least jdk-1.5, or gcj-4])
@@ -3253,11 +3240,6 @@ if test "$SOLAR_JAVA" != ""; then
     else
         javacompiler="javac"
     fi
-    if test "$_os" = "OS2"; then
-      if test x`echo "$javacompiler" | grep -i '\.exe$'` = x; then
-          javacompiler="${javacompiler}.exe"
-      fi
-    fi
     if test -z "$with_jdk_home"; then
         AC_PATH_PROG(JAVACOMPILER, $javacompiler)
     else
@@ -3276,11 +3258,6 @@ if test "$SOLAR_JAVA" != ""; then
        fi
        JAVACOMPILER=`cygpath -d "$JAVACOMPILER"`
        JAVACOMPILER=`cygpath -u "$JAVACOMPILER"`
-    fi
-    if test "$_os" = "OS2"; then
-       if test x`echo "$JAVACOMPILER" | grep -i '\.exe$'` = x; then
-          JAVACOMPILER="${JAVACOMPILER}.exe"
-       fi
     fi
 
     if test `$JAVACOMPILER -version 2>&1 | grep -c "Eclipse Java Compiler"` -gt 0; then
@@ -3323,11 +3300,6 @@ if test "$SOLAR_JAVA" != ""; then
         AC_PATH_PROG(JAVADOC, javadoc)
     else
         _javadoc_path="$with_jdk_home/bin/javadoc"
-        if test "$_os" = "OS2"; then
-          if test x`echo "$_javadoc_path" | grep -i '\.exe$'` = x; then
-              _javadoc_path="${_javadoc_path}.exe"
-          fi
-        fi
         dnl Check if there is a javadoc at all.
         if test -x "$_javadoc_path"; then
             JAVADOC=$_javadoc_path
@@ -3344,11 +3316,6 @@ if test "$SOLAR_JAVA" != ""; then
         fi
         JAVADOC=`cygpath -d "$JAVADOC"`
         JAVADOC=`cygpath -u "$JAVADOC"`
-    fi
-    if test "$_os" = "OS2"; then
-        if test x`echo "$JAVADOC" | grep -i '\.exe$'` = x; then
-            JAVADOC="${JAVADOC}.exe"
-        fi
     fi
 fi
 
@@ -3610,9 +3577,6 @@ if test "$enable_epm" = "yes"; then
 
    # defaults
    case "$_os" in
-    OS2)
-        PKGFORMAT=native
-        ;;
     Darwin)
         PKGFORMAT=dmg
         ;;
@@ -5290,10 +5254,6 @@ if test "$_os" = "Darwin" -a "x$x_includes" = "xno_x_includes"; then
    echo "Do Nothing for _os = Darwin"
    dnl Mac OS X using Aqua graphics. Don't check for X11.
    :
-elif test "$_os" = "OS2" ; then
-   echo "Do Nothing for _os = OS2. Don't check for X11."
-   dnl OS/2 uses native graphics. Don't check for X11.
-   :
 elif test "$_os" != "WINNT" ; then
    AC_PATH_X
    AC_PATH_XTRA
@@ -5344,7 +5304,7 @@ fi
 AC_SUBST(XLIB)
 AC_SUBST(XAU_LIBS)
 
-if test "$_os" != "WINNT" -a "$_os" != "OS2" -a "$_os" != "Darwin"; then
+if test "$_os" != "WINNT" -a "$_os" != "Darwin"; then
    dnl ===================================================================
    dnl Check for Composite.h for mozilla plugin
    dnl ===================================================================
@@ -6036,7 +5996,7 @@ dnl ===================================================================
 
 ENABLE_GCONF=""
 AC_MSG_CHECKING([whether to enable GConf support])
-if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$_os" != "OS2" -a "$enable_gconf" = "yes"; then
+if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_gconf" = "yes"; then
     ENABLE_GCONF="TRUE"
     AC_MSG_RESULT([yes])
     PKG_CHECK_MODULES( GCONF, gconf-2.0 )
@@ -7544,11 +7504,6 @@ else
      ANT="`pwd`"/"`basename "$a_script"`"
      cd "$a_cwd"
   done
-
-  if test "$_os" = "OS2"; then
-    ANT_HOME=`echo $ANT | $SED -n "s/\/bin\/ant.*\$//p"`
-    export ANT_HOME
-  fi
 
   AC_MSG_CHECKING([if $ANT works])
 cat > conftest.java << EOF

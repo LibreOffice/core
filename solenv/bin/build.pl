@@ -1178,7 +1178,6 @@ sub check_platform {
     return 1 if ($platform eq 'all');
     return 1 if (($ENV{GUI} eq 'WIN') && ($platform eq 'w'));
     return 1 if (($ENV{GUI} eq 'UNX') && ($platform eq 'u'));
-    return 1 if (($ENV{GUI} eq 'OS2') && ($platform eq 'p'));
     return 1 if (($ENV{GUI} eq 'WNT') &&
                  (($platform eq 'w') || ($platform eq 'n')));
     return 0;

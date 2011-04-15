@@ -32,8 +32,6 @@
 command_seperator=&&
 #command_seperator=^
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
-.ELIF "$(GUI)"=="OS2"
-command_seperator=&&
 .ELSE
 command_seperator=;
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"

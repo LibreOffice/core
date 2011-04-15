@@ -4,8 +4,6 @@
 command_seperator=&&
 #command_seperator=^
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
-.ELIF "$(GUI)"=="OS2"
-command_seperator=&&
 .ELSE
 command_seperator=;
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
@@ -137,8 +135,6 @@ $(ZIP1TARGETN) : delzip $(ZIP1DEPS)
 command_seperator=&&
 #command_seperator=^
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
-.ELIF "$(GUI)"=="OS2"
-command_seperator=&&
 .ELSE
 command_seperator=;
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
@@ -270,8 +266,6 @@ $(ZIP2TARGETN) : delzip $(ZIP2DEPS)
 command_seperator=&&
 #command_seperator=^
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
-.ELIF "$(GUI)"=="OS2"
-command_seperator=&&
 .ELSE
 command_seperator=;
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
@@ -403,8 +397,6 @@ $(ZIP3TARGETN) : delzip $(ZIP3DEPS)
 command_seperator=&&
 #command_seperator=^
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
-.ELIF "$(GUI)"=="OS2"
-command_seperator=&&
 .ELSE
 command_seperator=;
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
@@ -536,8 +528,6 @@ $(ZIP4TARGETN) : delzip $(ZIP4DEPS)
 command_seperator=&&
 #command_seperator=^
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
-.ELIF "$(GUI)"=="OS2"
-command_seperator=&&
 .ELSE
 command_seperator=;
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
@@ -669,8 +659,6 @@ $(ZIP5TARGETN) : delzip $(ZIP5DEPS)
 command_seperator=&&
 #command_seperator=^
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
-.ELIF "$(GUI)"=="OS2"
-command_seperator=&&
 .ELSE
 command_seperator=;
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
@@ -802,8 +790,6 @@ $(ZIP6TARGETN) : delzip $(ZIP6DEPS)
 command_seperator=&&
 #command_seperator=^
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
-.ELIF "$(GUI)"=="OS2"
-command_seperator=&&
 .ELSE
 command_seperator=;
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
@@ -935,8 +921,6 @@ $(ZIP7TARGETN) : delzip $(ZIP7DEPS)
 command_seperator=&&
 #command_seperator=^
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
-.ELIF "$(GUI)"=="OS2"
-command_seperator=&&
 .ELSE
 command_seperator=;
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
@@ -1068,8 +1052,6 @@ $(ZIP8TARGETN) : delzip $(ZIP8DEPS)
 command_seperator=&&
 #command_seperator=^
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
-.ELIF "$(GUI)"=="OS2"
-command_seperator=&&
 .ELSE
 command_seperator=;
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
@@ -1201,8 +1183,6 @@ $(ZIP9TARGETN) : delzip $(ZIP9DEPS)
 command_seperator=&&
 #command_seperator=^
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
-.ELIF "$(GUI)"=="OS2"
-command_seperator=&&
 .ELSE
 command_seperator=;
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"

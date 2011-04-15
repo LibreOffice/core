@@ -704,42 +704,6 @@ elsif ( $platform =~ m/cygwin/ )
       $PATH_SEPERATOR = ';';
   }
 }
-elsif ( $platform =~ m/os2/ )
-{
-      $COMPATH        = PathFormat('@COMPATH@');
-      $MSPDB_PATH     = PathFormat('@MSPDB_PATH@');
-      $MIDL_PATH      = PathFormat('@MIDL_PATH@');
-      $CSC_PATH       = PathFormat('@CSC_PATH@');
-      $PSDK_HOME      = PathFormat('@PSDK_HOME@');
-      $FRAME_HOME     = PathFormat('@FRAME_HOME@');
-      $USE_NEW_SDK    = "TRUE";
-      $CPUNAME        = "INTEL";
-      $CPU            = "I";
-      $GUI            = "OS2";
-      $GUIBASE        = "os2";
-      $GVER           = "VCL";
-      $OS             = "OS2";
-      $DYNAMIC_CRT    = "TRUE";
-      $SET_EXCEPTIONS = "TRUE";
-      $use_shl_versions = "TRUE";
-  {
-      print "Setting OS/2 gcc 3.3.5 specific values... \n";
-      $outfile        = "os2env.set.sh";
-      $COM            = "GCC";
-      $OUTPATH        = "os2gcci";
-      $INPATH         = $OUTPATH.$PROEXT;
-      $COMEX          = '@COMEX@';
-
-  {   print "Setting OS/2 with 4OS2 specific values... ";
-      # Change path to lower case.
-      $COMPATH        = lc $COMPATH;
-      $PATH_SEPERATOR = ';';
-      $ps = ';';
-      $wps = ';'; # Windows style path seperator
-  }
-
-  }
-}
 elsif ( $platform =~ m/darwin/ )
 {     print "Setting Mac OS X/Darwin specific values... ";
       $BIG_SVX        = "TRUE";
@@ -855,7 +819,7 @@ else
 # JAVA_HOME as argument from autoconf.
 $JAVA_HOME = PathFormat('@JAVA_HOME@') ;
 
-if ( $platform =~ m/cygwin|os2/ ) {
+if ( $platform =~ m/cygwin/ ) {
    $JAVA_HOME =~ s/[\s\/]+$//;	# remove trailing \n or \/ if there is any.
 }
 # 3. bash path.
@@ -1054,12 +1018,12 @@ elsif ($platform =~ m/darwin/)
 {  $SOLAREXTRALIB     = $L.$LIB.
                         $L.$USR.$LIB;
 }
-elsif ($platform !~ m/cygwin|os2/ )
+elsif ($platform !~ m/cygwin/ )
 {  AddWarning( "set_soenv", "$platform not configured for linkage create libraries" );
 }
 
 # Windows NT only variables
-if ($platform =~ m/cygwin|os2/)
+if ($platform =~ m/cygwin/)
 {  $COMP_ENV          = $OUTPATH;
 
    $JAVAHOME          = '$JAVA_HOME';
@@ -1267,37 +1231,6 @@ elsif ($platform =~ m/cygwin/)
 
 }
 
-elsif ($platform =~ m/os2/)
-{  # The PATH variable is completely created from scratch. Everything that is not
-   # needed is appended to the end.
-
-   $PATH              = $cur_dir.
-#                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
-                        $ps.'$SOLARENV'.$ds."bin".
-                        $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN;
-
-   if ( $JAVA_HOME ne "" && $JAVA_HOME ne "NO_JAVA_HOME" )
-   {
-      # hack either "hotspot" or "client" should be used, depending on the jdk version:
-      # 1.2.x   -   no such directory, unsupported
-      # 1.3.x   -   hotspot, client missing
-      # 1.4.x   -   client, hotspot missing
-
-      $PATH .= $ps.$JAVA_HOME.$BIN;
-	  if ( -d $JAVA_HOME.$ds."jre".$ds."bin".$ds."hotspot" ) {
-		  $PATH .= $ps.$JAVA_HOME.$ds."jre".$ds."bin".$ds."hotspot";
-	  }
-	  if ( -d $JAVA_HOME.$ds."jre".$ds."bin".$ds."client" ) {
-		  $PATH .= $ps.$JAVA_HOME.$ds."jre".$ds."bin".$ds."client";
-	  }
-   }
-
-  # Append old PATH
-  my $temp = $oldPATH;
-  $temp =~ s/\\/\//g ;
-  $PATH             .= $ps.$temp;
-}
-
 elsif ($platform =~ m/darwin/)
 {  $PATH              = $cur_dir.
 #                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
@@ -1349,7 +1282,7 @@ elsif ($platform =~ m/linux|netbsd|aix|freebsd|openbsd|dragonfly/)
                         $L.$JRETOOLKITDIR.
                         $L.$JRETHREADDIR;
 }
-elsif ($platform =~ m/cygwin|os2/)
+elsif ($platform =~ m/cygwin/)
 {  $SOLARLIB          = $L.'$SOLARVER'.$ds.'$INPATH'.$LIB.
                         $L.$par_dir.$LIB.
                         $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB;
@@ -1972,7 +1905,7 @@ ToFile( "SYSTEM_LIBTEXTCAT_DATA","@SYSTEM_LIBTEXTCAT_DATA@","e" );
 ToFile( "XAU_LIBS",          "@XAU_LIBS@",         "e" );
 ToFile( "GXX_INCLUDE_PATH",  PathFormat("@GXX_INCLUDE_PATH@"), "e" );
 ToFile( "COMMON_BUILD_TOOLS",$COMMON_BUILD_TOOLS,  "e" );
-if ($platform !~ m/cygwin|os2/) {
+if ($platform !~ m/cygwin/) {
    if ( !defined $ENV{"TMPDIR"} || $ENV{"TMPDIR"} eq "" ) {
       ToFile( "TMPDIR",      "/tmp",               "e" );
    } else {
@@ -2004,26 +1937,10 @@ if ( $platform =~ m/cygwin/ )
    ToFile( "GNUCOPY",           $WIN_GNUCOPY,       "e" );
    ToFile( "TOUCH",             $WIN_TOUCH,         "e" );
 }
-if ( $platform =~ m/os2/ )
-{
-   #ToFile( "ILIB",              $ILIB,              "e" );
 
-   ToFile( "GREP",              "grep.exe",         "e" );
-   ToFile( "FIND",              "find.exe",         "e" );
-   ToFile( "LS",                "ls.exe",           "e" );
-   ToFile( "GNUCOPY",           "cp.exe",           "e" );
-   ToFile( "TOUCH",             "touch",            "e" );
-}
-
-# $perlpre is only used for the following three variables
-# and only set for OS2.
-my $perlpre = "";
-if (( $platform =~ m/os2/ )) {
-   $perlpre = "perl ".${SOLARENV}.${BIN}.${ds};
-}
-ToFile( "DELIVER",       $perlpre."deliver.pl",     "e" );
-ToFile( "MKOUT",         $perlpre."mkout.pl",       "e" );
-ToFile( "ZIPDEP",        $perlpre."zipdep.pl",      "e" );
+ToFile( "DELIVER",       "deliver.pl",     "e" );
+ToFile( "MKOUT",         "mkout.pl",       "e" );
+ToFile( "ZIPDEP",        "zipdep.pl",      "e" );
 
 #
 # Writing the aliases to file.
@@ -2038,9 +1955,6 @@ ToFile( "alias build_client",$build_client,      "a" );
 ToFile( "alias zipdep",      $zipdep,            "a" );
 if ( $platform !~ m/cygwin/ )
 {  ToFile( "alias nmake",       $nmake,             "a" );
-}
-if ( $platform =~ m/os2/ )
-{  ToFile( "alias gunzip",       "gzip -d",         "a" );
 }
 
 ToFile( "fi",                $empty, "z");
@@ -2061,13 +1975,6 @@ if ($platform =~ m/solaris|darwin|freebsd/)
   ToFile( "GNUPATCH",   "@GNUPATCH@",	"e");
 }
 ToFile( "GNUCOPY",	"@GNUCP@",	"e");
-# OS/2 define .pl as executable for 4os2
-# use - as switch char for dmake (os2/switchar.c)
-if ($platform =~ m/os2/)
-{
-  ToFile( ".pl",   	"perl",	"e");
-  ToFile( "SWITCHAR",   "-",	"e");
-}
 ToFile( "SAL_ENABLE_FILE_LOCKING",	"1",	"e");
 
 ToFile( "ENV_SCRIPT", "$outfile", "e" );
@@ -2328,7 +2235,7 @@ sub CygFormat
 {  my ( $variable, $d1, $d2 );
    $variable = $_[ 0 ];
    # ToDo: Do the replacement only if Windows and var contains "\" and ":"
-   if ( $platform =~ m/cygwin|os2/ )
+   if ( $platform =~ m/cygwin/ )
    {
        # Complain if PosixPath is used on a PATH-like string
        if ( $variable =~ m/;/ ) {

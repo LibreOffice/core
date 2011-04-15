@@ -51,11 +51,11 @@ static const struct VersionInfo g_aVersionInfo =
     _INPATH
 };
 
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
 __declspec(dllexport) const struct VersionInfo* GetVersionInfo(void);
 #endif
 
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
 __declspec(dllexport) const struct VersionInfo* GetVersionInfo(void)
 #else
 const struct VersionInfo *GetVersionInfo(void)
