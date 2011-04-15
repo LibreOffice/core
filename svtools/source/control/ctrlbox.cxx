@@ -50,6 +50,8 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
+#include <rtl/bootstrap.hxx>
+
 #if OSL_DEBUG_LEVEL > 1
 #include <cstdio>
 #endif
@@ -65,7 +67,6 @@
 #define FONTNAMEBOXMRUENTRIESFILE "/user/config/fontnameboxmruentries"
 
 using namespace ::com::sun::star;
-using namespace psp;
 
 // ========================================================================
 // ColorListBox
@@ -1078,7 +1079,10 @@ void FontNameBox::LoadMRUEntries( const String& aFontMRUEntriesFile, xub_Unicode
 
 void FontNameBox::InitFontMRUEntriesFile()
 {
-    maFontMRUEntriesFile = getOfficePath( UserPath );
+    rtl::OUString sUserConfigDir(RTL_CONSTASCII_USTRINGPARAM("${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}"));
+    rtl::Bootstrap::expandMacros(sUserConfigDir);
+
+    maFontMRUEntriesFile = sUserConfigDir;
     if( maFontMRUEntriesFile.Len() )
     {
         maFontMRUEntriesFile.AppendAscii( FONTNAMEBOXMRUENTRIESFILE );
