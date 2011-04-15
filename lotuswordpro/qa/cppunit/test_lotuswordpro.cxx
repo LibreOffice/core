@@ -26,10 +26,7 @@
  * instead of those above.
  */
 
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-#include <cppunit/plugin/TestPlugIn.h>
-#include <cppunit/extensions/HelperMacros.h>
+#include <sal/cppunit.h>
 
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
@@ -138,8 +135,8 @@ namespace
 
     void LotusWordProTest::test()
     {
-        recursiveScan(m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/data/pass/")), true);
-        recursiveScan(m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/data/fail/")), false);
+        recursiveScan(m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/qa/cppunit/data/pass")), true);
+        recursiveScan(m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/qa/cppunit/data/fail/")), false);
 
         printf("LotusWordPro: tested %d files\n", m_nLoadedDocs);
     }
