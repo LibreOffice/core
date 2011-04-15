@@ -82,7 +82,8 @@ my_file = file://
 ALLTAR: test
 
 test_components = \
-    component/framework/util/fwk
+    component/framework/util/fwk \
+    i18npool
 
 #Make a services.rdb with the services we know we need to get up and running
 $(MISC)/$(TARGET)/services.input : makefile.mk
