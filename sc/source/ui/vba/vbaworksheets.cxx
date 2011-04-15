@@ -55,6 +55,8 @@
 #include "vbaworkbook.hxx"
 #include "unonames.hxx"
 
+#include <vector>
+
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
@@ -418,6 +420,43 @@ ScVbaWorksheets::Select( const uno::Any& Replace ) throw (uno::RuntimeException)
     }
 
 
+}
+
+void SAL_CALL
+ScVbaWorksheets::Copy ( const uno::Any& Before, const uno::Any& After) throw (css::uno::RuntimeException)
+{
+    uno::Reference<excel::XWorksheet> xSheet;
+    sal_Int32 nElems = getCount();
+    bool bAfter = After.hasValue();
+    std::vector< uno::Reference< excel::XWorksheet > > Sheets;
+    sal_Int32 nItem = 0;
+
+    for ( nItem = 1; nItem <= nElems; ++nItem)
+    {
+        uno::Reference<excel::XWorksheet> xWorksheet(Item( uno::makeAny( nItem ), uno::Any() ), uno::UNO_QUERY_THROW );
+        Sheets.push_back(xWorksheet);
+    }
+    bool bNewDoc = (!(Before >>= xSheet) && !(After >>=xSheet)&& !(Before.hasValue()) && !(After.hasValue()));
+
+    uno::Reference< excel::XWorksheet > xSrcSheet;
+    if ( bNewDoc )
+    {
+        bAfter = true;
+        xSrcSheet = Sheets.at(0);
+        ScVbaWorksheet* pSrcSheet = excel::getImplFromDocModuleWrapper<ScVbaWorksheet>( xSrcSheet );
+        xSheet = pSrcSheet->createSheetCopyInNewDoc(xSrcSheet->getName());
+        nItem = 1;
+    }
+
+    for (nItem = 0; nItem < nElems; ++nItem )
+    {
+        xSrcSheet = Sheets[nItem];
+        ScVbaWorksheet* pSrcSheet = excel::getImplFromDocModuleWrapper<ScVbaWorksheet>( xSrcSheet );
+        if ( bAfter )
+            xSheet = pSrcSheet->createSheetCopy(xSheet, bAfter);
+        else
+            pSrcSheet->createSheetCopy(xSheet, bAfter);
+    }
 }
 
 //ScVbaCollectionBaseImpl

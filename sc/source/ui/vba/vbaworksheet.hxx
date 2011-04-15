@@ -91,6 +91,8 @@ public:
     virtual css::uno::Reference< css::sheet::XSpreadsheet > getSheet()
     { return mxSheet; }
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
+    css::uno::Reference< ov::excel::XWorksheet > createSheetCopyInNewDoc( rtl::OUString);
+    css::uno::Reference< ov::excel::XWorksheet > createSheetCopy(css::uno::Reference< ov::excel::XWorksheet> xSheet, bool bAfter);
 
     // Attributes
     virtual ::rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
