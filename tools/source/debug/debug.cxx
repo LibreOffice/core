@@ -1701,7 +1701,7 @@ void DbgOut( const sal_Char* pMsg, sal_uInt16 nDbgOut, const sal_Char* pFile, sa
     int nMsgLen = strlen( pMsg );
     if ( nBufLen+nMsgLen > DBG_BUF_MAXLEN )
     {
-        int nCopyLen = DBG_BUF_MAXLEN-nBufLen-3;
+        int nCopyLen = DBG_BUF_MAXLEN-nBufLen-4;
         strncpy( &(aBufOut[nBufLen]), pMsg, nCopyLen );
         strcpy( &(aBufOut[nBufLen+nCopyLen]), "..." );
     }
