@@ -57,10 +57,16 @@ my_components = \
     component/canvas/source/simplecanvas/simplecanvas \
     component/canvas/source/vcl/vclcanvas \
     component/comphelper/util/comphelp \
+	component/dbaccess/util/dba \
+	component/dbaccess/util/dbu \
+	component/dbaccess/util/sdbt \
     component/framework/util/fwk \
     component/framework/util/fwl \
     component/framework/util/fwm \
     component/linguistic/source/lng \
+	component/reportdesign/util/rpt \
+	component/reportdesign/util/rptui \
+	component/reportdesign/util/rptxml \
     component/vbahelper/util/msforms \
     component/sax/source/expatwrap/expwrap \
     component/sax/source/fastparser/fastsax \
@@ -91,14 +97,12 @@ my_components = \
     configmgr \
     ctl \
     date \
-    dba \
     dbase \
     dbaxml \
     dbmm \
     dbp \
     dbpool2 \
     dbtools \
-    dbu \
     deployment \
     deploymentgui \
     dlgprov \
@@ -147,7 +151,6 @@ my_components = \
     scriptframe \
     sd \
     sdbc2 \
-    sdbt \
     sdd \
     slideshow \
     solver \
