@@ -504,10 +504,10 @@ void SlideShowView::updateimpl( ::osl::ClearableMutexGuard& rGuard, SlideshowImp
         if( mbFirstPaint )
         {
             mbFirstPaint = false;
-            SlideshowImpl* pSlideShow = mpSlideShow;
+            SlideshowImpl* pTmpSlideShow = mpSlideShow;
             rGuard.clear();
-            if( pSlideShow )
-                pSlideShow->onFirstPaint();
+            if( pTmpSlideShow )
+                pTmpSlideShow->onFirstPaint();
         } else
             rGuard.clear();
 
