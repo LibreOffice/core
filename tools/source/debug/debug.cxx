@@ -37,6 +37,7 @@
 #include <direct.h>
 #endif
 
+#include <errno.h>
 #include <time.h>
 #include <cstdarg>  // combinations
 #include <stdlib.h>
@@ -827,7 +828,11 @@ static DebugData* GetDebugData()
 
         }
 
-        getcwd( aCurPath, sizeof( aCurPath ) );
+        sal_Char* getcwdResult = getcwd( aCurPath, sizeof( aCurPath ) );
+        if ( !getcwdResult )
+        {
+            OSL_TRACE( "getcwd failed with error %s", strerror(errno) );
+        }
 
         // Daten initialisieren
         if ( aDebugData.aDbgData.nTestFlags & DBG_TEST_XTOR )
@@ -856,8 +861,17 @@ static FILETYPE ImplDbgInitFile()
     static sal_Bool bFileInit = sal_False;
 
     sal_Char aBuf[4096];
-    getcwd( aBuf, sizeof( aBuf ) );
-    chdir( aCurPath );
+    sal_Char* getcwdResult = getcwd( aBuf, sizeof( aBuf ) );
+    if ( !getcwdResult ) {
+        OSL_TRACE( "getcwd failed with error = %s", strerror(errno) );
+        return NULL;
+    }
+
+    int chdirResult = chdir( aCurPath );
+    if ( !chdirResult ) {
+        OSL_TRACE ( "chdir failed with error = %s", strerror(errno) );
+        return NULL;
+    }
 
     DebugData*  pData = GetDebugData();
     FILETYPE    pDebugFile;
@@ -892,7 +906,11 @@ static FILETYPE ImplDbgInitFile()
     else
         pDebugFile = FileOpen( pData->aDbgData.aDebugName, "a" );
 
-    chdir( aBuf );
+    chdirResult = chdir( aBuf );
+    if ( !chdirResult )
+    {
+        OSL_TRACE( "chdir failed with error = %s", strerror(errno) );
+    }
 
     return pDebugFile;
 }
