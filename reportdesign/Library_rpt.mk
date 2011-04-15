@@ -40,8 +40,7 @@ $(eval $(call gb_Library_set_include,rpt,\
 	-I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,rpt,\
-	$$(DEFS) \
+$(eval $(call gb_Library_add_defs,rpt,\
 	-DREPORTDESIGN_DLLIMPLEMENTATION \
 ))
 

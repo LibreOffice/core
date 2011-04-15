@@ -37,8 +37,7 @@ $(eval $(call gb_Library_set_include,adabasui,\
 	-I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,adabasui,\
-	$$(DEFS) \
+$(eval $(call gb_Library_add_defs,adabasui,\
 	-DCOMPMOD_NAMESPACE=adabasui \
 ))
 

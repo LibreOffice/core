@@ -25,7 +25,7 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_JunitTest_JunitTest,dbaccess_complex))
+$(eval $(call gb_JunitTest_JunitTest,dbaccess_complex,SRCDIR))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,dbaccess_complex,\
 	dbaccess/qa/complex/dbaccess/ApplicationController \

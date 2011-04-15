@@ -40,10 +40,6 @@ $(eval $(call gb_Library_set_include,sdbt,\
 	-I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,sdbt,\
-	$$(DEFS) \
-))
-
 $(eval $(call gb_Library_add_linked_libs,sdbt,\
 	tl \
 	cppuhelper \

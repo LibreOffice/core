@@ -40,11 +40,6 @@ $(eval $(call gb_Library_set_include,dbaxml,\
 	-I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,dbaxml,\
-	$$(DEFS) \
-))
-
-
 $(eval $(call gb_Library_add_linked_libs,dbaxml,\
 	tl \
 	svl \

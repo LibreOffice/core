@@ -25,7 +25,7 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_JunitTest_JunitTest,dbaccess_unoapi))
+$(eval $(call gb_JunitTest_JunitTest,dbaccess_unoapi,SRCDIR))
 
 $(eval $(call gb_JunitTest_set_defs,dbaccess_unoapi,\
 	$$(DEFS) \
