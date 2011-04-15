@@ -901,14 +901,14 @@ sal_Bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart p
             if( part == PART_TRACK_VERT_AREA || part == PART_TRACK_HORZ_AREA )
             {
                 QStyleOptionSlider option;
-                OSL_ASSERT( val.getType() == CTRL_SCROLLBAR );
-                const ScrollbarValue* sbVal = static_cast<const ScrollbarValue *>(&val);
                 option.orientation = ( part == PART_TRACK_HORZ_AREA ) ? Qt::Horizontal : Qt::Vertical;
-                option.minimum = sbVal->mnMin;
-                option.maximum = sbVal->mnMax;
-                option.sliderValue = sbVal->mnCur;
-                option.sliderPosition = sbVal->mnCur;
-                option.pageStep = sbVal->mnVisibleSize;
+                // getNativeControlRegion usually gets ImplControlValue as 'val' (i.e. not the proper
+                // subclass), so use random sensible values (doesn't matter anyway, as the wanted
+                // geometry here depends only on button sizes)
+                option.maximum = 10;
+                option.minimum = 0;
+                option.sliderPosition = option.sliderValue = 4;
+                option.pageStep = 2;
                 // Adjust coordinates to make the widget appear to be at (0,0), i.e. make
                 // widget and screen coordinates the same. QStyle functions should use screen
                 // coordinates but at least QPlastiqueStyle::subControlRect() is buggy
