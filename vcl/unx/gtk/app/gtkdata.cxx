@@ -568,6 +568,7 @@ GtkXLib::~GtkXLib()
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "GtkXLib::~GtkXLib()\n" );
 #endif
+    Yield( true, true );
     StopTimer();
      // sanity check: at this point nobody should be yielding, but wake them
      // up anyway before the condition they're waiting on gets destroyed.
