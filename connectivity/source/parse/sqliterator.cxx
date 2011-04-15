@@ -1923,7 +1923,7 @@ void OSQLParseTreeIterator::setOrderByColumnName(const ::rtl::OUString & rColumn
     cout << "OSQLParseTreeIterator::setOrderByColumnName: "
          << (const char *) rColumnName << ", "
          << (const char *) rTableRange << ", "
-         << (bAscending ? "sal_True" : "sal_False")
+         << (bAscending ? "true" : "false")
          << "\n";
 #endif
 }
@@ -1945,7 +1945,7 @@ void OSQLParseTreeIterator::setGroupByColumnName(const ::rtl::OUString & rColumn
     cout << "OSQLParseTreeIterator::setOrderByColumnName: "
          << (const char *) rColumnName << ", "
          << (const char *) rTableRange << ", "
-         << (bAscending ? "sal_True" : "sal_False")
+         << (bAscending ? "true" : "false")
          << "\n";
 #endif
 }
