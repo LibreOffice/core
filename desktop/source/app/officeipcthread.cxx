@@ -230,7 +230,7 @@ OfficeIPCThread*    OfficeIPCThread::pGlobalOfficeIPCThread = 0;
 String CreateMD5FromString( const OUString& aMsg )
 {
 #if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
-    fprintf (stderr, "create md5 frim '%s'\n",
+    fprintf (stderr, "create md5 from '%s'\n",
              (const sal_Char *)rtl::OUStringToOString (aMsg, RTL_TEXTENCODING_UTF8));
 #endif
 
