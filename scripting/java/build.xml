@@ -29,7 +29,6 @@
   <!-- =================== Environmental Properties ======================= -->
 
   <property name="prj" value=".."/>
-  <property name="build.compiler"   value="classic"/>
   <property name="optimize"   value="off"/>
   <property name="debug"   value="on"/>
   <property name="jardir" value="${out}/class"/>
