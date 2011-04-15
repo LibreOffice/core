@@ -38,7 +38,6 @@ $(eval $(call gb_Module_add_check_targets,writerfilter,\
 	CppunitTest_writerfilter_doctok \
 ))
 
-# does not run
 $(eval $(call gb_Module_add_subsequentcheck_targets,writerfilter,\
 	JunitTest_writerfilter_complex \
 ))

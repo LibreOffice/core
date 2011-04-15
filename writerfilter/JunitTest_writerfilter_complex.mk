@@ -25,10 +25,9 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_JunitTest_JunitTest,writerfilter_complex))
+$(eval $(call gb_JunitTest_JunitTest,writerfilter_complex,SRCDIR))
 
-$(eval $(call gb_JunitTest_set_defs,writerfilter_complex,\
-	$$(DEFS) \
+$(eval $(call gb_JunitTest_add_defs,writerfilter_complex,\
 	-Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/writerfilter/qa/complex/ooxml/testdocuments \
 ))
 

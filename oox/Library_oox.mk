@@ -41,8 +41,7 @@ $(eval $(call gb_Library_set_include,oox,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_set_defs,oox,\
-	$$(DEFS) \
+$(eval $(call gb_Library_add_defs,oox,\
 	-DOOX_DLLIMPLEMENTATION \
 ))
 

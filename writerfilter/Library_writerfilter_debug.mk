@@ -33,10 +33,6 @@ $(eval $(call gb_Library_set_include,writerfilter_debug,\
 	-I$(SRCDIR)/writerfilter/inc \
 ))
 
-$(eval $(call gb_Library_set_defs,writerfilter_debug,\
-	$$(DEFS) \
-))
-
 $(eval $(call gb_Library_add_linked_libs,writerfilter_debug,\
 	writerfilter \
 	comphelper \
