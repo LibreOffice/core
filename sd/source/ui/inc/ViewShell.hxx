@@ -562,6 +562,27 @@ protected:
     virtual void SetZoomFactor( const Fraction &rZoomX,
                                 const Fraction &rZoomY );
 
+    /**
+        This must be called after the ctor, but before anything else.
+        It's the part of construction that is dependent
+        on showing the top-level window.
+
+        Showing a window with a11y enabled causes various callbacks
+        to be triggered.
+
+        Due to the "virtual methods are not virtual during constructors"
+        problem, this is a disaster to call from the ctor
+
+        i.e. construct calls Show, and if a11y is enabled this
+        reenters the not-fully constructed object and calls
+        CreateAccessibleDocumentView, so if construct is called
+        from the ctor then if a derived class is contructed the base-cass
+        CreateAccessibleDocumentView is used, not the derived
+        CreateAccessibleDocumentView. i.e. run smoketest under a11y with
+        debugging assertions enabled
+    */
+    void doShow();
+
 private:
     ::Window* mpParentWindow;
     /** This window updater is used to keep all relevant windows up to date

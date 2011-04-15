@@ -143,6 +143,8 @@ DrawViewShell::DrawViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBas
 , mbIsLayerModeActive(false)
 , mbIsInSwitchPage(false)
 {
+    ViewShell::doShow();
+
     if (pFrameViewArgument != NULL)
         mpFrameView = pFrameViewArgument;
     else

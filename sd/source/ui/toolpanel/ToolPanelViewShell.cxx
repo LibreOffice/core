@@ -483,6 +483,8 @@ ToolPanelViewShell::ToolPanelViewShell( SfxViewFrame* pFrame, ViewShellBase& rVi
     ,mpSubShellManager()
     ,mnMenuId(0)
 {
+    ViewShell::doShow();
+
     meShellType = ST_TASK_PANE;
 
     mpContentWindow->SetCenterAllowed( false );

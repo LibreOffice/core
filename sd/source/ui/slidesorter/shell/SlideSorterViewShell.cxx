@@ -135,9 +135,6 @@ SlideSorterViewShell::SlideSorterViewShell (
 {
     meShellType = ST_SLIDE_SORTER;
 
-    SetPool( &GetDoc()->GetPool() );
-    SetUndoManager( GetDoc()->GetDocSh()->GetUndoManager() );
-
     if (pFrameViewArgument != NULL)
         mpFrameView = pFrameViewArgument;
     else
@@ -189,6 +186,11 @@ void SlideSorterViewShell::Initialize (void)
         mpVerticalScrollBar,
         mpScrollBarBox);
     mpView = &mpSlideSorter->GetView();
+
+    ViewShell::doShow();
+
+    SetPool( &GetDoc()->GetPool() );
+    SetUndoManager( GetDoc()->GetDocSh()->GetUndoManager() );
 
     // For accessibility we have to shortly hide the content window.
     // This triggers the construction of a new accessibility object for

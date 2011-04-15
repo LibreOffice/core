@@ -218,11 +218,6 @@ void ViewShell::construct(void)
     mpContentWindow->SetViewShell(this);
     mpContentWindow->SetPosSizePixel(
         GetParentWindow()->GetPosPixel(),GetParentWindow()->GetSizePixel());
-    mpContentWindow->Show();
-    static_cast< ::Window*>(mpContentWindow.get())->Resize();
-    OSL_TRACE("content window has size %d %d",
-        mpContentWindow->GetSizePixel().Width(),
-        mpContentWindow->GetSizePixel().Height());
 
     if ( ! GetDocSh()->IsPreview())
     {
@@ -231,18 +226,12 @@ void ViewShell::construct(void)
         mpHorizontalScrollBar->EnableRTL (sal_False);
         mpHorizontalScrollBar->SetRange(Range(0, 32000));
         mpHorizontalScrollBar->SetScrollHdl(LINK(this, ViewShell, HScrollHdl));
-        mpHorizontalScrollBar->Show();
 
         mpVerticalScrollBar.reset (new ScrollBar(GetParentWindow(), WinBits(WB_VSCROLL | WB_DRAG)));
         mpVerticalScrollBar->SetRange(Range(0, 32000));
         mpVerticalScrollBar->SetScrollHdl(LINK(this, ViewShell, VScrollHdl));
-        mpVerticalScrollBar->Show();
-        maScrBarWH = Size(
-            mpVerticalScrollBar->GetSizePixel().Width(),
-            mpHorizontalScrollBar->GetSizePixel().Height());
 
         mpScrollBarBox.reset(new ScrollBarBox(GetParentWindow(), WB_SIZEABLE));
-        mpScrollBarBox->Show();
     }
 
     String aName( RTL_CONSTASCII_USTRINGPARAM( "ViewShell" ));
@@ -264,12 +253,31 @@ void ViewShell::construct(void)
     // Register the sub shell factory.
     mpImpl->mpSubShellFactory.reset(new ViewShellObjectBarFactory(*this));
     GetViewShellBase().GetViewShellManager()->AddSubShellFactory(this,mpImpl->mpSubShellFactory);
+}
+
+void ViewShell::doShow(void)
+{
+    mpContentWindow->Show();
+    static_cast< ::Window*>(mpContentWindow.get())->Resize();
+    OSL_TRACE("content window has size %d %d",
+        mpContentWindow->GetSizePixel().Width(),
+        mpContentWindow->GetSizePixel().Height());
+
+    if ( ! GetDocSh()->IsPreview())
+    {
+        // Show scroll bars
+        mpHorizontalScrollBar->Show();
+
+        mpVerticalScrollBar->Show();
+        maScrBarWH = Size(
+            mpVerticalScrollBar->GetSizePixel().Width(),
+            mpHorizontalScrollBar->GetSizePixel().Height());
+
+        mpScrollBarBox->Show();
+    }
 
     GetParentWindow()->Show();
 }
-
-
-
 
 void ViewShell::Init (bool bIsMainViewShell)
 {

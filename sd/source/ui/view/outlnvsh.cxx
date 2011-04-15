@@ -225,6 +225,8 @@ OutlineViewShell::OutlineViewShell (
       mbInitialized(false)
 
 {
+    ViewShell::doShow();
+
     if (pFrameViewArgument != NULL)
         mpFrameView = pFrameViewArgument;
     else
