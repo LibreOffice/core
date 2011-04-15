@@ -199,7 +199,7 @@ ooxml_MODELPROCESSED := $(ooxml_MISCDIR)/model_preprocessed.xml
 ooxml_NSXSL := $(ooxml_MISCDIR)/namespacesmap.xsl
 ooxml_PREPROCESSXSLCOPIED := $(ooxml_MISCDIR)/modelpreprocess.xsl
 
-ooxml_NAMESPACESTXT := $(SOLARVER)/$(INPATH)/inc$(UPDMINOREXT)/oox/namespaces.txt
+ooxml_NAMESPACESTXT := $(OUTDIR)/inc/oox/namespaces.txt
 
 ooxml_GENHEADERS = \
     $(ooxml_FACTORYGENERATEDHXX) \
