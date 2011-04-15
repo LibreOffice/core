@@ -56,10 +56,10 @@ my_components = \
     cached1 \
     calc \
     canvasfactory \
-    chartcontroller \
-    chartmodel \
-    charttools \
-    chartview \
+    component/chart2/source/controller/chartcontroller \
+    component/chart2/source/model/chartmodel \
+    component/chart2/source/tools/charttools \
+    component/chart2/source/view/chartview \
     component/comphelper/util/comphelp \
     component/fileaccess/source/fileacc \
     component/forms/util/frm \
