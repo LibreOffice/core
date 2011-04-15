@@ -2113,6 +2113,7 @@ fi
 dnl ===================================================================
 dnl  Check which Microsoft C/C++ or MinGW compiler is used for WINNT
 dnl ===================================================================
+SHOWINCLUDES_PREFIX=
 if test "$_os" = "WINNT"; then
     if test "$WITH_MINGW" != "yes"; then
         AC_MSG_CHECKING([for a friendly Microsoft C/C++ compiler installation path])
@@ -2163,7 +2164,7 @@ if test "$_os" = "WINNT"; then
         fi
 
         if test -z "$MSPDB_PATH"; then
-            AC_MSG_ERROR([You need a mspdb80.dllor mspdb100.dll, make sure it's in the path or use --with-mspdb-path])
+            AC_MSG_ERROR([You need a mspdb80.dllor mspdb100.dll, make sure it is in the path or use --with-mspdb-path])
         fi
         MSPDB_PATH=`cygpath -d "$MSPDB_PATH"`
         MSPDB_PATH=`cygpath -u "$MSPDB_PATH"`
@@ -2222,6 +2223,19 @@ dnl      The following find microsoft, matches nn.nn.nnnn then pulls numbers out
         else
             AC_MSG_ERROR([Microsoft C/C++ Compiler not found. Use --with-cl-home or set path to cl.exe.])
         fi
+
+        dnl We need to guess the prefix of the -showIncludes output, it can be
+        dnl localized
+        AC_MSG_CHECKING([the dependency generation prefix (cl.exe -showIncludes)])
+        echo "#include <stdlib.h>" > conftest.c
+        SHOWINCLUDES_PREFIX=`$CC -c -showIncludes conftest.c 2>/dev/null | \
+            grep 'stdlib\.h' | head -n1 | sed 's/ [[[:alpha:]]]:.*//'`
+        rm -f conftest.c conftest.obj
+        if test -z "$SHOWINCLUDES_PREFIX" ; then
+            AC_MSG_ERROR([cannot determine the -showIncludes prefix])
+        else
+            AC_MSG_RESULT(["$SHOWINCLUDES_PREFIX"])
+        fi
     else
         AC_MSG_CHECKING([the MinGW C++ Compiler])
         if test `$CC -dumpmachine | $SED -e 's/^.*-//'` = "mingw32"; then
@@ -2239,6 +2253,7 @@ fi
 AC_SUBST(COMEX)
 AC_SUBST(MSPDB_PATH)
 AC_SUBST(USE_MINGW)
+AC_SUBST(SHOWINCLUDES_PREFIX)
 
 dnl ===================================================================
 dnl  .NET needs special treatment

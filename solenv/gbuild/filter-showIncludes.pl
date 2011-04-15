@@ -20,14 +20,19 @@ if ( !defined $outfile || !defined $objfile || !defined $srcfile ) {
     die "Not enough parameters to create dependencies.";
 }
 
+my $showincludes_prefix = $ENV{'SHOWINCLUDES_PREFIX'};
+if ( !defined( $showincludes_prefix ) || $showincludes_prefix eq "" ) {
+    $showincludes_prefix = 'Note: including file:';
+}
+
 open( OUT, "> $outfile" ) or die "Cannot open $outfile for writing.";
 print OUT "$objfile: \\\n $srcfile";
 
 my %seen;
 my $first_line = 1;
 while ( <STDIN> ) {
-    if ( /^Note: including file:/ ) {
-        s/^Note: including file:\s*//;
+    if ( /^$showincludes_prefix/ ) {
+        s/^$showincludes_prefix\s*//;
         s/\r$//;
 
         chomp;
