@@ -135,6 +135,13 @@ gb_Library_DLLFILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_DLLFILENAMES))
 
 endif
 
+# TODO: is this correct? This is how I parsed the conditionals in
+# oox/util/makefile.mk .-)
+ifeq ($(COM),GCC)
+gb_Library_FILENAMES := $(patsubst crypto:libcrypto%,crypto:libcrypto_static%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst ssl:libssl%,ssl:libssl_static%,$(gb_Library_FILENAMES))
+endif
+
 endif
 
 ifeq ($(OS),SOLARIS)
