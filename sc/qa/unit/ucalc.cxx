@@ -225,6 +225,7 @@ public:
     void testInput();
     void testSUM();
     void testVolatileFunc();
+    void testFuncParam();
     void testNamedRange();
     void testCSV();
     void testMatrix();
@@ -256,6 +257,7 @@ public:
     CPPUNIT_TEST(testInput);
     CPPUNIT_TEST(testSUM);
     CPPUNIT_TEST(testVolatileFunc);
+    CPPUNIT_TEST(testFuncParam);
     CPPUNIT_TEST(testNamedRange);
     CPPUNIT_TEST(testCSV);
     CPPUNIT_TEST(testMatrix);
@@ -405,6 +407,29 @@ void Test::testVolatileFunc()
     double now2;
     m_pDoc->GetValue(0, 1, 0, now2);
     CPPUNIT_ASSERT_MESSAGE("Result should be the value of NOW() again.", (now2 - now1) >= 0.0);
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testFuncParam()
+{
+    rtl::OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("foo"));
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
+                            m_pDoc->InsertTab (0, aTabName));
+
+    // First, the normal case, with no missing parameters.
+    m_pDoc->SetString(0, 0, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=AVERAGE(1;2;3)")));
+    m_pDoc->CalcFormulaTree(false, true);
+    double val;
+    m_pDoc->GetValue(0, 0, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("incorrect result", val == 2);
+
+    // Now function with missing parameters.  Missing values should be treated
+    // as zeros.
+    m_pDoc->SetString(0, 0, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=AVERAGE(1;;;)")));
+    m_pDoc->CalcFormulaTree(false, true);
+    m_pDoc->GetValue(0, 0, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("incorrect result", val == 0.25);
 
     m_pDoc->DeleteTab(0);
 }
