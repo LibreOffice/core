@@ -42,16 +42,18 @@
 
 // STATIC DATA -----------------------------------------------------------
 
+namespace {
+
 //  incl. Doppelpunkt -> Doppelte Referenzen werden einzeln behandelt
-const sal_Unicode ScRefFinder::pDelimiters[] = {
+const sal_Unicode pDelimiters[] = {
     '=','(',')','+','-','*','/','^','&',' ','{','}','<','>',':', 0
 };
 
 // =======================================================================
 
-inline sal_Bool IsText( sal_Unicode c )
+inline bool IsText( sal_Unicode c )
 {
-    bool bFound = ScGlobal::UnicodeStrChr( ScRefFinder::pDelimiters, c );
+    bool bFound = ScGlobal::UnicodeStrChr( pDelimiters, c );
     if (bFound)
         // This is one of delimiters, therefore not text.
         return false;
@@ -61,23 +63,160 @@ inline sal_Bool IsText( sal_Unicode c )
     return c != sep;
 }
 
-inline sal_Bool IsText( sal_Bool& bQuote, sal_Unicode c )
+inline bool IsText( bool& bQuote, sal_Unicode c )
 {
-    if ( c == '\'' )
+    if (c == '\'')
     {
         bQuote = !bQuote;
-        return sal_True;
+        return true;
     }
-    if ( bQuote )
-        return sal_True;
-    return IsText( c );
+    if (bQuote)
+        return true;
+
+    return IsText(c);
 }
 
-ScRefFinder::ScRefFinder(const String& rFormula, ScDocument* pDocument,
-             formula::FormulaGrammar::AddressConvention eConvP) :
+/**
+ * Find first character position that is considered text.  A character is
+ * considered a text when it's within the ascii range and when it's not a
+ * delimiter.
+ */
+xub_StrLen FindStartPos(const sal_Unicode* p, xub_StrLen nStartPos, xub_StrLen nEndPos)
+{
+    while (nStartPos <= nEndPos && !IsText(p[nStartPos]))
+        ++nStartPos;
+
+    return nStartPos;
+}
+
+xub_StrLen FindEndPosA1(const sal_Unicode* p, xub_StrLen nStartPos, xub_StrLen nEndPos)
+{
+    bool bQuote = false;
+    xub_StrLen nNewEnd = nStartPos;
+    while (nNewEnd <= nEndPos && IsText(bQuote, p[nNewEnd]))
+        ++nNewEnd;
+
+    return nNewEnd;
+}
+
+xub_StrLen FindEndPosR1C1(const sal_Unicode* p, xub_StrLen nStartPos, xub_StrLen nEndPos)
+{
+    xub_StrLen nNewEnd = nStartPos;
+    p = &p[nStartPos];
+    for (; nNewEnd <= nEndPos; ++p, ++nNewEnd)
+    {
+        if (*p == '\'')
+        {
+            // Skip until the closing quote.
+            for (; nNewEnd <= nEndPos; ++p, ++nNewEnd)
+                if (*p == '\'')
+                    break;
+        }
+        else if (*p == '[')
+        {
+            // Skip until the closing braket.
+            for (; nNewEnd <= nEndPos; ++p, ++nNewEnd)
+                if (*p == ']')
+                    break;
+        }
+        else if (!IsText(*p))
+            break;
+    }
+
+    return nNewEnd;
+}
+
+/**
+ * Find last character position that is considred text, from the specified
+ * start position.
+ */
+xub_StrLen FindEndPos(const sal_Unicode* p, xub_StrLen nStartPos, xub_StrLen nEndPos,
+                           formula::FormulaGrammar::AddressConvention eConv)
+{
+    switch (eConv)
+    {
+        case formula::FormulaGrammar::CONV_XL_R1C1:
+            return FindEndPosR1C1(p, nStartPos, nEndPos);
+        case formula::FormulaGrammar::CONV_OOO:
+        case formula::FormulaGrammar::CONV_XL_A1:
+        default:
+            return FindEndPosA1(p, nStartPos, nEndPos);
+    }
+}
+
+void ExpandToTextA1(const sal_Unicode* p, xub_StrLen nLen, xub_StrLen& rStartPos, xub_StrLen& rEndPos)
+{
+    while (rStartPos > 0 && IsText(p[rStartPos - 1]) )
+        --rStartPos;
+    if (rEndPos)
+        --rEndPos;
+    while (rEndPos+1 < nLen && IsText(p[rEndPos + 1]) )
+        ++rEndPos;
+}
+
+void ExpandToTextR1C1(const sal_Unicode* p, xub_StrLen nLen, xub_StrLen& rStartPos, xub_StrLen& rEndPos)
+{
+    // move back the start position to the first text character.
+    if (rStartPos > 0)
+    {
+        for (--rStartPos; rStartPos > 0; --rStartPos)
+        {
+            sal_Unicode c = p[rStartPos];
+            if (c == '\'')
+            {
+                // Skip until the opening quote.
+                for (--rStartPos; rStartPos > 0; --rStartPos)
+                {
+                    c = p[rStartPos];
+                    if (c == '\'')
+                        break;
+                }
+            }
+            else if (c == ']')
+            {
+                // Skip until the opening braket.
+                for (--rStartPos; rStartPos > 0; --rStartPos)
+                {
+                    if (c == '[')
+                        break;
+                }
+            }
+            else if (!IsText(c))
+            {
+                ++rStartPos;
+                break;
+            }
+        }
+    }
+
+    // move forward the end position to the last text character.
+    rEndPos = FindEndPosR1C1(p, rEndPos, nLen-1);
+}
+
+void ExpandToText(const sal_Unicode* p, xub_StrLen nLen, xub_StrLen& rStartPos, xub_StrLen& rEndPos,
+                  formula::FormulaGrammar::AddressConvention eConv)
+{
+    switch (eConv)
+    {
+        case formula::FormulaGrammar::CONV_XL_R1C1:
+            ExpandToTextR1C1(p, nLen, rStartPos, rEndPos);
+        break;
+        case formula::FormulaGrammar::CONV_OOO:
+        case formula::FormulaGrammar::CONV_XL_A1:
+        default:
+            ExpandToTextA1(p, nLen, rStartPos, rEndPos);
+    }
+}
+
+}
+
+ScRefFinder::ScRefFinder(
+    const String& rFormula, const ScAddress& rPos,
+    ScDocument* pDocument, formula::FormulaGrammar::AddressConvention eConvP) :
     aFormula( rFormula ),
     eConv( eConvP ),
-    pDoc( pDocument )
+    pDoc( pDocument ),
+    maPos(rPos)
 {
     nSelStart = nSelEnd = nFound = 0;
 }
@@ -107,15 +246,9 @@ void ScRefFinder::ToggleRel( xub_StrLen nStartPos, xub_StrLen nEndPos )
     //  Selektion erweitern, und statt Selektion Start- und Endindex
 
     if ( nEndPos < nStartPos )
-    {
-        xub_StrLen nTemp = nStartPos; nStartPos = nEndPos; nEndPos = nTemp;
-    }
-    while (nStartPos > 0 && IsText(pSource[nStartPos - 1]) )
-        --nStartPos;
-    if (nEndPos)
-        --nEndPos;
-    while (nEndPos+1 < nLen && IsText(pSource[nEndPos + 1]) )
-        ++nEndPos;
+        ::std::swap(nEndPos, nStartPos);
+
+    ExpandToText(pSource, nLen, nStartPos, nEndPos, eConv);
 
     String aResult;
     String aExpr;
@@ -126,27 +259,20 @@ void ScRefFinder::ToggleRel( xub_StrLen nStartPos, xub_StrLen nEndPos )
     xub_StrLen nLoopStart = nStartPos;
     while ( nLoopStart <= nEndPos )
     {
-        //  Formel zerlegen
-
-        xub_StrLen nEStart = nLoopStart;
-        while ( nEStart <= nEndPos && !IsText(pSource[nEStart]) )
-            ++nEStart;
-
-        sal_Bool bQuote = false;
-        xub_StrLen nEEnd = nEStart;
-        while ( nEEnd <= nEndPos && IsText(bQuote,pSource[nEEnd]) )
-            ++nEEnd;
+        // Determine the stard and end positions of a text segment.
+        xub_StrLen nEStart = FindStartPos(pSource, nLoopStart, nEndPos);
+        xub_StrLen nEEnd  = FindEndPos(pSource, nEStart, nEndPos, eConv);
 
         aSep  = aFormula.Copy( nLoopStart, nEStart-nLoopStart );
         aExpr = aFormula.Copy( nEStart, nEEnd-nEStart );
 
-        //  Test, ob aExpr eine Referenz ist
-
-        sal_uInt16 nResult = aAddr.Parse( aExpr, pDoc, pDoc->GetAddressConvention() );
+        // Check the validity of the expression, and toggle the relative flag.
+        ScAddress::Details aDetails(eConv, maPos.Row(), maPos.Col());
+        sal_uInt16 nResult = aAddr.Parse(aExpr, pDoc, aDetails);
         if ( nResult & SCA_VALID )
         {
             sal_uInt16 nFlags = lcl_NextFlags( nResult );
-            aAddr.Format( aExpr, nFlags, pDoc, pDoc->GetAddressConvention() );
+            aAddr.Format(aExpr, nFlags, pDoc, aDetails);
 
             xub_StrLen nAbsStart = nStartPos+aResult.Len()+aSep.Len();
 

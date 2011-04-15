@@ -259,7 +259,7 @@ void ScViewFunc::DoRefConversion( sal_Bool bRecord )
                         String aOld;
                         ((ScFormulaCell*)pCell)->GetFormula(aOld);
                         xub_StrLen nLen = aOld.Len();
-                        ScRefFinder aFinder( aOld, pDoc );
+                        ScRefFinder aFinder( aOld, aIter.GetPos(), pDoc, pDoc->GetAddressConvention() );
                         aFinder.ToggleRel( 0, nLen );
                         if (aFinder.GetFound())
                         {
