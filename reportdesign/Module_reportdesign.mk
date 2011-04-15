@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -28,11 +28,11 @@
 $(eval $(call gb_Module_Module,reportdesign))
 
 $(eval $(call gb_Module_add_targets,reportdesign,\
-	AllLangResTarget_rpt\
-	AllLangResTarget_rptui\
-	Library_rpt\
-	Library_rptxml\
-	Library_rptui\
+	AllLangResTarget_rpt \
+	AllLangResTarget_rptui \
+	Library_rpt \
+	Library_rptxml \
+	Library_rptui \
 	Package_uiconfig \
 	Package_xml \
 ))

@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ $(eval $(call gb_Library_add_cflags,dbui,\
 ))
 endif
 
-ifneq ($(WINDOWS_VISTA_PSDK),) 
+ifneq ($(WINDOWS_VISTA_PSDK),)
 ifeq ($(PROF_EDITION),)
 $(eval $(call gb_Library_add_defs,dbui,\
 	-DDBACCESS_DLLIMPLEMENTATION\
@@ -67,7 +67,7 @@ DISABLE_ADO=TRUE
 endif
 endif
 
-ifeq ($(OS),WNT) 
+ifeq ($(OS),WNT)
 ifeq ($(DISABLE_ADO),)
 $(eval $(call gb_Library_add_exception_objects,dbui,\
 	dbaccess/source/ui/dlg/adodatalinks \

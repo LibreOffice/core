@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,6 @@
 
 $(eval $(call gb_Library_Library,sdbt))
 $(eval $(call gb_Library_add_package_headers,sdbt,dbaccess_inc))
-
 
 $(eval $(call gb_Library_set_componentfile,sdbt,dbaccess/util/sdbt))
 
@@ -65,4 +64,5 @@ $(eval $(call gb_Library_add_noexception_objects,sdbt, \
 	dbaccess/source/shared/sdbtstrings \
 ))
 
+# vim: set noet sw=4 ts=4:
 # vim: set noet sw=4 ts=4:

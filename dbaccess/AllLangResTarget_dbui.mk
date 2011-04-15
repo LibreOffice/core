@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -108,13 +108,13 @@ $(WORKDIR)/inc/dbaccess/AutoControls.hrc : $(SRCDIR)/dbaccess/source/ui/dlg/Auto
 	echo copying $@
 	-mkdir -p $(WORKDIR)/inc/dbaccess
 	cp $(SRCDIR)/dbaccess/source/ui/dlg/AutoControls_tmpl.hrc $(WORKDIR)/inc/dbaccess/AutoControls.hrc
-	rm -f $(WORKDIR)/inc/dbaccess/lastrun.mk 
+	rm -f $(WORKDIR)/inc/dbaccess/lastrun.mk
 
 $(WORKDIR)/inc/dbaccess/toolbox.hrc : $(SRCDIR)/dbaccess/source/ui/inc/toolbox_tmpl.hrc
 	echo copying $@
 	-mkdir -p $(WORKDIR)/inc/dbaccess
 	cp $(SRCDIR)/dbaccess/source/ui/inc/toolbox_tmpl.hrc $(WORKDIR)/inc/dbaccess/toolbox.hrc
-	rm -f $(WORKDIR)/inc/dbaccess/lastrun.mk 
+	rm -f $(WORKDIR)/inc/dbaccess/lastrun.mk
 else
 -include $(WORKDIR)/inc/dbaccess/lastrun.mk
 ifneq ($(gb_lastrun_globlmn),MERGED)

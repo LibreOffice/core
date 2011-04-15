@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -29,16 +29,16 @@ $(eval $(call gb_Module_Module,dbaccess))
 
 $(eval $(call gb_Module_add_targets,dbaccess,\
 	AllLangResTarget_adabasui \
-	AllLangResTarget_dba\
-	AllLangResTarget_dbmm\
-	AllLangResTarget_dbui\
-	AllLangResTarget_sdbt\
-	Library_adabasui\
-	Library_dba\
-	Library_dbaxml\
-	Library_dbmm\
-	Library_dbui\
-	Library_sdbt\
+	AllLangResTarget_dba \
+	AllLangResTarget_dbmm \
+	AllLangResTarget_dbui \
+	AllLangResTarget_sdbt \
+	Library_adabasui \
+	Library_dba \
+	Library_dbaxml \
+	Library_dbmm \
+	Library_dbui \
+	Library_sdbt \
 	Executable_odbcconfig \
 	Package_inc \
 	Package_uiconfig \
