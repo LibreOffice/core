@@ -46,6 +46,10 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     avmedia \
     basegfx \
     canvastools \
+    chartcontroller \
+    chartmodel \
+    charttools \
+    chartview \
     cppcanvas \
     cui \
     dbtools \
