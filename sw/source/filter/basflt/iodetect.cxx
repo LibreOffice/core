@@ -201,9 +201,9 @@ sal_Bool SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter
 
 void TerminateBuffer(sal_Char *pBuffer, sal_uLong nBytesRead, sal_uLong nBufferLen)
 {
-    ASSERT(nBytesRead <= nBufferLen - 2,
+    OSL_ENSURE(nBytesRead <= nBufferLen - 2,
             "what you read must be less than the max + null termination");
-    ASSERT(!(nBufferLen & 0x00000001), "nMaxReadBuf must be an even number");
+    OSL_ENSURE(!(nBufferLen & 0x00000001),"nMaxReadBuf must be an even number");
     if (nBytesRead <= nBufferLen - 2)
     {
         pBuffer[nBytesRead] = '\0';

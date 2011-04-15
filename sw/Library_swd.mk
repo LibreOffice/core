@@ -41,6 +41,8 @@ $(eval $(call gb_Library_set_include,swd,\
     -I$(OUTDIR)/inc/offuh \
 ))
 
+$(eval $(call gb_Library_add_defs,swd,\
+	-DSWD_DLLIMPLEMENTATION \
 $(eval $(call gb_Library_add_linked_libs,swd,\
     comphelper \
     cppu \
@@ -58,7 +60,6 @@ $(eval $(call gb_Library_add_linked_libs,swd,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,swd,\
-    sw/source/core/except/errhdl \
     sw/source/filter/basflt/iodetect \
     sw/source/ui/uno/detreg \
     sw/source/ui/uno/swdet2 \
