@@ -39,11 +39,16 @@ $(eval $(call gb_Module_add_targets,dbaccess,\
 	Library_dbmm \
 	Library_dbui \
 	Library_sdbt \
-	Executable_odbcconfig \
 	Package_inc \
 	Package_uiconfig \
 	Package_xml \
 ))
+
+ifeq ($(GUI),WNT)
+$(eval $(call gb_Module_add_targets,dbaccess,\
+	Executable_odbcconfig \
+))
+endif
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,dbaccess,\
 	JunitTest_dbaccess_complex \

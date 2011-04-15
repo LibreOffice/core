@@ -24,7 +24,6 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-ifeq ($(GUI),WNT)
 
 $(eval $(call gb_Executable_Executable,odbcconfig))
 
@@ -53,5 +52,6 @@ $(eval $(call gb_Executable_add_exception_objects,odbcconfig,\
 	dbaccess/win32/source/odbcconfig/odbcconfig \
 ))
 
+# vim: set noet sw=4 ts=4:
 endif
 # vim: set noet sw=4 ts=4:

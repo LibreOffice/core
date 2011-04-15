@@ -36,7 +36,7 @@ $(eval $(call gb_SrsTarget_SrsTarget,dbaccess/sdbt))
 $(eval $(call gb_SrsTarget_set_include,dbaccess/sdbt,\
 	$$(INCLUDE) \
 	-I$(OUTDIR)/inc \
-	-I$(SRCDIR)/dbaccess\source\sdbtools\inc \
+	-I$(SRCDIR)/dbaccess/source/sdbtools/inc \
 	-I$(SRCDIR)/dbaccess/inc \
 ))
 
