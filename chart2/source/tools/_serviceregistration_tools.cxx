@@ -178,13 +178,13 @@ static struct ::cppu::ImplementationEntry g_entries_chart2_tools[] =
 extern "C"
 {
 //==================================================================================================
-OOO_DLLPUBLIC_CHARTTOOLS void SAL_CALL component_getImplementationEnvironment(
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** /* ppEnv */ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 //==================================================================================================
-OOO_DLLPUBLIC_CHARTTOOLS void * SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     return ::cppu::component_getFactoryHelper(
