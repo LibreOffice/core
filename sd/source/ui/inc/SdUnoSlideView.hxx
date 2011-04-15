@@ -46,7 +46,6 @@ class PageSelector;
 namespace sd {
 
 class DrawController;
-class SlideViewShell;
 class View;
 
 

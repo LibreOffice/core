@@ -37,9 +37,7 @@
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 
-class SdSlideViewShell;
 class SdWindow;
-class SdSlideView;
 class SdDrawDocument;
 class Sound;
 

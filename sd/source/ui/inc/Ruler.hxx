@@ -40,12 +40,6 @@ class RulerCtrlItem;
 class View;
 class Window;
 
-/*************************************************************************
-|*
-|* das Fenster der Diashow leitet Mouse- und Key-Events an die SlideViewShell
-|*
-\************************************************************************/
-
 class Ruler
     : public SvxRuler
 {

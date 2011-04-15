@@ -53,7 +53,6 @@
 #include "DrawViewShell.hxx"
 #include "Window.hxx"
 #include "fupoor.hxx"
-#include "fuslhide.hxx"
 #include "fuzoom.hxx"
 #include "fucushow.hxx"
 #include "fusldlg.hxx"

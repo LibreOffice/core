@@ -66,7 +66,7 @@ class ViewOverlayManager;
 /** Base class of the stacked shells that provide graphical views to
     Draw and Impress documents and editing functionality.  In contrast
     to this other stacked shells are responsible for showing an
-    overview over several slides (SlideViewShell) or a textual
+    overview over several slides or a textual
     overview over the text in an Impress document (OutlineViewShell).
 */
 class DrawViewShell

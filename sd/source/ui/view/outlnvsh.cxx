@@ -2077,9 +2077,8 @@ void OutlineViewShell::VisAreaChanged(const Rectangle& rRect)
 }
 
 /** If there is a valid controller then create a new instance of
-    <type>AccessibleDrawDocumentView</type>.  Otherwise delegate this call
-    to the base class to return a default object (probably an empty
-    reference).
+    <type>AccessibleDrawDocumentView</type>.  Otherwise return an empty
+    reference.
 */
 ::com::sun::star::uno::Reference<
     ::com::sun::star::accessibility::XAccessible>

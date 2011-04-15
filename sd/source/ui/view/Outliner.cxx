@@ -273,8 +273,6 @@ Outliner::~Outliner (void)
 
     <li>When the current shell is a <type>SdOutlineViewShell</type> then
     directly operate on it.  No switching into other views takes place.</li>
-
-    <li>For a <type>SlideViewShell</type> no action is performed.</li>
     </ol>
 */
 void Outliner::PrepareSpelling (void)
