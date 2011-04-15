@@ -52,7 +52,7 @@ protected:
     const XclBiff       meBiff;
 
     // ---------------------------------------------------------------
-    void                DoMulArgs( DefTokenId eId, sal_uInt8 nNumArgs, sal_uInt8 mnMinParamCount = 0 );
+    void                DoMulArgs( DefTokenId eId, sal_uInt8 nNumArgs );
 
     void                ExcRelToScRel( sal_uInt16 nRow, sal_uInt8 nCol, ScSingleRefData&, const sal_Bool bName );
 

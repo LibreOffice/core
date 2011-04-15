@@ -480,7 +480,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 else
                     aIn >> nXclFunc;
                 if( const XclFunctionInfo* pFuncInfo = maFuncProv.GetFuncInfoFromXclFunc( nXclFunc ) )
-                    DoMulArgs( pFuncInfo->meOpCode, pFuncInfo->mnMaxParamCount, pFuncInfo->mnMinParamCount );
+                    DoMulArgs( pFuncInfo->meOpCode, pFuncInfo->mnMaxParamCount );
                 else
                     DoMulArgs( ocNoName, 0 );
             }
@@ -498,7 +498,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 else
                     aIn >> nXclFunc;
                 if( const XclFunctionInfo* pFuncInfo = maFuncProv.GetFuncInfoFromXclFunc( nXclFunc ) )
-                    DoMulArgs( pFuncInfo->meOpCode, nParamCount, pFuncInfo->mnMinParamCount );
+                    DoMulArgs( pFuncInfo->meOpCode, nParamCount );
                 else
                     DoMulArgs( ocNoName, 0 );
             }
@@ -1525,7 +1525,7 @@ sal_Bool ExcelToSc::GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sa
     return !rRangeList.empty();
 }
 
-void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nAnz, sal_uInt8 nMinParamCount )
+void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nAnz )
 {
     TokenId                 eParam[ 256 ];
     sal_Int32                   nLauf;

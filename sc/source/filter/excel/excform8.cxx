@@ -475,7 +475,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 aIn >> nParamCount >> nXclFunc;
                 nParamCount &= 0x7F;
                 if( const XclFunctionInfo* pFuncInfo = maFuncProv.GetFuncInfoFromXclFunc( nXclFunc ) )
-                    DoMulArgs( pFuncInfo->meOpCode, nParamCount, pFuncInfo->mnMinParamCount );
+                    DoMulArgs( pFuncInfo->meOpCode, nParamCount );
                 else
                     DoMulArgs( ocNoName, 0 );
             }
