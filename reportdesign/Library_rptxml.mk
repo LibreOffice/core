@@ -26,7 +26,6 @@
 #*************************************************************************
 
 $(eval $(call gb_Library_Library,rptxml))
-$(eval $(call gb_Library_add_package_headers,rptxml,reportdesign_inc))
 $(eval $(call gb_Library_add_precompiled_header,rptxml,$(SRCDIR)/reportdesign/inc/pch/precompiled_rptxml))
 
 $(eval $(call gb_Library_set_componentfile,rptxml,reportdesign/source/filter/xml/rptxml))

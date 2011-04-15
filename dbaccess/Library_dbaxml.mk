@@ -26,7 +26,6 @@
 #*************************************************************************
 
 $(eval $(call gb_Library_Library,dbaxml))
-$(eval $(call gb_Library_add_package_headers,dbaxml,dbaccess_inc))
 $(eval $(call gb_Library_add_precompiled_header,dbaxml,$(SRCDIR)/dbaccess/inc/pch/precompiled_dbaxml))
 
 $(eval $(call gb_Library_set_componentfile,dbaxml,dbaccess/source/filter/xml/dbaxml))

@@ -26,7 +26,6 @@
 #*************************************************************************
 
 $(eval $(call gb_Library_Library,dbui))
-$(eval $(call gb_Library_add_package_headers,dbui,dbaccess_inc))
 $(eval $(call gb_Library_add_precompiled_header,dbui,$(SRCDIR)/dbaccess/inc/pch/precompiled_dbui))
 
 $(eval $(call gb_Library_set_componentfile,dbui,dbaccess/util/dbu))

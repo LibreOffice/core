@@ -26,7 +26,6 @@
 #*************************************************************************
 
 $(eval $(call gb_Library_Library,rptui))
-$(eval $(call gb_Library_add_package_headers,rptui,reportdesign_inc))
 $(eval $(call gb_Library_add_precompiled_header,rptui,$(SRCDIR)/reportdesign/inc/pch/precompiled_rptui))
 
 $(eval $(call gb_Library_set_componentfile,rptui,reportdesign/util/rptui))
