@@ -1081,13 +1081,13 @@ namespace svxform
 
                 // und die Properties des alten in das neue kopieren
                 Reference< XPropertySet >  xCurrent(pControls[i], UNO_QUERY);
-#if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
+#if (OSL_DEBUG_LEVEL > 1)
                 // nur mal eben sehen, ob das Ding tatsaechlich ein hidden control ist
                 sal_Int16 nClassId = ::comphelper::getINT16(xCurrent->getPropertyValue(FM_PROP_CLASSID));
                 OSL_ENSURE(nClassId == FormComponentType::HIDDENCONTROL, "NavigatorTree::implExecuteDataTransfer: invalid control in drop list !");
                     // wenn das SVX_FM_HIDDEN_CONTROLS-Format vorhanden ist, dann sollten wirklich nur hidden controls in der Sequenz
                     // stecken
-#endif // (OSL_DEBUG_LEVEL > 1) || DBG_UTIL
+#endif // (OSL_DEBUG_LEVEL > 1)
                 Reference< XPropertySetInfo >  xPropInfo( xCurrent->getPropertySetInfo());
                 Sequence< Property> seqAllCurrentProps = xPropInfo->getProperties();
                 Property* pAllCurrentProps = seqAllCurrentProps.getArray();
