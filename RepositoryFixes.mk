@@ -166,6 +166,11 @@ ifeq ($(SYSTEM_LIBXSLT),YES)
 gb_Library_TARGETS := $(filter-out xslt,$(gb_Library_TARGETS))
 endif
 
+ifeq ($(SYSTEM_OPENSSL),YES)
+gb_Library_TARGETS := $(filter-out crypto,$(gb_Library_TARGETS))
+gb_Library_TARGETS := $(filter-out ssl,$(gb_Library_TARGETS))
+endif
+
 ifeq ($(SYSTEM_REDLAND),YES)
 gb_Library_TARGETS := $(filter-out rdf,$(gb_Library_TARGETS))
 endif
