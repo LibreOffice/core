@@ -213,7 +213,7 @@ endef
 # CObject class
 
 ifeq ($(gb_FULLDEPS),$(true))
-define gb_CObject__command_deponcompile
+define gb_Object__command_deponcompile
 $(call gb_Helper_abbreviate_dirs_native,\
     $(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
         $(filter-out -DPRECOMPILED_HEADERS,$(4)) $(5) \
@@ -227,10 +227,10 @@ $(call gb_Helper_abbreviate_dirs_native,\
         -v WORKDIR=$(WORKDIR)/ \
         -v SRCDIR=$(SRCDIR)/ \
         -v REPODIR=$(REPODIR)/ \
-    > $(call gb_CObject_get_dep_target,$(2)))
++	> $(2))
 endef
 else
-CObject__command_deponcompile =
+gb_Object__command_deponcompile =
 endif
 
 define gb_CObject__command
@@ -244,33 +244,12 @@ $(call gb_Helper_abbreviate_dirs_native,\
         -o $(1) \
         -I$(dir $(3)) \
         $(INCLUDE))
-$(call gb_CObject__command_deponcompile,$(1),$(2),$(3),$(DEFS),$(T_CFLAGS),$(INCLUDE))
+$(call gb_Object__command_deponcompile,$(1),$(4),$(3),$(DEFS),$(T_CFLAGS),$(INCLUDE))
 endef
 
 
 
 # CxxObject class
-
-ifeq ($(gb_FULLDEPS),$(true))
-define gb_CxxObject__command_deponcompile
-$(call gb_Helper_abbreviate_dirs_native,\
-    $(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
-        $(filter-out -DPRECOMPILED_HEADERS,$(4)) $(5) \
-        -I$(dir $(3)) \
-        $(filter-out -I$(COMPATH)% %/pch -I$(JAVA_HOME),$(6)) \
-        $(3) \
-        -f - \
-    | $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
-        -v OBJECTFILE=$(1) \
-        -v OUTDIR=$(OUTDIR)/ \
-        -v WORKDIR=$(WORKDIR)/ \
-        -v SRCDIR=$(SRCDIR)/ \
-        -v REPODIR=$(REPODIR)/ \
-    > $(call gb_CxxObject_get_dep_target,$(2)))
-endef
-else
-gb_CxxObject__command_deponcompile =
-endif
 
 define gb_CxxObject__command
 $(call gb_Output_announce,$(2),$(true),CXX,3)
@@ -283,7 +262,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
         -o $(1) \
         -I$(dir $(3)) \
         $(INCLUDE_STL) $(INCLUDE))
-$(call gb_CxxObject__command_deponcompile,$(1),$(2),$(3),$(DEFS),$(T_CXXFLAGS),$(INCLUDE_STL) $(INCLUDE))
+$(call gb_Object__command_deponcompile,$(1),$(4),$(3),$(DEFS),$(T_CXXFLAGS),$(INCLUDE_STL) $(INCLUDE))
 endef
 
 

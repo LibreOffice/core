@@ -66,7 +66,7 @@ endif
 
 define gb_CObject__rules
 $$(call gb_CObject_get_target,%) : $$(call gb_CObject_get_source,$(1),%)
-	$$(call gb_CObject__command,$$@,$$*,$$<)
+	$$(call gb_CObject__command,$$@,$$*,$$<,$$(call gb_CObject_get_dep_target,$$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $$(call gb_CObject_get_dep_target,%) : $$(call gb_CObject_get_source,$(1),%)
@@ -135,7 +135,7 @@ endef
 define gb_CxxObject__rules
 $$(call gb_CxxObject_get_target,%) : $$(call gb_CxxObject_get_source,$(1),%)
     $$(eval $$(gb_CxxObject__set_pchflags))
-    $$(call gb_CxxObject__command,$$@,$$*,$$<)
+	$$(call gb_CxxObject__command,$$@,$$*,$$<,$$(call gb_CxxObject_get_dep_target,$$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $$(call gb_CxxObject_get_dep_target,%) : $$(call gb_CxxObject_get_source,$(1),%)
@@ -175,7 +175,7 @@ gb_GenCxxObject__command_dep =
 endif
 
 $(call gb_GenCxxObject_get_target,%) : $(call gb_GenCxxObject_get_source,%)
-    $(call gb_CxxObject__command,$@,$*,$<)
+	$(call gb_CxxObject__command,$@,$*,$<,$(call gb_GenCxxObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_GenCxxObject_get_dep_target,%) : $(call gb_GenCxxObject_get_source,%)
@@ -210,7 +210,7 @@ endif
 
 define gb_ObjCxxObject__rules
 $$(call gb_ObjCxxObject_get_target,%) : $$(call gb_ObjCxxObject_get_source,$(1),%)
-	$$(call gb_ObjCxxObject__command,$$@,$$*,$$<)
+	$$(call gb_ObjCxxObject__command,$$@,$$*,$$<,$$(call gb_ObjCxxObject_get_dep_target,$$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $$(call gb_ObjCxxObject_get_dep_target,%) : $$(call gb_ObjCxxObject_get_source,$(1),%)

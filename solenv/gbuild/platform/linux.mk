@@ -164,18 +164,18 @@ endef
 
 # CObject class
 
+# $(call gb_CObject__command,object,relative-source,source,dep-file)
 define gb_CObject__command
 $(call gb_Output_announce,$(2),$(true),C  ,3)
 $(call gb_Helper_abbreviate_dirs,\
-    mkdir -p $(dir $(1)) && \
-    mkdir -p $(dir $(call gb_CObject_get_dep_target,$(2))) && \
+	mkdir -p $(dir $(1)) $(dir $(4)) && \
     $(gb_CC) \
 		$(DEFS) \
 		$(T_CFLAGS) \
         -c $(3) \
         -o $(1) \
-        -MMD -MT $(call gb_CObject_get_target,$(2)) \
-        -MF $(call gb_CObject_get_dep_target,$(2)) \
+		-MMD -MT $(1) \
+		-MF $(4) \
         -I$(dir $(3)) \
         $(INCLUDE))
 endef
@@ -183,18 +183,18 @@ endef
 
 # CxxObject class
 
+# $(call gb_CxxObject__command,object,relative-source,source,dep-file)
 define gb_CxxObject__command
 $(call gb_Output_announce,$(2),$(true),CXX,3)
 $(call gb_Helper_abbreviate_dirs,\
-    mkdir -p $(dir $(1)) && \
-    mkdir -p $(dir $(call gb_CxxObject_get_dep_target,$(2))) && \
+	mkdir -p $(dir $(1)) $(dir $(4)) && \
     $(gb_CXX) \
 		$(DEFS) \
 		$(T_CXXFLAGS) \
         -c $(3) \
         -o $(1) \
-        -MMD -MT $(call gb_CxxObject_get_target,$(2)) \
-        -MF $(call gb_CxxObject_get_dep_target,$(2)) \
+		-MMD -MT $(1) \
+		-MF $(4) \
         -I$(dir $(3)) \
         $(INCLUDE_STL) $(INCLUDE))
 endef

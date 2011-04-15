@@ -319,7 +319,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
         $(INCLUDE_STL) $(INCLUDE) \
         -c $(3) \
         -Fo$(1))
-$(call gb_CxxObject__command_deponcompile,$(1),$(2),$(3),$(DEFS),$(CFLAGS),$(INCLUDE))
+$(call gb_Object__command_deponcompile,$(1),$(4),$(3),$(DEFS),$(T_CXXFLAGS),$(INCLUDE))
 endef
 
 

@@ -137,12 +137,11 @@ $(eval $(call gb_Helper_make_dep_targets,\
     CObject \
     CxxObject \
     ObjCxxObject \
+	GenCxxObject \
     LinkTarget \
     SrsPartTarget \
     SrsTarget \
 ))
-# needs to use same dep target because we use gb_CxxObject__command
-gb_GenCxxObject_get_dep_target = $(gb_CxxObject_get_dep_target)
 
 # other getters
 
