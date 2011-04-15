@@ -1859,6 +1859,28 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
             const VisualItem& rVI = mpVisualItems[ nItem ];
             if( rVI.IsEmpty() )
                 continue;
+
+            //Resolves: fdo#33090 Ensure that all glyph slots, even if 0-width
+            //or empty due to combining chars etc, map back to a character
+            //position so that iterating over glyph slots one at a time for
+            //glyph fallback can keep context as to what characters are the
+            //inputs that caused a missing glyph in a given font.
+            {
+                int dir = 1;
+                int out = rVI.mnMinCharPos;
+                if (rVI.IsRTL())
+                {
+                    dir = -1;
+                    out = rVI.mnEndCharPos-1;
+                }
+                for(c = rVI.mnMinCharPos; c < rVI.mnEndCharPos; ++c)
+                {
+                    int i = out;
+                    mpGlyphs2Chars[i] = c;
+                    out += dir;
+                }
+            }
+
             // calculate the mapping by using mpLogClusters[]
             // mpGlyphs2Chars[] should obey the logical order
             // => reversing the loop does this by overwriting higher logicals
