@@ -263,6 +263,7 @@ gb_Library_PLAINLIBS_NONE += \
     dl \
     freetype \
 	jpeg \
+	m \
 	nsl \
     pthread \
 	socket \
