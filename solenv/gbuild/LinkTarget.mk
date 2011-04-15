@@ -44,6 +44,25 @@ OBJCXXFLAGS ?= $(gb_COMPILEROPTFLAGS)
 endif
 
 
+# For every object there is a dep file (if gb_FULLDEPS is active).
+# The dep file depends on the object: the Object__command also updates the
+# dep file as a side effect.
+# In the dep file rule just touch it so it's newer than the object.
+
+# The gb_Object__command_dep generates an "always rebuild" dep file;
+# It is _only_ used in case the user deletes the object dep file.
+ifeq ($(gb_FULLDEPS),$(true))
+define gb_Object__command_dep
+mkdir -p $(dir $(1)) && \
+	echo '$(2) : $$(gb_Helper_PHONY)' > $(1)
+
+endef
+else
+gb_Object__command_dep = \
+ $(call gb_Output_error,gb_Object__command_dep is only for gb_FULLDEPS)
+endif
+
+
 # CObject class
 
 gb_CObject_REPOS := $(gb_REPOS)
@@ -52,25 +71,14 @@ gb_CObject_get_source = $(1)/$(2).c
 # defined by platform
 #  gb_CObject__command
 
-# this rule generates an "always rebuild" dep file, to have something to include.
-# the dep file will be overridden on the fly, when the object is compiled
-ifeq ($(gb_FULLDEPS),$(true))
-define gb_CObject__command_dep
-mkdir -p $(dir $(1)) && \
-    echo '$(call gb_CObject_get_target,$(2)) : $$(gb_Helper_PHONY)' > $(1)
-
-endef
-else
-gb_CObject__command_dep =
-endif
-
 define gb_CObject__rules
 $$(call gb_CObject_get_target,%) : $$(call gb_CObject_get_source,$(1),%)
 	$$(call gb_CObject__command,$$@,$$*,$$<,$$(call gb_CObject_get_dep_target,$$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
-$$(call gb_CObject_get_dep_target,%) : $$(call gb_CObject_get_source,$(1),%)
-	$$(call gb_CObject__command_dep,$$@,$$*,$$<)
+$$(call gb_CObject_get_dep_target,%) : $$(call gb_CObject_get_target,%)
+	$$(if $$(wildcard $$@),touch $$@,\
+	  $$(call gb_Object__command_dep,$$@,$$(call gb_CObject_get_target,$$*)))
 endif
 
 endef
@@ -90,19 +98,6 @@ gb_CxxObject_REPOS := $(gb_REPOS)
 gb_CxxObject_get_source = $(1)/$(2).cxx
 # defined by platform
 #  gb_CxxObject__command
-
-# This rule generates an "always rebuild" dep file, to have something to
-# include. The dep file will be overridden on the fly, when the object is
-# compiled.
-ifeq ($(gb_FULLDEPS),$(true))
-define gb_CxxObject__command_dep
-mkdir -p $(dir $(1)) && \
-    echo '$(call gb_CxxObject_get_target,$(2)) : $$(gb_Helper_PHONY)' > $(1)
-
-endef
-else
-gb_CxxObject__command_dep =
-endif
 
 # Only enable PCH if the PCH_CXXFLAGS and the PCH_DEFS (from the linktarget)
 # are the same as the T_CXXFLAGS and DEFS we want to use for this object. This
@@ -138,9 +133,10 @@ $$(call gb_CxxObject_get_target,%) : $$(call gb_CxxObject_get_source,$(1),%)
 	$$(call gb_CxxObject__command,$$@,$$*,$$<,$$(call gb_CxxObject_get_dep_target,$$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
-$$(call gb_CxxObject_get_dep_target,%) : $$(call gb_CxxObject_get_source,$(1),%)
-    $$(eval $$(gb_CxxObject__set_pchflags))
-    $$(call gb_CxxObject__command_dep,$$@,$$*,$$<)
+$$(call gb_CxxObject_get_dep_target,%) : $$(call gb_CxxObject_get_target,%)
+	$$(if $$(wildcard $$@),touch $$@,\
+	  $$(eval $$(gb_CxxObject__set_pchflags))\
+	  $$(call gb_Object__command_dep,$$@,$$(call gb_CxxObject_get_target,$$*)))
 endif
 
 endef
@@ -162,27 +158,13 @@ gb_GenCxxObject_get_source = $(WORKDIR)/$(1).cxx
 # defined by platform
 #  gb_CxxObject__command
 
-# This rule generates an "always rebuild" dep file, to have something to
-# include. The dep file will be overridden on the fly, when the object is
-# compiled.
-ifeq ($(gb_FULLDEPS),$(true))
-define gb_GenCxxObject__command_dep
-mkdir -p $(dir $(1)) && \
-    echo '$(call gb_GenCxxObject_get_target,$(2)) : $$(gb_Helper_PHONY)' > $(1)
-endef
-else
-gb_GenCxxObject__command_dep =
-endif
-
 $(call gb_GenCxxObject_get_target,%) : $(call gb_GenCxxObject_get_source,%)
 	$(call gb_CxxObject__command,$@,$*,$<,$(call gb_GenCxxObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_GenCxxObject_get_dep_target,%) : $(call gb_GenCxxObject_get_source,%)
-    $(call gb_GenCxxObject__command_dep,$@,$*,$<)
-
-$(call gb_GenCxxObject_get_dep_target,%) :
-    $(eval $(call gb_Output_error,Unable to find generated C++ file $(call gb_GenCxxObject_get_source,$*) in WORKDIR.))
+$(call gb_GenCxxObject_get_dep_target,%) : $(call gb_GenCxxObject_get_target,%)
+	$(if $(wildcard $@),touch $@,\
+	  $(call gb_Object__command_dep,$@,$(call gb_GenCxxObject_get_target,$*)))
 endif
 
 gb_GenCxxObject_GenCxxObject =
@@ -196,25 +178,14 @@ gb_ObjCxxObject_get_source = $(1)/$(2).mm
 # defined by platform
 #  gb_ObjCxxObject__command
 
-# this rule generates an "always rebuild" dep file, to have something to include.
-# the dep file will be overridden on the fly, when the object is compiled
-ifeq ($(gb_FULLDEPS),$(true))
-define gb_ObjCxxObject__command_dep
-mkdir -p $(dir $(1)) && \
-    echo '$(call gb_ObjCxxObject_get_target,$(2)) : $$(gb_Helper_PHONY)' > $(1)
-
-endef
-else
-gb_ObjCxxObject__command_dep =
-endif
-
 define gb_ObjCxxObject__rules
 $$(call gb_ObjCxxObject_get_target,%) : $$(call gb_ObjCxxObject_get_source,$(1),%)
 	$$(call gb_ObjCxxObject__command,$$@,$$*,$$<,$$(call gb_ObjCxxObject_get_dep_target,$$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
-$$(call gb_ObjCxxObject_get_dep_target,%) : $$(call gb_ObjCxxObject_get_source,$(1),%)
-	$$(call gb_ObjCxxObject__command_dep,$$@,$$*,$$<)
+$$(call gb_ObjCxxObject_get_dep_target,%) : $$(call gb_ObjCxxObject_get_target,%)
+	$$(if $$(wildcard $$@),touch $$@,\
+	  $$(call gb_Object__command_dep,$$@,$$(call gb_ObjCxxObject_get_target,$$*)))
 endif
 
 endef
@@ -266,7 +237,9 @@ define gb_LinkTarget__command_dep
 $(call gb_Output_announce,LNK:$(2),$(true),DEP,1)
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
+	echo '$$(info ************** THIS IS LIBTARGET.d *********)'> /tmp/hack && \
     RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,\
+				 /tmp/hack \
         $(foreach object,$(3),$(call gb_CObject_get_dep_target,$(object))) \
         $(foreach object,$(4),$(call gb_CxxObject_get_dep_target,$(object))) \
         $(foreach object,$(5),$(call gb_ObjCxxObject_get_dep_target,$(object)))\
@@ -388,11 +361,7 @@ $(call gb_LinkTarget_get_target,$(1)) : PDBFILE :=
 $(call gb_LinkTarget_get_target,$(1)) : NATIVERES :=
 
 ifeq ($(gb_FULLDEPS),$(true))
-ifneq ($(wildcard $(call gb_LinkTarget_get_dep_target,$(1))),)
-include $(call gb_LinkTarget_get_dep_target,$(1))
-else
-$(firstword $(MAKEFILE_LIST)) : $(call gb_LinkTarget_get_dep_target,$(1))
-endif
+-include $(call gb_LinkTarget_get_dep_target,$(1))
 $(call gb_LinkTarget_get_dep_target,$(1)) : COBJECTS := 
 $(call gb_LinkTarget_get_dep_target,$(1)) : CXXOBJECTS := 
 $(call gb_LinkTarget_get_dep_target,$(1)) : OBJCXXOBJECTS :=
