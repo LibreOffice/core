@@ -33,7 +33,6 @@ $(eval $(call gb_Module_add_targets,tools,\
     Executable_mkunroll \
     Executable_rscdep \
     Executable_so_checksum \
-    Executable_sspretty \
     Library_tl \
     Package_inc \
     Package_reversemap \
