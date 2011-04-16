@@ -64,6 +64,6 @@ $(eval $(call gb_CppunitTest_set_include,lotuswordpro_test_lotuswordpro,\
 
 # we need to explicitly depend on library lwpft because it is not implied
 # by a link relation
-$(call gb_CppunitTest_get_target,lotuswordpro_test_lotuswordpro) : $(call gb_LinkTarget_get_target,lwpft)
+$(call gb_CppunitTest_get_target,lotuswordpro_test_lotuswordpro) : $(call gb_Library_get_target,lwpft)
 
 # vim: set noet sw=4:
