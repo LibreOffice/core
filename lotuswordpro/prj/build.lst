@@ -1,3 +1,2 @@
-wp	lotuswordpro : sfx2 sot svx comphelper BOOST:boost NULL
-wp	lotuswordpro			usr1	-	all	lwp_mkout NULL
+wp	lotuswordpro : sfx2 sot svx comphelper BOOST:boost ure NULL
 wp	lotuswordpro\prj	nmake	-	all	lwp_prj NULL
