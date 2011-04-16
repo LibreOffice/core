@@ -67,6 +67,7 @@ $(foreach reponame,$(gb_CustomTarget_REPOSITORYNAMES),\
 	$(eval $(call gb_CustomTarget_get_repo_target,$(reponame),$(1)) : $(call gb_CustomTarget__get_makefile,$($(reponame)),$(1))))
 
 $(call gb_CustomTarget_get_workdir,$(1))/% : $(call gb_CustomTarget_get_target,$(1))
+	@true
 
 endef
 
