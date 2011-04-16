@@ -751,11 +751,10 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
 
     rSh.Push();
     const sal_Bool bCrsrInHidden = rSh.SelectHiddenRange();
-    // --> OD 2009-08-05 #i103839#, #b6855246#
+    // #i103839#
     // Do not call method <SwCrsrShell::Pop(..)> with 1st parameter = <sal_False>
     // in order to avoid that the view jumps to the visible cursor.
     rSh.Pop();
-    // <--
 
     while ( nWhich )
     {

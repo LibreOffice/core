@@ -205,7 +205,7 @@ sal_Bool SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool 
                     // _WouldFit kann auch gefragt werden, wenn _nur_ fremdverankerte Flys vorliegen,
                     // dabei ist sogar die Breite egal, da ein TestFormat in der neuen Umgebung
                     // vorgenommen wird.
-                    // --> OD 2007-11-26 #b6614158#
+                    //
                     const sal_uInt8 nBwdMoveNecessaryResult =
                                             BwdMoveNecessary( pNewPage, aRect);
                     const bool bObjsInNewUpper( nBwdMoveNecessaryResult == 2 ||
@@ -1129,7 +1129,7 @@ sal_Bool SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
 |*************************************************************************/
 
 #define STOP_FLY_FORMAT 10
-// --> OD 2006-09-25 #b6448963# - loop prevention
+// - loop prevention
 const int cnStopFormat = 15;
 // <--
 
@@ -1165,7 +1165,7 @@ void SwCntntFrm::MakeAll()
 
     LockJoin();
     long nFormatCount = 0;
-    // --> OD 2006-09-25 #b6448963# - loop prevention
+    // - loop prevention
     int nConsequetiveFormatsWithoutChange = 0;
     // <--
     PROTOCOL_ENTER( this, PROT_MAKEALL, 0, 0 )
@@ -1243,7 +1243,7 @@ void SwCntntFrm::MakeAll()
         }
     }
 
-    // --> OD 2008-08-12 #b6732519#
+    //
     if ( GetUpper()->IsSctFrm() &&
          HasFollow() &&
          GetFollow()->GetFrm() == GetNext() )
@@ -1319,7 +1319,7 @@ void SwCntntFrm::MakeAll()
 
     while ( !bValidPos || !bValidSize || !bValidPrtArea )
     {
-        // --> OD 2006-09-25 #b6448963# - loop prevention
+        // - loop prevention
         SwRect aOldFrm_StopFormat( Frm() );
         SwRect aOldPrt_StopFormat( Prt() );
         // <--
@@ -1447,7 +1447,7 @@ void SwCntntFrm::MakeAll()
             ++nFormatCount;
             if( nFormatCount > STOP_FLY_FORMAT )
                 SetFlyLock( sal_True );
-            // --> OD 2006-09-25 #b6448963# - loop prevention
+            // - loop prevention
             // No format any longer, if <cnStopFormat> consequetive formats
             // without change occur.
             if ( nConsequetiveFormatsWithoutChange <= cnStopFormat )
@@ -1563,7 +1563,7 @@ void SwCntntFrm::MakeAll()
             }
         }
 
-        // --> OD 2006-09-25 #b6448963# - loop prevention
+        // - loop prevention
         {
             if ( aOldFrm_StopFormat == Frm() &&
                  aOldPrt_StopFormat == Prt() )
@@ -1883,7 +1883,7 @@ sal_Bool lcl_IsNextFtnBoss( const SwFrm *pFrm, const SwFrm* pNxt )
     return ( pFrm && pNxt && pFrm->GetNext() == pNxt );
 }
 
-// --> OD 2007-11-26 #b6614158#
+//
 sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
                             SwLayoutFrm *pNewUpper,
                             sal_Bool bTstMove,
@@ -1912,11 +1912,10 @@ sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
         pTmpPrev = pTmpPrev->GetNext();
     do
     {
-        // --> FME 2005-03-31 #b6236853# #i46181#
+        // #i46181#
         SwTwips nSecondCheck = 0;
         SwTwips nOldSpace = nSpace;
         sal_Bool bOldSplit = bSplit;
-        // <--
 
         if ( bTstMove || IsInFly() || ( IsInSct() &&
              ( pFrm->GetUpper()->IsColBodyFrm() || ( pFtnFrm &&
@@ -1985,7 +1984,7 @@ sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
                     bCommonBorder = pSct->GetFmt()->GetBalancedColumns().GetValue();
                 }
 
-                // --> FME 2005-03-31 #b6236853# #i46181#
+                // #i46181#
                 nSecondCheck = ( 1 == nSecondCheck &&
                                  pFrm == this &&
                                  IsTxtFrm() &&
@@ -1993,7 +1992,6 @@ sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
                                  !static_cast<const SwTxtFrm*>(this)->IsEmpty() ) ?
                                  nUpper :
                                  0;
-                // <--
 
                 nUpper += bCommonBorder ?
                           rAttrs.GetBottomLine( *(pFrm) ) :
@@ -2002,9 +2000,8 @@ sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
             }
             else
             {
-                // --> FME 2005-03-31 #b6236853# #i46181#
+                // #i46181#
                 nSecondCheck = 0;
-                // <--
 
                 if( pFrm->IsVertical() )
                     nUpper = pFrm->Frm().Width() - pFrm->Prt().Width();
@@ -2018,7 +2015,7 @@ sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
             {
                 bRet = sal_False;
 
-                // --> FME 2005-03-31 #b6236853# #i46181#
+                // #i46181#
                 if ( nSecondCheck > 0 )
                 {
                     // The following code is indented to solve a (rare) problem
@@ -2037,7 +2034,6 @@ sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
                         bSplit = sal_True;
                     }
                 }
-                // <--
             }
         }
 
@@ -2075,7 +2071,7 @@ sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
                   pNxt->FindFtnFrm()->GetAttr() == pFtnFrm->GetAttr() ) ) )
             {
                 // ProbeFormatierung vertraegt keine absatz- oder gar zeichengebundene Objekte
-                // --> OD 2007-11-26 #b6614158#
+                //
                 // current solution for the test formatting doesn't work, if
                 // objects are present in the remaining area of the new upper
                 if ( bTstMove &&

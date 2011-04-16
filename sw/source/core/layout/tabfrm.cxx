@@ -1750,7 +1750,7 @@ void MA_FASTCALL lcl_RecalcTable( SwTabFrm& rTab,
 // GetIndPrev(), which did not work correctly for #i5947#
 bool lcl_NoPrev( const SwFrm& rFrm )
 {
-    // --> OD 2007-09-04 #i79774#, #b6596954#
+    // #i79774#
     // skip empty sections on investigation of direct previous frame.
     // use information, that at least one empty section is skipped in the following code.
     bool bSkippedDirectPrevEmptySection( false );
@@ -1800,7 +1800,7 @@ bool lcl_NoPrev( const SwFrm& rFrm )
 
 #define KEEPTAB ( !GetFollow() && !IsFollow() )
 
-// --> OD 2005-09-28 #b6329202# - helper method to find next content frame of
+// - helper method to find next content frame of
 // a table frame and format it to assure keep attribute.
 // method return true, if a next content frame is formatted.
 // Precondition: The given table frame hasn't a follow and isn't a follow.
@@ -2121,7 +2121,7 @@ void SwTabFrm::MakeAll()
                     bLowersFormatted = sal_True;
                     if ( bKeep && KEEPTAB )
                     {
-                        // --> OD 2005-09-28 #b6329202#
+                        //
                         // Consider case that table is inside another table,
                         // because it has to be avoided, that superior table
                         // is formatted.
@@ -2293,7 +2293,7 @@ void SwTabFrm::MakeAll()
                 {
                     delete pAccess;
 
-                    // --> OD 2005-09-28 #b6329202#
+                    //
                     // Consider case that table is inside another table, because
                     // it has to be avoided, that superior table is formatted.
                     // Thus, find next content, table or section and, if a section

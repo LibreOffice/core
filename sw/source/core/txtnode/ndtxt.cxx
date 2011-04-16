@@ -2656,7 +2656,7 @@ XubString SwTxtNode::GetNumString( const bool _bInclPrefixAndSuffixStrings, cons
         SvxNumberType const& rNumberType(
                 pRule->Get( static_cast<sal_uInt16>(GetActualListLevel()) ) );
         if (rNumberType.IsTxtFmt() ||
-        // #b6432095#
+        //
             (style::NumberingType::NUMBER_NONE == rNumberType.GetNumberingType()))
         {
             return pRule->MakeNumString( GetNum()->GetNumberVector(),
@@ -2715,11 +2715,10 @@ long SwTxtNode::GetLeftMarginWithNum( sal_Bool bTxtLeft ) const
 sal_Bool SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
 {
     sal_Bool bRet( sal_False );
-    // --> OD 2009-09-08 #i95907#, #b6879723#
+    // #i95907#
     rFLOffset = 0;
-    // <--
 
-    // --> OD 2005-11-02 #i51089 - TUNING#
+    // #i51089#
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
     if ( pRule )
     {
@@ -2760,7 +2759,7 @@ sal_Bool SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
     return bRet;
 }
 
-// --> OD 2010-01-05 #b6884103#
+//
 SwTwips SwTxtNode::GetAdditionalIndentForStartingNewList() const
 {
     SwTwips nAdditionalIndent = 0;

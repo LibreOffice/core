@@ -1863,7 +1863,7 @@ sal_Bool SwView::JumpToSwMark( const String& rMark )
         else if( 0 != ( pINet = pWrtShell->FindINetAttr( sMark ) ))
             bRet = pWrtShell->GotoINetAttr( *pINet->GetTxtINetFmt() );
 
-        // #b6330459# make selection visible later
+        // make selection visible later
         if ( aVisArea.IsEmpty() )
             bMakeSelectionVisible = sal_True;
 

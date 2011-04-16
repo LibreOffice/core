@@ -1684,7 +1684,7 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
                 if (rServiceName.lastIndexOf( C2U(".OLE2Shape") ) == rServiceName.getLength() - 10)
                     throw ServiceNotRegisteredException();  // declare service to be not registered with this factory
 
-                // --> OD 2006-02-22 #b6382898#
+                //
                 // the XML import is allowed to create instances of com.sun.star.drawing.OLE2Shape.
                 // Thus, a temporary service name is introduced to make this possible.
                 OUString aTmpServiceName( rServiceName );
@@ -1974,7 +1974,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
         case WID_DOC_BUILDID:
             aValue >>= maBuildId;
         break;
-        // --> OD 2006-03-21 #b6375613#
+        //
         case WID_APPLY_WORKAROUND_FOR_B6375613:
         {
             bool bApplyWorkaroundForB6375613( false );
@@ -2139,7 +2139,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         case WID_DOC_HAS_VALID_SIGNATURES:
             aAny <<= hasValidSignatures();
         break;
-        // --> OD 2006-03-21 #b6375613#
+        //
         case WID_APPLY_WORKAROUND_FOR_B6375613:
         {
             aAny <<= pDocShell->GetDoc()->ApplyWorkaroundForB6375613();

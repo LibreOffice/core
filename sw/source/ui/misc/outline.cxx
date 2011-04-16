@@ -409,7 +409,7 @@ short SwOutlineTabDialog::Ok()
         SwTxtFmtColl* pColl = rWrtSh.FindTxtFmtCollByName( sHeadline );
         if( !pColl )
         {
-            if(aCollNames[i] != sHeadline)//->added by zhaojianwei
+            if(aCollNames[i] != sHeadline)
             {
                 SwTxtFmtColl* pTxtColl = rWrtSh.GetTxtCollFromPool(
                     static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i) );
@@ -427,15 +427,14 @@ short SwOutlineTabDialog::Ok()
                         pTxtColl->SetFmtAttr(aItem);
                     }
                 }
-            }//<--end,zhaojianwei
+            }
         }
     }
 
     rWrtSh.SetOutlineNumRule( *pNumRule);
 
-    // --> OD 2006-12-11 #130443#
+    // #i30443#
     rWrtSh.EndAction();
-    // <--
 
     return RET_OK;
 }

@@ -4516,7 +4516,7 @@ const SwFrm* lcl_GetCellFrmForBorderAttrs( const SwFrm*         _pCellFrm,
         {
             if ( _bTop && !_rCellBorderAttrs.GetBox().GetTop() )
             {
-                // #b4779636#-hack:
+                //-hack
                 // Cell frame has no top border and no border inside the table, but
                 // it is at the top border of a table frame, which is a follow.
                 // Thus, use border attributes of cell frame in first row of complete table.
@@ -4537,7 +4537,7 @@ const SwFrm* lcl_GetCellFrmForBorderAttrs( const SwFrm*         _pCellFrm,
             }
             else if ( !_bTop && !_rCellBorderAttrs.GetBox().GetBottom() )
             {
-                // #b4779636#-hack:
+                //-hack
                 // Cell frame has no bottom border and no border inside the table,
                 // but it is at the bottom border of a table frame, which has a follow.
                 // Thus, use border attributes of cell frame in last row of complete table.
@@ -4624,10 +4624,10 @@ void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
     const bool bLine = rAttrs.IsLine() ? true : false;
     const bool bShadow = rAttrs.GetShadow().GetLocation() != SVX_SHADOW_NONE;
 
-    // OD 24.02.2003 #b4779636#, #107692# - flag to control,
-    // if #b4779636#-hack has to be used.
+    // - flag to control,
+    //-hack has to be used.
     const bool bb4779636HackActive = true;
-    // OD 21.02.2003 #b4779636#, #107692#
+    //
     const SwFrm* pCellFrmForBottomBorderAttrs = 0;
     const SwFrm* pCellFrmForTopBorderAttrs = 0;
     bool         bFoundCellForTopOrBorderAttrs = false;
@@ -4641,8 +4641,8 @@ void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
             bFoundCellForTopOrBorderAttrs = true;
     }
 
-    // OD 24.02.2003 #b4779636#, #107692# - add condition <bFoundCellForTopOrBorderAttrs>
-    // for #b4779636#-hack
+    // - add condition <bFoundCellForTopOrBorderAttrs>
+    //-hack
     if ( bLine || bShadow || bFoundCellForTopOrBorderAttrs )
     {
         //Wenn das Rechteck vollstandig innerhalb der PrtArea liegt,
@@ -4687,8 +4687,8 @@ void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
             PaintShadow( rRect, aRect, rAttrs );
         // OD 27.09.2002 #103636# - suspend drawing of border
         // add condition < NOT bDrawOnlyShadowForTransparentFrame > - see above
-        // OD 24.02.2003 #b4779636#, #107692# - add condition <bFoundCellForTopOrBorderAttrs>
-        // for #b4779636#-hack.
+        // - add condition <bFoundCellForTopOrBorderAttrs>
+        //-hack.
         if ( ( bLine || bFoundCellForTopOrBorderAttrs ) &&
              !bDrawOnlyShadowForTransparentFrame )
         {
@@ -4698,8 +4698,8 @@ void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
             ::lcl_PaintLeftRightLine ( sal_False, *(this), *(pPage), aRect, rRect, rAttrs, fnRect );
             if ( !IsCntntFrm() || rAttrs.GetTopLine( *(this) ) )
             {
-                // OD 21.02.2003 #b4779636#, #107692# -
-                // #b4779636#-hack: If another cell frame for top border
+                // -
+                //-hack
                 // paint is found, paint its top border.
                 if ( IsCellFrm() && pCellFrmForTopBorderAttrs != this )
                 {
@@ -4715,8 +4715,8 @@ void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
             }
             if ( !IsCntntFrm() || rAttrs.GetBottomLine( *(this) ) )
             {
-                // OD 21.02.2003 #b4779636#, #107692# -
-                // #b4779636#-hack: If another cell frame for bottom border
+                // -
+                //-hack
                 // paint is found, paint its bottom border.
                 if ( IsCellFrm() && pCellFrmForBottomBorderAttrs != this )
                 {

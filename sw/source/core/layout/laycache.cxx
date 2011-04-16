@@ -61,7 +61,7 @@
 #include <flyfrm.hxx>
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
-// --> OD 2006-03-22 #b6375613#
+//
 #include <pam.hxx>
 #include <docsh.hxx>
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
@@ -689,7 +689,7 @@ sal_Bool SwLayHelper::CheckInsertPage()
     return sal_False;
 }
 
-// --> OD 2006-03-22 #b6375613#
+//
 bool lcl_HasTextFrmAnchoredObjs( SwTxtFrm* p_pTxtFrm )
 {
     bool bHasTextFrmAnchoredObjs( false );
@@ -947,7 +947,7 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
             SwPageFrm* pLastPage = rpPage;
             if( CheckInsertPage() )
             {
-                // --> OD 2006-03-21 #b6375613#
+                //
                 if ( pDoc->ApplyWorkaroundForB6375613() )
                 {
                     lcl_ApplyWorkaroundForB6375613( rpFrm );

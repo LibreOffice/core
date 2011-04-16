@@ -2388,7 +2388,7 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
     //(6677)Wenn allerdings leere Blaetter uebersprungen wurden wird doch gemoved.
     if ( pNewUpper && IsFollow() && pNewUpper->Lower() )
     {
-        // --> OD 2007-09-05 #i79774#, #b6596954#
+        // #i79774#
         // neglect empty sections in proposed new upper frame
         bool bProposedNewUpperContainsOnlyEmptySections( true );
         {
@@ -2424,7 +2424,6 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
             else
                 pNewUpper = 0;
         }
-        // <--
     }
     if ( pNewUpper && !ShouldBwdMoved( pNewUpper, sal_True, rbReformat ) )
     {
@@ -2579,7 +2578,7 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
         }
         pNewUpper->Calc();
         rThis.Cut();
-        // --> OD 2005-02-23 #b6229852#
+        //
         // optimization: format section, if its size is invalidated and if it's
         // the new parent of moved backward frame.
         bool bFormatSect( false );
@@ -2590,7 +2589,7 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
             if( pSect->HasFollow() != bFollow )
             {
                 pSect->InvalidateSize();
-                // --> OD 2005-02-23 #b6229852# - optimization
+                // - optimization
                 if ( pSect == pNewUpper )
                     bFormatSect = true;
                 // <--
@@ -2598,7 +2597,7 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
         }
 
         rThis.Paste( pNewUpper );
-        // --> OD 2005-02-23 #b6229852# - optimization
+        // - optimization
         if ( bFormatSect )
             pSect->Calc();
         // <--

@@ -65,7 +65,7 @@
 #include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentLineNumberAccess.hxx>
 
-// --> OD 2006-06-27 #b6440955#
+//
 // variable moved to class <numfunc:GetDefBulletConfig>
 //extern const sal_Char sBulletFntName[];
 namespace numfunc

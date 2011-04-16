@@ -1715,7 +1715,7 @@ const SwRowFrm* SwFrm::IsInSplitTableRow() const
     OSL_ENSURE( pRow->GetUpper()->IsTabFrm(), "Confusion in table layout" );
 
     const SwTabFrm* pTab = (SwTabFrm*)pRow->GetUpper();
-    // --> OD 2006-06-28 #b6443897#
+    //
     // If most upper row frame is a headline row, the current frame
     // can't be in a splitted table row. Thus, add corresponding condition.
     if ( pRow->GetNext() ||

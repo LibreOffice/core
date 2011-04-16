@@ -315,7 +315,7 @@ void SwFlyInCntFrm::MakeAll()
             MakeObjPos();
         }
 
-        // --> OD 2006-04-13 #b6402800#
+        //
         // re-activate clipping of as-character anchored Writer fly frames
         // depending on compatibility option <ClipAsCharacterAnchoredWriterFlyFrames>
         if ( bValidPos && bValidSize &&

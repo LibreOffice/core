@@ -1135,7 +1135,7 @@ void SwSectionFrm::SimpleFormat()
     SWRECTFN( this )
     if( GetPrev() || GetUpper() )
     {
-        // --> OD 2009-09-28 #b6882166#
+        //
         // assure notifications on position changes.
         const SwLayNotify aNotify( this );
         // <--
@@ -2280,7 +2280,7 @@ sal_Bool SwSectionFrm::MoveAllowed( const SwFrm* pFrm) const
 SwFrm* SwFrm::_GetIndPrev() const
 {
     SwFrm *pRet = NULL;
-    // --> OD 2007-09-04 #i79774#, #b659654#
+    // #i79774#
     // Do not assert, if the frame has a direct previous frame, because it
     // could be an empty section frame. The caller has to assure, that the
     // frame has no direct previous frame or only empty section frames as

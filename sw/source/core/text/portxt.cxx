@@ -394,7 +394,7 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
         //   (work around different definition of tab stop character - breaking or
         //   non breaking character - in compatibility mode)
         else if ( ( IsFtnPortion() && rInf.IsFakeLineStart() &&
-                    // --> OD 2010-01-29 #b6921213#
+                    //
                     rInf.IsOtherThanFtnInside() ) ||
                     // <--
                   ( rInf.GetLast() &&

@@ -177,7 +177,7 @@ void SwKernPortion::Paint( const SwTxtPaintInfo &rInf ) const
         {
             static sal_Char const sDoubleSpace[] = "  ";
             XubString aTxtDouble( sDoubleSpace, RTL_TEXTENCODING_MS_1252 );
-            // --> FME 2006-07-12 #b6439097#
+            //
             SwRect aClipRect;
             rInf.CalcRect( *this, &aClipRect, 0 );
             SwSaveClip aClip( (OutputDevice*)rInf.GetOut() );

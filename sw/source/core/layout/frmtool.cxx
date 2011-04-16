@@ -3414,7 +3414,7 @@ SwFrm* GetFrmOfModify( const SwRootFrm* pLayout, SwModify const& rMod, sal_uInt1
 
                     if( bCalcFrm )
                     {
-                        // --> OD 2005-03-04 #b6234250# - format parent Writer
+                        // - format parent Writer
                         // fly frame, if it isn't been formatted yet.
                         // Note: The Writer fly frame could be the frame itself.
                         SwFlyFrm* pFlyFrm( pTmpFrm->FindFlyFrm() );

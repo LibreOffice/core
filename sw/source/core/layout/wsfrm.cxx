@@ -233,7 +233,7 @@ void SwCellFrm::CheckDirection( sal_Bool bVert )
 {
     const SwFrmFmt* pFmt = GetFmt();
     const SfxPoolItem* pItem;
-    // --> FME 2006-03-30 #b6402837# Check if the item is set, before actually
+    // Check if the item is set, before actually
     // using it. Otherwise the dynamic pool default is used, which may be set
     // to LTR in case of OOo 1.0 documents.
     // <--
@@ -1040,7 +1040,7 @@ void SwCntntFrm::Cut()
         {
             if ( pUp->GetUpper() )
             {
-                // --> OD 2006-09-25 #b6448963#
+                //
                 // prevent delete of <ColLocked> footnote frame
                 if ( pUp->IsFtnFrm() && !pUp->IsColLocked())
                 // <--
@@ -1056,7 +1056,7 @@ void SwCntntFrm::Cut()
                 }
                 else
                 {
-                    // --> OD 2006-09-25 #b6448963#
+                    //
                     if ( pSct->IsColLocked() || !pSct->IsInFtn() ||
                          ( pUp->IsFtnFrm() && pUp->IsColLocked() ) )
                     // <--

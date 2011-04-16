@@ -440,7 +440,7 @@ sal_Bool SwGlossaryHdl::Expand( const String& rShortName,
     String aShortName( rShortName );
     sal_Bool bCancel = sal_False;
     // search for text block
-    //#b6633427# - don't prefer current group depending on configuration setting
+    // - don't prefer current group depending on configuration setting
     const SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
     sal_uInt16 nFound = !pCfg->IsSearchInAllCategories() ? pGlossary->GetIndex( aShortName ) : -1;
     // if not found then search in all groups

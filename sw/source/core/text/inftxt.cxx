@@ -100,7 +100,7 @@ using namespace ::com::sun::star::beans;
 #define DRAW_SPECIAL_OPTIONS_CENTER 1
 #define DRAW_SPECIAL_OPTIONS_ROTATE 2
 
-// --> OD 2006-06-27 #b6440955#
+//
 // variable moved to class <numfunc:GetDefBulletConfig>
 //extern const sal_Char sBulletFntName[];
 namespace numfunc

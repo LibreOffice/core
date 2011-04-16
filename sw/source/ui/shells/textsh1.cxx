@@ -1013,7 +1013,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     //if it's set to something different than USHRT_MAX
 
                     sal_Bool bStart = ((SfxBoolItem&)pSet->Get(FN_NUMBER_NEWSTART)).GetValue();
-                    // --> OD 2007-06-11 #b6560525#
+                    //
                     // Default value for restart value has to be USHRT_MAX
                     // in order to indicate that the restart value of the list
                     // style has to be used on restart.

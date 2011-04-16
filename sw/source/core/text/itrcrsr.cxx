@@ -178,8 +178,8 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
     const SwTxtNode *pNode = pFrm->GetTxtNode();
 
     const SvxLRSpaceItem &rSpace = pFrm->GetTxtNode()->GetSwAttrSet().GetLRSpace();
-    // --> OD 2009-09-08 #i95907#, #b6879723#
-    // --> OD 2010-05-05 #i111284#
+    // #i95907#
+    // #i111284#
     const bool bListLevelIndentsApplicableAndLabelAlignmentActive(
         AreListLevelIndentsApplicableAndLabelAlignmentActive( *(pFrm->GetTxtNode()) ) );
     // <--
@@ -204,37 +204,31 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
                 pFrm->Prt().Left() +
                 nLMWithNum -
                 pNode->GetLeftMarginWithNum( sal_False ) -
-                // --> OD 2009-09-08 #i95907#, #b6879723#
-                // --> OD 2010-05-05 #i111284#
+                // #i95907#
+                // #i111284#
 //                rSpace.GetLeft() +
 //                rSpace.GetTxtLeft();
                 ( bListLevelIndentsApplicableAndLabelAlignmentActive
                   ? 0
                   : ( rSpace.GetLeft() - rSpace.GetTxtLeft() ) );
-                // <--
     }
     else
     {
-        // --> OD 2009-09-08 #i95907#, #b6879723#
-        // --> OD 2010-05-05 #i111284#
-//        if ( !pNode->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) )
+        // #i95907#
+        // #i111284#
         if ( bListLevelIndentsApplicableAndLabelAlignmentActive ||
              !pNode->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) )
-        // <--
         {
             // this calculation is identical this the calculation for R2L layout - see above
             nLeft = pFrm->Frm().Left() +
                     pFrm->Prt().Left() +
                     nLMWithNum -
                     pNode->GetLeftMarginWithNum( sal_False ) -
-                    // --> OD 2009-09-08 #i95907#, #b6879723#
-                    // --> OD 2010-05-05 #i111284#
-//                    rSpace.GetLeft() +
-//                    rSpace.GetTxtLeft();
+                    // #i95907#
+                    // #i111284#
                     ( bListLevelIndentsApplicableAndLabelAlignmentActive
                       ? 0
                       : ( rSpace.GetLeft() - rSpace.GetTxtLeft() ) );
-                    // <--
         }
         else
         {
@@ -318,14 +312,11 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
         else
             nFirstLineOfs = nFLOfst;
 
-        // --> OD 2009-09-08 #i95907#, #b6879723#
-        // --> OD 2010-05-05 #i111284#
-//        if ( pFrm->IsRightToLeft() ||
-//             !pNode->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) )
+        // #i95907#
+        // #i111284#
         if ( pFrm->IsRightToLeft() ||
              bListLevelIndentsApplicableAndLabelAlignmentActive ||
              !pNode->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) )
-        // <--
         {
             nFirst = nLeft + nFirstLineOfs;
         }
