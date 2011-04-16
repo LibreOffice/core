@@ -24,29 +24,15 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-PRJ=..$/..
-PRJNAME=cui
-TARGET=factory
-ENABLE_EXCEPTIONS=TRUE
 
-# --- Settings -----------------------------------------------------
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
-.INCLUDE :  settings.mk
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-.IF "$(ENABLE_LAYOUT)" == "TRUE"
-CFLAGS+= -DENABLE_LAYOUT=1 -I../$(PRJ)/layout/inc -I../$(PRJ)/layout/$(INPATH)/inc
-.ENDIF # ENABLE_LAYOUT == TRUE
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-# --- Files --------------------------------------------------------
-
-SLOFILES+=\
-        $(SLO)$/dlgfact.obj \
-        $(SLO)$/cuiexp.obj \
-        $(SLO)$/cuiresmgr.obj \
-        $(SLO)$/init.obj \
-
-
-# --- Targets -------------------------------------------------------
-
-.INCLUDE :  target.mk
+# vim: set noet sw=4 ts=4:
