@@ -992,7 +992,7 @@ void OutputDevice::ImplInitClipRegion()
                                               && GetOutDevType() != OUTDEV_PRINTER );
                 if( bClipDeviceBounds )
                 {
-                    // #b6520266# Perform actual rect clip against outdev
+                    // Perform actual rect clip against outdev
                     // dimensions, to generate empty clips whenever one of the
                     // values is completely off the device.
                     Rectangle aDeviceBounds( mnOutOffX, mnOutOffY,

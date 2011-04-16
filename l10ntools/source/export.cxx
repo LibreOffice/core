@@ -2261,7 +2261,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                                 break;
                             nLIndex ++;
                             PFormEntrys *oldEntry = pEntrys;
-                            pEntrys = pMergeDataFile->GetPFormEntrys( pResData ); // <--- game over
+                            pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
                             if( !pEntrys )
                                 pEntrys = oldEntry;
                         }

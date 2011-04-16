@@ -371,7 +371,7 @@ int XRMResParser::Execute( int nToken, char * pToken )
                 ByteString sLang = GetAttribute( sCurrentOpenTag, "xml:lang" );
                 WorkOnText( sCurrentOpenTag, sCurrentText );
                 Output( sCurrentText );
-                EndOfText( sCurrentOpenTag, sCurrentCloseTag );// <---
+                EndOfText( sCurrentOpenTag, sCurrentCloseTag );
                 bText = sal_False;
                 rToken = ByteString("");
                 sCurrentText  = ByteString("");
