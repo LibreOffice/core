@@ -35,7 +35,7 @@ $(eval $(call gb_Library_set_include,writerfilter,\
     -I$(OUTDIR)/inc/offuh \
 ))
 
-include debug_setup.mk
+include $(SRCDIR)/writerfilter/debug_setup.mk
 
 $(eval $(call gb_Library_set_defs,writerfilter,\
 	$$(DEFS) \
