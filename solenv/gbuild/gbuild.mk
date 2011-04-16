@@ -279,6 +279,14 @@ ifneq ($(wildcard $(GBUILDDIR)/extensions/post_*.mk),)
 include $(wildcard $(GBUILDDIR)/extensions/post_*.mk)
 endif
 
+define gb_Extensions_final_hook
+ifneq ($(wildcard $(GBUILDDIR)/extensions/final_*.mk),)
+include $(wildcard $(GBUILDDIR)/extensions/final_*.mk)
+endif
+
+endef
+
+
 ifeq ($(SYSTEM_LIBXSLT),YES)
 gb_XSLTPROCTARGET :=
 gb_XSLTPROC := xsltproc

@@ -224,6 +224,7 @@ ifneq ($$(and $$(gb_Module_TARGETSTACK),$$(gb_Module_CHECKTARGETSTACK),$$(gb_Mod
 $$(eval $$(call gb_Output_error,Corrupted module target stack!3))
 endif
 
+$$(eval $$(gb_Extensions_final_hook))
 endef
 
 # vim: set noet sw=4:
