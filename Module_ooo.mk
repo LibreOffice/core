@@ -38,6 +38,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     lotuswordpro \
     oox \
     padmin \
+    sc \
     sfx2 \
     sot \
     svl \
@@ -61,7 +62,6 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     qadevOOo \
     sal \
     ucb \
-    unotools \
 ))
 
 # vim: set noet ts=4 sw=4:
