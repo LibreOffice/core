@@ -433,7 +433,7 @@ void SAL_CALL XMLTransformerBase::initialize( const Sequence< Any >& aArguments 
 
     for( sal_Int32 nIndex = 0; nIndex < nAnyCount; nIndex++, pAny++ )
     {
-        // #b6236750# use isAssignableFrom instead of comparing the types to
+        // use isAssignableFrom instead of comparing the types to
         // allow XExtendedDocumentHandler instead of XDocumentHandler (used in
         // writeOasis2OOoLibraryElement in sfx2).
         // The Any shift operator can't be used to query the type because it

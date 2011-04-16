@@ -3106,7 +3106,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     nTextStart = 0;
                                     nTextLen = aText.Len();
 
-                                    // #b6668980# crash when accessing 0 pointer in pDXArray
+                                    // crash when accessing 0 pointer in pDXArray
                                     pTmpDXArray = new sal_Int32[ aText.Len() ];
                                     pDXArray = pTmpDXArray;
                                     Font _aOldFont( GetRefDevice()->GetFont() );
