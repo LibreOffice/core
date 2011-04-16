@@ -29,6 +29,7 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sc_ucalc))
 
+$(eval $(call gb_CppunitTest_uses_ure,sc_ucalc))
 $(eval $(call gb_CppunitTest_add_package_headers,sc_ucalc,sc_qa_unit))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_ucalc, \
