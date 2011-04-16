@@ -636,7 +636,7 @@ FrameHelper::rebuildMenuFromRoot ()
 {
     Reference < XFrame >         xFrame = getFrame ();
     Reference < XPropertySet >   frameProps     (xFrame, UNO_QUERY);
-    Reference < XLayoutManager > xLayoutManager (frameProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("LayoutManager")=),
+    Reference < XLayoutManager > xLayoutManager (frameProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("LayoutManager"))),
                                                  UNO_QUERY);
     Reference < XUIElement >   menuBar     (xLayoutManager->getElement (OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/menubar/menubar"))),
                                             UNO_QUERY);
