@@ -46,11 +46,11 @@ $(eval $(call gb_Executable_add_linked_libs,rscdep,\
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,rscdep,\
-    tools/bootstrp/appdef \
-    tools/bootstrp/cppdep \
-    tools/bootstrp/inimgr \
-    tools/bootstrp/prj \
     tools/bootstrp/rscdep \
+))
+
+$(eval $(call gb_Executable_add_linked_static_libs,rscdep,\
+	toolshelpers \
 ))
 
 ifeq ($(OS),WNT)
