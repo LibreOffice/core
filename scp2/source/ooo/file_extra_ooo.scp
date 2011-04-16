@@ -375,12 +375,6 @@ File gid_File_Extra_Tplwizletter
     Name = "tplwizletter.zip";
 End
 
-File gid_File_Extra_Tplwizletter_Lang
-    Dir = gid_Dir_Template_Wizard_Letter;
-    ARCHIVE_TXT_FILE_BODY;
-    EXTRA_ALL_LANG(tplwizletter,zip);
-End
-
 File gid_File_Extra_Tplwizfax_Lang
     Dir = gid_Dir_Template_Wizard_Fax;
     TXT_FILE_BODY;
