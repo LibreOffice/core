@@ -159,6 +159,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     ooopathutils \
     salcpprt \
     ssl \
+    toolshelpers \
     vclmain \
     zlib \
 ))
