@@ -37,6 +37,7 @@ $(eval $(call gb_Module_add_targets,tools,\
     Package_inc \
     Package_reversemap \
     StaticLibrary_ooopathutils \
+    StaticLibrary_toolshelpers \
 ))
 
 # vim: set noet sw=4 ts=4:
