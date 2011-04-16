@@ -51,7 +51,7 @@ Reference<VendorBase> SunInfo::createInstance()
 char const* const* SunInfo::getJavaExePaths(int * size)
 {
     static char const * ar[] = {
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
         "java.exe",
         "bin/java.exe",
         "jre/bin/java.exe"
@@ -74,8 +74,6 @@ char const* const* SunInfo::getRuntimePaths(int * size)
         "/bin/classic/jvm.dll",
         // The 64-bit JRE has the jvm in bin/server
         "/bin/server/jvm.dll"
-#elif defined(OS2)
-        "/bin/classic/jvm.dll",
 #elif UNX
         "/lib/" JFW_PLUGIN_ARCH "/client/libjvm.so",
         "/lib/" JFW_PLUGIN_ARCH "/server/libjvm.so",

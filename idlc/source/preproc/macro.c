@@ -47,11 +47,7 @@ void
     Nlist *np;
     Source *s;
     Tokenrow *def, *args;
-#ifdef OS2
-    static uchar location[(_MAX_PATH + 8) * NINC], *cp;
-#else
     static uchar location[(PATH_MAX + 8) * NINC], *cp;
-#endif
     tp = trp->tp + 1;
     if (tp >= trp->lp || tp->type != NAME)
     {

@@ -39,7 +39,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-#if ( defined UNX ) || ( defined OS2 )  //Unix
+#if ( defined UNX )                      //Unix
 #   include <unistd.h>
 #endif
 #if ( defined WNT )                     // Windows

@@ -42,9 +42,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Targets ------------------------------------------------------
 
 APP1TARGET=	$(TARGET)
-.IF "$(GUI)"!="OS2"
 APP1STACK=	1000000
-.ENDIF
 
 UWINAPILIB=$(0)
 LIBSALCPPRT=$(0)

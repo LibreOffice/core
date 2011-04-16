@@ -333,15 +333,9 @@ public:
 
     @see VolumeInfo
 */
-#ifdef OS2
-class VolumeInfo;
-#endif
 
 class VolumeDevice : public FileBase
 {
-#ifdef OS2
-public:
-#endif
     oslVolumeDeviceHandle   _aHandle;
 
 public:

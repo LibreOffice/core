@@ -41,7 +41,7 @@ class Simstr;
 template <class XY> class List;
 
 
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
 const char   C_sSLASH[] = "\\";
 const char   C_cSLASH = '\\';
 #elif defined(UNX)

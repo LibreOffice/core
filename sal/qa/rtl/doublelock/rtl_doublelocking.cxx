@@ -79,7 +79,7 @@ namespace ThreadHelper
 #ifdef WNT      //Windows
         Sleep(_nTenthSec * 100 );
 #endif
-#if ( defined UNX ) || ( defined OS2 )  //Unix
+#if ( defined UNX )
         TimeValue nTV;
         nTV.Seconds = static_cast<sal_uInt32>( _nTenthSec/10 );
         nTV.Nanosec = ( (_nTenthSec%10 ) * 100000000 );

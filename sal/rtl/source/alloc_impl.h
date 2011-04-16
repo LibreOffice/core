@@ -197,7 +197,7 @@ lowbit(sal_Size n)
 /** rtl_memory_lock_type
  *  (platform dependent)
  */
-#if defined(SAL_UNX) || defined(SAL_OS2)
+#if defined(SAL_UNX)
 
 #include <unistd.h>
 #include <pthread.h>

@@ -25,11 +25,7 @@
 #
 #*************************************************************************
 
-.IF "$(GUI)" == "OS2"
-STL_OS2_BUILDING=1
-.ENDIF
-
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.IF "$(GUI)"=="WNT"
 CODEMAKERLIBDEPN=codemaker.lib
 COMMONCPPLIBDEPN=commoncpp.lib
 COMMONJAVALIBDEPN=commonjava.lib

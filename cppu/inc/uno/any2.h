@@ -38,8 +38,6 @@ extern "C"
 
 #if defined( SAL_W32)
 #pragma pack(push, 8)
-#elif defined(SAL_OS2)
-#pragma pack(push, 8)
 #endif
 
 struct _typelib_TypeDescriptionReference;
@@ -63,7 +61,7 @@ typedef struct _uno_Any
     void * pReserved;
 } uno_Any;
 
-#if defined( SAL_W32) ||  defined(SAL_OS2)
+#if defined( SAL_W32)
 #pragma pack(pop)
 #endif
 

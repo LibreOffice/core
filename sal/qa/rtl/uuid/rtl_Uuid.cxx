@@ -155,7 +155,7 @@ namespace ThreadHelper
 #ifdef WNT      //Windows
         Sleep(_nSec * 10 );
 #endif
-#if ( defined UNX ) || ( defined OS2 )  //Unix
+#if ( defined UNX )
         sleep( _nSec );
 #endif
     }

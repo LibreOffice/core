@@ -42,8 +42,6 @@ struct _typelib_TypeDescription;
 
 #if defined( SAL_W32)
 #pragma pack(push, 8)
-#elif defined(SAL_OS2)
-#pragma pack(push, 8)
 #endif
 
 /** Holds a weak reference to a type description.
@@ -560,7 +558,7 @@ typedef struct _typelib_Union_Init
     typelib_TypeDescriptionReference* pTypeRef;
 } typelib_Union_Init;
 
-#if defined( SAL_W32) ||  defined(SAL_OS2)
+#if defined( SAL_W32)
 #pragma pack(pop)
 #endif
 

@@ -67,11 +67,7 @@ public:
     };
 
 protected:
-#ifdef OS2
-    struct timeb m_start, m_stop;
-#else
     struct _timeb m_start, m_stop;
-#endif
     double m_diff;
 };
 #else
@@ -106,7 +102,7 @@ protected:
 using ::rtl::OUString;
 using ::rtl::OUStringToOString;
 
-#if (defined UNX) || (defined OS2)
+#if (defined UNX)
 int main( int argc, char * argv[] )
 #else
 int _cdecl main( int argc, char * argv[] )

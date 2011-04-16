@@ -49,9 +49,7 @@ OBJFILES= \
 # --- Targets ------------------------------------------------------
 
 APP1TARGET=	$(TARGET)
-.IF "$(GUI)"!="OS2"
 APP1STACK=	1000000
-.ENDIF
 
 LIBSALCPPRT=$(0)
 

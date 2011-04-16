@@ -238,8 +238,9 @@ inline void printTime( TimeValue *tv )
 
 /** compare two TimeValue, unit is "ms", since Windows time precision is better than UNX.
 */
+/* FIXME: the above assertion is bogus */
 
-#if ( defined UNX ) || ( defined OS2 )                 //precision of time in Windows is better than UNX
+#if ( defined UNX )                      //precision of time in Windows is better than UNX
 #   define delta 2000                    //time precision, 2000ms
 #else
 #   define delta 1800                    //time precision, 1.8s
@@ -643,7 +644,7 @@ inline ::rtl::OString outputError( const ::rtl::OString & returnVal, const ::rtl
 
 /** Change file mode, two version in UNIX and Windows;.
 */
-#if ( defined UNX ) || ( defined OS2 )        //chmod() method is differ in Windows
+#if ( defined UNX )         //chmod() method is differ in Windows
 inline void changeFileMode( ::rtl::OUString & filepath, sal_Int32 mode )
 {
     rtl::OString    aString;
@@ -784,7 +785,7 @@ namespace osl_FileBase
   void getAbsoluteFileURL::getAbsoluteFileURL_001_8()
   {
     rtl::OUString suAssume = aUserDirectoryURL.concat( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/tmp/ok")) );
-#if ( defined UNX ) || ( defined OS2 )
+#if ( defined UNX )
     check_getAbsoluteFileURL( aUserDirectoryURL, "tmp//ok",::osl::FileBase::E_None, suAssume );
 #else
     check_getAbsoluteFileURL( aUserDirectoryURL, "tmp//ok",::osl::FileBase::E_INVAL, suAssume );
@@ -792,7 +793,7 @@ namespace osl_FileBase
   }
   void getAbsoluteFileURL::getAbsoluteFileURL_002()
   {
-#if ( defined UNX ) || ( defined OS2 )  //Link is not defined in Windows
+#if ( defined UNX )     //Link is not defined in Windows
         ::rtl::OUString aUStr_AbsURL, aUStr_LnkFileSys( aTempDirectorySys ), aUStr_SrcFileSys( aTempDirectorySys );
         ( ( aUStr_LnkFileSys += aSlashURL ) += getCurrentPID( ) ) += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/link.file"));
         ( ( aUStr_SrcFileSys += aSlashURL ) += getCurrentPID( ) ) += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/canonical.name"));
@@ -1520,7 +1521,7 @@ namespace osl_VolumeInfo
                                     sal_True == compareFileName( aUStr, aNullURL ) );
         }
 
-#if ( defined UNX ) || ( defined OS2 )
+#if ( defined UNX )
         void ctors_002( )
         {
             ::osl::VolumeInfo   aVolumeInfo( osl_VolumeInfo_Mask_TotalSpace |
@@ -1612,7 +1613,7 @@ namespace osl_VolumeInfo
                                       sal_True == aVolumeInfo.isValid( mask ) );
         }
 
-#if ( defined UNX ) || ( defined OS2 )
+#if ( defined UNX )
           void isValid_002( )
         {
             sal_Int32 mask = osl_VolumeInfo_Mask_Attributes | osl_VolumeInfo_Mask_TotalSpace | osl_VolumeInfo_Mask_UsedSpace |
@@ -1681,7 +1682,7 @@ namespace osl_VolumeInfo
                                      ( sal_False == bOk ) );
         }
 
- #if ( defined UNX ) || ( defined OS2 ) //remote Volume is different in Solaris and Windows
+ #if ( defined UNX )        //remote Volume is different in Solaris and Windows
         void getRemoteFlag_002( )
         {
             sal_Int32 mask = osl_VolumeInfo_Mask_Attributes;
@@ -2175,7 +2176,7 @@ namespace osl_VolumeInfo
         }
 
 
-#if ( defined UNX ) || ( defined OS2 )
+#if ( defined UNX )
          void getMaxNameLength_002( )
         {
              struct statvfs aStatFS;
@@ -2234,7 +2235,7 @@ namespace osl_VolumeInfo
         }
 
 
-#if ( defined UNX ) || ( defined OS2 )
+#if ( defined UNX )
          void getMaxPathLength_002( )
         {
              sal_Int32 mask = osl_VolumeInfo_Mask_MaxPathLength;
@@ -2865,7 +2866,7 @@ namespace osl_FileStatus
         }
 
         // test code.
-#if ( defined UNX ) || ( defined OS2 )
+#if ( defined UNX )
 //windows only 3 file attributes: normal, readonly, hidden
         void getAttributes_001( )
         {
@@ -2890,7 +2891,7 @@ namespace osl_FileStatus
 
         void getAttributes_002( )
         {
-#if ( defined UNX ) || ( defined OS2 )
+#if ( defined UNX )
             changeFileMode( aTypeURL, S_IXUSR | S_IXGRP | S_IXOTH );
 
               ::osl::FileStatus   rFileStatus( FileStatusMask_Attributes );
@@ -2904,7 +2905,7 @@ namespace osl_FileStatus
         }
 
 
-#if ( defined UNX ) || ( defined OS2 )
+#if ( defined UNX )
         void getAttributes_003( )
         {
             changeFileMode( aTypeURL, S_IWUSR | S_IWGRP | S_IWOTH );
@@ -2925,7 +2926,7 @@ namespace osl_FileStatus
         }
 #endif
 
-#if ( defined UNX ) || ( defined OS2 )  //hidden file definition may different in Windows
+#if ( defined UNX )                     //hidden file definition may different in Windows
         void getAttributes_004( )
         {
             sal_Int32 test_Attributes = Attribute_Hidden;
@@ -3243,7 +3244,7 @@ namespace osl_FileStatus
             deleteTestFile( aTypeURL );
         }
 
-#if ( defined UNX ) || ( defined OS2 )         //Link file is not define in Windows
+#if ( defined UNX )            //Link file is not define in Windows
         void getLinkTargetURL_001( )
         {
             //create a link file;
@@ -6293,7 +6294,7 @@ class GlobalObject
         try
         {
             //~ special clean up task in Windows and Unix seperately;
-#if ( defined UNX ) || ( defined OS2 )
+#if ( defined UNX )
             //~ some clean up task  for UNIX OS
             ;
 #else

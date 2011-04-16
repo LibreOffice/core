@@ -35,7 +35,7 @@
 /* Grab __SIZEOFxxx constants from typesconfig tool on Unix */
 #if defined UNX
   #include <sal/typesizes.h>
-#elif defined(WNT) || defined(OS2)
+#elif defined(WNT)
   /* FIXME: autogeneration of type sizes on Win32/Win64? */
   #define SAL_TYPES_ALIGNMENT2      1
   #define SAL_TYPES_ALIGNMENT4      1
@@ -239,7 +239,7 @@ typedef void *                   sal_Handle;
 #define SAL_MAX_SIZE        SAL_MAX_UINT64
 #endif
 
-#if defined(SAL_W32) || defined(SAL_OS2) || defined(SAL_UNX)
+#if defined(SAL_W32) || defined(SAL_UNX)
 #   define SAL_MAX_ENUM 0x7fffffff
 #elif defined(SAL_W16)
 #   define SAL_MAX_ENUM 0x7fff
@@ -260,13 +260,6 @@ typedef void *                   sal_Handle;
 #   define SAL_CALL
 #   define SAL_CALL_ELLIPSE
 #endif
-#elif defined SAL_OS2 // YD
-/* YD 25/09/2007 gcc doesn't like imports inside class members */
-#   define SAL_DLLPUBLIC_EXPORT
-#   define SAL_DLLPUBLIC_IMPORT
-#   define SAL_DLLPRIVATE
-#   define SAL_CALL
-#   define SAL_CALL_ELLIPSE
 #elif defined SAL_UNX
 #   if   defined(__SUNPRO_CC) && (__SUNPRO_CC >= 0x550)
 #     define SAL_DLLPUBLIC_EXPORT  __global
@@ -317,8 +310,6 @@ typedef void *                   sal_Handle;
 
 #ifdef SAL_W32
 #   pragma pack(push, 8)
-#elif defined(SAL_OS2)
-#   pragma pack(push, 4)
 #endif
 
 /** This is the binary specification of a SAL sequence.
@@ -339,7 +330,7 @@ typedef struct _sal_Sequence
 
 #define SAL_SEQUENCE_HEADER_SIZE ((sal_Size)&((sal_Sequence *)0)->elements)
 
-#if defined( SAL_W32) ||  defined(SAL_OS2)
+#if defined( SAL_W32)
 #pragma pack(pop)
 #endif
 
@@ -350,7 +341,7 @@ typedef struct _sal_Sequence
  */
 #ifdef __cplusplus
 #if defined SAL_W32 || defined SOLARIS || defined LINUX || defined MACOSX || \
-    defined FREEBSD || defined NETBSD || defined AIX || defined OS2 || \
+    defined FREEBSD || defined NETBSD || defined AIX || \
     defined OPENBSD || defined DRAGONFLY
 #define SAL_CONST_CAST(type, expr) (const_cast< type >(expr))
 #define SAL_REINTERPRET_CAST(type, expr) (reinterpret_cast< type >(expr))

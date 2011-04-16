@@ -150,11 +150,6 @@ sub initEnvironment()
           $g_sTempDir         = $ENV{TMP}  ? "$ENV{TMP}${FS}" : "c:${FS}tmp${FS}";
           last SWITCH;
       }
-      if ( $gui eq "OS2" ) {
-          $FS             = "\\";
-          $g_sTempDir         = $ENV{TMP}  ? "$ENV{TMP}${FS}" : "c:${FS}tmp${FS}";
-          last SWITCH;
-      }
       if ( $gui eq "UNX" ) {
           $FS             = "/";
           $g_sTempDir         = $ENV{TMP}  ? "$ENV{TMP}${FS}" : "${FS}tmp${FS}";
@@ -181,7 +176,7 @@ sub getLibName($)
     {
         return "lib" . $sFile . ".so";
     }
-    if ($OSNAME eq "MSWin32" || $OSNAME eq "OS2")
+    if ($OSNAME eq "MSWin32")
     {
         return $sFile . ".dll";
     }
@@ -320,7 +315,7 @@ sub runASingleTest($$)
 #     }
 #     else
 #     {
-#         if ($OSNAME eq "MSWin32" || $OSNAME eq "OS2")
+#         if ($OSNAME eq "MSWin32")
 #         {
 #             # test
 #             $redirect = ">>$sLogFile 2>>$sLogFile";

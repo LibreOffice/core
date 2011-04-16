@@ -159,7 +159,7 @@ Index::CreateHtmlFileName(  char *                      o_sOutputHtml,
     }
 
     strcpy( o_sOutputHtml, sOutputDirectory.str() );        // STRCPY SAFE HERE
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
     strcat(o_sOutputHtml, "\\");                            // STRCAT SAFE HERE
 #elif defined(UNX)
     strcat(o_sOutputHtml, "/");                             // STRCAT SAFE HERE

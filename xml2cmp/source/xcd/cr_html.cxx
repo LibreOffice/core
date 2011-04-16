@@ -54,7 +54,7 @@ HtmlCreator::HtmlCreator( const char *              i_pOutputFileName,
                           const XmlElement &        i_rDocument,
                           const Simstr &            i_sIDL_BaseDirectory )
     :   aFile(i_pOutputFileName, std::ios::out
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
                                                | std::ios::binary
 #endif
                                                              ),

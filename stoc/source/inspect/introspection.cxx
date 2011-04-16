@@ -32,9 +32,7 @@
 #include <string.h>
 
 // Schalter fuer Introspection-Caching
-#ifndef OS2
 #define USE_INTROSPECTION_CACHE
-#endif
 
 #ifdef USE_INTROSPECTION_CACHE
 #define INTROSPECTION_CACHE_MAX_SIZE 100

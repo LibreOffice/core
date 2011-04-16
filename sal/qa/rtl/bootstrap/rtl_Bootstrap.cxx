@@ -125,7 +125,7 @@ inline rtl::OUString t_getSourcePath(rtl::OString const& _sFilename)
      rtl::OUString aDirURL(getExecutableDirectory());
      aDirURL += OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
      aDirURL += OUString::createFromAscii( _sFilename.getStr() );
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
     aDirURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".ini"));
 #else
     aDirURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rc"));
@@ -138,7 +138,7 @@ void thread_sleep_tenth_sec(sal_Int32 _nTenthSec)
 #ifdef WNT      //Windows
     Sleep(_nTenthSec * 100 );
 #endif
-#if ( defined UNX ) || ( defined OS2 )  //Unix
+#if ( defined UNX )
     TimeValue nTV;
     nTV.Seconds = static_cast<sal_uInt32>( _nTenthSec/10 );
     nTV.Nanosec = ( (_nTenthSec%10 ) * 100000000 );
@@ -307,7 +307,7 @@ namespace rtl_Bootstrap
             oslProcess hProcess = NULL;
            rtl::OUString suFileURL = suCWD;
             suFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) +  rtl::OUString::createFromAscii(process_name) ;
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
         suFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".exe"));
 #endif
             const int nParameterCount = 3;
@@ -590,7 +590,7 @@ namespace rtl_Bootstrap
      rtl::OUString aDirURL(RTL_CONSTASCII_USTRINGPARAM("$ORIGIN"));
      aDirURL += OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
      aDirURL += OUString(RTL_CONSTASCII_USTRINGPARAM("rtl"));
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
     aDirURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".ini"));
 #else
     aDirURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rc"));
@@ -836,7 +836,7 @@ static void removeAndCreateFile(rtl::OUString const& _suFileURL, rtl::OString co
 static void create_rtlrc()
 {
     rtl::OUString aFileURL(getExecutableDirectory());
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
     aFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/rtl.ini"));
 #else
     aFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/rtlrc"));
@@ -859,7 +859,7 @@ static void create_rtlrc()
 static void create_testshl2rc()
 {
     rtl::OUString aFileURL(getExecutableDirectory());
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
     aFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/testshl2.ini"));
 #else
     aFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/testshl2rc"));
@@ -899,7 +899,7 @@ static void create_testshl2rc()
 static void create_pseudorc()
 {
     rtl::OUString aFileURL(getExecutableDirectory());
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
     aFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/pseudo.ini"));
 #else
     aFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/pseudorc"));
@@ -916,7 +916,7 @@ static void create_pseudorc()
 void create_bootstrap_processrc()
 {
     rtl::OUString aDirURL(getModulePath());
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
     aDirURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/bootstrap_process.ini"));
 #else
     aDirURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/bootstrap_processrc"));

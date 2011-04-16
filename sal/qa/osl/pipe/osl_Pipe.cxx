@@ -884,7 +884,7 @@ namespace osl_StreamPipe
 #ifdef WNT                               //Windows
         Sleep( _nSec * 1000 );
 #endif
-#if ( defined UNX ) || ( defined OS2 )   //Unix
+#if ( defined UNX )                     //Unix
         sleep( _nSec );
 #endif
         // printf("done\n" );

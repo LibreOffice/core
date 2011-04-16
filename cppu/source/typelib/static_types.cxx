@@ -70,8 +70,6 @@ void SAL_CALL typelib_typedescriptionreference_getByName(
 
 #ifdef SAL_W32
 #pragma pack(push, 8)
-#elif defined(SAL_OS2)
-#pragma pack(8)
 #endif
 
 /**
@@ -95,8 +93,6 @@ struct AlignSize_Impl
 
 #ifdef SAL_W32
 #pragma pack(pop)
-#elif defined(SAL_OS2)
-#pragma pack()
 #endif
 
 // the value of the maximal alignment

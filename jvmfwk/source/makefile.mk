@@ -31,7 +31,7 @@ FRAMEWORKLIB=jvmfwk
 TARGET = $(FRAMEWORKLIB)
 ENABLE_EXCEPTIONS = TRUE
 
-.IF "$(OS)" != "WNT" && "$(GUI)"!="OS2"
+.IF "$(OS)" != "WNT"
 UNIXVERSIONNAMES = UDK
 .ENDIF # WNT
 
@@ -73,7 +73,7 @@ DEF1NAME = $(SHL1TARGET)
 
 .IF "$(GUI)"=="UNX"
 RCFILE=$(BIN)$/jvmfwk3rc
-.ELIF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.ELIF "$(GUI)"=="WNT"
 RCFILE=$(BIN)$/jvmfwk3.ini
 .END
 

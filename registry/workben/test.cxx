@@ -31,7 +31,7 @@
 
 #include <stdio.h>
 
-#if (defined UNX) || (defined OS2)
+#if (defined UNX)
 int main()
 #else
 int _cdecl main()

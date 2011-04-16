@@ -43,8 +43,6 @@ struct _typelib_InterfaceTypeDescription;
 
 #if defined( SAL_W32)
 #pragma pack(push, 8)
-#elif defined(SAL_OS2)
-#pragma pack(push, 8)
 #endif
 
 /** The binary specification of an UNO environment.
@@ -256,7 +254,7 @@ typedef struct _uno_ExtEnvironment
 
 } uno_ExtEnvironment;
 
-#if defined( SAL_W32) ||  defined(SAL_OS2)
+#if defined( SAL_W32)
 #pragma pack(pop)
 #endif
 

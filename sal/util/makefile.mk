@@ -75,7 +75,7 @@ LIB3FILES=	\
     $(LB)$/textenc.lib
 
 
-.IF "$(GUI)" == "WNT" || "$(GUI)"=="OS2"
+.IF "$(GUI)" == "WNT"
 SHL1TARGET= $(TARGET)
 .ELSE
 SHL1TARGET= uno_$(TARGET)
@@ -116,10 +116,6 @@ SHL1STDLIBS+= -z allextract -staticlib=Crun -z defaultextract
 .ENDIF # C50
 .ENDIF # SOLARIS
 .ENDIF # UNX
-
-.IF "$(GUI)"=="OS2"
-SHL1STDLIBS=pthread.lib
-.ENDIF # OS2
 
 .IF "$(OS)"=="MACOSX"
 SHL1STDLIBS+=-framework CoreFoundation -framework Carbon

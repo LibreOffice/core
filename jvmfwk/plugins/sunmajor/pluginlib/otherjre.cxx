@@ -48,7 +48,7 @@ Reference<VendorBase> OtherInfo::createInstance()
 char const* const* OtherInfo::getJavaExePaths(int * size)
 {
     static char const * ar[] = {
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
         "bin/java.exe",
         "jre/bin/java.exe"
 #elif UNX
@@ -68,10 +68,6 @@ char const* const* OtherInfo::getRuntimePaths(int * size)
         "/bin/hotspot/jvm.dll",
         "/bin/classic/jvm.dll",
     "/bin/jrockit/jvm.dll"
-#elif defined(OS2)
-        "/bin/classic/jvm.dll",
-        "/bin/client/jvm.dll",
-        "/bin/hotspot/jvm.dll"
 #elif UNX
 #ifdef MACOSX
         "/../../../../../Frameworks/JavaVM.framework/JavaVM"  //as of  1.6.0_22

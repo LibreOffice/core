@@ -231,7 +231,7 @@ static sal_Bool checkSingletons(Options_Impl const & options, RegistryKey& singl
     return bRet;
 }
 
-#if (defined UNX) || (defined OS2) || (defined __MINGW32__)
+#if (defined UNX) (defined __MINGW32__)
 int main( int argc, char * argv[] )
 #else
 int _cdecl main( int argc, char * argv[] )

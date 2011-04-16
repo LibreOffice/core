@@ -109,10 +109,6 @@ extern "C" {
 #   endif
 #endif
 
-#ifdef OS2
-#   include <machine/endian.h>
-#endif
-
 #ifdef SOLARIS
 #   include <sys/isa_defs.h>
 #endif
@@ -136,7 +132,7 @@ extern "C" {
 
 /** Check supported platform.
  */
-#if !defined(_WIN32)  && !defined(OS2)     && \
+#if !defined(_WIN32)  && \
     !defined(LINUX)   && !defined(NETBSD) && \
     !defined(AIX)     && !defined(OPENBSD) && \
     !defined(SOLARIS) && !defined(MACOSX) && !defined(FREEBSD) && \

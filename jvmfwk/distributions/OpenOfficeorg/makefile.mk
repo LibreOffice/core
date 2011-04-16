@@ -50,8 +50,6 @@ $(BIN)$/javavendors.xml: javavendors_unx.xml javavendors_wnt.xml javavendors_mac
 .ENDIF
 .ELIF "$(GUI)"=="WNT"
     -$(COPY) javavendors_wnt.xml $(BIN)$/javavendors.xml	
-.ELIF "$(GUI)"=="OS2"
-    -$(COPY) javavendors_os2.xml $(BIN)$/javavendors.xml	
 .ELSE
     @echo Unsupported platform.
 .ENDIF

@@ -37,7 +37,7 @@ USE_DEFFILE=TRUE
 # without "-L" (light) switch
 BOOTSTRAP_SERVICE=TRUE
 
-.IF "$(OS)" != "WNT" && "$(GUI)"!="OS2"
+.IF "$(OS)" != "WNT"
 UNIXVERSIONNAMES=UDK
 .ENDIF # WNT
 
@@ -149,9 +149,6 @@ OBJFILES = $(OBJ)$/findsofficepath.obj
 
 .IF "$(GUI)" == "WNT"
 SHL1TARGET=$(TARGET)$(UDK_MAJOR)$(COMID)
-.ELIF "$(GUI)" == "OS2"
-SHL1TARGET=cppuh
-SHL1TARGET=cppuh$(UDK_MAJOR)
 .ELSE
 SHL1TARGET=uno_$(TARGET)$(COMID)
 .ENDIF
@@ -179,8 +176,6 @@ SHL1VERSIONMAP=msvc_win32_intel.map
 SHL1VERSIONMAP=msvc_win32_x86_64.map
 .ELIF "$(COMNAME)"=="sunpro5"
 SHL1VERSIONMAP=cc5_solaris_sparc.map
-.ELIF "$(GUI)$(COMNAME)"=="OS2gcc3"
-SHL1VERSIONMAP=gcc3os2.map
 .ELIF "$(COMNAME)"=="gcc3"
 SHL1VERSIONMAP=gcc3.map
 .ENDIF

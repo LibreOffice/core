@@ -82,16 +82,6 @@
 #endif
 /* BR: 16bit fuer Borland-Compiler */
 
-#ifdef OS2
-#define SAL_OS2
-#define SAL_DLLEXTENSION ".dll"
-#define SAL_PRGEXTENSION ".exe"
-#define SAL_PATHSEPARATOR ';'
-#define SAL_PATHDELIMITER '\\'
-#define SAL_CONFIGFILE( name ) name ".ini"
-#define SAL_SYSCONFIGFILE( name ) name ".ini"
-#endif
-
 #if defined(SOLARIS) || defined(LINUX) || defined(NETBSD) || defined(FREEBSD) || \
     defined(AIX) || defined(OPENBSD) || defined(DRAGONFLY)
 #define SAL_UNX

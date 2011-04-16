@@ -93,12 +93,8 @@ void oldtests::test_OStringBuffer()
     b2.append(n);
     TEST_ENSURE( s1 == b2.getStr(), "test_OStringBuffer error 5");
 
-#ifndef SAL_OS2
 #ifdef SAL_UNX
     sal_Int64 m = -3223372036854775807LL;
-#elif defined(SAL_OS2)
-    sal_Int64 m;
-    sal_setInt64(&m, 3965190145L, -750499787L);
 #else
     sal_Int64 m = -3223372036854775807;
 #endif
@@ -106,7 +102,6 @@ void oldtests::test_OStringBuffer()
     b2.append(" ");
     b2.append(m);
     TEST_ENSURE( s1 == b2.getStr(), "test_OStringBuffer error 6");
-#endif
 
     OString s2(b2.makeStringAndClear());
     TEST_ENSURE( s1 == s2, "test_OStringBuffer error 7");
@@ -129,12 +124,10 @@ void oldtests::test_OStringBuffer()
     s2 = "Hier fuege ich jetzt ein > 123456789 false Hallo <\n";
     TEST_ENSURE( s2 == b2.getStr(), "test_OStringBuffer error 11");
 
-#ifndef SAL_OS2
     b2.insert(26, m);
     b2.insert(26, " ");
     s2 = "Hier fuege ich jetzt ein > -3223372036854775807 123456789 false Hallo <\n";
     TEST_ENSURE( s2 == b2.getStr(), "test_OStringBuffer error 12");
-#endif
 
     printf("test_OStringBuffer OK !!!\n");
     return;
@@ -187,12 +180,8 @@ void oldtests::test_OUStringBuffer()
     b2.append(n);
     TEST_ENSURE( s1 == b2.getStr(), "test_OWStringBuffer error 5");
 
-#ifndef SAL_OS2
 #ifdef SAL_UNX
     sal_Int64 m = -3223372036854775807LL;
-#elif defined(SAL_OS2)
-    sal_Int64 m;
-    sal_setInt64(&m, 3965190145L, -750499787L);
 #else
     sal_Int64 m = -3223372036854775807;
 #endif
@@ -200,7 +189,6 @@ void oldtests::test_OUStringBuffer()
     b2.append(OUString(RTL_CONSTASCII_USTRINGPARAM(" ")));
     b2.append(m);
     TEST_ENSURE( s1 == b2.getStr(), "test_OWStringBuffer error 6");
-#endif
 
     OUString s2(b2.makeStringAndClear());
     TEST_ENSURE( s1 == s2, "test_OWStringBuffer error 7");
@@ -223,12 +211,10 @@ void oldtests::test_OUStringBuffer()
     s2 = OUString(RTL_CONSTASCII_USTRINGPARAM("Hier fuege ich jetzt ein > 123456789 false Hallo <\n"));
     TEST_ENSURE( s2 == b2.getStr(), "test_OWStringBuffer error 11");
 
-#ifndef SAL_OS2
     b2.insert(26, m);
     b2.insert(26, OUString(RTL_CONSTASCII_USTRINGPARAM(" ")));
     s2 = OUString(RTL_CONSTASCII_USTRINGPARAM("Hier fuege ich jetzt ein > -3223372036854775807 123456789 false Hallo <\n"));
     TEST_ENSURE( s2 == b2.getStr(), "test_OWStringBuffer error 12");
-#endif
 
     // ASCII-Schnittstelle, AB 15.10.1999
     OUString s3(OUString(RTL_CONSTASCII_USTRINGPARAM("Noch'n RTL OUString")));

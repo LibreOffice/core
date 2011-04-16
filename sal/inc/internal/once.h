@@ -33,7 +33,7 @@
  *  (platform dependent)
  */
 
-#if defined(SAL_UNX) || defined(SAL_OS2)
+#if defined(SAL_UNX)
 
 #include <pthread.h>
 

@@ -35,8 +35,6 @@
 
 #if defined WIN32
 #define THIS_OS "Windows"
-#elif defined OS2
-#define THIS_OS "OS2"
 #elif defined SOLARIS
 #define THIS_OS "Solaris"
 #elif defined LINUX

@@ -64,7 +64,7 @@ Create_AccessMethod( const char *           i_pOutputFileName,
     int    sDescrLen = (int) strlen(sDescrLineChange);
 
     std::ofstream aFile(i_pOutputFileName, std::ios::out
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
                                                | std::ios::binary
 #endif
     );

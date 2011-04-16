@@ -36,10 +36,6 @@ PROJECTPCH4DLL=TRUE
 PROJECTPCH=cont_pch
 PROJECTPCHSOURCE=cont_pch
 
-.IF "$(GUI)" == "OS2"
-STL_OS2_BUILDING=1
-.ENDIF
-
 TARGETTYPE=CUI
 
 # --- Settings -----------------------------------------------------

@@ -47,11 +47,7 @@ Wraplist wraplist[NINCLUDE];
 void
     doinclude(Tokenrow * trp, int depth, int import)
 {
-#ifdef OS2
-    char fname[_MAX_PATH], iname[_MAX_PATH];
-#else
     char fname[PATH_MAX], iname[PATH_MAX];
-#endif
     Includelist *ip;
     int angled, len, fd, i;
 

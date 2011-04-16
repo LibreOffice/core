@@ -41,7 +41,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#if ( defined UNX ) || ( defined OS2 )
+#if ( defined UNX )
 #include <unistd.h>
 #include <pwd.h>
 #endif

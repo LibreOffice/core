@@ -50,7 +50,7 @@ SHL1LIBS= \
     $(SLB)$/cppu_threadpool.lib	\
     $(SLB)$/cppu_cppu.lib
 
-.IF "$(GUI)" == "WNT" || "$(GUI)"=="OS2"
+.IF "$(GUI)" == "WNT"
 SHL1TARGET=$(TARGET)$(UDK_MAJOR)
 .ELSE
 SHL1TARGET= uno_$(TARGET)
@@ -74,8 +74,6 @@ SHL2TARGET  := $(NAMEpurpenv_helper)
 DEF2NAME    := $(SHL2TARGET)
 .IF "$(GUI)$(COM)"=="WNTGCC"
 SHL2VERSIONMAP:=uno_purpenvhelper$(COMID).map
-.ELIF "$(GUI)"=="OS2"
-SHL2VERSIONMAP:=uno_purpenvhelperwntgcc.map
 .ELIF "$(COMNAME)"=="mscx"
 SHL2VERSIONMAP:=$(SHL2TARGET)X.map
 .ELSE

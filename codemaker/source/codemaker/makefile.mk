@@ -43,9 +43,7 @@ SLOFILES = \
     $(SLO)$/codemaker.obj
 
 LIB1TARGET=$(LB)$/$(TARGET).lib
-.IF "$(GUI)" != "OS2"
 LIB1ARCHIV=$(LB)$/lib$(TARGET).a
-.ENDIF
 LIB1OBJFILES=$(SLOFILES)
 
 .INCLUDE: target.mk

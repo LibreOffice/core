@@ -34,7 +34,7 @@
 #include <osl/file.hxx>
 #include <osl/thread.h>
 
-#if defined(SAL_W32) || defined(SAL_OS2)
+#if defined(SAL_W32)
 #include <io.h>
 #include <direct.h>
 #include <errno.h>
@@ -80,7 +80,7 @@ static sal_Bool checkOutputPath(const OString& completeName)
 
         if ( buffer.getLength() > 0 && nIndex != -1 )
         {
-#if defined(SAL_UNX) || defined(SAL_OS2)
+#if defined(SAL_UNX)
             if (mkdir((char*)buffer.getStr(), 0777) == -1)
 #else
             if (mkdir((char*)buffer.getStr()) == -1)

@@ -394,7 +394,7 @@ static const sal_Int16 kSInt16Max = SHRT_MAX;
 static const sal_Int32 kUInt16Max = USHRT_MAX;
 static const sal_Int32 kSInt32Max = INT_MAX;
 static const sal_Int64 kUInt32Max = UINT_MAX;
-#if (defined UNX) || (defined OS2)
+#if (defined UNX)
 static const sal_Int64 kSInt64Max = 9223372036854775807LL;
 #else
 static const sal_Int64 kSInt64Max = 9223372036854775807;

@@ -67,8 +67,6 @@ typedef enum
 
 #ifdef SAL_W32
 #   pragma pack(push, 8)
-#elif defined(SAL_OS2)
-#   pragma pack(push, 4)
 #endif
 
 typedef struct
@@ -78,7 +76,7 @@ typedef struct
     void*       UserData;
 } oslSignalInfo;
 
-#if defined( SAL_W32) ||  defined(SAL_OS2)
+#if defined( SAL_W32)
 #   pragma pack(pop)
 #endif
 

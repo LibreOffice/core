@@ -35,10 +35,6 @@ LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 INCPRE=$(MISC)
 
-.IF "$(GUI)" == "OS2"
-STL_OS2_BUILDING=1
-.ENDIF
-
 # --- Settings -----------------------------------------------------
 
 

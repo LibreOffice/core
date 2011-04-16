@@ -70,7 +70,7 @@
 # endif
 #endif
 
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
     const rtl::OUString EXECUTABLE_NAME (RTL_CONSTASCII_USTRINGPARAM("osl_process_child.exe"));
 #else
     const rtl::OUString EXECUTABLE_NAME (RTL_CONSTASCII_USTRINGPARAM("osl_process_child"));
@@ -672,7 +672,7 @@ public:
     void osl_execProc_test_batch()
     {
         oslProcess process;
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
         rtl::OUString suBatch = suCWD + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("batch.bat"));
 #else
         rtl::OUString suBatch = suCWD + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("batch.sh"));

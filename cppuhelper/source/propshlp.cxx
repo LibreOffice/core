@@ -1107,11 +1107,9 @@ void OPropertyArrayHelper::init( sal_Bool bSorted ) SAL_THROW( () )
     {
         if(  pProperties[i-1].Name >= pProperties[i].Name )
         {
-#ifndef OS2 // YD disabled, too many troubles with debug builds!
             if (bSorted) {
                 OSL_FAIL( "Property array is not sorted" );
             }
-#endif
             // not sorted
             qsort( aInfos.getArray(), nElements, sizeof( Property ),
                     compare_Property_Impl );

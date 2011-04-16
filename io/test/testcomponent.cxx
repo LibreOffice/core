@@ -108,7 +108,7 @@ int main (int argc, char **argv)
         sTestName = "test";
         sTestName += argv[2];
 
-#if defined(SAL_W32) || defined(SAL_OS2)
+#if defined(SAL_W32)
         OUString aDllName = OStringToOUString( sTestName , RTL_TEXTENCODING_ASCII_US );
 #else
         OUString aDllName(RTL_CONSTASCII_USTRINGPARAM("lib"));

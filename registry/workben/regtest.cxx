@@ -41,7 +41,7 @@ using namespace std;
 using ::rtl::OUString;
 using ::rtl::OUStringToOString;
 
-#if (defined UNX) || (defined OS2)
+#if (defined UNX)
 int main()
 #else
 int _cdecl main()

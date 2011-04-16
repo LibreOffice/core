@@ -98,7 +98,7 @@ APP3STDLIBS= \
 .IF "$(GUI)"=="UNX"
 APP3STDLIBS+= -l$(SHL1TARGET)
 .ENDIF
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.IF "$(GUI)"=="WNT"
 APP3STDLIBS+= i$(SHL1TARGET).lib
 .ENDIF
 

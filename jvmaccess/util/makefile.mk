@@ -31,7 +31,7 @@ TARGET = $(PRJNAME)
 
 ENABLE_EXCEPTIONS = TRUE
 
-.IF "$(OS)" != "WNT" && "$(OS)" != "OS2"
+.IF "$(OS)" != "WNT"
 UNIXVERSIONNAMES = UDK
 .ENDIF # WNT
 

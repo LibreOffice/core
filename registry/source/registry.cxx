@@ -37,7 +37,7 @@
 #include "regimpl.hxx"
 #include "regkey.hxx"
 
-#if defined(WIN32) || defined(WNT) || defined(OS2)
+#if defined(WIN32) || defined(WNT)
 #include <io.h>
 #endif
 

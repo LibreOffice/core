@@ -179,7 +179,7 @@ void testConnection( const OUString &sConnectionDescription  ,
 }
 
 
-#if (defined UNX) || (defined OS2)
+#if (defined UNX)
 int main( int argc, char * argv[] )
 #else
 int __cdecl main( int argc, char * argv[] )

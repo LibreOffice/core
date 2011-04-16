@@ -44,7 +44,7 @@ extern "C" {
 #define SAL_MODULENAME(name) name SAL_DLLEXTENSION
 #endif
 
-#if defined(SAL_W32) || defined(SAL_OS2)
+#if defined(SAL_W32)
 #define SAL_MODULENAME_WITH_VERSION(name, version) name version SAL_DLLEXTENSION
 
 #elif defined(SAL_UNX)

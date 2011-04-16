@@ -60,7 +60,6 @@ published interface XSystemChildFactory : com::sun::star::uno::XInterface
         JAVA: global reference to a java.awt.Component
         object provided from the JNI-API.<BR>
 
-        OS2: HWND.<BR>
         MAC: Not supported.<BR></p>
 
         @param ProcessId

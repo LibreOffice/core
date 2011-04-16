@@ -242,7 +242,7 @@ void thread_sleep( sal_Int32 _nSec )
 #ifdef WNT                               //Windows
     Sleep( _nSec * 100 );
 #endif
-#if ( defined UNX ) || ( defined OS2 )   //Unix
+#if ( defined UNX )             //Unix
     usleep(_nSec * 100000);
 #endif
     t_print("# done\n" );

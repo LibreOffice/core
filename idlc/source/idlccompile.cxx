@@ -36,7 +36,7 @@
 #include <osl/thread.h>
 #include <osl/file.hxx>
 
-#if defined(SAL_W32) || defined(SAL_OS2)
+#if defined(SAL_W32)
 #include <io.h>
 #endif
 
@@ -150,7 +150,7 @@ OString makeTempName(const OString& prefix)
     if ( uTmpPath.getLength() )
         tmpPath = OUStringToOString(uTmpPath, RTL_TEXTENCODING_UTF8);
 
-#if defined(SAL_W32) || defined(SAL_UNX) || defined(SAL_OS2)
+#if defined(SAL_W32) || defined(SAL_UNX)
 
     OSL_ASSERT( sizeof(tmpFilePattern) > ( strlen(tmpPath)
                                            + RTL_CONSTASCII_LENGTH(
@@ -300,22 +300,7 @@ sal_Int32 compileFile(const OString * pathname)
             idlc()->getOptions()->getProgramName().getStr(), cmdFileName.getStr());
           exit(99);
     }
-#ifdef SAL_OS2_00
-      char* tok = strtok( (char*)cppArgs.getStr(), " \t\n\r");
-      while( tok) {
-         if (tok[strlen(tok)-1] == '\"')
-            tok[strlen(tok)-1] = '\0';
-         if (*tok == '\"')
-            memcpy( tok, tok+1, strlen(tok));
-         if (strlen(tok)>0) {
-            fputs(tok, pCmdFile);
-            fputc('\n', pCmdFile);
-         }
-         tok = strtok( NULL, " \t\n\r");
-      }
-#else
     fprintf(pCmdFile, "%s", cppArgs.getStr());
-#endif
     fclose(pCmdFile);
 
     OUString cmdArg(RTL_CONSTASCII_USTRINGPARAM("@"));
@@ -330,7 +315,7 @@ sal_Int32 compileFile(const OString * pathname)
     sal_Int32 idx= cpp.lastIndexOf(OUString( RTL_CONSTASCII_USTRINGPARAM("idlc")) );
      cpp = cpp.copy(0, idx);
 
-#if defined(SAL_W32) || defined(SAL_OS2)
+#if defined(SAL_W32)
      cpp += OUString( RTL_CONSTASCII_USTRINGPARAM("idlcpp.exe"));
 #else
     cpp += OUString( RTL_CONSTASCII_USTRINGPARAM("idlcpp"));

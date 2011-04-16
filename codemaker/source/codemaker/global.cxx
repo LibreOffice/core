@@ -35,7 +35,7 @@
 #include "osl/file.hxx"
 
 #include <string.h>
-#if defined(SAL_W32) || defined(SAL_OS2)
+#if defined(SAL_W32)
 #include <io.h>
 
 #include <direct.h>
@@ -152,7 +152,7 @@ OString createFileNameFromType( const OString& destination,
             continue;
         }
 
-#if defined(SAL_UNX) || defined(SAL_OS2)
+#if defined(SAL_UNX)
         if (mkdir((char*)nameBuffer.getStr(), 0777) == -1)
 #else
         if (mkdir((char*)nameBuffer.getStr()) == -1)

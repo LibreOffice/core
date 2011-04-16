@@ -356,12 +356,10 @@ sal_Bool SAL_CALL uno_type_isAssignableFromData(
 
 #if defined( SAL_W32)
 #pragma pack(push, 8)
-#elif defined(SAL_OS2)
-#pragma pack(push, 4)
 #endif
 
 #if defined(INTEL) \
-    && (defined(__GNUC__) && (defined(LINUX) || defined(FREEBSD) || defined(OS2) \
+    && (defined(__GNUC__) && (defined(LINUX) || defined(FREEBSD) \
         || defined(NETBSD) || defined(OPENBSD)) || defined(MACOSX) || defined(DRAGONFLY) \
         || defined(__SUNPRO_CC) && defined(SOLARIS))
 #define MAX_ALIGNMENT_4
@@ -597,8 +595,6 @@ BinaryCompatible_Impl::BinaryCompatible_Impl()
 
 #ifdef SAL_W32
 #   pragma pack(pop)
-#elif defined(SAL_OS2)
-#   pragma pack()
 #endif
 
 static BinaryCompatible_Impl aTest;

@@ -38,10 +38,6 @@ PROJECTPCHSOURCE=cont_pch
 
 MULTITHREAD_OBJ=TRUE
 
-.IF "$(GUI)" == "OS2"
-STL_OS2_BUILDING=1
-.ENDIF
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk

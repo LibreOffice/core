@@ -75,15 +75,7 @@ SHL2DEPN=$(APP3TARGETN) \
 #------------------------------- All object files -------------------------------
 # do this here, so we get right dependencies
 
-.IF "$(GUI)" == "OS2"
-
-SLOFILES=$(SHL2OBJS)
-
-.ELSE
-
 SLOFILES=$(SHL1OBJS) $(SHL2OBJS)
-
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 

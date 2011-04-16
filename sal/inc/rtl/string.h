@@ -742,8 +742,6 @@ double SAL_CALL rtl_str_toDouble( const sal_Char * str ) SAL_THROW_EXTERN_C();
 
 #ifdef SAL_W32
 #   pragma pack(push, 8)
-#elif defined(SAL_OS2)
-#   pragma pack(push, 4)
 #endif
 
 /** The implementation of a byte string.
@@ -757,7 +755,7 @@ typedef struct _rtl_String
     sal_Char            buffer[1];
 } rtl_String;
 
-#if defined( SAL_W32) ||  defined(SAL_OS2)
+#if defined(SAL_W32)
 #pragma pack(pop)
 #endif
 

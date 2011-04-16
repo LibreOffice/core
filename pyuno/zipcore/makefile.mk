@@ -35,7 +35,7 @@ LIBTARGET=NO
 .IF "$(L10N_framework)"==""
 UWINAPILIB =
 
-.IF "$(SYSTEM_PYTHON)" == "YES" || "$(GUI)" == "OS2"
+.IF "$(SYSTEM_PYTHON)" == "YES"
 systempython:
         @echo "Not building python-core because system python is being used"
 .ELSE

@@ -82,7 +82,7 @@ const sal_Char pBuffer_Blank[]  = "";
 //------------------------------------------------------------------------
 // OS dependent declaration and includes
 //------------------------------------------------------------------------
-#if ( defined UNX ) || ( defined OS2 )  //Unix
+#if ( defined UNX )  //Unix
 #   include <unistd.h>
 #   include <limits.h>
 #   include <math.h>
@@ -187,7 +187,7 @@ OSLTEST_DECLARE( FifoSys,  TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/tmpdir/fifo" 
 // socket, link, etc.
 // Note that this may be changed in the different platform, so be careful to use.
 //------------------------------------------------------------------------
-#if ( defined UNX ) || ( defined OS2 )                                 //          Unix
+#if ( defined UNX )                                                    //          Unix
 OSLTEST_DECLARE( TypeURL1,  FILE_PREFIX "dev/ccv");                    //socket    Solaris/Linux
 OSLTEST_DECLARE( TypeURL2,  FILE_PREFIX "devices/pseudo/tcp@0:tcp");   //special   Solaris/Linux
 OSLTEST_DECLARE( TypeURL3,  FILE_PREFIX "lib" );                       //link      Solaris
@@ -201,7 +201,7 @@ OSLTEST_DECLARE( TypeURL3,  FILE_PREFIX "" );
 // Volume device URL, we pick some canonical volume device for test:
 // UNIX file system, Floppy Disk, Proc file system, Temp file system, Compact Disk.
 //------------------------------------------------------------------------
-#if ( defined UNX ) || ( defined OS2 )                  //          Unix
+#if ( defined UNX )                                     //          Unix
 OSLTEST_DECLARE( VolURL1,  FILE_PREFIX  "");            //ufs       Solaris/Linux
 #ifdef SOLARIS
 OSLTEST_DECLARE( VolURL2,  FILE_PREFIX  "dev/fd" );     //fd        Solaris

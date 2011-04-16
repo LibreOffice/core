@@ -1062,7 +1062,7 @@ double SAL_CALL rtl_ustr_toDouble( const sal_Unicode * str ) SAL_THROW_EXTERN_C(
 
 /* ======================================================================= */
 
-#if defined( SAL_W32) ||  defined(SAL_OS2)
+#if defined(SAL_W32)
 #pragma pack(push, 4)
 #endif
 
@@ -1077,7 +1077,7 @@ typedef struct _rtl_uString
     sal_Unicode         buffer[1];
 } rtl_uString;
 
-#if defined( SAL_W32) ||  defined(SAL_OS2)
+#if defined(SAL_W32)
 #pragma pack(pop)
 #endif
 

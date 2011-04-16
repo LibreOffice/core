@@ -32,8 +32,6 @@
 
 #if defined( SAL_W32)
 #pragma pack(push, 8)
-#elif defined(SAL_OS2)
-#pragma pack(push, 8)
 #endif
 
 /** Binary typelib uik struct.  Internally not used anymore.
@@ -47,7 +45,7 @@ typedef struct _typelib_Uik
     sal_uInt32  m_Data5;
 } typelib_Uik;
 
-#if defined( SAL_W32) ||  defined(SAL_OS2)
+#if defined( SAL_W32)
 #   pragma pack(pop)
 #endif
 

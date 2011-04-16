@@ -37,7 +37,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#if defined(UNX) || defined(OS2)
+#if defined(UNX)
 #       include <unistd.h>
 #endif
 

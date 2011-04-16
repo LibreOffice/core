@@ -90,8 +90,6 @@ typedef sal_Int32 oslDescriptorFlag;
 
 #ifdef SAL_W32
 #   pragma pack(push, 8)
-#elif defined(SAL_OS2)
-#   pragma pack(push, 4)
 #endif
 
 typedef struct {
@@ -104,7 +102,7 @@ typedef struct {
     sal_uInt32              HeapUsage;
 } oslProcessInfo;
 
-#if defined( SAL_W32) ||  defined(SAL_OS2)
+#if defined( SAL_W32)
 #   pragma pack(pop)
 #endif
 

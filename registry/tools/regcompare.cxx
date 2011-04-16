@@ -1962,7 +1962,7 @@ static sal_uInt32 compareKeys(
     return nError;
 }
 
-#if (defined UNX) || (defined OS2) || defined __MINGW32__
+#if (defined UNX) || defined __MINGW32__
 int main( int argc, char * argv[] )
 #else
 int _cdecl main( int argc, char * argv[] )

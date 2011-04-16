@@ -273,7 +273,7 @@ SAL_IMPLEMENT_MAIN()
         OSL_VERIFY( xContext->getValueByName( OUSTR("/singletons/com.sun.star.bootstrap.theTestComponent0") ) >>= x );
 
         ::fprintf( stderr, "> registering service...\n");
-#if defined(SAL_W32) || defined(SAL_OS2)
+#if defined(SAL_W32)
         OUString libName( OUSTR("cfg_test.dll") );
 #elif defined(SAL_UNX)
         OUString libName( OUSTR("libcfg_test.so") );

@@ -379,7 +379,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     t_print("#if no text forwarded, this function will be skipped.\n" );
 
     /// get system information
-#if ( defined UNX ) || ( defined OS2 )
+#if ( defined UNX )
     /// some initialization work for UNIX OS
 
 

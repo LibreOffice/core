@@ -59,7 +59,7 @@
 
 #include "mergekeys.hxx"
 
-#if defined(SAL_W32) || defined(SAL_OS2)
+#if defined(SAL_W32)
 #include <io.h>
 #endif
 

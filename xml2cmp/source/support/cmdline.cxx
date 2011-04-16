@@ -163,7 +163,7 @@ CommandLine::ParseIndexCommand( int                 argc,
                     argv  );
 
     sIndexFile = sOutputDirectory;
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
     sIndexFile+= "\\xmlindex.html";
 #elif defined(UNX)
     sIndexFile+= "/xmlindex.html";

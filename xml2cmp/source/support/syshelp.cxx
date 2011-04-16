@@ -37,7 +37,7 @@
 
 #ifdef WNT
 #include <io.h>
-#elif defined(UNX) || defined(OS2)
+#elif defined(UNX)
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <dirent.h>
@@ -205,7 +205,7 @@ GatherFileNames( List<Simstr> &     o_sFiles,
 
     _findclose(hFile);
     delete [] sFilter;
-#elif defined(UNX) || defined(OS2)
+#elif defined(UNX)
     DIR * pDir = opendir( i_sSrcDirectory );
     dirent * pEntry = 0;
     char * sEnding;
@@ -287,7 +287,7 @@ GatherSubDirectories( List<Simstr> &    o_sSubDirectories,
     _findclose(hFile);
     delete [] sFilter;
 
-#elif defined(UNX) || defined(OS2)
+#elif defined(UNX)
     DIR * pDir = opendir( i_sParentdDirectory );
     dirent * pEntry = 0;
     struct stat     aEntryStatus;

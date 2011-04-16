@@ -2370,8 +2370,6 @@ sal_Bool StructureType::dumpDeclaration(FileStream& o)
 {
     o << "\n#ifdef SAL_W32\n"
       << "#   pragma pack(push, 8)\n"
-      << "#elif defined(SAL_OS2)\n"
-      << "#   pragma pack(8)\n"
       << "#endif\n\n";
 
     OSL_ASSERT(!isPolymorphic() || m_reader.getSuperTypeCount() == 0); //TODO
@@ -2448,8 +2446,6 @@ sal_Bool StructureType::dumpDeclaration(FileStream& o)
 
     o << "#ifdef SAL_W32\n"
       << "#   pragma pack(pop)\n"
-      << "#elif defined(SAL_OS2)\n"
-      << "#   pragma pack()\n"
       << "#endif\n\n";
 
     return sal_True;

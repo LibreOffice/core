@@ -64,8 +64,6 @@ typedef void (SAL_CALL * uno_DispatchMethod)(
 
 #if defined( SAL_W32)
 #pragma pack(push, 8)
-#elif defined(SAL_OS2)
-#pragma pack(push, 8)
 #endif
 
 /** The binary C uno interface description.
@@ -87,7 +85,7 @@ typedef struct _uno_Interface
     uno_DispatchMethod pDispatcher;
 } uno_Interface;
 
-#if defined( SAL_W32) ||  defined(SAL_OS2)
+#if defined( SAL_W32)
 #pragma pack(pop)
 #endif
 

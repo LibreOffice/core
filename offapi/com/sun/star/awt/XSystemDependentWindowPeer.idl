@@ -59,8 +59,6 @@ published interface XSystemDependentWindowPeer: com::sun::star::uno::XInterface
         JAVA: Returns a global reference to a java.awt.Component
         object provided from the JNI-API.<BR>
 
-        OS2: Returns an HWND if possible, otherwise 0.<BR>
-
         MAC: Returns a ptr to the NSView implementing the window.<BR>
 
         XWINDOW: Returns a structure SystemDependentXWindow

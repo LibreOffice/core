@@ -106,18 +106,13 @@ void oldtests::test_OString()
     s6 = s5.valueOf(n);
     TEST_ENSURE( s6.compareTo("123456789") == 0, "test_OString error 16");
 
-#ifndef SAL_OS2
 #ifdef SAL_UNX
     sal_Int64 m = -3223372036854775807LL;
-#elif defined(SAL_OS2)
-    sal_Int64 m;
-    sal_setInt64(&m, 3965190145L, -750499787L);
 #else
     sal_Int64 m = -3223372036854775807;
 #endif
     s6 = s5.valueOf(m);
     TEST_ENSURE( s6.compareTo("-3223372036854775807") == 0, "test_OString error 17");
-#endif
 
     OString s7("HaLLo");
     s7 = s7.toAsciiLowerCase();

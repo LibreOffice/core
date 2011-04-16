@@ -29,11 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_bridges.hxx"
 
-#if defined OS2
-#define INCL_DOS
-#define INCL_DOSMISC
-#endif
-
 #include "bridges/cpp_uno/shared/vtablefactory.hxx"
 
 #include "guardedarray.hxx"
@@ -68,10 +63,6 @@
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
-#elif defined SAL_OS2
-#define INCL_DOS
-#define INCL_DOSMISC
-#include <os2.h>
 #else
 #error Unsupported platform
 #endif
@@ -92,10 +83,6 @@ extern "C" void * SAL_CALL allocExec(rtl_arena_type *, sal_Size * size) {
     SYSTEM_INFO info;
     GetSystemInfo(&info);
     pagesize = info.dwPageSize;
-#elif defined(SAL_OS2)
-    ULONG ulPageSize;
-    DosQuerySysInfo(QSV_PAGE_SIZE, QSV_PAGE_SIZE, &ulPageSize, sizeof(ULONG));
-    pagesize = (sal_Size)ulPageSize;
 #else
 #error Unsupported platform
 #endif
@@ -115,9 +102,6 @@ extern "C" void * SAL_CALL allocExec(rtl_arena_type *, sal_Size * size) {
     }
 #elif defined SAL_W32
     p = VirtualAlloc(0, n, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
-#elif defined(SAL_OS2)
-    p = 0;
-    DosAllocMem( &p, n, PAG_COMMIT | PAG_READ | PAG_WRITE | OBJ_ANY);
 #endif
     if (p != 0) {
         *size = n;
@@ -133,8 +117,6 @@ extern "C" void SAL_CALL freeExec(
 #elif defined SAL_W32
     (void) size; // unused
     VirtualFree(address, 0, MEM_RELEASE);
-#elif defined(SAL_OS2)
-    (void) DosFreeMem( address);
 #endif
 }
 

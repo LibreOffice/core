@@ -185,7 +185,7 @@ Put2File_TypeInfo( const char *            i_sOutputFile,
                    ModuleDescription &     i_rData )
 {
     std::ofstream aOut(i_sOutputFile, std::ios::out
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
                                                | std::ios::binary
 #endif
     );

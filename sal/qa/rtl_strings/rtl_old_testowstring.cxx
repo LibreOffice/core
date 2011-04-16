@@ -39,9 +39,6 @@
 #ifdef UNX
 #include <wchar.h>
 #endif
-#ifdef OS2__00
-#include <wcstr.h>
-#endif
 
 #include <rtl/ustring.hxx>
 
@@ -118,18 +115,13 @@ void oldtests::test_OUString()
     s6 = s5.valueOf(n);
     TEST_ENSURE( s6.compareTo(OUString(RTL_CONSTASCII_USTRINGPARAM("123456789"))) == 0, "test_OWString error 16");
 
-#ifndef SAL_OS2
 #ifdef SAL_UNX
     sal_Int64 m = -3223372036854775807LL;
-#elif defined(SAL_OS2)
-    sal_Int64 m;
-    sal_setInt64(&m, 3965190145L, -750499787L);
 #else
     sal_Int64 m = -3223372036854775807;
 #endif
     s6 = s5.valueOf(m);
     TEST_ENSURE( s6.compareTo( OUString(RTL_CONSTASCII_USTRINGPARAM("-3223372036854775807")) ) == 0, "test_OWString error 17");
-#endif
 
 // LLA: locale tests removed        ::rtl::OLocale locale = ::rtl::OLocale::getDefault();
 // LLA: locale tests removed
@@ -326,7 +318,7 @@ void oldtests::test_OUString()
     // toInt64
     OUString s9( OUString(RTL_CONSTASCII_USTRINGPARAM(" -3223372036854775807")) );
     sal_Int64 ln1 = s9.toInt64();
-#if (defined UNX) || (defined OS2)
+#if (defined UNX)
     TEST_ENSURE( ln1 == -3223372036854775807LL, "test_OWString error 67" );
 #else
     TEST_ENSURE( ln1 == -3223372036854775807, "test_OWString error 67" );
@@ -336,7 +328,7 @@ void oldtests::test_OUString()
     TEST_ENSURE( ln2 == 13243, "test_OWString error 68" );
 
     sal_Int64 ln3 = s10.toInt64( 16 );
-#if (defined UNX) || (defined OS2)
+#if (defined UNX)
     TEST_ENSURE( ln3 == 0x13243A65F1LL, "test_OWString error 69" );
 #else
     TEST_ENSURE( ln3 == 0x13243A65F1, "test_OWString error 69" );

@@ -44,7 +44,7 @@ LoadXmlFile( Buffer &           o_rBuffer,
     std::ifstream aXmlFile;
 
     aXmlFile.open(i_sXmlFilePath, std::ios::in
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
                                           | std::ios::binary
 #endif // WNT
     );

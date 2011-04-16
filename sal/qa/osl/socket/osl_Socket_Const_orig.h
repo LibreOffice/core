@@ -64,7 +64,7 @@ extern "C"
 //------------------------------------------------------------------------
 // OS dependent declaration and includes
 //------------------------------------------------------------------------
-#if ( defined UNX ) || ( defined OS2 )  //Unix
+#if ( defined UNX )     //Unix
 #   include <unistd.h>
 #   include <limits.h>
 #   include <string.h>
