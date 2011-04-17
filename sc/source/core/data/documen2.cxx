@@ -1085,9 +1085,9 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
         SfxObjectShell* pSrcShell = pSrcDoc ? pSrcDoc->GetDocumentShell() : NULL;
         if ( pSrcShell )
         {
-            StarBASIC* pStarBASIC = pSrcShell ? pSrcShell->GetBasic() : NULL;
+            StarBASIC* pStarBASIC = pSrcShell->GetBasic();
             String aLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
-            if ( pSrcShell && pSrcShell->GetBasicManager()->GetName().Len() > 0 )
+            if ( pSrcShell->GetBasicManager()->GetName().Len() > 0 )
             {
                 aLibName = pSrcShell->GetBasicManager()->GetName();
                 pStarBASIC = pSrcShell->GetBasicManager()->GetLib( aLibName );
