@@ -713,7 +713,8 @@ void SdNavigatorWin::RefreshDocumentLB( const String* pDocName )
                 NavDocInfo* pInfo = new NavDocInfo();
                 pInfo->mpDocShell = pDocShell;
 
-                aStr = pDocShell->GetMedium()->GetName();
+                SfxMedium *pMedium = pDocShell->GetMedium();
+                aStr = pMedium ? pMedium->GetName() : String();
                 if( aStr.Len() )
                     pInfo->SetName();
                 else
