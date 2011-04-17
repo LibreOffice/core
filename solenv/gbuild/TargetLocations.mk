@@ -82,6 +82,8 @@ gb_SdiTarget_get_target = $(WORKDIR)/SdiTarget/$(1)
 gb_SrsPartMergeTarget_get_target = $(WORKDIR)/SrsPartMergeTarget/$(1)
 gb_SrsPartTarget_get_target = $(WORKDIR)/SrsPartTarget/$(1)
 gb_SrsTarget_get_target = $(WORKDIR)/SrsTarget/$(1).srs
+gb_SrsTemplatePartTarget_get_target = $(WORKDIR)/inc/$(firstword $(subst /, ,$(1)))/$(subst _tmpl,,$(notdir $(1)))
+gb_SrsTemplateTarget_get_target = $(WORKDIR)/SrsTemplateTarget/$(1)
 
 define gb_Library_get_external_headers_target
 $(patsubst $(1):%,$(WORKDIR)/ExternalHeaders/Library/%,$(filter $(1):%,$(gb_Library_FILENAMES)))
@@ -112,6 +114,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	ResTarget \
 	SdiTarget \
 	SrsTarget \
+	SrsTemplateTarget \
 	CppunitTest \
 	CustomTarget \
 ))

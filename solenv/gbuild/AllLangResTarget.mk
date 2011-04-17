@@ -30,8 +30,11 @@
 #
 # target                task                depends on
 # SrsTarget             joining the parts   SrsPartTarget
+#                                           SrsTemplateTarget
 # SrsPartTarget         preprocessing       SrsPartMergeTarget (with l10n)
 #                                           source file (without l10n)
+# SrsTemplateTarget     handling templates  SrsTemplatePartTarget
+# SrsTemplatePartTarget handling template   SrsPartMergeTarget
 # SrsPartMergeTarget    merging/transex     source file (only needed with l10n)
 
 # Overview of dependencies and tasks of AllLangResTarget
@@ -127,6 +130,64 @@ endif
 
 endef
 
+# SrsTemplatePartTarget class
+
+define gb_SrsTemplatePartTarget_SrsTemplatePartTarget
+$(call gb_SrsTemplatePartTarget_get_target,$(1)) : $(call gb_SrsPartMergeTarget_get_target,$(1))
+	$$(call gb_Helper_abbreviate_dirs,\
+	    mkdir -p $$(dir $$@) && \
+	    cp $$< $$@)
+ifneq ($(strip $(WITH_LANG)),)
+$(call gb_SrsPartMergeTarget_get_target,$(1)) : SDF := $(realpath $(gb_SrsPartMergeTarget_SDFLOCATION)$(dir $(1))localize.sdf)
+$(call gb_SrsPartMergeTarget_get_target,$(1)) : $$(SDF)
+endif
+endef
+
+# SrsTemplateTarget class
+
+gb_SrsTemplateTarget__get_merged_target = $(call gb_SrsTemplateTarget_get_target,$(1))_merged
+gb_SrsTemplateTarget__get_unmerged_target = $(call gb_SrsTemplateTarget_get_target,$(1))_unmerged
+
+ifeq ($(strip $(WITH_LANG)),)
+gb_SrsTemplateTarget__get_target = $(call gb_SrsTemplateTarget__get_unmerged_target,$(1))
+gb_SrsTemplateTarget__get_update_target = $(call gb_SrsTemplateTarget__get_merged_target,$(1))
+else
+gb_SrsTemplateTarget__get_target = $(call gb_SrsTemplateTarget__get_merged_target,$(1))
+gb_SrsTemplateTarget__get_update_target = $(call gb_SrsTemplateTarget__get_unmerged_target,$(1))
+endif
+
+define gb_SrsTemplateTarget_SrsTemplateTarget
+$(call gb_SrsTemplateTarget_get_target,$(1)) : PARTS :=
+$(call gb_SrsTemplateTarget_get_clean_target,$(1)) : PARTS :=
+$(call gb_SrsTemplateTarget_get_target,$(1)) : $(call gb_SrsTemplateTarget__get_target,$(1))
+$(call gb_SrsTemplateTarget__get_target,$(1)) : $(call gb_SrsTemplateTarget__get_update_target,$(1))
+endef
+
+.PHONY : $(call gb_SrsTemplateTarget_get_target,%)
+$(call gb_SrsTemplateTarget_get_target,%) :
+	$(call gb_Output_announce,$*,$(true),SRT,4)
+	$(call gb_Helper_abbreviate_dirs,\
+	    mkdir -p $(dir $@) && \
+	    touch $@)
+
+.PHONY : $(call gb_SrsTemplateTarget_get_clean_target,%)
+$(call gb_SrsTemplateTarget_get_clean_target,%) :
+	$(call gb_Output_announce,$*,$(false),SRT,4)
+	-$(call gb_Helper_abbreviate_dirs,\
+	    rm -f $(call gb_SrsTemplateTarget_get_target,$*) \
+		    $(call gb_SrsTemplateTarget__get_merged_target,$*) \
+		    $(call gb_SrsTemplateTarget__get_unmerged_target,$*) \
+		    $(foreach part,$(PARTS),$(call gb_SrsTemplatePartTarget_get_target,$(part))) \
+		    $(foreach part,$(PARTS),$(call gb_SrsPartMergeTarget_get_target,$(part))))
+
+define gb_SrsTemplateTarget_add_file
+$(call gb_SrsTemplatePartTarget_SrsTemplatePartTarget,$(2))
+$(call gb_SrsTemplateTarget_get_target,$(1)) : PARTS += $(2)
+$(call gb_SrsTemplateTarget_get_clean_target,$(1)) : PARTS += $(2)
+$(call gb_SrsTemplateTarget__get_target,$(1)) : $(call gb_SrsTemplatePartTarget_get_target,$(2))
+$(call gb_SrsTemplatePartTarget_get_target,$(2)) : $(call gb_SrsTemplateTarget__get_update_target,$(1))
+$(call gb_SrsPartMergeTarget_get_target,$(2)) : $(call gb_SrsTemplateTarget__get_update_target,$(1))
+endef
 
 # SrsTarget class
 
@@ -164,10 +225,13 @@ $(call gb_SrsTarget_get_dep_target,%) :
 endif
 
 define gb_SrsTarget_SrsTarget
+$(call gb_SrsTemplateTarget_SrsTemplateTarget,$(1))
 $(call gb_SrsTarget_get_target,$(1)) : DEFS := $(gb_SrsTarget_DEFAULTDEFS)
 $(call gb_SrsTarget_get_target,$(1)) : INCLUDE := $(SOLARINC)
 $(call gb_SrsTarget_get_clean_target,$(1)) : PARTS :=
 $(call gb_SrsTarget_get_target,$(1)) : PARTS :=
+$(call gb_SrsTarget_get_target,$(1)) : $(call gb_SrsTemplateTarget_get_target,$(1))
+$(call gb_SrsTarget_get_clean_target,$(1)) : $(call gb_SrsTemplateTarget_get_clean_target,$(1))
 ifeq ($(gb_FULLDEPS),$(true))
 ifneq ($(wildcard $(call gb_SrsTarget_get_dep_target,$(1))),)
 include $(call gb_SrsTarget_get_dep_target,$(1))
@@ -200,6 +264,7 @@ $(call gb_SrsTarget_get_dep_target,$(1)) : $(call gb_SrsPartTarget_get_dep_targe
 endif
 $(call gb_SrsPartTarget_SrsPartTarget,$(2))
 $(call gb_SrsTarget_get_target,$(1)) : $(call gb_SrsPartTarget_get_target,$(2))
+$(call gb_SrsPartTarget_get_target,$(2)) :| $(call gb_SrsTemplateTarget_get_target,$(1))
 $(call gb_SrsTarget_get_clean_target,$(1)) : PARTS += $(2)
 $(call gb_SrsTarget_get_target,$(1)) : PARTS += $(2)
 
@@ -208,6 +273,14 @@ endef
 define gb_SrsTarget_add_files
 $(foreach file,$(2),$(call gb_SrsTarget_add_file,$(1),$(file)))
 
+endef
+
+define gb_SrsTarget_add_template
+$(call gb_SrsTemplateTarget_add_file,$(1),$(2))
+endef
+
+define gb_SrsTarget_add_templates
+$(foreach template,$(2),$(eval $(call gb_SrsTarget_add_template,$(1),$(template))))
 endef
 
 
