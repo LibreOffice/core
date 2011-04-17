@@ -1985,7 +1985,7 @@ void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
 
     if( bBrowseModeChanged )
     {
-        // --> FME 2005-03-16 #i44963# Good occasion to check if page sizes in
+        // #i44963# Good occasion to check if page sizes in
         // page descriptions are still set to (LONG_MAX, LONG_MAX) (html import)
         pDoc->CheckDefaultPageFmt();
         // <--

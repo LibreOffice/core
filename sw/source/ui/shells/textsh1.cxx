@@ -977,7 +977,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             {
                 rReq.Done( *pSet );
                 ::SfxToSwPageDescAttr( rWrtSh, *pSet );
-                // --> OD 2006-12-06 #i56253#
+                // #i56253#
                 // enclose all undos.
                 // Thus, check conditions, if actions will be performed.
                 const bool bUndoNeeded( pSet->Count() ||
@@ -1032,7 +1032,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     rWrtSh.SetNodeNumStart(nNumStart);
                     rWrtSh.SetNumRuleStart(sal_False);
                 }
-                // --> OD 2006-12-06 #i56253#
+                // #i56253#
                 if ( bUndoNeeded )
                 {
                     rWrtSh.EndUndo( UNDO_INSATTR );
@@ -1048,7 +1048,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             String sContinuedListId;
             const SwNumRule* pRule =
                 rWrtSh.SearchNumRule( false, true, false, -1, sContinuedListId );
-            // --> OD 2009-08-26 #i86492#
+            // #i86492#
             // Search also for bullet list
             if ( !pRule )
             {
@@ -1648,7 +1648,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             case FN_NUM_CONTINUE:
             {
                 {
-                    // --> OD 2009-08-26 #i86492#
+                    // #i86492#
                     // Search also for bullet list
                     String aDummy;
                     const SwNumRule* pRule =

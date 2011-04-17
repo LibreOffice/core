@@ -739,13 +739,13 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
             {
                 if ( RES_TXTATR_CHARFMT == (*aIter)->Which() )
                 {
-                    // --> FME 2007-02-16 #i74589#
+                    // #i74589#
                     const SwFmtCharFmt& rOtherCharFmt = (*aIter)->GetCharFmt();
                     const SwFmtCharFmt& rThisCharFmt = rNewHint.GetCharFmt();
                     const bool bSameCharFmt = rOtherCharFmt.GetCharFmt() == rThisCharFmt.GetCharFmt();
                     // <--
 
-                    // --> OD 2009-03-24 #i90311#
+                    // #i90311#
                     // Do not remove existing character format hint during XML import
                     if ( !rNode.GetDoc()->IsInXMLImport() &&
                          ( !( nsSetAttrMode::SETATTR_DONTREPLACE & nMode ) ||
@@ -843,8 +843,8 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
                 SfxItemSet aNewSet( *pCurrentStyle );
                 aNewSet.Put( *pNewStyle );
 
-                // --> FME 2007-4-11 #i75750# Remove attributes already set at whole paragraph
-                // --> FME 2007-09-24 #i81764# This should not be applied for no length attributes!!! <--
+                // #i75750# Remove attributes already set at whole paragraph
+                // #i81764# This should not be applied for no length attributes!!! <--
                 if ( !bNoLengthAttribute && rNode.HasSwAttrSet() && aNewSet.Count() )
                 {
                     SfxItemIter aIter2( aNewSet );
@@ -881,8 +881,8 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
                 bool bOptimizeAllowed = true;
 
                 SfxItemSet* pNewSet = 0;
-                // --> FME 2007-4-11 #i75750# Remove attributes already set at whole paragraph
-                // --> FME 2007-09-24 #i81764# This should not be applied for no length attributes!!! <--
+                // #i75750# Remove attributes already set at whole paragraph
+                // #i81764# This should not be applied for no length attributes!!! <--
                 if ( !bNoLengthAttribute && rNode.HasSwAttrSet() && pNewStyle->Count() )
                 {
                     SfxItemIter aIter2( *pNewStyle );
@@ -1557,7 +1557,7 @@ void SwTxtNode::DeleteAttributes( const sal_uInt16 nWhich,
                 if ( SFX_ITEM_SET == pFmt->GetItemState( RES_CHRATR_HIDDEN, sal_True, &pItem ) )
                     SetCalcHiddenCharFlags();
             }
-            // --> FME 2007-03-16 #i75430# Recalc hidden flags if necessary
+            // #i75430# Recalc hidden flags if necessary
             else if ( nWhich == RES_TXTATR_AUTOFMT )
             {
                 // Check if auto style contains hidden attribute:
@@ -1886,7 +1886,7 @@ sal_Bool SwTxtNode::GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
         }
         else                            // es ist ein Bereich definiert
         {
-            // --> FME 2007-03-13 #i75299#
+            // #i75299#
             ::std::auto_ptr< std::vector< SwPoolItemEndPair > > pAttrArr;
             // <--
 
@@ -2610,7 +2610,7 @@ bool SwpHints::TryInsertHint( SwTxtAttr* const pHint, SwTxtNode &rNode,
         ((SwTxtCharFmt*)pHint)->ChgTxtNode( &rNode );
         break;
     }
-    // --> FME 2007-03-16 #i75430# Recalc hidden flags if necessary
+    // #i75430# Recalc hidden flags if necessary
     case RES_TXTATR_AUTOFMT:
     {
         // Check if auto style contains hidden attribute:
@@ -2856,7 +2856,7 @@ bool SwpHints::TryInsertHint( SwTxtAttr* const pHint, SwTxtNode &rNode,
         }
         else
         {
-            // --> FME 2007-11-08 #i82989# Check sort numbers in NoHintAdjustMode
+            // #i82989# Check sort numbers in NoHintAdjustMode
             if ( RES_TXTATR_CHARFMT == nWhich )
                 lcl_CheckSortNumber( *this, *static_cast<SwTxtCharFmt*>(pHint) );
             // <--
@@ -2974,9 +2974,8 @@ sal_uInt16 SwTxtNode::GetLang( const xub_StrLen nBegin, const xub_StrLen nLen,
         nScript = pBreakIt->GetRealScriptOfText( m_Text, nBegin );
     }
 
-    // --> FME 2008-09-29 #i91465# hennerdrewes: Consider nScript if pSwpHints == 0
+    // #i91465# Consider nScript if pSwpHints == 0
     const sal_uInt16 nWhichId = GetWhichOfScript( RES_CHRATR_LANGUAGE, nScript );
-    // <--
 
     if ( HasHints() )
     {

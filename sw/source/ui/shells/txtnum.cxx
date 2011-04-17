@@ -137,7 +137,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
         else
         {
             SwNumRule aRule( GetShell().GetUniqueNumRuleName(),
-                             // --> OD 2008-06-06 #i89178#
+                             // #i89178#
                              numfunc::GetDefaultPositionAndSpaceMode() );
                              // <--
             SvxNumRule aSvxRule = aRule.MakeSvxNumRule();
@@ -154,7 +154,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                         aFmt.SetLSpace(720);
                         aFmt.SetAbsLSpace(n * 720);
                     }
-                    // --> FME 2005-01-21 #i38904#  Default alignment for
+                    // #i38904#  Default alignment for
                     // numbering/bullet should be rtl in rtl paragraph:
                     if ( bRightToLeft )
                     {
@@ -191,7 +191,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                 SwNumRule aSetRule( pCurRule
                                         ? pCurRule->GetName()
                                         : GetShell().GetUniqueNumRuleName(),
-                                    // --> OD 2008-06-06 #i89178#
+                                    // #i89178#
                                     numfunc::GetDefaultPositionAndSpaceMode() );
                                     // <--
                 aSetRule.SetSvxRule( *pSetRule, GetShell().GetDoc());
@@ -210,7 +210,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                 rReq.Done();
                 SvxNumRule* pSetRule = ((SvxNumBulletItem*)pItem)->GetNumRule();
                 SwNumRule aSetRule( GetShell().GetUniqueNumRuleName(),
-                                    // --> OD 2008-06-06 #i89178#
+                                    // #i89178#
                                     numfunc::GetDefaultPositionAndSpaceMode() );
                                     // <--
                 aSetRule.SetSvxRule(*pSetRule, GetShell().GetDoc());

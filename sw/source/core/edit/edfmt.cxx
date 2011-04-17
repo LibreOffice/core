@@ -79,7 +79,7 @@ void SwEditShell::FillByEx(SwCharFmt* pCharFmt, sal_Bool bReset)
 {
     if ( bReset )
     {
-        // --> OD 2007-01-25 #i73790# - method renamed
+        // #i73790# - method renamed
         pCharFmt->ResetAllFmtAttr();
         // <--
     }

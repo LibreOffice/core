@@ -304,7 +304,7 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
     if (!bSkipKashida)
         CalcRightMargin( pCurrent, nReal );
 
-    // --> FME 2005-06-08 #i49277#
+    // #i49277#
     const sal_Bool bDoNotJustifyLinesWithManualBreak =
                 GetTxtFrm()->GetNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK);
     // <--

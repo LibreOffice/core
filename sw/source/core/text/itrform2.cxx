@@ -346,7 +346,7 @@ void SwTxtFormatter::InsertPortion( SwTxtFormatInfo &rInf,
             pPor = pCurr->GetPortion();
         }
 
-        // --> OD 2010-07-07 #i112181#
+        // #i112181#
         rInf.SetOtherThanFtnInside( rInf.IsOtherThanFtnInside() || !pPor->IsFtnPortion() );
         // <--
     }
@@ -775,7 +775,7 @@ void SwTxtFormatter::CalcAscent( SwTxtFormatInfo &rInf, SwLinePortion *pPor )
         ((SwFldPortion*)pPor)->Height( pFldFnt->GetHeight( rInf.GetVsh(), *rInf.GetOut() ) );
         ((SwFldPortion*)pPor)->SetAscent( pFldFnt->GetAscent( rInf.GetVsh(), *rInf.GetOut() ) );
     }
-    // --> OD 2008-06-05 #i89179#
+    // #i89179#
     // tab portion representing the list tab of a list label gets the
     // same height and ascent as the corresponding number portion
     else if ( pPor->InTabGrp() && pPor->GetLen() == 0 &&
@@ -1236,7 +1236,7 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
     if( !pPor )
     {
         if( ( !pMulti || pMulti->IsBidi() ) &&
-            // --> FME 2005-02-14 #i42734#
+            // #i42734#
             // No multi portion if there is a hook character waiting:
             ( !rInf.GetRest() || '\0' == rInf.GetHookChar() ) )
             // <--
@@ -1852,7 +1852,7 @@ void SwTxtFormatter::FeedInf( SwTxtFormatInfo &rInf ) const
     rInf.SetIdx( nStart );
 
     // Handle overflows:
-    // --> FME 2004-11-25 #i34348# Changed type from sal_uInt16 to SwTwips
+    // #i34348# Changed type from sal_uInt16 to SwTwips
     SwTwips nTmpLeft = Left();
     SwTwips nTmpRight = Right();
     SwTwips nTmpFirst = FirstLeft();
@@ -2052,7 +2052,7 @@ namespace {
 
     #ifndef QUARTZ
     #ifndef ENABLE_GRAPHITE
-            // --> FME 2004-09-27 #i28795#, #i34607#, #i38388#
+            // #i28795#, #i34607#, #i38388#
             // step back six(!) more characters for complex scripts
             // this is required e.g., for Khmer (thank you, Javier!)
             const SwScriptInfo& rSI = txtFmtInfo.GetParaPortion()->GetScriptInfo();

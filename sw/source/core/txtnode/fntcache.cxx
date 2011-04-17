@@ -2166,7 +2166,7 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
     xub_StrLen nLastIdx = nIdx;
     const xub_StrLen nEnd = rInf.GetIdx() + rInf.GetLen();
 
-    // --> OD 2009-12-29 #i105901#
+    // #i105901#
     // skip character cells for all script types
     if ( pBreakIt->GetBreakIter().is() )
     // <--

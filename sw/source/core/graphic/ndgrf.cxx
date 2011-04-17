@@ -60,7 +60,7 @@
 #include <tools/link.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/io/XSeekable.hpp>
-// --> OD 2007-03-28 #i73788#
+// #i73788#
 #include <retrieveinputstreamconsumer.hxx>
 // <--
 
@@ -76,7 +76,7 @@ SwGrfNode::SwGrfNode(
         SwGrfFmtColl *pGrfColl,
         SwAttrSet* pAutoAttr ) :
     SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr ),
-    // --> OD 2007-01-23 #i73788#
+    // #i73788#
     mbLinkedInputStreamReady( false ),
     mbIsStreamReadOnly( sal_False )
     // <--
@@ -93,7 +93,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
                           const GraphicObject& rGrfObj,
                       SwGrfFmtColl *pGrfColl, SwAttrSet* pAutoAttr ) :
     SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr ),
-    // --> OD 2007-01-23 #i73788#
+    // #i73788#
     mbLinkedInputStreamReady( false ),
     mbIsStreamReadOnly( sal_False )
     // <--
@@ -116,7 +116,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
                       SwGrfFmtColl *pGrfColl,
                       SwAttrSet* pAutoAttr ) :
     SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr ),
-    // --> OD 2007-01-23 #i73788#
+    // #i73788#
     mbLinkedInputStreamReady( false ),
     mbIsStreamReadOnly( sal_False )
     // <--
@@ -217,7 +217,7 @@ sal_Bool SwGrfNode::ReRead(
                     SwMsgPoolItem aMsgHint( RES_GRF_REREAD_AND_INCACHE );
                     ModifyNotification( &aMsgHint, &aMsgHint );
                 }
-                // --> OD 2006-11-03 #i59688#
+                // #i59688#
                 // do not load linked graphic, if it isn't a new linked graphic.
 //                else {
                 else if ( bNewGrf )
@@ -315,7 +315,7 @@ sal_Bool SwGrfNode::ReRead(
 
 SwGrfNode::~SwGrfNode()
 {
-    // --> OD 2007-03-30 #i73788#
+    // #i73788#
     mpThreadConsumer.reset();
     // <--
 
@@ -328,7 +328,7 @@ SwGrfNode::~SwGrfNode()
     }
     else
     {
-        // --> OD 2005-01-19 #i40014# - A graphic node, which are in linked
+        // #i40014# - A graphic node, which are in linked
         // section, whose link is another section is the document, doesn't
         // have to remove the stream from the storage.
         // Because it's hard to detect this case here and it would only fix
@@ -453,7 +453,7 @@ short SwGrfNode::SwapIn( sal_Bool bWaitForData )
         else
         {
 
-            // --> OD 2005-05-04 #i48434# - usage of new method <_GetStreamForEmbedGrf(..)>
+            // #i48434# - usage of new method <_GetStreamForEmbedGrf(..)>
             try
             {
                 // #i53025# - needed correction of new method <_GetStreamForEmbedGrf(..)>
@@ -471,7 +471,7 @@ short SwGrfNode::SwapIn( sal_Bool bWaitForData )
             }
             catch ( uno::Exception& )
             {
-                // --> OD 2005-04-25 #i48434#
+                // #i48434#
                 OSL_FAIL( "<SwGrfNode::SwapIn(..)> - unhandled exception!" );
                 // <--
             }
@@ -564,7 +564,7 @@ sal_Bool SwGrfNode::SavePersistentData()
     if( HasStreamName() && !SwapIn() )
         return sal_False;
 
-    // --> OD 2005-04-19 #i44367#
+    // #i44367#
     // Do not delete graphic file in storage, because the graphic file could
     // be referenced by other graphic nodes.
     // Because it's hard to detect this case here and it would only fix
@@ -744,7 +744,7 @@ void SwGrfNode::DelStreamName()
             }
             catch ( uno::Exception& )
             {
-                // --> OD 2005-04-25 #i48434#
+                // #i48434#
                 OSL_FAIL( "<SwGrfNode::DelStreamName()> - unhandled exception!" );
                 // <--
             }
@@ -832,7 +832,7 @@ SvStream* SwGrfNode::_GetStreamForEmbedGrf(
 }
 
 
-// --> OD 2005-08-17 #i53025# - stream couldn't be in a 3.1 - 5.2 storage any more.
+// #i53025# - stream couldn't be in a 3.1 - 5.2 storage any more.
 // Thus, removing corresponding code.
 void SwGrfNode::_GetStreamStorageNames( String& rStrmName,
                                         String& rStorName ) const
@@ -884,7 +884,7 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     SwBaseLink* pLink = (SwBaseLink*)(::sfx2::SvBaseLink*) refLink;
     if( !pLink && HasStreamName() )
     {
-        // --> OD 2005-05-04 #i48434# - usage of new method <_GetStreamForEmbedGrf(..)>
+        // #i48434# - usage of new method <_GetStreamForEmbedGrf(..)>
         try
         {
             // #i53025# - needed correction of new method <_GetStreamForEmbedGrf(..)>
@@ -901,7 +901,7 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
         }
         catch ( uno::Exception& )
         {
-            // --> OD 2005-04-25 #i48434#
+            // #i48434#
             OSL_FAIL( "<SwGrfNode::MakeCopy(..)> - unhandled exception!" );
             // <--
         }
@@ -968,7 +968,7 @@ IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
 
         if( HasStreamName() )
         {
-            // --> OD 2005-05-04 #i48434# - usage of new method <_GetStreamForEmbedGrf(..)>
+            // #i48434# - usage of new method <_GetStreamForEmbedGrf(..)>
             try
             {
                 // #i53025# - needed correction of new method <_GetStreamForEmbedGrf(..)>
@@ -993,7 +993,7 @@ IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
             }
             catch ( uno::Exception& )
             {
-                // --> OD 2005-04-25 #i48434#
+                // #i48434#
                 OSL_FAIL( "<SwapGraphic> - unhandled exception!" );
                 // <--
             }
@@ -1116,7 +1116,7 @@ sal_Bool SwGrfNode::IsSelected() const
     return bRet;
 }
 
-// --> OD 2006-12-22 #i73788#
+// #i73788#
 boost::weak_ptr< SwAsyncRetrieveInputStreamThreadConsumer > SwGrfNode::GetThreadConsumer()
 {
     return mpThreadConsumer;
@@ -1172,7 +1172,7 @@ void SwGrfNode::UpdateLinkWithInputStream()
         SwMsgPoolItem aMsgHint( RES_GRAPHIC_ARRIVED );
         ModifyNotification( &aMsgHint, &aMsgHint );
 
-        // --> OD 2008-06-18 #i88291#
+        // #i88291#
         mxInputStream.clear();
         GetLink()->clearStreamToLoadFrom();
         // <--
@@ -1182,7 +1182,7 @@ void SwGrfNode::UpdateLinkWithInputStream()
 }
 // <--
 
-// --> OD 2008-07-21 #i90395#
+// #i90395#
 bool SwGrfNode::IsAsyncRetrieveInputStreamPossible() const
 {
     bool bRet = false;

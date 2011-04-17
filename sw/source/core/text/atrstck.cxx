@@ -229,7 +229,7 @@ bool lcl_ChgHyperLinkColor( const SwTxtAttr& rAttr,
          RES_CHRATR_COLOR != rItem.Which() )
         return false;
 
-    // --> FME 2004-09-13 #i15455#
+    // #i15455#
     // 1. case:
     // We do not want to show visited links:
     // (printing, pdf export, page preview)

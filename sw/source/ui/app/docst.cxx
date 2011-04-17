@@ -864,7 +864,7 @@ sal_uInt16 SwDocShell::ApplyStyles(const String &rName, sal_uInt16 nFamily,
         }
         case SFX_STYLE_FAMILY_PARA:
         {
-            // --> OD 2007-11-06 #i62675#
+            // #i62675#
             // clear also list attributes at affected text nodes, if paragraph
             // style has the list style attribute set.
             pSh->SetTxtFmtColl( pStyle->GetCollection(), true );
@@ -1004,7 +1004,7 @@ sal_uInt16 SwDocShell::UpdateStyle(const String &rName, sal_uInt16 nFamily, SwWr
                 pCurrWrtShell->StartAllAction();
                 pCurrWrtShell->GetFlyFrmAttr( aSet );
 
-                // --> OD 2009-12-28 #i105535#
+                // #i105535#
                 // no update of anchor attribute
                 aSet.ClearItem( RES_ANCHOR );
                 // <--

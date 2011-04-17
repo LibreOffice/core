@@ -549,7 +549,7 @@ void SwUndoSaveCntnt::MovePtForward( SwPaM& rPam, sal_Bool bMvBkwrd )
                     - Bookmarks
                     - Verzeichnisse
 */
-// --> OD 2007-10-17 #i81002# - extending method:
+// #i81002# - extending method
 // delete certain (not all) cross-reference bookmarks at text node of <rMark>
 // and at text node of <rPoint>, if these text nodes aren't the same.
 void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
@@ -776,7 +776,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
 
             for( sal_uInt16 n = 0; n < pMarkAccess->getMarksCount(); ++n )
             {
-                // --> OD 2007-10-17 #i81002#
+                // #i81002#
                 bool bSavePos = false;
                 bool bSaveOtherPos = false;
                 const ::sw::mark::IMark* pBkmk = (pMarkAccess->getMarksBegin() + n)->get();
@@ -792,7 +792,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                 }
                 else
                 {
-                    // --> OD 2009-08-06 #i92125#
+                    // #i92125#
                     bool bKeepCrossRefBkmk( false );
                     {
                         if ( rMark.nNode == rPoint.nNode &&
@@ -829,7 +829,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                     }
                     // <--
 
-                    // --> OD 2007-10-17 #i81002#
+                    // #i81002#
                     const bool bDifferentTxtNodesAtMarkAndPoint(
                                         rMark.nNode != rPoint.nNode &&
                                         rMark.nNode.GetNode().GetTxtNode() &&

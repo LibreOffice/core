@@ -42,7 +42,7 @@ class SwFtnPortion : public SwFldPortion
     SwTxtFrm *pFrm;         // um im Dtor RemoveFtn rufen zu koennen.
     SwTxtFtn *pFtn;
     KSHORT nOrigHeight;
-    // --> OD 2009-01-29 #i98418#
+    // #i98418#
     bool mbPreferredScriptTypeSet;
     sal_uInt8 mnPreferredScriptType;
     // <--
@@ -56,7 +56,7 @@ public:
     virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
 
-    // --> OD 2009-01-29 #i98418#
+    // #i98418#
     void SetPreferredScriptType( sal_uInt8 nPreferredScriptType );
     // <--
 

@@ -524,7 +524,7 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
 
 
     sal_Bool bTblIsValid, bValidChartSel;
-    // --> FME 2006-01-25 #i55421# Reduced value 10
+    // #i55421# Reduced value 10
     int nLoopMax = 10;      //JP 28.06.99: max 100 loops - Bug 67292
     // <--
     sal_uInt16 i = 0;
@@ -1975,7 +1975,7 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
             while ( pRow && !pRow->Frm().IsOver( aUnion ) )
                 pRow = (SwLayoutFrm*)pRow->GetNext();
 
-            // --> FME 2004-07-26 #i31976#
+            // #i31976#
             // A follow flow row may contain emtpy cells. These are not
             // considered by FirstCell(). Therefore we have to find
             // the first cell manually:
@@ -2325,7 +2325,7 @@ void _FndBox::DelFrms( SwTable &rTable )
                         if ( pPrev )
                         {
                             pPrev->SetFollow( pFollow );
-                            // --> FME 2006-01-31 #i60340# Do not transfer the
+                            // #i60340# Do not transfer the
                             // flag from pUp to pPrev. pUp may still have the
                             // flag set although there is not more follow flow
                             // line associated with pUp.
@@ -2462,7 +2462,7 @@ void _FndBox::MakeFrms( SwTable &rTable )
                             pSibling->GetTabLine() != pLine ||
                             !lcl_IsLineOfTblFrm( *pTable, *pSibling ) ||
                             pSibling->IsRepeatedHeadline() ||
-                            // --> FME 2005-08-24 #i53647# If !pLineBehind,
+                            // #i53647# If !pLineBehind,
                             // IsInSplitTableRow() should be checked.
                             ( pLineBehind && pSibling->IsInFollowFlowRow() ) ||
                             (!pLineBehind && pSibling->IsInSplitTableRow() ) ) )
@@ -2585,7 +2585,7 @@ void _FndBox::MakeNewFrms( SwTable &rTable, const sal_uInt16 nNumber,
                             // only consider row frames that are not follow flow rows
                             // 2. case: pLineBefore != 0:
                             // only consider row frames that are not split table rows
-                            // --> FME 2004-11-23 #i37476# If !pLineBefore,
+                            // #i37476# If !pLineBefore,
                             // check IsInFollowFlowRow instead of IsInSplitTableRow.
                             ( ( !pLineBefore && pSibling->IsInFollowFlowRow() ) ||
                               (  pLineBefore && pSibling->IsInSplitTableRow() ) ) ) )

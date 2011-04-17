@@ -245,7 +245,7 @@ void SwNumFmt::NotifyGraphicArrived()
 // #i22362#
 sal_Bool SwNumFmt::IsEnumeration() const
 {
-    // --> FME 2004-08-12 #i30655# native numbering did not work any longer
+    // #i30655# native numbering did not work any longer
     // using this code. Therefore HBRINKM and I agreed upon defining
     // IsEnumeration() as !IsItemize()
     return !IsItemize();

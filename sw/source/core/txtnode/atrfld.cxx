@@ -207,7 +207,7 @@ void SwFmtFld::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                 // GetReferenz-Felder aktualisieren
                 if( RES_GETREFFLD == GetFld()->GetTyp()->Which() )
                 {
-                    // --> OD 2007-09-06 #i81002#
+                    // #i81002#
 //                    ((SwGetRefField*)GetFld())->UpdateField();
                     dynamic_cast<SwGetRefField*>(GetFld())->UpdateField( pTxtAttr );
                     // <--

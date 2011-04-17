@@ -468,7 +468,7 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                 //
                 pNumFnt = new SwFont( &rInf.GetCharAttr(), pIDSA );
 
-                // --> FME 2005-08-11 #i53199#
+                // #i53199#
                 if ( !pIDSA->get(IDocumentSettingAccess::DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT) )
                 {
                     // i18463:
@@ -535,7 +535,7 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                     //
                     pNumFnt = new SwFont( &rInf.GetCharAttr(), pIDSA );
 
-                    // --> FME 2005-08-11 #i53199#
+                    // #i53199#
                     if ( !pIDSA->get(IDocumentSettingAccess::DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT) )
                     {
                         // i18463:

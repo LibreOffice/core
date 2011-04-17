@@ -930,7 +930,7 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
     {
         SvUShortsSort aResetAttrsArray;
         aResetAttrsArray.Insert( RES_LR_SPACE );
-        // --> OD 2010-10-05 #i114929#
+        // #i114929#
         // On a selection setup a corresponding Point-and-Mark in order to get
         // the indentation attribute reset on all paragraphs touched by the selection
         if ( rPam.HasMark() &&
@@ -963,7 +963,7 @@ void SwDoc::SetCounted(const SwPaM & rPam, bool bCounted)
     {
         SvUShortsSort aResetAttrsArray;
         aResetAttrsArray.Insert( RES_PARATR_LIST_ISCOUNTED );
-        // --> OD 2010-10-05 #i114929#
+        // #i114929#
         // On a selection setup a corresponding Point-and-Mark in order to get
         // the list-is-counted attribute reset on all paragraphs touched by the selection
         if ( rPam.HasMark() &&
@@ -1077,7 +1077,7 @@ sal_Bool SwDoc::DelNumRule( const String& rName, sal_Bool bBroadcast )
                 deleteList( pList->GetListId() );
             }
         }
-        // --> FME 2004-11-02 #i34097# DeleteAndDestroy deletes rName if
+        // #i34097# DeleteAndDestroy deletes rName if
         // rName is directly taken from the numrule.
         const String aTmpName( rName );
         // <--

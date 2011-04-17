@@ -149,7 +149,7 @@ private:
           KSHORT  nDropDescent;
           MSHORT  nDropLines;
           MSHORT  nAdjust;
-          // --> OD 2008-06-30 #i91133#
+          // #i91133#
           SwTwips mnTabLeft;
           // <--
 
@@ -181,7 +181,7 @@ public:
     inline SwTwips GetLeftMin() const { return nFirst < nLeft ? nFirst : nLeft; }
     inline sal_Bool HasNegFirst() const { return nFirst < nLeft; }
 
-    // --> OD 2008-06-30 #i91133#
+    // #i91133#
     inline SwTwips GetTabLeft() const
     {
         return mnTabLeft;

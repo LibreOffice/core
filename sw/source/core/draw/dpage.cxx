@@ -199,7 +199,7 @@ sal_Bool SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
 
             if ( sTxt.Len() )
             {
-                // --> OD 2007-07-26 #i80029#
+                // #i80029#
                 sal_Bool bExecHyperlinks = rDoc.GetDocShell()->IsReadOnly();
                 if ( !bExecHyperlinks )
                 {

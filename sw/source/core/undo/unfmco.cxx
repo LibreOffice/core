@@ -54,7 +54,7 @@ SwUndoFmtColl::SwUndoFmtColl( const SwPaM& rRange,
       mbReset( bReset ),
       mbResetListAttrs( bResetListAttrs )
 {
-    // --> FME 2004-08-06 #i31191#
+    // #i31191#
     if ( pColl )
         aFmtName = pColl->GetName();
     // <--
@@ -110,7 +110,7 @@ SwRewriter SwUndoFmtColl::GetRewriter() const
 {
     SwRewriter aResult;
 
-    // --> FME 2004-08-06 #i31191# Use stored format name instead of
+    // #i31191# Use stored format name instead of
     // pFmtColl->GetName(), because pFmtColl does not have to be available
     // anymore.
     aResult.AddRule(UNDO_ARG1, aFmtName );

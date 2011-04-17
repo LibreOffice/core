@@ -54,7 +54,7 @@ SfxItemPool* SwSvxUnoDrawPool::getModelPool( sal_Bool /*bReadOnly*/ ) throw()
         // it contains draw model item pool as secondary pool.
         //SdrModel* pModel = m_pDoc->MakeDrawModel();
         //return &pModel->GetItemPool();
-        // --> OD 2005-08-08 #i52858# - method name changed
+        // #i52858# - method name changed
         m_pDoc->GetOrCreateDrawModel();
         // <--
         return &(m_pDoc->GetAttrPool());

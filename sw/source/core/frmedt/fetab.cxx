@@ -1608,7 +1608,7 @@ const SwCellFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt,
 
             if ( pFrm ) // Note: this condition should be the same like the while condition!!!
             {
-                // --> FME 2004-07-30 #i32329# Enhanced table selection
+                // #i32329# Enhanced table selection
                 // used for hotspot selection of tab/cols/rows
                 if ( !bMouseMoveRowCols )
                 {
@@ -1679,7 +1679,7 @@ const SwFrm* SwFEShell::GetBox( const Point &rPt, bool* pbRow, bool* pbCol ) con
     SwTwips nFuzzy = COLFUZZY;
     if( pOutWin )
     {
-        // --> FME 2004-07-30 #i32329# Enhanced table selection
+        // #i32329# Enhanced table selection
         SwTwips nSize = pbCol ? ENHANCED_TABLE_SELECTION_FUZZY : RULER_MOUSE_MARGINWIDTH;
         // <--
         Size aTmp( nSize, nSize );
@@ -1846,7 +1846,7 @@ Point lcl_ProjectOntoClosestTableFrm( const SwTabFrm& rTab, const Point& rPoint,
     return aRet;
 }
 
-// --> FME 2004-07-30 #i32329# Enhanced table selection
+// #i32329# Enhanced table selection
 bool SwFEShell::SelTblRowCol( const Point& rPt, const Point* pEnd, bool bRowDrag )
 {
     bool bRet = false;
@@ -1941,7 +1941,7 @@ bool SwFEShell::SelTblRowCol( const Point& rPt, const Point* pEnd, bool bRowDrag
 
             if ( bNewSelection )
             {
-                // --> FME 2004-10-20 #i35543# SelTblRowCol should remove any existing
+                // #i35543# SelTblRowCol should remove any existing
                 // table cursor:
                 if ( IsTableMode() )
                     TblCrsrToCursor();
@@ -2082,7 +2082,7 @@ sal_Bool SwFEShell::IsNumLabel( const Point &rPt, int nMaxOffset )
 }
 // <- #i23726#
 
-// --> OD 2005-02-21 #i42921#
+// #i42921#
 bool SwFEShell::IsVerticalModeAtNdAndPos( const SwTxtNode& _rTxtNode,
                                           const Point& _rDocPos ) const
 {

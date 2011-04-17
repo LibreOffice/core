@@ -156,7 +156,7 @@ int Put( boost::shared_ptr<const SfxItemSet>& mrpAttrSet, const SwCntntNode& rNo
 {
     SwAttrSet aNewSet( (SwAttrSet&)*mrpAttrSet );
 
-    // --> FME 2007-4-12 #i76273# Robust: Save the style name items:
+    // #i76273# Robust
     SfxItemSet* pStyleNames = 0;
     if ( SFX_ITEM_SET == rSet.GetItemState( RES_FRMATR_STYLE_NAME, sal_False ) )
     {
@@ -167,7 +167,7 @@ int Put( boost::shared_ptr<const SfxItemSet>& mrpAttrSet, const SwCntntNode& rNo
 
     const int nRet = aNewSet.Put( rSet );
 
-    // --> FME 2007-4-12 #i76273# Robust: Save the style name items:
+    // #i76273# Robust
     if ( pStyleNames )
     {
         aNewSet.Put( *pStyleNames );
@@ -206,7 +206,7 @@ int Put_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
 {
     SwAttrSet aNewSet( (SwAttrSet&)*mrpAttrSet );
 
-    // --> FME 2007-4-12 #i76273# Robust: Save the style name items:
+    // #i76273# Robust
     SfxItemSet* pStyleNames = 0;
     if ( SFX_ITEM_SET == rSet.GetItemState( RES_FRMATR_STYLE_NAME, sal_False ) )
     {
@@ -222,7 +222,7 @@ int Put_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
 
     const int nRet = aNewSet.Put_BC( rSet, pOld, pNew );
 
-    // --> FME 2007-4-12 #i76273# Robust: Save the style name items:
+    // #i76273# Robust
     if ( pStyleNames )
     {
         aNewSet.Put( *pStyleNames );

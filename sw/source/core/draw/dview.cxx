@@ -61,7 +61,7 @@
 #include <com/sun/star/embed/EmbedMisc.hpp>
 
 #include <vector>
-// --> OD 2004-06-24 #i28701#
+// #i28701#
 #include <sortedobjs.hxx>
 #include <flyfrms.hxx>
 // <--
@@ -139,7 +139,7 @@ SwDrawView::SwDrawView( SwViewImp &rI, SdrModel *pMd, OutputDevice *pOutDev) :
     SetBufferedOutputAllowed(getOptionsDrawinglayer().IsPaintBuffer_Writer());
 }
 
-// --> OD 2009-03-05 #i99665#
+// #i99665#
 sal_Bool SwDrawView::IsAntiAliasing() const
 {
     return getOptionsDrawinglayer().IsAntiAliasing();
@@ -257,7 +257,7 @@ void SwDrawView::AddCustomHdl()
 
     if ( FLY_AT_CHAR == rAnchor.GetAnchorId() )
     {
-        // --> OD 2004-06-24 #i28701# - use last character rectangle saved at object
+        // #i28701# - use last character rectangle saved at object
         // in order to avoid a format of the anchor frame
         SwAnchoredObject* pAnchoredObj = ::GetUserCall( pObj )->GetAnchoredObj( pObj );
         SwRect aAutoPos = pAnchoredObj->GetLastCharRect();
@@ -623,7 +623,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
         const SdrObject* pTmpObj = pDrawPage->GetObj( nNewPos + 1 );
         while ( pTmpObj )
         {
-            // --> OD 2004-12-07 #i38563# - assure, that anchor frame exists.
+            // #i38563# - assure, that anchor frame exists.
             // If object is anchored inside a invisible part of the document
             // (e.g. page header, whose page style isn't applied, or hidden
             // section), no anchor frame exists.
@@ -677,7 +677,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
             if ( pTmpObj == pObj )
                 break;
 
-            // --> OD 2004-12-07 #i38563# - assure, that anchor frame exists.
+            // #i38563# - assure, that anchor frame exists.
             // If object is anchored inside a invisible part of the document
             // (e.g. page header, whose page style isn't applied, or hidden
             // section), no anchor frame exists.

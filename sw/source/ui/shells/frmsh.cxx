@@ -49,7 +49,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/objface.hxx>
 #include <svx/hlnkitem.hxx>
-// --> OD 2009-07-07 #i73249#
+// #i73249#
 #include <svx/svdview.hxx>
 #include <vcl/msgbox.hxx>
 // <--
@@ -86,7 +86,7 @@
 #include <shells.hrc>
 #include "swabstdlg.hxx"
 #include "misc.hrc"
-// --> OD 2009-07-14 #i73249#
+// #i73249#
 #include <svx/dialogs.hrc>
 // <--
 
@@ -741,7 +741,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             rReq.SetReturnValue(SfxBoolItem(nSlot, bMirror));
         }
         break;
-        // --> OD 2009-07-14 #i73249#
+        // #i73249#
         case FN_TITLE_DESCRIPTION_SHAPE:
         {
             bUpdateMgr = sal_False;
@@ -1015,7 +1015,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                         rSet.DisableItem( nWhich );
                 }
                 break;
-                // --> OD 2009-07-07 #i73249#
+                // #i73249#
                 case FN_TITLE_DESCRIPTION_SHAPE:
                 {
                     SwWrtShell &rWrtSh = GetShell();

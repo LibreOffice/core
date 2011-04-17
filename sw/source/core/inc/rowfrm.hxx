@@ -44,7 +44,7 @@ class SwRowFrm: public SwLayoutFrm
 
     const SwTableLine *pTabLine;
     SwRowFrm* pFollowRow;
-    // --> collapsing borders FME 2005-05-27 #i29550#
+    // #i29550#
     sal_uInt16 mnTopMarginForLowers;
     sal_uInt16 mnBottomMarginForLowers;
     sal_uInt16 mnBottomLineSize;
@@ -80,7 +80,7 @@ public:
     SwRowFrm* GetFollowRow() const { return pFollowRow; }
     void SetFollowRow( SwRowFrm* pNew ) { pFollowRow = pNew; }
 
-    // --> collapsing borders FME 2005-05-27 #i29550#
+    // #i29550#
     sal_uInt16 GetTopMarginForLowers() const { return mnTopMarginForLowers; }
     void   SetTopMarginForLowers( sal_uInt16 nNew ) { mnTopMarginForLowers = nNew; }
     sal_uInt16 GetBottomMarginForLowers() const { return mnBottomMarginForLowers; }
@@ -102,7 +102,7 @@ public:
     bool ShouldRowKeepWithNext() const;
     // <--
 
-    // --> FME 2006-10-30 #i4032# NEW TABLES
+    // #i4032# NEW TABLES
     bool IsRowSpanLine() const { return mbIsRowSpanLine; }
     void SetRowSpanLine( bool bNew ) { mbIsRowSpanLine = bNew; }
 

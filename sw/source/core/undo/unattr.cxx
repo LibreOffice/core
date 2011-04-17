@@ -134,7 +134,7 @@ SwUndoFmtAttr::SwUndoFmtAttr( const SfxItemSet& rOldSet,
                               bool bSaveDrawPt )
     : SwUndo( UNDO_INSFMTATTR )
     , m_pFmt( &rChgFmt )
-      // --> OD 2007-07-11 #i56253#
+      // #i56253#
     , m_pOldSet( new SfxItemSet( rOldSet ) )
       // <--
     , m_nNodeIndex( 0 )
@@ -206,7 +206,7 @@ void SwUndoFmtAttr::UndoImpl(::sw::UndoRedoContext & rContext)
     if ( !m_pOldSet.get() || !m_pFmt || !IsFmtInDoc( &rContext.GetDoc() ))
         return;
 
-    // --> OD 2004-10-26 #i35443# - If anchor attribute has been successfull
+    // #i35443# - If anchor attribute has been successfull
     // restored, all other attributes are also restored.
     // Thus, keep track of its restoration
     bool bAnchorAttrRestored( false );
@@ -336,7 +336,7 @@ SwFmt* SwUndoFmtAttr::GetFmt( SwDoc& rDoc )
 
 void SwUndoFmtAttr::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    // --> OD 2004-10-26 #i35443# - Because the undo stores the attributes for
+    // #i35443# - Because the undo stores the attributes for
     // redo, the same code as for <Undo(..)> can be applied for <Redo(..)>
     UndoImpl(rContext);
     // <--
@@ -470,7 +470,7 @@ void SwUndoFmtAttr::SaveFlyAnchor( bool bSvDrwPt )
     m_pOldSet->Put( aAnchor );
 }
 
-// --> OD 2004-10-26 #i35443# - Add return value, type <bool>.
+// #i35443# - Add return value, type <bool>.
 // Return value indicates, if anchor attribute is restored.
 // Note: If anchor attribute is restored, all other existing attributes
 //       are also restored.
@@ -491,7 +491,7 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
                     static_cast<SwStartNode*>(pNd)->GetStartNodeType()) )
             : !pNd->IsTxtNode() )
         {
-            // --> OD 2004-10-26 #i35443# - invalid position.
+            // #i35443# - invalid position.
             // Thus, anchor attribute not restored
             return false;
             // <--
@@ -505,7 +505,7 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
             if ( aPos.nContent.GetIndex() >
                     static_cast<SwTxtNode*>(pNd)->GetTxt().Len() )
             {
-                // --> OD 2004-10-26 #i35443# - invalid position.
+                // #i35443# - invalid position.
                 // Thus, anchor attribute not restored
                 return false;
                 // <--
@@ -540,7 +540,7 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
     }
 
     const SwFmtAnchor &rOldAnch = pFrmFmt->GetAnchor();
-    // --> OD 2006-03-13 #i54336#
+    // #i54336#
     // Consider case, that as-character anchored object has moved its anchor position.
     if (FLY_AS_CHAR == rOldAnch.GetAnchorId())
     // <--
@@ -621,7 +621,7 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
 
     rContext.SetSelections(pFrmFmt, 0);
 
-    // --> OD 2004-10-26 #i35443# - anchor attribute restored.
+    // #i35443# - anchor attribute restored.
     return true;
     // <--
 }

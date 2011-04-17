@@ -70,7 +70,7 @@ class SwPosNotify
     public:
         SwPosNotify( SwAnchoredDrawObject* _pAnchoredDrawObj );
         ~SwPosNotify();
-        // --> OD 2004-08-12 #i32795#
+        // #i32795#
         Point LastObjPos() const;
         // <--
 };
@@ -244,7 +244,7 @@ SwAnchoredDrawObject::SwAnchoredDrawObject() :
 
 SwAnchoredDrawObject::~SwAnchoredDrawObject()
 {
-    // --> follow-up of #i34748#
+    // #i34748#
     delete mpLastObjRect;
     // <--
 }
@@ -326,7 +326,7 @@ void SwAnchoredDrawObject::MakeObjPos()
         // <--
         // --> perform conversion of positioning
         // attributes only for 'master' drawing objects
-        // --> #i44334#, #i44681# - check, if positioning
+        // #i44334#, #i44681# - check, if positioning
         // attributes already have been set.
         if ( !GetDrawObj()->ISA(SwDrawVirtObj) &&
              !static_cast<SwDrawFrmFmt&>(GetFrmFmt()).IsPosAttrSet() )
@@ -660,7 +660,7 @@ void SwAnchoredDrawObject::InvalidateObjPos()
                 _InvalidatePage( pPageFrmRegisteredAt );
             }
             // <--
-            // --> #i33751#, #i34060# - method <GetPageFrmOfAnchor()>
+            // #i33751#, #i34060# - method <GetPageFrmOfAnchor()>
             // is replaced by method <FindPageFrmOfAnchor()>. It's return value
             // have to be checked.
             SwPageFrm* pPageFrmOfAnchor = FindPageFrmOfAnchor();
@@ -810,7 +810,7 @@ void SwAnchoredDrawObject::_SetPositioningAttr()
 
         SwTwips nHoriPos = aObjRect.Left();
         SwTwips nVertPos = aObjRect.Top();
-        // --> #i44334#, #i44681#
+        // #i44334#, #i44681#
         // perform conversion only if position is in horizontal-left-to-right-layout.
         if ( GetFrmFmt().GetPositionLayoutDir() ==
                 text::PositionLayoutDir::PositionInHoriL2R )

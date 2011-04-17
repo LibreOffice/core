@@ -106,7 +106,7 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
 
         SwTableNode* pTblNd = rDoc.GetNodes()[ nTblNd ]->GetTableNode();
 
-        // --> FME 2004-11-26 #i37739# A simple 'MakeFrms' after the node sorting
+        // #i37739# A simple 'MakeFrms' after the node sorting
         // does not work if the table is inside a frame and has no prev/next.
         SwNode2Layout aNode2Layout( *pTblNd );
         // <--
@@ -131,7 +131,7 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
         }
 
         // Restore table frames:
-        // --> FME 2004-11-26 #i37739# A simple 'MakeFrms' after the node sorting
+        // #i37739# A simple 'MakeFrms' after the node sorting
         // does not work if the table is inside a frame and has no prev/next.
         const sal_uLong nIdx = pTblNd->GetIndex();
         aNode2Layout.RestoreUpperFrms( rDoc.GetNodes(), nIdx, nIdx + 1 );
@@ -183,7 +183,7 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
 
         SwTableNode* pTblNd = rDoc.GetNodes()[ nTblNd ]->GetTableNode();
 
-        // --> FME 2004-11-26 #i37739# A simple 'MakeFrms' after the node sorting
+        // #i37739# A simple 'MakeFrms' after the node sorting
         // does not work if the table is inside a frame and has no prev/next.
         SwNode2Layout aNode2Layout( *pTblNd );
         // <--
@@ -212,7 +212,7 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
         }
 
         // Restore table frames:
-        // --> FME 2004-11-26 #i37739# A simple 'MakeFrms' after the node sorting
+        // #i37739# A simple 'MakeFrms' after the node sorting
         // does not work if the table is inside a frame and has no prev/next.
         const sal_uLong nIdx = pTblNd->GetIndex();
         aNode2Layout.RestoreUpperFrms( rDoc.GetNodes(), nIdx, nIdx + 1 );

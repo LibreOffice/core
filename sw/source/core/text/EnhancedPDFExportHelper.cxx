@@ -1709,10 +1709,9 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
                     if ( !bIntern || -1 != nDestId )
                     {
-                        // --> FME 2005-05-09 #i44368# Links in Header/Footer
+                        // #i44368# Links in Header/Footer
                         const SwPosition aPos( *pTNd );
                         const bool bHeaderFooter = pDoc->IsInHeaderFooter( aPos.nNode );
-                        // <--
 
                         // Create links for all selected rectangles:
                         const sal_uInt16 nNumOfRects = aTmp.Count();
@@ -1740,7 +1739,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                                 else
                                     pPDFExtOutDevData->SetLinkURL( nLinkId, aURL );
 
-                                // --> FME 2005-05-09 #i44368# Links in Header/Footer
+                                // #i44368# Links in Header/Footer
                                 if ( bHeaderFooter )
                                     MakeHeaderFooterLinks( *pPDFExtOutDevData, *pTNd, rLinkRect, nDestId, aURL, bIntern );
                                 // <--
@@ -1806,7 +1805,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                         else
                             pPDFExtOutDevData->SetLinkURL( nLinkId, aURL );
 
-                        // --> FME 2005-05-09 #i44368# Links in Header/Footer
+                        // #i44368# Links in Header/Footer
                         const SwFmtAnchor &rAnch = pFrmFmt->GetAnchor();
                         if (FLY_AT_PAGE != rAnch.GetAnchorId())
                         {
@@ -1818,7 +1817,6 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                                     MakeHeaderFooterLinks( *pPDFExtOutDevData, *pTNd, aLinkRect, nDestId, aURL, bIntern );
                             }
                         }
-                        // <--
                     }
                 }
             }
@@ -1870,10 +1868,9 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                         // Destination Export
                         const sal_Int32 nDestId = pPDFExtOutDevData->CreateDest( rDestRect.SVRect(), nDestPageNum );
 
-                        // --> FME 2005-05-09 #i44368# Links in Header/Footer
+                        // #i44368# Links in Header/Footer
                         const SwPosition aPos( *pTNd );
                         const bool bHeaderFooter = pDoc->IsInHeaderFooter( aPos.nNode );
-                        // <--
 
                         // Create links for all selected rectangles:
                         const sal_uInt16 nNumOfRects = aTmp.Count();
@@ -1898,7 +1895,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                                 // Connect Link and Destination:
                                 pPDFExtOutDevData->SetLinkDest( nLinkId, nDestId );
 
-                                // --> FME 2005-05-09 #i44368# Links in Header/Footer
+                                // #i44368# Links in Header/Footer
                                 if ( bHeaderFooter )
                                 {
                                     const String aDummy;
@@ -2000,9 +1997,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                 OSL_ENSURE( 0 != pTNd, "Enhanced pdf export - text node is missing" );
 
                 if ( pTNd->IsHidden() ||
-                     // --> FME 2005-01-10 #i40292# Skip empty outlines:
+                     // #i40292# Skip empty outlines:
                      0 == pTNd->GetTxt().Len() )
-                     // <--
                     continue;
 
                 // Get parent id from stack:
@@ -2044,7 +2040,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
         if( pPDFExtOutDevData->GetIsExportNamedDestinations() )
         {
-            //---> i56629 the iteration to convert the OOo bookmark (#bookmark)
+            // #i56629# the iteration to convert the OOo bookmark (#bookmark)
             // into PDF named destination, see section 8.2.1 in PDF 1.4 spec
             // We need:
             // 1. a name for the destination, formed from the standard OOo bookmark name

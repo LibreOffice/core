@@ -66,7 +66,7 @@ class SwObjectFormatterLayFrm : public SwObjectFormatter
     public:
         virtual ~SwObjectFormatterLayFrm();
 
-        // --> OD 2005-01-10 #i40147# - add parameter <_bCheckForMovedFwd>.
+        // #i40147# - add parameter <_bCheckForMovedFwd>.
         // Not relevant for objects anchored at layout frame.
         virtual bool DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                                   const bool _bCheckForMovedFwd = false );

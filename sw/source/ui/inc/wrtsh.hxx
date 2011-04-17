@@ -189,7 +189,7 @@ public:
     //Word bzw. Satz selektieren.
     sal_Bool    SelNearestWrd();
     sal_Bool    SelWrd      (const Point * = 0, sal_Bool bProp=sal_False );
-    // --> FME 2004-07-30 #i32329# Enhanced selection
+    // #i32329# Enhanced selection
     void    SelSentence (const Point * = 0, sal_Bool bProp=sal_False );
     void    SelPara     (const Point * = 0, sal_Bool bProp=sal_False );
     // <--
@@ -233,7 +233,7 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     sal_Bool BwdSentence( sal_Bool bSelect = sal_False )
                 { return SimpleMove( &SwWrtShell::_BwdSentence, bSelect ); }
 
-    // --> FME 2004-07-30 #i20126# Enhanced table selection
+    // #i20126# Enhanced table selection
     sal_Bool SelectTableRowCol( const Point& rPt, const Point* pEnd = 0, bool bRowDrag = false );
     // <--
     sal_Bool SelectTableRow();
@@ -559,7 +559,7 @@ private:
     SW_DLLPRIVATE sal_Bool _EndWrd();
     SW_DLLPRIVATE sal_Bool _NxtWrd();
     SW_DLLPRIVATE sal_Bool _PrvWrd();
-    // --> OD 2008-08-06 #i92468#
+    // #i92468#
     SW_DLLPRIVATE sal_Bool _NxtWrdForDelete();
     SW_DLLPRIVATE sal_Bool _PrvWrdForDelete();
     // <--

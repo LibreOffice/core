@@ -1394,7 +1394,7 @@ sal_Bool IsValidRowName( const String& rStr )
     return bIsValid;
 }
 
-// --> OD 2007-08-03 #i80314#
+// #i80314#
 // add 3rd parameter and its handling
 sal_uInt16 SwTable::_GetBoxNum( String& rStr, sal_Bool bFirstPart,
                             const bool bPerformValidCheck )
@@ -1444,7 +1444,7 @@ sal_uInt16 SwTable::_GetBoxNum( String& rStr, sal_Bool bFirstPart,
 }
 // <--
 
-// --> OD 2007-08-03 #i80314#
+// #i80314#
 // add 2nd parameter and its handling
 const SwTableBox* SwTable::GetTblBox( const String& rName,
                                       const bool bPerformValidCheck ) const
@@ -1637,7 +1637,7 @@ void SwTableLine::ChgFrmFmt( SwTableLineFmt *pNewFmt )
             pRow->SetCompletePaint();
             pRow->ReinitializeFrmSizeAttrFlags();
 
-            // --> FME 2004-10-27 #i35063#
+            // #i35063#
             // consider 'split row allowed' attribute
             SwTabFrm* pTab = pRow->FindTabFrm();
             bool bInFollowFlowRow = false;
@@ -1863,7 +1863,7 @@ void SwTableBox::ChgFrmFmt( SwTableBoxFmt* pNewFmt )
             pCell->SetDerivedVert( sal_False );
             pCell->CheckDirChange();
 
-            // --> FME 2005-04-15 #i47489#
+            // #i47489#
             // make sure that the row will be formatted, in order
             // to have the correct Get(Top|Bottom)MarginForLowers values
             // set at the row.

@@ -1417,7 +1417,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
             break;
             case SID_IMAP:
             {
-                // --> OD 2006-11-08 #i59688#
+                // #i59688#
                 // improve efficiency:
                 // If selected object is protected, item has to disabled.
                 const sal_Bool bProtect = 0 != rSh.IsSelObjProtected(FLYPROTECT_CONTENT|FLYPROTECT_PARENT);
@@ -1433,7 +1433,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     const sal_Bool bIsGraphicSelection =
                                 rSh.GetSelectionType() == nsSelectionType::SEL_GRF;
 
-                    // --> OD 2006-11-08 #i59688#
+                    // #i59688#
                     // avoid unnecessary loading of selected graphic.
                     // The graphic is only needed, if the dialog is open.
                     //wenn die Grafik ausgeswappt ist, dann muss der
@@ -1512,7 +1512,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     sal_Bool bDisable = sal_False;
                     if( !bHas && !bOk )
                         bDisable = sal_True;
-                    // --> OD 2006-11-08 #i59688#
+                    // #i59688#
                     // avoid unnecessary loading of selected graphic.
                     // The graphic is only needed, if the dialog is open.
                     // wenn die Grafik ausgeswappt ist, dann muss der Status
@@ -1523,7 +1523,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     {
                         if( AddGrfUpdateSlot( nWhich ))
                             rSh.GetGraphic(sal_False);  // start the loading
-                        // --> OD 2007-07-04 #i75481#
+                        // #i75481#
                         bDisable = sal_True;
                         // <--
                     }
@@ -1531,7 +1531,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                         bDisable = !lcl_UpdateContourDlg( rSh, nSel );
                     else if( bOk )
                     {
-                        // --> OD 2007-07-04 #i75481#
+                        // #i75481#
                         // apply fix #i59688# only for selected graphics
                         if ( nSel & nsSelectionType::SEL_GRF )
                             bDisable = GRAPHIC_NONE == rSh.GetGraphicType();

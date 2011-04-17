@@ -287,7 +287,7 @@ void SwFrm::CheckDirChange()
         else if( IsTxtFrm() )
             ((SwTxtFrm*)this)->Prepare( PREP_CLEAR );
 
-        // --> OD 2004-07-27 #i31698# - notify anchored objects also for page frames.
+        // #i31698# - notify anchored objects also for page frames.
         // Remove code above for special handling of page frames
         if ( GetDrawObjs() )
         {
@@ -305,7 +305,7 @@ void SwFrm::CheckDirChange()
                     // invalidate
                     pAnchoredObj->InvalidateObjPos();
                 }
-                // --> OD 2004-07-27 #i31698# - update layout direction of
+                // #i31698# - update layout direction of
                 // anchored object
                 {
                     ::setContextWritingMode( pAnchoredObj->DrawObj(), pAnchoredObj->GetAnchorFrmContainingAnchPos() );
@@ -506,7 +506,7 @@ void SwCntntFrm::DelFrms( const SwCntntNode& rNode )
     SwIterator<SwCntntFrm,SwCntntNode> aIter( rNode );
     for( SwCntntFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
     {
-        // --> OD 2005-12-01 #i27138#
+        // #i27138#
         // notify accessibility paragraphs objects about changed
         // CONTENT_FLOWS_FROM/_TO relation.
         // Relation CONTENT_FLOWS_FROM for current next paragraph will change
@@ -580,7 +580,7 @@ SwLayoutFrm::~SwLayoutFrm()
             while ( pFrm->GetDrawObjs() && pFrm->GetDrawObjs()->Count() )
             {
                 nCnt = pFrm->GetDrawObjs()->Count();
-                // --> OD 2004-06-30 #i28701#
+                // #i28701#
                 SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[0];
                 if ( pAnchoredObj->ISA(SwFlyFrm) )
                     delete pAnchoredObj;
@@ -613,7 +613,7 @@ SwLayoutFrm::~SwLayoutFrm()
         {
             nCnt = GetDrawObjs()->Count();
 
-            // --> OD 2004-06-30 #i28701#
+            // #i28701#
             SwAnchoredObject* pAnchoredObj = (*GetDrawObjs())[0];
             if ( pAnchoredObj->ISA(SwFlyFrm) )
                 delete pAnchoredObj;

@@ -73,7 +73,7 @@ public:
     void TakeNextOffset( const SwFldPortion* pFld );
     void CheckScript( const SwTxtSizeInfo &rInf );
     inline sal_Bool HasFont() const { return 0 != pFnt; }
-    // --> OD 2008-06-05 #i89179# - made public
+    // #i89179# - made public
     inline const SwFont *GetFont() const { return pFnt; }
     // <--
 

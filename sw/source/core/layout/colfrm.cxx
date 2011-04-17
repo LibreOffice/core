@@ -206,7 +206,7 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
 {
     if ( rOld.GetNumCols() <= 1 && rNew.GetNumCols() <= 1 && !bChgFtn )
         return;
-    // --> OD 2009-08-12 #i97379#
+    // #i97379#
     // If current lower is a no text frame, then columns are not allowed
     if ( Lower() && Lower()->IsNoTxtFrm() &&
          rNew.GetNumCols() > 1 )
@@ -360,7 +360,7 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, sal_Bool bAdjustAttribut
     const sal_Bool bR2L = IsRightToLeft();
     SwFrm *pCol = bR2L ? GetLastLower() : Lower();
 
-    // --> FME 2004-07-16 #i27399#
+    // #i27399#
     // bOrtho means we have to adjust the column frames manually. Otherwise
     // we may use the values returned by CalcColWidth:
     const sal_Bool bOrtho = pAttr->IsOrtho() && pAttr->GetNumCols() > 0;

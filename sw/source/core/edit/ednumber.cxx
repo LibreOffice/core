@@ -263,7 +263,7 @@ sal_Bool SwEditShell::NumUpDown( sal_Bool bDown )
     }
     GetDoc()->SetModified();
 
-    // --> FME 2005-09-19 #i54693# Update marked numbering levels
+    // #i54693# Update marked numbering levels
     if ( IsInFrontOfLabel() )
         UpdateMarkedListLevel();
     // <--
@@ -299,7 +299,7 @@ sal_Bool SwEditShell::IsFirstOfNumRule(const SwPaM & rPaM) const
 // <- #i23726#
 
 // -> #i23725#
-// --> OD 2008-06-09 #i90078#
+// #i90078#
 // Remove unused default parameter <nLevel> and <bRelative>.
 // Adjust method name and parameter name
 void SwEditShell::ChangeIndentOfAllListLevels( short nDiff )
@@ -311,7 +311,7 @@ void SwEditShell::ChangeIndentOfAllListLevels( short nDiff )
     if (pCurNumRule)
     {
         SwNumRule aRule(*pCurNumRule);
-        // --> OD 2008-06-09 #i90078#
+        // #i90078#
         aRule.ChangeIndent( nDiff );
         // <--
 
@@ -322,7 +322,7 @@ void SwEditShell::ChangeIndentOfAllListLevels( short nDiff )
     EndAllAction();
 }
 
-// --> OD 2008-06-09 #i90078#
+// #i90078#
 // Adjust method name
 void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
 // <--
@@ -336,7 +336,7 @@ void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
         SwPaM aPaM(rPos);
         SwTxtNode * pTxtNode = aPaM.GetNode()->GetTxtNode();
 
-        // --> OD 2008-06-09 #i90078#
+        // #i90078#
 
         SwNumRule aRule(*pCurNumRule);
 
@@ -351,7 +351,7 @@ void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
         }
         // <--
 
-        // --> OD 2005-02-18 #i42921# - 3rd parameter = false in order to
+        // #i42921# - 3rd parameter = false in order to
         // suppress setting of num rule at <aPaM>.
         // do not apply any list
         GetDoc()->SetNumRule( aPaM, aRule, false, String(), sal_False );
@@ -464,7 +464,7 @@ sal_Bool SwEditShell::MoveNumParas( sal_Bool bUpperLower, sal_Bool bUpperLeft )
                         {
                             ++nIdx;
                         }
-                        // --> OD 2005-11-14 #i57856#
+                        // #i57856#
                         else
                         {
                             break;

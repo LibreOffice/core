@@ -667,7 +667,7 @@ SwCntntFrm *SwTxtFrm::JoinFrm()
 
     pFoll->MoveFlyInCnt( this, nStart, STRING_LEN );
     pFoll->SetFtn( sal_False );
-    // --> OD 2005-12-01 #i27138#
+    // #i27138#
     // notify accessibility paragraphs objects about changed CONTENT_FLOWS_FROM/_TO relation.
     // Relation CONTENT_FLOWS_FROM for current next paragraph will change
     // and relation CONTENT_FLOWS_TO for current previous paragraph, which
@@ -707,7 +707,7 @@ SwCntntFrm *SwTxtFrm::SplitFrm( const xub_StrLen nTxtPos )
     SetFollow( pNew );
 
     pNew->Paste( GetUpper(), GetNext() );
-    // --> OD 2005-12-01 #i27138#
+    // #i27138#
     // notify accessibility paragraphs objects about changed CONTENT_FLOWS_FROM/_TO relation.
     // Relation CONTENT_FLOWS_FROM for current next paragraph will change
     // and relation CONTENT_FLOWS_TO for current previous paragraph, which
@@ -1337,7 +1337,7 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
     // AMA: Leider doch, Textgroessenaenderungen + FlyFrames, die Rueckwirkung
     // kann im Extremfall mehrere Zeilen (Frames!!!) betreffen!
 
-    // --> FME 2005-04-18 #i46560#
+    // #i46560#
     // FME: Yes, consider this case: (word ) has to go to the next line
     // because ) is a forbidden character at the beginning of a line although
     // (word would still fit on the previous line. Adding text right in front
@@ -1347,7 +1347,7 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
     // <--
     sal_Bool bPrev = rLine.GetPrev() &&
                      ( FindBrk( rString, rLine.GetStart(), rReformat.Start() + 1 )
-                       // --> FME 2005-04-18 #i46560#
+                       // #i46560#
                        + 1
                        // <--
                        >= rReformat.Start() ||
@@ -1919,7 +1919,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
         {
             SwFrm* pPre = GetPrev();
             if( pPre &&
-                // --> FME 2004-07-22 #i10826# It's the first, it cannot keep!
+                // #i10826# It's the first, it cannot keep!
                 pPre->GetIndPrev() &&
                 // <--
                 pPre->GetAttrSet()->GetKeep().GetValue() )

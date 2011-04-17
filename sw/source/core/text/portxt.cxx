@@ -736,7 +736,7 @@ SwLinePortion *SwHolePortion::Compress() { return this; }
 
 void SwHolePortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
-    // --> FME 2004-06-24 #i16816# tagged pdf support
+    // #i16816# tagged pdf support
     if( rInf.GetVsh() && rInf.GetVsh()->GetViewOptions()->IsPDFExport() )
     {
         const XubString aTxt( ' ' );

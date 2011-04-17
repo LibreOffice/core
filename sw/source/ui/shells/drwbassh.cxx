@@ -280,7 +280,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                             const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
                             pSh->StartAllAction();
 
-                            // --> OD 2004-07-14 #i30451#
+                            // #i30451#
                             pSh->StartUndo(UNDO_INSFMTATTR);
 
                             pSdrView->SetGeoAttrToMarked(*pOutSet);
@@ -363,7 +363,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
                             rBind.InvalidateAll(sal_False);
 
-                            // --> OD 2004-07-14 #i30451#
+                            // #i30451#
                             pSh->EndUndo( UNDO_INSFMTATTR );
 
                             pSh->EndAllAction();

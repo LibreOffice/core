@@ -355,7 +355,7 @@ SwRectFn fnRectVertL2R = &aVerticalLeftToRight;
 SwRectFn fnRectB2T = &aBottomToTop;
 SwRectFn fnRectVL2R = &aVerticalRightToLeft;
 
-// --> OD 2006-05-10 #i65250#
+// #i65250#
 sal_uInt32 SwFrm::mnLastFrmId=0;
 // <--
 

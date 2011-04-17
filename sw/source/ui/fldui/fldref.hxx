@@ -36,7 +36,7 @@
 #include <vcl/edit.hxx>
 
 #include "fldpage.hxx"
-// --> OD 2007-11-15 #i83479#
+// #i83479#
 #include <IDocumentOutlineNodes.hxx>
 #include <IDocumentListItems.hxx>
 #include <FldRefTreeListBox.hxx>
@@ -49,7 +49,7 @@ class SwFldRefPage : public SwFldPage
     ListBox         aTypeLB;
     FixedText       aSelectionFT;
     ListBox         aSelectionLB;
-    // --> OD 2007-11-21 #i83479#
+    // #i83479#
     SwFldRefTreeListBox aSelectionToolTipLB;
     // <--
     FixedText       aFormatFT;
@@ -61,7 +61,7 @@ class SwFldRefPage : public SwFldPage
     const String    sBookmarkTxt;
     const String    sFootnoteTxt;
     const String    sEndnoteTxt;
-    // --> OD 2007-11-09 #i83479#
+    // #i83479#
     const String    sHeadingTxt;
     const String    sNumItemTxt;
 
@@ -82,7 +82,7 @@ class SwFldRefPage : public SwFldPage
     void                UpdateSubType();
     sal_uInt16              FillFormatLB(sal_uInt16 nTypeId);
 
-    // --> OD 2007-12-05 #i83479#
+    // #i83479#
     void SaveSelectedTxtNode();
     const SwTxtNode* GetSavedSelectedTxtNode() const;
     sal_uInt16 GetSavedSelectedPos() const;

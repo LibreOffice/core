@@ -1160,7 +1160,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
 
             rSh.ClearMark();
 
-            // --> FME 2007-07-09 #i75891#
+            // #i75891#
             // SETATTR_DONTEXPAND does not work if there are already hard attributes.
             // Therefore we have to restore the font attributes.
             rSh.SetMark();

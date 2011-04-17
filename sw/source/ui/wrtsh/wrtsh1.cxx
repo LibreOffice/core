@@ -702,7 +702,7 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                 aSz.Width = aSize.Width();
                 aSz.Height = aSize.Height();
                 xObj->setVisualAreaSize( nAspect, aSz );
-                // --> OD 2005-05-02 #i48419# - action 'UpdateReplacement' doesn't
+                // #i48419# - action 'UpdateReplacement' doesn't
                 // have to change the modified state of the document.
                 // This is only a workaround for the defect, that this action
                 // modifies a document after load, because unnecessarily the
@@ -1135,7 +1135,7 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
                 }
                 else
                 {
-                    // --> OD 2009-08-27 #i101234#
+                    // #i101234#
                     // activate outline numbering, because from the precondition
                     // it's known, that <SwEdit::HasNumber()> == sal_False
                     bActivateOutlineRule = true;
@@ -1144,7 +1144,7 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
             }
             else if ( !pNumRule )
             {
-                // --> OD 2009-08-27 #i101234#
+                // #i101234#
                 // Check, if corresponding list level of the outline numbering
                 // has already a numbering format set.
                 nActivateOutlineLvl = pColl->GetAssignedOutlineStyleLevel();//<-end,zhaojianwei,need further consideration
@@ -1261,7 +1261,7 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
     }
     else
     {
-        // --> OD 2009-08-27 #i95907#
+        // #i95907#
         const SvxNumberFormat::SvxNumPositionAndSpaceMode ePosAndSpaceMode(
                                     numfunc::GetDefaultPositionAndSpaceMode() );
         SwNumRule aNumRule( GetUniqueNumRuleName(), ePosAndSpaceMode );
@@ -1269,7 +1269,7 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
         // Zeichenvorlage an die Numerierung haengen
         SwCharFmt* pChrFmt;
         SwDocShell* pDocSh = GetView().GetDocShell();
-        // --> OD 2008-06-03 #i63395#
+        // #i63395#
         // Only apply user defined default bullet font
         const Font* pFnt = numfunc::IsDefBulletFontUserDefined()
                            ? &numfunc::GetDefBulletFont()
@@ -1300,7 +1300,7 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
 
             if (! bNum)
             {
-                // --> OD 2008-06-03 #i63395#
+                // #i63395#
                 // Only apply user defined default bullet font
                 if ( pFnt )
                 {
@@ -1313,7 +1313,7 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
                 aFmt.SetSuffix(::rtl::OUString());
             }
 
-            // --> OD 2009-08-26 #i95907#
+            // #i95907#
             if ( ePosAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
                 if(bHtml && nLvl)
@@ -1329,7 +1329,7 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
             }
             // <--
 
-            // --> FME 2005-01-21 #i38904#  Default alignment for
+            // #i38904#  Default alignment for
             // numbering/bullet should be rtl in rtl paragraph:
             if ( bRightToLeft )
             {
@@ -1340,7 +1340,7 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
             aNumRule.Set( nLvl, aFmt );
         }
 
-        // --> OD 2009-08-26 #i95907#
+        // #i95907#
         if ( pTxtNode &&
              ePosAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
         {
@@ -1349,7 +1349,7 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
             // <--
             if ( ( nTxtNodeIndent + nWidthOfTabs ) != 0 )
             {
-                // --> OD 2010-05-05 #i111172#
+                // #i111172#
                 // If text node is already inside a list, assure that the indents
                 // are the same. Thus, adjust the indent change value by subtracting
                 // indents of to be applied list style.
@@ -1496,7 +1496,7 @@ SelectionType SwWrtShell::GetSelectionType() const
     if ( IsTableMode() )
         nCnt |= (nsSelectionType::SEL_TBL | nsSelectionType::SEL_TBL_CELLS);
 
-    // --> FME 2005-01-12 #i39855#
+    // #i39855#
     // Do not pop up numbering toolbar, if the text node has a numbering
     // of type SVX_NUM_NUMBER_NONE.
     const SwNumRule* pNumRule = GetCurNumRule();

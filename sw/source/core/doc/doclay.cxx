@@ -1247,7 +1247,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 //Erstmal das Format zum Fly besorgen und das Layout entkoppeln.
                 SwFrmFmt *pOldFmt = rDoc.GetNodes()[nNdIdx]->GetFlyFmt();
                 OSL_ENSURE( pOldFmt, "Format des Fly nicht gefunden." );
-                // --> OD #i115719#
+                // #i115719#
                 // <title> and <description> attributes are lost when calling <DelFrms()>.
                 // Thus, keep them and restore them after the calling <MakeFrms()>
                 const bool bIsSwFlyFrmFmtInstance( dynamic_cast<SwFlyFrmFmt*>(pOldFmt) != 0 );
@@ -1395,7 +1395,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 //Nun nur noch die Flys erzeugen lassen. Das ueberlassen
                 //wir vorhanden Methoden (insb. fuer InCntFlys etwas aufwendig).
                 pNewFmt->MakeFrms();
-                // --> OD #i115719#
+                // #i115719#
                 if ( bIsSwFlyFrmFmtInstance )
                 {
                     static_cast<SwFlyFrmFmt*>(pOldFmt)->SetObjTitle( sTitle );
@@ -2148,7 +2148,7 @@ void SwDoc::SetAllUniqueFlyNames()
     if( GetFtnIdxs().Count() )
     {
         SwTxtFtn::SetUniqueSeqRefNo( *this );
-        // --> FME 2005-08-02 #i52775# Chapter footnotes did not
+        // #i52775# Chapter footnotes did not
         // get updated correctly. Calling UpdateAllFtn() instead of
         // UpdateFtn() solves this problem, but I do not dare to
         // call UpdateAllFtn() in all cases: Safety first.

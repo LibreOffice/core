@@ -1467,7 +1467,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
 
     // falls die Numerierung gesetzt werden, die akt. besorgen
     SwNumRule aRule( pDoc->GetUniqueNumRuleName(),
-                     // --> OD 2008-06-06 #i89178#
+                     // #i89178#
                      numfunc::GetDefaultPositionAndSpaceMode() );
                      // <--
 
@@ -1507,7 +1507,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                         cBullChar = nBulletPos < cnPosEmDash
                                         ? cStarSymbolEnDash
                                         : cStarSymbolEmDash;
-                        // --> OD 2008-06-03 #i63395#
+                        // #i63395#
                         // Only apply user defined default bullet font
                         if ( numfunc::IsDefBulletFontUserDefined() )
                         {

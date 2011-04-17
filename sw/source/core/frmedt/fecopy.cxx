@@ -413,7 +413,7 @@ sal_Bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                         // direct positioning
                         pFmt->SetFmtAttr( SwFmtHoriOrient( aPos.X(), text::HoriOrientation::NONE, text::RelOrientation::FRAME ) );
                         pFmt->SetFmtAttr( SwFmtVertOrient( aPos.Y(), text::VertOrientation::NONE, text::RelOrientation::FRAME ) );
-                        // --> OD 2005-04-15 #i47455# - notify draw frame format
+                        // #i47455# - notify draw frame format
                         // that position attributes are already set.
                         if ( pFmt->ISA(SwDrawFrmFmt) )
                         {
@@ -1006,7 +1006,7 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
                         else
                         {
                             OSL_ENSURE( RES_DRAWFRMFMT == pNew->Which(), "Neues Format.");
-                            // --> OD 2005-09-01 #i52780# - drawing object has
+                            // #i52780# - drawing object has
                             // to be made visible on paste.
                             {
                                 SwDrawContact* pContact =
@@ -1017,7 +1017,7 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
                             SdrObject *pObj = pNew->FindSdrObject();
                             SwDrawView  *pDV = Imp()->GetDrawView();
                             pDV->MarkObj( pObj, pDV->GetSdrPageView() );
-                            // --> OD 2005-04-15 #i47455# - notify draw frame format
+                            // #i47455# - notify draw frame format
                             // that position attributes are already set.
                             if ( pNew->ISA(SwDrawFrmFmt) )
                             {
@@ -1295,7 +1295,7 @@ sal_Bool SwFEShell::GetDrawObjGraphic( sal_uLong nFmt, Graphic& rGrf ) const
     return bConvert;
 }
 
-// --> OD 2005-08-03 #i50824#
+// #i50824#
 // replace method <lcl_RemoveOleObjsFromSdrModel> by <lcl_ConvertSdrOle2ObjsToSdrGrafObjs>
 void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SdrModel* _pModel )
 {
@@ -1476,7 +1476,7 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
         if( !bDesignMode )
             pView->SetDesignMode( sal_True );
 
-        // --> OD 2005-08-03 #i50824#
+        // #i50824#
         // method <lcl_RemoveOleObjsFromSdrModel> replaced by <lcl_ConvertSdrOle2ObjsToSdrGrafObjs>
         lcl_ConvertSdrOle2ObjsToSdrGrafObjs( pModel );
         pView->Paste( *pModel, aPos );

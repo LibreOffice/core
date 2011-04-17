@@ -551,7 +551,7 @@ sal_Bool SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     // MIB 9.7.97: HTML-Layout loeschen
     pTblNd->GetTable().SetHTMLTableLayout( 0 );
 
-    // --> FME 2004-11-26 #i37739# A simple 'MakeFrms' after the node sorting
+    // #i37739# A simple 'MakeFrms' after the node sorting
     // does not work if the table is inside a frame and has no prev/next.
     SwNode2Layout aNode2Layout( *pTblNd );
     // <--
@@ -600,7 +600,7 @@ sal_Bool SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     }
 
     // Restore table frames:
-    // --> FME 2004-11-26 #i37739# A simple 'MakeFrms' after the node sorting
+    // #i37739# A simple 'MakeFrms' after the node sorting
     // does not work if the table is inside a frame and has no prev/next.
     const sal_uLong nIdx = pTblNd->GetIndex();
     aNode2Layout.RestoreUpperFrms( GetNodes(), nIdx, nIdx + 1 );

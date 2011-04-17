@@ -565,7 +565,7 @@ sal_Bool SwDoubleLinePortion::ChgSpaceAdd( SwLineLayout* pCurr,
             if( nMultiSpace < KSHRT_MAX * SPACING_PRECISION_FACTOR )
             {
 //                pCurr->SetLLSpaceAdd( nMultiSpace, 0 );
-                // --> FME 2006-07-11 #i65711# SetLLSpaceAdd replaces the first value,
+                // #i65711# SetLLSpaceAdd replaces the first value,
                 // instead we want to insert a new first value:
                 std::vector<long>* pVec = pCurr->GetpLLSpaceAdd();
                 pVec->insert( pVec->begin(), nMultiSpace );

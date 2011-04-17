@@ -135,7 +135,7 @@ void SwNumberTreeNode::ClearObsoletePhantoms()
 
         if ((*aIt)->mChildren.empty())
         {
-            // --> OD 2006-01-17 #i60652#
+            // #i60652#
             // Because <mChildren.erase(aIt)> could destroy the element, which
             // is referenced by <mItLastValid>, it's needed to adjust
             // <mItLastValid> before erasing <aIt>.
@@ -274,13 +274,13 @@ void SwNumberTreeNode::ValidateContinuous(const SwNumberTreeNode * pNode) const
         {
             SwNumberTreeNode * pPred = (*aIt)->GetPred();
 
-            // --> OD 2006-04-21 #i64311#
+            // #i64311#
             // correct consideration of phantoms
             // correct consideration of restart at a number tree node
             if ( pPred )
             {
                 if ( !(*aIt)->IsCounted() )
-                    // --> OD 2006-05-12 #i65284#
+                    // #i65284#
                     nTmpNumber = pPred->GetNumber( pPred->GetParent() != (*aIt)->GetParent() );
                     // <--
                 else
@@ -310,7 +310,7 @@ void SwNumberTreeNode::ValidateContinuous(const SwNumberTreeNode * pNode) const
     }
     while (aIt != mChildren.end() && *aIt != pNode);
 
-    // --> OD 2008-05-21 #i74748# - applied patch from garnier_romain
+    // #i74748# - applied patch from garnier_romain
     // number tree node has to be validated.
     SetLastValid( aIt, true );
     // <--
@@ -401,7 +401,7 @@ void SwNumberTreeNode::MoveGreaterChildren( SwNumberTreeNode& _rCompareNode,
 
         _rDestNode.mChildren.insert(aItUpper, mChildren.end());
 
-        // --> OD 2006-01-17 #i60652#
+        // #i60652#
         // Because <mChildren.erase(aItUpper, mChildren.end())> could destroy
         // the element, which is referenced by <mItLastValid>, it's needed to
         // adjust <mItLastValid> before erasing <aIt>.
@@ -410,7 +410,7 @@ void SwNumberTreeNode::MoveGreaterChildren( SwNumberTreeNode& _rCompareNode,
 
         mChildren.erase(aItUpper, mChildren.end());
 
-        // --> OD 2006-01-17 #i60652#
+        // #i60652#
         if ( !mChildren.empty() )
         {
             SetLastValid( --(mChildren.end()) );
@@ -431,7 +431,7 @@ void SwNumberTreeNode::MoveChildren(SwNumberTreeNode * pDest)
         tSwNumberTreeChildren::iterator aItBegin = mChildren.begin();
         SwNumberTreeNode * pMyFirst = *mChildren.begin();
 
-        // --> OD 2006-01-17 #i60652#
+        // #i60652#
         // Because <mChildren.erase(aItBegin)> could destroy the element,
         // which is referenced by <mItLastValid>, it's needed to adjust
         // <mItLastValid> before erasing <aItBegin>.
@@ -680,7 +680,7 @@ void SwNumberTreeNode::RemoveChild(SwNumberTreeNode * pChild)
             (*aItPred)->NotifyInvalidChildren();
         }
 
-        // --> OD 2006-01-17 #i60652#
+        // #i60652#
         // Because <mChildren.erase(aRemoveIt)> could destroy the element,
         // which is referenced by <mItLastValid>, it's needed to adjust
         // <mItLastValid> before erasing <aRemoveIt>.
@@ -1065,7 +1065,7 @@ SwNumberTreeNode * SwNumberTreeNode::GetPred(bool bSibling) const
 
         if ( aIt == mpParent->mChildren.begin() )
         {
-            // --> OD 2006-04-24 #i64311#
+            // #i64311#
             // root node is no valid predecessor
             pResult = mpParent->GetParent() ? mpParent : NULL;
             // <--
@@ -1250,7 +1250,7 @@ void SwNumberTreeNode::NotifyInvalidSiblings()
         mpParent->NotifyInvalidChildren();
 }
 
-// --> OD 2007-09-07 #i81002#
+// #i81002#
 const SwNumberTreeNode* SwNumberTreeNode::GetPrecedingNodeOf(
                                         const SwNumberTreeNode& rNode ) const
 {

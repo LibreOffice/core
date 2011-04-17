@@ -121,7 +121,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
         nLineWidth -= nItalic;
 
-        // --> FME 2005-05-13 #i46524# LineBreak bug with italics
+        // #i46524# LineBreak bug with italics
         if ( nLineWidth < 0 ) nLineWidth = 0;
         // <--
     }
@@ -141,7 +141,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             nCutPos = rInf.GetIdx() + nMaxLen;
             if( nItalic &&
                 ( nCutPos >= rInf.GetTxt().Len() ||
-                  // --> FME 2005-05-13 #i48035# Needed for CalcFitToContent
+                  // #i48035# Needed for CalcFitToContent
                   // if first line ends with a manual line break
                   rInf.GetTxt().GetChar( nCutPos ) == CH_BREAK ) )
                   // <--

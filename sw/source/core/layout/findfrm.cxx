@@ -457,7 +457,7 @@ SwPageFrm* SwFrm::FindPageFrm()
             pRet = pRet->GetUpper();
         else if ( pRet->IsFlyFrm() )
         {
-            // --> OD 2004-06-30 #i28701# - use new method <GetPageFrm()>
+            // #i28701# - use new method <GetPageFrm()>
             if ( static_cast<SwFlyFrm*>(pRet)->GetPageFrm() )
                 pRet = static_cast<SwFlyFrm*>(pRet)->GetPageFrm();
             else
@@ -482,7 +482,7 @@ SwFtnBossFrm* SwFrm::FindFtnBossFrm( sal_Bool bFootnotes )
             pRet = pRet->GetUpper();
         else if ( pRet->IsFlyFrm() )
         {
-            // --> OD 2004-06-30 #i28701# - use new method <GetPageFrm()>
+            // #i28701# - use new method <GetPageFrm()>
             if ( static_cast<SwFlyFrm*>(pRet)->GetPageFrm() )
                 pRet = static_cast<SwFlyFrm*>(pRet)->GetPageFrm();
             else
@@ -831,7 +831,7 @@ SwFrm *SwFrm::_FindNext()
     return pRet;
 }
 
-// --> OD 2005-12-01 #i27138# - add parameter <_bInSameFtn>
+// #i27138# - add parameter <_bInSameFtn>
 SwCntntFrm *SwFrm::_FindNextCnt( const bool _bInSameFtn )
 {
     SwFrm *pThis = this;
@@ -870,7 +870,7 @@ SwCntntFrm *SwFrm::_FindNextCnt( const bool _bInSameFtn )
         SwCntntFrm *pNxtCnt = ((SwCntntFrm*)pThis)->GetNextCntntFrm();
         if ( pNxtCnt )
         {
-            // --> OD 2005-12-01 #i27138#
+            // #i27138#
             if ( bBody || ( bFtn && !_bInSameFtn ) )
             // <--
             {
@@ -883,7 +883,7 @@ SwCntntFrm *SwFrm::_FindNextCnt( const bool _bInSameFtn )
                     pNxtCnt = pNxtCnt->GetNextCntntFrm();
                 }
             }
-            // --> OD 2005-12-01 #i27138#
+            // #i27138#
             else if ( bFtn && _bInSameFtn )
             {
                 // handling for environments 'each footnote':

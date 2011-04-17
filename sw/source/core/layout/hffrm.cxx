@@ -48,7 +48,7 @@
 #include "hfspacingitem.hxx"
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
-// --> OD 2005-03-03 #i43771#
+// #i43771#
 #include <objectformatter.hxx>
 // <--
 
@@ -257,7 +257,7 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
 
             SwTwips nMaxHeight = LONG_MAX;
             SwTwips nRemaining, nOldHeight;
-            // --> OD 2006-05-24 #i64301#
+            // #i64301#
             // use the position of the footer printing area to control invalidation
             // of the first footer content.
             Point aOldFooterPrtPos;
@@ -267,7 +267,7 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
             {
                 nOldHeight = Prt().Height();
                 SwFrm* pFrm = Lower();
-                // --> OD 2006-05-24 #i64301#
+                // #i64301#
                 if ( pFrm &&
                      aOldFooterPrtPos != ( Frm().Pos() + Prt().Pos() ) )
                 {
@@ -278,9 +278,9 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                 while( pFrm )
                 {
                     pFrm->Calc();
-                    // --> OD 2005-03-03 #i43771# - format also object anchored
+                    // #i43771# - format also object anchored
                     // at the frame
-                    // --> OD 2005-05-03 #i46941# - frame has to be valid.
+                    // #i46941# - frame has to be valid.
                     // Note: frame could be invalid after calling its format,
                     //       if it's locked
                     OSL_ENSURE( StackHack::IsLocked() || !pFrm->IsTxtFrm() ||

@@ -893,7 +893,7 @@ SdrObject *SwXFrame::GetOrCreateSdrObject( SwFlyFrmFmt *pFmt )
     if( !pObject )
     {
         SwDoc *pDoc = pFmt->GetDoc();
-        // --> OD 2005-08-08 #i52858# - method name changed
+        // #i52858# - method name changed
         SdrModel *pDrawModel = pDoc->GetOrCreateDrawModel();
         // <--
         SwFlyDrawContact* pContactObject
@@ -1011,7 +1011,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                 }
             }
         }
-        // --> OD 2009-07-13 #i73249#
+        // #i73249#
         // Attribute AlternativeText was never published.
         // Now it has been replaced by Attribute Title - valid for all <SwXFrame> instances
 //        else if( FN_UNO_ALTERNATIVE_TEXT == pEntry->nWID && eType != FLYCNTTYPE_FRM )
@@ -1061,7 +1061,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                 UnoActionContext aAction(pFmt->GetDoc());
 
                 SfxItemSet* pSet = 0;
-                // --> OD 2004-08-13 #i31771#, #i25798# - No adjustment of
+                // #i31771#, #i25798# - No adjustment of
                 // anchor ( no call of method <::lcl_ChkAndSetNewAnchor(..)> ),
                 // if document is currently in reading mode.
                 if ( !pFmt->GetDoc()->IsInReading() )
@@ -1341,7 +1341,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                     aSet.Put(aAnchor);
                 }
 
-                // --> OD 2004-08-13 #i31771#, #i25798# - No adjustment of
+                // #i31771#, #i25798# - No adjustment of
                 // anchor ( no call of method <::lcl_ChkAndSetNewAnchor(..)> ),
                 // if document is currently in reading mode.
                 if ( !pFmt->GetDoc()->IsInReading() )
@@ -1520,7 +1520,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         {
             aAny <<= OUString(SwStyleNameMapper::GetProgName(pFmt->DerivedFrom()->GetName(), nsSwGetPoolIdFromName::GET_POOLID_FRMFMT ) );
         }
-        // --> OD 2009-07-13 #i73249#
+        // #i73249#
         // Attribute AlternativeText was never published.
         // Now it has been replaced by Attribute Title - valid for all <SwXFrame> instances
 //        else if(eType != FLYCNTTYPE_FRM &&
@@ -1802,7 +1802,7 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
                     }
                 }
             }
-            // --> OD 2009-07-13 #i73249#
+            // #i73249#
             // Attribute AlternativeText was never published.
             // Now it has been replaced by Attribute Title - valid for all <SwXFrame> instances
 //            else if( eType != FLYCNTTYPE_FRM && FN_UNO_ALTERNATIVE_TEXT == pEntry->nWID )

@@ -204,7 +204,7 @@ void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
         {
             SwNode *pNode = 0;
             {
-                // --> OD 2008-10-07 #i92993#
+                // #i92993#
                 // Begin with start node of page header/footer to assure that
                 // complete content is checked for cursors and the complete content
                 // is deleted on below made method call <pDoc->DeleteSection(pNode)>
@@ -2603,7 +2603,7 @@ SwContact* SwFrmFmt::FindContactObj()
 
 SdrObject* SwFrmFmt::FindSdrObject()
 {
-    // --> OD 2005-01-06 #i30669# - use method <FindContactObj()> instead of
+    // #i30669# - use method <FindContactObj()> instead of
     // duplicated code.
     SwContact* pFoundContact = FindContactObj();
     return pFoundContact ? pFoundContact->GetMaster() : 0;
@@ -2677,7 +2677,7 @@ sal_Bool SwFrmFmt::IsLowerOf( const SwFrmFmt& rFmt ) const
     return sal_False;
 }
 
-// --> OD 2004-07-27 #i31698#
+// #i31698#
 SwFrmFmt::tLayoutDir SwFrmFmt::GetLayoutDir() const
 {
     return SwFrmFmt::HORI_L2R;
@@ -2689,7 +2689,7 @@ void SwFrmFmt::SetLayoutDir( const SwFrmFmt::tLayoutDir )
 }
 // <--
 
-// --> OD 2004-08-06 #i28749#
+// #i28749#
 sal_Int16 SwFrmFmt::GetPositionLayoutDir() const
 {
     return text::PositionLayoutDir::PositionInLayoutDirOfAnchor;
@@ -2760,7 +2760,7 @@ void SwFlyFrmFmt::MakeFrms()
             //die Suche vom StartNode zum FrameFormat sein.
             SwNodeIndex aIdx( aAnchorAttr.GetCntntAnchor()->nNode );
             SwCntntNode *pCNd = GetDoc()->GetNodes().GoNext( &aIdx );
-            // --> OD 2009-12-28 #i105535#
+            // #i105535#
             if ( pCNd == 0 )
             {
                 pCNd = aAnchorAttr.GetCntntAnchor()->nNode.GetNode().GetCntntNode();
@@ -2773,7 +2773,7 @@ void SwFlyFrmFmt::MakeFrms()
                     pModify = pCNd;
                 }
             }
-            // --> OD 2009-12-28 #i105535#
+            // #i105535#
             if ( pModify == 0 )
             // <--
             {
@@ -2820,7 +2820,7 @@ void SwFlyFrmFmt::MakeFrms()
             {
                 if ( pPage->GetPhyPageNum() == nPgNum )
                 {
-                    // --> OD 2005-06-09 #i50432# - adjust synopsis of <PlaceFly(..)>
+                    // #i50432# - adjust synopsis of <PlaceFly(..)>
                     pPage->PlaceFly( 0, this );
                     // <--
                     break;
@@ -2843,7 +2843,7 @@ void SwFlyFrmFmt::MakeFrms()
 
             if ( FLY_AT_FLY == aAnchorAttr.GetAnchorId() && !pFrm->IsFlyFrm() )
             {
-                // --> OD 2009-12-28 #i105535#
+                // #i105535#
                 // fallback to anchor type at-paragraph, if no fly frame is found.
 //                pFrm = pFrm->FindFlyFrm();
                 SwFrm* pFlyFrm = pFrm->FindFlyFrm();
@@ -2863,11 +2863,11 @@ void SwFlyFrmFmt::MakeFrms()
 
             if( pFrm->GetDrawObjs() )
             {
-                // --> OD 2004-07-01 #i28701# - new type <SwSortedObjs>
+                // #i28701# - new type <SwSortedObjs>
                 SwSortedObjs &rObjs = *pFrm->GetDrawObjs();
                 for( sal_uInt16 i = 0; i < rObjs.Count(); ++i)
                 {
-                    // --> OD 2004-07-01 #i28701# - consider changed type of
+                    // #i28701# - consider changed type of
                     // <SwSortedObjs> entries.
                     SwAnchoredObject* pObj = rObjs[i];
                     if( pObj->ISA(SwFlyFrm) &&
@@ -2945,7 +2945,7 @@ sal_Bool SwFlyFrmFmt::GetInfo( SfxPoolItem& rInfo ) const
     return sal_True;
 }
 
-// --> OD 2009-07-14 #i73249#
+// #i73249#
 void SwFlyFrmFmt::SetObjTitle( const String& rTitle, bool bBroadcast )
 {
     SdrObject* pMasterObject = FindSdrObject();
@@ -3173,7 +3173,7 @@ void SwDrawFrmFmt::DelFrms()
         pContact->DisconnectFromLayout();
 }
 
-// --> OD 2004-07-27 #i31698#
+// #i31698#
 SwFrmFmt::tLayoutDir SwDrawFrmFmt::GetLayoutDir() const
 {
     return meLayoutDir;
@@ -3185,7 +3185,7 @@ void SwDrawFrmFmt::SetLayoutDir( const SwFrmFmt::tLayoutDir _eLayoutDir )
 }
 // <--
 
-// --> OD 2004-08-06 #i28749#
+// #i28749#
 sal_Int16 SwDrawFrmFmt::GetPositionLayoutDir() const
 {
     return mnPositionLayoutDir;

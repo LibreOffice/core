@@ -113,7 +113,7 @@
 #include <osl/file.hxx>
 #include <comphelper/storagehelper.hxx>
 
-// --> FME 2004-06-08 #i12836# enhanced pdf export
+// #i12836# enhanced pdf export
 #include <EnhancedPDFExportHelper.hxx>
 // <--
 #include <numrule.hxx>
@@ -1484,7 +1484,7 @@ void    SwXTextDocument::InitNewDoc()
 
     if(pxXDrawPage)
     {
-        // --> OD 2008-07-23 #i91798#, #i91895#
+        // #i91798#, #i91895#
         // dispose XDrawPage here. We are the owner and know that it is no longer in a valid condition.
         uno::Reference<lang::XComponent> xComp( *pxXDrawPage, uno::UNO_QUERY );
         xComp->dispose();
@@ -1931,7 +1931,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
                 // must thus create an SdrModel, if we don't have an
                 // SdrModel and we are leaving the default at false,
                 // we don't need to make an SdrModel and can do nothing
-                // --> OD 2005-08-08 #i52858# - method name changed
+                // #i52858# - method name changed
                 pDrawDoc = dynamic_cast< SwDrawDocument * > (pDocShell->GetDoc()->GetOrCreateDrawModel() );
                 // <--
                 pDrawDoc->SetAutoControlFocus ( bAuto );
@@ -1953,14 +1953,14 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
                 // SdrModel and we are leaving the default at true,
                 // we don't need to make an SdrModel and can do
                 // nothing
-                // --> OD 2005-08-08 #i52858# - method name changed
+                // #i52858# - method name changed
                 pDrawDoc = dynamic_cast< SwDrawDocument * > (pDocShell->GetDoc()->GetOrCreateDrawModel() );
                 // <--
                 pDrawDoc->SetOpenInDesignMode ( bMode );
             }
         }
         break;
-        // --> FME 2005-02-25 #i42634# New property to set the bInReading
+        // #i42634# New property to set the bInReading
         // flag at the document, used during binary import
         case WID_DOC_LOCK_UPDATES :
         {
@@ -2693,7 +2693,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     uno::Sequence< beans::PropertyValue > aRenderer;
     if (m_pRenderData)
     {
-        // --> TL, OD 2010-09-07 #i114210#
+        // #i114210#
         // determine the correct page number from the renderer index
         // --> OD 2010-10-01 #i114875
         // consider brochure print
@@ -2925,7 +2925,7 @@ void SAL_CALL SwXTextDocument::render(
                     // should be set for printing as well ...
                     pVwSh->SetPDFExportOption( sal_True );
 
-                    // --> FME 2004-06-08 #i12836# enhanced pdf export
+                    // #i12836# enhanced pdf export
                     //
                     // First, we have to export hyperlinks, notes, and outline to pdf.
                     // During this process, additional information required for tagging
@@ -2948,7 +2948,7 @@ void SAL_CALL SwXTextDocument::render(
                     else    // normal printing and PDF export
                         pVwSh->PrintOrPDFExport( pOut, rSwPrtOptions, nRenderer );
 
-                    // --> FME 2004-10-08 #i35176#
+                    // #i35176#
                     //
                     // After printing the last page, we take care for the links coming
                     // from the EditEngine. The links are generated during the painting
@@ -3769,7 +3769,7 @@ Reference<XInterface> SwXDocumentPropertyHelper::GetDrawTable(short nWhich)
     {
         switch(nWhich)
         {
-            // --> OD 2005-08-08 #i52858#
+            // #i52858#
             // assure that Draw model is created, if it doesn't exist.
             case SW_CREATE_DASH_TABLE         :
                 if(!xDashTable.is())

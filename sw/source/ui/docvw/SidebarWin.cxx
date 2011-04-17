@@ -555,7 +555,7 @@ void SwSidebarWin::SetPosAndSize()
     {
         if (IsFollow() && !HasChildPathFocus())
         {
-            // --> OD 2010-06-03 #i111964#
+            // #i111964#
             if ( mpAnchor )
             {
                 mpAnchor->SetAnchorState(AS_END);
@@ -564,14 +564,14 @@ void SwSidebarWin::SetPosAndSize()
         }
         else
         {
-            // --> OD 2010-06-03 #i111964#
+            // #i111964#
             if ( mpAnchor )
             {
                 mpAnchor->SetAnchorState(AS_ALL);
             }
             // <--
             SwSidebarWin* pWin = GetTopReplyNote();
-            // --> OD 2010-06-03 #i111964#
+            // #i111964#
             if ( pWin && pWin->Anchor() )
             // <--
             {
@@ -1127,7 +1127,7 @@ void SwSidebarWin::SetViewState(ViewState bViewState)
             {
                 mpAnchor->SetAnchorState(AS_ALL);
                 SwSidebarWin* pWin = GetTopReplyNote();
-                // --> OD 2010-06-03 #i111964#
+                // #i111964#
                 if ( pWin && pWin->Anchor() )
                 // <--
                 {
@@ -1160,7 +1160,7 @@ void SwSidebarWin::SetViewState(ViewState bViewState)
                     SwSidebarWin* pTopWinActive = mrMgr.HasActiveSidebarWin()
                                                   ? mrMgr.GetActiveSidebarWin()->GetTopReplyNote()
                                                   : 0;
-                    // --> OD 2010-06-03 #i111964#
+                    // #i111964#
                     if ( pTopWinSelf && ( pTopWinSelf != pTopWinActive ) &&
                          pTopWinSelf->Anchor() )
                     // <--

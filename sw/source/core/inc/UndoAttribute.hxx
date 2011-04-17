@@ -112,7 +112,7 @@ class SwUndoFmtAttr : public SwUndo
 
     bool IsFmtInDoc( SwDoc* );   //is the attribute format still in the Doc?
     void SaveFlyAnchor( bool bSaveDrawPt = false );
-    // --> OD 2004-10-26 #i35443# - Add return value, type <bool>.
+    // #i35443# - Add return value, type <bool>.
     // Return value indicates, if anchor attribute is restored.
     // Notes: - If anchor attribute is restored, all other existing attributes
     //          are also restored.

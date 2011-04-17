@@ -622,7 +622,7 @@ void SwOLENode::CheckFileLink_Impl()
     }
 }
 
-// --> OD 2009-03-05 #i99665#
+// #i99665#
 bool SwOLENode::IsChart() const
 {
     bool bIsChart( false );

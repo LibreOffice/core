@@ -289,7 +289,7 @@ public:
     //#i3370# remove quick help to prevent saving of autocorrection suggestions
     void StopQuickHelp();
 
-    // --> OD 2005-02-18 #i42921# - add parameter <bVerticalMode>
+    // #i42921# - add parameter <bVerticalMode>
     sal_Bool RulerMarginDrag( const MouseEvent& rMEvt,
                                      const bool bVerticalMode );
     // <--

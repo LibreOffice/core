@@ -306,7 +306,7 @@ sal_Bool SwFEShell::MoveAnchor( sal_uInt16 nDir )
     if( pOld )
     {
         SwFrm* pNew = pOld;
-        // --> OD 2004-07-16 #i28701#
+        // #i28701#
         SwAnchoredObject* pAnchoredObj = ::GetUserCall( pObj )->GetAnchoredObj( pObj );
         SwFrmFmt& rFmt = pAnchoredObj->GetFrmFmt();
         SwFmtAnchor aAnch( rFmt.GetAnchor() );
@@ -516,7 +516,7 @@ sal_Bool SwFEShell::MoveAnchor( sal_uInt16 nDir )
                 delete pHandleAnchorNodeChg;
             }
             // <--
-            // --> OD 2004-06-24 #i28701# - no call of method
+            // #i28701# - no call of method
             // <CheckCharRectAndTopOfLine()> for to-character anchored
             // Writer fly frame needed. This method call can cause a
             // format of the anchor frame, which is no longer intended.
@@ -814,7 +814,7 @@ void lcl_NotifyNeighbours( const SdrMarkList *pLst )
             if( !pAnch )
                 continue;
             pPage = pAnch->FindPageFrm();
-            // --> OD 2006-08-15 #i68520# - naming changed
+            // #i68520# - naming changed
             aRect = GetBoundRectOfAnchoredObj( pO );
             // <--
         }
@@ -1142,7 +1142,7 @@ sal_Bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
         if ( bRet && pObj )
         {
             const IDocumentDrawModelAccess* pIDDMA = getIDocumentDrawModelAccess();
-            // --> OD 2009-12-30 #i89920#
+            // #i89920#
             // Do not select object in background which is overlapping this text
             // at the given position.
             bool bObjInBackground( false );
@@ -1781,7 +1781,7 @@ sal_Bool SwFEShell::ImpEndCreate()
         //Erzeugtes Object wegwerfen, so kann der Fly am elegentesten
         //ueber vorhandene SS erzeugt werden.
         GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(false); // see above
-        // --> OD 2005-08-08 #i52858# - method name changed
+        // #i52858# - method name changed
         SdrPage *pPg = getIDocumentDrawModelAccess()->GetOrCreateDrawModel()->GetPage( 0 );
         // <--
         if( !pPg )
@@ -1853,16 +1853,16 @@ sal_Bool SwFEShell::ImpEndCreate()
         SwFmtVertOrient aVert( nYOffset, text::VertOrientation::NONE, text::RelOrientation::FRAME );
         aSet.Put( aVert );
         SwDrawFrmFmt* pFmt = (SwDrawFrmFmt*)getIDocumentLayoutAccess()->MakeLayoutFmt( RND_DRAW_OBJECT, &aSet );
-        // --> OD 2004-10-25 #i36010# - set layout direction of the position
+        // #i36010# - set layout direction of the position
         pFmt->SetPositionLayoutDir(
             text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
         // <--
-        // --> OD 2005-03-11 #i44344#, #i44681# - positioning attributes already set
+        // #i44344#, #i44681# - positioning attributes already set
         pFmt->PosAttrSet();
         // <--
 
         SwDrawContact *pContact = new SwDrawContact( pFmt, &rSdrObj );
-        // --> OD 2004-11-22 #i35635#
+        // #i35635#
         pContact->MoveObjToVisibleLayer( &rSdrObj );
         // <--
         if( bCharBound )
@@ -2638,7 +2638,7 @@ void SwFEShell::CheckUnboundObjects()
             SwDrawContact *pContact = new SwDrawContact(
                                             (SwDrawFrmFmt*)pFmt, pObj );
 
-            // --> OD 2004-11-22 #i35635#
+            // #i35635#
             pContact->MoveObjToVisibleLayer( pObj );
             // <--
             pContact->ConnectToLayout();

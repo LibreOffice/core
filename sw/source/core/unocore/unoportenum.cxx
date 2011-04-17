@@ -32,7 +32,7 @@
 
 #include <unoport.hxx>
 #include <IMark.hxx>
-// --> OD 2007-10-23 #i81002#
+// #i81002#
 #include <crossrefbookmark.hxx>
 // <--
 #include <doc.hxx>

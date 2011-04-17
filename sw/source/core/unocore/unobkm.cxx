@@ -258,7 +258,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     m_pImpl->registerInMark(*this,
         m_pImpl->m_pDoc->getIDocumentMarkAccess()->makeMark(
             aPam, m_pImpl->m_sMarkName, eType));
-    // --> OD 2007-10-23 #i81002#
+    // #i81002#
     // Check, if bookmark has been created.
     // E.g., the creation of a cross-reference bookmark is suppress,
     // if the PaM isn't a valid one for cross-reference bookmarks.

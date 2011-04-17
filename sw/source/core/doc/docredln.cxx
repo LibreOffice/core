@@ -905,7 +905,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                             {
                                 if( *pRStt == *pStt )
                                 {
-                                    // --> mst 2010-05-17 #i97421#
+                                    // #i97421#
                                     // redline w/out extent loops
                                     if (*pStt != *pEnd)
                                     // <--

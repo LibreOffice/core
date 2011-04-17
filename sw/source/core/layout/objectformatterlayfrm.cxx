@@ -85,7 +85,7 @@ SwFrm& SwObjectFormatterLayFrm::GetAnchorFrm()
     return mrAnchorLayFrm;
 }
 
-// --> OD 2005-01-10 #i40147# - add parameter <_bCheckForMovedFwd>.
+// #i40147# - add parameter <_bCheckForMovedFwd>.
 // Not relevant for objects anchored at layout frame.
 bool SwObjectFormatterLayFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                                            const bool )
@@ -157,23 +157,23 @@ bool SwObjectFormatterLayFrm::_AdditionalFormatObjsOnPage()
     {
         SwAnchoredObject* pAnchoredObj = (*rPageFrm.GetSortedObjs())[i];
 
-        // --> OD 2005-08-18 #i51941# - do not format object, which are anchored
+        // #i51941# - do not format object, which are anchored
         // inside or at fly frame.
         if ( pAnchoredObj->GetAnchorFrm()->FindFlyFrm() )
         {
             continue;
         }
         // <--
-        // --> OD 2004-09-23 #i33751#, #i34060# - method <GetPageFrmOfAnchor()>
+        // #i33751#, #i34060# - method <GetPageFrmOfAnchor()>
         // is replaced by method <FindPageFrmOfAnchor()>. It's return value
         // have to be checked.
         SwPageFrm* pPageFrmOfAnchor = pAnchoredObj->FindPageFrmOfAnchor();
-        // --> OD 2004-10-08 #i26945# - check, if the page frame of the
+        // #i26945# - check, if the page frame of the
         // object's anchor frame isn't the given page frame
         OSL_ENSURE( pPageFrmOfAnchor,
                 "<SwObjectFormatterLayFrm::_AdditionalFormatObjsOnPage()> - missing page frame" );
         if ( pPageFrmOfAnchor &&
-             // --> OD 2004-10-22 #i35911#
+             // #i35911#
              pPageFrmOfAnchor->GetPhyPageNum() < rPageFrm.GetPhyPageNum() )
              // <--
         // <--

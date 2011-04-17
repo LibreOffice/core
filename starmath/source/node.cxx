@@ -859,7 +859,7 @@ void SmTableNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
             ExtendBy(rNodeRect, nSize > 1 ? RCP_NONE : RCP_ARG);
         }
     }
-    // --> 4.7.2010 #i972#
+    // #i972#
     if (HasBaseline())
         nFormulaBaseline = GetBaseline();
     else

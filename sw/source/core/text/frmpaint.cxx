@@ -58,7 +58,7 @@
 #include <tabfrm.hxx>   // SwTabFrm (Redlining)
 #include <SwGrammarMarkUp.hxx>
 
-// --> FME 2004-06-08 #i12836# enhanced pdf export
+// #i12836# enhanced pdf export
 #include <EnhancedPDFExportHelper.hxx>
 // <--
 
@@ -332,7 +332,7 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
         SwLayoutModeModifier aLayoutModeModifier( *pSh->GetOut() );
         aLayoutModeModifier.Modify( sal_False );
 
-        // --> FME 2004-06-24 #i16816# tagged pdf support
+        // #i16816# tagged pdf support
         SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pSh->GetOut() );
         // <--
 
@@ -605,7 +605,7 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 {
     ResetRepaint();
 
-    // --> FME 2004-06-24 #i16816# tagged pdf support
+    // #i16816# tagged pdf support
     ViewShell *pSh = getRootFrm()->GetCurrShell();
 
     Num_Info aNumInfo( *this );
@@ -631,7 +631,7 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         {
             OSL_ENSURE( GetValidPosFlag(), "+SwTxtFrm::Paint: no Calc()" );
 
-            // --> FME 2004-10-29 #i29062# pass info that we are currently
+            // #i29062# pass info that we are currently
             // painting.
             ((SwTxtFrm*)this)->GetFormatted( true );
             // <--

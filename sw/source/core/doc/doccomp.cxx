@@ -1449,7 +1449,7 @@ void SwCompareData::SetRedlinesToDoc( sal_Bool bUseDocInfo )
                 pTmp->GetPoint()->nNode++;
                 pTmp->GetPoint()->nContent.Assign( pTmp->GetCntntNode(), 0 );
             }
-            // --> mst 2010-05-17 #i101009#
+            // #i101009#
             // prevent redlines that end on structural end node
             if (& rDoc.GetNodes().GetEndOfContent() ==
                 & pTmp->GetPoint()->nNode.GetNode())
@@ -1482,7 +1482,7 @@ void SwCompareData::SetRedlinesToDoc( sal_Bool bUseDocInfo )
                 pTmp->GetPoint()->nNode++;
                 pTmp->GetPoint()->nContent.Assign( pTmp->GetCntntNode(), 0 );
             }
-            // --> mst 2010-05-17 #i101009#
+            // #i101009#
             // prevent redlines that end on structural end node
             if (& rDoc.GetNodes().GetEndOfContent() ==
                 & pTmp->GetPoint()->nNode.GetNode())

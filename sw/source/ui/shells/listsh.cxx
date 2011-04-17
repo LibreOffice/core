@@ -74,7 +74,7 @@ SFX_IMPL_INTERFACE(SwListShell, SwBaseShell, SW_RES(STR_SHELLNAME_LIST))
 
 TYPEINIT1(SwListShell,SwBaseShell)
 
-// --> FME 2005-01-04 #i35572# Functionality of Numbering/Bullet toolbar
+// #i35572# Functionality of Numbering/Bullet toolbar
 // for outline numbered paragraphs should match the functions for outlines
 // available in the navigator. Therefore the code in the following
 // function is quite similar the the code in SwContentTree::ExecCommand.

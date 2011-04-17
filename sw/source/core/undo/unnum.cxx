@@ -143,7 +143,7 @@ void SwUndoInsNum::RedoImpl(::sw::UndoRedoContext & rContext)
         }
         else
         {
-            // --> OD 2005-02-25 #i42921# - adapt to changed signature
+            // #i42921# - adapt to changed signature
             rDoc.SetNumRule(rPam, aNumRule, false);
             // <--
         }
@@ -163,7 +163,7 @@ void SwUndoInsNum::RepeatImpl(::sw::RepeatContext & rContext)
     {
         if( !sReplaceRule.Len() )
         {
-            // --> OD 2005-02-25 #i42921# - adapt to changed signature
+            // #i42921# - adapt to changed signature
             rDoc.SetNumRule(rContext.GetRepeatPaM(), aNumRule, false);
             // <--
         }

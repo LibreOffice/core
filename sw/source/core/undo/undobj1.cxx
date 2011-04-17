@@ -83,7 +83,7 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrm)
         if ( pDrawContact )
         {
             pDrawContact->InsertMasterIntoDrawPage();
-            // --> OD 2005-01-31 #i40845# - follow-up of #i35635#
+            // #i40845# - follow-up of #i35635#
             // move object to visible layer
             pDrawContact->MoveObjToVisibleLayer( pDrawContact->GetMaster() );
             // <--

@@ -85,7 +85,7 @@
 #include "sectfrm.hxx"
 #include "lineinfo.hxx"
 #include <acmplwrd.hxx>
-// --> OD 2004-06-28 #i28701#
+// #i28701#
 #include <sortedobjs.hxx>
 #include <objectformatter.hxx>
 #include <PostItMgr.hxx>
@@ -526,7 +526,7 @@ SwPageFrm* SwLayAction::CheckFirstVisPage( SwPageFrm *pPage )
 }
 
 // OD 2004-05-12 #i28701#
-// --> OD 2004-11-03 #i114798# - unlock position on start and end of page
+// #i114798# - unlock position on start and end of page
 // layout process.
 class NotifyLayoutOfPageInProgress
 {
@@ -710,7 +710,7 @@ void SwLayAction::InternalAction()
                         {
                             pPage->ValidateFlyInCnt();
                             pPage->ValidateCntnt();
-                            // --> OD 2004-05-10 #i28701#
+                            // #i28701#
                             pPage->ValidateFlyLayout();
                             pPage->ValidateFlyCntnt();
                             // <--
@@ -719,7 +719,7 @@ void SwLayAction::InternalAction()
                                 XCHECKPAGE;
                                 pPage->InvalidateCntnt();
                                 pPage->InvalidateFlyInCnt();
-                                // --> OD 2004-05-10 #i28701#
+                                // #i28701#
                                 pPage->InvalidateFlyLayout();
                                 pPage->InvalidateFlyCntnt();
                                 // <--
@@ -840,14 +840,14 @@ void SwLayAction::InternalAction()
         // OD 14.04.2003 #106346# - set flag for interrupt content formatting
         mbFormatCntntOnInterrupt = IsInput() && !IsStopPrt();
         long nBottom = rVis.Bottom();
-        // --> OD 2005-02-15 #i42586# - format current page, if idle action is active
+        // #i42586# - format current page, if idle action is active
         // This is an optimization for the case that the interrupt is created by
         // the move of a form control object, which is represented by a window.
         while ( pPg && ( pPg->Frm().Top() < nBottom ||
                          ( IsIdle() && pPg == pPage ) ) )
         // <--
         {
-            // --> OD 2004-10-11 #i26945# - follow-up of #i28701#
+            // #i26945# - follow-up of #i28701#
             NotifyLayoutOfPageInProgress aLayoutOfPageInProgress( *pPg );
 
             XCHECKPAGE;
@@ -857,10 +857,10 @@ void SwLayAction::InternalAction()
             const sal_uInt16 nLoopControlMax = 20;
 
             // OD 14.04.2003 #106346# - special case: interrupt content formatting
-            // --> OD 2004-07-08 #i28701# - conditions, introduced by #106346#,
+            // #i28701# - conditions, introduced by #106346#,
             // are incorrect (marcos IS_FLYS and IS_INVAFLY only works for <pPage>)
             // and are too strict.
-            // --> OD 2005-06-09 #i50432# - adjust interrupt formatting to
+            // #i50432# - adjust interrupt formatting to
             // normal page formatting - see above.
             while ( ( mbFormatCntntOnInterrupt &&
                       ( pPg->IsInvalid() ||
@@ -868,10 +868,10 @@ void SwLayAction::InternalAction()
                     ( !mbFormatCntntOnInterrupt && pPg->IsInvalidLayout() ) )
             {
                 XCHECKPAGE;
-                // --> OD 2005-06-09 #i50432# - format also at-page anchored objects
+                // #i50432# - format also at-page anchored objects
                 SwObjectFormatter::FormatObjsAtFrm( *pPg, *pPg, this );
                 // <--
-                // --> OD 2005-06-09 #i50432#
+                // #i50432#
                 if ( !pPg->GetSortedObjs() )
                 {
                     pPg->ValidateFlyLayout();
@@ -898,7 +898,7 @@ void SwLayAction::InternalAction()
                     XCHECKPAGE;
                 }
 
-                // --> OD 2005-06-09 #i50432#
+                // #i50432#
                 if ( mbFormatCntntOnInterrupt &&
                      ( pPg->IsInvalidCntnt() ||
                        ( pPg->GetSortedObjs() && pPg->IsInvalidFly() ) ) )
@@ -906,7 +906,7 @@ void SwLayAction::InternalAction()
                 {
                     pPg->ValidateFlyInCnt();
                     pPg->ValidateCntnt();
-                    // --> OD 2004-05-10 #i26945# - follow-up of fix #117736#
+                    // #i26945# - follow-up of fix #117736#
                     pPg->ValidateFlyLayout();
                     pPg->ValidateFlyCntnt();
                     // <--
@@ -924,12 +924,12 @@ void SwLayAction::InternalAction()
                         XCHECKPAGE;
                         pPg->InvalidateCntnt();
                         pPg->InvalidateFlyInCnt();
-                        // --> OD 2004-05-10 #i26945# - follow-up of fix #117736#
+                        // #i26945# - follow-up of fix #117736#
                         pPg->InvalidateFlyLayout();
                         pPg->InvalidateFlyCntnt();
                         // <--
                     }
-                    // --> OD 2005-04-06 #i46807# - we are statisfied, if the
+                    // #i46807# - we are statisfied, if the
                     // content is formatted once complete.
                     else
                     {
@@ -1122,7 +1122,7 @@ static const SwFrm *lcl_FindFirstInvaCntnt( const SwLayoutFrm *pLay, long nBotto
     return 0;
 }
 
-// --> OD 2005-02-21 #i37877# - consider drawing objects
+// #i37877# - consider drawing objects
 static const SwAnchoredObject* lcl_FindFirstInvaObj( const SwPageFrm* _pPage,
                                               long _nBottom )
 {
@@ -1246,7 +1246,7 @@ sal_Bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
 
             if ( bTstCnt )
             {
-                // --> OD 2004-06-04 #i27756# - check after each frame calculation,
+                // #i27756# - check after each frame calculation,
                 // if the content frame has changed the page. If yes, no other
                 // frame calculation is performed
                 bool bPageChg = false;
@@ -1260,7 +1260,7 @@ sal_Bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
                         pSct->SetCompletePaint();
                         if ( IsAgain() )
                             return sal_False;
-                        // --> OD 2004-06-04 #i27756#
+                        // #i27756#
                         bPageChg = pCntnt->FindPageFrm() != p2ndPage &&
                                    prPage->GetPrev();
                     }
@@ -1272,7 +1272,7 @@ sal_Bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
                     pCntnt->SetCompletePaint();
                     if ( IsAgain() )
                         return sal_False;
-                    // --> OD 2004-06-04 #i27756#
+                    // #i27756#
                     bPageChg = pCntnt->FindPageFrm() != p2ndPage &&
                                prPage->GetPrev();
                 }
@@ -1286,7 +1286,7 @@ sal_Bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
                         pTab->SetCompletePaint();
                         if ( IsAgain() )
                             return sal_False;
-                        // --> OD 2004-06-04 #i27756#
+                        // #i27756#
                         bPageChg = pCntnt->FindPageFrm() != p2ndPage &&
                                    prPage->GetPrev();
                     }
@@ -1301,13 +1301,13 @@ sal_Bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
                         pSct->SetCompletePaint();
                         if ( IsAgain() )
                             return sal_False;
-                        // --> OD 2004-06-04 #i27756#
+                        // #i27756#
                         bPageChg = pCntnt->FindPageFrm() != p2ndPage &&
                                    prPage->GetPrev();
                     }
                 }
 
-                // --> OD 2004-06-04 #i27756#
+                // #i27756#
                 if ( bPageChg )
                 {
                     bRet = sal_False;
@@ -1831,7 +1831,7 @@ sal_Bool SwLayAction::FormatCntnt( const SwPageFrm *pPage )
             const sal_Bool bOldPaint = IsPaint();
             bPaint = bOldPaint && !(pTab && pTab == pOptTab);
             _FormatCntnt( pCntnt, pPage );
-            // --> OD 2004-11-05 #i26945# - reset <bPaint> before format objects
+            // #i26945# - reset <bPaint> before format objects
             bPaint = bOldPaint;
             // <--
 
@@ -1839,7 +1839,7 @@ sal_Bool SwLayAction::FormatCntnt( const SwPageFrm *pPage )
             // No format, if action flag <bAgain> is set or action is interrupted.
             // OD 2004-08-30 #117736# - allow format on interruption of action, if
             // it's the format for this interrupt
-            // --> OD 2004-11-01 #i23129#, #i36347# - pass correct page frame
+            // #i23129#, #i36347# - pass correct page frame
             // to the object formatter.
             if ( !IsAgain() &&
                  ( !IsInterrupt() || mbFormatCntntOnInterrupt ) &&
@@ -2046,9 +2046,9 @@ sal_Bool SwLayAction::_FormatFlyCntnt( const SwFlyFrm *pFly )
         // OD 2004-05-10 #i28701#
         _FormatCntnt( pCntnt, pCntnt->FindPageFrm() );
 
-        // --> OD 2004-07-23 #i28701# - format floating screen objects
+        // #i28701# - format floating screen objects
         // at content text frame
-        // --> OD 2004-11-02 #i23129#, #i36347# - pass correct page frame
+        // #i23129#, #i36347# - pass correct page frame
         // to the object formatter.
         if ( pCntnt->IsTxtFrm() &&
              !SwObjectFormatter::FormatObjsAtFrm(

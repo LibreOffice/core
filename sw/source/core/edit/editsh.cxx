@@ -668,7 +668,7 @@ void *SwEditShell::GetIMapInventor() const
     return (void*)GetCrsr()->GetNode();
 }
 
-// --> OD 2007-03-01 #i73788#
+// #i73788#
 // remove default parameter, because method is always called this default value
 Graphic SwEditShell::GetIMapGraphic() const
 {

@@ -386,7 +386,7 @@ sal_Bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
 
 sal_Bool SwHyphPortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const
 {
-    // --> FME 2004-06-24 #i16816# tagged pdf support
+    // #i16816# tagged pdf support
     const sal_Unicode cChar = rInf.GetVsh() &&
                               rInf.GetVsh()->GetViewOptions()->IsPDFExport() &&
                               SwTaggedPDFHelper::IsExportTaggedPDF( *rInf.GetOut() ) ?

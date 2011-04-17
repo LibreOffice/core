@@ -79,7 +79,7 @@ class SwPageNumAndTypeOfAnchors
         {
             tEntry* pNewEntry = new tEntry();
             pNewEntry->mpAnchoredObj = &_rAnchoredObj;
-            // --> #i33751#, #i34060# - method <GetPageFrmOfAnchor()>
+            // #i33751#, #i34060# - method <GetPageFrmOfAnchor()>
             // is replaced by method <FindPageFrmOfAnchor()>. It's return value
             // have to be checked.
             SwPageFrm* pPageFrmOfAnchor = _rAnchoredObj.FindPageFrmOfAnchor();
@@ -306,7 +306,7 @@ void SwObjectFormatter::_FormatObjCntnt( SwAnchoredObject& _rAnchoredObj )
         pCntnt->OptCalc();
 
         // format floating screen objects at content text frame
-        // --> #i23129#, #i36347# - pass correct page frame to
+        // #i23129#, #i36347# - pass correct page frame to
         // the object formatter
         if ( pCntnt->IsTxtFrm() &&
              !SwObjectFormatter::FormatObjsAtFrm( *pCntnt,
@@ -383,7 +383,7 @@ void SwObjectFormatter::_FormatObj( SwAnchoredObject& _rAnchoredObj )
                 static_cast<SwFlyLayFrm&>(rFlyFrm).SetNoMakePos( true );
             }
             // <--
-            // --> #i23129#, #i36347# - pass correct page frame
+            // #i23129#, #i36347# - pass correct page frame
             // to the object formatter
             SwObjectFormatter::FormatObjsAtFrm( rFlyFrm,
                                                 *(rFlyFrm.FindPageFrm()),
@@ -486,7 +486,7 @@ bool SwObjectFormatter::_FormatObjsAtFrm( SwTxtFrm* _pMasterTxtFrm )
             continue;
         }
         // <--
-        // --> #i33751#, #i34060# - method <GetPageFrmOfAnchor()>
+        // #i33751#, #i34060# - method <GetPageFrmOfAnchor()>
         // is replaced by method <FindPageFrmOfAnchor()>. It's return value
         // have to be checked.
         SwPageFrm* pPageFrmOfAnchor = pAnchoredObj->FindPageFrmOfAnchor();

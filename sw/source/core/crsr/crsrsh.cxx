@@ -647,7 +647,7 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, sal_Bool bOnlyText, bool bBlock )
     SwTxtNode * pTxtNd = pCrsr->GetNode()->GetTxtNode();
 
     if ( pTxtNd && !IsTableMode() &&
-        // --> FME 2004-11-25 #i37515# No bInFrontOfLabel during selection
+        // #i37515# No bInFrontOfLabel during selection
         !pCrsr->HasMark() &&
         // <--
         pTxtNd->HasVisibleNumberingOrBullet() )

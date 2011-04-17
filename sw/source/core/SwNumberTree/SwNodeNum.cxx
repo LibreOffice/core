@@ -35,7 +35,7 @@
 #include <ndtxt.hxx>
 #include <pam.hxx>
 #include <stdio.h>
-// --> OD 2007-10-31 #i83479#
+// #i83479#
 #include <IDocumentListItems.hxx>
 // <--
 #include <doc.hxx>
@@ -171,7 +171,7 @@ bool SwNodeNum::IsContinuous() const
 {
     bool aResult = false;
 
-    // --> OD 2006-04-21 #i64311#
+    // #i64311#
     if ( GetNumRule() )
     {
         aResult = mpNumRule->IsContinusNum();
@@ -195,7 +195,7 @@ bool SwNodeNum::IsCounted() const
 
     if ( GetTxtNode() )
     {
-        // --> OD 2006-01-25 #i59559#
+        // #i59559#
         // <SwTxtNode::IsCounted()> determines, if a text node is counted for numbering
         aResult = GetTxtNode()->IsCountedInList();
         // <--
@@ -206,7 +206,7 @@ bool SwNodeNum::IsCounted() const
     return aResult;
 }
 
-// --> OD 2006-04-26 #i64010#
+// #i64010#
 bool SwNodeNum::HasCountedChildren() const
 {
     bool bResult = false;
@@ -231,7 +231,7 @@ bool SwNodeNum::HasCountedChildren() const
     return bResult;
 }
 // <--
-// --> OD 2006-04-26 #i64010#
+// #i64010#
 bool SwNodeNum::IsCountedForNumbering() const
 {
     return IsCounted() &&
@@ -262,7 +262,7 @@ bool SwNodeNum::LessThan(const SwNumberTreeNode & rNode) const
         bResult = true;
     else if (mpTxtNode != NULL && rTmpNode.mpTxtNode != NULL)
     {
-        // --> OD 2007-10-31 #i83479# - refactoring
+        // #i83479# - refactoring
         // simplify comparison by comparing the indexes of the text nodes
         bResult = ( mpTxtNode->GetIndex() < rTmpNode.mpTxtNode->GetIndex() ) ? true : false;
         // <--
@@ -287,7 +287,7 @@ bool SwNodeNum::IsCountPhantoms() const
 {
     bool bResult = true;
 
-    // --> OD 2006-04-21 #i64311#
+    // #i64311#
     // phantoms aren't counted in consecutive numbering rules
     if ( mpNumRule )
         bResult = !mpNumRule->IsContinusNum() &&
@@ -397,12 +397,12 @@ void SwNodeNum::_UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum )
 }
 // <--
 
-// --> OD 2007-09-06 #i81002#
+// #i81002#
 const SwNodeNum* SwNodeNum::GetPrecedingNodeNumOf( const SwTxtNode& rTxtNode ) const
 {
     const SwNodeNum* pPrecedingNodeNum( 0 );
 
-    // --> OD 2007-10-31 #i83479#
+    // #i83479#
     SwNodeNum aNodeNumForTxtNode( const_cast<SwTxtNode*>(&rTxtNode) );
     // <--
 

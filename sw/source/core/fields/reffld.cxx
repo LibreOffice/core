@@ -239,7 +239,7 @@ void SwGetRefField::SetSubType( sal_uInt16 n )
     nSubType = n;
 }
 
-// --> OD 2007-11-09 #i81002#
+// #i81002#
 bool SwGetRefField::IsRefToHeadingCrossRefBookmark() const
 {
     return GetSubType() == REF_BOOKMARK &&
@@ -259,7 +259,7 @@ const SwTxtNode* SwGetRefField::GetReferencedTxtNode() const
     return SwGetRefFieldType::FindAnchor( pDoc, sSetRefName, nSubType, nSeqNo, &nDummy );
 }
 // <--
-// --> OD 2008-01-09 #i85090#
+// #i85090#
 String SwGetRefField::GetExpandedTxtOfReferencedTxtNode() const
 {
     const SwTxtNode* pReferencedTxtNode( GetReferencedTxtNode() );
@@ -282,7 +282,7 @@ String SwGetRefField::GetFieldName() const
     return aStr;
 }
 
-// --> OD 2007-09-07 #i81002# - parameter <pFldTxtAttr> added
+// #i81002# - parameter <pFldTxtAttr> added
 void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
 {
     sTxt.Erase();
@@ -428,7 +428,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
 
     case REF_UPDOWN:
         {
-            // --> OD 2007-09-07 #i81002#
+            // #i81002#
             // simplified: use parameter <pFldTxtAttr>
             if( !pFldTxtAttr || !pFldTxtAttr->GetpTxtNode() )
                 break;
@@ -453,7 +453,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
                         : aLocaleData.getBelowWord();
         }
         break;
-    // --> OD 2007-08-24 #i81002#
+    // #i81002#
     case REF_NUMBER:
     case REF_NUMBER_NO_CONTEXT:
     case REF_NUMBER_FULL_CONTEXT:
@@ -470,7 +470,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
     }
 }
 
-// --> OD 2007-09-06 #i81002#
+// #i81002#
 String SwGetRefField::MakeRefNumStr( const SwTxtNode& rTxtNodeOfField,
                                      const SwTxtNode& rTxtNodeOfReferencedItem,
                                      const sal_uInt32 nRefNumFormat ) const
@@ -594,7 +594,7 @@ bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
             case REF_ONLYNUMBER : nPart = ReferenceFieldPart::CATEGORY_AND_NUMBER ; break;
             case REF_ONLYCAPTION: nPart = ReferenceFieldPart::ONLY_CAPTION        ; break;
             case REF_ONLYSEQNO  : nPart = ReferenceFieldPart::ONLY_SEQUENCE_NUMBER; break;
-            // --> OD 2007-09-06 #i81002#
+            // #i81002#
             case REF_NUMBER:              nPart = ReferenceFieldPart::NUMBER;              break;
             case REF_NUMBER_NO_CONTEXT:   nPart = ReferenceFieldPart::NUMBER_NO_CONTEXT;   break;
             case REF_NUMBER_FULL_CONTEXT: nPart = ReferenceFieldPart::NUMBER_FULL_CONTEXT; break;
@@ -668,7 +668,7 @@ bool SwGetRefField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             case ReferenceFieldPart::CATEGORY_AND_NUMBER:   nPart = REF_ONLYNUMBER; break;
             case ReferenceFieldPart::ONLY_CAPTION:          nPart = REF_ONLYCAPTION; break;
             case ReferenceFieldPart::ONLY_SEQUENCE_NUMBER : nPart = REF_ONLYSEQNO; break;
-            // --> OD 2007-09-06 #i81002#
+            // #i81002#
             case ReferenceFieldPart::NUMBER:              nPart = REF_NUMBER;              break;
             case ReferenceFieldPart::NUMBER_NO_CONTEXT:   nPart = REF_NUMBER_NO_CONTEXT;   break;
             case ReferenceFieldPart::NUMBER_FULL_CONTEXT: nPart = REF_NUMBER_FULL_CONTEXT; break;
@@ -787,7 +787,7 @@ void SwGetRefFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew
                                                 *pTFld->GetStart() ) );
             }
 
-            // --> OD 2007-09-06 #i81002#
+            // #i81002#
             pGRef->UpdateField( pFld->GetTxtFld() );
             // <--
         }
@@ -857,7 +857,7 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const String& rRefMark,
                     if(!pBkmk->IsExpanded())
                     {
                         *pEnd = *pStt;
-                        // --> OD 2007-10-18 #i81002#
+                        // #i81002#
                         if(dynamic_cast< ::sw::mark::CrossRefBookmark const *>(pBkmk))
                         {
                             OSL_ENSURE( pTxtNd,

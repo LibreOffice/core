@@ -263,7 +263,7 @@ void SwAnchoredObject::SetVertPosOrientFrm( const SwLayoutFrm& _rVertPosOrientFr
 {
     mpVertPosOrientFrm = &_rVertPosOrientFrm;
 
-    // --> OD 2004-07-02 #i28701# - take over functionality of deleted method
+    // #i28701# - take over functionality of deleted method
     // <SwFlyAtCntFrm::AssertPage()>: assure for at-paragraph and at-character
     // an anchored object, that it is registered at the correct page frame
     RegisterAtCorrectPage();
@@ -375,7 +375,7 @@ void SwAnchoredObject::_CheckCharRect( const SwFmtAnchor& _rAnch,
                    ( (aCharRect.*fnRect->fnGetTop)() !=
                         (maLastCharRect.*fnRect->fnGetTop)() ) ) )
             {
-                // --> #i26945#, #i35911# - unlock position of
+                // #i26945#, #i35911# - unlock position of
                 // anchored object, if it isn't registered at the page,
                 // where its anchor character frame is on.
                 if ( GetPageFrm() != _rAnchorCharFrm.FindPageFrm() )
@@ -414,7 +414,7 @@ void SwAnchoredObject::_CheckTopOfLine( const SwFmtAnchor& _rAnch,
             // check alignment for invalidation of position
             if ( GetFrmFmt().GetVertOrient().GetRelationOrient() == text::RelOrientation::TEXT_LINE )
             {
-                // --> #i26945#, #i35911# - unlock position of
+                // #i26945#, #i35911# - unlock position of
                 // anchored object, if it isn't registered at the page,
                 // where its anchor character frame is on.
                 if ( GetPageFrm() != _rAnchorCharFrm.FindPageFrm() )

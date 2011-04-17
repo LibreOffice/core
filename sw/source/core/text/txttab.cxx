@@ -42,7 +42,7 @@
 #include "itrform2.hxx"
 #include "txtfrm.hxx"
 #include <numrule.hxx>
-// --> OD 2008-06-05 #i89179#
+// #i89179#
 #include <porfld.hxx>
 // <--
 
@@ -100,7 +100,7 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
         // #i24363# tab stops relative to indent
         // nTabLeft: The absolute value, the tab stops are relative to: Tabs origin.
         //
-        // --> OD 2008-07-01 #i91133#
+        // #i91133#
         const bool bTabsRelativeToIndent =
             pFrm->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT);
         const SwTwips nTabLeft = bRTL
@@ -394,13 +394,13 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
     const bool bTabCompat = rInf.GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT);
 
     // Die Mindestbreite eines Tabs ist immer mindestens ein Blank
-    // --> FME 2004-11-25 #i37686# In compatibility mode, the minimum width
+    // #i37686# In compatibility mode, the minimum width
     // should be 1, even for non-left tab stops.
     sal_uInt16 nMinimumTabWidth = 1;
     // <--
     if ( !bTabCompat )
     {
-        // --> OD 2008-06-05 #i89179#
+        // #i89179#
         // tab portion representing the list tab of a list label gets the
         // same font as the corresponding number portion
         std::auto_ptr< SwFontSave > pSave( 0 );
@@ -589,7 +589,7 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
     }
 #endif
 
-    // --> OD 2008-06-05 #i89179#
+    // #i89179#
     // tab portion representing the list tab of a list label gets the
     // same font as the corresponding number portion
     std::auto_ptr< SwFontSave > pSave( 0 );

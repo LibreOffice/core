@@ -156,7 +156,7 @@ struct SwCrsrMoveState
                                 // position if screen position is inside second
                                 // have of bound rect
 
-    sal_Bool bCntntCheck :1; // --> FME 2005-05-13 #i43742# Cursor position over content? <--
+    sal_Bool bCntntCheck :1; // #i43742# Cursor position over content?
 
     // #i27615#
     /**

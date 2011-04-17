@@ -883,7 +883,7 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                         if( rpFrm->IsTabFrm() )
                         {
                             SwTabFrm* pTab = (SwTabFrm*)rpFrm;
-                            // --> OD 2004-09-23 #i33629#, #i29955#
+                            // #i33629#, #i29955#
                             ::RegistFlys( pTab->FindPageFrm(), pTab );
                             // <--
                             SwFrm *pRow = pTab->Lower();
@@ -1145,7 +1145,7 @@ sal_Bool SwLayHelper::CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly )
             SwPageFrm *pPage = rpPage;
             while( pPage && pPage->GetPhyPageNum() < pFlyC->nPageNum )
                 pPage = (SwPageFrm*)pPage->GetNext();
-            // --> OD 2005-02-22 #i43266# - if the found page is an empty page,
+            // #i43266# - if the found page is an empty page,
             // take the previous one (take next one, if previous one doesn't exists)
             if ( pPage && pPage->IsEmptyPage() )
             {

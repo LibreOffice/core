@@ -600,7 +600,7 @@ SwTableNode* SwNodes::InsertTable( const SwNodeIndex& rNdIdx,
 
             SwTxtNode * pTmpNd = new SwTxtNode( aIdx, pTxtColl );
 
-            // --> FME 2006-04-13 #i60422# Propagate some more attributes.
+            // #i60422# Propagate some more attributes.
             const SfxPoolItem* pItem = NULL;
             if ( NULL != pAttrSet )
             {
@@ -1408,7 +1408,7 @@ sal_Bool SwDoc::TableToText( const SwTableNode* pTblNd, sal_Unicode cCh )
     if( !pTblNd )
         return sal_False;
 
-    // --> FME 2004-09-28 #i34471#
+    // #i34471#
     // If this is trigged by SwUndoTblToTxt::Repeat() nobody ever deleted
     // the table cursor.
     SwEditShell* pESh = GetEditShell();
@@ -2223,7 +2223,7 @@ sal_uInt16 SwDoc::MergeTbl( SwPaM& rPam )
         nRet = TBLMERGE_NOSELECTION;
     }
 
-    // --> FME 2004-10-08 #i33394#
+    // #i33394#
     GetIDocumentUndoRedo().StartUndo( UNDO_TABLE_MERGE, NULL );
     // <--
 
@@ -2559,7 +2559,7 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* ,
     if ( !pBoxFrm )
         return;
 
-    // --> FME 2005-01-06 #i39552# Collection of the boxes of the current
+    // #i39552# Collection of the boxes of the current
     // column has to be done at the beginning of this function, because
     // the table may be formatted in ::GetTblSel.
     SwDeletionChecker aDelCheck( pBoxFrm );
@@ -2680,7 +2680,7 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* ,
 
     // delete first and last entry
     OSL_ENSURE( rFill.Count(), "Deleting from empty vector. Fasten your seatbelts!" );
-    // --> FME 2006-01-19 #i60818# There may be only one entry in rFill. Make
+    // #i60818# There may be only one entry in rFill. Make
     // code robust by checking count of rFill.
     if ( rFill.Count() ) rFill.Remove( 0, 1 );
     if ( rFill.Count() ) rFill.Remove( rFill.Count() - 1 , 1 );

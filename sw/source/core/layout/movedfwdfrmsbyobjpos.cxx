@@ -73,7 +73,7 @@ bool SwMovedFwdFrmsByObjPos::FrmMovedFwdByObjPos( const SwTxtFrm& _rTxtFrm,
     return false;
 }
 
-// --> OD 2004-10-05 #i26945#
+// #i26945#
 bool SwMovedFwdFrmsByObjPos::DoesRowContainMovedFwdFrm( const SwRowFrm& _rRowFrm ) const
 {
     bool bDoesRowContainMovedFwdFrm( false );

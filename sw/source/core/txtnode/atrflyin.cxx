@@ -273,7 +273,7 @@ SwFlyInCntFrm *SwTxtFlyCnt::_GetFlyFrm( const SwFrm *pCurrFrm )
 
     // 7922: Wir muessen dafuer sorgen, dass der Inhalt des FlyInCnt
     // nach seiner Konstruktion stramm durchformatiert wird.
-    // --> OD 2004-11-09 #i26945# - Use new object formatter to format Writer
+    // #i26945# - Use new object formatter to format Writer
     // fly frame and its content.
     SwObjectFormatter::FormatObj( *pFly, const_cast<SwFrm*>(pCurrFrm),
                                   pCurrFrm->FindPageFrm() );

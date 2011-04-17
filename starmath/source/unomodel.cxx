@@ -303,10 +303,10 @@ PropertySetInfo * lcl_createModelPropertyInfo ()
         { RTL_CONSTASCII_STRINGPARAM( "Symbols"                       ),        HANDLE_SYMBOLS                       ,      &::getCppuType((const Sequence < SymbolDescriptor > *)0),   PROPERTY_NONE, 0  },
         { RTL_CONSTASCII_STRINGPARAM( "UserDefinedSymbolsInUse"       ),        HANDLE_USED_SYMBOLS                  ,      &::getCppuType((const Sequence < SymbolDescriptor > *)0),   PropertyAttribute::READONLY, 0  },
         { RTL_CONSTASCII_STRINGPARAM( "TopMargin"                         ),    HANDLE_TOP_MARGIN                    ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_TOPSPACE               },
-        // --> PB 2004-08-25 #i33095# Security Options
+        // #i33095# Security Options
         { RTL_CONSTASCII_STRINGPARAM( "LoadReadonly" ), HANDLE_LOAD_READONLY, &::getBooleanCppuType(), PROPERTY_NONE, 0 },
         // <--
-        // --> 3.7.2010 #i972#
+        // #i972#
         { RTL_CONSTASCII_STRINGPARAM( "BaseLine"), HANDLE_BASELINE, &::getCppuType((const sal_Int16*)0), PROPERTY_NONE, 0},
         // <--
         { NULL, 0, 0, NULL, 0, 0 }
@@ -709,7 +709,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                     throw IllegalArgumentException();
             }
             break;
-            // --> PB 2004-08-25 #i33095# Security Options
+            // #i33095# Security Options
             case HANDLE_LOAD_READONLY :
             {
                 if ( (*pValues).getValueType() != ::getBooleanCppuType() )
@@ -927,14 +927,14 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_RUNTIME_UID:
                 *pValue <<= getRuntimeUID();
             break;
-            // --> PB 2004-08-25 #i33095# Security Options
+            // #i33095# Security Options
             case HANDLE_LOAD_READONLY :
             {
                  *pValue <<= pDocSh->IsLoadReadonly();
                 break;
             }
             // <--
-            // --> 3.7.2010 #i972#
+            // #i972#
             case HANDLE_BASELINE:
             {
                 if ( !pDocSh->pTree )

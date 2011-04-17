@@ -203,7 +203,7 @@ long SwWrtShell::DelLeft()
 
     if( SwCrsrShell::IsSttPara())
     {
-        // --> FME 2007-02-15 #i4032# Don't actually call a 'delete' if we
+        // #i4032# Don't actually call a 'delete' if we
         // changed the table cell, compare DelRight().
         const SwStartNode * pSNdOld = pWasInTblNd ?
                                       GetSwCrsr()->GetNode()->FindTableBoxStartNode() :
@@ -225,7 +225,7 @@ long SwWrtShell::DelLeft()
                                      GetSwCrsr()->GetNode()->FindTableBoxStartNode() :
                                      0;
 
-        // --> FME 2007-02-15 #i4032# Don't actually call a 'delete' if we
+        // #i4032# Don't actually call a 'delete' if we
         // changed the table cell, compare DelRight().
         if ( pSNdOld != pSNdNew )
             return 0;
@@ -329,7 +329,7 @@ long SwWrtShell::DelRight()
 
             if ( SwCrsrShell::IsEndPara() )
             {
-                // --> FME 2005-01-28 #i41424# Introduced a couple of
+                // #i41424# Introduced a couple of
                 // Push()-Pop() pairs here. The reason for this is that a
                 // Right()-Left() combination does not make sure, that
                 // the cursor will be in its initial state, because there
@@ -505,9 +505,9 @@ long SwWrtShell::DelNxtWord()
     EnterStdMode();
     SetMark();
     if(IsEndWrd() && !IsSttWrd())
-        _NxtWrdForDelete(); // --> OD 2008-08-06 #i92468#
+        _NxtWrdForDelete(); // #i92468#
     if(IsSttWrd() || IsEndPara())
-        _NxtWrdForDelete(); // --> OD 2008-08-06 #i92468#
+        _NxtWrdForDelete(); // #i92468#
     else
         _EndWrd();
 
@@ -531,11 +531,11 @@ long SwWrtShell::DelPrvWord()
     EnterStdMode();
     SetMark();
     if ( !IsSttWrd() ||
-         !_PrvWrdForDelete() ) // --> OD 2008-08-06 #i92468#
+         !_PrvWrdForDelete() ) // #i92468#
     {
         if( IsEndWrd() )
         {
-            if ( _PrvWrdForDelete() ) // --> OD 2008-08-06 #i92468#
+            if ( _PrvWrdForDelete() ) // #i92468#
             {
                 // skip over all-1 spaces
                 short n = -1;
@@ -547,7 +547,7 @@ long SwWrtShell::DelPrvWord()
             }
         }
         else if( IsSttPara())
-            _PrvWrdForDelete(); // --> OD 2008-08-06 #i92468#
+            _PrvWrdForDelete(); // #i92468#
         else
             _SttWrd();
     }

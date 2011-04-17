@@ -192,12 +192,12 @@ struct ObjAnchorOrder
                                         &(rFmtListed.GetWrapInfluenceOnObjPos());
         const SwFmtWrapInfluenceOnObjPos* pWrapInfluenceOnObjPosNew =
                                         &(rFmtNew.GetWrapInfluenceOnObjPos());
-        // --> OD 2004-10-18 #i35017# - handle ITERATIVE as ONCE_SUCCESSIVE
+        // #i35017# - handle ITERATIVE as ONCE_SUCCESSIVE
         if ( pWrapInfluenceOnObjPosListed->GetWrapInfluenceOnObjPos( true ) !=
                 pWrapInfluenceOnObjPosNew->GetWrapInfluenceOnObjPos( true ) )
         // <--
         {
-            // --> OD 2004-10-18 #i35017# - constant name has changed
+            // #i35017# - constant name has changed
             if ( pWrapInfluenceOnObjPosListed->GetWrapInfluenceOnObjPos( true )
                             == text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE )
             // <--
@@ -215,7 +215,7 @@ struct ObjAnchorOrder
 
 bool SwSortedObjsImpl::Insert( SwAnchoredObject& _rAnchoredObj )
 {
-    // --> OD 2005-08-18 #i51941#
+    // #i51941#
     if ( Contains( _rAnchoredObj ) )
     {
         // list already contains object
@@ -298,7 +298,7 @@ sal_uInt32 SwSortedObjsImpl::ListPosOf( const SwAnchoredObject& _rAnchoredObj ) 
 
     if ( aIter != maSortedObjLst.end() )
     {
-        // --> OD 2005-08-18 #i51941#
+        // #i51941#
 //        nRetLstPos = aIter - maSortedObjLst.begin();
         std::vector< SwAnchoredObject* >::difference_type nPos =
                                                 aIter - maSortedObjLst.begin();

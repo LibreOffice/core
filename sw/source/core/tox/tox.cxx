@@ -335,7 +335,7 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
         SwFormToken aToken(TOKEN_TAB_STOP);
         aToken.nTabStopPosition = 0;
 
-        // --> FME 2004-12-10 #i36870# right aligned tab for all
+        // #i36870# right aligned tab for all
         aToken.cTabFillChar = '.';
         aToken.eTabAlign = SVX_TAB_ADJUST_END;
         // <--
@@ -463,7 +463,7 @@ void SwForm::AdjustTabStops(SwDoc& rDoc, sal_Bool bInsertNewTapStops) // #i21237
             {
                 const SvxTabStop& rTab = (*pTabStops)[nTab];
 
-                // --> FME 2004-12-16 #i29178#
+                // #i29178#
                 // For Word import, we do not want to replace exising tokens,
                 // we insert new tabstop tokens without a tabstop character:
                 if ( bInsertNewTapStops )

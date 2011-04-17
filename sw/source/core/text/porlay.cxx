@@ -415,7 +415,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
         nFlyDescent = 0;
     }
 
-    // --> FME 2006-03-01 #i3952#
+    // #i3952#
     const bool bIgnoreBlanksAndTabsForLineHeightCalculation =
             rInf.GetTxtFrm()->GetNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION);
 
@@ -469,7 +469,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                 nLineLength = nLineLength + pPos->GetLen();
                 AddPrtWidth( pPos->Width() );
 
-                // --> FME 2006-03-01 #i3952#
+                // #i3952#
                 if ( bIgnoreBlanksAndTabsForLineHeightCalculation )
                 {
                     if ( pPos->InTabGrp() || pPos->IsHolePortion() ||
@@ -623,7 +623,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
     {
         SetCntnt( !bTmpDummy );
 
-        // --> FME 2006-03-01 #i3952#
+        // #i3952#
         if ( bIgnoreBlanksAndTabsForLineHeightCalculation &&
              lcl_HasOnlyBlanks( rInf.GetTxt(), rInf.GetLineStart(), rInf.GetLineStart() + GetLen() ) )
         {
@@ -632,7 +632,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
         // <--
     }
 
-    // --> FME 2006-03-01 #i3952#
+    // #i3952#
     if ( bHasBlankPortion && bHasOnlyBlankPortions )
     {
         sal_uInt16 nTmpAscent = GetAscent();
@@ -652,7 +652,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
         rLine.GetRedln()->CheckLine( rLine.GetStart(), rLine.GetEnd() ) );
 }
 
-// --> OD 2005-05-20 #i47162# - add optional parameter <_bNoFlyCntPorAndLinePor>
+// #i47162# - add optional parameter <_bNoFlyCntPorAndLinePor>
 // to control, if the fly content portions and line portion are considered.
 void SwLineLayout::MaxAscentDescent( SwTwips& _orAscent,
                                      SwTwips& _orDescent,
@@ -988,7 +988,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         if ( nChg > rTxt.Len() )
             nChg = rTxt.Len();
 
-        // --> FME 2008-09-17 #i28203#
+        // #i28203#
         // for 'complex' portions, we make sure that a portion does not contain more
         // than one script:
         if( i18n::ScriptType::COMPLEX == nScript && pBreakIt->GetScriptTypeDetector().is() )

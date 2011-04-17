@@ -193,7 +193,7 @@ sal_uInt16 aTableSetRange[] = {
     RES_KEEP,           RES_KEEP,
     RES_LAYOUT_SPLIT,   RES_LAYOUT_SPLIT,
     RES_FRAMEDIR,       RES_FRAMEDIR,
-    // --> collapsing borders FME 2005-05-27 #i29550#
+    // #i29550#
     RES_COLLAPSING_BORDERS, RES_COLLAPSING_BORDERS,
     // <-- collapsing
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,

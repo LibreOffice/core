@@ -153,7 +153,7 @@ sal_Bool SwWrtShell::_PrvWrd()
     return bRet;
 }
 
-// --> OD 2008-08-06 #i92468#
+// #i92468#
 // method code of <SwWrtShell::_NxtWrd()> before fix for issue i72162
 sal_Bool SwWrtShell::_NxtWrdForDelete()
 {

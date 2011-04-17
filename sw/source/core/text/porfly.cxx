@@ -172,7 +172,7 @@ void SwTxtFrm::MoveFlyInCnt( SwTxtFrm *pNew, xub_StrLen nStart, xub_StrLen nEnd 
         for ( sal_uInt32 i = 0; GetDrawObjs() && i < pObjs->Count(); ++i )
         {
             // OD 2004-03-29 #i26791#
-            // --> OD 2004-07-06 #i28701# - consider changed type of
+            // #i28701# - consider changed type of
             // <SwSortedList> entries
             SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
             const SwFmtAnchor& rAnch = pAnchoredObj->GetFrmFmt().GetAnchor();
@@ -326,7 +326,7 @@ SwFlyCntPortion::SwFlyCntPortion( const SwTxtFrm& rFrm,
     {
         // OD 2004-04-01 #i26791# - no direct positioning needed any more
         pDrawContact->ConnectToLayout();
-        // --> OD 2005-01-14 #i40333# - follow-up of #i35635#
+        // #i40333# - follow-up of #i35635#
         // move object to visible layer
         pDrawContact->MoveObjToVisibleLayer( pDrawContact->GetMaster() );
         // <--
@@ -369,7 +369,7 @@ void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
             OSL_FAIL( "SwFlyCntPortion::SetBase(..) - No drawing object found by <GetDrawContact()->GetDrawObjectByAnchorFrm( rFrm )>" );
             pSdrObj = GetDrawContact()->GetMaster();
         }
-        // --> OD 2007-11-29 #i65798#
+        // #i65798#
         // call <SwAnchoredDrawObject::MakeObjPos()> to assure that flag at
         // the <DrawFrmFmt> and at the <SwAnchoredDrawObject> instance are
         // correctly set.

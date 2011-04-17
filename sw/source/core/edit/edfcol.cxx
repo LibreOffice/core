@@ -67,7 +67,7 @@ SwTxtFmtColl& SwEditShell::GetTxtFmtColl( sal_uInt16 nFmtColl) const
     return *((*(GetDoc()->GetTxtFmtColls()))[nFmtColl]);
 }
 
-// --> OD 2007-11-06 #i62675#
+// #i62675#
 void SwEditShell::SetTxtFmtColl( SwTxtFmtColl *pFmt,
                                  bool bResetListAttrs )
 {
@@ -111,7 +111,7 @@ void SwEditShell::FillByEx(SwTxtFmtColl* pColl, sal_Bool bReset)
 {
     if( bReset )
     {
-        // --> OD 2007-01-25 #i73790# - method renamed
+        // #i73790# - method renamed
         pColl->ResetAllFmtAttr();
         // <--
     }

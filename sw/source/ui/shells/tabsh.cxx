@@ -141,7 +141,7 @@ const sal_uInt16 aUITableAttrRange[] =
     RES_FRAMEDIR,                   RES_FRAMEDIR,
     RES_ROW_SPLIT,                  RES_ROW_SPLIT,
     FN_TABLE_BOX_TEXTDIRECTION,     FN_TABLE_BOX_TEXTDIRECTION,
-// --> collapsing borders FME 2005-05-27 #i29550#
+// #i29550#
     RES_COLLAPSING_BORDERS,         RES_COLLAPSING_BORDERS,
 // <-- collapsing borders
     0
@@ -438,7 +438,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
             RES_UL_SPACE,
             RES_SHADOW,
             RES_FRAMEDIR,
-            // --> collapsing borders FME 2005-05-27 #i29550#
+            // #i29550#
             RES_COLLAPSING_BORDERS,
             // <-- collapsing borders
             0

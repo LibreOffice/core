@@ -266,9 +266,8 @@ void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
     }
 
     if( pSh->GetAccessibilityOptions()->IsStopAnimatedGraphics() ||
-    // --> FME 2004-06-21 #i9684# Stop animation during printing/pdf export
+    // #i9684# Stop animation during printing/pdf export
        !pSh->GetWin() )
-    // <--
         StopAnimation();
 
     SfxProgress::EnterLock(); //Keine Progress-Reschedules im Paint (SwapIn)
@@ -875,9 +874,8 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                 const sal_Bool bAnimate = rGrfObj.IsAnimated() &&
                                          !pShell->IsPreView() &&
                                          !pShell->GetAccessibilityOptions()->IsStopAnimatedGraphics() &&
-                // --> FME 2004-06-21 #i9684# Stop animation during printing/pdf export
+                // #i9684# Stop animation during printing/pdf export
                                           pShell->GetWin();
-                // <--
 
                 if( bAnimate &&
                     FindFlyFrm() != ::GetFlyFromMarked( 0, pShell ))

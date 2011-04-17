@@ -56,7 +56,7 @@
 #include "pordrop.hxx"
 #include "crstate.hxx"      // SwCrsrMoveState
 #include <pormulti.hxx>     // SwMultiPortion
-// --> OD 2010-05-05 #i111284#
+// #i111284#
 #include <numrule.hxx>
 // <--
 
@@ -145,7 +145,7 @@ void lcl_GetCharRectInsideField( SwTxtSizeInfo& rInf, SwRect& rOrig,
     }
 }
 
-// --> OD 2010-05-05 #i111284#
+// #i111284#
 namespace {
     bool AreListLevelIndentsApplicableAndLabelAlignmentActive( const SwTxtNode& rTxtNode )
     {
@@ -241,7 +241,7 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
     nRight = pFrm->Frm().Left() + pFrm->Prt().Left() + pFrm->Prt().Width();
 
     if( nLeft >= nRight &&
-         // --> FME 2005-08-10 #i53066# Omit adjustment of nLeft for numbered
+         // #i53066# Omit adjustment of nLeft for numbered
          // paras inside cells inside new documents:
         ( pNode->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) ||
           !pFrm->IsInTab() ||
@@ -352,7 +352,7 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
     bLastBlock = rAdjust.GetLastBlock() == SVX_ADJUST_BLOCK;
     bLastCenter = rAdjust.GetLastBlock() == SVX_ADJUST_CENTER;
 
-    // --> OD 2008-07-01 #i91133#
+    // #i91133#
     mnTabLeft = pNode->GetLeftMarginForTabCalculation();
     // <--
 
@@ -1625,7 +1625,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                 if ( nSpaceAdd )
                 {
                     xub_StrLen nCharCnt;
-                    // --> FME 2005-04-04 #i41860# Thai justified alignemt needs some
+                    // #i41860# Thai justified alignemt needs some
                     // additional information:
                     aDrawInf.SetNumberOfBlanks( pPor->InTxtGrp() ?
                                                 static_cast<const SwTxtPortion*>(pPor)->GetSpaceCnt( aSizeInf, nCharCnt ) :

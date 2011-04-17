@@ -1981,7 +1981,7 @@ SwWrongList* SwTxtNode::GetWrong()
     return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->pWrong : 0;
 }
 
-// --> OD 2008-05-27 #i71360#
+// #i71360#
 const SwWrongList* SwTxtNode::GetWrong() const
 {
     return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->pWrong : 0;

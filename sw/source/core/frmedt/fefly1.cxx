@@ -412,7 +412,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
         return aRet;
 
     SdrObject* pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
-    // --> OD 2004-07-16 #i28701#
+    // #i28701#
     SwAnchoredObject* pAnchoredObj = ::GetUserCall( pObj )->GetAnchoredObj( pObj );
     SwFrmFmt& rFmt = pAnchoredObj->GetFrmFmt();
     RndStdIds nAnchorId = rFmt.GetAnchor().GetAnchorId();
@@ -568,7 +568,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
                         delete pHandleAnchorNodeChg;
                     }
                     // <--
-                    // --> OD 2004-06-24 #i28701# - no call of method
+                    // #i28701# - no call of method
                     // <CheckCharRectAndTopOfLine()> for to-character anchored
                     // Writer fly frame needed. This method call can cause a
                     // format of the anchor frame, which is no longer intended.
@@ -625,7 +625,7 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
             // Position gesetzt.
             ParkCrsr( SwNodeIndex( *aBoxes[0]->GetSttNd() ));
 
-            // --> FME 2005-12-01 #i127787# pCurCrsr will be deleted in ParkCrsr,
+            // #i127787# pCurCrsr will be deleted in ParkCrsr,
             // we better get the current pCurCrsr instead of working with the
             // deleted one:
             pCrsr = GetCrsr();
@@ -895,7 +895,7 @@ void SwFEShell::InsertDrawObj( SdrObject& rDrawObj,
 
     SfxItemSet rFlyAttrSet( GetDoc()->GetAttrPool(), aFrmFmtSetRange );
     rFlyAttrSet.Put( SwFmtAnchor( FLY_AT_PARA ));
-    // --> OD 2009-12-29 #i89920#
+    // #i89920#
     rFlyAttrSet.Put( SwFmtSurround( SURROUND_THROUGHT ) );
     rDrawObj.SetLayer( getIDocumentDrawModelAccess()->GetHeavenId() );
     // <--
@@ -1137,7 +1137,7 @@ sal_Bool SwFEShell::SetDrawingAttr( SfxItemSet& rSet )
         if ( nNew != pFmt->GetAnchor().GetAnchorId() )
         {
             ChgAnchor( nNew );
-            // --> OD 2004-06-17 #i26791# - clear anchor attribute in item set,
+            // #i26791# - clear anchor attribute in item set,
             // because method <ChgAnchor(..)> takes care of it.
             rSet.ClearItem( RES_ANCHOR );
         }
@@ -2019,7 +2019,7 @@ void SwFEShell::GetConnectableFrmFmts(SwFrmFmt & rFmt,
     EndAction();
 }
 
-// --> OD 2009-07-13 #i73249#
+// #i73249#
 const String SwFEShell::GetObjTitle() const
 {
     String aTitle;

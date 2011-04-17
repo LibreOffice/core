@@ -1282,7 +1282,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                 if( rDoc.FindPageDescByName( pDesc->GetName(), &nPgDscPos ))
                 {
                     pNewDsc = new SwPageDesc( *pDesc );
-                    // --> OD 2005-05-09 #i48949# - no undo actions for the
+                    // #i48949# - no undo actions for the
                     // copy of the page style
                     ::sw::UndoGuard const ug(rDoc.GetIDocumentUndoRedo());
                     rDoc.CopyPageDesc(*pDesc, *pNewDsc); // #i7983#
@@ -2167,7 +2167,7 @@ void  SwDocStyleSheetPool::Replace( SfxStyleSheetBase& rSource,
                 pTargetFmt->ResetFmtAttr( RES_PAGEDESC, RES_FRMATR_END-1 );
             else
             {
-                // --> OD 2007-01-25 #i73790# - method renamed
+                // #i73790# - method renamed
                 pTargetFmt->ResetAllFmtAttr();
                 // <--
             }

@@ -311,12 +311,12 @@ sal_uInt8 SwFlowFrm::BwdMoveNecessary( const SwPageFrm *pPage, const SwRect &rRe
     } while ( !nRet && pTmp );
     if ( pPage->GetSortedObjs() )
     {
-        // --> OD 2004-07-01 #i28701# - new type <SwSortedObjs>
+        // #i28701# - new type <SwSortedObjs>
         const SwSortedObjs &rObjs = *pPage->GetSortedObjs();
         sal_uLong nIndex = ULONG_MAX;
         for ( sal_uInt16 i = 0; nRet < 3 && i < rObjs.Count(); ++i )
         {
-            // --> OD 2004-07-01 #i28701# - consider changed type of
+            // #i28701# - consider changed type of
             // <SwSortedObjs> entries.
             SwAnchoredObject* pObj = rObjs[i];
             const SwFrmFmt& rFmt = pObj->GetFrmFmt();
@@ -405,7 +405,7 @@ SwLayoutFrm *SwFlowFrm::CutTree( SwFrm *pStart )
     if ( pLay->IsInFtn() )
         pLay = pLay->FindFtnFrm();
 
-    // --> OD 2006-05-08 #i58846#
+    // #i58846#
     // <pPrepare( PREP_QUOVADIS )> only for frames in footnotes
     if( pStart->IsInFtn() )
     {
@@ -594,7 +594,7 @@ void SwFlowFrm::MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling )
         if ( pPre )
         {
             pPre->SetRetouche();
-            // --> OD 2004-11-23 #115759# - follow-up of #i26250#
+            // #115759# - follow-up of #i26250#
             // invalidate printing area of previous frame, if it's in a table
             if ( pPre->GetUpper()->IsInTab() )
             {
@@ -812,7 +812,7 @@ SwLayoutFrm *SwFrm::GetLeaf( MakePageType eMakePage, sal_Bool bFwd )
     if ( IsInFtn() )
         return bFwd ? GetNextFtnLeaf( eMakePage ) : GetPrevFtnLeaf( eMakePage );
 
-    // --> OD 2005-08-16 #i53323#
+    // #i53323#
     // A frame could be inside a table AND inside a section.
     // Thus, it has to be determined, which is the first parent.
     bool bInTab( IsInTab() );
@@ -993,7 +993,7 @@ SwLayoutFrm *SwFrm::GetNextLeaf( MakePageType eMakePage )
             const ViewShell *pSh = getRootFrm()->GetCurrShell();
             // #111704# The pagedesc check does not make sense for frames in fly frames
             if ( pNew != FindPageFrm() && !bNewPg && !IsInFly() &&
-                 // --> FME 2005-05-10 #i46683#
+                 // #i46683#
                  // Do not consider page descriptions in browse mode (since
                  // MoveBwd ignored them)
                  !(pSh && pSh->GetViewOptions()->getBrowseMode() ) )
@@ -1140,16 +1140,16 @@ sal_Bool SwFlowFrm::IsPrevObjMove() const
                      pPreUp->GetUpper()->GetUpper()->IsSctFrm() )
                 pPreUp = pPreUp->GetUpper()->GetUpper()->GetUpper();
         }
-        // --> OD 2004-10-15 #i26945# - re-factoring:
+        // #i26945# - re-factoring
         // use <GetVertPosOrientFrm()> to determine, if object has followed the
         // text flow to the next layout frame
         for ( sal_uInt16 i = 0; i < pPre->GetDrawObjs()->Count(); ++i )
         {
-            // --> OD 2004-07-01 #i28701# - consider changed type of
+            // #i28701# - consider changed type of
             // <SwSortedObjs> entries.
             const SwAnchoredObject* pObj = (*pPre->GetDrawObjs())[i];
             // OD 2004-01-20 #110582# - do not consider hidden objects
-            // --> OD 2004-10-15 #i26945# - do not consider object, which
+            // #i26945# - do not consider object, which
             // doesn't follow the text flow.
             if ( pObj->GetFrmFmt().GetDoc()->IsVisibleLayerId(
                                             pObj->GetDrawObj()->GetLayer() ) &&
@@ -1454,7 +1454,7 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
             // values of found previous frame and use these values.
             SwTwips nPrevLowerSpace = 0;
             SwTwips nPrevLineSpacing = 0;
-            // --> OD 2009-08-28 #i102458#
+            // #i102458#
             bool bPrevLineSpacingPorportional = false;
             GetSpacingValuesOfFrm( (*pPrevFrm),
                                    nPrevLowerSpace, nPrevLineSpacing,
@@ -1484,7 +1484,7 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                     //      building its maximum.
                     if ( pOwn->IsTxtFrm() )
                     {
-                        // --> OD 2009-08-28 #i102458#
+                        // #i102458#
                         // Correction:
                         // A proportional line spacing of the previous text frame
                         // is added up to a own leading line spacing.
@@ -1531,7 +1531,7 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                     SwTwips nAdd = nPrevLineSpacing;
                     if ( pOwn->IsTxtFrm() )
                     {
-                        // --> OD 2009-08-28 #i102458#
+                        // #i102458#
                         // Correction:
                         // A proportional line spacing of the previous text frame
                         // is added up to a own leading line spacing.
@@ -1650,7 +1650,7 @@ SwTwips SwFlowFrm::_GetUpperSpaceAmountConsideredForPrevFrm() const
     {
         SwTwips nPrevLowerSpace = 0;
         SwTwips nPrevLineSpacing = 0;
-        // --> OD 2009-08-28 #i102458#
+        // #i102458#
         bool bDummy = false;
         GetSpacingValuesOfFrm( (*pPrevFrm), nPrevLowerSpace, nPrevLineSpacing, bDummy );
         // <--
@@ -1721,7 +1721,7 @@ SwTwips SwFlowFrm::CalcLowerSpace( const SwBorderAttrs* _pAttrs ) const
                   _pAttrs->GetBottomLine( rThis ) :
                   _pAttrs->CalcBottomLine();
 
-    // --> OD 2004-07-16 #i26250#
+    // #i26250#
     // - correct consideration of table frames
     // - use new method <CalcAddLowerSpaceAsLastInTableCell(..)>
     if ( ( ( rThis.IsTabFrm() && rThis.GetUpper()->IsInTab() ) ||
@@ -1968,7 +1968,7 @@ sal_Bool SwFlowFrm::MoveFwd( sal_Bool bMakePage, sal_Bool bPageBreak, sal_Bool b
         // First, we move the footnotes.
         sal_Bool bFtnMoved = sal_False;
 
-        // --> FME 2004-07-15 #i26831#
+        // #i26831#
         // If pSect has just been created, the printing area of pSect has
         // been calculated based on the first content of its follow.
         // In this case we prefer to call a SimpleFormat for this new
@@ -2003,7 +2003,7 @@ sal_Bool SwFlowFrm::MoveFwd( sal_Bool bMakePage, sal_Bool bPageBreak, sal_Bool b
         // MoveSubTree bzw. PasteTree ist auf so etwas nicht vorbereitet.
         if( pNewUpper != rThis.GetUpper() )
         {
-            // --> FME 2004-04-19 #i27145#
+            // #i27145#
             SwSectionFrm* pOldSct = 0;
             if ( rThis.GetUpper()->IsSctFrm() )
             {
@@ -2013,7 +2013,7 @@ sal_Bool SwFlowFrm::MoveFwd( sal_Bool bMakePage, sal_Bool bPageBreak, sal_Bool b
 
             MoveSubTree( pNewUpper, pNewUpper->Lower() );
 
-            // --> FME 2004-04-19 #i27145#
+            // #i27145#
             if ( pOldSct && pOldSct->GetSection() )
             {
                 // Prevent loops by setting the new height at
@@ -2029,7 +2029,7 @@ sal_Bool SwFlowFrm::MoveFwd( sal_Bool bMakePage, sal_Bool bPageBreak, sal_Bool b
             }
             // <--
 
-            // --> FME 2004-07-15 #i26831#
+            // #i26831#
             if ( bForceSimpleFormat )
             {
                 pSect->SimpleFormat();
@@ -2063,7 +2063,7 @@ sal_Bool SwFlowFrm::MoveFwd( sal_Bool bMakePage, sal_Bool bPageBreak, sal_Bool b
 
         if ( !( pSh && pSh->GetViewOptions()->getBrowseMode() ) )
         {
-            // --> OD 2009-12-31 #i106452#
+            // #i106452#
             // check page description not only in situation with sections.
             if ( !bSamePage &&
                  ( rThis.GetAttrSet()->GetPageDesc().GetPageDesc() ||
@@ -2128,7 +2128,7 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
         //steht, ist nix mit zurueckfliessen. Die breaks brauche fuer die
         //Fussnoten nicht geprueft zu werden.
 
-        // --> FME 2004-11-15 #i37084# FindLastCntnt does not necessarily
+        // #i37084# FindLastCntnt does not necessarily
         // have to have a result != 0
         SwFrm* pRef = 0;
         const bool bEndnote = pFtn->GetAttr()->GetFtn().IsEndNote();
@@ -2177,13 +2177,13 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
                 if ( nDiff > 1 )
                 {
                     pNewUpper = rThis.GetLeaf( MAKEPAGE_NONE, sal_False );
-                    // --> OD 2006-05-08 #i53139#
+                    // #i53139#
                     // Now <pNewUpper> is a previous layout frame, which contains
                     // content. But the new upper layout frame has to be the next one.
                     // Thus, hack for issue i14206 no longer needed, but fix for issue 114442
                     // --> OD 2006-05-17 #136024# - correct fix for i53139:
                     // Check for wrong page description before using next new upper.
-                    // --> OD 2006-06-06 #i66051# - further correction of fix for i53139
+                    // #i66051# - further correction of fix for i53139
                     // Check for correct type of new next upper layout frame
                     // --> OD 2006-06-08 #136538# - another correction of fix for i53139
                     // Assumption, that in all cases <pNewUpper> is a previous
@@ -2191,7 +2191,7 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
                     // --> OD 2006-07-05 #136538# - another correction of fix for i53139
                     // Beside type check, check also, if proposed new next upper
                     // frame is inside the same frame types.
-                    // --> OD 2007-01-10 #i73194# - and yet another correction
+                    // #i73194# - and yet another correction
                     // of fix for i53139:
                     // Assure that the new next upper layout frame doesn't
                     // equal the current one.
@@ -2238,18 +2238,17 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
             {
                 pNewUpper = 0;
             }
-            // --> OD 2006-05-08 #i53139#
-            // --> OD 2006-09-11 #i69409# - check <pNewUpper>
-            // --> OD 2006-11-02 #i71065# - check <SwFlowFrm::IsMoveBwdJump()>
+            // #i53139#
+            // #i69409# - check <pNewUpper>
+            // #i71065# - check <SwFlowFrm::IsMoveBwdJump()>
             else if ( pNewUpper && !SwFlowFrm::IsMoveBwdJump() )
-            // <--
             {
                 // Now <pNewUpper> is a previous layout frame, which
                 // contains content. But the new upper layout frame
                 // has to be the next one.
                 // --> OD 2006-05-17 #136024# - correct fix for i53139
                 // Check for wrong page description before using next new upper.
-                // --> OD 2006-06-06 #i66051# - further correction of fix for i53139
+                // #i66051# - further correction of fix for i53139
                 // Check for correct type of new next upper layout frame
                 // --> OD 2006-07-05 #136538# - another correction of fix for i53139
                 // Beside type check, check also, if proposed new next upper
@@ -2295,18 +2294,18 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
                         if( SwFlowFrm::IsMoveBwdJump() )
                         {
                             pNewUpper = pColBody;
-                            // --> OD 2006-05-08 #i53139#
+                            // #i53139#
                             // Now <pNewUpper> is a previous layout frame, which
                             // contains content. But the new upper layout frame
                             // has to be the next one.
                             // --> OD 2006-05-17 #136024# - correct fix for i53139
                             // Check for wrong page description before using next new upper.
-                            // --> OD 2006-06-06 #i66051# - further correction of fix for i53139
+                            // #i66051# - further correction of fix for i53139
                             // Check for correct type of new next upper layout frame
                             // --> OD 2006-07-05 #136538# - another correction of fix for i53139
                             // Beside type check, check also, if proposed new next upper
                             // frame is inside the same frame types.
-                            // --> OD 2006-11-02 #i71065#
+                            // #i71065#
                             // Check that the proposed new next upper layout
                             // frame isn't the current one.
                             SwLayoutFrm* pNewNextUpper = pNewUpper->GetLeaf( MAKEPAGE_NONE, sal_True );
@@ -2340,12 +2339,12 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
     else //Keine Breaks also kann ich zurueckfliessen
         pNewUpper = rThis.GetLeaf( MAKEPAGE_NONE, sal_False );
 
-    // --> OD 2004-06-23 #i27801# - no move backward of 'master' text frame,
+    // #i27801# - no move backward of 'master' text frame,
     // if - due to its object positioning - it isn't allowed to be on the new page frame
-    // --> OD 2005-03-07 #i44049# - add another condition for not moving backward:
+    // #i44049# - add another condition for not moving backward
     // If one of its objects has restarted the layout process, moving backward
     // isn't sensible either.
-    // --> OD 2005-04-19 #i47697# - refine condition made for issue i44049:
+    // #i47697# - refine condition made for issue i44049
     // - allow move backward as long as the anchored object is only temporarily
     //   positions considering its wrapping style.
     if ( pNewUpper &&
@@ -2361,7 +2360,7 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
         {
             pNewUpper = 0;
         }
-        // --> OD 2005-03-07 #i44049# - check, if one of its anchored objects
+        // #i44049# - check, if one of its anchored objects
         // has restarted the layout process.
         else if ( rThis.GetDrawObjs() )
         {
@@ -2369,7 +2368,7 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
             for ( ; i < rThis.GetDrawObjs()->Count(); ++i )
             {
                 SwAnchoredObject* pAnchoredObj = (*rThis.GetDrawObjs())[i];
-                // --> OD 2005-04-19 #i47697# - refine condition - see above
+                // #i47697# - refine condition - see above
                 if ( pAnchoredObj->RestartLayoutProcess() &&
                      !pAnchoredObj->IsTmpConsiderWrapInfluence() )
                 // <--
@@ -2454,13 +2453,13 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
 
     // OD 2004-05-26 #i21478# - don't move backward, if flow frame wants to
     // keep with next frame and next frame is locked.
-    // --> OD 2004-12-08 #i38232# - If next frame is a table, do *not* check,
+    // #i38232# - If next frame is a table, do *not* check,
     // if it's locked.
     if ( pNewUpper && !IsFollow() &&
          rThis.GetAttrSet()->GetKeep().GetValue() && rThis.GetIndNext() )
     {
         SwFrm* pIndNext = rThis.GetIndNext();
-        // --> OD 2004-12-08 #i38232#
+        // #i38232#
         if ( !pIndNext->IsTabFrm() )
         {
             // get first content of section, while empty sections are skipped
@@ -2488,7 +2487,7 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
         // <--
     }
 
-    // --> OD 2006-05-10 #i65250#
+    // #i65250#
     // layout loop control for flowing content again and again moving
     // backward under the same layout condition.
     if ( pNewUpper && !IsFollow() &&
@@ -2501,7 +2500,7 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
                                     ? MAKEPAGE_NOSECTION
                                     : MAKEPAGE_NONE,
                                     sal_True );
-        // --> OD 2007-01-10 #i73194# - make code robust
+        // #i73194# - make code robust
         OSL_ENSURE( pNextNewUpper, "<SwFlowFrm::MoveBwd(..)> - missing next new upper" );
         if ( pNextNewUpper &&
              ( pNextNewUpper == rThis.GetUpper() ||

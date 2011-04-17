@@ -1221,7 +1221,7 @@ SwXNumberingRules::SwXNumberingRules(SwDoc& rDoc) :
     sal_uInt16 nIndex =
 #endif
     rDoc.MakeNumRule( sCreatedNumRuleName, 0, sal_False,
-                      // --> OD 2008-06-06 #i89178#
+                      // #i89178#
                       numfunc::GetDefaultPositionAndSpaceMode() );
                       // <--
 #if OSL_DEBUG_LEVEL > 1

@@ -1035,7 +1035,7 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                 bRet = sal_True;
             }
         }
-        // --> FME 2005-05-13 #i43742# New function: SW_CONTENT_CHECK
+        // #i43742# New function
         else if ( SwContentAtPos::SW_CONTENT_CHECK & rCntntAtPos.eCntntAtPos &&
                   bCrsrFoundExact )
         {

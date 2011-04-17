@@ -368,7 +368,7 @@ sal_Bool SwTxtFrm::FormatEmpty()
                  aTxtFly.IsOn() && aTxtFly.IsAnyObj( aRect ) )
                  return sal_False;
 
-            // --> OD 2004-11-17 #i35635# - call method <HideAndShowObjects()>
+            // #i35635# - call method <HideAndShowObjects()>
             // to assure that objects anchored at the empty paragraph are
             // correctly visible resp. invisible.
             HideAndShowObjects();

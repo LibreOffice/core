@@ -288,7 +288,7 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
         if ( rAnchorFrm.IsVertical() )
             rAnchorFrm.SwitchHorizontalToVertical( aAnchorPos );
 
-        // --> OD 2005-03-09 #i44347# - keep last object rectangle at anchored object
+        // #i44347# - keep last object rectangle at anchored object
        OSL_ENSURE( GetAnchoredObj().ISA(SwAnchoredDrawObject),
                  "<SwAsCharAnchoredObjectPosition::CalcPosition()> - wrong type of anchored object." );
         SwAnchoredDrawObject& rAnchoredDrawObj =

@@ -177,7 +177,7 @@ sal_Bool SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
         pStt = aBoxes[0];
         pEnd = aBoxes[aBoxes.Count() - 1];
     }
-    // --> FME 2004-07-30 #i32329# Enhanced table selection
+    // #i32329# Enhanced table selection
     else if ( pTable->IsNewModel() )
     {
         const SwShellCrsr *pCrsr = _GetCrsr();

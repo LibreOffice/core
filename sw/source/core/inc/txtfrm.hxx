@@ -459,7 +459,7 @@ public:
     SwTxtFrm *FindQuoVadisFrm();
 
     // holt die Formatierug nach, wenn der Idle-Handler zugeschlagen hat.
-    // --> FME 2004-10-29 #i29062# GetFormatted() can trigger a full formatting
+    // #i29062# GetFormatted() can trigger a full formatting
     // of the paragraph, causing other layout frames to become invalid. This
     // has to be avoided during painting. Therefore we need to pass the
     // information that we are currently in the paint process.

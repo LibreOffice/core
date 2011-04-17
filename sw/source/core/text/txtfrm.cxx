@@ -669,7 +669,7 @@ xub_StrLen SwTxtFrm::FindBrk( const XubString &rTxt,
                               const xub_StrLen nStart,
                               const xub_StrLen nEnd ) const
 {
-    // --> OD 2009-12-28 #i104291# - applying patch to avoid overflow.
+    // #i104291# - applying patch to avoid overflow.
     unsigned long nFound = nStart;
     const xub_StrLen nEndLine = Min( nEnd, rTxt.Len() );
 
@@ -1065,7 +1065,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                 }
             }
 
-            // --> OD 2010-02-16 #i104008#
+            // #i104008#
             ViewShell* pViewSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
             if ( pViewSh  )
             {
@@ -1322,7 +1322,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                     SwCntntFrm::Modify( pOld, pNew );
             }
 
-            // --> OD 2009-01-06 #i88069#
+            // #i88069#
             ViewShell* pViewSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
             if ( pViewSh  )
             {
@@ -1559,7 +1559,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                 if ( pGrid && GetTxtNode()->GetSwAttrSet().GetParaGrid().GetValue() )
                     break;
 
-                // --> OD 2004-07-16 #i28701# - consider anchored objects
+                // #i28701# - consider anchored objects
                 if ( GetDrawObjs() )
                     break;
                 // <--
@@ -1743,7 +1743,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                         for ( MSHORT i = 0; i < nCnt; ++i )
                         {
                             SwAnchoredObject* pAnchoredObj = (*GetDrawObjs())[i];
-                            // --> OD 2004-07-16 #i28701# - consider all
+                            // #i28701# - consider all
                             // to-character anchored objects
                             if ( pAnchoredObj->GetFrmFmt().GetAnchor().GetAnchorId()
                                     == FLY_AT_CHAR )
@@ -2162,7 +2162,7 @@ SwTxtFrm* SwTxtFrm::GetFormatted( bool bForceQuickFormat )
 
 SwTwips SwTxtFrm::CalcFitToContent()
 {
-    // --> FME 2004-07-16 #i31490#
+    // #i31490#
     // If we are currently locked, we better return with a
     // fairly reasonable value:
     if ( IsLocked() )
@@ -2184,11 +2184,11 @@ SwTwips SwTxtFrm::CalcFitToContent()
     Frm().Width( nPageWidth );
     Prt().Width( nPageWidth );
 
-    // --> FME 2004-07-19 #i25422# objects anchored as character in RTL
+    // #i25422# objects anchored as character in RTL
     if ( IsRightToLeft() )
         Frm().Pos().X() += nOldFrmWidth - nPageWidth;
 
-    // --> FME 2004-07-16 #i31490#
+    // #i31490#
     SwTxtFrmLocker aLock( this );
     // <--
 
@@ -2197,7 +2197,7 @@ SwTwips SwTxtFrm::CalcFitToContent()
     SwTxtFormatter  aLine( this, &aInf );
     SwHookOut aHook( aInf );
 
-    // --> OD 2005-09-06 #i54031# - assure mininum of MINLAY twips.
+    // #i54031# - assure mininum of MINLAY twips.
     const SwTwips nMax = Max( (SwTwips)MINLAY,
                               aLine._CalcFitToContent() + 1 );
     // <--
@@ -2205,7 +2205,7 @@ SwTwips SwTxtFrm::CalcFitToContent()
     Frm().Width( nOldFrmWidth );
     Prt().Width( nOldPrtWidth );
 
-    // --> FME 2004-07-19 #i25422# objects anchored as character in RTL
+    // #i25422# objects anchored as character in RTL
     if ( IsRightToLeft() )
         Frm().Pos() = aOldFrmPos;
 
@@ -2302,14 +2302,14 @@ void SwTxtFrm::CalcAdditionalFirstLineOffset()
 */
 void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
 {
-    // --> OD 2006-11-13 #i71281#
+    // #i71281#
     // invalidate printing area, if height of last line changes
     const SwTwips mnOldHeightOfLastLine( mnHeightOfLastLine );
     // <--
     // determine output device
     ViewShell* pVsh = getRootFrm()->GetCurrShell();
     OSL_ENSURE( pVsh, "<SwTxtFrm::_GetHeightOfLastLineForPropLineSpacing()> - no ViewShell" );
-    // --> OD 2007-07-02 #i78921# - make code robust, according to provided patch
+    // #i78921# - make code robust, according to provided patch
     // There could be no <ViewShell> instance in the case of loading a binary
     // StarOffice file format containing an embedded Writer document.
     if ( !pVsh )
@@ -2324,7 +2324,7 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
         pOut = GetTxtNode()->getIDocumentDeviceAccess()->getReferenceDevice( true );
     }
     OSL_ENSURE( pOut, "<SwTxtFrm::_GetHeightOfLastLineForPropLineSpacing()> - no OutputDevice" );
-    // --> OD 2007-07-02 #i78921# - make code robust, according to provided patch
+    // #i78921# - make code robust, according to provided patch
     if ( !pOut )
     {
         return;
@@ -2366,7 +2366,7 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
     else
     {
         // new determination of last line height - take actually height of last line
-        // --> OD 2008-05-06 #i89000#
+        // #i89000#
         // assure same results, if paragraph is undersized
         if ( IsUndersized() )
         {
@@ -2397,20 +2397,20 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
                 if ( pLineLayout )
                 {
                     SwTwips nAscent, nDescent, nDummy1, nDummy2;
-                    // --> OD 2005-05-20 #i47162# - suppress consideration of
+                    // #i47162# - suppress consideration of
                     // fly content portions and the line portion.
                     pLineLayout->MaxAscentDescent( nAscent, nDescent,
                                                    nDummy1, nDummy2,
                                                    0, true );
                     // <--
-                    // --> OD 2006-11-22 #i71281#
+                    // #i71281#
                     // Suppress wrong invalidation of printing area, if method is
                     // called recursive.
                     // Thus, member <mnHeightOfLastLine> is only set directly, if
                     // no recursive call is needed.
     //                mnHeightOfLastLine = nAscent + nDescent;
                     const SwTwips nNewHeightOfLastLine = nAscent + nDescent;
-                    // --> OD 2005-05-20 #i47162# - if last line only contains
+                    // #i47162# - if last line only contains
                     // fly content portions, <mnHeightOfLastLine> is zero.
                     // In this case determine height of last line by the font
                     if ( nNewHeightOfLastLine == 0 )
@@ -2428,7 +2428,7 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
         }
         // <--
     }
-    // --> OD 2006-11-13 #i71281#
+    // #i71281#
     // invalidate printing area, if height of last line changes
     if ( mnHeightOfLastLine != mnOldHeightOfLastLine )
     {
@@ -2622,7 +2622,7 @@ void SwTxtFrm::RecalcAllLines()
                     (pPrv->IsInTab() || pPrv->IsInDocBody() != IsInDocBody()) )
                 pPrv = pPrv->GetPrevCntntFrm();
 
-            // --> FME 2007-06-22 #i78254# Restart line numbering at page change:
+            // #i78254# Restart line numbering at page change
             // First body content may be in table!
             if ( bRestart && pPrv && pPrv->FindPageFrm() != FindPageFrm() )
                 pPrv = 0;

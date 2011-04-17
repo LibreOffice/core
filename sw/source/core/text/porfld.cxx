@@ -72,10 +72,9 @@ SwFldPortion *SwFldPortion::Clone( const XubString &rExpand ) const
     {
         pNewFnt = new SwFont( *pFnt );
     }
-    // --> OD 2009-11-25 #i107143#
+    // #i107143#
     // pass placeholder property to created <SwFldPortion> instance.
     SwFldPortion* pClone = new SwFldPortion( rExpand, pNewFnt, bPlaceHolder );
-    // <--
     pClone->SetNextOffset( nNextOffset );
     pClone->m_bNoLength = this->m_bNoLength;
     return pClone;
@@ -243,12 +242,10 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
 
         // #i16354# Change script type for RTL text to CTL.
         const SwScriptInfo& rSI = rInf.GetParaPortion()->GetScriptInfo();
-        // --> OD 2009-01-29 #i98418#
-//        const sal_uInt8 nFldDir = IsNumberPortion() ?
+        // #i98418#
         const sal_uInt8 nFldDir = ( IsNumberPortion() || IsFtnNumPortion() ) ?
                              rSI.GetDefaultDir() :
                              rSI.DirType( IsFollow() ? rInf.GetIdx() - 1 : rInf.GetIdx() );
-        // <--
         if ( UBIDI_RTL == nFldDir )
         {
             UErrorCode nError = U_ZERO_ERROR;
@@ -283,11 +280,10 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
                 nTmp = SW_CTL;
         }
 
-        // --> OD 2009-01-29 #i98418#
+        // #i98418#
         // keep determined script type for footnote portions as preferred script type.
         // For footnote portions a font can not be created directly - see footnote
         // portion format method.
-//         if( !IsFtnPortion() && nTmp != nActual )
         if ( IsFtnPortion() )
         {
             dynamic_cast<SwFtnPortion*>(this)->SetPreferredScriptType( nTmp );
@@ -298,7 +294,6 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
                 pFnt = new SwFont( *rInf.GetFont() );
             pFnt->SetActual( nTmp );
         }
-        // <--
     }
 }
 
@@ -398,20 +393,16 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
                 case CHAR_HARDHYPHEN:               // non-breaking hyphen
                 case CHAR_SOFTHYPHEN:
                 case CHAR_HARDBLANK:
-                // --> FME 2006-01-11 #i59759# Erase additional control
+                // #i59759# Erase additional control
                 // characters from field string, otherwise we get stuck in
                 // a loop.
                 case CHAR_ZWSP :
                 case CHAR_ZWNBSP :
-        //        case CHAR_RLM :
-        //        case CHAR_LRM :
-                // <--
-                // --> OD 2010-06-03 #i111750#
+                // #i111750#
                 // - Erasing further control characters from field string in
                 // to avoid loop.
                 case CH_TXTATR_BREAKWORD:
                 case CH_TXTATR_INWORD:
-                // <--
                 {
                     aNew.Erase( 0, 1 );
                     ++nNextOfst;
@@ -597,9 +588,8 @@ sal_Bool SwNumberPortion::Format( SwTxtFormatInfo &rInf )
         if ( !mbLabelAlignmentPosAndSpaceModeActive )
         {
             if ( !rInf.GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) &&
-                 // --> FME 2004-08-13 #i32902#
+                 // #i32902#
                  !IsFtnNumPortion() )
-                 // <--
             {
                 nDiff = rInf.Left()
                     + rInf.GetTxtFrm()->GetTxtNode()->
@@ -768,7 +758,7 @@ void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
 static sal_Char const sDoubleSpace[] = "  ";
                 aInf.X( aInf.X() + nSpaceOffs );
 
-                // --> FME 2005-08-12 #i53199# Adjust position of underline:
+                // #i53199# Adjust position of underline:
                 if ( rInf.GetUnderFnt() )
                 {
                     const Point aNewPos( aInf.GetPos().X(), rInf.GetUnderFnt()->GetPos().Y() );
@@ -1004,9 +994,8 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
             else if ( pViewShell &&
                      !pViewShell->GetAccessibilityOptions()->IsStopAnimatedGraphics() &&
                      !pViewShell->IsPreView() &&
-                      // --> FME 2004-06-21 #i9684# Stop animation during printing/pdf export.
+                      // #i9684# Stop animation during printing/pdf export.
                       pViewShell->GetWin() )
-                      // <--
             {
                 ( (Graphic*) pBrush->GetGraphic() )->StartAnimation(
                     (OutputDevice*)rInf.GetOut(), aPos, aSize, nId );

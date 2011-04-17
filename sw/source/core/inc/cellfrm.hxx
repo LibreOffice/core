@@ -53,7 +53,7 @@ public:
                         SwPrintData const*const pPrintData = NULL ) const;
     virtual void CheckDirection( sal_Bool bVert );
 
-    // --> OD 2010-02-17 #i103961#
+    // #i103961#
     virtual void Cut();
     // <--
 

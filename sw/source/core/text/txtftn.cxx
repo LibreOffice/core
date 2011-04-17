@@ -1022,7 +1022,7 @@ SwNumberPortion *SwTxtFormatter::NewFtnNumPortion( SwTxtFormatInfo &rInf ) const
     const IDocumentSettingAccess* pIDSA = pFrm->GetTxtNode()->getIDocumentSettingAccess();
     SwFont *pNumFnt = new SwFont( pParSet, pIDSA );
 
-    // --> FME 2005-02-17 #i37142#
+    // #i37142#
     // Underline style of paragraph font should not be considered
     // Overline style of paragraph font should not be considered
     // Weight style of paragraph font should not be considered
@@ -1354,7 +1354,7 @@ SwFtnSave::SwFtnSave( const SwTxtSizeInfo &rInf,
         SwFmtFtn& rFtn = (SwFmtFtn&)pTxtFtn->GetFtn();
         const SwDoc *pDoc = rInf.GetTxtFrm()->GetNode()->GetDoc();
 
-        // --> OD 2009-01-29 #i98418#
+        // #i98418#
         if ( bApplyGivenScriptType )
         {
             pFnt->SetActual( nGivenScriptType );
@@ -1427,7 +1427,7 @@ SwFtnPortion::SwFtnPortion( const XubString &rExpand, SwTxtFrm *pFrame,
         , pFrm(pFrame)
         , pFtn(pFootn)
         , nOrigHeight( nReal )
-        // --> OD 2009-01-29 #i98418#
+        // #i98418#
         , mbPreferredScriptTypeSet( false )
         , mnPreferredScriptType( SW_LATIN )
         // <--
@@ -1452,7 +1452,7 @@ sal_Bool SwFtnPortion::GetExpTxt( const SwTxtSizeInfo &, XubString &rTxt ) const
 
 sal_Bool SwFtnPortion::Format( SwTxtFormatInfo &rInf )
 {
-    // --> OD 2009-01-29 #i98418#
+    // #i98418#
 //    SwFtnSave aFtnSave( rInf, pFtn );
     SwFtnSave aFtnSave( rInf, pFtn, mbPreferredScriptTypeSet, mnPreferredScriptType );
     // <--
@@ -1476,7 +1476,7 @@ sal_Bool SwFtnPortion::Format( SwTxtFormatInfo &rInf )
 
 void SwFtnPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
-    // --> OD 2009-01-29 #i98418#
+    // #i98418#
 //    SwFtnSave aFtnSave( rInf, pFtn );
     SwFtnSave aFtnSave( rInf, pFtn, mbPreferredScriptTypeSet, mnPreferredScriptType );
     // <--
@@ -1490,14 +1490,14 @@ void SwFtnPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
 SwPosSize SwFtnPortion::GetTxtSize( const SwTxtSizeInfo &rInfo ) const
 {
-    // --> OD 2009-01-29 #i98418#
+    // #i98418#
 //    SwFtnSave aFtnSave( rInfo, pFtn );
     SwFtnSave aFtnSave( rInfo, pFtn, mbPreferredScriptTypeSet, mnPreferredScriptType );
     // <--
     return SwExpandPortion::GetTxtSize( rInfo );
 }
 
-// --> OD 2009-01-29 #i98418#
+// #i98418#
 void SwFtnPortion::SetPreferredScriptType( sal_uInt8 nPreferredScriptType )
 {
     mbPreferredScriptTypeSet = true;

@@ -153,7 +153,7 @@ ShellResource::ShellResource()
 
     aGetRefFld_Up( SW_RES( STR_GETREFFLD_UP ) ),
     aGetRefFld_Down( SW_RES( STR_GETREFFLD_DOWN ) ),
-    // --> OD 2007-09-13 #i81002#
+    // #i81002#
     aGetRefFld_RefItemNotFound( SW_RES( STR_GETREFFLD_REFITEMNOTFOUND ) ),
     // <--
     aStrAllPageHeadFoot( SW_RES( STR_ALLPAGE_HEADFOOT ) ),

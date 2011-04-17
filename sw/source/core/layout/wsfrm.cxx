@@ -89,7 +89,7 @@ using namespace ::com::sun::star;
 
 SwFrm::SwFrm( SwModify *pMod, SwFrm* pSib ) :
     SwClient( pMod ),
-    // --> OD 2006-05-10 #i65250#
+    // #i65250#
     mnFrmId( SwFrm::mnLastFrmId++ ),
     // <--
     mpRoot( pSib ? pSib->getRootFrm() : 0 ),
@@ -389,7 +389,7 @@ void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
     if ( !pPage )
     {
         pPage = FindPageFrm();
-        // --> OD 2004-07-02 #i28701# - for at-character and as-character
+        // #i28701# - for at-character and as-character
         // anchored Writer fly frames additionally invalidate also page frame
         // its 'anchor character' is on.
         if ( pPage && pPage->GetUpper() && IsFlyFrm() )
@@ -397,7 +397,7 @@ void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
             const SwFlyFrm* pFlyFrm = static_cast<const SwFlyFrm*>(this);
             if ( pFlyFrm->IsAutoPos() || pFlyFrm->IsFlyInCntFrm() )
             {
-                // --> OD 2004-09-23 #i33751#, #i34060# - method <GetPageFrmOfAnchor()>
+                // #i33751#, #i34060# - method <GetPageFrmOfAnchor()>
                 // is replaced by method <FindPageFrmOfAnchor()>. It's return value
                 // have to be checked.
                 SwPageFrm* pPageFrmOfAnchor =
@@ -919,7 +919,7 @@ void SwCntntFrm::Cut()
             if( IsInFtn() )
                 pFrm->Prepare( PREP_QUOVADIS, 0, sal_False );
         }
-        // --> OD 2004-07-15 #i26250# - invalidate printing area of previous
+        // #i26250# - invalidate printing area of previous
         // table frame.
         else if ( pFrm && pFrm->IsTabFrm() )
         {
@@ -1002,7 +1002,7 @@ void SwCntntFrm::Cut()
                     pSct->InvalidatePage( pPage );
                 }
             }
-            // --> FME 2005-08-03 #i52253# The master table should take care
+            // #i52253# The master table should take care
             // of removing the follow flow line.
             if ( IsInTab() )
             {
@@ -1026,7 +1026,7 @@ void SwCntntFrm::Cut()
         if ( !pUp->Lower() &&
              ( ( pUp->IsFtnFrm() && !pUp->IsColLocked() ) ||
                ( pUp->IsInSct() &&
-                 // -->  FME 2004-06-03 #i29438#
+                 // #i29438#
                  // We have to consider the case that the section may be "empty"
                  // except from a temporary empty table frame.
                  // This can happen due to the new cell split feature.
@@ -1785,7 +1785,7 @@ void SwFrm::ReinitializeFrmSizeAttrFlags()
                 pFrm = pFrm->GetNext();
             }
             SwCntntFrm *pCnt = ((SwLayoutFrm*)this)->ContainsCntnt();
-            // --> OD 2004-12-20 #i36991# - be save.
+            // #i36991# - be save.
             // E.g., a row can contain *no* content.
             if ( pCnt )
             {
@@ -1887,7 +1887,7 @@ SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
             {
                 GetNext()->InvalidatePos();
             }
-            // --> OD 2004-07-05 #i28701# - Due to the new object positioning the
+            // #i28701# - Due to the new object positioning the
             // frame on the next page/column can flow backward (e.g. it was moved forward
             // due to the positioning of its objects ). Thus, invalivate this next frame,
             // if document compatibility option 'Consider wrapping style influence on
@@ -1949,7 +1949,7 @@ SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
     else
         nReal = nDist;
 
-    // --> OD 2004-07-05 #i28701# - Due to the new object positioning the
+    // #i28701# - Due to the new object positioning the
     // frame on the next page/column can flow backward (e.g. it was moved forward
     // due to the positioning of its objects ). Thus, invalivate this next frame,
     // if document compatibility option 'Consider wrapping style influence on
@@ -2333,7 +2333,7 @@ SwLayoutFrm::SwLayoutFrm( SwFrmFmt* pFmt, SwFrm* pSib ):
         bFixSize = sal_True;
 }
 
-// --> OD 2004-06-29 #i28701#
+// #i28701#
 TYPEINIT1(SwLayoutFrm,SwFrm);
 // <--
 /*--------------------------------------------------
@@ -2751,7 +2751,7 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
     if ( !( bVert ? bHeightChgd : bWidthChgd ) &&
          ! Lower()->IsColumnFrm() &&
            ( ( IsBodyFrm() && IsInDocBody() && ( !IsInSct() || !FindSctFrm()->IsColLocked() ) ) ||
-                // --> FME 2004-07-21 #i10826# Section frames without columns should not
+                // #i10826# Section frames without columns should not
                 // invalidate all lowers!
                IsSctFrm() ) )
                // <--
@@ -2854,12 +2854,12 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
                         ((SwCntntFrm*)pLowerFrm)->Prepare( PREP_ADJUST_FRM );
                 }
             }
-            // --> OD 2005-01-31 #i41694# - improvement by removing duplicates
+            // #i41694# - improvement by removing duplicates
             if ( pLowerFrm )
             {
                 if ( pLowerFrm->IsInSct() )
                 {
-                    // --> OD 2005-01-31 #i41694# - follow-up of issue #i10826#:
+                    // #i41694# - follow-up of issue #i10826#
                     // No invalidation of section frame, if it's the this.
                     SwFrm* pSectFrm = pLowerFrm->FindSctFrm();
                     if( pSectFrm != this && IsAnLower( pSectFrm ) )
@@ -3461,7 +3461,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                 ( !(Frm().*fnRect->fnGetHeight)() && pAny ) )
             {
                 long nTop = (this->*fnRect->fnGetTopMargin)();
-                // --> OD 2004-11-01 #i23129# - correction: enlarge section
+                // #i23129# - correction
                 // to the calculated maximum height.
                 (Frm().*fnRect->fnAddBottom)( nMaximum -
                                               (Frm().*fnRect->fnGetHeight)() );
@@ -3487,7 +3487,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
         else
             nMaximum = LONG_MAX;
 
-        // --> OD 2004-08-25 #i3317# - reset temporarly consideration
+        // #i3317# - reset temporarly consideration
         // of wrapping style influence
         SwPageFrm* pPageFrm = FindPageFrm();
         SwSortedObjs* pObjs = pPageFrm ? pPageFrm->GetSortedObjs() : 0L;
@@ -3518,7 +3518,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
             //Breiten und Hoehen der Spalten ein (so sie denn falsch sind).
             SwLayoutFrm *pCol = (SwLayoutFrm*)Lower();
 
-            // --> FME 2004-07-19 #i27399#
+            // #i27399#
             // Simply setting the column width based on the values returned by
             // CalcColWidth does not work for automatic column width.
             AdjustColumns( &rCol, sal_False );
@@ -3649,7 +3649,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                         // nicht dadurch wieder unter das Minimum rutschen, wollen wir ein wenig
                         // Luft herauslassen.
                         if ( !bNoBalance &&
-                             // --> OD 2004-11-04 #i23129# - <nMinDiff> can be
+                             // #i23129# - <nMinDiff> can be
                              // big, because of an object at the beginning of
                              // a column. Thus, decrease optimization here.
                              //nMaxFree >= nMinDiff &&
@@ -3678,7 +3678,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                     nDiff = (Prt().*fnRect->fnGetHeight)() + nDiff + nBorder -
                             (Frm().*fnRect->fnGetHeight)();
                     (Frm().*fnRect->fnAddBottom)( nDiff );
-                    // --> OD 2006-08-16 #i68520#
+                    // #i68520#
                     if ( dynamic_cast<SwFlyFrm*>(this) )
                     {
                         dynamic_cast<SwFlyFrm*>(this)->InvalidateObjRectWithSpaces();
@@ -3688,7 +3688,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                     ChgLowersProp( aOldSz );
                     NotifyLowerObjs();
 
-                    // --> OD 2004-08-25 #i3317# - reset temporarly consideration
+                    // #i3317# - reset temporarly consideration
                     // of wrapping style influence
                     SwPageFrm* pTmpPageFrm = FindPageFrm();
                     SwSortedObjs* pTmpObjs = pTmpPageFrm ? pTmpPageFrm->GetSortedObjs() : 0L;
@@ -3949,7 +3949,7 @@ void SwRootFrm::InvalidateAllObjPos()
                     // only to paragraph and to character anchored objects are considered.
                     continue;
                 }
-                // --> OD 2004-07-07 #i28701# - special invalidation for anchored
+                // #i28701# - special invalidation for anchored
                 // objects, whose wrapping style influence has to be considered.
                 if ( pAnchoredObj->ConsiderObjWrapInfluenceOnObjPos() )
                     pAnchoredObj->InvalidateObjPosForConsiderWrapInfluence( true );

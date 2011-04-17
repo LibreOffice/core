@@ -153,7 +153,7 @@ void SwPageDesc::ResetAllAttr( sal_Bool bLeft )
 {
     SwFrmFmt& rFmt = bLeft ? GetLeft() : GetMaster();
 
-    // --> OD 2007-01-25 #i73790# - method renamed
+    // #i73790# - method renamed
     rFmt.ResetAllFmtAttr();
     // <--
     rFmt.SetFmtAttr( SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR) );

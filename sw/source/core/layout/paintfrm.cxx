@@ -810,7 +810,7 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
     //der Tabellen.
     if ( Count() != nLastCount )
     {
-        // --> FME 2004-06-24 #i16816# tagged pdf support
+        // #i16816# tagged pdf support
         SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pOut );
         // <--
 
@@ -928,7 +928,7 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
 {
     if ( Count() )
     {
-        // --> FME 2004-06-24 #i16816# tagged pdf support
+        // #i16816# tagged pdf support
         SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pOut );
         // <--
 
@@ -1277,7 +1277,7 @@ void MA_FASTCALL lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
             if ( bBottom )
             {
                 SwTwips nDiff = 0;
-                // --> collapsing borders FME 2005-05-27 #i29550#
+                // #i29550#
                 if ( pFrm->IsTabFrm() &&
                      ((SwTabFrm*)pFrm)->IsCollapsingBorders() )
                 {
@@ -1690,7 +1690,7 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush,
         if( rSh.GetViewOptions()->IsGraphic() )
         {
             //#125488#: load graphic directly in PDF import
-            // --> OD 2006-08-25 #i68953# - also during print load graphic directly.
+            // #i68953# - also during print load graphic directly.
             if ( (rSh).GetViewOptions()->IsPDFExport() ||
                  rSh.GetOut()->GetOutDevType() == OUTDEV_PRINTER )
             // <--
@@ -1800,7 +1800,7 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush,
                 // calculate paint offset
                 Point aPaintOffset( aAlignedPaintRect.Pos() - aGrf.Pos() );
                 // draw background graphic tiled for aligned paint rectangle
-                // --> OD 2005-02-15 #i42643# - apply fix #104004# for Calc
+                // #i42643# - apply fix #104004# for Calc
                 // also for Writer - see /sc/source/view/printfun.cxx
                 // For PDF export, every draw operation for bitmaps takes a
                 // noticeable amount of place (~50 characters). Thus, optimize
@@ -1911,7 +1911,7 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush,
                                 ( ( aColor.GetTransparency() != 0) ||
                                     bTransparentGrfWithNoFillBackgrd );
 
-        // --> OD 2008-06-02 #i75614#
+        // #i75614#
         // reset draw mode in high contrast mode in order to get fill color set
         const sal_uLong nOldDrawMode = pOutDev->GetDrawMode();
         if ( pGlobalShell->GetWin() &&
@@ -1935,7 +1935,7 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush,
                 pOutDev->SetFillColor( aColor );
         }
 
-        // --> OD 2008-06-02 #i75614#
+        // #i75614#
         // restore draw mode
         pOutDev->SetDrawMode( nOldDrawMode );
         // <--
@@ -2255,7 +2255,7 @@ void SwTabFrmPainter::HandleFrame( const SwLayoutFrm& rLayoutFrm )
 
 void SwTabFrmPainter::PaintLines( OutputDevice& rDev, const SwRect& rRect ) const
 {
-    // --> FME 2004-06-24 #i16816# tagged pdf support
+    // #i16816# tagged pdf support
     SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, rDev );
     // <--
 
@@ -2786,7 +2786,7 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
     //Ggf. eine Action ausloesen um klare Verhaeltnisse zu schaffen.
     //Durch diesen Kunstgriff kann in allen Paints davon ausgegangen werden,
     //das alle Werte gueltigt sind - keine Probleme, keine Sonderbehandlung(en).
-    // --> OD 2008-10-07 #i92745#
+    // #i92745#
     // Extend check on certain states of the 'current' <ViewShell> instance to
     // all existing <ViewShell> instances.
     bool bPerformLayoutAction( true );
@@ -2843,7 +2843,7 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
     // #i68597#
     const bool bGridPainting(pSh->GetWin() && pSh->Imp()->HasDrawView() && pSh->Imp()->GetDrawView()->IsGridVisible());
 
-    // --> OD 2008-05-16 #i84659#
+    // #i84659#
 //    while ( pPage && !::IsShortCut( aRect, pPage->Frm() ) )
     while ( pPage )
     // <--
@@ -2894,7 +2894,7 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
                 }
                 // <--
 
-                // --> OD 2007-08-20 #i80793#
+                // #i80793#
                 // enlarge paint rectangle for objects overlapping the same pixel
                 // in all cases and before the DrawingLayer overlay is initialized.
                 lcl_AdjustRectToPixelSize( aPaintRect, *(pSh->GetOut()) );
@@ -3153,7 +3153,7 @@ void SwLayoutFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 {
     ViewShell *pSh = getRootFrm()->GetCurrShell();
 
-    // --> FME 2004-06-24 #i16816# tagged pdf support
+    // #i16816# tagged pdf support
     Frm_Info aFrmInfo( *this );
     SwTaggedPDFHelper aTaggedPDFHelper( 0, &aFrmInfo, 0, *pSh->GetOut() );
     // <--
@@ -3491,7 +3491,7 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
             bContour = GetContour( aPoly, sal_True );
         }
 
-        // --> OD 2005-06-08 #i47804# - distinguish complete background paint
+        // #i47804# - distinguish complete background paint
         // and margin paint.
         // paint complete background for Writer text fly frames
         bool bPaintCompleteBack( !pNoTxt );
@@ -3514,7 +3514,7 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         const bool bPaintMarginOnly( !bPaintCompleteBack &&
                                      Prt().SSize() != Frm().SSize() );
 
-        // --> OD 2005-06-08 #i47804# - paint background of parent fly frame
+        // #i47804# - paint background of parent fly frame
         // for transparent graphics in layer Hell, if parent fly frame isn't
         // in layer Hell. It's only painted the intersection between the
         // parent fly frame area and the paint area <aRect>
@@ -3558,7 +3558,7 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
             // paint background
             {
                 SwRegionRects aRegion( aRect );
-                // --> OD 2007-12-13 #i80822#
+                // #i80822#
                 // suppress painting of background in printing area for
                 // non-transparent graphics.
                 if ( bPaintMarginOnly ||
@@ -3573,7 +3573,7 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
                 if ( bContour )
                 {
                     pOut->Push();
-                    // --> OD 2007-12-13 #i80822#
+                    // #i80822#
                     // apply clip region under the same conditions, which are
                     // used in <SwNoTxtFrm::Paint(..)> to set the clip region
                     // for painting the graphic/OLE. Thus, the clip region is
@@ -3683,7 +3683,7 @@ void SwTabFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 {
     if ( pGlobalShell->GetViewOptions()->IsTable() )
     {
-        // --> collapsing borders FME 2005-05-27 #i29550#
+        // #i29550#
         if ( IsCollapsingBorders() )
         {
             SwBorderAttrAccess aAccess( SwFrm::GetCache(), (SwFrm*)this );
@@ -4609,7 +4609,7 @@ void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
          !pGlobalShell->GetViewOptions()->IsTable() )
         return;
 
-    // --> collapsing borders FME 2005-05-27 #i29550#
+    // #i29550#
     if ( IsTabFrm() || IsCellFrm() || IsRowFrm() )
     {
         const SwTabFrm* pTabFrm = FindTabFrm();
@@ -5296,7 +5296,7 @@ const sal_Int8 SwPageFrm::mnShadowPxWidth = 10;
     // No shadow in prefs
     if( !SwViewOption::IsShadow() ) return;
 
-    // --> FME 2004-06-24 #i16816# tagged pdf support
+    // #i16816# tagged pdf support
     SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *_pViewShell->GetOut() );
     // <--
 
@@ -5547,7 +5547,7 @@ void SwFrm::PaintBaBo( const SwRect& rRect, const SwPageFrm *pPage,
 
     OutputDevice *pOut = pGlobalShell->GetOut();
 
-    // --> FME 2004-06-24 #i16816# tagged pdf support
+    // #i16816# tagged pdf support
     SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pOut );
     // <--
 
@@ -5610,7 +5610,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
 
     ViewShell *pSh = pGlobalShell;
 
-    // --> FME 2004-06-24 #i16816# tagged pdf support
+    // #i16816# tagged pdf support
     SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pSh->GetOut() );
     // <--
 
@@ -6014,7 +6014,7 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
 {
     bool bNewTableModel = false;
 
-    // --> collapsing borders FME 2005-05-27 #i29550#
+    // #i29550#
     if ( IsTabFrm() || IsCellFrm() || IsRowFrm() )
     {
         const SwTabFrm* pTabFrm = FindTabFrm();
@@ -6324,7 +6324,7 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
         aRegion -= rRect;
         ViewShell *pSh = getRootFrm()->GetCurrShell();
 
-        // --> FME 2004-06-24 #i16816# tagged pdf support
+        // #i16816# tagged pdf support
         SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pSh->GetOut() );
         // <--
 

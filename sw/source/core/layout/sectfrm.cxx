@@ -192,7 +192,7 @@ void SwSectionFrm::DelEmpty( sal_Bool bRemove )
     SwFrm* pUp = GetUpper();
     if( pUp )
     {
-        // --> OD 2005-12-01 #i27138#
+        // #i27138#
         // notify accessibility paragraphs objects about changed
         // CONTENT_FLOWS_FROM/_TO relation.
         // Relation CONTENT_FLOWS_FROM for current next paragraph will change
@@ -1158,7 +1158,7 @@ void SwSectionFrm::SimpleFormat()
     UnlockJoin();
 }
 
-// --> OD 2005-01-11 #i40147# - helper class to perform extra section format
+// #i40147# - helper class to perform extra section format
 // to position anchored objects and to keep the position of whose objects locked.
 class ExtraFormatToPositionObjs
 {
@@ -1195,7 +1195,7 @@ class ExtraFormatToPositionObjs
             }
         }
 
-        // --> OD 2008-06-20 #i81555#
+        // #i81555#
         void InitObjs( SwFrm& rFrm )
         {
             SwSortedObjs* pObjs = rFrm.GetDrawObjs();
@@ -1238,7 +1238,7 @@ class ExtraFormatToPositionObjs
                                         (mpSectFrm->GetUpper()->*fnRect->fnGetPrtBottom)() );
                 (mpSectFrm->Frm().*fnRect->fnAddBottom)( nDiff );
                 (mpSectFrm->*fnRect->fnSetYMargins)( nTopMargin, 0 );
-                // --> OD 2006-05-08 #i59789#
+                // #i59789#
                 // suppress formatting, if printing area of section is too narrow
                 if ( (mpSectFrm->Prt().*fnRect->fnGetHeight)() <= 0 )
                 {
@@ -1262,7 +1262,7 @@ class ExtraFormatToPositionObjs
                 }
 
                 // unlock position of lower floating screen objects for the extra format
-                // --> OD 2008-06-20 #i81555#
+                // #i81555#
                 // Section frame can already have changed the page and its content
                 // can still be on the former page.
                 // Thus, initialize objects via lower-relationship
@@ -1353,7 +1353,7 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
         // OD 2004-05-17 #i28701# - If the wrapping style has to be considered
         // on object positioning, an extra formatting has to be performed
         // to determine the correct positions the floating screen objects.
-        // --> OD 2005-01-11 #i40147#
+        // #i40147#
         // use new helper class <ExtraFormatToPositionObjs>.
         // This class additionally keep the locked position of the objects
         // and releases this position lock keeping on destruction.
@@ -1404,7 +1404,7 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
             {
                 if( pFrm->IsColumnFrm() && pFrm->GetNext() )
                 {
-                    // --> OD 2006-05-08 #i61435#
+                    // #i61435#
                     // suppress formatting, if upper frame has height <= 0
                     if ( (GetUpper()->Frm().*fnRect->fnGetHeight)() > 0 )
                     {
@@ -1826,7 +1826,7 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType )
     // this table.
     SwSectionFrm *pSect = FindSctFrm();
 
-    // --> OD 2009-01-16 #i95698#
+    // #i95698#
     // A table cell containing directly a section does not break - see lcl_FindSectionsInRow(..)
     // Thus, a table inside a section, which is inside another table can only
     // flow backward in the columns of its section.
@@ -2093,7 +2093,7 @@ SwTwips SwSectionFrm::_Grow( SwTwips nDist, sal_Bool bTst )
                             pFrm->InvalidatePos();
                     }
                 }
-                // --> OD 2004-07-05 #i28701# - Due to the new object positioning
+                // #i28701# - Due to the new object positioning
                 // the frame on the next page/column can flow backward (e.g. it
                 // was moved forward due to the positioning of its objects ).
                 // Thus, invalivate this next frame, if document compatibility

@@ -2190,7 +2190,7 @@ sal_uInt16 SwRefPageGetFieldType::MakeSetList( _SetGetExpFlds& rTmpLst )
 
                 if( !pFrm ||
                      pFrm->IsInDocBody() ||
-                    // --> FME 2004-07-27 #i31868#
+                    // #i31868#
                     // Check if pFrm is not yet connected to the layout.
                     !pFrm->FindPageFrm() )
                     // <--

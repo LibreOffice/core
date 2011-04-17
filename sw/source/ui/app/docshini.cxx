@@ -334,14 +334,14 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     // the static pool default.
     pDoc->SetDefault( SwFmtFollowTextFlow( sal_False ) );
 
-// --> collapsing borders FME 2005-05-27 #i29550#
+// #i29550#
     pDoc->SetDefault( SfxBoolItem( RES_COLLAPSING_BORDERS, sal_True ) );
 // <-- collapsing
 
     //#i16874# AutoKerning as default for new documents
     pDoc->SetDefault( SvxAutoKernItem( sal_True, RES_CHRATR_AUTOKERN ) );
 
-    // --> OD 2005-02-10 #i42080# - Due to the several calls of method <SetDefault(..)>
+    // #i42080# - Due to the several calls of method <SetDefault(..)>
     // at the document instance, the document is modified. Thus, reset this
     // status here. Note: In method <SubInitNew()> this is also done.
     pDoc->ResetModified();

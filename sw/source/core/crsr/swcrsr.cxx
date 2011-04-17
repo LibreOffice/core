@@ -358,7 +358,7 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
                     0 == pFrm->Frm().Height() )
                 ;
 
-            // --> LIJIAN/FME 2007-11-27 #i72394# skip to prev /next valid paragraph
+            // #i72394# skip to prev /next valid paragraph
             // with a layout in case the first search did not succeed:
             if( !pFrm )
             {
@@ -370,7 +370,6 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
                         :   pFrm->GetPrevCntntFrm();
                 }
             }
-            // <--
 
             SwCntntNode* pCNd;
             if( pFrm && 0 != (pCNd = (SwCntntNode*)pFrm->GetNode()) )
@@ -2046,7 +2045,7 @@ sal_Bool SwCursor::MovePara(SwWhichPara fnWhichPara, SwPosPara fnPosPara )
     bool bShortCut = false;
     if ( fnWhichPara == fnParaCurr )
     {
-        // --> FME 2005-02-21 #i41048#
+        // #i41048#
         // If fnWhichPara == fnParaCurr, (*fnWhichPara)( *this, fnPosPara )
         // can already move the cursor to a different text node. In this case
         // we better check if IsSelOvr().
@@ -2057,7 +2056,6 @@ sal_Bool SwCursor::MovePara(SwWhichPara fnWhichPara, SwPosPara fnPosPara )
             if ( GetPoint()->nContent.GetIndex() != nSttEnd )
                 bShortCut = true;
         }
-        // <--
     }
     else
     {

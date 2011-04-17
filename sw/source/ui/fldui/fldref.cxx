@@ -47,7 +47,7 @@
 #include <fldui.hrc>
 #include <fldtdlg.hrc>
 #include <globals.hrc>
-// --> OD 2007-11-14 #i83479#
+// #i83479#
 #include <SwNodeNum.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <ndtxt.hxx>
@@ -60,7 +60,7 @@ SV_IMPL_PTRARR( _SwSeqFldList, _SeqFldLstElem* )
 #define REFFLDFLAG_BOOKMARK 0x4800
 #define REFFLDFLAG_FOOTNOTE 0x5000
 #define REFFLDFLAG_ENDNOTE  0x6000
-// --> OD 2007-11-09 #i83479#
+// #i83479#
 #define REFFLDFLAG_HEADING  0x7100
 #define REFFLDFLAG_NUMITEM  0x7200
 // <--
@@ -77,7 +77,7 @@ SwFldRefPage::SwFldRefPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     aTypeLB         (this, SW_RES(LB_REFTYPE)),
     aSelectionFT    (this, SW_RES(FT_REFSELECTION)),
     aSelectionLB    (this, SW_RES(LB_REFSELECTION)),
-    // --> OD 2007-11-21 #i83479#
+    // #i83479#
     aSelectionToolTipLB( this, SW_RES(LB_REFSELECTION_TOOLTIP) ),
     // <--
     aFormatFT       (this, SW_RES(FT_REFFORMAT)),
@@ -90,7 +90,7 @@ SwFldRefPage::SwFldRefPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     sBookmarkTxt    (SW_RES(STR_REFBOOKMARK)),
     sFootnoteTxt    (SW_RES(STR_REFFOOTNOTE)),
     sEndnoteTxt     (SW_RES(STR_REFENDNOTE)),
-    // --> OD 2007-11-09 #i83479#
+    // #i83479#
     sHeadingTxt     (SW_RES(STR_REFHEADING)),
     sNumItemTxt     (SW_RES(STR_REFNUMITEM)),
     maOutlineNodes(),
@@ -109,7 +109,7 @@ SwFldRefPage::SwFldRefPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     aSelectionLB.SetDoubleClickHdl  (LINK(this, SwFldRefPage, InsertHdl));
     aFormatLB.SetDoubleClickHdl     (LINK(this, SwFldRefPage, InsertHdl));
 
-    // --> OD 2007-11-21 #i83479#
+    // #i83479#
     aSelectionToolTipLB.SetSelectHdl( LINK(this, SwFldRefPage, SubTypeHdl) );
     aSelectionToolTipLB.SetDoubleClickHdl( LINK(this, SwFldRefPage, InsertHdl) );
     aSelectionToolTipLB.SetStyle( aSelectionToolTipLB.GetStyle() | WB_HSCROLL );
@@ -122,7 +122,7 @@ SwFldRefPage::~SwFldRefPage()
 {
 }
 
-// --> OD 2007-11-22 #i83479#
+// #i83479#
 void SwFldRefPage::SaveSelectedTxtNode()
 {
     mpSavedSelectedTxtNode = 0;
@@ -175,7 +175,7 @@ void SwFldRefPage::Reset(const SfxItemSet& )
     if (!IsFldEdit())
     {
         SavePos(&aTypeLB);
-        // --> OD 2007-11-22 #i83479#
+        // #i83479#
         SaveSelectedTxtNode();
         // <--
     }
@@ -204,7 +204,7 @@ void SwFldRefPage::Reset(const SfxItemSet& )
         }
     }
 
-    // --> OD 2007-11-09 #i83479#
+    // #i83479#
     // entries for headings and numbered items
     nPos = aTypeLB.InsertEntry(sHeadingTxt);
     aTypeLB.SetEntryData(nPos, (void*)REFFLDFLAG_HEADING);
@@ -307,7 +307,7 @@ IMPL_LINK( SwFldRefPage, TypeHdl, ListBox *, EMPTYARG )
             {
                 case REF_BOOKMARK:
                 {
-                    // --> OD 2007-11-14 #i83479#
+                    // #i83479#
                     SwGetRefField* pRefFld = dynamic_cast<SwGetRefField*>(GetCurField());
                     if ( pRefFld &&
                          pRefFld->IsRefToHeadingCrossRefBookmark() )
@@ -452,7 +452,7 @@ IMPL_LINK( SwFldRefPage, SubTypeHdl, ListBox *, EMPTYARG )
 
         }
         break;
-        // --> OD 2007-11-21 #i83479#
+        // #i83479#
         case REFFLDFLAG_HEADING:
         case REFFLDFLAG_NUMITEM:
         {
@@ -487,7 +487,7 @@ void SwFldRefPage::UpdateSubType()
     const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
 
     String sOldSel;
-    // --> OD 2007-11-22 #i83479#
+    // #i83479#
     if ( aSelectionLB.IsVisible() )
     {
         const sal_uInt16 nSelectionSel = aSelectionLB.GetSelectEntryPos();
@@ -502,7 +502,7 @@ void SwFldRefPage::UpdateSubType()
 
     aSelectionLB.SetUpdateMode(sal_False);
     aSelectionLB.Clear();
-    // --> OD 2007-11-21 #i83479#
+    // #i83479#
     aSelectionToolTipLB.SetUpdateMode(sal_False);
     aSelectionToolTipLB.Clear();
     bool bShowSelectionToolTipLB( false );
@@ -552,7 +552,7 @@ void SwFldRefPage::UpdateSubType()
                     sOldSel = aArr[n]->sDlgEntry;
             }
         }
-        // --> OD 2007-11-14 #i83479#
+        // #i83479#
         else if ( nTypeId == REFFLDFLAG_HEADING )
         {
             bShowSelectionToolTipLB = true;
@@ -653,7 +653,7 @@ void SwFldRefPage::UpdateSubType()
             sOldSel = pRefFld->GetSetRefName();
     }
 
-    // --> OD 2007-11-21 #i83479#
+    // #i83479#
     aSelectionToolTipLB.Show( bShowSelectionToolTipLB );
     aSelectionLB.Show( !bShowSelectionToolTipLB );
     if ( bShowSelectionToolTipLB )
@@ -712,7 +712,7 @@ sal_uInt16 SwFldRefPage::FillFormatLB(sal_uInt16 nTypeId)
     bool bAddCrossRefFormats( false );
     switch (nTypeId)
     {
-        // --> OD 2007-11-16 #i83479#
+        // #i83479#
         case REFFLDFLAG_HEADING:
         case REFFLDFLAG_NUMITEM:
             bAddCrossRefFormats = true;
@@ -727,7 +727,7 @@ sal_uInt16 SwFldRefPage::FillFormatLB(sal_uInt16 nTypeId)
             break;
 
         default:
-            // --> OD 2007-11-16 #i83479#
+            // #i83479#
 
             if ( REFFLDFLAG & nTypeId )
             {
@@ -748,7 +748,7 @@ sal_uInt16 SwFldRefPage::FillFormatLB(sal_uInt16 nTypeId)
         sal_uInt16 nPos = aFormatLB.InsertEntry(GetFldMgr().GetFormatStr( nTypeId, i ));
         aFormatLB.SetEntryData( nPos, reinterpret_cast<void*>(GetFldMgr().GetFormatId( nTypeId, i )));
     }
-    // --> OD 2007-11-16 #i83479#
+    // #i83479#
     if ( bAddCrossRefFormats )
     {
         sal_uInt16 nFormat = FMT_REF_NUMBER - FMT_REF_BEGIN;
@@ -902,7 +902,7 @@ sal_Bool SwFldRefPage::FillItemSet(SfxItemSet& )
             else if (IsFldEdit())
                 aVal = String::CreateFromInt32( pRefFld->GetSeqNo() );
         }
-        // --> OD 2007-11-16 #i83479#
+        // #i83479#
         else if ( nTypeId == REFFLDFLAG_HEADING )
         {
             SvLBoxEntry* pEntry = aSelectionToolTipLB.GetCurEntry();

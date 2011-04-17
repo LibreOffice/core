@@ -374,7 +374,7 @@ void SwUnoCursorHelper::SetCrsrAttr(SwPaM & rPam,
     //<-end,zhaojianwei
 }
 
-// --> OD 2006-07-12 #i63870#
+// #i63870#
 // split third parameter <bCurrentAttrOnly> into new parameters <bOnlyTxtAttr>
 // and <bGetFromChrFmt> to get better control about resulting <SfxItemSet>
 void SwUnoCursorHelper::GetCrsrAttr(SwPaM & rPam,

@@ -50,7 +50,7 @@
 #include <pagedesc.hxx> // SwPageDesc
 #include <tgrditem.hxx>
 
-// --> FME 2004-06-08 #i12836# enhanced pdf export
+// #i12836# enhanced pdf export
 #include <EnhancedPDFExportHelper.hxx>
 // <--
 
@@ -398,7 +398,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         }
 
         {
-            // --> FME 2004-06-24 #i16816# tagged pdf support
+            // #i16816# tagged pdf support
             Por_Info aPorInfo( *pPor, *this );
             SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, &aPorInfo, *pOut );
             // <--
@@ -426,7 +426,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             pArrow = (SwArrowPortion*)pPor;
 
         pPor = bDrawInWindow || GetInfo().X() <= nMaxRight ||
-               // --> FME 2004-06-24 #i16816# tagged pdf support
+               // #i16816# tagged pdf support
                ( GetInfo().GetVsh() &&
                  GetInfo().GetVsh()->GetViewOptions()->IsPDFExport() &&
                  pNext && pNext->IsHolePortion() ) ?

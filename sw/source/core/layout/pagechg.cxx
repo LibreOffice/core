@@ -497,7 +497,7 @@ void SwPageFrm::PreparePage( sal_Bool bFtn )
 {
     SetFtnPage( bFtn );
 
-    // --> OD 2008-01-30 #i82258#
+    // #i82258#
     // Due to made change on OOo 2.0 code line, method <::lcl_FormatLay(..)> has
     // the side effect, that the content of page header and footer are formatted.
     // For this formatting it is needed that the anchored objects are registered
@@ -900,7 +900,7 @@ void SwPageFrm::Cut()
             for ( int i = 0; GetSortedObjs() &&
                              (sal_uInt16)i < GetSortedObjs()->Count(); ++i )
             {
-                // --> OD 2004-06-29 #i28701#
+                // #i28701#
                 SwAnchoredObject* pAnchoredObj = (*GetSortedObjs())[i];
 
                 if ( pAnchoredObj->ISA(SwFlyAtCntFrm) )
@@ -1009,7 +1009,7 @@ void lcl_PrepFlyInCntRegister( SwCntntFrm *pFrm )
     {
         for( sal_uInt16 i = 0; i < pFrm->GetDrawObjs()->Count(); ++i )
         {
-            // --> OD 2004-06-29 #i28701#
+            // #i28701#
             SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[i];
             if ( pAnchoredObj->ISA(SwFlyInCntFrm) )
             {
@@ -1040,7 +1040,7 @@ void SwPageFrm::PrepareRegisterChg()
     {
         for( sal_uInt16 i = 0; i < GetSortedObjs()->Count(); ++i )
         {
-            // --> OD 2004-06-29 #i28701#
+            // #i28701#
             SwAnchoredObject* pAnchoredObj = (*GetSortedObjs())[i];
             if ( pAnchoredObj->ISA(SwFlyFrm) )
             {
@@ -1472,7 +1472,7 @@ void SwRootFrm::RemoveSuperfluous()
             SwSortedObjs &rObjs = *pPage->GetSortedObjs();
             for ( sal_uInt16 i = 0; bOnlySuperfluosObjs && i < rObjs.Count(); ++i )
             {
-                // --> OD 2004-06-29 #i28701#
+                // #i28701#
                 SwAnchoredObject* pAnchoredObj = rObjs[i];
                 // OD 2004-01-19 #110582# - do not consider hidden objects
                 if ( pPage->GetFmt()->GetDoc()->IsVisibleLayerId(
@@ -1493,7 +1493,7 @@ void SwRootFrm::RemoveSuperfluous()
              pPage->FindFtnCont() ||
              ( 0 != ( pBody = pPage->FindBodyCont() ) &&
                 ( pBody->ContainsCntnt() ||
-                    // --> FME 2005-05-18 #i47580#
+                    // #i47580#
                     // Do not delete page if there's an empty tabframe
                     // left. I think it might be correct to use ContainsAny()
                     // instead of ContainsCntnt() to cover the empty-table-case,
@@ -1639,7 +1639,7 @@ void SwRootFrm::AssertPageFlys( SwPageFrm *pPage )
                   pPage->GetSortedObjs() && sal_uInt16(i) < pPage->GetSortedObjs()->Count();
                   ++i)
             {
-                // --> OD 2004-06-29 #i28701#
+                // #i28701#
                 SwFrmFmt& rFmt = (*pPage->GetSortedObjs())[i]->GetFrmFmt();
                 const SwFmtAnchor &rAnch = rFmt.GetAnchor();
                 const sal_uInt16 nPg = rAnch.GetPageNum();
@@ -1794,7 +1794,7 @@ void SwRootFrm::ImplCalcBrowseWidth()
         {
             for ( sal_uInt16 i = 0; i < pFrm->GetDrawObjs()->Count(); ++i )
             {
-                // --> OD 2004-06-29 #i28701#
+                // #i28701#
                 SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[i];
                 const SwFrmFmt& rFmt = pAnchoredObj->GetFrmFmt();
                 const sal_Bool bFly = pAnchoredObj->ISA(SwFlyFrm);
@@ -1813,7 +1813,7 @@ void SwRootFrm::ImplCalcBrowseWidth()
                         break;
                     case FLY_AT_PARA:
                         {
-                            // --> FME 2004-09-13 #i33170#
+                            // #i33170#
                             // Reactivated old code because
                             // nWidth = pAnchoredObj->GetObjRect().Right()
                             // gives wrong results for objects that are still
@@ -1903,7 +1903,7 @@ void SwRootFrm::UnoRemoveAllActions()
     if ( pSh )
         do
         {
-            // --> OD 2008-05-16 #i84729#
+            // #i84729#
             // No end action, if <ViewShell> instance is currently in its end action.
             // Recursives calls to <::EndAction()> are not allowed.
             if ( !pSh->IsInEndAction() )
@@ -2033,7 +2033,7 @@ void lcl_MoveAllLowerObjs( SwFrm* pFrm, const Point& rOffset )
             pAnchoredDrawObj->DrawObj()->SetAnchorPos( aNewAnchorPos );
             pAnchoredDrawObj->SetLastObjRect( pAnchoredDrawObj->GetObjRect().SVRect() );
         }
-        // --> OD 2009-08-20 #i92511#
+        // #i92511#
         // cache for object rectangle inclusive spaces has to be invalidated.
         pAnchoredObj->InvalidateObjRectWithSpaces();
         // <--
@@ -2076,7 +2076,7 @@ void lcl_MoveAllLowers( SwFrm* pFrm, const Point& rOffset )
 // PAGES01: Calculate how the pages have to be positioned
 void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVisArea )
 {
-    // --> OD 2008-07-07 #i91432#
+    // #i91432#
     // No calculation of page positions, if only an empty page is present.
     // This situation occurs when <SwRootFrm> instance is in construction
     // and the document contains only left pages.
@@ -2409,7 +2409,7 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
 bool SwRootFrm::IsLeftToRightViewLayout() const
 {
     // Layout direction determined by layout direction of the first page.
-    // --> OD 2008-04-08 #i88036#
+    // #i88036#
     // Only ask a non-empty page frame for its layout direction
 //    const SwPageFrm* pPage = dynamic_cast<const SwPageFrm*>(Lower());
 //    return !pPage->IsRightToLeft() && !pPage->IsVertical();
@@ -2425,7 +2425,7 @@ const SwPageFrm& SwPageFrm::GetFormatPage() const
     if ( IsEmptyPage() )
     {
         pRet = static_cast<const SwPageFrm*>( OnRightPage() ? GetNext() : GetPrev() );
-        // --> OD 2008-04-08 #i88035#
+        // #i88035#
         // Typically a right empty page frame has a next non-empty page frame and
         // a left empty page frame has a previous non-empty page frame.
         // But under certain cirsumstances this assumption is not true -

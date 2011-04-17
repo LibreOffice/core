@@ -38,10 +38,10 @@
 #include "ftnfrm.hxx"
 #include "txtfrm.hxx"
 
-// --> OD 2004-06-23 #i28701#
+// #i28701#
 #include <movedfwdfrmsbyobjpos.hxx>
 // <--
-// --> OD 2004-10-22 #i35911#
+// #i35911#
 #include <objstmpconsiderwrapinfl.hxx>
 // <--
 
@@ -228,10 +228,10 @@ void SwLooping::Control( SwPageFrm* pPage )
 SwLayouter::SwLayouter()
         : pEndnoter( NULL ),
           pLooping( NULL ),
-          // --> OD 2004-06-23 #i28701#
+          // #i28701#
           mpMovedFwdFrms( 0L ),
           // <--
-          // --> OD 2004-10-22 #i35911#
+          // #i35911#
           mpObjsTmpConsiderWrapInfl( 0L )
           // <--
 {
@@ -241,11 +241,11 @@ SwLayouter::~SwLayouter()
 {
     delete pEndnoter;
     delete pLooping;
-    // --> OD 2004-06-23 #i28701#
+    // #i28701#
     delete mpMovedFwdFrms;
     mpMovedFwdFrms = 0L;
     // <--
-    // --> OD 2004-10-22 #i35911#
+    // #i35911#
     delete mpObjsTmpConsiderWrapInfl;
     mpObjsTmpConsiderWrapInfl = 0L;
     // <--
@@ -339,7 +339,7 @@ sal_Bool SwLayouter::StartLoopControl( SwDoc* pDoc, SwPageFrm *pPage )
             pDoc->GetLayouter()->StartLooping( pPage );
 }
 
-// --> OD 2004-06-23 #i28701#
+// #i28701#
 // -----------------------------------------------------------------------------
 // methods to manage text frames, which are moved forward by the positioning
 // of its anchored objects
@@ -372,7 +372,7 @@ void SwLayouter::InsertMovedFwdFrm( const SwDoc& _rDoc,
                                                  _nToPageNum );
 }
 
-// --> OD 2005-01-12 #i40155#
+// #i40155#
 void SwLayouter::RemoveMovedFwdFrm( const SwDoc& _rDoc,
                                     const SwTxtFrm& _rTxtFrm )
 {
@@ -405,7 +405,7 @@ bool SwLayouter::FrmMovedFwdByObjPos( const SwDoc& _rDoc,
     }
 }
 // <--
-// --> OD 2004-10-05 #i26945#
+// #i26945#
 bool SwLayouter::DoesRowContainMovedFwdFrm( const SwDoc& _rDoc,
                                             const SwRowFrm& _rRowFrm )
 {
@@ -425,7 +425,7 @@ bool SwLayouter::DoesRowContainMovedFwdFrm( const SwDoc& _rDoc,
 }
 // <--
 
-// --> OD 2004-10-22 #i35911#
+// #i35911#
 void SwLayouter::ClearObjsTmpConsiderWrapInfluence( const SwDoc& _rDoc )
 {
     if ( _rDoc.GetLayouter() &&
@@ -452,7 +452,7 @@ void SwLayouter::InsertObjForTmpConsiderWrapInfluence(
     _rDoc.GetLayouter()->mpObjsTmpConsiderWrapInfl->Insert( _rAnchoredObj );
 }
 // <--
-// --> OD 2005-01-12 #i40155#
+// #i40155#
 void SwLayouter::ClearFrmsNotToWrap( const SwDoc& _rDoc )
 {
     if ( _rDoc.GetLayouter() )
@@ -514,7 +514,7 @@ void LOOPING_LOUIE_LIGHT( bool bCondition, const SwTxtFrm& rTxtFrm )
     }
 }
 
-// --> OD 2006-05-10 #i65250#
+// #i65250#
 bool SwLayouter::MoveBwdSuppressed( const SwDoc& p_rDoc,
                                     const SwFlowFrm& p_rFlowFrm,
                                     const SwLayoutFrm& p_rNewUpperFrm )

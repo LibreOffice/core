@@ -881,7 +881,7 @@ long SwWrtShell::EndDrag(const Point * /*pPt*/, sal_Bool )
     return 1;
 }
 
-// --> FME 2004-07-30 #i32329# Enhanced table selection
+// #i32329# Enhanced table selection
 sal_Bool SwWrtShell::SelectTableRowCol( const Point& rPt, const Point* pEnd, bool bRowDrag )
 {
     MV_KONTEXT(this);

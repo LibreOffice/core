@@ -73,7 +73,7 @@
 #include <pam.hxx>
 #include <SwGrammarMarkUp.hxx>
 #include <cstdio>
-// --> FME 2004-06-08 #i12836# enhanced pdf export
+// #i12836# enhanced pdf export
 #include <EnhancedPDFExportHelper.hxx>
 // <--
 
@@ -692,7 +692,7 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
     if ( nSpaceAdd )
     {
         xub_StrLen nCharCnt;
-        // --> FME 2005-04-04 #i41860# Thai justified alignemt needs some
+        // #i41860# Thai justified alignemt needs some
         // additional information:
         aDrawInf.SetNumberOfBlanks( rPor.InTxtGrp() ?
                                     static_cast<const SwTxtPortion&>(rPor).GetSpaceCnt( *this, nCharCnt ) :
@@ -1225,7 +1225,7 @@ void SwTxtPaintInfo::_DrawBackBrush( const SwLinePortion &rPor ) const
     {
         OutputDevice* pTmpOut = (OutputDevice*)GetOut();
 
-        // --> FME 2004-06-24 #i16816# tagged pdf support
+        // #i16816# tagged pdf support
         SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pTmpOut );
         // <--
 
@@ -1598,7 +1598,7 @@ xub_StrLen SwTxtFormatInfo::ScanPortionEnd( const xub_StrLen nStart,
     //
     const xub_Unicode cTabDec = GetLastTab() ? (sal_Unicode)GetTabDecimal() : 0;
     const xub_Unicode cThousandSep  = ',' == cTabDec ? '.' : ',';
-    // --> FME 2006-01-23 #i45951# German (Switzerland) uses ' as thousand separator:
+    // #i45951# German (Switzerland) uses ' as thousand separator
     const xub_Unicode cThousandSep2 = ',' == cTabDec ? '.' : '\'';
     // <--
 

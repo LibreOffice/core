@@ -79,7 +79,7 @@ SwExtTextInput::~SwExtTextInput()
             // muss ueber die Doc-Schnittstellen gegangen werden !!!
             if(eInputLanguage != LANGUAGE_DONTKNOW)
             {
-                // --> FME 2005-02-11 #i41974# Only set language attribute
+                // #i41974# Only set language attribute
                 // for CJK/CTL scripts.
                 bool bLang = true;
                 // <--

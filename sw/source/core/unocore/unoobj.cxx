@@ -218,7 +218,7 @@ void SwUnoCursorHelper::GetTextFromPam(SwPaM & rPam, OUString & rBuffer)
         aOpt.SetCharSet( RTL_TEXTENCODING_UNICODE );
         xWrt->SetAsciiOptions( aOpt );
         xWrt->bUCS2_WithStartChar = sal_False;
-        // --> FME #i68522#
+        // #i68522#
         const sal_Bool bOldShowProgress = xWrt->bShowProgress;
         xWrt->bShowProgress = sal_False;
         // <--
@@ -562,7 +562,7 @@ throw (lang::IllegalArgumentException)
             lcl_SetNodeNumStart( rPam, rValue );
         break;
         case FN_UNO_NUM_LEVEL:
-        // --> OD 2008-07-14 #i91601#
+        // #i91601#
         case FN_UNO_LIST_ID:
         // <--
         case FN_UNO_IS_NUMBER:
@@ -577,7 +577,7 @@ throw (lang::IllegalArgumentException)
                     pTxtNd->SetAttrListLevel(nLevel);
                 }
             }
-            // --> OD 2008-07-14 #i91601#
+            // #i91601#
             else if (FN_UNO_LIST_ID == rEntry.nWID)
             {
                 ::rtl::OUString sListId;
@@ -2011,7 +2011,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
                                 RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
                                 0L ));
                     }
-                    // --> OD 2006-07-12 #i63870#
+                    // #i63870#
                     SwUnoCursorHelper::GetCrsrAttr( rPaM, *pSet );
                     // <--
                 }
@@ -2026,7 +2026,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
                     if (!pSetParent.get())
                     {
                         pSetParent.reset( pSet->Clone( sal_False ) );
-                        // --> OD 2006-07-12 #i63870#
+                        // #i63870#
                         SwUnoCursorHelper::GetCrsrAttr(
                                 rPaM, *pSetParent, sal_True, sal_False );
                         // <--

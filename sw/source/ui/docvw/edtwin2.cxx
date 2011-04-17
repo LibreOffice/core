@@ -76,7 +76,7 @@
 #include <PostItMgr.hxx>
 #include <fmtfld.hxx>
 
-// --> OD 2009-08-18 #i104300#
+// #i104300#
 #include <IDocumentMarkAccess.hxx>
 #include <ndtxt.hxx>
 // <--

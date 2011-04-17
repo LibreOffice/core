@@ -74,7 +74,7 @@ SwFlyInCntFrm::~SwFlyInCntFrm()
     }
 }
 
-// --> OD 2004-06-29 #i28701#
+// #i28701#
 TYPEINIT1(SwFlyInCntFrm,SwFlyFrm);
 // <--
 /*************************************************************************
@@ -97,7 +97,7 @@ void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
     SetCurrRelPos( rRelAttr );
     SWRECTFN( GetAnchorFrm() )
     (Frm().*fnRect->fnSetPos)( rPoint + rRelPos );
-    // --> OD 2006-08-25 #i68520#
+    // #i68520#
     InvalidateObjRectWithSpaces();
     // <--
     if( pNotify )

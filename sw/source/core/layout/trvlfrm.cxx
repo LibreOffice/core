@@ -120,7 +120,7 @@ sal_Bool SwLayoutFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
     {
         pFrm->Calc();
 
-        // --> FME 2005-05-13 #i43742# New function: SW_CONTENT_CHECK
+        // #i43742# New function
         const bool bCntntCheck = pFrm->IsTxtFrm() && pCMS && pCMS->bCntntCheck;
         const SwRect aPaintRect( bCntntCheck ?
                                  pFrm->UnionFrm() :
@@ -308,7 +308,7 @@ sal_Bool SwRootFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
     // search for page containing rPoint. The borders around the pages are considerd
     const SwPageFrm* pPage = GetPageAtPos( rPoint, 0, true );
 
-    // --> OD 2008-12-23 #i95626#
+    // #i95626#
     // special handling for <rPoint> beyond root frames area
     if ( !pPage &&
          rPoint.X() > Frm().Right() &&
@@ -1977,7 +1977,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
 
     ViewShell *pSh = GetCurrShell();
 
-// --> FME 2004-06-08 #i12836# enhanced pdf
+// #i12836# enhanced pdf
     SwRegionRects aRegion( pSh && !pSh->GetViewOptions()->IsPDFExport() ?
                            pSh->VisArea() :
                            Frm() );

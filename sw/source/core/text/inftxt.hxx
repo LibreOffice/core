@@ -532,7 +532,7 @@ class SwTxtFormatInfo : public SwTxtPaintInfo
     xub_StrLen nHyphWrdLen;     // gefundene Wort-Laenge
     xub_StrLen nLineStart;      // aktueller Zeilenbeginn im rTxt
     xub_StrLen nUnderScorePos;  // enlarge repaint if underscore has been found
-    // --> FME 2004-11-25 #i34348# Changed type from sal_uInt16 to SwTwips
+    // #i34348# Changed type from sal_uInt16 to SwTwips
     SwTwips nLeft;          // linker Rand
     SwTwips nRight;           // rechter Rand
     SwTwips nFirst;           // EZE

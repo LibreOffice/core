@@ -434,7 +434,7 @@ static void GetFormatAndCreateCursorFromRangeRep(
             SwTable *pTable = pTblFmt ? SwTable::FindTable( pTblFmt ) : 0;
             // create new SwUnoCrsr spanning the specified range
             //! see also SwXTextTable::GetRangeByName
-            // --> OD 2007-08-03 #i80314#
+            // #i80314#
             // perform validation check. Thus, pass <true> as 2nd parameter to <SwTable::GetTblBox(..)>
             const SwTableBox* pTLBox =
                             pTable ? pTable->GetTblBox( aStartCell, true ) : 0;
@@ -449,7 +449,7 @@ static void GetFormatAndCreateCursorFromRangeRep(
                 SwUnoCrsr* pUnoCrsr = pTblFmt->GetDoc()->CreateUnoCrsr(aPos, sal_True);
                 pUnoCrsr->Move( fnMoveForward, fnGoNode );
                 pUnoCrsr->SetRemainInSection( sal_False );
-                // --> OD 2007-08-03 #i80314#
+                // #i80314#
                 // perform validation check. Thus, pass <true> as 2nd parameter to <SwTable::GetTblBox(..)>
                 const SwTableBox* pBRBox = pTable->GetTblBox( aEndCell, true );
                 // <--

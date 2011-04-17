@@ -39,7 +39,7 @@ class SwTabFrm;
 class SwViewImp;
 class SwCntntNode;
 class SwWait;
-// --> OD 2004-06-28 #i28701#
+// #i28701#
 class SfxProgress;
 
 //Die Verwendung der LayAction laeuft immer gleich ab:
@@ -192,10 +192,10 @@ public:
     //Auch andere sollen den Wartecrsr einschalten koennen.
     void CheckWaitCrsr();
 
-    // --> OD 2004-06-09 #i28701# - method is now public;
+    // #i28701# - method is now public;
     // delete 2nd parameter, because its not used;
     sal_Bool FormatLayoutFly( SwFlyFrm * );
-    // --> OD 2004-06-09 #i28701# - method is now public
+    // #i28701# - method is now public
     sal_Bool _FormatFlyCntnt( const SwFlyFrm * );
 
 };

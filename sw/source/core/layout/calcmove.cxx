@@ -58,10 +58,10 @@
 #include "sectfrm.hxx"
 #include "dbg_lay.hxx"
 
-// --> OD 2004-06-23 #i28701#
+// #i28701#
 #include <sortedobjs.hxx>
 #include <layouter.hxx>
-// --> OD 2004-11-01 #i36347#
+// #i36347#
 #include <flyfrms.hxx>
 // <--
 
@@ -276,7 +276,7 @@ bool lcl_IsCalcUpperAllowed( const SwFrm& rFrm )
 {
     return !rFrm.GetUpper()->IsSctFrm() &&
            !rFrm.GetUpper()->IsFooterFrm() &&
-           // --> OD 2004-11-02 #i23129#, #i36347# - no format of upper Writer fly frame
+           // #i23129#, #i36347# - no format of upper Writer fly frame
            !rFrm.GetUpper()->IsFlyFrm() &&
            // <--
            !( rFrm.GetUpper()->IsTabFrm() && rFrm.GetUpper()->GetUpper()->IsInTab() ) &&
@@ -325,7 +325,7 @@ void SwFrm::PrepareMake()
             }
         }
 
-        // --> OD 2005-03-04 #i44049# - no format of previous frame, if current
+        // #i44049# - no format of previous frame, if current
         // frame is a table frame and its previous frame wants to keep with it.
         const bool bFormatPrev = !bTab ||
                                  !GetPrev() ||
@@ -393,7 +393,7 @@ void SwFrm::PrepareMake()
 
 void SwFrm::OptPrepareMake()
 {
-    // --> OD 2004-11-02 #i23129#, #i36347# - no format of upper Writer fly frame
+    // #i23129#, #i36347# - no format of upper Writer fly frame
     if ( GetUpper() && !GetUpper()->IsFooterFrm() &&
          !GetUpper()->IsFlyFrm() )
     // <--
@@ -593,7 +593,7 @@ void SwFrm::MakePos()
             // NOTE: Footer frame is <ColLocked()> during its
             //     <FormatSize(..)>, which is called from <Format(..)>, which
             //     is called from <MakeAll()>, which is called from <Calc()>.
-            // --> OD 2005-11-17 #i56850#
+            // #i56850#
             // - no format of upper Writer fly frame, which is anchored
             //   at-paragraph or at-character.
             if ( !GetUpper()->IsTabFrm() &&
@@ -667,7 +667,7 @@ void SwFrm::MakePos()
 |*  SwPageFrm::MakeAll()
 |*
 |*************************************************************************/
-// --> OD 2004-07-01 #i28701# - new type <SwSortedObjs>
+// #i28701# - new type <SwSortedObjs>
 void lcl_CheckObjects( SwSortedObjs* pSortedObjs, SwFrm* pFrm, long& rBot )
 {
     //Und dann kann es natuerlich noch Absatzgebundene
@@ -675,7 +675,7 @@ void lcl_CheckObjects( SwSortedObjs* pSortedObjs, SwFrm* pFrm, long& rBot )
     long nMax = 0;
     for ( sal_uInt16 i = 0; i < pSortedObjs->Count(); ++i )
     {
-        // --> OD 2004-07-01 #i28701# - consider changed type of <SwSortedObjs>
+        // #i28701# - consider changed type of <SwSortedObjs>
         // entries.
         SwAnchoredObject* pObj = (*pSortedObjs)[i];
         long nTmp = 0;
@@ -813,7 +813,7 @@ void SwPageFrm::MakeAll()
                         if ( pSortedObjs )
                             lcl_CheckObjects( pSortedObjs, this, nBot );
                         nBot -= Frm().Top();
-                        // --> OD 2004-11-10 #i35143# - If second page frame
+                        // #i35143# - If second page frame
                         // exists, the first page doesn't have to fulfill the
                         // visible area.
                         if ( !GetPrev() && !GetNext() )
@@ -821,7 +821,7 @@ void SwPageFrm::MakeAll()
                         {
                             nBot = Max( nBot, pSh->VisArea().Height() );
                         }
-                        // --> OD 2004-11-10 #i35143# - Assure, that the page
+                        // #i35143# - Assure, that the page
                         // doesn't exceed the defined browse height.
                         Frm().Height( Min( nBot, BROWSE_HEIGHT ) );
                         // <--
@@ -1032,7 +1032,7 @@ sal_Bool SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
 
                 for (sal_uInt16 i = 0; GetDrawObjs() && i < GetDrawObjs()->Count();++i)
                 {
-                    // --> OD 2004-07-01 #i28701# - consider changed type of
+                    // #i28701# - consider changed type of
                     // <SwSortedObjs> entries
                     SwAnchoredObject* pObj = (*GetDrawObjs())[i];
                     const SwFrmFmt& rFmt = pObj->GetFrmFmt();
@@ -1252,7 +1252,7 @@ void SwCntntFrm::MakeAll()
     }
     // <--
 
-    // --> OD 2004-06-23 #i28701# - move master forward, if it has to move,
+    // #i28701# - move master forward, if it has to move,
     // because of its object positioning.
     if ( !static_cast<SwTxtFrm*>(this)->IsFollow() )
     {
@@ -1261,7 +1261,7 @@ void SwCntntFrm::MakeAll()
                                                     *(GetAttrSet()->GetDoc()),
                                                     *(static_cast<SwTxtFrm*>(this)),
                                                     nToPageNum );
-        // --> OD 2006-01-27 #i58182#
+        // #i58182#
         // Also move a paragraph forward, which is the first one inside a table cell.
         if ( bMoveFwdByObjPos &&
              FindPageFrm()->GetPhyPageNum() < nToPageNum &&
@@ -1380,18 +1380,18 @@ void SwCntntFrm::MakeAll()
         if ( !bValidPrtArea )
         {
             const long nOldW = (Prt().*fnRect->fnGetWidth)();
-            // --> OD 2004-09-28 #i34730# - keep current frame height
+            // #i34730# - keep current frame height
             const SwTwips nOldH = (Frm().*fnRect->fnGetHeight)();
             // <--
             MakePrtArea( rAttrs );
             if ( nOldW != (Prt().*fnRect->fnGetWidth)() )
                 Prepare( PREP_FIXSIZE_CHG );
-            // --> OD 2004-09-28 #i34730# - check, if frame height has changed.
+            // #i34730# - check, if frame height has changed.
             // If yes, send a PREP_ADJUST_FRM and invalidate the size flag to
             // force a format. The format will check in its method
             // <SwTxtFrm::CalcPreps()>, if the already formatted lines still
             // fit and if not, performs necessary actions.
-            // --> OD 2005-01-10 #i40150# - no check, if frame is undersized.
+            // #i40150# - no check, if frame is undersized.
             if ( bValidSize && !IsUndersized() &&
                  nOldH != (Frm().*fnRect->fnGetHeight)() )
             {
@@ -1544,7 +1544,7 @@ void SwCntntFrm::MakeAll()
         //dazu fuehren, dass seine Position obwohl unrichtig valide ist.
         if ( bValidPos )
         {
-            // --> OD 2006-01-23 #i59341#
+            // #i59341#
             // Workaround for inadequate layout algorithm:
             // suppress invalidation and calculation of position, if paragraph
             // has formatted itself at least STOP_FLY_FORMAT times and
@@ -1783,7 +1783,7 @@ void SwCntntFrm::MakeAll()
                                 ( bFtn && !FindFtnFrm()->GetRef()->IsInSct() ) ||
                                 // <--
 
-                                // --> FME 2005-01-27 #i33887#
+                                // #i33887#
                                 ( IsInSct() && bKeep )
                                 // <--
 

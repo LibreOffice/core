@@ -496,7 +496,7 @@ SwFtnFrm::SwFtnFrm( SwFrmFmt *pFmt, SwFrm* pSib, SwCntntFrm *pCnt, SwTxtFtn *pAt
     pRef( pCnt ),
     pAttr( pAt ),
     bBackMoveLocked( sal_False ),
-    // --> OD 2005-08-11 #i49383#
+    // #i49383#
     mbUnlockPosOfLowerObjs( true )
     // <--
 {
@@ -1778,12 +1778,12 @@ void SwFtnBossFrm::AppendFtn( SwCntntFrm *pRef, SwTxtFtn *pAttr )
             pSect->InvalidateSize();
         else
         {
-            // --> OD 2005-05-18 #i49383# - disable unlock of position of
+            // #i49383# - disable unlock of position of
             // lower objects during format of footnote content.
             const bool bOldFtnFrmLocked( pNew->IsColLocked() );
             pNew->ColLock();
             pNew->KeepLockPosOfLowerObjs();
-            // --> OD 2006-02-02 #i57914# - adjust fix #i49383#
+            // #i57914# - adjust fix #i49383#
             // no extra notify for footnote frame
 //            SwLayNotify* pFtnFrmNotitfy = new SwLayNotify( pNew );
             // <--
@@ -1791,7 +1791,7 @@ void SwFtnBossFrm::AppendFtn( SwCntntFrm *pRef, SwTxtFtn *pAttr )
             while ( pCnt && pCnt->FindFtnFrm()->GetAttr() == pAttr )
             {
                 pCnt->Calc();
-                // --> OD 2005-05-17 #i49383# - format anchored objects
+                // #i49383# - format anchored objects
                 if ( pCnt->IsTxtFrm() && pCnt->IsValid() )
                 {
                     if ( !SwObjectFormatter::FormatObjsAtFrm( *pCnt,
@@ -1805,17 +1805,17 @@ void SwFtnBossFrm::AppendFtn( SwCntntFrm *pRef, SwTxtFtn *pAttr )
                 // <--
                 pCnt = (SwCntntFrm*)pCnt->FindNextCnt();
             }
-            // --> OD 2005-05-18 #i49383#
+            // #i49383#
             if ( !bOldFtnFrmLocked )
             {
                 pNew->ColUnlock();
             }
-            // --> OD 2006-02-02 #i57914# - adjust fix #i49383#
+            // #i57914# - adjust fix #i49383#
             // enable lock of lower object position before format of footnote frame.
             pNew->UnlockPosOfLowerObjs();
             // <--
             pNew->Calc();
-            // --> OD 2006-02-02 #i57914# - adjust fix #i49383#
+            // #i57914# - adjust fix #i49383#
             // no extra notify for footnote frame
 //            pNew->UnlockPosOfLowerObjs();
 //            delete pFtnFrmNotitfy;
@@ -2168,7 +2168,7 @@ void SwFtnBossFrm::_MoveFtns( SvPtrarr &rFtnArr, sal_Bool bCalc )
     const sal_uInt16 nMyCol = lcl_ColumnNum( this );
     SWRECTFN( this )
 
-    // --> OD 2004-06-11 #i21478# - keep last inserted footnote in order to
+    // #i21478# - keep last inserted footnote in order to
     // format the content of the following one.
     SwFtnFrm* pLastInsertedFtn = 0L;
     for ( sal_uInt16 i = 0; i < rFtnArr.Count(); ++i )
@@ -2223,10 +2223,10 @@ void SwFtnBossFrm::_MoveFtns( SvPtrarr &rFtnArr, sal_Bool bCalc )
                 sal_Bool bUnlock = !pFtn->IsBackMoveLocked();
                 pFtn->LockBackMove();
 
-                // --> OD 2005-05-18 #i49383# - disable unlock of position of
+                // #i49383# - disable unlock of position of
                 // lower objects during format of footnote content.
                 pFtn->KeepLockPosOfLowerObjs();
-                // --> OD 2006-02-02 #i57914# - adjust fix #i49383#
+                // #i57914# - adjust fix #i49383#
                 // no extra notify for footnote frame
 //                SwLayNotify aFtnFrmNotitfy( pFtn );
                 // <--
@@ -2235,7 +2235,7 @@ void SwFtnBossFrm::_MoveFtns( SvPtrarr &rFtnArr, sal_Bool bCalc )
                 {
                     pCnt->_InvalidatePos();
                     pCnt->Calc();
-                    // --> OD 2005-05-17 #i49383# - format anchored objects
+                    // #i49383# - format anchored objects
                     if ( pCnt->IsTxtFrm() && pCnt->IsValid() )
                     {
                         if ( !SwObjectFormatter::FormatObjsAtFrm( *pCnt,
@@ -2266,21 +2266,21 @@ void SwFtnBossFrm::_MoveFtns( SvPtrarr &rFtnArr, sal_Bool bCalc )
                     {
                         pFtn->Cut();
                         delete pFtn;
-                        // --> OD 2004-06-10 #i21478#
+                        // #i21478#
                         pFtn = 0L;
                     }
                 }
-                // --> OD 2005-05-18 #i49383#
+                // #i49383#
                 if ( pFtn )
                 {
-                    // --> OD 2006-02-02 #i57914# - adjust fix #i49383#
+                    // #i57914# - adjust fix #i49383#
                     // enable lock of lower object position before format of footnote frame.
                     pFtn->UnlockPosOfLowerObjs();
                     pFtn->Calc();
 //                    pFtn->UnlockPosOfLowerObjs();
                     // <--
                 }
-                // --> OD 2006-02-02 #i57914# - adjust fix #i49383#
+                // #i57914# - adjust fix #i49383#
                 // no extra notify for footnote frame
 //                else
 //                {
@@ -2293,18 +2293,18 @@ void SwFtnBossFrm::_MoveFtns( SvPtrarr &rFtnArr, sal_Bool bCalc )
         { OSL_ENSURE( !pFtn->GetMaster() && !pFtn->GetFollow(),
                     "DelFtn und Master/Follow?" );
             delete pFtn;
-            // --> OD 2004-06-10 #i21478#
+            // #i21478#
             pFtn = 0L;
         }
 
-        // --> OD 2004-06-10 #i21478#
+        // #i21478#
         if ( pFtn )
         {
             pLastInsertedFtn = pFtn;
         }
     }
 
-    // --> OD 2004-06-10 #i21478# - format content of footnote following
+    // #i21478# - format content of footnote following
     // the new inserted ones.
     if ( bCalc && pLastInsertedFtn )
     {
@@ -2316,10 +2316,10 @@ void SwFtnBossFrm::_MoveFtns( SvPtrarr &rFtnArr, sal_Bool bCalc )
 
             sal_Bool bUnlock = !pNextFtn->IsBackMoveLocked();
             pNextFtn->LockBackMove();
-            // --> OD 2005-05-18 #i49383# - disable unlock of position of
+            // #i49383# - disable unlock of position of
             // lower objects during format of footnote content.
             pNextFtn->KeepLockPosOfLowerObjs();
-            // --> OD 2006-02-02 #i57914# - adjust fix #i49383#
+            // #i57914# - adjust fix #i49383#
             // no extra notify for footnote frame
 //            SwLayNotify aFtnFrmNotitfy( pNextFtn );
             // <--
@@ -2328,7 +2328,7 @@ void SwFtnBossFrm::_MoveFtns( SvPtrarr &rFtnArr, sal_Bool bCalc )
             {
                 pCnt->_InvalidatePos();
                 pCnt->Calc();
-                // --> OD 2005-05-17 #i49383# - format anchored objects
+                // #i49383# - format anchored objects
                 if ( pCnt->IsTxtFrm() && pCnt->IsValid() )
                 {
                     if ( !SwObjectFormatter::FormatObjsAtFrm( *pCnt,
@@ -2356,8 +2356,8 @@ void SwFtnBossFrm::_MoveFtns( SvPtrarr &rFtnArr, sal_Bool bCalc )
             {
                 pNextFtn->UnlockBackMove();
             }
-            // --> OD 2005-05-18 #i49383#
-            // --> OD 2006-02-02 #i57914# - adjust fix #i49383#
+            // #i49383#
+            // #i57914# - adjust fix #i49383#
             // enable lock of lower object position before format of footnote frame.
             pNextFtn->UnlockPosOfLowerObjs();
             pNextFtn->Calc();
@@ -2437,7 +2437,7 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const sal_Bool bLock,
             pFirst->LockBackMove();
             pFirst->Calc();
             pCntnt->Calc();
-            // --> OD 2005-05-17 #i49383# - format anchored objects
+            // #i49383# - format anchored objects
             if ( pCntnt->IsTxtFrm() && pCntnt->IsValid() )
             {
                 SwObjectFormatter::FormatObjsAtFrm( *pCntnt,
@@ -2456,10 +2456,10 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const sal_Bool bLock,
     {
         sal_Bool bMore = sal_True;
         sal_Bool bStart = pAttr == 0; // wenn kein Attribut uebergeben wird, alle bearbeiten
-        // --> OD 2005-05-18 #i49383# - disable unlock of position of
+        // #i49383# - disable unlock of position of
         // lower objects during format of footnote and footnote content.
         SwFtnFrm* pLastFtnFrm( 0L );
-        // --> OD 2006-02-02 #i57914# - adjust fix #i49383#
+        // #i57914# - adjust fix #i49383#
         // no extra notify for footnote frame
 //        SwLayNotify* pFtnFrmNotify( 0L );
         // footnote frame needs to be locked, if <bLock> isn't set.
@@ -2476,7 +2476,7 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const sal_Bool bLock,
                 pCnt->_InvalidateSize();
                 pCnt->Prepare( PREP_ADJUST_FRM );
                 SwFtnFrm* pFtnFrm = pCnt->FindFtnFrm();
-                // --> OD 2005-05-18 #i49383#
+                // #i49383#
                 if ( pFtnFrm != pLastFtnFrm )
                 {
                     if ( pLastFtnFrm )
@@ -2485,7 +2485,7 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const sal_Bool bLock,
                         {
                             pLastFtnFrm->ColUnlock();
                         }
-                        // --> OD 2006-02-02 #i57914# - adjust fix #i49383#
+                        // #i57914# - adjust fix #i49383#
                         // enable lock of lower object position before format of footnote frame.
                         pLastFtnFrm->UnlockPosOfLowerObjs();
                         pLastFtnFrm->Calc();
@@ -2510,7 +2510,7 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const sal_Bool bLock,
                     }
                     pFtnFrm->KeepLockPosOfLowerObjs();
                     pLastFtnFrm = pFtnFrm;
-                    // --> OD 2006-02-02 #i57914# - adjust fix #i49383#
+                    // #i57914# - adjust fix #i49383#
                     // no extra notify for footnote frame
 //                    pFtnFrmNotify = new SwLayNotify( pLastFtnFrm );
                     // <--
@@ -2534,7 +2534,7 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const sal_Bool bLock,
                     pFtnFrm->LockBackMove();
                     pFtnFrm->Calc();
                     pCnt->Calc();
-                    // --> OD 2005-05-17 #i49383# - format anchored objects
+                    // #i49383# - format anchored objects
                     if ( pCnt->IsTxtFrm() && pCnt->IsValid() )
                     {
                         if ( !SwObjectFormatter::FormatObjsAtFrm( *pCnt,
@@ -2552,11 +2552,11 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const sal_Bool bLock,
                         if( !pFtnFrm->Lower() &&
                             !pFtnFrm->IsColLocked() )
                         {
-                            // --> OD 2005-08-10 #i49383#
+                            // #i49383#
                             OSL_ENSURE( pLastFtnFrm == pFtnFrm,
                                     "<SwFtnBossFrm::RearrangeFtns(..)> - <pLastFtnFrm> != <pFtnFrm>" );
                             pLastFtnFrm = 0L;
-                            // --> OD 2006-02-02 #i57914# - adjust fix #i49383#
+                            // #i57914# - adjust fix #i49383#
                             // no extra notify for footnote frame
 //                            pFtnFrmNotify->FrmDeleted();
 //                            delete pFtnFrmNotify;
@@ -2570,7 +2570,7 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const sal_Bool bLock,
                 {
                     pFtnFrm->Calc();
                     pCnt->Calc();
-                    // --> OD 2005-05-17 #i49383# - format anchored objects
+                    // #i49383# - format anchored objects
                     if ( pCnt->IsTxtFrm() && pCnt->IsValid() )
                     {
                         if ( !SwObjectFormatter::FormatObjsAtFrm( *pCnt,
@@ -2625,14 +2625,14 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const sal_Bool bLock,
                     bMore = sal_False;
             }
         } while ( bMore );
-        // --> OD 2005-05-18 #i49383#
+        // #i49383#
         if ( pLastFtnFrm )
         {
             if ( !bLock && bUnlockLastFtnFrm )
             {
                 pLastFtnFrm->ColUnlock();
             }
-            // --> OD 2006-02-02 #i57914# - adjust fix #i49383#
+            // #i57914# - adjust fix #i49383#
             // enable lock of lower object position before format of footnote frame.
             pLastFtnFrm->UnlockPosOfLowerObjs();
             pLastFtnFrm->Calc();
