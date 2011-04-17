@@ -1927,7 +1927,7 @@ void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XA
 
             if ( maPath.hasValue() )
             {
-                // --> OD #i115492#
+                // #i115492#
                 // Ignore svg:d attribute for text documents created by OpenOffice.org
                 // versions before OOo 3.3, because these OOo versions are storing
                 // svg:d values not using the correct unit.
