@@ -110,7 +110,7 @@ private:
     //properties - "Merge with next paragraph" in Writer
     FixedLine           aPropertiesFL;
     CheckBox            aMergeWithNextCB;
-    // --> collapsing table borders #i29550#
+    // #i29550#
     CheckBox            aMergeAdjacentBordersCB;
     // <--
 
