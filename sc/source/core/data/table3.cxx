@@ -263,10 +263,10 @@ public:
                             ppInfo[n2] = pTmp;
                         }
                     }
-    sal_uInt16      GetUsedSorts() { return nUsedSorts; }
-    ScSortInfo**    GetFirstArray() { return pppInfo[0]; }
-    SCCOLROW    GetStart() { return nStart; }
-    SCSIZE      GetCount() { return nCount; }
+    sal_uInt16      GetUsedSorts() const { return nUsedSorts; }
+    ScSortInfo**    GetFirstArray() const { return pppInfo[0]; }
+    SCCOLROW    GetStart() const { return nStart; }
+    SCSIZE      GetCount() const { return nCount; }
 };
 
 ScSortInfoArray* ScTable::CreateSortInfoArray( SCCOLROW nInd1, SCCOLROW nInd2 )
