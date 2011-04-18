@@ -215,6 +215,9 @@ void DocxExport::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
     if ( nHeadFootFlags & nsHdFtFlags::WW8_FOOTER_FIRST )
         WriteHeaderFooter( rFirstPageFmt, false, "first" );
 
+    if ( nHeadFootFlags & ( nsHdFtFlags::WW8_FOOTER_EVEN | nsHdFtFlags::WW8_HEADER_EVEN ))
+        settings.evenAndOddHeaders = true;
+
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "DocxExport::WriteHeadersFooters() - nBreakCode introduced, but ignored\n" );
 #endif
@@ -338,6 +341,8 @@ void DocxExport::ExportDocument_Impl()
     WriteNumbering();
 
     WriteFonts();
+
+    WriteSettings();
 
     delete pStyles, pStyles = NULL;
     delete m_pSections, m_pSections = NULL;
@@ -642,6 +647,28 @@ void DocxExport::WriteProperties( )
     m_pFilter->exportDocumentProperties( xDocProps );
 }
 
+void DocxExport::WriteSettings()
+{
+    if( !settings.hasData())
+        return;
+    m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
+            S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings" ),
+            S( "settings.xml" ) );
+
+    ::sax_fastparser::FSHelperPtr pFS = m_pFilter->openFragmentStreamWithSerializer(
+            S( "word/settings.xml" ),
+            S( "application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml" ) );
+
+    pFS->startElementNS( XML_w, XML_settings,
+            FSNS( XML_xmlns, XML_w ), "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
+            FSEND );
+
+    if( settings.evenAndOddHeaders )
+        pFS->singleElementNS( XML_w, XML_evenAndOddHeaders, FSEND );
+
+    pFS->endElementNS( XML_w, XML_settings );
+}
+
 VMLExport& DocxExport::VMLExporter()
 {
     return *m_pVMLExport;
@@ -724,6 +751,18 @@ DocxExport::~DocxExport()
     delete m_pVMLExport, m_pVMLExport = NULL;
     delete m_pAttrOutput, m_pAttrOutput = NULL;
     delete m_pDrawingML, m_pDrawingML = NULL;
+}
+
+DocxSettingsData::DocxSettingsData()
+: evenAndOddHeaders( false )
+{
+}
+
+bool DocxSettingsData::hasData() const
+{
+    if( evenAndOddHeaders )
+        return true;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
