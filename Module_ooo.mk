@@ -31,6 +31,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     chart2 \
     comphelper \
     cui \
+    dbaccess \
     drawinglayer \
     editeng \
     fileaccess \
@@ -58,7 +59,6 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 # these have only migrated subsequentcheck for now
 $(eval $(call gb_Module_add_moduledirs,ooo,\
     configmgr \
-    dbaccess \
     linguistic \
     qadevOOo \
     sal \

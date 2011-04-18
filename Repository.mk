@@ -42,6 +42,7 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
+    adabasui \
     avmedia \
     basegfx \
     canvastools \
@@ -51,7 +52,11 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     chartview \
     cppcanvas \
     cui \
+    dba \
+    dbaxml \
+    dbmm \
     dbtools \
+    dbu \
     doctok \
     drawinglayer \
     editeng \
@@ -78,6 +83,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     scd \
     scfilt \
     scui \
+    sdbt \
     sfx \
     sm \
     smd \
