@@ -46,7 +46,6 @@ SM_COMPONENTS:= component/starmath/util/sm component/starmath/util/smd
 
 my_components = \
     abp \
-    adabasui \
     analysis \
     animcore \
     avmedia \
@@ -61,6 +60,12 @@ my_components = \
     component/chart2/source/tools/charttools \
     component/chart2/source/view/chartview \
     component/comphelper/util/comphelp \
+    component/dbaccess/source/ext/adabas/adabasui \
+    component/dbaccess/util/dba \
+    component/dbaccess/source/filter/xml/dbaxml \
+    component/dbaccess/source/ext/macromigration/dbmm \
+    component/dbaccess/util/dbu \
+    component/dbaccess/util/sdbt \
     component/fileaccess/source/fileacc \
     component/forms/util/frm \
     component/framework/util/fwk \
@@ -95,14 +100,10 @@ my_components = \
     configmgr \
     ctl \
     date \
-    dba \
     dbase \
-    dbaxml \
-    dbmm \
     dbp \
     dbpool2 \
     dbtools \
-    dbu \
     deployment \
     deploymentgui \
     dlgprov \
@@ -152,7 +153,6 @@ my_components = \
     scriptframe \
     sd \
     sdbc2 \
-    sdbt \
     sdd \
     simplecanvas \
     slideshow \
