@@ -523,7 +523,7 @@ HTML_OPTION_ENUM_END,
 
 // Attribute mit Script-Code als Wert
 HTML_OPTION_SCRIPT_START        = HTML_OPTION_ENUM_END,
-    HTML_O_ONABORT              = HTML_OPTION_SCRIPT_START, // JavaScaript
+    HTML_O_ONABORT              = HTML_OPTION_SCRIPT_START, // JavaScript
     HTML_O_ONBLUR,      // JavaScript
     HTML_O_ONCHANGE,    // JavaScript
     HTML_O_ONCLICK,     // JavaScript
