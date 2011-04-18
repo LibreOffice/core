@@ -1671,22 +1671,22 @@ void Test::testToggleRefFlag()
         // column relative / row relative -> column absolute / row absolute
         aFinder.ToggleRel(0, aFormula.getLength());
         aFormula = aFinder.GetText();
-        CPPUNIT_ASSERT_MESSAGE("Does not equal the original text.", aFormula.equalsAscii("=$B$100"));
+        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAscii("=$B$100"));
 
         // column absolute / row absolute -> column relative / row absolute
         aFinder.ToggleRel(0, aFormula.getLength());
         aFormula = aFinder.GetText();
-        CPPUNIT_ASSERT_MESSAGE("Does not equal the original text.", aFormula.equalsAscii("=B$100"));
+        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAscii("=B$100"));
 
         // column relative / row absolute -> column absolute / row relative
         aFinder.ToggleRel(0, aFormula.getLength());
         aFormula = aFinder.GetText();
-        CPPUNIT_ASSERT_MESSAGE("Does not equal the original text.", aFormula.equalsAscii("=$B100"));
+        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAscii("=$B100"));
 
         // column absolute / row relative -> column relative / row relative
         aFinder.ToggleRel(0, aFormula.getLength());
         aFormula = aFinder.GetText();
-        CPPUNIT_ASSERT_MESSAGE("Does not equal the original text.", aFormula.equalsAscii("=B100"));
+        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAscii("=B100"));
     }
 
     {
@@ -1702,22 +1702,22 @@ void Test::testToggleRefFlag()
         // column absolute / row absolute -> column relative / row absolute
         aFinder.ToggleRel(0, aFormula.getLength());
         aFormula = aFinder.GetText();
-        CPPUNIT_ASSERT_MESSAGE("Does not equal the original text.", aFormula.equalsAscii("=R2C[-3]"));
+        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAscii("=R2C[-3]"));
 
         // column relative / row absolute - > column absolute / row relative
         aFinder.ToggleRel(0, aFormula.getLength());
         aFormula = aFinder.GetText();
-        CPPUNIT_ASSERT_MESSAGE("Does not equal the original text.", aFormula.equalsAscii("=R[-4]C1"));
+        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAscii("=R[-4]C1"));
 
         // column absolute / row relative -> column relative / row relative
         aFinder.ToggleRel(0, aFormula.getLength());
         aFormula = aFinder.GetText();
-        CPPUNIT_ASSERT_MESSAGE("Does not equal the original text.", aFormula.equalsAscii("=R[-4]C[-3]"));
+        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAscii("=R[-4]C[-3]"));
 
         // column relative / row relative -> column absolute / row absolute
         aFinder.ToggleRel(0, aFormula.getLength());
         aFormula = aFinder.GetText();
-        CPPUNIT_ASSERT_MESSAGE("Does not equal the original text.", aFormula.equalsAscii("=R2C1"));
+        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAscii("=R2C1"));
     }
 
     // TODO: Add more test cases esp. for 3D references, Excel A1 syntax, and
