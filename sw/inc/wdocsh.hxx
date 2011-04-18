@@ -33,13 +33,13 @@
 
 class SW_DLLPUBLIC SwWebDocShell: public SwDocShell
 {
-    sal_uInt16      nSourcePara;    // aktive Zeile in der SourceView
+    sal_uInt16      nSourcePara;    // Active line in source view.
 
 public:
 
     using SotObject::GetInterface;
 
-    // aber selbst implementieren
+    // But implement yourself.
     SFX_DECL_INTERFACE(SW_WEBDOCSHELL)
     SFX_DECL_OBJECTFACTORY();
     TYPEINFO();

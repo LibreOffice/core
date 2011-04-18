@@ -39,7 +39,7 @@
 #endif
 #include <stringhash.hxx>
 
-/* This class holds all data about the names of styles used in the user
+/** This class holds all data about the names of styles used in the user
  * interface (UI names...these are localised into different languages).
  * These UI names are loaded from the resource files on demand.
  *
@@ -67,7 +67,7 @@
  * 5. Numbering Rule contains the NumRule name array.
  */
 
-/*
+/**
  * There is a further complication that came to light later. If someone enters
  * a user-defined style name which is the same as a programmatic name, this
  * name clash must be handled.

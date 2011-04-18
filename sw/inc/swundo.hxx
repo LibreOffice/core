@@ -36,15 +36,15 @@
 typedef ::std::vector< ::rtl::OUString > SwUndoComments_t;
 
 
-// die Ids fuer StdAktionen
+// The IDs for StdActions.
 enum SwUndoId
 {
     UNDO_EMPTY = 0,
     UNDO_STD_BEGIN = 1,
     UNDO_START = UNDO_STD_BEGIN,            //  1
     UNDO_END,                               //  2
-        REPEAT_START,               // alle UndoIds zwischen REPEAT_START und
-                                    // REPEAT_END sind Repeat-Faehig !!
+        REPEAT_START,               // All UndoIDs between REPEAT_START and
+                                    // REPEAT_END are Repeat-enabled !!
     UNDO_DELETE = REPEAT_START,             //  3
     UNDO_INSERT,                            //  4
     UNDO_OVERWRITE,                         //  5

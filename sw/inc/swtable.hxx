@@ -40,7 +40,7 @@ class SwStartNode;
 #include <memory>
 #include <boost/noncopyable.hpp>
 #else
-#include <node.hxx>         // fuer StartNode->GetMyIndex
+#include <node.hxx>         // For StartNode->GetMyIndex.
 #endif
 
 class SwFmt;
@@ -79,20 +79,20 @@ SV_DECL_REF( SwServerObject )
 SV_DECL_PTRARR_DEL(SwTableLines, SwTableLine*, 10, 20)
 SV_DECL_PTRARR_DEL(SwTableBoxes, SwTableBox*, 25, 50)
 
-// speicher die Inhaltstragenden Box-Pointer zusaetzlich in einem
-// sortierten Array (fuers rechnen in der Tabelle)
+// Save content-bearing box-pointers additionally in a sorted array
+// (for calculation in table).
 typedef SwTableBox* SwTableBoxPtr;
 SV_DECL_PTRARR_SORT( SwTableSortBoxes, SwTableBoxPtr, 25, 50 )
 typedef SwTableLine* SwTableLinePtr;
 
-class SW_DLLPUBLIC SwTable: public SwClient          //Client vom FrmFmt
+class SW_DLLPUBLIC SwTable: public SwClient          //Client of FrmFmt.
 {
 
 
 protected:
     SwTableLines aLines;
     SwTableSortBoxes aSortCntBoxes;
-    SwServerObjectRef refObj;   // falls DataServer -> Pointer gesetzt
+    SwServerObjectRef refObj;   // In case DataServer -> pointer is set.
 
     SwHTMLTableLayout *pHTMLLayout;
 
@@ -102,17 +102,17 @@ protected:
     // boxes have been build (SwTableNode::MakeCopy with tables in tables).
     SwTableNode* pTableNode;
 
-//SOLL das fuer jede Tabelle einstellbar sein?
+    // Should that be adjustable for every table?
     TblChgMode  eTblChgMode;
 
-    sal_uInt16      nGrfsThatResize;    // Anzahl der Grfs, die beim HTML-Import
-                                    // noch ein Resize der Tbl. anstossen
-    sal_uInt16      nRowsToRepeat;      // number of rows to repeat on every page
+    sal_uInt16      nGrfsThatResize;    // Count of Grfs that initiate a resize of table
+                                        // at HTML-import.
+    sal_uInt16      nRowsToRepeat;      // Number of rows to repeat on every page.
 
     sal_Bool        bModifyLocked   :1;
     sal_Bool        bNewModel       :1; // sal_False: old SubTableModel; sal_True: new RowSpanModel
 #if OSL_DEBUG_LEVEL > 1
-    bool bDontChangeModel;  // This is set by functions (like Merge()) to forbid a laet model change
+    bool bDontChangeModel;  // This is set by functions (like Merge()) to forbid a laet model change.
 #endif
 
     sal_Bool IsModifyLocked(){ return bModifyLocked;}
@@ -158,13 +158,13 @@ public:
 
     SwHTMLTableLayout *GetHTMLTableLayout() { return pHTMLLayout; }
     const SwHTMLTableLayout *GetHTMLTableLayout() const { return pHTMLLayout; }
-    void SetHTMLTableLayout( SwHTMLTableLayout *p );    //Eigentumsuebergang!
+    void SetHTMLTableLayout( SwHTMLTableLayout *p );    //Change of property!
 
     sal_uInt16 IncGrfsThatResize() { return ++nGrfsThatResize; }
     sal_uInt16 DecGrfsThatResize() { return nGrfsThatResize ? --nGrfsThatResize : 0; }
 
-    void LockModify()   { bModifyLocked = sal_True; }   //Muessen _immer_ paarig
-    void UnlockModify() { bModifyLocked = sal_False;}   //benutzt werden!
+    void LockModify()   { bModifyLocked = sal_True; }   // Must be used always
+    void UnlockModify() { bModifyLocked = sal_False;}   // in pairs!
 
     void SetTableModel( sal_Bool bNew ){ bNewModel = bNew; }
     sal_Bool IsNewModel() const { return bNewModel; }
@@ -250,69 +250,72 @@ public:
           SwTableSortBoxes& GetTabSortBoxes()       { return aSortCntBoxes; }
     const SwTableSortBoxes& GetTabSortBoxes() const { return aSortCntBoxes; }
 
-        // lese die 1. Nummer und loesche sie aus dem String
-        // (wird von GetTblBox und SwTblFld benutzt)
+    // Read 1st number and delete it from string (used by GetTblBox and SwTblFld).
+
     // #i80314#
     // add 3rd parameter in order to control validation check on <rStr>
     static sal_uInt16 _GetBoxNum( String& rStr,
                               sal_Bool bFirst = sal_False,
                               const bool bPerformValidCheck = false );
-        // suche die Inhaltstragende Box mit dem Namen
+
+    // Search content-bearing box with that name.
+
     // #i80314#
     // add 2nd parameter in order to control validation check in called method
     // <_GetBoxNum(..)>
     const SwTableBox* GetTblBox( const String& rName,
                                  const bool bPerformValidCheck = false ) const;
-        // kopiere die selektierten Boxen in ein anderes Dokument.
+    // Copy selected boxes to another document.
     sal_Bool MakeCopy( SwDoc*, const SwPosition&, const SwSelBoxes&,
                     sal_Bool bCpyNds = sal_True, sal_Bool bCpyName = sal_False ) const;
-        // kopiere die Tabelle in diese. (die Logik steht im TBLRWCL.CXX)
+    // Copy table in this (implemented in TBLRWCL.CXX).
     sal_Bool InsTable( const SwTable& rCpyTbl, const SwNodeIndex&,
                     SwUndoTblCpyTbl* pUndo = 0 );
     sal_Bool InsTable( const SwTable& rCpyTbl, const SwSelBoxes&,
                     SwUndoTblCpyTbl* pUndo = 0 );
     sal_Bool InsNewTable( const SwTable& rCpyTbl, const SwSelBoxes&,
                       SwUndoTblCpyTbl* pUndo );
-        // kopiere die Headline (mit Inhalt!) der Tabelle in eine andere
+    // Copy headline of table (with content!) into an other one.
     sal_Bool CopyHeadlineIntoTable( SwTableNode& rTblNd );
 
-        // erfrage die Box, dessen Start-Index auf nBoxStt steht
+    // Get box, whose start index is set on nBoxStt.
           SwTableBox* GetTblBox( sal_uLong nSttIdx );
     const SwTableBox* GetTblBox( sal_uLong nSttIdx ) const
                         {   return ((SwTable*)this)->GetTblBox( nSttIdx );  }
 
-    // returnt sal_True wenn sich in der Tabelle Verschachtelungen befinden
+    // Returns sal_True if table contains nestings.
     sal_Bool IsTblComplex() const;
 
-    //returnt sal_True wenn die Tabelle oder Selektion ausgeglichen ist
+    // Returns sal_True if table or selection is balanced.
     sal_Bool IsTblComplexForChart( const String& rSel,
                                 SwChartLines* pGetCLines = 0  ) const;
 
-    // suche alle Inhaltstragenden-Boxen der Grundline in der diese Box
+    // Search all content-bearing boxes of the base line on which this box stands.
+    // rBoxes as a return value for immediate use.
     // steht. rBoxes auch als Return-Wert, um es gleich weiter zu benutzen
-    //JP 31.01.97: bToTop = sal_True -> hoch bis zur Grundline,
-    //                      sal_False-> sonst nur die Line der Box
+    // bToTop = sal_True -> up to base line, sal_False-> else only line of box.
     SwSelBoxes& SelLineFromBox( const SwTableBox* pBox,
                             SwSelBoxes& rBoxes, sal_Bool bToTop = sal_True ) const;
-        // erfrage vom Client Informationen
+
+    // Get information from client.
     virtual sal_Bool GetInfo( SfxPoolItem& ) const;
 
-        // suche im Format nach der angemeldeten Tabelle
+    // Search in format for registered table.
     static SwTable * FindTable( SwFrmFmt const*const pFmt );
 
-        // Struktur ein wenig aufraeumen
+    // Clean up structure a bit.
     void GCLines();
 
-    // returns the table node via aSortCntBoxes or pTableNode
+    // Returns the table node via aSortCntBoxes or pTableNode.
     SwTableNode* GetTableNode() const;
     void SetTableNode( SwTableNode* pNode ) { pTableNode = pNode; }
 
-        // Daten Server-Methoden
+    // Data server methods.
     void SetRefObject( SwServerObject* );
     const SwServerObject* GetObject() const     {  return &refObj; }
           SwServerObject* GetObject()           {  return &refObj; }
 
-    //Daten fuer das Chart fuellen.
+    // Fill data for chart.
     void UpdateCharts() const;
 
     TblChgMode GetTblChgMode() const        { return eTblChgMode; }
@@ -328,7 +331,7 @@ public:
 #endif
 };
 
-class SW_DLLPUBLIC SwTableLine: public SwClient     // Client vom FrmFmt
+class SW_DLLPUBLIC SwTableLine: public SwClient     // Client of FrmFmt.
 {
     SwTableBoxes aBoxes;
     SwTableBox *pUpper;
@@ -352,11 +355,11 @@ public:
     SwFrmFmt* GetFrmFmt()       { return (SwFrmFmt*)GetRegisteredIn(); }
     SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
 
-    //Macht ein eingenes FrmFmt wenn noch mehr Lines von ihm abhaengen.
+    // Creates a own FrmFmt if more lines depend on it.
     SwFrmFmt* ClaimFrmFmt();
     void ChgFrmFmt( SwTableLineFmt* pNewFmt );
 
-    // suche nach der naechsten/vorherigen Box mit Inhalt
+    // Search next/previous box with content.
     SwTableBox* FindNextBox( const SwTable&, const SwTableBox* =0,
                             sal_Bool bOvrTblLns=sal_True ) const;
     SwTableBox* FindPreviousBox( const SwTable&, const SwTableBox* =0,
@@ -368,23 +371,23 @@ public:
     void RegisterToFormat( SwFmt& rFmt );
 };
 
-class SW_DLLPUBLIC SwTableBox: public SwClient      //Client vom FrmFmt
+class SW_DLLPUBLIC SwTableBox: public SwClient      //Client of FrmFmt.
 {
-    friend class SwNodes;           // um den Index umzusetzen !
-    friend void DelBoxNode(SwTableSortBoxes&);  // um den StartNode* zu loeschen !
+    friend class SwNodes;           // Transpose index.
+    friend void DelBoxNode(SwTableSortBoxes&);  // Delete StartNode* !
     friend class SwXMLTableContext;
 
-    //nicht (mehr) implementiert.
+    // Not implemented (any more).
     SwTableBox( const SwTableBox & );
-    SwTableBox &operator=( const SwTableBox &); //gibts nicht.
+    SwTableBox &operator=( const SwTableBox &); // Does not exist.
 
     SwTableLines aLines;
     const SwStartNode * pSttNd;
     SwTableLine *pUpper;
     SwTableBox_Impl* pImpl;
 
-    // falls das Format schon Formeln/Values enthaelt, muss ein neues
-    // fuer die neue Box erzeugt werden.
+    // In case Format contains formulas/values already,
+    // a new one must be created for the new box.
     SwTableBoxFmt* CheckBoxFmt( SwTableBoxFmt* );
 
 public:
@@ -407,7 +410,7 @@ public:
     SwFrmFmt* GetFrmFmt()       { return (SwFrmFmt*)GetRegisteredIn(); }
     SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
 
-    //Macht ein eingenes FrmFmt wenn noch mehr Boxen von ihm abhaengen.
+    // Creates its own FrmFmt if more boxes depend on it.
     SwFrmFmt* ClaimFrmFmt();
     void ChgFrmFmt( SwTableBoxFmt *pNewFmt );
 
@@ -419,30 +422,30 @@ public:
         { return pSttNd ? pSttNd->GetIndex() : 0; }
 #endif
 
-    // suche nach der naechsten/vorherigen Box mit Inhalt
+    // Search next/previous box with content.
     SwTableBox* FindNextBox( const SwTable&, const SwTableBox* =0,
                             sal_Bool bOvrTblLns=sal_True ) const;
     SwTableBox* FindPreviousBox( const SwTable&, const SwTableBox* =0,
                             sal_Bool bOvrTblLns=sal_True ) const;
-    // gebe den Namen dieser Box zurueck. Dieser wird dynamisch bestimmt
-    // und ergibt sich aus der Position in den Lines/Boxen/Tabelle
+    // Return name of this box. It is determined dynamically and
+    // is calculated from the position in the lines/boxes/table.
     String GetName() const;
-    // gebe den "Wert" der Box zurueck (fuers rechnen in der Tabelle)
+    // Return "value" of box (for calculating in table).
     double GetValue( SwTblCalcPara& rPara ) const;
 
     sal_Bool IsInHeadline( const SwTable* pTbl = 0 ) const;
 
-    // enthaelt die Box Inhalt, der als Nummer formatiert werden kann?
+    // Contains box contents, that can be formated as a number?
     sal_Bool HasNumCntnt( double& rNum, sal_uInt32& rFmtIndex,
                     sal_Bool& rIsEmptyTxtNd ) const;
     sal_uLong IsValidNumTxtNd( sal_Bool bCheckAttr = sal_True ) const;
-    // teste ob der BoxInhalt mit der Nummer uebereinstimmt, wenn eine
-    // Tabellenformel gesetzt ist. (fuers Redo des Change vom NumFormat!)
+    // If a table formula is set, test if box contents is congruent with number.
+    // (For Redo of change of NumFormat!).
     sal_Bool IsNumberChanged() const;
 
-    // ist das eine FormelBox oder eine Box mit numerischen Inhalt (AutoSum)
-    // Was es ist, besagt der ReturnWert - die WhichId des Attributes
-    // Leere Boxen haben den ReturnWert USHRT_MAX !!
+    // Is that a formula box or a box with numeric contents (AutoSum)?
+    // What it is is indicated by the return value - the WhichId of the attribute.
+    // Empty boxes have the return value USHRT_MAX !!
     sal_uInt16 IsFormulaOrValueBox() const;
 
     // Loading of a document requires an actualisation of cells with values
@@ -450,7 +453,7 @@ public:
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTableBox)
 
-    // zugriff auf interne Daten - z.Z. benutzt fuer den NumFormatter
+    // Access on internal data - currently used for the NumFormatter.
     inline const Color* GetSaveUserColor()  const;
     inline const Color* GetSaveNumFmtColor() const;
     inline void SetSaveUserColor(const Color* p );
