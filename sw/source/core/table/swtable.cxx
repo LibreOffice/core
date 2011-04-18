@@ -1524,7 +1524,7 @@ SwTableBox* SwTable::GetTblBox( sal_uLong nSttIdx )
     if ( pCNd || pTblNd )
     {
         SwModify* pModify = pCNd;
-        // --> FME 2007-3-26 #144862# Better handling of table in table:
+        // #144862# Better handling of table in table
         if ( pTblNd && pTblNd->GetTable().GetFrmFmt() )
             pModify = pTblNd->GetTable().GetFrmFmt();
         // <--

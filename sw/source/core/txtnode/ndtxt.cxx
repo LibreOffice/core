@@ -2640,7 +2640,7 @@ sal_Bool SwTxtNode::HasBullet() const
 }
 // <- #i29560#
 
-// --> OD 2005-11-17 #128041# - introduce parameter <_bInclPrefixAndSuffixStrings>
+// #128041# - introduce parameter <_bInclPrefixAndSuffixStrings>
 //i53420 added max outline parameter
 XubString SwTxtNode::GetNumString( const bool _bInclPrefixAndSuffixStrings, const unsigned int _nRestrictToThisLevel ) const
 {
@@ -3493,7 +3493,7 @@ void SwTxtNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewVal
     SwCntntNode::Modify( pOldValue, pNewValue );
 
     SwDoc * pDoc = GetDoc();
-    // --> OD 2005-11-02 #125329# - assure that text node is in document nodes array
+    // #125329# - assure that text node is in document nodes array
     if ( pDoc && !pDoc->IsInDtor() && &pDoc->GetNodes() == &GetNodes() )
     // <--
     {

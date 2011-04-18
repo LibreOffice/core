@@ -630,7 +630,7 @@ sal_Bool SwLayHelper::CheckInsertPage()
     const SwAttrSet* pAttr = rpFrm->GetAttrSet();
     const SvxFmtBreakItem& rBrk = pAttr->GetBreak();
     const SwFmtPageDesc& rDesc = pAttr->GetPageDesc();
-    // --> FME 2004-10-26 #118195# Do not evaluate page description if frame
+    // #118195# Do not evaluate page description if frame
     // is a follow frame!
     const SwPageDesc* pDesc = rpFrm->IsFlowFrm() &&
                               SwFlowFrm::CastFlowFrm( rpFrm )->IsFollow() ?

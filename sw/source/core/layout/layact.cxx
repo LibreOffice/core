@@ -1322,7 +1322,7 @@ sal_Bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
                         prPage = (SwPageFrm*)prPage->GetPrev();
                     }
                 }
-                // --> OD 2005-04-25 #121980# - no shortcut, if at previous page
+                // #121980# - no shortcut, if at previous page
                 // an anchored object is registered, whose anchor is <pCntnt>.
                 else if ( prPage->GetPrev() &&
                           static_cast<SwPageFrm*>(prPage->GetPrev())->GetSortedObjs() )
@@ -2406,7 +2406,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
                 SwRect aTmp( pSh->VisArea() );
                 pSh->UISizeNotify();
 
-                // --> FME 2006-08-03 #137134#
+                // #137134#
                 // Are we supposed to crash if pSh isn't a cursor shell?!
                 // bActions |= aTmp != pSh->VisArea() ||
                 //             aBools[nBoolIdx] != ((SwCrsrShell*)pSh)->GetCharRect().IsOver( pSh->VisArea() );

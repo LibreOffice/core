@@ -34,7 +34,7 @@
 #include <layfrm.hxx>
 #include <pagefrm.hxx>
 
-// --> OD 2005-07-13 #124218#
+// #124218#
 #include <layact.hxx>
 // <--
 
@@ -93,7 +93,7 @@ bool SwObjectFormatterLayFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
 {
     _FormatObj( _rAnchoredObj );
 
-    // --> OD 2005-07-13 #124218# - consider that the layout action has to be
+    // #124218# - consider that the layout action has to be
     // restarted due to a deleted page frame.
     return GetLayAction() ? !GetLayAction()->IsAgain() : true;
     // <--
@@ -133,7 +133,7 @@ bool SwObjectFormatterLayFrm::_AdditionalFormatObjsOnPage()
         return true;
     }
 
-    // --> OD 2005-07-13 #124218# - consider, if the layout action
+    // #124218# - consider, if the layout action
     // has to be restarted due to a delete of a page frame.
     if ( GetLayAction() && GetLayAction()->IsAgain() )
     {

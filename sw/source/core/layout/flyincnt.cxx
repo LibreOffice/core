@@ -212,7 +212,7 @@ void SwFlyInCntFrm::MakeObjPos()
     }
 }
 
-// --> OD 2004-12-02 #115759#
+// #115759#
 void SwFlyInCntFrm::_ActionOnInvalidation( const InvalidationType _nInvalid )
 {
     if ( INVALID_POS == _nInvalid || INVALID_ALL == _nInvalid )

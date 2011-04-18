@@ -212,7 +212,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             }
             else
             {
-                // --> OD 2005-02-09 #119353# - robust
+                // #119353# - robust
                 const GraphicObject* pGrfObj = rSh.GetGraphicObj();
                 if ( pGrfObj )
                 {
@@ -496,7 +496,7 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
         case SID_GRFFILTER_SOLARIZE:
             if( GRAPHIC_BITMAP == nGrfType )
             {
-                // --> OD 2005-02-09 #119353# - robust
+                // #119353# - robust
                 const GraphicObject* pFilterObj( GetShell().GetGraphicObj() );
                 if ( pFilterObj )
                 {
@@ -622,7 +622,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
         case SID_ATTR_GRAF_TRANSPARENCE:
             if( !bParentCntProt )
             {
-                // --> OD 2005-02-09 #119353# - robust
+                // #119353# - robust
                 const GraphicObject* pGrfObj = rSh.GetGraphicObj();
                 if ( pGrfObj )
                 {

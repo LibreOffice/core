@@ -89,7 +89,7 @@ bool SwMovedFwdFrmsByObjPos::DoesRowContainMovedFwdFrm( const SwRowFrm& _rRowFrm
             SwIterator<SwTxtFrm,SwTxtNode> aFrmIter( *rEntry.first );
             for( SwTxtFrm* pTxtFrm = aFrmIter.First(); pTxtFrm; pTxtFrm = (SwTxtFrm*)aFrmIter.Next() )
             {
-                // --> OD 2004-12-03 #115759# - assure that found text frame
+                // #115759# - assure that found text frame
                 // is the first one.
                 if ( _rRowFrm.IsAnLower( pTxtFrm ) && !pTxtFrm->GetIndPrev() )
                 // <--

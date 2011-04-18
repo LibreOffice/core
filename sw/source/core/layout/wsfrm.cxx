@@ -1032,8 +1032,8 @@ void SwCntntFrm::Cut()
                  // This can happen due to the new cell split feature.
                  !pUp->IsCellFrm() &&
                  // <--
-                 // --> OD 2006-01-04 #126020# - adjust check for empty section
-                 // --> OD 2006-02-01 #130797# - correct fix #126020#
+                 // #126020# - adjust check for empty section
+                 // #130797# - correct fix #126020#
                  !(pSct = pUp->FindSctFrm())->ContainsCntnt() &&
                  !pSct->ContainsAny( true ) ) ) )
                  // <--

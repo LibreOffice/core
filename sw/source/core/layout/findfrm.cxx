@@ -158,7 +158,7 @@ const SwCellFrm *SwLayoutFrm::FirstCell() const
 |*
 |*************************************************************************/
 
-// --> OD 2006-02-01 #130797#
+// #130797#
 // New parameter <_bInvestigateFtnForSections> controls investigation of
 // content of footnotes for sections.
 const SwFrm *SwLayoutFrm::ContainsAny( const bool _bInvestigateFtnForSections ) const
@@ -169,7 +169,7 @@ const SwFrm *SwLayoutFrm::ContainsAny( const bool _bInvestigateFtnForSections ) 
     // Oder bis wir einen SectionFrm oder TabFrm gefunden haben
 
     const SwLayoutFrm *pLayLeaf = this;
-    // --> OD 2006-02-01 #130797#
+    // #130797#
     const bool bNoFtn = IsSctFrm() && !_bInvestigateFtnForSections;
     // <--
     do
@@ -1044,7 +1044,7 @@ SwCntntFrm* SwFrm::_FindPrevCnt( const bool _bInSameFtn )
                             SwFtnFrm* pMasterFtnFrmOfCurr(
                                         const_cast<SwFtnFrm*>(pFtnFrmOfCurr) );
                             pPrevCntntFrm = 0L;
-                            // --> OD 2007-07-05 #146872#
+                            // #146872#
                             // correct wrong loop-condition
                             do {
                                 pMasterFtnFrmOfCurr = pMasterFtnFrmOfCurr->GetMaster();

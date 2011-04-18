@@ -216,7 +216,7 @@ sal_Bool SwFlowFrm::IsKeep( const SwAttrSet& rAttrs, bool bCheckIfLastRowShouldK
             if( 0 != (pNxt = rThis.FindNextCnt()) &&
                 (!pFollow || pNxt != pFollow->GetFrm()))
             {
-                // --> FME 2006-05-15 #135914#
+                // #135914#
                 // The last row of a table only keeps with the next content
                 // it they are in the same section:
                 if ( bCheckIfLastRowShouldKeep )
@@ -617,8 +617,8 @@ void SwFlowFrm::MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling )
     // Wenn durch das Cut&Paste ein leerer SectionFrm entstanden ist, sollte
     // dieser automatisch verschwinden.
     SwSectionFrm *pSct;
-    // --> OD 2006-01-04 #126020# - adjust check for empty section
-    // --> OD 2006-02-01 #130797# - correct fix #126020#
+    // #126020# - adjust check for empty section
+    // #130797# - correct fix #126020#
     if ( pOldParent && !pOldParent->Lower() &&
          ( pOldParent->IsInSct() &&
            !(pSct = pOldParent->FindSctFrm())->ContainsCntnt() &&
@@ -1725,7 +1725,7 @@ SwTwips SwFlowFrm::CalcLowerSpace( const SwBorderAttrs* _pAttrs ) const
     // - correct consideration of table frames
     // - use new method <CalcAddLowerSpaceAsLastInTableCell(..)>
     if ( ( ( rThis.IsTabFrm() && rThis.GetUpper()->IsInTab() ) ||
-           // --> OD 2004-11-16 #115759# - no lower spacing, if frame has a follow
+           // #115759# - no lower spacing, if frame has a follow
            ( rThis.IsInTab() && !GetFollow() ) ) &&
            // <--
          !rThis.GetIndNext() )
@@ -2096,7 +2096,7 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
     if ( pFtn && pFtn->IsBackMoveLocked() )
         return sal_False;
 
-    // --> OD 2004-11-29 #115759# - text frames, which are directly inside
+    // #115759# - text frames, which are directly inside
     // tables aren't allowed to move backward.
     if ( rThis.IsTxtFrm() && rThis.IsInTab() )
     {
@@ -2181,14 +2181,14 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
                     // Now <pNewUpper> is a previous layout frame, which contains
                     // content. But the new upper layout frame has to be the next one.
                     // Thus, hack for issue i14206 no longer needed, but fix for issue 114442
-                    // --> OD 2006-05-17 #136024# - correct fix for i53139:
+                    // #136024# - correct fix for i53139
                     // Check for wrong page description before using next new upper.
                     // #i66051# - further correction of fix for i53139
                     // Check for correct type of new next upper layout frame
-                    // --> OD 2006-06-08 #136538# - another correction of fix for i53139
+                    // #136538# - another correction of fix for i53139
                     // Assumption, that in all cases <pNewUpper> is a previous
                     // layout frame, which contains content, is wrong.
-                    // --> OD 2006-07-05 #136538# - another correction of fix for i53139
+                    // #136538# - another correction of fix for i53139
                     // Beside type check, check also, if proposed new next upper
                     // frame is inside the same frame types.
                     // #i73194# - and yet another correction
@@ -2246,11 +2246,11 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
                 // Now <pNewUpper> is a previous layout frame, which
                 // contains content. But the new upper layout frame
                 // has to be the next one.
-                // --> OD 2006-05-17 #136024# - correct fix for i53139
+                // #136024# - correct fix for i53139
                 // Check for wrong page description before using next new upper.
                 // #i66051# - further correction of fix for i53139
                 // Check for correct type of new next upper layout frame
-                // --> OD 2006-07-05 #136538# - another correction of fix for i53139
+                // #136538# - another correction of fix for i53139
                 // Beside type check, check also, if proposed new next upper
                 // frame is inside the same frame types.
                 SwLayoutFrm* pNewNextUpper = pNewUpper->GetLeaf( MAKEPAGE_NOSECTION, sal_True );
@@ -2298,11 +2298,11 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
                             // Now <pNewUpper> is a previous layout frame, which
                             // contains content. But the new upper layout frame
                             // has to be the next one.
-                            // --> OD 2006-05-17 #136024# - correct fix for i53139
+                            // #136024# - correct fix for i53139
                             // Check for wrong page description before using next new upper.
                             // #i66051# - further correction of fix for i53139
                             // Check for correct type of new next upper layout frame
-                            // --> OD 2006-07-05 #136538# - another correction of fix for i53139
+                            // #136538# - another correction of fix for i53139
                             // Beside type check, check also, if proposed new next upper
                             // frame is inside the same frame types.
                             // #i71065#
@@ -2436,8 +2436,8 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
             else
             {
                 SwSectionFrm* pSectFrm = pNewUpper->FindSctFrm();
-                // --> OD 2006-01-04 #126020# - adjust check for empty section
-                // --> OD 2006-02-01 #130797# - correct fix #126020#
+                // #126020# - adjust check for empty section
+                // #130797# - correct fix #126020#
                 if ( pSectFrm && !pSectFrm->IsColLocked() &&
                      !pSectFrm->ContainsCntnt() && !pSectFrm->ContainsAny( true ) )
                 // <--

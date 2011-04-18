@@ -1408,7 +1408,7 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
                             nRemaining += ((SwSectionFrm*)pFrm)->Undersize();
                         pFrm = pFrm->GetNext();
                     }
-                    // --> OD 2006-02-09 #130878#
+                    // #130878#
                     // Do not keep old height, if content has no height.
                     // The old height could be wrong due to wrong layout cache
                     // and isn't corrected in the further formatting, because
@@ -2396,7 +2396,7 @@ void SwFrm::InvalidateObjs( const bool _bInvaPosOnly,
                 {
                     continue;
                 }
-                // --> OD 2004-11-24 #115759# - unlock its position, if anchored
+                // #115759# - unlock its position, if anchored
                 // object isn't registered at the page, where its anchor
                 // character text frame is on, respectively if it has no
                 // anchor character text frame.

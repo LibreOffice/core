@@ -357,7 +357,7 @@ short SwOutlineTabDialog::Ok()
     // geschehen, um evtl. aufgehobene Zuordnungen
     // auch wieder zu loeschen
 
-    // --> OD 2006-12-11 #130443#
+    // #130443#
     // encapsulate changes into a action to avoid effects on the current cursor
     // position during the changes.
     rWrtSh.StartAction();
@@ -1044,7 +1044,7 @@ void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                     pVDev->SetFont(aStdFont);
                     if(pActNum->IsContinusNum())
                         aNumVector[nLevel] = nPreNum;
-                    // --> OD 2005-11-17 #128041#
+                    // #128041#
                     String aText(pActNum->MakeNumString( aNumVector ));
                     // <--
                     pVDev->DrawText( Point(nNumberXPos, nYStart), aText );
@@ -1150,7 +1150,7 @@ void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                     pVDev->SetFont(aStdFont);
                     if(pActNum->IsContinusNum())
                         aNumVector[nLevel] = nPreNum;
-                    // --> OD 2005-11-17 #128041#
+                    // #128041#
                     String aText(pActNum->MakeNumString( aNumVector ));
                     // <--
                     pVDev->DrawText( Point(nXStart, nYStart), aText );

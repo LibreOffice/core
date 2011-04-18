@@ -98,7 +98,7 @@ public:
     void SetFollowFlowRow( bool bNew ) { bIsFollowFlowRow = bNew; }
     // <-- split table rows
 
-    // --> FME 2006-02-10 #131283# Table row keep feature
+    // #131283# Table row keep feature
     bool ShouldRowKeepWithNext() const;
     // <--
 

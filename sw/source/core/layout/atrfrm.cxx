@@ -3083,7 +3083,7 @@ sal_Bool SwFlyFrmFmt::IsBackgroundBrushInherited() const
     return bReturn;
 }
 
-// --> OD 2006-02-28 #125892#
+// #125892#
 SwHandleAnchorNodeChg::SwHandleAnchorNodeChg( SwFlyFrmFmt& _rFlyFrmFmt,
                                               const SwFmtAnchor& _rNewAnchorFmt,
                                               SwFlyFrm* _pKeepThisFlyFrm )

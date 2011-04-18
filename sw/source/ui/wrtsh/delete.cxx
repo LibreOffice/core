@@ -34,7 +34,7 @@
 #include <crsskip.hxx>
 #include <swcrsr.hxx>
 #include <editeng/lrspitem.hxx> // #i23725#
-// --> OD 2006-07-10 #134369#
+// #134369#
 #include <view.hxx>
 #include <drawbase.hxx>
 // <--
@@ -385,11 +385,11 @@ long SwWrtShell::DelRight()
 
             LeaveSelFrmMode();
             UnSelectFrm();
-            // --> OD 2006-07-06 #134369#
+            // #134369#
             OSL_ENSURE( !IsFrmSelected(),
                     "<SwWrtShell::DelRight(..)> - <SwWrtShell::UnSelectFrm()> should unmark all objects" );
             // <--
-            // --> OD 2006-07-10 #134369#
+            // #134369#
             // leave draw mode, if necessary.
             {
                 if (GetView().GetDrawFuncPtr())
@@ -405,7 +405,7 @@ long SwWrtShell::DelRight()
             // <--
         }
 
-        // --> OD 2006-07-07 #134369#
+        // #134369#
         // <IsFrmSelected()> can't be true - see above.
         // <--
         {

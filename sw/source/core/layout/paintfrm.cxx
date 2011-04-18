@@ -321,7 +321,7 @@ class SwSavePaintStatics
                        *pSFlyOnlyDraw;
     SwLineRects        *pSLines;
     SwSubsRects        *pSSubsLines;
-    // --> OD 2005-07-04 #123196#
+    // #123196#
     SwSubsRects*        pSSpecSubsLines;
     // <--
     SfxProgress        *pSProgress;
@@ -348,7 +348,7 @@ SwSavePaintStatics::SwSavePaintStatics() :
     pSFlyOnlyDraw       ( pFlyOnlyDraw      ),
     pSLines             ( pLines            ),
     pSSubsLines         ( pSubsLines        ),
-    // --> OD 2005-07-04 #123196#
+    // #123196#
     pSSpecSubsLines     ( pSpecSubsLines    ),
     // <--
     pSProgress          ( pProgress         ),
@@ -374,7 +374,7 @@ SwSavePaintStatics::SwSavePaintStatics() :
     aEdgeScale = 0.5;
     pLines = 0;
     pSubsLines = 0;
-    // --> OD 2005-07-04 #123196#
+    // #123196#
     pSpecSubsLines = 0L;
     // <--
     pProgress = 0;
@@ -390,7 +390,7 @@ SwSavePaintStatics::~SwSavePaintStatics()
     pFlyOnlyDraw       = pSFlyOnlyDraw;
     pLines             = pSLines;
     pSubsLines         = pSSubsLines;
-    // --> OD 2005-07-04 #123196#
+    // #123196#
     pSpecSubsLines     = pSSpecSubsLines;
     // <--
     pProgress          = pSProgress;
@@ -6441,7 +6441,7 @@ sal_Bool SwFrm::GetBackgroundBrush( const SvxBrushItem* & rpBrush,
                 rBack.GetGraphicPos() == GPOS_NONE &&
                 !pOpt->IsPagePreview() &&
                 !pOpt->IsReadonly() &&
-                // --> FME 2004-06-29 #114856# Formular view
+                // #114856# Formular view
                 !pOpt->IsFormView() &&
                 // <--
                 SwViewOption::IsIndexShadings() &&

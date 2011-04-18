@@ -773,7 +773,7 @@ void SwTxtFly::CtorInitTxtFly( const SwTxtFrm *pFrm )
 {
     mbIgnoreCurrentFrame = sal_False;
     mbIgnoreContour = sal_False;
-    // --> OD 2004-12-17 #118809#
+    // #118809#
     mbIgnoreObjsInHeaderFooter = sal_False;
     // <--
     pPage = pFrm->FindPageFrm();
@@ -1287,7 +1287,7 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
                 pTmp = GetVirtualUpper( pTmp, aPos );
             }
             // #i26945#
-            // --> OD 2004-11-29 #115759#
+            // #115759#
             // If <pTmp> is a text frame inside a table, take the upper
             // of the anchor frame, which contains the anchor position.
             else if ( pTmp->IsTxtFrm() && pTmp->IsInTab() )
@@ -2058,7 +2058,7 @@ void SwTxtFly::CalcRightMargin( SwRect &rFly,
     OSL_ENSURE( ! pCurrFrm->IsVertical() || ! pCurrFrm->IsSwapped(),
             "SwTxtFly::CalcRightMargin with swapped frame" );
     SWRECTFN( pCurrFrm )
-    // --> OD 2004-12-14 #118796# - correct determination of right of printing area
+    // #118796# - correct determination of right of printing area
     SwTwips nRight = (pCurrFrm->*fnRect->fnGetPrtRight)();
     // <--
     SwTwips nFlyRight = (rFly.*fnRect->fnGetRight)();
@@ -2162,7 +2162,7 @@ void SwTxtFly::CalcLeftMargin( SwRect &rFly,
     OSL_ENSURE( ! pCurrFrm->IsVertical() || ! pCurrFrm->IsSwapped(),
             "SwTxtFly::CalcLeftMargin with swapped frame" );
     SWRECTFN( pCurrFrm )
-    // --> OD 2004-12-14 #118796# - correct determination of left of printing area
+    // #118796# - correct determination of left of printing area
     SwTwips nLeft = (pCurrFrm->*fnRect->fnGetPrtLeft)();
     // <--
     const SwTwips nFlyLeft = (rFly.*fnRect->fnGetLeft)();
@@ -2211,7 +2211,7 @@ void SwTxtFly::CalcLeftMargin( SwRect &rFly,
 
         if( (aTmp.*fnRect->fnGetLeft)() < nFlyLeft && aTmp.IsOver( aLine ) )
         {
-            // --> OD 2004-12-14 #118796# - no '+1', because <..fnGetRight>
+            // #118796# - no '+1', because <..fnGetRight>
             // returns the correct value.
             SwTwips nTmpRight = (aTmp.*fnRect->fnGetRight)();
             if ( nLeft <= nTmpRight )

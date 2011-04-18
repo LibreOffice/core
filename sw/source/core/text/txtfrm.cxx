@@ -505,7 +505,7 @@ void SwTxtFrm::HideFootnotes( xub_StrLen nStart, xub_StrLen nEnd )
     }
 }
 
-// --> OD 2005-03-30 #120729# - hotfix: WW8 documents contain at its end hidden,
+// #120729# - hotfix
 // as-character anchored graphics, which are used for a graphic bullet list.
 // As long as these graphic bullet list aren't imported, do not hide a
 // at-character anchored object, if
@@ -589,7 +589,7 @@ void SwTxtFrm::HideAndShowObjects()
             {
                 SdrObject* pObj = (*GetDrawObjs())[i]->DrawObj();
                 SwContact* pContact = static_cast<SwContact*>(pObj->GetUserCall());
-                // --> OD 2005-03-30 #120729# - hotfix: do not hide object
+                // #120729# - hotfix
                 // under certain conditions
                 const RndStdIds eAnchorType( pContact->GetAnchorId() );
                 const xub_StrLen nObjAnchorPos = pContact->GetCntntAnchorIndex().GetIndex();
@@ -618,7 +618,7 @@ void SwTxtFrm::HideAndShowObjects()
             {
                 SdrObject* pObj = (*GetDrawObjs())[i]->DrawObj();
                 SwContact* pContact = static_cast<SwContact*>(pObj->GetUserCall());
-                // --> OD 2005-03-30 #120729# - determine anchor type only once
+                // #120729# - determine anchor type only once
                 const RndStdIds eAnchorType( pContact->GetAnchorId() );
                 // <--
 
@@ -633,7 +633,7 @@ void SwTxtFrm::HideAndShowObjects()
                     xub_StrLen nHiddenEnd;
                     xub_StrLen nObjAnchorPos = pContact->GetCntntAnchorIndex().GetIndex();
                     SwScriptInfo::GetBoundsOfHiddenRange( rNode, nObjAnchorPos, nHiddenStart, nHiddenEnd, 0 );
-                    // --> OD 2005-03-30 #120729# - hotfix: do not hide object
+                    // #120729# - hotfix
                     // under certain conditions
                     if ( nHiddenStart != STRING_LEN && bShouldBeHidden &&
                          lcl_HideObj( *this, eAnchorType, nObjAnchorPos, (*GetDrawObjs())[i] ) )
@@ -2779,7 +2779,7 @@ void SwTxtFrm::CalcBaseOfstForFly()
     SwTxtFly aTxtFly( this );
     aTxtFly.SetIgnoreCurrentFrame( sal_True );
     aTxtFly.SetIgnoreContour( sal_True );
-    // --> OD 2004-12-17 #118809# - ignore objects in page header|footer for
+    // #118809# - ignore objects in page header|footer for
     // text frames not in page header|footer
     aTxtFly.SetIgnoreObjsInHeaderFooter( sal_True );
     // <--

@@ -1429,7 +1429,7 @@ void SwPageFrm::GetCntntPosition( const Point &rPt, SwPosition &rPos ) const
 |*
 |*************************************************************************/
 
-// --> OD 2005-05-25 #123110# - helper class to disable creation of an action
+// #123110# - helper class to disable creation of an action
 // by a callback event - e.g., change event from a drawing object
 class DisableCallbackAction
 {
@@ -1456,7 +1456,7 @@ class DisableCallbackAction
 //JP 11.10.2001: only in tables we try to find the right column - Bug 72294
 Point SwRootFrm::GetNextPrevCntntPos( const Point& rPoint, sal_Bool bNext ) const
 {
-    // --> OD 2005-05-25 #123110# - disable creation of an action by a callback
+    // #123110# - disable creation of an action by a callback
     // event during processing of this method. Needed because formatting is
     // triggered by this method.
     DisableCallbackAction aDisableCallbackAction( *this );
@@ -1837,7 +1837,7 @@ bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
         }
     }
 
-    // --> FME 2008-01-14 #151012# Made code robust here:
+    // #151012# Made code robust here
     const SwCntntNode* pTmpStartNode = rTblCrsr.GetCntntNode();
     const SwCntntNode* pTmpEndNode   = rTblCrsr.GetCntntNode(sal_False);
 
@@ -2459,7 +2459,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
             const SwCntntFrm *pCntnt = pStartFrm->GetNextCntntFrm();
             SwRect aPrvRect;
 
-            // --> OD 2006-01-24 #123908# - introduce robust code:
+            // #123908# - introduce robust code
             // The stacktrace issue reveals that <pCntnt> could be NULL.
             // One root cause found by AMA - see #130650#
             OSL_ENSURE( pCntnt,
@@ -2502,7 +2502,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
                     }
                 }
                 pCntnt = pCntnt->GetNextCntntFrm();
-                // --> OD 2006-01-24 #123908#
+                // #123908#
                 OSL_ENSURE( pCntnt,
                         "<SwRootFrm::CalcFrmRects(..)> - no content frame. This is a serious defect -> please inform OD" );
                 // <--

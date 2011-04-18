@@ -288,7 +288,7 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
     if ( bAuto )
     {
         if ( SVX_TAB_ADJUST_DECIMAL == eAdj &&
-             // --> FME 2005-12-19 #127428#
+             // #127428#
              1 == aLineInf.NumberOfTabStops() )
              // <--
             pTabPor = new SwAutoTabDecimalPortion( nNewTabPos, cDec, cFill );
@@ -467,7 +467,7 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
         // Wir muessen aufpassen, dass wir nicht endlos schleifen,
         // wenn die Breite kleiner ist, als ein Blank ...
         if( rInf.GetIdx() == rInf.GetLineStart() &&
-            // --> FME 2005-01-19 #119175# TabStop should be forced to current
+            // #119175# TabStop should be forced to current
             // line if there is a fly reducing the line width:
             !rInf.GetFly() )
             // <--
@@ -516,7 +516,7 @@ sal_Bool SwTabPortion::PostFormat( SwTxtFormatInfo &rInf )
     OSL_ENSURE( POR_TABLEFT != nWhich, "SwTabPortion::PostFormat: already formatted" );
     const bool bTabCompat = rInf.GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT);
 
-    // --> FME 2005-12-19 #127428# Abandon dec. tab position if line is full:
+    // #127428# Abandon dec. tab position if line is full
     if ( bTabCompat && POR_TABDECIMAL == nWhich )
     {
         KSHORT nPrePorWidth = static_cast<const SwTabDecimalPortion*>(this)->GetWidthOfPortionsUpToDecimalPosition();

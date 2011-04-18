@@ -347,7 +347,7 @@ void SwSectionFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
 
     //In den Baum einhaengen.
     SwSectionFrm* pSect = pParent->FindSctFrm();
-    // --> OD 2008-06-23 #156927#
+    // #156927#
     // Assure that parent is not inside a table frame, which is inside the found section frame.
     if ( pSect )
     {
@@ -1411,8 +1411,8 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
                         FormatWidthCols( *pAttr, nRemaining, MINLAY );
                     }
                     // <--
-                    // --> OD 2006-01-04 #126020# - adjust check for empty section
-                    // --> OD 2006-02-01 #130797# - correct fix #126020#
+                    // #126020# - adjust check for empty section
+                    // #130797# - correct fix #126020#
                     while( HasFollow() && !GetFollow()->ContainsCntnt() &&
                            !GetFollow()->ContainsAny( true ) )
                     // <--

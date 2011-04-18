@@ -1354,7 +1354,7 @@ void SwCntntFrm::MakeAll()
         //FixSize einstellen, die VarSize wird von Format() justiert.
         if ( !bValidSize )
         {
-            // --> OD 2006-01-03 #125452#
+            // #125452#
             // invalidate printing area flag, if the following conditions are hold:
             // - current frame width is 0.
             // - current printing area width is 0.
@@ -1395,7 +1395,7 @@ void SwCntntFrm::MakeAll()
             if ( bValidSize && !IsUndersized() &&
                  nOldH != (Frm().*fnRect->fnGetHeight)() )
             {
-                // --> OD 2004-11-25 #115759# - no PREP_ADJUST_FRM and size
+                // #115759# - no PREP_ADJUST_FRM and size
                 // invalidation, if height decreases only by the additional
                 // lower space as last content of a table cell and an existing
                 // follow containing one line exists.
@@ -1779,7 +1779,7 @@ void SwCntntFrm::MakeAll()
     LOOPING_LOUIE_LIGHT( bMovedFwd && bMovedBwd && !IsInBalancedSection() &&
                             (
 
-                                // --> FME 2005-01-26 #118572#
+                                // #118572#
                                 ( bFtn && !FindFtnFrm()->GetRef()->IsInSct() ) ||
                                 // <--
 

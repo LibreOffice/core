@@ -95,7 +95,7 @@ class SwEditRegionDlg : public SfxModalDialog
     FixedText       aConditionFT;
     ConditionEdit   aConditionED;
 
-    // --> FME 2004-06-22 #114856# edit in readonly sections
+    // #114856# edit in readonly sections
     FixedLine       aPropertiesFL;
     TriStateBox     aEditInReadonlyCB;
     // <--
@@ -133,7 +133,7 @@ class SwEditRegionDlg : public SfxModalDialog
     DECL_LINK( ChangePasswdHdl, Button * );
     DECL_LINK( ChangeProtectHdl, TriStateBox * );
     DECL_LINK( ChangeHideHdl, TriStateBox * );
-    // --> FME 2004-06-22 #114856# edit in readonly sections
+    // #114856# edit in readonly sections
     DECL_LINK( ChangeEditInReadonlyHdl, TriStateBox * );
     // <--
     DECL_LINK( ChangeDismissHdl, CheckBox * );
@@ -183,7 +183,7 @@ class SwInsertSectionTabPage : public SfxTabPage
     FixedText       aConditionFT;
     ConditionEdit   aConditionED;
 
-    // --> FME 2004-06-22 #114856# edit in readonly sections
+    // #114856# edit in readonly sections
     FixedLine       aPropertiesFL;
     CheckBox        aEditInReadonlyCB;
     // <--
@@ -199,7 +199,7 @@ class SwInsertSectionTabPage : public SfxTabPage
     Window*                 m_pOldDefDlgParent;
 
     DECL_LINK( ChangeHideHdl, CheckBox * );
-    // --> FME 2004-06-22 #114856# edit in readonly sections
+    // #114856# edit in readonly sections
     DECL_LINK( ChangeEditInReadonlyHdl, CheckBox * );
     // <--
     DECL_LINK( ChangeProtectHdl, CheckBox * );

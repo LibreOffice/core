@@ -1083,7 +1083,7 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
         // retrieve numbering rule at paragraph
         // style, which is found at current cursor position in the document.
         SwNumRule* pCollRule = pDoc->FindNumRulePtr(pColl->GetNumRule().GetValue());
-        // --> OD 2005-10-25 #125993# - The outline numbering rule isn't allowed
+        // #125993# - The outline numbering rule isn't allowed
         // to be derived from a parent paragraph style to a derived one.
         // Thus check, if the found outline numbering rule is directly
         // set at the paragraph style <pColl>. If not, set <pCollRule> to NULL
@@ -1411,7 +1411,7 @@ void SwWrtShell::NumOrBulletOff()
             DelNumRules();
         }
 
-        // --> OD 2005-10-24 #126346# - Cursor can not be anymore in front of
+        // #126346# - Cursor can not be anymore in front of
         // a label, because numbering/bullet is switched off.
         SetInFrontOfLabel( sal_False );
         // <--

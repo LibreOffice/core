@@ -900,7 +900,7 @@ void SwDrawTextShell::StateClpbrd(SfxItemSet &rSet)
             case SID_PASTE_SPECIAL:
                 rSet.DisableItem( SID_PASTE_SPECIAL );
                 break;
-            // --> OD 2008-06-20 #151110#
+            // #151110#
             case SID_CLIPBOARD_FORMAT_ITEMS:
                 rSet.DisableItem( SID_CLIPBOARD_FORMAT_ITEMS );
                 break;

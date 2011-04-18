@@ -224,7 +224,7 @@ const SwTxtFmtColl* SwPageDesc::GetRegisterFmtColl() const
 
 void SwPageDesc::RegisterChange()
 {
-    // --> OD 2004-06-15 #117072# - During destruction of the document <SwDoc>
+    // #117072# - During destruction of the document <SwDoc>
     // the page description is modified. Thus, do nothing, if the document
     // is in destruction respectively if no viewshell exists.
     SwDoc* pDoc = GetMaster().GetDoc();

@@ -486,7 +486,7 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
 
         //In Tabellenzellen kann ich mir evtl. noch ein wenig dazuholen, weil
         //durch eine vertikale Ausrichtung auch oben noch Raum sein kann.
-        // --> OD 2004-11-25 #115759# - assure, that first lower in upper
+        // #115759# - assure, that first lower in upper
         // is the current one or is valid.
         if ( IsInTab() &&
              ( GetUpper()->Lower() == this ||

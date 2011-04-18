@@ -1669,7 +1669,7 @@ xub_StrLen SwTxtFormatInfo::ScanPortionEnd( const xub_StrLen nStart,
         }
     }
 
-    // --> FME 2006-01-13 #130210# Check if character *behind* the portion has
+    // #130210# Check if character *behind* the portion has
     // to become the hook:
     if ( i == nEnd && i < GetTxt().Len() && bNumFound )
     {
