@@ -1594,6 +1594,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
         }
     }
 
+    bool titlePage = false;
     if ( bOutPgDscSet )
     {
         // es ist ein Follow gesetzt und dieser zeigt nicht auf sich
@@ -1620,9 +1621,18 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
                 pPdFmt = &rFollowFmt;
 
                 // has different headers/footers for the title page
-                AttrOutput().SectionTitlePage();
+                titlePage = true;
             }
         }
+
+        // The code above tries to detect if this is first page headers/footers,
+        // but it doesn't work even for quite trivial testcases. As I don't actually
+        // understand that code, I'll keep it. The simple and (at least for me) reliable way
+        // to detect for first page seems to be just RES_POOLPAGE_FIRST.
+        if( pPd->GetPoolFmtId() == RES_POOLPAGE_FIRST )
+            titlePage = true;
+        if( titlePage )
+            AttrOutput().SectionTitlePage();
 
         const SfxItemSet* pOldI = pISet;
 
@@ -1707,7 +1717,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
         if ( !pPd->IsFooterShared() || bLeftRightPgChain )
             MSWordSections::SetFooterFlag( nHeadFootFlags, *pPdLeftFmt, WW8_FOOTER_EVEN );
 
-        if ( pPdFmt != pPdFirstPgFmt )
+        if ( titlePage )
         {
             // es gibt eine ErsteSeite:
             MSWordSections::SetHeaderFlag( nHeadFootFlags, *pPdFirstPgFmt, WW8_HEADER_FIRST );
