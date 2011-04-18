@@ -11,7 +11,7 @@
 # License.
 #
 # The Initial Developer of the Original Code is
-#       Bjoern Michaelsen, Canonical Ltd. <bjoern.michaelsen@canonical.com>
+#       David Tardon, Red Hat Inc. <dtardon@redhat.com>
 # Portions created by the Initial Developer are Copyright (C) 2010 the
 # Initial Developer. All Rights Reserved.
 #
@@ -25,27 +25,48 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,dbaccess))
+$(eval $(call gb_Library_Library,adabasui))
 
-$(eval $(call gb_Module_add_targets,dbaccess,\
-    AllLangResTarget_adabasui \
-    AllLangResTarget_dba \
-    AllLangResTarget_dbmm \
-    AllLangResTarget_dbu \
-    $(if $(filter WNT,$(GUI)),Executable_odbcconfig) \
-    Library_adabasui \
-    Library_dba \
-    Library_dbaxml \
-    Library_dbmm \
-    Library_dbu \
-    Package_inc \
-    Package_uiconfig \
+$(eval $(call gb_Library_add_precompiled_header,adabasui,$(SRCDIR)/dbaccess/inc/pch/precompiled_dbaccess))
+
+$(eval $(call gb_Library_set_include,adabasui,\
+    $$(INCLUDE) \
+    -I$(realpath $(SRCDIR)/dbaccess/inc/pch) \
+    -I$(OUTDIR)/inc \
+    -I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,dbaccess,\
-    JunitTest_dbaccess_unoapi \
+$(eval $(call gb_Library_set_defs,adabasui,\
+    $$(DEFS) \
+    -DCOMPMOD_NAMESPACE=adabasui \
 ))
 
-$(call $(gb_Library_get_target,dbu)) :| $(call $(gb_SrsTemplateTarget_get_target,dbaccess/dbu))
+$(eval $(call gb_Library_add_linked_libs,adabasui,\
+    comphelper \
+    cppu \
+    cppuhelper \
+    dbtools \
+    sal \
+    sfx \
+    svl \
+    svt \
+    tk \
+    tl \
+    ucbhelper \
+    utl \
+    vcl \
+    $(gb_STDLIBS) \
+))
+
+$(eval $(call gb_Library_set_componentfile,adabasui,dbaccess/source/ext/adabas/adabasui))
+
+$(eval $(call gb_Library_add_exception_objects,adabasui,\
+    dbaccess/source/ext/adabas/Acomponentmodule \
+    dbaccess/source/ext/adabas/AdabasNewDb \
+    dbaccess/source/ext/adabas/adabasuistrings \
+    dbaccess/source/ext/adabas/ANewDb \
+    dbaccess/source/ext/adabas/Aservices \
+    dbaccess/source/ext/adabas/ASqlNameEdit \
+))
 
 # vim: set noet ts=4 sw=4:

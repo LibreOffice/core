@@ -11,7 +11,7 @@
 # License.
 #
 # The Initial Developer of the Original Code is
-#       Bjoern Michaelsen, Canonical Ltd. <bjoern.michaelsen@canonical.com>
+#       David Tardon, Red Hat Inc. <dtardon@redhat.com>
 # Portions created by the Initial Developer are Copyright (C) 2010 the
 # Initial Developer. All Rights Reserved.
 #
@@ -25,27 +25,14 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,dbaccess))
+$(eval $(call gb_Executable_Executable,odbcconfig))
 
-$(eval $(call gb_Module_add_targets,dbaccess,\
-    AllLangResTarget_adabasui \
-    AllLangResTarget_dba \
-    AllLangResTarget_dbmm \
-    AllLangResTarget_dbu \
-    $(if $(filter WNT,$(GUI)),Executable_odbcconfig) \
-    Library_adabasui \
-    Library_dba \
-    Library_dbaxml \
-    Library_dbmm \
-    Library_dbu \
-    Package_inc \
-    Package_uiconfig \
+$(eval $(call gb_Executable_add_linked_libs,odbcconfig,\
+    $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,dbaccess,\
-    JunitTest_dbaccess_unoapi \
+$(eval $(call gb_Executable_add_exception_objects,odbcconfig,\
+    dbaccess/win32/source/odbcconfig/odbcconfig \
 ))
-
-$(call $(gb_Library_get_target,dbu)) :| $(call $(gb_SrsTemplateTarget_get_target,dbaccess/dbu))
 
 # vim: set noet ts=4 sw=4:

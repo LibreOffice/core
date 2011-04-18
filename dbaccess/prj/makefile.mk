@@ -25,27 +25,16 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..
-PRJINC=$(PRJ)$/source
-PRJNAME=dbaccess
-TARGET=core_resource
+PRJ=..
+TARGET=prj
 
-# --- Settings -----------------------------------------------------
+.INCLUDE : settings.mk
 
-.INCLUDE :  settings.mk
-.INCLUDE : $(PRJ)$/util$/dba.pmk
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
+.ENDIF
 
-# --- Files --------------------------------------------------------
-
-SRS1NAME=core_strings
-SRC1FILES= \
-    strings.src 	\
-
-EXCEPTIONSFILES= \
-	$(SLO)$/core_resource.obj
-
-SLOFILES=	$(EXCEPTIONSFILES)
-
-# --- Targets ----------------------------------
-
-.INCLUDE :  target.mk
+all:
+    cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog
