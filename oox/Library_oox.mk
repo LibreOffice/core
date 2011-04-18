@@ -35,7 +35,7 @@ $(eval $(call gb_Library_set_include,oox,\
     $$(INCLUDE) \
     -I$(OUTDIR)/inc \
     -I$(OUTDIR)/inc/offuh \
-    -I$(SRCDIR)/oox/inc \
+    -I$(realpath $(SRCDIR)/oox/inc) \
     $(if $(filter YES,$(SYSTEM_OPENSSL)),$(filter -I%,$(OPENSSL_CFLAGS))) \
 ))
 
