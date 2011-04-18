@@ -76,11 +76,6 @@ sub new
     }
     my $SourceConfigObj = SourceConfig->new();
     @repos = $SourceConfigObj->get_repositories();
-    if ( defined $ENV{UPDMINOREXT} ) {
-        foreach my $onedir ( @repos ) {
-            push( @basedirs, $onedir.$ENV{UPDMINOREXT} );
-        }
-    }
     # basdirs is repositories (dmake) + workdir (gnu make)
     push(@basedirs, $relworkdir);
     if (!scalar @basedirs) {

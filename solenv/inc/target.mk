@@ -1032,7 +1032,7 @@ ALL_JAVA_TARGETS= \
 .IF "$(lintit)"==""
 .IF "$(L10N_framework)"!=""
 ALLTAR:	\
-        "$(SOLARVERSION)/$(INPATH)/inc$(UPDMINOREXT)/$(UPD)minor.mk" \
+        "$(SOLARVERSION)/$(INPATH)/inc/$(UPD)minor.mk" \
         $(SUBDIRS)		\
         $(DPRTARGET) \
         $(DPZTARGET) \
@@ -1080,7 +1080,7 @@ ALLTAR:	\
 .ELSE			# "$(L10N_framework)"!=""
 
 ALLTAR: \
-        "$(SOLARVERSION)/$(INPATH)/inc$(UPDMINOREXT)/$(UPD)minor.mk" \
+        "$(SOLARVERSION)/$(INPATH)/inc/$(UPD)minor.mk" \
         $(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
         $(COMPVERMK) \
         $(JAVAVERMK) \
@@ -1419,7 +1419,7 @@ $(SCP_PRODUCT_TYPE):
 
 .ENDIF			# "$(PARFILES)"!=""
 
-"$(SOLARVERSION)/$(INPATH)/inc$(UPDMINOREXT)/minormkchanged.flg" :
+"$(SOLARVERSION)/$(INPATH)/inc/minormkchanged.flg" :
     $(TOUCH) $@
 
 .IF "$(COMPVERMK)"!=""
@@ -1428,7 +1428,7 @@ $(SCP_PRODUCT_TYPE):
 COMPVERMK_PHONY:=.PHONY
 .ENDIF			# "$(COMPATH:s!\!/!)"!="$(COMPATH_STORED)"
 COMPVTMP:=$(mktmp iii)
-"$(COMPVERMK)" $(COMPVERMK_PHONY): $(SOLARVERSION)/$(INPATH)/inc$(UPDMINOREXT)/minormkchanged.flg
+"$(COMPVERMK)" $(COMPVERMK_PHONY): $(SOLARVERSION)/$(INPATH)/inc/minormkchanged.flg
 .IF "$(CCNUMVER)"!=""
     @echo COMNAME:=$(COMNAME) > $(COMPVTMP)
     @echo COMID:=$(COMID) >> $(COMPVTMP)
@@ -1456,7 +1456,7 @@ COMPVTMP:=$(mktmp iii)
 .IF "$(JAVALOCATION)"!="$(JAVA_HOME)"
 "$(JAVAVERMK)" .PHONY :
 .ELSE          # "$(JAVALOCATION)"!="$(JAVA_HOME)"
-"$(JAVAVERMK)" : $(SOLARVERSION)/$(INPATH)/inc$(UPDMINOREXT)/minormkchanged.flg
+"$(JAVAVERMK)" : $(SOLARVERSION)/$(INPATH)/inc/minormkchanged.flg
 .ENDIF          # "$(JAVALOCATION)"!="$(JAVA_HOME)"
     @-$(RM) $@
     @echo JAVAVER:=$(JAVAVER) > $@
@@ -1960,7 +1960,7 @@ $(MISC)/$(TARGET).dpz $(ZIPDEPPHONY) : $(ZIP1TARGETN) $(ZIP2TARGETN) $(ZIP3TARGE
 .ENDIF
 
 VERSIONTMP:=$(mktmp iii)
-$(INCCOM)/%_version.h : $(SOLARVERSION)/$(INPATH)/inc$(UPDMINOREXT)/minormkchanged.flg
+$(INCCOM)/%_version.h : $(SOLARVERSION)/$(INPATH)/inc/minormkchanged.flg
     @echo $(EMQ)#define _BUILD $(EMQ)"$(BUILD)$(EMQ)" > $(VERSIONTMP)
     @echo $(EMQ)#define _UPD $(EMQ)"$(UPD)$(EMQ)"                 >> $(VERSIONTMP)
     @echo $(EMQ)#define _LAST_MINOR $(EMQ)"$(LAST_MINOR)$(EMQ)"   >> $(VERSIONTMP)

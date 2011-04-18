@@ -33,7 +33,7 @@ set -- `getopt "L:" "$@"` ||  {
     exit 1
 }
 
-checkdll="$SOLARVERSION/$INPATH/bin$UPDMINOREXT/checkdll"
+checkdll="$SOLARVERSION/$INPATH/bin/checkdll"
 
 if [ -x $checkdll ]; then
     while :

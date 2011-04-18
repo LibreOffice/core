@@ -7,14 +7,9 @@ fi
 # localize.pl calls localize_sl in solver bin directory which depends on dynamic
 # libraries in solver lib directory but has no correct RPATH (or equivalent):
 if [ "${OS?}" = MACOSX ]; then
-    export DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH:+${DYLD_LIBRARY_PATH}:}${SOLARVERSION?}/${INPATH?}/lib${UPDMINOREXT}
+    export DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH:+${DYLD_LIBRARY_PATH}:}${SOLARVERSION?}/${INPATH?}/lib
 else
-    export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+${LD_LIBRARY_PATH}:}${SOLARVERSION?}/${INPATH?}/lib${UPDMINOREXT}
+    export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+${LD_LIBRARY_PATH}:}${SOLARVERSION?}/${INPATH?}/lib
 fi
 
-if [ x${SOLARVER}x = xx -o x${UPDMINOREXT}x = xx  ]; then
-    exec perl -w $SOLARVERSION/$INPATH/bin/localize.pl "$@"
-else
-    exec perl -w $SOLARVERSION/$INPATH/bin$UPDMINOREXT/localize.pl "$@"
-fi
-
+exec perl -w $SOLARVERSION/$INPATH/bin/localize.pl "$@"

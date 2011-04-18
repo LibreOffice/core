@@ -2298,7 +2298,6 @@ sub retrieve_build_list {
     my $solver_inc_dir = "$ENV{SOLARVER}/$ENV{OUTPATH}";
     $solver_inc_dir .= $ENV{PROEXT} if (defined $ENV{PROEXT});
     $solver_inc_dir .= '/inc';
-    $solver_inc_dir .= $ENV{UPDMINOREXT} if (defined $ENV{UPDMINOREXT});
     $solver_inc_dir .= "/$module";
     $solver_inc_dir = correct_path($solver_inc_dir);
     $dead_parents{$module}++;
@@ -2572,12 +2571,11 @@ sub read_ssolar_vars {
         $platform = $`;
     };
 
-    my ($verswitch, $source_root, $cwsname);
-    $verswitch = "-ver $ENV{UPDMINOR}" if (defined $ENV{UPDMINOR});
+    my ($source_root, $cwsname);
     $source_root = '-sourceroot' if (defined $ENV{SOURCE_ROOT_USED});
     my $cws_name = "-cwsname $ENV{CWS_WORK_STAMP}" if (defined $ENV{CWS_WORK_STAMP});
 
-    my $param = "-$ENV{WORK_STAMP} $verswitch $source_root $cws_name $pro $platform";
+    my $param = "-$ENV{WORK_STAMP} $source_root $cws_name $pro $platform";
     my $ss_command = "$perl $setsolar -file $tmp_file $param $nul";
     if (system($ss_command)) {
         unlink $tmp_file;

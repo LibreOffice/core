@@ -317,12 +317,6 @@ sub read_config_file {
             if (/\s*(\S+)=active\s*(\s+#)*/) {
                 if ($repository_section) {
                     my $repository_source_path = $self->{SOURCE_ROOT} . "/$1";
-                    if (defined $ENV{UPDMINOREXT}) {
-                        $repository_source_path .= $ENV{UPDMINOREXT};
-                        if (defined ${$self->{REPOSITORIES}}{$1.$ENV{UPDMINOREXT}}) {
-                            delete ${$self->{REPOSITORIES}}{$1.$ENV{UPDMINOREXT}};
-                        };
-                    };
                     ${$self->{REPOSITORIES}}{$1} = $repository_source_path;
                     ${$self->{ACTIVATED_REPOSITORIES}}{$1}++;
                     next;

@@ -463,8 +463,6 @@ sub init_globals
     my $inpath        = $ENV{'INPATH'};
     my $solarversion  = $ENV{'SOLARVERSION'};
     my $updater       = $ENV{'UPDATER'};
-    my $updminor      = $ENV{'UPDMINOR'};
-    my $updminorext   = $ENV{'UPDMINOREXT'};
     my $work_stamp    = $ENV{'WORK_STAMP'};
 
     # special security check for release engineers
@@ -486,9 +484,6 @@ sub init_globals
     }
 
     $ext = "";
-    if ( ($updminor) && !$dest ) {
-        $ext = "$updminorext";
-    }
 
     # Do we have common trees?
     if ( defined($ENV{'common_build'}) && $ENV{'common_build'} eq 'TRUE' ) {
@@ -1119,20 +1114,8 @@ sub push_on_ziplist
     return if ( $opt_check );
     # strip $dest from path since we don't want to record it in zip file
     if ( $file =~ s#^\Q$dest\E/##o ) {
-        if ( $updminor ){
-            # strip minor from path
-            my $ext = "%_EXT%";
-            $ext = expand_macros($ext);
-            $file =~ s#^$ext##o;
-        }
         push(@zip_list, $file);
     } elsif ( $file =~ s#^\Q$common_dest\E/##o ) {
-        if ( $updminor ){
-            # strip minor from path
-            my $ext = "%_EXT%";
-            $ext = expand_macros($ext);
-            $file =~ s#^$ext##o;
-        }
         push(@common_zip_list, $file);
     }
 }

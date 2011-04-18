@@ -5,14 +5,9 @@ exit 1
 fi
 
 if [ "${OS?}" = MACOSX ]; then
-    export DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH:+${DYLD_LIBRARY_PATH}:}${SOLARVERSION?}/${INPATH?}/lib${UPDMINOREXT}
+    export DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH:+${DYLD_LIBRARY_PATH}:}${SOLARVERSION?}/${INPATH?}/lib
 else
-    export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+${LD_LIBRARY_PATH}:}${SOLARVERSION?}/${INPATH?}/lib${UPDMINOREXT}
+    export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+${LD_LIBRARY_PATH}:}${SOLARVERSION?}/${INPATH?}/lib
 fi
 
-if [ x${SOLARVER}x = xx -o x${UPDMINOREXT}x = xx  ]; then
-    exec $SOLARVERSION/$INPATH/bin/localize_sl "$@"
-else
-    exec $SOLARVERSION/$INPATH/bin$UPDMINOREXT/localize_sl "$@"
-fi
-
+exec $SOLARVERSION/$INPATH/bin/localize_sl "$@"

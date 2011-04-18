@@ -489,17 +489,8 @@ sub replace_minor_in_pathes
     {
         my $line = ${$patharrayref}[$i];
 
-        if ( ! defined $ENV{CWS_WORK_STAMP} and defined $ENV{UPDMINOR} )
-        {
-            $line =~ s/\{minor\}/$installer::globals::minor/g;
-            # no difference for minor and minornonpre (ToDo ?)
-            $line =~ s/\{minornonpre\}/$installer::globals::minor/g;
-        }
-        else    # building without a minor
-        {
-            $line =~ s/\.\{minor\}//g;
-            $line =~ s/\.\{minornonpre\}//g;
-        }
+        $line =~ s/\.\{minor\}//g;
+        $line =~ s/\.\{minornonpre\}//g;
 
         ${$patharrayref}[$i] = $line;
     }

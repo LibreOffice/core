@@ -61,7 +61,7 @@ installationtest_instset = \
 .IF "$(OS)" == "WNT"
 installationtest_instpath = `cat $(MISC)/$(TARGET)/installation.flag`
 .ELSE
-installationtest_instpath = $(SOLARVERSION)/$(INPATH)/installation$(UPDMINOREXT)
+installationtest_instpath = $(SOLARVERSION)/$(INPATH)/installation
 .END
 
 .IF "$(OS)" == "MACOSX"

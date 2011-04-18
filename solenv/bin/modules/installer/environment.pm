@@ -111,7 +111,6 @@ sub set_global_environment_variables
     $installer::globals::build = $environment->{'WORK_STAMP'};
     $installer::globals::compiler = $environment->{'OUTPATH'};
 
-    if ( $ENV{'UPDMINOR'} ) { $installer::globals::minor = $ENV{'UPDMINOR'}; }
     if ( $ENV{'LAST_MINOR'} ) { $installer::globals::lastminor = $ENV{'LAST_MINOR'}; }
 
     if ( $ENV{'PROEXT'} ) { $installer::globals::pro = 1; }
