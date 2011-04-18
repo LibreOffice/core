@@ -1520,7 +1520,12 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
             aSet.Put( aUL );
             bSetLeft = sal_False;
             if( pNewPgDsc )
+            {
                 pNewPgDsc->SetUseOn( nsUseOnPage::PD_LEFT );
+                // this relies on GetPageDescFromPool() not going into infinite recursion
+                // (by this point RES_POOLPAGE_LEFT will not reach this place again)
+                pNewPgDsc->SetFollow( GetPageDescFromPool( RES_POOLPAGE_RIGHT ));
+            }
         }
         break;
     case RES_POOLPAGE_RIGHT:                // Rechte Seite
@@ -1530,7 +1535,10 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
             aSet.Put( aUL );
             bSetLeft = sal_False;
             if( pNewPgDsc )
+            {
                 pNewPgDsc->SetUseOn( nsUseOnPage::PD_RIGHT );
+                pNewPgDsc->SetFollow( GetPageDescFromPool( RES_POOLPAGE_LEFT ));
+            }
         }
         break;
 
