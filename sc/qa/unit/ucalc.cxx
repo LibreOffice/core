@@ -57,6 +57,7 @@
 #include "scmatrix.hxx"
 #include "drwlayer.hxx"
 #include "scitems.hxx"
+#include "reffind.hxx"
 
 #include "docsh.hxx"
 #include "funcdesc.hxx"
@@ -252,6 +253,13 @@ public:
      */
     void testCVEs();
 
+    /**
+     * Test toggling relative/absolute flag of cell and cell range references.
+     * This corresponds with hitting Shift-F4 while the cursor is on a formula
+     * cell.
+     */
+    void testToggleRefFlag();
+
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
     CPPUNIT_TEST(testInput);
@@ -269,6 +277,7 @@ public:
     CPPUNIT_TEST(testStreamValid);
     CPPUNIT_TEST(testFunctionLists);
     CPPUNIT_TEST(testCVEs);
+    CPPUNIT_TEST(testToggleRefFlag);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1636,6 +1645,83 @@ void Test::testGraphicsInGroup()
         (rNewRect.nBottom - rNewRect.nTop) <= 1);
     m_pDoc->ShowRows(0, 100, 0, true);
     CPPUNIT_ASSERT_MESSAGE("Should not change when page anchored", aOrigRect == rNewRect);
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testToggleRefFlag()
+{
+    // In this test, there is no need to insert formula string into a cell in
+    // the document, as ScRefFinder does not depend on the content of the
+    // document except for the sheet names.
+
+    OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("Test"));
+    m_pDoc->InsertTab(0, aTabName);
+
+    {
+        // Calc A1: basic 2D reference
+
+        OUString aFormula(RTL_CONSTASCII_USTRINGPARAM("=B100"));
+        ScAddress aPos(1, 5, 0);
+        ScRefFinder aFinder(aFormula, aPos, m_pDoc, formula::FormulaGrammar::CONV_OOO);
+
+        // Original
+        CPPUNIT_ASSERT_MESSAGE("Does not equal the original text.", aFormula.equals(aFinder.GetText()));
+
+        // column relative / row relative -> column absolute / row absolute
+        aFinder.ToggleRel(0, aFormula.getLength());
+        aFormula = aFinder.GetText();
+        CPPUNIT_ASSERT_MESSAGE("Does not equal the original text.", aFormula.equalsAscii("=$B$100"));
+
+        // column absolute / row absolute -> column relative / row absolute
+        aFinder.ToggleRel(0, aFormula.getLength());
+        aFormula = aFinder.GetText();
+        CPPUNIT_ASSERT_MESSAGE("Does not equal the original text.", aFormula.equalsAscii("=B$100"));
+
+        // column relative / row absolute -> column absolute / row relative
+        aFinder.ToggleRel(0, aFormula.getLength());
+        aFormula = aFinder.GetText();
+        CPPUNIT_ASSERT_MESSAGE("Does not equal the original text.", aFormula.equalsAscii("=$B100"));
+
+        // column absolute / row relative -> column relative / row relative
+        aFinder.ToggleRel(0, aFormula.getLength());
+        aFormula = aFinder.GetText();
+        CPPUNIT_ASSERT_MESSAGE("Does not equal the original text.", aFormula.equalsAscii("=B100"));
+    }
+
+    {
+        // Excel R1C1: basic 2D reference
+
+        OUString aFormula(RTL_CONSTASCII_USTRINGPARAM("=R2C1"));
+        ScAddress aPos(3, 5, 0);
+        ScRefFinder aFinder(aFormula, aPos, m_pDoc, formula::FormulaGrammar::CONV_XL_R1C1);
+
+        // Original
+        CPPUNIT_ASSERT_MESSAGE("Does not equal the original text.", aFormula.equals(aFinder.GetText()));
+
+        // column absolute / row absolute -> column relative / row absolute
+        aFinder.ToggleRel(0, aFormula.getLength());
+        aFormula = aFinder.GetText();
+        CPPUNIT_ASSERT_MESSAGE("Does not equal the original text.", aFormula.equalsAscii("=R2C[-3]"));
+
+        // column relative / row absolute - > column absolute / row relative
+        aFinder.ToggleRel(0, aFormula.getLength());
+        aFormula = aFinder.GetText();
+        CPPUNIT_ASSERT_MESSAGE("Does not equal the original text.", aFormula.equalsAscii("=R[-4]C1"));
+
+        // column absolute / row relative -> column relative / row relative
+        aFinder.ToggleRel(0, aFormula.getLength());
+        aFormula = aFinder.GetText();
+        CPPUNIT_ASSERT_MESSAGE("Does not equal the original text.", aFormula.equalsAscii("=R[-4]C[-3]"));
+
+        // column relative / row relative -> column absolute / row absolute
+        aFinder.ToggleRel(0, aFormula.getLength());
+        aFormula = aFinder.GetText();
+        CPPUNIT_ASSERT_MESSAGE("Does not equal the original text.", aFormula.equalsAscii("=R2C1"));
+    }
+
+    // TODO: Add more test cases esp. for 3D references, Excel A1 syntax, and
+    // partial selection within formula string.
 
     m_pDoc->DeleteTab(0);
 }
