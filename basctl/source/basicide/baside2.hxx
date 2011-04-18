@@ -265,7 +265,6 @@ class StackWindow : public BasicDockingWindow
 {
 private:
     SvTreeListBox   aTreeListBox;
-    ImageButton     aGotoCallButton;
     String          aStackStr;
 
 protected:
