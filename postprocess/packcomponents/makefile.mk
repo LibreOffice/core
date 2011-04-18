@@ -61,9 +61,9 @@ my_components = \
     component/chart2/source/view/chartview \
     component/comphelper/util/comphelp \
     component/dbaccess/source/ext/adabas/adabasui \
-    component/dbaccess/util/dba \
-    component/dbaccess/source/filter/xml/dbaxml \
     component/dbaccess/source/ext/macromigration/dbmm \
+    component/dbaccess/source/filter/xml/dbaxml \
+    component/dbaccess/util/dba \
     component/dbaccess/util/dbu \
     component/dbaccess/util/sdbt \
     component/fileaccess/source/fileacc \
@@ -71,7 +71,8 @@ my_components = \
     component/framework/util/fwk \
     component/framework/util/fwl \
     component/framework/util/fwm \
-    component/vbahelper/util/msforms \
+    component/lotuswordpro/util/lwpfilter \
+    component/oox/util/oox \
     component/sc/util/sc \
     component/sc/util/scd \
     component/sc/util/scfilt \
@@ -95,6 +96,8 @@ my_components = \
     component/unotools/util/utl \
     component/unoxml/source/rdf/unordf \
     component/unoxml/source/service/unoxml \
+    component/vbahelper/util/msforms \
+    component/writerfilter/util/writerfilter \
     component/xmloff/source/transform/xof \
     component/xmloff/util/xo \
     configmgr \
@@ -125,7 +128,6 @@ my_components = \
     lnth \
     localebe1 \
     log \
-    component/lotuswordpro/util/lwpfilter \
     mcnttype \
     migrationoo2 \
     msfilter \
@@ -135,7 +137,6 @@ my_components = \
     odfflatxml \
     offacc \
     oooimprovecore \
-    component/oox/util/oox \
     package2 \
     pcr \
     pdffilter \
@@ -184,7 +185,6 @@ my_components = \
     vclcanvas \
     wpft \
     wpgfilter \
-    component/writerfilter/util/writerfilter \
     xcr \
     xmlfa \
     xmlfd \
