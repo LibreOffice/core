@@ -237,9 +237,7 @@ define gb_LinkTarget__command_dep
 $(call gb_Output_announce,LNK:$(2),$(true),DEP,1)
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
-	echo '$$(info ************** THIS IS LIBTARGET.d *********)'> /tmp/hack && \
     RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,\
-				 /tmp/hack \
         $(foreach object,$(3),$(call gb_CObject_get_dep_target,$(object))) \
         $(foreach object,$(4),$(call gb_CxxObject_get_dep_target,$(object))) \
         $(foreach object,$(5),$(call gb_ObjCxxObject_get_dep_target,$(object)))\
