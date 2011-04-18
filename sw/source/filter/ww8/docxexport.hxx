@@ -58,6 +58,14 @@ namespace com { namespace sun { namespace star {
     namespace frame { class XModel; }
 } } }
 
+/// Data to be written in the document settings part of the document
+struct DocxSettingsData
+{
+    DocxSettingsData();
+    bool hasData() const; /// returns true if there are any non-default settings (i.e. something to write)
+    bool evenAndOddHeaders;
+};
+
 /// The class that does all the actual DOCX export-related work.
 class DocxExport : public MSWordExportBase
 {
@@ -84,6 +92,8 @@ class DocxExport : public MSWordExportBase
 
     /// Exporter of the VML shapes.
     oox::vml::VMLExport *m_pVMLExport;
+
+    DocxSettingsData settings;
 
 public:
 
@@ -192,6 +202,9 @@ private:
     /// Write docProps/core.xml
     void WriteProperties();
 
+    /// Write word/settings.xml
+    void WriteSettings();
+
     /// All xml namespaces to be used at the top of any text .xml file (main doc, headers, footers,...)
     sax_fastparser::XFastAttributeListRef MainXmlNamespaces( sax_fastparser::FSHelperPtr serializer );
 
@@ -209,6 +222,9 @@ public:
 
     /// Reference to the VMLExport instance for the main document.
     oox::vml::VMLExport& VMLExporter();
+
+    /// Data to be exported in the settings part of the document
+    DocxSettingsData& settingsData();
 
 private:
     /// No copying.
