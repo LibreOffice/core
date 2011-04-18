@@ -59,7 +59,6 @@ endif
 
 gb_COMPILERDEFS := \
 	-D$(COM) \
-	-DHAVE_GCC_VISIBILITY_FEATURE \
 	-DCPPU_ENV=gcc3 \
 	-DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) \
 
@@ -71,7 +70,6 @@ gb_CFLAGS := \
 	-fPIC \
 	-fmessage-length=0 \
 	-fno-common \
-	-fvisibility=hidden \
 	-pipe \
 
 gb_CXXFLAGS := \
@@ -85,9 +83,25 @@ gb_CXXFLAGS := \
 	-fPIC \
 	-fmessage-length=0 \
 	-fno-common \
-	-fvisibility-inlines-hidden \
-	-fvisibility=hidden \
 	-pipe \
+
+ifeq ($(HAVE_GCC_VISIBILITY_FEATURE),TRUE)
+gb_COMPILERDEFS += \
+        -DHAVE_GCC_VISIBILITY_FEATURE \
+
+gb_CFLAGS += \
+        -fvisibility=hidden
+
+gb_CXXFLAGS += \
+	-fvisibility=hidden \
+
+ifneq ($(HAVE_GCC_VISIBILITY_BROKEN),TRUE)
+gb_CXXFLAGS += \
+        -fvisibility-inlines-hidden \
+
+endif
+
+endif
 
 gb_CCVER := $(shell $(gb_CC) -dumpversion | $(gb_AWK) -F. -- '{ print $$1*10000+$$2*100+$$3 }')
 gb_StrictAliasingUnsafe := $(shell expr $(gb_CCVER) \< 40600)
