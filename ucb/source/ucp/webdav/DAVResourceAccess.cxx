@@ -1198,7 +1198,7 @@ sal_Bool DAVResourceAccess::handleException( DAVException & e, int errorCount )
             return sal_True;
         }
         return sal_False;
-    // --> tkr #67048# copy & paste images doesn't display.
+    // #67048# copy & paste images doesn't display.
     // if we have a bad connection try again. Up to three times.
     case DAVException::DAV_HTTP_ERROR:
         // retry up to three times, if not a client-side error.
@@ -1208,11 +1208,9 @@ sal_Bool DAVResourceAccess::handleException( DAVException & e, int errorCount )
             return sal_True;
         }
         return sal_False;
-    // <--
-    // --> tkr: if connection has said retry then retry!
+    // if connection has said retry then retry!
     case DAVException::DAV_HTTP_RETRY:
         return sal_True;
-    // <--
     default:
         return sal_False; // Abort
     }
