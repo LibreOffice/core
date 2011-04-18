@@ -4755,7 +4755,7 @@ static WinSalMenuItem* ImplGetSalMenuItem( HMENU hMenu, UINT nPos, sal_Bool bByP
     mi.cbSize = sizeof( mi );
     mi.fMask = MIIM_DATA;
     if( !GetMenuItemInfoW( hMenu, nPos, bByPosition, &mi) )
-       DWORD err = GetLastError();
+        ImplWriteLastError( GetLastError(), "ImplGetSalMenuItem" );
 
     return (WinSalMenuItem *) mi.dwItemData;
 }
@@ -4773,7 +4773,7 @@ static int ImplGetSelectedIndex( HMENU hMenu )
         for(int i=0; i<n; i++ )
         {
             if( !GetMenuItemInfoW( hMenu, i, TRUE, &mi) )
-                DWORD err = GetLastError();
+                ImplWriteLastError( GetLastError(), "ImplGetSelectedIndex" );
             else
             {
                 if( mi.fState & MFS_HILITE )
@@ -4883,7 +4883,6 @@ static int ImplMeasureItem( HWND hWnd, WPARAM wParam, LPARAM lParam )
 static int ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
 {
     int nRet = 0;
-    DWORD err = 0;
     if( !wParam )
     {
         // request was sent by a menu
@@ -4923,7 +4922,7 @@ static int ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
 
         // Fill background
         if(!PatBlt( pDI->hDC, aRect.left, aRect.top, aRect.right-aRect.left, aRect.bottom-aRect.top, PATCOPY ))
-            err = GetLastError();
+            ImplWriteLastError(GetLastError(), "ImplDrawItem");
 
         int lineHeight = aRect.bottom-aRect.top;
 
@@ -5007,7 +5006,7 @@ static int ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
             (LPARAM)(LPWSTR) aStr.GetBuffer(),
             (WPARAM)0, aRect.left, aRect.top + (lineHeight - strSize.cy)/2, 0, 0,
             DST_PREFIXTEXT | (fDisabled && !fSelected ? DSS_DISABLED : DSS_NORMAL) ) )
-            err = GetLastError();
+            ImplWriteLastError(GetLastError(), "ImplDrawItem");
 
         if( pSalMenuItem->mAccelText.Len() )
         {
@@ -5024,7 +5023,7 @@ static int ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
                 (LPARAM)(LPWSTR) aStr.GetBuffer(),
                 (WPARAM)0, aRect.right-strSizeA.cx-tm.tmMaxCharWidth, aRect.top + (lineHeight - strSizeA.cy)/2, 0, 0,
                 DST_TEXT | (fDisabled && !fSelected ? DSS_DISABLED : DSS_NORMAL) ) )
-                err = GetLastError();
+                ImplWriteLastError(GetLastError(), "ImplDrawItem");
         }
 
         // Restore the original font and colors.
