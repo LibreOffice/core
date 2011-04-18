@@ -120,6 +120,7 @@ gb_Library_NOILIBFILENAMES:=\
     ole32 \
     oleaut32 \
     shell32 \
+    shlwapi \
     sot \
     unicows \
     user32 \
