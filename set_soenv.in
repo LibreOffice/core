@@ -2338,7 +2338,7 @@ sub PathFormat
        # Replace absolute paths or DOS paths with ...
        if ( ( $variable =~ m/^\// ) or ( $variable =~ m/:/ ) ) {
            # mixed mode paths
-           chomp( $variable = qx{realpath "$variable"} );
+           chomp( $variable = qx{realpath "$variable"} ) unless ($variable =~ m/:/);
            chomp( $variable = qx{cygpath -m "$variable"} );
        }
    }
