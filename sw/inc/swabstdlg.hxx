@@ -28,7 +28,6 @@
 #ifndef _SW_ABSTDLG_HXX
 #define _SW_ABSTDLG_HXX
 
-// include ---------------------------------------------------------------
 
 #include <tools/solar.h>
 #include <tools/string.hxx>
@@ -338,7 +337,7 @@ public:
 };
 
 
-//-------Swabstract fractory
+// Swabstract fractory
 class SwAbstractDialogFactory
 {
 public:

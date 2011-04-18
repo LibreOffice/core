@@ -66,15 +66,13 @@ enum REFERENCEMARK
 };
 
 
-/*--------------------------------------------------------------------
-    Beschreibung: Referenz holen
- --------------------------------------------------------------------*/
+// Get reference.
 
 class SwGetRefFieldType : public SwFieldType
 {
     SwDoc* pDoc;
 protected:
-    // ueberlagert, um alle Ref-Felder zu updaten
+    // Overlay in order to update all ref-fields.
    virtual void Modify( const SfxPoolItem*, const SfxPoolItem * );
 public:
     SwGetRefFieldType(SwDoc* pDoc );
@@ -89,9 +87,6 @@ public:
                                         sal_uInt16* pStt, sal_uInt16* pEnd = 0 );
 };
 
-/*--------------------------------------------------------------------
-    Beschreibung: Referenzfeld
- --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwGetRefField : public SwField
 {
@@ -130,7 +125,7 @@ public:
 
     void                SetExpand( const String& rStr ) { sTxt = rStr; }
 
-    // SubType erfragen/setzen
+    // Get/set sub type.
     virtual sal_uInt16      GetSubType() const;
     virtual void        SetSubType( sal_uInt16 n );
 
@@ -143,11 +138,11 @@ public:
     String GetExpandedTxtOfReferencedTxtNode() const;
 
 
-    // SequenceNo erfragen/setzen (nur fuer REF_SEQUENCEFLD interressant)
+    // Get/set SequenceNo (of interest only for REF_SEQUENCEFLD).
     sal_uInt16              GetSeqNo() const        { return nSeqNo; }
     void                SetSeqNo( sal_uInt16 n )    { nSeqNo = n; }
 
-    // Name der Referenz
+    // Name of reference.
     virtual const String& GetPar1() const;
     virtual void        SetPar1(const String& rStr);
 

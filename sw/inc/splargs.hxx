@@ -130,7 +130,7 @@ struct SwSpellArgs : SwArgsBase
  *                      class SwInterHyphInfo
  *************************************************************************/
 
-// Parameter-Klasse fuer Hyphenate
+// Parameter-class for Hyphenate.
 // docedt.cxx:  SwDoc::Hyphenate()
 // txtedt.cxx:  SwTxtNode::Hyphenate()
 // txthyph.cxx: SwTxtFrm::Hyphenate()

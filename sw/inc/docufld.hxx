@@ -352,16 +352,16 @@ public:
 
 class SwHiddenTxtField : public SwField
 {
-    String  aTRUETxt;           // Text wenn Bedingung sal_True
-    String  aFALSETxt;          // Wenn Bedingung falsch
-    String  aContent;           // Ausgewerteter DB-Text
+    String  aTRUETxt;           // Text if condition sal_True.
+    String  aFALSETxt;          // If condition false.
+    String  aContent;           // Evaluated DB-text.
 
-    String  aCond;              // Bedingung
+    String  aCond;              // Condition.
     sal_uInt16  nSubType;
 
-    sal_Bool    bCanToggle : 1;     // kann das Feld einzeln getoggelt werden?
-    sal_Bool    bIsHidden  : 1;     // ist es nicht sichtbar?
-    sal_Bool    bValid     : 1;     // DB-Feld evaluiert?
+    sal_Bool    bCanToggle : 1;     // Can field be toggled alone?
+    sal_Bool    bIsHidden  : 1;     // Is it not visible?
+    sal_Bool    bValid     : 1;     // Is DB-field evaluated?
 
     virtual String      Expand() const;
     virtual SwField*    Copy() const;

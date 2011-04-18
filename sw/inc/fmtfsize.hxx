@@ -52,8 +52,8 @@ class SW_DLLPUBLIC SwFmtFrmSize: public SfxPoolItem
     Size      aSize;
     SwFrmSize eFrmHeightType;
     SwFrmSize eFrmWidthType;
-    sal_uInt8     nWidthPercent;    //Fuer Tabellen kann die Breite in Prozent
-    sal_uInt8     nHeightPercent;   //angegeben sein.
+    sal_uInt8     nWidthPercent;
+    sal_uInt8     nHeightPercent;
 
     // For tables: width can be given in percent.
 

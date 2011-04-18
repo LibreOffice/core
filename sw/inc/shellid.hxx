@@ -30,9 +30,7 @@
 
 #include <sfx2/shell.hxx>
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Mapping fuer UI-Parameter
- --------------------------------------------------------------------*/
+// Mapping for UI-parameters
 
 #define SW_BASESHELL            (SFX_INTERFACE_SW_START + 1)
 #define SW_TEXTSHELL            (SFX_INTERFACE_SW_START + 2)

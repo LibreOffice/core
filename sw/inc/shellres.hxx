@@ -44,7 +44,7 @@ struct SW_DLLPUBLIC ShellResource : public Resource
     String          aPostItPage;
     String          aPostItLine;
 
-    // Calc Fehlerstrings
+    // Calc error-strings.
     String          aCalc_Syntax;
     String          aCalc_ZeroDiv;
     String          aCalc_Brack;
@@ -55,21 +55,21 @@ struct SW_DLLPUBLIC ShellResource : public Resource
     String          aCalc_Default;
     String          aCalc_Error;
 
-    // fuers GetRefFeld - oben/unten
+    // For GetRefField - up/down.
     String          aGetRefFld_Up;
     String          aGetRefFld_Down;
-    // for GetRefField - referenced item not found
+    // For GetRefField - referenced item not found.
     String          aGetRefFld_RefItemNotFound;
-    // fuer dynamisches Menu - String "alle"
+    // For dynamic menu - string "all".
     String          aStrAllPageHeadFoot;
-    // fuer einige Listboxen - String "keine"
+    // For some list boxes - string "none"
     String          aStrNone;
-    // fuer Felder, die Fixiert sind
+    // For fixed fields.
     String          aFixedStr;
-    // custom fields of type css::util::Duration
+    // Custom fields of type css::util::Duration.
     String          sDurationFormat;
 
-    //names of TOXs
+    //Names of TOXs.
     String          aTOXIndexName;
     String          aTOXUserName;
     String          aTOXContentName;
@@ -82,7 +82,7 @@ struct SW_DLLPUBLIC ShellResource : public Resource
 
     SvStringsDtor   aDocInfoLst;
 
-    // die AutoFormat-Redline-Kommentare
+    // The autoFormat-Redline comments.
     inline const SvStringsDtor& GetAutoFmtNameLst() const;
 
     enum PageNameMode
@@ -91,9 +91,9 @@ struct SW_DLLPUBLIC ShellResource : public Resource
         FIRST_PAGE,
         FOLLOW_PAGE
     };
-    // returns for the specific filter the new names of pagedescs
+    // Returns for the specific filter the new names of pagedescs
     // This method is for the old code of the specific filters with
-    // now localized names
+    // now localized names.
     String GetPageDescName( sal_uInt16 nNo, PageNameMode eMode );
 
     ShellResource();
