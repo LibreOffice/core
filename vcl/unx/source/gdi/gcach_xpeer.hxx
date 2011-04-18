@@ -84,12 +84,13 @@ private:
 class X11GlyphCache : public GlyphCache
 {
 public:
-    X11GlyphPeer&      GetPeer() { return reinterpret_cast<X11GlyphPeer&>( mrPeer ); }
-static X11GlyphCache&  GetInstance();
-static void            KillInstance();
-
-private:
-                       X11GlyphCache( X11GlyphPeer& );
+    X11GlyphCache( X11GlyphPeer& );
+    X11GlyphPeer& GetPeer()
+    {
+        return reinterpret_cast<X11GlyphPeer&>(mrPeer);
+    }
+    static X11GlyphCache& GetInstance();
+    static void  KillInstance();
 };
 
 #endif // _SV_GCACH_XPEER_HXX
