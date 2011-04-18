@@ -57,8 +57,6 @@
 #include <basobj.hxx>
 #include <brkdlg.hxx>
 
-#include <svx/srchdlg.hxx>
-
 #include <vcl/sound.hxx>
 
 #include <unotools/textsearch.hxx>
