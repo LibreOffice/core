@@ -312,4 +312,52 @@ endef
 
 endif # SYSTEM_ICU
 
+
+ifeq ($(SYSTEM_OPENSSL),YES)
+
+define gb_LinkTarget__use_openssl
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(OPENSSL_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(OPENSSL_LIBS))
+endef
+
+else # !SYSTEM_OPENSSL
+
+ifeq ($(OS),WNT)
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+    crypto \
+    ssl \
+))
+else
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+    crypto \
+    ssl \
+))
+endif
+
+define gb_LinkTarget__use_openssl
+ifeq ($(OS),WNT)
+$(call gb_LinkTarget_add_linked_libs,$(1),\
+	crypto \
+	ssl \
+)
+else
+$(call gb_LinkTarget_add_linked_static_libs,$(1),\
+	crypto \
+	ssl \
+)
+ifeq ($(OS),SOLARIS)
+$(call gb_LinkTarget_add_libs,$(1),\
+	-lnsl \
+	-lsocket \
+)
+endif
+endif
+endef
+
+endif # SYSTEM_OPENSSL
+
+
 # vim: set noet sw=4 ts=4:
