@@ -654,7 +654,7 @@ elsif ( $platform =~ m/cygwin/ )
       $use_shl_versions = "TRUE";
       $wps = ';'; # Windows style path seperator
   if ( $MINGW eq "yes" )
-  {   # At the moment this implies the use of tcsh
+  {
       print "Setting Windows NT cygwin MinGW specific values... ";
       $FLIPCMD        = "slfl.pl";
       $PATH_SEPERATOR = ';';
@@ -1523,8 +1523,6 @@ print "done\n";
 # VI. Open the output file.
 #--------------------------
 #
-open( OUT, ">$outfile" ) ||
-   die "Cannot open $outfile: $!\n";
 
 # Create sh environment file
 open( OUT_SH, ">$outfile_sh" ) ||
@@ -1536,7 +1534,6 @@ open( OUT_SH, ">$outfile_sh" ) ||
 #------------------------------------------
 #
 # Write file header.
-CreateFileHeader( *OUT, $UPD, $platform, "(t)csh", "#" );
 CreateFileHeader( *OUT_SH, $UPD, $platform, "sh/bash/ksh", "#" );
 
 ToFile( "SRC_ROOT",	     $SRC_ROOT,          "e" );
@@ -2065,8 +2062,6 @@ ToFile( "SAL_ENABLE_FILE_LOCKING",	"1",	"e");
 #
 # Writing unset variables you might not need to file.
 # 
-print OUT $unsetvars;
-
 print OUT_SH "export $exportvars$newline";
 print OUT_SH "unset $unsetvarssh$newline";
 
@@ -2076,8 +2071,6 @@ print OUT_SH "unset $unsetvarssh$newline";
 # VIII. Closing output file.
 #---------------------------
 #
-close( OUT ) || print "Can't close $outfile: $!";
-
 close( OUT_SH ) || print "Can't close $outfile_sh: $!";
 
 #
@@ -2126,8 +2119,7 @@ if ( $Warning ne "" )
 }
 
 print "*$newline* USAGE: $newline";
-print "* Source $outfile (in tcsh)";
-print " or $outfile.sh (in sh)";
+print "* Source $outfile.sh (in sh)";
 print "$newline";
 print "* in order to set up the build-environment variables.$newline";
 for ( $tmp = 0; $tmp < 2; $tmp++ ) 
@@ -2242,8 +2234,6 @@ sub CreateFileHeader
 #                   a - alias
 #                   c - comment
 #                   n - newline
-#                   x - raw, write as is to OUT_BAT
-#                   y - raw, write as is to OUT
 #                   z - raw, write as is to OUT_SH
 # Return value:  void
 #---------------------------------------------------------
@@ -2259,7 +2249,6 @@ sub ToFile {
          $envvarbash = $envvar;
 
          printf("%-12s %-17s %-10s %s\n", "The variable", $_[ 0 ], "is set to:", $envvar);
-         print OUT "$setenv $_[ 0 ] \"$envvar\"$newline";  # to tcsh file
          print OUT_SH "$_[ 0 ]=\"$envvarbash\"$newline";   # to sh file
          $exportvars .= " $_[ 0 ]";                        # add to export list for sh file
 
@@ -2272,7 +2261,6 @@ sub ToFile {
    elsif ( $_[ 2 ] eq "a" ) 
    {  # Write an alias to file.
       print "The $_[ 0 ] is set to: $_[ 1 ]\n";    # to stdout
-      print OUT "$_[ 0 ] $_[ 1 ]$newline";         # to tcsh file
       print OUT_SH "$_[ 0 ]=$_[ 1 ]$newline";      # to sh file
    }
    elsif ( $_[ 2 ] eq "c" ) 
@@ -2281,10 +2269,6 @@ sub ToFile {
       print "$comment$newline";
       print "$comment $_[ 0 ]$newline";
       print "$comment$newline";
-      print OUT "$newline";
-      print OUT "$comment$newline";
-      print OUT "$comment $_[ 0 ]$newline";
-      print OUT "$comment$newline";
       print OUT_SH "$newline";
       print OUT_SH "$comment$newline";
       print OUT_SH "$comment $_[ 0 ]$newline";
@@ -2292,13 +2276,7 @@ sub ToFile {
    }
    elsif ( $_[ 2 ] eq "n" )
    {  #Write a newline to a file
-      print OUT "$newline";
       print OUT_SH "$newline";
-   }
-   elsif ( $_[ 2 ] eq "y" )
-   {
-      #Write first argument as is, and nothing else
-      print OUT "$_[ 0 ]$newline";
    }
    elsif ( $_[ 2 ] eq "z" )
    {
