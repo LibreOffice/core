@@ -1,4 +1,12 @@
 
+if test -z "${SOLARENV}"; then
+    if test -f ./source_soenv.sh; then . ./source_soenv.sh; fi
+fi
+if test -z "${SOLARENV}"; then
+    echo "bootstrap: No environment set!"
+    exit 1
+fi
+
 # remove aliases set by *Env.Set.sh
 unalias mkout
 unalias deliver
