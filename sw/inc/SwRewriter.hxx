@@ -39,7 +39,7 @@ extern SW_DLLPUBLIC String const UNDO_ARG3;
 
 typedef std::pair<String, String> SwRewriteRule;
 
-class SwRewriter
+class SW_DLLPUBLIC SwRewriter
 {
     std::vector<SwRewriteRule> mRules;
 

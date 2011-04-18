@@ -68,7 +68,6 @@ $(eval $(call gb_Library_add_linked_libs,swui,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,swui,\
-    sw/source/core/undo/SwRewriter \
     sw/source/ui/chrdlg/break \
     sw/source/ui/chrdlg/chardlg \
     sw/source/ui/chrdlg/drpcps \
