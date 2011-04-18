@@ -4750,14 +4750,12 @@ static int ImplHandleMinMax( HWND hWnd, LPARAM lParam )
 // if bByPosition is FALSE then nPos denotes a menu id instead of a position
 static WinSalMenuItem* ImplGetSalMenuItem( HMENU hMenu, UINT nPos, sal_Bool bByPosition=TRUE )
 {
-    DWORD err=0;
-
     MENUITEMINFOW mi;
     memset(&mi, 0, sizeof(mi));
     mi.cbSize = sizeof( mi );
     mi.fMask = MIIM_DATA;
     if( !GetMenuItemInfoW( hMenu, nPos, bByPosition, &mi) )
-        err = GetLastError();
+       DWORD err = GetLastError();
 
     return (WinSalMenuItem *) mi.dwItemData;
 }
@@ -4765,8 +4763,6 @@ static WinSalMenuItem* ImplGetSalMenuItem( HMENU hMenu, UINT nPos, sal_Bool bByP
 // returns the index of the currently selected item if any or -1
 static int ImplGetSelectedIndex( HMENU hMenu )
 {
-    DWORD err=0;
-
     MENUITEMINFOW mi;
     memset(&mi, 0, sizeof(mi));
     mi.cbSize = sizeof( mi );
@@ -4777,7 +4773,7 @@ static int ImplGetSelectedIndex( HMENU hMenu )
         for(int i=0; i<n; i++ )
         {
             if( !GetMenuItemInfoW( hMenu, i, TRUE, &mi) )
-                err = GetLastError();
+                DWORD err = GetLastError();
             else
             {
                 if( mi.fState & MFS_HILITE )
