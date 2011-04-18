@@ -64,17 +64,17 @@ class SwFrmFmt;
 class SwFmtINetFmt;
 class IMapObject;
 
-// enum fuer Objecte die Events ins Basic oder in JavaScript Callen
+// Enum for objects that call events into Basic or JavaScript.
 enum SwCallEventObjectType
 {
-    EVENT_OBJECT_NONE = 0,          // Null ist garnichts
+    EVENT_OBJECT_NONE = 0,          // Null is nothing at all.
     EVENT_OBJECT_IMAGE,
     EVENT_OBJECT_INETATTR,
     EVENT_OBJECT_URLITEM,
     EVENT_OBJECT_IMAGEMAP
 };
 
-// structur fuer den Austausch zwischen UI/CORE
+// Structure for the exchange between UI/CORE.
 
 struct SwCallMouseEvent
 {

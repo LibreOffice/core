@@ -65,7 +65,7 @@ class SvxCharRotateItem;
 class SvxCharReliefItem;
 class SvxCharHiddenItem;
 
-// Frame-Attribute
+// Frame attributes
 class SwFmtFillOrder;
 class SwFmtFrmSize;
 class SvxPaperBinItem;
@@ -143,8 +143,8 @@ class SwTblBoxValue;
 
 class SwAttrPool : public SfxItemPool
 {
-    friend void _InitCore();            // fuers anlegen/zerstoeren der
-    friend void _FinitCore();           // Versionsmaps
+    friend void _InitCore();            // For creating/deleting of version maps.
+    friend void _FinitCore();
     static sal_uInt16* pVersionMap1;
     static sal_uInt16* pVersionMap2;
     static sal_uInt16* pVersionMap3;
@@ -191,7 +191,7 @@ public:
     int Put_BC( const SfxPoolItem& rAttr, SwAttrSet* pOld, SwAttrSet* pNew );
     int Put_BC( const SfxItemSet& rSet, SwAttrSet* pOld, SwAttrSet* pNew );
 
-    // ein Item oder einen Bereich loeschen
+    // Delete an item or a range.
     sal_uInt16 ClearItem_BC( sal_uInt16 nWhich, SwAttrSet* pOld, SwAttrSet* pNew );
     sal_uInt16 ClearItem_BC( sal_uInt16 nWhich1, sal_uInt16 nWhich2,
                         SwAttrSet* pOld = 0, SwAttrSet* pNew = 0 );
@@ -203,27 +203,24 @@ public:
 
     SwAttrPool* GetPool() const { return (SwAttrPool*)SfxItemSet::GetPool(); }
 
-    // kopiere die Attribute ggfs. ueber Dokumentgrenzen
+    // Copy attributes, if necessary across documents.
     void CopyToModify( SwModify& rMod ) const;
 
-    // ----------------------------------------------------------------
-    // Sonderbehandlung fuer einige Attribute
-    // Setze den Modify-Pointer (alten pDefinedIn) bei folgenden Attributen:
+    // Special treatment for some attributes.
+    // Set Modify-pointer (the old pDefinedIn) at the following attributes:
     //  - SwFmtDropCaps
     //  - SwFmtPageDesc
-    // (Wird beim Einfuegen in Formate/Nodes gerufen)
+    // (Is called at insert in formats/nodes.)
     // Second version is for the SwAttrSet handles of SwCntntNode.
     bool SetModifyAtAttr( const SwModify* pModify );
 
-    // Das Doc wird jetzt am SwAttrPool gesetzt. Dadurch hat man es immer
-    // im Zugriff.
+    // Document is set at SwAttrPool. Therefore it is always accessible.
     const SwDoc *GetDoc() const { return GetPool()->GetDoc(); }
           SwDoc *GetDoc()       { return GetPool()->GetDoc(); }
 
-    // GetMethoden: das Bool gibt an, ob nur im Set (sal_False) oder auch in
-    //              den Parents gesucht werden soll. Wird nichts gefunden,
-    //              wird das deflt. Attribut returnt.
-    // Charakter-Attribute  - impl. steht im charatr.hxx
+    // Get methods: bool indicates whether to search only in Set (sal_False)
+    // or also in parents. If nothing is found then default attribute is returned.
+    // Character attributes. Implementation in charatr.hxx.
     inline const SvxPostureItem           &GetPosture( sal_Bool = sal_True ) const;
     inline const SvxWeightItem          &GetWeight( sal_Bool = sal_True ) const;
     inline const SvxShadowedItem        &GetShadowed( sal_Bool = sal_True ) const;
@@ -263,7 +260,7 @@ public:
     inline const SvxCharReliefItem        &GetCharRelief( sal_Bool = sal_True ) const;
     inline const SvxCharHiddenItem      &GetCharHidden( sal_Bool = sal_True ) const;
 
-    // Frame-Attribute  - impl. steht im frmatr.hxx
+    // Frame attributes. Implementation in frmatr.hxx.
     inline const SwFmtFillOrder       &GetFillOrder( sal_Bool = sal_True ) const;
     inline const SwFmtFrmSize             &GetFrmSize( sal_Bool = sal_True ) const;
     inline const SvxPaperBinItem      &GetPaperBin( sal_Bool = sal_True ) const;

@@ -74,12 +74,12 @@ public:
 
     SwCntntNode *GetCntntNode() { return pCntntNode; }
 
-    // nur fuer Grafiken
+    // For graphics only.
     sal_Bool SwapIn( sal_Bool bWaitForData = sal_False, sal_Bool bNativFormat = sal_False );
 
     sal_Bool Connect() { return 0 != SvBaseLink::GetRealObject(); }
 
-    // nur fuer Grafik-Links ( zum Umschalten zwischen DDE / Grf-Link)
+    // Only for graphics-links (for switching between DDE / Grf-link).
     void SetObjType( sal_uInt16 nType ) { SvBaseLink::SetObjType( nType ); }
 
     sal_Bool IsRecursion( const SwBaseLink* pChkLnk ) const;

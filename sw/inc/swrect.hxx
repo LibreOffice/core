@@ -44,7 +44,7 @@ public:
     inline SwRect( const Point& rLT, const Point& rRB );
     inline SwRect( long X, long Y, long Width, long Height );
 
-        //SV-SS e.g. SwRect( pWin->GetClipRect() );
+    //SV-SS e.g. SwRect( pWin->GetClipRect() );
     SwRect( const Rectangle &rRect );
 
     //Set-Methods
@@ -70,8 +70,7 @@ public:
     inline long Top()    const;
     inline long Bottom() const;
 
-    //Damit Layoutseitig per Memberpointer auf die Member von Pos und SSize
-    //zugegriffen werden kann.
+    // In order to be able to access the members of Pos and SSize from the layout side.
     inline Point &Pos();
     inline Size  &SSize();
 
@@ -81,7 +80,8 @@ public:
 
            SwRect &Union( const SwRect& rRect );
            SwRect &Intersection( const SwRect& rRect );
-   //Wie Intersection nur wird davon ausgegangen, dass die Rects ueberlappen!
+
+   // Same as Intersection, only assume that Rects are overlapping!
            SwRect &_Intersection( const SwRect &rRect );
     inline SwRect  GetIntersection( const SwRect& rRect ) const;
 
@@ -107,7 +107,7 @@ public:
     //SV-SS e.g. pWin->DrawRect( aSwRect.SVRect() );
     inline Rectangle  SVRect() const;
 
-    // Ausgabeoperator fuer die Debugging-Gemeinde
+    // Output operator for debugging.
     friend SvStream &operator<<( SvStream &rStream, const SwRect &rRect );
 
 

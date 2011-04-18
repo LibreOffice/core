@@ -42,8 +42,8 @@ namespace com { namespace sun { namespace star { namespace util {
 } } } }
 
 
-// ein Basis-Struktur fuer die Parameter der Find-Methoden
-// return - Werte vom Found-Aufruf.
+// Base structure for parameters of the find-methods.
+// Returns values of found-call.
 const int FIND_NOT_FOUND    = 0;
 const int FIND_FOUND        = 1;
 const int FIND_NO_RING      = 2;
@@ -192,9 +192,8 @@ public:
     sal_Bool MoveTable( SwWhichTable, SwPosTable );
     sal_Bool MoveRegion( SwWhichRegion, SwPosRegion );
 
-
-    // gibt es eine Selection vom Content in die Tabelle
-    // Return Wert gibt an, ob der Crsr auf der alten Position verbleibt
+    // Is there a selection of content in table?
+    // Return value indicates if cursor remains at its old position.
     virtual sal_Bool IsSelOvr( int eFlags =
                                 ( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
                                   nsSwCursorSelOverFlags::SELOVER_TOGGLE |
@@ -206,10 +205,10 @@ public:
     /** Restore cursor state to the one saved by SwCrsrSaveState **/
     void RestoreSavePos();
 
-    // sal_True: an die Position kann der Cursor gesetzt werden
+    // sal_True: cursor can be set at this position.
     virtual sal_Bool IsAtValidPos( sal_Bool bPoint = sal_True ) const;
 
-    // darf der Cursor in ReadOnlyBereiche?
+    // Is cursor allowed in ready only ranges?
     virtual bool IsReadOnlyAvailable() const;
 
     virtual sal_Bool IsSkipOverProtectSections() const;
@@ -270,7 +269,7 @@ protected:
     xub_StrLen nTblPtCnt, nTblMkCnt;
     SwSelBoxes aSelBoxes;
     sal_Bool bChg : 1;
-    sal_Bool bParked : 1;       // Tabellen-Cursor wurde geparkt
+    sal_Bool bParked : 1;       // Table-cursor was parked.
 
     virtual bool IsSelOvrCheck(int eFlags);
 
@@ -288,15 +287,14 @@ public:
     sal_uInt16 GetBoxesCount() const { return aSelBoxes.Count(); }
     const SwSelBoxes& GetBoxes() const { return aSelBoxes; }
 
-        // Baut fuer alle Boxen die Cursor auf
+    // Creates cursor for all boxes.
     SwCursor* MakeBoxSels( SwCursor* pAktCrsr );
-        // sind irgendwelche Boxen mit einem Schutz versehen?
+    // Any boxes protected?
     sal_Bool HasReadOnlyBoxSel() const;
 
-        // wurde der TabelleCursor veraendert ? Wenn ja speicher gleich
-        // die neuen Werte.
+    // Has table cursor been changed? If so, save new values immediately.
     sal_Bool IsCrsrMovedUpdt();
-        // wurde der TabelleCursor veraendert ?
+    // Has table cursor been changed?
     sal_Bool IsCrsrMoved() const
     {
         return  nTblMkNd != GetMark()->nNode.GetIndex() ||
@@ -307,7 +305,7 @@ public:
 
     sal_Bool IsChgd() const { return bChg; }
 
-    // Parke den Tabellen-Cursor auf dem StartNode der Boxen.
+    // Park table cursor at start node of boxes.
     void ParkCrsr();
 
     bool NewTableSelection();

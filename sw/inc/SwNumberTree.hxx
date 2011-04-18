@@ -93,13 +93,13 @@ struct compSwNumberTreeNodeLessThan
     Uncounted Phantoms
 
       0.1. dljflskjlasf
-    5. ödsöfkaös
+    5. abcdagaha
       5.1.
 
     + R (nStart = 5)
       + 0 (phantom, not counted)
       | + 1 dljflskjlasf
-      + 5 ödsöfkaös
+      + 5 abcdagaha
         + 1
 
      The phantom gets numbered with 0. The first non-phantom node gets
