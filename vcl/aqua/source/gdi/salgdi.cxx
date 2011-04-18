@@ -154,6 +154,7 @@ const ImplFontCharMap* ImplMacFontData::GetImplFontCharMap() const
         return mpCharMap;
 
     mpCharMap = new ImplFontCharMap( aCmapResult );
+    mpCharMap->AddReference();
     return mpCharMap;
 }
 
