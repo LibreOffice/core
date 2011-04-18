@@ -1,4 +1,13 @@
 
+# remove aliases set by *Env.Set.sh
+unalias mkout
+unalias deliver
+unalias build
+unalias build_client
+unalias zipdep
+unalias nmake
+unalias gunzip
+
 # executables are *.exe for WNT. This variable is necessary since Cygwin 1.5.x
 # Use spawn instead of fork when building dmake on cygwin. 
 if test "$GUI" = "WNT"; then

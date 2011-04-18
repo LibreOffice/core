@@ -2034,9 +2034,6 @@ ToFile( "ZIPDEP",        $perlpre."zipdep.pl",      "e" );
 #
 # Writing the aliases to file.
 ToFile( "Aliases.",          $empty,             "c" );
-ToFile( "Don't set aliases when bootstrapping", $empty, "c" );
-ToFile( 'if ( ! ${?_ISBOOTSTRAP_} ) then', $empty, "y");
-ToFile( "if test -z \"\$_ISBOOTSTRAP_\"; then", $empty, "z");
 
 ToFile( "alias mkout",       $mkout,             "a" );
 ToFile( "alias deliver",     $deliver,           "a" );
@@ -2050,20 +2047,6 @@ if ( $platform =~ m/os2/ )
 {  ToFile( "alias gunzip",       "gzip -d",         "a" );
 }
 
-ToFile( "endif",             $empty, "y");
-ToFile( "fi",                $empty, "z");
-
-# Check if the right dmake version is used. (W32 only)
-if ( $platform =~ m/cygwin/ ) {
-    ToFile( "Check if the right dmake version is used.", $empty, "c" );
-    # Invalidate build environment.
-    ToFile( "WORK_STAMP", "_invalid_", "e" );
-    # Don't test the dmake version if this file is sourced by bootstrap
-    ToFile( "bash -c 'if test -n \"\$_ISBOOTSTRAP_\" || (dmake.exe -V | grep -e \"-cygwin\\|OS := cygwin\" > /dev/null ); then true; else echo -e \"\\n\\nERROR: Not a cygwin build dmake or dmake missing, please check!\\n\\n\" ; sleep 5; false ; fi' || exit 1", $empty, "y");
-    # Restore valid environment if test was successful.
-    ToFile( "WORK_STAMP",        $WORK_STAMP,        "e" );
-    ToFile( "", $empty, "n");
-}
 
 # on Solaris, MacOSX and FreeBSD, set GNUCOPY and GNUPATCH
 if ($platform =~ m/solaris|darwin|freebsd/)
@@ -2157,8 +2140,6 @@ $bootfile = "bootstrap";
 open( OUT, ">$bootfile" ) ||
 die "Cannot open $bootfile: $!\n";
 print OUT "#!/bin/sh\n";
-print OUT "_ISBOOTSTRAP_=TRUE ; export _ISBOOTSTRAP_ ; . $SRC_ROOT/$outfile.sh\n"; 
-print OUT "unset _ISBOOTSTRAP_; export _ISBOOTSTRAP_\n"; 
 if ( $MINGW eq "yes" )
 {  print OUT 'PATH="/usr/bin:$PATH" : export PATH'."\n"; }
 close( OUT ) || print "Can't close $bootfile: $!";
