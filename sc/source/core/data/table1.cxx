@@ -1655,6 +1655,7 @@ void ScTable::CopyPrintRange(const ScTable& rTable)
     bPrintEntireSheet = rTable.bPrintEntireSheet;
 
     delete pRepeatColRange;
+    pRepeatColRange = NULL;
     if (rTable.pRepeatColRange)
     {
         pRepeatColRange = new ScRange(*rTable.pRepeatColRange);
@@ -1663,6 +1664,7 @@ void ScTable::CopyPrintRange(const ScTable& rTable)
     }
 
     delete pRepeatRowRange;
+    pRepeatRowRange = NULL;
     if (rTable.pRepeatRowRange)
     {
         pRepeatRowRange = new ScRange(*rTable.pRepeatRowRange);
