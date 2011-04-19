@@ -27,6 +27,16 @@
 
 $(eval $(call gb_Executable_Executable,odbcconfig))
 
+$(eval $(call gb_Executable_add_precompiled_header,odbcconfig,$(SRCDIR)/dbaccess/inc/pch/precompiled_dbaccess))
+
+$(eval $(call gb_Executable_set_include,odbcconfig,\
+    $$(INCLUDE) \
+	-I$(realpath $(SRCDIR)/dbaccess/inc) \
+	-I$(realpath $(SRCDIR)/dbaccess/inc/pch) \
+    -I$(OUTDIR)/inc \
+    -I$(OUTDIR)/inc/offuh \
+))
+
 $(eval $(call gb_Executable_add_linked_libs,odbcconfig,\
     $(gb_STDLIBS) \
 ))

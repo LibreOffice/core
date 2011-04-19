@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Library_Library,dbu))
 
-$(eval $(call gb_Library_add_precompiled_header,dbu,$(SRCDIR)/chart2/inc/pch/precompiled_chart2))
+$(eval $(call gb_Library_add_precompiled_header,dbu,$(SRCDIR)/dbaccess/inc/pch/precompiled_dbaccess))
 
 $(eval $(call gb_Library_set_include,dbu,\
     $$(INCLUDE) \
