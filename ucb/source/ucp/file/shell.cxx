@@ -951,23 +951,23 @@ shell::setv( const rtl::OUString& aUnqPath,
                     if(err == osl::FileBase::E_None) {
                         if(values[i].Name == IsReadOnly)
                         {
-                            nAttributes &= ~(Attribute_OwnWrite |
-                                             Attribute_GrpWrite |
-                                             Attribute_OthWrite |
-                                             Attribute_ReadOnly);
+                            nAttributes &= ~(osl_File_Attribute_OwnWrite |
+                                             osl_File_Attribute_GrpWrite |
+                                             osl_File_Attribute_OthWrite |
+                                             osl_File_Attribute_ReadOnly);
                             if(value)
-                                nAttributes |= Attribute_ReadOnly;
+                                nAttributes |= osl_File_Attribute_ReadOnly;
                             else
                                 nAttributes |= (
-                                    Attribute_OwnWrite |
-                                    Attribute_GrpWrite |
-                                    Attribute_OthWrite);
+                                    osl_File_Attribute_OwnWrite |
+                                    osl_File_Attribute_GrpWrite |
+                                    osl_File_Attribute_OthWrite);
                         }
                         else if(values[i].Name == IsHidden)
                         {
-                            nAttributes &= ~(Attribute_Hidden);
+                            nAttributes &= ~(osl_File_Attribute_Hidden);
                             if(value)
-                                nAttributes |= Attribute_Hidden;
+                                nAttributes |= osl_File_Attribute_Hidden;
                         }
                         err = osl::File::setAttributes(
                             aUnqPath,nAttributes);
@@ -2426,7 +2426,7 @@ shell::commit( const shell::ContentMap::iterator& it,
         if( aFileStatus.isValid( osl_FileStatus_Mask_Attributes ) )
         {
             sal_uInt64 Attr = aFileStatus.getAttributes();
-            sal_Bool readonly = ( Attr & Attribute_ReadOnly ) != 0;
+            sal_Bool readonly = ( Attr & osl_File_Attribute_ReadOnly ) != 0;
             it1->setValue( uno::makeAny( readonly ) );
         }
     }
@@ -2437,7 +2437,7 @@ shell::commit( const shell::ContentMap::iterator& it,
         if( aFileStatus.isValid( osl_FileStatus_Mask_Attributes ) )
         {
             sal_uInt64 Attr = aFileStatus.getAttributes();
-            sal_Bool ishidden = ( Attr & Attribute_Hidden ) != 0;
+            sal_Bool ishidden = ( Attr & osl_File_Attribute_Hidden ) != 0;
             it1->setValue( uno::makeAny( ishidden ) );
         }
     }

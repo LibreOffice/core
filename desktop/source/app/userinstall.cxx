@@ -240,7 +240,7 @@ namespace desktop {
 
 #ifdef UNIX
     // set safer permissions for the user directory by default
-    File::setAttributes(aUserPath, Attribute_OwnWrite| Attribute_OwnRead| Attribute_OwnExe);
+    File::setAttributes(aUserPath, osl_File_Attribute_OwnWrite| osl_File_Attribute_OwnRead| osl_File_Attribute_OwnExe);
 #endif
 
             // copy data from shared data directory of base installation

@@ -2920,7 +2920,7 @@ RTLFUNC(GetAttr)
             FileStatus aFileStatus( osl_FileStatus_Mask_Attributes | osl_FileStatus_Mask_Type );
             aItem.getFileStatus( aFileStatus );
             sal_uInt64 nAttributes = aFileStatus.getAttributes();
-            sal_Bool bReadOnly = (nAttributes & Attribute_ReadOnly) != 0;
+            sal_Bool bReadOnly = (nAttributes & osl_File_Attribute_ReadOnly) != 0;
 
             FileStatus::Type aType = aFileStatus.getFileType();
             sal_Bool bDirectory = isFolder( aType );

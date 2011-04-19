@@ -3332,11 +3332,11 @@ sal_Bool SfxMedium::SetWritableForUserOnly( const ::rtl::OUString& aURL )
         {
             sal_uInt64 nAttributes = aFileStatus.getAttributes();
 
-            nAttributes &= ~(Attribute_OwnWrite |
-                             Attribute_GrpWrite |
-                             Attribute_OthWrite |
-                             Attribute_ReadOnly);
-            nAttributes |= Attribute_OwnWrite;
+            nAttributes &= ~(osl_File_Attribute_OwnWrite |
+                             osl_File_Attribute_GrpWrite |
+                             osl_File_Attribute_OthWrite |
+                             osl_File_Attribute_ReadOnly);
+            nAttributes |= osl_File_Attribute_OwnWrite;
 
             bResult = ( osl::File::setAttributes( aURL, nAttributes ) == ::osl::FileBase::E_None );
         }
