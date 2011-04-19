@@ -567,7 +567,7 @@ ODsnTypeCollection::TypeIterator::TypeIterator(const ODsnTypeCollection* _pConta
     ,m_nPosition(_nInitialPos)
 {
     OSL_ENSURE(m_pContainer, "ODsnTypeCollection::TypeIterator::TypeIterator : invalid container!");
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     ++const_cast<ODsnTypeCollection*>(m_pContainer)->m_nLivingIterators;
 #endif
 }
@@ -577,7 +577,7 @@ ODsnTypeCollection::TypeIterator::TypeIterator(const TypeIterator& _rSource)
     :m_pContainer(_rSource.m_pContainer)
     ,m_nPosition(_rSource.m_nPosition)
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     ++const_cast<ODsnTypeCollection*>(m_pContainer)->m_nLivingIterators;
 #endif
 }
@@ -585,7 +585,7 @@ ODsnTypeCollection::TypeIterator::TypeIterator(const TypeIterator& _rSource)
 //-------------------------------------------------------------------------
 ODsnTypeCollection::TypeIterator::~TypeIterator()
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     --const_cast<ODsnTypeCollection*>(m_pContainer)->m_nLivingIterators;
 #endif
 }
