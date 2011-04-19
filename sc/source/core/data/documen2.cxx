@@ -904,6 +904,9 @@ sal_Bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pO
 
         pTab[nNewPos]->SetPageStyle( pTab[nOldPos]->GetPageStyle() );
         pTab[nNewPos]->SetPendingRowHeights( pTab[nOldPos]->IsPendingRowHeights() );
+
+        // Copy the custom print range if exists.
+        pTab[nNewPos]->CopyPrintRange(*pTab[nOldPos]);
     }
     else
         SetAutoCalc( bOldAutoCalc );
