@@ -711,8 +711,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
     }
 
     for ( ContentHash::const_iterator aCI = maContents.begin(), aEnd = maContents.end();
-          aCI != aEnd;
-          aCI++)
+          aCI != aEnd; ++aCI)
     {
         const OUString &rShortName = (*aCI).first;
         const ContentInfo &rInfo = *(*aCI).second;
