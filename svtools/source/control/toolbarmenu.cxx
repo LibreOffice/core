@@ -1570,53 +1570,6 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
                     DrawCtrlText( aTmpPos, pEntry->maText, 0, pEntry->maText.Len(), nStyle, NULL, NULL ); // pVector, pDisplayText );
                 }
 
-/*
-                // Accel
-                if ( !bLayout && !bIsMenuBar && pData->aAccelKey.GetCode() && !ImplAccelDisabled() )
-                {
-                    XubString aAccText = pData->aAccelKey.GetName();
-                    aTmpPos.X() = aOutSz.Width() - this->GetTextWidth( aAccText );
-                    aTmpPos.X() -= 4*nExtra;
-
-                    aTmpPos.X() -= nOuterSpace;
-                    aTmpPos.Y() = aPos.Y();
-                    aTmpPos.Y() += nTextOffsetY;
-                    this->DrawCtrlText( aTmpPos, aAccText, 0, aAccText.Len(), nTextStyle );
-                }
-*/
-
-/*
-                // SubMenu?
-                if ( !bLayout && !bIsMenuBar && pData->pSubMenu )
-                {
-                    aTmpPos.X() = aOutSz.Width() - nFontHeight + nExtra - nOuterSpace;
-                    aTmpPos.Y() = aPos.Y();
-                    aTmpPos.Y() += nExtra/2;
-                    aTmpPos.Y() += ( pEntry->maSize.Height() / 2 ) - ( nFontHeight/4 );
-                    if ( pEntry->mnBits & MIB_POPUPSELECT )
-                    {
-                        this->SetTextColor( rSettings.GetMenuTextColor() );
-                        Point aTmpPos2( aPos );
-                        aTmpPos2.X() = aOutSz.Width() - nFontHeight - nFontHeight/4;
-                        aDecoView.DrawFrame(
-                            Rectangle( aTmpPos2, Size( nFontHeight+nFontHeight/4, pEntry->maSize.Height() ) ), FRAME_DRAW_GROUP );
-                    }
-                    aDecoView.DrawSymbol(
-                        Rectangle( aTmpPos, Size( nFontHeight/2, nFontHeight/2 ) ),
-                        SYMBOL_SPIN_RIGHT, this->GetTextColor(), nSymbolStyle );
-//                  if ( pEntry->mnBits & MIB_POPUPSELECT )
-//                  {
-//                      aTmpPos.Y() += nFontHeight/2 ;
-//                      this->SetLineColor( rSettings.GetShadowColor() );
-//                      this->DrawLine( aTmpPos, Point( aTmpPos.X() + nFontHeight/3, aTmpPos.Y() ) );
-//                      this->SetLineColor( rSettings.GetLightColor() );
-//                      aTmpPos.Y()++;
-//                      this->DrawLine( aTmpPos, Point( aTmpPos.X() + nFontHeight/3, aTmpPos.Y() ) );
-//                      this->SetLineColor();
-//                  }
-                }
-*/
-
                 if ( pThisOnly && bHighlighted )
                 {
                     // This restores the normal menu or menu bar text
