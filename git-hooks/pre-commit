@@ -18,11 +18,6 @@ $ENV{LC_ALL} = "C";
 sub fix_whitespace($$) {
     my ( $file, $lines ) = @_;
 
-    # usually we have nothing to do ;-)
-    return if ( keys( %{$lines} ) == 0 ||
-                $file eq "" || $file eq "GNUmakefile" ||
-                !( $file =~ /\.(c|cpp|cxx|h|hrc|hxx|idl|inl|java|map|MK|pl|pm|pmk|py|sdi|sh|src|tab)/ ) );
-
     open( IN, "$file" ) || die "Cannot open $file for reading";
     my ( $out, $tmpfile ) = mkstemp( "/tmp/whitespace-fixing-XXXXXX" );
 
@@ -66,35 +61,41 @@ sub check_and_fix_whitespace($)
         my $fd;
         ( $fd, $stash ) = mkstemp( "/tmp/unstaged-changes-XXXXXX" );
         close( $fd );
+
         # this will keep the staged changes
         system( "git diff > $stash" );
         system( "git checkout ." );
     }
-    open( IN, "git diff-index -p --no-prefix --cached $head -- |" ) || die "Cannot get git diff-index";
-    while ( my $line = <IN> ) {
-        if ( $line =~ /^\+\+\+ (.*)/ ) {
-            fix_whitespace( $file, \%lines );
-            $file = $1;
-            %lines = ();
-            $line_no = 0;
-            $line_max = -1;
-        }
-        elsif ( $line =~ /^@@ -[0-9]+,[0-9]+ \+([0-9]+),([0-9]+) @@/ ) {
-            $line_no = $1;
-            $line_max = $line_no + $2;
-        }
-        elsif ( ( $line_no < $line_max ) && ( $line =~ /^[ +]/ ) ) {
-            if ( $line =~ /^\+.*[ \t]$/ ) {
-                $lines{$line_no} = 1;
+    open( FILES, "git diff-index --cached --name-only $head |" ) || die "Cannot run git diff-index.";
+    while( my $file = <FILES> ) {
+        chomp( $file );
+        if ( $file ne "GNUmakefile" &&
+           ( $file =~ /\.(c|cpp|cxx|h|hrc|hxx|idl|inl|java|map|MK|pl|pm|pmk|py|sdi|sh|src|tab)/ ) ) {
+            open( F, "git diff-index -p --cached $head -- $file |" );
+            while ( my $line = <F> ) {
+                if ( $line =~ /^\+\+\+ (.*)/ ) {
+                    %lines = ();
+                    $line_no = 0;
+                    $line_max = -1;
+                }
+                elsif ( $line =~ /^@@ -[0-9]+,[0-9]+ \+([0-9]+),([0-9]+) @@/ ) {
+                    $line_no = $1;
+                    $line_max = $line_no + $2;
+                }
+                elsif ( ( $line_no < $line_max ) && ( $line =~ /^[ +]/ ) ) {
+                    if ( $line =~ /^\+.*[ \t]$/ ) {
+                        $lines{$line_no} = 1;
+                    }
+                    ++$line_no;
+                }
             }
-            ++$line_no;
+            fix_whitespace( $file, \%lines );
+            close( IN );
+            if ($stash) {
+                system( "git apply < $stash" );
+                unlink( $stash );
+            }
         }
-    }
-    fix_whitespace( $file, \%lines );
-    close( IN );
-    if ($stash) {
-        system( "git apply < $stash" );
-        unlink( $stash );
     }
 }
 
