@@ -298,7 +298,7 @@ public:
             rVector.resize( m_nLevel );
 
         vector< uno::Any >::iterator aIt( rVector.begin() );
-        for( sal_Int32 nN=0; aIt<rVector.end(); aIt++, nN++)
+        for( sal_Int32 nN=0; aIt<rVector.end(); ++aIt, ++nN)
         {
             if( nN==m_nLevel )
                 break;
@@ -320,7 +320,7 @@ public:
     void operator() ( vector< uno::Any >& rVector )
     {
         vector< uno::Any >::iterator aIt( rVector.begin() );
-        for( sal_Int32 nN=0; aIt<rVector.end(); aIt++, nN++)
+        for( sal_Int32 nN=0; aIt<rVector.end(); ++aIt, ++nN)
         {
             if( nN==m_nLevel )
             {
