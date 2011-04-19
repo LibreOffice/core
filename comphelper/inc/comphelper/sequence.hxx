@@ -179,13 +179,9 @@ namespace comphelper
         ,m_pCurrent(NULL)
     {
         ::com::sun::star::uno::Sequence< TYPE > aContainer;
-    #ifdef DBG_UTIL
-        sal_Bool bSuccess =
-    #endif
-        _rSequenceAny >>= aContainer;
-    #ifdef DBG_UTIL
+        sal_Bool bSuccess = _rSequenceAny >>= aContainer;
         OSL_ENSURE(bSuccess, "OSequenceIterator::OSequenceIterator: invalid Any!");
-    #endif
+        (void)bSuccess;
         construct(aContainer);
     }
 
