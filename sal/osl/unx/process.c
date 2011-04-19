@@ -300,6 +300,23 @@ static sal_Bool sendFdPipe(int PipeFD, int SocketFD)
     return bRet;
 }
 
+static sal_Bool safeWrite(int socket, void* data, sal_uInt32 dataSize)
+{
+    sal_Int32 nToWrite = dataSize;
+    // Check for overflow as we convert a signed to an unsigned.
+    OSL_ASSERT(dataSize == (sal_uInt32)nToWrite);
+    while ( nToWrite ) {
+        sal_Int32 nWritten = write(socket, data, nToWrite);
+        if ( nWritten < 0 )
+            return sal_False;
+
+        OSL_ASSERT(nWritten > 0);
+        nToWrite -= nWritten;
+    }
+
+    return sal_True;
+}
+
 /**********************************************
  receiveFdPipe
  *********************************************/
@@ -374,7 +391,8 @@ static oslSocket receiveFdPipe(int PipeFD)
     }
 
     OSL_TRACE("receiveFdPipe : writing back %i",nRetCode);
-    nRead=write(PipeFD,&nRetCode,sizeof(nRetCode));
+    if ( !safeWrite(PipeFD, &nRetCode, sizeof(nRetCode)) )
+        OSL_TRACE("write failed (%s)", strerror(errno));
 
 #if defined(IOCHANNEL_TRANSFER_BSD_RENO)
     free(cmptr);
@@ -466,7 +484,6 @@ static void ChildStatusProc(void *pData)
     {
         /* Child */
         int chstatus = 0;
-        sal_Int32 nWrote;
 
         if (channel[0] != -1) close(channel[0]);
 
@@ -543,11 +560,11 @@ static void ChildStatusProc(void *pData)
         OSL_TRACE("ChildStatusProc : starting '%s' failed",data.m_pszArgs[0]);
 
         /* if we reach here, something went wrong */
-        nWrote = write(channel[1], &errno, sizeof(errno));
-        if (nWrote != sizeof(errno))
+        if ( !safeWrite(channel[1], &errno, sizeof(errno)) )
             OSL_TRACE("sendFdPipe : sending failed (%s)",strerror(errno));
 
-        if (channel[1] != -1) close(channel[1]);
+        if ( channel[1] != -1 )
+            close(channel[1]);
 
         _exit(255);
     }
