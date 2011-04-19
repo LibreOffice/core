@@ -35,7 +35,7 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; }}}}
 
 // Returns a SbxObject that wrapps an Uno Interface
 // Implementation in basic/source/classes/sbunoobj.cxx
-SbxObjectRef GetSbUnoObject( const String& aName, const com::sun::star::uno::Any& aUnoObj_ );
+SbxObjectRef GetSbUnoObject( const ::rtl::OUString& aName, const com::sun::star::uno::Any& aUnoObj_ );
 
 // Force creation of all properties for debugging
 void createAllObjectProperties( SbxObject* pObj );
