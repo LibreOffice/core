@@ -108,7 +108,7 @@ MasterPropertySet::~MasterPropertySet()
     while (aIter != aEnd )
     {
         delete (*aIter).second;
-        aIter++;
+        ++aIter;
     }
 }
 
