@@ -54,8 +54,8 @@ STD_RES_FILE( gid_File_Res_Abp, abp)
 STD_LIB_FILE( gid_File_Lib_Dbp, dbp)
 STD_RES_FILE( gid_File_Res_Dbp, dbp)
 
-STD_LIB_FILE( gid_File_Lib_Dbu, dbu )
-STD_RES_FILE( gid_File_Res_Dbu, dbu)
+STD_LIB_FILE( gid_File_Lib_Dbu, dbui)
+STD_RES_FILE( gid_File_Res_Dbu, dbui)
 
 STD_LIB_FILE( gid_File_Lib_Adabasui, adabasui )
 STD_RES_FILE( gid_File_Res_Adabasui, adabasui)
