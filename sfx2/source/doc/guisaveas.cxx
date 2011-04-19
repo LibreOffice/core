@@ -312,7 +312,7 @@ public:
     sal_Bool ShowDocumentInfoDialog();
 
     ::rtl::OUString GetReccomendedDir( const ::rtl::OUString& aSuggestedDir,
-                                       const sfx2::FileDialogHelper::Context& aCtxt );
+                                       const sfx2::FileDialogHelper::Context& rCtxt );
     ::rtl::OUString GetReccomendedName( const ::rtl::OUString& aSuggestedName,
                                         const ::rtl::OUString& aTypeName );
 
@@ -885,10 +885,8 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
 
         if( aDocServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) )
                eCtxt = sfx2::FileDialogHelper::SD_EXPORT;
-        if( aDocServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) )
+        else if( aDocServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) )
                eCtxt = sfx2::FileDialogHelper::SI_EXPORT;
-        if( aDocServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.TextDocument" ) ) )
-            eCtxt = sfx2::FileDialogHelper::SW_EXPORT;
 
         if ( eCtxt != sfx2::FileDialogHelper::UNKNOWN_CONTEXT )
                pFileDlg->SetContext( eCtxt );
@@ -1144,7 +1142,7 @@ sal_Bool ModelData_Impl::ShowDocumentInfoDialog()
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString ModelData_Impl::GetReccomendedDir( const ::rtl::OUString& aSuggestedDir, const sfx2::FileDialogHelper::Context& aCtxt )
+::rtl::OUString ModelData_Impl::GetReccomendedDir( const ::rtl::OUString& aSuggestedDir, const sfx2::FileDialogHelper::Context& rCtxt )
 {
     ::rtl::OUString aReccomendedDir;
 
@@ -1175,8 +1173,12 @@ sal_Bool ModelData_Impl::ShowDocumentInfoDialog()
     }
     else
     {
-        // pb: set graphic path if context == SD_EXPORT or SI_EXPORT else work path
-        ::rtl::OUString aConfigSuggestion( ( aCtxt != sfx2::FileDialogHelper::UNKNOWN_CONTEXT ) ? SvtPathOptions().GetGraphicPath() : SvtPathOptions().GetWorkPath() );
+        ::rtl::OUString aConfigSuggestion;
+        // Set graphic path if context == SD_EXPORT or SI_EXPORT else work path
+        if (rCtxt == sfx2::FileDialogHelper::SD_EXPORT || rCtxt == sfx2::FileDialogHelper::SI_EXPORT)
+            aConfigSuggestion = SvtPathOptions().GetGraphicPath();
+        else
+            aConfigSuggestion = SvtPathOptions().GetWorkPath();
         aReccomendedDir = INetURLObject( aConfigSuggestion ).GetMainURL( INetURLObject::NO_DECODE );
     }
 
