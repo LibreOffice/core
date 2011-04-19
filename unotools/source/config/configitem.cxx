@@ -219,7 +219,7 @@ void ConfigChangeListener_Impl::disposing( const EventObject& /*rSource*/ ) thro
     pParent->RemoveChangesListener();
 }
 
-ConfigItem::ConfigItem(const OUString rSubTree, sal_Int16 nSetMode ) :
+ConfigItem::ConfigItem(const OUString &rSubTree, sal_Int16 nSetMode ) :
     sSubTree(rSubTree),
     pImpl(new ConfigItem_Impl)
 {

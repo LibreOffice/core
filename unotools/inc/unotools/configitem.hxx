@@ -115,7 +115,7 @@ namespace utl
                                         GetTree();
 
         protected:
-            ConfigItem(const rtl::OUString rSubTree,
+            ConfigItem(const rtl::OUString &rSubTree,
                         sal_Int16 nMode = CONFIG_MODE_DELAYED_UPDATE);
             ConfigItem(utl::ConfigManager&  rManager, const rtl::OUString rSubTree);
 
