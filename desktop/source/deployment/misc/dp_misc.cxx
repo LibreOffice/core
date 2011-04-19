@@ -149,7 +149,7 @@ static bool getModifyTimeTargetFile(const OUString &rFileURL, TimeValue &rTime)
     if (::osl::DirectoryItem::get(rFileURL, item) != ::osl::File::E_None)
         return false;
 
-    ::osl::FileStatus stat(FileStatusMask_ModifyTime|FileStatusMask_Type|FileStatusMask_LinkTargetURL);
+    ::osl::FileStatus stat(osl_FileStatus_Mask_ModifyTime|osl_FileStatus_Mask_Type|osl_FileStatus_Mask_LinkTargetURL);
     if (item.getFileStatus(stat) != ::osl::File::E_None)
         return false;
 
