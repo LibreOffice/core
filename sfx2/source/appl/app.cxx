@@ -153,6 +153,7 @@ using namespace ::com::sun::star;
 // Static member
 SfxApplication* SfxApplication::pApp = NULL;
 static BasicDLL*       pBasic   = NULL;
+static SfxHelp*        pSfxHelp = NULL;
 
 class SfxPropertyHandler : public PropertyHandler
 {
@@ -305,7 +306,6 @@ SfxApplication* SfxApplication::GetOrCreate()
         ::framework::SetIsDockingWindowVisible( IsDockingWindowVisible );
         ::framework::SetActivateToolPanel( &SfxViewFrame::ActivateToolPanel );
 
-        SfxHelp* pSfxHelp = new SfxHelp;
         Application::SetHelp( pSfxHelp );
         if ( SvtHelpOptions().IsHelpTips() )
             Help::EnableQuickHelp();
@@ -351,6 +351,8 @@ SfxApplication::SfxApplication()
 #endif
 #endif
 
+    pSfxHelp = new SfxHelp;
+
     pBasic   = new BasicDLL;
     StarBASIC::SetGlobalErrorHdl( LINK( this, SfxApplication, GlobalBasicErrorHdl_Impl ) );
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "} initialize DDE" );
@@ -363,6 +365,9 @@ SfxApplication::~SfxApplication()
     Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
 
     SfxModule::DestroyModules_Impl();
+
+    delete pSfxHelp;
+    Application::SetHelp( NULL );
 
     // delete global options
     SvtViewOptions::ReleaseOptions();
