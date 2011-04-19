@@ -32,6 +32,7 @@ $(eval $(call gb_Module_add_targets,dbaccess,\
     AllLangResTarget_dba \
     AllLangResTarget_dbmm \
     AllLangResTarget_dbu \
+    AllLangResTarget_sdbt \
     $(if $(filter WNT,$(GUI)),Executable_odbcconfig) \
     Library_adabasui \
     Library_dba \
