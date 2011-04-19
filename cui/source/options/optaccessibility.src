@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-#include <optaccessibility.hrc>
+#include "optaccessibility.hrc"
 #include <sfx2/sfx.hrc>
 #include "helpid.hrc"
 #include <cuires.hrc>

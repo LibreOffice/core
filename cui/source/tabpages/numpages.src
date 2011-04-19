@@ -27,7 +27,7 @@
 
 #include <cuires.hrc>
 #include <helpid.hrc>
-#include <numpages.hrc>
+#include "numpages.hrc"
 #include <svx/dialogs.hrc>
 
 /**************************************************************************/
