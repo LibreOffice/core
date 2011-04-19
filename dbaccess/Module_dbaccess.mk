@@ -46,6 +46,4 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,dbaccess,\
     JunitTest_dbaccess_unoapi \
 ))
 
-$(call $(gb_Library_get_target,dbu)) :| $(call $(gb_SrsTemplateTarget_get_target,dbaccess/dbu))
-
 # vim: set noet ts=4 sw=4:
