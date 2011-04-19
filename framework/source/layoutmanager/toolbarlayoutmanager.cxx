@@ -295,7 +295,7 @@ Rectangle ToolbarLayoutManager::implts_calcDockingArea()
     aRowColumnSizes[nCurrDockingArea].clear();
     aRowColumnSizes[nCurrDockingArea].push_back( 0 );
 
-    for ( pConstIter = aWindowVector.begin(); pConstIter != aWindowVector.end(); pConstIter++ )
+    for ( pConstIter = aWindowVector.begin(); pConstIter != aWindowVector.end(); ++pConstIter )
     {
         uno::Reference< ui::XUIElement > xUIElement( pConstIter->m_xUIElement, uno::UNO_QUERY );
         if ( xUIElement.is() )
@@ -469,7 +469,7 @@ bool ToolbarLayoutManager::destroyToolbar( const ::rtl::OUString& rResourceURL )
     bool bMustBeDestroyed( rResourceURL.indexOf( aAddonTbResourceName ) != 0 );
 
     WriteGuard aWriteLock( m_aLock );
-    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
     {
         if ( pIter->m_aName == rResourceURL )
         {
@@ -546,7 +546,7 @@ void ToolbarLayoutManager::destroyToolbars()
     aWriteLock.unlock();
 
     UIElementVector::iterator pIter;
-    for ( pIter = aUIElementVector.begin(); pIter != aUIElementVector.end(); pIter++ )
+    for ( pIter = aUIElementVector.begin(); pIter != aUIElementVector.end(); ++pIter )
     {
         uno::Reference< lang::XComponent > xComponent( pIter->m_xUIElement, uno::UNO_QUERY );
         if ( xComponent.is() )
@@ -613,7 +613,7 @@ void ToolbarLayoutManager::refreshToolbarsVisibility( bool bAutomaticToolbars )
     UIElement aUIElement;
     SolarMutexGuard aGuard;
     UIElementVector::iterator pIter;
-    for ( pIter = aUIElementVector.begin(); pIter != aUIElementVector.end(); pIter++ )
+    for ( pIter = aUIElementVector.begin(); pIter != aUIElementVector.end(); ++pIter )
     {
         if ( implts_readWindowStateData( pIter->m_aName, aUIElement ) &&
              ( pIter->m_bVisible != aUIElement.m_bVisible ) && !pIter->m_bMasterHide )
@@ -636,7 +636,7 @@ void ToolbarLayoutManager::setFloatingToolbarsVisibility( bool bVisible )
 
     SolarMutexGuard aGuard;
     UIElementVector::iterator pIter;
-    for ( pIter = aUIElementVector.begin(); pIter != aUIElementVector.end(); pIter++ )
+    for ( pIter = aUIElementVector.begin(); pIter != aUIElementVector.end(); ++pIter )
     {
         Window* pWindow = getWindowFromXUIElement( pIter->m_xUIElement );
         if ( pWindow && pIter->m_bFloating )
@@ -659,7 +659,7 @@ void ToolbarLayoutManager::setVisible( bool bVisible )
 
     SolarMutexGuard aGuard;
     UIElementVector::iterator pIter;
-    for ( pIter = aUIElementVector.begin(); pIter != aUIElementVector.end(); pIter++ )
+    for ( pIter = aUIElementVector.begin(); pIter != aUIElementVector.end(); ++pIter )
     {
         pIter->m_bMasterHide = !bVisible;
         Window* pWindow = getWindowFromXUIElement( pIter->m_xUIElement );
@@ -773,7 +773,7 @@ bool ToolbarLayoutManager::dockAllToolbars()
 
     ReadGuard aReadLock( m_aLock );
     UIElementVector::iterator pIter;
-    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
     {
         if ( pIter->m_aType.equalsAscii( "toolbar" ) && pIter->m_xUIElement.is() &&
              pIter->m_bFloating && pIter->m_bVisible )
@@ -820,7 +820,7 @@ long ToolbarLayoutManager::childWindowEvent( VclSimpleEvent* pEvent )
                 ::std::vector< uno::Reference< ui::XUIFunctionListener > > aListenerArray;
                 UIElementVector::iterator pIter;
 
-                for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+                for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
                 {
                     if ( pIter->m_xUIElement.is() )
                     {
@@ -1211,7 +1211,7 @@ void ToolbarLayoutManager::implts_reparentToolbars()
     if ( pContainerWindow )
     {
         UIElementVector::iterator pIter;
-        for ( pIter = aUIElementVector.begin(); pIter != aUIElementVector.end(); pIter++ )
+        for ( pIter = aUIElementVector.begin(); pIter != aUIElementVector.end(); ++pIter )
         {
             uno::Reference< ui::XUIElement > xUIElement( pIter->m_xUIElement );
             if ( xUIElement.is() )
@@ -1796,7 +1796,7 @@ UIElement& ToolbarLayoutManager::impl_findToolbar( const rtl::OUString& aName )
     UIElementVector::iterator pIter;
 
     ReadGuard aReadLock( m_aLock );
-    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
     {
         if ( pIter->m_aName == aName )
             return *pIter;
@@ -1820,7 +1820,7 @@ UIElement ToolbarLayoutManager::implts_findToolbar( const uno::Reference< uno::X
     UIElementVector::const_iterator pIter;
 
     ReadGuard aReadLock( m_aLock );
-    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
     {
         if ( pIter->m_xUIElement.is() )
         {
@@ -1842,7 +1842,7 @@ uno::Reference< awt::XWindow > ToolbarLayoutManager::implts_getXWindow( const ::
     uno::Reference< awt::XWindow > xWindow;
 
     ReadGuard aReadLock( m_aLock );
-    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
     {
         if ( pIter->m_aName == aName && pIter->m_xUIElement.is() )
         {
@@ -1932,7 +1932,7 @@ void ToolbarLayoutManager::implts_setToolbar( const UIElement& rUIElement )
 
     // Try to find a cascaded position for the new floating window
     UIElementVector::const_iterator pIter;
-    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
     {
         if ( pIter->m_xUIElement.is() )
         {
@@ -1971,7 +1971,7 @@ void ToolbarLayoutManager::implts_sortUIElements()
 
     // We have to reset our temporary flags.
     UIElementVector::iterator pIter;
-    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
         pIter->m_bUserActive = sal_False;
     aWriteLock.unlock();
 }
@@ -2015,7 +2015,7 @@ void ToolbarLayoutManager::implts_getDockingAreaElementInfos( ui::DockingArea eD
     aWindowVector.reserve(m_aUIElements.size());
     xDockAreaWindow = m_xDockAreaWindows[eDockingArea];
     UIElementVector::iterator   pIter;
-    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
     {
         if ( pIter->m_aDockedData.m_nDockedArea == eDockingArea && pIter->m_bVisible && !pIter->m_bFloating )
         {
@@ -2199,7 +2199,7 @@ void ToolbarLayoutManager::implts_getDockingAreaElementInfoOnSingleRowCol( ui::D
     ReadGuard aReadLock( m_aLock );
     UIElementVector::iterator   pIter;
     UIElementVector::iterator   pEnd = m_aUIElements.end();
-    for ( pIter = m_aUIElements.begin(); pIter != pEnd; pIter++ )
+    for ( pIter = m_aUIElements.begin(); pIter != pEnd; ++pIter )
     {
         if ( pIter->m_aDockedData.m_nDockedArea == eDockingArea )
         {
@@ -3270,7 +3270,7 @@ void ToolbarLayoutManager::implts_renumberRowColumnData(
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
     UIElementVector::iterator pIter;
-    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
     {
         if (( pIter->m_aDockedData.m_nDockedArea == sal_Int16( eDockingArea )) && ( pIter->m_aName != rUIElement.m_aName ))
         {
@@ -3914,7 +3914,7 @@ throw (uno::RuntimeException)
     UIElementVector::iterator pIter;
 
     WriteGuard aWriteLock( m_aLock );
-    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
     {
         uno::Reference< ui::XUIElement > xUIElement( pIter->m_xUIElement );
         if ( xUIElement.is() )
@@ -4108,7 +4108,7 @@ uno::Sequence< uno::Reference< ui::XUIElement > > ToolbarLayoutManager::getToolb
     {
         sal_uInt32 nCount(0);
         UIElementVector::iterator pIter;
-        for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+        for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
         {
             if ( pIter->m_xUIElement.is() )
             {
