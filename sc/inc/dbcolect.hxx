@@ -122,6 +122,7 @@ public:
 
             bool        operator== (const ScDBData& rData) const;
 
+            SCTAB       GetTable() const;
             const String& GetName() const               { return aName; }
             void        GetName(String& rName) const    { rName = aName; }
             void        SetName(const String& rName)    { aName = rName; }
@@ -214,6 +215,7 @@ public:
     virtual sal_Bool        IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) const;
             ScDBData*   GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Bool bStartOnly) const;
             ScDBData*   GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
+            ScDBData*   GetFilterDBAtTable(SCTAB nTab) const;
             ScDBData*   GetDBNearCursor(SCCOL nCol, SCROW nRow, SCTAB nTab );
 
     sal_Bool    SearchName( const String& rName, sal_uInt16& rIndex ) const;

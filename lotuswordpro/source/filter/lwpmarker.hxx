@@ -203,7 +203,6 @@ public:
     void Read();
     void ParseIndex(OUString& sKey1,OUString& sKey2);
     void ParseTOC(OUString& sLevel,OUString& sText);
-//  sal_uInt8 ParseCrossRef(OUString& sMarkName);
     sal_uInt16 GetFieldType(){return m_nFieldType;}
     sal_Bool IsFormulaInsert();
     sal_Bool IsDateTimeField(sal_uInt8& type,OUString& formula);

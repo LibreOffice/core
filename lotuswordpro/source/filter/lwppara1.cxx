@@ -175,13 +175,13 @@ LwpPara* LwpPara::GetParent()
 
     if (level != 1)
     {
-        pPara = static_cast<LwpPara*>(GetPrevious()->obj());
+        pPara = dynamic_cast<LwpPara*>(GetPrevious()->obj());
         while (pPara)
         {
             otherlevel = pPara->GetLevel();
             if ((otherlevel < level) || (otherlevel && (level == 0)))
                 return pPara;
-            pPara = static_cast<LwpPara*>(pPara->GetPrevious()->obj());
+            pPara = dynamic_cast<LwpPara*>(pPara->GetPrevious()->obj());
         }
     }
     return NULL;
@@ -237,12 +237,12 @@ void LwpPara::GetParaNumber(sal_uInt16 nPosition, ParaNumbering* pParaNumbering)
                     //get suffix text frib
                     if ( (pFrib = pFrib->GetNext()) )
                     {
-//                      if((pFrib->GetType() == FRIB_TAG_TEXT) &&
-//                          (pFrib->GetModifiers()->aTxtAttrOverride.GetHideLevels() == nHideLevels))
                         if( pFrib->GetType() == FRIB_TAG_TEXT )
                         {
-                            if ((pFrib->GetNext()->GetType() == FRIB_TAG_TEXT ) ||
-                                (pFrib->GetModifiers()->aTxtAttrOverride.GetHideLevels() == nHideLevels))
+                            if (
+                                 (pFrib->GetNext() && pFrib->GetNext()->GetType() == FRIB_TAG_TEXT) ||
+                                 (pFrib->GetModifiers()->aTxtAttrOverride.GetHideLevels() == nHideLevels)
+                               )
                             {
                                 pParaNumbering->pSuffix = static_cast<LwpFribText*>(pFrib);
                             }
@@ -323,21 +323,21 @@ void LwpPara::OverrideSpacing(LwpSpacingOverride* base,LwpSpacingOverride* over,
 {
     if (base)//the latter two parameter never be null
     {
-        over->Override(base);
+        if (over)
+            over->Override(base);
         LwpParaStyle::ApplySpacing(this,pOverStyle,base);
     }
     else
         LwpParaStyle::ApplySpacing(this,pOverStyle,over);
 }
 
-//add by , 01/25/2005
 /**
  * @short:   Get parastyle object according to the objID.
  * @return:  pointer to the parastyle.
  */
 LwpParaStyle* LwpPara::GetParaStyle()
 {
-    return static_cast<LwpParaStyle*>(m_ParaStyle.obj(VO_PARASTYLE));
+    return dynamic_cast<LwpParaStyle*>(m_ParaStyle.obj(VO_PARASTYLE));
 }
 
 /**
@@ -488,8 +488,9 @@ void LwpPara::OverrideParaBullet(LwpParaProperty* pProps)
             m_pBullOver = pFinalBullet.release();
             if (!aSilverBulletID.IsNull())
             {
-                m_pSilverBullet = static_cast<LwpSilverBullet*>(aSilverBulletID.obj(VO_SILVERBULLET));
-                m_pSilverBullet->SetFoundry(m_pFoundry);
+                m_pSilverBullet = dynamic_cast<LwpSilverBullet*>(aSilverBulletID.obj(VO_SILVERBULLET));
+                if (m_pSilverBullet)
+                    m_pSilverBullet->SetFoundry(m_pFoundry);
             }
 
             m_aSilverBulletID = aSilverBulletID;
@@ -506,8 +507,9 @@ void LwpPara::OverrideParaBullet(LwpParaProperty* pProps)
             {
                 m_bHasBullet = sal_True;
 
-                m_pSilverBullet = static_cast<LwpSilverBullet*>(m_aSilverBulletID.obj(VO_SILVERBULLET));
-                m_pSilverBullet->SetFoundry(m_pFoundry);
+                m_pSilverBullet = dynamic_cast<LwpSilverBullet*>(m_aSilverBulletID.obj(VO_SILVERBULLET));
+                if (m_pSilverBullet)
+                    m_pSilverBullet->SetFoundry(m_pFoundry);
             }
 
             std::auto_ptr<LwpBulletOverride> pBulletOverride(pBullOver->clone());
@@ -578,7 +580,7 @@ void LwpPara::FindLayouts()
 {
     m_Fribs.SetPara(this);
     m_Fribs.FindLayouts();
-    LwpPara* pNextPara = static_cast<LwpPara*>(GetNext()->obj());
+    LwpPara* pNextPara = dynamic_cast<LwpPara*>(GetNext()->obj());
     if(pNextPara)
     {
         pNextPara->FindLayouts();
@@ -640,96 +642,15 @@ sal_Bool LwpPara::ComparePagePosition(LwpVirtualLayout * pPreLayout, LwpVirtualL
     m_Fribs.SetPara(this);
     return m_Fribs.ComparePagePosition(pPreLayout, pNextLayout);
 }
-/*
-sal_Bool LwpPara::IsNeedTabForTOC()
-{
-    LwpStory* pStory = GetStory();
-    if(pStory)
-    {
-        if(GetNext()->IsNull())
-        {
-            LwpVirtualLayout* pLayout = pStory->GetLayout(NULL);
-            if(pLayout && pLayout->IsCell())
-            {
-                LwpCellLayout * pCell = static_cast<LwpCellLayout *>(pStory->GetLayout(NULL));
-                if (pCell->GetLeaderChar() == 0)
-                {
-                    return sal_False;
-                }
-                return sal_True;
-            }
-        }
-    }
-    return sal_False;
-}
 
-void LwpPara::AddTabStyleForTOC( )
-{
-    if(IsNeedTabForTOC())
-    {
-        XFParaStyle* pParaStyle = new XFParaStyle;
-        *pParaStyle = *GetXFParaStyle();
-        pParaStyle->ClearTabStyles();
-        //Add Tab Style;
-        enumXFTab eType = enumXFTabRight;
-
-        LwpCellLayout * pCell = static_cast<LwpCellLayout *>(GetStory()->GetLayout(NULL));
-        double dLen = pCell->GetActualWidth(); /// todo: get from table
-        sal_Unicode cLeader = static_cast<sal_Unicode>(pCell->GetLeaderChar());
-        pParaStyle->AddTabStyle(eType, dLen, cLeader );
-        m_StyleName = XFStyleManager::AddStyle(pParaStyle)->GetStyleName();
-
-        // Get font info of default text style and set into tab style
-        XFParaStyle* pBaseStyle = static_cast<XFParaStyle*>(m_pFoundry->GetStyleManager()->GetStyle(*m_pFoundry->GetDefaultTextStyle()));
-        XFTextStyle*pTextStyle = new XFTextStyle;
-        pTextStyle->SetFont(pBaseStyle->GetFont()); // who delete this font?????
-        m_TabStyleName = XFStyleManager::AddStyle(pTextStyle)->GetStyleName();
-    }
-}
-
-void LwpPara::AddTabStopForTOC()
-{
-    if(IsNeedTabForTOC())
-    {
-        XFParagraph* pXFPara = GetFribs()->GetXFPara();
-        pXFPara->SetStyleName(m_StyleName);
-
-        XFParaStyle* pParaStyle = static_cast<XFParaStyle*>(XFStyleManager::FindStyle(m_StyleName));
-        if(pParaStyle)
-        {
-            XFTextSpan *pSpan = new XFTextSpan;
-            XFTabStop *pTab = new XFTabStop;
-            pSpan->Add(pTab);
-            pSpan->SetStyleName(m_TabStyleName);
-            enumXFAlignType eType = pParaStyle->GetAlighType();
-
-            if(eType == enumXFAlignStart || eType == enumXFAlignJustify || eType == enumXFAlignNone)
-            {
-                pXFPara->Add(pSpan);
-            }
-            else if(eType == enumXFAlignEnd)
-            {
-                pXFPara->InsertAtBegin(pSpan);
-            }
-            else
-            {
-                delete pSpan; // pTabl will be delete inside XFTextSpan
-            }
-
-        }
-
-    }
-}
-*/
 /**
  * @short   check paragraph alignment
  */
 sal_Bool LwpPara::IsNumberRight()
 {
-    LwpObject* pObj = m_ParaStyle.obj();
-    if (pObj)
+    LwpParaStyle* pStyle = dynamic_cast<LwpParaStyle*>(m_ParaStyle.obj());
+    if (pStyle)
     {
-        LwpParaStyle* pStyle = static_cast<LwpParaStyle*>(pObj);
         return pStyle->IsNumberRight();
     }
     else
@@ -740,7 +661,8 @@ sal_Bool LwpPara::IsNumberRight()
  */
 sal_Bool LwpPara::IsInCell()
 {
-    LwpVirtualLayout* pLayout = GetStory()->GetLayout(NULL);
+    LwpStory *pStory = GetStory();
+    LwpVirtualLayout* pLayout = pStory ? pStory->GetLayout(NULL) : NULL;
     if(pLayout && pLayout->IsCell())
         return sal_True;
     return sal_False;

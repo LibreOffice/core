@@ -137,7 +137,7 @@ OUString LwpCHBlkMarker::GetPromptText()
 {
     LwpStory* pStory = NULL;
     if (m_objPromptStory.obj())
-        pStory = static_cast<LwpStory*>(m_objPromptStory.obj());
+        pStory = dynamic_cast<LwpStory*>(m_objPromptStory.obj());
     if (pStory)
         return pStory->GetContentText();
     return A2OUSTR("");
@@ -380,6 +380,9 @@ sal_Bool LwpBookMark::IsRightName(OUString sName)
 
 LwpFieldMark::LwpFieldMark(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
     : LwpStoryMarker(objHdr,pStrm)
+    , m_nExtra(0)
+    , m_nFlag(0)
+    , m_nFieldType(0)
     , m_bHasStyle(sal_False)
     , m_bHasStart(sal_False)
     , m_pFrib(NULL)

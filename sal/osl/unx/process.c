@@ -376,6 +376,16 @@ static oslSocket receiveFdPipe(int PipeFD)
     OSL_TRACE("receiveFdPipe : writing back %i",nRetCode);
     nRead=write(PipeFD,&nRetCode,sizeof(nRetCode));
 
+    if ( nRead < 0 )
+    {
+        OSL_TRACE("write failed (%s)", strerror(errno));
+    }
+    else if ( nRead != sizeof(nRetCode) )
+    {
+        // TODO: Handle this case.
+        OSL_TRACE("partial write: wrote %d out of %d)", nRead, sizeof(nRetCode));
+    }
+
 #if defined(IOCHANNEL_TRANSFER_BSD_RENO)
     free(cmptr);
 #endif
@@ -534,8 +544,9 @@ static void ChildStatusProc(void *pData)
                 if (stdError[1] != -1) close( stdError[1] );
             }
 
-            pid=execv(data.m_pszArgs[0], (sal_Char **)data.m_pszArgs);
-
+            // No need to check the return value of execv. If we return from
+            // it, an error has occurred.
+            execv(data.m_pszArgs[0], (sal_Char **)data.m_pszArgs);
         }
 
         OSL_TRACE("Failed to exec, errno=%d (%s)\n", errno, strerror(errno));

@@ -376,8 +376,8 @@ gb_LinkTarget_CFLAGS += -finline-limit=0 -fno-inline -fno-default-inline
 endif
 
 ifeq ($(gb_SYMBOL),$(true))
-gb_LinkTarget_CXXFLAGS += -ggdb3
-gb_LinkTarget_CFLAGS += -ggdb3
+gb_LinkTarget_CXXFLAGS += -ggdb2
+gb_LinkTarget_CFLAGS += -ggdb2
 endif
 
 gb_LinkTarget_INCLUDE :=\
@@ -400,6 +400,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(gb_MINGWLIBDIR)/crt2.o \
 		$(MINGW_CLIB_DIR)/crtbegin.o \
 		@$${RESPONSEFILE} \
+		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),@$(extraobjectlist)) \
 		--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) --end-group \
 		--start-group $(patsubst %.dll,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_dllname,$(lib)))) --end-group \
 		$(MINGW_CLIB_DIR)/crtend.o \
@@ -423,6 +424,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(gb_MINGWLIBDIR)/dllcrt2.o \
 		$(MINGW_CLIB_DIR)/crtbegin.o \
 		@$${RESPONSEFILE} \
+		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),@$(extraobjectlist)) \
 		--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) --end-group \
 		--start-group $(patsubst %.dll,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_dllname,$(lib)))) --end-group \
 		$(MINGW_CLIB_DIR)/crtend.o \

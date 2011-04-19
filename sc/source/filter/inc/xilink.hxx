@@ -32,6 +32,7 @@
 #include <map>
 #include "xllink.hxx"
 #include "xiroot.hxx"
+#include "scmatrix.hxx"
 
 /* ============================================================================
 Classes for import of different kinds of internal/external references.
@@ -113,6 +114,19 @@ class XclImpSupbook;
     @descr Supported: External defined names, AddIn names, DDE links and OLE objects. */
 class XclImpExtName
 {
+    /**
+     * MOper, multiple operands, stores cached values of external range
+     * specified in the record.
+     */
+    class MOper
+    {
+    public:
+        MOper(XclImpStream& rStrm);
+        const ScMatrix& GetCache() const;
+    private:
+        ScMatrixRef mxCached;
+    };
+
 public:
     /** Reads the external name from the stream. */
     explicit            XclImpExtName( const XclImpSupbook& rSupbook, XclImpStream& rStrm,
@@ -125,6 +139,14 @@ public:
 
     void                CreateExtNameData( ScDocument& rDoc, sal_uInt16 nFileId ) const;
 
+    /**
+     * Create OLE link data.  OLE link data is converted to external
+     * reference, since OLE link doesn't work cross-platform, and is not very
+     * reliable even on Windows.
+     */
+    bool CreateOleData(ScDocument& rDoc, const ::rtl::OUString& rUrl,
+                       sal_uInt16& rFileId, ::rtl::OUString& rTabName, ScRange& rRange) const;
+
     bool                HasFormulaTokens() const;
 
     inline XclImpExtNameType GetType() const { return meType; }
@@ -136,6 +158,7 @@ private:
     typedef ::std::auto_ptr< ScTokenArray >       TokenArrayPtr;
 
     XclImpCachedMatrixPtr mxDdeMatrix;      /// Cached results of the DDE link.
+    MOper*              mpMOper;            /// Cached values for OLE link
     TokenArrayPtr       mxArray;            /// Formula tokens for external name.
     String              maName;             /// The name of the external name.
     sal_uInt32          mnStorageId;        /// Storage ID for OLE object storages.

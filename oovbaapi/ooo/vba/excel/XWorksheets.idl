@@ -44,6 +44,7 @@ interface XWorksheets
         void Delete();
     void PrintOut( [in] any From, [in] any To, [in] any Copies, [in] any Preview, [in] any ActivePrinter, [in] any PrintToFile, [in] any Collate, [in] any PrToFileName );
     void Select( [in] any Replace );
+    void Copy( [in] any Before, [in] any After);
 };
 }; }; };
 

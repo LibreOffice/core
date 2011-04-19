@@ -141,7 +141,7 @@ inline OUString LwpContent::GetClassName()
 
 inline LwpContent* LwpContent::GetNextEnumerated()
 {
-    return static_cast<LwpContent*>(m_NextEnumerated.obj());
+    return dynamic_cast<LwpContent*>(m_NextEnumerated.obj());
 }
 /**
  * @brief

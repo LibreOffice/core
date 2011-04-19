@@ -2628,6 +2628,20 @@ void ScTable::ShowRows(SCROW nRow1, SCROW nRow2, bool bShow)
     DecRecalcLevel();
 }
 
+bool ScTable::IsDataFiltered() const
+{
+    bool bAnyQuery = false;
+    ScDBData* pDBData = pDocument->GetFilterDBAtTable(nTab);
+    if ( pDBData )
+    {
+        ScQueryParam aParam;
+        pDBData->GetQueryParam( aParam );
+        if ( aParam.GetEntry(0).bDoQuery )
+            bAnyQuery = true;
+    }
+    return bAnyQuery;
+}
+
 
 void ScTable::SetColFlags( SCCOL nCol, sal_uInt8 nNewFlags )
 {

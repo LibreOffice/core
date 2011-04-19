@@ -229,45 +229,7 @@ void LwpChangeMgr::ConvertFribContent(XFContentContainer* pCont, LwpFrib* pFrib)
             }
         }
             break;
-/*      case FRIB_TAG_SECTION:
-        {
-            delete pXFPara;
-            LwpFribSection* pSectionFrib = static_cast<LwpFribSection*>(pFrib);
-            pSectionFrib->ParseSection();
-        }
-        break;
-        case FRIB_TAG_PAGEBREAK:
-        {
-            LwpFribPageBreak* pPageBreak = static_cast<LwpFribPageBreak*>(pFrib);
-            LwpPageLayout* pLayout = static_cast<LwpPageLayout*>(pPageBreak->GetLayout()->obj());
-            if(pLayout)
-            {
-                pPageBreak->ParseLayout();
-            }
-            else
-            {
-                if (pPageBreak->IsLastFrib() == sal_True)
-                {
-                    pXFPara->SetStyleName( pPageBreak->GetStyleName() );
-                }
-                else
-                {
-                    //parse pagebreak
-                    XFParagraph *pNewPara = new XFParagraph();
-                    pNewPara->SetStyleName(pFrib->GetStyleName());
-                    pPara->AddXFContent(pNewPara);
-                }
-            }
-        }
-            break;
-        case FRIB_TAG_COLBREAK:
-        {
-            XFParagraph *pNewPara = new XFParagraph();
-            pNewPara->SetStyleName(pFrib->GetStyleName());
-            pPara->AddXFContent(pNewPara);
-        }
-            break;
-*/      case FRIB_TAG_LINEBREAK:
+        case FRIB_TAG_LINEBREAK:
         {
             XFLineBreak *pLineBreak = new XFLineBreak();
             pXFPara->Add(pLineBreak);

@@ -547,7 +547,7 @@ sub clean_jds_temp_dirs
 
 ###########################################################
 # Setting one language in the language independent
-# array of include pathes with $(LANG)
+# array of include paths with $(LANG)
 ###########################################################
 
 sub get_language_specific_include_pathes
@@ -2314,7 +2314,7 @@ sub add_variables_from_inc_to_hashref
 }
 
 ##############################################
-# Collecting all files from include pathes
+# Collecting all files from include paths
 ##############################################
 
 sub collect_all_files_from_includepathes
@@ -2322,7 +2322,7 @@ sub collect_all_files_from_includepathes
     my ($patharrayref) = @_;
 
     installer::logger::globallog("Reading all directories: Start");
-    installer::logger::print_message( "... reading include pathes ...\n" );
+    installer::logger::print_message( "... reading include paths ...\n" );
     # empty the global
 
     @installer::globals::allincludepathes =();

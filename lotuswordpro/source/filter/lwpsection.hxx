@@ -127,7 +127,7 @@ inline sal_uInt16 LwpSection::GetFlags()
  */
 inline LwpPageLayout* LwpSection::GetPageLayout()
 {
-    return static_cast<LwpPageLayout*>(m_PageLayout.obj());
+    return dynamic_cast<LwpPageLayout*>(m_PageLayout.obj());
 }
 
 /**

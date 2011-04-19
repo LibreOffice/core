@@ -36,10 +36,16 @@ DEF1NAME=$(SHL1TARGET)
 
 .INCLUDE :  target.mk
 
-ALLTAR : $(MISC)/lwpfilter.component
+ALLTAR : $(MISC)/lwpfilter.component $(MISC)/qa_lwpfilter.component
 
 $(MISC)/lwpfilter.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
         lwpfilter.component
     $(XSLTPROC) --nonet --stringparam uri \
         '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt lwpfilter.component
+
+$(MISC)/qa_lwpfilter.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        lwpfilter.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_INBUILD_NATIVE)$(SHL1TARGETN:f)' -o $@ \
         $(SOLARENV)/bin/createcomponent.xslt lwpfilter.component

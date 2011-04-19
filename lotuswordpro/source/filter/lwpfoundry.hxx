@@ -221,6 +221,7 @@ public:
     void RegisterAllLayouts();
 private:
     LwpDocument* m_pDoc;
+    bool m_bRegisteredAll;
 private: //file members
     LwpVersionManager m_VerMgr;
     LwpObjectManager m_ObjMgr;

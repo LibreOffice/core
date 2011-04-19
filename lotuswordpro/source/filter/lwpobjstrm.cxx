@@ -100,6 +100,7 @@ void LwpObjectStream::Read2Buffer()
     if( m_bCompressed )
     {
         sal_uInt8* pCompressBuffer = new sal_uInt8[m_nBufSize];
+        memset(pCompressBuffer, 0, m_nBufSize);
         m_pStrm->Read(pCompressBuffer, m_nBufSize);
 
         sal_uInt8 pTempDst[IO_BUFFERSIZE];
@@ -165,6 +166,7 @@ void LwpObjectStream::ReleaseBuffer()
  */
 sal_uInt16 LwpObjectStream::QuickRead(void* buf, sal_uInt16 len)
 {
+    memset(buf, 0, len);
     if( len > m_nBufSize - m_nReadPos )
     {
         assert(false);
@@ -304,6 +306,8 @@ sal_uInt16 LwpObjectStream::DecompressBuffer(sal_uInt8* pDst, sal_uInt8* pSrc, s
                 // where zzzzzz is the count - 1 of compressed 0 bytes
 
                 Cnt = (*pSrc++ & 0x3F) + 1;
+                if (DstSize+Cnt >= IO_BUFFERSIZE)
+                    throw BadDecompress();
                 memset(pDst, 0, Cnt);
                 pDst += Cnt;
                 DstSize += Cnt;
@@ -317,15 +321,21 @@ sal_uInt16 LwpObjectStream::DecompressBuffer(sal_uInt8* pDst, sal_uInt8* pSrc, s
                 // and nnn is the count - 1 of following non-zero bytes
 
                 Cnt = ((*pSrc & 0x38) >> 3) + 1;
+                if (DstSize+Cnt >= IO_BUFFERSIZE)
+                    throw BadDecompress();
                 memset(pDst, 0, Cnt);
                 pDst += Cnt;
                 DstSize += Cnt;
                 Cnt = (*pSrc++ & 0x07) + 1;
+                if (Size < Cnt + 1)
+                    throw BadDecompress();
+                Size -= Cnt + 1;
+                if (DstSize+Cnt >= IO_BUFFERSIZE)
+                    throw BadDecompress();
                 memcpy(pDst, pSrc, Cnt);
                 pDst += Cnt;
                 DstSize += Cnt;
                 pSrc += Cnt;
-                Size -= Cnt + 1;
                 break;
 
             case 0x80:
@@ -344,14 +354,21 @@ sal_uInt16 LwpObjectStream::DecompressBuffer(sal_uInt8* pDst, sal_uInt8* pSrc, s
                 // nnnnnn is the count less 1 of following non-zero bytes
 
                 Cnt = (*pSrc++ & 0x3F) + 1;
+                if (Size < Cnt + 1)
+                    throw BadDecompress();
+                Size -= Cnt + 1;
+                if (DstSize+Cnt >= IO_BUFFERSIZE)
+                    throw BadDecompress();
                 memcpy(pDst, pSrc, Cnt);
                 pDst += Cnt;
                 DstSize += Cnt;
                 pSrc += Cnt;
-                Size -= Cnt + 1;
                 break;
         }
         assert(DstSize < IO_BUFFERSIZE);
+        if (DstSize >= IO_BUFFERSIZE)
+            throw BadDecompress();
+
     }
     return(static_cast<sal_uInt16>(DstSize));
 }

@@ -36,7 +36,7 @@ export DBGSV_ERROR_OUT
 #  gb_CppunitTest_TARGETTYPE
 #  gb_CppunitTest_get_filename
 gb_CppunitTest_CPPTESTTARGET := $(call gb_Executable_get_target,cppunit/cppunittester)
-gb_CppunitTest_CPPTESTCOMMAND := $(gb_CppunitTest_CPPTESTPRECOMMAND) $(gb_CppunitTest_CPPTESTTARGET)
+gb_CppunitTest_CPPTESTCOMMAND := $(gb_CppunitTest_CPPTESTPRECOMMAND) $(gb_CppunitTest_GDBTRACE) STAR_RESOURCEPATH=$(dir $(call gb_ResTarget_get_outdir_target,example)) $(gb_CppunitTest_CPPTESTTARGET)
 gb_CppunitTest__get_linktargetname = CppunitTest/$(call gb_CppunitTest_get_filename,$(1))
 
 .PHONY : $(call gb_CppunitTest_get_clean_target,%)
@@ -49,7 +49,7 @@ $(call gb_CppunitTest_get_target,%) : $(gb_CppunitTest_CPPTESTTARGET)
 	$(call gb_Output_announce,$*,$(true),CUT,2)
 	$(call gb_Helper_abbreviate_dirs_native,\
 		mkdir -p $(dir $@) && \
-		$(gb_CppunitTest_CPPTESTCOMMAND) $(call gb_LinkTarget_get_target,CppunitTest/$(call gb_CppunitTest_get_libfilename,$*)) > $@.log 2>&1 || (cat $@.log && false))
+		$(gb_CppunitTest_CPPTESTCOMMAND) $(call gb_LinkTarget_get_target,CppunitTest/$(call gb_CppunitTest_get_libfilename,$*)) $(ARGS) > $@.log 2>&1 || (cat $@.log && false))
 
 define gb_CppunitTest_CppunitTest
 $(call gb_CppunitTest__CppunitTest_impl,$(1),$(call gb_CppunitTest__get_linktargetname,$(1)))
@@ -68,7 +68,13 @@ $(call gb_LinkTarget_set_defs,$(2), \
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2))
 $(call gb_CppunitTest_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
 $(call gb_CppunitTest_CppunitTest_platform,$(1),$(2),$(gb_CppunitTest_DLLDIR)/$(call gb_CppunitTest_get_libfilename,$(1)))
+$(call gb_CppunitTest_get_target,$(1)) : ARGS :=
 $$(eval $$(call gb_Module_register_target,$(call gb_CppunitTest_get_target,$(1)),$(call gb_CppunitTest_get_clean_target,$(1))))
+
+endef
+
+define gb_CppunitTest_set_args
+$(call gb_CppunitTest_get_target,$(1)) : ARGS := $(2)
 
 endef
 
@@ -82,22 +88,24 @@ $(eval $(foreach method,\
 	add_cobjects \
 	add_cxxobject \
 	add_cxxobjects \
+	add_exception_objects \
+	add_executable_objects \
+	add_library_objects \
+	add_linked_libs \
+	add_linked_static_libs \
+	add_noexception_objects \
 	add_objcxxobject \
 	add_objcxxobjects \
-	add_exception_objects \
-	add_noexception_objects \
+	add_package_headers \
+	add_precompiled_header \
+	add_sdi_headers \
 	set_cflags \
 	set_cxxflags \
-	set_objcxxflags \
 	set_defs \
 	set_include \
 	set_ldflags \
 	set_library_path_flags \
-	add_linked_libs \
-	add_linked_static_libs \
-	add_package_headers \
-	add_sdi_headers \
-	add_precompiled_header \
+	set_objcxxflags \
 ,\
 	$(call gb_CppunitTest__forward_to_Linktarget,$(method))\
 ))

@@ -245,13 +245,13 @@ LwpPara* LwpSilverBullet::GetBulletPara()
 {
     if (!m_pBulletPara)
     {
-        LwpStory* pStory = static_cast<LwpStory*>(m_aStory.obj(VO_STORY));
+        LwpStory* pStory = dynamic_cast<LwpStory*>(m_aStory.obj(VO_STORY));
         if (!pStory)
         {
             return NULL;
         }
 
-        m_pBulletPara = static_cast<LwpPara*>(pStory->GetFirstPara()->obj(VO_PARA));
+        m_pBulletPara = dynamic_cast<LwpPara*>(pStory->GetFirstPara()->obj(VO_PARA));
     }
 
     return m_pBulletPara;
@@ -333,7 +333,15 @@ rtl::OUString LwpSilverBullet::GetNumCharByStyleID(LwpFribParaNumber* pParaNumbe
  */
 sal_Bool LwpSilverBullet::IsBulletOrdered()
 {
-    return (sal_Bool)(m_pBulletPara->GetFribs()->HasFrib(FRIB_TAG_PARANUMBER) != NULL);
+    if (!m_pBulletPara)
+        return sal_False;
+
+    LwpFribPtr* pFribs = m_pBulletPara->GetFribs();
+
+    if (!pFribs)
+        return sal_False;
+
+    return (sal_Bool)(pFribs->HasFrib(FRIB_TAG_PARANUMBER) != NULL);
 }
 
 /**
@@ -434,7 +442,9 @@ rtl::OUString LwpSilverBullet::GetDivisionName()
         LwpObjectID* pID = pDoc->GetDivInfoID();
         if (!pID->IsNull())
         {
-            aRet = static_cast<LwpDivInfo*>(pID->obj(VO_DIVISIONINFO))->GetDivName();
+            LwpDivInfo *pInfo = dynamic_cast<LwpDivInfo*>(pID->obj(VO_DIVISIONINFO));
+            if (pInfo)
+                aRet = pInfo->GetDivName();
         }
     }
 
@@ -443,7 +453,7 @@ rtl::OUString LwpSilverBullet::GetDivisionName()
 
 rtl::OUString LwpSilverBullet::GetSectionName()
 {
-    LwpStory* pStory = static_cast<LwpStory*>(m_aStory.obj(VO_STORY));
+    LwpStory* pStory = dynamic_cast<LwpStory*>(m_aStory.obj(VO_STORY));
     if (!pStory)
     {
         return rtl::OUString();

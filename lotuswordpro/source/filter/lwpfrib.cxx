@@ -337,26 +337,33 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
 
 void LwpFrib::ReadModifiers(LwpObjectStream* pObjStrm,ModifierInfo* pModInfo)
 {
-    sal_uInt8 Modifier;
-    sal_uInt8 len;
-//  sal_Bool ModifyFlag = sal_False;
-
     for(;;)
     {
+        sal_uInt8 Modifier(0);
+        sal_uInt8 len(0);
+
         // Get the modifier type
-        pObjStrm->QuickRead(&Modifier, sizeof(Modifier));
+        if (pObjStrm->QuickRead(&Modifier, sizeof(Modifier)) != sizeof(Modifier))
+            break;
 
         // Stop when we hit the last modifier
         if (Modifier == FRIB_MTAG_NONE)
             break;
-//        ModifyFlag = sal_True;
+
         // Get the modifier length
-        pObjStrm->QuickRead(&len, sizeof(len));
+        if (pObjStrm->QuickRead(&len, sizeof(len)) != sizeof(len))
+            break;
 
         switch (Modifier)
         {
             case FRIB_MTAG_FONT:
-                pObjStrm->QuickRead(&pModInfo->FontID,len);
+                if (len > sizeof(pModInfo->FontID))
+                {
+                    OSL_FAIL("FRIB_MTAG_FONT entry wrong size\n");
+                    pObjStrm->SeekRel(len);
+                }
+                else
+                    pObjStrm->QuickRead(&pModInfo->FontID,len);
                 break;
             case FRIB_MTAG_CHARSTYLE:
                 pModInfo->HasCharStyle = sal_True;
@@ -367,15 +374,19 @@ void LwpFrib::ReadModifiers(LwpObjectStream* pObjStrm,ModifierInfo* pModInfo)
                 pModInfo->Language.Read(pObjStrm);
                 break;
             case FRIB_MTAG_CODEPAGE:
-                pObjStrm->QuickRead(&pModInfo->CodePage,len);
+                if (len > sizeof(pModInfo->CodePage))
+                {
+                    OSL_FAIL("FRIB_MTAG_CODEPAGE entry wrong size\n");
+                    pObjStrm->SeekRel(len);
+                }
+                else
+                    pObjStrm->QuickRead(&pModInfo->CodePage,len);
                 break;
-            //add by , 02/22/2005
             case FRIB_MTAG_ATTRIBUTE:
                 pModInfo->aTxtAttrOverride.Read(pObjStrm);
                 if (pModInfo->aTxtAttrOverride.IsHighLight())
                     pModInfo->HasHighLight = sal_True;
                 break;
-            //end add
             case FRIB_MTAG_REVISION:
                 pModInfo->RevisionType = pObjStrm->QuickReaduInt8();
                 pModInfo->RevisionFlag = sal_True;
@@ -385,10 +396,7 @@ void LwpFrib::ReadModifiers(LwpObjectStream* pObjStrm,ModifierInfo* pModInfo)
                 break;
         }
         // TODO: read the modifier data
-    //  pObjStrm->SeekRel(len);
-
     }
-
 }
 
 //do nothing

@@ -162,7 +162,7 @@ inline sal_Bool LwpDivInfo::IsGotoable()
 
 inline LwpDocument* LwpDivInfo::GetDivision()
 {
-    return static_cast<LwpDocument*>(m_ParentID.obj());
+    return dynamic_cast<LwpDocument*>(m_ParentID.obj());
 }
 #endif
 

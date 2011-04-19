@@ -210,7 +210,7 @@ const sal_Char sAPI_is_fixed_language[] = "IsFixedLanguage";
 const sal_Char sAPI_is_visible[]        = "IsVisible";
 const sal_Char sAPI_TextRange[]         = "TextRange";
 
-const sal_Char sAPI_true[] = "sal_True";
+const sal_Char sAPI_true[] = "TRUE";
 
 
 TYPEINIT1( XMLTextFieldImportContext, SvXMLImportContext);

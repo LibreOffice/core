@@ -2230,8 +2230,8 @@ void CustomPropertiesWindow::DoScroll( sal_Int32 nNewPos )
         if ( pLine->m_bIsRemoved )
             continue;
 
-        Window* pWindows[] = {  &pLine->m_aNameBox, &pLine->m_aTypeBox, &pLine->m_aValueEdit, &pLine->m_aDurationField,
-                                &pLine->m_aYesNoButton, &pLine->m_aRemoveButton, NULL };
+        Window* pWindows[] = {  &pLine->m_aNameBox, &pLine->m_aTypeBox, &pLine->m_aValueEdit, &pLine->m_aDateField, &pLine->m_aTimeField,
+                                &pLine->m_aDurationField, &pLine->m_aEditButton, &pLine->m_aYesNoButton, &pLine->m_aRemoveButton, NULL };
         Window** pCurrent = pWindows;
         while ( *pCurrent )
         {

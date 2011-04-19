@@ -74,15 +74,16 @@ LwpObjectHeader::LwpObjectHeader()
 /**
  * @descr  read header from stream
   */
-void LwpObjectHeader::Read(LwpSvStream &rStrm)
+bool LwpObjectHeader::Read(LwpSvStream &rStrm)
 {
-
     sal_uInt8 nFlagBits = 0;
     sal_uInt32 nVersionID = 0;
     sal_uInt32 nRefCount = 0;
     sal_uInt32 nNextVersionOffset = 0;
     sal_uInt32 nNextVersionID = 0;
     sal_uInt32 nHeaderSize = 0;
+
+    sal_Int64 nStartPos = rStrm.Tell();
 
     if ( LwpFileHeader::m_nFileRevision < 0x000B)
     {
@@ -196,6 +197,8 @@ void LwpObjectHeader::Read(LwpSvStream &rStrm)
             m_bCompressed = sal_True;
         }
     }
+    sal_Int64 nEndPos = rStrm.Tell();
+    return (nStartPos + nHeaderSize == nEndPos);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

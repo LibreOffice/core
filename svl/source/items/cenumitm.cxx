@@ -287,8 +287,8 @@ UniString CntBoolItem::GetValueTextByVal(sal_Bool bTheValue) const
 {
     return
         bTheValue ?
-            UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("sal_True")) :
-            UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("sal_False"));
+            UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("TRUE")) :
+            UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("FALSE"));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

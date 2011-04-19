@@ -484,13 +484,14 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
         case SID_TOGGLE_REL:
             {
-                sal_Bool bOk = false;
+                bool bOk = false;
                 if (pEngine->GetParagraphCount() == 1)
                 {
                     String aText = pEngine->GetText();
                     ESelection aSel = pEditView->GetSelection();    // aktuelle View
 
-                    ScRefFinder aFinder( aText, pViewData->GetDocument() );
+                    ScDocument* pDoc = pViewData->GetDocument();
+                    ScRefFinder aFinder(aText, pViewData->GetCurPos(), pDoc, pDoc->GetAddressConvention());
                     aFinder.ToggleRel( aSel.nStartPos, aSel.nEndPos );
                     if (aFinder.GetFound())
                     {
@@ -503,7 +504,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                             pTopView->GetEditEngine()->SetText( aNew );
                             pTopView->SetSelection( aNewSel );
                         }
-                        bOk = sal_True;
+                        bOk = true;
 
                         //  Referenz wird selektiert -> beim Tippen nicht ueberschreiben
                         bSetSelIsRef = sal_True;

@@ -65,6 +65,7 @@ gb_JunitTest_get_userdir = $(WORKDIR)/JunitTest/$(1)/user
 gb_LinkTarget_get_external_headers_target = $(WORKDIR)/ExternalHeaders/$(1)
 gb_LinkTarget_get_headers_target = $(WORKDIR)/Headers/$(1)
 gb_LinkTarget_get_target = $(WORKDIR)/LinkTarget/$(1)
+gb_LinkTarget_get_objects_list = $(WORKDIR)/LinkTarget/$(1).objectlist
 gb_Module_get_check_target = $(WORKDIR)/Module/check/$(1)
 gb_Module_get_subsequentcheck_target = $(WORKDIR)/Module/subsequentcheck/$(1)
 gb_Module_get_target = $(WORKDIR)/Module/$(1)
@@ -151,6 +152,9 @@ define gb_StaticLibrary_get_filename
 $(patsubst $(1):%,%,$(filter $(1):%,$(gb_StaticLibrary_FILENAMES)))
 endef
 
+gb_Executable_get_linktargetname = Executable/$(1)$(gb_Executable_EXT)
+gb_Library_get_linktargetname = Library/$(call gb_Library_get_filename,$(1))
+gb_StaticLibrary_get_linktargetname = StaticLibrary/$(call gb_StaticLibrary_get_filename,$(1))
 
 # static members declared here because they are used globally
 

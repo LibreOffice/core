@@ -77,18 +77,22 @@ Lwp9Reader::Lwp9Reader (LwpSvStream* pInputStream, IXFStream* pStream)
 void Lwp9Reader::Read()
 {
     LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance(m_pDocStream);
-    m_pObjMgr = pGlobal->GetLwpObjFactory();
-
-    //Commented out  by , 10/26/2005
-    //Read Ole object in LwpOleObject::XFConverter to support Ole in Linux
-    //ReadOleObjects();
-
-    ReadFileHeader();
-    //Does not support Word Pro 96 and previous versions
-    if(LwpFileHeader::m_nFileRevision>=0x000B)
+    try
     {
-        ReadIndex();
-        ParseDocument();
+        m_pObjMgr = pGlobal->GetLwpObjFactory();
+
+        ReadFileHeader();
+        //Does not support Word Pro 96 and previous versions
+        if(LwpFileHeader::m_nFileRevision>=0x000B)
+        {
+            ReadIndex();
+            ParseDocument();
+        }
+    }
+    catch(...)
+    {
+        LwpGlobalMgr::DeleteInstance();
+        throw;
     }
     LwpGlobalMgr::DeleteInstance();
 }
@@ -181,14 +185,15 @@ void Lwp9Reader::ParseDocument()
     WriteDocHeader();
 
     //Get root document
-    LwpDocument* doc = static_cast<LwpDocument*> ( m_LwpFileHdr.GetDocID()->obj() );
+    LwpDocument* doc = dynamic_cast<LwpDocument*> ( m_LwpFileHdr.GetDocID()->obj() );
+
+    if (!doc)
+        return;
 
     //Parse Doc Data
-    LwpDocData *pDocData = static_cast<LwpDocData*>((doc->GetDocData())->obj());
+    LwpDocData *pDocData = dynamic_cast<LwpDocData*>((doc->GetDocData())->obj());
     if (pDocData!=NULL)
-    {
         pDocData->Parse(m_pStream);
-    }
 
     //Register Styles
     RegisteArrowStyles();

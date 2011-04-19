@@ -42,14 +42,13 @@ private:
     String      aFormula;
     formula::FormulaGrammar::AddressConvention eConv;
     ScDocument* pDoc;
+    ScAddress   maPos;
     xub_StrLen  nFound;
     xub_StrLen  nSelStart;
     xub_StrLen  nSelEnd;
 
 public:
-    static const sal_Unicode pDelimiters[];
-
-    ScRefFinder( const String& rFormula,
+    ScRefFinder( const String& rFormula, const ScAddress& rPos,
              ScDocument* pDocument = NULL,
              formula::FormulaGrammar::AddressConvention eConvP = formula::FormulaGrammar::CONV_OOO );
     ~ScRefFinder();

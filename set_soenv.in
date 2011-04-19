@@ -78,7 +78,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
      $SOLARSRC, $DEVROOT, $SOLARVER, $SOLARVERSION, $WORKDIR, $OUTDIR, $SOLARENV, $SOLARDEFIMG,
      $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI,
      $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH,
-     $MSPDB_PATH, $MIDL_PATH, $CSC_PATH,
+     $MSPDB_PATH, $MIDL_PATH, $CSC_PATH, $SHOWINCLUDES_PREFIX,
      $PATH, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARLIB, $JAVALIB,
      $SOLARINC, $LOCALINI, $FRAMEWORKSHOME, $COMEX, $PERL,
      $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $DIRECTXSDK_LIB, $USE_NEW_SDK, $FRAME_HOME,
@@ -125,12 +125,8 @@ $JDK 		= '@JDK@';
 $JAVAFLAGS 		= '@JAVAFLAGS@';
 $MINGW          = '@WITH_MINGW@';    # use MinGW for Windows build
 $USE_MINGW      = '@USE_MINGW@';     # use MinGW in cygwin or pure-mingw
-if ( $MINGW eq "yes" )
-{ $CC             = '@CC@';           # C compiler
-  $CXX            = '@CXX@'; }        # C++ compiler
-else
-{ $CC             = PathFormat('@CC@');           # C compiler
-  $CXX            = PathFormat('@CXX@'); }        # C++ compiler
+$CC             = '@CC@';            # C compiler
+$CXX            = '@CXX@';           # C++ compiler
 $MOZILLA_VERSION	= '@MOZILLA_VERSION@'; # mozilla version to use to build mozilla
 $MOZILLA_TOOLKIT	= '@MOZILLA_TOOLKIT@'; # GUI toolkit to use to build mozilla
 $FLIPCMD        = "";               # Flip '/' to '\' wrapper (only for winnt)
@@ -659,6 +655,7 @@ elsif ( $platform =~ m/cygwin/ )
       $MSPDB_PATH     = PathFormat('@MSPDB_PATH@');
       $MIDL_PATH      = PathFormat('@MIDL_PATH@');
       $CSC_PATH       = PathFormat('@CSC_PATH@');
+      $SHOWINCLUDES_PREFIX = '@SHOWINCLUDES_PREFIX@';
       $PSDK_HOME      = PathFormat('@PSDK_HOME@');
       $DIRECTXSDK_LIB = PathFormat('@DIRECTXSDK_LIB@');
       $USE_DIRECTX5   = "";
@@ -2341,7 +2338,7 @@ sub PathFormat
        # Replace absolute paths or DOS paths with ...
        if ( ( $variable =~ m/^\// ) or ( $variable =~ m/:/ ) ) {
            # mixed mode paths
-           chomp( $variable = qx{realpath "$variable"} );
+           chomp( $variable = qx{realpath "$variable"} ) unless ($variable =~ m/:/);
            chomp( $variable = qx{cygpath -m "$variable"} );
        }
    }

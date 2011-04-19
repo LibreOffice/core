@@ -58,7 +58,7 @@ $(call gb_Deliver_add_deliverable,$(call gb_Executable_get_target,$(1)),$(call g
 endef
 
 define gb_Executable_forward_to_Linktarget
-gb_Executable_$(1) = $$(call gb_LinkTarget_$(1),Executable/$$(1)$$(gb_Executable_EXT),$$(2),$$(3))
+gb_Executable_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_Executable_get_linktargetname,$$(1)),$$(2),$$(3))
 
 endef
 

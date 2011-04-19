@@ -1321,8 +1321,8 @@ void XclImpXF::ApplyPatternToAttrList(
         pPat = static_cast<const ScPatternAttr*>(&aCache.ApplyTo(*pPat, true));
     }
 
-
-    if (pPat)
+    // Make sure we skip unnamed styles.
+    if (pPat && pPat->GetStyleName())
     {
         // Check for a gap between the last entry and this one.
         bool bHasGap = false;

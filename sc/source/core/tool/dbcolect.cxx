@@ -222,6 +222,11 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
     return *this;
 }
 
+SCTAB ScDBData::GetTable() const
+{
+    return nTable;
+}
+
 bool ScDBData::operator== (const ScDBData& rData) const
 {
     //  Daten, die nicht in den Params sind
@@ -818,6 +823,27 @@ ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCO
         return const_cast<ScDBData*>(pData);
 
     return NULL;
+}
+
+ScDBData* ScDBCollection::GetFilterDBAtTable(SCTAB nTab) const
+{
+    ScDBData* pDataEmpty = NULL;
+    if (pItems)
+    {
+        for (sal_uInt16 i = 0; i < nCount; i++)
+        {
+            ScDBData* pDBTemp = (ScDBData*)pItems[i];
+            if ( pDBTemp->GetTable() == nTab )
+            {
+                sal_Bool bFilter = pDBTemp->HasAutoFilter() || pDBTemp->HasQueryParam();
+
+                if ( bFilter )
+                    return pDBTemp;
+            }
+        }
+    }
+
+    return pDataEmpty;
 }
 
 sal_Bool ScDBCollection::SearchName( const String& rName, sal_uInt16& rIndex ) const

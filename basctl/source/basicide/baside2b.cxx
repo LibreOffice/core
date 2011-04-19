@@ -1497,7 +1497,6 @@ void WatchWindow::UpdateWatches( bool bBasicStopped )
 StackWindow::StackWindow( Window* pParent ) :
     BasicDockingWindow( pParent ),
     aTreeListBox( this, WB_BORDER | WB_3DLOOK | WB_HSCROLL | WB_TABSTOP ),
-    aGotoCallButton( this, IDEResId( RID_IMGBTN_GOTOCALL ) ),
     aStackStr( IDEResId( RID_STR_STACK ) )
 {
        aTreeListBox.SetHelpId(HID_BASICIDE_STACKWINDOW_LIST);
@@ -1511,14 +1510,6 @@ StackWindow::StackWindow( Window* pParent ) :
     SetText( String( IDEResId( RID_STR_STACKNAME ) ) );
 
     SetHelpId( HID_BASICIDE_STACKWINDOW );
-
-    aGotoCallButton.SetClickHdl( LINK( this, StackWindow, ButtonHdl ) );
-    aGotoCallButton.SetPosPixel( Point( DWBORDER, 2 ) );
-    Size aSz( aGotoCallButton.GetModeImage().GetSizePixel() );
-    aSz.Width() += 6;
-    aSz.Height() += 6;
-    aGotoCallButton.SetSizePixel( aSz );
-    aGotoCallButton.Hide();
 
     // make stack window keyboard accessible
     GetSystemWindow()->GetTaskPaneList()->AddWindow( this );
@@ -1560,16 +1551,6 @@ void StackWindow::Resize()
 
 IMPL_LINK_INLINE_START( StackWindow, ButtonHdl, ImageButton *, pButton )
 {
-    if ( pButton == &aGotoCallButton )
-    {
-        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
-        SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-        SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
-        if( pDispatcher )
-        {
-            pDispatcher->Execute( SID_BASICIDE_GOTOCALL );
-        }
-    }
     return 0;
 }
 IMPL_LINK_INLINE_END( StackWindow, ButtonHdl, ImageButton *, pButton )

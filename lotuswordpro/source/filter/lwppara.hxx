@@ -386,7 +386,7 @@ inline LwpObjectID* LwpPara::GetStoryID()
 inline LwpStory* LwpPara::GetStory()
 {
     if (m_Story.obj())
-        return static_cast<LwpStory*>(m_Story.obj());
+        return dynamic_cast<LwpStory*>(m_Story.obj());
     return NULL;
 }
 

@@ -269,7 +269,9 @@ void LwpPageLayout::ParseFootNoteSeparator(XFPageMaster * pm1)
     LwpDocument* pDocument = m_pFoundry->GetDocument();
     if(pDocument)
     {
-        LwpFootnoteOptions* pFootnoteOpts = static_cast<LwpFootnoteOptions*>(pDocument->GetValidFootnoteOpts()->obj());
+        LwpObjectID* pFontnodeId = pDocument->GetValidFootnoteOpts();
+
+        LwpFootnoteOptions* pFootnoteOpts = pFontnodeId ? dynamic_cast<LwpFootnoteOptions*>(pFontnodeId->obj()) : NULL;
         if(pFootnoteOpts)
         {
             LwpFootnoteSeparatorOptions* pFootnoteSep = pFootnoteOpts->GetFootnoteSeparator();
@@ -476,8 +478,8 @@ void LwpPageLayout::ConvertFillerPageText(XFContentContainer* pCont)
     {
         //get filerpage story from division info
         LwpDocument* pDoc = m_pFoundry->GetDocument();
-        LwpDivInfo* pDivInfo = static_cast<LwpDivInfo*>(pDoc->GetDivInfoID()->obj());
-        LwpStory* pStory = static_cast<LwpStory*>(pDivInfo->GetFillerPageTextID()->obj());
+        LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*>(pDoc->GetDivInfoID()->obj());
+        LwpStory* pStory = dynamic_cast<LwpStory*>(pDivInfo->GetFillerPageTextID()->obj());
 
         //parse fillerpage story
         if(pStory)
@@ -500,24 +502,24 @@ void LwpPageLayout::ResetXFColumns()
 
 LwpHeaderLayout* LwpPageLayout::GetHeaderLayout()
 {
-    LwpVirtualLayout* pLay = static_cast<LwpVirtualLayout*>(GetChildHead()->obj());
+    LwpVirtualLayout* pLay = dynamic_cast<LwpVirtualLayout*>(GetChildHead()->obj());
     while(pLay)
     {
         if( pLay->GetLayoutType() == LWP_HEADER_LAYOUT )
             return ( static_cast<LwpHeaderLayout*> (pLay) );
-        pLay = static_cast<LwpVirtualLayout*> (pLay->GetNext()->obj());
+        pLay = dynamic_cast<LwpVirtualLayout*> (pLay->GetNext()->obj());
     }
     return NULL;
 }
 
 LwpFooterLayout* LwpPageLayout::GetFooterLayout()
 {
-    LwpVirtualLayout* pLay = static_cast<LwpVirtualLayout*>(GetChildHead()->obj());
+    LwpVirtualLayout* pLay = dynamic_cast<LwpVirtualLayout*>(GetChildHead()->obj());
     while(pLay)
     {
         if( pLay->GetLayoutType() == LWP_FOOTER_LAYOUT )
             return ( static_cast<LwpFooterLayout*> (pLay) );
-        pLay = static_cast<LwpVirtualLayout*> (pLay->GetNext()->obj());
+        pLay = dynamic_cast<LwpVirtualLayout*> (pLay->GetNext()->obj());
     }
     return NULL;
 }
@@ -530,7 +532,7 @@ LwpPageLayout* LwpPageLayout::GetOddChildLayout()
 {
     if(IsComplex())
     {
-        LwpVirtualLayout* pLay = static_cast<LwpVirtualLayout*>(GetChildHead()->obj());
+        LwpVirtualLayout* pLay = dynamic_cast<LwpVirtualLayout*>(GetChildHead()->obj());
         while(pLay)
         {
             if( pLay->GetLayoutType() == LWP_PAGE_LAYOUT )
@@ -542,7 +544,7 @@ LwpPageLayout* LwpPageLayout::GetOddChildLayout()
                     return pPageLayout;
                 }
             }
-            pLay = static_cast<LwpVirtualLayout*> (pLay->GetNext()->obj());
+            pLay = dynamic_cast<LwpVirtualLayout*> (pLay->GetNext()->obj());
         }
     }
     return NULL;
@@ -574,11 +576,11 @@ sal_Int32 LwpPageLayout::GetPageNumber(sal_uInt16 nLayoutNumber)
     sal_Int16 nPageNumber = -1;
     LwpFoundry* pFoundry = this->GetFoundry();
     LwpDocument* pDoc = pFoundry->GetDocument();
-    LwpDLVListHeadTailHolder* pHeadTail = static_cast<LwpDLVListHeadTailHolder*>(pDoc->GetPageHintsID()->obj());
+    LwpDLVListHeadTailHolder* pHeadTail = dynamic_cast<LwpDLVListHeadTailHolder*>(pDoc->GetPageHintsID()->obj());
     if(!pHeadTail) return nPageNumber;
 
     //get first pagehint
-    LwpPageHint* pPageHint =static_cast<LwpPageHint*>(pHeadTail->GetHead()->obj());
+    LwpPageHint* pPageHint = dynamic_cast<LwpPageHint*>(pHeadTail->GetHead()->obj());
     while(pPageHint)
     {
         if(*(this->GetObjectID()) == *(pPageHint->GetPageLayoutID()))
@@ -608,7 +610,7 @@ sal_Int32 LwpPageLayout::GetPageNumber(sal_uInt16 nLayoutNumber)
             }
 
         }
-        pPageHint = static_cast<LwpPageHint*>(pPageHint->GetNext()->obj());
+        pPageHint = dynamic_cast<LwpPageHint*>(pPageHint->GetNext()->obj());
     }
     if(nPageNumber>=0)
     {
@@ -709,7 +711,7 @@ sal_Bool LwpPageLayout::operator<(LwpPageLayout& Other)
 */
 LwpPara* LwpPageLayout::GetPagePosition()
 {
-    LwpPara* pPara = static_cast<LwpPara*>(GetPosition()->obj());
+    LwpPara* pPara = dynamic_cast<LwpPara*>(GetPosition()->obj());
     if(pPara)
         return pPara;
     //Get the position from its related section
@@ -720,7 +722,7 @@ LwpPara* LwpPageLayout::GetPagePosition()
         while( (pSection = pFoundry->EnumSections(pSection)) )
         {
             if(pSection->GetPageLayout() == this)
-                return static_cast<LwpPara*>(pSection->GetPosition()->obj());
+                return dynamic_cast<LwpPara*>(pSection->GetPosition()->obj());
         }
     }
 
@@ -784,15 +786,15 @@ void LwpHeaderLayout::ParseMargins(XFHeaderStyle* ph1)
     }
 
     //Set left,right,bottom margins
-    LwpMiddleLayout* parent = static_cast<LwpMiddleLayout*> (GetParent()->obj());
+    LwpMiddleLayout* parent = dynamic_cast<LwpMiddleLayout*> (GetParent()->obj());
     //left margin in SODC: the space from the left edge of body to the left edge of header
-    double left = GetMarginsValue(MARGIN_LEFT) - parent->GetMarginsValue(MARGIN_LEFT);
+    double left = GetMarginsValue(MARGIN_LEFT) - (parent ? parent->GetMarginsValue(MARGIN_LEFT) : 0);
     if(left<=0) //The left margin in SODC can not be minus value
     {
         left = -1;
     }
     //left margin in SODC: the space from the right edge of header to the right edge of body
-    double right = GetMarginsValue(MARGIN_RIGHT) - parent->GetMarginsValue(MARGIN_RIGHT);
+    double right = GetMarginsValue(MARGIN_RIGHT) - (parent ? parent->GetMarginsValue(MARGIN_RIGHT) : 0);
     if(right<=0)//The right margin in SODC can not be minus value
     {
         right = -1;
@@ -952,13 +954,13 @@ void LwpFooterLayout::ParseMargins(XFFooterStyle* pFooterStyle)
     }
 
     //Set left,right,top margins
-    LwpMiddleLayout* parent = static_cast<LwpMiddleLayout*> (GetParent()->obj());
-    double left = GetMarginsValue(MARGIN_LEFT) - parent->GetMarginsValue(MARGIN_LEFT);
+    LwpMiddleLayout* parent = dynamic_cast<LwpMiddleLayout*> (GetParent()->obj());
+    double left = GetMarginsValue(MARGIN_LEFT) - (parent ? parent->GetMarginsValue(MARGIN_LEFT) : 0);
     if(left<=0) //The left margin in SODC can not be minus value
     {
         left = -1;
     }
-    double right = GetMarginsValue(MARGIN_RIGHT) - parent->GetMarginsValue(MARGIN_RIGHT);
+    double right = GetMarginsValue(MARGIN_RIGHT) - (parent ? parent->GetMarginsValue(MARGIN_RIGHT) : 0);
     if(right<=0)//The left margin in SODC can not be minus value
     {
         right = -1;

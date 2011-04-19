@@ -69,6 +69,7 @@
 **********************************************************************************************************************/
 
 #include "lwpidxmgr.hxx"
+#include "lwptools.hxx"
 
 const sal_uInt8 LwpIndexManager::MAXOBJECTIDS = 255;
 
@@ -122,8 +123,11 @@ void LwpIndexManager::Read(LwpSvStream* pStrm)
         for (sal_uInt16 k = 0; k < m_nLeafCount; k++)
         {
             //Read leaf
-            pStrm->Seek(m_ChildIndex[k]+LwpSvStream::LWP_STREAM_BASE);
+            sal_Int64 nPos = m_ChildIndex[k]+LwpSvStream::LWP_STREAM_BASE;
+            sal_Int64 nActualPos = pStrm->Seek(nPos);
 
+            if (nPos != nActualPos)
+                throw BadSeek();
 
             //Old Code
             //ReadLeafIndex(pStrm);
@@ -150,7 +154,7 @@ void LwpIndexManager::ReadRootData(LwpObjectStream* pObjStrm)
 
     sal_uInt16 KeyCount = 0;
     pObjStrm->QuickRead(&KeyCount, sizeof(KeyCount));
-    m_nLeafCount = KeyCount + 1;
+    m_nLeafCount = KeyCount ? KeyCount + 1 : 0;
 
     if(KeyCount)
     {
@@ -160,7 +164,6 @@ void LwpIndexManager::ReadRootData(LwpObjectStream* pObjStrm)
         m_RootObjs.push_back(akey);
 
 
-        //sal_uInt8 k = 0;
         sal_uInt16 k = 0;
 
         for (k = 1; k < KeyCount; k++)
@@ -216,7 +219,9 @@ void LwpIndexManager::ReadObjIndexData(LwpObjectStream* pObjStrm)
         }
 
         for (k = 0; k < KeyCount; k++)
+        {
             pObjStrm->QuickRead(&(vObjIndexs[k]->offset), sizeof(sal_uInt32));
+        }
 
         for (k = 0; k < LeafCount; k++)
             pObjStrm->QuickRead(&(m_TempVec[k]), sizeof(sal_uInt32));
@@ -224,7 +229,13 @@ void LwpIndexManager::ReadObjIndexData(LwpObjectStream* pObjStrm)
 
     for( sal_uInt16 j=0; j<LeafCount; j++ )
     {
-        pObjStrm->GetStream()->Seek( m_TempVec[j]+LwpSvStream::LWP_STREAM_BASE);
+        sal_Int64 nPos = m_TempVec[j]+LwpSvStream::LWP_STREAM_BASE;
+        sal_Int64 nActualPos = pObjStrm->GetStream()->Seek(nPos);
+
+        if (nPos != nActualPos)
+            throw BadSeek();
+
+
         ReadLeafIndex(pObjStrm->GetStream());
 
         if(j!=LeafCount-1)
@@ -283,7 +294,7 @@ void LwpIndexManager::ReadLeafIndex( LwpSvStream *pStrm )
  */
 void LwpIndexManager::ReadLeafData( LwpObjectStream *pObjStrm )
 {
-    sal_uInt16 KeyCount;
+    sal_uInt16 KeyCount=0;
     pObjStrm->QuickRead(&KeyCount, sizeof(KeyCount));
 
     if(KeyCount)
@@ -296,13 +307,13 @@ void LwpIndexManager::ReadLeafData( LwpObjectStream *pObjStrm )
         for (sal_uInt8 k = 1; k < KeyCount; k++)
         {
             akey = new LwpKey();
-            akey->id.ReadCompressed(pObjStrm, m_ObjectKeys[m_nKeyCount+k-1]->id);
+            akey->id.ReadCompressed(pObjStrm, m_ObjectKeys.at(m_nKeyCount+k-1)->id);
             m_ObjectKeys.push_back(akey);
         }
 
         for (sal_uInt8 j = 0; j < KeyCount; j++)
         {
-            pObjStrm->QuickRead(&(m_ObjectKeys[m_nKeyCount+j]->offset), sizeof(sal_uInt32));
+            pObjStrm->QuickRead(&(m_ObjectKeys.at(m_nKeyCount+j)->offset), sizeof(sal_uInt32));
         }
     }
     m_nKeyCount += KeyCount;

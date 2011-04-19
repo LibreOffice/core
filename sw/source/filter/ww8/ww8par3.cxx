@@ -2158,7 +2158,7 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
         nType=1;
     }
     fUnknown = nHeaderByte & 0x3;
-    fDropdownIndex = (nHeaderByte & 0xFC) >> 2;
+    fDropdownIndex = (nHeaderByte & 0x7C) >> 2;
     *pDataStream >> nField;
     fToolTip = nField & 0x01;
     fNoMark = (nField & 0x02)>>1;

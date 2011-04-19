@@ -68,13 +68,8 @@ FindNamedObject(pCUtList pList, const char * sName,
         pCBenNamedObjectListElmt pCurrNamedObjectListElmt =
           (pCBenNamedObjectListElmt) pCurr;
 
-
-        //Old code
-//      int Comp = strcmp(sName, pCurrNamedObjectListElmt->GetNamedObject()->
-//        GetName());
         int Comp = strcmp(sName, pCurrNamedObjectListElmt->GetNamedObject()->
           GetNameCStr());
-
 
         if (Comp == 0)
             return pCurrNamedObjectListElmt->GetNamedObject();

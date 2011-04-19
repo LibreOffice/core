@@ -94,6 +94,8 @@ LwpGraphicObject::LwpGraphicObject(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     , m_bIsLinked(0)
     , m_bCompressed(0)
 {
+    memset(m_sDataFormat, 0, sizeof(m_sDataFormat));
+    memset(m_sServerContextFormat, 0, sizeof(m_sServerContextFormat));
 }
 LwpGraphicObject::~LwpGraphicObject()
 {
@@ -207,21 +209,6 @@ void LwpGraphicObject::XFConvert (XFContentContainer* pCont)
 {
     if ((m_sServerContextFormat[1]=='s'&&m_sServerContextFormat[2]=='d'&&m_sServerContextFormat[3]=='w'))
     {
-/*      LwpSvStream* pStream = m_pStrm;
-        //test code
-        OpenStormBento::LtcBenContainer* pBentoContainer;
-        ULONG ulRet = OpenStormBento::BenOpenContainer(pStream, &pBentoContainer);
-        std::vector<SvStream*> vStream;
-        std::vector<SvStream*>::iterator iter;
-        pBentoContainer->CreateGraphicStreams(&vStream);
-        for (iter=vStream.begin();iter!=vStream.end();iter++)
-        {
-            LwpSdwFileLoader fileLoader(*iter,pOutputStream);
-            fileLoader.LoadObjectList();
-            delete *iter;
-        }
-        vStream.clear();*/
-
         //XFParagraph* pPara = new XFParagraph();
         std::vector <XFFrame*>::iterator iter;
         for (iter = m_vXFDrawObjects.begin(); iter != m_vXFDrawObjects.end(); ++iter)
@@ -375,24 +362,7 @@ void LwpGraphicObject::RegisterStyle()
     {
         this->CreateGrafObject();
     }
-/*  if (m_sServerContextFormat[1]=='s'&&m_sServerContextFormat[2]=='d'&&m_sServerContextFormat[3]=='w')
-    {
-        LwpSvStream* pStream = m_pStrm;
-        //test code
-        OpenStormBento::LtcBenContainer* pBentoContainer;
-        ULONG ulRet = OpenStormBento::BenOpenContainer(pStream, &pBentoContainer);
-        std::vector<SvStream*> vStream;
-        std::vector<SvStream*>::iterator iter;
-        pBentoContainer->CreateGraphicStreams(&vStream);
-        for (iter=vStream.begin();iter!=vStream.end();iter++)
-        {
-            LwpSdwFileLoader fileLoader(*iter);
-            fileLoader.RegisterStyle();
-            delete *iter;
-        }
-        vStream.clear();
 
-    }*/
     if (m_sServerContextFormat[1]=='l'&&m_sServerContextFormat[2]=='c'&&m_sServerContextFormat[3]=='h')
     {
         LwpVirtualLayout* pMyLayout = GetLayout(NULL);
@@ -418,7 +388,10 @@ void LwpGraphicObject::CreateDrawObjects()
     LwpSvStream* pStream = m_pStrm->GetCompressedStream() ?  m_pStrm->GetCompressedStream(): m_pStrm;
 
     OpenStormBento::LtcBenContainer* pBentoContainer;
-    /*ULONG ulRet =*/ OpenStormBento::BenOpenContainer(pStream, &pBentoContainer);
+    sal_uLong ulRet = OpenStormBento::BenOpenContainer(pStream, &pBentoContainer);
+    if (ulRet != OpenStormBento::BenErr_OK)
+        return;
+
     SvStream* pDrawObjStream = NULL;
 
     // get graphic object's bento objet name
@@ -463,7 +436,10 @@ sal_uInt32 LwpGraphicObject::GetRawGrafData(sal_uInt8*& pGrafData)
     LwpSvStream* pStream = m_pStrm->GetCompressedStream() ?  m_pStrm->GetCompressedStream(): m_pStrm;
 
     OpenStormBento::LtcBenContainer* pBentoContainer;
-    /*ULONG ulRet =*/ OpenStormBento::BenOpenContainer(pStream, &pBentoContainer);
+    sal_uLong ulRet = OpenStormBento::BenOpenContainer(pStream, &pBentoContainer);
+    if (ulRet != OpenStormBento::BenErr_OK)
+        return 0;
+
     SvStream* pGrafStream = NULL;
 
     // get graphic object's bento objet name
@@ -503,7 +479,9 @@ sal_uInt32 LwpGraphicObject::GetGrafData(sal_uInt8*& pGrafData)
     LwpSvStream* pStream = m_pStrm->GetCompressedStream() ?  m_pStrm->GetCompressedStream(): m_pStrm;
 
     OpenStormBento::LtcBenContainer* pBentoContainer;
-    /*ULONG ulRet =*/ OpenStormBento::BenOpenContainer(pStream, &pBentoContainer);
+    sal_uLong ulRet = OpenStormBento::BenOpenContainer(pStream, &pBentoContainer);
+    if (ulRet != OpenStormBento::BenErr_OK)
+        return 0;
 
     SvStream* pGrafStream = NULL;
 

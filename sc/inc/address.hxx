@@ -487,7 +487,7 @@ public:
                   const ::com::sun::star::uno::Sequence<
                     const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks = NULL );
 
-    sal_uInt16 ParseAny( const String&, ScDocument* = NULL,
+    SC_DLLPUBLIC sal_uInt16 ParseAny( const String&, ScDocument* = NULL,
                      const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
     SC_DLLPUBLIC sal_uInt16 ParseCols( const String&, ScDocument* = NULL,
                      const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );

@@ -40,15 +40,12 @@ namespace accessibility
 {
     namespace
     {
-        void checkIndex_Impl( sal_Int32 _nIndex, const ::rtl::OUString& _sText ) throw (::com::sun::star::lang::IndexOutOfBoundsException)
+        // FIXME this is a copy'n'paste from
+        // source/extended/AccessibleBrowseBoxTableCell.cxx, get rid of that...
+        static void checkIndex_Impl( sal_Int32 _nIndex, const ::rtl::OUString& _sText ) throw (::com::sun::star::lang::IndexOutOfBoundsException)
         {
             if ( _nIndex >= _sText.getLength() )
                 throw ::com::sun::star::lang::IndexOutOfBoundsException();
-        }
-
-        sal_Int32 getIndex_Impl( sal_Int32 _nRow, sal_uInt16 _nColumn, sal_uInt16 _nColumnCount )
-        {
-            return _nRow * _nColumnCount + _nColumn;
         }
     }
     using namespace ::com::sun::star::lang;

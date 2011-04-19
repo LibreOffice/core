@@ -60,7 +60,7 @@
 #include    "xfimage.hxx"
 #include    "xfbase64.hxx"
 
-XFImage::XFImage()
+XFImage::XFImage() : m_bUseLink(sal_False)
 {
     m_eType = enumXFFrameImage;
     m_strName = XFGlobal::GenImageName();

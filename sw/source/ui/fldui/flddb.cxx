@@ -385,7 +385,7 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
             aValueED.SetText(aEmptyStr);
             if (bCond)
                 aConditionED.SetText( String::CreateFromAscii(
-                        RTL_CONSTASCII_STRINGPARAM( "sal_True" )));
+                        RTL_CONSTASCII_STRINGPARAM( "TRUE" )));
             else
                 aConditionED.SetText(aEmptyStr);
         }

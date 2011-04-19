@@ -97,7 +97,7 @@ if (defined $ENV{NOCONFIGURE}) {
     print "Skipping configure process.";
 } else {
     if ($#cmdline_args > 0) {
-    print "writing args to autogen.lastrun\n";
+#   print "writing args to autogen.lastrun\n";
     my $fh;
     open ($fh, ">autogen.lastrun") || die "can't open autogen.lastrun: $!";
     for my $arg (@cmdline_args) {

@@ -71,6 +71,7 @@
 #include "xfilter/xfdatestyle.hxx"
 #include "xfilter/xftimestyle.hxx"
 #include <rtl/textenc.h>
+#include <stdexcept>
 
 // 01/19/2005
 const sal_uInt32 UNITS_PER_INCH = 65536L * 72L;
@@ -140,6 +141,18 @@ inline sal_Bool LwpTools::IsEvenNumber(sal_uInt16& nNumber)
 {
     return nNumber%2? sal_False : sal_True;
 }
+
+class BadSeek : public std::runtime_error
+{
+public:
+    BadSeek() : std::runtime_error("Lotus Word Pro Bad Seek") { }
+};
+
+class BadDecompress : public std::runtime_error
+{
+public:
+    BadDecompress() : std::runtime_error("Lotus Word Pro Bad Decompress") { }
+};
 
 #endif
 

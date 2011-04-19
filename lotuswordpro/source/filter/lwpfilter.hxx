@@ -174,9 +174,8 @@ public:
     uno::Reference< XImporter > rImporter;
 };
 
-int     ReadWordproFile(String& strName,uno::Reference<XDocumentHandler>& XDoc);
 //test code
-int     ReadWordproFile(SvStream* pStream, uno::Reference<XDocumentHandler>& XDoc);
+int ReadWordproFile(SvStream &rStream, uno::Reference<XDocumentHandler>& XDoc);
 
 #endif
 
