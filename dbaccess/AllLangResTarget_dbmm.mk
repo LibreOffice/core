@@ -25,22 +25,22 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_AllLangResTarget_AllLangResTarget,dbamm))
+$(eval $(call gb_AllLangResTarget_AllLangResTarget,dbmm))
 
-$(eval $(call gb_AllLangResTarget_set_reslocation,dbamm,dbaccess))
+$(eval $(call gb_AllLangResTarget_set_reslocation,dbmm,dbaccess))
 
-$(eval $(call gb_AllLangResTarget_add_srs,dbamm,dbaccess/dbamm))
+$(eval $(call gb_AllLangResTarget_add_srs,dbmm,dbaccess/dbmm))
 
-$(eval $(call gb_SrsTarget_SrsTarget,dbaccess/dbamm))
+$(eval $(call gb_SrsTarget_SrsTarget,dbaccess/dbmm))
 
-$(eval $(call gb_SrsTarget_set_include,dbaccess/dbamm,\
+$(eval $(call gb_SrsTarget_set_include,dbaccess/dbmm,\
 	$$(INCLUDE) \
 	-I$(OUTDIR)/inc \
 	-I$(SRCDIR)/dbaccess/source/ext/macromigration \
 	-I$(SRCDIR)/dbaccess/inc \
 ))
 
-$(eval $(call gb_SrsTarget_add_files,dbaccess/dbamm,\
+$(eval $(call gb_SrsTarget_add_files,dbaccess/dbmm,\
 	dbaccess/source/ext/macromigration/macromigration.src \
 ))
 
