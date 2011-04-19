@@ -1235,7 +1235,8 @@ void SwHTMLParser::NextToken( int nToken )
         else if( aUnknownToken.Len() )
         {
             // Paste content of unknown tags.
-            if (aToken.Len() > 0)
+            // (but surely if we are not in the header section) fdo#36080 fdo#34666
+            if (aToken.Len() > 0 && !IsInHeader() )
             {
                 if( !bDocInitalized )
                     DocumentDetected();
@@ -2027,6 +2028,8 @@ void SwHTMLParser::NextToken( int nToken )
     case HTML_UNKNOWNCONTROL_ON:
         // Ignore content of unknown token in the header, if the token
         // does not start with a '!'.
+        // (but judging from the code, also if does not start with a '%')
+        // (and also if we're not somewhere we consider PRE)
         if( IsInHeader() && !IsReadPRE() && !aUnknownToken.Len() &&
             sSaveToken.Len() && '!' != sSaveToken.GetChar(0) &&
             '%' != sSaveToken.GetChar(0) )
