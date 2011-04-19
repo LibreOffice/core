@@ -38,6 +38,7 @@ $(eval $(call gb_Module_add_targets,dbaccess,\
     Library_dbaxml \
     Library_dbmm \
     Library_dbu \
+    Library_sdbt \
     Package_inc \
     Package_uiconfig \
 ))
