@@ -332,21 +332,6 @@ sub link_pagein_files()
     print "\n";
 }
 
-# link installed files back into src tree:
-sub link_soffice_bin_files()
-{
-    my $dest;
-    my $src = "$OOO_INSTALL/" . $brand_program_dir;
-
-    print "soffice files";
-    $dest = "$OOO_BUILD/desktop/$TARGET/bin";
-    do_link ($src, $dest, 'soffice', 'soffice.bin', 1);
-    do_link ($src, $dest, 'bootstraprc', 'bootstraprc', 1);
-    do_link ("$OOO_INSTALL", "$OOO_BUILD/desktop/$TARGET", 'share', 'share', 1);
-
-    print "\n";
-}
-
 for my $a (@ARGV) {
 
 # options
@@ -394,7 +379,6 @@ link_iso_res();
 link_types_rdb();
 link_oovbaapi_rdb();
 link_pagein_files();
-link_soffice_bin_files();
 
 if (!-f "$OOO_INSTALL/" . $brand_program_dir . "/ooenv") {
     my $ooenv;
