@@ -7831,7 +7831,7 @@ else
 fi
 AC_SUBST(UNIXWRAPPERNAME)
 
-INSTALL_DIRNAME=libreoffice
+INSTALL_DIRNAME=`echo AC_PACKAGE_NAME | tr [[:upper:]] [[:lower:]]`
 AC_MSG_CHECKING([for install dirname])
 if test -n "$with_install_dirname" -a "$with_install_dirname" != "no" -a "$with_install_dirname" != "yes" ; then
    INSTALL_DIRNAME="$with_install_dirname"
