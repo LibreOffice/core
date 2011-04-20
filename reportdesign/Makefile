@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -25,38 +25,14 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..
-PRJINC=$(PRJ)$/source
-PRJNAME=reportdesign
-TARGET=uimisc
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
-VISIBILITY_HIDDEN=TRUE
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-# --- Settings ----------------------------------
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-.INCLUDE : settings.mk
-# .INCLUDE : $(PRJ)$/util$/dll.pmk
-
-# --- Files -------------------------------------
-
-# ... resource files ............................
-
-# ... object files ............................
-
-EXCEPTIONSFILES=	\
-        $(SLO)$/RptUndo.obj					\
-        $(SLO)$/ColorListener.obj			\
-        $(SLO)$/UITools.obj					\
-        $(SLO)$/rptuiservices.obj			\
-        $(SLO)$/toolboxcontroller.obj		\
-        $(SLO)$/statusbarcontroller.obj		\
-        $(SLO)$/FunctionHelper.obj
-
-
-SLOFILES=	\
-        $(EXCEPTIONSFILES)
-
-# --- Targets ----------------------------------
-
-.INCLUDE : target.mk
-
+# vim: set noet sw=4 ts=4:
