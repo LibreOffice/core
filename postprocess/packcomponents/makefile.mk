@@ -77,6 +77,9 @@ my_components = \
     component/sc/util/scd \
     component/sc/util/scfilt \
     component/sc/util/vbaobj \
+    component/sd/util/sd \
+    component/sd/util/sdd \
+    component/sd/util/sdfilt \
     component/sfx2/util/sfx \
     component/sot/util/sot \
     component/svl/source/fsstor/fsstorage \
@@ -152,9 +155,7 @@ my_components = \
     sb \
     scn \
     scriptframe \
-    sd \
     sdbc2 \
-    sdd \
     simplecanvas \
     slideshow \
     $(SM_COMPONENTS)\
