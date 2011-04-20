@@ -35,6 +35,8 @@ $(eval $(call gb_Library_set_include,writerfilter,\
     -I$(OUTDIR)/inc/offuh \
 ))
 
+$(eval $(call gb_Library_set_componentfile,writerfilter,writerfilter/util/writerfilter))
+
 include $(SRCDIR)/writerfilter/debug_setup.mk
 
 $(eval $(call gb_Library_set_defs,writerfilter,\

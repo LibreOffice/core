@@ -53,8 +53,6 @@ $(eval $(call gb_Library_add_linked_libs,writerfilter_uno,\
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Library_set_componentfile,writerfilter_uno,writerfilter/util/writerfilter))
-
 $(eval $(call gb_Library_add_exception_objects,writerfilter_uno,\
     writerfilter/unocomponent/component \
     writerfilter/unocomponent/debugservices/doctok/DocTokAnalyzeService \
