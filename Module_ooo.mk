@@ -41,6 +41,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     oox \
     padmin \
     sc \
+    sd \
     sfx2 \
     sot \
     svl \

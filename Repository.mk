@@ -83,7 +83,11 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     scd \
     scfilt \
     scui \
+    sd \
     sdbt \
+    sdd \
+    sdfilt \
+    sdui \
     sfx \
     sm \
     smd \
