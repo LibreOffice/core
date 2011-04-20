@@ -921,6 +921,12 @@ STD_LIB_FILE(gid_File_Lib_Wlwp,lwpft)
 
 STD_LIB_FILE(gid_File_Lib_Writerfilter,writerfilter)
 
+STD_LIB_FILE(gid_File_Lib_Resource,resourcemodel)
+
+STD_LIB_FILE(gid_File_Lib_Doctok,doctok)
+
+STD_LIB_FILE(gid_File_Lib_ooxml,ooxml)
+
 #ifdef WNT
 #if defined(_gcc3)
 
