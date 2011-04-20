@@ -74,6 +74,9 @@ my_components = \
     component/framework/util/fwm \
     component/lotuswordpro/util/lwpfilter \
     component/oox/util/oox \
+    component/reportdesign/util/rpt \
+    component/reportdesign/util/rptui \
+    component/reportdesign/util/rptxml \
     component/sc/util/sc \
     component/sc/util/scd \
     component/sc/util/scfilt \
@@ -149,9 +152,6 @@ my_components = \
     protocolhandler \
     pythonloader \
     res \
-    rpt \
-    rptui \
-    rptxml \
     sax \
     sb \
     scn \
