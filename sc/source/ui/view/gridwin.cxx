@@ -4033,7 +4033,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                     pView->MarkCursor( nDestPosX + nSizeX - 1,
                                        nDestPosY + nSizeY - 1, nThisTab );
 
-                    pView->EnterMatrix( aFormula );
+                    pView->EnterMatrix( aFormula, ::formula::FormulaGrammar::GRAM_NATIVE );
 
                     pView->MarkRange( aDest, false, false );
                     pView->SetCursor( aDest.aStart.Col(), aDest.aStart.Row() );

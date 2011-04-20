@@ -475,21 +475,27 @@ sal_Bool ScImportExport::ExportStream( SvStream& rStrm, const String& rBaseURL, 
         DBG_ASSERT( aDocName.Len(), "ClipBoard document has no name! :-/" );
         if( aDocName.Len() )
         {
+            // Always use Calc A1 syntax for paste link.
             String aRefName;
             sal_uInt16 nFlags = SCA_VALID | SCA_TAB_3D;
             if( bSingle )
-                aRange.aStart.Format( aRefName, nFlags, pDoc, pDoc->GetAddressConvention() );
+                aRange.aStart.Format( aRefName, nFlags, pDoc, formula::FormulaGrammar::CONV_OOO );
             else
             {
                 if( aRange.aStart.Tab() != aRange.aEnd.Tab() )
                     nFlags |= SCA_TAB2_3D;
-                aRange.Format( aRefName, nFlags, pDoc );
+                aRange.Format( aRefName, nFlags, pDoc, formula::FormulaGrammar::CONV_OOO );
             }
             String aAppName = Application::GetAppName();
 
-            WriteUnicodeOrByteString( rStrm, aAppName, sal_True );
-            WriteUnicodeOrByteString( rStrm, aDocName, sal_True );
-            WriteUnicodeOrByteString( rStrm, aRefName, sal_True );
+            // extra bits are used to tell the client to prefer external
+            // reference link.
+            ::rtl::OUString aExtraBits(RTL_CONSTASCII_USTRINGPARAM("calc:extref"));
+
+            WriteUnicodeOrByteString( rStrm, aAppName, true );
+            WriteUnicodeOrByteString( rStrm, aDocName, true );
+            WriteUnicodeOrByteString( rStrm, aRefName, true );
+            WriteUnicodeOrByteString( rStrm, aExtraBits, true );
             if ( rStrm.GetStreamCharSet() == RTL_TEXTENCODING_UNICODE )
                 rStrm << sal_Unicode(0);
             else

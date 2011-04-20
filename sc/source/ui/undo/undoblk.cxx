@@ -1768,7 +1768,8 @@ void ScUndoEnterMatrix::Repeat(SfxRepeatTarget& rTarget)
     if (rTarget.ISA(ScTabViewTarget))
     {
         String aTemp = aFormula;
-        ((ScTabViewTarget&)rTarget).GetViewShell()->EnterMatrix(aTemp);
+        ScDocument* pDoc = pDocShell->GetDocument();
+        ((ScTabViewTarget&)rTarget).GetViewShell()->EnterMatrix(aTemp, pDoc->GetGrammar());
     }
 }
 

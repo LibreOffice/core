@@ -304,7 +304,7 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
             //  if this transfer object was used to create a DDE link, filtered rows
             //  have to be included for subsequent calls (to be consistent with link data)
             if ( nFormat == SOT_FORMATSTR_ID_LINK )
-                bUsedForLink = sal_True;
+                bUsedForLink = true;
 
             sal_Bool bIncludeFiltered = pDoc->IsCutMode() || bUsedForLink;
 
@@ -395,7 +395,7 @@ sal_Bool ScTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObj
 {
     // called from SetObject, put data into stream
 
-    sal_Bool bRet = false;
+    bool bRet = false;
     switch (nUserObjectId)
     {
         case SCTRANS_TYPE_IMPEX:

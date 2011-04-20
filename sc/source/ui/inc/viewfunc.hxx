@@ -100,7 +100,7 @@ public:
     void            EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const EditTextObject* pData,
                                 sal_Bool bRecord = sal_True, sal_Bool bTestSimple = false );
 
-    void            EnterMatrix( const String& rString );
+    void            EnterMatrix( const String& rString, ::formula::FormulaGrammar::Grammar eGram );
     void            EnterBlock( const String& rString, const EditTextObject* pData );
 
     void            EnterDataAtCursor( const String& rString );         //! nicht benutzt ?
@@ -149,7 +149,7 @@ public:
                                 const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::datatransfer::XTransferable >& rxTransferable,
                                 SCCOL nPosX, SCROW nPosY );
-    sal_Bool            PasteDDE( const ::com::sun::star::uno::Reference<
+    bool            PasteLink( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::datatransfer::XTransferable >& rxTransferable );
 
     sal_Bool            ApplyGraphicToObject( SdrObject* pObject, const Graphic& rGraphic );

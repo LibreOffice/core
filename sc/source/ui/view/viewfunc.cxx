@@ -899,7 +899,7 @@ void ScViewFunc::EnterDataAtCursor( const String& rString )
     EnterData( nPosX, nPosY, nTab, rString );
 }
 
-void ScViewFunc::EnterMatrix( const String& rString )
+void ScViewFunc::EnterMatrix( const String& rString, ::formula::FormulaGrammar::Grammar eGram )
 {
     ScViewData* pData = GetViewData();
     const ScMarkData& rMark = pData->GetMarkData();
@@ -912,7 +912,7 @@ void ScViewFunc::EnterMatrix( const String& rString )
         SCCOL nCol = pData->GetCurX();
         SCROW nRow = pData->GetCurY();
         SCTAB nTab = pData->GetTabNo();
-        ScFormulaCell aFormCell( pDoc, ScAddress(nCol,nRow,nTab), rString,formula::FormulaGrammar::GRAM_DEFAULT, MM_FORMULA );
+        ScFormulaCell aFormCell( pDoc, ScAddress(nCol,nRow,nTab), rString, eGram, MM_FORMULA );
 
         SCSIZE nSizeX;
         SCSIZE nSizeY;
@@ -932,7 +932,8 @@ void ScViewFunc::EnterMatrix( const String& rString )
     if (pData->GetSimpleArea(aRange) == SC_MARK_SIMPLE)
     {
         ScDocShell* pDocSh = pData->GetDocShell();
-        sal_Bool bSuccess = pDocSh->GetDocFunc().EnterMatrix( aRange, &rMark, NULL, rString, false, false, EMPTY_STRING, formula::FormulaGrammar::GRAM_DEFAULT );
+        bool bSuccess = pDocSh->GetDocFunc().EnterMatrix(
+            aRange, &rMark, NULL, rString, false, false, EMPTY_STRING, eGram );
         if (bSuccess)
             pDocSh->UpdateOle(GetViewData());
     }

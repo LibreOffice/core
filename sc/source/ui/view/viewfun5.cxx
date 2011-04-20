@@ -288,7 +288,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
     }
     else if ( nFormatId == SOT_FORMATSTR_ID_LINK )      // LINK is also in ScImportExport
     {
-        bRet = PasteDDE( rxTransferable );
+        bRet = PasteLink( rxTransferable );
     }
     else if ( ScImportExport::IsFormatSupported( nFormatId ) || nFormatId == SOT_FORMAT_RTF )
     {
@@ -630,17 +630,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
     return bRet;
 }
 
-ByteString lcl_GetSubString( sal_Char* pData, long nStart, long nDataSize )
-{
-    if ( nDataSize <= nStart /* || pData[nDataSize] != 0 */ )
-    {
-        OSL_FAIL("DDE Data: invalid data");
-        return ByteString();
-    }
-    return ByteString( pData + nStart );
-}
-
-sal_Bool ScViewFunc::PasteDDE( const uno::Reference<datatransfer::XTransferable>& rxTransferable )
+bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& rxTransferable )
 {
     TransferableDataHelper aDataHelper( rxTransferable );
 
@@ -682,37 +672,76 @@ sal_Bool ScViewFunc::PasteDDE( const uno::Reference<datatransfer::XTransferable>
 
     //  create formula
 
-    long nSeqLen = aSequence.getLength();
-    sal_Char* pData = (sal_Char*)aSequence.getConstArray();
+    sal_Int32 nSeqLen = aSequence.getLength();
+    const char* p = reinterpret_cast<const char*>(aSequence.getConstArray());
 
     rtl_TextEncoding eSysEnc = gsl_getSystemTextEncoding();
 
-    ByteString aByteApp   = lcl_GetSubString( pData, 0, nSeqLen );
-    ByteString aByteTopic = lcl_GetSubString( pData, aByteApp.Len() + 1, nSeqLen );
-    ByteString aByteItem  = lcl_GetSubString( pData, aByteApp.Len() + aByteTopic.Len() + 2, nSeqLen );
+    // char array delimited by \0.
+    // app \0 topic \0 item \0 (extra \0) where the extra is optional.
+    ::std::vector<rtl::OUString> aStrs;
+    const char* pStart = p;
+    sal_Int32 nStart = 0;
+    for (sal_Int32 i = 0; i < nSeqLen; ++i, ++p)
+    {
+        if (*p == '\0')
+        {
+            sal_Int32 nLen = i - nStart;
+            aStrs.push_back(rtl::OUString(pStart, nLen, eSysEnc));
+            nStart = ++i;
+            pStart = ++p;
+        }
+    }
 
-    String aApp( aByteApp, eSysEnc );
-    String aTopic( aByteTopic, eSysEnc );
-    String aItem( aByteItem, eSysEnc );
+    if (aStrs.size() < 3)
+        return false;
 
-    // TODO: we could define ocQuote for "
-    const String aQuote( '"' );
-    const String& sSep = ScCompiler::GetNativeSymbol( ocSep);
-    String aFormula( '=' );
-    aFormula += ScCompiler::GetNativeSymbol( ocDde);
-    aFormula += ScCompiler::GetNativeSymbol( ocOpen);
-    aFormula += aQuote;
-    aFormula += aApp;
-    aFormula += aQuote;
-    aFormula += sSep;
-    aFormula += aQuote;
-    aFormula += aTopic;
-    aFormula += aQuote;
-    aFormula += sSep;
-    aFormula += aQuote;
-    aFormula += aItem;
-    aFormula += aQuote;
-    aFormula += ScCompiler::GetNativeSymbol( ocClose);
+    const rtl::OUString* pApp   = &aStrs[0];
+    const rtl::OUString* pTopic = &aStrs[1];
+    const rtl::OUString* pItem  = &aStrs[2];
+    const rtl::OUString* pExtra = NULL;
+    if (aStrs.size() > 3)
+        pExtra = &aStrs[3];
+
+    if (pExtra && pExtra->equalsAscii("calc:extref"))
+    {
+        // Paste this as an external reference.  Note that paste link always
+        // uses Calc A1 syntax even when another formula syntax is specified
+        // in the UI.
+        rtl::OUStringBuffer aBuf;
+        aBuf.appendAscii("='");
+        rtl::OUString aPath = ScGlobal::GetAbsDocName(
+            *pTopic, GetViewData()->GetDocument()->GetDocumentShell());
+        aBuf.append(aPath);
+        aBuf.appendAscii("'#");
+        aBuf.append(*pItem);
+        EnterMatrix(aBuf.makeStringAndClear(), ::formula::FormulaGrammar::GRAM_NATIVE);
+        return true;
+    }
+    else
+    {
+        // DDE in all other cases.
+
+        // TODO: we could define ocQuote for "
+        rtl::OUStringBuffer aBuf;
+        aBuf.append(sal_Unicode('='));
+        aBuf.append(ScCompiler::GetNativeSymbol(ocDde));
+        aBuf.append(ScCompiler::GetNativeSymbol(ocOpen));
+        aBuf.append(sal_Unicode('"'));
+        aBuf.append(*pApp);
+        aBuf.append(sal_Unicode('"'));
+        aBuf.append(ScCompiler::GetNativeSymbol(ocSep));
+        aBuf.append(sal_Unicode('"'));
+        aBuf.append(*pTopic);
+        aBuf.append(sal_Unicode('"'));
+        aBuf.append(ScCompiler::GetNativeSymbol(ocSep));
+        aBuf.append(sal_Unicode('"'));
+        aBuf.append(*pItem);
+        aBuf.append(sal_Unicode('"'));
+        aBuf.append(ScCompiler::GetNativeSymbol(ocClose));
+
+        EnterMatrix(aBuf.makeStringAndClear(), ::formula::FormulaGrammar::GRAM_NATIVE);
+    }
 
     //  mark range
 
@@ -724,13 +753,9 @@ sal_Bool ScViewFunc::PasteDDE( const uno::Reference<datatransfer::XTransferable>
     InitBlockMode( nCurX, nCurY, nTab );
     MarkCursor( nCurX+static_cast<SCCOL>(nCols)-1, nCurY+static_cast<SCROW>(nRows)-1, nTab );
     ShowAllCursors();
-
-    //  enter formula
-
-    EnterMatrix( aFormula );
     CursorPosChanged();
 
-    return sal_True;
+    return true;
 }
 
 

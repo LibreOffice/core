@@ -219,7 +219,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 {
                     String aStr = ((const SfxStringItem&)pReqArgs->
                                     Get( SID_INSERT_MATRIX )).GetValue();
-                    pTabViewShell->EnterMatrix( aStr );
+                    ScDocument* pDoc = GetViewData()->GetDocument();
+                    pTabViewShell->EnterMatrix( aStr, pDoc->GetGrammar() );
                     rReq.Done();
                 }
             }
@@ -288,7 +289,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     }
                     else
                     {
-                        pTabViewShell->EnterMatrix( aString );
+                        ScDocument* pDoc = GetViewData()->GetDocument();
+                        pTabViewShell->EnterMatrix( aString, pDoc->GetGrammar() );
                         rReq.Done();
                     }
 
