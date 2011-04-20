@@ -672,6 +672,12 @@ public:
      */
     void notifyAllLinkListeners(sal_uInt16 nFileId, LinkUpdateType eType);
 
+    /**
+     * Check if the file specified by the path is a legitimate file that
+     * exists & can be loaded.
+     */
+    bool isFileLoadable(const String& rFile) const;
+
 private:
     ScExternalRefManager();
     ScExternalRefManager(const ScExternalRefManager&);
@@ -722,7 +728,6 @@ private:
     const ScDocument* getInMemorySrcDocument(sal_uInt16 nFileId);
     const ScDocument* getSrcDocument(sal_uInt16 nFileId);
     SfxObjectShellRef loadSrcDocument(sal_uInt16 nFileId, String& rFilter);
-    bool isFileLoadable(const String& rFile) const;
 
     void maybeLinkExternalFile(sal_uInt16 nFileId);
 

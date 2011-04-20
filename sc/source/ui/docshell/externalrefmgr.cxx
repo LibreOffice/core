@@ -1272,6 +1272,10 @@ void ScExternalRefLink::DataChanged(const String& /*rMimeType*/, const Any& /*rV
     String aFile, aFilter;
     mpDoc->GetLinkManager()->GetDisplayNames(this, NULL, &aFile, NULL, &aFilter);
     ScExternalRefManager* pMgr = mpDoc->GetExternalRefManager();
+
+    if (!pMgr->isFileLoadable(aFile))
+        return;
+
     const String* pCurFile = pMgr->getExternalFileName(mnFileId);
     if (!pCurFile)
         return;
