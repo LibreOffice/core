@@ -74,7 +74,7 @@ namespace sd { namespace colortoolpanel
 extern "C"
 {
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** )
+    SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** )
     {
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
@@ -86,7 +86,7 @@ extern "C"
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+    SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
     {
         return ::cppu::component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , ::sd::colortoolpanel::s_aServiceEntries );
     }

@@ -242,8 +242,7 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::lang::XSingleServiceFactory;
 using ::com::sun::star::lang::XMultiServiceFactory;
 
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL
-component_getImplementationEnvironment(
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
                 const sal_Char  **ppEnvTypeName,
                 uno_Environment ** /*ppEnv*/
             )

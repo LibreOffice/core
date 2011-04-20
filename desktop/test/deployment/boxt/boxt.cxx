@@ -168,14 +168,14 @@ static cppu::ImplementationEntry const services[] = {
 
 }
 
-extern "C" void * SAL_CALL component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     char const * pImplName, void * pServiceManager, void * pRegistryKey)
 {
     return cppu::component_getFactoryHelper(
         pImplName, pServiceManager, pRegistryKey, services);
 }
 
-extern "C" void SAL_CALL component_getImplementationEnvironment(
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     char const ** ppEnvTypeName, uno_Environment **)
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
