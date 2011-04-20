@@ -33,7 +33,7 @@
 // Document-Icon
 #define RC_DOC_ICON                     (RC_APP_BEGIN + 2)
 
-//Soll das Clipboard fuer andere Applikationen...
+// Should the clipboard for other applications...
 #define MSG_CLPBRD_CLEAR                (RC_APP_BEGIN + 3)
 
 #define STR_CANTCREATE                  (RC_APP_BEGIN + 4)
@@ -43,7 +43,7 @@
 #define MSG_ERROR_SEND_MAIL             ( RC_APP_BEGIN + 6)
 #define MSG_SAVE_HTML_QUERY             ( RC_APP_BEGIN + 7)
 
-//Fuer das Interface, weil der RID_APP_BEGIN jetzt Desktop ist.
+// For the interface because the RID_APP_BEGIN is now Desktop.
 #define RID_SW_NAME                     ( RC_APP_BEGIN + 8)
 #define MSG_SAVEAS_HTML_QUERY           ( RC_APP_BEGIN + 9)
 
@@ -53,10 +53,10 @@
 #define STR_PRINT_MERGE_MACRO           (RC_APP_BEGIN + 15)
 #define STR_PAGE_COUNT_MACRO            (RC_APP_BEGIN + 16)
 
-// Bitmap fuer die NumerierungsVorlagen im Organizer
+// Bitmap for the numbering style in organizer
 #define BMP_STYLES_FAMILY_NUM           (RC_APP_BEGIN + 17)
 
-// Strings fuer Bereiche in der Konfiguration
+// Strings for regions in the configuration
 #define STR_GRP_FILE                    (RC_APP_BEGIN + 56)
 #define STR_GRP_EDIT                    (RC_APP_BEGIN + 57)
 #define STR_GRP_TRAVELLING              (RC_APP_BEGIN + 58)
@@ -102,7 +102,7 @@
 #define STR_FDLG_TEMPLATE_NAME          (RC_APP_BEGIN + 2)
 
 
-// Ids fuer die einzelnen PopUpMenues
+// Ids for all the PopUpMenues
 #define MN_FORMAT_STYLE                 (RC_APP_BEGIN + 17)
 #define MN_FORMAT_ALGN                  (RC_APP_BEGIN + 18)
 #define MN_FORMAT_LINESPACE             (RC_APP_BEGIN + 19)

@@ -52,14 +52,14 @@ class SwBaseShell: public SfxShell
 {
     SwView      &rView;
 
-    // DragModus
+    // DragMode
     static FlyMode eFrameMode;
 
     // Bug 75078 - if in GetState the asynch call of GetGraphic returns
     //              synch, the set the state directly into the itemset
     SfxItemSet*         pGetStateSet;
 
-    //Update-Timer fuer Graphic
+    // Update-Timer for graphic
     SvUShortsSort aGrfUpdateSlots;
 
     DECL_LINK( GraphicArrivedHdl, SwCrsrShell* );
@@ -118,7 +118,7 @@ public:
 
     void        ExecField(SfxRequest& rReq);
 
-    static void    SetFrmMode( FlyMode eMode, SwWrtShell *pShell );  //Mit Update!
+    static void    SetFrmMode( FlyMode eMode, SwWrtShell *pShell );  // with update!
     static void   _SetFrmMode( FlyMode eMode )   { eFrameMode = eMode; }
     static FlyMode  GetFrmMode()                 { return eFrameMode;  }
 

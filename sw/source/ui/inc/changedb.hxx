@@ -43,7 +43,7 @@ class SwWrtShell;
 struct SwDBData;
 
 /*--------------------------------------------------------------------
-     Beschreibung: Datenbank an Feldern austauschen
+     Description: exchange database at fields
  --------------------------------------------------------------------*/
 class SwChangeDBDlg: public SvxStandardDialog
 {

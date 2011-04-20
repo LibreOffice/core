@@ -49,7 +49,7 @@ private:
     String          sSeparator;
     String          sCharacterStyle;
 
-    sal_Bool         bIgnoreSeqOpts;    // wird nicht gespeichert
+    sal_Bool         bIgnoreSeqOpts;    // is not being saved
     sal_Bool         bCopyAttributes;   //          -""-
 
 public:

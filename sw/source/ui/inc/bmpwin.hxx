@@ -34,7 +34,7 @@
 #include <vcl/window.hxx>
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Extended Page fuer Grafiken
+    Description:    extended page for graphics
  --------------------------------------------------------------------*/
 class BmpWindow : public Window
 {

@@ -32,7 +32,7 @@
 #include "swdllapi.h"
 
 /*--------------------------------------------------------------------
-    Beschreibung:   numerische Eingabe
+    Description:    numerical input
  --------------------------------------------------------------------*/
 class SW_DLLPUBLIC NumEditAction: public NumericField
 {
@@ -51,7 +51,7 @@ public:
 
 
 /* --------------------------------------------------
- * Edit, dass keine Spaces akzeptiert
+ * Edit that doesn't accept spaces
  * --------------------------------------------------*/
 class SW_DLLPUBLIC NoSpaceEdit : public Edit
 {
@@ -68,7 +68,7 @@ public:
 };
 
 /* --------------------------------------------------
- * Kein Space und kein Punkt
+ * No space and no full stop
  * --------------------------------------------------*/
 class TableNameEdit : public NoSpaceEdit
 {

@@ -40,7 +40,7 @@ protected:
     virtual void KeyInput( const KeyEvent& rEvent );
 };
 
-// Implementieriung im autocorr.cxx
+// Implementation in autocorr.cxx
 
 
 

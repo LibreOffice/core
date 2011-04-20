@@ -52,7 +52,7 @@ SfxPrinter* GetPrt( ViewShell* );
 void        SetPrt( SfxPrinter* );
 
 /*--------OS 12.01.95 -----------------------------------
-Item fuer Einstellungsdialog - Dokumentanzeige
+Item for settings dialog - document view
 --------------------------------------------------------- */
 class SW_DLLPUBLIC SwDocDisplayItem : public SfxPoolItem
 {
@@ -89,7 +89,7 @@ public:
 };
 
 /*--------OS 12.01.95 -----------------------------------
-Item fuer Einstellungsdialog, Elementeseite
+Item for settings dialog, element page
 --------------------------------------------------------- */
 class SW_DLLPUBLIC SwElemItem : public SfxPoolItem
 {
@@ -130,7 +130,7 @@ public:
 };
 
 /*--------OS 12.01.95 -----------------------------------
-Item fuer Einstellungsdialog - Drucker/Zusaetze
+Item for settings dialog - printer/add ons
 --------------------------------------------------------- */
 class SW_DLLPUBLIC SwAddPrinterItem : public SfxPoolItem, public SwPrintData
 {
@@ -177,7 +177,7 @@ public:
 };
 
 /*--------OS 12.01.95 -----------------------------------
-Item fuer Einstellungsdialog, ShadowCursorSeite
+Item for settings dialog, ShadowCursorPage
 --------------------------------------------------------- */
 class SW_DLLPUBLIC SwShadowCursorItem : public SfxPoolItem
 {
@@ -206,7 +206,7 @@ public:
 #if OSL_DEBUG_LEVEL > 1
 
 /*--------OS 12.01.95 -----------------------------------
-Item fuer Einstellungsdialog - Testeinstellungen
+Item for settings dialog - test settings
 --------------------------------------------------------- */
 class SW_DLLPUBLIC SwTestItem : public SfxPoolItem
 {
