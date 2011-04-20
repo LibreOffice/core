@@ -354,29 +354,29 @@ void showAttributes( sal_uInt64 uAttributes )
 {
     if ( uAttributes==0 )
         printf( "No Attributes \n" );
-    if ( uAttributes & Attribute_ReadOnly )
+    if ( uAttributes & osl_File_Attribute_ReadOnly )
         printf( "Attribute: ReadOnly \n" );
-    if ( uAttributes & Attribute_Hidden )
+    if ( uAttributes & osl_File_Attribute_Hidden )
         printf( "Attribute: Hidden \n" );
-    if ( uAttributes & Attribute_Executable )
+    if ( uAttributes & osl_File_Attribute_Executable )
         printf( "Attribute: Executable \n");
-    if ( uAttributes & Attribute_GrpWrite )
+    if ( uAttributes & osl_File_Attribute_GrpWrite )
         printf( "Attribute: GrpWrite \n");
-    if ( uAttributes & Attribute_GrpRead )
+    if ( uAttributes & osl_File_Attribute_GrpRead )
         printf( "Attribute: GrpRead \n" );
-    if ( uAttributes & Attribute_GrpExe )
+    if ( uAttributes & osl_File_Attribute_GrpExe )
         printf( "Attribute: GrpExe \n" );
-    if ( uAttributes & Attribute_OwnWrite )
+    if ( uAttributes & osl_File_Attribute_OwnWrite )
         printf( "Attribute: OwnWrite \n");
-    if ( uAttributes & Attribute_OwnRead )
+    if ( uAttributes & osl_File_Attribute_OwnRead )
         printf( "Attribute: OwnRead \n" );
-    if ( uAttributes & Attribute_OwnExe )
+    if ( uAttributes & osl_File_Attribute_OwnExe )
         printf( "Attribute: OwnExe \n" );
-    if ( uAttributes & Attribute_OthWrite )
+    if ( uAttributes & osl_File_Attribute_OthWrite )
         printf( "Attribute: OthWrite \n" );
-    if ( uAttributes & Attribute_OthRead )
+    if ( uAttributes & osl_File_Attribute_OthRead )
         printf( "Attribute: OthRead \n");
-    if ( uAttributes & Attribute_OthExe )
+    if ( uAttributes & osl_File_Attribute_OthExe )
         printf( "Attribute: OthExe \n" );
 
     return;
@@ -1278,7 +1278,7 @@ void FileAttributesTest( void )
     printf( "\n\n" );
 
 
-    rc=File::setAttributes( file1, Attribute_GrpWrite );
+    rc=File::setAttributes( file1, osl_File_Attribute_GrpWrite );
     print_error( rtl::OString( "Set Attribute: GrpWrite" ), rc );
 
     verifyFileAttributes();
@@ -1287,7 +1287,7 @@ void FileAttributesTest( void )
     if ( rc!=FileBase::E_None )
         print_error( rtl::OString( "Reset Attributes" ), rc );
 
-    rc=File::setAttributes( file1, Attribute_GrpRead );
+    rc=File::setAttributes( file1, osl_File_Attribute_GrpRead );
     print_error( rtl::OString( "Set Attribute: GrpRead" ), rc );
 
     verifyFileAttributes();
@@ -1296,7 +1296,7 @@ void FileAttributesTest( void )
     if ( rc!=FileBase::E_None )
         print_error( rtl::OString( "Reset Attributes" ), rc );
 
-    rc=File::setAttributes( file1, Attribute_GrpExe );
+    rc=File::setAttributes( file1, osl_File_Attribute_GrpExe );
     print_error( rtl::OString( "Set Attribute: GrpExe" ), rc );
 
     verifyFileAttributes();
@@ -1305,7 +1305,7 @@ void FileAttributesTest( void )
     if ( rc!=FileBase::E_None )
         print_error( rtl::OString( "Reset Attributes" ), rc );
 
-    rc=File::setAttributes( file1, Attribute_OwnWrite );
+    rc=File::setAttributes( file1, osl_File_Attribute_OwnWrite );
     print_error( rtl::OString( "Set Attribute: OwnWrite" ), rc );
 
     verifyFileAttributes();
@@ -1314,7 +1314,7 @@ void FileAttributesTest( void )
     if ( rc!=FileBase::E_None )
         print_error( rtl::OString( "Reset Attributes" ), rc );
 
-    rc=File::setAttributes( file1, Attribute_OwnRead );
+    rc=File::setAttributes( file1, osl_File_Attribute_OwnRead );
     print_error( rtl::OString( "Set Attribute: OwnRead" ), rc );
 
     verifyFileAttributes();
@@ -1323,7 +1323,7 @@ void FileAttributesTest( void )
     if ( rc!=FileBase::E_None )
         print_error( rtl::OString( "Reset Attributes" ), rc );
 
-    rc=File::setAttributes( file1, Attribute_OwnExe );
+    rc=File::setAttributes( file1, osl_File_Attribute_OwnExe );
     print_error( rtl::OString( "Set Attribute: OwnExe" ), rc );
 
     verifyFileAttributes();
@@ -1332,7 +1332,7 @@ void FileAttributesTest( void )
     if ( rc!=FileBase::E_None )
         print_error( rtl::OString( "Reset Attributes" ), rc );
 
-    rc=File::setAttributes( file1, Attribute_OthWrite );
+    rc=File::setAttributes( file1, osl_File_Attribute_OthWrite );
     print_error( rtl::OString( "Set Attribute: OthWrite" ), rc );
 
     verifyFileAttributes();
@@ -1341,7 +1341,7 @@ void FileAttributesTest( void )
     if ( rc!=FileBase::E_None )
         print_error( rtl::OString( "Reset Attributes" ), rc );
 
-    rc=File::setAttributes( file1, Attribute_OthRead );
+    rc=File::setAttributes( file1, osl_File_Attribute_OthRead );
     print_error( rtl::OString( "Set Attribute: OthRead" ), rc );
 
     verifyFileAttributes();
@@ -1350,7 +1350,7 @@ void FileAttributesTest( void )
     if ( rc!=FileBase::E_None )
         print_error( rtl::OString( "Reset Attributes" ), rc );
 
-    rc=File::setAttributes( file1, Attribute_OthExe );
+    rc=File::setAttributes( file1, osl_File_Attribute_OthExe );
     print_error( rtl::OString( "Set Attribute: OthExe" ), rc );
 
     verifyFileAttributes();
@@ -1360,7 +1360,7 @@ void FileAttributesTest( void )
         print_error( rtl::OString( "Reset Attributes" ), rc );
 
 
-    rc=File::setAttributes( file1, Attribute_GrpWrite | Attribute_GrpRead | Attribute_GrpExe | Attribute_OwnWrite | Attribute_OwnRead | Attribute_OwnExe | Attribute_OthWrite | Attribute_OthRead | Attribute_OthExe );
+    rc=File::setAttributes( file1, osl_File_Attribute_GrpWrite | osl_File_Attribute_GrpRead | osl_File_Attribute_GrpExe | osl_File_Attribute_OwnWrite | osl_File_Attribute_OwnRead | osl_File_Attribute_OwnExe | osl_File_Attribute_OthWrite | osl_File_Attribute_OthRead | osl_File_Attribute_OthExe );
     print_error( rtl::OString( "Set all Attributes" ), rc );
 
     verifyFileAttributes();
@@ -1385,7 +1385,7 @@ void FileAttributesTest( void )
     printf( "\n\n" );
 
 
-    rc=File::setAttributes( file1, Attribute_ReadOnly );
+    rc=File::setAttributes( file1, osl_File_Attribute_ReadOnly );
     print_error( rtl::OString( "Set Attribute: ReadOnly" ), rc );
 
     verifyFileAttributes();
@@ -1395,7 +1395,7 @@ void FileAttributesTest( void )
 
     verifyFileAttributes();
 
-    rc=File::setAttributes( file1, Attribute_Hidden );
+    rc=File::setAttributes( file1, osl_File_Attribute_Hidden );
     print_error( rtl::OString( "Set Attribute: Hidden" ), rc );
 
     verifyFileAttributes();
@@ -1405,7 +1405,7 @@ void FileAttributesTest( void )
 
     verifyFileAttributes();
 
-    rc=File::setAttributes( file1, Attribute_Hidden | Attribute_ReadOnly );
+    rc=File::setAttributes( file1, osl_File_Attribute_Hidden | osl_File_Attribute_ReadOnly );
     print_error( rtl::OString( "Set Attribute: Hidden & ReadOnly" ), rc );
 
     verifyFileAttributes();

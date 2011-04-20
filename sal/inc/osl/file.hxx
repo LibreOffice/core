@@ -676,20 +676,6 @@ public:
 };
 
 // -----------------------------------------------------------------------------
-
-#define Attribute_ReadOnly     osl_File_Attribute_ReadOnly
-#define Attribute_Hidden       osl_File_Attribute_Hidden
-#define Attribute_Executable   osl_File_Attribute_Executable
-#define Attribute_GrpWrite     osl_File_Attribute_GrpWrite
-#define Attribute_GrpRead      osl_File_Attribute_GrpRead
-#define Attribute_GrpExe       osl_File_Attribute_GrpExe
-#define Attribute_OwnWrite     osl_File_Attribute_OwnWrite
-#define Attribute_OwnRead      osl_File_Attribute_OwnRead
-#define Attribute_OwnExe       osl_File_Attribute_OwnExe
-#define Attribute_OthWrite     osl_File_Attribute_OthWrite
-#define Attribute_OthRead      osl_File_Attribute_OthRead
-#define Attribute_OthExe       osl_File_Attribute_OthExe
-
 class DirectoryItem;
 
 /** The FileStatus class.

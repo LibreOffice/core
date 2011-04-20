@@ -147,29 +147,29 @@ inline void printFileType( const ::osl::FileStatus::Type nType )
 inline void printFileAttributes( const sal_Int64 nAttributes )
 {
     printf( "#printFileAttributes# This file is a: (" );
-    if ( ( nAttributes | Attribute_ReadOnly ) == nAttributes )
+    if ( ( nAttributes | osl_File_Attribute_ReadOnly ) == nAttributes )
             printf( " ReadOnly " );
-    if ( ( nAttributes | Attribute_Hidden ) == nAttributes )
+    if ( ( nAttributes | osl_File_Attribute_Hidden ) == nAttributes )
             printf( " Hidden " );
-    if ( ( nAttributes | Attribute_Executable ) == nAttributes )
+    if ( ( nAttributes | osl_File_Attribute_Executable ) == nAttributes )
             printf( " Executable " );
-    if ( ( nAttributes | Attribute_GrpWrite ) == nAttributes )
+    if ( ( nAttributes | osl_File_Attribute_GrpWrite ) == nAttributes )
             printf( " GrpWrite " );
-    if ( ( nAttributes | Attribute_GrpRead ) == nAttributes )
+    if ( ( nAttributes | osl_File_Attribute_GrpRead ) == nAttributes )
             printf( " GrpRead " );
-    if ( ( nAttributes | Attribute_GrpExe ) == nAttributes )
+    if ( ( nAttributes | osl_File_Attribute_GrpExe ) == nAttributes )
             printf( " GrpExe " );
-    if ( ( nAttributes | Attribute_OwnWrite ) == nAttributes )
+    if ( ( nAttributes | osl_File_Attribute_OwnWrite ) == nAttributes )
             printf( " OwnWrite " );
-    if ( ( nAttributes | Attribute_OwnRead ) == nAttributes )
+    if ( ( nAttributes | osl_File_Attribute_OwnRead ) == nAttributes )
             printf( " OwnRead " );
-    if ( ( nAttributes | Attribute_OwnExe ) == nAttributes )
+    if ( ( nAttributes | osl_File_Attribute_OwnExe ) == nAttributes )
             printf( " OwnExe " );
-    if ( ( nAttributes | Attribute_OthWrite ) == nAttributes )
+    if ( ( nAttributes | osl_File_Attribute_OthWrite ) == nAttributes )
             printf( " OthWrite " );
-    if ( ( nAttributes | Attribute_OthRead ) == nAttributes )
+    if ( ( nAttributes | osl_File_Attribute_OthRead ) == nAttributes )
             printf( " OthRead " );
-    if ( ( nAttributes | Attribute_OthExe ) == nAttributes )
+    if ( ( nAttributes | osl_File_Attribute_OthExe ) == nAttributes )
             printf( " OthExe " );
     printf( ") file!\n" );
 }
@@ -394,7 +394,7 @@ inline void deleteTestFile( const ::rtl::OUString filename )
     if ( !isURL( filename ) )
         ::osl::FileBase::getFileURLFromSystemPath( filename, aPathURL ); //convert if not full qualified URL
 
-    nError = ::osl::File::setAttributes( aPathURL, Attribute_GrpWrite| Attribute_OwnWrite| Attribute_OthWrite ); // if readonly, make writtenable.
+    nError = ::osl::File::setAttributes( aPathURL, osl_File_Attribute_GrpWrite| osl_File_Attribute_OwnWrite| osl_File_Attribute_OthWrite ); // if readonly, make writtenable.
     CPPUNIT_ASSERT_MESSAGE( "In deleteTestFile Function: set writtenable ", ( ::osl::FileBase::E_None == nError ) || ( ::osl::FileBase::E_NOENT == nError ) );
 
     nError = ::osl::File::remove( aPathURL );
@@ -2877,7 +2877,7 @@ namespace osl_FileStatus
             CPPUNIT_ASSERT( nError == FileBase::E_None );
 
             CPPUNIT_ASSERT_MESSAGE( "test for getAttributes function: ReadOnly, GrpRead, OwnRead, OthRead( UNX version ) ",
-                                    ( Attribute_ReadOnly | Attribute_GrpRead | Attribute_OwnRead | Attribute_OthRead ) ==
+                                    ( osl_File_Attribute_ReadOnly | osl_File_Attribute_GrpRead | osl_File_Attribute_OwnRead | osl_File_Attribute_OthRead ) ==
                                     rFileStatus.getAttributes( ) );
         }
 #else                                    //Windows version
@@ -2899,7 +2899,7 @@ namespace osl_FileStatus
             CPPUNIT_ASSERT( nError == FileBase::E_None );
 
             CPPUNIT_ASSERT_MESSAGE( "test for getAttributes function: Executable, GrpExe, OwnExe, OthExe, the result is Readonly, Executable, GrpExe, OwnExe, OthExe, it partly not pass( Solaris version )",
-                                    ( Attribute_ReadOnly | Attribute_Executable | Attribute_GrpExe | Attribute_OwnExe | Attribute_OthExe ) ==
+                                    ( osl_File_Attribute_ReadOnly | osl_File_Attribute_Executable | osl_File_Attribute_GrpExe | osl_File_Attribute_OwnExe | osl_File_Attribute_OthExe ) ==
                                     rFileStatus.getAttributes( ) );
 #endif
         }
@@ -2915,7 +2915,7 @@ namespace osl_FileStatus
             CPPUNIT_ASSERT( nError == FileBase::E_None );
 
             CPPUNIT_ASSERT_MESSAGE( "test for getAttributes function: GrpWrite, OwnWrite, OthWrite( Solaris version )",
-                                    ( Attribute_GrpWrite | Attribute_OwnWrite | Attribute_OthWrite ) ==
+                                    ( osl_File_Attribute_GrpWrite | osl_File_Attribute_OwnWrite | osl_File_Attribute_OthWrite ) ==
                                     rFileStatus.getAttributes( ) );
         }
 #else                                    //Windows version
@@ -2929,14 +2929,14 @@ namespace osl_FileStatus
 #if ( defined UNX )                     //hidden file definition may different in Windows
         void getAttributes_004( )
         {
-            sal_Int32 test_Attributes = Attribute_Hidden;
+            sal_Int32 test_Attributes = osl_File_Attribute_Hidden;
               ::osl::FileStatus   rFileStatus( osl_FileStatus_Mask_Attributes );
             nError = rItem_hidden.getFileStatus( rFileStatus );
             CPPUNIT_ASSERT( nError == FileBase::E_None );
             test_Attributes &= rFileStatus.getAttributes( );
 
             CPPUNIT_ASSERT_MESSAGE( "test for getAttributes function: Hidden files( Solaris version )",
-                                    test_Attributes == Attribute_Hidden );
+                                    test_Attributes == osl_File_Attribute_Hidden );
         }
 #else                                    //Windows version
         void getAttributes_004( )
@@ -2949,7 +2949,7 @@ namespace osl_FileStatus
             CPPUNIT_ASSERT( nError == FileBase::E_None );
 
             CPPUNIT_ASSERT_MESSAGE( "Hidden files(Windows version), please check if hidden file c:/AUTOEXEC.BAT exists ",
-                                    (rFileStatus.getAttributes( ) & Attribute_Hidden)!= 0 );
+                                    (rFileStatus.getAttributes( ) & osl_File_Attribute_Hidden)!= 0 );
         }
 #endif
 
@@ -4544,10 +4544,10 @@ namespace osl_File
         // test code.
         void setAttributes_001( )
         {
-        //on windows, only can set 2 attributes: Attribute_ReadOnly,  Attribute_HIDDEN
+        //on windows, only can set 2 attributes: osl_File_Attribute_ReadOnly,  osl_File_Attribute_Hidden
 #ifdef UNX
             //set the file to readonly
-            nError2 = ::osl::File::setAttributes( aTmpName6, Attribute_ReadOnly | Attribute_GrpRead | Attribute_OwnRead | Attribute_OthRead );
+            nError2 = ::osl::File::setAttributes( aTmpName6, osl_File_Attribute_ReadOnly | osl_File_Attribute_GrpRead | osl_File_Attribute_OwnRead | osl_File_Attribute_OthRead );
             CPPUNIT_ASSERT( nError2 == FileBase::E_None);
             nError1 = ::osl::DirectoryItem::get( aTmpName6, rItem );
             CPPUNIT_ASSERT( nError1 == FileBase::E_None);
@@ -4557,11 +4557,11 @@ namespace osl_File
             CPPUNIT_ASSERT( nError1 == FileBase::E_None );
 
             CPPUNIT_ASSERT_MESSAGE( "test for setAttributes function: set file attributes and get it to verify.",
-                                    ( Attribute_ReadOnly | Attribute_GrpRead | Attribute_OwnRead | Attribute_OthRead ) ==
+                                    ( osl_File_Attribute_ReadOnly | osl_File_Attribute_GrpRead | osl_File_Attribute_OwnRead | osl_File_Attribute_OthRead ) ==
                                     rFileStatus.getAttributes( ) );
 #else
             //please see GetFileAttributes
-            nError2 = ::osl::File::setAttributes( aTmpName6, Attribute_ReadOnly );
+            nError2 = ::osl::File::setAttributes( aTmpName6, osl_File_Attribute_ReadOnly );
             CPPUNIT_ASSERT( nError2 == FileBase::E_None);
             nError1 = ::osl::DirectoryItem::get( aTmpName6, rItem );
             CPPUNIT_ASSERT( nError1 == FileBase::E_None);
@@ -4579,7 +4579,7 @@ namespace osl_File
                 printf("has readonly attribute");
             */
             CPPUNIT_ASSERT_MESSAGE( "test for setAttributes function: set file attributes READONLY and get it to verify.",
-                                    (Attribute_ReadOnly & rFileStatus.getAttributes( )) != 0  );
+                                    (osl_File_Attribute_ReadOnly & rFileStatus.getAttributes( )) != 0  );
 #endif
     }
         void setAttributes_002( )
@@ -4587,7 +4587,7 @@ namespace osl_File
         //on UNX, can not set hidden attribute to file, rename file can set the attribute
 #ifdef WNT
             //set the file to hidden
-            nError2 = ::osl::File::setAttributes( aTmpName6, Attribute_Hidden);
+            nError2 = ::osl::File::setAttributes( aTmpName6, osl_File_Attribute_Hidden);
 
             CPPUNIT_ASSERT( nError2 == FileBase::E_None);
             nError1 = ::osl::DirectoryItem::get( aTmpName6, rItem );
@@ -4598,7 +4598,7 @@ namespace osl_File
             CPPUNIT_ASSERT( nError1 == FileBase::E_None );
 
             CPPUNIT_ASSERT_MESSAGE( "test for setAttributes function: set file attributes and get it to verify.",
-                                    (Attribute_Hidden & rFileStatus.getAttributes( )) != 0 );
+                                    (osl_File_Attribute_Hidden & rFileStatus.getAttributes( )) != 0 );
 #endif
         }
 
@@ -4738,7 +4738,7 @@ namespace osl_File
             CPPUNIT_ASSERT_MESSAGE("write failed!", nError1 == FileBase::E_None);
 
             //set the file to readonly
-            nError2 = ::osl::File::setAttributes( aTmpName6, Attribute_ReadOnly | Attribute_GrpRead | Attribute_OwnRead | Attribute_OthRead );
+            nError2 = ::osl::File::setAttributes( aTmpName6, osl_File_Attribute_ReadOnly | osl_File_Attribute_GrpRead | osl_File_Attribute_OwnRead | osl_File_Attribute_OthRead );
             CPPUNIT_ASSERT( nError2 == FileBase::E_None);
 
             nError2 = tmp_file.sync();
