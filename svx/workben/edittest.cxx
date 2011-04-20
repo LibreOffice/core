@@ -54,7 +54,6 @@
 
 #include <dialdll.hxx>
 
-
 #define SERVICE_SIMPLEREGISTRY             "com.sun.star.registry.SimpleRegistry"
 #include <comphelper/processfactory.hxx>
 #include <comphelper/regpathhelper.hxx>
@@ -356,7 +355,6 @@ BOOL __EXPORT MyView::QueryDrop( DropEvent& rEvt )
 }
 
 // --- class EditMainWindow --------------------------------------------
-DECLARE_LIST( ViewList, MyView* );
 
 class EditViewWindow : public Window
 {
@@ -366,7 +364,6 @@ private:
     Pointer                 aStdPtr;
     Pointer                 aURLPtr;
     WorkWindow*             pTmpWindow;
-    ViewList                aViewList;
 
     XubString               aTestStr;
 
@@ -1396,15 +1393,6 @@ IMPL_LINK( EditMainWindow, ShowStatus, EditStatus *, pStat )
 
 EditViewWindow::~EditViewWindow()
 {
-    // erst die angemeldeten Views zerstoeren
-    // (melden sich selbst ab)
-    MyView* pView = aViewList.First();
-    while ( pView )
-    {
-        delete pView;
-        pView = aViewList.Next();
-    }
-
     pEditEngine->RemoveView( pEditView );
     delete pEditView;
     // Beim Zerstoeren der Styles am Ende, EditEngine noch nicht kaputt,
