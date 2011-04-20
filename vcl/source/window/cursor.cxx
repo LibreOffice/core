@@ -225,6 +225,7 @@ bool Cursor::ImplHide()
         bWasCurVisible = mpData->mbCurVisible;
         if ( mpData->mbCurVisible )
             ImplRestore();
+        mpData->maTimer.Stop();
     }
     return bWasCurVisible;
 }
