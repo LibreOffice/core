@@ -71,7 +71,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnviron
 
 //------------------------------------------------------------------------------
 
-extern "C" SAL_DLLPUBLIC_EXPORT void *component_getFactory( const sal_Char *aImplementationName,
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory( const sal_Char *aImplementationName,
     void *aServiceManager,
     void *aRegistryKey) {
 
