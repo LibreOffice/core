@@ -83,7 +83,7 @@ namespace
     }
 }
 
-extern "C" void SAL_CALL component_getImplementationEnvironment(
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char **ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
@@ -155,7 +155,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, voi
     return sal_True;
 }
 
-extern "C" void* SAL_CALL component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
     const sal_Char* pImplementationName, void* /*pServiceManager*/, void* /*pRegistryKey*/ )
 {
     ::rtl::OUString sImplementationName( ::rtl::OUString::createFromAscii( pImplementationName ) );
