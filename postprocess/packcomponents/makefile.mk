@@ -68,6 +68,7 @@ my_components = \
     component/dbaccess/util/sdbt \
     component/fileaccess/source/fileacc \
     component/forms/util/frm \
+    component/formula/util/for \
     component/framework/util/fwk \
     component/framework/util/fwl \
     component/framework/util/fwm \
@@ -120,7 +121,6 @@ my_components = \
     filterconfig1 \
     flash \
     flat \
-    for \
     fpicker \
     fps_office \
     guesslang \
