@@ -50,7 +50,7 @@ namespace comphelper{
 /** TODO    doc
  */
 #define _COMPHELPER_COMPONENT_GETIMPLEMENTATIONENVIRONMENT                                                          \
-    extern "C" void SAL_CALL component_getImplementationEnvironment(const sal_Char**        ppEnvironmentTypeName,  \
+    extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(const sal_Char**        ppEnvironmentTypeName,  \
                                                                           uno_Environment** /* ppEnvironment */ )   \
     {                                                                                                               \
         *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;                                                \
@@ -83,7 +83,7 @@ namespace comphelper{
 /** TODO    doc
  */
 #define _COMPHELPER_COMPONENT_GETFACTORY(STATIC_INIT,FACTORYLIST)                                                                                               \
-    extern "C" void* SAL_CALL component_getFactory(const sal_Char* pImplementationName,                                                             \
+    extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(const sal_Char* pImplementationName,                                        \
                                                          void*     pServiceManager    ,                                                             \
                                                          void*     /* pRegistryKey */ )                                                             \
     {                                                                                                                                               \
