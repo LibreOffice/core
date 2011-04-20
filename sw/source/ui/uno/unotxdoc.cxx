@@ -1354,10 +1354,13 @@ Reference< drawing::XDrawPage >  SwXTextDocument::getDrawPage(void) throw( Runti
         throw RuntimeException();
     if(!pxXDrawPage)
     {
-        // simplified this creation, keeping original below as reference
-        // for the case that it did something by purpose
         ((SwXTextDocument*)this)->pDrawPage = new SwXDrawPage(pDocShell->GetDoc());
         ((SwXTextDocument*)this)->pxXDrawPage = new Reference< drawing::XDrawPage >(pDrawPage);
+        // Create a Reference to trigger the complete initialization of the
+        // object. Otherwise in some corner cases it would get initialized
+        // at ::InitNewDoc -> which would get called during
+        // close() or dispose() -> n#681746
+        uno::Reference<lang::XComponent> xComp( *pxXDrawPage, uno::UNO_QUERY );
     }
     return *pxXDrawPage;
 }
