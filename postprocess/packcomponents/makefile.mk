@@ -81,6 +81,7 @@ my_components = \
     component/sd/util/sdd \
     component/sd/util/sdfilt \
     component/sfx2/util/sfx \
+    component/slideshow/util/slideshow \
     component/sot/util/sot \
     component/svl/source/fsstor/fsstorage \
     component/svl/source/passwordcontainer/passwordcontainer \
@@ -157,7 +158,6 @@ my_components = \
     scriptframe \
     sdbc2 \
     simplecanvas \
-    slideshow \
     $(SM_COMPONENTS)\
     solver \
     spell \
@@ -239,7 +239,7 @@ my_components += kde4be1
 .END
 
 .IF "$(ENABLE_OGL)" == "TRUE"
-my_components += ogltrans
+my_components += component/slideshow/source/engine/OGLTrans/ogltrans
 .END
 
 .IF "$(ENABLE_SVCTAGS)" == "YES"
