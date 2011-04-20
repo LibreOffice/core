@@ -74,7 +74,7 @@ Reference<XInterface> SAL_CALL OleServer_CreateInstance( const Reference<XMultiS
 }
 } // end namespace
 
-extern "C" void * SAL_CALL component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = 0;
