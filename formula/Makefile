@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -25,42 +25,14 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
-PRJNAME=formula
-TARGET=uidlg
-IMGLST_SRS=$(SRS)$/$(TARGET).srs
-BMP_IN=$(PRJ)$/res
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-# --- Settings ----------------------------------
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-.INCLUDE : settings.mk
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
-
-# --- Files -------------------------------------
-
-# ... resource files ............................
-
-SRS1NAME=$(TARGET)
-SRC1FILES =	\
-        formdlgs.src	\
-        parawin.src	
-
-# ... object files ............................
-
-EXCEPTIONSFILES=	\
-        $(SLO)$/formula.obj					\
-        $(SLO)$/FormulaHelper.obj			\
-        $(SLO)$/parawin.obj				    \
-        $(SLO)$/funcutl.obj			        \
-        $(SLO)$/funcpage.obj			        \
-        $(SLO)$/structpg.obj
-        
-SLOFILES=	\
-        $(EXCEPTIONSFILES)
-
-
-# --- Targets ----------------------------------
-
-.INCLUDE : target.mk
-
+# vim: set noet sw=4 ts=4:
