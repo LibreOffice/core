@@ -1722,7 +1722,10 @@ sal_uInt16 DbGridControl::AppendColumn(const XubString& rName, sal_uInt16 nWidth
 //------------------------------------------------------------------------------
 void DbGridControl::RemoveColumn(sal_uInt16 nId)
 {
-    sal_Int16 nIndex = GetModelColumnPos(nId);
+    sal_uInt16 nIndex = GetModelColumnPos(nId);
+    if (nIndex == GRID_COLUMN_NOT_FOUND)
+        return;
+
     DbGridControl_Base::RemoveColumn(nId);
 
     delete m_aColumns[ nIndex ];
@@ -1737,7 +1740,7 @@ void DbGridControl::ColumnMoved(sal_uInt16 nId)
     DbGridControl_Base::ColumnMoved(nId);
 
     // remove the col from the model
-    sal_Int16 nOldModelPos = GetModelColumnPos(nId);
+    sal_uInt16 nOldModelPos = GetModelColumnPos(nId);
 #ifdef DBG_UTIL
     DbGridColumn* pCol = m_aColumns[ (sal_uInt32)nOldModelPos ];
     DBG_ASSERT(!pCol->IsHidden(), "DbGridControl::ColumnMoved : moved a hidden col ? how this ?");
