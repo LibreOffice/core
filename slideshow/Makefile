@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -25,36 +25,14 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
-PRJNAME=slideshow
-TARGET=shapes
-ENABLE_EXCEPTIONS=TRUE
-PRJINC=..$/..
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-# --- Settings -----------------------------------------------------------
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-.INCLUDE :	settings.mk
-.INCLUDE : $(PRJ)$/util$/makefile.pmk
-
-# --- Common ----------------------------------------------------------
-
-SLOFILES =	$(SLO)$/appletshape.obj \
-            $(SLO)$/backgroundshape.obj \
-            $(SLO)$/drawinglayeranimation.obj \
-            $(SLO)$/drawshape.obj \
-            $(SLO)$/drawshapesubsetting.obj \
-            $(SLO)$/externalshapebase.obj \
-            $(SLO)$/gdimtftools.obj \
-            $(SLO)$/intrinsicanimationactivity.obj \
-            $(SLO)$/mediashape.obj \
-            $(SLO)$/shapeimporter.obj \
-            $(SLO)$/viewappletshape.obj \
-            $(SLO)$/viewbackgroundshape.obj \
-            $(SLO)$/viewmediashape.obj \
-            $(SLO)$/viewshape.obj
-
-
-# ==========================================================================
-
-.INCLUDE :	target.mk
+# vim: set noet sw=4 ts=4:
