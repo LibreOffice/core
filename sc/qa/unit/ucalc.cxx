@@ -489,7 +489,7 @@ void Test::recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL
 
     CPPUNIT_ASSERT(osl::FileBase::E_None == aDir.open());
     osl::DirectoryItem aItem;
-    osl::FileStatus aFileStatus(FileStatusMask_FileURL|FileStatusMask_Type);
+    osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileURL|osl_FileStatus_Mask_Type);
     while (aDir.getNextItem(aItem) == osl::FileBase::E_None)
     {
         aItem.getFileStatus(aFileStatus);
