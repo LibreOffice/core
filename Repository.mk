@@ -77,6 +77,9 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     ooxml \
     qstart_gtk \
     resourcemodel \
+    rpt \
+    rptui \
+    rptxml \
     sax \
     sb \
     sc \
