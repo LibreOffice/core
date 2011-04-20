@@ -36,6 +36,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     editeng \
     fileaccess \
     forms \
+    formula \
     framework \
     lotuswordpro \
     oox \
