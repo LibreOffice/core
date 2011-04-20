@@ -149,8 +149,10 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     hatchwindowfactory \
     lomenubar \
     msforms \
+    OGLTrans \
     passwordcontainer \
     productregistration \
+    slideshow \
     vbaobj \
     vbaswobj \
     writerfilter_uno \

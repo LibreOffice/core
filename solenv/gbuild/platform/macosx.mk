@@ -319,10 +319,14 @@ endif
 
 gb_Library__FRAMEWORKS := \
 	Cocoa \
+	GLUT \
+	OpenGL \
 
 gb_Library_PLAINLIBS_NONE += \
+	GLUT \
 	Cocoa \
 	objc \
+	OpenGL \
 	jpeg \
 	m \
 	pthread \

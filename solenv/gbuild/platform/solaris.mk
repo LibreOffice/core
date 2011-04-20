@@ -246,6 +246,8 @@ endif
 
 gb_Library_PLAINLIBS_NONE += \
 	dl \
+	GL \
+	GLU \
 	jpeg \
 	m \
 	pthread \

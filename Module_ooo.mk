@@ -43,6 +43,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     sc \
     sd \
     sfx2 \
+    slideshow \
     sot \
     svl \
     svtools \
