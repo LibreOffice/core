@@ -25,33 +25,16 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..$/..
+PRJ=..
+TARGET=prj
 
-PROJECTPCH=sd
-PROJECTPCHSOURCE=$(PRJ)$/util$/sd
-PRJNAME=sd
-TARGET=slsmodel
-ENABLE_EXCEPTIONS=TRUE
-AUTOSEG=true
-PRJINC=..$/..
+.INCLUDE : settings.mk
 
-# --- Settings -----------------------------------------------------
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
+.ENDIF
 
-.INCLUDE :  settings.mk
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
-
-# --- Files --------------------------------------------------------
-
-SLOFILES =      							\
-    $(SLO)$/SlsPageDescriptor.obj			\
-    $(SLO)$/SlsPageEnumeration.obj			\
-    $(SLO)$/SlsPageEnumerationProvider.obj	\
-    $(SLO)$/SlsVisualState.obj				\
-    $(SLO)$/SlideSorterModel.obj
-
-EXCEPTIONSFILES= 
-
-# --- Tagets -------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+all:
+    cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog

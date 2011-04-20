@@ -30,6 +30,8 @@
 #ifndef _SD_LAYER_DLG_HXX_
 #define _SD_LAYER_DLG_HXX_
 
+#include <sddllapi.h>
+
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/dialog.hxx>
@@ -40,7 +42,7 @@
 
 class SfxItemSet;
 
-class SdInsertLayerDlg : public ModalDialog
+class SD_DLLPUBLIC SdInsertLayerDlg : public ModalDialog
 {
 private:
     FixedText           maFtName;

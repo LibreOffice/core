@@ -1,0 +1,93 @@
+# Version: MPL 1.1 / GPLv3+ / LGPLv3+
+#
+# The contents of this file are subject to the Mozilla Public License Version
+# 1.1 (the "License"); you may not use this file except in compliance with
+# the License or as specified alternatively below. You may obtain a copy of
+# the License at http://www.mozilla.org/MPL/
+#
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
+#
+# The Initial Developer of the Original Code is
+#       David Tardon, Red Hat Inc. <dtardon@redhat.com>
+# Portions created by the Initial Developer are Copyright (C) 2010 the
+# Initial Developer. All Rights Reserved.
+#
+# Major Contributor(s):
+#
+# For minor contributions see the git repository.
+#
+# Alternatively, the contents of this file may be used under the terms of
+# either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+# the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+# in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+# instead of those above.
+
+$(eval $(call gb_CppunitTest_CppunitTest,sd_uimpress))
+
+$(eval $(call gb_CppunitTest_add_package_headers,sd_uimpress,sd_qa_unit))
+
+$(eval $(call gb_CppunitTest_set_include,sd_uimpress,\
+    $$(INCLUDE) \
+    -I$(realpath $(SRCDIR)/sd/inc) \
+    -I$(realpath $(SRCDIR)/sd/inc/pch) \
+    -I$(OUTDIR)/inc \
+    -I$(OUTDIR)/inc/offuh \
+))
+
+$(eval $(call gb_CppunitTest_set_defs,sd_uimpress,\
+    $$(DEFS) \
+    -DSD_DLLIMPLEMENTATION \
+))
+
+$(eval $(call gb_CppunitTest_add_library_objects,sd_uimpress,sd))
+
+$(eval $(call gb_CppunitTest_add_linked_libs,sd_uimpress,\
+    avmedia \
+    basegfx \
+    canvastools \
+    comphelper \
+    cppcanvas \
+    cppu \
+    cppuhelper \
+    drawinglayer \
+    editeng \
+    i18nisolang1 \
+    sal \
+    salhelper \
+    sb \
+    sfx \
+    sot \
+    svl \
+    svt \
+    svxcore \
+    svx \
+    tk \
+    tl \
+    ucbhelper \
+    utl \
+    vcl \
+    xo \
+    $(gb_STDLIBS) \
+))
+
+$(eval $(call gb_CppunitTest_add_exception_objects,sd_uimpress,\
+    sd/qa/unit/uimpress \
+))
+
+$(eval $(call gb_CppunitTest_uses_ure,sd_uimpress))
+
+$(eval $(call gb_CppunitTest_set_args,sd_uimpress,\
+    --headless \
+    --invisible \
+    "-env:UNO_TYPES=$(foreach binrdb,udkapi.rdb types.rdb,\
+        file://$(if $(filter WNT,$(OS)),/)$(OUTDIR)/bin/$(binrdb))" \
+    "-env:UNO_SERVICES=$(foreach rdb,$(OUTDIR)/xml/ure/services.rdb $(WORKDIR)/CustomTarget/sd/qa/unit/services.rdb,\
+        file://$(if $(filter WNT,$(OS)),/)$(rdb))" \
+    $(foreach dir,URE_INTERNAL_LIB_DIR OOO_BASE_DIR BRAND_BASE_DIR,\
+        -env:$(dir)=file://$(if $(filter WNT,$(OS)),/$(OUTDIR)/bin,$(OUTDIR)/lib)) \
+))
+
+# vim: set noet sw=4:

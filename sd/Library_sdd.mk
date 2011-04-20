@@ -11,12 +11,12 @@
 # License.
 #
 # The Initial Developer of the Original Code is
-#       Bjoern Michaelsen, Canonical Ltd. <bjoern.michaelsen@canonical.com>
+#       David Tardon, Red Hat Inc. <dtardon@redhat.com>
 # Portions created by the Initial Developer are Copyright (C) 2010 the
 # Initial Developer. All Rights Reserved.
 #
-# Major Contributor(s): 
-# 
+# Major Contributor(s):
+#
 # For minor contributions see the git repository.
 #
 # Alternatively, the contents of this file may be used under the terms of
@@ -25,22 +25,39 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,sd))
+$(eval $(call gb_Library_Library,sdd))
 
-$(eval $(call gb_Module_add_targets,sd,\
-    CppUnitTest_sd_uimpress \
-    Library_sd \
-    Library_sdd \
-    Library_sdfilt \
-    Library_sdui \
-    Package_inc \
-    Package_qa_unit \
-    Package_uiconfig \
-    Package_xml \
+$(eval $(call gb_Library_add_precompiled_header,sdd,$(SRCDIR)/sd/inc/pch/precompiled_sd))
+
+$(eval $(call gb_Library_set_include,sdd,\
+    $$(INCLUDE) \
+    -I$(realpath $(SRCDIR)/sd/inc) \
+    -I$(realpath $(SRCDIR)/sd/inc/pch) \
+    -I$(OUTDIR)/inc \
+    -I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,sd,\
-    JunitTest_sd_unoapi \
+$(eval $(call gb_Library_add_linked_libs,sdd,\
+    cppu \
+    cppuhelper \
+    sal \
+    sfx \
+    sot \
+    svl \
+    svt \
+    svxcore \
+    tl \
+    ucbhelper \
+    utl \
+    vcl \
+    $(gb_STDLIBS) \
+))
+
+$(eval $(call gb_Library_set_componentfile,sdd,sd/util/sdd))
+
+$(eval $(call gb_Library_add_exception_objects,sdd,\
+    sd/source/ui/unoidl/detreg \
+    sd/source/ui/unoidl/sddetect \
 ))
 
 # vim: set noet ts=4 sw=4:

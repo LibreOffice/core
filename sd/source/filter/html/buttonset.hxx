@@ -29,6 +29,8 @@
 #ifndef _SD_HTMLEX_BUTTONSET_HXX
 #define _SD_HTMLEX_BUTTONSET_HXX
 
+#include <sddllapi.h>
+
 #include <rtl/ustring.hxx>
 #include <boost/scoped_ptr.hpp>
 #include <vector>
@@ -36,7 +38,7 @@
 class Image;
 class ButtonSetImpl;
 
-class ButtonSet
+class SD_DLLPUBLIC ButtonSet
 {
 public:
     ButtonSet();

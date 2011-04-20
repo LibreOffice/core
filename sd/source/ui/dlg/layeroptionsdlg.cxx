@@ -29,9 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
-#ifdef SD_DLLIMPLEMENTATION
-#undef SD_DLLIMPLEMENTATION
-#endif
 #include <svl/itemset.hxx>
 
 #include "strings.hrc"

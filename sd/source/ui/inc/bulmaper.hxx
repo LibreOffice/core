@@ -29,14 +29,14 @@
 #ifndef INCLUDED_SD_BULMAPER_HXX
 #define INCLUDED_SD_BULMAPER_HXX
 
-#include "tools/solar.h"
+#include <sddllapi.h>
 
 class SfxItemSet;
 class SvxBulletItem;
 class SvxNumberFormat;
 class SvxNumRule;
 
-class SdBulletMapper
+class SD_DLLPUBLIC SdBulletMapper
 {
 public:
 /* #i35937#

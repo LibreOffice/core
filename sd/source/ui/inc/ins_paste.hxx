@@ -29,6 +29,8 @@
 #ifndef _SD_INS_PASTE_HXX_
 #define _SD_INS_PASTE_HXX_
 
+#include <sddllapi.h>
+
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/dialog.hxx>
@@ -38,7 +40,7 @@
 // - SdInsertPasteDlg -
 // --------------------
 
-class SdInsertPasteDlg : public ModalDialog
+class SD_DLLPUBLIC SdInsertPasteDlg : public ModalDialog
 {
 private:
 
