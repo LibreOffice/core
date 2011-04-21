@@ -64,7 +64,7 @@ XFContentContainer::XFContentContainer()
 {
 }
 
-XFContentContainer::XFContentContainer(const XFContentContainer& other)
+XFContentContainer::XFContentContainer(const XFContentContainer& other):XFContent(other)
 {
     std::vector<IXFContent*>::const_iterator it;
 

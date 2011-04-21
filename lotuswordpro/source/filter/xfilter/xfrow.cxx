@@ -67,7 +67,7 @@ XFRow::XFRow()
     m_nRow = 0;
 }
 
-XFRow::XFRow(const XFRow& other)
+XFRow::XFRow(const XFRow& other):XFContent(other)
 {
     m_pOwnerTable = NULL;
     m_nRepeat = other.m_nRepeat;

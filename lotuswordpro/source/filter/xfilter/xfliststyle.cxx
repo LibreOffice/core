@@ -171,7 +171,7 @@ XFListStyle::XFListStyle()
     }
 }
 
-XFListStyle::XFListStyle(const XFListStyle& other)
+XFListStyle::XFListStyle(const XFListStyle& other):XFStyle(other)
 {
     enumXFListLevel type;
     for( int i=0; i<10; i++ )

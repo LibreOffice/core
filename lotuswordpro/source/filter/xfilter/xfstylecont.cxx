@@ -70,8 +70,8 @@ XFStyleContainer::XFStyleContainer(const rtl::OUString& strStyleNamePrefix)
 {
 }
 
-XFStyleContainer::XFStyleContainer(const XFStyleContainer& other)
-    :m_strStyleNamePrefix(other.m_strStyleNamePrefix)
+XFStyleContainer::XFStyleContainer(const XFStyleContainer& other):IXFObject(other),
+    m_strStyleNamePrefix(other.m_strStyleNamePrefix)
 {
     this->m_aStyles = other.m_aStyles;
 }

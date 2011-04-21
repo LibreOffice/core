@@ -70,7 +70,7 @@ XFTable::XFTable()
     m_pOwnerCell = NULL;
 }
 
-XFTable::XFTable(const XFTable& other)
+XFTable::XFTable(const XFTable& other):XFContent(other)
 {
     m_strName = other.m_strName;
     m_bSubTable = other.m_bSubTable;

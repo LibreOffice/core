@@ -85,7 +85,7 @@ XFParaStyle::XFParaStyle()
     m_bNumberRight = sal_False;
 }
 
-XFParaStyle::XFParaStyle(XFParaStyle& other)
+XFParaStyle::XFParaStyle(XFParaStyle& other):XFStyle(other)
 {
     m_strParentStyleName = other.m_strParentStyleName;
     m_nFlag = other.m_nFlag;
