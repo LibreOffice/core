@@ -28,6 +28,7 @@
 $(eval $(call gb_Module_Module,sd))
 
 $(eval $(call gb_Module_add_targets,sd,\
+    AllLangResTarget_sd \
     CppUnitTest_sd_uimpress \
     Library_sd \
     Library_sdd \
