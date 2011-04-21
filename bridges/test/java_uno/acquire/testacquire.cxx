@@ -510,7 +510,7 @@ css::uno::Reference< css::uno::XInterface > Service::createInstance(
     return static_cast< cppu::OWeakObject * >(new Service(context));
 }
 
-extern "C" void SAL_CALL component_getImplementationEnvironment(
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     char const ** envTypeName, uno_Environment **)
 {
     if (envTypeName != 0) {
@@ -518,7 +518,7 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(
     }
 }
 
-extern "C" void * SAL_CALL component_getFactory(char const * implName,
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(char const * implName,
                                                 void * serviceManager, void *) {
     void * p = 0;
     if (serviceManager != 0) {
