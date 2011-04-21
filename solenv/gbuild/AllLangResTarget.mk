@@ -308,6 +308,7 @@ $(call gb_ResTarget_get_target,%) : $(gb_Helper_MISCDUMMY) | $(gb_ResTarget_RSCT
 			-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/imglst/$(LANGUAGE)) \
 			-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/imglst) \
 			-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/res/$(LANGUAGE)) \
+			-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/res/imagelst) \
 			-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/res) \
 			-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)) \
 			-lip=$(gb_ResTarget_DEFIMAGESLOCATION)res/$(LANGUAGE) \
