@@ -44,8 +44,8 @@ public:
     virtual ~SdPageLink();
 
     virtual void Closed();
-    virtual void DataChanged( const String& ,
-                              const ::com::sun::star::uno::Any & );
+    virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
+        const String& rMimeType, const ::com::sun::star::uno::Any & rValue );
     bool         Connect() { return 0 != SvBaseLink::GetRealObject(); }
 };
 
