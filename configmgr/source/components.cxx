@@ -510,11 +510,15 @@ css::beans::Optional< css::uno::Any > Components::getExternalValue(
     return value;
 }
 
+int tempHACK = 0;
+
 Components::Components(
     css::uno::Reference< css::uno::XComponentContext > const & context):
     context_(context)
 {
     lock_ = lock();
+
+    tempHACK = 1;
 
     OSL_ASSERT(context.is());
     RTL_LOGFILE_TRACE_AUTHOR("configmgr", "sb", "begin parsing");
@@ -594,6 +598,7 @@ Components::Components(
 Components::~Components()
 {
     flushModifications();
+    tempHACK = 0;
 }
 
 void Components::parseFileLeniently(
