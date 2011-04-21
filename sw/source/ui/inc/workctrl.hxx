@@ -36,8 +36,8 @@
 class PopupMenu;
 class SwView;
 
-// doppelter Eintrag! hrc und hxx
-// diese Ids bestimmen, was die Buttons unter dem Scrollbar tun
+// double entry! hrc and hxx
+// these Ids say what the buttons below the scrollbar are doing
 #define NID_START   20000
 #define NID_NEXT    20000
 #define NID_PREV    20001
@@ -186,7 +186,7 @@ class SwNaviImageButton : public ImageButton
 };
 
 //----------------------------------------------------------------------------
-//  Die ImageButtons muessen sich bei Bedarf den HelpText selbst setzen
+//  ImageButtons have to set the HelpText themselves if needed
 //----------------------------------------------------------------------------
 
 class SwHlpImageButton : public ImageButton

@@ -58,7 +58,7 @@ namespace nsTransferBufferType
     const sal_uInt16 TRNSFR_DDELINK         = 0x0010;
     const sal_uInt16 TRNSFR_OLE             = 0x0020;
     const sal_uInt16 TRNSFR_INETFLD         = 0x0040;
-    const sal_uInt16 TRNSFR_DRAWING         = 0x0081;   //Drawing ist auch intern!
+    const sal_uInt16 TRNSFR_DRAWING         = 0x0081;   // drawing is internal too!
 }
 
 #define DATA_FLAVOR     ::com::sun::star::datatransfer::DataFlavor
@@ -77,7 +77,7 @@ class SwTransferable : public TransferableHelper
     const ViewShell       *pCreatorView;
     SwDocFac        *pClpDocFac;
     Graphic         *pClpGraphic, *pClpBitmap, *pOrigGrf;
-    INetBookmark    *pBkmk;     // URL und Beschreibung!
+    INetBookmark    *pBkmk;     // URL and description!
     ImageMap        *pImageMap;
     INetImage       *pTargetURL;
 

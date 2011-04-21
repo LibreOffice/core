@@ -56,7 +56,7 @@ public:
 
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Umlauf-TabPage
+    Description:    circulation TabPage
  --------------------------------------------------------------------*/
 
 class SwWrapTabPage: public SfxTabPage

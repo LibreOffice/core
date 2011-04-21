@@ -39,7 +39,7 @@ class SwTabCols;
 struct TColumn;
 
 /*-------------------------------------------------------
- Tabellendialog
+ table dialog
 --------------------------------------------------------- */
 class SwTableTabDlg : public SfxTabDialog
 {

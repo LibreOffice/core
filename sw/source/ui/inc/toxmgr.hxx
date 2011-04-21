@@ -37,7 +37,7 @@ class SwWrtShell;
 class SwForm;
 
 /*--------------------------------------------------------------------
-    Beschreibung: Manager fuer Verzeichnisfunktionalitaet
+    Description: manager for directory functionality
  --------------------------------------------------------------------*/
 //one single method will be sufficient to insert AND upate indexes
 class SW_DLLPUBLIC SwTOXDescription
@@ -281,7 +281,7 @@ public:
     explicit SwTOXMgr(SwWrtShell* pShell);
 
     //
-    // Methoden fuer Verzeichnismarkierungen
+    // methods for directory marks
     //
     void    InsertTOXMark(const SwTOXMarkDescription& rDesc);
 
@@ -292,7 +292,7 @@ public:
     void                NextTOXMark(sal_Bool bSame=sal_False);
     void                PrevTOXMark(sal_Bool bSame=sal_False);
 
-    // Aktuelle TOXmarks holen
+    // get current TOXmarks
     sal_uInt16              GetTOXMarks();
     sal_uInt16              GetTOXMarkCount();
     SwTOXMark*          GetTOXMark(sal_uInt16 nId);
@@ -300,7 +300,7 @@ public:
     void                SetCurTOXMark(sal_uInt16 nId);
 
     //
-    // Methoden fuer Verzeichnisse
+    // methods for directories
     //
     sal_Bool    UpdateOrInsertTOX(const SwTOXDescription& rDesc, SwTOXBase** ppBase = 0, const SfxItemSet* pSet = 0);
 
@@ -310,7 +310,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Inlines
+    Description: inlines
  --------------------------------------------------------------------*/
 inline sal_uInt16 SwTOXMgr::GetTOXMarkCount()
     {   return aCurMarks.Count();   }

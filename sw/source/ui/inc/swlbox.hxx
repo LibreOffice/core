@@ -41,7 +41,7 @@ class Window;
 SV_DECL_PTRARR_DEL(SwEntryLst, SwBoxEntry*, 10, 10)
 
 /*--------------------------------------------------------------------
-     Beschreibung: SwBoxEntry
+     Description: SwBoxEntry
  --------------------------------------------------------------------*/
 class SW_DLLPUBLIC SwBoxEntry
 {
@@ -62,7 +62,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-     Beschreibung: fuer ComboBoxen
+     Description: for combo boxes
  --------------------------------------------------------------------*/
 typedef sal_uInt16 SwComboBoxStyle;
 

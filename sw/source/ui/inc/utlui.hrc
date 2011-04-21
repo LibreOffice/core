@@ -42,7 +42,7 @@
 #define STR_HYPERCTRL_SEL                       (RC_UTLUI_BEGIN + 5)
 #define STR_HYPERCTRL_HYP                       (RC_UTLUI_BEGIN + 6)
 
-// Namene der Inhaltstypen                      (RC_UTLUI_BEGIN + 7)
+// names of content types                       (RC_UTLUI_BEGIN + 7)
 #define STR_CONTENT_TYPE_FIRST                  (RC_UTLUI_BEGIN + 8)
 #define STR_CONTENT_TYPE_OUTLINE                STR_CONTENT_TYPE_FIRST
 #define STR_CONTENT_TYPE_TABLE                  (RC_UTLUI_BEGIN + 9)

@@ -37,7 +37,7 @@ class SwNumRule;
 class IntlWrapper;
 
 /*--------------------------------------------------------------------
-    Beschreibung: Container fuer FootNote
+    Description: container for FootNote
  --------------------------------------------------------------------*/
 class SW_DLLPUBLIC SwPageFtnInfoItem : public SfxPoolItem
 {

@@ -34,7 +34,7 @@ class SfxItemSet;
 class SwWrtShell;
 
 /*--------------------------------------------------------------------
-   Beschreibung:    Der Tabdialog Traeger der TabPages
+   Description:    the tab dialog carrier of TabPages
  --------------------------------------------------------------------*/
 class SwTemplateDlg: public SfxStyleDialog
 {

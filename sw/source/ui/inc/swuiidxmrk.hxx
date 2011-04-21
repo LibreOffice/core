@@ -52,7 +52,7 @@ class SwWrtShell;
 class SwTOXMgr;
 class SwTOXMark;
 /*--------------------------------------------------------------------
-     Beschreibung:  Markierung fuer Verzeichniseintrag einfuegen
+     Description:   insert mark for index entry
  --------------------------------------------------------------------*/
 class SwIndexMarkFloatDlg;
 class SwIndexMarkModalDlg;

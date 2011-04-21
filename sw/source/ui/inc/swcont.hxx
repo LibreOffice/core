@@ -33,7 +33,7 @@
 
 class SwContentType;
 
-//Reihenfolge und Anzahl mit ResIds abgleichen!!
+// synchronize order and number with ResIds!!
 #define CONTENT_TYPE_OUTLINE        0
 #define CONTENT_TYPE_TABLE          1
 #define CONTENT_TYPE_FRAME          2
@@ -49,17 +49,17 @@ class SwContentType;
 #define CONTENT_TYPE_MAX            CONTENT_TYPE_DRAWOBJECT +1
 
 
-// Typen fuer das Globaldokument
+// types for global document
 #define GLOBAL_CONTENT_REGION       100
 #define GLOBAL_CONTENT_INDEX        101
 #define GLOBAL_CONTENT_TEXT         102
 #define GLOBAL_CONTENT_MAX          3
 
-// Strings fuer Kontextmenue
+// strings for context menus
 #define CONTEXT_COUNT   12
 #define GLOBAL_CONTEXT_COUNT 14
 
-// Modi fuer Drag 'n Drop
+// modes for Drag 'n Drop
 #define REGION_MODE_NONE        0
 #define REGION_MODE_LINK        1
 #define REGION_MODE_EMBEDDED    2
@@ -94,12 +94,12 @@ public:
     const String&           GetName()   const {return sContentName;}
     int                     operator==(const SwContent& /*rCont*/) const
                                 {
-                                    //gleich sind sie nie, sonst fallen sie aus dem Array
+                                    // they're never equal, otherwise they'd fall out of the array
                                     return sal_False;
                                 }
     int                     operator<(const SwContent& rCont) const
                                 {
-                                    //zuerst nach Position dann nach Name sortieren
+                                    // at first sort by position and then by name
                                     return nYPosition != rCont.nYPosition ?
                                         nYPosition < rCont.nYPosition :
                                             sContentName < rCont.sContentName;;

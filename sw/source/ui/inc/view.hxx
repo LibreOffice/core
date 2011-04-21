@@ -134,7 +134,7 @@ enum ShellModes
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Anwendung einer Vorlage
+    Description:    apply a template
  --------------------------------------------------------------------*/
 struct SwApplyTemplate
 {
@@ -163,11 +163,11 @@ struct SwApplyTemplate
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Sicht auf ein Dokument
+    Description:    view of a document
  --------------------------------------------------------------------*/
 class SW_DLLPUBLIC SwView: public SfxViewShell
 {
-    //Messehack (MA,MBA)
+    // exhibition hack (MA,MBA)
     friend void lcl_SelectShellForDrop( SwView &rView );
 
     friend class TestTemplateItem;
@@ -176,7 +176,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     friend class SwView_Impl;
     friend class SwClipboardChangeListener;
 
-    //suchen & ersetzen
+    // search & replace
     static SvxSearchDialog *pSrchDlg;
     static SvxSearchItem   *pSrchItem;
 
@@ -184,8 +184,8 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     static sal_uInt16           nWebInsertCtrlState;
     static sal_uInt16           nInsertObjectCtrlState;
     static sal_uInt16           nInsertFieldCtrlState;
-    static sal_uInt16           nMoveType; // fuer Buttons unter dem Scrollbar (viewmdi)
-    static sal_Int32        nActMark; // aktuelle Sprungmarke fuer unbenannte Merker
+    static sal_uInt16           nMoveType; // for buttons below the scrollbar (viewmdi)
+    static sal_Int32        nActMark; // current jump mark for unknown mark
 
     static sal_Bool             bExtra;
     static sal_Bool             bFound;
@@ -196,37 +196,34 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
 
     SvxHtmlOptions      aHTMLOpt;
-    Timer               aTimer;         //Fuer verzoegerte ChgLnks waehrend
-                                        //einer Aktion
-    String              aPageStr;       //Statusanzeige, aktuelle Seite
+    Timer               aTimer;         // for delayed ChgLnks during an action
+    String              aPageStr;       // status view, current page
     String              sSwViewData,
     //and the new cursor position if the user double click in the PagePreView
                         sNewCrsrPos;
     // to support keyboard the number of the page to go to can be set too
     sal_uInt16              nNewPage;
 
-    Point               aTabColFromDocPos;  //Verschieben von Tabellenspalten aus
-                                            //aus dem Dokument heraus.
+    Point               aTabColFromDocPos;  // moving table colmns out of the document
     SwTxtNode           * pNumRuleNodeFromDoc; // Moving indent of numrule #i23726#
 
-    Size                aDocSz;         // aktuelle Dokumentgroesse
-    Rectangle           aVisArea;       // sichtbarer Bereich
+    Size                aDocSz;         // current document size
+    Rectangle           aVisArea;       // visible region
 
     SwEditWin           *pEditWin;
     SwWrtShell          *pWrtShell;
 
-    SfxShell            *pShell;        //aktuelle SubShell auf dem Dispatcher
+    SfxShell            *pShell;        // current SubShell at the dispatcher
     FmFormShell         *pFormShell;    // DB-FormShell
 
-    SwView_Impl         *pViewImpl;     // Impl-Daten fuer UNO + Basic
+    SwView_Impl         *pViewImpl;     // Impl-data for UNO + Basic
 
 
-    SwScrollbar         *pHScrollbar,   // MDI Bedienelemente
+    SwScrollbar         *pHScrollbar,   // MDI control elements
                         *pVScrollbar;
 
-    Window              *pScrollFill;   // Dummy-Window zum Fuellen der rechten
-                                        // unteren Ecke, wenn beide Scrollbars
-                                        // aktiv sind
+    Window              *pScrollFill;   // dummy window for filling the lower right edge
+                                        // when both scrollbars are active
 
     SvxRuler            *pHRuler,
                         *pVRuler;
@@ -236,7 +233,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
                         *pPageDownBtn;
 
     SwNaviImageButton   *pNaviBtn;
-    SwGlossaryHdl       *pGlosHdl;          // Henkel Textbausteine
+    SwGlossaryHdl       *pGlosHdl;          // handle text block
     SwDrawBase          *pDrawActual;
 
     const SwFrmFmt      *pLastTableFormat;
@@ -254,7 +251,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     sal_uInt16          nPageCnt;
 
-    // Aktueller Drawmode
+    // current draw mode
     sal_uInt16          nDrawSfxId;
     String          sDrawCustom; //some drawing types are marked with strings!
     sal_uInt16          nFormSfxId;
@@ -288,8 +285,8 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
                     bMakeSelectionVisible : 1 // transport the bookmark selection
                     ;
 
-    // Methoden fuers Suchen
-    // Suchkontext setzen
+    // methods for searching
+    // set search context
     SW_DLLPRIVATE sal_Bool              SearchAndWrap(sal_Bool bApi = sal_False);
     SW_DLLPRIVATE sal_Bool          SearchAll(sal_uInt16* pFound = 0);
     SW_DLLPRIVATE sal_uLong         FUNC_Search( const SwSearchOptions& rOptions );
@@ -299,7 +296,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     SW_DLLPRIVATE sal_Bool          IsTextTool() const;
 
-    // Bedienelemente verwalten anlegen
+    // create control elements
     SW_DLLPRIVATE void          CreateBtns();
     SW_DLLPRIVATE DECL_LINK( BtnPage, Button * );
 
@@ -320,7 +317,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SW_DLLPRIVATE sal_Bool          GetPageScrollUpOffset(SwTwips& rOff) const;
     SW_DLLPRIVATE sal_Bool          GetPageScrollDownOffset(SwTwips& rOff) const;
 
-    // Scrollbar Movements
+    // scrollbar movements
     SW_DLLPRIVATE long          PageUp();
     SW_DLLPRIVATE long          PageDown();
     SW_DLLPRIVATE long          PageUpCrsr(sal_Bool bSelect);
@@ -337,7 +334,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     SW_DLLPRIVATE void            CreatePageButtons(sal_Bool bShow);
 
-    // Linguistik-Funktionen
+    // linguistics functions
     SW_DLLPRIVATE void          HyphenateDocument();
     SW_DLLPRIVATE sal_Bool          IsDrawTextHyphenate();
     SW_DLLPRIVATE void          HyphenateDrawText();
@@ -356,16 +353,16 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SW_DLLPRIVATE void          SpellKontext(sal_Bool bOn = sal_True)
                             { bCenterCrsr = bOn; bAllwaysShowSel = bOn; }
 
-    // Methoden fuers Printing
+    // methods for printing
     SW_DLLPRIVATE virtual   SfxPrinter*     GetPrinter( sal_Bool bCreate = sal_False );
             SfxTabPage*     CreatePrintOptionsPage( Window* pParent,
                                                     const SfxItemSet& rSet);
-    // fuer Readonly-Umschaltung
+    // for readonly switching
     SW_DLLPRIVATE virtual void  Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
     SW_DLLPRIVATE void          _CheckReadonlyState();
     SW_DLLPRIVATE void          _CheckReadonlySelection();
 
-    // Methode fuer PageDesc drehen
+    // method for rotating PageDesc
     SW_DLLPRIVATE void          SwapPageMargin(const SwPageDesc&, SvxLRSpaceItem& rLR);
 
     SW_DLLPRIVATE void          _SetZoom( const Size &rEditSz,
@@ -389,7 +386,7 @@ protected:
     int             GetSelectionType() const { return nSelectionType; }
     void            SetSelectionType(int nSet) { nSelectionType = nSet;}
 
-    // fuer die SwWebView
+    // for SwWebView
     void            SetShell( SfxShell* pS )            { pShell = pS; }
     void            SetFormShell( FmFormShell* pSh )    { pFormShell = pSh; }
 
@@ -444,7 +441,7 @@ public:
     bool                    IsValidSelectionForThesaurus() const;
     String                  GetThesaurusLookUpText( bool bSelection ) const;
 
-    // Shell sofort wechseln ->  fuer GetSelectionObject
+    // immediately switch shell -> for GetSelectionObject
     void        StopShellTimer();
 
     inline SwWrtShell&      GetWrtShell   () const { return *pWrtShell; }
@@ -457,7 +454,7 @@ public:
     void ScannerEventHdl( const ::com::sun::star::lang::EventObject& rEventObject );
 #endif
 
-    //Handler fuer Textbausteine an die Textshell rausreichen, gfs. anlegen
+    // hand the handler for text blocks to the shell; create if applicable
     SwGlossaryHdl*          GetGlosHdl();
 
     inline const Rectangle& GetVisArea() const { return aVisArea; }
@@ -509,7 +506,7 @@ public:
 
     sal_Bool            HandleWheelCommands( const CommandEvent& );
 
-    // Rahmen einfuegen
+    // insert frames
     void            InsFrmMode(sal_uInt16 nCols);
 
     void            SetZoom( SvxZoomType eZoomType, short nFactor = 100, sal_Bool bViewOnly = sal_False);
@@ -563,7 +560,7 @@ public:
     void            StateStatusLine(SfxItemSet&);
 
 
-    // Funktionen fuer Drawing
+    // functions for drawing
     void            SetDrawFuncPtr(SwDrawBase* pFuncPtr);
     inline SwDrawBase* GetDrawFuncPtr(/*sal_Bool bBuf = sal_False*/) const  { return pDrawActual; }
     void            GetDrawState(SfxItemSet &rSet);
@@ -573,7 +570,7 @@ public:
     inline sal_Bool     IsDrawSelMode()     { return bDrawSelMode; }
     void            SetSelDrawSlot();
     inline void     FlipDrawSelMode()   { bDrawSelMode = !bDrawSelMode; }
-    void            NoRotate();     // Rotate-Mode abschalten
+    void            NoRotate();     // turn off rotate mode
     sal_Bool            EnterDrawTextMode(const Point& aDocPos);
     void            LeaveDrawCreate()   { nDrawSfxId = nFormSfxId = USHRT_MAX; sDrawCustom.Erase();}
     sal_Bool            IsDrawMode()        { return (nDrawSfxId != USHRT_MAX || nFormSfxId != USHRT_MAX); }
@@ -587,30 +584,30 @@ public:
 
     void            StateTabWin(SfxItemSet&);
 
-    // Attribute haben sich geaendert
+    // attributes have changed
     DECL_LINK( AttrChangedNotify, SwWrtShell * );
 
     // form control has been activated
     DECL_LINK( FormControlActivated, FmFormShell* );
 
-    // Links bearbeiten
+    // edit links
     void            EditLinkDlg();
     void            AutoCaption(const sal_uInt16 nType, const SvGlobalName *pOleId = 0);
     void            InsertCaption(const InsCaptionOpt *pOpt);
 
-    // Async Aufruf durch Core
+    // Async call by Core
     void        UpdatePageNums(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const String& rPgStr);
 
     String      GetPageStr(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const String& rPgStr);
 
-    // Shell rausreichen
+    // hand over Shell
                  SfxShell       *GetCurShell()  { return pShell; }
                  SwDocShell     *GetDocShell();
     inline const SwDocShell     *GetDocShell() const;
     inline       FmFormShell    *GetFormShell() { return pFormShell; }
     inline const FmFormShell    *GetFormShell() const { return pFormShell; }
 
-    //damit in DToren der SubShells ggf. pShell zurueckgesetzt werden kann
+    // so that in the SubShells' DTors pShell can be reset if applicable
     void ResetSubShell()    { pShell = 0; }
 
     virtual void    WriteUserData(String &, sal_Bool bBrowse = sal_False );

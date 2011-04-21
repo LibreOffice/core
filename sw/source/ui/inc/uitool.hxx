@@ -46,28 +46,28 @@ class SwTabCols;
 class DateTime;
 class SfxViewFrame;
 
-// Umschalten einer Metric
+// switch a metric
 SW_DLLPUBLIC void SetMetric(MetricFormatter& rCtrl, FieldUnit eUnit);
 
-// BoxInfoAttribut fuellen
+// fill BoxInfoAttribut
 SW_DLLPUBLIC void PrepareBoxInfo(SfxItemSet& rSet, const SwWrtShell& rSh);
 
 // SfxItemSets <-> PageDesc
 void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc );
 void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet);
 
-// Auffuellen der Tabs mit DefaultTabs
+// fill tabs with default tabs
 SW_DLLPUBLIC void   MakeDefTabs(SwTwips nDefDist, SvxTabStopItem& rTabs);
 
-// DefaultTabs loeschen aus dem TabStopArray
+// erase DefaultTabs from TabStopArray
 //void  EraseDefTabs(SvxTabStopItem& rTabs);
 
-// Abstand zwischen dem 1. und zweitem Element ermitteln
+// determine space between 1st and 2nd element
 SW_DLLPUBLIC sal_uInt16     GetTabDist(const SvxTabStopItem& rTabs);
 
-// erfrage ob im Set eine Sfx-PageDesc-Kombination vorliegt
-// und setze diesen im Set und loesche die Transport Items
-// (PageBreak & PageModel) aus dem Set
+// determine whether a Sfx-PageDesc combination exists in the set
+// and set this in the set and delete the transport items
+// (PageBreak & PageModel) from the set
 void SwToSfxPageDescAttr( SfxItemSet& rSet );
 void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet );
 

@@ -49,7 +49,7 @@ class SwSrcView: public SfxViewShell
     rtl_TextEncoding    eLoadEncoding;
     void                Init();
 
-    // fuer Readonly-Umschaltung
+    // for read-only switching
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
 
