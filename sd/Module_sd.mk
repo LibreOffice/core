@@ -36,6 +36,7 @@ $(eval $(call gb_Module_add_targets,sd,\
     Package_inc \
     Package_qa_unit \
     Package_uiconfig \
+    Package_web \
     Package_xml \
 ))
 
