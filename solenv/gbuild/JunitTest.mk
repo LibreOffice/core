@@ -36,18 +36,18 @@ export DBGSV_ERROR_OUT
 
 .PHONY : $(call gb_JunitTest_get_clean_target,%)
 $(call gb_JunitTest_get_clean_target,%) : $(call gb_JavaClassSet_get_clean_target,$(call gb_JunitTest_get_classsetname,%))
-    $(call gb_Helper_abbreviate_dirs,\
-        rm -f $@ $@.log)
+	$(call gb_Helper_abbreviate_dirs,\
+		rm -f $@ $@.log)
 
 .PHONY : $(call gb_JunitTest_get_target,$(1))
 $(call gb_JunitTest_get_target,%) :
-    $(call gb_Output_announce,$*,$(true),JUT,2)
-    $(call gb_Helper_abbreviate_dirs_native,\
-        rm -rf $(call gb_JunitTest_get_userdir,$*) && \
-        mkdir -p $(call gb_JunitTest_get_userdir,$*) && \
-        $(gb_JunitTest_JAVACOMMAND) -cp "$(CLASSPATH)" $(DEFS) org.junit.runner.JUnitCore $(CLASSES) 2>&1 > $@.log || (cat $@.log && false) && \
-        rm -rf $(call gb_JunitTest_get_userdir,$*))
-    $(CLEAN_CMD)
+	$(call gb_Output_announce,$*,$(true),JUT,2)
+	$(call gb_Helper_abbreviate_dirs_native,\
+		rm -rf $(call gb_JunitTest_get_userdir,$*) && \
+		mkdir -p $(call gb_JunitTest_get_userdir,$*) && \
+		$(gb_JunitTest_JAVACOMMAND) -cp "$(CLASSPATH)" $(DEFS) org.junit.runner.JUnitCore $(CLASSES) 2>&1 > $@.log || (cat $@.log && false) && \
+		rm -rf $(call gb_JunitTest_get_userdir,$*))
+	$(CLEAN_CMD)
 
 define gb_JunitTest_JunitTest
 $(call gb_JunitTest_get_target,$(1)) : CLASSPATH := $(value XCLASSPATH)$(gb_CLASSPATHSEP)$(call gb_JavaClassSet_get_classdir,$(call gb_JunitTest_get_classsetname,$(1)))$(gb_CLASSPATHSEP)$(OOO_JUNIT_JAR)$(gb_CLASSPATHSEP)$(OUTDIR)/lib

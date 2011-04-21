@@ -39,7 +39,7 @@ $(eval $(call gb_SrsTarget_SrsTarget,RES/res))
 
 # add any additional include paths here
 $(eval $(call gb_SrsTarget_set_include,RES/res,\
-    $$(INCLUDE) \
+	$$(INCLUDE) \
 ))
 
 # add src files here (complete path relative to repository root)
