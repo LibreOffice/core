@@ -38,7 +38,7 @@ class SwNavigationConfig : public utl::ConfigItem
     sal_Int32   nRegionMode;    //InsertMode
     sal_Int32   nActiveBlock;   //ActiveBlock//Expand/CollapsState
     sal_Bool    bIsSmall;       //ShowListBox
-    sal_Bool    bIsGlobalActive; //GlobalDocMode// Globalansicht fuer GlobalDoc gueltig?
+    sal_Bool    bIsGlobalActive; //GlobalDocMode// global view for GlobalDoc valid?
 
     com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
 

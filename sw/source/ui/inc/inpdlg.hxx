@@ -41,7 +41,7 @@ class SwField;
 class SwWrtShell;
 
 /*--------------------------------------------------------------------
-     Beschreibung: Einfuegen Felder
+     Description: insert fields
  --------------------------------------------------------------------*/
 
 class SwFldInputDlg: public SvxStandardDialog

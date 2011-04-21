@@ -74,7 +74,7 @@ public:
     SwPagePreViewWin( Window* pParent, SwPagePreView& rView );
     ~SwPagePreViewWin();
 
-    //Ruft ViewShell::Paint
+    // calls ViewShell::Paint
     virtual void Paint( const Rectangle& rRect );
     virtual void KeyInput( const KeyEvent & );
     virtual void Command( const CommandEvent& rCEvt );
@@ -172,12 +172,12 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Sicht auf ein Dokument
+    Description:   view of a document
  --------------------------------------------------------------------*/
 class SW_DLLPUBLIC SwPagePreView: public SfxViewShell
 {
-    // ViewWindow und Henkel zur Core
-    // aktuelle Dispatcher-Shell
+    // ViewWindow and handle to core
+    // current dispatcher shell
     SwPagePreViewWin        aViewWin;
     //viewdata of the previous SwView and the new crsrposition
     String                  sSwViewData,
@@ -185,18 +185,17 @@ class SW_DLLPUBLIC SwPagePreView: public SfxViewShell
                             sNewCrsrPos;
     // to support keyboard the number of the page to go to can be set too
     sal_uInt16                  nNewPage;
-    // Sichtbarer Bereich
+    // visible range
     String                  sPageStr;
     Size                    aDocSz;
     Rectangle               aVisArea;
 
-    // MDI Bedienelemente
+    // MDI control elements
     SwScrollbar             *pHScrollbar;
     SwScrollbar             *pVScrollbar;
     ImageButton             *pPageUpBtn,
                             *pPageDownBtn;
-    // Dummy-Window zum F�llen der rechten unteren Ecke, wenn beide Scrollbars
-    // aktiv sind
+    // dummy window for filling the lower right edge when both scrollbars are active
     Window                  *pScrollFill;
 
     sal_uInt16                  mnPageCount;
@@ -284,7 +283,7 @@ public:
     sal_uInt16          GetNewPage() const {return nNewPage;}
     void            SetNewPage(sal_uInt16 nSet)  {nNewPage = nSet;}
 
-        // Handler
+        // handler
     void            Execute(SfxRequest&);
     void            GetState(SfxItemSet&);
     void            StateUndo(SfxItemSet&);
@@ -324,7 +323,7 @@ public:
     ~SwPagePreView();
 };
 
-// ----------------- inline Methoden ----------------------
+// ----------------- inline methods ----------------------
 inline void SwPagePreView::AdjustEditWin()
 {
     OuterResizePixel( Point(), GetFrameWindow()->GetOutputSizePixel() );

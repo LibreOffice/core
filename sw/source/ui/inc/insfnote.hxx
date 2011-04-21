@@ -41,7 +41,7 @@ class SwInsFootNoteDlg: public SvxStandardDialog
 {
     SwWrtShell     &rSh;
 
-    //Alles fuer das/die Zeichen
+    // everything for the character(s)
     String          aFontName;
     CharSet         eCharSet;
     char            cExtChar;
@@ -53,7 +53,7 @@ class SwInsFootNoteDlg: public SvxStandardDialog
     Edit            aNumberCharEdit;
     PushButton      aNumberExtChar;
 
-    //Alles fuer die Auswahl Fussnote/Endnote
+    // everything for the selection footnote/endnote
     FixedLine        aTypeFL;
     RadioButton     aFtnBtn;
     RadioButton     aEndNoteBtn;

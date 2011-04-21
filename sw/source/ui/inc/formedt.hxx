@@ -44,7 +44,7 @@ class SwWrtShell;
 class SwForm;
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Markierung fuer Verzeichniseintrag einfuegen
+     Description:   insert marker for index entry
  --------------------------------------------------------------------*/
 class SwIdxFormDlg : public SvxStandardDialog
 {

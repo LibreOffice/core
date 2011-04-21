@@ -62,7 +62,7 @@ namespace sfx2
 }
 
 /*************************************************************************
-    Dialog "Bereiche bearbeiten"
+    dialog "edit regions"
 *************************************************************************/
 class SectRepr;
 typedef SectRepr* SectReprPtr;
@@ -156,7 +156,7 @@ public:
 };
 
 /*************************************************************************
-    Dialog "Bereich einfuegen"
+    dialog "insert region"
 *************************************************************************/
 class SwInsertSectionTabPage : public SfxTabPage
 {

@@ -48,11 +48,11 @@ struct FrmMap;
 struct SwPosition;
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Rahmendialog
+     Description:   frame dialog
  --------------------------------------------------------------------*/
 class SwFrmPage: public SfxTabPage
 {
-    // Size
+    // size
     FixedLine       aSizeFL;
     FixedText       aWidthFT;
     FixedText       aWidthAutoFT;
@@ -67,7 +67,7 @@ class SwFrmPage: public SfxTabPage
     CheckBox        aFixedRatioCB;
     PushButton      aRealSizeBT;
 
-    // Anker
+    // anchor
     FixedLine       aTypeSepFL;
     FixedLine       aTypeFL;
     RadioButton     aAnchorAtPageRB;
@@ -76,7 +76,7 @@ class SwFrmPage: public SfxTabPage
     RadioButton     aAnchorAsCharRB;
     RadioButton     aAnchorAtFrameRB;
 
-    // Position
+    // position
     FixedLine       aPositionFL;
     FixedText       aHorizontalFT;
     ListBox         aHorizontalDLB;
@@ -94,7 +94,7 @@ class SwFrmPage: public SfxTabPage
     // OD 02.10.2003 #i18732# - check box for new option 'FollowTextFlow'
     CheckBox        aFollowTextFlowCB;
 
-    // Example
+    // example
     SvxSwFrameExample   aExampleWN;
 
     //'string provider'
@@ -125,7 +125,7 @@ class SwFrmPage: public SfxTabPage
     // to character anchored objects.
     const SwPosition* mpToCharCntntPos;
 
-    // Die alten Ausrichtungen
+    // old alignment
     short        nOldH;
     short    nOldHRel;
     short        nOldV;
@@ -157,7 +157,7 @@ class SwFrmPage: public SfxTabPage
     DECL_LINK( AutoWidthClickHdl, void* );
     DECL_LINK( AutoHeightClickHdl, void* );
 
-    // Beispiel aktualisieren
+    // update example
     void            UpdateExample();
     DECL_LINK( ModifyHdl, Edit * );
 
@@ -206,7 +206,7 @@ public:
 
 class SwGrfExtPage: public SfxTabPage
 {
-    // Spiegeln
+    // mirror
     FixedLine       aMirrorFL;
     CheckBox        aMirrorVertBox;
     CheckBox        aMirrorHorzBox;
@@ -227,7 +227,7 @@ class SwGrfExtPage: public SfxTabPage
 
     sal_Bool            bHtmlMode;
 
-    // Handler fuer Spiegeln
+    // handler for mirroring
     DECL_LINK( MirrorHdl, CheckBox * );
     DECL_LINK( BrowseHdl, Button * );
 
@@ -249,7 +249,7 @@ public:
 
 class SwFrmURLPage : public SfxTabPage
 {
-    //Hyperlink
+    // hyperlink
     FixedLine       aHyperLinkFL;
     FixedText       aURLFT;
     Edit            aURLED;
@@ -259,7 +259,7 @@ class SwFrmURLPage : public SfxTabPage
     FixedText       aFrameFT;
     ComboBox        aFrameCB;
 
-    //Image map
+    // image map
     FixedLine       aImageFL;
     CheckBox        aServerCB;
     CheckBox        aClientCB;

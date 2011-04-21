@@ -41,12 +41,12 @@ private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XHyphenator >  xHyph;
     Link            aOldLnk;
-    LanguageType        nLangError;     // nicht vorhandene Sprache
-    sal_uInt16          nPageCount;     // Seitenanzahl fuer Progressanzeige
-    sal_uInt16          nPageStart;     // 1. gepruefte Seite
-    sal_Bool            bInSelection : 1; // Trennen von selektiertem Text
-    sal_Bool            bShowError : 1; // nicht vorhandene Sprache melden
-    sal_Bool            bAutomatic : 1; // Trennstellen ohne Rueckfrage einfuegen
+    LanguageType        nLangError;     // non existing language
+    sal_uInt16          nPageCount;     // page count for progress view
+    sal_uInt16          nPageStart;     // 1st checked page
+    sal_Bool            bInSelection : 1; // seperating selected text
+    sal_Bool            bShowError : 1; // report non existing language
+    sal_Bool            bAutomatic : 1; // insert seperators without further inquiry
     sal_Bool            bInfoBox : 1;   // display info-box when ending
     DECL_LINK( SpellError, LanguageType * );
 
@@ -55,7 +55,7 @@ protected:
     virtual sal_Bool SpellContinue();
     virtual void SpellEnd( );
     virtual sal_Bool SpellMore();
-    virtual void InsertHyphen( const sal_uInt16 nPos ); // Hyphen einfuegen
+    virtual void InsertHyphen( const sal_uInt16 nPos ); // insert hyphen
 
 public:
     SwHyphWrapper( SwView* pVw,

@@ -34,7 +34,7 @@
 class SwWrtShell;
 
 /*--------------------------------------------------------------------
-   Beschreibung:    Rahmendialog
+   Description: frame dialog
  --------------------------------------------------------------------*/
 class SwFrmDlg : public SfxTabDialog
 {

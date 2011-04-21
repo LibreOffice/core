@@ -62,7 +62,7 @@ extern SvStringsDtor*   pDBNameList;
 extern SvStringsDtor*   pAuthFieldNameList;
 extern SvStringsDtor*   pAuthFieldTypeList;
 
-// stellt die Textbausteinverwaltung zur Verfuegung
+// provides textblock management
 class SwGlossaries;
 SW_DLLPUBLIC SwGlossaries* GetGlossaries();
 

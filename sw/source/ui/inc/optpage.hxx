@@ -95,7 +95,7 @@ public:
 };
 
 /*--------------------------------------------------------
- TabPage Druckereinstellungen Zusaetze
+ TabPage printer settings additions
 --------------------------------------------------------- */
 class SwAddPrinterTabPage : public SfxTabPage
 {
@@ -199,7 +199,7 @@ class SwStdFontTabPage : public SfxTabPage
     SwStdFontConfig*    pFontConfig;
     SwWrtShell*         pWrtShell;
     LanguageType        eLanguage;
-    // waren nur defaults vorhanden? wurden sie mit den Boxen ueberschrieben
+    // only defaults were there? they were signed with the boxes
     sal_Bool    bListDefault    :1;
     sal_Bool    bSetListDefault :1;
     sal_Bool    bLabelDefault   :1;
@@ -301,7 +301,7 @@ public:
 };
 
 /*--------------------------------------------------
- TabPage fuer ShadowCrsr
+ TabPage for ShadowCrsr
 --------------------------------------------------*/
 class SwShdwCrsrOptionsTabPage : public SfxTabPage
 {
@@ -352,7 +352,7 @@ public:
 };
 
 /*-----------------------------------------------------------------------
-    Beschreibung: Markierungsvorschau
+    Description: mark preview
  -----------------------------------------------------------------------*/
 class SwMarkPreview : public Window
 {
@@ -389,7 +389,7 @@ public:
 };
 
 /*-----------------------------------------------------------------------
-    Beschreibung: Redlining-Optionen
+    Description: redlining options
  -----------------------------------------------------------------------*/
 class SwRedlineOptionsTabPage : public SfxTabPage
 {
@@ -445,7 +445,7 @@ public:
 };
 
 /*-------------------------------------------------------
- TabPage Testeinstellungen fuer SW
+ TabPage test settings for SW
 --------------------------------------------------------- */
 
 #if OSL_DEBUG_LEVEL > 1

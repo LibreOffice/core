@@ -37,8 +37,8 @@
 
 
 /* --- class SwParagraphNumTabPage ----------------------------------------
-    Mit dieser TabPage werden Numerierungseinstellungen am Absatz bzw. der
-    Absatzvorlage vorgenommen.
+    with this TabPage numbering settings at the paragraph / paragraph style
+    are performed.
 
  ---------------------------------------------------------------------------*/
 class SwParagraphNumTabPage : public SfxTabPage

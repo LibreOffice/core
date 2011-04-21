@@ -42,7 +42,7 @@ class SwView;
 class SwWrtShell;
 
 /*--------------------------------------------------------------------
-   Beschreibung: SingleTabDialog
+   Description: SingleTabDialog
  --------------------------------------------------------------------*/
 class SwLineNumberingDlg : public SfxSingleTabDialog
 {
@@ -58,7 +58,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-   Beschreibung: TabPage
+   Description: TabPage
  --------------------------------------------------------------------*/
 class SwLineNumberingPage : public SfxTabPage
 {

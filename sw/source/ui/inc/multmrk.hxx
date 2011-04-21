@@ -39,7 +39,7 @@
 class SwTOXMgr;
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Markierung fuer Verzeichniseintrag einfuegen
+     Description:   insert mark for index entry
  --------------------------------------------------------------------*/
 
 class SwMultiTOXMarkDlg : public SvxStandardDialog

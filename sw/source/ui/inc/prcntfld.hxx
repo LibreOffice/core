@@ -33,7 +33,7 @@
 
 class SW_DLLPUBLIC PercentField : public MetricField
 {
-    sal_Int64   nRefValue;      // 100%-Wert fuer Umrechnung (in Twips)
+    sal_Int64   nRefValue;      // 100% value for conversion (in Twips)
     sal_Int64   nOldMax;
     sal_Int64   nOldMin;
     sal_Int64   nOldSpinSize;

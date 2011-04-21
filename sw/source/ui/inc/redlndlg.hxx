@@ -44,17 +44,17 @@ class SwChildWinWrapper;
 
 struct SwRedlineDataChild
 {
-    const SwRedlineData*        pChild;     // Verweis auf originale gestackte Daten
-    const SwRedlineDataChild*   pNext;      // Verweis auf gestackte Daten
-    SvLBoxEntry*                pTLBChild;  // zugehoeriger TreeListBox-Eintrag
+    const SwRedlineData*        pChild;     // link to original stacked data
+    const SwRedlineDataChild*   pNext;      // link to stacked data
+    SvLBoxEntry*                pTLBChild;  // corresponding TreeListBox entry
 };
 
 struct SwRedlineDataParent
 {
     const SwRedlineData*        pData;      // RedlineDataPtr
-    const SwRedlineDataChild*   pNext;      // Verweis auf gestackte Daten
-    SvLBoxEntry*                pTLBParent; // zugehoeriger TreeListBox-Eintrag
-    String                      sComment;   // Redline-Kommentar
+    const SwRedlineDataChild*   pNext;      // link to stacked data
+    SvLBoxEntry*                pTLBParent; // corresponding TreeListBox entry
+    String                      sComment;   // redline comment
 
     inline sal_Bool operator==( const SwRedlineDataParent& rObj ) const
                         { return (pData && pData->GetSeqNo() == rObj.pData->GetSeqNo()); }

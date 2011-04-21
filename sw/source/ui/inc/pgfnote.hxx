@@ -38,7 +38,7 @@
 #include <svtools/ctrlbox.hxx>
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Fussnoteneinstellungs-TabPage
+    Description:    footnote settings TabPage
  --------------------------------------------------------------------*/
 class SwFootNotePage: public SfxTabPage
 {

@@ -44,7 +44,7 @@
 
 #include <vcl/field.hxx>
 
-#include "swtypes.hxx"      //fuer MAXLEVEL
+#include "swtypes.hxx"      //for MAXLEVEL
 #include <numprevw.hxx>
 #include <numberingtypelistbox.hxx>
 

@@ -77,7 +77,7 @@ class SwNavigationPI : public Window,
     String              sContentFileName;
     String              aContextArr[3];
     String              aStatusArr[4];
-    Point               aBoxBottomLeft; // Pos., wenn Box unten ist
+    Point               aBoxBottomLeft; // Pos when Box is at bottom
 
     SfxObjectShellLock  *pxObjectShell;
     SwView              *pContentView;
@@ -95,7 +95,7 @@ class SwNavigationPI : public Window,
     long    nDocLBIniHeight;
     long    nWishWidth;
     sal_uInt16  nAutoMarkIdx;
-    sal_uInt16  nRegionMode; // 0 - URL, 1 - Bereich mit Link 2 - B. ohne Link
+    sal_uInt16  nRegionMode; // 0 - URL, 1 - region with link 2 - region without link
     short   nZoomIn;
     short   nZoomOutInit;
     short   nZoomOut;
@@ -143,7 +143,7 @@ protected:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
 
-    // zum App-Ende rechtzeitig ObjectShellLock loslassen
+    // release ObjectShellLock early enough for app end
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     NumEditAction&  GetPageEdit();
@@ -155,7 +155,7 @@ public:
     SwNavigationPI(SfxBindings*, SfxChildWindowContext*, Window*);
     ~SwNavigationPI();
 
-    void            GotoPage(); // Seite anspringen; bindbare Funktion
+    void            GotoPage(); // jump to page; bindable function
 
     void            Update() { FillBox(); }
     void            UpdateListBox();

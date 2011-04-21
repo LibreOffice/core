@@ -101,7 +101,7 @@ class SwNumPositionTabPage : public SfxTabPage
 
     sal_Bool                bModified           : 1;
     sal_Bool                bPreset             : 1;
-    sal_Bool                bInInintControl     : 1;  //Modify-Fehler umgehen, soll ab 391 behoben sein
+    sal_Bool                bInInintControl     : 1;  // work around modify-error; should be resolved from 391 on
     bool                bLabelAlignmentPosAndSpaceModeActive;
 
     void                InitControls();
