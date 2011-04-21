@@ -82,6 +82,7 @@ class SvMetaSlot : public SvMetaAttribute
     void            WriteSlot( const ByteString & rShellName,
                             sal_uInt16 nCount, const ByteString & rSlotId,
                             SvSlotElementList &rList,
+                            size_t nStart,
                             const ByteString & rPrefix,
                                SvIdlDataBase & rBase, SvStream & rOutStm );
     virtual void    Write( SvIdlDataBase & rBase,
@@ -255,6 +256,7 @@ public:
     sal_uInt16              WriteSlotMap( const ByteString & rShellName,
                                     sal_uInt16 nCount,
                                     SvSlotElementList&,
+                                    size_t nStart,
                                     const ByteString &,
                                     SvIdlDataBase & rBase,
                                     SvStream & rOutStm );

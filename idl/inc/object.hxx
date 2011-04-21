@@ -44,7 +44,7 @@ struct SvSlotElement
                 , aPrefix( rPrefix )
              {}
 };
-DECLARE_LIST( SvSlotElementList, SvSlotElement* )
+typedef std::vector< SvSlotElement* > SvSlotElementList;
 
 class SvMetaClass;
 typedef ::std::vector< SvMetaClass* > SvMetaClassList;
