@@ -391,8 +391,7 @@ namespace comphelper
     //= implementing the API of a component library (component_*)
 
 #define IMPLEMENT_COMPONENT_LIBRARY_API( module_class, initializer_function )   \
-    extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL \
-    component_getImplementationEnvironment(    \
+    extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(    \
         const sal_Char **ppEnvTypeName, uno_Environment ** /*ppEnv*/ )  \
     {   \
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;    \

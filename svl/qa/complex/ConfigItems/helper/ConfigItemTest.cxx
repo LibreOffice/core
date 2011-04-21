@@ -222,14 +222,14 @@ static ::cppu::ImplementationEntry const lRegEntries[] =
 };
 
 //=============================================================================
-extern "C" void SAL_CALL component_getImplementationEnvironment(const char**            pEnvTypeName,
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(const char**            pEnvTypeName,
                                                                       uno_Environment**             )
 {
     *pEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
 //=============================================================================
-extern "C" void * SAL_CALL component_getFactory(const char* sImplName      ,
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(const char* sImplName      ,
                                                       void* pServiceManager,
                                                       void* pRegistryKey   )
 {
