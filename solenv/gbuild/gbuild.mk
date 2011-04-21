@@ -116,6 +116,8 @@ else
 gb_FULLDEPS := $(true)
 endif
 
+gb_CHECKOBJECTOWNER := $(true)
+
 # save user-supplied flags for latter use
 ifneq ($(strip $(CFLAGS)),)
 gb__ENV_CFLAGS := $(CFLAGS)

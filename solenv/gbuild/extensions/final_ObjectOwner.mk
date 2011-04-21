@@ -40,7 +40,7 @@ endef
 gb_CHECKOBJECTOWNER_VALID := $(true)
 $(foreach object,$(sort $(gb_LinkTarget_OBJECTS)),$(eval $(call gb_LinkTarget_check_object_owner,$(object))))
 ifneq ($(gb_CHECKOBJECTOWNER_VALID),$(true))
-$(eval $(call gb_Output_error,duplicate linked objects))
+$(eval $(call gb_Output_warn,duplicate linked objects))
 endif
 
 endif
