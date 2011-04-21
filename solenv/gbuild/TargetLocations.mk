@@ -31,6 +31,7 @@ gb_ComponentTarget_get_outdir_target = $(OUTDIR)/xml/component/$(1).component
 gb_Executable_get_target = $(OUTDIR)/bin/$(1)$(gb_Executable_EXT)
 gb_PackagePart_get_destinations = \
 	$(OUTDIR)/xml \
+	$(OUTDIR)/pck \
 	$(OUTDIR)/inc \
 	$(OUTDIR)/bin \
 
