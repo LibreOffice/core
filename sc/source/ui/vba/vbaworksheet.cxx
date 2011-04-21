@@ -101,6 +101,8 @@
 #include "vbasheetobjects.hxx"
 #include "viewuno.hxx"
 
+#include "attrib.hxx"
+
 #define STANDARDWIDTH 2267
 #define STANDARDHEIGHT 427
 #define DOESNOTEXIST -1
@@ -352,38 +354,39 @@ ScVbaWorksheet::setEnableSelection( sal_Int32 nSelection ) throw (uno::RuntimeEx
 
 }
 
-uno::Reference< beans::XPropertySet > ScVbaWorksheet::getFirstDBRangeProperties() throw (uno::RuntimeException)
-{
-    uno::Reference< beans::XPropertySet > xModelProps( mxModel, uno::UNO_QUERY_THROW );
-    uno::Reference< container::XIndexAccess > xDBRangesIA( xModelProps->getPropertyValue(
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DatabaseRanges" ) ) ), uno::UNO_QUERY_THROW );
-
-    for( sal_Int32 nIndex = 0, nCount = xDBRangesIA->getCount(); nIndex < nCount; ++nIndex )
-    {
-        uno::Reference< sheet::XCellRangeReferrer > xDBRange( xDBRangesIA->getByIndex( nIndex ), uno::UNO_QUERY_THROW );
-        // check if the database area is on this sheet
-        uno::Reference< sheet::XCellRangeAddressable > xRangeAddr( xDBRange->getReferredCells(), uno::UNO_QUERY_THROW );
-        if( getSheetID() == xRangeAddr->getRangeAddress().Sheet )
-            return uno::Reference< beans::XPropertySet >( xDBRange, uno::UNO_QUERY_THROW );
-    }
-    return uno::Reference< beans::XPropertySet >();
-}
-
 sal_Bool SAL_CALL ScVbaWorksheet::getAutoFilterMode() throw (uno::RuntimeException)
 {
-    uno::Reference< beans::XPropertySet > xDBRangeProps = getFirstDBRangeProperties();
-    sal_Bool bAutoFilterMode = false;
-    return
-        xDBRangeProps.is() &&
-        (xDBRangeProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AutoFilter" ) ) ) >>= bAutoFilterMode) &&
-        bAutoFilterMode;
+    uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_QUERY_THROW );
+    ScDocument* pDoc = excel::getDocShell( xModel )->GetDocument();
+    ScDBData* pDBData = pDoc->GetAnonymousDBData(getSheetID());
+    if (pDBData)
+        return pDBData->HasAutoFilter();
+    return false;
 }
 
 void SAL_CALL ScVbaWorksheet::setAutoFilterMode( sal_Bool bAutoFilterMode ) throw (uno::RuntimeException)
 {
-    uno::Reference< beans::XPropertySet > xDBRangeProps = getFirstDBRangeProperties();
-    if( xDBRangeProps.is() )
-        xDBRangeProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AutoFilter" ) ), uno::Any( bAutoFilterMode ) );
+    uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_QUERY_THROW );
+    ScDocShell* pDocShell = excel::getDocShell( xModel );
+    ScDocument* pDoc = pDocShell->GetDocument();
+    ScDBData* pDBData = pDoc->GetAnonymousDBData(getSheetID());
+    if (pDBData)
+    {
+        pDBData->SetAutoFilter(bAutoFilterMode);
+        ScRange aRange;
+        pDBData->GetArea(aRange);
+        if (bAutoFilterMode && pDoc)
+            pDoc->ApplyFlagsTab( aRange.aStart.Col(), aRange.aStart.Row(),
+                                    aRange.aEnd.Col(), aRange.aStart.Row(),
+                                    aRange.aStart.Tab(), SC_MF_AUTO );
+        else  if (!bAutoFilterMode && pDoc)
+            pDoc->RemoveFlagsTab(aRange.aStart.Col(), aRange.aStart.Row(),
+                                    aRange.aEnd.Col(), aRange.aStart.Row(),
+                                    aRange.aStart.Tab(), SC_MF_AUTO );
+        ScRange aPaintRange(aRange.aStart, aRange.aEnd);
+        aPaintRange.aEnd.SetRow(aPaintRange.aStart.Row());
+        pDocShell->PostPaint(aPaintRange, PAINT_GRID);
+    }
 }
 
 uno::Reference< excel::XRange >
