@@ -38,7 +38,7 @@ public:
                                        // Mouse- & Key-Events
     virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
 
-    virtual void Activate(const sal_uInt16 nSlotId);    // Function aktivieren
+    virtual void Activate(const sal_uInt16 nSlotId);    // activate function
     virtual void CreateDefaultObject();
 };
 

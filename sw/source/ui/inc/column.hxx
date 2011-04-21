@@ -99,7 +99,7 @@ class ColumnValueSet : public ValueSet
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Spaltendialog jetzt als TabPage
+    Description:    column dialog now as TabPage
  --------------------------------------------------------------------*/
 class SwColumnPage : public SfxTabPage
 {

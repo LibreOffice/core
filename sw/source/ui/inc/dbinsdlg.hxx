@@ -160,7 +160,7 @@ class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
     virtual void            Commit();
     void                    Load();
 
-    // setze die Tabellen - Eigenschaften
+    // set the tables - properties
     void SetTabSet();
 
 public:

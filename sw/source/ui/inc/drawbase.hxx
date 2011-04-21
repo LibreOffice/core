@@ -40,7 +40,7 @@ class MouseEvent;
 
 /*************************************************************************
 |*
-|* Basisklasse fuer alle Funktionen
+|* base class for all functions
 |*
 \************************************************************************/
 
@@ -50,8 +50,8 @@ protected:
     SwView*         m_pView;
     SwWrtShell*     m_pSh;
     SwEditWin*      m_pWin;
-    Point           m_aStartPos;                 // Position von BeginCreate
-    Point           m_aMDPos;                // Position von MouseButtonDown
+    Point           m_aStartPos;                 // position of BeginCreate
+    Point           m_aMDPos;                // position of MouseButtonDown
     sal_uInt16          m_nSlotId;
     sal_Bool            m_bCreateObj  :1;
     sal_Bool            m_bInsForm   :1;
@@ -66,7 +66,7 @@ public:
     inline sal_Bool  IsInsertForm() const { return m_bInsForm; }
     inline sal_Bool  IsCreateObj() const { return m_bCreateObj; }
 
-    // Mouse- & Key-Events; Returnwert=sal_True: Event wurde bearbeitet
+    // mouse- & key events; return value=sal_True: event was edited
     virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
     virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
     virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
@@ -76,8 +76,8 @@ public:
     void         SetSlotId(sal_uInt16 nSlot) {m_nSlotId = nSlot;}
     sal_uInt16       GetSlotId() { return m_nSlotId;}
 
-    virtual void Activate(const sal_uInt16 nSlotId);    // Function aktivieren
-    virtual void Deactivate();                      // Function deaktivieren
+    virtual void Activate(const sal_uInt16 nSlotId);    // activate fuction
+    virtual void Deactivate();                      // deactivate function
 
     virtual void CreateDefaultObject();
 

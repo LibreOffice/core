@@ -36,7 +36,7 @@
 #include "docstat.hxx"
 
 /*--------------------------------------------------------------------
-    Beschreibung:   DocInfo jetzt als Page
+    Description:   DocInfo now as page
  --------------------------------------------------------------------*/
 class SwDocStatPage: public SfxTabPage
 {

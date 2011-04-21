@@ -36,8 +36,7 @@ SW_DLLPUBLIC void FitToActualSize(SwFmtCol& rCol, sal_uInt16 nWidth);
 class SW_DLLPUBLIC SwColMgr
 {
 public:
-        // lActWidth wird aus den Edits des Seitendialogs
-        // direkt uebergeben
+        // lActWidth is passed directly from the page dialogs edits
     SwColMgr(const SfxItemSet &rSet, sal_uInt16 nActWidth = USHRT_MAX);
     ~SwColMgr();
 
@@ -82,7 +81,7 @@ private:
     sal_uInt16              nWidth;
 };
 
-// INLINE METHODE --------------------------------------------------------
+// INLINE METHOD --------------------------------------------------------
 inline  sal_uInt16 SwColMgr::GetCount() const
 {
     return aFmtCol.GetNumCols();

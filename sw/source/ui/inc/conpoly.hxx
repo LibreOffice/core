@@ -32,7 +32,7 @@
 
 /*************************************************************************
 |*
-|* Basisklasse fuer alle Funktionen
+|* base class for all functions
 |*
 \************************************************************************/
 
@@ -48,7 +48,7 @@ public:
     virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
     virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
 
-    virtual void Activate(const sal_uInt16 nSlotId);    // Function aktivieren
+    virtual void Activate(const sal_uInt16 nSlotId);    // activate function
 };
 
 

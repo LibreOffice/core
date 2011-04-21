@@ -51,19 +51,19 @@ class SW_DLLPUBLIC SwEnvItem : public SfxPoolItem
 {
 public:
 
-    rtl::OUString   aAddrText;       // Text fuer Empfaenger
-    sal_Bool        bSend;           // Absender?
-    rtl::OUString   aSendText;       // Text fuer Absender
-    sal_Int32       lAddrFromLeft;   // Linker Abstand fuer Empfaenger (twips)
-    sal_Int32       lAddrFromTop;    // Oberer Abstand fuer Empfaenger (twips)
-    sal_Int32       lSendFromLeft;   // Linker Abstand fuer Absender   (twips)
-    sal_Int32       lSendFromTop;    // Oberer Abstand fuer Absender   (twips)
-    sal_Int32       lWidth;          // Breite des Umschlags           (twips)
-    sal_Int32       lHeight;         // Hoehe  des Umschlags           (twips)
-    SwEnvAlign      eAlign;          // Ausrichtung beim Einzug
-    sal_Bool        bPrintFromAbove; // Von oben drucken?
-    sal_Int32       lShiftRight;     // Verschiebung nach rechts       (twips)
-    sal_Int32       lShiftDown;      // Verschiebung nach unten        (twips)
+    rtl::OUString   aAddrText;       // text for reciever
+    sal_Bool        bSend;           // sender?
+    rtl::OUString   aSendText;       // text for sender
+    sal_Int32       lAddrFromLeft;   // left gap for reciever (twips)
+    sal_Int32       lAddrFromTop;    // upper gap for reciever (twips)
+    sal_Int32       lSendFromLeft;   // left gap for sender (twips)
+    sal_Int32       lSendFromTop;    // upper gap for sender (twips)
+    sal_Int32       lWidth;          // envelope's width (twips)
+    sal_Int32       lHeight;         // envelope's height (twips)
+    SwEnvAlign      eAlign;          // alignment at indent
+    sal_Bool        bPrintFromAbove; // print from above?
+    sal_Int32       lShiftRight;     // shift to right (twips)
+    sal_Int32       lShiftDown;      // shift down (twips)
 
     SwEnvItem();
     SwEnvItem(const SwEnvItem& rItem);

@@ -95,8 +95,8 @@ class SwCaptionDialog : public SvxStandardDialog
 
     SwCaptionPreview    aPrevWin;
 
-    SwView       &rView; //Suchen per aktive ::com::sun::star::sdbcx::View vermeiden.
-    SwFldMgr     *pMgr;      //Ptr um das include zu sparen
+    SwView       &rView; // search per active, avoid ::com::sun::star::sdbcx::View
+    SwFldMgr     *pMgr;      // pointer to save the include
     SelectionType eType;
 
     String       sCharacterStyle;

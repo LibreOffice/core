@@ -73,8 +73,8 @@ class SwContentTree : public SvTreeListBox
     String              sPostItHide;
     String              sPostItDelete;
 
-    SwWrtShell*         pHiddenShell;   // gedropptes Doc
-    SwWrtShell*         pActiveShell;   // die aktive oder eine konst. offene View
+    SwWrtShell*         pHiddenShell;   // dropped Doc
+    SwWrtShell*         pActiveShell;   // the active or a const. open view
     SwNavigationConfig* pConfig;
 
     std::map< void*, sal_Bool > mOutLineNodeMap;
@@ -207,7 +207,7 @@ public:
 
 
 //----------------------------------------------------------------------------
-// TreeListBox fuer Globaldokumente
+// TreeListBox for global documents
 //----------------------------------------------------------------------------
 
 class SwLBoxString : public SvLBoxString
@@ -235,9 +235,9 @@ private:
     ImageList           aEntryImages;
 
     SwWrtShell*             pActiveShell;   //
-    SvLBoxEntry*            pEmphasisEntry; // Drag'n Drop-Emphasis
-    SvLBoxEntry*            pDDSource;      // Quelle beim DnD
-    SwGlblDocContents*      pSwGlblDocContents; // Array mit sortierten Inhalten
+    SvLBoxEntry*            pEmphasisEntry; // Drag'n Drop emphasis
+    SvLBoxEntry*            pDDSource;      // source for Drag'n Drop
+    SwGlblDocContents*      pSwGlblDocContents; // array with sorted content
 
     Window*                 pDefParentWin;
     SwGlblDocContent*       pDocContent;
