@@ -72,8 +72,6 @@ class ScVbaWorksheet : public WorksheetImpl_BASE
     css::uno::Reference< css::container::XNameAccess > getFormControls();
     css::uno::Any getControlShape( const rtl::OUString& sName );
 
-    css::uno::Reference< css::beans::XPropertySet > getFirstDBRangeProperties() throw (css::uno::RuntimeException);
-
 protected:
 
     ScVbaWorksheet( const css::uno::Reference< ov::XHelperInterface >& xParent,  const css::uno::Reference< css::uno::XComponentContext >& xContext );
