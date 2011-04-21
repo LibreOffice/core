@@ -2094,9 +2094,6 @@ void Edit::Command( const CommandEvent& rCEvt )
     if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
     {
         PopupMenu* pPopup = Edit::CreatePopupMenu();
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-        if ( rStyleSettings.GetOptions() & STYLE_OPTION_HIDEDISABLED )
-            pPopup->SetMenuFlags( MENU_FLAG_HIDEDISABLEDENTRIES );
 
         if ( !maSelection.Len() )
         {
@@ -2934,6 +2931,10 @@ PopupMenu* Edit::CreatePopupMenu()
 
     PopupMenu* pPopup = new PopupMenu( ResId( SV_RESID_MENU_EDIT, *pResMgr ) );
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    if ( rStyleSettings.GetHideDisabledMenuItems() )
+        pPopup->SetMenuFlags( MENU_FLAG_HIDEDISABLEDENTRIES );
+    else
+        pPopup->SetMenuFlags ( MENU_FLAG_ALWAYSSHOWDISABLEDENTRIES );
     if ( rStyleSettings.GetAcceleratorsInContextMenus() )
     {
         pPopup->SetAccelKey( SV_MENU_EDIT_UNDO, KeyCode( KEYFUNC_UNDO ) );

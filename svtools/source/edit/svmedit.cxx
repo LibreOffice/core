@@ -859,9 +859,6 @@ void TextWindow::Command( const CommandEvent& rCEvt )
     if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
     {
         PopupMenu* pPopup = Edit::CreatePopupMenu();
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-        if ( rStyleSettings.GetOptions() & STYLE_OPTION_HIDEDISABLED )
-            pPopup->SetMenuFlags( MENU_FLAG_HIDEDISABLEDENTRIES );
         if ( !mpExtTextView->HasSelection() )
         {
             pPopup->EnableItem( SV_MENU_EDIT_CUT, sal_False );

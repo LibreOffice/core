@@ -1970,6 +1970,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
 
     // Menu
     aStyleSettings.SetSkipDisabledInMenus( sal_True );
+    aStyleSettings.SetHideDisabledMenuItems( sal_True );
     KMenuBar *pMenuBar = qMainWindow.menuBar();
     if ( pMenuBar )
     {

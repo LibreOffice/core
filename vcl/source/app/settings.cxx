@@ -529,6 +529,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mnUseImagesInMenus          = rData.mnUseImagesInMenus;
     mbPreferredUseImagesInMenus = rData.mbPreferredUseImagesInMenus;
     mnSkipDisabledInMenus       = rData.mnSkipDisabledInMenus;
+    mbHideDisabledMenuItems              = rData.mbHideDisabledMenuItems;
     mnAcceleratorsInContextMenus    = rData.mnAcceleratorsInContextMenus;
     mnToolbarIconSize           = rData.mnToolbarIconSize;
     mnSymbolsStyle              = rData.mnSymbolsStyle;
@@ -618,6 +619,7 @@ void ImplStyleData::SetStandardStyles()
     mnUseFlatMenues             = 0;
     mbPreferredUseImagesInMenus         = sal_True;
     mnSkipDisabledInMenus       = (sal_uInt16)sal_False;
+    mbHideDisabledMenuItems     = sal_False;
     mnAcceleratorsInContextMenus    = sal_True;
 
     Gradient aGrad( GRADIENT_LINEAR, DEFAULT_WORKSPACE_GRADIENT_START_COLOR, DEFAULT_WORKSPACE_GRADIENT_END_COLOR );
@@ -1079,6 +1081,7 @@ sal_Bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->mnUseImagesInMenus        == rSet.mpData->mnUseImagesInMenus)         &&
          (mpData->mbPreferredUseImagesInMenus == rSet.mpData->mbPreferredUseImagesInMenus) &&
          (mpData->mnSkipDisabledInMenus     == rSet.mpData->mnSkipDisabledInMenus)      &&
+         (mpData->mbHideDisabledMenuItems   == rSet.mpData->mbHideDisabledMenuItems)    &&
          (mpData->mnAcceleratorsInContextMenus  == rSet.mpData->mnAcceleratorsInContextMenus)       &&
          (mpData->maFontColor               == rSet.mpData->maFontColor ))
         return sal_True;

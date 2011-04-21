@@ -434,6 +434,7 @@ private:
     sal_uLong                           mnSymbolsStyle;
     sal_uLong                           mnPreferredSymbolsStyle;
     sal_uInt16                          mnSkipDisabledInMenus;
+    sal_Bool                            mbHideDisabledMenuItems;
     sal_Bool                            mnAcceleratorsInContextMenus;
     Wallpaper                       maWorkspaceGradient;
     const void*                     mpFontOptions;
@@ -456,7 +457,6 @@ private:
 #define STYLE_OPTION_SPINARROW      ((sal_uLong)0x00000080)
 #define STYLE_OPTION_SPINUPDOWN     ((sal_uLong)0x00000100)
 #define STYLE_OPTION_NOMNEMONICS    ((sal_uLong)0x00000200)
-#define STYLE_OPTION_HIDEDISABLED   ((sal_uLong)0x00100000)
 
 #define DRAGFULL_OPTION_WINDOWMOVE  ((sal_uLong)0x00000001)
 #define DRAGFULL_OPTION_WINDOWSIZE  ((sal_uLong)0x00000002)
@@ -736,6 +736,10 @@ public:
                                         { CopyData(); mpData->mnSkipDisabledInMenus = bSkipDisabledInMenus; }
     sal_Bool                            GetSkipDisabledInMenus() const
                                         { return (sal_Bool) mpData->mnSkipDisabledInMenus; }
+    void                                                       SetHideDisabledMenuItems( sal_Bool bHideDisabledMenuItems )
+                                        { CopyData(); mpData->mbHideDisabledMenuItems = bHideDisabledMenuItems; }
+    sal_Bool                            GetHideDisabledMenuItems() const
+                                        { return mpData->mbHideDisabledMenuItems; }
     void                                                       SetAcceleratorsInContextMenus( sal_Bool bAcceleratorsInContextMenus )
                                         { CopyData(); mpData->mnAcceleratorsInContextMenus = bAcceleratorsInContextMenus; }
     sal_Bool                            GetAcceleratorsInContextMenus() const
