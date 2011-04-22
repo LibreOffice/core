@@ -429,7 +429,7 @@ void BackendDb::writeSimpleList(
                 listNode, css::uno::UNO_QUERY_THROW));
 
         typedef ::std::list<OUString>::const_iterator ITC_ITEMS;
-        for (ITC_ITEMS i = list.begin(); i != list.end(); i++)
+        for (ITC_ITEMS i = list.begin(); i != list.end(); ++i)
         {
             const Reference<css::xml::dom::XNode> memberNode(
                 doc->createElementNS(sNameSpace, sPrefix + sMemberTagName), css::uno::UNO_QUERY_THROW);

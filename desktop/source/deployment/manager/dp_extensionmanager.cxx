@@ -102,7 +102,7 @@ OUString CompIdentifiers::getName(::std::vector<Reference<deploy::XPackage> > co
     //get the first non-null reference
     Reference<deploy::XPackage>  extension;
     ::std::vector<Reference<deploy::XPackage> >::const_iterator it = a.begin();
-    for (; it != a.end(); it++)
+    for (; it != a.end(); ++it)
     {
         if (it->is())
         {
@@ -250,13 +250,13 @@ void ExtensionManager::addExtensionsToMap(
     ::std::list<OUString>::const_iterator citNames =
         m_repositoryNames.begin();
     int index = 0;
-    for (;citNames != m_repositoryNames.end(); citNames++, index++)
+    for (;citNames != m_repositoryNames.end(); ++citNames, ++index)
     {
         if (citNames->equals(repository))
             break;
     }
 
-    for (int i = 0; i < seqExt.getLength(); i++)
+    for (int i = 0; i < seqExt.getLength(); ++i)
     {
         Reference<deploy::XPackage> const & xExtension = seqExt[i];
         OUString id = dp_misc::getIdentifier(xExtension);
@@ -333,7 +333,7 @@ ExtensionManager::getExtensionsWithSameIdentifier(
 
         //throw an IllegalArgumentException if there is no extension at all.
         typedef  ::std::list<Reference<deploy::XPackage> >::const_iterator CIT;
-        for (CIT i = listExtensions.begin(); i != listExtensions.end(); i++)
+        for (CIT i = listExtensions.begin(); i != listExtensions.end(); ++i)
             bHasExtension |= i->is();
         if (!bHasExtension)
             throw lang::IllegalArgumentException(

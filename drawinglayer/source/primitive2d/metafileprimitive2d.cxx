@@ -365,7 +365,7 @@ namespace
 
         ~PropertyHolders()
         {
-            while(maPropertyHolders.size())
+            while(!maPropertyHolders.empty())
             {
                 delete maPropertyHolders.back();
                 maPropertyHolders.pop_back();
@@ -527,7 +527,7 @@ namespace
         void Pop()
         {
             OSL_ENSURE(maTargetHolders.size(), "TargetHolders: POP with no property holders (!)");
-            if(maTargetHolders.size())
+            if(!maTargetHolders.empty())
             {
                 delete maTargetHolders.back();
                 maTargetHolders.pop_back();
@@ -542,7 +542,7 @@ namespace
 
         ~TargetHolders()
         {
-            while(maTargetHolders.size())
+            while(!maTargetHolders.empty())
             {
                 delete maTargetHolders.back();
                 maTargetHolders.pop_back();
@@ -632,7 +632,7 @@ namespace
         PropertyHolder& rProperties,
         basegfx::BColor aBColor)
     {
-        if(rPositions.size())
+        if(!rPositions.empty())
         {
             if(rProperties.getTransformation().isIdentity())
             {
@@ -1589,7 +1589,7 @@ namespace
                     }
                 }
 
-                if(aTargetVector.size())
+                if(!aTargetVector.empty())
                 {
                     // add created text primitive to target
                     if(rProperty.getTransformation().isIdentity())
@@ -1687,7 +1687,7 @@ namespace
 
                         if(pA->GetColor() != aLastColor)
                         {
-                            if(aPositions.size())
+                            if(!aPositions.empty())
                             {
                                 createPointArrayPrimitive(aPositions, rTargetHolders.Current(), rPropertyHolders.Current(), aLastColor.getBColor());
                                 aPositions.clear();
@@ -1703,7 +1703,7 @@ namespace
 
                     nAction--;
 
-                    if(aPositions.size())
+                    if(!aPositions.empty())
                     {
                         createPointArrayPrimitive(aPositions, rTargetHolders.Current(), rPropertyHolders.Current(), aLastColor.getBColor());
                     }
@@ -1727,7 +1727,7 @@ namespace
 
                         nAction--;
 
-                        if(aPositions.size())
+                        if(!aPositions.empty())
                         {
                             createPointArrayPrimitive(aPositions, rTargetHolders.Current(), rPropertyHolders.Current(), rPropertyHolders.Current().getLineColor());
                         }

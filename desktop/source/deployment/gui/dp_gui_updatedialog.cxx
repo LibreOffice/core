@@ -1381,7 +1381,7 @@ IMPL_LINK(UpdateDialog, okHandler, void *, EMPTYARG)
     //If users are going to update a shared extension then we need
     //to warn them
     typedef ::std::vector<UpdateData>::const_iterator CIT;
-    for (CIT i = m_enabledUpdates.begin(); i < m_enabledUpdates.end(); i++)
+    for (CIT i = m_enabledUpdates.begin(); i < m_enabledUpdates.end(); ++i)
     {
         OSL_ASSERT(i->aInstalledPackage.is());
         //If the user has no write access to the shared folder then the update

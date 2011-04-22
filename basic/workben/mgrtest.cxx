@@ -526,7 +526,6 @@ void __EXPORT TestWindow::Resize()
 
 void __EXPORT TestWindow::KeyInput( const KeyEvent& rKEvt )
 {
-    char nCharCode = rKEvt.GetCharCode();
     sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
 
     // Nur bei Alt-Return
