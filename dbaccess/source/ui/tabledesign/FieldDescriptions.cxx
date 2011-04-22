@@ -39,7 +39,7 @@
 #include "UITools.hxx"
 #include <com/sun/star/util/NumberFormat.hpp>
 
-#define DEFAULT_VARCHAR_PRECSION    50
+#define DEFAULT_VARCHAR_PRECSION    100
 #define DEFAULT_OTHER_PRECSION      16
 #define DEFAULT_NUMERIC_PRECSION    5
 #define DEFAULT_NUMERIC_SCALE       0
