@@ -1159,7 +1159,7 @@ bool getScRangeListForAddress( const rtl::OUString& sName, ScDocShell* pDocSh, S
         vNames.push_back( aToken );
     } while ( nIndex >= 0 );
 
-    if ( !vNames.size() )
+    if ( vNames.empty() )
         vNames.push_back( sName );
 
     std::vector< rtl::OUString >::iterator it = vNames.begin();
