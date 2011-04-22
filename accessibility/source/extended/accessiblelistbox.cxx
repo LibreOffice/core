@@ -155,7 +155,6 @@ namespace accessibility
                     }
                     break;
                 }
-                // <--
                 }
                 default:
                     VCLXAccessibleComponent::ProcessWindowEvent (rVclWindowEvent);

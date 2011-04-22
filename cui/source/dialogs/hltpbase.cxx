@@ -453,7 +453,6 @@ IMPL_LINK ( SvxHyperlinkTabPageBase, ClickScriptHdl_Impl, void *, EMPTYARG )
         sal_Bool bIsInputEnabled = GetParent()->IsInputEnabled();
         if ( bIsInputEnabled )
             GetParent()->EnableInput( sal_False );
-        // <--
         SfxMacroAssignDlg aDlg( this, mxDocumentFrame, *pItemSet );
 
         // add events
@@ -471,7 +470,6 @@ IMPL_LINK ( SvxHyperlinkTabPageBase, ClickScriptHdl_Impl, void *, EMPTYARG )
 
         if ( bIsInputEnabled )
             GetParent()->EnableInput( sal_True );
-        // <--
         // execute dlg
         DisableClose( sal_True );
         short nRet = aDlg.Execute();

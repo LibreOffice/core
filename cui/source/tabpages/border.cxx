@@ -1228,7 +1228,6 @@ void SvxBorderTabPage::PageCreated (SfxAllItemSet aSet)
             aMergeAdjacentBordersCB.Show();
             aPropertiesFL.Show();
         }
-        // <--
     }
     if (pFlagItem)
         if ( ( pFlagItem->GetValue() & SVX_HIDESHADOWCTL ) == SVX_HIDESHADOWCTL )

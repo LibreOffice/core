@@ -150,14 +150,12 @@ public class TimeStampControl extends DatabaseControl
     {
         // --> TESTING
         Point aBeforePt = xShapeGroup.getPosition();
-        // <--
         xShapeGroup.setPosition(_aPoint);
 //      oDateControl.xShape.setPosition(_aPoint);
 //      Point atimepoint = new Point(oDateControl.xShape.getPosition().X + oDateControl.xShape.getSize().Width, oDateControl.xShape.getPosition().Y );
 //      oTimeControl.xShape.setPosition(atimepoint);
         // --> TESTING
         Point aAfterPt = xShapeGroup.getPosition();
-    // <--
     }
 
     public int getControlType()

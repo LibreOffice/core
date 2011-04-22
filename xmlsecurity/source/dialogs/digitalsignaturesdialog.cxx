@@ -211,7 +211,6 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
 {
     // --> PB #i48253 the tablistbox needs its own unique id
     maSignaturesLB.Window::SetUniqueId( HID_XMLSEC_TREE_SIGNATURESDLG );
-    // <--
     Size aControlSize( maSignaturesLB.GetSizePixel() );
     aControlSize = maSignaturesLB.PixelToLogic( aControlSize, MapMode( MAP_APPFONT ) );
     const long nControlWidth = aControlSize.Width();

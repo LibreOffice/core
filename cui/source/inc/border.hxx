@@ -112,7 +112,6 @@ private:
     CheckBox            aMergeWithNextCB;
     // #i29550#
     CheckBox            aMergeAdjacentBordersCB;
-    // <--
 
     ImageList           aShadowImgLstH;
     ImageList           aShadowImgLst;
