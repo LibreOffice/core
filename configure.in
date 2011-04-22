@@ -7326,13 +7326,16 @@ AC_MSG_CHECKING([whether to include extra galleries])
 if test "z$enable_extra_gallery" = "z" -o "z$enable_extra_gallery" = "zno" ; then
   AC_MSG_RESULT([no])
   WITH_EXTRA_GALLERY=NO
+  OOOP_GALLERY_PACK=""
 else
   AC_MSG_RESULT([yes])
   WITH_EXTRA_GALLERY=YES
   BUILD_TYPE="$BUILD_TYPE EXTRA_GALLERY"
-  SCPDEFS="$SCPDEFS -DWITH_EXTRA_GALLERY"  
+  SCPDEFS="$SCPDEFS -DWITH_EXTRA_GALLERY"
+  OOOP_GALLERY_PACK="af9314c5972d95a5d6da23ffad818f68-OOOP-gallery-pack-2.8.0.0.zip"  
 fi
 AC_SUBST(WITH_EXTRA_GALLERY)
+AC_SUBST(OOOP_GALLERY_PACK)
 
 dnl ===================================================================
 dnl Test whether to include extra templates
@@ -7341,13 +7344,16 @@ AC_MSG_CHECKING([whether to include extra templates])
 if test "z$enable_extra_template" = "z" -o "z$enable_extra_template" = "zno" ; then
   AC_MSG_RESULT([no])
   WITH_EXTRA_TEMPLATE=NO
+  OOOP_TEMPLATES_PACK=""
 else
   AC_MSG_RESULT([yes])
   WITH_EXTRA_TEMPLATE=YES
   BUILD_TYPE="$BUILD_TYPE EXTRA_TEMPLATE"
   SCPDEFS="$SCPDEFS -DWITH_EXTRA_TEMPLATE"
+  OOOP_TEMPLATES_PACK="1be202fbbbc13f10592a98f70a4a87fb-OOOP-templates-pack-2.9.0.0.zip"
 fi
 AC_SUBST(WITH_EXTRA_TEMPLATE)
+AC_SUBST(OOOP_TEMPLATES_PACK)
 
 dnl ===================================================================
 dnl Test whether to include extra samples
@@ -7356,13 +7362,16 @@ AC_MSG_CHECKING([whether to include extra samples])
 if test "z$enable_extra_sample" = "z" -o "z$enable_extra_sample" = "zno" ; then
   AC_MSG_RESULT([no])
   WITH_EXTRA_SAMPLE=NO
+  OOOP_SAMPLES_PACK=""
 else
   AC_MSG_RESULT([yes])
   WITH_EXTRA_SAMPLE=YES
   BUILD_TYPE="$BUILD_TYPE EXTRA_SAMPLE"
   SCPDEFS="$SCPDEFS -DWITH_EXTRA_SAMPLE"
+  OOOP_SAMPLES_PACK="a6bccacf44914969e6e7b2f8faf4132c-OOOP-samples-pack-2.7.0.0.zip"
 fi
 AC_SUBST(WITH_EXTRA_SAMPLE)
+AC_SUBST(OOOP_SAMPLES_PACK)
 
 dnl ===================================================================
 dnl Test whether to include extra fonts
@@ -7371,13 +7380,16 @@ AC_MSG_CHECKING([whether to include extra fonts])
 if test "z$enable_extra_font" = "z" -o "z$enable_extra_font" = "zno" ; then
   AC_MSG_RESULT([no])
   WITH_EXTRA_FONT=NO
+  OOOP_FONTS_PACK=""
 else
   AC_MSG_RESULT([yes])
   WITH_EXTRA_FONT=YES
   BUILD_TYPE="$BUILD_TYPE EXTRA_FONT"
   SCPDEFS="$SCPDEFS -DWITH_EXTRA_FONT"
+  OOOP_FONTS_PACK="a10aa597411643326e27d7fc128af12d-OOOP-fonts-pack-2.9.0.0.zip"
 fi
 AC_SUBST(WITH_EXTRA_FONT)
+AC_SUBST(OOOP_FONTS_PACK)
 
 dnl ===================================================================
 dnl Test whether to enable ActiveX embedding
@@ -7924,6 +7936,8 @@ if test -f set_soenv; then
 else
    echo > set_soenv.last
 fi
+
+AC_OUTPUT([ooo.lst])
 
 AC_OUTPUT([set_soenv Makefile bin/repo-list])
 
