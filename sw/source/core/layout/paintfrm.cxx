@@ -323,7 +323,6 @@ class SwSavePaintStatics
     SwSubsRects        *pSSubsLines;
     // #123196#
     SwSubsRects*        pSSpecSubsLines;
-    // <--
     SfxProgress        *pSProgress;
     long                nSPixelSzW,
                         nSPixelSzH,
@@ -350,7 +349,6 @@ SwSavePaintStatics::SwSavePaintStatics() :
     pSSubsLines         ( pSubsLines        ),
     // #123196#
     pSSpecSubsLines     ( pSpecSubsLines    ),
-    // <--
     pSProgress          ( pProgress         ),
     nSPixelSzW          ( nPixelSzW         ),
     nSPixelSzH          ( nPixelSzH         ),
@@ -376,7 +374,6 @@ SwSavePaintStatics::SwSavePaintStatics() :
     pSubsLines = 0;
     // #123196#
     pSpecSubsLines = 0L;
-    // <--
     pProgress = 0;
 }
 
@@ -392,7 +389,6 @@ SwSavePaintStatics::~SwSavePaintStatics()
     pSubsLines         = pSSubsLines;
     // #123196#
     pSpecSubsLines     = pSSpecSubsLines;
-    // <--
     pProgress          = pSProgress;
     nPixelSzW          = nSPixelSzW;
     nPixelSzH          = nSPixelSzH;
@@ -812,7 +808,6 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
     {
         // #i16816# tagged pdf support
         SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pOut );
-        // <--
 
         // OD 2004-04-23 #116347#
         pOut->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
@@ -930,7 +925,6 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
     {
         // #i16816# tagged pdf support
         SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pOut );
-        // <--
 
         //Alle Hilfslinien, die sich fast decken entfernen (Tabellen)
         for ( sal_uInt16 i = 0; i < Count(); ++i )
@@ -1693,7 +1687,6 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush,
             // #i68953# - also during print load graphic directly.
             if ( (rSh).GetViewOptions()->IsPDFExport() ||
                  rSh.GetOut()->GetOutDevType() == OUTDEV_PRINTER )
-            // <--
             {
                 ((SvxBrushItem*)pBrush)->PurgeMedium();
                 ((SvxBrushItem*)pBrush)->SetDoneLink( Link() );
@@ -1831,7 +1824,6 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush,
                                         Size( aPaintOffset.X(), aPaintOffset.Y() ),
                                         NULL, GRFMGR_DRAW_STANDARD,
                                         ::std::max( 128, static_cast<int>( sqrt(sqrt( Abitmap)) + .5 ) ) );
-                // <--
             }
             // reset clipping at output device
             pOutDev->Pop();
@@ -1919,7 +1911,6 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush,
         {
             pOutDev->SetDrawMode( 0 );
         }
-        // <--
 
         /// OD 06.08.2002 #99657# - if background region have to be drawn
         ///     transparent, set only the RGB values of the background color as
@@ -1938,7 +1929,6 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush,
         // #i75614#
         // restore draw mode
         pOutDev->SetDrawMode( nOldDrawMode );
-        // <--
 
         /// OD 02.09.2002 #99657#
         if ( bDrawTransparent )
@@ -2257,7 +2247,6 @@ void SwTabFrmPainter::PaintLines( OutputDevice& rDev, const SwRect& rRect ) cons
 {
     // #i16816# tagged pdf support
     SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, rDev );
-    // <--
 
     const SwFrm* pTmpFrm = &mrTabFrm;
     const bool bVert = pTmpFrm->IsVertical();
@@ -2805,7 +2794,6 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
         } while ( bPerformLayoutAction && pTmpViewShell != pSh );
     }
     if ( bPerformLayoutAction )
-    // <--
     {
         ((SwRootFrm*)this)->ResetTurbo();
         SwLayAction aAction( (SwRootFrm*)this, pSh->Imp() );
@@ -2846,7 +2834,6 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
     // #i84659#
 //    while ( pPage && !::IsShortCut( aRect, pPage->Frm() ) )
     while ( pPage )
-    // <--
     {
         // Paint right shadow in single page mode, or if we're on last page of
         // the doc, or if ???Lower()??? or if we're on a page with no right
@@ -2866,7 +2853,6 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
             SwPageFrm::GetBorderAndShadowBoundRect( pPage->Frm(), pSh, aPaintRect, bRightSidebar );
 
             if ( aRect.IsOver( aPaintRect ) )
-            // <--
             {
                 if ( pSh->GetWin() )
                 {
@@ -2892,13 +2878,11 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
                     aPageRectRegion.Exclude( aPaintRect.SVRect() );
                     pSh->GetWin()->Invalidate( aPageRectRegion, INVALIDATE_CHILDREN );
                 }
-                // <--
 
                 // #i80793#
                 // enlarge paint rectangle for objects overlapping the same pixel
                 // in all cases and before the DrawingLayer overlay is initialized.
                 lcl_AdjustRectToPixelSize( aPaintRect, *(pSh->GetOut()) );
-                // <--
 
                 // #i68597#
                 // moved paint pre-process for DrawingLayer overlay here since the above
@@ -3156,7 +3140,6 @@ void SwLayoutFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
     // #i16816# tagged pdf support
     Frm_Info aFrmInfo( *this );
     SwTaggedPDFHelper aTaggedPDFHelper( 0, &aFrmInfo, 0, *pSh->GetOut() );
-    // <--
 
     const SwFrm *pFrm = Lower();
     if ( !pFrm )
@@ -3495,7 +3478,6 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         // and margin paint.
         // paint complete background for Writer text fly frames
         bool bPaintCompleteBack( !pNoTxt );
-        // <--
         // paint complete background for transparent graphic and contour,
         // if own background color exists.
         const bool bIsGraphicTransparent = pNoTxt ? pNoTxt->IsTransparent() : false;
@@ -3563,7 +3545,6 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
                 // non-transparent graphics.
                 if ( bPaintMarginOnly ||
                      ( pNoTxt && !bIsGraphicTransparent ) )
-                // <--
                 {
                     //Was wir eigentlich Painten wollen ist der schmale Streifen
                     //zwischen PrtArea und aeusserer Umrandung.
@@ -3580,7 +3561,6 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
                     // also applied for the PDF export.
                     ViewShell *pSh = getRootFrm()->GetCurrShell();
                     if ( !pOut->GetConnectMetaFile() || !pSh || !pSh->GetWin() )
-                    // <--
                     {
                         pOut->SetClipRegion( aPoly );
                     }
@@ -4619,7 +4599,6 @@ void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
         if ( pTabFrm->GetTable()->IsNewModel() && ( !IsCellFrm() || IsCoveredCell() ) )
             return;
     }
-    // <--
 
     const bool bLine = rAttrs.IsLine() ? true : false;
     const bool bShadow = rAttrs.GetShadow().GetLocation() != SVX_SHADOW_NONE;
@@ -5298,7 +5277,6 @@ const sal_Int8 SwPageFrm::mnShadowPxWidth = 10;
 
     // #i16816# tagged pdf support
     SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *_pViewShell->GetOut() );
-    // <--
 
     static BitmapEx aPageTopRightShadow;
     static BitmapEx aPageBottomRightShadow;
@@ -5549,7 +5527,6 @@ void SwFrm::PaintBaBo( const SwRect& rRect, const SwPageFrm *pPage,
 
     // #i16816# tagged pdf support
     SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pOut );
-    // <--
 
     // OD 2004-04-23 #116347#
     pOut->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
@@ -5612,7 +5589,6 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
 
     // #i16816# tagged pdf support
     SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pSh->GetOut() );
-    // <--
 
     const SvxBrushItem* pItem;
     /// OD 05.09.2002 #102912#
@@ -6326,7 +6302,6 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
 
         // #i16816# tagged pdf support
         SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pSh->GetOut() );
-        // <--
 
         for ( sal_uInt16 i = 0; i < aRegion.Count(); ++i )
         {
@@ -6443,7 +6418,6 @@ sal_Bool SwFrm::GetBackgroundBrush( const SvxBrushItem* & rpBrush,
                 !pOpt->IsReadonly() &&
                 // #114856# Formular view
                 !pOpt->IsFormView() &&
-                // <--
                 SwViewOption::IsIndexShadings() &&
                 !pOpt->IsPDFExport() &&
                 pSh->GetOut()->GetOutDevType() != OUTDEV_PRINTER )

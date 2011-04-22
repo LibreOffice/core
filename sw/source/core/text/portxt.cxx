@@ -396,7 +396,6 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
         else if ( ( IsFtnPortion() && rInf.IsFakeLineStart() &&
                     //
                     rInf.IsOtherThanFtnInside() ) ||
-                    // <--
                   ( rInf.GetLast() &&
                     rInf.GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT) &&
                     rInf.GetLast()->InTabGrp() &&
@@ -742,7 +741,6 @@ void SwHolePortion::Paint( const SwTxtPaintInfo &rInf ) const
         const XubString aTxt( ' ' );
         rInf.DrawText( aTxt, *this, 0, 1, false );
     }
-    // <--
 }
 
 /*************************************************************************

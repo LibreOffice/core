@@ -90,11 +90,9 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
                                            // screen object for the preparation
                                            // of the re-calculation of the
                                            // last table row.
-    // <--
     // #i26945#
     sal_Bool bObjsDoesFit :1; // For splitting table rows algorithm, this boolean
                           // indicates, if the floating screen objects fits
-    // <--
     sal_Bool bDummy4 :1;
 
     //Split() spaltet den Frm an der angegebenen Stelle, es wird ein
@@ -182,7 +180,6 @@ public:
     {
         bConsiderObjsForMinCellHeight = _bNewConsiderObjsForMinCellHeight;
     }
-    // <--
     // #i26945#
     sal_Bool DoesObjsFit() const
     {
@@ -192,7 +189,6 @@ public:
     {
         bObjsDoesFit = _bNewObjsDoesFit;
     }
-    // <--
 
     bool RemoveFollowFlowLine();
     //

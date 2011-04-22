@@ -66,7 +66,6 @@
 #include <utility>
 // #i27767#
 #include <fmtwrapinfluenceonobjpos.hxx>
-// <--
 #include <editeng/brshitem.hxx>
 #include <fmtfollowtextflow.hxx>
 #include "dcontact.hxx"
@@ -506,7 +505,6 @@ void SwRTFParser::SetFlysInDoc()
                 new SwFlyDrawContact( pFmt,
                                       pFmt->GetDoc()->GetOrCreateDrawModel() );
         pContact->GetMaster()->SetOrdNum( n );
-        // <--
 
         delete pFlySave;
     }
@@ -557,7 +555,6 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
     SwFmtAnchor aAnchor( FLY_AT_PARA );
     SwFmtHoriOrient aHori( 0, text::HoriOrientation::LEFT, text::RelOrientation::FRAME );
     SwFmtVertOrient aVert( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME );
-    // <--
 
     SvxFrameDirectionItem aFrmDir( FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR );
 
@@ -949,7 +946,6 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
     // #i35017# - constant name has changed
     pSet->Put( SwFmtWrapInfluenceOnObjPos(
                     text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE ));
-    // <--
 
     SwFmtFollowTextFlow aFollowTextFlow( sal_False );
     pSet->Put( aFollowTextFlow );

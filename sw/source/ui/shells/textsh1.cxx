@@ -987,7 +987,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 {
                     rWrtSh.StartUndo( UNDO_INSATTR );
                 }
-                // <--
                 if( pSet->Count() )
                 {
                     rWrtSh.StartAction();
@@ -1018,7 +1017,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     // in order to indicate that the restart value of the list
                     // style has to be used on restart.
                     sal_uInt16 nNumStart = USHRT_MAX;
-                    // <--
                     if( SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) )
                     {
                         nNumStart = ((SfxUInt16Item&)pSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue();
@@ -1037,7 +1035,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 {
                     rWrtSh.EndUndo( UNDO_INSATTR );
                 }
-                // <--
             }
 
             delete pDlg;
@@ -1054,7 +1051,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
             {
                 pRule = rWrtSh.SearchNumRule( false, false, false, -1, sContinuedListId );
             }
-            // <--
             if ( pRule )
             {
                 rWrtSh.SetCurNumRule( *pRule, false, sContinuedListId );
@@ -1657,7 +1653,6 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                     {
                         pRule = rSh.SearchNumRule( false, false, false, -1, aDummy );
                     }
-                    // <--
                     if ( !pRule )
                         rSet.DisableItem(nWhich);
                 }

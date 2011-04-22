@@ -666,7 +666,6 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
                 }
             }
         }
-        // <--
     }
     //
     // 3. ggfs. CHPx einlesen und
@@ -797,7 +796,6 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
             ++aIter;
         }
     }
-    // <--
 
     sal_uInt8 nUpperLevel = 0;  // akt. Anzeigetiefe fuer den Writer
     for(nLevelB = 0; nLevelB < nMaxLevel; ++nLevelB)
@@ -1058,7 +1056,6 @@ SwNumRule* WW8ListManager::CreateNextRule(bool bSimple)
     sal_uInt16 nRul =
             rDoc.MakeNumRule( rDoc.GetUniqueNumRuleName(&sPrefix), 0, sal_False,
                               SvxNumberFormat::LABEL_ALIGNMENT );
-    // <--
     SwNumRule* pMyNumRule = rDoc.GetNumRuleTbl()[nRul];
     pMyNumRule->SetAutoRule(false);
     pMyNumRule->SetContinusNum(bSimple);
@@ -1632,7 +1629,6 @@ bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
         {
             return bRes;
         }
-        // <--
 
         SwNumRule * pNumRule = pTxtNode->GetNumRule(); // #i27610#
 
@@ -1677,7 +1673,6 @@ void UseListIndent(SwWW8StyInf &rStyle, const SwNumFmt &rFmt)
         rStyle.pFmt->SetFmtAttr(aLR);
         rStyle.bListReleventIndentSet = true;
     }
-    // <--
 }
 
 void SetStyleIndent(SwWW8StyInf &rStyle, const SwNumFmt &rFmt)
@@ -1809,7 +1804,6 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
             // correct condition according to the above given comment.
             if ( pTxtNd->GetNumRule() == rDoc.GetOutlineNumRule() &&
                  pRule == mpChosenOutlineNumRule )
-            // <--
             {
                 bUnchangedOutlineNumbering = true;
             }
@@ -1835,7 +1829,6 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
             {
                 pTxtNd->SetCountedInList( true );
             }
-            // <--
 
             // #i99822#
             // Direct application of the list level formatting no longer
@@ -1891,7 +1884,6 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
                     pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_LR_SPACE);
                 }
             }
-            // <--
         }
     }
 }
@@ -2015,7 +2007,6 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
                         pTxtNode->SetAttr(
                             SwNumRuleItem( rDoc.GetOutlineNumRule()->GetName() ) );
                     }
-                    // <--
                 }
 
                 pCtrlStck->NewAttr(*pPaM->GetPoint(), SvxLRSpaceItem(RES_LR_SPACE));

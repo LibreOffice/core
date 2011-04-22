@@ -1223,7 +1223,6 @@ SwXNumberingRules::SwXNumberingRules(SwDoc& rDoc) :
     rDoc.MakeNumRule( sCreatedNumRuleName, 0, sal_False,
                       // #i89178#
                       numfunc::GetDefaultPositionAndSpaceMode() );
-                      // <--
 #if OSL_DEBUG_LEVEL > 1
     (void)nIndex;
 #endif
@@ -1548,7 +1547,6 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
             // adjust conversion due to type mismatch between <Size> and <awt::Size>
             awt::Size aAwtSize(TWIP_TO_MM100(aSize.Width()), TWIP_TO_MM100(aSize.Height()));
             pData = new PropValData((void*)&aAwtSize, SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_SIZE), ::getCppuType((const awt::Size*)0));
-            // <--
             aPropertyValues.Insert(pData, aPropertyValues.Count());
 
             const SwFmtVertOrient* pOrient = rFmt.GetGraphicOrientation();
@@ -1930,7 +1928,6 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                             SvxUnoFontDescriptor::ConvertToFont( *pDesc, aFont );
                             aFmt.SetBulletFont(&aFont);
                         }
-                        // <--
                     }
                     else
                         bWrongArg = sal_True;
@@ -2276,7 +2273,6 @@ OUString SwXNumberingRules::getName() throw( RuntimeException )
                                          aString, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE, sal_True );
         return OUString ( aString );
     }
-    // <--
     else
         return sCreatedNumRuleName;
 }

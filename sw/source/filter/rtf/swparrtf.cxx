@@ -471,7 +471,6 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( sal_False ).nNode.GetIndex() )
                             }
                         }
                     }
-                    // <--
 
                     if ( !bAnchoredObjs )
                         DelLastNode();

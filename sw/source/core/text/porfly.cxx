@@ -195,7 +195,6 @@ void SwTxtFrm::MoveFlyInCnt( SwTxtFrm *pNew, xub_StrLen nStart, xub_StrLen nEnd 
                     --i;
                 }
             }
-            // <--
         }
     }
 }
@@ -329,7 +328,6 @@ SwFlyCntPortion::SwFlyCntPortion( const SwTxtFrm& rFrm,
         // #i40333# - follow-up of #i35635#
         // move object to visible layer
         pDrawContact->MoveObjToVisibleLayer( pDrawContact->GetMaster() );
-        // <--
     }
     nLineLength = 1;
     nFlags |= AS_CHAR_ULSPACE | AS_CHAR_INIT;
@@ -377,7 +375,6 @@ void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
         {
             GetDrawContact()->GetAnchoredObj( pSdrObj )->MakeObjPos();
         }
-        // <--
     }
     else
     {

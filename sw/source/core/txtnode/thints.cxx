@@ -743,7 +743,6 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
                     const SwFmtCharFmt& rOtherCharFmt = (*aIter)->GetCharFmt();
                     const SwFmtCharFmt& rThisCharFmt = rNewHint.GetCharFmt();
                     const bool bSameCharFmt = rOtherCharFmt.GetCharFmt() == rThisCharFmt.GetCharFmt();
-                    // <--
 
                     // #i90311#
                     // Do not remove existing character format hint during XML import
@@ -751,7 +750,6 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
                          ( !( nsSetAttrMode::SETATTR_DONTREPLACE & nMode ) ||
                            bNoLengthAttribute ||
                            bSameCharFmt ) )
-                    // <--
                     {
                         // Remove old hint
                         Delete( *aIter );
@@ -864,7 +862,6 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
                     }
                     while (!aIter2.IsAtEnd() && 0 != (pItem = aIter2.NextItem()));
                 }
-                // <--
 
                 // Remove old hint
                 Delete( pCurrentAutoStyle );
@@ -917,7 +914,6 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
                         delete pNewSet;
                     }
                 }
-                // <--
 
                 // Create new AutoStyle
                 // If there is no current hint and start and end of rNewHint
@@ -1565,7 +1561,6 @@ void SwTxtNode::DeleteAttributes( const sal_uInt16 nWhich,
                 if ( pHiddenItem )
                     SetCalcHiddenCharFlags();
             }
-            // <--
 
             xub_StrLen const * const pEndIdx = pTxtHt->GetEnd();
 
@@ -1888,7 +1883,6 @@ sal_Bool SwTxtNode::GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
         {
             // #i75299#
             ::std::auto_ptr< std::vector< SwPoolItemEndPair > > pAttrArr;
-            // <--
 
             const sal_uInt16 coArrSz = static_cast<sal_uInt16>(RES_TXTATR_WITHEND_END) -
                                    static_cast<sal_uInt16>(RES_CHRATR_BEGIN);
@@ -2619,7 +2613,6 @@ bool SwpHints::TryInsertHint( SwTxtAttr* const pHint, SwTxtNode &rNode,
             rNode.SetCalcHiddenCharFlags();
         break;
     }
-    // <--
     case RES_TXTATR_INETFMT:
         static_cast<SwTxtINetFmt*>(pHint)->InitINetFmt(rNode);
         break;
@@ -2859,7 +2852,6 @@ bool SwpHints::TryInsertHint( SwTxtAttr* const pHint, SwTxtNode &rNode,
             // #i82989# Check sort numbers in NoHintAdjustMode
             if ( RES_TXTATR_CHARFMT == nWhich )
                 lcl_CheckSortNumber( *this, *static_cast<SwTxtCharFmt*>(pHint) );
-            // <--
 
             SwpHintsArray::Insert( pHint );
             NoteInHistory( pHint, true );

@@ -109,14 +109,12 @@ class SwAccessibleTableData_Impl
         return !mbOnlyTableColumnHeader ||
                mpTabFrm->IsInHeadline( rFrm );
     }
-    // <--
 public:
     // #i77106# - add third optional parameter <bOnlyTableColumnHeader>, default value <false>
     SwAccessibleTableData_Impl( SwAccessibleMap& rAccMap,
                                 const SwTabFrm *pTabFrm,
                                 sal_Bool bIsInPagePreview,
                                 bool bOnlyTableColumnHeader = false );
-    // <--
 
     const Int32Set_Impl& GetRows() const { return maRows; }
     const Int32Set_Impl& GetColumns() const { return maColumns; }
@@ -849,14 +847,12 @@ SwAccessibleTableData_Impl* SwAccessibleTable::CreateNewTableData()
     const SwTabFrm* pTabFrm = static_cast<const SwTabFrm*>( GetFrm() );
     return new SwAccessibleTableData_Impl( *GetMap(), pTabFrm, IsInPagePreview() );
 }
-// <--
 
 void SwAccessibleTable::UpdateTableData()
 {
     // #i77106# - usage of new method <CreateNewTableData()>
     delete mpTableData;
     mpTableData = CreateNewTableData();
-    // <--
 }
 
 void SwAccessibleTable::ClearTableData()
@@ -927,7 +923,6 @@ OUString SAL_CALL SwAccessibleTable::getAccessibleRowDescription(
     }
 
     return sRowDesc;
-    // <--
 }
 
 OUString SAL_CALL SwAccessibleTable::getAccessibleColumnDescription(
@@ -962,7 +957,6 @@ OUString SAL_CALL SwAccessibleTable::getAccessibleColumnDescription(
     }
 
     return sColumnDesc;
-    // <--
 }
 
 sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRowExtentAt(
@@ -1050,7 +1044,6 @@ uno::Reference< XAccessibleTable > SAL_CALL
     }
 
     return xTableColumnHeaders;
-    // <--
 }
 
 uno::Sequence< sal_Int32 > SAL_CALL SwAccessibleTable::getSelectedAccessibleRows()
@@ -1247,7 +1240,6 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRow( sal_Int32 nChildIndex )
     {
         throw lang::IndexOutOfBoundsException();
     }
-    // <--
 
     SwAccessibleChild aCell( GetChild( *(GetMap()), nChildIndex ) );
     if ( aCell.GetSwFrm()  )
@@ -1286,7 +1278,6 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleColumn(
     {
         throw lang::IndexOutOfBoundsException();
     }
-    // <--
 
     SwAccessibleChild aCell( GetChild( *(GetMap()), nChildIndex ) );
     if ( aCell.GetSwFrm()  )
@@ -1599,7 +1590,6 @@ void SAL_CALL SwAccessibleTable::deselectAccessibleChild(
     // assure, that child, identified by the given index, is selected.
     if ( !IsChildSelected( nChildIndex ) )
         return;
-    // <--
 
     const SwTableBox* pBox = GetTableBox( nChildIndex );
     DBG_ASSERT( pBox != NULL, "We need the table box." );

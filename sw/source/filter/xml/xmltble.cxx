@@ -997,7 +997,6 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
                     nCol = nOldCol;
                 }
             }
-            // <--
 
             sal_uInt16 nColSpan = nCol - nOldCol + 1U;
 

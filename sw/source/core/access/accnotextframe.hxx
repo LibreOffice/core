@@ -60,7 +60,6 @@ public:
     virtual ::rtl::OUString SAL_CALL
         getAccessibleName (void)
         throw (::com::sun::star::uno::RuntimeException);
-    // <--
 
     /// Return this object's description.
     virtual ::rtl::OUString SAL_CALL

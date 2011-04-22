@@ -84,7 +84,6 @@ SwAccessibleNoTextFrame::SwAccessibleNoTextFrame(
             msDesc = msTitle;
         }
     }
-    // <--
 }
 
 SwAccessibleNoTextFrame::~SwAccessibleNoTextFrame()
@@ -184,7 +183,6 @@ OUString SAL_CALL SwAccessibleNoTextFrame::getAccessibleName (void)
 
     return SwAccessibleFrameBase::getAccessibleName();
 }
-// <--
 
 OUString SAL_CALL SwAccessibleNoTextFrame::getAccessibleDescription (void)
         throw (uno::RuntimeException)

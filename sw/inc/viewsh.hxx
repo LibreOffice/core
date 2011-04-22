@@ -342,7 +342,6 @@ public:
 
     const IDocumentListItems* getIDocumentListItemsAccess() const;
     const IDocumentOutlineNodes* getIDocumentOutlineNodesAccess() const;
-    // <--
 
     // 1. GetRefDev:   Either the printer or the virtual device from the doc
     // 2. GetWin:      Available if we not printing

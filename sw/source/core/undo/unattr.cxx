@@ -136,7 +136,6 @@ SwUndoFmtAttr::SwUndoFmtAttr( const SfxItemSet& rOldSet,
     , m_pFmt( &rChgFmt )
       // #i56253#
     , m_pOldSet( new SfxItemSet( rOldSet ) )
-      // <--
     , m_nNodeIndex( 0 )
     , m_nFmtWhich( rChgFmt.Which() )
     , m_bSaveDrawPt( bSaveDrawPt )
@@ -228,7 +227,6 @@ void SwUndoFmtAttr::UndoImpl(::sw::UndoRedoContext & rContext)
     }
 
     if ( !bAnchorAttrRestored )
-    // <--
     {
         SwUndoFmtAttrHelper aTmp( *m_pFmt, m_bSaveDrawPt );
         m_pFmt->SetFmtAttr( *m_pOldSet );
@@ -339,7 +337,6 @@ void SwUndoFmtAttr::RedoImpl(::sw::UndoRedoContext & rContext)
     // #i35443# - Because the undo stores the attributes for
     // redo, the same code as for <Undo(..)> can be applied for <Redo(..)>
     UndoImpl(rContext);
-    // <--
 }
 
 void SwUndoFmtAttr::RepeatImpl(::sw::RepeatContext & rContext)
@@ -494,7 +491,6 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
             // #i35443# - invalid position.
             // Thus, anchor attribute not restored
             return false;
-            // <--
         }
 
         SwPosition aPos( *pNd );
@@ -508,7 +504,6 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
                 // #i35443# - invalid position.
                 // Thus, anchor attribute not restored
                 return false;
-                // <--
             }
         }
         aNewAnchor.SetAnchor( &aPos );
@@ -543,7 +538,6 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
     // #i54336#
     // Consider case, that as-character anchored object has moved its anchor position.
     if (FLY_AS_CHAR == rOldAnch.GetAnchorId())
-    // <--
     {
         //Bei InCntnt's wird es spannend: Das TxtAttribut muss vernichtet
         //werden. Leider reisst dies neben den Frms auch noch das Format mit
@@ -623,7 +617,6 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
 
     // #i35443# - anchor attribute restored.
     return true;
-    // <--
 }
 
 // -----------------------------------------------------
@@ -660,7 +653,6 @@ void SwUndoFmtResetAttr::RedoImpl(::sw::UndoRedoContext &)
         m_pChangedFormat->ResetFmtAttr( m_nWhichId );
     }
 }
-// <--
 
 // -----------------------------------------------------
 

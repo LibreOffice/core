@@ -44,7 +44,6 @@
 #include <numrule.hxx>
 // #i89179#
 #include <porfld.hxx>
-// <--
 
 
 /*************************************************************************
@@ -108,7 +107,6 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
                                    ( bTabsRelativeToIndent ? GetTabLeft() : 0 )
                                  : pFrm->Frm().Left() +
                                    ( bTabsRelativeToIndent ? GetTabLeft() : 0 );
-        // <--
 
         //
         // nLinePos: The absolute position, where we started the line formatting.
@@ -204,7 +202,6 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
             nNextPos = nCount < 0 || (!nCount && nSearchPos <= 0)? nCount * nDefTabDist :( nCount + 1 ) * nDefTabDist ;
             // --> FME 2004-09-21 #117919 Minimum tab stop width is 1 or 51 twips:
             const SwTwips nMinimumTabWidth = pFrm->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT) ? 0 : 50;
-            // <--
             if( (  bRTL && nTabLeft - nNextPos >= nCurrentAbsPos - nMinimumTabWidth ) ||
                  ( !bRTL && nNextPos + nTabLeft <= nCurrentAbsPos + nMinimumTabWidth  ) )
             {
@@ -290,7 +287,6 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
         if ( SVX_TAB_ADJUST_DECIMAL == eAdj &&
              // #127428#
              1 == aLineInf.NumberOfTabStops() )
-             // <--
             pTabPor = new SwAutoTabDecimalPortion( nNewTabPos, cDec, cFill );
     }
     else
@@ -397,7 +393,6 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
     // #i37686# In compatibility mode, the minimum width
     // should be 1, even for non-left tab stops.
     sal_uInt16 nMinimumTabWidth = 1;
-    // <--
     if ( !bTabCompat )
     {
         // #i89179#
@@ -412,7 +407,6 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
                     static_cast<SwNumberPortion*>(rInf.GetLast())->GetFont();
             pSave.reset( new SwFontSave( rInf, const_cast<SwFont*>(pNumberPortionFont) ) );
         }
-        // <--
         XubString aTmp( ' ' );
         SwTxtSizeInfo aInf( rInf, aTmp );
         nMinimumTabWidth = aInf.GetTxtSize().Width();
@@ -470,7 +464,6 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
             // #119175# TabStop should be forced to current
             // line if there is a fly reducing the line width:
             !rInf.GetFly() )
-            // <--
         {
             PrtWidth( static_cast<sal_uInt16>(rInf.Width() - rInf.X()) );
             SetFixWidth( PrtWidth() );
@@ -532,7 +525,6 @@ sal_Bool SwTabPortion::PostFormat( SwTxtFormatInfo &rInf )
             nPorWidth = nPrePorWidth - 1;
         }
     }
-    // <--
 
     if( POR_TABCENTER == nWhich )
     {
@@ -606,7 +598,6 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
             pSave.reset( new SwFontSave( rInf, const_cast<SwFont*>(pNumberPortionFont) ) );
         }
     }
-    // <--
     rInf.DrawBackBrush( *this );
 
     // do we have to repaint a post it portion?

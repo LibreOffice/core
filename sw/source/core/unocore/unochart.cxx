@@ -438,7 +438,6 @@ static void GetFormatAndCreateCursorFromRangeRep(
             // perform validation check. Thus, pass <true> as 2nd parameter to <SwTable::GetTblBox(..)>
             const SwTableBox* pTLBox =
                             pTable ? pTable->GetTblBox( aStartCell, true ) : 0;
-            // <--
             if(pTLBox)
             {
                 // hier muessen die Actions aufgehoben werden
@@ -452,7 +451,6 @@ static void GetFormatAndCreateCursorFromRangeRep(
                 // #i80314#
                 // perform validation check. Thus, pass <true> as 2nd parameter to <SwTable::GetTblBox(..)>
                 const SwTableBox* pBRBox = pTable->GetTblBox( aEndCell, true );
-                // <--
                 if(pBRBox)
                 {
                     pUnoCrsr->SetMark();

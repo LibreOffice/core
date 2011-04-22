@@ -45,7 +45,6 @@ class SwFtnPortion : public SwFldPortion
     // #i98418#
     bool mbPreferredScriptTypeSet;
     sal_uInt8 mnPreferredScriptType;
-    // <--
 public:
     SwFtnPortion( const XubString &rExpand, SwTxtFrm *pFrm, SwTxtFtn *pFtn,
                   KSHORT nOrig = KSHRT_MAX );
@@ -58,7 +57,6 @@ public:
 
     // #i98418#
     void SetPreferredScriptType( sal_uInt8 nPreferredScriptType );
-    // <--
 
     const SwTxtFtn* GetTxtFtn() const { return pFtn; };
     OUTPUT_OPERATOR

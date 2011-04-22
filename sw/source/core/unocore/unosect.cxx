@@ -1579,7 +1579,6 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
             }
         }
         break;
-        // <--
 
         case  FN_UNO_ANCHOR_TYPES:
         case  FN_UNO_TEXT_WRAP:

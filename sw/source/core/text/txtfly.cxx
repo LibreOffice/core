@@ -60,7 +60,6 @@
 #include <editeng/ulspitem.hxx>
 // #i28701#
 #include <editeng/lspcitem.hxx>
-// <--
 #include <txtflcnt.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtanchr.hxx>
@@ -775,17 +774,14 @@ void SwTxtFly::CtorInitTxtFly( const SwTxtFrm *pFrm )
     mbIgnoreContour = sal_False;
     // #118809#
     mbIgnoreObjsInHeaderFooter = sal_False;
-    // <--
     pPage = pFrm->FindPageFrm();
     const SwFlyFrm* pTmp = pFrm->FindFlyFrm();
     // #i68520#
     mpCurrAnchoredObj = pTmp;
-    // <--
     pCurrFrm = pFrm;
     pMaster = pCurrFrm->IsFollow() ? NULL : pCurrFrm;
     // #i68520#
     mpAnchoredObjList = NULL;
-    // <--
     // Wenn wir nicht von einem Frame ueberlappt werden, oder wenn
     // es gar keine FlyCollection gibt, dann schaltet wir uns fuer immer ab.
     // Aber es koennte sein, dass waehrend der Formatierung eine Zeile
@@ -885,7 +881,6 @@ sal_Bool SwTxtFly::IsAnyObj( const SwRect &rRect ) const
 
             // #i68520#
             if( mpCurrAnchoredObj != pObj && aBound.IsOver( aRect ) )
-            // <--
                 return sal_True;
         }
     }
@@ -948,13 +943,11 @@ sal_Bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
     const sal_uInt32 nCurrOrd = mpCurrAnchoredObj
                             ? mpCurrAnchoredObj->GetDrawObj()->GetOrdNum()
                             : SAL_MAX_UINT32;
-    // <--
     OSL_ENSURE( !bTopRule, "DrawTextOpaque: Wrong TopRule" );
 
     // #i68520#
     SwAnchoredObjList::size_type nCount( bOn ? GetAnchoredObjList()->size() : 0 );
     if ( bOn && nCount > 0 )
-    // <--
     {
         MSHORT nHellId = pPage->getRootFrm()->GetCurrShell()->getIDocumentDrawModelAccess()->GetHellId();
         for( MSHORT i = 0; i < nCount; ++i )
@@ -963,11 +956,9 @@ sal_Bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
             const SwAnchoredObject* pTmpAnchoredObj = (*mpAnchoredObjList)[i];
             if( dynamic_cast<const SwFlyFrm*>(pTmpAnchoredObj) &&
                 mpCurrAnchoredObj != pTmpAnchoredObj )
-            // <--
             {
                 // #i68520#
                 const SwFlyFrm* pFly = dynamic_cast<const SwFlyFrm*>(pTmpAnchoredObj);
-                // <--
                 if( aRegion.GetOrigin().IsOver( pFly->Frm() ) )
                 {
                     const SwFrmFmt *pFmt = pFly->GetFmt();
@@ -982,7 +973,6 @@ sal_Bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
                         ( !rSur.IsAnchorOnly() ||
                           // #i68520#
                           GetMaster() == pFly->GetAnchorFrm() ||
-                          // <--
                           ((FLY_AT_PARA != rAnchor.GetAnchorId()) &&
                            (FLY_AT_CHAR != rAnchor.GetAnchorId())
                           )
@@ -990,7 +980,6 @@ sal_Bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
                         // #i68520#
                         pTmpAnchoredObj->GetDrawObj()->GetLayer() != nHellId &&
                         nCurrOrd < pTmpAnchoredObj->GetDrawObj()->GetOrdNum()
-                        // <--
                       )
                     {
                         //Ausser der Inhalt ist Transparent
@@ -1059,7 +1048,6 @@ void SwTxtFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
     // #i68520#
     SwAnchoredObjList::size_type nCount( bOn ? GetAnchoredObjList()->size() : 0 );
     if ( bOn && nCount > 0 )
-    // <--
     {
         MSHORT nHellId = pPage->getRootFrm()->GetCurrShell()->getIDocumentDrawModelAccess()->GetHellId();
         for( MSHORT i = 0; i < nCount; ++i )
@@ -1068,37 +1056,31 @@ void SwTxtFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
             const SwAnchoredObject* pAnchoredObjTmp = (*mpAnchoredObjList)[i];
             if( mpCurrAnchoredObj != pAnchoredObjTmp &&
                 dynamic_cast<const SwFlyFrm*>(pAnchoredObjTmp) )
-            // <--
             {
                 // #i68520#
                 const SwFmtSurround& rSur = pAnchoredObjTmp->GetFrmFmt().GetSurround();
-                // <--
 
                 // OD 24.01.2003 #106593# - correct clipping of fly frame area.
                 // Consider that fly frame background/shadow can be transparent
                 // and <SwAlignRect(..)> fly frame area
                 // #i68520#
                 const SwFlyFrm* pFly = dynamic_cast<const SwFlyFrm*>(pAnchoredObjTmp);
-                // <--
                 // #i47804# - consider transparent graphics
                 // and OLE objects.
                 bool bClipFlyArea =
                         ( ( SURROUND_THROUGHT == rSur.GetSurround() )
                           // #i68520#
                           ? (pAnchoredObjTmp->GetDrawObj()->GetLayer() != nHellId)
-                          // <--
                           : !rSur.IsContour() ) &&
                         !pFly->IsBackgroundTransparent() &&
                         !pFly->IsShadowTransparent() &&
                         ( !pFly->Lower() ||
                           !pFly->Lower()->IsNoTxtFrm() ||
                           !static_cast<const SwNoTxtFrm*>(pFly->Lower())->IsTransparent() );
-                // <--
                 if ( bClipFlyArea )
                 {
                     // #i68520#
                     SwRect aFly( pAnchoredObjTmp->GetObjRect() );
-                    // <--
                     // OD 24.01.2003 #106593#
                     ::SwAlignRect( aFly, pPage->getRootFrm()->GetCurrShell() );
                     if( aFly.Width() > 0 && aFly.Height() > 0 )
@@ -1127,16 +1109,13 @@ void SwTxtFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
 sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
                            const sal_Bool bInFtn,
                            const sal_Bool bInFooterOrHeader )
-// <--
 {
     // #i68520#
     // <mpCurrAnchoredObj> is set, if <pCurrFrm> is inside a fly frame
     if( _pAnchoredObj != mpCurrAnchoredObj )
-    // <--
     {
         // #i26945#
         const SdrObject* pNew = _pAnchoredObj->GetDrawObj();
-        // <--
         // #102344# Ignore connectors which have one or more connections
         if(pNew && pNew->ISA(SdrEdgeObj))
         {
@@ -1152,7 +1131,6 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
             // #i26945#
             const SwFrmFmt& rFrmFmt = _pAnchoredObj->GetFrmFmt();
             const SwFmtAnchor& rNewA = rFrmFmt.GetAnchor();
-            // <--
             if (FLY_AT_PAGE == rNewA.GetAnchorId())
             {
                 if ( bInFtn )
@@ -1190,15 +1168,12 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
                 // innerhalb von verketteten Flys wird nur Lowern ausgewichen
                 // #i68520#
                 const SwFmtChain &rChain = mpCurrAnchoredObj->GetFrmFmt().GetChain();
-                // <--
                 if ( !rChain.GetPrev() && !rChain.GetNext() )
                 {
                     // #i26945#
                     const SwFmtAnchor& rNewA = _pAnchoredObj->GetFrmFmt().GetAnchor();
-                    // <--
                     // #i68520#
                     const SwFmtAnchor& rCurrA = mpCurrAnchoredObj->GetFrmFmt().GetAnchor();
-                    // <--
 
                     // If <mpCurrAnchoredObj> is anchored as character, its content
                     // does not wrap around pNew
@@ -1239,7 +1214,6 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
 //                              rCurrA.GetCntntAnchor()->nNode.GetIndex();
                     else
                         return sal_False;
-                    // <--
                 }
             }
 
@@ -1248,14 +1222,12 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
             // ausgewichen werden.
             // #i68520#
             bEvade &= ( mpCurrAnchoredObj->GetDrawObj()->GetOrdNum() < pNew->GetOrdNum() );
-            // <--
             if( bEvade )
             {
                 // #i68520#
                 SwRect aTmp( _pAnchoredObj->GetObjRectWithSpaces() );
                 if ( !aTmp.IsOver( mpCurrAnchoredObj->GetObjRectWithSpaces() ) )
                     bEvade = sal_False;
-                // <--
             }
         }
 
@@ -1263,7 +1235,6 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
         {
             // #i26945#
             const SwFmtAnchor& rNewA = _pAnchoredObj->GetFrmFmt().GetAnchor();
-            // <--
             OSL_ENSURE( FLY_AS_CHAR != rNewA.GetAnchorId(),
                     "Don't call GetTop with a FlyInCntFrm" );
             if (FLY_AT_PAGE == rNewA.GetAnchorId())
@@ -1276,14 +1247,12 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
             // pCurrFrm ist der Anker von pNew?
             // #i26945#
             const SwFrm* pTmp = _pAnchoredObj->GetAnchorFrm();
-            // <--
             if( pTmp == pCurrFrm )
                 return sal_True;
             if( pTmp->IsTxtFrm() && ( pTmp->IsInFly() || pTmp->IsInFtn() ) )
             {
                 // #i26945#
                 Point aPos = _pAnchoredObj->GetObjRect().Pos();
-                // <--
                 pTmp = GetVirtualUpper( pTmp, aPos );
             }
             // #i26945#
@@ -1295,7 +1264,6 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
                 pTmp = const_cast<SwAnchoredObject*>(_pAnchoredObj)
                                 ->GetAnchorFrmContainingAnchPos()->GetUpper();
             }
-            // <--
             // #i28701# - consider all objects in same context,
             // if wrapping style is considered on object positioning.
             // Thus, text will wrap around negative positioned objects.
@@ -1314,7 +1282,6 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
             {
                 return sal_True;
             }
-            // <--
 
             const SwFrm* pHeader = 0;
             if ( pCurrFrm->GetNext() != pTmp &&
@@ -1324,7 +1291,6 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
                      0 != ( pHeader = pTmp->FindFooterOrHeader() ) &&
                      !pHeader->IsFooterFrm() &&
                      pCurrFrm->IsInDocBody() ) ) )
-                   // <--
             {
                 if( pHeader || FLY_AT_FLY == rNewA.GetAnchorId() )
                     return sal_True;
@@ -1409,7 +1375,6 @@ SwAnchoredObjList* SwTxtFly::InitAnchoredObjList()
     OSL_ENSURE( pCurrFrm, "InitFlyList: No Frame, no FlyList" );
     // #i68520#
     OSL_ENSURE( !mpAnchoredObjList, "InitFlyList: FlyList already initialized" );
-    // <--
 
     SWAP_IF_SWAPPED( pCurrFrm )
 
@@ -1423,7 +1388,6 @@ SwAnchoredObjList* SwTxtFly::InitAnchoredObjList()
     const sal_Bool bWrapAllowed = ( pIDSA->get(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING) ||
                                     ( !pCurrFrm->IsInFtn() && !bFooterHeader ) ) &&
                                       !SwLayouter::FrmNotToWrap( *pCurrFrm->GetTxtNode()->getIDocumentLayoutAccess(), *pCurrFrm );
-    // <--
 
     bOn = sal_False;
 
@@ -1431,7 +1395,6 @@ SwAnchoredObjList* SwTxtFly::InitAnchoredObjList()
     {
         // #i68520#
         mpAnchoredObjList = new SwAnchoredObjList();
-        // <--
 
         // #i28701# - consider complete frame area for new
         // text wrapping
@@ -1488,7 +1451,6 @@ SwAnchoredObjList* SwTxtFly::InitAnchoredObjList()
             // <GetTop(..)> instead of only the <SdrObject> instance of the
             // anchored object
             if ( GetTop( pAnchoredObj, pCurrFrm->IsInFtn(), bFooterHeader ) )
-            // <--
             {
                 // OD 11.03.2003 #107862# - adjust insert position:
                 // overlapping objects should be sorted from left to right and
@@ -1550,13 +1512,11 @@ SwAnchoredObjList* SwTxtFly::InitAnchoredObjList()
 
                     mpAnchoredObjList->insert( aInsPosIter, pAnchoredObj );
                 }
-                // <--
 
                 const SwFmtSurround &rFlyFmt = pAnchoredObj->GetFrmFmt().GetSurround();
                 // #i68520#
                 if ( rFlyFmt.IsAnchorOnly() &&
                      pAnchoredObj->GetAnchorFrm() == GetMaster() )
-                // <--
                 {
                     const SwFmtVertOrient &rTmpFmt =
                                     pAnchoredObj->GetFrmFmt().GetVertOrient();
@@ -1580,16 +1540,13 @@ SwAnchoredObjList* SwTxtFly::InitAnchoredObjList()
     {
         // #i68520#
         mpAnchoredObjList = new SwAnchoredObjList();
-        // <--
     }
 
     UNDO_SWAP( pCurrFrm )
 
     // #i68520#
     return mpAnchoredObjList;
-    // <--
 }
-// <--
 
 SwTwips SwTxtFly::CalcMinBottom() const
 {
@@ -1721,7 +1678,6 @@ const SwRect SwContourCache::CalcBoundRect( const SwAnchoredObject* pAnchoredObj
 
     return aRet;
 }
-// <--
 
 const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
     const SdrObject* pObj, const SwTxtFrm* pFrm, const SwRect &rLine,
@@ -1940,7 +1896,6 @@ sal_Bool SwTxtFly::ForEach( const SwRect &rRect, SwRect* pRect, sal_Bool bAvoid 
     // #i68520#
     SwAnchoredObjList::size_type nCount( bOn ? GetAnchoredObjList()->size() : 0 );
     if ( bOn && nCount > 0 )
-    // <--
     {
         for( SwAnchoredObjList::size_type i = 0; i < nCount; ++i )
         {
@@ -1948,7 +1903,6 @@ sal_Bool SwTxtFly::ForEach( const SwRect &rRect, SwRect* pRect, sal_Bool bAvoid 
             const SwAnchoredObject* pAnchoredObj = (*mpAnchoredObjList)[i];
 
             SwRect aRect( pAnchoredObj->GetObjRectWithSpaces() );
-            // <--
 
             // Optimierung
             SWRECTFN( pCurrFrm )
@@ -1956,12 +1910,10 @@ sal_Bool SwTxtFly::ForEach( const SwRect &rRect, SwRect* pRect, sal_Bool bAvoid 
                 break;
             // #i68520#
             if ( mpCurrAnchoredObj != pAnchoredObj && aRect.IsOver( rRect ) )
-            // <--
             {
                 // #i68520#
                 const SwFmt* pFmt( &(pAnchoredObj->GetFrmFmt()) );
                 const SwFmtSurround &rSur = pFmt->GetSurround();
-                // <--
                 if( bAvoid )
                 {
                     // Wenn der Text drunter durchlaeuft, bleibt die
@@ -1972,7 +1924,6 @@ sal_Bool SwTxtFly::ForEach( const SwRect &rRect, SwRect* pRect, sal_Bool bAvoid 
                           ( !rSur.IsAnchorOnly() ||
                             // #i68520#
                             GetMaster() == pAnchoredObj->GetAnchorFrm() ||
-                            // <--
                             ((FLY_AT_PARA != rAnchor.GetAnchorId()) &&
                              (FLY_AT_CHAR != rAnchor.GetAnchorId())) ) )
                         || aRect.Top() == WEIT_WECH )
@@ -1990,13 +1941,11 @@ sal_Bool SwTxtFly::ForEach( const SwRect &rRect, SwRect* pRect, sal_Bool bAvoid 
                 if ( mbIgnoreCurrentFrame &&
                      GetMaster() == pAnchoredObj->GetAnchorFrm() )
                     continue;
-                // <--
 
                 if( pRect )
                 {
                     // #i68520#
                     SwRect aFly = AnchoredObjToRect( pAnchoredObj, rRect );
-                    // <--
                     if( aFly.IsEmpty() || !aFly.IsOver( rRect ) )
                         continue;
                     if( !bRet || (
@@ -2039,7 +1988,6 @@ SwAnchoredObjList::size_type SwTxtFly::GetPos( const SwAnchoredObject* pAnchored
         ++nRet;
     return nRet;
 }
-// <--
 
 /*************************************************************************
  *                      SwTxtFly::CalcRightMargin()
@@ -2060,7 +2008,6 @@ void SwTxtFly::CalcRightMargin( SwRect &rFly,
     SWRECTFN( pCurrFrm )
     // #118796# - correct determination of right of printing area
     SwTwips nRight = (pCurrFrm->*fnRect->fnGetPrtRight)();
-    // <--
     SwTwips nFlyRight = (rFly.*fnRect->fnGetRight)();
     SwRect aLine( rLine );
     (aLine.*fnRect->fnSetRight)( nRight );
@@ -2074,16 +2021,13 @@ void SwTxtFly::CalcRightMargin( SwRect &rFly,
     // 3301: pNext->Frm().IsOver( rLine ) ist noetig
     // #i68520#
     SwSurround eSurroundForTextWrap;
-    // <--
 
     sal_Bool bStop = sal_False;
     // #i68520#
     SwAnchoredObjList::size_type nPos = 0;
-    // <--
 
     // #i68520#
     while( nPos < mpAnchoredObjList->size() && !bStop )
-    // <--
     {
         if( nPos == nFlyPos )
         {
@@ -2097,7 +2041,6 @@ void SwTxtFly::CalcRightMargin( SwRect &rFly,
         eSurroundForTextWrap = _GetSurroundForTextWrap( pNext );
         if( SURROUND_THROUGHT == eSurroundForTextWrap )
             continue;
-        // <--
 
         const SwRect aTmp( SwContourCache::CalcBoundRect
                 ( pNext, aLine, pCurrFrm, nFlyRight, sal_True ) );
@@ -2144,7 +2087,6 @@ void SwTxtFly::CalcRightMargin( SwRect &rFly,
     }
     (rFly.*fnRect->fnSetRight)( nRight );
 }
-// <--
 
 /*************************************************************************
  *                      SwTxtFly::CalcLeftMargin()
@@ -2164,7 +2106,6 @@ void SwTxtFly::CalcLeftMargin( SwRect &rFly,
     SWRECTFN( pCurrFrm )
     // #118796# - correct determination of left of printing area
     SwTwips nLeft = (pCurrFrm->*fnRect->fnGetPrtLeft)();
-    // <--
     const SwTwips nFlyLeft = (rFly.*fnRect->fnGetLeft)();
 
     if( nLeft > nFlyLeft )
@@ -2183,12 +2124,10 @@ void SwTxtFly::CalcLeftMargin( SwRect &rFly,
     // #i68520#
     SwAnchoredObjList::size_type nMyPos = nFlyPos;
     while( ++nFlyPos < mpAnchoredObjList->size() )
-    // <--
     {
         // #i68520#
         const SwAnchoredObject* pNext = (*mpAnchoredObjList)[ nFlyPos ];
         const SwRect aTmp( pNext->GetObjRectWithSpaces() );
-        // <--
         if( (aTmp.*fnRect->fnGetLeft)() >= nFlyLeft )
             break;
     }
@@ -2204,7 +2143,6 @@ void SwTxtFly::CalcLeftMargin( SwRect &rFly,
         SwSurround eSurroundForTextWrap = _GetSurroundForTextWrap( pNext );
         if( SURROUND_THROUGHT == eSurroundForTextWrap )
             continue;
-        // <--
 
         const SwRect aTmp( SwContourCache::CalcBoundRect
                 ( pNext, aLine, pCurrFrm, nFlyLeft, sal_False ) );
@@ -2216,14 +2154,12 @@ void SwTxtFly::CalcLeftMargin( SwRect &rFly,
             SwTwips nTmpRight = (aTmp.*fnRect->fnGetRight)();
             if ( nLeft <= nTmpRight )
                 nLeft = nTmpRight;
-            // <--
 
             break;
         }
     }
     (rFly.*fnRect->fnSetLeft)( nLeft );
 }
-// <--
 
 /*************************************************************************
  *                      SwTxtFly::FlyToRect()

@@ -61,7 +61,6 @@ enum REFERENCEMARK
     REF_NUMBER,
     REF_NUMBER_NO_CONTEXT,
     REF_NUMBER_FULL_CONTEXT,
-    // <--
     REF_END
 };
 
@@ -133,7 +132,6 @@ public:
     bool IsRefToHeadingCrossRefBookmark() const;
     bool IsRefToNumItemCrossRefBookmark() const;
     const SwTxtNode* GetReferencedTxtNode() const;
-    // <--
     // #i85090#
     String GetExpandedTxtOfReferencedTxtNode() const;
 

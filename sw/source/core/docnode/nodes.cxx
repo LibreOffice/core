@@ -181,7 +181,6 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
                     pOutlineNds->Remove( pSrch );
                 }
             }
-            // <--
 
             BigPtrArray::Move( aDelIdx.GetIndex(), rInsPos.GetIndex() );
 

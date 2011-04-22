@@ -36,7 +36,6 @@ class SwFrmFmt;
 // #i30669#
 class SwFmtHoriOrient;
 class SwFmtVertOrient;
-// <--
 
 class WinwordAnchoring : public EscherExClientRecord_Base
 {

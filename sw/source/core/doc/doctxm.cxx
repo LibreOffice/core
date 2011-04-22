@@ -1779,7 +1779,6 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
                             aFld.ChangeExpansion( pFrm,
                                 dynamic_cast<const SwCntntNode*>(pTOXSource->pNd),
                                 sal_True );
-                            // <--
                             //---> #i89791#
                             // continue to support CF_NUMBER
                             // and CF_NUM_TITLE in order to handle ODF 1.0/1.1
@@ -1790,7 +1789,6 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
                                 rTxt.Insert(aFld.GetNumber()); //get the string number without pre/postfix
                             else if ( CF_NUMBER_NOPREPST == aToken.nChapterFormat ||
                                       CF_NUM_TITLE == aToken.nChapterFormat )
-                            //<---
                             {
                                 rTxt += aFld.GetNumber();
                                 rTxt += ' ';

@@ -610,7 +610,6 @@ void _InitCore()
     // #i35017# - constant name has changed
     aAttrTab[ RES_WRAP_INFLUENCE_ON_OBJPOS - POOLATTR_BEGIN ] =
             new SwFmtWrapInfluenceOnObjPos( text::WrapInfluenceOnPosition::ONCE_CONCURRENT );
-    // <--
 // FrmAttr-Dummies
     aAttrTab[ RES_AUTO_STYLE - POOLATTR_BEGIN ] = new SwFmtAutoFmt( RES_AUTO_STYLE );
     aAttrTab[ RES_FRMATR_STYLE_NAME - POOLATTR_BEGIN ] = new SfxStringItem( RES_FRMATR_STYLE_NAME, aEmptyStr );

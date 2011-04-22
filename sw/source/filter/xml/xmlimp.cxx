@@ -337,7 +337,6 @@ SvXMLImportContext* SwXMLOfficeDocContext_Impl::CreateChildContext(
                     nPrefix, rLocalName, xAttrList );
     }
 }
-// <--
 
 // #i69629# - new subclass <SwXMLDocStylesContext_Impl> of class <SwXMLDocContext_Impl>
 class SwXMLDocStylesContext_Impl : public SwXMLDocContext_Impl
@@ -378,9 +377,7 @@ void SwXMLDocStylesContext_Impl::EndElement()
     SwXMLImport& rSwImport = dynamic_cast<SwXMLImport&>( GetImport());
     GetImport().GetTextImport()->SetOutlineStyles(
             (rSwImport.GetStyleFamilyMask() & SFX_STYLE_FAMILY_PARA ) ? sal_True : sal_False);
-    // <--
 }
-// <--
 //----------------------------------------------------------------------------
 
 const SvXMLTokenMap& SwXMLImport::GetDocElemTokenMap()
@@ -428,7 +425,6 @@ SvXMLImportContext *SwXMLImport::CreateContext(
         pContext = new SwXMLDocStylesContext_Impl( *this, nPrefix, rLocalName,
                                                    xAttrList );
     }
-    // <--
     else
         pContext = SvXMLImport::CreateContext( nPrefix, rLocalName, xAttrList );
 
@@ -1387,7 +1383,6 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("DoNotJustifyLinesWithManualBreak")), makeAny( true ) );
     }
-    // <--
 
     // This flag has to be set for all documents < SO8
     if ( !bDoNotResetParaAttrsForNumFont && bDocumentPriorSO8 )
@@ -1427,7 +1422,6 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("UseOldPrinterMetrics") ), makeAny( true ) );
     }
-    // <--
 
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
     Reference < XText > xText = xTextDoc->getText();

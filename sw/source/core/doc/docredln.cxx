@@ -452,7 +452,6 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                             pRedlineTbl->Remove( n );
                             bDec = true;
                         }
-                        // <--
                         else if( POS_OVERLAP_BEHIND == eCmpPos )
                         {
                             *pStt = *pREnd;
@@ -908,7 +907,6 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                                     // #i97421#
                                     // redline w/out extent loops
                                     if (*pStt != *pEnd)
-                                    // <--
                                     {
                                         pNewRedl->PushData( *pRedl, sal_False );
                                         pRedl->SetStart( *pEnd, pRStt );
@@ -3667,7 +3665,6 @@ void SwRedline::MoveFromSection()
         {
             pDoc->DeleteSection( &pCntntSect->GetNode() );
         }
-        // <--
         delete pCntntSect, pCntntSect = 0;
 
         // adjustment of redline table positions must take start and

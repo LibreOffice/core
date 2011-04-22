@@ -392,7 +392,6 @@ sal_Bool SwHyphPortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) 
                               SwTaggedPDFHelper::IsExportTaggedPDF( *rInf.GetOut() ) ?
                               0xad :
                               '-';
-    // <--
 
     rTxt = cChar;
     return sal_True;

@@ -1377,7 +1377,6 @@ void SwHTMLParser::StripTrailingPara()
                         const SwPaM aPaM(aNewPos);
                         pMarkAccess->repositionMark(ppMark->get(), aPaM);
                     }
-                    // <--
                 }
                 else if( nBookNdIdx > nNodeIdx )
                     break;

@@ -311,7 +311,6 @@ void SwFrm::CheckDirChange()
                     ::setContextWritingMode( pAnchoredObj->DrawObj(), pAnchoredObj->GetAnchorFrmContainingAnchPos() );
                     pAnchoredObj->UpdateLayoutDir();
                 }
-                // <--
             }
         }
     }
@@ -522,7 +521,6 @@ void SwCntntFrm::DelFrms( const SwCntntNode& rNode )
                             dynamic_cast<SwTxtFrm*>(pFrm->FindPrevCnt( true )) );
             }
         }
-        // <--
         if( pFrm->HasFollow() )
             pFrm->GetFollow()->_SetIsFollow( pFrm->IsFollow() );
         if( pFrm->IsFollow() )
@@ -601,7 +599,6 @@ SwLayoutFrm::~SwLayoutFrm()
                 {
                     pFrm->GetDrawObjs()->Remove( *pAnchoredObj );
                 }
-                // <--
             }
             pFrm->Remove();
             delete pFrm;
@@ -633,7 +630,6 @@ SwLayoutFrm::~SwLayoutFrm()
             {
                 GetDrawObjs()->Remove( *pAnchoredObj );
             }
-            // <--
         }
     }
     else

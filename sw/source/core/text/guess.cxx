@@ -123,7 +123,6 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
         // #i46524# LineBreak bug with italics
         if ( nLineWidth < 0 ) nLineWidth = 0;
-        // <--
     }
 
     // first check if everything fits to line
@@ -144,7 +143,6 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
                   // #i48035# Needed for CalcFitToContent
                   // if first line ends with a manual line break
                   rInf.GetTxt().GetChar( nCutPos ) == CH_BREAK ) )
-                  // <--
                 nBreakWidth = nBreakWidth + nItalic;
 
             // save maximum width for later use

@@ -498,7 +498,6 @@ SwFtnFrm::SwFtnFrm( SwFrmFmt *pFmt, SwFrm* pSib, SwCntntFrm *pCnt, SwTxtFtn *pAt
     bBackMoveLocked( sal_False ),
     // #i49383#
     mbUnlockPosOfLowerObjs( true )
-    // <--
 {
     nType = FRMC_FTN;
 }
@@ -1786,7 +1785,6 @@ void SwFtnBossFrm::AppendFtn( SwCntntFrm *pRef, SwTxtFtn *pAttr )
             // #i57914# - adjust fix #i49383#
             // no extra notify for footnote frame
 //            SwLayNotify* pFtnFrmNotitfy = new SwLayNotify( pNew );
-            // <--
             SwCntntFrm *pCnt = pNew->ContainsCntnt();
             while ( pCnt && pCnt->FindFtnFrm()->GetAttr() == pAttr )
             {
@@ -1802,7 +1800,6 @@ void SwFtnBossFrm::AppendFtn( SwCntntFrm *pRef, SwTxtFtn *pAttr )
                         continue;
                     }
                 }
-                // <--
                 pCnt = (SwCntntFrm*)pCnt->FindNextCnt();
             }
             // #i49383#
@@ -1813,20 +1810,17 @@ void SwFtnBossFrm::AppendFtn( SwCntntFrm *pRef, SwTxtFtn *pAttr )
             // #i57914# - adjust fix #i49383#
             // enable lock of lower object position before format of footnote frame.
             pNew->UnlockPosOfLowerObjs();
-            // <--
             pNew->Calc();
             // #i57914# - adjust fix #i49383#
             // no extra notify for footnote frame
 //            pNew->UnlockPosOfLowerObjs();
 //            delete pFtnFrmNotitfy;
-            // <--
             if ( !bOldFtnFrmLocked && !pNew->GetLower() &&
                  !pNew->IsColLocked() && !pNew->IsBackMoveLocked() )
             {
                 pNew->Cut();
                 delete pNew;
             }
-            // <--
         }
         pMyPage->UpdateFtnNum();
     }
@@ -2229,7 +2223,6 @@ void SwFtnBossFrm::_MoveFtns( SvPtrarr &rFtnArr, sal_Bool bCalc )
                 // #i57914# - adjust fix #i49383#
                 // no extra notify for footnote frame
 //                SwLayNotify aFtnFrmNotitfy( pFtn );
-                // <--
 
                 while ( pCnt && pCnt->FindFtnFrm()->GetAttr() == pAttr )
                 {
@@ -2246,7 +2239,6 @@ void SwFtnBossFrm::_MoveFtns( SvPtrarr &rFtnArr, sal_Bool bCalc )
                             continue;
                         }
                     }
-                    // <--
                     if( pCnt->IsSctFrm() )
                     {   // Wenn es sich um einen nichtleeren Bereich handelt,
                         // iterieren wir auch ueber seinen Inhalt
@@ -2278,7 +2270,6 @@ void SwFtnBossFrm::_MoveFtns( SvPtrarr &rFtnArr, sal_Bool bCalc )
                     pFtn->UnlockPosOfLowerObjs();
                     pFtn->Calc();
 //                    pFtn->UnlockPosOfLowerObjs();
-                    // <--
                 }
                 // #i57914# - adjust fix #i49383#
                 // no extra notify for footnote frame
@@ -2286,7 +2277,6 @@ void SwFtnBossFrm::_MoveFtns( SvPtrarr &rFtnArr, sal_Bool bCalc )
 //                {
 //                    aFtnFrmNotitfy.FrmDeleted();
 //                }
-                // <--
             }
         }
         else
@@ -2322,7 +2312,6 @@ void SwFtnBossFrm::_MoveFtns( SvPtrarr &rFtnArr, sal_Bool bCalc )
             // #i57914# - adjust fix #i49383#
             // no extra notify for footnote frame
 //            SwLayNotify aFtnFrmNotitfy( pNextFtn );
-            // <--
 
             while ( pCnt && pCnt->FindFtnFrm()->GetAttr() == pAttr )
             {
@@ -2339,7 +2328,6 @@ void SwFtnBossFrm::_MoveFtns( SvPtrarr &rFtnArr, sal_Bool bCalc )
                         continue;
                     }
                 }
-                // <--
                 if( pCnt->IsSctFrm() )
                 {   // Wenn es sich um einen nichtleeren Bereich handelt,
                     // iterieren wir auch ueber seinen Inhalt
@@ -2362,7 +2350,6 @@ void SwFtnBossFrm::_MoveFtns( SvPtrarr &rFtnArr, sal_Bool bCalc )
             pNextFtn->UnlockPosOfLowerObjs();
             pNextFtn->Calc();
 //            pNextFtn->UnlockPosOfLowerObjs();
-            // <--
         }
     }
 }
@@ -2443,7 +2430,6 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const sal_Bool bLock,
                 SwObjectFormatter::FormatObjsAtFrm( *pCntnt,
                                                     *(pCntnt->FindPageFrm()) );
             }
-            // <--
             if( bUnlock )
                 pFirst->UnlockBackMove();
         }
@@ -2464,7 +2450,6 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const sal_Bool bLock,
 //        SwLayNotify* pFtnFrmNotify( 0L );
         // footnote frame needs to be locked, if <bLock> isn't set.
         bool bUnlockLastFtnFrm( false );
-        // <--
         do
         {
             if( !bStart )
@@ -2492,7 +2477,6 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const sal_Bool bLock,
 //                        pLastFtnFrm->UnlockPosOfLowerObjs();
                         // no extra notify for footnote frame
 //                        delete pFtnFrmNotify;
-                        // <--
                         if ( !bLock && bUnlockLastFtnFrm &&
                              !pLastFtnFrm->GetLower() &&
                              !pLastFtnFrm->IsColLocked() &&
@@ -2513,9 +2497,7 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const sal_Bool bLock,
                     // #i57914# - adjust fix #i49383#
                     // no extra notify for footnote frame
 //                    pFtnFrmNotify = new SwLayNotify( pLastFtnFrm );
-                    // <--
                 }
-                // <--
                 // OD 30.10.2002 #97265# - invalidate position of footnote
                 // frame, if it's below its footnote container, in order to
                 // assure its correct position, probably calculating its previous
@@ -2545,7 +2527,6 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const sal_Bool bLock,
                             continue;
                         }
                     }
-                    // <--
                     if( bUnlock )
                     {
                         pFtnFrm->UnlockBackMove();
@@ -2560,7 +2541,6 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const sal_Bool bLock,
                             // no extra notify for footnote frame
 //                            pFtnFrmNotify->FrmDeleted();
 //                            delete pFtnFrmNotify;
-                            // <--
                             pFtnFrm->Cut();
                             delete pFtnFrm;
                         }
@@ -2581,7 +2561,6 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const sal_Bool bLock,
                             continue;
                         }
                     }
-                    // <--
                 }
             }
             SwSectionFrm *pDel = NULL;
@@ -2639,7 +2618,6 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const sal_Bool bLock,
 //            pLastFtnFrm->UnlockPosOfLowerObjs();
             // no extra notify for footnote frame
 //            delete pFtnFrmNotify;
-            // <--
             if ( !bLock && bUnlockLastFtnFrm &&
                  !pLastFtnFrm->GetLower() &&
                  !pLastFtnFrm->IsColLocked() &&
@@ -2649,7 +2627,6 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const sal_Bool bLock,
                 delete pLastFtnFrm;
             }
         }
-        // <--
     }
 }
 

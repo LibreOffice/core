@@ -174,7 +174,6 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
         { "OutlineStyleAsNormalListStyle", sizeof("OutlineStyleAsNormalListStyle")-1, 0,
               &::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        // <--
         { "TargetStorage", sizeof("TargetStorage")-1,0, &embed::XStorage::static_type(),
               ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
 
@@ -278,7 +277,6 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
                 RTL_CONSTASCII_USTRINGPARAM("OutlineStyleAsNormalListStyle") );
         xInfoSet->setPropertyValue( sOutlineStyleAsNormalListStyle, makeAny( sal_True ) );
     }
-    // <--
 
     // filter arguments
     // - graphics + object resolver for styles + content

@@ -151,7 +151,6 @@ private:
           MSHORT  nAdjust;
           // #i91133#
           SwTwips mnTabLeft;
-          // <--
 
 protected:
     // fuer FormatQuoVadis
@@ -186,7 +185,6 @@ public:
     {
         return mnTabLeft;
     }
-    // <--
     // DropCaps
     inline MSHORT GetDropLines() const { return nDropLines; }
     inline void SetDropLines( const MSHORT nNew ) { nDropLines = nNew; }

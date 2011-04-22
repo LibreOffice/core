@@ -37,7 +37,6 @@
 #include <stdio.h>
 // #i83479#
 #include <IDocumentListItems.hxx>
-// <--
 #include <doc.hxx>
 
 SwNodeNum::SwNodeNum( SwTxtNode* pTxtNode )
@@ -145,7 +144,6 @@ void SwNodeNum::PostRemove()
         mpNumRule = 0;
     }
 }
-// <--
 
 bool SwNodeNum::IsNotifiable() const
 {
@@ -184,7 +182,6 @@ bool SwNodeNum::IsContinuous() const
     {
         OSL_FAIL( "<SwNodeNum::IsContinuous()> - OD debug" );
     }
-    // <--
 
     return aResult;
 }
@@ -198,7 +195,6 @@ bool SwNodeNum::IsCounted() const
         // #i59559#
         // <SwTxtNode::IsCounted()> determines, if a text node is counted for numbering
         aResult = GetTxtNode()->IsCountedInList();
-        // <--
     }
     else
         aResult = SwNumberTreeNode::IsCounted();
@@ -230,7 +226,6 @@ bool SwNodeNum::HasCountedChildren() const
 
     return bResult;
 }
-// <--
 // #i64010#
 bool SwNodeNum::IsCountedForNumbering() const
 {
@@ -240,7 +235,6 @@ bool SwNodeNum::IsCountedForNumbering() const
              GetTxtNode()->HasNumber() ||   // text node
              GetTxtNode()->HasBullet() );   // text node
 }
-// <--
 
 
 void SwNodeNum::NotifyNode()
@@ -265,7 +259,6 @@ bool SwNodeNum::LessThan(const SwNumberTreeNode & rNode) const
         // #i83479# - refactoring
         // simplify comparison by comparing the indexes of the text nodes
         bResult = ( mpTxtNode->GetIndex() < rTmpNode.mpTxtNode->GetIndex() ) ? true : false;
-        // <--
     }
 
     return bResult;
@@ -296,7 +289,6 @@ bool SwNodeNum::IsCountPhantoms() const
     {
         OSL_FAIL( "<SwNodeNum::IsCountPhantoms(): missing numbering rule - please inform OD" );
     }
-    // <--
 
     return bResult;
 }
@@ -391,11 +383,9 @@ void SwNodeNum::_UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum )
             pTxtNode->GetDoc()->ResetAttrs( aPam, sal_False,
                                             &aResetAttrsArray,
                                             false );
-            // <--
         }
     }
 }
-// <--
 
 // #i81002#
 const SwNodeNum* SwNodeNum::GetPrecedingNodeNumOf( const SwTxtNode& rTxtNode ) const
@@ -404,7 +394,6 @@ const SwNodeNum* SwNodeNum::GetPrecedingNodeNumOf( const SwTxtNode& rTxtNode ) c
 
     // #i83479#
     SwNodeNum aNodeNumForTxtNode( const_cast<SwTxtNode*>(&rTxtNode) );
-    // <--
 
     pPrecedingNodeNum = dynamic_cast<const SwNodeNum*>(
                             GetRoot()
@@ -413,6 +402,5 @@ const SwNodeNum* SwNodeNum::GetPrecedingNodeNumOf( const SwTxtNode& rTxtNode ) c
 
     return pPrecedingNodeNum;
 }
-// <--
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

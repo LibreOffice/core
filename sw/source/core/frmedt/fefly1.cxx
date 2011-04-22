@@ -567,7 +567,6 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
                         rFmt.GetDoc()->SetAttr( aAnch, rFmt );
                         delete pHandleAnchorNodeChg;
                     }
-                    // <--
                     // #i28701# - no call of method
                     // <CheckCharRectAndTopOfLine()> for to-character anchored
                     // Writer fly frame needed. This method call can cause a
@@ -575,7 +574,6 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
                     // Instead clear the anchor character rectangle and
                     // the top of line values for all to-character anchored objects.
                     pAnchoredObj->ClearCharRectAndTopOfLine();
-                    // <--
                     EndAllAction();
                 }
             }
@@ -898,7 +896,6 @@ void SwFEShell::InsertDrawObj( SdrObject& rDrawObj,
     // #i89920#
     rFlyAttrSet.Put( SwFmtSurround( SURROUND_THROUGHT ) );
     rDrawObj.SetLayer( getIDocumentDrawModelAccess()->GetHeavenId() );
-    // <--
 
     // find anchor position
     SwPaM aPam( pDoc->GetNodes() );

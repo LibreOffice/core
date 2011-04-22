@@ -68,7 +68,6 @@ class SW_DLLPUBLIC SwFlyFrmAttrMgr
     sal_Bool        bIsInVertical;
     // --> OD 2009-09-01 #mongolianlayout#
     sal_Bool        bIsInVerticalL2R;
-    // <--
 
     // internal calculation for borders
     SW_DLLPRIVATE SwTwips           CalcTopSpace();

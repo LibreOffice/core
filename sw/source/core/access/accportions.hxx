@@ -127,7 +127,6 @@ public:
     sal_Int32 GetLineNo( const sal_Int32 nPos ) const;
     void GetBoundaryOfLine( const sal_Int32 nLineNo,
                             com::sun::star::i18n::Boundary& rLineBound );
-    // <--
 
     /// get the position in the model string for a given
     /// (accessibility) position

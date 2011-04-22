@@ -464,7 +464,6 @@ public:
     // has to be avoided during painting. Therefore we need to pass the
     // information that we are currently in the paint process.
     SwTxtFrm* GetFormatted( bool bForceQuickFormat = false );
-    // <--
 
     // wird demnaechst uebertragen
     inline void SetFtn( const sal_Bool bNew ) { bFtn = bNew; }

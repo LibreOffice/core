@@ -1442,7 +1442,6 @@ sal_uInt16 SwTable::_GetBoxNum( String& rStr, sal_Bool bFirstPart,
     }
     return nRet;
 }
-// <--
 
 // #i80314#
 // add 2nd parameter and its handling
@@ -1527,7 +1526,6 @@ SwTableBox* SwTable::GetTblBox( sal_uLong nSttIdx )
         // #144862# Better handling of table in table
         if ( pTblNd && pTblNd->GetTable().GetFrmFmt() )
             pModify = pTblNd->GetTable().GetFrmFmt();
-        // <--
 
         SwFrm* pFrm = SwIterator<SwFrm,SwModify>::FirstElement( *pModify );
         while ( pFrm && !pFrm->IsCellFrm() )
@@ -1654,7 +1652,6 @@ void SwTableLine::ChgFrmFmt( SwTableLineFmt *pNewFmt )
                 pTab->SetRemoveFollowFlowLinePending( sal_True );
                 pTab->InvalidatePos();
             }
-            // <--
         }
     }
 
@@ -1874,7 +1871,6 @@ void SwTableBox::ChgFrmFmt( SwTableBoxFmt* pNewFmt )
                 pRow->_InvalidateSize();
                 pRow->_InvalidatePrt();
             }
-            // <--
         }
     }
 

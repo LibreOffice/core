@@ -219,7 +219,6 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                     aSet.Put( SvxBrushItem( *pGrfObj, GPOS_LT,
                                             SID_ATTR_GRAF_GRAPHIC ) );
                 }
-                // <--
             }
             aSet.Put( SfxBoolItem( FN_PARAM_GRF_CONNECT, sGrfNm.Len() > 0 ) );
 
@@ -506,7 +505,6 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
                         GetShell().ReRead( aEmptyStr, aEmptyStr,
                                            &aFilterObj.GetGraphic() );
                 }
-                // <--
             }
             break;
 
@@ -679,7 +677,6 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
                         bDisable = eGraphicType != GRAPHIC_BITMAP;
                     }
                 }
-                // <--
             }
             break;
 

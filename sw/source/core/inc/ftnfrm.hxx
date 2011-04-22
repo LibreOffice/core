@@ -71,7 +71,6 @@ class SwFtnFrm: public SwLayoutFrm
                                 //nicht rueckwaerts fliessen.
     // #i49383# - control unlock of position of lower anchored objects.
     bool mbUnlockPosOfLowerObjs : 1;
-    // <--
 #if OSL_DEBUG_LEVEL > 1
 protected:
     virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
@@ -135,7 +134,6 @@ public:
     {
         return mbUnlockPosOfLowerObjs;
     }
-    // <--
     /** search for last content in the current footnote frame
 
         OD 2005-12-02 #i27138#

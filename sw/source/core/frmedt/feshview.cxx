@@ -133,7 +133,6 @@ extern sal_Bool bNoInterrupt;       // in swapp.cxx
         // --> assure consistent cursor
         pSh->KillPams();
         pSh->ClearMark();
-        // <--
         pSh->SetCrsr( pSh->Imp()->GetDrawView()->GetAllMarkedRect().TopLeft(), sal_True);
     }
 }
@@ -515,7 +514,6 @@ sal_Bool SwFEShell::MoveAnchor( sal_uInt16 nDir )
                 rFmt.GetDoc()->SetAttr( aAnch, rFmt );
                 delete pHandleAnchorNodeChg;
             }
-            // <--
             // #i28701# - no call of method
             // <CheckCharRectAndTopOfLine()> for to-character anchored
             // Writer fly frame needed. This method call can cause a
@@ -749,7 +747,6 @@ const SwFrmFmt* SwFEShell::SelFlyGrabCrsr()
                 // --> assure, that the cursor is consistent.
                 KillPams();
                 ClearMark();
-                // <--
                 SwPaM       *pCrsr  = GetCrsr();
 
                 pCrsr->GetPoint()->nNode = *pCNode;
@@ -816,7 +813,6 @@ void lcl_NotifyNeighbours( const SdrMarkList *pLst )
             pPage = pAnch->FindPageFrm();
             // #i68520# - naming changed
             aRect = GetBoundRectOfAnchoredObj( pO );
-            // <--
         }
 
         sal_uInt32 nCount = pPage->GetSortedObjs() ? pPage->GetSortedObjs()->Count() : 0;
@@ -959,7 +955,6 @@ void SwFEShell::ChangeOpaque( SdrLayerID nLayerId )
             const bool bControlObj = ( pContact && pContact->GetMaster() )
                                      ? ::CheckControlLayer( pContact->GetMaster() )
                                      : ::CheckControlLayer( pObj );
-            // <--
             if ( !bControlObj && pObj->GetLayer() != nLayerId )
             {
                 pObj->SetLayer( nLayerId );
@@ -1198,7 +1193,6 @@ sal_Bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
                     }
                 }
             }
-            // <--
 
             if ( bRet )
             {
@@ -1783,7 +1777,6 @@ sal_Bool SwFEShell::ImpEndCreate()
         GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(false); // see above
         // #i52858# - method name changed
         SdrPage *pPg = getIDocumentDrawModelAccess()->GetOrCreateDrawModel()->GetPage( 0 );
-        // <--
         if( !pPg )
         {
             SdrModel* pTmpSdrModel = getIDocumentDrawModelAccess()->GetDrawModel();
@@ -1856,15 +1849,12 @@ sal_Bool SwFEShell::ImpEndCreate()
         // #i36010# - set layout direction of the position
         pFmt->SetPositionLayoutDir(
             text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
-        // <--
         // #i44344#, #i44681# - positioning attributes already set
         pFmt->PosAttrSet();
-        // <--
 
         SwDrawContact *pContact = new SwDrawContact( pFmt, &rSdrObj );
         // #i35635#
         pContact->MoveObjToVisibleLayer( &rSdrObj );
-        // <--
         if( bCharBound )
         {
             OSL_ENSURE( aAnch.GetAnchorId() == FLY_AS_CHAR, "wrong AnchorType" );
@@ -2216,7 +2206,6 @@ sal_Bool SwFEShell::IsGroupSelected()
             if ( pObj->IsGroupObject() &&
                  // --> #i38505# No ungroup allowed for 3d objects
                  !pObj->Is3DObj() &&
-                 // <--
                  FLY_AS_CHAR != ((SwDrawContact*)GetUserCall(pObj))->
                                       GetFmt()->GetAnchor().GetAnchorId() )
             {
@@ -2525,7 +2514,6 @@ sal_Bool SwFEShell::GetObjAttr( SfxItemSet &rSet ) const
             else
                 rSet.Put( pContact->GetFmt()->GetAttrSet() );
         }
-        // <--
     }
     return sal_True;
 }
@@ -2640,7 +2628,6 @@ void SwFEShell::CheckUnboundObjects()
 
             // #i35635#
             pContact->MoveObjToVisibleLayer( pObj );
-            // <--
             pContact->ConnectToLayout();
 
             EndAllAction();

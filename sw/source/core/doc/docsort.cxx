@@ -554,7 +554,6 @@ sal_Bool SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     // #i37739# A simple 'MakeFrms' after the node sorting
     // does not work if the table is inside a frame and has no prev/next.
     SwNode2Layout aNode2Layout( *pTblNd );
-    // <--
 
     // loesche die Frames der Tabelle
     pTblNd->DelFrms();
@@ -604,7 +603,6 @@ sal_Bool SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     // does not work if the table is inside a frame and has no prev/next.
     const sal_uLong nIdx = pTblNd->GetIndex();
     aNode2Layout.RestoreUpperFrms( GetNodes(), nIdx, nIdx + 1 );
-    // <--
 
     // TL_CHART2: need to inform chart of probably changed cell names
     UpdateCharts( pTblNd->GetTable().GetFrmFmt()->GetName() );

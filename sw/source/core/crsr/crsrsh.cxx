@@ -448,7 +448,6 @@ void SwCrsrShell::UpdateMarkedListLevel()
         }
     }
 }
-// <--
 
 sal_Bool SwCrsrShell::UpDown( sal_Bool bUp, sal_uInt16 nCnt )
 {
@@ -649,7 +648,6 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, sal_Bool bOnlyText, bool bBlock )
     if ( pTxtNd && !IsTableMode() &&
         // #i37515# No bInFrontOfLabel during selection
         !pCrsr->HasMark() &&
-        // <--
         pTxtNd->HasVisibleNumberingOrBullet() )
     {
         aTmpState.bInFrontOfLabel = sal_True; // #i27615#
@@ -1301,7 +1299,6 @@ class SwNotifyAccAboutInvalidTextSelections
             mrCrsrSh.InvalidateAccessibleParaTextSelection();
         }
 };
-// <--
 void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
 {
     SET_CURR_SHELL( this );
@@ -1367,7 +1364,6 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
         // --> Make code robust. The table cursor may point
         // to a table in a currently inactive header.
         SwTabFrm *pTab = pTblFrm ? pTblFrm->FindTabFrm() : 0;
-        // <--
 
         if ( pTab && pTab->GetTable()->GetRowsToRepeat() > 0 )
         {

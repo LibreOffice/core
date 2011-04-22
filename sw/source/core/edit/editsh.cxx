@@ -295,10 +295,8 @@ const Graphic* SwEditShell::GetGraphic( sal_Bool bWait ) const
 #endif
             }
         }
-        // <--
     }
     return pGrf;
-    // <--
 }
 
 sal_Bool SwEditShell::IsGrfSwapOut( sal_Bool bOnlyLinked ) const

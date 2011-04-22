@@ -155,7 +155,6 @@ ShellResource::ShellResource()
     aGetRefFld_Down( SW_RES( STR_GETREFFLD_DOWN ) ),
     // #i81002#
     aGetRefFld_RefItemNotFound( SW_RES( STR_GETREFFLD_REFITEMNOTFOUND ) ),
-    // <--
     aStrAllPageHeadFoot( SW_RES( STR_ALLPAGE_HEADFOOT ) ),
     aStrNone( SW_RES( STR_TEMPLATE_NONE )),
     aFixedStr( SW_RES( STR_FIELD_FIXED )),

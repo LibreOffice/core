@@ -471,7 +471,6 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
             OSL_FAIL( "Current box has been deleted during GetTblSel()" );
             break;
         }
-        // <--
 
         i = 0;
         rBoxes.Remove( i, rBoxes.Count() );
@@ -526,7 +525,6 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
     sal_Bool bTblIsValid, bValidChartSel;
     // #i55421# Reduced value 10
     int nLoopMax = 10;      //JP 28.06.99: max 100 loops - Bug 67292
-    // <--
     sal_uInt16 i = 0;
 
     do {
@@ -1777,7 +1775,6 @@ void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
     // --> Made code robust. If pTab does not have a lower,
     // we would crash here.
     if ( !pLastCntnt ) return;
-    // <--
 
     while( !rpEnd->IsCellFrm() )
         rpEnd = rpEnd->GetUpper();
@@ -1990,7 +1987,6 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
                 }
                 OSL_ENSURE( !pTmpCell || pTmpCell->IsCellFrm(), "Lower of rowframe != cellframe?!" );
             }
-            // <--
 
             const SwLayoutFrm* pFirst = pTmpCell ?
                                         static_cast<const SwLayoutFrm*>(pTmpCell) :
@@ -2330,7 +2326,6 @@ void _FndBox::DelFrms( SwTable &rTable )
                             // flag set although there is not more follow flow
                             // line associated with pUp.
                             pPrev->SetFollowFlowLine( sal_False );
-                            // <--
                         }
                         else if ( pFollow )
                             ::UnsetFollow( pFollow );
@@ -2466,7 +2461,6 @@ void _FndBox::MakeFrms( SwTable &rTable )
                             // IsInSplitTableRow() should be checked.
                             ( pLineBehind && pSibling->IsInFollowFlowRow() ) ||
                             (!pLineBehind && pSibling->IsInSplitTableRow() ) ) )
-                            // <--
                 {
                     pSibling = aIter.Next();
                 }
@@ -2589,7 +2583,6 @@ void _FndBox::MakeNewFrms( SwTable &rTable, const sal_uInt16 nNumber,
                             // check IsInFollowFlowRow instead of IsInSplitTableRow.
                             ( ( !pLineBefore && pSibling->IsInFollowFlowRow() ) ||
                               (  pLineBefore && pSibling->IsInSplitTableRow() ) ) ) )
-                            // <--
                     {
                         pSibling = aIter.Next();
                     }

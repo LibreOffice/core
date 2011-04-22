@@ -161,7 +161,6 @@ enum SwUndoId
     // --> #i73249#
     UNDO_FLYFRMFMT_TITLE,           // 112
     UNDO_FLYFRMFMT_DESCRIPTION,     // 113
-    // <--
     UNDO_STD_END= UNDO_FLYFRMFMT_DESCRIPTION,
 
     // UI undo ID's...

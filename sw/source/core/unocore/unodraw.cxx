@@ -944,7 +944,6 @@ SwXShape::SwXShape(uno::Reference< uno::XInterface > & xShape) :
                 OSL_ENSURE( mxShape.is(),
                         "<SwXShape::SwXShape(..)> - no XShape found at <xShapeAgg>" );
             }
-            // <--
         }
         xShape = 0;
         m_refCount++;

@@ -115,7 +115,6 @@
 
 // #i12836# enhanced pdf export
 #include <EnhancedPDFExportHelper.hxx>
-// <--
 #include <numrule.hxx>
 
 #include <editeng/langitem.hxx>
@@ -1491,7 +1490,6 @@ void    SwXTextDocument::InitNewDoc()
         // dispose XDrawPage here. We are the owner and know that it is no longer in a valid condition.
         uno::Reference<lang::XComponent> xComp( *pxXDrawPage, uno::UNO_QUERY );
         xComp->dispose();
-        // <--
         pDrawPage->InvalidateSwDoc();
         delete pxXDrawPage;
         pxXDrawPage = 0;
@@ -1698,7 +1696,6 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
                 }
                 //hier den Draw - Service suchen
                 Reference< XInterface >  xTmp = SvxFmMSFactory::createInstance(aTmpServiceName);
-                // <--
                 if(bShape)
                 {
                     nIndex = COM_SUN_STAR__DRAWING_LENGTH;
@@ -1936,7 +1933,6 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
                 // we don't need to make an SdrModel and can do nothing
                 // #i52858# - method name changed
                 pDrawDoc = dynamic_cast< SwDrawDocument * > (pDocShell->GetDoc()->GetOrCreateDrawModel() );
-                // <--
                 pDrawDoc->SetAutoControlFocus ( bAuto );
             }
         }
@@ -1958,7 +1954,6 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
                 // nothing
                 // #i52858# - method name changed
                 pDrawDoc = dynamic_cast< SwDrawDocument * > (pDocShell->GetDoc()->GetOrCreateDrawModel() );
-                // <--
                 pDrawDoc->SetOpenInDesignMode ( bMode );
             }
         }
@@ -1973,7 +1968,6 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
               pDoc->SetInReading( bBool );
         }
         break;
-        // <--
         case WID_DOC_BUILDID:
             aValue >>= maBuildId;
         break;
@@ -1985,7 +1979,6 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
             pDocShell->GetDoc()->SetApplyWorkaroundForB6375613( bApplyWorkaroundForB6375613 );
         }
         break;
-        // <--
 
         default:
         {
@@ -2148,7 +2141,6 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
             aAny <<= pDocShell->GetDoc()->ApplyWorkaroundForB6375613();
         }
         break;
-        // <--
 
         default:
         {
@@ -2579,7 +2571,6 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
 
             // #122919# Force field update before PDF export
             pViewShell->ViewShell::UpdateFlds(sal_True);
-            // <--
             if( bStateChanged )
                 pRenderDocShell->EnableSetModified( sal_True );
 
@@ -2703,7 +2694,6 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
         const sal_uInt16 nPage = bPrintProspect
                              ? nRenderer + 1
                              : m_pRenderData->GetPagesToPrint()[ nRenderer ];
-        // <--
 
         // get paper tray to use ...
         sal_Int32 nPrinterPaperTray = -1;
@@ -2942,7 +2932,6 @@ void SAL_CALL SwXTextDocument::render(
                     {
                         SwEnhancedPDFExportHelper aHelper( *pWrtShell, *pOut, aPageRange, bIsSkipEmptyPages, sal_False );
                     }
-                    // <--
 
                     SwPrintData const& rSwPrtOptions =
                         *m_pRenderData->GetSwPrtOptions();
@@ -2961,7 +2950,6 @@ void SAL_CALL SwXTextDocument::render(
                     {
                         SwEnhancedPDFExportHelper aHelper( *pWrtShell, *pOut, aPageRange, bIsSkipEmptyPages,  sal_True );
                     }
-                    // <--
 
                     pVwSh->SetPDFExportOption( sal_False );
 
@@ -3804,7 +3792,6 @@ Reference<XInterface> SwXDocumentPropertyHelper::GetDrawTable(short nWhich)
                     xMarkerTable = SvxUnoMarkerTable_createInstance( m_pDoc->GetOrCreateDrawModel() );
                 xRet = xMarkerTable;
             break;
-            // <--
             case  SW_CREATE_DRAW_DEFAULTS:
                 if(!xDrawDefaults.is())
                     xDrawDefaults = (cppu::OWeakObject*)new SwSvxUnoDrawPool(m_pDoc);

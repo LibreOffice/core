@@ -92,7 +92,6 @@ bool SwMovedFwdFrmsByObjPos::DoesRowContainMovedFwdFrm( const SwRowFrm& _rRowFrm
                 // #115759# - assure that found text frame
                 // is the first one.
                 if ( _rRowFrm.IsAnLower( pTxtFrm ) && !pTxtFrm->GetIndPrev() )
-                // <--
                 {
                     bDoesRowContainMovedFwdFrm = true;
                     break;
@@ -103,6 +102,5 @@ bool SwMovedFwdFrmsByObjPos::DoesRowContainMovedFwdFrm( const SwRowFrm& _rRowFrm
 
     return bDoesRowContainMovedFwdFrm;
 }
-// <--
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

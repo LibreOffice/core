@@ -253,7 +253,6 @@ void lcl_SetHeadline( SwDoc* pDoc, SwTxtFmtColl* pColl,
 
                     pColl->SetFmtAttr(aItem);
                 }
-                // <--
             }
         }
         pColl->SetNextTxtFmtColl( *pDoc->GetTxtCollFromPool(
@@ -1647,7 +1646,6 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
 
     const SvxNumberFormat::SvxNumPositionAndSpaceMode eNumberFormatPositionAndSpaceMode
                                   = numfunc::GetDefaultPositionAndSpaceMode(); //#i89178#
-    // <--
     {
         sal_Bool bIsModified = IsModified();
 
@@ -2320,7 +2318,6 @@ sal_Bool SwDoc::IsUsed( const SwNumRule& rRule ) const
                      rRule.GetParagraphStyleListSize() > 0;
 
     return bUsed;
-    // <--
 }
 
     // Suche die Position vom Vorlagen-Namen. Ist nicht vorhanden

@@ -325,7 +325,6 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
 };
-// <--
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

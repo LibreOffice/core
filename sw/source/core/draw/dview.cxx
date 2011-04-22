@@ -64,7 +64,6 @@
 // #i28701#
 #include <sortedobjs.hxx>
 #include <flyfrms.hxx>
-// <--
 
 
 using namespace com::sun::star;
@@ -144,7 +143,6 @@ sal_Bool SwDrawView::IsAntiAliasing() const
 {
     return getOptionsDrawinglayer().IsAntiAliasing();
 }
-// <--
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -630,7 +628,6 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
             const SwFrm* pTmpAnchorFrm = lcl_FindAnchor( pTmpObj, sal_True );
             const SwFlyFrm* pTmpParentObj = pTmpAnchorFrm
                                             ? pTmpAnchorFrm->FindFlyFrm() : 0L;
-            // <--
             if ( pTmpParentObj &&
                  &(pTmpParentObj->GetFrmFmt()) != pParentFrmFmt )
             {
@@ -684,7 +681,6 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
             const SwFrm* pTmpAnchorFrm = lcl_FindAnchor( pTmpObj, sal_True );
             const SwFlyFrm* pTmpParentObj = pTmpAnchorFrm
                                             ? pTmpAnchorFrm->FindFlyFrm() : 0L;
-            // <--
             if ( pTmpParentObj &&
                  ( ( pTmpParentObj == pFlyFrm ) ||
                    ( pFlyFrm->IsUpperOf( *pTmpParentObj ) ) ) )
@@ -729,7 +725,6 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
 
     _MoveRepeatedObjs( *pMovedAnchoredObj, aMovedChildObjs );
 }
-// <--
 
 /*************************************************************************
 |*
@@ -953,7 +948,6 @@ void SwDrawView::CheckPossibilities()
                             // TODO/LATER: retrieve Aspect - from where?!
                             bSzProtect |= ( embed::EmbedMisc::EMBED_NEVERRESIZE & xObj->getStatus( embed::Aspects::MSOLE_CONTENT ) ) ? sal_True : sal_False;
 
-                            // <--
 
                             // #i972: protect position if it is a Math object anchored 'as char' and baseline alignment is activated
                             SwDoc* pDoc = Imp().GetShell()->GetDoc();

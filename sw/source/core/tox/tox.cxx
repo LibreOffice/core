@@ -338,7 +338,6 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
         // #i36870# right aligned tab for all
         aToken.cTabFillChar = '.';
         aToken.eTabAlign = SVX_TAB_ADJUST_END;
-        // <--
 
         aTokens.push_back(aToken);
         aTokens.push_back(SwFormToken(TOKEN_PAGE_NUMS));
@@ -479,7 +478,6 @@ void SwForm::AdjustTabStops(SwDoc& rDoc, sal_Bool bInsertNewTapStops) // #i21237
                         aCurrentPattern.push_back(aToken);
                     }
                 }
-                // <--
                 else
                 {
                     aIt = find_if(aIt, aCurrentPattern.end(),
@@ -500,7 +498,6 @@ void SwForm::AdjustTabStops(SwDoc& rDoc, sal_Bool bInsertNewTapStops) // #i21237
                         break; // no more tokens to replace
                 }
             }
-            // <--
 
             if(bChanged)
                 SetPattern(nLevel, aCurrentPattern); // #i21237#

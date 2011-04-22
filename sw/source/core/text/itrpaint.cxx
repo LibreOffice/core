@@ -52,7 +52,6 @@
 
 // #i12836# enhanced pdf export
 #include <EnhancedPDFExportHelper.hxx>
-// <--
 
 
 #include "flyfrms.hxx"
@@ -401,7 +400,6 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             // #i16816# tagged pdf support
             Por_Info aPorInfo( *pPor, *this );
             SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, &aPorInfo, *pOut );
-            // <--
 
             if( pPor->IsMultiPortion() )
                 PaintMultiPortion( rPaint, (SwMultiPortion&)*pPor );
@@ -430,7 +428,6 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                ( GetInfo().GetVsh() &&
                  GetInfo().GetVsh()->GetViewOptions()->IsPDFExport() &&
                  pNext && pNext->IsHolePortion() ) ?
-               // <--
                pNext :
                0;
     }

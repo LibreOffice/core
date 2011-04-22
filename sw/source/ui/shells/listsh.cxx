@@ -143,7 +143,6 @@ void lcl_OutlineUpDownWithSubPoints( SwWrtShell& rSh, bool bMove, bool bUp )
         rSh.Pop( sal_False );
     }
 }
-// <--
 
 void SwListShell::Execute(SfxRequest &rReq)
 {

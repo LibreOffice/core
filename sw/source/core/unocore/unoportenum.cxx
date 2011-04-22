@@ -34,7 +34,6 @@
 #include <IMark.hxx>
 // #i81002#
 #include <crossrefbookmark.hxx>
-// <--
 #include <doc.hxx>
 #include <txatbase.hxx>
 #include <txtatr.hxx>

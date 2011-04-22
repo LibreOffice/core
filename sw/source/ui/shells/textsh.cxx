@@ -1166,7 +1166,6 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
             rSh.SetMark();
             rSh.SetAttr( aRestoreSet );
             rSh.ClearMark();
-            // <--
 
             rSh.UpdateAttr();
             aFont = aNewFontItem;

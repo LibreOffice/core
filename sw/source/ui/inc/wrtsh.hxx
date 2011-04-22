@@ -190,7 +190,6 @@ public:
     // #i32329# Enhanced selection
     void    SelSentence (const Point * = 0, sal_Bool bProp=sal_False );
     void    SelPara     (const Point * = 0, sal_Bool bProp=sal_False );
-    // <--
     long    SelAll();
 
     // basecursortravelling
@@ -233,7 +232,6 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
 
     // #i20126# Enhanced table selection
     sal_Bool SelectTableRowCol( const Point& rPt, const Point* pEnd = 0, bool bRowDrag = false );
-    // <--
     sal_Bool SelectTableRow();
     sal_Bool SelectTableCol();
     sal_Bool SelectTableCell();
@@ -557,7 +555,6 @@ private:
     // #i92468#
     SW_DLLPRIVATE sal_Bool _NxtWrdForDelete();
     SW_DLLPRIVATE sal_Bool _PrvWrdForDelete();
-    // <--
     SW_DLLPRIVATE sal_Bool _FwdSentence();
     SW_DLLPRIVATE sal_Bool _BwdSentence();
     sal_Bool _FwdPara();

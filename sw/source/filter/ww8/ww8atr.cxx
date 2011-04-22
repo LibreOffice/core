@@ -470,7 +470,6 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
                     }
                 }
             }
-            // <--
 
             bBreakSet = true;
 
@@ -494,7 +493,6 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
                     {
                         bNewPageDesc = SetAktPageDescFromNode( rNd );
                     }
-                    // <--
                 }
                 if ( !bNewPageDesc )
                     AttrOutput().OutputItem( *pItem );
@@ -738,7 +736,6 @@ bool WW8Export::DisallowInheritingOutlineNumbering(const SwFmt &rFmt)
 
     return bRet;
 }
-// <--
 
 void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpFmt, bool bFlyFmt )
 {
@@ -797,7 +794,6 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
                         com::sun::star::i18n::ScriptType::LATIN, mbExportModeRTF);
                     bCallOutSet = false;
                 }
-                // <--
             }
         }
         break;
@@ -1842,7 +1838,6 @@ void WW8Export::OutputField( const SwField* pFld, ww::eField eFldType,
             // insert hyperlink character including attributes and data.
             InsertSpecialChar( *this, 0x01, &aLinkStr );
         }
-        // <--
     }
     if (WRITEFIELD_CMD_END & nMode)
     {
@@ -3608,7 +3603,6 @@ void AttributeOutputBase::FormatBreak( const SvxFmtBreakItem& rBreak )
                 {
                     bCheckForFollowPageDesc = true;
                 }
-                // <--
                 break;
 
             default:
@@ -3629,7 +3623,6 @@ void AttributeOutputBase::FormatBreak( const SvxFmtBreakItem& rBreak )
             {
                 SectionBreak( nC );
             }
-            // <--
         }
     }
 }
@@ -4952,7 +4945,6 @@ void WW8AttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStops )
         ParaTabStopDelAdd( m_rWW8Export, aTabs, 0, rTabStops, 0 );
         return;
     }
-    // <--
 
     // StyleDef -> "einfach" eintragen || keine Style-Attrs -> dito
     const SvxTabStopItem* pStyleTabs = 0;

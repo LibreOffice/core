@@ -213,7 +213,6 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
     {
         return;
     }
-    // <--
 
     sal_uInt16 nNewNum, nOldNum = 1;
     if( Lower() && Lower()->IsColumnFrm() )
@@ -365,7 +364,6 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, sal_Bool bAdjustAttribut
     // we may use the values returned by CalcColWidth:
     const sal_Bool bOrtho = pAttr->IsOrtho() && pAttr->GetNumCols() > 0;
     long nGutter = 0;
-    // <--
 
     for ( sal_uInt16 i = 0; i < pAttr->GetNumCols(); ++i )
     {

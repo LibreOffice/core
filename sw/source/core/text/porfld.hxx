@@ -75,7 +75,6 @@ public:
     inline sal_Bool HasFont() const { return 0 != pFnt; }
     // #i89179# - made public
     inline const SwFont *GetFont() const { return pFnt; }
-    // <--
 
     inline const XubString &GetExp() const { return aExpand; }
     virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const;

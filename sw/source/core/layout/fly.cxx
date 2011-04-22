@@ -263,7 +263,6 @@ void SwFlyFrm::InsertCnt()
     {
         return;
     }
-    // <--
 
     const SwFmtCol &rCol = GetFmt()->GetCol();
     if ( rCol.GetNumCols() > 1 )
@@ -414,7 +413,6 @@ sal_uInt32 SwFlyFrm::_GetOrdNumForNewRef( const SwFlyDrawContact* pContact )
         // of method <GetOrdNum()> to avoid a recalculation of the order number,
         // which isn't intended.
         nOrdNum = pContact->GetMaster()->GetOrdNumDirect();
-        // <--
     }
 
     return nOrdNum;
@@ -443,11 +441,9 @@ SwVirtFlyDrawObj* SwFlyFrm::CreateNewRef( SwFlyDrawContact *pContact )
         pContact->GetFmt()->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage( 0 )->
                         InsertObject( pDrawObj, _GetOrdNumForNewRef( pContact ) );
     }
-    // <--
     // #i38889# - assure, that new <SwVirtFlyDrawObj> instance
     // is in a visible layer.
     pContact->MoveObjToVisibleLayer( pDrawObj );
-    // <--
     return pDrawObj;
 }
 
@@ -466,7 +462,6 @@ void SwFlyFrm::InitDrawObj( sal_Bool bNotify )
         // #i52858# - method name changed
         pContact = new SwFlyDrawContact( (SwFlyFrmFmt*)GetFmt(),
                                           pIDDMA->GetOrCreateDrawModel() );
-        // <--
     }
     OSL_ENSURE( pContact, "InitDrawObj failed" );
     // OD 2004-03-22 #i26791#
@@ -760,7 +755,6 @@ sal_Bool SwFlyFrm::FrmSizeChg( const SwFmtFrmSize &rFrmSize )
             aFrm.Width ( aFrm.Width()  - nDiffWidth  );
             // #i68520#
             InvalidateObjRectWithSpaces();
-            // <--
             aPrt.Height( aPrt.Height() - nDiffHeight );
             aPrt.Width ( aPrt.Width()  - nDiffWidth  );
             ChgLowersProp( aOldSz );
@@ -817,14 +811,12 @@ void SwFlyFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
             _InvalidatePos();
             // #i68520#
             InvalidateObjRectWithSpaces();
-            // <--
         }
         if ( nInvFlags & 0x02 )
         {
             _InvalidateSize();
             // #i68520#
             InvalidateObjRectWithSpaces();
-            // <--
         }
         if ( nInvFlags & 0x04 )
             _InvalidatePrt();
@@ -843,12 +835,10 @@ void SwFlyFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
             // update sorted object lists, the Writer fly frame is registered at.
             UpdateObjInSortedList();
         }
-        // <--
     }
 
     // #i51474# - reset flags for the layout process
     ResetLayoutProcessBools();
-    // <--
 }
 
 void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
@@ -1211,7 +1201,6 @@ void SwFlyFrm::_Invalidate( SwPageFrm *pPage )
             ClearVertPosOrientFrm();
         }
     }
-    // <--
 }
 
 /*************************************************************************
@@ -1251,7 +1240,6 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
             aVert.SetVertOrient( text::VertOrientation::NONE );
             aVert.SetRelationOrient( text::RelOrientation::FRAME );
         }
-        // <--
         else if ( IsFlyAtCntFrm() || text::VertOrientation::NONE != aVert.GetVertOrient() )
         {
             if( text::RelOrientation::CHAR == aVert.GetRelationOrient() && IsAutoPos() )
@@ -1306,7 +1294,6 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
                 aHori.SetRelationOrient( text::RelOrientation::FRAME );
                 aHori.SetPosToggle( sal_False );
             }
-            // <--
             else if ( IsFlyAtCntFrm() || text::HoriOrientation::NONE != aHori.GetHoriOrient() )
             {
                 aHori.SetHoriOrient( text::HoriOrientation::NONE );
@@ -1361,7 +1348,6 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
             Frm().Pos().X() = Frm().Pos().Y() = 0;
             // #i68520#
             InvalidateObjRectWithSpaces();
-            // <--
         }
 
         //Breite der Spalten pruefen und ggf. einstellen.
@@ -1415,7 +1401,6 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
                     // the fly frame doesn't become invalid anymore.
 //                    if( !nRemaining )
 //                        nRemaining = nOldHeight - nUL;
-                    // <--
                 }
                 if ( GetDrawObjs() )
                 {
@@ -1463,7 +1448,6 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
             {
                 InvalidateObjRectWithSpaces();
             }
-            // <--
             bValidSize = sal_True;
         }
         else
@@ -1482,7 +1466,6 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
             {
                 InvalidateObjRectWithSpaces();
             }
-            // <--
         }
 
         if ( !bFormatHeightOnly )
@@ -1515,7 +1498,6 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
             {
                 InvalidateObjRectWithSpaces();
             }
-            // <--
         }
     }
     ColUnlock();
@@ -1647,7 +1629,6 @@ void CalcCntnt( SwLayoutFrm *pLay,
                                 pLay->IsAnLower( pTmpPrev ) &&
                                 pTmpPrevFlowFrm->IsKeep( *pTmpPrev->GetAttrSet() ) &&
                                 pTmpPrevFlowFrm->IsKeepFwdMoveAllowed();
-            // <--
 
             // format floating screen objects anchored to the frame.
             bool bRestartLayoutProcess = false;
@@ -1673,7 +1654,6 @@ void CalcCntnt( SwLayoutFrm *pLay,
                         // anchored object needed - causes loops for as-character
                         // anchored objects.
                         //pAnchoredObj->InvalidateObjPos();
-                        // <--
                         SwRect aRect( pAnchoredObj->GetObjRect() );
                         if ( !SwObjectFormatter::FormatObj( *pAnchoredObj, pFrm, pPageFrm ) )
                         {
@@ -1687,7 +1667,6 @@ void CalcCntnt( SwLayoutFrm *pLay,
                             bRestartLayoutProcess = true;
                             break;
                         }
-                        // <--
 
                         if ( aRect != pAnchoredObj->GetObjRect() )
                         {
@@ -1752,7 +1731,6 @@ void CalcCntnt( SwLayoutFrm *pLay,
                 {
                     pFrm->Calc();
                 }
-                // <--
 
                 if ( bAgain )
                 {
@@ -1868,14 +1846,12 @@ void SwFlyFrm::MakeObjPos()
         // #i58280#
         // update relative position
         SetCurrRelPos( aObjPositioning.GetRelPos() );
-        // <--
 
         SWRECTFN( GetAnchorFrm() );
         aFrm.Pos( aObjPositioning.GetRelPos() );
         aFrm.Pos() += (GetAnchorFrm()->Frm().*fnRect->fnGetPos)();
         // #i69335#
         InvalidateObjRectWithSpaces();
-        // <--
     }
 }
 
@@ -1956,7 +1932,6 @@ SwTwips SwFlyFrm::_Grow( SwTwips nDist, sal_Bool bTst )
                 {
                     bFormatHeightOnly = sal_True;
                 }
-                // <--
                 static_cast<SwFlyFreeFrm*>(this)->SetNoMoveOnCheckClip( true );
                 ((SwFlyFreeFrm*)this)->SwFlyFreeFrm::MakeAll();
                 static_cast<SwFlyFreeFrm*>(this)->SetNoMoveOnCheckClip( false );
@@ -1965,8 +1940,6 @@ SwTwips SwFlyFrm::_Grow( SwTwips nDist, sal_Bool bTst )
                 {
                     bFormatHeightOnly = bOldFormatHeightOnly;
                 }
-                // <--
-                // <--
             }
             else
                 MakeAll();
@@ -2017,7 +1990,6 @@ SwTwips SwFlyFrm::_Shrink( SwTwips nDist, sal_Bool bTst )
                 {
                     InvalidateObjRectWithSpaces();
                 }
-                // <--
                 nHeight = (Prt().*fnRect->fnGetHeight)();
                 (Prt().*fnRect->fnSetHeight)( nHeight - nVal );
                 _InvalidatePos();
@@ -2055,7 +2027,6 @@ SwTwips SwFlyFrm::_Shrink( SwTwips nDist, sal_Bool bTst )
                 {
                     bFormatHeightOnly = sal_True;
                 }
-                // <--
                 static_cast<SwFlyFreeFrm*>(this)->SetNoMoveOnCheckClip( true );
                 ((SwFlyFreeFrm*)this)->SwFlyFreeFrm::MakeAll();
                 static_cast<SwFlyFreeFrm*>(this)->SetNoMoveOnCheckClip( false );
@@ -2064,8 +2035,6 @@ SwTwips SwFlyFrm::_Shrink( SwTwips nDist, sal_Bool bTst )
                 {
                     bFormatHeightOnly = bOldFormatHeightOnly;
                 }
-                // <--
-                // <--
             }
             else
                 MakeAll();
@@ -2118,7 +2087,6 @@ Size SwFlyFrm::ChgSize( const Size& aNewSize )
             }
         }
     }
-    // <--
     if ( aAdjustedNewSize != Frm().SSize() )
     {
         SwFrmFmt *pFmt = GetFmt();
@@ -2129,7 +2097,6 @@ Size SwFlyFrm::ChgSize( const Size& aNewSize )
         // <SetAttr> call, if <aSz> equals the current <SwFmtFrmSize> attribute.
 //        if ( Abs(aAdjustedNewSize.Height() - aSz.GetHeight()) > 1 )
         aSz.SetHeight( aAdjustedNewSize.Height() );
-        // <--
         // uebers Doc fuers Undo!
         pFmt->GetDoc()->SetAttr( aSz, *pFmt );
         return aSz.GetSize();
@@ -2246,7 +2213,6 @@ void SwFrm::RemoveFly( SwFlyFrm *pToRemove )
             }
         }
     }
-    // <--
 
     pDrawObjs->Remove( *pToRemove );
     if ( !pDrawObjs->Count() )
@@ -2312,7 +2278,6 @@ void SwFrm::AppendDrawObj( SwAnchoredObject& _rNewObj )
             }
         }
     }
-    // <--
 
     // no direct positioning needed, but invalidate the drawing object position
     _rNewObj.InvalidateObjPos();
@@ -2372,7 +2337,6 @@ void SwFrm::InvalidateObjs( const bool _bInvaPosOnly,
         // in order to check, if anchored object is registered at the same
         // page.
         const SwPageFrm* pPageFrm = FindPageFrm();
-        // <--
         // #i28701# - re-factoring
         sal_uInt32 i = 0;
         for ( ; i < GetDrawObjs()->Count(); ++i )
@@ -2404,9 +2368,7 @@ void SwFrm::InvalidateObjs( const bool _bInvaPosOnly,
                 {
                     pAnchoredObj->UnlockPosition();
                 }
-                // <--
             }
-            // <--
             // #i51474# - reset flag, that anchored object
             // has cleared environment, and unlock its position, if the anchored
             // object is registered at the same page as the anchor frame is on.
@@ -2417,7 +2379,6 @@ void SwFrm::InvalidateObjs( const bool _bInvaPosOnly,
                 pAnchoredObj->UnlockPosition();
                 pAnchoredObj->SetClearedEnvironment( false );
             }
-            // <--
             // distinguish between writer fly frames and drawing objects
             if ( pAnchoredObj->ISA(SwFlyFrm) )
             {
@@ -2464,7 +2425,6 @@ void SwLayoutFrm::NotifyLowerObjs( const bool _bUnlockPosOfObjs )
             // for at-character/as-character anchored objects the anchor character
             // text frame is taken.
             const SwFrm* pAnchorFrm = pObj->GetAnchorFrmContainingAnchPos();
-            // <--
             if ( pObj->ISA(SwFlyFrm) )
             {
                 SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pObj);
@@ -2480,7 +2440,6 @@ void SwLayoutFrm::NotifyLowerObjs( const bool _bUnlockPosOfObjs )
                 // at a different page registered as its anchor frame is on.
                 const bool bLow = IsAnLower( pAnchorFrm );
                 if ( bLow || pAnchorFrm->FindPageFrm() != pPageFrm )
-                // <--
                 {
                     pFly->_Invalidate( pPageFrm );
                     if ( !bLow || pFly->IsFlyAtCntFrm() )
@@ -2490,7 +2449,6 @@ void SwLayoutFrm::NotifyLowerObjs( const bool _bUnlockPosOfObjs )
                         {
                             pFly->UnlockPosition();
                         }
-                        // <--
                         pFly->_InvalidatePos();
                     }
                     else
@@ -2506,14 +2464,12 @@ void SwLayoutFrm::NotifyLowerObjs( const bool _bUnlockPosOfObjs )
                 // at a different page registered as its anchor frame is on.
                 if ( IsAnLower( pAnchorFrm ) ||
                      pAnchorFrm->FindPageFrm() != pPageFrm )
-                // <--
                 {
                     // #i44016#
                     if ( _bUnlockPosOfObjs )
                     {
                         pObj->UnlockPosition();
                     }
-                    // <--
                     pObj->InvalidateObjPos();
                 }
             }
@@ -2786,7 +2742,6 @@ void SwFlyFrm::InvalidateObjPos()
     InvalidatePos();
     // #i68520#
     InvalidateObjRectWithSpaces();
-    // <--
 }
 
 SwFrmFmt& SwFlyFrm::GetFrmFmt()
@@ -2813,7 +2768,6 @@ const SwRect SwFlyFrm::GetObjBoundRect() const
 {
     return GetObjRect();
 }
-// <--
 
 // #i68520#
 bool SwFlyFrm::_SetObjTop( const SwTwips _nTop )
@@ -2832,7 +2786,6 @@ bool SwFlyFrm::_SetObjLeft( const SwTwips _nLeft )
 
     return bChanged;
 }
-// <--
 
 /** method to assure that anchored object is registered at the correct
     page frame

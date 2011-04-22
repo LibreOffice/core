@@ -86,7 +86,6 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrm)
             // #i40845# - follow-up of #i35635#
             // move object to visible layer
             pDrawContact->MoveObjToVisibleLayer( pDrawContact->GetMaster() );
-            // <--
         }
     }
 

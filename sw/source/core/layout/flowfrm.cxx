@@ -235,7 +235,6 @@ sal_Bool SwFlowFrm::IsKeep( const SwAttrSet& rAttrs, bool bCheckIfLastRowShouldK
                     if ( pThisSection != pNextSection )
                         bKeep = sal_False;
                 }
-                // <--
 
                 if ( bKeep )
                 {
@@ -413,7 +412,6 @@ SwLayoutFrm *SwFlowFrm::CutTree( SwFrm *pStart )
         if( pTmp )
             pTmp->Prepare( PREP_QUOVADIS );
     }
-    // <--
 
     //Nur fix auschneiden und zwar so, dass klare Verhaeltnisse bei den
     //Verlassenen herrschen. Die Pointer der ausgeschnittenen Kette zeigen
@@ -600,7 +598,6 @@ void SwFlowFrm::MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling )
             {
                 pPre->_InvalidatePrt();
             }
-            // <--
             pPre->InvalidatePage();
         }
         else
@@ -623,7 +620,6 @@ void SwFlowFrm::MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling )
          ( pOldParent->IsInSct() &&
            !(pSct = pOldParent->FindSctFrm())->ContainsCntnt() &&
            !pSct->ContainsAny( true ) ) )
-    // <--
     {
             pSct->DelEmpty( sal_False );
     }
@@ -844,7 +840,6 @@ SwLayoutFrm *SwFrm::GetLeaf( MakePageType eMakePage, sal_Bool bFwd )
 
     if ( bInSct )
         return bFwd ? GetNextSctLeaf( eMakePage ) : GetPrevSctLeaf( eMakePage );
-    // <--
 
     return bFwd ? GetNextLeaf( eMakePage ) : GetPrevLeaf( eMakePage );
 }
@@ -997,7 +992,6 @@ SwLayoutFrm *SwFrm::GetNextLeaf( MakePageType eMakePage )
                  // Do not consider page descriptions in browse mode (since
                  // MoveBwd ignored them)
                  !(pSh && pSh->GetViewOptions()->getBrowseMode() ) )
-                 // <--
             {
                 if( WrongPageDesc( pNew ) )
                 {
@@ -1154,7 +1148,6 @@ sal_Bool SwFlowFrm::IsPrevObjMove() const
             if ( pObj->GetFrmFmt().GetDoc()->IsVisibleLayerId(
                                             pObj->GetDrawObj()->GetLayer() ) &&
                  pObj->GetFrmFmt().GetFollowTextFlow().GetValue() )
-            // <--
             {
                 const SwLayoutFrm* pVertPosOrientFrm = pObj->GetVertPosOrientFrm();
                 if ( pVertPosOrientFrm &&
@@ -1165,7 +1158,6 @@ sal_Bool SwFlowFrm::IsPrevObjMove() const
                 }
             }
         }
-        // <--
     }
     return sal_False;
 }
@@ -1459,7 +1451,6 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
             GetSpacingValuesOfFrm( (*pPrevFrm),
                                    nPrevLowerSpace, nPrevLineSpacing,
                                    bPrevLineSpacingPorportional );
-            // <--
             if( pIDSA->get(IDocumentSettingAccess::PARA_SPACE_MAX) )
             {
                 nUpper = nPrevLowerSpace + pAttrs->GetULSpace().GetUpper();
@@ -1499,7 +1490,6 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                         {
                             nAdd = Max( nAdd, static_cast<SwTxtFrm&>(rThis).GetLineSpace( true ) );
                         }
-                        // <--
                     }
                     nUpper += nAdd;
                 }
@@ -1546,7 +1536,6 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                         {
                             nAdd = Max( nAdd, static_cast<SwTxtFrm&>(rThis).GetLineSpace( true ) );
                         }
-                        // <--
                     }
                     nUpper += nAdd;
                 }
@@ -1653,7 +1642,6 @@ SwTwips SwFlowFrm::_GetUpperSpaceAmountConsideredForPrevFrm() const
         // #i102458#
         bool bDummy = false;
         GetSpacingValuesOfFrm( (*pPrevFrm), nPrevLowerSpace, nPrevLineSpacing, bDummy );
-        // <--
         if ( nPrevLowerSpace > 0 || nPrevLineSpacing > 0 )
         {
             const IDocumentSettingAccess* pIDSA = rThis.GetUpper()->GetFmt()->getIDocumentSettingAccess();
@@ -1727,12 +1715,10 @@ SwTwips SwFlowFrm::CalcLowerSpace( const SwBorderAttrs* _pAttrs ) const
     if ( ( ( rThis.IsTabFrm() && rThis.GetUpper()->IsInTab() ) ||
            // #115759# - no lower spacing, if frame has a follow
            ( rThis.IsInTab() && !GetFollow() ) ) &&
-           // <--
          !rThis.GetIndNext() )
     {
         nLowerSpace += CalcAddLowerSpaceAsLastInTableCell( _pAttrs );
     }
-    // <--
 
     delete pAttrAccess;
 
@@ -1977,7 +1963,6 @@ sal_Bool SwFlowFrm::MoveFwd( sal_Bool bMakePage, sal_Bool bPageBreak, sal_Bool b
         // in SwSectionFrm::Format, which can cause loops.
         const bool bForceSimpleFormat = pSect && pSect->HasFollow() &&
                                        !pSect->ContainsAny();
-        // <--
 
         if ( pNewBoss != pOldBoss )
         {
@@ -2009,7 +1994,6 @@ sal_Bool SwFlowFrm::MoveFwd( sal_Bool bMakePage, sal_Bool bPageBreak, sal_Bool b
             {
                 pOldSct = static_cast<SwSectionFrm*>(rThis.GetUpper());
             }
-            // <--
 
             MoveSubTree( pNewUpper, pNewUpper->Lower() );
 
@@ -2027,14 +2011,12 @@ sal_Bool SwFlowFrm::MoveFwd( sal_Bool bMakePage, sal_Bool bPageBreak, sal_Bool b
                 // for these.
                 pOldSct->SimpleFormat();
             }
-            // <--
 
             // #i26831#
             if ( bForceSimpleFormat )
             {
                 pSect->SimpleFormat();
             }
-            // <--
 
             if ( bFtnMoved && !bSamePage )
             {
@@ -2071,7 +2053,6 @@ sal_Bool SwFlowFrm::MoveFwd( sal_Bool bMakePage, sal_Bool bPageBreak, sal_Bool b
             {
                 SwFrm::CheckPageDescs( pNewPage, sal_False );
             }
-            // <--
         }
     }
     return bSamePage;
@@ -2114,7 +2095,6 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
             pUpperFrm = pUpperFrm->GetUpper();
         }
     }
-    // <--
 
     SwFtnBossFrm * pOldBoss = rThis.FindFtnBossFrm();
     SwPageFrm * const pOldPage = pOldBoss->FindPageFrm();
@@ -2140,7 +2120,6 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
         }
         if( !pRef )
             pRef = pFtn->GetRef();
-        // <--
 
         OSL_ENSURE( pRef, "MoveBwd: Endnote for an empty section?" );
 
@@ -2215,7 +2194,6 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
                             bCheckPageDescOfNextPage = true;
                         }
                     }
-                    // <--
 
                     bCheckPageDescs = sal_True;
                 }
@@ -2265,7 +2243,6 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
                     pNewUpper = pNewNextUpper;
                 }
             }
-            // <--
         }
         else
         {
@@ -2320,7 +2297,6 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
                             {
                                 pNewUpper = pNewNextUpper;
                             }
-                            // <--
                         }
                     }
                     else
@@ -2371,16 +2347,13 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
                 // #i47697# - refine condition - see above
                 if ( pAnchoredObj->RestartLayoutProcess() &&
                      !pAnchoredObj->IsTmpConsiderWrapInfluence() )
-                // <--
                 {
                     pNewUpper = 0;
                     break;
                 }
             }
         }
-        // <--
     }
-    // <--
 
     //Fuer Follows ist das zurueckfliessen nur dann erlaubt wenn in der
     //neuen Umgebung kein Nachbar existiert (denn dieses waere der Master).
@@ -2440,7 +2413,6 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
                 // #130797# - correct fix #126020#
                 if ( pSectFrm && !pSectFrm->IsColLocked() &&
                      !pSectFrm->ContainsCntnt() && !pSectFrm->ContainsAny( true ) )
-                // <--
                 {
                     pSectFrm->DelEmpty( sal_True );
                     delete pSectFrm;
@@ -2484,7 +2456,6 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
                 pNewUpper = 0L;
             }
         }
-        // <--
     }
 
     // #i65250#
@@ -2505,7 +2476,6 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
         if ( pNextNewUpper &&
              ( pNextNewUpper == rThis.GetUpper() ||
                pNextNewUpper->GetType() != rThis.GetUpper()->GetType() ) )
-        // <--
         {
             pNewUpper = 0L;
 #if OSL_DEBUG_LEVEL > 1
@@ -2513,7 +2483,6 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
 #endif
         }
     }
-    // <--
 
     OSL_ENSURE( pNewUpper != rThis.GetUpper(),
             "<SwFlowFrm::MoveBwd(..)> - moving backward to the current upper frame!? -> Please inform OD." );
@@ -2581,7 +2550,6 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
         // optimization: format section, if its size is invalidated and if it's
         // the new parent of moved backward frame.
         bool bFormatSect( false );
-        // <--
         if( bUnlock )
         {
             pSect->ColUnlock();
@@ -2591,7 +2559,6 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
                 // - optimization
                 if ( pSect == pNewUpper )
                     bFormatSect = true;
-                // <--
             }
         }
 
@@ -2599,7 +2566,6 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
         // - optimization
         if ( bFormatSect )
             pSect->Calc();
-        // <--
 
         SwPageFrm *pNewPage = rThis.FindPageFrm();
         if( pNewPage != pOldPage )

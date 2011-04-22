@@ -171,7 +171,6 @@ const SwFrm *SwLayoutFrm::ContainsAny( const bool _bInvestigateFtnForSections ) 
     const SwLayoutFrm *pLayLeaf = this;
     // #130797#
     const bool bNoFtn = IsSctFrm() && !_bInvestigateFtnForSections;
-    // <--
     do
     {
         while ( ( (!pLayLeaf->IsSctFrm() && !pLayLeaf->IsTabFrm())
@@ -872,7 +871,6 @@ SwCntntFrm *SwFrm::_FindNextCnt( const bool _bInSameFtn )
         {
             // #i27138#
             if ( bBody || ( bFtn && !_bInSameFtn ) )
-            // <--
             {
                 // handling for environments 'footnotes' and 'document body frames':
                 while ( pNxtCnt )
@@ -916,7 +914,6 @@ SwCntntFrm *SwFrm::_FindNextCnt( const bool _bInSameFtn )
                     return 0L;
                 }
             }
-            // <--
             else if ( pThis->IsInFly() )
                 // handling for environments 'unlinked fly frame' and
                 // 'group of linked fly frames':
@@ -1051,7 +1048,6 @@ SwCntntFrm* SwFrm::_FindPrevCnt( const bool _bInSameFtn )
                                 pPrevCntntFrm = pMasterFtnFrmOfCurr->FindLastCntnt();
                             } while ( !pPrevCntntFrm &&
                                       pMasterFtnFrmOfCurr->GetMaster() );
-                            // <--
                         }
                         else
                         {
@@ -1724,7 +1720,6 @@ const SwRowFrm* SwFrm::IsInSplitTableRow() const
          !pTab->HasFollowFlowLine() ||
          !pTab->GetFollow() )
         return NULL;
-    // <--
 
     // skip headline
     const SwRowFrm* pFollowRow = pTab->GetFollow()->GetFirstNonHeadlineRow();

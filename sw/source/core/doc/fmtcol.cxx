@@ -72,7 +72,6 @@ namespace TxtFmtCollFunc
         // #i73790#
         if ( !pTxtFmtColl->StayAssignedToListLevelOfOutlineStyle() &&
              pTxtFmtColl->IsAssignedToListLevelOfOutlineStyle() )
-        // <--
         {
             if ( !pNewNumRuleItem )
             {
@@ -90,7 +89,6 @@ namespace TxtFmtCollFunc
             }
         }
     }
-    // <--
 
     SwNumRule* GetNumRule( SwTxtFmtColl& rTxtFmtColl )
     {
@@ -128,7 +126,6 @@ namespace TxtFmtCollFunc
         }
     }
 } // end of namespace TxtFmtCollFunc
-// <--
 
 /*
  * SwTxtFmtColl  TXT
@@ -176,7 +173,6 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             pNewChgSet->GetChgSet()->GetItemState( RES_PARATR_NUMRULE, sal_False,
                                                    (const SfxPoolItem**)&pNewNumRuleItem );
         }
-        // <--
 
         break;
 
@@ -227,7 +223,6 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         TxtFmtCollFunc::CheckTxtFmtCollForDeletionOfAssignmentToOutlineStyle(
                                                         this, pNewNumRuleItem );
     }
-    // <--
 
     int bWeiter = sal_True;
 
@@ -410,7 +405,6 @@ sal_Bool SwTxtFmtColl::ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
 
     return bRet;
 }
-// <--
 
 // #i73790#
 sal_uInt16 SwTxtFmtColl::ResetAllFmtAttr()
@@ -424,7 +418,6 @@ sal_uInt16 SwTxtFmtColl::ResetAllFmtAttr()
     const int nAssignedOutlineStyleLevel = IsAssignedToListLevelOfOutlineStyle()
                                      ? GetAssignedOutlineStyleLevel()
                                      : -1;
-    // <--
 
     sal_uInt16 nRet = SwFmtColl::ResetAllFmtAttr();
 
@@ -433,13 +426,11 @@ sal_uInt16 SwTxtFmtColl::ResetAllFmtAttr()
     {
         AssignToListLevelOfOutlineStyle( nAssignedOutlineStyleLevel );
     }
-    // <--
 
     mbStayAssignedToListLevelOfOutlineStyle = bOldState;
 
     return nRet;
 }
-// <--
 
 bool SwTxtFmtColl::AreListLevelIndentsApplicable() const
 {
@@ -493,7 +484,6 @@ bool SwTxtFmtColl::AreListLevelIndentsApplicable() const
 
     return bAreListLevelIndentsApplicable;
 }
-// <--
 
 //FEATURE::CONDCOLL
 
@@ -694,7 +684,6 @@ void SwTxtFmtColl::AssignToListLevelOfOutlineStyle(const int nAssignedListLevel)
 
         pDerivedTxtFmtColl = aIter.Next();
     }
-    // <--
 }
 
 void SwTxtFmtColl::DeleteAssignmentToListLevelOfOutlineStyle()

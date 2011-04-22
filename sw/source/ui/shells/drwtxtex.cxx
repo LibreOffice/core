@@ -904,7 +904,6 @@ void SwDrawTextShell::StateClpbrd(SfxItemSet &rSet)
             case SID_CLIPBOARD_FORMAT_ITEMS:
                 rSet.DisableItem( SID_CLIPBOARD_FORMAT_ITEMS );
                 break;
-            // <--
         }
         nWhich = aIter.NextWhich();
     }

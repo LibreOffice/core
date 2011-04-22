@@ -91,7 +91,6 @@ SwFrm::SwFrm( SwModify *pMod, SwFrm* pSib ) :
     SwClient( pMod ),
     // #i65250#
     mnFrmId( SwFrm::mnLastFrmId++ ),
-    // <--
     mpRoot( pSib ? pSib->getRootFrm() : 0 ),
     pUpper( 0 ),
     pNext( 0 ),
@@ -236,7 +235,6 @@ void SwCellFrm::CheckDirection( sal_Bool bVert )
     // Check if the item is set, before actually
     // using it. Otherwise the dynamic pool default is used, which may be set
     // to LTR in case of OOo 1.0 documents.
-    // <--
     if( pFmt && SFX_ITEM_SET == pFmt->GetItemState( RES_FRAMEDIR, sal_True, &pItem ) )
     {
         const SvxFrameDirectionItem* pFrmDirItem = static_cast<const SvxFrameDirectionItem*>(pItem);
@@ -403,13 +401,11 @@ void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
                 SwPageFrm* pPageFrmOfAnchor =
                         const_cast<SwFlyFrm*>(pFlyFrm)->FindPageFrmOfAnchor();
                 if ( pPageFrmOfAnchor && pPageFrmOfAnchor != pPage )
-                // <--
                 {
                     InvalidatePage( pPageFrmOfAnchor );
                 }
             }
         }
-        // <--
     }
 
     if ( pPage && pPage->GetUpper() )
@@ -925,7 +921,6 @@ void SwCntntFrm::Cut()
         {
             pFrm->InvalidatePrt();
         }
-        // <--
     }
 
     SwFrm *pNxt = FindNextCnt();
@@ -1014,7 +1009,6 @@ void SwCntntFrm::Cut()
                     pMasterTab->SetRemoveFollowFlowLinePending( sal_True );
                 }
             }
-            // <--
         }
     }
     //Erst removen, dann Upper Shrinken.
@@ -1031,19 +1025,16 @@ void SwCntntFrm::Cut()
                  // except from a temporary empty table frame.
                  // This can happen due to the new cell split feature.
                  !pUp->IsCellFrm() &&
-                 // <--
                  // #126020# - adjust check for empty section
                  // #130797# - correct fix #126020#
                  !(pSct = pUp->FindSctFrm())->ContainsCntnt() &&
                  !pSct->ContainsAny( true ) ) ) )
-                 // <--
         {
             if ( pUp->GetUpper() )
             {
                 //
                 // prevent delete of <ColLocked> footnote frame
                 if ( pUp->IsFtnFrm() && !pUp->IsColLocked())
-                // <--
                 {
                     if( pUp->GetNext() && !pUp->GetPrev() )
                     {
@@ -1059,7 +1050,6 @@ void SwCntntFrm::Cut()
                     //
                     if ( pSct->IsColLocked() || !pSct->IsInFtn() ||
                          ( pUp->IsFtnFrm() && pUp->IsColLocked() ) )
-                    // <--
                     {
                         pSct->DelEmpty( sal_False );
                         // Wenn ein gelockter Bereich nicht geloescht werden darf,
@@ -1797,7 +1787,6 @@ void SwFrm::ReinitializeFrmSizeAttrFlags()
                     pCnt = pCnt->GetNextCntntFrm();
                 } while ( ((SwLayoutFrm*)this)->IsAnLower( pCnt ) );
             }
-            // <--
         }
     }
     else if ( rFmtSize.GetHeightSizeType() == ATT_FIX_SIZE )
@@ -1896,7 +1885,6 @@ SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
             {
                 InvalidateNextPos();
             }
-            // <--
         }
         return 0;
     }
@@ -1965,7 +1953,6 @@ SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
             InvalidateNextPos();
         }
     }
-    // <--
 
     return nReal;
 }
@@ -2335,7 +2322,6 @@ SwLayoutFrm::SwLayoutFrm( SwFrmFmt* pFmt, SwFrm* pSib ):
 
 // #i28701#
 TYPEINIT1(SwLayoutFrm,SwFrm);
-// <--
 /*--------------------------------------------------
  * SwLayoutFrm::InnerHeight()
  * --------------------------------------------------*/
@@ -2754,7 +2740,6 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
                 // #i10826# Section frames without columns should not
                 // invalidate all lowers!
                IsSctFrm() ) )
-               // <--
     {
         // Determine page frame the body frame resp. the section frame belongs to.
         SwPageFrm *pPage = FindPageFrm();
@@ -2867,10 +2852,8 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
                         pSectFrm->_InvalidateSize();
                         pSectFrm->InvalidatePage( pPage );
                     }
-                    // <--
                 }
             }
-            // <--
         }
         return;
     } // end of { special case }
@@ -3465,7 +3448,6 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                 // to the calculated maximum height.
                 (Frm().*fnRect->fnAddBottom)( nMaximum -
                                               (Frm().*fnRect->fnGetHeight)() );
-                // <--
                 if( nTop > nMaximum )
                     nTop = nMaximum;
                 (this->*fnRect->fnSetYMargins)( nTop, 0 );
@@ -3504,7 +3486,6 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                 }
             }
         }
-        // <--
         do
         {
             //Kann eine Weile dauern, deshalb hier auf Waitcrsr pruefen.
@@ -3522,7 +3503,6 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
             // Simply setting the column width based on the values returned by
             // CalcColWidth does not work for automatic column width.
             AdjustColumns( &rCol, sal_False );
-            // <--
 
             for ( sal_uInt16 i = 0; i < nNumCols; ++i )
             {
@@ -3654,7 +3634,6 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                              // a column. Thus, decrease optimization here.
                              //nMaxFree >= nMinDiff &&
                              nMaxFree > 0 &&
-                             // <--
                              ( !nAllFree ||
                                nMinimum < nPrtHeight - nMinDiff ) )
                         {
@@ -3683,7 +3662,6 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                     {
                         dynamic_cast<SwFlyFrm*>(this)->InvalidateObjRectWithSpaces();
                     }
-                    // <--
                     (this->*fnRect->fnSetYMargins)( nTop, nBorder - nTop );
                     ChgLowersProp( aOldSz );
                     NotifyLowerObjs();
@@ -3705,7 +3683,6 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                             }
                         }
                     }
-                    // <--
                     //Es muss geeignet invalidiert werden, damit
                     //sich die Frms huebsch ausbalancieren
                     //- Der jeweils erste ab der zweiten Spalte bekommt
@@ -3955,7 +3932,6 @@ void SwRootFrm::InvalidateAllObjPos()
                     pAnchoredObj->InvalidateObjPosForConsiderWrapInfluence( true );
                 else
                     pAnchoredObj->InvalidateObjPos();
-                // <--
             }
         }
 

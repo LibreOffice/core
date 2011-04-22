@@ -1985,7 +1985,6 @@ void SwWW8ImplReader::MapWrapIntoFlyFmt(SvxMSDffImportRec* pRecord,
             // #i47277# - contour is already in unit of the
             // graphic prefered unit. Thus, call method <SetContour(..)>
             pNd->SetContour(&aPoly);
-            // <--
         }
     }
 }
@@ -2186,7 +2185,6 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
             // - inside -> text::HoriOrientation::LEFT and outside -> text::HoriOrientation::RIGHT
             text::HoriOrientation::LEFT,   // inside
             text::HoriOrientation::RIGHT   // outside
-            // <--
         };
 
 
@@ -2253,7 +2251,6 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
             pFSPA->nXaLeft = 0;
             pFSPA->nXaRight = nWidth;
         }
-        // <--
 
         // #i24255# - position of floating screen objects in
         // R2L layout are given in L2R layout, thus convert them of all
@@ -2269,7 +2266,6 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
                 pFSPA->nXaRight = pFSPA->nXaLeft + nWidth;
             }
         }
-        // <--
 
         // if the object is anchored inside a table cell, is horizontal aligned
         // at frame|character and has wrap through, but its attribute
@@ -2282,7 +2278,6 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
         {
             eHoriRel = text::RelOrientation::PAGE_PRINT_AREA;
         }
-        // <--
 
         SwFmtHoriOrient aHoriOri(MakeSafePositioningValue(pFSPA->nXaLeft),
             eHoriOri, eHoriRel);
@@ -2361,7 +2356,6 @@ bool SwWW8ImplReader::IsObjectLayoutInTableCell( const sal_uInt32 nLayoutInTable
                      nLayoutInTableCell & 0x80008000 ||
                      ( nLayoutInTableCell & 0x02000000 &&
                        !(nLayoutInTableCell & 0x80000000 ) ) )
-                // <--
                 {
                     bIsObjectLayoutInTableCell = true;
                 }
@@ -2380,7 +2374,6 @@ bool SwWW8ImplReader::IsObjectLayoutInTableCell( const sal_uInt32 nLayoutInTable
 
     return bIsObjectLayoutInTableCell;
 }
-// <--
 
 SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 {
@@ -2564,7 +2557,6 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
     const bool bLayoutInTableCell =
         nInTable && IsObjectLayoutInTableCell( pRecord->nLayoutInTableCell );
-    // <--
 
     // #i18732# - Switch on 'follow text flow', if object is laid out
     // inside table cell and its wrapping isn't 'SURROUND_THROUGH'
@@ -2635,7 +2627,6 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                 //  pass information, if object is in page header|footer to method.
                 pWWZOrder->InsertEscherObject( pObject, pF->nSpId,
                                                bIsHeader || bIsFooter );
-                // <--
             }
             else
             {
@@ -2671,7 +2662,6 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     {
         static_cast<SwDrawFrmFmt*>(pRetFrmFmt)->PosAttrSet();
     }
-    // <--
     if (!IsInlineEscherHack())
         MapWrapIntoFlyFmt(pRecord, pRetFrmFmt);
 
@@ -2972,7 +2962,6 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
             // One of the two conditions have to be true to insert the graphic
             // as a linked graphic -
             if (GRAPHIC_NONE == eType || CanUseRemoteLink(aGrfName))
-            // <--
             {
                 pRetFrmFmt = rDoc.Insert(*pPaM, aGrfName, aEmptyStr, 0,
                     &rFlySet, &aGrSet, NULL);
@@ -3026,7 +3015,6 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
             // pass information, if object is in page header|footer to method.
             pWWZOrder->InsertEscherObject( rpOurNewObject, pF->nSpId,
                                            bIsHeader || bIsFooter );
-            // <--
         }
     }
     return pRetFrmFmt;

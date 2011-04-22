@@ -1813,7 +1813,6 @@ const SwStartNode *SwXMLTableContext::GetPrevStartNode( sal_uInt32 nRow,
         // #i95726# - Some fault tolerance
 //        else
         else if ( pPrevCell->GetSubTable() )
-        // <--
             pSttNd = pPrevCell->GetSubTable()->GetLastStartNode();
 
         OSL_ENSURE( pSttNd != 0,
@@ -2293,7 +2292,6 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
                     OSL_FAIL( "table seems to be corrupt." );
                     break;
                 }
-                // <--
 
                 // Could the table fragment be splitted vertically behind the
                 // current column (uptp the current line?
@@ -2326,7 +2324,6 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
                 if( ( !bHasSubTables || ( pCell->GetRowSpan() == (nBottomRow-nTopRow) ) ) &&
                     pCell->GetColSpan() == (nCol+1UL-nStartCol) &&
                     ( pCell->GetStartNode() || pCell->GetSubTable() ) )
-                // <--
                 {
                     // insert new empty cell for covered cells:
                     long nBoxRowSpan = 1;
@@ -2889,7 +2886,6 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
         {
             pDoc = const_cast<SwDoc*>(pEndNd->GetDoc());
         }
-        // <--
         sal_uInt32 nOffset = pPrevSttNd ? 1UL : 0UL;
         SwNodeIndex aIdx( *pEndNd, nOffset );
         SwTxtFmtColl *pColl =

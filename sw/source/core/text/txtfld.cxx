@@ -513,7 +513,6 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                                             pNumFnt,
                                             bLeft, bCenter, nMinDist,
                                             bLabelAlignmentPosAndSpaceModeActive );
-                // <--
             }
             else
             {

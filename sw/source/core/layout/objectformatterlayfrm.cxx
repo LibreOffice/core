@@ -36,7 +36,6 @@
 
 // #124218#
 #include <layact.hxx>
-// <--
 
 // =============================================================================
 // implementation of class <SwObjectFormatterLayFrm>
@@ -89,14 +88,12 @@ SwFrm& SwObjectFormatterLayFrm::GetAnchorFrm()
 // Not relevant for objects anchored at layout frame.
 bool SwObjectFormatterLayFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                                            const bool )
-// <--
 {
     _FormatObj( _rAnchoredObj );
 
     // #124218# - consider that the layout action has to be
     // restarted due to a deleted page frame.
     return GetLayAction() ? !GetLayAction()->IsAgain() : true;
-    // <--
 }
 
 bool SwObjectFormatterLayFrm::DoFormatObjs()
@@ -139,7 +136,6 @@ bool SwObjectFormatterLayFrm::_AdditionalFormatObjsOnPage()
     {
         return false;
     }
-    // <--
 
 
     SwPageFrm& rPageFrm = static_cast<SwPageFrm&>(GetAnchorFrm());
@@ -163,7 +159,6 @@ bool SwObjectFormatterLayFrm::_AdditionalFormatObjsOnPage()
         {
             continue;
         }
-        // <--
         // #i33751#, #i34060# - method <GetPageFrmOfAnchor()>
         // is replaced by method <FindPageFrmOfAnchor()>. It's return value
         // have to be checked.
@@ -175,8 +170,6 @@ bool SwObjectFormatterLayFrm::_AdditionalFormatObjsOnPage()
         if ( pPageFrmOfAnchor &&
              // #i35911#
              pPageFrmOfAnchor->GetPhyPageNum() < rPageFrm.GetPhyPageNum() )
-             // <--
-        // <--
         {
             // if format of object fails, stop formatting and pass fail to
             // calling method via the return value.

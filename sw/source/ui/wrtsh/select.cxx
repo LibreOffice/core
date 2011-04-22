@@ -894,7 +894,6 @@ sal_Bool SwWrtShell::SelectTableRowCol( const Point& rPt, const Point* pEnd, boo
     }
     return sal_False;
 }
-// <--
 
 /*------------------------------------------------------------------------
  Beschreibung:  Selektion einer Tabellenzeile / Spalte

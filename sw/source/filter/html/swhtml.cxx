@@ -186,7 +186,6 @@ String HTMLReader::GetTemplateName() const
         // no OpenDocument Writer/Web template found.
         // search for OpenOffice.org Writer/Web template
         sTemplate.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM(".stw") );
-        // <--
         bSet = aPathOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
     }
 #endif
@@ -302,7 +301,6 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     // #i83625#
     nContextStMin( 0 ),
     nContextStAttrMin( 0 ),
-    // <--
     nOpenParaToken( 0 ),
     eJumpTo( JUMPTO_NONE ),
 #if OSL_DEBUG_LEVEL > 1
@@ -518,7 +516,6 @@ IMPL_LINK( SwHTMLParser, AsyncCallback, void*, /*pVoid*/ )
         // wurde der Import vom SFX abgebrochen?
         eState = SVPAR_ERROR;
     }
-    // <--
 
     GetAsynchCallLink().Call(0);
     return 0;

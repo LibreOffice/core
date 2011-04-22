@@ -44,11 +44,9 @@
 #include <editeng/lrspitem.hxx>
 #include <sortedobjs.hxx>
 #include <pagefrm.hxx>
-// <--
 #include <frmatr.hxx>
 // --> #i3317#
 #include <colfrm.hxx>
-// <--
 // --> #i35911#
 #include <layouter.hxx>
 
@@ -56,7 +54,6 @@
 using namespace ::com::sun::star;
 
 
-// <--
 // ============================================================================
 // --> #i28701# -
 // implementation of helper class <SwObjPositioningInProgress>
@@ -65,23 +62,19 @@ SwObjPositioningInProgress::SwObjPositioningInProgress( SdrObject& _rSdrObj ) :
     mpAnchoredObj( 0L ),
     // --> #i52904#
     mbOldObjPositioningInProgress( false )
-    // <--
 {
     mpAnchoredObj = ::GetUserCall( &_rSdrObj )->GetAnchoredObj( &_rSdrObj );
     // --> #i52904#
     mbOldObjPositioningInProgress = mpAnchoredObj->IsPositioningInProgress();
-    // <--
     mpAnchoredObj->SetPositioningInProgress( true );
 }
 SwObjPositioningInProgress::SwObjPositioningInProgress( SwAnchoredObject& _rAnchoredObj ) :
     mpAnchoredObj( &_rAnchoredObj ),
     // --> #i52904#
     mbOldObjPositioningInProgress( false )
-    // <--
 {
     // --> #i52904#
     mbOldObjPositioningInProgress = mpAnchoredObj->IsPositioningInProgress();
-    // <--
     mpAnchoredObj->SetPositioningInProgress( true );
 }
 
@@ -91,7 +84,6 @@ SwObjPositioningInProgress::~SwObjPositioningInProgress()
     {
         // --> #i52904#
         mpAnchoredObj->SetPositioningInProgress( mbOldObjPositioningInProgress );
-        // <--
     }
 }
 
@@ -104,7 +96,6 @@ SwAnchoredObject::SwAnchoredObject() :
     mpAnchorFrm( 0L ),
     // --> #i28701#
     mpPageFrm( 0L ),
-    // <--
     maRelPos(),
     maLastCharRect(),
     mnLastTopOfLine( 0L ),
@@ -115,20 +106,15 @@ SwAnchoredObject::SwAnchoredObject() :
     mbPositionLocked( false ),
     // --> #i40147#
     mbKeepPositionLockedForSection( false ),
-    // <--
     mbRestartLayoutProcess( false ),
-    // <--
     // --> #i35911#
     mbClearedEnvironment( false ),
-    // <--
     // --> #i3317#
     mbTmpConsiderWrapInfluence( false ),
-    // <--
     // --> #i68520#
     maObjRectWithSpaces(),
     mbObjRectWithSpacesValid( false ),
     maLastObjRect()
-    // <--
 {
 }
 
@@ -313,13 +299,11 @@ void SwAnchoredObject::CheckCharRectAndTopOfLine(
             // paragraph portion information.
             // --> #i26945# - use new method <FindAnchorCharFrm()>
             const SwTxtFrm& aAnchorCharFrm = *(FindAnchorCharFrm());
-            // <--
             if ( !_bCheckForParaPorInf || aAnchorCharFrm.HasPara() )
             {
                 _CheckCharRect( rAnch, aAnchorCharFrm );
                 _CheckTopOfLine( rAnch, aAnchorCharFrm );
             }
-            // <--
         }
     }
 }
@@ -382,7 +366,6 @@ void SwAnchoredObject::_CheckCharRect( const SwFmtAnchor& _rAnch,
                 {
                     UnlockPosition();
                 }
-                // <--
                 InvalidateObjPos();
             }
         }
@@ -421,7 +404,6 @@ void SwAnchoredObject::_CheckTopOfLine( const SwFmtAnchor& _rAnch,
                 {
                     UnlockPosition();
                 }
-                // <--
                 InvalidateObjPos();
             }
             // keep new top of line value
@@ -533,7 +515,6 @@ bool SwAnchoredObject::ConsiderObjWrapInfluenceOnObjPos() const
         bRet = true;
     }
     else if ( rObjFmt.getIDocumentSettingAccess()->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) )
-    // <--
     {
         const SwFmtAnchor& rAnchor = rObjFmt.GetAnchor();
         if ( ((rAnchor.GetAnchorId() == FLY_AT_CHAR) ||
@@ -544,7 +525,6 @@ bool SwAnchoredObject::ConsiderObjWrapInfluenceOnObjPos() const
             // objects in the layer Hell - see the text formatting.
             // Thus, it hasn't to be checked here.
             bRet = true;
-            // <--
         }
     }
 
@@ -630,7 +610,6 @@ void SwAnchoredObject::SetClearedEnvironment( const bool _bClearedEnvironment )
 {
     mbClearedEnvironment = _bClearedEnvironment;
 }
-// <--
 
 /** method to determine, if due to anchored object size and wrapping
     style, its layout environment is cleared.
@@ -651,7 +630,6 @@ bool SwAnchoredObject::HasClearedEnvironment() const
          !static_cast<const SwTxtFrm*>(GetAnchorFrm())->IsFollow() &&
          static_cast<const SwTxtFrm*>(GetAnchorFrm())->FindPageFrm()->GetPhyPageNum() >=
                 GetPageFrm()->GetPhyPageNum() )
-    // <--
     {
         const SwFrm* pTmpFrm = GetVertPosOrientFrm()->Lower();
         while ( pTmpFrm && pTmpFrm->IsLayoutFrm() && !pTmpFrm->IsTabFrm() )
@@ -698,7 +676,6 @@ const SwRect& SwAnchoredObject::GetObjRectWithSpaces() const
         // use bounding rectangle of anchored objects.
 //        maObjRectWithSpaces = GetObjRect();
         maObjRectWithSpaces = GetObjBoundRect();
-        // <--
         const SwFrmFmt& rFmt = GetFrmFmt();
         const SvxULSpaceItem& rUL = rFmt.GetULSpace();
         const SvxLRSpaceItem& rLR = rFmt.GetLRSpace();
@@ -734,7 +711,6 @@ void SwAnchoredObject::SetObjLeft( const SwTwips _nLeft)
         mbObjRectWithSpacesValid = false;
     }
 }
-// <--
 
 /** method to update anchored object in the <SwSortedObjs> lists
 
@@ -805,7 +781,6 @@ bool SwAnchoredObject::InvalidationOfPosAllowed() const
     // --> Check, if page frame layout is in progress,
     // isn't needed, because of anchored object, whose are moved forward.
     return !PositionLocked();
-    // <--
 }
 
 /** method to determine the page frame, on which the 'anchor' of
@@ -829,7 +804,6 @@ SwPageFrm* SwAnchoredObject::FindPageFrmOfAnchor()
     {
         // --> #i26945# - use new method <GetAnchorFrmContainingAnchPos()>
         pRetPageFrm = GetAnchorFrmContainingAnchPos()->FindPageFrm();
-        // <--
     }
 
     return pRetPageFrm;
@@ -861,7 +835,6 @@ SwTxtFrm* SwAnchoredObject::FindAnchorCharFrm()
                         GetFrmAtOfst( rAnch.GetCntntAnchor()->nContent.GetIndex() ));
         }
     }
-    // <--
 
     return pAnchorCharFrm;
 }
@@ -889,14 +862,12 @@ void SwAnchoredObject::SetTmpConsiderWrapInfluence( const bool _bTmpConsiderWrap
         SwLayouter::InsertObjForTmpConsiderWrapInfluence( *(GetFrmFmt().GetDoc()),
                                                           *this );
     }
-    // <--
 }
 
 bool SwAnchoredObject::IsTmpConsiderWrapInfluence() const
 {
     return mbTmpConsiderWrapInfluence;
 }
-// <--
 
 void SwAnchoredObject::SetTmpConsiderWrapInfluenceOfOtherObjs( const bool bTmpConsiderWrapInfluence )
 {
@@ -1018,7 +989,6 @@ Point SwAnchoredObject::GetRelPosToPageFrm( const bool _bFollowTextFlow,
     {
         aRelPos -= pFrm->Frm().Pos();
     }
-    // <--
 
     return aRelPos;
 }

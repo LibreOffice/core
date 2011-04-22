@@ -71,7 +71,6 @@
 
 
 using namespace ::com::sun::star;
-// <--
 
 SV_IMPL_PTRARR( SwPageFlyCache, SwFlyCachePtr )
 
@@ -636,7 +635,6 @@ sal_Bool SwLayHelper::CheckInsertPage()
                               SwFlowFrm::CastFlowFrm( rpFrm )->IsFollow() ?
                               0 :
                               rDesc.GetPageDesc();
-    // <--
 
     sal_Bool bBrk = nParagraphCnt > nMaxParaPerPage || rbBreakAfter;
     rbBreakAfter = rBrk.GetBreak() == SVX_BREAK_PAGE_AFTER ||
@@ -751,7 +749,6 @@ void lcl_ApplyWorkaroundForB6375613( SwFrm* p_pFirstFrmOnNewPage )
         }
     }
 }
-// <--
 
 /*
  * SwLayHelper::CheckInsert
@@ -885,7 +882,6 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                             SwTabFrm* pTab = (SwTabFrm*)rpFrm;
                             // #i33629#, #i29955#
                             ::RegistFlys( pTab->FindPageFrm(), pTab );
-                            // <--
                             SwFrm *pRow = pTab->Lower();
                             SwTabFrm *pFoll = new SwTabFrm( *pTab );
 
@@ -952,7 +948,6 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                 {
                     lcl_ApplyWorkaroundForB6375613( rpFrm );
                 }
-                // <--
                 _CheckFlyCache( pLastPage );
                 if( rpPrv && rpPrv->IsTxtFrm() && !rpPrv->GetValidSizeFlag() )
                     rpPrv->Frm().Height( rpPrv->GetUpper()->Prt().Height() );
@@ -1153,7 +1148,6 @@ sal_Bool SwLayHelper::CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly )
                                                  ? pPage->GetPrev()
                                                  : pPage->GetNext() );
             }
-            // <--
             if( pPage )
             {
                 rpPage = pPage;

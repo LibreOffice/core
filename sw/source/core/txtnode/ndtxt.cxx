@@ -1499,7 +1499,6 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
                  ( nDestStart ||
                    pDest->HasSwAttrSet() ||
                    nLen != pDest->GetTxt().Len() ) )
-            // <--
             {
                 SfxItemSet aCharSet( pDest->GetDoc()->GetAttrPool(),
                                     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
@@ -1546,7 +1545,6 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
              ( nDestStart ||
                pDest->HasSwAttrSet() ||
                nLen != pDest->GetTxt().Len() ) )
-        // <--
         {
             SfxItemSet aCharSet( pDest->GetDoc()->GetAttrPool(),
                                 RES_CHRATR_BEGIN, RES_CHRATR_END-1,
@@ -2232,7 +2230,6 @@ void SwTxtNode::EraseText(const SwIndex &rIdx, const xub_StrLen nCount,
                  // #i62668# Ruby text attribute must be
                  // treated just like toxmark and refmarks
                     (RES_TXTATR_CJK_RUBY == nWhich) ) )
-                 // <--
             || ( (nHintStart < nEndIdx)     &&
                  pHt->HasDummyChar()        )
            )
@@ -2428,7 +2425,6 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, sal_Bool bNext,
     SwAttrSet* pNewAttrSet = 0;
     // #i75353#
     bool bClearHardSetNumRuleWhenFmtCollChanges( false );
-    // <--
     if( HasSwAttrSet() )
     {
         pNewAttrSet = new SwAttrSet( *GetpSwAttrSet() );
@@ -2483,7 +2479,6 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, sal_Bool bNext,
                     // No clear of hard set numbering rule at an outline paragraph at this point.
                     // Only if the paragraph style changes - see below.
                     bClearHardSetNumRuleWhenFmtCollChanges = true;
-                    // <--
                 }
                 bRemoveFromCache = sal_True;
             }
@@ -2515,7 +2510,6 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, sal_Bool bNext,
         //   previous implementation.
         if ( !bNext && !IsCountedInList() )
             SetCountedInList(true);
-        // <--
     }
 
     // jetzt kann es sein, das durch die Nummerierung dem neuen Node eine
@@ -2545,9 +2539,7 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, sal_Bool bNext,
                 SetInCache( sal_False );
             }
         }
-        // <--
     }
-    // <--
     ChgFmtColl( pNextColl );
 
     return pNode;
@@ -3448,13 +3440,11 @@ namespace {
                     rTxtNode.GetDoc()->ResetAttrs( aPam, sal_False,
                                                    &aResetAttrsArray,
                                                    false );
-                    // <--
                     // #i70748#
                     if ( dynamic_cast<const SfxUInt16Item &>(rTxtNode.GetAttr( RES_PARATR_OUTLINELEVEL, sal_False )).GetValue() > 0 )
                     {
                         rTxtNode.SetEmptyListStyleDueToSetOutlineLevelAttr();
                     }
-                    // <--
                 }
             }
         }
@@ -3495,7 +3485,6 @@ void SwTxtNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewVal
     SwDoc * pDoc = GetDoc();
     // #125329# - assure that text node is in document nodes array
     if ( pDoc && !pDoc->IsInDtor() && &pDoc->GetNodes() == &GetNodes() )
-    // <--
     {
         pDoc->GetNodes().UpdateOutlineNode(*this);
     }
@@ -3634,7 +3623,6 @@ void SwTxtNode::ResetEmptyListStyleDueToResetOutlineLevelAttr()
         mbEmptyListStyleSetDueToSetOutlineLevelAttr = false;
     }
 }
-// <--
 
 
 void SwTxtNode::SetAttrListLevel( int nLevel )
@@ -3718,7 +3706,6 @@ bool SwTxtNode::HasVisibleNumberingOrBullet() const
         {
             bRet = true;
         }
-        // <--
     }
 
     return bRet;
@@ -4105,7 +4092,6 @@ bool SwTxtNode::IsHidden() const
 
     return false;
 }
-// <--
 
 namespace {
     // Helper class for special handling of setting attributes at text node:
@@ -4152,7 +4138,6 @@ namespace {
             bool mbUpdateListCount;
             // #i70748#
             bool mbOutlineLevelSet;
-            // <--
     };
 
     HandleSetAttrAtTxtNode::HandleSetAttrAtTxtNode( SwTxtNode& rTxtNode,
@@ -4164,7 +4149,6 @@ namespace {
           mbUpdateListCount( false ),
           // #i70748#
           mbOutlineLevelSet( false )
-          // <--
     {
         switch ( pItem.Which() )
         {
@@ -4181,7 +4165,6 @@ namespace {
                     // #i105562#
                     //
                     mrTxtNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
-                    // <--
                 }
             }
             break;
@@ -4268,7 +4251,6 @@ namespace {
                 }
             }
             break;
-            // <--
         }
 
     }
@@ -4282,7 +4264,6 @@ namespace {
           mbUpdateListCount( false ),
           // #i70748#
           mbOutlineLevelSet( false )
-          // <--
     {
         const SfxPoolItem* pItem = 0;
         // handle RES_PARATR_NUMRULE
@@ -4297,7 +4278,6 @@ namespace {
                 mbAddTxtNodeToList = true;
                 // #i70748#
                 mrTxtNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
-                // <--
             }
         }
 
@@ -4376,7 +4356,6 @@ namespace {
                 mbOutlineLevelSet = true;
             }
         }
-        // <--
     }
 
     HandleSetAttrAtTxtNode::~HandleSetAttrAtTxtNode()
@@ -4428,7 +4407,6 @@ namespace {
                 }
             }
         }
-        // <--
     }
     // End of class <HandleSetAttrAtTxtNode>
 }
@@ -4522,7 +4500,6 @@ namespace {
                     mrTxtNode.GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_ID, sal_False ) == SFX_ITEM_SET;
                 // #i92898#
                 mbListStyleOrIdReset = true;
-                // <--
             }
 
             if ( !bRemoveFromList )
@@ -4551,7 +4528,6 @@ namespace {
             {
                 mrTxtNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
             }
-            // <--
         }
         else
         {
@@ -4567,7 +4543,6 @@ namespace {
                     mrTxtNode.GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_ID, sal_False ) == SFX_ITEM_SET;
                 // #i92898#
                 mbListStyleOrIdReset = true;
-                // <--
             }
             // #i70748#
             // RES_PARATR_OUTLINELEVEL
@@ -4575,7 +4550,6 @@ namespace {
             {
                 mrTxtNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
             }
-            // <--
 
             if ( !bRemoveFromList )
             {
@@ -4628,7 +4602,6 @@ namespace {
                           mrTxtNode.GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_ID, sal_False ) == SFX_ITEM_SET );
                     // #i92898#
                     mbListStyleOrIdReset = true;
-                    // <--
                 }
                 // #i70748#
                 // RES_PARATR_OUTLINELEVEL
@@ -4636,7 +4609,6 @@ namespace {
                 {
                     mrTxtNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
                 }
-                // <--
 
                 if ( !bRemoveFromList )
                 {
@@ -4680,7 +4652,6 @@ namespace {
         }
         // #i70748#
         mrTxtNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
-        // <--
     }
 
     HandleResetAttrAtTxtNode::~HandleResetAttrAtTxtNode()
@@ -4706,7 +4677,6 @@ namespace {
                         mrTxtNode.SetAttrListLevel( nNewListLevel );
                     }
                 }
-                // <--
                 mrTxtNode.AddToList();
             }
             // #i70748#
@@ -4716,7 +4686,6 @@ namespace {
             {
                 mrTxtNode.SetEmptyListStyleDueToSetOutlineLevelAttr();
             }
-            // <--
         }
 
         if ( mrTxtNode.IsInList() )
@@ -4785,7 +4754,6 @@ sal_uInt16 SwTxtNode::ResetAllAttr()
 
     return nRet;
 }
-// <--
 
 // sw::Metadatable
 ::sfx2::IXmlIdRegistry& SwTxtNode::GetRegistry()

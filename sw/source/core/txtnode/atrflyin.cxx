@@ -277,7 +277,6 @@ SwFlyInCntFrm *SwTxtFlyCnt::_GetFlyFrm( const SwFrm *pCurrFrm )
     // fly frame and its content.
     SwObjectFormatter::FormatObj( *pFly, const_cast<SwFrm*>(pCurrFrm),
                                   pCurrFrm->FindPageFrm() );
-    // <--
 
     return pFly;
 }

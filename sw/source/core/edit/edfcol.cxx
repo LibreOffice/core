@@ -89,7 +89,6 @@ void SwEditShell::SetTxtFmtColl( SwTxtFmtColl *pFmt,
     GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_SETFMTCOLL, &aRewriter);
     EndAllAction();
 }
-// <--
 
 
 SwTxtFmtColl* SwEditShell::MakeTxtFmtColl(const String& rFmtCollName,
@@ -113,7 +112,6 @@ void SwEditShell::FillByEx(SwTxtFmtColl* pColl, sal_Bool bReset)
     {
         // #i73790# - method renamed
         pColl->ResetAllFmtAttr();
-        // <--
     }
 
     SwPaM * pCrsr = GetCrsr();

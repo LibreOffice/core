@@ -451,7 +451,6 @@ void SwSection::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                 pNewSet->ClearItem( RES_EDIT_IN_READONLY );
                 pOldSet->ClearItem( RES_EDIT_IN_READONLY );
             }
-            // <--
 
             if( SFX_ITEM_SET == pNewSet->GetItemState(
                         RES_FTN_AT_TXTEND, sal_False, &pItem ) ||
@@ -790,7 +789,6 @@ void SwSectionFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                 pNewSet->ClearItem( RES_EDIT_IN_READONLY );
                 pOldSet->ClearItem( RES_EDIT_IN_READONLY );
             }
-            // <--
 
             if( SFX_ITEM_SET == pNewSet->GetItemState(
                                     RES_FTN_AT_TXTEND, sal_False, &pItem ))

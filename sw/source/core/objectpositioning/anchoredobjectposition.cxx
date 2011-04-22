@@ -449,7 +449,6 @@ SwTwips SwAnchoredObjectPosition::_ImplAdjustVertRelPos( const SwTwips nTopOfAnc
     {
         // #i31805# - consider value of <_bCheckBottom>
         if ( !bVertL2R )
-        // <--
         {
             if ( bCheckBottom &&
                  nTopOfAnch - nAdjustedRelPosY - aObjSize.Width() <

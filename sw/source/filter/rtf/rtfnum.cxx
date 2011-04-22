@@ -634,7 +634,6 @@ void SwRTFParser::ReadListOverrideTable()
                     }
                 }
             }
-            // <--
 
             pStyle->aAttrSet.ClearItem( FN_PARAM_NUM_LEVEL );
 

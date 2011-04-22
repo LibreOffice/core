@@ -403,7 +403,6 @@ public:
     {
         // #i73790# - method renamed
         pColl->ResetAllFmtAttr();
-        // <--
         pColl->SetAuto(sal_False); // nach Empfehlung JP
     }
     void Derived(SwTxtFmtColl* pBase)

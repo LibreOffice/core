@@ -303,6 +303,5 @@ const String SwNoTxtNode::GetDescription() const
 
     return pFlyFmt->GetObjDescription();
 }
-// <--
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -75,7 +75,6 @@
 #include <cstdio>
 // #i12836# enhanced pdf export
 #include <EnhancedPDFExportHelper.hxx>
-// <--
 
 #include <unomid.h>
 
@@ -108,7 +107,6 @@ namespace numfunc
     extern const String& GetDefBulletFontname();
     extern bool IsDefBulletFontUserDefined();
 }
-// <--
 
 #if OSL_DEBUG_LEVEL > 1
 // Test2: WYSIWYG++
@@ -697,7 +695,6 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
         aDrawInf.SetNumberOfBlanks( rPor.InTxtGrp() ?
                                     static_cast<const SwTxtPortion&>(rPor).GetSpaceCnt( *this, nCharCnt ) :
                                     0 );
-        // <--
     }
 
     aDrawInf.SetSpace( nSpaceAdd );
@@ -1227,7 +1224,6 @@ void SwTxtPaintInfo::_DrawBackBrush( const SwLinePortion &rPor ) const
 
         // #i16816# tagged pdf support
         SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pTmpOut );
-        // <--
 
         pTmpOut->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
 
@@ -1600,7 +1596,6 @@ xub_StrLen SwTxtFormatInfo::ScanPortionEnd( const xub_StrLen nStart,
     const xub_Unicode cThousandSep  = ',' == cTabDec ? '.' : ',';
     // #i45951# German (Switzerland) uses ' as thousand separator
     const xub_Unicode cThousandSep2 = ',' == cTabDec ? '.' : '\'';
-    // <--
 
     bool bNumFound = false;
     const bool bTabCompat = GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT);

@@ -292,7 +292,6 @@ public:
     // #i42921# - add parameter <bVerticalMode>
     sal_Bool RulerMarginDrag( const MouseEvent& rMEvt,
                                      const bool bVerticalMode );
-    // <--
 
     /** #i42732# display status of font size/name depending on either the input
         language or the selection position depending on what has changed lately

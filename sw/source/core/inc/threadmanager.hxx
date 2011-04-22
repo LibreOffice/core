@@ -64,7 +64,6 @@ class ThreadManager : public IThreadListenerOwner
         // --> IThreadListenerOwner
         virtual boost::weak_ptr< IFinishedThreadListener > GetThreadListenerWeakRef();
         virtual void NotifyAboutFinishedThread( const oslInterlockedCount nThreadID );
-        // <--
 
         /** initialization
 

@@ -991,7 +991,6 @@ sal_Bool SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd 
             {
                 bRet = (SimpleTableToText(rSrcNd) == SimpleTableToText(rDstNd));
             }
-            // <--
         }
         break;
 
@@ -1053,7 +1052,6 @@ sal_Bool SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd 
             bRet = CompareNode(
                 *rSrcNd.StartOfSectionNode(), *rDstNd.StartOfSectionNode());
         }
-        // <--
 
         break;
     }
@@ -1459,7 +1457,6 @@ void SwCompareData::SetRedlinesToDoc( sal_Bool bUseDocInfo )
                 pTmp->GetPoint()->nContent.Assign( pContentNode,
                         (pContentNode) ? pContentNode->Len() : 0 );
             }
-            // <--
 
             rDoc.DeleteRedline( *pTmp, false, USHRT_MAX );
 
@@ -1492,7 +1489,6 @@ void SwCompareData::SetRedlinesToDoc( sal_Bool bUseDocInfo )
                 pTmp->GetPoint()->nContent.Assign( pContentNode,
                         (pContentNode) ? pContentNode->Len() : 0 );
             }
-            // <--
         } while( pInsRing != ( pTmp = (SwPaM*)pTmp->GetNext() ));
         SwRedlineData aRedlnData( nsRedlineType_t::REDLINE_INSERT, nAuthor, aTimeStamp,
                                     aEmptyStr, 0, 0 );

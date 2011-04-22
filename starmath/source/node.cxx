@@ -874,7 +874,6 @@ void SmTableNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
         // between middle and baseline for single letter
         nFormulaBaseline += aRect.GetBaseline() - aRect.GetAlignM();
     }
-    // <--
 }
 
 

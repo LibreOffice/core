@@ -764,7 +764,6 @@ static sal_Char const sDoubleSpace[] = "  ";
                     const Point aNewPos( aInf.GetPos().X(), rInf.GetUnderFnt()->GetPos().Y() );
                     rInf.GetUnderFnt()->SetPos( aNewPos );
                 }
-                // <--
 
                 pThis->Width( nOldWidth - nSpaceOffs + 12 );
                 {
@@ -867,7 +866,6 @@ sal_Bool SwGrfNumPortion::Format( SwTxtFormatInfo &rInf )
         SetLen( 0 );
     }
     Width( nFixWidth + nFollowedByWidth );
-    // <--
     const sal_Bool bFull = rInf.Width() < rInf.X() + Width();
     const sal_Bool bFly = rInf.GetFly() ||
         ( rInf.GetLast() && rInf.GetLast()->IsFlyPortion() );
@@ -891,7 +889,6 @@ sal_Bool SwGrfNumPortion::Format( SwTxtFormatInfo &rInf )
     long nDiff = mbLabelAlignmentPosAndSpaceModeActive
                  ? 0
                  : rInf.Left() - rInf.First() + rInf.ForcedLeftMargin();
-    // <--
     // Ein Vorschlag von Juergen und Volkmar:
     // Der Textteil hinter der Numerierung sollte immer
     // mindestens beim linken Rand beginnen.

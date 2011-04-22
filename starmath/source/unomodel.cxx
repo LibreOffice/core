@@ -305,10 +305,8 @@ PropertySetInfo * lcl_createModelPropertyInfo ()
         { RTL_CONSTASCII_STRINGPARAM( "TopMargin"                         ),    HANDLE_TOP_MARGIN                    ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_TOPSPACE               },
         // #i33095# Security Options
         { RTL_CONSTASCII_STRINGPARAM( "LoadReadonly" ), HANDLE_LOAD_READONLY, &::getBooleanCppuType(), PROPERTY_NONE, 0 },
-        // <--
         // #i972#
         { RTL_CONSTASCII_STRINGPARAM( "BaseLine"), HANDLE_BASELINE, &::getCppuType((const sal_Int16*)0), PROPERTY_NONE, 0},
-        // <--
         { NULL, 0, 0, NULL, 0, 0 }
     };
     PropertySetInfo *pInfo = new PropertySetInfo ( aModelPropertyInfoMap );
@@ -719,7 +717,6 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                     pDocSh->SetLoadReadonly( bReadonly );
                 break;
             }
-            // <--
         }
     }
 
@@ -933,7 +930,6 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
                  *pValue <<= pDocSh->IsLoadReadonly();
                 break;
             }
-            // <--
             // #i972#
             case HANDLE_BASELINE:
             {
@@ -948,7 +944,6 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
                 }
             }
             break;
-            // <--
         }
     }
 }

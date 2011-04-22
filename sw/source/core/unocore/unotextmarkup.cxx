@@ -430,7 +430,6 @@ void SwXTextMarkup::Modify( const SfxPoolItem* /*pOld*/, const SfxPoolItem* /*pN
     // therefore I remove the assertion in SwModify::_Remove()
     if ( GetRegisteredIn() )
         GetRegisteredInNonConst()->Remove( this );
-    // <--
 
     SolarMutexGuard aGuard;
     mpTxtNode = 0;

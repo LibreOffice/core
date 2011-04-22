@@ -366,7 +366,6 @@ sal_uInt16 SwHTMLTableLayout::GetBrowseWidth( const SwDoc& rDoc )
     // Investigation reveals that all calls can handle the case that no browse
     // width is provided.
     return GetBrowseWidthByVisArea( rDoc );
-    // <--
 }
 
 sal_uInt16 SwHTMLTableLayout::GetBrowseWidthByTabFrm(

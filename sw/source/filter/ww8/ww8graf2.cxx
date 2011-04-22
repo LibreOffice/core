@@ -86,7 +86,6 @@ void wwZOrderer::InsertEscherObject( SdrObject* pObject,
                                      const bool _bInHeaderFooter )
 {
     sal_uLong nInsertPos = GetEscherObjectPos( nSpId, _bInHeaderFooter );
-// <--
     InsertObject(pObject, nInsertPos + mnNoInitialObjects + mnInlines);
 }
 
@@ -151,7 +150,6 @@ sal_uLong wwZOrderer::GetEscherObjectPos( sal_uLong nSpId,
             ++aIter;
         }
     }
-    // <--
     while (aIter != aEnd)
     {
         // insert object in page header|footer
@@ -160,7 +158,6 @@ sal_uLong wwZOrderer::GetEscherObjectPos( sal_uLong nSpId,
         {
             break;
         }
-        // <--
         if ( aIter->mnEscherShapeOrder > nFound )
             break;
         nRet += aIter->mnNoInlines+1;
@@ -169,7 +166,6 @@ sal_uLong wwZOrderer::GetEscherObjectPos( sal_uLong nSpId,
     maEscherLayer.insert(aIter, EscherShape( nFound, _bInHeaderFooter ) );
     return nRet;
 }
-// <--
 
 // InsertObj() fuegt das Objekt in die Sw-Page ein und merkt sich die Z-Pos in
 // einem VarArr

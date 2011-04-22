@@ -558,7 +558,6 @@ void SwUndoDrawDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         {
             static_cast<SwDrawFrmFmt*>(rSave.pFmt)->PosAttrSet();
         }
-        // <--
     }
     rContext.SetSelections(0, pMarkLst);
 }

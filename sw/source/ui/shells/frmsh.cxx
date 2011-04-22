@@ -52,7 +52,6 @@
 // #i73249#
 #include <svx/svdview.hxx>
 #include <vcl/msgbox.hxx>
-// <--
 
 #include <doc.hxx>
 #include <fmturl.hxx>
@@ -88,7 +87,6 @@
 #include "misc.hrc"
 // #i73249#
 #include <svx/dialogs.hrc>
-// <--
 
 #include <sfx2/filedlghelper.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
@@ -773,7 +771,6 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             }
         }
         break;
-        // <--
         default:
             OSL_ENSURE( !this, "wrong dispatcher" );
             return;
@@ -1028,7 +1025,6 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
 
                 }
                 break;
-                // <--
                 default:
                     /* do nothing */;
                     break;

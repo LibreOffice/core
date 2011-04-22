@@ -345,7 +345,6 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     // at the document instance, the document is modified. Thus, reset this
     // status here. Note: In method <SubInitNew()> this is also done.
     pDoc->ResetModified();
-    // <--
 
     return bRet;
 }

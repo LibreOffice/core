@@ -106,7 +106,6 @@ TabDialog DLG_TAB_OUTLINE
     // --> OD 2008-04-14 #outlinelevel#
     // dialog title is now given by resource STR_OUTLINE_NUMBERING
 //    Text [ en-US ] = "Outline Numbering" ;
-    // <--
     Moveable = TRUE ;
     TabControl 1
     {

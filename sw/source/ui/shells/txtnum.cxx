@@ -139,7 +139,6 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
             SwNumRule aRule( GetShell().GetUniqueNumRuleName(),
                              // #i89178#
                              numfunc::GetDefaultPositionAndSpaceMode() );
-                             // <--
             SvxNumRule aSvxRule = aRule.MakeSvxNumRule();
             const bool bRightToLeft = GetShell().IsInRightToLeftText( 0 );
 
@@ -160,7 +159,6 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                     {
                         aFmt.SetNumAdjust( SVX_ADJUST_RIGHT );
                     }
-                    // <--
                     aSvxRule.SetLevel( n, aFmt, sal_False );
                 }
                 aSvxRule.SetFeatureFlag(NUM_ENABLE_EMBEDDED_BMP, sal_False);
@@ -193,7 +191,6 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                                         : GetShell().GetUniqueNumRuleName(),
                                     // #i89178#
                                     numfunc::GetDefaultPositionAndSpaceMode() );
-                                    // <--
                 aSetRule.SetSvxRule( *pSetRule, GetShell().GetDoc());
                 aSetRule.SetAutoRule( sal_True );
                 // No start of new list, if an existing list style is edited.
@@ -212,7 +209,6 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                 SwNumRule aSetRule( GetShell().GetUniqueNumRuleName(),
                                     // #i89178#
                                     numfunc::GetDefaultPositionAndSpaceMode() );
-                                    // <--
                 aSetRule.SetSvxRule(*pSetRule, GetShell().GetDoc());
                 aSetRule.SetAutoRule( sal_True );
                 // start new list

@@ -2101,7 +2101,6 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
             {
                 aLR.SetTxtLeft( aLR.GetTxtLeft() + pFmt->GetAbsLSpace() );
             }
-            // <--
 
             if( rNode.IsNumbered() && rNode.IsCountedInList() )
             {
@@ -2114,7 +2113,6 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                     else
                         aLR.SetTxtFirstLineOfst(GetWordFirstLineOffset(*pFmt));
                 }
-                // <--
 
                 // correct fix for issue i94187
                 if (SFX_ITEM_SET !=
@@ -2216,7 +2214,6 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 // put back the new item
                 pTmpSet->Put( aLRSpace );
             }
-            // <--
 
             // assure that numbering rule is in <pTmpSet>
             if (SFX_ITEM_SET != pTmpSet->GetItemState(RES_PARATR_NUMRULE, false) )
@@ -2307,7 +2304,6 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 }
             }
         }
-        // <--
 
         const SfxItemSet* pNewSet = pTmpSet ? pTmpSet : rNode.GetpSwAttrSet();
         if( pNewSet )

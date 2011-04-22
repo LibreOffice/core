@@ -35,7 +35,6 @@ class SwTxtNode;
 class SwTxtFrm;
 // --> #i26945#
 class SwRowFrm;
-// <--
 
 typedef std::map< const SwTxtNode*, const sal_uInt32 > NodeMap;
 typedef std::map< const SwTxtNode*, const sal_uInt32 >::const_iterator NodeMapIter;
@@ -56,14 +55,12 @@ class SwMovedFwdFrmsByObjPos
 
         // --> #i40155#
         void Remove( const SwTxtFrm& _rTxtFrm );
-        // <--
 
         bool FrmMovedFwdByObjPos( const SwTxtFrm& _rTxtFrm,
                                   sal_uInt32& _ornToPageNum ) const;
 
         // --> #i26945#
         bool DoesRowContainMovedFwdFrm( const SwRowFrm& _rRowFrm ) const;
-        // <--
 
         void Clear() { maMovedFwdFrms.clear(); };
 };

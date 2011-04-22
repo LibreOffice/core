@@ -619,7 +619,6 @@ SwTableNode* SwNodes::InsertTable( const SwNodeIndex& rNdIdx,
                     ++pIdx;
                 }
             }
-            // <--
 
             new SwEndNode( aIdx, *pSttNd );
         }
@@ -1414,7 +1413,6 @@ sal_Bool SwDoc::TableToText( const SwTableNode* pTblNd, sal_Unicode cCh )
     SwEditShell* pESh = GetEditShell();
     if( pESh && pESh->IsTableMode() )
         pESh->ClearMark();
-    // <--
 
     SwNodeRange aRg( *pTblNd, 0, *pTblNd->EndOfSectionNode() );
     SwUndoTblToTxt* pUndo = 0;
@@ -2225,7 +2223,6 @@ sal_uInt16 SwDoc::MergeTbl( SwPaM& rPam )
 
     // #i33394#
     GetIDocumentUndoRedo().StartUndo( UNDO_TABLE_MERGE, NULL );
-    // <--
 
     RedlineMode_t eOld = GetRedlineMode();
     SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
@@ -2404,7 +2401,6 @@ void SwTableNode::MakeFrms( SwNodeIndex* pIdxBehind )
                             dynamic_cast<SwTxtFrm*>(pNew->FindPrevCnt( true )) );
             }
         }
-        // <--
         ((SwTabFrm*)pNew)->RegistFlys();
     }
 }
@@ -2442,7 +2438,6 @@ void SwTableNode::DelFrms()
                             dynamic_cast<SwTxtFrm*>(pFrm->FindPrevCnt( true )) );
                     }
                 }
-                // <--
                 pFrm->Cut();
                 delete pFrm;
                 bAgain = sal_True;
@@ -2572,7 +2567,6 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* ,
         const SwCursor aTmpCrsr( aPos, 0, false );
         ::GetTblSel( aTmpCrsr, aBoxes, nsSwTblSearchType::TBLSEARCH_COL );
     }
-    // <--
 
     // Make code robust:
     if ( aDelCheck.HasBeenDeleted() )
@@ -2684,7 +2678,6 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* ,
     // code robust by checking count of rFill.
     if ( rFill.Count() ) rFill.Remove( 0, 1 );
     if ( rFill.Count() ) rFill.Remove( rFill.Count() - 1 , 1 );
-    // <--
     rFill.SetLastRowAllowedToChange( !pTab->HasFollowFlowLine() );
 }
 

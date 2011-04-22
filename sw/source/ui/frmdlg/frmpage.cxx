@@ -500,7 +500,6 @@ SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(SvxSwFramePosString
         eStringId = SwFPos::FROMLEFT;
         return eStringId;
     }
-    // <--
     if ( bVertical )
     {
         //exchange horizontal strings with vertical strings and vice versa
@@ -538,7 +537,6 @@ SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(SvxSwFramePosString
             {SwFPos::REL_FRM_TOP,    SwFPos::REL_FRM_LEFT },
             {SwFPos::REL_FRM_BOTTOM, SwFPos::REL_FRM_RIGHT }
         };
-        // <--
         sal_uInt16 nIndex;
         for(nIndex = 0; nIndex < sizeof(aHoriIds) / sizeof(StringIdPair_Impl); ++nIndex)
         {
@@ -568,7 +566,6 @@ SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(SvxSwFramePosString
                     break;
                 }
             }
-            // <--
         }
     }
     return eStringId;
@@ -675,7 +672,6 @@ SwFrmPage::SwFrmPage ( Window *pParent, const SfxItemSet &rSet ) :
     bNoModifyHdl(sal_True),
     // --> OD 2009-08-31 #mongolianlayout# - no used
 //    bVerticalChanged(sal_False),
-    // <--
     bIsVerticalFrame(sal_False),
     bIsVerticalL2R(sal_False),
     bIsInRightToLeft(sal_False),
@@ -828,7 +824,6 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
         // --> OD 2009-08-31 #mongolianlayout#
 //        if ( !bVerticalChanged && pSh->IsFrmVertical(sal_True, bIsInRightToLeft) )
         if ( pSh->IsFrmVertical( sal_True, bIsInRightToLeft, bIsVerticalL2R ) )
-        // <--
         {
             String sHLabel = aHorizontalFT.GetText();
             aHorizontalFT.SetText(aVerticalFT.GetText());
@@ -1323,7 +1318,6 @@ sal_uInt16 SwFrmPage::FillPosLB(const FrmMap* _pMap,
                                                      bIsVerticalFrame,
                                                      bIsVerticalL2R,
                                                      bIsInRightToLeft);
-            // <--
             String sEntry(aFramePosString.GetString(eStrId));
             if (_rLB.GetEntryPos(sEntry) == LISTBOX_ENTRY_NOTFOUND)
             {
@@ -1390,7 +1384,6 @@ sal_uLong SwFrmPage::FillRelLB( const FrmMap* _pMap,
                                                                 bIsVerticalFrame,
                                                                 bIsVerticalL2R,
                                                                 bIsInRightToLeft);
-                            // <--
                             String sEntry = aFramePosString.GetString(sStrId1);
                             sal_uInt16 nPos = _rLB.InsertEntry(sEntry);
                             _rLB.SetEntryData(nPos, &aAsCharRelationMap[nRelPos]);
@@ -1456,7 +1449,6 @@ sal_uLong SwFrmPage::FillRelLB( const FrmMap* _pMap,
                                                                 bIsVerticalFrame,
                                                                 bIsVerticalL2R,
                                                                 bIsInRightToLeft);
-                            // <--
                             String sEntry = aFramePosString.GetString(eStrId1);
                             sal_uInt16 nPos = _rLB.InsertEntry(sEntry);
                             _rLB.SetEntryData(nPos, &aRelationMap[nRelPos]);

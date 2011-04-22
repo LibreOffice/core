@@ -2193,7 +2193,6 @@ sal_uInt16 SwRefPageGetFieldType::MakeSetList( _SetGetExpFlds& rTmpLst )
                     // #i31868#
                     // Check if pFrm is not yet connected to the layout.
                     !pFrm->FindPageFrm() )
-                    // <--
                 {
                     // einen sdbcx::Index fuers bestimmen vom TextNode anlegen
                     SwNodeIndex aIdx( rTxtNd );

@@ -182,7 +182,6 @@ void SwAccessiblePortionData::Special(
             sDisplay = aTmpBuffer.makeStringAndClear();
             break;
         }
-        // <--
         default:
             sDisplay = rText;
             break;
@@ -348,7 +347,6 @@ void SwAccessiblePortionData::GetBoundaryOfLine( const sal_Int32 nLineNo,
 {
     FillBoundary( rLineBound, aLineBreaks, nLineNo );
 }
-// <--
 
 void SwAccessiblePortionData::GetLastLineBoundary(
     Boundary& rBound ) const
@@ -472,7 +470,6 @@ size_t SwAccessiblePortionData::FindLastBreak(
     {
         nResult++;
     }
-    // <--
 
     return nResult;
 }

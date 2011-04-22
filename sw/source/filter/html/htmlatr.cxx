@@ -628,7 +628,6 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
             {
                 nNumStart = static_cast< sal_uInt16 >(pTxtNd->GetActualListStartValue());
             }
-            // <--
             DBG_ASSERT( rHWrt.nLastParaToken == 0,
                 "<PRE> wurde nicht vor <LI> beendet." );
         }
@@ -2410,7 +2409,6 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     // because the outline numbering isn't exported as a numbering - see <SwHTMLNumRuleInfo::Set(..)>
     if ( pNd->IsOutline() &&
          pNd->GetNumRule() == pNd->GetDoc()->GetOutlineNumRule() )
-    // <--
     {
         aOutlineTxt = pNd->GetNumString();
         nOffset = nOffset + aOutlineTxt.Len();

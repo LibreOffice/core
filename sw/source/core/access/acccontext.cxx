@@ -431,7 +431,6 @@ void SwAccessibleContext::InvalidateChildrenStates( const SwFrm* _pFrm,
         ++aIter;
     }
 }
-// <--
 
 void SwAccessibleContext::DisposeChildren( const SwFrm *pFrm,
                                        sal_Bool bRecursive )
@@ -1255,7 +1254,6 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
                 {
                     OSL_FAIL( "<SwAccessibleContext::InvalidateChildPosOrSize(..)> - no accessible shape found." );
                 }
-                // <--
             }
             else if ( rChildFrmOrObj.GetWindow() )
             {
@@ -1361,7 +1359,6 @@ void SwAccessibleContext::InvalidateStates( tAccessibleStates _nStates )
         InvalidateChildrenStates( GetFrm(), _nStates );
     }
 }
-// <--
 
 void SwAccessibleContext::InvalidateRelation( sal_uInt16 nType )
 {

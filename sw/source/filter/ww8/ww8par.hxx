@@ -572,7 +572,6 @@ private:
                                   const Rectangle& rVisArea,
                                   const int _nCalledByGroup,
                                   sal_Int64 nAspect ) const;
-    // <--
 
     //No copying
     SwMSDffManager(const SwMSDffManager&);
@@ -1150,7 +1149,6 @@ private:
     void NewAttr( const SfxPoolItem& rAttr,
                   const bool bFirstLineOfStSet = false,
                   const bool bLeftIndentSet = false );
-    // <--
 
     bool GetFontParams(sal_uInt16, FontFamily&, String&, FontPitch&,
         rtl_TextEncoding&);
@@ -1403,7 +1401,6 @@ private:
     // #i84783#
     // determine object attribute "Layout in Table Cell"
     bool IsObjectLayoutInTableCell( const sal_uInt32 nLayoutInTableCell ) const;
-    // <--
     bool ReadGlobalTemplateSettings( const rtl::OUString& sCreatedFrom, const com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >& xPrjNameMap );
     //No copying
     SwWW8ImplReader(const SwWW8ImplReader &);
@@ -1614,7 +1611,6 @@ void SyncIndentWithList( SvxLRSpaceItem &rLR,
                          const SwNumFmt &rFmt,
                          const bool bFirstLineOfStSet,
                          const bool bLeftIndentSet );
-// <--
 long GetListFirstLineIndent(const SwNumFmt &rFmt);
 String BookmarkToWriter(const String &rBookmark);
 bool RTLGraphicsHack(SwTwips &rLeft, SwTwips nWidth,

@@ -210,7 +210,6 @@ void SwFmtFld::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                     // #i81002#
 //                    ((SwGetRefField*)GetFld())->UpdateField();
                     dynamic_cast<SwGetRefField*>(GetFld())->UpdateField( pTxtAttr );
-                    // <--
                 }
                 break;
         case RES_DOCPOS_UPDATE:
@@ -332,7 +331,6 @@ void SwTxtFld::Expand() const
             // during formatting, therefore an invalidation of the text frame
             // has to be triggered even if aNewExpand == aExpand:
             ( RES_DOCSTATFLD != nWhich || DS_PAGE != static_cast<const SwDocStatField*>(pFld)->GetSubType() ) &&
-            // <--
             ( RES_GETEXPFLD != nWhich || ((SwGetExpField*)pFld)->IsInBodyTxt() ) )
         {
             // BP: das muesste man noch optimieren!

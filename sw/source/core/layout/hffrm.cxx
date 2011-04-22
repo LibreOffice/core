@@ -50,7 +50,6 @@
 #include <sortedobjs.hxx>
 // #i43771#
 #include <objectformatter.hxx>
-// <--
 
 extern sal_Bool bObjsDirect;    //frmtool.cxx
 
@@ -261,7 +260,6 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
             // use the position of the footer printing area to control invalidation
             // of the first footer content.
             Point aOldFooterPrtPos;
-            // <--
 
             do
             {
@@ -274,7 +272,6 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                     pFrm->_InvalidatePos();
                     aOldFooterPrtPos = Frm().Pos() + Prt().Pos();
                 }
-                // <--
                 while( pFrm )
                 {
                     pFrm->Calc();
@@ -297,7 +294,6 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                             continue;
                         }
                     }
-                    // <--
                     pFrm = pFrm->GetNext();
                 }
                 nRemaining = 0;

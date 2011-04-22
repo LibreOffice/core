@@ -142,7 +142,6 @@ String STR_NUM_OUTLINE
 {
     Text [ en-US ] = "Outline ";
 };//<-end,zhaojianwei
-// <--
 String STR_ERROR_NOLANG
 {
     Text [ en-US ] = "No language is selected in the proofed section." ;

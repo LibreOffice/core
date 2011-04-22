@@ -258,7 +258,6 @@ const SwTxtNode* SwGetRefField::GetReferencedTxtNode() const
     sal_uInt16 nDummy = USHRT_MAX;
     return SwGetRefFieldType::FindAnchor( pDoc, sSetRefName, nSubType, nSeqNo, &nDummy );
 }
-// <--
 // #i85090#
 String SwGetRefField::GetExpandedTxtOfReferencedTxtNode() const
 {
@@ -464,7 +463,6 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
             }
         }
         break;
-    // <--
     default:
         OSL_FAIL("<SwGetRefField::UpdateField(..)> - unknown format type");
     }
@@ -544,7 +542,6 @@ String SwGetRefField::MakeRefNumStr( const SwTxtNode& rTxtNodeOfField,
 
     return String();
 }
-// <--
 
 SwField* SwGetRefField::Copy() const
 {
@@ -598,7 +595,6 @@ bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
             case REF_NUMBER:              nPart = ReferenceFieldPart::NUMBER;              break;
             case REF_NUMBER_NO_CONTEXT:   nPart = ReferenceFieldPart::NUMBER_NO_CONTEXT;   break;
             case REF_NUMBER_FULL_CONTEXT: nPart = ReferenceFieldPart::NUMBER_FULL_CONTEXT; break;
-            // <--
             }
             rAny <<= nPart;
         }
@@ -672,7 +668,6 @@ bool SwGetRefField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             case ReferenceFieldPart::NUMBER:              nPart = REF_NUMBER;              break;
             case ReferenceFieldPart::NUMBER_NO_CONTEXT:   nPart = REF_NUMBER_NO_CONTEXT;   break;
             case ReferenceFieldPart::NUMBER_FULL_CONTEXT: nPart = REF_NUMBER_FULL_CONTEXT; break;
-            // <--
             default: return false;
             }
             SetFormat(nPart);
@@ -789,7 +784,6 @@ void SwGetRefFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew
 
             // #i81002#
             pGRef->UpdateField( pFld->GetTxtFld() );
-            // <--
         }
     }
     // weiter an die Text-Felder, diese "Expandieren" den Text
@@ -864,7 +858,6 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const String& rRefMark,
                                     "<SwGetRefFieldType::FindAnchor(..)> - node marked by cross-reference bookmark isn't a text node --> crash" );
                             *pEnd = pTxtNd->Len();
                         }
-                        // <--
                     }
                     else if(pBkmk->GetOtherMarkPos().nNode == pBkmk->GetMarkPos().nNode)
                         *pEnd = pBkmk->GetMarkEnd().nContent.GetIndex();

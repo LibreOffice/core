@@ -307,7 +307,6 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
     // #i49277#
     const sal_Bool bDoNotJustifyLinesWithManualBreak =
                 GetTxtFrm()->GetNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK);
-    // <--
 
     SwLinePortion *pPos = pCurrent->GetPortion();
 

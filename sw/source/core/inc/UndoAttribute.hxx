@@ -121,10 +121,8 @@ class SwUndoFmtAttr : public SwUndo
     //          aren't restored.
     //          This situation occurs for undo of styles.
     bool RestoreFlyAnchor(::sw::UndoRedoContext & rContext);
-    // <--
     // --> OD 2008-02-27 #refactorlists# - removed <rAffectedItemSet>
     void Init();
-    // <--
 
 public:
     // register at the Format and save old attributes
@@ -132,7 +130,6 @@ public:
     SwUndoFmtAttr( const SfxItemSet& rOldSet,
                    SwFmt& rFmt,
                    bool bSaveDrawPt = true );
-    // <--
     SwUndoFmtAttr( const SfxPoolItem& rItem,
                    SwFmt& rFmt,
                    bool bSaveDrawPt = true );
@@ -168,7 +165,6 @@ class SwUndoFmtResetAttr : public SwUndo
         // old attribute which has been reset - needed for undo.
         ::std::auto_ptr<SfxPoolItem> m_pOldItem;
 };
-// <--
 
 class SwUndoDontExpandFmt : public SwUndo
 {

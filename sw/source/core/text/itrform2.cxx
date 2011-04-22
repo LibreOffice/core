@@ -348,7 +348,6 @@ void SwTxtFormatter::InsertPortion( SwTxtFormatInfo &rInf,
 
         // #i112181#
         rInf.SetOtherThanFtnInside( rInf.IsOtherThanFtnInside() || !pPor->IsFtnPortion() );
-        // <--
     }
     else
     {
@@ -786,7 +785,6 @@ void SwTxtFormatter::CalcAscent( SwTxtFormatInfo &rInf, SwLinePortion *pPor )
         pPor->Height( pLast->Height() );
         pPor->SetAscent( pLast->GetAscent() );
     }
-    // <--
     else
     {
         const SwLinePortion *pLast = rInf.GetLast();
@@ -1239,7 +1237,6 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
             // #i42734#
             // No multi portion if there is a hook character waiting:
             ( !rInf.GetRest() || '\0' == rInf.GetHookChar() ) )
-            // <--
         {
             // We open a multiportion part, if we enter a multi-line part
             // of the paragraph.
@@ -1358,7 +1355,6 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
                         static_cast<SwTabDecimalPortion*>(pLastTabPortion)->SetWidthOfPortionsUpToDecimalPosition( nWidthOfPortionsUpToDecimalPosition );
                         rInf.SetTabDecimal( 0 );
                     }
-                    // <--
                     else
                         rInf.SetFull( rInf.GetLastTab()->Format( rInf ) );
                 }
@@ -1856,7 +1852,6 @@ void SwTxtFormatter::FeedInf( SwTxtFormatInfo &rInf ) const
     SwTwips nTmpLeft = Left();
     SwTwips nTmpRight = Right();
     SwTwips nTmpFirst = FirstLeft();
-    // <--
 
     if ( nTmpLeft > USHRT_MAX ||
          nTmpRight > USHRT_MAX ||
@@ -2075,7 +2070,6 @@ namespace {
                 else
                     nReformat = txtFmtInfo.GetLineStart();
             }
-            // <--
 
             // Weird situation: Our line used to end with a hole portion
             // and we delete some characters at the end of our line. We have

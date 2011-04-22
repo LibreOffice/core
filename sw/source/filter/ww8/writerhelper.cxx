@@ -112,10 +112,8 @@ namespace
             }
 
             return bResult;
-            // <--
        }
     };
-    // <--
 
     bool IsValidSlotWhich(sal_uInt16 nSlotId, sal_uInt16 nWhichId)
     {
@@ -195,7 +193,6 @@ namespace sw
                         }
                         maLayoutSize = aRect.GetSize();
                     }
-                    // <--
                     switch (rNd.GetNodeType())
                     {
                         case ND_GRFNODE:
@@ -210,7 +207,6 @@ namespace sw
                             meWriterType = eTxtBox;
                             // #i43447# - Size equals layout size for text boxes
                             maSize = maLayoutSize;
-                            // <--
                             break;
                     }
                     mpStartFrameContent = &rNd;

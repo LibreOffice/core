@@ -593,7 +593,6 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
                         pTableDesc->GetAktCol() == 0 &&
                         ( !pTableDesc->IsValidCell( pTableDesc->GetAktCol() ) ||
                           pTableDesc->InFirstParaInCell() );
-                    // <--
                 }
             }
         }
@@ -782,7 +781,6 @@ SwNumRule* SwWW8ImplReader::GetStyRule()
     // #i86652#
     sal_uInt16 nRul = rDoc.MakeNumRule( aName, 0, sal_False,
                                     SvxNumberFormat::LABEL_ALIGNMENT );
-    // <--
     pStyles->pStyRule = rDoc.GetNumRuleTbl()[nRul];
     // Auto == false-> Nummerierungsvorlage
     pStyles->pStyRule->SetAutoRule(false);
@@ -1005,7 +1003,6 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
             pNumRule = rDoc.GetNumRuleTbl()[
                             rDoc.MakeNumRule( sNumRule, 0, sal_False,
                                               SvxNumberFormat::LABEL_ALIGNMENT ) ];
-            // <--
         }
         if (pTableDesc)
         {
@@ -2656,7 +2653,6 @@ void WW8TabDesc::MergeCells()
                             else
                                 break;
                         pActMGroup->nGroupWidth = nSizCell;
-                        // <--
 
                         // locked previously created merge groups,
                         // after determining the size for the new merge group.
@@ -2669,7 +2665,6 @@ void WW8TabDesc::MergeCells()
                         {
                             (*pMergeGroups)[ nMGrIdx ]->bGroupLocked = true;
                         }
-                        // <--
 
                         // 3. und in Gruppen-Array eintragen
                         pMergeGroups->Insert(pActMGroup, pMergeGroups->Count());
@@ -3334,7 +3329,6 @@ SwTableBox* WW8TabDesc::UpdateTableMergeGroup(  WW8_TCell&     rCell,
            rCell.bMerged ||
            rCell.bVertMerge ||
            rCell.bVertRestart ) )
-    // <--
     {
         // passende Merge-Gruppe ermitteln
         WW8SelBoxInfo* pTheMergeGroup = 0;
@@ -3414,7 +3408,6 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
     // only at-character, if absolute position object attributes are available.
     // Thus, default anchor type is as-character anchored.
     RndStdIds eAnchor( FLY_AS_CHAR );
-    // <--
     if ( nInTable )
     {
         WW8_TablePos* pNestedTabPos( 0L );
@@ -3447,7 +3440,6 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
             }
         }
     }
-    // <--
 
     pTableDesc = new WW8TabDesc( this, nStartCp );
 
@@ -3475,7 +3467,6 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
                                                       pTableDesc->pParentPos, &aItemSet);
             OSL_ENSURE( pTableDesc->pFlyFmt->GetAnchor().GetAnchorId() == eAnchor,
                    "Not the anchor type requested!" );
-            // <--
             MoveInsideFly(pTableDesc->pFlyFmt);
         }
         pTableDesc->CreateSwTable();
@@ -3499,11 +3490,9 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
                 pTableDesc->pFlyFmt->SetFmtAttr(aHori);
                 pTableDesc->pFlyFmt->SetFmtAttr( SwFmtSurround( SURROUND_NONE ) );
             }
-            // <--
             // #i33818# - The nested table doesn't have to leave
             // the table cell. Thus, the Writer fly frame has to follow the text flow.
             pTableDesc->pFlyFmt->SetFmtAttr( SwFmtFollowTextFlow( sal_True ) );
-            // <--
         }
         else
             pTableDesc->SetSizePosition(0);
@@ -3515,7 +3504,6 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
     // #i33818#
     delete pTableWFlyPara;
     delete pTableSFlyPara;
-    // <--
 
     bool bSuccess = (0 != pTableDesc);
     if (bSuccess)

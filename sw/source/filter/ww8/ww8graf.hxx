@@ -45,7 +45,6 @@ struct EscherShape
           mnNoInlines(0),
           mbInHeaderFooter( _bInHeaderFooter )
     {}
-    // <--
 };
 
 class wwZOrderer
@@ -58,7 +57,6 @@ private:
     //No of objects in doc before starting (always 0 unless using file->insert
     //and probably 0 then as well
     std::vector<EscherShape> maEscherLayer;
-    // <--
     typedef std::vector<EscherShape>::iterator myeiter;
 
     std::vector<short> maDrawHeight;
@@ -79,7 +77,6 @@ private:
     // that object is in header or footer
     sal_uLong GetEscherObjectPos( sal_uLong nSpId,
                               const bool _bInHeaderFooter );
-    // <--
     sal_uLong GetDrawingObjectPos(short nWwHeight);
     bool InsertObject(SdrObject *pObject, sal_uLong nPos);
 public:
@@ -95,7 +92,6 @@ public:
     void InsertEscherObject( SdrObject* pObject,
                              sal_uLong nSpId,
                              const bool _bInHeaderFooter );
-    // <--
     void InsideEscher(sal_uLong nIndex);
     void OutsideEscher();
 };

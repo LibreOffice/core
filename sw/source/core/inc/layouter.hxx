@@ -41,24 +41,19 @@ class IDocumentLayoutAccess;
 // --> #i28701#
 class SwMovedFwdFrmsByObjPos;
 class SwTxtFrm;
-// <--
 // --> #i26945#
 class SwRowFrm;
-// <--
 // --> #i35911#
 class SwObjsMarkedAsTmpConsiderWrapInfluence;
 class SwAnchoredObject;
-// <--
 // --> #i40155#
 #include <vector>
 class SwFrm;
-// <--
 // --> #i65250#
 #include <swtypes.hxx>
 #include <boost/unordered_map.hpp>
 class SwFlowFrm;
 class SwLayoutFrm;
-// <--
 
 #define LOOP_PAGE 1
 
@@ -71,14 +66,11 @@ class SwLayouter
 
     // --> #i28701#
     SwMovedFwdFrmsByObjPos* mpMovedFwdFrms;
-    // <--
     // --> #i35911#
     SwObjsMarkedAsTmpConsiderWrapInfluence* mpObjsTmpConsiderWrapInfl;
-    // <--
     // --> #i40155# - data structure to collect frames, which are
     // marked not to wrap around objects.
     std::vector< const SwFrm* > maFrmsNotToWrap;
-    // <--
 
 public:
     // --> #i65250#
@@ -121,7 +113,6 @@ private:
     boost::unordered_map< const tMoveBwdLayoutInfoKey, sal_uInt16,
                    fMoveBwdLayoutInfoKeyHash,
                    fMoveBwdLayoutInfoKeyEq > maMoveBwdLayoutInfo;
-    // <--
 public:
     SwLayouter();
     ~SwLayouter();
@@ -145,35 +136,29 @@ public:
     static bool FrmMovedFwdByObjPos( const SwDoc& _rDoc,
                                      const SwTxtFrm& _rTxtFrm,
                                      sal_uInt32& _ornToPageNum );
-    // <--
     // --> #i40155# - ummark given frame as to be moved forward.
     static void RemoveMovedFwdFrm( const SwDoc& _rDoc,
                                    const SwTxtFrm& _rTxtFrm );
-    // <--
     // --> #i26945#
     static bool DoesRowContainMovedFwdFrm( const SwDoc& _rDoc,
                                            const SwRowFrm& _rRowFrm );
-    // <--
 
     // --> #i35911#
     static void ClearObjsTmpConsiderWrapInfluence( const SwDoc& _rDoc );
     static void InsertObjForTmpConsiderWrapInfluence(
                                         const SwDoc& _rDoc,
                                         SwAnchoredObject& _rAnchoredObj );
-    // <--
     // --> #i40155#
     static void ClearFrmsNotToWrap( const SwDoc& _rDoc );
     static void InsertFrmNotToWrap( const SwDoc& _rDoc,
                                     const SwFrm& _rFrm );
     static bool FrmNotToWrap( const IDocumentLayoutAccess& _rIDLA,
                               const SwFrm& _rFrm );
-    // <--
     // --> #i65250#
     static bool MoveBwdSuppressed( const SwDoc& p_rDoc,
                                    const SwFlowFrm& p_rFlowFrm,
                                    const SwLayoutFrm& p_rNewUpperFrm );
     static void ClearMoveBwdLayoutInfo( const SwDoc& p_rDoc );
-    // <--
 };
 
 

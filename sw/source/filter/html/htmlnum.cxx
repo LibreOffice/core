@@ -88,9 +88,7 @@ void SwHTMLNumRuleInfo::Set( const SwTxtNode& rTxtNd )
         // Start value <USHRT_MAX> indicates, that at this text node the numbering
         // is restarted with the value given at the corresponding level.
         bRestart = rTxtNd.IsListRestart() && !rTxtNd.HasAttrListRestartValue();
-        // <--
     }
-    // <--
     else
     {
         pNumRule = 0;
@@ -151,7 +149,6 @@ void SwHTMLParser::NewNumBulList( int nToken )
             {
                 aNumFmt.SetBulletFont( &numfunc::GetDefBulletFont() );
             }
-            // <--
             aNumFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
             aNumFmt.SetBulletChar( cBulletChar );       // das Bulletzeichen !!
             nChrFmtPoolId = RES_POOLCHR_BUL_LEVEL;
@@ -357,7 +354,6 @@ void SwHTMLParser::NewNumBulList( int nToken )
                 pDoc->ChgNumRuleFmts( *rInfo.GetNumRule() );
                 bChangeNumFmt = sal_False;
             }
-            // <--
 
             DoPositioning( aItemSet, aPropInfo, pCntxt );
 
@@ -434,7 +430,6 @@ void SwHTMLParser::EndNumBulList( int nToken )
                         {
                             aNumFmt.SetBulletFont( &numfunc::GetDefBulletFont() );
                         }
-                        // <--
                         aNumFmt.SetBulletChar( cBulletChar );
                     }
                     aNumFmt.SetAbsLSpace( (i+1) * HTML_NUMBUL_MARGINLEFT );
@@ -458,7 +453,6 @@ void SwHTMLParser::EndNumBulList( int nToken )
         {
             // the next paragraph not numbered first
             SetNodeNum( rInfo.GetLevel(), false );
-            // <--
         }
     }
 
@@ -543,7 +537,6 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
         {
             aNumFmt.SetBulletFont( &numfunc::GetDefBulletFont() );
         }
-        // <--
         aNumFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
         aNumFmt.SetBulletChar( cBulletChar );   // das Bulletzeichen !!
         aNumFmt.SetCharFmt( pCSS1Parser->GetCharFmtFromPool(RES_POOLCHR_BUL_LEVEL) );
@@ -570,7 +563,6 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
     {
         pTxtNode->SetCountedInList( bCountedInList );
     }
-    // <--
     // #i57919#
     // correction of refactoring done by cws swnumtree
     // - <nStart> contains the start value, if the numbering has to be restarted
@@ -581,7 +573,6 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
         pTxtNode->SetListRestart( true );
         pTxtNode->SetAttrListRestartValue( nStart );
     }
-    // <--
 
     if( GetNumInfo().GetNumRule() )
         GetNumInfo().GetNumRule()->SetInvalidRule( sal_True );

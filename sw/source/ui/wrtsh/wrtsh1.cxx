@@ -563,7 +563,6 @@ sal_Bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyF
     // --> #i972#
     if ( bStarMath && pDoc->get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT ) )
         AlignFormulaToBaseline( xRef.GetObject() );
-    // <--
 
     if (pFlyFrmFmt)
         *pFlyFrmFmt = pFmt;
@@ -730,7 +729,6 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                         GetDoc()->GetDocShell()->EnableSetModified( sal_True );
                     }
                 }
-                // <--
             }
 
             // TODO/LATER: this is only a workaround,
@@ -872,7 +870,6 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                         : GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, 0, xObj.GetObject() ));
             aArea += rPoint - aRect.Pos(); // adjust area by diff of printing area position in order to keep baseline alignment correct.
         }
-        // <--
         aArea.Width ( _aVisArea.Width() );
         aArea.Height( _aVisArea.Height() );
         RequestObjectResize( aArea, xObj.GetObject() );
@@ -1160,7 +1157,6 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
                     // turning on outline numbering at current cursor position
                     bContinueFoundNumRule = true;
                 }
-                // <--
             }
             else
             {
@@ -1265,7 +1261,6 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
         const SvxNumberFormat::SvxNumPositionAndSpaceMode ePosAndSpaceMode(
                                     numfunc::GetDefaultPositionAndSpaceMode() );
         SwNumRule aNumRule( GetUniqueNumRuleName(), ePosAndSpaceMode );
-        // <--
         // Zeichenvorlage an die Numerierung haengen
         SwCharFmt* pChrFmt;
         SwDocShell* pDocSh = GetView().GetDocShell();
@@ -1274,7 +1269,6 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
         const Font* pFnt = numfunc::IsDefBulletFontUserDefined()
                            ? &numfunc::GetDefBulletFont()
                            : 0;
-        // <--
 
         if (bNum)
         {
@@ -1327,7 +1321,6 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
                     aFmt.SetAbsLSpace(nWidthOfTabs + nLvl * 720);
                 }
             }
-            // <--
 
             // #i38904#  Default alignment for
             // numbering/bullet should be rtl in rtl paragraph:
@@ -1335,7 +1328,6 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
             {
                 aFmt.SetNumAdjust( SVX_ADJUST_RIGHT );
             }
-            // <--
 
             aNumRule.Set( nLvl, aFmt );
         }
@@ -1346,7 +1338,6 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
         {
 
             const SwTwips nTxtNodeIndent = pTxtNode->GetAdditionalIndentForStartingNewList();
-            // <--
             if ( ( nTxtNodeIndent + nWidthOfTabs ) != 0 )
             {
                 // #i111172#
@@ -1362,11 +1353,9 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
                         nIndentChange -= aFmt.GetIndentAt() + aFmt.GetFirstLineIndent();
                     }
                 }
-                // <--
                 aNumRule.ChangeIndent( nIndentChange );
             }
         }
-        // <--
         // reset indent attribute on applying list style
         // start new list
         SetCurNumRule( aNumRule, true, String(), true );
@@ -1414,7 +1403,6 @@ void SwWrtShell::NumOrBulletOff()
         // #126346# - Cursor can not be anymore in front of
         // a label, because numbering/bullet is switched off.
         SetInFrontOfLabel( sal_False );
-        // <--
     }
 }
 // <- #i29560#
@@ -1512,7 +1500,6 @@ SelectionType SwWrtShell::GetSelectionType() const
                 nCnt |= nsSelectionType::SEL_NUM;
         }
     }
-    // <--
 
     return nCnt;
 }

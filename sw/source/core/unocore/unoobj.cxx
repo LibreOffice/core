@@ -221,7 +221,6 @@ void SwUnoCursorHelper::GetTextFromPam(SwPaM & rPam, OUString & rBuffer)
         // #i68522#
         const sal_Bool bOldShowProgress = xWrt->bShowProgress;
         xWrt->bShowProgress = sal_False;
-        // <--
 
         long lLen;
         if( !IsError( aWriter.Write( xWrt ) ) &&
@@ -564,7 +563,6 @@ throw (lang::IllegalArgumentException)
         case FN_UNO_NUM_LEVEL:
         // #i91601#
         case FN_UNO_LIST_ID:
-        // <--
         case FN_UNO_IS_NUMBER:
         {
             // multi selection is not considered
@@ -586,7 +584,6 @@ throw (lang::IllegalArgumentException)
                     pTxtNd->SetListId( sListId );
                 }
             }
-            // <--
             else if (FN_UNO_IS_NUMBER == rEntry.nWID)
             {
                 sal_Bool bIsNumber(sal_False);
@@ -2013,7 +2010,6 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
                     }
                     // #i63870#
                     SwUnoCursorHelper::GetCrsrAttr( rPaM, *pSet );
-                    // <--
                 }
 
                 pStates[i] = ( pSet->Count() )
@@ -2029,7 +2025,6 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
                         // #i63870#
                         SwUnoCursorHelper::GetCrsrAttr(
                                 rPaM, *pSetParent, sal_True, sal_False );
-                        // <--
                     }
 
                     pStates[i] = ( (pSetParent)->Count() )

@@ -149,7 +149,6 @@ class SwAccessibleParagraph :
             const sal_Int32 nIndex,
             const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes,
             tAccParaPropValMap& rRunAttrSeq );
-    // <--
 
 public:
 
@@ -266,7 +265,6 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getBackground()
         throw (::com::sun::star::uno::RuntimeException);
-    // <--
 
     //=====  XServiceInfo  ====================================================
 
@@ -396,7 +394,6 @@ public:
             throw (::com::sun::star::lang::IndexOutOfBoundsException,
                    ::com::sun::star::lang::IllegalArgumentException,
                    ::com::sun::star::uno::RuntimeException);
-    // <--
 
     // #i89175#
     //=====  XAccessibleMultiLineText  ========================================
@@ -415,13 +412,11 @@ public:
 
     virtual sal_Int32 SAL_CALL getNumberOfLineWithCaret()
             throw (::com::sun::star::uno::RuntimeException);
-    // <--
 
     // #i63870#
     //=====  XAccesibleTextAttributes  ========================================
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getDefaultAttributes( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getRunAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-    // <--
 };
 
 inline SwAccessibleParagraph::operator ::com::sun::star::accessibility::XAccessibleText *()

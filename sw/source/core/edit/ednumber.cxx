@@ -266,7 +266,6 @@ sal_Bool SwEditShell::NumUpDown( sal_Bool bDown )
     // #i54693# Update marked numbering levels
     if ( IsInFrontOfLabel() )
         UpdateMarkedListLevel();
-    // <--
 
     CallChgLnk();
 
@@ -313,7 +312,6 @@ void SwEditShell::ChangeIndentOfAllListLevels( short nDiff )
         SwNumRule aRule(*pCurNumRule);
         // #i90078#
         aRule.ChangeIndent( nDiff );
-        // <--
 
         // no start of new list
         SetCurNumRule( aRule, false );
@@ -325,7 +323,6 @@ void SwEditShell::ChangeIndentOfAllListLevels( short nDiff )
 // #i90078#
 // Adjust method name
 void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
-// <--
 {
     StartAllAction();
 
@@ -349,13 +346,11 @@ void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
             aRule.SetIndent( nIndent,
                              static_cast<sal_uInt16>(pTxtNode->GetActualListLevel()) );
         }
-        // <--
 
         // #i42921# - 3rd parameter = false in order to
         // suppress setting of num rule at <aPaM>.
         // do not apply any list
         GetDoc()->SetNumRule( aPaM, aRule, false, String(), sal_False );
-        // <--
     }
 
     EndAllAction();
@@ -469,7 +464,6 @@ sal_Bool SwEditShell::MoveNumParas( sal_Bool bUpperLower, sal_Bool bUpperLeft )
                         {
                             break;
                         }
-                        // <--
                     }
 
                     if( nStt == nIdx || !GetDoc()->GetNodes()[ nIdx ]->IsTxtNode() )

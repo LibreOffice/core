@@ -210,7 +210,6 @@ void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
                 // is deleted on below made method call <pDoc->DeleteSection(pNode)>
 //                SwNodeIndex aIdx( *rCnt.GetCntntIdx(), 1 );
                 SwNodeIndex aIdx( *rCnt.GetCntntIdx(), 0 );
-                // <--
                 //Wenn in einem der Nodes noch ein Crsr angemeldet ist, muss das
                 //ParkCrsr einer (beliebigen) Shell gerufen werden.
                 pNode = & aIdx.GetNode();
@@ -2607,7 +2606,6 @@ SdrObject* SwFrmFmt::FindSdrObject()
     // duplicated code.
     SwContact* pFoundContact = FindContactObj();
     return pFoundContact ? pFoundContact->GetMaster() : 0;
-    // <--
 }
 
 SdrObject* SwFrmFmt::FindRealSdrObject()
@@ -2687,7 +2685,6 @@ void SwFrmFmt::SetLayoutDir( const SwFrmFmt::tLayoutDir )
 {
     // empty body, because default implementation does nothing
 }
-// <--
 
 // #i28749#
 sal_Int16 SwFrmFmt::GetPositionLayoutDir() const
@@ -2698,7 +2695,6 @@ void SwFrmFmt::SetPositionLayoutDir( const sal_Int16 )
 {
     // empty body, because default implementation does nothing
 }
-// <--
 String SwFrmFmt::GetDescription() const
 {
     return SW_RES(STR_FRAME);
@@ -2766,7 +2762,6 @@ void SwFlyFrmFmt::MakeFrms()
                 pCNd = aAnchorAttr.GetCntntAnchor()->nNode.GetNode().GetCntntNode();
             }
             if ( pCNd )
-            // <--
             {
                 if( SwIterator<SwFrm,SwCntntNode>::FirstElement( *pCNd ) )
                 {
@@ -2775,7 +2770,6 @@ void SwFlyFrmFmt::MakeFrms()
             }
             // #i105535#
             if ( pModify == 0 )
-            // <--
             {
                 const SwNodeIndex &rIdx = aAnchorAttr.GetCntntAnchor()->nNode;
                 SwSpzFrmFmts& rFmts = *GetDoc()->GetSpzFrmFmts();
@@ -2822,7 +2816,6 @@ void SwFlyFrmFmt::MakeFrms()
                 {
                     // #i50432# - adjust synopsis of <PlaceFly(..)>
                     pPage->PlaceFly( 0, this );
-                    // <--
                     break;
                 }
                 pPage = (SwPageFrm*)pPage->GetNext();
@@ -2858,7 +2851,6 @@ void SwFlyFrmFmt::MakeFrms()
                     MakeFrms();
                     return;
                 }
-                // <--
             }
 
             if( pFrm->GetDrawObjs() )
@@ -3017,7 +3009,6 @@ const String SwFlyFrmFmt::GetObjDescription() const
 
     return pMasterObject->GetDescription();
 }
-// <--
 
 /** SwFlyFrmFmt::IsBackgroundTransparent - for #99657#
 
@@ -3146,7 +3137,6 @@ SwHandleAnchorNodeChg::~SwHandleAnchorNodeChg()
         mrFlyFrmFmt.MakeFrms();
     }
 }
-// <--
 //  class SwDrawFrmFmt
 //  Implementierung teilweise inline im hxx
 
@@ -3183,7 +3173,6 @@ void SwDrawFrmFmt::SetLayoutDir( const SwFrmFmt::tLayoutDir _eLayoutDir )
 {
     meLayoutDir = _eLayoutDir;
 }
-// <--
 
 // #i28749#
 sal_Int16 SwDrawFrmFmt::GetPositionLayoutDir() const
@@ -3206,7 +3195,6 @@ void SwDrawFrmFmt::SetPositionLayoutDir( const sal_Int16 _nPositionLayoutDir )
         }
     }
 }
-// <--
 
 String SwDrawFrmFmt::GetDescription() const
 {

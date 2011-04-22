@@ -58,7 +58,6 @@
 #include <pormulti.hxx>     // SwMultiPortion
 // #i111284#
 #include <numrule.hxx>
-// <--
 
 // Nicht reentrant !!!
 // wird in GetCharRect gesetzt und im UnitUp/Down ausgewertet.
@@ -164,7 +163,6 @@ namespace {
         return bRet;
     }
 } // end of anonymous namespace
-// <--
 
 /*************************************************************************
  *                SwTxtMargin::CtorInitTxtMargin()
@@ -182,7 +180,6 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
     // #i111284#
     const bool bListLevelIndentsApplicableAndLabelAlignmentActive(
         AreListLevelIndentsApplicableAndLabelAlignmentActive( *(pFrm->GetTxtNode()) ) );
-    // <--
 
     //
     // Carefully adjust the text formatting ranges.
@@ -246,7 +243,6 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
         ( pNode->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) ||
           !pFrm->IsInTab() ||
           !nLMWithNum ) )
-         // <--
     {
         nLeft = pFrm->Prt().Left() + pFrm->Frm().Left();
         if( nLeft >= nRight )   // z.B. bei grossen Absatzeinzuegen in schmalen Tabellenspalten
@@ -354,7 +350,6 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
 
     // #i91133#
     mnTabLeft = pNode->GetLeftMarginForTabCalculation();
-    // <--
 
 #if OSL_DEBUG_LEVEL > 1
     static sal_Bool bOne = sal_False;
@@ -1630,7 +1625,6 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                     aDrawInf.SetNumberOfBlanks( pPor->InTxtGrp() ?
                                                 static_cast<const SwTxtPortion*>(pPor)->GetSpaceCnt( aSizeInf, nCharCnt ) :
                                                 0 );
-                    // <--
                 }
 
                 if ( pPor->InFldGrp() && pCMS && pCMS->pSpecialPos )

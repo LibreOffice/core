@@ -182,7 +182,6 @@ void SwKernPortion::Paint( const SwTxtPaintInfo &rInf ) const
             rInf.CalcRect( *this, &aClipRect, 0 );
             SwSaveClip aClip( (OutputDevice*)rInf.GetOut() );
             aClip.ChgClip( aClipRect, 0 );
-            // <--
             rInf.DrawText( aTxtDouble, *this, 0, 2, sal_True );
         }
     }
@@ -372,7 +371,6 @@ sal_Bool SwTxtFrm::FormatEmpty()
             // to assure that objects anchored at the empty paragraph are
             // correctly visible resp. invisible.
             HideAndShowObjects();
-            // <--
             return sal_True;
         }
     }

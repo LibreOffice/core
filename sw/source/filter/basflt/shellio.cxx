@@ -379,7 +379,6 @@ sal_uLong SwReader::Read( const Reader& rOptions )
         // SwDocShell::UpdateLinks() to new SwDoc::UpdateLinks():
     // ATM still with Update
         pDoc->UpdateLinks( sal_True );
-        // <--
 
         // not insert: set the redline mode read from settings.xml
         eOld = static_cast<RedlineMode_t>(
@@ -876,7 +875,6 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
     // #i37248# - Modifications are only allowed at a new document.
     // <pOutDoc> contains a new document, if <pDoc> is set - see above.
     if ( pDoc && !pOutDoc->getPrinter( false ) )
-    // <--
     {
         const SwPageDesc& rPgDsc = const_cast<const SwDoc *>(pOutDoc)->GetPageDesc( 0 );
         //const SwPageDesc& rPgDsc = *pOutDoc->GetPageDescFromPool( RES_POOLPAGE_STANDARD );;

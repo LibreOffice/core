@@ -181,7 +181,6 @@ class SW_DLLPUBLIC SwAnchoredObject
                                  const RndStdIds _eAnchorType,
                                  const xub_StrLen _nObjAnchorPos,
                                  SwAnchoredObject* _pAnchoredObj );
-        // <--
     protected:
         SwAnchoredObject();
 

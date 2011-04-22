@@ -619,7 +619,6 @@ void wwSectionManager::SetPageULSpaceItems(SwFrmFmt &rFmt,
                 const SwTwips nHdLowerSpace( Abs(rSection.maSep.dyaTop) - rData.nSwUp - rData.nSwHLo );
                 pHdFmt->SetFmtAttr(SwFmtFrmSize(ATT_FIX_SIZE, 0, rData.nSwHLo + nHdLowerSpace));
                 aHdUL.SetLower( static_cast< sal_uInt16 >(nHdLowerSpace) );
-                // <--
                 pHdFmt->SetFmtAttr(SwHeaderAndFooterEatSpacingItem(
                     RES_HEADER_FOOTER_EAT_SPACING, false));
             }
@@ -647,7 +646,6 @@ void wwSectionManager::SetPageULSpaceItems(SwFrmFmt &rFmt,
                 const SwTwips nFtUpperSpace( Abs(rSection.maSep.dyaBottom) - rData.nSwLo - rData.nSwFUp );
                 pFtFmt->SetFmtAttr(SwFmtFrmSize(ATT_FIX_SIZE, 0, rData.nSwFUp + nFtUpperSpace));
                 aFtUL.SetUpper( static_cast< sal_uInt16 >(nFtUpperSpace) );
-                // <--
                 pFtFmt->SetFmtAttr(SwHeaderAndFooterEatSpacingItem(
                     RES_HEADER_FOOTER_EAT_SPACING, false));
             }
@@ -2025,7 +2023,6 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
         nRiMgn = rWW.nRiMgn;
     }
     else if (rWW.bBorderLines)
-    // <--
     {
         /*
         #i582#
@@ -2630,14 +2627,12 @@ void SwWW8ImplReader::NewAttr( const SfxPoolItem& rAttr,
                 const SwNode* pNd = &(pPaM->GetPoint()->nNode.GetNode());
                 maTxtNodesHavingFirstLineOfstSet.insert( pNd );
             }
-            // <--
             // #i105414#
             if ( bLeftIndentSet )
             {
                 const SwNode* pNd = &(pPaM->GetPoint()->nNode.GetNode());
                 maTxtNodesHavingLeftIndentSet.insert( pNd );
             }
-            // <--
         }
 
         if (mpPostProcessAttrsInfo && mpPostProcessAttrsInfo->mbCopy)

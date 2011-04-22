@@ -137,7 +137,6 @@ public:
     // --> #i44016# - add parameter <_bUnlockPosOfObjs> to
     // force an unlockposition call for the lower objects.
     void NotifyLowerObjs( const bool _bUnlockPosOfObjs = false );
-    // <--
 
     //Invalidiert diejenigen innenliegenden Frames, deren Breite und/oder
     //Hoehe Prozentual berechnet werden. Auch Rahmen, die an this oder an

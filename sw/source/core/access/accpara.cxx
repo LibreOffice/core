@@ -81,7 +81,6 @@
 // #i10825#
 #include <parachangetrackinginfo.hxx>
 #include <com/sun/star/text/TextMarkupType.hpp>
-// <--
 #include <comphelper/stlunosequence.hxx> // #i92233#
 
 #include <algorithm>
@@ -312,7 +311,6 @@ SwPaM* SwAccessibleParagraph::GetCursor( const bool _bForSelection )
     // a table selection has to be returned.
     if ( pCrsrShell != NULL &&
          ( _bForSelection || !pCrsrShell->IsTableMode() ) )
-    // <--
     {
         SwFEShell *pFESh = pCrsrShell->ISA( SwFEShell )
                             ? static_cast< SwFEShell * >( pCrsrShell ) : 0;
@@ -982,7 +980,6 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getBackground()
 
     return SwAccessibleContext::getBackground();
 }
-// <--
 
 ::rtl::OUString SAL_CALL SwAccessibleParagraph::getImplementationName()
         throw( uno::RuntimeException )
@@ -1045,7 +1042,6 @@ uno::Any SwAccessibleParagraph::queryInterface( const uno::Type& rType )
         uno::Reference<XAccessibleTextAttributes> aAccTextAttr = this;
         aRet <<= aAccTextAttr;
     }
-    // <--
     // #i89175#
     // add interface com::sun:star:accessibility::XAccessibleTextMarkup
     else if ( rType == ::getCppuType((uno::Reference<XAccessibleTextMarkup> *)0) )
@@ -1059,7 +1055,6 @@ uno::Any SwAccessibleParagraph::queryInterface( const uno::Type& rType )
         uno::Reference<XAccessibleMultiLineText> aAccMultiLineText = this;
         aRet <<= aAccMultiLineText;
     }
-    // <--
     else
     {
         aRet = SwAccessibleContext::queryInterface(rType);
@@ -1086,7 +1081,6 @@ uno::Sequence< uno::Type > SAL_CALL SwAccessibleParagraph::getTypes() throw(uno:
     pTypes[nIndex++] = ::getCppuType( static_cast< uno::Reference< XAccessibleTextMarkup > * >( 0 ) );
     pTypes[nIndex++] = ::getCppuType( static_cast< uno::Reference< XAccessibleMultiLineText > * >( 0 ) );
     pTypes[nIndex] = ::getCppuType( static_cast< uno::Reference< XAccessibleHypertext > * >( 0 ) );
-    // <--
 
     return aTypes;
 }
@@ -1280,7 +1274,6 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
         aCharSet.Put( pTxtNode->GetTxtColl()->GetAttrSet() );
         pSet->Put( aCharSet );
     }
-    // <--
 
     // build-up sequence containing the run attributes <rDefAttrSeq>
     tAccParaPropValMap aDefAttrSeq;
@@ -1327,7 +1320,6 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
                 aDefAttrSeq[rPropVal.Name] = rPropVal;
             }
         }
-        // <--
 
         // #i73371#
         // resolve value text::WritingMode2::PAGE of property value entry WritingMode
@@ -1378,7 +1370,6 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
                 }
             }
         }
-        // <--
     }
 
     if ( aRequestedAttributes.getLength() == 0 )
@@ -1430,7 +1421,6 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getDefaultAttributes(
             }
         }
     }
-    // <--
 
     uno::Sequence< PropertyValue > aValues( aDefAttrSeq.size() +
                                             ( bProvideMMToPixelRatio ? 1 : 0 ) );
@@ -1457,7 +1447,6 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getDefaultAttributes(
         rPropVal.State = beans::PropertyState_DEFAULT_VALUE;
         pValues[ aValues.getLength() - 1 ] = rPropVal;
     }
-    // <--
 
     return aValues;
 }
@@ -1511,7 +1500,6 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
         SwUnoCursorHelper::GetCrsrAttr(*pPaM, aCharAttrsAtPaM, sal_True, sal_True);
         aSet.Put( aCharAttrsAtPaM );
     }
-    // <--
 
     // build-up sequence containing the run attributes <rRunAttrSeq>
     {
@@ -1609,7 +1597,6 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getRunAttributes(
 
     return aValues;
 }
-// <--
 
 awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
     sal_Int32 nIndex )
@@ -2301,7 +2288,6 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getHyperLinkCount()
     sal_Int32 nCount = 0;
     // #i77108# - provide hyperlinks also in editable documents.
 //    if( !IsEditableState() )
-    // <--
     {
         const SwTxtFrm *pTxtFrm = static_cast<const SwTxtFrm*>( GetFrm() );
         SwHyperlinkIter_Impl aIter( pTxtFrm );
@@ -2490,7 +2476,6 @@ uno::Sequence< /*accessibility::*/TextSegment > SAL_CALL
 
     return pTextMarkupHelper->getTextMarkupAtIndex( nCharIndex, nTextMarkupType );
 }
-// <--
 
 // #i89175#
 sal_Int32 SAL_CALL SwAccessibleParagraph::getLineNumberAtIndex( sal_Int32 nIndex )

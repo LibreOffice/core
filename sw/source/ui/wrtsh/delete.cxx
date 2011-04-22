@@ -37,7 +37,6 @@
 // #134369#
 #include <view.hxx>
 #include <drawbase.hxx>
-// <--
 
 inline void SwWrtShell::OpenMark()
 {
@@ -208,7 +207,6 @@ long SwWrtShell::DelLeft()
         const SwStartNode * pSNdOld = pWasInTblNd ?
                                       GetSwCrsr()->GetNode()->FindTableBoxStartNode() :
                                       0;
-        // <--
 
         /* If the cursor is at the beginning of a paragraph, try to step
            backwards. On failure we are done. */
@@ -229,7 +227,6 @@ long SwWrtShell::DelLeft()
         // changed the table cell, compare DelRight().
         if ( pSNdOld != pSNdNew )
             return 0;
-        // <--
 
         OpenMark();
         SwCrsrShell::Right(1,CRSR_SKIP_CHARS);
@@ -335,7 +332,6 @@ long SwWrtShell::DelRight()
                 // the cursor will be in its initial state, because there
                 // may be a numbering in front of the next paragraph.
                 SwCrsrShell::Push();
-                // <--
 
                 if ( SwCrsrShell::Right(1, CRSR_SKIP_CHARS) )
                 {
@@ -388,7 +384,6 @@ long SwWrtShell::DelRight()
             // #134369#
             OSL_ENSURE( !IsFrmSelected(),
                     "<SwWrtShell::DelRight(..)> - <SwWrtShell::UnSelectFrm()> should unmark all objects" );
-            // <--
             // #134369#
             // leave draw mode, if necessary.
             {
@@ -402,12 +397,10 @@ long SwWrtShell::DelRight()
                     GetView().LeaveDrawCreate();
                 }
             }
-            // <--
         }
 
         // #134369#
         // <IsFrmSelected()> can't be true - see above.
-        // <--
         {
             nSelection = GetSelectionType();
             if ( nsSelectionType::SEL_FRM & nSelection ||

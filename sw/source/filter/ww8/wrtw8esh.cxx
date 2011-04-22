@@ -170,14 +170,12 @@ void WW8Export::DoComboBox(uno::Reference<beans::XPropertySet> xPropSet)
         try
         {
             uno::Any aTmp = xPropSet->getPropertyValue(C2U("HelpText"));
-            // <--
             const rtl::OUString *pStr = (const rtl::OUString *)aTmp.getValue();
             if (pStr)
                 sHelp = *pStr;
         }
         catch( uno::Exception& )
         {}
-        // <--
     }
 
     rtl::OUString sToolTip;
@@ -486,7 +484,6 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
             // Most positions are converted, if layout information exists.
             const bool bPosConverted =
                 WinwordAnchoring::ConvertPosition( rHOr, rVOr, rFmt );
-            // <--
 
             Point aObjPos;
             if (RES_FLYFRMFMT == rFmt.Which())
@@ -504,7 +501,6 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
                     const SwRect aSizeRect(rFmt.FindLayoutRect());
                     if ( aSizeRect.Width() > aLayRect.Width() )
                         aLayRect.Width( aSizeRect.Width() );
-                    // <--
 
                     aRect = aLayRect.SVRect();
                 }
@@ -542,7 +538,6 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
                     aObjPos.X() = rHOr.GetPos();
                 aRect.SetPos( aObjPos );
             }
-            // <--
 
             sal_Int32 nThick = aIter->mnThick;
 
@@ -2090,7 +2085,6 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
     {
         return false;
     }
-    // <--
 
     bool bConverted( false );
 
@@ -2115,7 +2109,6 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
             bConvDueToAnchoredAtColBreakPara = true;
         }
     }
-    // <--
 
     // convert horizontal position, if needed
     {
@@ -2178,7 +2171,6 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
                     OSL_FAIL( "<WinwordAnchoring::ConvertPosition(..)> - unknown horizontal relation" );
             }
         }
-        // <--
         if ( eHoriConv != NO_CONV )
         {
             _iorHoriOri.SetHoriOrient( text::HoriOrientation::NONE );
@@ -2196,7 +2188,6 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
                     {
                         _iorHoriOri.SetRelationOrient( text::RelOrientation::PAGE_PRINT_AREA );
                     }
-                    // <--
                 }
                 else if ( eHoriConv == CONV2COL )
                 {
@@ -2308,7 +2299,6 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
                     {
                         _iorVertOri.SetRelationOrient( text::RelOrientation::PAGE_PRINT_AREA );
                     }
-                    // <--
                 }
                 else if ( eVertConv == CONV2PARA )
                 {

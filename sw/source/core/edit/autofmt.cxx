@@ -1469,7 +1469,6 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
     SwNumRule aRule( pDoc->GetUniqueNumRuleName(),
                      // #i89178#
                      numfunc::GetDefaultPositionAndSpaceMode() );
-                     // <--
 
     const SwNumRule* pCur = 0;
     if( aFlags.bSetNumRule && 0 != (pCur = pAktTxtNd->GetNumRule()) )
@@ -1513,7 +1512,6 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                         {
                             pBullFnt = &numfunc::GetDefBulletFont();
                         }
-                        // <--
                     }
 
                     sal_uInt16 nAbsPos = lBullIndent;

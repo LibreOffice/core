@@ -315,7 +315,6 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
                 }
             }
         }
-        // <--
 
         //Inhalt Loeschen.
         if( pCntIdx )
@@ -494,7 +493,6 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
         {
             static_cast<SwDrawFrmFmt*>(pDest)->PosAttrSet();
         }
-        // <--
 
         if( pDest->GetAnchor() == rNewAnchor )
         {
@@ -653,7 +651,6 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
                 aAnch.SetAnchor( &rAnchPos );
             }
         }
-        // <--
         pFmt->SetFmtAttr( aAnch );
     }
     else
@@ -1257,7 +1254,6 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 const String sDescription( bIsSwFlyFrmFmtInstance
                                            ? static_cast<SwFlyFrmFmt*>(pOldFmt)->GetObjDescription()
                                            : String() );
-                // <--
                 pOldFmt->DelFrms();
 
                 pNewFmt = rDoc.MakeFlyFrmFmt( rDoc.GetUniqueFrameName(),
@@ -1401,7 +1397,6 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                     static_cast<SwFlyFrmFmt*>(pOldFmt)->SetObjTitle( sTitle );
                     static_cast<SwFlyFrmFmt*>(pOldFmt)->SetObjDescription( sDescription );
                 }
-                // <--
             }
             break;
 
@@ -2156,7 +2151,6 @@ void SwDoc::SetAllUniqueFlyNames()
         {
             GetFtnIdxs().UpdateAllFtn();
         }
-        // <--
         else
         {
             SwNodeIndex aTmp( GetNodes() );

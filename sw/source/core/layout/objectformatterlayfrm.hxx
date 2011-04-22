@@ -70,7 +70,6 @@ class SwObjectFormatterLayFrm : public SwObjectFormatter
         // Not relevant for objects anchored at layout frame.
         virtual bool DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                                   const bool _bCheckForMovedFwd = false );
-        // <--
         virtual bool DoFormatObjs();
 
         static SwObjectFormatterLayFrm* CreateObjFormatter(

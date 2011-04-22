@@ -327,7 +327,6 @@ void SwXMLAutoStylePoolP::exportStyleAttributes(
                         GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                               sListStyleName,
                               GetExport().EncodeStyleName( sStyleName ) );
-                        // <--
                     }
                     break;
                 case CTF_PAGEDESCNAME:

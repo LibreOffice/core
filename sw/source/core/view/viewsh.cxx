@@ -1988,7 +1988,6 @@ void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
         // #i44963# Good occasion to check if page sizes in
         // page descriptions are still set to (LONG_MAX, LONG_MAX) (html import)
         pDoc->CheckDefaultPageFmt();
-        // <--
         CheckBrowseView( sal_True );
     }
 

@@ -140,7 +140,6 @@ void SwNumberTreeNode::ClearObsoletePhantoms()
             // is referenced by <mItLastValid>, it's needed to adjust
             // <mItLastValid> before erasing <aIt>.
             SetLastValid(mChildren.end());
-            // <--
 
             delete *aIt;
             mChildren.erase(aIt);
@@ -243,11 +242,9 @@ void SwNumberTreeNode::ValidateHierarchical(const SwNumberTreeNode * pNode) cons
                 else
                     ++nTmpNumber;
             }
-            // <--
 
             (*aIt)->mnNumber = nTmpNumber;
         }
-        // <--
 
         SetLastValid(aIt, true);
     }
@@ -282,7 +279,6 @@ void SwNumberTreeNode::ValidateContinuous(const SwNumberTreeNode * pNode) const
                 if ( !(*aIt)->IsCounted() )
                     // #i65284#
                     nTmpNumber = pPred->GetNumber( pPred->GetParent() != (*aIt)->GetParent() );
-                    // <--
                 else
                 {
                     if ( (*aIt)->IsRestart() )
@@ -303,7 +299,6 @@ void SwNumberTreeNode::ValidateContinuous(const SwNumberTreeNode * pNode) const
                        nTmpNumber = GetStartValue();
                 }
             }
-            // <--
 
             (*aIt)->mnNumber = nTmpNumber;
         }
@@ -313,7 +308,6 @@ void SwNumberTreeNode::ValidateContinuous(const SwNumberTreeNode * pNode) const
     // #i74748# - applied patch from garnier_romain
     // number tree node has to be validated.
     SetLastValid( aIt, true );
-    // <--
 }
 
 void SwNumberTreeNode::Validate(const SwNumberTreeNode * pNode) const
@@ -406,7 +400,6 @@ void SwNumberTreeNode::MoveGreaterChildren( SwNumberTreeNode& _rCompareNode,
         // the element, which is referenced by <mItLastValid>, it's needed to
         // adjust <mItLastValid> before erasing <aIt>.
         SetLastValid( mChildren.end() );
-        // <--
 
         mChildren.erase(aItUpper, mChildren.end());
 
@@ -415,7 +408,6 @@ void SwNumberTreeNode::MoveGreaterChildren( SwNumberTreeNode& _rCompareNode,
         {
             SetLastValid( --(mChildren.end()) );
         }
-        // <--
     }
 
 #ifdef __SW_NUMBER_TREE_SANITY_CHECK
@@ -436,7 +428,6 @@ void SwNumberTreeNode::MoveChildren(SwNumberTreeNode * pDest)
         // which is referenced by <mItLastValid>, it's needed to adjust
         // <mItLastValid> before erasing <aItBegin>.
         SetLastValid(mChildren.end());
-        // <--
 
         if (pMyFirst->IsPhantom())
         {
@@ -598,7 +589,6 @@ void SwNumberTreeNode::AddChild( SwNumberTreeNode * pChild,
                 }
                 // assure that unnessary created phantoms at <pChild> are deleted.
                 pChild->ClearObsoletePhantoms();
-                // <--
 
                 if ((*aPredIt)->IsValid())
                     SetLastValid(aPredIt);
@@ -688,7 +678,6 @@ void SwNumberTreeNode::RemoveChild(SwNumberTreeNode * pChild)
             SetLastValid(mChildren.end());
         else
             SetLastValid(aItPred);
-        // <--
 
         mChildren.erase(aRemoveIt);
 
@@ -1068,7 +1057,6 @@ SwNumberTreeNode * SwNumberTreeNode::GetPred(bool bSibling) const
             // #i64311#
             // root node is no valid predecessor
             pResult = mpParent->GetParent() ? mpParent : NULL;
-            // <--
         }
         else
         {
@@ -1237,7 +1225,6 @@ void SwNumberTreeNode::NotifyInvalidChildren()
             }
         }
 
-        // <--
     }
 
     if (IsContinuous() && mpParent)
@@ -1281,7 +1268,6 @@ const SwNumberTreeNode* SwNumberTreeNode::GetPrecedingNodeOf(
 
     return pPrecedingNode;
 }
-// <--
 
 void SwNumberTreeNode::NotifyNodesOnListLevel( const int nListLevel )
 {

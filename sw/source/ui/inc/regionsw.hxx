@@ -98,7 +98,6 @@ class SwEditRegionDlg : public SfxModalDialog
     // #114856# edit in readonly sections
     FixedLine       aPropertiesFL;
     TriStateBox     aEditInReadonlyCB;
-    // <--
 
     OKButton        aOK;
     CancelButton    aCancel;
@@ -135,7 +134,6 @@ class SwEditRegionDlg : public SfxModalDialog
     DECL_LINK( ChangeHideHdl, TriStateBox * );
     // #114856# edit in readonly sections
     DECL_LINK( ChangeEditInReadonlyHdl, TriStateBox * );
-    // <--
     DECL_LINK( ChangeDismissHdl, CheckBox * );
     DECL_LINK( UseFileHdl, CheckBox* );
     DECL_LINK( FileSearchHdl, PushButton* );
@@ -186,7 +184,6 @@ class SwInsertSectionTabPage : public SfxTabPage
     // #114856# edit in readonly sections
     FixedLine       aPropertiesFL;
     CheckBox        aEditInReadonlyCB;
-    // <--
 
     String          m_sFileName;
     String          m_sFilterName;
@@ -201,7 +198,6 @@ class SwInsertSectionTabPage : public SfxTabPage
     DECL_LINK( ChangeHideHdl, CheckBox * );
     // #114856# edit in readonly sections
     DECL_LINK( ChangeEditInReadonlyHdl, CheckBox * );
-    // <--
     DECL_LINK( ChangeProtectHdl, CheckBox * );
     DECL_LINK( ChangePasswdHdl, Button * );
     DECL_LINK( NameEditHdl, Edit * );

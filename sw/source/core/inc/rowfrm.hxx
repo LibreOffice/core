@@ -100,7 +100,6 @@ public:
 
     // #131283# Table row keep feature
     bool ShouldRowKeepWithNext() const;
-    // <--
 
     // #i4032# NEW TABLES
     bool IsRowSpanLine() const { return mbIsRowSpanLine; }

@@ -83,7 +83,6 @@ class SwRootFrm: public SwLayoutFrm
     sal_uInt16  mnColumns;              // the current page layout bases on this number of columns
     bool    mbBookMode;             // the current page layout is in book view
     bool    mbSidebarChanged;       // the notes sidebar state has changed
-    // <--
 
     bool    mbNeedGrammarCheck;     // true when sth needs to be checked (not necessarily started yet!)
 
@@ -349,7 +348,6 @@ public:
     bool IsLeftToRightViewLayout() const;
     const SwRect& GetPagesArea() const { return maPagesArea; }
     void SetSidebarChanged() { mbSidebarChanged = true; }
-    // <--
 };
 
 inline long SwRootFrm::GetBrowseWidth() const

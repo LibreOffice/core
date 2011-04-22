@@ -427,7 +427,6 @@ void Writer::PutNumFmtFontsInAttrPool()
     const SwNumFmt* pFmt;
     const Font* pFont;
     const Font* pDefFont = &numfunc::GetDefBulletFont();
-    // <--
     sal_Bool bCheck = sal_False;
 
     for( sal_uInt16 nGet = rListTbl.Count(); nGet; )

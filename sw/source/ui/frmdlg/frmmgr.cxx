@@ -292,7 +292,6 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
 
     // --> OD 2009-09-01 #mongolianlayout#
     if ( bIsInVertical || bIsInVerticalL2R )
-    // <--
     {
         Point aPos(aBoundRect.Pos());
         long nTmp = aPos.X();
@@ -491,7 +490,6 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
     }
     // --> OD 2009-09-01 #mongolianlayout#
     if ( bIsInVertical || bIsInVerticalL2R )
-    // <--
     {
         //restore width/height exchange
         long nTmp = rVal.nWidth;

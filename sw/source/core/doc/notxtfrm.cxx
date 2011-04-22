@@ -631,7 +631,6 @@ void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
          RES_GRAPHIC_ARRIVED != nWhich &&
          RES_GRF_REREAD_AND_INCACHE != nWhich &&
          RES_LINKED_GRAPHIC_STREAM_ARRIVED != nWhich )
-    // <--
     {
         SwCntntFrm::Modify( pOld, pNew );
     }
@@ -830,7 +829,6 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
             {
                 pGrfNd->UpdateLinkWithInputStream();
             }
-            // <--
             // #i85717#, #i90395# - check, if asynchronous retrieval
             // if input stream for the graphic is possible
 //            else if( GRAPHIC_DEFAULT == rGrfObj.GetType() &&
@@ -838,7 +836,6 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                         rGrfObj.GetType() == GRAPHIC_NONE ) &&
                       pGrfNd->IsLinkedFile() &&
                       pGrfNd->IsAsyncRetrieveInputStreamPossible() )
-            // <--
             {
                 Size aTmpSz;
                 ::sfx2::SvLinkSource* pGrfObj = pGrfNd->GetLink()->GetObj();
@@ -954,7 +951,6 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                     nFormerAntialiasingAtOutput | ANTIALIASING_PIXELSNAPHAIRLINE;
             pOut->SetAntialiasing( nAntialiasingForChartOLE );
         }
-        // <--
 
         Point aPosition(aAlignedGrfArea.Pos());
         Size aSize(aAlignedGrfArea.SSize());
@@ -1004,7 +1000,6 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
         {
             pOut->SetAntialiasing( nFormerAntialiasingAtOutput );
         }
-        // <--
     }
 }
 

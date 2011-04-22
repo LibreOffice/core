@@ -1041,7 +1041,6 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
         {
             bRet = sal_True;
         }
-        // <--
         // #i23726#
         else if( pTxtNd &&
                  SwContentAtPos::SW_NUMLABEL & rCntntAtPos.eCntntAtPos)

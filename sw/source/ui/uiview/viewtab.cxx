@@ -603,7 +603,6 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             rSh.GetCurAttr( aSet );
             const SvxLRSpaceItem& rLR =
                     static_cast<const SvxLRSpaceItem&>(aSet.Get(RES_LR_SPACE));
-            // <--
 
             SwPosition aPos(*pNumRuleNodeFromDoc);
             // #i90078#
@@ -611,7 +610,6 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             // #i42921# invalidate state of indent in order to get a ruler update.
             aParaMargin.SetWhich( nSlot );
             GetViewFrame()->GetBindings().SetState( aParaMargin );
-            // <--
         }
         else if( pColl && pColl->IsAutoUpdateFmt() )
         {
@@ -1086,7 +1084,6 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                                         // #i42922# Mouse move of numbering label
                                         // has to consider the left indent of the paragraph
                                         pNumRuleNodeFromDoc->GetLeftMarginWithNum( sal_True ) );
-                                       // <--
 
                         short nFLOffset;
                         pNumRuleNodeFromDoc->GetFirstLineOfsWithNum( nFLOffset );

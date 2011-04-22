@@ -2693,7 +2693,6 @@ void WW8Export::WriteFkpPlcUsw()
             (pDoc->getExternalData(::sw::STTBF_ASSOC).get());
 
         if ( pSttbfAssoc )                      // #i106057#
-        // <--
         {
         ::std::vector<String> aStrings;
 
@@ -2717,7 +2716,6 @@ void WW8Export::WriteFkpPlcUsw()
           (pDoc->getExternalData(::sw::FIB).get());
 
     if ( pFibData )
-    // <--
     {
     pFib->fReadOnlyRecommended =
         pFibData->getReadOnlyRecommended() ? 1 : 0;

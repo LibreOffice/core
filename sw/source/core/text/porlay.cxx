@@ -421,7 +421,6 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
 
     bool bHasBlankPortion = false;
     bool bHasOnlyBlankPortions = true;
-    // <--
 
     if( pPortion )
     {
@@ -482,7 +481,6 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                         continue;
                     }
                 }
-                // <--
 
                 bHasOnlyBlankPortions = false;
 
@@ -629,7 +627,6 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
         {
             bHasBlankPortion = true;
         }
-        // <--
     }
 
     // #i3952#
@@ -641,7 +638,6 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
         SetAscent( nTmpAscent );
         Height( nTmpHeight );
     }
-    // <--
 
     // Robust:
     if( nLineWidth < Width() )
@@ -1006,7 +1002,6 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
             }
             nChg = Min( nChg, nNextCTLScriptStart );
         }
-        // <--
 
         // special case for dotted circle since it can be used with complex
         // before a mark, so we want it associated with the mark's script

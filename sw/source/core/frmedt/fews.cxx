@@ -1018,7 +1018,6 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 {
                     aPos.X() = nTop;
                 }
-                // <--
                 else
                 {
                     aPos.Y() = nTop;

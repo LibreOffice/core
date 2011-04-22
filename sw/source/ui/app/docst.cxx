@@ -868,7 +868,6 @@ sal_uInt16 SwDocShell::ApplyStyles(const String &rName, sal_uInt16 nFamily,
             // clear also list attributes at affected text nodes, if paragraph
             // style has the list style attribute set.
             pSh->SetTxtFmtColl( pStyle->GetCollection(), true );
-            // <--
             break;
         }
         case SFX_STYLE_FAMILY_FRAME:
@@ -1007,7 +1006,6 @@ sal_uInt16 SwDocShell::UpdateStyle(const String &rName, sal_uInt16 nFamily, SwWr
                 // #i105535#
                 // no update of anchor attribute
                 aSet.ClearItem( RES_ANCHOR );
-                // <--
 
                 pFrm->SetFmtAttr( aSet );
 

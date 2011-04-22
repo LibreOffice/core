@@ -1036,7 +1036,6 @@ SwNumberPortion *SwTxtFormatter::NewFtnNumPortion( SwTxtFormatInfo &rInf ) const
     pNumFnt->SetWeight( WEIGHT_NORMAL, SW_LATIN );
     pNumFnt->SetWeight( WEIGHT_NORMAL, SW_CJK );
     pNumFnt->SetWeight( WEIGHT_NORMAL, SW_CTL );
-    // <--
 
     pNumFnt->SetDiffFnt(&rSet, pIDSA );
     pNumFnt->SetVertical( pNumFnt->GetOrientation(), pFrm->IsVertical() );
@@ -1365,7 +1364,6 @@ SwFtnSave::SwFtnSave( const SwTxtSizeInfo &rInf,
             String aTmpStr( rFtn.GetViewNumStr( *pDoc ) );
             pFnt->SetActual( SwScriptInfo::WhichFont( 0, &aTmpStr, 0 ) );
         }
-        // <--
 
         const SwEndNoteInfo* pInfo;
         if( rFtn.IsEndNote() )
@@ -1430,7 +1428,6 @@ SwFtnPortion::SwFtnPortion( const XubString &rExpand, SwTxtFrm *pFrame,
         // #i98418#
         , mbPreferredScriptTypeSet( false )
         , mnPreferredScriptType( SW_LATIN )
-        // <--
 {
     SetLen(1);
     SetWhichPor( POR_FTN );
@@ -1455,7 +1452,6 @@ sal_Bool SwFtnPortion::Format( SwTxtFormatInfo &rInf )
     // #i98418#
 //    SwFtnSave aFtnSave( rInf, pFtn );
     SwFtnSave aFtnSave( rInf, pFtn, mbPreferredScriptTypeSet, mnPreferredScriptType );
-    // <--
     // the idx is manipulated in SwExpandPortion::Format
     // this flag indicates, that a footnote is allowed to trigger
     // an underflow during SwTxtGuess::Guess
@@ -1479,7 +1475,6 @@ void SwFtnPortion::Paint( const SwTxtPaintInfo &rInf ) const
     // #i98418#
 //    SwFtnSave aFtnSave( rInf, pFtn );
     SwFtnSave aFtnSave( rInf, pFtn, mbPreferredScriptTypeSet, mnPreferredScriptType );
-    // <--
     rInf.DrawViewOpt( *this, POR_FTN );
     SwExpandPortion::Paint( rInf );
 }
@@ -1493,7 +1488,6 @@ SwPosSize SwFtnPortion::GetTxtSize( const SwTxtSizeInfo &rInfo ) const
     // #i98418#
 //    SwFtnSave aFtnSave( rInfo, pFtn );
     SwFtnSave aFtnSave( rInfo, pFtn, mbPreferredScriptTypeSet, mnPreferredScriptType );
-    // <--
     return SwExpandPortion::GetTxtSize( rInfo );
 }
 
@@ -1503,7 +1497,6 @@ void SwFtnPortion::SetPreferredScriptType( sal_uInt8 nPreferredScriptType )
     mbPreferredScriptTypeSet = true;
     mnPreferredScriptType = nPreferredScriptType;
 }
-// <--
 
 /*************************************************************************
  *                      class SwQuoVadisPortion

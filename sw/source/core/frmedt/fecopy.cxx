@@ -419,7 +419,6 @@ sal_Bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                         {
                             static_cast<SwDrawFrmFmt*>(pFmt)->PosAttrSet();
                         }
-                        // <--
                     }
                     if( bSelectInsert )
                         pDestDrwView->MarkObj( pNew, pDestPgView );
@@ -1013,7 +1012,6 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
                                     static_cast<SwDrawContact*>(pNew->FindContactObj());
                                 pContact->MoveObjToVisibleLayer( pContact->GetMaster() );
                             }
-                            // <--
                             SdrObject *pObj = pNew->FindSdrObject();
                             SwDrawView  *pDV = Imp()->GetDrawView();
                             pDV->MarkObj( pObj, pDV->GetSdrPageView() );
@@ -1023,7 +1021,6 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
                             {
                                 static_cast<SwDrawFrmFmt*>(pNew)->PosAttrSet();
                             }
-                            // <--
                         }
                     }
                 }

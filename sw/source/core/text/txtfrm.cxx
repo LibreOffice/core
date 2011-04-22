@@ -562,7 +562,6 @@ bool lcl_HideObj( const SwTxtFrm& _rFrm,
 
     return bRet;
 }
-// <--
 /*************************************************************************
  *                        SwTxtFrm::HideAndShowObjects()
  *************************************************************************/
@@ -599,7 +598,6 @@ void SwTxtFrm::HideAndShowObjects()
                 {
                     pContact->MoveObjToInvisibleLayer( pObj );
                 }
-                // <--
             }
         }
         else
@@ -620,7 +618,6 @@ void SwTxtFrm::HideAndShowObjects()
                 SwContact* pContact = static_cast<SwContact*>(pObj->GetUserCall());
                 // #120729# - determine anchor type only once
                 const RndStdIds eAnchorType( pContact->GetAnchorId() );
-                // <--
 
                 if (eAnchorType == FLY_AT_PARA)
                 {
@@ -637,7 +634,6 @@ void SwTxtFrm::HideAndShowObjects()
                     // under certain conditions
                     if ( nHiddenStart != STRING_LEN && bShouldBeHidden &&
                          lcl_HideObj( *this, eAnchorType, nObjAnchorPos, (*GetDrawObjs())[i] ) )
-                    // <--
                         pContact->MoveObjToInvisibleLayer( pObj );
                     else
                         pContact->MoveObjToVisibleLayer( pObj );
@@ -693,7 +689,6 @@ xub_StrLen SwTxtFrm::FindBrk( const XubString &rTxt,
     return nFound <= STRING_LEN
            ? static_cast<xub_StrLen>(nFound)
            : STRING_LEN;
-    // <--
 }
 
 /*************************************************************************
@@ -1071,7 +1066,6 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             {
                 pViewSh->InvalidateAccessibleParaAttrs( *this );
             }
-            // <--
         }
         break;
         case RES_OBJECTDYING:
@@ -1328,7 +1322,6 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             {
                 pViewSh->InvalidateAccessibleParaAttrs( *this );
             }
-            // <--
         }
         break;
 
@@ -1562,7 +1555,6 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                 // #i28701# - consider anchored objects
                 if ( GetDrawObjs() )
                     break;
-                // <--
 
                 return;
             }
@@ -2167,7 +2159,6 @@ SwTwips SwTxtFrm::CalcFitToContent()
     // fairly reasonable value:
     if ( IsLocked() )
         return Prt().Width();
-    // <--
 
     SwParaPortion* pOldPara = GetPara();
     SwParaPortion *pDummy = new SwParaPortion();
@@ -2190,7 +2181,6 @@ SwTwips SwTxtFrm::CalcFitToContent()
 
     // #i31490#
     SwTxtFrmLocker aLock( this );
-    // <--
 
     SwTxtFormatInfo aInf( this, sal_False, sal_True, sal_True );
     aInf.SetIgnoreFly( sal_True );
@@ -2200,7 +2190,6 @@ SwTwips SwTxtFrm::CalcFitToContent()
     // #i54031# - assure mininum of MINLAY twips.
     const SwTwips nMax = Max( (SwTwips)MINLAY,
                               aLine._CalcFitToContent() + 1 );
-    // <--
 
     Frm().Width( nOldFrmWidth );
     Prt().Width( nOldPrtWidth );
@@ -2305,7 +2294,6 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
     // #i71281#
     // invalidate printing area, if height of last line changes
     const SwTwips mnOldHeightOfLastLine( mnHeightOfLastLine );
-    // <--
     // determine output device
     ViewShell* pVsh = getRootFrm()->GetCurrShell();
     OSL_ENSURE( pVsh, "<SwTxtFrm::_GetHeightOfLastLineForPropLineSpacing()> - no ViewShell" );
@@ -2329,7 +2317,6 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
     {
         return;
     }
-    // <--
 
     // determine height of last line
 
@@ -2402,7 +2389,6 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
                     pLineLayout->MaxAscentDescent( nAscent, nDescent,
                                                    nDummy1, nDummy2,
                                                    0, true );
-                    // <--
                     // #i71281#
                     // Suppress wrong invalidation of printing area, if method is
                     // called recursive.
@@ -2421,12 +2407,9 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
                     {
                         mnHeightOfLastLine = nNewHeightOfLastLine;
                     }
-                    // <--
-                    // <--
                 }
             }
         }
-        // <--
     }
     // #i71281#
     // invalidate printing area, if height of last line changes
@@ -2434,7 +2417,6 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
     {
         InvalidatePrt();
     }
-    // <--
 }
 
 /*************************************************************************
@@ -2626,7 +2608,6 @@ void SwTxtFrm::RecalcAllLines()
             // First body content may be in table!
             if ( bRestart && pPrv && pPrv->FindPageFrm() != FindPageFrm() )
                 pPrv = 0;
-            // <--
 
             nNewNum = pPrv ? ((SwTxtFrm*)pPrv)->GetAllLines() : 0;
         }
@@ -2782,7 +2763,6 @@ void SwTxtFrm::CalcBaseOfstForFly()
     // #118809# - ignore objects in page header|footer for
     // text frames not in page header|footer
     aTxtFly.SetIgnoreObjsInHeaderFooter( sal_True );
-    // <--
     SwTwips nRet1 = lcl_CalcFlyBasePos( *this, aFlyRect, aTxtFly );
     aTxtFly.SetIgnoreCurrentFrame( sal_False );
     SwTwips nRet2 = lcl_CalcFlyBasePos( *this, aFlyRect, aTxtFly );

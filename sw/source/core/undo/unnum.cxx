@@ -145,7 +145,6 @@ void SwUndoInsNum::RedoImpl(::sw::UndoRedoContext & rContext)
         {
             // #i42921# - adapt to changed signature
             rDoc.SetNumRule(rPam, aNumRule, false);
-            // <--
         }
     }
 }
@@ -165,7 +164,6 @@ void SwUndoInsNum::RepeatImpl(::sw::RepeatContext & rContext)
         {
             // #i42921# - adapt to changed signature
             rDoc.SetNumRule(rContext.GetRepeatPaM(), aNumRule, false);
-            // <--
         }
     }
     else

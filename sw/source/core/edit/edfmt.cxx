@@ -81,7 +81,6 @@ void SwEditShell::FillByEx(SwCharFmt* pCharFmt, sal_Bool bReset)
     {
         // #i73790# - method renamed
         pCharFmt->ResetAllFmtAttr();
-        // <--
     }
 
     SwPaM* pPam = GetCrsr();

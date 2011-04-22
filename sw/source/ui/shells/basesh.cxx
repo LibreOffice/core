@@ -1461,9 +1461,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                             rSet.Put(aBool);
                         }
                     }
-                    // <--
                 }
-                // <--
             }
             break;
             case SID_IMAP_EXEC:
@@ -1525,7 +1523,6 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                             rSh.GetGraphic(sal_False);  // start the loading
                         // #i75481#
                         bDisable = sal_True;
-                        // <--
                     }
                     else if( bHas && bOk )
                         bDisable = !lcl_UpdateContourDlg( rSh, nSel );
@@ -1537,9 +1534,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                             bDisable = GRAPHIC_NONE == rSh.GetGraphicType();
                         else
                             bDisable = GRAPHIC_NONE == rSh.GetIMapGraphic().GetType();
-                        // <--
                     }
-                    // <--
 
                     if( bDisable )
                         rSet.DisableItem( nWhich );
@@ -1857,7 +1852,6 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
                 {
                     nSurround = nOldSurround;
                 }
-                // <--
                 break;
             case FN_FRAME_WRAP_CONTOUR:
                 aWrap.SetContour(!aWrap.IsContour());

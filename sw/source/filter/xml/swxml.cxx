@@ -80,7 +80,6 @@
 #include <poolfmt.hxx>
 #include <numrule.hxx>
 #include <paratr.hxx>
-// <--
 
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
@@ -465,7 +464,6 @@ void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
         if ( !aOutlineLevelAssigned[ i ] &&
              aCreatedDefaultOutlineStyles[ i ] != 0 &&
              ! aCreatedDefaultOutlineStyles[ i ]->IsAssignedToListLevelOfOutlineStyle() )
-        // <--
         {
             // apply outline level at created default outline style
             aCreatedDefaultOutlineStyles[ i ]->AssignToListLevelOfOutlineStyle(i);//#outline level added by zhaojianwei
@@ -482,7 +480,6 @@ void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
     }
 
 }
-// <--
 
 void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SwDoc& _rDoc )
 {
@@ -644,7 +641,6 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
         { "ShapePositionInHoriL2R", sizeof("ShapePositionInHoriL2R")-1, 0,
               &::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        // <--
 
         { "BuildId", sizeof("BuildId")-1, 0,
               &::getCppuType( (OUString *)0 ),
@@ -659,7 +655,6 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
         { "TextDocInOOoFileFormat", sizeof("TextDocInOOoFileFormat")-1, 0,
               &::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        // <--
         { NULL, 0, 0, NULL, 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet(
@@ -870,7 +865,6 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
                 OUString(RTL_CONSTASCII_USTRINGPARAM("ShapePositionInHoriL2R")),
                 makeAny( bShapePositionInHoriL2R ) );
     }
-    // <--
     {
         const sal_Bool bTextDocInOOoFileFormat = !bOASIS;
         xInfoSet->setPropertyValue(
@@ -1020,12 +1014,10 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
         {
             lcl_AdjustOutlineStylesForOOo( rDoc );
         }
-        // <--
         // Fix #i58251#: Unfortunately is the static default different to SO7 behaviour,
         // so we have to set a dynamic default after importing SO7
         rDoc.SetDefault( SfxBoolItem( RES_ROW_SPLIT, sal_False ) );
     }
-    // <--
 
     rDoc.PropagateOutlineRule();
 
@@ -1034,7 +1026,6 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
     {
         rDoc.set(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE, false);
     }
-    // <--
 
     // Convert all instances of <SdrOle2Obj> into <SdrGrafObj>, because the
     // Writer doesn't support such objects.

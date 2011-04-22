@@ -357,7 +357,6 @@ SwRectFn fnRectVL2R = &aVerticalRightToLeft;
 
 // #i65250#
 sal_uInt32 SwFrm::mnLastFrmId=0;
-// <--
 
 TYPEINIT1(SwFrm,SwClient);      //rtti fuer SwFrm
 TYPEINIT1(SwCntntFrm,SwFrm);    //rtti fuer SwCntntFrm
@@ -486,7 +485,6 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     mbBookMode( false ),
     mbSidebarChanged( false ),
     mbNeedGrammarCheck( false ),
-    // <--
     nBrowseWidth( MM50*4 ), //2cm Minimum
     pTurbo( 0 ),
     pLastPage( 0 ),
@@ -536,7 +534,6 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
     SwCntntNode *pNode = pDoc->GetNodes().GoNextSection( &aIndex, sal_True, sal_False );
     // #123067# pNode = 0 can really happen
     SwTableNode *pTblNd= pNode ? pNode->FindTableNode() : 0;
-    // <--
 
     //PageDesc besorgen (entweder vom FrmFmt des ersten Node oder den
     //initialen.)
@@ -585,7 +582,6 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
         SwDocPosUpdate aMsgHnt( pPage->Frm().Top() );
         pFieldsAccess->UpdatePageFlds( &aMsgHnt );
     }
-    // <---
 
     pTimerAccess->StartIdling();
     bCallbackActionEnabled = sal_True;

@@ -491,7 +491,6 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
         if ( IsInTab() &&
              ( GetUpper()->Lower() == this ||
                GetUpper()->Lower()->IsValid() ) )
-        // <--
         {
             long nAdd = (*fnRect->fnYDiff)( (GetUpper()->Lower()->Frm().*fnRect->fnGetTop)(),
                                             (GetUpper()->*fnRect->fnGetPrtTop)() );
@@ -682,7 +681,6 @@ SwCntntFrm *SwTxtFrm::JoinFrm()
                             this );
         }
     }
-    // <--
     pFoll->Cut();
     delete pFoll;
     pFollow = pNxt;
@@ -722,7 +720,6 @@ SwCntntFrm *SwTxtFrm::SplitFrm( const xub_StrLen nTxtPos )
                             this );
         }
     }
-    // <--
 
     // Wenn durch unsere Aktionen Fussnoten in pNew landen,
     // so muessen sie umgemeldet werden.
@@ -1344,12 +1341,10 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
     // of ) would not trigger a reformatting of the previous line. Adding 1
     // to the result of FindBrk() does not solve the problem in all cases,
     // nevertheless it should be sufficient.
-    // <--
     sal_Bool bPrev = rLine.GetPrev() &&
                      ( FindBrk( rString, rLine.GetStart(), rReformat.Start() + 1 )
                        // #i46560#
                        + 1
-                       // <--
                        >= rReformat.Start() ||
                        rLine.GetCurr()->IsRest() );
     if( bPrev )
@@ -1921,7 +1916,6 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
             if( pPre &&
                 // #i10826# It's the first, it cannot keep!
                 pPre->GetIndPrev() &&
-                // <--
                 pPre->GetAttrSet()->GetKeep().GetValue() )
             {
                 pPre->InvalidatePos();

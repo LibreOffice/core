@@ -257,7 +257,6 @@ bool lcl_ChgHyperLinkColor( const SwTxtAttr& rAttr,
 
         return false;
     }
-    // <--
 
     //
     // 2. case:

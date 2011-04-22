@@ -65,7 +65,6 @@
 // #i27138#
 #include <viewsh.hxx>
 #include <txtfrm.hxx>
-// <--
 
 
 // #i21457# - new implementation of local method <lcl_IsInSameTblBox(..)>.
@@ -1162,7 +1161,6 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
                                 dynamic_cast<SwTxtFrm*>(pNew->FindPrevCnt( true )) );
                         }
                     }
-                    // <--
                     pNew = pSct;
                 }
 
@@ -1189,7 +1187,6 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
                             dynamic_cast<SwTxtFrm*>(pNew->FindPrevCnt( true )) );
                     }
                 }
-                // <--
                 if ( bInitNewSect )
                     static_cast<SwSectionFrm*>(pNew)->Init();
             }

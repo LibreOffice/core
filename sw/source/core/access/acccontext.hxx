@@ -156,7 +156,6 @@ protected:
     // #i27301# - use new type definition for <_nStates>
     void InvalidateChildrenStates( const SwFrm* _pFrm,
                                    tAccessibleStates _nStates );
-    // <--
 
     // Dispose children of the specified SwFrm. The SwFrm might belong to
     // the current object or to any other child or grandchild.

@@ -40,10 +40,8 @@
 
 // #i28701#
 #include <movedfwdfrmsbyobjpos.hxx>
-// <--
 // #i35911#
 #include <objstmpconsiderwrapinfl.hxx>
-// <--
 
 #define LOOP_DETECT 250
 
@@ -230,10 +228,8 @@ SwLayouter::SwLayouter()
           pLooping( NULL ),
           // #i28701#
           mpMovedFwdFrms( 0L ),
-          // <--
           // #i35911#
           mpObjsTmpConsiderWrapInfl( 0L )
-          // <--
 {
 }
 
@@ -244,11 +240,9 @@ SwLayouter::~SwLayouter()
     // #i28701#
     delete mpMovedFwdFrms;
     mpMovedFwdFrms = 0L;
-    // <--
     // #i35911#
     delete mpObjsTmpConsiderWrapInfl;
     mpObjsTmpConsiderWrapInfl = 0L;
-    // <--
 }
 
 void SwLayouter::_CollectEndnotes( SwSectionFrm* pSect )
@@ -382,7 +376,6 @@ void SwLayouter::RemoveMovedFwdFrm( const SwDoc& _rDoc,
         _rDoc.GetLayouter()->mpMovedFwdFrms->Remove( _rTxtFrm );
     }
 }
-// <--
 
 bool SwLayouter::FrmMovedFwdByObjPos( const SwDoc& _rDoc,
                                       const SwTxtFrm& _rTxtFrm,
@@ -404,7 +397,6 @@ bool SwLayouter::FrmMovedFwdByObjPos( const SwDoc& _rDoc,
                                 FrmMovedFwdByObjPos( _rTxtFrm, _ornToPageNum );
     }
 }
-// <--
 // #i26945#
 bool SwLayouter::DoesRowContainMovedFwdFrm( const SwDoc& _rDoc,
                                             const SwRowFrm& _rRowFrm )
@@ -423,7 +415,6 @@ bool SwLayouter::DoesRowContainMovedFwdFrm( const SwDoc& _rDoc,
                         mpMovedFwdFrms->DoesRowContainMovedFwdFrm( _rRowFrm );
     }
 }
-// <--
 
 // #i35911#
 void SwLayouter::ClearObjsTmpConsiderWrapInfluence( const SwDoc& _rDoc )
@@ -451,7 +442,6 @@ void SwLayouter::InsertObjForTmpConsiderWrapInfluence(
 
     _rDoc.GetLayouter()->mpObjsTmpConsiderWrapInfl->Insert( _rAnchoredObj );
 }
-// <--
 // #i40155#
 void SwLayouter::ClearFrmsNotToWrap( const SwDoc& _rDoc )
 {
@@ -500,7 +490,6 @@ bool SwLayouter::FrmNotToWrap( const IDocumentLayoutAccess& _rDLA,
         return bFrmNotToWrap;
     }
 }
-// <--
 
 void LOOPING_LOUIE_LIGHT( bool bCondition, const SwTxtFrm& rTxtFrm )
 {
@@ -560,6 +549,5 @@ void SwLayouter::ClearMoveBwdLayoutInfo( const SwDoc& _rDoc )
     if ( _rDoc.GetLayouter() )
         const_cast<SwDoc&>(_rDoc).GetLayouter()->maMoveBwdLayoutInfo.clear();
 }
-// <--
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

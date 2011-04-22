@@ -213,7 +213,6 @@ sal_Bool SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
                     }
                 }
 
-                // <--
 
                 if( rEvt.GetMode() & HELPMODE_BALLOON )
                 {

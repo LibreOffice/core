@@ -282,7 +282,6 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                                             ? rLR.GetLeft()
                                             : rLR.GetRight() )
                                         : rUL.GetLower();
-            // <--
             switch ( aVert.GetVertOrient() )
             {
                 case text::VertOrientation::CHAR_BOTTOM:
@@ -580,7 +579,6 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                 maOffsetToFrmAnchorPos.X() = nVertOffsetToFrmAnchorPos;
             else
                 maOffsetToFrmAnchorPos.Y() = nVertOffsetToFrmAnchorPos;
-            // <--
             // #i11860# - use new method <_GetTopForObjPos>
             // to get top of frame for object positioning.
             const SwTwips nTopOfAnch = _GetTopForObjPos( *pAnchorFrmForVertPos, fnRect, bVert );
@@ -651,7 +649,6 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                         {
                             pLayoutFrmToGrow->Grow( nRelPosY - nAvail );
                         }
-                        // <--
                         nRelPosY = 0;
                     }
                     else
@@ -754,7 +751,6 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                 GetAnchoredObj().SetObjLeft( nTopOfAnch +
                                              ( aRelPos.X() - nRelDiff ) );
             }
-            // <--
         }
         else
         {
@@ -810,7 +806,6 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
             {
                 pLayoutFrmToGrow->Grow( -nDist );
             }
-            // <--
         }
 
         if ( DoesObjFollowsTextFlow() &&
@@ -864,7 +859,6 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                         {
                             GetAnchoredObj().SetObjLeft( nTopOfAnch + aRelPos.X() );
                         }
-                        // <--
                     }
                     else
                     {
@@ -955,7 +949,6 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                                     GetAnchoredObj().SetObjLeft( nTopOfAnch +
                                                                  aRelPos.X() );
                                 }
-                                // <--
                             }
                             else
                                 GetAnchoredObj().SetObjTop( nTopOfAnch +
@@ -1018,7 +1011,6 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
             {
                 GetAnchoredObj().SetObjLeft( nTopOfAnch + aRelPos.X() );
             }
-            // <--
         }
         else
             GetAnchoredObj().SetObjTop( nTopOfAnch + aRelPos.Y() );
@@ -1079,7 +1071,6 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
         {
             GetAnchoredObj().SetObjLeft( nTopOfAnch + aRelPos.X() );
         }
-        // <--
         GetAnchoredObj().SetObjTop( rAnchorTxtFrm.Frm().Top() +
                                     aRelPos.Y() );
     }

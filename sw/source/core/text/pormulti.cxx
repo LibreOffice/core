@@ -569,7 +569,6 @@ sal_Bool SwDoubleLinePortion::ChgSpaceAdd( SwLineLayout* pCurr,
                 // instead we want to insert a new first value:
                 std::vector<long>* pVec = pCurr->GetpLLSpaceAdd();
                 pVec->insert( pVec->begin(), nMultiSpace );
-                // <--
                 bRet = sal_True;
             }
         }

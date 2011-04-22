@@ -62,7 +62,6 @@
 #include <com/sun/star/io/XSeekable.hpp>
 // #i73788#
 #include <retrieveinputstreamconsumer.hxx>
-// <--
 
 using namespace com::sun::star;
 
@@ -79,7 +78,6 @@ SwGrfNode::SwGrfNode(
     // #i73788#
     mbLinkedInputStreamReady( false ),
     mbIsStreamReadOnly( sal_False )
-    // <--
 {
     aGrfObj.SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ) );
     bInSwapIn = bChgTwipSize = bChgTwipSizeFromPixel = bLoadLowResGrf =
@@ -96,7 +94,6 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
     // #i73788#
     mbLinkedInputStreamReady( false ),
     mbIsStreamReadOnly( sal_False )
-    // <--
 {
     aGrfObj = rGrfObj;
     aGrfObj.SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ) );
@@ -119,7 +116,6 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
     // #i73788#
     mbLinkedInputStreamReady( false ),
     mbIsStreamReadOnly( sal_False )
-    // <--
 {
     aGrfObj.SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ) );
 
@@ -221,7 +217,6 @@ sal_Bool SwGrfNode::ReRead(
                 // do not load linked graphic, if it isn't a new linked graphic.
 //                else {
                 else if ( bNewGrf )
-                // <--
                 {
                     //TODO refLink->setInputStream(getInputStream());
                     ((SwBaseLink*)&refLink)->SwapIn();
@@ -292,7 +287,6 @@ sal_Bool SwGrfNode::ReRead(
                 {
                     ((SwBaseLink*)&refLink)->SwapIn();
                 }
-                // <--
             }
         }
     }
@@ -317,7 +311,6 @@ SwGrfNode::~SwGrfNode()
 {
     // #i73788#
     mpThreadConsumer.reset();
-    // <--
 
     SwDoc* pDoc = GetDoc();
     if( refLink.Is() )
@@ -339,7 +332,6 @@ SwGrfNode::~SwGrfNode()
         // inside one document have to be implemented.
 //        if( !pDoc->IsInDtor() && HasStreamName() )
 //          DelStreamName();
-        // <--
     }
     //#39289# Die Frames muessen hier bereits geloescht weil der DTor der
     //Frms die Grafik noch fuer StopAnimation braucht.
@@ -467,15 +459,12 @@ short SwGrfNode::SwapIn( sal_Bool bWaitForData )
                         nRet = 1;
                     delete pStrm;
                 }
-                // <--
             }
             catch ( uno::Exception& )
             {
                 // #i48434#
                 OSL_FAIL( "<SwGrfNode::SwapIn(..)> - unhandled exception!" );
-                // <--
             }
-            // <--
         }
 
         if( 1 == nRet )
@@ -576,7 +565,6 @@ sal_Bool SwGrfNode::SavePersistentData()
     // Important note: see also fix for #i40014#
 //    if( HasStreamName() )
 //        DelStreamName();
-    // <--
 
     // Und in TempFile rausswappen
     return (sal_Bool) SwapOut();
@@ -746,7 +734,6 @@ void SwGrfNode::DelStreamName()
             {
                 // #i48434#
                 OSL_FAIL( "<SwGrfNode::DelStreamName()> - unhandled exception!" );
-                // <--
             }
         }
 
@@ -813,7 +800,6 @@ SvStream* SwGrfNode::_GetStreamForEmbedGrf(
                 _aStrmName += aExtStr;
             }
         }
-        // <--
 
         // assure that graphic file exist in the storage.
         if ( _refPics->hasByName( _aStrmName ) &&
@@ -873,7 +859,6 @@ void SwGrfNode::_GetStreamStorageNames( String& rStrmName,
     OSL_ENSURE( STRING_NOTFOUND == rStrmName.Search( '/' ),
             "invalid graphic stream name" );
 }
-// <--
 
 SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 {
@@ -897,15 +882,12 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
                 GraphicFilter::GetGraphicFilter()->ImportGraphic( aTmpGrf, String(), *pStrm );
                 delete pStrm;
             }
-            // <--
         }
         catch ( uno::Exception& )
         {
             // #i48434#
             OSL_FAIL( "<SwGrfNode::MakeCopy(..)> - unhandled exception!" );
-            // <--
         }
-        // <--
     }
     else
     {
@@ -989,15 +971,12 @@ IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
                     }
                     delete pStrm;
                 }
-                // <--
             }
             catch ( uno::Exception& )
             {
                 // #i48434#
                 OSL_FAIL( "<SwapGraphic> - unhandled exception!" );
-                // <--
             }
-            // <--
         }
     }
 
@@ -1175,12 +1154,10 @@ void SwGrfNode::UpdateLinkWithInputStream()
         // #i88291#
         mxInputStream.clear();
         GetLink()->clearStreamToLoadFrom();
-        // <--
         mbLinkedInputStreamReady = false;
         mpThreadConsumer.reset();
     }
 }
-// <--
 
 // #i90395#
 bool SwGrfNode::IsAsyncRetrieveInputStreamPossible() const
@@ -1200,6 +1177,5 @@ bool SwGrfNode::IsAsyncRetrieveInputStreamPossible() const
 
     return bRet;
 }
-// <--
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

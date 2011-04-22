@@ -60,7 +60,6 @@
 
 // #i12836# enhanced pdf export
 #include <EnhancedPDFExportHelper.hxx>
-// <--
 
 #include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentLineNumberAccess.hxx>
@@ -73,7 +72,6 @@ namespace numfunc
     extern const String& GetDefBulletFontname();
     extern bool IsDefBulletFontUserDefined();
 }
-// <--
 
 
 #define REDLINE_DISTANCE 567/4
@@ -334,7 +332,6 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
 
         // #i16816# tagged pdf support
         SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pSh->GetOut() );
-        // <--
 
         SwExtraPainter aExtra( this, pSh, rLineInf, rRect, eHor, bLineNum );
 
@@ -613,7 +610,6 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 
     Frm_Info aFrmInfo( *this );
     SwTaggedPDFHelper aTaggedPDFHelperParagraph( 0, &aFrmInfo, 0, *pSh->GetOut() );
-    // <--
 
     if( !IsEmpty() || !PaintEmpty( rRect, sal_True ) )
     {
@@ -634,7 +630,6 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
             // #i29062# pass info that we are currently
             // painting.
             ((SwTxtFrm*)this)->GetFormatted( true );
-            // <--
             if( IsEmpty() )
             {
                 PaintEmpty( rRect, sal_False );

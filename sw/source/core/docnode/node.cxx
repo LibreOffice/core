@@ -163,7 +163,6 @@ int Put( boost::shared_ptr<const SfxItemSet>& mrpAttrSet, const SwCntntNode& rNo
         pStyleNames = new SfxItemSet( *aNewSet.GetPool(), RES_FRMATR_STYLE_NAME, RES_FRMATR_CONDITIONAL_STYLE_NAME );
         pStyleNames->Put( aNewSet );
     }
-    // <--
 
     const int nRet = aNewSet.Put( rSet );
 
@@ -173,7 +172,6 @@ int Put( boost::shared_ptr<const SfxItemSet>& mrpAttrSet, const SwCntntNode& rNo
         aNewSet.Put( *pStyleNames );
         delete pStyleNames;
     }
-    // <--
 
     if ( nRet )
         GetNewAutoStyle( mrpAttrSet, rNode, aNewSet );
@@ -213,7 +211,6 @@ int Put_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
         pStyleNames = new SfxItemSet( *aNewSet.GetPool(), RES_FRMATR_STYLE_NAME, RES_FRMATR_CONDITIONAL_STYLE_NAME );
         pStyleNames->Put( aNewSet );
     }
-    // <--
 
     // for a correct broadcast, we need to do a SetModifyAtAttr with the items
     // from aNewSet. The 'regular' SetModifyAtAttr is done in GetNewAutoStyle
@@ -228,7 +225,6 @@ int Put_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
         aNewSet.Put( *pStyleNames );
         delete pStyleNames;
     }
-    // <--
 
     if ( nRet )
         GetNewAutoStyle( mrpAttrSet, rNode, aNewSet );
@@ -890,7 +886,6 @@ sal_uInt8 SwNode::HasPrevNextLayNode() const
         {
             --aIdx;
         }
-        // <--
         if( IsValidNextPrevNd( aIdx.GetNode() ))
             nRet |= ND_HAS_PREV_LAYNODE;
         // #i77805# - skip section start and end nodes
@@ -1328,7 +1323,6 @@ void SwCntntNode::MakeFrms( SwCntntNode& rNode )
                             dynamic_cast<SwTxtFrm*>(pNew->FindPrevCnt( true )) );
             }
         }
-        // <--
     }
 }
 
@@ -1697,7 +1691,6 @@ const SfxPoolItem* SwCntntNode::GetNoCondAttr( sal_uInt16 nWhich,
     //       the attribute set of the paragraph style, which is valid for the
     //       content node - see file <node.hxx>
     else
-    // <--
     {
         GetSwAttrSet().GetItemState( nWhich, bInParents, &pFnd );
     }
@@ -1956,7 +1949,6 @@ short SwCntntNode::GetTextDirection( const SwPosition& rPos,
 
     return nRet;
 }
-// <--
 
 SwOLENodes* SwCntntNode::CreateOLENodesArray( const SwFmtColl& rColl, bool bOnlyWithInvalidSize )
 {

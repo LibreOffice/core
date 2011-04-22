@@ -125,7 +125,6 @@ sal_Bool SwLayoutFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
         const SwRect aPaintRect( bCntntCheck ?
                                  pFrm->UnionFrm() :
                                  pFrm->PaintArea() );
-        // <--
 
         if ( aPaintRect.IsInside( rPoint ) &&
              ( bCntntCheck || pFrm->GetCrsrOfst( pPos, rPoint, pCMS ) ) )
@@ -320,7 +319,6 @@ sal_Bool SwRootFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
             pPage = dynamic_cast<const SwPageFrm*>(pPage->GetNext());
         }
     }
-    // <--
     if ( pPage )
     {
         pPage->SwPageFrm::GetCrsrOfst( pPos, rPoint, pCMS );
@@ -1450,7 +1448,6 @@ class DisableCallbackAction
             mrRootFrm.SetCallbackActionEnabled( mbOldCallbackActionState );
         }
 };
-// <--
 
 //!!!!! Es wird nur der vertikal naechstliegende gesucht.
 //JP 11.10.2001: only in tables we try to find the right column - Bug 72294
@@ -1460,7 +1457,6 @@ Point SwRootFrm::GetNextPrevCntntPos( const Point& rPoint, sal_Bool bNext ) cons
     // event during processing of this method. Needed because formatting is
     // triggered by this method.
     DisableCallbackAction aDisableCallbackAction( *this );
-    // <--
     //Ersten CntntFrm und seinen Nachfolger im Body-Bereich suchen
     //Damit wir uns nicht tot suchen (und vor allem nicht zuviel formatieren)
     //gehen wir schon mal von der richtigen Seite aus.
@@ -1848,7 +1844,6 @@ bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
     const SwLayoutFrm* pEnd   = pTmpEndFrm   ? pTmpEndFrm->GetUpper() : 0;
 
     OSL_ENSURE( pStart && pEnd, "MakeTblCrsrs: Good to have the code robust here!" );
-    // <--
 
     /* #109590# Only change table boxes if the frames are
         valid. Needed because otherwise the table cursor after moving
@@ -1981,7 +1976,6 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
     SwRegionRects aRegion( pSh && !pSh->GetViewOptions()->IsPDFExport() ?
                            pSh->VisArea() :
                            Frm() );
-// <--
     if( !pStartPos->nNode.GetNode().IsCntntNode() ||
         !pStartPos->nNode.GetNode().GetCntntNode()->getLayoutFrm(this) ||
         ( pStartPos->nNode != pEndPos->nNode &&
@@ -2465,7 +2459,6 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
             OSL_ENSURE( pCntnt,
                     "<SwRootFrm::CalcFrmRects(..)> - no content frame. This is a serious defect -> please inform OD" );
             while ( pCntnt && pCntnt != pEndFrm )
-            // <--
             {
                 if ( pCntnt->IsInFly() )
                 {
@@ -2505,7 +2498,6 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
                 // #123908#
                 OSL_ENSURE( pCntnt,
                         "<SwRootFrm::CalcFrmRects(..)> - no content frame. This is a serious defect -> please inform OD" );
-                // <--
             }
             if ( aPrvRect.HasArea() )
                 Sub( aRegion, aPrvRect );

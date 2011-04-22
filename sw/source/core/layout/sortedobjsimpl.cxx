@@ -158,7 +158,6 @@ struct ObjAnchorOrder
                 return false;
             }
         }
-        // <--
 
         // objects anchored at the same content and at the same content anchor
         // node position with the same anchor type
@@ -195,12 +194,10 @@ struct ObjAnchorOrder
         // #i35017# - handle ITERATIVE as ONCE_SUCCESSIVE
         if ( pWrapInfluenceOnObjPosListed->GetWrapInfluenceOnObjPos( true ) !=
                 pWrapInfluenceOnObjPosNew->GetWrapInfluenceOnObjPos( true ) )
-        // <--
         {
             // #i35017# - constant name has changed
             if ( pWrapInfluenceOnObjPosListed->GetWrapInfluenceOnObjPos( true )
                             == text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE )
-            // <--
                 return true;
             else
                 return false;
@@ -303,7 +300,6 @@ sal_uInt32 SwSortedObjsImpl::ListPosOf( const SwAnchoredObject& _rAnchoredObj ) 
         std::vector< SwAnchoredObject* >::difference_type nPos =
                                                 aIter - maSortedObjLst.begin();
         nRetLstPos = sal_uInt32( nPos );
-        // <--
     }
 
     return nRetLstPos;

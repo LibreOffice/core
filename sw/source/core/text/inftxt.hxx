@@ -536,7 +536,6 @@ class SwTxtFormatInfo : public SwTxtPaintInfo
     SwTwips nLeft;          // linker Rand
     SwTwips nRight;           // rechter Rand
     SwTwips nFirst;           // EZE
-    // <--
     KSHORT nRealWidth;      // "echte" Zeilenbreite
     KSHORT nWidth;          // "virtuelle" Zeilenbreite
     KSHORT nLineHeight;     // endgueltige Hoehe nach CalcLine

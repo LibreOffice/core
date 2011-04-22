@@ -385,7 +385,6 @@ SdrObject* SwMSDffManager::ImportOLE( long nOLEId,
     {
         return 0L;
     }
-    // <--
 
     SdrObject* pRet = 0;
     String sStorageName;
@@ -1067,7 +1066,6 @@ void SyncIndentWithList( SvxLRSpaceItem &rLR,
         }
     }
 }
-// <--
 
 const SwNumFmt* SwWW8FltControlStack::GetNumFmtFromStack(const SwPosition &rPos,
     const SwTxtNode &rTxtNode)
@@ -1141,7 +1139,6 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                             SyncIndentWithList( aNewLR, *pNum,
                                                 bFirstLineIndentSet,
                                                 bLeftIndentSet );
-                            // <--
                         }
 
                         if (aNewLR == aOldLR)
@@ -1890,7 +1887,6 @@ void SwWW8ImplReader::Read_HdFtTextAsHackedFrame(long nStart, long nLen,
     {
         pFrmObj->SetOrdNum( 0L );
     }
-    // <--
     MoveInsideFly(pFrame);
 
     const SwNodeIndex* pHackIdx = pFrame->GetCntnt().GetCntntIdx();
@@ -3530,7 +3526,6 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
                 {
                     AppendTxtNode(*pPaM->GetPoint());
                 }
-                // <--
                 rDoc.InsertPoolItem(*pPaM,
                     SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK), 0);
                 bFirstParaOfPage = true;//xushanchuan add for issue106569
@@ -5117,7 +5112,6 @@ void SwWW8ImplReader::SetOutLineStyles()
     // But at the end of the method <mpChosenOutlineNumRule> has to be set to
     // <rDoc.GetOutlineNumRule()>, because <aOutlineRule> will be destroyed.
     mpChosenOutlineNumRule = &aOutlineRule;
-    // <--
 
     sw::ParaStyles aOutLined(sw::util::GetParaStyles(rDoc));
     // #i98791# - sorting algorithm adjusted
@@ -5134,7 +5128,6 @@ void SwWW8ImplReader::SetOutLineStyles()
         // #i70748# - backward iteration needed due to the outline level attribute
         sw::ParaStyles::reverse_iterator aEnd = aOutLined.rend();
         for ( sw::ParaStyles::reverse_iterator aIter = aOutLined.rbegin(); aIter < aEnd; ++aIter)
-        // <--
         {
             if ((*aIter)->IsAssignedToListLevelOfOutlineStyle())
                 nFlagsStyleOutlLevel |= 1 << (*aIter)->GetAssignedOutlineStyleLevel();//<-end,zhaojianwei
@@ -5184,7 +5177,6 @@ void SwWW8ImplReader::SetOutLineStyles()
                 mpChosenOutlineNumRule = pCollA[ aIter->first ].pOutlineNumrule;
             }
         }
-        // <--
 
         OSL_ENSURE(mpChosenOutlineNumRule, "Impossible");
         if (mpChosenOutlineNumRule)
@@ -5195,7 +5187,6 @@ void SwWW8ImplReader::SetOutLineStyles()
             // #i70748# - backward iteration needed due to the outline level attribute
             sw::ParaStyles::reverse_iterator aEnd = aOutLined.rend();
             for ( sw::ParaStyles::reverse_iterator aIter = aOutLined.rbegin(); aIter < aEnd; ++aIter)
-            // <--
             {
                 if((*aIter)->IsAssignedToListLevelOfOutlineStyle())
                     (*aIter)->DeleteAssignmentToListLevelOfOutlineStyle();  //<-end
@@ -5279,7 +5270,6 @@ void SwWW8ImplReader::SetOutLineStyles()
     {
         mpChosenOutlineNumRule = rDoc.GetOutlineNumRule();
     }
-    // <--
 }
 
 const String* SwWW8ImplReader::GetAnnotationAuthor(sal_uInt16 nIdx)
@@ -5594,7 +5584,6 @@ sal_Bool SwMSDffManager::GetOLEStorageName(long nOLEId, String& rStorageName,
 
                 rReader.pPlcxMan->RestoreAllPLCFx( aSave );
             }
-            // <--
         }
         rReader.pStrm->Seek( nOldPos );
     }
@@ -5632,7 +5621,6 @@ bool SwWW8ImplReader::InEqualOrHigherApo(int nLvl) const
     {
         return false;
     }
-    // <--
     mycApoIter aIter = std::find(maApos.begin() + nLvl, maApos.end(), true);
     if (aIter != maApos.end())
         return true;

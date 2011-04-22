@@ -63,7 +63,6 @@ class SwParagraphNumTabPage : public SfxTabPage
 
     // --> OD 2008-04-14 #outlinelevel#
     const String msOutlineNumbering;
-    // <--
 
     sal_Bool                    bModified : 1;
     sal_Bool                    bCurNumrule : 1;

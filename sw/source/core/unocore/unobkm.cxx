@@ -268,7 +268,6 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
             " - could not create Mark.");
         throw lang::IllegalArgumentException();
     }
-    // <--
 }
 
 void SwXBookmark::attachToRange(

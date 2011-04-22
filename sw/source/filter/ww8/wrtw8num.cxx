@@ -109,7 +109,6 @@ sal_uInt16 MSWordExportBase::GetId( const SwNumRule& rNumRule )
             SwNumRule* pR = (SwNumRule*)pDoc->GetOutlineNumRule();
             pUsedNumTbl->Insert( pR, pUsedNumTbl->Count() );
         }
-        // <--
     }
     SwNumRule* p = (SwNumRule*)&rNumRule;
     sal_uInt16 nRet = pUsedNumTbl->GetPos(p);
@@ -124,7 +123,6 @@ sal_uInt16 MSWordExportBase::GetId( const SwNumRule& rNumRule )
             nRet = (*aResult).second;
         }
     } while ( aResult != aRuleDuplicates.end() );
-    // <--
 
     return nRet;
 }
@@ -355,7 +353,6 @@ void MSWordExportBase::AbstractNumberingDefinitions()
                     }
                 }
             }
-            // <--
 
             // Build the NumString for this Level
             String sNumStr;
@@ -393,7 +390,6 @@ void MSWordExportBase::AbstractNumberingDefinitions()
                                 rFmt.GetCharTextDistance() == 0 )
                               ? 2 : 0;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
                 }
-                // <--
             }
             else
             {
@@ -403,7 +399,6 @@ void MSWordExportBase::AbstractNumberingDefinitions()
                     // the numbering string has to be restrict
                     // to the level currently working on.
                     sNumStr = rRule.MakeNumString(aNumVector, false, true, nLvl);
-                    // <--
 
                     // now search the nums in the string
                     for( sal_uInt8 i = 0; i <= nLvl; ++i )
@@ -427,7 +422,6 @@ void MSWordExportBase::AbstractNumberingDefinitions()
                                     rFmt.GetCharTextDistance() == 0 )
                                   ? 2 : 0;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
                     }
-                    // <--
                 }
 
                 if( rFmt.GetPrefix().Len() )
@@ -629,7 +623,6 @@ void WW8Export::BuildAnlvBulletBase(WW8_ANLV& rAnlv, sal_uInt8*& rpCh,
         if (GetWordFirstLineOffset(rFmt) < 0)
             nb |= 0x8;          // number will be displayed using a hanging indent
     }
-    // <--
     ByteToSVBT8(nb, rAnlv.aBits1);
 
     if (1 < rCharLen)
@@ -691,7 +684,6 @@ void WW8Export::BuildAnlvBulletBase(WW8_ANLV& rAnlv, sal_uInt8*& rpCh,
         ShortToSVBT16( 0, rAnlv.dxaIndent );
         ShortToSVBT16( 0, rAnlv.dxaSpace );
     }
-    // <--
 }
 
 void MSWordExportBase::SubstituteBullet( String& rNumStr,
@@ -830,7 +822,6 @@ void WW8Export::BuildAnlvBase(WW8_ANLV& rAnlv, sal_uInt8*& rpCh,
         ShortToSVBT16( 0, rAnlv.dxaIndent );
         ShortToSVBT16( 0, rAnlv.dxaSpace );
     }
-    // <--
 }
 
 void WW8Export::Out_NumRuleAnld( const SwNumRule& rRul, const SwNumFmt& rFmt,

@@ -91,7 +91,6 @@
 #include <PostItMgr.hxx>
 #include <vector>
 
-// <--
 //#pragma optimize("ity",on)
 
 /*************************************************************************
@@ -559,7 +558,6 @@ class NotifyLayoutOfPageInProgress
             _UnlockPositionOfObjs();
         }
 };
-// <--
 
 void SwLayAction::InternalAction()
 {
@@ -713,7 +711,6 @@ void SwLayAction::InternalAction()
                             // #i28701#
                             pPage->ValidateFlyLayout();
                             pPage->ValidateFlyCntnt();
-                            // <--
                             if ( !FormatCntnt( pPage ) )
                             {
                                 XCHECKPAGE;
@@ -722,7 +719,6 @@ void SwLayAction::InternalAction()
                                 // #i28701#
                                 pPage->InvalidateFlyLayout();
                                 pPage->InvalidateFlyCntnt();
-                                // <--
                                 if ( IsBrowseActionStop() )
                                     bInput = sal_True;
                             }
@@ -845,7 +841,6 @@ void SwLayAction::InternalAction()
         // the move of a form control object, which is represented by a window.
         while ( pPg && ( pPg->Frm().Top() < nBottom ||
                          ( IsIdle() && pPg == pPage ) ) )
-        // <--
         {
             // #i26945# - follow-up of #i28701#
             NotifyLayoutOfPageInProgress aLayoutOfPageInProgress( *pPg );
@@ -870,14 +865,12 @@ void SwLayAction::InternalAction()
                 XCHECKPAGE;
                 // #i50432# - format also at-page anchored objects
                 SwObjectFormatter::FormatObjsAtFrm( *pPg, *pPg, this );
-                // <--
                 // #i50432#
                 if ( !pPg->GetSortedObjs() )
                 {
                     pPg->ValidateFlyLayout();
                     pPg->ValidateFlyCntnt();
                 }
-                // <--
 
                 // FME 2007-08-30 #i81146# new loop control
                 sal_uInt16 nLoopControlRuns_3 = 0;
@@ -902,14 +895,12 @@ void SwLayAction::InternalAction()
                 if ( mbFormatCntntOnInterrupt &&
                      ( pPg->IsInvalidCntnt() ||
                        ( pPg->GetSortedObjs() && pPg->IsInvalidFly() ) ) )
-                // <--
                 {
                     pPg->ValidateFlyInCnt();
                     pPg->ValidateCntnt();
                     // #i26945# - follow-up of fix #117736#
                     pPg->ValidateFlyLayout();
                     pPg->ValidateFlyCntnt();
-                    // <--
 
                     if ( ++nLoopControlRuns_2 > nLoopControlMax )
                     {
@@ -927,7 +918,6 @@ void SwLayAction::InternalAction()
                         // #i26945# - follow-up of fix #117736#
                         pPg->InvalidateFlyLayout();
                         pPg->InvalidateFlyCntnt();
-                        // <--
                     }
                     // #i46807# - we are statisfied, if the
                     // content is formatted once complete.
@@ -935,10 +925,8 @@ void SwLayAction::InternalAction()
                     {
                         break;
                     }
-                    // <--
                 }
             }
-            // <--
             pPg = (SwPageFrm*)pPg->GetNext();
         }
         // OD 14.04.2003 #106346# - reset flag for special interrupt content formatting.
@@ -1155,7 +1143,6 @@ static const SwAnchoredObject* lcl_FindFirstInvaObj( const SwPageFrm* _pPage,
     }
     return 0;
 }
-// <--
 
 sal_Bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
 {
@@ -1343,7 +1330,6 @@ sal_Bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
                         }
                     }
                 }
-                // <--
             }
         }
     }
@@ -1833,7 +1819,6 @@ sal_Bool SwLayAction::FormatCntnt( const SwPageFrm *pPage )
             _FormatCntnt( pCntnt, pPage );
             // #i26945# - reset <bPaint> before format objects
             bPaint = bOldPaint;
-            // <--
 
             // OD 2004-05-10 #i28701# - format floating screen object at content frame.
             // No format, if action flag <bAgain> is set or action is interrupted.
@@ -1846,7 +1831,6 @@ sal_Bool SwLayAction::FormatCntnt( const SwPageFrm *pPage )
                  pCntnt->IsTxtFrm() &&
                  !SwObjectFormatter::FormatObjsAtFrm( *(const_cast<SwCntntFrm*>(pCntnt)),
                                                       *(pCntnt->FindPageFrm()), this ) )
-            // <--
             {
                 return sal_False;
             }
@@ -2054,13 +2038,11 @@ sal_Bool SwLayAction::_FormatFlyCntnt( const SwFlyFrm *pFly )
              !SwObjectFormatter::FormatObjsAtFrm(
                                             *(const_cast<SwCntntFrm*>(pCntnt)),
                                             *(pCntnt->FindPageFrm()), this ) )
-        // <--
         {
             // restart format with first content
             pCntnt = pFly->ContainsCntnt();
             continue;
         }
-        // <--
 
         if ( !pCntnt->GetValidLineNumFlag() && pCntnt->IsTxtFrm() )
         {

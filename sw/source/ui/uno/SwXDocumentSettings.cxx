@@ -118,7 +118,6 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_TABS_RELATIVE_TO_INDENT,
     // #i89181#
     HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST,
-    // <--
     HANDLE_MODIFYPASSWORDINFO,
     HANDLE_MATH_BASELINE_ALIGNMENT,
     HANDLE_INVERT_BORDER_SPACING,
@@ -671,7 +670,6 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->set(IDocumentSettingAccess::TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST, bTmp);
         }
         break;
-        // <--
         case HANDLE_MODIFYPASSWORDINFO:
         {
             uno::Sequence< beans::PropertyValue > aInfo;
@@ -1026,7 +1024,6 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
-        // <--
         case HANDLE_MODIFYPASSWORDINFO:
         {
             rValue <<= mpDocSh->GetModifyPasswordInfo();

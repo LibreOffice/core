@@ -150,7 +150,6 @@ void SwAccessibleTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
             }
         }
         break;
-        // <--
     }
 }
 
@@ -169,7 +168,6 @@ OUString SAL_CALL SwAccessibleTextFrame::getAccessibleName (void)
 
     return SwAccessibleFrameBase::getAccessibleName();
 }
-// <--
 OUString SAL_CALL SwAccessibleTextFrame::getAccessibleDescription (void)
         throw (uno::RuntimeException)
 {

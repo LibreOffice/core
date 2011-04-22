@@ -637,7 +637,6 @@ bool SwOLENode::IsChart() const
 
     return bIsChart;
 }
-// <--
 
 SwOLEObj::SwOLEObj( const svt::EmbeddedObjectRef& xObj ) :
     pOLENd( 0 ),

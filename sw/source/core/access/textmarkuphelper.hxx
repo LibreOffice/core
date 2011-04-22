@@ -77,7 +77,6 @@ class SwTextMarkupHelper
         // #i108125#
         const SwTxtNode* mpTxtNode;
         const SwWrongList* mpTextMarkupList;
-        // <--
 };
 #endif
 

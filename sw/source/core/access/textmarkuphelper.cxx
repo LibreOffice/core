@@ -88,7 +88,6 @@ SwTextMarkupHelper::SwTextMarkupHelper( const SwAccessiblePortionData& rPortionD
     // #i108125#
     , mpTxtNode( &rTxtNode )
     , mpTextMarkupList( 0 )
-    // <--
 {
 }
 
@@ -100,7 +99,6 @@ SwTextMarkupHelper::SwTextMarkupHelper( const SwAccessiblePortionData& rPortionD
     , mpTextMarkupList( &rTextMarkupList )
 {
 }
-// <--
 
 sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupType )
         throw (::com::sun::star::lang::IllegalArgumentException,
@@ -113,7 +111,6 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
                             mpTextMarkupList
                             ? mpTextMarkupList
                             : getTextMarkupList( *mpTxtNode, nTextMarkupType );
-    // <--
     if ( pTextMarkupList )
     {
         nTextMarkupCount = pTextMarkupList->Count();
@@ -143,7 +140,6 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
                             mpTextMarkupList
                             ? mpTextMarkupList
                             : getTextMarkupList( *mpTxtNode, nTextMarkupType );
-    // <--
     if ( pTextMarkupList )
     {
         const SwWrongArea* pTextMarkup =
@@ -191,7 +187,6 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
                             mpTextMarkupList
                             ? mpTextMarkupList
                             : getTextMarkupList( *mpTxtNode, nTextMarkupType );
-    // <--
     ::std::vector< ::com::sun::star::accessibility::TextSegment > aTmpTextMarkups;
     if ( pTextMarkupList )
     {

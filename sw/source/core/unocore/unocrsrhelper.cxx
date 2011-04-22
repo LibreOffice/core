@@ -290,7 +290,6 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                     {
                         *pAny <<= OUString();
                     }
-                    // <--
                     else /*if(rEntry.nWID == UNO_NAME_PARA_IS_NUMBERING_RESTART)*/
                         *pAny <<= false;
                 }

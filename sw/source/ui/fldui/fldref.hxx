@@ -41,7 +41,6 @@
 #include <IDocumentListItems.hxx>
 #include <FldRefTreeListBox.hxx>
 class SwTxtNode;
-// <--
 
 class SwFldRefPage : public SwFldPage
 {
@@ -51,7 +50,6 @@ class SwFldRefPage : public SwFldPage
     ListBox         aSelectionLB;
     // #i83479#
     SwFldRefTreeListBox aSelectionToolTipLB;
-    // <--
     FixedText       aFormatFT;
     ListBox         aFormatLB;
     FixedText       aNameFT;
@@ -73,7 +71,6 @@ class SwFldRefPage : public SwFldPage
     const SwTxtNode* mpSavedSelectedTxtNode;
     // fallback, if previously selected text node doesn't exist anymore
     sal_uInt16 mnSavedSelectedPos;
-    // <--
 
     DECL_LINK( TypeHdl, ListBox* pLB = 0 );
     DECL_LINK( SubTypeHdl, ListBox* pLB = 0 );
@@ -86,7 +83,6 @@ class SwFldRefPage : public SwFldPage
     void SaveSelectedTxtNode();
     const SwTxtNode* GetSavedSelectedTxtNode() const;
     sal_uInt16 GetSavedSelectedPos() const;
-    // <--
 
 protected:
     virtual sal_uInt16      GetGroup();

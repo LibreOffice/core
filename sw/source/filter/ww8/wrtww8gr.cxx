@@ -427,7 +427,6 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
         OutputField( 0, ww::eINCLUDEPICTURE, sStr,
                    WRITEFIELD_START | WRITEFIELD_CMD_START | WRITEFIELD_CMD_END );
     }
-    // <--
 
     WriteChar( (char)1 );   // Grafik-Sonderzeichen in Haupttext einfuegen
 
@@ -499,7 +498,6 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
     if ( !rFrame.IsInline() &&
          ( ((eAn == FLY_AT_PARA) && ( bWrtWW8 || !bIsInTable )) ||
            (eAn == FLY_AT_PAGE)) )
-    // <--
     {
         WriteChar( (char)0x0d ); // umgebenden Rahmen mit CR abschliessen
 
@@ -520,7 +518,6 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
     {
         OutputField( 0, ww::eINCLUDEPICTURE, String(), WRITEFIELD_CLOSE );
     }
-    // <--
 }
 
 GraphicDetails& GraphicDetails::operator=(const GraphicDetails &rOther)

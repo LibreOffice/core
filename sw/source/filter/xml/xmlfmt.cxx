@@ -668,7 +668,6 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
                                    sName,
                                    nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC,
                                    sal_True);
-    // <--
     SwPageDesc *pPageDesc = pDoc->FindPageDescByName( sName );
     if( !pPageDesc )
     {

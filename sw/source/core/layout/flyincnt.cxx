@@ -76,7 +76,6 @@ SwFlyInCntFrm::~SwFlyInCntFrm()
 
 // #i28701#
 TYPEINIT1(SwFlyInCntFrm,SwFlyFrm);
-// <--
 /*************************************************************************
 |*
 |*  SwFlyInCntFrm::SetRefPoint(),
@@ -99,7 +98,6 @@ void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
     (Frm().*fnRect->fnSetPos)( rPoint + rRelPos );
     // #i68520#
     InvalidateObjRectWithSpaces();
-    // <--
     if( pNotify )
     {
         InvalidatePage();
@@ -218,7 +216,6 @@ void SwFlyInCntFrm::_ActionOnInvalidation( const InvalidationType _nInvalid )
     if ( INVALID_POS == _nInvalid || INVALID_ALL == _nInvalid )
         AnchorFrm()->Prepare( PREP_FLY_ATTR_CHG, &GetFrmFmt() );
 }
-// <--
 /*************************************************************************
 |*
 |*  SwFlyInCntFrm::NotifyBackground()
@@ -330,7 +327,6 @@ void SwFlyInCntFrm::MakeAll()
                 bWidthClipped = sal_True;
             }
         }
-        // <--
     }
     Unlock();
 }

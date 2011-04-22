@@ -648,7 +648,6 @@ IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxNameDialog*, pNam
                 break;
             }
         }
-        // <--
     }
     return nRet;
 }

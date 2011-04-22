@@ -1623,7 +1623,6 @@ const SwCellFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt,
                         break;
                     }
                 }
-                // <--
                 else
                 {
                     // used for mouse move of columns/rows
@@ -1681,7 +1680,6 @@ const SwFrm* SwFEShell::GetBox( const Point &rPt, bool* pbRow, bool* pbCol ) con
     {
         // #i32329# Enhanced table selection
         SwTwips nSize = pbCol ? ENHANCED_TABLE_SELECTION_FUZZY : RULER_MOUSE_MARGINWIDTH;
-        // <--
         Size aTmp( nSize, nSize );
         aTmp = pOutWin->PixelToLogic( aTmp );
         nFuzzy = aTmp.Width();
@@ -1945,7 +1943,6 @@ bool SwFEShell::SelTblRowCol( const Point& rPt, const Point* pEnd, bool bRowDrag
                 // table cursor:
                 if ( IsTableMode() )
                     TblCrsrToCursor();
-                // <--
 
                 if ( pbRow[0] && pbCol[0] )
                     bRet = SwCrsrShell::SelTbl();
@@ -1964,7 +1961,6 @@ bool SwFEShell::SelTblRowCol( const Point& rPt, const Point* pEnd, bool bRowDrag
 
     return bRet;
 }
-// <--
 
 
 /*************************************************************************
@@ -2109,7 +2105,6 @@ bool SwFEShell::IsVerticalModeAtNdAndPos( const SwTxtNode& _rTxtNode,
 
     return bRet;
 }
-// <--
 
 /*************************************************************************
 |*

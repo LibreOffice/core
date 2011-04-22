@@ -56,7 +56,6 @@ SfxItemPool* SwSvxUnoDrawPool::getModelPool( sal_Bool /*bReadOnly*/ ) throw()
         //return &pModel->GetItemPool();
         // #i52858# - method name changed
         m_pDoc->GetOrCreateDrawModel();
-        // <--
         return &(m_pDoc->GetAttrPool());
     }
     return 0;

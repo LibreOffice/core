@@ -1286,7 +1286,6 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                     // copy of the page style
                     ::sw::UndoGuard const ug(rDoc.GetIDocumentUndoRedo());
                     rDoc.CopyPageDesc(*pDesc, *pNewDsc); // #i7983#
-                    // <--
 
                     pFmt = &pNewDsc->GetMaster();
                 }
@@ -2169,7 +2168,6 @@ void  SwDocStyleSheetPool::Replace( SfxStyleSheetBase& rSource,
             {
                 // #i73790# - method renamed
                 pTargetFmt->ResetAllFmtAttr();
-                // <--
             }
 
             if( USHRT_MAX != nPgDscPos )

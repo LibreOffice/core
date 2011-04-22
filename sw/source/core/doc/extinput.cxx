@@ -82,7 +82,6 @@ SwExtTextInput::~SwExtTextInput()
                 // #i41974# Only set language attribute
                 // for CJK/CTL scripts.
                 bool bLang = true;
-                // <--
                 sal_uInt16 nWhich = RES_CHRATR_LANGUAGE;
                 switch(GetI18NScriptTypeOfLanguage(eInputLanguage))
                 {

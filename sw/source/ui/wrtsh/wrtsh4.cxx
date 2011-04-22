@@ -199,7 +199,6 @@ sal_Bool SwWrtShell::_PrvWrdForDelete()
     Combine();
     return sal_True;
 }
-// <--
 
 
 sal_Bool SwWrtShell::_FwdSentence()
@@ -266,7 +265,6 @@ sal_Bool SwWrtShell::_BwdPara()
     {
         SttPara();
     }
-    // <--
 
     ClearMark();
     Combine();

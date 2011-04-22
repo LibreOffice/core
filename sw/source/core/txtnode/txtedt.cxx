@@ -1986,7 +1986,6 @@ const SwWrongList* SwTxtNode::GetWrong() const
 {
     return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->pWrong : 0;
 }
-// <--
 
 void SwTxtNode::SetGrammarCheck( SwGrammarMarkUp* pNew, bool bDelete )
 {

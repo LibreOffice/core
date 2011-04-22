@@ -294,7 +294,6 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
         SwAnchoredDrawObject& rAnchoredDrawObj =
                         static_cast<SwAnchoredDrawObject&>( GetAnchoredObj() );
         rAnchoredDrawObj.SetLastObjRect( rAnchoredDrawObj.GetObjRect().SVRect() );
-        // <--
     }
     else
     {

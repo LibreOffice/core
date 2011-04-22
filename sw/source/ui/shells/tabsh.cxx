@@ -892,7 +892,6 @@ void SwTableShell::Execute(SfxRequest &rReq)
                     ItemSetToTableParam( aSet, rSh );
                     rSh.EndUndo( nUndoId );
                 }
-                // <--
 
                 bCallDone = sal_True;
                 break;

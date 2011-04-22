@@ -207,7 +207,6 @@ void SwSectionFrm::DelEmpty( sal_Bool bRemove )
                                 dynamic_cast<SwTxtFrm*>(FindPrevCnt( true )) );
             }
         }
-        // <--
         _Cut( bRemove );
     }
     if( IsFollow() )
@@ -358,7 +357,6 @@ void SwSectionFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
             pSect = 0;
         }
     }
-    // <--
 
     SWRECTFN( pParent )
     if( pSect && HasToBreak( pSect ) )
@@ -1138,7 +1136,6 @@ void SwSectionFrm::SimpleFormat()
         //
         // assure notifications on position changes.
         const SwLayNotify aNotify( this );
-        // <--
         (this->*fnRect->fnMakePos)( GetUpper(), GetPrev(), sal_False );
         bValidPos = sal_True;
     }
@@ -1222,7 +1219,6 @@ class ExtraFormatToPositionObjs
                 }
             }
         }
-        // <--
 
         void FormatSectionToPositionObjs()
         {
@@ -1244,7 +1240,6 @@ class ExtraFormatToPositionObjs
                 {
                     return;
                 }
-                // <--
                 mpSectFrm->ChgLowersProp( aOldSectPrtSize );
 
                 // format column frames and its body and footnote container
@@ -1267,7 +1262,6 @@ class ExtraFormatToPositionObjs
                 // can still be on the former page.
                 // Thus, initialize objects via lower-relationship
                 InitObjs( *mpSectFrm );
-                // <--
 
                 // format content - first with collecting its foot-/endnotes before content
                 // format, second without collecting its foot-/endnotes.
@@ -1364,7 +1358,6 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
         {
             aExtraFormatToPosObjs.FormatSectionToPositionObjs();
         }
-        // <--
 
         // Column widths have to be adjusted before calling _CheckClipping.
         // _CheckClipping can cause the formatting of the lower frames
@@ -1410,12 +1403,10 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
                     {
                         FormatWidthCols( *pAttr, nRemaining, MINLAY );
                     }
-                    // <--
                     // #126020# - adjust check for empty section
                     // #130797# - correct fix #126020#
                     while( HasFollow() && !GetFollow()->ContainsCntnt() &&
                            !GetFollow()->ContainsAny( true ) )
-                    // <--
                     {
                         SwFrm* pOld = GetFollow();
                         GetFollow()->DelEmpty( sal_False );
@@ -1835,7 +1826,6 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType )
     {
         return pCol;
     }
-    // <--
 
     {
         SwFrm *pPrv;
@@ -2102,7 +2092,6 @@ SwTwips SwSectionFrm::_Grow( SwTwips nDist, sal_Bool bTst )
                 {
                     InvalidateNextPos();
                 }
-                // <--
             }
             return nGrow;
         }
@@ -2286,7 +2275,6 @@ SwFrm* SwFrm::_GetIndPrev() const
     // frame has no direct previous frame or only empty section frames as
     // previous frames.
     OSL_ENSURE( /*!pPrev &&*/ IsInSct(), "Why?" );
-    // <--
     const SwFrm* pSct = GetUpper();
     if( !pSct )
         return NULL;

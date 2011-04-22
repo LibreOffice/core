@@ -175,7 +175,6 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
 
     // #i38810# Do not reset modified state of document, if it's already been modified.
     const bool bIsDocModified( pDoc->IsModified() );
-    // <--
     pDoc->acquire();
     pOutput = pOut;
     Init( pNewOpt );

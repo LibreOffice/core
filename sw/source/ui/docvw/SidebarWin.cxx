@@ -560,7 +560,6 @@ void SwSidebarWin::SetPosAndSize()
             {
                 mpAnchor->SetAnchorState(AS_END);
             }
-            // <--
         }
         else
         {
@@ -569,11 +568,9 @@ void SwSidebarWin::SetPosAndSize()
             {
                 mpAnchor->SetAnchorState(AS_ALL);
             }
-            // <--
             SwSidebarWin* pWin = GetTopReplyNote();
             // #i111964#
             if ( pWin && pWin->Anchor() )
-            // <--
             {
                 pWin->Anchor()->SetAnchorState(AS_END);
             }
@@ -1129,7 +1126,6 @@ void SwSidebarWin::SetViewState(ViewState bViewState)
                 SwSidebarWin* pWin = GetTopReplyNote();
                 // #i111964#
                 if ( pWin && pWin->Anchor() )
-                // <--
                 {
                     pWin->Anchor()->SetAnchorState(AS_END);
                 }
@@ -1163,7 +1159,6 @@ void SwSidebarWin::SetViewState(ViewState bViewState)
                     // #i111964#
                     if ( pTopWinSelf && ( pTopWinSelf != pTopWinActive ) &&
                          pTopWinSelf->Anchor() )
-                    // <--
                     {
                         if ( pTopWinSelf != mrMgr.GetActiveSidebarWin() )
                         {

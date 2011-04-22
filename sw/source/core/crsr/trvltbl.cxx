@@ -233,7 +233,6 @@ sal_Bool SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
             pEnd = aCells[ bVert ? (bRow ? 3 : 0) : (bRow ? 1 : 2) ]->GetTabBox();  // will become mark of table cursor
         }
     }
-    // <--
 
     // noch kein Tabellen-Cursor vorhanden, dann erzeuge einen
     if( !pTblCrsr )

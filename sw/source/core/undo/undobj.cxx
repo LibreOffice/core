@@ -827,14 +827,12 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                             }
                         }
                     }
-                    // <--
 
                     // #i81002#
                     const bool bDifferentTxtNodesAtMarkAndPoint(
                                         rMark.nNode != rPoint.nNode &&
                                         rMark.nNode.GetNode().GetTxtNode() &&
                                         rPoint.nNode.GetNode().GetTxtNode() );
-                    // <--
                     if( !bSavePos && !bSaveOtherPos && bDifferentTxtNodesAtMarkAndPoint &&
                         dynamic_cast< const ::sw::mark::CrossRefBookmark* >(pBkmk))
                     {

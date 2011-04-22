@@ -527,7 +527,6 @@ public:
     SwEscherEx* pEscher;            // escher export class
     // #i43447# - removed
 //    SwTwips nFlyWidth, nFlyHeight;  // Fuer Anpassung Graphic
-    // <--
 
     sal_uInt8 nTxtTyp;
 

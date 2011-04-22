@@ -214,7 +214,6 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
         // --> OD 2009-09-04 #mongolianlayout#
         if( bVert || bVertL2R )
-        // <--
         {
 
             aRelPos.Y() = nRelPosX;

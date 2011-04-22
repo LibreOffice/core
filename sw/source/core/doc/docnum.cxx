@@ -643,7 +643,6 @@ sal_uInt16 lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
             // its number vector will not fit to the searched level.
             if ( pNd->GetNum() &&
                  pNd->GetActualListLevel() == ( nLevel - 1 ) )
-            // <--
             {
                 const SwNodeNum & rNdNum = *(pNd->GetNum());
                 SwNumberTree::tNumberVector aLevelVal = rNdNum.GetNumberVector();
@@ -946,7 +945,6 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
         {
             ResetAttrs( rPam, sal_False, &aResetAttrsArray );
         }
-        // <--
     }
 
     if (GetIDocumentUndoRedo().DoesUndo())
@@ -979,7 +977,6 @@ void SwDoc::SetCounted(const SwPaM & rPam, bool bCounted)
         {
             ResetAttrs( rPam, sal_False, &aResetAttrsArray );
         }
-        // <--
     }
     else
     {
@@ -1080,7 +1077,6 @@ sal_Bool SwDoc::DelNumRule( const String& rName, sal_Bool bBroadcast )
         // #i34097# DeleteAndDestroy deletes rName if
         // rName is directly taken from the numrule.
         const String aTmpName( rName );
-        // <--
         pNumRuleTbl->DeleteAndDestroy( nPos );
         maNumRuleMap.erase(aTmpName);
 
@@ -1303,7 +1299,6 @@ void SwDoc::MakeUniqueNumRules(const SwPaM & rPaM)
                     aListStyleData.sListId = pCNd->GetListId();
                     aMyNumRuleMap[pRule] = aListStyleData;
                 }
-                // <--
 
                 bFirst = false;
             }

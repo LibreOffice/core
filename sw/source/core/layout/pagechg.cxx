@@ -509,7 +509,6 @@ void SwPageFrm::PreparePage( sal_Bool bFtn )
     {
                 ::lcl_FormatLay( this );
     }
-    // <--
 
     //Flys und DrawObjekte die noch am Dokument bereitstehen.
     //Fussnotenseiten tragen keine Seitengebundenen Flys!
@@ -916,7 +915,6 @@ void SwPageFrm::Cut()
                         pFly->_InvalidatePos();
                     }
                 }
-                // <--
             }
         }
         //Window aufraeumen
@@ -1021,7 +1019,6 @@ void lcl_PrepFlyInCntRegister( SwCntntFrm *pFrm )
                     pCnt = pCnt->GetNextCntntFrm();
                 }
             }
-            // <--
         }
     }
 }
@@ -1481,7 +1478,6 @@ void SwRootFrm::RemoveSuperfluous()
                 {
                     bOnlySuperfluosObjs = false;
                 }
-                // <--
             }
             bExistEssentialObjs = !bOnlySuperfluosObjs;
         }
@@ -1500,7 +1496,6 @@ void SwRootFrm::RemoveSuperfluous()
                     // but I'm not fully sure, since ContainsAny() also returns
                     // SectionFrames. Therefore I prefer to do it the safe way:
                   ( pBody->Lower() && pBody->Lower()->IsTabFrm() ) ) ) )
-                    // <--
         {
             if ( pPage->IsFtnPage() )
             {
@@ -1842,7 +1837,6 @@ void SwRootFrm::ImplCalcBrowseWidth()
                                 //aktuelle Groesse bestimmt werden.
                                 nWidth = pAnchoredObj->GetObjRect().Right() -
                                          pAnchoredObj->GetDrawObj()->GetAnchorPos().X();
-                            // <--
                         }
                         break;
                     default:    /* do nothing */;
@@ -1927,7 +1921,6 @@ void SwRootFrm::UnoRemoveAllActions()
                 }
                 pSh->SetRestoreActions(nRestore);
             }
-            // <--
             pSh->LockView(sal_True);
             pSh = (ViewShell*)pSh->GetNext();
 
@@ -2017,7 +2010,6 @@ void lcl_MoveAllLowerObjs( SwFrm* pFrm, const Point& rOffset )
                     }
                 }
             }
-            // <--
         }
         else if ( pAnchoredObj->ISA(SwAnchoredDrawObject) )
         {
@@ -2036,7 +2028,6 @@ void lcl_MoveAllLowerObjs( SwFrm* pFrm, const Point& rOffset )
         // #i92511#
         // cache for object rectangle inclusive spaces has to be invalidated.
         pAnchoredObj->InvalidateObjRectWithSpaces();
-        // <--
     }
 }
 
@@ -2085,7 +2076,6 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
     {
         return;
     }
-    // <--
 
     if ( !pVisArea )
     {
@@ -2416,7 +2406,6 @@ bool SwRootFrm::IsLeftToRightViewLayout() const
     const SwPageFrm& rPage =
                     dynamic_cast<const SwPageFrm*>(Lower())->GetFormatPage();
     return !rPage.IsRightToLeft() && !rPage.IsVertical();
-    // <--
 }
 
 const SwPageFrm& SwPageFrm::GetFormatPage() const
@@ -2445,7 +2434,6 @@ const SwPageFrm& SwPageFrm::GetFormatPage() const
         }
         OSL_ENSURE( pRet,
                 "<SwPageFrm::GetFormatPage()> - inconsistent layout: empty page without previous and next page frame --> crash." );
-        // <--
     }
     return *pRet;
 }

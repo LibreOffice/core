@@ -85,7 +85,6 @@ protected:
     // --> #i64010#
     virtual bool HasCountedChildren() const;
     virtual bool IsCountedForNumbering() const;
-    // <--
 
     // method called before this tree node has been added to the list tree
     virtual void PreAdd();

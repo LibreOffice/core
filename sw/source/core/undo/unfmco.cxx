@@ -57,7 +57,6 @@ SwUndoFmtColl::SwUndoFmtColl( const SwPaM& rRange,
     // #i31191#
     if ( pColl )
         aFmtName = pColl->GetName();
-    // <--
 }
 
 
@@ -114,7 +113,6 @@ SwRewriter SwUndoFmtColl::GetRewriter() const
     // pFmtColl->GetName(), because pFmtColl does not have to be available
     // anymore.
     aResult.AddRule(UNDO_ARG1, aFmtName );
-    // <--
 
     return aResult;
 }

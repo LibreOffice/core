@@ -108,7 +108,6 @@ const SwNumFmt* SwNumRule::GetNumFmt( sal_uInt16 i ) const
 // #i91400#
 void SwNumRule::SetName( const String & rName,
                          IDocumentListsAccess& rDocListAccess)
-// <--
 {
     if ( sName != rName )
     {
@@ -373,7 +372,6 @@ void SwNumFmt::UpdateNumNodes( SwDoc* pDoc )
                 {
                     lcl_SetRuleChgd( *(*aIter), i );
                 }
-                // <--
                 bFnd = sal_True;
                 break;
             }
@@ -876,11 +874,9 @@ void SwNumRule::SetInvalidRule(sal_Bool bFlag)
             {
                 aLists.insert( pList );
             }
-            // <--
         }
         std::for_each( aLists.begin(), aLists.end(),
                        std::mem_fun( &SwList::InvalidateListTree ) );
-        // <--
     }
 
     bInvalidRuleFlag = bFlag;
@@ -1164,7 +1160,6 @@ namespace numfunc
     {
         msFontname = String::CreateFromAscii("OpenSymbol");
         mbUserDefinedFontname = false;
-        // <--
         meFontWeight = WEIGHT_DONTKNOW;
         meFontItalic = ITALIC_NONE;
 
@@ -1450,8 +1445,6 @@ namespace numfunc
 
         return ePosAndSpaceMode;
     }
-    // <--
 }
-// <--
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

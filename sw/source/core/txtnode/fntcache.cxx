@@ -2169,7 +2169,6 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
     // #i105901#
     // skip character cells for all script types
     if ( pBreakIt->GetBreakIter().is() )
-    // <--
     {
         aLang = rInf.GetFont()->GetLanguage();
         bSkipCharacterCells = true;

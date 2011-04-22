@@ -1742,7 +1742,6 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                                 // #i44368# Links in Header/Footer
                                 if ( bHeaderFooter )
                                     MakeHeaderFooterLinks( *pPDFExtOutDevData, *pTNd, rLinkRect, nDestId, aURL, bIntern );
-                                // <--
                             }
                         }
                     }
@@ -1901,7 +1900,6 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                                     const String aDummy;
                                     MakeHeaderFooterLinks( *pPDFExtOutDevData, *pTNd, rLinkRect, nDestId, aDummy, true );
                                 }
-                                // <--
                             }
                         }
                     }

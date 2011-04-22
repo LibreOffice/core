@@ -193,7 +193,6 @@ SwOutlineTabDialog::SwOutlineTabDialog(Window* pParent,
 {
     // --> OD 2008-04-14 #outlinelevel#
     SetText( SW_RES( STR_OUTLINE_NUMBERING ) );
-    // <--
     PushButton* pUserButton = GetUserButton();
     pUserButton->SetText(SW_RES(ST_FORM));
     pUserButton->SetHelpId(HID_OUTLINE_FORM);
@@ -361,7 +360,6 @@ short SwOutlineTabDialog::Ok()
     // encapsulate changes into a action to avoid effects on the current cursor
     // position during the changes.
     rWrtSh.StartAction();
-    // <--
 
     const SwNumRule * pOutlineRule = rWrtSh.GetOutlineNumRule();
 
@@ -1046,7 +1044,6 @@ void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                         aNumVector[nLevel] = nPreNum;
                     // #128041#
                     String aText(pActNum->MakeNumString( aNumVector ));
-                    // <--
                     pVDev->DrawText( Point(nNumberXPos, nYStart), aText );
                     nBulletWidth = (sal_uInt16)pVDev->GetTextWidth(aText);
                     nPreNum++;
@@ -1152,7 +1149,6 @@ void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                         aNumVector[nLevel] = nPreNum;
                     // #128041#
                     String aText(pActNum->MakeNumString( aNumVector ));
-                    // <--
                     pVDev->DrawText( Point(nXStart, nYStart), aText );
                     nTextOffset = (sal_uInt16)pVDev->GetTextWidth(aText);
                     nTextOffset = nTextOffset + nXStep;

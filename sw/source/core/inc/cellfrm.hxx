@@ -55,7 +55,6 @@ public:
 
     // #i103961#
     virtual void Cut();
-    // <--
 
     const SwTableBox *GetTabBox() const { return pTabBox; }
 

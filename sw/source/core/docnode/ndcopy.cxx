@@ -271,7 +271,6 @@ SwCntntNode* SwTxtNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     // #i96213# - force copy of all attributes
     pCpyTxtNd->CopyText( pTxtNd, SwIndex( pCpyTxtNd ),
         pCpyTxtNd->GetTxt().Len(), true );
-    // <--
 
 //FEATURE::CONDCOLL
     if( RES_CONDTXTFMTCOLL == pColl->Which() )
@@ -841,7 +840,6 @@ bool lcl_ContainsOnlyParagraphsInList( const SwPaM& rPam )
 
     return bRet;
 }
-// <--
 
 bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
         const bool bMakeNewFrms, const bool bCopyAll,
@@ -929,7 +927,6 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
         pNumRuleToPropagate =
             pDoc->SearchNumRule( rPos, false, false, false, 0, aListIdToPropagate, true );
     }
-    // <--
     // #i86492#
     // Do not propagate previous found list, if
     // - destination is an empty paragraph which is not in a list and
@@ -940,7 +937,6 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     {
         pNumRuleToPropagate = 0;
     }
-    // <--
 
     // Block, damit aus diesem gesprungen werden kann !!
     do {
@@ -1027,7 +1023,6 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                         }
                     }
                 }
-                // <--
 
                 if( !bCopyOk )
                 {
@@ -1173,7 +1168,6 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                         aListIdItem.SetValue( static_cast<const SfxStringItem*>(pItem)->GetValue() );
                 }
             }
-            // <--
 
             const bool bEmptyDestNd = 0 == pDestTxtNd->GetTxt().Len();
             pEndTxtNd->CopyText( pDestTxtNd, aDestIdx, SwIndex( pEndTxtNd ),
@@ -1545,7 +1539,6 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
             SwNodeIndex aIdx( rStartIdx, nOffset );
             pNewPos->nNode = aIdx;
         }
-        // <--
         // die am Zeichen Flys wieder ans das vorgegebene Zeichen setzen
         if ((FLY_AT_CHAR == aAnchor.GetAnchorId()) &&
              pNewPos->nNode.GetNode().IsTxtNode() )

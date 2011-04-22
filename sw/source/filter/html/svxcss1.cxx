@@ -1662,7 +1662,6 @@ static void ParseCSS1_line_height( const CSS1Expression *pExpr,
         aLSItem.SetLineHeight( nHeight );
         // interpret <line-height> attribute as minimum line height
         aLSItem.GetLineSpaceRule() = SVX_LINE_SPACE_MIN;
-        // <--
         aLSItem.GetInterLineSpaceRule() = SVX_INTER_LINE_SPACE_OFF;
         rItemSet.Put( aLSItem );
     }

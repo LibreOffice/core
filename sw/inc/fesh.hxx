@@ -548,7 +548,6 @@ public:
 
     // aligns all formulas with anchor 'as char' to baseline
     void AlignAllFormulasToBaseline();
-    // <--
 
 
 

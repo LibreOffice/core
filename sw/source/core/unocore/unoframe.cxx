@@ -895,7 +895,6 @@ SdrObject *SwXFrame::GetOrCreateSdrObject( SwFlyFrmFmt *pFmt )
         SwDoc *pDoc = pFmt->GetDoc();
         // #i52858# - method name changed
         SdrModel *pDrawModel = pDoc->GetOrCreateDrawModel();
-        // <--
         SwFlyDrawContact* pContactObject
                     = new SwFlyDrawContact( pFmt, pDrawModel );
         pObject = pContactObject->GetMaster();
@@ -1052,7 +1051,6 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
             GetOrCreateSdrObject( pFlyFmt );
             pFlyFmt->GetDoc()->SetFlyFrmDescription( *(pFlyFmt), sDescription );
         }
-        // <--
         else if(FN_UNO_FRAME_STYLE_NAME == pEntry->nWID)
         {
             SwFrmFmt *pFrmFmt = lcl_GetFrmFmt( aValue, pFmt->GetDoc() );
@@ -1085,7 +1083,6 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                         }
                     }
                 }
-                // <--
 
                 pFmt->GetDoc()->SetFrmFmtToFly( *pFmt, *pFrmFmt, pSet, sal_False );
                 delete pSet;
@@ -1360,7 +1357,6 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                         }
                     }
                 }
-                // <--
 
                 pFmt->GetDoc()->SetFlyFrmAttr( *pFmt, aSet );
             }
@@ -1553,7 +1549,6 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             GetOrCreateSdrObject( pFlyFmt );
             aAny <<= OUString(pFlyFmt->GetObjDescription());
         }
-        // <--
         else if(eType == FLYCNTTYPE_GRF &&
                 (rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_ACTUAL_SIZE))))
         {
@@ -1835,7 +1830,6 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
                 GetOrCreateSdrObject( pFlyFmt );
                 pFlyFmt->GetDoc()->SetFlyFrmDescription( *(pFlyFmt), aEmptyStr );
             }
-            // <--
             else
             {
                 SwDoc* pDoc = pFmt->GetDoc();

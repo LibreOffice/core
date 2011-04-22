@@ -1380,7 +1380,6 @@ void SwRegHistory::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 //    if ( m_pHistory && ( pOld || pNew ) )
     if ( m_pHistory && ( pOld || pNew ) &&
          pOld != pNew )
-    // <--
     {
         if ( pNew->Which() < POOLATTR_END )
         {

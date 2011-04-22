@@ -1773,7 +1773,6 @@ public:
             break;
         }
     }
-//<---
     sal_uInt16 GetChapterInfo() const{ return aFormToken.nChapterFormat;}
 
     void SetOutlineLevel( sal_uInt16 nSet ) { aFormToken.nOutlineLevel = nSet;}//i53420
@@ -2599,7 +2598,6 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
             aChapterEntryLB.SelectEntryPos(2);
             break;
         }
-//<---
 //i53420
 
         aEntryOutlineLevelNF.SetValue(pToken->nOutlineLevel);

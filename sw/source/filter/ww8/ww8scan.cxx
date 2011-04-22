@@ -5571,7 +5571,6 @@ WW8Fib::WW8Fib(sal_uInt8 nVer)
             fFarEast = false;
             break;
     };
-    // <--
 
     Locale aTempLocale;
     SvxLanguageToLocale( aTempLocale, lid );

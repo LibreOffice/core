@@ -594,7 +594,6 @@ String GetWordDefaultDateStringAsUS(SvNumberFormatter* pFormatter, sal_uInt16 nL
     {
         sParams.SearchAndReplace(CREATE_CONST_ASC("YY"), CREATE_CONST_ASC("YYYY"));
     }
-    // <--
     return sParams;
 }
 
@@ -1112,7 +1111,6 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         {
             aStr.EraseAllChars( 0x01 );
         }
-        // <--
 
         eF_ResT eRes = (this->*aWW8FieldTab[aF.nId])( &aF, aStr );
         pStrm->Seek( nOldPos );
@@ -3315,7 +3313,6 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                             }
                             if ( pForm )
                                 pBase->SetTOXForm( *pForm );
-                            // <--
                         }
 
                         if (eCreateFrom)
@@ -3358,7 +3355,6 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                             aForm.SetTemplate( nLevel,
                                 aOldForm.GetTemplate(nLevel));
                         }
-                        // <--
 
                         pBase->SetTOXForm( aForm );
                     }
