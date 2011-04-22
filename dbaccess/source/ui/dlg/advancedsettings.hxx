@@ -74,6 +74,7 @@ namespace dbaui
         CheckBox*           m_pIgnoreCurrency;
         CheckBox*           m_pEscapeDateTime;
         CheckBox*           m_pPrimaryKeySupport;
+        CheckBox*           m_pRespectDriverResultSetType;
 
         FixedText*          m_pBooleanComparisonModeLabel;
         ListBox*            m_pBooleanComparisonMode;

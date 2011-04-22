@@ -163,9 +163,6 @@ namespace dbaui
                     0,
                     i_rDispatchArgs.getPropertyValues()
                 );
-
-                if ( !xReturn.is() )
-                    xReturn.set( m_xFrameLoader, UNO_QUERY );
             }
             catch( const Exception& )
             {

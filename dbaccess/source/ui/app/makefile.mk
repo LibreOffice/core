@@ -49,7 +49,8 @@ EXCEPTIONSFILES=\
             $(SLO)$/AppSwapWindow.obj		\
             $(SLO)$/AppTitleWindow.obj		\
             $(SLO)$/AppView.obj			\
-            $(SLO)$/subcomponentmanager.obj
+            $(SLO)$/subcomponentmanager.obj \
+            $(SLO)$/closeveto.obj
             
 
 SLOFILES =\

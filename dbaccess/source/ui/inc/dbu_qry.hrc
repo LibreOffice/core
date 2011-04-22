@@ -56,8 +56,8 @@
 #define STR_QUERY_NOTABLE                   RID_STR_QRY_START + 21
 #define STR_QRY_ORDERBY_UNRELATED           RID_STR_QRY_START + 22
 #define STR_QUERY_HANDLETEXT                RID_STR_QRY_START + 23
-#define STR_QUERY_FALSE                     RID_STR_QRY_START + 24
-#define STR_QUERY_TRUE                      RID_STR_QRY_START + 25
+// free
+// free
 #define STR_QRY_TOO_MANY_COLUMNS            RID_STR_QRY_START + 26
 #define STR_SVT_SQL_SYNTAX_ERROR            RID_STR_QRY_START + 27
 #define STR_QUERYDESIGN_NO_VIEW_SUPPORT     RID_STR_QRY_START + 28

@@ -54,6 +54,7 @@
 #include <algorithm>
 #include "dbtreelistbox.hxx"
 #include "IApplicationController.hxx"
+#include "imageprovider.hxx"
 
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;
@@ -90,6 +91,7 @@ OCreationList::OCreationList( OTasksWindow& _rParent )
     SetSpaceBetweenEntries(nSize);
     SetSelectionMode( NO_SELECTION );
     SetExtendedWinBits( EWB_NO_AUTO_CURENTRY );
+    SetNodeDefaultImages( );
     EnableEntryMnemonics();
 }
 // -----------------------------------------------------------------------------
@@ -367,6 +369,12 @@ OTasksWindow::OTasksWindow(Window* _pParent,OApplicationDetailView* _pDetailView
     m_aHelpText.SetHelpId(HID_APP_HELP_TEXT);
     m_aDescription.SetHelpId(HID_APP_DESCRIPTION_TEXT);
     m_aDescription.SetText(ModuleRes(STR_DESCRIPTION));
+
+    ImageProvider aImageProvider;
+    Image aFolderImage = aImageProvider.getFolderImage( DatabaseObject::FORM, false );
+    m_aCreation.SetDefaultCollapsedEntryBmp( aFolderImage );
+    m_aCreation.SetDefaultExpandedEntryBmp( aFolderImage );
+
     ImplInitSettings(sal_True,sal_True,sal_True);
 }
 // -----------------------------------------------------------------------------

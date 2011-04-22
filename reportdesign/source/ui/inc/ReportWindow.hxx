@@ -37,6 +37,7 @@
 
 #include <vector>
 #include <boost/shared_ptr.hpp>
+#include <comphelper/propmultiplex.hxx>
 
 #include <MarkedSection.hxx>
 #include "ViewsWindow.hxx"
@@ -55,12 +56,16 @@ namespace rptui
     class DlgEdFunc;
     class DlgEdFactory;
 
-    class OReportWindow :    public Window, public IMarkedSection
+    class OReportWindow :    public Window
+                            , public IMarkedSection
+                            , public ::cppu::BaseMutex
+                            , public ::comphelper::OPropertyChangeListener
     {
         Ruler                   m_aHRuler;
         ODesignView*            m_pView;
         OScrollWindowHelper*    m_pParent;
         OViewsWindow            m_aViewsWindow;
+        ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>   m_pReportListener;
         ::std::auto_ptr<DlgEdFactory>
                                 m_pObjFac;
 
@@ -73,6 +78,8 @@ namespace rptui
         void operator =(OReportWindow&);
     protected:
         virtual void DataChanged( const DataChangedEvent& rDCEvt );
+        // OPropertyChangeListener
+        virtual void    _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException);
     public:
         OReportWindow(OScrollWindowHelper* _pParent,ODesignView* _pView);
         virtual ~OReportWindow();

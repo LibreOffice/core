@@ -387,18 +387,14 @@ void OTableEditorCtrl::PaintCell(OutputDevice& rDev, const Rectangle& rRect,
                                    sal_uInt16 nColumnId ) const
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
-    String aText( GetCellText( m_nCurrentPos, nColumnId ));
-    Point aPos(rRect.TopLeft());
-    Size TxtSize(GetDataWindow().GetTextWidth(aText), GetDataWindow().GetTextHeight());
+    const String aText( GetCellText( m_nCurrentPos, nColumnId ));
+    const Point aPos(rRect.TopLeft());
+    const Size TxtSize(GetDataWindow().GetTextWidth(aText), GetDataWindow().GetTextHeight());
 
-    if (aPos.X() < rRect.Right() || aPos.X() + TxtSize.Width() > rRect.Right() ||
-        aPos.Y() < rRect.Top() || aPos.Y() + TxtSize.Height() > rRect.Bottom())
-        rDev.SetClipRegion( rRect );
-
-    rDev.DrawText(aPos, aText);
-
-    if (rDev.IsClipRegion())
-        rDev.SetClipRegion();
+    rDev.Push( PUSH_CLIPREGION );
+    rDev.SetClipRegion( rRect );
+    rDev.DrawText( rRect, aText, TEXT_DRAW_LEFT | TEXT_DRAW_VCENTER );
+    rDev.Pop();
 }
 
 //------------------------------------------------------------------------------
@@ -1529,7 +1525,7 @@ sal_Bool OTableEditorCtrl::IsPrimaryKeyAllowed( long /*nRow*/ )
     Reference<XPropertySet> xTable = rController.getTable();
     //////////////////////////////////////////////////////////////
     // Key darf nicht veraendert werden
-    // Dies gilt jedoch nur, wenn die Tabelle nicht neu ist und keine ::com::sun::star::sdbcx::View. Ansonsten wird kein DROP ausgeführt
+    // Dies gilt jedoch nur, wenn die Tabelle nicht neu ist und keine ::com::sun::star::sdbcx::View. Ansonsten wird kein DROP ausgefï¿½hrt
 
     if(xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW")))
         return sal_False;
@@ -1551,7 +1547,7 @@ sal_Bool OTableEditorCtrl::IsPrimaryKeyAllowed( long /*nRow*/ )
         {
             //////////////////////////////////////////////////////////////
             // Wenn Feldtyp Memo oder Image, kein PrimKey
-            // oder wenn Spalten nicht gedroped werden können und das Required Flag ist nicht gesetzt
+            // oder wenn Spalten nicht gedroped werden kï¿½nnen und das Required Flag ist nicht gesetzt
             // oder wenn eine ::com::sun::star::sdbcx::View vorhanden ist und das Required Flag nicht gesetzt ist
             TOTypeInfoSP pTypeInfo = pFieldDescr->getTypeInfo();
             if(     pTypeInfo->nSearchType == ColumnSearch::NONE

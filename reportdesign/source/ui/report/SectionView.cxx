@@ -53,6 +53,7 @@ OSectionView::OSectionView( SdrModel* pModel, OReportSection* _pSectionWindow, O
     ,m_pSectionWindow(_pSectionWindow)
 {
     DBG_CTOR( rpt_OSectionView,NULL);
+    // SetPagePaintingAllowed(false);
     SetBufferedOutputAllowed(true);
     SetBufferedOverlayAllowed(true);
     SetPageBorderVisible(false);
