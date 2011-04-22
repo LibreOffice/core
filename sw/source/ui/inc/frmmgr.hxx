@@ -76,7 +76,7 @@ class SW_DLLPUBLIC SwFlyFrmAttrMgr
     SW_DLLPRIVATE SwTwips           CalcLeftSpace();
     SW_DLLPRIVATE SwTwips           CalcRightSpace();
 
-    SW_DLLPRIVATE void _UpdateFlyFrm(); // post-treatment after insertation or update
+    SW_DLLPRIVATE void _UpdateFlyFrm(); // post-treatment after insert or update
 
 public:
     SwFlyFrmAttrMgr( sal_Bool bNew, SwWrtShell* pSh, sal_uInt8 nType );
