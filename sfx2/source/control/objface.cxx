@@ -47,14 +47,10 @@ DBG_NAME(SfxInterface)
 //====================================================================
 
 EXTERN_C
-#if defined( PM2 )
-int _stdcall
-#else
 #ifdef WNT
 int _cdecl
 #else
 int
-#endif
 #endif
 
 SfxCompareSlots_Impl( const void* pSmaller, const void* pBigger )

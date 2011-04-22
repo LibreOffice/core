@@ -2028,14 +2028,10 @@ void SfxDispatcher::SetSlotFilter
 
 //--------------------------------------------------------------------
 EXTERN_C
-#if defined( PM2 )
-int _stdcall
-#else
 #ifdef WNT
 int _cdecl
 #else
 int
-#endif
 #endif
 
 SfxCompareSIDs_Impl( const void* pSmaller, const void* pBigger )

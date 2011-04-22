@@ -228,7 +228,7 @@ static const Func pOperand3[] = {
 // TODO: Why as method? Isn't a simple define sufficient?
 static const char* _crlf()
 {
-#if defined (UNX) || defined( PM2 )
+#if defined (UNX)
     return "\n";
 #else
     return "\r\n";
