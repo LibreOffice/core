@@ -49,11 +49,14 @@ sub shorten_feature_gid
     my ($stringref) = @_;
 
     $$stringref =~ s/gid_Module_/gm_/;
+    $$stringref =~ s/_Extension_/_ex_/;
     $$stringref =~ s/_Root_/_r_/;
     $$stringref =~ s/_Prg_/_p_/;
     $$stringref =~ s/_Optional_/_o_/;
+    $$stringref =~ s/_Tools_/_tl_/;
     $$stringref =~ s/_Wrt_Flt_/_w_f_/;
     $$stringref =~ s/_Javafilter_/_jf_/;
+    $$stringref =~ s/_Productivity_/_pr_/;
 }
 
 ############################################

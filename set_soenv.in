@@ -201,7 +201,7 @@ if ( $platform =~ m/solaris/ )
       $CPU            = "I";
       $CPUNAME        = "INTEL";
 	  $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386";
-	  $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."motif21";
+	  $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."xawt";
 	  $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
 
    }
@@ -217,7 +217,7 @@ if ( $platform =~ m/solaris/ )
       $CPU            = "S";
       $CPUNAME        = "SPARC";
 	  $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc";
-	  $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."motif21";
+	  $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."xawt";
 	  $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."native_threads";
    }
 
@@ -1616,6 +1616,8 @@ ToFile( "DEFAULT_TO_ENGLISH_FOR_PACKING",  "yes", "e" );
 ToFile( "ENABLE_GTK",        "@ENABLE_GTK@",       "e" );
 ToFile( "GTK_CFLAGS",        "@GTK_CFLAGS@",       "e" );
 ToFile( "GTK_LIBS",          "@GTK_LIBS@",         "e" );
+ToFile( "GTHREAD_CFLAGS",        "@GTHREAD_CFLAGS@",       "e" );
+ToFile( "GTHREAD_LIBS",          "@GTHREAD_LIBS@",         "e" );
 ToFile( "ENABLE_SYSTRAY_GTK", "@ENABLE_SYSTRAY_GTK@", "e" );
 ToFile( "ENABLE_STATIC_GTK", "@ENABLE_STATIC_GTK@", "e" );
 ToFile( "ENABLE_CAIRO",      "@ENABLE_CAIRO@",     "e" );
@@ -1969,6 +1971,15 @@ ToFile( "MDDS_CPPFLAGS",     "@MDDS_CPPFLAGS@",     "e" );
 ToFile( "SYSTEM_MDDS",       "@SYSTEM_MDDS@",      "e" );
 ToFile( "SYSTEM_VIGRA",      "@SYSTEM_VIGRA@",     "e" );
 ToFile( "SYSTEM_NEON",       "@SYSTEM_NEON@",      "e" );
+ToFile( "SYSTEM_LIBRSVG",    "@SYSTEM_LIBRSVG@",   "e" );
+ToFile( "SYSTEM_GDKPIXBUF",  "@SYSTEM_GDKPIXBUF@",   "e" );
+ToFile( "SYSTEM_GLIB",       "@SYSTEM_GLIB@",   "e" );
+ToFile( "SYSTEM_GETTEXT",    "@SYSTEM_GETTEXT@",   "e" );
+ToFile( "SYSTEM_LIBCROCO",   "@SYSTEM_LIBCROCO@",   "e" );
+ToFile( "SYSTEM_PANGO",      "@SYSTEM_PANGO@",   "e" );
+ToFile( "SYSTEM_LIBGSF",     "@SYSTEM_LIBGSF@",   "e" );
+ToFile( "SYSTEM_LIBPNG",     "@SYSTEM_LIBPNG@",   "e" );
+ToFile( "SYSTEM_LIBJPEG",    "@SYSTEM_LIBJPEG@",   "e" );
 ToFile( "NEON_VERSION",      "@NEON_VERSION@",     "e" );
 ToFile( "NEON_LIBS",         "@NEON_LIBS@",        "e" );
 ToFile( "NEON_CFLAGS",       "@NEON_CFLAGS@",      "e" );

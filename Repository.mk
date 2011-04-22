@@ -43,9 +43,12 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
+    AppleRemote \
     avmedia \
     basegfx \
+    basebmp \
     cui \
+    desktop_detector \
     drawinglayer \
     editeng \
     for \
@@ -87,6 +90,11 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     unoxml \
     vbahelper \
     vcl \
+    vclplug_gen \
+    vclplug_gtk \
+    vclplug_kde \
+    vclplug_kde4 \
+    vclplug_svp \
     xcr \
     xo \
     xof \
@@ -100,6 +108,9 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	test \
     cppunit \
     icuuc \
+    icule \
+    graphite_dll \
+    cppunit \
     rdf \
     xslt \
 ))
@@ -109,6 +120,7 @@ $(eval $(call gb_Helper_register_libraries,RTLIBS, \
     comphelper \
     i18nisolang1 \
     i18nutil \
+    jvmaccess \
     ucbhelper \
 ))
 
@@ -139,8 +151,8 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     jpeglib \
     ooopathutils \
     salcpprt \
-    vclmain \
     zlib \
+    graphite \
 ))
 
 # vim: set noet sw=4 ts=4:

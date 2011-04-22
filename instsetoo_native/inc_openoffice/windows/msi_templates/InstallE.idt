@@ -173,6 +173,7 @@ ScheduleReboot	ISSCHEDULEREBOOT	3125
 SelfRegModules		2850
 SelfUnregModules		1100
 SetARPInstallLocation		990
+SetInstalllocation		3140
 SetODBCFolders		550
 StartServices	VersionNT	2800
 StopServices	VersionNT	950
