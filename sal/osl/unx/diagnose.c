@@ -256,7 +256,9 @@ sal_Bool SAL_CALL osl_assertFailedLine (
     OSL_DIAGNOSE_OUTPUTMESSAGE(f, szMessage);
 
     /* output backtrace */
-    osl_diagnose_backtrace_Impl(f);
+    char const * envBacktrace = getenv( "SAL_DIAGNOSE_BACKTRACE" );
+    if( envBacktrace != NULL && *envBacktrace != '\0' );
+        osl_diagnose_backtrace_Impl(f);
 
     /* release lock and leave */
     pthread_mutex_unlock(&g_mutex);
