@@ -883,7 +883,6 @@ void XMLShapeImportHelper::finishShape(
                 aPosLayoutDir );
         }
     }
-    // <--
 }
 
 // helper functions for z-order sorting

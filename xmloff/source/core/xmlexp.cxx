@@ -449,7 +449,6 @@ void SvXMLExport::_InitCtor()
             mpImpl->mbSaveBackwardCompatibleODF = bTemp;
         }
     }
-    // <--
 }
 
 // Shapes in Writer cannot be named via context menu (#i51726#)

@@ -151,7 +151,6 @@ static SvXMLTokenMapEntry aTextElemTokenMap[] =
     { XML_NAMESPACE_TEXT, XML_ALPHABETICAL_INDEX_AUTO_MARK_FILE, XML_TOK_TEXT_AUTOMARK },
     // #i52127#
     { XML_NAMESPACE_TEXT, XML_NUMBERED_PARAGRAPH, XML_TOK_TEXT_NUMBERED_PARAGRAPH   },
-    // <--
 
     XML_TOKEN_MAP_END
 };
@@ -1447,9 +1446,7 @@ sal_Bool lcl_HasListStyle( OUString sStyleName,
                         {
                             bRet = sal_False;
                         }
-                        // <--
                     }
-                    // <--
                     break;
                 }
                 else
@@ -1463,7 +1460,6 @@ sal_Bool lcl_HasListStyle( OUString sStyleName,
 
     return bRet;
 }
-// <--
 OUString XMLTextImportHelper::SetStyleAndAttrs(
         SvXMLImport& rImport,
         const Reference < XTextCursor >& rCursor,

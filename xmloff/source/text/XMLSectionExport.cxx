@@ -1341,7 +1341,6 @@ void XMLSectionExport::ExportIndexTemplateElement(
                     rValues[i].Value >>= nLevel;
                     bLevelOK = sal_True;
                     break;
-//<---
                 case TOK_TPARAM_BIBLIOGRAPHY_DATA:
                     rValues[i].Value >>= nBibliographyData;
                     bBibliographyDataOK = sal_True;
@@ -1449,7 +1448,6 @@ void XMLSectionExport::ExportIndexTemplateElement(
             bChapterFormatOK = sal_False;
         }
     }
-//<---
 
     // ... and write Element
     if (eElement != XML_TOKEN_INVALID)
@@ -1537,7 +1535,6 @@ void XMLSectionExport::ExportIndexTemplateElement(
             if (bLevelOK)
                 GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_OUTLINE_LEVEL,
                                      OUString::valueOf((sal_Int32)nLevel));
-//<---
         }
 
 //--->i53420
@@ -1552,7 +1549,6 @@ void XMLSectionExport::ExportIndexTemplateElement(
                 GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_OUTLINE_LEVEL,
                                      OUString::valueOf((sal_Int32)nLevel));
         }
-//<---
         // export template
         SvXMLElementExport aTemplateElement(GetExport(), XML_NAMESPACE_TEXT,
                                             GetXMLToken(eElement),

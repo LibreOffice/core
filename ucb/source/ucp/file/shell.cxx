@@ -1138,7 +1138,6 @@ shell::move( sal_Int32 CommandId,
     // srcUnqPath and dstUnqPathIn are equal
     if( srcUnqPath == dstUnqPathIn )
         return;
-    // <--
     //
     osl::FileBase::RC nError;
     rtl::OUString dstUnqPath( dstUnqPathIn );

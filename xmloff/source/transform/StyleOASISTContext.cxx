@@ -520,7 +520,6 @@ void XMLPropertiesTContext_Impl::StartElement(
                             }
                         }
                         pAttrList->AddAttribute( rAttrName, aNewAttrValue );
-                        // <--
 
                         // create old draw:mirror for drawing graphic objects
                         OUString aAttrValue( GetXMLToken( IsXMLToken( rAttrValue, XML_HORIZONTAL ) ? XML_TRUE : XML_FALSE ) );

@@ -1953,7 +1953,6 @@ void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XA
                 {
                     xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("PolyPolygonBezier") ), maPath );
                 }
-                // <--
             }
 
             SdXMLShapeContext::StartElement(xAttrList);

@@ -344,7 +344,6 @@ sal_Bool implts_isFrameOrWindowTop( const uno::Reference< frame::XFrame >& xFram
         uno::Reference< awt::XWindow > xWindow( xWindowCheck, uno::UNO_QUERY );
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         return ( pWindow && pWindow->IsSystemWindow() );
-        // <--
     }
 
     return sal_False;

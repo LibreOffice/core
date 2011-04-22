@@ -1198,7 +1198,6 @@ void XMLTableTransformerContext_Impl::StartElement(
     Reference< XAttributeList > xAttrList( rAttrList );
 
     XMLMutableAttributeList *pMutableAttrList = 0;
-    // <--
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )

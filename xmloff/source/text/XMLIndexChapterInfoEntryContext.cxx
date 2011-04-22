@@ -87,7 +87,6 @@ static const SvXMLEnumMapEntry aChapterDisplayMap[] =
     //---> i89791
     // enabled for ODF 1.2, full index support in 3.0
     { XML_PLAIN_NUMBER_AND_NAME,    ChapterFormat::NO_PREFIX_SUFFIX },
-    //<---
     { XML_PLAIN_NUMBER,             ChapterFormat::DIGIT },
     { XML_TOKEN_INVALID,            0 }
 };
@@ -174,7 +173,6 @@ void XMLIndexChapterInfoEntryContext::StartElement(
                 }
             }
         }
-        // <--
     }
     if (bOutlineLevelOK)
         nValues++;
