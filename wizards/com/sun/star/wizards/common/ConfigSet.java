@@ -90,11 +90,11 @@ public class ConfigSet implements ConfigNode, XMLProvider, ListModel
     public void add(int i, Object o)
     {
         int name = i;
-        while (getElement("" + name) != null)
+        while (getElement(PropertyNames.EMPTY_STRING + name) != null)
         {
             name++;
         }
-        childrenMap.put("" + name, o);
+        childrenMap.put(PropertyNames.EMPTY_STRING + name, o);
         childrenList.add(i, o);
 
         fireListDataListenerIntervalAdded(i, i);

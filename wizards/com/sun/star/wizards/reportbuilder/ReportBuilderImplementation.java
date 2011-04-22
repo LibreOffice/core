@@ -33,7 +33,6 @@ import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XHierarchicalNameContainer;
-import com.sun.star.container.XNameContainer;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
@@ -60,6 +59,7 @@ import java.util.Set;
 import java.util.Vector;
 import com.sun.star.wizards.common.FileAccess;
 import com.sun.star.wizards.common.NamedValueCollection;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.report.IReportBuilderLayouter;
 import com.sun.star.wizards.report.IReportDefinitionReadAccess;
 import com.sun.star.wizards.report.IReportDocument;
@@ -78,23 +78,24 @@ import java.util.logging.Logger;
 public class ReportBuilderImplementation extends ReportImplementationHelper
         implements IReportDocument, IReportDefinitionReadAccess
 {
-    private Resource            m_resource;
+
+    private Resource m_resource;
     private XDatabaseDocumentUI m_documentUI;
-
     private static final int MAXIMUM_GROUPCOUNT = 4;
+    private String[] groupNames = null;
 
-    private ReportBuilderImplementation( XMultiServiceFactory _serviceFactory )
+    private ReportBuilderImplementation(XMultiServiceFactory _serviceFactory)
     {
         // creates an access to the ReportBuilder Extension
         super(_serviceFactory, ReportLayouter.SOOPTLANDSCAPE);
     }
 
-    public static IReportDocument create( XMultiServiceFactory i_serviceFactory )
+    public static IReportDocument create(XMultiServiceFactory i_serviceFactory)
     {
-        return new ReportBuilderImplementation( i_serviceFactory );
+        return new ReportBuilderImplementation(i_serviceFactory);
     }
 
-    public void initialize( final XDatabaseDocumentUI i_documentUI, final Resource i_resource )
+    public void initialize(final XDatabaseDocumentUI i_documentUI, final Resource i_resource)
     {
         m_documentUI = i_documentUI;
         m_resource = i_resource;
@@ -106,12 +107,11 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
 
     public XWindowPeer getWizardParent()
     {
-        final XWindowPeer aWindowPeer = UnoRuntime.queryInterface( XWindowPeer.class, getFrame().getComponentWindow() );
-        return aWindowPeer;
+        return UnoRuntime.queryInterface(XWindowPeer.class, getFrame().getComponentWindow());
     }
     private XFrame m_xFrame = null;
     // private ReportBuilderLayouter m_aReportBuilderLayouter = null;
-    private String m_sReportBuilderLayoutName = "";
+    private String m_sReportBuilderLayoutName = PropertyNames.EMPTY_STRING;
 
     /**
      * Get access to the current ReportLayouter, which depends on the name.
@@ -120,8 +120,7 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
      */
     private IReportBuilderLayouter getReportBuilderLayouter()
     {
-        final IReportBuilderLayouter aReportBuilderLayouter = (IReportBuilderLayouter) getLayoutMap().get(m_sReportBuilderLayoutName);
-        return aReportBuilderLayouter;
+        return (IReportBuilderLayouter) getLayoutMap().get(m_sReportBuilderLayoutName);
     }
     private Object m_aReportDocument;
     private XPropertySet m_documentDefinition;
@@ -139,15 +138,18 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
         try
         {
             NamedValueCollection creationArgs = new NamedValueCollection();
-            creationArgs.put( "DocumentServiceName", "com.sun.star.report.ReportDefinition" );
-            creationArgs.put( "Mode", "remote" );
+            creationArgs.put("DocumentServiceName", "com.sun.star.report.ReportDefinition");
+            creationArgs.put("Mode", "remote");
 
-            XComponent[] docDefinition = new XComponent[] { null };
+            XComponent[] docDefinition = new XComponent[]
+            {
+                null
+            };
             XComponent reportDefinitionComp = m_documentUI.createComponentWithArguments(
-                DatabaseObject.REPORT, creationArgs.getPropertyValues(), docDefinition );
+                    DatabaseObject.REPORT, creationArgs.getPropertyValues(), docDefinition);
 
-            m_documentDefinition = UnoRuntime.queryInterface( XPropertySet.class, docDefinition[0] );
-            m_reportDocument = UnoRuntime.queryInterface( XReportDefinition.class, reportDefinitionComp );
+            m_documentDefinition = UnoRuntime.queryInterface(XPropertySet.class, docDefinition[0]);
+            m_reportDocument = UnoRuntime.queryInterface(XReportDefinition.class, reportDefinitionComp);
         }
         catch (com.sun.star.uno.Exception e)
         {
@@ -164,8 +166,7 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
     private XModeSelector getModeSelector()
     {
         final XController xController = getReportDefinition().getCurrentController();
-        final XModeSelector xModeSelector = UnoRuntime.queryInterface( XModeSelector.class, xController );
-        return xModeSelector;
+        return UnoRuntime.queryInterface(XModeSelector.class, xController);
     }
 
     private void switchOffAddFieldWindow()
@@ -209,11 +210,11 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
         try
         {
             final XController xController = getReportDefinition().getCurrentController();
-            final XDispatchProvider xDP = UnoRuntime.queryInterface( XDispatchProvider.class, xController );
+            final XDispatchProvider xDP = UnoRuntime.queryInterface(XDispatchProvider.class, xController);
 
             // Create special service for parsing of given URL.
             final Object aURLTransformer = getMSF().createInstance("com.sun.star.util.URLTransformer");
-            final XURLTransformer xURLTransformer = UnoRuntime.queryInterface( com.sun.star.util.XURLTransformer.class, aURLTransformer );
+            final XURLTransformer xURLTransformer = UnoRuntime.queryInterface(com.sun.star.util.XURLTransformer.class, aURLTransformer);
 
             com.sun.star.util.URL[] aURL = new com.sun.star.util.URL[1];
             aURL[0] = new com.sun.star.util.URL();
@@ -273,14 +274,14 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
             return;
         }
 
-        final XCommandProcessor xProcessor = UnoRuntime.queryInterface( XCommandProcessor.class, m_documentDefinition );
+        final XCommandProcessor xProcessor = UnoRuntime.queryInterface(XCommandProcessor.class, m_documentDefinition);
         final com.sun.star.ucb.Command aCommand = new com.sun.star.ucb.Command();
         aCommand.Name = "store";
 
         xProcessor.execute(aCommand, xProcessor.createCommandIdentifier(), null);
 
         final XHierarchicalNameContainer aNameContainer = UnoRuntime.queryInterface(XHierarchicalNameContainer.class, m_aReportDocument);
-        aNameContainer.insertByHierarchicalName( Name, m_documentDefinition );
+        aNameContainer.insertByHierarchicalName(Name, m_documentDefinition);
     }
 
     public boolean liveupdate_addGroupNametoDocument(String[] GroupNames, String CurGroupTitle, Vector GroupFieldVector, ArrayList ReportPath, int iSelCount)
@@ -366,19 +367,19 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
     {
         try
         {
-            if ( m_documentDefinition != null )
+            if (m_documentDefinition != null)
             {
                 // set the document to "not modified", to ensure that it won't ask the user before closing
-                XModifiable documentModify = UnoRuntime.queryInterface( XModifiable.class, m_reportDocument );
-                documentModify.setModified( false );
+                XModifiable documentModify = UnoRuntime.queryInterface(XModifiable.class, m_reportDocument);
+                documentModify.setModified(false);
                 // actually close
-                XSubDocument subComponent = UnoRuntime.queryInterface( XSubDocument.class, m_documentDefinition );
+                XSubDocument subComponent = UnoRuntime.queryInterface(XSubDocument.class, m_documentDefinition);
                 subComponent.close();
             }
         }
-        catch ( Exception ex )
+        catch (Exception ex)
         {
-            Logger.getLogger( ReportBuilderImplementation.class.getName() ).log( Level.SEVERE, null, ex );
+            Logger.getLogger(ReportBuilderImplementation.class.getName()).log(Level.SEVERE, null, ex);
         }
         m_documentDefinition = null;
         m_reportDocument = null;
@@ -407,15 +408,15 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
     {
     }
 
-    private XComponent loadReport( final String i_reportName )
+    private XComponent loadReport(final String i_reportName)
     {
         try
         {
-            return m_documentUI.loadComponent( DatabaseObject.REPORT, i_reportName, false );
+            return m_documentUI.loadComponent(DatabaseObject.REPORT, i_reportName, false);
         }
-        catch ( Exception ex )
+        catch (Exception ex)
         {
-            Logger.getLogger( ReportBuilderImplementation.class.getName() ).log( Level.SEVERE, null, ex );
+            Logger.getLogger(ReportBuilderImplementation.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
@@ -428,19 +429,19 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
         aCommand.Name = "open";
         try
         {
-            final Object result = commandProcessor.execute( aCommand, commandProcessor.createCommandIdentifier(), null );
-            return UnoRuntime.queryInterface( XComponent.class, result );
+            final Object result = commandProcessor.execute(aCommand, commandProcessor.createCommandIdentifier(), null);
+            return UnoRuntime.queryInterface(XComponent.class, result);
         }
-        catch ( Exception ex )
+        catch (Exception ex)
         {
-            Logger.getLogger( ReportBuilderImplementation.class.getName() ).log( Level.SEVERE, null, ex );
+            Logger.getLogger(ReportBuilderImplementation.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
 
-    public void createAndOpenReportDocument( String i_name, boolean i_asTemplate, boolean i_openForEditing )
+    public void createAndOpenReportDocument(String i_name, boolean i_asTemplate, boolean i_openForEditing)
     {
-        if ( i_openForEditing )
+        if (i_openForEditing)
         {
             // we won't destroy the report builder window, also don't create a document
             // Do we need to reopen the report builder with the known name?
@@ -449,13 +450,13 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
             return;
         }
 
-        if ( i_asTemplate )
+        if (i_asTemplate)
         {
             // don't need the report definition anymore - the document it represents has already been stored
             closeReportDefinition();
 
             // open the report, again, this time not in design, but containing data
-            loadReport( i_name );
+            loadReport(i_name);
         }
         else
         {
@@ -466,8 +467,10 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
             closeReportDefinition();
 
             // store the generated report
-            if ( getRecordParser().storeDatabaseDocumentToTempPath( document, i_name ) )
-                getRecordParser().addReportDocument( document, false );
+            if (getRecordParser().storeDatabaseDocumentToTempPath(document, i_name))
+            {
+                getRecordParser().addReportDocument(document, false);
+            }
         }
 
         dispose();
@@ -509,10 +512,17 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
     public void setSorting(String[][] _aSortFieldNames)
     {
         getRecordParser().setSortFieldNames(_aSortFieldNames);
+        if (groupNames != null)
+        {
+            getRecordParser().prependSortFieldNames(groupNames);
+        }
+        getReportBuilderLayouter().insertSortingNames(_aSortFieldNames);
+        getReportBuilderLayouter().layout();
     }
 
     public void setGrouping(String[] _aGroupFieldNames)
     {
+        groupNames = _aGroupFieldNames;
         getRecordParser().prependSortFieldNames(_aGroupFieldNames);
 
         getReportBuilderLayouter().insertGroupNames(_aGroupFieldNames);
@@ -532,12 +542,12 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
             try
             {
                 // Check general availability of office paths
-                m_aReportPath = FileAccess.getOfficePaths( getMSF(), "Template", "share", "/wizard" );
-                FileAccess.combinePaths( getMSF(), m_aReportPath, "/wizard/report" );
+                m_aReportPath = FileAccess.getOfficePaths(getMSF(), "Template", "share", "/wizard");
+                FileAccess.combinePaths(getMSF(), m_aReportPath, "/wizard/report");
             }
-            catch ( NoValidPathException ex )
+            catch (NoValidPathException ex)
             {
-                Logger.getLogger( ReportBuilderImplementation.class.getName() ).log( Level.SEVERE, null, ex );
+                Logger.getLogger(ReportBuilderImplementation.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return m_aReportPath;
@@ -545,7 +555,7 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
 
     public String getContentPath()
     {
-        return "";
+        return PropertyNames.EMPTY_STRING;
     }
 
     public int getDefaultPageOrientation()
@@ -573,8 +583,7 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
             Object[] aParams = new Object[2];
             aParams[0] = this;
             aParams[1] = m_resource;
-            final IReportBuilderLayouter aReportBuilderLayouter = (IReportBuilderLayouter) cTor.newInstance(aParams);
-            return aReportBuilderLayouter;
+            return (IReportBuilderLayouter) cTor.newInstance(aParams);
         }
         catch (Exception e)
         {
@@ -727,7 +736,6 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
         getReportDefinition().setCommandType(_nCommand);
     }
 
-
     public void checkInvariants() throws java.lang.Exception
     {
         final String sDefaultHeaderLayoutPath = getDefaultHeaderLayout();
@@ -737,12 +745,9 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
         }
 
         FileAccess aAccess = new FileAccess(getGlobalMSF());
-        if (! aAccess.exists(sDefaultHeaderLayoutPath, true))
+        if (!aAccess.exists(sDefaultHeaderLayoutPath, true))
         {
             throw new java.io.IOException("default.otr");
         }
     }
-
 }
-
-

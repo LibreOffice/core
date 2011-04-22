@@ -44,8 +44,7 @@ public class SectionEmptyObject extends SectionObject
 
     public static SectionObject create()
     {
-        SectionEmptyObject a = new SectionEmptyObject();
-        return a;
+        return new SectionEmptyObject();
     }
 
     public FontDescriptor getFontDescriptor()

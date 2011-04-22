@@ -44,6 +44,7 @@ import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.NumberFormatter;
 import com.sun.star.sdbc.XResultSet;
 import com.sun.star.task.XInteractionHandler;
+import com.sun.star.wizards.common.PropertyNames;
 
 public class RecordParser extends QueryMetaData
 {
@@ -78,11 +79,11 @@ public class RecordParser extends QueryMetaData
         try
         {
             xRowSet = (XInterface) xMSF.createInstance("com.sun.star.sdb.RowSet");
-            xRowSetColumnsSupplier = (XColumnsSupplier) UnoRuntime.queryInterface(XColumnsSupplier.class, xRowSet);
-            xRowSetComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, xRowSet);
-            xExecute = (com.sun.star.sdb.XCompletedExecution) UnoRuntime.queryInterface(com.sun.star.sdb.XCompletedExecution.class, xRowSet);
+            xRowSetColumnsSupplier = UnoRuntime.queryInterface(XColumnsSupplier.class, xRowSet);
+            xRowSetComponent = UnoRuntime.queryInterface(XComponent.class, xRowSet);
+            xExecute = UnoRuntime.queryInterface(XCompletedExecution.class, xRowSet);
             XInterface oInteraction = (XInterface) xMSF.createInstance("com.sun.star.task.InteractionHandler");
-            xInteraction = (XInteractionHandler) UnoRuntime.queryInterface(XInteractionHandler.class, oInteraction);
+            xInteraction = UnoRuntime.queryInterface(XInteractionHandler.class, oInteraction);
         }
         catch (Exception exception)
         {
@@ -217,14 +218,14 @@ public class RecordParser extends QueryMetaData
         try
         {
             Helper.setUnoPropertyValue(xRowSet, "DataSourceName", DataSourceName);
-            Helper.setUnoPropertyValue(xRowSet, "ActiveConnection", DBConnection);
-            Helper.setUnoPropertyValue(xRowSet, "Command", Command);
-            Helper.setUnoPropertyValue(xRowSet, "CommandType", new Integer(_nCommandType)); // CommandType
+            Helper.setUnoPropertyValue(xRowSet, PropertyNames.ACTIVE_CONNECTION, DBConnection);
+            Helper.setUnoPropertyValue(xRowSet, PropertyNames.COMMAND, Command);
+            Helper.setUnoPropertyValue(xRowSet, PropertyNames.COMMAND_TYPE, new Integer(_nCommandType)); // CommandType
             xExecute.executeWithCompletion(xInteraction);
-            com.sun.star.sdb.XResultSetAccess xResultAccess = (com.sun.star.sdb.XResultSetAccess) UnoRuntime.queryInterface(com.sun.star.sdb.XResultSetAccess.class, xRowSet);
+            com.sun.star.sdb.XResultSetAccess xResultAccess = UnoRuntime.queryInterface(com.sun.star.sdb.XResultSetAccess.class, xRowSet);
             ResultSet = xResultAccess.createResultSet();
-            xResultSetRow = (com.sun.star.sdbc.XRow) UnoRuntime.queryInterface(com.sun.star.sdbc.XRow.class, ResultSet);
-            XColumnsSupplier xDBCols = (XColumnsSupplier) UnoRuntime.queryInterface(XColumnsSupplier.class, ResultSet);
+            xResultSetRow = UnoRuntime.queryInterface(com.sun.star.sdbc.XRow.class, ResultSet);
+            XColumnsSupplier xDBCols = UnoRuntime.queryInterface(XColumnsSupplier.class, ResultSet);
             xColumns = xDBCols.getColumns();
             setCommandType(_nCommandType);
             return true;
@@ -240,7 +241,7 @@ public class RecordParser extends QueryMetaData
     {
         try
         {
-            if (binitializeDBColumns == true)
+            if (binitializeDBColumns)
             {
                 initializeFieldColumns(_sFieldNames, xColumns);
             }

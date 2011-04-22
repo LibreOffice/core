@@ -73,8 +73,8 @@ public class Shape
             this.aSize = _aSize;
             this.oFormHandler = _oFormHandler;
             Object oShape = oFormHandler.xMSF.createInstance(_sServiceName);
-            xShapes = (XShapes) UnoRuntime.queryInterface(XShapes.class, oShape);
-            xServiceInfo = (XServiceInfo) UnoRuntime.queryInterface(XServiceInfo.class, oShape);
+            xShapes = UnoRuntime.queryInterface(XShapes.class, oShape);
+            xServiceInfo = UnoRuntime.queryInterface(XServiceInfo.class, oShape);
         }
         catch (Exception e)
         {
@@ -92,7 +92,7 @@ public class Shape
         {
             xMSF = oFormHandler.xMSFDoc;
             Object oShape = xMSF.createInstance(sServiceName);
-            xShape = (XShape) UnoRuntime.queryInterface(XShape.class, oShape);
+            xShape = UnoRuntime.queryInterface(XShape.class, oShape);
             xShape.setPosition(aPoint);
             if (aSize != null)
             {
@@ -103,8 +103,8 @@ public class Shape
                 xShape.setSize(new Size(1000, 100));
             }
             Helper.setUnoPropertyValue(xShape, "AnchorType", TextContentAnchorType.AT_PARAGRAPH);
-            xServiceInfo = (XServiceInfo) UnoRuntime.queryInterface(XServiceInfo.class, xShape);
-            xControlShape = (XControlShape) UnoRuntime.queryInterface(XControlShape.class, xShape);
+            xServiceInfo = UnoRuntime.queryInterface(XServiceInfo.class, xShape);
+            xControlShape = UnoRuntime.queryInterface(XControlShape.class, xShape);
 
         }
         catch (Exception e)

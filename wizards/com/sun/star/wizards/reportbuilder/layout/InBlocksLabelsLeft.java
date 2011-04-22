@@ -29,6 +29,7 @@
 package com.sun.star.wizards.reportbuilder.layout;
 
 import com.sun.star.awt.Rectangle;
+import com.sun.star.report.XGroup;
 import com.sun.star.report.XSection;
 import com.sun.star.wizards.common.Resource;
 import com.sun.star.wizards.report.IReportDefinitionReadAccess;
@@ -53,8 +54,7 @@ public class InBlocksLabelsLeft extends ColumnarTwoColumns
 
     public String getLocalizedName()
     {
-        final String sLocalizedName = getResource().getResText(UIConsts.RID_REPORT + 84);
-        return sLocalizedName;
+        return getResource().getResText(UIConsts.RID_REPORT + 84);
     }
 
     protected void insertDetailFields()
@@ -126,7 +126,7 @@ public class InBlocksLabelsLeft extends ColumnarTwoColumns
         doNotBreakInTable(xSection);
     }
 
-    protected void insertDetailFieldTitles()
+    protected void insertDetailFieldTitles(int lastGroupPostion)
     {
         // we won't extra field titles
     }

@@ -42,9 +42,9 @@ import com.sun.star.wizards.web.data.CGSession;
 public class ImpressHTMLExporter extends ConfiguredExporter
 {
 
-    private static final Integer SMALL_IMAGE = new Integer(512);
-    private static final Integer MEDIUM_IMAGE = new Integer(640);
-    private static final Integer LARGE_IMAGE = new Integer(800);
+    private static final Integer SMALL_IMAGE = 512;
+    private static final Integer MEDIUM_IMAGE = 640;
+    private static final Integer LARGE_IMAGE = 800;
 
     public boolean export(CGDocument source, String targetDirectory, XMultiServiceFactory xmsf, Task task) throws IOException
     {

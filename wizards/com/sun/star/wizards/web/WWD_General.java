@@ -64,7 +64,7 @@ public abstract class WWD_General extends WebWizardDialog
 
         StatusDialog statusDialog = new StatusDialog(xMSF, StatusDialog.STANDARD_WIDTH, resources.resLoadingSession, false, new String[]
                 {
-                    resources.prodName, "", "", "", "", ""
+                    resources.prodName, PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING
                 }, HelpIds.getHelpIdString(HID0_STATUS_DIALOG));
         try
         {
@@ -302,7 +302,7 @@ public abstract class WWD_General extends WebWizardDialog
     public boolean checkSaveSession()
     {
         return (!isSaveSession() ||
-                !getSessionSaveName().equals(""));
+                !getSessionSaveName().equals(PropertyNames.EMPTY_STRING));
 
     }
 
@@ -317,7 +317,7 @@ public abstract class WWD_General extends WebWizardDialog
         if (p.cp_Publish)
         {
             String url = (String) Helper.getUnoPropertyValue(getModel(text), property);
-            if ((url == null) || (url.equals("")))
+            if ((url == null) || (url.equals(PropertyNames.EMPTY_STRING)))
             {
                 throw new IllegalArgumentException();
             }
