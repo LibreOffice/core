@@ -1,0 +1,43 @@
+--- misc/librsvg-2.32.1/configure	2010-11-13 11:52:19.000000000 +0100
++++ misc/build/librsvg-2.32.1/configure	2011-03-03 14:28:12.000000000 +0100
+@@ -12288,8 +12288,8 @@
+ 
+ 
+ 
+-GLIB_MKENUMS=`$PKG_CONFIG --variable=glib_mkenums glib-2.0`
+-
++#GLIB_MKENUMS=`$PKG_CONFIG --variable=glib_mkenums glib-2.0`
++GLIB_MKENUMS=glib-mkenums
+ 
+ 
+ pkg_failed=no
+@@ -12562,6 +12562,7 @@
+ 
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether gio 2.24 is available" >&5
+ $as_echo_n "checking whether gio 2.24 is available... " >&6; }
++if 0 ; then
+ if test -n "$PKG_CONFIG" && \
+     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gio-2.0 >= 2.24.0\""; } >&5
+   ($PKG_CONFIG --exists --print-errors "gio-2.0 >= 2.24.0") 2>&5
+@@ -12572,6 +12573,9 @@
+ else
+   have_gio_2_24=no
+ fi
++else
++  have_gio_2_24=yes
++fi
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: $have_gio_2_24" >&5
+ $as_echo "$have_gio_2_24" >&6; }
+ 
+@@ -12695,8 +12699,8 @@
+ 
+ 
+ 
+-LIBCROCO_CFLAGS=""
+-LIBCROCO_LIBS=""
++#LIBCROCO_CFLAGS=""
++#LIBCROCO_LIBS=""
+ LIBCROCOPKG=""
+ 
+ test_croco=true
+

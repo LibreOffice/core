@@ -27,49 +27,37 @@
 
 PRJ=.
 
-PRJNAME=zlib
-TARGET=zlib
-
-.IF "$(GUI)" == "UNX"
-.IF "$(SYSTEM_ZLIB)" == "YES"
-all:
-    @echo "An already available installation of zlib should exist on your system."
-    @echo "Therefore the version provided here does not need to be built in addition."
-.ENDIF
-.ENDIF
+PRJNAME=libpng
+TARGET=libpng
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
 
+.IF "$(SYSTEM_LIBPNG)" == "YES"
+all:
+    @echo "An already available installation of libpng should exist on your system."
+    @echo "Therefore the version provided here does not need to be built in addition."
+.ENDIF
+
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=zlib-1.2.5
-TARFILE_MD5=c735eab2d659a96e5a594c9e8541ad63
+LIBPNGVERSION=1.5.1
 
-PATCH_FILES=zlib-1.2.5.patch
-ADDITIONAL_FILES=makefile.mk
+TARFILE_NAME=$(PRJNAME)-$(LIBPNGVERSION)
+TARFILE_MD5=220035f111ea045a51e290906025e8b5
+
+PATCH_FILES=$(PRJNAME)-$(LIBPNGVERSION).patch
+ADDITIONAL_FILES=makefile.mk pnglibconf.h
 
 #relative to CONFIGURE_DIR
 
 BUILD_DIR=$(CONFIGURE_DIR)
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 
-OUT2INC= \
-    zlib.h \
-    zconf.h \
-    contrib$/minizip$/unzip.h \
-    contrib$/minizip$/ioapi.h
-
-PATCHED_HEADERS=$(INCCOM)$/patched$/zlib.h
-
+OUT2INC=png.h pnglibconf.h pngconf.h pngstruct.h
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : set_ext.mk
-.INCLUDE :	target.mk
-.INCLUDE :	tg_ext.mk
-
-ALLTAR: $(PATCHED_HEADERS)
-
-$(PATCHED_HEADERS) : $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
-    @$(PERL) make_patched_header.pl $@ $(PRJNAME)
+.INCLUDE : target.mk
+.INCLUDE : tg_ext.mk

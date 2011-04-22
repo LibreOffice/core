@@ -42,23 +42,27 @@ all:
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=jpeg-6b
-TARFILE_MD5=dbd5f3b47ed13132f04c685d608a7547
+#TARFILE_NAME=jpeg-6b
+TARFILE_NAME=jpeg-8c
 
-PATCH_FILES=jpeg-6b.patch
-ADDITIONAL_FILES=makefile.mk \
-                 jconfig.h
+#TARFILE_MD5=dbd5f3b47ed13132f04c685d608a7547
+TARFILE_MD5=a2c10c04f396a9ce72894beb18b4e1f9
+
+#PATCH_FILES=jpeg-6b.patch
+PATCH_FILES=jpeg-8c.patch
+
+ADDITIONAL_FILES=makefile.mk jconfig.h	
 
 #relative to CONFIGURE_DIR
 
 BUILD_DIR=$(CONFIGURE_DIR)
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 
-OUT2INC=jerror.h   \
-        jpeglib.h  \
-        jconfig.h  \
-        jmorecfg.h
-
+OUT2INC=	jconfig.h	\
+            jerror.h	\
+            jmorecfg.h	\
+            jpegint.h	\
+            jpeglib.h	
 
 # --- Targets ------------------------------------------------------
 

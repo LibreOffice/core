@@ -50,7 +50,9 @@ PATCH_FILES=\
     Python-parallel-make.patch \
     Python-ssl.patch \
     Python-aix.patch \
-    Python-2.6.1-urllib.patch
+    Python-2.6.1-urllib.patch \
+    Python-2.6.1-sysbase.patch \
+    Python-2.6.1-nohardlink.patch
 
 CONFIGURE_DIR=
 
