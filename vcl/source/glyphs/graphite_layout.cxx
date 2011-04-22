@@ -54,8 +54,9 @@
 
 // Platform
 #include <svsys.h>
+#include <graphite_adaptors.hxx>
 
-#include <vcl/salgdi.hxx>
+#include <salgdi.hxx>
 
 #include <unicode/uchar.h>
 #include <unicode/ubidi.h>

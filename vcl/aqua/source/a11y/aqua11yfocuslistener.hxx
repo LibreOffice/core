@@ -31,8 +31,8 @@
 
 #include <salhelper/refobj.hxx>
 
-#include "keyboardfocuslistener.hxx"
-#include "aquavcltypes.h"
+#include "aqua/keyboardfocuslistener.hxx"
+#include "aqua/aquavcltypes.h"
 
 class AquaA11yFocusListener :
     public KeyboardFocusListener,

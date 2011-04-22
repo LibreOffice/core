@@ -28,13 +28,16 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
+
 #include <svsys.h>
-#include <wincomp.hxx>
-#include <saldata.hxx>
-#include <salinst.h>
-#include <salgdi.h>
-#include <salvd.h>
+
 #include <vcl/sysdata.hxx>
+
+#include <win/wincomp.hxx>
+#include <win/saldata.hxx>
+#include <win/salinst.h>
+#include <win/salgdi.h>
+#include <win/salvd.h>
 
 // =======================================================================
 

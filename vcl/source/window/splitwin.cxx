@@ -30,19 +30,21 @@
 #include "precompiled_vcl.hxx"
 
 #include <string.h>
+
 #include <tools/debug.hxx>
 #include <tools/rcid.h>
+
 #include <vcl/event.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/symbol.hxx>
-#include <vcl/svids.hrc>
 #include <vcl/image.hxx>
-#include <vcl/svdata.hxx>
 #include <vcl/help.hxx>
 #include <vcl/splitwin.hxx>
 
+#include <svdata.hxx>
+#include <svids.hrc>
 
 // =======================================================================
 

@@ -33,20 +33,23 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :	$(PRJ)$/util$/makefile.pmk
-.INCLUDE :	settings.mk
+.INCLUDE :  $(PRJ)$/util$/makefile.pmk
+.INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile2.pmk
 
 # --- Files --------------------------------------------------------
 
-SLOFILES=	$(SLO)$/display.obj		 \
-            $(SLO)$/dtranscomp.obj   \
-            $(SLO)$/fontident.obj    \
-            $(SLO)$/stringmirror.obj \
+SLOFILES=   $(SLO)$/display.obj		\
+            $(SLO)$/dtranscomp.obj	\
+            $(SLO)$/fontident.obj	\
+            $(SLO)$/stringmirror.obj	\
+            $(SLO)$/rasterizer_rsvg.obj \
             $(SLO)$/factory.obj
+
+EXCEPTIONSFILES=	$(SLO)$/rasterizer_rsvg.obj
+
 
 # --- Targets ------------------------------------------------------
 
-.INCLUDE :	target.mk
-.INCLUDE :	$(PRJ)$/util$/target.pmk
-
+.INCLUDE :  target.mk
+.INCLUDE :  $(PRJ)$/util$/target.pmk

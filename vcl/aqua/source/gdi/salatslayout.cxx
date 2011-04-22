@@ -26,12 +26,14 @@
  *
 ************************************************************************/
 
-#include "vcl/salgdi.hxx"
-#include "saldata.hxx"
-#include "salgdi.h"
-#include "vcl/sallayout.hxx"
-#include "salatsuifontutils.hxx"
 #include "tools/debug.hxx"
+
+#include "aqua/saldata.hxx"
+#include "aqua/salgdi.h"
+#include "aqua/salatsuifontutils.hxx"
+
+#include "sallayout.hxx"
+#include "salgdi.hxx"
 
 #include <math.h>
 
@@ -1093,7 +1095,7 @@ void ATSLayout::InvalidateMeasurements()
 
 // glyph fallback is supported directly by Aqua
 // so methods used only by MultiSalLayout can be dummy implementated
-bool ATSLayout::GetGlyphOutlines( SalGraphics&, PolyPolyVector& rPPV ) const { return false; }
+bool ATSLayout::GetGlyphOutlines( SalGraphics&, PolyPolyVector& ) const { return false; }
 void ATSLayout::InitFont() {}
 void ATSLayout::MoveGlyph( int /*nStart*/, long /*nNewXPos*/ ) {}
 void ATSLayout::DropGlyph( int /*nStart*/ ) {}
@@ -1145,7 +1147,7 @@ const ImplFontData* FallbackInfo::GetFallbackFontData( int nFallbackLevel ) cons
 
 // =======================================================================
 
-SalLayout* AquaSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
+SalLayout* AquaSalGraphics::GetTextLayout( ImplLayoutArgs&, int /*nFallbackLevel*/ )
 {
     ATSLayout* pATSLayout = new ATSLayout( maATSUStyle, mfFontScale );
     return pATSLayout;

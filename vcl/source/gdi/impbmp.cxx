@@ -29,13 +29,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include <svsys.h>
-#include <vcl/salbmp.hxx>
 #include <tools/debug.hxx>
-#include <vcl/impbmp.hxx>
+
 #include <vcl/bitmap.hxx>
-#include <vcl/svdata.hxx>
-#include <vcl/salinst.hxx>
+
+#include <svdata.hxx>
+#include <salinst.hxx>
+#include <salbmp.hxx>
+#include <impbmp.hxx>
 
 // --------------
 // - ImpBitmap  -

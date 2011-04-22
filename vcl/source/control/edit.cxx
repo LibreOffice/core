@@ -30,20 +30,21 @@
 #include "precompiled_vcl.hxx"
 
 #include <tools/rc.h>
-#include <vcl/svdata.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/svids.hrc>
 #include <vcl/menu.hxx>
 #include <vcl/cmdevt.h>
-#include <vcl/subedit.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/controldata.hxx>
 #include <vcl/msgbox.hxx>
-#include <vcl/window.h>
+
+#include <window.h>
+#include <svdata.hxx>
+#include <svids.hrc>
+#include <subedit.hxx>
+#include <controldata.hxx>
 
 #include <osl/mutex.hxx>
 

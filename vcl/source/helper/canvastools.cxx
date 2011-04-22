@@ -70,7 +70,7 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/bitmapex.hxx>
 
-#include <vcl/canvasbitmap.hxx>
+#include <canvasbitmap.hxx>
 #include <vcl/canvastools.hxx>
 #include <boost/unordered_map.hpp>
 

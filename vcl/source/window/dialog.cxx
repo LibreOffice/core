@@ -31,11 +31,12 @@
 #include <tools/debug.hxx>
 
 #include <tools/rc.h>
-#include <vcl/svdata.hxx>
+#include <svdata.hxx>
+#include <window.h>
+#include <brdwin.hxx>
+
 #include <vcl/svapp.hxx>
-#include <vcl/window.h>
 #include <vcl/event.hxx>
-#include <vcl/brdwin.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/button.hxx>
 #include <vcl/mnemonic.hxx>

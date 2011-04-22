@@ -28,10 +28,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
+
 #include <vcl/bitmapex.hxx>
 #include <vcl/imagerepository.hxx>
 #include <vcl/svapp.hxx>
-#include "vcl/impimagetree.hxx"
+#include "impimagetree.hxx"
 
 //........................................................................
 namespace vcl

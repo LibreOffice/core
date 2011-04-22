@@ -30,27 +30,27 @@
 #include "precompiled_vcl.hxx"
 
 #include <limits.h>
-#include <svsys.h>
-#include <vcl/salbmp.hxx>
-#include <vcl/salgdi.hxx>
-#include <vcl/salframe.hxx>
 #include <tools/debug.hxx>
-#include <vcl/svdata.hxx>
-#include <vcl/impbmp.hxx>
+#include <tools/poly.hxx>
+
 #include <vcl/bitmap.hxx>
 #include <vcl/event.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/metric.hxx>
-#include <vcl/outfont.hxx>
-#include <vcl/outdev.h>
-#include <tools/poly.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/window.h>
 #include <vcl/window.hxx>
 #include <vcl/scrbar.hxx>
-#include <scrwnd.hxx>
 #include <vcl/dockwin.hxx>
 
+#include <window.h>
+#include <outfont.hxx>
+#include <outdev.h>
+#include <svdata.hxx>
+#include <impbmp.hxx>
+#include <salbmp.hxx>
+#include <salgdi.hxx>
+#include <salframe.hxx>
+#include <scrwnd.hxx>
 
 
 // =======================================================================

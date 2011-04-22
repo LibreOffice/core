@@ -34,42 +34,53 @@
 #include <algorithm>
 
 #include <tools/urlobj.hxx>
+
 #include <pdfwriter_impl.hxx>
+
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+
+#include <osl/thread.h>
+#include <osl/file.h>
+
+#include <rtl/crc.h>
+#include <rtl/digest.h>
 #include <rtl/ustrbuf.hxx>
+
 #include <tools/debug.hxx>
 #include <tools/zcodec.hxx>
 #include <tools/stream.hxx>
+
 #include <i18npool/mslangid.hxx>
+
 #include <vcl/virdev.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/image.hxx>
-#include <vcl/outdev.h>
-#include <vcl/sallayout.hxx>
 #include <vcl/metric.hxx>
-#include <vcl/fontsubset.hxx>
-#include <vcl/textlayout.hxx>
-#include <vcl/cvtgrf.hxx>
-#include <svsys.h>
-#include <vcl/salgdi.hxx>
 #include <vcl/svapp.hxx>
-#include <osl/thread.h>
-#include <osl/file.h>
-#include <rtl/crc.h>
-#include <rtl/digest.h>
+#include <vcl/lineinfo.hxx>
+#include "vcl/cvtgrf.hxx"
+#include "vcl/strhelper.hxx"
+
+#include <fontsubset.hxx>
+#include <outdev.h>
+#include <sallayout.hxx>
+#include <textlayout.hxx>
+#include <salgdi.hxx>
+
+#include <icc/sRGB-IEC61966-2.1.hxx>
+
 #include <comphelper/processfactory.hxx>
+
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/URL.hpp>
+
 #include "cppuhelper/implbase1.hxx"
-#include <icc/sRGB-IEC61966-2.1.hxx>
-#include <vcl/lineinfo.hxx>
-#include "vcl/strhelper.hxx"
 
 using namespace vcl;
 
@@ -5582,7 +5593,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
             if(!m_bIsPDF_A1)
             {
                 OStringBuffer aDest;
-                if( rWidget.m_nDest != -1 && appendDest( rWidget.m_nDest, aDest ) )
+                if( rWidget.m_nDest != -1 && appendDest( m_aDestinationIdTranslation[ rWidget.m_nDest ], aDest ) )
                 {
                     aLine.append( "/AA<</D<</Type/Action/S/GoTo/D " );
                     aLine.append( aDest.makeStringAndClear() );
@@ -10817,6 +10828,11 @@ sal_Int32 PDFWriterImpl::createDest( const Rectangle& rRect, sal_Int32 nPageNr, 
     m_aPages[nPageNr].convertRect( m_aDests.back().m_aRect );
 
     return nRet;
+}
+
+sal_Int32 PDFWriterImpl::registerDestReference( sal_Int32 nDestId, const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
+{
+    return m_aDestinationIdTranslation[ nDestId ] = createDest( rRect, nPageNr, eType );
 }
 
 sal_Int32 PDFWriterImpl::setLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId )

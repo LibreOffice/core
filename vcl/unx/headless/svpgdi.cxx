@@ -30,7 +30,6 @@
 #include "svpbmp.hxx"
 
 #include <vcl/sysdata.hxx>
-#include <vcl/region.h>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -48,6 +47,7 @@
 #endif
 
 #include <svppspgraphics.hxx>
+#include <region.h>
 
 using namespace basegfx;
 using namespace basebmp;

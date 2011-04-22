@@ -28,7 +28,7 @@
 
 #pragma once
 
-#include <saldisp.hxx>
+#include <unx/saldisp.hxx>
 
 #include <fixx11h.h>
 

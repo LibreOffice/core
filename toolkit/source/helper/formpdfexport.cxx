@@ -267,7 +267,8 @@ namespace toolkitform
     //--------------------------------------------------------------------
     /** creates a PDF compatible control descriptor for the given control
     */
-    void TOOLKIT_DLLPUBLIC describePDFControl( const Reference< XControl >& _rxControl, ::std::auto_ptr< ::vcl::PDFWriter::AnyWidget >& _rpDescriptor ) SAL_THROW(())
+    void TOOLKIT_DLLPUBLIC describePDFControl( const Reference< XControl >& _rxControl,
+        ::std::auto_ptr< ::vcl::PDFWriter::AnyWidget >& _rpDescriptor, ::vcl::PDFExtOutDevData& i_pdfExportData ) SAL_THROW(())
     {
         _rpDescriptor.reset( NULL );
         OSL_ENSURE( _rxControl.is(), "describePDFControl: invalid (NULL) control!" );
@@ -494,7 +495,25 @@ namespace toolkitform
                 }
                 else if ( eButtonType == FormButtonType_URL )
                 {
-                    OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_TARGET_URL ) >>= pButtonWidget->URL);
+                    ::rtl::OUString sURL;
+                    OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_TARGET_URL ) >>= sURL );
+                    const bool bDocumentLocalTarget = ( sURL.getLength() > 0 ) && ( sURL.getStr()[0] == '#' );
+                    if ( bDocumentLocalTarget )
+                    {
+                        const ::rtl::OUString sDestinationName( sURL.copy(1) );
+                        // Register the destination for for future handling ...
+                        pButtonWidget->Dest = i_pdfExportData.RegisterDest();
+
+                        // and put it into the bookmarks, to ensure the future handling really happens
+                        ::std::vector< ::vcl::PDFExtOutDevBookmarkEntry >& rBookmarks( i_pdfExportData.GetBookmarks() );
+                        ::vcl::PDFExtOutDevBookmarkEntry aBookmark;
+                        aBookmark.nDestId = pButtonWidget->Dest;
+                        aBookmark.aBookmark = sURL;
+                        rBookmarks.push_back( aBookmark );
+                    }
+                    else
+                        pButtonWidget->URL = sURL;
+
                     pButtonWidget->Submit = false;
                 }
 

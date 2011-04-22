@@ -29,10 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include <svsys.h>
-#include <vcl/salgdi.hxx>
 #include <tools/debug.hxx>
-#include <vcl/outdev.h>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/bmpacc.hxx>
@@ -41,16 +38,22 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/wall2.hxx>
+#include <vcl/rendergraphicrasterizer.hxx>
+
+#include <wall2.hxx>
+#include <salgdi.hxx>
+#include <window.h>
+#include <svdata.hxx>
+#include <outdev.h>
+
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+
 #include <math.h>
-#include <vcl/window.h>
-#include <vcl/svdata.hxx>
 
 // ========================================================================
 
@@ -1135,6 +1138,7 @@ void OutputDevice::Erase()
         return;
 
     sal_Bool bNativeOK = sal_False;
+
     if( meOutDevType == OUTDEV_WINDOW )
     {
         Window* pWindow = static_cast<Window*>(this);
@@ -1185,6 +1189,8 @@ void OutputDevice::ImplDraw2ColorFrame( const Rectangle& rRect,
 bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
                             const GfxLink& rGfxLink, GDIMetaFile* pSubst )
 {
+    DBG_TRACE( "OutputDevice::DrawEPS()" );
+
     bool bDrawn(true);
 
     if ( mpMetaFile )
@@ -1203,7 +1209,7 @@ bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
     if( mbOutputClipped )
         return bDrawn;
 
-    Rectangle   aRect( ImplLogicToDevicePixel( Rectangle( rPoint, rSize ) ) );
+    Rectangle aRect( ImplLogicToDevicePixel( Rectangle( rPoint, rSize ) ) );
 
     if( !aRect.IsEmpty() )
     {
@@ -1237,5 +1243,25 @@ bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
 
     return bDrawn;
 }
+
+// ------------------------------------------------------------------
+                                      const ::vcl::RenderGraphic& rRenderGraphic )
+{
+    DBG_TRACE( "OutputDevice::DrawRenderGraphic()" );
+
+    if( mpMetaFile )
+        mpMetaFile->AddAction( new MetaRenderGraphicAction( rPoint, rSize, rRenderGraphic ) );
+
+    if( !rRenderGraphic.IsEmpty() )
+    {
+        ::vcl::RenderGraphicRasterizer  aRasterizer( rRenderGraphic );
+        BitmapEx                        aBmpEx;
+        const Size                      aSizePixel( LogicToPixel( rSize ) );
+        GDIMetaFile*                    pOldMetaFile = mpMetaFile;
+
+        mpMetaFile = NULL;
+        DrawBitmapEx( rPoint, rSize, aRasterizer.Rasterize( aSizePixel ) );
+        mpMetaFile = pOldMetaFile;
+    }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

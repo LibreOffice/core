@@ -50,7 +50,7 @@ CDEFS+=-DGR2_STATIC
 
 # --- Files --------------------------------------------------------
 
-EXCEPTIONSFILES=	$(SLO)$/salmisc.obj 	\
+EXCEPTIONSFILES=	$(SLO)$/salmisc.obj		\
                     $(SLO)$/animate.obj 	\
                     $(SLO)$/base14.obj		\
                     $(SLO)$/bitmap.obj		\
@@ -90,35 +90,37 @@ EXCEPTIONSFILES=	$(SLO)$/salmisc.obj 	\
                     $(SLO)$/pdfwriter_impl.obj	\
                     $(SLO)$/pdfwriter_impl2.obj	\
                     $(SLO)$/pngread.obj		\
-                    $(SLO)$/pngwrite.obj    \
+                    $(SLO)$/pngwrite.obj		\
                     $(SLO)$/print.obj		\
                     $(SLO)$/print2.obj		\
                     $(SLO)$/print3.obj		\
+                    $(SLO)$/rendergraphic.obj	\
+                    $(SLO)$/rendergraphicrasterizer.obj \
                     $(SLO)$/salgdilayout.obj	\
                     $(SLO)$/sallayout.obj		\
                     $(SLO)$/salnativewidgets-none.obj	\
+                    $(SLO)$/svgread.obj		\
                     $(SLO)$/textlayout.obj   \
                     $(SLO)$/virdev.obj \
                     $(SLO)$/wall.obj
 
-SLOFILES=	$(EXCEPTIONSFILES)      \
+SLOFILES=	$(EXCEPTIONSFILES)		\
             $(SLO)$/bitmap3.obj 	\
             $(SLO)$/bitmap4.obj 	\
-            $(SLO)$/alpha.obj		\
+            $(SLO)$/alpha.obj	\
             $(SLO)$/bmpacc.obj		\
             $(SLO)$/bmpacc2.obj 	\
             $(SLO)$/bmpacc3.obj 	\
             $(SLO)$/bmpfast.obj	\
-            $(SLO)$/font.obj		\
+            $(SLO)$/font.obj	\
             $(SLO)$/gradient.obj	\
-            $(SLO)$/hatch.obj		\
-            $(SLO)$/impbmp.obj		\
-            $(SLO)$/mapmod.obj		\
-            $(SLO)$/octree.obj		\
+            $(SLO)$/hatch.obj	\
+            $(SLO)$/impbmp.obj	\
+            $(SLO)$/mapmod.obj	\
+            $(SLO)$/octree.obj	\
             $(SLO)$/regband.obj 	\
-            $(SLO)$/region.obj		\
+            $(SLO)$/region.obj	\
             $(SLO)$/extoutdevdata.obj
-
 
 # --- Targets ------------------------------------------------------
 

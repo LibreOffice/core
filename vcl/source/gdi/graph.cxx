@@ -28,11 +28,15 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-#include <vcl/impgraph.hxx>
+
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/graph.hxx>
+
+#include <impgraph.hxx>
+
 #include <comphelper/processfactory.hxx>
+
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -428,6 +432,27 @@ sal_Bool Graphic::IsAnimated() const
 
 // ------------------------------------------------------------------------
 
+sal_Bool Graphic::IsEPS() const
+{
+    return mpImpGraphic->ImplIsEPS();
+}
+
+// ------------------------------------------------------------------------
+
+sal_Bool Graphic::IsRenderGraphic() const
+{
+    return mpImpGraphic->ImplIsRenderGraphic();
+}
+
+// ------------------------------------------------------------------------
+
+sal_Bool Graphic::HasRenderGraphic() const
+{
+    return mpImpGraphic->ImplHasRenderGraphic();
+}
+
+// ------------------------------------------------------------------------
+
 Bitmap Graphic::GetBitmap(const GraphicConversionParameters& rParameters) const
 {
     return mpImpGraphic->ImplGetBitmap(rParameters);
@@ -452,6 +477,13 @@ Animation Graphic::GetAnimation() const
 const GDIMetaFile& Graphic::GetGDIMetaFile() const
 {
     return mpImpGraphic->ImplGetGDIMetaFile();
+}
+
+// ------------------------------------------------------------------------
+
+::vcl::RenderGraphic Graphic::GetRenderGraphic() const
+{
+    return mpImpGraphic->ImplGetRenderGraphic();
 }
 
 // ------------------------------------------------------------------------

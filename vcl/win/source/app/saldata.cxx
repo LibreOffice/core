@@ -29,10 +29,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 #include <svsys.h>
+#include "tools/svwin.h"
 #include "rtl/tencinfo.h"
-#include <saldata.hxx>
-#include <vcl/svapp.hxx>
+#include "vcl/svapp.hxx"
 
+#include "win/saldata.hxx"
 
 // =======================================================================
 

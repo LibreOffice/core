@@ -28,9 +28,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "salinst.h"
+#include "aqua/salinst.h"
+
 #include "aqua11ywrappercombobox.h"
 #include "aqua11yrolehelper.h"
+
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
 using namespace ::com::sun::star::accessibility;

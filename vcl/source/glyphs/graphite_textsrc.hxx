@@ -44,9 +44,6 @@
 #include <windows.h>
 #endif
 
-#include <vcl/salgdi.hxx>
-
-#include <vcl/sallayout.hxx>
 
 // Module
 #include "vcl/dllapi.h"

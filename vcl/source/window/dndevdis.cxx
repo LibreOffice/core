@@ -29,13 +29,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include <vcl/dndevdis.hxx>
-#include <vcl/dndlcon.hxx>
-#include <vcl/window.h>
+#include <dndevdis.hxx>
+#include <dndlcon.hxx>
+#include <window.h>
+#include <svdata.hxx>
 
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/svdata.hxx>
+
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

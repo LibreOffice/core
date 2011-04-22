@@ -33,7 +33,8 @@
 
 #include "sal/main.h"
 #include "tools/extendapplicationenvironment.hxx"
-#include "vcl/salinst.hxx"
+
+#include "salinst.hxx"
 
 SAL_IMPLEMENT_MAIN() {
     tools::extendApplicationEnvironment();

@@ -33,33 +33,35 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
+
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/process.h>
-
 #include "tools/debug.hxx"
 #include "tools/resary.hxx"
 
-#include "vcl/salinst.hxx"
-#include "vcl/salframe.hxx"
+#include "unotools/fontcfg.hxx"
+
+#include "vos/mutex.hxx"
+
+#include "cppuhelper/implbase1.hxx"
+
+#include "uno/current_context.hxx"
+
 #include "vcl/configsettings.hxx"
-#include "vcl/svdata.hxx"
-#include "vcl/window.h"
 #include "vcl/svapp.hxx"
 #include "vcl/wrkwin.hxx"
 #include "vcl/msgbox.hxx"
 #include "vcl/unohelp.hxx"
 #include "vcl/button.hxx" // for Button::GetStandardText
 #include "vcl/dockwin.hxx"  // for DockingManager
-#include "vcl/salimestatus.hxx"
-#include "vcl/salsys.hxx"
-#include "vcl/svids.hrc"
-#include "vcl/xconnection.hxx"
-
-#include "unotools/fontcfg.hxx"
-
-#include "cppuhelper/implbase1.hxx"
-#include "uno/current_context.hxx"
+#include "salinst.hxx"
+#include "salframe.hxx"
+#include "svdata.hxx"
+#include "window.h"
+#include "salimestatus.hxx"
+#include "salsys.hxx"
+#include "svids.hrc"
 
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/lang/XComponent.hpp"

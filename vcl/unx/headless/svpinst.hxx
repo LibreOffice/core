@@ -29,13 +29,13 @@
 #ifndef _SVP_SALINST_HXX
 #define _SVP_SALINST_HXX
 
-#include <vcl/salinst.hxx>
-#include <vcl/salwtype.hxx>
-#include <vcl/saltimer.hxx>
 #include <vcl/solarmutex.hxx>
 
 #include <osl/mutex.hxx>
 #include <osl/thread.hxx>
+#include <salinst.hxx>
+#include <salwtype.hxx>
+#include <saltimer.hxx>
 
 #include <list>
 

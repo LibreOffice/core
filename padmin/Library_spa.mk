@@ -47,6 +47,7 @@ $(eval $(call gb_Library_add_linked_libs,spa,\
     i18nisolang1 \
     cppu \
     sal \
+    $(gb_STDLIBS) \
 ))
 
 

@@ -51,38 +51,42 @@
 #ifdef __MINGW32__
 #include <excpt.h>
 #endif
+
 #include <rtl/string.h>
 #include <rtl/ustring.h>
 
 #include <osl/module.h>
+
 #include <tools/debug.hxx>
+
+#include <vcl/sysdata.hxx>
+#include <vcl/timer.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/keycodes.hxx>
+#include <vcl/window.hxx>
+#include <vcl/wrkwin.hxx>
+#include <vcl/svapp.hxx>
 
 // Warning in SDK header
 #if defined(_MSC_VER) && (_MSC_VER > 1400)
 #pragma warning( disable: 4242 4244 )
-#endif
-#include <wincomp.hxx>
-#include <salids.hrc>
-#include <vcl/sysdata.hxx>
-#include <saldata.hxx>
-#include <salinst.h>
-#include <salbmp.h>
-#include <salgdi.h>
-#include <salsys.h>
-#include <salframe.h>
-#include <salvd.h>
-#include <salmenu.h>
-#include <salobj.h>
-#include <vcl/impbmp.hxx>
-#include <vcl/timer.hxx>
-#include <saltimer.h>
-#include <vcl/settings.hxx>
-#include <vcl/keycodes.hxx>
-#include <vcl/window.h>
-#include <vcl/window.hxx>
-#include <vcl/wrkwin.hxx>
-#include <vcl/sallayout.hxx>
-#include <vcl/svapp.hxx>
+#include <win/wincomp.hxx>
+#include <win/salids.hrc>
+#include <win/saldata.hxx>
+#include <win/salinst.h>
+#include <win/salbmp.h>
+#include <win/salgdi.h>
+#include <win/salsys.h>
+#include <win/salframe.h>
+#include <win/salvd.h>
+#include <win/salmenu.h>
+#include <win/salobj.h>
+#include <win/saltimer.h>
+
+#include <impbmp.hxx>
+#include <window.h>
+#include <sallayout.hxx>
+
 #define COMPILE_MULTIMON_STUBS
 #include <multimon.h>
 #include <vector>

@@ -30,16 +30,19 @@
 #include "precompiled_vcl.hxx"
 
 #include <tools/rc.h>
+#include <tools/poly.hxx>
+
 #include <vcl/event.hxx>
 #include <vcl/split.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/gradient.hxx>
-#include <tools/poly.hxx>
 #include <vcl/lineinfo.hxx>
+
 #include <rtl/instance.hxx>
-#include <vcl/window.h>
+
+#include <window.h>
 
 namespace
 {

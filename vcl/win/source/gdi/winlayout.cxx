@@ -30,20 +30,21 @@
 #include "precompiled_vcl.hxx"
 
 #include <svsys.h>
-
-#include "salgdi.h"
-#include "saldata.hxx"
-// for GetMirroredChar
-#include "sft.hxx"
-
-#include "vcl/sallayout.hxx"
-#include "vcl/svapp.hxx"
-
 #include "rtl/ustring.hxx"
 
 #include "osl/module.h"
 #include "osl/file.h"
 
+#include "tools/svwin.h"
+
+#include "vcl/svapp.hxx"
+
+#include "win/salgdi.h"
+#include "win/saldata.hxx"
+
+// for GetMirroredChar
+#include "sft.hxx"
+#include "sallayout.hxx"
 
 #include <cstdio>
 #include <malloc.h>
@@ -72,8 +73,8 @@ typedef std::set<int> IntSet;
 // Graphite headers
 #ifdef ENABLE_GRAPHITE
 #include <i18npool/mslangid.hxx>
-#include <vcl/graphite_layout.hxx>
-#include <vcl/graphite_features.hxx>
+#include <graphite_layout.hxx>
+#include <graphite_features.hxx>
 #endif
 
 #define DROPPED_OUTGLYPH 0xFFFF

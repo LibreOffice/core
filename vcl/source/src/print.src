@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-#include "vcl/svids.hrc"
+#include "svids.hrc"
 
 ModalDialog SV_DLG_PRINT
 {
