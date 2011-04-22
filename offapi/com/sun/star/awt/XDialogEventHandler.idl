@@ -48,7 +48,7 @@ module com { module sun { module star { module awt {
 /** Handles events fired by dialogs represented by a
     <type scope="com::sun::star::awt">XDialog</type> interface.
  */
-interface XDialogEventHandler : ::com::sun::star::uno::XInterface {
+published interface XDialogEventHandler : ::com::sun::star::uno::XInterface {
 
     //-------------------------------------------------------------------------
 

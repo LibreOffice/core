@@ -60,7 +60,7 @@ module com { module sun { module star { module resource {
     But also changing the locale at runtime can be supported in this way.
 
 */
-interface XStringResourceResolver: com::sun::star::util::XModifyBroadcaster
+published interface XStringResourceResolver: com::sun::star::util::XModifyBroadcaster
 {
     /**
         Resolves the passed ResoureID for the current locale. This

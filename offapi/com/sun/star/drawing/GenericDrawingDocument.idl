@@ -82,7 +82,7 @@
 
     <p>Because its function is needed more then once, its defined as generic one.</p>
  */
-service GenericDrawingDocument
+published service GenericDrawingDocument
 {
     /** this base service describes storing and printing */
     service com::sun::star::document::OfficeDocument;

@@ -40,7 +40,7 @@
 #endif
 
 module com {  module sun {  module star {  module container {
-interface XIndexAccess;
+published interface XIndexAccess;
 };};};};
 //=============================================================================
 
@@ -55,7 +55,7 @@ interface XIndexAccess;
     structure of the used query.
     </p>
  */
-interface XSingleSelectQueryAnalyzer : com::sun::star::uno::XInterface
+published interface XSingleSelectQueryAnalyzer : com::sun::star::uno::XInterface
 {
 
     /** returns the query.

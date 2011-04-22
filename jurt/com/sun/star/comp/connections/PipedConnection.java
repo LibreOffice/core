@@ -139,7 +139,7 @@ public class PipedConnection implements XConnection {
 
             if(_closed) throw new com.sun.star.io.IOException("connection has been closed");
 
-            int bytes = 0;
+            int bytes  ;
 
             if(_out < _in) {
                 bytes = Math.min(aData.length - bytesWritten, _in - _out - 1);

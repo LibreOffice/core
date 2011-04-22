@@ -53,7 +53,7 @@ module com {  module sun {  module star {  module awt { module tree {
 
     @see TreeControl
  */
-interface XTreeControl
+published interface XTreeControl
 {
     /** This interfaces provides access to the selection of tree nodes for this control.
 

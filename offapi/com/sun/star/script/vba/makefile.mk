@@ -41,12 +41,15 @@ IDLFILES=\
     VBAEventId.idl \
     VBAEventProcessor.idl \
     VBAMacroResolver.idl \
+    VBAScriptEvent.idl \
+    VBAScriptEventId.idl \
     VBASpreadsheetEventProcessor.idl \
     VBATextEventProcessor.idl \
     XVBACompatibility.idl \
     XVBAEventProcessor.idl \
     XVBAMacroResolver.idl \
-    XVBAModuleInfo.idl
+    XVBAModuleInfo.idl \
+    XVBAScriptListener.idl
 
 # ------------------------------------------------------------------
 

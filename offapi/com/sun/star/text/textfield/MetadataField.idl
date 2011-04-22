@@ -61,7 +61,7 @@ module com { module sun { module star { module text { module textfield {
 
     @see com::sun::star::rdf
 */
-service MetadataField
+published service MetadataField
 {
     //-------------------------------------------------------------------------
     /** None of the properties of

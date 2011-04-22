@@ -37,13 +37,13 @@
 
 module com { module sun { module star { module drawing { module framework {
 
-interface XConfigurationChangeListener;
+published interface XConfigurationChangeListener;
 
 /** Manage the set of registered event listeners and the event notification for a configuration
     controller.
     <p>The listeners are called in the order in which they are registered.</p>
 */
-interface XConfigurationControllerBroadcaster
+published interface XConfigurationControllerBroadcaster
 {
     /** Add a new listener for configuration changes.
         <p>The listener is notified only for the specified type of

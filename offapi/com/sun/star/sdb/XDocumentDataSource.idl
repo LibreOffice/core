@@ -43,7 +43,7 @@
     </p>
     @see OfficeDatabaseDocument
  */
-interface XDocumentDataSource
+published interface XDocumentDataSource
 {
     /** provides access to the one and only <type>OfficeDatabaseDocument</type>
         which the data source is based on.

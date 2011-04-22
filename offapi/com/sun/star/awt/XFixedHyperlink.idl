@@ -43,7 +43,7 @@
 
 /** gives access to the text and formatting of a fixed hyperlink field.
  */
-interface XFixedHyperlink: com::sun::star::uno::XInterface
+published interface XFixedHyperlink: com::sun::star::uno::XInterface
 {
         //-------------------------------------------------------------------------
 

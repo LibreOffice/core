@@ -76,7 +76,7 @@ module com {  module sun {  module star {  module report {
     @see com.sun.star.document.OfficeDocument
 */
 
-interface XReportEngine
+published interface XReportEngine
 {
     /** allows life-time control of report engine.
      */

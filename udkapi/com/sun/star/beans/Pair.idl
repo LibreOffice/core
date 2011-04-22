@@ -40,7 +40,7 @@ module com {  module sun {  module star {  module beans {
 
     @since OOo 3.0
  */
-struct Pair<T, U> {
+published struct Pair<T, U> {
 
     /// first object.
     T First;

@@ -43,7 +43,7 @@
     @since OOo 2.0
  */
 
-interface XLayoutManagerEventBroadcaster : com::sun::star::uno::XInterface
+published interface XLayoutManagerEventBroadcaster : com::sun::star::uno::XInterface
 {
     /** adds a layout manager event listener to the object's listener list.
 

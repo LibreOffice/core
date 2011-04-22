@@ -37,21 +37,21 @@
 
 module com {  module sun {  module star {
     module container {
-        interface XNameAccess;
+        published interface XNameAccess;
     };
     module lang {
-        interface XComponent;
+        published interface XComponent;
     };
 };};};
 //=============================================================================
 module com {  module sun {  module star {  module sdb {
-    interface XSingleSelectQueryComposer;
+    published interface XSingleSelectQueryComposer;
     module tools {
 //=============================================================================
 
-interface XTableName;
-interface XObjectNames;
-interface XDataSourceMetaData;
+published interface XTableName;
+published interface XObjectNames;
+published interface XDataSourceMetaData;
 
 //-----------------------------------------------------------------------------
 /** encapsulates various useful functionality around a
@@ -68,7 +68,7 @@ interface XDataSourceMetaData;
 
     @since OOo 2.0.4
 */
-interface XConnectionTools
+published interface XConnectionTools
 {
     /** creates an instance supporting the <type>XTableName</type> interface,
         which can be used to manipulate table names for various purposes.

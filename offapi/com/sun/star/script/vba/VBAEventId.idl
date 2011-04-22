@@ -97,11 +97,11 @@ constants VBAEventId
     const long WORKBOOK_AFTERSAVE                   = 2007;
     /** New sheet inserted. Arguments: short nSheet. */
     const long WORKBOOK_NEWSHEET                    = 2008;
-    /** Document window has been activated. No arguments. */
+    /** Document window has been activated. Arguments: XController aController. */
     const long WORKBOOK_WINDOWACTIVATE              = 2009;
-    /** Document window has been deactivated. No arguments. */
+    /** Document window has been deactivated. Arguments: XController aController. */
     const long WORKBOOK_WINDOWDEACTIVATE            = 2010;
-    /** Document window has been resized. No arguments. */
+    /** Document window has been resized. Arguments: XController aController. */
     const long WORKBOOK_WINDOWRESIZE                = 2011;
 
     //-------------------------------------------------------------------------

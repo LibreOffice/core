@@ -46,7 +46,7 @@
 /**  registers item listeners at controls like the com::sun::star::awt::Roadmap
  */
 
-interface XItemEventBroadcaster: com::sun::star::uno::XInterface
+published interface XItemEventBroadcaster: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 

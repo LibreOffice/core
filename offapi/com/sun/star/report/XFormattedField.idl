@@ -44,7 +44,7 @@
     @see com::sun::star::report::XReportControlModel
     @see com::sun::star::util::XNumberFormatsSupplier
 */
-interface XFormattedField
+published interface XFormattedField
 {
     interface XReportControlModel;
 
@@ -61,7 +61,7 @@ interface XFormattedField
     [attribute,bound] com::sun::star::util::XNumberFormatsSupplier FormatsSupplier;
 };
 
-service FormattedField : XFormattedField;
+published service FormattedField : XFormattedField;
 //=============================================================================
 
 }; }; }; };

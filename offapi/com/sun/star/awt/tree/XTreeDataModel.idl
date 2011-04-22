@@ -58,7 +58,7 @@ module com {  module sun {  module star {  module awt {  module tree {
 
     If you do not need your own model implementation, you can also use the <type>MutableTreeDataModel</type>.
 */
-interface XTreeDataModel : ::com::sun::star::lang::XComponent
+published interface XTreeDataModel : ::com::sun::star::lang::XComponent
 {
     /** Returns the root of the tree.
         <p>Returns null only if the tree has no nodes.

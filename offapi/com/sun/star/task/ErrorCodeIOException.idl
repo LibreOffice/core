@@ -40,7 +40,7 @@
 /** IOException that can carry error codes ( not only io related ).
     It can be used to transport the error code information.
  */
-exception ErrorCodeIOException : com::sun::star::io::IOException
+published exception ErrorCodeIOException : com::sun::star::io::IOException
 {
     //------------------------------------------------------------------------
     /** specifies the error code.

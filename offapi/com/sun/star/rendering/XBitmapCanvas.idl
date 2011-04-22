@@ -61,7 +61,7 @@ module com { module sun { module star { module rendering {
 
     @since OOo 2.0
  */
-interface XBitmapCanvas : XCanvas
+published interface XBitmapCanvas : XCanvas
 {
     /** This method copies a rectangular area from a place of one
         canvas to a place on another.<p>

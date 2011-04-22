@@ -40,7 +40,7 @@
 
 module com { module sun { module star { module drawing { module framework {
 
-interface XResourceId;
+published interface XResourceId;
 
 /** A configuration describes the resources of an application like panes,
     views, and tool bars and their relationships that are currently active
@@ -54,7 +54,7 @@ interface XResourceId;
 
     @see XConfigurationController
 */
-interface XConfiguration
+published interface XConfiguration
     : ::com::sun::star::util::XCloneable
 {
     /** Returns the list of resources that are bound directly and/or

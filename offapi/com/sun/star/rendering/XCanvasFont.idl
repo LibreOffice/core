@@ -59,15 +59,15 @@
 
 module com { module sun { module star { module rendering {
 
-interface XCanvas;
-interface XTextLayout;
-interface XPolyPolygon2D;
+published interface XCanvas;
+published interface XTextLayout;
+published interface XPolyPolygon2D;
 
 /** This interface provides access to a specific, XCanvas-dependent
     font incarnation. This font is not universally usable, but belongs
     to the XCanvas it was queried from.
  */
-interface XCanvasFont : ::com::sun::star::uno::XInterface
+published interface XCanvasFont : ::com::sun::star::uno::XInterface
 {
     /** Create a text layout interface.<p>
 
@@ -122,7 +122,7 @@ interface XCanvasFont : ::com::sun::star::uno::XInterface
         contained in the list returned by this method can lead to
         visible disturbances.<p>
      */
-    sequence< double >                                  getAvailableSizes();
+    sequence< double >                                      getAvailableSizes();
 
     //-------------------------------------------------------------------------
 

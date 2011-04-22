@@ -44,7 +44,7 @@ module com { module sun { module star { module rendering {
 
     @since OOo 2.0
  */
-interface XBufferController : ::com::sun::star::uno::XInterface
+published interface XBufferController : ::com::sun::star::uno::XInterface
 {
     /** Create the given number of background buffers.<p>
 
@@ -61,7 +61,7 @@ interface XBufferController : ::com::sun::star::uno::XInterface
 
         @throws <type>com::sun::star::lang::IllegalArgumentException</type>
         if nBuffers is smaller than one.
-      */
+     */
     long    createBuffers( [in] long nBuffers )
         raises (com::sun::star::lang::IllegalArgumentException);
 

@@ -58,7 +58,7 @@
 
     @see com::sun::star::sdb::SingleSelectQueryComposer
  */
-interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
+published interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
 {
     //-------------------------------------------------------------------------
     // FILTER
@@ -211,7 +211,7 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
             if a database access error occurs.
      */
     void appendOrderByColumn([in] com::sun::star::beans::XPropertySet column,
-                              [in] boolean ascending)
+                             [in] boolean ascending)
             raises (com::sun::star::sdbc::SQLException);
 
     //-------------------------------------------------------------------------

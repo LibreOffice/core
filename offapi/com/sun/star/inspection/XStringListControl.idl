@@ -46,7 +46,7 @@ module com {  module sun {  module star {  module inspection {
 
     @since OOo 2.0.3
 */
-interface XStringListControl : XPropertyControl
+published interface XStringListControl : XPropertyControl
 {
     /** clears the whole list
     */

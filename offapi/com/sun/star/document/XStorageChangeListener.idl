@@ -46,7 +46,7 @@ module com {  module sun {  module star {  module document {
 //=============================================================================
 /** allows to be notified when a document is switched to a new storage.
  */
-interface XStorageChangeListener: com::sun::star::lang::XEventListener
+published interface XStorageChangeListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
     /** is called when document switches to another storage.

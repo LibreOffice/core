@@ -37,7 +37,7 @@
 /** Specifies how to calculate a value.
     @see XFormattedField
  */
-constants Calculation
+published constants Calculation
 {
     //-------------------------------------------------------------------------
 

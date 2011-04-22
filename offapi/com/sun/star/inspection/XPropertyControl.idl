@@ -38,14 +38,14 @@
 //=============================================================================
 module com {  module sun {  module star {  module inspection {
 
-interface XPropertyControlContext;
+published interface XPropertyControlContext;
 
 //-----------------------------------------------------------------------------
 /** defines the interface for a single control in an <type>ObjectInspector</type>
 
     @since OOo 2.0.3
 */
-interface XPropertyControl
+published interface XPropertyControl
 {
     /** denotes the type of the control, as one of the <type>PropertyControlType</type>
         constants

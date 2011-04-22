@@ -25,10 +25,6 @@
  *
  ************************************************************************/
 
-//i20156 - new file for xmlsecurity module
-
-/** -- idl definition -- **/
-
 #ifndef __com_sun_star_security_SecurityInfrastructureException_idl__
 #define __com_sun_star_security_SecurityInfrastructureException_idl__
 
@@ -43,7 +39,7 @@ module com { module sun { module star { module security {
 
 //=============================================================================
 
-exception SecurityInfrastructureException : com::sun::star::uno::SecurityException
+published exception SecurityInfrastructureException : com::sun::star::uno::SecurityException
 {
 };
 

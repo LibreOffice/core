@@ -59,7 +59,13 @@ IDLFILES=\
     XSerialNumberAdapter.idl		\
     SerialNumberAdapter.idl		\
     CertificateContainer.idl \
-    CertificateContainerStatus.idl
+    CertificateContainerStatus.idl \
+    ExtAltNameType.idl \
+    XSanExtension.idl \
+    CertAltNameEntry.idl
+    
+    
+    
 
 # ------------------------------------------------------------------
 

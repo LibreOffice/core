@@ -43,7 +43,7 @@ module com { module sun { module star { module drawing { module framework {
     anchor a1:a2 which itself is a resource a1 bound to anchor a2.
     Then r:a1:a2 is bound directly to a1:a2 and indirectly to a2.</p>
 */
-enum AnchorBindingMode
+published enum AnchorBindingMode
 {
     DIRECT,
     INDIRECT

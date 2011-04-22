@@ -52,7 +52,7 @@
 /** specifies the basic operations for a tab controller,
     but does not require XControl as type of tabs.
  */
-interface XSimpleTabController : com::sun::star::uno::XInterface
+published interface XSimpleTabController : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** create a new tab and return an unique ID,

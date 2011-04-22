@@ -56,7 +56,7 @@ module com { module sun { module star { module rendering {
 
     @since OOo 2.0
  */
-interface XAnimatedSprite : XSprite
+published interface XAnimatedSprite : XSprite
 {
     /** Start animation sequence of this sprite.<p>
 

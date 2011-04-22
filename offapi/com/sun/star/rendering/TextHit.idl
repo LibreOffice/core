@@ -36,7 +36,7 @@ module com { module sun { module star { module rendering {
 
     @since OOo 2.0
  */
-struct TextHit
+published struct TextHit
 {
     /** This contains the entry index.<p>
 

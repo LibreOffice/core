@@ -39,7 +39,7 @@ module com {  module sun {  module star {  module awt {
 
 /** allows receive window-related events, additional to the ones received by an <type>XWindowListener</type>
  */
-interface XWindowListener2: XWindowListener
+published interface XWindowListener2: XWindowListener
 {
     //-------------------------------------------------------------------------
 

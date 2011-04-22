@@ -50,7 +50,7 @@ module com { module sun { module star { module ui {
     @since OOo 2.0
 */
 
-interface XUIConfiguration : ::com::sun::star::uno::XInterface
+published interface XUIConfiguration : ::com::sun::star::uno::XInterface
 {
     /** adds the specified listener to receive events when elements are
         changed, inserted or removed.

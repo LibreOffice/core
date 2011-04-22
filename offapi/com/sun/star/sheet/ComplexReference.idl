@@ -40,7 +40,7 @@ module com {  module sun {  module star {  module sheet {
 
 /** contains a reference to a cell range.
  */
-struct ComplexReference
+published struct ComplexReference
 {
     //-------------------------------------------------------------------------
 

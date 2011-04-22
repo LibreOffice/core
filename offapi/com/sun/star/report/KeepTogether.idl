@@ -37,7 +37,7 @@
 /** Specifies that a group header, detail, and footer section is printed on the same page.
     @see XGroup
  */
-constants KeepTogether
+published constants KeepTogether
 {
     //-------------------------------------------------------------------------
 

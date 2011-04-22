@@ -62,7 +62,7 @@ module com {   module sun {   module star {   module rdf {
 
     @see XRepository
  */
-interface XURI : XResource
+published interface XURI : XResource
 {
     /// prefix
     [readonly, attribute] string Namespace;

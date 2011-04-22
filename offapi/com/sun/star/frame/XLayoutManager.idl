@@ -98,7 +98,7 @@ module com { module sun { module star { module frame {
     @since OOo 2.0
 */
 
-interface XLayoutManager : com::sun::star::uno::XInterface
+published interface XLayoutManager : com::sun::star::uno::XInterface
 {
     /** attaches a <type scope="com::sun::star::frame">XFrame</type> to a layout manager.
 

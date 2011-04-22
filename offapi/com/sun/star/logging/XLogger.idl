@@ -36,7 +36,7 @@
 
 module com { module sun { module star { module logging {
 
-interface XLogHandler;
+published interface XLogHandler;
 
 //=============================================================================
 
@@ -53,7 +53,7 @@ interface XLogHandler;
 
     @since OOo 2.3
  */
-interface XLogger
+published interface XLogger
 {
     /** denotes the name of the logger.
     */

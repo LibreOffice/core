@@ -43,7 +43,7 @@ module com { module sun { module star { module resource {
 
     @see <type>XStringResourcePersistence</type>.
 */
-interface XStringResourceWithLocation: com::sun::star::resource::XStringResourcePersistence
+published interface XStringResourceWithLocation: com::sun::star::resource::XStringResourcePersistence
 {
     /**
         Stores all string table data to a location and associates this location

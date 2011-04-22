@@ -40,7 +40,7 @@ module com { module sun { module star { module rendering {
 
         @since OOo 2.0
     */
-    exception VolatileContentDestroyedException : ::com::sun::star::uno::Exception
+    published exception VolatileContentDestroyedException : ::com::sun::star::uno::Exception
     {
     };
 

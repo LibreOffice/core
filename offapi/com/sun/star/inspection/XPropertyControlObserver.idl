@@ -36,7 +36,7 @@
 
 module com { module sun { module star { module inspection {
 
-interface XPropertyControl;
+published interface XPropertyControl;
 
 //=============================================================================
 
@@ -45,7 +45,7 @@ interface XPropertyControl;
 
     @since OOo 2.2
 */
-interface XPropertyControlObserver
+published interface XPropertyControlObserver
 {
     /** notifies the observer that a certain <type>XPropertyControl</type>'s UI
         representation gained the focus.

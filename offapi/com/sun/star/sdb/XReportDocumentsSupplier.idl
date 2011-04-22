@@ -41,7 +41,7 @@
 /** provides the access to a container of database reports.
     @see Reports
  */
-interface XReportDocumentsSupplier: com::sun::star::uno::XInterface
+published interface XReportDocumentsSupplier: com::sun::star::uno::XInterface
 {
 
     /** returns the container of reports.

@@ -47,7 +47,7 @@
  module com {  module sun {  module star {  module report {
 
 //=============================================================================
-interface XReportControlModel
+published interface XReportControlModel
 {
     /** allows the creation of sub reports.
     */

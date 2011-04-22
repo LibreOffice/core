@@ -42,7 +42,7 @@ module com {  module sun {  module star {  module report { module inspection {
 
     @see com::sun::star::inspection::XPropertyHandler
 */
-service ReportComponentHandler
+published service ReportComponentHandler
 {
     interface com::sun::star::inspection::XPropertyHandler;
 };

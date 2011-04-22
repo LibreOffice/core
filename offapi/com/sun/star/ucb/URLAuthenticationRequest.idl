@@ -42,7 +42,7 @@ module com { module sun { module star { module ucb {
 
     @since OOo 3.2
 */
-/*published*/ exception URLAuthenticationRequest : AuthenticationRequest
+published exception URLAuthenticationRequest : AuthenticationRequest
 {
     //-------------------------------------------------------------------------
     /** The URL for which authentication is requested.

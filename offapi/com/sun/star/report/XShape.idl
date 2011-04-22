@@ -44,7 +44,7 @@
  module com {  module sun {  module star {  module report {
 
 //=============================================================================
-interface XShape
+published interface XShape
 {
     interface XReportControlModel;
 

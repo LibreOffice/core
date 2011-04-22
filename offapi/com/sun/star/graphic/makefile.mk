@@ -42,7 +42,9 @@ IDLFILES= \
     Graphic.idl \
     GraphicColorMode.idl \
     GraphicDescriptor.idl \
+    GraphicObject.idl \
     GraphicProvider.idl \
+    GraphicRasterizer.idl \
     GraphicRendererVCL.idl \
     GraphicType.idl \
     MediaProperties.idl \
@@ -51,9 +53,9 @@ IDLFILES= \
     XPrimitiveFactory2D.idl \
     XGraphic.idl \
     XGraphicProvider.idl \
+    XGraphicRasterizer.idl \
     XGraphicRenderer.idl \
     XGraphicObject.idl \
-    GraphicObject.idl \
     XGraphicTransformer.idl
     
 # --- Targets ------------------------------------------------------

@@ -70,7 +70,7 @@ module com { module sun { module star { module ui {
     @since OOo 2.0
 */
 
-interface XUIElementFactory : ::com::sun::star::uno::XInterface
+published interface XUIElementFactory : ::com::sun::star::uno::XInterface
 {
     /** creates a new instances of a specific user interface element.
 
