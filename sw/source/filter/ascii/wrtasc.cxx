@@ -51,10 +51,8 @@ SwASCWriter::SwASCWriter( const String& rFltNm )
     switch( 5 <= rFltNm.Len() ? rFltNm.GetChar( 4 ) : 0 )
     {
     case 'D':
-#if !defined(PM2)
                 aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_850 );
                 aNewOpts.SetParaFlags( LINEEND_CRLF );
-#endif
                 if( 5 < rFltNm.Len() )
                     switch( rFltNm.Copy( 5 ).ToInt32() )
                     {

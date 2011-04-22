@@ -38,10 +38,6 @@ class SvxErrorHandler;
 #define APPLICATIONNAME     "smath3"
 
 
-#ifdef PM2
-#define RELEASE     "PM304"
-#endif
-
 #ifdef WNT
 #define RELEASE     "WNT304"
 #endif

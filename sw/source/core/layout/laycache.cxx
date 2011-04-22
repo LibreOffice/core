@@ -592,11 +592,7 @@ sal_uLong SwLayHelper::CalcPageCount()
             {
                 nMaxParaPerPage = Max( sal_uLong(20),
                                        sal_uLong(20 + nNdCount / 1000 * 3) );
-#ifdef PM2
-                const sal_uLong nMax = 49;
-#else
                 const sal_uLong nMax = 53;
-#endif
                 nMaxParaPerPage = Min( nMaxParaPerPage, nMax );
                 nPgCount = nNdCount / nMaxParaPerPage;
             }

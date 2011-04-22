@@ -35,9 +35,6 @@
 #define INCLUDED_LIMITS_H
 #endif
 
-#ifdef PM20
-#include <stdlib.h>
-#endif
 #include <com/sun/star/uno/Reference.h>
 #include "swdllapi.h"
 #include <i18npool/lang.h>

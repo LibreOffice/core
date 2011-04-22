@@ -512,7 +512,7 @@ void SwFntObj::CreateScrFont( const ViewShell& rSh, const OutputDevice& rOut )
 
 
 void SwFntObj::GuessLeading( const ViewShell&
-#if defined(WNT) || defined(PM2)
+#if defined(WNT)
                              rSh
 #endif
                              , const FontMetric& rMet )
@@ -525,7 +525,7 @@ void SwFntObj::GuessLeading( const ViewShell&
         return;
     }
 
-#if defined(WNT) || defined(PM2)
+#if defined(WNT)
     OutputDevice *pWin = rSh.GetWin() ?
                          rSh.GetWin() :
                          GetpApp()->GetDefaultDevice();
