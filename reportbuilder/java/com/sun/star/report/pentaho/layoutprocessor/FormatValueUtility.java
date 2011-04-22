@@ -29,6 +29,7 @@ package com.sun.star.report.pentaho.layoutprocessor;
 import com.sun.star.report.OfficeToken;
 import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.pentaho.model.FormattedTextElement;
+import java.math.BigDecimal;
 
 import java.sql.Time;
 
@@ -45,7 +46,6 @@ import org.jfree.report.flow.FlowController;
 import org.jfree.report.flow.layoutprocessor.LayoutControllerUtil;
 
 import org.pentaho.reporting.libraries.formula.util.HSSFDateUtil;
-
 
 /**
  * Creation-Date: 06.06.2007, 17:03:30
@@ -125,17 +125,30 @@ public class FormatValueUtility
         }
         else if (value instanceof java.sql.Date)
         {
-            if ( "float".equals(valueType))//@see http://qa.openoffice.org/issues/show_bug.cgi?id=108954
+            if ("float".equals(valueType))//@see http://qa.openoffice.org/issues/show_bug.cgi?id=108954
             {
                 variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE, HSSFDateUtil.getExcelDate((Date) value, false, 2).toString());
             }
             else
+            {
                 variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "date-value", formatDate((Date) value));
+            }
         }
         else if (value instanceof Date)
         {
             variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE_TYPE, "float");
             variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE, HSSFDateUtil.getExcelDate((Date) value, false, 2).toString());
+        }
+        else if (value instanceof BigDecimal)
+        {
+            if ("date".equals(valueType))
+            {
+                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "date-value", formatDate(HSSFDateUtil.getJavaDate((BigDecimal) value, false, 0)));
+            }
+            else
+            {
+                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE, String.valueOf(value));
+            }
         }
         else if (value instanceof Number)
         {
@@ -143,13 +156,21 @@ public class FormatValueUtility
         }
         else if (value instanceof Boolean)
         {
-            if (Boolean.TRUE.equals(value))
+            if ("float".equals(valueType))
             {
-                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, BOOLEAN_VALUE, OfficeToken.TRUE);
+                float fvalue = Boolean.TRUE.equals(value) ? 1 : 0;
+                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE, String.valueOf(fvalue));
             }
             else
             {
-                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, BOOLEAN_VALUE, OfficeToken.FALSE);
+                if (Boolean.TRUE.equals(value))
+                {
+                    variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, BOOLEAN_VALUE, OfficeToken.TRUE);
+                }
+                else
+                {
+                    variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, BOOLEAN_VALUE, OfficeToken.FALSE);
+                }
             }
         }
         else if (value != null)
@@ -165,12 +186,10 @@ public class FormatValueUtility
             }
             if (!"string".equals(valueType))
             {
-                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE, String.valueOf(value));
+                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE_TYPE, "string");
+                //variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE, String.valueOf(value));
             }
-            else
-            {
-                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, STRING_VALUE, String.valueOf(value));
-            }
+            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, STRING_VALUE, String.valueOf(value));
         }
         else
         {
