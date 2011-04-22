@@ -130,14 +130,6 @@ in this Software without prior written authorization from the X Consortium.
 #define imake_ccflags "-DSYSV -DUSG -DNOSTDHDRS"
 #endif
 
-#ifdef sequent
-#define imake_ccflags "-DX_NOT_STDC_ENV -DX_NOT_POSIX"
-#endif
-
-#ifdef _SEQUENT_
-#define imake_ccflags "-DSYSV -DUSG"
-#endif
-
 #if defined(SX) || defined(PC_UX)
 #define imake_ccflags "-DSYSV"
 #endif
@@ -167,7 +159,7 @@ in this Software without prior written authorization from the X Consortium.
  *     descriptor onto another, define such a mechanism here (if you don't
  *     already fall under the existing category(ies).
  */
-#if defined(SYSV) && !defined(_CRAY) && !defined(Mips) && !defined(_SEQUENT_)
+#if defined(SYSV) && !defined(_CRAY) && !defined(Mips)
 #define dup2(fd1,fd2)   ((fd1 == fd2) ? fd1 : (close(fd2), \
                            fcntl(fd1, F_DUPFD, fd2)))
 #endif
@@ -654,10 +646,6 @@ struct pair predefs[] = {
 #endif
 #ifdef __sxg__
     {"__sxg__", "1", NULL},
-#endif
-#ifdef _SEQUENT_
-    {"_SEQUENT_", "1", NULL},
-    {"__STDC__", "1", NULL},
 #endif
 #ifdef __bsdi__
     {"__bsdi__", "1", NULL},

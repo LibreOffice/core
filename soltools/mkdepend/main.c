@@ -719,7 +719,7 @@ void redirect(line, makefile)
         }
     }
     fflush(fdout);
-#if defined(USGISH) || defined(_SEQUENT_) || defined(USE_CHMOD)
+#if defined(USGISH) || defined(USE_CHMOD)
     chmod(makefile, st.st_mode);
 #else
     fchmod(fileno(fdout), st.st_mode);
