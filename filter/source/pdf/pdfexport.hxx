@@ -114,7 +114,6 @@ private:
     sal_Int32               mnDefaultLinkAction;
     sal_Bool                mbConvertOOoTargetToPDFTarget;
     sal_Bool                mbExportBmkToDest;
-//<---
     sal_Bool                ImplExportPage( ::vcl::PDFWriter& rWriter, ::vcl::PDFExtOutDevData& rPDFExtOutDevData,
                                                 const GDIMetaFile& rMtf );
     void                    ImplWriteWatermark( ::vcl::PDFWriter& rWriter, const Size& rPageSize );

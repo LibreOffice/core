@@ -157,7 +157,6 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc,
     mnDefaultLinkAction         ( 0 ),
     mbConvertOOoTargetToPDFTarget( sal_False ),
     mbExportBmkToDest           ( sal_False )
-//<---
 {
 }
 
@@ -551,7 +550,6 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                      rFilterData[ nData ].Value >>= mbConvertOOoTargetToPDFTarget;
                   else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportBookmarksToPDFDestination" ) ) )
                       rFilterData[ nData ].Value >>= mbExportBmkToDest;
-//<---
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportBookmarks" ) ) )
                     rFilterData[ nData ].Value >>= mbExportBookmarks;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenBookmarkLevels" ) ) )
@@ -782,7 +780,6 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     //and remove the remote goto action forced on PDF file
                     aContext.ForcePDFAction = sal_False;
                 }
-//<---
             }
 // all context data set, time to create the printing device
             PDFWriter*          pPDFWriter = new PDFWriter( aContext, xEnc );
