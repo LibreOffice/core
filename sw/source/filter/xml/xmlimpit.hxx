@@ -59,7 +59,7 @@ public:
     void importXML( SfxItemSet& rSet,
                     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > xAttrList,
                     const SvXMLUnitConverter& rUnitConverter,
-                    const SvXMLNamespaceMap& rNamespaceMap ) const;
+                    const SvXMLNamespaceMap& rNamespaceMap );
 
     /** this method is called for every item that has the
         MID_SW_FLAG_SPECIAL_ITEM_IMPORT flag set */
@@ -68,7 +68,7 @@ public:
                                     SfxItemSet& rSet,
                                     const ::rtl::OUString& rValue,
                                     const SvXMLUnitConverter& rUnitConverter,
-                                    const SvXMLNamespaceMap& rNamespaceMap ) const;
+                                    const SvXMLNamespaceMap& rNamespaceMap );
 
     /** this method is called for every item that has the
         MID_SW_FLAG_NO_ITEM_IMPORT flag set */
@@ -76,13 +76,14 @@ public:
                                SfxItemSet& rSet,
                                const ::rtl::OUString& rValue,
                                const SvXMLUnitConverter& rUnitConverter,
-                               const SvXMLNamespaceMap& rNamespaceMap ) const;
+                               const SvXMLNamespaceMap& rNamespaceMap );
 
     /** This method is called when all attributes have benn processed. It
       * may be used to remove items that are incomplete */
-    virtual void finished( SfxItemSet& rSet ) const;
+    virtual void finished(SfxItemSet & rSet,
+                          SvXMLUnitConverter const& rUnitConverter) const;
 
-    inline void setMapEntries( SvXMLItemMapEntriesRef rMapEntries );
+    virtual void setMapEntries( SvXMLItemMapEntriesRef rMapEntries );
     inline SvXMLItemMapEntriesRef getMapEntries() const;
 
 
@@ -94,12 +95,6 @@ public:
         sal_uInt16 nMemberId,
         const SvXMLUnitConverter& rUnitConverter );
 };
-
-inline void
-SvXMLImportItemMapper::setMapEntries( SvXMLItemMapEntriesRef rMapEntries )
-{
-    mrMapEntries = rMapEntries;
-}
 
 inline SvXMLItemMapEntriesRef
 SvXMLImportItemMapper::getMapEntries() const

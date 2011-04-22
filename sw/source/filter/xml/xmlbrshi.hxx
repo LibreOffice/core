@@ -26,8 +26,12 @@
  *
  ************************************************************************/
 
-#ifndef _XMLBRSHI_HXX
-#define _XMLBRSHI_HXX
+#ifndef SW_XMLBRSHI_HXX
+#define SW_XMLBRSHI_HXX
+
+#include <com/sun/star/io/XOutputStream.hpp>
+
+#include <xmloff/xmlictxt.hxx>
 
 class SvXMLImport;
 class SvXMLUnitConverter;

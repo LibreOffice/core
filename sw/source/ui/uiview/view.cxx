@@ -756,7 +756,8 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     nRightBorderDistance( 0 ),
     bInMailMerge(sal_False),
     bInDtor(sal_False),
-    bOldShellWasPagePreView(sal_False)
+    bOldShellWasPagePreView(sal_False),
+    bIsPreviewDoubleClick(sal_False)
 {
     // According to discussion with MBA and further
     // investigations, no old SfxViewShell will be set as parameter <pOldSh>,
@@ -813,6 +814,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
             sNewCrsrPos = ((SwPagePreView*)pExistingSh)->GetNewCrsrPos();
             nNewPage = ((SwPagePreView*)pExistingSh)->GetNewPage();
             bOldShellWasPagePreView = sal_True;
+            bIsPreviewDoubleClick = sNewCrsrPos.Len() > 0 || nNewPage != USHRT_MAX;
         }
         else if( pExistingSh->IsA( TYPE( SwSrcView ) ) )
             bOldShellWasSrcView = sal_True;
@@ -1262,7 +1264,7 @@ void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
 
 void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >& rSequence, sal_Bool bBrowse )
 {
-    if(GetDocShell()->IsPreview())
+    if(GetDocShell()->IsPreview()||bIsPreviewDoubleClick)
         return;
     bool bIsOwnDocument = lcl_IsOwnDocument( *this );
     sal_Int32 nLength = rSequence.getLength();

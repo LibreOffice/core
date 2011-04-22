@@ -2457,7 +2457,15 @@ sal_Bool WW8FormulaListBox::Import(const uno::Reference <
         aTmp <<= aListSource;
         xPropSet->setPropertyValue(C2U("StringItemList"), aTmp );
 
-        aTmp <<= aListSource[0];
+        if (fDropdownIndex < nLen)
+        {
+            aTmp <<= aListSource[fDropdownIndex];
+        }
+        else
+        {
+            aTmp <<= aListSource[0];
+        }
+
         xPropSet->setPropertyValue(C2U("DefaultText"), aTmp );
 
         rSz = rRdr.MiserableDropDownFormHack(maListEntries[0], xPropSet);

@@ -494,6 +494,22 @@ uno::Reference< sdbc::XResultSet> AbstractMailMergeDlg_Impl::GetResultSet() cons
 {
     return pDlg->GetResultSet();
 }
+bool AbstractMailMergeDlg_Impl::IsSaveIndividualDocs() const
+{
+    return pDlg->IsSaveIndividualDocs();
+}
+bool AbstractMailMergeDlg_Impl::IsGenerateFromDataBase() const
+{
+    return pDlg->IsGenerateFromDataBase();
+}
+String AbstractMailMergeDlg_Impl::GetColumnName() const
+{
+    return pDlg->GetColumnName();
+}
+String AbstractMailMergeDlg_Impl::GetPath() const
+{
+    return pDlg->GetPath();
+}
 
 sal_Bool AbstractMailMergeCreateFromDlg_Impl::IsThisDocument() const
 {

@@ -526,6 +526,9 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
     rSh.GetCurAttr( aCoreSet );
     sal_Bool bParentCntProt = 0 != rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT );
     sal_Bool bIsGrfCntnt = CNT_GRF == GetShell().GetCntType();
+//    const GraphicObject* pGrfObj = ( bIsGrfCntnt ? rSh.GetGraphicObj() : NULL );
+//    sal_Bool bIsRenderGraphicGrfCntnt = ( pGrfObj && pGrfObj->IsRenderGraphic() );
+
 
     SetGetStateSet( &rSet );
 
@@ -623,11 +626,11 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
             if( !bParentCntProt )
             {
                 // --> OD 2005-02-09 #119353# - robust
-                const GraphicObject* pGrfObj = rSh.GetGraphicObj();
-                if ( pGrfObj )
+                const GraphicObject* pGrafObj = rSh.GetGraphicObj();
+                if ( pGrafObj )
                 {
-                    if( pGrfObj->IsAnimated() ||
-                        GRAPHIC_GDIMETAFILE == pGrfObj->GetType() )
+                    if( pGrafObj->IsAnimated() ||
+                        GRAPHIC_GDIMETAFILE == pGrafObj->GetType() )
                         bDisable = sal_True;
                     else
                         rSet.Put( SfxUInt16Item( nWhich, ((SwTransparencyGrf&)
@@ -702,8 +705,5 @@ SwGrfShell::SwGrfShell(SwView &_rView) :
     SetName(String::CreateFromAscii("Graphic"));
     SetHelpId(SW_GRFSHELL);
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
