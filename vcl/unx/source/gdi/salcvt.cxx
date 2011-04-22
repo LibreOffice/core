@@ -51,7 +51,6 @@ SalConverterCache::~SalConverterCache()
 
 // ---> FIXME
 #include <stdio.h>
-// <---
 
 rtl_UnicodeToTextConverter
 SalConverterCache::GetU2TConverter( rtl_TextEncoding nEncoding )
@@ -66,7 +65,6 @@ SalConverterCache::GetU2TConverter( rtl_TextEncoding nEncoding )
 // ---> FIXME
 if ( rConverter.mpU2T == NULL )
     fprintf( stderr, "failed to create Unicode -> %i converter\n", nEncoding);
-// <---
         }
         return rConverter.mpU2T;
     }
@@ -86,7 +84,6 @@ SalConverterCache::GetT2UConverter( rtl_TextEncoding nEncoding )
 // ---> FIXME
 if ( rConverter.mpT2U == NULL )
     fprintf( stderr, "failed to create %i -> Unicode converter\n", nEncoding );
-// <---
         }
         return rConverter.mpT2U;
     }
@@ -289,7 +286,6 @@ SalConverterCache::EncodingHasChar( rtl_TextEncoding nEncoding,
             // ---> FIXME
             if ( aConverter == NULL )
                 return False;
-            // <---
 
             sal_Char   pConversionBuffer[ 32 ];
             sal_uInt32 nConversionInfo;

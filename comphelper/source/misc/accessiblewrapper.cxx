@@ -244,7 +244,6 @@ namespace comphelper
             // #130798#
             // these Ids are also missed: SUB_WINDOW_OF_RELATION_CHANGED & TEXT_ATTRIBUTE_CHANGED
             case AccessibleEventId::TEXT_SELECTION_CHANGED:
-            // <--
                 // nothing to translate
                 break;
 

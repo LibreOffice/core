@@ -300,7 +300,6 @@ sal_Bool GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size&
             MapMode m(maGraphic.GetPrefMapMode());
             aSize100 = pOut->LogicToLogic( maGraphic.GetPrefSize(), &m, &aMap100 );
         }
-        // <--
 
         nTotalWidth = aSize100.Width() - pAttr->GetLeftCrop() - pAttr->GetRightCrop();
         nTotalHeight = aSize100.Height() - pAttr->GetTopCrop() - pAttr->GetBottomCrop();

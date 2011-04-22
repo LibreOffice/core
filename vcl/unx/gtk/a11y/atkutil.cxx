@@ -41,7 +41,6 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
-// <--
 #include <cppuhelper/implbase1.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>

@@ -132,11 +132,9 @@ typedef sal_uInt16 PointerStyle;
 #define POINTER_TAB_SELECT_SE           ((PointerStyle)90)
 #define POINTER_TAB_SELECT_W            ((PointerStyle)91)
 #define POINTER_TAB_SELECT_SW           ((PointerStyle)92)
-// <--
 
 // #i20119#
 #define POINTER_PAINTBRUSH              ((PointerStyle)93)
-// <--
 
 #define POINTER_COUNT                   94
 

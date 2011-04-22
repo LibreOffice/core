@@ -1545,7 +1545,6 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
                                 if( rArgs.mpStr[ c ] == 0x2060 )
                                     mpOutGlyphs[ i + rVisualItem.mnMinGlyphPos ] = 1;
                                 else
-                                // <--
                                     rArgs.NeedFallback( c, false );
                            }
                         }
@@ -1561,7 +1560,6 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
                                 if( rArgs.mpStr[ c ] == 0x2060 )
                                     mpOutGlyphs[ i + rVisualItem.mnMinGlyphPos ] = 1;
                                 else
-                                // <--
                                     rArgs.NeedFallback( c, true );
                             }
                         }

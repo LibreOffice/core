@@ -471,11 +471,9 @@ GdkCursor *GtkSalDisplay::getCursor( PointerStyle ePointerStyle )
             MAKE_CURSOR( POINTER_TAB_SELECT_SE, tblselse_ );
             MAKE_CURSOR( POINTER_TAB_SELECT_W, tblselw_ );
             MAKE_CURSOR( POINTER_TAB_SELECT_SW, tblselsw_ );
-            // <--
 
             // #i20119#
             MAKE_CURSOR( POINTER_PAINTBRUSH, paintbrush_ );
-            // <--
 
         default:
             fprintf( stderr, "pointer %d not implemented", ePointerStyle );

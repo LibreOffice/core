@@ -388,7 +388,6 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
             }
             break;
         }
-        // <--
 
         // AtkAction signals ...
         case accessibility::AccessibleEventId::ACTION_CHANGED:

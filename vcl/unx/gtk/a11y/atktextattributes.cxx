@@ -146,7 +146,6 @@ static const char * ExportedTextAttributes[TEXT_ATTRIBUTE_LAST] =
     "CharWeight",           // TEXT_ATTRIBUTE_WEIGHT
     // #i92233#
     "MMToPixelRatio",       // TEXT_ATTRIBUTE_MM_TO_PIXEL_RATIO
-    // <--
     "ParaAdjust",           // TEXT_ATTRIBUTE_JUSTIFICATION
     "ParaBottomMargin",     // TEXT_ATTRIBUTE_BOTTOM_MARGIN
     "ParaFirstLineIndent",  // TEXT_ATTRIBUTE_FIRST_LINE_INDENT

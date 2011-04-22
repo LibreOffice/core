@@ -386,7 +386,6 @@ public:
         PDFWriter::DestAreaType     m_eType;
         Rectangle                   m_aRect;
     };
-//<---
 
     struct PDFOutlineEntry
     {
@@ -610,7 +609,6 @@ private:
        destination id is always the destination's position in this vector
      */
     std::vector<PDFNamedDest>           m_aNamedDests;
-    //<---
     /* contains all dests ever set during the PDF creation,
        dest id is always the dest's position in this vector
      */

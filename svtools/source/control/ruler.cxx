@@ -1684,7 +1684,6 @@ sal_Bool Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest,
     pHitTest->mnDragSize = 0;
     pHitTest->bSize = sal_False;
     pHitTest->bSizeBar = sal_False;
-    // <--
 
     // Damit ueberstehende Tabs und Einzuege mit beruecksichtigt werden
     long nXExtraOff;

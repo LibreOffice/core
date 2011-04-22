@@ -426,7 +426,6 @@ sal_Int32 PDFWriter::CreateNamedDest( const rtl::OUString& sDestName, const Rect
 {
     return ((PDFWriterImpl*)pImplementation)->createNamedDest( sDestName, rRect, nPageNr, eType );
 }
-//<---
 sal_Int32 PDFWriter::CreateDest( const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
 {
     return ((PDFWriterImpl*)pImplementation)->createDest( rRect, nPageNr, eType );
