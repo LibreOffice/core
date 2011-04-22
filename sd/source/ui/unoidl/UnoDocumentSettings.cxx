@@ -198,7 +198,6 @@ enum SdDocumentSettingsPropertyHandles
             // --> #i33095#
             { MAP_LEN("LoadReadonly"),          HANDLE_LOAD_READONLY,       &::getBooleanCppuType(),                0,  0 },
             { MAP_LEN("SaveVersionOnClose"),    HANDLE_SAVE_VERSION,        &::getBooleanCppuType(),                0,  0 },
-            // <--
             { NULL, 0, 0, NULL, 0, 0 }
         };
 
@@ -832,7 +831,6 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                 }
             }
             break;
-            // <--
 
             case HANDLE_SAVE_VERSION:
             {
@@ -1097,7 +1095,6 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
                 *pValue <<= pDocSh->IsLoadReadonly();
             }
             break;
-            // <--
 
             case HANDLE_SAVE_VERSION:
             {
