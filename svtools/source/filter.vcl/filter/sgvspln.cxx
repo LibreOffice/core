@@ -34,10 +34,6 @@
 
 #include <tools/poly.hxx>
 
-#if defined( PM2 ) && defined( __BORLANDC__ )
-#pragma option -Od
-#endif
-
 extern "C" {
 
 /*.pn 277 */

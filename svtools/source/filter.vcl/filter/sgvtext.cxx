@@ -617,8 +617,8 @@ sal_uInt16 SetTextContext(OutputDevice& rOut, ObjTextType& Atr, sal_Bool Kapt, s
         switch (Atr.GetFont()) {
           case 92500: case 92501: case 92504: case 92505:
           {
-#if defined(WNT) || defined(PM2)
-              FNam=String::CreateFromAscii( "Times New Roman" );  // CG Times ist unter Windows und OS/2 Times New Roman
+#if defined(WNT)
+              FNam=String::CreateFromAscii( "Times New Roman" );  // CG Times ist unter Windows Times New Roman
 #else
               FNam=String::CreateFromAscii( "Times" );            // ansonsten ist das einfach Times
 #endif

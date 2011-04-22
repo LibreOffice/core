@@ -161,22 +161,10 @@ sal_uLong DdeData::GetExternalFormat( sal_uLong nFmt )
 
     default:
         {
-#if defined(WNT) || defined( PM2 )
-            String aName( SotExchange::GetFormatName( nFmt ) );
-
 #if defined(WNT)
-
+            String aName( SotExchange::GetFormatName( nFmt ) );
             if( aName.Len() )
                 nFmt = RegisterClipboardFormat( reinterpret_cast<LPCWSTR>(aName.GetBuffer()) );
-#endif
-#if defined( PM2 )
-
-            if( aName.Len() )
-            {
-                HATOMTBL hSysTable = WinQuerySystemAtomTable();
-                nFmt = (sal_uLong)WinAddAtom( hSysTable, (PSZ)aName.GetBuffer() );
-            }
-#endif
 #endif
         }
     }
@@ -207,17 +195,6 @@ sal_uLong DdeData::GetInternalFormat( sal_uLong nFmt )
 
             if( GetClipboardFormatName( nFmt, szName, sizeof(szName) ) )
                 nFmt = SotExchange::RegisterFormatName( String(reinterpret_cast<const sal_Unicode*>(szName)) );
-        }
-#endif
-#if defined(PM2)
-        if( nFmt > CF_PALETTE )
-        {
-            char szName[ 256 ];
-
-            HATOMTBL hSysTable = WinQuerySystemAtomTable();
-            WinQueryAtomName( hSysTable, (ATOM)nFmt, (PSZ)szName,
-                                sizeof( szName ) );
-            nFmt = SotExchange::RegisterFormatName( String( szName ) );
         }
 #endif
         break;
