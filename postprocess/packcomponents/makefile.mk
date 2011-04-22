@@ -180,7 +180,7 @@ my_components = \
     utl \
     uui \
     vbaevents \
-    vcl \
+    vbaobj \
     vclcanvas \
     wpft \
     wpgfilter \
@@ -195,6 +195,16 @@ my_components = \
 
 .IF "$(OS)" != "WNT" && "$(OS)" != "MACOSX"
 my_components += splash
+.ENDIF
+    
+.IF "$(OS)" == "MACOSX"
+my_components += component/vcl/vcl.macosx
+.ELSE
+.IF "$(OS)" == "WNT"
+my_components += component/vcl/vcl.windows
+.ELSE
+my_components += component/vcl/vcl.unx
+.ENDIF
 .ENDIF
 
 .IF "$(BUILD_SPECIAL)" != ""
