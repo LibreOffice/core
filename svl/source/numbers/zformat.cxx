@@ -3548,11 +3548,11 @@ sal_Bool SvNumberformat::ImpGetNumberOutput(double fNumber,
     sal_uInt16 i, j;
     xub_StrLen k;
     String sStr;
-    long nPrecExp;
     sal_Bool bInteger = sal_False;
     if ( rInfo.nThousand != FLAG_STANDARD_IN_FORMAT )
     {   // special formatting only if no GENERAL keyword in format code
         const sal_uInt16 nThousand = rInfo.nThousand;
+        long nPrecExp;
         for (i = 0; i < nThousand; i++)
         {
            if (fNumber > _D_MIN_M_BY_1000)

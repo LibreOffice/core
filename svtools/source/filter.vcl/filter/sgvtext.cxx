@@ -765,7 +765,6 @@ UCHAR ProcessChar(OutputDevice& rOut, UCHAR* TBuf, ProcChrSta& R, ObjTextType& A
                   sal_uInt16& nChars, sal_uInt16 Rest,
                   short* Line, UCHAR* cLine)
 {
-    sal_uInt16       KernDist=0;       // Wert fuer Kerning
     sal_uInt16       ChrWidth;
     UCHAR        c;
     UCHAR        c1;
@@ -775,6 +774,7 @@ UCHAR ProcessChar(OutputDevice& rOut, UCHAR* TBuf, ProcChrSta& R, ObjTextType& A
 
     AbsEnd=(c==AbsatzEnd || c==TextEnd);
     if (AbsEnd==sal_False) {
+        sal_uInt16       KernDist=0;       // Wert fuer Kerning
         R.OutCh=ConvertTextChar(c); // von HardTrenn nach '-', ...
         R.Kapt=(R.Attrib.Schnitt & TextKaptBit) !=0 && UpcasePossible(R.OutCh);
         if (R.Kapt) R.OutCh=Upcase(R.OutCh);

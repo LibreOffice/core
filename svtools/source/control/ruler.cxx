@@ -467,13 +467,10 @@ void Ruler::ImplInvertLines( sal_Bool bErase )
 
 void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
 {
-    long    n = 0;
     long    nTick3 = aImplRulerUnitTab[mnUnitIndex].nTick3;
     long    nTickCount = aImplRulerUnitTab[mnUnitIndex].nTick1;
     Size    aPixSize = maVirDev.LogicToPixel( Size( nTick3, nTick3 ), maMapMode );
     long    nTickWidth;
-    long    nX;
-    long    nY;
     sal_Bool    bNoTicks = sal_False;
 
     //Amelia
@@ -569,6 +566,9 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
 
     if ( !bNoTicks )
     {
+        long nX;
+        long nY;
+        long n = 0;
         long nTxtWidth2;
         long nTxtHeight2 = GetTextHeight()/2;
         long nTick = 0;

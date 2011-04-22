@@ -1686,9 +1686,9 @@ int INetMIMEMessageStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
                 for( pOldPos = pChar = (const sal_Char *) pMsgBuffer->GetData(); nBufSize--;
                      pChar++ )
                 {
-                    int status;
                     if( *pChar == '\r' || *pChar == '\n' )
                     {
+                        int status;
                         if( aDelim.CompareTo (pOldPos, aDelim.Len())
                             != COMPARE_EQUAL &&
                             aClose.CompareTo (pOldPos, aClose.Len())
