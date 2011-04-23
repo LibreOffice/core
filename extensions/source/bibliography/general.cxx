@@ -849,7 +849,7 @@ sal_Bool BibGeneralPage::HandleShortCutKey( const KeyEvent& rKeyEvent )
                     if( pWindow->HasChildPathFocus() )
                     {   // save focused control
                         DBG_ASSERT( nFocused == 0xFFFF, "+BibGeneralPage::HandleShortCutKey(): more than one with focus?!" );
-                        DBG_ASSERT( aMatchList.size() > 0, "+BibGeneralPage::HandleShortCutKey(): push_back and no content?!" );
+                        DBG_ASSERT( !aMatchList.empty(), "+BibGeneralPage::HandleShortCutKey(): push_back and no content?!" );
                         nFocused = aMatchList.size() - 1;
                     }
                 }
@@ -859,7 +859,7 @@ sal_Bool BibGeneralPage::HandleShortCutKey( const KeyEvent& rKeyEvent )
 
     if( bHandled )
     {
-        DBG_ASSERT( aMatchList.size() > 0, "*BibGeneralPage::HandleShortCutKey(): be prepared to crash..." );
+        DBG_ASSERT( !aMatchList.empty(), "*BibGeneralPage::HandleShortCutKey(): be prepared to crash..." );
 
         if( nFocused >= ( aMatchList.size() - 1 ) )
             // >=... includes 0xFFFF

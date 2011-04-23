@@ -522,10 +522,10 @@ rtl::OUString XSecTester::parseFile(
             m_bIsBlocking = false;
             m_bIsInsideCollectedElement = false;
 
-            OSL_ASSERT(m_vSignatureList.size() == 0);
-            OSL_ASSERT(m_vUnsolvedReferenceURIs.size() == 0);
-            OSL_ASSERT(m_vUnsolvedReferenceKeeperIds.size() == 0);
-            OSL_ASSERT(m_vUnsolvedReferenceRefNums.size() == 0);
+            OSL_ASSERT(m_vSignatureList.empty());
+            OSL_ASSERT(m_vUnsolvedReferenceURIs.empty());
+            OSL_ASSERT(m_vUnsolvedReferenceKeeperIds.empty());
+            OSL_ASSERT(m_vUnsolvedReferenceRefNums.empty());
             OSL_ASSERT(m_stCurrentPath.empty());
             OSL_ASSERT(m_stCurrentPathType.empty());
             OSL_ASSERT(m_vAncestorEvents.empty());
@@ -1510,9 +1510,9 @@ void XSecTester::checkReference(
 
 void XSecTester::endMission()
 {
-    while (m_vSignatureList.size() > 0)
+    while (!m_vSignatureList.empty())
     {
-        if (m_vSignatureList.size()>0)
+        if (!m_vSignatureList.empty())
         {
             SignatureEntity * pSignatureEntity = m_vSignatureList.at(0);
             m_vSignatureList.erase(m_vSignatureList.begin());
@@ -1521,7 +1521,7 @@ void XSecTester::endMission()
         }
     }
 
-    while (m_vUnsolvedReferenceURIs.size()>0)
+    while (!m_vUnsolvedReferenceURIs.empty())
     {
         int nKeeperId = m_vUnsolvedReferenceKeeperIds.at(0);
         m_xSAXEventKeeper->removeElementCollector(nKeeperId);
@@ -1641,7 +1641,7 @@ void XSecTester::flushAncestorEvents(
     /* free the ancestor events list */
     std::vector< AncestorEvent* >::iterator jj;
 
-    while (m_vAncestorEvents.size()>0)
+    while (!m_vAncestorEvents.empty())
     {
         jj = m_vAncestorEvents.begin();
         delete *jj;

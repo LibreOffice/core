@@ -155,7 +155,7 @@ vector<Guess> SimpleGuesser::GuessLanguage(char* text)
 Guess SimpleGuesser::GuessPrimaryLanguage(char* text)
 {
     vector<Guess> ret = GuessLanguage(text);
-    if(ret.size() > 0){
+    if(!ret.empty()){
         return GuessLanguage(text)[0];
     }
     else{
