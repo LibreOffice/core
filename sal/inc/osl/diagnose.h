@@ -192,8 +192,6 @@ pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pf
 #define OSL_THIS_FUNC __FUNCSIG__
 #elif (defined(__INTEL_COMPILER) && (__INTEL_COMPILER >= 600)) || (defined(__IBMCPP__) && (__IBMCPP__ >= 500))
 #define OSL_THIS_FUNC __FUNCTION__
-#elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x550)
-#define OSL_THIS_FUNC __FUNC__
 #elif defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901)
 #define OSL_THIS_FUNC __func__
 #else

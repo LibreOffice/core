@@ -75,13 +75,6 @@
 
 #endif /* defined WIN32 */
 
-/* BR: 16bit fuer Borland-Compiler */
-#ifdef __BORLANDC__
-#define SAL_W16
-#define SAL_DLLEXTENSION ".dll"
-#endif
-/* BR: 16bit fuer Borland-Compiler */
-
 #if defined(SOLARIS) || defined(LINUX) || defined(NETBSD) || defined(FREEBSD) || \
     defined(AIX) || defined(OPENBSD) || defined(DRAGONFLY)
 #define SAL_UNX
