@@ -48,7 +48,6 @@ int _cdecl
 #else
 int
 #endif
-#endif
 
 CompareStart( const void* pFirst, const void* pSecond )
 {
