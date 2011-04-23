@@ -48,3 +48,29 @@ sal_Bool safeWrite(int fd, void* data, sal_uInt32 dataSize)
 
     return sal_True;
 }
+
+sal_Bool safeRead( int fd, void* buffer, sal_uInt32 count )
+{
+    sal_Int32 nToRead = count;
+    // Check for overflow as we convert a signed to an unsigned.
+    OSL_ASSERT(count == (sal_uInt32)nToRead);
+    while ( nToRead ) {
+        sal_Int32 nRead = read(fd, buffer, nToRead);
+        if ( nRead < 0 ) {
+            // We were interrupted before reading, retry.
+            if (errno == EINTR)
+                continue;
+
+            return sal_False;
+        }
+
+        // If we reach the EOF, we consider this a partial transfer and thus
+        // an error.
+        if ( nRead == 0 )
+            return sal_False;
+
+        nToRead -= nRead;
+    }
+
+    return sal_True;
+}

@@ -283,15 +283,15 @@ static sal_Bool sendFdPipe(int PipeFD, int SocketFD)
         OSL_TRACE("sendFdPipe : sending failed (%s)",strerror(errno));
     }
 
-    nSend=read(PipeFD,&RetCode,sizeof(RetCode));
+    bRet = safeRead(PipeFD, &RetCode, sizeof(RetCode));
 
-    if ( nSend > 0 && RetCode == 1 )
+    if ( bRet && RetCode == 1 )
     {
         OSL_TRACE("sendFdPipe : resource was received\n");
     }
     else
     {
-        OSL_TRACE("sendFdPipe : resource wasn't received\n");
+        OSL_TRACE("sendFdPipe : resource wasn't received (error %s)\n", strerror(errno));
     }
 
 #if defined(IOCHANNEL_TRANSFER_BSD_RENO)
@@ -1168,7 +1168,7 @@ sal_Bool osl_getProcStat(pid_t pid, struct osl_procStat* procstat)
         char* tmp=0;
         char prstatbuf[512];
         memset(prstatbuf,0,512);
-        bRet = read(fd,prstatbuf,511) == 511;
+        bRet = safeRead(fd, prstatbuf, 511);
 
         close(fd);
         /*printf("%s\n\n",prstatbuf);*/
@@ -1222,7 +1222,7 @@ sal_Bool osl_getProcStatus(pid_t pid, struct osl_procStat* procstat)
         char* tmp=0;
         char prstatusbuf[512];
         memset(prstatusbuf,0,512);
-        bRet = read(fd,prstatusbuf,511) == 511;
+        bRet = safeRead(fd, prstatusbuf, 511);
 
         close(fd);
 
