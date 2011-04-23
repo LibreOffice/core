@@ -372,7 +372,7 @@ int HTMLParser::FilterToken( int nToken )
     {
     case sal_Unicode(EOF):
         nToken = 0;
-        break;          // nicht verschicken
+        break;          // don't pass
 
     case HTML_HEAD_OFF:
         bIsInBody = sal_True;
@@ -393,7 +393,7 @@ int HTMLParser::FilterToken( int nToken )
     case HTML_HTML_OFF:
         nToken = 0;
         bReadPRE = bReadListing = bReadXMP = sal_False;
-        break;      // HTML_ON wurde auch nicht verschickt !
+        break;      // HTML_ON hasn't been passed either !
 
     case HTML_PREFORMTXT_ON:
         StartPRE();
@@ -1223,12 +1223,10 @@ int HTMLParser::_GetNextToken()
                     {
                         ScanText( '>' );
 
-                        // fdo#34666: closing "/>"?:
-                        // return HTML_UNKNOWNCONTROL_OFF instead of
-                        // HTML_UNKNOWNCONTROL_ON
+                        // fdo#34666 fdo#36080 fdo#36390: closing "/>"?:
+                        // return HTML_<TOKEN>_OFF instead of HTML_<TOKEN>_ON
                         if (aToken.Len() >= 1 && '/' == aToken.GetChar(aToken.Len()-1)) {
-                            if (HTML_UNKNOWNCONTROL_ON == nRet)
-                                nRet = HTML_UNKNOWNCONTROL_OFF;
+                            nRet += 1; // HTML_<TOKEN>_ON -> HTML_<TOKEN>_OFF;
                         }
                         if( sal_Unicode(EOF) == nNextCh && rInput.IsEof() )
                         {
@@ -1351,7 +1349,6 @@ int HTMLParser::_GetNextToken()
                         bReadStyle = sal_False;
                         break;
                     }
-
                 }
             }
             break;
@@ -1648,7 +1645,7 @@ int HTMLParser::FilterPRE( int nToken )
         {
             xub_StrLen nSpaces = sal::static_int_cast< xub_StrLen >(
                 8 - (nPre_LinePos % 8));
-            DBG_ASSERT( !aToken.Len(), "Wieso ist das Token nicht leer?" );
+            DBG_ASSERT( !aToken.Len(), "Why is the token not empty?" );
             aToken.Expand( nSpaces, ' ' );
             nPre_LinePos += nSpaces;
             nToken = HTML_TEXTTOKEN;
