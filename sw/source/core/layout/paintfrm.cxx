@@ -5348,20 +5348,19 @@ const sal_Int8 SwPageFrm::mnShadowPxWidth = 9;
             aPageTopRightShadow );
         BitmapEx aPageRightShadow = aPageRightShadowBase;
         aPageRightShadow.Scale( 1, aPagePxRect.Height() - 2 * (mnShadowPxWidth - 1) );
-        pOut->DrawBitmapEx( pOut->PixelToLogic( Point( aPagePxRect.Right() + 1, aPagePxRect.Top() + mnShadowPxWidth - 1) ), aPageRightShadow );
+        pOut->DrawBitmapEx( pOut->PixelToLogic( Point( aPaintRect.Right() + mnShadowPxWidth, aPagePxRect.Top() + mnShadowPxWidth - 1) ), aPageRightShadow );
     }
 
     // paint top & bottom shadow
     if(bPaintLeftShadow)
     {
-        pOut->DrawBitmapEx( pOut->PixelToLogic( Point( aPaintRect.Left() - aPageBottomLeftShadow.GetSizePixel().Width(),
+        const long lLeft = aPaintRect.Left() - aPageBottomLeftShadow.GetSizePixel().Width();
+        pOut->DrawBitmapEx( pOut->PixelToLogic( Point( lLeft,
             aPagePxRect.Bottom() + 1 + mnShadowPxWidth - aPageBottomLeftShadow.GetSizePixel().Height() ) ), aPageBottomLeftShadow );
-        pOut->DrawBitmapEx( pOut->PixelToLogic( Point( aPaintRect.Left() - aPageBottomLeftShadow.GetSizePixel().Width(),
-            aPagePxRect.Top() - mnShadowPxWidth ) ), aPageTopLeftShadow );
+        pOut->DrawBitmapEx( pOut->PixelToLogic( Point( lLeft, aPagePxRect.Top() - mnShadowPxWidth ) ), aPageTopLeftShadow );
         BitmapEx aPageLeftShadow = aPageLeftShadowBase;
         aPageLeftShadow.Scale( 1, aPagePxRect.Height() - 2 * (mnShadowPxWidth - 1) );
-        pOut->DrawBitmapEx( pOut->PixelToLogic( Point( aPagePxRect.Left() - aPageLeftShadow.GetSizePixel().Width(),
-             aPagePxRect.Top() + mnShadowPxWidth - 1) ), aPageLeftShadow );
+        pOut->DrawBitmapEx( pOut->PixelToLogic( Point( lLeft, aPagePxRect.Top() + mnShadowPxWidth - 1) ), aPageLeftShadow );
     }
     BitmapEx aPageBottomShadow = aPageBottomShadowBase;
     aPageBottomShadow.Scale( aPaintRect.Width(), 1 );
