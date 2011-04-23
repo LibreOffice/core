@@ -103,7 +103,7 @@
 
 // Page frame
 #define RC_PAGEFRM_BEGIN            RC_PAGEFRM
-#define RC_PAGEFRM_EN               (RC_PAGEFRM + 99)
+#define RC_PAGEFRM_END               (RC_PAGEFRM + 99)
 
 // SW/Web
 #define RC_WEB_BEGIN                RC_WEB
