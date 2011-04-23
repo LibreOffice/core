@@ -267,7 +267,6 @@ private:
     sal_uInt16  nCompressMode;
     LineEnd         eLineDelimiter;
     CharSet         eStreamCharSet;
-//  CharSet         eTargetCharSet;
 
     // Verschluesselung
     ByteString      aKey;           // aKey.Len != 0  -> Verschluesselung
@@ -344,9 +343,6 @@ public:
     void            SetStreamCharSet( CharSet eCharSet )
                         { eStreamCharSet = eCharSet; }
     CharSet         GetStreamCharSet() const { return eStreamCharSet; }
-//  void            SetTargetCharSet( CharSet eCharSet )
-//                      { eTargetCharSet = eCharSet; }
-//  CharSet         GetTargetCharSet() const { return eTargetCharSet; }
 
     void            SetLineDelimiter( LineEnd eLineEnd )
                         { eLineDelimiter = eLineEnd; }
@@ -656,16 +652,6 @@ inline SvStream& SvStream::ReadNumber( int& rInt )
     rInt = (int)nTmp;
     return *this;
 }
-
-/*
-inline SvStream& SvStream::ReadNumber( unsigned int& rUInt )
-{
-    sal_uIntPtr nTmp;
-    ReadNumber( nTmp );
-    rUInt = (unsigned int)nTmp;
-    return *this;
-}
-*/
 
 inline SvStream& SvStream::ReadNumber( float& rFloat )
 {

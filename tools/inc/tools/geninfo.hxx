@@ -104,7 +104,6 @@ GenericLockInformation( const ByteString &rKey, const ByteString &rValue,
             GenericInformationList *pSubInfos = NULL )
   : GenericInformation( rKey, rValue, pParentList, pSubInfos),
     aLockState( read ), nLockKey( 0 ) {};
-  //~GenericLockInformation();
 
   /* bietet einen Lockmechanismus fuer exclusive Zugriffe
    *
@@ -174,7 +173,6 @@ GenericLockInformation( const ByteString &rKey, const ByteString &rValue,
       return NULL;
     return GenericInformation::GetSubInfo(rKey, bSearchByPath, bCreatePath); }
 
-  //  TYPEINFO();
 private:
 
   LockState aLockState;
