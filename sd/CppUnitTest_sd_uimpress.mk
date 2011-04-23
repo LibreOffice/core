@@ -79,15 +79,27 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sd_uimpress,\
 
 $(eval $(call gb_CppunitTest_uses_ure,sd_uimpress))
 
+$(eval $(call gb_CppunitTest_add_type_rdbs,sd_uimpress,\
+    types \
+))
+
+$(eval $(call gb_CppunitTest_add_service_rdbs,sd_uimpress,\
+    sd_uimpress \
+))
+
 $(eval $(call gb_CppunitTest_set_args,sd_uimpress,\
     --headless \
     --invisible \
-    "-env:UNO_TYPES=$(foreach binrdb,udkapi.rdb types.rdb,\
-        file://$(if $(filter WNT,$(OS)),/)$(OUTDIR)/bin/$(binrdb))" \
-    "-env:UNO_SERVICES=$(foreach rdb,$(OUTDIR)/xml/ure/services.rdb $(WORKDIR)/CustomTarget/sd/qa/unit/services.rdb,\
-        file://$(if $(filter WNT,$(OS)),/)$(rdb))" \
-    $(foreach dir,URE_INTERNAL_LIB_DIR OOO_BASE_DIR BRAND_BASE_DIR,\
-        -env:$(dir)=file://$(if $(filter WNT,$(OS)),/$(OUTDIR)/bin,$(OUTDIR)/lib)) \
+))
+
+$(eval $(call gb_RdbTarget_RdbTarget,sd_uimpress))
+
+$(eval $(call gb_RdbTarget_add_components,sd_uimpress,\
+    framework/util/fwk \
+))
+
+$(eval $(call gb_RdbTarget_add_old_components,sd_uimpress,\
+    i18npool \
 ))
 
 # vim: set noet sw=4:
