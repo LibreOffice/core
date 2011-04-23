@@ -96,7 +96,7 @@ void PageCollector::CollectNonCustomShowPages( const com::sun::star::uno::Refere
     {
         std::vector< Reference< XDrawPage > > vUsedPageList;
         PageCollector::CollectCustomShowPages( rxModel, rCustomShowName, vUsedPageList );
-        if ( vUsedPageList.size() )
+        if ( !vUsedPageList.empty() )
         {
             Reference< XDrawPagesSupplier > xDrawPagesSupplier( rxModel, UNO_QUERY_THROW );
             Reference< XDrawPages > xDrawPages( xDrawPagesSupplier->getDrawPages(), UNO_QUERY_THROW );
