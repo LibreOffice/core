@@ -36,6 +36,7 @@ gb_PackagePart_get_destinations = \
 	$(OUTDIR)/bin \
 
 gb_PackagePart_get_target = $(OUTDIR)/$(1)
+gb_RdbTarget_get_outdir_target = $(OUTDIR)/xml/$(1).rdb
 gb_ResTarget_get_outdir_imagelist_target = $(OUTDIR)/res/img/$(1).ilst
 gb_ResTarget_get_outdir_target = $(OUTDIR)/bin/$(1).res
 
@@ -82,6 +83,7 @@ gb_Package_get_preparation_target = $(WORKDIR)/Package/prepared/$(1)
 gb_Package_get_target = $(WORKDIR)/Package/$(1)
 gb_PrecompiledHeader_get_dep_target = $(WORKDIR)/Dep/PrecompiledHeader/$(gb_PrecompiledHeader_DEBUGDIR)/$(1).hxx.pch.d
 gb_PrecompiledHeader_get_target = $(WORKDIR)/PrecompiledHeader/$(gb_PrecompiledHeader_DEBUGDIR)/$(1).hxx.pch
+gb_RdbTarget_get_target = $(WORKDIR)/RdbTarget/$(1).rdb
 gb_ResTarget_get_imagelist_target = $(WORKDIR)/ResTarget/$(1).ilst
 gb_ResTarget_get_target = $(WORKDIR)/ResTarget/$(1).res
 gb_SdiTarget_get_target = $(WORKDIR)/SdiTarget/$(1)
@@ -117,6 +119,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	NoexPrecompiledHeader \
 	PackagePart \
 	PrecompiledHeader \
+	RdbTarget \
 	ResTarget \
 	SdiTarget \
 	SrsTarget \

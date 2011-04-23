@@ -270,6 +270,7 @@ include $(foreach class, \
 	Package \
 	CustomTarget \
 	PrecompiledHeaders \
+	RdbTarget \
 	CppunitTest \
 	JavaClassSet \
 	JunitTest \
