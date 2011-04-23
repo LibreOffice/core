@@ -64,6 +64,7 @@
 #include <grp.h>
 
 #include "procimpl.h"
+#include "readwrite_helper.h"
 #include "sockimpl.h"
 #include "secimpl.h"
 
@@ -298,23 +299,6 @@ static sal_Bool sendFdPipe(int PipeFD, int SocketFD)
 #endif
 
     return bRet;
-}
-
-static sal_Bool safeWrite(int socket, void* data, sal_uInt32 dataSize)
-{
-    sal_Int32 nToWrite = dataSize;
-    // Check for overflow as we convert a signed to an unsigned.
-    OSL_ASSERT(dataSize == (sal_uInt32)nToWrite);
-    while ( nToWrite ) {
-        sal_Int32 nWritten = write(socket, data, nToWrite);
-        if ( nWritten < 0 )
-            return sal_False;
-
-        OSL_ASSERT(nWritten > 0);
-        nToWrite -= nWritten;
-    }
-
-    return sal_True;
 }
 
 /**********************************************

@@ -78,7 +78,8 @@ SLOFILES= \
             $(SLO)$/file_volume.obj \
             $(SLO)$/uunxapi.obj\
             $(SLO)$/process_impl.obj\
-            $(SLO)$/salinit.obj
+            $(SLO)$/salinit.obj \
+            $(SLO)$/readwrite_helper.obj
 
 OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/diagnose.obj \
@@ -107,7 +108,8 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/file_volume.obj \
             $(OBJ)$/uunxapi.obj\
             $(OBJ)$/process_impl.obj\
-            $(OBJ)$/salinit.obj
+            $(OBJ)$/salinit.obj \
+            $(OBJ)$/readwrite_helper.obj
             
 
 .IF "$(OS)"=="MACOSX"
