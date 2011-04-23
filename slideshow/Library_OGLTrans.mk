@@ -66,7 +66,7 @@ ifeq ($(strip $(OS)),MACOSX)
 $(eval $(call gb_Library_add_objcobjects,OGLTrans,\
     slideshow/source/engine/OGLTrans/mac/aquaOpenGLView \
     slideshow/source/engine/OGLTrans/mac/OGLTrans_Shaders \
-    , $(gb_LinkTarget_EXCEPTIONFLAGS) \
+    ,\
 ))
 
 $(eval $(call gb_Library_add_objcxxobjects,OGLTrans,\
