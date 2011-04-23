@@ -104,6 +104,8 @@ $(eval $(foreach method,\
 	add_linked_libs \
 	add_linked_static_libs \
 	add_noexception_objects \
+	add_objcobject \
+	add_objcobjects \
 	add_objcxxobject \
 	add_objcxxobjects \
 	add_package_headers \
@@ -115,6 +117,7 @@ $(eval $(foreach method,\
 	set_include \
 	set_ldflags \
 	set_library_path_flags \
+	set_objcflags \
 	set_objcxxflags \
 ,\
 	$(call gb_CppunitTest__forward_to_Linktarget,$(method))\

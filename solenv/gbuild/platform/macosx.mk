@@ -111,6 +111,8 @@ gb_CXXFLAGS := \
 # (see toolkit module for a case where it is necessary to do it this way)
 gb_OBJCXXFLAGS := -x objective-c++ -fobjc-exceptions
 
+gb_OBJCFLAGS := -x objective-c
+
 ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
 gb_CFLAGS_WERROR := -Werror
 gb_CXXFLAGS_WERROR := -Werror
@@ -206,6 +208,23 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(INCLUDE_STL) $(INCLUDE))
 endef
 
+# ObjCObject class
+
+define gb_ObjCObject__command
+$(call gb_Output_announce,$(2),$(true),OCC,3)
+$(call gb_Helper_abbreviate_dirs,\
+	mkdir -p $(dir $(1)) && \
+	mkdir -p $(dir $(call gb_ObjCObject_get_dep_target,$(2))) && \
+	$(gb_CC) \
+		$(DEFS) $(OBJCFLAGS) \
+		-c $(3) \
+		-o $(1) \
+		-MMD -MT $(call gb_ObjCObject_get_target,$(2)) \
+		-MF $(call gb_ObjCObject_get_dep_target,$(2)) \
+		-I$(dir $(3)) \
+		$(INCLUDE_STL) $(INCLUDE))
+endef
+
 
 # LinkTarget class
 
@@ -228,11 +247,13 @@ endef
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR) $(gb_COMPILEROPTFLAGS)
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
 gb_LinkTarget_OBJCXXFLAGS := $(gb_CXXFLAGS) $(gb_OBJCXXFLAGS) $(gb_COMPILEROPTFLAGS)
+gb_LinkTarget_OBJCFLAGS := $(gb_CFLAGS) $(gb_OBJCFLAGS) $(gb_COMPILEROPTFLAGS)
 
 ifeq ($(gb_SYMBOL),$(true))
 gb_LinkTarget_CFLAGS += -g
 gb_LinkTarget_CXXFLAGS += -g
 gb_LinkTarget_OBJCXXFLAGS += -g
+gb_LinkTarget_OBJCFLAGS += -g
 endif
 
 gb_LinkTarget_INCLUDE := $(filter-out %/stl, $(subst -I. , ,$(SOLARINC)))
@@ -268,6 +289,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(call gb_LinkTarget__get_liblinkflags,$(LINKED_LIBS)) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+		$(foreach object,$(OBJCOBJECTS),$(call gb_ObjCObject_get_target,$(object))) \
 		$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),`cat $(extraobjectlist)`) \
@@ -287,6 +309,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(gb_AR) -rsu $(1) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+		$(foreach object,$(OBJCOBJECTS),$(call gb_ObjCObject_get_target,$(object))) \
 		$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),@$(extraobjectlist)) \

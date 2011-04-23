@@ -77,6 +77,7 @@ gb_Module_get_target = $(WORKDIR)/Module/$(1)
 gb_NoexPrecompiledHeader_get_dep_target = $(WORKDIR)/Dep/NoexPrecompiledHeader/$(gb_NoexPrecompiledHeader_DEBUGDIR)/$(1).hxx.pch.d
 gb_NoexPrecompiledHeader_get_target = $(WORKDIR)/NoexPrecompiledHeader/$(gb_NoexPrecompiledHeader_DEBUGDIR)/$(1).hxx.pch
 gb_ObjCxxObject_get_target = $(WORKDIR)/ObjCxxObject/$(1).o
+gb_ObjCObject_get_target = $(WORKDIR)/ObjCObject/$(1).o
 gb_Package_get_preparation_target = $(WORKDIR)/Package/prepared/$(1)
 gb_Package_get_target = $(WORKDIR)/Package/$(1)
 gb_PrecompiledHeader_get_dep_target = $(WORKDIR)/Dep/PrecompiledHeader/$(gb_PrecompiledHeader_DEBUGDIR)/$(1).hxx.pch.d
@@ -134,6 +135,7 @@ $(eval $(call gb_Helper_make_outdir_clean_targets,\
 $(eval $(call gb_Helper_make_dep_targets,\
 	CObject \
 	CxxObject \
+	ObjCObject \
 	ObjCxxObject \
 	LinkTarget \
 	SrsPartTarget \

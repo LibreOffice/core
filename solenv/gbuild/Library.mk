@@ -108,6 +108,8 @@ $(eval $(foreach method,\
 	add_cobjects \
 	add_cxxobject \
 	add_cxxobjects \
+	add_objcobject \
+	add_objcobjects \
 	add_objcxxobject \
 	add_objcxxobjects \
 	add_exception_objects \
@@ -116,6 +118,7 @@ $(eval $(foreach method,\
 	add_generated_exception_objects \
 	set_cflags \
 	set_cxxflags \
+	set_objcflags \
 	set_objcxxflags \
 	set_defs \
 	set_include \
