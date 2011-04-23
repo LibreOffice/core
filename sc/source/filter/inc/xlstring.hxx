@@ -46,7 +46,7 @@ const XclStrFlags EXC_STR_NOHEADER          = 0x0010;   /// Export: Don't write 
 // ----------------------------------------------------------------------------
 
 const sal_uInt16 EXC_STR_MAXLEN_8BIT        = 0x00FF;
-const sal_uInt16 EXC_STR_MAXLEN             = 0xFFFF;
+const sal_uInt16 EXC_STR_MAXLEN             = 0x7FFF;
 
 const sal_uInt8 EXC_STRF_16BIT              = 0x01;
 const sal_uInt8 EXC_STRF_FAREAST            = 0x04;
