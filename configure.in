@@ -7150,11 +7150,13 @@ dnl ===================================================================
 AC_MSG_CHECKING([for Watch Window extension integration])
 if test "z$enable_ext_watch_window" = "z" -o "z$enable_ext_watch_window" = "zno" ; then
   AC_MSG_RESULT([no])
+  WATCH_WINDOW_EXTENSION_PACK=""
 else
   AC_MSG_RESULT([yes])
   SCPDEFS="$SCPDEFS -DWITH_EXTENSION_WATCH_WINDOW"
+  WATCH_WINDOW_EXTENSION_PACK="23bd75552206dfcd8fd4e29137dcac84-WatchWindow_1.2.0.0.oxt"
 fi
-AC_SUBST(WITH_WATCH_WINDOW_EXTENSION)
+AC_SUBST(WATCH_WINDOW_EXTENSION_PACK)
 
 dnl ===================================================================
 dnl Test whether to include Diagram extension
@@ -7162,11 +7164,13 @@ dnl ===================================================================
 AC_MSG_CHECKING([for Diagram extension integration])
 if test "z$enable_ext_diagram" = "z" -o "z$enable_ext_diagram" = "zno" ; then
   AC_MSG_RESULT([no])
+  DIAGRAM_EXTENSION_PACK=""
 else
   AC_MSG_RESULT([yes])
   SCPDEFS="$SCPDEFS -DWITH_EXTENSION_DIAGRAM"
+  DIAGRAM_EXTENSION_PACK="41c9b65ad60af4b3255bbecdfef11736-Diagram_1.1.0.0.oxt"
 fi
-AC_SUBST(WITH_DIAGRAM_EXTENSION)
+AC_SUBST(DIAGRAM_EXTENSION_PACK)
 
 dnl ===================================================================
 dnl Test whether to include Validator extension
@@ -7174,11 +7178,13 @@ dnl ===================================================================
 AC_MSG_CHECKING([for Validator extension integration])
 if test "z$enable_ext_validator" = "z" -o "z$enable_ext_validator" = "zno" ; then
   AC_MSG_RESULT([no])
+  VALIDATOR_EXTENSION_PACK=""
 else
   AC_MSG_RESULT([yes])
   SCPDEFS="$SCPDEFS -DWITH_EXTENSION_VALIDATOR"
+  VALIDATOR_EXTENSION_PACK="bbdd5639ada63e3130761daaecae1a10-Validator_1.1.0.0.oxt"
 fi
-AC_SUBST(WITH_VALIDATOR_EXTENSION)
+AC_SUBST(VALIDATOR_EXTENSION_PACK)
 
 dnl ===================================================================
 dnl Test whether to include Barcode extension
@@ -7186,11 +7192,13 @@ dnl ===================================================================
 AC_MSG_CHECKING([for Barcode extension integration])
 if test "z$enable_ext_barcode" = "z" -o "z$enable_ext_barcode" = "zno" ; then
   AC_MSG_RESULT([no])
+  BARCODE_EXTENSION_PACK=""
 else
   AC_MSG_RESULT([yes])
   SCPDEFS="$SCPDEFS -DWITH_EXTENSION_BARCODE"
+  BARCODE_EXTENSION_PACK="7e7efc5d4a03126bb9ae3ae9aa2c4e87-Barcode_1.3.1.0.oxt"
 fi
-AC_SUBST(WITH_BARCODE_EXTENSION)
+AC_SUBST(BARCODE_EXTENSION_PACK)
 
 dnl ===================================================================
 dnl Test whether to include ConvertTextToNumber extension
@@ -7198,11 +7206,14 @@ dnl ===================================================================
 AC_MSG_CHECKING([for ConvertTextToNumber extension integration])
 if test "z$enable_ext_ct2n" = "z" -o "z$enable_ext_ct2n" = "zno" ; then
   AC_MSG_RESULT([no])
+  CT2N_EXTENSION_PACK=""
 else
   AC_MSG_RESULT([yes])
   BUILD_TYPE="$BUILD_TYPE CT2N"
   SCPDEFS="$SCPDEFS -DWITH_EXTENSION_CT2N"
+  CT2N_EXTENSION_PACK="451ccf439a36a568653b024534669971-ConvertTextToNumber-1.3.2.oxt"
 fi
+AC_SUBST(CT2N_EXTENSION_PACK)
 
 dnl ===================================================================
 dnl Test whether to include Numbertext extension
@@ -7210,11 +7221,13 @@ dnl ===================================================================
 AC_MSG_CHECKING([for Numbertext extension integration])
 if test "z$enable_ext_numbertext" = "z" -o "z$enable_ext_numbertext" = "zno" ; then
   AC_MSG_RESULT([no])
+  NUMBERTEXT_EXTENSION_PACK=""
 else
   AC_MSG_RESULT([yes])
   SCPDEFS="$SCPDEFS -DWITH_EXTENSION_NUMBERTEXT"
+  NUMBERTEXT_EXTENSION_PACK="b8cbca7b3363e6ca2d02bc0ba2b63904-numbertext-0.9.4.oxt"
 fi
-AC_SUBST(WITH_NUMBERTEXT_EXTENSION)
+AC_SUBST(NUMBERTEXT_EXTENSION_PACK)
 
 dnl ===================================================================
 dnl Test whether to include Hungarian Cross-reference Toolbar extension
@@ -7222,11 +7235,13 @@ dnl ===================================================================
 AC_MSG_CHECKING([for Hungarian Cross-reference Toolbar extension integration])
 if test "z$enable_ext_hunart" = "z" -o "z$enable_ext_hunart" = "zno" ; then
   AC_MSG_RESULT([no])
+  HUNART_EXTENSION_PACK=""
 else
   AC_MSG_RESULT([yes])
   SCPDEFS="$SCPDEFS -DWITH_EXTENSION_HUNART"
+  HUNART_EXTENSION_PACK="b632bdd25649cc4067bcb410bae23d2b-hunart-0.3.oxt"
 fi
-AC_SUBST(WITH_HUNART_EXTENSION)
+AC_SUBST(HUNART_EXTENSION_PACK)
 
 dnl ===================================================================
 dnl Test whether to include Typography Toolbar extension
@@ -7234,11 +7249,13 @@ dnl ===================================================================
 AC_MSG_CHECKING([for Typography Toolbar extension integration])
 if test "z$enable_ext_typo" = "z" -o "z$enable_ext_typo" = "zno" ; then
   AC_MSG_RESULT([no])
+  TYPO_EXTENSION_PACK=""
 else
   AC_MSG_RESULT([yes])
   SCPDEFS="$SCPDEFS -DWITH_EXTENSION_TYPO"
+  TYPO_EXTENSION_PACK="9d60b6cfa3ef1926848710bbcd11115b-typo-0.4.2.oxt"
 fi
-AC_SUBST(WITH_TYPO_EXTENSION)
+AC_SUBST(TYPO_EXTENSION_PACK)
 
 dnl ===================================================================
 dnl Test whether to include Google Docs extension
@@ -7246,10 +7263,13 @@ dnl ===================================================================
 AC_MSG_CHECKING([for Google Docs extension integration])
 if test "z$enable_ext_google_docs" = "z" -o "z$enable_ext_google_docs" = "zno" ; then
   AC_MSG_RESULT([no])
+  GOOGLE_DOCS_EXTENSION_PACK=""
 else
   AC_MSG_RESULT([yes])
   SCPDEFS="$SCPDEFS -DWITH_EXTENSION_GOOGLE_DOCS"
+  GOOGLE_DOCS_EXTENSION_PACK="dbaafd21de055e582d92d7d32fe9da13-gdocs_2.3.1.oxt"
 fi
+AC_SUBST(GOOGLE_DOCS_EXTENSION_PACK)
 
 dnl ===================================================================
 dnl Test whether to include NLPSolver extension
