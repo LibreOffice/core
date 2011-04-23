@@ -3268,7 +3268,7 @@ void lcl_FillRecognizerData( uno::Sequence< rtl::OUString >& rSmartTagTypes,
         }
     }
 
-    if ( aSmartTagTypes.size() )
+    if ( !aSmartTagTypes.empty() )
     {
         rSmartTagTypes.realloc( aSmartTagTypes.size() );
         rStringKeyMaps.realloc( aSmartTagTypes.size() );

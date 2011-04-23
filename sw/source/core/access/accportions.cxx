@@ -227,7 +227,7 @@ void SwAccessiblePortionData::LineBreak()
 void SwAccessiblePortionData::Skip(sal_uInt16 nLength)
 {
     DBG_ASSERT( !bFinished, "We are already done!" );
-    DBG_ASSERT( aModelPositions.size() == 0, "Never Skip() after portions" );
+    DBG_ASSERT( aModelPositions.empty(), "Never Skip() after portions" );
     DBG_ASSERT( nLength <= pTxtNode->GetTxt().Len(), "skip exceeds model string!" );
 
     nModelPosition += nLength;

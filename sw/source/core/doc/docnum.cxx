@@ -1067,7 +1067,7 @@ sal_Bool SwDoc::DelNumRule( const String& rName, sal_Bool bBroadcast )
 
                 ++aListIter;
             }
-            while ( aListsForDeletion.size() > 0 )
+            while ( !aListsForDeletion.empty() )
             {
                 SwList* pList = aListsForDeletion.back();
                 aListsForDeletion.pop_back();
