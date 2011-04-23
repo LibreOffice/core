@@ -437,7 +437,6 @@ sal_Bool SAL_CALL osl_flushProfile(oslProfile Profile)
 
 static sal_Bool writeProfileImpl(osl_TFile* pFile)
 {
-    int BytesWritten=0;
 #if OSL_DEBUG_LEVEL > 1
     unsigned int nLen=0;
 #endif
@@ -459,18 +458,11 @@ static sal_Bool writeProfileImpl(osl_TFile* pFile)
     OSL_ASSERT(nLen == (pFile->m_nWriteBufLen - pFile->m_nWriteBufFree));
 #endif
 
-    BytesWritten = write(pFile->m_Handle, pFile->m_pWriteBuf, pFile->m_nWriteBufLen - pFile->m_nWriteBufFree);
-
-    if ( BytesWritten <= 0 )
+    if ( !safeWrite(pFile->m_Handle, pFile->m_pWriteBuf, pFile->m_nWriteBufLen - pFile->m_nWriteBufFree) )
     {
         OSL_TRACE("write failed '%s'\n",strerror(errno));
         return (sal_False);
     }
-
-#if OSL_DEBUG_LEVEL > 1
-    OSL_ASSERT(
-        BytesWritten >= 0 && SAL_INT_CAST(unsigned int, BytesWritten) == nLen);
-#endif
 
     free(pFile->m_pWriteBuf);
     pFile->m_pWriteBuf=0;
