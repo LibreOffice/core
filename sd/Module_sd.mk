@@ -29,7 +29,6 @@ $(eval $(call gb_Module_Module,sd))
 
 $(eval $(call gb_Module_add_targets,sd,\
     AllLangResTarget_sd \
-    CppUnitTest_sd_uimpress \
     Library_sd \
     Library_sdd \
     Library_sdfilt \
@@ -38,6 +37,10 @@ $(eval $(call gb_Module_add_targets,sd,\
     Package_uiconfig \
     Package_web \
     Package_xml \
+))
+
+$(eval $(call gb_Module_add_check_targets,sd,\
+    CppUnitTest_sd_uimpress \
 ))
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,sd,\
