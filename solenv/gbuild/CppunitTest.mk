@@ -103,8 +103,9 @@ $(call gb_CppunitTest_get_target,$(1)) : ARGS := $(2)
 
 endef
 
-# Once we build the services.rdb with gbuild we should use its *_get_target method
+# TODO: Once we build the services.rdb with gbuild we should use its *_get_target method
 define gb_CppunitTest_uses_ure
+$(call gb_CppunitTest_get_target,$(1)) : $(call gb_CppunitTest__get_uno_type_target,udkapi)
 $(call gb_CppunitTest_get_target,$(1)) : $(OUTDIR)/xml/ure/services.rdb
 $(call gb_CppunitTest_get_target,$(1)) : URE := $(true)
 
