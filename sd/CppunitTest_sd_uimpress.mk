@@ -27,8 +27,6 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sd_uimpress))
 
-$(eval $(call gb_CppunitTest_add_package_headers,sd_uimpress,sd_qa_unit))
-
 $(eval $(call gb_CppunitTest_set_include,sd_uimpress,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/sd/inc) \
