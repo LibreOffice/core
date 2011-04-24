@@ -5029,6 +5029,8 @@ else
    AC_MSG_RESULT([no])
 fi
 
+AC_OUTPUT([ooo.lst])
+
 if test "$BUILD_MOZAB" = "TRUE"; then
   if test "$_os" = "WINNT"; then
     if test "$WITH_MINGW" != "yes"; then
@@ -7956,8 +7958,6 @@ if test -f set_soenv; then
 else
    echo > set_soenv.last
 fi
-
-AC_OUTPUT([ooo.lst])
 
 AC_OUTPUT([set_soenv Makefile bin/repo-list])
 
