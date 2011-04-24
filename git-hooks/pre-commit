@@ -66,7 +66,7 @@ sub check_and_fix_whitespace($)
         system( "git diff > $stash" );
         system( "git checkout ." );
     }
-    open( FILES, "git diff-index --cached --name-only $head |" ) || die "Cannot run git diff-index.";
+    open( FILES, "git diff-index --cached --diff-filter=ACM --name-only $head |" ) || die "Cannot run git diff-index.";
     while( my $file = <FILES> ) {
         chomp( $file );
         if ( $file ne "GNUmakefile" &&
