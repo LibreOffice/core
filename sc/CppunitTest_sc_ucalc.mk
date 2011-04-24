@@ -17,6 +17,7 @@
 # Initial Developer. All Rights Reserved.
 #
 # Major Contributor(s):
+#       David Tardon, Red Hat Inc. <dtardon@redhat.com>
 #
 # For minor contributions see the git repository.
 #
@@ -29,22 +30,10 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sc_ucalc))
 
-$(eval $(call gb_CppunitTest_uses_ure,sc_ucalc))
 $(eval $(call gb_CppunitTest_add_package_headers,sc_ucalc,sc_qa_unit))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_ucalc, \
     sc/qa/unit/ucalc \
-))
-
-$(eval $(call gb_CppunitTest_set_args,sc_ucalc,\
-	--headless \
-	--invisible \
-	"-env:UNO_TYPES=$(foreach binrdb,udkapi.rdb types.rdb,\
-		file://$(if $(filter WNT,$(OS)),/)$(OUTDIR)/bin/$(binrdb))" \
-	"-env:UNO_SERVICES=$(foreach rdb,$(OUTDIR)/xml/ure/services.rdb $(WORKDIR)/CustomTarget/sc/qa/unit/services.rdb,\
-		file://$(if $(filter WNT,$(OS)),/)$(rdb))" \
-	$(foreach dir,URE_INTERNAL_LIB_DIR OOO_BASE_DIR BRAND_BASE_DIR, \
-		-env:$(dir)=file://$(if $(filter WNT,$(OS)),/$(OUTDIR)/bin,$(OUTDIR)/lib)) \
 ))
 
 $(eval $(call gb_CppunitTest_add_library_objects,sc_ucalc,sc))
@@ -86,6 +75,35 @@ $(eval $(call gb_CppunitTest_set_include,sc_ucalc,\
     $$(INCLUDE) \
     -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
+))
+
+$(eval $(call gb_CppunitTest_uses_ure,sc_ucalc))
+
+$(eval $(call gb_CppunitTest_add_type_rdbs,sc_ucalc,\
+    types \
+))
+
+$(eval $(call gb_CppunitTest_add_service_rdbs,sc_ucalc,\
+    sc_ucalc \
+))
+
+$(eval $(call gb_CppunitTest_set_args,sc_ucalc,\
+    --headless \
+    --invisible \
+))
+
+$(eval $(call gb_RdbTarget_RdbTarget,sc_ucalc))
+
+$(eval $(call gb_RdbTarget_add_components,sc_ucalc,\
+    framework/util/fwk \
+    sfx2/util/sfx \
+    unoxml/source/service/unoxml \
+))
+
+$(eval $(call gb_RdbTarget_add_old_components,sc_ucalc,\
+    i18npool \
+    ucb1 \
+    ucpfile1 \
 ))
 
 # vim: set noet sw=4:
