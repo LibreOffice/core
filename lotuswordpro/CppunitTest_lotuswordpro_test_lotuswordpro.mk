@@ -42,10 +42,9 @@ $(eval $(call gb_CppunitTest_add_library_objects,lotuswordpro_test_lotuswordpro,
 ))
 
 $(eval $(call gb_CppunitTest_add_linked_libs,lotuswordpro_test_lotuswordpro, \
-    vcl \
     comphelper \
-    cppuhelper \
     cppu \
+    cppuhelper \
     icui18n \
     icuuc \
     sal \
@@ -53,8 +52,9 @@ $(eval $(call gb_CppunitTest_add_linked_libs,lotuswordpro_test_lotuswordpro, \
     sot \
     svt \
     svxcore \
-    ucbhelper \
     tl \
+    ucbhelper \
+    vcl \
     xo \
     $(gb_STDLIBS) \
 ))

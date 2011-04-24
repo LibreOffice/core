@@ -37,6 +37,8 @@ $(eval $(call gb_Library_add_linked_libs,lwpft,\
     comphelper \
     cppu \
     cppuhelper \
+    icui18n \
+    icuuc \
     sal \
     sfx \
     sot \
@@ -45,8 +47,6 @@ $(eval $(call gb_Library_add_linked_libs,lwpft,\
     tl \
     ucbhelper \
     vcl \
-    icui18n \
-    icuuc \
     xo \
     $(gb_STDLIBS) \
 ))
