@@ -39,6 +39,7 @@
 #include "file_path_helper.hxx"
 #include "file_url.h"
 #include "uunxapi.hxx"
+#include "readwrite_helper.h"
 
 #include <sys/types.h>
 #include <errno.h>
@@ -1010,7 +1011,6 @@ static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszD
         return nRet;
     }
 
-    size_t nWritten = 0;
     size_t nRemains = nSourceSize;
 
     if ( nRemains )
@@ -1021,18 +1021,18 @@ static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszD
 
         do
         {
-            nRead = 0;
-            nWritten = 0;
-
             size_t nToRead = std::min( sizeof(pBuffer), nRemains );
-            nRead = read( SourceFileFD, pBuffer, nToRead );
-            if ( (size_t)-1 != nRead )
-                nWritten = write( DestFileFD, pBuffer, nRead );
+            sal_Bool succeeded = safeRead( SourceFileFD, pBuffer, nToRead );
+            if ( !succeeded )
+                break;
 
-            if ( (size_t)-1 != nWritten )
-                nRemains -= nWritten;
+            succeeded = safeWrite( DestFileFD, pBuffer, nToRead );
+            if ( !succeeded )
+                break;
+
+            nRemains -= nToRead;
         }
-        while( nRemains && (size_t)-1 != nRead && nRead == nWritten );
+        while( nRemains );
     }
 
     if ( nRemains )
