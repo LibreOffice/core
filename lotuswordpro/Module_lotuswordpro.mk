@@ -32,7 +32,6 @@ $(eval $(call gb_Module_add_targets,lotuswordpro,\
 ))
 
 $(eval $(call gb_Module_add_check_targets,lotuswordpro,\
-    Package_qa_cppunit \
     CppunitTest_lotuswordpro_test_lotuswordpro \
 ))
 
