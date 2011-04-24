@@ -40,7 +40,7 @@ $(eval $(call gb_Module_add_targets,sd,\
 ))
 
 $(eval $(call gb_Module_add_check_targets,sd,\
-    CppUnitTest_sd_uimpress \
+    CppunitTest_sd_uimpress \
 ))
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,sd,\
