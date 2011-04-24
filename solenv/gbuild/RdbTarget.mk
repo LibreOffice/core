@@ -61,6 +61,7 @@ endif
 endef
 
 define gb_RdbTarget_add_component
+$(call gb_RdbTarget_get_target,$(1)) : $(call gb_ComponentTarget_get_target,$(2))
 $(call gb_RdbTarget_get_target,$(1)) : COMPONENTS += $(2)
 $(call gb_RdbTarget_get_clean_target,$(1)) : COMPONENTS += $(2)
 endef
@@ -70,6 +71,7 @@ $(foreach component,$(2),$(eval $(call gb_RdbTarget_add_component,$(1),$(compone
 endef
 
 define gb_RdbTarget_add_old_component
+$(call gb_RdbTarget_get_target,$(1)) : $(call gb_RdbTarget__get_old_component_target,$(2))
 $(call gb_RdbTarget_get_target,$(1)) : OLD_COMPONENTS += $(2)
 $(call gb_RdbTarget_get_clean_target,$(1)) : OLD_COMPONENTS += $(2)
 endef
