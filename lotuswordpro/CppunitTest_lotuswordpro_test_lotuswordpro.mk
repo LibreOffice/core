@@ -31,8 +31,6 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,lotuswordpro_test_lotuswordpro))
 
-$(eval $(call gb_CppunitTest_add_package_headers,lotuswordpro_test_lotuswordpro,lotuswordpro_qa_cppunit))
-
 $(eval $(call gb_CppunitTest_add_exception_objects,lotuswordpro_test_lotuswordpro, \
     lotuswordpro/qa/cppunit/test_lotuswordpro \
 ))
