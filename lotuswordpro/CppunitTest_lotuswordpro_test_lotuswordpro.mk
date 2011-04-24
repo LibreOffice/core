@@ -37,12 +37,25 @@ $(eval $(call gb_CppunitTest_add_exception_objects,lotuswordpro_test_lotuswordpr
     lotuswordpro/qa/cppunit/test_lotuswordpro \
 ))
 
+$(eval $(call gb_CppunitTest_add_library_objects,lotuswordpro_test_lotuswordpro,\
+    lwpft \
+))
+
 $(eval $(call gb_CppunitTest_add_linked_libs,lotuswordpro_test_lotuswordpro, \
     vcl \
     comphelper \
     cppuhelper \
     cppu \
+    icui18n \
+    icuuc \
     sal \
+    sfx \
+    sot \
+    svt \
+    svxcore \
+    ucbhelper \
+    tl \
+    xo \
     $(gb_STDLIBS) \
 ))
 
@@ -72,9 +85,5 @@ $(eval $(call gb_RdbTarget_RdbTarget,lotuswordpro_test_lotuswordpro))
 $(eval $(call gb_RdbTarget_add_components,lotuswordpro_test_lotuswordpro,\
     lotuswordpro/util/lwpfilter,\
 ))
-
-# we need to explicitly depend on library lwpft because it is not implied
-# by a link relation
-$(call gb_CppunitTest_get_target,lotuswordpro_test_lotuswordpro) : $(call gb_Library_get_target,lwpft)
 
 # vim: set noet sw=4:
