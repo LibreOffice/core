@@ -36,7 +36,7 @@
 // Bereiche fuer die UI-Verzeichnisse
 // ----------------------------------------------------------------
 
-#define RC_BASE                     RID_SW_START    // aus solar.hrc
+#define RC_BASE                     RID_SW_START    // From solar.hrc
 
 #define RC_APP                      RC_BASE
 #define RC_DIALOG                   (RC_BASE + 200)

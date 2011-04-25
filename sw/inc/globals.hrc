@@ -67,7 +67,7 @@
 #define STR_EVENT_FRM_RESIZE         ( RC_GLOBALS_BEGIN + 28 )
 #define STR_EVENT_FRM_MOVE           ( RC_GLOBALS_BEGIN + 29 )
 
-// Strings fuer Rahmenausrichtungen im Popup
+// Strings for frame alignment in Popup
 #define STR_TOP_BASE                (RC_GLOBALS_BEGIN + 30)
 #define STR_BOTTOM_BASE             (RC_GLOBALS_BEGIN + 31)
 #define STR_CENTER_BASE             (RC_GLOBALS_BEGIN + 32)
@@ -92,7 +92,7 @@
 #define RES_TABD                    (RC_GLOBALS_BEGIN + 3)
 #define RES_TABC                    (RC_GLOBALS_BEGIN + 4)
 
-// DIALOGE -----------------------------------------------------------
+// DIALOGS -----------------------------------------------------------
 
 #define DLG_LISTBOX                 (RC_GLOBALS_BEGIN + 1)
 #define DLG_THESAURUS               (RC_GLOBALS_BEGIN + 2)
@@ -171,11 +171,11 @@
 #define TP_FOOTER_PAGE              (RC_GLOBALS_BEGIN +  17)
 #define TP_FOOTNOTE_PAGE            (RC_GLOBALS_BEGIN +  18)
 
-#define TP_OPTGENERAL_PAGE          (RC_GLOBALS_BEGIN +  19) //Sfx-Seiten
+#define TP_OPTGENERAL_PAGE          (RC_GLOBALS_BEGIN +  19) // Sfx-pages
 #define TP_OPTSAVE_PAGE             (RC_GLOBALS_BEGIN +  20)
 #define TP_OPTPATH_PAGE             (RC_GLOBALS_BEGIN +  21)
 #define TP_OPTSPELL_PAGE            (RC_GLOBALS_BEGIN +  22)
- //Sw-Seiten
+// Sw-pages
 #define SW_EDIT_OPTIONS_TDLG        (RC_GLOBALS_BEGIN +  23)
 #define SW_BROWSER_OPTIONS_TDLG     (RC_GLOBALS_BEGIN +  24)
 #define TP_OPTTEST_PAGE             (RC_GLOBALS_BEGIN +  25)

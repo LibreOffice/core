@@ -166,7 +166,7 @@
 #define WID_SECT_EDIT_IN_READONLY 8013
 
 
-//Verzeichnisse
+// Indices/Tables of content
 #define WID_PRIMARY_KEY                         1000
 #define WID_SECONDARY_KEY                       1001
 #define WID_ALT_TEXT                            1002
@@ -230,7 +230,7 @@
 #define WID_PRIMARY_KEY_READING                 1059
 #define WID_SECONDARY_KEY_READING               1060
 
-//text document
+// Text document
 #define WID_DOC_CHAR_COUNT                      1000
 #define WID_DOC_PARA_COUNT                      1001
 #define WID_DOC_WORD_COUNT                      1002
@@ -253,7 +253,7 @@
 #define WID_DOC_ISTEMPLATEID                        1025
 #define WID_APPLY_WORKAROUND_FOR_B6375613       1070
 
-//MailMerge
+// MailMerge
 #define WID_SELECTION                           1071
 #define WID_RESULT_SET                          1072
 #define WID_CONNECTION                          1073
@@ -296,11 +296,11 @@
 #define WID_DOC_VBA_DOCOBJ                      1106
 
 
-//AutoText
+// AutoText
 #define WID_GROUP_PATH                          0
 #define WID_GROUP_TITLE                         1
 
-//NumberingRules
+// NumberingRules
 #define WID_IS_AUTOMATIC                0
 #define WID_CONTINUOUS                  1
 #define WID_RULE_NAME                   2
@@ -308,7 +308,7 @@
 #define WID_IS_OUTLINE                  4
 #define WID_DEFAULT_LIST_ID             5
 
-//TextColumns
+// TextColumns
 #define WID_TXTCOL_LINE_WIDTH           0
 #define WID_TXTCOL_LINE_COLOR           1
 #define WID_TXTCOL_LINE_REL_HGT         2
