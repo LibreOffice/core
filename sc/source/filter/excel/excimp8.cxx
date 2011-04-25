@@ -82,6 +82,7 @@
 #include "attrib.hxx"
 #include "conditio.hxx"
 #include "dbcolect.hxx"
+#include "globalnames.hxx"
 #include "editutil.hxx"
 #include "markdata.hxx"
 #include "rangenam.hxx"
@@ -468,8 +469,6 @@ void ImportExcel8::FilterMode( void )
     // then the latter is true..
     if( !pExcRoot->pAutoFilterBuffer ) return;
 
-    pExcRoot->pAutoFilterBuffer->IncrementActiveAF();
-
     XclImpAutoFilterData* pData = pExcRoot->pAutoFilterBuffer->GetByTab( GetCurrScTab() );
     if( pData )
         pData->SetAutoOrAdvanced();
@@ -498,15 +497,14 @@ void ImportExcel8::AutoFilter( void )
 
 
 
-XclImpAutoFilterData::XclImpAutoFilterData( RootData* pRoot, const ScRange& rRange, const String& rName ) :
+XclImpAutoFilterData::XclImpAutoFilterData( RootData* pRoot, const ScRange& rRange ) :
         ExcRoot( pRoot ),
         pCurrDBData(NULL),
         nFirstEmpty( 0 ),
         bActive( false ),
         bHasConflict( false ),
         bCriteria( false ),
-        bAutoOrAdvanced(false),
-        aFilterName(rName)
+        bAutoOrAdvanced(false)
 {
     aParam.nCol1 = rRange.aStart.Col();
     aParam.nRow1 = rRange.aStart.Row();
@@ -750,9 +748,9 @@ void XclImpAutoFilterData::SetExtractPos( const ScAddress& rAddr )
     aParam.bDestPers = sal_True;
 }
 
-void XclImpAutoFilterData::Apply( const sal_Bool bUseUnNamed )
+void XclImpAutoFilterData::Apply()
 {
-    CreateScDBData(bUseUnNamed);
+    CreateScDBData();
 
     if( bActive )
     {
@@ -774,35 +772,27 @@ void XclImpAutoFilterData::Apply( const sal_Bool bUseUnNamed )
     }
 }
 
-void XclImpAutoFilterData::CreateScDBData( const sal_Bool bUseUnNamed )
+void XclImpAutoFilterData::CreateScDBData()
 {
 
     // Create the ScDBData() object if the AutoFilter is activated
     // or if we need to create the Advanced Filter.
     if( bActive || bCriteria)
     {
-        ScDBCollection& rColl = pExcRoot->pIR->GetDatabaseRanges();
-        pCurrDBData = rColl.GetDBAtArea( Tab(), StartCol(), StartRow(), EndCol(), EndRow() );
-        if( !pCurrDBData )
+        ScDocument* pDoc = pExcRoot->pIR->GetDocPtr();
+        String aNewName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME));
+        pCurrDBData = new ScDBData(aNewName , Tab(),
+                                StartCol(),StartRow(), EndCol(),EndRow() );
+        if(bCriteria)
         {
-            AmendAFName(bUseUnNamed);
+            EnableRemoveFilter();
 
-            pCurrDBData = new ScDBData( aFilterName, Tab(), StartCol(), StartRow(), EndCol(), EndRow() );
-
-            if( pCurrDBData )
-            {
-                if(bCriteria)
-                {
-                    EnableRemoveFilter();
-
-                    pCurrDBData->SetQueryParam( aParam );
-                    pCurrDBData->SetAdvancedQuerySource(&aCriteriaRange);
-                }
-                else
-                    pCurrDBData->SetAdvancedQuerySource(NULL);
-                rColl.Insert( pCurrDBData );
-            }
+            pCurrDBData->SetQueryParam( aParam );
+            pCurrDBData->SetAdvancedQuerySource(&aCriteriaRange);
         }
+        else
+            pCurrDBData->SetAdvancedQuerySource(NULL);
+        pDoc->SetAnonymousDBData(Tab(), pCurrDBData);
     }
 
 }
@@ -822,18 +812,7 @@ void XclImpAutoFilterData::EnableRemoveFilter()
     // inside the advanced range
 }
 
-void XclImpAutoFilterData::AmendAFName(const sal_Bool bUseUnNamed)
-{
-    // If-and-only-if we have one AF filter then
-    // use the Calc "unnamed" range name. Calc
-    // only supports one in total while Excel
-    // supports one per sheet.
-    if( bUseUnNamed && bAutoOrAdvanced )
-        aFilterName = ScGlobal::GetRscString(STR_DB_NONAME);
-}
-
-XclImpAutoFilterBuffer::XclImpAutoFilterBuffer() :
-    nAFActiveCount( 0 )
+XclImpAutoFilterBuffer::XclImpAutoFilterBuffer()
 {
 }
 
@@ -843,11 +822,10 @@ XclImpAutoFilterBuffer::~XclImpAutoFilterBuffer()
         delete pData;
 }
 
-void XclImpAutoFilterBuffer::Insert( RootData* pRoot, const ScRange& rRange,
-                                    const String& rName )
+void XclImpAutoFilterBuffer::Insert( RootData* pRoot, const ScRange& rRange)
 {
     if( !GetByTab( rRange.aStart.Tab() ) )
-        Append( new XclImpAutoFilterData( pRoot, rRange, rName ) );
+        Append( new XclImpAutoFilterData( pRoot, rRange) );
 }
 
 void XclImpAutoFilterBuffer::AddAdvancedRange( const ScRange& rRange )
@@ -867,7 +845,7 @@ void XclImpAutoFilterBuffer::AddExtractPos( const ScRange& rRange )
 void XclImpAutoFilterBuffer::Apply()
 {
     for( XclImpAutoFilterData* pData = _First(); pData; pData = _Next() )
-        pData->Apply(UseUnNamed());
+        pData->Apply();
 }
 
 XclImpAutoFilterData* XclImpAutoFilterBuffer::GetByTab( SCTAB nTab )
