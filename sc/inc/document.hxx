@@ -526,7 +526,7 @@ public:
     SC_DLLPUBLIC sal_Bool                   SetCodeName( SCTAB nTab, const String& rName );
     SC_DLLPUBLIC sal_Bool           GetTable( const String& rName, SCTAB& rTab ) const;
 
-    void            SetAnonymousDBData(SCTAB nTab, ScDBData* pDBData);
+    SC_DLLPUBLIC void            SetAnonymousDBData(SCTAB nTab, ScDBData* pDBData);
     SC_DLLPUBLIC ScDBData*       GetAnonymousDBData(SCTAB nTab);
 
     SC_DLLPUBLIC inline SCTAB   GetTableCount() const { return nMaxTableNumber; }
