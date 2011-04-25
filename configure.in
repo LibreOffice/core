@@ -2871,7 +2871,7 @@ elif test "$enable_ccache_skip" = "auto" ; then
          save_CXXFLAGS=$CXXFLAGS
          CXXFLAGS="$CXXFLAGS --ccache-skip -O2"
          dnl an empty program will do, we're checking the compiler flags
-         AC_COMPILE_IFELSE(AC_LANG_PROGRAM([],[]),
+         AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],
             [use_ccache=yes], [use_ccache=no])
          if test $use_ccache = yes ; then
             AC_MSG_RESULT([yes, will enable --ccache-skip])
