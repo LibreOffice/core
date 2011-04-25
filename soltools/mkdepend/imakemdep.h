@@ -554,9 +554,6 @@ struct pair predefs[] = {
 #ifdef __mips__
     {"__mips__", "1", NULL},
 #endif
-#ifdef ultrix
-    {"ultrix", "1", NULL},
-#endif
 #ifdef stellar
     {"stellar", "1", NULL},
 #endif
