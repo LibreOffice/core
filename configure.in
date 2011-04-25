@@ -4091,6 +4091,11 @@ AC_MSG_CHECKING([whether to enable Python 2.x UNO API])
 if test "$enable_python" != "no"; then
    AC_MSG_RESULT([yes])
    BUILD_TYPE="$BUILD_TYPE PYUNO"
+else
+   AC_MSG_RESULT([no])
+   DISABLE_PYTHON=TRUE
+   AC_SUBST(DISABLE_PYTHON)
+fi
 
 AC_MSG_CHECKING([which python to use])
 if test "$_os" = "WINNT"; then
@@ -4143,12 +4148,6 @@ AC_SUBST(PYTHON_CFLAGS)
 AC_SUBST(PYTHON_LIBS)
 HOME=`echo $HOME | $SED 's:\\\\:/:g'`
 AC_SUBST(HOME)
-dnl disable python
-else
-   AC_MSG_RESULT([no])
-   DISABLE_PYTHON=TRUE
-   AC_SUBST(DISABLE_PYTHON)
-fi
 
 dnl ===================================================================
 dnl Check for system translate-toolkit
