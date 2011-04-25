@@ -35,9 +35,6 @@ class SfxPoolItem;
 class SwCalc;
 class SwDoc;
 
-/*--------------------------------------------------------------------
-    Beschreibung: Benutzerfelder
- --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwUserFieldType : public SwValueFieldType
 {
@@ -62,7 +59,7 @@ public:
     inline sal_Bool             IsValid() const;
     inline void             ChgValid( sal_Bool bNew );
 
-           double           GetValue(SwCalc& rCalc);    // Member nValue neu berrechnen
+           double           GetValue(SwCalc& rCalc);    // Recalculate member nValue.
     inline double           GetValue() const;
     inline void             SetValue(const double nVal);
 
@@ -100,9 +97,6 @@ inline void SwUserFieldType::SetType(sal_uInt16 nSub)
     EnableFormat(!(nSub & nsSwGetSetExpType::GSE_STRING));
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Benutzerfelder
- --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwUserField : public SwValueField
 {
@@ -122,10 +116,10 @@ public:
 
     virtual String          GetFieldName() const;
 
-    // Name kann nicht geaendert werden
+    // Name cannot be changed.
     virtual const String&   GetPar1() const;
 
-    // Inhalt
+    // Content.
     virtual String          GetPar2() const;
     virtual void            SetPar2(const String& rStr);
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const;

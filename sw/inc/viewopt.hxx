@@ -96,12 +96,13 @@ namespace svtools{ class ColorConfig;}
 #define VIEWOPT_2_SHADOWCRSR        0x01000000L
 #define VIEWOPT_2_V_RULER_RIGHT     0x02000000L
 
-//Tabellenhintergrund
+
+// Table background.
 #define TBL_DEST_CELL   0
 #define TBL_DEST_ROW    1
 #define TBL_DEST_TBL    2
 
-//Appearance flags
+// Appearance flags.
 #define VIEWOPT_DOC_BOUNDARIES      0x0001
 #define VIEWOPT_OBJECT_BOUNDARIES   0x0002
 #define VIEWOPT_TABLE_BOUNDARIES    0x0004
@@ -112,7 +113,7 @@ namespace svtools{ class ColorConfig;}
 #define VIEWOPT_SECTION_BOUNDARIES  0x0080
 #define VIEWOPT_SHADOW              0x0100
 
-// Implementierung in core/text/txtpaint.cxx
+// Implementation in core/text/txtpaint.cxx.
 extern void SyncVout( const OutputDevice *pOut );
 
 class SwViewOption
@@ -136,59 +137,59 @@ class SwViewOption
     static Color    aScriptIndicatorColor;
     static Color    aShadowColor;
 
-    static sal_Int32 nAppearanceFlags;  //
+    static sal_Int32 nAppearanceFlags;
 protected:
     static sal_uInt16   nPixelTwips;// 1 Pixel == ? Twips
 
-    String          sSymbolFont;        // Symbolzeichensatz
-    sal_uInt32          nCoreOptions;       // Bits fuer die ViewShell
-    sal_uInt32          nCore2Options;      // Bits fuer die ViewShell
+    String          sSymbolFont;        // Symbolfont.
+    sal_uInt32          nCoreOptions;       // Bits for ViewShell.
+    sal_uInt32          nCore2Options;      // Bits for ViewShell.
     sal_uInt32          nUIOptions;         // UI-Bits
-    Color           aRetoucheColor;     // DefaultBackground fuer BrowseView
-    Size            aSnapSize;          // Beschreibt hori. wie vert. Snap
+    Color           aRetoucheColor;     // DefaultBackground for BrowseView
+    Size            aSnapSize;          // Describes horizontal and vertical snap.
     sal_uInt16          mnViewLayoutColumns;// # columns for edit view
-    short           nDivisionX;         // Rasterunterteilung
+    short           nDivisionX;         // Grid division.
     short           nDivisionY;
-    sal_uInt8           nPagePrevRow;       // Page Preview Row/Columns
-    sal_uInt8           nPagePrevCol;       // Page Preview Row/Columns
-    sal_uInt8           nShdwCrsrFillMode;  // FillMode fuer den ShadowCrsr
-    sal_Bool            bReadonly : 1;      // Readonly-Doc
-    sal_Bool            bStarOneSetting : 1;// prevent from UI automatics (no scrollbars in readonly documents)
-    sal_Bool            bIsPagePreview : 1; // the preview mustn't print field/footnote/... shadings
-    sal_Bool            bSelectionInReadonly : 1; //determines whether selection is switched on in readonly documents
+    sal_uInt8           nPagePrevRow;       // Page Preview Row/Columns.
+    sal_uInt8           nPagePrevCol;       // Page Preview Row/Columns.
+    sal_uInt8           nShdwCrsrFillMode;  // FillMode for ShadowCrsr.
+    sal_Bool            bReadonly : 1;      // Readonly-Doc.
+    sal_Bool            bStarOneSetting : 1;// Prevent from UI automatics (no scrollbars in readonly documents).
+    sal_Bool            bIsPagePreview : 1; // The preview mustn't print field/footnote/... shadings.
+    sal_Bool            bSelectionInReadonly : 1; // Determines whether selection is switched on in readonly documents.
     sal_Bool            mbFormView : 1;
-    sal_Bool            mbBrowseMode : 1;    //swmod 080130
-    sal_Bool            mbBookView : 1;      // view mode for page preview
-    sal_Bool            mbViewLayoutBookMode : 1; // book view mode for edit view
-    sal_Bool        bShowPlaceHolderFields : 1; //only used in printing!
+    sal_Bool            mbBrowseMode : 1;    // swmod 080130.
+    sal_Bool            mbBookView : 1;      // View mode for page preview.
+    sal_Bool            mbViewLayoutBookMode : 1; // Book view mode for edit view.
+    sal_Bool        bShowPlaceHolderFields : 1; // Only used in printing!
     mutable bool    bIdle;
 
-    // Maszstab
-    sal_uInt16          nZoom;              // Angaben in Prozent
-    SvxZoomType     eZoom;              // 'enum' fuer Zoom
+    // Scale
+    sal_uInt16          nZoom;          // In percent.
+    SvxZoomType     eZoom;              // 'enum' for zoom.
 
-    sal_uInt8            nTblDest;           // Ziel fuer Tabellenhintergrund
+    sal_uInt8            nTblDest;      // Destination for table background.
 
 #if OSL_DEBUG_LEVEL > 1
-    // korrespondieren zu den Angaben in ui/config/cfgvw.src
-    sal_Bool  bTest1        :1;     // Test-Flag  "Layout not loading"
-    sal_Bool  bTest2        :1;     // Test-Flag  "WYSIWYG++"
-    sal_Bool  bTest3        :1;     // Test-Flag  ""
-    sal_Bool  bTest4        :1;     // Test-Flag  "WYSIWYG debug"
-    sal_Bool  bTest5        :1;     // Test-Flag  "No idle format"
-    sal_Bool  bTest6        :1;     // Test-Flag  "No screen adj"
-    sal_Bool  bTest7        :1;     // Test-Flag  "win format"
-    sal_Bool  bTest8        :1;     // Test-Flag  ""
+    // Corresponds to statements in ui/config/cfgvw.src.
+    sal_Bool  bTest1        :1;     // Test-flag  "Layout not loading"
+    sal_Bool  bTest2        :1;     // Test-flag  "WYSIWYG++"
+    sal_Bool  bTest3        :1;     // Test-flag  ""
+    sal_Bool  bTest4        :1;     // Test-flag  "WYSIWYG debug"
+    sal_Bool  bTest5        :1;     // Test-flag  "No idle format"
+    sal_Bool  bTest6        :1;     // Test-flag  "No screen adj"
+    sal_Bool  bTest7        :1;     // Test-flag  "win format"
+    sal_Bool  bTest8        :1;     // Test-flag  ""
     static sal_Bool  bTest9;    // Test-Flag  "DrawingLayerNotLoading"
     sal_Bool  bTest10       :1;     // Test-Flag  "Format by Input"
 #endif
 
 public:
             SwViewOption();                     // CTOR
-            SwViewOption(const SwViewOption&);  //
-            ~SwViewOption();                    //
+            SwViewOption(const SwViewOption&);
+            ~SwViewOption();
 
-    void   Init( Window *pWin );        // Initialisierung der statischen Daten
+    void   Init( Window *pWin );        // Initializing of static data.
 
     sal_uInt16 GetPixelTwips() const { return nPixelTwips; }
 
@@ -196,13 +197,13 @@ public:
     inline void     SetUIOptions( const SwViewOption& );
 
 /*---------------------------------------------------------------------------
-    Optionen aus nCoreOptions
+    Options from nCoreOptions
 ----------------------------------------------------------------------------*/
 
     inline sal_Bool IsIdle() const
         { return bIdle; }
 
-    // logically this is a const function since it does not modify the viewoptions
+    // Logically this is a const function since it does not modify the viewoptions
     // but only effects idle formatting. Of course that member is already implement
     // in the wrong place here... Also currently there are many const modifying casts in the code
     // just to call this function on otherwise const objects. Thus declaring it as const now.
@@ -348,7 +349,7 @@ public:
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_CROSSHAIR ) : ( nCoreOptions &= ~VIEWOPT_1_CROSSHAIR); }
 
 /*---------------------------------------------------------------------------
-    Optionen aus nCore2Options
+    Options from nCore2Options
 ----------------------------------------------------------------------------*/
     inline sal_Bool IsBlackFont() const
         {return nCore2Options & VIEWOPT_CORE2_BLACKFONT ? sal_True : sal_False;}
@@ -417,7 +418,7 @@ public:
     void   SetViewLayoutColumns( sal_uInt16 nNew ) { mnViewLayoutColumns = nNew; }
 
 #if OSL_DEBUG_LEVEL > 1
-    // korrespondieren zu den Angaben in ui/config/cfgvw.src
+    // Correspond to statements in ui/config/cfgvw.src.
     inline sal_Bool IsTest1() const     { return bTest1; }
     inline void SetTest1( sal_Bool b )  { bTest1 = b; }
     inline sal_Bool IsTest2() const     { return bTest2; }
@@ -447,14 +448,15 @@ public:
     void DrawRectPrinter( OutputDevice* pOut, const SwRect& rRect ) const;
 
     SwViewOption& operator=( const SwViewOption &rOpt );
-    // Vergleichsmethoden
+
+    // Compare methods.
     sal_Bool IsEqualFlags ( const SwViewOption &rOpt ) const;
     inline sal_Bool operator == ( const SwViewOption &rOpt ) const;
     inline sal_Bool operator != ( const SwViewOption &rOpt ) const  { return !(*this == rOpt); }
 
 
 /*---------------------------------------------------------------------------
-    Optionen aus nUIOptions
+    Options from nUIOptions
 ----------------------------------------------------------------------------*/
 
     sal_Bool    IsViewVScrollBar() const
@@ -526,7 +528,7 @@ public:
     void            SetViewVRuler     (sal_Bool b)
                         { b ? (nUIOptions |= VIEWOPT_2_V_RULER ) : ( nUIOptions &= ~VIEWOPT_2_V_RULER);}
 
-    // ShadowCursor ein schalten/abfragen/Farbe setzen/Modus setzen
+    // ShadowCursor, switch on/off, get/set color/mode.
     sal_Bool    IsShadowCursor()    const
         { return nUIOptions & VIEWOPT_2_SHADOWCRSR ? sal_True : sal_False;   }
     void   SetShadowCursor(sal_Bool b)
@@ -601,7 +603,7 @@ inline void SwViewOption::SetUIOptions( const SwViewOption& rVOpt )
 }
 
 
-// Hilfsfunktion zur Ermittlung der HTML-Faehigkeiten
+// Helper function for checking HTML-capabilities.
 SW_DLLPUBLIC sal_uInt16     GetHtmlMode(const SwDocShell*);
 
 

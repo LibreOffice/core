@@ -47,9 +47,7 @@ class SwDoc;
 class SwFmtCol;
 class SwDocShell;
 class SwNumRule;
-/******************************************************************************
- *
- ******************************************************************************/
+
 class SwXFootnoteProperties : public cppu::WeakAggImplHelper2
 <
     ::com::sun::star::beans::XPropertySet,
@@ -156,8 +154,8 @@ class SwXNumberingRules : public cppu::WeakAggImplHelper5
     String                      sNewCharStyleNames[MAXLEVEL];
     String                      sNewBulletFontNames[MAXLEVEL];
     String                      sCreatedNumRuleName; //connects to a numbering in SwDoc
-    SwDoc*                      pDoc; // wird nur fuers anmelden gebraucht
-    SwDocShell*                 pDocShell; //nur, wenn als ChapterNumbering verwendet
+    SwDoc*                      pDoc; // Only needed for registration.
+    SwDocShell*                 pDocShell; // Only if used as chapter numbering.
     SwNumRule*                  pNumRule;
     const SfxItemPropertySet*   m_pPropertySet;
     sal_Bool                    bOwnNumRuleCreated;
