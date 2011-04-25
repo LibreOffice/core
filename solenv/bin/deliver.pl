@@ -823,10 +823,6 @@ sub copy_if_newer
             }
         }
         fix_file_permissions($$from_stat_ref[2], $temp_file);
-        if ( $^O eq 'os2' )
-        {
-            $rc = unlink($to); # YD OS/2 can't rename if $to exists!
-        }
         # Ugly hack: on windows file locking(?) sometimes prevents renaming.
         # Until we've found and fixed the real reason try it repeatedly :-(
         my $try = 0;

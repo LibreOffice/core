@@ -2681,11 +2681,6 @@ sub do_exit {
     my $exit_code = shift;
     $build_finished++;
     generate_html_file(1);
-    if ( $^O eq 'os2' )
-    {
-        # perl 5.10 returns 'resource busy' for rmtree
-        rmdir(correct_path($tmp_dir)) if ($tmp_dir);
-    }
     rmtree(correct_path($tmp_dir), 0, 0) if ($tmp_dir);
     print STDERR "Cannot delete $tmp_dir. Please remove it manually\n" if (-d $tmp_dir);
     exit($exit_code);
