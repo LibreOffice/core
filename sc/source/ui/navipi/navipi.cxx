@@ -154,11 +154,6 @@ void ColumnEdit::Up()
 {
     nCol++;
 
-#ifdef OS2
-    if ( nCol > SCNAV_MAXCOL )
-        nCol = 1;
-#endif
-
     if ( nCol <= SCNAV_MAXCOL )
         SetCol( nCol );
     else
@@ -171,10 +166,6 @@ void ColumnEdit::Down()
 {
     if ( nCol>1 )
         SetCol( nCol-1 );
-#ifdef OS2
-    else
-        SetCol( SCNAV_MAXCOL );
-#endif
 }
 
 //------------------------------------------------------------------------

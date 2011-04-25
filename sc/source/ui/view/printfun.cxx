@@ -617,19 +617,6 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
         pDev->SetMapMode(aMode);
 
     aOutputData.DrawBackground();
-
-#ifdef OS2
-    if (bMetaFile && !bDoGrid)
-    {
-                    // unter OS2 fuer Metafiles gesamte Flaeche benutzen,
-                    // weil sonst die Groesse nicht erkannt wird
-        pDev->SetLineColor();
-        pDev->SetFillColor();
-        pDev->DrawRect( Rectangle( nScrX,nScrY,
-                        nScrX+aOutputData.GetScrW(), nScrY+aOutputData.GetScrH() ) );
-    }
-#endif
-
     aOutputData.DrawShadow();
     aOutputData.DrawFrame();
     aOutputData.DrawStrings();

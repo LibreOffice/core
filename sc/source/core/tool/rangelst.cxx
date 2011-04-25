@@ -906,11 +906,7 @@ ScRangePair** ScRangePairList::CreateNameSortedArray( size_t& nListCount,
         pSortArray[j].pPair = maPairs[ j ];
         pSortArray[j].pDoc = pDoc;
     }
-#if !(defined(ICC ) && defined(OS2))
     qsort( (void*)pSortArray, nListCount, sizeof(ScRangePairNameSort), &ScRangePairList_QsortNameCompare );
-#else
-    qsort( (void*)pSortArray, nListCount, sizeof(ScRangePairNameSort), ICCQsortRPairCompare );
-#endif
     // ScRangePair Pointer aufruecken
     ScRangePair** ppSortArray = (ScRangePair**)pSortArray;
     for ( j=0; j < nListCount; j++ )

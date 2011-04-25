@@ -135,11 +135,6 @@ __cdecl
 #endif
 ScRangePairList_QsortNameCompare( const void*, const void* );
 
-#if defined( ICC ) && defined( SC_RANGELST_CXX ) && defined( OS2 )
-    static int _Optlink ICCQsortRPairCompare( const void* a, const void* b)
-                    { return ScRangePairList_QsortNameCompare(a,b); }
-#endif
-
 
 #endif
 

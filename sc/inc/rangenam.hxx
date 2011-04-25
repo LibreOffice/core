@@ -169,11 +169,6 @@ inline sal_Bool ScRangeData::HasType( RangeType nType ) const
 
 extern "C" int SAL_CALL ScRangeData_QsortNameCompare( const void*, const void* );
 
-#if defined( ICC ) && defined( OS2 )
-    static int _Optlink  ICCQsortNameCompare( const void* a, const void* b)
-                            { return ScRangeData_QsortNameCompare(a,b); }
-#endif
-
 bool operator< (const ScRangeData& left, const ScRangeData& right);
 
 class ScRangeName

@@ -131,7 +131,7 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::rtl::OUString;
 
 // #TODO is this defined somewhere else?
-#if ( defined UNX ) || ( defined OS2 ) //unix
+#if ( defined UNX ) //unix
 #define FILE_PATH_SEPERATOR "/"
 #else // windows
 #define FILE_PATH_SEPERATOR "\\"

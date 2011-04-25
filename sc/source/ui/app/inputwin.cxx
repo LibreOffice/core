@@ -134,13 +134,8 @@ SfxChildWinInfo ScInputWindowWrapper::GetInfo() const
 //==================================================================
 
 ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
-#ifdef OS2
-// ohne WB_CLIPCHILDREN wg. os/2 Paintproblem
-        ToolBox         ( pParent, WinBits(WB_BORDER|WB_3DLOOK) ),
-#else
 // mit WB_CLIPCHILDREN, sonst Flicker
         ToolBox         ( pParent, WinBits(WB_BORDER|WB_3DLOOK|WB_CLIPCHILDREN) ),
-#endif
         aWndPos         ( this ),
         aTextWindow     ( this ),
         pInputHdl       ( NULL ),
