@@ -611,6 +611,11 @@ void ScDPFieldControlBase::DrawInvertSelection()
     InvertTracking(aSel, SHOWTRACK_SMALL | SHOWTRACK_WINDOW);
 }
 
+Size ScDPFieldControlBase::GetStdFieldBtnSize() const
+{
+    return mpDlg->GetStdFieldBtnSize();
+}
+
 bool ScDPFieldControlBase::IsShortenedText( size_t nIndex ) const
 {
     const FieldNames& rFields = GetFieldNames();
@@ -726,7 +731,7 @@ Point ScDPHorFieldControl::GetFieldPosition( size_t nIndex )
 
 Size ScDPHorFieldControl::GetFieldSize() const
 {
-    return Size(FIELD_BTN_WIDTH, FIELD_BTN_HEIGHT);
+    return GetStdFieldBtnSize();
 }
 
 bool ScDPHorFieldControl::GetFieldIndex( const Point& rPos, size_t& rnIndex )
@@ -1032,7 +1037,7 @@ Point ScDPRowFieldControl::GetFieldPosition(size_t nIndex)
 
 Size ScDPRowFieldControl::GetFieldSize() const
 {
-    return Size(FIELD_BTN_WIDTH, FIELD_BTN_HEIGHT);
+    return GetStdFieldBtnSize();
 }
 
 bool ScDPRowFieldControl::GetFieldIndex( const Point& rPos, size_t& rnIndex )

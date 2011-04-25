@@ -195,6 +195,7 @@ protected:
     void AppendPaintable(Window* p);
     void DrawPaintables();
     void DrawInvertSelection();
+    Size GetStdFieldBtnSize() const;
 
     /** @return  The new selection index after moving to the given direction. */
     virtual size_t CalcNewFieldIndex( SCsCOL nDX, SCsROW nDY ) const = 0;
