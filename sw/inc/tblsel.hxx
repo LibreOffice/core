@@ -51,21 +51,20 @@ SV_DECL_PTRARR( SwCellFrms, SwCellFrm*, 16, 16 )
 SV_DECL_PTRARR_SORT( SwSelBoxes, SwTableBoxPtr, 10, 20 )
 
 
-//Sucht alle Boxen zusammen, die in der Tabelle selektiert sind.
-//Je nach enum-Parameter wird die Selektion in der angegebenen Richtung
-//erweitert.
-//Die Boxen werden ueber das Layout zusammengsucht, es wird auch bei
-//aufgespaltenen Tabellen korrekt gearbeitet (siehe: MakeSelUnions()).
+// Collects all boxes in table that are selected.
+// Selection gets extended in given direction according to enum-parameter.
+// Boxes are collected via the Layout; works correctly if tables are split.
+// (Cf. MakeSelUnions().)
 typedef sal_uInt16 SwTblSearchType;
 namespace nsSwTblSearchType
 {
-    const SwTblSearchType TBLSEARCH_NONE = 0x1;       // keine Erweiterung
-    const SwTblSearchType TBLSEARCH_ROW  = 0x2;       // erweiter auf Zeilen
-    const SwTblSearchType TBLSEARCH_COL  = 0x3;       // erweiter auf Spalten
+    const SwTblSearchType TBLSEARCH_NONE = 0x1;       // No extension.
+    const SwTblSearchType TBLSEARCH_ROW  = 0x2;       // Extend to rows.
+    const SwTblSearchType TBLSEARCH_COL  = 0x3;       // Extend to columns.
 
-    // als Flag zu den anderen Werten!!
-    const SwTblSearchType TBLSEARCH_PROTECT = 0x8;      // auch geschuetzte Boxen einsammeln
-    const SwTblSearchType TBLSEARCH_NO_UNION_CORRECT = 0x10; // die zusammenges. Union nicht korrigieren
+    // As flag to the other values!
+    const SwTblSearchType TBLSEARCH_PROTECT = 0x8;      // Collect protected boxes too.
+    const SwTblSearchType TBLSEARCH_NO_UNION_CORRECT = 0x10; // Do not correct collected Union.
 }
 
 SW_DLLPUBLIC void GetTblSel( const SwCrsrShell& rShell, SwSelBoxes& rBoxes,
@@ -74,60 +73,58 @@ SW_DLLPUBLIC void GetTblSel( const SwCrsrShell& rShell, SwSelBoxes& rBoxes,
 void GetTblSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
                 const SwTblSearchType = nsSwTblSearchType::TBLSEARCH_NONE );
 
-//wie vor, jedoch wird nicht von der Selektion sondern von den
-//Start- EndFrms ausgegangen.
+
+// As before, but don't start from selection but from Start- EndFrms.
 void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
                 SwSelBoxes& rBoxes, SwCellFrms* pCells,
                 const SwTblSearchType = nsSwTblSearchType::TBLSEARCH_NONE );
 
-// Desgleichen nocheinmal direkt per PaM's
+// As before but directly via PaMs.
 void GetTblSelCrs( const SwCrsrShell& rShell, SwSelBoxes& rBoxes );
 void GetTblSelCrs( const SwTableCursor& rTblCrsr, SwSelBoxes& rBoxes );
 
-// suche fuer eine AutoSumme die beteiligten Boxen zusammen
+// Collect boxes relevant for auto sum.
 sal_Bool GetAutoSumSel( const SwCrsrShell&, SwCellFrms& );
 
-// check if the SelBoxes contains protected Boxes
+// Check if the SelBoxes contains protected Boxes.
 sal_Bool HasProtectedCells( const SwSelBoxes& rBoxes );
 
-// teste, ob die Selektion ausgeglichen ist
+// Check if selection is balanced.
 SV_DECL_PTRARR( SwChartBoxes, SwTableBoxPtr, 16, 16)
 SV_DECL_PTRARR_DEL( SwChartLines, SwChartBoxes*, 25, 50)
 
 sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
                     SwChartLines* pGetCLines = 0 );
 
-// teste ob die Celle in die SSelection gehoert
-// (wurde eine Funktion, damit GetTblSel() und MakeTblCrsr() immer
-// das "gleiche Verstaendnis" fuer die Selektion haben)
+// Check if cell is part of SSelection.
+// (Became a function, in order to make sure that GetTblSel() and MakeTblCrsr()
+// have always the same concept of the selection.
 sal_Bool IsFrmInTblSel( const SwRect& rUnion, const SwFrm* pCell );
 
-// bestimme die Boxen, die zusammen gefasst werden sollen.
-// Dabei wird auf Layout Basis das Rechteck "angepasst". D.H. es
-// werden Boxen zugefuegt wenn welche an den Seiten ueberlappen
-// Zusaetzlich wird die neue Box erzeugt und mit dem entsprechenden
-// Inhalt gefuellt.
+// Determine boxes to be merged.
+// In this process the rectangle gets "adapted" on the base of the layout,
+// i.e. boxes are added if some overlap at the sides.
+// Additionally a new box is created and filled with the relevant content.
 void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                   SwTableBox** ppMergeBox, SwUndoTblMerge* pUndo = 0 );
 
-// teste ob die selektierten Boxen ein gueltiges Merge erlauben
+// Check if selected boxes allow for a valid merge.
 sal_uInt16 CheckMergeSel( const SwPaM& rPam );
 sal_uInt16 CheckMergeSel( const SwSelBoxes& rBoxes );
 
 sal_Bool IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam );
 
-// teste ob ein Split oder InsertCol dazu fuehrt, das eine Box
-// kleiner als MINLAY wird.
+// Check if Split or InsertCol lead to a box becoming smaller than MINLAY.
 sal_Bool CheckSplitCells( const SwCrsrShell& rShell, sal_uInt16 nDiv,
                         const SwTblSearchType = nsSwTblSearchType::TBLSEARCH_NONE );
 sal_Bool CheckSplitCells( const SwCursor& rCrsr, sal_uInt16 nDiv,
                         const SwTblSearchType = nsSwTblSearchType::TBLSEARCH_NONE );
 
-//Fuer das Arbeiten auf TabSelektion auch fuer aufgespaltene Tabellen.
+// For working on tab selection also for split tables.
 class SwSelUnion
 {
-    SwRect   aUnion;        //Das die Sel umschliessende Rechteck.
-    SwTabFrm *pTable;       //Die (Follow-)Table zu der Union.
+    SwRect   aUnion;        // The rectangle enclosing the selection.
+    SwTabFrm *pTable;       // The (Follow-)Table for the Union.
 
 public:
     SwSelUnion( const SwRect &rRect, SwTabFrm *pTab ) :
@@ -141,18 +138,18 @@ public:
 
 SV_DECL_PTRARR_DEL( SwSelUnions, SwSelUnion*, 10, 20 )
 
-//Ermittelt die von einer Tabellenselektion betroffenen Tabellen und die
-//Union-Rechteckte der Selektionen - auch fuer aufgespaltene Tabellen.
-//Wenn ein Parameter != nsSwTblSearchType::TBLSEARCH_NONE uebergeben wird, so wird die
-//Selektion in der angegebenen Richtung erweitert.
+// Gets the tables involved in a table selection and the union-rectangles of the selections
+// - also for split tables.
+// If a parameter is passed that != nsSwTblSearchType::TBLSEARCH_NONE
+// the selection is extended in the given direction.
 void MakeSelUnions( SwSelUnions&, const SwLayoutFrm *pStart,
                     const SwLayoutFrm *pEnd,
                     const SwTblSearchType = nsSwTblSearchType::TBLSEARCH_NONE );
 
 
-// -------------------------------------------------------------------
-// Diese Klassen kopieren die aktuelle Tabellen-Selektion (rBoxes)
-// unter Beibehaltung der Tabellen-Strubktur in eine eigene Struktur
+
+// These classes copy the current table selections (rBoxes) into a
+// separate structure while keeping the table structure.
 
 class _FndBox;
 class _FndLine;
@@ -166,7 +163,7 @@ class _FndBox
     _FndLines aLines;
     _FndLine* pUpper;
 
-    SwTableLine *pLineBefore;   //Zum Loeschen/Restaurieren des Layouts.
+    SwTableLine *pLineBefore;   // For deleting/restoring the layout.
     SwTableLine *pLineBehind;
 
 public:

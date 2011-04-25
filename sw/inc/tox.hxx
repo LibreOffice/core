@@ -73,7 +73,7 @@ class SW_DLLPUBLIC SwTOXMark
     friend void _InitCore();
     friend class SwTxtTOXMark;
 
-    String aAltText;    // Der Text des Eintrages ist unterschiedlich
+    String aAltText;    // Text of caption is different.
     String aPrimaryKey, aSecondaryKey;
 
     // three more strings for phonetic sorting

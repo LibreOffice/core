@@ -136,7 +136,7 @@ public:
 };
 
 
-// --------------- Inline Implementierungen ------------------------
+// --------------- Inline Implementations ------------------------
 
 inline const xub_StrLen* SwTxtAttr::GetEnd() const
 {
