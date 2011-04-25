@@ -89,8 +89,6 @@ using namespace ::com::sun::star::ui::dialogs;
 
 #if defined(UNX)
 #define FILTERMASK_ALL "*"
-#elif defined(PM2)
-#define FILTERMASK_ALL ""
 #else
 #define FILTERMASK_ALL "*.*"
 #endif

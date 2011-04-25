@@ -81,8 +81,6 @@ using namespace ::com::sun::star::uno;
 
 #if defined(OW) || defined(MTF)
 #define FILTERMASK_ALL "*"
-#elif defined(PM2)
-#define FILTERMASK_ALL ""
 #else
 #define FILTERMASK_ALL "*.*"
 #endif
