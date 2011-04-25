@@ -146,7 +146,6 @@ my_components = \
     placeware \
     preload \
     protocolhandler \
-    pythonloader \
     res \
     sax \
     sb \
@@ -188,6 +187,10 @@ my_components = \
     xsltdlg \
     xsltfilter \
     xstor
+
+.IF "$(DISABLE_PYTHON)" != "TRUE"
+my_components += pythonloader
+.ENDIF
 
 .IF "$(OS)" != "WNT" && "$(OS)" != "MACOSX"
 my_components += splash
