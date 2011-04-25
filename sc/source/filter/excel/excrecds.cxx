@@ -856,31 +856,18 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab ) :
     pFilterInfo( NULL )
     , mbAutoFilter (false)
 {
-    ScDBCollection& rDBColl = GetDatabaseRanges();
     XclExpNameManager& rNameMgr = GetNameManager();
 
-    // search for first DB-range with filter
-    sal_uInt16      nIndex  = 0;
     sal_Bool        bFound  = false;
     sal_Bool        bAdvanced = false;
-    ScDBData*   pData   = NULL;
+    ScDBData*   pData   = rRoot.GetDoc().GetAnonymousDBData(nTab);
     ScRange     aAdvRange;
-    while( (nIndex < rDBColl.GetCount()) && !bFound )
+    if (pData)
     {
-        pData = rDBColl[ nIndex ];
-        if( pData )
-        {
-            ScRange aRange;
-            pData->GetArea( aRange );
-            bAdvanced = pData->GetAdvancedQuerySource( aAdvRange );
-            bFound = (aRange.aStart.Tab() == nTab) &&
-                (pData->HasQueryParam() || pData->HasAutoFilter() || bAdvanced);
-        }
-        if( !bFound )
-            nIndex++;
+        bAdvanced = pData->GetAdvancedQuerySource( aAdvRange );
+        bFound = (pData->HasQueryParam() || pData->HasAutoFilter() || bAdvanced);
     }
-
-    if( pData && bFound )
+    if( bFound )
     {
         ScQueryParam    aParam;
         pData->GetQueryParam( aParam );
