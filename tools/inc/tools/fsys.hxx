@@ -223,7 +223,6 @@ public:
     Time            TimeAccessed() const { return aTimeAccessed; }
     sal_Bool            IsYounger( const FileStat& rIsOlder ) const;
 
-#define TF_FSYS_READONLY_FLAG
     static sal_uIntPtr  SetReadOnlyFlag( const DirEntry &rEntry, sal_Bool bRO = sal_True );
     static sal_Bool     GetReadOnlyFlag( const DirEntry &rEntry );
     static sal_Bool     HasReadOnlyFlag();

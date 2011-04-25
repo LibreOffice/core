@@ -66,8 +66,6 @@ key [value]
 
 */
 
-#define DEF_STAND_LST  "\\\\dev4\\data1\\b_server\\config\\stand.lst"
-
 // error codes:
 
 #define IP_NO_ERROR         0x0000
