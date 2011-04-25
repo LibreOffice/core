@@ -33,7 +33,7 @@
 class SwTxtNode;
 
 // SWTXT_REFMARK *************************************
-// Attribut fuer Inhalts-/Positions-Referenzen im Text
+// Attribute for content-/position references in text.
 
 class SwTxtRefMark : public SwTxtAttrEnd
 {

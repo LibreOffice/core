@@ -47,17 +47,14 @@
 class SdrMarkList;
 class SdrView;
 class SwDoc;
-/******************************************************************************
- *
- ******************************************************************************/
+
 class SwFmDrawPage : public SvxFmDrawPage
 {
     SdrPageView*        pPageView;
 protected:
 
-    // Erzeugen eines SdrObjects anhand einer Description. Kann von
-    // abgeleiteten Klassen dazu benutzt werden, eigene ::com::sun::star::drawing::Shapes zu
-    // unterstuetzen (z.B. Controls)
+    // Create a SdrObject according to a description. Can be used by derived classes to
+    // support own ::com::sun::star::drawing::Shapes (e.g. controls).
     virtual SdrObject *_CreateSdrObject( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & xShape ) throw ();
 
 public:
@@ -72,9 +69,9 @@ public:
     void                RemovePageView();
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >       GetInterface( SdrObject* pObj );
 
-    // Die folgende Methode wird gerufen, wenn ein SvxShape-Objekt angelegt
-    // werden soll. abgeleitete Klassen koennen hier eine Ableitung oder
-    // ein ein SvxShape aggregierendes Objekt anlegen.
+    // The following method is called when a SvxShape-object is to be created.
+    // Derived classes may obtain at this point a derivation or an object
+    // that is aggregating a SvxShape.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >  _CreateShape( SdrObject *pObj ) const throw ();
 };
 

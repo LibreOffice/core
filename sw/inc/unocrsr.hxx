@@ -49,8 +49,8 @@ protected:
 
 public:
 
-    // gibt es eine Selection vom Content in die Tabelle
-    // Return Wert gibt an, ob der Crsr auf der alten Position verbleibt
+    // Does a selection of content exist in table?
+    // Return value indicates if the cursor remains at its old position.
     virtual sal_Bool IsSelOvr( int eFlags =
                                 ( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
                                   nsSwCursorSelOverFlags::SELOVER_TOGGLE |
@@ -81,9 +81,9 @@ public:
 
 class SwUnoTableCrsr : public virtual SwUnoCrsr, public virtual SwTableCursor
 {
-    // die Selection hat die gleiche Reihenfolge wie die
-    // TabellenBoxen. D.h., wird aus dem einen Array an einer Position
-    // etwas geloescht, dann muss es auch im anderen erfolgen!!
+    // The selection has the same order as the table boxes, i.e.
+    // if something is deleted from the one array at a certain position
+    // it has also to be deleted from the other!
     SwCursor aTblSel;
 
     using SwTableCursor::MakeBoxSels;
@@ -92,8 +92,8 @@ public:
     SwUnoTableCrsr( const SwPosition& rPos );
     virtual ~SwUnoTableCrsr();
 
-    // gibt es eine Selection vom Content in die Tabelle
-    // Return Wert gibt an, ob der Crsr auf der alten Position verbleibt
+    // Does a selection of content exist in table?
+    // Return value indicates if the cursor remains at its old position.
     virtual sal_Bool IsSelOvr( int eFlags =
                                 ( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
                                   nsSwCursorSelOverFlags::SELOVER_TOGGLE |

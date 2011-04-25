@@ -53,21 +53,22 @@ public:
     void SetNumber( const sal_uInt16 nNumber, const String* = 0 );
     void CopyFtn(SwTxtFtn & rDest, SwTxtNode & rDestNode) const;
 
-    // get and set TxtNode pointer
+    // Get and set TxtNode pointer.
     inline const SwTxtNode& GetTxtNode() const;
     void ChgTxtNode( SwTxtNode* pNew ) { m_pTxtNode = pNew; }
 
-        // lege eine neue leere TextSection fuer diese Fussnote an
+    // Create a new empty TextSection for this footnote.
     void MakeNewTextSection( SwNodes& rNodes );
 
-        // loesche die FtnFrame aus der Seite
+    // Delete the FtnFrame from page.
     void DelFrms( const SwFrm* );
-        // bedingten Absatzvorlagen checken
+
+    // Check conditional paragraph styles.
     void CheckCondColl();
 
-        // fuer die Querverweise auf Fussnoten
+    // For references to footnotes.
     sal_uInt16 SetSeqRefNo();
-    void SetSeqNo( sal_uInt16 n )       { m_nSeqNo = n; }   // for Readers
+    void SetSeqNo( sal_uInt16 n )       { m_nSeqNo = n; }   // For Readers.
     sal_uInt16 GetSeqRefNo() const      { return m_nSeqNo; }
 
     static void SetUniqueSeqRefNo( SwDoc& rDoc );

@@ -114,14 +114,14 @@ public:
     */
     virtual String GetComment() const;
 
-        // das UndoObject merkt sich, welcher Mode eingeschaltet war.
-        // In Undo/Redo/Repeat wird dann immer auf diesen zurueck geschaltet
+    // UndoObject remembers which mode was turned on.
+    // In Undo/Redo/Repeat this remembered mode is switched on.
     sal_uInt16 GetRedlineMode() const { return nOrigRedlineMode; }
     void SetRedlineMode( sal_uInt16 eMode ) { nOrigRedlineMode = eMode; }
 
     bool IsDelBox() const;
 
-        // sicher und setze die RedlineDaten
+    // Save and set Redline data.
     static sal_Bool FillSaveData( const SwPaM& rRange, SwRedlineSaveDatas& rSData,
                             sal_Bool bDelRange = sal_True, sal_Bool bCopyNext = sal_True );
     static sal_Bool FillSaveDataForFmt( const SwPaM& , SwRedlineSaveDatas& );
@@ -145,20 +145,20 @@ bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
         SwPosition const & rStart, SwPosition const & rEnd,
         DelCntntType const nDelCntntType = nsDelCntntType::DELCNT_ALL);
 
-// diese Klasse muss in ein Undo-Object vererbt werden, wenn dieses Inhalt
-// fuers Redo/Undo ... speichert
+
+// This class has to be inherited into an Undo-object if it saves content
+// for Redo/Undo...
 class SwUndoSaveCntnt
 {
 protected:
 
     SwHistory* pHistory;
 
-    // wird fuer das loeschen von Inhalt benoetigt. Fuer das ReDo werden
-    // Inhalte in das UndoNodesArray verschoben. Diese Methoden fuegen
-    // am Ende eines TextNodes ein Trenner fuer die Attribute. Damit werden
-    // Attribute nicht expandiert.
-    // MoveTo..     verschiebt aus dem NodesArray in das UndoNodesArray
-    // MoveFrom..   verschiebt aus dem UndoNodesArray in das NodesArray
+    // Needed for deletion of content. For Redo content is moved into the
+    // UndoNodesArray. These methods insert a separator for the attributes
+    // at the end of a TextNode. So the attributes do not get expanded.
+    // MoveTo:      moves from the NodesArray into the UndoNodesArray.
+    // MoveFrom:    moves from the UndoNodesArray into the NodesArray.
     void MoveToUndoNds( SwPaM& rPam,
                         SwNodeIndex* pNodeIdx = 0, SwIndex* pCntIdx = 0,
                         sal_uLong* pEndNdIdx = 0, xub_StrLen * pEndCntIdx = 0 );
@@ -166,15 +166,15 @@ protected:
                           SwPosition& rInsPos,
                           sal_uLong* pEndNdIdx = 0, xub_StrLen * pEndCntIdx = 0 );
 
-    // diese beiden Methoden bewegen den SPoint vom Pam zurueck/vor. Damit
-    // kann fuer ein Undo/Redo ein Bereich aufgespannt werden. (Der
-    // SPoint liegt dann vor dem manipuliertem Bereich !!)
-    // Das Flag gibt an, ob noch vorm SPoint Inhalt steht.
+    // These two methods move the SPoint back/forth from PaM. With it
+    // a range can be spanned for Undo/Redo. (In this case the SPoint
+    // is before the manipulated range!!)
+    // The flag indicates if there is content before the SPoint.
     sal_Bool MovePtBackward( SwPaM& rPam );
     void MovePtForward( SwPaM& rPam, sal_Bool bMvBkwrd );
 
-    // vor dem Move ins UndoNodes-Array muss dafuer gesorgt werden, das
-    // die Inhaltstragenden Attribute aus dem Nodes-Array entfernt werden.
+    // Before moving stuff into UndoNodes-Array care has to be taken that
+    // the content-bearing attributes are removed from the nodes-array.
     void DelCntntIndex( const SwPosition& pMark, const SwPosition& pPoint,
                         DelCntntType nDelCntntType = nsDelCntntType::DELCNT_ALL );
 
@@ -183,12 +183,12 @@ public:
     ~SwUndoSaveCntnt();
 };
 
-// sicher eine vollstaendige Section im Nodes-Array
+// Save a complete section in nodes-array.
 class SwUndoSaveSection : private SwUndoSaveCntnt
 {
     SwNodeIndex *pMvStt;
     SwRedlineSaveDatas* pRedlSaveData;
-    sal_uLong nMvLen;           // Index ins UndoNodes-Array
+    sal_uLong nMvLen;           // Index into UndoNodes-Array.
     sal_uLong nStartPos;
 
 protected:
@@ -208,8 +208,9 @@ public:
           SwHistory* GetHistory()       { return pHistory; }
 };
 
-// Diese Klasse speichert den Pam als sal_uInt16's und kann diese wieder zu
-// einem PaM zusammensetzen
+
+// This class saves the PaM as sal_uInt16's and is able to restore it
+// into a PaM.
 class SwUndRng
 {
 public:
@@ -238,8 +239,8 @@ class SwUndoInserts : public SwUndo, public SwUndRng, private SwUndoSaveCntnt
     sal_Bool bSttWasTxtNd;
 protected:
     sal_uLong nNdDiff;
-    SwPosition *pPos;                   // Inhalt fuers Redo
-    sal_uInt16 nSetPos;                     // Start in der History-Liste
+    SwPosition *pPos;                   // Content for Redo.
+    sal_uInt16 nSetPos;                 // Start in the history list.
 
     SwUndoInserts( SwUndoId nUndoId, const SwPaM& );
 public:
@@ -249,7 +250,7 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & );
     virtual void RepeatImpl( ::sw::RepeatContext & );
 
-    // setze den Destination-Bereich nach dem Einlesen.
+    // Set destination range after reading.
     void SetInsertRange( const SwPaM&, sal_Bool bScanFlys = sal_True,
                         sal_Bool bSttWasTxtNd = sal_True );
 };
@@ -271,11 +272,11 @@ public:
 class SwUndoFlyBase : public SwUndo, private SwUndoSaveSection
 {
 protected:
-    SwFrmFmt* pFrmFmt;                  // das gespeicherte FlyFormat
+    SwFrmFmt* pFrmFmt;          // The saved FlyFormat.
     sal_uLong nNdPgPos;
-    xub_StrLen nCntPos;                 // Seite/am Absatz/im Absatz
+    xub_StrLen nCntPos;         // Page at/in paragraph.
     sal_uInt16 nRndId;
-    sal_Bool bDelFmt;                       // loesche das gespeicherte Format
+    sal_Bool bDelFmt;           // Delete saved format.
 
     void InsFly(::sw::UndoRedoContext & rContext, bool bShowSel = true);
     void DelFly( SwDoc* );

@@ -34,7 +34,7 @@ class SwTxtNode;
 class SwDoc;
 
 // SWTXT_TOXMARK *******************************
-// Attribut fuer die Verzeichnisse
+// Attribute for indices/tables of contents.
 
 class SwTxtTOXMark : public SwTxtAttrEnd
 {
