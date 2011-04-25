@@ -41,8 +41,6 @@
 
 #ifdef SAL_W32
 #   pragma pack(push, 2)
-#elif defined(SAL_OS2)
-#   pragma pack(2)
 #endif
 
 inline void Set_UInt8( sal_uInt8 *& p, sal_uInt8 n )
@@ -902,8 +900,6 @@ struct WW8_WKB
 
 #ifdef SAL_W32
 #   pragma pack(pop)
-#elif defined(SAL_OS2)
-#   pragma pack()
 #endif
 
 struct SEPr

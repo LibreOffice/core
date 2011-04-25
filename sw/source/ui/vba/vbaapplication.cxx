@@ -59,7 +59,7 @@ using ::rtl::OUString;
 #define OWN_JOIN 1
 
 // #TODO is this defined somewhere else?
-#if ( defined UNX ) || ( defined OS2 ) //unix
+#if ( defined UNX )
 #define FILE_PATH_SEPERATOR "/"
 #else // windows
 #define FILE_PATH_SEPERATOR "\\"
