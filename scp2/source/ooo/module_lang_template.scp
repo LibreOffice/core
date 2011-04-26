@@ -37,8 +37,6 @@ Module gid_Module_Langpack_Basis_Template
              gid_File_Extra_Tplwizfax_Lang,
              gid_File_Extra_Tplwizreport_Lang,
              gid_File_Extra_Tplwizstyles_Lang,
-             gid_File_Extra_Wordbook,
-             gid_File_Extra_Wordbook_Lang,
              gid_File_Registry_Filter_Zip,
              gid_File_Registry_Lang,
              gid_File_Registry_Spool_Langpack_Lang,

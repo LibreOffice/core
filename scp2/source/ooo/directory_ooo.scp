@@ -1196,11 +1196,6 @@ Directory gid_Dir_Wordbook
     DosName = "wordbook";
 End
 
-Directory gid_Dir_Wordbook_Language
-    ParentID = gid_Dir_Wordbook;
-    DIR_ISOLANGUAGE_ALL_LANG_2;
-End
-
 Directory gid_Dir_Share_Plugin
     ParentID = gid_Dir_Share;
     DosName = "plugin";

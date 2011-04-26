@@ -416,15 +416,8 @@ File gid_File_Extra_Webcast_Pl
 End
 
 File gid_File_Extra_Wordbook
-    Dir = gid_Dir_Wordbook_Language;
+    Dir = gid_Dir_Wordbook;
     TXT_FILE_BODY;
     Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_IDENT_ALL_LANG(wordbook.zip);
-End
-
-File gid_File_Extra_Wordbook_Lang
-    Dir = gid_Dir_Wordbook_Language;
-    TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(wordbook,zip);
+    Name = "wordbook.zip";
 End
