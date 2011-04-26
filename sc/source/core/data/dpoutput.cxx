@@ -56,7 +56,6 @@
 #include "scresid.hxx"
 #include "unonames.hxx"
 #include "sc.hrc"
-#include "scdpoutputimpl.hxx"
 #include "dpglobal.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 
@@ -89,10 +88,201 @@ using ::rtl::OUString;
 #define DP_PROP_ROWGRAND            "RowGrand"
 #define DP_PROP_SUBTOTALS           "SubTotals"
 
-// -----------------------------------------------------------------------
+#define SC_DP_FRAME_INNER_BOLD      20
+#define SC_DP_FRAME_OUTER_BOLD      40
 
-//! dynamic!!!
+#define SC_DP_FRAME_COLOR           Color(0,0,0) //( 0x20, 0x40, 0x68 )
+
 #define SC_DPOUT_MAXLEVELS  256
+
+namespace {
+
+class ScDPOutputImpl
+{
+    ScDocument*         mpDoc;
+    sal_uInt16          mnTab;
+    ::std::vector< bool > mbNeedLineCols;
+    ::std::vector< SCCOL > mnCols;
+
+    ::std::vector< bool > mbNeedLineRows;
+    ::std::vector< SCROW > mnRows;
+
+    SCCOL   mnTabStartCol;
+    SCROW   mnTabStartRow;
+    SCCOL   mnMemberStartCol;
+    SCROW   mnMemberStartRow;
+
+    SCCOL   mnDataStartCol;
+    SCROW   mnDataStartRow;
+    SCCOL   mnTabEndCol;
+    SCROW   mnTabEndRow;
+
+public:
+    ScDPOutputImpl( ScDocument* pDoc, sal_uInt16 nTab,
+        SCCOL   nTabStartCol,
+        SCROW   nTabStartRow,
+        SCCOL   nMemberStartCol,
+        SCROW   nMemberStartRow,
+        SCCOL nDataStartCol,
+        SCROW nDataStartRow,
+        SCCOL nTabEndCol,
+        SCROW nTabEndRow );
+    bool AddRow( SCROW nRow );
+    bool AddCol( SCCOL nCol );
+
+    void OutputDataArea();
+    void OutputBlockFrame ( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, bool bHori = false );
+
+};
+
+
+namespace
+{
+    bool lcl_compareColfuc ( SCCOL i,  SCCOL j) { return (i<j); }
+    bool lcl_compareRowfuc ( SCROW i,  SCROW j) { return (i<j); }
+}
+
+
+void ScDPOutputImpl::OutputDataArea()
+{
+    AddRow( mnDataStartRow );
+    AddCol( mnDataStartCol );
+
+    mnCols.push_back( mnTabEndCol+1); //set last row bottom
+    mnRows.push_back( mnTabEndRow+1); //set last col bottom
+
+    bool bAllRows = ( ( mnTabEndRow - mnDataStartRow + 2 ) == (SCROW) mnRows.size() );
+
+    std::sort( mnCols.begin(), mnCols.end(), lcl_compareColfuc );
+    std::sort( mnRows.begin(), mnRows.end(), lcl_compareRowfuc );
+
+    for( SCCOL nCol = 0; nCol < (SCCOL)mnCols.size()-1; nCol ++ )
+    {
+        if ( !bAllRows )
+        {
+            if ( nCol < (SCCOL)mnCols.size()-2)
+            {
+                for ( SCROW i = nCol%2; i < (SCROW)mnRows.size()-2; i +=2 )
+                    OutputBlockFrame( mnCols[nCol], mnRows[i], mnCols[nCol+1]-1, mnRows[i+1]-1 );
+                if ( mnRows.size()>=2 )
+                    OutputBlockFrame(  mnCols[nCol], mnRows[mnRows.size()-2], mnCols[nCol+1]-1, mnRows[mnRows.size()-1]-1 );
+            }
+            else
+            {
+                for ( SCROW i = 0 ; i < (SCROW)mnRows.size()-1; i++ )
+                    OutputBlockFrame(  mnCols[nCol], mnRows[i], mnCols[nCol+1]-1,  mnRows[i+1]-1 );
+            }
+        }
+        else
+            OutputBlockFrame( mnCols[nCol], mnRows.front(), mnCols[nCol+1]-1, mnRows.back()-1, bAllRows );
+    }
+    //out put rows area outer framer
+    if ( mnTabStartCol != mnDataStartCol )
+    {
+        if ( mnTabStartRow != mnDataStartRow )
+            OutputBlockFrame( mnTabStartCol, mnTabStartRow, mnDataStartCol-1, mnDataStartRow-1 );
+        OutputBlockFrame( mnTabStartCol, mnDataStartRow, mnDataStartCol-1, mnTabEndRow );
+    }
+    //out put cols area outer framer
+    OutputBlockFrame( mnDataStartCol, mnTabStartRow, mnTabEndCol, mnDataStartRow-1 );
+}
+
+ScDPOutputImpl::ScDPOutputImpl( ScDocument* pDoc, sal_uInt16 nTab,
+        SCCOL   nTabStartCol,
+        SCROW   nTabStartRow,
+        SCCOL   nMemberStartCol,
+        SCROW   nMemberStartRow,
+        SCCOL nDataStartCol,
+        SCROW nDataStartRow,
+        SCCOL nTabEndCol,
+        SCROW nTabEndRow ):
+    mpDoc( pDoc ),
+    mnTab( nTab ),
+    mnTabStartCol( nTabStartCol ),
+    mnTabStartRow( nTabStartRow ),
+    mnMemberStartCol( nMemberStartCol),
+    mnMemberStartRow( nMemberStartRow),
+    mnDataStartCol ( nDataStartCol ),
+    mnDataStartRow ( nDataStartRow ),
+    mnTabEndCol(  nTabEndCol ),
+    mnTabEndRow(  nTabEndRow )
+{
+    mbNeedLineCols.resize( nTabEndCol-nDataStartCol+1, false );
+    mbNeedLineRows.resize( nTabEndRow-nDataStartRow+1, false );
+
+}
+
+bool ScDPOutputImpl::AddRow( SCROW nRow )
+{
+    if ( !mbNeedLineRows[ nRow - mnDataStartRow ] )
+    {
+        mbNeedLineRows[ nRow - mnDataStartRow ] = true;
+        mnRows.push_back( nRow );
+        return true;
+    }
+    else
+        return false;
+}
+
+bool ScDPOutputImpl::AddCol( SCCOL nCol )
+{
+
+    if ( !mbNeedLineCols[ nCol - mnDataStartCol ] )
+    {
+        mbNeedLineCols[ nCol - mnDataStartCol ] = true;
+        mnCols.push_back( nCol );
+        return true;
+    }
+    else
+        return false;
+}
+
+void ScDPOutputImpl::OutputBlockFrame ( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, bool bHori )
+{
+    Color color = SC_DP_FRAME_COLOR;
+    ::editeng::SvxBorderLine aLine( &color, SC_DP_FRAME_INNER_BOLD );
+    ::editeng::SvxBorderLine aOutLine( &color, SC_DP_FRAME_OUTER_BOLD );
+
+    SvxBoxItem aBox( ATTR_BORDER );
+
+    if ( nStartCol == mnTabStartCol )
+        aBox.SetLine(&aOutLine, BOX_LINE_LEFT);
+    else
+        aBox.SetLine(&aLine, BOX_LINE_LEFT);
+
+    if ( nStartRow == mnTabStartRow )
+        aBox.SetLine(&aOutLine, BOX_LINE_TOP);
+    else
+        aBox.SetLine(&aLine, BOX_LINE_TOP);
+
+    if ( nEndCol == mnTabEndCol ) //bottom row
+        aBox.SetLine(&aOutLine, BOX_LINE_RIGHT);
+    else
+        aBox.SetLine(&aLine,  BOX_LINE_RIGHT);
+
+     if ( nEndRow == mnTabEndRow ) //bottom
+        aBox.SetLine(&aOutLine,  BOX_LINE_BOTTOM);
+    else
+        aBox.SetLine(&aLine,  BOX_LINE_BOTTOM);
+
+
+    SvxBoxInfoItem aBoxInfo( ATTR_BORDER_INNER );
+    aBoxInfo.SetValid(VALID_VERT,false );
+    if ( bHori )
+    {
+        aBoxInfo.SetValid(VALID_HORI,sal_True);
+        aBoxInfo.SetLine( &aLine, BOXINFO_LINE_HORI );
+    }
+    else
+        aBoxInfo.SetValid(VALID_HORI,false );
+
+    aBoxInfo.SetValid(VALID_DISTANCE,false);
+
+    mpDoc->ApplyFrameAreaTab( ScRange(  nStartCol, nStartRow, mnTab, nEndCol, nEndRow , mnTab ), &aBox, &aBoxInfo );
+
+}
+
+}
 
 struct ScDPOutLevelData
 {
