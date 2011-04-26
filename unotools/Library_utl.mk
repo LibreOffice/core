@@ -41,7 +41,6 @@ $(eval $(call gb_Library_set_include,utl,\
 $(eval $(call gb_Library_set_defs,utl,\
     $$(DEFS) \
     -DUNOTOOLS_DLLIMPLEMENTATION \
-    $(if $(filter TRUE,$(ENABLE_BROFFICE)),-DENABLE_BROFFICE) \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,utl,\
