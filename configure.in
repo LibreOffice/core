@@ -275,12 +275,6 @@ AC_ARG_ENABLE(systray,
         [Determines whether to build the systray quickstarter.]),
 ,enable_systray=yes)
 
-AC_ARG_ENABLE(broffice,
-    AS_HELP_STRING([--disable-broffice],
-        [When disabled, broffice specific branding artwork for use in the pt_BR
-	 locale is removed, giving uniform branding.]),
-,enable_broffice=no)
-
 AC_ARG_ENABLE(cairo,
     AS_HELP_STRING([--disable-cairo],
         [Determines whether to use Cairo library on platforms where Cairo is
@@ -6084,16 +6078,6 @@ PKG_CHECK_MODULES( LIBPNG, libpng, ENABLE_QUICKSTART_LIBPNG="TRUE", ENABLE_QUICK
 AC_SUBST(LIBPNG_LIBS)
 AC_SUBST(LIBPNG_CFLAGS)
 AC_SUBST(ENABLE_QUICKSTART_LIBPNG)
-
-ENABLE_BROFFICE=""
-AC_MSG_CHECKING([whether to enable BrOffice branding])
-if test "$enable_broffice" = "yes"; then
-    ENABLE_BROFFICE="TRUE"
-    AC_MSG_RESULT([yes])
-else
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(ENABLE_BROFFICE)
 
 dnl ===================================================================
 dnl Check whether the Cairo libraries are available.

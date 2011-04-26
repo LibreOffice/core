@@ -29,7 +29,6 @@
 
 Installation gid_Installation_Ooo
     ProductName = "${PRODUCTNAME}";
-    ProductName_Br = "${PRODUCTNAME_BR}";
     ProductVersion = "${PRODUCTVERSION}";
     ProductExtension = "${PRODUCTEXTENSION}";
     OOoBaseVersion = "${OOOBASEVERSION}";

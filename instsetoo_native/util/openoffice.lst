@@ -53,7 +53,6 @@ LibreOffice
 		variables
 		{
 			PRODUCTNAME LibreOffice
-			PRODUCTNAME_BR BrOffice
 			PRODUCTVERSION 3.4
 			PRODUCTEXTENSION 
 			LONG_PRODUCTEXTENSION 
@@ -92,8 +91,6 @@ LibreOffice
 			PATCHCODEFILE ooo_patchcodes.txt
 			DOWNLOADBANNER	ooobanner.bmp
 			DOWNLOADBITMAP	ooobitmap.bmp
-			DOWNLOADBANNER_BR	brobanner.bmp
-			DOWNLOADBITMAP_BR	brobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
 			RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
@@ -121,7 +118,6 @@ LibreOffice_wJRE
 		variables
 		{
 			PRODUCTNAME LibreOffice
-			PRODUCTNAME_BR BrOffice
 			PRODUCTVERSION 3.4
 			PRODUCTEXTENSION 
 			LONG_PRODUCTEXTENSION 
@@ -301,7 +297,6 @@ LibreOffice_SDK
         variables
         {
             PRODUCTNAME LibreOffice
-            PRODUCTNAME_BR BrOffice
             PRODUCTVERSION 3.4
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
@@ -400,7 +395,6 @@ OxygenOffice
 		variables
 		{
 			PRODUCTNAME OxygenOffice
-			PRODUCTNAME_BR OxygenOffice
 			PRODUCTVERSION 3.3
 			PRODUCTEXTENSION
 			LONG_PRODUCTEXTENSION
@@ -440,8 +434,6 @@ OxygenOffice
 			PATCHCODEFILE ooo_patchcodes.txt
 			DOWNLOADBANNER	ooobanner_ooop.bmp
 			DOWNLOADBITMAP	ooobitmap_ooop.bmp
-			DOWNLOADBANNER_BR	ooobanner_ooop.bmp
-			DOWNLOADBITMAP_BR	ooobitmap_ooop.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
 			RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
@@ -469,7 +461,6 @@ OxygenOffice_wJRE
 		variables
 		{
 			PRODUCTNAME OxygenOffice
-			PRODUCTNAME_BR OxygenOffice
 			PRODUCTVERSION 3.3
 			PRODUCTEXTENSION
 			LONG_PRODUCTEXTENSION
@@ -510,8 +501,6 @@ OxygenOffice_wJRE
 			JAVAPRODUCT 1
 			DOWNLOADBANNER	ooobanner_ooop.bmp
 			DOWNLOADBITMAP	ooobitmap_ooop.bmp
-			DOWNLOADBANNER_BR	ooobanner_ooop.bmp
-			DOWNLOADBITMAP_BR	ooobitmap_ooop.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
 			RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/

@@ -139,14 +139,6 @@ sdkoodev: $(foreach,i,$(alllangiso) sdkoodev_$i)
 
 ure: $(foreach,i,$(alllangiso) ure_$i)
 
-broffice: $(foreach,i,$(alllangiso) broffice_$i)
-
-brofficedev: $(foreach,i,$(alllangiso) brofficedev_$i)
-
-brofficewithjre: $(foreach,i,$(alllangiso) brofficewithjre_$i)
-
-broolanguagepack : $(foreach,i,$(alllangiso) broolanguagepack_$i)
-
 oxygenoffice: $(foreach,i,$(alllangiso) oxygenoffice_$i)
 
 oxygenofficewithjre: $(foreach,i,$(alllangiso) oxygenofficewithjre_$i)
@@ -201,14 +193,6 @@ $(foreach,i,$(alllangiso) sdkoo_$i) : $(ADDDEPS)
 $(foreach,i,$(alllangiso) sdkoodev_$i) : $(ADDDEPS)
 
 $(foreach,i,$(alllangiso) ure_$i) : $(ADDDEPS)
-
-$(foreach,i,$(alllangiso) broffice_$i) : $(ADDDEPS)
-
-$(foreach,i,$(alllangiso) brofficedev_$i) : $(ADDDEPS)
-
-$(foreach,i,$(alllangiso) brofficewithjre_$i) : $(ADDDEPS)
-
-$(foreach,i,$(alllangiso) broolanguagepack_$i) : $(ADDDEPS)
 
 $(foreach,i,$(alllangiso) oxygenoffice_$i) : $(ADDDEPS)
 
@@ -279,30 +263,6 @@ ure_%{$(PKGFORMAT:^".")} :
         -msilanguage $(COMMONMISC)$/win_ulffiles
 .ENDIF
 
-$(foreach,i,$(alllangiso) broffice_$i) : $$@{$(PKGFORMAT:^".")}
-.IF "$(MAKETARGETS)"!=""
-.IF "$(MAKETARGETS:e)"=="" && "$(MAKETARGETS:s/_//)"!="$(MAKETARGETS)"
-$(MAKETARGETS) : $$@{$(PKGFORMAT:^".")}
-$(MAKETARGETS){$(PKGFORMAT:^".")} : $(ADDDEPS)
-.ENDIF			# "$(MAKETARGETS:e)"=="" && "$(MAKETARGETS:s/_//)"!="$(MAKETARGETS)"
-.ENDIF			# "$(MAKETARGETS)"!=""
-broffice_%{$(PKGFORMAT:^".")} :
-    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p BrOffice -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -format $(@:e:s/.//) $(VERBOSESWITCH)
-    $(PERL) -w $(SOLARENV)$/bin$/gen_update_info.pl --buildid $(BUILD) --arch "$(RTL_ARCH)" --os "$(RTL_OS)" --lstfile $(PRJ)$/util$/openoffice.lst --product BrOffice --languages $(subst,$(@:s/_/ /:1)_, $(@:b)) $(PRJ)$/util$/update.xml > $(MISC)/$(@:b)_$(RTL_OS)_$(RTL_ARCH)$(@:e).update.xml
-
-$(foreach,i,$(alllangiso) brofficewithjre_$i) : $$@{$(PKGFORMAT:^".")}
-brofficewithjre_%{$(PKGFORMAT:^".")} :
-    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p BrOffice_wJRE -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -format $(@:e:s/.//) $(VERBOSESWITCH)
-
-$(foreach,i,$(alllangiso) brofficedev_$i) : $$@{$(PKGFORMAT:^".")}
-brofficedev_%{$(PKGFORMAT:^".")} :
-    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p BrOffice_Dev -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -format $(@:e:s/.//) $(VERBOSESWITCH)
-    $(PERL) -w $(SOLARENV)$/bin$/gen_update_info.pl --buildid $(BUILD) --arch "$(RTL_ARCH)" --os "$(RTL_OS)" --lstfile $(PRJ)$/util$/openoffice.lst --product BrOffice_Dev --languages $(subst,$(@:s/_/ /:1)_, $(@:b)) $(PRJ)$/util$/update.xml > $(MISC)/$(@:b)_$(RTL_OS)_$(RTL_ARCH)$(@:e).update.xml
-
-$(foreach,i,$(alllangiso) broolanguagepack_$i) : $$@{$(PKGFORMAT:^".")}
-broolanguagepack_%{$(PKGFORMAT:^".")} :
-    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p BrOffice -u $(OUT) -buildid $(BUILD) -msitemplate $(MSILANGPACKTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -languagepack -format $(@:e:s/.//) $(VERBOSESWITCH)
-
 $(foreach,i,$(alllangiso) oxygenoffice_$i) : $$@{$(PKGFORMAT:^".")}
 .IF "$(MAKETARGETS)"!=""
 .IF "$(MAKETARGETS:e)"=="" && "$(MAKETARGETS:s/_//)"!="$(MAKETARGETS)"
@@ -334,7 +294,7 @@ openoffice:
 
 .IF "$(DISABLE_PYTHON)" != "TRUE"
 .IF "$(LOCALPYFILES)"!=""
-$(foreach,i,$(alllangiso) openoffice_$i{$(PKGFORMAT:^".") .archive} openofficewithjre_$i{$(PKGFORMAT:^".")} openofficedev_$i{$(PKGFORMAT:^".")} broffice_$i{$(PKGFORMAT:^".")} brofficewithjre_$i{$(PKGFORMAT:^".")} brofficedev_$i{$(PKGFORMAT:^".")} sdkoo_$i{$(PKGFORMAT:^".")} oxygenoffice_$i{$(PKGFORMAT:^".") .archive} oxygenofficewithjre_$i{$(PKGFORMAT:^".")}) updatepack : $(LOCALPYFILES)
+$(foreach,i,$(alllangiso) openoffice_$i{$(PKGFORMAT:^".") .archive} openofficewithjre_$i{$(PKGFORMAT:^".")} openofficedev_$i{$(PKGFORMAT:^".")} sdkoo_$i{$(PKGFORMAT:^".")} oxygenoffice_$i{$(PKGFORMAT:^".") .archive} oxygenofficewithjre_$i{$(PKGFORMAT:^".")}) updatepack : $(LOCALPYFILES)
 .ENDIF			# "$(LOCALPYFILES)"!=""
 
 $(BIN)$/%.py : $(SOLARSHAREDBIN)$/pyuno$/%.py
@@ -345,14 +305,6 @@ $(BIN)$/intro.zip : $(SOLARCOMMONPCKDIR)$/intro.zip
     $(COPY) $< $@
 
 $(BIN)$/dev$/intro.zip : $(SOLARCOMMONPCKDIR)$/brand_dev$/intro.zip
-    @-$(MKDIR) $(@:d)
-    $(COPY) $< $@
-
-$(BIN)$/broffice_dev$/intro.zip : $(SOLARCOMMONPCKDIR)$/broffice_dev_nologo$/intro.zip
-    @-$(MKDIR) $(@:d)
-    $(COPY) $< $@
-
-$(BIN)$/broffice$/images_brand.zip : $(SOLARCOMMONBINDIR)$/broffice_nologo$/images_brand.zip
     @-$(MKDIR) $(@:d)
     $(COPY) $< $@
 

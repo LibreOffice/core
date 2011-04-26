@@ -25,7 +25,7 @@
 #
 #*************************************************************************
 
-PRODUCTLIST = libreoffice broffice
+PRODUCTLIST = libreoffice
 
 # default values to minimize maintainance effort
 PRODUCTVERSION = 3.4

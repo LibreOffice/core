@@ -149,11 +149,6 @@ sub get_productname($$)
 
     my $name = $allvariables->{'PRODUCTNAME'};
 
-    # BrOffice has its own locale-specific name
-    if ($language eq 'pt-BR' && defined $allvariables->{'PRODUCTNAME_BR'}) {
-        $name = $allvariables->{'PRODUCTNAME_BR'};
-    }
-
     return $name;
 }
 

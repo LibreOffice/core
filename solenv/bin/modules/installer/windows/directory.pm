@@ -421,9 +421,6 @@ sub add_root_directories
         my $productname;
 
     $productname = $allvariableshashref->{'PRODUCTNAME'};
-    if ($onelanguage eq 'pt-BR' && defined $allvariableshashref->{'PRODUCTNAME_BR'}) {
-        $productname = $allvariableshashref->{'PRODUCTNAME_BR'};
-    }
         my $productversion = $allvariableshashref->{'PRODUCTVERSION'};
         my $baseproductversion = $productversion;
 
