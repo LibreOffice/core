@@ -18,5 +18,4 @@ pk  setup_native\source\win32\customactions\shellextensions nmake   -  w   sn_sh
 pk  setup_native\source\win32\customactions\indexingfilter nmake   -  w   sn_indexingfilter NULL
 pk  setup_native\source\win32\customactions\languagepacks nmake   -  w   sn_languagepacks sn_shellextensions.w sn_tools.w NULL
 pk  setup_native\source\win32\customactions\patch         nmake   -  w   sn_patch sn_languagepacks.w sn_shellextensions.w sn_quickstarter.w sn_tools.w NULL
-pk  setup_native\source\win32\stwrapper                   nmake   -  w   sn_stwrapper NULL
 pk  setup_native\source\ulfconv                           nmake   -  all sn_ulfconv NULL

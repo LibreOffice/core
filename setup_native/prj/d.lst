@@ -18,8 +18,6 @@ mkdir: %_DEST%\bin%_EXT%\osolsmf
 ..\%__SRC%\bin\unpack_update.sh %_DEST%\bin%_EXT%\unpack_update
 ..\%__SRC%\bin\update.sh %_DEST%\bin%_EXT%\update
 ..\%__SRC%\bin\javaloader.sh %_DEST%\bin%_EXT%\javaloader.sh
-..\%__SRC%\bin\stclient_wrapper.sh %_DEST%\bin%_EXT%\stclient_wrapper
-..\%__SRC%\bin\stclient_wrapper.exe %_DEST%\bin%_EXT%\stclient_wrapper.exe
 ..\%__SRC%\misc\mac_ulffiles_dest\*.ulf %_DEST%\bin%_EXT%\*.ulf
 ..\source\win32\msi-encodinglist.txt %_DEST%\bin%_EXT%\msi-encodinglist.txt
 ..\source\win32\patchlist.txt %_DEST%\bin%_EXT%\patchlist.txt
