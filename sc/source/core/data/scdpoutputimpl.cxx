@@ -42,7 +42,7 @@ namespace
 }
 
 
-void OutputImpl::OutputDataArea()
+void ScDPOutputImpl::OutputDataArea()
 {
     AddRow( mnDataStartRow );
     AddCol( mnDataStartCol );
@@ -86,7 +86,7 @@ void OutputImpl::OutputDataArea()
     OutputBlockFrame( mnDataStartCol, mnTabStartRow, mnTabEndCol, mnDataStartRow-1 );
 }
 
-OutputImpl::OutputImpl( ScDocument* pDoc, sal_uInt16 nTab,
+ScDPOutputImpl::ScDPOutputImpl( ScDocument* pDoc, sal_uInt16 nTab,
         SCCOL   nTabStartCol,
         SCROW   nTabStartRow,
         SCCOL   nMemberStartCol,
@@ -111,7 +111,7 @@ OutputImpl::OutputImpl( ScDocument* pDoc, sal_uInt16 nTab,
 
 }
 
-sal_Bool OutputImpl::AddRow( SCROW nRow )
+bool ScDPOutputImpl::AddRow( SCROW nRow )
 {
     if ( !mbNeedLineRows[ nRow - mnDataStartRow ] )
     {
@@ -123,7 +123,7 @@ sal_Bool OutputImpl::AddRow( SCROW nRow )
         return false;
 }
 
-sal_Bool OutputImpl::AddCol( SCCOL nCol )
+bool ScDPOutputImpl::AddCol( SCCOL nCol )
 {
 
     if ( !mbNeedLineCols[ nCol - mnDataStartCol ] )
@@ -136,7 +136,7 @@ sal_Bool OutputImpl::AddCol( SCCOL nCol )
         return false;
 }
 
-void OutputImpl::OutputBlockFrame ( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, sal_Bool bHori )
+void ScDPOutputImpl::OutputBlockFrame ( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, sal_Bool bHori )
 {
     Color color = SC_DP_FRAME_COLOR;
     ::editeng::SvxBorderLine aLine( &color, SC_DP_FRAME_INNER_BOLD );

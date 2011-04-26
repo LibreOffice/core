@@ -36,7 +36,7 @@
 
 #define SC_DP_FRAME_COLOR           Color(0,0,0) //( 0x20, 0x40, 0x68 )
 
-class OutputImpl
+class ScDPOutputImpl
 {
     ScDocument*         mpDoc;
     sal_uInt16              mnTab;
@@ -57,7 +57,7 @@ class OutputImpl
     SCROW   mnTabEndRow;
 
 public:
-    OutputImpl( ScDocument* pDoc, sal_uInt16 nTab,
+    ScDPOutputImpl( ScDocument* pDoc, sal_uInt16 nTab,
         SCCOL   nTabStartCol,
         SCROW   nTabStartRow,
         SCCOL   nMemberStartCol,
@@ -66,8 +66,8 @@ public:
         SCROW nDataStartRow,
         SCCOL nTabEndCol,
         SCROW nTabEndRow );
-    sal_Bool AddRow( SCROW nRow );
-    sal_Bool AddCol( SCCOL nCol );
+    bool AddRow( SCROW nRow );
+    bool AddCol( SCCOL nCol );
 
     void OutputDataArea();
     void OutputBlockFrame ( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, sal_Bool bHori = false );
