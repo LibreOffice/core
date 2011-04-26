@@ -39,7 +39,7 @@
 class ScDPOutputImpl
 {
     ScDocument*         mpDoc;
-    sal_uInt16              mnTab;
+    sal_uInt16          mnTab;
     ::std::vector< bool > mbNeedLineCols;
     ::std::vector< SCCOL > mnCols;
 
@@ -70,7 +70,7 @@ public:
     bool AddCol( SCCOL nCol );
 
     void OutputDataArea();
-    void OutputBlockFrame ( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, sal_Bool bHori = false );
+    void OutputBlockFrame ( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, bool bHori = false );
 
 };
 

@@ -50,7 +50,7 @@ void ScDPOutputImpl::OutputDataArea()
     mnCols.push_back( mnTabEndCol+1); //set last row bottom
     mnRows.push_back( mnTabEndRow+1); //set last col bottom
 
-    sal_Bool bAllRows = ( ( mnTabEndRow - mnDataStartRow + 2 ) == (SCROW) mnRows.size() );
+    bool bAllRows = ( ( mnTabEndRow - mnDataStartRow + 2 ) == (SCROW) mnRows.size() );
 
     std::sort( mnCols.begin(), mnCols.end(), lcl_compareColfuc );
     std::sort( mnRows.begin(), mnRows.end(), lcl_compareRowfuc );
@@ -117,7 +117,7 @@ bool ScDPOutputImpl::AddRow( SCROW nRow )
     {
         mbNeedLineRows[ nRow - mnDataStartRow ] = true;
         mnRows.push_back( nRow );
-        return sal_True;
+        return true;
     }
     else
         return false;
@@ -130,13 +130,13 @@ bool ScDPOutputImpl::AddCol( SCCOL nCol )
     {
         mbNeedLineCols[ nCol - mnDataStartCol ] = true;
         mnCols.push_back( nCol );
-        return sal_True;
+        return true;
     }
     else
         return false;
 }
 
-void ScDPOutputImpl::OutputBlockFrame ( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, sal_Bool bHori )
+void ScDPOutputImpl::OutputBlockFrame ( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, bool bHori )
 {
     Color color = SC_DP_FRAME_COLOR;
     ::editeng::SvxBorderLine aLine( &color, SC_DP_FRAME_INNER_BOLD );
