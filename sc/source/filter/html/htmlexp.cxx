@@ -168,7 +168,26 @@ FltError ScFormatFilterPluginImpl::ScExportHTML( SvStream& rStrm, const String& 
 }
 
 
-void lcl_AddStamp( String& rStr, const String& rName,
+static ByteString lcl_getColGroupString( sal_Int32 nSpan, sal_Int32 nWidth )
+{
+        ByteString aByteStr = OOO_STRING_SVTOOLS_HTML_colgroup;
+        aByteStr += ' ';
+        if( nSpan > 1 )
+        {
+            aByteStr += OOO_STRING_SVTOOLS_HTML_O_span;
+            aByteStr += "=\"";
+            aByteStr += ByteString::CreateFromInt32( nSpan );
+            aByteStr += "\" ";
+        }
+        aByteStr += OOO_STRING_SVTOOLS_HTML_O_width;
+        aByteStr += "=\"";
+        aByteStr += ByteString::CreateFromInt32( nWidth );
+        aByteStr += '"';
+        return aByteStr;
+}
+
+
+static void lcl_AddStamp( String& rStr, const String& rName,
     const ::com::sun::star::util::DateTime& rDateTime,
     const LocaleDataWrapper& rLoc )
 {
@@ -201,7 +220,7 @@ void lcl_AddStamp( String& rStr, const String& rName,
 }
 
 
-void lcl_AppendHTMLColorTripel( ByteString& rStr, const Color& rColor )
+static void lcl_AppendHTMLColorTripel( ByteString& rStr, const Color& rColor )
 {
     // <font COLOR="#00FF40">hallo</font>
     sal_Char    buf[64];
@@ -701,7 +720,7 @@ void ScHTMLExport::WriteTables()
         ByteString  aByteStrOut = OOO_STRING_SVTOOLS_HTML_table;
 
         // FRAME=VOID, we do the styling of the cells in <TD>
-        (((aByteStrOut += ' ') += OOO_STRING_SVTOOLS_HTML_frame) += '=') += OOO_STRING_SVTOOLS_HTML_TF_void;
+        ((((aByteStrOut += ' ') += OOO_STRING_SVTOOLS_HTML_frame) += "=\"") += OOO_STRING_SVTOOLS_HTML_TF_void) += '"';
 
         bTabHasGraphics = bTabAlignedLeft = false;
         if ( bAll && pDrawLayer )
@@ -710,11 +729,11 @@ void ScHTMLExport::WriteTables()
 
         // more <TABLE ...>
         if ( bTabAlignedLeft )
-            (((aByteStrOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_align) += '=') += OOO_STRING_SVTOOLS_HTML_AL_left;
+            ((((aByteStrOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_align) += "=\"") += OOO_STRING_SVTOOLS_HTML_AL_left) += '"';
             // ALIGN=LEFT allow text and graphics to flow around
         // CELLSPACING
-        (((aByteStrOut += ' ' ) += OOO_STRING_SVTOOLS_HTML_O_cellspacing ) += '=') +=
-                                    ByteString::CreateFromInt32( nCellSpacing );
+        ((((aByteStrOut += ' ' ) += OOO_STRING_SVTOOLS_HTML_O_cellspacing ) += "=\"") +=
+                 ByteString::CreateFromInt32( nCellSpacing )) += '"';
         // COLS=n
         SCCOL nColCnt = 0;
         SCCOL nCol;
@@ -723,36 +742,49 @@ void ScHTMLExport::WriteTables()
             if ( !pDoc->ColHidden(nCol, nTab) )
                 ++nColCnt;
         }
-        (((aByteStrOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_cols) += '=') += ByteString::CreateFromInt32( nColCnt );
+        ((((aByteStrOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_cols) += "=\"") += ByteString::CreateFromInt32( nColCnt ))+='"';
 
         // RULES=NONE, we do the styling of the cells in <TD>
-        (((aByteStrOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_rules) += '=') += OOO_STRING_SVTOOLS_HTML_TR_none;
+        ((((aByteStrOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_rules) += "=\"") += OOO_STRING_SVTOOLS_HTML_TR_none)+='"';
 
         // BORDER=0, we do the styling of the cells in <TD>
-        ((aByteStrOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_border) += "=0";
+        ((aByteStrOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_border) += "=\"0\"";
         IncIndent(1); TAG_ON_LF( aByteStrOut.GetBuffer() );
 
-        // <COLGROUP>
-        TAG_ON( OOO_STRING_SVTOOLS_HTML_colgroup );
-        // <COL WIDTH=x> as pre-info for long tables
-        ByteString  aByteStr = OOO_STRING_SVTOOLS_HTML_col;
-        aByteStr += ' ';
-        aByteStr += OOO_STRING_SVTOOLS_HTML_O_width;
-        aByteStr += '=';
-        for ( nCol=nStartCol; nCol<=nEndCol; nCol++ )
+        // --- <COLGROUP> ----
         {
-            if ( pDoc->ColHidden(nCol, nTab) )
-                continue;   // for
-
-            aByteStrOut  = aByteStr;
-            aByteStrOut += ByteString::CreateFromInt32(
-                                ToPixel( pDoc->GetColWidth( nCol, nTab ) ) );
-            TAG_ON( aByteStrOut.GetBuffer() );
+            nCol = nStartCol;
+            sal_Int32 nWidth = 0;
+            sal_Int32 nSpan = 0;
+            while( nCol <= nEndCol )
+            {
+                if( pDoc->ColHidden(nCol, nTab) )
+                    continue;
+                if( nWidth != ToPixel( pDoc->GetColWidth( nCol, nTab ) ) )
+                {
+                    if( nSpan != 0 )
+                    {
+                        TAG_ON(lcl_getColGroupString(nSpan, nWidth).GetBuffer());
+                        TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_colgroup );
+                    }
+                    nWidth = ToPixel( pDoc->GetColWidth( nCol, nTab ) );
+                    nSpan = 1;
+                }
+                else
+                    nSpan++;
+                nCol++;
+            }
+            if( nSpan )
+            {
+                TAG_ON(lcl_getColGroupString(nSpan, nWidth).GetBuffer());
+                TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_colgroup );
+            }
         }
-        TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_colgroup );
 
-        // <TBODY>
-        IncIndent(1); TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_tbody );
+        // -------------------
+
+        // <TBODY> // Re-enable only when THEAD and TFOOT are exported
+        // IncIndent(1); TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_tbody );
         // At least old (3.x, 4.x?) Netscape doesn't follow <TABLE COLS=n> and
         // <COL WIDTH=x> specified, but needs a width at every column.
         bTableDataWidth = sal_True;     // widths in first row
@@ -784,7 +816,8 @@ void ScHTMLExport::WriteTables()
                 IncIndent(-1);
             TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_tablerow );
         }
-        IncIndent(-1); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_tbody );
+        // Uncomment later
+        // IncIndent(-1); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_tbody );
 
         IncIndent(-1); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_table );
 
@@ -922,10 +955,12 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
         nHeightPixel = ToPixel( pDoc->GetRowHeight( nRow, nTab ) );
     }
 
+#if 0 // No point - this is already defined in ColGroup
     if ( bTableDataWidth )
-        (((aStrTD += ' ') += OOO_STRING_SVTOOLS_HTML_O_width) += '=') += ByteString::CreateFromInt32( nWidthPixel );
+        ((((aStrTD += ' ') += OOO_STRING_SVTOOLS_HTML_O_width) += "=\"") += ByteString::CreateFromInt32( nWidthPixel )) += '"';
+#endif
     if ( bTableDataHeight )
-        (((aStrTD += ' ') += OOO_STRING_SVTOOLS_HTML_O_height) += '=') += ByteString::CreateFromInt32( nHeightPixel );
+        ((((aStrTD += ' ') += OOO_STRING_SVTOOLS_HTML_O_height) += "=\"") += ByteString::CreateFromInt32( nHeightPixel )) += '"';
 
     const SvxFontItem& rFontItem = (const SvxFontItem&) pAttr->GetItem(
             ScGlobal::GetScriptedWhichID( nScriptType, ATTR_FONT),
@@ -997,7 +1032,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
         default:                        pChar = OOO_STRING_SVTOOLS_HTML_AL_left;    break;
     }
 
-    (((aStrTD += ' ') += OOO_STRING_SVTOOLS_HTML_O_align) += '=') += pChar;
+    ((((aStrTD += ' ') += OOO_STRING_SVTOOLS_HTML_O_align) += "=\"") += pChar)+='"';
 
     switch( rVerJustifyItem.GetValue() )
     {
