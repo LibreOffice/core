@@ -153,13 +153,15 @@ char            *malloc();
 char            *realloc();
 #endif
 
-char            *copy();
-char            *base_name();
-char            *get_line();
-char            *isdefined();
-struct filepointer  *getfile();
-struct inclist      *newinclude();
-struct inclist      *inc_path();
+char            *copy(char *);
+char            *base_name(char *);
+char            *get_line(struct filepointer *);
+char            *isdefined(char *);
+struct filepointer  *getfile(char *);
+struct inclist *newinclude(register char *newfile,
+                           register char *incstring);
+struct inclist      *inc_path(char *, char *, boolean,
+                                  struct IncludesCollection *);
 
 void define( char *def, struct symhash **symbols );
 void hash_define(char *name, char * val, struct symhash **symbols);

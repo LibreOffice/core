@@ -72,6 +72,6 @@ typedef struct _if_parser {
     char *data;
 } IfParser;
 
-const char *ParseIfExpression (/* IfParser *, const char *, int * */);
+const char *ParseIfExpression (IfParser *, const char *, int *);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
