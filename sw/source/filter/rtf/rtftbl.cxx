@@ -701,9 +701,13 @@ void SwRTFParser::ReadTable( int nToken )
     if( aBoxFmts.Count() )
     {
         // setze das default Style
-        SwTxtFmtColl* pColl = aTxtCollTbl.Get( 0 );
-        if( !pColl )
+        SwTxtFmtColl* pColl = NULL;
+        std::map<sal_Int32,SwTxtFmtColl*>::iterator iter = aTxtCollTbl.find(0);
+
+        if( iter == aTxtCollTbl.end() )
             pColl = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
+        else
+            pColl = iter->second;
 
         sal_uInt16 nStt = 0;
         if( bNewTbl )
@@ -907,9 +911,14 @@ void SwRTFParser::NewTblLine()
 
     // alle Nodes in den Boxen auf die "default" Vorlage setzten
     {
-        SwTxtFmtColl* pColl = aTxtCollTbl.Get( 0 );
-        if( !pColl )
+        SwTxtFmtColl* pColl = NULL;
+        std::map<sal_Int32,SwTxtFmtColl*>::iterator iter = aTxtCollTbl.find( 0 );
+
+        if( iter == aTxtCollTbl.end() )
             pColl = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
+        else
+            pColl = iter->second;
+
         pPam->SetMark();
 
         pLine = (*pLns)[ pLns->Count()-1 ];

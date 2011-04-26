@@ -2026,9 +2026,14 @@ void SwRTFParser::InsertPara()
     if( !bStyleTabValid )
         MakeStyleTab();
 
-    SwTxtFmtColl* pColl = aTxtCollTbl.Get( 0 );
-    if( !pColl )
+    SwTxtFmtColl* pColl = NULL;
+    std::map<sal_Int32,SwTxtFmtColl*>::iterator iter = aTxtCollTbl.find(0);
+
+    if( iter == aTxtCollTbl.end() )
         pColl = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
+    else
+        pColl = iter->second;
+
     pDoc->SetTxtFmtColl( *pPam, pColl );
 
     ::SetProgressState( rInput.Tell(), pDoc->GetDocShell() );
@@ -2121,9 +2126,11 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
         // setze jetzt das Style
         if( !bStyleTabValid )
             MakeStyleTab();
-        SwTxtFmtColl* pColl = aTxtCollTbl.Get( rSet.StyleNo() );
-        if( pColl )
-            pDoc->SetTxtFmtColl( aPam, pColl, false );
+
+        std::map<sal_Int32,SwTxtFmtColl*>::iterator iter = aTxtCollTbl.find(rSet.StyleNo());
+
+        if (iter != aTxtCollTbl.end())
+            pDoc->SetTxtFmtColl( aPam, iter->second, false );
     }
 
     const SfxPoolItem* pItem;
@@ -2647,11 +2654,13 @@ void SwRTFParser::ReadDocControls( int nToken )
 
         MakeStyleTab();
 
-        SwTxtFmtColl* pColl = aTxtCollTbl.Get(0);
-        if (!pColl)
-        {
+        SwTxtFmtColl *pColl = NULL;
+        std::map<sal_Int32,SwTxtFmtColl*>::iterator iter = aTxtCollTbl.find(0);
+
+        if (iter == aTxtCollTbl.end())
             pColl = pDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false );
-        }
+        else
+            pColl = iter->second;
 
         OSL_ENSURE(pColl, "impossible to have no standard style");
 
@@ -2697,7 +2706,7 @@ void SwRTFParser::MakeStyleTab()
                     // existiert noch nicht, also anlegen
                     MakeCharStyle( nNo, *pStyle );
             }
-            else if( !aTxtCollTbl.Get( nNo ) )
+            else if( aTxtCollTbl.find( nNo ) == aTxtCollTbl.end() )
             {
                 // existiert noch nicht, also anlegen
                 MakeStyle( nNo, *pStyle );
@@ -3180,9 +3189,14 @@ void SwRTFParser::ReadPageDescTbl()
     // diese auch in den Headers/Footer benutzt werden koennen!
     MakeStyleTab();
     // das default-Style schon gleich am ersten Node setzen
-    SwTxtFmtColl* pColl = aTxtCollTbl.Get( 0 );
-    if( !pColl )
+    SwTxtFmtColl* pColl = NULL;
+    std::map<sal_Int32,SwTxtFmtColl*>::iterator iter = aTxtCollTbl.find( 0 );
+
+    if( iter == aTxtCollTbl.end() )
         pColl = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
+    else
+        pColl = iter->second;
+
     pDoc->SetTxtFmtColl( *pPam, pColl );
 
     int nToken, bSaveChkStyleAttr = IsChkStyleAttr();
@@ -3643,9 +3657,14 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
         pPam->GetPoint()->nNode = *pNode->EndOfSectionNode();
         pPam->Move( fnMoveBackward );
 
-        SwTxtFmtColl* pColl = aTxtCollTbl.Get( 0 );
-        if( !pColl )
+        SwTxtFmtColl* pColl = NULL;
+        std::map<sal_Int32,SwTxtFmtColl*>::iterator iter = aTxtCollTbl.find( 0 );
+
+        if( iter == aTxtCollTbl.end() )
             pColl = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
+        else
+            pColl = iter->second;
+
         pDoc->SetTxtFmtColl( *pPam, pColl );
 
         SetNewGroup( sal_True );
@@ -3919,7 +3938,7 @@ SwTxtFmtColl* SwRTFParser::MakeStyle( sal_uInt16 nNo, const SvxRTFStyleType& rSt
     bool bCollExist;
     SwTxtFmtColl* pColl = MakeColl( rStyle.sName, sal_uInt16(nNo),
         rStyle.nOutlineNo, bCollExist);
-    aTxtCollTbl.Insert( nNo, pColl );
+    aTxtCollTbl.insert(std::make_pair(nNo,pColl));
 
     // in bestehendes Dok einfuegen, dann keine Ableitung usw. setzen
     if( bCollExist )
@@ -3929,14 +3948,19 @@ SwTxtFmtColl* SwRTFParser::MakeStyle( sal_uInt16 nNo, const SvxRTFStyleType& rSt
     if( rStyle.bBasedOnIsSet && nStyleNo != nNo )
     {
         SvxRTFStyleType* pDerivedStyle = GetStyleTbl().Get( nStyleNo );
-        SwTxtFmtColl* pDerivedColl = aTxtCollTbl.Get( nStyleNo );
-        if( !pDerivedColl )         // noch nicht vorhanden, also anlegen
+
+        SwTxtFmtColl* pDerivedColl = NULL;
+        std::map<sal_Int32,SwTxtFmtColl*>::iterator iter = aTxtCollTbl.find(nStyleNo);
+
+        if(iter == aTxtCollTbl.end() )         // noch nicht vorhanden, also anlegen
         {
             // ist die ueberhaupt als Style vorhanden ?
             pDerivedColl = pDerivedStyle
                     ? MakeStyle( nStyleNo, *pDerivedStyle )
                     : pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
         }
+        else
+            pDerivedColl = iter->second;
 
         if( pColl == pDerivedColl )
             ((SfxItemSet&)pColl->GetAttrSet()).Put( rStyle.aAttrSet );
@@ -3962,8 +3986,10 @@ SwTxtFmtColl* SwRTFParser::MakeStyle( sal_uInt16 nNo, const SvxRTFStyleType& rSt
     nStyleNo = rStyle.nNext;
     if( nStyleNo != nNo )
     {
-        SwTxtFmtColl* pNext = aTxtCollTbl.Get( nStyleNo );
-        if( !pNext )            // noch nicht vorhanden, also anlegen
+        SwTxtFmtColl* pNext = NULL;
+        std::map<sal_Int32,SwTxtFmtColl*>::iterator iter = aTxtCollTbl.find( nStyleNo );
+
+        if( iter == aTxtCollTbl.end())            // noch nicht vorhanden, also anlegen
         {
             // ist die ueberhaupt als Style vorhanden ?
             SvxRTFStyleType* pMkStyle = GetStyleTbl().Get( nStyleNo );
@@ -3971,6 +3997,9 @@ SwTxtFmtColl* SwRTFParser::MakeStyle( sal_uInt16 nNo, const SvxRTFStyleType& rSt
                     ? MakeStyle( nStyleNo, *pMkStyle )
                     : pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
         }
+        else
+            pNext = iter->second;
+
         pColl->SetNextTxtFmtColl( *pNext );
     }
     return pColl;

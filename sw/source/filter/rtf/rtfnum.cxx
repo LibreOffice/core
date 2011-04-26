@@ -593,18 +593,18 @@ void SwRTFParser::ReadListOverrideTable()
             MakeStyleTab();
 
         const SfxPoolItem* pItem( 0 );
-        const SwTxtFmtColl* pColl( 0 );
+        std::map<sal_Int32,SwTxtFmtColl*>::const_iterator iterColl;
         sal_uInt16 nRulePos( USHRT_MAX );
         const SwNumRule *pNumRule = 0;
         SvxRTFStyleType* pStyle = GetStyleTbl().First();
         do {
             if ( MAXLEVEL > pStyle->nOutlineNo )
             {
-                pColl = aTxtCollTbl.Get( (sal_uInt16)GetStyleTbl().GetCurKey() );
-                if ( pColl )
+                iterColl = aTxtCollTbl.find( (sal_uInt16)GetStyleTbl().GetCurKey() );
+                if ( iterColl != aTxtCollTbl.end() )
                 {
                     const SfxItemState eItemState =
-                        pColl->GetItemState( RES_PARATR_NUMRULE, sal_False, &pItem );
+                        iterColl->second->GetItemState( RES_PARATR_NUMRULE, sal_False, &pItem );
                     if ( eItemState == SFX_ITEM_SET )
                     {
                         nRulePos = pDoc->FindNumRule( ((SwNumRuleItem*)pItem)->GetValue() );

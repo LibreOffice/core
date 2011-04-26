@@ -31,6 +31,7 @@
 
 #include <deque>
 #include <vector>
+#include <map>
 
 #include <editeng/svxrtf.hxx>
 #include <editeng/numitem.hxx>
@@ -145,7 +146,6 @@ struct SwListEntry
                     bRuleUsed = sal_False; }
 };
 
-DECLARE_TABLE( SwRTFStyleTbl, SwTxtFmtColl* )
 DECLARE_TABLE( SwRTFCharStyleTbl, SwCharFmt* )
 typedef SwFlySave* SwFlySavePtr;
 SV_DECL_PTRARR_DEL( SwFlySaveArr, SwFlySavePtr, 0, 20 )
@@ -286,7 +286,7 @@ class SwRTFParser : public SvxRTFParser
     rtfSections maSegments;
 
     sw::util::InsertedTablesManager maInsertedTables;
-    SwRTFStyleTbl aTxtCollTbl;
+    std::map<sal_Int32,SwTxtFmtColl*> aTxtCollTbl;
     SwRTFCharStyleTbl aCharFmtTbl;
     SwFlySaveArr aFlyArr;               // Flys als Letzes im Doc setzen
     std::vector<bool> aMergeBoxes;      // Flags fuer gemergte Zellen
