@@ -1625,7 +1625,7 @@
 						<author>TL</author>
 						<desc>Contains the provided dictionaries.</desc>
 					</info>
-					<value>$(insturl)/share/wordbook/$(vlang)</value>
+					<value>$(insturl)/share/wordbook</value>
 				</prop>
 				<prop oor:name="Favorite" oor:type="xs:string">
 					<info>
