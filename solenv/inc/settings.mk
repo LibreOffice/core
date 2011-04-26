@@ -809,23 +809,9 @@ SOLARCOMMONSDFDIR=$(SOLARSDFDIR)
 
 .EXPORT : SOLARBINDIR
 
-.IF "$(GUI)" == "WNT" 
-L10N_MODULE*=$(shell cygpath -m $(SRC_ROOT)/translations)
-.ELSE
-L10N_MODULE*=$(SRC_ROOT)/translations
-.ENDIF
-ALT_L10N_MODULE*=$(SOLARSRC)$/l10n_so
-
 .IF "$(WITH_LANG)"!=""
 .INCLUDE .IGNORE: $(L10N_MODULE)/$(COMMON_OUTDIR)$(PROEXT)/inc/localization_present.mk
-.INCLUDE .IGNORE: $(ALT_L10N_MODULE)/$(COMMON_OUTDIR)$(PROEXT)/inc/localization_present.mk
 
-# check for localizations not hosted in l10n module. if a file exists there
-# it won't in l10n
-.IF "$(ALT_LOCALIZATION_FOUND)"!=""
-TRYALTSDF:=$(ALT_L10N_MODULE)$/$(COMMON_OUTDIR)$(PROEXT)$/misc/sdf$/$(PRJNAME)$/$(PATH_IN_MODULE)$/localize.sdf
-LOCALIZESDF:=$(strip $(shell @+$(IFEXIST) $(TRYALTSDF) $(THEN) echo $(TRYALTSDF) $(FI)))
-.ENDIF			# "$(ALT_LOCALIZATION_FOUND)"!=""
 # if the l10n module exists, use split localize.sdf directly from there
 .IF "$(LOCALIZATION_FOUND)"!="" && "$(LOCALIZESDF)"==""
 # still check for existence as there may be no localization yet
