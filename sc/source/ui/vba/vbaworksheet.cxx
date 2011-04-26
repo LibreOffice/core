@@ -72,6 +72,13 @@
 #include <comphelper/processfactory.hxx>
 #include <vbahelper/vbashapes.hxx>
 
+#include <com/sun/star/script/vba/VBAEventId.hpp>
+#include <com/sun/star/script/vba/XVBACompatibility.hpp>
+#include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
+#include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
+#include <com/sun/star/script/ModuleInfo.hpp>
+#include <com/sun/star/script/ModuleType.hpp>
+
 #include <tools/string.hxx>
 
 //zhangyun showdataform
@@ -245,12 +252,15 @@ ScVbaWorksheet::createSheetCopyInNewDoc(rtl::OUString aCurrSheetName)
         excel::implnPaste(xModel);
     }
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xModel, uno::UNO_QUERY_THROW );
+    excel::setUpDocumentModules(xSpreadDoc);
     uno::Reference <sheet::XSpreadsheets> xSheets( xSpreadDoc->getSheets(), uno::UNO_QUERY_THROW );
     uno::Reference <container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY_THROW );
     uno::Reference< sheet::XSpreadsheet > xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
-    //#TODO #FIXME
-    //get proper parent for Worksheet
-    return new ScVbaWorksheet( NULL, mxContext, xSheet, xModel );
+
+    ScDocShell* pShell = excel::getDocShell( xModel );
+    String aCodeName;
+    pShell->GetDocument()->GetCodeName( 0, aCodeName );
+    return uno::Reference< excel::XWorksheet >( getUnoDocModule( aCodeName, pShell ), uno::UNO_QUERY_THROW );
 }
 
 css::uno::Reference< ov::excel::XWorksheet >
