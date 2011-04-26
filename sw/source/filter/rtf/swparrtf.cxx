@@ -2702,7 +2702,7 @@ void SwRTFParser::MakeStyleTab()
             sal_uInt16 nNo = sal_uInt16( GetStyleTbl().GetCurKey() );
             if( pStyle->bIsCharFmt )
             {
-                if( !aCharFmtTbl.Get( nNo ) )
+                if(aCharFmtTbl.find( nNo ) == aCharFmtTbl.end())
                     // existiert noch nicht, also anlegen
                     MakeCharStyle( nNo, *pStyle );
             }
@@ -4009,7 +4009,7 @@ SwCharFmt* SwRTFParser::MakeCharStyle( sal_uInt16 nNo, const SvxRTFStyleType& rS
 {
     int bCollExist;
     SwCharFmt* pFmt = MakeCharFmt( rStyle.sName, sal_uInt16(nNo), bCollExist );
-    aCharFmtTbl.Insert( nNo, pFmt );
+    aCharFmtTbl.insert(std::make_pair(nNo,pFmt));
 
     // in bestehendes Dok einfuegen, dann keine Ableitung usw. setzen
     if( bCollExist )
@@ -4019,14 +4019,18 @@ SwCharFmt* SwRTFParser::MakeCharStyle( sal_uInt16 nNo, const SvxRTFStyleType& rS
     if( rStyle.bBasedOnIsSet && nStyleNo != nNo )
     {
         SvxRTFStyleType* pDerivedStyle = GetStyleTbl().Get( nStyleNo );
-        SwCharFmt* pDerivedFmt = aCharFmtTbl.Get( nStyleNo );
-        if( !pDerivedFmt )          // noch nicht vorhanden, also anlegen
+        SwCharFmt* pDerivedFmt = NULL;
+        std::map<sal_Int32,SwCharFmt*>::iterator iter = aCharFmtTbl.find( nStyleNo );
+
+        if(iter == aCharFmtTbl.end())          // noch nicht vorhanden, also anlegen
         {
             // ist die ueberhaupt als Style vorhanden ?
             pDerivedFmt = pDerivedStyle
                     ? MakeCharStyle( nStyleNo, *pDerivedStyle )
                     : pDoc->GetDfltCharFmt();
         }
+        else
+            pDerivedFmt = iter->second;
 
         if( pFmt == pDerivedFmt )
             ((SfxItemSet&)pFmt->GetAttrSet()).Put( rStyle.aAttrSet );
@@ -4162,9 +4166,10 @@ void SwRTFParser::UnknownAttrToken( int nToken, SfxItemSet* pSet )
         break;
     case RTF_CS:
         {
-            SwCharFmt* pFmt = aCharFmtTbl.Get( nTokenValue );
-            if( pFmt )
-                pSet->Put( SwFmtCharFmt( pFmt ));
+            std::map<sal_Int32,SwCharFmt*>::iterator iter = aCharFmtTbl.find( nTokenValue );
+
+            if(iter != aCharFmtTbl.end())
+                pSet->Put( SwFmtCharFmt(iter->second));
         }
         break;
 

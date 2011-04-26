@@ -687,9 +687,15 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                 }
 
                 SwFmtRuby aRuby( aData.sUp );
-                SwCharFmt * pCharFmt = -1 != aData.nStyleNo
-                                          ? aCharFmtTbl.Get( aData.nStyleNo )
-                                          : 0;
+                SwCharFmt * pCharFmt = NULL;
+
+                if ( aData.nStyleNo != -1)
+                {
+                    std::map<sal_Int32,SwCharFmt*>::iterator iter = aCharFmtTbl.find(aData.nStyleNo);
+
+                    if (iter != aCharFmtTbl.end())
+                        pCharFmt = iter->second;
+                }
 
                 if( !pCharFmt )
                 {

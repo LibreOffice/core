@@ -146,7 +146,6 @@ struct SwListEntry
                     bRuleUsed = sal_False; }
 };
 
-DECLARE_TABLE( SwRTFCharStyleTbl, SwCharFmt* )
 typedef SwFlySave* SwFlySavePtr;
 SV_DECL_PTRARR_DEL( SwFlySaveArr, SwFlySavePtr, 0, 20 )
 typedef std::deque< SwListEntry > SwListArr;
@@ -287,7 +286,7 @@ class SwRTFParser : public SvxRTFParser
 
     sw::util::InsertedTablesManager maInsertedTables;
     std::map<sal_Int32,SwTxtFmtColl*> aTxtCollTbl;
-    SwRTFCharStyleTbl aCharFmtTbl;
+    std::map<sal_Int32,SwCharFmt*> aCharFmtTbl;
     SwFlySaveArr aFlyArr;               // Flys als Letzes im Doc setzen
     std::vector<bool> aMergeBoxes;      // Flags fuer gemergte Zellen
     SwListArr aListArr;
