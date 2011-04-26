@@ -67,15 +67,22 @@ sub standardize_summary($)
     return $line;
 }
 
-sub load_git_log($$$$) 
+sub load_git_log($$$$$) 
 {
-    my ($pdata, $repo_dir, $piece, $git_command) = @_;
+    my ($pdata, $repo_dir, $piece, $branch_name, $git_command) = @_;
 
     my $cmd = "cd $repo_dir; $git_command";
     my $commit_id;
     my $summary;
 
     print STDERR "Analyzing log from the git repo: $piece...\n";
+
+    my $repo_branch_name = get_branch_name($repo_dir);
+    if ( $branch_name ne $repo_branch_name ) {
+        die "Error: mismatch of branches:\n" .
+            "       main repo is on the branch: $branch_name\n" .
+            "       $piece repo is on the branch: $repo_branch_name\n";
+    }
 
     open (GIT, "$cmd 2>&1|") || die "Can't run $cmd: $!";
     %{$pdata->{$piece}} = ();
@@ -144,9 +151,9 @@ sub get_repo_name($)
     die "Error: can't find repo name in \"$$repo_dir/.git/config\"\n";
 }
 
-sub load_data($$$$)
+sub load_data($$$$$)
 {
-    my ($pdata, $top_dir, $piece, $git_command) = @_;
+    my ($pdata, $top_dir, $piece, $branch_name, $git_command) = @_;
 
     if (defined $piece) {
         my $piece_dir;
@@ -155,11 +162,11 @@ sub load_data($$$$)
         } else {
             $piece_dir = "$top_dir/clone/$piece";
         }
-        load_git_log($pdata, $piece_dir, $piece, $git_command);
+        load_git_log($pdata, $piece_dir, $piece, $branch_name, $git_command);
     } else {
-        load_git_log($pdata, $top_dir, $main_repo, $git_command);
+        load_git_log($pdata, $top_dir, $main_repo, $branch_name, $git_command);
         foreach my $piece (@pieces) {
-            load_git_log($pdata, "$top_dir/clone/$piece", $piece, $git_command);
+            load_git_log($pdata, "$top_dir/clone/$piece", $piece, $branch_name, $git_command);
         }
     }
 }
@@ -170,8 +177,6 @@ sub get_branch_name($)
 
     my $branch;
     my $cmd = "cd $top_dir && git branch";
-
-    print STDERR "Analyzing git branch: ";
 
     open (GIT, "$cmd 2>&1|") || die "Can't run $cmd: $!";
 
@@ -184,19 +189,16 @@ sub get_branch_name($)
     }
 
     close GIT;
-
-    die "Error: did not detect git branch name\n" unless defined ($branch);
-
-    print STDERR "$branch\n";
+    
+    die "Error: did not detect git branch name in $top_dir\n" unless defined ($branch);
 
     return $branch;
 }
 
-sub open_log_file($$$)
+sub open_log_file($$$$)
 {
-    my ($log_prefix, $log_suffix, $top_dir) = @_;
+    my ($log_prefix, $log_suffix, $top_dir, $branch_name) = @_;
 
-    my $branch_name = get_branch_name($top_dir);
     my $logfilename = "$log_prefix-$branch_name-$log_suffix.log";
 
     if (-f $logfilename) {
@@ -333,6 +335,7 @@ my $log_prefix = "commit-log";
 my $log_suffix;
 my $log;
 my $git_command = "git log";
+my $branch_name;
 my @git_args;
 my %data;
 my %print_filters = ();
@@ -369,8 +372,10 @@ $git_command .= " " . join ' ', @git_args if (@git_args);
 
 (defined $log_suffix) || die "Error: define log suffix using --log-suffix=<string>\n";
 
-load_data(\%data, $top_dir,$piece, $git_command);
+$branch_name = get_branch_name($top_dir);
 
-$log = open_log_file($log_prefix, $log_suffix, $top_dir);
+load_data(\%data, $top_dir, $piece, $branch_name, $git_command);
+
+$log = open_log_file($log_prefix, $log_suffix, $top_dir, $branch_name);
 print_stat(\%data, \%print_filters, $log);
 close $log;
