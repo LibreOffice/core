@@ -358,6 +358,12 @@ AC_ARG_ENABLE(binfilter,
 ,enable_binfilter=no
 )
 
+AC_ARG_ENABLE(ugly,
+    AS_HELP_STRING([--enable-ugly],
+        [Enables ugly pieces of functionality.]),
+,enable_ugly=no
+)
+
 AC_ARG_ENABLE(rpath,
     AS_HELP_STRING([--disable-rpath],
         [Disable the use of relative paths in shared libraries.]),
@@ -1728,6 +1734,17 @@ else
    AC_MSG_RESULT([yes])
 fi
 AC_SUBST(WITH_BINFILTER)
+
+dnl Enable ugly pieces of code we're better off without
+dnl ===================================================================
+if test "$enable_ugly" = "yes"; then
+  BUILD_TYPE="$BUILD_TYPE DICTIONARIES"
+  SCPDEFS="$SCPDEFS -DWITH_UGLY"
+  ENABLE_UGLY=YES
+else
+  ENABLE_UGLY=NO
+fi
+AC_SUBST(ENABLE_UGLY)
 
 dnl ===================================================================
 dnl Disable rpath in shared libraries?
