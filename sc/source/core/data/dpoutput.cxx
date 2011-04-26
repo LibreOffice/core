@@ -97,6 +97,9 @@ using ::rtl::OUString;
 
 namespace {
 
+bool lcl_compareColfuc ( SCCOL i,  SCCOL j) { return (i<j); }
+bool lcl_compareRowfuc ( SCROW i,  SCROW j) { return (i<j); }
+
 class ScDPOutputImpl
 {
     ScDocument*         mpDoc;
@@ -134,14 +137,6 @@ public:
     void OutputBlockFrame ( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, bool bHori = false );
 
 };
-
-
-namespace
-{
-    bool lcl_compareColfuc ( SCCOL i,  SCCOL j) { return (i<j); }
-    bool lcl_compareRowfuc ( SCROW i,  SCROW j) { return (i<j); }
-}
-
 
 void ScDPOutputImpl::OutputDataArea()
 {
