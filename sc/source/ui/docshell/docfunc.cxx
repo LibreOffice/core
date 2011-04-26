@@ -4344,17 +4344,14 @@ sal_Bool ScDocFunc::MergeCells( const ScCellMergeOption& rOption, sal_Bool bCont
                 for( aPos.SetRow( nStartRow ); !bHasNotes && (aPos.Row() <= nEndRow); aPos.IncRow() )
                     bHasNotes = ((aPos.Col() != nStartCol) || (aPos.Row() != nStartRow)) && (pDoc->GetNote( aPos ) != 0);
 
-            if (bNeedContents || bHasNotes || rOption.mbCenter)
+            if (!pUndoDoc)
             {
-                if (!pUndoDoc)
-                {
-                    pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-                    pUndoDoc->InitUndo(pDoc, nTab1, nTab2);
-                }
-                // note captions are collected by drawing undo
-                pDoc->CopyToDocument( nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab,
-                                      IDF_ALL|IDF_NOCAPTIONS, false, pUndoDoc );
+                pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+                pUndoDoc->InitUndo(pDoc, nTab1, nTab2);
             }
+            // note captions are collected by drawing undo
+            pDoc->CopyToDocument( nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab,
+                                  IDF_ALL|IDF_NOCAPTIONS, false, pUndoDoc );
             if( bHasNotes )
                 pDoc->BeginDrawUndo();
         }
