@@ -130,29 +130,6 @@ typedef struct tagMYITEM
 
 // -------------------------------
 
-static bool isNT()
-{
-    static bool bInitialized    = false;
-    static bool bWnt            = false;
-
-    if( !bInitialized )
-    {
-        bInitialized = true;
-
-        OSVERSIONINFO   aVerInfo;
-        aVerInfo.dwOSVersionInfoSize = sizeof( aVerInfo );
-        if ( GetVersionEx( &aVerInfo ) )
-        {
-            if ( aVerInfo.dwPlatformId == VER_PLATFORM_WIN32_NT )
-                bWnt = true;
-        }
-    }
-    return bWnt;
-}
-
-
-// -------------------------------
-
 static void addMenuItem( HMENU hMenu, UINT id, UINT iconId, const OUString& text, int& pos, int bOwnerdraw, const OUString& module )
 {
     MENUITEMINFOW mi;
@@ -889,22 +866,7 @@ static bool FileExistsW( LPCWSTR lpPath )
 bool ShutdownIcon::IsQuickstarterInstalled()
 {
     wchar_t aPath[_MAX_PATH];
-    if( isNT() )
-    {
-        GetModuleFileNameW( NULL, aPath, _MAX_PATH-1);
-    }
-    else
-    {
-        char szPathA[_MAX_PATH];
-        GetModuleFileNameA( NULL, szPathA, _MAX_PATH-1);
-
-        // calc the string wcstr len
-        int nNeededWStrBuffSize = MultiByteToWideChar( CP_ACP, 0, szPathA, -1, NULL, 0 );
-
-        // copy the string if necessary
-        if ( nNeededWStrBuffSize > 0 )
-            MultiByteToWideChar( CP_ACP, 0, szPathA, -1, aPath, nNeededWStrBuffSize );
-    }
+    GetModuleFileNameW( NULL, aPath, _MAX_PATH-1);
 
     OUString aOfficepath( reinterpret_cast<const sal_Unicode*>(aPath) );
     int i = aOfficepath.lastIndexOf((sal_Char) '\\');
@@ -920,20 +882,7 @@ bool ShutdownIcon::IsQuickstarterInstalled()
 void ShutdownIcon::EnableAutostartW32( const rtl::OUString &aShortcut )
 {
     wchar_t aPath[_MAX_PATH];
-    if( isNT() )
-        GetModuleFileNameW( NULL, aPath, _MAX_PATH-1);
-    else
-    {
-        char szPathA[_MAX_PATH];
-        GetModuleFileNameA( NULL, szPathA, _MAX_PATH-1);
-
-        // calc the string wcstr len
-        int nNeededWStrBuffSize = MultiByteToWideChar( CP_ACP, 0, szPathA, -1, NULL, 0 );
-
-        // copy the string if necessary
-        if ( nNeededWStrBuffSize > 0 )
-            MultiByteToWideChar( CP_ACP, 0, szPathA, -1, aPath, nNeededWStrBuffSize );
-    }
+    GetModuleFileNameW( NULL, aPath, _MAX_PATH-1);
 
     OUString aOfficepath( reinterpret_cast<const sal_Unicode*>(aPath) );
     int i = aOfficepath.lastIndexOf((sal_Char) '\\');
