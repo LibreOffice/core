@@ -31,6 +31,7 @@ $(eval $(call gb_JunitTest_set_defs,dbaccess_unoapi,\
 	$$(DEFS) \
 	-Dorg.openoffice.test.arg.sce=$(SRCDIR)/dbaccess/qa/unoapi/dbaccess.sce \
 	-Dorg.openoffice.test.arg.xcl=$(SRCDIR)/dbaccess/qa/unoapi/knownissues.xcl \
+	-Dorg.openoffice.test.arg.ini=$(SRCDIR)/dbaccess/qa/unoapi/dbaccess.props \
 	-Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/dbaccess/qa/unoapi/testdocuments \
 ))
 
