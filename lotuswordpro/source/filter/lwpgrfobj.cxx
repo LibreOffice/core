@@ -63,6 +63,9 @@
  *  For LWP filter architecture prototype
 */
 #include <stdio.h>
+
+#include <boost/scoped_ptr.hpp>
+
 #include "lwp9reader.hxx"
 #include "lwpgrfobj.hxx"
 #include "lwpsdwfileloader.hxx"
@@ -435,10 +438,14 @@ sal_uInt32 LwpGraphicObject::GetRawGrafData(sal_uInt8*& pGrafData)
     // if small file, use the compressed stream for BENTO
     LwpSvStream* pStream = m_pStrm->GetCompressedStream() ?  m_pStrm->GetCompressedStream(): m_pStrm;
 
-    OpenStormBento::LtcBenContainer* pBentoContainer;
-    sal_uLong ulRet = OpenStormBento::BenOpenContainer(pStream, &pBentoContainer);
-    if (ulRet != OpenStormBento::BenErr_OK)
-        return 0;
+    boost::scoped_ptr<OpenStormBento::LtcBenContainer> pBentoContainer;
+    {
+        OpenStormBento::LtcBenContainer* pTmp(0);
+        sal_uLong ulRet = OpenStormBento::BenOpenContainer(pStream, &pTmp);
+        pBentoContainer.reset(pTmp);
+        if (ulRet != OpenStormBento::BenErr_OK)
+            return 0;
+    }
 
     SvStream* pGrafStream = NULL;
 
