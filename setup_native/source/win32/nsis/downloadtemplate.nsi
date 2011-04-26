@@ -275,24 +275,10 @@ ALLLANGUAGESPLACEHOLDER
 
 Function SetupBranding
 	File "/oname=$PLUGINSDIR\modern-header.bmp" BANNERBMPPLACEHOLDER
-	File "/oname=$PLUGINSDIR\modern-header-br.bmp" BANNERBMPPLACEHOLDER_BR
 	File "/oname=$PLUGINSDIR\modern-wizard.bmp" WELCOMEBMPPLACEHOLDER
-	File "/oname=$PLUGINSDIR\modern-wizard-br.bmp" WELCOMEBMPPLACEHOLDER_BR
 
-	; use broffice specific branding if we are in Brazil
-;	messageBox MB_OK "Language: $LANGUAGE"
-	StrCmp $LANGUAGE "1046" BrOfficeSplash DefaultSplash
-	DefaultSplash:
-;		messageBox MB_OK "LibreOffice"
-		SetBrandingImage /IMGID=1046 "$PLUGINSDIR\modern-header.bmp"
-		!insertmacro INSTALLOPTIONS_WRITE "ioSpecial.ini" "Field 1" "Text" "$PLUGINSDIR\modern-wizard.bmp"
-		GoTo atEnd
-	BrOfficeSplash:
-;		messageBox MB_OK "BrOffice"
-		SetBrandingImage /IMGID=1046 "$PLUGINSDIR\modern-header-br.bmp"
-		!insertmacro INSTALLOPTIONS_WRITE "ioSpecial.ini" "Field 1" "Text" "$PLUGINSDIR\modern-wizard-br.bmp"
-		GoTo atEnd
-	atEnd:
+	SetBrandingImage /IMGID=1046 "$PLUGINSDIR\modern-header.bmp"
+	!insertmacro INSTALLOPTIONS_WRITE "ioSpecial.ini" "Field 1" "Text" "$PLUGINSDIR\modern-wizard.bmp"
 FunctionEnd
 
 ; Reserve files
