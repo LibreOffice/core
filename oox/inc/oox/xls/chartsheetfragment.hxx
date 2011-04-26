@@ -40,10 +40,8 @@ class ChartsheetFragment : public WorksheetFragmentBase
 {
 public:
     explicit            ChartsheetFragment(
-                            const WorkbookHelper& rHelper,
-                            const ::rtl::OUString& rFragmentPath,
-                            const ISegmentProgressBarRef& rxProgressBar,
-                            sal_Int16 nSheet );
+                            const WorksheetHelper& rHelper,
+                            const ::rtl::OUString& rFragmentPath );
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
@@ -68,9 +66,8 @@ class BiffChartsheetFragment : public BiffWorksheetFragmentBase
 {
 public:
     explicit            BiffChartsheetFragment(
-                            const BiffWorkbookFragmentBase& rParent,
-                            const ISegmentProgressBarRef& rxProgressBar,
-                            sal_Int16 nSheet );
+                            const WorksheetHelper& rHelper,
+                            const BiffWorkbookFragmentBase& rParent );
 
     /** Imports the entire sheet fragment, returns true, if EOF record has been reached. */
     virtual bool        importFragment();

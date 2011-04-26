@@ -10,23 +10,26 @@ inline sal_Int32 getBaseToken( sal_Int32 nToken ) { return nToken & TOKEN_MASK; 
 /** Returns the namespace without token identifier of the passed token. */
 inline sal_Int32 getNamespace( sal_Int32 nToken ) { return nToken & NMSP_MASK; }
 
+
 // defines for tokens with specific namespaces
-#define A_TOKEN( token )            (::oox::NMSP_dml | XML_##token)
-#define AX_TOKEN( token )           (::oox::NMSP_ax | XML_##token)
-#define C_TOKEN( token )            (::oox::NMSP_dmlChart | XML_##token)
-#define CDR_TOKEN( token )          (::oox::NMSP_dmlChartDr | XML_##token)
-#define DGM_TOKEN( token )          (::oox::NMSP_dmlDiagram | XML_##token)
-#define O_TOKEN( token )            (::oox::NMSP_vmlOffice | XML_##token)
-#define PC_TOKEN( token )           (::oox::NMSP_packageContentTypes | XML_##token)
-#define PPT_TOKEN( token )          (::oox::NMSP_ppt | XML_##token)
-#define PR_TOKEN( token )           (::oox::NMSP_packageRel | XML_##token)
-#define R_TOKEN( token )            (::oox::NMSP_officeRel | XML_##token)
-#define VML_TOKEN( token )          (::oox::NMSP_vml | XML_##token)
-#define VMLX_TOKEN( token )         (::oox::NMSP_vmlExcel | XML_##token)
-#define XDR_TOKEN( token )          (::oox::NMSP_dmlSpreadDr | XML_##token)
-#define XLS_TOKEN( token )          (::oox::NMSP_xls | XML_##token)
-#define XM_TOKEN( token )           (::oox::NMSP_xm | XML_##token)
-#define XML_TOKEN( token )          (::oox::NMSP_xml | XML_##token)
+#define OOX_TOKEN( namespace, token ) (::oox::NMSP_##namespace | ::oox::XML_##token)
+
+#define A_TOKEN( token )        OOX_TOKEN( dml, token )
+#define AX_TOKEN( token )       OOX_TOKEN( ax, token )
+#define C_TOKEN( token )        OOX_TOKEN( dmlChart, token )
+#define CDR_TOKEN( token )      OOX_TOKEN( dmlChartDr, token )
+#define DGM_TOKEN( token )      OOX_TOKEN( dmlDiagram, token )
+#define O_TOKEN( token )        OOX_TOKEN( vmlOffice, token )
+#define PC_TOKEN( token )       OOX_TOKEN( packageContentTypes, token )
+#define PPT_TOKEN( token )      OOX_TOKEN( ppt, token )
+#define PR_TOKEN( token )       OOX_TOKEN( packageRel, token )
+#define R_TOKEN( token )        OOX_TOKEN( officeRel, token )
+#define VML_TOKEN( token )      OOX_TOKEN( vml, token )
+#define VMLX_TOKEN( token )     OOX_TOKEN( vmlExcel, token )
+#define XDR_TOKEN( token )      OOX_TOKEN( dmlSpreadDr, token )
+#define XLS_TOKEN( token )      OOX_TOKEN( xls, token )
+#define XM_TOKEN( token )       OOX_TOKEN( xm, token )
+#define XML_TOKEN( token )      OOX_TOKEN( xml, token )
 
 // ============================================================================
 

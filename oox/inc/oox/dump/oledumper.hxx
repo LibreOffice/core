@@ -181,7 +181,7 @@ protected:
     void                construct( const ObjectBase& rParent );
 
     virtual void        implDumpStream(
-                            const BinaryInputStreamRef& rxStrm,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxStrm,
                             const ::rtl::OUString& rStrgPath,
                             const ::rtl::OUString& rStrmName,
                             const ::rtl::OUString& rSysFileName );
@@ -763,7 +763,7 @@ public:
 
 protected:
     virtual void        implDumpStream(
-                            const BinaryInputStreamRef& rxStrm,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxStrm,
                             const ::rtl::OUString& rStrgPath,
                             const ::rtl::OUString& rStrmName,
                             const ::rtl::OUString& rSysFileName );
@@ -858,7 +858,7 @@ public:
 
 protected:
     virtual void        implDumpStream(
-                            const BinaryInputStreamRef& rxStrm,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxStrm,
                             const ::rtl::OUString& rStrgPath,
                             const ::rtl::OUString& rStrmName,
                             const ::rtl::OUString& rSysFileName );
@@ -880,7 +880,7 @@ public:
 
 protected:
     virtual void        implDumpStream(
-                            const BinaryInputStreamRef& rxStrm,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxStrm,
                             const ::rtl::OUString& rStrgPath,
                             const ::rtl::OUString& rStrmName,
                             const ::rtl::OUString& rSysFileName );
@@ -898,7 +898,7 @@ public:
 
 protected:
     virtual void        implDumpStream(
-                            const BinaryInputStreamRef& rxStrm,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxStrm,
                             const ::rtl::OUString& rStrgPath,
                             const ::rtl::OUString& rStrmName,
                             const ::rtl::OUString& rSysFileName );

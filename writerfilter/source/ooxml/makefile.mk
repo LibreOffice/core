@@ -169,8 +169,8 @@ GENERATEDFILES= \
     $(TOKENXMLTMP) \
     $(TOKENXML)
 
-$(TOKENXMLTMP): $(SOLARVER)$/$(INPATH)$/inc$(UPDMINOREXT)$/oox$/token.txt
-    @$(TYPE) $(SOLARVER)$/$(INPATH)$/inc$(UPDMINOREXT)$/oox$/token.txt | $(SED) "s#\(.*\)#<fasttoken>\1</fasttoken>#" > $@
+$(TOKENXMLTMP): $(SOLARVER)$/$(INPATH)$/inc$(UPDMINOREXT)$/oox$/token$/tokens.txt
+    @$(TYPE) $(SOLARVER)$/$(INPATH)$/inc$(UPDMINOREXT)$/oox$/token$/tokens.txt | $(SED) "s#\(.*\)#<fasttoken>\1</fasttoken>#" > $@
 
 $(TOKENXML): tokenxmlheader $(TOKENXMLTMP) tokenxmlfooter
     @$(TYPE) tokenxmlheader $(TOKENXMLTMP) tokenxmlfooter > $@

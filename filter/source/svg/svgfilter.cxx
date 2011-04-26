@@ -86,7 +86,7 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
         pFocusWindow->EnterWait();
 
     if( mxDstDoc.is() )
-        bRet = implImport( rDescriptor );
+        bRet = sal_False;//implImport( rDescriptor );
     else
     if( mxSrcDoc.is() )
     {
@@ -118,18 +118,18 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
             }
         }
 
-        Sequence< PropertyValue > aNewDescritor( rDescriptor );
+        Sequence< PropertyValue > aNewDescriptor( rDescriptor );
 
         if( nCurrentPageNumber > 0 )
         {
             const sal_uInt32    nOldLength = rDescriptor.getLength();
 
-            aNewDescritor.realloc( nOldLength + 1 );
-            aNewDescritor[ nOldLength ].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PagePos" ) );
-            aNewDescritor[ nOldLength ].Value <<= static_cast< sal_Int16 >( nCurrentPageNumber - 1 );
+            aNewDescriptor.realloc( nOldLength + 1 );
+            aNewDescriptor[ nOldLength ].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PagePos" ) );
+            aNewDescriptor[ nOldLength ].Value <<= static_cast< sal_Int16 >( nCurrentPageNumber - 1 );
         }
 
-        bRet = implExport( aNewDescritor );
+        bRet = implExport( aNewDescriptor );
     }
     else
         bRet = sal_False;
@@ -166,20 +166,6 @@ void SAL_CALL SVGFilter::setTargetDocument( const Reference< XComponent >& xDoc 
 
 rtl::OUString SAL_CALL SVGFilter::detect( Sequence< PropertyValue >& io_rDescriptor ) throw (RuntimeException)
 {
-    uno::Reference< io::XInputStream > xInput;
-    rtl::OUString aURL;
-
-    const beans::PropertyValue* pAttribs = io_rDescriptor.getConstArray();
-    const sal_Int32 nAttribs = io_rDescriptor.getLength();
-    for( sal_Int32 i = 0; i < nAttribs; i++ )
-    {
-        if( pAttribs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InputStream" ) ) )
-            pAttribs[i].Value >>= xInput;
-    }
-
-    if( !xInput.is() )
-        return rtl::OUString();
-
     uno::Reference< io::XSeekable > xSeek( xInput, uno::UNO_QUERY );
     if( xSeek.is() )
         xSeek->seek( 0 );

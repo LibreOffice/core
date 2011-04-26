@@ -558,12 +558,12 @@ Reference< XInputStream > XmlFilterBase::implGetInputStream( MediaDescriptor& rM
 
 StorageRef XmlFilterBase::implCreateStorage( const Reference< XInputStream >& rxInStream ) const
 {
-    return StorageRef( new ZipStorage( getServiceFactory(), rxInStream ) );
+    return StorageRef( new ZipStorage( getComponentContext(), rxInStream ) );
 }
 
 StorageRef XmlFilterBase::implCreateStorage( const Reference< XStream >& rxOutStream ) const
 {
-    return StorageRef( new ZipStorage( getServiceFactory(), rxOutStream ) );
+    return StorageRef( new ZipStorage( getComponentContext(), rxOutStream ) );
 }
 
 // ============================================================================

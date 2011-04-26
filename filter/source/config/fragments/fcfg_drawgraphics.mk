@@ -53,6 +53,7 @@ F4_DRAWGRAPHICS = \
     RAS___Sun_Rasterfile \
     SGF___StarOffice_Writer_SGF \
     SGV___StarDraw_2_0 \
+    SVG___Scalable_Vector_Graphics \
     SVM___StarView_Metafile \
     SVG___Scalable_Vector_Graphics \
     TGA___Truevision_TARGA \

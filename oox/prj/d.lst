@@ -20,9 +20,10 @@ mkdir: %_DEST%\inc%_EXT%\oox\xls
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 
 ..\%__SRC%\inc\oox\token\tokens.hxx %_DEST%\inc%_EXT%\oox\token\tokens.hxx
-..\%__SRC%\misc\namespaces.txt %_DEST%\inc%_EXT%\oox\namespaces.txt
+..\%__SRC%\misc\namespaces.txt %_DEST%\inc%_EXT%\oox\token\namespaces.txt
 
-..\source\token\tokens.txt %_DEST%\inc%_EXT%\oox\token.txt
+..\source\token\tokens.txt %_DEST%\inc%_EXT%\oox\token\tokens.txt
+
 ..\inc\oox\dllapi.h %_DEST%\inc%_EXT%\oox\dllapi.h
 ..\inc\oox\helper\binarystreambase.hxx %_DEST%\inc%_EXT%\oox\helper\binarystreambase.hxx
 ..\inc\oox\helper\helper.hxx %_DEST%\inc%_EXT%\oox\helper\helper.hxx

@@ -28,6 +28,7 @@
 
 #include "oox/vml/vmldrawingfragment.hxx"
 
+#include "oox/core/xmlfilterbase.hxx"
 #include "oox/vml/vmldrawing.hxx"
 #include "oox/vml/vmlinputstream.hxx"
 #include "oox/vml/vmlshapecontext.hxx"
@@ -54,7 +55,7 @@ DrawingFragment::DrawingFragment( XmlFilterBase& rFilter, const OUString& rFragm
 Reference< XInputStream > DrawingFragment::openFragmentStream() const
 {
     // #i104719# create an input stream that preprocesses the VML data
-    return new InputStream( FragmentHandler2::openFragmentStream() );
+    return new InputStream( getFilter().getComponentContext(), FragmentHandler2::openFragmentStream() );
 }
 
 ContextHandlerRef DrawingFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )

@@ -86,6 +86,7 @@ void BiffOutputRecordBuffer::fill( sal_uInt8 nValue, sal_uInt16 nBytes )
 // ============================================================================
 
 BiffOutputStream::BiffOutputStream( BinaryOutputStream& rOutStream, sal_uInt16 nMaxRecSize ) :
+    BinaryStreamBase( true ),
     maRecBuffer( rOutStream, nMaxRecSize ),
     mnPortionSize( 0 ),
     mnPortionPos( 0 )
@@ -97,19 +98,19 @@ BiffOutputStream::BiffOutputStream( BinaryOutputStream& rOutStream, sal_uInt16 n
 void BiffOutputStream::startRecord( sal_uInt16 nRecId )
 {
     maRecBuffer.startRecord( nRecId );
-    setPortionSize( 0 );
+    setPortionSize( 1 );
 }
 
 void BiffOutputStream::endRecord()
 {
-    setPortionSize( 0 );
+    setPortionSize( 1 );
     maRecBuffer.endRecord();
 }
 
-void BiffOutputStream::setPortionSize( sal_uInt16 nSize )
+void BiffOutputStream::setPortionSize( sal_uInt8 nSize )
 {
     OSL_ENSURE( mnPortionPos == 0, "BiffOutputStream::setPortionSize - block operation inside portion" );
-    mnPortionSize = nSize;
+    mnPortionSize = ::std::max< sal_uInt8 >( nSize, 1 );
     mnPortionPos = 0;
 }
 
@@ -120,20 +121,20 @@ sal_Int64 BiffOutputStream::tellBase() const
     return maRecBuffer.getBaseStream().tell();
 }
 
-sal_Int64 BiffOutputStream::getBaseLength() const
+sal_Int64 BiffOutputStream::sizeBase() const
 {
-    return maRecBuffer.getBaseStream().getLength();
+    return maRecBuffer.getBaseStream().size();
 }
 
 // BinaryOutputStream interface (stream write access) -------------------------
 
-void BiffOutputStream::writeData( const StreamDataSequence& rData )
+void BiffOutputStream::writeData( const StreamDataSequence& rData, size_t nAtomSize )
 {
     if( rData.hasElements() )
-        writeMemory( rData.getConstArray(), rData.getLength() );
+        writeMemory( rData.getConstArray(), rData.getLength(), nAtomSize );
 }
 
-void BiffOutputStream::writeMemory( const void* pMem, sal_Int32 nBytes )
+void BiffOutputStream::writeMemory( const void* pMem, sal_Int32 nBytes, size_t nAtomSize )
 {
     if( pMem && (nBytes > 0) )
     {
@@ -141,7 +142,7 @@ void BiffOutputStream::writeMemory( const void* pMem, sal_Int32 nBytes )
         sal_Int32 nBytesLeft = nBytes;
         while( nBytesLeft > 0 )
         {
-            sal_uInt16 nBlockSize = prepareRawBlock( nBytesLeft );
+            sal_uInt16 nBlockSize = prepareWriteBlock( nBytesLeft, nAtomSize );
             maRecBuffer.write( pnBuffer, nBlockSize );
             pnBuffer += nBlockSize;
             nBytesLeft -= nBlockSize;
@@ -149,59 +150,60 @@ void BiffOutputStream::writeMemory( const void* pMem, sal_Int32 nBytes )
     }
 }
 
-void BiffOutputStream::fill( sal_uInt8 nValue, sal_Int32 nBytes )
+void BiffOutputStream::fill( sal_uInt8 nValue, sal_Int32 nBytes, size_t nAtomSize )
 {
     sal_Int32 nBytesLeft = nBytes;
     while( nBytesLeft > 0 )
     {
-        sal_uInt16 nBlockSize = prepareRawBlock( nBytesLeft );
+        sal_uInt16 nBlockSize = prepareWriteBlock( nBytesLeft, nAtomSize );
         maRecBuffer.fill( nValue, nBlockSize );
         nBytesLeft -= nBlockSize;
     }
 }
 
-void BiffOutputStream::writeBlock( const void* pMem, sal_uInt16 nBytes )
-{
-    ensureRawBlock( nBytes );
-    maRecBuffer.write( pMem, nBytes );
-}
-
 // private --------------------------------------------------------------------
 
-void BiffOutputStream::writeAtom( const void* pMem, sal_uInt8 nSize )
-{
-    // byte swapping is done in calling BinaryOutputStream::writeValue() template function
-    writeBlock( pMem, nSize );
-}
-
-void BiffOutputStream::ensureRawBlock( sal_uInt16 nSize )
-{
-    if( (maRecBuffer.getRecLeft() < nSize) ||
-        ((mnPortionSize > 0) && (mnPortionPos == 0) && (maRecBuffer.getRecLeft() < mnPortionSize)) )
-    {
-        maRecBuffer.endRecord();
-        maRecBuffer.startRecord( BIFF_ID_CONT );
-    }
-    if( mnPortionSize > 0 )
-    {
-        OSL_ENSURE( mnPortionPos + nSize <= mnPortionSize, "BiffOutputStream::ensureRawBlock - portion overflow" );
-        mnPortionPos = (mnPortionPos + nSize) % mnPortionSize;  // prevent compiler warning, do not use operator+=, operator%=
-    }
-}
-
-sal_uInt16 BiffOutputStream::prepareRawBlock( sal_Int32 nTotalSize )
+sal_uInt16 BiffOutputStream::prepareWriteBlock( sal_Int32 nTotalSize, size_t nAtomSize )
 {
     sal_uInt16 nRecLeft = maRecBuffer.getRecLeft();
-    if( mnPortionSize > 0 )
+    if( mnPortionSize <= 1 )
     {
-        OSL_ENSURE( mnPortionPos == 0, "BiffOutputStream::prepareRawBlock - block operation inside portion" );
-        OSL_ENSURE( nTotalSize % mnPortionSize == 0, "BiffOutputStream::prepareRawBlock - portion size does not match block size" );
-        nRecLeft = (nRecLeft / mnPortionSize) * mnPortionSize;
+        // no portions: restrict remaining record size to entire atoms
+        nRecLeft = static_cast< sal_uInt16 >( (nRecLeft / nAtomSize) * nAtomSize );
     }
-    sal_uInt16 nSize = getLimitedValue< sal_uInt16, sal_Int32 >( nTotalSize, 0, nRecLeft );
-    ensureRawBlock( nSize );
-    return nSize;
+    else
+    {
+        sal_Int32 nPortionLeft = mnPortionSize - mnPortionPos;
+        if( nTotalSize <= nPortionLeft )
+        {
+            // block fits into the current portion
+            OSL_ENSURE( nPortionLeft <= nRecLeft, "BiffOutputStream::prepareWriteBlock - portion exceeds record" );
+            mnPortionPos = static_cast< sal_uInt8 >( (mnPortionPos + nTotalSize) % mnPortionSize );
+        }
+        else
+        {
+            // restrict remaining record size to entire portions
+            OSL_ENSURE( mnPortionPos == 0, "BiffOutputStream::prepareWriteBlock - writing over multiple portions starts inside portion" );
+            mnPortionPos = 0;
+            // check that atom size matches portion size
+            OSL_ENSURE( mnPortionSize % nAtomSize == 0, "BiffOutputStream::prepareWriteBlock - atom size does not match portion size" );
+            sal_uInt8 nPortionSize = static_cast< sal_uInt8 >( (mnPortionSize / nAtomSize) * nAtomSize );
+            // restrict remaining record size to entire portions
+            nRecLeft = (nRecLeft / nPortionSize) * nPortionSize;
+        }
+    }
+
+    // current record has space for some data: return size of available space
+    if( nRecLeft > 0 )
+        return getLimitedValue< sal_uInt16, sal_Int32 >( nTotalSize, 0, nRecLeft );
+
+    // finish current record and start a new CONTINUE record
+    maRecBuffer.endRecord();
+    maRecBuffer.startRecord( BIFF_ID_CONT );
+    mnPortionPos = 0;
+    return prepareWriteBlock( nTotalSize, nAtomSize );
 }
+
 // ============================================================================
 
 } // namespace xls

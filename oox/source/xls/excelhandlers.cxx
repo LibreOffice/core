@@ -52,17 +52,10 @@ WorkbookFragmentBase::WorkbookFragmentBase(
 
 // ============================================================================
 
-WorksheetFragmentBase::WorksheetFragmentBase( const WorkbookHelper& rHelper,
-        const OUString& rFragmentPath, const ISegmentProgressBarRef& rxProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
-    FragmentHandler2( rHelper.getOoxFilter(), rFragmentPath ),
-    WorksheetHelperRoot( rHelper, rxProgressBar, eSheetType, nSheet )
-{
-}
-
 WorksheetFragmentBase::WorksheetFragmentBase(
         const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
     FragmentHandler2( rHelper.getOoxFilter(), rFragmentPath ),
-    WorksheetHelperRoot( rHelper )
+    WorksheetHelper( rHelper )
 {
 }
 
@@ -82,14 +75,8 @@ BiffWorkbookContextBase::BiffWorkbookContextBase( const WorkbookHelper& rHelper 
 
 // ----------------------------------------------------------------------------
 
-BiffWorksheetContextBase::BiffWorksheetContextBase( const WorkbookHelper& rHelper,
-        const ISegmentProgressBarRef& rxProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
-    WorksheetHelperRoot( rHelper, rxProgressBar, eSheetType, nSheet )
-{
-}
-
 BiffWorksheetContextBase::BiffWorksheetContextBase( const WorksheetHelper& rHelper ) :
-    WorksheetHelperRoot( rHelper )
+    WorksheetHelper( rHelper )
 {
 }
 
@@ -104,17 +91,33 @@ const sal_uInt16 BIFF_BOF_CHART             = 0x0020;   /// BIFF2-BIFF8 chart sh
 const sal_uInt16 BIFF_BOF_MACRO             = 0x0040;   /// BIFF4-BIFF8 macro sheet.
 const sal_uInt16 BIFF_BOF_WORKSPACE         = 0x0100;   /// BIFF3-BIFF8 workspace.
 
-BiffFragmentType lclStartFragment( BiffInputStream& rStrm, BiffType eBiff )
+} // namespace
+
+// ----------------------------------------------------------------------------
+
+BiffFragmentHandler::BiffFragmentHandler( const FilterBase& rFilter, const OUString& rStrmName )
+{
+    // do not automatically close the root stream (indicated by empty stream name)
+    bool bRootStrm = rStrmName.getLength() == 0;
+    mxXInStrm.reset( new BinaryXInputStream( rFilter.openInputStream( rStrmName ), !bRootStrm ) );
+    mxBiffStrm.reset( new BiffInputStream( *mxXInStrm ) );
+}
+
+BiffFragmentHandler::~BiffFragmentHandler()
+{
+}
+
+BiffFragmentType BiffFragmentHandler::startFragment( BiffType eBiff )
 {
     BiffFragmentType eFragment = BIFF_FRAGMENT_UNKNOWN;
     /*  #i23425# Don't rely on BOF record ID to read BOF contents, but on
         the detected BIFF version. */
-    if( BiffHelper::isBofRecord( rStrm ) )
+    if( mxBiffStrm->startNextRecord() && BiffHelper::isBofRecord( *mxBiffStrm ) )
     {
         // BOF is always written unencrypted
-        rStrm.enableDecoder( false );
-        rStrm.skip( 2 );
-        sal_uInt16 nType = rStrm.readuInt16();
+        mxBiffStrm->enableDecoder( false );
+        mxBiffStrm->skip( 2 );
+        sal_uInt16 nType = mxBiffStrm->readuInt16();
 
         // decide which fragment types are valid for current BIFF version
         switch( eBiff )
@@ -167,32 +170,6 @@ BiffFragmentType lclStartFragment( BiffInputStream& rStrm, BiffType eBiff )
     return eFragment;
 }
 
-} // namespace
-
-// ----------------------------------------------------------------------------
-
-BiffFragmentHandler::BiffFragmentHandler( const FilterBase& rFilter, const OUString& rStrmName )
-{
-    // do not automatically close the root stream (indicated by empty stream name)
-    bool bRootStrm = rStrmName.getLength() == 0;
-    mxXInStrm.reset( new BinaryXInputStream( rFilter.openInputStream( rStrmName ), !bRootStrm ) );
-    mxBiffStrm.reset( new BiffInputStream( *mxXInStrm ) );
-}
-
-BiffFragmentHandler::~BiffFragmentHandler()
-{
-}
-
-BiffFragmentType BiffFragmentHandler::startFragment( BiffType eBiff )
-{
-    return mxBiffStrm->startNextRecord() ? lclStartFragment( *mxBiffStrm, eBiff ) : BIFF_FRAGMENT_UNKNOWN;
-}
-
-BiffFragmentType BiffFragmentHandler::startFragment( BiffType eBiff, sal_Int64 nRecHandle )
-{
-    return mxBiffStrm->startRecordByHandle( nRecHandle ) ? lclStartFragment( *mxBiffStrm, eBiff ) : BIFF_FRAGMENT_UNKNOWN;
-}
-
 bool BiffFragmentHandler::skipFragment()
 {
     while( mxBiffStrm->startNextRecord() && (mxBiffStrm->getRecId() != BIFF_ID_EOF) )
@@ -201,7 +178,7 @@ bool BiffFragmentHandler::skipFragment()
     return !mxBiffStrm->isEof() && (mxBiffStrm->getRecId() == BIFF_ID_EOF);
 }
 
-// ----------------------------------------------------------------------------
+// ============================================================================
 
 BiffWorkbookFragmentBase::BiffWorkbookFragmentBase( const WorkbookHelper& rHelper, const OUString& rStrmName, bool bCloneDecoder ) :
     BiffFragmentHandler( rHelper.getBaseFilter(), rStrmName ),
@@ -213,18 +190,16 @@ BiffWorkbookFragmentBase::BiffWorkbookFragmentBase( const WorkbookHelper& rHelpe
 
 // ----------------------------------------------------------------------------
 
-BiffWorksheetFragmentBase::BiffWorksheetFragmentBase( const BiffWorkbookFragmentBase& rParent,
-        const ISegmentProgressBarRef& rxProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
+BiffWorksheetFragmentBase::BiffWorksheetFragmentBase( const WorksheetHelper& rHelper, const BiffWorkbookFragmentBase& rParent ) :
     BiffFragmentHandler( rParent ),
-    WorksheetHelperRoot( rParent, rxProgressBar, eSheetType, nSheet )
+    WorksheetHelper( rHelper )
 {
 }
 
 // ----------------------------------------------------------------------------
 
-BiffSkipWorksheetFragment::BiffSkipWorksheetFragment( const BiffWorkbookFragmentBase& rParent,
-        const ISegmentProgressBarRef& rxProgressBar, sal_Int16 nSheet ) :
-    BiffWorksheetFragmentBase( rParent, rxProgressBar, SHEETTYPE_EMPTYSHEET, nSheet )
+BiffSkipWorksheetFragment::BiffSkipWorksheetFragment( const WorksheetHelper& rHelper, const BiffWorkbookFragmentBase& rParent ) :
+    BiffWorksheetFragmentBase( rHelper, rParent )
 {
 }
 

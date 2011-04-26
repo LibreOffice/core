@@ -46,9 +46,8 @@ using ::rtl::OUString;
 
 // ============================================================================
 
-ChartsheetFragment::ChartsheetFragment( const WorkbookHelper& rHelper,
-        const OUString& rFragmentPath, const ISegmentProgressBarRef& rxProgressBar, sal_Int16 nSheet ) :
-    WorksheetFragmentBase( rHelper, rFragmentPath, rxProgressBar, SHEETTYPE_CHARTSHEET, nSheet )
+ChartsheetFragment::ChartsheetFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
+    WorksheetFragmentBase( rHelper, rFragmentPath )
 {
 }
 
@@ -180,9 +179,8 @@ void ChartsheetFragment::importDrawing( SequenceInputStream& rStrm )
 
 // ============================================================================
 
-BiffChartsheetFragment::BiffChartsheetFragment( const BiffWorkbookFragmentBase& rParent,
-        const ISegmentProgressBarRef& rxProgressBar, sal_Int16 nSheet ) :
-    BiffWorksheetFragmentBase( rParent, rxProgressBar, SHEETTYPE_CHARTSHEET, nSheet )
+BiffChartsheetFragment::BiffChartsheetFragment( const WorksheetHelper& rHelper, const BiffWorkbookFragmentBase& rParent ) :
+    BiffWorksheetFragmentBase( rHelper, rParent )
 {
 }
 

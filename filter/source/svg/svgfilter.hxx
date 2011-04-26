@@ -3,9 +3,12 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: svgfilter.hxx,v $
+ * $Revision: 1.10.110.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,6 +62,9 @@
 #include <boost/unordered_map.hpp>
 #include <osl/diagnose.h>
 #include <rtl/process.h>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dpolygonclipper.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/tempfile.hxx>
@@ -78,6 +84,8 @@
 
 #include "svgfilter.hxx"
 #include "svgscript.hxx"
+
+#include <cstdio>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
@@ -105,25 +113,42 @@ using namespace ::std;
 // #110680#
 class SVGExport : public SvXMLExport
 {
-private:
-
-                            SVGExport();
-
-protected:
-
-    virtual void            _ExportMeta() {}
-    virtual void            _ExportStyles( sal_Bool /* bUsed */ ) {}
-    virtual void            _ExportAutoStyles() {}
-    virtual void            _ExportContent() {}
-    virtual void            _ExportMasterStyles() {}
-    virtual sal_uInt32      exportDoc( enum ::xmloff::token::XMLTokenEnum /* eClass */ ) { return 0; }
+    typedef ::std::list< ::basegfx::B2DPolyPolygon > B2DPolyPolygonList;
 
 public:
 
-    SVGExport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
-        const Reference< XDocumentHandler >& rxHandler );
-    virtual                 ~SVGExport();
+    SVGExport( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+                const Reference< XDocumentHandler >& rxHandler,
+                const Sequence< PropertyValue >& rFilterData );
+
+    virtual ~SVGExport();
+
+    sal_Bool IsUseTinyProfile() const;
+    sal_Bool IsEmbedFonts() const;
+    sal_Bool IsUseNativeTextDecoration() const;
+    ::rtl::OUString GetGlyphPlacement() const;
+    sal_Bool IsUseOpacity() const;
+    sal_Bool IsUseGradient() const;
+
+    void  pushClip( const ::basegfx::B2DPolyPolygon& rPolyPoly );
+    void  popClip();
+    sal_Bool  hasClip() const;
+    const ::basegfx::B2DPolyPolygon* getCurClip() const;
+
+protected:
+
+virtual void            _ExportStyles( sal_Bool /* bUsed */ ) {}
+virtual void            _ExportAutoStyles() {}
+virtual void            _ExportContent() {}
+virtual void            _ExportMasterStyles() {}
+virtual sal_uInt32      exportDoc( enum ::xmloff::token::XMLTokenEnum /* eClass */ ) { return 0; }
+
+private:
+
+    const Sequence< PropertyValue >&    mrFilterData;
+    B2DPolyPolygonList                  maClipList;
+
+    SVGExport();
 };
 
 // ------------------------
@@ -146,7 +171,7 @@ public:
                                     ~ObjectRepresentation();
 
     ObjectRepresentation&           operator=( const ObjectRepresentation& rPresentation );
-    bool                            operator==( const ObjectRepresentation& rPresentation ) const;
+    sal_Bool                            operator==( const ObjectRepresentation& rPresentation ) const;
 
     const Reference< XInterface >&  GetObject() const { return mxObject; }
     sal_Bool                        HasRepresentation() const { return mpMtf != NULL; }
@@ -159,7 +184,10 @@ public:
 
 struct HashReferenceXInterface
 {
-    size_t operator()( const Reference< XInterface >& rxIf ) const { return reinterpret_cast< size_t >( rxIf.get() ); }
+    size_t operator()( const Reference< XInterface >& rxIf ) const
+    {
+        return reinterpret_cast< size_t >( rxIf.get() );
+    }
 };
 
 // -------------
@@ -176,6 +204,7 @@ class SVGFilter : public cppu::WeakImplHelper4 < XFilter,
                                                  XExtendedFilterDetection >
 {
     typedef ::boost::unordered_map< Reference< XInterface >, ObjectRepresentation, HashReferenceXInterface > ObjectMap;
+    typedef ::std::vector< ::rtl::OUString > UniqueIdVector;
 
 private:
 
@@ -192,6 +221,12 @@ private:
     Reference< XComponent >             mxSrcDoc;
     Reference< XComponent >             mxDstDoc;
     Reference< XDrawPage >              mxDefaultPage;
+    Sequence< PropertyValue >           maFilterData;
+    UniqueIdVector                      maUniqueIdVector;
+    sal_Int32                           mnMasterSlideId;
+    sal_Int32                           mnSlideId;
+    sal_Int32                           mnDrawingGroupId;
+    sal_Int32                           mnDrawingId;
     Link                                maOldFieldHdl;
 
     sal_Bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException);
@@ -223,7 +258,7 @@ private:
     sal_Bool                            implCreateObjectsFromBackground( const Reference< XDrawPage >& rxMasterPage );
 
     ::rtl::OUString                     implGetClassFromShape( const Reference< XShape >& rxShape );
-    ::rtl::OUString                     implGetValidIDFromInterface( const Reference< XInterface >& rxIf );
+    ::rtl::OUString                     implGetValidIDFromInterface( const Reference< XInterface >& rxIf, sal_Bool bUnique = sal_False );
 
                                         DECL_LINK( CalcFieldHdl, EditFieldInfo* );
 

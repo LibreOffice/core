@@ -21688,6 +21688,7 @@
       <value name="bestFit" tokenid="ooxml:Value_wordprocessingml_ST_Zoom_bestFit">bestFit</value>
       <value name="textFit" tokenid="ooxml:Value_wordprocessingml_ST_Zoom_textFit">textFit</value>
     </resource>
+    <resource name="ST_Percentage" resource="Integer" generated="yes"/>
     <resource name="CT_Zoom" resource="Properties" tag="settings">
       <attribute name="val" tokenid="ooxml:CT_Zoom_val"/>
       <attribute name="percent" tokenid="ooxml:CT_Zoom_percent"/>
@@ -22598,7 +22599,56 @@
       <attribute name="val" tokenid="ooxml:CT_CalendarType_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
-    <resource name="CT_SdtContentRun" resource="Properties" tag="content"/>
+    <resource name="CT_SdtPr" resource="Properties" tag="field">
+      <element name="rPr" tokenid="ooxml:CT_SdtPr_rPr"/>
+      <element name="alias" tokenid="ooxml:CT_SdtPr_alias"/>
+      <element name="lock" tokenid="ooxml:CT_SdtPr_lock"/>
+      <element name="placeholder" tokenid="ooxml:CT_SdtPr_placeholder"/>
+      <element name="showingPlcHdr" tokenid="ooxml:CT_SdtPr_showingPlcHdr"/>
+      <element name="dataBinding" tokenid="ooxml:CT_SdtPr_dataBinding"/>
+      <element name="temporary" tokenid="ooxml:CT_SdtPr_temporary"/>
+      <element name="id" tokenid="ooxml:CT_SdtPr_id"/>
+      <element name="tag" tokenid="ooxml:CT_SdtPr_tag"/>
+      <element name="equation" tokenid="ooxml:CT_SdtPr_equation"/>
+      <element name="comboBox" tokenid="ooxml:CT_SdtPr_comboBox"/>
+      <element name="date" tokenid="ooxml:CT_SdtPr_date"/>
+      <element name="docPartObj" tokenid="ooxml:CT_SdtPr_docPartObj"/>
+      <element name="docPartList" tokenid="ooxml:CT_SdtPr_docPartList"/>
+      <element name="dropDownList" tokenid="ooxml:CT_SdtPr_dropDownList"/>
+      <element name="picture" tokenid="ooxml:CT_SdtPr_picture"/>
+      <element name="richText" tokenid="ooxml:CT_SdtPr_richText"/>
+      <element name="text" tokenid="ooxml:CT_SdtPr_text"/>
+      <element name="citation" tokenid="ooxml:CT_SdtPr_citation"/>
+      <element name="group" tokenid="ooxml:CT_SdtPr_group"/>
+      <element name="bibliography" tokenid="ooxml:CT_SdtPr_bibliography"/>
+    </resource>
+    <resource name="CT_SdtEndPr" resource="Properties" tag="field">
+      <element name="rPr" tokenid="ooxml:CT_SdtEndPr_rPr"/>
+    </resource>
+    <resource name="CT_SdtContentRun" resource="Stream" tag="field"/>
+    <resource name="CT_SdtContentBlock" resource="Stream" tag="field"/>
+    <resource name="CT_SdtContentRow" resource="Stream" tag="field"/>
+    <resource name="CT_SdtContentCell" resource="Stream" tag="field"/>
+    <resource name="CT_SdtBlock" resource="Stream" tag="field">
+      <element name="sdtPr" tokenid="ooxml:CT_SdtBlock_sdtPr"/>
+      <element name="sdtEndPr" tokenid="ooxml:CT_SdtBlock_sdtEndPr"/>
+      <element name="sdtContent" tokenid="ooxml:CT_SdtBlock_sdtContent"/>
+    </resource>
+    <resource name="CT_SdtRun" resource="Stream" tag="field">
+      <element name="sdtPr" tokenid="ooxml:CT_SdtRun_sdtPr"/>
+      <element name="sdtEndPr" tokenid="ooxml:CT_SdtRun_sdtEndPr"/>
+      <element name="sdtContent" tokenid="ooxml:CT_SdtRun_sdtContent"/>
+    </resource>
+    <resource name="CT_SdtCell" resource="Stream" tag="field">
+      <element name="sdtPr" tokenid="ooxml:CT_SdtCell_sdtPr"/>
+      <element name="sdtEndPr" tokenid="ooxml:CT_SdtCell_sdtEndPr"/>
+      <element name="sdtContent" tokenid="ooxml:CT_SdtCell_sdtContent"/>
+    </resource>
+    <resource name="CT_SdtRow" resource="Stream" tag="field">
+      <element name="sdtPr" tokenid="ooxml:CT_SdtRow_sdtPr"/>
+      <element name="sdtEndPr" tokenid="ooxml:CT_SdtRow_sdtEndPr"/>
+      <element name="sdtContent" tokenid="ooxml:CT_SdtRow_sdtContent"/>
+    </resource>
     <resource name="CT_Attr" resource="Properties" tag="content">
       <attribute name="uri" tokenid="ooxml:CT_Attr_uri"/>
       <attribute name="name" tokenid="ooxml:CT_Attr_name"/>

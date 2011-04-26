@@ -158,7 +158,7 @@ private:
     typedef ::std::deque< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphicObject > > GraphicObjectDeque;
     typedef ::std::map< ::rtl::OUString, ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > > EmbeddedGraphicMap;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxCompContext;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphicProvider > mxGraphicProvider;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XUnitConversion > mxUnitConversion;
     ::com::sun::star::awt::DeviceInfo maDeviceInfo; /// Current output device info.

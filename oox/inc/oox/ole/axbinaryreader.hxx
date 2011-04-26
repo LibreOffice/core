@@ -41,7 +41,7 @@ namespace ole {
 /** A wrapper for a binary input stream that supports aligned read operations.
 
     The implementation does not support seeking back the wrapped stream. All
-    seeking operations (tell, seek, align) are performed relative to the
+    seeking operations (tell, seekTo, align) are performed relative to the
     position of the wrapped stream at construction time of this wrapper. It is
     possible to construct this wrapper with an unseekable input stream without
     loosing any functionality.
@@ -51,21 +51,26 @@ class AxAlignedInputStream : public BinaryInputStream
 public:
     explicit            AxAlignedInputStream( BinaryInputStream& rInStrm );
 
+    /** Returns the size of the data this stream represents, if the wrapped
+        stream supports the size() operation. */
+    virtual sal_Int64   size() const;
     /** Return the current relative stream position (relative to position of
         the wrapped stream at construction time). */
     virtual sal_Int64   tell() const;
     /** Seeks the stream to the passed relative position, if it is behind the
         current position. */
     virtual void        seek( sal_Int64 nPos );
+    /** Closes the input stream but not the wrapped stream. */
+    virtual void        close();
 
     /** Reads nBytes bytes to the passed sequence.
         @return  Number of bytes really read. */
-    virtual sal_Int32   readData( StreamDataSequence& orData, sal_Int32 nBytes );
+    virtual sal_Int32   readData( StreamDataSequence& orData, sal_Int32 nBytes, size_t nAtomSize = 1 );
     /** Reads nBytes bytes to the (existing) buffer opMem.
         @return  Number of bytes really read. */
-    virtual sal_Int32   readMemory( void* opMem, sal_Int32 nBytes );
+    virtual sal_Int32   readMemory( void* opMem, sal_Int32 nBytes, size_t nAtomSize = 1 );
     /** Seeks the stream forward by the passed number of bytes. */
-    virtual void        skip( sal_Int32 nBytes );
+    virtual void        skip( sal_Int32 nBytes, size_t nAtomSize = 1 );
 
     /** Aligns the stream to a multiple of the passed size (relative to the
         position of the wrapped stream at construction time). */
@@ -79,8 +84,9 @@ public:
     inline void         skipAligned() { align( sizeof( Type ) ); skip( sizeof( Type ) ); }
 
 private:
-    BinaryInputStream&  mrInStrm;           /// The wrapped input stream.
+    BinaryInputStream*  mpInStrm;           /// The wrapped input stream.
     sal_Int64           mnStrmPos;          /// Tracks relative position in the stream.
+    sal_Int64           mnStrmSize;         /// Size of the wrapped stream data.
 };
 
 // ============================================================================

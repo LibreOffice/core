@@ -26,11 +26,12 @@
  *
  ************************************************************************/
 
-#include "oox/helper/propertyset.hxx"
 #include "oox/ppt/timenode.hxx"
 #include "oox/ppt/pptshape.hxx"
 #include "oox/ppt/slidepersist.hxx"
 #include "oox/drawingml/fillproperties.hxx"
+#include "oox/drawingml/shapepropertymap.hxx"
+#include "oox/helper/propertyset.hxx"
 #include "oox/vml/vmldrawing.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 
@@ -177,24 +178,12 @@ void SlidePersist::createBackground( const XmlFilterBase& rFilterBase )
 {
     if ( mpBackgroundPropertiesPtr )
     {
-        try
-        {
-            sal_Int32 nPhClr = API_RGB_TRANSPARENT;
-            if ( maBackgroundColorRef.isUsed() )
-                nPhClr = maBackgroundColorRef.getColor( rFilterBase.getGraphicHelper() );
+        sal_Int32 nPhClr = maBackgroundColor.isUsed() ?
+            maBackgroundColor.getColor( rFilterBase.getGraphicHelper() ) : API_RGB_TRANSPARENT;
 
-            PropertyMap aPropMap;
-            static const rtl::OUString sBackground( RTL_CONSTASCII_USTRINGPARAM( "Background" ) );
-            uno::Reference< beans::XPropertySet > xPagePropSet( mxPage, uno::UNO_QUERY_THROW );
-            uno::Reference< beans::XPropertySet > xPropertySet( aPropMap.makePropertySet() );
-            PropertySet aPropSet( xPropertySet );
-            mpBackgroundPropertiesPtr->pushToPropSet( aPropSet, rFilterBase.getModelObjectHelper(),
-                rFilterBase.getGraphicHelper(), oox::drawingml::FillProperties::DEFAULT_IDS, 0, nPhClr );
-            xPagePropSet->setPropertyValue( sBackground, Any( xPropertySet ) );
-        }
-        catch( Exception )
-        {
-        }
+        ::oox::drawingml::ShapePropertyMap aPropMap( rFilterBase.getModelObjectHelper() );
+        mpBackgroundPropertiesPtr->pushToPropMap( aPropMap, rFilterBase.getGraphicHelper(), 0, nPhClr );
+        PropertySet( mxPage ).setProperty( PROP_Background, aPropMap.makePropertySet() );
     }
 }
 

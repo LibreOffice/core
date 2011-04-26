@@ -93,10 +93,10 @@ public:
         @param nPhClr  Actual color for the phClr placeholder color used in theme style lists. */
     sal_Int32           getColor( const GraphicHelper& rGraphicHelper, sal_Int32 nPhClr = API_RGB_TRANSPARENT ) const;
 
-    /** Returns true, if the color has a transparence set. */
-    bool                hasTransparence() const;
-    /** Returns the transparence of the color (0 = opaque, 100 = full transparent). */
-    sal_Int16           getTransparence() const;
+    /** Returns true, if the color is transparent. */
+    bool                hasTransparency() const;
+    /** Returns the transparency of the color (0 = opaque, 100 = full transparent). */
+    sal_Int16           getTransparency() const;
 
 private:
     /** Internal helper for getColor(). */

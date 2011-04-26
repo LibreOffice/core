@@ -39,6 +39,7 @@
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/script/ModuleType.hpp>
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 #include <unotools/pathoptions.hxx>
@@ -172,6 +173,7 @@ SfxObjectShell* findShellForUrl( const rtl::OUString& sMacroURLOrPath )
 
 // sMod can be empty ( but we really need the library to search in )
 // if sMod is empty and a macro is found then sMod is updated
+// if sMod is empty, only standard modules will be searched (no class, document, form modules)
 bool hasMacro( SfxObjectShell* pShell, const String& sLibrary, String& sMod, const String& sMacro )
 {
     bool bFound = false;
@@ -211,8 +213,12 @@ bool hasMacro( SfxObjectShell* pShell, const String& sLibrary, String& sMod, con
                 {
                     if( SbModule* pModule = pMethod->GetModule() )
                     {
-                        sMod = pModule->GetName();
-                        bFound = true;
+                        // when searching for a macro without module name, do not search in class/document/form modules
+                        if( pModule->GetModuleType() == script::ModuleType::NORMAL )
+                        {
+                            sMod = pModule->GetName();
+                            bFound = true;
+                        }
                     }
                 }
             }
@@ -220,6 +226,19 @@ bool hasMacro( SfxObjectShell* pShell, const String& sLibrary, String& sMod, con
     }
     return bFound;
 }
+
+::rtl::OUString getDefaultProjectName( SfxObjectShell* pShell )
+{
+    ::rtl::OUString aPrjName;
+    if( BasicManager* pBasicMgr = pShell ? pShell->GetBasicManager() : 0 )
+    {
+        aPrjName = pBasicMgr->GetName();
+        if( aPrjName.getLength() == 0 )
+            aPrjName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
+    }
+    return aPrjName;
+}
+
 void parseMacro( const rtl::OUString& sMacro, String& sContainer, String& sModule, String& sProcedure )
 {
     sal_Int32 nMacroDot = sMacro.lastIndexOf( '.' );
@@ -239,6 +258,18 @@ void parseMacro( const rtl::OUString& sMacro, String& sContainer, String& sModul
     }
     else
        sProcedure = sMacro;
+}
+
+::rtl::OUString resolveVBAMacro( SfxObjectShell* pShell, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModuleName, const ::rtl::OUString& rMacroName )
+{
+    if( pShell )
+    {
+        ::rtl::OUString aLibName = (rLibName.getLength() > 0) ? rLibName : getDefaultProjectName( pShell );
+        String aModuleName = rModuleName;
+        if( hasMacro( pShell, aLibName, aModuleName, rMacroName ) )
+            return ::rtl::OUStringBuffer( aLibName ).append( sal_Unicode( '.' ) ).append( aModuleName ).append( sal_Unicode( '.' ) ).append( rMacroName ).makeStringAndClear();
+    }
+    return ::rtl::OUString();
 }
 
 MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUString& MacroName, bool bSearchGlobalTemplates )
@@ -284,18 +315,27 @@ MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUString& 
     // macro format = Container.Module.Procedure
     String sContainer, sModule, sProcedure;
     parseMacro( aMacroName, sContainer, sModule, sProcedure );
-    uno::Reference< container::XNameContainer > xPrjNameCache;
 
+#if 0
     // As long as service VBAProjectNameProvider isn't supported in the model, disable the createInstance call
     // (the ServiceNotRegisteredException is wrongly caught in ScModelObj::createInstance)
-    //uno::Reference< lang::XMultiServiceFactory> xSF( pShell->GetModel(), uno::UNO_QUERY);
-    //if ( xSF.is() )
-    //    xPrjNameCache.set( xSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAProjectNameProvider" ) ) ), uno::UNO_QUERY );
+    uno::Reference< container::XNameContainer > xPrjNameCache;
+    uno::Reference< lang::XMultiServiceFactory> xSF( pShell->GetModel(), uno::UNO_QUERY);
+    if ( xSF.is() ) try
+    {
+        xPrjNameCache.set( xSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAProjectNameProvider" ) ) ), uno::UNO_QUERY );
+    }
+    catch( uno::Exception& )    // createInstance may throw
+    {
+    }
+#endif
 
     std::vector< rtl::OUString > sSearchList;
 
     if ( sContainer.Len() > 0 )
     {
+// service VBAProjectNameProvider not implemented
+#if 0
         // get the Project associated with the Container
         if ( xPrjNameCache.is() )
         {
@@ -306,6 +346,7 @@ MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUString& 
                 sContainer = sProject;
             }
         }
+#endif
         sSearchList.push_back( sContainer ); // First Lib to search
     }
     else
@@ -322,6 +363,9 @@ MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUString& 
             catch( uno::Exception& /*e*/) {}
 
         sSearchList.push_back( sThisProject ); // First Lib to search
+
+// service VBAProjectNameProvider not implemented
+#if 0
         if ( xPrjNameCache.is() )
         {
             // is this document created from a template?
@@ -378,7 +422,9 @@ MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUString& 
 
             }
         }
+#endif
     }
+
     std::vector< rtl::OUString >::iterator it_end = sSearchList.end();
     for ( std::vector< rtl::OUString >::iterator it = sSearchList.begin(); !aRes.mbFound && (it != it_end); ++it )
     {

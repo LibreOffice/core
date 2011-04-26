@@ -521,9 +521,6 @@ DrawingFragment::DrawingFragment( const WorksheetHelper& rHelper, const OUString
     mxDrawPage( rHelper.getDrawPage(), UNO_QUERY )
 {
     OSL_ENSURE( mxDrawPage.is(), "DrawingFragment::DrawingFragment - missing drawing page" );
-    maApiSheetSize = getDrawPageSize();
-    maEmuSheetSize.Width = static_cast< sal_Int64 >( getUnitConverter().scaleFromMm100( maApiSheetSize.Width, UNIT_EMU ) );
-    maEmuSheetSize.Height = static_cast< sal_Int64 >( getUnitConverter().scaleFromMm100( maApiSheetSize.Height, UNIT_EMU ) );
 }
 
 ContextHandlerRef DrawingFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
@@ -598,20 +595,23 @@ void DrawingFragment::onEndElement()
         case XDR_TOKEN( absoluteAnchor ):
         case XDR_TOKEN( oneCellAnchor ):
         case XDR_TOKEN( twoCellAnchor ):
-            if( mxDrawPage.is() && mxShape.get() && mxAnchor.get() && mxAnchor->isValidAnchor() )
+            if( mxDrawPage.is() && mxShape.get() && mxAnchor.get() )
             {
-                Rectangle aShapeRect = mxAnchor->calcEmuLocation( maEmuSheetSize );
-                if( (aShapeRect.X >= 0) && (aShapeRect.Y >= 0) && (aShapeRect.Width >= 0) && (aShapeRect.Height >= 0) )
+                EmuRectangle aShapeRectEmu = mxAnchor->calcAnchorRectEmu( getDrawPageSize() );
+                if( (aShapeRectEmu.X >= 0) && (aShapeRectEmu.Y >= 0) && (aShapeRectEmu.Width >= 0) && (aShapeRectEmu.Height >= 0) )
                 {
-                    mxShape->addShape( getOoxFilter(), &getTheme(), mxDrawPage, &aShapeRect );
+                    // TODO: DrawingML implementation expects 32-bit coordinates for EMU rectangles (change that to EmuRectangle)
+                    Rectangle aShapeRectEmu32(
+                        getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.X, 0, SAL_MAX_INT32 ),
+                        getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Y, 0, SAL_MAX_INT32 ),
+                        getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Width, 0, SAL_MAX_INT32 ),
+                        getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Height, 0, SAL_MAX_INT32 ) );
+                    mxShape->addShape( getOoxFilter(), &getTheme(), mxDrawPage, &aShapeRectEmu32 );
                     /*  Collect all shape positions in the WorksheetHelper base
                         class. But first, scale EMUs to 1/100 mm. */
-                    const UnitConverter& rUnitConv = getUnitConverter();
                     Rectangle aShapeRectHmm(
-                        rUnitConv.scaleToMm100( aShapeRect.X, UNIT_EMU ),
-                        rUnitConv.scaleToMm100( aShapeRect.Y, UNIT_EMU ),
-                        rUnitConv.scaleToMm100( aShapeRect.Width, UNIT_EMU ),
-                        rUnitConv.scaleToMm100( aShapeRect.Height, UNIT_EMU ) );
+                        convertEmuToHmm( aShapeRectEmu.X ), convertEmuToHmm( aShapeRectEmu.Y ),
+                        convertEmuToHmm( aShapeRectEmu.Width ), convertEmuToHmm( aShapeRectEmu.Height ) );
                     extendShapeBoundingBox( aShapeRectHmm );
                 }
             }
@@ -773,7 +773,7 @@ bool VmlDrawing::convertClientAnchor( Rectangle& orShapeRect, const OUString& rS
         return false;
     ShapeAnchor aAnchor( *this );
     aAnchor.importVmlAnchor( rShapeAnchor );
-    orShapeRect = aAnchor.calcApiLocation( getDrawPageSize(), AnchorSizeModel() );
+    orShapeRect = aAnchor.calcAnchorRectHmm( getDrawPageSize() );
     return (orShapeRect.Width >= 0) && (orShapeRect.Height >= 0);
 }
 

@@ -95,9 +95,6 @@ private:
     CONTINUE record, use setPortionSize(). Example: To write a sequence of
     16-bit values where 4 values form a unit and cannot be split, call
     setPortionSize(8) first (4*2 bytes == 8).
-
-    To write unicode character arrays, call writeUnicodeBuffer(). It creates
-    CONTINUE records and repeats the unicode string flag byte automatically.
 */
 class BiffOutputStream : public BinaryOutputStream
 {
@@ -114,47 +111,44 @@ public:
     /** Finishes the current record. Must be called for every started record. */
     void                endRecord();
 
-    /** Sets size of data portion in bytes. 0 means no portions are used. */
-    void                setPortionSize( sal_uInt16 nSize );
+    /** Sets size of data portion in bytes. 0 or 1 means no portions are used. */
+    void                setPortionSize( sal_uInt8 nSize );
 
     // BinaryStreamBase interface (seeking) -----------------------------------
 
     /** Returns the absolute position in the wrapped binary stream. */
     sal_Int64           tellBase() const;
     /** Returns the total size of the wrapped binary stream. */
-    sal_Int64           getBaseLength() const;
+    sal_Int64           sizeBase() const;
 
     // BinaryOutputStream interface (stream write access) ---------------------
 
     /** Writes the passed data sequence. */
-    virtual void        writeData( const StreamDataSequence& rData );
+    virtual void        writeData( const StreamDataSequence& rData, size_t nAtomSize = 1 );
     /** Writes nBytes bytes from the passed buffer pMem. */
-    virtual void        writeMemory( const void* pMem, sal_Int32 nBytes );
+    virtual void        writeMemory( const void* pMem, sal_Int32 nBytes, size_t nAtomSize = 1 );
 
     /** Writes a sequence of nBytes bytes with the passed value. */
-    void                fill( sal_uInt8 nValue, sal_Int32 nBytes );
-    /** Writes a block of memory, ensures that it is not split to a CONTINUE record. */
-    void                writeBlock( const void* pMem, sal_uInt16 nBytes );
+    void                fill( sal_uInt8 nValue, sal_Int32 nBytes, size_t nAtomSize = 1 );
 
-    /** Stream operator for integral and floating-point types. */
+    /** Stream operator for all data types supported by the writeValue() function. */
     template< typename Type >
     inline BiffOutputStream& operator<<( Type nValue ) { writeValue( nValue ); return *this; }
 
     // ------------------------------------------------------------------------
 private:
-    /** Forwards calls of writeValue() template functions to the record buffer. */
-    virtual void        writeAtom( const void* pMem, sal_uInt8 nSize );
-
     /** Checks the remaining size in the current record, creates CONTINUE record if needed. */
     void                ensureRawBlock( sal_uInt16 nSize );
-    /** Checks the remaining size in the current record and creates CONTINUE record if needed.
+
+    /** Checks the remaining size in the current record and creates a CONTINUE
+        record if needed.
         @return  Maximum size left for writing to current record. */
-    sal_uInt16          prepareRawBlock( sal_Int32 nTotalSize );
+    sal_uInt16          prepareWriteBlock( sal_Int32 nTotalSize, size_t nAtomSize );
 
 private:
     prv::BiffOutputRecordBuffer maRecBuffer;    /// Raw record data buffer.
-    sal_uInt16          mnPortionSize;          /// Size of data portions.
-    sal_uInt16          mnPortionPos;           /// Position in current portion.
+    sal_uInt8           mnPortionSize;          /// Size of data portions.
+    sal_uInt8           mnPortionPos;           /// Position in current portion.
 };
 
 // ============================================================================

@@ -50,10 +50,9 @@
 
 namespace com { namespace sun { namespace star {
     namespace io { class XInputStream; }
-    namespace io { class XTextInputStream; }
     namespace io { class XOutputStream; }
     namespace io { class XTextOutputStream; }
-    namespace lang { class XMultiServiceFactory; }
+    namespace uno { class XComponentContext; }
 } } }
 
 namespace comphelper {
@@ -125,43 +124,46 @@ public:
     // input streams ----------------------------------------------------------
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
-                        getXInputStream( BinaryInputStream& rStrm );
-
-    static ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
                         openInputStream(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                             const ::rtl::OUString& rFileName );
-
-    static ::com::sun::star::uno::Reference< ::com::sun::star::io::XTextInputStream >
-                        openTextInputStream(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStrm,
-                            const ::rtl::OUString& rEncoding );
-
-    static ::com::sun::star::uno::Reference< ::com::sun::star::io::XTextInputStream >
-                        openTextInputStream(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
-                            const ::rtl::OUString& rFileName,
-                            const ::rtl::OUString& rEncoding );
 
     // output streams ---------------------------------------------------------
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
                         openOutputStream(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                             const ::rtl::OUString& rFileName );
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::io::XTextOutputStream >
                         openTextOutputStream(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rxOutStrm,
-                            const ::rtl::OUString& rEncoding );
+                            rtl_TextEncoding eTextEnc );
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::io::XTextOutputStream >
                         openTextOutputStream(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                             const ::rtl::OUString& rFileName,
-                            const ::rtl::OUString& rEncoding );
+                            rtl_TextEncoding eTextEnc );
+};
+
+// ============================================================================
+
+class BinaryInputStreamRef : public ::oox::BinaryInputStreamRef
+{
+public:
+    inline              BinaryInputStreamRef() {}
+
+    inline /*implicit*/ BinaryInputStreamRef( BinaryInputStream* pInStrm ) :
+                            ::oox::BinaryInputStreamRef( pInStrm ) {}
+
+    inline /*implicit*/ BinaryInputStreamRef( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStrm ) :
+                            ::oox::BinaryInputStreamRef( new BinaryXInputStream( rxInStrm, true ) ) {}
+
+    template< typename StreamType >
+    inline /*implicit*/ BinaryInputStreamRef( const ::boost::shared_ptr< StreamType >& rxInStrm ) :
+                            ::oox::BinaryInputStreamRef( rxInStrm ) {}
 };
 
 // ============================================================================
@@ -551,7 +553,9 @@ typedef ::boost::shared_ptr< Base > BaseRef;
             |               |
             |               +---->  BinaryStreamObject
             |               |
-            |               +---->  TextStreamObject
+            |               +---->  TextStreamObjectBase
+            |               |       |
+            |               |       +---->  TextStreamObject
             |               |       |
             |               |       +---->  XmlStreamObject
             |               |
@@ -891,14 +895,14 @@ class SharedConfigData : public Base, public ConfigItemBase
 public:
     explicit            SharedConfigData(
                             const ::rtl::OUString& rFileName,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                             const StorageRef& rxRootStrg,
                             const ::rtl::OUString& rSysFileName,
                             ::comphelper::MediaDescriptor& rMediaDesc );
 
     virtual             ~SharedConfigData();
 
-    inline const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& getFactory() const { return mxFactory; }
+    inline const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& getContext() const { return mxContext; }
     inline const StorageRef& getRootStorage() const { return mxRootStrg; }
     inline const ::rtl::OUString& getSysFileName() const { return maSysFileName; }
 
@@ -933,7 +937,7 @@ private:
     typedef ::std::map< ::rtl::OUString, ::rtl::OUString >  ConfigDataMap;
     typedef ::std::map< ::rtl::OUString, NameListRef >      NameListMap;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxContext;
     StorageRef          mxRootStrg;
     ::rtl::OUString     maSysFileName;
     ::comphelper::MediaDescriptor& mrMediaDesc;
@@ -978,14 +982,14 @@ public:
                             const ::oox::core::FilterBase& rFilter );
     explicit            Config(
                             const sal_Char* pcEnvVar,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                             const StorageRef& rxRootStrg,
                             const ::rtl::OUString& rSysFileName,
                             ::comphelper::MediaDescriptor& rMediaDesc );
 
     virtual             ~Config();
 
-    inline const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& getFactory() const { return mxCfgData->getFactory(); }
+    inline const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& getContext() const { return mxCfgData->getContext(); }
     inline const StorageRef& getRootStorage() const { return mxCfgData->getRootStorage(); }
     inline const ::rtl::OUString& getSysFileName() const { return mxCfgData->getSysFileName(); }
 
@@ -1023,7 +1027,7 @@ protected:
                             const ::oox::core::FilterBase& rFilter );
     void                construct(
                             const sal_Char* pcEnvVar,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                             const StorageRef& rxRootStrg,
                             const ::rtl::OUString& rSysFileName,
                             ::comphelper::MediaDescriptor& rMediaDesc );
@@ -1077,10 +1081,7 @@ class Output : public Base
 {
 public:
     explicit            Output(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XTextOutputStream >& rxStrm );
-
-    explicit            Output(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                             const ::rtl::OUString& rFileName );
 
     // ------------------------------------------------------------------------
@@ -1153,8 +1154,6 @@ public:
 
     // ------------------------------------------------------------------------
 protected:
-    void                construct( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XTextOutputStream >& rxStrm );
-
     virtual bool        implIsValid() const;
 
 private:
@@ -1280,8 +1279,8 @@ class ObjectBase : public Base
 public:
     virtual             ~ObjectBase();
 
-    inline const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
-                        getFactory() const { return mxConfig->getFactory(); }
+    inline const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
+                        getContext() const { return mxConfig->getContext(); }
 
     void                dump();
 
@@ -1324,7 +1323,7 @@ protected:
     virtual void        implDump();
 
     virtual void        implDumpStream(
-                            const BinaryInputStreamRef& rxStrm,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxStrm,
                             const ::rtl::OUString& rStrgPath,
                             const ::rtl::OUString& rStrmName,
                             const ::rtl::OUString& rSysFileName );
@@ -1395,7 +1394,6 @@ protected:
 
     using               ObjectBase::construct;
     void                construct( const ObjectBase& rParent, const ::rtl::OUString& rSysFileName );
-    void                construct( const ObjectBase& rParent, const OutputRef& rxOut );
     void                construct( const OutputObjectBase& rParent );
 
     virtual bool        implIsValid() const;
@@ -1454,6 +1452,7 @@ protected:
 
 protected:
     OutputRef           mxOut;
+    ::rtl::OUString     maSysFileName;
 };
 
 typedef ::boost::shared_ptr< OutputObjectBase > OutputObjectRef;
@@ -1579,7 +1578,6 @@ protected:
 
     using               OutputObjectBase::construct;
     void                construct( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const ::rtl::OUString& rSysFileName );
-    void                construct( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OutputRef& rxOut );
     void                construct( const OutputObjectBase& rParent, const BinaryInputStreamRef& rxStrm );
     void                construct( const InputObjectBase& rParent );
 
@@ -1806,33 +1804,63 @@ protected:
 };
 
 // ============================================================================
+// ============================================================================
 
-class TextStreamObject : public InputObjectBase
+class TextStreamObjectBase : public InputObjectBase
 {
-public:
-    explicit            TextStreamObject(
+protected:
+    inline              TextStreamObjectBase() {}
+
+    using               InputObjectBase::construct;
+    void                construct(
                             const ObjectBase& rParent,
                             const BinaryInputStreamRef& rxStrm,
                             rtl_TextEncoding eTextEnc,
                             const ::rtl::OUString& rSysFileName );
-
-    explicit            TextStreamObject(
+    void                construct(
                             const OutputObjectBase& rParent,
                             const BinaryInputStreamRef& rxStrm,
                             rtl_TextEncoding eTextEnc );
+    void                construct(
+                            const InputObjectBase& rParent,
+                            rtl_TextEncoding eTextEnc );
 
-protected:
     virtual bool        implIsValid() const;
     virtual void        implDump();
-    virtual void        implDumpLine( const ::rtl::OUString& rLine, sal_uInt32 nLine );
+
+    virtual void        implDumpText( TextInputStream& rTextStrm ) = 0;
 
 private:
+    void                constructTextStrmObj( rtl_TextEncoding eTextEnc );
+
+protected:
     ::boost::shared_ptr< TextInputStream > mxTextStrm;
 };
 
 // ============================================================================
 
-class XmlStreamObject : public TextStreamObject
+class TextLineStreamObject : public TextStreamObjectBase
+{
+public:
+    explicit            TextLineStreamObject(
+                            const ObjectBase& rParent,
+                            const BinaryInputStreamRef& rxStrm,
+                            rtl_TextEncoding eTextEnc,
+                            const ::rtl::OUString& rSysFileName );
+
+    explicit            TextLineStreamObject(
+                            const OutputObjectBase& rParent,
+                            const BinaryInputStreamRef& rxStrm,
+                            rtl_TextEncoding eTextEnc );
+
+protected:
+    virtual void        implDumpText( TextInputStream& rTextStrm );
+    virtual void        implDumpLine( const ::rtl::OUString& rLine, sal_uInt32 nLine );
+};
+
+// ============================================================================
+
+class XmlStreamObject : public TextStreamObjectBase
 {
 public:
     explicit            XmlStreamObject(
@@ -1840,12 +1868,12 @@ public:
                             const BinaryInputStreamRef& rxStrm,
                             const ::rtl::OUString& rSysFileName );
 
-protected:
-    virtual void        implDump();
-    virtual void        implDumpLine( const ::rtl::OUString& rLine, sal_uInt32 nLine );
+    explicit            XmlStreamObject(
+                            const OutputObjectBase& rParent,
+                            const BinaryInputStreamRef& rxStrm );
 
-private:
-    ::rtl::OUString     maIncompleteLine;
+protected:
+    virtual void        implDumpText( TextInputStream& rTextStrm );
 };
 
 // ============================================================================

@@ -133,7 +133,7 @@ public:
     /** Final processing after import of the fragment. */
     void                finalizeFragmentImport();
 
-    /** Creates and inserts all UNO shapes into the passed container. The virtual
+    /** Creates and inserts all UNO shapes into the draw page. The virtual
         function notifyXShapeInserted() will be called for each new shape. */
     void                convertAndInsert() const;
 

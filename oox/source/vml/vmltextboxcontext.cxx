@@ -75,6 +75,8 @@ TextPortionContext::TextPortionContext( ContextHandler2Helper& rParent,
             OSL_ENSURE( !maFont.mobStrikeout, "TextPortionContext::TextPortionContext - nested <s> elements" );
             maFont.mobStrikeout = true;
         break;
+        case XML_span:
+        break;
         default:
             OSL_ENSURE( false, "TextPortionContext::TextPortionContext - unknown element" );
     }
@@ -92,7 +94,7 @@ void TextPortionContext::onCharacters( const OUString& rChars )
     {
         case XML_span:
             // replace all NBSP characters with SP
-            mrTextBox.appendPortion( maFont, rChars.replace( 160, ' ' ) );
+            mrTextBox.appendPortion( maFont, rChars.replace( 0xA0, ' ' ) );
         break;
         default:
             mrTextBox.appendPortion( maFont, rChars );
@@ -101,19 +103,23 @@ void TextPortionContext::onCharacters( const OUString& rChars )
 
 void TextPortionContext::onEndElement()
 {
-    /*  An empty child element without own child elements represents a single
-        space character, for example:
+    /*  A child element without own child elements may contain a single space
+        character, for example:
 
-            <font>
-              <i>abc</i>
-              <font></font>
-              <b>def</b>
-            </font>
+          <div>
+            <font><i>abc</i></font>
+            <font> </font>
+            <font><b>def</b></font>
+          </div>
 
         represents the italic text 'abc', an unformatted space character, and
-        the bold text 'def'.
+        the bold text 'def'. Unfortunately, the XML parser skips the space
+        character without issuing a 'characters' event. The class member
+        'mnInitialPortions' contains the number of text portions existing when
+        this context has been constructed. If no text has been added in the
+        meantime, the space character has to be added manually.
      */
-    if( (mnInitialPortions > 0) && (mrTextBox.getPortionCount() == mnInitialPortions) )
+    if( mrTextBox.getPortionCount() == mnInitialPortions )
         mrTextBox.appendPortion( maFont, OUString( sal_Unicode( ' ' ) ) );
 }
 
@@ -143,4 +149,3 @@ ContextHandlerRef TextBoxContext::onCreateContext( sal_Int32 nElement, const Att
 
 } // namespace vml
 } // namespace oox
-

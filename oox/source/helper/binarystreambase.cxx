@@ -28,6 +28,7 @@
 
 #include "oox/helper/binarystreambase.hxx"
 
+#include <com/sun/star/io/XSeekable.hpp>
 #include <osl/diagnose.h>
 
 namespace oox {
@@ -43,30 +44,11 @@ BinaryStreamBase::~BinaryStreamBase()
 {
 }
 
-bool BinaryStreamBase::isSeekable() const
-{
-    return false;
-}
-
-sal_Int64 BinaryStreamBase::getLength() const
-{
-    return -1;
-}
-
-sal_Int64 BinaryStreamBase::tell() const
-{
-    return -1;
-}
-
-void BinaryStreamBase::seek( sal_Int64 )
-{
-}
-
 sal_Int64 BinaryStreamBase::getRemaining() const
 {
     // do not use isSeekable(), implementations may provide stream position and size even if not seekable
     sal_Int64 nPos = tell();
-    sal_Int64 nLen = getLength();
+    sal_Int64 nLen = size();
     return ((nPos >= 0) && (nLen >= 0)) ? ::std::max< sal_Int64 >( nLen - nPos, 0 ) : -1;
 }
 
@@ -74,7 +56,7 @@ void BinaryStreamBase::alignToBlock( sal_Int32 nBlockSize, sal_Int64 nAnchorPos 
 {
     sal_Int64 nStrmPos = tell();
     // nothing to do, if stream is at anchor position
-    if( isSeekable() && (0 <= nAnchorPos) && (nAnchorPos != nStrmPos) && (nBlockSize > 1) )
+    if( mbSeekable && (0 <= nAnchorPos) && (nAnchorPos != nStrmPos) && (nBlockSize > 1) )
     {
         // prevent modulo with negative arguments...
         sal_Int64 nSkipSize = (nAnchorPos < nStrmPos) ?
@@ -87,16 +69,16 @@ void BinaryStreamBase::alignToBlock( sal_Int32 nBlockSize, sal_Int64 nAnchorPos 
 // ============================================================================
 
 BinaryXSeekableStream::BinaryXSeekableStream( const Reference< XSeekable >& rxSeekable ) :
+    BinaryStreamBase( mxSeekable.is() ),
     mxSeekable( rxSeekable )
 {
 }
 
-bool BinaryXSeekableStream::isSeekable() const
+BinaryXSeekableStream::~BinaryXSeekableStream()
 {
-    return mxSeekable.is();
 }
 
-sal_Int64 BinaryXSeekableStream::getLength() const
+sal_Int64 BinaryXSeekableStream::size() const
 {
     if( mxSeekable.is() ) try
     {
@@ -104,7 +86,7 @@ sal_Int64 BinaryXSeekableStream::getLength() const
     }
     catch( Exception& )
     {
-        OSL_FAIL( "BinaryXSeekableStream::getLength - exception caught" );
+        OSL_FAIL( "BinaryXSeekableStream::size - exception caught" );
     }
     return -1;
 }
@@ -135,27 +117,44 @@ void BinaryXSeekableStream::seek( sal_Int64 nPos )
     }
 }
 
-// ============================================================================
-
-bool SequenceSeekableStream::isSeekable() const
+void BinaryXSeekableStream::close()
 {
-    return true;
+    mxSeekable.clear();
+    mbEof = true;
 }
 
-sal_Int64 SequenceSeekableStream::getLength() const
+// ============================================================================
+
+SequenceSeekableStream::SequenceSeekableStream( const StreamDataSequence& rData ) :
+    BinaryStreamBase( true ),
+    mpData( &rData ),
+    mnPos( 0 )
 {
-    return mrData.getLength();
+}
+
+sal_Int64 SequenceSeekableStream::size() const
+{
+    return mpData ? mpData->getLength() : -1;
 }
 
 sal_Int64 SequenceSeekableStream::tell() const
 {
-    return mnPos;
+    return mpData ? mnPos : -1;
 }
 
 void SequenceSeekableStream::seek( sal_Int64 nPos )
 {
-    mnPos = getLimitedValue< sal_Int32, sal_Int64 >( nPos, 0, mrData.getLength() );
-    mbEof = mnPos != nPos;
+    if( mpData )
+    {
+        mnPos = getLimitedValue< sal_Int32, sal_Int64 >( nPos, 0, mpData->getLength() );
+        mbEof = mnPos != nPos;
+    }
+}
+
+void SequenceSeekableStream::close()
+{
+    mpData = 0;
+    mbEof = true;
 }
 
 // ============================================================================
