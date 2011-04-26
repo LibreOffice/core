@@ -912,6 +912,8 @@ private:
      */
     void        MaybeAddExtraColumn(SCCOL& rCol, SCROW nRow, OutputDevice* pDev, double nPPTX, double nPPTY);
 
+    void        CopyPrintRange(const ScTable& rTable);
+
     /**
      * Use this to iterate through non-empty visible cells in a single column.
      */

@@ -104,6 +104,8 @@ public:
     void                    NotifyMoveFieldToEnd      ( ScDPFieldType eToType );
     void                    NotifyRemoveField    ( ScDPFieldType eType, size_t nFieldIndex );
 
+    Size                    GetStdFieldBtnSize() const;
+
 protected:
     virtual void            Deactivate();
 

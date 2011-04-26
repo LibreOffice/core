@@ -35,6 +35,7 @@
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <ooo/vba/XHelperInterface.hpp>
 #include <formula/grammar.hxx>
@@ -76,6 +77,7 @@ ScDocShell* GetDocShellFromRange( const css::uno::Reference< css::uno::XInterfac
 ScDocShell* GetDocShellFromRanges( const css::uno::Reference< css::sheet::XSheetCellRangeContainer >& xRanges ) throw ( css::uno::RuntimeException );
 ScDocument* GetDocumentFromRange( const css::uno::Reference< css::uno::XInterface >& xRange ) throw ( css::uno::RuntimeException );
 css::uno::Reference< css::frame::XModel > GetModelFromRange( const css::uno::Reference< css::uno::XInterface >& xRange ) throw ( css::uno::RuntimeException );
+void setUpDocumentModules( const css::uno::Reference< css::sheet::XSpreadsheetDocument >& xDoc );
 
 // ============================================================================
 

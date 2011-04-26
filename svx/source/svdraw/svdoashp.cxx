@@ -1668,6 +1668,16 @@ void SdrObjCustomShape::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
                 {
                     rInfo.bCanConvToContour = aInfo.bCanConvToContour;
                 }
+
+                if(rInfo.bShearAllowed != aInfo.bShearAllowed)
+                {
+                    rInfo.bShearAllowed = aInfo.bShearAllowed;
+                }
+
+                if(rInfo.bEdgeRadiusAllowed != aInfo.bEdgeRadiusAllowed)
+                {
+                    rInfo.bEdgeRadiusAllowed = aInfo.bEdgeRadiusAllowed;
+                }
             }
         }
     }

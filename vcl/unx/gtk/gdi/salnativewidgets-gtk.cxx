@@ -987,7 +987,7 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
             rNativeContentRegion.Right() = rNativeContentRegion.Left() + 1;
         if (!rNativeContentRegion.GetHeight())
             rNativeContentRegion.Bottom() = rNativeContentRegion.Top() + 1;
-
+        returnVal = sal_True;
     }
     if( (nType == CTRL_MENUBAR) && (nPart == PART_ENTIRE_CONTROL) )
     {
@@ -3337,6 +3337,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 
     // menu disabled entries handling
     aStyleSet.SetSkipDisabledInMenus( sal_True );
+    aStyleSet.SetAcceleratorsInContextMenus( sal_False );
     // menu colors
     GtkStyle* pMenuStyle = gtk_widget_get_style( gWidgetData[m_nScreen].gMenuWidget );
     GtkStyle* pMenuItemStyle = gtk_rc_get_style( gWidgetData[m_nScreen].gMenuItemMenuWidget );

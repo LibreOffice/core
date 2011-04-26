@@ -434,6 +434,7 @@ private:
     sal_uLong                           mnSymbolsStyle;
     sal_uLong                           mnPreferredSymbolsStyle;
     sal_uInt16                          mnSkipDisabledInMenus;
+    sal_Bool                            mnAcceleratorsInContextMenus;
     Wallpaper                       maWorkspaceGradient;
     const void*                     mpFontOptions;
 };
@@ -735,6 +736,10 @@ public:
                                         { CopyData(); mpData->mnSkipDisabledInMenus = bSkipDisabledInMenus; }
     sal_Bool                            GetSkipDisabledInMenus() const
                                         { return (sal_Bool) mpData->mnSkipDisabledInMenus; }
+    void                                                       SetAcceleratorsInContextMenus( sal_Bool bAcceleratorsInContextMenus )
+                                        { CopyData(); mpData->mnAcceleratorsInContextMenus = bAcceleratorsInContextMenus; }
+    sal_Bool                            GetAcceleratorsInContextMenus() const
+                                        { return mpData->mnAcceleratorsInContextMenus; }
 
     void                            SetCairoFontOptions( const void *pOptions )
                                         { CopyData(); mpData->mpFontOptions = pOptions;  }

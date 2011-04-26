@@ -2629,7 +2629,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
     case RES_AUTHORFLD:
         {
             ww::eField eFld =
-                (AF_SHORTCUT & nSubType ? ww::eUSERINITIALS : ww::eUSERNAME);
+                (AF_SHORTCUT & pFld->GetFormat() ? ww::eUSERINITIALS : ww::eUSERNAME);
             GetExport().OutputField(pFld, eFld, FieldString(eFld));
         }
         break;

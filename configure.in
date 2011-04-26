@@ -274,7 +274,7 @@ AC_ARG_ENABLE(broffice,
     AS_HELP_STRING([--disable-broffice],
         [When disabled, broffice specific branding artwork for use in the pt_BR
 	 locale is removed, giving uniform branding.]),
-,enable_broffice=yes)
+,enable_broffice=no)
 
 AC_ARG_ENABLE(cairo,
     AS_HELP_STRING([--disable-cairo],
@@ -1204,6 +1204,20 @@ AC_ARG_WITH(vendor,
         [Set vendor of the build.])
     [
                           Usage:     --with-vendor="John the Builder"
+    ],
+,)
+
+AC_ARG_WITH(install-dirname,
+    AS_HELP_STRING([--with-install-dirname],
+        [Specify the directory name of the core LibO install dir. The final
+         installation path is defined by <libdir>/<install-dirname>.
+         The default value is "libreoffice" and the default installation
+         patch is /usr/lib/libreoffice.
+
+         FIXME: It affects only the installation by "make install" and not the
+         generated installation sets.])
+    [
+                          Usage:     --with-install-dirname=lo-3.4.2
     ],
 ,)
 
@@ -2898,7 +2912,7 @@ elif test "$enable_ccache_skip" = "auto" ; then
          save_CXXFLAGS=$CXXFLAGS
          CXXFLAGS="$CXXFLAGS --ccache-skip -O2"
          dnl an empty program will do, we're checking the compiler flags
-         AC_COMPILE_IFELSE(AC_LANG_PROGRAM([],[]),
+         AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],
             [use_ccache=yes], [use_ccache=no])
          if test $use_ccache = yes ; then
             AC_MSG_RESULT([yes, will enable --ccache-skip])
@@ -4144,6 +4158,11 @@ AC_MSG_CHECKING([whether to enable Python 2.x UNO API])
 if test "$enable_python" != "no"; then
    AC_MSG_RESULT([yes])
    BUILD_TYPE="$BUILD_TYPE PYUNO"
+else
+   AC_MSG_RESULT([no])
+   DISABLE_PYTHON=TRUE
+   AC_SUBST(DISABLE_PYTHON)
+fi
 
 AC_MSG_CHECKING([which python to use])
 if test "$_os" = "WINNT"; then
@@ -4196,12 +4215,6 @@ AC_SUBST(PYTHON_CFLAGS)
 AC_SUBST(PYTHON_LIBS)
 HOME=`echo $HOME | $SED 's:\\\\:/:g'`
 AC_SUBST(HOME)
-dnl disable python
-else
-   AC_MSG_RESULT([no])
-   DISABLE_PYTHON=TRUE
-   AC_SUBST(DISABLE_PYTHON)
-fi
 
 dnl ===================================================================
 dnl Check for system translate-toolkit
@@ -4897,6 +4910,8 @@ fi
 AC_SUBST(WITH_LDAP)
 AC_SUBST(WITH_OPENLDAP)
 
+AC_OUTPUT([ooo.lst])
+
 dnl ===================================================================
 dnl Check for system mozilla
 dnl ===================================================================
@@ -5081,6 +5096,7 @@ else
    ENABLE_NSS_MODULE="NO"
    AC_MSG_RESULT([no])
 fi
+
 
 if test "$BUILD_MOZAB" = "TRUE"; then
   if test "$_os" = "WINNT"; then
@@ -7367,13 +7383,16 @@ AC_MSG_CHECKING([whether to include extra galleries])
 if test "z$enable_extra_gallery" = "z" -o "z$enable_extra_gallery" = "zno" ; then
   AC_MSG_RESULT([no])
   WITH_EXTRA_GALLERY=NO
+  OOOP_GALLERY_PACK=""
 else
   AC_MSG_RESULT([yes])
   WITH_EXTRA_GALLERY=YES
   BUILD_TYPE="$BUILD_TYPE EXTRA_GALLERY"
-  SCPDEFS="$SCPDEFS -DWITH_EXTRA_GALLERY"  
+  SCPDEFS="$SCPDEFS -DWITH_EXTRA_GALLERY"
+  OOOP_GALLERY_PACK="af9314c5972d95a5d6da23ffad818f68-OOOP-gallery-pack-2.8.0.0.zip"  
 fi
 AC_SUBST(WITH_EXTRA_GALLERY)
+AC_SUBST(OOOP_GALLERY_PACK)
 
 dnl ===================================================================
 dnl Test whether to include extra templates
@@ -7382,13 +7401,16 @@ AC_MSG_CHECKING([whether to include extra templates])
 if test "z$enable_extra_template" = "z" -o "z$enable_extra_template" = "zno" ; then
   AC_MSG_RESULT([no])
   WITH_EXTRA_TEMPLATE=NO
+  OOOP_TEMPLATES_PACK=""
 else
   AC_MSG_RESULT([yes])
   WITH_EXTRA_TEMPLATE=YES
   BUILD_TYPE="$BUILD_TYPE EXTRA_TEMPLATE"
   SCPDEFS="$SCPDEFS -DWITH_EXTRA_TEMPLATE"
+  OOOP_TEMPLATES_PACK="1be202fbbbc13f10592a98f70a4a87fb-OOOP-templates-pack-2.9.0.0.zip"
 fi
 AC_SUBST(WITH_EXTRA_TEMPLATE)
+AC_SUBST(OOOP_TEMPLATES_PACK)
 
 dnl ===================================================================
 dnl Test whether to include extra samples
@@ -7397,13 +7419,16 @@ AC_MSG_CHECKING([whether to include extra samples])
 if test "z$enable_extra_sample" = "z" -o "z$enable_extra_sample" = "zno" ; then
   AC_MSG_RESULT([no])
   WITH_EXTRA_SAMPLE=NO
+  OOOP_SAMPLES_PACK=""
 else
   AC_MSG_RESULT([yes])
   WITH_EXTRA_SAMPLE=YES
   BUILD_TYPE="$BUILD_TYPE EXTRA_SAMPLE"
   SCPDEFS="$SCPDEFS -DWITH_EXTRA_SAMPLE"
+  OOOP_SAMPLES_PACK="a6bccacf44914969e6e7b2f8faf4132c-OOOP-samples-pack-2.7.0.0.zip"
 fi
 AC_SUBST(WITH_EXTRA_SAMPLE)
+AC_SUBST(OOOP_SAMPLES_PACK)
 
 dnl ===================================================================
 dnl Test whether to include extra fonts
@@ -7412,13 +7437,16 @@ AC_MSG_CHECKING([whether to include extra fonts])
 if test "z$enable_extra_font" = "z" -o "z$enable_extra_font" = "zno" ; then
   AC_MSG_RESULT([no])
   WITH_EXTRA_FONT=NO
+  OOOP_FONTS_PACK=""
 else
   AC_MSG_RESULT([yes])
   WITH_EXTRA_FONT=YES
   BUILD_TYPE="$BUILD_TYPE EXTRA_FONT"
   SCPDEFS="$SCPDEFS -DWITH_EXTRA_FONT"
+  OOOP_FONTS_PACK="a10aa597411643326e27d7fc128af12d-OOOP-fonts-pack-2.9.0.0.zip"
 fi
 AC_SUBST(WITH_EXTRA_FONT)
+AC_SUBST(OOOP_FONTS_PACK)
 
 dnl ===================================================================
 dnl Test whether to enable ActiveX embedding
@@ -7816,6 +7844,14 @@ else
    AC_MSG_RESULT([$UNIXWRAPPERNAME])
 fi
 AC_SUBST(UNIXWRAPPERNAME)
+
+INSTALL_DIRNAME=`echo AC_PACKAGE_NAME | tr [[:upper:]] [[:lower:]]`
+AC_MSG_CHECKING([for install dirname])
+if test -n "$with_install_dirname" -a "$with_install_dirname" != "no" -a "$with_install_dirname" != "yes" ; then
+   INSTALL_DIRNAME="$with_install_dirname"
+fi
+AC_MSG_RESULT([$INSTALL_DIRNAME])
+AC_SUBST(INSTALL_DIRNAME)
 
 AC_MSG_CHECKING([whether to statically link to Gtk])
 if test -n "$enable_static_gtk" && test "$enable_static_gtk" != "no"; then

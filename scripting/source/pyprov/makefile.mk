@@ -35,7 +35,8 @@ TARGET=pyprov
 .INCLUDE :  settings.mk
 
 # --- Targets ------------------------------------------------------
-.IF "$(DISABLE_PYTHON)" != "TRUE"
+# mailmerge is put in an extra services.rdb
+# simply do not fiddle with that. cws sb123, sb129
 ALL : ALLTAR \
     $(DLLDEST)$/officehelper.py	\
         $(DLLDEST)$/mailmerge.py
@@ -62,12 +63,6 @@ COMPONENT_FILES=$(EXTENSIONDIR)$/pythonscript.py
 .INCLUDE : extension_pre.mk
 .INCLUDE : target.mk
 .INCLUDE : extension_post.mk
-
-.ELSE
-
-.INCLUDE : target.mk
-
-.ENDIF
 
 .ELSE
 

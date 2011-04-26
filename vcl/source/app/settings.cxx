@@ -529,6 +529,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mnUseImagesInMenus          = rData.mnUseImagesInMenus;
     mbPreferredUseImagesInMenus = rData.mbPreferredUseImagesInMenus;
     mnSkipDisabledInMenus       = rData.mnSkipDisabledInMenus;
+    mnAcceleratorsInContextMenus    = rData.mnAcceleratorsInContextMenus;
     mnToolbarIconSize           = rData.mnToolbarIconSize;
     mnSymbolsStyle              = rData.mnSymbolsStyle;
     mnPreferredSymbolsStyle         = rData.mnPreferredSymbolsStyle;
@@ -617,6 +618,7 @@ void ImplStyleData::SetStandardStyles()
     mnUseFlatMenues             = 0;
     mbPreferredUseImagesInMenus         = sal_True;
     mnSkipDisabledInMenus       = (sal_uInt16)sal_False;
+    mnAcceleratorsInContextMenus    = sal_True;
 
     Gradient aGrad( GRADIENT_LINEAR, DEFAULT_WORKSPACE_GRADIENT_START_COLOR, DEFAULT_WORKSPACE_GRADIENT_END_COLOR );
     maWorkspaceGradient = Wallpaper( aGrad );
@@ -1077,6 +1079,7 @@ sal_Bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->mnUseImagesInMenus        == rSet.mpData->mnUseImagesInMenus)         &&
          (mpData->mbPreferredUseImagesInMenus == rSet.mpData->mbPreferredUseImagesInMenus) &&
          (mpData->mnSkipDisabledInMenus     == rSet.mpData->mnSkipDisabledInMenus)      &&
+         (mpData->mnAcceleratorsInContextMenus  == rSet.mpData->mnAcceleratorsInContextMenus)       &&
          (mpData->maFontColor               == rSet.mpData->maFontColor ))
         return sal_True;
     else

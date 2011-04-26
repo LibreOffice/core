@@ -1222,6 +1222,9 @@ void ScOutputData::DrawFrame()
     // draw only rows with set RowInfo::bChanged flag
     size_t nRow1 = nFirstRow;
     drawinglayer::processor2d::BaseProcessor2D* pProcessor = CreateProcessor2D();
+    if (!pProcessor)
+        return;
+
     while( nRow1 <= nLastRow )
     {
         while( (nRow1 <= nLastRow) && !pRowInfo[ nRow1 ].bChanged ) ++nRow1;
@@ -1631,9 +1634,12 @@ void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
 
 drawinglayer::processor2d::BaseProcessor2D* ScOutputData::CreateProcessor2D( )
 {
-    basegfx::B2DRange aViewRange;
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    if (!pDrawLayer)
+        return NULL;
 
-    SdrPage *pDrawPage = pDoc->GetDrawLayer()->GetPage( static_cast< sal_uInt16 >( nTab ) );
+    basegfx::B2DRange aViewRange;
+    SdrPage *pDrawPage = pDrawLayer->GetPage( static_cast< sal_uInt16 >( nTab ) );
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos(
             basegfx::B2DHomMatrix(  ),
             pDev->GetViewTransformation(),

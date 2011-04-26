@@ -447,8 +447,12 @@ ScVbaWorksheets::Copy ( const uno::Any& Before, const uno::Any& After) throw (cs
         xSheet = pSrcSheet->createSheetCopyInNewDoc(xSrcSheet->getName());
         nItem = 1;
     }
+    else
+    {
+        nItem=0;
+    }
 
-    for (nItem = 0; nItem < nElems; ++nItem )
+    for (; nItem < nElems; ++nItem )
     {
         xSrcSheet = Sheets[nItem];
         ScVbaWorksheet* pSrcSheet = excel::getImplFromDocModuleWrapper<ScVbaWorksheet>( xSrcSheet );

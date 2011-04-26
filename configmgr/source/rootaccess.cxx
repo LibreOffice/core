@@ -284,6 +284,8 @@ void RootAccess::removeChangesListener(
     }
 }
 
+extern int tempHACK;
+
 void RootAccess::commitChanges()
     throw (css::lang::WrappedTargetException, css::uno::RuntimeException)
 {
@@ -291,6 +293,13 @@ void RootAccess::commitChanges()
     Broadcaster bc;
     {
         osl::MutexGuard g(*lock_);
+
+        // OSL_ENSURE(tempHACK, "fucktastic!, seriously busted lifecycles\n");
+        if (!tempHACK)
+        {
+            return;
+        }
+
         checkLocalizedPropertyAccess();
         int finalizedLayer;
         Modifications globalMods;

@@ -1320,6 +1320,7 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
 
     // images in menus false for MacOSX
     aStyleSettings.SetPreferredUseImagesInMenus( false );
+    aStyleSettings.SetAcceleratorsInContextMenus( sal_False );
 
     rSettings.SetStyleSettings( aStyleSettings );
 

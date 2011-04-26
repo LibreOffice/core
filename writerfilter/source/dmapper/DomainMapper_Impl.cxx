@@ -1642,15 +1642,16 @@ void DomainMapper_Impl::SetNumberFormat( const ::rtl::OUString& rCommand,
     lang::Locale aCurrentLocale = aUSLocale;
     GetCurrentLocale( aCurrentLocale );
     ::rtl::OUString sFormat = ConversionHelper::ConvertMSFormatStringToSO( sFormatString, aCurrentLocale, bHijri);
-
     //get the number formatter and convert the string to a format value
     try
     {
         uno::Reference< util::XNumberFormatsSupplier > xNumberSupplier( m_xTextDocument, uno::UNO_QUERY_THROW );
-        long nKey = xNumberSupplier->getNumberFormats()->addNewConverted( sFormat, aUSLocale, aCurrentLocale );
+        sal_Int32 nKey = xNumberSupplier->getNumberFormats()->addNewConverted( sFormat, aUSLocale, aCurrentLocale );
         xPropertySet->setPropertyValue(
             PropertyNameSupplier::GetPropertyNameSupplier().GetName(PROP_NUMBER_FORMAT),
             uno::makeAny( nKey ));
+        xPropertySet->getPropertyValue(
+            PropertyNameSupplier::GetPropertyNameSupplier().GetName(PROP_NUMBER_FORMAT ) ) >>= nKey;
     }
     catch(const uno::Exception&)
     {
@@ -1844,7 +1845,7 @@ if(!bFilled)
             {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AUTONUM")),       "SetExpression",            "SetExpression", FIELD_AUTONUM   },
             {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AUTONUMLGL")),     "SetExpression",            "SetExpression", FIELD_AUTONUMLGL },
             {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AUTONUMOUT")),     "SetExpression",            "SetExpression", FIELD_AUTONUMOUT },
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AUTHOR")),        "Author",                   "", FIELD_AUTHOR       },
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AUTHOR")),        "DocInfo.CreateAuthor",                   "", FIELD_AUTHOR       },
             {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DATE")),          "DateTime",                 "", FIELD_DATE         },
             {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("COMMENTS")),      "DocInfo.Description",      "", FIELD_COMMENTS     },
             {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CREATEDATE")),    "DocInfo.CreateDateTime",   "", FIELD_CREATEDATE   },
@@ -1886,9 +1887,11 @@ if(!bFilled)
             {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TEMPLATE")),      "TemplateName",             "", FIELD_TEMPLATE},
             {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TIME")),          "DateTime",                 "", FIELD_TIME         },
             {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TITLE")),         "DocInfo.Title",            "", FIELD_TITLE        },
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("USERINITIALS")),  "ExtendedUser",              "", FIELD_USERINITIALS},
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("USERINITIALS")),  "Author",                   "", FIELD_USERINITIALS       },
 //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("USERADDRESS")),   "",                         "", FIELD_USERADDRESS  },
-//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("USERNAME")),      "ExtendedUser",             "", FIELD_USERNAME     }
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("USERNAME")), "Author",                   "", FIELD_USERNAME       },
+
+
             {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TOC")), "com.sun.star.text.ContentIndex", "", FIELD_TOC},
             {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TC")), "com.sun.star.text.ContentIndexMark", "", FIELD_TC},
             {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NUMCHARS")), "CharacterCount", "", FIELD_NUMCHARS},
@@ -2006,12 +2009,25 @@ void DomainMapper_Impl::handleAuthor
     (FieldContextPtr pContext,
     PropertyNameSupplier& rPropNameSupplier,
      uno::Reference< uno::XInterface > & /*xFieldInterface*/,
-     uno::Reference< beans::XPropertySet > xFieldProperties)
+     uno::Reference< beans::XPropertySet > xFieldProperties,
+     FieldId  eFieldId )
 {
-    xFieldProperties->setPropertyValue
-        ( rPropNameSupplier.GetName(PROP_FULL_NAME), uno::makeAny( true ));
+    if ( eFieldId != FIELD_USERINITIALS )
+        xFieldProperties->setPropertyValue
+            ( rPropNameSupplier.GetName(PROP_FULL_NAME), uno::makeAny( true ));
+
+    sal_Int32 nLen = sizeof( " AUTHOR" );
+    if ( eFieldId != FIELD_AUTHOR )
+    {
+        if (  eFieldId == FIELD_USERINITIALS )
+            nLen = sizeof( " USERINITIALS" );
+        else if (  eFieldId == FIELD_USERNAME )
+            nLen = sizeof( " USERNAME" );
+    }
+
     ::rtl::OUString sParam =
-        lcl_ExtractParameter(pContext->GetCommand(), sizeof(" AUTHOR") );
+        lcl_ExtractParameter(pContext->GetCommand(), nLen );
+
     if(sParam.getLength())
     {
         xFieldProperties->setPropertyValue(
@@ -2036,6 +2052,7 @@ void DomainMapper_Impl::handleAuthor
     {
         #define SET_ARABIC      0x01
         #define SET_FULL_NAME   0x02
+        #define SET_DATE        0x04
         struct DocPropertyMap
         {
             const sal_Char* pDocPropertyName;
@@ -2044,20 +2061,19 @@ void DomainMapper_Impl::handleAuthor
         };
         static const DocPropertyMap aDocProperties[] =
         {
-            {"Author",           "Author",                  SET_FULL_NAME},
-            {"CreateTime",       "DocInfo.CreateDateTime",  0},
+            {"CreateTime",       "DocInfo.CreateDateTime",  SET_DATE},
             {"Characters",       "CharacterCount",          SET_ARABIC},
             {"Comments",         "DocInfo.Description",     0},
             {"Keywords",         "DocInfo.KeyWords",        0},
             {"LastPrinted",      "DocInfo.PrintDateTime",   0},
             {"LastSavedBy",      "DocInfo.ChangeAuthor",    0},
-            {"LastSavedTime",    "DocInfo.ChangeDateTime",  0},
+            {"LastSavedTime",    "DocInfo.ChangeDateTime",  SET_DATE},
             {"Paragraphs",       "ParagraphCount",          SET_ARABIC},
             {"RevisionNumber",   "DocInfo.Revision",        0},
             {"Subject",          "DocInfo.Subject",         0},
             {"Template",         "TemplateName",            0},
             {"Title",            "DocInfo.Title",           0},
-            {"TotalEditingTime", "DocInfo.EditTime",        9},
+            {"TotalEditingTime", "DocInfo.EditTime",        0},
             {"Words",            "WordCount",               SET_ARABIC}
 
             //other available DocProperties:
@@ -2111,11 +2127,19 @@ void DomainMapper_Impl::handleAuthor
                 xFieldProperties->setPropertyValue(
                     rPropNameSupplier.GetName(PROP_FULL_NAME),
                         uno::makeAny( true ));
+            else if(0 != (aDocProperties[nMap].nFlags & SET_DATE))
+            {
+                xFieldProperties->setPropertyValue(
+                    rPropNameSupplier.GetName(PROP_IS_DATE),
+                        uno::makeAny( true ));
+                SetNumberFormat( pContext->GetCommand(), xFieldProperties );
+            }
         }
     }
 
 #undef SET_ARABIC
 #undef SET_FULL_NAME
+#undef SET_DATE
 }
 
 void DomainMapper_Impl::handleToc
@@ -2432,7 +2456,9 @@ void DomainMapper_Impl::CloseFieldCommand()
                         handleAutoNum(pContext, rPropNameSupplier, xFieldInterface, xFieldProperties);
                     break;
                     case FIELD_AUTHOR       :
-                        handleAuthor(pContext, rPropNameSupplier, xFieldInterface, xFieldProperties);
+                    case FIELD_USERNAME     :
+                    case FIELD_USERINITIALS :
+                        handleAuthor(pContext, rPropNameSupplier, xFieldInterface, xFieldProperties, aIt->second.eFieldId  );
                     break;
                     case FIELD_DATE:
                     {
@@ -2449,16 +2475,23 @@ void DomainMapper_Impl::CloseFieldCommand()
                     case FIELD_COMMENTS     :
                     {
                         ::rtl::OUString sParam = lcl_ExtractParameter(pContext->GetCommand(), sizeof(" COMMENTS") );
-                        if(sParam.getLength())
-                        {
-                            xFieldProperties->setPropertyValue(
-                                    rPropNameSupplier.GetName( PROP_IS_FIXED ), uno::makeAny( true ));
+                        // A parameter with COMMENTS shouldn't set fixed
+                        // ( or at least the binary filter doesn't )
+                        // If we set fixed then we wont export a field cmd.
+                        // Additionally the para in COMMENTS is more like an
+                        // instruction to set the document property comments
+                        // with the param ( e.g. each COMMENT with a param will
+                        // overwrite the Comments document property
+                        // #TODO implement the above too
+                        xFieldProperties->setPropertyValue(
+                            rPropNameSupplier.GetName( PROP_IS_FIXED ), uno::makeAny( false ));
                             //PROP_CURRENT_PRESENTATION is set later anyway
-                        }
                     }
                     break;
                     case FIELD_CREATEDATE  :
                     {
+                        xFieldProperties->setPropertyValue(
+                            rPropNameSupplier.GetName( PROP_IS_DATE ), uno::makeAny( true ));
                         SetNumberFormat( pContext->GetCommand(), xFieldProperties );
                     }
                     break;
@@ -2694,23 +2727,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         }
                     }
                     break;
-                    case FIELD_USERINITIALS:
-                    {
-                        xFieldProperties->setPropertyValue(
-                            rPropNameSupplier.GetName(PROP_USER_DATA_TYPE), uno::makeAny( text::UserDataPart::SHORTCUT ));
-                        //todo: if initials are provided - set them as fixed content
-                        ::rtl::OUString sParam = lcl_ExtractParameter(pContext->GetCommand(), sizeof(" USERINITIALS") );
-                        if(sParam.getLength())
-                        {
-                            xFieldProperties->setPropertyValue(
-                                    rPropNameSupplier.GetName( PROP_IS_FIXED ), uno::makeAny( true ));
-                            //PROP_CURRENT_PRESENTATION is set later anyway
-                        }
-                    }
-                    break;
                     case FIELD_USERADDRESS  : //todo: user address collects street, city ...
-                    break;
-                    case FIELD_USERNAME     : //todo: user name is firstname + lastname
                     break;
                     case FIELD_TOC:
                         handleToc(pContext, rPropNameSupplier, xFieldInterface, xFieldProperties,

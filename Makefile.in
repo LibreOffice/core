@@ -8,6 +8,10 @@ else
 GBUILD_OPT:=--gmake
 endif
 
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+libdir = @libdir@
+
 all: Makefile dmake/dmake@EXEEXT@ src.downloaded
 
 	@. ./*[Ee]nv.[Ss]et.sh && \
@@ -16,11 +20,11 @@ all: Makefile dmake/dmake@EXEEXT@ src.downloaded
 
 install:
 	@. ./*[Ee]nv.[Ss]et.sh && \
-	echo "Installing in $${prefix:-@prefix@}..." && \
-	ooinstall "$${prefix:-@prefix@}" && \
+	echo "Installing in $${libdir:-@libdir@}/@INSTALL_DIRNAME@..." && \
+	ooinstall "$${libdir:-@libdir@}/@INSTALL_DIRNAME@" && \
 	echo "" && \
 	echo "Installation finished, you can now execute:" && \
-	echo "$${prefix:-@prefix@}/program/soffice"
+	echo "$${libdir:-@libdir@}/@INSTALL_DIRNAME@/program/soffice"
 
 dev-install:
 	@. ./*[Ee]nv.[Ss]et.sh && \

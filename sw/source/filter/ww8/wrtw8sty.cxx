@@ -1648,7 +1648,6 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
             bOutFirstPage = false;
         }
 
-
         // left-/right chain of pagedescs ?
         if ( pPd->GetFollow() && pPd != pPd->GetFollow() &&
                 pPd->GetFollow()->GetFollow() == pPd &&
@@ -1714,10 +1713,10 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
             MSWordSections::SetHeaderFlag( nHeadFootFlags, *pPdFirstPgFmt, WW8_HEADER_FIRST );
             MSWordSections::SetFooterFlag( nHeadFootFlags, *pPdFirstPgFmt, WW8_FOOTER_FIRST );
         }
-        // write other headers/footers only if it's not the first page - I'm not quite sure
+        // write other headers/footers only if it's not on the first page - I'm not quite sure
         // this is technically correct, but it avoids first-page headers/footers
         // extending to all pages (bnc#654230)
-        if( pPdFmt != pPdFirstPgFmt )
+        if( !titlePage || pPdFmt != pPdFirstPgFmt )
         {
             MSWordSections::SetHeaderFlag( nHeadFootFlags, *pPdFmt, WW8_HEADER_ODD );
             MSWordSections::SetFooterFlag( nHeadFootFlags, *pPdFmt, WW8_FOOTER_ODD );

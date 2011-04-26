@@ -153,7 +153,7 @@ void ImpSvNumberformatScan::InitSpecialKeyword( NfKeywordIndex eIdx ) const
             if ( !sKeyword[NF_KEY_FALSE].Len() )
             {
                 DBG_ERRORFILE( "InitSpecialKeyword: FALSE_WORD?" );
-                ((ImpSvNumberformatScan*)this)->sKeyword[NF_KEY_FALSE].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "TRUE" ) );
+                ((ImpSvNumberformatScan*)this)->sKeyword[NF_KEY_FALSE].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "FALSE" ) );
             }
         break;
         default:

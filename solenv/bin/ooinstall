@@ -67,9 +67,9 @@ my @larr = grep { $_ ne '' } split(/ /, $langs);
 $langs = join (",", @larr);
 
 $destdir='';
-if ( defined $ENV{OODESTDIR} &&
-     $ENV{OODESTDIR} ne "" ) {
-    $destdir = "-destdir \"$ENV{OODESTDIR}\"";
+if ( defined $ENV{DESTDIR} &&
+     $ENV{DESTDIR} ne "" ) {
+    $destdir = "-destdir \"$ENV{DESTDIR}\"";
 }
 
 $strip='';
