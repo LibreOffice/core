@@ -25,9 +25,6 @@
 #
 #*************************************************************************
 PRJ=..$/..
-
-
-
 PRJNAME=extras
 TARGET=wordbookall
 
@@ -35,23 +32,11 @@ TARGET=wordbookall
 
 .INCLUDE : $(PRJ)$/util$/target.pmk
 
-
-
 ZIP1TARGET      = $(WORDBOOK_ALL_TARGET)
 
-ZIP1LIST        = technical.dic
-
-
-ZIP2TARGET      = $(WORDBOOK_USER_TARGET)
-
-ZIP2LIST        = standard.dic
-
-
-
+ZIP1LIST        = technical.dic \
+                  sl.dic \
+                  en-US.dic \
+                  en-GB.dic
 
 .INCLUDE : target.mk
-
-
-
-
-

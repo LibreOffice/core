@@ -186,11 +186,10 @@ TEMPLATE_WIZARD_HOMEPAGE_TARGET = tplwizhomepage
 TEMPLATE_WIZARD_LETTER_TARGET   = tplwizletter
 TEMPLATE_WIZARD_REPORT_TARGET   = tplwizreport
 TEMPLATE_WIZARD_STYLES_TARGET   = tplwizstyles
-TEMPLATE_WIZARD_WEB_TARGET		= tplwizweb
+TEMPLATE_WIZARD_WEB_TARGET      = tplwizweb
 
 
 WORDBOOK_ALL_TARGET             = wordbook
-WORDBOOK_USER_TARGET            = wordbookuser
 
 FONTS_WIN_ARIOSO_BOLD           = fontwinariosobold
 FONTS_WIN_ARIOSO_NORMAL         = fontwinariosonormal

@@ -4,10 +4,6 @@ mkdir: %COMMON_DEST%\pck%_EXT%\openoffice
 
 ..\%COMMON_OUTDIR%\bin\*.zip %COMMON_DEST%\pck%_EXT%\*.zip
 ..\source\extensions\*.oxt %COMMON_DEST%\bin%_EXT%\*.oxt
-..\%COMMON_OUTDIR%\bin\wordbook_en-US.zip %COMMON_DEST%\pck%_EXT%\wordbook_ja.zip
-..\%COMMON_OUTDIR%\bin\wordbook_en-US.zip %COMMON_DEST%\pck%_EXT%\wordbook_ko.zip
-..\%COMMON_OUTDIR%\bin\wordbook_en-US.zip %COMMON_DEST%\pck%_EXT%\wordbook_zh-CN.zip
-..\%COMMON_OUTDIR%\bin\wordbook_en-US.zip %COMMON_DEST%\pck%_EXT%\wordbook_zh-TW.zip
 ..\source\truetype\symbol\*.ttf %COMMON_DEST%\pck%_EXT%\*.ttf
 ..\source\truetype\symbol\*.otf %COMMON_DEST%\pck%_EXT%\*.otf
 ..\source\truetype\decorative\*.ttf %COMMON_DEST%\pck%_EXT%\*.ttf
