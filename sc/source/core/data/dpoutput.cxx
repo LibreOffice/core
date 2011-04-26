@@ -350,7 +350,7 @@ uno::Sequence<sheet::MemberResult> lcl_GetSelectedPageAsResult( const uno::Refer
 }
 
 ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsSupplier>& xSrc,
-                                const ScAddress& rPos, sal_Bool bFilter ) :
+                        const ScAddress& rPos, bool bFilter ) :
     pDoc( pD ),
     xSource( xSrc ),
     aStartPos( rPos ),
@@ -526,7 +526,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
         }
         catch (uno::RuntimeException&)
         {
-            bResultsError = sal_True;
+            bResultsError = true;
         }
     }
 
@@ -695,7 +695,7 @@ void ScDPOutput::CalcSizes()
         if ( aStartPos.Col() + nRowFieldCount + nColCount - 1 > MAXCOL ||
              aStartPos.Row() + nPageSize + nHeaderSize + nColFieldCount + nRowCount > MAXROW )
         {
-            bSizeOverflow = sal_True;
+            bSizeOverflow = true;
         }
 
         nTabStartCol = aStartPos.Col();
@@ -715,7 +715,7 @@ void ScDPOutput::CalcSizes()
             nTabEndRow = nDataStartRow + (SCROW)nRowCount - 1;
         else
             nTabEndRow = nDataStartRow;     // single row will remain empty
-        bSizesValid = sal_True;
+        bSizesValid = true;
     }
 }
 
