@@ -1749,21 +1749,6 @@ File gid_File_Config_Javasettingsunopkginstall
   #endif
 End
 
-#if defined( BUILD_SPECIAL )
-#if !defined( MACOSX )
-File gid_File_Stclient_Wrapper
-    Dir = gid_Dir_Program;
-    BIN_FILE_BODY;
-#if defined ( WNT )
-    Name = "stclient_wrapper.exe";
-#else
-    Name = "stclient_wrapper";
-#endif
-    Styles = ();
-End
-#endif
-#endif
-
 #ifdef ENABLE_SVCTAGS
 File gid_File_Jar_Productregistration
     TXT_FILE_BODY;
