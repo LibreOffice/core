@@ -42,6 +42,7 @@
 /post_download
 /bin/repo-list
 /src.downloaded
+/ooo.lst
 
 # misc
 /set_soenv.last
