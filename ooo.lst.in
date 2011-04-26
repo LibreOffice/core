@@ -1,4 +1,4 @@
-http://hg.services.openoffice.org/binaries
+http://download.go-oo.org/src
 48a9f787f43a09c0a9b7b00cd1fddbbf-hyphen-2.7.1.tar.gz
 63ddc5116488985e820075e65fbe6aa4-openssl-0.9.8o.tar.gz
 09357cc74975b01714e00c5899ea1881-pixman-0.12.0.tar.gz
@@ -65,7 +65,6 @@ eeb2c7ddf0d302fba4bfc6e97eac9624-libbase-1.1.6.zip
 f94d9870737518e3b597f9265f4e9803-libserializer-1.1.6.zip
 ba2930200c9f019c2d93a8c88c651a0f-flow-engine-0.9.4.zip
 ff369e69ef0f0143beb5626164e87ae2-neon-0.29.5.tar.gz
-http://download.go-oo.org/src
 314e582264c36b3735466c522899aa07-icu4c-4_4_2-src.tgz
 451ccf439a36a568653b024534669971-ConvertTextToNumber-1.3.2.oxt
 47e1edaa44269bc537ae8cabebb0f638-JLanguageTool-1.0.0.tar.bz2
