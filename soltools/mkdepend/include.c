@@ -56,6 +56,7 @@ struct inclist *inc_path(file, include, dot, incCollection)
     register struct inclist *ip;
     struct stat st;
     boolean found = FALSE;
+    (void)dot;
 
     /*
      * Check all previously found include files for a path that
