@@ -67,6 +67,7 @@
 #include "com/sun/star/ucb/XInteractionReplaceExistingData.hpp"
 #include "com/sun/star/ucb/XInteractionSupplyName.hpp"
 #include "com/sun/star/xforms/InvalidDataOnSubmitException.hpp"
+#include "com/sun/star/loader/CannotActivateFactoryException.hpp"
 
 #include "osl/conditn.hxx"
 #include "tools/rcid.h" // RSC_STRING
@@ -854,6 +855,23 @@ UUIInteractionHelper::handleRequest_impl(
                                        bObtainErrorStringOnly,
                                        bHasErrorString,
                                        rErrorString);
+            return true;
+        }
+
+        loader::CannotActivateFactoryException aCannotActivateFactoryException;
+        if (aAnyRequest >>= aCannotActivateFactoryException)
+        {
+            ErrCode nErrorCode = ERRCODE_UUI_CANNOT_ACTIVATE_FACTORY;
+            std::vector< rtl::OUString > aArguments;
+            aArguments.push_back( aCannotActivateFactoryException.Message );
+
+            handleErrorHandlerRequest( task::InteractionClassification_ERROR,
+                                       nErrorCode,
+                                       aArguments,
+                                       rRequest->getContinuations(),
+                                       bObtainErrorStringOnly,
+                                       bHasErrorString,
+                                       rErrorString );
             return true;
         }
 
