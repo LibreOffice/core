@@ -95,6 +95,33 @@ using ::rtl::OUString;
 
 #define SC_DPOUT_MAXLEVELS  256
 
+struct ScDPOutLevelData
+{
+    long                                nDim;
+    long                                nHier;
+    long                                nLevel;
+    long                                nDimPos;
+    uno::Sequence<sheet::MemberResult>  aResult;
+    String                              maName;   /// Name is the internal field name.
+    String                              aCaption; /// Caption is the name visible in the output table.
+    bool                                mbHasHiddenMember;
+
+    ScDPOutLevelData()
+    {
+        nDim = nHier = nLevel = nDimPos = -1;
+        mbHasHiddenMember = false;
+    }
+
+    sal_Bool operator<(const ScDPOutLevelData& r) const
+        { return nDimPos<r.nDimPos || ( nDimPos==r.nDimPos && nHier<r.nHier ) ||
+            ( nDimPos==r.nDimPos && nHier==r.nHier && nLevel<r.nLevel ); }
+
+    void Swap(ScDPOutLevelData& r)
+        { ScDPOutLevelData aTemp; aTemp = r; r = *this; *this = aTemp; }
+
+    //! bug (73840) in uno::Sequence - copy and then assign doesn't work!
+};
+
 namespace {
 
 bool lcl_compareColfuc ( SCCOL i,  SCCOL j) { return (i<j); }
@@ -276,37 +303,6 @@ void ScDPOutputImpl::OutputBlockFrame ( SCCOL nStartCol, SCROW nStartRow, SCCOL 
     mpDoc->ApplyFrameAreaTab( ScRange(  nStartCol, nStartRow, mnTab, nEndCol, nEndRow , mnTab ), &aBox, &aBoxInfo );
 
 }
-
-}
-
-struct ScDPOutLevelData
-{
-    long                                nDim;
-    long                                nHier;
-    long                                nLevel;
-    long                                nDimPos;
-    uno::Sequence<sheet::MemberResult>  aResult;
-    String                              maName;   /// Name is the internal field name.
-    String                              aCaption; /// Caption is the name visible in the output table.
-    bool                                mbHasHiddenMember;
-
-    ScDPOutLevelData()
-    {
-        nDim = nHier = nLevel = nDimPos = -1;
-        mbHasHiddenMember = false;
-    }
-
-    sal_Bool operator<(const ScDPOutLevelData& r) const
-        { return nDimPos<r.nDimPos || ( nDimPos==r.nDimPos && nHier<r.nHier ) ||
-            ( nDimPos==r.nDimPos && nHier==r.nHier && nLevel<r.nLevel ); }
-
-    void Swap(ScDPOutLevelData& r)
-        { ScDPOutLevelData aTemp; aTemp = r; r = *this; *this = aTemp; }
-
-    //! bug (73840) in uno::Sequence - copy and then assign doesn't work!
-};
-
-// -----------------------------------------------------------------------
 
 void lcl_SetStyleById( ScDocument* pDoc, SCTAB nTab,
                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
@@ -532,6 +528,8 @@ uno::Sequence<sheet::MemberResult> lcl_GetSelectedPageAsResult( const uno::Refer
         }
     }
     return aRet;
+}
+
 }
 
 ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsSupplier>& xSrc,
