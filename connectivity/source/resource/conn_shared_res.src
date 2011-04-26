@@ -611,7 +611,7 @@ String STR_COMMAND_NOT_FOUND
 };
 String STR_DATABASE_NEEDS_CONVERTING
 {
-    Text [ en-US ] = "The current database need to be converted. Please insert control user  and password.";
+    Text [ en-US ] = "The current database need to be converted. Please insert control user and password.";
 };
 String STR_USER_NO_DELETE
 {
