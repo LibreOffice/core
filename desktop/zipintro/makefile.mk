@@ -45,18 +45,6 @@ ZIP3LIST= \
     $(MISC)$/$(RSCDEFIMG)$/brand$/shell$/backing_rtl_left.png \
     $(MISC)$/$(RSCDEFIMG)$/brand$/shell$/backing_rtl_right.png
 
-.IF "$(ENABLE_BROFFICE)"=="TRUE"
-ZIP1LIST+= \
-    $(MISC)$/$(RSCDEFIMG)$/brand$/intro-pt_BR.png  \
-    $(MISC)$/$(RSCDEFIMG)$/brand$/about-pt_BR.png
-ZIP2LIST+= \
-    $(MISC)$/$(RSCDEFIMG)$/brand_dev$/intro-pt_BR.png  \
-    $(MISC)$/$(RSCDEFIMG)$/brand_dev$/about-pt_BR.png
-ZIP3LIST+= \
-    $(MISC)$/$(RSCDEFIMG)$/brand$/shell$/backing_left-pt_BR.png \
-    $(MISC)$/$(RSCDEFIMG)$/brand$/shell$/backing_right-pt_BR.png
-.ENDIF # ENABLE_BROFFICE
-
 ZIP1TARGET=brand
 ZIP1DEPS=$(ZIP1LIST)
 ZIP2TARGET=brand_dev
