@@ -932,7 +932,22 @@ sal_uLong ScDPCache::GetNumberFormat( long nDim ) const
     if (maTableDataValues[nDim].empty())
         return 0;
 
-    return maTableDataValues[nDim][0].nNumFormat;
+    // TODO: This is very ugly, but the best we can do right now.  Check the
+    // first 10 dimension members, and take the first non-zero number format,
+    // else return the default number format (of 0).  For the long-term, we
+    // need to redo this cache structure to properly indicate empty cells, and
+    // skip them when trying to determine the representative number format for
+    // a dimension.
+    size_t nCount = maTableDataValues[nDim].size();
+    if (nCount > 10)
+        nCount = 10;
+    for (size_t i = 0; i < nCount; ++i)
+    {
+        sal_uLong n = maTableDataValues[nDim][i].nNumFormat;
+        if (n)
+            return n;
+    }
+    return 0;
 }
 
 bool ScDPCache::IsDateDimension( long nDim ) const
