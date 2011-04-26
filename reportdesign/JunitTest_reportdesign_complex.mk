@@ -27,6 +27,11 @@
 
 $(eval $(call gb_JunitTest_JunitTest,reportdesign_complex,SRCDIR))
 
+$(eval $(call gb_JunitTest_set_defs,reportdesign_complex,\
+	$$(DEFS) \
+	-Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/reportdesign/qa/complex/reportdesign/test_documents \
+))
+
 $(eval $(call gb_JunitTest_add_sourcefiles,reportdesign_complex,\
 	reportdesign/qa/complex/reportdesign/ReportDesignerTest \
 	reportdesign/qa/complex/reportdesign/TestDocument \
