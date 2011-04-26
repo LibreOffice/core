@@ -4910,6 +4910,8 @@ fi
 AC_SUBST(WITH_LDAP)
 AC_SUBST(WITH_OPENLDAP)
 
+AC_OUTPUT([ooo.lst])
+
 dnl ===================================================================
 dnl Check for system mozilla
 dnl ===================================================================
@@ -5095,7 +5097,6 @@ else
    AC_MSG_RESULT([no])
 fi
 
-AC_OUTPUT([ooo.lst])
 
 if test "$BUILD_MOZAB" = "TRUE"; then
   if test "$_os" = "WINNT"; then
