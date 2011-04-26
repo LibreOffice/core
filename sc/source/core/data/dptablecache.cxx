@@ -928,10 +928,11 @@ sal_uLong ScDPCache::GetNumberFormat( long nDim ) const
 {
     if ( nDim >= mnColumnCount )
         return 0;
-    if ( maTableDataValues[nDim].size()==0 )
+
+    if (maTableDataValues[nDim].empty())
         return 0;
-    else
-        return maTableDataValues[nDim][0].nNumFormat;
+
+    return maTableDataValues[nDim][0].nNumFormat;
 }
 
 bool ScDPCache::IsDateDimension( long nDim ) const
