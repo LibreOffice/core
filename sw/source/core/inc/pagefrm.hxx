@@ -116,7 +116,7 @@ class SwPageFrm: public SwFtnBossFrm
     static void GetHorizontalShadowRect( const SwRect& _rPageRect,
                                      ViewShell*    _pViewShell,
                                      SwRect&       _orBottomShadowRect,
-                                     bool bPaintLeftShado,
+                                     bool bPaintLeftShadow,
                                      bool bPaintRightShadow,
                                      bool bRightSidebar );
 
