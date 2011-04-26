@@ -82,7 +82,6 @@ using ::rtl::OUString;
 #define DP_PROP_POSITION            "Position"
 #define DP_PROP_USEDHIERARCHY       "UsedHierarchy"
 #define DP_PROP_ISDATALAYOUT        "IsDataLayoutDimension"
-#define DP_PROP_NUMBERFORMAT        "NumberFormat"
 #define DP_PROP_FILTER              "Filter"
 #define DP_PROP_COLUMNGRAND         "ColumnGrand"
 #define DP_PROP_ROWGRAND            "RowGrand"
@@ -395,7 +394,7 @@ void lcl_FillNumberFormats( sal_uInt32*& rFormats, long& rCount,
                     aDataNames[nDataCount] = String( xDimName->getName() );
                     long nFormat = ScUnoHelpFunctions::GetLongProperty(
                                             xDimProp,
-                                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_NUMBERFORMAT)) );
+                                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT)) );
                     nDataFormats[nDataCount] = nFormat;
                     if ( nFormat != 0 )
                         bAnySet = sal_True;
@@ -461,7 +460,7 @@ sal_uInt32 lcl_GetFirstNumberFormat( const uno::Reference<container::XIndexAcces
             {
                 long nFormat = ScUnoHelpFunctions::GetLongProperty(
                                         xDimProp,
-                                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_NUMBERFORMAT)) );
+                                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT)) );
 
                 return nFormat;     // use format from first found data dimension
             }
