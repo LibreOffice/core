@@ -110,7 +110,7 @@ String STR_ERROR_FILTER_NAME_EXISTS
 
 String STR_ERROR_TYPE_NAME_EXISTS
 {
-    Text [ en-US ]  = "The name for  the user interface '%s1' is already used by the XML filter '%s2'. Please enter a different name.";
+    Text [ en-US ]  = "The name for the user interface '%s1' is already used by the XML filter '%s2'. Please enter a different name.";
 };
 
 String STR_ERROR_DTD_NOT_FOUND
