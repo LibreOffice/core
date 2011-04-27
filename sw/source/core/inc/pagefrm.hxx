@@ -172,6 +172,8 @@ public:
     inline const SwCntntFrm  *FindFirstBodyCntnt() const;
     inline const SwCntntFrm  *FindLastBodyCntnt() const;
 
+    SwRect GetBoundRect() const;
+
     //Spezialisiertes GetCntntPos() fuer Felder in Rahmen.
     void GetCntntPosition( const Point &rPt, SwPosition &rPos ) const;
 

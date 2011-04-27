@@ -5538,6 +5538,21 @@ sal_Bool SwPageFrm::IsLeftShadowNeeded() const
     _orBorderAndShadowBoundRect = _pViewShell->GetOut()->PixelToLogic( aPagePxRect.SVRect() );
 }
 
+SwRect SwPageFrm::GetBoundRect() const
+{
+    const ViewShell *pSh = getRootFrm()->GetCurrShell();
+    SwRect aPageRect( Frm() );
+    SwRect aResult;
+
+    if(!pSh) {
+        return SwRect( Point(0, 0), Size(0, 0) );
+    }
+
+    SwPageFrm::GetBorderAndShadowBoundRect( aPageRect, pSh, aResult,
+        IsLeftShadowNeeded(), IsRightShadowNeeded(), SidebarPosition() ==  sw::sidebarwindows::SIDEBAR_RIGHT );
+    return aResult;
+}
+
 /*static*/ void SwPageFrm::AddSidebarBorders(SwRect &aRect, ViewShell* _pViewShell, bool bRightSidebar, bool bPx)
 {
     const SwPostItMgr *pMgr = _pViewShell ? _pViewShell->GetPostItMgr() : 0;
