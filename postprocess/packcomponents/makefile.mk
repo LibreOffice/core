@@ -38,7 +38,14 @@ PKGCONFIG_MODULES=gtk+-2.0
 GTK_TWO_FOUR=$(shell @+-$(PKG_CONFIG) --exists 'gtk+-2.0 >= 2.4.0' && echo YES)
 .END
 
+.IF "$(USE_GMAKE)" != "1"
+SM_COMPONENTS:=sm smd
+.ELSE
+SM_COMPONENTS:= component/starmath/util/sm component/starmath/util/smd
+.END
+
 my_components = \
+    $(SM_COMPONENTS)\
     abp \
     analysis \
     animcore \
@@ -62,27 +69,17 @@ my_components = \
     component/dbaccess/util/sdbt \
     component/fileaccess/source/fileacc \
     component/forms/util/frm \
-    component/formula/util/for \
     component/framework/util/fwk \
     component/framework/util/fwl \
     component/framework/util/fwm \
     component/lotuswordpro/util/lwpfilter \
     component/oox/util/oox \
-    component/reportdesign/util/rpt \
-    component/reportdesign/util/rptui \
-    component/reportdesign/util/rptxml \
     component/sc/util/sc \
     component/sc/util/scd \
     component/sc/util/scfilt \
     component/sc/util/vbaobj \
-    component/sd/util/sd \
-    component/sd/util/sdd \
-    component/sd/util/sdfilt \
     component/sfx2/util/sfx \
-    component/slideshow/util/slideshow \
     component/sot/util/sot \
-    component/starmath/util/sm \
-    component/starmath/util/smd \
     component/svl/source/fsstor/fsstorage \
     component/svl/source/passwordcontainer/passwordcontainer \
     component/svl/util/svl \
@@ -120,6 +117,7 @@ my_components = \
     filterconfig1 \
     flash \
     flat \
+    for \
     fpicker \
     fps_office \
     guesslang \
@@ -146,13 +144,21 @@ my_components = \
     placeware \
     preload \
     protocolhandler \
+    pythonloader \
     res \
     sax \
     sb \
     scn \
     scriptframe \
+    sd \
     sdbc2 \
+<<<<<<< HEAD
     simplecanvas \
+=======
+    sdd \
+    simplecanvas \
+    slideshow \
+>>>>>>> add gbuild component files from dbaccess
     solver \
     spell \
     spl \
@@ -187,10 +193,6 @@ my_components = \
     xsltdlg \
     xsltfilter \
     xstor
-
-.IF "$(DISABLE_PYTHON)" != "TRUE"
-my_components += pythonloader
-.ENDIF
 
 .IF "$(OS)" != "WNT" && "$(OS)" != "MACOSX"
 my_components += splash
@@ -237,7 +239,7 @@ my_components += kde4be1
 .END
 
 .IF "$(ENABLE_OGL)" == "TRUE"
-my_components += component/slideshow/source/engine/OGLTrans/ogltrans
+my_components += ogltrans
 .END
 
 .IF "$(ENABLE_SVCTAGS)" == "YES"
