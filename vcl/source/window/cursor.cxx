@@ -49,7 +49,7 @@ struct ImplCursorData
     short           mnOrientation;      // Pixel-Orientation
     unsigned char   mnDirection;        // indicates writing direction
     sal_uInt16          mnStyle;            // Cursor-Style
-    sal_Bool            mbCurVisible;       // Ist Cursor aktuell sichtbar
+    bool            mbCurVisible;       // Ist Cursor aktuell sichtbar
     Window*         mpWindow;           // Zugeordnetes Windows
 };
 
@@ -58,8 +58,8 @@ struct ImplCursorData
 static void ImplCursorInvert( ImplCursorData* pData )
 {
     Window* pWindow  = pData->mpWindow;
-    sal_Bool    bMapMode = pWindow->IsMapModeEnabled();
-    pWindow->EnableMapMode( sal_False );
+    bool    bMapMode = pWindow->IsMapModeEnabled();
+    pWindow->EnableMapMode( false );
     sal_uInt16 nInvertStyle;
     if ( pData->mnStyle & CURSOR_SHADOW )
         nInvertStyle = INVERT_50;
@@ -155,7 +155,7 @@ void Cursor::ImplDraw()
 
         // Ausgabeflaeche berechnen und ausgeben
         ImplCursorInvert( mpData );
-        mpData->mbCurVisible = sal_True;
+        mpData->mbCurVisible = true;
     }
 }
 
@@ -166,7 +166,7 @@ void Cursor::ImplRestore()
     if ( mpData && mpData->mbCurVisible )
     {
         ImplCursorInvert( mpData );
-        mpData->mbCurVisible = sal_False;
+        mpData->mbCurVisible = false;
     }
 }
 
@@ -194,7 +194,7 @@ void Cursor::ImplShow( bool bDrawDirect, bool bRestore )
             if ( !mpData )
             {
                 mpData = new ImplCursorData;
-                mpData->mbCurVisible = sal_False;
+                mpData->mbCurVisible = false;
                 mpData->maTimer.SetTimeoutHdl( LINK( this, Cursor, ImplTimerHdl ) );
             }
 
@@ -270,7 +270,7 @@ Cursor::Cursor()
     mnOrientation   = 0;
     mnDirection     = 0;
     mnStyle         = 0;
-    mbVisible       = sal_False;
+    mbVisible       = false;
 }
 
 // -----------------------------------------------------------------------
@@ -318,7 +318,7 @@ void Cursor::Show()
 {
     if ( !mbVisible )
     {
-        mbVisible = sal_True;
+        mbVisible = true;
         ImplShow();
     }
 }
@@ -329,7 +329,7 @@ void Cursor::Hide()
 {
     if ( mbVisible )
     {
-        mbVisible = sal_False;
+        mbVisible = false;
         ImplHide();
 
         if( mpData )
@@ -456,7 +456,7 @@ Cursor& Cursor::operator=( const Cursor& rCursor )
 
 // -----------------------------------------------------------------------
 
-sal_Bool Cursor::operator==( const Cursor& rCursor ) const
+bool Cursor::operator==( const Cursor& rCursor ) const
 {
     if ( (maPos         == rCursor.maPos)           &&
          (maSize        == rCursor.maSize)          &&
@@ -464,9 +464,9 @@ sal_Bool Cursor::operator==( const Cursor& rCursor ) const
          (mnOrientation == rCursor.mnOrientation)   &&
          (mnDirection   == rCursor.mnDirection)     &&
          (mbVisible     == rCursor.mbVisible) )
-        return sal_True;
+        return true;
     else
-        return sal_False;
+        return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -62,7 +62,7 @@ private:
     Point           maPos;              // Position
     short           mnOrientation;      // Rotation
     sal_uInt16          mnStyle;            // Style
-    sal_Bool            mbVisible;          // Ist Cursor sichtbar
+    bool            mbVisible;          // Ist Cursor sichtbar
     unsigned char   mnDirection;        // indicates direction
 
 public:
@@ -83,7 +83,7 @@ public:
 
     void            Show();
     void            Hide();
-    sal_Bool            IsVisible() const { return mbVisible; }
+    bool            IsVisible() const { return mbVisible; }
 
     void            SetWindow( Window* pWindow );
     Window*         GetWindow() const { return mpWindow; }
@@ -110,8 +110,8 @@ public:
     unsigned char   GetDirection() const { return mnDirection; }
 
     Cursor&         operator=( const Cursor& rCursor );
-    sal_Bool            operator==( const Cursor& rCursor ) const;
-    sal_Bool            operator!=( const Cursor& rCursor ) const
+    bool            operator==( const Cursor& rCursor ) const;
+    bool            operator!=( const Cursor& rCursor ) const
                         { return !(Cursor::operator==( rCursor )); }
 };
 
