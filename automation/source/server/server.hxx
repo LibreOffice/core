@@ -61,11 +61,6 @@ public:
 
     static sal_uLong GetPort();
     static sal_uInt16 nComm;
-
-#if OSL_DEBUG_LEVEL > 1
-//  virtual void DataReceived( CommunicationLink* pCL );
-#endif
-
 };
 
 #endif

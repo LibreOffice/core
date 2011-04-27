@@ -44,7 +44,6 @@ SCmdStream::SCmdStream(SvStream *pIn)
 {
     pSammel = pIn;
     pCommStream = new SvCommStream( pSammel );
-//  SetCommStream( pCommStream );
 }
 
 SCmdStream::~SCmdStream()

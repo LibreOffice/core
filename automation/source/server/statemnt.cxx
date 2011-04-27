@@ -127,9 +127,6 @@ Dir *StatementCommand::pDir = NULL;
 pfunc_osl_printDebugMessage StatementCommand::pOriginal_osl_DebugMessageFunc = NULL;
 
 
-#define RESET_APPLICATION_TO_BACKING_WINDOW
-
-
 #define SET_WINP_CLOSING(pWin) \
     pWindowWaitPointer = pWin; \
     aWindowWaitUId = pControl->GetUniqueOrHelpId(); \
@@ -2186,11 +2183,9 @@ Window* StatementCommand::GetNextRecoverWin()
 
         pBase = Application::GetNextTopLevelWindow( pBase );
     }
-#ifdef RESET_APPLICATION_TO_BACKING_WINDOW
     // close the FirstDocFrame last, It will not be closed, but the Document inside will be closed.
     if ( IsDocWin( pMyFirstDocFrame ) )
         return pMyFirstDocFrame;
-#endif // def RESET_APPLICATION_TO_BACKING_WINDOW
 
     return NULL;
 }
@@ -2414,7 +2409,6 @@ sal_Bool StatementCommand::Execute()
                                     ||  (pControl->GetType() == WINDOW_WORKWINDOW)
                                     ||  (pControl->GetType() == WINDOW_BORDERWINDOW) ) )
                         {
-#ifdef RESET_APPLICATION_TO_BACKING_WINDOW
                             // Special handling for last Document; do not close the Frame, only the Document
                             if ( GetDocWinCount() == 1 && IsDocFrame( pControl ) )
                             {
@@ -2441,7 +2435,6 @@ sal_Bool StatementCommand::Execute()
                                 }
                             }
                             else
-#endif // def RESET_APPLICATION_TO_BACKING_WINDOW
                             {
                                 REPORT_WIN_CLOSED( pControl, TypeString(pControl->GetType()));
                                 SET_WINP_CLOSING(pControl);
@@ -4577,7 +4570,6 @@ sal_Bool StatementControl::Execute()
                                 //HELPID BACKWARD (No numbers please (remove PARAM_ULONG_1 part)
                                 if ( (nParams & PARAM_ULONG_1) )
                                 {
-                                    //aWantedID = rtl::OString( nLNr1 );
                                     ReportError( aUId, GEN_RES_STR1c( S_INTERNAL_ERROR, "using numeric HelpID from old Testtool" ) );
                                 }
                                 else if ( (nParams & PARAM_STR_1) )
@@ -6339,10 +6331,6 @@ sal_Bool StatementControl::Execute()
         }
     }
     return bStatementDone;
-
-#define FINISH_NEXT
-#define FINISH_SAME
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

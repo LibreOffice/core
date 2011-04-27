@@ -40,7 +40,6 @@ RetStream::RetStream()
 {
     pSammel = new SvMemoryStream();
     pCommStream = new SvCommStream( pSammel );
-//  SetCommStream( pCommStream );
 }
 
 RetStream::~RetStream()
@@ -123,7 +122,6 @@ void RetStream::Reset ()
     delete pSammel;
     pSammel = new SvMemoryStream();
     pCommStream = new SvCommStream( pSammel );
-//  SetCommStream( pCommStream );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

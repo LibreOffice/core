@@ -32,11 +32,6 @@
 // do not use Application Idle but AutoTimer instead
 #define TIMERIDLE
 
-#define NO_JPEG
-
-#ifndef NO_JPEG
-#include <svtools/jpeg.hxx>
-#endif
 #include <vcl/timer.hxx>
 #include <vcl/wrkwin.hxx>
 #include <osl/diagnose.h>
@@ -47,7 +42,6 @@
 #include <tools/stream.hxx>
 #include <tools/config.hxx>
 
-#if 1
 #include <svtools/ttprops.hxx>
 #include <basic/ttstrhlp.hxx>
 #include <svl/stritem.hxx>
@@ -57,7 +51,6 @@
 #include <vcl/bitmap.hxx>
 // Hat keinen Includeschutz
 #include <svtools/svtdata.hxx>
-#endif // 1
 #include <rtl/textenc.h>
 #include <rtl/uri.h>
 #include <rtl/uri.hxx>
@@ -341,12 +334,6 @@ void ExtraIdle::Timeout()
         case 3:
         {
 
-#if OSL_DEBUG_LEVEL > 1
-#define TT_CODE
-#else
-#define TT_CODE
-#endif
-
 #ifdef TT_NO_DECRYPT
             String aStr =
                 ""
@@ -377,7 +364,6 @@ void ExtraIdle::Timeout()
                 ;
 #endif
 
-#ifdef TT_CODE
             for ( sal_uInt16 i = 0 ; i < aStr.Len() ; i++ )
             {
                 if ( aStr.GetChar(i) < 32 || aStr.GetChar(i) > 126 )
@@ -397,7 +383,6 @@ void ExtraIdle::Timeout()
                     aStr.SetChar( aStr.Len()-i-1, c );
                 }
             }
-#endif
 
             ::svt::OStringTransfer::CopyString( UniString( aStr, RTL_TEXTENCODING_ASCII_US ), StatementList::GetFirstDocFrame()  );
 
@@ -510,16 +495,6 @@ void ExtraIdle::Timeout()
             }
 
             aStream.Seek(0);
-#ifndef NO_JPEG
-            Graphic aGraphic;
-            if ( ImportJPEG( aStream, aGraphic, NULL ) )
-            {
-                Bitmap *pBmp = new Bitmap( aGraphic.GetBitmap() );
-                StatementList::pTTProperties->Img( pBmp );
-                delete pBmp;
-            }
-            else
-#endif
             {
                 ::svt::OStringTransfer::CopyString( CUniString("\nSorry! no bitmap"), StatementList::GetFirstDocFrame() );
             }

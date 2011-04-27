@@ -90,10 +90,6 @@ private:
     ProfileSnapshot *mpStart;
     ProfileSnapshot *mpEnd;
     sal_Bool bIsProfileIntervalStarted;
-
-
-
-//
     sal_Bool bIsProfilingPerCommand;
     sal_Bool bIsPartitioning;
 
@@ -110,7 +106,6 @@ private:
 
 // Einige Hilfsfunktionen
 
-//  String Hex( sal_uLong nNr );
     String Dec( sal_uLong nNr );    // Ergebnis = nNr / 100 mit 2 Dezimalen
     String Pad( const String &aS, xub_StrLen nLen );        // F�gt blanks links an den String an
 
