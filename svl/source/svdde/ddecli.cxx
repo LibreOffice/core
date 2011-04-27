@@ -39,11 +39,6 @@
 #include <tools/solarmutex.hxx>
 #include <osl/mutex.hxx>
 
-// static DWORD        hDdeInst  = NULL;
-// static short        nInstance = 0;
-
-// DdeConnections*     DdeConnection::pConnections = NULL;
-
 DdeInstData* ImpInitInstData()
 {
     DdeInstData* pData = new DdeInstData;
@@ -74,15 +69,19 @@ HDDEDATA CALLBACK DdeInternal::CliCallback(
             HDDEDATA hData, DWORD nInfo1, DWORD )
 {
     HDDEDATA nRet = DDE_FNOTPROCESSED;
-    DdeConnections&     rAll = (DdeConnections&)DdeConnection::GetConnections();
+    const std::vector<DdeConnection*> &rAll = DdeConnection::GetConnections();
     DdeConnection*      self = 0;
 
     DdeInstData* pInst = ImpGetInstData();
     DBG_ASSERT(pInst,"SVDDE:No instance data");
 
-    for ( self = rAll.First(); self; self = rAll.Next() )
+    for ( size_t i = 0; i < rAll.size(); ++i)
+    {
+        self = rAll[i];
+
         if ( self->pImp->hConv == hConv )
             break;
+    }
 
     if( self )
     {
@@ -173,7 +172,6 @@ DdeConnection::DdeConnection( const String& rService, const String& rTopic )
                                        CBF_FAIL_ALLSVRXACTIONS |
                                        CBF_SKIP_REGISTRATIONS  |
                                        CBF_SKIP_UNREGISTRATIONS, 0L );
-        pInst->pConnections = new DdeConnections;
     }
 
     pService = new DdeString( pInst->hDdeInstCli, rService );
@@ -186,8 +184,7 @@ DdeConnection::DdeConnection( const String& rService, const String& rTopic )
             pImp->nStatus = DdeGetLastError( pInst->hDdeInstCli );
     }
 
-    if ( pInst->pConnections )
-        pInst->pConnections->Insert( this );
+    pInst->aConnections.push_back( this );
 }
 
 // --- DdeConnection::~DdeConnection() -----------------------------
@@ -202,8 +199,9 @@ DdeConnection::~DdeConnection()
 
     DdeInstData* pInst = ImpGetInstData();
     DBG_ASSERT(pInst,"SVDDE:No instance data");
-    if ( pInst->pConnections )
-        pInst->pConnections->Remove( this );
+
+    pInst->aConnections.erase(std::remove(pInst->aConnections.begin(),
+                                          pInst->aConnections.end(),this));
 
     pInst->nInstanceCli--;
     pInst->nRefCount--;
@@ -212,8 +210,6 @@ DdeConnection::~DdeConnection()
         if( DdeUninitialize( pInst->hDdeInstCli ) )
         {
             pInst->hDdeInstCli = NULL;
-            delete pInst->pConnections;
-            pInst->pConnections = NULL;
             if( pInst->nRefCount == 0 )
                 ImpDeinitInstData();
         }
@@ -263,11 +259,11 @@ long DdeConnection::GetConvId()
     return (long)pImp->hConv;
 }
 
-const DdeConnections& DdeConnection::GetConnections()
+const std::vector<DdeConnection*>& DdeConnection::GetConnections()
 {
     DdeInstData* pInst = ImpGetInstData();
     DBG_ASSERT(pInst,"SVDDE:No instance data");
-    return *(pInst->pConnections);
+    return pInst->aConnections;
 }
 
 // --- DdeTransaction::DdeTransaction() ----------------------------

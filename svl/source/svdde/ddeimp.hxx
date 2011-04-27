@@ -143,7 +143,7 @@ class DdeServices;
 struct DdeInstData
 {
     sal_uInt16          nRefCount;
-    DdeConnections* pConnections;
+    std::vector<DdeConnection*> aConnections;
     // Server
     long            hCurConvSvr;
     DWORD           hDdeInstSvr;

@@ -55,12 +55,10 @@ class DdeItemImp;
 struct Conversation;
 
 #ifndef _SVDDE_NOLISTS
-DECLARE_LIST( DdeConnections, DdeConnection* )
 DECLARE_LIST( DdeServices, DdeService* )
 DECLARE_LIST( DdeTopics, DdeTopic* )
 DECLARE_LIST( DdeItems, DdeItem* )
 #else
-typedef List DdeConnections;
 typedef List DdeServices;
 typedef List DdeTopics;
 typedef List DdeItems;
@@ -244,7 +242,7 @@ public:
     long            GetError();
     long            GetConvId();
 
-    static const DdeConnections& GetConnections();
+    static const std::vector<DdeConnection*>& GetConnections();
 
     sal_Bool            IsConnected();
 
