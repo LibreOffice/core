@@ -1308,6 +1308,13 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
                     pLine->SetHeight( nMinHeight, nTxtHeight );
                 }
             }
+            else if ( rLSItem.GetLineSpaceRule() == SVX_LINE_SPACE_FIX )
+            {
+                sal_uInt16 nFixHeight = GetYValue( rLSItem.GetLineHeight() );
+                sal_uInt16 nTxtHeight = pLine->GetHeight();
+                pLine->SetMaxAscent( (sal_uInt16)(pLine->GetMaxAscent() + ( nFixHeight - nTxtHeight ) ) );
+                pLine->SetHeight( nFixHeight, nTxtHeight );
+            }
             else if ( rLSItem.GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP )
             {
                 if ( nPara || IsFixedCellHeight() || pLine->GetStartPortion() ) // Not the very first line
@@ -1635,6 +1642,14 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uIn
                 pTmpLine->SetMaxAscent( (sal_uInt16)(pTmpLine->GetMaxAscent() + nDiff) );
                 pTmpLine->SetHeight( nMinHeight, nTxtHeight );
             }
+        }
+        else if ( rLSItem.GetLineSpaceRule() == SVX_LINE_SPACE_FIX )
+        {
+            sal_uInt16 nFixHeight = rLSItem.GetLineHeight();
+            sal_uInt16 nTxtHeight = pTmpLine->GetHeight();
+
+            pTmpLine->SetMaxAscent( (sal_uInt16)(pTmpLine->GetMaxAscent() + ( nFixHeight - nTxtHeight ) ) );
+            pTmpLine->SetHeight( nFixHeight, nTxtHeight );
         }
         else if ( rLSItem.GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP )
         {
