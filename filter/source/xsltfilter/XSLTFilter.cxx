@@ -44,14 +44,13 @@
 #include <osl/time.h>
 #include <osl/conditn.h>
 #include <tools/urlobj.hxx>
-#include <osl/module.h>
-#include <osl/file.hxx>
-#include <osl/process.h>
+
+#include <comphelper/interaction.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/EventObject.hpp>
 
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Type.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
@@ -63,6 +62,7 @@
 #include <com/sun/star/xml/XImportFilter.hpp>
 #include <com/sun/star/xml/XExportFilter.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+
 #include <com/sun/star/util/XMacroExpander.hpp>
 
 #include <com/sun/star/io/XInputStream.hpp>
@@ -71,14 +71,18 @@
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/io/XStreamListener.hpp>
-#include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/XInteractionRequest.hpp>
+#include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 
 #include <xmloff/attrlist.hxx>
+
 #include <fla.hxx>
 #include <LibXSLTTransformer.hxx>
+
+#define TRANSFORMATION_TIMEOUT_SEC 60
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -92,12 +96,12 @@ using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::xml;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::task;
 
 namespace XSLT
 {
-
     /*
-     * FLABridge provides some obscure attribute mangling to wordml2000 import/export filters.
+     * FLABridge provides some obscure attribute mangling to wordml2003 import/export filters.
      * In the long run, you might want to replace this with an XSLT extension function.
      */
     class FLABridge : public WeakImplHelper1< DocumentHandlerAdapter >
@@ -180,22 +184,23 @@ namespace XSLT
     }
 
     /*
-     * XSLTFilter reads flat xml streams from the XML filter framework and passes
+     * XSLTFilter reads flat XML streams from the XML filter framework and passes
      * them to an XSLT transformation service. XSLT transformation errors are
      * reported to XSLTFilter.
      *
-     * Currently, two implemations for the XSLT transformation service exist:
+     * Currently, two implementations for the XSLT transformation service exist:
      * a java based service (see XSLTransformer.java) and  a libxslt based
      * service (LibXSLTTransformer.cxx).
      *
-     * The libxslt implementation will be used, if the value of the 2nd "UserData"
-     * parameter of the filter configuration is "libxslt"
+     * The libxslt implementation will be used by default.
+     *
+     * If the value of the 2nd "UserData" parameter of the filter configuration is
+     * not empty, the service name given there will be used.
      */
     class XSLTFilter : public WeakImplHelper4<XImportFilter, XExportFilter,
             XStreamListener, ExtendedDocumentHandlerAdapter>
     {
     private:
-        static const OUString LIBXSLT_HELPER_SERVICE_IMPL;
 
         // the UNO ServiceFactory
         Reference<XMultiServiceFactory> m_rServiceFactory;
@@ -361,15 +366,19 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
         sal_Int32 nLength = aSourceData.getLength();
         OUString aName, aFileName, aURL;
         Reference<XInputStream> xInputStream;
+        Reference<XInteractionHandler> xInterActionHandler;
         for (sal_Int32 i = 0; i < nLength; i++)
             {
                 aName = aSourceData[i].Name;
+                Any value = aSourceData[i].Value;
                 if (aName.equalsAscii("InputStream"))
-                    aSourceData[i].Value >>= xInputStream;
+                    value >>= xInputStream;
                 else if (aName.equalsAscii("FileName"))
-                    aSourceData[i].Value >>= aFileName;
+                    value >>= aFileName;
                 else if (aName.equalsAscii("URL"))
-                    aSourceData[i].Value >>= aURL;
+                    value >>= aURL;
+                else if (aName.equalsAscii("InteractionHandler"))
+                    value >>= xInterActionHandler;
             }
         OSL_ASSERT(xInputStream.is());
         if (!xInputStream.is())
@@ -447,18 +456,38 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
 
                         // transform
                         m_tcontrol->start();
-                        // osl_waitCondition(m_cTransformed, 0);
-                        if (!m_bError && !m_bTerminated)
-                            {
-                                // parse the transformed XML buffered in the pipe
+                        TimeValue timeout = { TRANSFORMATION_TIMEOUT_SEC, 0};
+                        oslConditionResult result(osl_waitCondition(m_cTransformed, &timeout));
+                        while (osl_cond_result_timeout == result) {
+                                if (xInterActionHandler.is()) {
+                                        Sequence<Any> excArgs(0);
+                                        ::com::sun::star::ucb::InteractiveAugmentedIOException exc(
+                                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Timeout!")),
+                                                static_cast< OWeakObject * >( this ),
+                                                InteractionClassification_ERROR,
+                                                ::com::sun::star::ucb::IOErrorCode_GENERAL,
+                                                 excArgs);
+                                        Any r;
+                                        r <<= exc;
+                                        ::comphelper::OInteractionRequest* pRequest = new ::comphelper::OInteractionRequest(r);
+                                        Reference< XInteractionRequest > xRequest(pRequest);
+                                        ::comphelper::OInteractionRetry* pRetry = new ::comphelper::OInteractionRetry;
+                                        ::comphelper::OInteractionAbort* pAbort = new ::comphelper::OInteractionAbort;
+                                        pRequest->addContinuation(pRetry);
+                                        pRequest->addContinuation(pAbort);
+                                        xInterActionHandler->handle(xRequest);
+                                        if (pAbort->wasSelected()) {
+                                                m_bError = sal_True;
+                                                osl_setCondition(m_cTransformed);
+                                        }
+                                }
+                                result = osl_waitCondition(m_cTransformed, &timeout);
+                        };
+                        if (!m_bError) {
                                 xSaxParser->parseStream(aInput);
-                                osl_waitCondition(m_cTransformed, 0);
-                                return sal_True;
-                            }
-                        else
-                            {
-                                return sal_False;
-                            }
+                        }
+                        m_tcontrol->terminate();
+                        return !m_bError;
                     }
 #if OSL_DEBUG_LEVEL > 0
                 catch( Exception& exc)
@@ -607,6 +636,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
         ExtendedDocumentHandlerAdapter::endDocument();
         // wait for the transformer to finish
         osl_waitCondition(m_cTransformed, 0);
+        m_tcontrol->terminate();
         if (!m_bError && !m_bTerminated)
             {
                 return;
@@ -617,6 +647,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
             }
 
     }
+
 
     // --------------------------------------
     // Component management

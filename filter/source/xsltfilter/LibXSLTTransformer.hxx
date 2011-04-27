@@ -116,6 +116,16 @@ namespace XSLT
 
         ::std::map<const char *, OString> m_parameters;
 
+        osl::Thread* m_Reader;
+
+    protected:
+        virtual ~LibXSLTTransformer() {
+            if (m_Reader) {
+                    m_Reader->terminate();
+            }
+            delete(m_Reader);
+        }
+
     public:
 
         // ctor...

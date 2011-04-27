@@ -51,6 +51,7 @@
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase.hxx>
+
 #include <osl/module.h>
 #include <osl/file.hxx>
 #include <osl/process.h>
@@ -135,10 +136,10 @@ namespace XSLT
         }
     };
     /**
-     * ExtFuncOleCB forwards XPath extension function calls registers with libxslt to the OleHandler instance that actually
+     * ExtFuncOleCB forwards XPath extension function calls registered with libxslt to the OleHandler instance that actually
      * provides the implementation for those functions.
      *
-     * The OLE extension module currently supplies to functions
+     * The OLE extension module currently supplies two functions
      * insertByName: registers an OLE object to be later inserted into the output tree.
      * getByName: reads a previously registered OLE object and returns a base64 encoded string representation.
      */
@@ -390,7 +391,7 @@ namespace XSLT
 
     LibXSLTTransformer::LibXSLTTransformer(
             const Reference<XMultiServiceFactory> &r) :
-        m_rServiceFactory(r)
+        m_rServiceFactory(r), m_Reader(NULL)
     {
     }
 
@@ -447,8 +448,9 @@ namespace XSLT
                 Reference<XStreamListener> xl = *it;
                 xl.get()->started();
             }
-        Reader* r = new Reader(this);
-        r->create();
+        OSL_ENSURE(m_Reader == NULL, "Somebody forgot to call terminate *and* holds a reference to this LibXSLTTransformer instance");
+        m_Reader = new Reader(this);
+        m_Reader->create();
     }
 
     void
@@ -484,6 +486,8 @@ namespace XSLT
     void
     LibXSLTTransformer::terminate() throw (RuntimeException)
     {
+        m_Reader->terminate();
+        delete(m_Reader);
         m_parameters.clear();
     }
 

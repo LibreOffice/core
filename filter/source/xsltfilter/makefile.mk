@@ -54,9 +54,11 @@ SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 
 SHL1STDLIBS= \
-    $(TOOLSLIB)         \
-    $(CPPUHELPERLIB)    \
-    $(CPPULIB)          \
+    $(TOOLSLIB) \
+    $(CPPUHELPERLIB) \
+    $(UCBHELPERLIB) \
+    $(COMPHELPERLIB) \
+    $(CPPULIB) \
     $(XMLOFFLIB) \
     $(SALLIB) \
     $(LIBXML2LIB) \
