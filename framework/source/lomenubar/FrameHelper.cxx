@@ -26,6 +26,8 @@
 #include "MenuItemInfo.hxx"
 #include "MenuItemStatusListener.hxx"
 
+#include <boost/foreach.hpp>
+
 #include <com/sun/star/awt/KeyEvent.hpp>
 #include <com/sun/star/awt/SystemDependentXWindow.hpp>
 #include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
@@ -113,6 +115,62 @@ using com::sun::star::ui::XModuleUIConfigurationManagerSupplier;
 using com::sun::star::util::URL;
 using com::sun::star::util::XURLTransformer;
 
+
+namespace
+{
+    static Sequence<Any> lcl_initArgs(const OUString& sModuleName, const Reference<XFrame> xFrame)
+    {
+        // These are the arguments needed for the XPopupMenuController
+        Sequence<Any> aResult(2);
+        PropertyValue item;
+
+        item.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleName"));
+        item.Value <<= sModuleName;
+        aResult[0] <<= item;
+
+        item.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Frame"));
+        item.Value <<= xFrame;
+        aResult[1] <<= item;
+        return aResult;
+    };
+
+    struct DispatchConnection
+    {
+        Reference<XDispatch> m_xDispatch;
+        URL m_aUrl;
+        DispatchConnection(Reference<XDispatch> xDispatch, URL aUrl)
+            : m_xDispatch(xDispatch), m_aUrl(aUrl)
+        {}
+    };
+}
+
+namespace framework { namespace lomenubar
+{
+    class DispatchRegistry
+    {
+        private:
+            ::std::vector<DispatchConnection> m_vDispatchConnections;
+            const Reference<XStatusListener> m_xStatusListener;
+        public:
+            DispatchRegistry(const Reference<XStatusListener> xStatusListener)
+                : m_xStatusListener(xStatusListener)
+            {}
+            ~DispatchRegistry()
+            {
+                BOOST_FOREACH(const DispatchConnection& rConnection, m_vDispatchConnections)
+                {
+                    rConnection.m_xDispatch->removeStatusListener(m_xStatusListener, rConnection.m_aUrl);
+                }
+            }
+            void Connect(Reference<XDispatch> xDispatch, URL aURL)
+            {
+                const DispatchConnection connection(xDispatch, aURL);
+                m_vDispatchConnections.push_back(connection);
+                xDispatch->addStatusListener(m_xStatusListener, aURL);
+            }
+    };
+}}
+
 // ------------------------ Item callbacks ---------------------------
 // Item activated. It distpatches the command associated to a given menu item.
 void
@@ -198,30 +256,29 @@ destroy_menu_item_info (gpointer data)
 FrameHelper::FrameHelper(const Reference< XMultiServiceFactory >&  rServiceManager,
                          const Reference< XFrame >&        xFrame,
                          DbusmenuServer*                   server)
+    : m_xStatusListener(new MenuItemStatusListener(this))
+    , m_pDispatchRegistry(new framework::lomenubar::DispatchRegistry(m_xStatusListener))
+    , m_xMSF(rServiceManager)
+    , m_xTrans(m_xMSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer" ))), UNO_QUERY)
+    , m_xMM(m_xMSF->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager"))),UNO_QUERY)
+    , m_xPCF(m_xMSF->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.PopupMenuControllerFactory"))), UNO_QUERY)
+    , m_xFrame(xFrame)
+    , m_xdp(xFrame, UNO_QUERY)
+    , m_args(lcl_initArgs(m_xMM->identify(xFrame), xFrame))
+    , m_server(server)
+    , m_root(NULL)
+    , m_watcher_set(FALSE)
+    , m_blockDetach(FALSE)
 {
-    m_xMSF = rServiceManager;
-    this->m_xFrame = xFrame;
-    this->m_server = server;
 
     //Get xUICommands database (to retrieve labels, see FrameJob::getLabelFromCommandURL ())
     Reference < XNameAccess > xNameAccess (m_xMSF->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.UICommandDescription"))),
                                            UNO_QUERY);
-    m_xMM = Reference < XModuleManager> (m_xMSF->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager"))),
-                                       UNO_QUERY);
     xNameAccess->getByName(m_xMM->identify(xFrame)) >>= m_xUICommands;
 
-    m_xdp = Reference < XDispatchProvider > (xFrame, UNO_QUERY);
-    m_xTrans = Reference < XURLTransformer > (m_xMSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer" ))), UNO_QUERY);
-
-    m_xSL = (XStatusListener*)new MenuItemStatusListener (this);
 
     // This initializes the shortcut database
     getAcceleratorConfigurations (xFrame->getController()->getModel (), m_xMM);
-
-    // This information is needed for the dynamic submenus
-    m_xPCF = Reference < XMultiComponentFactory > (m_xMSF->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.PopupMenuControllerFactory"))),
-                                                 UNO_QUERY);
-
 
     // This is a hash table that maps Command URLs to MenuItemInfo classes
     //   to cache command information
@@ -230,24 +287,6 @@ FrameHelper::FrameHelper(const Reference< XMultiServiceFactory >&  rServiceManag
                                           g_free,
                                           destroy_menu_item_info);
 
-    // These are the arguments needed for the XPopupMenuController
-    m_args = Sequence < Any > (2);
-    PropertyValue item;
-
-    item.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleName"));
-    item.Value <<= m_xMM->identify (xFrame);
-    m_args[0] <<= item;
-
-    item.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Frame"));
-    item.Value <<= xFrame;
-    m_args[1] <<= item;
-
-    m_root = NULL;
-    m_watcher_set = FALSE;
-
-    //This variable prevents the helper from being disconnected from the frame
-    //for special cases of component dettaching like print preview
-    m_blockDetach = FALSE;
 }
 
 void SAL_CALL
@@ -256,6 +295,7 @@ FrameHelper::disposing (const EventObject& /*aEvent*/ ) throw (RuntimeException)
 
 FrameHelper::~FrameHelper()
 {
+    ::boost::scoped_ptr< ::framework::lomenubar::DispatchRegistry>().swap(m_pDispatchRegistry);
     if (m_server)
         g_object_unref (m_server);
 
@@ -289,12 +329,6 @@ Reference < XFrame >
 FrameHelper::getFrame ()
 {
     return m_xFrame;
-}
-
-XStatusListener*
-FrameHelper::getStatusListener ()
-{
-    return m_xSL;
 }
 
 GHashTable*
@@ -540,9 +574,9 @@ FrameHelper::rebuildMenu (Reference < XMenu >  xMenu,
         commandURL.Complete = oUCommand;
         m_xTrans->parseStrict (commandURL);
 
-        Reference < XDispatch > xDispatch  = m_xdp->queryDispatch (commandURL, OUString(), 0);
-        if (xDispatch.is())
-            xDispatch->addStatusListener (m_xSL, commandURL);
+        Reference < XDispatch > xDispatch = m_xdp->queryDispatch (commandURL, OUString(), 0);
+        if(xDispatch.is())
+            m_pDispatchRegistry->Connect(xDispatch, commandURL);
 
         Reference < XPopupMenu > subPopMenu (xMenu->getPopupMenu (id), UNO_QUERY);
 

@@ -6,9 +6,9 @@
 using com::sun::star::frame::status::Visibility;
 
 MenuItemStatusListener::MenuItemStatusListener (FrameHelper *helper)
+    : m_helper(helper)
 {
-    if (!helper) throw ("FrameHelper cannot be NULL");
-    this->m_helper = helper;
+    OSL_ENSURE(m_helper, "FrameHelper cannot be NULL");
 }
 
 void SAL_CALL

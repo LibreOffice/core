@@ -19,7 +19,7 @@ class MenuItemStatusListener : public cppu::WeakImplHelper1 < XStatusListener >
 {
   private:
     guint16 m_id;
-    FrameHelper *m_helper;
+    FrameHelper* const m_helper;
 
   public:
     MenuItemStatusListener (FrameHelper *helper);
