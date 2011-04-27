@@ -1,4 +1,3 @@
-
 This module exist only to take advantage of the ability of gbuild to build
 multiple modules in one single Makefile.
 
@@ -12,10 +11,7 @@ To qualify a module must not be the dependant of any other module,
 except postprocess or if the other module itself is under tail_build
 
 To migrate a module <foo> under tail_build, one should:
-
-Merge the dependencies declared in <foo>/prj/build.lst into tail_build/prj/build.lst
-Remove the module <foo> from postprocess/prj/build.lst dependencies
-
-Add the module name in Module_tail_build.mk at the root of bootstrap
-
-
+* merge the dependencies declared in <foo>/prj/build.lst into tail_build/prj/build.lst
+* remove the module <foo> from postprocess/prj/build.lst dependencies
+* remove the module <foo> from tail_build/prj/build.lst dependencies
+* add the module name in Module_tail_build.mk at the root of bootstrap
