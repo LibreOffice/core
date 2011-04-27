@@ -192,4 +192,18 @@ SdParagraphDlg::SdParagraphDlg( Window* pParent, const SfxItemSet* pAttr )
        AddTabPage( RID_SVXPAGE_TABULATOR );
 }
 
+void SdParagraphDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
+{
+    SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
+    switch( nId )
+    {
+    case RID_SVXPAGE_STD_PARAGRAPH:
+        aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_ABSLINEDIST, MM50/2));
+        rPage.PageCreated(aSet);
+        break;
+    default:
+        break;
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
