@@ -29,6 +29,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     dbaccess \
     formula \
     lotuswordpro \
+    padmin \
     reportdesign \
     sc \
     sd \
