@@ -170,9 +170,7 @@ void Cursor::ImplRestore()
     }
 }
 
-// -----------------------------------------------------------------------
-
-void Cursor::ImplShow( bool bDrawDirect, bool bRestore )
+void Cursor::ImplDoShow( bool bDrawDirect, bool bRestore )
 {
     if ( mbVisible )
     {
@@ -215,9 +213,7 @@ void Cursor::ImplShow( bool bDrawDirect, bool bRestore )
     }
 }
 
-// -----------------------------------------------------------------------
-
-bool Cursor::ImplHide()
+bool Cursor::ImplDoHide( bool bSuspend )
 {
     bool bWasCurVisible = false;
     if ( mpData && mpData->mpWindow )
@@ -225,12 +221,35 @@ bool Cursor::ImplHide()
         bWasCurVisible = mpData->mbCurVisible;
         if ( mpData->mbCurVisible )
             ImplRestore();
-        mpData->maTimer.Stop();
+
+        if ( !bSuspend )
+        {
+            mpData->maTimer.Stop();
+            mpData->mpWindow = NULL;
+        }
     }
     return bWasCurVisible;
 }
 
-// -----------------------------------------------------------------------
+void Cursor::ImplShow( bool bDrawDirect )
+{
+    ImplDoShow( bDrawDirect, false );
+}
+
+void Cursor::ImplHide()
+{
+    ImplDoHide( false );
+}
+
+void Cursor::ImplResume( bool bRestore )
+{
+    ImplDoShow( false, bRestore );
+}
+
+bool Cursor::ImplSuspend()
+{
+    ImplDoHide( true );
+}
 
 void Cursor::ImplNew()
 {
@@ -331,12 +350,6 @@ void Cursor::Hide()
     {
         mbVisible = false;
         ImplHide();
-
-        if( mpData )
-        {
-            mpData->maTimer.Stop();
-            mpData->mpWindow = NULL;
-        }
     }
 }
 
