@@ -41,6 +41,8 @@ gb_STDLIBS := pthread
 
 include $(GBUILDDIR)/platform/unxgcc.mk
 
+gb_LinkTarget_NOEXCEPTIONFLAGS += -DBOOST_NO_EXCEPTIONS
+
 define gb_LinkTarget__command_dynamiclink
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
