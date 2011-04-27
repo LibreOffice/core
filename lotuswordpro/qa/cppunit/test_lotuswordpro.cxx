@@ -48,6 +48,7 @@ namespace
     {
     public:
         LotusWordProTest();
+        ~LotusWordProTest();
 
         virtual void setUp();
         virtual void tearDown();
@@ -88,6 +89,11 @@ namespace
 
         //Lotus Import filter pokes at printers :-(
         InitVCL(m_xMSF);
+    }
+
+    LotusWordProTest::~LotusWordProTest()
+    {
+        DeInitVCL();
     }
 
     void LotusWordProTest::setUp()
