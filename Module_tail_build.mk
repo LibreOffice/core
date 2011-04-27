@@ -27,6 +27,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     chart2 \
     cui \
     dbaccess \
+    fileaccess \
     formula \
     lotuswordpro \
     padmin \
