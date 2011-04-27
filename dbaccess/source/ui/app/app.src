@@ -315,12 +315,12 @@ String RID_STR_FORMS_HELP_TEXT_WIZARD
 
 String RID_STR_QUERIES_HELP_TEXT
 {
-    Text [ en-US ] = "Create a query by specifying the filters, input tables, field names,  and  properties for sorting or grouping." ;
+    Text [ en-US ] = "Create a query by specifying the filters, input tables, field names, and properties for sorting or grouping." ;
 };
 
 String RID_STR_QUERIES_HELP_TEXT_SQL
 {
-    Text [ en-US ] = "Create a query  entering an SQL statement directly." ;
+    Text [ en-US ] = "Create a query entering an SQL statement directly." ;
 };
 
 String RID_STR_QUERIES_HELP_TEXT_WIZARD

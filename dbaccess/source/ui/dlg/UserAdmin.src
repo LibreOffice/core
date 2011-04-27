@@ -182,7 +182,7 @@ ModalDialog DLG_PASSWORD
     {
         Pos = MAP_APPFONT ( 6 , 52 ) ;
         Size = MAP_APPFONT ( FT_SIZE_X , 10 ) ;
-        Text [ en-US ] = "~Confirm  password";
+        Text [ en-US ] = "~Confirm password";
     };
     Edit ED_PASSWORD_REPEAT
     {

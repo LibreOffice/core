@@ -335,7 +335,7 @@ TabPage PAGE_DBASE
         WordBreak = TRUE;
         Pos = MAP_APPFONT ( 6 , 3*UNRELATED_CONTROLS + 2*RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT) ;
         Size = MAP_APPFONT ( PAGE_X - 12 , 2*FIXEDTEXT_HEIGHT ) ;
-        Text [ en-US ] = "Note: When deleted, and thus inactive, records are  displayed, you will not be able to delete records from the data source." ;
+        Text [ en-US ] = "Note: When deleted, and thus inactive, records are displayed, you will not be able to delete records from the data source." ;
     };
 
     PushButton PB_INDICIES
