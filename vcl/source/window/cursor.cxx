@@ -248,7 +248,7 @@ void Cursor::ImplResume( bool bRestore )
 
 bool Cursor::ImplSuspend()
 {
-    ImplDoHide( true );
+    return ImplDoHide( true );
 }
 
 void Cursor::ImplNew()
