@@ -38,6 +38,7 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <vector>
 #include <map>
 
@@ -142,6 +143,7 @@ public:
                             ::oox::core::XmlFilterBase& rFilterBase,
                             const Theme* pTheme,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
+                            basegfx::B2DHomMatrix& aTransformation,
                             const ::com::sun::star::awt::Rectangle* pShapeRect = 0,
                             ShapeIdMap* pShapeMap = 0 );
 
@@ -161,7 +163,8 @@ protected:
                             const Theme* pTheme,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ::com::sun::star::awt::Rectangle* pShapeRect,
-                            sal_Bool bClearText );
+                            sal_Bool bClearText,
+                            basegfx::B2DHomMatrix& aTransformation );
 
     void                addChildren(
                             ::oox::core::XmlFilterBase& rFilterBase,
@@ -169,7 +172,8 @@ protected:
                             const Theme* pTheme,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ::com::sun::star::awt::Rectangle& rClientRect,
-                            ShapeIdMap* pShapeMap );
+                            ShapeIdMap* pShapeMap,
+                            basegfx::B2DHomMatrix& aTransformation );
 
     virtual ::rtl::OUString finalizeServiceName(
                             ::oox::core::XmlFilterBase& rFilter,

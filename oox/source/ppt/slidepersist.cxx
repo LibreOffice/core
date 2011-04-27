@@ -150,10 +150,11 @@ void SlidePersist::createXShapes( XmlFilterBase& rFilterBase )
         while( aChildIter != rChildren.end() )
         {
             PPTShape* pPPTShape = dynamic_cast< PPTShape* >( (*aChildIter).get() );
+            basegfx::B2DHomMatrix aTransformation;
             if ( pPPTShape )
-                pPPTShape->addShape( rFilterBase, *this, getTheme().get(), xShapes, 0, &getShapeMap() );
+                pPPTShape->addShape( rFilterBase, *this, getTheme().get(), xShapes, aTransformation, 0, &getShapeMap() );
             else
-                (*aChildIter)->addShape( rFilterBase, getTheme().get(), xShapes, 0, &getShapeMap() );
+                (*aChildIter)->addShape( rFilterBase, getTheme().get(), xShapes, aTransformation, 0, &getShapeMap() );
             aChildIter++;
         }
     }

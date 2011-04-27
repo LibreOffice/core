@@ -218,8 +218,10 @@ void ChartDrawingFragment::onEndElement()
         if( mxDrawPage.is() && mxShape.get() && mxAnchor.get() )
         {
             Rectangle aLoc = mxAnchor->calcEmuLocation( maEmuChartRect );
-            if( (aLoc.X >= 0) && (aLoc.Y >= 0) && (aLoc.Width >= 0) && (aLoc.Height >= 0) )
-                mxShape->addShape( getFilter(), getFilter().getCurrentTheme(), mxDrawPage, &aLoc );
+            if( (aLoc.X >= 0) && (aLoc.Y >= 0) && (aLoc.Width >= 0) && (aLoc.Height >= 0) ) {
+                basegfx::B2DHomMatrix aMatrix;
+                mxShape->addShape( getFilter(), getFilter().getCurrentTheme(), mxDrawPage, aMatrix, &aLoc );
+            }
         }
         mxShape.reset();
         mxAnchor.reset();

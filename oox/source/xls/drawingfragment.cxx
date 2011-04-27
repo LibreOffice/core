@@ -603,7 +603,8 @@ void DrawingFragment::onEndElement()
                 Rectangle aShapeRect = mxAnchor->calcEmuLocation( maEmuSheetSize );
                 if( (aShapeRect.X >= 0) && (aShapeRect.Y >= 0) && (aShapeRect.Width >= 0) && (aShapeRect.Height >= 0) )
                 {
-                    mxShape->addShape( getOoxFilter(), &getTheme(), mxDrawPage, &aShapeRect );
+                    basegfx::B2DHomMatrix aTransformation;
+                    mxShape->addShape( getOoxFilter(), &getTheme(), mxDrawPage, aTransformation, &aShapeRect );
                     /*  Collect all shape positions in the WorksheetHelper base
                         class. But first, scale EMUs to 1/100 mm. */
                     const UnitConverter& rUnitConv = getUnitConverter();

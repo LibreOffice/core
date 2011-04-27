@@ -53,6 +53,7 @@ public:
             const SlidePersist& rPersist,
             const oox::drawingml::Theme* pTheme,
             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
+            basegfx::B2DHomMatrix& aTransformation,
             const com::sun::star::awt::Rectangle* pShapeRect = 0,
             ::oox::drawingml::ShapeIdMap* pShapeMap = 0 );
 

@@ -252,7 +252,8 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException)
         }
         else if (mpShape.get() != NULL)
         {
-            mpShape->addShape(*mxFilterBase, mpThemePtr.get(), xShapes);
+            basegfx::B2DHomMatrix aTransformation;
+            mpShape->addShape(*mxFilterBase, mpThemePtr.get(), xShapes, aTransformation);
             xResult.set(mpShape->getXShape());
             mxGraphicShapeContext.clear( );
         }

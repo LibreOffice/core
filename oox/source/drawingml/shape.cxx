@@ -167,6 +167,7 @@ void Shape::addShape(
         ::oox::core::XmlFilterBase& rFilterBase,
         const Theme* pTheme,
         const Reference< XShapes >& rxShapes,
+        basegfx::B2DHomMatrix& aTransformation,
         const awt::Rectangle* pShapeRect,
         ShapeIdMap* pShapeMap )
 {
@@ -175,7 +176,8 @@ void Shape::addShape(
         rtl::OUString sServiceName( msServiceName );
         if( sServiceName.getLength() )
         {
-            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, pShapeRect, sal_False ) );
+            basegfx::B2DHomMatrix aMatrix( aTransformation );
+            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, pShapeRect, sal_False, aMatrix ) );
 
             if( pShapeMap && msId.getLength() )
             {
@@ -185,7 +187,7 @@ void Shape::addShape(
             // if this is a group shape, we have to add also each child shape
             Reference< XShapes > xShapes( xShape, UNO_QUERY );
             if ( xShapes.is() )
-                addChildren( rFilterBase, *this, pTheme, xShapes, pShapeRect ? *pShapeRect : awt::Rectangle( maPosition.X, maPosition.Y, maSize.Width, maSize.Height ), pShapeMap );
+                addChildren( rFilterBase, *this, pTheme, xShapes, pShapeRect ? *pShapeRect : awt::Rectangle( maPosition.X, maPosition.Y, maSize.Width, maSize.Height ), pShapeMap, aMatrix );
         }
         Reference< document::XActionLockable > xLockable( mxShape, UNO_QUERY );
         if( xLockable.is() )
@@ -224,10 +226,12 @@ void Shape::addChildren(
         const Theme* pTheme,
         const Reference< XShapes >& rxShapes,
         const awt::Rectangle&,
-        ShapeIdMap* pShapeMap )
+        ShapeIdMap* pShapeMap,
+        basegfx::B2DHomMatrix& aTransformation )
 {
     awt::Point& aPosition( mbIsChild ? maAbsolutePosition : maPosition );
     awt::Size& aSize( mbIsChild ? maAbsoluteSize : maSize );
+    basegfx::B2DHomMatrix aChildTransformation;
 
     std::vector< ShapePtr >::iterator aIter( rMaster.maChildren.begin() );
     while( aIter != rMaster.maChildren.end() )
@@ -236,8 +240,8 @@ void Shape::addChildren(
         awt::Rectangle* pShapeRect = 0;
         Shape& rChild = *(*aIter);
 
-        double sx = ((double)aSize.Width)/maChSize.Width;
-        double sy = ((double)aSize.Height)/maChSize.Height;
+        double sx = (maChSize.Width) ?  ((double)aSize.Width)/maChSize.Width : 1.0;
+        double sy = (maChSize.Height) ?  ((double)aSize.Height)/maChSize.Height : 1.0;
         rChild.maAbsolutePosition.X = aPosition.X + sx*(rChild.maPosition.X - maChPosition.X);
         rChild.maAbsolutePosition.Y = aPosition.Y + sy*(rChild.maPosition.Y - maChPosition.Y);
         rChild.maAbsoluteSize.Width = rChild.maSize.Width*sx;
@@ -249,9 +253,14 @@ void Shape::addChildren(
         aShapeRect.Width = rChild.maAbsoluteSize.Width;
         aShapeRect.Height = rChild.maAbsoluteSize.Height;
 
-        pShapeRect = &aShapeRect;
+        //pShapeRect = &aShapeRect;
 
-        (*aIter++)->addShape( rFilterBase, pTheme, rxShapes, pShapeRect, pShapeMap );
+        aChildTransformation = aTransformation;
+
+        aChildTransformation.translate((-maChPosition.X)/360.0, (-maChPosition.Y)/360.0);
+        aChildTransformation.scale((360.0*sx)/(maSize.Width ? maSize.Width : 1.0), (360.0*sy)/(maSize.Height ? maSize.Height : 1.0));
+
+        (*aIter++)->addShape( rFilterBase, pTheme, rxShapes, aChildTransformation, pShapeRect, pShapeMap );
     }
 }
 
@@ -261,7 +270,8 @@ Reference< XShape > Shape::createAndInsert(
         const Theme* pTheme,
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
         const awt::Rectangle* pShapeRect,
-        sal_Bool bClearText )
+        sal_Bool bClearText,
+        basegfx::B2DHomMatrix& aParentTransformation )
 {
     awt::Size aSize( pShapeRect ? awt::Size( pShapeRect->Width, pShapeRect->Height ) : maSize );
     awt::Point aPosition( pShapeRect ? awt::Point( pShapeRect->X, pShapeRect->Y ) : maPosition );
@@ -270,7 +280,7 @@ Reference< XShape > Shape::createAndInsert(
     OUString aServiceName = finalizeServiceName( rFilterBase, rServiceName, aShapeRectHmm );
     sal_Bool bIsCustomShape = aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.CustomShape" ) );
 
-    basegfx::B2DHomMatrix aTransformation;
+    basegfx::B2DHomMatrix aTransformation( aParentTransformation );
     if( aSize.Width != 1 || aSize.Height != 1)
     {
         // take care there are no zeros used by error
@@ -309,6 +319,17 @@ Reference< XShape > Shape::createAndInsert(
         // if global position is used, add it to transformation
         aTransformation.translate( aPosition.X / 360.0, aPosition.Y / 360.0 );
     }
+
+    OSL_TRACE("transformation:\n%f %f %f\n%f %f %f\n%f %f %f\n",
+              aTransformation.get(0,0),
+              aTransformation.get(0,1),
+              aTransformation.get(0,2),
+              aTransformation.get(1,0),
+              aTransformation.get(1,1),
+              aTransformation.get(1,2),
+              aTransformation.get(2,0),
+              aTransformation.get(2,1),
+              aTransformation.get(2,2));
 
     // special for lineshape
     if ( aServiceName == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.LineShape")) )
@@ -352,6 +373,7 @@ Reference< XShape > Shape::createAndInsert(
         // now set transformation for this object
         HomogenMatrix3 aMatrix;
 
+
         aMatrix.Line1.Column1 = aTransformation.get(0,0);
         aMatrix.Line1.Column2 = aTransformation.get(0,1);
         aMatrix.Line1.Column3 = aTransformation.get(0,2);
@@ -366,6 +388,9 @@ Reference< XShape > Shape::createAndInsert(
 
         maShapeProperties[ PROP_Transformation ] <<= aMatrix;
     }
+
+    aParentTransformation = aTransformation;
+
     Reference< lang::XMultiServiceFactory > xServiceFact( rFilterBase.getModel(), UNO_QUERY_THROW );
     if ( !mxShape.is() )
         mxShape = Reference< drawing::XShape >( xServiceFact->createInstance( aServiceName ), UNO_QUERY_THROW );
