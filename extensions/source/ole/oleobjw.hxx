@@ -148,7 +148,7 @@ public:
     virtual ::sal_Bool SAL_CALL hasMember( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
 
 
-    Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
+    Any  invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
                             const OUString& sFuncName,
                             const Sequence< Any >& Params,
                             Sequence< sal_Int16 >& OutParamIndex,

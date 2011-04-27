@@ -750,7 +750,7 @@ Any SAL_CALL ZipPackageStream::getPropertyValue( const OUString& PropertyName )
     }
     else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "Encrypted" ) ) )
     {
-        aAny <<= ( m_nStreamMode == PACKAGE_STREAM_RAW ) ? sal_True : bToBeEncrypted;
+        aAny <<= ((m_nStreamMode == PACKAGE_STREAM_RAW) ? sal_True : bToBeEncrypted);
         return aAny;
     }
     else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "WasEncrypted" ) ) )
@@ -765,7 +765,7 @@ Any SAL_CALL ZipPackageStream::getPropertyValue( const OUString& PropertyName )
     }
     else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "EncryptionKey" ) ) )
     {
-        aAny <<= !xEncryptionData.is() ? Sequence < sal_Int8 > () : xEncryptionData->aKey;
+        aAny <<= (!xEncryptionData.is() ? Sequence < sal_Int8 > () : xEncryptionData->aKey);
         return aAny;
     }
     else

@@ -391,7 +391,7 @@ void VCLXAccessibleToolBox::UpdateItem_Impl( sal_Int32 _nPos, sal_Bool _bItemAdd
                 if ( pItem )
                 {
                     sal_Int32 nIndex = pItem->getIndexInParent( );
-                    nIndex += _bItemAdded ? +1 : -1;
+                    nIndex += (_bItemAdded ? +1 : -1);
                     pItem->setIndexInParent( nIndex );
                 }
             }
@@ -400,7 +400,7 @@ void VCLXAccessibleToolBox::UpdateItem_Impl( sal_Int32 _nPos, sal_Bool _bItemAdd
                 if ( pWindowItem )
                 {
                     sal_Int32 nIndex = pWindowItem->getIndexInParent( );
-                    nIndex += _bItemAdded ? +1 : -1;
+                    nIndex += (_bItemAdded ? +1 : -1);
                     pWindowItem->setIndexInParent( nIndex );
                 }
             }

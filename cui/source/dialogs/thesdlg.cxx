@@ -398,7 +398,7 @@ void SvxThesaurusDialog_Impl::LookUp_Impl()
 
     aLookUpText = OUString( aText );
     if (aLookUpText.getLength() > 0 &&
-            (aLookUpHistory.size() == 0 || aLookUpText != aLookUpHistory.top()))
+            (aLookUpHistory.empty() || aLookUpText != aLookUpHistory.top()))
         aLookUpHistory.push( aLookUpText );
 
     m_bWordFound = UpdateAlternativesBox_Impl();

@@ -86,7 +86,6 @@ public:
 
 class MyApp : public Application
 {
-    PopupMenu  *MyMenu;
     Timer aCommandTimer;
     PlugInDispatcher *pMyDispatcher;
 

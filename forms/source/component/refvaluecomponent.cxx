@@ -260,7 +260,7 @@ namespace frm
                 }
                 else if ( bStringExchange )
                 {
-                    aExternalValue <<= m_bSupportSecondRefValue ? m_sNoCheckReferenceValue : ::rtl::OUString();
+                    aExternalValue <<= (m_bSupportSecondRefValue ? m_sNoCheckReferenceValue : ::rtl::OUString());
                 }
                 break;
             }

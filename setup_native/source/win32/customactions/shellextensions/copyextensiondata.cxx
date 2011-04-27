@@ -80,7 +80,6 @@ extern "C" UINT __stdcall copyExtensionData(MSIHANDLE handle) {
     std::_tstring sSourceDir = GetMsiProperty( handle, TEXT("SourceDir") );
     std::_tstring sExtensionDir = sSourceDir + TEXT("extension\\");
     std::_tstring sPattern = sExtensionDir + TEXT("*.oxt");
-    // std::_tstring mystr;
 
     // Finding all oxt files in sExtensionDir
 
@@ -91,7 +90,6 @@ extern "C" UINT __stdcall copyExtensionData(MSIHANDLE handle) {
     if ( hFindOxt != INVALID_HANDLE_VALUE )
     {
         bool fNextFile = false;
-        bool fSuccess = true;
         bool bFailIfExist = true;
 
         std::_tstring sDestDir = GetMsiProperty( handle, TEXT("INSTALLLOCATION") );
@@ -101,9 +99,9 @@ extern "C" UINT __stdcall copyExtensionData(MSIHANDLE handle) {
         std::_tstring sShareDir = sDestDir + TEXT("share");
         std::_tstring sExtDir = sShareDir + TEXT("\\extension");
         std::_tstring sExtInstDir = sExtDir + TEXT("\\install");
-        bool bDir = CreateDirectory(sShareDir.c_str(), NULL);
-        bDir = CreateDirectory(sExtDir.c_str(), NULL);
-        bDir = CreateDirectory(sExtInstDir.c_str(), NULL);
+        CreateDirectory(sShareDir.c_str(), NULL);
+        CreateDirectory(sExtDir.c_str(), NULL);
+        CreateDirectory(sExtInstDir.c_str(), NULL);
 
         do
         {
@@ -112,7 +110,7 @@ extern "C" UINT __stdcall copyExtensionData(MSIHANDLE handle) {
             std::_tstring sSourceFile = sExtensionDir + sOxtFile;
             std::_tstring sDestFile = sShareInstallDir + sOxtFile;
 
-            fSuccess = CopyFile( sSourceFile.c_str(), sDestFile.c_str(), bFailIfExist );
+            CopyFile( sSourceFile.c_str(), sDestFile.c_str(), bFailIfExist );
 
             fNextFile = FindNextFile( hFindOxt, &aFindFileData );
 

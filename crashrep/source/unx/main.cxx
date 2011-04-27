@@ -484,12 +484,9 @@ static void WriteSOAPRequest( FILE *fp )
 
 struct RequestParams
 {
-    bool    success;
-    FILE    *fpin;
+    FILE *fpin;
     const char *pServer;
-    unsigned short uPort;
     const char *pProxyServer;
-    unsigned short uProxyPort;
 };
 
 
@@ -540,8 +537,7 @@ bool send_crash_report( const boost::unordered_map< string, string >& rSettings 
 
 static bool append_file( const char *filename, string& rString )
 {
-    char    buf[1024];
-    bool    bSuccess = false;
+    char buf[1024];
 
     FILE *fp = fopen( filename, "r" );
     if ( fp )

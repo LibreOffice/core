@@ -998,14 +998,14 @@ void BasicIDEShell::SetCurLib( const ScriptDocument& rDocument, String aLibName,
     {
         ContainerListenerImpl* pListener = static_cast< ContainerListenerImpl* >( m_xLibListener.get() );
 
-        if ( pListener )
-            pListener->removeContainerListener( m_aCurDocument, m_aCurLibName );
-
         m_aCurDocument = rDocument;
-
-        pListener->addContainerListener( m_aCurDocument, aLibName );
-
         m_aCurLibName = aLibName;
+
+        if ( pListener )
+        {
+            pListener->removeContainerListener( m_aCurDocument, m_aCurLibName );
+            pListener->addContainerListener( m_aCurDocument, aLibName );
+        }
 
         if ( bUpdateWindows )
             UpdateWindows();

@@ -279,7 +279,7 @@ void DbRegistrationOptionsPage::FillUserData()
     aUserData += ';';
     HeaderBarItemBits nBits = pHeaderBar->GetItemBits( ITEMID_TYPE );
     sal_Bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
-    aUserData += bUp ? '1' : '0';
+    aUserData += (bUp ? '1' : '0');
     SetUserData( aUserData );
 }
 // -----------------------------------------------------------------------

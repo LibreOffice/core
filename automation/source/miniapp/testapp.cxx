@@ -157,6 +157,7 @@ MyApp aApp;
 MyApp::MyApp()
 {
     pMainWin = NULL;
+    pMyDispatcher = NULL;
 }
 
 void MyApp::Property( ApplicationProperty& rProp )

@@ -1366,7 +1366,6 @@ uno::Any SAL_CALL IUnknownWrapper_Impl::directInvoke( const ::rtl::OUString& aNa
         scoped_array<CComVariant> ptrRefArgs; // referenced arguments
         CComVariant * arArgs = NULL;
         CComVariant * arRefArgs = NULL;
-        bool bVarargParam = false;
 
         dispparams.cArgs = aParams.getLength();
 
@@ -1758,8 +1757,6 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
     CComVariant * arArgs = NULL;
     CComVariant * arRefArgs = NULL;
     sal_Int32 revIndex = 0;
-    bool bVarargParam = false;
-
 
     //Set the array of DISPIDs for named args if it is a property put operation.
     //If there are other named arguments another array is set later on.
@@ -1906,24 +1903,15 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
             if ( i < nUnoArgs)
                 anyArg= Params.getConstArray()[i];
 
-            //Test if the current parameter is a "vararg" parameter.
-            if (bVarargParam || (aFuncDesc->cParamsOpt == -1 &&
-                                aFuncDesc->cParams == (i + 1)))
-            {   //This parameter is from the variable argument list. There is no
-                //type info available, except that it must be a VARIANT
-                bVarargParam = true;
-            }
-
             unsigned short paramFlags = PARAMFLAG_FOPT | PARAMFLAG_FIN;
             VARTYPE varType = VT_VARIANT;
-            if ( ! bVarargParam)
+            if (aFuncDesc->cParamsOpt != -1 || aFuncDesc->cParams != (i + 1))
             {
-                paramFlags =
-                    aFuncDesc->lprgelemdescParam[i].paramdesc.wParamFlags;
-                varType = getElementTypeDesc(
-                    & aFuncDesc->lprgelemdescParam[i].tdesc);
+                paramFlags = aFuncDesc->lprgelemdescParam[i].paramdesc.wParamFlags;
+                varType = getElementTypeDesc(&aFuncDesc->lprgelemdescParam[i].tdesc);
             }
-            //Make sure that there is a UNO parameter for every
+
+            // Make sure that there is a UNO parameter for every
             // expected parameter. If there is no UNO parameter where the
             // called function expects one, then it must be optional. Otherwise
             // its a UNO programming error.

@@ -294,7 +294,7 @@ void SvxMultiPathDialog::SetPath( const String& rPath )
         if ( pImpl->bIsRadioButtonMode )
         {
             String sEntry( '\t' );
-            sEntry += bIsSystemPath ? sSystemPath : sPath;
+            sEntry += (bIsSystemPath ? sSystemPath : sPath);
             SvLBoxEntry* pEntry = aRadioLB.InsertEntry( sEntry );
             String* pURL = new String( sPath );
             pEntry->SetUserData( pURL );

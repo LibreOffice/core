@@ -2191,7 +2191,7 @@ void OfaTreeOptionsDialog::ResizeTreeLB( void )
     while( pEntry )
     {
         long n = aTreeLB.GetTextWidth( aTreeLB.GetEntryText( static_cast< SvLBoxEntry* >( pEntry ) ) );
-        n += ( nDepth == 0 )? nIndent0 : nIndent1;
+        n += ((nDepth == 0) ? nIndent0 : nIndent1);
 
         if( n > nDelta )
             nDelta = n;

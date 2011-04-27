@@ -45,15 +45,18 @@ void HttpRequest::Init()
 }
 
 HttpRequest::HttpRequest()
-: nStatus( HTTP_INIT )
-, nResultId( 0 )
-, pStream( NULL )
-{}
+    : nStatus(HTTP_INIT), nResultId(0),
+      pStream(NULL), pOutSocket(NULL)
+{
+}
 
 HttpRequest::~HttpRequest()
 {
     delete pStream;
     pStream = NULL;
+
+    delete pOutSocket;
+    pOutSocket = NULL;
 }
 
 void HttpRequest::SetRequest( ByteString aHost, ByteString aPath, sal_uInt16 nPort )
@@ -95,17 +98,13 @@ sal_Bool HttpRequest::Execute()
     aTV.Nanosec = 0;
 
     pOutSocket = new osl::ConnectorSocket();
-    if ( pOutSocket->connect( aConnectAddr, &aTV ) == osl_Socket_Ok )
-    {
-//      pOutSocket->setTcpNoDelay( 1 );
-    }
-    else
+    if ( pOutSocket->connect( aConnectAddr, &aTV ) != osl_Socket_Ok )
     {
         delete pOutSocket;
+        pOutSocket = NULL;
         nStatus = HTTP_REQUEST_ERROR;
         return sal_False;
     }
-
 
     SendString( pOutSocket, "GET " );
     if ( aProxyHost.Len() )
@@ -218,13 +217,10 @@ void HttpRequest::Abort()
     if ( pOutSocket )
     {
         nStatus = HTTP_REQUEST_ERROR;
-          pOutSocket->shutdown();
+        pOutSocket->shutdown();
         pOutSocket->close();
     }
 }
-
-
-
 
 SvMemoryStream* HttpRequest::GetBody()
 {

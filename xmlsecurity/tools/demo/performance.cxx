@@ -244,7 +244,7 @@ public:
 
 struct AncestorEvent
 {
-    AncestorEvent( sal_Int32 nAttrNum ):aAttributeList(nAttrNum){};
+    AncestorEvent(sal_Int32 nAttrNum) : aAttributeList(nAttrNum), bIsStartElement(false) {};
 
     bool bIsStartElement;
     rtl::OUString ouName;
@@ -357,27 +357,30 @@ private:
         const com::sun::star::uno::Reference<
             com::sun::star::xml::sax::XDocumentHandler >& xDocumentHandler);
 
-    void XSecTester::sendAncestorStartElementEvent(
+    void sendAncestorStartElementEvent(
         const rtl::OUString& ouName,
         const com::sun::star::uno::Sequence<
             com::sun::star::xml::csax::XMLAttribute >& xAttrList,
         const com::sun::star::uno::Reference<
             com::sun::star::xml::sax::XDocumentHandler >& xDocumentHandler) const;
 
-    void XSecTester::sendAncestorEndElementEvent(
+    void sendAncestorEndElementEvent(
         const rtl::OUString& ouName,
         const com::sun::star::uno::Reference<
             com::sun::star::xml::sax::XDocumentHandler >& xDocumentHandler) const;
 
-    std::vector< AncestorEvent* >::const_iterator XSecTester::checkAncestorStartElementEvent(
+    std::vector< AncestorEvent* >::const_iterator checkAncestorStartElementEvent(
         const std::vector< AncestorEvent* >::const_iterator& ii,
         const com::sun::star::uno::Reference<
             com::sun::star::xml::sax::XDocumentHandler >& xDocumentHandler) const;
 
 public:
-    XSecTester(const com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory >& rxMSF)
-        :mxMSF( rxMSF ){};
+    XSecTester(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory >& rxMSF)
+        : mxMSF(rxMSF), m_bIsExporting(false), m_bIsBlocking(false),
+          m_bIsInsideCollectedElement(false), m_bIsSAXEventKeeperOnTheSAXChain(false)
+    {
+    };
+
     virtual ~XSecTester(){};
 
     /* XSignatureCreationResultListener */

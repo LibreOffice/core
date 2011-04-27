@@ -3627,7 +3627,7 @@ sal_Bool SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
         else
         {
             nEsc = (short)m_aHighLowEdit.Denormalize( m_aHighLowEdit.GetValue() );
-            nEsc *= bHigh ? 1 : -1;
+            nEsc *= (bHigh ? 1 : -1);
         }
         nEscProp = (sal_uInt8)m_aFontSizeEdit.Denormalize( m_aFontSizeEdit.GetValue() );
     }

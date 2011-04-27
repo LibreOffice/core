@@ -118,14 +118,13 @@ Reference< XConnection > getConnection(const ::rtl::OUString& _rURL)
         {
             xDataSource = Reference< XDataSource > (Reference< XNamingService > (xNamingContext, UNO_QUERY)->getRegisteredObject(_rURL), UNO_QUERY);
         }
-        catch(Exception eEx)
+        catch(Exception &)
         {
-            (void) eEx; // make compiler happy
             OSL_FAIL("Exception caught in ODatabaseContext::getRegisteredObject()");
         }
     }
     // build the connection from the data source
-    Reference< XConnection >    xConn;
+    Reference< XConnection > xConn;
     if (xDataSource.is())
     {
         // need user/pwd for this
