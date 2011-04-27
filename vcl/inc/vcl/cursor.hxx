@@ -69,8 +69,10 @@ public:
     SAL_DLLPRIVATE void         ImplDraw();
     SAL_DLLPRIVATE void         ImplRestore();
     DECL_DLLPRIVATE_LINK(       ImplTimerHdl, AutoTimer* );
-    SAL_DLLPRIVATE void         ImplShow( bool bDrawDirect = true, bool bRestore = false );
-    SAL_DLLPRIVATE bool         ImplHide();
+    SAL_DLLPRIVATE void         ImplShow( bool bDrawDirect = true );
+    SAL_DLLPRIVATE void         ImplHide();
+    SAL_DLLPRIVATE void         ImplResume( bool bRestore = false );
+    SAL_DLLPRIVATE bool         ImplSuspend();
     SAL_DLLPRIVATE void         ImplNew();
 
 public:
@@ -113,6 +115,10 @@ public:
     sal_Bool            operator==( const Cursor& rCursor ) const;
     sal_Bool            operator!=( const Cursor& rCursor ) const
                         { return !(Cursor::operator==( rCursor )); }
+
+private:
+    void ImplDoShow( bool bDrawDirect, bool bRestore );
+    bool ImplDoHide( bool bStop );
 };
 
 #endif  // _SV_CURSOR_HXX
