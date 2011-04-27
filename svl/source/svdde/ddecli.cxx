@@ -85,18 +85,18 @@ HDDEDATA CALLBACK DdeInternal::CliCallback(
 
     if( self )
     {
-        DdeTransaction* t;
         sal_Bool bFound = sal_False;
-        for( t = self->aTransactions.First(); t; t = self->aTransactions.Next() )
+        std::vector<DdeTransaction*> iter;
+        for( iter = self->aTransactions.begin(); iter != self->aTransactions.end(); ++iter )
         {
             switch( nCode )
             {
                 case XTYP_XACT_COMPLETE:
-                    if( (DWORD)t->nId == nInfo1 )
+                    if( (DWORD)iter->nId == nInfo1 )
                     {
-                        nCode = t->nType & (XCLASS_MASK | XTYP_MASK);
-                        t->bBusy = sal_False;
-                        t->Done( 0 != hData );
+                        nCode = iter->nType & (XCLASS_MASK | XTYP_MASK);
+                        iter->bBusy = sal_False;
+                        iter->Done( 0 != hData );
                         bFound = sal_True;
                     }
                     break;
@@ -106,27 +106,27 @@ HDDEDATA CALLBACK DdeInternal::CliCallback(
                     self->pImp->nStatus = self->pImp->hConv
                                     ? DMLERR_NO_ERROR
                                     : DdeGetLastError( pInst->hDdeInstCli );
-                    t = 0;
+                    iter = self->aTransactions.end();
                     nRet = 0;
                     bFound = sal_True;
                     break;
 
                 case XTYP_ADVDATA:
-                    bFound = sal_Bool( *t->pName == hText2 );
+                    bFound = sal_Bool( *iter->pName == hText2 );
                     break;
             }
             if( bFound )
                 break;
         }
 
-        if( t )
+        if( iter != self->aTransactions.end() )
         {
             switch( nCode )
             {
             case XTYP_ADVDATA:
                 if( !hData )
                 {
-                    ((DdeLink*) t)->Notify();
+                    static_cast<DdeLink*>(*iter)->Notify();
                     nRet = (HDDEDATA)DDE_FACK;
                     break;
                 }
@@ -142,7 +142,7 @@ HDDEDATA CALLBACK DdeInternal::CliCallback(
                 d.pImp->hData = hData;
                 d.pImp->nFmt  = DdeData::GetInternalFormat( nCbType );
                 d.Lock();
-                t->Data( &d );
+                iter->Data( &d );
                 nRet = (HDDEDATA)DDE_FACK;
                 break;
             }
@@ -279,7 +279,7 @@ DdeTransaction::DdeTransaction( DdeConnection& d, const String& rItemName,
     nType = 0;
     bBusy = sal_False;
 
-    rDde.aTransactions.Insert( this );
+    rDde.aTransactions.push_back( this );
 }
 
 // --- DdeTransaction::~DdeTransaction() ---------------------------
@@ -293,7 +293,8 @@ DdeTransaction::~DdeTransaction()
     }
 
     delete pName;
-    rDde.aTransactions.Remove( this );
+    rDde.aTransactions.erase(std::remove(rDde.aTransactions.begin(),
+                                         rDde.aTransactions.end(),this));
 }
 
 // --- DdeTransaction::Execute() -----------------------------------

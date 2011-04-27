@@ -60,7 +60,6 @@ DECLARE_LIST( DdeServices, DdeService* )
 typedef List DdeServices;
 #endif
 
-DECLARE_LIST( DdeTransactions, DdeTransaction* )
 typedef ::std::vector< long > DdeFormats;
 typedef ::std::vector< Conversation* > ConvList;
 
@@ -226,7 +225,7 @@ class SVL_DLLPUBLIC DdeConnection
 {
     friend class    DdeInternal;
     friend class    DdeTransaction;
-    DdeTransactions aTransactions;
+    std::vector<DdeTransaction*> aTransactions;
     DdeString*      pService;
     DdeString*      pTopic;
     DdeImp*         pImp;
