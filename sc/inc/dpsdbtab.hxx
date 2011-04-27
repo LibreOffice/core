@@ -41,8 +41,8 @@ class ScDocument;
 
 struct ScImportSourceDesc
 {
-    String  aDBName;
-    String  aObject;
+    ::rtl::OUString aDBName;
+    ::rtl::OUString aObject;
     sal_uInt16  nType;          // enum DataImportMode
     bool    bNative;
     ScDocument* mpDoc;
@@ -56,7 +56,8 @@ struct ScImportSourceDesc
                  bNative == rOther.bNative &&
                 mpDoc == rOther.mpDoc; }
 
-    ScDPCache* CreateCache() const;
+    sal_Int32 GetCommandType() const;
+    const ScDPCache* CreateCache() const;
 };
 
 /**

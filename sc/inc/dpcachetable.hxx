@@ -121,7 +121,7 @@ public:
         Criterion();
     };
 
-    ScDPCacheTable(ScDPCache* pCache);
+    ScDPCacheTable(const ScDPCache* pCache);
     ~ScDPCacheTable();
 
     sal_Int32 getRowSize() const;
@@ -169,14 +169,12 @@ public:
     SCROW getOrder(long nDim, SCROW nIndex) const;
     void clear();
     bool empty() const;
-    void setCache(ScDPCache* p);
+    void setCache(const ScDPCache* p);
     bool hasCache() const;
 
 private:
     ScDPCacheTable();
     ScDPCacheTable(const ScDPCacheTable&);
-
-    ScDPCache* getCache();
 
     /**
      * Check if a given row meets all specified criteria.
@@ -194,7 +192,7 @@ private:
         has the index of 0. */
     ::std::vector<bool> maRowsVisible;
 
-    ScDPCache* mpCache;
+    const ScDPCache* mpCache;
 };
 #endif
 

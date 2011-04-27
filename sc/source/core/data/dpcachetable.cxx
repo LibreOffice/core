@@ -158,14 +158,13 @@ ScDPCacheTable::Criterion::Criterion() :
 
 // ----------------------------------------------------------------------------
 
-ScDPCacheTable::ScDPCacheTable(ScDPCache* pCache) :
+ScDPCacheTable::ScDPCacheTable(const ScDPCache* pCache) :
     mpCache(pCache)
 {
 }
 
 ScDPCacheTable::~ScDPCacheTable()
 {
-    delete mpCache;
 }
 
 sal_Int32 ScDPCacheTable::getRowSize() const
@@ -181,9 +180,9 @@ sal_Int32 ScDPCacheTable::getColSize() const
 void ScDPCacheTable::fillTable(
     const ScQueryParam& rQuery, bool* pSpecial, bool bIgnoreEmptyRows, bool bRepeatIfEmpty)
 {
-   const SCROW  nRowCount = getRowSize();
-   const SCCOL  nColCount = (SCCOL) getColSize();
-   if ( nRowCount <= 0 || nColCount <= 0)
+    const SCROW nRowCount = getRowSize();
+    const SCCOL  nColCount = (SCCOL) getColSize();
+    if ( nRowCount <= 0 || nColCount <= 0)
         return;
 
     maRowsVisible.clear();
@@ -402,7 +401,6 @@ void ScDPCacheTable::clear()
 {
     maFieldEntries.clear();
     maRowsVisible.clear();
-    delete mpCache;
     mpCache = NULL;
 }
 
@@ -411,9 +409,8 @@ bool ScDPCacheTable::empty() const
     return mpCache == NULL || maFieldEntries.empty();
 }
 
-void ScDPCacheTable::setCache(ScDPCache* p)
+void ScDPCacheTable::setCache(const ScDPCache* p)
 {
-    delete mpCache;
     mpCache = p;
 }
 
@@ -444,11 +441,6 @@ bool ScDPCacheTable::isRowQualified(sal_Int32 nRow, const vector<Criterion>& rCr
 }
 
 const ScDPCache* ScDPCacheTable::getCache() const
-{
-    return mpCache;
-}
-
-ScDPCache* ScDPCacheTable::getCache()
 {
     return mpCache;
 }

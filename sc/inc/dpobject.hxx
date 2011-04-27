@@ -39,6 +39,7 @@
 
 #include <boost/ptr_container/ptr_list.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/ptr_container/ptr_map.hpp>
 #include <boost/shared_ptr.hpp>
 
 namespace com { namespace sun { namespace star { namespace sheet {
@@ -117,7 +118,6 @@ private:
     SC_DLLPRIVATE void              CreateObjects();
     SC_DLLPRIVATE void              CreateOutput();
     sal_Bool                    bRefresh;
-    long                        mnCacheId;
 
 public:
     ScDPObject(ScDocument* pD);
@@ -257,13 +257,48 @@ public:
 
 class ScDPCollection
 {
-private:
-    typedef ::boost::ptr_vector<ScDPObject> TablesType;
-
-    ScDocument* pDoc;
-    TablesType maTables;
-
 public:
+
+    /**
+     * Stores and manages all caches from internal sheets.
+     */
+    class SheetCaches
+    {
+        typedef ::boost::ptr_map<ScRange, ScDPCache> CachesType;
+        CachesType maCaches;
+        ScDocument* mpDoc;
+    public:
+        SheetCaches(ScDocument* pDoc);
+        const ScDPCache* getCache(const ScRange& rRange);
+        void removeCache(const ScRange& rRange);
+    };
+
+    /**
+     * Defines connection type to external data source.  Used as a key to look
+     * up database cache.
+     */
+    struct DBType
+    {
+        sal_Int32 mnSdbType;
+        ::rtl::OUString maDBName;
+        ::rtl::OUString maCommand;
+        DBType(sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand);
+    };
+
+    /**
+     * Data caches for external database sources.
+     */
+    class DBCaches
+    {
+        typedef ::boost::ptr_map<DBType, ScDPCache> CachesType;
+        CachesType maCaches;
+        ScDocument* mpDoc;
+    public:
+        DBCaches(ScDocument* pDoc);
+        const ScDPCache* getCache(sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand);
+        void removeCache(sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand);
+    };
+
     ScDPCollection(ScDocument* pDocument);
     ScDPCollection(const ScDPCollection& r);
     ~ScDPCollection();
@@ -296,8 +331,20 @@ public:
     SC_DLLPUBLIC bool InsertNewTable(ScDPObject* pDPObj);
 
     bool HasDPTable(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
+
+    SheetCaches& GetSheetCaches();
+    DBCaches& GetDBCaches();
+
+private:
+    typedef ::boost::ptr_vector<ScDPObject> TablesType;
+
+    ScDocument* pDoc;
+    TablesType maTables;
+    SheetCaches maSheetCaches;
+    DBCaches maDBCaches;
 };
 
+bool operator<(const ScDPCollection::DBType& left, const ScDPCollection::DBType& right);
 
 #endif
 

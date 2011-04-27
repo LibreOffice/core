@@ -72,6 +72,8 @@
 #include "dbdocfun.hxx"
 #include "dpoutput.hxx"
 #include "dptabsrc.hxx"
+#include "dpshttab.hxx"
+#include "dpsdbtab.hxx"
 #include "editable.hxx"
 #include "docpool.hxx"
 #include "patattr.hxx"
@@ -697,13 +699,29 @@ void ScDBFunc::RecalcPivotTable()
     ScDocShell* pDocSh  = GetViewData()->GetDocShell();
     ScDocument* pDoc    = GetViewData()->GetDocument();
 
-    //  old pivot not used any more
-
+    ScDPCollection* pDPs = pDoc->GetDPCollection();
     ScDPObject* pDPObj  = pDoc->GetDPAtCursor( GetViewData()->GetCurX(),
                                                   GetViewData()->GetCurY(),
                                                   GetViewData()->GetTabNo() );
-    if ( pDPObj )
+    if (pDPs && pDPObj)
     {
+        // Remove existing data cache for the data that this datapilot uses,
+        // to force re-build data cache.
+        if (pDPObj->IsSheetData())
+        {
+            // data source is internal sheet.
+            ScDPCollection::SheetCaches& rCaches = pDPs->GetSheetCaches();
+            const ScSheetSourceDesc* pDesc = pDPObj->GetSheetDesc();
+            rCaches.removeCache(pDesc->GetSourceRange());
+        }
+        else if (pDPObj->IsImportData())
+        {
+            // data source is external database.
+            ScDPCollection::DBCaches& rCaches = pDPs->GetDBCaches();
+            const ScImportSourceDesc* pDesc = pDPObj->GetImportSourceDesc();
+            rCaches.removeCache(pDesc->GetCommandType(), pDesc->aDBName, pDesc->aObject);
+        }
+
         ScDBDocFunc aFunc( *pDocSh );
         aFunc.DataPilotUpdate( pDPObj, pDPObj, true, false );
         CursorPosChanged();     // shells may be switched

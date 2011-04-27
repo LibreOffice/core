@@ -54,6 +54,7 @@
 #include "dpglobal.hxx"
 #include "globstr.hrc"
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/sdb/XCompletedExecution.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
@@ -70,13 +71,15 @@
 #include <com/sun/star/sheet/XDrillDownDataSupplier.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/types.hxx>
 #include <sal/macros.h>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <svl/zforlist.hxx>     // IsNumberFormat
+#include <vcl/msgbox.hxx>
 
 #include <vector>
-#include <stdio.h>
+#include <memory>
 
 using namespace com::sun::star;
 using ::std::vector;
@@ -94,6 +97,13 @@ using ::com::sun::star::sheet::DataPilotTablePositionData;
 using ::com::sun::star::sheet::XDimensionsSupplier;
 using ::com::sun::star::beans::XPropertySet;
 using ::rtl::OUString;
+
+#define SC_SERVICE_ROWSET           "com.sun.star.sdb.RowSet"
+#define SC_SERVICE_INTHANDLER       "com.sun.star.task.InteractionHandler"
+
+#define SC_DBPROP_DATASOURCENAME    "DataSourceName"
+#define SC_DBPROP_COMMAND           "Command"
+#define SC_DBPROP_COMMANDTYPE       "CommandType"
 
 // -----------------------------------------------------------------------
 
@@ -417,7 +427,7 @@ ScDPTableData* ScDPObject::GetTableData()
                 OSL_FAIL("no source descriptor");
                 pSheetDesc = new ScSheetSourceDesc(pDoc);     // dummy defaults
             }
-            ScDPCache* pCache = pSheetDesc->CreateCache();
+            const ScDPCache* pCache = pSheetDesc->CreateCache();
             if (pCache)
                 pData.reset(new ScSheetDPData(pDoc, *pSheetDesc, pCache));
         }
@@ -2383,15 +2393,123 @@ uno::Reference<sheet::XDimensionsSupplier> ScDPObject::CreateSource( const ScDPS
     return xRet;
 }
 
-// ----------------------------------------------------------------------------
+ScDPCollection::SheetCaches::SheetCaches(ScDocument* pDoc) : mpDoc(pDoc) {}
+
+const ScDPCache* ScDPCollection::SheetCaches::getCache(const ScRange& rRange)
+{
+    CachesType::const_iterator itr = maCaches.find(rRange);
+    if (itr != maCaches.end())
+        // already cached.
+        return itr->second;
+
+    ::std::auto_ptr<ScDPCache> pCache(new ScDPCache(mpDoc));
+    pCache->InitFromDoc(mpDoc, rRange);
+    const ScDPCache* p = pCache.get();
+    maCaches.insert(rRange, pCache);
+    return p;
+}
+
+void ScDPCollection::SheetCaches::removeCache(const ScRange& rRange)
+{
+    CachesType::iterator itr = maCaches.find(rRange);
+    if (itr != maCaches.end())
+        maCaches.erase(itr);
+}
+
+ScDPCollection::DBType::DBType(sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand) :
+    mnSdbType(nSdbType), maDBName(rDBName), maCommand(rCommand) {}
+
+ScDPCollection::DBCaches::DBCaches(ScDocument* pDoc) : mpDoc(pDoc) {}
+
+const ScDPCache* ScDPCollection::DBCaches::getCache(sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand)
+{
+    DBType aType(nSdbType, rDBName, rCommand);
+    CachesType::const_iterator itr = maCaches.find(aType);
+    if (itr != maCaches.end())
+        // already cached.
+        return itr->second;
+
+    uno::Reference<sdbc::XRowSet> xRowSet ;
+    try
+    {
+        xRowSet = uno::Reference<sdbc::XRowSet>(
+            comphelper::getProcessServiceFactory()->createInstance(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_SERVICE_ROWSET )) ),
+            uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xRowProp( xRowSet, uno::UNO_QUERY );
+        DBG_ASSERT( xRowProp.is(), "can't get RowSet" );
+        if ( xRowProp.is() )
+        {
+            //
+            //  set source parameters
+            //
+            uno::Any aAny;
+            aAny <<= rDBName;
+            xRowProp->setPropertyValue(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_DATASOURCENAME)), aAny );
+
+            aAny <<= rCommand;
+            xRowProp->setPropertyValue(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_COMMAND)), aAny );
+
+            aAny <<= nSdbType;
+            xRowProp->setPropertyValue(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_COMMANDTYPE)), aAny );
+
+            uno::Reference<sdb::XCompletedExecution> xExecute( xRowSet, uno::UNO_QUERY );
+            if ( xExecute.is() )
+            {
+                uno::Reference<task::XInteractionHandler> xHandler(
+                    comphelper::getProcessServiceFactory()->createInstance(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_SERVICE_INTHANDLER )) ),
+                    uno::UNO_QUERY);
+                xExecute->executeWithCompletion( xHandler );
+            }
+            else
+                xRowSet->execute();
+        }
+    }
+    catch ( sdbc::SQLException& rError )
+    {
+        //! store error message
+        InfoBox aInfoBox( 0, String(rError.Message) );
+        aInfoBox.Execute();
+        return NULL;
+    }
+    catch ( uno::Exception& )
+    {
+        OSL_FAIL("Unexpected exception in database");
+        return NULL;
+    }
+
+    ::std::auto_ptr<ScDPCache> pCache(new ScDPCache(mpDoc));
+    SvNumberFormatter aFormat(mpDoc->GetServiceManager(), ScGlobal::eLnge);
+    pCache->InitFromDataBase(xRowSet, *aFormat.GetNullDate());
+    ::comphelper::disposeComponent(xRowSet);
+    const ScDPCache* p = pCache.get();
+    maCaches.insert(aType, pCache);
+    return p;
+}
+
+void ScDPCollection::DBCaches::removeCache(sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand)
+{
+    DBType aType(nSdbType, rDBName, rCommand);
+    CachesType::iterator itr = maCaches.find(aType);
+    if (itr != maCaches.end())
+        maCaches.erase(itr);
+}
 
 ScDPCollection::ScDPCollection(ScDocument* pDocument) :
-    pDoc( pDocument )
+    pDoc( pDocument ),
+    maSheetCaches(pDocument),
+    maDBCaches(pDocument)
 {
 }
 
 ScDPCollection::ScDPCollection(const ScDPCollection& r) :
-    pDoc(r.pDoc)
+    pDoc(r.pDoc),
+    maSheetCaches(r.pDoc),
+    maDBCaches(r.pDoc)
 {
 }
 
@@ -2582,6 +2700,27 @@ bool ScDPCollection::HasDPTable(SCCOL nCol, SCROW nRow, SCTAB nTab) const
         return false;
 
     return pMergeAttr->HasDPTable();
+}
+
+ScDPCollection::SheetCaches& ScDPCollection::GetSheetCaches()
+{
+    return maSheetCaches;
+}
+
+ScDPCollection::DBCaches& ScDPCollection::GetDBCaches()
+{
+    return maDBCaches;
+}
+
+bool operator<(const ScDPCollection::DBType& left, const ScDPCollection::DBType& right)
+{
+    if (left.mnSdbType != right.mnSdbType)
+        return left.mnSdbType < right.mnSdbType;
+
+    if (!left.maDBName.equals(right.maDBName))
+        return left.maDBName < right.maDBName;
+
+    return left.maCommand < right.maCommand;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

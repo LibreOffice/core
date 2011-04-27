@@ -93,7 +93,7 @@ public:
     bool IsEmptyMember( SCROW nRow, sal_uInt16 nColumn ) const;
     bool IsRowEmpty( SCROW nRow ) const;
     bool IsValid() const;
-    bool ValidQuery( SCROW nRow, const ScQueryParam& rQueryParam, bool* pSpecial );
+    bool ValidQuery( SCROW nRow, const ScQueryParam& rQueryParam, bool* pSpecial ) const;
 
     ScDocument* GetDoc() const;//ms-cache-core
     long GetColumnCount() const;

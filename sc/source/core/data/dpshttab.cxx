@@ -60,7 +60,7 @@ using ::std::vector;
 
 // -----------------------------------------------------------------------
 
-ScSheetDPData::ScSheetDPData(ScDocument* pD, const ScSheetSourceDesc& rDesc, ScDPCache* pCache) :
+ScSheetDPData::ScSheetDPData(ScDocument* pD, const ScSheetSourceDesc& rDesc, const ScDPCache* pCache) :
     ScDPTableData(pD),
     aQuery ( rDesc.GetQueryParam() ),
     pSpecial(NULL),
@@ -307,7 +307,7 @@ bool ScSheetSourceDesc::operator== (const ScSheetSourceDesc& rOther) const
         maQueryParam  == rOther.maQueryParam;
 }
 
-ScDPCache* ScSheetSourceDesc::CreateCache() const
+const ScDPCache* ScSheetSourceDesc::CreateCache() const
 {
     if (!mpDoc)
         return NULL;
@@ -319,9 +319,10 @@ ScDPCache* ScSheetSourceDesc::CreateCache() const
         return NULL;
     }
 
-    ScDPCache* pCache = new ScDPCache(mpDoc);
-    pCache->InitFromDoc(mpDoc, GetSourceRange());
-    return pCache;
+    // All cache instances are managed centrally by ScDPCollection.
+    ScDPCollection* pDPs = mpDoc->GetDPCollection();
+    ScDPCollection::SheetCaches& rCaches = pDPs->GetSheetCaches();
+    return rCaches.getCache(GetSourceRange());
 }
 
 long ScSheetSourceDesc::GetCacheId() const
