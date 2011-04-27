@@ -44,7 +44,7 @@ String RID_UPDATE_STR_NO_UPD_FOUND
 
 String RID_UPDATE_STR_UPD_FOUND
 {
-    Text [ en-US ] = "%PRODUCTNAME %NEXTVERSION is available.\n\nThe installed version is %PRODUCTNAME %PRODUCTVERSION.\n\nNote: Before downloading  an update, please ensure that you have sufficient access rights to install it.\nA password, usually the administrator's or root password, may be required.";
+    Text [ en-US ] = "%PRODUCTNAME %NEXTVERSION is available.\n\nThe installed version is %PRODUCTNAME %PRODUCTVERSION.\n\nNote: Before downloading an update, please ensure that you have sufficient access rights to install it.\nA password, usually the administrator's or root password, may be required.";
 };
 
 String RID_UPDATE_STR_DLG_TITLE
