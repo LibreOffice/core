@@ -13,6 +13,15 @@ use Cwd;
 
 $path = '';
 $do_link = 0;
+my $tmp_dir;
+if( defined($ENV{TMPDIR}) ) {
+    $tmp_dir = $ENV{TMPDIR};
+} elsif( defined($ENV{TMP}) ) {
+   $tmp_dir = $ENV{TMP};
+} else {
+   $tmp_dir = '/tmp';
+}
+if (!-d $tmp_dir) {die "Set TMP or TMPDIR!\n";}
 
 # Workaround for system Mozilla
 if ( $ENV{'SYSTEM_MOZILLA'} eq 'YES' ) {
@@ -82,6 +91,7 @@ print "Running OOo installer\n";
 system ("cd $ENV{SRC_ROOT}/instsetoo_native/util ; " .
 	"perl -w $ENV{SOLARENV}/bin/make_installer.pl " .
 	"-f openoffice.lst -l $langs -p LibreOffice " .
+	"-u $tmp_dir " .
 	"-buildid $BUILD $destdir $strip " .
 	"-simple $path") && die "Failed to install: $!";
 
@@ -90,6 +100,7 @@ if ($ENV{BUILD_TYPE} =~ m/ODK/) {
     system ("cd $ENV{SRC_ROOT}/instsetoo_native/util ; " .
 	"perl -w $ENV{SOLARENV}/bin/make_installer.pl " .
 	"-f openoffice.lst -l en-US -p LibreOffice_SDK " .
+	"-u $tmp_dir " .
 	"-buildid $BUILD $destdir $strip " .
 	"-simple $path") && die "Failed to install: $!";
 }
