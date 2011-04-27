@@ -255,8 +255,9 @@ sal_Bool SAL_CALL osl_assertFailedLine (
     /* output message buffer */
     OSL_DIAGNOSE_OUTPUTMESSAGE(f, szMessage);
 
-    /* output backtrace */
-    osl_diagnose_backtrace_Impl(f);
+    /* if SAL backtrace for assertions is disabled, skip here */
+    if ( !getenv("DISABLE_SAL_BACKTRACE") )
+        osl_diagnose_backtrace_Impl(f);
 
     /* release lock and leave */
     pthread_mutex_unlock(&g_mutex);
