@@ -458,15 +458,14 @@ Cursor& Cursor::operator=( const Cursor& rCursor )
 
 bool Cursor::operator==( const Cursor& rCursor ) const
 {
-    if ( (maPos         == rCursor.maPos)           &&
+    return
+        ((maPos         == rCursor.maPos)           &&
          (maSize        == rCursor.maSize)          &&
          (mnSlant       == rCursor.mnSlant)         &&
          (mnOrientation == rCursor.mnOrientation)   &&
          (mnDirection   == rCursor.mnDirection)     &&
-         (mbVisible     == rCursor.mbVisible) )
-        return true;
-    else
-        return false;
+         (mbVisible     == rCursor.mbVisible))
+        ;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
