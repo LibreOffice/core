@@ -454,8 +454,9 @@ OutlinerView* SdrObjEditView::ImpMakeOutlinerView(Window* pWin, sal_Bool /*bNoPa
         pOutlView->SetAnchorMode((EVAnchorMode)(pText->GetOutlinerViewAnchorMode()));
         pTextEditOutliner->SetFixedCellHeight(((const SdrTextFixedCellHeightItem&)pText->GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
     }
-    pOutlView->SetOutputArea(aTextEditArea);
+    // do update before setting output area so that aTextEditArea can be recalculated
     pTextEditOutliner->SetUpdateMode(sal_True);
+    pOutlView->SetOutputArea(aTextEditArea);
     ImpInvalidateOutlinerView(*pOutlView);
     return pOutlView;
 }
