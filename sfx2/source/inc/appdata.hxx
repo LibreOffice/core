@@ -164,7 +164,6 @@ public:
                                 SfxAppData_Impl( SfxApplication* );
                                 ~SfxAppData_Impl();
 
-    void                        UpdateApplicationSettings( sal_Bool bDontHide );
     SfxDocumentTemplates*       GetDocumentTemplates();
     void                        DeInitDDE();
 

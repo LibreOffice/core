@@ -149,20 +149,6 @@ SfxAppData_Impl::~SfxAppData_Impl()
     delete pBasMgrListener;
 }
 
-void SfxAppData_Impl::UpdateApplicationSettings( sal_Bool bDontHide )
-{
-    AllSettings aAllSet = Application::GetSettings();
-    StyleSettings aStyleSet = aAllSet.GetStyleSettings();
-    sal_uInt32 nStyleOptions = aStyleSet.GetOptions();
-    if ( bDontHide )
-        nStyleOptions &= ~STYLE_OPTION_HIDEDISABLED;
-    else
-        nStyleOptions |= STYLE_OPTION_HIDEDISABLED;
-    aStyleSet.SetOptions( nStyleOptions );
-    aAllSet.SetStyleSettings( aStyleSet );
-    Application::SetSettings( aAllSet );
-}
-
 SfxDocumentTemplates* SfxAppData_Impl::GetDocumentTemplates()
 {
     if ( !pTemplates )

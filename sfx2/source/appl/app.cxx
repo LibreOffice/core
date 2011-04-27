@@ -330,7 +330,6 @@ SfxApplication::SfxApplication()
     SvtViewOptions::AcquireOptions();
 
     pAppData_Impl = new SfxAppData_Impl( this );
-    pAppData_Impl->UpdateApplicationSettings( SvtMenuOptions().IsEntryHidingEnabled() );
     pAppData_Impl->m_xImeStatusWindow->init();
     pApp->PreInit();
 
