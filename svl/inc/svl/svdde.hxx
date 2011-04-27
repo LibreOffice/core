@@ -56,11 +56,9 @@ struct Conversation;
 
 #ifndef _SVDDE_NOLISTS
 DECLARE_LIST( DdeServices, DdeService* )
-DECLARE_LIST( DdeTopics, DdeTopic* )
 DECLARE_LIST( DdeItems, DdeItem* )
 #else
 typedef List DdeServices;
-typedef List DdeTopics;
 typedef List DdeItems;
 #endif
 
@@ -392,7 +390,7 @@ protected:
 
     const DdeTopic* GetSysTopic() const { return pSysTopic; }
 private:
-    DdeTopics       aTopics;
+    std::vector<DdeTopic*> aTopics;
     DdeFormats      aFormats;
     DdeTopic*       pSysTopic;
     DdeString*      pName;
@@ -409,7 +407,7 @@ public:
     short           GetError()              { return nStatus; }
 
     static DdeServices& GetServices();
-    DdeTopics&      GetTopics()             { return aTopics; }
+    std::vector<DdeTopic*>& GetTopics() { return aTopics; }
 
     void            AddTopic( const DdeTopic& );
     void            RemoveTopic( const DdeTopic& );

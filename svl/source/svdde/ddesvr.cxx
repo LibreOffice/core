@@ -121,10 +121,10 @@ HDDEDATA CALLBACK _export DdeInternal::SvrCallback(
             {
                 if ( !hText2 || ( *pService->pName == hText2 ) )
                 {
-                    for( pTopic = pService->aTopics.First(); pTopic;
-                         pTopic = pService->aTopics.Next() )
+                    std::vector<DdeTopic*>::const_iterator iter;
+                    for (iter = pService->aTopics.begin(); iter != pService->aTopics.end(); ++iter)
                     {
-                        if ( !hText1 || (*pTopic->pName == hText1) )
+                        if ( !hText1 || iter->pName == hText1 )
                             nTopics++;
                     }
                 }
@@ -403,17 +403,17 @@ DdeService* DdeInternal::FindService( HSZ hService )
 
 DdeTopic* DdeInternal::FindTopic( DdeService& rService, HSZ hTopic )
 {
-    DdeTopic* s;
-    DdeTopics& rTopics = rService.aTopics;
+    std::vector<DdeTopic*>::iterator iter;
+    std::vector<DdeTopic*> &rTopics = rService.aTopics;
     int bWeiter = sal_False;
     DdeInstData* pInst = ImpGetInstData();
     DBG_ASSERT(pInst,"SVDDE:No instance data");
 
     do {            // middle check loop
-        for ( s = rTopics.First(); s; s = rTopics.Next() )
+        for ( iter = rTopics.begin(); iter != rTopics.end(); ++iter )
         {
-            if ( *s->pName == hTopic )
-                return s;
+            if ( iter->pName == hTopic )
+                return *iter;
         }
 
         bWeiter = !bWeiter;
@@ -559,19 +559,19 @@ DdeServices& DdeService::GetServices()
 void DdeService::AddTopic( const DdeTopic& rTopic )
 {
     RemoveTopic( rTopic );
-    aTopics.Insert( (DdeTopic*) &rTopic );
+    aTopics.push_back(&rTopic);
 }
 
 // --- DdeService::RemoveTopic() -----------------------------------
 
 void DdeService::RemoveTopic( const DdeTopic& rTopic )
 {
-    DdeTopic* t;
-    for ( t = aTopics.First(); t; t = aTopics.Next() )
+    std::vector<DdeTopic*>::iterator iter;
+    for ( iter = aTopics.begin(); iter != aTopics.end(); ++iter )
     {
-        if ( !DdeCmpStringHandles (*t->pName, *rTopic.pName ) )
+        if ( !DdeCmpStringHandles (*iter->pName, *rTopic.pName ) )
         {
-            aTopics.Remove( t );
+            aTopics.erase(iter);
             // JP 27.07.95: und alle Conversions loeschen !!!
             //              (sonst wird auf geloeschten Topics gearbeitet!!)
             for( size_t n = pConv->size(); n; )
@@ -986,14 +986,14 @@ void DdeGetPutItem::AdviseLoop( sal_Bool )
 String DdeService::SysItems()
 {
     String s;
-    DdeTopic* t;
-    for ( t = aTopics.First(); t; t = aTopics.Next() )
+    std::vector<DdeTopic*>::iterator iter;
+    for ( iter = aTopics.begin(); iter != aTopics.end(); ++iter )
     {
-        if ( t->GetName() == reinterpret_cast<const sal_Unicode*>(SZDDESYS_TOPIC) )
+        if ( iter->GetName() == reinterpret_cast<const sal_Unicode*>(SZDDESYS_TOPIC) )
         {
             short n = 0;
             DdeItem* pi;
-            for ( pi = t->aItems.First(); pi; pi = t->aItems.Next(), n++ )
+            for ( pi = iter->aItems.First(); pi; pi = iter->aItems.Next(), n++ )
             {
                 if ( n )
                     s += '\t';
@@ -1011,14 +1011,14 @@ String DdeService::SysItems()
 String DdeService::Topics()
 {
     String      s;
-    DdeTopic*   t;
+    std::vector<DdeTopic*>::iterator iter;
     short       n = 0;
 
-    for ( t = aTopics.First(); t; t = aTopics.Next(), n++ )
+    for ( iter = aTopics.begin(); iter != aTopics.end(); ++iter, n++ )
     {
         if ( n )
             s += '\t';
-        s += t->GetName();
+        s += iter->GetName();
     }
     s += String::CreateFromAscii("\r\n");
 
