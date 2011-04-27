@@ -35,6 +35,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     slideshow \
     starmath \
     sw \
+    unoxml \
     writerfilter \
 ))
 
