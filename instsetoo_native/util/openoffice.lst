@@ -216,12 +216,11 @@ LibreOffice_Dev
 			OPENSOURCE 1
 			SETSTATICPATH 1
 			OOODOWNLOADNAME 1
-			XPDINSTALLER 1
+			XPDINSTALLER 0
 			BETAUPGRADECODE
 			STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
 			CHANGETARGETDIR 1
 			USE_FILEVERSION 1
-			JAVAPRODUCT 1
 			LIBRARYVERSION 9.4.0
 			PATCHCODEFILE ooodev_patchcodes.txt
 			CODEFILENAME codes_ooodev.txt
@@ -240,7 +239,7 @@ LibreOffice_Dev
 		}
 		active			1
 		compression		5
-		script			setup_osljre
+		script			setup_osl
 		downloadname	LibO-dev_{productversion}_{os}_install_{languages}
 		langpackdownloadname	LibO_{productversion}_languagepack_{os}_install_{languages}
 		helppackdownloadname	LibO_{productversion}_helppack_{os}_install_{languages}
