@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<oor:component-data oor:name="Jobs" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <node oor:name="Jobs">
+        <node oor:name="AppMenuDesktopJob" oor:op="replace">
+            <prop oor:name="Service">
+                <value>org.libreoffice.comp.framework.lomenubar.DesktopJob</value>
+            </prop>
+        </node>
+        <node oor:name="AppMenuFrameJob" oor:op="replace">
+            <prop oor:name="Service">
+                <value>org.libreoffice.comp.framework.lomenubar.FrameJob</value>
+            </prop>
+        </node>
+    </node>
+    <node oor:name="Events">
+        <node oor:name="OnStartApp" oor:op="replace">
+            <node oor:name="JobList">
+                <node oor:name="AppMenuDesktopJob" oor:op="replace"/>
+            </node>
+        </node>
+        <node oor:name="onDocumentOpened" oor:op="replace">
+            <node oor:name="JobList">
+                <node oor:name="AppMenuFrameJob" oor:op="replace"/>
+            </node>
+        </node>
+        <!--node oor:name="OnNew" oor:op="replace">
+            <node oor:name="JobList">
+                <node oor:name="AppMenuFrameJob" oor:op="replace"/>
+            </node>
+        </node-->
+
+    </node>
+</oor:component-data>
