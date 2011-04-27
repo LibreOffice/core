@@ -2698,7 +2698,10 @@ EditPaM ImpEditEngine::ImpInsertText( EditSelection aCurSel, const XubString& rS
     // get word boundaries in order to clear possible WrongList entries
     // and invalidate all the necessary text (everything after and including the
     // start of the word)
-    EditSelection aCurWord( SelectWord( aCurPaM, i18n::WordType::DICTIONARY_WORD ) );
+    // #i107201# do the expensive SelectWord call only if online spelling is active
+    EditSelection aCurWord;
+    if ( GetStatus().DoOnlineSpelling() )
+        aCurWord = SelectWord( aCurPaM, i18n::WordType::DICTIONARY_WORD );
 
     XubString aText( rStr );
     aText.ConvertLineEnd( LINEEND_LF );
@@ -2752,12 +2755,17 @@ EditPaM ImpEditEngine::ImpInsertText( EditSelection aCurSel, const XubString& rS
             ParaPortion* pPortion = FindParaPortion( aPaM.GetNode() );
             OSL_ENSURE( pPortion, "Blind Portion in InsertText" );
 
-            // now remove the Wrongs (red spell check marks) from both words...
-            WrongList *pWrongs = aCurPaM.GetNode()->GetWrongList();
-            if (pWrongs && pWrongs->HasWrongs())
-                pWrongs->ClearWrongs( aCurWord.Min().GetIndex(), aPaM.GetIndex(), aPaM.GetNode() );
-            // ... and mark both words as 'to be checked again'
-            pPortion->MarkInvalid( aCurWord.Min().GetIndex(), aLine.Len() );
+            if ( GetStatus().DoOnlineSpelling() )
+            {
+                // now remove the Wrongs (red spell check marks) from both words...
+                WrongList *pWrongs = aCurPaM.GetNode()->GetWrongList();
+                if (pWrongs && pWrongs->HasWrongs())
+                    pWrongs->ClearWrongs( aCurWord.Min().GetIndex(), aPaM.GetIndex(), aPaM.GetNode() );
+                // ... and mark both words as 'to be checked again'
+                pPortion->MarkInvalid( aCurWord.Min().GetIndex(), aLine.Len() );
+            }
+            else
+                pPortion->MarkInvalid( aCurPaM.GetIndex(), aLine.Len() );
         }
         if ( nEnd < aText.Len() )
             aPaM = ImpInsertParaBreak( aPaM );

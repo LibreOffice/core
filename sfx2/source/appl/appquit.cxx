@@ -154,6 +154,8 @@ void SfxApplication::Deinitialize()
     //TODO/CLEANTUP
     //ReleaseArgs could be used instead!
     pAppData_Impl->pPool = NULL;
+    DELETEZ(pAppData_Impl->pBasicResMgr);
+    DELETEZ(pAppData_Impl->pSvtResMgr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

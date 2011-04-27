@@ -39,6 +39,7 @@
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
+#include <drawinglayer/primitive2d/rendergraphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
@@ -866,7 +867,7 @@ namespace drawinglayer
                             // I have now moved describePDFControl to toolkit, thus i can implement the PDF
                             // form control support now as follows
                             ::std::auto_ptr< ::vcl::PDFWriter::AnyWidget > pPDFControl;
-                            ::toolkitform::describePDFControl(rXControl, pPDFControl);
+                            ::toolkitform::describePDFControl( rXControl, pPDFControl, *mpPDFExtOutDevData );
 
                             if(pPDFControl.get())
                             {
@@ -1286,6 +1287,12 @@ namespace drawinglayer
                 {
                     // direct draw of transformed BitmapEx primitive; use default processing
                     RenderBitmapPrimitive2D(static_cast< const primitive2d::BitmapPrimitive2D& >(rCandidate));
+                    break;
+                }
+                case PRIMITIVE2D_ID_RENDERGRAPHICPRIMITIVE2D :
+                {
+                    // direct draw of transformed RenderGraphic primitive; use default processing
+                    RenderRenderGraphicPrimitive2D(static_cast< const primitive2d::RenderGraphicPrimitive2D& >(rCandidate));
                     break;
                 }
                 case PRIMITIVE2D_ID_POLYPOLYGONBITMAPPRIMITIVE2D :

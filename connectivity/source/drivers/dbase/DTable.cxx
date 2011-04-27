@@ -2775,7 +2775,7 @@ void ODbaseTable::AllocBuffer()
     }
 
     // if there is no buffer available: allocate:
-    if (m_pBuffer == NULL && nSize)
+    if (m_pBuffer == NULL && nSize > 0)
     {
         m_nBufferSize = nSize;
         m_pBuffer       = new sal_uInt8[m_nBufferSize+1];

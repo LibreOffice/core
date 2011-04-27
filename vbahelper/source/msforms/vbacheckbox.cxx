@@ -25,9 +25,10 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #include "vbacheckbox.hxx"
+#include "vbanewfont.hxx"
 #include <vbahelper/helperdecl.hxx>
-#include <vector>
 
 using namespace com::sun::star;
 using namespace ooo::vba;
@@ -88,6 +89,12 @@ ScVbaCheckbox::setValue( const uno::Any& _value ) throw (css::uno::RuntimeExcept
     if ( nValue != nOldValue )
         fireClickEvent();
 }
+
+uno::Reference< msforms::XNewFont > SAL_CALL ScVbaCheckbox::getFont() throw (uno::RuntimeException)
+{
+    return new VbaNewFont( this, mxContext, m_xProps );
+}
+
 rtl::OUString&
 ScVbaCheckbox::getServiceImplName()
 {

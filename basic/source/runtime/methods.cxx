@@ -79,6 +79,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::io;
 using namespace com::sun::star::script;
+using namespace com::sun::star::frame;
 
 #include "stdobj.hxx"
 #include <basic/sbstdobj.hxx>
@@ -89,6 +90,7 @@ using namespace com::sun::star::script;
 #include "iosys.hxx"
 #include "ddectrl.hxx"
 #include <sbintern.hxx>
+#include <basic/vbahelper.hxx>
 
 #include <list>
 #include <math.h>
@@ -383,20 +385,46 @@ RTLFUNC(Asc)
     }
 }
 
-RTLFUNC(Chr)
+void implChr( SbxArray& rPar, bool bChrW )
 {
-    (void)pBasic;
-    (void)bWrite;
-
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
     {
         SbxVariableRef pArg = rPar.Get( 1 );
-        sal_Unicode aCh = (sal_Unicode)pArg->GetUShort();
-        String aStr( aCh );
+
+        String aStr;
+        if( !bChrW && SbiRuntime::isVBAEnabled() )
+        {
+            sal_Char c = (sal_Char)pArg->GetByte();
+            ByteString s( c );
+            aStr = String( s, gsl_getSystemTextEncoding() );
+        }
+        else
+        {
+            sal_Unicode aCh = (sal_Unicode)pArg->GetUShort();
+            aStr = String( aCh );
+        }
         rPar.Get(0)->PutString( aStr );
     }
+}
+
+RTLFUNC(Chr)
+{
+    (void)pBasic;
+    (void)bWrite;
+
+    bool bChrW = false;
+    implChr( rPar, bChrW );
+}
+
+RTLFUNC(ChrW)
+{
+    (void)pBasic;
+    (void)bWrite;
+
+    bool bChrW = true;
+    implChr( rPar, bChrW );
 }
 
 
@@ -481,11 +509,16 @@ RTLFUNC(CurDir)
 
 RTLFUNC(ChDir)
 {
-    (void)pBasic;
     (void)bWrite;
 
     rPar.Get(0)->PutEmpty();
-    if (rPar.Count() != 2)
+    if (rPar.Count() == 2)
+    {
+        // VBA: track current directory per document type (separately for Writer, Calc, Impress, etc.)
+        if( SbiRuntime::isVBAEnabled() )
+            ::basic::vba::registerCurrentDirectory( getDocumentModel( pBasic ), rPar.Get(1)->GetString() );
+    }
+    else
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
 }
 
@@ -689,7 +722,7 @@ void implRemoveDirRecursive( const String& aDirPath )
     FileBase::RC nRet = DirectoryItem::get( aDirPath, aItem );
     sal_Bool bExists = (nRet == FileBase::E_None);
 
-    FileStatus aFileStatus( FileStatusMask_Type );
+    FileStatus aFileStatus( osl_FileStatus_Mask_Type );
     nRet = aItem.getFileStatus( aFileStatus );
     FileStatus::Type aType = aFileStatus.getFileType();
     sal_Bool bFolder = isFolder( aType );
@@ -716,7 +749,7 @@ void implRemoveDirRecursive( const String& aDirPath )
             break;
 
         // Handle flags
-        FileStatus aFileStatus2( FileStatusMask_Type | FileStatusMask_FileURL );
+        FileStatus aFileStatus2( osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL );
         nRet = aItem2.getFileStatus( aFileStatus2 );
         ::rtl::OUString aPath = aFileStatus2.getFileURL();
 
@@ -845,7 +878,7 @@ RTLFUNC(FileLen)
         {
             DirectoryItem aItem;
             DirectoryItem::get( getFullPathUNC( aStr ), aItem );
-            FileStatus aFileStatus( FileStatusMask_FileSize );
+            FileStatus aFileStatus( osl_FileStatus_Mask_FileSize );
             aItem.getFileStatus( aFileStatus );
             nLen = (sal_Int32)aFileStatus.getFileSize();
         }
@@ -2459,7 +2492,7 @@ String getDirectoryPath( String aPathStr )
     FileBase::RC nRet = DirectoryItem::get( aPathStr, aItem );
     if( nRet == FileBase::E_None )
     {
-        FileStatus aFileStatus( FileStatusMask_Type );
+        FileStatus aFileStatus( osl_FileStatus_Mask_Type );
         nRet = aItem.getFileStatus( aFileStatus );
         if( nRet == FileBase::E_None )
         {
@@ -2470,7 +2503,7 @@ String getDirectoryPath( String aPathStr )
             }
             else if( aType == FileStatus::Link )
             {
-                FileStatus aFileStatus2( FileStatusMask_LinkTargetURL );
+                FileStatus aFileStatus2( osl_FileStatus_Mask_LinkTargetURL );
                 nRet = aItem.getFileStatus( aFileStatus2 );
                 if( nRet == FileBase::E_None )
                     aRetStr = getDirectoryPath( aFileStatus2.getLinkTargetURL() );
@@ -2817,7 +2850,7 @@ RTLFUNC(Dir)
                         }
 
                         // Handle flags
-                        FileStatus aFileStatus( FileStatusMask_Type | FileStatusMask_FileName );
+                        FileStatus aFileStatus( osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName );
                         nRet = aItem.getFileStatus( aFileStatus );
 
                         // Only directories?
@@ -2917,7 +2950,7 @@ RTLFUNC(GetAttr)
         {
             DirectoryItem aItem;
             DirectoryItem::get( getFullPathUNC( rPar.Get(1)->GetString() ), aItem );
-            FileStatus aFileStatus( FileStatusMask_Attributes | FileStatusMask_Type );
+            FileStatus aFileStatus( osl_FileStatus_Mask_Attributes | osl_FileStatus_Mask_Type );
             aItem.getFileStatus( aFileStatus );
             sal_uInt64 nAttributes = aFileStatus.getAttributes();
             sal_Bool bReadOnly = (nAttributes & Attribute_ReadOnly) != 0;
@@ -2969,7 +3002,7 @@ RTLFUNC(FileDateTime)
         {
             DirectoryItem aItem;
             DirectoryItem::get( getFullPathUNC( aPath ), aItem );
-            FileStatus aFileStatus( FileStatusMask_ModifyTime );
+            FileStatus aFileStatus( osl_FileStatus_Mask_ModifyTime );
             aItem.getFileStatus( aFileStatus );
             TimeValue aTimeVal = aFileStatus.getModifyTime();
             oslDateTime aDT;

@@ -1487,7 +1487,7 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
         // the item should remain only if it was set by the dialog
         rpSet->ClearItem( SID_SELECTION );
 
-        if( mbExport )
+        if( mbExport && mbHasSelectionBox )
         {
             try
             {

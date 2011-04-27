@@ -28,6 +28,8 @@
 #define __ooo_vba_msforms_XCheckBox_idl__
 
 #include <com/sun/star/uno/XInterface.idl>
+#include <ooo/vba/msforms/XNewFont.idl>
+
 //=============================================================================
 
 module ooo {  module vba {  module msforms {
@@ -37,6 +39,7 @@ interface XCheckBox: com::sun::star::uno::XInterface
 {
     [attribute] string Caption;
     [attribute] any Value;
+    [attribute, readonly] XNewFont Font;
 };
 
 //=============================================================================

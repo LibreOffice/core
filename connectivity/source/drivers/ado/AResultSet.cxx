@@ -401,7 +401,7 @@ void SAL_CALL OResultSet::beforeFirst(  ) throw(SQLException, RuntimeException)
 
 
     if(first())
-        previous();
+        m_bOnFirstAfterOpen = !previous();
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::afterLast(  ) throw(SQLException, RuntimeException)

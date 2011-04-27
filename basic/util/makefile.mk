@@ -64,6 +64,9 @@ SHL1STDLIBS= \
             $(SOTLIB) \
             $(XMLSCRIPTLIB)
 
+# Uncomment the following line if DBG_TRACE_PROFILING is active in source/inc/sbtrace.hxx
+# SHL1STDLIBS+=$(CANVASTOOLSLIB)
+
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+=	\
     $(UWINAPILIB)	\

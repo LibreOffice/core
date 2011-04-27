@@ -80,9 +80,10 @@ FmFormPage::FmFormPage(FmFormModel& rModel, StarBASIC* _pBasic, bool bMasterPage
 //------------------------------------------------------------------
 FmFormPage::FmFormPage(const FmFormPage& rPage)
            :SdrPage(rPage)
-           ,m_pImpl(new FmFormPageImpl( *this, rPage.GetImpl() ) )
+           ,m_pImpl(new FmFormPageImpl( *this ) )
            ,m_pBasic(0)
 {
+    m_pImpl->initFrom( rPage.GetImpl() );
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::FmFormPage" );
     m_sPageName = rPage.m_sPageName;
 }

@@ -31,6 +31,9 @@
 #include <tools/debug.hxx>
 #include <xmloff/txtprmap.hxx>
 #include <com/sun/star/table/BorderLine2.hpp>
+
+#include "txtexppr.hxx"
+
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
@@ -38,7 +41,10 @@
 #include <com/sun/star/awt/FontPitch.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/text/XChapterNumberingSupplier.hpp>
-#include "txtexppr.hxx"
+
+#include <tools/debug.hxx>
+
+#include <xmloff/txtprmap.hxx>
 #include <xmloff/xmlexp.hxx>
 #include "XMLSectionFootnoteConfigExport.hxx"
 
@@ -303,6 +309,26 @@ void XMLTextExportPropertySetMapper::ContextFontHeightFilter(
 // helper method; implementation below
 bool lcl_IsOutlineStyle(const SvXMLExport&, const OUString&);
 
+static void
+lcl_checkMultiProperty(XMLPropertyState *const pState,
+                       XMLPropertyState *const pRelState)
+{
+    if (pState && pRelState)
+    {
+        sal_Int32 nTemp = 0;
+        pRelState->maValue >>= nTemp;
+        if (100 == nTemp)
+        {
+            pRelState->mnIndex = -1;
+            pRelState->maValue.clear();
+        }
+        else
+        {
+            pState->mnIndex = -1;
+            pState->maValue.clear();
+        }
+    }
+}
 
 void XMLTextExportPropertySetMapper::ContextFilter(
     ::std::vector< XMLPropertyState >& rProperties,
@@ -443,6 +469,9 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     XMLPropertyState* pClip11State = NULL;
     XMLPropertyState* pClipState = NULL;
 
+    XMLPropertyState* pAllParaMargin = NULL;
+    XMLPropertyState* pAllMargin = NULL;
+
     sal_Bool bNeedsAnchor = sal_False;
 
     for( ::std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
@@ -557,6 +586,8 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         case CTF_NUMBERINGSTYLENAME:    pListStyleName = propertie; break;
         case CTF_TEXT_CLIP11:           pClip11State = propertie; break;
         case CTF_TEXT_CLIP:             pClipState = propertie; break;
+        case CTF_PARAMARGINALL:         pAllParaMargin = propertie; break;
+        case CTF_MARGINALL:             pAllMargin = propertie; break;
         }
     }
 
@@ -602,87 +633,21 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         }
     }
 
-    if( pParaLeftMarginState && pParaLeftMarginRelState )
-    {
-        sal_Int32 nTemp = 0;
-        pParaLeftMarginRelState->maValue >>= nTemp;
-        if( nTemp == 100 )
-        {
-            pParaLeftMarginRelState->mnIndex = -1;
-            pParaLeftMarginRelState->maValue.clear();
-        }
-        else
-        {
-            pParaLeftMarginState->mnIndex = -1;
-            pParaLeftMarginState->maValue.clear();
-        }
+    lcl_checkMultiProperty(pParaLeftMarginState, pParaLeftMarginRelState);
+    lcl_checkMultiProperty(pParaRightMarginState, pParaRightMarginRelState);
+    lcl_checkMultiProperty(pParaTopMarginState, pParaTopMarginRelState);
+    lcl_checkMultiProperty(pParaBottomMarginState, pParaBottomMarginRelState);
+    lcl_checkMultiProperty(pParaFirstLineState, pParaFirstLineRelState);
 
+    if (pAllParaMargin)
+    {
+        pAllParaMargin->mnIndex = -1; // just export individual attributes...
+        pAllParaMargin->maValue.clear();
     }
-
-    if( pParaRightMarginState && pParaRightMarginRelState )
+    if (pAllMargin)
     {
-        sal_Int32 nTemp = 0;
-        pParaRightMarginRelState->maValue >>= nTemp;
-        if( nTemp == 100 )
-        {
-            pParaRightMarginRelState->mnIndex = -1;
-            pParaRightMarginRelState->maValue.clear();
-        }
-        else
-        {
-            pParaRightMarginState->mnIndex = -1;
-            pParaRightMarginState->maValue.clear();
-        }
-    }
-
-    if( pParaFirstLineState && pParaFirstLineRelState )
-    {
-        sal_Int32 nTemp = 0;
-        pParaFirstLineRelState->maValue >>= nTemp;
-        if( nTemp == 100 )
-        {
-            pParaFirstLineRelState->mnIndex = -1;
-            pParaFirstLineRelState->maValue.clear();
-        }
-        else
-        {
-            pParaFirstLineState->mnIndex = -1;
-            pParaFirstLineState->maValue.clear();
-        }
-    }
-
-    if( pParaTopMarginState && pParaTopMarginRelState )
-    {
-        sal_Int32 nTemp = 0;
-        pParaTopMarginRelState->maValue >>= nTemp;
-        if( nTemp == 100 )
-        {
-            pParaTopMarginRelState->mnIndex = -1;
-            pParaTopMarginRelState->maValue.clear();
-        }
-        else
-        {
-            pParaTopMarginState->mnIndex = -1;
-            pParaTopMarginState->maValue.clear();
-        }
-
-    }
-
-    if( pParaBottomMarginState && pParaBottomMarginRelState )
-    {
-        sal_Int32 nTemp = 0;
-        pParaBottomMarginRelState->maValue >>= nTemp;
-        if( nTemp == 100 )
-        {
-            pParaBottomMarginRelState->mnIndex = -1;
-            pParaBottomMarginRelState->maValue.clear();
-        }
-        else
-        {
-            pParaBottomMarginState->mnIndex = -1;
-            pParaBottomMarginState->maValue.clear();
-        }
-
+        pAllMargin->mnIndex = -1; // just export individual attributes...
+        pAllMargin->maValue.clear();
     }
 
     if( pAllBorderWidthState )

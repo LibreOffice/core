@@ -59,6 +59,7 @@
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 #include <com/sun/star/document/XVbaMethodParameter.hpp>
+#include <com/sun/star/script/vba/VBAScriptEventId.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
@@ -86,10 +87,9 @@ using namespace com::sun::star;
 #include <cppuhelper/implbase1.hxx>
 #include <basic/sbobjmod.hxx>
 #include <com/sun/star/uno/XAggregation.hpp>
-#include <map>
 #include <com/sun/star/script/XInvocation.hpp>
 
- using namespace ::com::sun::star;
+using namespace ::com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::reflection;
 using namespace com::sun::star::beans;
@@ -105,6 +105,7 @@ using namespace com::sun::star::script;
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/anytostring.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <ooo/vba/VbQueryClose.hpp>
 
 typedef ::cppu::WeakImplHelper1< XInvocation > DocObjectWrapper_BASE;
 typedef ::std::map< sal_Int16, Any, ::std::less< sal_Int16 > > OutParamMap;
@@ -448,24 +449,36 @@ TYPEINIT1(SbUserFormModule,SbObjModule)
 
 typedef std::vector<HighlightPortion> HighlightPortions;
 
-bool getDefaultVBAMode( StarBASIC* pb )
+uno::Reference< frame::XModel > getDocumentModel( StarBASIC* pb )
 {
-    bool bResult = false;
-    if ( pb && pb->IsDocBasic() )
+    uno::Reference< frame::XModel > xModel;
+    if( pb && pb->IsDocBasic() )
     {
         uno::Any aDoc;
-    if ( pb->GetUNOConstant( "ThisComponent", aDoc ) )
-        {
-            uno::Reference< beans::XPropertySet > xProp( aDoc, uno::UNO_QUERY );
-            if ( xProp.is() )
-            {
-                uno::Reference< script::vba::XVBACompatibility > xVBAMode( xProp->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicLibraries") ) ), uno::UNO_QUERY );
-                if ( xVBAMode.is() )
-                    bResult = xVBAMode->getVBACompatibilityMode() == sal_True;
-            }
-        }
+        if( pb->GetUNOConstant( "ThisComponent", aDoc ) )
+            xModel.set( aDoc, uno::UNO_QUERY );
     }
-    return bResult;
+    return xModel;
+}
+
+uno::Reference< vba::XVBACompatibility > getVBACompatibility( const uno::Reference< frame::XModel >& rxModel )
+{
+    uno::Reference< vba::XVBACompatibility > xVBACompat;
+    try
+    {
+        uno::Reference< beans::XPropertySet > xModelProps( rxModel, uno::UNO_QUERY_THROW );
+        xVBACompat.set( xModelProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicLibraries" ) ) ), uno::UNO_QUERY );
+    }
+    catch( uno::Exception& )
+    {
+    }
+    return xVBACompat;
+}
+
+bool getDefaultVBAMode( StarBASIC* pb )
+{
+    uno::Reference< vba::XVBACompatibility > xVBACompat = getVBACompatibility( getDocumentModel( pb ) );
+    return xVBACompat.is() && xVBACompat->getVBACompatibilityMode();
 }
 
 class AsyncQuitHandler
@@ -511,7 +524,6 @@ void VBAUnlockDocuments( StarBASIC* pBasic )
         }
     }
 }
-
 
 // A Basic module has set EXTSEARCH, so that the elements, that the modul contains,
 // could be found from other module.
@@ -903,7 +915,7 @@ void SbModule::SetSource( const String& r )
 void SbModule::SetSource32( const ::rtl::OUString& r )
 {
     // Default basic mode to library container mode, but.. allow Option VBASupport 0/1 override
-        SetVBACompat( getDefaultVBAMode( static_cast< StarBASIC*>( GetParent() ) ) );
+    SetVBACompat( getDefaultVBAMode( static_cast< StarBASIC*>( GetParent() ) ) );
     aOUSource = r;
     StartDefinitions();
     SbiTokenizer aTok( r );
@@ -1104,12 +1116,54 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
     sal_Bool bDelInst = sal_Bool( pINST == NULL );
         bool bQuit = false;
     StarBASICRef xBasic;
+    uno::Reference< frame::XModel > xModel;
+    uno::Reference< script::vba::XVBACompatibility > xVBACompat;
     if( bDelInst )
     {
         // #32779: Hold Basic during the execution
         xBasic = (StarBASIC*) GetParent();
 
         pINST = new SbiInstance( (StarBASIC*) GetParent() );
+
+        /*  If a VBA script in a document is started, get the VBA compatibility
+            interface from the document Basic library container, and notify all
+            VBA script listeners about the started script. */
+        if( mbVBACompat )
+        {
+            StarBASIC* pBasic = static_cast< StarBASIC* >( GetParent() );
+            if( pBasic && pBasic->IsDocBasic() ) try
+            {
+                xModel.set( getDocumentModel( pBasic ), uno::UNO_SET_THROW );
+                xVBACompat.set( getVBACompatibility( xModel ), uno::UNO_SET_THROW );
+                xVBACompat->broadcastVBAScriptEvent( script::vba::VBAScriptEventId::SCRIPT_STARTED, GetName() );
+            }
+            catch( uno::Exception& )
+            {
+            }
+        }
+
+        // Launcher problem
+        // i80726 The Find below will genarate an error in Testtool so we reset it unless there was one before already
+        sal_Bool bWasError = SbxBase::GetError() != 0;
+        SbxVariable* pMSOMacroRuntimeLibVar = Find( aMSOMacroRuntimeLibName, SbxCLASS_OBJECT );
+        if ( !bWasError && (SbxBase::GetError() == SbxERR_PROC_UNDEFINED) )
+            SbxBase::ResetError();
+        if( pMSOMacroRuntimeLibVar )
+        {
+            StarBASIC* pMSOMacroRuntimeLib = PTR_CAST(StarBASIC,pMSOMacroRuntimeLibVar);
+            if( pMSOMacroRuntimeLib )
+            {
+                sal_uInt16 nGblFlag = pMSOMacroRuntimeLib->GetFlags() & SBX_GBLSEARCH;
+                pMSOMacroRuntimeLib->ResetFlag( SBX_GBLSEARCH );
+                SbxVariable* pAppSymbol = pMSOMacroRuntimeLib->Find( aMSOMacroRuntimeAppSymbol, SbxCLASS_METHOD );
+                pMSOMacroRuntimeLib->SetFlag( nGblFlag );
+                if( pAppSymbol )
+                {
+                    pMSOMacroRuntimeLib->SetFlag( SBX_EXTSEARCH );      // Could have been disabled before
+                    GetSbData()->pMSOMacroRuntimLib = pMSOMacroRuntimeLib;
+                }
+            }
+        }
 
         // Delete the Error-Stack
         SbErrorStack*& rErrStack = GetSbData()->pErrStack;
@@ -1220,9 +1274,20 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
                 ResetCapturedAssertions();
 #endif
 
-                // VBA always ensures screenupdating is enabled after completing
-                if ( mbVBACompat )
-                    VBAUnlockDocuments( PTR_CAST( StarBASIC, GetParent() ) );
+                if( xVBACompat.is() )
+                {
+                    // notify all VBA script listeners about the stopped script
+                    try
+                    {
+                        xVBACompat->broadcastVBAScriptEvent( script::vba::VBAScriptEventId::SCRIPT_STOPPED, GetName() );
+                    }
+                    catch( uno::Exception& )
+                    {
+                    }
+                    // VBA always ensures screenupdating is enabled after completing
+                    ::basic::vba::lockControllersOfAllDocuments( xModel, sal_False );
+                    ::basic::vba::enableContainerWindowsOfAllDocuments( xModel, sal_True );
+                }
 
 #ifdef DBG_TRACE_BASIC
                 dbg_DeInitTrace();
@@ -2320,7 +2385,7 @@ public:
                 if ( xVbaMethodParameter.is() )
                 {
                     sal_Int8 nCancel = 0;
-                    sal_Int8 nCloseMode = 0;
+                    sal_Int8 nCloseMode = ::ooo::vba::VbQueryClose::vbFormControlMenu;
 
                     Sequence< Any > aParams;
                     aParams.realloc(2);
@@ -2445,14 +2510,14 @@ void SbUserFormModule::triggerMethod( const String& aMethodToRun )
     Sequence< Any > aArguments;
     triggerMethod( aMethodToRun, aArguments );
 }
-void SbUserFormModule::triggerMethod( const String& aMethodToRun, Sequence< Any >& aArguments)
+
+void SbUserFormModule::triggerMethod( const String& aMethodToRun, Sequence< Any >& aArguments )
 {
     OSL_TRACE("*** trigger %s ***", rtl::OUStringToOString( aMethodToRun, RTL_TEXTENCODING_UTF8 ).getStr() );
     // Search method
     SbxVariable* pMeth = SbObjModule::Find( aMethodToRun, SbxCLASS_METHOD );
     if( pMeth )
     {
-
         if ( aArguments.getLength() > 0 )   // Setup parameters
         {
             SbxArrayRef xArray = new SbxArray;
@@ -2480,7 +2545,6 @@ void SbUserFormModule::triggerMethod( const String& aMethodToRun, Sequence< Any 
             pMeth->SetParameters( NULL );
         }
         else
-
         {
             SbxValues aVals;
             pMeth->Get( aVals );
@@ -2572,7 +2636,7 @@ void SbUserFormModule::Unload()
     OSL_TRACE("** Unload() ");
 
     sal_Int8 nCancel = 0;
-    sal_Int8 nCloseMode = 1;
+    sal_Int8 nCloseMode = ::ooo::vba::VbQueryClose::vbFormCode;
 
     Sequence< Any > aParams;
     aParams.realloc(2);
@@ -2628,6 +2692,9 @@ void SbUserFormModule::InitObject()
         SbUnoObject* pGlobs = (SbUnoObject*)GetParent()->Find( aHook, SbxCLASS_DONTCARE );
         if ( m_xModel.is() && pGlobs )
         {
+            // broadcast INITIALIZE_USERFORM script event before the dialog is created
+            Reference< script::vba::XVBACompatibility > xVBACompat( getVBACompatibility( m_xModel ), uno::UNO_SET_THROW );
+            xVBACompat->broadcastVBAScriptEvent( script::vba::VBAScriptEventId::INITIALIZE_USERFORM, GetName() );
 
             uno::Reference< lang::XMultiServiceFactory > xVBAFactory( pGlobs->getUnoAny(), uno::UNO_QUERY_THROW );
             uno::Reference< lang::XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();

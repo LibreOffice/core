@@ -46,11 +46,12 @@ SLOFILES= \
     $(SLO)$/token.obj
 
 EXCEPTIONSFILES= \
-    $(SLO)$/codegen.obj		\
-    $(SLO)$/dim.obj		\
-    $(SLO)$/exprtree.obj	\
-    $(SLO)$/parser.obj		\
-    $(SLO)$/scanner.obj
+    $(SLO)$/codegen.obj     \
+    $(SLO)$/dim.obj         \
+    $(SLO)$/exprtree.obj    \
+    $(SLO)$/parser.obj      \
+    $(SLO)$/scanner.obj     \
+    $(SLO)$/sbcomp.obj
 
 # --- Targets --------------------------------------------------------------
 

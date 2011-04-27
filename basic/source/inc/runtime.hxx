@@ -438,6 +438,8 @@ public:
     SbxArray* GetParams();
     SbxVariable* GetExternalCaller(){ return mpExtCaller; }
 
+    SbiForStack* FindForStackItemForCollection( class BasicCollection* pCollection );
+
     SbxBase* FindElementExtern( const String& rName );
     static bool isVBAEnabled();
 

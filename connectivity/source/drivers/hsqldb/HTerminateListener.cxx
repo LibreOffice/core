@@ -52,6 +52,7 @@ throw( RuntimeException )
 void SAL_CALL OConnectionController::queryTermination( const EventObject& /*aEvent*/ )
 throw( TerminationVetoException, RuntimeException )
 {
+    m_pDriver->flushConnections();
 }
 
 void SAL_CALL OConnectionController::notifyTermination( const EventObject& /*aEvent*/ )

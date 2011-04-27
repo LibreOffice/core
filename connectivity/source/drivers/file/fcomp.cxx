@@ -97,7 +97,7 @@ void OPredicateCompiler::start(OSQLParseNode* pSQLParseNode)
         OSQLParseNode * pTableExp = pSQLParseNode->getChild(3);
         DBG_ASSERT(pTableExp != NULL,"Fehler im Parse Tree");
         DBG_ASSERT(SQL_ISRULE(pTableExp,table_exp)," Fehler im Parse Tree");
-        DBG_ASSERT(pTableExp->count() == 5,"Fehler im Parse Tree");
+        DBG_ASSERT(pTableExp->count() == TABLE_EXPRESSION_CHILD_COUNT,"Fehler im Parse Tree");
 
         // check that we don't use anything other than count(*) as function
         OSQLParseNode* pSelection = pSQLParseNode->getChild(2);
@@ -115,7 +115,7 @@ void OPredicateCompiler::start(OSQLParseNode* pSQLParseNode)
 
 
         pWhereClause    = pTableExp->getChild(1);
-        pOrderbyClause  = pTableExp->getChild(4);
+        pOrderbyClause  = pTableExp->getChild(ORDER_BY_CHILD_POS);
         (void)pOrderbyClause;
     }
     else if (SQL_ISRULE(pSQLParseNode,update_statement_searched))
@@ -295,10 +295,19 @@ OOperand* OPredicateCompiler::execute_LIKE(OSQLParseNode* pPredicateNode) throw(
     OSQLParseNode* pAtom        = pPart2->getChild(pPart2->count()-2);
     OSQLParseNode* pOptEscape   = pPart2->getChild(pPart2->count()-1);
 
-    if (!(pAtom->getNodeType() == SQL_NODE_STRING || SQL_ISRULE(pAtom,parameter)))
+    if (!(pAtom->getNodeType() == SQL_NODE_STRING   ||
+          SQL_ISRULE(pAtom,parameter)               ||
+          // odbc date
+          SQL_ISRULE(pAtom,set_fct_spec)            ||
+          SQL_ISRULE(pAtom,position_exp)            ||
+          SQL_ISRULE(pAtom,char_substring_fct)      ||
+          // upper, lower etc.
+          SQL_ISRULE(pAtom,fold)) )
     {
-        m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_INVALID_LIKE_STRING,NULL);
+        m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_TOO_COMPLEX,NULL);
+        return NULL;
     }
+
     if (pOptEscape->count() != 0)
     {
         if (pOptEscape->count() != 2)

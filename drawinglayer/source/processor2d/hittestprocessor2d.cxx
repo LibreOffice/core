@@ -529,6 +529,8 @@ namespace drawinglayer
                 case PRIMITIVE2D_ID_FILLGRADIENTPRIMITIVE2D :
                 case PRIMITIVE2D_ID_FILLHATCHPRIMITIVE2D :
                 case PRIMITIVE2D_ID_PAGEPREVIEWPRIMITIVE2D :
+                case PRIMITIVE2D_ID_MEDIAPRIMITIVE2D:
+                case PRIMITIVE2D_ID_RENDERGRAPHICPRIMITIVE2D:
                 {
                     if(!getHitTextOnly())
                     {

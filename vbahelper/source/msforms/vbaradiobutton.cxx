@@ -25,8 +25,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #include "vbaradiobutton.hxx"
-#include <vector>
+#include "vbanewfont.hxx"
 
 using namespace com::sun::star;
 using namespace ooo::vba;
@@ -95,6 +96,11 @@ ScVbaRadioButton::setValue( const uno::Any& _value ) throw (uno::RuntimeExceptio
             fireClickEvent();
         }
     }
+}
+
+uno::Reference< msforms::XNewFont > SAL_CALL ScVbaRadioButton::getFont() throw (uno::RuntimeException)
+{
+    return new VbaNewFont( this, mxContext, m_xProps );
 }
 
 rtl::OUString&

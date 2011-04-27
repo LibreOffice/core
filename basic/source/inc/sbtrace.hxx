@@ -30,6 +30,19 @@
 
 //#define DBG_TRACE_BASIC
 
+// ###############################################################################
+// ###
+// ###    ATTENTION:
+// ###
+// ###  - DBG_TRACE_PROFILING can only be activated together with DBG_TRACE_BASIC
+// ###
+// ###  - If you activate DBG_TRACE_PROFILING you also need to uncomment line
+// ###    # SHL1STDLIBS+=$(CANVASTOOLSLIB) in basic/util/makefile.mk (search
+// ###    for DBG_TRACE_PROFILING there)
+// ###
+// ###############################################################################
+//#define DBG_TRACE_PROFILING
+
 #ifdef DBG_TRACE_BASIC
 void dbg_InitTrace( void );
 void dbg_DeInitTrace( void );

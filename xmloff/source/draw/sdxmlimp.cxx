@@ -444,6 +444,17 @@ void SAL_CALL SdXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
 
         if( xInfoSetInfo->hasPropertyByName( msPreview ) )
             xInfoSet->getPropertyValue( msPreview ) >>= mbPreview;
+
+        ::rtl::OUString const sOrganizerMode(
+            RTL_CONSTASCII_USTRINGPARAM("OrganizerMode"));
+        if (xInfoSetInfo->hasPropertyByName(sOrganizerMode))
+        {
+            sal_Bool bStyleOnly(sal_False);
+            if (xInfoSet->getPropertyValue(sOrganizerMode) >>= bStyleOnly)
+            {
+                mbLoadDoc = !bStyleOnly;
+            }
+        }
     }
 }
 
@@ -753,7 +764,7 @@ SvXMLImportContext *SdXMLImport::CreateMetaContext(const OUString& rLocalName,
 {
     SvXMLImportContext* pContext = 0L;
 
-    if (!IsStylesOnlyMode() && (getImportFlags() & IMPORT_META))
+    if (getImportFlags() & IMPORT_META)
     {
         uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
             mxServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
@@ -761,9 +772,11 @@ SvXMLImportContext *SdXMLImport::CreateMetaContext(const OUString& rLocalName,
                 uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             GetModel(), uno::UNO_QUERY_THROW);
+        uno::Reference<document::XDocumentProperties> const xDocProps(
+            (IsStylesOnlyMode()) ? 0 : xDPS->getDocumentProperties());
         pContext = new SvXMLMetaDocumentContext(*this,
                         XML_NAMESPACE_OFFICE, rLocalName,
-                        xDPS->getDocumentProperties(), xDocBuilder);
+                        xDocProps, xDocBuilder);
     }
 
     if(!pContext)

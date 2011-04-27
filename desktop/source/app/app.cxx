@@ -1724,6 +1724,14 @@ int Desktop::Main()
         if ( bAbort )
             return EXIT_FAILURE;
 
+        {
+            ::comphelper::ComponentContext aContext( xSMgr );
+            xRestartManager.set( aContext.getSingleton( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.OfficeRestartManager" ) ) ), UNO_QUERY );
+        }
+
+        // check whether the shutdown is caused by restart
+        pExecGlobals->bRestartRequested = ( xRestartManager.is() && xRestartManager->isRestartRequested( sal_True ) );
+
         Migration::migrateSettingsIfNecessary();
 
         // keep a language options instance...

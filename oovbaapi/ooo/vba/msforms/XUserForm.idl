@@ -35,6 +35,8 @@ interface XUserForm
     //interface ::ooo::vba::XHelperInterface;
     interface ::com::sun::star::script::XInvocation;
     [attribute] string Caption;
+    [attribute] double InnerWidth;
+    [attribute] double InnerHeight;
     void Show();
     void Hide();
     void RePaint();

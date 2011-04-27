@@ -25,8 +25,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #include "vbalabel.hxx"
-#include <vector>
+#include "vbanewfont.hxx"
 
 using namespace com::sun::star;
 using namespace ooo::vba;
@@ -78,7 +79,11 @@ ScVbaLabel::setAccelerator( const rtl::OUString& /*_accelerator*/ ) throw (::com
     //FIXME: seems not support?
 }
 
-rtl::OUString&
+uno::Reference< msforms::XNewFont > SAL_CALL ScVbaLabel::getFont() throw (uno::RuntimeException)
+{
+    return new VbaNewFont( this, mxContext, m_xProps );
+}
+
 ScVbaLabel::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaLabel") );

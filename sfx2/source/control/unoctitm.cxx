@@ -131,7 +131,7 @@ void SfxUnoControllerItem::UnBind()
 void SAL_CALL SfxUnoControllerItem::statusChanged(const ::com::sun::star::frame::FeatureStateEvent& rEvent) throw ( ::com::sun::star::uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
-    DBG_ASSERT( pCtrlItem, "Dispatch has not removed the StatusListener!" );
+    DBG_ASSERT( pCtrlItem, "dispatch implementation didn't respect our previous removeStatusListener call!" );
 
     if ( rEvent.Requery )
     {
