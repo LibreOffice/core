@@ -24,7 +24,6 @@
 $(eval $(call gb_Module_Module,tail_end))
 
 $(eval $(call gb_Module_add_moduledirs,tail_end,\
-    writerfilter \
     chart2 \
     cui \
     dbaccess \
@@ -36,6 +35,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     slideshow \
     starmath \
     sw \
+    writerfilter \
 ))
 
 # vim: set noet ts=4 sw=4:
