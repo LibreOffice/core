@@ -2695,7 +2695,8 @@ void TestToolObj::DebugFindNoErrors( sal_Bool bDebugFindNoErrors )
 
 SbxVariable* TestToolObj::Find( const String& aStr, SbxClassType aType)
 {
-    if ( BasicRuntimeAccess::IsRunInit() )            // wegen Find im "Global" Befehl des Basic
+    if ( BasicRuntimeAccess::IsRunInit()
+    || ( aStr == String( RTL_CONSTASCII_USTRINGPARAM( "ThisComponent" ) ) ) )            // wegen Find im "Global" Befehl des Basic
         return NULL;
 
     SbxVariableRef Old = SbxObject::Find(aStr, aType );
