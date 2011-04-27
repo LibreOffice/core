@@ -56,10 +56,8 @@ struct Conversation;
 
 #ifndef _SVDDE_NOLISTS
 DECLARE_LIST( DdeServices, DdeService* )
-DECLARE_LIST( DdeItems, DdeItem* )
 #else
 typedef List DdeServices;
-typedef List DdeItems;
 #endif
 
 DECLARE_LIST( DdeTransactions, DdeTransaction* )
@@ -327,7 +325,7 @@ private:
 private:
     DdeString*      pName;
     String          aItem;
-    DdeItems        aItems;
+    std::vector<DdeItem*> aItems;
     Link            aConnectLink;
     Link            aDisconnectLink;
     Link            aGetLink;
@@ -359,7 +357,7 @@ public:
     DdeItem*        AddItem( const DdeItem& );  // werden kopiert !
     void            RemoveItem( const DdeItem& );
     const String&   GetCurItem() { return aItem;  }
-    const DdeItems& GetItems()   { return aItems; }
+    const std::vector<DdeItem*>& GetItems() const  { return aItems; }
 
 private:
                     DdeTopic( const DdeTopic& );

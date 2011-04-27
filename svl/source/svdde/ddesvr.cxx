@@ -330,25 +330,34 @@ found:
                 if( !pItem->pImpData && pTopic->StartAdviseLoop() )
                 {
                     // dann wurde das Item ausgewechselt
-                    pTopic->aItems.Remove( pItem );
-                    DdeItem* pTmp;
-                    for(  pTmp = pTopic->aItems.First(); pTmp;
-                                    pTmp = pTopic->aItems.Next() )
-                        if( *pTmp->pName == hText2 )
+                    pTopic->aItems.erase(std::remove(pTopic->aItems.begin(),
+                                                     pTopic->aItems.end(),
+                                                     pItem));
+
+                    std::vector<DdeItem*> iter;
+                    for(  iter = pTopic->aItems.begin(); iter != pTopic->aItems.end(); ++iter )
+                    {
+                        if( *iter->pName == hText2 )
                         {
                             // es wurde tatsaechlich ausgewechselt
                             delete pItem;
                             pItem = 0;
                             break;
                         }
+                    }
+
                     if( pItem )
                         // es wurde doch nicht ausgewechselt, also wieder rein
-                        pTopic->aItems.Insert( pItem );
+                        pTopic->aItems.push_back(pItem);
                     else
-                        pItem = pTmp;
+                        pItem = iter != pTopic->aItems.end() ? *iter : NULL;
                 }
-                pItem->IncMonitor( (long)hConv );
-                pInst->hCurConvSvr = NULL;
+
+                if (pItem)
+                {
+                    pItem->IncMonitor( (long)hConv );
+                    pInst->hCurConvSvr = NULL;
+                }
             }
             return (HDDEDATA)sal_True;
 
@@ -434,17 +443,17 @@ DdeTopic* DdeInternal::FindTopic( DdeService& rService, HSZ hTopic )
 
 DdeItem* DdeInternal::FindItem( DdeTopic& rTopic, HSZ hItem )
 {
-    DdeItem* s;
-    DdeItems& rItems = rTopic.aItems;
+    std::vector<DdeItem>::iterator iter;
+    std::vector<DdeItem*> &rItems = rTopic.aItems;
     DdeInstData* pInst = ImpGetInstData();
     DBG_ASSERT(pInst,"SVDDE:No instance data");
     int bWeiter = sal_False;
 
     do {            // middle check loop
 
-        for ( s = rItems.First(); s; s = rItems.Next() )
-            if ( *s->pName == hItem )
-                return s;
+        for ( iter = rItems.begin(); iter != rItems.end(); ++iter )
+            if ( *iter->pName == hItem )
+                return *iter;
 
         bWeiter = !bWeiter;
         if( !bWeiter )
@@ -644,13 +653,13 @@ DdeTopic::DdeTopic( const String& rName )
 
 DdeTopic::~DdeTopic()
 {
-    DdeItem* t;
-    while( ( t = aItems.First() ) != NULL )
+    std::vector<DdeItem*>::iterator iter;
+    for (iter = aItems.begin(); iter != aItems.end(); ++iter)
     {
-        aItems.Remove( t );
-        t->pMyTopic = 0;
-        delete t;
+        iter->pMyTopic = 0;
+        delete *iter;
     }
+
     delete pName;
 }
 
@@ -679,7 +688,7 @@ DdeItem* DdeTopic::AddItem( const DdeItem& r )
         s = new DdeItem( r );
     if ( s )
     {
-        aItems.Insert( s );
+        aItems.push_back( s );
         s->pMyTopic = this;
     }
     return s;
@@ -691,7 +700,7 @@ void DdeTopic::InsertItem( DdeItem* pNew )
 {
     if( pNew )
     {
-        aItems.Insert( pNew );
+        aItems.push_back( pNew );
         pNew->pMyTopic = this;
     }
 }
@@ -700,18 +709,18 @@ void DdeTopic::InsertItem( DdeItem* pNew )
 
 void DdeTopic::RemoveItem( const DdeItem& r )
 {
-    DdeItem* s;
-    for ( s = aItems.First(); s; s = aItems.Next() )
+    std::vector<DdeItem*>::iterator iter;
+    for (iter = aItems.begin(); iter != aItems.end(); ++iter)
     {
-        if ( !DdeCmpStringHandles (*s->pName, *r.pName ) )
+        if ( !DdeCmpStringHandles (*iter->pName, *r.pName ) )
             break;
     }
 
-    if ( s )
+    if ( iter != aItems.end() )
     {
-        aItems.Remove( s );
-        s->pMyTopic = 0;
-        delete s;
+        iter->pMyTopic = 0;
+        delete *iter;
+        aItems.erase(iter);
     }
 }
 
@@ -719,17 +728,16 @@ void DdeTopic::RemoveItem( const DdeItem& r )
 
 void DdeTopic::NotifyClient( const String& rItem )
 {
-    DdeItem* pItem;
+    std::vector<DdeItem*>::iterator iter;
     DdeInstData* pInst = ImpGetInstData();
     DBG_ASSERT(pInst,"SVDDE:No instance data");
-    for ( pItem = aItems.First(); pItem; pItem = aItems.Next() )
+    for ( iter = aItems.begin(); iter != aItems.end(); ++iter)
     {
-        if ( pItem->GetName() == rItem )
+        if ( iter->GetName() == rItem && iter->pImpData)
         {
-            if ( pItem->pImpData )
-                DdePostAdvise( pInst->hDdeInstSvr, *pName, *pItem->pName );
+            DdePostAdvise( pInst->hDdeInstSvr, *pName, *iter->pName );
+            break;
         }
-        break;
     }
 }
 
@@ -751,8 +759,9 @@ void DdeTopic::Disconnect( long nId )
 
 void DdeTopic::_Disconnect( long nId )
 {
-    for( DdeItem* pItem = aItems.First(); pItem; pItem = aItems.Next() )
-        pItem->DecMonitor( nId );
+    std::vector<DdeItem*>::iterator iter;
+    for (iter = aItems.begin(); iter != aItems.end(); ++iter)
+        iter->DecMonitor( nId );
 
     Disconnect( nId );
 }
@@ -851,7 +860,8 @@ DdeItem::DdeItem( const DdeItem& r)
 DdeItem::~DdeItem()
 {
     if( pMyTopic )
-        pMyTopic->aItems.Remove( this );
+        pMyTopic->aItems.erase(std::remove(pMyTopic->aItems.begin(),
+                                           pMyTopic->aItems.end(),this));
     delete pName;
     delete pImpData;
 }
@@ -987,17 +997,17 @@ String DdeService::SysItems()
 {
     String s;
     std::vector<DdeTopic*>::iterator iter;
+    std::vector<DdeItem*>::iterator iterItem;
     for ( iter = aTopics.begin(); iter != aTopics.end(); ++iter )
     {
         if ( iter->GetName() == reinterpret_cast<const sal_Unicode*>(SZDDESYS_TOPIC) )
         {
             short n = 0;
-            DdeItem* pi;
-            for ( pi = iter->aItems.First(); pi; pi = iter->aItems.Next(), n++ )
+            for ( iterItem = iter->aItems.begin(); iterItem != iter->aItems.end(); ++iterItem, n++ )
             {
                 if ( n )
                     s += '\t';
-                s += pi->GetName();
+                s += iterItem->GetName();
             }
             s += String::CreateFromAscii("\r\n");
         }

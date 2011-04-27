@@ -55,7 +55,6 @@
 class DdeService;
 class DdeTopic;
 class DdeItem;
-class DdeItems;
 
 // ----------------
 // - Conversation -
