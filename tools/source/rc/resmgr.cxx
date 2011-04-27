@@ -33,7 +33,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <tools/debug.hxx>
-#include <tools/table.hxx>
 #include <tools/stream.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/rc.hxx>
