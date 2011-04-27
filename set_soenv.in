@@ -1864,6 +1864,7 @@ ToFile( "DB_LIB",            "@DB_LIB@",           "e" );
 ToFile( "DB_CPPLIB",         "@DB_CPPLIB@",        "e" );
 ToFile( "DB_INCLUDES",       "@DB_INCLUDES@",      "e" );
 ToFile( "ENABLE_MYSQLC",     "@ENABLE_MYSQLC@",    "e" );
+ToFile( "ENABLE_LOMENUBAR",  "@ENABLE_LOMENUBAR@", "e" );
 ToFile( "SYSTEM_MYSQL",      "@SYSTEM_MYSQL@",     "e" );
 ToFile( "SYSTEM_MYSQL_CPPCONN","@SYSTEM_MYSQL_CPPCONN@","e" );
 ToFile( "MYSQL_INC",         "@MYSQL_INC@",        "e" );
