@@ -34,7 +34,6 @@
 #include <tools/string.hxx>
 
 class DdeConnection;
-class DdeConnections;
 class DdeData;
 
 class SbiDdeControl
@@ -43,7 +42,7 @@ private:
     DECL_LINK( Data, DdeData* );
     SbError GetLastErr( DdeConnection* );
     sal_Int16 GetFreeChannel();
-    DdeConnections* pConvList;
+    std::vector<DdeConnection*> aConvList;
     String aData;
 
 public:

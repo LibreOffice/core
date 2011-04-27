@@ -81,32 +81,26 @@ IMPL_LINK_INLINE( SbiDdeControl,Data , DdeData*, pData,
 
 SbiDdeControl::SbiDdeControl()
 {
-    pConvList = new DdeConnections;
-    DdeConnection* pPtr = DDE_FREECHANNEL;
-    pConvList->Insert( pPtr );
 }
 
 SbiDdeControl::~SbiDdeControl()
 {
     TerminateAll();
-    delete pConvList;
 }
 
 sal_Int16 SbiDdeControl::GetFreeChannel()
 {
-    sal_Int16 nListSize = (sal_Int16)pConvList->Count();
-    DdeConnection* pPtr = pConvList->First();
-    pPtr = pConvList->Next(); // nullten eintrag ueberspringen
-    sal_Int16 nChannel;
-    for( nChannel = 1; nChannel < nListSize; nChannel++ )
+    sal_Int16 nChannel = 0;
+    sal_Int16 nListSize = static_cast<sal_Int16>(aConvList.size());
+
+    for (; nChannel < nListSize; ++nChannel)
     {
-        if( pPtr == DDE_FREECHANNEL )
-            return nChannel;
-        pPtr = pConvList->Next();
+        if (aConvList[nChannel] == DDE_FREECHANNEL)
+            return nChannel+1;
     }
-    pPtr = DDE_FREECHANNEL;
-    pConvList->Insert( pPtr, LIST_APPEND );
-    return nChannel;
+
+    aConvList.push_back(DDE_FREECHANNEL);
+    return nChannel+1;
 }
 
 SbError SbiDdeControl::Initiate( const String& rService, const String& rTopic,
@@ -123,7 +117,7 @@ SbError SbiDdeControl::Initiate( const String& rService, const String& rTopic,
     else
     {
         sal_Int16 nChannel = GetFreeChannel();
-        pConvList->Replace( pConv, (sal_uIntPtr)nChannel );
+        aConvList[nChannel-1] = pConv;
         rnHandle = nChannel;
     }
     return 0;
@@ -131,34 +125,44 @@ SbError SbiDdeControl::Initiate( const String& rService, const String& rTopic,
 
 SbError SbiDdeControl::Terminate( sal_Int16 nChannel )
 {
-    DdeConnection* pConv = pConvList->GetObject( (sal_uIntPtr)nChannel );
-    if( !nChannel || !pConv || pConv == DDE_FREECHANNEL )
+    if (!nChannel || nChannel > aConvList.size())
         return SbERR_DDE_NO_CHANNEL;
-    pConvList->Replace( DDE_FREECHANNEL, (sal_uIntPtr)nChannel );
-    delete pConv;
+
+    std::vector<DdeConnection*> iterConv = aConvList.begin()+nChannel-1;
+
+    if( *iterConv == DDE_FREECHANNEL )
+        return SbERR_DDE_NO_CHANNEL;
+
+    delete *iterConv;
+    *iterConv = DDE_FREECHANNEL;
+
     return 0L;
 }
 
 SbError SbiDdeControl::TerminateAll()
 {
-    sal_Int16 nChannel = (sal_Int16)pConvList->Count();
-    while( nChannel )
+    DdeConnection *conv;
+    for (sal_Int16 nChannel = 0; nChannel < aConvList.size(); ++nChannel)
     {
-        nChannel--;
-        Terminate( nChannel );
+        conv = aConvList[nChannel];
+
+        if (conv != DDE_FREECHANNEL)
+            delete conv;
     }
 
-    pConvList->Clear();
-    DdeConnection* pPtr = DDE_FREECHANNEL;
-    pConvList->Insert( pPtr );
+    aConvList.clear();
 
     return 0;
 }
 
 SbError SbiDdeControl::Request( sal_Int16 nChannel, const String& rItem, String& rResult )
 {
-    DdeConnection* pConv = pConvList->GetObject( (sal_uIntPtr)nChannel );
-    if( !nChannel || !pConv || pConv == DDE_FREECHANNEL )
+    if (!nChannel || nChannel > aConvList.size())
+        return SbERR_DDE_NO_CHANNEL;
+
+    DdeConnection* pConv = aConvList[nChannel-1];
+
+    if( pConv == DDE_FREECHANNEL )
         return SbERR_DDE_NO_CHANNEL;
 
     DdeRequest aRequest( *pConv, rItem, 30000 );
@@ -170,9 +174,14 @@ SbError SbiDdeControl::Request( sal_Int16 nChannel, const String& rItem, String&
 
 SbError SbiDdeControl::Execute( sal_Int16 nChannel, const String& rCommand )
 {
-    DdeConnection* pConv = pConvList->GetObject( (sal_uIntPtr)nChannel );
-    if( !nChannel || !pConv || pConv == DDE_FREECHANNEL )
+    if (!nChannel || nChannel > aConvList.size())
         return SbERR_DDE_NO_CHANNEL;
+
+    DdeConnection* pConv = aConvList[nChannel-1];
+
+    if( conv == DDE_FREECHANNEL )
+        return SbERR_DDE_NO_CHANNEL;
+
     DdeExecute aRequest( *pConv, rCommand, 30000 );
     aRequest.Execute();
     return GetLastErr( pConv );
@@ -180,9 +189,14 @@ SbError SbiDdeControl::Execute( sal_Int16 nChannel, const String& rCommand )
 
 SbError SbiDdeControl::Poke( sal_Int16 nChannel, const String& rItem, const String& rData )
 {
-    DdeConnection* pConv = pConvList->GetObject( (sal_uIntPtr)nChannel );
-    if( !nChannel || !pConv || pConv == DDE_FREECHANNEL )
+    if (!nChannel || nChannel > aConvList.size())
         return SbERR_DDE_NO_CHANNEL;
+
+    DdeConnection* pConv = aConvList[nChannel-1];
+
+    if( pConv == DDE_FREECHANNEL )
+        return SbERR_DDE_NO_CHANNEL;
+
     DdePoke aRequest( *pConv, rItem, DdeData(rData), 30000 );
     aRequest.Execute();
     return GetLastErr( pConv );
