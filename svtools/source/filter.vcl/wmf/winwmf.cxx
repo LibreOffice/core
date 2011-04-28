@@ -1036,6 +1036,7 @@ sal_Bool WMFReader::ReadHeader()
         pWMF->Seek( nStrmPos );
     }
 
+    pOut->SetUnitsPerInch( nUnitsPerInch );
     pOut->SetWinOrg( aPlaceableBound.TopLeft() );
     aWMFSize = Size( labs( aPlaceableBound.GetWidth() ), labs( aPlaceableBound.GetHeight() ) );
     pOut->SetWinExt( aWMFSize );
