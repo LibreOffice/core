@@ -308,7 +308,6 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
 
     // Menu
     style.SetSkipDisabledInMenus( TRUE );
-    style.SetHideDisabledMenuItems( sal_True );
     KMenuBar* pMenuBar = new KMenuBar();
     if ( pMenuBar )
     {
