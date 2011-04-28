@@ -51,10 +51,10 @@ static KCmdLineOptions sOptions[] =
 
 int main( int argc, char* argv[] )
 {
-    // we fake the name of the application to have "OpenOffice.org" in the
+    // we fake the name of the application to have "LibreOffice" in the
     // title
-    KAboutData qAboutData( "kdefilepicker", I18N_NOOP( "OpenOffice.org" ),
-            "0.1", I18N_NOOP( "kdefilepicker is an implementation of the KDE file dialog for OpenOffice.org." ),
+    KAboutData qAboutData( "kdefilepicker", I18N_NOOP( "LibreOffice" ),
+            "0.1", I18N_NOOP( "kdefilepicker is an implementation of the KDE file dialog for LibreOffice." ),
             KAboutData::License_LGPL,
             "(c) 2004, Jan Holesovsky" );
     qAboutData.addAuthor( "Jan Holesovsky", I18N_NOOP("Original author and current maintainer"), "kendy@openoffice.org" );
