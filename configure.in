@@ -1181,15 +1181,6 @@ AC_ARG_WITH(lang,
     ],
 ,)
 
-AC_ARG_WITH(poor-help-localizations,
-    AS_HELP_STRING([--with-poor-help-localizations],
-        [Use this option to specify which languages have unusable help localizations.
-         Separate multiple languages with space.])
-    [
-                          Usage:     --with-poor-help-localizations="af be"
-    ],
-,)
-
 AC_ARG_WITH(intro-bitmap,
 [  --with-intro-bitmap    Prefer the specified intro bitmap over the
                           the default one.
@@ -7773,15 +7764,6 @@ done
 AC_SUBST(ALL_LANGS)
 AC_SUBST(WITH_LANG)
 AC_SUBST(GIT_REPO_NAMES)
-
-AC_MSG_CHECKING([which languages have poor help localizations])
-WITH_POOR_HELP_LOCALIZATIONS="$with_poor_help_localizations"
-if test -z "$WITH_POOR_HELP_LOCALIZATIONS"; then
-   AC_MSG_RESULT([none])
-else
-   AC_MSG_RESULT([$WITH_POOR_HELP_LOCALIZATIONS])
-fi
-AC_SUBST(WITH_POOR_HELP_LOCALIZATIONS)
 
 AC_MSG_CHECKING([for another 'intro' bitmap])
 INTRO_BITMAP=
