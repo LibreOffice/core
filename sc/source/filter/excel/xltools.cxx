@@ -469,6 +469,8 @@ String XclTools::GetXclFontName( const String& rFontName )
 
 const String XclTools::maDefNamePrefix( RTL_CONSTASCII_USTRINGPARAM( "Excel_BuiltIn_" ) );
 
+const String XclTools::maDefNamePrefixXml ( RTL_CONSTASCII_USTRINGPARAM( "_xlnm." ) );
+
 static const sal_Char* const ppcDefNames[] =
 {
     "Consolidate_Area",
@@ -502,6 +504,11 @@ String XclTools::GetXclBuiltInDefName( sal_Unicode cBuiltIn )
 String XclTools::GetBuiltInDefName( sal_Unicode cBuiltIn )
 {
     return String( maDefNamePrefix ).Append( GetXclBuiltInDefName( cBuiltIn ) );
+}
+
+String XclTools::GetBuiltInDefNameXml( sal_Unicode cBuiltIn )
+{
+    return String( maDefNamePrefixXml ).Append( GetXclBuiltInDefName( cBuiltIn ) );
 }
 
 sal_Unicode XclTools::GetBuiltInDefNameIndex( const String& rDefName )
