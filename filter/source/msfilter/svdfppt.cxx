@@ -4827,7 +4827,7 @@ void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, SdrPowerPointImport& 
             {
                 rIn >> aSet.mpArry[ PPT_ParaAttr_BulletHeight ];
                 if ( ! ( ( nMask & ( 1 << PPT_ParaAttr_BuHardHeight ) )
-                         && ( nBulFlg && ( 1 << PPT_ParaAttr_BuHardHeight ) ) ) )
+                         && ( nBulFlg & ( 1 << PPT_ParaAttr_BuHardHeight ) ) ) )
                     aSet.mnAttrSet ^= 0x40;
             }
             if ( nMask & 0x0020 )   // buColor
