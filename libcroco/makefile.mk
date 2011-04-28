@@ -58,9 +58,9 @@ CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) \
                  LDFLAGS="-L$(SOLARLIBDIR)" \
                  GLIB2_CFLAGS="-I$(SOLARINCDIR)$/external$/glib-2.0" \
                  GLIB2_LIBS="-lgio-2.0 -lgobject-2.0 -lgthread-2.0 -lglib-2.0 -lintl" \
-                 LIBXML2_CFLAGS=" " \
-                 LIBXML2_LIBS="-lxml2"
-                 
+                 LIBXML2_CFLAGS="$(LIBXML_CFLAGS)" \
+                 LIBXML2_LIBS="$(LIBXML_LIBS)"
+
 CONFIGURE_FLAGS=$(eq,$(OS),MACOSX CPPFLAGS="$(EXTRA_CDEFS)" $(NULL))
                 
 BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) \
