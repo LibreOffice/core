@@ -257,14 +257,7 @@ sal_uInt16 MyBasic::BreakHdl()
         pWin->Highlight( GetLine(), GetCol1(), GetCol2() );
     }
 
-    if( IsBreak() ) // If Breakpoint (or "Run to Cursor")
-    {
-        return aBasicApp.pFrame->BreakHandler();
-    }
-    else
-    {
-        return aBasicApp.pFrame->BreakHandler();
-    }
+    return aBasicApp.pFrame->BreakHandler();
 }
 
 /***************************************************************************
