@@ -216,12 +216,12 @@ sub open_log_file($$$$)
     return $log;
 }
 
-sub print_summary_in_stat($$$$$$$$)
+sub print_summary_in_stat($$$$$$$$$)
 {
-    my ($summary, $pprint_filters, $ppiece_title, $pflags, $pbugs, $pauthors, $prefix, $log) = @_;
+    my ($summary, $pprint_filters, $print_mode, $ppiece_title, $pflags, $pbugs, $pauthors, $prefix, $log) = @_;
 
     return if ( $summary eq "" );
-    
+
     # do we want to print this summary at all?
     my $print;
     if (%{$pprint_filters}) {
@@ -234,7 +234,7 @@ sub print_summary_in_stat($$$$$$$$)
     return unless (defined $print);
 
     # print piece title if not done yet
-    if (defined ${$ppiece_title}) {
+    if ( defined ${$ppiece_title} && $print_mode ne "bugnumbers" ) {
         printf $log "${$ppiece_title}\n";
         ${$ppiece_title} = undef;
     }
@@ -242,7 +242,11 @@ sub print_summary_in_stat($$$$$$$$)
     # finally print the summary line
     my $bugs = "";
     if ( %{$pbugs} ) {
-        $bugs = " (" . join (", ", keys %{$pbugs}) . ")";
+        if ( $print_mode eq "bugnumbers" ) {
+            $bugs = join ("\n", keys %{$pbugs}) . "\n";
+        } else {
+            $bugs = " (" . join (", ", keys %{$pbugs}) . ")";
+        }
     }
 
     my $authors = "";
@@ -250,12 +254,16 @@ sub print_summary_in_stat($$$$$$$$)
         $authors = " [" . join (", ", keys %{$pauthors}) . "]";
     }
 
-    printf $log $prefix . $summary . $bugs . $authors . "\n";
+    if ( $print_mode eq "bugnumbers" ) {
+        printf $log $bugs;
+    } else {
+        printf $log $prefix . $summary . $bugs . $authors . "\n";
+    }
 }
 
-sub print_stat($$$)
+sub print_stat($$$$)
 {
-    my ($pdata, $pprint_filters, $log) = @_;
+    my ($pdata, $pprint_filters, $print_mode, $log) = @_;
 
     foreach my $piece ( sort { $a cmp $b } keys %{$pdata}) {
         # check if this piece has any entries at all
@@ -268,7 +276,7 @@ sub print_stat($$$)
             foreach my $id ( sort { $pdata->{$piece}{$a}{'summary'} cmp $pdata->{$piece}{$b}{'summary'} } keys %{$pdata->{$piece}}) {
                 my $summary = $pdata->{$piece}{$id}{'summary'};
                 if ($summary ne $old_summary) {
-                    print_summary_in_stat($old_summary, $pprint_filters, \$piece_title, \%flags, \%bugs, \%authors, "    + ", $log);
+                    print_summary_in_stat($old_summary, $pprint_filters, $print_mode, \$piece_title, \%flags, \%bugs, \%authors, "    + ", $log);
                     $old_summary = $summary;
                     %authors = ();
                     %bugs = ();
@@ -288,7 +296,7 @@ sub print_stat($$$)
                     $flags{$flag} = 1;
                 }
             }
-            print_summary_in_stat($old_summary, $pprint_filters, \$piece_title, \%flags, \%bugs, \%authors, "    + ", $log);
+            print_summary_in_stat($old_summary, $pprint_filters, $print_mode, \$piece_title, \%flags, \%bugs, \%authors, "    + ", $log);
         }
     }
 }
@@ -310,6 +318,7 @@ sub usage()
           "                     commit-log-<branch>-<log-name-suffix>.log; the branch name\n" .
           "                     is detected automatically\n" .
           "     --bugs          print just bug fixes\n" .
+          "     --bug-numbers   print just fixed bug numbers\n" .
           "     --rev-list      use \"git rev-list\" instead of \"git log\"; useful to check\n" .
           "                     differences between branches\n" .
           "      topdir         directory with the libreoffice/bootstrap clone; the piece repos\n" .
@@ -339,6 +348,7 @@ my $git_command = "git log";
 my @git_args;
 my %data;
 my %print_filters = ();
+my $print_mode = "normal";
 
 foreach my $arg (@ARGV) {
     if ($arg eq '--help') {
@@ -353,6 +363,10 @@ foreach my $arg (@ARGV) {
     } elsif ($arg eq '--bugs') {
         $print_filters{'bug'} = 1;
         $log_prefix = "bugfixes"
+    } elsif ($arg eq '--bug-numbers') {
+        $print_filters{'bug'} = 1;
+        $log_prefix = "bugnumbers";
+        $print_mode = "bugnumbers";
     } elsif ($arg eq '--rev-list') {
         $git_command = "git rev-list --pretty=medium"
     } else {
@@ -377,5 +391,5 @@ $branch_name = get_branch_name($top_dir);
 load_data(\%data, $top_dir, $piece, $branch_name, $git_command);
 
 $log = open_log_file($log_prefix, $log_suffix, $top_dir, $branch_name);
-print_stat(\%data, \%print_filters, $log);
+print_stat(\%data, \%print_filters, $print_mode, $log);
 close $log;
