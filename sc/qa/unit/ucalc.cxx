@@ -669,6 +669,47 @@ void Test::testMatrix()
     }
 }
 
+namespace {
+
+template<int _Size>
+bool checkDPTableOutput(ScDocument* pDoc, const ScRange& aOutRange, const char* aOutputCheck[][_Size], const char* pCaption)
+{
+    const ScAddress& s = aOutRange.aStart;
+    const ScAddress& e = aOutRange.aEnd;
+    SheetPrinter printer(e.Row() - s.Row() + 1, e.Col() - s.Col() + 1);
+    SCROW nOutRowSize = e.Row() - s.Row() + 1;
+    SCCOL nOutColSize = e.Col() - s.Col() + 1;
+    for (SCROW nRow = 0; nRow < nOutRowSize; ++nRow)
+    {
+        for (SCCOL nCol = 0; nCol < nOutColSize; ++nCol)
+        {
+            OUString aVal;
+            pDoc->GetString(nCol + s.Col(), nRow + s.Row(), s.Tab(), aVal);
+            printer.set(nRow, nCol, aVal);
+            const char* p = aOutputCheck[nRow][nCol];
+            if (p)
+            {
+                OUString aCheckVal = OUString::createFromAscii(p);
+                bool bEqual = aCheckVal.equals(aVal);
+                if (!bEqual)
+                {
+                    cerr << "Expected: " << aCheckVal << "  Actual: " << aVal << endl;
+                    return false;
+                }
+            }
+            else if (!aVal.isEmpty())
+            {
+                cerr << "Empty cell expected" << endl;
+                return false;
+            }
+        }
+    }
+    printer.print(pCaption);
+    return true;
+}
+
+}
+
 void Test::testDataPilot()
 {
     m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
@@ -693,19 +734,6 @@ void Test::testDataPilot()
         { "David",   "B", 12 },
         { "Edward",  "C",  8 },
         { "Frank",   "C", 15 },
-    };
-
-    // Expected output table content.  0 = empty cell
-    const char* aOutputCheck[][5] = {
-        { "Sum - Score", "Group", 0, 0, 0 },
-        { "Name", "A", "B", "C", "Total Result" },
-        { "Andy", "30", 0, 0, "30" },
-        { "Bruce", "20", 0, 0, "20" },
-        { "Charlie", 0, "45", 0, "45" },
-        { "David", 0, "12", 0, "12" },
-        { "Edward", 0, 0, "8", "8" },
-        { "Frank", 0, 0, "15", "15" },
-        { "Total Result", "50", "57", "23", "130" }
     };
 
     sal_uInt32 nFieldCount = SAL_N_ELEMENTS(aFields);
@@ -841,42 +869,100 @@ void Test::testDataPilot()
 
     pDPObj->Output(aOutRange.aStart);
     aOutRange = pDPObj->GetOutRange();
-    const ScAddress& s = aOutRange.aStart;
-    const ScAddress& e = aOutRange.aEnd;
-    printer.resize(e.Row() - s.Row() + 1, e.Col() - s.Col() + 1);
-    SCROW nOutRowSize = SAL_N_ELEMENTS(aOutputCheck);
-    SCCOL nOutColSize = SAL_N_ELEMENTS(aOutputCheck[0]);
-    CPPUNIT_ASSERT_MESSAGE("Row size of the table output is not as expected.",
-                           nOutRowSize == (e.Row()-s.Row()+1));
-    CPPUNIT_ASSERT_MESSAGE("Column size of the table output is not as expected.",
-                           nOutColSize == (e.Col()-s.Col()+1));
-    for (SCROW nRow = 0; nRow < nOutRowSize; ++nRow)
     {
-        for (SCCOL nCol = 0; nCol < nOutColSize; ++nCol)
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][5] = {
+            { "Sum - Score", "Group", 0, 0, 0 },
+            { "Name", "A", "B", "C", "Total Result" },
+            { "Andy", "30", 0, 0, "30" },
+            { "Bruce", "20", 0, 0, "20" },
+            { "Charlie", 0, "45", 0, "45" },
+            { "David", 0, "12", 0, "12" },
+            { "Edward", 0, 0, "8", "8" },
+            { "Frank", 0, 0, "15", "15" },
+            { "Total Result", "50", "57", "23", "130" }
+        };
+
+        bSuccess = checkDPTableOutput<5>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    // Update the cell values.
+    double aData2[] = { 100, 200, 300, 400, 500, 600 };
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aData2); ++i)
+    {
+        SCROW nRow = i + 1;
+        m_pDoc->SetValue(2, nRow, 0, aData2[i]);
+    }
+
+    printer.resize(nRow2 - nRow1 + 1, nCol2 - nCol1 + 1);
+    for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
+    {
+        for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
         {
             String aVal;
-            m_pDoc->GetString(nCol + s.Col(), nRow + s.Row(), s.Tab(), aVal);
+            m_pDoc->GetString(nCol, nRow, 0, aVal);
             printer.set(nRow, nCol, aVal);
-            const char* p = aOutputCheck[nRow][nCol];
-            if (p)
-            {
-                OUString aCheckVal = OUString::createFromAscii(p);
-                bool bEqual = aCheckVal.equals(aVal);
-                if (!bEqual)
-                {
-                    cerr << "Expected: " << aCheckVal << "  Actual: " << aVal << endl;
-                    CPPUNIT_ASSERT_MESSAGE("Unexpected cell content.", false);
-                }
-            }
-            else
-                CPPUNIT_ASSERT_MESSAGE("Empty cell expected.", aVal.Len() == 0);
         }
     }
-    printer.print("DataPilot table output");
+    printer.print("Data sheet content (modified)");
     printer.clear();
 
-    // Now, delete the datapilot object.
+    // Now, create a copy of the datapilot object for the updated table, but
+    // don't clear the cache which should force the copy to use the old data
+    // from the cache.
+    ScDPObject* pDPObj2 = new ScDPObject(*pDPObj);
     pDPs->FreeTable(pDPObj);
+    pDPs->InsertNewTable(pDPObj2);
+
+    aOutRange = pDPObj2->GetOutRange();
+    pDPObj2->ClearSource();
+    pDPObj2->Output(aOutRange.aStart);
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][5] = {
+            { "Sum - Score", "Group", 0, 0, 0 },
+            { "Name", "A", "B", "C", "Total Result" },
+            { "Andy", "30", 0, 0, "30" },
+            { "Bruce", "20", 0, 0, "20" },
+            { "Charlie", 0, "45", 0, "45" },
+            { "David", 0, "12", 0, "12" },
+            { "Edward", 0, 0, "8", "8" },
+            { "Frank", 0, 0, "15", "15" },
+            { "Total Result", "50", "57", "23", "130" }
+        };
+
+        bSuccess = checkDPTableOutput<5>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (from old cache)");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    // This time clear the cache to refresh the data from the source range.
+    CPPUNIT_ASSERT_MESSAGE("This datapilot should be based on sheet data.", pDPObj2->IsSheetData());
+    ScDPCollection::SheetCaches& rCaches = pDPs->GetSheetCaches();
+    const ScSheetSourceDesc* pDesc = pDPObj2->GetSheetDesc();
+    rCaches.removeCache(pDesc->GetSourceRange());
+    pDPObj2->ClearSource();
+    pDPObj2->Output(aOutRange.aStart);
+
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][5] = {
+            { "Sum - Score", "Group", 0, 0, 0 },
+            { "Name", "A", "B", "C", "Total Result" },
+            { "Andy", "100", 0, 0, "100" },
+            { "Bruce", "200", 0, 0, "200" },
+            { "Charlie", 0, "300", 0, "300" },
+            { "David", 0, "400", 0, "400" },
+            { "Edward", 0, 0, "500", "500" },
+            { "Frank", 0, 0, "600", "600" },
+            { "Total Result", "300", "700", "1100", "2100" }
+        };
+
+        bSuccess = checkDPTableOutput<5>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (refreshed)");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    pDPs->FreeTable(pDPObj2);
     CPPUNIT_ASSERT_MESSAGE("There shouldn't be any data pilot table stored with the document.",
                            pDPs->GetCount() == 0);
 
