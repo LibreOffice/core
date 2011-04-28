@@ -3089,7 +3089,7 @@ uno::Sequence< beans::PropertyState > SAL_CALL SvxShape::getPropertyStates( cons
     else
     {
         for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
-            pState[nIdx] = getPropertyState_( pNames[nIdx] );
+            pState[nIdx] = _getPropertyState( pNames[nIdx] );
     }
 
     return aRet;
