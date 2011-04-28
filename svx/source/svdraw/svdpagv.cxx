@@ -883,14 +883,8 @@ void SdrPageView::InsertHelpLine(const SdrHelpLine& rHL, sal_uInt16 nNum)
 {
     if (nNum>aHelpLines.GetCount()) nNum=aHelpLines.GetCount();
     aHelpLines.Insert(rHL,nNum);
-    if (GetView().IsHlplVisible()) {
-        if (GetView().IsHlplFront()) {
-            // Hier optimieren ...
-            ImpInvalidateHelpLineArea(nNum);
-         } else {
-            ImpInvalidateHelpLineArea(nNum);
-        }
-    }
+    if (GetView().IsHlplVisible())
+        ImpInvalidateHelpLineArea(nNum);
 }
 
 // Betretene Gruppe und Liste setzen
