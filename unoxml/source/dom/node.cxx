@@ -87,8 +87,9 @@ namespace DOM
         // add node's namespaces to current context
         for (xmlNsPtr pNs = pNode->nsDef; pNs != 0; pNs = pNs->next) {
             const xmlChar *pPrefix = pNs->prefix;
+            // prefix can be NULL when xmlns attribute is empty (xmlns="")
             OString prefix(reinterpret_cast<const sal_Char*>(pPrefix),
-                           strlen(reinterpret_cast<const char*>(pPrefix)));
+                           pPrefix ? strlen(reinterpret_cast<const char*>(pPrefix)) : 0);
             const xmlChar *pHref = pNs->href;
             OUString val(reinterpret_cast<const sal_Char*>(pHref),
                 strlen(reinterpret_cast<const char*>(pHref)),
