@@ -28,13 +28,10 @@
 #ifndef _SFX_SHELL_HXX
 #define _SFX_SHELL_HXX
 
-#include <boost/shared_ptr.hpp>
-
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 #include "sal/types.h"
 #include <com/sun/star/embed/VerbDescriptor.hpp>
-#include <rtl/instance.hxx>
 #include <tools/debug.hxx>
 #include <tools/rtti.hxx>
 #include <svl/brdcst.hxx>
@@ -314,6 +311,9 @@ inline void SfxShell::SetPool
 #define SFX_SLOTMAP_ARG(ShellClass) static SfxSlot a##ShellClass##Slots_Impl[] =
 
 #define SFX_DECL_INTERFACE(nId)                                             \
+            static SfxInterface*                pInterface;                 \
+        private:                                                            \
+            static void                         InitInterface_Impl();       \
         public:                                                             \
             static const SfxFormalArgument*     pSfxFormalArgs_Impl;        \
             static SfxInterface*                GetStaticInterface();       \
@@ -323,27 +323,21 @@ inline void SfxShell::SetPool
 
 #define SFX_IMPL_INTERFACE(Class,SuperClass,NameResId)                      \
                                                                             \
+    SfxInterface* Class::pInterface = 0;                                    \
     const SfxFormalArgument* Class::pSfxFormalArgs_Impl = a##Class##Args_Impl;\
-    static void Init##Class##Interface_Impl(boost::shared_ptr<SfxInterface>& pInterface); \
-    struct Class##Interface_Impl \
-        : public rtl::StaticWithInit<boost::shared_ptr<SfxInterface>, Class##Interface_Impl> \
-    { \
-        boost::shared_ptr<SfxInterface> operator()() const \
-        { \
-            boost::shared_ptr<SfxInterface> pIface( \
-                    new SfxInterface(                                           \
-                #Class, NameResId, Class::GetInterfaceId(),                            \
-                SuperClass::GetStaticInterface(),                               \
-                a##Class##Slots_Impl[0],                                        \
-                (sal_uInt16) (sizeof(a##Class##Slots_Impl) / sizeof(SfxSlot) ) ) ) \
-                ; \
-            Init##Class##Interface_Impl(pIface); \
-            return pIface; \
-        } \
-    }; \
     SfxInterface* Class::GetStaticInterface()                      \
     {                                                                       \
-        return get_pointer(Class##Interface_Impl::get()); \
+        if ( !pInterface )                                                  \
+        {                                                                   \
+            pInterface =                                                    \
+                new SfxInterface(                                           \
+            #Class, NameResId, GetInterfaceId(),                            \
+            SuperClass::GetStaticInterface(),                               \
+            a##Class##Slots_Impl[0],                                        \
+            (sal_uInt16) (sizeof(a##Class##Slots_Impl) / sizeof(SfxSlot) ) );   \
+            InitInterface_Impl();                                           \
+        }                                                                   \
+        return pInterface;                                                  \
     }                                                                       \
                                                                             \
     SfxInterface* Class::GetInterface() const                               \
@@ -356,7 +350,7 @@ inline void SfxShell::SetPool
         GetStaticInterface()->Register(pMod);                               \
     }                                                                       \
                                                                             \
-    void Init##Class##Interface_Impl(boost::shared_ptr<SfxInterface>& pInterface)
+    void Class::InitInterface_Impl()
 
 #define SFX_POSITION_MASK               0x000F
 #define SFX_VISIBILITY_MASK             0xFFF0
@@ -375,28 +369,28 @@ inline void SfxShell::SetPool
 #define SFX_VISIBILITY_NOCONTEXT        0xFFFF  // Always visable
 
 #define SFX_OBJECTBAR_REGISTRATION(nPos,rResId) \
-        pInterface->RegisterObjectBar( nPos, rResId )
+        GetStaticInterface()->RegisterObjectBar( nPos, rResId )
 
 #define SFX_FEATURED_OBJECTBAR_REGISTRATION(nPos,rResId,nFeature) \
-        pInterface->RegisterObjectBar( nPos, rResId, nFeature )
+        GetStaticInterface()->RegisterObjectBar( nPos, rResId, nFeature )
 
 #define SFX_CHILDWINDOW_REGISTRATION(nId) \
-        pInterface->RegisterChildWindow( nId, (sal_Bool) sal_False )
+        GetStaticInterface()->RegisterChildWindow( nId, (sal_Bool) sal_False )
 
 #define SFX_FEATURED_CHILDWINDOW_REGISTRATION(nId,nFeature) \
-        pInterface->RegisterChildWindow( nId, (sal_Bool) sal_False, nFeature )
+        GetStaticInterface()->RegisterChildWindow( nId, (sal_Bool) sal_False, nFeature )
 
 #define SFX_CHILDWINDOW_CONTEXT_REGISTRATION(nId) \
-        pInterface->RegisterChildWindow( nId, (sal_Bool) sal_True )
+        GetStaticInterface()->RegisterChildWindow( nId, (sal_Bool) sal_True )
 
 #define SFX_POPUPMENU_REGISTRATION(rResId) \
-        pInterface->RegisterPopupMenu( rResId )
+        GetStaticInterface()->RegisterPopupMenu( rResId )
 
 #define SFX_OBJECTMENU_REGISTRATION(nPos,rResId) \
-        pInterface->RegisterObjectMenu( nPos, rResId )
+        GetStaticInterface()->RegisterObjectMenu( nPos, rResId )
 
 #define SFX_STATUSBAR_REGISTRATION(rResId) \
-        pInterface->RegisterStatusBar( rResId )
+        GetStaticInterface()->RegisterStatusBar( rResId )
 
 #endif
 
