@@ -187,6 +187,10 @@ public:
         @descr  Adds a prefix to the representation returned by GetXclBuiltInDefName().
         @param cBuiltIn  Excel index of the built-in name. */
     static String       GetBuiltInDefName( sal_Unicode cBuiltIn );
+    /** Returns the Excel built-in name with OOXML prefix
+        @descr  Adds the "_xlnm." prefix to the representation returned by GetXclBuiltInDefName()
+        @param cBuiltIn  Excel index of the built in name.*/
+    static String       GetBuiltInDefNameXml( sal_Unicode cBuiltIn );
     /** Returns the Excel built-in name index of the passed defined name from Calc.
         @descr  Ignores any characters following a valid representation of a built-in name.
         @param pcBuiltIn  (out-param) If not 0, the index of the built-in name will be returned here.
@@ -245,6 +249,7 @@ public:
 // ------------------------------------------------------------------------
 private:
     static const String maDefNamePrefix;            /// Prefix for built-in defined names.
+    static const String maDefNamePrefixXml;         /// Prefix for built-in defined names for OOX
     static const String maStyleNamePrefix1;         /// Prefix for built-in cell style names.
     static const String maStyleNamePrefix2;         /// Prefix for built-in cell style names from OOX filter.
     static const String maCFStyleNamePrefix1;       /// Prefix for cond. formatting style names.

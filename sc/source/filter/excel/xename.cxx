@@ -38,6 +38,7 @@
 #include "dbcolect.hxx"
 #include "xehelper.hxx"
 #include "xelink.hxx"
+#include "globalnames.hxx"
 
 // for filter manager
 #include "excrecds.hxx"
@@ -138,11 +139,10 @@ public:
 
     /** Inserts the Calc name with the passed index and returns the Excel NAME index. */
     sal_uInt16          InsertName( SCTAB nTab, sal_uInt16 nScNameIdx );
-    /** Inserts the Calc database range with the passed index and returns the Excel NAME index. */
-    sal_uInt16          InsertDBRange( sal_uInt16 nScDBRangeIdx );
 
     /** Inserts a new built-in defined name. */
     sal_uInt16          InsertBuiltInName( sal_Unicode cBuiltIn, XclTokenArrayRef xTokArr, SCTAB nScTab );
+    sal_uInt16          InsertBuiltInName( sal_Unicode cBuiltIn, XclTokenArrayRef xTokArr, const ScRange& aRange );
     /** Inserts a new defined name. Sets another unused name, if rName already exists. */
     sal_uInt16          InsertUniqueName( const String& rName, XclTokenArrayRef xTokArr, SCTAB nScTab );
     /** Returns index of an existing name, or creates a name without definition. */
@@ -179,10 +179,6 @@ private:
      */
     sal_uInt16          FindNamedExpIndex( SCTAB nTab, sal_uInt16 nScIdx );
 
-    /**
-     * Find the index of a NAME record from Calc's database range index.
-     */
-    sal_uInt16          FindDBNameIdx( sal_uInt16 nScIdx ) const;
     /** Returns the index of an existing built-in NAME record with the passed definition, otherwise 0. */
     sal_uInt16          FindBuiltInNameIdx( const String& rName,
                             const XclTokenArray& rTokArr, bool bDBRange ) const;
@@ -203,8 +199,6 @@ private:
     void                CreateBuiltInNames();
     /** Creates NAME records for all user-defined names in the document. */
     void                CreateUserNames();
-    /** Creates NAME records for all database ranges in the document. */
-    void                CreateDatabaseNames();
 
 private:
     /**
@@ -214,8 +208,6 @@ private:
      */
     NamedExpIndexMap    maNamedExpMap;
     XclExpNameList      maNameList;         /// List of NAME records.
-    XclExpIndexMap      maDBRangeMap;       /// Maps Calc database ranges to Excel NAME records.
-    String              maUnnamedDBName;    /// Name of the hidden unnamed database range.
     size_t              mnFirstUserIdx;     /// List index of first user-defined NAME record.
 };
 
@@ -254,9 +246,11 @@ XclExpName::XclExpName( const XclExpRoot& rRoot, sal_Unicode cBuiltIn ) :
     {
         String aName( XclTools::GetXclBuiltInDefName( EXC_BUILTIN_FILTERDATABASE ) );
         mxName = XclExpStringHelper::CreateString( rRoot, aName, EXC_STR_8BITLENGTH );
+        maOrigName = XclTools::GetXclBuiltInDefName( cBuiltIn );
     }
     else
     {
+        maOrigName =  XclTools::GetBuiltInDefNameXml( cBuiltIn ) ;
         mxName = XclExpStringHelper::CreateString( rRoot, cBuiltIn, EXC_STR_8BITLENGTH );
         ::set_flag( mnFlags, EXC_NAME_BUILTIN );
     }
@@ -336,10 +330,6 @@ void XclExpName::Save( XclExpStream& rStrm )
 
 void XclExpName::SaveXml( XclExpXmlStream& rStrm )
 {
-    // For some reason, AutoFilter creates exportable names where maOrigName==""
-    if( maOrigName.Len() == 0 )
-        return;
-
     sax_fastparser::FSHelperPtr& rWorkbook = rStrm.GetCurrentStream();
     rWorkbook->startElement( XML_definedName,
             // OOXTODO: XML_comment, "",
@@ -383,7 +373,6 @@ void XclExpName::WriteBody( XclExpStream& rStrm )
 
 XclExpNameManagerImpl::XclExpNameManagerImpl( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
-    maUnnamedDBName( ScGlobal::GetRscString( STR_DB_NONAME ) ),
     mnFirstUserIdx( 0 )
 {
 }
@@ -393,7 +382,6 @@ void XclExpNameManagerImpl::Initialize()
     CreateBuiltInNames();
     mnFirstUserIdx = maNameList.GetSize();
     CreateUserNames();
-    CreateDatabaseNames();
 }
 
 sal_uInt16 XclExpNameManagerImpl::InsertName( SCTAB nTab, sal_uInt16 nScNameIdx )
@@ -413,13 +401,15 @@ sal_uInt16 XclExpNameManagerImpl::InsertName( SCTAB nTab, sal_uInt16 nScNameIdx 
     return nNameIdx;
 }
 
-sal_uInt16 XclExpNameManagerImpl::InsertDBRange( sal_uInt16 nScDBRangeIdx )
+sal_uInt16 XclExpNameManagerImpl::InsertBuiltInName( sal_Unicode cBuiltIn, XclTokenArrayRef xTokArr, const ScRange& aRange )
 {
-    sal_uInt16 nNameIdx = FindDBNameIdx( nScDBRangeIdx );
-    if( nNameIdx == 0 )
-        if( const ScDBData* pDBData = GetDatabaseRanges().FindIndex( nScDBRangeIdx ) )
-            nNameIdx = CreateName( *pDBData );
-    return nNameIdx;
+    XclExpNameRef xName( new XclExpName( GetRoot(), cBuiltIn ) );
+    xName->SetTokenArray( xTokArr );
+    xName->SetLocalTab( aRange.aStart.Tab() );
+    String sSymbol;
+    aRange.Format( sSymbol, SCR_ABS_3D, GetDocPtr(), ScAddress::Details( ::formula::FormulaGrammar::CONV_XL_A1 ) );
+    xName->SetSymbol( sSymbol );
+    return Append( xName );
 }
 
 sal_uInt16 XclExpNameManagerImpl::InsertBuiltInName( sal_Unicode cBuiltIn, XclTokenArrayRef xTokArr, SCTAB nScTab )
@@ -515,18 +505,12 @@ sal_uInt16 XclExpNameManagerImpl::FindNamedExpIndex( SCTAB nTab, sal_uInt16 nScI
     return (itr == maNamedExpMap.end()) ? 0 : itr->second;
 }
 
-sal_uInt16 XclExpNameManagerImpl::FindDBNameIdx( sal_uInt16 nScIdx ) const
-{
-    XclExpIndexMap::const_iterator aIt = maDBRangeMap.find( nScIdx );
-    return (aIt == maDBRangeMap.end()) ? 0 : aIt->second;
-}
-
 sal_uInt16 XclExpNameManagerImpl::FindBuiltInNameIdx(
         const String& rName, const XclTokenArray& rTokArr, bool bDBRange ) const
 {
     /*  Get built-in index from the name. Special case: the database range
         'unnamed' will be mapped to Excel's built-in '_FilterDatabase' name. */
-    sal_Unicode cBuiltIn = (bDBRange && (rName == maUnnamedDBName)) ?
+    sal_Unicode cBuiltIn = (bDBRange && (rName == String(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME)))) ?
         EXC_BUILTIN_FILTERDATABASE : XclTools::GetBuiltInDefNameIndex( rName );
 
     if( cBuiltIn < EXC_BUILTIN_UNKNOWN )
@@ -597,11 +581,6 @@ sal_uInt16 XclExpNameManagerImpl::CreateName( SCTAB nTab, const ScRangeData& rRa
     {
         XclTokenArrayRef xTokArr = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_NAME, *pScTokArr );
         xName->SetTokenArray( xTokArr );
-
-        String sSymbol;
-        rRangeData.GetSymbol( sSymbol, formula::FormulaGrammar::GRAM_ENGLISH_XL_A1 );
-        xName->SetSymbol( sSymbol );
-
         /*  Try to replace by existing built-in name - complete token array is
             needed for comparison, and due to the recursion problem above this
             cannot be done earlier. If a built-in name is found, the created NAME
@@ -619,29 +598,6 @@ sal_uInt16 XclExpNameManagerImpl::CreateName( SCTAB nTab, const ScRangeData& rRa
         }
     }
 
-    return nNameIdx;
-}
-
-sal_uInt16 XclExpNameManagerImpl::CreateName( const ScDBData& rDBData )
-{
-    // get name and source range, and create the definition formula
-    const String& rName = rDBData.GetName();
-    ScRange aRange;
-    rDBData.GetArea( aRange );
-    XclTokenArrayRef xTokArr = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_NAME, aRange );
-
-    // try to use an existing built-in name
-    sal_uInt16 nNameIdx = FindBuiltInNameIdx( rName, *xTokArr, true );
-    if( nNameIdx == 0 )
-    {
-        // insert a new name into the list
-        XclExpNameRef xName( new XclExpName( GetRoot(), GetUnusedName( rName ) ) );
-        xName->SetTokenArray( xTokArr );
-        nNameIdx = Append( xName );
-    }
-
-    // store the index of the NAME record in the lookup map
-    maDBRangeMap[ rDBData.GetIndex() ] = nNameIdx;
     return nNameIdx;
 }
 
@@ -718,19 +674,6 @@ void XclExpNameManagerImpl::CreateUserNames()
     }
 }
 
-void XclExpNameManagerImpl::CreateDatabaseNames()
-{
-    const ScDBCollection& rDBRanges = GetDatabaseRanges();
-    for( sal_uInt16 nDBIdx = 0, nDBCount = rDBRanges.GetCount(); nDBIdx < nDBCount; ++nDBIdx )
-    {
-        const ScDBData* pDBData = rDBRanges[ nDBIdx ];
-        DBG_ASSERT( pDBData, "XclExpNameManagerImpl::CreateDatabaseNames - missing database range" );
-        // skip hidden "unnamed" range
-        if( pDBData && (pDBData->GetName() != maUnnamedDBName) && !FindDBNameIdx( pDBData->GetIndex() ) )
-            CreateName( *pDBData );
-    }
-}
-
 // ----------------------------------------------------------------------------
 
 XclExpNameManager::XclExpNameManager( const XclExpRoot& rRoot ) :
@@ -753,15 +696,10 @@ sal_uInt16 XclExpNameManager::InsertName( SCTAB nTab, sal_uInt16 nScNameIdx )
     return mxImpl->InsertName( nTab, nScNameIdx );
 }
 
-sal_uInt16 XclExpNameManager::InsertDBRange( sal_uInt16 nScDBRangeIdx )
-{
-    return mxImpl->InsertDBRange( nScDBRangeIdx );
-}
-
 sal_uInt16 XclExpNameManager::InsertBuiltInName( sal_Unicode cBuiltIn, const ScRange& rRange )
 {
     XclTokenArrayRef xTokArr = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_NAME, rRange );
-    return mxImpl->InsertBuiltInName( cBuiltIn, xTokArr, rRange.aStart.Tab() );
+    return mxImpl->InsertBuiltInName( cBuiltIn, xTokArr, rRange );
 }
 
 sal_uInt16 XclExpNameManager::InsertBuiltInName( sal_Unicode cBuiltIn, const ScRangeList& rRangeList )

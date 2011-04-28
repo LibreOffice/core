@@ -418,7 +418,6 @@ private:
     void                ProcessExternalRangeRef( const XclExpScToken& rTokData );
     void                ProcessDefinedName( const XclExpScToken& rTokData );
     void                ProcessExternalName( const XclExpScToken& rTokData );
-    void                ProcessDatabaseArea( const XclExpScToken& rTokData );
 
     // token vector -----------------------------------------------------------
 
@@ -1184,7 +1183,6 @@ XclExpScToken XclExpFmlaCompImpl::Factor( XclExpScToken aTokData )
             case ocBad:         ProcessBad( aTokData );             break;
             case ocOpen:        ProcessParentheses( aTokData );     break;
             case ocName:        ProcessDefinedName( aTokData );     break;
-            case ocDBArea:      ProcessDatabaseArea( aTokData );    break;
             case ocFalse:
             case ocTrue:        ProcessBoolean( aTokData );         break;
             case ocDde:         ProcessDdeLink( aTokData );         break;
@@ -2136,12 +2134,6 @@ void XclExpFmlaCompImpl::ProcessExternalName( const XclExpScToken& rTokData )
 
     // on any error: create a #NAME? error
     AppendErrorToken( EXC_ERR_NAME, rTokData.mnSpaces );
-}
-
-void XclExpFmlaCompImpl::ProcessDatabaseArea( const XclExpScToken& rTokData )
-{
-    sal_uInt16 nNameIdx = GetNameManager().InsertDBRange( rTokData.mpScToken->GetIndex() );
-    AppendNameToken( nNameIdx, rTokData.mnSpaces );
 }
 
 // token vector ---------------------------------------------------------------
