@@ -1596,7 +1596,6 @@ int Desktop::Main()
         ::comphelper::getProcessServiceFactory();
 
     Reference< ::com::sun::star::task::XRestartManager > xRestartManager;
-    int         nAcquireCount( 0 );
     try
     {
         RegisterServices( xSMgr );
@@ -1864,6 +1863,9 @@ int Desktop::Main()
             FatalError( MakeStartupErrorMessage(e.Message) );
             return EXIT_FAILURE;
         }
+
+        // Release solar mutex just before we wait for our client to connect
+        int nAcquireCount = Application::ReleaseSolarMutex();
 
         // Post user event to startup first application component window
         // We have to send this OpenClients message short before execute() to
