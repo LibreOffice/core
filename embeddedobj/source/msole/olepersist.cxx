@@ -1820,22 +1820,9 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
         if ( !xOutStream.is() )
             throw io::IOException(); //TODO: access denied
 
-        if ( m_bIsLink )
-        {
-            // just let the link store itself
-            // in case visual repersentation must be stored also
-            // the procedure should be the same as for embedded objects
-
-            uno::Reference< io::XOutputStream > xOutStream = GetStreamForSaving();
-
-            // should the component detect that it is a link???
-            StoreObjectToStream( xOutStream );
-        }
-        else
-        {
-            uno::Reference< io::XOutputStream > xOutStream = GetStreamForSaving();
-            StoreObjectToStream( xOutStream );
-        }
+        // TODO: does this work for links too?
+        uno::Reference< io::XOutputStream > xOutStream = GetStreamForSaving();
+        StoreObjectToStream( xOutStream );
 
         // the replacement is changed probably, and it must be in the object stream
         if ( !m_pOleComponent->IsWorkaroundActive() )
