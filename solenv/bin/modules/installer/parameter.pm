@@ -397,7 +397,6 @@ sub setglobalvariables
     if ($installer::globals::unpackpath eq "")  # unpackpath not set
     {
         $installer::globals::unpackpath = cwd();
-        if ( $installer::globals::iswin ) { $installer::globals::unpackpath =~ s/\//\\/g; }
     }
 
     if ( $installer::globals::localunpackdir ne "" ) { $installer::globals::unpackpath = $installer::globals::localunpackdir; }
