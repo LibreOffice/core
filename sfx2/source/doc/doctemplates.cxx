@@ -48,6 +48,7 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
+#include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/document/XStandaloneDocumentInfo.hpp>
@@ -593,11 +594,45 @@ void SfxDocTplService_Impl::getDirList()
 
     maTemplateDirs = Sequence< OUString >( nCount );
 
+    uno::Reference< XComponentContext > xCtx;
+    uno::Reference< util::XMacroExpander > xExpander;
+    uno::Reference< XPropertySet > xPropSet( mxFactory, UNO_QUERY );
+    const rtl::OUString aPrefix(
+        RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.expand:" ) );
+
+    if ( xPropSet.is() )
+    {
+        xPropSet->getPropertyValue(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) )
+            >>= xCtx;
+    }
+
+    if ( xCtx.is() )
+    {
+        xCtx->getValueByName(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                               "/singletons/com.sun.star.util.theMacroExpander" ) ) )
+            >>= xExpander;
+
+        OSL_ENSURE( xExpander.is(),
+                    "Unable to obtain macro expander singleton!" );
+    }
+
     for ( sal_uInt16 i=0; i<nCount; i++ )
     {
         aURL.SetSmartProtocol( INET_PROT_FILE );
         aURL.SetURL( aDirs.GetToken( i, C_DELIM ) );
         maTemplateDirs[i] = aURL.GetMainURL( INetURLObject::NO_DECODE );
+
+        sal_Int32 nIndex = maTemplateDirs[i].indexOf( aPrefix );
+        if ( nIndex != -1 && xExpander.is() )
+        {
+            maTemplateDirs[i] = maTemplateDirs[i].replaceAt(nIndex,
+                                                            aPrefix.getLength(),
+                                                            rtl::OUString());
+            maTemplateDirs[i] = xExpander->expandMacros( maTemplateDirs[i] );
+        }
     }
 
     aValue <<= maTemplateDirs;
