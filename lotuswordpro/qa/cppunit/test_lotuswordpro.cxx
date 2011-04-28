@@ -66,11 +66,11 @@ namespace
         uno::Reference<lang::XMultiServiceFactory> m_xMSF;
         uno::Reference<document::XFilter> m_xFilter;
 
-        ::rtl::OUString m_aPWDURL;
+        ::rtl::OUString m_aSrcRoot;
         int m_nLoadedDocs;
     };
 
-    LotusWordProTest::LotusWordProTest() : m_nLoadedDocs(0)
+    LotusWordProTest::LotusWordProTest() : m_aSrcRoot( RTL_CONSTASCII_USTRINGPARAM( "file://" ) ), m_nLoadedDocs(0)
     {
         m_xContext = cppu::defaultBootstrap_InitialComponentContext();
         m_xFactory = m_xContext->getServiceManager();
@@ -79,8 +79,10 @@ namespace
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Writer.LotusWordProImportFilter"))),
             uno::UNO_QUERY_THROW);
 
-        oslProcessError err = osl_getProcessWorkingDir(&m_aPWDURL.pData);
-        CPPUNIT_ASSERT_MESSAGE("no PWD!", err == osl_Process_E_None);
+        const char* pSrcRoot = getenv( "SRC_ROOT" );
+        CPPUNIT_ASSERT_MESSAGE("SRC_ROOT env variable not set", pSrcRoot != NULL && pSrcRoot[0] != 0);
+
+        m_aSrcRoot += rtl::OUString::createFromAscii( pSrcRoot );
 
         //Without this we're crashing because callees are using
         //getProcessServiceFactory.  In general those should be removed in favour
@@ -141,8 +143,8 @@ namespace
 
     void LotusWordProTest::test()
     {
-        recursiveScan(m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/qa/cppunit/data/pass")), true);
-        recursiveScan(m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/qa/cppunit/data/fail/")), false);
+        recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/lotuswordpro/qa/cppunit/data/pass")), true);
+        recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/lotuswordpro/qa/cppunit/data/fail/")), false);
 
         printf("LotusWordPro: tested %d files\n", m_nLoadedDocs);
     }
