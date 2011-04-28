@@ -70,11 +70,11 @@ my ( $BIG_SVX, $COM, $ARCH, $CPU, $CPUNAME, $CVER, $GLIBC, $GUI, $GUIBASE,
 my ( $USR, $ETC, $BIN, $LIB, $LIB64, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV, $SOLVER, $CONFIG, $DEFIMGS,
      $USR_BIN, $USR_LIB, $USR_LOCAL, $USR_CCS, $JAVA_BIN, $JAVA_LIB, $JAVA_INCLUDE,
      $SOLARENVINC, $USR_DT, $USR_OPENWIN, $XLIB, $XINC,
-     $CYGWIN_PATH, $language, $dict, $ASM_PATH, $NSIS_PATH, $PERL_PATH, $CL_X64 );
+     $CYGWIN_PATH, $language, @languages, $ASM_PATH, $NSIS_PATH, $PERL_PATH, $CL_X64 );
 
 # Environment variables.
 my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
-     $L10N_MODULE,
+     $L10N_MODULE, $WITH_POOR_HELP_LOCALIZATIONS,
      $UPD, $WORK_STAMP, $gb_REPOS, $BUILD_TYPE,
      $SOLARSRC, $DEVROOT, $SOLARVER, $SOLARVERSION, $WORKDIR, $OUTDIR, $SOLARENV, $SOLARDEFIMG,
      $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI,
@@ -1066,6 +1066,20 @@ $XCLASSPATH           = '$JAVA_HOME'.$ds.'jre'.$LIB.$ds."rt.jar".$wps.'.';
 # Location of the translations module
 $L10N_MODULE = PathFormat($SRC_ROOT."/translations");
 
+# Check for poor help localizations, i.e. no help translation at all...
+opendir(DIR,$L10N_MODULE . "/source");
+@languages = readdir(DIR);
+closedir(DIR);
+$WITH_POOR_HELP_LOCALIZATIONS = "";
+
+foreach $language (@languages)
+{
+    if ( ($language ne ".") && ($language ne "..") && (! -d $L10N_MODULE . "/source/" . $language . "/helpcontent2") )
+    {
+        $WITH_POOR_HELP_LOCALIZATIONS = $WITH_POOR_HELP_LOCALIZATIONS . " " . $language;
+    }
+}
+
 # Location used by the linker to create libraries.
 if ($platform =~ m/solaris/)
 {  $SOLAREXTRALIB     = $L.$par_dir.$LIB.
@@ -1579,7 +1593,7 @@ ToFile( "INTRO_BITMAP",      "@INTRO_BITMAP@",   "e" );
 ToFile( "ABOUT_BITMAP",      "@ABOUT_BITMAP@",   "e" );
 ToFile( "OOO_VENDOR",        "@OOO_VENDOR@",     "e" );
 ToFile( "OOODMAKEMODE",      "YES",              "e" );
-ToFile( "WITH_POOR_HELP_LOCALIZATIONS", "@WITH_POOR_HELP_LOCALIZATIONS@", "e" );
+ToFile( "WITH_POOR_HELP_LOCALIZATIONS", $WITH_POOR_HELP_LOCALIZATIONS, "e" );
 
 ToFile( "CALL_CDECL",        $CALL_CDECL,        "e" );
 ToFile( "COMMON_OUTDIR",     $COMMON_OUTDIR,     "e" );
