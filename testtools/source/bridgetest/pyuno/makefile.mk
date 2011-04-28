@@ -56,7 +56,7 @@ PYTHONPATH:=$(SOLARLIBDIR)$/pyuno:$(PWD):$(SOLARLIBDIR):$(SOLARLIBDIR)$/python:$
 .ENDIF                  # "$(GUI)"=="WNT"
 .EXPORT: PYTHONPATH
 
-.IF "$(GUI)"!="WNT" && "$(GUI)"!="OS2"
+.IF "$(GUI)"!="WNT"
 TEST_ENV=export FOO=file://$(shell @pwd)$/$(DLLDEST) \
     UNO_TYPES=uno_types.rdb UNO_SERVICES=pyuno_services.rdb
 .ELSE # "$(GUI)" != "WNT"

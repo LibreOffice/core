@@ -42,11 +42,6 @@ BATCH_SUFFIX=.bat
 GIVE_EXEC_RIGHTS=@echo
 MY_URE_INTERNAL_JAVA_DIR=$(strip $(subst,\,/ file:///$(shell @$(WRAPCMD) echo $(SOLARBINDIR))))
 MY_LOCAL_CLASSDIR=$(strip $(subst,\,/ file:///$(shell $(WRAPCMD) echo $(PWD)/$(CLASSDIR)/)))
-.ELIF "$(GUI)"=="OS2"
-BATCH_SUFFIX=.cmd
-GIVE_EXEC_RIGHTS=@echo
-MY_URE_INTERNAL_JAVA_DIR=$(strip $(subst,\,/ file:///$(shell @$(WRAPCMD) echo $(SOLARBINDIR))))
-MY_LOCAL_CLASSDIR=$(strip $(subst,\,/ file:///$(shell $(WRAPCMD) echo $(PWD)/$(CLASSDIR)/)))
 .ELSE
 GIVE_EXEC_RIGHTS=chmod +x 
 MY_URE_INTERNAL_JAVA_DIR=file://$(SOLARBINDIR)
