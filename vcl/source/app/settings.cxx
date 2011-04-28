@@ -749,6 +749,21 @@ void StyleSettings::SetPreferredSymbolsStyleName( const ::rtl::OUString &rName )
     }
 }
 
+void StyleSettings::SetCheckedColorSpecialCase( )
+{
+    CopyData();
+    // Light gray checked color special case
+    if ( GetFaceColor() == COL_LIGHTGRAY )
+        mpData->maCheckedColor = Color( 0xCC, 0xCC, 0xCC );
+    else
+    {
+        sal_uInt8 nRed   = (sal_uInt8)(((sal_uInt16)mpData->maFaceColor.GetRed()   + (sal_uInt16)mpData->maLightColor.GetRed())/2);
+        sal_uInt8 nGreen = (sal_uInt8)(((sal_uInt16)mpData->maFaceColor.GetGreen() + (sal_uInt16)mpData->maLightColor.GetGreen())/2);
+        sal_uInt8 nBlue  = (sal_uInt8)(((sal_uInt16)mpData->maFaceColor.GetBlue()  + (sal_uInt16)mpData->maLightColor.GetBlue())/2);
+        mpData->maCheckedColor = Color( nRed, nGreen, nBlue );
+    }
+}
+
 // -----------------------------------------------------------------------
 
 sal_uLong StyleSettings::GetCurrentSymbolsStyle() const

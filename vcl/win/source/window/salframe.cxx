@@ -2941,19 +2941,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
         pSVData->maNWFData.maMenuBarHighlightTextColor = aStyleSettings.GetMenuTextColor();
         GetSalData()->mbThemeMenuSupport = TRUE;
     }
-    // Bei hellgrau geben wir die Farbe vor, damit es besser aussieht
-    if ( aStyleSettings.GetFaceColor() == COL_LIGHTGRAY )
-        aStyleSettings.SetCheckedColor( Color( 0xCC, 0xCC, 0xCC ) );
-    else
-    {
-        // Checked-Color berechnen
-        Color   aColor1 = aStyleSettings.GetFaceColor();
-        Color   aColor2 = aStyleSettings.GetLightColor();
-        BYTE    nRed    = (BYTE)(((sal_uInt16)aColor1.GetRed()   + (sal_uInt16)aColor2.GetRed())/2);
-        BYTE    nGreen  = (BYTE)(((sal_uInt16)aColor1.GetGreen() + (sal_uInt16)aColor2.GetGreen())/2);
-        BYTE    nBlue   = (BYTE)(((sal_uInt16)aColor1.GetBlue()  + (sal_uInt16)aColor2.GetBlue())/2);
-        aStyleSettings.SetCheckedColor( Color( nRed, nGreen, nBlue ) );
-    }
+    aStyleSettings.SetCheckedColorSpecialCase( );
 
     // caret width
     DWORD nCaretWidth = 2;

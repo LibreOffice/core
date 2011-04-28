@@ -226,17 +226,7 @@ void CDEIntegrator::GetSystemLook( AllSettings& rSettings )
         aStyleSettings.SetDialogColor( aColors[1] );
         aStyleSettings.SetMenuColor( aColors[1] );
         aStyleSettings.SetMenuBarColor( aColors[1] );
-        if ( aStyleSettings.GetFaceColor() == COL_LIGHTGRAY )
-            aStyleSettings.SetCheckedColor( Color( 0xCC, 0xCC, 0xCC ) );
-        else
-        {
-            // calculate Checked color
-            Color   aColor2 = aStyleSettings.GetLightColor();
-            sal_uInt8    nRed    = (sal_uInt8)(((sal_uInt16)aColors[1].GetRed()   + (sal_uInt16)aColor2.GetRed())/2);
-            sal_uInt8    nGreen  = (sal_uInt8)(((sal_uInt16)aColors[1].GetGreen() + (sal_uInt16)aColor2.GetGreen())/2);
-            sal_uInt8    nBlue   = (sal_uInt8)(((sal_uInt16)aColors[1].GetBlue()  + (sal_uInt16)aColor2.GetBlue())/2);
-            aStyleSettings.SetCheckedColor( Color( nRed, nGreen, nBlue ) );
-        }
+        aStyleSettings.SetCheckedColorSpecialCase( );
     }
     rSettings.SetStyleSettings( aStyleSettings );
 }

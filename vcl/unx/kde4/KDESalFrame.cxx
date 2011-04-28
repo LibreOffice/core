@@ -263,18 +263,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     style.SetFaceColor( aBack );
     style.SetInactiveTabColor( aBack );
     style.SetDialogColor( aBack );
-
-    if( aBack == COL_LIGHTGRAY )
-        style.SetCheckedColor( Color( 0xCC, 0xCC, 0xCC ) );
-    else
-    {
-        Color aColor2 = style.GetLightColor();
-        style.
-            SetCheckedColor( Color( (sal_uInt8)(((sal_uInt16)aBack.GetRed()+(sal_uInt16)aColor2.GetRed())/2),
-                        (sal_uInt8)(((sal_uInt16)aBack.GetGreen()+(sal_uInt16)aColor2.GetGreen())/2),
-                        (sal_uInt8)(((sal_uInt16)aBack.GetBlue()+(sal_uInt16)aColor2.GetBlue())/2)
-                        ) );
-    }
+    style.SetCheckedColorSpecialCase( );
 
     // Selection
     style.SetHighlightColor( aHigh );

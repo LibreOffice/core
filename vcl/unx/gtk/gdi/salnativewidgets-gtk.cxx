@@ -3306,19 +3306,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetWorkspaceColor( aBackColor );
     aStyleSet.SetFieldColor( aBackFieldColor );
     aStyleSet.SetWindowColor( aBackFieldColor );
-//    aStyleSet.SetHelpColor( aBackColor );
-    // ancient wisdom tells us a mystic algorithm how to set checked color
-    if( aBackColor == COL_LIGHTGRAY )
-        aStyleSet.SetCheckedColor( Color( 0xCC, 0xCC, 0xCC ) );
-    else
-    {
-        Color aColor2 = aStyleSet.GetLightColor();
-        Color aCheck( (sal_uInt8)(((sal_uInt16)aBackColor.GetRed()+(sal_uInt16)aColor2.GetRed())/2),
-                      (sal_uInt8)(((sal_uInt16)aBackColor.GetGreen()+(sal_uInt16)aColor2.GetGreen())/2),
-                      (sal_uInt8)(((sal_uInt16)aBackColor.GetBlue()+(sal_uInt16)aColor2.GetBlue())/2)
-                      );
-        aStyleSet.SetCheckedColor( aCheck );
-    }
+    aStyleSet.SetCheckedColorSpecialCase( );
 
     // highlighting colors
     Color aHighlightColor = getColor( pStyle->base[GTK_STATE_SELECTED] );

@@ -527,6 +527,7 @@ public:
     Color                           GetSeparatorColor() const;
     void                            SetCheckedColor( const Color& rColor )
                                         { CopyData(); mpData->maCheckedColor = rColor; }
+    void                            SetCheckedColorSpecialCase( );
     const Color&                    GetCheckedColor() const
                                         { return mpData->maCheckedColor; }
     void                            SetLightColor( const Color& rColor )
