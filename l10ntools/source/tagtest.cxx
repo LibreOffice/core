@@ -953,7 +953,6 @@ void TokenParser::Paragraph()
                 Paragraph();
             }
             break;
-        case TAG_OS2:
         case TAG_WIN:
         case TAG_UNIX:
         case TAG_MAC: //...
@@ -1016,7 +1015,6 @@ void TokenParser::PfCase()
                 CaseEnd();
             }
             break;
-        case TAG_OS2:
         case TAG_WIN:
         case TAG_UNIX:
         case TAG_MAC: //First (PfBegin)
@@ -1035,7 +1033,6 @@ void TokenParser::PfCaseBegin()
 {
     switch ( aTag.nId )
     {
-        case TAG_OS2:
         case TAG_WIN:
         case TAG_UNIX:
         case TAG_MAC:

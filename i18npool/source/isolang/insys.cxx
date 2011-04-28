@@ -33,7 +33,7 @@
 
 #include "inwnt.cxx"
 
-#elif defined( UNX ) || defined( OS2 )
+#elif defined( UNX )
 
 #include "inunx.cxx"
 

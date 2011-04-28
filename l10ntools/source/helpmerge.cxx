@@ -470,7 +470,7 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
 
     if( !Export::CopyFile( sTempFile , sTempFileCopy ) )
     {
-#if defined(UNX) || defined(OS2)
+#if defined(UNX)
         sleep( 3 );
 #else
         Sleep( 3 );
@@ -488,7 +488,7 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
         remove( sTargetFile.GetBuffer() );
     }
     int rc;
-#if defined(UNX) || defined(OS2)
+#if defined(UNX)
     rc = rename( sTempFile.GetBuffer() , sTargetFile.GetBuffer() );
 #else
     rc = MoveFileEx( sTempFile.GetBuffer() , sTargetFile.GetBuffer(), MOVEFILE_REPLACE_EXISTING );
@@ -504,7 +504,7 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
 //    if( aFS.GetSize() < 1 )
 //#endif
     {
-#if defined(UNX) || defined(OS2)
+#if defined(UNX)
         sleep( 3 );
 #else
         Sleep( 3 );
@@ -514,7 +514,7 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
         {
             remove( sTargetFile.GetBuffer() );
         }
-#if defined(UNX) || defined(OS2)
+#if defined(UNX)
         rc = rename( sTempFileCopy.GetBuffer() , sTargetFile.GetBuffer() );
 #else
         rc = MoveFileEx( sTempFileCopy.GetBuffer() , sTargetFile.GetBuffer() , MOVEFILE_REPLACE_EXISTING );

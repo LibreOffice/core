@@ -55,7 +55,7 @@ EXCEPTIONSNOOPTFILES= \
 SHL1TARGET= $(TARGET)
 SHL1OBJS=	$(SLOFILES)
 
-.IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
+.IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC")
 I18NREGEXPLIB=-li18nregexp$(COMID)
 .ELSE
 I18NREGEXPLIB=ii18nregexp.lib

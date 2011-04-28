@@ -690,7 +690,7 @@ DirEntry Export::GetTempFile()
     String sDecodedStr = INetURLObject::decode( strTmp , '%' , eMechanism );
     ByteString sTmp( sDecodedStr , RTL_TEXTENCODING_UTF8 );
 
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
     sTmp.SearchAndReplace("file:///","");
     sTmp.SearchAndReplaceAll('/','\\');
 #else

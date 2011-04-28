@@ -201,7 +201,7 @@ void Help()
 /*****************************************************************************/
 #ifndef TESTDRIVER
 
-#if defined(UNX) || defined(OS2)
+#if defined(UNX)
 int main( int argc, char *argv[] )
 #else
 int _cdecl main( int argc, char *argv[] )

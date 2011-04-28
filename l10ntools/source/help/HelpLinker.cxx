@@ -486,10 +486,8 @@ void HelpLinker::link() throw( HelpProcessingException )
 
     if( !bExtensionMode )
     {
-#ifndef OS2 // YD @TODO@ crashes libc runtime :-(
         std::cout << "Making " << outputFile.native_file_string() <<
             " from " << helpFiles.size() << " input files" << std::endl;
-#endif
     }
 
     // here we start our loop over the hzip files.
@@ -1060,9 +1058,7 @@ int main(int argc, char**argv)
         exit(1);
     }
     sal_uInt32 endtime = osl_getGlobalTimer();
-#ifndef OS2 // YD @TODO@ crashes libc runtime :-(
     std::cout << "time taken was " << (endtime-starttime)/1000.0 << " seconds" << std::endl;
-#endif
     return 0;
 }
 

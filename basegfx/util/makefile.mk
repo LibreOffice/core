@@ -52,9 +52,6 @@ LIB1FILES=\
     $(SLB)$/raster.lib
 
 SHL1TARGET= basegfx$(DLLPOSTFIX)
-.IF "$(GUI)" == "OS2"
-SHL1TARGET= bgfx
-.ENDIF
 SHL1IMPLIB= ibasegfx
 
 SHL1STDLIBS=\

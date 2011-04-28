@@ -346,7 +346,7 @@ void SourceTreeLocalizer::WorkOnFile(
             ByteString sTempFile( aTemp.GetFull(), RTL_TEXTENCODING_ASCII_US );
 
             ByteString sDel;
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
             sDel=ByteString("\\");
 #else
             sDel=ByteString("/");
@@ -355,7 +355,7 @@ void SourceTreeLocalizer::WorkOnFile(
             ByteString sPath2( Export::GetEnv("INPATH") );
             ByteString sPath3( "bin" );
             ByteString sExecutable( sPath1 );
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
             sExecutable.SearchAndReplaceAll( "/", sDel );
 #endif
             sExecutable += sDel ;
@@ -876,7 +876,7 @@ sal_Bool CheckLanguages( ByteString &rLanguages )
 }
 
 /*****************************************************************************/
-#if defined(UNX) || defined(OS2)
+#if defined(UNX)
 int main( int argc, char *argv[] )
 #else
 int _cdecl main( int argc, char *argv[] )

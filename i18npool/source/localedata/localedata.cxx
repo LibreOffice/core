@@ -52,17 +52,10 @@ typedef sal_Unicode***  (SAL_CALL * MyFunc_Type2)( sal_Int16&, sal_Int16& );
 typedef sal_Unicode**** (SAL_CALL * MyFunc_Type3)( sal_Int16&, sal_Int16&, sal_Int16& );
 typedef sal_Unicode const * const * (SAL_CALL * MyFunc_FormatCode)( sal_Int16&, sal_Unicode const *&, sal_Unicode const *& );
 
-#ifdef OS2 // YD 8.3!!
-static const char *lcl_DATA_EN = "ld_en";
-static const char *lcl_DATA_ES = "ld_es";
-static const char *lcl_DATA_EURO = "ld_eur";
-static const char *lcl_DATA_OTHERS = "ld_oth";
-#else
 static const char *lcl_DATA_EN = "localedata_en";
 static const char *lcl_DATA_ES = "localedata_es";
 static const char *lcl_DATA_EURO = "localedata_euro";
 static const char *lcl_DATA_OTHERS = "localedata_others";
-#endif
 
 static const struct {
     const char* pLocale;

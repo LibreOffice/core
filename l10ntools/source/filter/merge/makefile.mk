@@ -65,7 +65,7 @@ JARCOMPRESS     =   TRUE
 
 .INCLUDE :  target.mk
 
-.IF "$(SOLAR_JAVA)" != "" || "$(GUI)"=="OS2"
+.IF "$(SOLAR_JAVA)" != ""
 ALLTAR : $(OWNCOPY)
 
 .IF "$(JARTARGETN)" != ""

@@ -29,9 +29,6 @@ PRJ=..$/..$/..
 
 PRJNAME=i18npool
 TARGET=localedata
-.IF "$(GUI)" == "OS2"
-TARGET=ld
-.ENDIF
 LIBTARGET=NO
 
 # Disable debugging on MSC compilers, due linker bug
@@ -60,10 +57,6 @@ LINK_LOCALEDATA_ES_LIB=-l$(SHL2TARGET)
 LINK_LOCALEDATA_EN_LIB=$(LB)$/i$(SHL1TARGET).lib
 LINK_LOCALEDATA_ES_LIB=$(LB)$/i$(SHL2TARGET).lib
 .ENDIF
-.ELIF "$(GUI)" == "OS2"
-LINK_LOCALEDATA_EN_LIB=$(LB)$/i$(SHL1TARGET).lib
-LINK_LOCALEDATA_ES_LIB=$(LB)$/i$(SHL2TARGET).lib
-.ELSE
 LINK_LOCALEDATA_EN_LIB=-l$(SHL1TARGET)
 LINK_LOCALEDATA_ES_LIB=-l$(SHL2TARGET)
 .ENDIF
@@ -72,9 +65,6 @@ LINK_LOCALEDATA_ES_LIB=-l$(SHL2TARGET)
 
 # English Locales
 SHL1TARGET=localedata_en
-.IF "$(GUI)" == "OS2"
-SHL1TARGET=ld_en
-.ENDIF
 SHL1IMPLIB=i$(SHL1TARGET)
 
 SHL1VERSIONMAP=localedata_en.map
@@ -102,9 +92,6 @@ LIB1OBJFILES=$(SHL1OBJS)
 
 # Spanish Locales
 SHL2TARGET=localedata_es
-.IF "$(GUI)" == "OS2"
-SHL2TARGET=ld_es
-.ENDIF
 SHL2IMPLIB=i$(SHL2TARGET)
 
 SHL2VERSIONMAP=localedata_es.map
@@ -140,9 +127,6 @@ LIB2OBJFILES=$(SHL2OBJS)
 
 # European Locales
 SHL3TARGET=localedata_euro
-.IF "$(GUI)" == "OS2"
-SHL3TARGET=ld_eur
-.ENDIF
 SHL3IMPLIB=i$(SHL3TARGET)
 
 SHL3VERSIONMAP=localedata_euro.map
@@ -229,9 +213,6 @@ LIB3OBJFILES=$(SHL3OBJS)
 
 # Other Locales
 SHL4TARGET=localedata_others
-.IF "$(GUI)" == "OS2"
-SHL4TARGET=ld_oth
-.ENDIF
 SHL4IMPLIB=i$(SHL4TARGET)
 
 SHL4VERSIONMAP=localedata_others.map
