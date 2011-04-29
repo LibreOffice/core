@@ -71,10 +71,17 @@ $(eval $(call gb_Library_add_linked_libs,oox,\
     ssl \
 ))
 else
+ifeq ($(OS),WNT)
+$(eval $(call gb_Library_add_linked_static_libs,oox,\
+    libeay32 \
+    ssleay32 \
+))
+else
 $(eval $(call gb_Library_add_linked_static_libs,oox,\
     crypto \
     ssl \
 ))
+endif
 endif
 
 $(eval $(call gb_Library_set_ldflags,oox,\
