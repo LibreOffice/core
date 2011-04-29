@@ -34,7 +34,7 @@
 #include <sfx2/fcontnr.hxx>
 #include <osl/endian.h>
 #include <tools/string.hxx>
-#include <swdllapi.h>
+#include <swddllapi.h>
 
 #define FILTER_RTF      "RTF"       // RTF filter
 #define sRtfWH          "WH_RTF"
@@ -86,7 +86,7 @@ enum ReaderWriterEnum {
     MAXFILTER
 };
 
-extern SwIoDetect aFilterDetect[];
+extern SWD_DLLPUBLIC SwIoDetect aFilterDetect[];
 
 // The following class is a wrapper for basic i/o functions of Writer 3.0.
 // Everything is static. All filter names mentioned are Writer-internal
@@ -97,13 +97,13 @@ class SwIoSystem
 {
 public:
     // find for an internal format name the corresponding filter entry
-    SW_DLLPUBLIC static const SfxFilter* GetFilterOfFormat( const String& rFormat,
+    SWD_DLLPUBLIC static const SfxFilter* GetFilterOfFormat( const String& rFormat,
             const SfxFilterContainer* pCnt = 0 );
 
     // Detect for the given file which filter should be used. The filter name
     // is returned. If no filter could be found, the name of the ASCII filter
     // is returned!
-    static const SfxFilter* GetFileFilter( const String& rFileName,
+    SWD_DLLPUBLIC static const SfxFilter* GetFileFilter( const String& rFileName,
             const String& rPrefFltName,
             SfxMedium* pMedium = 0 );
 
@@ -115,12 +115,12 @@ public:
     static sal_Bool IsValidStgFilter( SotStorage& , const SfxFilter& );
     static sal_Bool IsValidStgFilter( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const SfxFilter& rFilter);
 
-    static bool IsDetectableText( const sal_Char* pBuf, sal_uLong &rLen,
+    SWD_DLLPUBLIC static bool IsDetectableText( const sal_Char* pBuf, sal_uLong &rLen,
             CharSet *pCharSet=0, bool *pSwap=0, LineEnd *pLineEnd=0, bool bEncodedFilter = false );
 
     static const SfxFilter* GetTextFilter( const sal_Char* pBuf, sal_uLong nLen );
 
-    static const String GetSubStorageName( const SfxFilter& rFltr );
+    SWD_DLLPUBLIC static const String GetSubStorageName( const SfxFilter& rFltr );
 };
 
 #endif

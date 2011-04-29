@@ -43,6 +43,7 @@ $(eval $(call gb_Library_set_include,swd,\
 
 $(eval $(call gb_Library_set_defs,swd,\
     $$(DEFS) \
+    -DSWD_DLLIMPLEMENTATION \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,swd,\

@@ -73,6 +73,7 @@ $(eval $(call gb_Library_add_linked_libs,sw,\
     svt \
     svx \
     svxcore \
+    swd \
     tk \
     tl \
     ucbhelper \
@@ -472,7 +473,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/filter/ascii/wrtasc \
     sw/source/filter/basflt/docfact \
     sw/source/filter/basflt/fltini \
-    sw/source/filter/basflt/iodetect \
     sw/source/filter/basflt/shellio \
     sw/source/filter/html/SwAppletImpl \
     sw/source/filter/html/css1atr \

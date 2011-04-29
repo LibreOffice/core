@@ -59,6 +59,7 @@ $(eval $(call gb_Library_add_linked_libs,swui,\
     svx \
     svxcore \
     sw \
+    swd \
     tk \
     tl \
     ucbhelper \
