@@ -6869,8 +6869,8 @@ sal_Bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, 
             pGrStream = pOut;
         }
 
-#ifdef DBG_EXTRACTGRAPHICS
-
+#if OSL_DEBUG_LEVEL > 2
+        // extract graphics from ole storage into "dbggfxNNN.*"
         static sal_Int32 nCount;
 
         String aFileName( String( RTL_CONSTASCII_STRINGPARAM( "dbggfx" ) ) );
@@ -6886,7 +6886,6 @@ sal_Bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, 
         }
 
         String aURLStr;
-
         if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( Application::GetAppFileName(), aURLStr ) )
         {
             INetURLObject aURL( aURLStr );
@@ -7498,6 +7497,17 @@ com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >  SvxMS
                 pFilter = aMatch.GetFilter4EA( aType );
         }
 
+#if OSL_DEBUG_LEVEL > 2
+        // extract embedded ole streams into "/tmp/embedded_stream_NNN"
+        static sal_Int32 nCount(0);
+        String aTmpName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("/tmp/embedded_stream_")));
+        aTmpName += String::CreateFromInt32(nCount++);
+        aTmpName += String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(".bin"));
+        SvFileStream aTmpStream(aTmpName,STREAM_READ|STREAM_WRITE|STREAM_TRUNC);
+        pStream->Seek(0);
+        *pStream >> aTmpStream;
+        aTmpStream.Close();
+#endif
         if ( pName || pFilter )
         {
             //Reuse current ole name
