@@ -68,7 +68,7 @@ String SV_BUTTONTEXT_MORE
 
 String SV_BUTTONTEXT_LESS
 {
-    Text [ en-US ] = "~More";
+    Text [ en-US ] = "~Less";
 };
 
 String SV_BUTTONTEXT_IGNORE
