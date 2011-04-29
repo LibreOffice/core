@@ -170,6 +170,8 @@ $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     crypto \
+    libeay32 \
+    ssleay32 \
     jpeglib \
     ooopathutils \
     salcpprt \
