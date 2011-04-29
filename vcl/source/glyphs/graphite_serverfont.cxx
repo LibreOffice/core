@@ -37,9 +37,10 @@
 
 // Platform
 #include <i18npool/mslangid.hxx>
+#include <sallayout.hxx>
 // Module
 #include "gcach_ftyp.hxx"
-#include <vcl/glyphcache.hxx>
+#include <glyphcache.hxx>
 #include <graphite_features.hxx>
 //#include "graphite_textsrc.hxx"
 #include <graphite_serverfont.hxx>

@@ -31,10 +31,8 @@
 
 #include "rtl/logfile.hxx"
 
-#include "osl/file.hxx"
-
-#include "vos/signal.hxx"
-#include "vos/process.hxx"
+#include <osl/file.hxx>
+#include <osl/signal.h>
 
 #include "tools/tools.h"
 #include "tools/debug.hxx"

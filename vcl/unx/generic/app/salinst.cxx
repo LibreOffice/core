@@ -35,8 +35,6 @@
 
 #include "osl/module.hxx"
 #include "tools/solarmutex.hxx"
-#include "vos/mutex.hxx"
-
 
 #include "unx/salunx.h"
 #include "unx/saldata.hxx"

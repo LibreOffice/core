@@ -1189,7 +1189,7 @@ void OutputDevice::ImplDraw2ColorFrame( const Rectangle& rRect,
 bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
                             const GfxLink& rGfxLink, GDIMetaFile* pSubst )
 {
-    DBG_TRACE( "OutputDevice::DrawEPS()" );
+    OSL_TRACE( "OutputDevice::DrawEPS()" );
 
     bool bDrawn(true);
 
@@ -1245,9 +1245,11 @@ bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
 }
 
 // ------------------------------------------------------------------
+
+void OutputDevice::DrawRenderGraphic( const Point& rPoint, const Size& rSize,
                                       const ::vcl::RenderGraphic& rRenderGraphic )
 {
-    DBG_TRACE( "OutputDevice::DrawRenderGraphic()" );
+    OSL_TRACE( "OutputDevice::DrawRenderGraphic()" );
 
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaRenderGraphicAction( rPoint, rSize, rRenderGraphic ) );
@@ -1263,5 +1265,6 @@ bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
         DrawBitmapEx( rPoint, rSize, aRasterizer.Rasterize( aSizePixel ) );
         mpMetaFile = pOldMetaFile;
     }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

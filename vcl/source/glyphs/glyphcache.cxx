@@ -32,13 +32,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-
+#include <vcl/salbtype.hxx>
 #include <gcach_ftyp.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/bitmap.hxx>
-#include <vcl/salbtype.hxx>
-
 #include <outfont.hxx>
 
 #ifdef ENABLE_GRAPHITE

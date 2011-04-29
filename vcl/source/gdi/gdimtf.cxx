@@ -37,18 +37,20 @@
 #include <vcl/window.hxx>
 #include <vcl/cvtsvm.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/salbmp.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/svdata.hxx>
-#include <vcl/salinst.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/graphictools.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/unohelp.hxx>
 
+#include <salbmp.hxx>
+#include <salinst.hxx>
+#include <svdata.hxx>
+
 #include <com/sun/star/beans/XFastPropertySet.hpp>
-#include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/MtfRenderer.hpp>
+#include <com/sun/star/rendering/XBitmapCanvas.hpp>
+#include <com/sun/star/rendering/XCanvas.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>

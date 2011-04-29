@@ -36,7 +36,7 @@
 
 #include <vcl/button.hxx>
 #include <vcl/btndlg.hxx>
-#include <vcl/svdata.hxx>
+
 typedef boost::ptr_vector<ImplBtnDlgItem>::iterator btn_iterator;
 typedef boost::ptr_vector<ImplBtnDlgItem>::const_iterator btn_const_iterator;
 

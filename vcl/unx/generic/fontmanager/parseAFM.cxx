@@ -333,7 +333,7 @@ static char *linetoken( FileInputStream* stream )
  *
  *  The algorithm is a standard Knuth binary search.
  */
-#include "afm_hash.cpp"
+#include "afm_hash.hpp"
 
 static inline enum parseKey recognize( register char* ident, int len)
 {

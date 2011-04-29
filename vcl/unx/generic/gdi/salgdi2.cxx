@@ -46,7 +46,7 @@
 #include "printergfx.hxx"
 
 #include "vcl/bmpacc.hxx"
-#include "vcl/outdata.hxx"
+#include <outdata.hxx>
 
 #undef SALGDI2_TESTTRANS
 

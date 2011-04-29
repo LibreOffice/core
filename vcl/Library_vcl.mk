@@ -36,6 +36,7 @@ $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.unx))
 endif
 
 $(eval $(call gb_Library_add_package_headers,vcl,vcl_inc))
+$(eval $(call gb_Library_add_package_headers,vcl,vcl_afmhash))
 
 $(eval $(call gb_Library_set_include,vcl,\
     $$(INCLUDE) \
@@ -43,8 +44,8 @@ $(eval $(call gb_Library_set_include,vcl,\
     -I$(SRCDIR)/vcl/inc/pch \
     -I$(SRCDIR)/solenv/inc \
     -I$(OUTDIR)/inc/offuh \
-    -I$(OUTDIR)/inc/stl \
     -I$(OUTDIR)/inc \
+	-I$(WORKDIR)/CustomTarget/vcl/unx/generic/fontmanager \
 ))
 ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_set_cxxflags,vcl,\
@@ -74,10 +75,8 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
     i18npaper \
     i18nutil \
     jvmaccess \
-    stl \
     cppu \
     sal \
-    vos3 \
     $(gb_STDLIBS) \
 ))
 
@@ -251,6 +250,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/app/salvtables \
     vcl/source/app/session \
     vcl/source/app/settings \
+    vcl/source/app/solarmutex \
     vcl/source/app/sound \
     vcl/source/app/stdtext \
     vcl/source/app/svapp \
@@ -428,14 +428,11 @@ $(eval $(call gb_Library_set_defs,vcl,\
     -DENABLE_GRAPHITE \
 ))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/source/glyphs/graphite_cache \
     vcl/source/glyphs/graphite_features \
     vcl/source/glyphs/graphite_layout \
-    vcl/source/glyphs/graphite_textsrc \
 ))
 ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/source/glyphs/graphite_adaptors \
     vcl/source/glyphs/graphite_serverfont \
 ))
 ifeq ($(SYSTEM_GRAPHITE),YES)
@@ -445,7 +442,7 @@ $(eval $(call gb_Library_set_ldflags,vcl,\
 ))
 else
 $(eval $(call gb_Library_add_linked_static_libs,vcl,\
-    graphite \
+    graphite2_off \
 ))
 endif
 endif

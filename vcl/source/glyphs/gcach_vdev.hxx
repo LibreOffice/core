@@ -26,32 +26,35 @@
  *
  ************************************************************************/
 
-#ifndef _SVP_SVPPRN_HXX
-#define _SVP_SVPPRN_HXX
+#include <vcl/glyphcache.hxx>
 
-#include "vcl/jobdata.hxx"
+// -----------------------------------------------------------------------
 
-#include "printergfx.hxx"
-#include "printerjob.hxx"
-#include <unx/salprn.h>
-
-#include "vclpluginapi.h"
-
-class PspGraphics;
-
-class SvpSalInfoPrinter : public PspSalInfoPrinter
+class VirtDevServerFont : public ServerFont
 {
 public:
-    virtual sal_Bool                    Setup( SalFrame* pFrame, ImplJobSetup* pSetupData );
+    virtual bool                GetAntialiasAdvice( void ) const;
+    virtual bool                GetGlyphBitmap1( int nGlyphIndex, RawBitmap& ) const;
+    virtual bool                GetGlyphBitmap8( int nGlyphIndex, RawBitmap& ) const;
+    virtual bool                GetGlyphOutline( int nGlyphIndex, PolyPolygon& ) const;
+
+protected:
+    friend class GlyphCache;
+    static void                 AnnounceFonts( ImplDevFontList* );
+    static void                 ClearFontList();
+
+    static VirtDevServerFont*   CreateFont( const ImplFontSelectData& );
+    virtual void                FetchFontMetric( ImplFontMetricData&, long& rFactor ) const;
+    virtual sal_uLong               GetKernPairs( ImplKernPairData** ) const;
+    virtual int                 GetGlyphKernValue( int, int ) const;
+
+    virtual int                 GetGlyphIndex( sal_Unicode ) const;
+    virtual void                InitGlyphData( int nGlyphIndex, GlyphData& ) const;
+
+private:
+                                VirtDevServerFont( const ImplFontSelectData& );
 };
 
-class SvpSalPrinter : public PspSalPrinter
-{
-public:
-    SvpSalPrinter( SalInfoPrinter* pInfoPrinter ) : PspSalPrinter(pInfoPrinter) {}
-};
-
-#endif // _SVP_SVPPRN_HXX
-
+// -----------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

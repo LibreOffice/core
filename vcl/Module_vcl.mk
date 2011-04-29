@@ -40,6 +40,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Library_vclplug_gen \
     Library_vclplug_svp \
     Library_desktop_detector \
+	Package_afmhash \
 ))
 
 ifneq ($(ENABLE_GTK),)

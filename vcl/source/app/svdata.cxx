@@ -42,8 +42,6 @@
 
 #include "unotools/fontcfg.hxx"
 
-#include "vos/mutex.hxx"
-
 #include "cppuhelper/implbase1.hxx"
 
 #include "uno/current_context.hxx"

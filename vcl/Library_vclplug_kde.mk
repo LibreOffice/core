@@ -33,7 +33,6 @@ $(eval $(call gb_Library_set_include,vclplug_kde,\
     -I$(SRCDIR)/vcl/inc/pch \
     -I$(SRCDIR)/solenv/inc \
     -I$(OUTDIR)/inc/offuh \
-    -I$(OUTDIR)/inc/stl \
     -I$(OUTDIR)/inc \
 ))
 
@@ -68,10 +67,8 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_kde,\
     i18npaper \
     i18nutil \
     jvmaccess \
-    stl \
     cppu \
     sal \
-    vos3 \
     X11 \
     Xext \
     SM \
