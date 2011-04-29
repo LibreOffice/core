@@ -74,7 +74,6 @@ $(eval $(call gb_Library_add_exception_objects,sm,\
         starmath/source/dialog \
         starmath/source/document \
         starmath/source/edit \
-        starmath/source/eqnolefilehdr \
         starmath/source/format \
         starmath/source/mathmlexport \
         starmath/source/mathmlimport \
