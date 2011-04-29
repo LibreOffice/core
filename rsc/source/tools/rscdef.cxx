@@ -32,7 +32,6 @@
 
 // Programmuebergreifende Includes.
 #include <rscdef.hxx>
-#include <tools/list.hxx>
 
 /****************** C o d e **********************************************/
 /****************** R s c I d ********************************************/
@@ -876,7 +875,7 @@ sal_Bool RscFileTab::TestDef( sal_uLong lFileKey, size_t lPos,
     if( lFileKey == pDefDec->GetFileKey() ) {
         RscFile * pFile = GetFile( pDefDec->GetFileKey() );
         if( pFile && (lPos <= pFile->aDefLst.GetPos( (RscDefine *)pDefDec ))
-          && (lPos != LIST_APPEND) )
+          && (lPos != ULONG_MAX ) )
             return sal_False;
     }
     else if( !Depend( lFileKey, pDefDec->GetFileKey() ) )
@@ -1138,7 +1137,7 @@ sal_uLong  RscFileTab :: NewCodeFile( const ByteString & rName )
         pFName->aFileName = rName;
         pFName->aPathName = rName;
         lKey = Insert( pFName );
-        pFName->InsertDependFile( lKey, LIST_APPEND );
+        pFName->InsertDependFile( lKey, ULONG_MAX );
     }
     return lKey;
 }
@@ -1162,7 +1161,7 @@ sal_uLong  RscFileTab :: NewIncFile( const ByteString & rName,
         pFName->aPathName = rPath;
         pFName->SetIncFlag();
         lKey = Insert( pFName );
-        pFName->InsertDependFile( lKey, LIST_APPEND );
+        pFName->InsertDependFile( lKey, ULONG_MAX );
     }
     return lKey;
 }
