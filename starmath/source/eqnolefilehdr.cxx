@@ -33,30 +33,6 @@
 
 //////////////////////////////////////////////////////////////////////
 
-void EQNOLEFILEHDR::Read(SvStorageStream *pS)
-{
-    *pS >> nCBHdr;
-    *pS >> nVersion;
-    *pS >> nCf;
-    *pS >> nCBObject;
-    *pS >> nReserved1;
-    *pS >> nReserved2;
-    *pS >> nReserved3;
-    *pS >> nReserved4;
-}
-
-
-void EQNOLEFILEHDR::Write(SvStorageStream *pS)
-{
-    *pS << nCBHdr;
-    *pS << nVersion;
-    *pS << nCf;
-    *pS << nCBObject;
-    *pS << nReserved1;
-    *pS << nReserved2;
-    *pS << nReserved3;
-    *pS << nReserved4;
-}
 
 
 sal_Bool GetMathTypeVersion( SotStorage* pStor, sal_uInt8 &nVersion )

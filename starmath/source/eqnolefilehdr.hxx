@@ -54,8 +54,28 @@ public:
     sal_uInt32   nReserved3; // not used
     sal_uInt32   nReserved4; // not used
 
-    void Read(SvStorageStream *pS);
-    void Write(SvStorageStream *pS);
+    inline void Read(SvStorageStream *pS)
+    {
+        *pS >> nCBHdr;
+        *pS >> nVersion;
+        *pS >> nCf;
+        *pS >> nCBObject;
+        *pS >> nReserved1;
+        *pS >> nReserved2;
+        *pS >> nReserved3;
+        *pS >> nReserved4;
+    }
+    inline void Write(SvStorageStream *pS)
+    {
+        *pS << nCBHdr;
+        *pS << nVersion;
+        *pS << nCf;
+        *pS << nCBObject;
+        *pS << nReserved1;
+        *pS << nReserved2;
+        *pS << nReserved3;
+        *pS << nReserved4;
+    }
 };
 
 sal_Bool GetMathTypeVersion( SotStorage* pStor, sal_uInt8 &nVersion );
