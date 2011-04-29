@@ -477,6 +477,12 @@ AC_ARG_ENABLE(lomenubar,
 	[Enable global menu support.]),
 ,)
 
+AC_ARG_ENABLE(release-build,
+    AS_HELP_STRING([--enable-release-build],
+        [Enable release build.
+         See http://wiki.documentfoundation.org/DevBuild]),
+,)
+
 dnl ===================================================================
 dnl Optional Packages (--with/without-)
 dnl ===================================================================
@@ -7422,6 +7428,19 @@ else
   ENABLE_LOMENUBAR="TRUE"
 fi
 AC_SUBST(ENABLE_LOMENUBAR)
+
+dnl ===================================================================
+dnl Test whether build target is Release Build
+dnl ===================================================================
+AC_MSG_CHECKING([whether build target is Release Build])
+if test "z$enable_release_build" = "z" -o "z$enable_release_build" = "zno" ; then
+  AC_MSG_RESULT([no])
+  ENABLE_RELEASE_BUILD="FALSE"
+else
+  AC_MSG_RESULT([yes])
+  ENABLE_RELEASE_BUILD="TRUE"
+fi
+AC_SUBST(ENABLE_RELEASE_BUILD)
 
 dnl ===================================================================
 dnl Test whether to enable ActiveX embedding

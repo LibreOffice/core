@@ -1803,6 +1803,7 @@ ToFile( "VERBOSE",           "@VERBOSE@",          "e" );
 ToFile( "ENABLE_ZENITY",           "@ENABLE_ZENITY@",          "e" );
 ToFile( "ENABLE_EVOAB2",     "@ENABLE_EVOAB2@",    "e" );
 ToFile( "ENABLE_UGLY",       "@ENABLE_UGLY@",      "e" );
+ToFile( "ENABLE_RELEASE_BUILD", "@ENABLE_RELEASE_BUILD@", "e" );
 ToFile( "GOBJECT_CFLAGS",    "@GOBJECT_CFLAGS@",   "e" );
 ToFile( "GOBJECT_LIBS",      "@GOBJECT_LIBS@",     "e" );
 if ( '@ENABLE_RPATH@' eq "no" ) {
