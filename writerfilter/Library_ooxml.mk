@@ -160,23 +160,25 @@ define ooxml_namespace_headers
 $(foreach namespace,$(ooxml_NAMESPACES),$(call ooxml_factory_header,$(namespace)))
 endef
 
-ooxml_MODEL := $(SRCDIR)/writerfilter/source/ooxml/model.xml
+ooxml_BASEDIR := $(realpath $(SRCDIR)/writerfilter)
 
-ooxml_FACTORYIMPLNSXSL := $(SRCDIR)/writerfilter/source/ooxml/factoryimpl_ns.xsl
-ooxml_FACTORYIMPLXSL := $(SRCDIR)/writerfilter/source/ooxml/factoryimpl.xsl
-ooxml_FACTORYINCXSL := $(SRCDIR)/writerfilter/source/ooxml/factoryinc.xsl
-ooxml_FACTORYNSXSL := $(SRCDIR)/writerfilter/source/ooxml/factory_ns.xsl
-ooxml_FACTORYTOOLSXSL := $(SRCDIR)/writerfilter/source/ooxml/factorytools.xsl
-ooxml_FACTORYVALUESIMPLXSL := $(SRCDIR)/writerfilter/source/ooxml/factoryimpl_values.xsl
-ooxml_FACTORYVALUESXSL := $(SRCDIR)/writerfilter/source/ooxml/factory_values.xsl
-ooxml_FASTTOKENSXSL := $(SRCDIR)/writerfilter/source/ooxml/fasttokens.xsl
-ooxml_GPERFFASTTOKENXSL := $(SRCDIR)/writerfilter/source/ooxml/gperffasttokenhandler.xsl
-ooxml_NAMESPACEIDSXSL := $(SRCDIR)/writerfilter/source/ooxml/namespaceids.xsl
-ooxml_PREPROCESSXSL := $(SRCDIR)/writerfilter/source/ooxml/modelpreprocess.xsl
-ooxml_QNAMETOSTRXSL := $(SRCDIR)/writerfilter/source/ooxml/qnametostr.xsl
-ooxml_RESORUCETOKENSXSL := $(SRCDIR)/writerfilter/source/ooxml/resourcestokens.xsl
-ooxml_RESOURCEIDSXSL := $(SRCDIR)/writerfilter/source/ooxml/resourceids.xsl
-ooxml_RESOURCESIMPLXSL := $(SRCDIR)/writerfilter/source/ooxml/resourcesimpl.xsl
+ooxml_MODEL := $(ooxml_BASEDIR)/source/ooxml/model.xml
+
+ooxml_FACTORYIMPLNSXSL := $(ooxml_BASEDIR)/source/ooxml/factoryimpl_ns.xsl
+ooxml_FACTORYIMPLXSL := $(ooxml_BASEDIR)/source/ooxml/factoryimpl.xsl
+ooxml_FACTORYINCXSL := $(ooxml_BASEDIR)/source/ooxml/factoryinc.xsl
+ooxml_FACTORYNSXSL := $(ooxml_BASEDIR)/source/ooxml/factory_ns.xsl
+ooxml_FACTORYTOOLSXSL := $(ooxml_BASEDIR)/source/ooxml/factorytools.xsl
+ooxml_FACTORYVALUESIMPLXSL := $(ooxml_BASEDIR)/source/ooxml/factoryimpl_values.xsl
+ooxml_FACTORYVALUESXSL := $(ooxml_BASEDIR)/source/ooxml/factory_values.xsl
+ooxml_FASTTOKENSXSL := $(ooxml_BASEDIR)/source/ooxml/fasttokens.xsl
+ooxml_GPERFFASTTOKENXSL := $(ooxml_BASEDIR)/source/ooxml/gperffasttokenhandler.xsl
+ooxml_NAMESPACEIDSXSL := $(ooxml_BASEDIR)/source/ooxml/namespaceids.xsl
+ooxml_PREPROCESSXSL := $(ooxml_BASEDIR)/source/ooxml/modelpreprocess.xsl
+ooxml_QNAMETOSTRXSL := $(ooxml_BASEDIR)/source/ooxml/qnametostr.xsl
+ooxml_RESORUCETOKENSXSL := $(ooxml_BASEDIR)/source/ooxml/resourcestokens.xsl
+ooxml_RESOURCEIDSXSL := $(ooxml_BASEDIR)/source/ooxml/resourceids.xsl
+ooxml_RESOURCESIMPLXSL := $(ooxml_BASEDIR)/source/ooxml/resourcesimpl.xsl
 
 ooxml_NSPROCESS := $(SRCDIR)/writerfilter/source/resourcemodel/namespace_preprocess.pl
 
@@ -237,14 +239,14 @@ $(ooxml_GENHEADERS) : $(ooxml_HXXOUTDIRCREATED)
 $(call ooxml_factory_source,%) :| $(call ooxml_factory_header,%)
 
 $(call ooxml_factory_source,%) : $(ooxml_FACTORYIMPLNSXSL) $(ooxml_MODELPROCESSED)
-	mkdir -p $(dir $@) && $(gb_XSLTPROC) --nonet --stringparam file $@ $(ooxml_FACTORYIMPLNSXSL) $(ooxml_MODELPROCESSED) > $@
+	mkdir -p $(dir $@) && $(call gb_Helper_abbreviate_dirs_native,$(gb_XSLTPROC) --nonet --stringparam file $@ $(ooxml_FACTORYIMPLNSXSL) $(ooxml_MODELPROCESSED)) > $@
 
 $(call ooxml_factory_header,%) : $(ooxml_FACTORYNSXSL) $(ooxml_MODELPROCESSED)
-	mkdir -p $(dir $@) && $(gb_XSLTPROC) --nonet --stringparam file $@ $(ooxml_FACTORYNSXSL) $(ooxml_MODELPROCESSED) > $@
+	mkdir -p $(dir $@) && $(call gb_Helper_abbreviate_dirs_native,$(gb_XSLTPROC) --nonet --stringparam file $@ $(ooxml_FACTORYNSXSL) $(ooxml_MODELPROCESSED)) > $@
 
 define ooxml_xsl_process
 $(1) : $(2) $(3)
-	mkdir -p $(dir $(1)) && $(gb_XSLTPROC) --nonet $(2) $(3) > $(1)
+	mkdir -p $(dir $(1)) && $$(call gb_Helper_abbreviate_dirs_native,$(gb_XSLTPROC) --nonet $(2) $(3)) > $(1)
 endef
 
 define ooxml_xsl_process_model

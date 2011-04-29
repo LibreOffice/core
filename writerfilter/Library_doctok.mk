@@ -88,15 +88,17 @@ doctok_GENDIR := $(WORKDIR)/writerfilter
 doctok_HXXOUTDIR := $(doctok_GENDIR)/inc/doctok
 doctok_HXXOUTDIRCREATED := $(doctok_HXXOUTDIR)/created
 
-doctok_QNAMETOSTRXSL := $(SRCDIR)/writerfilter/source/doctok/qnametostr.xsl
-doctok_RESOURCEIDSXSL := $(SRCDIR)/writerfilter/source/doctok/resourceids.xsl
-doctok_RESOURCESIMPLXSL := $(SRCDIR)/writerfilter/source/doctok/resourcesimpl.xsl
-doctok_RESOURCESXSL := $(SRCDIR)/writerfilter/source/doctok/resources.xsl
-doctok_RESOURCETOOLSXSL := $(SRCDIR)/writerfilter/source/doctok/resourcetools.xsl
-doctok_SPRMCODETOSTRXSL := $(SRCDIR)/writerfilter/source/doctok/sprmcodetostr.xsl
-doctok_SPRMIDSXSL := $(SRCDIR)/writerfilter/source/doctok/sprmids.xsl
+ooxml_BASEDIR := $(realpath $(SRCDIR)/writerfilter)
 
-doctok_MODEL := $(SRCDIR)/writerfilter/source/doctok/resources.xmi
+doctok_QNAMETOSTRXSL := $(ooxml_BASEDIR)/source/doctok/qnametostr.xsl
+doctok_RESOURCEIDSXSL := $(ooxml_BASEDIR)/source/doctok/resourceids.xsl
+doctok_RESOURCESIMPLXSL := $(ooxml_BASEDIR)/source/doctok/resourcesimpl.xsl
+doctok_RESOURCESXSL := $(ooxml_BASEDIR)/source/doctok/resources.xsl
+doctok_RESOURCETOOLSXSL := $(ooxml_BASEDIR)/source/doctok/resourcetools.xsl
+doctok_SPRMCODETOSTRXSL := $(ooxml_BASEDIR)/source/doctok/sprmcodetostr.xsl
+doctok_SPRMIDSXSL := $(ooxml_BASEDIR)/source/doctok/sprmids.xsl
+
+doctok_MODEL := $(ooxml_BASEDIR)/source/doctok/resources.xmi
 
 doctok_RESOURCEIDSHXX := $(doctok_HXXOUTDIR)/resourceids.hxx
 doctok_SPRMIDSHXX := $(doctok_HXXOUTDIR)/sprmids.hxx
@@ -124,7 +126,7 @@ $(doctok_GENHEADERS) : $(doctok_HXXOUTDIRCREATED)
 
 define doctok_xsl_process_model
 $(1) : $(2) $(doctok_MODEL)
-	mkdir -p $(dir $(1)) && $(gb_XSLTPROC) --nonet $(2) $(doctok_MODEL) > $(1)
+	mkdir -p $(dir $(1)) && $$(call gb_Helper_abbreviate_dirs_native,$(gb_XSLTPROC) --nonet $(2) $(doctok_MODEL)) > $(1)
 endef
 
 $(eval $(call doctok_xsl_process_model,$(doctok_RESOURCESHXX),$(doctok_RESOURCESXSL)))
