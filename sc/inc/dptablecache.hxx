@@ -58,12 +58,33 @@ private:
     ScDocument* mpDoc;
     long mnColumnCount;
 
-    DataGridType                maTableDataValues; // Data Pilot Table's index - value map
-    RowGridType                 maSourceData;      // Data Pilot Table's source data
-    RowGridType                 maGlobalOrder;     // Sorted members index
-    mutable RowGridType         maIndexOrder;      // Index the sorted numbers
-    DataListType                maLabelNames;      // Source label data
-    std::vector<bool>           mbEmptyRow;        //If empty row?
+    /**
+     * This container stores only the unique instances of item data in each
+     * column. Duplicates are not allowed.
+     */
+    DataGridType maTableDataValues;
+
+    /**
+     * This container stores indices within maTableDataValues pointing to the
+     * data.  The order of data are exactly as they appear in the original
+     * data source.
+     */
+    RowGridType maSourceData;
+
+    /**
+     * This container stores indices within maTableDataValues.  The order of
+     * indices in each column represents ascending order of the actual data.
+     */
+    RowGridType maGlobalOrder;
+
+    /**
+     * This container stores the ranks of each unique data represented by
+     * their index.
+     */
+    mutable RowGridType maIndexOrder;
+
+    DataListType maLabelNames;    // Stores dimension names.
+    std::vector<bool> mbEmptyRow; // Keeps track of empty rows.
 
     mutable ScDPItemDataPool    maAdditionalData;
 
@@ -108,7 +129,7 @@ public:
 private:
     SCROW GetOrder( long nDim, SCROW nIndex ) const;
     void AddLabel( ScDPItemData* pData);
-    bool AddData( long nDim, ScDPItemData* itemData );
+    bool AddData(long nDim, ScDPItemData* pData);
 };
 
 #endif
