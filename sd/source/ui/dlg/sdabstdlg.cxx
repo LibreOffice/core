@@ -43,7 +43,8 @@ SdAbstractDialogFactory* SdAbstractDialogFactory::Create()
 {
     SdFuncPtrCreateDialogFactory fp = 0;
     static ::osl::Module aDialogLibrary;
-    if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, String( RTL_CONSTASCII_USTRINGPARAM( DLL_NAME ) ) ) )
+    if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, String( RTL_CONSTASCII_USTRINGPARAM( DLL_NAME ) ),
+                                                             SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY ) )
         fp = ( SdAbstractDialogFactory* (__LOADONCALLAPI*)() )
             aDialogLibrary.getFunctionSymbol( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateDialogFactory")) );
     if ( fp )
