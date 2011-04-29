@@ -49,7 +49,6 @@
 #endif
 
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 #include <tools/shl.hxx>
 #include <vector>
 
