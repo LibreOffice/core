@@ -1399,9 +1399,15 @@ sal_Bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, sal_Bool bAddRect )
         if ( pLay->GetPrev() && !pLay->GetPrev()->IsValid() )
             pLay->GetPrev()->SetCompletePaint();
 
-        SwRect aOldRect( pLay->Frm() );
+        SwRect aOldFrame( pLay->Frm() );
+        SwRect aOldRect( aOldFrame );
+        if( pLay->IsPageFrm() )
+        {
+            aOldRect = static_cast<SwPageFrm*>(pLay)->GetBoundRect();
+        }
+
         pLay->Calc();
-        if ( aOldRect != pLay->Frm() )
+        if ( aOldFrame != pLay->Frm() )
             bChanged = sal_True;
 
         sal_Bool bNoPaint = sal_False;
@@ -1424,15 +1430,7 @@ sal_Bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, sal_Bool bAddRect )
             if ( pLay->IsPageFrm() )
             {
                 SwPageFrm* pPageFrm = static_cast<SwPageFrm*>(pLay);
-                const ViewShell *pSh = pLay->getRootFrm()->GetCurrShell();
-
-                if(pSh)
-                {
-                    SwPageFrm::GetBorderAndShadowBoundRect(aPaint, pSh, aPaint,
-                        pPageFrm->IsLeftShadowNeeded(), pPageFrm->IsRightShadowNeeded(),
-                        pPageFrm->SidebarPosition() == sw::sidebarwindows::SIDEBAR_RIGHT);
-                }
-
+                aPaint = pPageFrm->GetBoundRect();
             }
 
             sal_Bool bPageInBrowseMode = pLay->IsPageFrm();
@@ -1499,12 +1497,16 @@ sal_Bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, sal_Bool bAddRect )
                 {
                     // top
                     SwRect aSpaceToPrevPage( aPageRect );
+                    aSpaceToPrevPage.Top( aSpaceToPrevPage.Top() - nHalfDocBorder );
                     aSpaceToPrevPage.Bottom( pLay->Frm().Top() );
                     if(aSpaceToPrevPage.Height() > 0 && aSpaceToPrevPage.Width() > 0)
                         pImp->GetShell()->AddPaintRect( aSpaceToPrevPage );
 
+                    pSh->GetOut()->DrawRect( aSpaceToPrevPage.SVRect() );
+
                     // left
                     aSpaceToPrevPage = aPageRect;
+                    aSpaceToPrevPage.Left( aSpaceToPrevPage.Left() - nHalfDocBorder );
                     aSpaceToPrevPage.Right( pLay->Frm().Left() );
                     if(aSpaceToPrevPage.Height() > 0 && aSpaceToPrevPage.Width() > 0)
                         pImp->GetShell()->AddPaintRect( aSpaceToPrevPage );
@@ -1578,12 +1580,14 @@ sal_Bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, sal_Bool bAddRect )
     // OD 11.11.2002 #104414# - add complete frame area as paint area, if frame
     // area has been already added and after formating its lowers the frame area
     // is enlarged.
+    SwRect aBoundRect(pLay->IsPageFrm() ? static_cast<SwPageFrm*>(pLay)->GetBoundRect() : pLay->Frm() );
+
     if ( bAlreadyPainted &&
-         ( pLay->Frm().Width() > aFrmAtCompletePaint.Width() ||
-           pLay->Frm().Height() > aFrmAtCompletePaint.Height() )
+         ( aBoundRect.Width() > aFrmAtCompletePaint.Width() ||
+           aBoundRect.Height() > aFrmAtCompletePaint.Height() )
        )
     {
-        pImp->GetShell()->AddPaintRect( pLay->Frm() );
+        pImp->GetShell()->AddPaintRect( aBoundRect );
     }
     return bChanged || bTabChanged;
 }

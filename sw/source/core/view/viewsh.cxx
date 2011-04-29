@@ -995,11 +995,11 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
 
             while ( pPage && pPage->Frm().Top() <= nBottom )
             {
-                SwRect aPageRect( pPage->Frm() );
+                SwRect aPageRect( pPage->GetBoundRect() );
                 if ( bBookMode )
                 {
                     const SwPageFrm& rFormatPage = static_cast<const SwPageFrm*>(pPage)->GetFormatPage();
-                    aPageRect.SSize() = rFormatPage.Frm().SSize();
+                    aPageRect.SSize() = rFormatPage.GetBoundRect().SSize();
                 }
 
                 if ( aPageRect.IsOver( aBoth ) )
@@ -1010,11 +1010,8 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
 
                     if( aSidebarPos != sw::sidebarwindows::SIDEBAR_NONE )
                     {
-                        SwRect aShadowRect;
-                        SwPageFrm::GetBorderAndShadowBoundRect(aPageRect, this,
-                            aShadowRect, pPage->IsLeftShadowNeeded(), pPage->IsRightShadowNeeded(), aSidebarPos == sw::sidebarwindows::SIDEBAR_RIGHT);
-                        nPageLeft = aShadowRect.Left();
-                        nPageRight = aShadowRect.Right();
+                        nPageLeft = aPageRect.Left();
+                        nPageRight = aPageRect.Right();
                     }
 
                     if( nPageLeft < nMinLeft )
