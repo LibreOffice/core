@@ -145,8 +145,14 @@ endef
 
 # SrsTemplateTarget class
 
-gb_SrsTemplateTarget__get_merged_target = $(call gb_SrsTemplateTarget_get_target,$(1))_merged
-gb_SrsTemplateTarget__get_unmerged_target = $(call gb_SrsTemplateTarget_get_target,$(1))_unmerged
+define gb_SrsTemplateTarget__command
+	$(call gb_Helper_abbreviate_dirs,\
+	    mkdir -p $(dir $(1)) && \
+	    touch $(1))
+endef
+
+gb_SrsTemplateTarget__get_merged_target = $(call gb_SrsTemplateTarget_get_target,$(1))_merged_last
+gb_SrsTemplateTarget__get_unmerged_target = $(call gb_SrsTemplateTarget_get_target,$(1))_unmerged_last
 
 ifeq ($(strip $(WITH_LANG)),)
 gb_SrsTemplateTarget__get_target = $(call gb_SrsTemplateTarget__get_unmerged_target,$(1))
@@ -163,12 +169,14 @@ $(call gb_SrsTemplateTarget_get_target,$(1)) : $(call gb_SrsTemplateTarget__get_
 $(call gb_SrsTemplateTarget__get_target,$(1)) : $(call gb_SrsTemplateTarget__get_update_target,$(1))
 endef
 
+.PHONY : $(call gb_SrsTemplateTarget_get_target,%_last)
+$(call gb_SrsTemplateTarget_get_target,%_last) :
+	$(call gb_SrsTemplateTarget__command,$@)
+
 .PHONY : $(call gb_SrsTemplateTarget_get_target,%)
 $(call gb_SrsTemplateTarget_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),SRT,4)
-	$(call gb_Helper_abbreviate_dirs,\
-	    mkdir -p $(dir $@) && \
-	    touch $@)
+	$(call gb_SrsTemplateTarget__command,$@)
 
 .PHONY : $(call gb_SrsTemplateTarget_get_clean_target,%)
 $(call gb_SrsTemplateTarget_get_clean_target,%) :
