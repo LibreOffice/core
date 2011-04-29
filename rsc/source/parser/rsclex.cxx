@@ -380,12 +380,12 @@ void IncludeParser( RscFileInst * pFileInst )
                 if( STRING == (nToken = MakeToken( &aYYSType )) ){
                     lKey = pTypCon->aFileTab.NewIncFile( aYYSType.string,
                                                          aYYSType.string );
-                    pFName->InsertDependFile( lKey, LIST_APPEND );
+                    pFName->InsertDependFile( lKey, ULONG_MAX );
                 }
                 else if( INCLUDE_STRING == nToken ){
                     lKey = pTypCon->aFileTab.NewIncFile( aYYSType.string,
                                                          ByteString() );
-                    pFName->InsertDependFile( lKey, LIST_APPEND );
+                    pFName->InsertDependFile( lKey, ULONG_MAX );
                 };
             };
         };

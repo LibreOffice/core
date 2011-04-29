@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -148,7 +148,7 @@ resource_definition
 		if( $4.IsNumber() ){
 			if( !pTC->aFileTab.NewDef( pFI->GetFileIndex(),
 									   ByteString( $3 ),
-									   $4.GetLong(), LIST_APPEND ) )
+									   $4.GetLong(), ULONG_MAX ) )
 				bError = sal_True;
 		}
 		else if( $4.IsDefinition() ){
@@ -161,13 +161,13 @@ resource_definition
 			pExpr = new RscExpression( aExpType, '+', $4 );
 
 			if( !pTC->aFileTab.NewDef( pFI->GetFileIndex(),
-									   ByteString( $3 ), pExpr, LIST_APPEND ) )
+									   ByteString( $3 ), pExpr, ULONG_MAX ) )
 				bError = sal_True;
 		}
 		else if( $4.IsExpression() ){
 			if( !pTC->aFileTab.NewDef( pFI->GetFileIndex(),
 									   ByteString( $3 ), $4.aExp.pExp,
-									   LIST_APPEND ) )
+									   ULONG_MAX ) )
 				bError = sal_True;
 		}
 
