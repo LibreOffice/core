@@ -302,15 +302,10 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/ui/app/transobj \
 	sc/source/ui/app/typemap \
 	sc/source/ui/app/uiitems \
-	sc/source/ui/attrdlg/attrdlg \
 	sc/source/ui/attrdlg/condfrmt \
 	sc/source/ui/attrdlg/scabstdlg \
-        sc/source/ui/attrdlg/scdlgfact \
-        sc/source/ui/attrdlg/scuiexp \
-        sc/source/ui/attrdlg/tabpages \
 	sc/source/ui/cctrl/cbuttonw \
 	sc/source/ui/cctrl/dpcontrol \
-	sc/source/ui/cctrl/editfield \
 	sc/source/ui/cctrl/popmenu \
 	sc/source/ui/cctrl/tbinsert \
 	sc/source/ui/cctrl/tbzoomsliderctrl \
@@ -321,28 +316,14 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/ui/dbgui/csvruler \
 	sc/source/ui/dbgui/csvsplits \
 	sc/source/ui/dbgui/csvtablebox \
-	sc/source/ui/dbgui/dapidata \
-	sc/source/ui/dbgui/dapitype \
 	sc/source/ui/dbgui/dbnamdlg \
-	sc/source/ui/dbgui/dpgroupdlg \
 	sc/source/ui/dbgui/expftext \
 	sc/source/ui/dbgui/fieldwnd \
 	sc/source/ui/dbgui/filtdlg \
 	sc/source/ui/dbgui/foptmgr \
 	sc/source/ui/dbgui/imoptdlg \
-	sc/source/ui/dbgui/pfiltdlg \
-	sc/source/ui/dbgui/pvfundlg \
 	sc/source/ui/dbgui/pvlaydlg \
-	sc/source/ui/dbgui/scuiasciiopt \
-	sc/source/ui/dbgui/scuiimoptdlg \
-	sc/source/ui/dbgui/scendlg \
 	sc/source/ui/dbgui/sfiltdlg \
-	sc/source/ui/dbgui/sortdlg \
-	sc/source/ui/dbgui/subtdlg \
-	sc/source/ui/dbgui/textimportoptions \
-	sc/source/ui/dbgui/tpsort \
-	sc/source/ui/dbgui/tpsubt \
-	sc/source/ui/dbgui/validate \
 	sc/source/ui/docshell/arealink \
 	sc/source/ui/docshell/autostyl \
 	sc/source/ui/docshell/dbdocfun \
@@ -367,7 +348,6 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/ui/docshell/servobj \
 	sc/source/ui/docshell/sizedev \
 	sc/source/ui/docshell/tablink \
-	sc/source/ui/docshell/tpstat \
 	sc/source/ui/drawfunc/chartsh \
 	sc/source/ui/drawfunc/drawsh \
 	sc/source/ui/drawfunc/drawsh2 \
@@ -404,58 +384,26 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/ui/miscdlgs/anyrefdg \
 	sc/source/ui/miscdlgs/autofmt \
 	sc/source/ui/miscdlgs/conflictsdlg \
-	sc/source/ui/miscdlgs/crdlg \
 	sc/source/ui/miscdlgs/crnrdlg \
-	sc/source/ui/miscdlgs/datafdlg \
-	sc/source/ui/miscdlgs/delcldlg \
-	sc/source/ui/miscdlgs/delcodlg \
-	sc/source/ui/miscdlgs/filldlg \
-	sc/source/ui/miscdlgs/groupdlg \
 	sc/source/ui/miscdlgs/highred \
-	sc/source/ui/miscdlgs/inscldlg \
-	sc/source/ui/miscdlgs/inscodlg \
-	sc/source/ui/miscdlgs/instbdlg \
-	sc/source/ui/miscdlgs/lbseldlg \
-	sc/source/ui/miscdlgs/linkarea \
-	sc/source/ui/miscdlgs/mtrindlg \
-	sc/source/ui/miscdlgs/mvtabdlg \
-	sc/source/ui/miscdlgs/namecrea \
-	sc/source/ui/miscdlgs/namepast \
 	sc/source/ui/miscdlgs/optsolver \
 	sc/source/ui/miscdlgs/protectiondlg \
 	sc/source/ui/miscdlgs/redcom \
 	sc/source/ui/miscdlgs/retypepassdlg \
-	sc/source/ui/miscdlgs/scuiautofmt \
 	sc/source/ui/miscdlgs/sharedocdlg \
-	sc/source/ui/miscdlgs/shtabdlg \
 	sc/source/ui/miscdlgs/simpref \
 	sc/source/ui/miscdlgs/solveroptions \
 	sc/source/ui/miscdlgs/solverutil \
 	sc/source/ui/miscdlgs/solvrdlg \
-	sc/source/ui/miscdlgs/strindlg \
-	sc/source/ui/miscdlgs/tabbgcolordlg \
 	sc/source/ui/miscdlgs/tabopdlg \
-	sc/source/ui/miscdlgs/textdlgs \
 	sc/source/ui/miscdlgs/warnbox \
 	sc/source/ui/namedlg/namedlg \
 	sc/source/ui/navipi/content \
 	sc/source/ui/navipi/navcitem \
 	sc/source/ui/navipi/navipi \
 	sc/source/ui/navipi/scenwnd \
-	sc/source/ui/optdlg/opredlin \
-	sc/source/ui/optdlg/tpcalc \
-	sc/source/ui/optdlg/tpcompatibility \
-	sc/source/ui/optdlg/tpformula \
-	sc/source/ui/optdlg/tpprint \
-	sc/source/ui/optdlg/tpusrlst \
-	sc/source/ui/optdlg/tpview \
 	sc/source/ui/pagedlg/areasdlg \
-	sc/source/ui/pagedlg/hfedtdlg \
-	sc/source/ui/pagedlg/scuitphfedit \
-	sc/source/ui/pagedlg/tphf \
 	sc/source/ui/pagedlg/tphfedit \
-	sc/source/ui/pagedlg/tptable \
-	sc/source/ui/styleui/styledlg \
 	sc/source/ui/undo/areasave \
 	sc/source/ui/undo/refundo \
 	sc/source/ui/undo/target \
