@@ -175,12 +175,12 @@ $(call gb_SrsTemplateTarget_get_target,%_last) :
 
 .PHONY : $(call gb_SrsTemplateTarget_get_target,%)
 $(call gb_SrsTemplateTarget_get_target,%) :
-	$(call gb_Output_announce,$*,$(true),SRT,4)
+	$(if $(strip $(PARTS)),$(call gb_Output_announce,$*,$(true),SRT,4))
 	$(call gb_SrsTemplateTarget__command,$@)
 
 .PHONY : $(call gb_SrsTemplateTarget_get_clean_target,%)
 $(call gb_SrsTemplateTarget_get_clean_target,%) :
-	$(call gb_Output_announce,$*,$(false),SRT,4)
+	$(if $(strip $(PARTS)),$(call gb_Output_announce,$*,$(false),SRT,4))
 	-$(call gb_Helper_abbreviate_dirs,\
 	    rm -f $(call gb_SrsTemplateTarget_get_target,$*) \
 		    $(call gb_SrsTemplateTarget__get_merged_target,$*) \
