@@ -76,6 +76,10 @@ LOCALPYFILES= \
     $(BIN)$/mailmerge.py
 .ENDIF
 
+help_exist:=$(shell @find $(L10N_MODULE)/source/ -type d -name "helpcontent2" | sed -e "s|/helpcontent2||" -e "s|^.*/||" ) en-US
+
+allhelplangiso:=$(foreach,i,$(alllangiso) $(foreach,j,$(help_exist) $(eq,$i,$j  $i $(NULL))))
+
 xxxx:
     echo $(PERL) -w $(SOLARENV)$/bin$/gen_update_info.pl --buildid $(BUILD) --arch "$(RTL_ARCH)" --os "$(RTL_OS)" --lstfile $(PRJ)$/util$/openoffice.lst --product LibreOffice --languages $(subst,$(@:s/_/ /:1)_, $(@:b)) $(PRJ)$/util$/update.xml
 
@@ -129,9 +133,9 @@ ooolanguagepack : $(foreach,i,$(alllangiso) ooolanguagepack_$i)
 
 ooodevlanguagepack: $(foreach,i,$(alllangiso) ooodevlanguagepack_$i)
 
-ooohelppack : $(foreach,i,$(alllangiso) ooohelppack_$i)
+ooohelppack : $(foreach,i,$(allhelplangiso) ooohelppack_$i)
 
-ooodevhelppack: $(foreach,i,$(alllangiso) ooodevhelppack_$i)
+ooodevhelppack: $(foreach,i,$(allhelplangiso) ooodevhelppack_$i)
 
 sdkoo: $(foreach,i,$(alllangiso) sdkoo_$i)
 
@@ -145,7 +149,7 @@ oxygenofficewithjre: $(foreach,i,$(alllangiso) oxygenofficewithjre_$i)
 
 oxygenofficelanguagepack : $(foreach,i,$(alllangiso) oxygenofficelanguagepack_$i)
 
-oxygenofficehelppack : $(foreach,i,$(alllangiso) oxygenofficehelppack_$i)
+oxygenofficehelppack : $(foreach,i,$(allhelplangiso) oxygenofficehelppack_$i)
 
 MSIOFFICETEMPLATESOURCE=$(PRJ)$/inc_openoffice$/windows$/msi_templates
 MSILANGPACKTEMPLATESOURCE=$(PRJ)$/inc_ooolangpack$/windows$/msi_templates
@@ -184,9 +188,9 @@ $(foreach,i,$(alllangiso) ooolanguagepack_$i) : $(ADDDEPS)
 
 $(foreach,i,$(alllangiso) ooodevlanguagepack_$i) : $(ADDDEPS)
 
-$(foreach,i,$(alllangiso) ooohelppack_$i) : $(ADDDEPS)
+$(foreach,i,$(allhelplangiso) ooohelppack_$i) : $(ADDDEPS)
 
-$(foreach,i,$(alllangiso) ooodevhelppack_$i) : $(ADDDEPS)
+$(foreach,i,$(allhelplangiso) ooodevhelppack_$i) : $(ADDDEPS)
 
 $(foreach,i,$(alllangiso) sdkoo_$i) : $(ADDDEPS)
 
@@ -200,7 +204,7 @@ $(foreach,i,$(alllangiso) oxygenofficewithjre_$i) : $(ADDDEPS)
 
 $(foreach,i,$(alllangiso) oxygenofficelanguagepack_$i) : $(ADDDEPS)
 
-$(foreach,i,$(alllangiso) oxygenofficehelppack_$i) : $(ADDDEPS)
+$(foreach,i,$(allhelplangiso) oxygenofficehelppack_$i) : $(ADDDEPS)
 
 .IF "$(MAKETARGETS)"!=""
 $(MAKETARGETS) : $(ADDDEPS)
@@ -236,11 +240,11 @@ $(foreach,i,$(alllangiso) ooodevlanguagepack_$i) : $$@{$(PKGFORMAT:^".")}
 ooodevlanguagepack_%{$(PKGFORMAT:^".")} :
     $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p LibreOffice_Dev -u $(OUT) -buildid $(BUILD) -msitemplate $(MSILANGPACKTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -languagepack -format $(@:e:s/.//) $(VERBOSESWITCH)
 
-$(foreach,i,$(alllangiso) ooohelppack_$i) : $$@{$(PKGFORMAT:^".")}
+$(foreach,i,$(allhelplangiso) ooohelppack_$i) : $$@{$(PKGFORMAT:^".")}
 ooohelppack_%{$(PKGFORMAT:^".")} :
     $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p LibreOffice -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIHELPPACKTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -helppack -format $(@:e:s/.//) $(VERBOSESWITCH)
 
-$(foreach,i,$(alllangiso) ooodevhelppack_$i) : $$@{$(PKGFORMAT:^".")}
+$(foreach,i,$(allhelplangiso) ooodevhelppack_$i) : $$@{$(PKGFORMAT:^".")}
 ooodevhelppack_%{$(PKGFORMAT:^".")} :
     $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p LibreOffice_Dev -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIHELPPACKTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -helppack -format $(@:e:s/.//) $(VERBOSESWITCH)
 
@@ -282,13 +286,13 @@ $(foreach,i,$(alllangiso) oxygenofficelanguagepack_$i) : $$@{$(PKGFORMAT:^".")}
 oxygenofficelanguagepack_%{$(PKGFORMAT:^".")} :
     $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OxygenOffice -u $(OUT) -buildid $(BUILD) -msitemplate $(MSILANGPACKTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -languagepack -format $(@:e:s/.//) $(VERBOSESWITCH)
 
-$(foreach,i,$(alllangiso) oxygenofficehelppack_$i) : $$@{$(PKGFORMAT:^".")}
+$(foreach,i,$(allhelplangiso) oxygenofficehelppack_$i) : $$@{$(PKGFORMAT:^".")}
 oxygenofficehelppack_%{$(PKGFORMAT:^".")} :
     $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OxygenOffice -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIHELPPACKTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -helppack -format $(@:e:s/.//) $(VERBOSESWITCH)
 
 .ELSE			# "$(alllangiso)"!=""
 openoffice:
-    @echo cannot pack nothing...
+    @echo cannot pack anything...
 
 .ENDIF			# "$(alllangiso)"!=""
 
