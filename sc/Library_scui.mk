@@ -22,15 +22,14 @@
 $(eval $(call gb_Library_Library,scui))
 
 $(eval $(call gb_Library_set_include,scui,\
-	-I$(realpath $(SRCDIR)/sc/inc) \
-	-I$(realpath $(SRCDIR)/sc/inc/pch) \
 	-I$(realpath $(SRCDIR)/sc/source/core/inc) \
 	-I$(realpath $(SRCDIR)/sc/source/filter/inc) \
 	-I$(realpath $(SRCDIR)/sc/source/ui/inc) \
+	-I$(realpath $(SRCDIR)/sc/inc) \
+	-I$(realpath $(SRCDIR)/sc/inc/pch) \
 	-I$(WORKDIR)/SdiTarget/sc/sdi \
 	-I$(WORKDIR)/Misc/sc \
 	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/sc \
 	-I$(OUTDIR)/inc/offuh \
 ))
 

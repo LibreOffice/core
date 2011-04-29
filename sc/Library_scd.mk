@@ -31,7 +31,6 @@ $(eval $(call gb_Library_set_include,scd,\
         -I$(WORKDIR)/Misc/sc/ \
         $$(INCLUDE) \
         -I$(OUTDIR)/inc/offuh \
-        -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_set_defs,scd,\
