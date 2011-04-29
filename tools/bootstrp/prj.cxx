@@ -30,7 +30,6 @@
 #include "precompiled_tools.hxx"
 #include <stdlib.h>
 #include <stdio.h>
-//#include "bootstrp/sstring.hxx"
 #include <osl/mutex.hxx>
 
 #include <tools/stream.hxx>
