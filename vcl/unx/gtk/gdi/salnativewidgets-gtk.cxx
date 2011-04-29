@@ -3260,17 +3260,18 @@ void printStyleColors( GtkStyle* pStyle )
 
 void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 {
+    GdkScreen* pScreen = gtk_widget_get_screen( m_pWindow );
+    gtk_widget_ensure_style( m_pWindow );
+    GtkStyle* pStyle = gtk_widget_get_style( m_pWindow );
+    GtkSettings* pSettings = gtk_widget_get_settings( m_pWindow );
+    StyleSettings aStyleSet = rSettings.GetStyleSettings();
+
     // get the widgets in place
     NWEnsureGTKMenu( m_nScreen );
     NWEnsureGTKMenubar( m_nScreen );
     NWEnsureGTKScrollbars( m_nScreen );
     NWEnsureGTKEditBox( m_nScreen );
     NWEnsureGTKTooltip( m_nScreen );
-
-    gtk_widget_ensure_style( m_pWindow );
-    GtkStyle* pStyle = gtk_widget_get_style( m_pWindow );
-
-    StyleSettings aStyleSet = rSettings.GetStyleSettings();
 
 #if OSL_DEBUG_LEVEL > 2
     printStyleColors( pStyle );
@@ -3481,7 +3482,6 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetFloatTitleFont( aFont );
 
     // get cursor blink time
-    GtkSettings *pSettings = gtk_widget_get_settings( gWidgetData[m_nScreen].gEditBoxWidget );
     gboolean blink = false;
 
     g_object_get( pSettings, "gtk-cursor-blink", &blink, (char *)NULL );
@@ -3498,7 +3498,6 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
         aStyleSet.SetCursorBlinkTime( STYLE_CURSOR_NOBLINKTIME );
 
     gboolean showmenuicons = true;
-    pSettings = gtk_widget_get_settings( gWidgetData[m_nScreen].gImageMenuItem );
     g_object_get( pSettings, "gtk-menu-images", &showmenuicons, (char *)NULL );
     aStyleSet.SetPreferredUseImagesInMenus( showmenuicons );
 
@@ -3519,45 +3518,29 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 
     // preferred icon style
     gchar* pIconThemeName = NULL;
-    g_object_get( gtk_settings_get_default(), "gtk-icon-theme-name", &pIconThemeName, (char *)NULL );
+    g_object_get( pSettings, "gtk-icon-theme-name", &pIconThemeName, (char *)NULL );
     aStyleSet.SetPreferredSymbolsStyleName( OUString::createFromAscii( pIconThemeName ) );
     g_free( pIconThemeName );
 
     aStyleSet.SetToolbarIconSize( STYLE_TOOLBAR_ICONSIZE_LARGE );
 
     const cairo_font_options_t* pNewOptions = NULL;
-    if( GdkScreen* pScreen = gdk_display_get_screen( gdk_display_get_default(), m_nScreen ) )
-    {
 #if !GTK_CHECK_VERSION(2,9,0)
     static cairo_font_options_t* (*gdk_screen_get_font_options)(GdkScreen*) =
         (cairo_font_options_t*(*)(GdkScreen*))osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gdk_screen_get_font_options" );
     if( gdk_screen_get_font_options != NULL )
 #endif
         pNewOptions = gdk_screen_get_font_options( pScreen );
-    }
     aStyleSet.SetCairoFontOptions( pNewOptions );
 
     // finally update the collected settings
     rSettings.SetStyleSettings( aStyleSet );
 
+    gchar* pThemeName = NULL;
+    g_object_get( pSettings, "gtk-theme-name", &pThemeName, (char *)NULL );
     #if OSL_DEBUG_LEVEL > 1
-    {
-        GtkSettings* pGtkSettings = gtk_settings_get_default();
-        GValue aValue;
-        memset( &aValue, 0, sizeof(GValue) );
-        g_value_init( &aValue, G_TYPE_STRING );
-        g_object_get_property( G_OBJECT(pGtkSettings), "gtk-theme-name", &aValue );
-        const gchar* pThemeName = g_value_get_string( &aValue );
-        std::fprintf( stderr, "Theme name is \"%s\"\n", pThemeName );
-        g_value_unset( &aValue );
-    }
+    std::fprintf( stderr, "Theme name is \"%s\"\n", pThemeName );
     #endif
-    GtkSettings* pGtkSettings = gtk_settings_get_default();
-    GValue aValue;
-    memset( &aValue, 0, sizeof(GValue) );
-    g_value_init( &aValue, G_TYPE_STRING );
-    g_object_get_property( G_OBJECT(pGtkSettings), "gtk-theme-name", &aValue );
-    const gchar* pThemeName = g_value_get_string( &aValue );
 
     // default behaviour
     bNeedPixmapPaint = bGlobalNeedPixmapPaint;
@@ -3582,7 +3565,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
         }
     }
     // clean up
-    g_value_unset( &aValue );
+    g_free (pThemeName);
 }
 
 
