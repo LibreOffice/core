@@ -162,9 +162,9 @@ OfficeInstallationDirectories::makeRelocatableURL( const rtl::OUString& URL )
         if ( nIndex  != -1 )
         {
             return rtl::OUString(
-                URL.replaceAt( nIndex,
-                               m_pOfficeBrandDir->getLength(),
-                               m_aOfficeBrandDirMacro ) );
+                aCanonicalURL.replaceAt( nIndex,
+                                         m_pOfficeBrandDir->getLength(),
+                                         m_aOfficeBrandDirMacro ) );
         }
         else
         {
@@ -172,9 +172,9 @@ OfficeInstallationDirectories::makeRelocatableURL( const rtl::OUString& URL )
             if ( nIndex  != -1 )
             {
                 return rtl::OUString(
-                    URL.replaceAt( nIndex,
-                                   m_pOfficeBaseDir->getLength(),
-                                   m_aOfficeBaseDirMacro ) );
+                    aCanonicalURL.replaceAt( nIndex,
+                                             m_pOfficeBaseDir->getLength(),
+                                             m_aOfficeBaseDirMacro ) );
             }
             else
             {
@@ -182,9 +182,9 @@ OfficeInstallationDirectories::makeRelocatableURL( const rtl::OUString& URL )
                 if ( nIndex  != -1 )
                 {
                     return rtl::OUString(
-                        URL.replaceAt( nIndex,
-                                       m_pUserDir->getLength(),
-                                       m_aUserDirMacro ) );
+                        aCanonicalURL.replaceAt( nIndex,
+                                                 m_pUserDir->getLength(),
+                                                 m_aUserDirMacro ) );
                 }
             }
         }
