@@ -1821,8 +1821,7 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
             throw io::IOException(); //TODO: access denied
 
         // TODO: does this work for links too?
-        uno::Reference< io::XOutputStream > xOutStream = GetStreamForSaving();
-        StoreObjectToStream( xOutStream );
+        StoreObjectToStream( GetStreamForSaving() );
 
         // the replacement is changed probably, and it must be in the object stream
         if ( !m_pOleComponent->IsWorkaroundActive() )
