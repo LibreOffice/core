@@ -122,6 +122,9 @@
 /formula
 /fpicker
 /framework
+/gdk-pixbuf
+/gettext
+/glib
 /graphite
 /helpcontent2
 /hsqldb
@@ -145,7 +148,11 @@
 /l10n
 /l10ntools
 /languagetool
+/libcroco
 /libegg
+/libgsf
+/libpng
+/librsvg
 /libtextcat
 /libwpd
 /libwpg
@@ -181,6 +188,7 @@
 /package
 /packimages
 /padmin
+/pango
 /postprocess
 /psprint_config
 /python
