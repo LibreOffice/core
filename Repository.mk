@@ -148,11 +148,12 @@ $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
 ))
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+    graphite2_off \
     jpeglib \
     ooopathutils \
     salcpprt \
+    vclmain \
     zlib \
-    graphite \
 ))
 
 # vim: set noet sw=4 ts=4:
