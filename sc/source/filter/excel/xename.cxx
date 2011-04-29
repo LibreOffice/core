@@ -581,6 +581,11 @@ sal_uInt16 XclExpNameManagerImpl::CreateName( SCTAB nTab, const ScRangeData& rRa
     {
         XclTokenArrayRef xTokArr = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_NAME, *pScTokArr );
         xName->SetTokenArray( xTokArr );
+
+        String sSymbol;
+        rRangeData.GetSymbol( sSymbol, formula::FormulaGrammar::GRAM_ENGLISH_XL_A1 );
+        xName->SetSymbol( sSymbol );
+
         /*  Try to replace by existing built-in name - complete token array is
             needed for comparison, and due to the recursion problem above this
             cannot be done earlier. If a built-in name is found, the created NAME
