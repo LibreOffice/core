@@ -1,7 +1,7 @@
 dnl configure.in serves as input for the GNU autoconf package
 dnl in order to create a configure script.
 
-AC_INIT([LibreOffice], [3.3],,, [http://documentfoundation.org/])
+AC_INIT([LibreOffice], [3.4],,, [http://documentfoundation.org/])
 AC_PREREQ(2.50)
 echo "$@" >config.parms
 
