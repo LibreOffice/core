@@ -321,6 +321,13 @@ const ScDPCache* ScSheetSourceDesc::CreateCache() const
 
     // All cache instances are managed centrally by ScDPCollection.
     ScDPCollection* pDPs = mpDoc->GetDPCollection();
+    if (HasRangeName())
+    {
+        // Name-based data source.
+        ScDPCollection::NameCaches& rCaches = pDPs->GetNameCaches();
+        return rCaches.getCache(GetRangeName(), GetSourceRange());
+    }
+
     ScDPCollection::SheetCaches& rCaches = pDPs->GetSheetCaches();
     return rCaches.getCache(GetSourceRange());
 }

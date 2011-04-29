@@ -710,15 +710,33 @@ void ScDBFunc::RecalcPivotTable()
         if (pDPObj->IsSheetData())
         {
             // data source is internal sheet.
-            ScDPCollection::SheetCaches& rCaches = pDPs->GetSheetCaches();
             const ScSheetSourceDesc* pDesc = pDPObj->GetSheetDesc();
-            rCaches.removeCache(pDesc->GetSourceRange());
+            if (!pDesc)
+            {
+                ErrorMessage(STR_PIVOT_NOTFOUND);
+                return;
+            }
+            if (pDesc->HasRangeName())
+            {
+                ScDPCollection::NameCaches& rCaches = pDPs->GetNameCaches();
+                rCaches.removeCache(pDesc->GetRangeName());
+            }
+            else
+            {
+                ScDPCollection::SheetCaches& rCaches = pDPs->GetSheetCaches();
+                rCaches.removeCache(pDesc->GetSourceRange());
+            }
         }
         else if (pDPObj->IsImportData())
         {
             // data source is external database.
-            ScDPCollection::DBCaches& rCaches = pDPs->GetDBCaches();
             const ScImportSourceDesc* pDesc = pDPObj->GetImportSourceDesc();
+            if (!pDesc)
+            {
+                ErrorMessage(STR_PIVOT_NOTFOUND);
+                return;
+            }
+            ScDPCollection::DBCaches& rCaches = pDPs->GetDBCaches();
             rCaches.removeCache(pDesc->GetCommandType(), pDesc->aDBName, pDesc->aObject);
         }
 

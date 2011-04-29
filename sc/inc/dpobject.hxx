@@ -274,6 +274,20 @@ public:
     };
 
     /**
+     * Data caches for range name based source data.
+     */
+    class NameCaches
+    {
+        typedef ::boost::ptr_map<rtl::OUString, ScDPCache> CachesType;
+        CachesType maCaches;
+        ScDocument* mpDoc;
+    public:
+        NameCaches(ScDocument* pDoc);
+        const ScDPCache* getCache(const ::rtl::OUString& rName, const ScRange& rRange);
+        void removeCache(const ::rtl::OUString& rName);
+    };
+
+    /**
      * Defines connection type to external data source.  Used as a key to look
      * up database cache.
      */
@@ -333,6 +347,7 @@ public:
     bool HasDPTable(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
 
     SheetCaches& GetSheetCaches();
+    NameCaches& GetNameCaches();
     DBCaches& GetDBCaches();
 
 private:
@@ -341,6 +356,7 @@ private:
     ScDocument* pDoc;
     TablesType maTables;
     SheetCaches maSheetCaches;
+    NameCaches maNameCaches;
     DBCaches maDBCaches;
 };
 

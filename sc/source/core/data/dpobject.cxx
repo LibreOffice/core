@@ -2416,6 +2416,29 @@ void ScDPCollection::SheetCaches::removeCache(const ScRange& rRange)
         maCaches.erase(itr);
 }
 
+ScDPCollection::NameCaches::NameCaches(ScDocument* pDoc) : mpDoc(pDoc) {}
+
+const ScDPCache* ScDPCollection::NameCaches::getCache(const OUString& rName, const ScRange& rRange)
+{
+    CachesType::const_iterator itr = maCaches.find(rName);
+    if (itr != maCaches.end())
+        // already cached.
+        return itr->second;
+
+    ::std::auto_ptr<ScDPCache> pCache(new ScDPCache(mpDoc));
+    pCache->InitFromDoc(mpDoc, rRange);
+    const ScDPCache* p = pCache.get();
+    maCaches.insert(rName, pCache);
+    return p;
+}
+
+void ScDPCollection::NameCaches::removeCache(const OUString& rName)
+{
+    CachesType::iterator itr = maCaches.find(rName);
+    if (itr != maCaches.end())
+        maCaches.erase(itr);
+}
+
 ScDPCollection::DBType::DBType(sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand) :
     mnSdbType(nSdbType), maDBName(rDBName), maCommand(rCommand) {}
 
@@ -2502,6 +2525,7 @@ void ScDPCollection::DBCaches::removeCache(sal_Int32 nSdbType, const OUString& r
 ScDPCollection::ScDPCollection(ScDocument* pDocument) :
     pDoc( pDocument ),
     maSheetCaches(pDocument),
+    maNameCaches(pDocument),
     maDBCaches(pDocument)
 {
 }
@@ -2509,6 +2533,7 @@ ScDPCollection::ScDPCollection(ScDocument* pDocument) :
 ScDPCollection::ScDPCollection(const ScDPCollection& r) :
     pDoc(r.pDoc),
     maSheetCaches(r.pDoc),
+    maNameCaches(r.pDoc),
     maDBCaches(r.pDoc)
 {
 }
@@ -2705,6 +2730,11 @@ bool ScDPCollection::HasDPTable(SCCOL nCol, SCROW nRow, SCTAB nTab) const
 ScDPCollection::SheetCaches& ScDPCollection::GetSheetCaches()
 {
     return maSheetCaches;
+}
+
+ScDPCollection::NameCaches& ScDPCollection::GetNameCaches()
+{
+    return maNameCaches;
 }
 
 ScDPCollection::DBCaches& ScDPCollection::GetDBCaches()
