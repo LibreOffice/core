@@ -198,7 +198,7 @@ void ScDPCacheTable::fillTable(
         SCROW nMemCount = getCache()->GetDimMemberCount( nCol );
         if ( nMemCount )
         {
-            std::vector< SCROW > pAdded( nMemCount, -1 );
+            std::vector<SCROW> aAdded( nMemCount, -1 );
 
             for (SCROW nRow = 0; nRow < nRowCount; ++nRow )
             {
@@ -206,7 +206,7 @@ void ScDPCacheTable::fillTable(
                 SCROW nOrder = getOrder( nCol, nIndex );
 
                 if ( nCol == 0 )
-                         maRowsVisible.push_back(false);
+                    maRowsVisible.push_back(false);
 
                 if ( lcl_HasQueryEntry(rQuery) &&
                     !getCache()->ValidQuery( nRow , rQuery, pSpecial ) )
@@ -217,13 +217,13 @@ void ScDPCacheTable::fillTable(
                 if ( nCol == 0 )
                      maRowsVisible.back() = true;
 
-                pAdded[nOrder] = nIndex;
+                aAdded[nOrder] = nIndex;
             }
             maFieldEntries.push_back( vector<SCROW>() );
             for ( SCROW nRow = 0; nRow < nMemCount; nRow++ )
             {
-                if ( pAdded[nRow] != -1 )
-                    maFieldEntries.back().push_back( pAdded[nRow] );
+                if ( aAdded[nRow] != -1 )
+                    maFieldEntries.back().push_back( aAdded[nRow] );
             }
         }
     }
