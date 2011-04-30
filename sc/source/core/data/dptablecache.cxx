@@ -499,7 +499,7 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
 bool ScDPCache::InitFromDataBase (const Reference<sdbc::XRowSet>& xRowSet, const Date& rNullDate)
 {
     if (!xRowSet.is())
-        // Dont' even waste time to go any further.
+        // Don't even waste time to go any further.
         return false;
     try
     {
