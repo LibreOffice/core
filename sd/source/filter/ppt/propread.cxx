@@ -503,10 +503,12 @@ void Section::Read( SvStorageStream *pStrm )
                     break;
 
                     case VT_LPWSTR :
+                        {
                         *pStrm >> nTemp;
                         // looks like these are aligned to 4 bytes
                         sal_uInt32 nLength = nPropOfs + nSecOfs + nPropSize + ( nTemp << 1 ) + 4;
                         nPropSize += ( nTemp << 1 ) + 4 + (nLength % 4);
+                        }
                     break;
 
                     case VT_BLOB_OBJECT :
