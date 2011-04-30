@@ -33,7 +33,7 @@
 #include <osl/file.h>
 #include <sal/macros.h>
 
-#if defined( UNX) || defined(OS2)
+#if defined( UNX)
 
 #include <stdio.h>
 #include <string.h>

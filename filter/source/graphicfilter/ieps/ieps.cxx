@@ -195,7 +195,7 @@ static oslProcessError runProcessWithPathSearch(const rtl::OUString &rProgName,
 #endif
 }
 
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
 #    define EXESUFFIX ".exe"
 #else
 #    define EXESUFFIX ""

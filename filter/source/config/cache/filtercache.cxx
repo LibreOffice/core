@@ -209,7 +209,7 @@ void FilterCache::load(EFillState eRequired,
     if ((m_eFillState & eRequired) == eRequired)
         return;
 
-#if OSL_DEBUG_LEVEL > 1 && !defined(OS2)
+#if OSL_DEBUG_LEVEL > 1
     if (
         (!bByThread) &&
         (
