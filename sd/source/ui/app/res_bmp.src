@@ -261,7 +261,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         {
             SfxStyleFamiliesRes1
             StyleFamily = SFX_STYLE_FAMILY_PARA ;
-            FilterList  =
+            FilterList [ en-US ] =
             {
                 < "All Styles" ; SFXSTYLEBIT_ALL ; > ;
                 < "Applied Styles" ; SFXSTYLEBIT_USED ; > ;
@@ -272,7 +272,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         {
             SfxStyleFamiliesRes2
             StyleFamily = SFX_STYLE_FAMILY_PSEUDO ;
-            FilterList =
+            FilterList [ en-US ] =
             {
                 < "All Styles" ; SFXSTYLEBIT_ALL ; > ;
             };
