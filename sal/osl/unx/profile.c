@@ -28,6 +28,7 @@
 
 
 #include "system.h"
+#include "readwrite_helper.h"
 
 #include <osl/diagnose.h>
 #include <osl/profile.h>
