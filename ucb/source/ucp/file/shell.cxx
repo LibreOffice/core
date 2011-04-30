@@ -300,7 +300,7 @@ shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceF
             beans::PropertyState_DEFAULT_VALUE,
             beans::PropertyAttribute::MAYBEVOID
             | beans::PropertyAttribute::BOUND
-#if defined( WNT ) || defined( OS2 )
+#if defined( WNT )
         ));
 #else
     | beans::PropertyAttribute::READONLY)); // under unix/linux only readable

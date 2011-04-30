@@ -190,7 +190,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL RecoveryUI::st_createInstan
 static OUString GetCrashConfigDir()
 {
 
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
     OUString    ustrValue = OUString(RTL_CONSTASCII_USTRINGPARAM("${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}"));
 #elif defined(MACOSX)
     OUString    ustrValue = OUString(RTL_CONSTASCII_USTRINGPARAM("~"));
@@ -199,7 +199,7 @@ static OUString GetCrashConfigDir()
 #endif
     Bootstrap::expandMacros( ustrValue );
 
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
     ustrValue += OUString(RTL_CONSTASCII_USTRINGPARAM("/user/crashdata"));
 #endif
     return ustrValue;
@@ -207,7 +207,7 @@ static OUString GetCrashConfigDir()
 
 //===============================================
 
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
 #define LCKFILE "crashdat.lck"
 #else
 #define LCKFILE ".crash_report_unsent"

@@ -226,13 +226,6 @@ E3dScene::E3dScene(E3dDefaultAttributes& rDefault)
 
 void E3dScene::SetDefaultAttributes(E3dDefaultAttributes& /*rDefault*/)
 {
-    // For OS/2 turn off the FP-Exceptions
-#if defined(OS2)
-#define SC_FPEXCEPTIONS_ON()    _control87( MCW_EM, 0 )
-#define SC_FPEXCEPTIONS_OFF()   _control87( MCW_EM, MCW_EM )
-    SC_FPEXCEPTIONS_OFF();
-#endif
-
     // For WIN95/NT turn off the FP-Exceptions
 #if defined(WNT)
 #define SC_FPEXCEPTIONS_ON()    _control87( _MCW_EM, 0 )

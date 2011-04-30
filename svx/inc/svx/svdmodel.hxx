@@ -58,10 +58,6 @@ class OutputDevice;
 #define DEGREE_CHAR ((sal_Unicode)176)   /* 0xB0 = Ansi */
 #endif
 
-#if defined(OS2)
-#define DEGREE_CHAR ((sal_Unicode)248)   /* 0xF8 = IBM PC (Erw. ASCII) */
-#endif
-
 #ifndef DEGREE_CHAR
 #error unbekannte Plattrorm
 #endif

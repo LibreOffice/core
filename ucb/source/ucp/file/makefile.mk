@@ -69,10 +69,6 @@ SHL1STDLIBS=\
 
 SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
-.IF "$(GUI)" == "OS2"
-DEF1EXPORTFILE=exports2.dxp
-.ENDIF
-
 DEF1NAME=$(SHL1TARGET)
 .ENDIF # L10N_framework
 

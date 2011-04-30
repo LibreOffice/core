@@ -2012,7 +2012,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
         static ::rtl::OUString GetCrashConfigDir()
         {
 
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
             OUString    ustrValue = OUString(RTL_CONSTASCII_USTRINGPARAM("${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}"));
 #elif defined( MACOSX )
             OUString    ustrValue = OUString(RTL_CONSTASCII_USTRINGPARAM("~"));
@@ -2021,13 +2021,13 @@ void BrokenRecoveryDialog::impl_askForSavePath()
 #endif
             Bootstrap::expandMacros( ustrValue );
 
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
             ustrValue += OUString(RTL_CONSTASCII_USTRINGPARAM("/user/crashdata"));
 #endif
             return ustrValue;
         }
 
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
 #define CHKFILE "crashdat.chk"
 #define STKFILE "crashdat.stk"
 #define PRVFILE "crashdat.prv"

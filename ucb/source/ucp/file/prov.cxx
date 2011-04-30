@@ -514,7 +514,7 @@ void SAL_CALL FileProvider::initProperties( void )
 
 #if defined ( UNX )
         m_FileSystemNotation = FileSystemNotation::UNIX_NOTATION;
-#elif defined( WNT ) || defined( OS2 )
+#elif defined( WNT )
         m_FileSystemNotation = FileSystemNotation::DOS_NOTATION;
 #else
         m_FileSystemNotation = FileSystemNotation::UNKNOWN_NOTATION;

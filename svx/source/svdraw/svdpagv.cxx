@@ -497,10 +497,6 @@ void SdrPageView::SetDesignMode( bool _bDesignMode ) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifdef OS2
-#define RGBCOLOR(r,g,b) ((sal_uIntPtr)(((sal_uInt8)(b) | ((sal_uInt16)(g)<<8)) | (((sal_uIntPtr)(sal_uInt8)(r))<<16)))
-#endif
-
 void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, Color aColor)
 {
     if (GetPage()==NULL)

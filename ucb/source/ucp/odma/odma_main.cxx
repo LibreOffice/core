@@ -44,7 +44,7 @@
 /** our main program to convert ODMAIDs to ODMA URLs
 */
 
-#if (defined UNX) || (defined OS2)
+#if (defined UNX)
 void main( int argc, char * argv[] )
 #else
 void _cdecl main( int argc, char * argv[] )

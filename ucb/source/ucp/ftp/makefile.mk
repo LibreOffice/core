@@ -77,10 +77,6 @@ SHL1STDLIBS=\
     $(UCBHELPERLIB) \
     $(CURLLIB)
 
-.IF "$(GUI)" == "OS2"
-SHL1STDLIBS+=ssl.lib crypto.lib libz.lib
-.ENDIF
-
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 SHL1LIBS= \
     $(LIB1TARGET)

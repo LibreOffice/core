@@ -62,9 +62,6 @@ extern "C" int
 #if defined( WNT )
  __cdecl
 #endif
-#if defined( ICC ) && defined( OS2 )
-_Optlink
-#endif
     NameCompare(const void* pFirst, const void* pSecond)
 {
     return ((::rtl::OUString*)pFirst)->compareTo(*(::rtl::OUString*)pSecond);

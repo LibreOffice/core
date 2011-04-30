@@ -45,11 +45,11 @@ SCRIPTFILES =	$(BIN)$/gengal
 
 OBJFILES=	$(OBJ)$/gengal.obj
 
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.IF "$(GUI)"=="WNT"
 APP1TARGET= $(TARGET)
-.ELSE			# .IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.ELSE			# .IF "$(GUI)"=="WNT"
 APP1TARGET= $(TARGET).bin
-.ENDIF			# .IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.ENDIF			# .IF "$(GUI)"=="WNT"
 
 APP1OBJS=   $(OBJFILES)
 
