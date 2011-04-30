@@ -124,7 +124,7 @@ public:
     bool operator== ( const ScDPCache& r ) const;
 
     ScDPCache(ScDocument* pDoc);
-    virtual ~ScDPCache();
+    ~ScDPCache();
 
 private:
     SCROW GetOrder( long nDim, SCROW nIndex ) const;
