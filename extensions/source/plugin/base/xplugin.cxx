@@ -546,7 +546,7 @@ void XPlugin_Impl::loadPlugin()
                                            sv[0],
                                            sv[1]
                                            );
-#elif (defined WNT || defined OS2)
+#elif defined WNT
             PluginComm* pComm = new PluginComm_Impl( m_aDescription.Mimetype,
                                                      m_aDescription.PluginName,
                                                      (HWND)pEnvData->hWnd );

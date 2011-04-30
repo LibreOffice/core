@@ -29,10 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 
-#ifdef OS2
-#define UNIX
-#endif
-
 #ifdef UNIX
 
 #define XP_UNIX 1

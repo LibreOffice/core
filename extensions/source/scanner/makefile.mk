@@ -46,7 +46,7 @@ SLOFILES+=\
                 $(SLO)$/scanwin.obj		
 .ENDIF
 
-.IF "$(GUI)"=="UNX" || "$(GUI)" =="OS2"
+.IF "$(GUI)"=="UNX"
 SLOFILES+=\
                 $(SLO)$/sane.obj		\
                 $(SLO)$/sanedlg.obj		\

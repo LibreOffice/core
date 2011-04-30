@@ -75,8 +75,6 @@
 
 #ifdef WNT
 #include <plugin/win/sysplug.hxx>
-#elif defined(OS2)
-#include "plugin/os2/sysplug.hxx"
 #elif defined(QUARTZ)
 #include "plugin/aqua/sysplug.hxx"
 #elif defined(UNX)

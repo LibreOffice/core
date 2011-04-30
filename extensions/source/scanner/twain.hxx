@@ -75,14 +75,8 @@ public:
 
     sal_Bool                        ImplHandleMsg( void* pMsg );
 
-#ifdef OS2
-    HAB                         hAB;
-    HWND                        hTwainWnd;
-    long                        hTwainHook;
-#else
     HWND                        hTwainWnd;
     HHOOK                       hTwainHook;
-#endif
 
 public:
 
