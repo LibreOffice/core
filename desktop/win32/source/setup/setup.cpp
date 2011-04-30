@@ -835,10 +835,10 @@ boolean SetupAppX::LaunchInstaller( LPCTSTR pParam )
     PROCESS_INFORMATION aPI;
 
     Log( TEXT( " Will install using <%s>\r\n" ), sMsiPath );
-    Log( TEXT( "   Prameters are: %s\r\n" ), pParam );
+    Log( TEXT( "   Parameters are: %s\r\n" ), pParam );
 
     OutputDebugStringFormat( TEXT( " Will install using <%s>\r\n" ), sMsiPath );
-    OutputDebugStringFormat( TEXT( "   Prameters are: %s\r\n" ), pParam );
+    OutputDebugStringFormat( TEXT( "   Parameters are: %s\r\n" ), pParam );
 
     ZeroMemory( (void*)&aPI, sizeof( PROCESS_INFORMATION ) );
     ZeroMemory( (void*)&aSUI, sizeof( STARTUPINFO ) );
@@ -1898,6 +1898,7 @@ boolean SetupAppX::IsPatchInstalled( TCHAR* pBaseDir, TCHAR* pFileName )
 boolean SetupAppX::InstallRuntimes( TCHAR *sProductCode, TCHAR *sRuntimePath )
 {
     INSTALLSTATE  nRet = MsiQueryProductState( sProductCode );
+    Log( TEXT( "MsiQueryProductState returned <%d>\r\n" ), nRet );
     OutputDebugStringFormat( TEXT( "MsiQueryProductState returned <%d>\r\n" ), nRet );
     if ( nRet == INSTALLSTATE_DEFAULT )
         return true;
