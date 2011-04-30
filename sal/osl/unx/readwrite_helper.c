@@ -39,8 +39,13 @@ sal_Bool safeWrite(int fd, void* data, sal_uInt32 dataSize)
     OSL_ASSERT(dataSize == (sal_uInt32)nToWrite);
     while ( nToWrite ) {
         sal_Int32 nWritten = write(fd, data, nToWrite);
-        if ( nWritten < 0 )
+        if ( nWritten < 0 ) {
+            if ( errno == EINTR )
+                continue;
+
             return sal_False;
+
+        }
 
         OSL_ASSERT(nWritten > 0);
         nToWrite -= nWritten;
