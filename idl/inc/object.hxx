@@ -33,7 +33,6 @@
 #include <types.hxx>
 #include <slot.hxx>
 #include <vector>
-#include <tools/list.hxx>
 
 struct SvSlotElement
 {
