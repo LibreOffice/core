@@ -48,7 +48,6 @@ struct ScQueryParam;
  */
 class SC_DLLPUBLIC ScDPCache
 {
-    friend class ScDPCacheTable;
 public:
     typedef ::boost::ptr_vector<ScDPItemData>           DataListType;
 private:
@@ -102,6 +101,7 @@ public:
     bool  IsDateDimension( long nDim ) const ;
     sal_uLong GetDimNumType( SCCOL nDim) const;
     SCROW GetDimMemberCount( SCCOL nDim ) const;
+    SCROW GetOrder( long nDim, SCROW nIndex ) const;
 
     SCROW GetSortedItemDataId( SCCOL nDim, SCROW nOrder ) const;
     const DataListType& GetDimMemberValues( SCCOL nDim ) const;
@@ -127,7 +127,6 @@ public:
     ~ScDPCache();
 
 private:
-    SCROW GetOrder( long nDim, SCROW nIndex ) const;
     void AddLabel( ScDPItemData* pData);
     bool AddData(long nDim, ScDPItemData* pData);
 };
