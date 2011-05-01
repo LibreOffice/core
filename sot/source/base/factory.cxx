@@ -39,7 +39,6 @@
 #include <sot/sotdata.hxx>
 #include <sot/clsids.hxx>
 #include <rtl/instance.hxx>
-#include <com/sun/star/datatransfer/DataFlavor.hpp>
 
 /************** class SotData_Impl *********************************************/
 /*************************************************************************
@@ -104,8 +103,8 @@ void SotFactory::DeInit()
     if( pSotData->pDataFlavorList )
     {
 
-        for( sal_uLong i = 0, nMax = pSotData->pDataFlavorList->Count(); i < nMax; i++ )
-            delete (::com::sun::star::datatransfer::DataFlavor*) pSotData->pDataFlavorList->GetObject( i );
+        for( size_t i = 0, nMax = pSotData->pDataFlavorList->size(); i < nMax; i++ )
+            delete (*pSotData->pDataFlavorList)[ i ];
         delete pSotData->pDataFlavorList;
         pSotData->pDataFlavorList = NULL;
     }

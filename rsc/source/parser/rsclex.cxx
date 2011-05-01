@@ -49,7 +49,6 @@
 
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
-#include <tools/list.hxx>
 
 using ::rtl::OString;
 using ::rtl::OStringBuffer;

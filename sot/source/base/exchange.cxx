@@ -33,7 +33,6 @@
 #define _SOT_FORMATS_INCLUDE_SYSTEMFORMATS
 #include <tools/debug.hxx>
 #include <tools/solar.h>
-#include <tools/list.hxx>
 #include <tools/globname.hxx>
 #include <tools/string.hxx>
 #include <sot/sotdata.hxx>
@@ -42,7 +41,6 @@
 #include <sot/clsids.hxx>
 #include <rtl/instance.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <comphelper/documentconstants.hxx>
 
 #ifdef GetObject
@@ -229,11 +227,11 @@ namespace
 
 //-----------------------------------------------------------------------
 
-static List& InitFormats_Impl()
+static tDataFlavorList& InitFormats_Impl()
 {
     SotData_Impl * pSotData = SOTDATA();
     if( !pSotData->pDataFlavorList )
-        pSotData->pDataFlavorList = new List();
+        pSotData->pDataFlavorList = new tDataFlavorList();
     return *pSotData->pDataFlavorList;
 }
 
@@ -263,10 +261,10 @@ sal_uLong SotExchange::RegisterFormatName( const String& rName )
                      : i );
 
     // dann in der dynamischen Liste
-    List& rL = InitFormats_Impl();
-    for( i = 0, nMax = rL.Count(); i < nMax; i++ )
+    tDataFlavorList& rL = InitFormats_Impl();
+    for( i = 0, nMax = rL.size(); i < nMax; i++ )
     {
-        DataFlavor* pFlavor = (DataFlavor*) rL.GetObject( i );
+        DataFlavor* pFlavor = rL[ i ];
         if( pFlavor && rName == String( pFlavor->HumanPresentableName ) )
             return i + SOT_FORMATSTR_ID_USER_END + 1;
     }
@@ -278,7 +276,7 @@ sal_uLong SotExchange::RegisterFormatName( const String& rName )
     pNewFlavor->HumanPresentableName = rName;
     pNewFlavor->DataType = ::getCppuType( (const ::rtl::OUString*) 0 );
 
-    rL.Insert( pNewFlavor, LIST_APPEND );
+    rL.push_back( pNewFlavor );
 
     return nMax + SOT_FORMATSTR_ID_USER_END + 1;
 }
@@ -298,10 +296,10 @@ sal_uLong SotExchange::RegisterFormatMimeType( const String& rMimeType )
             return i;
 
     // dann in der dynamischen Liste
-    List& rL = InitFormats_Impl();
-    for( i = 0, nMax = rL.Count(); i < nMax; i++ )
+    tDataFlavorList& rL = InitFormats_Impl();
+    for( i = 0, nMax = rL.size(); i < nMax; i++ )
     {
-        DataFlavor* pFlavor = (DataFlavor*) rL.GetObject( i );
+        DataFlavor* pFlavor = rL[ i ];
         if( pFlavor && rMimeType == String( pFlavor->MimeType ) )
             return i + SOT_FORMATSTR_ID_USER_END + 1;
     }
@@ -313,7 +311,7 @@ sal_uLong SotExchange::RegisterFormatMimeType( const String& rMimeType )
     pNewFlavor->HumanPresentableName = rMimeType;
     pNewFlavor->DataType = ::getCppuType( (const ::rtl::OUString*) 0 );
 
-    rL.Insert( pNewFlavor, LIST_APPEND );
+    rL.push_back( pNewFlavor );
 
     return nMax + SOT_FORMATSTR_ID_USER_END + 1;
 }
@@ -330,9 +328,9 @@ sal_uLong SotExchange::RegisterFormat( const DataFlavor& rFlavor )
 
     if( !nRet )
     {
-        List& rL = InitFormats_Impl();
-        nRet = rL.Count() + SOT_FORMATSTR_ID_USER_END + 1;
-        rL.Insert( new DataFlavor( rFlavor ), LIST_APPEND );
+        tDataFlavorList& rL = InitFormats_Impl();
+        nRet = rL.size() + SOT_FORMATSTR_ID_USER_END + 1;
+        rL.push_back( new DataFlavor( rFlavor ) );
     }
 
     return nRet;
@@ -359,13 +357,13 @@ sal_Bool SotExchange::GetFormatDataFlavor( sal_uLong nFormat, DataFlavor& rFlavo
     }
     else
     {
-        List& rL = InitFormats_Impl();
+        tDataFlavorList& rL = InitFormats_Impl();
 
         nFormat -= SOT_FORMATSTR_ID_USER_END + 1;
 
-        if( rL.Count() > nFormat )
+        if( rL.size() > nFormat )
         {
-            rFlavor = *(DataFlavor*) rL.GetObject( nFormat );
+            rFlavor = *rL[ nFormat ];
             bRet = sal_True;
         }
         else
@@ -393,12 +391,12 @@ String SotExchange::GetFormatMimeType( sal_uLong nFormat )
         sMimeType.AssignAscii( FormatArray_Impl::get()[nFormat].pMimeType );
     else
     {
-        List& rL = InitFormats_Impl();
+        tDataFlavorList& rL = InitFormats_Impl();
 
         nFormat -= SOT_FORMATSTR_ID_USER_END + 1;
 
-        if( rL.Count() > nFormat )
-            sMimeType = ((DataFlavor*) rL.GetObject( nFormat ))->MimeType;
+        if( rL.size() > nFormat )
+            sMimeType = rL[ nFormat ]->MimeType;
     }
 
     DBG_ASSERT( sMimeType.Len(), "SotExchange::GetFormatMimeType(): DataFlavor not initialized" );
@@ -431,11 +429,11 @@ sal_uLong SotExchange::GetFormatIdFromMimeType( const String& rMimeType )
                      : i );
 
     // dann in der dynamischen Liste
-    List& rL = InitFormats_Impl();
+    tDataFlavorList& rL = InitFormats_Impl();
     ::rtl::OUString aMimeType( rMimeType );
-    for( i = 0, nMax = rL.Count(); i < nMax; i++ )
+    for( i = 0, nMax = rL.size(); i < nMax; i++ )
     {
-        DataFlavor* pFlavor = (DataFlavor*) rL.GetObject( i );
+        DataFlavor* pFlavor = rL[ i ];
         if( pFlavor && aMimeType == pFlavor->MimeType )
             return i + SOT_FORMATSTR_ID_USER_END + 1;
     }
@@ -471,10 +469,10 @@ sal_uLong SotExchange::GetFormat( const DataFlavor& rFlavor )
                      : i );
 
     // dann in der dynamischen Liste
-    List& rL = InitFormats_Impl();
-    for( i = 0, nMax = rL.Count(); i < nMax; i++ )
+    tDataFlavorList& rL = InitFormats_Impl();
+    for( i = 0, nMax = rL.size(); i < nMax; i++ )
     {
-        DataFlavor* pFlavor = (DataFlavor*) rL.GetObject( i );
+        DataFlavor* pFlavor = rL[ i ];
         if( pFlavor && rMimeType == pFlavor->MimeType )
             return i + SOT_FORMATSTR_ID_USER_END + 1;
     }
