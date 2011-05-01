@@ -2882,17 +2882,6 @@ sal_Bool DirEntry::IsValid() const
         return (nError == FSYS_ERR_OK);
 }
 
-/*************************************************************************
-|*
-|*    DirEntry::IsRFSAvailable()
-|*
-*************************************************************************/
-
-sal_Bool DirEntry::IsRFSAvailable()
-{
-    return sal_False;
-}
-
 //========================================================================
 
 #if defined(DBG_UTIL)

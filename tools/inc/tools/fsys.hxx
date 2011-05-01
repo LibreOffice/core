@@ -369,7 +369,6 @@ public:
     static FSysPathStyle GetPathStyle( const String &rDevice );
     static String       ConvertNameToSystem( const String & rName );
     static String       ConvertSystemToName( const String & rName );
-    static sal_Bool         IsRFSAvailable();
 };
 
 // --------------
