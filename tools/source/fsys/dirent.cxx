@@ -2908,46 +2908,6 @@ sal_Bool DirEntry::IsRFSAvailable()
     return sal_False;
 }
 
-/*************************************************************************
-|*
-|*    IsLongNameOnFAT()
-|*
-|*    Beschreibung      ?berpr?ft , ob das DirEntry einen langen
-|*                      Filenamen auf einer FAT-Partition enth?lt (EAs).
-|*                      (eigentlich nur f?r OS2 interessant)
-|*
-*************************************************************************/
-
-sal_Bool DirEntry::IsLongNameOnFAT() const
-{
-        // FAT-System?
-        DirEntry aTempDirEntry(*this);
-        aTempDirEntry.ToAbs();
-        if (DirEntry::GetPathStyle(aTempDirEntry.GetDevice().GetName().GetChar(0)) != FSYS_STYLE_FAT)
-        {
-            return sal_False;       // nein, also false
-        }
-
-        // DirEntry-Kette auf lange Dateinamen pr?fen
-        for( sal_uInt16 iLevel = this->Level(); iLevel > 0; iLevel-- )
-        {
-            const DirEntry& rEntry = (const DirEntry&) (*this)[iLevel-1];
-            String  aBase( rEntry.GetBase() );
-            String  aExtension( rEntry.GetExtension() );
-
-            if (aBase.Len()>8)  // Name > 8?
-            {
-                return sal_True;
-            }
-
-            if (aExtension.Len()>3) // Extension > 3?
-            {
-                return sal_True;
-            }
-        }
-        return sal_False;
-}
-
 //========================================================================
 
 #if defined(DBG_UTIL)

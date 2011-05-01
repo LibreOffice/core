@@ -296,7 +296,6 @@ public:
                                    FSysPathStyle eParser = FSYS_STYLE_HOST );
                         ~DirEntry();
 
-    sal_Bool                IsLongNameOnFAT() const;
     sal_Bool                IsCaseSensitive (FSysPathStyle eFormatter = FSYS_STYLE_HOST) const;
 
     sal_uIntPtr             GetError() const { return nError; }
