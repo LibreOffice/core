@@ -1709,42 +1709,6 @@ sal_Bool DirEntry::ImpToRel( String aCurStr )
 
 /*************************************************************************
 |*
-|*    DirEntry::CutRelParents()
-|*
-*************************************************************************/
-
-sal_uInt16 DirEntry::CutRelParents()
-{
-    DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
-
-        // erstes '..' finden
-    DirEntry *pDir = 0;
-    DirEntry *pPar;
-
-    for (  pPar = this;
-          pPar && pPar->eFlag != FSYS_FLAG_PARENT;
-          pPar = pPar->pParent )
-        pDir = pPar;
-
-    // '..' zaehlen
-    sal_uInt16 nParCount = 0;
-    while ( pPar && pPar->eFlag == FSYS_FLAG_PARENT )
-    {
-        ++nParCount;
-        pPar = pPar->pParent;
-    }
-
-    // cutten
-    if ( pDir )
-        DELETEZ(pDir->pParent);
-    else
-        eFlag = FSYS_FLAG_CURRENT;
-
-    return nParCount;
-}
-
-/*************************************************************************
-|*
 |*    DirEntry::ToRel()
 |*
 *************************************************************************/
@@ -1830,42 +1794,6 @@ void DirEntry::SetBase( const String& rBase, char cSep )
 String DirEntry::GetSearchDelimiter( FSysPathStyle eFormatter )
 {
     return String( ByteString(SEARCHDELIM( GetStyle( eFormatter ) ) ), osl_getThreadTextEncoding());
-}
-
-/*************************************************************************
-|*
-|*    DirEntry::GetMaxNameLen()
-|*
-|*    Beschreibung      Liefert die maximale Anzahl von Zeichen in
-|*                      einzelnen Namensteile. Bei FileSystmen mit
-|*                      fester Extension (FAT) zaehlt diese nicht mit.
-|*                      Bei unbekannten FileSytemen und FSYS_STYLE_URL
-|*                      wird USHRT_MAX zurueckgegeben.
-|*
-*************************************************************************/
-
-sal_uInt16 DirEntry::GetMaxNameLen( FSysPathStyle eFormatter )
-{
-    eFormatter = GetStyle( eFormatter );
-    switch ( eFormatter )
-    {
-        case FSYS_STYLE_MAC:    return  31;
-
-        case FSYS_STYLE_FAT:    return   8;
-
-        case FSYS_STYLE_VFAT:
-        case FSYS_STYLE_NTFS:
-        case FSYS_STYLE_NWFS:
-        case FSYS_STYLE_HPFS:   return 255;
-
-
-        case FSYS_STYLE_SYSV:   return  14;
-
-        case FSYS_STYLE_BSD:    return 250;
-
-        default:
-            return USHRT_MAX;
-    }
 }
 
 /*************************************************************************
@@ -2847,28 +2775,6 @@ sal_uInt16 DirEntry::Level() const
     }
 
     return nLevel;
-}
-
-/*************************************************************************
-|*
-|*    DirEntry::ConvertNameToSystem()
-|*
-*************************************************************************/
-
-String DirEntry::ConvertNameToSystem( const String &rName )
-{
-    return rName;
-}
-
-/*************************************************************************
-|*
-|*    DirEntry::ConvertSystemToName()
-|*
-*************************************************************************/
-
-String DirEntry::ConvertSystemToName( const String &rName )
-{
-    return rName;
 }
 
 /*************************************************************************

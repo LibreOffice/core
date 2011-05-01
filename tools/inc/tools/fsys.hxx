@@ -330,7 +330,6 @@ public:
     sal_Bool                Find( const String& rPfad, char cDelim = 0 );
     sal_Bool                ToRel();
     sal_Bool                ToRel( const DirEntry& rRefDir );
-    sal_uInt16              CutRelParents();
 
     sal_Bool                SetCWD( sal_Bool bSloppy = sal_False ) const;
     sal_Bool                MakeDir( sal_Bool bSloppy = sal_False ) const;
@@ -365,10 +364,7 @@ public:
 
     static String       GetAccessDelimiter( FSysPathStyle eFormatter = FSYS_STYLE_HOST );
     static String       GetSearchDelimiter( FSysPathStyle eFormatter = FSYS_STYLE_HOST );
-    static sal_uInt16       GetMaxNameLen( FSysPathStyle eFormatter = FSYS_STYLE_HOST );
     static FSysPathStyle GetPathStyle( const String &rDevice );
-    static String       ConvertNameToSystem( const String & rName );
-    static String       ConvertSystemToName( const String & rName );
 };
 
 // --------------
