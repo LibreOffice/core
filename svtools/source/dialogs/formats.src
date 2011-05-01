@@ -189,7 +189,7 @@ String STR_FORMAT_ID_BIFF_5
 };
 String STR_FORMAT_ID_BIFF_8
 {
-    Text [ en-US ] = "Biff8 (Microsoft Excel 97/2000/XP)";
+    Text [ en-US ] = "Biff8 (Microsoft Excel 97/2000/XP/2003)";
 };
 String STR_FORMAT_ID_SYLK
 {
