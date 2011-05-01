@@ -1,6 +1,5 @@
     <node oor:name="MS Word 2007 XML Template">
         <prop oor:name="UIName">
             <value xml:lang="en-US">Microsoft Word 2007 XML Template</value>
-            <value xml:lang="de">Microsoft Word 2007 XML Vorlage</value>
         </prop>
     </node>

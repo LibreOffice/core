@@ -1,6 +1,5 @@
     <node oor:name="MS Word 2007 XML">
         <prop oor:name="UIName">
             <value xml:lang="en-US">Microsoft Word 2007 XML</value>
-            <value xml:lang="de">Microsoft Word 2007 XML</value>
         </prop>
     </node>

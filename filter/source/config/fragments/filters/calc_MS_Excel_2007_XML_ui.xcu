@@ -1,6 +1,5 @@
 <node oor:name="Calc MS Excel 2007 XML">
     <prop oor:name="UIName">
         <value xml:lang="en-US">Microsoft Excel 2007 XML</value>
-        <value xml:lang="de">Microsoft Excel 2007 XML</value>
     </prop>
 </node>

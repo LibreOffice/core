@@ -1,6 +1,5 @@
     <node oor:name="Office Open XML Text">
         <prop oor:name="UIName">
             <value xml:lang="en-US">Office Open XML Text</value>
-            <value xml:lang="de">Office Open XML Text</value>
         </prop>
     </node>

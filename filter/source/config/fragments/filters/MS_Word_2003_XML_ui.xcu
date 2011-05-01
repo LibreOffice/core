@@ -1,12 +1,5 @@
     <node oor:name="MS Word 2003 XML">
         <prop oor:name="UIName">
-            <value xml:lang="el">Microsoft Word 2003 XML</value>
             <value xml:lang="en-US">Microsoft Word 2003 XML</value>
-            <value xml:lang="hu">Microsoft Word 2003 XML</value>
-            <value xml:lang="cs">Microsoft Word 2003 XML</value>
-            <value xml:lang="sk">Microsoft Word 2003 XML</value>
-            <value xml:lang="sl">Microsoft Word 2003 XML</value>
-            <value xml:lang="nl">Microsoft Word 2003 XML</value>
-            <value xml:lang="da">Microsoft Word 2003 XML</value>
-                    </prop>
+        </prop>
     </node>
