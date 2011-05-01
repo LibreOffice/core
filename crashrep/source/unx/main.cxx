@@ -538,19 +538,20 @@ bool send_crash_report( const boost::unordered_map< string, string >& rSettings 
 static bool append_file( const char *filename, string& rString )
 {
     char buf[1024];
+    bool bSuccess = false;
 
     FILE *fp = fopen( filename, "r" );
     if ( fp )
     {
-        bSuccess = true;
         while (fgets(buf, sizeof(buf), fp) != NULL)
         {
             rString.append( buf );
         }
         fclose( fp );
+        bSuccess = true;
     }
 
-    return true;
+    return bSuccess;
 }
 
 string crash_get_details( const boost::unordered_map< string, string >& rSettings )
