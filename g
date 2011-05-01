@@ -12,6 +12,7 @@ if [ "$#" -eq "0" ] ; then
     echo "Usage: g [options] [git commands]"
     echo "   -f         Force - act on all the repos, not only the changed ones"
     echo "   -s         Silent - do not report the repo names."
+    echo "   -1         report the repos name on the first line of the output as <repo>:"
     echo "   --set-push-user [username] re-write an existing tree's config with an fd.o commit account name"
     exit $?
 fi
@@ -49,6 +50,7 @@ PUSH_ALL=
 ALLOW_EMPTY=
 KEEP_GOING=0
 REPORT_REPOS=1
+REPORT_COMPACT=0
 
 while [ "${COMMAND:0:1}" = "-" ] ; do
     case "$COMMAND" in
@@ -56,10 +58,12 @@ while [ "${COMMAND:0:1}" = "-" ] ; do
             ;;
         -s) REPORT_REPOS=0
             ;;
-	--set-push-user)
-	    shift
-	    PUSH_USER="$1"
-	    ;;
+		-1) REPORT_COMPACT=1
+            ;;
+	    --set-push-user)
+	        shift
+	        PUSH_USER="$1"
+	        ;;
     esac
     shift
     COMMAND="$1"
@@ -232,11 +236,17 @@ for REPO in $DIRS ; do
             HEADREF=$(git show-ref --head HEAD)
 
             # do it!
-	    if [ "$COMMAND" != "clone" -o ! -d $DIR ] ; then
-                [ "$REPORT_REPOS" = "1" ] && echo "===== $NAME ====="
+            if [ "$COMMAND" != "clone" -o ! -d $DIR ] ; then
+                if [ "$REPORT_REPOS" = "1" ] ; then
+                    if [ "$REPORT_COMPACT" = "1" ] ; then
+                        echo -n "${REPO}:"
+                    else
+                        echo "===== $NAME ====="
+                    fi
+                fi
                 git $PAGER "$COMMAND" $EXTRA "${FILES[@]}"
                 RETURN=$?
-	    fi
+            fi
 
             # now we can change the dir in case of clone as well
             if [ "$COMMAND" = "clone" ] ; then
