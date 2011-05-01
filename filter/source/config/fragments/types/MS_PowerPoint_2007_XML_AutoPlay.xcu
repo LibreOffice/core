@@ -5,6 +5,6 @@
     <prop oor:name="MediaType"/>
     <prop oor:name="Preferred"><value>true</value></prop>
     <prop oor:name="PreferredFilter"><value>Impress MS PowerPoint 2007 XML AutoPlay</value></prop>
-    <prop oor:name="UIName"><value xml:lang="x-default">Microsoft PowerPoint 2007 XML</value></prop>
+    <prop oor:name="UIName"><value xml:lang="en-US">Microsoft PowerPoint 2007/2010 XML</value></prop>
     <prop oor:name="ClipboardFormat"/>
 </node>

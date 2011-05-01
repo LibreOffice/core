@@ -5,6 +5,6 @@
     <prop oor:name="MediaType"><value>application/vnd.ms-excel</value></prop>
     <prop oor:name="Preferred"><value>false</value></prop>
     <prop oor:name="PreferredFilter"><value>Calc MS Excel 2007 XML</value></prop>
-    <prop oor:name="UIName"><value xml:lang="x-default">Microsoft Excel 2007 XML</value></prop>
+    <prop oor:name="UIName"><value xml:lang="en-US">Microsoft Excel 2007/2010 XML</value></prop>
     <prop oor:name="ClipboardFormat"/>
 </node>

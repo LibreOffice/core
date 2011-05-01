@@ -1,5 +1,5 @@
 <node oor:name="Impress MS PowerPoint 2007 XML">
     <prop oor:name="UIName">
-        <value xml:lang="en-US">Microsoft PowerPoint 2007 XML</value>
+        <value xml:lang="en-US">Microsoft PowerPoint 2007/2010 XML</value>
     </prop>
 </node>
