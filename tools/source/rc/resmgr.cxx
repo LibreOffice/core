@@ -662,9 +662,7 @@ sal_Bool InternalResMgr::Create()
             }
         }
         rtl_freeMemory( pContentBuf );
-#ifndef OS2
         OSL_ENSURE( bSorted, "content not sorted" );
-#endif
         OSL_ENSURE( bEqual2Content, "resource structure wrong" );
         if( !bSorted )
             ::std::sort(pContent,pContent+nEntries,ImpContentLessCompare());

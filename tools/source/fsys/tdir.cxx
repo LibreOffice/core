@@ -334,7 +334,7 @@ void Dir::Reset()
 #endif
 
     // gibt es das zu oeffnende Verzeichnis ueberhaupt?
-#if !defined(UNX) && !defined(OS2) //explanation: see DirReader_Impl::Read() in unx.cxx
+#if !defined(UNX)   //explanation: see DirReader_Impl::Read() in unx.cxx
     if( !pReader->pDosDir )
     {
         nError = FSYS_ERR_NOTADIRECTORY;

@@ -52,8 +52,6 @@
 #include "unx.hxx"
 #elif defined WNT
 #include "wntmsc.hxx"
-#elif defined OS2
-#include "os2.hxx"
 #endif
 
 //--------------------------------------------------------------------
@@ -93,7 +91,7 @@ struct DirReader_Impl
 
                     // nur den String der Memer-Var nehmen!
 
-#if defined(UNX) || defined(OS2) //for further exlpanation see DirReader_Impl::Read() in unx.cxx
+#if defined(UNX)    //for further eplanation see DirReader_Impl::Read() in unx.cxx
                     pDosDir = NULL;
 #else
                     aBypass = ByteString(aPath, osl_getThreadTextEncoding());
@@ -145,7 +143,7 @@ struct FileCopier_Impl
 
 //--------------------------------------------------------------------
 
-#if defined WNT || defined OS2
+#if defined WNT
 sal_Bool IsRedirectable_Impl( const ByteString &rPath );
 #else
 #define IsRedirectable_Impl( rPath )    sal_True

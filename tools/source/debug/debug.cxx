@@ -44,14 +44,6 @@
 #include <string.h>
 #include <stdio.h>
 
-#ifdef OS2
-#define INCL_DOSSEMAPHORES
-#define INCL_DOSMISC
-#define INCL_WINDIALOGS
-#define INCL_WINSHELLDATA
-#include <svpm.h>
-#endif
-
 #if defined ( WNT )
 #include <windows.h>
 #endif
@@ -210,8 +202,6 @@ static int bDbgImplInMain = sal_False;
 
 #if defined( WNT )
 static CRITICAL_SECTION aImplCritDbgSection;
-#elif defined( OS2 )
-static HMTX             hImplCritDbgSection = 0;
 #endif
 static sal_Bool             bImplCritDbgSectionInit = sal_False;
 
@@ -221,8 +211,6 @@ void ImplDbgInitLock()
 {
 #if defined( WNT )
     InitializeCriticalSection( &aImplCritDbgSection );
-#elif defined( OS2 )
-    DosCreateMutexSem( NULL, &hImplCritDbgSection, 0, sal_False );
 #endif
     bImplCritDbgSectionInit = sal_True;
 }
@@ -233,8 +221,6 @@ void ImplDbgDeInitLock()
 {
 #if defined( WNT )
     DeleteCriticalSection( &aImplCritDbgSection );
-#elif defined( OS2 )
-    DosCloseMutexSem( hImplCritDbgSection );
 #endif
     bImplCritDbgSectionInit = sal_False;
 }
@@ -248,8 +234,6 @@ void ImplDbgLock()
 
 #if defined( WNT )
     EnterCriticalSection( &aImplCritDbgSection );
-#elif defined( OS2 )
-    DosRequestMutexSem( hImplCritDbgSection, SEM_INDEFINITE_WAIT );
 #endif
 }
 
@@ -262,14 +246,12 @@ void ImplDbgUnlock()
 
 #if defined( WNT )
     LeaveCriticalSection( &aImplCritDbgSection );
-#elif defined( OS2 )
-    DosReleaseMutexSem( hImplCritDbgSection );
 #endif
 }
 
 // =======================================================================
 
-#if (defined WNT || defined OS2)
+#if defined WNT
 //#define SV_MEMMGR //
 #endif
 #ifdef SV_MEMMGR
@@ -316,10 +298,6 @@ static sal_uIntPtr ImplGetPerfTime()
 {
 #if defined( WNT )
     return (sal_uIntPtr)GetTickCount();
-#elif defined( OS2 )
-    sal_uIntPtr nClock;
-    DosQuerySysInfo( QSV_MS_COUNT, QSV_MS_COUNT, &nClock, sizeof( nClock ) );
-    return (sal_uIntPtr)nClock;
 #else
     static sal_uIntPtr    nImplTicksPerSecond = 0;
     static double   dImplTicksPerSecond;
@@ -683,9 +661,6 @@ static void DbgGetDbgFileName( sal_Char* pStr, sal_Int32 nMaxLen )
         strncpy( pStr, pName, nMaxLen );
     else
         GetProfileStringA( "sv", "dbgsv", "dbgsv.ini", pStr, nMaxLen );
-#elif defined( OS2 )
-    PrfQueryProfileString( HINI_PROFILE, (PSZ)"SV", (PSZ)"DBGSV",
-                           "dbgsv.ini", (PSZ)pStr, nMaxLen );
 #else
     strncpy( pStr, "dbgsv.ini", nMaxLen );
 #endif
@@ -707,9 +682,6 @@ static void DbgGetLogFileName( sal_Char* pStr )
         strcpy( pStr, pName );
     else
         GetProfileStringA( "sv", "dbgsvlog", "dbgsv.log", pStr, 200 );
-#elif defined( OS2 )
-    PrfQueryProfileString( HINI_PROFILE, (PSZ)"SV", (PSZ)"DBGSVLOG",
-                           "dbgsv.log", (PSZ)pStr, 200 );
 #else
     strcpy( pStr, "dbgsv.log" );
 #endif
@@ -721,8 +693,6 @@ static void DbgDebugBeep()
 {
 #if defined( WNT )
     MessageBeep( MB_ICONHAND );
-#elif defined( OS2 )
-    WinAlarm( HWND_DESKTOP, WA_ERROR );
 #endif
 }
 

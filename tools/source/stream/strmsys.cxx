@@ -33,8 +33,6 @@
 #include "strmwnt.cxx"
 #elif defined UNX
 #include "strmunx.cxx"
-#elif defined OS2
-#include "strmos2.cxx"
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -38,7 +38,7 @@
 #include <process.h>
 #endif
 
-#if defined(UNX) || defined(OS2)
+#if defined(UNX)
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -966,7 +966,7 @@ sal_Bool DirEntry::Exists( FSysAccess nAccess ) const
         if ( !IsValid() )
                 return sal_False;
 
-#if defined WNT || defined OS2
+#if defined WNT
     // spezielle Filenamen sind vom System da
     if ( ( aName.CompareIgnoreCaseToAscii("CLOCK$") == COMPARE_EQUAL ||
            aName.CompareIgnoreCaseToAscii("CON") == COMPARE_EQUAL ||
@@ -990,7 +990,7 @@ sal_Bool DirEntry::Exists( FSysAccess nAccess ) const
                 return sal_True;
         }
 
-#if defined WNT || defined OS2
+#if defined WNT
         if ( 0 != ( eKind & FSYS_KIND_DEV ) )
         {
                 return DRIVE_EXISTS( ImpGetTopPtr()->aName.GetChar(0) );
@@ -1358,14 +1358,8 @@ sal_Bool DirEntry::operator==( const DirEntry& rEntry ) const
          ( rEntry.eFlag == FSYS_FLAG_INVALID ) )
         return sal_False;
 
-#ifndef OS2
-    const
-#endif
-    DirEntry *pThis = (DirEntry *)this;
-#ifndef OS2
-    const
-#endif
-    DirEntry *pWith = (DirEntry *)&rEntry;
+    const DirEntry *pThis = (DirEntry *)this;
+    const DirEntry *pWith = (DirEntry *)&rEntry;
     while( pThis && pWith && (pThis->eFlag == pWith->eFlag) )
     {
         if ( CMP_LOWER(pThis->aName) != CMP_LOWER(pWith->aName) )
@@ -1971,7 +1965,7 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
             strcpy(ret_val,dir);
 
             /* Make sure directory ends with a separator    */
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
             if ( i>0 && ret_val[i-1] != '\\' && ret_val[i-1] != '/' &&
                  ret_val[i-1] != ':')
                 ret_val[i++] = '\\';
@@ -2039,7 +2033,7 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
                                 }
                                 else
                                 {
-#if defined(UNX) || defined(OS2)
+#if defined(UNX)
                                         if( access( ByteString(aRedirected, osl_getThreadTextEncoding()).GetBuffer(), F_OK ) )
                                         {
                                                 aRet = DirEntry( aRetVal );
@@ -2530,7 +2524,7 @@ FSysError DirEntry::CopyTo( const DirEntry& rDest, FSysAction nActions ) const
 |*
 *************************************************************************/
 
-#if defined WNT || defined UNX || defined OS2
+#if defined WNT || defined UNX
 
 FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
 {
@@ -2552,13 +2546,6 @@ FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
     {
         return FSYS_ERR_ALREADYEXISTS;
     }
-
-#if defined(OS2)
-    if ( FileStat(*this).IsKind(FSYS_KIND_DIR) && aDest.GetPath() != GetPath() )
-    {
-        return FSYS_ERR_NOTSUPPORTED;
-    }
-#endif
 
         FSysFailOnErrorImpl();
         String aFrom( GetFull() );
@@ -2634,7 +2621,7 @@ FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
         // on some nfs connections rename with from == to
         // leads to destruction of file
         if ( ( aFrom != aTo ) && ( 0 != rename( bFrom.GetBuffer(), bTo.GetBuffer() ) ) )
-#if !defined(UNX) && !defined(OS2)
+#if !defined(UNX)
             return Sys2SolarError_Impl( GetLastError() );
 #else
         {
@@ -2773,9 +2760,7 @@ FSysError DirEntry::Kill(  FSysAction nActions ) const
         {
                 if ( FSYS_ACTION_USERECYCLEBIN == (nActions & FSYS_ACTION_USERECYCLEBIN) )
                 {
-#ifdef OS2
-                        eError = ApiRet2ToSolarError_Impl( DosDelete( (PSZ) pName ) );
-#elif defined(WNT)
+#if defined(WNT)
                         SHFILEOPSTRUCT aOp;
                         aOp.hwnd = 0;
                         aOp.wFunc = FO_DELETE;

@@ -39,8 +39,6 @@ DBG_NAMEEX( DirEntry )
 #include "unx.cxx"
 #elif defined WNT
 #include "wntmsc.cxx"
-#elif defined OS2
-#include "os2.cxx"
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

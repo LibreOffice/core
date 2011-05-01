@@ -33,13 +33,6 @@
 #include <windows.h>
 #include <io.h>
 
-#elif defined(OS2)
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <share.h>
-#include <io.h>
-
 #elif defined UNX
 #include <fcntl.h>
 #include <unistd.h>
@@ -242,55 +235,6 @@ FSysError FileCopier::DoCopy_Impl(
     FileStat aSourceFileStat( rSource );
     if ( aSourceFileStat.IsKind( FSYS_KIND_DIR ) )
     {
-#ifdef OS2
-        CHAR szSource[CCHMAXPATHCOMP];
-        HOBJECT hSourceObject;
-
-        strcpy(szSource, ByteString(rSource.GetFull(), osl_getThreadTextEncoding()).GetBuffer());
-        hSourceObject = WinQueryObject(szSource);
-
-        if ( hSourceObject )
-        {
-            PSZ  pszSourceName;
-            PSZ  pszTargetName;
-            CHAR szTarget[CCHMAXPATHCOMP];
-            HOBJECT hTargetObject;
-            HOBJECT hReturn = NULLHANDLE;
-
-            strcpy(szTarget, ByteString(rTarget.GetFull(), osl_getThreadTextEncoding()).GetBuffer());
-            pszTargetName = strrchr(szTarget, '\\');
-            pszSourceName = strrchr(szSource, '\\');
-
-            hTargetObject = WinQueryObject(szTarget);
-
-            if ( hTargetObject )
-                WinDestroyObject(hTargetObject);
-
-            if ( pszTargetName && pszSourceName )
-            {
-                *pszTargetName = '\0';
-                pszSourceName++;
-                pszTargetName++;
-
-                if(strcmp(pszSourceName, pszTargetName) == 0)
-                {
-                    hTargetObject = WinQueryObject(szTarget);
-
-                    if(pImp->nActions & FSYS_ACTION_MOVE)
-                    {
-                        hReturn = WinMoveObject(hSourceObject, hTargetObject, 0);
-                    }
-                    else
-                    {
-                        hReturn = WinCopyObject(hSourceObject, hTargetObject, 0);
-                    }
-                    if ( bMakeShortNames && aTarget.Exists() )
-                        aTarget.Kill();
-                    return hReturn ? FSYS_ERR_OK : FSYS_ERR_UNKNOWN;
-                }
-            }
-        }
-#endif
         // recursive copy
         eRet = Error( aTgt.MakeDir() ? FSYS_ERR_OK : FSYS_ERR_UNKNOWN, 0, &aTgt );
         Dir aSourceDir( rSource, FSYS_KIND_DIR|FSYS_KIND_FILE );

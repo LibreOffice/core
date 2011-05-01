@@ -29,10 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_tools.hxx"
 
-#if defined( OS2 )
-#define INCL_DOSDATETIME
-#include <svpm.h>
-#elif defined( WNT )
+#if defined( WNT )
 #include <windows.h>
 #else
 #include <time.h>
@@ -140,15 +137,7 @@ static void DaysToDate( long nDays,
 
 Date::Date()
 {
-#if defined( OS2 )
-    DATETIME aDateTime;
-    DosGetDateTime( &aDateTime );
-
-    // Datum zusammenbauen
-    nDate = ((sal_uIntPtr)aDateTime.day) +
-            (((sal_uIntPtr)aDateTime.month)*100) +
-            (((sal_uIntPtr)aDateTime.year)*10000);
-#elif defined WNT
+#if defined WNT
     SYSTEMTIME aDateTime;
     GetLocalTime( &aDateTime );
 

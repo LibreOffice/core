@@ -36,7 +36,7 @@
 #include <tools/debug.hxx>
 #include <toolsin.hxx>
 
-#if defined WNT || defined OS2
+#if defined WNT
 #include <dll.hxx>
 #endif
 
@@ -89,9 +89,6 @@ void GlobalDeInitTools()
 
 #if defined WNT
     ImpDeInitWinTools();
-#endif
-#ifdef OS2
-    ImpDeInitOS2Tools();
 #endif
 }
 

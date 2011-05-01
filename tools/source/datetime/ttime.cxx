@@ -31,11 +31,7 @@
 
 #define _TOOLS_TIME_CXX
 
-#if defined( OS2 )
-#define INCL_DOSMISC
-#define INCL_DOSDATETIME
-#include <svpm.h>
-#elif defined( WNT )
+#if defined( WNT )
 #include <windows.h>
 #elif defined UNX
 #include <unistd.h>
@@ -94,16 +90,7 @@ static Time Sec100ToTime( sal_Int32 nSec100 )
 
 Time::Time()
 {
-#if defined( OS2 )
-    DATETIME aDateTime;
-    DosGetDateTime( &aDateTime );
-
-    // Zeit zusammenbauen
-    nTime = (((sal_Int32)aDateTime.hours)*1000000) +
-            (((sal_Int32)aDateTime.minutes)*10000) +
-            (((sal_Int32)aDateTime.seconds)*100) +
-            ((sal_Int32)aDateTime.hundredths);
-#elif defined( WNT )
+#if defined( WNT )
     SYSTEMTIME aDateTime;
     GetLocalTime( &aDateTime );
 
@@ -313,23 +300,7 @@ sal_Bool Time::IsEqualIgnore100Sec( const Time& rTime ) const
 
 Time Time::GetUTCOffset()
 {
-#if defined( OS2 )
-#undef timezone
-    DATETIME aDateTime;
-    DosGetDateTime( &aDateTime );
-
-    // Zeit zusammenbauen
-    if ( aDateTime.timezone != -1  )
-    {
-        short nTempTime = (short)Abs( aDateTime.timezone );
-        Time aTime( 0, (sal_uInt16)nTempTime );
-        if ( aDateTime.timezone > 0 )
-            aTime = -aTime;
-        return aTime;
-    }
-    else
-        return Time( 0 );
-#elif defined( WNT )
+#if defined( WNT )
     TIME_ZONE_INFORMATION   aTimeZone;
     aTimeZone.Bias = 0;
     DWORD nTimeZoneRet = GetTimeZoneInformation( &aTimeZone );
@@ -391,10 +362,6 @@ sal_uIntPtr Time::GetSystemTicks()
 {
 #if defined WNT
     return (sal_uIntPtr)GetTickCount();
-#elif defined( OS2 )
-    sal_uIntPtr nClock;
-    DosQuerySysInfo( QSV_MS_COUNT, QSV_MS_COUNT, &nClock, sizeof( nClock ) );
-    return (sal_uIntPtr)nClock;
 #else
     timeval tv;
     gettimeofday (&tv, 0);
@@ -414,10 +381,6 @@ sal_uIntPtr Time::GetProcessTicks()
 {
 #if defined WNT
     return (sal_uIntPtr)GetTickCount();
-#elif defined( OS2 )
-    sal_uIntPtr nClock;
-    DosQuerySysInfo( QSV_MS_COUNT, QSV_MS_COUNT, &nClock, sizeof( nClock ) );
-    return (sal_uIntPtr)nClock;
 #else
     static sal_uIntPtr  nImplTicksPerSecond = 0;
     static double   dImplTicksPerSecond;
