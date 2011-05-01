@@ -290,5 +290,6 @@ void FileStat::SetDateTime( const String& rFileName,
         CloseHandle( hFile );
     }
 }
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
