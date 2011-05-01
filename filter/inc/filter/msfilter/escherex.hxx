@@ -34,7 +34,6 @@
 #include <boost/shared_ptr.hpp>
 #include <tools/solar.h>
 #include <tools/gen.hxx>
-#include <tools/list.hxx>
 #include <tools/stream.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <svtools/grfmgr.hxx>
