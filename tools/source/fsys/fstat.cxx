@@ -134,21 +134,6 @@ sal_Bool FileStat::IsKind( DirEntryKind nKind ) const
 
 /*************************************************************************
 |*
-|*    FileStat::HasReadOnlyFlag()
-|*
-*************************************************************************/
-
-sal_Bool FileStat::HasReadOnlyFlag()
-{
-#if defined WNT || defined UNX || defined OS2
-    return sal_True;
-#else
-    return sal_False;
-#endif
-}
-
-/*************************************************************************
-|*
 |*    FileStat::GetReadOnlyFlag()
 |*
 *************************************************************************/

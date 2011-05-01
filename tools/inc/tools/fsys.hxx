@@ -225,7 +225,6 @@ public:
 
     static sal_uIntPtr  SetReadOnlyFlag( const DirEntry &rEntry, sal_Bool bRO = sal_True );
     static sal_Bool     GetReadOnlyFlag( const DirEntry &rEntry );
-    static sal_Bool     HasReadOnlyFlag();
 
     static ErrCode  QueryDiskSpace( const String &rPath,
                                     BigInt &rFreeBytes, BigInt &rTotalBytes );
