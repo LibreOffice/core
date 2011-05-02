@@ -53,7 +53,7 @@ LibreOffice
 		variables
 		{
 			PRODUCTNAME LibreOffice
-			PRODUCTNAME_BR BrOffice
+			PRODUCTNAME_BR LibreOffice
 			PRODUCTVERSION 3.4
 			PRODUCTEXTENSION 
 			LONG_PRODUCTEXTENSION 
@@ -121,7 +121,7 @@ LibreOffice_wJRE
 		variables
 		{
 			PRODUCTNAME LibreOffice
-			PRODUCTNAME_BR BrOffice
+			PRODUCTNAME_BR LibreOffice
 			PRODUCTVERSION 3.4
 			PRODUCTEXTENSION 
 			LONG_PRODUCTEXTENSION 
@@ -301,7 +301,7 @@ LibreOffice_SDK
         variables
         {
             PRODUCTNAME LibreOffice
-            PRODUCTNAME_BR BrOffice
+            PRODUCTNAME_BR LibreOffice
             PRODUCTVERSION 3.4
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
