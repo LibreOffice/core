@@ -308,8 +308,12 @@ SfxFilterMatcher::SfxFilterMatcher()
 SfxFilterMatcher::~SfxFilterMatcher()
 {
     if ( !pImpl->aName.getLength() )
+    {
         // only the global Matcher owns his ImplData
+        if( pImplArr )
+            pImplArr->Remove( pImpl );
         delete pImpl;
+    }
 }
 
 void SfxFilterMatcher_Impl::Update()
