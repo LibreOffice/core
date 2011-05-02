@@ -34,7 +34,6 @@
 #include <tools/debug.hxx>
 #include <sot/object.hxx>
 #include <sot/factory.hxx>
-#include <sot/agg.hxx>
 
 /************** class SotObject ******************************************/
 class SotObjectFactory : public SotFactory
