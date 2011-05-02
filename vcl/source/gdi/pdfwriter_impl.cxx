@@ -3359,9 +3359,9 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const ImplFont
                 throw FontException();
 
             // nLength3 is the rest of the file - excluding any section headers
-            // nIndex now points to the first of the 512 '0' characters marking the
+            // nIndex now points before the first of the 512 '0' characters marking the
             // fixed content portion
-            sal_Int32 nLength3 = nFontLen - nIndex;
+            sal_Int32 nLength3 = nFontLen - nIndex - 1;
             for( it = aSections.begin(); it != aSections.end(); ++it )
             {
                 if( *it >= nIndex  )
