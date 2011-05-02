@@ -486,15 +486,12 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
         maIndexOrder.push_back(new vector<SCROW>());
     }
     //check valid
-    for ( SCROW nRow = nStartRow; nRow <= nEndRow; nRow ++ )
+
+    for (sal_uInt16 nCol = nStartCol; nCol <= nEndCol; ++nCol)
     {
-        for ( sal_uInt16 nCol = nStartCol; nCol <= nEndCol; nCol++ )
-        {
-            if ( nRow == nStartRow )
-                AddLabel( new ScDPItemData( pDoc, nRow, nCol, nDocTab  ) );
-            else
-                AddData( nCol - nStartCol, new ScDPItemData( pDoc, nRow, nCol, nDocTab  ) );
-        }
+        AddLabel(new ScDPItemData(pDoc, nStartRow, nCol, nDocTab));
+        for (SCROW nRow = nStartRow + 1; nRow <= nEndRow; ++nRow)
+            AddData(nCol - nStartCol, new ScDPItemData(pDoc, nRow, nCol, nDocTab));
     }
     return true;
 }
