@@ -1898,7 +1898,6 @@ boolean SetupAppX::IsPatchInstalled( TCHAR* pBaseDir, TCHAR* pFileName )
 boolean SetupAppX::InstallRuntimes( TCHAR *sProductCode, TCHAR *sRuntimePath )
 {
     INSTALLSTATE  nRet = MsiQueryProductState( sProductCode );
-    Log( TEXT( "MsiQueryProductState returned <%d>\r\n" ), nRet );
     OutputDebugStringFormat( TEXT( "MsiQueryProductState returned <%d>\r\n" ), nRet );
     if ( nRet == INSTALLSTATE_DEFAULT )
         return true;
