@@ -427,10 +427,6 @@ private:
 //==================class SotObjectRef======================================
 SV_IMPL_REF(SotObject)
 
-//==================class SotObject*List====================================
-SV_DECL_REF_LIST(SotObject,SotObject*)
-SV_IMPL_REF_LIST(SotObject,SotObject*)
-
 #endif // _IFACE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

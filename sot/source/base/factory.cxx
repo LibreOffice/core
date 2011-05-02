@@ -48,7 +48,6 @@
 *************************************************************************/
 SotData_Impl::SotData_Impl()
     : nSvObjCount( 0 )
-    , pObjectList( NULL )
     , pFactoryList( NULL )
     , pSotObjectFactory( NULL )
     , pSotStorageStreamFactory( NULL )
@@ -96,10 +95,11 @@ void SotFactory::DeInit()
         pFactoryList->clear();
         delete pFactoryList;
         pSotData->pFactoryList = NULL;
+
     }
 
-    delete pSotData->pObjectList;
-    pSotData->pObjectList = NULL;
+    pSotData->aObjectList.clear();
+
     if( pSotData->pDataFlavorList )
     {
 
@@ -222,10 +222,9 @@ void SotFactory::IncSvObjectCount( SotObject * pObj )
 {
     SotData_Impl * pSotData = SOTDATA();
     pSotData->nSvObjCount++;
-    if( !pSotData->pObjectList )
-        pSotData->pObjectList = new SotObjectList();
+
     if( pObj )
-        pSotData->pObjectList->Insert( pObj );
+        pSotData->aObjectList.push_back( pObj );
 }
 
 
@@ -239,7 +238,7 @@ void SotFactory::DecSvObjectCount( SotObject * pObj )
     SotData_Impl * pSotData = SOTDATA();
     pSotData->nSvObjCount--;
     if( pObj )
-        pSotData->pObjectList->Remove( pObj );
+        pSotData->aObjectList.remove( pObj );
     if( !pSotData->nSvObjCount )
     {
         //keine internen und externen Referenzen mehr
@@ -256,14 +255,10 @@ void SotFactory::TestInvariant()
 {
 #ifdef TEST_INVARIANT
     SotData_Impl * pSotData = SOTDATA();
-    if( pSotData->pObjectList )
-    {
-        sal_uLong nCount = pSotData->pObjectList->Count();
-        for( sal_uLong i = 0; i < nCount ; i++ )
-        {
-            pSotData->pObjectList->GetObject( i )->TestInvariant( sal_False );
-        }
-    }
+
+    std::list<SotObject*>::iterator it;
+    for( it = pSotData->aObjectList.begin(); it != pSotData->aObjectList.end(); ++it )
+        (*it)->TestInvariant( sal_False );
 #endif
 }
 

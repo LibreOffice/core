@@ -36,11 +36,12 @@
 #include "sot/sotdllapi.h"
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <vector>
+#include <list>
 
 //==================class SotData_Impl====================================
 
 class SotFactory;
-class SotObjectList;
+class SotObject;
 
 typedef ::std::vector< SotFactory* > SotFactoryList;
 typedef ::std::vector< com::sun::star::datatransfer::DataFlavor* > tDataFlavorList;
@@ -48,7 +49,7 @@ typedef ::std::vector< com::sun::star::datatransfer::DataFlavor* > tDataFlavorLi
 struct SotData_Impl
 {
     sal_uInt32          nSvObjCount;
-    SotObjectList *     pObjectList;
+    std::list<SotObject*> aObjectList;
     SotFactoryList *    pFactoryList;
     SotFactory *        pSotObjectFactory;
     SotFactory *        pSotStorageStreamFactory;
