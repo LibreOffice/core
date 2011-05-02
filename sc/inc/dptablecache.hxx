@@ -89,10 +89,10 @@ private:
     mutable ScDPItemDataPool    maAdditionalData;
 
 public:
-    SCROW GetIdByItemData( long nDim,  String sItemData  ) const;
+    SCROW GetIdByItemData( long nDim, const String& sItemData ) const;
     SCROW GetIdByItemData( long nDim, const ScDPItemData& rData ) const;
 
-    SCROW GetAdditionalItemID ( String sItemData ) const;
+    SCROW GetAdditionalItemID ( const String& sItemData ) const;
     SCROW GetAdditionalItemID( const ScDPItemData& rData ) const;
 
     SCCOL GetDimensionIndex( String sName) const;

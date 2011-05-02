@@ -993,7 +993,7 @@ SCCOL ScDPCache::GetDimensionIndex(String sName) const
     return -1;
 }
 
-SCROW ScDPCache::GetIdByItemData(long nDim, String sItemData ) const
+SCROW ScDPCache::GetIdByItemData(long nDim, const String& sItemData ) const
 {
     if ( nDim < mnColumnCount && nDim >=0 )
     {
@@ -1021,7 +1021,7 @@ SCROW ScDPCache::GetIdByItemData( long nDim, const ScDPItemData& rData  ) const
     return  GetRowCount() + maAdditionalData.getDataId(rData);
 }
 
-SCROW ScDPCache::GetAdditionalItemID ( String sItemData ) const
+SCROW ScDPCache::GetAdditionalItemID ( const String& sItemData ) const
 {
     ScDPItemData rData ( sItemData );
     return GetAdditionalItemID( rData );
