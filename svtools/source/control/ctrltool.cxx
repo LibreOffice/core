@@ -171,30 +171,30 @@ ImplFontListNameInfo* FontList::ImplFind( const XubString& rSearchName, sal_uLon
     // und somit die Wahrscheinlichkeit das hinten angehaengt werden muss
     // sehr gross ist.
     StringCompare eComp;
-    sal_uLong nCnt = Count();
+    sal_uLong nCnt = maEntries.size();
     if ( !nCnt )
     {
         if ( pIndex )
-            *pIndex = LIST_APPEND;
+            *pIndex = ULONG_MAX;
         return NULL;
     }
     else
     {
-        ImplFontListNameInfo* pCmpData = (ImplFontListNameInfo*)List::GetObject( nCnt-1 );
+        const ImplFontListNameInfo* pCmpData = &maEntries[nCnt-1];
         eComp = rSearchName.CompareTo( pCmpData->maSearchName );
         if ( eComp == COMPARE_GREATER )
         {
             if ( pIndex )
-                *pIndex = LIST_APPEND;
+                *pIndex = ULONG_MAX;
             return NULL;
         }
         else if ( eComp == COMPARE_EQUAL )
-            return pCmpData;
+            return const_cast<ImplFontListNameInfo*>(pCmpData);
     }
 
     // Fonts in der Liste suchen
-    ImplFontListNameInfo*   pCompareData;
-    ImplFontListNameInfo*   pFoundData = NULL;
+    const ImplFontListNameInfo* pCompareData;
+    const ImplFontListNameInfo* pFoundData = NULL;
     sal_uLong                   nLow = 0;
     sal_uLong                   nHigh = nCnt-1;
     sal_uLong                   nMid;
@@ -202,7 +202,7 @@ ImplFontListNameInfo* FontList::ImplFind( const XubString& rSearchName, sal_uLon
     do
     {
         nMid = (nLow + nHigh) / 2;
-        pCompareData = (ImplFontListNameInfo*)List::GetObject( nMid );
+        pCompareData = &maEntries[nMid];
         eComp = rSearchName.CompareTo( pCompareData->maSearchName );
         if ( eComp == COMPARE_LESS )
         {
@@ -232,7 +232,7 @@ ImplFontListNameInfo* FontList::ImplFind( const XubString& rSearchName, sal_uLon
             *pIndex = nMid;
     }
 
-    return pFoundData;
+    return const_cast<ImplFontListNameInfo*>(pFoundData);
 }
 
 // -----------------------------------------------------------------------
@@ -284,7 +284,11 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, sal_Bool bAll,
                 pData->mpFirst      = pNewInfo;
                 pNewInfo->mpNext    = NULL;
                 pData->mnType       = 0;
-                Insert( (void*)pData, nIndex );
+
+                if (nIndex < maEntries.size())
+                    maEntries.insert(maEntries.begin()+nIndex,pData);
+                else
+                    maEntries.push_back(pData);
             }
         }
         else
@@ -344,8 +348,7 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, sal_Bool bAll,
 
 // =======================================================================
 
-FontList::FontList( OutputDevice* pDevice, OutputDevice* pDevice2, sal_Bool bAll ) :
-    List( 4096, sal::static_int_cast< sal_uInt16 >(pDevice->GetDevFontCount()), 32 )
+FontList::FontList( OutputDevice* pDevice, OutputDevice* pDevice2, sal_Bool bAll )
 {
     // Variablen initialisieren
     mpDev = pDevice;
@@ -387,20 +390,17 @@ FontList::~FontList()
         delete[] mpSizeAry;
 
     // FontInfos loeschen
-    ImplFontListNameInfo* pData = (ImplFontListNameInfo*)First();
-    while ( pData )
+    ImplFontListFontInfo *pTemp, *pInfo;
+    boost::ptr_vector<ImplFontListNameInfo>::iterator it;
+    for (it = maEntries.begin(); it != maEntries.end(); ++it)
     {
-        ImplFontListFontInfo* pTemp;
-        ImplFontListFontInfo* pInfo = pData->mpFirst;
+        pInfo = it->mpFirst;
         while ( pInfo )
         {
             pTemp = pInfo->mpNext;
             delete pInfo;
             pInfo = pTemp;
         }
-        ImplFontListNameInfo* pNext = (ImplFontListNameInfo*)Next();
-        delete pData;
-        pData = pNext;
     }
 }
 // -----------------------------------------------------------------------
@@ -757,8 +757,7 @@ const FontInfo& FontList::GetFontName( sal_uInt16 nFont ) const
 {
     DBG_ASSERT( nFont < GetFontNameCount(), "FontList::GetFontName(): nFont >= Count" );
 
-    ImplFontListNameInfo* pData = (ImplFontListNameInfo*)List::GetObject( nFont );
-    return *(pData->mpFirst);
+    return *(maEntries[nFont].mpFirst);
 }
 
 // -----------------------------------------------------------------------
@@ -767,8 +766,7 @@ sal_uInt16 FontList::GetFontNameType( sal_uInt16 nFont ) const
 {
     DBG_ASSERT( nFont < GetFontNameCount(), "FontList::GetFontNameType(): nFont >= Count" );
 
-    ImplFontListNameInfo* pData = (ImplFontListNameInfo*)List::GetObject( nFont );
-    return pData->mnType;
+    return maEntries[nFont].mnType;
 }
 
 // -----------------------------------------------------------------------

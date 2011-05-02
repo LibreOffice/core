@@ -29,8 +29,9 @@
 #ifndef _CTRLTOOL_HXX
 #define _CTRLTOOL_HXX
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #include "svtools/svtdllapi.h"
-#include <tools/list.hxx>
 
 #include <sal/types.h>
 #include <vcl/metric.hxx>
@@ -150,7 +151,7 @@ von der FontList, sollte deshalb das Array nicht mehr referenziert werden.
 #define FONTLIST_FONTNAMETYPE_SCREEN            ((sal_uInt16)0x0002)
 #define FONTLIST_FONTNAMETYPE_SCALABLE          ((sal_uInt16)0x0004)
 
-class SVT_DLLPUBLIC FontList : private List
+class SVT_DLLPUBLIC FontList
 {
 private:
     XubString               maMapBoth;
@@ -170,7 +171,7 @@ private:
     long*                   mpSizeAry;
     OutputDevice*           mpDev;
     OutputDevice*           mpDev2;
-
+    boost::ptr_vector<ImplFontListNameInfo> maEntries;
 #ifdef CTRLTOOL_CXX
     SVT_DLLPRIVATE ImplFontListNameInfo*    ImplFind( const XubString& rSearchName, sal_uLong* pIndex ) const;
     SVT_DLLPRIVATE ImplFontListNameInfo*    ImplFindByName( const XubString& rStr ) const;
@@ -206,7 +207,7 @@ public:
 
     sal_Bool                    IsAvailable( const XubString& rName ) const;
     sal_uInt16                  GetFontNameCount() const
-                                { return (sal_uInt16)List::Count(); }
+                                { return (sal_uInt16)maEntries.size(); }
     const FontInfo&         GetFontName( sal_uInt16 nFont ) const;
     sal_uInt16                  GetFontNameType( sal_uInt16 nFont ) const;
     sal_Handle              GetFirstFontInfo( const XubString& rName ) const;
