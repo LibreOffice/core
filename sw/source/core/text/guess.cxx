@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <ctype.h>
 #include <editeng/unolingu.hxx>
 #include <tools/shl.hxx>    // needed for SW_MOD() macro
@@ -45,6 +44,7 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #include <unotools/charclass.hxx>
 #include <porfld.hxx>
+#include <paratr.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -68,7 +68,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 {
     nCutPos = rInf.GetIdx();
 
-    // Leere Strings sind immer 0
+    // Empty strings are always 0
     if( !rInf.GetLen() || !rInf.GetTxt().Len() )
         return sal_False;
 
@@ -189,8 +189,8 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
         nBreakWidth = nMinSize;
 
-        // Der folgende Vergleich sollte eigenlich immer sal_True ergeben, sonst
-        // hat es wohl bei GetTxtBreak einen Pixel-Rundungsfehler gegeben...
+        // The following comparison should always give sal_True, otherwise
+        // a pixel rounding error in GetTxtBreak will appear
         if ( nBreakWidth <= nLineWidth )
         {
             if( nItalic && ( nBreakPos + 1 ) >= rInf.GetTxt().Len() )
@@ -221,12 +221,23 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         nBreakPos = nCutPos;
         xub_StrLen nX = nBreakPos;
 
-        // we step back until a non blank character has been found
-        // or there is only one more character left
-        while( nX && nBreakPos > rInf.GetLineStart() + 1 &&
-               ( CH_BLANK == ( cCutChar = rInf.GetChar( --nX ) ) ||
-                 CH_FULL_BLANK == cCutChar ) )
-            --nBreakPos;
+        const SvxAdjust& rAdjust = rInf.GetTxtFrm()->GetTxtNode()->GetSwAttrSet().GetAdjust().GetAdjust();
+        if ( rAdjust == SVX_ADJUST_LEFT )
+        {
+            // we step back until a non blank character has been found
+            // or there is only one more character left
+            while( nX && nBreakPos > rInf.GetTxt().Len() &&
+                   ( CH_BLANK == ( cCutChar = rInf.GetChar( --nX ) ) ||
+                     CH_FULL_BLANK == cCutChar ) )
+                --nBreakPos;
+        }
+        else
+        {
+            while( nX && nBreakPos > rInf.GetLineStart() + 1 &&
+                   ( CH_BLANK == ( cCutChar = rInf.GetChar( --nX ) ) ||
+                     CH_FULL_BLANK == cCutChar ) )
+                --nBreakPos;
+        }
 
         if( nBreakPos > rInf.GetIdx() )
             nPorLen = nBreakPos - rInf.GetIdx();
@@ -430,16 +441,20 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
                 CHAR_SOFTHYPHEN == rInf.GetTxt().GetChar( nBreakPos - 1 ) )
                 nBreakPos = rInf.GetIdx() - 1;
 
-            // Delete any blanks at the end of a line, but be careful:
-            // If a field has been expanded, we do not want to delete any
-            // blanks inside the field portion. This would cause an unwanted
-            // underflow
-            xub_StrLen nX = nBreakPos;
-            while( nX > rInf.GetLineStart() &&
-                   ( CH_TXTATR_BREAKWORD != cFldChr || nX > rInf.GetIdx() ) &&
-                   ( CH_BLANK == rInf.GetChar( --nX ) ||
-                     CH_FULL_BLANK == rInf.GetChar( nX ) ) )
-                nBreakPos = nX;
+            const SvxAdjust& rAdjust = rInf.GetTxtFrm()->GetTxtNode()->GetSwAttrSet().GetAdjust().GetAdjust();
+            if( rAdjust != SVX_ADJUST_LEFT )
+            {
+                // Delete any blanks at the end of a line, but be careful:
+                // If a field has been expanded, we do not want to delete any
+                // blanks inside the field portion. This would cause an unwanted
+                // underflow
+                xub_StrLen nX = nBreakPos;
+                while( nX > rInf.GetLineStart() &&
+                       ( CH_TXTATR_BREAKWORD != cFldChr || nX > rInf.GetIdx() ) &&
+                       ( CH_BLANK == rInf.GetChar( --nX ) ||
+                         CH_FULL_BLANK == rInf.GetChar( nX ) ) )
+                    nBreakPos = nX;
+            }
             if( nBreakPos > rInf.GetIdx() )
                 nPorLen = nBreakPos - rInf.GetIdx();
         }

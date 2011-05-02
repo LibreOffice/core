@@ -35,6 +35,7 @@
 #include <swatrset.hxx>
 #include <format.hxx>
 #include <swtypes.hxx>
+#include <editeng/adjitem.hxx>
 
 class SwCharFmt;
 class IntlWrapper;
