@@ -45,8 +45,8 @@ void HttpRequest::Init()
 }
 
 HttpRequest::HttpRequest()
-    : nStatus(HTTP_INIT), nResultId(0),
-      pStream(NULL), pOutSocket(NULL)
+    : nStatus(HTTP_INIT), pOutSocket(NULL),
+      nResultId(0), pStream(NULL)
 {
 }
 
