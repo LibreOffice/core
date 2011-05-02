@@ -42,7 +42,7 @@ public final class NativeLibraryLoader_Test extends ComplexTestCase {
         File subdir = new File(dir, "with space");
         File file1 = new File(subdir, "file");
 
-        String fileUrl = dir.toURL().toString();
+        String fileUrl = dir.toURI().toURL().toString();
         if (!fileUrl.endsWith("/")) {
             fileUrl += "/";
         }
@@ -64,7 +64,7 @@ public final class NativeLibraryLoader_Test extends ComplexTestCase {
         File subdir = new File(dir, "with space");
         File file1 = new File(subdir, "file");
 
-        String fileUrl = dir.toURL().toString();
+        String fileUrl = dir.toURI().toURL().toString();
         if (!fileUrl.endsWith("/")) {
             fileUrl += "/";
         }
