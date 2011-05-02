@@ -29,6 +29,8 @@
 #ifndef _SV_ILSTBOX_HXX
 #define _SV_ILSTBOX_HXX
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #include <vcl/sv.h>
 #include <vcl/image.hxx>
 #include <vcl/ctrl.hxx>
@@ -104,7 +106,7 @@ struct ImplEntryType
 // - ImplEntryList -
 // -----------------
 
-class ImplEntryList : private List
+class ImplEntryList
 {
 private:
     Window*         mpWindow;   // For getting the current locale when matching strings
@@ -117,8 +119,14 @@ private:
 
     Link            maSelectionChangedHdl;
     sal_Bool            mbCallSelectionChangedHdl;
+    boost::ptr_vector<ImplEntryType> maEntries;
 
-    ImplEntryType*  GetEntry( sal_uInt16 nPos ) const { return (ImplEntryType*)List::GetObject( nPos ); }
+    ImplEntryType*  GetEntry( sal_uInt16 nPos ) const
+    {
+        if (nPos >= maEntries.size())
+            return NULL;
+        return const_cast<ImplEntryType*>(&maEntries[nPos]);
+    }
 
 public:
                     ImplEntryList( Window* pWindow );
@@ -126,8 +134,8 @@ public:
 
     sal_uInt16                  InsertEntry( sal_uInt16 nPos, ImplEntryType* pNewEntry, sal_Bool bSort );
     void                    RemoveEntry( sal_uInt16 nPos );
-    const ImplEntryType*    GetEntryPtr( sal_uInt16 nPos ) const { return (const ImplEntryType*) GetObject( nPos ); }
-    ImplEntryType*          GetMutableEntryPtr( sal_uInt16 nPos ) const { return (ImplEntryType*) GetObject( nPos ); }
+    const ImplEntryType*    GetEntryPtr( sal_uInt16 nPos ) const { return (const ImplEntryType*) GetEntry( nPos ); }
+    ImplEntryType*          GetMutableEntryPtr( sal_uInt16 nPos ) const { return GetEntry( nPos ); }
     void                    Clear();
 
     sal_uInt16          FindMatchingEntry( const XubString& rStr, sal_uInt16 nStart = 0, sal_Bool bForward = sal_True, sal_Bool bLazy = sal_True ) const;
@@ -141,7 +149,7 @@ public:
     long            GetAddedHeight( sal_uInt16 nEndIndex, sal_uInt16 nBeginIndex = 0, long nBeginHeight = 0 ) const;
     long            GetEntryHeight( sal_uInt16 nPos ) const;
 
-    sal_uInt16          GetEntryCount() const { return (sal_uInt16)List::Count(); }
+    sal_uInt16          GetEntryCount() const { return (sal_uInt16)maEntries.size(); }
     sal_Bool            HasImages() const { return mnImages ? sal_True : sal_False; }
 
     XubString       GetEntryText( sal_uInt16 nPos ) const;
