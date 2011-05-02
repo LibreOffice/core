@@ -29,12 +29,12 @@
 #ifndef SC_CHGTRACK_HXX
 #define SC_CHGTRACK_HXX
 
+#include <deque>
 
 #include <tools/string.hxx>
 #include <tools/datetime.hxx>
 #include <tools/table.hxx>
 #include <tools/stack.hxx>
-#include <tools/queue.hxx>
 #include <tools/mempool.hxx>
 #include <tools/link.hxx>
 #include <unotools/options.hxx>
@@ -954,7 +954,7 @@ struct ScChangeTrackMsgInfo
 };
 
 // MsgQueue for notification via ModifiedLink
-DECLARE_QUEUE( ScChangeTrackMsgQueue, ScChangeTrackMsgInfo* )
+typedef std::deque<ScChangeTrackMsgInfo*> ScChangeTrackMsgQueue;
 DECLARE_STACK( ScChangeTrackMsgStack, ScChangeTrackMsgInfo* )
 
 enum ScChangeTrackMergeState

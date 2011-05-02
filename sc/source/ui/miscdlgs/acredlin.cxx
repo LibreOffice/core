@@ -1647,22 +1647,22 @@ void ScAcceptChgDlg::UpdateEntrys(ScChangeTrack* pChgTrack, sal_uLong nStartActi
 
 IMPL_LINK( ScAcceptChgDlg, ChgTrackModHdl, ScChangeTrack*, pChgTrack)
 {
+    ScChangeTrackMsgQueue::iterator iter;
     ScChangeTrackMsgQueue& aMsgQueue= pChgTrack->GetMsgQueue();
 
-    ScChangeTrackMsgInfo* pTrackInfo=aMsgQueue.Get();
     sal_uLong   nStartAction;
     sal_uLong   nEndAction;
 
-    while(pTrackInfo!=NULL)
+    for (iter = aMsgQueue.begin(); iter != aMsgQueue.end(); ++iter)
     {
-        nStartAction=pTrackInfo->nStartAction;
-        nEndAction=pTrackInfo->nEndAction;
+        nStartAction=(*iter)->nStartAction;
+        nEndAction=(*iter)->nEndAction;
 
         if(!bIgnoreMsg)
         {
             bNoSelection=sal_True;
 
-            switch(pTrackInfo->eMsgType)
+            switch((*iter)->eMsgType)
             {
                 case SC_CTM_APPEND: AppendChanges(pChgTrack,nStartAction,nEndAction);
                                     break;
@@ -1678,9 +1678,10 @@ IMPL_LINK( ScAcceptChgDlg, ChgTrackModHdl, ScChangeTrack*, pChgTrack)
                 }
             }
         }
-        delete pTrackInfo;
-        pTrackInfo=aMsgQueue.Get();
+        delete *iter;
     }
+
+    aMsgQueue.clear();
 
     return 0;
 }

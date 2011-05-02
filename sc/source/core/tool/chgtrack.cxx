@@ -2146,8 +2146,12 @@ void ScChangeTrack::ClearMsgQueue()
         delete pMsgInfo;
     while ( ( pMsgInfo = aMsgStackFinal.Pop() ) != NULL )
         delete pMsgInfo;
-    while ( ( pMsgInfo = aMsgQueue.Get() ) != NULL )
-        delete pMsgInfo;
+
+    ScChangeTrackMsgQueue::iterator itQueue;
+    for ( itQueue = aMsgQueue.begin(); itQueue != aMsgQueue.end(); ++itQueue)
+        delete *itQueue;
+
+    aMsgQueue.clear();
 }
 
 
@@ -2238,7 +2242,7 @@ void ScChangeTrack::EndBlockModify( sal_uLong nEndAction )
             ScChangeTrackMsgInfo* pMsg;
             while ( ( pMsg = aMsgStackFinal.Pop() ) != NULL )
             {
-                aMsgQueue.Put( pMsg );
+                aMsgQueue.push_back( pMsg );
                 bNew = sal_True;
             }
             if ( bNew )
