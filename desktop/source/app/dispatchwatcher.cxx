@@ -33,6 +33,7 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include "osl/file.hxx"
+#include "sfx2/app.hxx"
 #include <svl/fstathelper.hxx>
 
 #include "dispatchwatcher.hxx"
@@ -96,10 +97,14 @@ static String impl_GetFilterFromExt( OUString aUrl, SfxFilterFlags nFlags,
     SfxMedium* pMedium = new SfxMedium( aUrl,
                                         STREAM_STD_READ, sal_False );
     const SfxFilter *pSfxFilter = NULL;
-    SfxFilterMatcher aMatcher;
     if( nFlags == SFX_FILTER_EXPORT )
-        aMatcher = SfxFilterMatcher( aAppl );
-    aMatcher.GuessFilterIgnoringContent( *pMedium, &pSfxFilter, nFlags, 0 );
+    {
+        SfxFilterMatcher( aAppl ).GuessFilterIgnoringContent( *pMedium, &pSfxFilter, nFlags, 0 );
+    }
+    else
+    {
+        SFX_APP()->GetFilterMatcher().GuessFilter( *pMedium, &pSfxFilter, nFlags, 0 );
+    }
     if( pSfxFilter )
         aFilter = ( nFlags == SFX_FILTER_EXPORT ) ? pSfxFilter->GetFilterName() :
                                                     pSfxFilter->GetServiceName();
