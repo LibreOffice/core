@@ -41,11 +41,8 @@ TARGET=wpd
     @echo "Using system libwpd..."
 .ENDIF
 
-TARFILE_NAME=libwpd-0.9.1
-TARFILE_MD5=5ff846847dab351604ad859e2fd4ed3c
-PATCH_FILES=libwpd.gcc460.patch \
-    libwpd.corruptedprefix.patch \
-    libwpd.warnings.patch
+TARFILE_NAME=libwpd-0.9.2
+TARFILE_MD5=8d265a592619166f29c4672ea54812b7
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 BUILD_DIR=src$/lib
 
