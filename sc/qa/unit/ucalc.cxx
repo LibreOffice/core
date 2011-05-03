@@ -304,6 +304,28 @@ Test::Test()
     //of retaining references to the root ServiceFactory as its passed around
     comphelper::setProcessServiceFactory(xSM);
 
+#if 0
+    // TODO: attempt to explicitly set UI locale to en-US, to get the unit
+    // test to work under non-English build environment.  But this causes
+    // runtime exception....
+    uno::Reference<lang::XMultiServiceFactory> theConfigProvider =
+        uno::Reference<lang::XMultiServiceFactory> (
+            xSM->createInstance(
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"))), uno::UNO_QUERY_THROW);
+
+    uno::Sequence<uno::Any> theArgs(1);
+    OUString aLocalePath(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Linguistic/General"));
+    theArgs[0] <<= aLocalePath;
+    uno::Reference<beans::XPropertySet> xProp(
+        theConfigProvider->createInstanceWithArguments(
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationUpdateAccess")), theArgs), uno::UNO_QUERY_THROW);
+
+    OUString aLang(RTL_CONSTASCII_USTRINGPARAM("en-US"));
+    uno::Any aAny;
+    aAny <<= aLang;
+    xProp->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("UILocale")), aAny);
+#endif
+
     // initialise UCB-Broker
     uno::Sequence<uno::Any> aUcbInitSequence(2);
     aUcbInitSequence[0] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Local"));
