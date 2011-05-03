@@ -73,6 +73,17 @@ static sal_Bool lcl_HasQueryEntry( const ScQueryParam& rParam )
 
 // ----------------------------------------------------------------------------
 
+bool ScDPCacheTable::RowFlag::isActive() const
+{
+    return mbShowByFilter && mbShowByPage;
+}
+
+ScDPCacheTable::RowFlag::RowFlag() :
+    mbShowByFilter(true),
+    mbShowByPage(true)
+{
+}
+
 ScDPCacheTable::FilterItem::FilterItem() :
     mfValue(0.0),
     mbHasValue(false)
@@ -185,8 +196,8 @@ void ScDPCacheTable::fillTable(
     if ( nRowCount <= 0 || nColCount <= 0)
         return;
 
-    maRowsVisible.clear();
-    maRowsVisible.reserve(nRowCount);
+    maRowFlags.clear();
+    maRowFlags.reserve(nRowCount);
 
     // Initialize field entries container.
     maFieldEntries.clear();
@@ -206,16 +217,19 @@ void ScDPCacheTable::fillTable(
                 SCROW nOrder = getOrder( nCol, nIndex );
 
                 if ( nCol == 0 )
-                    maRowsVisible.push_back(false);
+                {
+                    maRowFlags.push_back(RowFlag());
+                    maRowFlags.back().mbShowByFilter = false;
+                }
 
                 if ( lcl_HasQueryEntry(rQuery) &&
                     !getCache()->ValidQuery( nRow , rQuery, pSpecial ) )
                     continue;
                 if ( bIgnoreEmptyRows &&  getCache()->IsRowEmpty( nRow ) )
                     continue;
-                // Insert a new row into cache table.
+
                 if ( nCol == 0 )
-                     maRowsVisible.back() = true;
+                     maRowFlags.back().mbShowByFilter = true;
 
                 aAdded[nOrder] = nIndex;
             }
@@ -236,8 +250,8 @@ void ScDPCacheTable::fillTable()
    if ( nRowCount <= 0 || nColCount <= 0)
         return;
 
-    maRowsVisible.clear();
-    maRowsVisible.reserve(nRowCount);
+    maRowFlags.clear();
+    maRowFlags.reserve(nRowCount);
 
 
     // Initialize field entries container.
@@ -258,8 +272,10 @@ void ScDPCacheTable::fillTable()
                 SCROW nOrder = getOrder( nCol, nIndex );
 
                 if ( nCol == 0 )
-                     maRowsVisible.push_back(true);
-
+                {
+                     maRowFlags.push_back(RowFlag());
+                     maRowFlags.back().mbShowByFilter = true;
+                }
 
                 pAdded[nOrder] = nIndex;
             }
@@ -275,24 +291,24 @@ void ScDPCacheTable::fillTable()
 
 bool ScDPCacheTable::isRowActive(sal_Int32 nRow) const
 {
-    if (nRow < 0 || static_cast<size_t>(nRow) >= maRowsVisible.size())
+    if (nRow < 0 || static_cast<size_t>(nRow) >= maRowFlags.size())
         // row index out of bound
         return false;
 
-    return maRowsVisible[nRow];
+    return maRowFlags[nRow].isActive();
 }
 
 void ScDPCacheTable::filterByPageDimension(const vector<Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rRepeatIfEmptyDims)
 {
     sal_Int32 nRowSize = getRowSize();
-    if (nRowSize != static_cast<sal_Int32>(maRowsVisible.size()))
+    if (nRowSize != static_cast<sal_Int32>(maRowFlags.size()))
     {
         // sizes of the two tables differ!
         return;
     }
 
     for (sal_Int32 nRow = 0; nRow < nRowSize; ++nRow)
-        maRowsVisible[nRow] = isRowQualified(nRow, rCriteria, rRepeatIfEmptyDims);
+        maRowFlags[nRow].mbShowByPage = isRowQualified(nRow, rCriteria, rRepeatIfEmptyDims);
 }
 
 const ScDPItemData* ScDPCacheTable::getCell(SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty) const
@@ -358,7 +374,7 @@ void ScDPCacheTable::filterTable(const vector<Criterion>& rCriteria, Sequence< S
 
     for (sal_Int32 nRow = 0; nRow < nRowSize; ++nRow)
     {
-        if (!maRowsVisible[nRow])
+        if (!maRowFlags[nRow].isActive())
             // This row is filtered out.
             continue;
 
@@ -400,7 +416,7 @@ SCROW ScDPCacheTable::getOrder(long nDim, SCROW nIndex) const
 void ScDPCacheTable::clear()
 {
     maFieldEntries.clear();
-    maRowsVisible.clear();
+    maRowFlags.clear();
     mpCache = NULL;
 }
 
