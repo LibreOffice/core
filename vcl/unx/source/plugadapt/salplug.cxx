@@ -230,9 +230,9 @@ SalInstance *CreateSalInstance()
 
     static const char* pUsePlugin = getenv( "SAL_USE_VCLPLUGIN" );
 
-    if( !(pUsePlugin && *pUsePlugin) )
-        pInst = check_headless_plugin();
-    else
+    pInst = check_headless_plugin();
+
+    if( !pInst && pUsePlugin && *pUsePlugin )
         pInst = tryInstance( OUString::createFromAscii( pUsePlugin ) );
 
     if( ! pInst )
