@@ -236,7 +236,7 @@ sal_Bool OutputDevice::DrawNativeControl( ControlType nType,
 
     if ( mbInitClipRegion )
         ImplInitClipRegion();
-    if ( mbOutputClipped || rControlRegion.IsEmpty() )
+    if ( mbOutputClipped )
         return sal_True;
 
     if ( mbInitLineColor )
