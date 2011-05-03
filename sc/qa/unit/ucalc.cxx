@@ -88,7 +88,7 @@
 #define MDDS_HASH_CONTAINER_BOOST 1
 #include <mdds/mixed_type_matrix.hpp>
 
-#define UCALC_DEBUG_OUTPUT 1
+#define UCALC_DEBUG_OUTPUT 0
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
