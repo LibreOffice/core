@@ -5422,7 +5422,22 @@ void ScDocument::SetSubTotalCellsDirty(const ScRange& rDirtyRange)
 
 void ScDocument::EnableUndo( bool bVal )
 {
-    GetUndoManager()->EnableUndo(bVal);
+    // The undo manager increases lock count every time undo is disabled.
+    // Because of this, we shouldn't disable undo unless it's currently
+    // enabled, or else re-enabling it may not actually re-enable undo unless
+    // the lock count becomes zero.
+
+    if (bVal)
+    {
+        if (!GetUndoManager()->IsUndoEnabled())
+            GetUndoManager()->EnableUndo(true);
+    }
+    else
+    {
+        if (GetUndoManager()->IsUndoEnabled())
+            GetUndoManager()->EnableUndo(false);
+    }
+
     mbUndoEnabled = bVal;
 }
 
