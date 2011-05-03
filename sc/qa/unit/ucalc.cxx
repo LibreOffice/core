@@ -708,78 +708,25 @@ bool checkDPTableOutput(ScDocument* pDoc, const ScRange& aOutRange, const char* 
     return true;
 }
 
-}
-
-void Test::testDataPilot()
+struct DPFieldDef
 {
-    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
-    m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Table")));
+    const char* pName;
+    sheet::DataPilotFieldOrientation eOrient;
+};
 
-    // Dimension definition
-    struct {
-        const char* pName; sheet::DataPilotFieldOrientation eOrient;
-    } aFields[] = {
-        { "Name",  sheet::DataPilotFieldOrientation_ROW },
-        { "Group", sheet::DataPilotFieldOrientation_COLUMN },
-        { "Score", sheet::DataPilotFieldOrientation_DATA }
-    };
+ScDPObject* createDPFromRange(ScDocument* pDoc, const ScRange& rRange, DPFieldDef aFields[], size_t nFieldCount)
+{
+    SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();
+    SCCOL nCol1 = rRange.aStart.Col();
 
-    // Raw data
-    struct {
-        const char* pName; const char* pGroup; int nScore;
-    } aData[] = {
-        { "Andy",    "A", 30 },
-        { "Bruce",   "A", 20 },
-        { "Charlie", "B", 45 },
-        { "David",   "B", 12 },
-        { "Edward",  "C",  8 },
-        { "Frank",   "C", 15 },
-    };
-
-    sal_uInt32 nFieldCount = SAL_N_ELEMENTS(aFields);
-    sal_uInt32 nDataCount = SAL_N_ELEMENTS(aData);
-
-    // Insert field names in row 0.
-    for (sal_uInt32 i = 0; i < nFieldCount; ++i)
-        m_pDoc->SetString(static_cast<SCCOL>(i), 0, 0, OUString(aFields[i].pName, strlen(aFields[i].pName), RTL_TEXTENCODING_UTF8));
-
-    // Insert data into row 1 and downward.
-    for (sal_uInt32 i = 0; i < nDataCount; ++i)
-    {
-        SCROW nRow = static_cast<SCROW>(i) + 1;
-        m_pDoc->SetString(0, nRow, 0, OUString(aData[i].pName, strlen(aData[i].pName), RTL_TEXTENCODING_UTF8));
-        m_pDoc->SetString(1, nRow, 0, OUString(aData[i].pGroup, strlen(aData[i].pGroup), RTL_TEXTENCODING_UTF8));
-        m_pDoc->SetValue(2, nRow, 0, aData[i].nScore);
-    }
-
-    SCROW nRow1 = 0, nRow2 = 0;
-    SCCOL nCol1 = 0, nCol2 = 0;
-    m_pDoc->GetDataArea(0, nCol1, nRow1, nCol2, nRow2, true, false);
-    CPPUNIT_ASSERT_MESSAGE("Data is expected to start from (col=0,row=0).", nCol1 == 0 && nRow1 == 0);
-    CPPUNIT_ASSERT_MESSAGE("Unexpected data range.",
-                           nCol2 == static_cast<SCCOL>(nFieldCount - 1) && nRow2 == static_cast<SCROW>(nDataCount));
-
-    SheetPrinter printer(nRow2 - nRow1 + 1, nCol2 - nCol1 + 1);
-    for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
-    {
-        for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
-        {
-            String aVal;
-            m_pDoc->GetString(nCol, nRow, 0, aVal);
-            printer.set(nRow, nCol, aVal);
-        }
-    }
-    printer.print("Data sheet content");
-    printer.clear();
-
-    ScSheetSourceDesc aSheetDesc(m_pDoc);
-    aSheetDesc.SetSourceRange(ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0));
-    ScDPObject* pDPObj = new ScDPObject(m_pDoc);
+    ScSheetSourceDesc aSheetDesc(pDoc);
+    aSheetDesc.SetSourceRange(rRange);
+    ScDPObject* pDPObj = new ScDPObject(pDoc);
     pDPObj->SetSheetDesc(aSheetDesc);
     pDPObj->SetOutRange(ScAddress(0, 0, 1));
     ScPivotParam aParam;
     pDPObj->FillOldParam(aParam);
-    for (sal_uInt32 i = 0; i < nFieldCount; ++i)
+    for (size_t i = 0; i < nFieldCount; ++i)
     {
         vector<ScDPLabelData::Member> aMembers;
         pDPObj->GetMembers(i, 0, aMembers);
@@ -802,7 +749,7 @@ void Test::testDataPilot()
     CPPUNIT_ASSERT_MESSAGE("source range contains no data!", nRow2 - nRow1 > 1);
 
     // Set the dimension information.
-    for (sal_uInt32 i = 0; i < nFieldCount; ++i)
+    for (size_t i = 0; i < nFieldCount; ++i)
     {
         OUString aDimName(aFields[i].pName, strlen(aFields[i].pName), RTL_TEXTENCODING_UTF8);
         ScDPSaveDimension* pDim = aSaveData.GetDimensionByName(aDimName);
@@ -840,7 +787,7 @@ void Test::testDataPilot()
         {
             SCCOL nCol = nCol1 + static_cast<SCCOL>(i);
             String aVal;
-            m_pDoc->GetString(nCol, nRow, 0, aVal);
+            pDoc->GetString(nCol, nRow, 0, aVal);
             // This call is just to populate the member list for each dimension.
             ScDPSaveMember* pMem = pDim->GetMemberByName(aVal);
             pMem->SetShowDetails(true);
@@ -855,12 +802,81 @@ void Test::testDataPilot()
 
     pDPObj->SetSaveData(aSaveData);
     pDPObj->SetAlive(true);
+    pDPObj->InvalidateData();
+
+    return pDPObj;
+}
+
+}
+
+void Test::testDataPilot()
+{
+    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
+    m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Table")));
+
+    // Dimension definition
+    DPFieldDef aFields[] = {
+        { "Name",  sheet::DataPilotFieldOrientation_ROW },
+        { "Group", sheet::DataPilotFieldOrientation_COLUMN },
+        { "Score", sheet::DataPilotFieldOrientation_DATA }
+    };
+
+    // Raw data
+    struct {
+        const char* pName; const char* pGroup; int nScore;
+    } aData[] = {
+        { "Andy",    "A", 30 },
+        { "Bruce",   "A", 20 },
+        { "Charlie", "B", 45 },
+        { "David",   "B", 12 },
+        { "Edward",  "C",  8 },
+        { "Frank",   "C", 15 },
+    };
+
+    size_t nFieldCount = SAL_N_ELEMENTS(aFields);
+    size_t nDataCount = SAL_N_ELEMENTS(aData);
+
+    // Insert field names in row 0.
+    for (size_t i = 0; i < nFieldCount; ++i)
+        m_pDoc->SetString(static_cast<SCCOL>(i), 0, 0, OUString(aFields[i].pName, strlen(aFields[i].pName), RTL_TEXTENCODING_UTF8));
+
+    // Insert data into row 1 and downward.
+    for (size_t i = 0; i < nDataCount; ++i)
+    {
+        SCROW nRow = static_cast<SCROW>(i) + 1;
+        m_pDoc->SetString(0, nRow, 0, OUString(aData[i].pName, strlen(aData[i].pName), RTL_TEXTENCODING_UTF8));
+        m_pDoc->SetString(1, nRow, 0, OUString(aData[i].pGroup, strlen(aData[i].pGroup), RTL_TEXTENCODING_UTF8));
+        m_pDoc->SetValue(2, nRow, 0, aData[i].nScore);
+    }
+
+    SCROW nRow1 = 0, nRow2 = 0;
+    SCCOL nCol1 = 0, nCol2 = 0;
+    m_pDoc->GetDataArea(0, nCol1, nRow1, nCol2, nRow2, true, false);
+    CPPUNIT_ASSERT_MESSAGE("Data is expected to start from (col=0,row=0).", nCol1 == 0 && nRow1 == 0);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected data range.",
+                           nCol2 == static_cast<SCCOL>(nFieldCount - 1) && nRow2 == static_cast<SCROW>(nDataCount));
+
+    SheetPrinter printer(nRow2 - nRow1 + 1, nCol2 - nCol1 + 1);
+    for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
+    {
+        for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+        {
+            String aVal;
+            m_pDoc->GetString(nCol, nRow, 0, aVal);
+            printer.set(nRow, nCol, aVal);
+        }
+    }
+    printer.print("Data sheet content");
+    printer.clear();
+
+    ScDPObject* pDPObj = createDPFromRange(
+        m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), aFields, nFieldCount);
+
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     bool bSuccess = pDPs->InsertNewTable(pDPObj);
     CPPUNIT_ASSERT_MESSAGE("failed to insert a new datapilot object into document", bSuccess);
     CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
                            pDPs->GetCount() == 1);
-    pDPObj->InvalidateData();
     pDPObj->SetName(pDPs->CreateNewName());
 
     bool bOverFlow = false;
