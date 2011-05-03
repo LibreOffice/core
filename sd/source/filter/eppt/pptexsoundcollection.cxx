@@ -96,7 +96,7 @@ sal_uInt32 ExSoundEntry::GetSize( sal_uInt32 nId ) const
     return nSize;
 }
 
-void ExSoundEntry::Write( SvStream& rSt, sal_uInt32 nId )
+void ExSoundEntry::Write( SvStream& rSt, sal_uInt32 nId ) const
 {
     try
     {
@@ -154,27 +154,25 @@ void ExSoundEntry::Write( SvStream& rSt, sal_uInt32 nId )
     }
 }
 
-ExSoundCollection::~ExSoundCollection()
-{
-    for( void* pPtr = List::First(); pPtr; pPtr = List::Next() )
-        delete (ExSoundEntry*)pPtr;
-}
-
 sal_uInt32 ExSoundCollection::GetId( const String& rString )
 {
     sal_uInt32 nSoundId = 0;
     if( rString.Len() )
     {
-        const sal_uInt32 nSoundCount = Count();
+        const sal_uInt32 nSoundCount = maEntries.size();
+        boost::ptr_vector<ExSoundEntry>::const_iterator iter;
 
-        for( ; nSoundId < nSoundCount; nSoundId++ )
-            if( ImplGetByIndex( nSoundId )->IsSameURL( rString ) )
+        for (iter = maEntries.begin(); iter != maEntries.end(); ++iter, ++nSoundId)
+        {
+            if (iter->IsSameURL(rString))
                 break;
+        }
+
         if ( nSoundId++ == nSoundCount )
         {
             ExSoundEntry* pEntry = new ExSoundEntry( rString );
             if ( pEntry->GetFileSize() )
-                List::Insert( pEntry, LIST_APPEND );
+                maEntries.push_back(pEntry);
             else
             {
                 nSoundId = 0;   // only insert sounds that are accessible
@@ -185,37 +183,36 @@ sal_uInt32 ExSoundCollection::GetId( const String& rString )
     return nSoundId;
 }
 
-const ExSoundEntry* ExSoundCollection::ImplGetByIndex( sal_uInt32 nIndex ) const
-{
-    return (ExSoundEntry*)List::GetObject( nIndex );
-}
-
 sal_uInt32 ExSoundCollection::GetSize() const
 {
     sal_uInt32 nSize = 0;
-    sal_uInt32 i, nSoundCount = Count();
-    if ( nSoundCount )
+    sal_uInt32 i = 1;
+    if (!maEntries.empty())
     {
         nSize += 8 + 12;    // size of SoundCollectionContainerHeader + SoundCollAtom
-        for ( i = 0; i < nSoundCount; i++ )
-            nSize += ImplGetByIndex( i )->GetSize( i + 1 );
+        boost::ptr_vector<ExSoundEntry>::const_iterator iter;
+        for ( iter = maEntries.begin(); iter != maEntries.end(); ++iter, ++i)
+            nSize += iter->GetSize(i);
     }
     return nSize;
 }
 
-void ExSoundCollection::Write( SvStream& rSt )
+void ExSoundCollection::Write( SvStream& rSt ) const
 {
-    sal_uInt32 i, nSoundCount = Count();
-    if ( nSoundCount )
+    if (!maEntries.empty())
     {
+        sal_uInt32 i = 1;
+        sal_uInt32 nSoundCount = maEntries.size();
+
         // create SoundCollection Container
         rSt << (sal_uInt16)0xf << (sal_uInt16)EPP_SoundCollection << (sal_uInt32)( GetSize() - 8 );
 
         // create SoundCollAtom ( reference to the next free SoundId );
         rSt << (sal_uInt32)( EPP_SoundCollAtom << 16 ) << (sal_uInt32)4 << nSoundCount;
 
-        for ( i = 0; i < nSoundCount; i++ )
-            ((ExSoundEntry*)List::GetObject( i ))->Write( rSt, i + 1 );
+        boost::ptr_vector<ExSoundEntry>::const_iterator iter;
+        for ( iter = maEntries.begin(); iter != maEntries.end(); ++iter, ++i)
+            iter->Write(rSt,i);
     }
 }
 
