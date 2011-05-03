@@ -1084,7 +1084,7 @@ void Test::testDataPilotFilters()
             { "Total Sum - Val2", "80" }
         };
 
-        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
+        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (unfiltered)");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -1111,11 +1111,38 @@ void Test::testDataPilotFilters()
             { "Total Sum - Val2", "40" }
         };
 
-        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
+        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (filtered by page)");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
-    // TODO: Find out how to set standard filter and test it.
+    // Set query filter.
+    ScSheetSourceDesc aDesc(*pDPObj->GetSheetDesc());
+    ScQueryParam aQueryParam(aDesc.GetQueryParam());
+    CPPUNIT_ASSERT_MESSAGE("There should be at least one query entry.", aQueryParam.GetEntryCount() > 0);
+    ScQueryEntry& rEntry = aQueryParam.GetEntry(0);
+    rEntry.bDoQuery = true;
+    rEntry.nField = 1;  // Group1
+    rEntry.nVal = 1;
+    aDesc.SetQueryParam(aQueryParam);
+    pDPObj->SetSheetDesc(aDesc);
+    pDPObj->Output(aOutRange.aStart);
+    aOutRange = pDPObj->GetOutRange();
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][2] = {
+            { "Filter", 0 },
+            { "Group2", "A" },
+            { 0, 0 },
+            { "Data", 0 },
+            { "Sum - Val1", "2" },
+            { "Sum - Val2", "20" },
+            { "Total Sum - Val1", "2" },
+            { "Total Sum - Val2", "20" }
+        };
+
+        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (filtered by query)");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
 
     pDPs->FreeTable(pDPObj);
     CPPUNIT_ASSERT_MESSAGE("There shouldn't be any data pilot table stored with the document.",
