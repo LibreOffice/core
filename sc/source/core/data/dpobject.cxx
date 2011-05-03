@@ -1853,17 +1853,20 @@ sal_Bool ScDPObject::FillOldParam(ScPivotParam& rParam) const
     rParam.nTab = aOutRange.aStart.Tab();
     // ppLabelArr / nLabels is not changed
 
-    SCCOL nColAdd = pSheetDesc->GetSourceRange().aStart.Col();
+    SCCOL nSrcColOffset = 0;
+    if (IsSheetData())
+        // source data column offset is only for internal sheet source.
+        nSrcColOffset = pSheetDesc->GetSourceRange().aStart.Col();
 
     bool bAddData = ( lcl_GetDataGetOrientation( xSource ) == sheet::DataPilotFieldOrientation_HIDDEN );
     lcl_FillOldFields(
-        rParam.maPageFields, xSource, sheet::DataPilotFieldOrientation_PAGE, nColAdd, false);
+        rParam.maPageFields, xSource, sheet::DataPilotFieldOrientation_PAGE, nSrcColOffset, false);
     lcl_FillOldFields(
-        rParam.maColFields, xSource, sheet::DataPilotFieldOrientation_COLUMN, nColAdd, bAddData);
+        rParam.maColFields, xSource, sheet::DataPilotFieldOrientation_COLUMN, nSrcColOffset, bAddData);
     lcl_FillOldFields(
-        rParam.maRowFields, xSource, sheet::DataPilotFieldOrientation_ROW, nColAdd, false);
+        rParam.maRowFields, xSource, sheet::DataPilotFieldOrientation_ROW, nSrcColOffset, false);
     lcl_FillOldFields(
-        rParam.maDataFields, xSource, sheet::DataPilotFieldOrientation_DATA, nColAdd, false);
+        rParam.maDataFields, xSource, sheet::DataPilotFieldOrientation_DATA, nSrcColOffset, false);
 
     uno::Reference<beans::XPropertySet> xProp( xSource, uno::UNO_QUERY );
     if (xProp.is())
