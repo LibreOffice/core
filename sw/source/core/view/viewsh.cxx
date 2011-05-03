@@ -1012,7 +1012,7 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
                     {
                         SwRect aShadowRect;
                         SwPageFrm::GetBorderAndShadowBoundRect(aPageRect, this,
-                            aShadowRect, aSidebarPos == sw::sidebarwindows::SIDEBAR_RIGHT);
+                            aShadowRect, pPage->IsLeftShadowNeeded(), pPage->IsRightShadowNeeded(), aSidebarPos == sw::sidebarwindows::SIDEBAR_RIGHT);
                         nPageLeft = aShadowRect.Left();
                         nPageRight = aShadowRect.Right();
                     }

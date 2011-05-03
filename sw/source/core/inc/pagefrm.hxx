@@ -114,7 +114,7 @@ class SwPageFrm: public SwFtnBossFrm
     */
 
     static void GetHorizontalShadowRect( const SwRect& _rPageRect,
-                                     ViewShell*    _pViewShell,
+                                     const ViewShell*    _pViewShell,
                                      SwRect&       _orBottomShadowRect,
                                      bool bPaintLeftShadow,
                                      bool bPaintRightShadow,
@@ -246,6 +246,8 @@ public:
     inline void ValidateWordCount() const;
     inline sal_Bool IsInvalid() const;
     inline sal_Bool IsInvalidFly() const;
+    sal_Bool IsRightShadowNeeded() const;
+    sal_Bool IsLeftShadowNeeded() const;
     sal_Bool IsInvalidFlyLayout() const { return bInvalidFlyLayout; }
     sal_Bool IsInvalidFlyCntnt() const { return bInvalidFlyCntnt; }
     sal_Bool IsInvalidFlyInCnt() const { return bInvalidFlyInCnt; }
@@ -307,7 +309,7 @@ public:
         shadow with & position).
     */
     static void PaintBorderAndShadow( const SwRect& _rPageRect,
-                                      ViewShell*    _pViewShell,
+                                      const ViewShell*    _pViewShell,
                                       bool bPaintLeftShadow,
                                       bool bPaintRightShadow,
                                       bool bRightSidebar );
@@ -330,9 +332,12 @@ public:
         rectangle for the given page rectangle
     */
     static void GetBorderAndShadowBoundRect( const SwRect& _rPageRect,
-                                             ViewShell*    _pViewShell,
+                                             const ViewShell*    _pViewShell,
                                              SwRect& _orBorderAndShadowBoundRect,
-                                             const bool bRightSidebar );
+                                             const bool bLeftShadow,
+                                             const bool bRightShadow,
+                                             const bool bRightSidebar
+                                            );
 
     static void PaintNotesSidebar(const SwRect& _rPageRect, ViewShell* _pViewShell, sal_uInt16 nPageNum, bool bRight);
     static void PaintNotesSidebarArrows(const Point &aMiddleFirst, const Point &aMiddleSecond, ViewShell* _pViewShell, const Color aColorUp, const Color aColorDown);

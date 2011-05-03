@@ -310,7 +310,7 @@ SwPageFrm::~SwPageFrm()
                 // including border and shadow area.
                 const bool bRightSidebar = (SidebarPosition() == sw::sidebarwindows::SIDEBAR_RIGHT);
                 SwRect aRetoucheRect;
-                SwPageFrm::GetBorderAndShadowBoundRect( Frm(), pSh, aRetoucheRect, bRightSidebar );
+                SwPageFrm::GetBorderAndShadowBoundRect( Frm(), pSh, aRetoucheRect, IsLeftShadowNeeded(), IsRightShadowNeeded(), bRightSidebar );
                 pSh->AddPaintRect( aRetoucheRect );
             }
         }
@@ -674,7 +674,8 @@ void SwPageFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 // page frame for determine 'old' rectangle - it's used for invalidating.
                 const bool bRightSidebar = (SidebarPosition() == sw::sidebarwindows::SIDEBAR_RIGHT);
                 SwRect aOldRectWithBorderAndShadow;
-                SwPageFrm::GetBorderAndShadowBoundRect( aOldPageFrmRect, pSh, aOldRectWithBorderAndShadow, bRightSidebar );
+                SwPageFrm::GetBorderAndShadowBoundRect( aOldPageFrmRect, pSh, aOldRectWithBorderAndShadow,
+                    IsLeftShadowNeeded(), IsRightShadowNeeded(), bRightSidebar );
                 pSh->InvalidateWindows( aOldRectWithBorderAndShadow );
             }
             rInvFlags |= 0x03;

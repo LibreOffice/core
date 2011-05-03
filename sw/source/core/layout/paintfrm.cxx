@@ -1038,7 +1038,7 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
 // OD 29.04.2003 #107169# - correction: adjust rectangle on pixel level in order
 //          to assure, that the border 'leaves its original pixel', if it has to.
 //          No prior adjustments for odd relation between pixel and twip.
-void MA_FASTCALL SwAlignRect( SwRect &rRect, ViewShell *pSh )
+void MA_FASTCALL SwAlignRect( SwRect &rRect, const ViewShell *pSh )
 {
     if( !rRect.HasArea() )
         return;
@@ -2839,8 +2839,6 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
     if ( bBookMode && pPage->GetPrev() && static_cast<const SwPageFrm*>(pPage->GetPrev())->IsEmptyPage() )
         pPage = static_cast<const SwPageFrm*>(pPage->GetPrev());
 
-    const bool bLTR = IsLeftToRightViewLayout();
-
     // #i68597#
     const bool bGridPainting(pSh->GetWin() && pSh->Imp()->HasDrawView() && pSh->Imp()->GetDrawView()->IsGridVisible());
 
@@ -2849,22 +2847,15 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
     while ( pPage )
     // <--
     {
-        // Paint right shadow in single page mode, or if we're on last page of
-        // the doc, or if ???Lower()??? or if we're on a page with no right
-        // sibling (OnRightPage should be renamed as OnEvenPage since it does
-        // not take reading direction into account)
-        const bool bPaintRightShadow =  !bBookMode || (!pPage->GetNext()) || (pPage == Lower()) || (!bLTR && !pPage->OnRightPage()) || (bLTR && pPage->OnRightPage());
-        // Have a full bottom shadow on side by side pages.
-        // TODO Do not draw full shadow if our sibling hasn't the
-        // same orientation
-        const bool bPaintLeftShadow = !(bBookMode && pPage->GetPrev() &&
-            ((!bLTR && !pPage->OnRightPage()) || (bLTR && pPage->OnRightPage())));
+        const bool bPaintRightShadow =  pPage->IsRightShadowNeeded();
+        const bool bPaintLeftShadow = pPage->IsLeftShadowNeeded();
         const bool bRightSidebar = pPage->SidebarPosition() == sw::sidebarwindows::SIDEBAR_RIGHT;
 
         if ( !pPage->IsEmptyPage() )
         {
             SwRect aPaintRect;
-            SwPageFrm::GetBorderAndShadowBoundRect( pPage->Frm(), pSh, aPaintRect, bRightSidebar );
+            SwPageFrm::GetBorderAndShadowBoundRect( pPage->Frm(), pSh, aPaintRect,
+                bPaintLeftShadow, bPaintRightShadow, bRightSidebar );
 
             if ( aRect.IsOver( aPaintRect ) )
             // <--
@@ -3017,7 +3008,8 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
             const SwPageFrm& rFormatPage = pPage->GetFormatPage();
             aEmptyPageRect.SSize() = rFormatPage.Frm().SSize();
 
-            SwPageFrm::GetBorderAndShadowBoundRect( aEmptyPageRect, pSh, aPaintRect, bRightSidebar );
+            SwPageFrm::GetBorderAndShadowBoundRect( aEmptyPageRect, pSh, aPaintRect,
+                bPaintLeftShadow, bPaintRightShadow, bRightSidebar );
             aPaintRect._Intersection( aRect );
 
             if ( aRect.IsOver( aEmptyPageRect ) )
@@ -5216,6 +5208,31 @@ void SwPageFrm::PaintMarginArea( const SwRect& _rOutputRect,
 
 const sal_Int8 SwPageFrm::mnShadowPxWidth = 9;
 
+sal_Bool SwPageFrm::IsRightShadowNeeded() const
+{
+    const ViewShell *pSh = getRootFrm()->GetCurrShell();
+    const bool bIsLTR = getRootFrm()->IsLeftToRightViewLayout();
+
+    // We paint the right shadow if we're not in book mode
+    // or if we've no sibling or are the last page of the "row"
+    return !pSh || (!pSh->GetViewOptions()->IsViewLayoutBookMode()) || !GetNext()
+        || (this == Lower())  || (bIsLTR && OnRightPage())
+        || (!bIsLTR && !OnRightPage());
+
+}
+
+sal_Bool SwPageFrm::IsLeftShadowNeeded() const
+{
+    const ViewShell *pSh = getRootFrm()->GetCurrShell();
+    const bool bIsLTR = getRootFrm()->IsLeftToRightViewLayout();
+
+    // We paint the left shadow if we're not in book mode
+    // or if we've no sibling or are the last page of the "row"
+    return !pSh || (!pSh->GetViewOptions()->IsViewLayoutBookMode()) || !GetPrev()
+        || (bIsLTR && !OnRightPage())
+        || (!bIsLTR && OnRightPage());
+}
+
 /** determine rectangle for bottom page shadow
 
     OD 12.02.2003 for #i9719# and #105645#
@@ -5223,7 +5240,7 @@ const sal_Int8 SwPageFrm::mnShadowPxWidth = 9;
     @author OD
 */
 /*static*/ void SwPageFrm::GetHorizontalShadowRect( const SwRect& _rPageRect,
-                                                ViewShell*    _pViewShell,
+                                                const ViewShell*    _pViewShell,
                                                 SwRect&       _orHorizontalShadowRect,
                                                 bool bPaintLeftShadow,
                                                 bool bPaintRightShadow,
@@ -5261,7 +5278,7 @@ const sal_Int8 SwPageFrm::mnShadowPxWidth = 9;
     @author OD
 */
 /*static*/ void SwPageFrm::PaintBorderAndShadow( const SwRect& _rPageRect,
-                                                 ViewShell*    _pViewShell,
+                                                 const ViewShell*    _pViewShell,
                                                  bool bPaintLeftShadow,
                                                  bool bPaintRightShadow,
                                                  bool bRightSidebar )
@@ -5339,7 +5356,7 @@ const sal_Int8 SwPageFrm::mnShadowPxWidth = 9;
 
     SwPageFrm::GetHorizontalShadowRect( _rPageRect, _pViewShell, aPaintRect, bPaintLeftShadow, bPaintRightShadow, bRightSidebar );
 
-    // paint right shadow
+    // Right shadow & corners
     if ( bPaintRightShadow )
     {
         pOut->DrawBitmapEx( pOut->PixelToLogic( Point( aPaintRect.Right() + 1, aPagePxRect.Bottom() + 1 - (aPageBottomRightShadow.GetSizePixel().Height() - mnShadowPxWidth) ) ),
@@ -5351,7 +5368,7 @@ const sal_Int8 SwPageFrm::mnShadowPxWidth = 9;
         pOut->DrawBitmapEx( pOut->PixelToLogic( Point( aPaintRect.Right() + mnShadowPxWidth, aPagePxRect.Top() + mnShadowPxWidth - 1) ), aPageRightShadow );
     }
 
-    // paint top & bottom shadow
+    // Left shadows and corners
     if(bPaintLeftShadow)
     {
         const long lLeft = aPaintRect.Left() - aPageBottomLeftShadow.GetSizePixel().Width();
@@ -5362,6 +5379,7 @@ const sal_Int8 SwPageFrm::mnShadowPxWidth = 9;
         aPageLeftShadow.Scale( 1, aPagePxRect.Height() - 2 * (mnShadowPxWidth - 1) );
         pOut->DrawBitmapEx( pOut->PixelToLogic( Point( lLeft, aPagePxRect.Top() + mnShadowPxWidth - 1) ), aPageLeftShadow );
     }
+
     BitmapEx aPageBottomShadow = aPageBottomShadowBase;
     aPageBottomShadow.Scale( aPaintRect.Width(), 1 );
     pOut->DrawBitmapEx( pOut->PixelToLogic( Point( aPaintRect.Left(), aPagePxRect.Bottom() + 1 ) ), aPageBottomShadow);
@@ -5494,24 +5512,28 @@ const sal_Int8 SwPageFrm::mnShadowPxWidth = 9;
     author OD
 */
 /*static*/ void SwPageFrm::GetBorderAndShadowBoundRect( const SwRect& _rPageRect,
-                                                        ViewShell*    _pViewShell,
+                                                        const ViewShell*    _pViewShell,
                                                         SwRect& _orBorderAndShadowBoundRect,
-                                                        bool bRightSidebar )
+                                                        bool bLeftShadow,
+                                                        bool bRightShadow,
+                                                        bool bRightSidebar
+                                                      )
 {
     SwRect aAlignedPageRect( _rPageRect );
     ::SwAlignRect( aAlignedPageRect, _pViewShell );
     SwRect aPagePxRect =
             _pViewShell->GetOut()->LogicToPixel( aAlignedPageRect.SVRect() );
     aPagePxRect.Bottom( aPagePxRect.Bottom() + mnShadowPxWidth + 1 );
-    aPagePxRect.Top( aPagePxRect.Top() - mnShadowPxWidth );
+    aPagePxRect.Top( aPagePxRect.Top() - mnShadowPxWidth - 1 );
 
     SwRect aTmpRect;
 
-    // Always ask for full shadow
+    // Always ask for full shadow since we want a bounding rect
+    // including at least the page frame
     SwPageFrm::GetHorizontalShadowRect( _rPageRect, _pViewShell, aTmpRect, false, false, bRightSidebar );
 
-    aPagePxRect.Left( aTmpRect.Left() - mnShadowPxWidth);
-    aPagePxRect.Right( aTmpRect.Right() + mnShadowPxWidth + 1);
+    if(bLeftShadow) aPagePxRect.Left( aTmpRect.Left() - mnShadowPxWidth - 1);
+    if(bRightShadow) aPagePxRect.Right( aTmpRect.Right() + mnShadowPxWidth + 1);
 
     _orBorderAndShadowBoundRect = _pViewShell->GetOut()->PixelToLogic( aPagePxRect.SVRect() );
 }
