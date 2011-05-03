@@ -136,9 +136,15 @@ SlideSorterViewShell::SlideSorterViewShell (
     meShellType = ST_SLIDE_SORTER;
 
     if (pFrameViewArgument != NULL)
+    {
         mpFrameView = pFrameViewArgument;
+        m_bCreatedOwnFrameView = false;
+    }
     else
+    {
         mpFrameView = new FrameView(GetDoc());
+        m_bCreatedOwnFrameView = true;
+    }
     GetFrameView()->Connect();
 
     SetName (String (RTL_CONSTASCII_USTRINGPARAM("SlideSorterViewShell")));
@@ -171,6 +177,8 @@ SlideSorterViewShell::~SlideSorterViewShell (void)
         (void)e;
         OSL_FAIL("sd::SlideSorterViewShell::~SlideSorterViewShell(), exception caught!" );
     }
+    if (m_bCreatedOwnFrameView)
+        delete mpFrameView;
 }
 
 
