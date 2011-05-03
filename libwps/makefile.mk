@@ -54,6 +54,8 @@ TARFILE_MD5=83d4029aebf290c0a9a8fee9c99638d3
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 BUILD_DIR=src/lib
 
+PATCH_FILES=libwps-0.2.1.patch libwps-0.2.1-warnings.patch
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : set_ext.mk
