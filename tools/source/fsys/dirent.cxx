@@ -1662,13 +1662,13 @@ sal_Bool DirEntry::ImpToRel( String aCurStr )
     aThis.ToAbs();
     String aThisStr( aThis.GetFull( FSYS_STYLE_HPFS ) );
 
-    // #109512 preserve case of path even if caseinsensitive
+    // preserve case of path even if caseinsensitive
     String aThisCompareStr( aThisStr ), aCurCompareStr( aCurStr );
-    if ( ! IsCaseSensitive() )
-    {
-        aThisCompareStr.ToLowerAscii();
-        aCurCompareStr.ToLowerAscii();
-    }
+
+#if defined(WNT)
+    aThisCompareStr.ToLowerAscii();
+    aCurCompareStr.ToLowerAscii();
+#endif
 
     // "Ubereinstimmung pr"ufen
     sal_uInt16 nPos = aThisCompareStr.Match( aCurCompareStr );

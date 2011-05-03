@@ -296,8 +296,6 @@ public:
                                    FSysPathStyle eParser = FSYS_STYLE_HOST );
                         ~DirEntry();
 
-    sal_Bool                IsCaseSensitive (FSysPathStyle eFormatter = FSYS_STYLE_HOST) const;
-
     sal_uIntPtr             GetError() const { return nError; }
     sal_Bool                IsValid() const;
     DirEntryFlag        GetFlag() const { return eFlag; };
