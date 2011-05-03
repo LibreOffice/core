@@ -1208,7 +1208,7 @@ AC_ARG_WITH(install-dirname,
         [Specify the directory name of the core LibO install dir. The final
          installation path is defined by <libdir>/<install-dirname>.
          The default value is "libreoffice" and the default installation
-         patch is /usr/lib/libreoffice.
+         path is /usr/lib/libreoffice.
 
          FIXME: It affects only the installation by "make install" and not the
          generated installation sets.])
