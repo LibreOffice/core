@@ -29,8 +29,6 @@
 #ifndef CGM_CHART_HXX_
 #define CGM_CHART_HXX_
 
-#include <tools/list.hxx>
-
 /* FILE TYPE CONSTANTS: */
 #define NOCHART         0       /* Undefined chart.         */
 #define XYCHART         1       /* Standard XY chart.       */
