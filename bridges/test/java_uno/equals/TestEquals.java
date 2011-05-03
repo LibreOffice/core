@@ -71,7 +71,7 @@ public final class TestEquals {
     }
 
     private static String toFileUrl(String path) throws MalformedURLException {
-        String url = new File(path).toURL().toString();
+        String url = new File(path).toURI().toURL().toString();
         String prefix = "file:/";
         if (url.startsWith(prefix)
             && (url.length() == prefix.length()
