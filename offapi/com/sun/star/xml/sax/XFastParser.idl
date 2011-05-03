@@ -163,6 +163,11 @@ interface XFastParser: com::sun::star::uno::XInterface
         errors will be presented to the user.</p>
      */
     void setLocale( [in] com::sun::star::lang::Locale locale );
+
+    /** Gets the namespace url string.
+      */
+    string getNamespaceURL( [in] string prefix )
+        raises( com::sun::star::lang::IllegalArgumentException );
 };
 
 //=============================================================================
