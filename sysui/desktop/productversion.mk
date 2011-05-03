@@ -64,3 +64,10 @@ PRODUCTVERSIONSHORT.libreoffice = $(PRODUCTVERSIONSHORT)
 PKGVERSION.libreoffice = $(PKGVERSION)
 UNIXFILENAME.libreoffice = $(PRODUCTNAME.libreoffice:l)
 ICONPREFIX.libreoffice = $(UNIXFILENAME.libreoffice:s/.//g)
+
+PRODUCTNAME.oxygenoffice = OxygenOffice
+PRODUCTVERSION.oxygenoffice = $(PRODUCTVERSION)
+PRODUCTVERSIONSHORT.oxygenoffice = $(PRODUCTVERSIONSHORT)
+PKGVERSION.oxygenoffice = $(PKGVERSION)
+UNIXFILENAME.oxygenoffice = $(PRODUCTNAME.oxygenoffice:l)
+ICONPREFIX.oxygenoffice = $(UNIXFILENAME.oxygenoffice:s/.//g)
