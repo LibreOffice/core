@@ -5427,16 +5427,8 @@ void ScDocument::EnableUndo( bool bVal )
     // enabled, or else re-enabling it may not actually re-enable undo unless
     // the lock count becomes zero.
 
-    if (bVal)
-    {
-        if (!GetUndoManager()->IsUndoEnabled())
-            GetUndoManager()->EnableUndo(true);
-    }
-    else
-    {
-        if (GetUndoManager()->IsUndoEnabled())
-            GetUndoManager()->EnableUndo(false);
-    }
+    if (bVal != GetUndoManager()->IsUndoEnabled())
+        GetUndoManager()->EnableUndo(bVal);
 
     mbUndoEnabled = bVal;
 }
