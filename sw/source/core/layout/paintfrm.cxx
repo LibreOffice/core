@@ -102,6 +102,7 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
+#include <drawinglayer/primitive2d/discreteshadowprimitive2d.hxx>
 #include <svx/sdr/contact/objectcontacttools.hxx>
 #include <svx/unoapi.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -2856,8 +2857,8 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
         // Have a full bottom shadow on side by side pages.
         // TODO Do not draw full shadow if our sibling hasn't the
         // same orientation
-        const bool bFullBottomShadow = bBookMode && pPage->GetPrev() &&
-            ((!bLTR && !pPage->OnRightPage()) || (bLTR && pPage->OnRightPage()));
+        const bool bPaintLeftShadow = !(bBookMode && pPage->GetPrev() &&
+            ((!bLTR && !pPage->OnRightPage()) || (bLTR && pPage->OnRightPage())));
         const bool bRightSidebar = pPage->SidebarPosition() == sw::sidebarwindows::SIDEBAR_RIGHT;
 
         if ( !pPage->IsEmptyPage() )
@@ -2963,7 +2964,7 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
                 {
                     // OD 12.02.2003 #i9719#, #105645# - use new method
                     // <SwPageFrm::PaintBorderAndShadow(..)>.
-                    SwPageFrm::PaintBorderAndShadow( pPage->Frm(), pSh, bPaintRightShadow, bFullBottomShadow, bRightSidebar );
+                    SwPageFrm::PaintBorderAndShadow( pPage->Frm(), pSh, bPaintLeftShadow, bPaintRightShadow, bRightSidebar );
                     SwPageFrm::PaintNotesSidebar( pPage->Frm(), pSh, pPage->GetPhyPageNum(), bRightSidebar);
                 }
 
@@ -3055,7 +3056,7 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
                 // paint shadow and border for empty page
                 // OD 19.02.2003 #107369# - use new method to paint page border and
                 // shadow
-                SwPageFrm::PaintBorderAndShadow( aEmptyPageRect, pSh, bPaintRightShadow, bFullBottomShadow, bRightSidebar );
+                SwPageFrm::PaintBorderAndShadow( aEmptyPageRect, pSh, bPaintLeftShadow, bPaintRightShadow, bRightSidebar );
                 SwPageFrm::PaintNotesSidebar( aEmptyPageRect, pSh, pPage->GetPhyPageNum(), bRightSidebar);
 
                 {
@@ -5213,36 +5214,7 @@ void SwPageFrm::PaintMarginArea( const SwRect& _rOutputRect,
     }
 }
 
-const sal_Int8 SwPageFrm::mnShadowPxWidth = 10;
-
-/** determine rectangle for right page shadow
-
-    OD 12.02.2003 for #i9719# and #105645#
-
-    @author OD
-*/
-/*static*/ void SwPageFrm::GetRightShadowRect( const SwRect& _rPageRect,
-                                               ViewShell*    _pViewShell,
-                                               SwRect&       _orRightShadowRect,
-                                               bool bRightSidebar )
-{
-    SwRect aAlignedPageRect( _rPageRect );
-    ::SwAlignRect( aAlignedPageRect, _pViewShell );
-    SwRect aPagePxRect =
-            _pViewShell->GetOut()->LogicToPixel( aAlignedPageRect.SVRect() );
-    const SwPostItMgr *pMgr = _pViewShell ? _pViewShell->GetPostItMgr() : 0;
-
-    _orRightShadowRect.Chg(
-                    Point( aPagePxRect.Right() + 1, aPagePxRect.Top() + mnShadowPxWidth + 1 ),
-                    Size( mnShadowPxWidth, aPagePxRect.Height() - mnShadowPxWidth - 1 ) );
-
-    if (bRightSidebar && pMgr && pMgr->ShowNotes() && pMgr->HasNotes())
-    {
-        _orRightShadowRect.Pos(_orRightShadowRect.Left() + pMgr->GetSidebarWidth(true)
-            + pMgr->GetSidebarBorderWidth(true), _orRightShadowRect.Top());
-    }
-
-}
+const sal_Int8 SwPageFrm::mnShadowPxWidth = 9;
 
 /** determine rectangle for bottom page shadow
 
@@ -5250,10 +5222,11 @@ const sal_Int8 SwPageFrm::mnShadowPxWidth = 10;
 
     @author OD
 */
-/*static*/ void SwPageFrm::GetBottomShadowRect( const SwRect& _rPageRect,
+/*static*/ void SwPageFrm::GetHorizontalShadowRect( const SwRect& _rPageRect,
                                                 ViewShell*    _pViewShell,
-                                                SwRect&       _orBottomShadowRect,
-                                                bool bFullBottomShadow,
+                                                SwRect&       _orHorizontalShadowRect,
+                                                bool bPaintLeftShadow,
+                                                bool bPaintRightShadow,
                                                 bool bRightSidebar )
 {
     const SwPostItMgr *pMgr = _pViewShell ? _pViewShell->GetPostItMgr() : 0;
@@ -5262,21 +5235,21 @@ const sal_Int8 SwPageFrm::mnShadowPxWidth = 10;
     SwRect aPagePxRect =
             _pViewShell->GetOut()->LogicToPixel( aAlignedPageRect.SVRect() );
 
-    // Shadow is shifted when not full
-    long lShadowAdjustment = (bFullBottomShadow ? 0 : 1 + mnShadowPxWidth);
+    long lShadowAdjustment = mnShadowPxWidth - 1; // TODO extract this
 
-    _orBottomShadowRect.Chg(
-                    Point( aPagePxRect.Left() + lShadowAdjustment, aPagePxRect.Bottom() + 1 ),
-                    Size( aPagePxRect.Width() - lShadowAdjustment, mnShadowPxWidth ) );
+    _orHorizontalShadowRect.Chg(
+                    Point( aPagePxRect.Left() + (bPaintLeftShadow ? lShadowAdjustment : 0), 0 ),
+                    Size( aPagePxRect.Width() - ( (bPaintLeftShadow ? lShadowAdjustment : 0) + (bPaintRightShadow ? lShadowAdjustment : 0) ),
+                        mnShadowPxWidth ) );
 
     if(pMgr && pMgr->ShowNotes() && pMgr->HasNotes())
     {
         // Notes are displayed, we've to extend borders
         SwTwips aSidebarTotalWidth = pMgr->GetSidebarWidth(true) + pMgr->GetSidebarBorderWidth(true);
         if(bRightSidebar)
-            _orBottomShadowRect.Right( _orBottomShadowRect.Right() + aSidebarTotalWidth );
+            _orHorizontalShadowRect.Right( _orHorizontalShadowRect.Right() + aSidebarTotalWidth );
         else
-            _orBottomShadowRect.Left( _orBottomShadowRect.Left() - aSidebarTotalWidth );
+            _orHorizontalShadowRect.Left( _orHorizontalShadowRect.Left() - aSidebarTotalWidth );
     }
 }
 
@@ -5289,8 +5262,8 @@ const sal_Int8 SwPageFrm::mnShadowPxWidth = 10;
 */
 /*static*/ void SwPageFrm::PaintBorderAndShadow( const SwRect& _rPageRect,
                                                  ViewShell*    _pViewShell,
+                                                 bool bPaintLeftShadow,
                                                  bool bPaintRightShadow,
-                                                 bool bFullBottomShadow,
                                                  bool bRightSidebar )
 {
     // No shadow in prefs
@@ -5300,60 +5273,102 @@ const sal_Int8 SwPageFrm::mnShadowPxWidth = 10;
     SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *_pViewShell->GetOut() );
     // <--
 
+    static drawinglayer::primitive2d::DiscreteShadow shadowMask( SW_RES( BMP_PAGE_SHADOW_MASK ) );
     static BitmapEx aPageTopRightShadow;
     static BitmapEx aPageBottomRightShadow;
     static BitmapEx aPageBottomLeftShadow;
     static BitmapEx aPageBottomShadowBase;
     static BitmapEx aPageRightShadowBase;
-    static Color aShadowColor;
+    static BitmapEx aPageTopShadowBase;
+    static BitmapEx aPageTopLeftShadow;
+    static BitmapEx aPageLeftShadowBase;
+    static Color aShadowColor( COL_AUTO );
+
+    SwRect aAlignedPageRect( _rPageRect );
+    ::SwAlignRect( aAlignedPageRect, _pViewShell );
+    SwRect aPagePxRect =
+        _pViewShell->GetOut()->LogicToPixel( aAlignedPageRect.SVRect() );
 
 
     if(aShadowColor != SwViewOption::GetShadowColor() ) {
         aShadowColor = SwViewOption::GetShadowColor();
-        AlphaMask aMask( SW_RES( BMP_PAGE_BOTTOM_RIGHT_SHADOW_MASK ) );
-        Bitmap aFilledSquare( Size( mnShadowPxWidth, mnShadowPxWidth ), 24 );
-        aFilledSquare.Erase( aShadowColor );
 
+        AlphaMask aMask( shadowMask.getBottomRight().GetBitmap() );
+        Bitmap aFilledSquare( aMask.GetSizePixel(), 24 );
+        aFilledSquare.Erase( aShadowColor );
         aPageBottomRightShadow = BitmapEx( aFilledSquare, aMask );
-        aMask.Rotate( 900, 255 );
-        aPageTopRightShadow = BitmapEx( aFilledSquare, aMask );
-        aMask.Rotate( 1800, 255);
+
+        aMask = AlphaMask( shadowMask.getBottomLeft().GetBitmap() );
+        aFilledSquare = Bitmap( aMask.GetSizePixel(), 24 );
+        aFilledSquare.Erase( aShadowColor );
         aPageBottomLeftShadow = BitmapEx( aFilledSquare, aMask );
 
-        aFilledSquare = Bitmap( Size( 1, mnShadowPxWidth ), 24 );
+        aMask = AlphaMask( shadowMask.getBottom().GetBitmap() );
+        aFilledSquare = Bitmap( aMask.GetSizePixel(), 24 );
         aFilledSquare.Erase( aShadowColor );
-        aMask = Bitmap( SW_RES( BMP_PAGE_BOTTOM_SHADOW_MASK ) );
         aPageBottomShadowBase = BitmapEx( aFilledSquare, aMask );
 
-        aFilledSquare = Bitmap( Size( mnShadowPxWidth, 1 ), 24 );
+        aMask = AlphaMask( shadowMask.getTop().GetBitmap() );
+        aFilledSquare = Bitmap( aMask.GetSizePixel(), 24 );
         aFilledSquare.Erase( aShadowColor );
-        aMask = Bitmap( SW_RES( BMP_PAGE_RIGHT_SHADOW_MASK ) );
+        aPageTopShadowBase = BitmapEx( aFilledSquare, aMask );
+
+        aMask = AlphaMask( shadowMask.getTopRight().GetBitmap() );
+        aFilledSquare = Bitmap( aMask.GetSizePixel(), 24 );
+        aFilledSquare.Erase( aShadowColor );
+        aPageTopRightShadow = BitmapEx( aFilledSquare, aMask );
+
+        aMask = AlphaMask( shadowMask.getRight().GetBitmap() );
+        aFilledSquare = Bitmap( aMask.GetSizePixel(), 24 );
+        aFilledSquare.Erase( aShadowColor );
         aPageRightShadowBase = BitmapEx( aFilledSquare, aMask );
+
+        aMask = AlphaMask( shadowMask.getTopLeft().GetBitmap() );
+        aFilledSquare = Bitmap( aMask.GetSizePixel(), 24 );
+        aFilledSquare.Erase( aShadowColor );
+        aPageTopLeftShadow = BitmapEx( aFilledSquare, aMask );
+
+        aMask = AlphaMask( shadowMask.getLeft().GetBitmap() );
+        aFilledSquare = Bitmap( aMask.GetSizePixel(), 24 );
+        aFilledSquare.Erase( aShadowColor );
+        aPageLeftShadowBase = BitmapEx( aFilledSquare, aMask );
     }
 
     SwRect aPaintRect;
     OutputDevice *pOut = _pViewShell->GetOut();
 
+    SwPageFrm::GetHorizontalShadowRect( _rPageRect, _pViewShell, aPaintRect, bPaintLeftShadow, bPaintRightShadow, bRightSidebar );
+
     // paint right shadow
     if ( bPaintRightShadow )
     {
-        SwPageFrm::GetRightShadowRect( _rPageRect, _pViewShell, aPaintRect, bRightSidebar );
+        pOut->DrawBitmapEx( pOut->PixelToLogic( Point( aPaintRect.Right() + 1, aPagePxRect.Bottom() + 1 - (aPageBottomRightShadow.GetSizePixel().Height() - mnShadowPxWidth) ) ),
+            aPageBottomRightShadow );
+        pOut->DrawBitmapEx( pOut->PixelToLogic( Point( aPaintRect.Right() + 1, aPagePxRect.Top() - mnShadowPxWidth ) ),
+            aPageTopRightShadow );
         BitmapEx aPageRightShadow = aPageRightShadowBase;
-        aPageRightShadow.Scale( 1, aPaintRect.Height() );
-        pOut->DrawBitmapEx( pOut->PixelToLogic( aPaintRect.Pos() ), aPageRightShadow );
-        pOut->DrawBitmapEx( pOut->PixelToLogic( Point( aPaintRect.Left(), aPaintRect.Top() - mnShadowPxWidth ) ), aPageTopRightShadow );
-        pOut->DrawBitmapEx( pOut->PixelToLogic( aPaintRect.BottomLeft() ), aPageBottomRightShadow );
+        aPageRightShadow.Scale( 1, aPagePxRect.Height() - 2 * (mnShadowPxWidth - 1) );
+        pOut->DrawBitmapEx( pOut->PixelToLogic( Point( aPagePxRect.Right() + 1, aPagePxRect.Top() + mnShadowPxWidth - 1) ), aPageRightShadow );
     }
 
-    // paint bottom shadow
-    SwPageFrm::GetBottomShadowRect( _rPageRect, _pViewShell, aPaintRect, bFullBottomShadow, bRightSidebar );
-    if(!bFullBottomShadow)
+    // paint top & bottom shadow
+    if(bPaintLeftShadow)
     {
-        pOut->DrawBitmapEx( pOut->PixelToLogic( Point( aPaintRect.Left() - mnShadowPxWidth, aPaintRect.Top() ) ), aPageBottomLeftShadow );
+        pOut->DrawBitmapEx( pOut->PixelToLogic( Point( aPaintRect.Left() - aPageBottomLeftShadow.GetSizePixel().Width(),
+            aPagePxRect.Bottom() + 1 + mnShadowPxWidth - aPageBottomLeftShadow.GetSizePixel().Height() ) ), aPageBottomLeftShadow );
+        pOut->DrawBitmapEx( pOut->PixelToLogic( Point( aPaintRect.Left() - aPageBottomLeftShadow.GetSizePixel().Width(),
+            aPagePxRect.Top() - mnShadowPxWidth ) ), aPageTopLeftShadow );
+        BitmapEx aPageLeftShadow = aPageLeftShadowBase;
+        aPageLeftShadow.Scale( 1, aPagePxRect.Height() - 2 * (mnShadowPxWidth - 1) );
+        pOut->DrawBitmapEx( pOut->PixelToLogic( Point( aPagePxRect.Left() - aPageLeftShadow.GetSizePixel().Width(),
+             aPagePxRect.Top() + mnShadowPxWidth - 1) ), aPageLeftShadow );
     }
     BitmapEx aPageBottomShadow = aPageBottomShadowBase;
     aPageBottomShadow.Scale( aPaintRect.Width(), 1 );
-    pOut->DrawBitmapEx( pOut->PixelToLogic( aPaintRect.Pos() ), aPageBottomShadow);
+    pOut->DrawBitmapEx( pOut->PixelToLogic( Point( aPaintRect.Left(), aPagePxRect.Bottom() + 1 ) ), aPageBottomShadow);
+    BitmapEx aPageTopShadow = aPageTopShadowBase;
+    aPageTopShadow.Scale( aPaintRect.Width(), 1 );
+    pOut->DrawBitmapEx( pOut->PixelToLogic( Point( aPaintRect.Left(), aPagePxRect.Top() - mnShadowPxWidth ) ), aPageTopShadow );
 }
 
 //mod #i6193# paint sidebar for notes
@@ -5488,16 +5503,16 @@ const sal_Int8 SwPageFrm::mnShadowPxWidth = 10;
     ::SwAlignRect( aAlignedPageRect, _pViewShell );
     SwRect aPagePxRect =
             _pViewShell->GetOut()->LogicToPixel( aAlignedPageRect.SVRect() );
+    aPagePxRect.Bottom( aPagePxRect.Bottom() + mnShadowPxWidth + 1 );
+    aPagePxRect.Top( aPagePxRect.Top() - mnShadowPxWidth );
 
     SwRect aTmpRect;
-    SwPageFrm::GetRightShadowRect( _rPageRect, _pViewShell, aTmpRect, bRightSidebar );
-
-    aPagePxRect.Right( aTmpRect.Right() );
 
     // Always ask for full shadow
-    SwPageFrm::GetBottomShadowRect( _rPageRect, _pViewShell, aTmpRect, true, bRightSidebar );
-    aPagePxRect.Bottom( aTmpRect.Bottom() );
-    aPagePxRect.Left( aTmpRect.Left() );
+    SwPageFrm::GetHorizontalShadowRect( _rPageRect, _pViewShell, aTmpRect, false, false, bRightSidebar );
+
+    aPagePxRect.Left( aTmpRect.Left() - mnShadowPxWidth);
+    aPagePxRect.Right( aTmpRect.Right() + mnShadowPxWidth + 1);
 
     _orBorderAndShadowBoundRect = _pViewShell->GetOut()->PixelToLogic( aPagePxRect.SVRect() );
 }

@@ -95,29 +95,7 @@ class SwPageFrm: public SwFtnBossFrm
     // Anpassen der max. Fussnotenhoehen in den einzelnen Spalten
     void SetColMaxFtnHeight();
 
-    /** determine rectangle for right page shadow
-
-        #i9719#
-
-        @param _rPageRect
-        input parameter - constant instance reference of the page rectangle.
-        Generally, it's the frame area of the page, but for empty pages in print
-        preview, this parameter is useful.
-
-        @param _pViewShell
-        input parameter - instance of the view shell, for which the rectangle
-        has to be generated.
-
-        @param _orRightShadowRect
-        output parameter - instance reference of the right shadow rectangle for
-        the given page rectangle
-    */
-    static void GetRightShadowRect( const SwRect& _rPageRect,
-                                    ViewShell*    _pViewShell,
-                                    SwRect&       _orRightShadowRect,
-                                    bool bRightSidebar );
-
-    /** determine rectangle for bottom page shadow
+    /** determine rectangle for horizontal page shadow
 
         #i9719#
 
@@ -135,10 +113,11 @@ class SwPageFrm: public SwFtnBossFrm
         the given page rectangle
     */
 
-    static void GetBottomShadowRect( const SwRect& _rPageRect,
+    static void GetHorizontalShadowRect( const SwRect& _rPageRect,
                                      ViewShell*    _pViewShell,
                                      SwRect&       _orBottomShadowRect,
-                                     bool bFullBottomShadow,
+                                     bool bPaintLeftShado,
+                                     bool bPaintRightShadow,
                                      bool bRightSidebar );
 
     /** adds the sidebar used for notes to right and left border
@@ -329,8 +308,8 @@ public:
     */
     static void PaintBorderAndShadow( const SwRect& _rPageRect,
                                       ViewShell*    _pViewShell,
+                                      bool bPaintLeftShadow,
                                       bool bPaintRightShadow,
-                                      bool bFullBottomShadow,
                                       bool bRightSidebar );
 
     /** get bound rectangle of border and shadow for repaints
