@@ -61,3 +61,12 @@ File gid_File_Lib_Gconfbe
     Name = STRING(CONCAT2(gconfbe1.uno,UNXSUFFIX));
 End
 #endif
+
+#ifdef ENABLE_SYSTRAY_GTK
+File gid_File_Lib_QStart_Gtk
+    Name = LIBNAME(qstart_gtk);
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+End
+#endif

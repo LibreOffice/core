@@ -41,6 +41,14 @@ Module gid_Module_Optional_Gnome
     XpdCheckSolaris = "SUNWgnome-vfs";
 #endif
     Files = (
+      gid_File_Lib_Evoab_2,
+      gid_File_Lib_Fps_Gnome,
+      gid_File_Lib_Vclplug_Gtk,
+      gid_File_Bin_Gnome_Open_Url,
+      gid_File_Bin_Gnome_Open_Url_Bin,
+#ifdef ENABLE_SYSTRAY_GTK
+      gid_File_Lib_QStart_Gtk,
+#endif
 #ifdef ENABLE_GNOMEVFS
       gid_File_Lib_Gnomevfs, gid_File_Bin_Gnome_Set_Default_Application,
 #endif

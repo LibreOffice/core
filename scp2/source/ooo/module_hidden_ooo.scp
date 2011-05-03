@@ -83,8 +83,6 @@ Module gid_Module_Root_Files_2
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
 	Files = (gid_File_Bin_Cde_Open_Url,
-	gid_File_Bin_Gnome_Open_Url,
-	gid_File_Bin_Gnome_Open_Url_Bin,
 	gid_File_Bin_Kde_Open_Url,
 	gid_File_Bin_Open_Url,
 	gid_File_Bin_Pagein,
@@ -279,7 +277,6 @@ Module gid_Module_Root_Files_4
 	gid_File_Lib_Odfflatxml,
 	gid_File_Lib_Zip,
 	gid_File_Lib_Vclplug_Gen,
-	gid_File_Lib_Vclplug_Gtk,
 	gid_File_Lib_Vclplug_Kde,
 	gid_File_Lib_Vclplug_Kde4,
 	gid_File_Lib_Vclplug_Svp,
@@ -326,7 +323,6 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Dbpool,
 	gid_File_Lib_Embobj,
 	gid_File_Lib_Emboleobj,
-	gid_File_Lib_Evoab_2,
 	gid_File_Lib_Kab_1,
     gid_File_Lib_Kab_Drv_1,
 	gid_File_Lib_Macab_1,
@@ -334,7 +330,6 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Evtatt,
 	gid_File_Lib_Fileacc,
 	gid_File_Lib_Filterconfig1,
-	gid_File_Lib_Fps_Gnome,
 	gid_File_Lib_Dbodbcbase,
 	gid_File_Lib_I18npool,
 	gid_File_Lib_I18npaper,
