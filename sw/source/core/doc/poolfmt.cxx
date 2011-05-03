@@ -1308,7 +1308,7 @@ SwFmt* SwDoc::GetFmtFromPool( sal_uInt16 nId )
             aSet.Put( SwFmtAnchor( FLY_AT_PARA ));
             aSet.Put( SwFmtHoriOrient( 0, text::HoriOrientation::CENTER, text::RelOrientation::FRAME ));
             aSet.Put( SwFmtVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ));
-            aSet.Put( SwFmtSurround( SURROUND_NONE ));
+            aSet.Put( SwFmtSurround( SURROUND_IDEAL ));
         }
         break;
     case RES_POOLFRM_FORMEL:

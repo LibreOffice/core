@@ -70,10 +70,11 @@ my ( $BIG_SVX, $COM, $ARCH, $CPU, $CPUNAME, $CVER, $GLIBC, $GUI, $GUIBASE,
 my ( $USR, $ETC, $BIN, $LIB, $LIB64, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV, $SOLVER, $CONFIG, $DEFIMGS,
      $USR_BIN, $USR_LIB, $USR_LOCAL, $USR_CCS, $JAVA_BIN, $JAVA_LIB, $JAVA_INCLUDE,
      $SOLARENVINC, $USR_DT, $USR_OPENWIN, $XLIB, $XINC,
-     $CYGWIN_PATH, $language, $dict, $ASM_PATH, $NSIS_PATH, $PERL_PATH, $CL_X64 );
+     $CYGWIN_PATH, $language, @languages, $ASM_PATH, $NSIS_PATH, $PERL_PATH, $CL_X64 );
 
 # Environment variables.
 my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
+     $L10N_MODULE, $WITH_POOR_HELP_LOCALIZATIONS,
      $UPD, $WORK_STAMP, $gb_REPOS, $BUILD_TYPE,
      $SOLARSRC, $DEVROOT, $SOLARVER, $SOLARVERSION, $WORKDIR, $OUTDIR, $SOLARENV, $SOLARDEFIMG,
      $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI,
@@ -1062,6 +1063,23 @@ $CLASSPATH            = '$JAVA_HOME'.$ds.'jre'.$LIB.$ds."rt.jar".$wps.'.';
 # see above for why the change
 $XCLASSPATH           = '$JAVA_HOME'.$ds.'jre'.$LIB.$ds."rt.jar".$wps.'.';
 
+# Location of the translations module
+$L10N_MODULE = PathFormat($SRC_ROOT."/translations");
+
+# Check for poor help localizations, i.e. no help translation at all...
+opendir(DIR,$L10N_MODULE . "/source");
+@languages = readdir(DIR);
+closedir(DIR);
+$WITH_POOR_HELP_LOCALIZATIONS = "";
+
+foreach $language (@languages)
+{
+    if ( ($language ne ".") && ($language ne "..") && (! -d $L10N_MODULE . "/source/" . $language . "/helpcontent2") )
+    {
+        $WITH_POOR_HELP_LOCALIZATIONS = $WITH_POOR_HELP_LOCALIZATIONS . " " . $language;
+    }
+}
+
 # Location used by the linker to create libraries.
 if ($platform =~ m/solaris/)
 {  $SOLAREXTRALIB     = $L.$par_dir.$LIB.
@@ -1555,6 +1573,7 @@ CreateFileHeader( *OUT, $UPD, $platform, "sh/bash/ksh", "#" );
 ToFile( "SRC_ROOT",	     $SRC_ROOT,          "e" );
 ToFile( "OOO_SHELL",         $OOO_SHELL,         "e" );
 ToFile( "JAVA_HOME",         $JAVA_HOME,         "e" );
+ToFile( "L10N_MODULE",       $L10N_MODULE,       "e" );
 ToFile( "ANT_HOME",          PathFormat("@ANT_HOME@"), "e" );
 ToFile( "ANT_LIB",           PathFormat("@ANT_LIB@"), "e" );
 ToFile( "ANT",               PathFormat("@ANT@"), "e" );
@@ -1574,7 +1593,7 @@ ToFile( "INTRO_BITMAP",      "@INTRO_BITMAP@",   "e" );
 ToFile( "ABOUT_BITMAP",      "@ABOUT_BITMAP@",   "e" );
 ToFile( "OOO_VENDOR",        "@OOO_VENDOR@",     "e" );
 ToFile( "OOODMAKEMODE",      "YES",              "e" );
-ToFile( "WITH_POOR_HELP_LOCALIZATIONS", "@WITH_POOR_HELP_LOCALIZATIONS@", "e" );
+ToFile( "WITH_POOR_HELP_LOCALIZATIONS", $WITH_POOR_HELP_LOCALIZATIONS, "e" );
 
 ToFile( "CALL_CDECL",        $CALL_CDECL,        "e" );
 ToFile( "COMMON_OUTDIR",     $COMMON_OUTDIR,     "e" );
@@ -1939,6 +1958,7 @@ ToFile( "DB_LIB",            "@DB_LIB@",           "e" );
 ToFile( "DB_CPPLIB",         "@DB_CPPLIB@",        "e" );
 ToFile( "DB_INCLUDES",       "@DB_INCLUDES@",      "e" );
 ToFile( "ENABLE_MYSQLC",     "@ENABLE_MYSQLC@",    "e" );
+ToFile( "ENABLE_LOMENUBAR",  "@ENABLE_LOMENUBAR@", "e" );
 ToFile( "SYSTEM_MYSQL",      "@SYSTEM_MYSQL@",     "e" );
 ToFile( "SYSTEM_MYSQL_CPPCONN","@SYSTEM_MYSQL_CPPCONN@","e" );
 ToFile( "MYSQL_INC",         "@MYSQL_INC@",        "e" );

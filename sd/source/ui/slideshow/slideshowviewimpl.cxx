@@ -353,11 +353,7 @@ geometry::AffineMatrix2D SAL_CALL SlideShowView::getTransformation(  ) throw (Ru
         return geometry::AffineMatrix2D (1,0,0,0,1,0);
     }
 
-    // Reduce available width by one, as the slides might actually
-    // render one pixel wider and higher as aPageSize below specifies
-    // (when shapes of page size have visible border lines)
-    const Size  aWindowSize( rTmpSize.Width()-1,
-                             rTmpSize.Height()-1 );
+    const Size aWindowSize( mrOutputWindow.GetSizePixel() );
     Size aOutputSize( aWindowSize );
 
     if( meAnimationMode != ANIMATIONMODE_SHOW )
@@ -383,6 +379,12 @@ geometry::AffineMatrix2D SAL_CALL SlideShowView::getTransformation(  ) throw (Ru
 
     Point aOutputOffset( ( aWindowSize.Width() - aOutputSize.Width() ) >> 1,
                             ( aWindowSize.Height() - aOutputSize.Height() ) >> 1 );
+
+    // Reduce available width by one, as the slides might actually
+    // render one pixel wider and higher as aPageSize below specifies
+    // (when shapes of page size have visible border lines)
+    aOutputSize.Width() --;
+    aOutputSize.Height() --;
 
     maPresentationArea = Rectangle( aOutputOffset, aOutputSize );
     mrOutputWindow.SetPresentationArea( maPresentationArea );

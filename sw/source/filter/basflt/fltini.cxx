@@ -822,11 +822,11 @@ extern "C" { static void SAL_CALL thisModule() {} }
 static oslGenericFunction GetMswordLibSymbol( const char *pSymbol )
 {
     static ::osl::Module aModule;
-        static sal_Bool bLoaded = sal_False;
+    static sal_Bool bLoaded = sal_False;
     static ::rtl::OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "msword" ) ) );
-        if (!bLoaded)
-                bLoaded = SvLibrary::LoadModule( aModule, aLibName, &thisModule );
-        if (bLoaded)
+    if (!bLoaded)
+        bLoaded = SvLibrary::LoadModule( aModule, aLibName, &thisModule, SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY );
+    if (bLoaded)
         return aModule.getFunctionSymbol( ::rtl::OUString::createFromAscii( pSymbol ) );
     return NULL;
 }

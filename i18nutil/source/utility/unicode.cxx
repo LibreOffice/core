@@ -31,6 +31,11 @@
 #include <i18nutil/unicode.hxx>
 #include "unicode_data.h"
 
+// Workaround for glibc braindamage:
+// glibc 2.4's langinfo.h does "#define CURRENCY_SYMBOL __CURRENCY_SYMBOL"
+// which (obviously) breaks UnicodeType::CURRENCY_SYMBOL
+#undef CURRENCY_SYMBOL
+
 using namespace ::com::sun::star::i18n;
 
 static ScriptTypeList defaultTypeList[] = {

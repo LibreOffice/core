@@ -31,13 +31,11 @@
 #include "rcid.hrc"
 
 //  Bitmaps for page shadow
-#define BMP_PAGE_RIGHT_SHADOW_MASK          RC_PAGEFRM_BEGIN + 0
-#define BMP_PAGE_BOTTOM_RIGHT_SHADOW_MASK   RC_PAGEFRM_BEGIN + 1
-#define BMP_PAGE_BOTTOM_SHADOW_MASK         RC_PAGEFRM_BEGIN + 2
+#define BMP_PAGE_SHADOW_MASK                RC_PAGEFRM_BEGIN + 0
 
 
 // If you add resources, don't forget to update this
-#define PAGEFRM_ACT_END           BMP_PAGE_BOTTOMLEFT_SHADOW
+#define PAGEFRM_ACT_END           BMP_PAGE_SHADOW_MASK
 
 // Sanity check
 #if PAGEFRM_ACT_END > RC_PAGEFRM_END

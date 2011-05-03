@@ -81,6 +81,14 @@ void Registrar::RegisterForMsWord() const
         RegistrationContextInformation::Writer);
 
     RegisterForMsOfficeApplication(
+        m_ContextInformation.GetMOOXWordDocumentFileExtension(),
+        m_ContextInformation.GetMOOXWordDocumentDisplayName(),
+        m_ContextInformation.GetWordDocumentDefaultIconEntry(),
+        m_ContextInformation.GetWordDocumentDefaultShellCommand(),
+        m_ContextInformation.ShellNewCommandDisplayName(),
+        RegistrationContextInformation::Writer);
+
+    RegisterForMsOfficeApplication(
         m_ContextInformation.GetWordTemplateFileExtension(),
         m_ContextInformation.GetWordTemplateDisplayName(),
         m_ContextInformation.GetWordTemplateDefaultIconEntry(),
@@ -107,6 +115,14 @@ void Registrar::UnregisterForMsWord() const
     {
         UnregisterForMsOfficeApplication(
             m_ContextInformation.GetWordDocumentFileExtension());
+    }
+    catch(RegistryKeyNotFoundException&)
+    {}
+
+    try
+    {
+        UnregisterForMsOfficeApplication(
+            m_ContextInformation.GetMOOXWordDocumentFileExtension());
     }
     catch(RegistryKeyNotFoundException&)
     {}
@@ -192,6 +208,14 @@ void Registrar::RegisterForMsExcel() const
         RegistrationContextInformation::Calc);
 
     RegisterForMsOfficeApplication(
+        m_ContextInformation.GetMOOXExcelSheetFileExtension(),
+        m_ContextInformation.GetMOOXExcelSheetDisplayName(),
+        m_ContextInformation.GetExcelSheetDefaultIconEntry(),
+        m_ContextInformation.GetExcelSheetDefaultShellCommand(),
+        m_ContextInformation.ShellNewCommandDisplayName(),
+        RegistrationContextInformation::Calc);
+
+    RegisterForMsOfficeApplication(
         m_ContextInformation.GetExcelTemplateFileExtension(),
         m_ContextInformation.GetExcelTemplateDisplayName(),
         m_ContextInformation.GetExcelTemplateDefaultIconEntry(),
@@ -210,6 +234,22 @@ void Registrar::UnregisterForMsExcel() const
     {
         UnregisterForMsOfficeApplication(
             m_ContextInformation.GetExcelSheetFileExtension());
+    }
+    catch(RegistryKeyNotFoundException&)
+    {}
+
+    try
+    {
+        UnregisterForMsOfficeApplication(
+            m_ContextInformation.GetMOOXExcelSheetFileExtension());
+    }
+    catch(RegistryKeyNotFoundException&)
+    {}
+
+    try
+    {
+        UnregisterForMsOfficeApplication(
+            m_ContextInformation.GetMOOXPowerPointDocumentFileExtension());
     }
     catch(RegistryKeyNotFoundException&)
     {}
@@ -238,6 +278,14 @@ void Registrar::RegisterForMsPowerPoint() const
     RegisterForMsOfficeApplication(
         m_ContextInformation.GetPowerPointDocumentFileExtension(),
         m_ContextInformation.GetPowerPointDocumentDisplayName(),
+        m_ContextInformation.GetPowerPointDocumentDefaultIconEntry(),
+        m_ContextInformation.GetPowerPointDocumentDefaultShellCommand(),
+        m_ContextInformation.ShellNewCommandDisplayName(),
+        RegistrationContextInformation::Impress);
+
+    RegisterForMsOfficeApplication(
+        m_ContextInformation.GetMOOXPowerPointDocumentFileExtension(),
+        m_ContextInformation.GetMOOXPowerPointDocumentDisplayName(),
         m_ContextInformation.GetPowerPointDocumentDefaultIconEntry(),
         m_ContextInformation.GetPowerPointDocumentDefaultShellCommand(),
         m_ContextInformation.ShellNewCommandDisplayName(),

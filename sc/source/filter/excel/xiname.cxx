@@ -186,7 +186,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
                 switch( mcBuiltIn )
                 {
                     case EXC_BUILTIN_FILTERDATABASE:
-                        GetFilterManager().Insert( &GetOldRoot(), aRange, maScName );
+                        GetFilterManager().Insert( &GetOldRoot(), aRange);
                     break;
                     case EXC_BUILTIN_CRITERIA:
                         GetFilterManager().AddAdvancedRange( aRange );

@@ -47,6 +47,7 @@
 #define FILEVIEW_SHOW_SIZE          0x0020
 #define FILEVIEW_SHOW_DATE          0x0040
 #define FILEVIEW_SHOW_ALL           0x0070
+#define FILEVIEW_SHOW_NONE          0x00A0
 
 class ViewTabListBox_Impl;
 class SvtFileView_Impl;
@@ -80,6 +81,7 @@ class SVT_DLLPUBLIC SvtFileView : public Control
 {
 private:
     SvtFileView_Impl*       mpImp;
+    sal_Bool                bSortColumn;
 
     ::com::sun::star::uno::Sequence< ::rtl::OUString > mpBlackList;
 
@@ -108,6 +110,8 @@ public:
     void                    SetSizePixel( const Size& rNewSize );
     using Window::SetPosSizePixel;
     virtual void            SetPosSizePixel( const Point& rNewPos, const Size& rNewSize );
+    void                    SetSortColumn( sal_Bool bValue ) { bSortColumn = bValue; }
+    sal_Bool                GetSortColumn() { return bSortColumn; }
 
     /** initialize the view with the content of a folder given by URL, and aply an immediate filter
 

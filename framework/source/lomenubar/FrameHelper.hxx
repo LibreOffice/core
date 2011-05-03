@@ -24,24 +24,28 @@
 #ifndef __FRAME_HELPER_HXX__
 #define __FRAME_HELPER_HXX__
 
+#include <vector>
+
+#include <boost/scoped_ptr.hpp>
+
 #include <com/sun/star/awt/KeyEvent.hpp>
 #include <com/sun/star/awt/XMenu.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/frame/XFrameActionListener.hpp>
-#include <com/sun/star/frame/XStatusListener.hpp>
-#include <com/sun/star/frame/FrameAction.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <cppuhelper/implbase1.hxx>
-#include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/frame/FrameAction.hpp>
+#include <com/sun/star/frame/FrameSearchFlag.hpp>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XFrameActionListener.hpp>
+#include <com/sun/star/frame/XFramesSupplier.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/XStatusListener.hpp>
+#include <com/sun/star/lang/EventObject.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
+#include <com/sun/star/util/XURLTransformer.hpp>
+#include <cppuhelper/implbase1.hxx>
 
 //#pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wignored-qualifiers"
@@ -73,6 +77,12 @@ using com::sun::star::util::XURLTransformer;
 using com::sun::star::ui::XAcceleratorConfiguration;
 using rtl::OUString;
 
+
+namespace framework { namespace lomenubar
+{
+    class DispatchRegistry;
+}}
+
 /* This class is a helper in charge of closing the dbusmenu server when a frame is closed,
  * and also allows the menuitem callbacks to dispatch commands.
  */
@@ -80,23 +90,25 @@ using rtl::OUString;
 class FrameHelper : public cppu::WeakImplHelper1 < XFrameActionListener >
 {
   private:
-    Reference < XFrame >                m_xFrame;
-    Reference < XMultiServiceFactory >  m_xMSF;
+    const Reference < XStatusListener > m_xStatusListener;
+    ::boost::scoped_ptr< ::framework::lomenubar::DispatchRegistry> m_pDispatchRegistry;
+    const Reference < XMultiServiceFactory > m_xMSF;
+    const Reference < XURLTransformer > m_xTrans;
+    const Reference < XModuleManager> m_xMM;
+    const Reference < XMultiComponentFactory > m_xPCF;
+    const Reference < XFrame > m_xFrame;
+    const Reference < XDispatchProvider > m_xdp;
+    const Sequence < Any > m_args;
     Reference < XNameAccess >           m_xUICommands;
     DbusmenuServer                     *m_server;
     DbusmenuMenuitem                   *m_root;
     gboolean                            m_watcher_set;
     guint                               m_watcher;
-    XStatusListener                    *m_xSL;
-    Reference < XURLTransformer >       m_xTrans;
-    Reference < XDispatchProvider >     m_xdp;
     GHashTable                         *m_commandsInfo;
+    //This variable prevents the helper from being disconnected from the frame
+    //for special cases of component dettaching like print preview
     gboolean                            m_blockDetach;
 
-    //These object/methods are used to recreate dynamic popupmenus
-    Reference < XMultiComponentFactory > m_xPCF;
-    Reference < XModuleManager>          m_xMM;
-    Sequence  < Any >                    m_args;
 
     gboolean                             isSpecialSubmenu (OUString command);
 
@@ -131,7 +143,6 @@ class FrameHelper : public cppu::WeakImplHelper1 < XFrameActionListener >
     Reference < XFrame > getFrame               ();
     unsigned long        getXID                 ();
     GHashTable*          getCommandsInfo        ();
-    XStatusListener*     getStatusListener      ();
     ::rtl::OUString      getLabelFromCommandURL (::rtl::OUString);
 
     //Menu Related actions

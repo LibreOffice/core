@@ -48,6 +48,8 @@
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 
+#include <memory>
+
 const double D_TIMEFACTOR = 86400.0;
 
 using namespace ::com::sun::star;
@@ -57,26 +59,37 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::std::vector;
+using ::std::auto_ptr;
 
 namespace {
 
-bool lcl_isDate( sal_uLong nNumType )
+bool isDate( sal_uLong nNumType )
 {
     return ((nNumType & NUMBERFORMAT_DATE) != 0) ? 1 : 0;
 }
 
-bool lcl_Search( const ScDPCache::DataListType& list, const ::std::vector<SCROW>& rOrder, const ScDPItemData& item, SCROW& rIndex)
+/**
+ * Search for an item in the data array.  If it's in the array, return its
+ * index to the caller.
+ *
+ * @param rArray dimension array
+ * @param rOrder global order (what's this?)
+ * @param item item to search for
+ * @param rIndex the index of the found item in the global order.
+ *
+ * @return true if the item is found, or false otherwise.
+ */
+bool hasItemInDimension(const ScDPCache::DataListType& rArray, const ::std::vector<SCROW>& rOrder, const ScDPItemData& item, SCROW& rIndex)
 {
-    rIndex = list.size();
+    rIndex = rArray.size();
     bool bFound = false;
     SCROW nLo = 0;
-    SCROW nHi = list.size() - 1;
-    SCROW nIndex;
+    SCROW nHi = rArray.size() - 1;
     long nCompare;
     while (nLo <= nHi)
     {
-        nIndex = (nLo + nHi) / 2;
-        nCompare = ScDPItemData::Compare( list[rOrder[nIndex]], item );
+        SCROW nIndex = (nLo + nHi) / 2;
+        nCompare = ScDPItemData::Compare( rArray[rOrder[nIndex]], item );
         if (nCompare < 0)
             nLo = nIndex + 1;
         else
@@ -173,7 +186,7 @@ ScDPItemData* lcl_GetItemValue(
 
 ScDPItemData::ScDPItemData(const String& rS, double fV, bool bHV, const sal_uLong nNumFormatP, bool bData) :
     nNumFormat( nNumFormatP ), aString(rS), fValue(fV),
-    mbFlag( (MK_VAL*!!bHV) | (MK_DATA*!!bData) | (MK_ERR*!!false) | (MK_DATE*!!lcl_isDate( nNumFormat ) ) )
+    mbFlag( (MK_VAL*!!bHV) | (MK_DATA*!!bData) | (MK_ERR*!!false) | (MK_DATE*!!isDate( nNumFormat ) ) )
 {
 }
 
@@ -203,7 +216,7 @@ ScDPItemData::ScDPItemData(ScDocument* pDoc, SCROW nRow, sal_uInt16 nCol, sal_uI
         fValue = fVal;
         mbFlag |= MK_VAL|MK_DATA;
         nNumFormat = pDoc->GetNumberFormat( ScAddress( nCol, nRow, nDocTab ) );
-        lcl_isDate( nFormat ) ? ( mbFlag |= MK_DATE ) : (mbFlag &= ~MK_DATE);
+        isDate( nFormat ) ? ( mbFlag |= MK_DATE ) : (mbFlag &= ~MK_DATE);
     }
     else if ( pDoc->HasData( nCol,nRow, nDocTab ) )
         SetString ( aDocStr );
@@ -473,15 +486,12 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
         maIndexOrder.push_back(new vector<SCROW>());
     }
     //check valid
-    for ( SCROW nRow = nStartRow; nRow <= nEndRow; nRow ++ )
+
+    for (sal_uInt16 nCol = nStartCol; nCol <= nEndCol; ++nCol)
     {
-        for ( sal_uInt16 nCol = nStartCol; nCol <= nEndCol; nCol++ )
-        {
-            if ( nRow == nStartRow )
-                AddLabel( new ScDPItemData( pDoc, nRow, nCol, nDocTab  ) );
-            else
-                AddData( nCol - nStartCol, new ScDPItemData( pDoc, nRow, nCol, nDocTab  ) );
-        }
+        AddLabel(new ScDPItemData(pDoc, nStartRow, nCol, nDocTab));
+        for (SCROW nRow = nStartRow + 1; nRow <= nEndRow; ++nRow)
+            AddData(nCol - nStartCol, new ScDPItemData(pDoc, nRow, nCol, nDocTab));
     }
     return true;
 }
@@ -489,7 +499,7 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
 bool ScDPCache::InitFromDataBase (const Reference<sdbc::XRowSet>& xRowSet, const Date& rNullDate)
 {
     if (!xRowSet.is())
-        // Dont' even waste time to go any further.
+        // Don't even waste time to go any further.
         return false;
     try
     {
@@ -565,7 +575,7 @@ sal_uLong ScDPCache::GetDimNumType( SCCOL nDim) const
         return GetNumType(maTableDataValues[nDim][0].nNumFormat);
 }
 
-bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, bool *pSpecial)
+bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, bool *pSpecial) const
 {
     if (!rParam.GetEntry(0).bDoQuery)
         return true;
@@ -787,23 +797,23 @@ bool ScDPCache::IsEmptyMember( SCROW nRow, sal_uInt16 nColumn ) const
     return !GetItemDataById( nColumn, GetItemDataId( nColumn, nRow, false ) )->IsHasData();
 }
 
-bool ScDPCache::AddData(long nDim, ScDPItemData* pitemData)
+bool ScDPCache::AddData(long nDim, ScDPItemData* pData)
 {
     DBG_ASSERT( IsValid(), "  IsValid() == false " );
     DBG_ASSERT( nDim < mnColumnCount && nDim >=0 , "dimension out of bound" );
+
+    // Wrap this instance with scoped pointer to ensure proper deletion.
+    auto_ptr<ScDPItemData> p(pData);
+    pData->SetDate(isDate(GetNumType(pData->nNumFormat)));
+
     SCROW nIndex = 0;
-
-    bool bInserted = false;
-
-    pitemData->SetDate( lcl_isDate( GetNumType( pitemData->nNumFormat ) ) );
-
-    if ( !lcl_Search( maTableDataValues[nDim], maGlobalOrder[nDim], *pitemData, nIndex ) )
+    if (!hasItemInDimension(maTableDataValues[nDim], maGlobalOrder[nDim], *pData, nIndex))
     {
-        maTableDataValues[nDim].push_back( pitemData );
+        // This item doesn't exist in the dimension array yet.
+        maTableDataValues[nDim].push_back(p);
         maGlobalOrder[nDim].insert( maGlobalOrder[nDim].begin()+nIndex, maTableDataValues[nDim].size()-1  );
         DBG_ASSERT( (size_t) maGlobalOrder[nDim][nIndex] == maTableDataValues[nDim].size()-1 ,"ScDPTableDataCache::AddData ");
         maSourceData[nDim].push_back( maTableDataValues[nDim].size()-1 );
-        bInserted = true;
     }
     else
         maSourceData[nDim].push_back( maGlobalOrder[nDim][nIndex] );
@@ -813,11 +823,8 @@ bool ScDPCache::AddData(long nDim, ScDPItemData* pitemData)
     while ( mbEmptyRow.size() <= nCurRow )
         mbEmptyRow.push_back( true );
 
-    if ( pitemData->IsHasData() )
+    if ( pData->IsHasData() )
         mbEmptyRow[ nCurRow ] = false;
-
-    if ( !bInserted )
-        delete pitemData;
 
     return true;
 }
@@ -928,10 +935,26 @@ sal_uLong ScDPCache::GetNumberFormat( long nDim ) const
 {
     if ( nDim >= mnColumnCount )
         return 0;
-    if ( maTableDataValues[nDim].size()==0 )
+
+    if (maTableDataValues[nDim].empty())
         return 0;
-    else
-        return maTableDataValues[nDim][0].nNumFormat;
+
+    // TODO: This is very ugly, but the best we can do right now.  Check the
+    // first 10 dimension members, and take the first non-zero number format,
+    // else return the default number format (of 0).  For the long-term, we
+    // need to redo this cache structure to properly indicate empty cells, and
+    // skip them when trying to determine the representative number format for
+    // a dimension.
+    size_t nCount = maTableDataValues[nDim].size();
+    if (nCount > 10)
+        nCount = 10;
+    for (size_t i = 0; i < nCount; ++i)
+    {
+        sal_uLong n = maTableDataValues[nDim][i].nNumFormat;
+        if (n)
+            return n;
+    }
+    return 0;
 }
 
 bool ScDPCache::IsDateDimension( long nDim ) const
@@ -967,7 +990,7 @@ SCCOL ScDPCache::GetDimensionIndex(String sName) const
     return -1;
 }
 
-SCROW ScDPCache::GetIdByItemData(long nDim, String sItemData ) const
+SCROW ScDPCache::GetIdByItemData(long nDim, const String& sItemData ) const
 {
     if ( nDim < mnColumnCount && nDim >=0 )
     {
@@ -995,7 +1018,7 @@ SCROW ScDPCache::GetIdByItemData( long nDim, const ScDPItemData& rData  ) const
     return  GetRowCount() + maAdditionalData.getDataId(rData);
 }
 
-SCROW ScDPCache::GetAdditionalItemID ( String sItemData ) const
+SCROW ScDPCache::GetAdditionalItemID ( const String& sItemData ) const
 {
     ScDPItemData rData ( sItemData );
     return GetAdditionalItemID( rData );

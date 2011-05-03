@@ -1032,6 +1032,7 @@ ScDPFieldPopupWindow::ScDPFieldPopupWindow(Window* pParent, ScDocument* pDoc) :
     maChkToggleAll.SetPosSizePixel(aPos, aSize);
     maChkToggleAll.SetFont(getLabelFont());
     maChkToggleAll.SetText(ScRscStrLoader(RID_POPUP_FILTER, STR_BTN_TOGGLE_ALL).GetString());
+    maChkToggleAll.SetTextColor(rStyle.GetMenuTextColor());
     maChkToggleAll.SetControlBackground(rStyle.GetMenuColor());
     maChkToggleAll.SetClickHdl( LINK(this, ScDPFieldPopupWindow, TriStateHdl) );
     maChkToggleAll.Show();

@@ -103,7 +103,6 @@ private:
     sal_Bool                        bCriteria;
     sal_Bool                        bAutoOrAdvanced;
     ScRange                     aCriteriaRange;
-    String                      aFilterName;
 
     void                        CreateFromDouble( String& rStr, double fVal );
     void                        SetCellAttribs();
@@ -114,8 +113,7 @@ protected:
 public:
                                 XclImpAutoFilterData(
                                     RootData* pRoot,
-                                    const ScRange& rRange,
-                                    const String& rName );
+                                    const ScRange& rRange);
 
     inline bool                 IsActive() const    { return bActive; }
     inline bool                 IsFiltered() const  { return bAutoOrAdvanced; }
@@ -131,8 +129,8 @@ public:
     void                        SetAdvancedRange( const ScRange* pRange );
     void                        SetExtractPos( const ScAddress& rAddr );
     inline void                 SetAutoOrAdvanced()  { bAutoOrAdvanced = sal_True; }
-    void                        Apply( const sal_Bool bUseUnNamed = false );
-    void                        CreateScDBData( const sal_Bool bUseUnNamed );
+    void                        Apply();
+    void                        CreateScDBData();
     void                        EnableRemoveFilter();
 };
 
@@ -141,8 +139,6 @@ class XclImpAutoFilterBuffer : private List
 {
 private:
     using                       List::Insert;
-
-    sal_uInt16                      nAFActiveCount;
 
     inline XclImpAutoFilterData* _First()   { return (XclImpAutoFilterData*) List::First(); }
     inline XclImpAutoFilterData* _Next()    { return (XclImpAutoFilterData*) List::Next(); }
@@ -154,15 +150,12 @@ public:
                                 XclImpAutoFilterBuffer();
     virtual                     ~XclImpAutoFilterBuffer();
 
-    void                        Insert( RootData* pRoot, const ScRange& rRange,
-                                                const String& rName );
+    void                        Insert( RootData* pRoot, const ScRange& rRange);
     void                        AddAdvancedRange( const ScRange& rRange );
     void                        AddExtractPos( const ScRange& rRange );
     void                        Apply();
 
     XclImpAutoFilterData*       GetByTab( SCTAB nTab );
-    inline void                 IncrementActiveAF() { nAFActiveCount++; }
-    inline sal_Bool                 UseUnNamed() { return nAFActiveCount == 1; }
 };
 
 #endif

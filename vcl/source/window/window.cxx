@@ -2404,7 +2404,7 @@ void Window::ImplCallPaint( const Region* pRegion, sal_uInt16 nPaintFlags )
         {
             bool bRestoreCursor = false;
             if ( mpWindowImpl->mpCursor )
-                bRestoreCursor = mpWindowImpl->mpCursor->ImplHide();
+                bRestoreCursor = mpWindowImpl->mpCursor->ImplSuspend();
 
             mbInitClipRegion = sal_True;
             mpWindowImpl->mbInPaint = sal_True;
@@ -2451,7 +2451,7 @@ void Window::ImplCallPaint( const Region* pRegion, sal_uInt16 nPaintFlags )
             mbInitClipRegion = sal_True;
             mpWindowImpl->mpPaintRegion = NULL;
             if ( mpWindowImpl->mpCursor )
-                mpWindowImpl->mpCursor->ImplShow( false, bRestoreCursor );
+                mpWindowImpl->mpCursor->ImplResume( bRestoreCursor );
         }
     }
     else

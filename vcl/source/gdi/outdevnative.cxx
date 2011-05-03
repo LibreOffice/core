@@ -236,7 +236,14 @@ sal_Bool OutputDevice::DrawNativeControl( ControlType nType,
 
     if ( mbInitClipRegion )
         ImplInitClipRegion();
-    if ( mbOutputClipped || rControlRegion.IsEmpty() )
+    if ( mbOutputClipped
+#ifndef WNT
+         // This check causes spin buttons to not be drawn on Windows,
+         // see fdo#36481 . Presumably it is useful on other plaforms,
+         // though.
+         || rControlRegion.IsEmpty()
+#endif
+        )
         return sal_True;
 
     if ( mbInitLineColor )

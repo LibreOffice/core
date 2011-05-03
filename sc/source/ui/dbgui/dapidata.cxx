@@ -130,7 +130,7 @@ void ScDataPilotDatabaseDlg::GetValues( ScImportSourceDesc& rDesc )
     rDesc.aDBName = aLbDatabase.GetSelectEntry();
     rDesc.aObject = aCbObject.GetText();
 
-    if ( !rDesc.aDBName.Len() || !rDesc.aObject.Len() )
+    if (rDesc.aDBName.isEmpty() || rDesc.aObject.isEmpty())
         rDesc.nType = sheet::DataImportMode_NONE;
     else if ( nSelect == DP_TYPELIST_TABLE )
         rDesc.nType = sheet::DataImportMode_TABLE;

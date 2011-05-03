@@ -100,6 +100,7 @@ using namespace ::com::sun::star::view;
 using namespace svtools;
 
 extern ::rtl::OUString CreateExactSizeText_Impl( sal_Int64 nSize ); // fileview.cxx
+#define aSeparatorStr   "----------------------------------"
 
 #define SPLITSET_ID         0
 #define COLSET_ID           1
@@ -594,7 +595,7 @@ SvtFileViewWindow_Impl::SvtFileViewWindow_Impl( SvtTemplateWindow* pParent ) :
     Window( pParent, WB_DIALOGCONTROL | WB_TABSTOP | WB_BORDER | WB_3DLOOK ),
 
     rParent             ( *pParent ),
-    aFileView           ( this, SvtResId( CTRL_FILEVIEW ), FILEVIEW_SHOW_TITLE ),
+    aFileView           ( this, SvtResId( CTRL_FILEVIEW ), FILEVIEW_SHOW_NONE ),
     bIsTemplateFolder   ( sal_False )
 
 {
@@ -651,9 +652,14 @@ Sequence< ::rtl::OUString > SvtFileViewWindow_Impl::GetNewDocContents() const
     for ( i = 0; i < nCount; ++i )
     {
         GetMenuEntry_Impl( aDynamicMenuEntries[i], aTitle, aURL, aTargetFrame, aImageURL );
-
-        if ( aURL == sSeparator || aURL == sSlotURL )
+        if( aURL == sSlotURL )
             continue;
+        if( aURL == sSeparator )
+        {
+            String aSeparator( ASCII_STR( aSeparatorStr ) );
+            ::rtl::OUString* pSeparator = new ::rtl::OUString( aSeparator );
+            aNewDocs.push_back( pSeparator );
+        }
         else
         {
             // title

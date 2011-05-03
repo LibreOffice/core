@@ -44,7 +44,8 @@ SwAbstractDialogFactory* SwAbstractDialogFactory::Create()
     SwFuncPtrCreateDialogFactory fp = 0;
     static ::osl::Module aDialogLibrary;
     static const ::rtl::OUString sLibName(::vcl::unohelper::CreateLibraryName("swui", sal_True));
-    if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, String( sLibName ) ) )
+    if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, String( sLibName ),
+                                                             SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY ) )
         fp = ( SwAbstractDialogFactory* (__LOADONCALLAPI*)() )
             aDialogLibrary.getFunctionSymbol( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateDialogFactory")));
     if ( fp )

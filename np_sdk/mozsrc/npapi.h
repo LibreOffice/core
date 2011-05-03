@@ -42,8 +42,9 @@
  *  Netscape client plug-in API spec
  */
 
-#ifndef _NPAPI_H_
+#if !defined(_NPAPI_H_) && !defined(npapi_h_)
 #define _NPAPI_H_
+#define npapi_h_
 
 #ifdef __OS2__
 #pragma pack(1)

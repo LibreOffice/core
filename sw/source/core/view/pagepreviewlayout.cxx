@@ -1073,7 +1073,8 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
                 // #i80691# paint page border and shadow
                 {
                     SwRect aPageBorderRect;
-                    SwPageFrm::GetBorderAndShadowBoundRect( SwRect( aPageRect ), &mrParentViewShell, aPageBorderRect, true );
+                    SwPageFrm::GetBorderAndShadowBoundRect( SwRect( aPageRect ), &mrParentViewShell, aPageBorderRect,
+                        (*aPageIter)->pPage->IsLeftShadowNeeded(), (*aPageIter)->pPage->IsRightShadowNeeded(), true );
                     const Region aDLRegion(aPageBorderRect.SVRect());
                     mrParentViewShell.DLPrePaint2(aDLRegion);
                     SwPageFrm::PaintBorderAndShadow( aPageRect, &mrParentViewShell, true, false, true );

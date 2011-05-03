@@ -39,6 +39,7 @@
 #include <set>
 #include <boost/unordered_set.hpp>
 #include <boost/unordered_map.hpp>
+#include <boost/noncopyable.hpp>
 
 namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldFilter;
@@ -91,7 +92,7 @@ class ScDocument;
  * Base class that abstracts different data source types of a datapilot
  * table.
  */
-class SC_DLLPUBLIC ScDPTableData
+class SC_DLLPUBLIC ScDPTableData : public ::boost::noncopyable
 {
     //  cached data for GetDatePart
     long    nLastDateVal;

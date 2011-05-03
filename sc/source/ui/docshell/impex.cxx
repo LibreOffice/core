@@ -2086,7 +2086,7 @@ ScFormatFilterPlugin &ScFormatFilter::Get()
 
     ::rtl::OUString sFilterLib(RTL_CONSTASCII_USTRINGPARAM(SVLIBRARY("scfilt")));
     static ::osl::Module aModule;
-    bool bLoaded = aModule.loadRelative(&thisModule, sFilterLib);
+    bool bLoaded = aModule.loadRelative(&thisModule, sFilterLib, SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY);
     if (!bLoaded)
         bLoaded = aModule.load(sFilterLib);
     if (bLoaded)

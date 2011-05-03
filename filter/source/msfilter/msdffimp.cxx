@@ -4046,18 +4046,25 @@ bool SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj) const
                             sal_uInt16 nLen = (sal_uInt16)aHd.nRecLen;
                             if(nLen)
                             {
+                                sal_uInt32 nMask;
                                 sal_uInt16 nVal1, nVal2, nVal3;
                                 sal_uInt16 nDefaultTab = 2540; // PPT def: 1 Inch //rOutliner.GetDefTab();
                                 sal_uInt16 nMostrightTab = 0;
                                 SfxItemSet aSet(rOutliner.GetEmptyItemSet());
                                 SvxTabStopItem aTabItem(0, 0, SVX_TAB_ADJUST_DEFAULT, EE_PARA_TABS);
 
-                                rSt >> nVal1;
-                                rSt >> nVal2;
+                                rSt >> nMask;
                                 nLen -= 4;
 
+                                if(nLen && (nMask & 0x0002))
+                                {
+                                    // number of indent levels
+                                    rSt >> nVal3;
+                                    nLen -= 2;
+                                }
+
                                 // Allg. TAB verstellt auf Wert in nVal3
-                                if(nLen && (nVal1 & 0x0001))
+                                if(nLen && (nMask & 0x0001))
                                 {
                                     rSt >> nVal3;
                                     nLen -= 2;
@@ -4065,7 +4072,7 @@ bool SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj) const
                                 }
 
                                 // Weitere, frei gesetzte TABs
-                                if(nLen && (nVal1 & 0x0004))
+                                if(nLen && (nMask & 0x0004))
                                 {
                                     rSt >> nVal1;
                                     nLen -= 2;

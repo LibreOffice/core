@@ -110,6 +110,7 @@ $(WORKDIR)/inc/svx/globlmn.hrc : $(SRCDIR)/svx/inc/globlmn_tmpl.hrc
 	echo copying $@
 	-mkdir -p $(WORKDIR)/inc/svx
 	cp $(SRCDIR)/svx/inc/globlmn_tmpl.hrc $(WORKDIR)/inc/svx/globlmn.hrc
+	cp $(SRCDIR)/svx/inc/globlmn_tmpl.hrc $(OUTDIR)/inc/svx/globlmn.hrc
 	rm -f $(WORKDIR)/inc/svx/lastrun.mk
 else
 -include $(WORKDIR)/inc/svx/lastrun.mk
@@ -125,6 +126,7 @@ $(WORKDIR)/inc/svx/globlmn.hrc : $(SRCDIR)/svx/inc/globlmn_tmpl.hrc $(gb_SrsPart
             $(gb_SrsPartMergeTarget_TRANSEXCOMMAND) \
             -p svx \
             -i $< -o $@ -m $(gb_SrsPartMergeTarget_SDFLOCATION)/svx/inc/localize.sdf -l all)
+	cp $(WORKDIR)/inc/svx/globlmn.hrc $(OUTDIR)/inc/svx/globlmn.hrc
 endif
 
 .PHONY : $(WORKDIR)/inc/svx/globlmn.hrc_clean

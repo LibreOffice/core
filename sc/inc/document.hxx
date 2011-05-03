@@ -528,8 +528,8 @@ public:
     SC_DLLPUBLIC sal_Bool                   SetCodeName( SCTAB nTab, const String& rName );
     SC_DLLPUBLIC sal_Bool           GetTable( const String& rName, SCTAB& rTab ) const;
 
-    void            SetAnonymousDBData(SCTAB nTab, ScDBData* pDBData);
-    ScDBData*       GetAnonymousDBData(SCTAB nTab);
+    SC_DLLPUBLIC void            SetAnonymousDBData(SCTAB nTab, ScDBData* pDBData);
+    SC_DLLPUBLIC ScDBData*       GetAnonymousDBData(SCTAB nTab);
 
     SC_DLLPUBLIC inline SCTAB   GetTableCount() const { return nMaxTableNumber; }
     SvNumberFormatterIndexTable* GetFormatExchangeList() const { return pFormatExchangeList; }
@@ -1238,7 +1238,7 @@ public:
     SC_DLLPUBLIC sal_Bool           ApplyFlagsTab( SCCOL nStartCol, SCROW nStartRow,
                                             SCCOL nEndCol, SCROW nEndRow,
                                             SCTAB nTab, sal_Int16 nFlags );
-    sal_Bool            RemoveFlagsTab( SCCOL nStartCol, SCROW nStartRow,
+    SC_DLLPUBLIC sal_Bool           RemoveFlagsTab( SCCOL nStartCol, SCROW nStartRow,
                                             SCCOL nEndCol, SCROW nEndRow,
                                             SCTAB nTab, sal_Int16 nFlags );
 
