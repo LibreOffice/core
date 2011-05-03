@@ -425,7 +425,7 @@ public class TextDocuments {
         if ( xDoc != null ) {
             sourceFile = new java.io.File(sOutputDir);
             StringBuffer sStoreFileUrl = new StringBuffer();
-            sStoreFileUrl.append(sourceFile.toURL().toString());
+            sStoreFileUrl.append(sourceFile.toURI().toURL().toString());
             sStoreFileUrl.append("somepopularfileformat.doc");
 
             storeDocComponent(xDoc, sStoreFileUrl.toString() );

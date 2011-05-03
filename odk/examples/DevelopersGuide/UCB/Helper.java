@@ -179,7 +179,7 @@ public class Helper {
         try
         {
             File file = new File( systemPath );
-            String url = file.toURL().toString();
+            String url = file.toURI().toURL().toString();
             if ( url.charAt( 6 ) != '/' ) { // file:/xxx vs. file:///xxxx
                 StringBuffer buf1 = new StringBuffer( "file:///" );
                 buf1.append( url.substring( 6 ) );
@@ -217,7 +217,7 @@ public class Helper {
             buf.append( "resource-" );
             buf.append( System.currentTimeMillis() );
             File file = new File( buf.toString() );
-            String url = file.toURL().toString();
+            String url = file.toURI().toURL().toString();
             if ( url.charAt( 6 ) != '/' ) { // file:/xxx vs. file:///xxxx
                 StringBuffer buf1 = new StringBuffer( "file:///" );
                 buf1.append( url.substring( 6 ) );

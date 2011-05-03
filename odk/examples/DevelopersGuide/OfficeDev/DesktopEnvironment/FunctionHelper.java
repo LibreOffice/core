@@ -1025,7 +1025,7 @@ public class FunctionHelper
             // get file URL from the dialog
             try
             {
-                sFileURL = aChooser.getSelectedFile().toURL().toExternalForm();
+                sFileURL = aChooser.getSelectedFile().toURI().toURL().toExternalForm();
             }
             catch( MalformedURLException ex )
             {
