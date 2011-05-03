@@ -239,7 +239,7 @@ SalInstance *CreateSalInstance()
         pInst = autodetect_plugin();
 
     // fallback, try everything
-    const char* pPlugin[] = { "gtk", "kde", "gen", 0 };
+    const char* pPlugin[] = { "gtk", "kde4", "kde", "gen", 0 };
 
     for ( int i = 0; !pInst && pPlugin[ i ]; ++i )
         pInst = tryInstance( OUString::createFromAscii( pPlugin[ i ] ) );
