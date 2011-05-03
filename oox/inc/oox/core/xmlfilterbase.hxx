@@ -204,6 +204,10 @@ public:
      */
     XmlFilterBase& exportDocumentProperties( ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties > xProperties );
 
+    ::rtl::OUString getNamespaceURL( const ::rtl::OUString& rPrefix );
+
+    sal_Int32 getNamespaceId( const ::rtl::OUString& rUrl );
+
     void importDocumentProperties() throw();
 
 protected:

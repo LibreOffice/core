@@ -141,6 +141,8 @@ XmlFilterBaseImpl::XmlFilterBaseImpl( const Reference< XComponentContext >& rxCo
 
     maFastParser.registerNamespace( NMSP_ax );
     maFastParser.registerNamespace( NMSP_xm );
+    maFastParser.registerNamespace( NMSP_mce );
+    maFastParser.registerNamespace( NMSP_mceTest );
 }
 
 
@@ -270,6 +272,16 @@ bool XmlFilterBase::importFragment( const ::rtl::Reference< FragmentHandler >& r
     {
     }
     return false;
+}
+
+OUString XmlFilterBase::getNamespaceURL( const OUString& rPrefix )
+{
+    return mxImpl->maFastParser.getNamespaceURL( rPrefix );
+}
+
+sal_Int32 XmlFilterBase::getNamespaceId( const OUString& rUrl )
+{
+     return mxImpl->maFastParser.getNamespaceId( rUrl );
 }
 
 RelationsRef XmlFilterBase::importRelations( const OUString& rFragmentPath )

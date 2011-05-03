@@ -74,9 +74,18 @@ ContextHandler2Helper::~ContextHandler2Helper()
 {
 }
 
-sal_Int32 ContextHandler2Helper::getCurrentElement() const
+sal_Int32 ContextHandler2Helper::getCurrentElementWithMce() const
 {
     return mxContextStack->empty() ? XML_ROOT_CONTEXT : mxContextStack->back().mnElement;
+}
+
+sal_Int32 ContextHandler2Helper::getCurrentElement() const
+{
+    for ( ContextStack::const_reverse_iterator It = mxContextStack->rbegin();
+          It != mxContextStack->rend(); It++ )
+        if( getNamespace( It->mnElement ) != NMSP_mce )
+            return It->mnElement;
+    return XML_ROOT_CONTEXT;
 }
 
 sal_Int32 ContextHandler2Helper::getParentElement( sal_Int32 nCountBack ) const
@@ -118,7 +127,7 @@ void ContextHandler2Helper::implCharacters( const OUString& rChars )
 void ContextHandler2Helper::implEndElement( sal_Int32 nElement )
 {
     (void)nElement;     // prevent "unused parameter" warning in product build
-    OSL_ENSURE( getCurrentElement() == nElement, "ContextHandler2Helper::implEndElement - context stack broken" );
+    OSL_ENSURE( getCurrentElementWithMce() == nElement, "ContextHandler2Helper::implEndElement - context stack broken" );
     if( !mxContextStack->empty() )
     {
         // #i76091# process collected characters (calls onCharacters() if needed)
@@ -142,7 +151,7 @@ void ContextHandler2Helper::implStartRecord( sal_Int32 nRecId, SequenceInputStre
 void ContextHandler2Helper::implEndRecord( sal_Int32 nRecId )
 {
     (void)nRecId;   // prevent "unused parameter" warning in product build
-    OSL_ENSURE( getCurrentElement() == nRecId, "ContextHandler2Helper::implEndRecord - context stack broken" );
+    OSL_ENSURE( getCurrentElementWithMce() == nRecId, "ContextHandler2Helper::implEndRecord - context stack broken" );
     if( !mxContextStack->empty() )
     {
         onEndRecord();

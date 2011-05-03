@@ -31,6 +31,7 @@
 
 #include "oox/core/contexthandler2.hxx"
 #include "oox/core/fragmenthandler.hxx"
+#include <vector>
 
 namespace oox {
 namespace core {
@@ -39,6 +40,19 @@ namespace core {
 
 class FragmentHandler2 : public FragmentHandler, public ContextHandler2Helper
 {
+private:
+    enum MCE_STATE
+    {
+        MCE_UNUSED,
+        MCE_STARTED,
+        MCE_FOUND_CHOICE
+    };
+    ::std::vector<MCE_STATE>           aMceState;
+
+private:
+    bool                prepareMceContext( sal_Int32 nElement, const AttributeList& rAttribs );
+
+
 public:
     explicit            FragmentHandler2(
                             XmlFilterBase& rFilter,

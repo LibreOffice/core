@@ -27,6 +27,7 @@ inline sal_Int32 getNamespace( sal_Int32 nToken ) { return nToken & NMSP_MASK; }
 #define XLS_TOKEN( token )          (::oox::NMSP_xls | XML_##token)
 #define XM_TOKEN( token )           (::oox::NMSP_xm | XML_##token)
 #define XML_TOKEN( token )          (::oox::NMSP_xml | XML_##token)
+#define MCE_TOKEN( token )          (::oox::NMSP_mce | XML_##token)
 
 // ============================================================================
 

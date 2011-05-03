@@ -37,6 +37,7 @@ AbbreviatedCaseNumber
 Accel
 Accel2
 AlbumTitle
+AlternateContent
 Always
 Anchor
 AppVersion
@@ -79,6 +80,7 @@ Characters
 CharactersWithSpaces
 Checkbox
 Checked
+Choice
 City
 ClientData
 ColHidden
@@ -142,6 +144,7 @@ EnhancedMetaFile
 Extend
 Extension
 External
+Fallback
 False
 FieldCodes
 FileBinding
@@ -183,6 +186,7 @@ IDREF
 IDREFS
 Icon
 Id
+Ignorable
 Inc
 Institution
 Internal
@@ -324,6 +328,7 @@ Relationships
 RelationshipsGroupReference
 Report
 Reporter
+Requires
 Right
 RootElement
 Row

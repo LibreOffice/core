@@ -144,8 +144,11 @@ public:
 
     // helpers ----------------------------------------------------------------
 
-    /** Returns the identifier of the currently processed element. */
+    /** Returns the identifier of the currently processed element. Ignores MCE elements in stack */
     sal_Int32           getCurrentElement() const;
+
+    /** Returns the identifier of the currently processed element - Including MCE root elements */
+    sal_Int32           getCurrentElementWithMce() const;
 
     /** Returns true, if nElement contains the identifier of the currently
         processed element. */
