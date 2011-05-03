@@ -36,7 +36,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     SVLook = TRUE ;
     Moveable = TRUE ;
     Closeable = FALSE ;
-    Text [ en-US ] = "DataPilot" ;
+    Text [ en-US ] = "Pivot table" ;
 
     FixedText FT_PAGE
     {

@@ -793,7 +793,7 @@ String STR_ACC_DATAPILOT_SEL_DESCR
 
 String STR_ACC_DATAPILOT_PAGE_DESCR
 {
-    Text [ en-US ] = "Fields that you drop here will be available as filter lists at the top of the final DataPilot table.";
+    Text [ en-US ] = "Fields that you drop here will be available as filter lists at the top of the final pivot table.";
 };
 
 String SCSTR_MEDIASHELL
