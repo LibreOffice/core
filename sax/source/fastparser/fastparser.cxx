@@ -525,6 +525,19 @@ void SAL_CALL FastSaxParser::registerNamespace( const OUString& NamespaceURL, sa
     throw IllegalArgumentException();
 }
 
+OUString SAL_CALL FastSaxParser::getNamespaceURL( const OUString& rPrefix ) throw(IllegalArgumentException, RuntimeException)
+{
+    try
+    {
+        return GetNamespaceURL( OUStringToOString( rPrefix, RTL_TEXTENCODING_UTF8 ) );
+    }
+    catch(Exception)
+    {
+        ;
+    }
+    throw IllegalArgumentException();
+}
+
 void FastSaxParser::setErrorHandler(const Reference< XErrorHandler > & Handler) throw (RuntimeException)
 {
     maData.mxErrorHandler = Handler;
