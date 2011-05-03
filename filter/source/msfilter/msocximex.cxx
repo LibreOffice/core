@@ -4270,6 +4270,8 @@ OCX_map aOCXTab[] =
     {&OCX_ProgressBar::Create,"",
         form::FormComponentType::CONTROL,""},
     {&HTML_TextBox::Create,"5512D124-5CC6-11CF-8d67-00aa00bdce1d", form::FormComponentType::TEXTFIELD,"TextBox"},
+    {&HTML_Select::Create,"5512D122-5CC6-11CF-8d67-00aa00bdce1d",
+        form::FormComponentType::LISTBOX,"ListBox"},
 };
 
 const int NO_OCX = sizeof( aOCXTab ) / sizeof( *aOCXTab );
@@ -5052,6 +5054,143 @@ sal_Bool HTML_TextBox::Read(SotStorageStream * /*pS*/)
 sal_Bool HTML_TextBox::ReadFontData(SotStorageStream * /*pS*/)
 {
   return sal_True;
+}
+
+// HTML_Select
+sal_Bool HTML_Select::Import(com::sun::star::uno::Reference<
+    com::sun::star::beans::XPropertySet> &rPropSet)
+{
+    uno::Any aTmp(&sName,getCppuType((OUString *)0));
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Name"), aTmp );
+
+    sal_Bool bTmp=fEnabled;
+    aTmp = bool2any(bTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), aTmp);
+
+    bTmp=fLocked;
+    aTmp = bool2any(bTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("ReadOnly"), aTmp);
+
+    aTmp <<= ImportColor(mnForeColor);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
+
+    sal_Bool bTemp = nMultiState;
+    aTmp = bool2any(bTemp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("MultiSelection"), aTmp);
+
+    aTmp <<= ImportColor(mnBackColor);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
+
+    aTmp <<= ImportBorder(nSpecialEffect,nBorderStyle);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Border"), aTmp);
+
+    aTmp <<= ImportColor( nBorderColor );
+    rPropSet->setPropertyValue( WW8_ASCII2STR("BorderColor"), aTmp);
+
+    if ( msListData.getLength() )
+    {
+        aTmp <<= msListData;
+        rPropSet->setPropertyValue( WW8_ASCII2STR("StringItemList"), aTmp);
+        if ( msIndices.getLength() )
+        {
+            aTmp <<= msIndices;
+            rPropSet->setPropertyValue( WW8_ASCII2STR("SelectedItems"), aTmp);
+        }
+    }
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Dropdown"), uno::makeAny( sal_True ));
+
+    return sal_True;
+}
+
+sal_Bool HTML_Select::Read(SotStorageStream *pS)
+{
+    static rtl::OUString sTerm( RTL_CONSTASCII_USTRINGPARAM("</SELECT") );
+    static String sMultiple( RTL_CONSTASCII_USTRINGPARAM("<SELECT MULTIPLE") );
+    static String sSelected( RTL_CONSTASCII_USTRINGPARAM("OPTION SELECTED") );
+
+    // we should be positioned at the html fragment ( really we should
+    // reorganise the reading of controls from excel such that the position and
+    // lenght of the associated record in the Ctls stream is available
+    // But since we don't know about the lenght of the stream lets read the stream
+    // until we reach the end of the fragment
+    // I wish I know where there was a html parser in openoffice
+    OUStringBuffer buf(40);
+    bool bTerminate = false;
+    do
+    {
+        sal_uInt16 ch = 0;
+        *pS >> ch;
+        sal_Unicode uni = static_cast< sal_Unicode >( ch );
+        // if the buffer ends with </SELECT> we are done
+        if ( uni == '>' )
+        {
+            rtl::OUString bufContents( buf.getStr() );
+            if ( bufContents.indexOf( sTerm ) != -1 )
+                bTerminate = true;
+
+        }
+        buf.append( &uni, 1 );
+
+    } while ( !pS->IsEof() && !bTerminate );
+    String data = buf.makeStringAndClear();
+
+    // replace crlf with lf
+    data.SearchAndReplaceAll( String( RTL_CONSTASCII_USTRINGPARAM( "\x0D\x0A" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "\x0A" ) ) );
+    std::vector< rtl::OUString > listValues;
+    std::vector< sal_Int16 > selectedIndices;
+
+    // Ultra hacky parser for the info
+    sal_Int32 nTokenCount = data.GetTokenCount( '\n' );
+
+    for ( sal_Int32 nToken = 0; nToken < nTokenCount; ++nToken )
+    {
+        String sLine( data.GetToken( nToken, '\n' ) );
+        if ( !nToken ) // first line will tell us if multiselect is enabled
+        {
+            if ( sLine.CompareTo( sMultiple, sMultiple.Len() ) == COMPARE_EQUAL )
+                nMultiState = true;
+        }
+        // skip first and last lines, no data there
+        else if ( nToken < nTokenCount - 1)
+        {
+            if ( sLine.GetTokenCount( '>' ) )
+            {
+                String displayValue  = sLine.GetToken( 1, '>' );
+                if ( displayValue.Len() )
+                {
+                    // Really we should be using a proper html parser
+                    // escaping some common bits to be escaped
+                    displayValue.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "&lt;" ) ), String( RTL_CONSTASCII_USTRINGPARAM("<") ) );
+                    displayValue.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "&gt;" ) ), String( RTL_CONSTASCII_USTRINGPARAM(">") ) );
+                    displayValue.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "&quot;" ) ), String( RTL_CONSTASCII_USTRINGPARAM("\"") ) );
+                    displayValue.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "&amp;" ) ), String( RTL_CONSTASCII_USTRINGPARAM("&") ) );
+                    listValues.push_back( displayValue );
+                    if( sLine.Search( sSelected ) != STRING_NOTFOUND )
+                        selectedIndices.push_back( static_cast< sal_Int16 >( listValues.size() ) - 1 );
+                }
+            }
+        }
+    }
+    if ( listValues.size() )
+    {
+        msListData.realloc( listValues.size() );
+        sal_Int32 index = 0;
+        for( std::vector< rtl::OUString >::iterator it = listValues.begin(); it != listValues.end(); ++it, ++index )
+             msListData[ index ] = *it;
+    }
+    if ( selectedIndices.size() )
+    {
+        msIndices.realloc( selectedIndices.size() );
+        sal_Int32 index = 0;
+        for( std::vector< sal_Int16 >::iterator it = selectedIndices.begin(); it != selectedIndices.end(); ++it, ++index )
+             msIndices[ index ] = *it;
+    }
+    return sal_True;
+}
+
+sal_Bool HTML_Select::ReadFontData(SotStorageStream* /*pS*/)
+{
+    return sal_True;
 }
 
 // Doesn't really read anything but just skips the
