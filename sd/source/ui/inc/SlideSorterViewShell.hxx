@@ -199,8 +199,6 @@ private:
     ::boost::shared_ptr<SlideSorter> mpSlideSorter;
     bool mbIsArrangeGUIElementsPending;
 
-    bool m_bCreatedOwnFrameView;
-
     SlideSorterViewShell (
         SfxViewFrame* pFrame,
         ViewShellBase& rViewShellBase,
