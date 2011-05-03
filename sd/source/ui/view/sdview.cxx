@@ -128,7 +128,6 @@ View::View(SdDrawDocument* pDrawDoc, OutputDevice* pOutDev,
     mnDragSrcPgNum(SDRPAGE_NOTFOUND),
     mnAction(DND_ACTION_NONE),
     mnLockRedrawSmph(0),
-    mpLockedRedraws(NULL),
     mbIsDropAllowed(sal_True),
     maSmartTags(*this),
     mpClipboard (new ViewClipboard (*this))
@@ -189,18 +188,6 @@ View::~View()
     {
         // Alle angemeldeten OutDevs entfernen
         DeleteWindowFromPaintView(GetFirstOutputDevice() /*GetWin(0)*/);
-    }
-
-    // gespeicherte Redraws loeschen
-    if (mpLockedRedraws)
-    {
-        SdViewRedrawRec* pRec = (SdViewRedrawRec*)mpLockedRedraws->First();
-        while (pRec)
-        {
-            delete pRec;
-            pRec = (SdViewRedrawRec*)mpLockedRedraws->Next();
-        }
-        delete mpLockedRedraws;
     }
 }
 
@@ -543,13 +530,10 @@ void View::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contac
     // oder speichern?
     else
     {
-        if (!mpLockedRedraws)
-            mpLockedRedraws = new List;
-
         SdViewRedrawRec* pRec = new SdViewRedrawRec;
         pRec->mpOut = pOutDev;
         pRec->aRect = rReg.GetBoundRect();
-        mpLockedRedraws->Insert(pRec, LIST_APPEND);
+        maLockedRedraws.push_back(pRec);
     }
 }
 

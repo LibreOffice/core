@@ -29,6 +29,8 @@
 #ifndef SD_VIEW_HXX
 #define SD_VIEW_HXX
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #include "pres.hxx"
 #include <tools/gen.hxx>
 #include <svtools/transfer.hxx>
@@ -224,7 +226,7 @@ protected:
     Timer                   maDropErrorTimer;
     Timer                   maDropInsertFileTimer;
     sal_uInt16                  mnLockRedrawSmph;
-    List*                   mpLockedRedraws;
+    boost::ptr_vector<SdViewRedrawRec> maLockedRedraws;
     bool                    mbIsDropAllowed;
 
                             DECL_LINK( DropErrorHdl, Timer* );

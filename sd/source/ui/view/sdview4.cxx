@@ -585,34 +585,32 @@ void View::LockRedraw(sal_Bool bLock)
         // alle gespeicherten Redraws ausfuehren
         if (!mnLockRedrawSmph)
         {
-            while (mpLockedRedraws && mpLockedRedraws->Count())
-            {
-                SdViewRedrawRec* pRec = (SdViewRedrawRec*)mpLockedRedraws->First();
-                OutputDevice* pCurrentOut = pRec->mpOut;
-                Rectangle aBoundRect(pRec->aRect);
-                mpLockedRedraws->Remove(pRec);
-                delete pRec;
+            boost::ptr_vector<SdViewRedrawRec>::iterator iter;
 
-                pRec = (SdViewRedrawRec*)mpLockedRedraws->First();
-                while (pRec)
+            while (!maLockedRedraws.empty())
+            {
+                iter = maLockedRedraws.begin();
+
+                OutputDevice* pCurrentOut = iter->mpOut;
+                Rectangle aBoundRect(iter->aRect);
+
+                iter = maLockedRedraws.erase(iter);
+
+                while (iter != maLockedRedraws.end())
                 {
-                    if (pRec->mpOut == pCurrentOut)
+                    if (iter->mpOut == pCurrentOut)
                     {
-                        aBoundRect.Union(pRec->aRect);
-                        mpLockedRedraws->Remove(pRec);
-                        delete pRec;
-                        pRec = (SdViewRedrawRec*)mpLockedRedraws->GetCurObject();
+                        aBoundRect.Union(iter->aRect);
+                        iter = maLockedRedraws.erase(iter);
                     }
                     else
                     {
-                        pRec = (SdViewRedrawRec*)mpLockedRedraws->Next();
+                        ++iter;
                     }
                 }
 
                 CompleteRedraw(pCurrentOut, Region(aBoundRect));
             }
-            delete mpLockedRedraws;
-            mpLockedRedraws = NULL;
         }
     }
 }
