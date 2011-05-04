@@ -268,10 +268,8 @@ void ZipOutputStream::doDeflate()
                 m_xDigestContext->updateDigest( aTmpSeq );
                 mnDigested = mnDigested + static_cast< sal_Int16 >( nEat );
             }
-            (void)aDigestResult;
 
             uno::Sequence< sal_Int8 > aEncryptionBuffer = m_xCipherContext->convertWithCipherContext( aTmpBuffer );
-            (void)aCipherResult;
 
             aChucker.WriteBytes( aEncryptionBuffer );
 
