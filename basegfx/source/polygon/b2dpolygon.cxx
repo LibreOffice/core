@@ -168,8 +168,8 @@ public:
             for(sal_uInt32 a(0); a < nHalfSize; a++)
             {
                 ::std::swap(*aStart, *aEnd);
-                aStart++;
-                aEnd--;
+                ++aStart;
+                --aEnd;
             }
         }
     }
@@ -210,7 +210,7 @@ public:
         CoordinateData2DVector::iterator aStart(maVector.begin());
         CoordinateData2DVector::iterator aEnd(maVector.end());
 
-        for(; aStart != aEnd; aStart++)
+        for(; aStart != aEnd; ++aStart)
         {
             aStart->transform(rMatrix);
         }
@@ -317,7 +317,7 @@ public:
         aEnd += nCount;
         maVector.reserve(nCount);
 
-        for(; aStart != aEnd; aStart++)
+        for(; aStart != aEnd; ++aStart)
         {
             if(!aStart->getPrevVector().equalZero())
                 mnUsedVectors++;
@@ -449,7 +449,7 @@ public:
             ControlVectorPair2DVector::const_iterator aEnd(rSource.maVector.end());
             maVector.insert(aIndex, aStart, aEnd);
 
-            for(; aStart != aEnd; aStart++)
+            for(; aStart != aEnd; ++aStart)
             {
                 if(!aStart->getPrevVector().equalZero())
                     mnUsedVectors++;
@@ -468,7 +468,7 @@ public:
             const ControlVectorPair2DVector::iterator aDeleteEnd(aDeleteStart + nCount);
             ControlVectorPair2DVector::const_iterator aStart(aDeleteStart);
 
-            for(; mnUsedVectors && aStart != aDeleteEnd; aStart++)
+            for(; mnUsedVectors && aStart != aDeleteEnd; ++aStart)
             {
                 if(!aStart->getPrevVector().equalZero())
                     mnUsedVectors--;
@@ -501,8 +501,8 @@ public:
                 // swap entries
                 ::std::swap(*aStart, *aEnd);
 
-                aStart++;
-                aEnd--;
+                ++aStart;
+                --aEnd;
             }
 
             if(aStart == aEnd)

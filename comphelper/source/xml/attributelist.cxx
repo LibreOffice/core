@@ -93,7 +93,7 @@ OUString SAL_CALL AttributeList::getTypeByName( const OUString& sName ) throw( :
 {
     ::std::vector<struct TagAttribute_Impl>::iterator ii = m_pImpl->vecAttribute.begin();
 
-    for( ; ii != m_pImpl->vecAttribute.end() ; ii ++ ) {
+    for( ; ii != m_pImpl->vecAttribute.end() ; ++ii ) {
         if( (*ii).sName == sName ) {
             return (*ii).sType;
         }
@@ -105,7 +105,7 @@ OUString SAL_CALL AttributeList::getValueByName(const OUString& sName) throw( ::
 {
     ::std::vector<struct TagAttribute_Impl>::iterator ii = m_pImpl->vecAttribute.begin();
 
-    for( ; ii != m_pImpl->vecAttribute.end() ; ii ++ ) {
+    for( ; ii != m_pImpl->vecAttribute.end() ; ++ii ) {
         if( (*ii).sName == sName ) {
             return (*ii).sValue;
         }
@@ -144,7 +144,7 @@ void AttributeList::RemoveAttribute( const OUString sName )
 {
     ::std::vector<struct TagAttribute_Impl>::iterator ii = m_pImpl->vecAttribute.begin();
 
-    for( ; ii != m_pImpl->vecAttribute.end() ; ii ++ ) {
+    for( ; ii != m_pImpl->vecAttribute.end() ; ++ii ) {
         if( (*ii).sName == sName ) {
             m_pImpl->vecAttribute.erase( ii );
             break;

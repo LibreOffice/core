@@ -307,12 +307,12 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
 // aus Userwerten           nOtherX,    nShorterY,  nLongerZ,   bRelaxed
 int WLevDistance::CalcLPQR( int nX, int nY, int nZ, bool bRelaxed )
 {
-    int nMid, nMax;
     if ( nX < 0 ) nX = 0;       // nur positive Werte
     if ( nY < 0 ) nY = 0;
     if ( nZ < 0 ) nZ = 0;
     if (0 == Min3( nX, nY, nZ ))     // mindestens einer 0
     {
+        int nMid, nMax;
         nMax = Max3( nX, nY, nZ );      // entweder 0 bei drei 0 oder Max
         if ( 0 == (nMid = Mid3( nX, nY, nZ )) )     // sogar zwei 0
             nLimit = nMax;  // entweder 0 oder einziger >0

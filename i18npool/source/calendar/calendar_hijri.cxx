@@ -269,12 +269,11 @@ Calendar_hijri::getGregorianDay(sal_Int32 lJulianDay, sal_Int32 *pnDay, sal_Int3
 {
     /* working variables */
     long lFactorA, lFactorB, lFactorC, lFactorD, lFactorE;
-    long lAdjust;
 
     /* test whether to adjust for the Gregorian calendar crossover */
     if (lJulianDay >= GREGORIAN_CROSSOVER) {
     /* calculate a small adjustment */
-    lAdjust = (long) (((float) (lJulianDay - 1867216) - 0.25) / 36524.25);
+    long lAdjust = (long) (((float) (lJulianDay - 1867216) - 0.25) / 36524.25);
 
     lFactorA = lJulianDay + 1 + lAdjust - ((long) (0.25 * lAdjust));
 

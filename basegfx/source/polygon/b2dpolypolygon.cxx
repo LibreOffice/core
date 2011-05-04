@@ -105,7 +105,7 @@ public:
             for(sal_uInt32 a(0L); a < nCount; a++)
             {
                 aIndex = maPolygons.insert(aIndex, rPolyPolygon.getB2DPolygon(a));
-                aIndex++;
+                ++aIndex;
             }
         }
     }

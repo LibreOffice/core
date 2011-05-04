@@ -470,7 +470,7 @@ void detachAll_Impl
     while( aObjIt != aObjEnd )
     {
         pMgr->detach( nIdx, (*aObjIt).xTarget );
-        aObjIt++;
+        ++aObjIt;
     }
 }
 
@@ -487,7 +487,7 @@ void attachAll_Impl
     while( aObjIt != aObjEnd )
     {
         pMgr->attach( nIdx, (*aObjIt).xTarget, (*aObjIt).aHelper );
-        aObjIt++;
+        ++aObjIt;
     }
 }
 
@@ -541,7 +541,7 @@ void SAL_CALL ImplEventAttacherManager::registerScriptEvent
         {
         }
 
-        aObjIt++;
+        ++aObjIt;
     }
 }
 
@@ -605,7 +605,7 @@ void SAL_CALL ImplEventAttacherManager::revokeScriptEvent
             break;
         }
 
-        aEvtIt++;
+        ++aEvtIt;
     }
 #else
     Sequence< ScriptEventDescriptor >& rEventList = (*aIt).aEventList;
@@ -698,7 +698,7 @@ Sequence< ScriptEventDescriptor > SAL_CALL ImplEventAttacherManager::getScriptEv
     while( aEvtIt != aEvtEnd )
     {
         pArray[i++] = *aEvtIt;
-        aEvtIt++;
+        ++aEvtIt;
     }
     return aSeq;
 #else
@@ -763,7 +763,7 @@ void SAL_CALL ImplEventAttacherManager::attach(sal_Int32 nIndex, const Reference
         }
 
         pArray[i++] = xAdapter;
-        aEvtIt++;
+        ++aEvtIt;
     }
 #else
     sal_Int32 nLen = aCurrentPosition->aEventList.getLength();
@@ -824,7 +824,7 @@ void SAL_CALL ImplEventAttacherManager::detach(sal_Int32 nIndex, const Reference
                     }
                 }
                 i++;
-                aEvtIt++;
+                ++aEvtIt;
             }
 #else
             sal_Int32 nLen = aCurrentPosition->aEventList.getLength();
@@ -847,7 +847,7 @@ void SAL_CALL ImplEventAttacherManager::detach(sal_Int32 nIndex, const Reference
             aCurrentPosition->aObjList.erase( aObjIt );
             break;
         }
-        aObjIt++;
+        ++aObjIt;
     }
 }
 
@@ -910,7 +910,7 @@ void SAL_CALL ImplEventAttacherManager::write(const Reference< XObjectOutputStre
             OutStream->writeUTF( rDesc.ScriptType );
             OutStream->writeUTF( rDesc.ScriptCode );
 
-            aEvtIt++;
+            ++aEvtIt;
         }
 #else
         sal_Int32 nLen = (*aIt).aEventList.getLength();
@@ -927,7 +927,7 @@ void SAL_CALL ImplEventAttacherManager::write(const Reference< XObjectOutputStre
             OutStream->writeUTF( rDesc.ScriptCode );
         }
 #endif
-        aIt++;
+        ++aIt;
     }
 
     // Die jetzt bekannte Laenge eintragen

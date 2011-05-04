@@ -242,8 +242,8 @@ public:
             for(sal_uInt32 a(0); a < nHalfSize; a++)
             {
                 ::std::swap(*aStart, *aEnd);
-                aStart++;
-                aEnd--;
+                ++aStart;
+                --aEnd;
             }
         }
     }
@@ -253,7 +253,7 @@ public:
         CoordinateData3DVector::iterator aStart(maVector.begin());
         CoordinateData3DVector::iterator aEnd(maVector.end());
 
-        for(; aStart != aEnd; aStart++)
+        for(; aStart != aEnd; ++aStart)
         {
             aStart->transform(rMatrix);
         }

@@ -1076,7 +1076,6 @@ namespace cppcanvas
                     aStrikeoutText += pChars[0];
 
 
-                sal_Int32 nStartPos = 0;
                 xub_StrLen nLen = aStrikeoutText.Len();
 
                 if( nLen )
@@ -1094,6 +1093,8 @@ namespace cppcanvas
                     {
                         pStrikeoutCharWidths[ i ] += pStrikeoutCharWidths[ i-1 ];
                     }
+
+                    sal_Int32 nStartPos = 0;
 
                     pStrikeoutTextAction =
                         TextActionFactory::createTextAction(
