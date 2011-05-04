@@ -728,6 +728,24 @@ system_checks( void )
 /* re-use the pagein code */
 extern int pagein_execute (int argc, char **argv);
 
+#define REL_PATH "/../basis-link/program"
+static char *build_pagein_path (Args *args, const char *pagein_name)
+{
+    char *path;
+    rtl_String *app_path;
+
+    app_path = ustr_to_str (args->pAppPath);
+    path = malloc (app_path->length + strlen (pagein_name) + sizeof (REL_PATH) + 8);
+    strcpy (path, "@");
+    strcpy (path + 1, rtl_string_getStr (app_path));
+    strcat (path, "/../basis-link/program/");
+    strcat (path, pagein_name);
+
+    rtl_string_release( app_path );
+
+    return path;
+}
+
 void
 exec_pagein (Args *args)
 {
@@ -735,24 +753,20 @@ exec_pagein (Args *args)
 #ifdef MACOSX
     (void)args;
 #else
-    char *argv[5];
-    rtl_String *app_path;
+    char *argv[3];
 
-    app_path = ustr_to_str (args->pAppPath);
-
+    /* don't use -L - since that does a chdir that breaks relative paths */
     argv[0] = "dummy-pagein";
-    argv[1] = malloc (app_path->length + sizeof ("-L/../basis-link/program") + 2);
-    strcpy (argv[1], "-L");
-    strcat (argv[1], app_path->buffer);
-    strcat (argv[1], "/../basis-link/program");
-    argv[2] = "@pagein-common";
-    argv[3] = (char *)args->pPageinType;
-    argv[4] = NULL;
+    argv[1] = build_pagein_path (args, "pagein-common");
+    if (args->pPageinType) {
+        argv[2] = build_pagein_path (args, args->pPageinType);
+    } else
+        argv[2] = NULL;
 
-    rtl_string_release( app_path );
+    pagein_execute (args->pPageinType ? 3 : 2, argv);
 
-    pagein_execute (args->pPageinType ? 4 : 3, argv);
-
+    if (argv[2])
+        free (argv[2]);
     free (argv[1]);
 #endif
 }

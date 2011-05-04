@@ -61,10 +61,10 @@ static struct {
     { "minimized",  0, 1, 0, 0, NULL },
 
     /* pagein bits */
-    { "writer",     0, 0, 0, 0, "@pagein-writer"  },
-    { "calc",       0, 0, 0, 0, "@pagein-calc"    },
-    { "draw",       0, 0, 0, 0, "@pagein-draw"    },
-    { "impress",    0, 0, 0, 0, "@pagein-impress" },
+    { "writer",     0, 0, 0, 0, "pagein-writer"  },
+    { "calc",       0, 0, 0, 0, "pagein-calc"    },
+    { "draw",       0, 0, 0, 0, "pagein-draw"    },
+    { "impress",    0, 0, 0, 0, "pagein-impress" },
 
     /* nothing much */
     { "version",    0, 1, 1, 1, NULL },
