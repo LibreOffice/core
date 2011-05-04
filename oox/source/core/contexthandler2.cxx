@@ -81,8 +81,8 @@ sal_Int32 ContextHandler2Helper::getCurrentElementWithMce() const
 
 sal_Int32 ContextHandler2Helper::getCurrentElement() const
 {
-    for ( ContextStack::const_reverse_iterator It = mxContextStack->rbegin();
-          It != mxContextStack->rend(); It++ )
+    for ( ContextStack::reverse_iterator It = mxContextStack->rbegin();
+          It != mxContextStack->rend(); ++It )
         if( getNamespace( It->mnElement ) != NMSP_mce )
             return It->mnElement;
     return XML_ROOT_CONTEXT;
