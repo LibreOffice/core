@@ -144,18 +144,6 @@ int splash_load_bmp( const char *filename )
     width = png_get_image_width( png_ptr, info_ptr );
     height = png_get_image_height( png_ptr, info_ptr );
 
-#if 0
-    {
-      int i,j;
-      for (j = 0; j < height; j++) {
-        for (i = 0; i < width*3; i++) {
-          fprintf (stderr, "%.2x", bitmap_rows[j][i]);
-        }
-        fprintf (stderr, "\n");
-      }
-    }
-#endif
-
     return 1;
 }
 #else
@@ -172,8 +160,6 @@ int splash_load_bmp( const char *filename )
 
     if ( read( fd, file_header, BMP_HEADER_LEN ) != BMP_HEADER_LEN || file_header[0] != 'B' || file_header[1] != 'M' )
         LOAD_FAILURE( "Not a bitmap.\n" );
-
-/*    int file_size = UINT32( file_header + 2 ); */
 
     char info_header[ WIN_INFO_LEN ];
     if ( read( fd, info_header, 4 ) != 4 )
@@ -582,7 +568,6 @@ static void process_events()
     {
         num_events--;
         XNextEvent( display, &xev );
-        //process_event(xev);
     }
 }
 
