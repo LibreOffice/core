@@ -2350,13 +2350,9 @@ ScMatValType ScInterpreter::GetDoubleOrStringFromMatrix( double& rDouble,
 
     ScMatrixRef pMat;
     StackVar eType = GetStackType();
-    if (eType == svExternalDoubleRef)
+    if (eType == svExternalDoubleRef || eType == svExternalSingleRef || eType == svMatrix)
     {
-        PopExternalDoubleRef(pMat);
-    }
-    else if (eType == svMatrix)
-    {
-        pMat = PopMatrix();
+        pMat = GetMatrix();
     }
     else
     {
