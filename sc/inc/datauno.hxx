@@ -40,6 +40,7 @@
 #include <com/sun/star/sheet/XConsolidationDescriptor.hpp>
 #include <com/sun/star/sheet/XDatabaseRanges.hpp>
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
+#include <com/sun/star/sheet/XUnnamedDatabaseRanges.hpp>
 #include <com/sun/star/sheet/XSubTotalDescriptor.hpp>
 #include <com/sun/star/sheet/XSubTotalField.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -501,6 +502,8 @@ private:
     String                  aName;
     SfxItemPropertySet      aPropSet;
     XDBRefreshListenerArr_Impl aRefreshListeners;
+    bool                    bIsUnnamed;
+    SCTAB                   aTab;
 
 private:
     ScDBData*               GetDBData_Impl() const;
@@ -508,6 +511,7 @@ private:
 
 public:
                             ScDatabaseRangeObj(ScDocShell* pDocSh, const String& rNm);
+                            ScDatabaseRangeObj(ScDocShell* pDocSh, const SCTAB nTab);
     virtual                 ~ScDatabaseRangeObj();
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -660,6 +664,32 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
+};
+
+class ScUnnamedDatabaseRangesObj : public cppu::WeakImplHelper1<
+                                com::sun::star::sheet::XUnnamedDatabaseRanges>,
+                            public SfxListener
+{
+private:
+    ScDocShell*             pDocShell;
+
+public:
+                            ScUnnamedDatabaseRangesObj(ScDocShell* pDocSh);
+    virtual                 ~ScUnnamedDatabaseRangesObj();
+
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
+                            // XUnnamedDatabaseRanges
+    virtual void SAL_CALL setByTable( const ::com::sun::star::table::CellRangeAddress& aRange )
+                                throw(::com::sun::star::uno::RuntimeException,
+                                      ::com::sun::star::lang::IndexOutOfBoundsException );
+    virtual com::sun::star::uno::Any SAL_CALL getByTable( const sal_Int32 nTab )
+                                throw(::com::sun::star::uno::RuntimeException,
+                                ::com::sun::star::lang::IndexOutOfBoundsException,
+                                ::com::sun::star::container::NoSuchElementException );
+    virtual sal_Bool SAL_CALL hasByTable( sal_Int32 nTab )
+                                throw (::com::sun::star::uno::RuntimeException,
+                                ::com::sun::star::lang::IndexOutOfBoundsException);
 };
 
 
