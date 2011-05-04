@@ -41,7 +41,6 @@ SLOFILES= \
     $(SLO)$/exprnode.obj	\
     $(SLO)$/io.obj		\
     $(SLO)$/loops.obj		\
-    $(SLO)$/sbcomp.obj		\
     $(SLO)$/symtbl.obj		\
     $(SLO)$/token.obj
 

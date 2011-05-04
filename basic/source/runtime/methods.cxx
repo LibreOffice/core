@@ -111,8 +111,6 @@ SbxVariable* getDefaultProp( SbxVariable* pRef );
 
 #include <basic/sbobjmod.hxx>
 
-#include <basic/sbobjmod.hxx>
-
 #ifdef WNT
 #define GradientStyle_RECT BLA_GradientStyle_RECT
 #include <windows.h>
@@ -120,6 +118,9 @@ SbxVariable* getDefaultProp( SbxVariable* pRef );
 #undef GetObject
 #undef GradientSyle_RECT
 #endif
+
+// from source/classes/sbxmod.cxx
+Reference< XModel > getDocumentModel( StarBASIC* );
 
 static void FilterWhiteSpace( String& rStr )
 {

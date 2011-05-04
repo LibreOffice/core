@@ -98,25 +98,11 @@ typedef ::cppu::WeakImplHelper3<
     ::com::sun::star::container::XContainer,
     ::com::sun::star::util::XChangesNotifier > NameContainer_BASE;
 
+//============================================================================
+
 class NameContainer : public ::cppu::BaseMutex, public NameContainer_BASE
 {
-    sal_Bool operator()(const ::rtl::OUString Str1, const ::rtl::OUString Str2) const
-    {
-        return ( Str1 == Str2 );
-    }
-};
-
-typedef boost::unordered_map
-<
-    ::rtl::OUString,
-    sal_Int32,
-    hashName_Impl,
-    eqName_Impl
->
-NameContainerNameMap;
-
-
-//============================================================================
+    typedef boost::unordered_map < ::rtl::OUString, sal_Int32, ::rtl::OUStringHash > NameContainerNameMap;
 
     NameContainerNameMap mHashMap;
     ::com::sun::star::uno::Sequence< ::rtl::OUString > mNames;
