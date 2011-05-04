@@ -186,7 +186,6 @@ void SAL_CALL SfxModelListener_Impl::disposing( const com::sun::star::lang::Even
     SolarMutexGuard aSolarGuard;
     if ( SfxObjectShell::GetCurrentComponent() == _rEvent.Source )
     {
-        lcl_UpdateAppBasicDocVars( SfxObjectShell::GetCurrentComponent(), true );
         // remove ThisComponent reference from AppBasic
         SfxObjectShell::SetCurrentComponent( Reference< XInterface >() );
     }
