@@ -39,6 +39,7 @@
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -76,6 +77,7 @@
 #include <oox/export/chartexport.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::i18n;
@@ -104,6 +106,7 @@ using ::rtl::OUStringBuffer;
 using ::sax_fastparser::FSHelperPtr;
 
 #define IDS(x) (OString(#x " ") + OString::valueOf( mnShapeIdMax++ )).getStr()
+
 
 struct CustomShapeTypeTranslationTable
 {
@@ -408,17 +411,34 @@ awt::Size ShapeExport::MapSize( const awt::Size& rSize ) const
 sal_Bool ShapeExport::NonEmptyText( Reference< XShape > xShape )
 {
     Reference< XPropertySet > xPropSet( xShape, UNO_QUERY );
-    sal_Bool bIsEmptyPresObj = sal_False;
-    if( xPropSet.is() && ( xPropSet->getPropertyValue( S( "IsEmptyPresentationObject" ) ) >>= bIsEmptyPresObj ) ) {
-        DBG(printf("empty presentation object %d, props:\n", bIsEmptyPresObj));
-        if( bIsEmptyPresObj )
-            return sal_True;
-    }
-    sal_Bool bIsPresObj = sal_False;
-    if( xPropSet.is() && ( xPropSet->getPropertyValue( S( "IsPresentationObject" ) ) >>= bIsPresObj ) ) {
-        DBG(printf("presentation object %d, props:\n", bIsPresObj));
-        if( bIsPresObj )
-            return sal_True;
+
+    if( xPropSet.is() )
+    {
+        Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
+        if ( xPropSetInfo.is() )
+        {
+            if ( xPropSetInfo->hasPropertyByName( S( "IsEmptyPresentationObject" ) ) )
+            {
+                sal_Bool bIsEmptyPresObj = sal_False;
+                if ( xPropSet->getPropertyValue( S( "IsEmptyPresentationObject" ) ) >>= bIsEmptyPresObj )
+                {
+                    DBG(printf("empty presentation object %d, props:\n", bIsEmptyPresObj));
+                    if( bIsEmptyPresObj )
+                       return sal_True;
+                }
+            }
+
+            if ( xPropSetInfo->hasPropertyByName( S( "IsEmptyPresentationObject" ) ) )
+            {
+                sal_Bool bIsPresObj = sal_False;
+                if ( xPropSet->getPropertyValue( S( "IsPresentationObject" ) ) >>= bIsPresObj )
+                {
+                    DBG(printf("presentation object %d, props:\n", bIsPresObj));
+                    if( bIsPresObj )
+                       return sal_True;
+                }
+            }
+        }
     }
 
     Reference< XSimpleText > xText( xShape, UNO_QUERY );
