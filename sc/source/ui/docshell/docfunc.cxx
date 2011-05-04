@@ -4023,8 +4023,7 @@ sal_Bool ScDocFunc::FillSimple( const ScRange& rRange, const ScMarkData* pTabMar
         {
             rDocShell.GetUndoManager()->AddUndoAction(
                 new ScUndoAutoFill( &rDocShell, aDestArea, aSourceArea, pUndoDoc, aMark,
-                                    eDir, FILL_SIMPLE, FILL_DAY, MAXDOUBLE, 1.0, 1e307,
-                                    pDoc->GetRangeName()->GetSharedMaxIndex()+1 ) );
+                                    eDir, FILL_SIMPLE, FILL_DAY, MAXDOUBLE, 1.0, 1e307) );
         }
 
         rDocShell.PostPaintGridAll();
@@ -4143,8 +4142,7 @@ sal_Bool ScDocFunc::FillSeries( const ScRange& rRange, const ScMarkData* pTabMar
         {
             rDocShell.GetUndoManager()->AddUndoAction(
                 new ScUndoAutoFill( &rDocShell, aDestArea, aSourceArea, pUndoDoc, aMark,
-                                    eDir, eCmd, eDateCmd, fStart, fStep, fMax,
-                                    pDoc->GetRangeName()->GetSharedMaxIndex()+1 ) );
+                                    eDir, eCmd, eDateCmd, fStart, fStep, fMax) );
         }
 
         bSuccess = sal_True;
@@ -4271,8 +4269,7 @@ sal_Bool ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillD
     {
         rDocShell.GetUndoManager()->AddUndoAction(
             new ScUndoAutoFill( &rDocShell, aDestArea, aSourceArea, pUndoDoc, aMark,
-                                eDir, eCmd, eDateCmd, MAXDOUBLE, fStep, fMax,
-                                pDoc->GetRangeName()->GetSharedMaxIndex()+1 ) );
+                                eDir, eCmd, eDateCmd, MAXDOUBLE, fStep, fMax) );
     }
 
     rDocShell.PostPaintGridAll();

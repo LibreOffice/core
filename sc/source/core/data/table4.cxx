@@ -1576,17 +1576,11 @@ void ScTable::Fill( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     ScProgress aProgress( pDocument->GetDocumentShell(),
                             ScGlobal::GetRscString(STR_FILL_SERIES_PROGRESS), nProgCount );
 
-    bSharedNameInserted = false;
-
     if (eFillCmd == FILL_AUTO)
         FillAuto(nCol1, nRow1, nCol2, nRow2, nFillCount, eFillDir, aProgress);
     else
         FillSeries(nCol1, nRow1, nCol2, nRow2, nFillCount, eFillDir,
                     eFillCmd, eFillDateCmd, nStepValue, nMaxValue, 0, sal_True, aProgress);
-
-    if (bSharedNameInserted)                        // Wurde Shared-Name eingefuegt?
-        pDocument->GetRangeName()->SetSharedMaxIndex(
-            pDocument->GetRangeName()->GetSharedMaxIndex()+1);  // dann hochzaehlen
 }
 
 

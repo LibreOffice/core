@@ -421,8 +421,7 @@ public:
                                     ScDocument* pNewUndoDoc, const ScMarkData& rMark,
                                     FillDir eNewFillDir,
                                     FillCmd eNewFillCmd, FillDateCmd eNewFillDateCmd,
-                                    double fNewStartValue, double fNewStepValue, double fNewMaxValue,
-                                    sal_uInt16 nMaxShIndex );
+                                    double fNewStartValue, double fNewStepValue, double fNewMaxValue );
     virtual         ~ScUndoAutoFill();
 
     virtual void    Undo();
@@ -444,7 +443,6 @@ private:
     double          fMaxValue;
     sal_uLong           nStartChangeAction;
     sal_uLong           nEndChangeAction;
-    sal_uInt16          nMaxSharedIndex;
 
     void            SetChangeTrack();
 };
