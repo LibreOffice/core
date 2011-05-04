@@ -1180,7 +1180,7 @@ void GraphicImport::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_Anchor_positionH: // 90976;
         {
             // Use a special handler for the positionning
-            PositionHandlerPtr pHandler( new PositionHandler );
+            PositionHandlerPtr pHandler( new PositionHandler( false ));
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
             if( pProperties.get( ) )
             {
@@ -1197,7 +1197,7 @@ void GraphicImport::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_Anchor_positionV: // 90977;
         {
             // Use a special handler for the positionning
-            PositionHandlerPtr pHandler( new PositionHandler );
+            PositionHandlerPtr pHandler( new PositionHandler( true ));
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
             if( pProperties.get( ) )
             {

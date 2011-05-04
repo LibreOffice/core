@@ -204,6 +204,9 @@ public:
     void handleLastParagraphInSection();
     void endOfParagraph();
     void text(const ::rtl::OUString & sText);
+    void positionOffset(const ::rtl::OUString & sText);
+    void alignH(const ::rtl::OUString & sText);
+    void alignV(const ::rtl::OUString & sText);
     virtual void propagateCharacterProperties();
     virtual void propagateCharacterPropertiesAsSet(const Id & rId);
     virtual void propagateTableProperties();
@@ -283,6 +286,9 @@ protected:
 
     sal_uInt32 mnInstanceNumber;
     sal_uInt32 mnRefCount;
+
+    bool inPositionV;
+
 private:
     void operator =(OOXMLFastContextHandler &); // not defined
 

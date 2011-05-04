@@ -524,6 +524,15 @@ CreateElementMapPointer </xsl:text>
         <xsl:when test="@action='text'">
     pHandler-&gt;text(sText);
         </xsl:when>
+        <xsl:when test="@action='positionOffset'">
+    pHandler-&gt;positionOffset(sText);
+        </xsl:when>
+        <xsl:when test="@action='alignH'">
+    pHandler-&gt;alignH(sText);
+        </xsl:when>
+        <xsl:when test="@action='alignV'">
+    pHandler-&gt;alignV(sText);
+        </xsl:when>
         <xsl:when test="@action='newProperty'">
           <xsl:text>
     OOXMLFastHelper&lt;OOXMLIntegerValue&gt;::newProperty(pHandler, </xsl:text>

@@ -6817,13 +6817,11 @@
       <element name="wrapThrough" tokenid="ooxml:EG_WrapType_wrapThrough"/>
       <element name="wrapTopAndBottom" tokenid="ooxml:EG_WrapType_wrapTopAndBottom"/>
     </resource>
-    <resource name="ST_PositionOffset" resource="Integer" generated="yes"/>
-    <resource name="ST_AlignH" resource="List" generated="yes" tag="shape">
-      <value name="left" tokenid="ooxml:Value_wordprocessingDrawing_ST_AlignH_left">left</value>
-      <value name="right" tokenid="ooxml:Value_wordprocessingDrawing_ST_AlignH_right">right</value>
-      <value name="center" tokenid="ooxml:Value_wordprocessingDrawing_ST_AlignH_center">center</value>
-      <value name="inside" tokenid="ooxml:Value_wordprocessingDrawing_ST_AlignH_inside">inside</value>
-      <value name="outside" tokenid="ooxml:Value_wordprocessingDrawing_ST_AlignH_outside">outside</value>
+    <resource name="ST_PositionOffset" resource="Value">
+      <action name="characters" action="positionOffset"/>
+    </resource>
+    <resource name="ST_AlignH" resource="Value">
+      <action name="characters" action="alignH"/>
     </resource>
     <resource name="ST_RelFromH" resource="List" generated="yes">
       <value name="margin" tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromH_margin">margin</value>
@@ -6840,12 +6838,8 @@
       <element name="posOffset" tokenid="ooxml:CT_PosH_posOffset"/>
       <attribute name="relativeFrom" tokenid="ooxml:CT_PosH_relativeFrom"/>
     </resource>
-    <resource name="ST_AlignV" resource="List" generated="yes">
-      <value name="top" tokenid="ooxml:Value_wordprocessingDrawing_ST_AlignV_top">top</value>
-      <value name="bottom" tokenid="ooxml:Value_wordprocessingDrawing_ST_AlignV_bottom">bottom</value>
-      <value name="center" tokenid="ooxml:Value_wordprocessingDrawing_ST_AlignV_center">center</value>
-      <value name="inside" tokenid="ooxml:Value_wordprocessingDrawing_ST_AlignV_inside">inside</value>
-      <value name="outside" tokenid="ooxml:Value_wordprocessingDrawing_ST_AlignV_outside">outside</value>
+    <resource name="ST_AlignV" resource="Value">
+      <action name="characters" action="alignV"/>
     </resource>
     <resource name="ST_RelFromV" resource="List" generated="yes">
       <value name="margin" tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromV_margin">margin</value>

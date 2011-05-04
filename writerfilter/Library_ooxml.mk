@@ -31,6 +31,7 @@ $(eval $(call gb_Library_set_include,ooxml,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/writerfilter/inc) \
     -I$(realpath $(SRCDIR)/writerfilter/source/ooxml) \
+    -I$(realpath $(SRCDIR)/writerfilter/source/dmapper) \
     -I$(WORKDIR)/writerfilter/inc \
     -I$(WORKDIR)/writerfilter/inc/ooxml \
 	$(if $(filter YES,$(SYSTEM_LIBXML)),$(filter -I%,$(LIBXML_CFLAGS))) \

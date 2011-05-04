@@ -37,6 +37,8 @@
 #include <ooxml/resourceids.hxx>
 #include <doctok/sprmids.hxx>
 #include <ooxml/OOXMLnamespaceids.hxx>
+#include <dmapper/DomainMapper.hxx>
+#include <GraphicHelpers.hxx>
 #include "OOXMLFastContextHandler.hxx"
 #include "OOXMLFactory.hxx"
 #include "Handler.hxx"
@@ -139,6 +141,7 @@ OOXMLFastContextHandler::OOXMLFastContextHandler
   mnTableDepth(0),
   mnInstanceNumber(mnInstanceCount),
   mnRefCount(0),
+  inPositionV(false),
   m_xContext(context)
 {
     mnInstanceCount++;
@@ -161,6 +164,7 @@ OOXMLFastContextHandler::OOXMLFastContextHandler
   mnTableDepth(0),
   mnInstanceNumber(mnInstanceCount),
   mnRefCount(0),
+  inPositionV(pContext->inPositionV),
   m_xContext(pContext->m_xContext)
 {
     if (pContext != NULL)
@@ -246,6 +250,11 @@ void OOXMLFastContextHandler::lcl_startFastElement
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
     OOXMLFactory::getInstance()->startAction(this, Element);
+    if( Element == (NS_wordprocessingDrawing|OOXML_positionV) )
+        inPositionV = true;
+    else if( Element == (NS_wordprocessingDrawing|OOXML_positionH) )
+        inPositionV = false;
+
 }
 
 void OOXMLFastContextHandler::lcl_endFastElement
@@ -823,6 +832,49 @@ void OOXMLFastContextHandler::text(const ::rtl::OUString & sText)
         mpStream->utext(reinterpret_cast < const sal_uInt8 * >
                         (sText.getStr()),
                         sText.getLength());
+}
+
+/*
+ HACK. An ugly hack. The problem with wp:positionOffset, wp:alignV and wp:alignH
+ is that they do not work in the usual OOXML way of <tag val="value"/> but instead
+ it's <tag>value</tag>, which is otherwise used only things like <t>. And I really
+ haven't managed to find out how to make this XML parsing monstrosity to handle this
+ on its own, so the code is modelled after <t> handling and does it manually in a hackish
+ way - it reads the value as text and converts itself, moreover the reading of the value
+ is done sooner than lcl_sprms() actually results in processing the tags it is enclosed
+ in, so the values are stored in PositionHandler for later use.
+*/
+void OOXMLFastContextHandler::positionOffset(const ::rtl::OUString & sText)
+{
+#ifdef DEBUG_ELEMENT
+    debug_logger->startElement("positionOffset");
+    debug_logger->chars(sText);
+    debug_logger->endElement();
+#endif
+    if (isForwardEvents())
+        ::writerfilter::dmapper::PositionHandler::setPositionOffset( sText, inPositionV );
+}
+
+void OOXMLFastContextHandler::alignH(const ::rtl::OUString & sText)
+{
+#ifdef DEBUG_ELEMENT
+    debug_logger->startElement("alignH");
+    debug_logger->chars(sText);
+    debug_logger->endElement();
+#endif
+    if (isForwardEvents())
+        ::writerfilter::dmapper::PositionHandler::setAlignH( sText );
+}
+
+void OOXMLFastContextHandler::alignV(const ::rtl::OUString & sText)
+{
+#ifdef DEBUG_ELEMENT
+    debug_logger->startElement("alignV");
+    debug_logger->chars(sText);
+    debug_logger->endElement();
+#endif
+    if (isForwardEvents())
+        ::writerfilter::dmapper::PositionHandler::setAlignV( sText );
 }
 
 void OOXMLFastContextHandler::propagateCharacterProperties()
