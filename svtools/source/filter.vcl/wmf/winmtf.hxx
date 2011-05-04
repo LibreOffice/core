@@ -157,6 +157,7 @@ struct LOGFONTW
     sal_uInt8       lfPitchAndFamily;
     String      alfFaceName;
 };
+struct WMF_APMFILEHEADER;
 
 #define TA_NOUPDATECP           0x0000
 #define TA_UPDATECP             0x0001
@@ -767,7 +768,7 @@ private:
     sal_uInt32      nUnicodeEscapeAction;
 
     // Liesst den Kopf der WMF-Datei
-    sal_Bool            ReadHeader();
+    sal_Bool            ReadHeader(WMF_APMFILEHEADER *pAPMHeader);
 
     // Liesst die Parameter des Rocords mit der Funktionsnummer nFunction.
     void            ReadRecordParams( sal_uInt16 nFunction );
@@ -788,7 +789,7 @@ public:
                     ~WMFReader();
 
     // Liesst aus dem Stream eine WMF-Datei und fuellt das GDIMetaFile
-    void            ReadWMF();
+    void            ReadWMF(WMF_APMFILEHEADER *pAPMHeader=NULL);
 };
 
 #endif

@@ -1304,16 +1304,17 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const INetURLObject&
 }
 
 sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvStream& rIStream,
-                                     sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat, sal_uInt32 nImportFlags )
+                                     sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat, sal_uInt32 nImportFlags, WMF_APMFILEHEADER *pAPMHeader )
 {
-    return ImportGraphic( rGraphic, rPath, rIStream, nFormat, pDeterminedFormat, nImportFlags, NULL );
+    return ImportGraphic( rGraphic, rPath, rIStream, nFormat, pDeterminedFormat, nImportFlags, NULL, pAPMHeader );
 }
 
 //-------------------------------------------------------------------------
 
 sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvStream& rIStream,
                                      sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat, sal_uInt32 nImportFlags,
-                                     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData )
+                                     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData,
+                                     WMF_APMFILEHEADER *pAPMHeader )
 {
     String                  aFilterName;
     sal_uLong                   nStmBegin;
@@ -1510,7 +1511,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
                 aFilterName.EqualsIgnoreCaseAscii( IMP_EMF ) )
         {
             GDIMetaFile aMtf;
-            if( !ConvertWMFToGDIMetaFile( rIStream, aMtf, NULL ) )
+            if( !ConvertWMFToGDIMetaFile( rIStream, aMtf, NULL, pAPMHeader ) )
                 nStatus = GRFILTER_FORMATERROR;
             else
             {

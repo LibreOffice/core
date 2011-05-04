@@ -32,7 +32,30 @@
 #include "svtools/svtdllapi.h"
 #include <svtools/fltcall.hxx>
 
-sal_Bool ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, FilterConfigItem* pConfigItem = NULL );
+struct WMF_APMFILEHEADER {
+  sal_uInt32 key;
+  sal_uInt16 hmf;
+  sal_uInt16 left;
+  sal_uInt16 top;
+  sal_uInt16 right;
+  sal_uInt16 bottom;
+  sal_uInt16 inch;
+  sal_uInt32 reserved;
+  sal_uInt16 checksum;
+
+  WMF_APMFILEHEADER() : key(0x9ac6cdd7L),
+            hmf(0),
+            left(0),
+            top(0),
+            right(0),
+            bottom(0),
+            inch(96),
+            reserved(0),
+            checksum(0) {
+  }
+};
+
+sal_Bool ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, FilterConfigItem* pConfigItem = NULL, WMF_APMFILEHEADER *pAPMHeader = NULL );
 
 SVT_DLLPUBLIC sal_Bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF, FilterConfigItem* pConfigItem );
 

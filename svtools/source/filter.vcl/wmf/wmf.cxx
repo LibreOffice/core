@@ -36,7 +36,7 @@
 
 // -----------------------------------------------------------------------------
 
-sal_Bool ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, FilterConfigItem* pConfigItem )
+sal_Bool ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, FilterConfigItem* pConfigItem, WMF_APMFILEHEADER *pAPMHeader )
 {
     sal_uInt32 nMetaType;
     sal_uInt32 nOrgPos = rStreamWMF.Tell();
@@ -52,7 +52,7 @@ sal_Bool ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaF
     }
     else
     {
-        WMFReader( rStreamWMF, rGDIMetaFile, pConfigItem ).ReadWMF();
+        WMFReader( rStreamWMF, rGDIMetaFile, pConfigItem ).ReadWMF( pAPMHeader );
     }
     rStreamWMF.SetNumberFormatInt( nOrigNumberFormat );
     return !rStreamWMF.GetError();

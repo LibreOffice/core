@@ -39,6 +39,7 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
+struct WMF_APMFILEHEADER;
 // -----------------------
 // - GraphicFilter-Types -
 // -----------------------
@@ -341,13 +342,15 @@ public:
     sal_uInt16          ImportGraphic( Graphic& rGraphic, const String& rPath,
                                    SvStream& rStream,
                                    sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
-                                   sal_uInt16 * pDeterminedFormat = NULL, sal_uInt32 nImportFlags = 0 );
+                                   sal_uInt16 * pDeterminedFormat = NULL, sal_uInt32 nImportFlags = 0,
+                                   WMF_APMFILEHEADER *pAPMHeader = NULL );
 
     sal_uInt16          ImportGraphic( Graphic& rGraphic, const String& rPath,
                                    SvStream& rStream,
                                    sal_uInt16 nFormat,
                                    sal_uInt16 * pDeterminedFormat, sal_uInt32 nImportFlags,
-                                   com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData );
+                                   com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData,
+                                   WMF_APMFILEHEADER *pAPMHeader = NULL );
 
     sal_Bool            Setup( sal_uInt16 nFormat );
 

@@ -31,6 +31,7 @@
 
 #include "winmtf.hxx"
 #include <vcl/gdimtf.hxx>
+#include <svtools/wmf.hxx>
 #include <rtl/crc.h>
 #include <rtl/tencinfo.h>
 #include <osl/endian.h>
@@ -997,7 +998,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
 
 // ------------------------------------------------------------------------
 
-sal_Bool WMFReader::ReadHeader()
+sal_Bool WMFReader::ReadHeader(WMF_APMFILEHEADER *pAPMHeader)
 {
     Rectangle   aPlaceableBound;
     sal_uInt32  nl, nStrmPos = pWMF->Tell();
@@ -1030,10 +1031,17 @@ sal_Bool WMFReader::ReadHeader()
     }
     else
     {
-        nUnitsPerInch = 96;
-        pWMF->Seek( nStrmPos + 18 );    // set the streampos to the start of the the metaactions
-        GetPlaceableBound( aPlaceableBound, pWMF );
-        pWMF->Seek( nStrmPos );
+      nUnitsPerInch = (pAPMHeader!=NULL?pAPMHeader->inch:96);
+      pWMF->Seek( nStrmPos + 18 );    // set the streampos to the start of the the metaactions
+      GetPlaceableBound( aPlaceableBound, pWMF );
+      pWMF->Seek( nStrmPos );
+      if (pAPMHeader!=NULL) {
+        // #n417818#: If we have an external header then overwrite the bounds!
+        aPlaceableBound=Rectangle(pAPMHeader->left*567*nUnitsPerInch/1440/1000,
+                      pAPMHeader->top*567*nUnitsPerInch/1440/1000,
+                      pAPMHeader->right*567*nUnitsPerInch/1440/1000,
+                      pAPMHeader->bottom*567*nUnitsPerInch/1440/1000);
+      }
     }
 
     pOut->SetWinOrg( aPlaceableBound.TopLeft() );
@@ -1068,7 +1076,7 @@ sal_Bool WMFReader::ReadHeader()
     return sal_True;
 }
 
-void WMFReader::ReadWMF()
+void WMFReader::ReadWMF(WMF_APMFILEHEADER *pAPMHeader)
 {
     sal_uInt16  nFunction;
     sal_uLong   nPos, nPercent, nLastPercent;
@@ -1093,7 +1101,7 @@ void WMFReader::ReadWMF()
     pWMF->Seek( nStartPos );
     Callback( (sal_uInt16) ( nLastPercent = 0 ) );
 
-    if ( ReadHeader() )
+    if ( ReadHeader( pAPMHeader ) )
     {
 
         nPos = pWMF->Tell();
