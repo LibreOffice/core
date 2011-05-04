@@ -1786,7 +1786,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 default:
                 {
-                    DBG_ERROR( "Unsupported meta action!" );
+                    OSL_FAIL( "Unsupported meta action!" );
                 }
                 break;
           }
