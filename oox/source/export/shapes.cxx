@@ -428,7 +428,7 @@ sal_Bool ShapeExport::NonEmptyText( Reference< XShape > xShape )
                 }
             }
 
-            if ( xPropSetInfo->hasPropertyByName( S( "IsEmptyPresentationObject" ) ) )
+            if ( xPropSetInfo->hasPropertyByName( S( "IsPresentationObject" ) ) )
             {
                 sal_Bool bIsPresObj = sal_False;
                 if ( xPropSet->getPropertyValue( S( "IsPresentationObject" ) ) >>= bIsPresObj )
