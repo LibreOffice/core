@@ -57,6 +57,7 @@
 #include "docsh.hxx"
 #include "dbdocfun.hxx"
 #include "unonames.hxx"
+#include "globalnames.hxx"
 #include "globstr.hrc"
 #include "convuno.hxx"
 #include "hints.hxx"
@@ -1607,7 +1608,18 @@ void ScDataPilotFilterDescriptor::PutData( const ScQueryParam& rParam )
 ScDatabaseRangeObj::ScDatabaseRangeObj(ScDocShell* pDocSh, const String& rNm) :
     pDocShell( pDocSh ),
     aName( rNm ),
-    aPropSet( lcl_GetDBRangePropertyMap() )
+    aPropSet( lcl_GetDBRangePropertyMap() ),
+    bIsUnnamed(false)
+{
+    pDocShell->GetDocument()->AddUnoObject(*this);
+}
+
+ScDatabaseRangeObj::ScDatabaseRangeObj(ScDocShell* pDocSh, const SCTAB nTab) :
+    pDocShell( pDocSh ),
+    aName(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME)),
+    aPropSet( lcl_GetDBRangePropertyMap() ),
+    bIsUnnamed(true),
+    aTab( nTab )
 {
     pDocShell->GetDocument()->AddUnoObject(*this);
 }
@@ -1641,12 +1653,19 @@ ScDBData* ScDatabaseRangeObj::GetDBData_Impl() const
     ScDBData* pRet = NULL;
     if (pDocShell)
     {
-        ScDBCollection* pNames = pDocShell->GetDocument()->GetDBCollection();
-        if (pNames)
+        if (bIsUnnamed)
         {
-            sal_uInt16 nPos = 0;
-            if (pNames->SearchName( aName, nPos ))
-                pRet = (*pNames)[nPos];
+            pRet = pDocShell->GetDocument()->GetAnonymousDBData(aTab);
+        }
+        else
+        {
+            ScDBCollection* pNames = pDocShell->GetDocument()->GetDBCollection();
+            if (pNames)
+            {
+                sal_uInt16 nPos = 0;
+                if (pNames->SearchName( aName, nPos ))
+                    pRet = (*pNames)[nPos];
+            }
         }
     }
     return pRet;
@@ -2079,7 +2098,7 @@ uno::Any SAL_CALL ScDatabaseRangeObj::getPropertyValue( const rtl::OUString& aPr
         {
             //  all database ranges except "unnamed" are user defined
             ScUnoHelpFunctions::SetBoolInAny( aRet,
-                        ( pData->GetName() != ScGlobal::GetRscString(STR_DB_NONAME) ) );
+                        ( pData->GetName() != String(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME))  ) );
         }
         else if ( aString.EqualsAscii( SC_UNO_LINKDISPBIT ) )
         {
@@ -2354,8 +2373,90 @@ sal_Bool SAL_CALL ScDatabaseRangesObj::hasByName( const rtl::OUString& aName )
 
 //------------------------------------------------------------------------
 
+ScUnnamedDatabaseRangesObj::ScUnnamedDatabaseRangesObj(ScDocShell* pDocSh) :
+    pDocShell( pDocSh )
+{
+    pDocShell->GetDocument()->AddUnoObject(*this);
+}
 
+ScUnnamedDatabaseRangesObj::~ScUnnamedDatabaseRangesObj()
+{
+    if (pDocShell)
+        pDocShell->GetDocument()->RemoveUnoObject(*this);
+}
 
+void ScUnnamedDatabaseRangesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
+{
+    //  Referenz-Update interessiert hier nicht
+
+    if ( rHint.ISA( SfxSimpleHint ) &&
+            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    {
+        pDocShell = NULL;       // ungueltig geworden
+    }
+}
+
+// XUnnamedDatabaseRanges
+
+void ScUnnamedDatabaseRangesObj::setByTable( const table::CellRangeAddress& aRange )
+                                throw( uno::RuntimeException,
+                                        lang::IndexOutOfBoundsException )
+{
+    SolarMutexGuard aGuard;
+    bool bDone = false;
+    if (pDocShell)
+    {
+        if ( pDocShell->GetDocument()->GetTableCount() >= aRange.Sheet )
+            throw lang::IndexOutOfBoundsException();
+
+        ScDBDocFunc aFunc(*pDocShell);
+        String aString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME));
+        ScRange aUnnamedRange( (SCCOL)aRange.StartColumn, (SCROW)aRange.StartRow, aRange.Sheet,
+                            (SCCOL)aRange.EndColumn,   (SCROW)aRange.EndRow,   aRange.Sheet );
+        bDone = aFunc.AddDBRange( aString, aUnnamedRange, sal_True );
+    }
+    if (!bDone)
+        throw uno::RuntimeException();      // no other exceptions specified
+}
+
+uno::Any ScUnnamedDatabaseRangesObj::getByTable( const sal_Int32 nTab )
+                                throw(uno::RuntimeException,
+                                    lang::IndexOutOfBoundsException,
+                                    container::NoSuchElementException)
+{
+    SolarMutexGuard aGuard;
+    if (pDocShell)
+    {
+        if ( pDocShell->GetDocument()->GetTableCount() >= nTab )
+            throw lang::IndexOutOfBoundsException();
+        uno::Reference<sheet::XDatabaseRange> xRange( new ScDatabaseRangeObj(pDocShell, (SCTAB) nTab) );
+        if (xRange.is())
+            return uno::makeAny(xRange);
+        else
+            throw container::NoSuchElementException();
+    }
+    else
+        throw uno::RuntimeException();
+}
+
+sal_Bool ScUnnamedDatabaseRangesObj::hasByTable( sal_Int32 nTab )
+                                    throw (uno::RuntimeException,
+                                        lang::IndexOutOfBoundsException)
+{
+    SolarMutexGuard aGuard;
+    if (pDocShell)
+    {
+         if (pDocShell->GetDocument()->GetTableCount() >= nTab)
+            throw lang::IndexOutOfBoundsException();
+        if (pDocShell->GetDocument()->GetAnonymousDBData((SCTAB) nTab))
+            return true;
+        return false;
+    }
+    else
+        return false;
+}
+
+//------------------------------------------------------------------------
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
