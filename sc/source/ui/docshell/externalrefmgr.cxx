@@ -2358,8 +2358,13 @@ void lcl_removeByFileId(sal_uInt16 nFileId, MapContainer& rMap)
 {
     typename MapContainer::iterator itr = rMap.find(nFileId);
     if (itr != rMap.end())
+    {
+        // Close this document shell.
+        itr->second.maShell->DoClose();
         rMap.erase(itr);
+    }
 }
+
 
 void ScExternalRefManager::refreshNames(sal_uInt16 nFileId)
 {
@@ -2528,6 +2533,9 @@ void ScExternalRefManager::purgeStaleSrcDocument(sal_Int32 nTimeOut)
         sal_Int32 nSinceLastAccess = (Time() - itr->second.maLastAccess).GetTime();
         if (nSinceLastAccess < nTimeOut)
             aNewDocShells.insert(*itr);
+        else
+            // Timed out.  Let's close this.
+            itr->second.maShell->DoClose();
     }
     maDocShells.swap(aNewDocShells);
 
