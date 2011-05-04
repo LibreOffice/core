@@ -25,7 +25,7 @@
 #
 #*************************************************************************
 
-PRODUCTLIST = libreoffice
+PRODUCTLIST = libreoffice oxygenoffice
 
 # default values to minimize maintainance effort
 PRODUCTVERSION = 3.4
