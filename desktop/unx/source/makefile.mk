@@ -45,7 +45,7 @@ OBJFILES= \
     $(OBJ)$/args.obj
 
 .IF "$(OS)"!="MACOSX"
-PAGEIN_OBJS= \
+OBJFILES += \
     $(OBJ)$/pagein.obj \
     $(OBJ)$/file_image_unx.obj
 .ENDIF

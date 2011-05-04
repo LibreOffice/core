@@ -29,38 +29,12 @@ PRJ=..$/..
 
 PRJNAME=desktop
 TARGET=pagein
-TARGETTYPE=CUI
-LIBTARGET=NO
-
-NO_DEFAULT_STL=TRUE
-LIBSALCPPRT=$(0)
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
 
 .INCLUDE .IGNORE : icuversion.mk
-
-.IF "$(OS)"=="MACOSX"
-
-dummy:
-    @echo "Pagein disabled for mac"
-
-.ELSE
-
-# --- Files --------------------------------------------------------
-
-OBJFILES= \
-    $(OBJ)$/pagein.obj \
-    $(OBJ)$/pagein-main.obj \
-    $(OBJ)$/file_image_unx.obj
-
-APP1TARGET=$(TARGET)
-APP1OBJS=$(OBJFILES)
-APP1CODETYPE=C
-
-# depends on libc only.
-STDLIB=
 
 # --- Targets ------------------------------------------------------
 
@@ -193,4 +167,3 @@ $(MISC)$/$(TARGET)-common : makefile.mk
     @-echo $(DLLPRE)sfx$(DFTDLLPOST)             >> $@
     @-echo $(DLLPRE)sofficeapp$(DLLPOST)         >> $@
 
-.ENDIF
