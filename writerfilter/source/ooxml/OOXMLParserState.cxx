@@ -308,9 +308,7 @@ void OOXMLParserState::dumpXml( const TagLogger::Pointer_t& pLogger )
         sTmp += "-";
 
     pLogger->attribute("state", sTmp);
-    pLogger->attribute("XNoteId",
-                  OUStringToOString(getXNoteId(),
-                                    RTL_TEXTENCODING_ASCII_US).getStr());
+    pLogger->attribute("XNoteId", getXNoteId() );
     if (mpCharacterProps != OOXMLPropertySet::Pointer_t())
         pLogger->chars(mpCharacterProps->toString());
 
