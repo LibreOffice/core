@@ -582,6 +582,8 @@ class WinMtfOutput
 
         sal_uInt32          mnGfxMode;
         sal_uInt32          mnMapMode;
+        sal_uInt16          mnUnitsPerInch;
+
         XForm               maXForm;
         sal_Int32           mnDevOrgX, mnDevOrgY;
         sal_Int32           mnDevWidth, mnDevHeight;
@@ -628,6 +630,7 @@ class WinMtfOutput
 
         sal_uInt32          GetMapMode() const { return mnMapMode; };
         void                SetMapMode( sal_uInt32 mnMapMode );
+        void                SetUnitsPerInch( sal_uInt16 nUnitsPerInch );
         void                SetWorldTransform( const XForm& rXForm );
         void                ModifyWorldTransform( const XForm& rXForm, sal_uInt32 nMode );
 
