@@ -242,6 +242,7 @@ $(eval $(call gb_Library_add_cobjects,vcl,\
     vcl/source/fontsubset/list \
 ))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/source/app/brand \
     vcl/source/app/dbggui \
     vcl/source/app/dndhelp \
     vcl/source/app/help \
