@@ -166,6 +166,20 @@ void SAL_CALL SVGFilter::setTargetDocument( const Reference< XComponent >& xDoc 
 
 rtl::OUString SAL_CALL SVGFilter::detect( Sequence< PropertyValue >& io_rDescriptor ) throw (RuntimeException)
 {
+    uno::Reference< io::XInputStream > xInput;
+    rtl::OUString aURL;
+
+    const beans::PropertyValue* pAttribs = io_rDescriptor.getConstArray();
+    const sal_Int32 nAttribs = io_rDescriptor.getLength();
+    for( sal_Int32 i = 0; i < nAttribs; i++ )
+    {
+        if( pAttribs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InputStream" ) ) )
+            pAttribs[i].Value >>= xInput;
+    }
+
+    if( !xInput.is() )
+        return rtl::OUString();
+
     uno::Reference< io::XSeekable > xSeek( xInput, uno::UNO_QUERY );
     if( xSeek.is() )
         xSeek->seek( 0 );

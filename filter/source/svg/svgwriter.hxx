@@ -208,10 +208,6 @@ private:
     void                    ImplCheckPaintAttributes();
 
     void                    ImplWriteActions( const GDIMetaFile& rMtf, sal_uInt32 nWriteFlags, const ::rtl::OUString* pElementId );
-    sal_Int32               ImplGetNextClipId() { return mnCurClipId++; }
-    sal_Int32               ImplGetNextPatternId() { return mnCurPatternId++; }
-    sal_Int32               ImplGetNextGradientId() { return mnCurGradientId++; }
-    sal_Int32               ImplGetNextMaskId() { return mnCurMaskId++; }
 
 public:
 

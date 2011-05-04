@@ -132,13 +132,13 @@ void SVGAttributeWriter::ImplGetColorStr( const Color& rColor, ::rtl::OUString& 
     else
     {
         ::rtl::OUStringBuffer aStyle;
-        aStyle.appendAscii( RTL_CONSTASCII_USTRINGPARAM("rgb(") );
-        aStyle += NMSP_RTL::OUString::valueOf( (sal_Int32) rColor.GetRed() );
-        aStyle.appendAscii( RTL_CONSTASCII_USTRINGPARAM(",") );
-        aStyle += NMSP_RTL::OUString::valueOf( (sal_Int32) rColor.GetGreen() );
-        aStyle.appendAscii( RTL_CONSTASCII_USTRINGPARAM(",") );
-        aStyle += NMSP_RTL::OUString::valueOf( (sal_Int32) rColor.GetBlue() );
-        aStyle.appendAscii( RTL_CONSTASCII_USTRINGPARAM(")") );
+        aStyle.appendAscii( "rgb(" );
+        aStyle.append( (sal_Int32) rColor.GetRed() );
+        aStyle.appendAscii( "," );
+        aStyle.append( (sal_Int32) rColor.GetGreen() );
+        aStyle.appendAscii( "," );
+        aStyle.append( (sal_Int32) rColor.GetBlue() );
+        aStyle.appendAscii( ")" );
         rColorStr = aStyle.makeStringAndClear();
     }
 }
@@ -704,7 +704,7 @@ void SVGActionWriter::ImplWriteShape( const SVGShapeDescriptor& rShape, sal_Bool
 void SVGActionWriter::ImplWritePattern( const PolyPolygon& rPolyPoly,
                                         const Hatch* pHatch,
                                         const Gradient* pGradient,
-                                        const NMSP_RTL::OUString* pStyle,
+                                        const rtl::OUString* pStyle,
                                         sal_uInt32 nWriteFlags )
 {
     if( rPolyPoly.Count() )
@@ -726,7 +726,7 @@ void SVGActionWriter::ImplWritePattern( const PolyPolygon& rPolyPoly,
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrWidth, GetValueString( aRect.GetWidth() ) );
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrHeight, GetValueString( aRect.GetHeight() ) );
 
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrPatternUnits, NMSP_RTL::OUString( RTL_CONSTASCII_USTRINGPARAM( "userSpaceOnUse") ) );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrPatternUnits, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "userSpaceOnUse") ) );
 
             {
                 SvXMLElementExport aElemPattern( mrExport, XML_NAMESPACE_NONE, aXMLElemPattern, sal_True, sal_True );
@@ -829,7 +829,7 @@ void SVGActionWriter::ImplWriteGradientLinear( const PolyPolygon& rPolyPoly,
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY2, GetValueString( aPoly[ 1 ].Y() ) );
 
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrGradientUnits,
-                                       NMSP_RTL::OUString( RTL_CONSTASCII_USTRINGPARAM( "userSpaceOnUse" ) ) );
+                                       rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "userSpaceOnUse" ) ) );
             }
 
             {
@@ -906,7 +906,7 @@ void SVGActionWriter::ImplWriteGradientLinear( const PolyPolygon& rPolyPoly,
 
 void SVGActionWriter::ImplWriteGradientStop( const Color& rColor, double fOffset )
 {
-    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrOffset, NMSP_RTL::OUString::valueOf( fOffset ) );
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrOffset, rtl::OUString::valueOf( fOffset ) );
 
     ::rtl::OUString aStyle;
     aStyle += B2UCONST( "stop-color:" );
@@ -952,7 +952,7 @@ void SVGActionWriter::ImplWriteMask( GDIMetaFile& rMtf,
                                      const Point& rDestPt,
                                      const Size& rDestSize,
                                      const Gradient& rGradient,
-                                     const NMSP_RTL::OUString* pStyle,
+                                     const rtl::OUString* pStyle,
                                      sal_uInt32 nWriteFlags )
 {
     Point          aSrcPt( rMtf.GetPrefMapMode().GetOrigin() );
@@ -1288,7 +1288,7 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
                 Point                    aPt;
                 Size                     aSz;
                 Sequence< sal_Int8 >     aSeq( (sal_Int8*) aOStm.GetData(), aOStm.Tell() );
-                NMSP_RTL::OUStringBuffer aBuffer;
+                rtl::OUStringBuffer aBuffer;
                 aBuffer.appendAscii( "data:image/png;base64," );
                 SvXMLUnitConverter::encodeBase64( aBuffer, aSeq );
 

@@ -260,7 +260,6 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
         }
         else if( pValue[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PagePos" ) ) )
             pValue[ i ].Value >>= nPageToExport;
-        }
         else if( pValue[ i ].Name.equalsAscii( "FilterData" ) )
         {
             pValue[ i ].Value >>= maFilterData;
