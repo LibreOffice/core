@@ -255,7 +255,7 @@ sal_Bool ScDBDocFunc::ModifyDBData( const ScDBData& rNewData, sal_Bool /* bApi *
 
 // -----------------------------------------------------------------
 
-sal_Bool ScDBDocFunc::RepeatDB( const String& rDBName, sal_Bool bRecord, sal_Bool bApi )
+sal_Bool ScDBDocFunc::RepeatDB( const String& rDBName, sal_Bool bRecord, sal_Bool bApi, bool bIsUnnamed, SCTAB aTab )
 {
     //! auch fuer ScDBFunc::RepeatDB benutzen!
 
@@ -263,12 +263,21 @@ sal_Bool ScDBDocFunc::RepeatDB( const String& rDBName, sal_Bool bRecord, sal_Boo
     ScDocument* pDoc = rDocShell.GetDocument();
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = false;
-    ScDBCollection* pColl = pDoc->GetDBCollection();
-    sal_uInt16 nIndex;
-    if ( pColl && pColl->SearchName( rDBName, nIndex ) )
+    ScDBData* pDBData = NULL;
+    if (bIsUnnamed)
     {
-        ScDBData* pDBData = (*pColl)[nIndex];
+        pDBData = pDoc->GetAnonymousDBData( aTab );
+    }
+    else
+    {
+        sal_uInt16 nIndex;
+        ScDBCollection* pColl = pDoc->GetDBCollection();
+        if ( pColl && pColl->SearchName( rDBName, nIndex ) )
+            pDBData = (*pColl)[nIndex];
+    }
 
+    if ( pDBData )
+    {
         ScQueryParam aQueryParam;
         pDBData->GetQueryParam( aQueryParam );
         sal_Bool bQuery = aQueryParam.GetEntry(0).bDoQuery;
