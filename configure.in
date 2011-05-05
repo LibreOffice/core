@@ -2901,7 +2901,8 @@ elif test "$enable_ccache_skip" = "auto" ; then
       # check ccache version
       AC_MSG_CHECKING([whether version of ccache is suitable])
       CCACHE_VERSION=`"$CCACHE" -V | "$AWK" '/^ccache version/{print $3}'`
-      if test "$CCACHE_VERSION" = "2.4_OOo"; then
+      CCACHE_NUMVER=`echo $CCACHE_VERSION | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+      if test "$CCACHE_VERSION" = "2.4_OOo" -o "$CCACHE_NUMVER" -ge "030100"; then
          AC_MSG_RESULT([yes])
          AC_MSG_CHECKING([whether ccache is actually used for the build])
          AC_LANG_PUSH([C++])
