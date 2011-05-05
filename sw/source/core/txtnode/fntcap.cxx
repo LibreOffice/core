@@ -623,7 +623,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
         pBigFont = pLastFont;
 
     // Hier entsteht der Kleinbuchstabenfont:
-    aFont.SetProportion( sal_uInt8 (aFont.GetPropr() * SMALL_CAPS_PERCENTAGE ) / 100L);
+    aFont.SetProportion( (aFont.GetPropr() * SMALL_CAPS_PERCENTAGE ) / 100L );
     pMagic2 = NULL;
     nIndex2 = 0;
     SwFntAccess *pSmallFontAccess = new SwFntAccess( pMagic2, nIndex2, &aFont,
