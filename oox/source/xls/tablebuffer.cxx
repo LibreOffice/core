@@ -94,7 +94,7 @@ void Table::finalizeImport()
     if( (maModel.mnId > 0) && (maModel.maDisplayName.getLength() > 0) ) try
     {
         maDBRangeName = maModel.maDisplayName;
-        Reference< XDatabaseRange > xDatabaseRange( createDatabaseRangeObject( maDBRangeName, maModel.maRange ), UNO_SET_THROW );
+        Reference< XDatabaseRange > xDatabaseRange( createUnnamedDatabaseRangeObject( maModel.maRange ), UNO_SET_THROW );
         maDestRange = xDatabaseRange->getDataArea();
 
         // get formula token index of the database range
