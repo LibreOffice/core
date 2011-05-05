@@ -586,6 +586,7 @@ sal_Bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPar
                 ||  (nPart==PART_MENU_ITEM_CHECK_MARK)
                 ||  (nPart==PART_MENU_ITEM_RADIO_MARK)
                 ||  (nPart==PART_MENU_SEPARATOR)
+                ||  (nPart==PART_MENU_SUBMENU_ARROW)
                 )
                                                                 )   ||
         ((nType == CTRL_PROGRESS) &&
@@ -853,6 +854,7 @@ sal_Bool GtkSalGraphics::drawNativeControl( ControlType nType,
     || (nPart == PART_MENU_ITEM_CHECK_MARK)
     || (nPart == PART_MENU_ITEM_RADIO_MARK)
     || (nPart == PART_MENU_SEPARATOR)
+    || (nPart == PART_MENU_SUBMENU_ARROW)
     )
     )
     {
@@ -1024,6 +1026,42 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
                                              (rControlRegion.GetHeight()-indicator_size)/2),
                                       Size( indicator_size, indicator_size ) );
             rNativeContentRegion = aIndicatorRect;
+            returnVal = sal_True;
+        }
+        else if( nPart == PART_MENU_SUBMENU_ARROW )
+        {
+            GtkWidget* widget = gWidgetData[m_nScreen].gMenuItemMenuWidget;
+            GtkWidget* child;
+            PangoContext *context;
+            PangoFontMetrics *metrics;
+            gint arrow_size;
+            gint arrow_extent;
+            guint horizontal_padding;
+            gfloat arrow_scaling;
+
+            gtk_widget_style_get( widget,
+                                  "horizontal-padding", &horizontal_padding,
+                                  "arrow-scaling", &arrow_scaling,
+                                  NULL );
+
+            child = GTK_BIN( widget )->child;
+
+            context = gtk_widget_get_pango_context( child );
+            metrics = pango_context_get_metrics( context,
+                                                 child->style->font_desc,
+                                                 pango_context_get_language( context ) );
+
+            arrow_size = ( PANGO_PIXELS( pango_font_metrics_get_ascent( metrics ) +
+                                         pango_font_metrics_get_descent( metrics ) ));
+
+            pango_font_metrics_unref( metrics );
+
+            arrow_extent = arrow_size * arrow_scaling;
+
+            rNativeContentRegion = Rectangle( Point( 0, 0 ),
+                                              Size( arrow_extent, arrow_extent ));
+            rNativeBoundingRegion = Rectangle( Point( 0, 0 ),
+                                               Size( arrow_extent + horizontal_padding, arrow_extent ));
             returnVal = sal_True;
         }
     }
@@ -2818,6 +2856,32 @@ sal_Bool GtkSalGraphics::NWPaintGTKPopupMenu(
                              gWidgetData[m_nScreen].gMenuItemSeparatorMenuWidget,
                              "menuitem",
                              x, x + w, y + h / 2);
+        }
+        else if( nPart == PART_MENU_SUBMENU_ARROW )
+        {
+            GtkStateType nStateType = GTK_STATE_NORMAL;
+            GtkShadowType nShadowType;
+
+            if ( nState & CTRL_STATE_SELECTED )
+                nStateType = GTK_STATE_PRELIGHT;
+
+            NWSetWidgetState( gWidgetData[m_nScreen].gMenuItemMenuWidget,
+                              nState, nStateType );
+
+            if ( nState & CTRL_STATE_PRESSED )
+                nShadowType = GTK_SHADOW_IN;
+            else
+                nShadowType = GTK_SHADOW_OUT;
+
+            gtk_paint_arrow( gWidgetData[m_nScreen].gMenuItemMenuWidget->style,
+                             gdkDrawable,
+                             nStateType,
+                             nShadowType,
+                             &clipRect,
+                             gWidgetData[m_nScreen].gMenuItemMenuWidget,
+                             "menuitem",
+                             GTK_ARROW_RIGHT, TRUE,
+                             x, y, w, h);
         }
     }
 

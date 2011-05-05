@@ -199,6 +199,10 @@ protected:
     // return value is Max( rCheckHeight, rRadioHeight )
     SAL_DLLPRIVATE long             ImplGetNativeCheckAndRadioSize( Window*, long& rCheckHeight, long& rRadioHeight, long &rMaxWidth ) const;
 
+    // returns native submenu arrow size and spacing from right border
+    // return value is whether it's supported natively
+    SAL_DLLPRIVATE sal_Bool         ImplGetNativeSubmenuArrowSize( Window* pWin, Size& rArrowSize, long& rArrowSpacing ) const;
+
     SAL_DLLPRIVATE void                ImplAddDel( ImplMenuDelData &rDel );
     SAL_DLLPRIVATE void                ImplRemoveDel( ImplMenuDelData &rDel );
 public:

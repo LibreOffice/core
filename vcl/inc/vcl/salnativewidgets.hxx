@@ -178,6 +178,7 @@ typedef sal_uInt32      ControlPart;
 #define PART_MENU_ITEM_CHECK_MARK   251
 #define PART_MENU_ITEM_RADIO_MARK   252
 #define PART_MENU_SEPARATOR         253
+#define PART_MENU_SUBMENU_ARROW     254
 
 /*  #i77549#
     HACK: for scrollbars in case of thumb rect, page up and page down rect we

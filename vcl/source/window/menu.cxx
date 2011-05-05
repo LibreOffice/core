@@ -2305,6 +2305,37 @@ long Menu::ImplGetNativeCheckAndRadioSize( Window* pWin, long& rCheckHeight, lon
     return (rCheckHeight > rRadioHeight) ? rCheckHeight : rRadioHeight;
 }
 
+sal_Bool Menu::ImplGetNativeSubmenuArrowSize( Window* pWin, Size& rArrowSize, long& rArrowSpacing ) const
+{
+    ImplControlValue aVal;
+    Rectangle aNativeBounds;
+    Rectangle aNativeContent;
+    Point tmp( 0, 0 );
+    Rectangle aCtrlRegion( Rectangle( tmp, Size( 100, 15 ) ) );
+    if( pWin->IsNativeControlSupported( CTRL_MENU_POPUP,
+                                        PART_MENU_SUBMENU_ARROW ) )
+        {
+            if( pWin->GetNativeControlRegion( ControlType(CTRL_MENU_POPUP),
+                                              ControlPart(PART_MENU_SUBMENU_ARROW),
+                                              aCtrlRegion,
+                                              ControlState(CTRL_STATE_ENABLED),
+                                              aVal,
+                                              OUString(),
+                                              aNativeBounds,
+                                              aNativeContent )
+            )
+            {
+                Size aSize( Size ( aNativeContent.GetWidth(),
+                                   aNativeContent.GetHeight() ) );
+                rArrowSize = aSize;
+                rArrowSpacing = aNativeBounds.GetWidth() - aNativeContent.GetWidth();
+
+                return sal_True;
+            }
+        }
+    return sal_False;
+}
+
 // -----------------------------------------------------------------------
 
 void Menu::ImplAddDel( ImplMenuDelData& rDel )
@@ -2853,21 +2884,57 @@ void Menu::ImplPaint( Window* pWin, sal_uInt16 nBorder, long nStartY, MenuItemDa
                 // SubMenu?
                 if ( !bLayout && !bIsMenuBar && pData->pSubMenu )
                 {
-                    aTmpPos.X() = aOutSz.Width() - nFontHeight + nExtra - nOuterSpace;
-                    aTmpPos.Y() = aPos.Y();
-                    aTmpPos.Y() += nExtra/2;
-                    aTmpPos.Y() += ( pData->aSz.Height() / 2 ) - ( nFontHeight/4 );
-                    if ( pData->nBits & MIB_POPUPSELECT )
+                    bool bNativeOk = false;
+                    if( pWin->IsNativeControlSupported( CTRL_MENU_POPUP,
+                                                        PART_MENU_SUBMENU_ARROW ) )
                     {
-                        pWin->SetTextColor( rSettings.GetMenuTextColor() );
-                        Point aTmpPos2( aPos );
-                        aTmpPos2.X() = aOutSz.Width() - nFontHeight - nFontHeight/4;
-                        aDecoView.DrawFrame(
-                            Rectangle( aTmpPos2, Size( nFontHeight+nFontHeight/4, pData->aSz.Height() ) ), FRAME_DRAW_GROUP );
+                        ControlState nState = 0;
+                        Size aTmpSz( 0, 0 );
+                        long aSpacing = 0;
+
+                        if( !ImplGetNativeSubmenuArrowSize( pWin,
+                                                            aTmpSz, aSpacing ) )
+                        {
+                            aTmpSz = Size( nFontHeight, nFontHeight );
+                            aSpacing = nOuterSpace;
+                        }
+
+                        if ( pData->bEnabled )
+                            nState |= CTRL_STATE_ENABLED;
+                        if ( bHighlighted )
+                            nState |= CTRL_STATE_SELECTED;
+
+                        aTmpPos.X() = aOutSz.Width() - aTmpSz.Width() - aSpacing - nOuterSpace;
+                        aTmpPos.Y() = aPos.Y() + ( pData->aSz.Height() - aTmpSz.Height() ) / 2;
+                        aTmpPos.Y() += nExtra/2;
+
+                        Rectangle aItemRect( aTmpPos, aTmpSz );
+                        MenupopupValue aVal( nTextPos-GUTTERBORDER, aItemRect );
+                        bNativeOk = pWin->DrawNativeControl( CTRL_MENU_POPUP,
+                                                             PART_MENU_SUBMENU_ARROW,
+                                                             aItemRect,
+                                                             nState,
+                                                             aVal,
+                                                             OUString() );
                     }
-                    aDecoView.DrawSymbol(
-                        Rectangle( aTmpPos, Size( nFontHeight/2, nFontHeight/2 ) ),
-                        SYMBOL_SPIN_RIGHT, pWin->GetTextColor(), nSymbolStyle );
+                    if( ! bNativeOk )
+                    {
+                        aTmpPos.X() = aOutSz.Width() - nFontHeight + nExtra - nOuterSpace;
+                        aTmpPos.Y() = aPos.Y();
+                        aTmpPos.Y() += nExtra/2;
+                        aTmpPos.Y() += ( pData->aSz.Height() / 2 ) - ( nFontHeight/4 );
+                        if ( pData->nBits & MIB_POPUPSELECT )
+                        {
+                            pWin->SetTextColor( rSettings.GetMenuTextColor() );
+                            Point aTmpPos2( aPos );
+                            aTmpPos2.X() = aOutSz.Width() - nFontHeight - nFontHeight/4;
+                            aDecoView.DrawFrame(
+                                Rectangle( aTmpPos2, Size( nFontHeight+nFontHeight/4, pData->aSz.Height() ) ), FRAME_DRAW_GROUP );
+                        }
+                        aDecoView.DrawSymbol(
+                            Rectangle( aTmpPos, Size( nFontHeight/2, nFontHeight/2 ) ),
+                            SYMBOL_SPIN_RIGHT, pWin->GetTextColor(), nSymbolStyle );
+                    }
                 }
 
                 if ( pThisItemOnly && bHighlighted )
