@@ -158,12 +158,12 @@ void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
         if (!maRowManualBreaks.empty())
         {
             // Copy all breaks up to nStartRow (non-inclusive).
-            ::std::set<SCROW>::const_iterator itr1 = maRowManualBreaks.lower_bound(nStartRow);
+            ::std::set<SCROW>::iterator itr1 = maRowManualBreaks.lower_bound(nStartRow);
             ::std::set<SCROW> aNewBreaks(maRowManualBreaks.begin(), itr1);
 
             // Copy all breaks from nStartRow (inclusive) to the last element,
             // but add nSize to each value.
-            ::std::set<SCROW>::const_iterator itr2 = maRowManualBreaks.end();
+            ::std::set<SCROW>::iterator itr2 = maRowManualBreaks.end();
             for (; itr1 != itr2; ++itr1)
                 aNewBreaks.insert(static_cast<SCROW>(*itr1 + nSize));
 
