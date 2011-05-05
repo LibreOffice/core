@@ -51,6 +51,7 @@ using namespace padmin;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
+using namespace com::sun::star::frame;
 using namespace comphelper;
 
 using ::rtl::OUString;
@@ -104,10 +105,11 @@ int MyApp::Main()
     //-------------------------------------------------
     // create the global service-manager
     //-------------------------------------------------
+    Reference< XComponentContext > xCtx;
     Reference< XMultiServiceFactory > xFactory;
     try
     {
-        Reference< XComponentContext > xCtx = defaultBootstrap_InitialComponentContext();
+        xCtx = defaultBootstrap_InitialComponentContext();
         xFactory = Reference< XMultiServiceFactory >(  xCtx->getServiceManager(), UNO_QUERY );
         if( xFactory.is() )
             setProcessServiceFactory( xFactory );
@@ -174,6 +176,18 @@ int MyApp::Main()
      *  clean up UCB
      */
     ::ucbhelper::ContentBroker::deinitialize();
+
+    /*
+     *  clean up UNO
+     */
+    try
+    {
+        Reference<XComponent> xComp(xCtx, UNO_QUERY_THROW);
+        xComp->dispose();
+    }
+    catch(...)
+    {
+    }
 
     return EXIT_SUCCESS;
 }
