@@ -123,7 +123,7 @@ public:
                     // maybe they need a change in format, color, etc
                     ::std::vector< uno::Reference< container::XChild > >::const_iterator aIter = m_pImpl->m_aSections.begin();
                     ::std::vector< uno::Reference< container::XChild > >::const_iterator aEnd = m_pImpl->m_aSections.end();
-                    for (;aIter != aEnd; aIter++)
+                    for (;aIter != aEnd; ++aIter)
                     {
                         const uno::Reference<container::XChild> xChild (*aIter);
                         if (xChild.is())
