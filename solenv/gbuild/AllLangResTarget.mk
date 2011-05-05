@@ -47,7 +47,7 @@ gb_SrsPartMergeTarget_TRANSEXTARGET := $(call gb_Executable_get_target,transex3)
 # gb_SrsPartMergeTarget_TRANSEXPRECOMMAND is set by the platforms
 
 gb_SrsPartMergeTarget_TRANSEXCOMMAND := $(gb_SrsPartMergeTarget_TRANSEXPRECOMMAND) $(gb_SrsPartMergeTarget_TRANSEXTARGET)
-gb_SrsPartMergeTarget_SDFLOCATION := $(SRCDIR)/translations/$(INPATH)/misc/sdf/
+gb_SrsPartMergeTarget_SDFLOCATION := $(realpath $(SRCDIR)/translations/$(INPATH)/misc/sdf/)
 gb_SrsPartMergeTarget_REPOS := $(gb_REPOS)
 
 define gb_SrsPartMergeTarget__command
