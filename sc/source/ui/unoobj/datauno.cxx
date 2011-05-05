@@ -2406,7 +2406,7 @@ void ScUnnamedDatabaseRangesObj::setByTable( const table::CellRangeAddress& aRan
     bool bDone = false;
     if (pDocShell)
     {
-        if ( pDocShell->GetDocument()->GetTableCount() >= aRange.Sheet )
+        if ( pDocShell->GetDocument()->GetTableCount() <= aRange.Sheet )
             throw lang::IndexOutOfBoundsException();
 
         ScDBDocFunc aFunc(*pDocShell);
@@ -2427,7 +2427,7 @@ uno::Any ScUnnamedDatabaseRangesObj::getByTable( const sal_Int32 nTab )
     SolarMutexGuard aGuard;
     if (pDocShell)
     {
-        if ( pDocShell->GetDocument()->GetTableCount() >= nTab )
+        if ( pDocShell->GetDocument()->GetTableCount() <= nTab )
             throw lang::IndexOutOfBoundsException();
         uno::Reference<sheet::XDatabaseRange> xRange( new ScDatabaseRangeObj(pDocShell, (SCTAB) nTab) );
         if (xRange.is())
@@ -2446,7 +2446,7 @@ sal_Bool ScUnnamedDatabaseRangesObj::hasByTable( sal_Int32 nTab )
     SolarMutexGuard aGuard;
     if (pDocShell)
     {
-         if (pDocShell->GetDocument()->GetTableCount() >= nTab)
+         if (pDocShell->GetDocument()->GetTableCount() <= nTab)
             throw lang::IndexOutOfBoundsException();
         if (pDocShell->GetDocument()->GetAnonymousDBData((SCTAB) nTab))
             return true;
