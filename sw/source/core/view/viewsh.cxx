@@ -1042,12 +1042,16 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
                               i < pPage->GetSortedObjs()->Count(); ++i )
                         {
                             SwAnchoredObject* pObj = (*pPage->GetSortedObjs())[i];
-                            const Rectangle &rBound = pObj->GetObjRect().SVRect();
-                            const SwTwips nL = Max( 0L, rBound.Left() - nOfst );
-                            if ( nL < nMinLeft )
-                                nMinLeft = nL;
-                            if( rBound.Right() + nOfst > nMaxRight )
-                                nMaxRight = rBound.Right() + nOfst;
+                            // ignore objects that are not actually placed on the page
+                            if (pObj->IsFormatPossible())
+                            {
+                                const Rectangle &rBound = pObj->GetObjRect().SVRect();
+                                const SwTwips nL = Max( 0L, rBound.Left() - nOfst );
+                                if ( nL < nMinLeft )
+                                    nMinLeft = nL;
+                                if( rBound.Right() + nOfst > nMaxRight )
+                                    nMaxRight = rBound.Right() + nOfst;
+                            }
                         }
                     }
                 }
