@@ -280,7 +280,7 @@ namespace abp
 
             if ( aTables.empty() )
             {
-                if ( RET_YES != QueryBox( this, ModuleRes( RID_QRY_NOTABLES ) ).Execute() )
+                if ( RET_YES != QueryBox( this, ModuleRes( ( getSettings().eType == AST_EVOLUTION_GROUPWISE ? RID_QRY_NO_EVO_GW : RID_QRY_NOTABLES ) ) ).Execute() )
                 {
                     // cannot ask the user, or the user chose to use this data source, though there are no tables
                     bAllow = sal_False;
