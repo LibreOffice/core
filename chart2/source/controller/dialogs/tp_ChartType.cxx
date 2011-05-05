@@ -879,7 +879,7 @@ ChartTypeTabPage::ChartTypeTabPage( Window* pParent
 
     ::std::vector< ChartTypeDialogController* >::const_iterator       aIter = m_aChartTypeDialogControllerList.begin();
     const ::std::vector< ChartTypeDialogController* >::const_iterator aEnd  = m_aChartTypeDialogControllerList.end();
-    for( ; aIter != aEnd; aIter++ )
+    for( ; aIter != aEnd; ++aIter )
     {
         m_aMainTypeList.InsertEntry( (*aIter)->getName(), (*aIter)->getImage() );
         (*aIter)->setChangeListener( this );
@@ -900,7 +900,7 @@ ChartTypeTabPage::~ChartTypeTabPage()
     //delete all dialog controller
     ::std::vector< ChartTypeDialogController* >::const_iterator       aIter = m_aChartTypeDialogControllerList.begin();
     const ::std::vector< ChartTypeDialogController* >::const_iterator aEnd  = m_aChartTypeDialogControllerList.end();
-    for( ; aIter != aEnd; aIter++ )
+    for( ; aIter != aEnd; ++aIter )
     {
         delete *aIter;
     }
@@ -1107,7 +1107,7 @@ void ChartTypeTabPage::initializePage()
 
     ::std::vector< ChartTypeDialogController* >::iterator             aIter = m_aChartTypeDialogControllerList.begin();
     const ::std::vector< ChartTypeDialogController* >::const_iterator aEnd  = m_aChartTypeDialogControllerList.end();
-    for( sal_uInt16 nM=0; aIter != aEnd; aIter++, nM++ )
+    for( sal_uInt16 nM=0; aIter != aEnd; ++aIter, ++nM )
     {
         if( (*aIter)->isSubType(aServiceName) )
         {

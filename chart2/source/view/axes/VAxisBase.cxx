@@ -235,7 +235,7 @@ void VAxisBase::removeTextShapesFromTicks()
         {
             ::std::vector< TickInfo >::iterator       aTickIter = (*aDepthIter).begin();
             const ::std::vector< TickInfo >::const_iterator aTickEnd  = (*aDepthIter).end();
-            for( ; aTickIter != aTickEnd; aTickIter++ )
+            for( ; aTickIter != aTickEnd; ++aTickIter )
             {
                 TickInfo& rTickInfo = (*aTickIter);
                 if(rTickInfo.xTextShape.is())

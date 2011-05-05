@@ -93,7 +93,7 @@ TickInfo* PureTickIter::nextInfo()
 {
     if(m_aTickIter!=m_rTickVector.end())
     {
-        m_aTickIter++;
+        ++m_aTickIter;
         if(m_aTickIter!=m_rTickVector.end())
             return &*m_aTickIter;
     }
@@ -319,7 +319,7 @@ void TickFactory_2D::updateScreenValues( ::std::vector< ::std::vector< TickInfo 
     {
         ::std::vector< TickInfo >::iterator       aTickIter = (*aDepthIter).begin();
         const ::std::vector< TickInfo >::const_iterator aTickEnd  = (*aDepthIter).end();
-        for( ; aTickIter != aTickEnd; aTickIter++ )
+        for( ; aTickIter != aTickEnd; ++aTickIter )
         {
             TickInfo& rTickInfo = (*aTickIter);
             rTickInfo.aTickScreenPosition =

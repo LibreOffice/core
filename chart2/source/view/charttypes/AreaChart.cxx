@@ -498,13 +498,13 @@ void AreaChart::impl_createSeriesShapes()
     ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator            aZSlotIter = m_aZSlots.begin();
     const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator aZSlotEnd = m_aZSlots.end();
 //=============================================================================
-    for( sal_Int32 nZ=1; aZSlotIter != aZSlotEnd; aZSlotIter++, nZ++ )
+    for( sal_Int32 nZ=1; aZSlotIter != aZSlotEnd; ++aZSlotIter, ++nZ )
     {
         ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
         const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
 
     //=============================================================================
-        for( ; aXSlotIter != aXSlotEnd; aXSlotIter++ )
+        for( ; aXSlotIter != aXSlotEnd; ++aXSlotIter )
         {
             ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
 
@@ -516,7 +516,7 @@ void AreaChart::impl_createSeriesShapes()
             drawing::PolyPolygonShape3D* pSeriesPoly = NULL;
 
             //iterate through all series
-            for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
+            for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
             {
                 sal_Int32 nAttachedAxisIndex = (*aSeriesIter)->getAttachedAxisIndex();
                 PlottingPositionHelper* pPosHelper = &(this->getPlottingPositionHelper( nAttachedAxisIndex ));
@@ -646,13 +646,13 @@ void AreaChart::createShapes()
             const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
 
             //iterate through all x slots in this category to get 100percent sum
-            for( ; aXSlotIter != aXSlotEnd; aXSlotIter++ )
+            for( ; aXSlotIter != aXSlotEnd; ++aXSlotIter )
             {
                 ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
                 ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
                 const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
 
-                for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
+                for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
                 {
                     VDataSeries* pSeries( *aSeriesIter );
                     if(!pSeries)
@@ -684,7 +684,7 @@ void AreaChart::createShapes()
             //for the area chart there should be at most one x slot (no side by side stacking available)
             //attention different: xSlots are always interpreted as independent areas one behind the other: @todo this doesn't work why not???
             aXSlotIter = aZSlotIter->begin();
-            for( sal_Int32 nX=0; aXSlotIter != aXSlotEnd; aXSlotIter++, nX++ )
+            for( sal_Int32 nX=0; aXSlotIter != aXSlotEnd; ++aXSlotIter, ++nX )
             {
                 ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
                 ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
@@ -693,7 +693,7 @@ void AreaChart::createShapes()
                 std::map< sal_Int32, double > aLogicYForNextSeriesMap;//one for each different nAttachedAxisIndex
     //=============================================================================
                 //iterate through all series
-                for( sal_Int32 nSeriesIndex = 0; aSeriesIter != aSeriesEnd; aSeriesIter++, nSeriesIndex++ )
+                for( sal_Int32 nSeriesIndex = 0; aSeriesIter != aSeriesEnd; ++aSeriesIter, ++nSeriesIndex )
                 {
                     VDataSeries* pSeries( *aSeriesIter );
                     if(!pSeries)

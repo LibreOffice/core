@@ -225,7 +225,7 @@ void ChartView::impl_deleteCoordinateSystems()
     ::std::swap( aVectorToDeleteObjects, m_aVCooSysList );//#i109770#
     ::std::vector< VCoordinateSystem* >::const_iterator       aIter = aVectorToDeleteObjects.begin();
     const ::std::vector< VCoordinateSystem* >::const_iterator aEnd  = aVectorToDeleteObjects.end();
-    for( ; aIter != aEnd; aIter++ )
+    for( ; aIter != aEnd; ++aIter )
     {
         delete *aIter;
     }
@@ -587,7 +587,7 @@ SeriesPlotterContainer::~SeriesPlotterContainer()
     // - delete all plotter
     ::std::vector< VSeriesPlotter* >::const_iterator       aPlotterIter = m_aSeriesPlotterList.begin();
     const ::std::vector< VSeriesPlotter* >::const_iterator aPlotterEnd  = m_aSeriesPlotterList.end();
-    for( aPlotterIter = m_aSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; aPlotterIter++ )
+    for( aPlotterIter = m_aSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; ++aPlotterIter )
         delete *aPlotterIter;
     m_aSeriesPlotterList.clear();
 }
@@ -836,7 +836,7 @@ void SeriesPlotterContainer::initAxisUsageList(const Date& rNullDate)
     m_nMaxAxisIndex = 0;
     for(sal_Int32 nDimensionIndex=0; nDimensionIndex<3; nDimensionIndex++)
     {
-        for( aAxisIter = m_aAxisUsageList.begin(); aAxisIter != aAxisEndIter; aAxisIter++ )
+        for( aAxisIter = m_aAxisUsageList.begin(); aAxisIter != aAxisEndIter; ++aAxisIter )
         {
             sal_Int32 nLocalMax = aAxisIter->second.getMaxAxisIndexForDimension( nDimensionIndex );
             if( m_nMaxAxisIndex < nLocalMax )
@@ -850,7 +850,7 @@ void SeriesPlotterContainer::setScalesFromCooSysToPlotter()
     //set scales to plotter to enable them to provide the preferred scene AspectRatio
     ::std::vector< VSeriesPlotter* >::const_iterator       aPlotterIter = m_aSeriesPlotterList.begin();
     const ::std::vector< VSeriesPlotter* >::const_iterator aPlotterEnd  = m_aSeriesPlotterList.end();
-    for( aPlotterIter = m_aSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; aPlotterIter++ )
+    for( aPlotterIter = m_aSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; ++aPlotterIter )
     {
         VSeriesPlotter* pSeriesPlotter = *aPlotterIter;
         VCoordinateSystem* pVCooSys = lcl_getCooSysForPlotter( m_rVCooSysList, pSeriesPlotter );
@@ -870,7 +870,7 @@ void SeriesPlotterContainer::setNumberFormatsFromAxes()
 
     ::std::vector< VSeriesPlotter* >::const_iterator       aPlotterIter = m_aSeriesPlotterList.begin();
     const ::std::vector< VSeriesPlotter* >::const_iterator aPlotterEnd  = m_aSeriesPlotterList.end();
-    for( aPlotterIter = m_aSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; aPlotterIter++ )
+    for( aPlotterIter = m_aSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; ++aPlotterIter )
     {
         VSeriesPlotter* pSeriesPlotter = *aPlotterIter;
         VCoordinateSystem* pVCooSys = lcl_getCooSysForPlotter( m_rVCooSysList, pSeriesPlotter );
@@ -933,7 +933,7 @@ void SeriesPlotterContainer::doAutoScaling( const uno::Reference< frame::XModel 
     {
 
         // - first do autoscale for all x and z scales (because they are treated independent)
-        for( aAxisIter = m_aAxisUsageList.begin(); aAxisIter != aAxisEndIter; aAxisIter++ )
+        for( aAxisIter = m_aAxisUsageList.begin(); aAxisIter != aAxisEndIter; ++aAxisIter )
         {
             AxisUsage& rAxisUsage = (*aAxisIter).second;
             ::std::vector< VCoordinateSystem* > aVCooSysList_X = rAxisUsage.getCoordinateSystems(0,nAxisIndex);
@@ -955,7 +955,7 @@ void SeriesPlotterContainer::doAutoScaling( const uno::Reference< frame::XModel 
         }
 
         // - second do autoscale for the dependent y scales (the coordinate systems are prepared with x and z scales already )
-        for( aAxisIter = m_aAxisUsageList.begin(); aAxisIter != aAxisEndIter; aAxisIter++ )
+        for( aAxisIter = m_aAxisUsageList.begin(); aAxisIter != aAxisEndIter; ++aAxisIter )
         {
             AxisUsage& rAxisUsage = (*aAxisIter).second;
             ::std::vector< VCoordinateSystem* > aVCooSysList_X = rAxisUsage.getCoordinateSystems(0,nAxisIndex);
@@ -992,7 +992,7 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries( const uno::
 
     for( sal_Int32 nAxisIndex=0; nAxisIndex<=m_nMaxAxisIndex; nAxisIndex++ )
     {
-        for( aAxisIter = m_aAxisUsageList.begin(); aAxisIter != aAxisEndIter; aAxisIter++ )
+        for( aAxisIter = m_aAxisUsageList.begin(); aAxisIter != aAxisEndIter; ++aAxisIter )
         {
             AxisUsage& rAxisUsage = (*aAxisIter).second;
             ::std::vector< VCoordinateSystem* > aVCooSysList_Y = rAxisUsage.getCoordinateSystems( 1, nAxisIndex );
@@ -1007,7 +1007,7 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries( const uno::
                 {
                     ::std::vector< Reference< XDataSeries > > aSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
                     ::std::vector< Reference< XDataSeries > >::const_iterator aIter = aSeriesVector.begin();
-                    for( ; aIter != aSeriesVector.end(); aIter++ )
+                    for( ; aIter != aSeriesVector.end(); ++aIter )
                     {
                         sal_Int32 nCurrentIndex = DataSeriesHelper::getAttachedAxisIndex( *aIter );
                         if( nAxisIndex == nCurrentIndex )
@@ -1088,7 +1088,7 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries( const uno::
         //correct origin for y main axis (the origin is where the other main axis crosses)
         sal_Int32 nAxisIndex=0;
         sal_Int32 nDimensionIndex=1;
-        for( aAxisIter = m_aAxisUsageList.begin(); aAxisIter != aAxisEndIter; aAxisIter++ )
+        for( aAxisIter = m_aAxisUsageList.begin(); aAxisIter != aAxisEndIter; ++aAxisIter )
         {
             AxisUsage& rAxisUsage = (*aAxisIter).second;
             ::std::vector< VCoordinateSystem* > aVCooSysList = rAxisUsage.getCoordinateSystems(nDimensionIndex,nAxisIndex);
@@ -1138,7 +1138,7 @@ drawing::Direction3D SeriesPlotterContainer::getPreferredAspectRatio()
     ::std::vector< VSeriesPlotter* >::const_iterator       aPlotterIter = m_aSeriesPlotterList.begin();
     const ::std::vector< VSeriesPlotter* >::const_iterator aPlotterEnd  = m_aSeriesPlotterList.end();
     for( aPlotterIter = m_aSeriesPlotterList.begin(), nPlotterCount=0
-        ; aPlotterIter != aPlotterEnd; aPlotterIter++, nPlotterCount++ )
+        ; aPlotterIter != aPlotterEnd; ++aPlotterIter, ++nPlotterCount )
     {
         drawing::Direction3D aSingleRatio( (*aPlotterIter)->getPreferredDiagramAspectRatio() );
         if( fx<0 && aSingleRatio.DirectionX>0 )
@@ -1491,7 +1491,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
     m_bPointsWereSkipped = false;
     ::std::vector< VSeriesPlotter* >::const_iterator       aPlotterIter = rSeriesPlotterList.begin();
     const ::std::vector< VSeriesPlotter* >::const_iterator aPlotterEnd  = rSeriesPlotterList.end();
-    for( aPlotterIter = rSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; aPlotterIter++ )
+    for( aPlotterIter = rSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; ++aPlotterIter )
     {
         //------------ set transformation to plotter / create series
         VSeriesPlotter* pSeriesPlotter = *aPlotterIter;
@@ -1531,7 +1531,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
         if( !bUseFixedInnerSize )
             aNewInnerRect = aVDiagram.adjustInnerSize( aConsumedOuterRect );
 
-        for( aPlotterIter = rSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; aPlotterIter++ )
+        for( aPlotterIter = rSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; ++aPlotterIter )
         {
             VSeriesPlotter* pSeriesPlotter = *aPlotterIter;
             pSeriesPlotter->releaseShapes();
@@ -1551,7 +1551,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
         }
 
         // - create data series for all charttypes
-        for( aPlotterIter = rSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; aPlotterIter++ )
+        for( aPlotterIter = rSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; ++aPlotterIter )
         {
             //------------ set transformation to plotter / create series
             VSeriesPlotter* pSeriesPlotter = *aPlotterIter;
@@ -1562,7 +1562,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
             m_bPointsWereSkipped = m_bPointsWereSkipped || pSeriesPlotter->PointsWereSkipped();
         }
 
-        for( aPlotterIter = rSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; aPlotterIter++ )
+        for( aPlotterIter = rSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; ++aPlotterIter )
         {
             VSeriesPlotter* pSeriesPlotter = *aPlotterIter;
             pSeriesPlotter->rearrangeLabelToAvoidOverlapIfRequested( rPageSize );
@@ -1577,7 +1577,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
         aUsedOuterRect = awt::Rectangle( rAvailablePos.X, rAvailablePos.Y, rAvailableSize.Width, rAvailableSize.Height );
 
     bool bSnapRectToUsedArea = false;
-    for( aPlotterIter = rSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; aPlotterIter++ )
+    for( aPlotterIter = rSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; ++aPlotterIter )
     {
         VSeriesPlotter* pSeriesPlotter = *aPlotterIter;
         bSnapRectToUsedArea = pSeriesPlotter->shouldSnapRectToUsedArea();

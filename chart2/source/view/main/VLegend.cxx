@@ -928,7 +928,7 @@ void VLegend::createShapes(
 
             ::std::vector< LegendEntryProvider* >::const_iterator       aIter = m_aLegendEntryProviderList.begin();
             const ::std::vector< LegendEntryProvider* >::const_iterator aEnd  = m_aLegendEntryProviderList.end();
-            for( aIter = m_aLegendEntryProviderList.begin(); aIter != aEnd; aIter++ )
+            for( aIter = m_aLegendEntryProviderList.begin(); aIter != aEnd; ++aIter )
             {
                 LegendEntryProvider* pLegendEntryProvider( *aIter );
                 if( pLegendEntryProvider )
@@ -945,7 +945,7 @@ void VLegend::createShapes(
             awt::Size aMaxSymbolExtent( nSymbolWidth, nSymbolHeigth );
 
             tViewLegendEntryContainer aViewEntries;
-            for( aIter = m_aLegendEntryProviderList.begin(); aIter != aEnd; aIter++ )
+            for( aIter = m_aLegendEntryProviderList.begin(); aIter != aEnd; ++aIter )
             {
                 LegendEntryProvider* pLegendEntryProvider( *aIter );
                 if( pLegendEntryProvider )

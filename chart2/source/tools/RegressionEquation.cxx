@@ -206,7 +206,8 @@ RegressionEquation::RegressionEquation( const RegressionEquation & rOther ) :
         MutexContainer(),
         impl::RegressionEquation_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder()),
+    m_xContext( NULL )
 {}
 
 RegressionEquation::~RegressionEquation()

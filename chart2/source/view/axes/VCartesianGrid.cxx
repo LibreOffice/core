@@ -274,7 +274,7 @@ void VCartesianGrid::createShapes()
             ::std::vector< TickInfo >::const_iterator       aTickIter = (*aDepthIter).begin();
             const ::std::vector< TickInfo >::const_iterator aTickEnd  = (*aDepthIter).end();
             sal_Int32 nRealPointCount = 0;
-            for( ; aTickIter != aTickEnd; aTickIter++ )
+            for( ; aTickIter != aTickEnd; ++aTickIter )
             {
                 if( !(*aTickIter).bPaintIt )
                     continue;
@@ -314,7 +314,7 @@ void VCartesianGrid::createShapes()
             const ::std::vector< TickInfo >::const_iterator aTickEnd  = (*aDepthIter).end();
             sal_Int32 nRealPointCount = 0;
             sal_Int32 nPolyIndex = 0;
-            for( ; aTickIter != aTickEnd; aTickIter++, nPolyIndex++ )
+            for( ; aTickIter != aTickEnd; ++aTickIter, ++nPolyIndex )
             {
                 if( !(*aTickIter).bPaintIt )
                     continue;

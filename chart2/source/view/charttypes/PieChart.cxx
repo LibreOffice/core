@@ -355,7 +355,7 @@ void PieChart::createShapes()
     ::rtl::math::setNan(&m_fMaxOffset);
 
 //=============================================================================
-    for( double fSlotX=0; aXSlotIter != aXSlotEnd && (m_bUseRings||fSlotX<0.5 ); aXSlotIter++, fSlotX+=1.0 )
+    for( double fSlotX=0; aXSlotIter != aXSlotEnd && (m_bUseRings||fSlotX<0.5 ); ++aXSlotIter, fSlotX+=1.0 )
     {
         ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
         if( pSeriesList->size()<=0 )//there should be only one series in each x slot

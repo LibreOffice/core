@@ -490,7 +490,7 @@ bool SelectionHelper::isRotateableObject( const ::rtl::OUString& rCID
 }
 
 SelectionHelper::SelectionHelper( SdrObject* pSelectedObj )
-                      : m_pSelectedObj( pSelectedObj )
+                      : m_pSelectedObj( pSelectedObj ), m_pMarkObj(NULL)
 {
 
 }

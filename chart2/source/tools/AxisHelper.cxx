@@ -1149,7 +1149,7 @@ Reference< XChartType > AxisHelper::getFirstChartTypeWithSeriesAttachedToAxisInd
     Reference< XChartType > xChartType;
     ::std::vector< Reference< XDataSeries > > aSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
     ::std::vector< Reference< XDataSeries > >::const_iterator aIter = aSeriesVector.begin();
-    for( ; aIter != aSeriesVector.end(); aIter++ )
+    for( ; aIter != aSeriesVector.end(); ++aIter )
     {
         sal_Int32 nCurrentIndex = DataSeriesHelper::getAttachedAxisIndex( *aIter );
         if( nAttachedAxisIndex == nCurrentIndex )

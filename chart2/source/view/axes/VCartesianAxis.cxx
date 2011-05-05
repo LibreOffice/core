@@ -1487,7 +1487,7 @@ void VCartesianAxis::updatePositions()
         {
             ::std::vector< TickInfo >::iterator aTickIter = aDepthIter->begin();
             const ::std::vector< TickInfo >::const_iterator aTickEnd  = aDepthIter->end();
-            for( ; aTickIter != aTickEnd; aTickIter++ )
+            for( ; aTickIter != aTickEnd; ++aTickIter )
             {
                 TickInfo& rTickInfo = (*aTickIter);
                 Reference< drawing::XShape > xShape2DText( rTickInfo.xTextShape );
@@ -1541,7 +1541,7 @@ void VCartesianAxis::createTickMarkLineShapes( ::std::vector< TickInfo >& rTickI
     ::std::vector< TickInfo >::const_iterator       aTickIter = rTickInfos.begin();
     const ::std::vector< TickInfo >::const_iterator aTickEnd  = rTickInfos.end();
     sal_Int32 nN = 0;
-    for( ; aTickIter != aTickEnd; aTickIter++ )
+    for( ; aTickIter != aTickEnd; ++aTickIter )
     {
         if( !(*aTickIter).bPaintIt )
             continue;

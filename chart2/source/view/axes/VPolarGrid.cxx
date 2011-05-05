@@ -148,7 +148,7 @@ void VPolarGrid::create2DAngleGrid( const Reference< drawing::XShapes >& xLogicT
         drawing::PointSequenceSequence aAllPoints;
         ::std::vector< TickInfo >::iterator             aTickIter = (*aDepthIter).begin();
         const ::std::vector< TickInfo >::const_iterator aTickEnd  = (*aDepthIter).end();
-        for( ; aTickIter != aTickEnd; aTickIter++ )
+        for( ; aTickIter != aTickEnd; ++aTickIter )
         {
             TickInfo& rTickInfo = *aTickIter;
             if( !rTickInfo.bPaintIt )
@@ -215,7 +215,7 @@ void VPolarGrid::create2DRadiusGrid( const Reference< drawing::XShapes >& xLogic
         drawing::PointSequenceSequence aAllPoints;
         ::std::vector< TickInfo >::iterator             aTickIter = (*aDepthIter).begin();
         const ::std::vector< TickInfo >::const_iterator aTickEnd  = (*aDepthIter).end();
-        for( ; aTickIter != aTickEnd; aTickIter++ )
+        for( ; aTickIter != aTickEnd; ++aTickIter )
         {
             TickInfo& rTickInfo = *aTickIter;
             if( !rTickInfo.bPaintIt )

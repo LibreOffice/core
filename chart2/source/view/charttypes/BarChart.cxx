@@ -476,7 +476,7 @@ void BarChart::createShapes()
             ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
             const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
 
-            for( aXSlotIter = aZSlotIter->begin(); aXSlotIter != aXSlotEnd; aXSlotIter++ )
+            for( aXSlotIter = aZSlotIter->begin(); aXSlotIter != aXSlotEnd; ++aXSlotIter )
             {
                 sal_Int32 nAttachedAxisIndex = aXSlotIter->getAttachedAxisIndexForFirstSeries();
                 if( aLogicYSumMap.find(nAttachedAxisIndex)==aLogicYSumMap.end() )
@@ -503,7 +503,7 @@ void BarChart::createShapes()
 //=============================================================================
             //iterate through all x slots in this category
             double fSlotX=0;
-            for( aXSlotIter = aZSlotIter->begin(); aXSlotIter != aXSlotEnd; aXSlotIter++, fSlotX+=1.0 )
+            for( aXSlotIter = aZSlotIter->begin(); aXSlotIter != aXSlotEnd; ++aXSlotIter, fSlotX+=1.0 )
             {
                 sal_Int32 nAttachedAxisIndex = 0;
                 BarPositionHelper* pPosHelper = m_pMainPosHelper;
@@ -570,7 +570,7 @@ void BarChart::createShapes()
                 aSeriesIter = pSeriesList->begin();
     //=============================================================================
                 //iterate through all series in this x slot
-                for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
+                for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
                 {
                     VDataSeries* pSeries( *aSeriesIter );
                     if(!pSeries)
@@ -890,7 +890,7 @@ void BarChart::createShapes()
 
 //=============================================================================
             //iterate through all x slots in this category
-            for( double fSlotX=0; aXSlotIter != aXSlotEnd; aXSlotIter++, fSlotX+=1.0 )
+            for( double fSlotX=0; aXSlotIter != aXSlotEnd; ++aXSlotIter, fSlotX+=1.0 )
             {
                 ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
 
@@ -899,7 +899,7 @@ void BarChart::createShapes()
                 aSeriesIter = pSeriesList->begin();
 //=============================================================================
                 //iterate through all series in this x slot
-                for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
+                for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
                 {
                     VDataSeries* pSeries( *aSeriesIter );
                     if(!pSeries)

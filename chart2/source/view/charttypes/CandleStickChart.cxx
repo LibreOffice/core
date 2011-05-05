@@ -208,7 +208,7 @@ void CandleStickChart::createShapes()
             pPosHelper->updateSeriesCount( aZSlotIter->size() );
 //=============================================================================
             //iterate through all x slots in this category
-            for( double fSlotX=0; aXSlotIter != aXSlotEnd; aXSlotIter++, fSlotX+=1.0 )
+            for( double fSlotX=0; aXSlotIter != aXSlotEnd; ++aXSlotIter, fSlotX+=1.0 )
             {
                 ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
 
@@ -217,7 +217,7 @@ void CandleStickChart::createShapes()
                 aSeriesIter = pSeriesList->begin();
     //=============================================================================
                 //iterate through all series in this x slot
-                for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
+                for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
                 {
                     //collect data point information (logic coordinates, style ):
                     double fUnscaledX = (*aSeriesIter)->getXValue( nIndex );

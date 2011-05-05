@@ -55,9 +55,9 @@ void MultipleItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
     if( aIter != aEnd )
     {
         (*aIter)->FillItemSet( rOutItemSet );
-        aIter++;
+        ++aIter;
     }
-    for( ; aIter != aEnd; aIter++ )
+    for( ; aIter != aEnd; ++aIter )
     {
         SfxItemSet aSet = this->CreateEmptyItemSet();
         (*aIter)->FillItemSet( aSet );

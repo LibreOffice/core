@@ -420,7 +420,7 @@ Sequence< OUString > ExplicitCategoriesProvider::getExplicitSimpleCategories(
 struct DatePlusIndexComparator
 {
     inline bool operator() ( const DatePlusIndex& aFirst,
-                             const DatePlusIndex& aSecond )
+                             const DatePlusIndex& aSecond ) const
     {
         return ( aFirst.fValue < aSecond.fValue );
     }
