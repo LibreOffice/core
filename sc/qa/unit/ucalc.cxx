@@ -224,7 +224,7 @@ public:
 
     void testCollator();
     void testInput();
-    void testSUM();
+    void testCellFunctions();
     void testVolatileFunc();
     void testFuncParam();
     void testNamedRange();
@@ -264,7 +264,7 @@ public:
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
     CPPUNIT_TEST(testInput);
-    CPPUNIT_TEST(testSUM);
+    CPPUNIT_TEST(testCellFunctions);
     CPPUNIT_TEST(testVolatileFunc);
     CPPUNIT_TEST(testFuncParam);
     CPPUNIT_TEST(testNamedRange);
@@ -398,11 +398,13 @@ void Test::testInput()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSUM()
+void Test::testCellFunctions()
 {
     rtl::OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("foo"));
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, aTabName));
+
+    // SUM
     double val = 1;
     m_pDoc->SetValue (0, 0, 0, val);
     m_pDoc->SetValue (0, 1, 0, val);
@@ -411,6 +413,23 @@ void Test::testSUM()
     double result;
     m_pDoc->GetValue (0, 2, 0, result);
     CPPUNIT_ASSERT_MESSAGE ("calculation failed", result == 2.0);
+
+    // PRODUCT
+    val = 1;
+    m_pDoc->SetValue(0, 0, 0, val);
+    val = 2;
+    m_pDoc->SetValue(0, 1, 0, val);
+    val = 3;
+    m_pDoc->SetValue(0, 2, 0, val);
+    m_pDoc->SetString(0, 3, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=PRODUCT(A1:A3)")));
+    m_pDoc->CalcAll();
+    m_pDoc->GetValue(0, 3, 0, result);
+    CPPUNIT_ASSERT_MESSAGE("Calculation of PRODUCT failed", result == 6.0);
+
+    m_pDoc->SetString(0, 4, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=PRODUCT({1;2;3})")));
+    m_pDoc->CalcAll();
+    m_pDoc->GetValue(0, 4, 0, result);
+    CPPUNIT_ASSERT_MESSAGE("Calculation of PRODUCT with inline array failed", result == 6.0);
 
     m_pDoc->DeleteTab(0);
 }
