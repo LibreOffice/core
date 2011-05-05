@@ -2908,8 +2908,10 @@ void ScInterpreter::ScMin( sal_Bool bTextAsZero )
             }
             break;
             case svMatrix :
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
             {
-                ScMatrixRef pMat = PopMatrix();
+                ScMatrixRef pMat = GetMatrix();
                 if (pMat)
                 {
                     SCSIZE nC, nR;
@@ -3029,8 +3031,10 @@ void ScInterpreter::ScMax( sal_Bool bTextAsZero )
             }
             break;
             case svMatrix :
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
             {
-                ScMatrixRef pMat = PopMatrix();
+                ScMatrixRef pMat = GetMatrix();
                 if (pMat)
                 {
                     nFuncFmtType = NUMBERFORMAT_NUMBER;
