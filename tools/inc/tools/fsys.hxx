@@ -271,7 +271,6 @@ private:
                                           FSysPathStyle eStyle );
     TOOLS_DLLPRIVATE const DirEntry*    ImpGetTopPtr() const;
     TOOLS_DLLPRIVATE DirEntry*          ImpGetTopPtr();
-    TOOLS_DLLPRIVATE sal_Bool               ImpToRel( String aStart );
 
 protected:
     void                ImpTrim( FSysPathStyle eStyle );
@@ -326,8 +325,6 @@ public:
     bool                IsAbs() const;
     sal_Bool                ToAbs();
     sal_Bool                Find( const String& rPfad, char cDelim = 0 );
-    sal_Bool                ToRel();
-    sal_Bool                ToRel( const DirEntry& rRefDir );
 
     sal_Bool                SetCWD( sal_Bool bSloppy = sal_False ) const;
     sal_Bool                MakeDir( sal_Bool bSloppy = sal_False ) const;
