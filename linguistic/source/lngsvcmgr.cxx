@@ -553,9 +553,9 @@ sal_Bool LngSvcMgrListenerHelper::RemoveLngSvcEvtBroadcaster(
 
 
 
-LngSvcMgr::LngSvcMgr() :
-    utl::ConfigItem( String::CreateFromAscii( "Office.Linguistic" ) ),
-    aEvtListeners   ( GetLinguMutex() )
+LngSvcMgr::LngSvcMgr()
+    : utl::ConfigItem(OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Linguistic")))
+    , aEvtListeners(GetLinguMutex())
 {
     bDisposing = sal_False;
 
