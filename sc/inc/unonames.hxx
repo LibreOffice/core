@@ -48,6 +48,7 @@
 #define SC_UNO_EXTERNALDOCLINKS     "ExternalDocLinks"
 #define SC_UNO_COLLABELRNG          "ColumnLabelRanges"
 #define SC_UNO_DATABASERNG          "DatabaseRanges"
+#define SC_UNO_UNNAMEDDBRNG         "UnnamedDatabaseRanges"
 #define SC_UNO_NAMEDRANGES          "NamedRanges"
 #define SC_UNO_ROWLABELRNG          "RowLabelRanges"
 #define SC_UNO_SHEETLINKS           "SheetLinks"

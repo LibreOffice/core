@@ -56,6 +56,7 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
 #include <com/sun/star/sheet/XLabelRanges.hpp>
+#include <com/sun/star/sheet/XUnnamedDatabaseRanges.hpp>
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -1779,6 +1780,10 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const rtl::OUString& aPropertyNa
         else if ( aString.EqualsAscii( SC_UNO_DATABASERNG ) )
         {
             aRet <<= uno::Reference<sheet::XDatabaseRanges>(new ScDatabaseRangesObj( pDocShell ));
+        }
+        else if ( aString.EqualsAscii( SC_UNO_UNNAMEDDBRNG ) )
+        {
+            aRet <<= uno::Reference<sheet::XUnnamedDatabaseRanges>(new ScUnnamedDatabaseRangesObj(pDocShell));
         }
         else if ( aString.EqualsAscii( SC_UNO_COLLABELRNG ) )
         {

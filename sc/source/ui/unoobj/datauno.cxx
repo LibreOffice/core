@@ -1903,7 +1903,7 @@ void SAL_CALL ScDatabaseRangeObj::refresh() throw(uno::RuntimeException)
 
         // interne Operationen (sort, query, subtotal) nur, wenn kein Fehler
         if (bContinue)
-            aFunc.RepeatDB( pData->GetName(), sal_True, sal_True );
+            aFunc.RepeatDB( pData->GetName(), true, true, bIsUnnamed, aTab );
     }
 }
 

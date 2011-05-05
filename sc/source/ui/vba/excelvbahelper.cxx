@@ -59,36 +59,33 @@ GetDataBaseRanges( ScDocShell* pShell ) throw ( uno::RuntimeException )
     return xDBRanges;
 }
 
+uno::Reference< sheet::XUnnamedDatabaseRanges >
+GetUnnamedDataBaseRanges( ScDocShell* pShell ) throw ( uno::RuntimeException )
+{
+    uno::Reference< frame::XModel > xModel;
+    if ( pShell )
+        xModel.set( pShell->GetModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xModelProps( xModel, uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XUnnamedDatabaseRanges > xUnnamedDBRanges( xModelProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("UnnamedDatabaseRanges") ) ), uno::UNO_QUERY_THROW );
+    return xUnnamedDBRanges;
+}
+
 // returns the XDatabaseRange for the autofilter on sheet (nSheet)
 // also populates sName with the name of range
 uno::Reference< sheet::XDatabaseRange >
-GetAutoFiltRange( ScDocShell* pShell, sal_Int16 nSheet, rtl::OUString& sName ) throw ( uno::RuntimeException )
+GetAutoFiltRange( ScDocShell* pShell, sal_Int16 nSheet ) throw ( uno::RuntimeException )
 {
-    uno::Reference< container::XIndexAccess > xIndexAccess( GetDataBaseRanges( pShell ), uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XUnnamedDatabaseRanges > xUnnamedDBRanges( GetUnnamedDataBaseRanges( pShell ), uno::UNO_QUERY_THROW );
     uno::Reference< sheet::XDatabaseRange > xDataBaseRange;
-    table::CellRangeAddress dbAddress;
-    for ( sal_Int32 index=0; index < xIndexAccess->getCount(); ++index )
+    if (xUnnamedDBRanges->hasByTable( nSheet ) )
     {
-        uno::Reference< sheet::XDatabaseRange > xDBRange( xIndexAccess->getByIndex( index ), uno::UNO_QUERY_THROW );
-        uno::Reference< container::XNamed > xNamed( xDBRange, uno::UNO_QUERY_THROW );
-        // autofilters work weirdly with openoffice, unnamed is the default
-        // named range which is used to create an autofilter, but
-        // its also possible that another name could be used
-        //     this also causes problems when an autofilter is created on
-        //     another sheet
-        // ( but.. you can use any named range )
-        dbAddress = xDBRange->getDataArea();
-        if ( dbAddress.Sheet == nSheet )
+        uno::Reference< sheet::XDatabaseRange > xDBRange( xUnnamedDBRanges->getByTable( nSheet ) , uno::UNO_QUERY_THROW );
+        sal_Bool bHasAuto = false;
+        uno::Reference< beans::XPropertySet > xProps( xDBRange, uno::UNO_QUERY_THROW );
+        xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("AutoFilter") ) ) >>= bHasAuto;
+        if ( bHasAuto )
         {
-            sal_Bool bHasAuto = false;
-            uno::Reference< beans::XPropertySet > xProps( xDBRange, uno::UNO_QUERY_THROW );
-            xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("AutoFilter") ) ) >>= bHasAuto;
-            if ( bHasAuto )
-            {
-                sName = xNamed->getName();
-                xDataBaseRange=xDBRange;
-                break;
-            }
+            xDataBaseRange=xDBRange;
         }
     }
     return xDataBaseRange;
