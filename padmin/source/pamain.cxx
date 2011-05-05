@@ -46,12 +46,12 @@
 #include "unotools/configmgr.hxx"
 
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
+#include "com/sun/star/lang/XComponent.hpp"
 
 using namespace padmin;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-using namespace com::sun::star::frame;
 using namespace comphelper;
 
 using ::rtl::OUString;
