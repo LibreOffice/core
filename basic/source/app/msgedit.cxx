@@ -115,7 +115,6 @@ void MsgEdit::AddAnyMsg( TTLogMsg *LogMsg )
         DirEntry aConvert( LogMsg->aDebugData.aFilename );
         if ( pAppError->aBaseDir.Contains( aConvert ) )
         {
-            aConvert.ToRel( pAppError->aBaseDir );
             LogMsg->aDebugData.aFilename = CUniString("~");         // mark as converted
             LogMsg->aDebugData.aFilename += aConvert.GetFull( FSYS_STYLE_VFAT );
         }
