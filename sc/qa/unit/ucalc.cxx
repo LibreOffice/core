@@ -798,7 +798,7 @@ ScDPObject* createDPFromRange(
     {
         OUString aDimName(aFields[i].pName, strlen(aFields[i].pName), RTL_TEXTENCODING_UTF8);
         ScDPSaveDimension* pDim = aSaveData.GetDimensionByName(aDimName);
-        pDim->SetOrientation(aFields[i].eOrient);
+        pDim->SetOrientation(static_cast<sal_uInt16>(aFields[i].eOrient));
         pDim->SetUsedHierarchy(0);
         pDim->SetShowEmpty(true);
 

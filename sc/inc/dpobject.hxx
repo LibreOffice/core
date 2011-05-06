@@ -297,6 +297,11 @@ public:
         ::rtl::OUString maDBName;
         ::rtl::OUString maCommand;
         DBType(sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand);
+
+        struct less : public ::std::binary_function<DBType, DBType, bool>
+        {
+            bool operator() (const DBType& left, const DBType& right) const;
+        };
     };
 
     /**
@@ -304,7 +309,7 @@ public:
      */
     class DBCaches
     {
-        typedef ::boost::ptr_map<DBType, ScDPCache> CachesType;
+        typedef ::boost::ptr_map<DBType, ScDPCache, DBType::less> CachesType;
         CachesType maCaches;
         ScDocument* mpDoc;
     public:
