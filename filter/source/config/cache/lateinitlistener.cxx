@@ -78,10 +78,14 @@ LateInitListener::~LateInitListener()
 void SAL_CALL LateInitListener::notifyEvent(const css::document::EventObject& aEvent)
     throw(css::uno::RuntimeException)
 {
-    // wait for events, which indicates finished open of the first document
+    // wait for events which either
+    // a) indicate completed open of the first document in which case launch thread
+    // b) indicate close of application without any documents opened, in which case skip launching thread but drop references break cyclic dependencies in
+    // case of e.g. cancel from open/new database wizard or impress wizard
     if (
-        (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OnNew")) ) ||
-        (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OnLoad")))
+        (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OnNew"))) ||
+        (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OnLoad"))) ||
+        (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OnCloseApp")))
        )
     {
         // this thread must be started one times only ...
@@ -106,8 +110,11 @@ void SAL_CALL LateInitListener::notifyEvent(const css::document::EventObject& aE
         aLock.clear();
         // <- SAFE
 
-        LateInitThread* pThread = new LateInitThread();
-        pThread->create();
+        if (!aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OnCloseApp")))
+        {
+            LateInitThread* pThread = new LateInitThread();
+            pThread->create();
+        }
     }
 }
 
@@ -124,6 +131,10 @@ void SAL_CALL LateInitListener::disposing(const css::lang::EventObject& /* aEven
 
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
+    if ( !m_xBroadcaster.is() )
+        return;
+
+    m_xBroadcaster->removeEventListener(static_cast< css::document::XEventListener* >(this));
     m_xBroadcaster.clear();
     aLock.clear();
     // <- SAFE
