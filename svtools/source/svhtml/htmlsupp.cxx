@@ -43,7 +43,7 @@
 
 /*  */
 
-// Tabellen zum Umwandeln von Options-Werten in Strings
+// Table for converting option values into strings
 
 static HTMLOptionEnum const aScriptLangOptEnums[] =
 {
@@ -116,14 +116,14 @@ void HTMLParser::RemoveSGMLComment( String &rString, sal_Bool bFull )
         rString.Erase( rString.Len()-1 );
 
 
-    // SGML-Kommentare entfernen
+    // remove SGML comments
     if( rString.Len() >= 4 &&
         rString.CompareToAscii( "<!--", 4 ) == COMPARE_EQUAL )
     {
         xub_StrLen nPos = 3;
         if( bFull )
         {
-            // die gesamte Zeile !
+            // the whole line
             nPos = 4;
             while( nPos < rString.Len() &&
                 ( ( c = rString.GetChar( nPos )) != '\r' && c != '\n' ) )
@@ -144,7 +144,7 @@ void HTMLParser::RemoveSGMLComment( String &rString, sal_Bool bFull )
         rString.Erase( rString.Len()-3 );
         if( bFull )
         {
-            // auch noch ein "//" oder "'" und ggf CR/LF davor
+            // "//" or "'", maybe preceding CR/LF
             rString.EraseTrailingChars();
             xub_StrLen nDel = 0, nLen = rString.Len();
             if( nLen >= 2 &&
