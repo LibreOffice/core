@@ -625,14 +625,14 @@ static DdeTopic* FindTopic( const String & rLinkName, sal_uInt16* pItemStt )
             if( pItemStt )
                 *pItemStt = nTokenPos;
 
-            DdeTopics& rTopics = pService->GetTopics();
+            std::vector<DdeTopic*>& rTopics = pService->GetTopics();
 
             for( int i = 0; i < 2; ++i )
             {
-                for( DdeTopic* pTopic = rTopics.First(); pTopic;
-                                                pTopic = rTopics.Next() )
-                    if( pTopic->GetName() == sTopic )
-                        return pTopic;
+                for( std::vector<DdeTopic*>::iterator iterTopic = rTopics.begin();
+                     iterTopic != rTopics.end(); iterTopic++ )
+                    if( (*iterTopic)->GetName() == sTopic )
+                        return *iterTopic;
 
                 // Topic not found?
                 // then we try once to create it
