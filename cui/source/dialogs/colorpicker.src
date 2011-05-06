@@ -1,0 +1,489 @@
+/*
+ * Version: MPL 1.1 / GPLv3+ / LGPLv3+
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License or as specified alternatively below. You may obtain a copy of
+ * the License at http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Initial Developer of the Original Code is
+ *       Christian Lippka <cl@lippka.com>
+ * Portions created by the Initial Developer are Copyright (C) 2010 the
+ * Initial Developer. All Rights Reserved.
+ *
+ * Major Contributor(s):
+ *
+ *
+ * For minor contributions see the git repository.
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+ * the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+ * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+ * instead of those above.
+ */
+
+#include "colorpicker.hrc"
+
+#define DLG_WIDTH 295
+#define DLG_HEIGHT 216
+
+#define BUTTON_WIDTH 50
+#define BUTTON_HEIGHT 14
+
+#define METRIC_WIDTH 30
+#define METRIC_HEIGHT 12
+
+#define RADIO_WIDTH 8
+#define RADIO_HEIGHT 8
+
+#define LABEL_WIDTH 50
+#define LABEL_HEIGHT 10
+
+#define SLIDER_WIDTH 22
+#define PREVIEW_HEIGHT 16
+
+#define LINE_WIDTH  (3 + RADIO_WIDTH + 2 + LABEL_WIDTH + 3 + METRIC_WIDTH + 3)
+#define LINE_HEIGHT 8
+
+#define CONTROL_AREA_X    (DLG_WIDTH - LINE_WIDTH - 6)
+#define CONTROL_AREA_X_RADIO (CONTROL_AREA_X + 3)
+#define CONTROL_AREA_X_LABEL (CONTROL_AREA_X + 3 + RADIO_WIDTH + 2)
+#define CONTROL_AREA_X_METRIC (CONTROL_AREA_X + 3 + RADIO_WIDTH + 2 + LABEL_WIDTH + 3)
+
+#define CHOOSER_SIZE (CONTROL_AREA_X - 6 - SLIDER_WIDTH - 2 - 2 )
+
+#define BOTTOMLINE_Y (DLG_HEIGHT - 3 - 3 - 8 - 14)
+#define BUTTON_LINE_Y (BOTTOMLINE_Y + 8 + 3)
+
+#define RGB_Y1 (6 + LINE_HEIGHT + 1)
+#define RGB_Y2 (RGB_Y1 + METRIC_HEIGHT + 2)
+#define RGB_Y3 (RGB_Y2 + METRIC_HEIGHT + 2)
+#define RGB_Y4 (RGB_Y3 + METRIC_HEIGHT + 4)
+#define HSB_Y0 (RGB_Y4 + METRIC_HEIGHT + 1)
+#define HSB_Y1 (HSB_Y0 + LINE_HEIGHT + 2)
+#define HSB_Y2 (HSB_Y1 + METRIC_HEIGHT + 2)
+#define HSB_Y3 (HSB_Y2 + METRIC_HEIGHT + 2)
+#define CMYK_Y0 (HSB_Y3 + METRIC_HEIGHT + 1)
+#define CMYK_Y1 (CMYK_Y0 + LINE_HEIGHT + 1)
+#define CMYK_Y2 (CMYK_Y1 + METRIC_HEIGHT + 2)
+#define CMYK_Y3 (CMYK_Y2 + METRIC_HEIGHT + 2)
+#define CMYK_Y4 (CMYK_Y3 + METRIC_HEIGHT + 2)
+
+
+
+ModalDialog RID_CUI_DIALOG_COLORPICKER
+{
+    HelpID = "cui:ModalDialog:ColorPicker";
+
+    OutputSize = TRUE ;
+    SvLook = TRUE ;
+    Moveable = TRUE ;
+    Size = MAP_APPFONT ( DLG_WIDTH , DLG_HEIGHT ) ;
+
+    Text [ en-US ] = "Color Picker" ;
+
+    Control CT_COLORFIELD
+    {
+        HelpID = "cui:Control:ColorPicker:ColorField";
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( CHOOSER_SIZE , CHOOSER_SIZE ) ;
+        Border = TRUE;
+        TabStop = TRUE ;
+    };
+
+    Control CT_COLORSLIDER
+    {
+        HelpID = "cui:Control:ColorPicker:ColorSlider";
+        Pos = MAP_APPFONT ( CONTROL_AREA_X - 2 - SLIDER_WIDTH + 4 , 6 ) ;
+        Size = MAP_APPFONT ( SLIDER_WIDTH - 8 , CHOOSER_SIZE ) ;
+        Border = TRUE;
+        TabStop = TRUE ;
+    };
+
+    Control CT_PREVIEW
+    {
+        HelpID = "cui:Control:ColorPicker:ColorPreview";
+        Pos = MAP_APPFONT ( 6 , 6 + CHOOSER_SIZE + 3 ) ;
+        Size = MAP_APPFONT ( CHOOSER_SIZE , PREVIEW_HEIGHT ) ;
+        Border = FALSE;
+    };
+
+    Control CT_PREVIOUS
+    {
+        HelpID = "cui:Control:ColorPicker:ColorPrevious";
+        Pos = MAP_APPFONT ( 6 + (CHOOSER_SIZE/2), 6 + CHOOSER_SIZE + 3 ) ;
+        Size = MAP_APPFONT ( CHOOSER_SIZE/2 , PREVIEW_HEIGHT ) ;
+        Border = FALSE;
+        Hide = TRUE;
+    };
+
+    FixedImage CT_LEFT_SLIDER
+    {
+    };
+
+    FixedImage CT_RIGHT_SLIDER
+    {
+    };
+
+    Image CT_SLIDERIMG
+    {
+        ImageBitmap = Bitmap { File = "colorslider.png" ; };
+        MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; };
+    };
+
+#if 0
+    ImageButton PB_PICKER
+    {
+        HelpID = "cui:ImageButton:ColorPicker:Picker";
+        Pos = MAP_APPFONT ( CONTROL_AREA_X - 2 - SLIDER_WIDTH + 4, 6 + CHOOSER_SIZE + 3 ) ;
+        Size = MAP_APPFONT( SLIDER_WIDTH - 8, PREVIEW_HEIGHT );
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Pick a color from the document" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "pipette.png" ; };
+            MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; } ;
+        };
+    };
+#endif
+
+    FixedLine FL_RGB
+    {
+        Pos = MAP_APPFONT ( CONTROL_AREA_X , 6 ) ;
+        Size = MAP_APPFONT ( LINE_WIDTH , LINE_HEIGHT ) ;
+        Text [ en-US ] = "RGB" ;
+    };
+
+    RadioButton CT_RED
+    {
+        HelpID = "cui:RadioButton:ColorPicker:Red";
+        Pos = MAP_APPFONT ( CONTROL_AREA_X_RADIO , RGB_Y1+2 ) ;
+        Size = MAP_APPFONT ( RADIO_WIDTH , RADIO_HEIGHT ) ;
+        Group = TRUE;
+    };
+
+    RadioButton CT_GREEN
+    {
+        HelpID = "cui:RadioButton:ColorPicker:Green";
+        Pos = MAP_APPFONT ( CONTROL_AREA_X_RADIO , RGB_Y2+2 ) ;
+        Size = MAP_APPFONT ( RADIO_WIDTH , RADIO_HEIGHT ) ;
+    };
+
+    RadioButton CT_BLUE
+    {
+        HelpID = "cui:RadioButton:ColorPicker:Blue";
+        Pos = MAP_APPFONT ( CONTROL_AREA_X_RADIO , RGB_Y3+2 ) ;
+        Size = MAP_APPFONT ( RADIO_WIDTH , RADIO_HEIGHT ) ;
+    };
+
+    RadioButton CT_HUE
+    {
+        HelpID = "cui:RadioButton:ColorPicker:Hue";
+        Pos = MAP_APPFONT ( CONTROL_AREA_X_RADIO , HSB_Y1+2 ) ;
+        Size = MAP_APPFONT ( RADIO_WIDTH , RADIO_HEIGHT ) ;
+        Check = TRUE ;
+    };
+
+    RadioButton CT_SATURATION
+    {
+        HelpID = "cui:RadioButton:ColorPicker:Saturation";
+        Pos = MAP_APPFONT ( CONTROL_AREA_X_RADIO , HSB_Y2+2 ) ;
+        Size = MAP_APPFONT ( RADIO_WIDTH , RADIO_HEIGHT ) ;
+    };
+
+    RadioButton CT_BRIGHTNESS
+    {
+        HelpID = "cui:RadioButton:ColorPicker:Brightness";
+        Pos = MAP_APPFONT ( CONTROL_AREA_X_RADIO , HSB_Y3+2 ) ;
+        Size = MAP_APPFONT ( RADIO_WIDTH , RADIO_HEIGHT ) ;
+    };
+
+    FixedText CT_RED
+    {
+        Pos = MAP_APPFONT ( CONTROL_AREA_X_LABEL , RGB_Y1+1 ) ;
+        Size = MAP_APPFONT ( LABEL_WIDTH , LABEL_HEIGHT ) ;
+        Text [ en-US ] = "~Red" ;
+    };
+
+    MetricField CT_RED
+    {
+        HelpID = "cui:MetricField:ColorPicker:Red";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( CONTROL_AREA_X_METRIC , RGB_Y1 ) ;
+        Size = MAP_APPFONT ( METRIC_WIDTH , METRIC_HEIGHT ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 255 ;
+        Last = 255 ;
+    };
+
+    FixedText CT_GREEN
+    {
+        Pos = MAP_APPFONT ( CONTROL_AREA_X_LABEL , RGB_Y2+1 ) ;
+        Size = MAP_APPFONT ( LABEL_WIDTH , LABEL_HEIGHT ) ;
+        Text [ en-US ] = "~Green" ;
+    };
+
+    MetricField CT_GREEN
+    {
+        HelpID = "cui:MetricField:ColorPicker:Green";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( CONTROL_AREA_X_METRIC , RGB_Y2 ) ;
+        Size = MAP_APPFONT ( METRIC_WIDTH , METRIC_HEIGHT ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 255 ;
+        Last = 255 ;
+    };
+
+    FixedText CT_BLUE
+    {
+        Pos = MAP_APPFONT ( CONTROL_AREA_X_LABEL , RGB_Y3+1 ) ;
+        Size = MAP_APPFONT ( LABEL_WIDTH , LABEL_HEIGHT ) ;
+        Text [ en-US ] = "~Blue" ;
+    };
+
+    MetricField CT_BLUE
+    {
+        HelpID = "cui:MetricField:ColorPicker:Blue";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( CONTROL_AREA_X_METRIC , RGB_Y3 ) ;
+        Size = MAP_APPFONT ( METRIC_WIDTH , METRIC_HEIGHT ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 255 ;
+        Last = 255 ;
+    };
+
+    FixedText CT_HEX
+    {
+        Pos = MAP_APPFONT ( CONTROL_AREA_X_LABEL , RGB_Y4+1 ) ;
+        Size = MAP_APPFONT ( LABEL_WIDTH , LABEL_HEIGHT ) ;
+        Text [ en-US ] = "Hex ~#" ;
+    };
+
+    Edit CT_HEX
+    {
+        HelpID = "cui:MetricField:ColorPicker:Hex";
+        Border = TRUE ;
+        Left = TRUE ;
+        Pos = MAP_APPFONT ( CONTROL_AREA_X_METRIC , RGB_Y4 ) ;
+        Size = MAP_APPFONT ( METRIC_WIDTH , METRIC_HEIGHT ) ;
+        TabStop = TRUE ;
+    };
+
+// -------------------------------------------------------------------------
+// HSB
+// -------------------------------------------------------------------------
+
+    FixedLine FL_HSB
+    {
+        Pos = MAP_APPFONT ( CONTROL_AREA_X , HSB_Y0 ) ;
+        Size = MAP_APPFONT ( LINE_WIDTH , LINE_HEIGHT ) ;
+        Text [ en-US ] = "HSB" ;
+    };
+
+    FixedText CT_HUE
+    {
+        Pos = MAP_APPFONT ( CONTROL_AREA_X_LABEL , HSB_Y1+1 ) ;
+        Size = MAP_APPFONT ( LABEL_WIDTH , LABEL_HEIGHT ) ;
+        Text [ en-US ] = "H~ue" ;
+    };
+
+    MetricField CT_HUE
+    {
+        HelpID = "cui:MetricField:ColorPicker:Hue";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( CONTROL_AREA_X_METRIC , HSB_Y1 ) ;
+        Size = MAP_APPFONT ( METRIC_WIDTH , METRIC_HEIGHT ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 360 ;
+        Last = 360 ;
+        Unit = FUNIT_CUSTOM ;
+    };
+
+    FixedText CT_SATURATION
+    {
+        Pos = MAP_APPFONT ( CONTROL_AREA_X_LABEL , HSB_Y2+1 ) ;
+        Size = MAP_APPFONT ( LABEL_WIDTH , LABEL_HEIGHT ) ;
+        Text [ en-US ] = "~Saturation" ;
+    };
+
+    MetricField CT_SATURATION
+    {
+        HelpID = "cui:MetricField:ColorPicker:Saturation";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( CONTROL_AREA_X_METRIC , HSB_Y2 ) ;
+        Size = MAP_APPFONT ( METRIC_WIDTH , METRIC_HEIGHT ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        Last = 100 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " %" ;
+    };
+
+    FixedText CT_BRIGHTNESS
+    {
+        Pos = MAP_APPFONT ( CONTROL_AREA_X_LABEL , HSB_Y3+1 ) ;
+        Size = MAP_APPFONT ( LABEL_WIDTH , LABEL_HEIGHT ) ;
+        Text [ en-US ] = "Bright~ness" ;
+    };
+
+    MetricField CT_BRIGHTNESS
+    {
+        HelpID = "cui:MetricField:ColorPicker:Brightness";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( CONTROL_AREA_X_METRIC , HSB_Y3 ) ;
+        Size = MAP_APPFONT ( METRIC_WIDTH , METRIC_HEIGHT ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        Last = 100 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " %" ;
+    };
+
+// -------------------------------------------------------------------------
+// CMYK
+// -------------------------------------------------------------------------
+
+    FixedLine FL_CMYK
+    {
+        Pos = MAP_APPFONT ( CONTROL_AREA_X , CMYK_Y0 ) ;
+        Size = MAP_APPFONT ( LINE_WIDTH , LINE_HEIGHT ) ;
+        Text [ en-US ] = "CMYK" ;
+    };
+
+    FixedText CT_CYAN
+    {
+        Pos = MAP_APPFONT ( CONTROL_AREA_X_LABEL , CMYK_Y1+1 ) ;
+        Size = MAP_APPFONT ( LABEL_WIDTH , LABEL_HEIGHT ) ;
+        Text [ en-US ] = "~Cyan" ;
+    };
+
+    MetricField CT_CYAN
+    {
+        HelpID = "cui:MetricField:ColorPicker:Cyan";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( CONTROL_AREA_X_METRIC , CMYK_Y1 ) ;
+        Size = MAP_APPFONT ( METRIC_WIDTH , METRIC_HEIGHT ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        Last = 100 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " %" ;
+    };
+
+    FixedText CT_MAGENTA
+    {
+        Pos = MAP_APPFONT ( CONTROL_AREA_X_LABEL , CMYK_Y2+1 ) ;
+        Size = MAP_APPFONT ( LABEL_WIDTH , LABEL_HEIGHT ) ;
+        Text [ en-US ] = "~Magenta" ;
+    };
+
+    MetricField CT_MAGENTA
+    {
+        HelpID = "cui:MetricField:ColorPicker:Magenta";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( CONTROL_AREA_X_METRIC , CMYK_Y2 ) ;
+        Size = MAP_APPFONT ( METRIC_WIDTH , METRIC_HEIGHT ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        Last = 100 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " %" ;
+    };
+
+    FixedText CT_YELLOW
+    {
+        Pos = MAP_APPFONT ( CONTROL_AREA_X_LABEL , CMYK_Y3+1 ) ;
+        Size = MAP_APPFONT ( LABEL_WIDTH , LABEL_HEIGHT ) ;
+        Text [ en-US ] = "~Yellow" ;
+    };
+
+    MetricField CT_YELLOW
+    {
+        HelpID = "cui:MetricField:ColorPicker:Yellow";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( CONTROL_AREA_X_METRIC , CMYK_Y3 ) ;
+        Size = MAP_APPFONT ( METRIC_WIDTH , METRIC_HEIGHT ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        Last = 100 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " %" ;
+    };
+
+    FixedText CT_KEY
+    {
+        Pos = MAP_APPFONT ( CONTROL_AREA_X_LABEL , CMYK_Y4+1 ) ;
+        Size = MAP_APPFONT ( LABEL_WIDTH , LABEL_HEIGHT ) ;
+        Text [ en-US ] = "~Key" ;
+    };
+
+    MetricField CT_KEY
+    {
+        HelpID = "cui:MetricField:ColorPicker:Key";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( CONTROL_AREA_X_METRIC , CMYK_Y4 ) ;
+        Size = MAP_APPFONT ( METRIC_WIDTH , METRIC_HEIGHT ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        Last = 100 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " %" ;
+    };
+
+    // ------------------------------------------------------
+    // bottom buttons
+    // ------------------------------------------------------
+
+    FixedLine FT_BOTTOMLINE
+    {
+        Pos = MAP_APPFONT ( 0 , BOTTOMLINE_Y ) ;
+        Size = MAP_APPFONT ( DLG_WIDTH , 8 ) ;
+    };
+
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 3 , BUTTON_LINE_Y ) ;
+        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        TabStop = TRUE ;
+    };
+
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( DLG_WIDTH - 3 - BUTTON_WIDTH - 3 - BUTTON_WIDTH, BUTTON_LINE_Y ) ;
+        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( DLG_WIDTH - 3 - BUTTON_WIDTH, BUTTON_LINE_Y ) ;
+        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        TabStop = TRUE ;
+    };
+};

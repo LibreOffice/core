@@ -27,6 +27,8 @@
 
 $(eval $(call gb_Library_Library,cui))
 
+$(eval $(call gb_Library_set_componentfile,cui,cui/util/cui))
+
 $(eval $(call gb_Library_add_precompiled_header,cui,$(SRCDIR)/cui/inc/pch/precompiled_cui))
 
 $(eval $(call gb_Library_set_include,cui,\
@@ -59,8 +61,10 @@ $(eval $(call gb_Library_add_linked_libs,cui,\
     jvmfwk \
     lng \
     sal \
+    sax \
     sb \
     sfx \
+    sot \
     svl \
     svt \
     svxcore \
@@ -88,6 +92,7 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/customize/macropg \
     cui/source/customize/selector \
     cui/source/dialogs/about \
+    cui/source/dialogs/colorpicker \
     cui/source/dialogs/commonlingui \
     cui/source/dialogs/cuicharmap \
     cui/source/dialogs/cuifmsearch \
@@ -200,6 +205,7 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/tabpages/tplneend \
     cui/source/tabpages/tpshadow \
     cui/source/tabpages/transfrm \
+    cui/source/uno/services \
 ))
 
 ifeq ($(GUI),WNT)

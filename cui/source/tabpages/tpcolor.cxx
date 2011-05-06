@@ -634,6 +634,7 @@ IMPL_LINK( SvxColorTabPage, ClickWorkOnHdl_Impl, void *, EMPTYARG )
         ConvertColorValues (aTmpColor, CM_RGB);
 
     pColorDlg->SetColor (aTmpColor);
+    pColorDlg->SetMode( svtools::ColorPickerMode_MODIFY );
 
     if( pColorDlg->Execute() == RET_OK )
     {
