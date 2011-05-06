@@ -54,6 +54,7 @@ my_components = \
     component/chart2/source/tools/charttools \
     component/chart2/source/view/chartview \
     component/comphelper/util/comphelp \
+    component/cui/util/cui \
     component/dbaccess/source/ext/adabas/adabasui \
     component/dbaccess/source/ext/macromigration/dbmm \
     component/dbaccess/source/filter/xml/dbaxml \
