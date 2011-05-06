@@ -123,18 +123,18 @@ SbError SbiDdeControl::Initiate( const String& rService, const String& rTopic,
     return 0;
 }
 
-SbError SbiDdeControl::Terminate( sal_Int16 nChannel )
+SbError SbiDdeControl::Terminate( sal_uInt16 nChannel )
 {
     if (!nChannel || nChannel > aConvList.size())
         return SbERR_DDE_NO_CHANNEL;
 
-    std::vector<DdeConnection*> iterConv = aConvList.begin()+nChannel-1;
+    DdeConnection* pConv = aConvList[nChannel-1];
 
-    if( *iterConv == DDE_FREECHANNEL )
+    if( pConv == DDE_FREECHANNEL )
         return SbERR_DDE_NO_CHANNEL;
 
-    delete *iterConv;
-    *iterConv = DDE_FREECHANNEL;
+    delete pConv;
+    pConv = DDE_FREECHANNEL;
 
     return 0L;
 }
@@ -142,7 +142,7 @@ SbError SbiDdeControl::Terminate( sal_Int16 nChannel )
 SbError SbiDdeControl::TerminateAll()
 {
     DdeConnection *conv;
-    for (sal_Int16 nChannel = 0; nChannel < aConvList.size(); ++nChannel)
+    for (sal_uInt16 nChannel = 0; nChannel < aConvList.size(); ++nChannel)
     {
         conv = aConvList[nChannel];
 
@@ -155,7 +155,7 @@ SbError SbiDdeControl::TerminateAll()
     return 0;
 }
 
-SbError SbiDdeControl::Request( sal_Int16 nChannel, const String& rItem, String& rResult )
+SbError SbiDdeControl::Request( sal_uInt16 nChannel, const String& rItem, String& rResult )
 {
     if (!nChannel || nChannel > aConvList.size())
         return SbERR_DDE_NO_CHANNEL;
@@ -172,14 +172,14 @@ SbError SbiDdeControl::Request( sal_Int16 nChannel, const String& rItem, String&
     return GetLastErr( pConv );
 }
 
-SbError SbiDdeControl::Execute( sal_Int16 nChannel, const String& rCommand )
+SbError SbiDdeControl::Execute( sal_uInt16 nChannel, const String& rCommand )
 {
     if (!nChannel || nChannel > aConvList.size())
         return SbERR_DDE_NO_CHANNEL;
 
     DdeConnection* pConv = aConvList[nChannel-1];
 
-    if( conv == DDE_FREECHANNEL )
+    if( pConv == DDE_FREECHANNEL )
         return SbERR_DDE_NO_CHANNEL;
 
     DdeExecute aRequest( *pConv, rCommand, 30000 );
@@ -187,7 +187,7 @@ SbError SbiDdeControl::Execute( sal_Int16 nChannel, const String& rCommand )
     return GetLastErr( pConv );
 }
 
-SbError SbiDdeControl::Poke( sal_Int16 nChannel, const String& rItem, const String& rData )
+SbError SbiDdeControl::Poke( sal_uInt16 nChannel, const String& rItem, const String& rData )
 {
     if (!nChannel || nChannel > aConvList.size())
         return SbERR_DDE_NO_CHANNEL;

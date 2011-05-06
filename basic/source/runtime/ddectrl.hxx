@@ -52,11 +52,11 @@ public:
 
     SbError Initiate( const String& rService, const String& rTopic,
                      sal_Int16& rnHandle );
-    SbError Terminate( sal_Int16 nChannel );
+    SbError Terminate( sal_uInt16 nChannel );
     SbError TerminateAll();
-    SbError Request( sal_Int16 nChannel, const String& rItem, String& rResult );
-    SbError Execute( sal_Int16 nChannel, const String& rCommand );
-    SbError Poke( sal_Int16 nChannel, const String& rItem, const String& rData );
+    SbError Request( sal_uInt16 nChannel, const String& rItem, String& rResult );
+    SbError Execute( sal_uInt16 nChannel, const String& rCommand );
+    SbError Poke( sal_uInt16 nChannel, const String& rItem, const String& rData );
 };
 
 #endif
