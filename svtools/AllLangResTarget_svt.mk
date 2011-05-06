@@ -51,7 +51,6 @@ $(eval $(call gb_SrsTarget_add_files,svt/res,\
     svtools/source/control/ctrltool.src \
     svtools/source/control/filectrl.src \
     svtools/source/dialogs/addresstemplate.src \
-    svtools/source/dialogs/colrdlg.src \
     svtools/source/dialogs/filedlg2.src \
     svtools/source/dialogs/formats.src \
     svtools/source/dialogs/prnsetup.src \

@@ -177,10 +177,14 @@ public:
     static ColorData    HSBtoRGB( sal_uInt16 nHue, sal_uInt16 nSat, sal_uInt16 nBri );
     void                RGBtoHSB( sal_uInt16& nHue, sal_uInt16& nSat, sal_uInt16& nBri ) const;
 
-    sal_Bool                operator==( const Color& rColor ) const
-                            { return (mnColor == rColor.mnColor); }
-    sal_Bool                operator!=( const Color& rColor ) const
-                            { return !(Color::operator==( rColor )); }
+    // the range for cymk is 0 to 1.0
+    static ColorData    CMYKtoRGB( double fCyan, double fMagenta, double fYellow, double fKey );
+    void                RGBtoCMYK( double& fCyan, double& fMagenta, double& fYellow, double& fKey );
+
+    sal_Bool            operator==( const Color& rColor ) const
+                        { return (mnColor == rColor.mnColor); }
+    sal_Bool            operator!=( const Color& rColor ) const
+                        { return !(Color::operator==( rColor )); }
 
     SvStream&           Read( SvStream& rIStm, sal_Bool bNewFormat = sal_True );
     SvStream&           Write( SvStream& rOStm, sal_Bool bNewFormat = sal_True );

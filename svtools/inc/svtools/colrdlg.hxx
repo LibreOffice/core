@@ -30,77 +30,37 @@
 #define _SV_COLRDLG_HXX
 
 #include "svtools/svtdllapi.h"
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/field.hxx>
-#include <svtools/colctrl.hxx>
+
+#include <tools/color.hxx>
+
+class Window;
 
 // ---------------
 // - ColorDialog -
 // ---------------
 
-class SVT_DLLPUBLIC SvColorDialog : public ModalDialog
+namespace svtools
 {
-private:
-    ColorMixingControl  maColMixCtrl;
-    PushButton      maBtn1;
-    PushButton      maBtn2;
-    //PushButton        maBtn3;
-    //PushButton        maBtn4;
-    //FixedText     maFtRGB;
-    SvColorControl  maCtlColor;
+    // SELECT is the default
+    enum ColorPickerMode { ColorPickerMode_SELECT = 0, ColorPickerMode_ADD = 1, ColorPickerMode_MODIFY = 2 };
+}
 
-    // CMYK controls.
-    FixedText       maFtCyan;
-    MetricField     maNumCyan;
-    FixedText       maFtMagenta;
-    MetricField     maNumMagenta;
-    FixedText       maFtYellow;
-    MetricField     maNumYellow;
-    FixedText       maFtKey;
-    MetricField     maNumKey;
-
-    // RGB controls.
-    FixedText       maFtRed;
-    NumericField    maNumRed;
-    FixedText       maFtGreen;
-    NumericField    maNumGreen;
-    FixedText       maFtBlue;
-    NumericField    maNumBlue;
-
-    // HSL controls.
-    FixedText       maFtHue;
-    NumericField    maNumHue;
-    FixedText       maFtSaturation;
-    NumericField    maNumSaturation;
-    FixedText       maFtLuminance;
-    NumericField    maNumLuminance;
-
-    ColorPreviewControl maCtlPreview;
-    ColorPreviewControl maCtlPreviewOld;
-
-    OKButton        maBtnOK;
-    CancelButton    maBtnCancel;
-    HelpButton      maBtnHelp;
-
-    Color           maColor;
-
-    SVT_DLLPRIVATE void         Initialize();
-
-    DECL_DLLPRIVATE_LINK( ColorModifyHdl, void * );
-    DECL_DLLPRIVATE_LINK( ClickBtnHdl, void * );
-    DECL_DLLPRIVATE_LINK( ClickMixCtrlHdl, void * );
-    DECL_DLLPRIVATE_LINK( SelectMixCtrlHdl, void * );
-
+class SVT_DLLPUBLIC SvColorDialog
+{
 public:
-                    SvColorDialog( Window* pParent );
-                    ~SvColorDialog();
+    SvColorDialog( ::Window* pParent );
 
     void            SetColor( const Color& rColor );
     const Color&    GetColor() const;
 
+    void            SetMode( sal_Int16 eMode );
+
     virtual short   Execute();
+
+private:
+    Window*    mpParent;
+    Color    maColor;
+    sal_Int16 meMode;
 };
 
 #endif  // _SV_COLRDLG_HXX

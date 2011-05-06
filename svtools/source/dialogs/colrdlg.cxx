@@ -29,300 +29,105 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include <svtools/svtdata.hxx>
-#include "colrdlg.hrc"
+#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/beans/XPropertyAccess.hpp>
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+
+#include <comphelper/processfactory.hxx>
+
+#include <toolkit/helper/vclunohelper.hxx>
+
 #include <svtools/colrdlg.hxx>
+
+using rtl::OUString;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::ui::dialogs;
 
 // ---------------
 // - ColorDialog -
 // ---------------
 
-SvColorDialog::SvColorDialog( Window* pWindow ) :
-        ModalDialog     ( pWindow, SvtResId( DLG_COLOR ) ),
-        maColMixCtrl    ( this, SvtResId( VAL_SET_COLOR ), 8, 8 ),
-        maBtn1          ( this, SvtResId( BTN_1 ) ),
-        maBtn2          ( this, SvtResId( BTN_2 ) ),
-        //maBtn3            ( this, SvtResId( BTN_3 ) ),
-        //maBtn4            ( this, SvtResId( BTN_4 ) ),
-        //maFtRGB           ( this, SvtResId( FT_RGB ) ),
-        maCtlColor      ( this, SvtResId( CTL_COLOR ) ),
-
-        maFtCyan        ( this, SvtResId( FT_CYAN ) ),
-        maNumCyan       ( this, SvtResId( NUM_CYAN ) ),
-        maFtMagenta     ( this, SvtResId( FT_MAGENTA ) ),
-        maNumMagenta    ( this, SvtResId( NUM_MAGENTA ) ),
-        maFtYellow      ( this, SvtResId( FT_YELLOW ) ),
-        maNumYellow     ( this, SvtResId( NUM_YELLOW ) ),
-        maFtKey         ( this, SvtResId( FT_KEY ) ),
-        maNumKey        ( this, SvtResId( NUM_KEY ) ),
-
-        maFtRed         ( this, SvtResId( FT_RED ) ),
-        maNumRed        ( this, SvtResId( NUM_RED ) ),
-        maFtGreen       ( this, SvtResId( FT_GREEN ) ),
-        maNumGreen      ( this, SvtResId( NUM_GREEN ) ),
-        maFtBlue        ( this, SvtResId( FT_BLUE ) ),
-        maNumBlue       ( this, SvtResId( NUM_BLUE ) ),
-
-        maFtHue         ( this, SvtResId( FT_HUE ) ),
-        maNumHue        ( this, SvtResId( NUM_HUE ) ),
-        maFtSaturation  ( this, SvtResId( FT_SATURATION ) ),
-        maNumSaturation ( this, SvtResId( NUM_SATURATION ) ),
-        maFtLuminance   ( this, SvtResId( FT_LUMINANCE ) ),
-        maNumLuminance  ( this, SvtResId( NUM_LUMINANCE ) ),
-
-        maCtlPreview    ( this, SvtResId( CTL_PREVIEW ) ),
-        maCtlPreviewOld ( this, SvtResId( CTL_PREVIEW_OLD ) ),
-
-        maBtnOK         ( this, SvtResId( BTN_OK ) ),
-        maBtnCancel     ( this, SvtResId( BTN_CANCEL ) ),
-        maBtnHelp       ( this, SvtResId( BTN_HELP ) )
-{
-    FreeResource();
-
-    maColMixCtrl.SetDoubleClickHdl( LINK( this, SvColorDialog, ClickMixCtrlHdl ) );
-    maColMixCtrl.SetSelectHdl( LINK( this, SvColorDialog, SelectMixCtrlHdl ) );
-
-    Link aLink( LINK( this, SvColorDialog, ColorModifyHdl ) );
-    maCtlColor.SetModifyHdl( aLink );
-
-    maNumRed.SetModifyHdl( aLink );
-    maNumGreen.SetModifyHdl( aLink );
-    maNumBlue.SetModifyHdl( aLink );
-
-    maNumCyan.SetModifyHdl( aLink );
-    maNumMagenta.SetModifyHdl( aLink );
-    maNumYellow.SetModifyHdl( aLink );
-    maNumKey.SetModifyHdl( aLink );
-
-    maNumHue.SetModifyHdl( aLink );
-    maNumSaturation.SetModifyHdl( aLink );
-    maNumLuminance.SetModifyHdl( aLink );
-
-    aLink = ( LINK( this, SvColorDialog, ClickBtnHdl ) );
-    maBtn1.SetClickHdl( aLink );
-    maBtn2.SetClickHdl( aLink );
-    //maBtn3.SetClickHdl( aLink );
-    //maBtn4.SetClickHdl( aLink );
-
-    maColMixCtrl.SetExtraSpacing( 0 );
-}
-
-
-// -----------------------------------------------------------------------
-SvColorDialog::~SvColorDialog()
+SvColorDialog::SvColorDialog( Window* pWindow )
+: mpParent( pWindow )
+, meMode( svtools::ColorPickerMode_SELECT )
 {
 }
 
 // -----------------------------------------------------------------------
-void SvColorDialog::Initialize()
-{
-    maNumRed.SetValue( maColor.GetRed() );
-    maNumGreen.SetValue( maColor.GetGreen() );
-    maNumBlue.SetValue( maColor.GetBlue() );
 
-    ColorCMYK aColorCMYK( maColor );
-
-    long aCyan    = (long) ( (double)aColorCMYK.GetCyan() * 100.0 / 255.0 + 0.5 );
-    long aMagenta = (long) ( (double)aColorCMYK.GetMagenta() * 100.0 / 255.0 + 0.5 );
-    long aYellow  = (long) ( (double)aColorCMYK.GetYellow() * 100.0 / 255.0 + 0.5 );
-    long aKey     = (long) ( (double)aColorCMYK.GetKey() * 100.0 / 255.0 + 0.5 );
-    maNumCyan.SetValue( aCyan );
-    maNumMagenta.SetValue( aMagenta );
-    maNumYellow.SetValue( aYellow );
-    maNumKey.SetValue( aKey );
-
-    ColorHSB aColorHSB( maColor );
-    maNumHue.SetValue( aColorHSB.GetHue() );
-    maNumSaturation.SetValue( aColorHSB.GetSat() );
-    maNumLuminance.SetValue( aColorHSB.GetBri() );
-
-    maCtlColor.SetColor( aColorHSB );
-
-    maColMixCtrl.SelectItem( 1 );
-
-    maCtlPreview.SetColor( maColor );
-    maCtlPreviewOld.SetColor( maColor );
-}
-
-// -----------------------------------------------------------------------
 void SvColorDialog::SetColor( const Color& rColor )
 {
     maColor = rColor;
 }
 
 // -----------------------------------------------------------------------
+
 const Color& SvColorDialog::GetColor() const
 {
-    return( maColor );
+    return maColor;
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( SvColorDialog, ColorModifyHdl, void *, p )
+
+void SvColorDialog::SetMode( sal_Int16 eMode )
 {
-    sal_uInt16 n = 0x00; // 1 == RGB, 2 == CMYK, 4 == HSB
-
-    if( p == &maCtlColor )
-    {
-        maColor = maCtlColor.GetColor();
-        maNumRed.SetValue( maColor.GetRed() );
-        maNumGreen.SetValue( maColor.GetGreen() );
-        maNumBlue.SetValue( maColor.GetBlue() );
-
-        n = 7;
-    }
-    else if( p == &maNumRed )
-    {
-        maColor.SetRed( (sal_uInt8)maNumRed.GetValue() );
-        maCtlColor.SetColor( maColor );
-        n = 6;
-    }
-    else if( p == &maNumGreen )
-    {
-        maColor.SetGreen( (sal_uInt8)maNumGreen.GetValue() );
-        maCtlColor.SetColor( maColor );
-        n = 6;
-    }
-    else if( p == &maNumBlue )
-    {
-        maColor.SetBlue( (sal_uInt8)maNumBlue.GetValue() );
-        maCtlColor.SetColor( maColor );
-        n = 6;
-    }
-    else if( p == &maNumHue ||
-             p == &maNumSaturation ||
-             p == &maNumLuminance )
-    {
-
-        ColorHSB aColorHSB( (sal_uInt16) maNumHue.GetValue(),
-                            (sal_uInt16) maNumSaturation.GetValue(),
-                            (sal_uInt16) maNumLuminance.GetValue() );
-        maCtlColor.SetColor( aColorHSB );
-        maColor = maCtlColor.GetColor();
-        n = 3;
-    }
-    else if( p == &maNumCyan ||
-             p == &maNumMagenta ||
-             p == &maNumYellow ||
-             p == &maNumKey )
-    {
-        long aCyan    = (long) ( (double)maNumCyan.GetValue() * 255.0 / 100.0 + 0.5 );
-        long aMagenta = (long) ( (double)maNumMagenta.GetValue() * 255.0 / 100.0 + 0.5 );
-        long aYellow  = (long) ( (double)maNumYellow.GetValue() * 255.0 / 100.0 + 0.5 );
-        long aKey     = (long) ( (double)maNumKey.GetValue() * 255.0 / 100.0 + 0.5 );
-
-        ColorCMYK aColorCMYK( (sal_uInt16) aCyan,
-                              (sal_uInt16) aMagenta,
-                              (sal_uInt16) aYellow,
-                              (sal_uInt16) aKey );
-        maColor = aColorCMYK.GetRGB();
-        maCtlColor.SetColor( maColor );
-        n = 5;
-    }
-
-    if( n & 1 ) // RGB setzen
-    {
-        maNumRed.SetValue( maColor.GetRed() );
-        maNumGreen.SetValue( maColor.GetGreen() );
-        maNumBlue.SetValue( maColor.GetBlue() );
-    }
-    if( n & 2 ) // CMYK setzen
-    {
-        ColorCMYK aColorCMYK( maColor );
-        long aCyan    = (long) ( (double)aColorCMYK.GetCyan() * 100.0 / 255.0 + 0.5 );
-        long aMagenta = (long) ( (double)aColorCMYK.GetMagenta() * 100.0 / 255.0 + 0.5 );
-        long aYellow  = (long) ( (double)aColorCMYK.GetYellow() * 100.0 / 255.0 + 0.5 );
-        long aKey     = (long) ( (double)aColorCMYK.GetKey() * 100.0 / 255.0 + 0.5 );
-        maNumCyan.SetValue( aCyan );
-        maNumMagenta.SetValue( aMagenta );
-        maNumYellow.SetValue( aYellow );
-        maNumKey.SetValue( aKey );
-    }
-    if( n & 4 ) // HSB setzen
-    {
-        ColorHSB aColorHSB( maColor );
-        maNumHue.SetValue( aColorHSB.GetHue() );
-        maNumSaturation.SetValue( aColorHSB.GetSat() );
-        maNumLuminance.SetValue( aColorHSB.GetBri() );
-    }
-
-    maCtlPreview.SetColor( maColor );
-
-    return 0;
+    meMode = eMode;
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( SvColorDialog, ClickBtnHdl, void *, p )
-{
-    /*
-    Color aColor = maCtlColor.GetColor();
-    if( p == &maBtn1 )
-        maColMixCtrl.SetColor( CMC_TOPLEFT, aColor );
-    if( p == &maBtn2 )
-        maColMixCtrl.SetColor( CMC_TOPRIGHT, aColor );
-    if( p == &maBtn3 )
-        maColMixCtrl.SetColor( CMC_BOTTOMLEFT, aColor );
-    if( p == &maBtn4 )
-        maColMixCtrl.SetColor( CMC_BOTTOMRIGHT, aColor );
-    */
 
-    if( p == &maBtn1 )
-    {
-        CMCPosition ePos = maColMixCtrl.GetCMCPosition();
-        if( ePos != CMC_OTHER )
-            maColMixCtrl.SetColor( ePos, maColor );
-    }
-    else if( p == &maBtn2 )
-    {
-        sal_uInt16 nPos = maColMixCtrl.GetSelectItemId();
-        maColor = maColMixCtrl.GetItemColor( nPos );
-        maCtlColor.SetColor( maColor );
-        ColorModifyHdl( &maCtlColor );
-    }
-
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-IMPL_LINK( SvColorDialog, ClickMixCtrlHdl, void *, EMPTYARG )
-{
-    sal_uInt16 nPos = maColMixCtrl.GetSelectItemId();
-    CMCPosition ePos = maColMixCtrl.GetCMCPosition();
-
-    if( ePos != CMC_OTHER )
-        maColMixCtrl.SetColor( ePos, maColor );
-    else
-    {
-        maColor = maColMixCtrl.GetItemColor( nPos );
-        maCtlColor.SetColor( maColor );
-        ColorModifyHdl( &maCtlColor );
-    }
-
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-IMPL_LINK( SvColorDialog, SelectMixCtrlHdl, void *, EMPTYARG )
-{
-    //sal_uInt16 nPos = maColMixCtrl.GetSelectItemId();
-    //maFtRGB.SetText( maColMixCtrl.GetItemText( nPos ) );
-
-    CMCPosition ePos = maColMixCtrl.GetCMCPosition();
-    if( ePos == CMC_OTHER )
-        maBtn1.Enable( sal_False );
-    else
-        maBtn1.Enable();
-
-    return 0;
-}
-
-// -----------------------------------------------------------------------
 short SvColorDialog::Execute()
 {
-    Initialize();
+    short ret = 0;
+    try
+    {
+        const OUString sColor( RTL_CONSTASCII_USTRINGPARAM( "Color" ) );
+        Reference< XMultiServiceFactory > xSMGR( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
 
-    short nRet = ModalDialog::Execute();
+        Reference< com::sun::star::awt::XWindow > xParent( VCLUnoHelper::GetInterface( mpParent ) );
 
-    return( nRet );
+        Sequence< Any > args(1);
+        args[0] = Any( xParent );
+
+        Reference< XExecutableDialog > xDialog( xSMGR->createInstanceWithArguments(::rtl::OUString::createFromAscii("com.sun.star.cui.ColorPicker"), args), UNO_QUERY_THROW );
+        Reference< XPropertyAccess > xPropertyAccess( xDialog, UNO_QUERY_THROW );
+
+        Sequence< PropertyValue > props( 2 );
+        props[0].Name = sColor;
+        props[0].Value <<= (sal_Int32) maColor.GetColor();
+        props[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Mode" ) );
+        props[1].Value <<= (sal_Int16) meMode;
+
+        xPropertyAccess->setPropertyValues( props );
+
+        ret = xDialog->execute();
+
+        if( ret )
+        {
+            props = xPropertyAccess->getPropertyValues();
+            for( sal_Int32 n = 0; n < props.getLength(); n++ )
+            {
+                if( props[n].Name.equals( sColor ) )
+                {
+                    sal_Int32 nColor = 0;
+                    if( props[n].Value >>= nColor )
+                    {
+                        maColor.SetColor( nColor );
+                    }
+
+                }
+            }
+        }
+    }
+    catch(Exception&)
+    {
+        OSL_ASSERT(false);
+    }
+
+    return ret;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

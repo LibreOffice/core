@@ -261,6 +261,53 @@ ColorData Color::HSBtoRGB( sal_uInt16 nHue, sal_uInt16 nSat, sal_uInt16 nBri )
 
 // -----------------------------------------------------------------------
 
+// CMYK values from 0 to 1
+ColorData Color::CMYKtoRGB( double fCyan, double fMagenta, double fYellow, double fKey )
+{
+    fCyan = (fCyan * ( 1.0 - fKey )) + fKey;
+    fMagenta = (fMagenta * ( 1.0 - fKey )) + fKey;
+    fYellow = (fYellow * ( 1.0 - fKey )) + fKey;
+
+    sal_uInt8 nRed = static_cast< sal_uInt8 >( std::max( std::min( ( 1.0 - fCyan ) * 255.0, 255.0), 0.0 ) );
+    sal_uInt8 nGreen = static_cast< sal_uInt8 >( std::max( std::min( ( 1.0 - fMagenta ) * 255.0, 255.0), 0.0 ) );
+    sal_uInt8 nBlue = static_cast< sal_uInt8 >( std::max( std::min( ( 1.0 - fYellow ) * 255.0, 255.0), 0.0 ) );
+
+    return RGB_COLORDATA( nRed, nGreen, nBlue );
+}
+
+// -----------------------------------------------------------------------
+
+// RGB values from 0 to 255
+// CMY results from 0 to 1
+void Color::RGBtoCMYK( double& fCyan, double& fMagenta, double& fYellow, double& fKey )
+{
+    fCyan = 1 - ( GetRed() / 255.0 );
+    fMagenta = 1 - ( GetGreen() / 255.0 );
+    fYellow = 1 - ( GetBlue() / 255.0 );
+
+    //CMYK and CMY values from 0 to 1
+    fKey = 1.0;
+    if( fCyan < fKey ) fKey = fCyan;
+    if( fMagenta < fKey ) fKey = fMagenta;
+    if( fYellow < fKey ) fKey = fYellow;
+
+    if ( fKey == 1.0 )
+    {
+       //Black
+       fCyan = 0.0;
+       fMagenta = 0.0;
+       fYellow = 0.0;
+    }
+    else
+    {
+       fCyan = ( fCyan - fKey ) / ( 1.0 - fKey );
+       fMagenta = ( fMagenta - fKey ) / ( 1.0 - fKey );
+       fYellow = ( fYellow - fKey ) / ( 1.0 - fKey );
+    }
+}
+
+// -----------------------------------------------------------------------
+
 SvStream& Color::Read( SvStream& rIStm, sal_Bool bNewFormat )
 {
     if ( bNewFormat )
