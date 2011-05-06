@@ -59,18 +59,19 @@
 
 #include <sax/tools/converter.hxx>
 
+#include <basegfx/color/bcolortools.hxx>
+
 #include "dialmgr.hxx"
 #include "colorpicker.hrc"
 
 #include <cmath>
-#include <limits>
 
 using rtl::OUString;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-//using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::beans;
+using namespace ::basegfx;
 
 namespace cui
 {
@@ -92,87 +93,24 @@ const sal_uInt16 COLORCOMP_YELLOW  = 0x41;
 const sal_uInt16 COLORCOMP_MAGENTA = 0x42;
 const sal_uInt16 COLORCOMP_KEY     = 0x43;
 
-// -----------------------------------------------------------------------
-// color space conversion
-// RGB  = 0 .. 1
-// H    = 0 .. 360
-// SV   = 0 .. 1
-// CMYK = 0 .. 1
-// -----------------------------------------------------------------------
-
-static bool equals( double a, double b )
-{
-    return (a == b) || (abs(a-b) < std::numeric_limits<double>::epsilon());
-}
+// color space conversion helpers
 
 static void RGBtoHSV( double dR, double dG, double dB, double& dH, double& dS, double& dV )
 {
-    // Brightness = max(R, G, B);
-    dV = std::max( dR, std::max( dG, dB ) );
+    BColor result = tools::rgb2hsv( BColor( dR, dG, dB ) );
 
-    double cDelta = dV - std::min( dR, std::min( dG, dB ) );
-
-    // Saturation = max - min / max
-    if( dV > 0 )
-        dS = cDelta / dV;
-    else
-        dS = 0.0;
-
-    dH = 0.0;
-
-    if( !equals( dS, 0.0 ) )
-    {
-        if( equals( dR, dV ) )
-        {
-            dH = ( dG - dB ) / cDelta;
-        }
-        else if( equals( dG, dV ) )
-        {
-            dH = 2.0 + ( dB - dR ) / cDelta;
-        }
-        else if ( equals( dB, dV ) )
-        {
-            dH = 4.0 + ( dR - dG ) / cDelta;
-        }
-        dH *= 60.0;
-
-        if( dH < 0.0 )
-            dH += 360.0;
-    }
+    dH = result.getX();
+    dS = result.getY();
+    dV = result.getZ();
 }
 
 static void HSVtoRGB(double dH, double dS, double dV, double& dR, double& dG, double& dB )
 {
-    if( equals( dS, 0.0 ) )
-    {
-        dR = dV;
-        dG = dV;
-        dB = dV;
-    }
-    else
-    {
-        if( equals( dH, 360.0 ) )
-            dH = 0.0;
-        else
-            dH /= 60.0;
+    BColor result = tools::hsv2rgb( BColor( dH, dS, dV ) );
 
-        sal_uInt16 n = (sal_uInt16) dH;
-        double f = dH - n;
-
-        double a = dV * ( 1.0 - dS );
-        double b = dV * ( 1.0 - ( dS * f ) );
-        double c = dV * ( 1.0 - ( dS * ( 1.0 - f ) ) );
-
-        switch( n )
-        {
-            case 0: dR = dV; dG = c;  dB = a;  break;
-            case 1: dR = b;  dG = dV; dB = a;  break;
-            case 2: dR = a;  dG = dV; dB = c;  break;
-            case 3: dR = a;  dG = b;  dB = dV; break;
-            case 4: dR = c;  dG = a;  dB = dV; break;
-            case 5: dR = dV; dG = a;  dB = b;  break;
-        }
-    }
+    dR = result.getRed();
+    dG = result.getGreen();
+    dB = result.getBlue();
 }
 
 // -----------------------------------------------------------------------
@@ -204,7 +142,7 @@ static void RGBtoCMYK( double dR, double dG, double dB, double& fCyan, double& f
     if( fMagenta < fKey ) fKey = fMagenta;
     if( fYellow < fKey ) fKey = fYellow;
 
-    if( equals( fKey, 1.0 ) )
+    if( fKey >= 1.0 )
     {
         //Black
        fCyan = 0.0;
@@ -1289,9 +1227,9 @@ ColorPickerDialog::ColorPickerDialog( Window* pParent, sal_Int32 nColor, sal_Int
 
 // --------------------------------------------------------------------
 
-static int toInt( double dValue, double bRange )
+static int toInt( double dValue, double dRange )
 {
-    return static_cast< int >( std::floor((dValue * bRange) + 0.5 ) );
+    return static_cast< int >( std::floor((dValue * dRange) + 0.5 ) );
 }
 
 sal_Int32 ColorPickerDialog::GetColor() const
