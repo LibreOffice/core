@@ -38,7 +38,7 @@
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>
 
-// die Tabelle muss noch sortiert werden
+// Table has still to be sorted
 struct HTML_TokenEntry
 {
     union
@@ -49,7 +49,7 @@ struct HTML_TokenEntry
     int nToken;
 };
 
-// Flag: RTF-Token Tabelle wurde schon sortiert
+// Flag: RTF token table has already been sorted
 static int bSortKeyWords = sal_False;
 
 static HTML_TokenEntry aHTMLTokenTab[] = {
@@ -264,8 +264,6 @@ int GetHTMLToken( const String& rName )
     return nRet;
 }
 
-/**/
-
 struct HTML_CharEntry
 {
     union
@@ -276,7 +274,7 @@ struct HTML_CharEntry
     sal_Unicode cChar;
 };
 
-// Flag: RTF-Token Tabelle wurde schon sortiert
+// Flag: RTF token table has already been sorted
 static int bSortCharKeyWords = sal_False;
 
 static HTML_CharEntry aHTMLCharNameTab[] = {
@@ -350,7 +348,7 @@ static HTML_CharEntry aHTMLCharNameTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_S_thorn},     254},
     {{OOO_STRING_SVTOOLS_HTML_S_yuml},      255},
 
-// Sonderzeichen
+// special characters
     {{OOO_STRING_SVTOOLS_HTML_S_acute},     180},
     {{OOO_STRING_SVTOOLS_HTML_S_brvbar},    166},
     {{OOO_STRING_SVTOOLS_HTML_S_cedil},      184},
@@ -384,7 +382,7 @@ static HTML_CharEntry aHTMLCharNameTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_S_uml},        168},
     {{OOO_STRING_SVTOOLS_HTML_S_yen},        165},
 
-// Netscape kennt noch ein paar in Grossbuchstaben ...
+// Netscape has some in upper case...
     {{OOO_STRING_SVTOOLS_HTML_C_LT},             60},
     {{OOO_STRING_SVTOOLS_HTML_C_GT},             62},
     {{OOO_STRING_SVTOOLS_HTML_C_AMP},        38},
@@ -392,7 +390,7 @@ static HTML_CharEntry aHTMLCharNameTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_S_COPY},      169},
     {{OOO_STRING_SVTOOLS_HTML_S_REG},       174},
 
-// Sonderzeichen, die zu Tokens konvertiert werden !!!
+// special characters, which will be converted to tokens !!!
     {{OOO_STRING_SVTOOLS_HTML_S_nbsp},      1},
     {{OOO_STRING_SVTOOLS_HTML_S_shy},       2},
 
@@ -612,14 +610,12 @@ sal_Unicode GetHTMLCharName( const String& rName )
     return cRet;
 }
 
-/**/
-
-// Flag: Optionen-Tabelle wurde schon sortiert
+// Flag: Options table has already been sorted
 static int bSortOptionKeyWords = sal_False;
 
 static HTML_TokenEntry aHTMLOptionTab[] = {
 
-// Attribute ohne Wert
+// Attributes without value
     {{OOO_STRING_SVTOOLS_HTML_O_box},       HTML_O_BOX},
     {{OOO_STRING_SVTOOLS_HTML_O_checked},   HTML_O_CHECKED},
     {{OOO_STRING_SVTOOLS_HTML_O_compact},   HTML_O_COMPACT},
@@ -641,7 +637,7 @@ static HTML_TokenEntry aHTMLOptionTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_O_selected},      HTML_O_SELECTED},
     {{OOO_STRING_SVTOOLS_HTML_O_shapes},    HTML_O_SHAPES},
 
-// Attribute mit einem String als Wert
+// Attributes with a string value
     {{OOO_STRING_SVTOOLS_HTML_O_above},     HTML_O_ABOVE},
     {{OOO_STRING_SVTOOLS_HTML_O_accept},        HTML_O_ACCEPT},
     {{OOO_STRING_SVTOOLS_HTML_O_accesskey}, HTML_O_ACCESSKEY},
@@ -682,14 +678,14 @@ static HTML_TokenEntry aHTMLOptionTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_O_sdlibrary}, HTML_O_SDLIBRARY},
     {{OOO_STRING_SVTOOLS_HTML_O_sdmodule},  HTML_O_SDMODULE},
 
-// Attribute mit einem SGML-Identifier als Wert
+// Attributes with a SGML identifier value
     {{OOO_STRING_SVTOOLS_HTML_O_from},      HTML_O_FROM},
     {{OOO_STRING_SVTOOLS_HTML_O_id},            HTML_O_ID},
     {{OOO_STRING_SVTOOLS_HTML_O_target},        HTML_O_TARGET}, // Netscape 2.0
     {{OOO_STRING_SVTOOLS_HTML_O_to},            HTML_O_TO},
     {{OOO_STRING_SVTOOLS_HTML_O_until},     HTML_O_UNTIL},
 
-// Attribute mit einem URI als Wert
+// Attributes with an URI value
     {{OOO_STRING_SVTOOLS_HTML_O_action},        HTML_O_ACTION},
     {{OOO_STRING_SVTOOLS_HTML_O_archive},       HTML_O_ARCHIVE},
     {{OOO_STRING_SVTOOLS_HTML_O_background},    HTML_O_BACKGROUND},
@@ -705,11 +701,11 @@ static HTML_TokenEntry aHTMLOptionTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_O_src},       HTML_O_SRC},
     {{OOO_STRING_SVTOOLS_HTML_O_usemap},        HTML_O_USEMAP}, // Netscape 2.0
 
-// Attribute mit Entity-Namen als Wert
+// Attributes with entity name value
     {{OOO_STRING_SVTOOLS_HTML_O_dingbat},   HTML_O_DINGBAT},
     {{OOO_STRING_SVTOOLS_HTML_O_sym},       HTML_O_SYM},
 
-// Attribute mit einer Farbe als Wert (alle Netscape)
+// Attributes with a color value (all Netscape versions)
     {{OOO_STRING_SVTOOLS_HTML_O_alink},     HTML_O_ALINK},
     {{OOO_STRING_SVTOOLS_HTML_O_bgcolor},   HTML_O_BGCOLOR},
     {{OOO_STRING_SVTOOLS_HTML_O_bordercolor}, HTML_O_BORDERCOLOR}, // IExplorer 2.0
@@ -720,7 +716,7 @@ static HTML_TokenEntry aHTMLOptionTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_O_text},      HTML_O_TEXT},
     {{OOO_STRING_SVTOOLS_HTML_O_vlink},     HTML_O_VLINK},
 
-// Attribute mit einem numerischen Wert
+// Attributes with a numerical value
     {{OOO_STRING_SVTOOLS_HTML_O_border},        HTML_O_BORDER},
     {{OOO_STRING_SVTOOLS_HTML_O_cellspacing},HTML_O_CELLSPACING}, // HTML 3 Table Model Draft
     {{OOO_STRING_SVTOOLS_HTML_O_cellpadding},HTML_O_CELLPADDING}, // HTML 3 Table Model Draft
@@ -758,7 +754,7 @@ static HTML_TokenEntry aHTMLOptionTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_O_y},         HTML_O_Y},
     {{OOO_STRING_SVTOOLS_HTML_O_zindex},        HTML_O_ZINDEX},
 
-// Attribute mit Enum-Werten
+// Attributes with enum values
     {{OOO_STRING_SVTOOLS_HTML_O_bgproperties}, HTML_O_BGPROPERTIES}, // IExplorer 2.0
     {{OOO_STRING_SVTOOLS_HTML_O_behavior},  HTML_O_BEHAVIOR}, // IExplorer 2.0
     {{OOO_STRING_SVTOOLS_HTML_O_clear},     HTML_O_CLEAR},
@@ -781,7 +777,7 @@ static HTML_TokenEntry aHTMLOptionTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_O_wrap},      HTML_O_WRAP},
     {{OOO_STRING_SVTOOLS_HTML_O_visibility},    HTML_O_VISIBILITY},
 
-// Attribute mit Script-Code als Wert
+// Attributes with script code value
     {{OOO_STRING_SVTOOLS_HTML_O_onblur},        HTML_O_ONBLUR}, // JavaScript
     {{OOO_STRING_SVTOOLS_HTML_O_onchange},  HTML_O_ONCHANGE}, // JavaScript
     {{OOO_STRING_SVTOOLS_HTML_O_onclick},   HTML_O_ONCLICK}, // JavaScript
@@ -810,7 +806,7 @@ static HTML_TokenEntry aHTMLOptionTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_O_SDonerror},         HTML_O_SDONERROR}, // StarBasic
     {{OOO_STRING_SVTOOLS_HTML_O_SDonmouseout},  HTML_O_SDONMOUSEOUT}, // StarBasic
 
-// Attribute mit Kontext-abhaengigen Werten
+// Attributes with context sensitive values
     {{OOO_STRING_SVTOOLS_HTML_O_align},     HTML_O_ALIGN},
     {{OOO_STRING_SVTOOLS_HTML_O_cols},      HTML_O_COLS}, // Netscape 2.0 vs HTML 2.0
     {{OOO_STRING_SVTOOLS_HTML_O_rows},      HTML_O_ROWS}, // Netscape 2.0 vs HTML 2.0
@@ -845,9 +841,7 @@ int GetHTMLOption( const String& rName )
     return nRet;
 }
 
-/**/
 
-// Flag: Farb-Tabelle wurde schon sortiert
 struct HTML_ColorEntry
 {
     union
@@ -858,15 +852,14 @@ struct HTML_ColorEntry
     sal_uLong nColor;
 };
 
+// Flag: color table has already been sorted
 static int bSortColorKeyWords = sal_False;
 
 #define HTML_NO_COLOR 0xffffffffUL
 
-// die Farbnamen werden nicht exportiert
-// Sie stammen aus "http://www.uio.no/~mnbjerke/colors_w.html"
-// und scheinen im Gegensatz zu denen aus
-// "http://www.infi.net/wwwimages/colorindex.html"
-// zu stimmen
+// Color names are not exported (source:
+// "http://www.uio.no/~mnbjerke/colors_w.html")
+// "http://www.infi.net/wwwimages/colorindex.html" seem to be buggy.
 static HTML_ColorEntry aHTMLColorNameTab[] = {
     { { "ALICEBLUE" }, 0x00f0f8ffUL },
     { { "ANTIQUEWHITE" }, 0x00faebd7UL },
