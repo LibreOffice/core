@@ -344,18 +344,12 @@ bool HexColorControl::ImplProcessKeyInput( const KeyEvent& rKEv )
     if( rKeyCode.GetGroup() == KEYGROUP_ALPHA && !rKeyCode.IsMod1() && !rKeyCode.IsMod2() )
     {
         if( (rKeyCode.GetCode() < KEY_A) || (rKeyCode.GetCode() > KEY_F) )
-        {
-            Sound::Beep();
             return true;
-        }
     }
     else if( rKeyCode.GetGroup() == KEYGROUP_NUM )
     {
         if( rKeyCode.IsShift() )
-        {
-            Sound::Beep();
             return true;
-        }
     }
     return false;
 }
