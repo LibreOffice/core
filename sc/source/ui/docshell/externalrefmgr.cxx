@@ -74,6 +74,7 @@ using ::rtl::OUString;
 using ::std::vector;
 using ::std::find;
 using ::std::find_if;
+using ::std::remove_if;
 using ::std::distance;
 using ::std::pair;
 using ::std::list;
@@ -85,7 +86,7 @@ using namespace formula;
 
 namespace {
 
-class TabNameSearchPredicate : public unary_function<bool, ScExternalRefCache::TableName>
+class TabNameSearchPredicate : public unary_function<ScExternalRefCache::TableName, bool>
 {
 public:
     explicit TabNameSearchPredicate(const String& rSearchName) :
@@ -199,6 +200,35 @@ public:
     }
 private:
     ScDocument* mpDoc;
+};
+
+/**
+ * Predicate used to determine whether a named range contains an external
+ * reference to a particular document.
+ */
+class RangeNameWithExtRef : unary_function<ScRangeData, bool>
+{
+    sal_uInt16 mnFileId;
+public:
+    RangeNameWithExtRef(sal_uInt16 nFileId) : mnFileId(nFileId) {}
+    bool operator() (ScRangeData& rData) const
+    {
+        ScTokenArray* pArray = rData.GetCode();
+        if (!pArray)
+            return false;
+
+        pArray->Reset();
+        ScToken* p = static_cast<ScToken*>(pArray->GetNextReference());
+        for (; p; p = static_cast<ScToken*>(pArray->GetNextReference()))
+        {
+            if (!p->IsExternalRef())
+                continue;
+
+            if (p->GetIndex() == mnFileId)
+                return true;
+        }
+        return false;
+    }
 };
 
 }
@@ -2391,6 +2421,22 @@ void ScExternalRefManager::breakLink(sal_uInt16 nFileId)
         // the original container.
         RefCellSet aSet = itrRefs->second;
         for_each(aSet.begin(), aSet.end(), ConvertFormulaToStatic(mpDoc));
+
+        // Remove all named ranges that reference this document.
+
+        // Global named ranges.
+        ScRangeName* pRanges = mpDoc->GetRangeName();
+        if (pRanges)
+            remove_if(pRanges->begin(), pRanges->end(), RangeNameWithExtRef(nFileId));
+
+        // Sheet-local named ranges.
+        for (SCTAB i = 0, n = mpDoc->GetTableCount(); i < n; ++i)
+        {
+            pRanges = mpDoc->GetRangeName(i);
+            if (pRanges)
+                remove_if(pRanges->begin(), pRanges->end(), RangeNameWithExtRef(nFileId));
+        }
+
         maRefCells.erase(nFileId);
     }
 
