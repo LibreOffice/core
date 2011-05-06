@@ -28,7 +28,6 @@ mkdir -p $RPM_BUILD_ROOT
 export DESTDIR=$RPM_BUILD_ROOT
 export KDEMAINDIR=/usr
 export GNOMEDIR=/usr
-export GNOME_MIME_THEME=hicolor
 
 ./create_tree.sh
 
@@ -64,6 +63,55 @@ fi
 if [ -x /usr/bin/update-mime-database ]; then
   update-mime-database /usr/share/mime
 fi
+
+# add symlinks so that nautilus can identify the mime-icons 
+# not strictly freedesktop-stuff but there is no common naming scheme yet.
+# One proposal is "mime-application:vnd.oasis.opendocument.spreadsheet.png"
+# for e.g. application/vnd.oasis.opendocument.spreadsheet
+link_target_root="/opt/gnome/share/icons/hicolor"
+
+if [ ! -d "${link_target_root}" ]
+then
+  link_target_root="/opt/gnome/share/icons/gnome"
+fi
+
+for subdir in `cd ${link_target_root}; ls -d *`
+do
+  link_dir="/opt/gnome/share/icons/hicolor/$subdir/mimetypes"
+  link_target_dir="../../../gnome/$subdir/mimetypes"
+
+  test -d ${link_dir}/${link_target_dir} || continue;
+
+  if [ ! -d "${link_dir}" ]
+  then
+    mkdir -p "${link_dir}"
+  fi
+
+  icon=%iconprefix-drawing.png;                     test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.draw.png
+  icon=%iconprefix-drawing-template.png;            test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.draw.template.png
+  icon=%iconprefix-formula.png;                     test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.math.png
+  icon=%iconprefix-master-document.png;             test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.writer.global.png
+  icon=%iconprefix-oasis-database.png;              test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.base.png
+  icon=%iconprefix-oasis-database.png;              test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.database.png
+  icon=%iconprefix-oasis-drawing.png;               test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.graphics.png
+  icon=%iconprefix-oasis-drawing-template.png;      test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.graphics-template.png
+  icon=%iconprefix-oasis-formula.png;               test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.formula.png
+  icon=%iconprefix-oasis-master-document.png;       test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.text-master.png
+  icon=%iconprefix-oasis-presentation.png;          test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.presentation.png
+  icon=%iconprefix-oasis-presentation-template.png; test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.presentation-template.png
+  icon=%iconprefix-oasis-spreadsheet.png;           test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.spreadsheet.png
+  icon=%iconprefix-oasis-spreadsheet-template.png;  test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.spreadsheet-template.png
+  icon=%iconprefix-oasis-text.png;                  test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.text.png
+  icon=%iconprefix-oasis-text-template.png;         test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.text-template.png
+  icon=%iconprefix-oasis-web-template.png;          test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.text-web.png
+  icon=%iconprefix-presentation.png;                test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.impress.png
+  icon=%iconprefix-presentation-template.png;       test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.impress.template.png
+  icon=%iconprefix-spreadsheet.png;                 test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.calc.png
+  icon=%iconprefix-spreadsheet-template.png;        test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.calc.template.png
+  icon=%iconprefix-text.png;                        test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.writer.png
+  icon=%iconprefix-text-template.png;               test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.writer.template.png
+  icon=%iconprefix-extension.png;                   test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.openofficeorg.extension.png
+done
 
 # run only on first install, since postun is run when updating
 # post would be run before the old files are removed 
