@@ -2907,7 +2907,7 @@ else
          AC_LANG_POP([C++])
       else
          AC_MSG_RESULT([no])
-         AC_MSG_NOTICE([ccache version $CCACHE_VERSION not accepted. See description for --enable-ccache-skip])
+         AC_MSG_NOTICE([ccache version $CCACHE_VERSION not accepted. ccache will not be used.])
       fi
    fi
 fi
