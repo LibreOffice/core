@@ -274,13 +274,14 @@ for theme in gnome hicolor locolor; do
     true
   fi
 done
+echo  unixfilename=%unixfilename
 
 %files
-%if %unixfilename != libreoffice
+%if "%unixfilename" != "libreoffice%productversion"
 # compat symlinks
 %attr(0755,root,root) /opt/%unixfilename
-%attr(0755,root,root) /usr/bin/libreoffice
-%attr(0755,root,root) /usr/bin/libreoffice-printeradmin
+%attr(0755,root,root) /usr/bin/libreoffice%productversion
+%attr(0755,root,root) /usr/bin/libreoffice%productversion-printeradmin
 %endif
 %attr(0755,root,root) %verify(not size md5) /usr/bin/%unixfilename
 %attr(0755,root,root) /usr/bin/%unixfilename-printeradmin
