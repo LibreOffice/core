@@ -110,8 +110,8 @@ if test "${PREFIX}" != libreoffice${PRODUCTVERSION} ; then
 fi
 
 mkdir -p ${DESTDIR}/usr/share/mime/packages
-cp openoffice.org.xml ${DESTDIR}/usr/share/mime/packages/libreoffice.xml
-chmod 0644 ${DESTDIR}/usr/share/mime/packages/libreoffice.xml
+cp openoffice.org.xml ${DESTDIR}/usr/share/mime/packages/libreoffice${PRODUCTVERSION}.xml
+chmod 0644 ${DESTDIR}/usr/share/mime/packages/libreoffice${PRODUCTVERSION}.xml
 
 mkdir -p ${DESTDIR}/usr/share/applications
 for i in `cat launcherlist`; do
