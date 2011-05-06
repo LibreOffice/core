@@ -36,6 +36,8 @@
 #include "DatabaseDataProvider.hxx"
 #include "dbadllapi.hxx"
 
+#include <../dataaccess/databasecontext.hxx>
+
 /********************************************************************************************/
 
 using namespace ::com::sun::star::uno;
@@ -45,7 +47,6 @@ using namespace ::com::sun::star::registry;
 //***************************************************************************************
 //
 // registry functions
-extern "C" void SAL_CALL createRegistryInfo_ODatabaseContext();
 extern "C" void SAL_CALL createRegistryInfo_OCommandDefinition();
 extern "C" void SAL_CALL createRegistryInfo_OComponentDefinition();
 extern "C" void SAL_CALL createRegistryInfo_ORowSet();
@@ -56,8 +57,20 @@ extern "C" void SAL_CALL createRegistryInfo_DataAccessDescriptorFactory();
 namespace dba{
 //--------------------------------------------------------------------------
     ::cppu::ImplementationEntry entries[] = {
-        { &::dbaccess::DatabaseDataProvider::Create, &::dbaccess::DatabaseDataProvider::getImplementationName_Static, &::dbaccess::DatabaseDataProvider::getSupportedServiceNames_Static,
-            &cppu::createSingleComponentFactory, 0, 0 },
+        {
+            &::dbaccess::DatabaseDataProvider::Create,
+            &::dbaccess::DatabaseDataProvider::getImplementationName_Static,
+            &::dbaccess::DatabaseDataProvider::getSupportedServiceNames_Static,
+            &cppu::createSingleComponentFactory, 0, 0
+        },
+
+        {
+            &dbaccess::ODatabaseContext::Create,
+            &dbaccess::ODatabaseContext::getImplementationName_static,
+            &dbaccess::ODatabaseContext::getSupportedServiceNames_static,
+            &cppu::createOneInstanceComponentFactory, 0, 0
+        },
+
         { 0, 0, 0, 0, 0, 0 }
     };
 }
@@ -72,7 +85,6 @@ extern "C" void SAL_CALL createRegistryInfo_DBA()
     static sal_Bool bInit = sal_False;
     if (!bInit)
     {
-        createRegistryInfo_ODatabaseContext();
         createRegistryInfo_OCommandDefinition();
         createRegistryInfo_OComponentDefinition();
         createRegistryInfo_ORowSet();

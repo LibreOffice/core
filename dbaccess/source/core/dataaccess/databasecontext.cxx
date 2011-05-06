@@ -102,11 +102,6 @@ using ::com::sun::star::ucb::IOErrorCode_NOT_EXISTING;
 using ::com::sun::star::ucb::IOErrorCode_NOT_EXISTING_PATH;
 
 
-extern "C" void SAL_CALL createRegistryInfo_ODatabaseContext()
-{
-    static ::dba::OLegacySingletonRegistration< ::dbaccess::ODatabaseContext > aODatabaseContext_AutoRegistration;
-}
-
 namespace dbaccess
 {
 
