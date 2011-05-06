@@ -640,7 +640,6 @@ CreateElementMapPointer </xsl:text>
     <xsl:text>    }&#xa;</xsl:text>
   </xsl:if>
   <xsl:if test="string-length($switchblock2) > 0">
-    <xsl:text>    OOXMLFastContextHandlerValue * pValueHandler = dynamic_cast&lt;OOXMLFastContextHandlerValue *&gt;(pHandler);&#xa;</xsl:text>
     <xsl:text>    switch (nDefine)&#xa;</xsl:text>
     <xsl:text>    {&#xa;</xsl:text>
     <xsl:value-of select="$switchblock2"/>
