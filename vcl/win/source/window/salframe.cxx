@@ -3529,6 +3529,10 @@ static long ImplHandleWheelMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
         {
             aWheelEvt.mnScrollLines = aSalShlData.mnWheelScrollChars;
             aWheelEvt.mbHorz        = TRUE;
+
+            // fdo#36380 - seems horiz scrolling has swapped direction
+            aWheelEvt.mnDelta *= -1;
+            aWheelEvt.mnNotchDelta *= -1;
         }
 
         if ( nWinModCode & MK_SHIFT )
