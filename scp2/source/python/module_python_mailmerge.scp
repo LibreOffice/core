@@ -35,5 +35,11 @@ File gid_File_Pymailmerge
     Name = "mailmerge.py";
     Styles = (PACKED);
 End
+File gid_File_Pymailmerge_msgbox
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "msgbox.py";
+    Styles = (PACKED);
+End
 #endif
 #endif

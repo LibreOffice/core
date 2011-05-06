@@ -670,6 +670,7 @@ Module gid_Module_Root_Files_6
     gid_File_Share_Registry_Main_Xcd,
     gid_File_Share_Registry_Forcedefault_Xcd,
 	gid_File_Pymailmerge,
+	gid_File_Pymailmerge_msgbox,
     gid_File_Xsl_Common_Measure_Conversion,
 	gid_File_Xsl_Common_Math_Functions,
 	gid_File_Xsl_Export_Common_Body,

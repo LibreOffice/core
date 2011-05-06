@@ -73,7 +73,8 @@ LOCALPYFILES= \
     $(BIN)$/unohelper.py \
     $(BIN)$/pythonloader.py \
     $(BIN)$/officehelper.py \
-    $(BIN)$/mailmerge.py
+    $(BIN)$/mailmerge.py \
+    $(BIN)$/msgbox.py
 .ENDIF
 
 help_exist:=$(shell @find $(L10N_MODULE)/source/ -type d -name "helpcontent2" | sed -e "s|/helpcontent2||" -e "s|^.*/||" ) en-US
