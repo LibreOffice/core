@@ -78,7 +78,7 @@ fi
 # check for wget and md5sum
 wget=
 md5sum=
-curl=`which curl`
+curl=`which curl 2>/dev/null`
 
 for i in wget /usr/bin/wget /usr/local/bin/wget /usr/sfw/bin/wget /opt/sfw/bin/wget /opt/local/bin/wget; do
     eval "$i --version" > /dev/null 2>&1
