@@ -2442,23 +2442,22 @@ void ScExternalRefManager::breakLink(sal_uInt16 nFileId)
         // the original container.
         RefCellSet aSet = itrRefs->second;
         for_each(aSet.begin(), aSet.end(), ConvertFormulaToStatic(mpDoc));
+        maRefCells.erase(nFileId);
+    }
 
-        // Remove all named ranges that reference this document.
+    // Remove all named ranges that reference this document.
 
-        // Global named ranges.
-        ScRangeName* pRanges = mpDoc->GetRangeName();
+    // Global named ranges.
+    ScRangeName* pRanges = mpDoc->GetRangeName();
+    if (pRanges)
+        removeRangeNamesBySrcDoc(*pRanges, nFileId);
+
+    // Sheet-local named ranges.
+    for (SCTAB i = 0, n = mpDoc->GetTableCount(); i < n; ++i)
+    {
+        pRanges = mpDoc->GetRangeName(i);
         if (pRanges)
             removeRangeNamesBySrcDoc(*pRanges, nFileId);
-
-        // Sheet-local named ranges.
-        for (SCTAB i = 0, n = mpDoc->GetTableCount(); i < n; ++i)
-        {
-            pRanges = mpDoc->GetRangeName(i);
-            if (pRanges)
-                removeRangeNamesBySrcDoc(*pRanges, nFileId);
-        }
-
-        maRefCells.erase(nFileId);
     }
 
     lcl_removeByFileId(nFileId, maDocShells);
