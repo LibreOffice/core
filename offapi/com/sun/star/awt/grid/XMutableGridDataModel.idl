@@ -93,7 +93,7 @@ interface XMutableGridDataModel : XGridDataModel
         <p>The change in the data model will be notified to registered listeners via
         <member>XGridDataListener::dataChanged</member>. The <member>GridDataEvent::FirstColumn</member> and
         <member>GridDataEvent::LastColumn</member> will denote the smallest respectively largest column
-        index from <argColumnIndexes</arg>.</p>
+        index from <arg>ColumnIndexes</arg>.</p>
 
         @param ColumnIndexes
             contains the column indexes of the cells, which should be updated
