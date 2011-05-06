@@ -39,7 +39,8 @@ TARGET=pyprov
 # simply do not fiddle with that. cws sb123, sb129
 ALL : ALLTAR \
     $(DLLDEST)$/officehelper.py	\
-        $(DLLDEST)$/mailmerge.py
+    $(DLLDEST)$/msgbox.py \
+    $(DLLDEST)$/mailmerge.py
 
 $(DLLDEST)$/%.py: %.py
     cp $? $@
