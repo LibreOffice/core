@@ -151,6 +151,10 @@
 .INCLUDE : unxmacxi.mk
 .ENDIF
 
+.IF "$(COM)$(OS)$(CPU)" == "GCCIOSR"
+.INCLUDE : unxiosr.mk
+.ENDIF
+
 .IF "$(COM)$(OS)$(CPU)" == "GCCLINUXM"
 .INCLUDE : unxlngmips.mk
 .ENDIF

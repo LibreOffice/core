@@ -24,7 +24,7 @@ case "$build_os" in
     cygwin*) # Windows
         _os=WINNT
         ;;
-    darwin*) # Mac OS X
+    darwin*) # Mac OS X or iOS
         _os=Darwin
         ;;
     freebsd*)

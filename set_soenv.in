@@ -8,7 +8,7 @@
 # Description:
 # set_soenv generates a file that contains all necessary
 # environment variables for the build proces of OpenOffice
-# on Linux, NetBSD, Solaris, Windows NT and Mac OS X/Darwin.
+# on Linux, NetBSD, Solaris, Windows, Mac OS X and iOS.
 #
 # Program steps.
 #
@@ -102,8 +102,7 @@ my ( $dmake, $build, $build_client, $nmake, $mkout, $deliver, $zipdep );
 #
 # $platform is needed for PathFormat()
 #
-$platform          = `./config.guess`;
-chomp( $platform );
+$platform       = '@host_alias@';
 
 $UPD            = '@UPD@';          # the project's UPD
 $newline        = "\n";             # Perl newline character
@@ -706,17 +705,29 @@ elsif ( $platform =~ m/cygwin/ )
   }
 }
 elsif ( $platform =~ m/darwin/ )
-{     print "Setting Mac OS X/Darwin specific values... ";
-      $BIG_SVX        = "TRUE";
+{     $BIG_SVX        = "TRUE";
       $COM            = "GCC";
       $COMPATH        = '@COMPATH@';
-      if ($platform =~ m/^powerpc/)
+      if ($platform =~ m/^arm/)
+      {
+          print "Setting values for iOS... ";
+          $outfile        = "iOSEnv.Set.sh";
+          $CPU            = "R";
+          $CPUNAME        = "ARM";
+          $OUTPATH        = "unxiosr";
+          $GUI            = "UNX";
+          $OS             = "IOS";
+          $GUIBASE        = "cocoatouch";
+      }
+      elsif ($platform =~ m/^powerpc/)
       {
           print "Setting values for Mac OS X/Darwin on PowerPC... ";
           $outfile        = "MacOSXPPCEnv.Set.sh";
           $CPU            = "P";
           $CPUNAME        = "POWERPC";
           $OUTPATH        = "unxmacxp";
+          $OS             = "MACOSX";
+          $GUI            = "UNX";
       }
       else
       {
@@ -725,13 +736,13 @@ elsif ( $platform =~ m/darwin/ )
           $CPU            = "I";
           $CPUNAME        = "INTEL";
           $OUTPATH        = "unxmacxi";
+          $OS             = "MACOSX";
+          $GUI            = "UNX";
       }
-      $GUI            = "UNX";
       $GVER           = "VCL";
       $INPATH         = $OUTPATH.$PROEXT;
-      $OS             = "MACOSX";
       $PATH_SEPERATOR = $ps;
-      # GUIBASE is set below; may be "aqua" or "unx".
+      # GUIBASE is set below for Mac OS X; may be "aqua" or "unx".
 }
 elsif ( $platform =~ m/dragonfly/ )
 {
@@ -933,7 +944,7 @@ $XINC                 = PathFormat('@XINC@'); # X11 includes
 
 
 # Mac OS X/Darwin only variables.
-if ( $platform =~ m/darwin/ )
+if ( $platform =~ m/darwin/ && $platform !~ m/^arm/)
 {  $FRAMEWORKSHOME       = $ds."Developer".$ds."SDKs".$ds."MacOSX10.4u.sdk".$ds."System".$ds."Library".$ds."Frameworks";
    if ( $XLIB eq "no_x_libraries" ) {
       $GUIBASE  = "aqua";
@@ -1032,11 +1043,11 @@ elsif ($platform =~ m/linux|netbsd|freebsd|aix|openbsd|dragonfly/)
 {
    $SOLAREXTRALIB     = $L.$par_dir.$LIB64;
 }
-elsif ($platform =~ m/darwin/)
+elsif ($platform =~ m/darwin/ && $platform !~ m/^arm/)
 {  $SOLAREXTRALIB     = $L.$LIB.
                         $L.$USR.$LIB;
 }
-elsif ($platform !~ m/cygwin/ )
+elsif ($platform !~ m/cygwin/ && $platform !~ m/^arm-apple/)
 {  AddWarning( "set_soenv", "$platform not configured for linkage create libraries" );
 }
 
@@ -1424,7 +1435,7 @@ elsif ($platform =~ m/cygwin/)
        $SOLARINC   .= $I.PathFormat('@DIRECTXSDK_HOME@').$INCLUDE;
    }
 }
-elsif ($platform =~ m/darwin/)
+elsif ($platform =~ m/darwin/ && $platform !~ m/^arm/)
 {  $SOLARINC         .= $I.$FRAMEWORKSHOME.$ds."JavaVM.framework".$ds."Versions".$ds."Current".$ds."Headers".
                         $I.$FRAMEWORKSHOME.$ds."JavaVM.framework".$ds."Headers";
    # [ed] 6/15/02 Add in X11 headers as appropriate for the build
@@ -1432,6 +1443,9 @@ elsif ($platform =~ m/darwin/)
       $SOLARINC      .= $I.$XINC.
                         $I.$XINC.$ds."freetype2";
    }
+}
+elsif ($platform =~ m/^arm-apple/)
+{
 }
 else
 {  AddWarning( "set_soenv", "$platform not configured for system dependant include dir" );
@@ -1631,7 +1645,7 @@ ToFile( "DYNAMIC_CRT",       $DYNAMIC_CRT,       "e" );
 ToFile( "SET_EXCEPTIONS",    $SET_EXCEPTIONS,    "e" );
 ToFile( "use_shl_versions",  $use_shl_versions,  "e" );
 ToFile( "FLIPCMD",           $FLIPCMD,           "e" );
-if ( $platform =~ m/darwin/ )
+if ( $platform =~ m/darwin/ && $platform !~ m/^arm/)
 {
 # MAXOSX_DEPLOYMENT_TARGET : The minimum version required to run the build,
 # build can assume functions/libraries of that version to be available
@@ -1741,6 +1755,11 @@ ToFile( "SOLARINC",          $SOLARINC,          "e" );
 ToFile( "COMP_ENV",          $COMP_ENV,          "e" );
 ToFile( "JAVAHOME",          $JAVAHOME,          "e" );
 ToFile( "CC",                $CC,                "e" );
+ToFile( "CROSS_COMPILING",   "@CROSS_COMPILING@","e" );
+ToFile( "BUILD_ALIAS",       "@build_alias@",    "e" );
+ToFile( "HOST_ALIAS",        "@host_alias@",     "e" );
+ToFile( "CC_FOR_BUILD",      "@CC_FOR_BUILD@",   "e" );
+ToFile( "CXX_FOR_BUILD",     "@CXX_FOR_BUILD@",  "e" );
 ToFile( "HAVE_GCC_VISIBILITY_FEATURE",
 		"@HAVE_GCC_VISIBILITY_FEATURE@", "e" );
 ToFile( "HAVE_GCC_VISIBILITY_BROKEN",

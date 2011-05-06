@@ -198,39 +198,4 @@ void
 }
 
 
-/* memmove is defined here because some vendors don't provide it at
-   all and others do a terrible job (like calling malloc) */
-
-#if !defined(__IBMC__) && !defined(_WIN32) && !defined(__GLIBC__)
-
-void *
-    memmove(void *dp, const void *sp, size_t n)
-{
-    unsigned char *cdp, *csp;
-
-    if (n <= 0)
-        return 0;
-    cdp = dp;
-    csp = (unsigned char *) sp;
-    if (cdp < csp)
-    {
-        do
-        {
-            *cdp++ = *csp++;
-        } while (--n);
-    }
-    else
-    {
-        cdp += n;
-        csp += n;
-        do
-        {
-            *--cdp = *--csp;
-        } while (--n);
-    }
-    return 0;
-}
-
-#endif
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

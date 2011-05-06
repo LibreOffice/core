@@ -272,5 +272,5 @@ done
 
 [ -x "post_download" ] || { echo "'post_download' script not found, run ./autogen.sh." ; exit 1 ; }
 
-./post_download || exit 1
+./post_download --build=$BUILD_ALIAS --host=$HOST_ALIAS || exit 1
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

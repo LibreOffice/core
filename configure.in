@@ -1303,6 +1303,14 @@ echo "********************************************************************"
 echo ""
 
 dnl ===================================================================
+dnl checks build and host OSes
+dnl ===================================================================
+AC_CANONICAL_SYSTEM
+
+CROSS_COMPILING=$cross_compiling
+AC_SUBST(CROSS_COMPILING)
+
+dnl ===================================================================
 dnl check for required programs (grep, awk, sed, bash)
 dnl ===================================================================
 cat /dev/null > warn
@@ -1345,42 +1353,6 @@ if test -z "$GNUTAR"; then
     AC_MSG_ERROR([not found. install GNU or BSD tar.])
 fi
 AC_SUBST(GNUTAR)
-
-dnl ===================================================================
-dnl Checks for --with-local-solenv invocation
-dnl TODO: Is this still required?
-dnl ===================================================================
-AC_MSG_CHECKING([for solenv environment])
-if test -z "$with_local_solenv"; then
-   LOCAL_SOLENV="DEFAULT"
-   AC_MSG_RESULT([default])
-else
-   LOCAL_SOLENV=$with_local_solenv
-   AC_MSG_RESULT([$with_local_solenv])
-fi
-AC_SUBST(LOCAL_SOLENV)
-
-if test "$LOCAL_SOLENV" = "DEFAULT"; then
-  _solenv="./solenv"
-else
-  _solenv="$LOCAL_SOLENV"
-fi
-AC_SUBST(_solenv)
-
-if test -e $_solenv/inc/minor.mk; then
-   # Get UPD number from ./solenv/inc/minor.mk
-   UPD="`grep RSCVERSION= $_solenv/inc/minor.mk | $AWK -F"=" '{ print $2 }'`"
-   AC_SUBST(UPD)
-   SOURCEVERSION="`grep SOURCEVERSION= $_solenv/inc/minor.mk | $AWK -F"=" '{ print $2 }'`"
-   AC_SUBST(SOURCEVERSION)
-else
-   AC_MSG_ERROR([$_solenv/inc/minor.mk missing but needed for architecture/os detecion and proper environment script generation...])
-fi
-
-dnl ===================================================================
-dnl Checks for the operating system and processor.
-dnl ===================================================================
-AC_CANONICAL_HOST
 
 dnl ===================================================================
 dnl The following is a list of supported systems.
@@ -1449,14 +1421,16 @@ case "$host_os" in
         test_fontconfig=no
         _os=WINNT
         ;;
-    darwin*) # Mac OS X
+    darwin*) # Mac OS X or iOS
         test_gtk=yes
         test_randr=no
         test_freetype=no
         test_fontconfig=no
         test_cairo=no
         _os=Darwin
-        if test "$enable_systray" = "yes" && test "$enable_gtk" != "no"; then
+        if test "$host_cpu" = "arm"; then
+	    :
+        elif test "$enable_systray" = "yes" && test "$enable_gtk" != "no"; then
             AC_MSG_WARN([Disabling gtk-quickstarter - not supported on Mac. Use --disable-systray])
             echo "Disabling gtk-quickstarter - not supported on Mac. Use --disable-systray" >>warn
             enable_systray=no
@@ -1532,6 +1506,198 @@ esac
 AC_SUBST(OSVERSION)
 AC_SUBST(PTHREAD_CFLAGS)
 AC_SUBST(PTHREAD_LIBS)
+
+if test $_os = "WINNT"; then
+   AC_MSG_CHECKING([Windows build environment sanity])
+   dnl ===================================================================
+   dnl Sanity check! Native windows programs cannot use cygwin symlinks!
+   dnl ===================================================================
+   dnl As long as awk instead of $AWK is used somewhere in the sources,
+   dnl check for $AWK and awk. $AWK is pointing to gawk in cygwin.
+      if test -L $AWK -o -L `which awk` -o -L `which tar` -o -L `which gunzip` ; then
+         AC_MSG_ERROR([$AWK, awk, tar or gunzip is a Cygwin symlink!
+Native Windows programs cannot use Cygwin symlinks. Remove the symbolic
+link, and copy the program to the name of the link.])
+      fi
+   dnl ===================================================================
+   dnl If $CC is set to a MinGW compiler, e.g. "gcc -mno-cygwin" enable
+   dnl $WITH_MINGW
+   dnl ===================================================================
+      if test -n "$CC";then
+         if test "`$CC -dumpmachine 2>/dev/null | $SED -e 's/^.*-//'`" = "mingw32"; then
+            WITH_MINGW="yes"
+         fi
+      fi
+   dnl ===================================================================
+   if test "$WITH_MINGW" = "yes" ; then
+      if test -z "$CC"; then
+         CC="gcc -mno-cygwin"
+         CXX="g++ -mno-cygwin"
+      fi
+   fi
+   AC_MSG_RESULT([ok])
+fi
+AC_SUBST(WITH_MINGW)
+
+dnl ===================================================================
+dnl Extra check for Windows. cygwin builds need gcc to build dmake
+dnl and g++ to build guw.exe although MS cl (or MinGW) is used to
+dnl build LibO.
+dnl ===================================================================
+if test "_os" = "WINNT" ; then
+   AC_MSG_CHECKING([for Cygwin gcc/g++])
+   if which gcc > /dev/null && which g++ > /dev/null ; then
+      AC_MSG_RESULT([found])
+   else
+      AC_MSG_ERROR([Cygwin gcc and g++ are needed, please install them.])
+   fi
+fi
+
+dnl ===================================================================
+dnl  Checks for C compiler,
+dnl  The check for the C++ compiler is later on.
+dnl ===================================================================
+GCC_HOME_SET="true"
+AC_MSG_CHECKING([gcc home])
+if test -z "$with_gcc_home"; then
+   if test -n "$enable_icecream" && test "$enable_icecream" != "no" ; then
+      GCC_HOME="/opt/icecream"
+   else
+      GCC_HOME=`which gcc | $SED -e s,/bin/gcc,,`
+      GCC_HOME_SET="false"
+   fi
+else
+    GCC_HOME="$with_gcc_home"
+fi
+AC_MSG_RESULT($GCC_HOME)
+AC_SUBST(GCC_HOME)
+
+if test "$GCC_HOME_SET" = "true" ; then
+   if test -z "$CC"; then
+      CC="$GCC_HOME/bin/gcc"
+   fi
+   if test -z "$CXX"; then
+      CXX="$GCC_HOME/bin/g++"
+   fi
+fi
+
+dnl The following checks for gcc, cc and then cl (if it weren't guarded for win32)
+if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
+   AC_PROG_CC
+fi
+
+COMPATH=`dirname "$CC"`
+if test "$COMPATH" = "." ; then
+    AC_PATH_PROGS(COMPATH, $CC)
+    dnl double square bracket to get single because of M4 quote...
+    COMPATH=`echo $COMPATH | $SED "s@/[[^/:]]*\\\$@@"`;
+fi
+COMPATH=`echo $COMPATH | $SED "s@/[[Bb]][[Ii]][[Nn]]\\\$@@"`;
+
+dnl ===================================================================
+dnl  Test the gcc version,  3 is OK
+dnl ===================================================================
+if test \( "$_os" != "WINNT" -o "$WITH_MINGW" = "yes" \) -a "$GCC" = "yes"; then
+    AC_MSG_CHECKING([the GNU C compiler version])
+   _gcc_version=`$CC -dumpversion`
+   _gcc_major=`echo $_gcc_version | $AWK -F. '{ print \$1 }'`
+   GCCVER=`echo $_gcc_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+
+   if test "$_os" = "Darwin" -a "$host_cpu" != "arm" -a "$GCCVER" -ge "040100" ; then
+      if test -z "$save_CC" -a -x "$GCC_HOME/bin/gcc-4.0" ; then
+         export CC=$GCC_HOME/bin/gcc-4.0
+          dnl  export CC to have it available in set_soenv -> config.guess
+         GCCVER2=`"$CC" -dumpversion | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+         if test "$GCCVER2" -ge "040000" -a "$GCCVER2" -lt "040100" ; then
+            GCCVER=$GCCVER2
+         fi
+      fi
+      if test "$GCCVER" -ge "040100" ; then
+         AC_MSG_ERROR([You need to use the gcc-4.0 compiler (gcc $_gcc_version won't work with the MacOSX10.4u.sdk) - set CC accordingly])
+      else
+         AC_MSG_RESULT([implicitly using CC=$CC])
+      fi
+   else
+      AC_MSG_RESULT([checked (gcc $_gcc_version)])
+   fi
+   if test "$_os" = "SunOS"; then
+      AC_MSG_CHECKING([gcc linker])
+      if $CC -Wl,--version 2>&1 |head -n 1| grep -v GNU > /dev/null;then
+          AC_MSG_ERROR([failed (not GNU ld). Use GNU ld instead of Sun ld on Solaris])
+      fi
+      AC_MSG_RESULT([ok (GNU ld)])
+   fi
+fi
+
+HAVE_LD_BSYMBOLIC_FUNCTIONS=
+if test "$GCC" = "yes"; then
+   AC_MSG_CHECKING( for -Bsymbolic-functions linker support )
+   bsymbolic_functions_ldflags_save=$LDFLAGS
+   LDFLAGS="$LDFLAGS -Wl,-Bsymbolic-functions -Wl,--dynamic-list-cpp-new -Wl,--dynamic-list-cpp-typeinfo"
+   AC_LINK_IFELSE([AC_LANG_PROGRAM([
+   #include <stdio.h>
+   ],[
+    printf ("hello world\n");
+   ])], HAVE_LD_BSYMBOLIC_FUNCTIONS=TRUE, [])
+   if test "z$HAVE_LD_BSYMBOLIC_FUNCTIONS" = "zTRUE"; then
+     AC_MSG_RESULT( found )
+   else
+     AC_MSG_RESULT( not found )
+   fi
+   LDFLAGS=$bsymbolic_functions_ldflags_save
+fi
+AC_SUBST(HAVE_LD_BSYMBOLIC_FUNCTIONS)
+
+dnl ===================================================================
+dnl Set up a different compiler to produce tools to run on the build
+dnl machine when doing cross-compilation
+dnl ===================================================================
+
+if test "$cross_compiling" = "yes"; then
+  export tmpdir=`mktemp -d conf.XXXXXX`
+  eval `(unset CC CXX CFLAGS
+    autoconf conf-for-build.in >$tmpdir/conf-for-build
+    cd $tmpdir
+    sh ./conf-for-build 3>&1 >/dev/null)`
+  rm -rf $tmpdir
+  unset tmpdir
+else
+  CC_FOR_BUILD="$CC"
+  CXX_FOR_BUILD="$CXX"
+fi
+AC_SUBST(CC_FOR_BUILD)
+AC_SUBST(CXX_FOR_BUILD)
+
+dnl ===================================================================
+dnl Checks for --with-local-solenv invocation
+dnl TODO: Is this still required?
+dnl ===================================================================
+AC_MSG_CHECKING([for solenv environment])
+if test -z "$with_local_solenv"; then
+   LOCAL_SOLENV="DEFAULT"
+   AC_MSG_RESULT([default])
+else
+   LOCAL_SOLENV=$with_local_solenv
+   AC_MSG_RESULT([$with_local_solenv])
+fi
+AC_SUBST(LOCAL_SOLENV)
+
+if test "$LOCAL_SOLENV" = "DEFAULT"; then
+  _solenv="./solenv"
+else
+  _solenv="$LOCAL_SOLENV"
+fi
+AC_SUBST(_solenv)
+
+if test -e $_solenv/inc/minor.mk; then
+   # Get UPD number from ./solenv/inc/minor.mk
+   UPD="`grep RSCVERSION= $_solenv/inc/minor.mk | $AWK -F"=" '{ print $2 }'`"
+   AC_SUBST(UPD)
+   SOURCEVERSION="`grep SOURCEVERSION= $_solenv/inc/minor.mk | $AWK -F"=" '{ print $2 }'`"
+   AC_SUBST(SOURCEVERSION)
+else
+   AC_MSG_ERROR([$_solenv/inc/minor.mk missing but needed for architecture/os detecion and proper environment script generation...])
+fi
 
 dnl ===================================================================
 dnl Set the ENABLE_CRASHDUMP variable.
@@ -1807,155 +1973,6 @@ AC_SUBST(DICT_SYSTEM_DIR)
 AC_SUBST(HYPH_SYSTEM_DIR)
 AC_SUBST(THES_SYSTEM_DIR)
 
-if test $_os = "WINNT"; then
-   AC_MSG_CHECKING([Windows build environment sanity])
-   dnl ===================================================================
-   dnl Sanity check! Native windows programs cannot use cygwin symlinks!
-   dnl ===================================================================
-   dnl As long as awk instead of $AWK is used somewhere in the sources,
-   dnl check for $AWK and awk. $AWK is pointing to gawk in cygwin.
-      if test -L $AWK -o -L `which awk` -o -L `which tar` -o -L `which gunzip` ; then
-         AC_MSG_ERROR([$AWK, awk, tar or gunzip is a cygwin symlink!
-Native windows programs cannot use cygwin symlinks. Remove the symbolic
-link, and copy the program to the name of the link.])
-      fi
-   dnl ===================================================================
-   dnl Another sanity check! More a band-aid. winenv.* adds guw.exe to
-   dnl CC and CXX but the configure checks here assume that guw.exe
-   dnl (if needed at all) is not yet present.
-   dnl ===================================================================
-   CC=`echo $CC | $SED "s/^guw.exe //"`
-   CXX=`echo $CXX | $SED "s/^guw.exe //"`
-   dnl ===================================================================
-   dnl If $CC is set to a MinGW compiler, e.g. "gcc -mno-cygwin" enable
-   dnl $WITH_MINGW
-   dnl ===================================================================
-      if test -n "$CC";then
-         if test "`$CC -dumpmachine 2>/dev/null | $SED -e 's/^.*-//'`" = "mingw32"; then
-            WITH_MINGW="yes"
-         fi
-      fi
-   dnl ===================================================================
-   if test "$WITH_MINGW" = "yes" ; then
-      if test -z "$CC"; then
-         CC="gcc -mno-cygwin"
-         CXX="g++ -mno-cygwin"
-      fi
-   fi
-   AC_MSG_RESULT([ok])
-fi
-AC_SUBST(WITH_MINGW)
-
-dnl ===================================================================
-dnl Extra check for Windows. cygwin builds need gcc to build dmake
-dnl and g++ to build guw.exe although MS cl (or MinGW) is used to
-dnl build LibO.
-dnl ===================================================================
-if test "$_os" = "WINNT" ; then
-   AC_MSG_CHECKING([for cygwin gcc/g++])
-   if which gcc > /dev/null && which g++ > /dev/null ; then
-      AC_MSG_RESULT([found])
-   else
-      AC_MSG_ERROR([cygwin gcc and g++ are needed, please install them.])
-   fi
-fi
-
-
-dnl ===================================================================
-dnl  Checks for c compiler,
-dnl  The check for the c++ compiler is later on.
-dnl ===================================================================
-GCC_HOME_SET="true"
-AC_MSG_CHECKING([gcc home])
-if test -z "$with_gcc_home"; then
-   if test -n "$enable_icecream" && test "$enable_icecream" != "no" ; then
-      GCC_HOME="/opt/icecream"
-   else
-      GCC_HOME=`which gcc | $SED -e s,/bin/gcc,,`
-      GCC_HOME_SET="false"
-   fi
-else
-    GCC_HOME="$with_gcc_home"
-fi
-AC_MSG_RESULT($GCC_HOME)
-AC_SUBST(GCC_HOME)
-
-if test "$GCC_HOME_SET" = "true" ; then
-   if test -z "$CC"; then
-      CC="$GCC_HOME/bin/gcc"
-   fi
-   if test -z "$CXX"; then
-      CXX="$GCC_HOME/bin/g++"
-   fi
-fi
-
-dnl The following checks for gcc, cc and then cl (if it weren't guarded for win32)
-if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
-   AC_PROG_CC
-fi
-
-COMPATH=`dirname "$CC"`
-if test "$COMPATH" = "." ; then
-    AC_PATH_PROGS(COMPATH, $CC)
-    dnl double square bracket to get single because of M4 quote...
-    COMPATH=`echo $COMPATH | $SED "s@/[[^/:]]*\\\$@@"`;
-fi
-COMPATH=`echo $COMPATH | $SED "s@/[[Bb]][[Ii]][[Nn]]\\\$@@"`;
-
-dnl ===================================================================
-dnl  Test the gcc version,  3 is OK
-dnl ===================================================================
-if test \( "$_os" != "WINNT" -o "$WITH_MINGW" = "yes" \) -a "$GCC" = "yes"; then
-    AC_MSG_CHECKING([the GNU gcc compiler version])
-   _gcc_version=`$CC -dumpversion`
-   _gcc_major=`echo $_gcc_version | $AWK -F. '{ print \$1 }'`
-   GCCVER=`echo $_gcc_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
-
-   if test "$_os" = "Darwin" -a "$GCCVER" -ge "040100" ; then
-      if test -z "$save_CC" -a -x "$GCC_HOME/bin/gcc-4.0" ; then
-         export CC=$GCC_HOME/bin/gcc-4.0
-          dnl  export CC to have it available in set_soenv -> config.guess
-         GCCVER2=`"$CC" -dumpversion | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
-         if test "$GCCVER2" -ge "040000" -a "$GCCVER2" -lt "040100" ; then
-            GCCVER=$GCCVER2
-         fi
-      fi
-      if test "$GCCVER" -ge "040100" ; then
-         AC_MSG_ERROR([You need to use the gcc-4.0 compiler (gcc $_gcc_version won't work with the MacOSX10.4u.sdk) - set CC accordingly])
-      else
-         AC_MSG_RESULT([implicitly using CC=$CC])
-      fi
-   else
-      AC_MSG_RESULT([checked (gcc $_gcc_version)])
-   fi
-   if test "$_os" = "SunOS"; then
-      AC_MSG_CHECKING([gcc linker])
-      if $CC -Wl,--version 2>&1 |head -n 1| grep -v GNU > /dev/null;then
-          AC_MSG_ERROR([failed (not GNU ld). Use GNU ld instead of Sun ld on Solaris])
-      fi
-      AC_MSG_RESULT([ok (GNU ld)])
-   fi
-fi
-
-HAVE_LD_BSYMBOLIC_FUNCTIONS=
-if test "$GCC" = "yes"; then
-   AC_MSG_CHECKING( for -Bsymbolic-functions linker support )
-   bsymbolic_functions_ldflags_save=$LDFLAGS
-   LDFLAGS="$LDFLAGS -Wl,-Bsymbolic-functions -Wl,--dynamic-list-cpp-new -Wl,--dynamic-list-cpp-typeinfo"
-   AC_LINK_IFELSE([AC_LANG_PROGRAM([
-   #include <stdio.h>
-   ],[
-    printf ("hello world\n");
-   ])], HAVE_LD_BSYMBOLIC_FUNCTIONS=TRUE, [])
-   if test "z$HAVE_LD_BSYMBOLIC_FUNCTIONS" = "zTRUE"; then
-     AC_MSG_RESULT( found )
-   else
-     AC_MSG_RESULT( not found )
-   fi
-   LDFLAGS=$bsymbolic_functions_ldflags_save
-fi
-AC_SUBST(HAVE_LD_BSYMBOLIC_FUNCTIONS)
-
 dnl ===================================================================
 dnl Set the ENABLE_PCH variable. (Activate --enable-pch)
 dnl ===================================================================
@@ -2041,21 +2058,22 @@ if test "$GCC" = "yes" ; then
    else
       hash_styles="$with_linker_hash_style"
    fi
-   
+
    for hash_style in $hash_styles ; do
       test "$HAVE_LD_HASH_STYLE" = "TRUE" && continue
       hash_style_ldflags_save=$LDFLAGS
       LDFLAGS="$LDFLAGS -Wl,--hash-style=$hash_style"
 
-      AC_TRY_RUN([
-#include <stdio.h>
-
-int main(char argc, char** argv) {
-   printf ("");
-   return 0;
-}
-       ], HAVE_LD_HASH_STYLE=TRUE; WITH_LINKER_HASH_STYLE=$hash_style, HAVE_LD_HASH_STYLE=FALSE)
-
+      AC_LINK_IFELSE([AC_LANG_PROGRAM([
+	  #include <stdio.h>
+	],[
+	  printf ("");
+	])],
+	[ if ./conftest$EXEEXT; then 
+	    HAVE_LD_HASH_STYLE=TRUE
+	    WITH_LINKER_HASH_STYLE=$hash_style
+          fi], 
+	[HAVE_LD_HASH_STYLE=FALSE])
        LDFLAGS=$hash_style_ldflags_save
    done
    
@@ -2462,7 +2480,7 @@ fi
 AC_SUBST([VALGRIND_CFLAGS])
 
 dnl ===================================================================
-dnl Testing for c++ compiler and version...
+dnl Testing for C++ compiler and version...
 dnl ===================================================================
 if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
    if test -e "$CC"; then
@@ -2482,7 +2500,7 @@ if test "$GXX" = "yes"; then
    _gpp_version=`$CXX -dumpversion`
    _gpp_majmin=`echo $_gpp_version | $AWK -F. '{ print \$1*100+\$2 }'`
 
-   if test "$_os" = "Darwin" -a "$_gpp_majmin" -ge "401" ; then
+   if test "$_os" = "Darwin" -a "$host_cpu" != "arm" -a "$_gpp_majmin" -ge "401" ; then
       if test -z "$save_CXX" -a -x "$GCC_HOME/bin/g++-4.0" ; then
          CXX=$GCC_HOME/bin/g++-4.0
          _gpp_majmin_2=`"$CXX" -dumpversion | $AWK -F. '{ print \$1*100+\$2 }'`

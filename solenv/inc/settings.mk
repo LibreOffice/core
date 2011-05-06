@@ -527,6 +527,10 @@ RSC_LANG_ISO+:=$(completelangiso)
 TARGETTYPE=CUI
 .ENDIF
 
+.IF "$(TARGETPLAFORM)"==""
+TARGETPLATFORM=HOST
+.ENDIF
+
 # --- Pfade setzen -------------------------------------------------
 
 # Output-Pfad
@@ -884,7 +888,11 @@ CDEFS+=-DTIMELOG
 
 CDEFSCXX=
 CDEFSOBJ=
+.IF "$(OS)"=="IOS"
+CDEFSSLO=
+.ELSE
 CDEFSSLO=-DSHAREDLIB -D_DLL_
+.ENDIF
 CDEFSGUI=-DGUI
 CDEFSCUI=-DCUI
 #CDEFSMT=-DMULTITHREAD
