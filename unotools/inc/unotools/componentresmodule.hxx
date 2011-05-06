@@ -149,21 +149,7 @@ namespace utl
         OSingletonRegistration() : BaseClass( ModuleClass::getInstance() ) \
         { \
         } \
-    }; \
-    \
-    /* -------------------------------------------------------------------- */ \
-    template < class TYPE > \
-    class OLegacySingletonRegistration : public ::comphelper::OLegacySingletonRegistration< TYPE > \
-    { \
-    private: \
-        typedef ::comphelper::OLegacySingletonRegistration< TYPE >    BaseClass; \
-    \
-    public: \
-        OLegacySingletonRegistration() : BaseClass( ModuleClass::getInstance() ) \
-        { \
-        } \
     };
-
 
     //====================================================================
     //= implementing a concrete module
