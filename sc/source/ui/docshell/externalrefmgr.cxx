@@ -203,33 +203,54 @@ private:
 };
 
 /**
- * Predicate used to determine whether a named range contains an external
- * reference to a particular document.
+ * Check whether a named range contains an external reference to a
+ * particular document.
  */
-class RangeNameWithExtRef : unary_function<ScRangeData, bool>
+bool hasRefsToSrcDoc(ScRangeData& rData, sal_uInt16 nFileId)
 {
-    sal_uInt16 mnFileId;
-public:
-    RangeNameWithExtRef(sal_uInt16 nFileId) : mnFileId(nFileId) {}
-    bool operator() (ScRangeData& rData) const
-    {
-        ScTokenArray* pArray = rData.GetCode();
-        if (!pArray)
-            return false;
-
-        pArray->Reset();
-        ScToken* p = static_cast<ScToken*>(pArray->GetNextReference());
-        for (; p; p = static_cast<ScToken*>(pArray->GetNextReference()))
-        {
-            if (!p->IsExternalRef())
-                continue;
-
-            if (p->GetIndex() == mnFileId)
-                return true;
-        }
+    ScTokenArray* pArray = rData.GetCode();
+    if (!pArray)
         return false;
+
+    pArray->Reset();
+    ScToken* p = static_cast<ScToken*>(pArray->GetNextReference());
+    for (; p; p = static_cast<ScToken*>(pArray->GetNextReference()))
+    {
+        if (!p->IsExternalRef())
+            continue;
+
+        if (p->GetIndex() == nFileId)
+            return true;
+    }
+    return false;
+}
+
+class EraseRangeByIterator : unary_function<ScRangeName::iterator, void>
+{
+    ScRangeName& mrRanges;
+public:
+    EraseRangeByIterator(ScRangeName& rRanges) : mrRanges(rRanges) {}
+    void operator() (const ScRangeName::iterator& itr)
+    {
+        mrRanges.erase(itr);
     }
 };
+
+/**
+ * Remove all named ranges that contain references to specified source
+ * document.
+ */
+void removeRangeNamesBySrcDoc(ScRangeName& rRanges, sal_uInt16 nFileId)
+{
+    ScRangeName::iterator itr = rRanges.begin(), itrEnd = rRanges.end();
+    vector<ScRangeName::iterator> v;
+    for (; itr != itrEnd; ++itr)
+    {
+        if (hasRefsToSrcDoc(*itr, nFileId))
+            v.push_back(itr);
+    }
+    for_each(v.begin(), v.end(), EraseRangeByIterator(rRanges));
+}
 
 }
 
@@ -2427,14 +2448,14 @@ void ScExternalRefManager::breakLink(sal_uInt16 nFileId)
         // Global named ranges.
         ScRangeName* pRanges = mpDoc->GetRangeName();
         if (pRanges)
-            remove_if(pRanges->begin(), pRanges->end(), RangeNameWithExtRef(nFileId));
+            removeRangeNamesBySrcDoc(*pRanges, nFileId);
 
         // Sheet-local named ranges.
         for (SCTAB i = 0, n = mpDoc->GetTableCount(); i < n; ++i)
         {
             pRanges = mpDoc->GetRangeName(i);
             if (pRanges)
-                remove_if(pRanges->begin(), pRanges->end(), RangeNameWithExtRef(nFileId));
+                removeRangeNamesBySrcDoc(*pRanges, nFileId);
         }
 
         maRefCells.erase(nFileId);
