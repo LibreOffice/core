@@ -49,6 +49,8 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/oslfile2streamwrap.hxx>
+#include <i18npool/mslangid.hxx>
+#include <unotools/syslocaleoptions.hxx>
 
 #include <vcl/svapp.hxx>
 #include "scdll.hxx"
@@ -304,28 +306,6 @@ Test::Test()
     //of retaining references to the root ServiceFactory as its passed around
     comphelper::setProcessServiceFactory(xSM);
 
-#if 0
-    // TODO: attempt to explicitly set UI locale to en-US, to get the unit
-    // test to work under non-English build environment.  But this causes
-    // runtime exception....
-    uno::Reference<lang::XMultiServiceFactory> theConfigProvider =
-        uno::Reference<lang::XMultiServiceFactory> (
-            xSM->createInstance(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"))), uno::UNO_QUERY_THROW);
-
-    uno::Sequence<uno::Any> theArgs(1);
-    OUString aLocalePath(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Linguistic/General"));
-    theArgs[0] <<= aLocalePath;
-    uno::Reference<beans::XPropertySet> xProp(
-        theConfigProvider->createInstanceWithArguments(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationUpdateAccess")), theArgs), uno::UNO_QUERY_THROW);
-
-    OUString aLang(RTL_CONSTASCII_USTRINGPARAM("en-US"));
-    uno::Any aAny;
-    aAny <<= aLang;
-    xProp->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("UILocale")), aAny);
-#endif
-
     // initialise UCB-Broker
     uno::Sequence<uno::Any> aUcbInitSequence(2);
     aUcbInitSequence[0] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Local"));
@@ -339,8 +319,19 @@ Test::Test()
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.FileContentProvider"))), uno::UNO_QUERY);
     xUcb->registerContentProvider(xFileProvider, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file")), sal_True);
 
-    InitVCL(xSM);
+    // force locale (and resource files loaded) to en-US
+    const LanguageType eLang=LANGUAGE_ENGLISH_US;
 
+    rtl::OUString aLang, aCountry;
+    MsLangId::convertLanguageToIsoNames(eLang, aLang, aCountry);
+    lang::Locale aLocale(aLang, aCountry, rtl::OUString());
+    ResMgr::SetDefaultLocale( aLocale );
+
+    SvtSysLocaleOptions aLocalOptions;
+    aLocalOptions.SetUILocaleConfigString(
+        MsLangId::convertLanguageToIsoString( eLang ) );
+
+    InitVCL(xSM);
     ScDLL::Init();
 
     oslProcessError err = osl_getProcessWorkingDir(&m_aPWDURL.pData);
