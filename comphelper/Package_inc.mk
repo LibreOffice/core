@@ -89,7 +89,6 @@ $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/ChainablePropert
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/stl_types.hxx,comphelper/stl_types.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/eventattachermgr.hxx,comphelper/eventattachermgr.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/componentcontext.hxx,comphelper/componentcontext.hxx))
-$(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/legacysingletonfactory.hxx,comphelper/legacysingletonfactory.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/accessibleeventnotifier.hxx,comphelper/accessibleeventnotifier.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/ihwrapnofilter.hxx,comphelper/ihwrapnofilter.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/sequenceasvector.hxx,comphelper/sequenceasvector.hxx))

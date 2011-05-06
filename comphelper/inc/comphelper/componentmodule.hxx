@@ -29,7 +29,6 @@
 #define COMPHELPER_INC_COMPHELPER_COMPONENTMODULE_HXX
 
 #include <comphelper/comphelperdllapi.h>
-#include <comphelper/legacysingletonfactory.hxx>
 
 /** === begin UNO includes === **/
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -272,29 +271,6 @@ namespace comphelper
     }
 
     //==========================================================================
-    //= OLegacySingletonRegistration
-    //==========================================================================
-    template <class TYPE>
-    class OLegacySingletonRegistration
-    {
-    public:
-        OLegacySingletonRegistration( OModule& _rModule );
-    };
-
-    //--------------------------------------------------------------------------
-    template <class TYPE>
-    OLegacySingletonRegistration<TYPE>::OLegacySingletonRegistration( OModule& _rModule )
-    {
-        _rModule.registerImplementation( ComponentDescription(
-            TYPE::getImplementationName_static(),
-            TYPE::getSupportedServiceNames_static(),
-            ::rtl::OUString(),
-            &TYPE::Create,
-            &::comphelper::createLegacySingletonFactory
-        ) );
-    }
-
-    //==========================================================================
     //= helpers
     //==========================================================================
 
@@ -350,19 +326,7 @@ namespace comphelper
         OSingletonRegistration() : BaseClass( ModuleClass::getInstance() ) \
         { \
         } \
-    }; \
-    /* -------------------------------------------------------------------- */ \
-    template < class TYPE > \
-    class OLegacySingletonRegistration : public ::comphelper::OLegacySingletonRegistration< TYPE > \
-    { \
-    private: \
-        typedef ::comphelper::OLegacySingletonRegistration< TYPE >  BaseClass; \
-    \
-    public: \
-        OLegacySingletonRegistration() : BaseClass( ModuleClass::getInstance() ) \
-        { \
-        } \
-    }; \
+    };
 
     //==========================================================================
     //= implementing a OModule for a component library
