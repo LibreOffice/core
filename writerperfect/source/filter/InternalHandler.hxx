@@ -1,6 +1,5 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
- * Copyright (C) 2007 Fridrich Strba .strba@bluewin.ch)
+ * Copyright (C) 2007 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,9 +27,9 @@
 #include <libwpd/WPXProperty.h>
 #include <libwpd/WPXString.h>
 #include "DocumentElement.hxx"
-#include "DocumentHandlerInterface.hxx"
+#include "OdfDocumentHandler.hxx"
 
-class InternalHandler : public DocumentHandlerInterface
+class InternalHandler : public OdfDocumentHandler
 {
 public:
     InternalHandler(std::vector<DocumentElement *> *elements);
@@ -45,5 +44,3 @@ private:
     std::vector<DocumentElement *> *mpElements;
 };
 #endif
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

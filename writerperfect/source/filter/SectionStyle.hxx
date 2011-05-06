@@ -1,8 +1,7 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* SectionStyle: Stores (and writes) section-based information (e.g.: a column
  * change needs a new section) that is needed at the head of an OO document.
  *
- * Copyright (C) 2002-2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2002-2003 William Lachance (wrlach@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -38,12 +37,10 @@ class SectionStyle : public Style
 {
 public:
     SectionStyle(const WPXPropertyList &xPropList, const WPXPropertyListVector &xColumns, const char *psName);
-    virtual void write(DocumentHandlerInterface *pHandler) const;
+    virtual void write(OdfDocumentHandler *pHandler) const;
 
 private:
         WPXPropertyList mPropList;
     WPXPropertyListVector mColumns;
 };
 #endif
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

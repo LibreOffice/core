@@ -1,8 +1,7 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* ListStyle: Stores (and writes) list-based information that is
  * needed at the head of an OO document.
  *
- * Copyright (C) 2002-2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2002-2003 William Lachance (wrlach@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -33,7 +32,6 @@
 
 #include "Style.hxx"
 #include "WriterProperties.hxx"
-#include "DocumentHandlerInterface.hxx"
 
 class DocumentElement;
 
@@ -41,14 +39,14 @@ class ListLevelStyle
 {
 public:
     virtual ~ListLevelStyle() {};
-    virtual void write(DocumentHandlerInterface *pHandler, int iLevel) const = 0;
+    virtual void write(OdfDocumentHandler *pHandler, int iLevel) const = 0;
 };
 
 class OrderedListLevelStyle : public ListLevelStyle
 {
 public:
     OrderedListLevelStyle(const WPXPropertyList &xPropList);
-    void write(DocumentHandlerInterface *pHandler, int iLevel) const;
+    void write(OdfDocumentHandler *pHandler, int iLevel) const;
 private:
         WPXPropertyList mPropList;
 };
@@ -57,7 +55,7 @@ class UnorderedListLevelStyle : public ListLevelStyle
 {
 public:
     UnorderedListLevelStyle(const WPXPropertyList &xPropList);
-    void write(DocumentHandlerInterface *pHandler, int iLevel) const;
+    void write(OdfDocumentHandler *pHandler, int iLevel) const;
 private:
         WPXPropertyList mPropList;
 };
@@ -68,8 +66,8 @@ public:
     ListStyle(const char *psName, const int iListID);
     virtual ~ListStyle();
     virtual void updateListLevel(const int iLevel, const WPXPropertyList &xPropList) = 0;
-    virtual void write(DocumentHandlerInterface *pHandler) const;
-    int getListID() const { return miListID; }
+    virtual void write(OdfDocumentHandler *pHandler) const;
+    int getListID() { return miListID; }
     bool isListLevelDefined(int iLevel) const;
 
 protected:
@@ -95,5 +93,3 @@ public:
     void updateListLevel(const int iLevel, const WPXPropertyList &xPropList);
 };
 #endif
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

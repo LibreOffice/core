@@ -43,7 +43,6 @@
 
 #include "filter/FilterInternal.hxx"
 #include "filter/DocumentHandler.hxx"
-#include "filter/DocumentCollector.hxx"
 #include "stream/WPXSvStream.h"
 
 #if defined _MSC_VER
@@ -54,7 +53,8 @@
 #pragma warning( pop )
 #endif
 
-#include "WordPerfectCollector.hxx"
+#include "filter/OdtGenerator.hxx"
+#include "filter/OdgGenerator.hxx"
 #include "WordPerfectImportFilter.hxx"
 
 using namespace ::rtl;
@@ -83,6 +83,19 @@ using com::sun::star::xml::sax::XDocumentHandler;
 using com::sun::star::xml::sax::XParser;
 
 void callHandler(uno::Reference < XDocumentHandler > xDocHandler);
+
+
+static bool handleEmbeddedWPG(const WPXBinaryData &data, OdfDocumentHandler *pHandler,  const OdfStreamType streamType)
+{
+    OdgGenerator exporter(pHandler, streamType);
+
+    libwpg::WPGFileFormat fileFormat = libwpg::WPG_AUTODETECT;
+
+    if (!libwpg::WPGraphics::isSupported(const_cast<WPXInputStream *>(data.getDataStream())))
+        fileFormat = libwpg::WPG_WPG1;
+
+    return libwpg::WPGraphics::parse(const_cast<WPXInputStream *>(data.getDataStream()), &exporter, fileFormat);
+}
 
 sal_Bool SAL_CALL WordPerfectImportFilter::importImpl( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
     throw (RuntimeException)
@@ -143,14 +156,15 @@ sal_Bool SAL_CALL WordPerfectImportFilter::importImpl( const Sequence< ::com::su
     uno::Reference < XImporter > xImporter(xInternalHandler, UNO_QUERY);
     xImporter->setTargetDocument(mxDoc);
 
-        // OO Document Handler: abstract class to handle document SAX messages, concrete implementation here
-        // writes to in-memory target doc
-        DocumentHandler xHandler(xInternalHandler);
+    // OO Document Handler: abstract class to handle document SAX messages, concrete implementation here
+    // writes to in-memory target doc
+    DocumentHandler xHandler(xInternalHandler);
 
-    WordPerfectCollector collector(&input, &xHandler, aUtf8Passwd);
-    collector.filter();
-
-    return true;
+    OdtGenerator collector(&xHandler, ODF_FLAT_XML);
+    collector.registerEmbeddedObjectHandler("image/x-wpg", &handleEmbeddedWPG);
+    if (WPD_OK == WPDocument::parse(&input, static_cast<WPXDocumentInterface*>(&collector), (const char*)(aUtf8Passwd.getStr())))
+        return sal_True;
+    return sal_False;
 }
 
 sal_Bool SAL_CALL WordPerfectImportFilter::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )

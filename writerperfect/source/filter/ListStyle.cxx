@@ -1,8 +1,7 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* ListStyle: Stores (and writes) list-based information that is
  * needed at the head of an OO document.
  *
- * Copyright (C) 2002-2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2002-2003 William Lachance (wrlach@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -30,7 +29,7 @@
 #include "DocumentElement.hxx"
 
 OrderedListLevelStyle::OrderedListLevelStyle(const WPXPropertyList &xPropList) :
-        mPropList(xPropList)
+    mPropList(xPropList)
 {
 }
 
@@ -42,7 +41,7 @@ void OrderedListStyle::updateListLevel(const int iLevel, const WPXPropertyList &
         setListLevel(iLevel, new OrderedListLevelStyle(xPropList));
 }
 
-void OrderedListLevelStyle::write(DocumentHandlerInterface *pHandler, int iLevel) const
+void OrderedListLevelStyle::write(OdfDocumentHandler *pHandler, int iLevel) const
 {
     WPXString sLevel;
     sLevel.sprintf("%i", (iLevel+1));
@@ -50,23 +49,23 @@ void OrderedListLevelStyle::write(DocumentHandlerInterface *pHandler, int iLevel
     TagOpenElement listLevelStyleOpen("text:list-level-style-number");
     listLevelStyleOpen.addAttribute("text:level", sLevel);
     listLevelStyleOpen.addAttribute("text:style-name", "Numbering_Symbols");
-        if (mPropList["style:num-prefix"])
+    if (mPropList["style:num-prefix"])
     {
         WPXString sEscapedString(mPropList["style:num-prefix"]->getStr(), true);
         listLevelStyleOpen.addAttribute("style:num-prefix", sEscapedString);
     }
-        if (mPropList["style:num-suffix"])
+    if (mPropList["style:num-suffix"])
     {
         WPXString sEscapedString(mPropList["style:num-suffix"]->getStr(), true);
         listLevelStyleOpen.addAttribute("style:num-suffix", sEscapedString);
     }
-        if (mPropList["style:num-format"])
-                listLevelStyleOpen.addAttribute("style:num-format", mPropList["style:num-format"]->getStr());
-        if (mPropList["text:start-value"])
+    if (mPropList["style:num-format"])
+        listLevelStyleOpen.addAttribute("style:num-format", mPropList["style:num-format"]->getStr());
+    if (mPropList["text:start-value"])
     {
         // odf as to the version 1.1 does require the text:start-value to be a positive integer, means > 0
         if (mPropList["text:start-value"]->getInt() > 0)
-                listLevelStyleOpen.addAttribute("text:start-value", mPropList["text:start-value"]->getStr());
+            listLevelStyleOpen.addAttribute("text:start-value", mPropList["text:start-value"]->getStr());
         else
             listLevelStyleOpen.addAttribute("text:start-value", "1");
     }
@@ -74,7 +73,7 @@ void OrderedListLevelStyle::write(DocumentHandlerInterface *pHandler, int iLevel
 
     TagOpenElement stylePropertiesOpen("style:list-level-properties");
     if (mPropList["text:space-before"] && mPropList["text:space-before"]->getDouble() > 0.0)
-                stylePropertiesOpen.addAttribute("text:space-before", mPropList["text:space-before"]->getStr());
+        stylePropertiesOpen.addAttribute("text:space-before", mPropList["text:space-before"]->getStr());
     if (mPropList["text:min-label-width"] && mPropList["text:min-label-width"]->getDouble() > 0.0)
         stylePropertiesOpen.addAttribute("text:min-label-width", mPropList["text:min-label-width"]->getStr());
     if (mPropList["text:min-label-distance"] && mPropList["text:min-label-distance"]->getDouble() > 0.0)
@@ -98,7 +97,7 @@ void UnorderedListStyle::updateListLevel(const int iLevel, const WPXPropertyList
         setListLevel(iLevel, new UnorderedListLevelStyle(xPropList));
 }
 
-void UnorderedListLevelStyle::write(DocumentHandlerInterface *pHandler, int iLevel) const
+void UnorderedListLevelStyle::write(OdfDocumentHandler *pHandler, int iLevel) const
 {
     WPXString sLevel;
     sLevel.sprintf("%i", (iLevel+1));
@@ -121,7 +120,7 @@ void UnorderedListLevelStyle::write(DocumentHandlerInterface *pHandler, int iLev
 
     TagOpenElement stylePropertiesOpen("style:list-level-properties");
     if (mPropList["text:space-before"] && mPropList["text:space-before"]->getDouble() > 0.0)
-                stylePropertiesOpen.addAttribute("text:space-before", mPropList["text:space-before"]->getStr());
+        stylePropertiesOpen.addAttribute("text:space-before", mPropList["text:space-before"]->getStr());
     if (mPropList["text:min-label-width"] && mPropList["text:min-label-width"]->getDouble() > 0.0)
         stylePropertiesOpen.addAttribute("text:min-label-width", mPropList["text:min-label-width"]->getStr());
     if (mPropList["text:min-label-distance"] && mPropList["text:min-label-distance"]->getDouble() > 0.0)
@@ -168,7 +167,7 @@ void ListStyle::setListLevel(int iLevel, ListLevelStyle *iListLevelStyle)
         mppListLevels[iLevel] = iListLevelStyle;
 }
 
-void ListStyle::write(DocumentHandlerInterface *pHandler) const
+void ListStyle::write(OdfDocumentHandler *pHandler) const
 {
     TagOpenElement listStyleOpenElement("text:list-style");
     listStyleOpenElement.addAttribute("style:name", getName());
@@ -181,5 +180,3 @@ void ListStyle::write(DocumentHandlerInterface *pHandler) const
 
     pHandler->endElement("text:list-style");
 }
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

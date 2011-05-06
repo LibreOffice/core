@@ -12,12 +12,12 @@
 #pragma warning( pop )
 #endif
 
-#include "DocumentHandlerInterface.hxx"
+#include "OdfDocumentHandler.hxx"
 
 using com::sun::star::uno::Reference;
 using com::sun::star::xml::sax::XDocumentHandler;
 
-class DocumentHandler: public DocumentHandlerInterface
+class DocumentHandler: public OdfDocumentHandler
 {
 public:
         DocumentHandler(Reference < XDocumentHandler > &xHandler);

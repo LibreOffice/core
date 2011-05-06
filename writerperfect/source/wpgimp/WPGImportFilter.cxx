@@ -47,7 +47,7 @@
 #include <xmloff/attrlist.hxx>
 
 #include "filter/DocumentHandler.hxx"
-#include "filter/OdgExporter.hxx"
+#include "filter/OdgGenerator.hxx"
 #include "WPGImportFilter.hxx"
 #include "stream/WPXSvStream.h"
 
@@ -120,7 +120,7 @@ sal_Bool SAL_CALL WPGImportFilter::filter( const Sequence< ::com::sun::star::bea
 
     WPXInputStream* input = new WPXSvInputStream( xInputStream );
 
-    OdgExporter exporter(&xHandler);
+    OdgGenerator exporter(&xHandler, ODF_FLAT_XML);
     bool tmpParseResult = libwpg::WPGraphics::parse(input, &exporter);
     if (input)
         delete input;

@@ -1,9 +1,8 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* SectionStyle: Stores (and writes) section-based information (e.g.: a column
  * break needs a new section) that is needed at the head of an OO document and
  * is referenced throughout the entire document
  *
- * Copyright (C) 2002-2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2002-2003 William Lachance (wrlach@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -29,7 +28,6 @@
 #include "FilterInternal.hxx"
 #include "PageSpan.hxx"
 #include "DocumentElement.hxx"
-#include "DocumentHandler.hxx"
 
 PageSpan::PageSpan(const WPXPropertyList &xPropList) :
         mxPropList(xPropList),
@@ -163,7 +161,7 @@ void PageSpan::setFooterLeftContent(std::vector<DocumentElement *> * pFooterCont
     mpFooterLeftContent = pFooterContent;
 }
 
-void PageSpan::writePageLayout(const int iNum, DocumentHandlerInterface *pHandler) const
+void PageSpan::writePageLayout(const int iNum, OdfDocumentHandler *pHandler) const
 {
         WPXPropertyList propList;
 
@@ -194,7 +192,7 @@ void PageSpan::writePageLayout(const int iNum, DocumentHandlerInterface *pHandle
 }
 
 void PageSpan::writeMasterPages(const int iStartingNum, const int iPageLayoutNum, const bool bLastPageSpan,
-                                DocumentHandlerInterface *pHandler) const
+                                OdfDocumentHandler *pHandler) const
 {
     int iSpan = 0;
     (bLastPageSpan) ? iSpan = 1 : iSpan = getSpan();
@@ -223,9 +221,9 @@ void PageSpan::writeMasterPages(const int iStartingNum, const int iPageLayoutNum
         {
             _writeHeaderFooter("style:header", *mpHeaderContent, pHandler);
             pHandler->endElement("style:header");
-        if (mpHeaderLeftContent)
+            if (mpHeaderLeftContent)
             {
-            _writeHeaderFooter("style:header-left", *mpHeaderLeftContent, pHandler);
+                _writeHeaderFooter("style:header-left", *mpHeaderLeftContent, pHandler);
                 pHandler->endElement("style:header-left");
             }
         }
@@ -241,9 +239,9 @@ void PageSpan::writeMasterPages(const int iStartingNum, const int iPageLayoutNum
         {
             _writeHeaderFooter("style:footer", *mpFooterContent, pHandler);
             pHandler->endElement("style:footer");
-        if (mpFooterLeftContent)
+            if (mpFooterLeftContent)
             {
-            _writeHeaderFooter("style:footer-left", *mpFooterLeftContent, pHandler);
+                _writeHeaderFooter("style:footer-left", *mpFooterLeftContent, pHandler);
                 pHandler->endElement("style:footer-left");
             }
         }
@@ -257,20 +255,17 @@ void PageSpan::writeMasterPages(const int iStartingNum, const int iPageLayoutNum
 
                 pHandler->endElement("style:master-page");
     }
-
 }
 
 void PageSpan::_writeHeaderFooter(const char *headerFooterTagName,
                   const std::vector<DocumentElement *> & headerFooterContent,
-                  DocumentHandlerInterface *pHandler) const
+                  OdfDocumentHandler *pHandler) const
 {
     TagOpenElement headerFooterOpen(headerFooterTagName);
     headerFooterOpen.write(pHandler);
     for (std::vector<DocumentElement *>::const_iterator iter = headerFooterContent.begin();
          iter != headerFooterContent.end();
-         ++iter) {
+         iter++) {
         (*iter)->write(pHandler);
     }
 }
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,4 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* libwpg
  * Copyright (C) 2006 Ariya Hidayat (ariya@kde.org)
  *
@@ -26,27 +25,23 @@
 #ifndef __ODGEXPORTER_HXX__
 #define __ODGEXPORTER_HXX__
 
-#include <iostream>
-#include <sstream>
-#include <string>
-
 #include <libwpd/libwpd.h>
 #include <libwpg/libwpg.h>
-#include "DocumentElement.hxx"
-#include "DocumentHandler.hxx"
-#include "FilterInternal.hxx"
+#include "OdfDocumentHandler.hxx"
 
-class OdgExporter : public libwpg::WPGPaintInterface {
+class OdgGeneratorPrivate;
+
+class OdgGenerator : public libwpg::WPGPaintInterface {
 public:
-    OdgExporter(DocumentHandlerInterface *pHandler);
-    ~OdgExporter();
+    OdgGenerator(OdfDocumentHandler *pHandler, const OdfStreamType streamType);
+    ~OdgGenerator();
 
     void startGraphics(const ::WPXPropertyList &propList);
     void endGraphics();
     void startLayer(const ::WPXPropertyList &propList);
     void endLayer();
-    void startEmbeddedGraphics(const ::WPXPropertyList& /*propList*/) {}
-    void endEmbeddedGraphics() {}
+    void startEmbeddedGraphics(const ::WPXPropertyList&propList);
+    void endEmbeddedGraphics();
 
     void setStyle(const ::WPXPropertyList &propList, const ::WPXPropertyListVector& gradient);
 
@@ -56,38 +51,17 @@ public:
     void drawPolygon(const ::WPXPropertyListVector& vertices);
     void drawPath(const ::WPXPropertyListVector& path);
     void drawGraphicObject(const ::WPXPropertyList &propList, const ::WPXBinaryData& binaryData);
-    void startTextObject(const ::WPXPropertyList & /*propList*/, const ::WPXPropertyListVector &/*path*/) {}
-    void endTextObject() {}
-    void startTextLine(const ::WPXPropertyList & /*propList*/) {}
-    void endTextLine() {}
-    void startTextSpan(const ::WPXPropertyList & /*propList*/) {}
-    void endTextSpan() {}
-    void insertText(const ::WPXString & /*str*/) {}
+
+    void startTextObject(const ::WPXPropertyList &propList, const ::WPXPropertyListVector &path);
+    void endTextObject();
+    void startTextLine(const ::WPXPropertyList &propList);
+    void endTextLine();
+    void startTextSpan(const ::WPXPropertyList &propList);
+    void endTextSpan();
+    void insertText(const ::WPXString &str);
 
 private:
-    void writeGraphicsStyle();
-    WPXString doubleToString(const double value);
-    void drawPolySomething(const ::WPXPropertyListVector& vertices, bool isClosed);
-
-    // body elements
-    std::vector <DocumentElement *> mBodyElements;
-
-    // graphics styles
-    std::vector<DocumentElement *> mGraphicsStrokeDashStyles;
-    std::vector<DocumentElement *> mGraphicsGradientStyles;
-    std::vector<DocumentElement *> mGraphicsAutomaticStyles;
-
-    DocumentHandlerInterface *mpHandler;
-
-    ::WPXPropertyList mxStyle;
-    ::WPXPropertyListVector mxGradient;
-    int miGradientIndex;
-    int miDashIndex;
-    int miGraphicsStyleIndex;
-    double mfWidth;
-    double mfHeight;
+    OdgGeneratorPrivate *mpImpl;
 };
 
 #endif // __ODGEXPORTER_HXX__
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

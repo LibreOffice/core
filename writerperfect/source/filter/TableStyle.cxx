@@ -1,8 +1,7 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* TableStyle: Stores (and writes) table-based information that is
  * needed at the head of an OO document.
  *
- * Copyright (C) 2002-2004 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2002-2004 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2004 Net Integration Technologies, Inc. (http://www.net-itech.com)
  * Copyright (C) 2004 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
@@ -44,7 +43,7 @@ TableCellStyle::TableCellStyle(const WPXPropertyList &xPropList, const char *psN
 {
 }
 
-void TableCellStyle::write(DocumentHandlerInterface *pHandler) const
+void TableCellStyle::write(OdfDocumentHandler *pHandler) const
 {
     TagOpenElement styleOpen("style:style");
     styleOpen.addAttribute("style:name", getName());
@@ -73,7 +72,7 @@ TableRowStyle::TableRowStyle(const WPXPropertyList &propList, const char *psName
 {
 }
 
-void TableRowStyle::write(DocumentHandlerInterface *pHandler) const
+void TableRowStyle::write(OdfDocumentHandler *pHandler) const
 {
     TagOpenElement styleOpen("style:style");
     styleOpen.addAttribute("style:name", getName());
@@ -104,13 +103,13 @@ TableStyle::~TableStyle()
 {
     typedef std::vector<TableCellStyle *>::iterator TCSVIter;
     typedef std::vector<TableRowStyle *>::iterator TRSVIter;
-    for (TCSVIter iterTableCellStyles = mTableCellStyles.begin() ; iterTableCellStyles != mTableCellStyles.end(); ++iterTableCellStyles)
+    for (TCSVIter iterTableCellStyles = mTableCellStyles.begin() ; iterTableCellStyles != mTableCellStyles.end(); iterTableCellStyles++)
         delete(*iterTableCellStyles);
-    for (TRSVIter iterTableRowStyles = mTableRowStyles.begin() ; iterTableRowStyles != mTableRowStyles.end(); ++iterTableRowStyles)
+    for (TRSVIter iterTableRowStyles = mTableRowStyles.begin() ; iterTableRowStyles != mTableRowStyles.end(); iterTableRowStyles++)
         delete(*iterTableRowStyles);
 }
 
-void TableStyle::write(DocumentHandlerInterface *pHandler) const
+void TableStyle::write(OdfDocumentHandler *pHandler) const
 {
     TagOpenElement styleOpen("style:style");
     styleOpen.addAttribute("style:name", getName());
@@ -140,14 +139,14 @@ void TableStyle::write(DocumentHandlerInterface *pHandler) const
         WPXPropertyListVector::Iter j(mColumns);
     for (j.rewind(); j.next();)
     {
-        TagOpenElement styleOpen2("style:style");
+        TagOpenElement columnStyleOpen("style:style");
         WPXString sColumnName;
         sColumnName.sprintf("%s.Column%i", getName().cstr(), i);
-        styleOpen2.addAttribute("style:name", sColumnName);
-        styleOpen2.addAttribute("style:family", "table-column");
-        styleOpen2.write(pHandler);
+        columnStyleOpen.addAttribute("style:name", sColumnName);
+        columnStyleOpen.addAttribute("style:family", "table-column");
+        columnStyleOpen.write(pHandler);
 
-        pHandler->startElement("style:table-column-properties", j());
+                pHandler->startElement("style:table-column-properties", j());
         pHandler->endElement("style:table-column-properties");
 
         pHandler->endElement("style:style");
@@ -156,12 +155,10 @@ void TableStyle::write(DocumentHandlerInterface *pHandler) const
     }
 
     typedef std::vector<TableRowStyle *>::const_iterator TRSVIter;
-    for (TRSVIter iterTableRow = mTableRowStyles.begin() ; iterTableRow != mTableRowStyles.end(); ++iterTableRow)
+    for (TRSVIter iterTableRow = mTableRowStyles.begin() ; iterTableRow != mTableRowStyles.end(); iterTableRow++)
         (*iterTableRow)->write(pHandler);
 
     typedef std::vector<TableCellStyle *>::const_iterator TCSVIter;
-    for (TCSVIter iterTableCell = mTableCellStyles.begin() ; iterTableCell != mTableCellStyles.end(); ++iterTableCell)
+    for (TCSVIter iterTableCell = mTableCellStyles.begin() ; iterTableCell != mTableCellStyles.end(); iterTableCell++)
         (*iterTableCell)->write(pHandler);
 }
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

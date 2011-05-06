@@ -1,8 +1,7 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* FontStyle: Stores (and writes) font-based information that is needed at
  * the head of an OO document.
  *
- * Copyright (C) 2002-2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2002-2003 William Lachance (wrlach@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -39,14 +38,13 @@ FontStyle::~FontStyle()
 {
 }
 
-void FontStyle::write(DocumentHandlerInterface *pHandler) const
+void FontStyle::write(OdfDocumentHandler *pHandler) const
 {
     TagOpenElement styleOpen("style:font-face");
     styleOpen.addAttribute("style:name", getName());
     styleOpen.addAttribute("svg:font-family", msFontFamily);
+//    styleOpen.addAttribute("style:font-pitch", msFontPitch);
     styleOpen.write(pHandler);
     TagCloseElement styleClose("style:font-face");
     styleClose.write(pHandler);
 }
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,8 +1,7 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* WriterProperties: A grab bag of writer-specific properties which we use
  * define here for later use.
  *
- * Copyright (C) 2002-2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2002-2003 William Lachance (wrlach@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -29,10 +28,8 @@
 #define _WRITER_PROPERTIES_H
 
 #define IMP_DEFAULT_SUPER_SUB_SCRIPT "58%"
-#define IMP_NUM_CENTIMETERES_PER_INCH 2.54
+#define IMP_NUM_CENTIMETERES_PER_INCH 2.54f
 #define IMP_DEFAULT_FONT_NAME "Times New Roman"
 #define IMP_DEFAULT_FONT_SIZE 12.0
 #define IMP_DEFAULT_FONT_PITCH "variable"
 #endif
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

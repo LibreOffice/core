@@ -22,7 +22,6 @@ INCPRE+=$(LIBWPS_CFLAGS)
 INCPRE+= -I..
 
 SLOFILES= \
-    $(SLO)$/WordPerfectCollector.obj  \
     $(SLO)$/WordPerfectImportFilter.obj  \
     $(SLO)$/wpft_genericfilter.obj		
 

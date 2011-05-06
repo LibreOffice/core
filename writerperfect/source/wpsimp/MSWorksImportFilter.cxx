@@ -45,12 +45,11 @@
 
 #include "filter/FilterInternal.hxx"
 #include "filter/DocumentHandler.hxx"
-#include "filter/DocumentCollector.hxx"
+#include "filter/OdtGenerator.hxx"
 #include "stream/WPXSvStream.h"
 
 #include <libwps/WPSDocument.h>
 #include "MSWorksImportFilter.hxx"
-#include "MSWorksCollector.hxx"
 
 // using namespace ::rtl;
 using rtl::OString;
@@ -109,16 +108,16 @@ sal_Bool SAL_CALL MSWorksImportFilter::importImpl( const Sequence< ::com::sun::s
     Reference < XImporter > xImporter(xInternalHandler, UNO_QUERY);
     xImporter->setTargetDocument(mxDoc);
 
-        // OO Document Handler: abstract class to handle document SAX messages, concrete implementation here
-        // writes to in-memory target doc
-        DocumentHandler xHandler(xInternalHandler);
+    // OO Document Handler: abstract class to handle document SAX messages, concrete implementation here
+    // writes to in-memory target doc
+    DocumentHandler xHandler(xInternalHandler);
 
     WPXSvInputStream input( xInputStream );
 
-    MSWorksCollector collector(&input, &xHandler);
-    collector.filter();
-
-    return true;
+    OdtGenerator collector(&xHandler, ODF_FLAT_XML);
+    if (WPS_OK == WPSDocument::parse(&input, static_cast<WPXDocumentInterface*>(&collector)))
+        return sal_True;
+    return sal_False;
 }
 
 sal_Bool SAL_CALL MSWorksImportFilter::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )

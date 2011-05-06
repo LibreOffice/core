@@ -1,9 +1,8 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* SectionStyle: Stores (and writes) section-based information (e.g.: a column
  * break needs a new section) that is needed at the head of an OO document and
  * is referenced throughout the entire document
  *
- * Copyright (C) 2002-2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2002-2003 William Lachance (wrlach@gmail.com)
  * Copyright (c) 2004 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * This program is free software; you can redistribute it and/or
@@ -45,7 +44,7 @@ SectionStyle::SectionStyle(const WPXPropertyList &xPropList,
 {
 }
 
-void SectionStyle::write(DocumentHandlerInterface *pHandler) const
+void SectionStyle::write(OdfDocumentHandler *pHandler) const
 {
     TagOpenElement styleOpen("style:style");
     styleOpen.addAttribute("style:name", getName());
@@ -61,8 +60,8 @@ void SectionStyle::write(DocumentHandlerInterface *pHandler) const
 
     if (mColumns.count() > 1)
     {
-                columnProps.insert("fo:column-count", (int)mColumns.count());
-                pHandler->startElement("style:columns", columnProps);
+        columnProps.insert("fo:column-count", (int)mColumns.count());
+         pHandler->startElement("style:columns", columnProps);
 
                 WPXPropertyListVector::Iter i(mColumns);
                 for (i.rewind(); i.next();)
@@ -85,5 +84,3 @@ void SectionStyle::write(DocumentHandlerInterface *pHandler) const
 
     pHandler->endElement("style:style");
 }
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

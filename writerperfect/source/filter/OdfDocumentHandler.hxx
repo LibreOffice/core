@@ -1,4 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * Copyright (C) 2004 William Lachance (wlach@interlog.com)
  * Copyright (C) 2004 Net Integration Technologies (http://www.net-itech.com)
@@ -25,24 +24,22 @@
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
-#ifndef _DOCUMENTHANDLERINTERFACE_H
-#define _DOCUMENTHANDLERINTERFACE_H
+#ifndef _DOCUMENTHANDLER_H
+#define _DOCUMENTHANDLER_H
 #include <libwpd/libwpd.h>
-#include <libwpd/WPXProperty.h>
-#include <libwpd/WPXString.h>
 
-class DocumentHandlerInterface
+enum OdfStreamType { ODF_FLAT_XML, ODF_CONTENT_XML, ODF_STYLES_XML, ODF_SETTINGS_XML, ODF_META_XML };
+
+class OdfDocumentHandler
 {
 public:
-    DocumentHandlerInterface() {};
-    virtual ~DocumentHandlerInterface() {};
+    OdfDocumentHandler() {};
+    virtual ~OdfDocumentHandler() {};
 
-        virtual void startDocument() = 0;
-        virtual void endDocument() = 0;
-        virtual void startElement(const char *psName, const WPXPropertyList &xPropList) = 0;
-        virtual void endElement(const char *psName) = 0;
-        virtual void characters(const WPXString &sCharacters) = 0;
+    virtual void startDocument() = 0;
+    virtual void endDocument() = 0;
+    virtual void startElement(const char *psName, const WPXPropertyList &xPropList) = 0;
+    virtual void endElement(const char *psName) = 0;
+    virtual void characters(const WPXString &sCharacters) = 0;
 };
 #endif
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

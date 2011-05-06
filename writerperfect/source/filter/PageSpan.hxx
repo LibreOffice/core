@@ -1,8 +1,7 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* PageSpan: Stores (and writes) page-based information (e.g.: margins,
  * headers/footers)
  *
- * Copyright (C) 2002-2004 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2002-2004 William Lachance (wrlach@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -31,15 +30,15 @@
 #include <vector>
 
 class DocumentElement;
-class DocumentHandlerInterface;
+class OdfDocumentHandler;
 
 class PageSpan
 {
 public:
     PageSpan(const WPXPropertyList &xPropList);
     virtual ~PageSpan();
-    void writePageLayout(const int iNum, DocumentHandlerInterface *pHandler) const;
-    void writeMasterPages(const int iStartingNum, const int iPageLayoutNum, const bool bLastPageSpan, DocumentHandlerInterface *pHandler) const;
+    void writePageLayout(const int iNum, OdfDocumentHandler *pHandler) const;
+    void writeMasterPages(const int iStartingNum, const int iPageLayoutNum, const bool bLastPageSpan, OdfDocumentHandler *pHandler) const;
     int getSpan() const;
     double getMarginLeft() const;
     double getMarginRight() const;
@@ -50,7 +49,7 @@ public:
     void setFooterLeftContent(std::vector<DocumentElement *> * pFooterContent);
 protected:
     void _writeHeaderFooter(const char *headerFooterTagName, const std::vector<DocumentElement *> & headerFooterContent,
-                DocumentHandlerInterface *pHandler) const;
+                OdfDocumentHandler *pHandler) const;
 private:
         WPXPropertyList mxPropList;
     std::vector<DocumentElement *> * mpHeaderContent;
@@ -59,5 +58,3 @@ private:
     std::vector<DocumentElement *> * mpFooterLeftContent;
 };
 #endif
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

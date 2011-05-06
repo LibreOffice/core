@@ -1,7 +1,6 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* FilterInternal: Debugging information
  *
- * Copyright (C) 2002-2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2002-2003 William Lachance (wrlach@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,21 +19,18 @@
  * For further information visit http://libwpd.sourceforge.net
  *
  */
+#ifndef __FILTERINTERNAL_HXX__
+#define __FILTERINTERNAL_HXX__
 
-#ifndef _FILTERINTERNAL_HXX
-#define _FILTERINTERNAL_HXX
-
-#include <stdio.h>
 #ifdef DEBUG
+#include <stdio.h>
 #define WRITER_DEBUG_MSG(M) printf M
 #else
 #define WRITER_DEBUG_MSG(M)
 #endif
 
 const double fDefaultSideMargin = 1.0; // inches
-const double fDefaultPageWidth = 8.5; // inches (OOo required default: we will handle this later)
+const double fDefaultPageWidth = 8.5f; // inches (OOo required default: we will handle this later)
 const double fDefaultPageHeight = 11.0; // inches
 
 #endif
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

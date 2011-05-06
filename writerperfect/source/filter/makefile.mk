@@ -22,17 +22,16 @@ INCPRE+=$(LIBWPS_CFLAGS)
 INCPRE+= -I..
 
 SLOFILES= \
-    $(SLO)$/DocumentCollector.obj \
-    $(SLO)$/DocumentElement.obj		\
+    $(SLO)$/DocumentElement.obj \
     $(SLO)$/DocumentHandler.obj \
-    $(SLO)$/FontStyle.obj			\
-    $(SLO)$/GraphicsStyle.obj \
+    $(SLO)$/FontStyle.obj \
     $(SLO)$/InternalHandler.obj \
-    $(SLO)$/ListStyle.obj			\
-    $(SLO)$/OdgExporter.obj \
-    $(SLO)$/PageSpan.obj			\
-    $(SLO)$/SectionStyle.obj		\
-    $(SLO)$/TableStyle.obj			\
+    $(SLO)$/ListStyle.obj \
+    $(SLO)$/OdgGenerator.obj \
+    $(SLO)$/OdtGenerator.obj \
+    $(SLO)$/PageSpan.obj \
+    $(SLO)$/SectionStyle.obj \
+    $(SLO)$/TableStyle.obj \
     $(SLO)$/TextRunStyle.obj
 
 .INCLUDE :  target.mk

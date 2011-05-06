@@ -1,8 +1,7 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* Style: A base class from which all other styles are inherited, includes
  * a name.
  *
- * Copyright (C) 2002-2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2002-2003 William Lachance (wrlach@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -34,7 +33,7 @@
 class TopLevelElementStyle
 {
 public:
-    TopLevelElementStyle() : mpsMasterPageName(0) { }
+    TopLevelElementStyle() : mpsMasterPageName(NULL) { }
     virtual ~TopLevelElementStyle() { if (mpsMasterPageName) delete mpsMasterPageName; }
     void setMasterPageName(WPXString &sMasterPageName) { mpsMasterPageName = new WPXString(sMasterPageName); }
     const WPXString * getMasterPageName() const { return mpsMasterPageName; }
@@ -49,12 +48,10 @@ class Style
     Style(const WPXString &psName) : msName(psName) {}
     virtual ~Style() {}
 
-    virtual void write(DocumentHandlerInterface * /* pHandler */) const {};
+    virtual void write(OdfDocumentHandler *) const {};
     const WPXString &getName() const { return msName; }
 
  private:
     WPXString msName;
 };
 #endif
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

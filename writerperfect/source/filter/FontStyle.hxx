@@ -1,8 +1,7 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* FontStyle: Stores (and writes) font-based information that is needed at
  * the head of an OO document.
  *
- * Copyright (C) 2002-2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2002-2003 William Lachance (wrlach@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -31,14 +30,13 @@
 
 #include "Style.hxx"
 #include "WriterProperties.hxx"
-#include "DocumentHandlerInterface.hxx"
 
 class FontStyle : public Style
 {
 public:
     FontStyle(const char *psName, const char *psFontFamily);
     ~FontStyle();
-    virtual void write(DocumentHandlerInterface *pHandler) const;
+    virtual void write(OdfDocumentHandler *pHandler) const;
     const WPXString &getFontFamily() const { return msFontFamily; }
 
 private:
@@ -46,5 +44,3 @@ private:
     WPXString msFontPitch;
 };
 #endif
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

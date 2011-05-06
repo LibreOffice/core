@@ -22,7 +22,6 @@ INCPRE+=$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc$/libwps
 INCPRE+= -I..
 
 SLOFILES= \
-    $(SLO)$/MSWorksCollector.obj  \
     $(SLO)$/MSWorksImportFilter.obj  \
     $(SLO)$/msworks_genericfilter.obj
 

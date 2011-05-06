@@ -1,6 +1,5 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
- * Copyright (C) 2007 Fridrich Strba .strba@bluewin.ch)
+ * Copyright (C) 2007 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,13 +33,13 @@ InternalHandler::InternalHandler(std::vector<DocumentElement *> *elements):
 void InternalHandler::startElement(const char *psName, const WPXPropertyList &xPropList)
 {
     TagOpenElement    *element = new TagOpenElement(psName);
-    WPXPropertyList::Iter i(xPropList);
-    for (i.rewind(); i.next(); )
-    {
-        // filter out libwpd elements
-        if (strncmp(i.key(), "libwpd", 6) != 0)
-            element->addAttribute(i.key(), i()->getStr());
-    }
+        WPXPropertyList::Iter i(xPropList);
+        for (i.rewind(); i.next(); )
+        {
+                // filter out libwpd elements
+                if (strncmp(i.key(), "libwpd", 6) != 0)
+                        element->addAttribute(i.key(), i()->getStr());
+        }
     mpElements->push_back(element);
 }
 
@@ -53,5 +52,3 @@ void InternalHandler::characters(const WPXString &sCharacters)
 {
     mpElements->push_back(new CharDataElement(sCharacters.cstr()));
 }
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

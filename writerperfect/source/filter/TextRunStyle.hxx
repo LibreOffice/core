@@ -1,9 +1,8 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* TextRunStyle: Stores (and writes) paragraph/span-style-based information
  * (e.g.: a paragraph might be bold) that is needed at the head of an OO
  * document.
  *
- * Copyright (C) 2002-2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2002-2003 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2004 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * This program is free software; you can redistribute it and/or
@@ -36,13 +35,14 @@
 
 class TagOpenElement;
 class DocumentElement;
+class OdfDocumentHandler;
 
 class ParagraphStyle
 {
 public:
     ParagraphStyle(WPXPropertyList *propList, const WPXPropertyListVector &tabStops, const WPXString &sName);
     virtual ~ParagraphStyle();
-    virtual void write(DocumentHandlerInterface *pHandler) const;
+    virtual void write(OdfDocumentHandler *pHandler) const;
     WPXString getName() const { return msName; }
 private:
     WPXPropertyList *mpPropList;
@@ -55,11 +55,9 @@ class SpanStyle : public Style
 {
 public:
     SpanStyle(const char *psName, const WPXPropertyList &xPropList);
-    virtual void write(DocumentHandlerInterface *pHandler) const;
+    virtual void write(OdfDocumentHandler *pHandler) const;
 
 private:
         WPXPropertyList mPropList;
 };
 #endif
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

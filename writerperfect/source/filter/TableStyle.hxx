@@ -1,8 +1,7 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* TableStyle: Stores (and writes) table-based information that is
  * needed at the head of an OO document.
  *
- * Copyright (C) 2002-2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2002-2003 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2004 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * This program is free software; you can redistribute it and/or
@@ -28,27 +27,21 @@
  */
 #ifndef _TABLESTYLE_H
 #define _TABLESTYLE_H
-#if defined _MSC_VER
-#pragma warning( push, 1 )
-#endif
 #include <libwpd/libwpd.h>
-#if defined _MSC_VER
-#pragma warning( pop )
-#endif
 #include <vector>
 
 #include "Style.hxx"
 #include "WriterProperties.hxx"
-#include "DocumentHandlerInterface.hxx"
 
 class DocumentElement;
+class OdfDocumentHandler;
 
 class TableCellStyle : public Style
 {
 public:
     virtual ~TableCellStyle() {};
     TableCellStyle(const WPXPropertyList &xPropList, const char *psName);
-    virtual void write(DocumentHandlerInterface *pHandler) const;
+    virtual void write(OdfDocumentHandler *pHandler) const;
 private:
         WPXPropertyList mPropList;
 };
@@ -58,7 +51,7 @@ class TableRowStyle : public Style
 public:
     virtual ~TableRowStyle() {};
     TableRowStyle(const WPXPropertyList &propList, const char *psName);
-    virtual void write(DocumentHandlerInterface *pHandler) const;
+    virtual void write(OdfDocumentHandler *pHandler) const;
 private:
         WPXPropertyList mPropList;
 };
@@ -68,7 +61,7 @@ class TableStyle : public Style, public TopLevelElementStyle
 public:
     TableStyle(const WPXPropertyList &xPropList, const WPXPropertyListVector &columns, const char *psName);
     virtual ~TableStyle();
-    virtual void write(DocumentHandlerInterface *pHandler) const;
+    virtual void write(OdfDocumentHandler *pHandler) const;
     int getNumColumns() const { return mColumns.count(); }
     void addTableCellStyle(TableCellStyle *pTableCellStyle) { mTableCellStyles.push_back(pTableCellStyle); }
     int getNumTableCellStyles() { return mTableCellStyles.size(); }
@@ -81,5 +74,3 @@ private:
     std::vector<TableRowStyle *> mTableRowStyles;
 };
 #endif
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
