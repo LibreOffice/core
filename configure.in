@@ -403,15 +403,6 @@ AC_ARG_ENABLE(check-only,
     ],
 ,)
 
-AC_ARG_ENABLE(ccache-skip,
-    AS_HELP_STRING([--enable-ccache-skip],
-        [Allow the use of --ccache-skip to escape compiler flags that would
-         otherwise prevent caching of the result (currently used on Mac only)
-         NOTE: requires patched version because of a bug in ccache (see issue
-         104567 for details and patch) explicitly enable if your version of
-         ccache doesn't identify as version 2.4_OOo. (default=auto)]),
-,enable_ccache_skip=auto)
-
 AC_ARG_ENABLE(build-unowinreg,
     AS_HELP_STRING([--enable-build-unowinreg],
         [Do not use the prebuilt unowinreg.dll. Build it instead. The MinGW C++
@@ -2879,19 +2870,14 @@ fi
 AC_SUBST(HAVE_CXX0X)
 
 # ===================================================================
-# use --ccache-skip?
+# use ccache?
 # ===================================================================
-dnl used to escape compiler options for ccache that otherwise prevent
+dnl need to check for ccache version: otherwise prevents
 dnl caching of the results (like "-x objective-c++" for Mac)
-AC_MSG_CHECKING([whether we are allowed and able to use --ccache-skip])
+AC_MSG_CHECKING([whether we are able to use --ccache-skip])
 if test "$_os" != "Darwin" ; then
    AC_MSG_RESULT([only used on Mac currently, skipping])
-elif test "$enable_ccache_skip" = "no" ; then
-   AC_MSG_RESULT([no - diabled explicitly])
-elif test "$enable_ccache_skip" = "yes" ; then
-   AC_MSG_RESULT([yes - enabled explicitly, skipping checks])
-   AC_SUBST([USE_CCACHE], [YES])
-elif test "$enable_ccache_skip" = "auto" ; then
+else
    # checking for ccache presence/version
    AC_MSG_RESULT([probing...])
    AC_PATH_PROG([CCACHE],[ccache],[not_found])
@@ -2924,8 +2910,6 @@ elif test "$enable_ccache_skip" = "auto" ; then
          AC_MSG_NOTICE([ccache version $CCACHE_VERSION not accepted. See description for --enable-ccache-skip])
       fi
    fi
-else
-   AC_MSG_ERROR([invalid option to --enable-ccache-skip. Valid values are "auto", "yes" and "no"])
 fi
 
 dnl ===================================================================
