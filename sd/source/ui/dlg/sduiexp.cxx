@@ -36,22 +36,12 @@
 #include "sddlgfact.hxx"
 #include "sal/types.h"
 
-namespace sdui
-{
-    static SdAbstractDialogFactory_Impl* pFactory=NULL;
-    SdAbstractDialogFactory_Impl* GetFactory()
-    {
-        if ( !pFactory )
-            pFactory = new SdAbstractDialogFactory_Impl;
-        return pFactory;
-    }
-}
-
 extern "C"
 {
     SAL_DLLPUBLIC_EXPORT SdAbstractDialogFactory* CreateDialogFactory()
     {
-        return ::sdui::GetFactory();
+        static SdAbstractDialogFactory_Impl aFactory;
+        return &aFactory;
     }
 }
 
