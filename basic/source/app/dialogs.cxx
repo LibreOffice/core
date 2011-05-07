@@ -204,12 +204,18 @@ OptConfEdit::OptConfEdit( Window* pParent, sal_uInt16 nResCheck, sal_uInt16 nRes
     rBase.SetModifyHdl( LINK( this, OptConfEdit, BaseModifyHdl ) );
 }
 
+#if defined(WNT)
+    #define FSYS_STYLE_DEFAULT FSYS_STYLE_NTFS
+# else
+    #define FSYS_STYLE_DEFAULT FSYS_STYLE_UNX
+#endif
+
 void OptConfEdit::Reload( Config &aConf )
 {
     ConfEdit::Reload( aConf );
 
     DirEntry aCalculatedHIDDir( rBase.GetValue() );
-    aCalculatedHIDDir += DirEntry( "global/hid", DEFSTYLE );
+    aCalculatedHIDDir += DirEntry( "global/hid", FSYS_STYLE_DEFAULT );
 
     DirEntry aCurrentHIDDir( aEdit.GetText() );
 
@@ -231,7 +237,7 @@ IMPL_LINK( OptConfEdit, BaseModifyHdl, Edit*, EMPTYARG )
     if ( aCheck.IsChecked() )
     {
         DirEntry aCalculatedHIDDir( rBase.GetValue() );
-        aCalculatedHIDDir += DirEntry( "global/hid", DEFSTYLE );
+        aCalculatedHIDDir += DirEntry( "global/hid", FSYS_STYLE_DEFAULT );
         aEdit.SetText( aCalculatedHIDDir.GetFull() );
     }
     return 0;
