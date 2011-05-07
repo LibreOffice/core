@@ -110,19 +110,6 @@ void MsgEdit::AddAnyMsg( TTLogMsg *LogMsg )
     if ( LogMsg->aDebugData.aFilename.Copy(0,2).CompareToAscii( "--" ) == COMPARE_EQUAL )
         LogMsg->aDebugData.aFilename.Erase(0,2);
 
-    if ( LogMsg->aDebugData.aFilename.Len() && LogMsg->aDebugData.aFilename.GetChar(0) != '~' ) // do we want to convert
-    {
-        DirEntry aConvert( LogMsg->aDebugData.aFilename );
-        if ( pAppError->aBaseDir.Contains( aConvert ) )
-        {
-            LogMsg->aDebugData.aFilename = CUniString("~");         // mark as converted
-            LogMsg->aDebugData.aFilename += aConvert.GetFull( FSYS_STYLE_VFAT );
-        }
-        else if ( !bFileLoading )
-        {
-            LogMsg->aDebugData.aFilename.Insert( CUniString("~-"), 0); // mark as unconvertable
-        }
-    }
     xub_StrLen nPos;
     LogMsg->aDebugData.aMsg.ConvertLineEnd();
     // does the message have several lines -> repeat the call for each line
@@ -756,9 +743,6 @@ sal_Bool TTTreeListBox::JumpToSourcecode( SvLBoxEntry *pThisEntry )
             else
             {
                 aFilename.Erase( 0,1 );
-                DirEntry aConvert( pAppError->aBaseDir );
-                aConvert += DirEntry( aFilename, FSYS_STYLE_VFAT );
-                aFilename = aConvert.GetFull();
             }
         }
 
