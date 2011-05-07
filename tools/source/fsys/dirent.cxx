@@ -572,7 +572,6 @@ FSysError DirEntry::ImpParseName( const ByteString& rbInitName,
             return ImpParseOs2Name( rbInitName, eStyle );
 
         case FSYS_STYLE_BSD:
-        case FSYS_STYLE_SYSV:
             return ImpParseUnixName( rbInitName, eStyle );
 
         case FSYS_STYLE_MAC:
@@ -662,14 +661,6 @@ void DirEntry::ImpTrim( FSysPathStyle eStyle )
             if ( eStyle == FSYS_STYLE_HPFS &&
                  ( eFlag == FSYS_FLAG_ABSROOT || eFlag == FSYS_FLAG_RELROOT ) )
                 aName.ToUpperAscii();
-            break;
-
-        case FSYS_STYLE_SYSV:
-            if ( aName.Len() > 14 )
-            {
-                nError = ERRCODE_IO_MISPLACEDCHAR|ERRCODE_WARNING_MASK;
-                aName.Erase( 14 );
-            }
             break;
 
         case FSYS_STYLE_BSD:

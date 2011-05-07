@@ -47,11 +47,7 @@
 #define _getcwd         getcwd
 #define _access         access
 
-#ifdef SYSV3
-#define DEFSTYLE        FSYS_STYLE_SYSV
-#else
 #define DEFSTYLE        FSYS_STYLE_BSD
-#endif
 
 #define CMP_LOWER(s)    (s)
 #define TEMPNAME()      tmpnam(0)

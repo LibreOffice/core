@@ -40,11 +40,9 @@
                         ( ( e == FSYS_STYLE_VFAT || e == FSYS_STYLE_HPFS || \
                             e == FSYS_STYLE_FAT ) || e == FSYS_STYLE_NTFS ) \
                           ? '\\' : '/' )
-#define SEARCHDELIM(e)  ( (e == FSYS_STYLE_SYSV || e == FSYS_STYLE_BSD) ? ":" \
-                        : ";" )
+#define SEARCHDELIM(e)  ( (e == FSYS_STYLE_BSD) ? ":" : ";" )
 #define SEARCHDELIM_C(e)(char)\
-                        ( (e == FSYS_STYLE_SYSV || e == FSYS_STYLE_BSD) ? ':' \
-                        : ';' )
+                        ( (e == FSYS_STYLE_BSD) ? ':' : ';' )
 #define ACTPARENT(e)    ( (e == FSYS_STYLE_MAC) ? ":" : ".." )
 #define ACTCURRENT(e)   ( (e == FSYS_STYLE_MAC) ? "" : "." )
 
