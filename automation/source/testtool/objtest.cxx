@@ -1758,7 +1758,11 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                     if ( rPar && rPar->Count() >= 2 )
                     {
                         SbxVariableRef pArg = rPar->Get( 1 );
-                        DirEntry FilePath(pArg->GetString(),FSYS_STYLE_VFAT);
+                    #if defined(WNT)
+                        DirEntry FilePath(pArg->GetString(),FSYS_STYLE_NTFS);
+                    #else
+                        DirEntry FilePath(pArg->GetString(),FSYS_STYLE_UNX);
+                    #endif
                         if ( !FilePath.IsAbs() )
                             FilePath = pImpl->aFileBase + FilePath;
                         String Ext = FilePath.GetExtension();
