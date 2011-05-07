@@ -30,6 +30,8 @@
 
 // include ---------------------------------------------------------------
 
+#include <vector>
+
 #include <sfx2/tabdlg.hxx>
 #include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
@@ -206,7 +208,7 @@ class SvxBitmapPickTabPage : public SfxTabPage
     FixedText           aErrorText;
     CheckBox            aLinkedCB;
 
-    List                aGrfNames;
+    std::vector<String> aGrfNames;
     String              sNumCharFmtName;
 
     SvxNumRule*         pActNum;

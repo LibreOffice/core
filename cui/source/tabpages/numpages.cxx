@@ -846,16 +846,20 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(Window* pParent,
     // Grafiknamen ermitteln
     GalleryExplorer::FillObjList(GALLERY_THEME_BULLETS, aGrfNames);
     pExamplesVS->SetHelpId(HID_VALUESET_NUMBMP    );
-    for(sal_uInt16 i = 0; i < aGrfNames.Count(); i++)
+
+    sal_uInt16 i = 0;
+    for(std::vector<String>::iterator it = aGrfNames.begin(); it != aGrfNames.end(); ++it, ++i)
     {
         pExamplesVS->InsertItem( i + 1, i);
-        String* pGrfNm = (String*) aGrfNames.GetObject(i);
-        INetURLObject aObj(*pGrfNm);
+
+        INetURLObject aObj(*it);
         if(aObj.GetProtocol() == INET_PROT_FILE)
-            *pGrfNm = aObj.PathToFileName();
-        pExamplesVS->SetItemText( i + 1, *pGrfNm );
+            *it = aObj.PathToFileName();
+
+        pExamplesVS->SetItemText( i + 1, *it );
     }
-    if(!aGrfNames.Count())
+
+    if(aGrfNames.empty())
     {
         aErrorText.Show();
     }
@@ -870,12 +874,6 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(Window* pParent,
 
 SvxBitmapPickTabPage::~SvxBitmapPickTabPage()
 {
-    String* pStr = (String*)aGrfNames.First();
-    while( pStr )
-    {
-        delete pStr;
-        pStr = (String*)aGrfNames.Next();
-    }
     delete pExamplesVS;
     delete pActNum;
     delete pSaveNum;
@@ -911,7 +909,7 @@ void  SvxBitmapPickTabPage::ActivatePage(const SfxItemSet& rSet)
         pExamplesVS->SetNoSelection();
     }
     // ersten Eintrag vorselektieren
-    if(aGrfNames.Count() &&
+    if(!aGrfNames.empty() &&
         (pActNum && (!lcl_IsNumFmtSet(pActNum, nActNumLvl) || bIsPreset)))
     {
         pExamplesVS->SelectItem(1);
@@ -931,7 +929,7 @@ int  SvxBitmapPickTabPage::DeactivatePage(SfxItemSet *_pSet)
 
 sal_Bool  SvxBitmapPickTabPage::FillItemSet( SfxItemSet& rSet )
 {
-    if ( !aGrfNames.Count() )
+    if ( aGrfNames.empty() )
     {
         return sal_False;
     }
@@ -990,10 +988,6 @@ IMPL_LINK(SvxBitmapPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
         bModified = sal_True;
         sal_uInt16 nIdx = pExamplesVS->GetSelectItemId() - 1;
 
-        String* pGrfName = 0;
-        if(aGrfNames.Count() > nIdx)
-            pGrfName = (String*)aGrfNames.GetObject(nIdx);
-
         sal_uInt16 nMask = 1;
         String aEmptyStr;
         sal_uInt16 nSetNumberingType = SVX_NUM_BITMAP;
@@ -1018,8 +1012,8 @@ IMPL_LINK(SvxBitmapPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
                     SvxBrushItem aBrush(aGraphic, GPOS_AREA, SID_ATTR_BRUSH );
                     aFmt.SetGraphicBrush( &aBrush, &aSize, &eOrient );
                 }
-                else if(pGrfName)
-                    aFmt.SetGraphic( *pGrfName );
+                else if(aGrfNames.size() > nIdx)
+                    aFmt.SetGraphic( aGrfNames[nIdx] );
                 pActNum->SetLevel(i, aFmt);
             }
             nMask <<= 1 ;
