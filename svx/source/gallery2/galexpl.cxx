@@ -187,7 +187,7 @@ sal_Bool GalleryExplorer::FillObjListTitle( const sal_uInt32 nThemeId, std::vect
             pGal->ReleaseTheme( pTheme, aListener );
         }
     }
-    return( rList.size() > 0 );
+    return !rList.empty();
 }
 
 // ------------------------------------------------------------------------
