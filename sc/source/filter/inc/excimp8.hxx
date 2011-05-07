@@ -30,6 +30,9 @@
 #define SC_EXCIMP8_HXX
 
 #include <string.h>
+
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #include "imp_op.hxx"
 #include "root.hxx"
 #include "excscen.hxx"
@@ -135,20 +138,9 @@ public:
 };
 
 
-class XclImpAutoFilterBuffer : private List
+class XclImpAutoFilterBuffer
 {
-private:
-    using                       List::Insert;
-
-    inline XclImpAutoFilterData* _First()   { return (XclImpAutoFilterData*) List::First(); }
-    inline XclImpAutoFilterData* _Next()    { return (XclImpAutoFilterData*) List::Next(); }
-
-    inline void                 Append( XclImpAutoFilterData* pData )
-                                    { List::Insert( pData, LIST_APPEND ); }
-protected:
 public:
-                                XclImpAutoFilterBuffer();
-    virtual                     ~XclImpAutoFilterBuffer();
 
     void                        Insert( RootData* pRoot, const ScRange& rRange);
     void                        AddAdvancedRange( const ScRange& rRange );
@@ -156,6 +148,10 @@ public:
     void                        Apply();
 
     XclImpAutoFilterData*       GetByTab( SCTAB nTab );
+
+private:
+
+    boost::ptr_vector<XclImpAutoFilterData> maFilters;
 };
 
 #endif

@@ -31,6 +31,8 @@
 
 #include "excimp8.hxx"
 
+#include <boost/bind.hpp>
+
 #include <scitems.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/mediadescriptor.hxx>
@@ -812,20 +814,10 @@ void XclImpAutoFilterData::EnableRemoveFilter()
     // inside the advanced range
 }
 
-XclImpAutoFilterBuffer::XclImpAutoFilterBuffer()
-{
-}
-
-XclImpAutoFilterBuffer::~XclImpAutoFilterBuffer()
-{
-    for( XclImpAutoFilterData* pData = _First(); pData; pData = _Next() )
-        delete pData;
-}
-
 void XclImpAutoFilterBuffer::Insert( RootData* pRoot, const ScRange& rRange)
 {
     if( !GetByTab( rRange.aStart.Tab() ) )
-        Append( new XclImpAutoFilterData( pRoot, rRange) );
+        maFilters.push_back( new XclImpAutoFilterData( pRoot, rRange) );
 }
 
 void XclImpAutoFilterBuffer::AddAdvancedRange( const ScRange& rRange )
@@ -844,15 +836,18 @@ void XclImpAutoFilterBuffer::AddExtractPos( const ScRange& rRange )
 
 void XclImpAutoFilterBuffer::Apply()
 {
-    for( XclImpAutoFilterData* pData = _First(); pData; pData = _Next() )
-        pData->Apply();
+    std::for_each(maFilters.begin(),maFilters.end(),
+        boost::bind(&XclImpAutoFilterData::Apply,_1));
 }
 
 XclImpAutoFilterData* XclImpAutoFilterBuffer::GetByTab( SCTAB nTab )
 {
-    for( XclImpAutoFilterData* pData = _First(); pData; pData = _Next() )
-        if( pData->Tab() == nTab )
-            return pData;
+    boost::ptr_vector<XclImpAutoFilterData>::iterator it;
+    for( it = maFilters.begin(); it != maFilters.end(); ++it )
+    {
+        if( it->Tab() == nTab )
+            return const_cast<XclImpAutoFilterData*>(&(*it));
+    }
     return NULL;
 }
 
