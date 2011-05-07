@@ -1614,7 +1614,11 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                     if ( rPar && rPar->Count() >= 2 )  // Genau ein Parameter
                     {
                         SbxVariableRef pArg = rPar->Get( 1 );
-                        DirEntry FilePath = pImpl->aFileBase + DirEntry(pArg->GetString(),FSYS_STYLE_VFAT);
+                    #if defined(WNT)
+                        DirEntry FilePath = pImpl->aFileBase + DirEntry(pArg->GetString(),FSYS_STYLE_NTFS);
+                    #else
+                        DirEntry FilePath = pImpl->aFileBase + DirEntry(pArg->GetString(),FSYS_STYLE_UNX);
+                    #endif
                         WriteNamesBin( FilePath.GetFull(), m_pSIds, m_pControls );
                     }
                     else
