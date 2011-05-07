@@ -1193,12 +1193,6 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(Window* pParent,
 SvxNumOptionsTabPage::~SvxNumOptionsTabPage()
 {
     delete aBitmapMB.GetPopupMenu()->GetPopupMenu( MN_GALLERY );
-    String* pStr = (String*)aGrfNames.First();
-    while( pStr )
-    {
-        delete pStr;
-        pStr = (String*)aGrfNames.Next();
-    }
     delete pActNum;
     delete pPreviewWIN;
     delete pSaveNum;
@@ -1959,12 +1953,16 @@ IMPL_LINK( SvxNumOptionsTabPage, GraphicHdl_Impl, MenuButton *, pButton )
 
     if(MN_GALLERY_ENTRY <= nItemId )
     {
-        aGrfName = *((String*)aGrfNames.GetObject( nItemId - MN_GALLERY_ENTRY));
-        Graphic aGraphic;
-        if(GalleryExplorer::GetGraphicObj( GALLERY_THEME_BULLETS, nItemId - MN_GALLERY_ENTRY, &aGraphic))
+        sal_uInt16 idx = nItemId - MN_GALLERY_ENTRY;
+        if (idx < aGrfNames.size())
         {
-            aSize = SvxNumberFormat::GetGraphicSizeMM100(&aGraphic);
-            bSucc = sal_True;
+            aGrfName = aGrfNames[idx];
+            Graphic aGraphic;
+            if(GalleryExplorer::GetGraphicObj( GALLERY_THEME_BULLETS, idx, &aGraphic))
+            {
+                aSize = SvxNumberFormat::GetGraphicSizeMM100(&aGraphic);
+                bSucc = sal_True;
+            }
         }
     }
     else
@@ -2031,20 +2029,22 @@ IMPL_LINK( SvxNumOptionsTabPage, PopupActivateHdl_Impl, Menu *, EMPTYARG )
         bMenuButtonInitialized = sal_True;
         EnterWait();
         PopupMenu* pPopup = aBitmapMB.GetPopupMenu()->GetPopupMenu( MN_GALLERY );
-        GalleryExplorer::FillObjList(GALLERY_THEME_BULLETS, aGrfNames);
-        if(aGrfNames.Count())
+
+        if(GalleryExplorer::FillObjList(GALLERY_THEME_BULLETS, aGrfNames))
         {
             pPopup->RemoveItem( pPopup->GetItemPos( NUM_NO_GRAPHIC ));
-            String aEmptyStr;
             GalleryExplorer::BeginLocking(GALLERY_THEME_BULLETS);
 
-            for(sal_uInt16 i = 0; i < aGrfNames.Count(); i++)
+            Graphic aGraphic;
+            String sGrfName;
+            std::vector<String>::const_iterator it = aGrfNames.begin();
+            for(sal_uInt16 i = 0; it != aGrfNames.end(); ++it, ++i)
             {
-                Graphic aGraphic;
-                String sGrfName = *(const String*)aGrfNames.GetObject(i);
+                sGrfName = *it;
                 INetURLObject aObj(sGrfName);
                 if(aObj.GetProtocol() == INET_PROT_FILE)
                     sGrfName = aObj.PathToFileName();
+
                 if(GalleryExplorer::GetGraphicObj( GALLERY_THEME_BULLETS, i, &aGraphic))
                 {
                     Bitmap aBitmap(aGraphic.GetBitmap());

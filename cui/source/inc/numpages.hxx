@@ -301,7 +301,7 @@ class SvxNumOptionsTabPage : public SfxTabPage
     sal_Bool                bHTMLMode           : 1;
     sal_Bool                bMenuButtonInitialized : 1;
 
-    List                aGrfNames;
+    std::vector<String> aGrfNames;
     Font                aActBulletFont;
     String              sBullet;
     String              sStartWith;
