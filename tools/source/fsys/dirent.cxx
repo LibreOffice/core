@@ -447,36 +447,15 @@ FSysError DirEntry::ImpParseOs2Name( const ByteString& rPfad, FSysPathStyle eSty
 
                 else
                 {
-                    if ( eStyle == FSYS_STYLE_FAT )
-                    {
-                        // ist der Name grundsaetzlich ungueltig?
-                        int         nPunkte = 0;
-                        const char *pChar;
-                        for ( pChar = aName.GetBuffer();
-                              nPunkte < 2 && *pChar != 0;
-                              pChar++ )
-                        {
-                            if ( *pChar == ';' )
-                                nPunkte = 0;
-                            else
-                                nPunkte += ( *pChar == '.' ) ? 1 : 0;
-                        }
-                        if ( nPunkte > 1 )
-                        {
-                            aName = rPfad;
-                            return FSYS_ERR_MISPLACEDCHAR;
-                        }
-                    }
-
                     // normalen Entries kommen auf den Stack
-                                        DirEntry *pNew = new DirEntry( aName, FSYS_FLAG_NORMAL, eStyle );
-                                        if ( !pNew->IsValid() )
-                                        {
-                                                aName = rPfad;
-                                                ErrCode eErr = pNew->GetError();
-                                                delete pNew;
-                                                return eErr;
-                                        }
+                    DirEntry *pNew = new DirEntry( aName, FSYS_FLAG_NORMAL, eStyle );
+                    if ( !pNew->IsValid() )
+                    {
+                        aName = rPfad;
+                        ErrCode eErr = pNew->GetError();
+                        delete pNew;
+                        return eErr;
+                    }
                     aStack.Push( pNew );
                 }
             }
@@ -533,53 +512,15 @@ FSysError DirEntry::ImpParseOs2Name( const ByteString& rPfad, FSysPathStyle eSty
 FSysError DirEntry::ImpParseName( const ByteString& rbInitName,
                                   FSysPathStyle eStyle )
 {
-    String  rInitName( rbInitName, osl_getThreadTextEncoding() );
     if ( eStyle == FSYS_STYLE_HOST )
         eStyle = DEFSTYLE;
 
-    // KI-Division of FSys
-    if ( eStyle == FSYS_STYLE_DETECT )
-    {
-        sal_Unicode cFirst = rInitName.GetChar(0);
-        if ( rInitName.Len() == 2 && rInitName.GetChar(1) == ':' &&
-             ((cFirst >= 'A' && cFirst <= 'Z') ||
-              (cFirst >= 'a' && cFirst <= 'z')))
-           eStyle = FSYS_STYLE_HPFS;
-        else if ( rInitName.Len() > 2 && rInitName.GetChar(1) == ':' )
-        {
-            if ( rInitName.Search( ':', 2 ) == STRING_NOTFOUND )
-                eStyle = FSYS_STYLE_HPFS;
-            else
-                eStyle = FSYS_STYLE_MAC;
-        }
-        else if ( rInitName.Search( '/' ) != STRING_NOTFOUND )
-            eStyle = FSYS_STYLE_BSD;
-        else if ( rInitName.Search( '\\' ) != STRING_NOTFOUND )
-            eStyle = FSYS_STYLE_HPFS;
-        else if ( rInitName.Search( ':' ) != STRING_NOTFOUND )
-            eStyle = FSYS_STYLE_MAC;
-        else
-            eStyle = FSYS_STYLE_HPFS;
-    }
+#if defined(WNT)
+    return ImpParseOs2Name( rbInitName, eStyle );
+#else
+    return ImpParseUnixName( rbInitName, eStyle );
+#endif
 
-    switch ( eStyle )
-    {
-        case FSYS_STYLE_FAT:
-        case FSYS_STYLE_VFAT:
-        case FSYS_STYLE_HPFS:
-        case FSYS_STYLE_NTFS:
-        case FSYS_STYLE_NWFS:
-            return ImpParseOs2Name( rbInitName, eStyle );
-
-        case FSYS_STYLE_BSD:
-            return ImpParseUnixName( rbInitName, eStyle );
-
-        case FSYS_STYLE_MAC:
-            return FSYS_ERR_OK;
-
-        default:
-            return FSYS_ERR_UNKNOWN;
-    }
 }
 
 /*************************************************************************
@@ -614,85 +555,19 @@ void DirEntry::ImpTrim( FSysPathStyle eStyle )
          ( aName.Search( ';' ) != STRING_NOTFOUND ) )
         return;
 
-    switch ( eStyle )
+#if defined(WNT)
+    if ( aName.Len() > 254 )
     {
-        case FSYS_STYLE_FAT:
-        {
-            sal_uInt16 nPunktPos = aName.Search( '.' );
-            if ( nPunktPos == STRING_NOTFOUND )
-            {
-                if ( aName.Len() > 8 )
-                {
-                    nError = ERRCODE_IO_MISPLACEDCHAR|ERRCODE_WARNING_MASK;
-                    aName.Erase( 8 );
-                }
-            }
-            else
-            {
-                if ( nPunktPos > 8 )
-                {
-                    nError = ERRCODE_IO_MISPLACEDCHAR|ERRCODE_WARNING_MASK;
-                    aName.Erase( 8, nPunktPos - 8 );
-                    nPunktPos = 8;
-                }
-                if ( aName.Len() > nPunktPos + 3 )
-                {
-                    if ( aName.Len() - nPunktPos > 4 )
-                    {
-                        nError = ERRCODE_IO_MISPLACEDCHAR|ERRCODE_WARNING_MASK;
-                        aName.Erase( nPunktPos + 4 );
-                    }
-                }
-            }
-            aName.ToLowerAscii();
-            break;
-        }
-
-        case FSYS_STYLE_VFAT:
-        case FSYS_STYLE_HPFS:
-        case FSYS_STYLE_NTFS:
-        case FSYS_STYLE_NWFS:
-            if ( aName.Len() > 254 )
-            {
-                nError = ERRCODE_IO_MISPLACEDCHAR|ERRCODE_WARNING_MASK;
-                aName.Erase( 254 );
-            }
-
-            if ( eStyle == FSYS_STYLE_HPFS &&
-                 ( eFlag == FSYS_FLAG_ABSROOT || eFlag == FSYS_FLAG_RELROOT ) )
-                aName.ToUpperAscii();
-            break;
-
-        case FSYS_STYLE_BSD:
-            if ( aName.Len() > 250 )
-            {
-                nError = ERRCODE_IO_MISPLACEDCHAR|ERRCODE_WARNING_MASK;
-                aName.Erase( 250 );
-            }
-            break;
-
-        case FSYS_STYLE_MAC:
-            if ( eFlag & ( FSYS_FLAG_ABSROOT | FSYS_FLAG_VOLUME ) )
-            {
-                if ( aName.Len() > 27 )
-                {
-                    nError = ERRCODE_IO_MISPLACEDCHAR|ERRCODE_WARNING_MASK;
-                    aName.Erase( 27 );
-                }
-            }
-            else
-            {
-                if ( aName.Len() > 31 )
-                {
-                    nError = ERRCODE_IO_MISPLACEDCHAR|ERRCODE_WARNING_MASK;
-                    aName.Erase( 31 );
-                }
-            }
-            break;
-
-        default:
-            /* kann nicht sein */;
+        nError = ERRCODE_IO_MISPLACEDCHAR|ERRCODE_WARNING_MASK;
+        aName.Erase( 254 );
     }
+#else
+    if ( aName.Len() > 250 )
+    {
+        nError = ERRCODE_IO_MISPLACEDCHAR|ERRCODE_WARNING_MASK;
+        aName.Erase( 250 );
+    }
+#endif
 }
 
 /*************************************************************************
@@ -768,7 +643,7 @@ DirEntry::DirEntry( const String& rInitName, FSysPathStyle eStyle )
     }
 
     ByteString aTmpName(rInitName, osl_getThreadTextEncoding());
-    if( eStyle == FSYS_STYLE_URL || aTmpName.CompareIgnoreCaseToAscii("file:",5 ) == COMPARE_EQUAL )
+    if( aTmpName.CompareIgnoreCaseToAscii("file:",5 ) == COMPARE_EQUAL )
     {
 #ifndef BOOTSTRAP
         DBG_WARNING( "File URLs are not permitted but accepted" );
@@ -824,7 +699,7 @@ DirEntry::DirEntry( const ByteString& rInitName, FSysPathStyle eStyle )
     }
 
     ByteString aTmpName( rInitName );
-    if( eStyle == FSYS_STYLE_URL || rInitName.CompareIgnoreCaseToAscii("file:",5 ) == COMPARE_EQUAL )
+    if( rInitName.CompareIgnoreCaseToAscii("file:",5 ) == COMPARE_EQUAL )
     {
 #ifndef BOOTSTRAP
         DBG_WARNING( "File URLs are not permitted but accepted" );
@@ -1069,12 +944,6 @@ String DirEntry::GetFull( FSysPathStyle eStyle, sal_Bool bWithDelimiter,
         aRet = ByteString(GetName( eStyle ), osl_getThreadTextEncoding());
     }
 
-    if ( ( eStyle == FSYS_STYLE_MAC ) &&
-         ( ImpGetTopPtr()->eFlag != FSYS_FLAG_VOLUME )  &&
-         ( ImpGetTopPtr()->eFlag != FSYS_FLAG_ABSROOT ) &&
-         ( aRet.GetChar(0) != ':' ) )
-        aRet.Insert( ACCESSDELIM_C(eStyle), 0 );
-
     //! Hack
     if ( bWithDelimiter )
         if ( aRet.GetChar( aRet.Len()-1 ) != ACCESSDELIM_C(eStyle) )
@@ -1173,62 +1042,15 @@ String DirEntry::GetName( FSysPathStyle eStyle ) const
 
         case FSYS_FLAG_ABSROOT:
         {
-            if ( eStyle == FSYS_STYLE_URL )
-            {
-                aRet = "file:///";
-                aRet += aName;
-
-#ifndef UNX
-                if ( aName.Len())
-                {
-                    if ( aName.GetChar(aName.Len()-1) == ':' )
-                    {
-                        aRet.SetChar(aRet.Len()-1, '|');
-                    }
-                    else
-                    {
-                        aRet.Insert( '/', 5 );
-                    }
-                    aRet += "/";
-                }
-#endif
-            }
-            else if ( eStyle != FSYS_STYLE_MAC &&
-                                 aName.Len() > 1 && aName.GetChar( 1 ) != ':'  )
-            {
-                // UNC-Pathname
-                aRet = ACCESSDELIM_C(eStyle);
-                aRet += ACCESSDELIM_C(eStyle);
-                aRet += aName ;
-                aRet += ACCESSDELIM_C(eStyle);
-            }
-            else
-            {
-                aRet = aName;
-                aRet += ACCESSDELIM_C(eStyle);
-            }
+            aRet = aName;
+            aRet += ACCESSDELIM_C(eStyle);
             break;
         }
 
         case FSYS_FLAG_INVALID:
         case FSYS_FLAG_VOLUME:
         {
-            if ( eStyle == FSYS_STYLE_URL )
-            {
-                aRet = "file:///";
-                aRet += aName;
-#ifndef UNX
-                if ( aName.Len() && aName.GetChar(aName.Len()-1) == ':' )
-                {
-                    aRet.SetChar(aRet.Len()-1, '|');
-                }
-#endif
-            }
-            else
-            {
-                aRet = aName;
-            }
-
+            aRet = aName;
             break;
         }
 
@@ -1586,8 +1408,7 @@ void DirEntry::SetName( const String& rName, FSysPathStyle eFormatter )
 
     if ( (eFlag != FSYS_FLAG_NORMAL) ||
          (aName.Search( ':' ) != STRING_NOTFOUND) ||
-         (aName.Search( aAccDelim ) != STRING_NOTFOUND) ||
-         (eFormatter == FSYS_STYLE_FAT && (aName.GetTokenCount( '.' ) > 2) ) )
+         (aName.Search( aAccDelim ) != STRING_NOTFOUND) )
     {
         eFlag = FSYS_FLAG_INVALID;
     }
@@ -2076,13 +1897,6 @@ sal_Bool IsValidEntry_Impl( const DirEntry &rPath,
     aPath += aName;
     if ( 1 == aPath.Level() )
         return sal_False;
-    if ( eStyle == FSYS_STYLE_FAT || eStyle == FSYS_STYLE_NWFS ||
-         eStyle == FSYS_STYLE_UNKNOWN )
-    {
-        DirEntry aDosEntry( rLongName, FSYS_STYLE_FAT );
-        if ( !aDosEntry.IsValid() )
-            return sal_False;
-    }
 
         // Pfad-Trenner sind nicht erlaubt (bei ungek"urzten auch nicht FSYS_SHORTNAME_DELIMITER)
         char cDelim = bUseDelim == 2 ? FSYS_SHORTNAME_DELIMITER : char(0);
@@ -2102,14 +1916,6 @@ sal_Bool IsValidEntry_Impl( const DirEntry &rPath,
 }
 
 //-------------------------------------------------------------------------
-
-#define MAX_EXT_FAT         3
-#define MAX_LEN_FAT         8
-#define INVALID_CHARS_FAT   "\\/\"':|^<>[]?* "
-
-#define MAX_EXT_MAC        16   // nur wegen sinnvoller Namensk"rzung
-#define MAX_LEN_MAC        31
-#define INVALID_CHARS_MAC   "\":"
 
 #define MAX_EXT_MAX       250
 #define MAX_LEN_MAX       255
@@ -2147,49 +1953,27 @@ sal_Bool DirEntry::MakeShortName( const String& rLongName, DirEntryKind eKind,
         if ( FSYS_STYLE_DETECT == eStyle )
             eStyle = DirEntry::GetPathStyle( GetDevice().GetName() );
         ByteString aInvalidChars;
-        switch ( eStyle )
-        {
-            case FSYS_STYLE_FAT:
-                nMaxExt = MAX_EXT_FAT;
-                nMaxLen = MAX_LEN_FAT;
-                aInvalidChars = INVALID_CHARS_FAT;
-                break;
-
-            case FSYS_STYLE_MAC:
-                nMaxExt = MAX_EXT_MAC;
-                nMaxLen = MAX_LEN_MAC;
-                aInvalidChars = INVALID_CHARS_MAC;
-                break;
-
-            default:
-                nMaxExt = MAX_EXT_MAX;
-                nMaxLen = MAX_LEN_MAX;
-                aInvalidChars = INVALID_CHARS_DEF;
-        }
+        nMaxExt = MAX_EXT_MAX;
+        nMaxLen = MAX_LEN_MAX;
+        aInvalidChars = INVALID_CHARS_DEF;
 
         // Extension abschneiden und kuerzen
         ByteString aExt;
         ByteString aFName = bLongName;
-        if ( FSYS_STYLE_MAC != eStyle )
+        DirEntry aUnparsed;
+        aUnparsed.aName = bLongName;
+        aExt = ByteString(aUnparsed.CutExtension(), osl_getThreadTextEncoding());
+        aFName = aUnparsed.aName;
+        if ( aExt.Len() > nMaxExt )
         {
-            DirEntry aUnparsed;
-            aUnparsed.aName = bLongName;
-            aExt = ByteString(aUnparsed.CutExtension(), osl_getThreadTextEncoding());
-            aFName = aUnparsed.aName;
-            if ( aExt.Len() > nMaxExt )
-            {
-                char c = aExt.GetChar( aExt.Len() - 1 );
-                aExt.Erase(nMaxExt-1);
-                aExt += c;
-            }
+            char c = aExt.GetChar( aExt.Len() - 1 );
+            aExt.Erase(nMaxExt-1);
+            aExt += c;
         }
 
-        if ( FSYS_STYLE_FAT != eStyle )
-        {
-                // ausser auf einem FAT-System geh"ort die Extension zur
-                // Maxl"ange. Muss also vorher mit dem Punkt abgezogen werden.
-                nMaxLen -= ( aExt.Len() + 1 );
-        }
+        // ausser auf einem FAT-System geh"ort die Extension zur
+        // Maxl"ange. Muss also vorher mit dem Punkt abgezogen werden.
+        nMaxLen -= ( aExt.Len() + 1 );
 
         // Name k"urzen
         ByteString aSName;

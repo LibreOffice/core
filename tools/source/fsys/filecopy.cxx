@@ -212,24 +212,9 @@ FSysError FileCopier::DoCopy_Impl(
     FSysError eRet = FSYS_ERR_OK;
     ErrCode eWarn = FSYS_ERR_OK;
 
-    // HPFS->FAT?
-    FSysPathStyle eSourceStyle = DirEntry::GetPathStyle( rSource.ImpGetTopPtr()->GetName() );
-    FSysPathStyle eTargetStyle = DirEntry::GetPathStyle( rTarget.ImpGetTopPtr()->GetName() );
-    sal_Bool bMakeShortNames = ( eSourceStyle == FSYS_STYLE_HPFS && eTargetStyle == FSYS_STYLE_FAT );
-
     // Zieldateiname ggf. kuerzen
     DirEntry aTgt;
-    if ( bMakeShortNames )
-    {
-        aTgt = rTarget.GetPath();
-        aTgt.MakeShortName( rTarget.GetName() );
-    }
-    else
-        aTgt = rTarget;
-
-    // kein Move wenn Namen gekuerzt werden muessten
-    if ( bMakeShortNames && FSYS_ACTION_MOVE == ( pImp->nActions & FSYS_ACTION_MOVE ) && aTgt != rTarget )
-        return ERRCODE_IO_NAMETOOLONG;
+    aTgt = rTarget;
 
     // source is directory?
     FileStat aSourceFileStat( rSource );

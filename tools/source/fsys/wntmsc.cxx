@@ -114,57 +114,9 @@ int closedir( DIR *pDir )
 |*
 *************************************************************************/
 
-ErrCode GetPathStyle_Impl( const String &rDevice, FSysPathStyle &rStyle )
+FSysPathStyle DirEntry::GetPathStyle( const String & )
 {
-    ByteString aRootDir(rDevice, osl_getThreadTextEncoding());
-    if ( aRootDir.Len() && aRootDir.GetBuffer()[aRootDir.Len()-1] != '\\' )
-        aRootDir += '\\';
-
-    char sVolumeName[256];
-    char sFileSysName[16];
-    DWORD nSerial[2];
-    DWORD nMaxCompLen[2];
-    DWORD nFlags[2];
-
-    // Windows95 hat VFAT, WindowsNT nicht
-    DWORD nVer = GetVersion();
-    sal_Bool bW95 = ( nVer & 0xFF ) >= 4;
-
-    FSysFailOnErrorImpl();
-    rStyle = FSYS_STYLE_UNKNOWN;
-    if ( GetVolumeInformation(
-            (char*) aRootDir.GetBuffer(),
-            sVolumeName, 256, (LPDWORD) &nSerial, (LPDWORD) &nMaxCompLen,
-            (LPDWORD) &nFlags, sFileSysName, 16 ) )
-    {
-        // FAT/VFAT?
-        if ( 0 == strcmp( "FAT", sFileSysName ) )
-            rStyle = bW95 ? FSYS_STYLE_VFAT : FSYS_STYLE_FAT;
-
-        // NTFS?
-        else if ( 0 == strcmp( "NTFS", sFileSysName ) )
-            rStyle = FSYS_STYLE_NTFS;
-
-        // HPFS?
-        else if ( 0 == strcmp( "HPFS", sFileSysName ) )
-            rStyle = FSYS_STYLE_HPFS;
-
-        // NWCOMPA/NWFS?
-        else if ( 0 == strncmp( "NW", sFileSysName, 2 ) )
-            rStyle = FSYS_STYLE_NWFS;
-
-        return ERRCODE_NONE;
-    }
-
-    return ERRCODE_IO_INVALIDDEVICE;
-}
-
-FSysPathStyle DirEntry::GetPathStyle( const String &rDevice )
-{
-
-    FSysPathStyle eStyle;
-    GetPathStyle_Impl( rDevice, eStyle );
-    return eStyle;
+    return FSYS_STYLE_NTFS;
 }
 
 /*************************************************************************

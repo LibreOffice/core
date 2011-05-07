@@ -31,20 +31,14 @@
 
 #include <tools/fsys.hxx>
 
-#define ACCESSDELIM(e)  ( (e == FSYS_STYLE_MAC) ? ":" : \
-                        ( ( e == FSYS_STYLE_VFAT || e == FSYS_STYLE_HPFS || \
-                            e == FSYS_STYLE_FAT ) || e == FSYS_STYLE_NTFS ) \
-                          ? "\\" : "/" )
+#define ACCESSDELIM(e)  ( ( e == FSYS_STYLE_NTFS ) ? "\\" : "/" )
 #define ACCESSDELIM_C(e)(char)\
-                        ( (e == FSYS_STYLE_MAC) ? ':' : \
-                        ( ( e == FSYS_STYLE_VFAT || e == FSYS_STYLE_HPFS || \
-                            e == FSYS_STYLE_FAT ) || e == FSYS_STYLE_NTFS ) \
-                          ? '\\' : '/' )
+                        ( ( e == FSYS_STYLE_NTFS ) ? '\\' : '/' )
 #define SEARCHDELIM(e)  ( (e == FSYS_STYLE_BSD) ? ":" : ";" )
 #define SEARCHDELIM_C(e)(char)\
                         ( (e == FSYS_STYLE_BSD) ? ':' : ';' )
-#define ACTPARENT(e)    ( (e == FSYS_STYLE_MAC) ? ":" : ".." )
-#define ACTCURRENT(e)   ( (e == FSYS_STYLE_MAC) ? "" : "." )
+#define ACTPARENT(e)    ".."
+#define ACTCURRENT(e)   "."
 
 #if defined UNX
 #include "unx.hxx"
