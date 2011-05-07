@@ -76,10 +76,10 @@ SwInsertGrfRulerDlg::SwInsertGrfRulerDlg( Window* pParent ) :
     pExampleVS->InsertItem( 1, 1);
     pExampleVS->SetItemText( 1, sSimple);
 
-    for(sal_uInt16 i = 1; i <= aGrfNames.Count(); i++)
+    for(sal_uInt16 i = 1; i <= aGrfNames.size(); i++)
     {
         pExampleVS->InsertItem( i + 1, i);
-        pExampleVS->SetItemText( i + 1, *((String*)aGrfNames.GetObject(i-1)));
+        pExampleVS->SetItemText( i + 1, aGrfNames[i-1]);
     }
     pExampleVS->Show();
 
@@ -95,9 +95,9 @@ String SwInsertGrfRulerDlg::GetGraphicName()
 {
     String sRet;
     sal_uInt16 nSel = nSelPos - 2; //align selection position with ValueSet index
-    if(nSel < aGrfNames.Count())
+    if(nSel < aGrfNames.size())
         sRet = URIHelper::SmartRel2Abs(
-            INetURLObject(), *(String*) aGrfNames.GetObject(nSel),
+            INetURLObject(), aGrfNames[nSel],
             URIHelper::GetMaybeFileHdl());
     return sRet;
 }

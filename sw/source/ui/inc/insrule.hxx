@@ -27,6 +27,9 @@
  ************************************************************************/
 #ifndef _INSRULE_HXX
 #define _INSRULE_HXX
+
+#include <vector>
+
 #include "num.hxx"
 
 class SwRulerValueSet;
@@ -39,7 +42,7 @@ class SwInsertGrfRulerDlg  : public SfxModalDialog
     CancelButton    aCancelPB;
     HelpButton      aHelpPB;
 
-    List            aGrfNames;
+    std::vector<String> aGrfNames;
     String          sSimple;
     String          sRulers;
     sal_uInt16          nSelPos;
@@ -56,7 +59,7 @@ public:
 
     String          GetGraphicName();
     sal_Bool            IsSimpleLine() {return nSelPos == 1;}
-    sal_Bool            HasImages() const {return 0 != aGrfNames.Count();}
+    sal_Bool            HasImages() const {return !aGrfNames.empty();}
 };
 
 #endif
