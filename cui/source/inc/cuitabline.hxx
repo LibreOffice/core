@@ -29,6 +29,8 @@
 #define _CUI_TAB_LINE_HXX
 
 // include ---------------------------------------------------------------
+#include <vector>
+
 #include <svx/tabline.hxx>
 /*************************************************************************
 |*
@@ -146,7 +148,7 @@ private:
     FixedText           aSymbolHeightFT;
     MetricField         aSymbolHeightMF;
     CheckBox            aSymbolRatioCB;
-    List                aGrfNames;
+    std::vector<String> aGrfNames;
     List                aGrfBrushItems;
     String              sNumCharFmtName;
     sal_Bool                bLastWidthModified;

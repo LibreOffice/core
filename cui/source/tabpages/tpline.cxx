@@ -266,12 +266,6 @@ SvxLineTabPage::~SvxLineTabPage()
     if(pSymbolList)
         delete aSymbolMB.GetPopupMenu()->GetPopupMenu( MN_SYMBOLS );
 
-    String* pStr = (String*)aGrfNames.First();
-    while( pStr )
-    {
-        delete pStr;
-        pStr = (String*)aGrfNames.Next();
-    }
     SvxBmpItemInfo* pInfo = (SvxBmpItemInfo*)aGrfBrushItems.First();
     while( pInfo )
     {
@@ -1474,19 +1468,18 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
 
         PopupMenu* pPopup = new PopupMenu;
         String aEmptyStr;
-
-        nNumMenuGalleryItems=aGrfNames.Count();
-        for(long i = 0; i < nNumMenuGalleryItems; i++)
+        const String *pUIName = NULL;
+        sal_uInt32 i = 0;
+        for(std::vector<String>::iterator it = aGrfNames.begin(); it != aGrfNames.end(); ++it, ++i)
         {
-            const String* pGrfName = (const String*)aGrfNames.GetObject(i);
-            const String* pUIName = pGrfName;
+            pUIName = &(*it);
 
             // convert URL encodings to UI characters (eg %20 for spaces)
             String aPhysicalName;
-            if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( *pGrfName, aPhysicalName ))
+            if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( *it, aPhysicalName ))
                 pUIName = &aPhysicalName;
 
-            SvxBrushItem* pBrushItem = new SvxBrushItem(*pGrfName, aEmptyStr, GPOS_AREA, SID_ATTR_BRUSH);
+            SvxBrushItem* pBrushItem = new SvxBrushItem(*it, aEmptyStr, GPOS_AREA, SID_ATTR_BRUSH);
             pBrushItem->SetDoneLink(STATIC_LINK(this, SvxLineTabPage, GraphicArrivedHdl_Impl));
 
             SvxBmpItemInfo* pInfo = new SvxBmpItemInfo();
@@ -1519,7 +1512,8 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
             }
         }
         aSymbolMB.GetPopupMenu()->SetPopupMenu( MN_GALLERY, pPopup );
-        if(!aGrfNames.Count())
+
+        if(aGrfNames.empty())
             aSymbolMB.GetPopupMenu()->EnableItem(MN_GALLERY, sal_False);
     }
 
@@ -1546,8 +1540,7 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
             if(pObj==NULL)
                 break;
             pObj=pObj->Clone();
-            String *pStr=new String();
-            aGrfNames.Insert(pStr,LIST_APPEND);
+            aGrfNames.push_back(aEmptyStr);
             pPage->NbcInsertObject(pObj);
             pView->MarkObj(pObj,pPageView);
             if(pSymbolAttr)
@@ -1583,10 +1576,11 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
                 aBitmap.Scale(nScale, nScale);
             }
             Image aImage(aBitmap);
-            pPopup->InsertItem(pInfo->nItemId,*pStr,aImage);
+            pPopup->InsertItem(pInfo->nItemId,aEmptyStr,aImage);
         }
         aSymbolMB.GetPopupMenu()->SetPopupMenu( MN_SYMBOLS, pPopup );
-        if(!aGrfNames.Count())
+
+        if(aGrfNames.empty())
             aSymbolMB.GetPopupMenu()->EnableItem(MN_SYMBOLS, sal_False);
 
         delete pView;
