@@ -107,10 +107,10 @@ sal_Bool FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const OUSt
             if ( sFilterName.EqualsIgnoreCaseAscii( *pPtr ) )
                 bIsPixelFormat = sal_True;
         }
-        String aTemp( OUString(RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "?" ) )) );
-        xub_StrLen nIndex = aTemp.Search( (sal_Unicode)'?' );
-        aTemp.Replace( nIndex, 1, sFilterName );
-        sFilterName = aTemp;
+        rtl::OUString sTemp(OUString(RTL_CONSTASCII_USTRINGPARAM(SVLIBRARY("?") )));
+        sal_Int32 nIndex = sTemp.indexOf(static_cast<sal_Unicode>('?'));
+        sTemp.replaceAt(nIndex, 1, sFilterName);
+        sFilterName = sTemp;
     }
     return sFilterName.Len() != 0;
 }
