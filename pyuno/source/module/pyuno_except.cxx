@@ -167,7 +167,7 @@ static PyRef createClass( const OUString & name, const Runtime &runtime )
     PyTuple_SetItem( args.get(), 2, PyDict_New() );
 
     PyRef ret(
-        PyObject_CallObject(reinterpret_cast<PyObject *>(&PyClass_Type) , args.get()),
+        PyObject_CallObject(reinterpret_cast<PyObject *>(&PyType_Type) , args.get()),
         SAL_NO_ACQUIRE );
 
     // now overwrite ctor and attrib functions

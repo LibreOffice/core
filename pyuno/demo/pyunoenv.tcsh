@@ -18,13 +18,15 @@ setenv LD_LIBRARY_PATH
 endif
 
 if( "$PYTHONPATH" != "" ) then
-	setenv PYTHONPATH $OOOHOME/program:$OOOHOME/program/pydemo:$OOOHOME/program/python/lib:$PYTHONPATH
+    setenv PYTHONPATH $OOOHOME/program:$OOOHOME/program/pydemo:$OOOHOME/program/python/lib:$PYTHONPATH
 else
-	setenv PYTHONPATH $OOOHOME/program:$OOOHOME/program/pydemo:$OOOHOME/program/python/lib
+    setenv PYTHONPATH $OOOHOME/program:$OOOHOME/program/pydemo:$OOOHOME/program/python/lib
 endif
-	
+
 setenv LD_LIBRARY_PATH $OOOHOME/program:$LD_LIBRARY_PATH
 
 if( $?PYTHONHOME ) then
 setenv PATH $PYTHONHOME/bin:$PATH
 endif
+
+# vim:set shiftwidth=4 softtabstop=4 expandtab:

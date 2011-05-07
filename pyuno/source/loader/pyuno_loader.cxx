@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*nd '!=' comparisions are defined"126G -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -118,8 +118,26 @@ static void setPythonHome ( const OUString & pythonHome )
     OUString systemPythonHome;
     osl_getSystemPathFromFileURL( pythonHome.pData, &(systemPythonHome.pData) );
     OString o = rtl::OUStringToOString( systemPythonHome, osl_getThreadTextEncoding() );
-    rtl_string_acquire(o.pData); // leak this string (thats the api!)
-    Py_SetPythonHome( o.pData->buffer);
+#if PY_MAJOR_VERSION >= 3
+    // static because Py_SetPythonHome just copies the "wide" pointer
+    // PATH_MAX is defined in Python.h
+    static wchar_t wide[PATH_MAX + 1];
+    size_t len = mbstowcs(wide, o.pData->buffer, PATH_MAX + 1);
+    if(len == (size_t)-1)
+    {
+        PyErr_SetString(PyExc_SystemError, "invalid multibyte sequence in python home path");
+        return;
+    }
+    if(len == PATH_MAX + 1)
+    {
+        PyErr_SetString(PyExc_SystemError, "python home path is too long");
+        return;
+    }
+    Py_SetPythonHome(wide);
+#else
+    rtl_string_acquire(o.pData); // increase reference count
+    Py_SetPythonHome(o.pData->buffer);
+#endif
 }
 
 static void prependPythonPath( const OUString & pythonPathBootstrap )
@@ -178,7 +196,11 @@ Reference< XInterface > CreateInstance( const Reference< XComponentContext > & c
 
         if( pythonPath.getLength() )
             prependPythonPath( pythonPath );
-
+#if PY_MAJOR_VERSION >= 3
+        PyImport_AppendInittab( "pyuno", PyInit_pyuno );
+#else
+        PyImport_AppendInittab( "pyuno", initpyuno );
+#endif
         // initialize python
         Py_Initialize();
         PyEval_InitThreads();

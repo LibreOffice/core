@@ -59,7 +59,7 @@ FINDLIBFILES_TMP:=$(subst,/,$/ \
 FINDLIBFILES=$(subst,$(SOLARLIBDIR)$/python, $(FINDLIBFILES_TMP))
 
 FILES=\
-    $(PYTHONBINARY)	\
+    $(PYTHONBINARY) \
     $(foreach,i,$(FINDLIBFILES) $(DESTROOT)$/lib$(i)) 
 
 .IF "$(OS)" == "WNT"

@@ -28,6 +28,8 @@
 #ifndef _PYUNO_IMPL_
 #define _PYUNO_IMPL_
 
+#include <Python.h>
+
 #include <pyuno/pyuno.hxx>
 
 #include <boost/unordered_map.hpp>
@@ -47,6 +49,49 @@
 
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/weakref.hxx>
+
+// In Python 3, the PyString_* functions have been replaced by PyBytes_*
+// and PyUnicode_* functions.
+#if PY_MAJOR_VERSION >= 3
+inline char* PyString_AsString(PyObject *object)
+{
+    // check whether object is already of type "PyBytes"
+    if(PyBytes_Check(object))
+    {
+        return PyBytes_AsString(object);
+    }
+
+    // object is not encoded yet, so encode it to utf-8
+    PyObject *pystring;
+    pystring = PyUnicode_AsUTF8String(object);
+    if(!pystring)
+    {
+       PyErr_SetString(PyExc_ValueError, "cannot utf-8 decode string");
+       return 0;
+    }
+    return PyBytes_AsString(pystring);
+}
+
+inline PyObject* PyString_FromString(const char *string)
+{
+    return PyUnicode_FromString(string);
+}
+
+inline int PyString_Check(PyObject *object)
+{
+    return PyBytes_Check(object);
+}
+
+inline Py_ssize_t PyString_Size(PyObject *object)
+{
+    return PyBytes_Size(object);
+}
+
+inline PyObject* PyString_FromStringAndSize(const char *string, Py_ssize_t len)
+{
+    return PyBytes_FromStringAndSize(string, len);
+}
+#endif /* PY_MAJOR_VERSION >= 3 */
 
 namespace pyuno
 {
@@ -141,9 +186,6 @@ com::sun::star::uno::Any PyObjectToAny (PyObject* o)
 
 void raiseInvocationTargetExceptionWhenNeeded( const Runtime &runtime )
     throw ( com::sun::star::reflection::InvocationTargetException );
-
-// bool CheckPyObjectTypes (PyObject* o, Sequence<Type> types);
-// bool CheckPyObjectType (PyObject* o, Type type); //Only check 1 object.
 
 com::sun::star::uno::TypeClass StringToTypeClass (char* string);
 

@@ -1,8 +1,10 @@
+# -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
 
-# bootstrap uno component context 	
+# bootstrap uno component context
 import uno
 import unohelper
 
+from com.sun.star.lang import IllegalArgumentException
 
 # a UNO struct later needed to create a document
 from com.sun.star.text.ControlCharacter import PARAGRAPH_BREAK
@@ -17,9 +19,9 @@ def insertTextIntoCell( table, cellName, text, color ):
     tableText.setString( text )
 
 localContext = uno.getComponentContext()
-				   
+
 resolver = localContext.ServiceManager.createInstanceWithContext(
-				"com.sun.star.bridge.UnoUrlResolver", localContext )
+           "com.sun.star.bridge.UnoUrlResolver", localContext )
 
 smgr = resolver.resolve( "uno:socket,host=localhost,port=2002;urp;StarOffice.ServiceManager" )
 remoteContext = smgr.getPropertyValue( "DefaultContext" )
@@ -41,15 +43,15 @@ text.insertString( cursor, "Now we are in the second line\n" , 0 )
 table = doc.createInstance( "com.sun.star.text.TextTable" )
 
 # with 4 rows and 4 columns
-table.initialize( 4,4)
+table.initialize(4, 4)
 
 text.insertTextContent( cursor, table, 0 )
 rows = table.Rows
 
-table.setPropertyValue( "BackTransparent", uno.Bool(0) )
+table.setPropertyValue( "BackTransparent", False )
 table.setPropertyValue( "BackColor", 13421823 )
 row = rows.getByIndex(0)
-row.setPropertyValue( "BackTransparent", uno.Bool(0) )
+row.setPropertyValue( "BackTransparent", False )
 row.setPropertyValue( "BackColor", 6710932 )
 
 textColor = 16777215
@@ -60,8 +62,8 @@ insertTextIntoCell( table, "C1", "ThirdColumn", textColor )
 insertTextIntoCell( table, "D1", "SUM", textColor )
 
 values = ( (22.5,21.5,121.5),
-	   (5615.3,615.3,-615.3),
-	   (-2315.7,315.7,415.7) )
+         (5615.3,615.3,-615.3),
+         (-2315.7,315.7,415.7) )
 table.getCellByName("A2").setValue(22.5)
 table.getCellByName("B2").setValue(5615.3)
 table.getCellByName("C2").setValue(-2315.7)
@@ -79,7 +81,7 @@ table.getCellByName("D4").setFormula("sum <A4:C4>")
 
 
 cursor.setPropertyValue( "CharColor", 255 )
-cursor.setPropertyValue( "CharShadowed", uno.Bool(1) )
+cursor.setPropertyValue( "CharShadowed", True )
 
 text.insertControlCharacter( cursor, PARAGRAPH_BREAK, 0 )
 text.insertString( cursor, " This is a colored Text - blue with shadow\n" , 0 )
@@ -99,7 +101,8 @@ textInTextFrame.insertString( cursorInTextFrame, "\nWith this second line the he
 text.insertControlCharacter( cursor, PARAGRAPH_BREAK, 0 )
 
 cursor.setPropertyValue( "CharColor", 65536 )
-cursor.setPropertyValue( "CharShadowed", uno.Bool(0) )
+cursor.setPropertyValue( "CharShadowed", False )
 
-text.insertString( cursor, " That's all for now !!" , 0 )
+text.insertString( cursor, " That's all for now!" , 0 )
 
+# vim:set shiftwidth=4 softtabstop=4 expandtab:
