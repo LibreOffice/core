@@ -118,13 +118,10 @@ sal_Bool SAL_CALL WPGImportFilter::filter( const Sequence< ::com::sun::star::bea
     // writes to in-memory target doc
     DocumentHandler xHandler(xInternalHandler);
 
-    WPXInputStream* input = new WPXSvInputStream( xInputStream );
+    WPXSvInputStream input( xInputStream );
 
     OdgGenerator exporter(&xHandler, ODF_FLAT_XML);
-    bool tmpParseResult = libwpg::WPGraphics::parse(input, &exporter);
-    if (input)
-        delete input;
-    xInputStream->closeInput();
+    bool tmpParseResult = libwpg::WPGraphics::parse(&input, &exporter);
     return tmpParseResult;
 }
 

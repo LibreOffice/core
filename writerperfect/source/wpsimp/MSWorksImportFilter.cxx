@@ -115,7 +115,7 @@ sal_Bool SAL_CALL MSWorksImportFilter::importImpl( const Sequence< ::com::sun::s
     WPXSvInputStream input( xInputStream );
 
     OdtGenerator collector(&xHandler, ODF_FLAT_XML);
-    if (WPS_OK == WPSDocument::parse(&input, static_cast<WPXDocumentInterface*>(&collector)))
+    if (WPS_OK == WPSDocument::parse(&input, &collector))
         return sal_True;
     return sal_False;
 }

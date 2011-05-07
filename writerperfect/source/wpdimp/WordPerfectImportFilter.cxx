@@ -162,7 +162,7 @@ sal_Bool SAL_CALL WordPerfectImportFilter::importImpl( const Sequence< ::com::su
 
     OdtGenerator collector(&xHandler, ODF_FLAT_XML);
     collector.registerEmbeddedObjectHandler("image/x-wpg", &handleEmbeddedWPG);
-    if (WPD_OK == WPDocument::parse(&input, static_cast<WPXDocumentInterface*>(&collector), (const char*)(aUtf8Passwd.getStr())))
+    if (WPD_OK == WPDocument::parse(&input, &collector, aUtf8Passwd.getStr()))
         return sal_True;
     return sal_False;
 }
