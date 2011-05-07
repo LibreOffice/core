@@ -129,7 +129,7 @@ bool GalleryExplorer::FillThemeList( std::vector<String>& rThemeList )
 
 // ------------------------------------------------------------------------
 
-sal_Bool GalleryExplorer::FillObjList( const String& rThemeName, List& rObjList )
+sal_Bool GalleryExplorer::FillObjList( const String& rThemeName, std::vector<String> &rObjList )
 {
     Gallery* pGal = ImplGetGallery();
 
@@ -140,22 +140,26 @@ sal_Bool GalleryExplorer::FillObjList( const String& rThemeName, List& rObjList 
 
         if( pTheme )
         {
-            for( sal_uIntPtr i = 0, nCount = pTheme->GetObjectCount(); i < nCount; i++ )
-                rObjList.Insert( new String( pTheme->GetObjectURL( i ).GetMainURL( INetURLObject::NO_DECODE ) ), LIST_APPEND );
+            for( sal_uInt32 i = 0, nCount = pTheme->GetObjectCount(); i < nCount; i++ )
+                rObjList.push_back( pTheme->GetObjectURL( i ).GetMainURL( INetURLObject::NO_DECODE ) );
 
             pGal->ReleaseTheme( pTheme, aListener );
         }
     }
 
-    return( rObjList.Count() > 0 );
+    return !rObjList.empty();
 }
 
 // ------------------------------------------------------------------------
 
-sal_Bool GalleryExplorer::FillObjList( sal_uIntPtr nThemeId, List& rObjList )
+sal_Bool GalleryExplorer::FillObjList( const sal_uInt32 nThemeId, std::vector<String> &rObjList )
 {
     Gallery* pGal = ImplGetGallery();
-    return( pGal ? FillObjList( pGal->GetThemeName( nThemeId ), rObjList ) : sal_False );
+
+    if (!pGal)
+        return false;
+
+    return FillObjList( pGal->GetThemeName( nThemeId ), rObjList );
 }
 
 // ------------------------------------------------------------------------

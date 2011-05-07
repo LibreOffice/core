@@ -200,7 +200,6 @@
 // - GalleryExplorer -
 // -------------------
 
-class List;
 class Gallery;
 class VCDrawModel;
 class FmFormModel;
@@ -231,8 +230,8 @@ public:
     static bool                 FillThemeList( std::vector<String>& rThemeList );
 
                                 // FillObjList is filling rObjList with Strings of the internal Gallery Object URL
-    static sal_Bool                 FillObjList( const String& rThemeName, List& rObjList );
-    static sal_Bool                 FillObjList( sal_uIntPtr nThemeId, List& rObjList );
+    static sal_Bool                 FillObjList( const String& rThemeName, std::vector<String> &rObjList );
+    static sal_Bool                 FillObjList( const sal_uInt32 nThemeId, std::vector<String> &rObjList );
 
                                 // FillObjTitleList is filling the rList with the title for each gallery object
     static sal_Bool             FillObjListTitle( const sal_uInt32 nThemeId, std::vector< rtl::OUString >& rList );
