@@ -209,7 +209,7 @@ void OptConfEdit::Reload( Config &aConf )
     ConfEdit::Reload( aConf );
 
     DirEntry aCalculatedHIDDir( rBase.GetValue() );
-    aCalculatedHIDDir += DirEntry( "global/hid", FSYS_STYLE_FAT );
+    aCalculatedHIDDir += DirEntry( "global/hid", DEFSTYLE );
 
     DirEntry aCurrentHIDDir( aEdit.GetText() );
 
@@ -231,7 +231,7 @@ IMPL_LINK( OptConfEdit, BaseModifyHdl, Edit*, EMPTYARG )
     if ( aCheck.IsChecked() )
     {
         DirEntry aCalculatedHIDDir( rBase.GetValue() );
-        aCalculatedHIDDir += DirEntry( "global/hid", FSYS_STYLE_FAT );
+        aCalculatedHIDDir += DirEntry( "global/hid", DEFSTYLE );
         aEdit.SetText( aCalculatedHIDDir.GetFull() );
     }
     return 0;
