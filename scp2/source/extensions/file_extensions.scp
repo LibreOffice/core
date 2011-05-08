@@ -295,12 +295,12 @@ File gid_File_Optional_Extensions_Sun_Template_Pack
     TXT_FILE_BODY;
     Styles = (PACKED, ARCHIVE);
     Dir = gid_Brand_Dir_Share_Extensions_Sun_Template_Pack;
-    Name (en-US) = "Sun_ODF_Template_Pack_en-US.oxt";
-    Name (de) = "Sun_ODF_Template_Pack_de.oxt";
-    Name (it) = "Sun_ODF_Template_Pack_it.oxt";
-    Name (fr) = "Sun_ODF_Template_Pack_fr.oxt";
-    Name (es) = "Sun_ODF_Template_Pack_es.oxt";
-    Name (hu) = "Sun_ODF_Template_Pack_hu.oxt";
+    Name (en-US) = "Sun-ODF-Template-Pack-en-US.oxt";
+    Name (de) = "Sun-ODF-Template-Pack-de.oxt";
+    Name (it) = "Sun-ODF-Template-Pack-it.oxt";
+    Name (fr) = "Sun-ODF-Template-Pack-fr.oxt";
+    Name (es) = "Sun-ODF-Template-Pack-es.oxt";
+    Name (hu) = "Sun-ODF-Template-Pack-hu.oxt";
 End
 
 #endif
