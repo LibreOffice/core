@@ -123,13 +123,13 @@ StringResourceImpl::StringResourceImpl( const Reference< XComponentContext >& rx
 
 StringResourceImpl::~StringResourceImpl()
 {
-    for( LocaleItemVectorIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); it++ )
+    for( LocaleItemVectorIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); ++it )
     {
         LocaleItem* pLocaleItem = *it;
         delete pLocaleItem;
     }
 
-    for( LocaleItemVectorIt it = m_aDeletedLocaleItemVector.begin(); it != m_aDeletedLocaleItemVector.end(); it++ )
+    for( LocaleItemVectorIt it = m_aDeletedLocaleItemVector.begin(); it != m_aDeletedLocaleItemVector.end(); ++it )
     {
         LocaleItem* pLocaleItem = *it;
         delete pLocaleItem;
@@ -326,7 +326,7 @@ Sequence< Locale > StringResourceImpl::getLocales(  )
     Sequence< Locale > aLocalSeq( nSize );
     Locale* pLocales = aLocalSeq.getArray();
     int iTarget = 0;
-    for( LocaleItemVectorConstIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); it++ )
+    for( LocaleItemVectorConstIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); ++it )
     {
         LocaleItem* pLocaleItem = *it;
         pLocales[iTarget] = pLocaleItem->m_locale;
@@ -566,7 +566,7 @@ void StringResourceImpl::removeLocale( const Locale& locale )
             if( m_pCurrentLocaleItem == pRemoveItem ||
                 m_pDefaultLocaleItem  == pRemoveItem )
             {
-                for( LocaleItemVectorIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); it++ )
+                for( LocaleItemVectorIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); ++it )
                 {
                     LocaleItem* pLocaleItem = *it;
                     if( pLocaleItem != pRemoveItem )
@@ -586,7 +586,7 @@ void StringResourceImpl::removeLocale( const Locale& locale )
                 }
             }
         }
-        for( LocaleItemVectorIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); it++ )
+        for( LocaleItemVectorIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); ++it )
         {
             LocaleItem* pLocaleItem = *it;
             if( pLocaleItem == pRemoveItem )
@@ -666,7 +666,7 @@ LocaleItem* StringResourceImpl::getItemForLocale
     LocaleItem* pRetItem = NULL;
 
     // Search for locale
-    for( LocaleItemVectorConstIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); it++ )
+    for( LocaleItemVectorConstIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); ++it )
     {
         LocaleItem* pLocaleItem = *it;
         if( pLocaleItem )
@@ -699,7 +699,7 @@ LocaleItem* StringResourceImpl::getClosestMatchItemForLocale( const Locale& loca
     // Search for locale
     for( sal_Int32 iPass = 0 ; iPass <= 2 ; ++iPass )
     {
-        for( LocaleItemVectorConstIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); it++ )
+        for( LocaleItemVectorConstIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); ++it )
         {
             LocaleItem* pLocaleItem = *it;
             if( pLocaleItem )
@@ -1058,7 +1058,7 @@ void StringResourcePersistenceImpl::implStoreAtStorage
         }
     }
 
-    for( LocaleItemVectorConstIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); it++ )
+    for( LocaleItemVectorConstIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); ++it )
     {
         LocaleItem* pLocaleItem = *it;
         if( pLocaleItem != NULL && (bStoreAll || pLocaleItem->m_bModified) &&
@@ -1097,7 +1097,7 @@ void StringResourcePersistenceImpl::implStoreAtStorage
     if( bUsedForStore )
     {
         for( LocaleItemVectorIt it = m_aChangedDefaultLocaleVector.begin();
-             it != m_aChangedDefaultLocaleVector.end(); it++ )
+             it != m_aChangedDefaultLocaleVector.end(); ++it )
         {
             LocaleItem* pLocaleItem = *it;
             if( pLocaleItem != NULL )
@@ -1196,7 +1196,7 @@ void StringResourcePersistenceImpl::implKillChangedDefaultFiles
 {
     // Delete files for changed defaults
     for( LocaleItemVectorIt it = m_aChangedDefaultLocaleVector.begin();
-         it != m_aChangedDefaultLocaleVector.end(); it++ )
+         it != m_aChangedDefaultLocaleVector.end(); ++it )
     {
         LocaleItem* pLocaleItem = *it;
         if( pLocaleItem != NULL )
@@ -1228,7 +1228,7 @@ void StringResourcePersistenceImpl::implStoreAtLocation
     if( bUsedForStore || bKillAll )
         implKillRemovedLocaleFiles( Location, aNameBase, xFileAccess );
 
-    for( LocaleItemVectorConstIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); it++ )
+    for( LocaleItemVectorConstIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); ++it )
     {
         LocaleItem* pLocaleItem = *it;
         if( pLocaleItem != NULL && (bStoreAll || bKillAll || pLocaleItem->m_bModified) &&
@@ -1431,7 +1431,7 @@ Sequence< sal_Int8 > StringResourcePersistenceImpl::exportBinary(  )
     sal_Int32 iLocale = 0;
     sal_Int32 iDefault = 0;
     for( LocaleItemVectorConstIt it = m_aLocaleItemVector.begin();
-         it != m_aLocaleItemVector.end(); it++,iLocale++ )
+         it != m_aLocaleItemVector.end(); ++it,++iLocale )
     {
         LocaleItem* pLocaleItem = *it;
         if( pLocaleItem != NULL && loadLocale( pLocaleItem ) )
@@ -1740,7 +1740,7 @@ bool checkNamingSceme( const ::rtl::OUString& aName, const ::rtl::OUString& aNam
 
 void StringResourcePersistenceImpl::implLoadAllLocales( void )
 {
-    for( LocaleItemVectorIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); it++ )
+    for( LocaleItemVectorIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); ++it )
     {
         LocaleItem* pLocaleItem = *it;
         if( pLocaleItem != NULL )

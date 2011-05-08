@@ -45,10 +45,10 @@ class MenuItemInfo {
     void setVisible (gboolean is_visible);
 
     //Getters
-    gchar*       getLabel ();
-    gboolean     getEnabled ();
-    gint         getCheckState ();
-    const gchar* getCheckType ();
-    gboolean     getVisible ();
+    gchar*       getLabel const();
+    gboolean     getEnabled const();
+    gint         getCheckState const();
+    const gchar* getCheckType const();
+    gboolean     getVisible const();
 };
 #endif // __MENU_ITEM_INFO_HXX__

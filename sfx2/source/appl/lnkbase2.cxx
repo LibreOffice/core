@@ -630,7 +630,7 @@ static DdeTopic* FindTopic( const String & rLinkName, sal_uInt16* pItemStt )
             for( int i = 0; i < 2; ++i )
             {
                 for( std::vector<DdeTopic*>::iterator iterTopic = rTopics.begin();
-                     iterTopic != rTopics.end(); iterTopic++ )
+                     iterTopic != rTopics.end(); ++iterTopic )
                     if( (*iterTopic)->GetName() == sTopic )
                         return *iterTopic;
 

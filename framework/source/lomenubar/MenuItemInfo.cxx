@@ -73,31 +73,31 @@ MenuItemInfo::setVisible (gboolean is_visible)
 
 //Getters
 gchar*
-MenuItemInfo::getLabel ()
+MenuItemInfo::getLabel const()
 {
     return m_label;
 }
 
 gboolean
-MenuItemInfo::getEnabled ()
+MenuItemInfo::getEnabled const()
 {
     return m_is_enabled;
 }
 
 gint
-MenuItemInfo::getCheckState ()
+MenuItemInfo::getCheckState const()
 {
     return m_check_state;
 }
 
 const gchar*
-MenuItemInfo::getCheckType ()
+MenuItemInfo::getCheckType const()
 {
     return m_check_type;
 }
 
 gboolean
-MenuItemInfo::getVisible ()
+MenuItemInfo::getVisible const()
 {
     return m_is_visible;
 }
