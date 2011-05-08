@@ -44,7 +44,7 @@
 
 #include <tools/solar.h>
 #include <rtl/ustring.hxx>
-#include <tools/list.hxx>
+#include <vector>
 #include "cgmtypes.hxx"
 
 // ---------------------------------------------------------------
@@ -99,8 +99,8 @@ class CGM
         CGMElements*        pElement;
         CGMElements*        pCopyOfE;
         CGMOutAct*          mpOutAct;
-        List                maDefRepList;
-        List                maDefRepSizeList;
+        ::std::vector< sal_uInt8 * > maDefRepList;
+        ::std::vector< sal_uInt32  > maDefRepSizeList;
 
         sal_uInt8*              mpSource;       // source buffer that is not increased
                                             // ( instead use mnParaCount to index )

@@ -161,13 +161,10 @@ CGM::~CGM()
         *mpGraphic = Graphic( *mpGDIMetaFile );
     }
 #endif
-    sal_Int8* pBuf = (sal_Int8*)maDefRepList.First();
-    while( pBuf )
-    {
-        delete pBuf;
-        pBuf = (sal_Int8*)maDefRepList.Next();
-    }
-    maDefRepList.Clear();
+    for( size_t i = 0, n = maDefRepList.size(); i < n; ++i )
+        delete maDefRepList[ i ];
+    maDefRepList.clear();
+    maDefRepSizeList.clear();
     delete mpBitmapInUse;
     delete mpCommentOut;
     delete mpChart;
@@ -751,17 +748,18 @@ void CGM::ImplDoClass()
 
 void CGM::ImplDefaultReplacement()
 {
-    sal_uInt8*  pBuf = (sal_uInt8*)maDefRepList.First();
-    if ( pBuf )
+    if ( !maDefRepList.empty() )
     {
-        sal_uInt32  nElementSize = (sal_uInt32)(sal_uIntPtr)maDefRepSizeList.First();
         sal_uInt32  nOldEscape = mnEscape;
         sal_uInt32  nOldElementClass = mnElementClass;
         sal_uInt32  nOldElementID = mnElementID;
         sal_uInt32  nOldElementSize = mnElementSize;
         sal_uInt8*  pOldBuf = mpSource;
-        while( pBuf )
+
+        for ( size_t i = 0, n = maDefRepList.size(); i < n; ++i )
         {
+            sal_uInt8*  pBuf = maDefRepList[ i ];
+            sal_uInt32  nElementSize = maDefRepSizeList[ i ];
             sal_uInt32  nCount = 0;
             while ( mbStatus && ( nCount < nElementSize ) )
             {
@@ -784,8 +782,6 @@ void CGM::ImplDefaultReplacement()
                 if ( ( mnElementClass != 1 ) || ( mnElementID != 0xc ) )    // rekursion hier nicht moeglich!!
                     ImplDoClass();
             }
-            nElementSize = (sal_uInt32)(sal_uIntPtr)maDefRepSizeList.Next();
-            pBuf = (sal_uInt8*)maDefRepList.Next();
         }
         mnEscape = nOldEscape;
         mnElementClass = nOldElementClass;
