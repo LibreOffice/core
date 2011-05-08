@@ -43,6 +43,7 @@
 /bin/repo-list
 /src.downloaded
 /ooo.lst
+/instsetoo_native/*
 
 # misc
 /set_soenv.last
@@ -56,6 +57,7 @@
 /ID
 /tags
 /docs
+/autogen.save
 
 /*/*.exe
 
