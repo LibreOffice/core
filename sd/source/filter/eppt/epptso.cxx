@@ -2281,7 +2281,6 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             sal_Bool bPolyPolygon  = mType == "drawing.PolyPolygon";
             sal_Bool bPolyLine = mType == "drawing.PolyLine";
 
-            List        aAdjustmentList;
             Rectangle   aPolyBoundRect;
 
             const ::com::sun::star::awt::Size   aSize100thmm( mXShape->getSize() );
