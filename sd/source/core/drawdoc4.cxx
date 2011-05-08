@@ -1166,7 +1166,7 @@ void SdDrawDocument::RenameLayoutTemplate(const String& rOldLayoutName, const St
     aOldName.Erase(nPos + sizeof(SD_LT_SEPARATOR) - 1 );
     sal_uInt16 nLen = aOldName.Len();
 
-    List aReplList;
+    std::vector<StyleReplaceData> aReplList;
     SfxStyleSheetIterator aIter(mxStyleSheetPool.get(), SD_STYLE_FAMILY_MASTERPAGE);
     SfxStyleSheetBase* pSheet = aIter.First();
 
@@ -1180,12 +1180,12 @@ void SdDrawDocument::RenameLayoutTemplate(const String& rOldLayoutName, const St
             aSheetName.Erase(0, nLen - sizeof(SD_LT_SEPARATOR) + 1 );
             aSheetName.Insert(rNewName, 0);
 
-            StyleReplaceData* pReplData = new StyleReplaceData;
-            pReplData->nFamily    = pSheet->GetFamily();
-            pReplData->nNewFamily = pSheet->GetFamily();
-            pReplData->aName      = pSheet->GetName();
-            pReplData->aNewName   = aSheetName;
-            aReplList.Insert(pReplData, LIST_APPEND);
+            StyleReplaceData aReplData;
+            aReplData.nFamily     = pSheet->GetFamily();
+            aReplData.nNewFamily = pSheet->GetFamily();
+            aReplData.aName   = pSheet->GetName();
+            aReplData.aNewName   = aSheetName;
+            aReplList.push_back(aReplData);
 
             pSheet->SetName(aSheetName);
         }
@@ -1227,13 +1227,9 @@ void SdDrawDocument::RenameLayoutTemplate(const String& rOldLayoutName, const St
 
                             if (pOPO)
                             {
-                                StyleReplaceData* pReplData = (StyleReplaceData*) aReplList.First();
-
-                                while( pReplData )
-                                {
-                                    pOPO->ChangeStyleSheets( pReplData->aName, pReplData->nFamily, pReplData->aNewName, pReplData->nNewFamily );
-                                    pReplData = (StyleReplaceData*) aReplList.Next();
-                                }
+                                std::vector<StyleReplaceData>::iterator it;
+                                for (it = aReplList.begin(); it != aReplList.end(); ++it)
+                                    pOPO->ChangeStyleSheets( it->aName, it->nFamily, it->aNewName, it->nNewFamily );
                             }
                         }
                         break;
@@ -1275,13 +1271,9 @@ void SdDrawDocument::RenameLayoutTemplate(const String& rOldLayoutName, const St
 
                             if (pOPO)
                             {
-                                StyleReplaceData* pReplData = (StyleReplaceData*) aReplList.First();
-
-                                while( pReplData )
-                                {
-                                    pOPO->ChangeStyleSheets( pReplData->aName, pReplData->nFamily, pReplData->aNewName, pReplData->nNewFamily );
-                                    pReplData = (StyleReplaceData*) aReplList.Next();
-                                }
+                                std::vector<StyleReplaceData>::iterator it;
+                                for (it = aReplList.begin(); it != aReplList.end(); ++it)
+                                    pOPO->ChangeStyleSheets( it->aName, it->nFamily, it->aNewName, it->nNewFamily );
                             }
                         }
                         break;
