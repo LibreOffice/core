@@ -45,6 +45,7 @@
 #include <tools/stream.hxx>
 
 #include <rtl/uri.hxx>
+#include <rtl/instance.hxx>
 #include <tools/debug.hxx>
 
 #include <TransitionPreset.hxx>
@@ -225,21 +226,34 @@ bool TransitionPreset::importTransitionPresetList( TransitionPresetList& rList )
     return bRet;
 }
 
-TransitionPresetList* TransitionPreset::mpTransitionPresetList = 0;
+namespace
+{
+    class ImportedTransitionPresetList
+    {
+    private:
+        sd::TransitionPresetList m_aTransitionPresetList;
+    public:
+        ImportedTransitionPresetList()
+        {
+            sd::TransitionPreset::importTransitionPresetList(
+                m_aTransitionPresetList);
+        }
+        const sd::TransitionPresetList& getList() const
+        {
+            return m_aTransitionPresetList;
+        }
+    };
+
+    class theTransitionPresetList :
+        public rtl::Static<ImportedTransitionPresetList,
+                           theTransitionPresetList>
+    {
+    };
+}
 
 const TransitionPresetList& TransitionPreset::getTransitionPresetList()
 {
-    if( !mpTransitionPresetList )
-    {
-        SolarMutexGuard aGuard;
-        if( !mpTransitionPresetList )
-        {
-            mpTransitionPresetList = new sd::TransitionPresetList();
-            sd::TransitionPreset::importTransitionPresetList( *mpTransitionPresetList );
-        }
-    }
-
-    return *mpTransitionPresetList;
+    return theTransitionPresetList::get().getList();
 }
 
 void TransitionPreset::apply( SdPage* pSlide ) const

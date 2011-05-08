@@ -78,8 +78,6 @@ private:
     rtl::OUString maPresetId;
     rtl::OUString maUIName;
 
-    static sd::TransitionPresetList* mpTransitionPresetList;
-
     static bool importTransitionsFile( TransitionPresetList& rList,
                                        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
                                        UStringMap& rTransitionNameMape,
