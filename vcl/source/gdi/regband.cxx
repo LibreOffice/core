@@ -166,7 +166,7 @@ void ImplRegionBand::ProcessPoints()
     while ( pRegionBandPoint )
     {
         // within list?
-        if ( pRegionBandPoint && pRegionBandPoint->mpNextBandPoint )
+        if ( pRegionBandPoint->mpNextBandPoint )
         {
             // start/stop?
             if ( pRegionBandPoint->mbEndPoint && pRegionBandPoint->mpNextBandPoint->mbEndPoint )

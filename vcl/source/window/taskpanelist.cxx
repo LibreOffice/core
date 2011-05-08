@@ -235,7 +235,7 @@ sal_Bool TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
                 return sal_True;
             }
             else
-                p++;
+                ++p;
         }
 
         // the focus is not in the list: activate first float if F6 was pressed

@@ -670,7 +670,7 @@ long WindowEventHandler(void *, ::VclSimpleEvent const * pEvent)
     default:
         break;
     }
-    } catch(lang::IndexOutOfBoundsException e)
+    } catch(lang::IndexOutOfBoundsException)
     {
         g_warning("Focused object has invalid index in parent");
     }

@@ -368,7 +368,7 @@ ImplDockingWindowWrapper* DockingManager::GetDockingWindowWrapper( const Window 
         if( (*p)->mpDockingWindow == pWindow )
             return (*p);
         else
-            p++;
+            ++p;
     }
     return NULL;
 }
@@ -482,7 +482,7 @@ void DockingManager::RemoveWindow( const Window *pWindow )
             break;
         }
         else
-            p++;
+            ++p;
     }
 }
 

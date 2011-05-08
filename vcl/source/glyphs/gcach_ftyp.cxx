@@ -2430,7 +2430,7 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
     sal_uLong nRequestedLangsys = 0;    //MKTAG("ZHT"); //### TODO: where to get langsys?
     // TODO: request more features depending on script and language system
 
-    if( aReqFeatureTagList.size() == 0) // nothing to do
+    if( aReqFeatureTagList.empty()) // nothing to do
         return true;
 
     // load GSUB table into memory
@@ -2510,7 +2510,7 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
         }
     }
 
-    if( !aFeatureIndexList.size() )
+    if( aFeatureIndexList.empty() )
         return true;
 
     UshortList aLookupIndexList;

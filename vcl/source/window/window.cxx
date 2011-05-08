@@ -4335,7 +4335,7 @@ Window::~Window()
                 xComponent->dispose();
         }
 
-        catch ( Exception exc )
+        catch ( Exception )
         {
             // can be safely ignored here.
         }
@@ -6766,7 +6766,7 @@ void Window::EnableInput( sal_Bool bEnable, sal_Bool bChild, sal_Bool bSysWin,
                     if ( !pExcludeWindow || !pExcludeWindow->ImplIsWindowOrChild( (*p), sal_True ) )
                         (*p)->EnableInput( bEnable, bChild );
                 }
-                p++;
+                ++p;
             }
         }
     }
@@ -8373,7 +8373,7 @@ uno::Reference< XDropTarget > Window::GetDropTarget()
 
                     }
 
-                    catch( RuntimeException exc )
+                    catch( RuntimeException )
                     {
                         // release all instances
                         mpWindowImpl->mpFrameData->mxDropTarget.clear();
@@ -8446,7 +8446,7 @@ uno::Reference< XDragSource > Window::GetDragSource()
             }
 
             // createInstance can throw any exception
-            catch( Exception exc )
+            catch( Exception )
             {
                 // release all instances
                 mpWindowImpl->mpFrameData->mxDropTarget.clear();
@@ -8526,7 +8526,7 @@ uno::Reference< XClipboard > Window::GetClipboard()
             }
 
             // createInstance can throw any exception
-            catch( Exception exc )
+            catch( Exception )
             {
                 // release all instances
                 mpWindowImpl->mpFrameData->mxClipboard.clear();
@@ -8578,7 +8578,7 @@ uno::Reference< XClipboard > Window::GetPrimarySelection()
             }
 
             // createInstance can throw any exception
-            catch( Exception exc )
+            catch( Exception )
             {
                 // release all instances
                 mpWindowImpl->mpFrameData->mxSelection.clear();

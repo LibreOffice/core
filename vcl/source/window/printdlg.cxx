@@ -1078,7 +1078,6 @@ void PrintDialog::setupOptionalUI()
         Sequence< rtl::OUString > aHelpTexts;
         Sequence< rtl::OUString > aHelpIds;
         sal_Int64 nMinValue = 0, nMaxValue = 0;
-        sal_Int32 nCurHelpText = 0;
         rtl::OUString aGroupingHint;
         rtl::OUString aDependsOnName;
         sal_Int32 nDependsOnValue = 0;
@@ -1355,6 +1354,7 @@ void PrintDialog::setupOptionalUI()
             }
             else if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Radio" ) ) && pCurParent )
             {
+                sal_Int32 nCurHelpText = 0;
                 boost::shared_ptr<vcl::RowOrColumn> pRadioColumn( pCurColumn );
                 if( aText.getLength() )
                 {

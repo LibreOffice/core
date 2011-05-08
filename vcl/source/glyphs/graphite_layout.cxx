@@ -658,7 +658,7 @@ bool GraphiteLayout::LayoutGlyphs(ImplLayoutArgs& rArgs, gr_segment * pSegment)
                 mvCharDxs[mvCharDxs.size() - 1] = mnWidth;
             }
         }
-        catch (std::exception e)
+        catch (std::exception &e)
         {
 #ifdef GRLAYOUT_DEBUG
             fprintf(grLog(),"LayoutGlyphs failed %s\n", e.what());

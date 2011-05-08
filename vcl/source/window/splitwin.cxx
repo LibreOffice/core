@@ -97,7 +97,7 @@ struct ImplSplitSet
     size has not lower or upper bound.
 */
 namespace {
-    long ValidateSize (const long nSize, const ImplSplitItem rItem)
+    long ValidateSize (const long nSize, const ImplSplitItem &rItem)
     {
         if (rItem.mnMinSize>=0 && nSize<rItem.mnMinSize)
             return rItem.mnMinSize;

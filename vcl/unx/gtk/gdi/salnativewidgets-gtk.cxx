@@ -377,7 +377,7 @@ void NWPixmapCacheList::ThemeChanged( )
     while( p != mCaches.end() )
     {
         (*p)->ThemeChanged();
-        p++;
+        ++p;
     }
 }
 

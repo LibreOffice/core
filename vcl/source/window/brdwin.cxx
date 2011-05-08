@@ -371,9 +371,9 @@ sal_Bool ImplBorderWindowView::ImplMouseButtonDown( ImplBorderFrameData* pData, 
     {
         pData->maMouseOff = rMEvt.GetPosPixel();
         pData->mnHitTest = ImplHitTest( pData, pData->maMouseOff );
-        sal_uInt16 nDragFullTest = 0;
         if ( pData->mnHitTest )
         {
+            sal_uInt16 nDragFullTest = 0;
             sal_Bool bTracking = sal_True;
             sal_Bool bHitTest = sal_True;
 

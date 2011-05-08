@@ -404,7 +404,7 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
                     sal_uInt32 nYPixelPerMeter = ImplReadsal_uInt32();
 
                     sal_uInt8 nUnitSpecifier = *maDataIter++;
-                    if( (nUnitSpecifier == 1) && nXPixelPerMeter && nXPixelPerMeter )
+                    if( (nUnitSpecifier == 1) && nXPixelPerMeter && nYPixelPerMeter )
                     {
                         mbpHYs = sal_True;
 

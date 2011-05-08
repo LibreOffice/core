@@ -249,7 +249,7 @@ static rtl::OUString queryFile( Printer* pPrinter )
                 // add arbitrary files
                 xFilterMgr->appendFilter( String( VclResId( SV_STDTEXT_ALLFILETYPES ) ), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*.*" ) ) );
             }
-            catch( lang::IllegalArgumentException rExc )
+            catch( lang::IllegalArgumentException )
             {
                 DBG_ERRORFILE( "caught IllegalArgumentException when registering filter\n" );
             }
