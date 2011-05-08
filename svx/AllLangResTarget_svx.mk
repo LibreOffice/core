@@ -117,7 +117,7 @@ else
 ifneq ($(gb_lastrun_globlmn),MERGED)
 .PHONY : $(WORKDIR)/inc/svx/globlmn.hrc
 endif
-$(WORKDIR)/inc/svx/globlmn.hrc : $(realpath $(SRCDIR)/svx/inc/globlmn_tmpl.hrc) $(gb_SrsPartMergeTarget_SDFLOCATION)/svx/inc/localize.sdf
+$(WORKDIR)/inc/svx/globlmn.hrc : $(realpath $(SRCDIR)/svx/inc/globlmn_tmpl.hrc) $(realpath $(gb_SrsPartMergeTarget_SDFLOCATION)/svx/inc/localize.sdf)
 	echo merging $@
 	-mkdir -p $(WORKDIR)/inc/svx
 	rm -f $(WORKDIR)/inc/svx/lastrun.mk
@@ -125,7 +125,7 @@ $(WORKDIR)/inc/svx/globlmn.hrc : $(realpath $(SRCDIR)/svx/inc/globlmn_tmpl.hrc) 
 	$(call gb_Helper_abbreviate_dirs_native, \
             $(gb_SrsPartMergeTarget_TRANSEXCOMMAND) \
             -p svx \
-            -i $< -o $@ -m $(gb_SrsPartMergeTarget_SDFLOCATION)/svx/inc/localize.sdf -l all)
+            -i $< -o $@ -m $(realpath $(gb_SrsPartMergeTarget_SDFLOCATION)/svx/inc/localize.sdf) -l all)
 	$(call gb_Deliver_deliver, $@, $(OUTDIR)/inc/svx/globlmn.hrc)
 endif
 
