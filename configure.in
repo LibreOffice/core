@@ -7298,14 +7298,14 @@ else
     for lang in $wanted_sun_templates ; do
     if test "$with_lang" = "ALL" -o -n "`echo $with_lang | grep "$lang"`" ; then
         SUNTEMPLATES_LANG="$SUNTEMPLATES_LANG $lang"
-        case $lang in
-        	"de") SUNTEMPLATES_DE_PACK="53ca5e56ccd4cab3693ad32c6bd13343-Sun-ODF-Template-Pack-de_1.0.0.oxt";;
-        	"en-US") SUNTEMPLATES_EN_US_PACK="472ffb92d82cf502be039203c606643d-Sun-ODF-Template-Pack-en-US_1.0.0.oxt";;
-        	"es") SUNTEMPLATES_ES_PACK="4ad003e7bbda5715f5f38fde1f707af2-Sun-ODF-Template-Pack-es_1.0.0.oxt";;
-        	"fr") SUNTEMPLATES_FR_PACK="a53080dc876edcddb26eb4c3c7537469-Sun-ODF-Template-Pack-fr_1.0.0.oxt";;
-        	"hu") SUNTEMPLATES_HU_PACK="09ec2dac030e1dcd5ef7fa1692691dc0-Sun-ODF-Template-Pack-hu_1.0.0.oxt";;
-        	"it") SUNTEMPLATES_IT_PACK="b33775feda3bcf823cad7ac361fd49a6-Sun-ODF-Template-Pack-it_1.0.0.oxt";;
-    	esac        
+		case $lang in
+			"de") SUNTEMPLATES_DE_PACK="53ca5e56ccd4cab3693ad32c6bd13343-Sun-ODF-Template-Pack-de_1.0.0.oxt";;
+			"en-US") SUNTEMPLATES_EN_US_PACK="472ffb92d82cf502be039203c606643d-Sun-ODF-Template-Pack-en-US_1.0.0.oxt";;
+			"es") SUNTEMPLATES_ES_PACK="4ad003e7bbda5715f5f38fde1f707af2-Sun-ODF-Template-Pack-es_1.0.0.oxt";;
+			"fr") SUNTEMPLATES_FR_PACK="a53080dc876edcddb26eb4c3c7537469-Sun-ODF-Template-Pack-fr_1.0.0.oxt";;
+			"hu") SUNTEMPLATES_HU_PACK="09ec2dac030e1dcd5ef7fa1692691dc0-Sun-ODF-Template-Pack-hu_1.0.0.oxt";;
+			"it") SUNTEMPLATES_IT_PACK="b33775feda3bcf823cad7ac361fd49a6-Sun-ODF-Template-Pack-it_1.0.0.oxt";;
+		esac
     fi
     done
     AC_MSG_RESULT([$SUNTEMPLATES_LANG])
