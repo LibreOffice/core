@@ -1489,7 +1489,7 @@ bool HtmlExport::CreateHtmlForPresPages()
 {
     bool bOk = true;
 
-    List aClickableObjects;
+    std::vector<SdrObject*> aClickableObjects;
 
     for(sal_uInt16 nSdPage = 0; nSdPage < mnSdPageCount && bOk; nSdPage++)
     {
@@ -1527,7 +1527,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                       pInfo->meClickAction == presentation::ClickAction_LASTPAGE)) ||
                      pIMapInfo)
                 {
-                    aClickableObjects.Insert(pObject, LIST_APPEND);
+                    aClickableObjects.push_back(pObject);
                 }
 
                 pObject = aIter.Next();
@@ -1538,7 +1538,6 @@ bool HtmlExport::CreateHtmlForPresPages()
             else
                 bMasterDone = true;
         }
-        sal_uLong nClickableObjectCount = aClickableObjects.Count();
 
 // HTML Head
         String aStr(maHTMLHeader);
@@ -1603,7 +1602,7 @@ bool HtmlExport::CreateHtmlForPresPages()
         aStr += StringToURL( *mpImageFiles[nSdPage] );
         aStr.AppendAscii( "\" alt=\"\"" );
 
-        if (nClickableObjectCount > 0)
+        if (!aClickableObjects.empty())
             aStr.AppendAscii( " USEMAP=\"#map0\"" );
 
         aStr.AppendAscii( "></center>\r\n" );
@@ -1628,13 +1627,13 @@ bool HtmlExport::CreateHtmlForPresPages()
         }
 
 // ggfs. Imagemap erzeugen
-        if (nClickableObjectCount > 0)
+        if (!aClickableObjects.empty())
         {
             aStr.AppendAscii( "<map name=\"map0\">\r\n" );
 
-            for (sal_uLong nObject = 0; nObject < nClickableObjectCount; nObject++)
+            for (sal_uInt32 nObject = 0, n = aClickableObjects.size(); nObject < n; nObject++)
             {
-                SdrObject* pObject = (SdrObject*)aClickableObjects.GetObject(nObject);
+                SdrObject* pObject = aClickableObjects[nObject];
                 SdAnimationInfo* pInfo     = mpDoc->GetAnimationInfo(pObject);
                 SdIMapInfo*      pIMapInfo = mpDoc->GetIMapInfo(pObject);
 
@@ -1848,7 +1847,7 @@ bool HtmlExport::CreateHtmlForPresPages()
 
             aStr.AppendAscii( "</map>\r\n" );
         }
-        aClickableObjects.Clear();
+        aClickableObjects.clear();
 
         aStr.AppendAscii( "</body>\r\n</html>" );
 
