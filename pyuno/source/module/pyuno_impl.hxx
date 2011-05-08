@@ -30,6 +30,11 @@
 
 #include <Python.h>
 
+//Must define PyVarObject_HEAD_INIT for Python 2.5 or older
+#ifndef PyVarObject_HEAD_INIT
+#define PyVarObject_HEAD_INIT(type, size)  PyObject_HEAD_INIT(type) size,
+#endif
+
 #include <pyuno/pyuno.hxx>
 
 #include <boost/unordered_map.hpp>
