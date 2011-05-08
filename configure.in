@@ -7073,7 +7073,7 @@ if test "z$enable_ext_lightproof" = "z" -o "z$enable_ext_lightproof" = "zno" ; t
     AC_MSG_RESULT([no integration])
 else
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_LIGHTPROOF"
-    lightproof_supported_langs="hu"
+    lightproof_supported_langs="en-US hu"
     if test "z$enable_ext_lightproof" = "zyes" ; then
         wanted_lightproof="$lightproof_supported_langs"
     else
@@ -7086,15 +7086,23 @@ else
     done
     fi
     LIGHTPROOF_LANG=
+    LIGHTPROOF_HU_PACK=
+    LIGHTPROOF_EN_US_PACK=
     # check whether the langs are requested at all
     for lang in $wanted_lightproof ; do
     if test "$with_lang" = "ALL" -o -n "`echo $with_lang | grep "$lang"`" ; then
         LIGHTPROOF_LANG="$LIGHTPROOF_LANG $lang"
+        case $lang in
+        "hu") LIGHTPROOF_HU_PACK="324ddcb9ef45c3bc055fcc002bc4e556-lightproof-hu_1.2.oxt";;
+        "en-US") LIGHTPROOF_EN_US_PACK="942541da5f5498214518c8b459ae4524-lightproof-en-US_0.1.oxt";;
+    esac
     fi
     done
     AC_MSG_RESULT([$LIGHTPROOF_LANG])
 fi
 AC_SUBST(LIGHTPROOF_LANG)
+AC_SUBST(LIGHTPROOF_HU_PACK)
+AC_SUBST(LIGHTPROOF_EN_US_PACK)
 
 dnl ===================================================================
 dnl Test whether to include Watch Window extension
@@ -7163,7 +7171,7 @@ else
   AC_MSG_RESULT([yes])
   BUILD_TYPE="$BUILD_TYPE CT2N"
   SCPDEFS="$SCPDEFS -DWITH_EXTENSION_CT2N"
-  CT2N_EXTENSION_PACK="451ccf439a36a568653b024534669971-ConvertTextToNumber-1.3.2.oxt"
+  CT2N_EXTENSION_PACK="451ccf439a36a568653b024534669971-ConvertTextToNumber_1.3.2.oxt"
 fi
 AC_SUBST(CT2N_EXTENSION_PACK)
 
@@ -7177,7 +7185,7 @@ if test "z$enable_ext_numbertext" = "z" -o "z$enable_ext_numbertext" = "zno" ; t
 else
   AC_MSG_RESULT([yes])
   SCPDEFS="$SCPDEFS -DWITH_EXTENSION_NUMBERTEXT"
-  NUMBERTEXT_EXTENSION_PACK="b8cbca7b3363e6ca2d02bc0ba2b63904-numbertext-0.9.4.oxt"
+  NUMBERTEXT_EXTENSION_PACK="b8cbca7b3363e6ca2d02bc0ba2b63904-numbertext_0.9.4.oxt"
 fi
 AC_SUBST(NUMBERTEXT_EXTENSION_PACK)
 
@@ -7191,7 +7199,7 @@ if test "z$enable_ext_hunart" = "z" -o "z$enable_ext_hunart" = "zno" ; then
 else
   AC_MSG_RESULT([yes])
   SCPDEFS="$SCPDEFS -DWITH_EXTENSION_HUNART"
-  HUNART_EXTENSION_PACK="b632bdd25649cc4067bcb410bae23d2b-hunart-0.3.oxt"
+  HUNART_EXTENSION_PACK="b632bdd25649cc4067bcb410bae23d2b-hunart_0.3.oxt"
 fi
 AC_SUBST(HUNART_EXTENSION_PACK)
 
@@ -7205,7 +7213,7 @@ if test "z$enable_ext_typo" = "z" -o "z$enable_ext_typo" = "zno" ; then
 else
   AC_MSG_RESULT([yes])
   SCPDEFS="$SCPDEFS -DWITH_EXTENSION_TYPO"
-  TYPO_EXTENSION_PACK="9d60b6cfa3ef1926848710bbcd11115b-typo-0.4.2.oxt"
+  TYPO_EXTENSION_PACK="9d60b6cfa3ef1926848710bbcd11115b-typo_0.4.2.oxt"
 fi
 AC_SUBST(TYPO_EXTENSION_PACK)
 
