@@ -1145,7 +1145,7 @@ private:
     void onSoundPreview();
 
 private:
-    List maSoundList;
+    ::std::vector< String > maSoundList;
     sal_Bool mbHasText;
     const STLPropertySet* mpSet;
 
@@ -1466,10 +1466,10 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
                 const String aTmp( aSoundURL );
 
                 sal_uLong i;
-                for( i = 0; i < maSoundList.Count(); i++ )
+                for( i = 0; i < maSoundList.size(); i++ )
                 {
-                    String* pString = (String*)maSoundList.GetObject( i );
-                    if( *pString == aTmp )
+                    String aString = maSoundList[ i ];
+                    if( aString == aTmp )
                     {
                         nPos = (sal_uInt16)i+2;
                         break;
@@ -1478,8 +1478,8 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
 
                 if( nPos == 0 )
                 {
-                    nPos = (sal_uInt16)maSoundList.Count()+2;
-                    maSoundList.Insert( new String( aTmp ), LIST_APPEND );
+                    nPos = (sal_uInt16)maSoundList.size()+2;
+                    maSoundList.push_back( String( aTmp ) );
                     INetURLObject aURL( aTmp );
                     nPos = mpLBSound->InsertEntry( aURL.GetBase(), nPos );
                 }
@@ -1717,7 +1717,7 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
         }
         else
         {
-            OUString aSoundURL( *(String*)maSoundList.GetObject( nPos-2 ) );
+            OUString aSoundURL( maSoundList[ nPos-2 ] );
             aNewSoundURL = makeAny( aSoundURL );
         }
 
@@ -1736,10 +1736,10 @@ void CustomAnimationEffectTabPage::fillSoundListBox()
 
     mpLBSound->InsertEntry( String( SdResId( STR_CUSTOMANIMATION_NO_SOUND ) ) );
     mpLBSound->InsertEntry( String( SdResId( STR_CUSTOMANIMATION_STOP_PREVIOUS_SOUND ) ) );
-    for( sal_uLong i = 0; i < maSoundList.Count(); i++ )
+    for( size_t i = 0; i < maSoundList.size(); i++ )
     {
-        String* pString = (String*)maSoundList.GetObject( i );
-        INetURLObject aURL( *pString );
+        String aString = maSoundList[ i ];
+        INetURLObject aURL( aString );
         mpLBSound->InsertEntry( aURL.GetBase() );
     }
     mpLBSound->InsertEntry( String( SdResId( STR_CUSTOMANIMATION_BROWSE_SOUND ) ) );
@@ -1747,12 +1747,7 @@ void CustomAnimationEffectTabPage::fillSoundListBox()
 
 void CustomAnimationEffectTabPage::clearSoundListBox()
 {
-    const sal_uInt32 nCount = maSoundList.Count();
-    sal_uInt32 i;
-    for( i = 0; i < nCount; i++ )
-        delete (String*)maSoundList.GetObject( i );
-    maSoundList.Clear();
-
+    maSoundList.clear();
     mpLBSound->Clear();
 }
 
@@ -1761,11 +1756,11 @@ sal_Int32 CustomAnimationEffectTabPage::getSoundObject( const String& rStr )
     String aStrIn( rStr );
     aStrIn.ToLowerAscii();
 
-    sal_uInt32 i;
-    const sal_uInt32 nCount = maSoundList.Count();
+    size_t i;
+    const size_t nCount = maSoundList.size();
     for( i = 0; i < nCount; i++ )
     {
-        String aTmpStr( *(String*)maSoundList.GetObject( i ) );
+        String aTmpStr( maSoundList[ i ] );
         aTmpStr.ToLowerAscii();
 
         if( aTmpStr == aStrIn )
@@ -1836,8 +1831,8 @@ void CustomAnimationEffectTabPage::onSoundPreview()
 
     if( nPos >= 2 ) try
     {
-        const OUString aSoundURL( *(String*)maSoundList.GetObject( nPos-2 ) );
-                mxPlayer.set( avmedia::MediaWindow::createPlayer( aSoundURL ), uno::UNO_QUERY_THROW );
+        const OUString aSoundURL( maSoundList[ nPos-2 ] );
+        mxPlayer.set( avmedia::MediaWindow::createPlayer( aSoundURL ), uno::UNO_QUERY_THROW );
         mxPlayer->start();
     }
     catch( uno::Exception& e )
