@@ -184,7 +184,7 @@ void SelectionManager::DeleteSelectedNormalPages (const ::std::vector<SdPage*>& 
         // reverse order so that when one slide is not deleted (to avoid an
         // empty document) the remaining slide is the first one.
         ::std::vector<SdPage*>::const_reverse_iterator aI;
-        for (aI=rSelectedPages.rbegin(); aI!=rSelectedPages.rend(); aI++)
+        for (aI=rSelectedPages.rbegin(); aI!=rSelectedPages.rend(); ++aI)
         {
             // Do not delete the last slide in the document.
             if (xPages->getCount() <= 1)
@@ -220,7 +220,7 @@ void SelectionManager::DeleteSelectedMasterPages (const ::std::vector<SdPage*>& 
         // reverse order so that when one slide is not deleted (to avoid an
         // empty document) the remaining slide is the first one.
         ::std::vector<SdPage*>::const_reverse_iterator aI;
-        for (aI=rSelectedPages.rbegin(); aI!=rSelectedPages.rend(); aI++)
+        for (aI=rSelectedPages.rbegin(); aI!=rSelectedPages.rend(); ++aI)
         {
             // Do not delete the last slide in the document.
             if (xPages->getCount() <= 1)

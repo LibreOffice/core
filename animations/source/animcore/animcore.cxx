@@ -1874,7 +1874,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::insertAfter( const Reference
     if( ::std::find(maChilds.begin(), maChilds.end(), newChild) != maChilds.end() )
         throw ElementExistException();
 
-    before++;
+    ++before;
     if( before != maChilds.end() )
         maChilds.insert( before, newChild );
     else

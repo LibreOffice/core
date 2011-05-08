@@ -481,7 +481,7 @@ void AnnotationWindow::ResizeIfNeccessary(long aOldHeight, long aNewHeight)
     }
 }
 
-void AnnotationWindow::SetLanguage(const SvxLanguageItem aNewItem)
+void AnnotationWindow::SetLanguage(const SvxLanguageItem &aNewItem)
 {
     Engine()->SetModifyHdl( Link() );
     ESelection aOld = getView()->GetSelection();

@@ -149,7 +149,7 @@ class AnnotationWindow : public FloatingWindow
 
         bool            IsProtected() { return mbProtected; }
 
-        void            SetLanguage(const SvxLanguageItem aNewItem);
+        void            SetLanguage(const SvxLanguageItem &aNewItem);
 
         sal_Int32       GetScrollbarWidth();
 

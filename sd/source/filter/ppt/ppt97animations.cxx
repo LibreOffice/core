@@ -711,7 +711,7 @@ void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
 
             ::sd::CustomAnimationEffectPtr pLastEffect;
             sal_Int32 nIndex = 0;
-            for( ; aIter != rEffects.end(); aIter++ )
+            for( ; aIter != rEffects.end(); ++aIter )
             {
                 ::sd::CustomAnimationEffectPtr pGroupEffect(*aIter);
 

@@ -257,7 +257,7 @@ void ConfigurationUpdater::CleanRequestedConfiguration (void)
         // Request the deactivation of pure anchors that have no child.
         vector<Reference<XResourceId> > aResourcesToDeactivate;
         CheckPureAnchors(mxRequestedConfiguration, aResourcesToDeactivate);
-        if (aResourcesToDeactivate.size() > 0)
+        if (!aResourcesToDeactivate.empty())
         {
             Reference<XConfigurationController> xCC (
                 mxControllerManager->getConfigurationController());
@@ -328,7 +328,7 @@ void ConfigurationUpdater::UpdateCore (const ConfigurationClassifier& rClassifie
         // Deactivate pure anchors that have no child.
         vector<Reference<XResourceId> > aResourcesToDeactivate;
         CheckPureAnchors(mxCurrentConfiguration, aResourcesToDeactivate);
-        if (aResourcesToDeactivate.size() > 0)
+        if (!aResourcesToDeactivate.empty())
             mpResourceManager->DeactivateResources(aResourcesToDeactivate, mxCurrentConfiguration);
     }
     catch(const RuntimeException&)

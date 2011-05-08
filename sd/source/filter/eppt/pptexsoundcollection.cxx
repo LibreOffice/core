@@ -186,11 +186,11 @@ sal_uInt32 ExSoundCollection::GetId( const String& rString )
 sal_uInt32 ExSoundCollection::GetSize() const
 {
     sal_uInt32 nSize = 0;
-    sal_uInt32 i = 1;
     if (!maEntries.empty())
     {
         nSize += 8 + 12;    // size of SoundCollectionContainerHeader + SoundCollAtom
         boost::ptr_vector<ExSoundEntry>::const_iterator iter;
+        sal_uInt32 i = 1;
         for ( iter = maEntries.begin(); iter != maEntries.end(); ++iter, ++i)
             nSize += iter->GetSize(i);
     }

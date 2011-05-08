@@ -83,7 +83,7 @@ PresStyleMap& SdStyleFamilyImpl::getStyleSheets()
         const sal_uInt16 nLen = aLayoutName.Search(String( RTL_CONSTASCII_USTRINGPARAM(SD_LT_SEPARATOR)))+4;
         aLayoutName.Erase( nLen );
 
-        if( (maStyleSheets.size() == 0) || !((*maStyleSheets.begin()).second->GetName().Equals( aLayoutName, 0, nLen )) )
+        if( (maStyleSheets.empty()) || !((*maStyleSheets.begin()).second->GetName().Equals( aLayoutName, 0, nLen )) )
         {
             maStyleSheets.clear();
 
