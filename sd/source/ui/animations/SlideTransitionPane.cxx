@@ -892,24 +892,18 @@ void SlideTransitionPane::updateControlState()
 
 void SlideTransitionPane::updateSoundList()
 {
-    List aSoundList;
+    ::std::vector< String > aSoundList;
 
     GalleryExplorer::FillObjList( GALLERY_THEME_SOUNDS, aSoundList );
     GalleryExplorer::FillObjList( GALLERY_THEME_USERSOUNDS, aSoundList );
 
-    sal_uInt32 nCount = aSoundList.Count();
+    size_t nCount = aSoundList.size();
     maSoundList.clear();
     maSoundList.reserve( nCount );
-    for( sal_uInt32 i=0; i<nCount; ++i )
+    for( size_t i =0 ; i < nCount; ++i )
     {
-        String * pEntry = reinterpret_cast< String * >( aSoundList.GetObject( i ));
-        if( pEntry )
-        {
-            // store copy of string in member list
-            maSoundList.push_back( *pEntry );
-            // delete pointer in temporary List
-            delete pEntry;
-        }
+        // store copy of string in member list
+        maSoundList.push_back( aSoundList[ i ] );
     }
 
     lcl_FillSoundListBox( maSoundList, maLB_SOUND );
