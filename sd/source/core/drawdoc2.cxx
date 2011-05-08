@@ -786,14 +786,13 @@ sal_Bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage)
         BegUndo(String(SdResId(STR_UNDO_MOVEPAGES)));
 
     // Liste mit selektierten Seiten
-    List    aPageList;
+    std::vector<SdPage*> aPageList;
     for (nPage = 0; nPage < nNoOfPages; nPage++)
     {
         pPage = GetSdPage(nPage, PK_STANDARD);
+
         if (pPage->IsSelected())
-        {
-            aPageList.Insert(pPage, LIST_APPEND);
-        }
+            aPageList.push_back(pPage);
     }
 
     // falls noetig, nach vorne hangeln, bis nicht selektierte Seite gefunden
@@ -816,11 +815,10 @@ sal_Bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage)
     // vor der ersten Seite einfuegen
     if (nPage == (sal_uInt16)-1)
     {
-        while (aPageList.Count() > 0)
+        std::vector<SdPage*>::reverse_iterator iter;
+        for (iter = aPageList.rbegin(); iter != aPageList.rend(); ++iter)
         {
-            aPageList.Last();
-
-            nPage = ( (SdPage*) aPageList.GetCurObject() )->GetPageNum();
+            nPage = (*iter)->GetPageNum();
             if (nPage != 0)
             {
                 SdrPage* pPg = GetPage(nPage);
@@ -833,7 +831,6 @@ sal_Bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage)
                 MovePage(nPage+1, 2);
                 bSomethingHappened = sal_True;
             }
-            aPageList.Remove();
         }
     }
     // hinter <nPage> einfuegen
@@ -841,9 +838,11 @@ sal_Bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage)
     {
         nTargetPage = nPage;
         nTargetPage = 2 * nTargetPage + 1;    // PK_STANDARD --> absolut
-        while (aPageList.Count() > 0)
+
+        std::vector<SdPage*>::iterator iter;
+        for (iter = aPageList.begin(); iter != aPageList.end(); ++iter)
         {
-            pPage = (SdPage*)aPageList.GetObject(0);
+            pPage = *iter;
             nPage = pPage->GetPageNum();
             if (nPage > nTargetPage)
             {
@@ -877,7 +876,6 @@ sal_Bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage)
                     bSomethingHappened = sal_True;
                 }
             }
-            aPageList.Remove((sal_uLong)0);
             nTargetPage = pPage->GetPageNum();
         }
     }
