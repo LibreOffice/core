@@ -244,6 +244,7 @@ private:
 ScMatrixImpl::ScMatrixImpl(SCSIZE nC, SCSIZE nR, ScMatrix::DensityType eType) :
     maMat(nR, nC, toMddsDensityType(eType)),
     meType(eType),
+    pErrorInterpreter(NULL),
     mbCloneIfConst(true)
 {
 }
