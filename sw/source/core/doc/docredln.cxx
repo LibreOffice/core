@@ -71,19 +71,19 @@ TYPEINIT1(SwRedlineHint, SfxHint);
         SwPosition aComparePos( *pPos );
         aComparePos.nContent.Assign(
             aComparePos.nNode.GetNode().GetCntntNode(), 0 );
-        DBG_ASSERT( pPos->nContent.GetIdxReg() ==
+        OSL_ENSURE( pPos->nContent.GetIdxReg() ==
                     aComparePos.nContent.GetIdxReg(),
                     _ERROR_PREFIX "illegal position" );
 
         SwTxtNode* pTxtNode = pPos->nNode.GetNode().GetTxtNode();
         if( pTxtNode == NULL )
         {
-            DBG_ASSERT( pPos->nContent == 0,
+            OSL_ENSURE( pPos->nContent == 0,
                         _ERROR_PREFIX "non-text-node with content" );
         }
         else
         {
-            DBG_ASSERT( pPos->nContent >= 0  &&
+            OSL_ENSURE( pPos->nContent >= 0  &&
                         pPos->nContent <= pTxtNode->Len(),
                         _ERROR_PREFIX "index behind text" );
         }
@@ -91,7 +91,7 @@ TYPEINIT1(SwRedlineHint, SfxHint);
 
     void lcl_CheckPam( const SwPaM* pPam )
     {
-        DBG_ASSERT( pPam != NULL, _ERROR_PREFIX "illegal argument" );
+        OSL_ENSURE( pPam != NULL, _ERROR_PREFIX "illegal argument" );
         lcl_CheckPosition( pPam->GetPoint() );
         lcl_CheckPosition( pPam->GetMark() );
     }
@@ -109,7 +109,7 @@ TYPEINIT1(SwRedlineHint, SfxHint);
         for( sal_uInt16 j = 0; j < rTbl.Count(); ++j )
         {
             // check for empty redlines
-            DBG_ASSERT( ( *(rTbl[j]->GetPoint()) != *(rTbl[j]->GetMark()) ) ||
+            OSL_ENSURE( ( *(rTbl[j]->GetPoint()) != *(rTbl[j]->GetMark()) ) ||
                         ( rTbl[j]->GetContentIdx() != NULL ),
                         _ERROR_PREFIX "empty redline" );
          }
@@ -121,11 +121,11 @@ TYPEINIT1(SwRedlineHint, SfxHint);
             const SwRedline* pCurrent = rTbl[ n ];
 
             // check redline sorting
-            DBG_ASSERT( *pPrev->Start() <= *pCurrent->Start(),
+            OSL_ENSURE( *pPrev->Start() <= *pCurrent->Start(),
                         _ERROR_PREFIX "not sorted correctly" );
 
             // check for overlapping redlines
-            DBG_ASSERT( *pPrev->End() <= *pCurrent->Start(),
+            OSL_ENSURE( *pPrev->End() <= *pCurrent->Start(),
                         _ERROR_PREFIX "overlapping redlines" );
         }
     }
@@ -336,7 +336,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
             {
                 if( pStt->nContent > 0 )
                 {
-                    DBG_ASSERT( false, "Redline start: non-text-node with content" );
+                    OSL_ENSURE( false, "Redline start: non-text-node with content" );
                     pStt->nContent = 0;
                 }
             }
@@ -344,7 +344,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
             {
                 if( pStt->nContent > pTxtNode->Len() )
                 {
-                    DBG_ASSERT( false, "Redline start: index behind text" );
+                    OSL_ENSURE( false, "Redline start: index behind text" );
                     pStt->nContent = pTxtNode->Len();
                 }
             }
@@ -353,7 +353,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
             {
                 if( pEnd->nContent > 0 )
                 {
-                    DBG_ASSERT( false, "Redline end: non-text-node with content" );
+                    OSL_ENSURE( false, "Redline end: non-text-node with content" );
                     pEnd->nContent = 0;
                 }
             }
@@ -361,7 +361,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
             {
                 if( pEnd->nContent > pTxtNode->Len() )
                 {
-                    DBG_ASSERT( false, "Redline end: index behind text" );
+                    OSL_ENSURE( false, "Redline end: index behind text" );
                     pEnd->nContent = pTxtNode->Len();
                 }
             }

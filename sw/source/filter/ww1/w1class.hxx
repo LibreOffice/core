@@ -157,7 +157,7 @@ public:
     sal_uLong Where() const                 { return ulSeek; }
     void Seek( sal_uLong ulNew )
         {
-            DBG_ASSERT(ulNew < ulCountBytes, "Ww1PlainText");
+            OSL_ENSURE(ulNew < ulCountBytes, "Ww1PlainText");
             if (ulNew < ulCountBytes)
                 ulSeek = ulNew;
         }
@@ -171,7 +171,7 @@ public:
         }
     void operator++(int)
     {
-        DBG_ASSERT(ulSeek+1<ulCountBytes, "Ww1PlainText");
+        OSL_ENSURE(ulSeek+1<ulCountBytes, "Ww1PlainText");
         ulSeek++;
     }
     sal_Bool GetError()                     { return !bOK; }
@@ -1136,7 +1136,7 @@ public:
         if (grpfIhdt & 0x0008) nOddFootL = nextIhdd++;
         if (grpfIhdt & 0x0010) nFirstHeadL = nextIhdd++;
         if (grpfIhdt & 0x0020) nFirstFootL = nextIhdd++;
-        DBG_ASSERT(nextIhdd<=Count(), "Ww1HeaderFooter");
+        OSL_ENSURE(nextIhdd<=Count(), "Ww1HeaderFooter");
     }
     sal_Bool operator++(int)
     {
@@ -1233,13 +1233,13 @@ public:
     sal_uLong Where()       { return Where(nPlcIndex); }
     void operator++(int)
     {
-        DBG_ASSERT(nPlcIndex+1 <= Count(), "Ww1Fields");
+        OSL_ENSURE(nPlcIndex+1 <= Count(), "Ww1Fields");
         nPlcIndex++;
     }
     void Seek(sal_uLong ulNew)      { Ww1PlcFields::Seek(ulNew, nPlcIndex); }
     W1_FLD* GetData()
     {
-        DBG_ASSERT(nPlcIndex < Count(), "Ww1Fields");
+        OSL_ENSURE(nPlcIndex < Count(), "Ww1Fields");
         return Ww1PlcFields::GetData(nPlcIndex);
     }
     sal_uLong GetLength();
@@ -1335,7 +1335,7 @@ public:
     }
     void operator++(int)
     {
-        DBG_ASSERT(nPlcIndex+1 <= Count(), "Ww1Footnotes");
+        OSL_ENSURE(nPlcIndex+1 <= Count(), "Ww1Footnotes");
         nPlcIndex++;
     }
     void Start(Ww1Shell&, Ww1Manager&);
@@ -1408,7 +1408,7 @@ public:
     void Seek(sal_uLong);
     void Push(sal_uLong ulOffsetTmp = 0)
     {
-        DBG_ASSERT(!Pushed(), "Ww1Pap");
+        OSL_ENSURE(!Pushed(), "Ww1Pap");
         nPushedPlcIndex = nPlcIndex;
         nPushedFkpIndex = nFkpIndex;
         Seek(ulOffsetTmp);
@@ -1422,7 +1422,7 @@ public:
     }
     void Pop()
     {
-        DBG_ASSERT(Pushed(), "Ww1Pap");
+        OSL_ENSURE(Pushed(), "Ww1Pap");
         ulOffset = 0;
         nPlcIndex = nPushedPlcIndex;
         nFkpIndex = nPushedFkpIndex;
@@ -1473,7 +1473,7 @@ public:
     void Seek(sal_uLong);
     void Push(sal_uLong ulOffsetTmp = 0)
     {
-        DBG_ASSERT(!Pushed(), "Ww1Chp");
+        OSL_ENSURE(!Pushed(), "Ww1Chp");
         nPushedPlcIndex = nPlcIndex;
         nPushedFkpIndex = nFkpIndex;
         Seek(ulOffsetTmp);
@@ -1484,7 +1484,7 @@ public:
     sal_Bool Pushed()               { return nPushedPlcIndex != 0xffff; }
     void Pop()
     {
-        DBG_ASSERT(Pushed(), "Ww1Chp");
+        OSL_ENSURE(Pushed(), "Ww1Chp");
         ulOffset = 0;
         nPlcIndex = nPushedPlcIndex;
         nFkpIndex = nPushedFkpIndex;

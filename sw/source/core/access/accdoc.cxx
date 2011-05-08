@@ -346,11 +346,11 @@ void SwAccessibleDocument::Dispose( sal_Bool bRecursive )
 
 IMPL_LINK( SwAccessibleDocument, WindowChildEventListener, VclSimpleEvent*, pEvent )
 {
-    DBG_ASSERT( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
+    OSL_ENSURE( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
     if ( pEvent && pEvent->ISA( VclWindowEvent ) )
     {
         VclWindowEvent *pVclEvent = static_cast< VclWindowEvent * >( pEvent );
-        DBG_ASSERT( pVclEvent->GetWindow(), "Window???" );
+        OSL_ENSURE( pVclEvent->GetWindow(), "Window???" );
         switch ( pVclEvent->GetId() )
         {
         case VCLEVENT_WINDOW_SHOW:  // send create on show for direct accessible children

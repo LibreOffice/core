@@ -474,7 +474,7 @@ SwDoc* Reader::GetTemplateDoc()
     {
         INetURLObject aTDir( aTemplateNm );
         String aFileName = aTDir.GetMainURL( INetURLObject::NO_DECODE );
-        DBG_ASSERT( !aTDir.HasError(), "No absolute path for template name!" );
+        OSL_ENSURE( !aTDir.HasError(), "No absolute path for template name!" );
         DateTime aCurrDateTime;
         sal_Bool bLoad = sal_False;
 

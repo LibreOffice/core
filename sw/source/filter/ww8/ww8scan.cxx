@@ -1311,7 +1311,7 @@ short WW8_BRC::DetermineBorderProperties(bool bVer67, short *pSpace,
             case 4:
             case 5:
             case 22:
-                DBG_WARNING("Can't create these from the menus, please report");
+                OSL_FAIL("Can't create these from the menus, please report");
             default:
             case 23:    //Only 3pt in the menus, but honours the size setting.
                 break;
@@ -2999,7 +2999,7 @@ void WW8PLCFx_Fc_FKP::GetPCDSprms( WW8PLCFxDesc& rDesc )
     {
         if( !pFkp )
         {
-            DBG_WARNING(
+            OSL_FAIL(
                 "+Problem: GetPCDSprms: NewFkp necessay (not possible!)" );
             if( !NewFkp() )
                 return;
@@ -3014,7 +3014,7 @@ const sal_uInt8* WW8PLCFx_Fc_FKP::HasSprm( sal_uInt16 nId )
     // wegfallen
     if( !pFkp )
     {
-        DBG_WARNING( "+Motz: HasSprm: NewFkp noetig ( kein const moeglich )" );
+        OSL_FAIL( "+Motz: HasSprm: NewFkp noetig ( kein const moeglich )" );
         // Passiert bei BugDoc 31722
         if( !NewFkp() )
             return 0;
@@ -3044,7 +3044,7 @@ bool WW8PLCFx_Fc_FKP::HasSprm(sal_uInt16 nId, std::vector<const sal_uInt8 *> &rR
     // wegfallen
     if (!pFkp)
     {
-       DBG_WARNING( "+Motz: HasSprm: NewFkp noetig ( kein const moeglich )" );
+       OSL_FAIL( "+Motz: HasSprm: NewFkp noetig ( kein const moeglich )" );
        // Passiert bei BugDoc 31722
        if( !NewFkp() )
            return 0;

@@ -240,12 +240,12 @@ sal_Bool FillRangeDescriptor(
     lcl_GetCellPosition( aTLName, rDesc.nLeft,  rDesc.nTop );
     lcl_GetCellPosition( aBRName, rDesc.nRight, rDesc.nBottom );
     rDesc.Normalize();
-    DBG_ASSERT( rDesc.nTop    != -1 &&
+    OSL_ENSURE( rDesc.nTop    != -1 &&
                 rDesc.nLeft   != -1 &&
                 rDesc.nBottom != -1 &&
                 rDesc.nRight  != -1,
             "failed to get range descriptor" );
-    DBG_ASSERT( rDesc.nTop <= rDesc.nBottom  &&  rDesc.nLeft <= rDesc.nRight,
+    OSL_ENSURE( rDesc.nTop <= rDesc.nBottom  &&  rDesc.nLeft <= rDesc.nRight,
             "invalid range descriptor");
     return sal_True;
 }
@@ -277,8 +277,8 @@ static String GetCellRangeName( SwFrmFmt &rTblFmt, SwUnoCrsr &rTblCrsr )
             pStart = pUnoTblCrsr->GetMark()->nNode.GetNode().FindTableBoxStartNode();
             pStartBox = pTable->GetTblBox( pStart->GetIndex());
         }
-        DBG_ASSERT( pStartBox, "start box not found" );
-        DBG_ASSERT( pEndBox, "end box not found" );
+        OSL_ENSURE( pStartBox, "start box not found" );
+        OSL_ENSURE( pEndBox, "end box not found" );
         // need to switch start and end?
         if (*pUnoTblCrsr->GetPoint() < *pUnoTblCrsr->GetMark())
         {
@@ -302,8 +302,8 @@ static String GetRangeRepFromTableAndCells( const String &rTableName,
         const String &rStartCell, const String &rEndCell,
         sal_Bool bForceEndCellName )
 {
-    DBG_ASSERT( rTableName.Len(), "table name missing" );
-    DBG_ASSERT( rStartCell.Len(), "cell name missing" );
+    OSL_ENSURE( rTableName.Len(), "table name missing" );
+    OSL_ENSURE( rStartCell.Len(), "cell name missing" );
     String aRes( rTableName );
     aRes += (sal_Unicode) '.';
     aRes += rStartCell;
@@ -597,7 +597,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
                                             // false: DataSource will be sequence of rows
     OUString aChartOleObjectName;//work around wrong writer ranges ( see Issue 58464 )
     sal_Int32 nArgs = rArguments.getLength();
-    DBG_ASSERT( nArgs != 0, "no properties provided" );
+    OSL_ENSURE( nArgs != 0, "no properties provided" );
     if (nArgs == 0)
         return xRes;
     const beans::PropertyValue *pArg = rArguments.getConstArray();
@@ -739,12 +739,12 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
                 sal_Bool bOk2 = GetTableAndCellsFromRangeRep(
                                     pSubRanges[i], aTblName, aStartCell, aEndCell );
                 (void) bOk2;
-                DBG_ASSERT( bOk2, "failed to get table and start/end cells" );
+                OSL_ENSURE( bOk2, "failed to get table and start/end cells" );
 
                 sal_Int32 nStartRow, nStartCol, nEndRow, nEndCol;
                 lcl_GetCellPosition( aStartCell, nStartCol, nStartRow );
                 lcl_GetCellPosition( aEndCell,   nEndCol,   nEndRow );
-                DBG_ASSERT( nStartRow <= nEndRow && nStartCol <= nEndCol,
+                OSL_ENSURE( nStartRow <= nEndRow && nStartCol <= nEndCol,
                         "cell range not normalized");
 
                 // test if the ranges span more than the available cells
@@ -932,13 +932,13 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
                 // create XDataSequence's from cursors
                 if (pLabelUnoCrsr)
                     pLabelSeqs[ nSeqsIdx ] = new SwChartDataSequence( *this, *pTblFmt, pLabelUnoCrsr );
-                DBG_ASSERT( pDataUnoCrsr, "pointer to data sequence missing" );
+                OSL_ENSURE( pDataUnoCrsr, "pointer to data sequence missing" );
                 if (pDataUnoCrsr)
                     pDataSeqs [ nSeqsIdx ] = new SwChartDataSequence( *this, *pTblFmt, pDataUnoCrsr );
                 if (pLabelUnoCrsr || pDataUnoCrsr)
                     ++nSeqsIdx;
             }
-            DBG_ASSERT( nSeqsIdx == nNumLDS,
+            OSL_ENSURE( nSeqsIdx == nNumLDS,
                     "mismatch between sequence size and num,ber of entries" );
 
             // build data source from data and label sequences
@@ -984,7 +984,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
                     if (pOld_LDS[i].is())
                         pLDS[nNewCnt++] = pOld_LDS[i];
                 }
-                DBG_ASSERT( nNewCnt == nNumLDS, "unexpected size of resulting sequence" );
+                OSL_ENSURE( nNewCnt == nNumLDS, "unexpected size of resulting sequence" );
             }
 
             xRes = new SwChartDataSource( aLDS );
@@ -1078,7 +1078,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
 
     if (nNumDS_LDS == 0)
     {
-        DBG_WARNING( "XLabeledDataSequence in data source contains 0 entries" );
+        OSL_FAIL( "XLabeledDataSequence in data source contains 0 entries" );
         return aResult;
     }
 
@@ -1160,14 +1160,14 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
         //
         sal_Int32 nFirstCol = -1, nFirstRow = -1, nLastCol = -1, nLastRow = -1;
         String aCell( aLabelStartCell.Len() ? aLabelStartCell : aValuesStartCell );
-        DBG_ASSERT( aCell.Len() , "start cell missing?" );
+        OSL_ENSURE( aCell.Len() , "start cell missing?" );
         lcl_GetCellPosition( aCell, nFirstCol, nFirstRow);
         lcl_GetCellPosition( aValuesEndCell, nLastCol, nLastRow);
         //
         sal_Int16 nDirection = -1;  // -1: not yet set,  0: columns,  1: rows, -2: failed
         if (nFirstCol == nLastCol && nFirstRow == nLastRow) // a single cell...
         {
-            DBG_ASSERT( nCurLabelSeqLen == 0 && nCurValuesSeqLen == 1,
+            OSL_ENSURE( nCurLabelSeqLen == 0 && nCurValuesSeqLen == 1,
                     "trying to determine 'DataRowSource': something's fishy... should have been a single cell");
             (void)nCurValuesSeqLen;
             nDirection = 0;     // default direction for a single cell should be 'columns'
@@ -1197,7 +1197,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
         {
             // build data to obtain 'SequenceMapping' later on
             //
-            DBG_ASSERT( nDtaSrcIsColumns == 0  ||   /* rows */
+            OSL_ENSURE( nDtaSrcIsColumns == 0  ||   /* rows */
                         nDtaSrcIsColumns == 1,      /* columns */
                     "unexpected value for 'nDtaSrcIsColumns'" );
             pSequenceMapping[nDS1] = nDtaSrcIsColumns ? nFirstCol : nFirstRow;
@@ -1269,7 +1269,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
             {
                 lcl_GetCellPosition( aLabelStartCell, nStartCol, nStartRow);
                 lcl_GetCellPosition( aLabelEndCell,   nEndCol,   nEndRow);
-                DBG_ASSERT( (nStartCol == nEndCol && (nEndRow - nStartRow + 1) == xCurLabel->getData().getLength()) ||
+                OSL_ENSURE( (nStartCol == nEndCol && (nEndRow - nStartRow + 1) == xCurLabel->getData().getLength()) ||
                             (nStartRow == nEndRow && (nEndCol - nStartCol + 1) == xCurLabel->getData().getLength()),
                         "label sequence length does not match range representation!" );
             }
@@ -1277,7 +1277,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
             {
                 lcl_GetCellPosition( aValuesStartCell, nStartCol, nStartRow);
                 lcl_GetCellPosition( aValuesEndCell,   nEndCol,   nEndRow);
-                DBG_ASSERT( (nStartCol == nEndCol && (nEndRow - nStartRow + 1) == xCurValues->getData().getLength()) ||
+                OSL_ENSURE( (nStartCol == nEndCol && (nEndRow - nStartRow + 1) == xCurValues->getData().getLength()) ||
                             (nStartRow == nEndRow && (nEndCol - nStartCol + 1) == xCurValues->getData().getLength()),
                         "value sequence length does not match range representation!" );
             }
@@ -1350,13 +1350,13 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     uno::Sequence< sal_Int32 > aSortedMapping( aSequenceMapping );
     sal_Int32 *pSortedMapping = aSortedMapping.getArray();
     std::sort( pSortedMapping, pSortedMapping + aSortedMapping.getLength() );
-    DBG_ASSERT( aSortedMapping.getLength() == nNumDS_LDS, "unexpected size of sequence" );
+    OSL_ENSURE( aSortedMapping.getLength() == nNumDS_LDS, "unexpected size of sequence" );
     sal_Bool bNeedSequenceMapping = sal_False;
     for (sal_Int32 i = 0;  i < nNumDS_LDS;  ++i)
     {
         sal_Int32 *pIt = std::find( pSortedMapping, pSortedMapping + nNumDS_LDS,
                                     pSequenceMapping[i] );
-        DBG_ASSERT( pIt, "index not found" );
+        OSL_ENSURE( pIt, "index not found" );
         if (!pIt)
             return aResult; // failed -> return empty property sequence
         pSequenceMapping[i] = pIt - pSortedMapping;
@@ -1373,13 +1373,13 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     //
     // build resulting properties
     //
-    DBG_ASSERT(nLabelSeqLen >= 0 || nLabelSeqLen == -2 /*not used*/,
+    OSL_ENSURE(nLabelSeqLen >= 0 || nLabelSeqLen == -2 /*not used*/,
             "unexpected value for 'nLabelSeqLen'" );
     sal_Bool bFirstCellIsLabel = sal_False;     // default value if 'nLabelSeqLen' could not properly determined
     if (nLabelSeqLen > 0) // == 0 means no label sequence in use
         bFirstCellIsLabel = sal_True;
     //
-    DBG_ASSERT( aSortedCellRanges.getLength(), "CellRangeRepresentation missing" );
+    OSL_ENSURE( aSortedCellRanges.getLength(), "CellRangeRepresentation missing" );
     OUString aBrokenCellRangeForExport( GetBrokenCellRangeForExport( aSortedCellRanges ) );
     //
     aResult.realloc(5);
@@ -1432,7 +1432,7 @@ uno::Reference< chart2::data::XDataSequence > SwChartDataProvider::Impl_createDa
     if (aDesc.nTop != aDesc.nBottom  &&  aDesc.nLeft != aDesc.nRight)
         throw lang::IllegalArgumentException();
 
-    DBG_ASSERT( pTblFmt && pUnoCrsr, "table format or cursor missing" );
+    OSL_ENSURE( pTblFmt && pUnoCrsr, "table format or cursor missing" );
     uno::Reference< chart2::data::XDataSequence > xDataSeq;
     if (!bTestOnly)
         xDataSeq = new SwChartDataSequence( *this, *pTblFmt, pUnoCrsr );
@@ -1561,7 +1561,7 @@ void SwChartDataProvider::RemoveDataSequence( const SwTable &rTable, uno::Refere
 
 void SwChartDataProvider::InvalidateTable( const SwTable *pTable )
 {
-    DBG_ASSERT( pTable, "table pointer is NULL" );
+    OSL_ENSURE( pTable, "table pointer is NULL" );
     if (pTable)
     {
         if (!bDisposed)
@@ -1586,7 +1586,7 @@ void SwChartDataProvider::InvalidateTable( const SwTable *pTable )
 sal_Bool SwChartDataProvider::DeleteBox( const SwTable *pTable, const SwTableBox &rBox )
 {
     sal_Bool bRes = sal_False;
-    DBG_ASSERT( pTable, "table pointer is NULL" );
+    OSL_ENSURE( pTable, "table pointer is NULL" );
     if (pTable)
     {
         if (!bDisposed)
@@ -1635,7 +1635,7 @@ sal_Bool SwChartDataProvider::DeleteBox( const SwTable *pTable, const SwTableBox
 
 void SwChartDataProvider::DisposeAllDataSequences( const SwTable *pTable )
 {
-    DBG_ASSERT( pTable, "table pointer is NULL" );
+    OSL_ENSURE( pTable, "table pointer is NULL" );
     if (pTable)
     {
         if (!bDisposed)
@@ -1714,7 +1714,7 @@ void SwChartDataProvider::AddRowCols(
             sal_Int32 nFirstNewRow = bBehind ?  nFirstRow + 1 : nFirstRow - nLines;
             if (bAddCols)
             {
-                DBG_ASSERT( nFirstCol == nLastCol, "column indices seem broken" );
+                OSL_ENSURE( nFirstCol == nLastCol, "column indices seem broken" );
                 nFirstNewCol = bBehind ?  nFirstCol + 1 : nFirstCol - nLines;
                 nFirstNewRow = nFirstRow;
             }
@@ -1972,7 +1972,7 @@ SwChartDataSequence::SwChartDataSequence(
     // check if it can properly convert into a SwUnoTableCrsr
     // which is required for some functions
     SwUnoTableCrsr* pUnoTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pTblCrsr);
-    DBG_ASSERT(pUnoTblCrsr, "SwChartDataSequence: cursor not SwUnoTableCrsr");
+    OSL_ENSURE(pUnoTblCrsr, "SwChartDataSequence: cursor not SwUnoTableCrsr");
     (void) pUnoTblCrsr;
 #endif
 }
@@ -2022,7 +2022,7 @@ SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
     // check if it can properly convert into a SwUnoTableCrsr
     // which is required for some functions
     SwUnoTableCrsr* pUnoTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pTblCrsr);
-    DBG_ASSERT(pUnoTblCrsr, "SwChartDataSequence: cursor not SwUnoTableCrsr");
+    OSL_ENSURE(pUnoTblCrsr, "SwChartDataSequence: cursor not SwUnoTableCrsr");
     (void) pUnoTblCrsr;
 #endif
 }
@@ -2095,7 +2095,7 @@ OUString SAL_CALL SwChartDataSequence::getSourceRangeRepresentation(  )
     {
         aRes = pTblFmt->GetName();
         String aCellRange( GetCellRangeName( *pTblFmt, *pTblCrsr ) );
-        DBG_ASSERT( aCellRange.Len() != 0, "failed to get cell range" );
+        OSL_ENSURE( aCellRange.Len() != 0, "failed to get cell range" );
         aRes += (sal_Unicode) '.';
         aRes += aCellRange;
     }
@@ -2122,16 +2122,16 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
         else
         {
             String aCellRange( GetCellRangeName( *pTblFmt, *pTblCrsr ) );
-            DBG_ASSERT( aCellRange.Len() != 0, "failed to get cell range" );
+            OSL_ENSURE( aCellRange.Len() != 0, "failed to get cell range" );
             bOk = FillRangeDescriptor( aDesc, aCellRange );
-            DBG_ASSERT( bOk, "falied to get SwRangeDescriptor" );
+            OSL_ENSURE( bOk, "falied to get SwRangeDescriptor" );
         }
         if (bOk)
         {
             aDesc.Normalize();
             sal_Int32 nColSpan = aDesc.nRight - aDesc.nLeft + 1;
             sal_Int32 nRowSpan = aDesc.nBottom - aDesc.nTop + 1;
-            DBG_ASSERT( nColSpan == 1 || nRowSpan == 1,
+            OSL_ENSURE( nColSpan == 1 || nRowSpan == 1,
                     "unexpected range of selected cells" );
 
             String aTxt;    // label text to be returned
@@ -2535,13 +2535,13 @@ sal_Bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
 
         lcl_GetCellPosition( aPointCellName, nPointCol, nPointRow );
         lcl_GetCellPosition( aMarkCellName,  nMarkCol,  nMarkRow );
-        DBG_ASSERT( nPointRow >= 0 && nPointCol >= 0, "invalid row and col" );
-        DBG_ASSERT( nMarkRow >= 0 && nMarkCol >= 0, "invalid row and col" );
+        OSL_ENSURE( nPointRow >= 0 && nPointCol >= 0, "invalid row and col" );
+        OSL_ENSURE( nMarkRow >= 0 && nMarkCol >= 0, "invalid row and col" );
 
         // move vertical or horizontal?
-        DBG_ASSERT( nPointRow == nMarkRow || nPointCol == nMarkCol,
+        OSL_ENSURE( nPointRow == nMarkRow || nPointCol == nMarkCol,
                 "row/col indices not matching" );
-        DBG_ASSERT( nPointRow != nMarkRow || nPointCol != nMarkCol,
+        OSL_ENSURE( nPointRow != nMarkRow || nPointCol != nMarkCol,
                 "point and mark are identical" );
         sal_Bool bMoveVertical      = (nPointCol == nMarkCol);
         sal_Bool bMoveHorizontal    = (nPointRow == nMarkRow);
@@ -2659,7 +2659,7 @@ bool SwChartDataSequence::ExtendTo( bool bExtendCol,
     const SwTableBox  *pEndBox   = 0;
 
     const SwTable* pTable = SwTable::FindTable( GetFrmFmt() );
-    DBG_ASSERT( !pTable->IsTblComplex(), "table too complex" );
+    OSL_ENSURE( !pTable->IsTblComplex(), "table too complex" );
     if (nCount < 1 || nFirstNew < 0 || pTable->IsTblComplex())
         return false;
 
@@ -2686,7 +2686,7 @@ bool SwChartDataSequence::ExtendTo( bool bExtendCol,
     {
         // new column cells adjacent to the bottom of the
         // current data-sequence to be added...
-        DBG_ASSERT( aDesc.nLeft == aDesc.nRight, "data-sequence is not a column" );
+        OSL_ENSURE( aDesc.nLeft == aDesc.nRight, "data-sequence is not a column" );
         aNewStartCell = lcl_GetCellName(aDesc.nLeft,  aDesc.nTop);
         aNewEndCell   = lcl_GetCellName(aDesc.nRight, aDesc.nBottom + nCount);
         bChanged = true;
@@ -2695,7 +2695,7 @@ bool SwChartDataSequence::ExtendTo( bool bExtendCol,
     {
         // new column cells adjacent to the top of the
         // current data-sequence to be added...
-        DBG_ASSERT( aDesc.nLeft == aDesc.nRight, "data-sequence is not a column" );
+        OSL_ENSURE( aDesc.nLeft == aDesc.nRight, "data-sequence is not a column" );
         aNewStartCell = lcl_GetCellName(aDesc.nLeft,  aDesc.nTop - nCount);
         aNewEndCell   = lcl_GetCellName(aDesc.nRight, aDesc.nBottom);
         bChanged = true;
@@ -2704,7 +2704,7 @@ bool SwChartDataSequence::ExtendTo( bool bExtendCol,
     {
         // new row cells adjacent to the right of the
         // current data-sequence to be added...
-        DBG_ASSERT( aDesc.nTop == aDesc.nBottom, "data-sequence is not a row" );
+        OSL_ENSURE( aDesc.nTop == aDesc.nBottom, "data-sequence is not a row" );
         aNewStartCell = lcl_GetCellName(aDesc.nLeft, aDesc.nTop);
         aNewEndCell   = lcl_GetCellName(aDesc.nRight + nCount, aDesc.nBottom);
         bChanged = true;
@@ -2713,7 +2713,7 @@ bool SwChartDataSequence::ExtendTo( bool bExtendCol,
     {
         // new row cells adjacent to the left of the
         // current data-sequence to be added...
-        DBG_ASSERT( aDesc.nTop == aDesc.nBottom, "data-sequence is not a row" );
+        OSL_ENSURE( aDesc.nTop == aDesc.nBottom, "data-sequence is not a row" );
         aNewStartCell = lcl_GetCellName(aDesc.nLeft - nCount, aDesc.nTop);
         aNewEndCell   = lcl_GetCellName(aDesc.nRight, aDesc.nBottom);
         bChanged = true;

@@ -634,7 +634,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 throw lang::IllegalArgumentException();
             }
             lcl_ConvertTOUNameToUserName(sNewName);
-            DBG_ASSERT(TOX_USER == eTxBaseType,
+            OSL_ENSURE(TOX_USER == eTxBaseType,
                     "tox type name can only be changed for user indexes");
             if (pSectionFmt)
             {

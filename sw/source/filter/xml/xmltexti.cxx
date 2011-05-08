@@ -994,7 +994,7 @@ void SwXMLTextImportHelper::RedlineAdd(
     sal_Bool bMergeLastPara)
 {
     // create redline helper on demand
-    DBG_ASSERT(NULL != pRedlineHelper, "helper should have been created in constructor");
+    OSL_ENSURE(NULL != pRedlineHelper, "helper should have been created in constructor");
     if (NULL != pRedlineHelper)
         pRedlineHelper->Add(rType, rId, rAuthor, rComment, rDateTime,
                             bMergeLastPara);

@@ -179,7 +179,7 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
                 catch( uno::Exception& )
                 {}
 
-                DBG_ASSERT( pGraphicStream && !pGraphicStream->GetError(), "No graphic stream available!" );
+                OSL_ENSURE( pGraphicStream && !pGraphicStream->GetError(), "No graphic stream available!" );
                 if ( pGraphicStream && !pGraphicStream->GetError() )
                 {
                     Graphic aGr1;
@@ -771,7 +771,7 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
                 comphelper::EmbeddedObjectContainer aCnt( pOleNd->GetDoc()->GetDocStorage() );
 
                 SvStream* pGraphicStream = ::utl::UcbStreamHelper::CreateStream( aCnt.GetGraphicStream( rObj ) );
-                DBG_ASSERT( pGraphicStream && !pGraphicStream->GetError(), "No graphic stream available!" );
+                OSL_ENSURE( pGraphicStream && !pGraphicStream->GetError(), "No graphic stream available!" );
                 if ( pGraphicStream && !pGraphicStream->GetError() )
                 {
                     Graphic aGr;

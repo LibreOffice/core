@@ -118,7 +118,7 @@ class SwNoteProps: public utl::ConfigItem
             const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rNames = GetPropertyNames();
                 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aValues = GetProperties(rNames);
                 const ::com::sun::star::uno::Any* pValues = aValues.getConstArray();
-               DBG_ASSERT(aValues.getLength() == rNames.getLength(), "GetProperties failed");
+               OSL_ENSURE(aValues.getLength() == rNames.getLength(), "GetProperties failed");
                 if (aValues.getLength())
                 pValues[0]>>=bIsShowAnchor;
         }

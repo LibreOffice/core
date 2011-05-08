@@ -626,8 +626,8 @@ void SwAccessibleTable::FireTableChangeEvent(
 
 const SwTableBox* SwAccessibleTable::GetTableBox( sal_Int32 nChildIndex ) const
 {
-    DBG_ASSERT( nChildIndex >= 0, "Illegal child index." );
-    DBG_ASSERT( nChildIndex < const_cast<SwAccessibleTable*>(this)->getAccessibleChildCount(), "Illegal child index." ); // #i77106#
+    OSL_ENSURE( nChildIndex >= 0, "Illegal child index." );
+    OSL_ENSURE( nChildIndex < const_cast<SwAccessibleTable*>(this)->getAccessibleChildCount(), "Illegal child index." ); // #i77106#
 
     const SwTableBox* pBox = NULL;
 
@@ -644,7 +644,7 @@ const SwTableBox* SwAccessibleTable::GetTableBox( sal_Int32 nChildIndex ) const
         }
     }
 
-    DBG_ASSERT( pBox != NULL, "We need the table box." );
+    OSL_ENSURE( pBox != NULL, "We need the table box." );
     return pBox;
 }
 
@@ -655,7 +655,7 @@ sal_Bool SwAccessibleTable::IsChildSelected( sal_Int32 nChildIndex ) const
     if( pSelBoxes )
     {
         const SwTableBox* pBox = GetTableBox( nChildIndex );
-        DBG_ASSERT( pBox != NULL, "We need the table box." );
+        OSL_ENSURE( pBox != NULL, "We need the table box." );
         bRet = pSelBoxes->Seek_Entry( const_cast<SwTableBox*>( pBox ) );
     }
 
@@ -1417,7 +1417,7 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
 
     // preliminaries: get 'our' table box, and get the cursor shell
     const SwTableBox* pBox = GetTableBox( nChildIndex );
-    DBG_ASSERT( pBox != NULL, "We need the table box." );
+    OSL_ENSURE( pBox != NULL, "We need the table box." );
 
     SwCrsrShell* pCrsrShell = GetCrsrShell();
     if( pCrsrShell == NULL )
@@ -1592,7 +1592,7 @@ void SAL_CALL SwAccessibleTable::deselectAccessibleChild(
         return;
 
     const SwTableBox* pBox = GetTableBox( nChildIndex );
-    DBG_ASSERT( pBox != NULL, "We need the table box." );
+    OSL_ENSURE( pBox != NULL, "We need the table box." );
 
     // If we unselect point, then set cursor to mark. If we clear another
     // selected box, then set cursor to point.

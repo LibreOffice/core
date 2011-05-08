@@ -543,12 +543,12 @@ public:
 
     const String&           GetStyleNames(sal_uInt16 nLevel) const
                                 {
-                                DBG_ASSERT( nLevel < MAXLEVEL, "Which level?");
+                                OSL_ENSURE( nLevel < MAXLEVEL, "Which level?");
                                 return aStyleNames[nLevel];
                                 }
     void                    SetStyleNames(const String& rSet, sal_uInt16 nLevel)
                                 {
-                                DBG_ASSERT( nLevel < MAXLEVEL, "Which level?");
+                                OSL_ENSURE( nLevel < MAXLEVEL, "Which level?");
                                 aStyleNames[nLevel] = rSet;
                                 }
     sal_Bool                    IsFromChapter() const { return bFromChapter;}
@@ -760,7 +760,7 @@ inline sal_uInt16 SwTOXBase::GetLevel() const
 
 inline void SwTOXBase::SetTemplateName(const String& rName)
 {
-    DBG_WARNING("SwTOXBase::SetTemplateName obsolete");
+    OSL_FAIL("SwTOXBase::SetTemplateName obsolete");
     aStyleNames[0] = rName;
 }
 

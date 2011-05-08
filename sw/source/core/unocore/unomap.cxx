@@ -476,7 +476,7 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
 
 const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(sal_uInt16 nPropertyId)
 {
-    DBG_ASSERT(nPropertyId < PROPERTY_MAP_END, "Id ?" );
+    OSL_ENSURE(nPropertyId < PROPERTY_MAP_END, "Id ?" );
     if( !aMapEntriesArr[ nPropertyId ] )
     {
         switch(nPropertyId)
@@ -2452,7 +2452,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
             // get the cppu type from the comphelper
             CppuTypes nTyp = (CppuTypes) (long) p->pType;
             GenerateCppuType( nTyp, p->pType );
-            DBG_ASSERT( nTyp != (CppuTypes) (long) p->pType, "unknown type" );
+            OSL_ENSURE( nTyp != (CppuTypes) (long) p->pType, "unknown type" );
         }
     }
     return aMapEntriesArr[nPropertyId];

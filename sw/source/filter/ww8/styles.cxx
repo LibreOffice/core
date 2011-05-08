@@ -147,7 +147,7 @@ namespace
             "Plain Text"
         };
 
-        DBG_ASSERT( (SAL_N_ELEMENTS(stiName)) == ww::stiMax, "WrongSizeOfArray" );
+        OSL_ENSURE( (SAL_N_ELEMENTS(stiName)) == ww::stiMax, "WrongSizeOfArray" );
 
         return stiName;
     }

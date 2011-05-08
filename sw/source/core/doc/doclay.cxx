@@ -1189,7 +1189,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 break;
             }
         }
-        DBG_ASSERT( pColl, "no text collection found" );
+        OSL_ENSURE( pColl, "no text collection found" );
     }
 
     if( !pColl )
@@ -1551,7 +1551,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 break;
             }
         }
-        DBG_ASSERT( pColl, "no text collection found" );
+        OSL_ENSURE( pColl, "no text collection found" );
     }
 
     if( !pColl )

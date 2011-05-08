@@ -230,7 +230,7 @@ SwFlyFrm* SwAccessibleTextFrame::getFlyFrm() const
     SwFlyFrm* pFlyFrm = NULL;
 
     const SwFrm* pFrm = GetFrm();
-    DBG_ASSERT( pFrm != NULL, "frame expected" );
+    OSL_ENSURE( pFrm != NULL, "frame expected" );
     if( pFrm->IsFlyFrm() )
     {
         pFlyFrm = static_cast<SwFlyFrm*>( const_cast<SwFrm*>( pFrm ) );
@@ -258,7 +258,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleTextFrame::getAccess
     AccessibleRelationSetHelper* pHelper = new AccessibleRelationSetHelper();
 
     SwFlyFrm* pFlyFrm = getFlyFrm();
-    DBG_ASSERT( pFlyFrm != NULL, "fly frame expected" );
+    OSL_ENSURE( pFlyFrm != NULL, "fly frame expected" );
 
     const SwFlyFrm* pPrevFrm = pFlyFrm->GetPrevLink();
     if( pPrevFrm != NULL )

@@ -1409,13 +1409,13 @@ void SwCompareData::SetRedlinesToDoc( sal_Bool bUseDocInfo )
     sal_uInt16 nAuthor = rDoc.GetRedlineAuthor();
     DateTime aTimeStamp;
     SwDocShell *pDocShell(rDoc.GetDocShell());
-    DBG_ASSERT(pDocShell, "no SwDocShell");
+    OSL_ENSURE(pDocShell, "no SwDocShell");
     if (pDocShell) {
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             pDocShell->GetModel(), uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentProperties> xDocProps(
             xDPS->getDocumentProperties());
-        DBG_ASSERT(xDocProps.is(), "Doc has no DocumentProperties");
+        OSL_ENSURE(xDocProps.is(), "Doc has no DocumentProperties");
 
         if( bUseDocInfo && xDocProps.is() ) {
             String aTmp( 1 == xDocProps->getEditingCycles()

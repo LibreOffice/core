@@ -72,15 +72,15 @@ SwRenderData::~SwRenderData()
 {
     delete m_pViewOptionAdjust;     m_pViewOptionAdjust = 0;
     delete m_pPrtOptions;           m_pPrtOptions = 0;
-    DBG_ASSERT( !m_pPostItShell, "m_pPostItShell should already have been deleted" );
-    DBG_ASSERT( !m_pPostItDoc, "m_pPostItDoc should already have been deleted" );
-    DBG_ASSERT( !m_pPostItFields, " should already have been deleted" );
+    OSL_ENSURE( !m_pPostItShell, "m_pPostItShell should already have been deleted" );
+    OSL_ENSURE( !m_pPostItDoc, "m_pPostItDoc should already have been deleted" );
+    OSL_ENSURE( !m_pPostItFields, " should already have been deleted" );
 }
 
 
 void SwRenderData::CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewOpt, OutputDevice *pOutDev )
 {
-    DBG_ASSERT( !m_pPostItFields && !m_pPostItDoc && !m_pPostItShell, "some post-it data already exists" );
+    OSL_ENSURE( !m_pPostItFields && !m_pPostItDoc && !m_pPostItShell, "some post-it data already exists" );
     m_pPostItFields = new _SetGetExpFlds;
     lcl_GetPostIts( pDoc, m_pPostItFields );
     m_pPostItDoc    = new SwDoc;
@@ -118,7 +118,7 @@ void SwRenderData::ViewOptionAdjustStart( ViewShell &rSh, const SwViewOption &rV
 {
     if (m_pViewOptionAdjust)
     {
-        DBG_ASSERT( 0, "error: there should be no ViewOptionAdjust active when calling this function" );
+        OSL_ENSURE( 0, "error: there should be no ViewOptionAdjust active when calling this function" );
     }
     m_pViewOptionAdjust = new SwViewOptionAdjust_Impl( rSh, rViewOptions );
 }
@@ -196,7 +196,7 @@ SwPrintUIOptions::SwPrintUIOptions(
 {
     ResStringArray aLocalizedStrings( SW_RES( STR_PRINTOPTUI ) );
 
-    DBG_ASSERT( aLocalizedStrings.Count() >= 30, "resource incomplete" );
+    OSL_ENSURE( aLocalizedStrings.Count() >= 30, "resource incomplete" );
     if( aLocalizedStrings.Count() < 30 ) // bad resource ?
         return;
 
@@ -388,7 +388,7 @@ SwPrintUIOptions::SwPrintUIOptions(
         // 0 : all pages (left & right)
         // 1 : left pages
         // 2 : right pages
-        DBG_ASSERT( rDefaultPrintData.IsPrintLeftPage() || rDefaultPrintData.IsPrintRightPage(),
+        OSL_ENSURE( rDefaultPrintData.IsPrintLeftPage() || rDefaultPrintData.IsPrintRightPage(),
                 "unexpected value combination" );
         sal_Int16 nPagesChoice = 0;
         if (rDefaultPrintData.IsPrintLeftPage() && !rDefaultPrintData.IsPrintRightPage())
@@ -440,7 +440,7 @@ SwPrintUIOptions::SwPrintUIOptions(
     }
 
 
-    DBG_ASSERT( nIdx == nNumProps, "number of added properties is not as expected" );
+    OSL_ENSURE( nIdx == nNumProps, "number of added properties is not as expected" );
 }
 
 

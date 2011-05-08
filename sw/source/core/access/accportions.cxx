@@ -99,7 +99,7 @@ SwAccessiblePortionData::SwAccessiblePortionData(
     nBeforePortions( 0 ),
     bLastIsSpecial( sal_False )
 {
-    DBG_ASSERT( pTxtNode != NULL, "Text node is needed!" );
+    OSL_ENSURE( pTxtNode != NULL, "Text node is needed!" );
 
     // reserve some space to reduce memory allocations
     aLineBreaks.reserve( 5 );
@@ -117,10 +117,10 @@ SwAccessiblePortionData::~SwAccessiblePortionData()
 
 void SwAccessiblePortionData::Text(sal_uInt16 nLength, sal_uInt16 nType)
 {
-    DBG_ASSERT( (nModelPosition + nLength) <= pTxtNode->GetTxt().Len(),
+    OSL_ENSURE( (nModelPosition + nLength) <= pTxtNode->GetTxt().Len(),
                 "portion exceeds model string!" );
 
-    DBG_ASSERT( !bFinished, "We are already done!" );
+    OSL_ENSURE( !bFinished, "We are already done!" );
 
     // ignore zero-length portions
     if( nLength == 0 )
@@ -147,11 +147,11 @@ void SwAccessiblePortionData::Text(sal_uInt16 nLength, sal_uInt16 nType)
 void SwAccessiblePortionData::Special(
     sal_uInt16 nLength, const String& rText, sal_uInt16 nType)
 {
-    DBG_ASSERT( nModelPosition >= 0, "illegal position" );
-    DBG_ASSERT( (nModelPosition + nLength) <= pTxtNode->GetTxt().Len(),
+    OSL_ENSURE( nModelPosition >= 0, "illegal position" );
+    OSL_ENSURE( (nModelPosition + nLength) <= pTxtNode->GetTxt().Len(),
                 "portion exceeds model string!" );
 
-    DBG_ASSERT( !bFinished, "We are already done!" );
+    OSL_ENSURE( !bFinished, "We are already done!" );
 
     // construct string with representation; either directly from
     // rText, or use resources for special case portions
@@ -219,23 +219,23 @@ void SwAccessiblePortionData::Special(
 
 void SwAccessiblePortionData::LineBreak()
 {
-    DBG_ASSERT( !bFinished, "We are already done!" );
+    OSL_ENSURE( !bFinished, "We are already done!" );
 
     aLineBreaks.push_back( aBuffer.getLength() );
 }
 
 void SwAccessiblePortionData::Skip(sal_uInt16 nLength)
 {
-    DBG_ASSERT( !bFinished, "We are already done!" );
-    DBG_ASSERT( aModelPositions.empty(), "Never Skip() after portions" );
-    DBG_ASSERT( nLength <= pTxtNode->GetTxt().Len(), "skip exceeds model string!" );
+    OSL_ENSURE( !bFinished, "We are already done!" );
+    OSL_ENSURE( aModelPositions.empty(), "Never Skip() after portions" );
+    OSL_ENSURE( nLength <= pTxtNode->GetTxt().Len(), "skip exceeds model string!" );
 
     nModelPosition += nLength;
 }
 
 void SwAccessiblePortionData::Finish()
 {
-    DBG_ASSERT( !bFinished, "We are already done!" );
+    OSL_ENSURE( !bFinished, "We are already done!" );
 
     // include terminator values: always include two 'last character'
     // markers in the position arrays to make sure we always find one
@@ -253,7 +253,7 @@ void SwAccessiblePortionData::Finish()
 sal_Bool SwAccessiblePortionData::IsPortionAttrSet(
     size_t nPortionNo, sal_uInt8 nAttr ) const
 {
-    DBG_ASSERT( nPortionNo < aPortionAttrs.size(),
+    OSL_ENSURE( nPortionNo < aPortionAttrs.size(),
                 "Illegal portion number" );
     return (aPortionAttrs[nPortionNo] & nAttr) != 0;
 }
@@ -300,7 +300,7 @@ sal_Bool SwAccessiblePortionData::IsGrayPortionType( sal_uInt16 nType ) const
 
 const OUString& SwAccessiblePortionData::GetAccessibleString() const
 {
-    DBG_ASSERT( bFinished, "Shouldn't call this before we are done!" );
+    OSL_ENSURE( bFinished, "Shouldn't call this before we are done!" );
 
     return sAccessibleString;
 }
@@ -351,7 +351,7 @@ void SwAccessiblePortionData::GetBoundaryOfLine( const sal_Int32 nLineNo,
 void SwAccessiblePortionData::GetLastLineBoundary(
     Boundary& rBound ) const
 {
-    DBG_ASSERT( aLineBreaks.size() >= 2, "need min + max value" );
+    OSL_ENSURE( aLineBreaks.size() >= 2, "need min + max value" );
 
     // The last two positions except the two deleimiters are the ones
     // we are looking for, except for empty paragraphs (nBreaks==3)
@@ -361,8 +361,8 @@ void SwAccessiblePortionData::GetLastLineBoundary(
 
 sal_uInt16 SwAccessiblePortionData::GetModelPosition( sal_Int32 nPos ) const
 {
-    DBG_ASSERT( nPos >= 0, "illegal position" );
-    DBG_ASSERT( nPos <= sAccessibleString.getLength(), "illegal position" );
+    OSL_ENSURE( nPos >= 0, "illegal position" );
+    OSL_ENSURE( nPos <= sAccessibleString.getLength(), "illegal position" );
 
     // find the portion number
     size_t nPortionNo = FindBreak( aAccessiblePositions, nPos );
@@ -375,7 +375,7 @@ sal_uInt16 SwAccessiblePortionData::GetModelPosition( sal_Int32 nPos ) const
     if( ! IsSpecialPortion( nPortionNo ) )
     {
         // 'wide' portions have to be of the same width
-        DBG_ASSERT( ( aModelPositions[nPortionNo+1] - nStartPos ) ==
+        OSL_ENSURE( ( aModelPositions[nPortionNo+1] - nStartPos ) ==
                     ( aAccessiblePositions[nPortionNo+1] -
                       aAccessiblePositions[nPortionNo] ),
                     "accesability portion disagrees with text model" );
@@ -385,7 +385,7 @@ sal_uInt16 SwAccessiblePortionData::GetModelPosition( sal_Int32 nPos ) const
     }
     // else: return nStartPos unmodified
 
-    DBG_ASSERT( (nStartPos >= 0) && (nStartPos < USHRT_MAX),
+    OSL_ENSURE( (nStartPos >= 0) && (nStartPos < USHRT_MAX),
                 "How can the SwTxtNode have so many characters?" );
     return static_cast<sal_uInt16>(nStartPos);
 }
@@ -404,11 +404,11 @@ size_t SwAccessiblePortionData::FindBreak(
     const Positions_t& rPositions,
     sal_Int32 nValue ) const
 {
-    DBG_ASSERT( rPositions.size() >= 2, "need min + max value" );
-    DBG_ASSERT( rPositions[0] <= nValue, "need min value" );
-    DBG_ASSERT( rPositions[rPositions.size()-1] >= nValue,
+    OSL_ENSURE( rPositions.size() >= 2, "need min + max value" );
+    OSL_ENSURE( rPositions[0] <= nValue, "need min value" );
+    OSL_ENSURE( rPositions[rPositions.size()-1] >= nValue,
                 "need first terminator value" );
-    DBG_ASSERT( rPositions[rPositions.size()-2] >= nValue,
+    OSL_ENSURE( rPositions[rPositions.size()-2] >= nValue,
                 "need second terminator value" );
 
     size_t nMin = 0;
@@ -418,20 +418,20 @@ size_t SwAccessiblePortionData::FindBreak(
     while( nMin+1 < nMax )
     {
         // check loop invariants
-        DBG_ASSERT( ( (nMin == 0) && (rPositions[nMin] <= nValue) ) ||
+        OSL_ENSURE( ( (nMin == 0) && (rPositions[nMin] <= nValue) ) ||
                     ( (nMin != 0) && (rPositions[nMin] < nValue) ),
                     "minvalue not minimal" );
-        DBG_ASSERT( nValue <= rPositions[nMax], "max value not maximal" );
+        OSL_ENSURE( nValue <= rPositions[nMax], "max value not maximal" );
 
         // get middle (and ensure progress)
         size_t nMiddle = (nMin + nMax)/2;
-        DBG_ASSERT( nMin < nMiddle, "progress?" );
-        DBG_ASSERT( nMiddle < nMax, "progress?" );
+        OSL_ENSURE( nMin < nMiddle, "progress?" );
+        OSL_ENSURE( nMiddle < nMax, "progress?" );
 
         // check array
-        DBG_ASSERT( rPositions[nMin] <= rPositions[nMiddle],
+        OSL_ENSURE( rPositions[nMin] <= rPositions[nMiddle],
                     "garbled positions array" );
-        DBG_ASSERT( rPositions[nMiddle] <= rPositions[nMax],
+        OSL_ENSURE( rPositions[nMiddle] <= rPositions[nMax],
                     "garbled positions array" );
 
         if( nValue > rPositions[nMiddle] )
@@ -441,17 +441,17 @@ size_t SwAccessiblePortionData::FindBreak(
     }
 
     // only two are left; we only need to check which one is the winner
-    DBG_ASSERT( (nMax == nMin) || (nMax == nMin+1), "only two left" );
+    OSL_ENSURE( (nMax == nMin) || (nMax == nMin+1), "only two left" );
     if( (rPositions[nMin] < nValue) && (rPositions[nMin+1] <= nValue) )
         nMin = nMin+1;
 
     // finally, check to see whether the returned value is the 'right' position
-    DBG_ASSERT( rPositions[nMin] <= nValue, "not smaller or equal" );
-    DBG_ASSERT( nValue <= rPositions[nMin+1], "not equal or larger" );
-    DBG_ASSERT( (nMin == 0) || (rPositions[nMin-1] <= nValue),
+    OSL_ENSURE( rPositions[nMin] <= nValue, "not smaller or equal" );
+    OSL_ENSURE( nValue <= rPositions[nMin+1], "not equal or larger" );
+    OSL_ENSURE( (nMin == 0) || (rPositions[nMin-1] <= nValue),
                 "earlier value should have been returned" );
 
-    DBG_ASSERT( nMin < rPositions.size()-1,
+    OSL_ENSURE( nMin < rPositions.size()-1,
                 "shouldn't return last position (due to termintator values)" );
 
     return nMin;
@@ -479,13 +479,13 @@ void SwAccessiblePortionData::GetSentenceBoundary(
     Boundary& rBound,
     sal_Int32 nPos )
 {
-    DBG_ASSERT( nPos >= 0, "illegal position; check before" );
-    DBG_ASSERT( nPos < sAccessibleString.getLength(), "illegal position" );
+    OSL_ENSURE( nPos >= 0, "illegal position; check before" );
+    OSL_ENSURE( nPos < sAccessibleString.getLength(), "illegal position" );
 
     if( pSentences == NULL )
     {
-         DBG_ASSERT( pBreakIt != NULL, "We always need a break." );
-         DBG_ASSERT( pBreakIt->GetBreakIter().is(), "No break-iterator." );
+         OSL_ENSURE( pBreakIt != NULL, "We always need a break." );
+         OSL_ENSURE( pBreakIt->GetBreakIter().is(), "No break-iterator." );
          if( pBreakIt->GetBreakIter().is() )
          {
              pSentences = new Positions_t();
@@ -534,7 +534,7 @@ void SwAccessiblePortionData::GetAttributeBoundary(
     Boundary& rBound,
     sal_Int32 nPos) const
 {
-    DBG_ASSERT( pTxtNode != NULL, "Need SwTxtNode!" );
+    OSL_ENSURE( pTxtNode != NULL, "Need SwTxtNode!" );
 
     // attribute boundaries can only occur on portion boundaries
     FillBoundary( rBound, aAccessiblePositions,
@@ -544,7 +544,7 @@ void SwAccessiblePortionData::GetAttributeBoundary(
 
 sal_Int32 SwAccessiblePortionData::GetAccessiblePosition( sal_uInt16 nPos ) const
 {
-    DBG_ASSERT( nPos <= pTxtNode->GetTxt().Len(), "illegal position" );
+    OSL_ENSURE( nPos <= pTxtNode->GetTxt().Len(), "illegal position" );
 
     // find the portion number
     // #i70538# - consider "empty" model portions - e.g. number portion
@@ -560,7 +560,7 @@ sal_Int32 SwAccessiblePortionData::GetAccessiblePosition( sal_uInt16 nPos ) cons
     if( (nEndPos - nStartPos) > 1 )
     {
         // 'wide' portions have to be of the same width
-        DBG_ASSERT( ( nEndPos - nStartPos ) ==
+        OSL_ENSURE( ( nEndPos - nStartPos ) ==
                     ( aAccessiblePositions[nPortionNo+1] -
                       aAccessiblePositions[nPortionNo] ),
                     "accesability portion disagrees with text model" );
@@ -570,7 +570,7 @@ sal_Int32 SwAccessiblePortionData::GetAccessiblePosition( sal_uInt16 nPos ) cons
     }
     // else: return nRet unmodified
 
-    DBG_ASSERT( (nRet >= 0) && (nRet <= sAccessibleString.getLength()),
+    OSL_ENSURE( (nRet >= 0) && (nRet <= sAccessibleString.getLength()),
                 "too long!" );
     return nRet;
 }
@@ -606,10 +606,10 @@ sal_uInt16 SwAccessiblePortionData::FillSpecialPos(
             nModelEndPos = nModelPos;
             nModelPos = aModelPositions[nCorePortionNo];
 
-            DBG_ASSERT( nModelPos >= 0, "Can't happen." );
-            DBG_ASSERT( nCorePortionNo >= nBeforePortions, "Can't happen." );
+            OSL_ENSURE( nModelPos >= 0, "Can't happen." );
+            OSL_ENSURE( nCorePortionNo >= nBeforePortions, "Can't happen." );
         }
-        DBG_ASSERT( nModelPos != nModelEndPos,
+        OSL_ENSURE( nModelPos != nModelEndPos,
                     "portion with core-representation expected" );
 
         // if we have anything except plain text, compute nExtend + nRefPos
@@ -637,7 +637,7 @@ sal_uInt16 SwAccessiblePortionData::FillSpecialPos(
         else
         {
             // case 3: regular text portion
-            DBG_ASSERT( ( nModelEndPos - nModelPos ) ==
+            OSL_ENSURE( ( nModelEndPos - nModelPos ) ==
                         ( aAccessiblePositions[nPortionNo+1] -
                           aAccessiblePositions[nPortionNo] ),
                         "text portion expected" );
@@ -648,9 +648,9 @@ sal_uInt16 SwAccessiblePortionData::FillSpecialPos(
     }
     if( rpPos != NULL )
     {
-        DBG_ASSERT( rpPos == &rPos, "Yes!" );
-        DBG_ASSERT( nRefPos <= nPos, "wrong reference" );
-        DBG_ASSERT( (nExtend == SP_EXTEND_RANGE_NONE) ||
+        OSL_ENSURE( rpPos == &rPos, "Yes!" );
+        OSL_ENSURE( nRefPos <= nPos, "wrong reference" );
+        OSL_ENSURE( (nExtend == SP_EXTEND_RANGE_NONE) ||
                     (nExtend == SP_EXTEND_RANGE_BEFORE) ||
                     (nExtend == SP_EXTEND_RANGE_BEHIND), "need extend" );
 

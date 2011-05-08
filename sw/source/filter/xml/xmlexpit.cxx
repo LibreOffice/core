@@ -152,7 +152,7 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
             {
                 OUStringBuffer aOut;
                 const SfxBoolItem* pSplit = PTR_CAST(SfxBoolItem, &rItem);
-                DBG_ASSERT( pSplit != NULL, "Wrong Which-ID" );
+                OSL_ENSURE( pSplit != NULL, "Wrong Which-ID" );
                 sal_uInt16 eEnum = pSplit->GetValue() ? 1 : 0;
                 rUnitConverter.convertEnum( aOut, eEnum, aXML_KeepTogetherType );
                 aValue = aOut.makeStringAndClear();
@@ -249,7 +249,7 @@ void SvXMLExportItemMapper::exportElementItems(
     {
         const sal_uInt16 nElement = rIndexArray.GetObject( nIndex );
         SvXMLItemMapEntry* pEntry = mrMapEntries->getByIndex( nElement );
-        DBG_ASSERT( 0 != (pEntry->nMemberId & MID_SW_FLAG_ELEMENT_ITEM_EXPORT),
+        OSL_ENSURE( 0 != (pEntry->nMemberId & MID_SW_FLAG_ELEMENT_ITEM_EXPORT),
                     "wrong mid flag!" );
 
         const SfxPoolItem* pItem = GetItem( rSet, pEntry->nWhichId, nFlags );
@@ -405,7 +405,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_LR_SPACE:
         {
             const SvxLRSpaceItem* pLRSpace = PTR_CAST(SvxLRSpaceItem, &rItem);
-            DBG_ASSERT( pLRSpace != NULL, "Wrong Which-ID!" );
+            OSL_ENSURE( pLRSpace != NULL, "Wrong Which-ID!" );
 
             bOk = sal_True;
             switch( nMemberId )
@@ -455,7 +455,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_UL_SPACE:
         {
             const SvxULSpaceItem* pULSpace = PTR_CAST(SvxULSpaceItem, &rItem);
-            DBG_ASSERT( pULSpace != NULL, "Wrong Which-ID!" );
+            OSL_ENSURE( pULSpace != NULL, "Wrong Which-ID!" );
 
             switch( nMemberId )
             {
@@ -484,7 +484,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_SHADOW:
         {
             const SvxShadowItem* pShadow = PTR_CAST(SvxShadowItem, &rItem);
-            DBG_ASSERT( pShadow != NULL, "Wrong Which-ID" );
+            OSL_ENSURE( pShadow != NULL, "Wrong Which-ID" );
 
             sal_Int32 nX = 1, nY = 1;
             switch( pShadow->GetLocation() )
@@ -523,7 +523,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_BOX:
         {
             SvxBoxItem* pBox = PTR_CAST(SvxBoxItem, &rItem);
-            DBG_ASSERT( pBox != NULL, "Wrong WHich-ID" );
+            OSL_ENSURE( pBox != NULL, "Wrong WHich-ID" );
 
             /**
                xml -> MemberId
@@ -812,7 +812,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_BREAK:
         {
             const SvxFmtBreakItem* pFmtBreak = PTR_CAST(SvxFmtBreakItem, &rItem);
-            DBG_ASSERT( pFmtBreak != NULL, "Wrong Which-ID" );
+            OSL_ENSURE( pFmtBreak != NULL, "Wrong Which-ID" );
 
             sal_uInt16 eEnum = 0;
 
@@ -859,7 +859,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_KEEP:
         {
             SvxFmtKeepItem* pFmtKeep = PTR_CAST(SvxFmtKeepItem, &rItem);
-            DBG_ASSERT( pFmtKeep != NULL, "Wrong Which-ID" );
+            OSL_ENSURE( pFmtKeep != NULL, "Wrong Which-ID" );
 
             aOut.append( pFmtKeep->GetValue()
                          ? GetXMLToken( XML_ALWAYS )
@@ -871,7 +871,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_BACKGROUND:
         {
             SvxBrushItem* pBrush = PTR_CAST(SvxBrushItem, &rItem);
-            DBG_ASSERT( pBrush != NULL, "Wrong Which-ID" );
+            OSL_ENSURE( pBrush != NULL, "Wrong Which-ID" );
 
             // note: the graphic is only exported if nMemberId equals
             //       MID_GRAPHIC..
@@ -982,7 +982,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_PAGEDESC:
         {
             const SwFmtPageDesc* pPageDesc = PTR_CAST(SwFmtPageDesc, &rItem);
-            DBG_ASSERT( pPageDesc != NULL, "Wrong Which-ID" );
+            OSL_ENSURE( pPageDesc != NULL, "Wrong Which-ID" );
 
             if( MID_PAGEDESC_PAGENUMOFFSET==nMemberId )
             {
@@ -1004,7 +1004,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_ROW_SPLIT:
         {
             const SfxBoolItem* pSplit = PTR_CAST(SfxBoolItem, &rItem);
-            DBG_ASSERT( pSplit != NULL, "Wrong Which-ID" );
+            OSL_ENSURE( pSplit != NULL, "Wrong Which-ID" );
 
             rUnitConverter.convertBool( aOut, pSplit->GetValue() );
             bOk = sal_True;
@@ -1014,7 +1014,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_HORI_ORIENT:
         {
             SwFmtHoriOrient* pHoriOrient = PTR_CAST(SwFmtHoriOrient, &rItem);
-            DBG_ASSERT( pHoriOrient != NULL, "Wrong Which-ID" );
+            OSL_ENSURE( pHoriOrient != NULL, "Wrong Which-ID" );
 
             rUnitConverter.convertEnum( aOut, pHoriOrient->GetHoriOrient(),
                                         aXMLTableAlignMap );
@@ -1025,7 +1025,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_VERT_ORIENT:
         {
             SwFmtVertOrient* pVertOrient = PTR_CAST(SwFmtVertOrient, &rItem);
-            DBG_ASSERT( pVertOrient != NULL, "Wrong Which-ID" );
+            OSL_ENSURE( pVertOrient != NULL, "Wrong Which-ID" );
 
             rUnitConverter.convertEnum( aOut, pVertOrient->GetVertOrient(),
                                         aXMLTableVAlignMap );
@@ -1036,7 +1036,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_FRM_SIZE:
         {
             SwFmtFrmSize* pFrmSize = PTR_CAST(SwFmtFrmSize, &rItem);
-            DBG_ASSERT( pFrmSize != NULL, "Wrong Which-ID" );
+            OSL_ENSURE( pFrmSize != NULL, "Wrong Which-ID" );
 
             sal_Bool bOutHeight = sal_False;
             switch( nMemberId )
@@ -1087,7 +1087,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_COLLAPSING_BORDERS:
         {
             const SfxBoolItem* pBorders = PTR_CAST(SfxBoolItem, &rItem);
-            DBG_ASSERT( pBorders != NULL, "Wrong RES-ID" );
+            OSL_ENSURE( pBorders != NULL, "Wrong RES-ID" );
 
             aOut.append( pBorders->GetValue()
                          ? GetXMLToken( XML_COLLAPSING )

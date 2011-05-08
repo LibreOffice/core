@@ -475,7 +475,7 @@ short SwGrfNode::SwapIn( sal_Bool bWaitForData )
     }
     else
         nRet = 1;
-    DBG_ASSERTWARNING( nRet, "Grafik kann nicht eingeswapt werden" );
+    OSL_ENSURE( nRet, "Grafik kann nicht eingeswapt werden" );
 
     if( nRet )
     {

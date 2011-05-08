@@ -245,7 +245,7 @@ SvXMLImportContext *SwXMLDocContext_Impl::CreateChildContext(
                                                             xAttrList );
         break;
     case XML_TOK_DOC_META:
-        DBG_WARNING("XML_TOK_DOC_META: should not have come here, maybe document is invalid?");
+        OSL_FAIL("XML_TOK_DOC_META: should not have come here, maybe document is invalid?");
         break;
     case XML_TOK_DOC_SCRIPT:
         pContext = GetSwImport().CreateScriptContext( rLocalName );
@@ -564,7 +564,7 @@ void SwXMLImport::startDocument( void )
     // delegate to parent
     SvXMLImport::startDocument();
 
-    DBG_ASSERT( GetModel().is(), "model is missing" );
+    OSL_ENSURE( GetModel().is(), "model is missing" );
     if( !GetModel().is() )
         return;
 
@@ -775,7 +775,7 @@ void SwXMLImport::startDocument( void )
 void SwXMLImport::endDocument( void )
     throw( xml::sax::SAXException, uno::RuntimeException )
 {
-    DBG_ASSERT( GetModel().is(), "model missing; maybe startDocument wasn't called?" );
+    OSL_ENSURE( GetModel().is(), "model missing; maybe startDocument wasn't called?" );
     if( !GetModel().is() )
         return;
 
@@ -861,14 +861,14 @@ void SwXMLImport::endDocument( void )
         }
 
         SwPosition* pPos = pPaM->GetPoint();
-        DBG_ASSERT( !pPos->nContent.GetIndex(), "last paragraph isn't empty" );
+        OSL_ENSURE( !pPos->nContent.GetIndex(), "last paragraph isn't empty" );
         if( !pPos->nContent.GetIndex() )
         {
             SwTxtNode* pCurrNd;
             sal_uLong nNodeIdx = pPos->nNode.GetIndex();
             pDoc = pPaM->GetDoc();
 
-            DBG_ASSERT( pPos->nNode.GetNode().IsCntntNode(),
+            OSL_ENSURE( pPos->nNode.GetNode().IsCntntNode(),
                         "insert position is not a content node" );
             if( !IsInsertMode() )
             {

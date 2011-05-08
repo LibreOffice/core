@@ -1898,9 +1898,9 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
         return;
 
     // when inserting into the source range, nothing need to be done
-    DBG_ASSERT( &aRg.aStart.GetNodes() == this,
+    OSL_ENSURE( &aRg.aStart.GetNodes() == this,
                 "aRg should use thisnodes array" );
-    DBG_ASSERT( &aRg.aStart.GetNodes() == &aRg.aEnd.GetNodes(),
+    OSL_ENSURE( &aRg.aStart.GetNodes() == &aRg.aEnd.GetNodes(),
                "Range across different nodes arrays? You deserve punishment!");
     if( &rIndex.GetNodes() == &aRg.aStart.GetNodes() &&
         rIndex.GetIndex() >= aRg.aStart.GetIndex() &&

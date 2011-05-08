@@ -290,7 +290,7 @@ SwXFootnote::setLabel(const OUString& aLabel) throw (uno::RuntimeException)
     if(pFmt)
     {
         const SwTxtFtn* pTxtFtn = pFmt->GetTxtFtn();
-        DBG_ASSERT(pTxtFtn, "kein TextNode?");
+        OSL_ENSURE(pTxtFtn, "kein TextNode?");
         SwTxtNode& rTxtNode = (SwTxtNode&)pTxtFtn->GetTxtNode();
 
         SwPaM aPam(rTxtNode, *pTxtFtn->GetStart());
@@ -399,7 +399,7 @@ void SAL_CALL SwXFootnote::dispose() throw (uno::RuntimeException)
     SwFmtFtn const& rFmt( m_pImpl->GetFootnoteFormatOrThrow() );
 
     SwTxtFtn const*const pTxtFtn = rFmt.GetTxtFtn();
-    DBG_ASSERT(pTxtFtn, "no TextNode?");
+    OSL_ENSURE(pTxtFtn, "no TextNode?");
     SwTxtNode& rTxtNode = const_cast<SwTxtNode&>(pTxtFtn->GetTxtNode());
     const xub_StrLen nPos = *pTxtFtn->GetStart();
     SwPaM aPam(rTxtNode, nPos, rTxtNode, nPos+1);
@@ -577,7 +577,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             if (pFmt)
             {
                 SwTxtFtn const*const pTxtFtn = pFmt->GetTxtFtn();
-                DBG_ASSERT(pTxtFtn, "no TextNode?");
+                OSL_ENSURE(pTxtFtn, "no TextNode?");
                 aRet <<= static_cast<sal_Int16>(pTxtFtn->GetSeqRefNo());
             }
         }

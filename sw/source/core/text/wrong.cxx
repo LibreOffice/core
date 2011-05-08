@@ -467,7 +467,7 @@ void SwWrongList::JoinList( SwWrongList* pNext, xub_StrLen nInsertPos )
 {
     if (pNext)
     {
-        DBG_ASSERT( GetWrongListType() == pNext->GetWrongListType(), "type mismatch with next list" );
+        OSL_ENSURE( GetWrongListType() == pNext->GetWrongListType(), "type mismatch with next list" );
     }
     if( pNext )
     {
@@ -503,7 +503,7 @@ void SwWrongList::InsertSubList( xub_StrLen nNewPos, xub_StrLen nNewLen, sal_uIn
 {
     if (pSubList)
     {
-        DBG_ASSERT( GetWrongListType() == pSubList->GetWrongListType(), "type mismatch with sub list" );
+        OSL_ENSURE( GetWrongListType() == pSubList->GetWrongListType(), "type mismatch with sub list" );
     }
     std::vector<SwWrongArea>::iterator i = maList.begin();
     if ( nWhere >= maList.size() )

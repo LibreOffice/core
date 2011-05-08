@@ -447,7 +447,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
 
     const sal_Int32 nMaxRenderer = rPrintData.GetRenderData().GetPagesToPrint().size() - 1;
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( 0 <= nRenderer && nRenderer <= nMaxRenderer, "nRenderer out of bounds");
+    OSL_ENSURE( 0 <= nRenderer && nRenderer <= nMaxRenderer, "nRenderer out of bounds");
 #endif
     if (!pOutDev || nMaxRenderer < 0 || nRenderer < 0 || nRenderer > nMaxRenderer)
         return sal_False;
@@ -485,24 +485,24 @@ sal_Bool ViewShell::PrintOrPDFExport(
 
         const sal_Int32 nPage = rPrintData.GetRenderData().GetPagesToPrint()[ nRenderer ];
 #if OSL_DEBUG_LEVEL > 1
-        DBG_ASSERT( nPage == 0 || rPrintData.GetRenderData().GetValidPagesSet().count( nPage ) == 1, "nPage not valid" );
+        OSL_ENSURE( nPage == 0 || rPrintData.GetRenderData().GetValidPagesSet().count( nPage ) == 1, "nPage not valid" );
 #endif
         const SwPageFrm *pStPage = 0;
         if (nPage > 0)  // a 'regular' page, not one from the post-it document
         {
             const SwRenderData::ValidStartFramesMap_t &rFrms = rPrintData.GetRenderData().GetValidStartFrames();
             SwRenderData::ValidStartFramesMap_t::const_iterator aIt( rFrms.find( nPage ) );
-            DBG_ASSERT( aIt != rFrms.end(), "failed to find start frame" );
+            OSL_ENSURE( aIt != rFrms.end(), "failed to find start frame" );
             if (aIt == rFrms.end())
                 return sal_False;
             pStPage = aIt->second;
         }
         else    // a page from the post-its document ...
         {
-            DBG_ASSERT( nPage == 0, "unexpected page number. 0 for post-it pages expected" );
+            OSL_ENSURE( nPage == 0, "unexpected page number. 0 for post-it pages expected" );
             pStPage = rPrintData.GetRenderData().GetPostItStartFrames()[ nRenderer ];
         }
-        DBG_ASSERT( pStPage, "failed to get start page" );
+        OSL_ENSURE( pStPage, "failed to get start page" );
 
         //!! applying view options and formatting the dcoument should now only be done in getRendererCount!
 

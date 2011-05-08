@@ -52,8 +52,8 @@ using namespace ::com::sun::star;
 static void lcl_copyDocumentProperties(
         uno::Reference<document::XDocumentProperties> i_xSource,
         uno::Reference<document::XDocumentProperties> i_xTarget) {
-    DBG_ASSERT(i_xSource.is(), "null reference");
-    DBG_ASSERT(i_xTarget.is(), "null reference");
+    OSL_ENSURE(i_xSource.is(), "null reference");
+    OSL_ENSURE(i_xTarget.is(), "null reference");
 
     i_xTarget->setAuthor(i_xSource->getAuthor());
     i_xTarget->setGenerator(i_xSource->getGenerator());
@@ -130,8 +130,8 @@ sal_Bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
             // entry document.
             // To be able to do this, we copy the document properties of the
             // target document to the glossary document
-//            DBG_ASSERT(GetDocShell(), "no SwDocShell"); // may be clipboard!
-            DBG_ASSERT(pGDoc->GetDocShell(), "no SwDocShell at glossary");
+//            OSL_ENSURE(GetDocShell(), "no SwDocShell"); // may be clipboard!
+            OSL_ENSURE(pGDoc->GetDocShell(), "no SwDocShell at glossary");
             if (GetDocShell() && pGDoc->GetDocShell()) {
                 uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
                     GetDocShell()->GetModel(), uno::UNO_QUERY_THROW);

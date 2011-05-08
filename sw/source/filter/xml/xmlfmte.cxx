@@ -68,10 +68,10 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
     CheckAttrList();
 
     // style:family="..."
-    DBG_ASSERT( RES_FRMFMT==rFmt.Which(), "frame format expected" );
+    OSL_ENSURE( RES_FRMFMT==rFmt.Which(), "frame format expected" );
     if( RES_FRMFMT != rFmt.Which() )
         return;
-    DBG_ASSERT( eFamily != XML_TOKEN_INVALID, "family must be specified" );
+    OSL_ENSURE( eFamily != XML_TOKEN_INVALID, "family must be specified" );
     // style:name="..."
     sal_Bool bEncoded = sal_False;
     AddAttribute( XML_NAMESPACE_STYLE, XML_NAME, EncodeStyleName(
@@ -118,7 +118,7 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
 
     if( XML_TABLE_CELL == eFamily )
     {
-        DBG_ASSERT(RES_FRMFMT == rFmt.Which(), "only frame format");
+        OSL_ENSURE(RES_FRMFMT == rFmt.Which(), "only frame format");
 
         const SfxPoolItem *pItem;
         if( SFX_ITEM_SET ==

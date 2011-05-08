@@ -166,7 +166,7 @@ void SwXMLTextParagraphExport::exportStyleContent(
                 }
                 OUString sVal( sBuffer.makeStringAndClear() );
 
-                DBG_ASSERT( eFunc != XML_TOKEN_INVALID,
+                OSL_ENSURE( eFunc != XML_TOKEN_INVALID,
                             "SwXMLExport::ExportFmt: unknown condition" );
                 if( eFunc != XML_TOKEN_INVALID )
                 {

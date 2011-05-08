@@ -1766,7 +1766,7 @@ sal_Bool SwHTMLParser::FileDownload( const String& rURL,
         aStream << *pStream;
 
         aStream.Seek( STREAM_SEEK_TO_END );
-        DBG_ASSERT( aStream.Tell() < STRING_MAXLEN,
+        OSL_ENSURE( aStream.Tell() < STRING_MAXLEN,
                     "File zu lang fuer einen String, Ende abgeschnitten" );
         xub_StrLen nLen = aStream.Tell() < STRING_MAXLEN
                         ? (xub_StrLen)aStream.Tell()

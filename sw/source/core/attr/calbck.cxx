@@ -86,7 +86,7 @@ void SwClient::SwClientNotify( const SwModify&, const SfxHint& )
 //*************************************************************************
 SwClient::~SwClient()
 {
-    DBG_ASSERT( !pRegisteredIn || pRegisteredIn->GetDepends(),"SwModify still known, but Client already disconnected!" );
+    OSL_ENSURE( !pRegisteredIn || pRegisteredIn->GetDepends(),"SwModify still known, but Client already disconnected!" );
     if( pRegisteredIn && pRegisteredIn->GetDepends() )
         // still connected
         pRegisteredIn->Remove( this );

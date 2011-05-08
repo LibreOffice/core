@@ -67,9 +67,9 @@ sal_Bool SwAccessibleCell::IsSelected()
 {
     sal_Bool bRet = sal_False;
 
-    DBG_ASSERT( GetMap(), "no map?" );
+    OSL_ENSURE( GetMap(), "no map?" );
     const ViewShell *pVSh = GetMap()->GetShell();
-    DBG_ASSERT( pVSh, "no shell?" );
+    OSL_ENSURE( pVSh, "no shell?" );
     if( pVSh->ISA( SwCrsrShell ) )
     {
         const SwCrsrShell *pCSh = static_cast< const SwCrsrShell * >( pVSh );
@@ -92,7 +92,7 @@ void SwAccessibleCell::GetStates( ::utl::AccessibleStateSetHelper& rStateSet )
 
     // SELECTABLE
     const ViewShell *pVSh = GetMap()->GetShell();
-    DBG_ASSERT( pVSh, "no shell?" );
+    OSL_ENSURE( pVSh, "no shell?" );
     if( pVSh->ISA( SwCrsrShell ) )
         rStateSet.AddState( AccessibleStateType::SELECTABLE );
 
@@ -324,8 +324,8 @@ uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleCell::getImplementationId()
 
 SwFrmFmt* SwAccessibleCell::GetTblBoxFormat() const
 {
-    DBG_ASSERT( GetFrm() != NULL, "no frame?" );
-    DBG_ASSERT( GetFrm()->IsCellFrm(), "no cell frame?" );
+    OSL_ENSURE( GetFrm() != NULL, "no frame?" );
+    OSL_ENSURE( GetFrm()->IsCellFrm(), "no cell frame?" );
 
     const SwCellFrm* pCellFrm = static_cast<const SwCellFrm*>( GetFrm() );
     return pCellFrm->GetTabBox()->GetFrmFmt();

@@ -92,7 +92,7 @@ void ViewShell::PrintProspect(
 {
     const sal_Int32 nMaxRenderer = rPrintData.GetRenderData().GetPagePairsForProspectPrinting().size() - 1;
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( 0 <= nRenderer && nRenderer <= nMaxRenderer, "nRenderer out of bounds");
+    OSL_ENSURE( 0 <= nRenderer && nRenderer <= nMaxRenderer, "nRenderer out of bounds");
 #endif
     Printer *pPrinter = dynamic_cast< Printer * >(pOutDev);
     if (!pPrinter || nMaxRenderer < 0 || nRenderer < 0 || nRenderer > nMaxRenderer)
@@ -105,8 +105,8 @@ void ViewShell::PrintProspect(
     std::pair< sal_Int32, sal_Int32 > rPagesToPrint =
             rPrintData.GetRenderData().GetPagePairsForProspectPrinting()[ nRenderer ];
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( rPagesToPrint.first  == -1 || rPrintData.GetRenderData().GetValidPagesSet().count( rPagesToPrint.first ) == 1, "first Page not valid" );
-    DBG_ASSERT( rPagesToPrint.second == -1 || rPrintData.GetRenderData().GetValidPagesSet().count( rPagesToPrint.second ) == 1, "second Page not valid" );
+    OSL_ENSURE( rPagesToPrint.first  == -1 || rPrintData.GetRenderData().GetValidPagesSet().count( rPagesToPrint.first ) == 1, "first Page not valid" );
+    OSL_ENSURE( rPagesToPrint.second == -1 || rPrintData.GetRenderData().GetValidPagesSet().count( rPagesToPrint.second ) == 1, "second Page not valid" );
 #endif
 
     // create a new shell for the Printer
@@ -129,13 +129,13 @@ void ViewShell::PrintProspect(
     if (rPagesToPrint.first > 0)
     {
         SwRenderData::ValidStartFramesMap_t::const_iterator aIt( rFrms.find( rPagesToPrint.first ) );
-        DBG_ASSERT( aIt != rFrms.end(), "failed to find start frame" );
+        OSL_ENSURE( aIt != rFrms.end(), "failed to find start frame" );
         pStPage = aIt->second;
     }
     if (rPagesToPrint.second > 0)
     {
         SwRenderData::ValidStartFramesMap_t::const_iterator aIt( rFrms.find( rPagesToPrint.second ) );
-        DBG_ASSERT( aIt != rFrms.end(), "failed to find start frame" );
+        OSL_ENSURE( aIt != rFrms.end(), "failed to find start frame" );
         pNxtPage = aIt->second;
     }
 

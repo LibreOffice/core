@@ -324,7 +324,7 @@ SwXParagraph::getSupportedServiceNames() throw (uno::RuntimeException)
 void
 SwXParagraph::attachToText(SwXText & rParent, SwTxtNode & rTxtNode)
 {
-    DBG_ASSERT(m_pImpl->m_bIsDescriptor, "Paragraph is not a descriptor");
+    OSL_ENSURE(m_pImpl->m_bIsDescriptor, "Paragraph is not a descriptor");
     if (m_pImpl->m_bIsDescriptor)
     {
         m_pImpl->m_bIsDescriptor = false;
@@ -689,7 +689,7 @@ throw (uno::RuntimeException)
 
     for (sal_Int32 i = 0;  i < nProps;  ++i)
     {
-        DBG_ASSERT( nIdx < nProps, "index out ouf bounds" );
+        OSL_ENSURE( nIdx < nProps, "index out ouf bounds" );
         beans::GetDirectPropertyTolerantResult &rResult = pResult[nIdx];
 
         try
@@ -748,7 +748,7 @@ throw (uno::RuntimeException)
                     nIdx++;
                 }
                 // this assertion should never occur!
-                DBG_ASSERT( nIdx < 1  ||  pResult[nIdx - 1].Result != beans::TolerantPropertySetResultType::UNKNOWN_FAILURE,
+                OSL_ENSURE( nIdx < 1  ||  pResult[nIdx - 1].Result != beans::TolerantPropertySetResultType::UNKNOWN_FAILURE,
                         "unknown failure while retrieving property" );
 
             }

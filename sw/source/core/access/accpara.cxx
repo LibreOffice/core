@@ -110,10 +110,10 @@ const xub_StrLen MAX_DESC_TEXT_LEN = 40;
 const SwTxtNode* SwAccessibleParagraph::GetTxtNode() const
 {
     const SwFrm* pFrm = GetFrm();
-    DBG_ASSERT( pFrm->IsTxtFrm(), "The text frame has mutated!" );
+    OSL_ENSURE( pFrm->IsTxtFrm(), "The text frame has mutated!" );
 
     const SwTxtNode* pNode = static_cast<const SwTxtFrm*>(pFrm)->GetTxtNode();
-    DBG_ASSERT( pNode != NULL, "A text frame without a text node." );
+    OSL_ENSURE( pNode != NULL, "A text frame without a text node." );
 
     return pNode;
 }
@@ -160,8 +160,8 @@ sal_Int32 SwAccessibleParagraph::GetCaretPos()
                     nRet = GetPortionData().GetAccessiblePosition( nIndex );
                 }
 
-                DBG_ASSERT( nRet >= 0, "invalid cursor?" );
-                DBG_ASSERT( nRet <= GetPortionData().GetAccessibleString().
+                OSL_ENSURE( nRet >= 0, "invalid cursor?" );
+                OSL_ENSURE( nRet <= GetPortionData().GetAccessibleString().
                                               getLength(), "invalid cursor?" );
             }
             // else: in this paragraph, but in different frame
@@ -215,7 +215,7 @@ sal_Bool SwAccessibleParagraph::GetSelection(
                     }
                     else
                     {
-                        DBG_ASSERT( nHere == nStartIndex,
+                        OSL_ENSURE( nHere == nStartIndex,
                                     "miscalculated index" );
 
                         // selection starts in this node:
@@ -230,7 +230,7 @@ sal_Bool SwAccessibleParagraph::GetSelection(
                         else if( nCoreStart <=
                                  GetPortionData().GetLastValidCorePosition() )
                         {
-                            DBG_ASSERT(
+                            OSL_ENSURE(
                                 GetPortionData().IsValidCorePosition(
                                                                   nCoreStart ),
                                  "problem determining valid core position" );
@@ -252,7 +252,7 @@ sal_Bool SwAccessibleParagraph::GetSelection(
                     }
                     else
                     {
-                        DBG_ASSERT( nHere == nEndIndex,
+                        OSL_ENSURE( nHere == nEndIndex,
                                     "miscalculated index" );
 
                         // selection ends in this node: then select everything
@@ -269,7 +269,7 @@ sal_Bool SwAccessibleParagraph::GetSelection(
                                  GetPortionData().GetFirstValidCorePosition() )
                         {
                             // selection is inside our part of this para
-                            DBG_ASSERT(
+                            OSL_ENSURE(
                                 GetPortionData().IsValidCorePosition(
                                                                   nCoreEnd ),
                                  "problem determining valid core position" );
@@ -519,8 +519,8 @@ void SwAccessibleParagraph::UpdatePortionData()
     throw( uno::RuntimeException )
 {
     // obtain the text frame
-    DBG_ASSERT( GetFrm() != NULL, "The text frame has vanished!" );
-    DBG_ASSERT( GetFrm()->IsTxtFrm(), "The text frame has mutated!" );
+    OSL_ENSURE( GetFrm() != NULL, "The text frame has vanished!" );
+    OSL_ENSURE( GetFrm()->IsTxtFrm(), "The text frame has mutated!" );
     const SwTxtFrm* pFrm = static_cast<const SwTxtFrm*>( GetFrm() );
 
     // build new portion data
@@ -529,7 +529,7 @@ void SwAccessibleParagraph::UpdatePortionData()
         pFrm->GetTxtNode(), GetMap()->GetShell()->GetViewOptions() );
     pFrm->VisitPortions( *pPortionData );
 
-    DBG_ASSERT( pPortionData != NULL, "UpdatePortionData() failed" );
+    OSL_ENSURE( pPortionData != NULL, "UpdatePortionData() failed" );
 }
 
 void SwAccessibleParagraph::ClearPortionData()
@@ -544,23 +544,23 @@ void SwAccessibleParagraph::ClearPortionData()
 
 void SwAccessibleParagraph::ExecuteAtViewShell( sal_uInt16 nSlot )
 {
-    DBG_ASSERT( GetMap() != NULL, "no map?" );
+    OSL_ENSURE( GetMap() != NULL, "no map?" );
     ViewShell* pViewShell = GetMap()->GetShell();
 
-    DBG_ASSERT( pViewShell != NULL, "View shell exptected!" );
+    OSL_ENSURE( pViewShell != NULL, "View shell exptected!" );
     SfxViewShell* pSfxShell = pViewShell->GetSfxViewShell();
 
-    DBG_ASSERT( pSfxShell != NULL, "SfxViewShell shell exptected!" );
+    OSL_ENSURE( pSfxShell != NULL, "SfxViewShell shell exptected!" );
     if( !pSfxShell )
         return;
 
     SfxViewFrame *pFrame = pSfxShell->GetViewFrame();
-    DBG_ASSERT( pFrame != NULL, "View frame exptected!" );
+    OSL_ENSURE( pFrame != NULL, "View frame exptected!" );
     if( !pFrame )
         return;
 
     SfxDispatcher *pDispatcher = pFrame->GetDispatcher();
-    DBG_ASSERT( pDispatcher != NULL, "Dispatcher exptected!" );
+    OSL_ENSURE( pDispatcher != NULL, "Dispatcher exptected!" );
     if( !pDispatcher )
         return;
 
@@ -571,7 +571,7 @@ SwXTextPortion* SwAccessibleParagraph::CreateUnoPortion(
     sal_Int32 nStartIndex,
     sal_Int32 nEndIndex )
 {
-    DBG_ASSERT( (IsValidChar(nStartIndex, GetString().getLength()) &&
+    OSL_ENSURE( (IsValidChar(nStartIndex, GetString().getLength()) &&
                  (nEndIndex == -1)) ||
                 IsValidRange(nStartIndex, nEndIndex, GetString().getLength()),
                 "please check parameters before calling this method" );
@@ -644,8 +644,8 @@ sal_Bool SwAccessibleParagraph::GetWordBoundary(
     sal_Bool bRet = sal_False;
 
     // now ask the Break-Iterator for the word
-    DBG_ASSERT( pBreakIt != NULL, "We always need a break." );
-    DBG_ASSERT( pBreakIt->GetBreakIter().is(), "No break-iterator." );
+    OSL_ENSURE( pBreakIt != NULL, "We always need a break." );
+    OSL_ENSURE( pBreakIt->GetBreakIter().is(), "No break-iterator." );
     if( pBreakIt->GetBreakIter().is() )
     {
         // get locale for this position
@@ -724,8 +724,8 @@ sal_Bool SwAccessibleParagraph::GetGlyphBoundary(
 
     // ask the Break-Iterator for the glyph by moving one cell
     // forward, and then one cell back
-    DBG_ASSERT( pBreakIt != NULL, "We always need a break." );
-    DBG_ASSERT( pBreakIt->GetBreakIter().is(), "No break-iterator." );
+    OSL_ENSURE( pBreakIt != NULL, "We always need a break." );
+    OSL_ENSURE( pBreakIt->GetBreakIter().is(), "No break-iterator." );
     if( pBreakIt->GetBreakIter().is() )
     {
         // get locale for this position
@@ -741,8 +741,8 @@ sal_Bool SwAccessibleParagraph::GetGlyphBoundary(
         rBound.startPos = pBreakIt->GetBreakIter()->previousCharacters(
              rText, rBound.endPos, aLocale, nIterMode, 1, nDone );
 
-        DBG_ASSERT( rBound.startPos <= nPos, "start pos too high" );
-        DBG_ASSERT( rBound.endPos >= nPos, "end pos too low" );
+        OSL_ENSURE( rBound.startPos <= nPos, "start pos too high" );
+        OSL_ENSURE( rBound.endPos >= nPos, "end pos too low" );
     }
     else
     {
@@ -1713,8 +1713,8 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
     }
 
     // ask core for position
-    DBG_ASSERT( GetFrm() != NULL, "The text frame has vanished!" );
-    DBG_ASSERT( GetFrm()->IsTxtFrm(), "The text frame has mutated!" );
+    OSL_ENSURE( GetFrm() != NULL, "The text frame has vanished!" );
+    OSL_ENSURE( GetFrm()->IsTxtFrm(), "The text frame has mutated!" );
     const SwTxtFrm* pFrm = static_cast<const SwTxtFrm*>( GetFrm() );
     SwCrsrMoveState aMoveState;
     aMoveState.bPosMatchesBounds = sal_True;
@@ -1874,8 +1874,8 @@ sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 n
     i18n::Boundary aBound;
     sal_Bool bWord = GetTextBoundary( aBound, rText, nIndex, nTextType );
 
-    DBG_ASSERT( aBound.startPos >= 0,               "illegal boundary" );
-    DBG_ASSERT( aBound.startPos <= aBound.endPos,   "illegal boundary" );
+    OSL_ENSURE( aBound.startPos >= 0,               "illegal boundary" );
+    OSL_ENSURE( aBound.startPos <= aBound.endPos,   "illegal boundary" );
 
     // return word (if present)
     if ( bWord )

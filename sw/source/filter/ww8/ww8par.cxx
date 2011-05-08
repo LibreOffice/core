@@ -1504,7 +1504,7 @@ void SwWW8ImplReader::ImportDop()
         mpDocShell->GetModel(), uno::UNO_QUERY_THROW);
     uno::Reference<document::XDocumentProperties> xDocuProps(
         xDPS->getDocumentProperties());
-    DBG_ASSERT(xDocuProps.is(), "DocumentProperties is null");
+    OSL_ENSURE(xDocuProps.is(), "DocumentProperties is null");
     if (xDocuProps.is())
     {
         DateTime aLastPrinted(
@@ -4095,10 +4095,10 @@ void SwWW8ImplReader::ReadDocVars()
             mpDocShell->GetModel(), uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentProperties> xDocProps(
             xDPS->getDocumentProperties());
-        DBG_ASSERT(xDocProps.is(), "DocumentProperties is null");
+        OSL_ENSURE(xDocProps.is(), "DocumentProperties is null");
         uno::Reference<beans::XPropertyContainer> xUserDefinedProps =
             xDocProps->getUserDefinedProperties();
-        DBG_ASSERT(xUserDefinedProps.is(), "UserDefinedProperties is null");
+        OSL_ENSURE(xUserDefinedProps.is(), "UserDefinedProperties is null");
 
         for(size_t i=0; i<aDocVarStrings.size(); i++)
         {
@@ -4129,7 +4129,7 @@ void SwWW8ImplReader::ReadDocInfo()
             mpDocShell->GetModel(), uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentProperties> xDocProps(
             xDPS->getDocumentProperties());
-        DBG_ASSERT(xDocProps.is(), "DocumentProperties is null");
+        OSL_ENSURE(xDocProps.is(), "DocumentProperties is null");
 
         if (xDocProps.is()) {
             if ( pWwFib->fDot )

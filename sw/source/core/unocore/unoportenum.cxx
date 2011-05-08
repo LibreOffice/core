@@ -247,7 +247,7 @@ SwXTextPortionEnumeration::SwXTextPortionEnumeration(
        rParaCrsr.GetDoc()->CreateUnoCrsr(*rParaCrsr.GetPoint(), sal_False);
     pUnoCrsr->Add(this);
 
-    DBG_ASSERT(nEnd == -1 || (nStart <= nEnd &&
+    OSL_ENSURE(nEnd == -1 || (nStart <= nEnd &&
         nEnd <= pUnoCrsr->Start()->nNode.GetNode().GetTxtNode()->GetTxt().Len()),
             "start or end value invalid!");
 
@@ -1045,7 +1045,7 @@ lcl_CreatePortions(
         (pUnoCrsr->Start()->nContent.GetIndex() != i_nStartPos))
     {
         pUnoCrsr->DeleteMark();
-        DBG_ASSERT(pUnoCrsr->Start()->nNode.GetNode().GetTxtNode() &&
+        OSL_ENSURE(pUnoCrsr->Start()->nNode.GetNode().GetTxtNode() &&
             (i_nStartPos <= pUnoCrsr->Start()->nNode.GetNode().GetTxtNode()->
                                 GetTxt().Len()), "Incorrect start position" );
         // ??? should this be i_nStartPos - current position ?

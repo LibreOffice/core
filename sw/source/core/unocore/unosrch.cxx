@@ -619,22 +619,22 @@ SET_UINT16:
 
 void SwXTextSearch::addPropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXTextSearch::removePropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/) throw(beans::UnknownPropertyException, lang::WrappedTargetException,uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXTextSearch::addVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/) throw(beans::UnknownPropertyException, lang::WrappedTargetException,uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXTextSearch::removeVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/) throw(beans::UnknownPropertyException, lang::WrappedTargetException,uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 sal_Bool SwXTextSearch::getValueSearch(void) throw( uno::RuntimeException )

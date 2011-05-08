@@ -532,11 +532,11 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                         {
                             //now the attribute should start before or at the selection
                             //and it should end at the end of the selection or behind
-                            DBG_ASSERT(nAttrStart <= nPaMStart && nAttrEnd >=nPaMEnd,
+                            OSL_ENSURE(nAttrStart <= nPaMStart && nAttrEnd >=nPaMEnd,
                                     "attribute overlaps or is outside");
                             //now the name of the style has to be added to the sequence
                             aCharStyles.realloc(aCharStyles.getLength() + 1);
-                            DBG_ASSERT(pAttr->GetCharFmt().GetCharFmt(), "no character format set");
+                            OSL_ENSURE(pAttr->GetCharFmt().GetCharFmt(), "no character format set");
                             aCharStyles.getArray()[aCharStyles.getLength() - 1] =
                                         SwStyleNameMapper::GetProgName(
                                             pAttr->GetCharFmt().GetCharFmt()->GetName(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
@@ -958,7 +958,7 @@ sal_Bool DocInsertStringSplitCR(
     }
     while (nIdx != STRING_NOTFOUND )
     {
-        DBG_ASSERT( nIdx - nStartIdx >= 0, "index negative!" );
+        OSL_ENSURE( nIdx - nStartIdx >= 0, "index negative!" );
         aTxt = rText.Copy( nStartIdx, nIdx - nStartIdx );
         if (aTxt.getLength() &&
             !rDoc.InsertString( rNewCursor, aTxt, nInsertFlags ))

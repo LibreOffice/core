@@ -254,7 +254,7 @@ void SwXTextPortion::GetPropertyValue(
         SwUnoCrsr *pUnoCrsr,
         SfxItemSet *&pSet )
 {
-    DBG_ASSERT( pUnoCrsr, "UNO cursor missing" );
+    OSL_ENSURE( pUnoCrsr, "UNO cursor missing" );
     if (!pUnoCrsr)
         return;
     if(pUnoCrsr)
@@ -734,22 +734,22 @@ void SwXTextPortion::addPropertyChangeListener(
     const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/)
         throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXTextPortion::removePropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXTextPortion::addVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXTextPortion::removeVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 beans::PropertyState SwXTextPortion::getPropertyState(const OUString& rPropertyName)

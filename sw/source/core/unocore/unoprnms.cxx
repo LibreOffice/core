@@ -795,7 +795,7 @@ const SwPropNameLen& SwGetPropName( sal_uInt16 nId )
 }
 const SwPropNameLen& GetPropName( sal_uInt16 nId )
 {
-    DBG_ASSERT( SW_PROPNAME_BEGIN <= nId && nId < SW_PROPNAME_END,
+    OSL_ENSURE( SW_PROPNAME_BEGIN <= nId && nId < SW_PROPNAME_END,
                 "GetPropName(): Wrong index" );
     return aPropNameTab[ nId - SW_PROPNAME_BEGIN];
 }

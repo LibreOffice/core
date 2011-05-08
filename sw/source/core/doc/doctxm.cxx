@@ -788,7 +788,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
 
     SwDoc* pDoc = (SwDoc*)pSectNd->GetDoc();
 
-    DBG_ASSERT(pDoc != NULL, "Where is the document?");
+    OSL_ENSURE(pDoc != NULL, "Where is the document?");
 
     if(pAttr && pDoc && GetFmt())
         pDoc->ChgFmt(*GetFmt(), *pAttr);

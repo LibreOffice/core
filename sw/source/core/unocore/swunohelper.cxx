@@ -230,7 +230,7 @@ sal_Bool UCB_GetFileListOfFolder( const String& rURL, SvStrings& rList,
         }
         catch( UNO_NMSPC::Exception& )
         {
-            DBG_ERRORFILE( "create cursor failed!" );
+            OSL_FAIL( "create cursor failed!" );
         }
 
         if( xResultSet.is() )
@@ -274,13 +274,13 @@ sal_Bool UCB_GetFileListOfFolder( const String& rURL, SvStrings& rList,
             }
             catch( UNO_NMSPC::Exception& )
             {
-                DBG_ERRORFILE( "Exception caught!" );
+                OSL_FAIL( "Exception caught!" );
             }
         }
     }
     catch( UNO_NMSPC::Exception& )
     {
-        DBG_ERRORFILE( "Exception caught!" );
+        OSL_FAIL( "Exception caught!" );
         bOk = sal_False;
     }
     return bOk;

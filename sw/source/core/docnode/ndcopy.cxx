@@ -1141,7 +1141,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                 // (text) node, and thus we set bStartisTxtNode to true. This
                 // will ensure that this node will be deleted during Undo
                 // using JoinNext.
-                DBG_ASSERT( !bStartIsTxtNode, "Oops, undo may be instable now." );
+                OSL_ENSURE( !bStartIsTxtNode, "Oops, undo may be instable now." );
                 bStartIsTxtNode = sal_True;
             }
 

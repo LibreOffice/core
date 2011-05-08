@@ -273,7 +273,7 @@ uno::Any SwXRedlinePortion::getPropertyValue( const OUString& rPropertyName )
                 aRet <<= xRet;
             }
             else {
-                DBG_ASSERT(0, "Empty section in redline portion! (end node immediately follows start node)");
+                OSL_FAIL("Empty section in redline portion! (end node immediately follows start node)");
             }
         }
     }
@@ -397,7 +397,7 @@ uno::Sequence< beans::PropertyValue > SwXRedlinePortion::CreateRedlineProperties
             pRet[nPropIdx++].Value <<= xRet;
         }
         else {
-            DBG_ASSERT(0, "Empty section in redline portion! (end node immediately follows start node)");
+            OSL_FAIL("Empty section in redline portion! (end node immediately follows start node)");
         }
     }
     if(pNext)
@@ -486,14 +486,14 @@ uno::Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
             case ND_SECTIONNODE:
             {
                 SwSectionNode* pSectNode = pNode->GetSectionNode();
-                DBG_ASSERT(pSectNode, "No section node!");
+                OSL_ENSURE(pSectNode, "No section node!");
                 xRet = SwXTextSections::GetObject( *pSectNode->GetSection().GetFmt() );
             }
             break;
             case ND_TABLENODE :
             {
                 SwTableNode* pTblNode = pNode->GetTableNode();
-                DBG_ASSERT(pTblNode, "No table node!");
+                OSL_ENSURE(pTblNode, "No table node!");
                 SwTable& rTbl = pTblNode->GetTable();
                 SwFrmFmt* pTblFmt = rTbl.GetFrmFmt();
                 xRet = SwXTextTables::GetObject( *pTblFmt );
@@ -527,7 +527,7 @@ uno::Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
                 aRet <<= xRet;
             }
             else {
-                DBG_ASSERT(0, "Empty section in redline portion! (end node immediately follows start node)");
+                OSL_FAIL("Empty section in redline portion! (end node immediately follows start node)");
             }
         }
     }

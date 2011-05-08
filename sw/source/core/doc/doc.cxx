@@ -662,7 +662,7 @@ const SwPrintData & SwDoc::getPrintData() const
         // the respective config item is implememted by SwPrintOptions which
         // is also derived from SwPrintData
         const SwDocShell *pDocSh = GetDocShell();
-        DBG_ASSERT( pDocSh, "pDocSh is 0, can't determine if this is a WebDoc or not" );
+        OSL_ENSURE( pDocSh, "pDocSh is 0, can't determine if this is a WebDoc or not" );
         bool bWeb = 0 != dynamic_cast< const SwWebDocShell * >(pDocSh);
         SwPrintOptions aPrintOptions( bWeb );
         *pThis->pPrtData = aPrintOptions;
@@ -1121,7 +1121,7 @@ bool lcl_GetPostIts(
     bool bHasPostIts = false;
 
     SwFieldType* pFldType = pIDFA->GetSysFldType( RES_POSTITFLD );
-    DBG_ASSERT( pFldType, "kein PostItType ? ");
+    OSL_ENSURE( pFldType, "kein PostItType ? ");
 
     if( pFldType->GetDepends() )
     {
@@ -1158,7 +1158,7 @@ static void lcl_FormatPostIt(
 {
     static char const sTmp[] = " : ";
 
-    DBG_ASSERT( ViewShell::GetShellRes(), "missing ShellRes" );
+    OSL_ENSURE( ViewShell::GetShellRes(), "missing ShellRes" );
 
     if (bNewPage)
     {
@@ -1272,7 +1272,7 @@ void SwDoc::CalculatePagesForPrinting(
         }
     }
 
-    DBG_ASSERT( nFirstPageNo, "first page not found!  Should not happen!" );
+    OSL_ENSURE( nFirstPageNo, "first page not found!  Should not happen!" );
     if (nFirstPageNo)
     {
 // HACK: Hier muss von der MultiSelection noch eine akzeptable Moeglichkeit
@@ -1380,7 +1380,7 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
 {
 
     sal_Int16 nPostItMode = (sal_Int16) rOptions.getIntValue( "PrintAnnotationMode", 0 );
-    DBG_ASSERT(nPostItMode == POSTITS_NONE || rData.HasPostItData(),
+    OSL_ENSURE(nPostItMode == POSTITS_NONE || rData.HasPostItData(),
             "print post-its without post-it data?" );
     const sal_uInt16 nPostItCount = rData.HasPostItData() ? rData.m_pPostItFields->Count() : 0;
     if (nPostItMode != POSTITS_NONE && nPostItCount > 0)
@@ -1466,14 +1466,14 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
             const SwPageFrm * pPageFrm = (SwPageFrm*)rData.m_pPostItShell->GetLayout()->Lower();
             while( pPageFrm && nPageNum < nPostItDocPageCount )
             {
-                DBG_ASSERT( pPageFrm, "Empty page frame. How are we going to print this?" );
+                OSL_ENSURE( pPageFrm, "Empty page frame. How are we going to print this?" );
                 ++nPageNum;
                 rData.GetPagesToPrint().push_back( 0 );  // a page number of 0 indicates this page is from the post-it doc
-                DBG_ASSERT( pPageFrm, "pPageFrm is NULL!" );
+                OSL_ENSURE( pPageFrm, "pPageFrm is NULL!" );
                 rData.GetPostItStartFrames().push_back( pPageFrm );
                 pPageFrm = (SwPageFrm*)pPageFrm->GetNext();
             }
-            DBG_ASSERT( nPageNum == nPostItDocPageCount, "unexpected number of pages" );
+            OSL_ENSURE( nPageNum == nPostItDocPageCount, "unexpected number of pages" );
         }
         else if (nPostItMode == POSTITS_ENDPAGE)
         {
@@ -1487,12 +1487,12 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
             const SwPageFrm * pPageFrm = (SwPageFrm*)rData.m_pPostItShell->GetLayout()->Lower();
             while( pPageFrm && sal_Int32(aAllPostItStartFrames.size()) < nPostItDocPageCount )
             {
-                DBG_ASSERT( pPageFrm, "Empty page frame. How are we going to print this?" );
+                OSL_ENSURE( pPageFrm, "Empty page frame. How are we going to print this?" );
                 ++nPostItPageNum;
                 aAllPostItStartFrames.push_back( pPageFrm );
                 pPageFrm = (SwPageFrm*)pPageFrm->GetNext();
             }
-            DBG_ASSERT( sal_Int32(aAllPostItStartFrames.size()) == nPostItDocPageCount,
+            OSL_ENSURE( sal_Int32(aAllPostItStartFrames.size()) == nPostItDocPageCount,
                     "unexpected number of frames; does not match number of pages" );
 
             // get a map that holds all post-it frames to be printed for a
@@ -1504,13 +1504,13 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
                 const sal_Int32 nFrames = aIt->second - nLastStartPageNum;
                 const sal_Int32 nFirstStartPageNum = aIt == aPostItLastStartPageNum.begin() ?
                         1 : aIt->second - nFrames + 1;
-                DBG_ASSERT( 1 <= nFirstStartPageNum && nFirstStartPageNum <= nPostItDocPageCount,
+                OSL_ENSURE( 1 <= nFirstStartPageNum && nFirstStartPageNum <= nPostItDocPageCount,
                         "page number for first frame out of range" );
                 std::vector<  const SwPageFrm * > aStartFrames;
                 for (sal_Int32 i = 0; i < nFrames; ++i)
                 {
                     const sal_Int32 nIdx = nFirstStartPageNum - 1 + i;   // -1 because lowest page num is 1
-                    DBG_ASSERT( 0 <= nIdx && nIdx < sal_Int32(aAllPostItStartFrames.size()),
+                    OSL_ENSURE( 0 <= nIdx && nIdx < sal_Int32(aAllPostItStartFrames.size()),
                             "index out of range" );
                     aStartFrames.push_back( aAllPostItStartFrames[ nIdx ] );
                 }
@@ -1601,7 +1601,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     const SwPageFrm *pPageFrm  = dynamic_cast<const SwPageFrm*>( rLayout.Lower() );
     while( pPageFrm && nPageNum < nDocPageCount )
     {
-        DBG_ASSERT( pPageFrm, "Empty page frame. How are we going to print this?" );
+        OSL_ENSURE( pPageFrm, "Empty page frame. How are we going to print this?" );
         ++nPageNum;
         rValidPagesSet.insert( nPageNum );
         rValidStartFrms[ nPageNum ] = pPageFrm;
@@ -1609,7 +1609,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
 
         rPrinterPaperTrays[ nPageNum ] = lcl_GetPaperBin( pStPage );
     }
-    DBG_ASSERT( nPageNum == nDocPageCount, "unexpected number of pages" );
+    OSL_ENSURE( nPageNum == nDocPageCount, "unexpected number of pages" );
 
     // properties to take into account when calcualting the set of pages
     // Note: here bPrintLeftPages and bPrintRightPages refer to the (virtual) resulting pages
@@ -1695,7 +1695,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
         nSPg = nSPg + nStep;
         nEPg = nEPg - nStep;
     }
-    DBG_ASSERT( size_t(nCntPage) == rPagePairs.size(), "size mismatch for number of page pairs" );
+    OSL_ENSURE( size_t(nCntPage) == rPagePairs.size(), "size mismatch for number of page pairs" );
 
     // luckily prospect printing does not make use of post-its so far,
     // thus we are done here.

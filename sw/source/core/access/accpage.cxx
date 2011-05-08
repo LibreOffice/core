@@ -129,9 +129,9 @@ SwAccessiblePage::SwAccessiblePage( SwAccessibleMap* pInitMap,
     : SwAccessibleContext( pInitMap, AccessibleRole::PANEL, pFrame )
     , bIsSelected( sal_False )
 {
-    DBG_ASSERT( pFrame != NULL, "need frame" );
-    DBG_ASSERT( pInitMap != NULL, "need map" );
-    DBG_ASSERT( pFrame->IsPageFrm(), "need page frame" );
+    OSL_ENSURE( pFrame != NULL, "need frame" );
+    OSL_ENSURE( pInitMap != NULL, "need map" );
+    OSL_ENSURE( pFrame->IsPageFrm(), "need page frame" );
 
     SolarMutexGuard aGuard;
 

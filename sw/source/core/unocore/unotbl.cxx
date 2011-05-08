@@ -385,7 +385,7 @@ void lcl_GetCellPosition( const String &rCellName,
         }
     }
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( rColumn != -1 && rRow != -1, "failed to get column or row index" );
+    OSL_ENSURE( rColumn != -1 && rRow != -1, "failed to get column or row index" );
 #endif
 }
 
@@ -469,13 +469,13 @@ String lcl_GetCellName( sal_Int32 nColumn, sal_Int32 nRow )
     {
         sal_Int32 nCol, nRow2;
         lcl_GetCellPosition( String::CreateFromAscii("z1"), nCol, nRow2);
-        DBG_ASSERT( nCol == 51, "lcl_GetCellPosition failed" );
+        OSL_ENSURE( nCol == 51, "lcl_GetCellPosition failed" );
         lcl_GetCellPosition( String::CreateFromAscii("AA1"), nCol, nRow2);
-        DBG_ASSERT( nCol == 52, "lcl_GetCellPosition failed" );
+        OSL_ENSURE( nCol == 52, "lcl_GetCellPosition failed" );
         lcl_GetCellPosition( String::CreateFromAscii("AB1"), nCol, nRow2);
-        DBG_ASSERT( nCol == 53, "lcl_GetCellPosition failed" );
+        OSL_ENSURE( nCol == 53, "lcl_GetCellPosition failed" );
         lcl_GetCellPosition( String::CreateFromAscii("BB1"), nCol, nRow2);
-        DBG_ASSERT( nCol == 105, "lcl_GetCellPosition failed" );
+        OSL_ENSURE( nCol == 105, "lcl_GetCellPosition failed" );
     }
 #endif
 
@@ -1164,22 +1164,22 @@ uno::Any SwXCell::getPropertyValue(const OUString& rPropertyName)
 
 void SwXCell::addPropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXCell::removePropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXCell::addVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXCell::removeVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 uno::Reference< container::XEnumeration >  SwXCell::createEnumeration(void) throw( uno::RuntimeException )
@@ -1446,22 +1446,22 @@ uno::Any SwXTextTableRow::getPropertyValue(const OUString& rPropertyName) throw(
 
 void SwXTextTableRow::addPropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXTextTableRow::removePropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXTextTableRow::addVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXTextTableRow::removeVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXTextTableRow::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
@@ -1845,7 +1845,7 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
                 break;
                 case RES_BOXATR_FORMAT:
                     //GetAttr fuer Tabellenselektion am Doc fehlt noch
-                    DBG_WARNING("not implemented");
+                    OSL_FAIL("not implemented");
                 break;
                 case FN_UNO_PARA_STYLE:
                 {
@@ -1878,22 +1878,22 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
 
 void SwXTextTableCursor::addPropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXTextTableCursor::removePropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXTextTableCursor::addVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXTextTableCursor::removeVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXTextTableCursor::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
@@ -3424,22 +3424,22 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
 
 void SwXTextTable::addPropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXTextTable::removePropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXTextTable::addVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXTextTable::removeVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 OUString SwXTextTable::getName(void) throw( uno::RuntimeException )
@@ -3939,7 +3939,7 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName) throw( be
                 break;
                 case RES_BOXATR_FORMAT:
                     //GetAttr fuer Tabellenselektion am Doc fehlt noch
-                    DBG_WARNING("not implemented");
+                    OSL_FAIL("not implemented");
                 break;
                 case FN_UNO_PARA_STYLE:
                 {
@@ -3985,22 +3985,22 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName) throw( be
 
 void SwXCellRange::addPropertyChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXCellRange::removePropertyChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXCellRange::addVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXCellRange::removeVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXCellRange::GetDataSequence(
@@ -4086,7 +4086,7 @@ void SwXCellRange::GetDataSequence(
                             fVal = lcl_getValue(*pXCell);
                         else
                         {
-                            DBG_ASSERT( table::CellContentType_TEXT == pXCell->getType(),
+                            OSL_ENSURE( table::CellContentType_TEXT == pXCell->getType(),
                                     "this branch of 'if' is only for text formatted cells" );
 
                             // now we'll try to get a useful numerical value
@@ -4138,7 +4138,7 @@ void SwXCellRange::GetDataSequence(
             }
         }
     }
-    DBG_ASSERT( nDtaCnt == nSize, "size mismatch. Invalid cell range?" );
+    OSL_ENSURE( nDtaCnt == nSize, "size mismatch. Invalid cell range?" );
     if (pAnySeq)
         pAnySeq->realloc( nDtaCnt );
     else if (pTxtSeq)
@@ -4517,14 +4517,14 @@ void SwXCellRange::removeChartDataChangeEventListener(const uno::Reference< char
 
 sal_Bool SwXCellRange::isNotANumber(double /*fNumber*/) throw( uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
     return sal_False;
 
 }
 
 double SwXCellRange::getNotANumber(void) throw( uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
     return 0.;
 }
 

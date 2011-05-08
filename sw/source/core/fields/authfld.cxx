@@ -153,7 +153,7 @@ void    SwAuthorityFieldType::RemoveField(long nHandle)
         }
     }
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT(bRemoved, "Field unknown" );
+    OSL_ENSURE(bRemoved, "Field unknown" );
 #endif
 }
 
@@ -203,7 +203,7 @@ sal_Bool SwAuthorityFieldType::AddField(long nHandle)
             break;
         }
     }
-    DBG_ASSERT(bRet, "::AddField(long) failed");
+    OSL_ENSURE(bRet, "::AddField(long) failed");
     return bRet;
 }
 
@@ -547,7 +547,7 @@ const SwTOXSortKey*  SwAuthorityFieldType::GetSortKey(sal_uInt16 nIdx) const
     SwTOXSortKey* pRet = 0;
     if(m_pSortKeyArr->Count() > nIdx)
         pRet = (*m_pSortKeyArr)[nIdx];
-    DBG_ASSERT(pRet, "Sort key not found");
+    OSL_ENSURE(pRet, "Sort key not found");
     return pRet;
 }
 

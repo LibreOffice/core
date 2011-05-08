@@ -44,14 +44,14 @@ sal_uLong BigPtrArray::Count() const
 
 void BigPtrArray::Move(sal_uLong fromPos, sal_uLong toPos)
 {
-    DBG_ASSERT(fromPos < container_.size() && toPos < container_.size(), "BigPtrArray.Move precondition violation");
+    OSL_ENSURE(fromPos < container_.size() && toPos < container_.size(), "BigPtrArray.Move precondition violation");
     Insert(container_[fromPos], toPos);
     Remove(toPos < fromPos ? fromPos + 1 : fromPos, 1);
 }
 
 void BigPtrArray::ForEach(sal_uLong fromPos, sal_uLong toPos, FnForEach fn, void* pArgs)
 {
-    DBG_ASSERT(fromPos < toPos && fromPos < container_.size() && toPos < container_.size(), "BigPtrArray::ForEach precondition violation");
+    OSL_ENSURE(fromPos < toPos && fromPos < container_.size() && toPos < container_.size(), "BigPtrArray::ForEach precondition violation");
     Container_t::const_iterator iter = container_.begin() + fromPos;
     Container_t::const_iterator iter_end = container_.begin() + toPos;
     for (/*no init*/; iter != iter_end; ++iter)
@@ -68,13 +68,13 @@ void BigPtrArray::ForEach(FnForEach fn, void* pArgs)
 
 ElementPtr BigPtrArray::operator[](sal_uLong pos) const
 {
-    DBG_ASSERT(pos < container_.size(), "BigPtrArray::operator[] precondition violation");
+    OSL_ENSURE(pos < container_.size(), "BigPtrArray::operator[] precondition violation");
     return container_[pos];
 }
 
 void BigPtrArray::Insert(const ElementPtr& rElem, sal_uLong pos)
 {
-    DBG_ASSERT(pos <= container_.size(), "BigPtrArray::Insert precondition violation");
+    OSL_ENSURE(pos <= container_.size(), "BigPtrArray::Insert precondition violation");
 
     rElem->pBigPtrArray_ = this;
     rElem->pos_ = pos;
@@ -90,14 +90,14 @@ void BigPtrArray::Insert(const ElementPtr& rElem, sal_uLong pos)
 
 void BigPtrArray::Remove( sal_uLong pos, sal_uLong n )
 {
-    DBG_ASSERT((pos < container_.size()) && ((container_.begin() + pos + n) < container_.end()), "BigPtrArray.Remove precondition violation")
+    OSL_ENSURE((pos < container_.size()) && ((container_.begin() + pos + n) < container_.end()), "BigPtrArray.Remove precondition violation")
     container_.erase(container_.begin() + pos, container_.begin() + pos + n);
     FixElementIndizes(container_.begin(), container_.end());
 }
 
 void BigPtrArray::Replace(sal_uLong pos, const ElementPtr& rElem)
 {
-    DBG_ASSERT(pos < container_.size(), "BigPtrArray::Replace precondition violation");
+    OSL_ENSURE(pos < container_.size(), "BigPtrArray::Replace precondition violation");
     rElem->pBigPtrArray_ = this;
     rElem->pos_ = pos;
     container_[pos] = rElem;

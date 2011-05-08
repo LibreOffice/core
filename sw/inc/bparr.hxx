@@ -30,7 +30,7 @@
 #define _BPARR_HXX
 
 #include <tools/solar.h>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <swdllapi.h>
 
 struct BlockInfo;
@@ -113,7 +113,7 @@ public:
 
 inline sal_uLong BigPtrEntry::GetPos() const
 {
-    DBG_ASSERT( this == pBlock->pData[ nOffset ], "element not in the block" );
+    OSL_ENSURE( this == pBlock->pData[ nOffset ], "element not in the block" );
     return pBlock->nStart + nOffset;
 }
 

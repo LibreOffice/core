@@ -972,7 +972,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
 
         xShape = uno::Reference< drawing::XShape >( xCreate, UNO_QUERY );
 
-        DBG_ASSERT( xShape.is(), "XShape nicht erhalten" );
+        OSL_ENSURE( xShape.is(), "XShape nicht erhalten" );
         awt::Size aTmpSz;
         aTmpSz.Width  = rSize.Width();
         aTmpSz.Height = rSize.Height();
@@ -1415,7 +1415,7 @@ void SwHTMLParser::NewForm( sal_Bool bAppend )
         return;
 
     uno::Reference< XForm >  xForm( xInt, UNO_QUERY );
-    DBG_ASSERT( xForm.is(), "keine Form?" );
+    OSL_ENSURE( xForm.is(), "keine Form?" );
 
     uno::Reference< container::XIndexContainer > xFormComps( xForm, UNO_QUERY );
     pFormImpl->SetFormComps( xFormComps );
@@ -2119,7 +2119,7 @@ void SwHTMLParser::NewTextArea()
     }
 
     uno::Reference< XFormComponent > xFComp( xInt, UNO_QUERY );
-    DBG_ASSERT( xFComp.is(), "keine FormComponent?" );
+    OSL_ENSURE( xFComp.is(), "keine FormComponent?" );
 
     uno::Reference< beans::XPropertySet > xPropSet( xFComp, UNO_QUERY );
 
@@ -2398,7 +2398,7 @@ void SwHTMLParser::NewSelect()
     }
 
     uno::Reference< XFormComponent > xFComp( xInt, UNO_QUERY );
-    DBG_ASSERT(xFComp.is(), "keine FormComponent?");
+    OSL_ENSURE(xFComp.is(), "keine FormComponent?");
 
     uno::Reference< beans::XPropertySet >  xPropSet( xFComp, UNO_QUERY );
 

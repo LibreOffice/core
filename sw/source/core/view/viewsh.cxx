@@ -632,7 +632,7 @@ void ViewShell::LayoutIdle()
 
         SwSaveSetLRUOfst aSave( *SwTxtFrm::GetTxtCache(),
                              SwTxtFrm::GetTxtCache()->GetCurMax() - 50 );
-        DBG_ASSERT(Imp(), "ViewShell already deleted?");
+        OSL_ENSURE(Imp(), "ViewShell already deleted?");
         if(!Imp())
             return;
         SwLayIdle aIdle( GetLayout(), Imp() );
@@ -2094,7 +2094,7 @@ void ViewShell::UISizeNotify()
 
 void    ViewShell::SetRestoreActions(sal_uInt16 nSet)
 {
-    DBG_ASSERT(!GetRestoreActions()||!nSet, "mehrfaches Restore der Actions ?");
+    OSL_ENSURE(!GetRestoreActions()||!nSet, "mehrfaches Restore der Actions ?");
     Imp()->SetRestoreActions(nSet);
 }
 sal_uInt16  ViewShell::GetRestoreActions() const
@@ -2124,7 +2124,7 @@ uno::Reference< ::com::sun::star::accessibility::XAccessible > ViewShell::Create
 uno::Reference< ::com::sun::star::accessibility::XAccessible >
 ViewShell::CreateAccessiblePreview()
 {
-    DBG_ASSERT( IsPreView(),
+    OSL_ENSURE( IsPreView(),
                 "Can't create accessible preview for non-preview ViewShell" );
 
     // We require a layout and an XModel to be accessible.

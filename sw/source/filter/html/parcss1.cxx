@@ -54,7 +54,7 @@
 #define LOOP_CHECK_RESTART \
     nOldInPos = STRING_MAXLEN;
 #define LOOP_CHECK_CHECK( where ) \
-    DBG_ASSERT( nOldInPos!=nInPos || cNextCh==(sal_Unicode)EOF, where );    \
+    OSL_ENSURE( nOldInPos!=nInPos || cNextCh==(sal_Unicode)EOF, where );    \
     if( nOldInPos==nInPos && cNextCh!=(sal_Unicode)EOF )                    \
         break;                                                              \
     else                                                                    \
@@ -462,7 +462,7 @@ CSS1Token CSS1Parser::GetNextToken()
                         }
 
                         double nScale = 0.0;
-                        DBG_ASSERT( pCmp1, "Wo kommt das erste Zeichen her?" );
+                        OSL_ENSURE( pCmp1, "Wo kommt das erste Zeichen her?" );
                         if( aIdent.EqualsIgnoreCaseAscii(pCmp1) )
                         {
                             nScale = nScale1;
@@ -966,7 +966,7 @@ CSS1Selector *CSS1Parser::ParseSelector()
         // falls ein Selektor angelegt wurd, ihn speichern
         if( pNew )
         {
-            DBG_ASSERT( (pRoot!=0) == (pLast!=0),
+            OSL_ENSURE( (pRoot!=0) == (pLast!=0),
                     "Root-Selektor, aber kein Last" );
             if( pLast )
                 pLast->SetNext( pNew );
@@ -1113,7 +1113,7 @@ CSS1Expression *CSS1Parser::ParseDeclaration( String& rProperty )
         // falls ein Expression angelegt wurde, diesen speichern
         if( pNew )
         {
-            DBG_ASSERT( (pRoot!=0) == (pLast!=0),
+            OSL_ENSURE( (pRoot!=0) == (pLast!=0),
                     "Root-Selektor, aber kein Last" );
             if( pLast )
                 pLast->SetNext( pNew );
@@ -1259,9 +1259,9 @@ CSS1Expression::~CSS1Expression()
 
 sal_Bool CSS1Expression::GetURL( String& rURL  ) const
 {
-    DBG_ASSERT( CSS1_URL==eType, "CSS1-Ausruck ist keine Farbe URL" );
+    OSL_ENSURE( CSS1_URL==eType, "CSS1-Ausruck ist keine Farbe URL" );
 
-    DBG_ASSERT( aValue.CompareIgnoreCaseToAscii( sCSS1_url, 3 ) ==
+    OSL_ENSURE( aValue.CompareIgnoreCaseToAscii( sCSS1_url, 3 ) ==
                                         COMPARE_EQUAL &&
                 aValue.Len() > 5 &&
                 '(' == aValue.GetChar(3) &&
@@ -1283,7 +1283,7 @@ sal_Bool CSS1Expression::GetURL( String& rURL  ) const
 
 sal_Bool CSS1Expression::GetColor( Color &rColor ) const
 {
-    DBG_ASSERT( CSS1_IDENT==eType || CSS1_RGB==eType ||
+    OSL_ENSURE( CSS1_IDENT==eType || CSS1_RGB==eType ||
                 CSS1_HEXCOLOR==eType || CSS1_STRING==eType,
                 "CSS1-Ausruck kann keine Farbe sein" );
 
@@ -1296,7 +1296,7 @@ sal_Bool CSS1Expression::GetColor( Color &rColor ) const
         {
             sal_uInt8 aColors[3] = { 0, 0, 0 };
 
-            DBG_ASSERT( aValue.CompareIgnoreCaseToAscii( sCSS1_rgb, 3 )
+            OSL_ENSURE( aValue.CompareIgnoreCaseToAscii( sCSS1_rgb, 3 )
                                             == COMPARE_EQUAL &&
                         aValue.Len() > 5 &&
                         '(' == aValue.GetChar( 3 ) &&

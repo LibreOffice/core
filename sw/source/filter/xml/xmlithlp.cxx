@@ -261,7 +261,7 @@ const struct SvXMLEnumMapEntry psXML_BrushVertPos[] =
 void lcl_frmitems_MergeXMLHoriPos( SvxGraphicPosition& ePos,
                                    SvxGraphicPosition eHori )
 {
-    DBG_ASSERT( GPOS_LM==eHori || GPOS_MM==eHori || GPOS_RM==eHori,
+    OSL_ENSURE( GPOS_LM==eHori || GPOS_MM==eHori || GPOS_RM==eHori,
                 "lcl_frmitems_MergeXMLHoriPos: vertical pos must be middle" );
 
     switch( ePos )
@@ -291,7 +291,7 @@ void lcl_frmitems_MergeXMLHoriPos( SvxGraphicPosition& ePos,
 void lcl_frmitems_MergeXMLVertPos( SvxGraphicPosition& ePos,
                                      SvxGraphicPosition eVert )
 {
-    DBG_ASSERT( GPOS_MT==eVert || GPOS_MM==eVert || GPOS_MB==eVert,
+    OSL_ENSURE( GPOS_MT==eVert || GPOS_MM==eVert || GPOS_MB==eVert,
                 "lcl_frmitems_MergeXMLVertPos: horizontal pos must be middle" );
 
     switch( ePos )

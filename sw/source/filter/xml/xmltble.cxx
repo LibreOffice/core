@@ -1098,7 +1098,7 @@ void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
         SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE,
                                   XML_TABLE_HEADER_ROWS, sal_True, sal_True );
 
-        DBG_ASSERT( nHeaderRows <= nLines, "more headers then lines?" );
+        OSL_ENSURE( nHeaderRows <= nLines, "more headers then lines?" );
         for( sal_uInt16 nLine = 0U; nLine < nHeaderRows; nLine++ )
             ExportTableLine( *(rLines[nLine]), *pLines, rTblInfo );
     }
@@ -1201,7 +1201,7 @@ void SwXMLTextParagraphExport::exportTable(
     ((SwXMLExport&)GetExport()).SetShowProgress( _bProgress );
 
     Reference < XTextTable > xTxtTbl( rTextContent, UNO_QUERY );
-    DBG_ASSERT( xTxtTbl.is(), "text table missing" );
+    OSL_ENSURE( xTxtTbl.is(), "text table missing" );
     if( xTxtTbl.is() )
     {
         const SwXTextTable *pXTable = 0;

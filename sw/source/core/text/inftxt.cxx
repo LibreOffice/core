@@ -1343,7 +1343,7 @@ static void lcl_InitHyphValues( PropertyValues &rVals,
 
 const PropertyValues & SwTxtFormatInfo::GetHyphValues() const
 {
-    DBG_ASSERT( 2 == aHyphVals.getLength(),
+    OSL_ENSURE( 2 == aHyphVals.getLength(),
             "hyphenation values not yet initialized" );
     return aHyphVals;
 }

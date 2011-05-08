@@ -1001,7 +1001,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     const uno::Reference<lang::XUnoTunnel> xTunnel(xOwnCursor, uno::UNO_QUERY);
     OTextCursorHelper *const pOwnCursor =
             ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xTunnel);
-    DBG_ASSERT(pOwnCursor, "OTextCursorHelper::getUnoTunnelId() ??? ");
+    OSL_ENSURE(pOwnCursor, "OTextCursorHelper::getUnoTunnelId() ??? ");
     const SwStartNode* pOwnStartNode =
         pOwnCursor->GetPaM()->GetNode()->StartOfSectionNode();
     SwStartNodeType eSearchNodeType = SwNormalStartNode;
@@ -1070,7 +1070,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     }
     else
     {
-        DBG_ASSERT(*pStart1 == *pStart2,
+        OSL_ENSURE(*pStart1 == *pStart2,
                 "SwPositions should be equal here");
         nCompare = 0;
     }
@@ -2062,7 +2062,7 @@ lcl_ApplyCellProperties(
             else
             {
                 // find the cell that
-                DBG_ASSERT(rMergedCells.size(),
+                OSL_ENSURE(rMergedCells.size(),
                         "the first merged cell is missing");
                 if (rMergedCells.size())
                 {
@@ -2085,7 +2085,7 @@ lcl_ApplyCellProperties(
                         ++aMergedIter;
                     }
 #if OSL_DEBUG_LEVEL > 1
-                    DBG_ASSERT( bDbgFound,
+                    OSL_ENSURE( bDbgFound,
                             "couldn't find first vertically merged cell" );
 #endif
                 }

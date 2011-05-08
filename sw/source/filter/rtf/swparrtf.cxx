@@ -153,7 +153,7 @@ sal_uLong RtfReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, con
 
     sal_uLong nRet = 0;
     SwDocShell *pDocShell(rDoc.GetDocShell());
-    DBG_ASSERT(pDocShell, "no SwDocShell");
+    OSL_ENSURE(pDocShell, "no SwDocShell");
     uno::Reference<document::XDocumentProperties> xDocProps;
     if (pDocShell) {
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(

@@ -239,7 +239,7 @@ sal_Bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath,
                         uno::UNO_QUERY_THROW);
                     uno::Reference<document::XDocumentProperties> xDocProps(
                         xDPS->getDocumentProperties());
-                    DBG_ASSERT(xDocProps.is(), "Doc has no DocumentProperties");
+                    OSL_ENSURE(xDocProps.is(), "Doc has no DocumentProperties");
                     // the GlobalDoc is the template
                     xDocProps->setTemplateName(aEmptyStr);
                     ::util::DateTime uDT(aTmplDate.Get100Sec(),
@@ -587,7 +587,7 @@ sal_Bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, int nOutline
                         uno::UNO_QUERY_THROW);
                     uno::Reference<document::XDocumentProperties> xDocProps(
                         xDPS->getDocumentProperties());
-                    DBG_ASSERT(xDocProps.is(), "Doc has no DocumentProperties");
+                    OSL_ENSURE(xDocProps.is(), "Doc has no DocumentProperties");
                     // the GlobalDoc is the template
                     xDocProps->setTemplateName(aEmptyStr);
                     ::util::DateTime uDT(aTmplDate.Get100Sec(),

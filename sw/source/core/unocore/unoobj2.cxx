@@ -1123,7 +1123,7 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
                 : ((pPortion) ? pPortion->GetCursor() : 0);
             if (pUnoCrsr && pDoc == rToFill.GetDoc())
             {
-                DBG_ASSERT((SwPaM*)pUnoCrsr->GetNext() == pUnoCrsr,
+                OSL_ENSURE((SwPaM*)pUnoCrsr->GetNext() == pUnoCrsr,
                         "what to do about rings?");
                 bRet = true;
                 *rToFill.GetPoint() = *pUnoCrsr->GetPoint();
@@ -1718,7 +1718,7 @@ void SwUnoCursorHelper::SetString(SwCursor & rCursor, const OUString& rString)
         String aText(rString);
         const bool bSuccess( SwUnoCursorHelper::DocInsertStringSplitCR(
                     *pDoc, rCursor, aText, false ) );
-        DBG_ASSERT( bSuccess, "DocInsertStringSplitCR" );
+        OSL_ENSURE( bSuccess, "DocInsertStringSplitCR" );
         (void) bSuccess;
         SwUnoCursorHelper::SelectPam(rCursor, true);
         rCursor.Left(rString.getLength(), CRSR_SKIP_CHARS, sal_False, sal_False);
@@ -1813,7 +1813,7 @@ lcl_CreateNextObject(SwUnoCrsr& i_rUnoCrsr,
     else
     {
         const SwNodeIndex* pIdx = pFormat->GetCntnt().GetCntntIdx();
-        DBG_ASSERT(pIdx, "where is the index?");
+        OSL_ENSURE(pIdx, "where is the index?");
         SwNode const*const pNd =
             i_rUnoCrsr.GetDoc()->GetNodes()[ pIdx->GetIndex() + 1 ];
 

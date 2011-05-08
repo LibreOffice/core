@@ -853,13 +853,13 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( sal_False ).nNode.GetIndex() )
         if( IsNewDoc() )
         {
             SwDocShell *pDocShell(pDoc->GetDocShell());
-            DBG_ASSERT(pDocShell, "no SwDocShell");
+            OSL_ENSURE(pDocShell, "no SwDocShell");
             if (pDocShell) {
                 uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
                     pDocShell->GetModel(), uno::UNO_QUERY_THROW);
                 uno::Reference<document::XDocumentProperties> xDocProps(
                     xDPS->getDocumentProperties());
-                DBG_ASSERT(xDocProps.is(), "DocumentProperties is null");
+                OSL_ENSURE(xDocProps.is(), "DocumentProperties is null");
                 if ( xDocProps.is() && (xDocProps->getAutoloadSecs() > 0) &&
                      (xDocProps->getAutoloadURL().getLength() == 0) )
                 {
@@ -1013,7 +1013,7 @@ void SwHTMLParser::NextToken( int nToken )
                             uno::UNO_QUERY_THROW);
                         uno::Reference<document::XDocumentProperties> xDocProps(
                             xDPS->getDocumentProperties());
-                        DBG_ASSERT(xDocProps.is(), "no DocumentProperties");
+                        OSL_ENSURE(xDocProps.is(), "no DocumentProperties");
                         if (xDocProps.is()) {
                             xDocProps->setTitle(sTitle);
                         }
@@ -1315,13 +1315,13 @@ void SwHTMLParser::NextToken( int nToken )
                     if( IsNewDoc() )
                     {
                         SwDocShell *pDocShell(pDoc->GetDocShell());
-                        DBG_ASSERT(pDocShell, "no SwDocShell");
+                        OSL_ENSURE(pDocShell, "no SwDocShell");
                         if (pDocShell) {
                             uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
                                 pDocShell->GetModel(), uno::UNO_QUERY_THROW);
                             uno::Reference<document::XDocumentProperties>
                                 xDocProps(xDPS->getDocumentProperties());
-                            DBG_ASSERT(xDocProps.is(),"no DocumentProperties");
+                            OSL_ENSURE(xDocProps.is(),"no DocumentProperties");
                             if (xDocProps.is()) {
                                 xDocProps->setDefaultTarget(
                                     pOption->GetString());
@@ -1344,7 +1344,7 @@ void SwHTMLParser::NextToken( int nToken )
                     pHTTPHeader = pDocSh->GetHeaderAttributes();
             }
             SwDocShell *pDocShell(pDoc->GetDocShell());
-            DBG_ASSERT(pDocShell, "no SwDocShell");
+            OSL_ENSURE(pDocShell, "no SwDocShell");
             if (pDocShell)
             {
                 uno::Reference<document::XDocumentProperties> xDocProps;
@@ -1353,7 +1353,7 @@ void SwHTMLParser::NextToken( int nToken )
                     const uno::Reference<document::XDocumentPropertiesSupplier>
                         xDPS( pDocShell->GetModel(), uno::UNO_QUERY_THROW );
                     xDocProps = xDPS->getDocumentProperties();
-                    DBG_ASSERT(xDocProps.is(), "DocumentProperties is null");
+                    OSL_ENSURE(xDocProps.is(), "DocumentProperties is null");
                 }
                 ParseMetaOptions( xDocProps, pHTTPHeader );
             }

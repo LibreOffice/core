@@ -1582,7 +1582,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         {
             SwDoc* pDoc = pFmt->GetDoc();
             const SwFmtCntnt* pCnt = &pFmt->GetCntnt();
-            DBG_ASSERT( pCnt->GetCntntIdx() &&
+            OSL_ENSURE( pCnt->GetCntntIdx() &&
                            pDoc->GetNodes()[ pCnt->GetCntntIdx()->
                                             GetIndex() + 1 ]->GetOLENode(), "kein OLE-Node?");
 
@@ -1630,7 +1630,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             SwFrm* pTmpFrm = SwIterator<SwFrm,SwFmt>::FirstElement( *pFmt );
             if ( pTmpFrm )
             {
-                DBG_ASSERT( pTmpFrm->IsValid(), "frame not valid" );
+                OSL_ENSURE( pTmpFrm->IsValid(), "frame not valid" );
                 const SwRect &rRect = pTmpFrm->Frm();
                 Size aMM100Size = OutputDevice::LogicToLogic(
                         Size( rRect.Width(), rRect.Height() ),
@@ -1666,28 +1666,28 @@ void SwXFrame::addPropertyChangeListener(const OUString& /*PropertyName*/,
     const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXFrame::removePropertyChangeListener(const OUString& /*PropertyName*/,
     const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXFrame::addVetoableChangeListener(const OUString& /*PropertyName*/,
                                 const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXFrame::removeVetoableChangeListener(
     const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/)
         throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 beans::PropertyState SwXFrame::getPropertyState( const OUString& rPropertyName )
@@ -2901,7 +2901,7 @@ uno::Reference< lang::XComponent >  SwXTextEmbeddedObject::getEmbeddedObject(voi
     {
         SwDoc* pDoc = pFmt->GetDoc();
         const SwFmtCntnt* pCnt = &pFmt->GetCntnt();
-        DBG_ASSERT( pCnt->GetCntntIdx() &&
+        OSL_ENSURE( pCnt->GetCntntIdx() &&
                        pDoc->GetNodes()[ pCnt->GetCntntIdx()->
                                         GetIndex() + 1 ]->GetOLENode(), "kein OLE-Node?");
 
@@ -2941,7 +2941,7 @@ uno::Reference< embed::XEmbeddedObject > SAL_CALL SwXTextEmbeddedObject::getExte
     {
         SwDoc* pDoc = pFmt->GetDoc();
         const SwFmtCntnt* pCnt = &pFmt->GetCntnt();
-        DBG_ASSERT( pCnt->GetCntntIdx() &&
+        OSL_ENSURE( pCnt->GetCntntIdx() &&
                        pDoc->GetNodes()[ pCnt->GetCntntIdx()->
                                         GetIndex() + 1 ]->GetOLENode(), "kein OLE-Node?");
 
@@ -2979,7 +2979,7 @@ sal_Int64 SAL_CALL SwXTextEmbeddedObject::getAspect() throw (uno::RuntimeExcepti
     {
         SwDoc* pDoc = pFmt->GetDoc();
         const SwFmtCntnt* pCnt = &pFmt->GetCntnt();
-        DBG_ASSERT( pCnt->GetCntntIdx() &&
+        OSL_ENSURE( pCnt->GetCntntIdx() &&
                        pDoc->GetNodes()[ pCnt->GetCntntIdx()->
                                         GetIndex() + 1 ]->GetOLENode(), "kein OLE-Node?");
 
@@ -2996,7 +2996,7 @@ void SAL_CALL SwXTextEmbeddedObject::setAspect( sal_Int64 nAspect ) throw (uno::
     {
         SwDoc* pDoc = pFmt->GetDoc();
         const SwFmtCntnt* pCnt = &pFmt->GetCntnt();
-        DBG_ASSERT( pCnt->GetCntntIdx() &&
+        OSL_ENSURE( pCnt->GetCntntIdx() &&
                        pDoc->GetNodes()[ pCnt->GetCntntIdx()->
                                         GetIndex() + 1 ]->GetOLENode(), "kein OLE-Node?");
 
@@ -3011,7 +3011,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL SwXTextEmbeddedObject::getReplaceme
     {
         SwDoc* pDoc = pFmt->GetDoc();
         const SwFmtCntnt* pCnt = &pFmt->GetCntnt();
-        DBG_ASSERT( pCnt->GetCntntIdx() &&
+        OSL_ENSURE( pCnt->GetCntntIdx() &&
                        pDoc->GetNodes()[ pCnt->GetCntntIdx()->
                                         GetIndex() + 1 ]->GetOLENode(), "kein OLE-Node?");
 

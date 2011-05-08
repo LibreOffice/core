@@ -204,7 +204,7 @@ sal_uLong SwXMLTextBlocks::Delete( sal_uInt16 n )
 
 sal_uLong SwXMLTextBlocks::Rename( sal_uInt16 nIdx, const String& rNewShort, const String& )
 {
-    DBG_ASSERT( xBlkRoot.is(), "No storage set" );
+    OSL_ENSURE( xBlkRoot.is(), "No storage set" );
     if(!xBlkRoot.is())
         return 0;
     String aOldName (aNames[ nIdx ]->aPackageName);
@@ -255,7 +255,7 @@ sal_uLong SwXMLTextBlocks::CopyBlock( SwImpBlocks& rDestImp, String& rShort,
     String sDestShortName( GetPackageName (nIndex) );
     sal_uInt16 nIdx = 0;
 
-    DBG_ASSERT( xBlkRoot.is(), "No storage set" );
+    OSL_ENSURE( xBlkRoot.is(), "No storage set" );
     if(!xBlkRoot.is())
         return ERR_SWG_WRITE_ERROR;
 
@@ -298,7 +298,7 @@ sal_uLong SwXMLTextBlocks::CopyBlock( SwImpBlocks& rDestImp, String& rShort,
 
 sal_uLong SwXMLTextBlocks::StartPutBlock( const String& rShort, const String& rPackageName )
 {
-    DBG_ASSERT( xBlkRoot.is(), "No storage set" );
+    OSL_ENSURE( xBlkRoot.is(), "No storage set" );
     if(!xBlkRoot.is())
         return 0;
     GetIndex ( rShort );

@@ -288,7 +288,7 @@ SwCntntNode *SwOLENode::SplitCntntNode( const SwPosition & )
 
 sal_Bool SwOLENode::RestorePersistentData()
 {
-    DBG_ASSERT( aOLEObj.GetOleRef().is(), "No object to restore!" );
+    OSL_ENSURE( aOLEObj.GetOleRef().is(), "No object to restore!" );
     if ( aOLEObj.xOLERef.is() )
     {
         // Falls bereits eine SvPersist-Instanz existiert, nehmen wir diese
@@ -306,7 +306,7 @@ sal_Bool SwOLENode::RestorePersistentData()
         if ( xChild.is() )
             xChild->setParent( p->GetModel() );
 
-        DBG_ASSERT( aOLEObj.aName.Len(), "No object name!" );
+        OSL_ENSURE( aOLEObj.aName.Len(), "No object name!" );
         ::rtl::OUString aObjName;
         if ( !p->GetEmbeddedObjectContainer().InsertEmbeddedObject( aOLEObj.xOLERef.GetObject(), aObjName ) )
         {
@@ -334,7 +334,7 @@ sal_Bool SwOLENode::SavePersistentData()
 
 #if OSL_DEBUG_LEVEL > 0
         SfxObjectShell* p = GetDoc()->GetPersist();
-        DBG_ASSERT( p, "No document!" );
+        OSL_ENSURE( p, "No document!" );
         if( p )
         {
             comphelper::EmbeddedObjectContainer& rCnt = p->GetEmbeddedObjectContainer();
@@ -679,7 +679,7 @@ SwOLEObj::~SwOLEObj()
 
 #if OSL_DEBUG_LEVEL > 0
         SfxObjectShell* p = pOLENd->GetDoc()->GetPersist();
-        DBG_ASSERT( p, "No document!" );
+        OSL_ENSURE( p, "No document!" );
         if( p )
         {
             comphelper::EmbeddedObjectContainer& rCnt = p->GetEmbeddedObjectContainer();
@@ -931,7 +931,7 @@ void SwOLELRUCache::Load()
     Sequence< OUString > aNames( GetPropertyNames() );
     Sequence< Any > aValues = GetProperties( aNames );
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT( aValues.getLength() == aNames.getLength(), "GetProperties failed" );
+    OSL_ENSURE( aValues.getLength() == aNames.getLength(), "GetProperties failed" );
     if( aValues.getLength() == aNames.getLength() && pValues->hasValue() )
     {
         sal_Int32 nVal = 0;

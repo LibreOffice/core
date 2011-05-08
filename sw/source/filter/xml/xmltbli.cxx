@@ -1230,7 +1230,7 @@ SwDDEFieldType* lcl_GetDDEFieldType(SwXMLDDETableContext_Impl* pContext,
             GetDoc()->InsertFldType(aDDEFieldType);
     }
 
-    DBG_ASSERT(NULL != pType, "We really want a SwDDEFieldType here!");
+    OSL_ENSURE(NULL != pType, "We really want a SwDDEFieldType here!");
     return pType;
 }
 
@@ -2784,7 +2784,7 @@ void SwXMLTableContext::MakeTable()
     }
 
     SwTableLine *pLine1 = pTableNode->GetTable().GetTabLines()[0U];
-    DBG_ASSERT( pBox1 == pLine1->GetTabBoxes()[0U],
+    OSL_ENSURE( pBox1 == pLine1->GetTabBoxes()[0U],
                 "Why is box 1 change?" );
     pBox1->pSttNd = pSttNd1;
     pLine1->GetTabBoxes().Remove(0U);

@@ -2252,17 +2252,17 @@ bool SwTextGridItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal.setValue( &bDisplayGrid, ::getBooleanCppuType() );
             break;
         case MID_GRID_BASEHEIGHT:
-            DBG_ASSERT( (nMemberId & CONVERT_TWIPS) != 0,
+            OSL_ENSURE( (nMemberId & CONVERT_TWIPS) != 0,
                         "This value needs TWIPS-MM100 conversion" );
             rVal <<= (sal_Int32) TWIP_TO_MM100_UNSIGNED(nBaseHeight);
             break;
         case MID_GRID_BASEWIDTH:
-            DBG_ASSERT( (nMemberId & CONVERT_TWIPS) != 0,
+            OSL_ENSURE( (nMemberId & CONVERT_TWIPS) != 0,
                         "This value needs TWIPS-MM100 conversion" );
             rVal <<= (sal_Int32) TWIP_TO_MM100_UNSIGNED(nBaseWidth);
             break;
         case MID_GRID_RUBYHEIGHT:
-            DBG_ASSERT( (nMemberId & CONVERT_TWIPS) != 0,
+            OSL_ENSURE( (nMemberId & CONVERT_TWIPS) != 0,
                         "This value needs TWIPS-MM100 conversion" );
             rVal <<= (sal_Int32)TWIP_TO_MM100_UNSIGNED(nRubyHeight);
             break;
@@ -2338,7 +2338,7 @@ bool SwTextGridItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_GRID_BASEWIDTH:
         case MID_GRID_RUBYHEIGHT:
         {
-            DBG_ASSERT( (nMemberId & CONVERT_TWIPS) != 0,
+            OSL_ENSURE( (nMemberId & CONVERT_TWIPS) != 0,
                         "This value needs TWIPS-MM100 conversion" );
             sal_Int32 nTmp = 0;
             bRet = (rVal >>= nTmp);

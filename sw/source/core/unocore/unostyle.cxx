@@ -172,7 +172,7 @@ SwGetPoolIdFromName lcl_GetSwEnumFromSfxEnum ( SfxStyleFamily eFamily )
         case SFX_STYLE_FAMILY_PSEUDO:
             return nsSwGetPoolIdFromName::GET_POOLID_NUMRULE;
         default:
-            DBG_ASSERT(sal_False, "someone asking for all styles in unostyle.cxx!" );
+            OSL_ENSURE(sal_False, "someone asking for all styles in unostyle.cxx!" );
             return nsSwGetPoolIdFromName::GET_POOLID_CHRFMT;
     }
 }
@@ -1339,7 +1339,7 @@ SwXStyle::SwXStyle(SfxStyleSheetBasePool& rPool, SfxStyleFamily eFam,
     {
         pBasePool->SetSearchMask(eFamily, SFXSTYLEBIT_ALL );
         SfxStyleSheetBase* pBase = pBasePool->Find(sStyleName);
-        DBG_ASSERT(pBase, "where is the style?" );
+        OSL_ENSURE(pBase, "where is the style?" );
         if(pBase)
         {
             const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(sStyleName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
@@ -1377,7 +1377,7 @@ OUString SwXStyle::getName(void) throw( uno::RuntimeException )
     {
         pBasePool->SetSearchMask(eFamily, SFXSTYLEBIT_ALL );
         SfxStyleSheetBase* pBase = pBasePool->Find(sStyleName);
-        DBG_ASSERT(pBase, "where is the style?" );
+        OSL_ENSURE(pBase, "where is the style?" );
         if(!pBase)
             throw uno::RuntimeException();
         SwStyleNameMapper::FillProgName(pBase->GetName(), aString, lcl_GetSwEnumFromSfxEnum ( eFamily ), sal_True);
@@ -1394,7 +1394,7 @@ void SwXStyle::setName(const OUString& rName) throw( uno::RuntimeException )
     {
         pBasePool->SetSearchMask(eFamily, SFXSTYLEBIT_ALL );
         SfxStyleSheetBase* pBase = pBasePool->Find(sStyleName);
-        DBG_ASSERT(pBase, "where is the style?" );
+        OSL_ENSURE(pBase, "where is the style?" );
         sal_Bool bExcept = sal_True;
         if(pBase && pBase->IsUserDefined())
         {
@@ -1622,7 +1622,7 @@ struct SwStyleBase_Impl
     sal_Bool HasItemSet() {return mxNewBase.is();}
     SfxItemSet& GetItemSet()
         {
-            DBG_ASSERT(mxNewBase.is(), "no SwDocStyleSheet available");
+            OSL_ENSURE(mxNewBase.is(), "no SwDocStyleSheet available");
             if(!pItemSet)
                 pItemSet = new SfxItemSet(mxNewBase->GetItemSet());
             return *pItemSet;
@@ -1887,7 +1887,7 @@ void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             if (!(rValue >>= aSeq))
                 throw lang::IllegalArgumentException();
 
-            DBG_ASSERT(COND_COMMAND_COUNT == 28,
+            OSL_ENSURE(COND_COMMAND_COUNT == 28,
                     "invalid size of comman count?");
             const beans::NamedValue *pSeq = aSeq.getConstArray();
             sal_Int32 nLen = aSeq.getLength();
@@ -2104,7 +2104,7 @@ void SAL_CALL SwXStyle::SetPropertyValues_Impl(
         pBasePool->SetSearchMask(eFamily);
         SfxStyleSheetBase* pBase = pBasePool->Find(sStyleName);
         pBasePool->SetSearchMask(eFamily, nSaveMask );
-        DBG_ASSERT(pBase, "where is the style?" );
+        OSL_ENSURE(pBase, "where is the style?" );
         if(pBase)
             aBaseImpl.mxNewBase = new SwDocStyleSheet(*(SwDocStyleSheet*)pBase);
         else
@@ -2209,14 +2209,14 @@ uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             case  FN_UNO_NUM_RULES: //Sonderbehandlung fuer das SvxNumRuleItem:
             {
                 const SwNumRule* pRule = rBase.mxNewBase->GetNumRule();
-                DBG_ASSERT(pRule, "Wo ist die NumRule?");
+                OSL_ENSURE(pRule, "Wo ist die NumRule?");
                 uno::Reference< container::XIndexReplace >  xRules = new SwXNumberingRules(*pRule);
                 aRet.setValue(&xRules, ::getCppuType((uno::Reference<container::XIndexReplace>*)0));
             }
             break;
             case RES_PARATR_OUTLINELEVEL:
             {
-                DBG_ASSERT( SFX_STYLE_FAMILY_PARA == eFamily, "only paras" );
+                OSL_ENSURE( SFX_STYLE_FAMILY_PARA == eFamily, "only paras" );
                 int nLevel = rBase.mxNewBase->GetCollection()->GetAttrOutlineLevel();
                     aRet <<= static_cast<sal_Int16>( nLevel );
             }
@@ -2264,7 +2264,7 @@ uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             break;
             case FN_UNO_PARA_STYLE_CONDITIONS:
             {
-                DBG_ASSERT(COND_COMMAND_COUNT == 28,
+                OSL_ENSURE(COND_COMMAND_COUNT == 28,
                         "invalid size of comman count?");
                 uno::Sequence< beans::NamedValue > aSeq(COND_COMMAND_COUNT);
                 beans::NamedValue *pSeq = aSeq.getArray();
@@ -2510,28 +2510,28 @@ void SwXStyle::addPropertyChangeListener(const OUString& /*rPropertyName*/,
     const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXStyle::removePropertyChangeListener(const OUString& /*rPropertyName*/,
     const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXStyle::addVetoableChangeListener(const OUString& /*rPropertyName*/,
     const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXStyle::removeVetoableChangeListener(const OUString& /*rPropertyName*/,
     const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 beans::PropertyState SwXStyle::getPropertyState(const OUString& rPropertyName)
@@ -2557,7 +2557,7 @@ uno::Sequence< beans::PropertyState > SwXStyle::getPropertyStates(
     {
         pBasePool->SetSearchMask(eFamily );
         SfxStyleSheetBase* pBase = pBasePool->Find(sStyleName);
-        DBG_ASSERT(pBase, "where is the style?" );
+        OSL_ENSURE(pBase, "where is the style?" );
 
         if(pBase)
         {
@@ -2657,7 +2657,7 @@ void SAL_CALL SwXStyle::setPropertiesToDefault( const uno::Sequence< OUString >&
     {
         pBasePool->SetSearchMask(eFamily);
         SfxStyleSheetBase* pBase = pBasePool->Find(sStyleName);
-        DBG_ASSERT(pBase, "Where is the style?");
+        OSL_ENSURE(pBase, "Where is the style?");
 
         if(pBase)
         {
@@ -2730,7 +2730,7 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
     {
         pBasePool->SetSearchMask(eFamily);
         SfxStyleSheetBase* pBase = pBasePool->Find(sStyleName);
-        DBG_ASSERT(pBase, "where is the style, you fiend!?");
+        OSL_ENSURE(pBase, "where is the style, you fiend!?");
 
         if(pBase)
         {
@@ -2843,7 +2843,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::getPropertyDefaults( const uno::Seq
         {
             pBasePool->SetSearchMask(eFamily);
             SfxStyleSheetBase* pBase = pBasePool->Find(sStyleName);
-            DBG_ASSERT(pBase, "Doesn't seem to be a style!");
+            OSL_ENSURE(pBase, "Doesn't seem to be a style!");
 
             if(pBase)
             {
@@ -2973,7 +2973,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
         GetBasePool()->SetSearchMask(GetFamily());
         SfxStyleSheetBase* pBase = GetBasePool()->Find(GetStyleName());
         GetBasePool()->SetSearchMask(GetFamily(), nSaveMask );
-        DBG_ASSERT(pBase, "where is the style?" );
+        OSL_ENSURE(pBase, "where is the style?" );
         if(pBase)
             aBaseImpl.mxNewBase = new SwDocStyleSheet(*(SwDocStyleSheet*)pBase);
         else

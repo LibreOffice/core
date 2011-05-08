@@ -267,7 +267,7 @@ static void WriteDop( WW8Export& rWrt )
     rDop.cLines = rDStat.nPara;
 
     SwDocShell *pDocShell(rWrt.pDoc->GetDocShell());
-    DBG_ASSERT(pDocShell, "no SwDocShell");
+    OSL_ENSURE(pDocShell, "no SwDocShell");
     uno::Reference<document::XDocumentProperties> xDocProps;
     uno::Reference<beans::XPropertySet> xProps;
     if (pDocShell) {
@@ -278,7 +278,7 @@ static void WriteDop( WW8Export& rWrt )
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             xModelComp, uno::UNO_QUERY_THROW);
         xDocProps = xDPS->getDocumentProperties();
-        DBG_ASSERT(xDocProps.is(), "DocumentProperties is null");
+        OSL_ENSURE(xDocProps.is(), "DocumentProperties is null");
 
         rDop.lKeyProtDoc = pDocShell->GetModifyPasswordHash();
     }
@@ -3250,14 +3250,14 @@ void WW8Export::PrepareStorage()
     xStor->Write( pData, nLen );
 
     SwDocShell* pDocShell = pDoc->GetDocShell ();
-    DBG_ASSERT(pDocShell, "no SwDocShell");
+    OSL_ENSURE(pDocShell, "no SwDocShell");
 
     if (pDocShell) {
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             pDocShell->GetModel(), uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentProperties> xDocProps(
             xDPS->getDocumentProperties());
-        DBG_ASSERT(xDocProps.is(), "DocumentProperties is null");
+        OSL_ENSURE(xDocProps.is(), "DocumentProperties is null");
 
         if (xDocProps.is())
         {

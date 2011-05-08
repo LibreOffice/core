@@ -87,7 +87,7 @@ SwXMLWriter::~SwXMLWriter()
 
 sal_uInt32 SwXMLWriter::_Write( SfxMedium* pTargetMedium )
 {
-    DBG_ASSERT( pTargetMedium, "No medium is provided!" );
+    OSL_ENSURE( pTargetMedium, "No medium is provided!" );
     // Get service factory
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
             comphelper::getProcessServiceFactory();
@@ -532,9 +532,9 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
     const Sequence<beans::PropertyValue> & rMediaDesc,
     sal_Bool bPlainStream )
 {
-    DBG_ASSERT( xStg.is(), "Need storage!" );
-    DBG_ASSERT( NULL != pStreamName, "Need stream name!" );
-    DBG_ASSERT( NULL != pServiceName, "Need service name!" );
+    OSL_ENSURE( xStg.is(), "Need storage!" );
+    OSL_ENSURE( NULL != pStreamName, "Need stream name!" );
+    OSL_ENSURE( NULL != pServiceName, "Need service name!" );
 
     RTL_LOGFILE_TRACE_AUTHOR1( "sw", LOGFILE_AUTHOR,
                                "SwXMLWriter::WriteThroughComponent : stream %s",
@@ -580,7 +580,7 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
         uno::Reference< beans::XPropertySet > xInfoSet;
         if( rArguments.getLength() > 0 )
             rArguments.getConstArray()[0] >>= xInfoSet;
-        DBG_ASSERT( xInfoSet.is(), "missing property set" );
+        OSL_ENSURE( xInfoSet.is(), "missing property set" );
         if( xInfoSet.is() )
         {
             OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("StreamName") );

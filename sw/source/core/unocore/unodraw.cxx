@@ -364,7 +364,7 @@ uno::Reference< drawing::XShape >  SwFmDrawPage::_CreateShape( SdrObject *pObj )
                 OSL_FAIL( "<SwFmDrawPage::_CreateShape(..)> - could not retrieve type. Thus, no shape created." );
                 return xRet;
             }
-            DBG_ASSERT( eType != FLYCNTTYPE_ALL, "unexpected FlyCntType value for eType" );
+            OSL_ENSURE( eType != FLYCNTTYPE_ALL, "unexpected FlyCntType value for eType" );
             xRet = SwXFrames::GetObject( *pFlyFmt, eType );
         }
      }
@@ -632,7 +632,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
 
     uno::Reference< uno::XAggregation >     xAgg = pShape->GetAggregationInterface();
 
-    DBG_ASSERT(pSvxShape, "warum gibt es hier kein SvxShape?");
+    OSL_ENSURE(pSvxShape, "warum gibt es hier kein SvxShape?");
     //diese Position ist auf jeden Fall in 1/100 mm
     awt::Point aMM100Pos(pSvxShape->getPosition());
 
@@ -1171,7 +1171,7 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                 else if(RES_OPAQUE == pEntry->nWID)
                 {
                     SvxShape* pSvxShape = GetSvxShape();
-                    DBG_ASSERT(pSvxShape, "No SvxShape found!");
+                    OSL_ENSURE(pSvxShape, "No SvxShape found!");
                     if(pSvxShape)
                     {
                         SdrObject* pObj = pSvxShape->GetSdrObject();
@@ -1222,9 +1222,9 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                                 SwTxtAttr * const pHnt =
                                     pTxtNode->GetTxtAttrForCharAt(
                                         nIdx, RES_TXTATR_FLYCNT );
-                                DBG_ASSERT( pHnt && pHnt->Which() == RES_TXTATR_FLYCNT,
+                                OSL_ENSURE( pHnt && pHnt->Which() == RES_TXTATR_FLYCNT,
                                             "Missing FlyInCnt-Hint." );
-                                DBG_ASSERT( pHnt && pHnt->GetFlyCnt().GetFrmFmt() == pFmt,
+                                OSL_ENSURE( pHnt && pHnt->GetFlyCnt().GetFrmFmt() == pFmt,
                                             "Wrong TxtFlyCnt-Hint." );
                                 const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt())
                                     .SetFlyFmt();
@@ -1234,7 +1234,7 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                                     RES_TXTATR_FLYCNT, nIdx );
                                 //create a new one
                                 SwTxtNode *pNd = pInternalPam->GetNode()->GetTxtNode();
-                                DBG_ASSERT( pNd, "Cursor not at TxtNode." );
+                                OSL_ENSURE( pNd, "Cursor not at TxtNode." );
                                 SwFmtFlyCnt aFmt( pFmt );
                                 pNd->InsertItem(aFmt, pInternalPam->GetPoint()
                                         ->nContent.GetIndex(), 0 );
@@ -1308,9 +1308,9 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                             SwTxtAttr * const pHnt =
                                 pTxtNode->GetTxtAttrForCharAt(
                                     nIdx, RES_TXTATR_FLYCNT );
-                            DBG_ASSERT( pHnt && pHnt->Which() == RES_TXTATR_FLYCNT,
+                            OSL_ENSURE( pHnt && pHnt->Which() == RES_TXTATR_FLYCNT,
                                         "Missing FlyInCnt-Hint." );
-                            DBG_ASSERT( pHnt && pHnt->GetFlyCnt().GetFrmFmt() == pFlyFmt,
+                            OSL_ENSURE( pHnt && pHnt->GetFlyCnt().GetFrmFmt() == pFlyFmt,
                                         "Wrong TxtFlyCnt-Hint." );
                             const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt())
                                 .SetFlyFmt();
@@ -1346,7 +1346,7 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                             {
                                 //the RES_TXTATR_FLYCNT needs to be added now
                                 SwTxtNode *pNd = aPam.GetNode()->GetTxtNode();
-                                DBG_ASSERT( pNd, "Crsr is not in a TxtNode." );
+                                OSL_ENSURE( pNd, "Crsr is not in a TxtNode." );
                                 SwFmtFlyCnt aFmt( pFlyFmt );
                                 pNd->InsertItem(aFmt,
                                     aPam.GetPoint()->nContent.GetIndex(), 0 );
@@ -1476,7 +1476,7 @@ uno::Any SwXShape::getPropertyValue(const rtl::OUString& rPropertyName)
                 if(RES_OPAQUE == pEntry->nWID)
                 {
                     SvxShape* pSvxShape = GetSvxShape();
-                    DBG_ASSERT(pSvxShape, "No SvxShape found!");
+                    OSL_ENSURE(pSvxShape, "No SvxShape found!");
                     if(pSvxShape)
                     {
                         SdrObject* pObj = pSvxShape->GetSdrObject();
@@ -1490,7 +1490,7 @@ uno::Any SwXShape::getPropertyValue(const rtl::OUString& rPropertyName)
                 else if(FN_ANCHOR_POSITION == pEntry->nWID)
                 {
                     SvxShape* pSvxShape = GetSvxShape();
-                    DBG_ASSERT(pSvxShape, "No SvxShape found!");
+                    OSL_ENSURE(pSvxShape, "No SvxShape found!");
                     if(pSvxShape)
                     {
                         SdrObject* pObj = pSvxShape->GetSdrObject();
@@ -1946,7 +1946,7 @@ void SwXShape::addVetoableChangeListener(
     throw( beans::UnknownPropertyException, lang::WrappedTargetException,
            uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXShape::removeVetoableChangeListener(
@@ -1955,7 +1955,7 @@ void SwXShape::removeVetoableChangeListener(
     throw( beans::UnknownPropertyException, lang::WrappedTargetException,
            uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXShape::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
@@ -2682,7 +2682,7 @@ SwXGroupShape::SwXGroupShape(uno::Reference< XInterface > & xShape) :
 {
 #if OSL_DEBUG_LEVEL > 1
     uno::Reference<XShapes> xShapes(xShapeAgg, uno::UNO_QUERY);
-    DBG_ASSERT(xShapes.is(), "no SvxShape found or shape is not a group shape");
+    OSL_ENSURE(xShapes.is(), "no SvxShape found or shape is not a group shape");
 #endif
 }
 

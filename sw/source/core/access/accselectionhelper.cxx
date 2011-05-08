@@ -64,9 +64,9 @@ SwAccessibleSelectionHelper::~SwAccessibleSelectionHelper()
 
 SwFEShell* SwAccessibleSelectionHelper::GetFEShell()
 {
-    DBG_ASSERT( rContext.GetMap() != NULL, "no map?" );
+    OSL_ENSURE( rContext.GetMap() != NULL, "no map?" );
     ViewShell* pViewShell = rContext.GetMap()->GetShell();
-    DBG_ASSERT( pViewShell != NULL,
+    OSL_ENSURE( pViewShell != NULL,
                 "No view shell? Then what are you looking at?" );
 
     SwFEShell* pFEShell = NULL;
@@ -293,7 +293,7 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     if( !aChild.IsValid() )
         throwIndexOutOfBoundsException();
 
-    DBG_ASSERT( rContext.GetMap() != NULL, "We need the map." );
+    OSL_ENSURE( rContext.GetMap() != NULL, "We need the map." );
     Reference< XAccessible > xChild;
     if( aChild.GetSwFrm() )
     {

@@ -328,7 +328,7 @@ const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
 
     // the current position
     //    const SwPosition* pCurrentPos = GetCrsr()->GetPoint();
-    DBG_ASSERT( pCurrentPos != NULL, "Strange, we have no position!" );
+    OSL_ENSURE( pCurrentPos != NULL, "Strange, we have no position!" );
     const SwNode& rCurrentNode = pCurrentPos->nNode.GetNode();
 
 
@@ -361,9 +361,9 @@ const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
     // Now, pInnermostNode is NULL or the innermost section or table node.
     if( (pInnermostNode != NULL) && !pInnermostNode->IsProtect() )
     {
-        DBG_ASSERT( pInnermostNode->IsTableNode() ||
+        OSL_ENSURE( pInnermostNode->IsTableNode() ||
                     pInnermostNode->IsSectionNode(), "wrong node found" );
-        DBG_ASSERT( ( pInnermostNode->GetIndex() <= rCurrentNode.GetIndex() )&&
+        OSL_ENSURE( ( pInnermostNode->GetIndex() <= rCurrentNode.GetIndex() )&&
                     ( pInnermostNode->EndOfSectionNode()->GetIndex() >=
                       rCurrentNode.GetIndex() ), "wrong node found" );
 
@@ -403,7 +403,7 @@ const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
     }
 
 
-    DBG_ASSERT( ( pReturn == NULL ) || pReturn->IsStartNode() ||
+    OSL_ENSURE( ( pReturn == NULL ) || pReturn->IsStartNode() ||
                                        pReturn->IsEndNode(),
                 "SpecialInsertNode failed" );
     return pReturn;

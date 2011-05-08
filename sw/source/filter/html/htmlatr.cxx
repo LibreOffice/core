@@ -628,7 +628,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
             {
                 nNumStart = static_cast< sal_uInt16 >(pTxtNd->GetActualListStartValue());
             }
-            DBG_ASSERT( rHWrt.nLastParaToken == 0,
+            OSL_ENSURE( rHWrt.nLastParaToken == 0,
                 "<PRE> wurde nicht vor <LI> beendet." );
         }
     }

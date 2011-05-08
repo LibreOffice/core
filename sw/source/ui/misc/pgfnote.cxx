@@ -236,7 +236,7 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
     const SfxPoolItem*  pColorItem  = NULL;
     XColorTable*        pColorTable = NULL;
 
-    DBG_ASSERT( pDocSh, "DocShell not found!" );
+    OSL_ENSURE( pDocSh, "DocShell not found!" );
 
     if ( pDocSh )
     {
@@ -245,7 +245,7 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
             pColorTable = ( (SvxColorTableItem*)pColorItem )->GetColorTable();
     }
 
-    DBG_ASSERT( pColorTable, "ColorTable not found!" );
+    OSL_ENSURE( pColorTable, "ColorTable not found!" );
 
     if ( pColorTable )
     {

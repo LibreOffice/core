@@ -161,28 +161,28 @@ Any SAL_CALL SwXTextDefaults::getPropertyValue( const OUString& rPropertyName )
 void SAL_CALL SwXTextDefaults::addPropertyChangeListener( const OUString& /*rPropertyName*/, const uno::Reference< XPropertyChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    DBG_WARNING ( "not implemented" );
+    OSL_FAIL ( "not implemented" );
 }
 
 
 void SAL_CALL SwXTextDefaults::removePropertyChangeListener( const OUString& /*rPropertyName*/, const uno::Reference< XPropertyChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    DBG_WARNING ( "not implemented" );
+    OSL_FAIL ( "not implemented" );
 }
 
 
 void SAL_CALL SwXTextDefaults::addVetoableChangeListener( const OUString& /*rPropertyName*/, const uno::Reference< XVetoableChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    DBG_WARNING ( "not implemented" );
+    OSL_FAIL ( "not implemented" );
 }
 
 
 void SAL_CALL SwXTextDefaults::removeVetoableChangeListener( const OUString& /*rPropertyName*/, const uno::Reference< XVetoableChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    DBG_WARNING ( "not implemented" );
+    OSL_FAIL ( "not implemented" );
 }
 
 

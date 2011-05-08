@@ -67,7 +67,7 @@ SwBreakIt::SwBreakIt(
       aLast( LANGUAGE_DONTKNOW ),
       aForbiddenLang( LANGUAGE_DONTKNOW)
 {
-    DBG_ASSERT( m_xMSF.is(), "SwBreakIt: no MultiServiceFactory" );
+    OSL_ENSURE( m_xMSF.is(), "SwBreakIt: no MultiServiceFactory" );
 }
 
 SwBreakIt::~SwBreakIt()

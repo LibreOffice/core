@@ -1412,7 +1412,7 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
                                     static_cast< const SwTabFrm *>( pFrm ) );
                     break;
                 case FRM_PAGE:
-                    DBG_ASSERT( GetShell()->IsPreView(),
+                    OSL_ENSURE( GetShell()->IsPreView(),
                                 "accessible page frames only in PagePreview" );
                     pAcc = new SwAccessiblePage( this, pFrm );
                     break;
@@ -2210,8 +2210,8 @@ void SwAccessibleMap::UpdatePreview( const std::vector<PrevwPage*>& _rPrevwPages
                                      const SwPageFrm* _pSelectedPageFrm,
                                      const Size&      _rPrevwWinSize )
 {
-    DBG_ASSERT( GetShell()->IsPreView(), "no preview?" );
-    DBG_ASSERT( mpPreview != NULL, "no preview data?" );
+    OSL_ENSURE( GetShell()->IsPreView(), "no preview?" );
+    OSL_ENSURE( mpPreview != NULL, "no preview data?" );
 
     mpPreview->Update( *this, _rPrevwPages, _rScale, _pSelectedPageFrm, _rPrevwWinSize );
 
@@ -2247,8 +2247,8 @@ void SwAccessibleMap::UpdatePreview( const std::vector<PrevwPage*>& _rPrevwPages
 
 void SwAccessibleMap::InvalidatePreViewSelection( sal_uInt16 nSelPage )
 {
-    DBG_ASSERT( GetShell()->IsPreView(), "no preview?" );
-    DBG_ASSERT( mpPreview != NULL, "no preview data?" );
+    OSL_ENSURE( GetShell()->IsPreView(), "no preview?" );
+    OSL_ENSURE( mpPreview != NULL, "no preview data?" );
 
     mpPreview->InvalidateSelection( GetShell()->GetLayout()->GetPageByPageNum( nSelPage ) );
 
@@ -2550,7 +2550,7 @@ void SwAccessibleMap::GetMapMode( const Point& _rPoint,
     MapMode aMapMode = GetShell()->GetWin()->GetMapMode();
     if( GetShell()->IsPreView() )
     {
-        DBG_ASSERT( mpPreview != NULL, "need preview data" );
+        OSL_ENSURE( mpPreview != NULL, "need preview data" );
 
         mpPreview->AdjustMapMode( aMapMode, _rPoint );
     }
@@ -2559,8 +2559,8 @@ void SwAccessibleMap::GetMapMode( const Point& _rPoint,
 
 Size SwAccessibleMap::GetPreViewPageSize( sal_uInt16 _nPrevwPageNum ) const
 {
-    DBG_ASSERT( mpVSh->IsPreView(), "no page preview accessible." );
-    DBG_ASSERT( mpVSh->IsPreView() && ( mpPreview != NULL ),
+    OSL_ENSURE( mpVSh->IsPreView(), "no page preview accessible." );
+    OSL_ENSURE( mpVSh->IsPreView() && ( mpPreview != NULL ),
                 "missing accessible preview data at page preview" );
     if ( mpVSh->IsPreView() && ( mpPreview != NULL ) )
     {
@@ -2770,7 +2770,7 @@ void SwAccessibleMap::InvalidateTextSelectionOfAllParas()
 
 const SwRect& SwAccessibleMap::GetVisArea() const
 {
-    DBG_ASSERT( !GetShell()->IsPreView() || (mpPreview != NULL),
+    OSL_ENSURE( !GetShell()->IsPreView() || (mpPreview != NULL),
                 "preview without preview data?" );
 
     return GetShell()->IsPreView()

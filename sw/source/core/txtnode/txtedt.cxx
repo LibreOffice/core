@@ -947,7 +947,7 @@ void SwTxtNode::SetLanguageAndFont( const SwPaM &rPaM,
     SfxItemSet aSet( pEditShell->GetAttrPool(), aRanges );
     aSet.Put( SvxLanguageItem( nLang, nLangWhichId ) );
 
-    DBG_ASSERT( pFont, "target font missing?" );
+    OSL_ENSURE( pFont, "target font missing?" );
     if (pFont)
     {
         SvxFontItem aFontItem = (SvxFontItem&) aSet.Get( nFontWhichId );
@@ -1071,7 +1071,7 @@ sal_uInt16 SwTxtNode::Convert( SwConversionArgs &rArgs )
     if (bFound && bInSelection)     // convertible text found within selection/range?
     {
         const XubString aTxtPortion = m_Text.Copy( nBegin, nLen );
-        DBG_ASSERT( m_Text.Len() > 0, "convertible text portion missing!" );
+        OSL_ENSURE( m_Text.Len() > 0, "convertible text portion missing!" );
         rArgs.aConvText     = m_Text.Copy( nBegin, nLen );
         rArgs.nConvTextLang = nLangFound;
 
@@ -1198,7 +1198,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
             if( bSpell && rWord.Len() > 0 )
             {
                 // check for: bAlter => xHyphWord.is()
-                DBG_ASSERT(!bSpell || xSpell.is(), "NULL pointer");
+                OSL_ENSURE(!bSpell || xSpell.is(), "NULL pointer");
 
                 if( !xSpell->isValid( rWord, eActLang, Sequence< PropertyValue >() ) )
                 {
@@ -1574,7 +1574,7 @@ void SwTxtNode::TransliterateText(
                 nStt = (xub_StrLen)aCurWordBndry.startPos;
                 nEnd = (xub_StrLen)aCurWordBndry.endPos;
                 sal_Int32 nLen = nEnd - nStt;
-                DBG_ASSERT( nLen > 0, "invalid word length of 0" );
+                OSL_ENSURE( nLen > 0, "invalid word length of 0" );
 #if OSL_DEBUG_LEVEL > 1
                 String aText( GetTxt().Copy( nStt, nLen ) );
 #endif
@@ -1657,7 +1657,7 @@ void SwTxtNode::TransliterateText(
             while (nCurrentStart < nLastEnd)
             {
                 sal_Int32 nLen = nCurrentEnd - nCurrentStart;
-                DBG_ASSERT( nLen > 0, "invalid word length of 0" );
+                OSL_ENSURE( nLen > 0, "invalid word length of 0" );
 #if OSL_DEBUG_LEVEL > 1
                 String aText( GetTxt().Copy( nCurrentStart, nLen ) );
 #endif

@@ -41,7 +41,7 @@ namespace ww
 
     template<typename Ret> Ret checking_cast(Ret in, Ret)
     {
-        DBG_ASSERT( false, "UnnecessaryCast" );
+        OSL_ENSURE( false, "UnnecessaryCast" );
         return in;
     }
 

@@ -886,7 +886,7 @@ void SwXTextCursor::DeleteAndInsert(const ::rtl::OUString& rText,
                 const bool bSuccess(
                     SwUnoCursorHelper::DocInsertStringSplitCR(
                         *pDoc, *pCurrent, rText, bForceExpandHints ) );
-                DBG_ASSERT( bSuccess, "Doc->Insert(Str) failed." );
+                OSL_ENSURE( bSuccess, "Doc->Insert(Str) failed." );
                 (void) bSuccess;
 
                 SwUnoCursorHelper::SelectPam(*pUnoCrsr, true);
@@ -1702,7 +1702,7 @@ throw (uno::RuntimeException)
     // since MovePara(fnParaCurr, fnParaStart) only returns false
     // if we were already at the start of the paragraph this function
     // should always complete successfully.
-    DBG_ASSERT( bRet, "gotoStartOfParagraph failed" );
+    OSL_ENSURE( bRet, "gotoStartOfParagraph failed" );
     return bRet;
 }
 
@@ -1727,7 +1727,7 @@ SwXTextCursor::gotoEndOfParagraph(sal_Bool Expand) throw (uno::RuntimeException)
     // since MovePara(fnParaCurr, fnParaEnd) only returns false
     // if we were already at the end of the paragraph this function
     // should always complete successfully.
-    DBG_ASSERT( bRet, "gotoEndOfParagraph failed" );
+    OSL_ENSURE( bRet, "gotoEndOfParagraph failed" );
     return bRet;
 }
 
@@ -2544,7 +2544,7 @@ SwUnoCursorHelper::CreateSortDescriptor(const bool bFromTable)
     uno::Sequence< OUString > aSeq(
             GetAppCollator().listCollatorAlgorithms( aLang ) );
     const sal_Int32 nLen = aSeq.getLength();
-    DBG_ASSERT( nLen > 0, "list of collator algorithms is empty!");
+    OSL_ENSURE( nLen > 0, "list of collator algorithms is empty!");
     OUString aCollAlg;
     if (nLen > 0)
     {
@@ -2915,7 +2915,7 @@ SwXTextCursor::createEnumeration() throw (uno::RuntimeException)
     {
         pParentText = ::sw::UnoTunnelGetImplementation<SwXText>(xTunnel);
     }
-    DBG_ASSERT(pParentText, "parent is not a SwXText");
+    OSL_ENSURE(pParentText, "parent is not a SwXText");
     if (!pParentText)
     {
         throw uno::RuntimeException();

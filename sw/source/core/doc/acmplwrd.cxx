@@ -433,7 +433,7 @@ void SwAutoCompleteWord::DocumentDying(const SwDoc& rDoc)
         {
             aWordLst.Remove( nPos - 1 );
             sal_uInt16 nLRUPos = aLRULst.GetPos( (void*)pCurrent );
-            DBG_ASSERT(nLRUPos < USHRT_MAX, "word not found in LRU list" );
+            OSL_ENSURE(nLRUPos < USHRT_MAX, "word not found in LRU list" );
             aLRULst.Remove( nLRUPos );
             delete pCurrent;
         }

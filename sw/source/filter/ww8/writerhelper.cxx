@@ -308,7 +308,7 @@ namespace sw
         {
             if (mxIPRef.is())
             {
-                DBG_ASSERT( !mrPers.GetEmbeddedObjectContainer().HasEmbeddedObject( mxIPRef ), "Object in adaptor is inserted?!" );
+                OSL_ENSURE( !mrPers.GetEmbeddedObjectContainer().HasEmbeddedObject( mxIPRef ), "Object in adaptor is inserted?!" );
                 try
                 {
                     uno::Reference < com::sun::star::util::XCloseable > xClose( mxIPRef, uno::UNO_QUERY );

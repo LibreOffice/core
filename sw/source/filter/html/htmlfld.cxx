@@ -282,13 +282,13 @@ void SwHTMLParser::NewField()
         SvtUserOptions aOpt;
         const String& rUser = aOpt.GetFullName();
         SwDocShell *pDocShell(pDoc->GetDocShell());
-        DBG_ASSERT(pDocShell, "no SwDocShell");
+        OSL_ENSURE(pDocShell, "no SwDocShell");
         if (pDocShell) {
             uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
                 pDocShell->GetModel(), uno::UNO_QUERY_THROW);
             uno::Reference<document::XDocumentProperties> xDocProps(
                 xDPS->getDocumentProperties());
-            DBG_ASSERT(xDocProps.is(), "Doc has no DocumentProperties");
+            OSL_ENSURE(xDocProps.is(), "Doc has no DocumentProperties");
             const String& rChanged = xDocProps->getModifiedBy();
             const String& rCreated = xDocProps->getAuthor();
             if( !rUser.Len() ||

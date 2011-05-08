@@ -152,10 +152,10 @@ sal_Int32 ReadThroughComponent(
     sal_Bool bMustBeSuccessfull,
     sal_Bool bEncrypted )
 {
-    DBG_ASSERT(xInputStream.is(), "input stream missing");
-    DBG_ASSERT(xModelComponent.is(), "document missing");
-    DBG_ASSERT(rFactory.is(), "factory missing");
-    DBG_ASSERT(NULL != pFilterName,"I need a service name for the component!");
+    OSL_ENSURE(xInputStream.is(), "input stream missing");
+    OSL_ENSURE(xModelComponent.is(), "document missing");
+    OSL_ENSURE(rFactory.is(), "factory missing");
+    OSL_ENSURE(NULL != pFilterName,"I need a service name for the component!");
 
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "sw", LOGFILE_AUTHOR, "ReadThroughComponent" );
 
@@ -169,7 +169,7 @@ sal_Int32 ReadThroughComponent(
         rFactory->createInstance(
             OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser"))),
         UNO_QUERY );
-    DBG_ASSERT( xParser.is(), "Can't create parser" );
+    OSL_ENSURE( xParser.is(), "Can't create parser" );
     if( !xParser.is() )
         return ERR_SWG_READ_ERROR;
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "parser created" );
@@ -179,7 +179,7 @@ sal_Int32 ReadThroughComponent(
         rFactory->createInstanceWithArguments(
             OUString::createFromAscii(pFilterName), rFilterArguments),
         UNO_QUERY );
-    DBG_ASSERT( xFilter.is(), "Can't instantiate filter component." );
+    OSL_ENSURE( xFilter.is(), "Can't instantiate filter component." );
     if( !xFilter.is() )
         return ERR_SWG_READ_ERROR;
     RTL_LOGFILE_CONTEXT_TRACE1( aLog, "%s created", pFilterName );
@@ -316,8 +316,8 @@ sal_Int32 ReadThroughComponent(
     const OUString& rName,
     sal_Bool bMustBeSuccessfull)
 {
-    DBG_ASSERT(xStorage.is(), "Need storage!");
-    DBG_ASSERT(NULL != pStreamName, "Please, please, give me a name!");
+    OSL_ENSURE(xStorage.is(), "Need storage!");
+    OSL_ENSURE(NULL != pStreamName, "Please, please, give me a name!");
 
     // open stream (and set parser input)
     OUString sStreamName = OUString::createFromAscii(pStreamName);
@@ -357,7 +357,7 @@ sal_Int32 ReadThroughComponent(
     uno::Reference< beans::XPropertySet > xInfoSet;
     if( rFilterArguments.getLength() > 0 )
         rFilterArguments.getConstArray()[0] >>= xInfoSet;
-    DBG_ASSERT( xInfoSet.is(), "missing property set" );
+    OSL_ENSURE( xInfoSet.is(), "missing property set" );
     if( xInfoSet.is() )
     {
         OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("StreamName") );

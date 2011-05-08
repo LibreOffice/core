@@ -796,7 +796,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
     }
 
 
-    DBG_ASSERT( rWrt.nLastParaToken == 0,
+    OSL_ENSURE( rWrt.nLastParaToken == 0,
                 "<PRE> wurde nicht vor <OL> beendet." );
     sal_uInt16 nPrevDepth =
         (bSameRule && !rInfo.IsRestart()) ? rPrevInfo.GetDepth() : 0;
@@ -909,7 +909,7 @@ Writer& OutHTML_NumBulListEnd( SwHTMLWriter& rWrt,
         return rWrt;
     }
 
-    DBG_ASSERT( rWrt.nLastParaToken == 0,
+    OSL_ENSURE( rWrt.nLastParaToken == 0,
                 "<PRE> wurde nicht vor </OL> beendet." );
     sal_uInt16 nNextDepth =
         (bSameRule && !rNextInfo.IsRestart()) ? rNextInfo.GetDepth() : 0;

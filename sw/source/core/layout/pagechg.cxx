@@ -1902,7 +1902,7 @@ void SwRootFrm::UnoRemoveAllActions()
             // Recursives calls to <::EndAction()> are not allowed.
             if ( !pSh->IsInEndAction() )
             {
-                DBG_ASSERT(!pSh->GetRestoreActions(), "Restore action count is already set!");
+                OSL_ENSURE(!pSh->GetRestoreActions(), "Restore action count is already set!");
                 sal_Bool bCrsr = pSh->ISA( SwCrsrShell );
                 sal_Bool bFE = pSh->ISA( SwFEShell );
                 sal_uInt16 nRestore = 0;

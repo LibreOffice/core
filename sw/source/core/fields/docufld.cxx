@@ -618,13 +618,13 @@ String SwTemplNameFieldType::Expand(sal_uLong nFmt) const
 
     String aRet;
     SwDocShell *pDocShell(pDoc->GetDocShell());
-    DBG_ASSERT(pDocShell, "no SwDocShell");
+    OSL_ENSURE(pDocShell, "no SwDocShell");
     if (pDocShell) {
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             pDocShell->GetModel(), uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentProperties> xDocProps(
             xDPS->getDocumentProperties());
-        DBG_ASSERT(xDocProps.is(), "Doc has no DocumentProperties");
+        OSL_ENSURE(xDocProps.is(), "Doc has no DocumentProperties");
 
         if( FF_UI_NAME == nFmt )
             aRet = xDocProps->getTemplateName();
@@ -908,14 +908,14 @@ String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
     String aStr;
     const LocaleDataWrapper *pAppLocalData = 0, *pLocalData = 0;
     SwDocShell *pDocShell(GetDoc()->GetDocShell());
-    DBG_ASSERT(pDocShell, "no SwDocShell");
+    OSL_ENSURE(pDocShell, "no SwDocShell");
     if (!pDocShell) { return aStr; }
 
     uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
         pDocShell->GetModel(), uno::UNO_QUERY_THROW);
     uno::Reference<document::XDocumentProperties> xDocProps(
         xDPS->getDocumentProperties());
-    DBG_ASSERT(xDocProps.is(), "Doc has no DocumentProperties");
+    OSL_ENSURE(xDocProps.is(), "Doc has no DocumentProperties");
 
     sal_uInt16 nExtSub = nSub & 0xff00;
     nSub &= 0xff;   // ExtendedSubTypes nicht beachten
