@@ -740,7 +740,7 @@ void
 HF_IdlTypeText::write_TemplateParameterList(
                     const std::vector<ary::idl::Type_id> & i_templateParameters ) const
 {
-    if (i_templateParameters.size() == 0)
+    if (i_templateParameters.empty())
         return;
 
     HF_IdlTypeText

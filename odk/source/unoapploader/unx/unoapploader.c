@@ -267,7 +267,6 @@ char* createCommandName( char* argv0 )
 #ifndef AIX
     Dl_info dl_info;
 #endif
-    int pos;
 
     /* get the executable file name from argv0 */
     prgname = argv0;
@@ -293,7 +292,7 @@ char* createCommandName( char* argv0 )
         sep = strrchr( prgname, SEPARATOR );
         if ( sep != NULL )
         {
-            pos = ++sep - prgname;
+            int pos = ++sep - prgname;
             strncpy( cmdname, prgname, pos );
             cmdname[ pos ] = '\0';
             strcat( cmdname, CMDPREFIX );

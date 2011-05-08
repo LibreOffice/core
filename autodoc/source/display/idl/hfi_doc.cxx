@@ -165,7 +165,7 @@ HF_IdlDocu::Produce_byDocuAndScope( const ce_info & i_rDocu,
         }
     }   // end for
 
-    if (aSeeAlsosWithoutText.size() > 0)
+    if (!aSeeAlsosWithoutText.empty())
     {
         HF_IdlTag
             aSeeAlsoTag(Env(),  i_rScopeGivingCe);

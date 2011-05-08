@@ -220,7 +220,7 @@ void
 Parse::do_clDefaultProject( opt_iter &    it,
                             opt_iter      itEnd )
 {
-    if ( aProjects.size() > 0 )
+    if ( !aProjects.empty() )
     {
         throw X_CommandLine( "Both, named projects and a default project, cannot be used together." );
     }

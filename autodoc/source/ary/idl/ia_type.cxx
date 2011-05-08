@@ -127,7 +127,7 @@ TypeAdmin::lhf_CheckIn_TypeName( const String &        i_sLocalName,
 {
     String sSearchLocalName( i_sLocalName );
     if ( i_templateParameters != 0
-         ?  i_templateParameters->size() > 0
+         ?  (!i_templateParameters->empty())
          :  false )
     {
         sSearchLocalName = MakeTemplateName(
