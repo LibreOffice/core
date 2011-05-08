@@ -1933,27 +1933,24 @@ String ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
                     // existiert. Wenn nicht, exportiere diese
                     // in unser lokales Sound-Verzeichnis.
                     sal_Bool    bSoundExists = sal_False;
-                    List*   pSoundList = new List();
+                    ::std::vector< String > aSoundList;
 
-                    GalleryExplorer::FillObjList( GALLERY_THEME_SOUNDS, *pSoundList );
-                    GalleryExplorer::FillObjList( GALLERY_THEME_USERSOUNDS, *pSoundList );
+                    GalleryExplorer::FillObjList( GALLERY_THEME_SOUNDS, aSoundList );
+                    GalleryExplorer::FillObjList( GALLERY_THEME_USERSOUNDS, aSoundList );
 
-                    for( sal_uLong n = 0; ( n < pSoundList->Count() ) && !bSoundExists; n++ )
+                    for( size_t n = 0; ( n < aSoundList.size() ) && !bSoundExists; n++ )
                     {
-                        INetURLObject   aURL( *(String*)pSoundList->GetObject( n ) );
+                        INetURLObject   aURL( aSoundList[ n ] );
                         String          aSoundName( aURL.GetName() );
 
                         if( aSoundName == aRetval )
                         {
-                            aRetval = *(String*)pSoundList->GetObject( n );
+                            aRetval = aSoundList[ n ];
                             bSoundExists = sal_True;
                         }
                     }
 
-                    for ( void* pPtr = pSoundList->First(); pPtr; pPtr = pSoundList->Next() )
-                        delete (String*)pPtr;
-
-                    delete pSoundList;
+                    aSoundList.clear();
 
                     if ( !bSoundExists )
                     {
