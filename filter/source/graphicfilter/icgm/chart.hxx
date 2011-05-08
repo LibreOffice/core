@@ -188,8 +188,8 @@ class CGMChart
 
     protected:
         CGM*                    mpCGM;
-        sal_Int8                    mnCurrentFileType;
-        List                    maTextEntryList;
+        sal_Int8                mnCurrentFileType;
+        ::std::vector< TextEntry* > maTextEntryList;
         DataNode                mDataNode[ 7 ];
         ChartZone               mChartZone;
         PageOrientDim           mPageOrientDim;

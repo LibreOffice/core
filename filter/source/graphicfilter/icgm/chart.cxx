@@ -52,10 +52,9 @@ CGMChart::~CGMChart()
 {
     // delete the whole textentry structure
 
-    TextEntry* pTextEntry;
-    while( ( pTextEntry = (TextEntry*)maTextEntryList.First() ) != NULL )
+    while( !maTextEntryList.empty() )
     {
-        DeleteTextEntry( pTextEntry );
+        DeleteTextEntry( maTextEntryList[ 0 ] );
     }
 };
 
@@ -73,7 +72,15 @@ void CGMChart::DeleteTextEntry( TextEntry* pTextEntry )
             delete pTempTAttr;
         }
         delete pTextEntry;
-        maTextEntryList.Remove( pTextEntry );
+        ::std::vector< TextEntry* >::iterator it;
+        for ( it = maTextEntryList.begin(); it < maTextEntryList.end(); ++it )
+        {
+            if ( *it == pTextEntry )
+            {
+                maTextEntryList.erase( it );
+                break;
+            }
+        }
     }
 };
 
@@ -81,7 +88,7 @@ void CGMChart::DeleteTextEntry( TextEntry* pTextEntry )
 
 void CGMChart::InsertTextEntry( TextEntry* pTextEntry )
 {
-    maTextEntryList.Insert( pTextEntry );
+    maTextEntryList.push_back( pTextEntry );
 };
 
 // ---------------------------------------------------------------

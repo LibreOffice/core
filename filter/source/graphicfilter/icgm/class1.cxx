@@ -176,12 +176,12 @@ void CGM::ImplDoClass1()
         {
             if ( mnElementSize > 1 )
             {
-                sal_Int8* pBuf = new sal_Int8[ mnElementSize ];
+                sal_uInt8* pBuf = new sal_uInt8[ mnElementSize ];
                 if ( pBuf )
                 {
                     memcpy( pBuf, mpSource, mnElementSize );
-                    maDefRepList.Insert( pBuf, LIST_APPEND );
-                    maDefRepSizeList.Insert( (void*)(sal_uIntPtr)mnElementSize, LIST_APPEND );
+                    maDefRepList.push_back( pBuf );
+                    maDefRepSizeList.push_back( mnElementSize );
                 }
             }
             mnParaSize = mnElementSize;
