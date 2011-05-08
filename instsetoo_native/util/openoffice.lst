@@ -400,7 +400,6 @@ OxygenOffice
 		variables
 		{
 			PRODUCTNAME OxygenOffice
-			PRODUCTNAME_BR OxygenOffice
 			PRODUCTVERSION 3.4
 			PRODUCTEXTENSION
 			LONG_PRODUCTEXTENSION
@@ -436,12 +435,10 @@ OxygenOffice
 			STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
 			CHANGETARGETDIR 1
 			USE_FILEVERSION 1
-			LIBRARYVERSION 9.3.0
+			LIBRARYVERSION 9.4.0
 			PATCHCODEFILE ooo_patchcodes.txt
 			DOWNLOADBANNER	ooobanner_ooop.bmp
 			DOWNLOADBITMAP	ooobitmap_ooop.bmp
-			DOWNLOADBANNER_BR	ooobanner_ooop.bmp
-			DOWNLOADBITMAP_BR	ooobitmap_ooop.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
 			RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
@@ -469,7 +466,6 @@ OxygenOffice_wJRE
 		variables
 		{
 			PRODUCTNAME OxygenOffice
-			PRODUCTNAME_BR OxygenOffice
 			PRODUCTVERSION 3.4
 			PRODUCTEXTENSION
 			LONG_PRODUCTEXTENSION
@@ -479,7 +475,7 @@ OxygenOffice_wJRE
 			BRANDPACKAGEVERSION 3.4
 			USERDIRPRODUCTVERSION 3
 			ABOUTBOXPRODUCTVERSION 3.4.0
-			BASEPRODUCTVERSION 3.3
+			BASEPRODUCTVERSION 3.4
 			UPDATEURL http://update.libreoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.libreoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
@@ -505,13 +501,11 @@ OxygenOffice_wJRE
 			STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
 			CHANGETARGETDIR 1
 			USE_FILEVERSION 1
-			LIBRARYVERSION 9.3.0
+			LIBRARYVERSION 9.4.0
 			PATCHCODEFILE ooo_patchcodes.txt
 			JAVAPRODUCT 1
 			DOWNLOADBANNER	ooobanner_ooop.bmp
 			DOWNLOADBITMAP	ooobitmap_ooop.bmp
-			DOWNLOADBANNER_BR	ooobanner_ooop.bmp
-			DOWNLOADBITMAP_BR	ooobitmap_ooop.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
 			RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
