@@ -300,10 +300,14 @@ End
 
 #ifdef UNX
 
-// pyuno.so even on Mac OS X, because it is a python module
 File gid_File_Pyuno
     TXT_FILE_BODY;
+#ifdef MACOSX
+    // note: Mac OS X use .dylib, even for python modules
+    Name = "pyuno.dylib";
+#else
     Name = "pyuno.so";
+#endif
     Dir = gid_Dir_Program;
     Styles = (PACKED);
 End
