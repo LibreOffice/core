@@ -197,9 +197,9 @@ Reference< XInterface > CreateInstance( const Reference< XComponentContext > & c
         if( pythonPath.getLength() )
             prependPythonPath( pythonPath );
 #if PY_MAJOR_VERSION >= 3
-        PyImport_AppendInittab( "pyuno", PyInit_pyuno );
+        PyImport_AppendInittab( (char*)"pyuno", PyInit_pyuno );
 #else
-        PyImport_AppendInittab( "pyuno", initpyuno );
+        PyImport_AppendInittab( (char*)"pyuno", initpyuno );
 #endif
         // initialize python
         Py_Initialize();
