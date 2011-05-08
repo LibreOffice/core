@@ -112,8 +112,8 @@ File gid_File_Oxt_LightProof
     TXT_FILE_BODY;
     Styles = (PACKED, ARCHIVE);
     Dir = gid_Brand_Dir_Share_Extensions_LightProof;
-    Name (en-US) = "lightproof-en-US-0.1.oxt";
-    Name (hu) = "lightproof-hu-1.2.oxt";
+    Name (en-US) = "lightproof-en-US.oxt";
+    Name (hu) = "lightproof-hu.oxt";
 End
 
 #endif
