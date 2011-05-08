@@ -109,8 +109,7 @@ sal_Bool FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const OUSt
         }
         rtl::OUString sTemp(OUString(RTL_CONSTASCII_USTRINGPARAM(SVLIBRARY("?") )));
         sal_Int32 nIndex = sTemp.indexOf(static_cast<sal_Unicode>('?'));
-        sTemp.replaceAt(nIndex, 1, sFilterName);
-        sFilterName = sTemp;
+        sFilterName = sTemp.replaceAt(nIndex, 1, sFilterName);
     }
     return sFilterName.Len() != 0;
 }
