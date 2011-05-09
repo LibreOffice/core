@@ -744,7 +744,7 @@ void SAL_CALL AnimationNode::acquire(  ) throw ()
 // XInterface
 void SAL_CALL AnimationNode::release(  ) throw ()
 {
-    OWeakObject::acquire();
+    OWeakObject::release();
 }
 
 // --------------------------------------------------------------------
