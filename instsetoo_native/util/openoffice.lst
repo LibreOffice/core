@@ -439,6 +439,10 @@ OxygenOffice
 			PATCHCODEFILE ooo_patchcodes.txt
 			DOWNLOADBANNER	ooobanner_ooop.bmp
 			DOWNLOADBITMAP	ooobitmap_ooop.bmp
+			PROGRESSBARCOLOR 126,170,23
+			PROGRESSSIZE 430,5
+			PROGRESSPOSITION 5,230
+			PROGRESSFRAMECOLOR 207,208,211
 			DOWNLOADSETUPICO	ooosetup.ico
 			RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
@@ -507,6 +511,10 @@ OxygenOffice_wJRE
 			DOWNLOADBANNER	ooobanner_ooop.bmp
 			DOWNLOADBITMAP	ooobitmap_ooop.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
+			PROGRESSBARCOLOR 126,170,23
+			PROGRESSSIZE 430,5
+			PROGRESSPOSITION 5,230
+			PROGRESSFRAMECOLOR 207,208,211
 			RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
             STARTCENTER_INFO_URL http://www.libreoffice.org/
