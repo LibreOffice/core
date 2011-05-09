@@ -907,7 +907,7 @@ void AssistentDlgImpl::TemplateScanDone (
 
         // HACK! presnt directory is always initially selected.
         // We have to look at the first entry to get a URL.
-        if (pDir->maEntries.size() > 0)
+        if (!pDir->maEntries.empty() )
         {
             TemplateEntry* pEntry = pDir->maEntries.front();
             if (pEntry != NULL)
@@ -932,7 +932,7 @@ void AssistentDlgImpl::TemplateScanDone (
 
         // HACK! layout directory is always initially selected.
         // We have to look at the first entry to get a URL.
-        if (pDir->maEntries.size() > 0)
+        if (!pDir->maEntries.empty() )
         {
             TemplateEntry* pEntry = pDir->maEntries.front();
             if (pEntry != NULL)

@@ -33,4 +33,7 @@
     <service name="com.sun.star.awt.DialogProvider"/>
     <service name="com.sun.star.awt.DialogProvider2"/>
   </implementation>
+  <implementation name="com.sun.star.comp.scripting.DialogModelProvider">
+    <service name="com.sun.star.awt.UnoControlDialogModelProvider"/>
+  </implementation>
 </component>

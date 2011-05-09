@@ -83,7 +83,7 @@ namespace sdr
 
         BaseEvent* EventHandler::GetEvent()
         {
-            if(maVector.size())
+            if(!maVector.empty())
             {
                 // get the last event, that one is fastest to be removed
                 return maVector.back();
@@ -100,7 +100,7 @@ namespace sdr
 
         EventHandler::~EventHandler()
         {
-            while(maVector.size())
+            while(!maVector.empty())
             {
                 delete GetEvent();
             }

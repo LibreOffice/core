@@ -29,7 +29,7 @@
 '*
 '* short description :
 '*
-'**************************************************************************************
+'\**************************************************************************************
 
 '  Dateiname.SetText ConvertPath (gTesttoolPath + "global\input\graf_inp\columbia.dxf")
 '   Call hGrafikEinfuegen ConvertPath  ( gTesttoolPath + "global\input\graf_inp\enter.bmp" )

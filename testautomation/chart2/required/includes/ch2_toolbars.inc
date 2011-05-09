@@ -48,11 +48,16 @@ testcase tDrawBar
     EditObjectEdit
     printlog " Verify that the drawbar is visible"
     Kontext "DrawBar"
-    
-    qaerrorlog "#i107003# disabled because of bug in toolbars"
-'    if Not DrawBar.Exists then 
+   
+    if Not DrawBar.Exists then 
+        warnlog "Drawbar is not enabled"
+        Kontext "DocumentCalc"
+        DocumentCalc.TypeKeys "<Escape>"
+        printlog " Close document"
+        Call hCloseDocument
+        goto endsub
 '    	Call hToolbarSelect("Drawing", true)
-'    endif
+    endif
 
     printlog " Check if all items on drawbar are available"
     if DrawBar.GetItemCount <> 16 then

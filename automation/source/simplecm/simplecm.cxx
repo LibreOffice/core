@@ -41,7 +41,7 @@
 #include <stdio.h>
 void debug_printf( const char *chars )
 {
-    static BOOL bPrint = (getenv("DEBUG") != NULL);
+    static sal_Bool bPrint = (getenv("DEBUG") != NULL);
     if ( bPrint )
     {
         printf( chars );

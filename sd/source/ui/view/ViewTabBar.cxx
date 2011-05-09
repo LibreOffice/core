@@ -486,7 +486,7 @@ int ViewTabBar::GetHeight (void)
 {
     int nHeight (0);
 
-    if (maTabBarButtons.size() > 0)
+    if (!maTabBarButtons.empty())
     {
         TabPage* pActivePage (mpTabControl->GetTabPage(
             mpTabControl->GetCurPageId()));

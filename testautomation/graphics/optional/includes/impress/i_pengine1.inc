@@ -29,7 +29,7 @@
 '*
 '* short description : Tests the Engine for Presentation
 '*
-'*******************************************************************
+'\*******************************************************************
 
 testcase tiPengineTabEntrance
 

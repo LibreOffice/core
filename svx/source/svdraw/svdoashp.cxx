@@ -2438,7 +2438,7 @@ void SdrObjCustomShape::DragCreateObject( SdrDragStat& rStat )
 
         aRect1 = Rectangle( rStat.GetNow(), Size( nDefaultObjectSizeWidth, nDefaultObjectSizeHeight ) );
         // subtracting the horizontal difference of the latest handle from shape position
-        if ( aInteractionHandles.size() )
+        if ( !aInteractionHandles.empty() )
         {
             sal_Int32 nHandlePos = aInteractionHandles[ aInteractionHandles.size() - 1 ].xInteraction->getPosition().X;
             aRect1.Move( aRect.Left() - nHandlePos, 0 );

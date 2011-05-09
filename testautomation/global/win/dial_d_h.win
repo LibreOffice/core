@@ -443,8 +443,7 @@ Aktualisieren sym:SFX2_HID_TEMPLDLG_UPDATEBYEXAMPLE
 Vorlagenliste sym:SFX2_HID_TEMPLATE_FMT
 Gruppenliste sym:SFX2_HID_TEMPLATE_FILTER
 
-*GridControlDialogStarter ACTIVE
-ShowGridcontrol sym:showGridcontrol
+*ShowGridcontrol sym:showgridcontrol
 
 *GridControlDialog sym:gridcontroldialog
 gridcontrolcontrol sym:gridcontrolself

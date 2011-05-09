@@ -108,7 +108,7 @@ void BreakpointWindow::SetBPsInModule()
     {
         pModule->SetBP( (sal_uInt16)pBrk->nLine );
 #if OSL_DEBUG_LEVEL > 1
-        DBG_ASSERT( !pModule->IsCompiled() || pModule->IsBP( (USHORT)pBrk->nLine ), "Brechpunkt wurde nicht gesetzt" );
+        DBG_ASSERT( !pModule->IsCompiled() || pModule->IsBP( (sal_uInt16)pBrk->nLine ), "Brechpunkt wurde nicht gesetzt" );
 #endif
         pBrk = Next();
     }

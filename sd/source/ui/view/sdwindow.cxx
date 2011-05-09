@@ -359,7 +359,7 @@ long Window::Notify( NotifyEvent& rNEvt )
         nResult = mpViewShell->Notify(rNEvt, this);
     }
     if( !nResult )
-        ::Window::Notify( rNEvt );
+        nResult = ::Window::Notify( rNEvt );
 
     return nResult;
 }

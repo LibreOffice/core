@@ -2044,7 +2044,7 @@ void CustomAnimationPane::createPath( PathKind eKind, std::vector< Any >& rTarge
 
 void CustomAnimationPane::onRemove()
 {
-    if( maListSelection.size() )
+    if( !maListSelection.empty() )
     {
         addUndo();
 

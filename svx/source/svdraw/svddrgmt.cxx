@@ -247,7 +247,7 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragEntryPointGlueDrag::create
 {
     drawinglayer::primitive2d::Primitive2DSequence aRetval;
 
-    if(maPositions.size())
+    if(!maPositions.empty())
     {
         basegfx::B2DPolygon aPolygon;
         sal_uInt32 a(0);
@@ -499,7 +499,7 @@ void SdrDragMethod::createSdrDragEntries_PointDrag()
         }
     }
 
-    if(aPositions.size())
+    if(!aPositions.empty())
     {
         addSdrDragEntry(new SdrDragEntryPointGlueDrag(aPositions, true));
     }
@@ -543,7 +543,7 @@ void SdrDragMethod::createSdrDragEntries_GlueDrag()
         }
     }
 
-    if(aPositions.size())
+    if(!aPositions.empty())
     {
         addSdrDragEntry(new SdrDragEntryPointGlueDrag(aPositions, false));
     }
@@ -670,14 +670,14 @@ void SdrDragMethod::CancelSdrDrag()
 void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlayManager)
 {
     // create SdrDragEntries on demand
-    if(!maSdrDragEntries.size())
+    if(maSdrDragEntries.empty())
     {
         createSdrDragEntries();
     }
 
     // if there are entries, derive OverlayObjects from the entries, including
     // modification from current interactive state
-    if(maSdrDragEntries.size())
+    if(!maSdrDragEntries.empty())
     {
         drawinglayer::primitive2d::Primitive2DSequence aResult;
         drawinglayer::primitive2d::Primitive2DSequence aResultTransparent;

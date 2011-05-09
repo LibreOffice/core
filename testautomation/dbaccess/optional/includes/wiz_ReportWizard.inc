@@ -86,8 +86,7 @@ testcase tNewReport
     sleep(10)
 
     Kontext "DocumentWriter"
-    	DocumentWriter.TypeKeys "<MOD1 SHIFT I>" ,  true ' EDIT / SELECT TEXT
-    	DocumentWriter.TypeKeys "<DOWN>" ,  true
+    	DocumentWriter.TypeKeys "<MOD1 SHIFT I>" ,  true ' EDIT / SELECT TEXT    	
         DocumentWriter.TypeKeys "<SHIFT END>" , true
         DocumentWriter.TypeKeys "<MOD1 C>" , true
 
@@ -102,7 +101,7 @@ testcase tNewReport
 
     ' select next line and check content
     Kontext "DocumentWriter"
-        DocumentWriter.TypeKeys "<DOWN>" ,  true
+        DocumentWriter.TypeKeys "<DOWN>", 2, true
         DocumentWriter.TypeKeys "<SHIFT HOME>" , true
         DocumentWriter.TypeKeys "<MOD1 C>" , true
 

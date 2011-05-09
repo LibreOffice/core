@@ -32,7 +32,7 @@
 #include "SlideSorter.hxx"
 #include "SlideSorterViewShell.hxx"
 #include "SlsDragAndDropContext.hxx"
-#include "controller/SlsTransferable.hxx"
+#include "controller/SlsTransferableData.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsPageSelector.hxx"
 #include "controller/SlsFocusManager.hxx"

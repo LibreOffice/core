@@ -9784,7 +9784,7 @@ uno::Reference< rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscr
                                  OUString( RTL_CONSTASCII_USTRINGPARAM(
                                                "com.sun.star.rendering.SpriteCanvas.MultiScreen" )) :
                                  OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                               "com.sun.star.rendering.Canvas" )),
+                                               "com.sun.star.rendering.Canvas.MultiScreen" )),
                                  aArg ),
                              UNO_QUERY );
 

@@ -48,6 +48,8 @@
 #include <unotools/syslocale.hxx>
 #include <unotools/saveopt.hxx>
 
+#include <tools/datetime.hxx>
+
 #include <sfx2/imagemgr.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
@@ -152,11 +154,8 @@ static SfxDispatcher* getDispatcher( ViewShellBase& rBase )
 
 com::sun::star::util::DateTime getCurrentDateTime()
 {
-    TimeValue osltime;
-    osl_getSystemTime( &osltime );
-    oslDateTime osldt;
-    osl_getDateTimeFromTimeValue( &osltime, &osldt );
-    return com::sun::star::util::DateTime( 0, osldt.Seconds, osldt.Minutes, osldt.Hours, osldt.Day, osldt.Month, osldt.Year );
+    DateTime aCurrentDate;
+    return com::sun::star::util::DateTime( 0, aCurrentDate.GetSec(), aCurrentDate.GetMin(), aCurrentDate.GetHour(), aCurrentDate.GetDay(), aCurrentDate.GetMonth(), aCurrentDate.GetYear() );
 }
 
 OUString getAnnotationDateTimeString( const Reference< XAnnotation >& xAnnotation )

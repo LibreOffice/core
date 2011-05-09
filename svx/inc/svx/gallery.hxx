@@ -63,7 +63,7 @@
 #define GALLERY_THEME_MAPS              12
 #define GALLERY_THEME_PEOPLE            13
 #define GALLERY_THEME_SURFACES      14
-#define GALLERY_THEME_HTMLBUTTONS   15
+// free
 #define GALLERY_THEME_POWERPOINT    16
 #define GALLERY_THEME_RULERS        17
 #define GALLERY_THEME_SOUNDS        18

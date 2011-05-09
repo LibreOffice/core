@@ -337,6 +337,8 @@ sal_Bool ScTable::SetOptimalHeight( SCROW nStartRow, SCROW nEndRow, sal_uInt16 n
         }
     }
 
+    IncRecalcLevel();       // #i116460# avoid problems with Excel files
+
     SCROW nRngStart = 0;
     SCROW nRngEnd = 0;
     sal_uInt16 nLast = 0;
@@ -390,6 +392,8 @@ sal_Bool ScTable::SetOptimalHeight( SCROW nStartRow, SCROW nEndRow, sal_uInt16 n
     }
     if (nLast)
         bChanged |= SetRowHeightRange( nRngStart, nRngEnd, nLast, nPPTX, nPPTY );
+
+    DecRecalcLevel();       // #i116460# avoid problems with Excel files
 
     delete[] pHeight;
     if ( pProgress != pOuterProgress )

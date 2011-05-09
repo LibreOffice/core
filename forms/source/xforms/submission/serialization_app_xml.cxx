@@ -31,91 +31,117 @@
 #include "serialization.hxx"
 #include "serialization_app_xml.hxx"
 
-#include <unotools/processfactory.hxx>
+/** === begin UNO includes === **/
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/dom/NodeType.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/xml/xpath/XPathObjectType.hpp>
+#include <com/sun/star/xml/sax/XSAXSerializable.hpp>
+#include <com/sun/star/beans/StringPair.hpp>
+#include <com/sun/star/io/XActiveDataSource.hpp>
+#include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
+/** === end UNO includes === **/
 
-#include <libxml/tree.h>
+#include <tools/diagnose_ex.h>
+#include <comphelper/processfactory.hxx>
+
+#include <boost/scoped_ptr.hpp>
+#include <limits>
+
+/** === begin UNO using === **/
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::RuntimeException;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::uno::UNO_SET_THROW;
+using ::com::sun::star::xml::dom::XNode;
+using ::com::sun::star::xml::dom::XDocument;
+using ::com::sun::star::xml::sax::XSAXSerializable;
+using ::com::sun::star::beans::StringPair;
+using ::com::sun::star::io::XActiveDataSource;
+using ::com::sun::star::xml::dom::NodeType_DOCUMENT_NODE;
+using ::com::sun::star::xml::dom::NodeType_ELEMENT_NODE;
+using ::com::sun::star::xml::dom::XDocumentBuilder;
+using ::com::sun::star::xml::sax::XDocumentHandler;
+/** === end UNO using === **/
 
 CSerializationAppXML::CSerializationAppXML()
-    : m_aFactory(utl::getProcessServiceFactory())
-    , m_aPipe(CSS::uno::Reference< CSS::io::XOutputStream > (m_aFactory->createInstance(
-        rtl::OUString::createFromAscii("com.sun.star.io.Pipe")), CSS::uno::UNO_QUERY))
+    :m_aContext( ::comphelper::getProcessServiceFactory() )
 {
-    OSL_ENSURE(m_aPipe.is(), "cannot create Pipe");
+    m_aContext.createComponent( "com.sun.star.io.Pipe", m_xBuffer );
 }
 
-CSS::uno::Reference< CSS::io::XInputStream >
+Reference< CSS::io::XInputStream >
 CSerializationAppXML::getInputStream()
 {
     // The pipes output is provided through it's
     // XOutputStream interface aspect
-    return CSS::uno::Reference< CSS::io::XInputStream >(m_aPipe, CSS::uno::UNO_QUERY);
+    return Reference< CSS::io::XInputStream >(m_xBuffer, UNO_QUERY);
 }
 
 void
-CSerializationAppXML::serialize_node(const CSS::uno::Reference< CSS::xml::dom::XNode >& rNode)
+CSerializationAppXML::serialize_node(const Reference< XNode >& rNode)
 {
-    CSS::uno::Reference< CSS::xml::dom::XNode > aNode = rNode;
-    if (aNode->getNodeType() == CSS::xml::dom::NodeType_DOCUMENT_NODE)
+    try
     {
-        CSS::uno::Reference< CSS::xml::dom::XDocument > aDoc(rNode, CSS::uno::UNO_QUERY_THROW);
-        aNode = CSS::uno::Reference< CSS::xml::dom::XNode >(aDoc->getDocumentElement(), CSS::uno::UNO_QUERY_THROW);
-    }
-    if (aNode->getNodeType() != CSS::xml::dom::NodeType_ELEMENT_NODE)
-        return;
+        Reference< XSAXSerializable > xSerializer( rNode, UNO_QUERY );
+        if ( !xSerializer.is() )
+        {
+            // ensure we have a "real" node
+            Reference< XNode > xNode = rNode;
+            if ( xNode->getNodeType() == NodeType_DOCUMENT_NODE )
+            {
+                Reference< XDocument > const xDoc( xNode, UNO_QUERY_THROW );
+                xNode.set( xDoc->getDocumentElement(), UNO_QUERY_THROW );
+            }
+            ENSURE_OR_RETURN_VOID( xNode->getNodeType() == NodeType_ELEMENT_NODE,
+                "CSerializationAppXML::serialize_node: invalid node type!" );
 
-    // clone the node to a new document and serialize that document
-    CSS::uno::Reference< CSS::lang::XUnoTunnel > aTunnel(aNode, CSS::uno::UNO_QUERY);
-    if (aTunnel.is())
-    {
-        xmlNodePtr aNodePtr = reinterpret_cast< xmlNodePtr >( aTunnel->getSomething(CSS::uno::Sequence< sal_Int8 >()) );
-        xmlDocPtr aDocPtr = xmlNewDoc((xmlChar*)"1.0");
-        xmlNodePtr aDocNodePtr = xmlDocCopyNode(aNodePtr, aDocPtr, 1);
-        if (aDocNodePtr != NULL) {
-            xmlAddChild((xmlNodePtr)aDocPtr, aDocNodePtr);
-            xmlChar *buffer = NULL;
-            sal_Int32 size = 0;
-            xmlDocDumpMemory(aDocPtr, &buffer, (int*)&size);
+            // create a new document
+            Reference< XDocumentBuilder > const xDocBuilder(
+                m_aContext.createComponent( "com.sun.star.xml.dom.DocumentBuilder" ), UNO_QUERY_THROW );
+            Reference< XDocument > const xDocument( xDocBuilder->newDocument(), UNO_SET_THROW );
 
-            // write the xml into the pipe through it's XOutputStream interface
-            m_aPipe->writeBytes(CSS::uno::Sequence< sal_Int8 >((sal_Int8*)buffer, size));
-            xmlFree(buffer);
+            // copy the to-be-serialized node
+            Reference< XNode > const xImportedNode( xDocument->importNode( xNode, true ), UNO_SET_THROW );
+            xDocument->appendChild( xImportedNode );
+
+            // ask the doc for the serializer
+            xSerializer.set( xDocument, UNO_QUERY );
         }
 
-    } else {
-        // can't get tunnel to native backend
-        // logic for generic implementation could be implemented here...
-        OSL_ENSURE(sal_False, "unkown dom implementation, cannot serialize");
-        return;
+        ENSURE_OR_RETURN_VOID( xSerializer.is(),
+            "CSerializationAppXML::serialize_node: no serialization access to the node/document!" );
+
+        // create a SAXWriter to take the serialization events, and connect it to our pipe
+        Reference< XDocumentHandler > const xSaxWriter(
+            m_aContext.createComponent( "com.sun.star.xml.sax.Writer" ), UNO_QUERY_THROW );
+        Reference< XActiveDataSource > const xDataSource( xSaxWriter, UNO_QUERY_THROW );
+        xDataSource->setOutputStream( m_xBuffer );
+
+        // do the serialization
+        xSerializer->serialize( xSaxWriter, Sequence< StringPair >() );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
-
-/*
-void
-CSerializationAppXML::serialize_nodeset()
-{
-    CSS::uno::Reference< CSS::xml::dom::XNodeList > aNodeList = m_aXPathObject->getNodeList();
-    for (sal_Int32 i=0; i<aNodeList->getLength(); i++)
-        serialize_node(aNodeList->item(i));
-    m_aPipe->closeOutput();
-}
-*/
 
 void
 CSerializationAppXML::serialize()
 {
     if (!m_aFragment.is()) return;
 
-    CSS::uno::Reference< CSS::xml::dom::XNode > cur = m_aFragment->getFirstChild();
+    Reference< XNode > cur = m_aFragment->getFirstChild();
     while (cur.is())
     {
         serialize_node(cur);
         cur = cur->getNextSibling();
     }
-    m_aPipe->closeOutput();
+    m_xBuffer->closeOutput();
 }

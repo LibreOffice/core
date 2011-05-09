@@ -389,7 +389,7 @@ public class FormDocument extends TextDocument
 
         public void initialize(int _curArrangement, Short _NBorderType)
         {
-            boolean badaptControlStyles = false;
+            boolean adaptControlStyles = false;
             xTextDocument.lockControllers();
             curArrangement = _curArrangement;
             if (oGridControl != null)
@@ -413,14 +413,14 @@ public class FormDocument extends TextDocument
             if (curArrangement == FormWizard.AS_GRID)
             {
                 insertGridControl(_NBorderType);
-                badaptControlStyles = true;
+                adaptControlStyles = true;
             }
             else
             {
-                badaptControlStyles = !oFormController.areControlsexisting();
+                adaptControlStyles = !oFormController.areControlsexisting();
                 oFormController.positionControls(_curArrangement, aStartPoint, getAvailableFormSize(), curUIControlArranger.getAlignValue(), _NBorderType);
             }
-            if (badaptControlStyles)
+            if (adaptControlStyles)
             {
                 curStyleApplier.applyStyle(false, true);
             }

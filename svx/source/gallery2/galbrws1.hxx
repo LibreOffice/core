@@ -101,7 +101,7 @@ private:
     void                    ImplAdjustControls();
     sal_uIntPtr                 ImplInsertThemeEntry( const GalleryThemeEntry* pEntry );
     void                    ImplFillExchangeData( const GalleryTheme* pThm, ExchangeData& rData );
-    ::std::vector< sal_uInt16 > ImplGetExecuteVector();
+    void                    ImplGetExecuteVector(::std::vector< sal_uInt16 >& o_aExec);
     void                    ImplExecute( sal_uInt16 nId );
     void                    ImplGalleryThemeProperties( const String & rThemeName, bool bCreateNew );
     void                    ImplEndGalleryThemeProperties( VclAbstractDialog2* pDialog, bool bCreateNew );

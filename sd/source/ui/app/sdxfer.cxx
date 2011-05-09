@@ -123,6 +123,7 @@ SdTransferable::SdTransferable( SdDrawDocument* pSrcDoc, ::sd::View* pWorkView, 
 ,   mbPageTransferable( sal_False )
 ,   mbPageTransferablePersistent( sal_False )
 ,   mbIsUnoObj( false )
+,   maUserData()
 {
     if( mpSourceDoc )
         StartListening( *mpSourceDoc );
@@ -345,7 +346,9 @@ void SdTransferable::CreateData()
 
         if( 1 == mpSdDrawDocumentIntern->GetPageCount() )
         {
-            Point   aOrigin( ( maVisArea = mpSdViewIntern->GetAllMarkedRect() ).TopLeft() );
+            // #112978# need to use GetAllMarkedBoundRect instead of GetAllMarkedRect to get
+            // fat lines correctly
+            Point   aOrigin( ( maVisArea = mpSdViewIntern->GetAllMarkedBoundRect() ).TopLeft() );
             Size    aVector( -aOrigin.X(), -aOrigin.Y() );
 
             for( sal_uLong nObj = 0, nObjCount = pPage->GetObjCount(); nObj < nObjCount; nObj++ )
@@ -797,6 +800,52 @@ sal_Int64 SAL_CALL SdTransferable::getSomething( const ::com::sun::star::uno::Se
 
     return nRet;
 }
+
+
+
+
+SdDrawDocument* SdTransferable::GetSourceDoc (void) const
+{
+    return mpSourceDoc;
+}
+
+
+
+
+void SdTransferable::AddUserData (const ::boost::shared_ptr<UserData>& rpData)
+{
+    maUserData.push_back(rpData);
+}
+
+
+
+
+void SdTransferable::RemoveUserData (const ::boost::shared_ptr<UserData>& rpData)
+{
+    maUserData.erase(::std::find(maUserData.begin(), maUserData.end(), rpData));
+}
+
+
+
+
+sal_Int32 SdTransferable::GetUserDataCount (void) const
+{
+    return maUserData.size();
+}
+
+
+
+
+::boost::shared_ptr<SdTransferable::UserData> SdTransferable::GetUserData (const sal_Int32 nIndex) const
+{
+    if (nIndex>=0 && nIndex<sal_Int32(maUserData.size()))
+        return maUserData[nIndex];
+    else
+        return ::boost::shared_ptr<UserData>();
+}
+
+
+
 
 // -----------------------------------------------------------------------------
 

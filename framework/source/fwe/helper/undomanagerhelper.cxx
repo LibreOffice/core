@@ -220,6 +220,7 @@ namespace framework
         bool                                m_disposed;
         bool                                m_bAPIActionRunning;
         bool                                m_bProcessingEvents;
+        sal_Int32                           m_nLockCount;
         ::cppu::OInterfaceContainerHelper   m_aUndoListeners;
         ::cppu::OInterfaceContainerHelper   m_aModifyListeners;
         IUndoManagerImplementation&         m_rUndoManagerImplementation;
@@ -241,6 +242,7 @@ namespace framework
             ,m_disposed( false )
             ,m_bAPIActionRunning( false )
             ,m_bProcessingEvents( false )
+            ,m_nLockCount( 0 )
             ,m_aUndoListeners( m_aMutex )
             ,m_aModifyListeners( m_aMutex )
             ,m_rUndoManagerImplementation( i_undoManagerImpl )
@@ -289,6 +291,9 @@ namespace framework
         void clear( IMutexGuard& i_instanceLock );
         void clearRedo( IMutexGuard& i_instanceLock );
         void reset( IMutexGuard& i_instanceLock );
+
+        void lock();
+        void unlock();
 
         void addUndoManagerListener( const Reference< XUndoManagerListener >& i_listener )
         {
@@ -477,6 +482,37 @@ namespace framework
             ),
             i_instanceLock
         );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void UndoManagerHelper_Impl::lock()
+    {
+        // SYNCHRONIZED --->
+        ::osl::MutexGuard aGuard( getMutex() );
+
+        if ( ++m_nLockCount == 1 )
+        {
+            IUndoManager& rUndoManager = getUndoManager();
+            rUndoManager.EnableUndo( false );
+        }
+        // <--- SYNCHRONIZED
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void UndoManagerHelper_Impl::unlock()
+    {
+        // SYNCHRONIZED --->
+        ::osl::MutexGuard aGuard( getMutex() );
+
+        if ( m_nLockCount == 0 )
+            throw NotLockedException( ::rtl::OUString::createFromAscii( "Undo manager is not locked" ), getXUndoManager() );
+
+        if ( --m_nLockCount == 0 )
+        {
+            IUndoManager& rUndoManager = getUndoManager();
+            rUndoManager.EnableUndo( true );
+        }
+        // <--- SYNCHRONIZED
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -1100,25 +1136,13 @@ namespace framework
     //------------------------------------------------------------------------------------------------------------------
     void UndoManagerHelper::lock()
     {
-        // SYNCHRONIZED --->
-        ::osl::MutexGuard aGuard( m_pImpl->getMutex() );
-
-        IUndoManager& rUndoManager = m_pImpl->getUndoManager();
-        rUndoManager.EnableUndo( false );
-        // <--- SYNCHRONIZED
+        m_pImpl->lock();
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void UndoManagerHelper::unlock()
     {
-        // SYNCHRONIZED --->
-        ::osl::MutexGuard aGuard( m_pImpl->getMutex() );
-
-        IUndoManager& rUndoManager = m_pImpl->getUndoManager();
-        if ( rUndoManager.IsUndoEnabled() )
-            throw NotLockedException( ::rtl::OUString::createFromAscii( "Undo manager is not locked" ), m_pImpl->getXUndoManager() );
-        rUndoManager.EnableUndo( true );
-        // <--- SYNCHRONIZED
+        m_pImpl->unlock();
     }
 
     //------------------------------------------------------------------------------------------------------------------

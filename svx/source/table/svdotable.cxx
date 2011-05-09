@@ -330,6 +330,7 @@ void SdrTableObjImpl::operator=( const SdrTableObjImpl& rSource )
 void SdrTableObjImpl::SetModel(SdrModel* /*pOldModel*/, SdrModel* pNewModel)
 {
     // try to find new table style
+    disconnectTableStyle();
 
     Reference< XIndexAccess > xNewTableStyle;
     if( mxTableStyle.is() ) try
@@ -360,6 +361,7 @@ void SdrTableObjImpl::SetModel(SdrModel* /*pOldModel*/, SdrModel* pNewModel)
 
     mxTableStyle = xNewTableStyle;
 
+    connectTableStyle();
     update();
 }
 

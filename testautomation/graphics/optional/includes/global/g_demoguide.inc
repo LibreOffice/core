@@ -263,16 +263,15 @@ testcase t_Interoperability
     Kontext "DocumentImpress"
     Kontext "Slides"
     Kontext "SlidesControl"
-    SlidesControl.OpenContextMenu
     sleep 1
-    hMenuSelectNr (8)
+    SlidesControl.TypeKeys "<MOD1 X>"
+    
     Kontext "DocumentImpress"
     DocumentImpress.TypeKeys "<HOME>", true
     Kontext "Slides"
     Kontext "SlidesControl"
-    SlidesControl.OpenContextMenu
     sleep 1
-    hMenuSelectNr (10)
+    SlidesControl.TypeKeys "<MOD1 V>"
 
      Printlog "    Verify that the slide was moved correctly"
      Kontext "Slides"

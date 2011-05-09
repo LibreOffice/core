@@ -33,12 +33,13 @@
 
 #include "serialization.hxx"
 
+#include <comphelper/componentcontext.hxx>
 
 class CSerializationAppXML : public CSerialization
 {
 private:
-    CSS::uno::Reference< CSS::lang::XMultiServiceFactory > m_aFactory;
-    CSS::uno::Reference< CSS::io::XOutputStream > m_aPipe;
+    ::comphelper::ComponentContext                  m_aContext;
+    CSS::uno::Reference< CSS::io::XOutputStream >   m_xBuffer;
 
     void serialize_node(const CSS::uno::Reference< CSS::xml::dom::XNode >& aNode);
     void serialize_nodeset();

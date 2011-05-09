@@ -29,7 +29,7 @@
 '*
 '* short description : Tests the Presentation-Engines effects
 '*
-'*******************************************************************
+'\*******************************************************************
 
 testcase tiPengineAnimationEffectsPreview
     dim bError as boolean

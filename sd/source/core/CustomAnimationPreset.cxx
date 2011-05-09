@@ -645,7 +645,7 @@ Reference< XAnimationNode > CustomAnimationPresets::getRandomPreset( sal_Int16 n
         sal_Int32 nCategory = (rand() * pCategoryList->size() / RAND_MAX);
 
         PresetCategoryPtr pCategory = (*pCategoryList)[nCategory];
-        if( pCategory.get() && pCategory->maEffects.size() )
+        if( pCategory.get() && !pCategory->maEffects.empty() )
         {
             sal_Int32 nDescriptor = (rand() * pCategory->maEffects.size() / RAND_MAX);
             CustomAnimationPresetPtr pPreset = pCategory->maEffects[nDescriptor];
@@ -654,7 +654,7 @@ Reference< XAnimationNode > CustomAnimationPresets::getRandomPreset( sal_Int16 n
                 UStringList aSubTypes = pPreset->getSubTypes();
 
                 OUString aSubType;
-                if( aSubTypes.size() )
+                if( !aSubTypes.empty() )
                 {
                     sal_Int32 nSubType = (rand() * aSubTypes.size() / RAND_MAX);
                     aSubType = aSubTypes[nSubType];

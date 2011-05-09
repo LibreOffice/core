@@ -785,7 +785,7 @@ void SdrEditView::DeleteMarkedList(const SdrMarkList& rMark)
             }
 
             // fire scene updaters
-            while(aUpdaters.size())
+            while(!aUpdaters.empty())
             {
                 delete aUpdaters.back();
                 aUpdaters.pop_back();
@@ -794,7 +794,7 @@ void SdrEditView::DeleteMarkedList(const SdrMarkList& rMark)
             if( !bUndo )
             {
                 // now delete removed scene objects
-                while(aRemoved3DObjects.size())
+                while(!aRemoved3DObjects.empty())
                 {
                     SdrObject::Free( aRemoved3DObjects.back() );
                     aRemoved3DObjects.pop_back();
@@ -840,7 +840,7 @@ void SdrEditView::DeleteMarkedObj()
 
                 if(pParent)
                 {
-                    if(aParents.size())
+                    if(!aParents.empty())
                     {
                         std::vector< SdrObject* >::iterator aFindResult =
                             std::find(aParents.begin(), aParents.end(), pParent);
@@ -857,7 +857,7 @@ void SdrEditView::DeleteMarkedObj()
                 }
             }
 
-            if(aParents.size())
+            if(!aParents.empty())
             {
                 // in a 2nd run, remove all objects which may already be scheduled for
                 // removal. I am not sure if this can happen, but theoretically

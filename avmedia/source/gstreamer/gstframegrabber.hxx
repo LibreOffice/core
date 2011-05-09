@@ -34,6 +34,7 @@
 #ifndef _COM_SUN_STAR_MEDIA_XFRAMEGRABBER_HDL_
 #include "com/sun/star/media/XFrameGrabber.hdl"
 #endif
+#include <cppuhelper/implbase1.hxx>
 
 namespace avmedia { namespace gst {
 
@@ -41,9 +42,8 @@ namespace avmedia { namespace gst {
 // - FrameGrabber -
 // ----------------
 
-class FrameGrabber : public Player,
-                     public ::cppu::WeakImplHelper2 < ::com::sun::star::media::XFrameGrabber,
-                                                      ::com::sun::star::lang::XServiceInfo >
+class FrameGrabber :
+                     public ::cppu::ImplInheritanceHelper1 < Player,::com::sun::star::media::XFrameGrabber >
 {
 public:
 

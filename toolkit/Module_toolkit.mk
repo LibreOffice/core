@@ -36,6 +36,7 @@ $(eval $(call gb_Module_add_targets,toolkit,\
 ))
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,toolkit,\
+    JunitTest_toolkit_complex \
     JunitTest_toolkit_unoapi \
 ))
 

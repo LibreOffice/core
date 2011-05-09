@@ -31,6 +31,13 @@
 #include <com/sun/star/uno/Any.hxx>
 /** === end UNO includes === **/
 
+#include <boost/scoped_ptr.hpp>
+
+namespace comphelper
+{
+    class ComponentContext;
+}
+
 //......................................................................................................................
 namespace svt
 {
@@ -39,10 +46,17 @@ namespace svt
     //==================================================================================================================
     //= CellValueConversion
     //==================================================================================================================
+    struct CellValueConversion_Data;
     class CellValueConversion
     {
     public:
-        static ::rtl::OUString convertToString( const ::com::sun::star::uno::Any& i_cellValue );
+        CellValueConversion( ::comphelper::ComponentContext const & i_context );
+        ~CellValueConversion();
+
+        ::rtl::OUString convertToString( const ::com::sun::star::uno::Any& i_cellValue );
+
+    private:
+        ::boost::scoped_ptr< CellValueConversion_Data > m_pData;
     };
 
 //......................................................................................................................

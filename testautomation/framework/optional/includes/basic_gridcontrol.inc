@@ -32,7 +32,6 @@
 '\******************************************************************************
 
 testcase tGridcontrolLoad
-    const MACRO_NAME = "Show"
     const FILE_NAME  = "framework/optional/input/gridcontrol.odt"
 
     dim i as integer
@@ -42,8 +41,10 @@ testcase tGridcontrolLoad
     call hFileOpenLocally( gTestToolPath & FILE_NAME )
 
     printlog "Start the macro, that performs the test"
-    hExecMacro( MACRO_NAME )
     
+    Kontext "ShowGridcontrol"
+    ' FAILS IF DOCUMENT IS READONLY....
+        ShowGridcontrol.typeKeys "<space>"
     Kontext "GridControlDialog"
     if GridControlDialog.exists(5) then
         for i=1 to gridcontrolcontrol.getcolumncount

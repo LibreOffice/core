@@ -174,10 +174,15 @@ testcase tChartShapes
     printlog " Verify that the drawbar is visible"
     Kontext "DrawBar"
 
-    qaerrorlog "#i107003# disabled because of bug in toolbars"
-    '    if Not DrawBar.Exists then
-    '    	Call hToolbarSelect("Drawing", true)
-    '    endif
+    if Not DrawBar.Exists then
+        warnlog "Drawbar is not enabled"
+        Kontext "DocumentCalc"
+        DocumentCalc.TypeKeys "<Escape>"
+        printlog " Close document"
+        Call hCloseDocument
+        goto endsub
+'    	Call hToolbarSelect("Drawing", true)
+    endif
 
     printlog " Insert a shape to the chart by <STRG-RETURN>"
     Kontext "DocumentChart"

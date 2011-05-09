@@ -144,7 +144,7 @@
      {
 --- misc/glib-2.28.1/gio/makefile.msc	2011-02-11 16:23:12.000000000 +0100
 +++ misc/build/glib-2.28.1/gio/makefile.msc	2011-03-04 12:43:54.423706900 +0100
-@@ -3,9 +3,9 @@
+@@ -3,28 +3,22 @@
  PRJ_TOP = ..
  PACKAGE = gio
  PKG_VER = 2.0
@@ -152,11 +152,16 @@
 +!INCLUDE ..\build\win32\make.msc
  
 -SUBDIRS = win32
-+SUBDIRS = win32 gvdb
+-
+-sub-all: 
+-	for %d in ($(SUBDIRS)) do nmake -nologo -f makefile.msc sub-one THIS=%d
+-
+-sub-one:
+-	cd $(THIS)
+-	nmake -nologo -f makefile.msc
+-	cd ..
++SUBDIRS_ALL = win32.all gvdb.all
  
- sub-all: 
- 	for %d in ($(SUBDIRS)) do nmake -nologo -f makefile.msc sub-one THIS=%d
-@@ -18,13 +18,15 @@
  INCLUDES = \
  	-FImsvc_recommended_pragmas.h \
  	-I .. -I ..\glib -I ..\gmodule -I . \
@@ -173,7 +178,7 @@
  appinfo_sources = \
  	gwin32appinfo.c gwin32appinfo.h
  
-@@ -75,19 +77,50 @@
+@@ -75,19 +69,50 @@
  	$(NULL)
  
  OBJECTS = \
@@ -224,7 +229,7 @@
  	gemblem.obj \
  	gemblemedicon.obj \
  	gfile.obj \
-@@ -112,20 +145,39 @@
+@@ -112,20 +137,39 @@
  	giomodule.obj \
  	gioscheduler.obj \
  	giostream.obj \
@@ -264,7 +269,7 @@
  	gsocket.obj \
  	gsocketaddress.obj \
  	gsocketaddressenumerator.obj \
-@@ -135,13 +187,22 @@
+@@ -135,13 +179,22 @@
  	gsocketcontrolmessage.obj \
  	gsocketlistener.obj \
  	gsocketservice.obj \
@@ -287,7 +292,7 @@
  	gunionvolumemonitor.obj \
  	gvfs.obj \
  	gvolume.obj \
-@@ -156,11 +217,15 @@
+@@ -156,11 +209,15 @@
  	glocalfilemonitor.obj \
  	glocaldirectorymonitor.obj \
  	gwin32appinfo.obj \
@@ -304,35 +309,39 @@
  
  libgio_2_0_la_LIBADD = \
  	$(top_builddir)/glib/libglib-2.0.la \
-@@ -190,14 +255,14 @@
- 
+@@ -191,13 +248,13 @@
  gio-marshal.h: gio-marshal.list
  	$(GLIB_GEN_MARSHAL) --prefix=_gio_marshal gio-marshal.list --header >> xgen-gwmh \
--	&& copy /y xgen-gwmh gio-marshal.h \
+ 	&& copy /y xgen-gwmh gio-marshal.h \
 -	&& del xgen-gwmh xgen-gwmh~
-+	&& $(GNUCOPY) /y xgen-gwmh gio-marshal.h \
 +	&& rm xgen-gwmh xgen-gwmh~
  
  gio-marshal.c: gio-marshal.h
  	echo #include "gio-marshal.h" >> xgen-gwmc \
  	&& $(GLIB_GEN_MARSHAL) --prefix=_gio_marshal gio-marshal.list --body >> xgen-gwmc \
--	&& copy xgen-gwmc gio-marshal.c \
+ 	&& copy xgen-gwmc gio-marshal.c \
 -	&& del xgen-gwmc xgen-gwmc~
-+	&& $(GNUCOPY) xgen-gwmc gio-marshal.c \
 +	&& rm xgen-gwmc xgen-gwmc~
  
  local_sources = \
  	glocaldirectorymonitor.c \
-@@ -228,7 +293,7 @@
+@@ -220,12 +277,14 @@
  
+ all : \
+ 	$(PRJ_TOP)\config.h \
+-	sub-all	\
++	$(SUBDIRS_ALL) \
+ 	gio-marshal.c \
+ 	gioenumtypes.h		\
+ 	gioenumtypes.c		\
+ 	libgio-$(PKG_VER)-0.dll
+ 
++$(SUBDIRS_ALL): 
++	cmd /C "cd $* & nmake -nologo -f makefile.msc all"
  
  $(PRJ_TOP)\config.h: $(PRJ_TOP)\config.h.win32
--	copy $(PRJ_TOP)\config.h.win32 $(PRJ_TOP)\config.h
-+	$(GNUCOPY) $(PRJ_TOP)\config.h.win32 $(PRJ_TOP)\config.h
- 
- gioenumtypes.h: $(gio_headers) gioenumtypes.h.template
- 	$(PERL) ..\gobject\glib-mkenums --template gioenumtypes.h.template $(gio_headers) > gioenumtypes.h
-@@ -245,14 +310,14 @@
+ 	copy $(PRJ_TOP)\config.h.win32 $(PRJ_TOP)\config.h
+@@ -245,14 +304,14 @@
  RESOURCE = $(PACKAGE).res
  
  $(PACKAGE).res : $(PACKAGE).rc
@@ -451,7 +460,7 @@
  	gprimes.obj \
  	gprintf.obj \
  	gqsort.obj \
-@@ -88,22 +89,29 @@
+@@ -88,19 +89,26 @@
  	gthread.obj \
  	gthreadpool.obj \
  	gtimer.obj \
@@ -479,14 +488,10 @@
 -..\glibconfig.h: ..\glibconfig.h.win32
 -	copy ..\glibconfig.h.win32 ..\glibconfig.h
 +glibconfig.h: glibconfig.h.win32
-+	$(GNUCOPY) glibconfig.h.win32 glibconfig.h
++	copy glibconfig.h.win32 glibconfig.h
  
  ..\config.h: ..\config.h.win32
--	copy ..\config.h.win32 ..\config.h
-+	$(GNUCOPY) ..\config.h.win32 ..\config.h
- 
- localcharset.obj : libcharset\localcharset.c
- 	$(CC) $(CFLAGS) -DLIBDIR=\".\" -c libcharset\localcharset.c
+ 	copy ..\config.h.win32 ..\config.h
 @@ -115,7 +123,7 @@
  		-DG_GNUC_PRINTF=;G_GNUC_PRINTF -DG_GNUC_FORMAT=;G_GNUC_FORMAT glib.symbols >> glib.def
  
@@ -587,8 +592,7 @@
 +
  
  gmoduleconf.h: gmoduleconf.h.win32
--	copy gmoduleconf.h.win32 gmoduleconf.h
-+	$(GNUCOPY) gmoduleconf.h.win32 gmoduleconf.h
+ 	copy gmoduleconf.h.win32 gmoduleconf.h
  
  gmodule.res : gmodule.rc
 -	rc -DBUILDNUMBER=0 -r -fo gmodule.res gmodule.rc
@@ -601,8 +605,6 @@
  clean::
 -	del gmoduleconf.h
 +	rm gmoduleconf.h
---- misc/glib-2.28.1/gobject/makefile.msc	2011-02-18 16:35:05.000000000 +0100
-+++ misc/build/glib-2.28.1/gobject/makefile.msc	2011-03-04 12:33:52.399273100 +0100
 --- misc/glib-2.28.1/gobject/makefile.msc	2011-02-18 16:35:05.000000000 +0100
 +++ misc/build/glib-2.28.1/gobject/makefile.msc	2011-03-09 09:29:52.712284300 +0100
 @@ -7,7 +7,7 @@
@@ -622,7 +624,7 @@
  	gmarshal.strings \
  	gobject-query.exe \
  	libgobject-2.0-0.dll	\
-@@ -24,8 +23,10 @@
+@@ -24,6 +23,8 @@
  	testgobject.exe
  
  gobject_OBJECTS =		\
@@ -631,9 +633,7 @@
  	gboxed.obj		\
  	gclosure.obj		\
  	genums.obj		\
- 	gobject.obj		\
- 	gparam.obj		\
-@@ -47,21 +49,18 @@
+@@ -47,7 +48,7 @@
  		-DG_GNUC_PRINTF=;G_GNUC_PRINTF gobject.symbols >> gobject.def
  
  gobject.res : gobject.rc
@@ -642,15 +642,13 @@
  
  gmarshal.h : gmarshal.list glib-genmarshal.exe
  	echo #ifndef __G_MARSHAL_H__ > xgen-gmh
- 	echo #define __G_MARSHAL_H__ >> xgen-gmh
- 	glib-genmarshal --nostdinc --prefix=g_cclosure_marshal gmarshal.list --header >> xgen-gmh
+@@ -56,12 +57,9 @@
  	echo #endif /* __G_MARSHAL_H__ */ >> xgen-gmh
--	copy xgen-gmh gmarshal.h
--
+ 	copy xgen-gmh gmarshal.h
+ 
 -gmarshal.c: gmarshal.list gmarshal.h glib-genmarshal.exe
 -	glib-genmarshal --nostdinc --prefix=g_cclosure_marshal gmarshal.list --body > gmarshal.c
-+	$(GNUCOPY) xgen-gmh gmarshal.h
- 
+-
  libgobject-2.0-0.dll : $(gobject_OBJECTS) gobject.def gobject.res
  	$(CC) $(CFLAGS) -Fm -LD -Fe$@ $(gobject_OBJECTS) gobject.res \
 -	..\glib\glib-2.0.lib $(LDFLAGS) /implib:gobject-2.0.lib /def:gobject.def || del $@
@@ -658,7 +656,7 @@
  
  gobject-2.28s.lib : $(gobject_OBJECTS) 
  	lib /out:$@ $(gobject_OBJECTS)
-@@ -69,7 +68,7 @@
+@@ -69,7 +67,7 @@
  # link glib's static version to avoid installing 
  glib-genmarshal.exe : glib-genmarshal.c gmarshal.strings
  	$(CC) -Fe$@ $(CFLAGS) -UGOBJECT_COMPILATION glib-genmarshal.c \
@@ -689,26 +687,47 @@
  	$(CC) $(CFLAGS) -LD -Fe$@ $(gthread_OBJECTS) gthread.res \
 --- misc/glib-2.28.1/makefile.msc	2009-04-01 01:04:20.000000000 +0200
 +++ misc/build/glib-2.28.1/makefile.msc	2011-03-04 09:11:06.663432800 +0100
-@@ -1,7 +1,7 @@
+@@ -1,28 +1,25 @@
  ## Makefile for building the GLib dlls with Microsoft C
  ## Use: nmake -f makefile.msc
  
 -PARTS = glib gmodule gthread gobject gio tests
-+PARTS = "build\win32\dirent" glib gmodule gthread gobject gio tests 
++PARTS_ALL = "build\win32\dirent.all" glib.all gmodule.all gthread.all gobject.all gio.all tests.all 
++
++PARTS_CLEAN = "build\win32\dirent.clean" glib.clean gmodule.clean gthread.clean gobject.clean gio.clean tests.clean 
  
  all : \
  	config.h \
-@@ -22,7 +22,7 @@
- 	@cd ..
+-	glibconfig.h \
+-	sub-all
+-
+-sub-all: 
+-	for %d in ($(PARTS)) do nmake -nologo -f makefile.msc sub-one THIS=%d TARGET=all
++	glib/glibconfig.h \
++	$(PARTS_ALL)
+ 
+-clean : sub-clean
++$(PARTS_ALL):
++	cmd /C "cd $* & nmake -nologo -f makefile.msc all"
+ 
+-sub-clean:
+-	for %d in ($(PARTS)) do nmake -nologo -f makefile.msc sub-one THIS=%d TARGET=clean
++clean : $(PARTS_ALL)
+ 
+-sub-one:
+-	@cd $(THIS)
+-	@nmake -nologo -f makefile.msc $(TARGET)
+-	@cd ..
++$(PARTS_CLEAN):
++	cmd /C "cd $* & nmake -nologo -f makefile.msc clean"
  
  config.h: config.h.win32
--	copy config.h.win32 config.h
-+	$(GNUCOPY) config.h.win32 config.h
+ 	copy config.h.win32 config.h
  
 -glibconfig.h: glibconfig.h.win32
 -	copy glibconfig.h.win32 glibconfig.h
-+glibconfig.h: glib/glibconfig.h.win32
-+	$(GNUCOPY) glib/glibconfig.h.win32 glib/glibconfig.h
++glib/glibconfig.h: glib/glibconfig.h.win32
++	copy glib/glibconfig.h.win32 glib/glibconfig.h
 --- misc/glib-2.28.1/tests/makefile.msc	2011-02-18 16:35:43.000000000 +0100
 +++ misc/build/glib-2.28.1/tests/makefile.msc	2011-03-04 08:33:02.079762100 +0100
 @@ -7,7 +7,7 @@

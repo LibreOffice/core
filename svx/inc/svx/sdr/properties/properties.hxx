@@ -187,6 +187,10 @@ namespace sdr
             // default implementation returns 0 (zero)
             virtual sal_uInt32 getVersion() const;
         };
+
+        // checks the FillStyle item and removes unneeded Gradient, FillBitmap and Hatch items
+        void SVX_DLLPUBLIC CleanupFillProperties( SfxItemSet& rItemSet );
+
     } // end of namespace properties
 } // end of namespace sdr
 

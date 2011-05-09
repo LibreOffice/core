@@ -89,6 +89,12 @@ namespace sdr
             return 0L;
         }
 
+        void PageProperties::PostItemChange(const sal_uInt16 nWhich )
+        {
+            if( (nWhich == XATTR_FILLSTYLE) && (mpEmptyItemSet != NULL) )
+                CleanupFillProperties(*mpEmptyItemSet);
+        }
+
         void PageProperties::ClearObjectItem(const sal_uInt16 /*nWhich*/)
         {
             // simply ignore item clearing on page objects

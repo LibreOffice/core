@@ -146,6 +146,7 @@ Global gTestAppArea as String       '///+ gTestAppArea : name of the testarea (e
 Global gErrorSum as Integer         '///+ gErrorSum : last value of errors in a test
 Global gWarningSum as Integer       '///+ gWarningSum : last value of warnings in a test
 Global gQaErrorSum as Integer       '///+ gQaErrorSum : last value of qaErrors in a test
+Global gAssertionSum as Integer     '///+ gAssertionSum : last value of Assertions in a test
 Global gStatusDuration              '///+ gStatusDuration : starting time to get at the end the duration of a test
 Global gTestcaseStart as Date       '///+ gTestCaseDuration : starting time of the testcase
 Global glsStatusPage (32000) as String  '///+ glsStatusPage () : list for the output in the status-page

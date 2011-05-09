@@ -1186,221 +1186,14 @@ static const mso_CustomShape msoBentUpArrow =
     (SvxMSDffHandle*)mso_sptBentUpArrowHandle, sizeof( mso_sptBentUpArrowHandle ) / sizeof( SvxMSDffHandle )
 };
 
-
-static const SvxMSDffVertPair mso_sptCurvedDownVert[] =
-{
-    { 0, 0 }, { 3 MSO_I, 21 MSO_I }, { 0, 21600 }, { 4 MSO_I, 0 },
-    { 0, 0 }, { 3 MSO_I, 21 MSO_I }, { 4 MSO_I, 0 }, { 17 MSO_I, 24 MSO_I },
-    { 15 MSO_I, 0 }, { 1 MSO_I, 21 MSO_I }, { 17 MSO_I, 24 MSO_I }, { 15 MSO_I, 21600 },
-    { 15 MSO_I, 0 }, { 1 MSO_I, 21 MSO_I }, { 7 MSO_I, 0 }, { 13 MSO_I, 2 MSO_I },
-    { 14 MSO_I, 2 MSO_I }, { 8 MSO_I, 21600 }, { 12 MSO_I, 2 MSO_I },
-    { 0, 0 }, { 3 MSO_I, 21 MSO_I }, { 11 MSO_I, 2 MSO_I }, { 17 MSO_I, 24 MSO_I },
-    { 0, 0 }, { 3 MSO_I, 21 MSO_I }, { 17 MSO_I, 24 MSO_I }, { 4 MSO_I, 0 }
-};
-static const sal_uInt16 mso_sptCurvedDownSegm[] =
-{
-    0xa508,
-    0xa304,
-    0x6000,
-    0x8000,
-    0xa604,
-    0x0003,
-    0xa308,
-    0x6000,
-    0x8000
-};
-static const SvxMSDffCalculationData mso_sptCurvedDownCalc[] =
-{
-    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
-    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
-    { 0x2000, { DFF_Prop_adjust3Value, 0, 0 } },
-    { 0xa000, { DFF_Prop_adjustValue, 21600, DFF_Prop_adjust2Value } },
-    { 0x2001, { 0x403, 1, 2 } },
-    { 0x6000, { DFF_Prop_adjust2Value, DFF_Prop_adjust2Value, 21600 } },
-    { 0xe000, { 0x405, DFF_Prop_adjust2Value, DFF_Prop_adjustValue } },
-    { 0x2001, { 0x406, 1, 2 } },
-    { 0x4002, { 21600, DFF_Prop_adjustValue, 0 } },
-    { 0x8000, { 21600, 0, DFF_Prop_adjust3Value } },
-    { 0xa00f, { 0x409, 21600, 0x404 } },
-    { 0x6000, { 0x404, 0x40a, 0 } },
-    { 0x6000, { 0x40b, DFF_Prop_adjust2Value, 21600 } },
-    { 0x6000, { 0x407, 0x40a, 0 } },
-    { 0xa000, { 0x40c, 21600, DFF_Prop_adjustValue } },
-    { 0xa000, { 0x405, 0, DFF_Prop_adjustValue } },
-    { 0x2001, { 0x40f, 1, 2 } },
-    { 0x6002, { 0x404, 0x407, 0 } },
-    { 0x6000, { DFF_Prop_adjustValue, DFF_Prop_adjust2Value, 21600 } },
-    { 0x2001, { 0x412, 1, 2 } },
-    { 0xa000, { 0x411, 0, 0x413 } },
-    { 0x0001, { 21600, 2, 1 } },
-    { 0xa000, { 0x411, 0, 0x404 } },
-    { 0x600f, { 0x416, 0x404, 21600 } },
-    { 0x8000, { 21600, 0, 0x417 } },
-    { 0x2000, { 0x408, 128, 0 } },
-    { 0x2001, { 0x405, 1, 2 } },
-    { 0x2000, { 0x405, 0, 128 } },
-    { 0xe000, { DFF_Prop_adjustValue, 0x411, 0x40c } },
-    { 0x600f, { 0x414, 0x404, 21600 } },
-    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } },
-    { 0x2001, { 0x41e, 1, 2 } },
-    { 0x0001, { 21600, 21600, 1 } },
-    { 0x6001, { 0x409, 0x409, 1 } },
-    { 0xa000, { 0x420, 0, 0x421 } },
-    { 0x200d, { 0x422, 0, 0 } },
-    { 0x2000, { 0x423, 21600, 0 } },
-    { 0x8001, { 21600, 21600, 0x424 } },
-    { 0x2000, { 0x425, 64, 0 } },
-    { 0x2001, { DFF_Prop_adjustValue, 1, 2 } },
-    { 0x600f, { 0x41f, 0x427, 21600 } },
-    { 0x8000, { 21600, 0, 0x428 } },
-    { 0x2000, { 0x429, 64, 0 } },
-    { 0x2001, { 0x404, 1, 2 } },
-    { 0xa000, { DFF_Prop_adjust2Value, 0, 0x42b } },
-    { 0x0001, { 21600, 2195, 16384 } },
-    { 0x0001, { 21600, 14189, 16384 } }
-};
-static const sal_Int32 mso_sptCurvedDownDefault[] =
-{
-    3, 12960, 19440, 14400
-};
-static const SvxMSDffTextRectangles mso_sptCurvedDownTextRect[] =
-{
-    { { 43 MSO_I, 45 MSO_I }, { 44 MSO_I, 46 MSO_I } }
-};
-static const SvxMSDffVertPair mso_sptCurvedDownGluePoints[] =
-{
-    { 17 MSO_I, 0 }, { 16 MSO_I, 21600 }, { 12 MSO_I, 2 MSO_I }, { 8 MSO_I, 21600 }, { 14 MSO_I, 2 MSO_I }
-};
-static const SvxMSDffHandle mso_sptCurvedDownHandles[] =
-{
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL,
-        0x100, 21600, 10800, 10800, 3 + 0x26, 3 + 0x1b, 0, 10800 },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL,
-        0x101, 21600, 10800, 10800, 3 + 0x19, 21600, 0, 10800 },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL,
-        21600, 0x102, 10800, 10800, 3375, 21600, 3 + 0x2a, 21600 }
-};
-static const mso_CustomShape msoCurvedDownArrow =
-{
-    (SvxMSDffVertPair*)mso_sptCurvedDownVert, sizeof( mso_sptCurvedDownVert ) / sizeof( SvxMSDffVertPair ),
-    (sal_uInt16*)mso_sptCurvedDownSegm, sizeof( mso_sptCurvedDownSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptCurvedDownCalc, sizeof( mso_sptCurvedDownCalc ) / sizeof( SvxMSDffCalculationData ),
-    (sal_Int32*)mso_sptCurvedDownDefault,
-    (SvxMSDffTextRectangles*)mso_sptCurvedDownTextRect, sizeof( mso_sptCurvedDownTextRect ) / sizeof( SvxMSDffTextRectangles ),
-    21600, 21600,
-    0x80000000, 0x80000000,
-    (SvxMSDffVertPair*)mso_sptCurvedDownGluePoints, sizeof( mso_sptCurvedDownGluePoints ) / sizeof( SvxMSDffVertPair ),
-    (SvxMSDffHandle*)mso_sptCurvedDownHandles, sizeof( mso_sptCurvedDownHandles ) / sizeof( SvxMSDffHandle )
-};
-
-static const SvxMSDffVertPair mso_sptCurvedUpVert[] =
-{
-    { 0, 22 MSO_I }, { 3 MSO_I, 21 MSO_I }, { 0, 0 }, { 4 MSO_I, 21 MSO_I },
-        { 14 MSO_I, 22 MSO_I }, { 1 MSO_I, 21 MSO_I }, { 7 MSO_I, 21 MSO_I }, { 12 MSO_I, 2 MSO_I },
-    { 13 MSO_I, 2 MSO_I }, { 8 MSO_I, 0 }, { 11 MSO_I, 2 MSO_I },
-    { 0, 22 MSO_I }, { 3 MSO_I, 21 MSO_I }, { 10 MSO_I, 2 MSO_I }, { 16 MSO_I, 24 MSO_I },
-    { 14 MSO_I, 22 MSO_I }, { 1 MSO_I, 21 MSO_I }, { 16 MSO_I, 24 MSO_I }, { 14 MSO_I, 0 },
-    { 14 MSO_I, 22 MSO_I }, { 1 MSO_I, 21 MSO_I }, { 7 MSO_I, 21 MSO_I }, { 16 MSO_I, 24 MSO_I }
-};
-static const sal_uInt16 mso_sptCurvedUpSegm[] =
-{
-    0xa408,
-    0x0003,
-    0xa508,
-    0x6000,
-    0x8000,
-    0xa604,
-    0xaa00,
-    0x8000
-};
-static const SvxMSDffCalculationData mso_sptCurvedUpCalc[] =
-{
-    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
-    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
-    { 0x2000, { DFF_Prop_adjust3Value, 0, 0 } },
-    { 0xa000, { DFF_Prop_adjustValue, 21600, DFF_Prop_adjust2Value } },
-    { 0x2001, { 0x403, 1, 2 } },
-    { 0x6000, { DFF_Prop_adjust2Value, DFF_Prop_adjust2Value, 21600 } },
-    { 0xe000, { 0x405, DFF_Prop_adjust2Value, DFF_Prop_adjustValue } },
-    { 0x2001, { 0x406, 1, 2 } },
-    { 0x4002, { 21600, DFF_Prop_adjustValue, 0 } },
-    { 0xa00f, { DFF_Prop_adjust3Value, 21600, 0x404 } },
-    { 0x6000, { 0x404, 0x409, 0 } },
-    { 0x6000, { 0x40a, DFF_Prop_adjust2Value, 21600 } },
-    { 0x6000, { 0x407, 0x409, 0 } },
-    { 0xa000, { 0x40b, 21600, DFF_Prop_adjustValue } },
-    { 0xa000, { 0x405, 0, DFF_Prop_adjustValue } },
-    { 0x2001, { 0x40e, 1, 2 } },
-    { 0x6002, { 0x404, 0x407, 0 } },
-    { 0x6000, { DFF_Prop_adjustValue, DFF_Prop_adjust2Value, 21600 } },
-    { 0x2001, { 0x411, 1, 2 } },
-    { 0xa000, { 0x410, 0, 0x412 } },
-    { 0x0000, { 21600, 0, 0 } },
-    { 0x0000, { 21600, 0, 0 } },
-    { 0x0000, { 0, 0, 21600 } },
-    { 0xa000, { 0x410, 0, 0x404 } },
-    { 0x600f, { 0x417, 0x404, 21600 } },
-    { 0x2000, { 0x408, 128, 0 } },
-    { 0x2001, { 0x405, 1, 2 } },
-    { 0x2000, { 0x405, 0, 128 } },
-    { 0xe000, { DFF_Prop_adjustValue, 0x410, 0x40b } },
-    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } },
-    { 0x2001, { 0x41d, 1, 2 } },
-    { 0x0001, { 21600, 21600, 1 } },
-    { 0x6001, { DFF_Prop_adjust3Value, DFF_Prop_adjust3Value, 1 } },
-    { 0xa000, { 0x41f, 0, 0x420 } },
-    { 0x200d, { 0x421, 0, 0 } },
-    { 0x2000, { 0x422, 21600, 0 } },
-    { 0x8001, { 21600, 21600, 0x423 } },
-    { 0x2000, { 0x424, 64, 0 } },
-    { 0x2001, { DFF_Prop_adjustValue, 1, 2 } },
-    { 0x600f, { 0x41e, 0x426, 21600 } },
-    { 0x2000, { 0x427, 0, 64 } },
-    { 0x2001, { 0x404, 1, 2 } },
-    { 0xa000, { DFF_Prop_adjust2Value, 0, 0x429 } },
-    { 0x0001, { 21600, 2195, 16384 } },
-    { 0x0001, { 21600, 14189, 16384 } }
-};
-static const sal_Int32 mso_sptCurvedUpDefault[] =
-{
-    3, 12960, 19440, 7200
-};
-static const SvxMSDffTextRectangles mso_sptCurvedUpTextRect[] =
-{
-    { { 41 MSO_I, 43 MSO_I }, { 42 MSO_I, 44 MSO_I } }
-};
-static const SvxMSDffVertPair mso_sptCurvedUpGluePoints[] =
-{
-    { 8 MSO_I, 0 }, { 11 MSO_I, 2 MSO_I }, { 15 MSO_I, 0 }, { 16 MSO_I, 21 MSO_I }, { 13 MSO_I, 2 MSO_I }
-};
-static const SvxMSDffHandle mso_sptCurvedUpHandles[] =
-{
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL,
-        0x100, 0, 10800, 10800, 3 + 37, 3 + 27, 0, 10800 },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL,
-        0x101, 0, 10800, 10800, 3 + 25, 3 + 20, 0, 10800 },
-    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL,
-        21600, 0x102, 10800, 10800, 3375, 21600, 0, 3 + 40 }
-};
-static const mso_CustomShape msoCurvedUpArrow =
-{
-    (SvxMSDffVertPair*)mso_sptCurvedUpVert, sizeof( mso_sptCurvedUpVert ) / sizeof( SvxMSDffVertPair ),
-    (sal_uInt16*)mso_sptCurvedUpSegm, sizeof( mso_sptCurvedUpSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptCurvedUpCalc, sizeof( mso_sptCurvedUpCalc ) / sizeof( SvxMSDffCalculationData ),
-    (sal_Int32*)mso_sptCurvedUpDefault,
-    (SvxMSDffTextRectangles*)mso_sptCurvedUpTextRect, sizeof( mso_sptCurvedUpTextRect ) / sizeof( SvxMSDffTextRectangles ),
-    21600, 21600,
-    0x80000000, 0x80000000,
-    (SvxMSDffVertPair*)mso_sptCurvedUpGluePoints, sizeof( mso_sptCurvedUpGluePoints ) / sizeof( SvxMSDffVertPair ),
-    (SvxMSDffHandle*)mso_sptCurvedUpHandles, sizeof( mso_sptCurvedUpHandles ) / sizeof( SvxMSDffHandle )
-};
-
 static const SvxMSDffVertPair mso_sptCurvedRightVert[] =
 {
     { 0, 0 }, { 23 MSO_I, 3 MSO_I }, { 22 MSO_I, 0 }, { 0, 4 MSO_I }, { 0, 15 MSO_I }, { 23 MSO_I, 1 MSO_I }, { 0, 7 MSO_I }, { 2 MSO_I, 13 MSO_I },
     { 2 MSO_I, 14 MSO_I }, { 22 MSO_I, 8 MSO_I }, { 2 MSO_I, 12 MSO_I },
     { 0, 0 }, { 23 MSO_I, 3 MSO_I }, { 2 MSO_I, 11 MSO_I }, { 26 MSO_I, 17 MSO_I }, { 0, 15 MSO_I }, { 23 MSO_I, 1 MSO_I }, { 26 MSO_I, 17 MSO_I }, { 22 MSO_I, 15 MSO_I },
-    { 0, 0 }, { 23 MSO_I, 3 MSO_I }, { 0, 4 MSO_I }, { 26 MSO_I, 17 MSO_I }
+    { 0, 0 }, { 23 MSO_I, 3 MSO_I }, { 22 MSO_I, 0 }, { 0, 4 MSO_I },
+    { 0, 0 }, { 23 MSO_I, 3 MSO_I }, { 0, 4 MSO_I }, { 26 MSO_I, 17 MSO_I },
+    { 0, 15 MSO_I }, { 23 MSO_I, 1 MSO_I }, { 26 MSO_I, 17 MSO_I }, { 22 MSO_I, 15 MSO_I }
 };
 static const sal_uInt16 mso_sptCurvedRightSegm[] =
 {
@@ -1410,7 +1203,9 @@ static const sal_uInt16 mso_sptCurvedRightSegm[] =
     0x6000,
     0x8000,
     0xa404,
-    0xaa00,
+    0xa304,
+    0xa504,
+    0x6000,
     0x8000
 };
 static const SvxMSDffCalculationData mso_sptCurvedRightCalc[] =
@@ -1499,25 +1294,86 @@ static const mso_CustomShape msoCurvedRightArrow =
     (SvxMSDffHandle*)mso_sptCurvedRightHandles, sizeof( mso_sptCurvedRightHandles ) / sizeof( SvxMSDffHandle )
 };
 
-static const SvxMSDffVertPair mso_sptCurvedLeftVert[] =
+static const SvxMSDffVertPair mso_sptCurvedDownVert[] =
 {
-    { 22 MSO_I, 0 }, { 21 MSO_I, 3 MSO_I }, { 0, 0 }, { 21 MSO_I, 4 MSO_I }, { 22 MSO_I, 14 MSO_I }, { 21 MSO_I, 1 MSO_I }, { 21 MSO_I, 7 MSO_I }, { 2 MSO_I, 12 MSO_I },
-    { 2 MSO_I, 13 MSO_I }, { 0, 8 MSO_I }, { 2 MSO_I, 11 MSO_I },
-    { 22 MSO_I, 0 }, { 21 MSO_I, 3 MSO_I }, { 2 MSO_I, 10 MSO_I }, { 24 MSO_I, 16 MSO_I }, { 22 MSO_I, 14 MSO_I }, { 21 MSO_I, 1 MSO_I }, { 24 MSO_I, 16 MSO_I }, { 0, 14 MSO_I },
-    { 22 MSO_I, 14 MSO_I }, { 21 MSO_I, 1 MSO_I }, { 21 MSO_I, 7 MSO_I }, { 24 MSO_I, 16 MSO_I }
+    { 0, 0 }, { 3 MSO_I, 23 MSO_I }, { 0, 22 MSO_I }, { 4 MSO_I, 0 },
+    { 15 MSO_I, 0 }, { 1 MSO_I, 23 MSO_I }, { 7 MSO_I, 0 }, { 13 MSO_I, 2 MSO_I },
+    { 14 MSO_I, 2 MSO_I }, { 8 MSO_I, 22 MSO_I }, { 12 MSO_I, 2 MSO_I },
+    { 0, 0 }, { 3 MSO_I, 23 MSO_I }, { 11 MSO_I, 2 MSO_I }, { 17 MSO_I, 26 MSO_I }, { 15 MSO_I, 0 },
+    { 1 MSO_I, 23 MSO_I }, { 17 MSO_I, 26 MSO_I }, { 15 MSO_I, 22 MSO_I },
+    { 0, 0 }, { 3 MSO_I, 23 MSO_I }, { 0, 22 MSO_I }, { 4 MSO_I, 0 },
+    { 0, 0 }, { 3 MSO_I, 23 MSO_I }, { 4 MSO_I, 0 }, { 17 MSO_I, 26 MSO_I },
+    { 15 MSO_I, 0 }, { 1 MSO_I, 23 MSO_I }, { 17 MSO_I, 26 MSO_I }, { 15 MSO_I, 22 MSO_I }
 };
-static const sal_uInt16 mso_sptCurvedLeftSegm[] =
+static const sal_uInt16 mso_sptCurvedDownSegm[] =
 {
     0xa608,
     0x0003,
     0xa308,
     0x6000,
     0x8000,
-    0xa404,
-    0xaa00,
+    0xa604,
+    0xa504,
+    0xa304,
+    0x6000,
     0x8000
 };
-static const SvxMSDffCalculationData mso_sptCurvedLeftCalc[] =
+static const SvxMSDffTextRectangles mso_sptCurvedDownTextRect[] =
+{
+    { { 45 MSO_I, 47 MSO_I }, { 46 MSO_I, 48 MSO_I } }
+};
+static const SvxMSDffVertPair mso_sptCurvedDownGluePoints[] =
+{
+    { 17 MSO_I, 0 }, { 16 MSO_I, 22 MSO_I }, { 12 MSO_I, 2 MSO_I }, { 8 MSO_I, 22 MSO_I }, { 14 MSO_I, 2 MSO_I }
+};
+static const SvxMSDffHandle mso_sptCurvedDownHandles[] =
+{
+    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL,
+        0x100, 21600, 10800, 10800, 3 + 40, 3 + 29, 0, 10800 },
+    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL,
+        0x101, 21600, 10800, 10800, 3 + 27, 3 + 21, 0, 10800 },
+    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL,
+        21600, 0x102, 10800, 10800, 3375, 21600, 3 + 44, 3 + 22 }
+};
+
+static const mso_CustomShape msoCurvedDownArrow =
+{
+    (SvxMSDffVertPair*)mso_sptCurvedDownVert, sizeof( mso_sptCurvedDownVert ) / sizeof( SvxMSDffVertPair ),
+    (sal_uInt16*)mso_sptCurvedDownSegm, sizeof( mso_sptCurvedDownSegm ) >> 1,
+    (SvxMSDffCalculationData*)mso_sptCurvedRightCalc, sizeof( mso_sptCurvedRightCalc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptCurvedRightDefault,
+    (SvxMSDffTextRectangles*)mso_sptCurvedDownTextRect, sizeof( mso_sptCurvedDownTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    21600, 21600,
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptCurvedDownGluePoints, sizeof( mso_sptCurvedDownGluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffHandle*)mso_sptCurvedDownHandles, sizeof( mso_sptCurvedDownHandles ) / sizeof( SvxMSDffHandle )
+};
+
+static const SvxMSDffVertPair mso_sptCurvedUpVert[] =
+{
+    { 0, 22 MSO_I }, { 3 MSO_I, 21 MSO_I }, { 0, 0 }, { 4 MSO_I, 21 MSO_I },
+    { 14 MSO_I, 22 MSO_I }, { 1 MSO_I, 21 MSO_I }, { 7 MSO_I, 21 MSO_I },
+    { 12 MSO_I, 2 MSO_I }, { 13 MSO_I, 2 MSO_I }, { 8 MSO_I, 0 }, { 11 MSO_I, 2 MSO_I },
+    { 0, 22 MSO_I }, { 3 MSO_I, 21 MSO_I }, { 10 MSO_I, 2 MSO_I }, { 16 MSO_I, 24 MSO_I },
+    { 14 MSO_I, 22 MSO_I }, { 1 MSO_I, 21 MSO_I }, { 16 MSO_I, 24 MSO_I }, { 14 MSO_I, 0 },
+    { 0, 22 MSO_I }, { 3 MSO_I, 21 MSO_I }, { 0, 0 }, { 4 MSO_I, 21 MSO_I },
+    { 14 MSO_I, 22 MSO_I }, { 1 MSO_I, 21 MSO_I }, { 7 MSO_I, 21 MSO_I }, { 16 MSO_I, 24 MSO_I },
+    { 14 MSO_I, 22 MSO_I }, { 1 MSO_I, 21 MSO_I }, { 16 MSO_I, 24 MSO_I }, { 14 MSO_I, 0 }
+};
+static const sal_uInt16 mso_sptCurvedUpSegm[] =
+{
+    0xa408,
+    0x0003,
+    0xa508,
+    0x6000,
+    0x8000,
+    0xa404,
+    0xa508,
+    0xa504,
+    0x6000,
+    0x8000
+};
+static const SvxMSDffCalculationData mso_sptCurvedUpCalc[] =
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
@@ -1565,9 +1421,62 @@ static const SvxMSDffCalculationData mso_sptCurvedLeftCalc[] =
     { 0x0001, { 21600, 2195, 16384 } },
     { 0x0001, { 21600, 14189, 16384 } }
 };
-static const sal_Int32 mso_sptCurvedLeftDefault[] =
+static const sal_Int32 mso_sptCurvedUpDefault[] =
 {
     3, 12960, 19440, 7200
+};
+static const SvxMSDffTextRectangles mso_sptCurvedUpTextRect[] =
+{
+    { { 41 MSO_I, 43 MSO_I }, { 42 MSO_I, 44 MSO_I } }
+};
+static const SvxMSDffVertPair mso_sptCurvedUpGluePoints[] =
+{
+    { 8 MSO_I, 0 }, { 11 MSO_I, 2 MSO_I }, { 15 MSO_I, 0 }, { 16 MSO_I, 21 MSO_I }, { 13 MSO_I, 2 MSO_I }
+};
+static const SvxMSDffHandle mso_sptCurvedUpHandles[] =
+{
+    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL,
+        0x100, 0, 10800, 10800, 3 + 37, 3 + 27, 0, 10800 },
+    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL,
+        0x101, 0, 10800, 10800, 3 + 25, 3 + 20, 0, 10800 },
+    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL,
+        21600, 0x102, 10800, 10800, 3375, 21600, 0, 3 + 40 }
+};
+static const mso_CustomShape msoCurvedUpArrow =
+{
+    (SvxMSDffVertPair*)mso_sptCurvedUpVert, sizeof( mso_sptCurvedUpVert ) / sizeof( SvxMSDffVertPair ),
+    (sal_uInt16*)mso_sptCurvedUpSegm, sizeof( mso_sptCurvedUpSegm ) >> 1,
+    (SvxMSDffCalculationData*)mso_sptCurvedUpCalc, sizeof( mso_sptCurvedUpCalc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptCurvedUpDefault,
+    (SvxMSDffTextRectangles*)mso_sptCurvedUpTextRect, sizeof( mso_sptCurvedUpTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    21600, 21600,
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptCurvedUpGluePoints, sizeof( mso_sptCurvedUpGluePoints ) / sizeof( SvxMSDffVertPair ),
+    (SvxMSDffHandle*)mso_sptCurvedUpHandles, sizeof( mso_sptCurvedUpHandles ) / sizeof( SvxMSDffHandle )
+};
+
+static const SvxMSDffVertPair mso_sptCurvedLeftVert[] =
+{
+    { 22 MSO_I, 0 }, { 21 MSO_I, 3 MSO_I }, { 0, 0 }, { 21 MSO_I, 4 MSO_I },
+    { 22 MSO_I, 14 MSO_I }, { 21 MSO_I, 1 MSO_I }, { 21 MSO_I, 7 MSO_I }, { 2 MSO_I, 12 MSO_I },
+    { 2 MSO_I, 13 MSO_I }, { 0, 8 MSO_I }, { 2 MSO_I, 11 MSO_I },
+    { 22 MSO_I, 0 }, { 21 MSO_I, 3 MSO_I }, { 2 MSO_I, 10 MSO_I }, { 24 MSO_I, 16 MSO_I },
+    { 22 MSO_I, 14 MSO_I }, { 21 MSO_I, 1 MSO_I }, { 24 MSO_I, 16 MSO_I }, { 0, 14 MSO_I },
+    { 22 MSO_I, 0 }, { 21 MSO_I, 3 MSO_I }, { 0, 0 }, { 21 MSO_I, 4 MSO_I },
+    { 22 MSO_I, 14 MSO_I }, { 21 MSO_I, 1 MSO_I }, { 21 MSO_I, 7 MSO_I }, { 24 MSO_I, 16 MSO_I },
+    { 22 MSO_I, 14 MSO_I }, { 21 MSO_I, 1 MSO_I }, { 24 MSO_I, 16 MSO_I }, { 0, 14 MSO_I }
+};
+static const sal_uInt16 mso_sptCurvedLeftSegm[] =
+{
+    0xa608,
+    0x0003,
+    0xa308,
+    0x6000,
+    0x8000,
+    0xa604,
+    0xa308,
+    0x6000,
+    0x8000
 };
 static const SvxMSDffTextRectangles mso_sptCurvedLeftTextRect[] =
 {
@@ -1590,18 +1499,14 @@ static const mso_CustomShape msoCurvedLeftArrow =
 {
     (SvxMSDffVertPair*)mso_sptCurvedLeftVert, sizeof( mso_sptCurvedLeftVert ) / sizeof( SvxMSDffVertPair ),
     (sal_uInt16*)mso_sptCurvedLeftSegm, sizeof( mso_sptCurvedLeftSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptCurvedLeftCalc, sizeof( mso_sptCurvedLeftCalc ) / sizeof( SvxMSDffCalculationData ),
-    (sal_Int32*)mso_sptCurvedLeftDefault,
+    (SvxMSDffCalculationData*)mso_sptCurvedUpCalc, sizeof( mso_sptCurvedUpCalc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptCurvedUpDefault,
     (SvxMSDffTextRectangles*)mso_sptCurvedLeftTextRect, sizeof( mso_sptCurvedLeftTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
     0x80000000, 0x80000000,
     (SvxMSDffVertPair*)mso_sptCurvedLeftGluePoints, sizeof( mso_sptCurvedLeftGluePoints ) / sizeof( SvxMSDffVertPair ),
     (SvxMSDffHandle*)mso_sptCurvedLeftHandles, sizeof( mso_sptCurvedLeftHandles ) / sizeof( SvxMSDffHandle )
 };
-
-
-
-
 
 static const SvxMSDffVertPair mso_sptStripedRightArrowVert[] =  // adjustment1 : x 3375 - 21600
 {                                                               // adjustment2 : y 0 - 10800

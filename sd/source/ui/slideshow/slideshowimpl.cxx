@@ -1913,6 +1913,7 @@ IMPL_LINK( SlideshowImpl, PostYieldListener, void*, EMPTYARG )
     Application::RemovePostYieldListener(LINK(this, SlideshowImpl, PostYieldListener));
     if (mbDisposed)
         return 0;
+    Application::Reschedule(true);
     return updateSlideShow();
 }
 

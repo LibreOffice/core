@@ -1300,7 +1300,7 @@ testcase tEditImageMap
             printlog( "Check for <Imagemap changed> messagebox (should not appear)" )
             kontext "Active"
             if ( Active.exists( 1 ) ) then
-                Warnlog( "<imagemap changed> message displayed." )
+                Warnlog( "#i117432#<imagemap changed> message displayed." )
                 printlog( Active.getText )
                 Active.no()
             else

@@ -186,9 +186,9 @@ struct SVL_DLLPRIVATE SfxUndoManager_Data
     SfxUndoArray*   pActUndoArray;
     SfxUndoArray*   pFatherUndoArray;
 
-    sal_Int32       mnLockCount;
     sal_Int32       mnMarks;
     sal_Int32       mnEmptyMark;
+    bool            mbUndoEnabled;
     bool            mbDoing;
     bool            mbClearUntilTopLevel;
 
@@ -198,9 +198,9 @@ struct SVL_DLLPRIVATE SfxUndoManager_Data
         :pUndoArray( new SfxUndoArray( i_nMaxUndoActionCount ) )
         ,pActUndoArray( NULL )
         ,pFatherUndoArray( NULL )
-        ,mnLockCount( 0 )
         ,mnMarks( 0 )
         ,mnEmptyMark(MARK_INVALID)
+        ,mbUndoEnabled( true )
         ,mbDoing( false )
         ,mbClearUntilTopLevel( false )
     {
@@ -421,14 +421,9 @@ void SfxUndoManager::EnableUndo( bool i_enable )
 
 void SfxUndoManager::ImplEnableUndo_Lock( bool const i_enable )
 {
-    if ( !i_enable )
-        ++m_pData->mnLockCount;
-    else
-    {
-        OSL_PRECOND( m_pData->mnLockCount > 0, "SfxUndoManager::ImplEnableUndo_NoNotify: not disabled, so why enabling?" );
-        if ( m_pData->mnLockCount > 0 )
-            --m_pData->mnLockCount;
-    }
+    if ( m_pData->mbUndoEnabled == i_enable )
+        return;
+    m_pData->mbUndoEnabled = i_enable;
 }
 
 //------------------------------------------------------------------------
@@ -443,7 +438,7 @@ bool SfxUndoManager::IsUndoEnabled() const
 
 bool SfxUndoManager::ImplIsUndoEnabled_Lock() const
 {
-    return m_pData->mnLockCount == 0;
+    return m_pData->mbUndoEnabled;
 }
 
 //------------------------------------------------------------------------

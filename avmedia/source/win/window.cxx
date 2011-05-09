@@ -179,7 +179,25 @@ LRESULT CALLBACK MediaPlayerWndProc( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM n
 // - Window -
 // ---------------
 
-WNDCLASS* Window::mpWndClass = NULL;
+WNDCLASS* lcl_getWndClass()
+{
+    static WNDCLASS* s_pWndClass = NULL;
+    if ( !s_pWndClass )
+    {
+        s_pWndClass = new WNDCLASS;
+
+        memset( s_pWndClass, 0, sizeof( *s_pWndClass ) );
+        s_pWndClass->hInstance = GetModuleHandle( NULL );
+        s_pWndClass->cbWndExtra = sizeof( DWORD );
+        s_pWndClass->lpfnWndProc = MediaPlayerWndProc;
+        s_pWndClass->lpszClassName = "com_sun_star_media_PlayerWnd";
+        s_pWndClass->hbrBackground = (HBRUSH) ::GetStockObject( BLACK_BRUSH );
+        s_pWndClass->hCursor = ::LoadCursor( NULL, IDC_ARROW );
+
+        ::RegisterClass( s_pWndClass );
+    }
+    return s_pWndClass;
+}
 
 // ------------------------------------------------------------------------------
 
@@ -194,20 +212,7 @@ Window::Window( const uno::Reference< lang::XMultiServiceFactory >& rxMgr, Playe
 {
     ::osl::MutexGuard aGuard( ImplGetOwnStaticMutex() );
 
-    if( !mpWndClass )
-    {
-        mpWndClass = new WNDCLASS;
-
-        memset( mpWndClass, 0, sizeof( *mpWndClass ) );
-        mpWndClass->hInstance = GetModuleHandle( NULL );
-        mpWndClass->cbWndExtra = sizeof( DWORD );
-        mpWndClass->lpfnWndProc = MediaPlayerWndProc;
-        mpWndClass->lpszClassName = "com_sun_star_media_PlayerWnd";
-        mpWndClass->hbrBackground = (HBRUSH) ::GetStockObject( BLACK_BRUSH );
-        mpWndClass->hCursor = ::LoadCursor( NULL, IDC_ARROW );
-
-        ::RegisterClass( mpWndClass );
-    }
+    lcl_getWndClass();
 }
 
 // ------------------------------------------------------------------------------
@@ -310,6 +315,8 @@ void Window::ImplLayoutVideoWindow()
 bool Window::create( const uno::Sequence< uno::Any >& rArguments )
 {
     IVideoWindow* pVideoWindow = const_cast< IVideoWindow* >( mrPlayer.getVideoWindow() );
+    WNDCLASS* mpWndClass = lcl_getWndClass();
+
 
     if( !mnFrameWnd && pVideoWindow && mpWndClass )
     {
@@ -374,7 +381,7 @@ bool Window::create( const uno::Sequence< uno::Any >& rArguments )
 
                         mrPlayer.setNotifyWnd( mnFrameWnd );
 
-                        meZoomLevel = media::ZoomLevel_ORIGINAL;
+                        meZoomLevel = media::ZoomLevel_FIT_TO_WINDOW;
                         ImplLayoutVideoWindow();
 #ifdef DDRAW_TEST_OUTPUT
                     }

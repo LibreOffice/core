@@ -278,6 +278,7 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
 void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
 {
     ScDocument& rDoc = GetDoc();
+    rDoc.IncSizeRecalcLevel( nScTab );      // #i116460# performance with many hidden rows
 
     // hide the columns
     for( SCCOL nScCol = 0; nScCol <= MAXCOL; ++nScCol )
@@ -304,7 +305,7 @@ void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
         if( ::get_flag( maRowFlags[ nScRow ], EXC_COLROW_HIDDEN ) )
         {
             // hide the row
-            rDoc.ShowRow( nScRow, nScTab, sal_False );
+            rDoc.SetRowHidden(nScRow, nScRow, nScTab, true);        // #i116460# SetRowHidden instead of ShowRow
             // #i38093# rows hidden by filter need extra flag
             if( (nFirstFilterScRow <= nScRow) && (nScRow <= nLastFilterScRow) )
                 rDoc.SetRowFiltered(nScRow, nScRow, nScTab, true);
@@ -314,5 +315,7 @@ void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
     // #i47438# if default row format is hidden, hide remaining rows
     if( ::get_flag( mnDefRowFlags, EXC_DEFROW_HIDDEN ) && (mnLastScRow < MAXROW) )
         rDoc.ShowRows( mnLastScRow + 1, MAXROW, nScTab, sal_False );
+
+    rDoc.DecSizeRecalcLevel( nScTab );      // #i116460# performance with many hidden rows
 }
 

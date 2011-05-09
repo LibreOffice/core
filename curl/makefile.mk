@@ -100,7 +100,7 @@ CONFIGURE_FLAGS= --without-ssl --enable-ftp --enable-ipv6 --disable-http --disab
 BUILD_DIR=$(CONFIGURE_DIR)$/lib
 BUILD_ACTION=make
 OUT2BIN=$(BUILD_DIR)$/.libs$/libcurl*.dll
-OUT2LIB=$(BUILD_DIR)$/.libs$/libcurl*.a
+OUT2LIB=$(BUILD_DIR)$/.libs$/libcurl*.dll.a
 .ELSE
 # make use of stlport headerfiles
 EXT_USE_STLPORT=TRUE

@@ -207,17 +207,11 @@ void MediaWindowBaseImpl::setPlayerWindow( const uno::Reference< media::XPlayerW
 
 void MediaWindowBaseImpl::cleanUp()
 {
-    if( mxPlayer.is() )
-    {
-        mxPlayer->stop();
+    uno::Reference< lang::XComponent > xComponent( mxPlayer, uno::UNO_QUERY );
+    if( xComponent.is() ) // this stops the player
+        xComponent->dispose();
 
-        uno::Reference< lang::XComponent > xComponent( mxPlayer, uno::UNO_QUERY );
-
-        if( xComponent.is() )
-            xComponent->dispose();
-
-        mxPlayer.clear();
-    }
+    mxPlayer.clear();
 
     mpMediaWindow = NULL;
 }

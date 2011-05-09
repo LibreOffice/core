@@ -184,14 +184,14 @@ void ConfigurationControllerBroadcaster::DisposeAndClear (void)
 {
     lang::EventObject aEvent;
     aEvent.Source = mxConfigurationController;
-    while (maListenerMap.size() > 0)
+    while (!maListenerMap.empty())
     {
         ListenerMap::iterator iMap (maListenerMap.begin());
         if (iMap == maListenerMap.end())
             break;
 
         // When the first vector is empty then remove it from the map.
-        if (iMap->second.size() == 0)
+        if (iMap->second.empty())
         {
             maListenerMap.erase(iMap);
             continue;

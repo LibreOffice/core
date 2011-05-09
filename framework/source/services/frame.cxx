@@ -103,6 +103,7 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/moduleoptions.hxx>
+#include <tools/diagnose_ex.h>
 
 #ifdef ENABLE_ASSERTIONS
     #ifndef _RTL_STRBUF_HXX_
@@ -2882,10 +2883,13 @@ void Frame::implts_setIconOnWindow()
         {
             try
             {
-                xSet->getPropertyValue( DECLARE_ASCII("IconId") )>>= nIcon;
+                css::uno::Reference< css::beans::XPropertySetInfo > const xPSI( xSet->getPropertySetInfo(), css::uno::UNO_SET_THROW );
+                if ( xPSI->hasPropertyByName( CONTROLLER_PROPNAME_ICONID ) )
+                    xSet->getPropertyValue( CONTROLLER_PROPNAME_ICONID ) >>= nIcon;
             }
-            catch( css::beans::UnknownPropertyException& )
+            catch( css::uno::Exception& )
             {
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
 

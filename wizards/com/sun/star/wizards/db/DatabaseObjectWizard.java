@@ -16,7 +16,10 @@ import com.sun.star.sdbc.SQLException;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.NamedValueCollection;
+import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.ui.WizardDialog;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -71,6 +74,86 @@ public abstract class DatabaseObjectWizard extends WizardDialog
         catch ( SQLException ex )
         {
             Logger.getLogger( this.getClass().getName() ).log( Level.SEVERE, null, ex );
+        }
+    }
+
+    protected static void executeWizardFromCommandLine( final String i_args[], final String i_className )
+    {
+        final String settings[] = new String[] { null, null, null };
+        final int IDX_PIPE_NAME = 0;
+        final int IDX_LOCATION = 1;
+        final int IDX_DSN = 2;
+
+        // some simple parsing
+        boolean failure = false;
+        int settingsIndex = -1;
+        for ( int i=0; i<i_args.length; ++i )
+        {
+            if ( settingsIndex >= 0 )
+            {
+                settings[ settingsIndex ] = i_args[i];
+                settingsIndex = -1;
+                continue;
+            }
+
+            if ( i_args[i].equals( "--pipe-name" ) )
+            {
+                settingsIndex = IDX_PIPE_NAME;
+                continue;
+            }
+
+            if ( i_args[i].equals( "--database-location" ) )
+            {
+                settingsIndex = IDX_LOCATION;
+                continue;
+            }
+
+            if ( i_args[i].equals( "--data-source-name" ) )
+            {
+                settingsIndex = IDX_DSN;
+                continue;
+            }
+
+            failure = true;
+        }
+
+        if ( settings[ IDX_PIPE_NAME ] == null )
+            failure = true;
+
+        if ( ( settings[ IDX_DSN ] == null ) && ( settings[ IDX_LOCATION ] == null ) )
+            failure = true;
+
+        if ( failure )
+        {
+            System.err.println( "supported arguments: " );
+            System.err.println( "  --pipe-name <name>           : specifies the name of the pipe to connect to the running OOo instance" );
+            System.err.println( "  --database-location <url>    : specifies the URL of the database document to work with" );
+            System.err.println( "  --data-source-name <name>    : specifies the name of the data source to work with" );
+            return;
+        }
+
+        final String ConnectStr = "uno:pipe,name=" + settings[IDX_PIPE_NAME] + ";urp;StarOffice.ServiceManager";
+        try
+        {
+            final XMultiServiceFactory serviceFactory = Desktop.connect(ConnectStr);
+            if (serviceFactory != null)
+            {
+                PropertyValue[] curproperties = new PropertyValue[1];
+                if ( settings[ IDX_LOCATION ] != null )
+                    curproperties[0] = Properties.createProperty( "DatabaseLocation", settings[ IDX_LOCATION ] );
+                else
+                    curproperties[0] = Properties.createProperty( "DataSourceName", settings[ IDX_DSN ] );
+
+                final Class wizardClass = Class.forName( i_className );
+                final Constructor ctor = wizardClass.getConstructor( XMultiServiceFactory.class, PropertyValue[].class );
+                final Method invokeMethod = wizardClass.getMethod( "start", new Class[0] );
+                final Object wizardInstance = ctor.newInstance( serviceFactory, curproperties );
+                invokeMethod.invoke( wizardInstance );
+            }
+        }
+        catch (java.lang.Exception jexception)
+        {
+            jexception.printStackTrace(System.out);
         }
     }
 }
