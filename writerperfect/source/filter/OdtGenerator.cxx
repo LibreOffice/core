@@ -797,7 +797,7 @@ void OdtGenerator::defineOrderedListLevel(const WPXPropertyList &propList)
     // is starting a new list at level 1 (and only level 1)
     if (pOrderedListStyle == NULL || pOrderedListStyle->getListID() != id  ||
         (propList["libwpd:level"] && propList["libwpd:level"]->getInt()==1 &&
-         (propList["text:start-value"] && propList["text:start-value"]->getInt() != (mpImpl->mWriterListStates.top().miLastListNumber+1))))
+         (propList["text:start-value"] && static_cast<unsigned>(propList["text:start-value"]->getInt()) != (mpImpl->mWriterListStates.top().miLastListNumber+1))))
     {
         WRITER_DEBUG_MSG(("Attempting to create a new ordered list style (listid: %i)\n", id));
         WPXString sName;
