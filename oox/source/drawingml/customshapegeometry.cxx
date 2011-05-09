@@ -1471,7 +1471,8 @@ OUString GetShapeType( sal_Int32 nType )
             sType = sBracePair;
             } break;
         case XML_straightConnector1: {
-            static const OUString sStraightConnector1 = CREATE_OUSTRING( "mso-spt32" );
+            static const OUString sStraightConnector1 = CREATE_OUSTRING( "ooxml-straight-connector-1" );
+            OSL_TRACE("preset resolved as: ooxml-straight-connector-1");
             sType = sStraightConnector1;
             } break;
         case XML_bentConnector2: {
