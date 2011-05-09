@@ -118,7 +118,9 @@ static void ImplAccelEntryInsert( ImplAccelList* pList, ImplAccelEntry* pEntry )
         do
         {
             nIndex++;
-            ImplAccelEntry* pTempEntry = (*pList)[ nIndex ];
+            ImplAccelEntry* pTempEntry = NULL;
+            if ( nIndex < pList->size() )
+                pTempEntry = (*pList)[ nIndex ];
             if ( !pTempEntry || (pTempEntry->mnId != pEntry->mnId) )
                 break;
         }
