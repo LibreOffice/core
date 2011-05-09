@@ -27,6 +27,7 @@
 
 #ifndef _STYLE_H
 #define _STYLE_H
+#include <cstdlib>
 #include <libwpd/libwpd.h>
 #include "DocumentElement.hxx"
 
