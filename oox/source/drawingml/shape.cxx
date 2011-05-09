@@ -256,7 +256,7 @@ Reference< XShape > Shape::createAndInsert(
         const rtl::OUString& rServiceName,
         const Theme* pTheme,
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-        const awt::Rectangle* pShapeRect,
+        const awt::Rectangle* /* pShapeRect */,
         sal_Bool bClearText,
         basegfx::B2DHomMatrix& aParentTransformation )
 {
