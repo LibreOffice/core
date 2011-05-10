@@ -91,9 +91,7 @@
 #include <rtl/logfile.hxx>
 #include <vcl/svapp.hxx>
 
-#ifndef __RSC
 #include <tools/errinf.hxx>
-#endif
 #include <comphelper/extract.hxx>
 
 #include <fwkdllapi.h>
