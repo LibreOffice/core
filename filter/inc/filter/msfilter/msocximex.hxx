@@ -1177,6 +1177,31 @@ public:
                                 const com::sun::star::awt::Size& rSize );
 };
 
+class HTML_Select : public OCX_ModernControl
+{
+public:
+    HTML_Select() : OCX_ModernControl(rtl::OUString::createFromAscii("TextBox")) {
+        msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.ListBox");
+        msDialogType = rtl::OUString::createFromAscii("com.sun.star.form.component.ListBox");
+        mnBackColor = 0x80000005L;
+        mnForeColor = 0x80000008L;
+        nBorderColor = 0x80000006L;
+        aFontData.SetHasAlign(sal_True);
+                fEnabled = true;
+                nMultiState =false;
+    }
+
+    using OCX_ModernControl::Import; // to not hide the other two import methods
+    virtual sal_Bool Import(com::sun::star::uno::Reference<
+        com::sun::star::beans::XPropertySet> &rPropSet);
+
+    static OCX_Control *Create() { return new HTML_Select;}
+
+        virtual sal_Bool Read(SotStorageStream *pS);
+        virtual sal_Bool ReadFontData(SotStorageStream *pS);
+        com::sun::star::uno::Sequence< rtl::OUString > msListData;
+        com::sun::star::uno::Sequence< sal_Int16 > msIndices;
+};
 
 class HTML_TextBox : public OCX_ModernControl
 {

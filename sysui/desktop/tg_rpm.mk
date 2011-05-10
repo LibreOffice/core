@@ -38,6 +38,7 @@ $(RPMFLAGFILES) : $(SPECFILE)
         --define "productname $(PRODUCTNAME.$(@:b:s/-/ /:1))" \
         --define "pkgprefix $(@:b:s/-/ /:1)$(PRODUCTVERSION.$(@:b:s/-/ /:1))" \
         --define "unixfilename $(UNIXFILENAME.$(@:b:s/-/ /:1))" \
+        --define "productversion $(PRODUCTVERSION.$(@:b:s/-/ /:1))" \
         --define "iconprefix $(ICONPREFIX.$(@:b:s/-/ /:1))" \
         --define "version $(PKGVERSION.$(@:b:s/-/ /:1))" \
         --define "release $(PKGREV)" \

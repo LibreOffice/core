@@ -2445,6 +2445,11 @@ void ScDPCollection::NameCaches::removeCache(const OUString& rName)
 ScDPCollection::DBType::DBType(sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand) :
     mnSdbType(nSdbType), maDBName(rDBName), maCommand(rCommand) {}
 
+bool ScDPCollection::DBType::less::operator() (const DBType& left, const DBType& right) const
+{
+    return left < right;
+}
+
 ScDPCollection::DBCaches::DBCaches(ScDocument* pDoc) : mpDoc(pDoc) {}
 
 const ScDPCache* ScDPCollection::DBCaches::getCache(sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand)

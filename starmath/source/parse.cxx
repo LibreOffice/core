@@ -2513,11 +2513,15 @@ const SmErrorDesc *SmParser::PrevError()
 }
 
 
-const SmErrorDesc  *SmParser::GetError(size_t i)
+const SmErrorDesc *SmParser::GetError(size_t i)
 {
-    return ( i < m_aErrDescList.size() )
-               ? m_aErrDescList[ i ]
-               : m_aErrDescList[ m_nCurError ];
+    if ( i < m_aErrDescList.size() )
+        return m_aErrDescList[ i ];
+
+    if ( (size_t)m_nCurError < m_aErrDescList.size() )
+        return m_aErrDescList[ m_nCurError ];
+
+    return NULL;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

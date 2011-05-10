@@ -33,6 +33,7 @@
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
 #include <com/sun/star/sheet/XDatabaseRanges.hpp>
+#include <com/sun/star/sheet/XUnnamedDatabaseRanges.hpp>
 #include <com/sun/star/sheet/XNamedRange.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -140,6 +141,8 @@ public:
     Reference< XNamedRange > createNamedRangeObject( OUString& orName, sal_Int32 nNameFlags ) const;
     /** Creates and returns a database range on-the-fly in the Calc document. */
     Reference< XDatabaseRange > createDatabaseRangeObject( OUString& orName, const CellRangeAddress& rRangeAddr ) const;
+    /** Creates and returns an unnamed database range on-the-fly in the Calc document. */
+    Reference< XDatabaseRange > createUnnamedDatabaseRangeObject( const CellRangeAddress& rRangeAddr ) const;
     /** Creates and returns a com.sun.star.style.Style object for cells or pages. */
     Reference< XStyle > createStyleObject( OUString& orStyleName, bool bPageStyle ) const;
 
@@ -392,6 +395,28 @@ Reference< XDatabaseRange > WorkbookData::createDatabaseRangeObject( OUString& o
         // create the database range
         xDatabaseRanges->addNewByName( orName, aDestRange );
         xDatabaseRange.set( xDatabaseRanges->getByName( orName ), UNO_QUERY );
+    }
+    catch( Exception& )
+    {
+    }
+    OSL_ENSURE( xDatabaseRange.is(), "WorkbookData::createDatabaseRangeObject - cannot create database range" );
+    return xDatabaseRange;
+}
+
+Reference< XDatabaseRange > WorkbookData::createUnnamedDatabaseRangeObject( const CellRangeAddress& rRangeAddr ) const
+{
+    // validate cell range
+    CellRangeAddress aDestRange = rRangeAddr;
+    bool bValidRange = getAddressConverter().validateCellRange( aDestRange, true, true );
+
+    // create database range and insert it into the Calc document
+    Reference< XDatabaseRange > xDatabaseRange;
+    PropertySet aDocProps( mxDoc );
+    Reference< XUnnamedDatabaseRanges > xDatabaseRanges( aDocProps.getAnyProperty( PROP_UnnamedDatabaseRanges ), UNO_QUERY_THROW );
+    if( bValidRange ) try
+    {
+        xDatabaseRanges->setByTable( aDestRange );
+        xDatabaseRange.set( xDatabaseRanges->getByTable( aDestRange.Sheet ), UNO_QUERY );
     }
     catch( Exception& )
     {
@@ -746,6 +771,11 @@ Reference< XNamedRange > WorkbookHelper::createNamedRangeObject( OUString& orNam
 Reference< XDatabaseRange > WorkbookHelper::createDatabaseRangeObject( OUString& orName, const CellRangeAddress& rRangeAddr ) const
 {
     return mrBookData.createDatabaseRangeObject( orName, rRangeAddr );
+}
+
+Reference< XDatabaseRange > WorkbookHelper::createUnnamedDatabaseRangeObject( const CellRangeAddress& rRangeAddr ) const
+{
+    return mrBookData.createUnnamedDatabaseRangeObject( rRangeAddr );
 }
 
 Reference< XStyle > WorkbookHelper::createStyleObject( OUString& orStyleName, bool bPageStyle ) const

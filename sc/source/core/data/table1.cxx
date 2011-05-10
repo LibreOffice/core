@@ -1696,6 +1696,8 @@ void ScTable::SetRepeatColRange( const ScRange* pNew )
 
     if (IsStreamValid())
         SetStreamValid(false);
+
+    InvalidatePageBreaks();
 }
 
 void ScTable::SetRepeatRowRange( const ScRange* pNew )
@@ -1704,6 +1706,8 @@ void ScTable::SetRepeatRowRange( const ScRange* pNew )
 
     if (IsStreamValid())
         SetStreamValid(false);
+
+    InvalidatePageBreaks();
 }
 
 void ScTable::ClearPrintRanges()
@@ -1713,6 +1717,8 @@ void ScTable::ClearPrintRanges()
 
     if (IsStreamValid())
         SetStreamValid(false);
+
+    InvalidatePageBreaks();
 }
 
 void ScTable::AddPrintRange( const ScRange& rNew )
@@ -1723,6 +1729,8 @@ void ScTable::AddPrintRange( const ScRange& rNew )
 
     if (IsStreamValid())
         SetStreamValid(false);
+
+    InvalidatePageBreaks();
 }
 
 

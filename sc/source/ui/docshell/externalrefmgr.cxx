@@ -74,6 +74,7 @@ using ::rtl::OUString;
 using ::std::vector;
 using ::std::find;
 using ::std::find_if;
+using ::std::remove_if;
 using ::std::distance;
 using ::std::pair;
 using ::std::list;
@@ -85,7 +86,7 @@ using namespace formula;
 
 namespace {
 
-class TabNameSearchPredicate : public unary_function<bool, ScExternalRefCache::TableName>
+class TabNameSearchPredicate : public unary_function<ScExternalRefCache::TableName, bool>
 {
 public:
     explicit TabNameSearchPredicate(const String& rSearchName) :
@@ -200,6 +201,56 @@ public:
 private:
     ScDocument* mpDoc;
 };
+
+/**
+ * Check whether a named range contains an external reference to a
+ * particular document.
+ */
+bool hasRefsToSrcDoc(ScRangeData& rData, sal_uInt16 nFileId)
+{
+    ScTokenArray* pArray = rData.GetCode();
+    if (!pArray)
+        return false;
+
+    pArray->Reset();
+    ScToken* p = static_cast<ScToken*>(pArray->GetNextReference());
+    for (; p; p = static_cast<ScToken*>(pArray->GetNextReference()))
+    {
+        if (!p->IsExternalRef())
+            continue;
+
+        if (p->GetIndex() == nFileId)
+            return true;
+    }
+    return false;
+}
+
+class EraseRangeByIterator : unary_function<ScRangeName::iterator, void>
+{
+    ScRangeName& mrRanges;
+public:
+    EraseRangeByIterator(ScRangeName& rRanges) : mrRanges(rRanges) {}
+    void operator() (const ScRangeName::iterator& itr)
+    {
+        mrRanges.erase(itr);
+    }
+};
+
+/**
+ * Remove all named ranges that contain references to specified source
+ * document.
+ */
+void removeRangeNamesBySrcDoc(ScRangeName& rRanges, sal_uInt16 nFileId)
+{
+    ScRangeName::iterator itr = rRanges.begin(), itrEnd = rRanges.end();
+    vector<ScRangeName::iterator> v;
+    for (; itr != itrEnd; ++itr)
+    {
+        if (hasRefsToSrcDoc(*itr, nFileId))
+            v.push_back(itr);
+    }
+    for_each(v.begin(), v.end(), EraseRangeByIterator(rRanges));
+}
 
 }
 
@@ -2358,8 +2409,13 @@ void lcl_removeByFileId(sal_uInt16 nFileId, MapContainer& rMap)
 {
     typename MapContainer::iterator itr = rMap.find(nFileId);
     if (itr != rMap.end())
+    {
+        // Close this document shell.
+        itr->second.maShell->DoClose();
         rMap.erase(itr);
+    }
 }
+
 
 void ScExternalRefManager::refreshNames(sal_uInt16 nFileId)
 {
@@ -2387,6 +2443,21 @@ void ScExternalRefManager::breakLink(sal_uInt16 nFileId)
         RefCellSet aSet = itrRefs->second;
         for_each(aSet.begin(), aSet.end(), ConvertFormulaToStatic(mpDoc));
         maRefCells.erase(nFileId);
+    }
+
+    // Remove all named ranges that reference this document.
+
+    // Global named ranges.
+    ScRangeName* pRanges = mpDoc->GetRangeName();
+    if (pRanges)
+        removeRangeNamesBySrcDoc(*pRanges, nFileId);
+
+    // Sheet-local named ranges.
+    for (SCTAB i = 0, n = mpDoc->GetTableCount(); i < n; ++i)
+    {
+        pRanges = mpDoc->GetRangeName(i);
+        if (pRanges)
+            removeRangeNamesBySrcDoc(*pRanges, nFileId);
     }
 
     lcl_removeByFileId(nFileId, maDocShells);
@@ -2528,6 +2599,9 @@ void ScExternalRefManager::purgeStaleSrcDocument(sal_Int32 nTimeOut)
         sal_Int32 nSinceLastAccess = (Time() - itr->second.maLastAccess).GetTime();
         if (nSinceLastAccess < nTimeOut)
             aNewDocShells.insert(*itr);
+        else
+            // Timed out.  Let's close this.
+            itr->second.maShell->DoClose();
     }
     maDocShells.swap(aNewDocShells);
 

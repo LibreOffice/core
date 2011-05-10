@@ -224,6 +224,7 @@ $(COMMONMISC)$/{$(PRODUCTLIST)}$/create_tree.sh : $$(@:f)
     @echo "PREFIX=$(UNIXFILENAME.$(@:d:d:f))" >> $@.$(INPATH)
     @echo "ICON_PREFIX=$(ICONPREFIX.$(@:d:d:f))" >> $@.$(INPATH)
     @echo "ICON_SOURCE_DIR=../../../desktop/icons" >> $@.$(INPATH)
+    @echo "PRODUCTVERSION=$(PRODUCTVERSION.$(@:d:d:f))" >> $@.$(INPATH)
     @cat $< >> $@.$(INPATH)
     @chmod 774 $@.$(INPATH)
     @mv -f $@.$(INPATH) $@

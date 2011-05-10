@@ -273,19 +273,16 @@ void SvtSysLocaleOptions_Impl::MakeRealLocale()
 
 void SvtSysLocaleOptions_Impl::MakeRealUILocale()
 {
-    if ( !m_aRealUILocale.Language.getLength() )
+    // as we can't switch UILocale at runtime, we only store changes in the configuration
+    m_aRealUILocale = lcl_str_to_locale( m_aUILocaleString );
+    if ( m_aRealUILocale.Language.getLength() )
     {
-        // as we can't switch UILocale at runtime, we only store changes in the configuration
-        m_aRealUILocale = lcl_str_to_locale( m_aUILocaleString );
-        if ( m_aRealUILocale.Language.getLength() )
-        {
-            m_eRealUILanguage = MsLangId::convertLocaleToLanguage( m_aRealUILocale );
-        }
-        else
-        {
-            m_eRealUILanguage = MsLangId::getSystemUILanguage();
-            MsLangId::convertLanguageToLocale( m_eRealUILanguage, m_aRealUILocale );
-        }
+        m_eRealUILanguage = MsLangId::convertLocaleToLanguage( m_aRealUILocale );
+    }
+    else
+    {
+        m_eRealUILanguage = MsLangId::getSystemUILanguage();
+        MsLangId::convertLanguageToLocale( m_eRealUILanguage, m_aRealUILocale );
     }
 }
 
@@ -399,13 +396,12 @@ void SvtSysLocaleOptions_Impl::SetUILocaleString( const OUString& rStr )
     if (!m_bROUILocale && rStr != m_aUILocaleString )
     {
         m_aUILocaleString = rStr;
-/*
+
         // as we can't switch UILocale at runtime, we only store changes in the configuration
         MakeRealUILocale();
         MsLangId::setConfiguredSystemLanguage( m_eRealUILanguage );
         SetModified();
         NotifyListeners( SYSLOCALEOPTIONS_HINT_UILOCALE );
-*/
     }
 }
 

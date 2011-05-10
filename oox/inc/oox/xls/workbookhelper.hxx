@@ -201,6 +201,12 @@ public:
                             ::rtl::OUString& orName,
                             const ::com::sun::star::table::CellRangeAddress& rRangeAddr ) const;
 
+    /** Creates and returns an unnamed database range on-the-fly in the Calc document.
+        The range will not be buffered in the global table buffer. */
+    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDatabaseRange >
+                        createUnnamedDatabaseRangeObject(
+                            const ::com::sun::star::table::CellRangeAddress& rRangeAddr ) const;
+
     /** Creates and returns a com.sun.star.style.Style object for cells or pages. */
     ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle >
                         createStyleObject(

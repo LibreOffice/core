@@ -729,11 +729,10 @@ void ScRangeName::copyLocalNames(const TabNameMap& rNames, TabNameCopyMap& rCopy
     }
 }
 
-ScRangeName::ScRangeName() :
-    mnSharedMaxIndex(0) {}
+ScRangeName::ScRangeName() {}
 
 ScRangeName::ScRangeName(const ScRangeName& r) :
-    maData(r.maData), mnSharedMaxIndex(r.mnSharedMaxIndex) {}
+    maData(r.maData) {}
 
 const ScRangeData* ScRangeName::findByRange(const ScRange& rRange) const
 {
@@ -806,16 +805,6 @@ void ScRangeName::UpdateGrow(const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY)
         itr->UpdateGrow(rArea, nGrowX, nGrowY);
 }
 
-sal_uInt16 ScRangeName::GetSharedMaxIndex()
-{
-    return mnSharedMaxIndex;
-}
-
-void ScRangeName::SetSharedMaxIndex(sal_uInt16 nInd)
-{
-    mnSharedMaxIndex = nInd;
-}
-
 ScRangeName::const_iterator ScRangeName::begin() const
 {
     return maData.begin();
@@ -886,7 +875,7 @@ void ScRangeName::clear()
 
 bool ScRangeName::operator== (const ScRangeName& r) const
 {
-    return maData == r.maData && mnSharedMaxIndex == r.mnSharedMaxIndex;
+    return maData == r.maData;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

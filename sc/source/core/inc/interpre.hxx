@@ -316,6 +316,7 @@ void PopExternalSingleRef(ScExternalRefCache::TokenRef& rToken, ScExternalRefCac
 void PopExternalDoubleRef(sal_uInt16& rFileId, String& rTabName, ScComplexRefData& rRef);
 void PopExternalDoubleRef(ScExternalRefCache::TokenArrayRef& rArray);
 void PopExternalDoubleRef(ScMatrixRef& rMat);
+void GetExternalDoubleRef(sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& aData, ScExternalRefCache::TokenArrayRef& rArray);
 sal_Bool PopDoubleRefOrSingleRef( ScAddress& rAdr );
 void PopDoubleRefPushMatrix();
 // If MatrixFormula: convert formula::svDoubleRef to svMatrix, create JumpMatrix.

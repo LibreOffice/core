@@ -1533,7 +1533,7 @@ ScNameInputType lcl_GetInputType( const String& rText )
         sal_Int32 nNumeric;
 
         if ( aRange.Parse( rText, pDoc, eConv ) & SCA_VALID )
-            eRet = SC_NAME_INPUT_NAMEDRANGE;
+            eRet = SC_NAME_INPUT_RANGE;
         else if ( aAddress.Parse( rText, pDoc, eConv ) & SCA_VALID )
             eRet = SC_NAME_INPUT_CELL;
         else if ( aRangeUtil.MakeRangeFromName( rText, pDoc, nTab, aRange, RUTL_NAMES, eConv ) )
@@ -1697,11 +1697,14 @@ void ScPosWnd::DoEnter()
                 else
                 {
                     // for all selection types, excecute the SID_CURRENTCELL slot.
-                    // Note that SID_CURRENTCELL always expects address to be
-                    // in Calc A1 format.  Convert the text.
-                    ScRange aRange;
-                    aRange.ParseAny(aText, pDoc, pDoc->GetAddressConvention());
-                    aRange.Format(aText, SCR_ABS_3D, pDoc, ::formula::FormulaGrammar::CONV_OOO);
+                    if (eType == SC_NAME_INPUT_CELL || eType == SC_NAME_INPUT_RANGE)
+                    {
+                        // Note that SID_CURRENTCELL always expects address to
+                        // be in Calc A1 format.  Convert the text.
+                        ScRange aRange;
+                        aRange.ParseAny(aText, pDoc, pDoc->GetAddressConvention());
+                        aRange.Format(aText, SCR_ABS_3D, pDoc, ::formula::FormulaGrammar::CONV_OOO);
+                    }
 
                     SfxStringItem aPosItem( SID_CURRENTCELL, aText );
                     SfxBoolItem aUnmarkItem( FN_PARAM_1, sal_True );        // remove existing selection

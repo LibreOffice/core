@@ -49,6 +49,8 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/oslfile2streamwrap.hxx>
+#include <i18npool/mslangid.hxx>
+#include <unotools/syslocaleoptions.hxx>
 
 #include <vcl/svapp.hxx>
 #include "scdll.hxx"
@@ -224,7 +226,7 @@ public:
 
     void testCollator();
     void testInput();
-    void testSUM();
+    void testCellFunctions();
     void testVolatileFunc();
     void testFuncParam();
     void testNamedRange();
@@ -264,7 +266,7 @@ public:
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
     CPPUNIT_TEST(testInput);
-    CPPUNIT_TEST(testSUM);
+    CPPUNIT_TEST(testCellFunctions);
     CPPUNIT_TEST(testVolatileFunc);
     CPPUNIT_TEST(testFuncParam);
     CPPUNIT_TEST(testNamedRange);
@@ -304,28 +306,6 @@ Test::Test()
     //of retaining references to the root ServiceFactory as its passed around
     comphelper::setProcessServiceFactory(xSM);
 
-#if 0
-    // TODO: attempt to explicitly set UI locale to en-US, to get the unit
-    // test to work under non-English build environment.  But this causes
-    // runtime exception....
-    uno::Reference<lang::XMultiServiceFactory> theConfigProvider =
-        uno::Reference<lang::XMultiServiceFactory> (
-            xSM->createInstance(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"))), uno::UNO_QUERY_THROW);
-
-    uno::Sequence<uno::Any> theArgs(1);
-    OUString aLocalePath(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Linguistic/General"));
-    theArgs[0] <<= aLocalePath;
-    uno::Reference<beans::XPropertySet> xProp(
-        theConfigProvider->createInstanceWithArguments(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationUpdateAccess")), theArgs), uno::UNO_QUERY_THROW);
-
-    OUString aLang(RTL_CONSTASCII_USTRINGPARAM("en-US"));
-    uno::Any aAny;
-    aAny <<= aLang;
-    xProp->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("UILocale")), aAny);
-#endif
-
     // initialise UCB-Broker
     uno::Sequence<uno::Any> aUcbInitSequence(2);
     aUcbInitSequence[0] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Local"));
@@ -339,8 +319,19 @@ Test::Test()
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.FileContentProvider"))), uno::UNO_QUERY);
     xUcb->registerContentProvider(xFileProvider, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file")), sal_True);
 
-    InitVCL(xSM);
+    // force locale (and resource files loaded) to en-US
+    const LanguageType eLang=LANGUAGE_ENGLISH_US;
 
+    rtl::OUString aLang, aCountry;
+    MsLangId::convertLanguageToIsoNames(eLang, aLang, aCountry);
+    lang::Locale aLocale(aLang, aCountry, rtl::OUString());
+    ResMgr::SetDefaultLocale( aLocale );
+
+    SvtSysLocaleOptions aLocalOptions;
+    aLocalOptions.SetUILocaleConfigString(
+        MsLangId::convertLanguageToIsoString( eLang ) );
+
+    InitVCL(xSM);
     ScDLL::Init();
 
     oslProcessError err = osl_getProcessWorkingDir(&m_aPWDURL.pData);
@@ -398,11 +389,13 @@ void Test::testInput()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSUM()
+void Test::testCellFunctions()
 {
     rtl::OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("foo"));
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, aTabName));
+
+    // SUM
     double val = 1;
     m_pDoc->SetValue (0, 0, 0, val);
     m_pDoc->SetValue (0, 1, 0, val);
@@ -411,6 +404,23 @@ void Test::testSUM()
     double result;
     m_pDoc->GetValue (0, 2, 0, result);
     CPPUNIT_ASSERT_MESSAGE ("calculation failed", result == 2.0);
+
+    // PRODUCT
+    val = 1;
+    m_pDoc->SetValue(0, 0, 0, val);
+    val = 2;
+    m_pDoc->SetValue(0, 1, 0, val);
+    val = 3;
+    m_pDoc->SetValue(0, 2, 0, val);
+    m_pDoc->SetString(0, 3, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=PRODUCT(A1:A3)")));
+    m_pDoc->CalcAll();
+    m_pDoc->GetValue(0, 3, 0, result);
+    CPPUNIT_ASSERT_MESSAGE("Calculation of PRODUCT failed", result == 6.0);
+
+    m_pDoc->SetString(0, 4, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=PRODUCT({1;2;3})")));
+    m_pDoc->CalcAll();
+    m_pDoc->GetValue(0, 4, 0, result);
+    CPPUNIT_ASSERT_MESSAGE("Calculation of PRODUCT with inline array failed", result == 6.0);
 
     m_pDoc->DeleteTab(0);
 }
@@ -779,7 +789,7 @@ ScDPObject* createDPFromRange(
     {
         OUString aDimName(aFields[i].pName, strlen(aFields[i].pName), RTL_TEXTENCODING_UTF8);
         ScDPSaveDimension* pDim = aSaveData.GetDimensionByName(aDimName);
-        pDim->SetOrientation(aFields[i].eOrient);
+        pDim->SetOrientation(static_cast<sal_uInt16>(aFields[i].eOrient));
         pDim->SetUsedHierarchy(0);
         pDim->SetShowEmpty(true);
 

@@ -188,6 +188,15 @@ void AppendConfigToken( String& rURL, sal_Bool bQuestionMark, const rtl::OUStrin
     rURL += DEFINE_CONST_UNICODE("&System=");
     rURL += SvtHelpOptions().GetSystem();
 
+    static rtl::OUString aVersion;
+    if ( aVersion.isEmpty() )
+        aVersion = utl::Bootstrap::getProductVersion();
+
+    if ( !aVersion.isEmpty() )
+    {
+        rURL += DEFINE_CONST_UNICODE( "&Version=" );
+        rURL += String( aVersion );
+    }
 }
 
 sal_Bool GetHelpAnchor_Impl( const String& _rURL, String& _rAnchor )

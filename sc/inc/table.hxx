@@ -173,7 +173,6 @@ private:
     ScSortParam     aSortParam;
     CollatorWrapper*    pSortCollator;
     sal_Bool            bGlobalKeepQuery;
-    sal_Bool            bSharedNameInserted;
 
     ScRangeVec      aPrintRanges;
     bool            bPrintEntireSheet;

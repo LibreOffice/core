@@ -94,6 +94,7 @@ enum SvXMLTokenMapAttrs
     XML_TOK_META_STAT_PARA = 16,
     XML_TOK_META_STAT_WORD = 32,
     XML_TOK_META_STAT_CHAR = 64,
+    XML_TOK_META_STAT_NON_WHITE_SPACE_CHAR = 128,
     XML_TOK_META_STAT_END=XML_TOK_UNKNOWN
 };
 
@@ -112,6 +113,7 @@ static const struct statistic s_stats [] = {
     { XML_TOK_META_STAT_PARA,  "ParagraphCount", 0, &SwDocStat::nPara },
     { XML_TOK_META_STAT_WORD,  "WordCount",      0, &SwDocStat::nWord },
     { XML_TOK_META_STAT_CHAR,  "CharacterCount", 0, &SwDocStat::nChar },
+    { XML_TOK_META_STAT_NON_WHITE_SPACE_CHAR,  "NonWhitespaceCharacterCount", 0, &SwDocStat::nCharExcludingSpaces },
     { XML_TOK_META_STAT_END,   0,                0, 0                 }
 };
 
@@ -149,7 +151,7 @@ void SwXMLImport::SetStatistics(
         }
     }
 
-    if( 127 == nTokens )
+    if( 255 == nTokens )
         aDocStat.bModified = sal_False;
     if( nTokens )
         pDoc->SetDocStat( aDocStat );

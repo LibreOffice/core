@@ -98,7 +98,7 @@ using namespace ::com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
 // #i72754# 2nd set of Pre/PostPaints
-// This time it uses the lock counter mnPrePostPaintCount to allow only one activation
+// This time it uses the lock counter (mPrePostPaintRegions empty/non-empty) to allow only one activation
 // and deactivation and mpPrePostOutDev to remember the OutDev from the BeginDrawLayers
 // call. That way, all places where paint take place can be handled the same way, even
 // when calling other paint methods. This is the case at the places where SW paints
@@ -116,8 +116,9 @@ void ViewShell::PrePaint()
 
 void ViewShell::DLPrePaint2(const Region& rRegion)
 {
-    if(0L == mnPrePostPaintCount)
+    if(mPrePostPaintRegions.empty())
     {
+        mPrePostPaintRegions.push( rRegion );
         // #i75172# ensure DrawView to use DrawingLayer bufferings
         if ( !HasDrawView() )
             MakeDrawView();
@@ -139,16 +140,29 @@ void ViewShell::DLPrePaint2(const Region& rRegion)
         // remember original paint MapMode for wrapped FlyFrame paints
         maPrePostMapMode = pOut->GetMapMode();
     }
-
-    mnPrePostPaintCount++;
+    else
+    {
+        // region needs to be updated to the given one
+        if( mPrePostPaintRegions.top() != rRegion )
+            Imp()->GetDrawView()->UpdateDrawLayersRegion(mpPrePostOutDev, rRegion);
+        mPrePostPaintRegions.push( rRegion );
+    }
 }
 
 void ViewShell::DLPostPaint2(bool bPaintFormLayer)
 {
-    OSL_ENSURE(mnPrePostPaintCount > 0L, "ViewShell::DLPostPaint2: Pre/PostPaint encapsulation broken (!)");
-    mnPrePostPaintCount--;
+    OSL_ENSURE(!mPrePostPaintRegions.empty(), "ViewShell::DLPostPaint2: Pre/PostPaint encapsulation broken (!)");
 
-    if((0L == mnPrePostPaintCount) && (0 != mpTargetPaintWindow))
+    if( mPrePostPaintRegions.size() > 1 )
+    {
+        Region current = mPrePostPaintRegions.top();
+        mPrePostPaintRegions.pop();
+        if( current != mPrePostPaintRegions.top())
+            Imp()->GetDrawView()->UpdateDrawLayersRegion(mpPrePostOutDev, mPrePostPaintRegions.top());
+        return;
+    }
+    mPrePostPaintRegions.pop(); // clear
+    if(0 != mpTargetPaintWindow)
     {
         // #i74769# restore buffered OutDev
         if(mpTargetPaintWindow->GetPreRenderDevice())

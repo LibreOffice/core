@@ -1450,11 +1450,24 @@ void ScDPLayoutDlg::UpdateSrcRange()
     switch (eSrcType)
     {
         case SRC_REF:
+        {
             // data source is a range reference.
             if (inSheet.GetSourceRange() == aNewRange)
                 // new range is identical to the current range.  Nothing to do.
                 return;
             inSheet.SetSourceRange(aNewRange);
+            sal_uLong nError = inSheet.CheckSourceRange();
+            if (nError)
+            {
+                // The error number corresponds with string ID for the error
+                // message.  In the future we should display the error message
+                // somewhere in the dialog to let the user know of the reason
+                // for error.
+                aEdInPos.SetRefValid(false);
+                aBtnOk.Disable();
+                return;
+            }
+        }
         break;
         case SRC_NAME:
             // data source is a range name.

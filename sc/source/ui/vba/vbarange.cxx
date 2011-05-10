@@ -39,6 +39,7 @@
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
 #include <com/sun/star/sheet/XDatabaseRanges.hpp>
+#include <com/sun/star/sheet/XUnnamedDatabaseRanges.hpp>
 #include <com/sun/star/sheet/XGoalSeek.hpp>
 #include <com/sun/star/sheet/XSheetOperation.hpp>
 #include <com/sun/star/sheet/CellFlags.hpp>
@@ -4334,20 +4335,10 @@ ScVbaRange::ApplicationRange( const uno::Reference< uno::XComponentContext >& xC
 // Helper functions for AutoFilter
 ScDBData* lcl_GetDBData_Impl( ScDocShell* pDocShell, sal_Int16 nSheet )
 {
-    rtl::OUString sName;
-    excel::GetAutoFiltRange( pDocShell, nSheet, sName );
-    OSL_TRACE("lcl_GetDBData_Impl got autofilter range %s for sheet %d",
-        rtl::OUStringToOString( sName, RTL_TEXTENCODING_UTF8 ).getStr() , nSheet );
     ScDBData* pRet = NULL;
     if (pDocShell)
     {
-        ScDBCollection* pNames = pDocShell->GetDocument()->GetDBCollection();
-        if (pNames)
-        {
-            sal_uInt16 nPos = 0;
-            if (pNames->SearchName( sName , nPos ))
-                pRet = (*pNames)[nPos];
-        }
+        pRet = pDocShell->GetDocument()->GetAnonymousDBData(nSheet);
     }
     return pRet;
 }
@@ -4501,8 +4492,7 @@ ScVbaRange::AutoFilter( const uno::Any& Field, const uno::Any& Criteria1, const 
     sal_Int16 nSheet = thisAddress.Sheet;
     ScDocShell* pShell = getScDocShell();
     sal_Bool bHasAuto = false;
-    rtl::OUString sAutofiltRangeName;
-    uno::Reference< sheet::XDatabaseRange > xDataBaseRange = excel::GetAutoFiltRange( pShell, nSheet, sAutofiltRangeName );
+    uno::Reference< sheet::XDatabaseRange > xDataBaseRange = excel::GetAutoFiltRange( pShell, nSheet );
     if ( xDataBaseRange.is() )
         bHasAuto = true;
 
@@ -4549,16 +4539,13 @@ ScVbaRange::AutoFilter( const uno::Any& Field, const uno::Any& Criteria1, const 
             }
         }
 
-        uno::Reference< sheet::XDatabaseRanges > xDBRanges = excel::GetDataBaseRanges( pShell );
+        uno::Reference< sheet::XUnnamedDatabaseRanges > xDBRanges = excel::GetUnnamedDataBaseRanges( pShell );
         if ( xDBRanges.is() )
         {
-            rtl::OUString sGenName( RTL_CONSTASCII_USTRINGPARAM("VBA_Autofilter_") );
-            sGenName += rtl::OUString::valueOf( static_cast< sal_Int32 >( nSheet ) );
-            OSL_TRACE("Going to add new autofilter range.. name %s",
-                rtl::OUStringToOString( sGenName, RTL_TEXTENCODING_UTF8 ).getStr() , nSheet );
-            if ( !xDBRanges->hasByName( sGenName ) )
-                xDBRanges->addNewByName(  sGenName, autoFiltAddress );
-            xDataBaseRange.set( xDBRanges->getByName(  sGenName ), uno::UNO_QUERY_THROW );
+            OSL_TRACE("Going to add new autofilter range.. sheet %i", nSheet );
+            if ( !xDBRanges->hasByTable( nSheet ) )
+                xDBRanges->setByTable( autoFiltAddress );
+            xDataBaseRange.set( xDBRanges->getByTable(nSheet ), uno::UNO_QUERY_THROW );
         }
         if ( !xDataBaseRange.is() )
             throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Failed to find the autofilter placeholder range" ) ), uno::Reference< uno::XInterface >() );

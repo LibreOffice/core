@@ -1270,7 +1270,8 @@ ScConditionalFormat::ScConditionalFormat(const ScConditionalFormat& r) :
     pAreas( NULL ),
     nKey( r.nKey ),
     ppEntries( NULL ),
-    nEntryCount( r.nEntryCount )
+    nEntryCount( r.nEntryCount ),
+    pRanges( NULL )
 {
     if (nEntryCount)
     {
@@ -1281,7 +1282,8 @@ ScConditionalFormat::ScConditionalFormat(const ScConditionalFormat& r) :
             ppEntries[i]->SetParent(this);
         }
     }
-    pRanges = new ScRangeList( *r.pRanges );
+    if (r.pRanges)
+        pRanges = new ScRangeList( *r.pRanges );
 }
 
 ScConditionalFormat* ScConditionalFormat::Clone(ScDocument* pNewDoc) const
@@ -1320,10 +1322,16 @@ sal_Bool ScConditionalFormat::EqualEntries( const ScConditionalFormat& r ) const
         if ( ! (*ppEntries[i] == *r.ppEntries[i]) )
             return false;
 
-    if( *pRanges != *r.pRanges )
-        return false;
+    if (pRanges)
+    {
+        if (r.pRanges)
+            return *pRanges == *r.pRanges;
+        else
+            return false;
+    }
 
-    return true;
+    // pRanges is NULL, which means r.pRanges must be NULL.
+    return r.pRanges.Is() == false;
 }
 
 void ScConditionalFormat::AddRangeInfo( const ScRangeListRef& rRanges )

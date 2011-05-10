@@ -697,6 +697,8 @@ bool URLParameter::query()
             m_nHitCount = value.toInt32();
         else if( parameter.compareToAscii( "Active" ) == 0 )
             m_aActive = value;
+        else if( parameter.compareToAscii( "Version" ) == 0 )
+            ; // ignored (but accepted) in the build-in help, useful only for the online help
         else
             ret = false;
     }

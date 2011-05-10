@@ -34,6 +34,18 @@ fi
 # we want to clone if we are in the bootstrap git repo and clone does not exist yet
 # we need to test for a .git in order not to clone after rsync if we are called in
 # the inner autogen of the buid-repo based build
+
+check_file()
+{
+    echo "Looking for $1 ..."
+    if test -f $1; then
+	    echo "ok"
+    else
+	    echo "missing required archive; run './download' again";
+	    exit 1;
+    fi
+}
+
 if [ -d .git ] ; then
     if [ -z "$GIT_LINK_SRC" ]; then
         ./g -f clone
@@ -275,6 +287,24 @@ if [ "$GUI" = "WNT" -a -n "$md5sum" ]; then
         cp $TARFILE_LOCATION/vcredist_x64.exe ./external/vcredist/vcredist_x64.exe
     fi
 fi
+
+# OxygenOffice extras
+echo "Unpacking OxygenOffice extras ..."
+for pack in $OOOP_FONTS_PACK $OOOP_GALLERY_PACK $OOOP_SAMPLES_PACK $OOOP_TEMPLATES_PACK ; do
+    check_file $TARFILE_LOCATION/$pack
+    echo "Unpacking $pack ..."
+    unzip -o -q $TARFILE_LOCATION/$pack -d $SRC_ROOT/extras/source
+done
+
+# Extensions copy
+echo "Copy extensions to their location ..."
+for pack in $BARCODE_EXTENSION_PACK $DIAGRAM_EXTENSION_PACK $VALIDATOR_EXTENSION_PACK $WATCH_WINDOW_EXTENSION_PACK $NUMBERTEXT_EXTENSION_PACK $HUNART_EXTENSION_PACK $TYPO_EXTENSION_PACK $GOOGLE_DOCS_EXTENSION_PACK ; do
+    check_file $TARFILE_LOCATION/$pack
+    packfilename=`echo "$pack" | cut --only-delimited --delimiter=- --fields=2 | cut --delimiter=_ --fields=1`
+    echo "Copy extension: '$pack' as '$packfilename.oxt' ..."
+    mkdir -p $SRC_ROOT/extras/source/extensions/ || exit 1
+    cp $TARFILE_LOCATION/$pack $SRC_ROOT/extras/source/extensions/$packfilename.oxt || exit 1
+done
 
 [ -x "post_download" ] || { echo "'post_download' script not found, run ./autogen.sh." ; exit 1 ; }
 

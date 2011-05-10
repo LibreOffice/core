@@ -880,22 +880,3 @@ STD_FONT_FILE( gid_File_Fnt_Verina_Serif_Bold, Verina_Serif_Bold.otf, Verina Ser
 STD_FONT_FILE( gid_File_Fnt_Verina_Serif, Verina_Serif.otf, Verina Serif ) 
 #endif
 
-#ifdef WITH_EXTRA_FONT 
-STD_FONT_FILE( gid_File_Fnt_MagyarLinBiolinum, MagyarLinBiolinum.ttf, Magyar Linux Biolinum)
-STD_FONT_FILE( gid_File_Fnt_MagyarLinBiolinumB, MagyarLinBiolinumB.ttf, Magyar Linux Biolinum Bold)
-STD_FONT_FILE( gid_File_Fnt_MagyarLinLibertine, MagyarLinLibertine.ttf, Magyar Linux Libertine)
-STD_FONT_FILE( gid_File_Fnt_MagyarLinLibertineB, MagyarLinLibertineB.ttf, Magyar Linux Libertine Bold)
-STD_FONT_FILE( gid_File_Fnt_MagyarLinLibertineBI, MagyarLinLibertineBI.ttf, Magyar Linux Libertine Bold Italic)
-STD_FONT_FILE( gid_File_Fnt_MagyarLinLibertineC, MagyarLinLibertineC_Re.ttf, Magyar Linux Libertine Capital)
-STD_FONT_FILE( gid_File_Fnt_MagyarLinLibertineG, MagyarLinLibertineG.ttf, Magyar Linux Libertine Graphite)
-STD_FONT_FILE( gid_File_Fnt_MagyarLinLibertineGB, MagyarLinLibertineGB.ttf, Magyar Linux Libertine Bold Graphite)
-STD_FONT_FILE( gid_File_Fnt_MagyarLinLibertineGBI, MagyarLinLibertineGBI.ttf, Magyar Linux Libertine Bold Italic Graphite)
-STD_FONT_FILE( gid_File_Fnt_MagyarLinLibertineGI, MagyarLinLibertineGI.ttf, Magyar Linux Libertine Italic Graphite)
-STD_FONT_FILE( gid_File_Fnt_MagyarLinLibertineI, MagyarLinLibertineI.ttf, Magyar Linux Libertine Italic)
-STD_FONT_FILE( gid_File_Fnt_MagyarLinLibertineN, MagyarLinLibertineN.ttf, Magyar Linux N Libertine)
-STD_FONT_FILE( gid_File_Fnt_MagyarLinLibertineNB, MagyarLinLibertineNB.ttf, Magyar Linux Libertine N Bold)
-STD_FONT_FILE( gid_File_Fnt_MagyarLinLibertineNBI, MagyarLinLibertineNBI.ttf, Magyar Linux Libertine N Bold Italic)
-STD_FONT_FILE( gid_File_Fnt_MagyarLinLibertineNI, MagyarLinLibertineNI.ttf, Magyar Linux Libertine N Italic)
-STD_FONT_FILE( gid_File_Fnt_MagyarLinLibertineNC, MagyarLinLibertineNC_Re.ttf, Magyar Linux Libertine N Capital)
-#endif
-

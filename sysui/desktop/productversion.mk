@@ -62,14 +62,14 @@ PRODUCTNAME.libreoffice = LibreOffice
 PRODUCTVERSION.libreoffice = $(PRODUCTVERSION)
 PRODUCTVERSIONSHORT.libreoffice = $(PRODUCTVERSIONSHORT)
 PKGVERSION.libreoffice = $(PKGVERSION)
-UNIXFILENAME.libreoffice = $(PRODUCTNAME.libreoffice:l)
+UNIXFILENAME.libreoffice = $(PRODUCTNAME.libreoffice:l)$(PRODUCTVERSION.libreoffice)
 ICONPREFIX.libreoffice = $(UNIXFILENAME.libreoffice:s/.//g)
 
 PRODUCTNAME.broffice = BrOffice
 PRODUCTVERSION.broffice = $(PRODUCTVERSION)
 PRODUCTVERSIONSHORT.broffice = $(PRODUCTVERSIONSHORT)
 PKGVERSION.broffice = $(PKGVERSION)
-UNIXFILENAME.broffice = $(PRODUCTNAME.broffice:l)
+UNIXFILENAME.broffice = $(PRODUCTNAME.broffice:l)$(PRODUCTVERSION.broffice)
 ICONPREFIX.broffice = $(UNIXFILENAME.broffice:s/.//g)
 
 

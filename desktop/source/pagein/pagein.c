@@ -107,16 +107,25 @@ int pagein_execute (int argc, char **argv)
 
         if ((argv[i][0] == '@') && ((fp = fopen (argv[i], "r")) == 0))
         {
-            char path[1024];
+            char fullpath[4096];
+            char *path;
+            strncpy (fullpath, argv[i] + 1, 3000);
+            if (!(path = strrchr (fullpath, '/')))
+                path = fullpath;
+            else
+                path++;
+
             if ((fp = fopen (&(argv[i][1]), "r")) == 0)
             {
                 fprintf (stderr, "fopen %s: %s\n", &(argv[i][1]), strerror(errno));
                 continue;
             }
-            while (fgets (path, sizeof(path), fp) != 0)
+            while (fgets (path, 1024, fp) != 0)
             {
                 path[strlen(path) - 1] = '\0', k = 0;
-                if (do_pagein (path, &k) == 0)
+
+                /* paths relative to the location of the pagein file */
+                if (do_pagein (fullpath, &k) == 0)
                 {
                     /* accumulate total size */
                     nbytes += k;

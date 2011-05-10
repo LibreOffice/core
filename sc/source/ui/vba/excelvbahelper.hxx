@@ -32,6 +32,7 @@
 #include "docsh.hxx"
 #include <com/sun/star/sheet/XDatabaseRanges.hpp>
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
+#include <com/sun/star/sheet/XUnnamedDatabaseRanges.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -65,8 +66,9 @@ formula::FormulaGrammar::Grammar GetFormulaGrammar( ScDocument* pDoc, const ScAd
 void CompileExcelFormulaToODF( ScDocument* pDoc, const String& rOldFormula, String& rNewFormula );
 void CompileODFFormulaToExcel( ScDocument* pDoc, const String& rOldFormula, String& rNewFormula, const formula::FormulaGrammar::Grammar eGrammar );
 css::uno::Reference< css::sheet::XDatabaseRanges > GetDataBaseRanges( ScDocShell* pShell ) throw ( css::uno::RuntimeException );
+css::uno::Reference< css::sheet::XUnnamedDatabaseRanges > GetUnnamedDataBaseRanges( ScDocShell* pShell ) throw ( css::uno::RuntimeException );
 
-css::uno::Reference< css::sheet::XDatabaseRange > GetAutoFiltRange( ScDocShell* pShell, sal_Int16 nSheet, rtl::OUString& sName ) throw ( css::uno::RuntimeException );
+css::uno::Reference< css::sheet::XDatabaseRange > GetAutoFiltRange( ScDocShell* pShell, sal_Int16 nSheet ) throw ( css::uno::RuntimeException );
 css::uno::Reference< ooo::vba::XHelperInterface > getUnoSheetModuleObj( const css::uno::Reference< css::sheet::XSpreadsheet >& xSheet ) throw ( css::uno::RuntimeException );
 css::uno::Reference< ooo::vba::XHelperInterface > getUnoSheetModuleObj( const css::uno::Reference< css::sheet::XSheetCellRangeContainer >& xRanges ) throw ( css::uno::RuntimeException );
 css::uno::Reference< ooo::vba::XHelperInterface > getUnoSheetModuleObj( const css::uno::Reference< css::table::XCellRange >& xRange ) throw ( css::uno::RuntimeException );

@@ -338,6 +338,7 @@ IDLFILES=\
     XSubTotalDescriptor.idl\
     XSubTotalField.idl\
     XUniqueCellFormatRangesSupplier.idl\
+    XUnnamedDatabaseRanges.idl\
     XUsedAreaCursor.idl\
     XViewFreezable.idl\
     XViewPane.idl\

@@ -393,8 +393,11 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     strUserName = ::rtl::OUString::createFromAscii( pw->pw_name );
 
     /// get home directory;
+    char *pw_dir = pw->pw_dir;
+    if( getenv( "FAKEROOTKEY" ) )
+        pw_dir = getenv("HOME");
     CPPUNIT_ASSERT_MESSAGE( "#Convert from system path to URL failed.",
-                            ::osl::File::E_None == ::osl::File::getFileURLFromSystemPath( ::rtl::OUString::createFromAscii( pw->pw_dir ), strHomeDirectory ) );
+                            ::osl::File::E_None == ::osl::File::getFileURLFromSystemPath( ::rtl::OUString::createFromAscii( pw_dir ), strHomeDirectory ) );
 
     /// get config directory;
     strConfigDirectory = strHomeDirectory.copy(0);

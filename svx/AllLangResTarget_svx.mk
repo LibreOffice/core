@@ -106,18 +106,18 @@ $(call gb_SrsTarget_get_clean_target,svx/res) : $(WORKDIR)/inc/svx/globlmn.hrc_c
 # hack !!!
 # just a temporary - globlmn.hrc about to be removed!
 ifeq ($(strip $(WITH_LANG)),)
-$(WORKDIR)/inc/svx/globlmn.hrc : $(SRCDIR)/svx/inc/globlmn_tmpl.hrc
+$(WORKDIR)/inc/svx/globlmn.hrc : $(realpath $(SRCDIR)/svx/inc/globlmn_tmpl.hrc)
 	echo copying $@
 	-mkdir -p $(WORKDIR)/inc/svx
-	cp $(SRCDIR)/svx/inc/globlmn_tmpl.hrc $(WORKDIR)/inc/svx/globlmn.hrc
-	cp $(SRCDIR)/svx/inc/globlmn_tmpl.hrc $(OUTDIR)/inc/svx/globlmn.hrc
+	cp $< $@
+	$(call gb_Deliver_deliver, $@, $(OUTDIR)/inc/svx/globlmn.hrc)
 	rm -f $(WORKDIR)/inc/svx/lastrun.mk
 else
 -include $(WORKDIR)/inc/svx/lastrun.mk
 ifneq ($(gb_lastrun_globlmn),MERGED)
 .PHONY : $(WORKDIR)/inc/svx/globlmn.hrc
 endif
-$(WORKDIR)/inc/svx/globlmn.hrc : $(SRCDIR)/svx/inc/globlmn_tmpl.hrc $(gb_SrsPartMergeTarget_SDFLOCATION)/svx/inc/localize.sdf
+$(WORKDIR)/inc/svx/globlmn.hrc : $(realpath $(SRCDIR)/svx/inc/globlmn_tmpl.hrc) $(realpath $(gb_SrsPartMergeTarget_SDFLOCATION)/svx/inc/localize.sdf)
 	echo merging $@
 	-mkdir -p $(WORKDIR)/inc/svx
 	rm -f $(WORKDIR)/inc/svx/lastrun.mk
@@ -125,8 +125,8 @@ $(WORKDIR)/inc/svx/globlmn.hrc : $(SRCDIR)/svx/inc/globlmn_tmpl.hrc $(gb_SrsPart
 	$(call gb_Helper_abbreviate_dirs_native, \
             $(gb_SrsPartMergeTarget_TRANSEXCOMMAND) \
             -p svx \
-            -i $< -o $@ -m $(gb_SrsPartMergeTarget_SDFLOCATION)/svx/inc/localize.sdf -l all)
-	cp $(WORKDIR)/inc/svx/globlmn.hrc $(OUTDIR)/inc/svx/globlmn.hrc
+            -i $< -o $@ -m $(realpath $(gb_SrsPartMergeTarget_SDFLOCATION)/svx/inc/localize.sdf) -l all)
+	$(call gb_Deliver_deliver, $@, $(OUTDIR)/inc/svx/globlmn.hrc)
 endif
 
 .PHONY : $(WORKDIR)/inc/svx/globlmn.hrc_clean

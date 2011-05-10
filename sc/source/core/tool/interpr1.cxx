@@ -810,6 +810,38 @@ double ScInterpreter::Compare()
                 }
             }
             break;
+            case svExternalSingleRef:
+            {
+                ScMatrixRef pMat = GetMatrix();
+                if (!pMat)
+                {
+                    SetError( errIllegalParameter);
+                    break;
+                }
+
+                SCSIZE nC, nR;
+                pMat->GetDimensions(nC, nR);
+                if (!nC || !nR)
+                {
+                    SetError( errIllegalParameter);
+                    break;
+                }
+                if (pMat->IsEmpty(0, 0))
+                    aComp.bEmpty[i] = true;
+                else if (pMat->IsString(0, 0))
+                {
+                    *aComp.pVal[i] = pMat->GetString(0, 0);
+                    aComp.bVal[i] = false;
+                }
+                else
+                {
+                    aComp.nVal[i] = pMat->GetDouble(0, 0);
+                    aComp.bVal[i] = true;
+                }
+            }
+            break;
+            case svExternalDoubleRef:
+                // TODO: Find out how to handle this...
             default:
                 SetError( errIllegalParameter);
             break;
@@ -2908,8 +2940,10 @@ void ScInterpreter::ScMin( sal_Bool bTextAsZero )
             }
             break;
             case svMatrix :
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
             {
-                ScMatrixRef pMat = PopMatrix();
+                ScMatrixRef pMat = GetMatrix();
                 if (pMat)
                 {
                     SCSIZE nC, nR;
@@ -3029,8 +3063,10 @@ void ScInterpreter::ScMax( sal_Bool bTextAsZero )
             }
             break;
             case svMatrix :
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
             {
-                ScMatrixRef pMat = PopMatrix();
+                ScMatrixRef pMat = GetMatrix();
                 if (pMat)
                 {
                     nFuncFmtType = NUMBERFORMAT_NUMBER;
@@ -4603,7 +4639,9 @@ void ScInterpreter::ScCountIf()
                 }
             }
             break;
-            case svMatrix :
+            case svMatrix:
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
             {
                 ScMatValType nType = GetDoubleOrStringFromMatrix( fVal,
                         rString);
@@ -4648,23 +4686,25 @@ void ScInterpreter::ScCountIf()
                     nTab2 = nTab1;
                     break;
                 case svMatrix:
+                case svExternalSingleRef:
+                case svExternalDoubleRef:
+                {
+                    pQueryMatrix = GetMatrix();
+                    if (!pQueryMatrix)
                     {
-                        pQueryMatrix = PopMatrix();
-                        if (!pQueryMatrix)
-                        {
-                            PushIllegalParameter();
-                            return;
-                        }
-                        nCol1 = 0;
-                        nRow1 = 0;
-                        nTab1 = 0;
-                        SCSIZE nC, nR;
-                        pQueryMatrix->GetDimensions( nC, nR);
-                        nCol2 = static_cast<SCCOL>(nC - 1);
-                        nRow2 = static_cast<SCROW>(nR - 1);
-                        nTab2 = 0;
+                        PushIllegalParameter();
+                        return;
                     }
-                    break;
+                    nCol1 = 0;
+                    nRow1 = 0;
+                    nTab1 = 0;
+                    SCSIZE nC, nR;
+                    pQueryMatrix->GetDimensions( nC, nR);
+                    nCol2 = static_cast<SCCOL>(nC - 1);
+                    nRow2 = static_cast<SCROW>(nR - 1);
+                    nTab2 = 0;
+                }
+                break;
                 default:
                     PushIllegalParameter();
                     return ;

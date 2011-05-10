@@ -772,8 +772,7 @@ void AutoFilterBuffer::finalizeImport( sal_Int16 nSheet )
         if( pFilterDBName->getAbsoluteRange( aFilterRange ) && (aFilterRange.Sheet == nSheet) )
         {
             // use the same name for the database range as used for the defined name '_FilterDatabase'
-            OUString aDBRangeName = pFilterDBName->getCalcName();
-            Reference< XDatabaseRange > xDatabaseRange = createDatabaseRangeObject( aDBRangeName, aFilterRange );
+            Reference< XDatabaseRange > xDatabaseRange = createUnnamedDatabaseRangeObject( aFilterRange );
             // first, try to create an auto filter
             bool bHasAutoFilter = finalizeImport( xDatabaseRange );
             // no success: try to create an advanced filter

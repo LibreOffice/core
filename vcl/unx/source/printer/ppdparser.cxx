@@ -510,7 +510,7 @@ void PPDParser::initPPDFiles()
             INetURLObject aDir( aExe );
             aDir.removeSegment();
 #ifdef DEBUG
-            fprintf( stderr, "scanning last chance dir: %s\n", OUStringToOString( aDir.GetMainURL( INetURLObject::NO_DECODE ), osl_getThreadTextEncoding() ).getStr() );
+            fprintf( stderr, "scanning last chance dir: %s\n", rtl::OUStringToOString( aDir.GetMainURL( INetURLObject::NO_DECODE ), osl_getThreadTextEncoding() ).getStr() );
 #endif
             scanPPDDir( aDir.GetMainURL( INetURLObject::NO_DECODE ) );
 #ifdef DEBUG
@@ -655,7 +655,7 @@ const PPDParser* PPDParser::getParser( const String& rFile )
     if( ! aFile.Len() )
     {
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "Could not get printer PPD file \"%s\" !\n", OUStringToOString( rFile, osl_getThreadTextEncoding() ).getStr() );
+        fprintf( stderr, "Could not get printer PPD file \"%s\" !\n", rtl::OUStringToOString( rFile, osl_getThreadTextEncoding() ).getStr() );
 #endif
         return NULL;
     }

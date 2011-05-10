@@ -114,7 +114,7 @@ public:
     sal_Bool            RenameDBRange( const String& rOld, const String& rNew, sal_Bool bApi );
     sal_Bool            ModifyDBData( const ScDBData& rNewData, sal_Bool bApi );    // Name unveraendert
 
-    sal_Bool            RepeatDB( const String& rDBName, sal_Bool bRecord, sal_Bool bApi );
+    sal_Bool            RepeatDB( const String& rDBName, sal_Bool bRecord, sal_Bool bApi, bool bIsUnnamed=false, SCTAB aTab = 0);
 
     sal_Bool            DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewObj,
                                         sal_Bool bRecord, sal_Bool bApi, sal_Bool bAllowMove = false );
