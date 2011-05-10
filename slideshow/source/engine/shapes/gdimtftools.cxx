@@ -330,7 +330,7 @@ sal_Int32 getNextActionOffset( MetaAction * pCurrAct )
         // (though this is currently not used from the
         // DrawingLayer - shape transparency gradients
         // don't affect shape text)
-        return pAct->GetGDIMetaFile().GetActionCount();
+        return pAct->GetGDIMetaFile().GetActionSize();
     }
     default:
         return 1;

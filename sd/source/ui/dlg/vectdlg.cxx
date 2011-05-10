@@ -229,7 +229,7 @@ void SdVectorizeDlg::Calculate( Bitmap& rBmp, GDIMetaFile& rMtf )
 
                 aTmp.ReleaseAccess( pRAcc );
 
-                for( sal_uLong n = 0UL, nCount = rMtf.GetActionCount(); n < nCount; n++ )
+                for( size_t n = 0, nCount = rMtf.GetActionSize(); n < nCount; n++ )
                     aNewMtf.AddAction( rMtf.GetAction( n )->Clone() );
 
                 aMap.SetScaleX( aMap.GetScaleX() * aScale );

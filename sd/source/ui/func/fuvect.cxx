@@ -90,7 +90,7 @@ void FuVectorize::DoExecute( SfxRequest& )
                 const GDIMetaFile&  rMtf = pDlg->GetGDIMetaFile();
                 SdrPageView*        pPageView = mpView->GetSdrPageView();
 
-                if( pPageView && rMtf.GetActionCount() )
+                if( pPageView && rMtf.GetActionSize() )
                 {
                     SdrGrafObj* pVectObj = (SdrGrafObj*) pObj->Clone();
                     String      aStr( mpView->GetDescriptionOfMarkedObjects() );

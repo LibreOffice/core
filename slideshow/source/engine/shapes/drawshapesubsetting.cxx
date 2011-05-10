@@ -74,7 +74,7 @@ namespace slideshow
 
             // init doctree vector
             maActionClassVector.clear();
-            maActionClassVector.reserve( mpMtf->GetActionCount() );
+            maActionClassVector.reserve( mpMtf->GetActionSize() );
 
             // search metafile for text output
             MetaAction* pCurrAct;
