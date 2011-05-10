@@ -2278,28 +2278,27 @@ TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard( Window
     DBG_ASSERT( pWindow, "Window pointer is NULL" );
 
     Reference< XClipboard > xClipboard;
-       TransferableDataHelper   aRet;
+    TransferableDataHelper  aRet;
 
     if( pWindow )
         xClipboard = pWindow->GetClipboard();
 
     if( xClipboard.is() )
-       {
-           try
-
+    {
+        try
         {
             Reference< XTransferable > xTransferable( xClipboard->getContents() );
 
             if( xTransferable.is() )
             {
                 aRet = TransferableDataHelper( xTransferable );
-                   aRet.mxClipboard = xClipboard;
-                    // also copy the clipboard
+                // also copy the clipboard
+                aRet.mxClipboard = xClipboard;
             }
-           }
+        }
         catch( const ::com::sun::star::uno::Exception& )
         {
-           }
+        }
     }
 
     return aRet;
