@@ -254,7 +254,7 @@ inline bool IsPrevPos( const SwPosition rPos1, const SwPosition rPos2 )
                 : false;
 }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 bool CheckPosition( const SwPosition* pStt, const SwPosition* pEnd )
 {
     int nError = 0;
@@ -2733,7 +2733,7 @@ sal_Bool SwRedlineTbl::InsertWithValidRanges( SwRedlinePtr& p, sal_uInt16* pInsP
             }
             else
                 aNewStt = *pNew->GetPoint();
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             CheckPosition( pNew->GetPoint(), pNew->GetMark() );
 #endif
             if( *pNew->GetPoint() != *pNew->GetMark() &&

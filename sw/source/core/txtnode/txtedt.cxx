@@ -636,7 +636,7 @@ XubString SwTxtNode::GetCurWord( xub_StrLen nPos ) const
     {
         sal_Int16 nWordType = WordType::DICTIONARY_WORD;
         lang::Locale aLocale( pBreakIt->GetLocale( GetLang( nPos ) ) );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         sal_Bool bBegin = rxBreak->isBeginWord( m_Text, nPos, aLocale, nWordType );
         sal_Bool bEnd   = rxBreak->isEndWord  ( m_Text, nPos, aLocale, nWordType );
         (void)bBegin;

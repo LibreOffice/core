@@ -118,7 +118,7 @@ void SwRenderData::ViewOptionAdjustStart( ViewShell &rSh, const SwViewOption &rV
 {
     if (m_pViewOptionAdjust)
     {
-        OSL_ENSURE( 0, "error: there should be no ViewOptionAdjust active when calling this function" );
+        OSL_FAIL("error: there should be no ViewOptionAdjust active when calling this function" );
     }
     m_pViewOptionAdjust = new SwViewOptionAdjust_Impl( rSh, rViewOptions );
 }

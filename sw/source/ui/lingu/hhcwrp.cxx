@@ -304,7 +304,7 @@ void SwHHCWrapper::ChangeText( const String &rNewText,
                 {
                     nChgLen = nIndex - nChgPos;
                     nConvChgLen = nPos - nConvChgPos;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                     String aInOrig( rOrigText.copy( nChgPos, nChgLen ) );
 #endif
                     String aInNew( rNewText.Copy( nConvChgPos, nConvChgLen ) );
@@ -314,7 +314,7 @@ void SwHHCWrapper::ChangeText( const String &rNewText,
                     OSL_ENSURE( rWrtShell.GetCrsr()->HasMark(), "cursor misplaced (nothing selected)" );
                     rWrtShell.GetCrsr()->GetMark()->nContent.Assign( pStartTxtNode, nChgInNodeStartIndex );
                     rWrtShell.GetCrsr()->GetPoint()->nContent.Assign( pStartTxtNode, nChgInNodeStartIndex + nChgLen );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                     String aSelTxt1( rWrtShell.GetSelTxt() );
 #endif
 
@@ -369,7 +369,7 @@ void SwHHCWrapper::ChangeText_impl( const String &rNewText, sal_Bool bKeepAttrib
         // restore those for the new text
         rWrtShell.GetCurAttr( aItemSet );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         String aSelTxt1( rWrtShell.GetSelTxt() );
 #endif
         rWrtShell.Delete();
@@ -380,7 +380,7 @@ void SwHHCWrapper::ChangeText_impl( const String &rNewText, sal_Bool bKeepAttrib
             rWrtShell.GetCrsr()->SetMark();
         SwPosition *pMark = rWrtShell.GetCrsr()->GetMark();
         pMark->nContent = pMark->nContent.GetIndex() - rNewText.Len();
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         String aSelTxt2( rWrtShell.GetSelTxt() );
 #endif
 
@@ -497,7 +497,7 @@ void SwHHCWrapper::ReplaceUnit(
         pRuby->SetPosition( bRubyBelow );
         pRuby->SetAdjustment( RubyAdjust_CENTER );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         SwPaM *pPaM = rWrtShell.GetCrsr();
         (void)pPaM;
 #endif

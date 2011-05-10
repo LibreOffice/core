@@ -750,7 +750,7 @@ namespace sw { namespace mark
     {
         m_vFieldmarks.clear();
         m_vBookmarks.clear();
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         for(iterator_t pBkmk = m_vMarks.begin();
             pBkmk != m_vMarks.end();
             ++pBkmk)

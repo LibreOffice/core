@@ -1968,7 +1968,7 @@ lcl_ApplyRowProperties(
     }
 }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 //-->debug cell properties of all rows
 static void
 lcl_DebugCellProperties(
@@ -2249,7 +2249,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
                 xRows->getByIndex(nRow), aRowSeparators[nRow]);
         }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         lcl_DebugCellProperties(rCellProperties);
 #endif
 

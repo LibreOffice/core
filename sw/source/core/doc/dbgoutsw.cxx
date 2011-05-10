@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 
 #include <tools/string.hxx>
 #include <svl/poolitem.hxx>

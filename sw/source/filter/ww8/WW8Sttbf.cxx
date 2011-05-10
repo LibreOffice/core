@@ -31,7 +31,7 @@
 #include "WW8Sttbf.hxx"
 #include <cstdio>
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
 
@@ -83,7 +83,7 @@ namespace ww8
             aResult = rtl::OUString(pNew);
         }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         char sBuffer[256];
         snprintf(sBuffer, sizeof(sBuffer), "offset=\"%" SAL_PRIuUINT32 "\" count=\"%" SAL_PRIuUINT32 "\"",
                  nOffset, nCount);
@@ -109,7 +109,7 @@ namespace ww8
             aResult = rtl::OUString(aOUStr);
         }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         char sBuffer[256];
         snprintf(sBuffer, sizeof(sBuffer), "offset=\"%" SAL_PRIuUINT32 "\" count=\"%" SAL_PRIuUINT32 "\"",
                  nOffset, nCount);

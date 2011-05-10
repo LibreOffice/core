@@ -1330,7 +1330,7 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
                     }
                     else
                     {
-                        OSL_ENSURE( 0, "ApplyChangedSentence: iterator positions broken" );
+                        OSL_FAIL("ApplyChangedSentence: iterator positions broken" );
                         break;
                     }
                 }

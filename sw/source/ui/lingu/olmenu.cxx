@@ -166,7 +166,7 @@ LanguageType lcl_CheckLanguage(
         aLangList[2] = rSettings.GetLanguage();
         // en-US
         aLangList[3] = LANGUAGE_ENGLISH_US;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         lang::Locale a0( SvxCreateLocale( aLangList[0] ) );
         lang::Locale a1( SvxCreateLocale( aLangList[1] ) );
         lang::Locale a2( SvxCreateLocale( aLangList[2] ) );
@@ -327,9 +327,6 @@ static Image lcl_GetImageFromPngUrl( const OUString &rFileUrl )
     Image aRes;
     OUString aTmp;
     osl::FileBase::getSystemPathFromFileURL( rFileUrl, aTmp );
-#if defined(WNT)
-
-#endif
     Graphic aGraphic;
     const String aFilterName( RTL_CONSTASCII_USTRINGPARAM( IMP_PNG ) );
     if( GRFILTER_OK == GraphicFilter::LoadGraphic( aTmp, aFilterName, aGraphic ) )

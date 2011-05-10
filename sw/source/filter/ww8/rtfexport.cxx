@@ -491,7 +491,7 @@ void RtfExport::WritePageDescTable()
 
 void RtfExport::ExportDocument_Impl()
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     // MSWordExportBase::WriteText and others write debug messages to std::clog
     // which is not interesting while debugging RtfExport
     std::ostringstream aOss;
@@ -698,7 +698,7 @@ void RtfExport::ExportDocument_Impl()
 
     Strm() << '}';
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     std::clog.rdbuf(pOldBuf);
 #endif
 }

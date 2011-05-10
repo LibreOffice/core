@@ -78,7 +78,7 @@
 
 #include <unomid.h>
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
 
@@ -1192,7 +1192,7 @@ void SwTxtPaintInfo::_DrawBackBrush( const SwLinePortion &rPor ) const
             bool bIsStartMark=(1==GetLen() && CH_TXT_ATR_FIELDSTART==GetTxt().GetChar(GetIdx()));
             if(pFieldmark) {
                 OSL_TRACE("Found Fieldmark");
-#if DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 rtl::OUString str = pFieldmark->ToString( );
                 fprintf( stderr, "%s\n", rtl::OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr( ) );
 #endif

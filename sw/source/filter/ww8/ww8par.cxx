@@ -143,7 +143,7 @@
 
 #include <breakit.hxx>
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #include <iostream>
 #include <dbgoutsw.hxx>
 #endif
@@ -2876,7 +2876,7 @@ void SwWW8ImplReader::simpleAddTextToParagraph(const String& rAddString)
     if (!rAddString.Len())
         return;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         {
             rtl::OString sText(rtl::OUStringToOString(rAddString, RTL_TEXTENCODING_UTF8));
             ::std::clog <<

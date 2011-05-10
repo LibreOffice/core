@@ -157,8 +157,6 @@ ww::eField lcl_getFieldId( const IFieldmark* pFieldmark ) {
     }
 }
 
-/*  */
-
 MSWordAttrIter::MSWordAttrIter( MSWordExportBase& rExport )
     : pOld( rExport.pChpIter ), m_rExport( rExport )
 {
@@ -1557,7 +1555,7 @@ void WW8AttributeOutput::FormatDrop( const SwTxtNode& rNode, const SwFmtDrop &rS
 
     if ( pTextNodeInfo.get() != NULL )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         ::std::clog << pTextNodeInfo->toString() << ::std::endl;
 #endif
 
@@ -1740,7 +1738,7 @@ void MSWordExportBase::GetSortedBookmarks( const SwTxtNode& rNode, xub_StrLen nA
 
 void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     ::std::clog << "<OutWW8_SwTxtNode>" << ::std::endl;
 #endif
 
@@ -2026,7 +2024,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
 
     if ( pTextNodeInfo.get() != NULL )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         ::std::clog << pTextNodeInfo->toString() << ::std::endl;
 #endif
 
@@ -2328,7 +2326,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
 
     AttrOutput().EndParagraph( pTextNodeInfoInner );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     ::std::clog << "</OutWW8_SwTxtNode>" << ::std::endl;
 #endif
 }

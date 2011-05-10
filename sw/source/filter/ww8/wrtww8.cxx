@@ -1699,7 +1699,7 @@ void WW8Export::OutSwString(const String& rStr, xub_StrLen nStt,
     xub_StrLen nLen, bool bUnicode, rtl_TextEncoding eChrSet)
 
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     ::std::clog << "<OutSwString>" << ::std::endl;
 #endif
 
@@ -1712,7 +1712,7 @@ void WW8Export::OutSwString(const String& rStr, xub_StrLen nStt,
         {
             String sOut( rStr.Copy( nStt, nLen ) );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             ::std::clog << ::rtl::OUStringToOString(sOut, RTL_TEXTENCODING_ASCII_US).getStr() << ::std::endl;
 #endif
 
@@ -1723,7 +1723,7 @@ void WW8Export::OutSwString(const String& rStr, xub_StrLen nStt,
         }
         else
         {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             ::std::clog << ::rtl::OUStringToOString(rStr, RTL_TEXTENCODING_ASCII_US).getStr() << ::std::endl;
 #endif
 
@@ -1734,7 +1734,7 @@ void WW8Export::OutSwString(const String& rStr, xub_StrLen nStt,
         }
     }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     ::std::clog << "</OutSwString>" << ::std::endl;
 #endif
 }
@@ -2206,7 +2206,7 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
     ww8::TableBoxVector::const_iterator aIt;
     ww8::TableBoxVector::const_iterator aItEnd = pTableBoxes->end();
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     size_t nRowSpans = pRowSpans->size();
     size_t nTableBoxes = pTableBoxes->size();
     (void) nRowSpans;
@@ -2215,7 +2215,7 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
 
     for( aIt = pTableBoxes->begin(); aIt != aItEnd; ++aIt, ++aItRowSpans)
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         sal_uInt16 npOCount = m_rWW8Export.pO->Count();
 #endif
 
@@ -2243,7 +2243,7 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
         else
             m_rWW8Export.Out_SwFmtTableBox( *m_rWW8Export.pO, NULL); // 8/16 Byte
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         ::std::clog << "<tclength>" << m_rWW8Export.pO->Count() - npOCount << "</tclength>"
                     << ::std::endl;
 #endif
@@ -2436,7 +2436,7 @@ void WW8Export::SectionBreaksAndFrames( const SwTxtNode& rNode )
         OutWW6FlyFrmsInCntnt( rNode );
 }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 struct SwNodeHash
 {
     size_t operator()(SwNode * pNode) const { return reinterpret_cast<size_t>(pNode); }
@@ -2530,14 +2530,14 @@ void MSWordExportBase::WriteText()
         ::SetProgressState( nPos, pCurPam->GetDoc()->GetDocShell() );
     }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     ::std::clog << "</WriteText>" << ::std::endl;
 #endif
 }
 
 void WW8Export::WriteMainText()
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     ::std::clog << "<WriteMainText>" << ::std::endl;
 #endif
 
@@ -2562,7 +2562,7 @@ void WW8Export::WriteMainText()
     if( pLastNd )
         nLastFmtId = GetId( (SwTxtFmtColl&)pLastNd->GetAnyFmtColl() );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     ::std::clog << "</WriteMainText>" << ::std::endl;
 #endif
 }
@@ -3681,7 +3681,7 @@ void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer
     SVBT16 nStyle;
     ShortToSVBT16( m_rWW8Export.nStyleBeforeFly, nStyle );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     ::std::clog << "<OutWW8_TableNodeInfoInner>" << pNodeInfoInner->toString();
 #endif
 
@@ -3713,7 +3713,7 @@ void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer
 
     if (pNodeInfoInner->isEndOfCell())
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         ::std::clog << "<endOfCell/>" << ::std::endl;
 #endif
         m_rWW8Export.WriteCR(pNodeInfoInner);
@@ -3750,7 +3750,7 @@ void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer
 
     if (pNodeInfoInner->isEndOfLine())
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         ::std::clog << "<endOfLine/>" << ::std::endl;
 #endif
         TableRowEnd(pNodeInfoInner->getDepth());
@@ -3763,7 +3763,7 @@ void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer
 
         m_rWW8Export.pO->Remove( 0, m_rWW8Export.pO->Count() );                       // leeren
     }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     ::std::clog << "</OutWW8_TableNodeInfoInner>" << ::std::endl;
 #endif
 }
@@ -3776,7 +3776,7 @@ void MSWordExportBase::OutputStartNode( const SwStartNode & rNode)
 
     if (pNodeInfo.get() != NULL)
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         ::std::clog << pNodeInfo->toString() << ::std::endl;
 #endif
 
@@ -3791,14 +3791,14 @@ void MSWordExportBase::OutputStartNode( const SwStartNode & rNode)
             ++aIt;
         }
     }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     ::std::clog << "</OutWW8_SwStartNode>" << ::std::endl;
 #endif
 }
 
 void MSWordExportBase::OutputEndNode( const SwEndNode &rNode )
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 // whoever has need of the missing function should go and implement it!
 // This piece of code always breaks builds...
 //    ::std::clog << "<OutWW8_SwEndNode>" << dbg_out(&rNode) << ::std::endl;
@@ -3808,7 +3808,7 @@ void MSWordExportBase::OutputEndNode( const SwEndNode &rNode )
 
     if (pNodeInfo.get() != NULL)
      {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         ::std::clog << pNodeInfo->toString() << ::std::endl;
 #endif
 
@@ -3822,7 +3822,7 @@ void MSWordExportBase::OutputEndNode( const SwEndNode &rNode )
             ++aIt;
          }
      }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     ::std::clog << "</OutWW8_SwEndNode>" << ::std::endl;
 #endif
 }

@@ -116,7 +116,7 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
 {
     OSL_ENSURE(0 != pDoc, "no document?");
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     DebugHeaderFooterContent( (SwPageDesc&)aOld );
     DebugHeaderFooterContent( (SwPageDesc&)aNew );
 #endif
@@ -179,7 +179,7 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
         // After this exchange method the old page description will point to zero,
         // the new one will point to the node position of the original content nodes.
         ExchangeContentNodes( (SwPageDesc&)aOld, (SwPageDesc&)aNew );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         DebugHeaderFooterContent( (SwPageDesc&)aOld );
         DebugHeaderFooterContent( (SwPageDesc&)aNew );
 #endif
@@ -204,7 +204,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         rDest.GetMaster().GetAttrSet().GetItemState( RES_HEADER, sal_False, &pItem );
         SfxPoolItem *pNewItem = pItem->Clone();
         SwFrmFmt* pNewFmt = ((SwFmtHeader*)pNewItem)->GetHeaderFmt();
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         const SwFmtCntnt& rSourceCntnt = rSourceHead.GetHeaderFmt()->GetCntnt();
         (void)rSourceCntnt;
         const SwFmtCntnt& rDestCntnt = rDestHead.GetHeaderFmt()->GetCntnt();
@@ -228,7 +228,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
             rDest.GetLeft().GetAttrSet().GetItemState( RES_HEADER, sal_False, &pItem );
             pNewItem = pItem->Clone();
             pNewFmt = ((SwFmtHeader*)pNewItem)->GetHeaderFmt();
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             const SwFmtCntnt& rSourceCntnt1 = rSourceLeftHead.GetHeaderFmt()->GetCntnt();
             (void)rSourceCntnt1;
             const SwFmtCntnt& rDestCntnt1 = rDest.GetLeft().GetHeader().GetHeaderFmt()->GetCntnt();
@@ -255,7 +255,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         pNewFmt->SetFmtAttr( rSourceFoot.GetFooterFmt()->GetCntnt() );
         delete pNewItem;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         const SwFmtCntnt& rFooterSourceCntnt = rSourceFoot.GetFooterFmt()->GetCntnt();
         (void)rFooterSourceCntnt;
         const SwFmtCntnt& rFooterDestCntnt = rDestFoot.GetFooterFmt()->GetCntnt();
@@ -270,7 +270,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         if( !rDest.IsFooterShared() )
         {
             const SwFmtFooter& rSourceLeftFoot = rSource.GetLeft().GetFooter();
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             const SwFmtCntnt& rFooterSourceCntnt2 = rSourceLeftFoot.GetFooterFmt()->GetCntnt();
             const SwFmtCntnt& rFooterDestCntnt2 =
                 rDest.GetLeft().GetFooter().GetFooterFmt()->GetCntnt();
