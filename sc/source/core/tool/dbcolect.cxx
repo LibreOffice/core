@@ -85,6 +85,10 @@ ScDBData::ScDBData( const ::rtl::OUString& rName,
 ScDBData::ScDBData( const ScDBData& rData ) :
     ScDataObject(),
     ScRefreshTimer      ( rData ),
+    maSortParam         (rData.maSortParam),
+    maQueryParam        (rData.maQueryParam),
+    maSubTotal          (rData.maSubTotal),
+    maImportParam       (rData.maImportParam),
     aName               (rData.aName),
     nTable              (rData.nTable),
     nStartCol           (rData.nStartCol),
@@ -96,42 +100,22 @@ ScDBData::ScDBData( const ScDBData& rData ) :
     bDoSize             (rData.bDoSize),
     bKeepFmt            (rData.bKeepFmt),
     bStripData          (rData.bStripData),
-    bSortCaseSens       (rData.bSortCaseSens),
-    bSortNaturalSort    (rData.bSortNaturalSort),
-    bIncludePattern     (rData.bIncludePattern),
-    bSortInplace        (rData.bSortInplace),
-    bSortUserDef        (rData.bSortUserDef),
-    nSortUserIndex      (rData.nSortUserIndex),
-    nSortDestTab        (rData.nSortDestTab),
-    nSortDestCol        (rData.nSortDestCol),
-    nSortDestRow        (rData.nSortDestRow),
-    aSortLocale         (rData.aSortLocale),
-    aSortAlgorithm      (rData.aSortAlgorithm),
     bIsAdvanced         (rData.bIsAdvanced),
     aAdvSource          (rData.aAdvSource),
-    maQueryParam        (rData.maQueryParam),
-    maSubTotal          (rData.maSubTotal),
-    maImportParam       (rData.maImportParam),
     bDBSelection        (rData.bDBSelection),
     nIndex              (rData.nIndex),
     bAutoFilter         (rData.bAutoFilter),
     bModified           (rData.bModified)
 {
-    sal_uInt16 i;
-
-    for (i=0; i<MAXSORT; i++)
-    {
-        bDoSort[i]      = rData.bDoSort[i];
-        nSortField[i]   = rData.nSortField[i];
-        bAscending[i]   = rData.bAscending[i];
-    }
 }
 
 ScDBData& ScDBData::operator= (const ScDBData& rData)
 {
-    sal_uInt16 i;
-
     ScRefreshTimer::operator=( rData );
+    maSortParam         = rData.maSortParam;
+    maQueryParam        = rData.maQueryParam;
+    maSubTotal          = rData.maSubTotal;
+    maImportParam       = rData.maImportParam;
     aName               = rData.aName;
     nTable              = rData.nTable;
     nStartCol           = rData.nStartCol;
@@ -143,32 +127,11 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
     bDoSize             = rData.bDoSize;
     bKeepFmt            = rData.bKeepFmt;
     bStripData          = rData.bStripData;
-    bSortCaseSens       = rData.bSortCaseSens;
-    bSortNaturalSort    = rData.bSortNaturalSort;
-    bIncludePattern     = rData.bIncludePattern;
-    bSortInplace        = rData.bSortInplace;
-    nSortDestTab        = rData.nSortDestTab;
-    nSortDestCol        = rData.nSortDestCol;
-    nSortDestRow        = rData.nSortDestRow;
-    bSortUserDef        = rData.bSortUserDef;
-    nSortUserIndex      = rData.nSortUserIndex;
-    aSortLocale         = rData.aSortLocale;
-    aSortAlgorithm      = rData.aSortAlgorithm;
     bIsAdvanced         = rData.bIsAdvanced;
-    maQueryParam        = rData.maQueryParam;
-    maSubTotal          = rData.maSubTotal;
-    maImportParam       = rData.maImportParam;
     aAdvSource          = rData.aAdvSource;
     bDBSelection        = rData.bDBSelection;
     nIndex              = rData.nIndex;
     bAutoFilter         = rData.bAutoFilter;
-
-    for (i=0; i<MAXSORT; i++)
-    {
-        bDoSort[i]      = rData.bDoSort[i];
-        nSortField[i]   = rData.nSortField[i];
-        bAscending[i]   = rData.bAscending[i];
-    }
 
     return *this;
 }
@@ -251,7 +214,7 @@ ScDBData::~ScDBData()
             aBuf.append(ScGlobal::GetRscString(STR_OPERATION_FILTER));
     }
 
-    if (bDoSort[0])
+    if (maSortParam.bDoSort[0])
     {
         if (aBuf.getLength())
             aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
@@ -306,11 +269,11 @@ void ScDBData::MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
 
     for (i=0; i<MAXSORT; i++)
     {
-        nSortField[i] += nSortDif;
-        if (nSortField[i] > nSortEnd)
+        maSortParam.nField[i] += nSortDif;
+        if (maSortParam.nField[i] > nSortEnd)
         {
-            nSortField[i] = 0;
-            bDoSort[i]    = false;
+            maSortParam.nField[i] = 0;
+            maSortParam.bDoSort[i] = false;
         }
     }
 
@@ -341,52 +304,18 @@ void ScDBData::MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
 
 void ScDBData::GetSortParam( ScSortParam& rSortParam ) const
 {
+    rSortParam = maSortParam;
     rSortParam.nCol1 = nStartCol;
     rSortParam.nRow1 = nStartRow;
     rSortParam.nCol2 = nEndCol;
     rSortParam.nRow2 = nEndRow;
     rSortParam.bByRow = bByRow;
     rSortParam.bHasHeader = bHasHeader;
-    rSortParam.bCaseSens = bSortCaseSens;
-    rSortParam.bNaturalSort = bSortNaturalSort;
-    rSortParam.bInplace = bSortInplace;
-    rSortParam.nDestTab = nSortDestTab;
-    rSortParam.nDestCol = nSortDestCol;
-    rSortParam.nDestRow = nSortDestRow;
-    rSortParam.bIncludePattern = bIncludePattern;
-    rSortParam.bUserDef = bSortUserDef;
-    rSortParam.nUserIndex = nSortUserIndex;
-    for (sal_uInt16 i=0; i<MAXSORT; i++)
-    {
-        rSortParam.bDoSort[i]    = bDoSort[i];
-        rSortParam.nField[i]     = nSortField[i];
-        rSortParam.bAscending[i] = bAscending[i];
-    }
-    rSortParam.aCollatorLocale = aSortLocale;
-    rSortParam.aCollatorAlgorithm = aSortAlgorithm;
 }
 
 void ScDBData::SetSortParam( const ScSortParam& rSortParam )
 {
-    bSortCaseSens = rSortParam.bCaseSens;
-    bSortNaturalSort = rSortParam.bNaturalSort;
-    bIncludePattern = rSortParam.bIncludePattern;
-    bSortInplace = rSortParam.bInplace;
-    nSortDestTab = rSortParam.nDestTab;
-    nSortDestCol = rSortParam.nDestCol;
-    nSortDestRow = rSortParam.nDestRow;
-    bSortUserDef = rSortParam.bUserDef;
-    nSortUserIndex = rSortParam.nUserIndex;
-    for (sal_uInt16 i=0; i<MAXSORT; i++)
-    {
-        bDoSort[i]    = rSortParam.bDoSort[i];
-        nSortField[i] = rSortParam.nField[i];
-        bAscending[i] = rSortParam.bAscending[i];
-    }
-    aSortLocale = rSortParam.aCollatorLocale;
-    aSortAlgorithm = rSortParam.aCollatorAlgorithm;
-
-    //#98317#; set the orientation
+    maSortParam = rSortParam;
     bByRow = rSortParam.bByRow;
 }
 

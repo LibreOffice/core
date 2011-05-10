@@ -47,6 +47,11 @@ class ScDocument;
 class ScDBData : public ScDataObject, public ScRefreshTimer
 {
 private:
+    ScSortParam maSortParam;
+    ScQueryParam maQueryParam;
+    ScSubTotalParam maSubTotal;
+    ScImportParam maImportParam;
+
     // DBParam
     ::rtl::OUString aName;
     SCTAB           nTable;
@@ -59,32 +64,14 @@ private:
     bool            bDoSize;
     bool            bKeepFmt;
     bool            bStripData;
-    // SortParam
-    bool            bSortCaseSens;
-    bool            bSortNaturalSort;
-    bool            bIncludePattern;
-    bool            bSortInplace;
-    bool            bSortUserDef;
-    sal_uInt16          nSortUserIndex;
-    SCTAB           nSortDestTab;
-    SCCOL           nSortDestCol;
-    SCROW           nSortDestRow;
-    bool            bDoSort[MAXSORT];
-    SCCOLROW        nSortField[MAXSORT];
-    bool            bAscending[MAXSORT];
-    ::com::sun::star::lang::Locale aSortLocale;
-    ::rtl::OUString aSortAlgorithm;
+
     // QueryParam
     bool            bIsAdvanced;        // true if created by advanced filter
     ScRange         aAdvSource;         // source range
 
-    ScQueryParam maQueryParam;
-    ScSubTotalParam maSubTotal;
-    ScImportParam maImportParam;
-
     bool            bDBSelection;       // not in Param: if selection, block update
 
-    sal_uInt16          nIndex;             // unique index formulas
+    sal_uInt16      nIndex;             // unique index formulas
     bool            bAutoFilter;        // AutoFilter? (not saved)
     bool            bModified;          // is set/cleared for/by(?) UpdateReference
 
@@ -146,7 +133,7 @@ public:
 
             bool        HasImportParam() const   { return maImportParam.bImport; }
             SC_DLLPUBLIC bool HasQueryParam() const;
-            bool        HasSortParam() const     { return bDoSort[0]; }
+            bool        HasSortParam() const     { return maSortParam.bDoSort[0]; }
             bool        HasSubTotalParam() const { return maSubTotal.bGroupActive[0]; }
 
             bool        HasImportSelection() const      { return bDBSelection; }
