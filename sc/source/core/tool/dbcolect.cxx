@@ -122,13 +122,8 @@ ScDBData::ScDBData( const ScDBData& rData ) :
     bIsAdvanced         (rData.bIsAdvanced),
     aAdvSource          (rData.aAdvSource),
     maSubTotal          (rData.maSubTotal),
-    bDBImport           (rData.bDBImport),
-    aDBName             (rData.aDBName),
-    aDBStatement        (rData.aDBStatement),
-    bDBNative           (rData.bDBNative),
+    maImportParam       (rData.maImportParam),
     bDBSelection        (rData.bDBSelection),
-    bDBSql              (rData.bDBSql),
-    nDBType             (rData.nDBType),
     nIndex              (rData.nIndex),
     bAutoFilter         (rData.bAutoFilter),
     bModified           (rData.bModified)
@@ -190,14 +185,9 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
     nQueryDestRow       = rData.nQueryDestRow;
     bIsAdvanced         = rData.bIsAdvanced;
     maSubTotal          = rData.maSubTotal;
+    maImportParam       = rData.maImportParam;
     aAdvSource          = rData.aAdvSource;
-    bDBImport           = rData.bDBImport;
-    aDBName             = rData.aDBName;
-    aDBStatement        = rData.aDBStatement;
-    bDBNative           = rData.bDBNative;
     bDBSelection        = rData.bDBSelection;
-    bDBSql              = rData.bDBSql;
-    nDBType             = rData.nDBType;
     nIndex              = rData.nIndex;
     bAutoFilter         = rData.bAutoFilter;
 
@@ -282,42 +272,43 @@ ScDBData::~ScDBData()
 }
 
 
-String ScDBData::GetSourceString() const
+::rtl::OUString ScDBData::GetSourceString() const
 {
-    String aVal;
-    if (bDBImport)
+    ::rtl::OUStringBuffer aBuf;
+    if (maImportParam.bImport)
     {
-        aVal = aDBName;
-        aVal += '/';
-        aVal += aDBStatement;
+        aBuf.append(maImportParam.aDBName);
+        aBuf.append(sal_Unicode('/'));
+        aBuf.append(maImportParam.aStatement);
     }
-    return aVal;
+    return aBuf.makeStringAndClear();
 }
 
-String ScDBData::GetOperations() const
+::rtl::OUString ScDBData::GetOperations() const
 {
+    ::rtl::OUStringBuffer aBuf;
     String aVal;
     if (bDoQuery[0])
-        aVal = ScGlobal::GetRscString(STR_OPERATION_FILTER);
+        aBuf.append(ScGlobal::GetRscString(STR_OPERATION_FILTER));
 
     if (bDoSort[0])
     {
-        if (aVal.Len())
-            aVal.AppendAscii( RTL_CONSTASCII_STRINGPARAM(", ") );
-        aVal += ScGlobal::GetRscString(STR_OPERATION_SORT);
+        if (aBuf.getLength())
+            aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
+        aBuf.append(ScGlobal::GetRscString(STR_OPERATION_SORT));
     }
 
     if (maSubTotal.bGroupActive[0] && !maSubTotal.bRemoveOnly)
     {
-        if (aVal.Len())
-            aVal.AppendAscii( RTL_CONSTASCII_STRINGPARAM(", ") );
-        aVal += ScGlobal::GetRscString(STR_OPERATION_SUBTOTAL);
+        if (aBuf.getLength())
+            aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
+        aBuf.append(ScGlobal::GetRscString(STR_OPERATION_SUBTOTAL));
     }
 
-    if (!aVal.Len())
-        aVal = ScGlobal::GetRscString(STR_OPERATION_NONE);
+    if (!aBuf.getLength())
+        aBuf.append(ScGlobal::GetRscString(STR_OPERATION_NONE));
 
-    return aVal;
+    return aBuf.makeStringAndClear();
 }
 
 void ScDBData::GetArea(SCTAB& rTab, SCCOL& rCol1, SCROW& rRow1, SCCOL& rCol2, SCROW& rRow2) const
@@ -536,27 +527,18 @@ void ScDBData::SetSubTotalParam(const ScSubTotalParam& rSubTotalParam)
 
 void ScDBData::GetImportParam(ScImportParam& rImportParam) const
 {
+    rImportParam = maImportParam;
+    // set the range.
     rImportParam.nCol1 = nStartCol;
     rImportParam.nRow1 = nStartRow;
     rImportParam.nCol2 = nEndCol;
     rImportParam.nRow2 = nEndRow;
-
-    rImportParam.bImport    = bDBImport;
-    rImportParam.aDBName    = aDBName;
-    rImportParam.aStatement = aDBStatement;
-    rImportParam.bNative    = bDBNative;
-    rImportParam.bSql       = bDBSql;
-    rImportParam.nType      = nDBType;
 }
 
 void ScDBData::SetImportParam(const ScImportParam& rImportParam)
 {
-    bDBImport       = rImportParam.bImport;
-    aDBName         = rImportParam.aDBName;
-    aDBStatement    = rImportParam.aStatement;
-    bDBNative       = rImportParam.bNative;
-    bDBSql          = rImportParam.bSql;
-    nDBType         = rImportParam.nType;
+    // the range is ignored.
+    maImportParam = rImportParam;
 }
 
 bool ScDBData::IsDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) const

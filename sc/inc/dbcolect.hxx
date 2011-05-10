@@ -39,6 +39,7 @@
 #include "subtotalparam.hxx"
 
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/scoped_ptr.hpp>
 
 class ScDocument;
 
@@ -92,15 +93,9 @@ private:
     ScRange         aAdvSource;         // source range
 
     ScSubTotalParam maSubTotal;
+    ScImportParam maImportParam;
 
-    // data base import
-    bool            bDBImport;
-    String          aDBName;
-    String          aDBStatement;
-    bool            bDBNative;
     bool            bDBSelection;       // not in Param: if selection, block update
-    bool            bDBSql;             // aDBStatement is SQL not a name
-    sal_uInt8           nDBType;            // enum DBObject (up to now only dbTable, dbQuery)
 
     sal_uInt16          nIndex;             // unique index formulas
     bool            bAutoFilter;        // AutoFilter? (not saved)
@@ -143,8 +138,8 @@ public:
             bool        IsStripData() const             { return bStripData; }
             void        SetStripData(bool bSet)         { bStripData = bSet; }
 
-            String      GetSourceString() const;
-            String      GetOperations() const;
+            ::rtl::OUString GetSourceString() const;
+            ::rtl::OUString GetOperations() const;
 
             void        GetSortParam(ScSortParam& rSortParam) const;
             void        SetSortParam(const ScSortParam& rSortParam);
@@ -163,7 +158,7 @@ public:
             bool        IsDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) const;
             bool        IsDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
 
-            bool        HasImportParam() const   { return bDBImport; }
+            bool        HasImportParam() const   { return maImportParam.bImport; }
             bool        HasQueryParam() const    { return bDoQuery[0]; }
             bool        HasSortParam() const     { return bDoSort[0]; }
             bool        HasSubTotalParam() const { return maSubTotal.bGroupActive[0]; }
