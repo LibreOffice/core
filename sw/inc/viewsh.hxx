@@ -37,6 +37,7 @@
 #include <ring.hxx>
 #include <swrect.hxx>
 #include <boost/shared_ptr.hpp>// swmod 080115
+#include <stack>
 #include <vcl/mapmod.hxx>
 #include <vcl/print.hxx>
 
@@ -236,7 +237,7 @@ public:
     //////////////////////////////////////////////////////////////////////////////
     // #i72754# set of Pre/PostPaints with lock counter and initial target OutDev
 protected:
-    sal_uInt32              mnPrePostPaintCount;
+    std::stack<Region>          mPrePostPaintRegions; // acts also as a lock counter (empty == not locked)
     OutputDevice*           mpPrePostOutDev;
     MapMode                 maPrePostMapMode;
 public:
@@ -248,7 +249,7 @@ public:
 
     virtual void Paint(const Rectangle &rRect);
     sal_Bool IsPaintInProgress() const { return bPaintInProgress; }
-    bool IsDrawingLayerPaintInProgress() const { return 0 != mnPrePostPaintCount; }
+    bool IsDrawingLayerPaintInProgress() const { return !mPrePostPaintRegions.empty(); }
 
     //Benachrichtung, dass sich der sichtbare Bereich geaendert hat.
     //VisArea wird neu gesetzt, anschliessend wird gescrollt.
