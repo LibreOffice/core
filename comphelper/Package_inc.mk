@@ -38,6 +38,7 @@ $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/stillreadwritein
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/anycompare.hxx,comphelper/anycompare.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/propagg.hxx,comphelper/propagg.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/scopeguard.hxx,comphelper/scopeguard.hxx))
+$(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/scoped_disposing_ptr.hxx,comphelper/scoped_disposing_ptr.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/asyncnotification.hxx,comphelper/asyncnotification.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/namedvaluecollection.hxx,comphelper/namedvaluecollection.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/composedprops.hxx,comphelper/composedprops.hxx))
