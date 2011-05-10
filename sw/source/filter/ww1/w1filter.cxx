@@ -1911,7 +1911,7 @@ void Ww1Picture::Out(Ww1Shell& rOut, Ww1Manager& /*rMan*/)
          (sizeof(*pPic)-sizeof(pPic->rgb)));
         aOut.Seek(0);
         GDIMetaFile aWMF;
-        if (ReadWindowMetafile( aOut, aWMF, NULL ) && aWMF.GetActionCount() > 0)
+        if (ReadWindowMetafile( aOut, aWMF, NULL ) && aWMF.GetActionSize() > 0)
         {
             aWMF.SetPrefMapMode(MapMode(MAP_100TH_MM));
             Size aOldSiz(aWMF.GetPrefSize());

@@ -282,7 +282,7 @@ bool SwWW8ImplReader::ReadGrafFile(String& rFileName, Graphic*& rpGraphic,
     pSt->Seek( nPosFc );
     bool bOk = ReadWindowMetafile( *pSt, aWMF, NULL ) ? true : false;
 
-    if (!bOk || pSt->GetError() || !aWMF.GetActionCount())
+    if (!bOk || pSt->GetError() || !aWMF.GetActionSize())
         return false;
 
     if (pWwFib->envr != 1) // !MAC als Creator

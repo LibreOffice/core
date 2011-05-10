@@ -168,7 +168,7 @@ static bool SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
     }
     bool bOk = ReadWindowMetafile( *pSt, rWMF, NULL ) ? true : false;   // WMF lesen
                     // *pSt >> aWMF  geht nicht ohne placable Header
-    if (!bOk || pSt->GetError() || rWMF.GetActionCount() == 0)
+    if (!bOk || pSt->GetError() || rWMF.GetActionSize() == 0)
     {
         OSL_ENSURE( !pSt, "+OLE: Konnte Metafile nicht lesen" );
         return false;
