@@ -164,13 +164,10 @@ OUString SAL_CALL WPGImportFilter::detect( com::sun::star::uno::Sequence< Proper
             pValue[i].Value >>= xInputStream;
     }
 
-    WPXInputStream* input = new WPXSvInputStream( xInputStream );
+    WPXSvInputStream input( xInputStream );
 
-    if (libwpg::WPGraphics::isSupported(input))
+    if (libwpg::WPGraphics::isSupported(&input))
         sTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "draw_WordPerfect_Graphics" ) );
-
-    if (input)
-        delete input;
 
     if (sTypeName.getLength())
     {
