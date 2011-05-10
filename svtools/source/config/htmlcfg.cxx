@@ -35,6 +35,7 @@
 #include <tools/debug.hxx>
 #include <tools/link.hxx>
 #include <sal/macros.h>
+#include <rtl/instance.hxx>
 #include <list>
 
 // -----------------------------------------------------------------------
@@ -52,8 +53,6 @@ using namespace utl;
 using namespace com::sun::star::uno;
 
 using ::rtl::OUString;
-
-static SvxHtmlOptions* pOptions = 0;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
 
@@ -458,11 +457,14 @@ sal_Bool SvxHtmlOptions::IsDefaultTextEncoding() const
     return pImp->bIsEncodingDefault;
 }
 
-SvxHtmlOptions* SvxHtmlOptions::Get()
+namespace
 {
-    if ( !pOptions )
-        pOptions = new SvxHtmlOptions;
-    return pOptions;
+    class theSvxHtmlOptions : public rtl::Static<SvxHtmlOptions, theSvxHtmlOptions> {};
+}
+
+SvxHtmlOptions& SvxHtmlOptions::Get()
+{
+    return theSvxHtmlOptions::get();
 }
 
 sal_Bool SvxHtmlOptions::IsNumbersEnglishUS() const
