@@ -1501,7 +1501,7 @@ void ScDBDocFunc::UpdateImport( const String& rTarget, const String& rDBName,
     aImportParam.aStatement = bSql ? rStatement : rTableName;
     aImportParam.bNative    = bNative;
     aImportParam.nType      = nType;
-    aImportParam.bImport    = sal_True;
+    aImportParam.bImport    = true;
     sal_Bool bContinue = DoImport( nTab, aImportParam, xResultSet, pSelection, sal_True );
 
     //  DB-Operationen wiederholen

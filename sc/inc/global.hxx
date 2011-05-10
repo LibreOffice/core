@@ -422,19 +422,19 @@ struct ScImportParam
     SCROW           nRow1;
     SCCOL           nCol2;
     SCROW           nRow2;
-    sal_Bool            bImport;
-    String          aDBName;                    // alias of data base
-    String          aStatement;
-    sal_Bool            bNative;
-    sal_Bool            bSql;                       // statement or name?
-    sal_uInt8           nType;                      // enum DBObject
+    bool            bImport;
+    ::rtl::OUString aDBName;                    // alias of data base
+    ::rtl::OUString aStatement;
+    bool            bNative;
+    bool            bSql;                       // statement or name?
+    sal_uInt8       nType;                      // enum DBObject
 
     ScImportParam();
     ScImportParam( const ScImportParam& r );
     ~ScImportParam();
 
     ScImportParam&  operator=   ( const ScImportParam& r );
-    sal_Bool            operator==  ( const ScImportParam& r ) const;
+    bool            operator==  ( const ScImportParam& r ) const;
 };
 
 struct ScStringHashCode

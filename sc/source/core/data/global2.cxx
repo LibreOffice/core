@@ -67,7 +67,7 @@ ScImportParam::ScImportParam() :
     nRow2(0),
     bImport(false),
     bNative(false),
-    bSql(sal_True),
+    bSql(true),
     nType(ScDbTable)
 {
 }
@@ -106,7 +106,7 @@ ScImportParam& ScImportParam::operator=( const ScImportParam& r )
     return *this;
 }
 
-sal_Bool ScImportParam::operator==( const ScImportParam& rOther ) const
+bool ScImportParam::operator==( const ScImportParam& rOther ) const
 {
     return( nCol1       == rOther.nCol1 &&
             nRow1       == rOther.nRow1 &&

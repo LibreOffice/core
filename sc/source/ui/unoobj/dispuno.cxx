@@ -276,8 +276,8 @@ void lcl_FillDataSource( frame::FeatureStateEvent& rEvent, const ScImportParam& 
                     ( (rParam.nType == ScDbQuery) ? sdb::CommandType::QUERY :
                                                     sdb::CommandType::TABLE );
 
-        aDescriptor.setDataSource(rtl::OUString( rParam.aDBName ));
-        aDescriptor[svx::daCommand]     <<= rtl::OUString( rParam.aStatement );
+        aDescriptor.setDataSource(rParam.aDBName);
+        aDescriptor[svx::daCommand]     <<= rParam.aStatement;
         aDescriptor[svx::daCommandType] <<= nType;
     }
     else

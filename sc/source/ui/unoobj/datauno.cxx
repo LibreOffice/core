@@ -232,19 +232,19 @@ void ScImportDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rS
     if (aDescriptor.has( svx::daDataSource ))
     {
         pArray[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_DBNAME ));
-        pArray[0].Value <<= rtl::OUString( rParam.aDBName );
+        pArray[0].Value <<= rParam.aDBName;
     }
     else if (aDescriptor.has( svx::daConnectionResource ))
     {
         pArray[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_CONRES ));
-        pArray[0].Value <<= rtl::OUString( rParam.aDBName );
+        pArray[0].Value <<= rParam.aDBName;
     }
 
     pArray[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_SRCTYPE ));
     pArray[1].Value <<= eMode;
 
     pArray[2].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_SRCOBJ ));
-    pArray[2].Value <<= rtl::OUString( rParam.aStatement );
+    pArray[2].Value <<= rParam.aStatement;
 
     pArray[3].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_ISNATIVE ));
     ScUnoHelpFunctions::SetBoolInAny( pArray[3].Value, rParam.bNative );
@@ -265,17 +265,17 @@ void ScImportDescriptor::FillImportParam( ScImportParam& rParam, const uno::Sequ
         else if (aPropName.EqualsAscii( SC_UNONAME_DBNAME ))
         {
             if ( rProp.Value >>= aStrVal )
-                rParam.aDBName = String( aStrVal );
+                rParam.aDBName = aStrVal;
         }
         else if (aPropName.EqualsAscii( SC_UNONAME_CONRES ))
         {
             if ( rProp.Value >>= aStrVal )
-                rParam.aDBName = String( aStrVal );
+                rParam.aDBName = aStrVal;
         }
         else if (aPropName.EqualsAscii( SC_UNONAME_SRCOBJ ))
         {
             if ( rProp.Value >>= aStrVal )
-                rParam.aStatement = String( aStrVal );
+                rParam.aStatement = aStrVal;
         }
         else if (aPropName.EqualsAscii( SC_UNONAME_SRCTYPE ))
         {
@@ -288,16 +288,16 @@ void ScImportDescriptor::FillImportParam( ScImportParam& rParam, const uno::Sequ
                     rParam.bImport = false;
                     break;
                 case sheet::DataImportMode_SQL:
-                    rParam.bImport = sal_True;
-                    rParam.bSql    = sal_True;
+                    rParam.bImport = true;
+                    rParam.bSql    = true;
                     break;
                 case sheet::DataImportMode_TABLE:
-                    rParam.bImport = sal_True;
+                    rParam.bImport = true;
                     rParam.bSql    = false;
                     rParam.nType   = ScDbTable;
                     break;
                 case sheet::DataImportMode_QUERY:
-                    rParam.bImport = sal_True;
+                    rParam.bImport = true;
                     rParam.bSql    = false;
                     rParam.nType   = ScDbQuery;
                     break;

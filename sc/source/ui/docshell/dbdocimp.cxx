@@ -104,8 +104,8 @@ void ScDBDocFunc::ShowInBeamer( const ScImportParam& rParam, SfxViewFrame* pFram
                                                         sdb::CommandType::TABLE );
 
             ::svx::ODataAccessDescriptor aSelection;
-            aSelection.setDataSource(rtl::OUString( rParam.aDBName ));
-            aSelection[svx::daCommand]      <<= rtl::OUString( rParam.aStatement );
+            aSelection.setDataSource(rParam.aDBName);
+            aSelection[svx::daCommand]      <<= rParam.aStatement;
             aSelection[svx::daCommandType]  <<= nType;
 
             xControllerSelection->select(uno::makeAny(aSelection.createPropertyValueSequence()));
@@ -127,7 +127,7 @@ sal_Bool ScDBDocFunc::DoImportUno( const ScAddress& rPos,
     ScImportParam aImParam;
     aImParam.nCol1 = aImParam.nCol2 = rPos.Col();
     aImParam.nRow1 = aImParam.nRow2 = rPos.Row();
-    aImParam.bImport = sal_True;
+    aImParam.bImport = true;
 
     uno::Reference<sdbc::XResultSet> xResSet;
     uno::Sequence<uno::Any> aSelection;
@@ -303,11 +303,11 @@ sal_Bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                                                             sdb::CommandType::TABLE );
                 uno::Any aAny;
 
-                aAny <<= rtl::OUString( rParam.aDBName );
+                aAny <<= rParam.aDBName;
                 xRowProp->setPropertyValue(
                             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_DATASOURCENAME)), aAny );
 
-                aAny <<= rtl::OUString( rParam.aStatement );
+                aAny <<= rParam.aStatement;
                 xRowProp->setPropertyValue(
                             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_COMMAND)), aAny );
 
