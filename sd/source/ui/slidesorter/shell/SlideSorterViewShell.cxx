@@ -171,6 +171,7 @@ SlideSorterViewShell::~SlideSorterViewShell (void)
         (void)e;
         OSL_FAIL("sd::SlideSorterViewShell::~SlideSorterViewShell(), exception caught!" );
     }
+    GetFrameView()->Disconnect();
 }
 
 

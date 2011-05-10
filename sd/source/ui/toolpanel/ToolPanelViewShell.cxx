@@ -556,6 +556,7 @@ ToolPanelViewShell::~ToolPanelViewShell()
     // disposed/destroyed, too
     mpImpl.reset();
     GetViewShellBase().GetViewShellManager()->RemoveSubShellFactory(this, mpSubShellManager);
+    GetFrameView()->Disconnect();
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
