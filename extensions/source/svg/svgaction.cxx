@@ -1050,7 +1050,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf, const NMSP_RTL:
 {
     ImplAcquireContext();
 
-    for( sal_uLong i = 0, nCount = rMtf.GetActionCount(); i < nCount; i++ )
+    for( size_t i = 0, nCount = rMtf.GetActionSize(); i < nCount; i++ )
     {
         const MetaAction*   pAction = rMtf.GetAction( i );
         const sal_uInt16        nType = pAction->GetType();
@@ -1254,7 +1254,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf, const NMSP_RTL:
                 const GDIMetaFile       aGDIMetaFile( pA->GetSubstitute() );
                 sal_Bool                bFound = sal_False;
 
-                for( sal_uLong j = 0, nCount2 = aGDIMetaFile.GetActionCount(); ( j < nCount2 ) && !bFound; j++ )
+                for( size_t j = 0, nCount2 = aGDIMetaFile.GetActionSize(); ( j < nCount2 ) && !bFound; j++ )
                 {
                     const MetaAction* pSubstAct = aGDIMetaFile.GetAction( j );
 
