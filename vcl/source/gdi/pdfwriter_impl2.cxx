@@ -266,7 +266,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
 
     for( size_t i = 0, nCount = aMtf.GetActionSize(); i < nCount; )
     {
-        if ( !i_pOutDevData || !i_pOutDevData->PlaySyncPageAct( m_rOuterFace, i ) )
+        if ( !i_pOutDevData || !i_pOutDevData->PlaySyncPageAct( m_rOuterFace, (sal_uInt32)i ) )
         {
             const MetaAction*   pAction = aMtf.GetAction( i );
             const sal_uInt16        nType = pAction->GetType();
