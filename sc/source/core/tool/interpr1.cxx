@@ -810,6 +810,38 @@ double ScInterpreter::Compare()
                 }
             }
             break;
+            case svExternalSingleRef:
+            {
+                ScMatrixRef pMat = GetMatrix();
+                if (!pMat)
+                {
+                    SetError( errIllegalParameter);
+                    break;
+                }
+
+                SCSIZE nC, nR;
+                pMat->GetDimensions(nC, nR);
+                if (!nC || !nR)
+                {
+                    SetError( errIllegalParameter);
+                    break;
+                }
+                if (pMat->IsEmpty(0, 0))
+                    aComp.bEmpty[i] = true;
+                else if (pMat->IsString(0, 0))
+                {
+                    *aComp.pVal[i] = pMat->GetString(0, 0);
+                    aComp.bVal[i] = false;
+                }
+                else
+                {
+                    aComp.nVal[i] = pMat->GetDouble(0, 0);
+                    aComp.bVal[i] = true;
+                }
+            }
+            break;
+            case svExternalDoubleRef:
+                // TODO: Find out how to handle this...
             default:
                 SetError( errIllegalParameter);
             break;
