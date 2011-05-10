@@ -735,7 +735,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             if ( pDbData )
                             {
                                 pDBName = new String;
-                                pDbData->GetName( *pDBName );
+                                *pDBName = pDbData->GetName();
 
                                 if ( *pDBName != aStrNoName )
                                     aList.Insert( pDBName );

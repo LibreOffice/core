@@ -52,7 +52,7 @@ using ::std::remove_if;
 
 //---------------------------------------------------------------------------------------
 
-ScDBData::ScDBData( const String& rName,
+ScDBData::ScDBData( const ::rtl::OUString& rName,
                     SCTAB nTab,
                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     bool bByR, bool bHasH) :

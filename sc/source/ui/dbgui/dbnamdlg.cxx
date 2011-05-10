@@ -257,7 +257,7 @@ void ScDbNameDlg::Init()
             pDBData = pDBColl->GetDBAtCursor( nStartCol, nStartRow, nStartTab, sal_True );
             if ( pDBData )
             {
-                String      theDbName;
+                ::rtl::OUString theDbName;
                 ScAddress&  rStart = theCurArea.aStart;
                 ScAddress&  rEnd   = theCurArea.aEnd;
                 SCCOL nCol1;
@@ -272,8 +272,8 @@ void ScDbNameDlg::Init()
                     && (rStart.Col() == nCol1) && (rStart.Row() == nRow1)
                     && (rEnd.Col()   == nCol2) && (rEnd.Row()   == nRow2 ) )
                 {
-                    pDBData->GetName( theDbName );
-                    if ( theDbName != aStrNoName )
+                    theDbName = pDBData->GetName();
+                    if ( !theDbName.equals(aStrNoName) )
                         aEdName.SetText( theDbName );
                     else
                         aEdName.SetText( EMPTY_STRING );
@@ -297,21 +297,23 @@ void ScDbNameDlg::Init()
 
 void ScDbNameDlg::SetInfoStrings( const ScDBData* pDBData )
 {
-    String aSource = aStrSource;
+    ::rtl::OUStringBuffer aBuf;
+    aBuf.append(aStrSource);
     if (pDBData)
     {
-        aSource += ' ';
-        aSource += pDBData->GetSourceString();
+        aBuf.append(sal_Unicode(' '));
+        aBuf.append(pDBData->GetSourceString());
     }
-    aFTSource.SetText( aSource );
+    aFTSource.SetText(aBuf.makeStringAndClear());
 
+    aBuf.append(aStrOperations);
     String aOper = aStrOperations;
     if (pDBData)
     {
-        aOper += ' ';
-        aOper += pDBData->GetOperations();
+        aBuf.append(sal_Unicode(' '));
+        aBuf.append(pDBData->GetOperations());
     }
-    aFTOperations.SetText( aOper );
+    aFTOperations.SetText(aBuf.makeStringAndClear());
 }
 
 //----------------------------------------------------------------------------
@@ -377,15 +379,15 @@ void ScDbNameDlg::UpdateNames()
     if ( nNameCount > 0 )
     {
         ScDBData*   pDbData = NULL;
-        String      aString;
+        ::rtl::OUString aString;
 
         for ( sal_uInt16 i=0; i<nNameCount; i++ )
         {
             pDbData = (ScDBData*)(aLocalDbCol.At( i ));
             if ( pDbData )
             {
-                pDbData->GetName( aString );
-                if ( aString != aStrNoName )
+                aString = pDbData->GetName();
+                if (!aString.equals(aStrNoName))
                     aEdName.InsertEntry( aString );
             }
         }

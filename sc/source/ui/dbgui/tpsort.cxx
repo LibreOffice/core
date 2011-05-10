@@ -689,7 +689,7 @@ void ScTabPageSortOptions::Init()
                                             rSortData.nCol2, rSortData.nRow2 );
             if ( pDBData )
             {
-                pDBData->GetName( theDbName );
+                theDbName = pDBData->GetName();
                 aBtnHeader.Check( pDBData->HasHeader() );
             }
         }

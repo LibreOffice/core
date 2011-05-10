@@ -174,8 +174,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
                                                 theQueryData.nRow2,
                                                 nSrcTab ) );
         ScDBCollection* pDBColl     = pDoc->GetDBCollection();
-        String          theDbArea;
-        String          theDbName   = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME));
+        ::rtl::OUString theDbName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME));
 
         /*
          * Ueberpruefen, ob es sich bei dem uebergebenen
@@ -192,13 +191,14 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
                                                         rStart.Col(), rStart.Row(),
                                                         rEnd.Col(),   rEnd.Row() );
             if ( pDBData )
-                pDBData->GetName( theDbName );
+                theDbName = pDBData->GetName();
         }
 
-        theDbArea.AppendAscii(RTL_CONSTASCII_STRINGPARAM(" ("));
-        theDbArea += theDbName;
-        theDbArea += ')';
-        aFtDbArea.SetText( theDbArea );
+        ::rtl::OUStringBuffer aBuf;
+        aBuf.appendAscii(" (");
+        aBuf.append(theDbName);
+        aBuf.append(sal_Unicode(')'));
+        aFtDbArea.SetText(aBuf.makeStringAndClear());
     }
     else
     {

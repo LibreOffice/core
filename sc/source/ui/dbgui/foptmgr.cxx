@@ -190,7 +190,7 @@ void ScFilterOptionsMgr::Init()
             if ( pDBData )
             {
                 rBtnHeader.Check( pDBData->HasHeader() );
-                pDBData->GetName( theDbName );
+                theDbName = pDBData->GetName();
 
                 if ( theDbName != rStrNoName )
                 {

@@ -1472,13 +1472,13 @@ void ScDBDocFunc::UpdateImport( const String& rTarget, const String& rDBName,
     ScDBCollection& rDBColl = *pDoc->GetDBCollection();
     ScDBData* pData = NULL;
     ScImportParam aImportParam;
-    sal_Bool bFound = false;
+    bool bFound = false;
     sal_uInt16 nCount = rDBColl.GetCount();
     for (sal_uInt16 i=0; i<nCount && !bFound; i++)
     {
         pData = rDBColl[i];
-        if (pData->GetName() == rTarget)
-            bFound = sal_True;
+        if (pData->GetName().equals(rTarget))
+            bFound = true;
     }
     if (!bFound)
     {

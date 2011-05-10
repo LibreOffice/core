@@ -2092,8 +2092,8 @@ uno::Any SAL_CALL ScDatabaseRangeObj::getPropertyValue( const rtl::OUString& aPr
         else if ( aString.EqualsAscii( SC_UNONAME_ISUSER ) )
         {
             //  all database ranges except "unnamed" are user defined
-            ScUnoHelpFunctions::SetBoolInAny( aRet,
-                        ( pData->GetName() != String(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME))  ) );
+            ScUnoHelpFunctions::SetBoolInAny(
+                aRet, !pData->GetName().equalsAscii(STR_DB_LOCAL_NONAME));
         }
         else if ( aString.EqualsAscii( SC_UNO_LINKDISPBIT ) )
         {

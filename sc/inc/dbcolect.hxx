@@ -48,7 +48,7 @@ class ScDBData : public ScDataObject, public ScRefreshTimer
 {
 private:
     // DBParam
-    String          aName;
+    ::rtl::OUString aName;
     SCTAB           nTable;
     SCCOL           nStartCol;
     SCROW           nStartRow;
@@ -73,7 +73,7 @@ private:
     SCCOLROW        nSortField[MAXSORT];
     bool            bAscending[MAXSORT];
     ::com::sun::star::lang::Locale aSortLocale;
-    String          aSortAlgorithm;
+    ::rtl::OUString aSortAlgorithm;
     // QueryParam
     bool            bIsAdvanced;        // true if created by advanced filter
     ScRange         aAdvSource;         // source range
@@ -91,10 +91,10 @@ private:
     using ScRefreshTimer::operator==;
 
 public:
-            SC_DLLPUBLIC ScDBData(const String& rName,
+            SC_DLLPUBLIC ScDBData(const ::rtl::OUString& rName,
                      SCTAB nTab,
                      SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                     bool bByR = sal_True, bool bHasH = sal_True);
+                     bool bByR = true, bool bHasH = true);
             ScDBData(const ScDBData& rData);
             ~ScDBData();
 
@@ -105,9 +105,8 @@ public:
             bool        operator== (const ScDBData& rData) const;
 
             SCTAB       GetTable() const;
-            const String& GetName() const               { return aName; }
-            void        GetName(String& rName) const    { rName = aName; }
-            void        SetName(const String& rName)    { aName = rName; }
+            const ::rtl::OUString& GetName() const { return aName; }
+            void        SetName(const ::rtl::OUString& rName) { aName = rName; }
             void        GetArea(SCTAB& rTab, SCCOL& rCol1, SCROW& rRow1, SCCOL& rCol2, SCROW& rRow2) const;
             SC_DLLPUBLIC void GetArea(ScRange& rRange) const;
             void        SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
@@ -146,7 +145,7 @@ public:
             bool        IsDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
 
             bool        HasImportParam() const   { return maImportParam.bImport; }
-            bool        HasQueryParam() const;
+            SC_DLLPUBLIC bool HasQueryParam() const;
             bool        HasSortParam() const     { return bDoSort[0]; }
             bool        HasSubTotalParam() const { return maSubTotal.bGroupActive[0]; }
 

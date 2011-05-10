@@ -94,13 +94,12 @@ ScDBData* ScUndoUtil::GetOldDBData( ScDBData* pUndoData, ScDocument* pDoc, SCTAB
 
     if (!pRet)
     {
-        sal_Bool bWasTemp = false;
+        bool bWasTemp = false;
         if ( pUndoData )
         {
-            String aName;
-            pUndoData->GetName( aName );
-            if ( rtl::OUString(aName) == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME) ) )
-                bWasTemp = sal_True;
+            const ::rtl::OUString& aName = pUndoData->GetName();
+            if (aName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME)))
+                bWasTemp = true;
         }
         DBG_ASSERT(bWasTemp, "Undo: didn't find database range");
         (void)bWasTemp;

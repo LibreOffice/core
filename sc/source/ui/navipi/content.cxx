@@ -272,7 +272,7 @@ String lcl_GetDBAreaRange( ScDocument* pDoc, const String& rDBName )
         for ( sal_uInt16 i=0; i<nCount; i++ )
         {
             ScDBData* pData = (*pDbNames)[i];
-            if ( pData->GetName() == rDBName )
+            if ( pData->GetName().equals(rDBName) )
             {
                 ScRange aRange;
                 pData->GetArea(aRange);

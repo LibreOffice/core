@@ -489,7 +489,7 @@ String lcl_GetAreaName( ScDocument* pDoc, ScArea* pArea )
                                                         pArea->nColEnd, pArea->nRowEnd );
     if (pData)
     {
-        pData->GetName( aName );
+        aName = pData->GetName();
         bOk = sal_True;
     }
 
