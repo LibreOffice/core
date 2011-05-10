@@ -1859,6 +1859,9 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
     // We will die, die and die ...
     implts_stopWindowListening();
 
+    if (m_xLayoutManager.is())
+        lcl_disableLayoutManager(m_xLayoutManager, this);
+
     delete m_pWindowCommandDispatch;
 
     // Send message to all listener and forget her references.
