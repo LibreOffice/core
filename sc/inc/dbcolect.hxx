@@ -37,6 +37,7 @@
 #include "address.hxx"
 #include "scdllapi.h"
 #include "subtotalparam.hxx"
+#include "queryparam.hxx"
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -74,24 +75,10 @@ private:
     ::com::sun::star::lang::Locale aSortLocale;
     String          aSortAlgorithm;
     // QueryParam
-    bool            bQueryInplace;
-    bool            bQueryCaseSens;
-    bool            bQueryRegExp;
-    bool            bQueryDuplicate;
-    SCTAB           nQueryDestTab;
-    SCCOL           nQueryDestCol;
-    SCROW           nQueryDestRow;
-    bool            bDoQuery[MAXQUERY];
-    SCCOLROW        nQueryField[MAXQUERY];
-    ScQueryOp       eQueryOp[MAXQUERY];
-    bool            bQueryByString[MAXQUERY];
-    bool            bQueryByDate[MAXQUERY];
-    String*         pQueryStr[MAXQUERY];
-    double          nQueryVal[MAXQUERY];
-    ScQueryConnect  eQueryConnect[MAXQUERY];
-    bool            bIsAdvanced;        // sal_True if created by advanced filter
+    bool            bIsAdvanced;        // true if created by advanced filter
     ScRange         aAdvSource;         // source range
 
+    ScQueryParam maQueryParam;
     ScSubTotalParam maSubTotal;
     ScImportParam maImportParam;
 
@@ -159,7 +146,7 @@ public:
             bool        IsDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
 
             bool        HasImportParam() const   { return maImportParam.bImport; }
-            bool        HasQueryParam() const    { return bDoQuery[0]; }
+            bool        HasQueryParam() const;
             bool        HasSortParam() const     { return bDoSort[0]; }
             bool        HasSubTotalParam() const { return maSubTotal.bGroupActive[0]; }
 

@@ -73,7 +73,7 @@ ScQueryEntry& ScQueryParamBase::GetEntry(SCSIZE n) const
 void ScQueryParamBase::Resize(SCSIZE nNew)
 {
     if ( nNew < MAXQUERY )
-        nNew = MAXQUERY;                // nie weniger als MAXQUERY
+        nNew = MAXQUERY;                // never less than MAXQUERY
 
     vector<ScQueryEntry> aNewEntries(nNew);
     SCSIZE nCopy = ::std::min(maEntries.size(), nNew);

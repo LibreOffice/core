@@ -73,14 +73,9 @@ ScDBData::ScDBData( const String& rName,
     bAutoFilter (false),
     bModified   (false)
 {
-    sal_uInt16 i;
-
     ScSortParam aSortParam;
     ScQueryParam aQueryParam;
     ScImportParam aImportParam;
-
-    for (i=0; i<MAXQUERY; i++)
-        pQueryStr[i] = new String;
 
     SetSortParam( aSortParam );
     SetQueryParam( aQueryParam );
@@ -112,15 +107,9 @@ ScDBData::ScDBData( const ScDBData& rData ) :
     nSortDestRow        (rData.nSortDestRow),
     aSortLocale         (rData.aSortLocale),
     aSortAlgorithm      (rData.aSortAlgorithm),
-    bQueryInplace       (rData.bQueryInplace),
-    bQueryCaseSens      (rData.bQueryCaseSens),
-    bQueryRegExp        (rData.bQueryRegExp),
-    bQueryDuplicate     (rData.bQueryDuplicate),
-    nQueryDestTab       (rData.nQueryDestTab),
-    nQueryDestCol       (rData.nQueryDestCol),
-    nQueryDestRow       (rData.nQueryDestRow),
     bIsAdvanced         (rData.bIsAdvanced),
     aAdvSource          (rData.aAdvSource),
+    maQueryParam        (rData.maQueryParam),
     maSubTotal          (rData.maSubTotal),
     maImportParam       (rData.maImportParam),
     bDBSelection        (rData.bDBSelection),
@@ -135,17 +124,6 @@ ScDBData::ScDBData( const ScDBData& rData ) :
         bDoSort[i]      = rData.bDoSort[i];
         nSortField[i]   = rData.nSortField[i];
         bAscending[i]   = rData.bAscending[i];
-    }
-    for (i=0; i<MAXQUERY; i++)
-    {
-        bDoQuery[i]         = rData.bDoQuery[i];
-        nQueryField[i]      = rData.nQueryField[i];
-        eQueryOp[i]         = rData.eQueryOp[i];
-        bQueryByString[i]   = rData.bQueryByString[i];
-        bQueryByDate[i]     = rData.bQueryByDate[i];
-        pQueryStr[i]        = new String( *(rData.pQueryStr[i]) );
-        nQueryVal[i]        = rData.nQueryVal[i];
-        eQueryConnect[i]    = rData.eQueryConnect[i];
     }
 }
 
@@ -176,14 +154,8 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
     nSortUserIndex      = rData.nSortUserIndex;
     aSortLocale         = rData.aSortLocale;
     aSortAlgorithm      = rData.aSortAlgorithm;
-    bQueryInplace       = rData.bQueryInplace;
-    bQueryCaseSens      = rData.bQueryCaseSens;
-    bQueryRegExp        = rData.bQueryRegExp;
-    bQueryDuplicate     = rData.bQueryDuplicate;
-    nQueryDestTab       = rData.nQueryDestTab;
-    nQueryDestCol       = rData.nQueryDestCol;
-    nQueryDestRow       = rData.nQueryDestRow;
     bIsAdvanced         = rData.bIsAdvanced;
+    maQueryParam        = rData.maQueryParam;
     maSubTotal          = rData.maSubTotal;
     maImportParam       = rData.maImportParam;
     aAdvSource          = rData.aAdvSource;
@@ -196,17 +168,6 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
         bDoSort[i]      = rData.bDoSort[i];
         nSortField[i]   = rData.nSortField[i];
         bAscending[i]   = rData.bAscending[i];
-    }
-    for (i=0; i<MAXQUERY; i++)
-    {
-        bDoQuery[i]         = rData.bDoQuery[i];
-        nQueryField[i]      = rData.nQueryField[i];
-        eQueryOp[i]         = rData.eQueryOp[i];
-        bQueryByString[i]   = rData.bQueryByString[i];
-        bQueryByDate[i]     = rData.bQueryByDate[i];
-        *pQueryStr[i]       = *rData.pQueryStr[i];
-        nQueryVal[i]        = rData.nQueryVal[i];
-        eQueryConnect[i]    = rData.eQueryConnect[i];
     }
 
     return *this;
@@ -265,10 +226,6 @@ bool ScDBData::operator== (const ScDBData& rData) const
 ScDBData::~ScDBData()
 {
     StopRefreshTimer();
-    sal_uInt16 i;
-
-    for (i=0; i<MAXQUERY; i++)
-        delete pQueryStr[i];
 }
 
 
@@ -287,9 +244,12 @@ ScDBData::~ScDBData()
 ::rtl::OUString ScDBData::GetOperations() const
 {
     ::rtl::OUStringBuffer aBuf;
-    String aVal;
-    if (bDoQuery[0])
-        aBuf.append(ScGlobal::GetRscString(STR_OPERATION_FILTER));
+    if (maQueryParam.GetEntryCount())
+    {
+        const ScQueryEntry& rEntry = maQueryParam.GetEntry(0);
+        if (rEntry.bDoQuery)
+            aBuf.append(ScGlobal::GetRscString(STR_OPERATION_FILTER));
+    }
 
     if (bDoSort[0])
     {
@@ -353,13 +313,17 @@ void ScDBData::MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
             bDoSort[i]    = false;
         }
     }
+
+    if (maQueryParam.GetEntryCount() < MAXQUERY)
+        maQueryParam.Resize(MAXQUERY);
     for (i=0; i<MAXQUERY; i++)
     {
-        nQueryField[i] += nDifX;
-        if (nQueryField[i] > nCol2)
+        ScQueryEntry& rEntry = maQueryParam.GetEntry(i);
+        rEntry.nField += nDifX;
+        if (rEntry.nField > nCol2)
         {
-            nQueryField[i] = 0;
-            bDoQuery[i]    = false;
+            rEntry.nField = 0;
+            rEntry.bDoQuery = false;
         }
     }
     for (i=0; i<MAXSUBTOTAL; i++)
@@ -428,6 +392,7 @@ void ScDBData::SetSortParam( const ScSortParam& rSortParam )
 
 void ScDBData::GetQueryParam( ScQueryParam& rQueryParam ) const
 {
+    rQueryParam = maQueryParam;
     rQueryParam.nCol1 = nStartCol;
     rQueryParam.nRow1 = nStartRow;
     rQueryParam.nCol2 = nEndCol;
@@ -435,28 +400,6 @@ void ScDBData::GetQueryParam( ScQueryParam& rQueryParam ) const
     rQueryParam.nTab  = nTable;
     rQueryParam.bByRow = bByRow;
     rQueryParam.bHasHeader = bHasHeader;
-    rQueryParam.bInplace = bQueryInplace;
-    rQueryParam.bCaseSens = bQueryCaseSens;
-    rQueryParam.bRegExp = bQueryRegExp;
-    rQueryParam.bDuplicate = bQueryDuplicate;
-    rQueryParam.nDestTab = nQueryDestTab;
-    rQueryParam.nDestCol = nQueryDestCol;
-    rQueryParam.nDestRow = nQueryDestRow;
-
-    rQueryParam.Resize( MAXQUERY );
-    for (SCSIZE i=0; i<MAXQUERY; i++)
-    {
-        ScQueryEntry& rEntry = rQueryParam.GetEntry(i);
-
-        rEntry.bDoQuery = bDoQuery[i];
-        rEntry.nField = nQueryField[i];
-        rEntry.eOp = eQueryOp[i];
-        rEntry.bQueryByString = bQueryByString[i];
-        rEntry.bQueryByDate = bQueryByDate[i];
-        *rEntry.pStr = *pQueryStr[i];
-        rEntry.nVal = nQueryVal[i];
-        rEntry.eConnect = eQueryConnect[i];
-    }
 }
 
 void ScDBData::SetQueryParam(const ScQueryParam& rQueryParam)
@@ -465,30 +408,11 @@ void ScDBData::SetQueryParam(const ScQueryParam& rQueryParam)
                 !rQueryParam.GetEntry(MAXQUERY).bDoQuery,
                 "zuviele Eintraege bei ScDBData::SetQueryParam" );
 
+    maQueryParam = rQueryParam;
+
     //  set bIsAdvanced to false for everything that is not from the
     //  advanced filter dialog
     bIsAdvanced = false;
-
-    bQueryInplace = rQueryParam.bInplace;
-    bQueryCaseSens = rQueryParam.bCaseSens;
-    bQueryRegExp = rQueryParam.bRegExp;
-    bQueryDuplicate = rQueryParam.bDuplicate;
-    nQueryDestTab = rQueryParam.nDestTab;
-    nQueryDestCol = rQueryParam.nDestCol;
-    nQueryDestRow = rQueryParam.nDestRow;
-    for (SCSIZE i=0; i<MAXQUERY; i++)
-    {
-        ScQueryEntry& rEntry = rQueryParam.GetEntry(i);
-
-        bDoQuery[i] = rEntry.bDoQuery;
-        nQueryField[i] = rEntry.nField;
-        eQueryOp[i] = rEntry.eOp;
-        bQueryByString[i] = rEntry.bQueryByString;
-        bQueryByDate[i] = rEntry.bQueryByDate;
-        *pQueryStr[i] = *rEntry.pStr;
-        nQueryVal[i] = rEntry.nVal;
-        eQueryConnect[i] = rEntry.eConnect;
-    }
 }
 
 void ScDBData::SetAdvancedQuerySource(const ScRange* pSource)
@@ -560,6 +484,14 @@ bool ScDBData::IsDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCR
     return (bool)((nTab == nTable)
                     && (nCol1 == nStartCol) && (nRow1 == nStartRow)
                     && (nCol2 == nEndCol) && (nRow2 == nEndRow));
+}
+
+bool ScDBData::HasQueryParam() const
+{
+    if (!maQueryParam.GetEntryCount())
+        return false;
+
+    return maQueryParam.GetEntry(0).bDoQuery;
 }
 
 ScDataObject*   ScDBData::Clone() const
