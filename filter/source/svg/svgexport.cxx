@@ -677,7 +677,7 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
                         xExtDocHandler->characters( aDescription );
                     }
 
-                    if( rMtf.GetActionCount() )
+                    if( rMtf.GetActionSize() )
                     {
                         SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
                         mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf, SVGWRITER_WRITE_ALL);

@@ -210,12 +210,12 @@ void PictWriter::MayCallback()
 
 void PictWriter::CountActionsAndBitmaps(const GDIMetaFile & rMTF)
 {
-    sal_uLong               nAction, nActionCount;
+    size_t              nAction, nActionCount;
     const MetaAction*   pMA;
 
-    nActionCount = rMTF.GetActionCount();
+    nActionCount = rMTF.GetActionSize();
 
-    for (nAction=0; nAction<nActionCount; nAction++)
+    for (nAction=0; nAction < nActionCount; nAction++)
     {
         pMA = rMTF.GetAction( nAction );
 
@@ -1431,15 +1431,15 @@ void PictWriter::HandleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx
 
 void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 {
-    sal_uLong nA, nACount;
+    size_t nA, nACount;
     const MetaAction* pMA;
 
     if( !bStatus)
         return;
 
-    nACount=rMTF.GetActionCount();
+    nACount = rMTF.GetActionSize();
 
-    for (nA=0; nA<nACount; nA++)
+    for (nA=0; nA < nACount; nA++)
     {
         pMA = rMTF.GetAction(nA);
 
@@ -1863,8 +1863,8 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                 const MetaEPSAction* pA = (const MetaEPSAction*)pMA;
                 const GDIMetaFile aGDIMetaFile( pA->GetSubstitute() );
 
-                sal_Int32 nCount = aGDIMetaFile.GetActionCount();
-                for ( sal_Int32 i = 0; i < nCount; i++ )
+                size_t nCount = aGDIMetaFile.GetActionSize();
+                for ( size_t i = 0; i < nCount; i++ )
                 {
                     const MetaAction* pMetaAct = aGDIMetaFile.GetAction( i );
                     if ( pMetaAct->GetType() == META_BMPSCALE_ACTION )

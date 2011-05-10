@@ -68,7 +68,7 @@ void SVGFontExport::implCollectGlyphs()
 
             aVDev.Push();
 
-            for( sal_uInt32 i = 0, nCount = rMtf.GetActionCount(); i < nCount; ++i )
+            for( size_t i = 0, nCount = rMtf.GetActionSize(); i < nCount; ++i )
             {
                 ::rtl::OUString     aText;
                 MetaAction*         pAction = rMtf.GetAction( i );

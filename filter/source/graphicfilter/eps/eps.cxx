@@ -371,7 +371,7 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
 
     if (rGraphic.GetType() == GRAPHIC_GDIMETAFILE)
         pMTF = &rGraphic.GetGDIMetaFile();
-    else if (rGraphic.GetGDIMetaFile().GetActionCount())
+    else if (rGraphic.GetGDIMetaFile().GetActionSize())
         pMTF = pAMTF = new GDIMetaFile( rGraphic.GetGDIMetaFile() );
     else
     {
@@ -409,7 +409,7 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
     pChrSetList = NULL;
     nNextChrSetId = 1;
 
-    if( pMTF->GetActionCount() )
+    if( pMTF->GetActionSize() )
     {
         ImplWriteProlog( ( mnPreview & EPS_PREVIEW_EPSI ) ? &rGraphic : NULL );
         mnCursorPos = 0;
@@ -626,7 +626,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 {
     PolyPolygon aFillPath;
 
-    for( sal_uLong nCurAction = 0, nCount = rMtf.GetActionCount(); nCurAction < nCount; nCurAction++ )
+    for( size_t nCurAction = 0, nCount = rMtf.GetActionSize(); nCurAction < nCount; nCurAction++ )
     {
         MetaAction* pMA = rMtf.GetAction( nCurAction );
 

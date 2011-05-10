@@ -1414,7 +1414,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
 {
     Rectangle clipRect;
     int bMap = 0;
-    for( sal_uLong i = 0, nCount = rMtf.GetActionCount(); i < nCount; i++ )
+    for( size_t i = 0, nCount = rMtf.GetActionSize(); i < nCount; i++ )
     {
         const MetaAction*   pAction = rMtf.GetAction( i );
         const sal_uInt16        nType = pAction->GetType();
@@ -1635,7 +1635,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                 const GDIMetaFile       aGDIMetaFile( pA->GetSubstitute() );
                 sal_Bool                bFound = sal_False;
 
-                for( sal_uLong j = 0, nC = aGDIMetaFile.GetActionCount(); ( j < nC ) && !bFound; j++ )
+                for( size_t j = 0, nC = aGDIMetaFile.GetActionSize(); ( j < nC ) && !bFound; j++ )
                 {
                     const MetaAction* pSubstAct = aGDIMetaFile.GetAction( j );
 

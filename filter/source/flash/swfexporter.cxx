@@ -703,10 +703,10 @@ bool FlashExporter::getMetaFile( Reference< XComponent >&xComponent, GDIMetaFile
         BitmapEx rBitmapEx( aGraphic.GetBitmap(), Color(255,255,255) );
 
         Rectangle clipRect;
-        for( sal_uLong i = 0, nCount = rMtf.GetActionCount(); i < nCount; i++ )
+        for( size_t i = 0, nCount = rMtf.GetActionSize(); i < nCount; i++ )
         {
             const MetaAction*   pAction = rMtf.GetAction( i );
-            const sal_uInt16        nType = pAction->GetType();
+            const sal_uInt16    nType = pAction->GetType();
 
             switch( nType )
             {
@@ -728,8 +728,7 @@ bool FlashExporter::getMetaFile( Reference< XComponent >&xComponent, GDIMetaFile
     else
         rMtf.Read( *aFile.GetStream( STREAM_READ ) );
 
-    int icount = rMtf.GetActionCount();
-    return icount != 0;
+    return rMtf.GetActionSize() != 0;
 }
 
 sal_uInt32 FlashExporter::ActionSummer(Reference< XShape >& xShape)

@@ -231,7 +231,7 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com:
                     aMtf.Stop();
                     aMtf.WindStart();
 
-                    if( aMtf.GetActionCount() &&
+                    if( aMtf.GetActionSize() &&
                              ( !mbSkipEmptyPages || aPageSize.Width || aPageSize.Height ) )
                         bRet = ImplExportPage( rPDFWriter, *pPDFExtOutDevData, aMtf ) || bRet;
 
