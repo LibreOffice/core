@@ -964,47 +964,7 @@ SdrPaintWindow* SdrPaintView::BeginDrawLayers(OutputDevice* pOut, const Region& 
 
         if(pKnownTarget)
         {
-            // #i74769# check if pOut is a win and has a ClipRegion. If Yes, the Region
-            // rReg may be made more granular (fine) with using it. Normally, rReg
-            // does come from Window::Paint() anyways and thus is based on a single
-            // rectangle which was derived from exactly that repaint region
-            Region aOptimizedRepaintRegion(rReg);
-
-            // #i76114# Intersecting the region with the Window's paint region is disabled
-            // for print preview in Calc, because the intersection can be empty (if the paint
-            // region is outside of the table area of the page), and then no clip region
-            // would be set.
-            if(pOut && OUTDEV_WINDOW == pOut->GetOutDevType() && !bDisableIntersect)
-            {
-                Window* pWindow = (Window*)pOut;
-
-                if(pWindow->IsInPaint())
-                {
-                    if(!pWindow->GetPaintRegion().IsEmpty())
-                    {
-                        aOptimizedRepaintRegion.Intersect(pWindow->GetPaintRegion());
-
-#ifdef DBG_UTIL
-                        // #i74769# test-paint repaint region
-                        static bool bDoPaintForVisualControl(false);
-                        if(bDoPaintForVisualControl)
-                        {
-                            RegionHandle aRegionHandle(aOptimizedRepaintRegion.BeginEnumRects());
-                            Rectangle aRegionRectangle;
-
-                            while(aOptimizedRepaintRegion.GetEnumRects(aRegionHandle, aRegionRectangle))
-                            {
-                                pWindow->SetLineColor(COL_LIGHTGREEN);
-                                pWindow->SetFillColor();
-                                pWindow->DrawRect(aRegionRectangle);
-                            }
-
-                            aOptimizedRepaintRegion.EndEnumRects(aRegionHandle);
-                        }
-#endif
-                    }
-                }
-            }
+            Region aOptimizedRepaintRegion = OptimizeDrawLayersRegion( pOut, rReg, bDisableIntersect );
 
             // prepare redraw
             pKnownTarget->PrepareRedraw(aOptimizedRepaintRegion);
@@ -1027,6 +987,70 @@ void SdrPaintView::EndDrawLayers(SdrPaintWindow& rPaintWindow, bool bPaintFormLa
         // forget prepared SdrPageWindow
         mpPageView->setPreparedPageWindow(0);
     }
+}
+
+void SdrPaintView::UpdateDrawLayersRegion(OutputDevice* pOut, const Region& rReg, bool bDisableIntersect)
+{
+    SdrPaintWindow* pPaintWindow = FindPaintWindow(*pOut);
+    OSL_ENSURE(pPaintWindow, "SdrPaintView::UpdateDrawLayersRegion: No SdrPaintWindow (!)");
+
+    if(mpPageView)
+    {
+        SdrPageWindow* pKnownTarget = mpPageView->FindPageWindow(*pPaintWindow);
+
+        if(pKnownTarget)
+        {
+            Region aOptimizedRepaintRegion = OptimizeDrawLayersRegion( pOut, rReg, bDisableIntersect );
+            pKnownTarget->GetPaintWindow().SetRedrawRegion(aOptimizedRepaintRegion);
+            mpPageView->setPreparedPageWindow(pKnownTarget); // already set actually
+        }
+    }
+}
+
+Region SdrPaintView::OptimizeDrawLayersRegion(OutputDevice* pOut, const Region& rReg, bool bDisableIntersect)
+{
+    // #i74769# check if pOut is a win and has a ClipRegion. If Yes, the Region
+    // rReg may be made more granular (fine) with using it. Normally, rReg
+    // does come from Window::Paint() anyways and thus is based on a single
+    // rectangle which was derived from exactly that repaint region
+    Region aOptimizedRepaintRegion(rReg);
+
+    // #i76114# Intersecting the region with the Window's paint region is disabled
+    // for print preview in Calc, because the intersection can be empty (if the paint
+    // region is outside of the table area of the page), and then no clip region
+    // would be set.
+    if(pOut && OUTDEV_WINDOW == pOut->GetOutDevType() && !bDisableIntersect)
+    {
+        Window* pWindow = (Window*)pOut;
+
+        if(pWindow->IsInPaint())
+        {
+            if(!pWindow->GetPaintRegion().IsEmpty())
+            {
+                aOptimizedRepaintRegion.Intersect(pWindow->GetPaintRegion());
+
+#ifdef DBG_UTIL
+                // #i74769# test-paint repaint region
+                static bool bDoPaintForVisualControl(false);
+                if(bDoPaintForVisualControl)
+                {
+                    RegionHandle aRegionHandle(aOptimizedRepaintRegion.BeginEnumRects());
+                    Rectangle aRegionRectangle;
+
+                    while(aOptimizedRepaintRegion.GetEnumRects(aRegionHandle, aRegionRectangle))
+                    {
+                        pWindow->SetLineColor(COL_LIGHTGREEN);
+                        pWindow->SetFillColor();
+                        pWindow->DrawRect(aRegionRectangle);
+                    }
+
+                    aOptimizedRepaintRegion.EndEnumRects(aRegionHandle);
+                }
+#endif
+            }
+        }
+    }
+    return aOptimizedRepaintRegion;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
