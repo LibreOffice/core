@@ -44,7 +44,7 @@ namespace drawinglayer
             Primitive2DSequence xRetval;
             const GDIMetaFile& rSubstituteContent = getMetaFile();
 
-            if(rSubstituteContent.GetActionCount())
+            if( rSubstituteContent.GetActionSize() )
             {
                 // the default decomposition will use the Metafile replacement visualisation.
                 // To really use the Eps data, a renderer has to know and interpret this primitive

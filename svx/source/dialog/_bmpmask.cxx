@@ -830,7 +830,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
         }
 
         // Investigate actions and if necessary replace colors
-        for( sal_uIntPtr nAct = 0UL, nActCount = rMtf.GetActionCount(); nAct < nActCount; nAct++ )
+        for( size_t nAct = 0, nActCount = rMtf.GetActionSize(); nAct < nActCount; nAct++ )
         {
             MetaAction* pAction = rMtf.GetAction( nAct );
 
@@ -1081,7 +1081,7 @@ GDIMetaFile SvxBmpMask::ImpReplaceTransparency( const GDIMetaFile& rMtf, const C
     GDIMetaFile     aMtf;
     const MapMode&  rPrefMap = rMtf.GetPrefMapMode();
     const Size&     rPrefSize = rMtf.GetPrefSize();
-    const sal_uIntPtr       nActionCount = rMtf.GetActionCount();
+    const size_t    nActionCount = rMtf.GetActionSize();
 
     aVDev.EnableOutput( sal_False );
     aMtf.Record( &aVDev );
@@ -1093,7 +1093,7 @@ GDIMetaFile SvxBmpMask::ImpReplaceTransparency( const GDIMetaFile& rMtf, const C
     // retrieve one action at the time; first
     // set the whole area to the replacement color.
     aVDev.DrawRect( Rectangle( rPrefMap.GetOrigin(), rPrefSize ) );
-    for ( sal_uIntPtr i = 0; i < nActionCount; i++ )
+    for ( size_t i = 0; i < nActionCount; i++ )
     {
         MetaAction* pAct = rMtf.GetAction( i );
 

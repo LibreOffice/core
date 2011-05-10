@@ -1662,9 +1662,9 @@ namespace
         PropertyHolders& rPropertyHolders,
         const drawinglayer::geometry::ViewInformation2D& rViewInformation)
     {
-        const sal_uInt32 nCount(rMetaFile.GetActionCount());
+        const size_t nCount(rMetaFile.GetActionSize());
 
-        for(sal_uInt32 nAction(0); nAction < nCount; nAction++)
+        for(size_t nAction(0); nAction < nCount; nAction++)
         {
             MetaAction* pAction = rMetaFile.GetAction(nAction);
 
@@ -2140,7 +2140,7 @@ namespace
                         aTextLayouterDevice.addTextRectActions(
                             rRectangle, pA->GetText(), pA->GetStyle(), aGDIMetaFile);
 
-                        if(aGDIMetaFile.GetActionCount())
+                        if(aGDIMetaFile.GetActionSize())
                         {
                             // cerate sub-content
                             drawinglayer::primitive2d::Primitive2DSequence xSubContent;
@@ -2980,7 +2980,7 @@ namespace
                     {
                         const GDIMetaFile& rContent = pA->GetGDIMetaFile();
 
-                        if(rContent.GetActionCount())
+                        if(rContent.GetActionSize())
                         {
                             // create the sub-content with no embedding specific to the
                             // sub-metafile, this seems not to be used.

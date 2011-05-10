@@ -114,7 +114,7 @@ sal_uIntPtr ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
     pPage = rOL.GetPage();
     GDIMetaFile* pTmpMtf=NULL;
     GDIMetaFile* pMtf = (GDIMetaFile*) &rMtf;
-    sal_uIntPtr nActionAnz=pMtf->GetActionCount();
+    size_t nActionAnz = pMtf->GetActionSize();
     sal_Bool bError = sal_False;
 
 
@@ -156,7 +156,7 @@ sal_uIntPtr ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
     if(pProgrInfo)
         pProgrInfo->SetActionCount(nActionAnz);
 
-    sal_uIntPtr nActionsToReport = 0;
+    size_t nActionsToReport = 0;
 
     for( MetaAction* pAct = pMtf->FirstAction(); pAct; pAct = pMtf->NextAction() )
     {
@@ -223,11 +223,11 @@ sal_uIntPtr ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
     // Objekte in vorgegebenes Rechteck hineinskalieren
     sal_uIntPtr nAnz=aTmpList.GetObjCount();
 
-    // Beim berechnen der Fortschrittsanzeige wird GetActionCount()*3 benutzt.
-    // Da in aTmpList allerdings weniger eintraege als GetActionCount()
+    // Beim berechnen der Fortschrittsanzeige wird GetActionSize()*3 benutzt.
+    // Da in aTmpList allerdings weniger eintraege als GetActionSize()
     // existieren koennen, muessen hier die zuviel vermuteten Actionen wieder
     // hinzugefuegt werden.
-    nActionsToReport = (pMtf->GetActionCount() - nAnz)*2;
+    nActionsToReport = (pMtf->GetActionSize() - nAnz)*2;
 
 
     // Alle noch nicht gemeldeten Rescales melden

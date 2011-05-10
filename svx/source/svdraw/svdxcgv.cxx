@@ -603,7 +603,7 @@ GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile( sal_Bool bNoVDevIfOneMtfMarke
             }
         }
 
-        if( !aMtf.GetActionCount() )
+        if( !aMtf.GetActionSize() )
         {
             VirtualDevice   aOut;
             Size            aDummySize( 2, 2 );
@@ -708,7 +708,7 @@ Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject*
             aMtf.SetPrefMapMode( aMap );
             aMtf.SetPrefSize( aBoundRect.GetSize() );
 
-            if( aMtf.GetActionCount() )
+            if( aMtf.GetActionSize() )
                 aRet = aMtf;
         }
      }
