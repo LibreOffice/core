@@ -52,7 +52,7 @@ protected:
     const XclBiff       meBiff;
 
     // ---------------------------------------------------------------
-    void                DoMulArgs( DefTokenId eId, sal_uInt8 nNumArgs, sal_uInt8 mnMinParamCount = 0 );
+    void                DoMulArgs( DefTokenId eId, sal_uInt8 nNumArgs );
 
     void                ExcRelToScRel( sal_uInt16 nRow, sal_uInt8 nCol, ScSingleRefData&, const sal_Bool bName );
 
@@ -104,6 +104,7 @@ inline sal_Bool ExcelToSc::IsComplRowRange( const sal_uInt16 nRow1, const sal_uI
 // ============================================================================
 
 class XclImpLinkManager;
+class XclImpExtName;
 
 class ExcelToSc8 : public ExcelToSc
 {
@@ -111,9 +112,10 @@ public:
 
     struct ExternalTabInfo
     {
-        String      maTabName;
-        sal_uInt16  mnFileId;
-        bool        mbExternal;
+        ScRange         maRange;
+        ::rtl::OUString maTabName;
+        sal_uInt16      mnFileId;
+        bool            mbExternal;
 
         ExternalTabInfo();
     };
@@ -128,6 +130,7 @@ private:
 
     virtual bool        Read3DTabReference( sal_uInt16 nIxti, SCTAB& rFirstTab, SCTAB& rLastTab, ExternalTabInfo& rExtInfo );
 
+    bool                HandleOleLink(sal_uInt16 nXtiIndex, const XclImpExtName& rExtName, ExternalTabInfo& rExtInfo);
 public:
                         ExcelToSc8( const XclImpRoot& rRoot );
     virtual             ~ExcelToSc8();

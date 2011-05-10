@@ -48,7 +48,6 @@ struct ScQueryParam;
  */
 class SC_DLLPUBLIC ScDPCache
 {
-    friend class ScDPCacheTable;
 public:
     typedef ::boost::ptr_vector<ScDPItemData>           DataListType;
 private:
@@ -58,20 +57,41 @@ private:
     ScDocument* mpDoc;
     long mnColumnCount;
 
-    DataGridType                maTableDataValues; // Data Pilot Table's index - value map
-    RowGridType                 maSourceData;      // Data Pilot Table's source data
-    RowGridType                 maGlobalOrder;     // Sorted members index
-    mutable RowGridType         maIndexOrder;      // Index the sorted numbers
-    DataListType                maLabelNames;      // Source label data
-    std::vector<bool>           mbEmptyRow;        //If empty row?
+    /**
+     * This container stores only the unique instances of item data in each
+     * column. Duplicates are not allowed.
+     */
+    DataGridType maTableDataValues;
+
+    /**
+     * This container stores indices within maTableDataValues pointing to the
+     * data.  The order of data are exactly as they appear in the original
+     * data source.
+     */
+    RowGridType maSourceData;
+
+    /**
+     * This container stores indices within maTableDataValues.  The order of
+     * indices in each column represents ascending order of the actual data.
+     */
+    RowGridType maGlobalOrder;
+
+    /**
+     * This container stores the ranks of each unique data represented by
+     * their index.
+     */
+    mutable RowGridType maIndexOrder;
+
+    DataListType maLabelNames;    // Stores dimension names.
+    std::vector<bool> mbEmptyRow; // Keeps track of empty rows.
 
     mutable ScDPItemDataPool    maAdditionalData;
 
 public:
-    SCROW GetIdByItemData( long nDim,  String sItemData  ) const;
+    SCROW GetIdByItemData( long nDim, const String& sItemData ) const;
     SCROW GetIdByItemData( long nDim, const ScDPItemData& rData ) const;
 
-    SCROW GetAdditionalItemID ( String sItemData ) const;
+    SCROW GetAdditionalItemID ( const String& sItemData ) const;
     SCROW GetAdditionalItemID( const ScDPItemData& rData ) const;
 
     SCCOL GetDimensionIndex( String sName) const;
@@ -81,6 +101,7 @@ public:
     bool  IsDateDimension( long nDim ) const ;
     sal_uLong GetDimNumType( SCCOL nDim) const;
     SCROW GetDimMemberCount( SCCOL nDim ) const;
+    SCROW GetOrder( long nDim, SCROW nIndex ) const;
 
     SCROW GetSortedItemDataId( SCCOL nDim, SCROW nOrder ) const;
     const DataListType& GetDimMemberValues( SCCOL nDim ) const;
@@ -93,7 +114,7 @@ public:
     bool IsEmptyMember( SCROW nRow, sal_uInt16 nColumn ) const;
     bool IsRowEmpty( SCROW nRow ) const;
     bool IsValid() const;
-    bool ValidQuery( SCROW nRow, const ScQueryParam& rQueryParam, bool* pSpecial );
+    bool ValidQuery( SCROW nRow, const ScQueryParam& rQueryParam, bool* pSpecial ) const;
 
     ScDocument* GetDoc() const;//ms-cache-core
     long GetColumnCount() const;
@@ -103,12 +124,11 @@ public:
     bool operator== ( const ScDPCache& r ) const;
 
     ScDPCache(ScDocument* pDoc);
-    virtual ~ScDPCache();
+    ~ScDPCache();
 
 private:
-    SCROW GetOrder( long nDim, SCROW nIndex ) const;
     void AddLabel( ScDPItemData* pData);
-    bool AddData( long nDim, ScDPItemData* itemData );
+    bool AddData(long nDim, ScDPItemData* pData);
 };
 
 #endif

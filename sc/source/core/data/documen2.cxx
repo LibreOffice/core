@@ -904,6 +904,9 @@ sal_Bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pO
 
         pTab[nNewPos]->SetPageStyle( pTab[nOldPos]->GetPageStyle() );
         pTab[nNewPos]->SetPendingRowHeights( pTab[nOldPos]->IsPendingRowHeights() );
+
+        // Copy the custom print range if exists.
+        pTab[nNewPos]->CopyPrintRange(*pTab[nOldPos]);
     }
     else
         SetAutoCalc( bOldAutoCalc );
@@ -1125,53 +1128,6 @@ void ScDocument::SetError( SCCOL nCol, SCROW nRow, SCTAB nTab, const sal_uInt16 
     if (VALIDTAB(nTab))
         if (pTab[nTab])
             pTab[nTab]->SetError( nCol, nRow, nError );
-}
-
-namespace {
-
-bool eraseUnusedSharedName(ScRangeName* pRangeName, ScTable* pTab[], sal_uInt16 nLevel)
-{
-    if (!pRangeName)
-        return false;
-
-    ScRangeName::iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
-    for (; itr != itrEnd; ++itr)
-    {
-        if (!itr->HasType(RT_SHARED))
-            continue;
-
-        String aName;
-        itr->GetName(aName);
-        aName.Erase(0, 6);                      // !!! vgl. Table4, FillFormula !!
-        sal_uInt16 nInd = static_cast<sal_uInt16>(aName.ToInt32());
-        if (nInd > nLevel)
-            continue;
-
-        sal_uInt16 nIndex = itr->GetIndex();
-
-        bool bInUse = false;
-        for (SCTAB j = 0; !bInUse && (j <= MAXTAB); ++j)
-        {
-            if (pTab[j])
-                bInUse = pTab[j]->IsRangeNameInUse(0, 0, MAXCOL-1, MAXROW-1, nIndex);
-        }
-        if (!bInUse)
-        {
-            pRangeName->erase(itr);
-            return true;
-        }
-    }
-    return false;
-}
-
-}
-
-void ScDocument::EraseNonUsedSharedNames(sal_uInt16 nLevel)
-{
-    if (!pRangeName)
-        return;
-    while (eraseUnusedSharedName(pRangeName, pTab, nLevel))
-        ;
 }
 
 //  ----------------------------------------------------------------------------

@@ -852,6 +852,12 @@ void XclImpPivotCache::ReadPivotCacheStream( XclImpStream& rStrm )
     DBG_ASSERT( maPCInfo.mnTotalFields == maFields.size(),
         "XclImpPivotCache::ReadPivotCacheStream - field count mismatch" );
 
+    if (HasCacheRecords())
+    {
+        SCROW nNewEnd = maSrcRange.aStart.Row() + maPCInfo.mnSrcRecs;
+        maSrcRange.aEnd.SetRow(nNewEnd);
+    }
+
     // set source range for external source data
     if( bGenerateSource && (nFieldScCol > 0) )
     {
@@ -864,9 +870,14 @@ void XclImpPivotCache::ReadPivotCacheStream( XclImpStream& rStrm )
     }
 }
 
+bool XclImpPivotCache::HasCacheRecords() const
+{
+    return static_cast<bool>(maPCInfo.mnFlags & EXC_SXDB_SAVEDATA);
+}
+
 bool XclImpPivotCache::IsRefreshOnLoad() const
 {
-    return static_cast<bool>(maPCInfo.mnFlags & 0x0004);
+    return static_cast<bool>(maPCInfo.mnFlags & EXC_SXDB_REFRESH_LOAD);
 }
 
 bool XclImpPivotCache::IsValid() const
@@ -999,8 +1010,12 @@ void XclImpPTField::ConvertPageField( ScDPSaveData& rSaveData ) const
     DBG_ASSERT( maFieldInfo.mnAxes & EXC_SXVD_AXIS_PAGE, "XclImpPTField::ConvertPageField - no page field" );
     if( ScDPSaveDimension* pSaveDim = ConvertRCPField( rSaveData ) )
     {
-        const rtl::OUString aName = *GetItemName( maPageInfo.mnSelItem );
-        pSaveDim->SetCurrentPage( &aName );
+        const String* pName = GetItemName( maPageInfo.mnSelItem );
+        if (pName)
+        {
+            const OUString aName(*pName);
+            pSaveDim->SetCurrentPage(&aName);
+        }
     }
 }
 

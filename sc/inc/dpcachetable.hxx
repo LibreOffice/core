@@ -58,6 +58,13 @@ struct ScQueryParam;
 
 class SC_DLLPUBLIC ScDPCacheTable
 {
+    struct RowFlag
+    {
+        bool mbShowByFilter:1;
+        bool mbShowByPage:1;
+        bool isActive() const;
+        RowFlag();
+    };
 public:
     /** individual filter item used in SingleFilter and GroupFilter. */
     struct FilterItem
@@ -121,7 +128,7 @@ public:
         Criterion();
     };
 
-    ScDPCacheTable(ScDPCache* pCache);
+    ScDPCacheTable(const ScDPCache* pCache);
     ~ScDPCacheTable();
 
     sal_Int32 getRowSize() const;
@@ -169,14 +176,12 @@ public:
     SCROW getOrder(long nDim, SCROW nIndex) const;
     void clear();
     bool empty() const;
-    void setCache(ScDPCache* p);
+    void setCache(const ScDPCache* p);
     bool hasCache() const;
 
 private:
     ScDPCacheTable();
     ScDPCacheTable(const ScDPCacheTable&);
-
-    ScDPCache* getCache();
 
     /**
      * Check if a given row meets all specified criteria.
@@ -190,11 +195,10 @@ private:
     /** unique field entires for each field (column). */
     ::std::vector< ::std::vector<SCROW> > maFieldEntries;
 
-    /** used to track visibility of rows.  The first row below the header row
-        has the index of 0. */
-    ::std::vector<bool> maRowsVisible;
+    /** Row flags. The first row below the header row has the index of 0. */
+    ::std::vector<RowFlag> maRowFlags;
 
-    ScDPCache* mpCache;
+    const ScDPCache* mpCache;
 };
 #endif
 

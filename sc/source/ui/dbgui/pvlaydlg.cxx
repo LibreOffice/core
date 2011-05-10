@@ -1132,6 +1132,14 @@ void ScDPLayoutDlg::NotifyRemoveField( ScDPFieldType eType, size_t nFieldIndex )
         RemoveField( eType, nFieldIndex );
 }
 
+Size ScDPLayoutDlg::GetStdFieldBtnSize() const
+{
+    // This size is static but is platform dependent.  The field button size
+    // is calculated relative to the size of the OK button.
+    double w = static_cast<double>(aBtnOk.GetSizePixel().Width()) * 0.70;
+    return Size(static_cast<long>(w), FIELD_BTN_HEIGHT);
+}
+
 void ScDPLayoutDlg::Deactivate()
 {
     /*  If the dialog has been deactivated (click into document), the LoseFocus
@@ -1290,10 +1298,18 @@ Point ScDPLayoutDlg::DlgPos2WndPos( const Point& rPt, Window& rWnd )
 
 void ScDPLayoutDlg::CalcWndSizes()
 {
+    // The pivot.src file only specifies the positions of the controls. Here,
+    // we calculate appropriate size of each control based on how they are
+    // positioned relative to each other.
+
     // row/column/data area sizes
-    long nFldW = FIELD_BTN_WIDTH;
-    long nFldH = FIELD_BTN_HEIGHT;
-    aWndData.SetSizePixel(Size(338, 185));
+    long nFldW = GetStdFieldBtnSize().Width();
+    long nFldH = GetStdFieldBtnSize().Height();
+
+    aWndData.SetSizePixel(
+        Size(aWndSelect.GetPosPixel().X() - aWndData.GetPosPixel().X() - FIELD_AREA_GAP*4,
+             185));
+
     aWndPage.SetSizePixel(
         Size(aWndData.GetSizePixel().Width() + 85,
              aWndCol.GetPosPixel().Y() - aWndPage.GetPosPixel().Y() - FIELD_AREA_GAP));
@@ -1434,11 +1450,24 @@ void ScDPLayoutDlg::UpdateSrcRange()
     switch (eSrcType)
     {
         case SRC_REF:
+        {
             // data source is a range reference.
             if (inSheet.GetSourceRange() == aNewRange)
                 // new range is identical to the current range.  Nothing to do.
                 return;
             inSheet.SetSourceRange(aNewRange);
+            sal_uLong nError = inSheet.CheckSourceRange();
+            if (nError)
+            {
+                // The error number corresponds with string ID for the error
+                // message.  In the future we should display the error message
+                // somewhere in the dialog to let the user know of the reason
+                // for error.
+                aEdInPos.SetRefValid(false);
+                aBtnOk.Disable();
+                return;
+            }
+        }
         break;
         case SRC_NAME:
             // data source is a range name.

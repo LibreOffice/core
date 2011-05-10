@@ -924,37 +924,37 @@ sal_Bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, sal_Bool bCopy, s
             }
 
             sal_Bool bVbaEnabled = aDocument.IsInVBAMode();
-                        if ( bVbaEnabled )
-                        {
-                            String aLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
-                            Reference< XLibraryContainer > xLibContainer = GetBasicContainer();
-                            Reference< XVBACompatibility > xVBACompat( xLibContainer, UNO_QUERY );
+            if ( bVbaEnabled )
+            {
+                String aLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
+                Reference< XLibraryContainer > xLibContainer = GetBasicContainer();
+                Reference< XVBACompatibility > xVBACompat( xLibContainer, UNO_QUERY );
 
-                            if ( xVBACompat.is() )
-                            {
-                                aLibName = xVBACompat->getProjectName();
-                            }
-
-                            SCTAB nTabToUse = nDestTab;
-                            if ( nDestTab == SC_TAB_APPEND )
-                                nTabToUse = aDocument.GetMaxTableNumber() - 1;
-                            String sCodeName;
-                            String sSource;
-                            Reference< XNameContainer > xLib;
-                            if( xLibContainer.is() )
-                            {
-                                com::sun::star::uno::Any aLibAny = xLibContainer->getByName( aLibName );
-                                aLibAny >>= xLib;
-                            }
-                            if( xLib.is() )
-                            {
-                                rtl::OUString sRTLSource;
-                                xLib->getByName( sSrcCodeName ) >>= sRTLSource;
-                                sSource = sRTLSource;
-                            }
-                            VBA_InsertModule( aDocument, nTabToUse, sCodeName, sSource );
-                        }
+                if ( xVBACompat.is() )
+                {
+                    aLibName = xVBACompat->getProjectName();
                 }
+
+                SCTAB nTabToUse = nDestTab;
+                if ( nDestTab == SC_TAB_APPEND )
+                    nTabToUse = aDocument.GetMaxTableNumber() - 1;
+                String sCodeName;
+                String sSource;
+                Reference< XNameContainer > xLib;
+                if( xLibContainer.is() )
+                {
+                    com::sun::star::uno::Any aLibAny = xLibContainer->getByName( aLibName );
+                    aLibAny >>= xLib;
+                }
+                if( xLib.is() )
+                {
+                    rtl::OUString sRTLSource;
+                    xLib->getByName( sSrcCodeName ) >>= sRTLSource;
+                    sSource = sRTLSource;
+                }
+                VBA_InsertModule( aDocument, nTabToUse, sCodeName, sSource );
+            }
+        }
         Broadcast( ScTablesHint( SC_TAB_COPIED, nSrcTab, nDestTab ) );
     }
     else

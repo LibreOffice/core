@@ -222,6 +222,11 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
     return *this;
 }
 
+SCTAB ScDBData::GetTable() const
+{
+    return nTable;
+}
+
 bool ScDBData::operator== (const ScDBData& rData) const
 {
     //  Daten, die nicht in den Params sind
@@ -652,7 +657,7 @@ void ScDBData::UpdateReference(ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
 
     //!     Testen, ob mitten aus dem Bereich geloescht/eingefuegt wurde !!!
 }
-#include <stdio.h>
+
 void ScDBData::ExtendDataArea(ScDocument* pDoc)
 {
     // Extend the DB area to include data rows immediately below.
@@ -660,7 +665,6 @@ void ScDBData::ExtendDataArea(ScDocument* pDoc)
     SCROW nRow1a = nStartRow, nRow2a = nEndRow;
     pDoc->GetDataArea(nTable, nCol1a, nRow1a, nCol2a, nRow2a, false, false);
     nEndRow = nRow2a;
-    fprintf(stdout, "ScDBData::ExtendDataArea:   new end row = %"SAL_PRIdINT32"\n", nEndRow);
 }
 
 namespace {
@@ -819,6 +823,27 @@ ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCO
         return const_cast<ScDBData*>(pData);
 
     return NULL;
+}
+
+ScDBData* ScDBCollection::GetFilterDBAtTable(SCTAB nTab) const
+{
+    ScDBData* pDataEmpty = NULL;
+    if (pItems)
+    {
+        for (sal_uInt16 i = 0; i < nCount; i++)
+        {
+            ScDBData* pDBTemp = (ScDBData*)pItems[i];
+            if ( pDBTemp->GetTable() == nTab )
+            {
+                sal_Bool bFilter = pDBTemp->HasAutoFilter() || pDBTemp->HasQueryParam();
+
+                if ( bFilter )
+                    return pDBTemp;
+            }
+        }
+    }
+
+    return pDataEmpty;
 }
 
 sal_Bool ScDBCollection::SearchName( const String& rName, sal_uInt16& rIndex ) const

@@ -1089,7 +1089,7 @@ void ScXMLTableRowCellContext::EndElement()
                                 pCellObj->SetFormulaWithGrammar( pOUFormula->first, pOUFormula->second, eGrammar);
                                 if (bFormulaTextResult && pOUTextValue && pOUTextValue->getLength())
                                     pCellObj->SetFormulaResultString( *pOUTextValue);
-                                else if (fValue != 0.0)
+                                else
                                     pCellObj->SetFormulaResultDouble( fValue);
                             }
                         }

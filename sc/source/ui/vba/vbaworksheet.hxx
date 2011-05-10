@@ -88,6 +88,9 @@ public:
     { return mxModel; }
     virtual css::uno::Reference< css::sheet::XSpreadsheet > getSheet()
     { return mxSheet; }
+    static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
+    css::uno::Reference< ov::excel::XWorksheet > createSheetCopyInNewDoc( rtl::OUString);
+    css::uno::Reference< ov::excel::XWorksheet > createSheetCopy(css::uno::Reference< ov::excel::XWorksheet> xSheet, bool bAfter);
 
     // Attributes
     virtual ::rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
@@ -169,6 +172,8 @@ public:
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    // XUnoTunnel
+    virtual ::sal_Int64 SAL_CALL getSomething(const css::uno::Sequence<sal_Int8 >& rId ) throw(css::uno::RuntimeException);
 };
 
 #endif /* SC_VBA_WORKSHEET_HXX */

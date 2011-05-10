@@ -157,18 +157,17 @@ void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
 
         if (!maRowManualBreaks.empty())
         {
-            std::set<SCROW>::reverse_iterator rit = maRowManualBreaks.rbegin();
-            while (rit != maRowManualBreaks.rend())
-            {
-                SCROW nRow = *rit;
-                if (nRow < nStartRow)
-                    break;  // while
-                else
-                {
-                    maRowManualBreaks.erase( (++rit).base());
-                    maRowManualBreaks.insert( static_cast<SCROW>( nRow + nSize));
-                }
-            }
+            // Copy all breaks up to nStartRow (non-inclusive).
+            ::std::set<SCROW>::iterator itr1 = maRowManualBreaks.lower_bound(nStartRow);
+            ::std::set<SCROW> aNewBreaks(maRowManualBreaks.begin(), itr1);
+
+            // Copy all breaks from nStartRow (inclusive) to the last element,
+            // but add nSize to each value.
+            ::std::set<SCROW>::iterator itr2 = maRowManualBreaks.end();
+            for (; itr1 != itr2; ++itr1)
+                aNewBreaks.insert(static_cast<SCROW>(*itr1 + nSize));
+
+            maRowManualBreaks.swap(aNewBreaks);
         }
     }
 
@@ -208,14 +207,21 @@ void ScTable::DeleteRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
 
         if (!maRowManualBreaks.empty())
         {
-            std::set<SCROW>::iterator it = maRowManualBreaks.upper_bound( static_cast<SCROW>( nStartRow + nSize - 1));
-            maRowManualBreaks.erase( maRowManualBreaks.lower_bound( nStartRow), it);
-            while (it != maRowManualBreaks.end())
-            {
-                SCROW nRow = *it;
-                maRowManualBreaks.erase( it++);
-                maRowManualBreaks.insert( static_cast<SCROW>( nRow - nSize));
-            }
+            // Erase all manual breaks between nStartRow and nStartRow + nSize - 1 (inclusive).
+            std::set<SCROW>::iterator itr1 = maRowManualBreaks.lower_bound(nStartRow);
+            std::set<SCROW>::iterator itr2 = maRowManualBreaks.upper_bound(static_cast<SCROW>(nStartRow + nSize - 1));
+            maRowManualBreaks.erase(itr1, itr2);
+
+            // Copy all breaks from the 1st element up to nStartRow to the new container.
+            itr1 = maRowManualBreaks.lower_bound(nStartRow);
+            ::std::set<SCROW> aNewBreaks(maRowManualBreaks.begin(), itr1);
+
+            // Copy all breaks from nStartRow to the last element, but subtract each value by nSize.
+            itr2 = maRowManualBreaks.end();
+            for (; itr1 != itr2; ++itr1)
+                aNewBreaks.insert(static_cast<SCROW>(*itr1 - nSize));
+
+            maRowManualBreaks.swap(aNewBreaks);
         }
     }
 
@@ -2627,6 +2633,20 @@ void ScTable::ShowRows(SCROW nRow1, SCROW nRow2, bool bShow)
     }
 
     DecRecalcLevel();
+}
+
+bool ScTable::IsDataFiltered() const
+{
+    bool bAnyQuery = false;
+    ScDBData* pDBData = pDocument->GetFilterDBAtTable(nTab);
+    if ( pDBData )
+    {
+        ScQueryParam aParam;
+        pDBData->GetQueryParam( aParam );
+        if ( aParam.GetEntry(0).bDoQuery )
+            bAnyQuery = true;
+    }
+    return bAnyQuery;
 }
 
 

@@ -72,6 +72,13 @@
 #include <comphelper/processfactory.hxx>
 #include <vbahelper/vbashapes.hxx>
 
+#include <com/sun/star/script/vba/VBAEventId.hpp>
+#include <com/sun/star/script/vba/XVBACompatibility.hpp>
+#include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
+#include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
+#include <com/sun/star/script/ModuleInfo.hpp>
+#include <com/sun/star/script/ModuleType.hpp>
+
 #include <tools/string.hxx>
 
 //zhangyun showdataform
@@ -213,6 +220,91 @@ ScVbaWorksheet::ScVbaWorksheet( uno::Sequence< uno::Any> const & args,
 
 ScVbaWorksheet::~ScVbaWorksheet()
 {
+}
+
+const uno::Sequence<sal_Int8>& ScVbaWorksheet::getUnoTunnelId()
+{
+    static uno::Sequence< sal_Int8 > aSeq;
+
+    if( !aSeq.getLength() )
+    {
+        static osl::Mutex           aCreateMutex;
+        osl::Guard< osl::Mutex >    aGuard( aCreateMutex );
+
+        aSeq.realloc( 16 );
+        rtl_createUuid( reinterpret_cast< sal_uInt8* >( aSeq.getArray() ), 0, sal_True );
+    }
+
+    return aSeq;
+}
+
+uno::Reference< ov::excel::XWorksheet >
+ScVbaWorksheet::createSheetCopyInNewDoc(rtl::OUString aCurrSheetName)
+{
+    uno::Reference< sheet::XSheetCellCursor > xSheetCellCursor = getSheet()->createCursor( );
+    uno::Reference<sheet::XUsedAreaCursor> xUsedCursor(xSheetCellCursor,uno::UNO_QUERY_THROW);
+    uno::Reference< table::XCellRange > xRange1( xSheetCellCursor, uno::UNO_QUERY);
+    uno::Reference<excel::XRange> xRange =  new ScVbaRange( this, mxContext, xRange1);
+    if (xRange.is())
+        xRange->Select();
+    excel::implnCopy(mxModel);
+    uno::Reference<frame::XModel> xModel = openNewDoc(aCurrSheetName);
+    if (xModel.is())
+    {
+        excel::implnPaste(xModel);
+    }
+    uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xModel, uno::UNO_QUERY_THROW );
+    excel::setUpDocumentModules(xSpreadDoc);
+    uno::Reference <sheet::XSpreadsheets> xSheets( xSpreadDoc->getSheets(), uno::UNO_QUERY_THROW );
+    uno::Reference <container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XSpreadsheet > xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
+
+    ScDocShell* pShell = excel::getDocShell( xModel );
+    String aCodeName;
+    pShell->GetDocument()->GetCodeName( 0, aCodeName );
+    return uno::Reference< excel::XWorksheet >( getUnoDocModule( aCodeName, pShell ), uno::UNO_QUERY_THROW );
+}
+
+css::uno::Reference< ov::excel::XWorksheet >
+ScVbaWorksheet::createSheetCopy(uno::Reference<excel::XWorksheet> xSheet, bool bAfter)
+{
+    rtl::OUString aCurrSheetName = getName();
+    ScVbaWorksheet* pDestSheet = excel::getImplFromDocModuleWrapper<ScVbaWorksheet>( xSheet );
+
+    uno::Reference <sheet::XSpreadsheetDocument> xDestDoc( pDestSheet->getModel(), uno::UNO_QUERY );
+    uno::Reference <sheet::XSpreadsheetDocument> xSrcDoc( getModel(), uno::UNO_QUERY );
+
+    SCTAB nDest = 0;
+    SCTAB nSrc = 0;
+    rtl::OUString aSheetName = xSheet->getName();
+    bool bSameDoc = ( pDestSheet->getModel() == getModel() );
+    bool bDestSheetExists = ScVbaWorksheets::nameExists (xDestDoc, aSheetName, nDest );
+    bool bSheetExists = ScVbaWorksheets::nameExists (xSrcDoc, aCurrSheetName, nSrc );
+
+    // set sheet name to be newSheet name
+    aSheetName = aCurrSheetName;
+    if ( bSheetExists && bDestSheetExists )
+    {
+        SCTAB nDummy=0;
+        if(bAfter)
+              nDest++;
+        uno::Reference<sheet::XSpreadsheets> xSheets = xDestDoc->getSheets();
+        if ( bSameDoc || ScVbaWorksheets::nameExists( xDestDoc, aCurrSheetName, nDummy ) )
+            getNewSpreadsheetName(aSheetName,aCurrSheetName,xDestDoc);
+        if ( bSameDoc )
+            xSheets->copyByName(aCurrSheetName,aSheetName,nDest);
+        else
+        {
+            ScDocShell* pDestDocShell = excel::getDocShell( pDestSheet->getModel() );
+            ScDocShell* pSrcDocShell = excel::getDocShell( getModel() );
+            if ( pDestDocShell && pSrcDocShell )
+                pDestDocShell->TransferTab( *pSrcDocShell, static_cast<SCTAB>(nSrc), static_cast<SCTAB>(nDest), true, true );
+        }
+    }
+    // return new sheet
+    uno::Reference< excel::XApplication > xApplication( Application(), uno::UNO_QUERY_THROW );
+    uno::Reference< excel::XWorksheet > xNewSheet( xApplication->Worksheets( uno::makeAny( aSheetName ) ), uno::UNO_QUERY_THROW );
+    return xNewSheet;
 }
 
 ::rtl::OUString
@@ -558,59 +650,13 @@ void
 ScVbaWorksheet::Copy( const uno::Any& Before, const uno::Any& After ) throw (uno::RuntimeException)
 {
     uno::Reference<excel::XWorksheet> xSheet;
-    rtl::OUString aCurrSheetName =getName();
     if (!(Before >>= xSheet) && !(After >>=xSheet)&& !(Before.hasValue()) && !(After.hasValue()))
     {
-        uno::Reference< sheet::XSheetCellCursor > xSheetCellCursor = getSheet()->createCursor( );
-        uno::Reference<sheet::XUsedAreaCursor> xUsedCursor(xSheetCellCursor,uno::UNO_QUERY_THROW);
-            uno::Reference< table::XCellRange > xRange1( xSheetCellCursor, uno::UNO_QUERY);
-        uno::Reference<excel::XRange> xRange =  new ScVbaRange( this, mxContext, xRange1);
-        if (xRange.is())
-            xRange->Select();
-        excel::implnCopy(mxModel);
-        uno::Reference<frame::XModel> xModel = openNewDoc(aCurrSheetName);
-        if (xModel.is())
-        {
-            excel::implnPaste(xModel);
-        }
+        createSheetCopyInNewDoc(getName());
         return;
     }
 
-    ScVbaWorksheet* pDestSheet = static_cast< ScVbaWorksheet* >(xSheet.get());
-    uno::Reference <sheet::XSpreadsheetDocument> xDestDoc( pDestSheet->getModel(), uno::UNO_QUERY );
-    uno::Reference <sheet::XSpreadsheetDocument> xSrcDoc( getModel(), uno::UNO_QUERY );
-
-    SCTAB nDest = 0;
-    SCTAB nSrc = 0;
-    rtl::OUString aSheetName = xSheet->getName();
-    bool bSameDoc = ( pDestSheet->getModel() == getModel() );
-    bool bDestSheetExists = ScVbaWorksheets::nameExists (xDestDoc, aSheetName, nDest );
-    bool bSheetExists = ScVbaWorksheets::nameExists (xSrcDoc, aCurrSheetName, nSrc );
-
-    // set sheet name to be newSheet name
-    aSheetName = aCurrSheetName;
-    if ( bSheetExists && bDestSheetExists )
-    {
-        SCTAB nDummy=0;
-        sal_Bool bAfter = After.hasValue();
-        if(bAfter)
-              nDest++;
-        uno::Reference<sheet::XSpreadsheets> xSheets = xDestDoc->getSheets();
-        if ( bSameDoc || ScVbaWorksheets::nameExists( xDestDoc, aCurrSheetName, nDummy ) )
-            getNewSpreadsheetName(aSheetName,aCurrSheetName,xDestDoc);
-        if ( bSameDoc )
-            xSheets->copyByName(aCurrSheetName,aSheetName,nDest);
-        else
-        {
-            ScDocShell* pDestDocShell = excel::getDocShell( pDestSheet->getModel() );
-            ScDocShell* pSrcDocShell = excel::getDocShell( getModel() );
-            if ( pDestDocShell && pSrcDocShell )
-                pDestDocShell->TransferTab( *pSrcDocShell, static_cast<SCTAB>(nSrc), static_cast<SCTAB>(nDest), true, true );
-        }
-    }
-    // active the new sheet
-    uno::Reference< excel::XApplication > xApplication( Application(), uno::UNO_QUERY_THROW );
-    uno::Reference< excel::XWorksheet > xNewSheet( xApplication->Worksheets( uno::makeAny( aSheetName ) ), uno::UNO_QUERY_THROW );
+    uno::Reference<excel::XWorksheet> xNewSheet = createSheetCopy(xSheet, After.hasValue());
     xNewSheet->Activate();
 }
 
@@ -1119,6 +1165,17 @@ ScVbaWorksheet::PrintOut( const uno::Any& From, const uno::Any& To, const uno::A
 
     uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_QUERY_THROW );
     PrintOutHelper( excel::getBestViewShell( xModel ), From, To, Copies, Preview, ActivePrinter, PrintToFile, Collate, PrToFileName, bSelection );
+}
+
+sal_Int64 SAL_CALL
+ScVbaWorksheet::getSomething(const uno::Sequence<sal_Int8 > & rId) throw(uno::RuntimeException)
+{
+    if (rId.getLength() == 16 &&
+        0 == rtl_compareMemory( ScVbaWorksheet::getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ))
+    {
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
+    }
+    return 0;
 }
 
 namespace worksheet

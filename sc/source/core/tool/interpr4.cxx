@@ -238,6 +238,18 @@ double ScInterpreter::GetValueCellValue( const ScAddress& rPos, const ScValueCel
 
 double ScInterpreter::ConvertStringToValue( const String& rStr )
 {
+#if 1
+    // We keep this code until we provide a friendly way to convert string
+    // numbers into numbers in the UI.
+    double fValue = 0.0;
+    sal_uInt32 nFIndex = 0;
+    if (!pFormatter->IsNumberFormat(rStr, nFIndex, fValue))
+    {
+        SetError(errNoValue);
+        fValue = 0.0;
+    }
+    return fValue;
+#else
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ConvertStringToValue" );
     double fValue = 0.0;
     if (mnStringNoValueError == errCellNoValue)
@@ -407,6 +419,7 @@ double ScInterpreter::ConvertStringToValue( const String& rStr )
             fValue = 0.0;
     }
     return fValue;
+#endif
 }
 
 
@@ -1506,6 +1519,28 @@ void ScInterpreter::PopExternalDoubleRef(ScExternalRefCache::TokenArrayRef& rArr
     if (nGlobalError)
         return;
 
+    GetExternalDoubleRef(nFileId, aTabName, aData, rArray);
+    if (nGlobalError)
+        return;
+}
+
+void ScInterpreter::PopExternalDoubleRef(ScMatrixRef& rMat)
+{
+    ScExternalRefCache::TokenArrayRef pArray;
+    PopExternalDoubleRef(pArray);
+    if (nGlobalError)
+        return;
+
+    // For now, we only support single range data for external
+    // references, which means the array should only contain a
+    // single matrix token.
+    ScToken* p = static_cast<ScToken*>(pArray->First());
+    rMat = p->GetMatrix();
+}
+
+void ScInterpreter::GetExternalDoubleRef(
+    sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rData, ScExternalRefCache::TokenArrayRef& rArray)
+{
     ScExternalRefManager* pRefMgr = pDok->GetExternalRefManager();
     const String* pFile = pRefMgr->getExternalFileName(nFileId);
     if (!pFile)
@@ -1513,18 +1548,19 @@ void ScInterpreter::PopExternalDoubleRef(ScExternalRefCache::TokenArrayRef& rArr
         SetError(errNoName);
         return;
     }
-    if (aData.Ref1.IsTabRel() || aData.Ref2.IsTabRel())
+    if (rData.Ref1.IsTabRel() || rData.Ref2.IsTabRel())
     {
         OSL_FAIL("ScCompiler::GetToken: external double reference must have an absolute table reference!");
         SetError(errNoRef);
         return;
     }
 
+    ScComplexRefData aData(rData);
     aData.CalcAbsIfRel(aPos);
     ScRange aRange(aData.Ref1.nCol, aData.Ref1.nRow, aData.Ref1.nTab,
                    aData.Ref2.nCol, aData.Ref2.nRow, aData.Ref2.nTab);
     ScExternalRefCache::TokenArrayRef pArray = pRefMgr->getDoubleRefTokens(
-        nFileId, aTabName, aRange, &aPos);
+        nFileId, rTabName, aRange, &aPos);
 
     if (!pArray)
     {
@@ -1547,20 +1583,6 @@ void ScInterpreter::PopExternalDoubleRef(ScExternalRefCache::TokenArrayRef& rArr
     }
 
     rArray = pArray;
-}
-
-void ScInterpreter::PopExternalDoubleRef(ScMatrixRef& rMat)
-{
-    ScExternalRefCache::TokenArrayRef pArray;
-    PopExternalDoubleRef(pArray);
-    if (nGlobalError)
-        return;
-
-    // For now, we only support single range data for external
-    // references, which means the array should only contain a
-    // single matrix token.
-    ScToken* p = static_cast<ScToken*>(pArray->First());
-    rMat = p->GetMatrix();
 }
 
 sal_Bool ScInterpreter::PopDoubleRefOrSingleRef( ScAddress& rAdr )
@@ -1630,6 +1652,7 @@ bool ScInterpreter::ConvertMatrixParameters()
                 case svDouble:
                 case svString:
                 case svSingleRef:
+                case svExternalSingleRef:
                 case svMissing:
                 case svError:
                 case svEmptyCell:
@@ -1679,6 +1702,35 @@ bool ScInterpreter::ConvertMatrixParameters()
                                 if ( nJumpRows < static_cast<SCSIZE>(nRow2 - nRow1 + 1) )
                                     nJumpRows = static_cast<SCSIZE>(nRow2 - nRow1 + 1);
                             }
+                            ScToken* pNew = new ScMatrixToken( pMat);
+                            pNew->IncRef();
+                            pStack[ sp - i ] = pNew;
+                            p->DecRef();    // p may be dead now!
+                        }
+                    }
+                }
+                break;
+                case svExternalDoubleRef:
+                {
+                    ScParameterClassification::Type eType =
+                        ScParameterClassification::GetParameterType( pCur, nParams - i);
+                    if (eType == ScParameterClassification::Array)
+                    {
+                        sal_uInt16 nFileId = p->GetIndex();
+                        const String& rTabName = p->GetString();
+                        const ScComplexRefData& rRef = static_cast<ScToken*>(p)->GetDoubleRef();
+                        ScExternalRefCache::TokenArrayRef pArray;
+                        GetExternalDoubleRef(nFileId, rTabName, rRef, pArray);
+                        if (nGlobalError)
+                            break;
+
+                        ScToken* pTemp = static_cast<ScToken*>(pArray->First());
+                        if (!pTemp)
+                            break;
+
+                        ScMatrixRef pMat = pTemp->GetMatrix();
+                        if (pMat)
+                        {
                             ScToken* pNew = new ScMatrixToken( pMat);
                             pNew->IncRef();
                             pStack[ sp - i ] = pNew;
@@ -2337,13 +2389,9 @@ ScMatValType ScInterpreter::GetDoubleOrStringFromMatrix( double& rDouble,
 
     ScMatrixRef pMat;
     StackVar eType = GetStackType();
-    if (eType == svExternalDoubleRef)
+    if (eType == svExternalDoubleRef || eType == svExternalSingleRef || eType == svMatrix)
     {
-        PopExternalDoubleRef(pMat);
-    }
-    else if (eType == svMatrix)
-    {
-        pMat = PopMatrix();
+        pMat = GetMatrix();
     }
     else
     {

@@ -55,6 +55,8 @@
 #include "vbaworkbook.hxx"
 #include "unonames.hxx"
 
+#include <vector>
+
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
@@ -407,21 +409,58 @@ ScVbaWorksheets::Select( const uno::Any& Replace ) throw (uno::RuntimeException)
     for ( sal_Int32 nItem = 1; nItem <= nElems; ++nItem )
     {
         uno::Reference< excel::XWorksheet > xSheet( Item( uno::makeAny( nItem ), uno::Any() ), uno::UNO_QUERY_THROW );
-        ScVbaWorksheet* pSheet = dynamic_cast< ScVbaWorksheet* >( xSheet.get() );
-        if ( pSheet )
+        ScVbaWorksheet* pSheet = excel::getImplFromDocModuleWrapper<ScVbaWorksheet>( xSheet );
+        if ( bSelectSingle )
         {
-            if ( bSelectSingle )
-            {
-                rMarkData.SelectOneTable( static_cast< SCTAB >( pSheet->getSheetID() ) );
-                bSelectSingle = false;
-            }
-            else
-                rMarkData.SelectTable( static_cast< SCTAB >( pSheet->getSheetID() ), sal_True );
-
+            rMarkData.SelectOneTable( static_cast< SCTAB >( pSheet->getSheetID() ) );
+            bSelectSingle = false;
         }
+        else
+            rMarkData.SelectTable( static_cast< SCTAB >( pSheet->getSheetID() ), sal_True );
     }
 
 
+}
+
+void SAL_CALL
+ScVbaWorksheets::Copy ( const uno::Any& Before, const uno::Any& After) throw (css::uno::RuntimeException)
+{
+    uno::Reference<excel::XWorksheet> xSheet;
+    sal_Int32 nElems = getCount();
+    bool bAfter = After.hasValue();
+    std::vector< uno::Reference< excel::XWorksheet > > Sheets;
+    sal_Int32 nItem = 0;
+
+    for ( nItem = 1; nItem <= nElems; ++nItem)
+    {
+        uno::Reference<excel::XWorksheet> xWorksheet(Item( uno::makeAny( nItem ), uno::Any() ), uno::UNO_QUERY_THROW );
+        Sheets.push_back(xWorksheet);
+    }
+    bool bNewDoc = (!(Before >>= xSheet) && !(After >>=xSheet)&& !(Before.hasValue()) && !(After.hasValue()));
+
+    uno::Reference< excel::XWorksheet > xSrcSheet;
+    if ( bNewDoc )
+    {
+        bAfter = true;
+        xSrcSheet = Sheets.at(0);
+        ScVbaWorksheet* pSrcSheet = excel::getImplFromDocModuleWrapper<ScVbaWorksheet>( xSrcSheet );
+        xSheet = pSrcSheet->createSheetCopyInNewDoc(xSrcSheet->getName());
+        nItem = 1;
+    }
+    else
+    {
+        nItem=0;
+    }
+
+    for (; nItem < nElems; ++nItem )
+    {
+        xSrcSheet = Sheets[nItem];
+        ScVbaWorksheet* pSrcSheet = excel::getImplFromDocModuleWrapper<ScVbaWorksheet>( xSrcSheet );
+        if ( bAfter )
+            xSheet = pSrcSheet->createSheetCopy(xSheet, bAfter);
+        else
+            pSrcSheet->createSheetCopy(xSheet, bAfter);
+    }
 }
 
 //ScVbaCollectionBaseImpl
@@ -440,13 +479,10 @@ ScVbaWorksheets::Item( const uno::Any& Index, const uno::Any& Index2  ) throw (u
         for( sal_Int32 index = 0; index < nElems; ++index )
         {
             uno::Reference< excel::XWorksheet > xWorkSheet( ScVbaWorksheets_BASE::Item( sIndices[ index ], Index2 ), uno::UNO_QUERY_THROW );
-            ScVbaWorksheet* pWorkSheet = dynamic_cast< ScVbaWorksheet* >( xWorkSheet.get() );
-            if ( pWorkSheet )
-            {
-                uno::Reference< sheet::XSpreadsheet > xSheet( pWorkSheet->getSheet() , uno::UNO_QUERY_THROW );
-                uno::Reference< container::XNamed > xName( xSheet, uno::UNO_QUERY_THROW );
-                mSheets.push_back( xSheet );
-            }
+            ScVbaWorksheet* pWorkSheet = excel::getImplFromDocModuleWrapper<ScVbaWorksheet>( xWorkSheet );
+            uno::Reference< sheet::XSpreadsheet > xSheet( pWorkSheet->getSheet() , uno::UNO_QUERY_THROW );
+            uno::Reference< container::XNamed > xName( xSheet, uno::UNO_QUERY_THROW );
+            mSheets.push_back( xSheet );
         }
         uno::Reference< container::XIndexAccess > xIndexAccess = new SheetCollectionHelper( mSheets );
         uno::Reference< XCollection > xSelectedSheets(  new ScVbaWorksheets( this->getParent(), mxContext, xIndexAccess, mxModel ) );

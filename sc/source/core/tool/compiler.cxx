@@ -3788,6 +3788,7 @@ ScTokenArray* ScCompiler::CompileString( const String& rFormula )
              eLastOp == ocArrayColSep ||
              eLastOp == ocArrayOpen) &&
             (eOp == ocSep ||
+             eOp == ocClose ||
              eOp == ocArrayRowSep ||
              eOp == ocArrayColSep ||
              eOp == ocArrayClose) )

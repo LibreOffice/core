@@ -1625,6 +1625,52 @@ void ScTable::MaybeAddExtraColumn(SCCOL& rCol, SCROW nRow, OutputDevice* pDev, d
     rCol = nNewCol;
 }
 
+namespace {
+
+class SetTableIndex : public ::std::unary_function<ScRange, void>
+{
+    SCTAB mnTab;
+public:
+    SetTableIndex(SCTAB nTab) : mnTab(nTab) {}
+
+    void operator() (ScRange& rRange) const
+    {
+        rRange.aStart.SetTab(mnTab);
+        rRange.aEnd.SetTab(mnTab);
+    }
+};
+
+}
+
+void ScTable::CopyPrintRange(const ScTable& rTable)
+{
+    // The table index shouldn't be used when the print range is used, but
+    // just in case set the correct table index.
+
+    aPrintRanges = rTable.aPrintRanges;
+    ::std::for_each(aPrintRanges.begin(), aPrintRanges.end(), SetTableIndex(nTab));
+
+    bPrintEntireSheet = rTable.bPrintEntireSheet;
+
+    delete pRepeatColRange;
+    pRepeatColRange = NULL;
+    if (rTable.pRepeatColRange)
+    {
+        pRepeatColRange = new ScRange(*rTable.pRepeatColRange);
+        pRepeatColRange->aStart.SetTab(nTab);
+        pRepeatColRange->aEnd.SetTab(nTab);
+    }
+
+    delete pRepeatRowRange;
+    pRepeatRowRange = NULL;
+    if (rTable.pRepeatRowRange)
+    {
+        pRepeatRowRange = new ScRange(*rTable.pRepeatRowRange);
+        pRepeatRowRange->aStart.SetTab(nTab);
+        pRepeatRowRange->aEnd.SetTab(nTab);
+    }
+}
+
 void ScTable::DoColResize( SCCOL nCol1, SCCOL nCol2, SCSIZE nAdd )
 {
     for (SCCOL nCol=nCol1; nCol<=nCol2; nCol++)
@@ -1648,6 +1694,8 @@ void ScTable::SetRepeatColRange( const ScRange* pNew )
 
     if (IsStreamValid())
         SetStreamValid(false);
+
+    InvalidatePageBreaks();
 }
 
 void ScTable::SetRepeatRowRange( const ScRange* pNew )
@@ -1656,6 +1704,8 @@ void ScTable::SetRepeatRowRange( const ScRange* pNew )
 
     if (IsStreamValid())
         SetStreamValid(false);
+
+    InvalidatePageBreaks();
 }
 
 void ScTable::ClearPrintRanges()
@@ -1665,6 +1715,8 @@ void ScTable::ClearPrintRanges()
 
     if (IsStreamValid())
         SetStreamValid(false);
+
+    InvalidatePageBreaks();
 }
 
 void ScTable::AddPrintRange( const ScRange& rNew )
@@ -1675,6 +1727,8 @@ void ScTable::AddPrintRange( const ScRange& rNew )
 
     if (IsStreamValid())
         SetStreamValid(false);
+
+    InvalidatePageBreaks();
 }
 
 

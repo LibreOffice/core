@@ -73,6 +73,17 @@ static sal_Bool lcl_HasQueryEntry( const ScQueryParam& rParam )
 
 // ----------------------------------------------------------------------------
 
+bool ScDPCacheTable::RowFlag::isActive() const
+{
+    return mbShowByFilter && mbShowByPage;
+}
+
+ScDPCacheTable::RowFlag::RowFlag() :
+    mbShowByFilter(true),
+    mbShowByPage(true)
+{
+}
+
 ScDPCacheTable::FilterItem::FilterItem() :
     mfValue(0.0),
     mbHasValue(false)
@@ -158,14 +169,13 @@ ScDPCacheTable::Criterion::Criterion() :
 
 // ----------------------------------------------------------------------------
 
-ScDPCacheTable::ScDPCacheTable(ScDPCache* pCache) :
+ScDPCacheTable::ScDPCacheTable(const ScDPCache* pCache) :
     mpCache(pCache)
 {
 }
 
 ScDPCacheTable::~ScDPCacheTable()
 {
-    delete mpCache;
 }
 
 sal_Int32 ScDPCacheTable::getRowSize() const
@@ -181,13 +191,13 @@ sal_Int32 ScDPCacheTable::getColSize() const
 void ScDPCacheTable::fillTable(
     const ScQueryParam& rQuery, bool* pSpecial, bool bIgnoreEmptyRows, bool bRepeatIfEmpty)
 {
-   const SCROW  nRowCount = getRowSize();
-   const SCCOL  nColCount = (SCCOL) getColSize();
-   if ( nRowCount <= 0 || nColCount <= 0)
+    const SCROW nRowCount = getRowSize();
+    const SCCOL  nColCount = (SCCOL) getColSize();
+    if ( nRowCount <= 0 || nColCount <= 0)
         return;
 
-    maRowsVisible.clear();
-    maRowsVisible.reserve(nRowCount);
+    maRowFlags.clear();
+    maRowFlags.reserve(nRowCount);
 
     // Initialize field entries container.
     maFieldEntries.clear();
@@ -199,7 +209,7 @@ void ScDPCacheTable::fillTable(
         SCROW nMemCount = getCache()->GetDimMemberCount( nCol );
         if ( nMemCount )
         {
-            std::vector< SCROW > pAdded( nMemCount, -1 );
+            std::vector<SCROW> aAdded( nMemCount, -1 );
 
             for (SCROW nRow = 0; nRow < nRowCount; ++nRow )
             {
@@ -207,24 +217,27 @@ void ScDPCacheTable::fillTable(
                 SCROW nOrder = getOrder( nCol, nIndex );
 
                 if ( nCol == 0 )
-                         maRowsVisible.push_back(false);
+                {
+                    maRowFlags.push_back(RowFlag());
+                    maRowFlags.back().mbShowByFilter = false;
+                }
 
                 if ( lcl_HasQueryEntry(rQuery) &&
                     !getCache()->ValidQuery( nRow , rQuery, pSpecial ) )
                     continue;
                 if ( bIgnoreEmptyRows &&  getCache()->IsRowEmpty( nRow ) )
                     continue;
-                // Insert a new row into cache table.
-                if ( nCol == 0 )
-                     maRowsVisible.back() = true;
 
-                pAdded[nOrder] = nIndex;
+                if ( nCol == 0 )
+                     maRowFlags.back().mbShowByFilter = true;
+
+                aAdded[nOrder] = nIndex;
             }
             maFieldEntries.push_back( vector<SCROW>() );
             for ( SCROW nRow = 0; nRow < nMemCount; nRow++ )
             {
-                if ( pAdded[nRow] != -1 )
-                    maFieldEntries.back().push_back( pAdded[nRow] );
+                if ( aAdded[nRow] != -1 )
+                    maFieldEntries.back().push_back( aAdded[nRow] );
             }
         }
     }
@@ -237,8 +250,8 @@ void ScDPCacheTable::fillTable()
    if ( nRowCount <= 0 || nColCount <= 0)
         return;
 
-    maRowsVisible.clear();
-    maRowsVisible.reserve(nRowCount);
+    maRowFlags.clear();
+    maRowFlags.reserve(nRowCount);
 
 
     // Initialize field entries container.
@@ -259,8 +272,10 @@ void ScDPCacheTable::fillTable()
                 SCROW nOrder = getOrder( nCol, nIndex );
 
                 if ( nCol == 0 )
-                     maRowsVisible.push_back(true);
-
+                {
+                     maRowFlags.push_back(RowFlag());
+                     maRowFlags.back().mbShowByFilter = true;
+                }
 
                 pAdded[nOrder] = nIndex;
             }
@@ -276,24 +291,24 @@ void ScDPCacheTable::fillTable()
 
 bool ScDPCacheTable::isRowActive(sal_Int32 nRow) const
 {
-    if (nRow < 0 || static_cast<size_t>(nRow) >= maRowsVisible.size())
+    if (nRow < 0 || static_cast<size_t>(nRow) >= maRowFlags.size())
         // row index out of bound
         return false;
 
-    return maRowsVisible[nRow];
+    return maRowFlags[nRow].isActive();
 }
 
 void ScDPCacheTable::filterByPageDimension(const vector<Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rRepeatIfEmptyDims)
 {
     sal_Int32 nRowSize = getRowSize();
-    if (nRowSize != static_cast<sal_Int32>(maRowsVisible.size()))
+    if (nRowSize != static_cast<sal_Int32>(maRowFlags.size()))
     {
         // sizes of the two tables differ!
         return;
     }
 
     for (sal_Int32 nRow = 0; nRow < nRowSize; ++nRow)
-        maRowsVisible[nRow] = isRowQualified(nRow, rCriteria, rRepeatIfEmptyDims);
+        maRowFlags[nRow].mbShowByPage = isRowQualified(nRow, rCriteria, rRepeatIfEmptyDims);
 }
 
 const ScDPItemData* ScDPCacheTable::getCell(SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty) const
@@ -359,7 +374,7 @@ void ScDPCacheTable::filterTable(const vector<Criterion>& rCriteria, Sequence< S
 
     for (sal_Int32 nRow = 0; nRow < nRowSize; ++nRow)
     {
-        if (!maRowsVisible[nRow])
+        if (!maRowFlags[nRow].isActive())
             // This row is filtered out.
             continue;
 
@@ -401,8 +416,7 @@ SCROW ScDPCacheTable::getOrder(long nDim, SCROW nIndex) const
 void ScDPCacheTable::clear()
 {
     maFieldEntries.clear();
-    maRowsVisible.clear();
-    delete mpCache;
+    maRowFlags.clear();
     mpCache = NULL;
 }
 
@@ -411,9 +425,8 @@ bool ScDPCacheTable::empty() const
     return mpCache == NULL || maFieldEntries.empty();
 }
 
-void ScDPCacheTable::setCache(ScDPCache* p)
+void ScDPCacheTable::setCache(const ScDPCache* p)
 {
-    delete mpCache;
     mpCache = p;
 }
 
@@ -444,11 +457,6 @@ bool ScDPCacheTable::isRowQualified(sal_Int32 nRow, const vector<Criterion>& rCr
 }
 
 const ScDPCache* ScDPCacheTable::getCache() const
-{
-    return mpCache;
-}
-
-ScDPCache* ScDPCacheTable::getCache()
 {
     return mpCache;
 }

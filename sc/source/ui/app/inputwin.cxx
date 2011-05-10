@@ -1528,7 +1528,7 @@ ScNameInputType lcl_GetInputType( const String& rText )
         sal_Int32 nNumeric;
 
         if ( aRange.Parse( rText, pDoc, eConv ) & SCA_VALID )
-            eRet = SC_NAME_INPUT_NAMEDRANGE;
+            eRet = SC_NAME_INPUT_RANGE;
         else if ( aAddress.Parse( rText, pDoc, eConv ) & SCA_VALID )
             eRet = SC_NAME_INPUT_CELL;
         else if ( aRangeUtil.MakeRangeFromName( rText, pDoc, nTab, aRange, RUTL_NAMES, eConv ) )
@@ -1657,6 +1657,10 @@ void ScPosWnd::DoEnter()
             ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
             if ( pViewSh )
             {
+                ScViewData* pViewData = pViewSh->GetViewData();
+                ScDocShell* pDocShell = pViewData->GetDocShell();
+                ScDocument* pDoc = pDocShell->GetDocument();
+
                 ScNameInputType eType = lcl_GetInputType( aText );
                 if ( eType == SC_NAME_INPUT_BAD_NAME || eType == SC_NAME_INPUT_BAD_SELECTION )
                 {
@@ -1665,9 +1669,6 @@ void ScPosWnd::DoEnter()
                 }
                 else if ( eType == SC_NAME_INPUT_DEFINE )
                 {
-                    ScViewData* pViewData = pViewSh->GetViewData();
-                    ScDocShell* pDocShell = pViewData->GetDocShell();
-                    ScDocument* pDoc = pDocShell->GetDocument();
                     ScRangeName* pNames = pDoc->GetRangeName();
                     ScRange aSelection;
                     if ( pNames && !pNames->findByName(aText) &&
@@ -1690,7 +1691,15 @@ void ScPosWnd::DoEnter()
                 }
                 else
                 {
-                    // for all selection types, excecute the SID_CURRENTCELL slot
+                    // for all selection types, excecute the SID_CURRENTCELL slot.
+                    if (eType == SC_NAME_INPUT_CELL || eType == SC_NAME_INPUT_RANGE)
+                    {
+                        // Note that SID_CURRENTCELL always expects address to
+                        // be in Calc A1 format.  Convert the text.
+                        ScRange aRange;
+                        aRange.ParseAny(aText, pDoc, pDoc->GetAddressConvention());
+                        aRange.Format(aText, SCR_ABS_3D, pDoc, ::formula::FormulaGrammar::CONV_OOO);
+                    }
 
                     SfxStringItem aPosItem( SID_CURRENTCELL, aText );
                     SfxBoolItem aUnmarkItem( FN_PARAM_1, sal_True );        // remove existing selection

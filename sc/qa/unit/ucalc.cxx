@@ -49,6 +49,8 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/oslfile2streamwrap.hxx>
+#include <i18npool/mslangid.hxx>
+#include <unotools/syslocaleoptions.hxx>
 
 #include <vcl/svapp.hxx>
 #include "scdll.hxx"
@@ -57,6 +59,7 @@
 #include "scmatrix.hxx"
 #include "drwlayer.hxx"
 #include "scitems.hxx"
+#include "reffind.hxx"
 
 #include "docsh.hxx"
 #include "funcdesc.hxx"
@@ -224,12 +227,14 @@ public:
 
     void testCollator();
     void testInput();
-    void testSUM();
+    void testCellFunctions();
     void testVolatileFunc();
+    void testFuncParam();
     void testNamedRange();
     void testCSV();
     void testMatrix();
     void testDataPilot();
+    void testDataPilotFilters();
     void testSheetCopy();
     void testExternalRef();
     void testDataArea();
@@ -252,15 +257,24 @@ public:
      */
     void testCVEs();
 
+    /**
+     * Test toggling relative/absolute flag of cell and cell range references.
+     * This corresponds with hitting Shift-F4 while the cursor is on a formula
+     * cell.
+     */
+    void testToggleRefFlag();
+
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
     CPPUNIT_TEST(testInput);
-    CPPUNIT_TEST(testSUM);
+    CPPUNIT_TEST(testCellFunctions);
     CPPUNIT_TEST(testVolatileFunc);
+    CPPUNIT_TEST(testFuncParam);
     CPPUNIT_TEST(testNamedRange);
     CPPUNIT_TEST(testCSV);
     CPPUNIT_TEST(testMatrix);
     CPPUNIT_TEST(testDataPilot);
+    CPPUNIT_TEST(testDataPilotFilters);
     CPPUNIT_TEST(testSheetCopy);
     CPPUNIT_TEST(testExternalRef);
     CPPUNIT_TEST(testDataArea);
@@ -270,6 +284,7 @@ public:
 #if 0 // Disable because in some cases this test breaks
     CPPUNIT_TEST(testCVEs);
 #endif
+    CPPUNIT_TEST(testToggleRefFlag);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -305,8 +320,19 @@ Test::Test()
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.FileContentProvider"))), uno::UNO_QUERY);
     xUcb->registerContentProvider(xFileProvider, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file")), sal_True);
 
-    InitVCL(xSM);
+    // force locale (and resource files loaded) to en-US
+    const LanguageType eLang=LANGUAGE_ENGLISH_US;
 
+    rtl::OUString aLang, aCountry;
+    MsLangId::convertLanguageToIsoNames(eLang, aLang, aCountry);
+    lang::Locale aLocale(aLang, aCountry, rtl::OUString());
+    ResMgr::SetDefaultLocale( aLocale );
+
+    SvtSysLocaleOptions aLocalOptions;
+    aLocalOptions.SetUILocaleConfigString(
+        MsLangId::convertLanguageToIsoString( eLang ) );
+
+    InitVCL(xSM);
     ScDLL::Init();
 
     oslProcessError err = osl_getProcessWorkingDir(&m_aPWDURL.pData);
@@ -364,11 +390,13 @@ void Test::testInput()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSUM()
+void Test::testCellFunctions()
 {
     rtl::OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("foo"));
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, aTabName));
+
+    // SUM
     double val = 1;
     m_pDoc->SetValue (0, 0, 0, val);
     m_pDoc->SetValue (0, 1, 0, val);
@@ -377,6 +405,23 @@ void Test::testSUM()
     double result;
     m_pDoc->GetValue (0, 2, 0, result);
     CPPUNIT_ASSERT_MESSAGE ("calculation failed", result == 2.0);
+
+    // PRODUCT
+    val = 1;
+    m_pDoc->SetValue(0, 0, 0, val);
+    val = 2;
+    m_pDoc->SetValue(0, 1, 0, val);
+    val = 3;
+    m_pDoc->SetValue(0, 2, 0, val);
+    m_pDoc->SetString(0, 3, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=PRODUCT(A1:A3)")));
+    m_pDoc->CalcAll();
+    m_pDoc->GetValue(0, 3, 0, result);
+    CPPUNIT_ASSERT_MESSAGE("Calculation of PRODUCT failed", result == 6.0);
+
+    m_pDoc->SetString(0, 4, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=PRODUCT({1;2;3})")));
+    m_pDoc->CalcAll();
+    m_pDoc->GetValue(0, 4, 0, result);
+    CPPUNIT_ASSERT_MESSAGE("Calculation of PRODUCT with inline array failed", result == 6.0);
 
     m_pDoc->DeleteTab(0);
 }
@@ -407,6 +452,29 @@ void Test::testVolatileFunc()
     double now2;
     m_pDoc->GetValue(0, 1, 0, now2);
     CPPUNIT_ASSERT_MESSAGE("Result should be the value of NOW() again.", (now2 - now1) >= 0.0);
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testFuncParam()
+{
+    rtl::OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("foo"));
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
+                            m_pDoc->InsertTab (0, aTabName));
+
+    // First, the normal case, with no missing parameters.
+    m_pDoc->SetString(0, 0, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=AVERAGE(1;2;3)")));
+    m_pDoc->CalcFormulaTree(false, true);
+    double val;
+    m_pDoc->GetValue(0, 0, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("incorrect result", val == 2);
+
+    // Now function with missing parameters.  Missing values should be treated
+    // as zeros.
+    m_pDoc->SetString(0, 0, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=AVERAGE(1;;;)")));
+    m_pDoc->CalcFormulaTree(false, true);
+    m_pDoc->GetValue(0, 0, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("incorrect result", val == 0.25);
 
     m_pDoc->DeleteTab(0);
 }
@@ -651,89 +719,66 @@ void Test::testMatrix()
     }
 }
 
-void Test::testDataPilot()
+namespace {
+
+template<int _Size>
+bool checkDPTableOutput(ScDocument* pDoc, const ScRange& aOutRange, const char* aOutputCheck[][_Size], const char* pCaption)
 {
-    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
-    m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Table")));
-
-    // Dimension definition
-    struct {
-        const char* pName; sheet::DataPilotFieldOrientation eOrient;
-    } aFields[] = {
-        { "Name",  sheet::DataPilotFieldOrientation_ROW },
-        { "Group", sheet::DataPilotFieldOrientation_COLUMN },
-        { "Score", sheet::DataPilotFieldOrientation_DATA }
-    };
-
-    // Raw data
-    struct {
-        const char* pName; const char* pGroup; int nScore;
-    } aData[] = {
-        { "Andy",    "A", 30 },
-        { "Bruce",   "A", 20 },
-        { "Charlie", "B", 45 },
-        { "David",   "B", 12 },
-        { "Edward",  "C",  8 },
-        { "Frank",   "C", 15 },
-    };
-
-    // Expected output table content.  0 = empty cell
-    const char* aOutputCheck[][5] = {
-        { "Sum - Score", "Group", 0, 0, 0 },
-        { "Name", "A", "B", "C", "Total Result" },
-        { "Andy", "30", 0, 0, "30" },
-        { "Bruce", "20", 0, 0, "20" },
-        { "Charlie", 0, "45", 0, "45" },
-        { "David", 0, "12", 0, "12" },
-        { "Edward", 0, 0, "8", "8" },
-        { "Frank", 0, 0, "15", "15" },
-        { "Total Result", "50", "57", "23", "130" }
-    };
-
-    sal_uInt32 nFieldCount = SAL_N_ELEMENTS(aFields);
-    sal_uInt32 nDataCount = SAL_N_ELEMENTS(aData);
-
-    // Insert field names in row 0.
-    for (sal_uInt32 i = 0; i < nFieldCount; ++i)
-        m_pDoc->SetString(static_cast<SCCOL>(i), 0, 0, OUString(aFields[i].pName, strlen(aFields[i].pName), RTL_TEXTENCODING_UTF8));
-
-    // Insert data into row 1 and downward.
-    for (sal_uInt32 i = 0; i < nDataCount; ++i)
+    const ScAddress& s = aOutRange.aStart;
+    const ScAddress& e = aOutRange.aEnd;
+    SheetPrinter printer(e.Row() - s.Row() + 1, e.Col() - s.Col() + 1);
+    SCROW nOutRowSize = e.Row() - s.Row() + 1;
+    SCCOL nOutColSize = e.Col() - s.Col() + 1;
+    for (SCROW nRow = 0; nRow < nOutRowSize; ++nRow)
     {
-        SCROW nRow = static_cast<SCROW>(i) + 1;
-        m_pDoc->SetString(0, nRow, 0, OUString(aData[i].pName, strlen(aData[i].pName), RTL_TEXTENCODING_UTF8));
-        m_pDoc->SetString(1, nRow, 0, OUString(aData[i].pGroup, strlen(aData[i].pGroup), RTL_TEXTENCODING_UTF8));
-        m_pDoc->SetValue(2, nRow, 0, aData[i].nScore);
-    }
-
-    SCROW nRow1 = 0, nRow2 = 0;
-    SCCOL nCol1 = 0, nCol2 = 0;
-    m_pDoc->GetDataArea(0, nCol1, nRow1, nCol2, nRow2, true, false);
-    CPPUNIT_ASSERT_MESSAGE("Data is expected to start from (col=0,row=0).", nCol1 == 0 && nRow1 == 0);
-    CPPUNIT_ASSERT_MESSAGE("Unexpected data range.",
-                           nCol2 == static_cast<SCCOL>(nFieldCount - 1) && nRow2 == static_cast<SCROW>(nDataCount));
-
-    SheetPrinter printer(nRow2 - nRow1 + 1, nCol2 - nCol1 + 1);
-    for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
-    {
-        for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+        for (SCCOL nCol = 0; nCol < nOutColSize; ++nCol)
         {
-            String aVal;
-            m_pDoc->GetString(nCol, nRow, 0, aVal);
+            OUString aVal;
+            pDoc->GetString(nCol + s.Col(), nRow + s.Row(), s.Tab(), aVal);
             printer.set(nRow, nCol, aVal);
+            const char* p = aOutputCheck[nRow][nCol];
+            if (p)
+            {
+                OUString aCheckVal = OUString::createFromAscii(p);
+                bool bEqual = aCheckVal.equals(aVal);
+                if (!bEqual)
+                {
+                    cerr << "Expected: " << aCheckVal << "  Actual: " << aVal << endl;
+                    return false;
+                }
+            }
+            else if (!aVal.isEmpty())
+            {
+                cerr << "Empty cell expected" << endl;
+                return false;
+            }
         }
     }
-    printer.print("Data sheet content");
-    printer.clear();
+    printer.print(pCaption);
+    return true;
+}
 
-    ScSheetSourceDesc aSheetDesc(m_pDoc);
-    aSheetDesc.SetSourceRange(ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0));
-    ScDPObject* pDPObj = new ScDPObject(m_pDoc);
+struct DPFieldDef
+{
+    const char* pName;
+    sheet::DataPilotFieldOrientation eOrient;
+};
+
+ScDPObject* createDPFromRange(
+    ScDocument* pDoc, const ScRange& rRange, DPFieldDef aFields[], size_t nFieldCount,
+    bool bFilterButton)
+{
+    SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();
+    SCCOL nCol1 = rRange.aStart.Col();
+
+    ScSheetSourceDesc aSheetDesc(pDoc);
+    aSheetDesc.SetSourceRange(rRange);
+    ScDPObject* pDPObj = new ScDPObject(pDoc);
     pDPObj->SetSheetDesc(aSheetDesc);
     pDPObj->SetOutRange(ScAddress(0, 0, 1));
     ScPivotParam aParam;
     pDPObj->FillOldParam(aParam);
-    for (sal_uInt32 i = 0; i < nFieldCount; ++i)
+    for (size_t i = 0; i < nFieldCount; ++i)
     {
         vector<ScDPLabelData::Member> aMembers;
         pDPObj->GetMembers(i, 0, aMembers);
@@ -745,7 +790,7 @@ void Test::testDataPilot()
     aSaveData.SetRepeatIfEmpty(false);
     aSaveData.SetColumnGrand(true);
     aSaveData.SetRowGrand(true);
-    aSaveData.SetFilterButton(false);
+    aSaveData.SetFilterButton(bFilterButton);
     aSaveData.SetDrillDown(true);
 
     // Check the sanity of the source range.
@@ -756,11 +801,11 @@ void Test::testDataPilot()
     CPPUNIT_ASSERT_MESSAGE("source range contains no data!", nRow2 - nRow1 > 1);
 
     // Set the dimension information.
-    for (sal_uInt32 i = 0; i < nFieldCount; ++i)
+    for (size_t i = 0; i < nFieldCount; ++i)
     {
         OUString aDimName(aFields[i].pName, strlen(aFields[i].pName), RTL_TEXTENCODING_UTF8);
         ScDPSaveDimension* pDim = aSaveData.GetDimensionByName(aDimName);
-        pDim->SetOrientation(aFields[i].eOrient);
+        pDim->SetOrientation(static_cast<sal_uInt16>(aFields[i].eOrient));
         pDim->SetUsedHierarchy(0);
         pDim->SetShowEmpty(true);
 
@@ -794,7 +839,7 @@ void Test::testDataPilot()
         {
             SCCOL nCol = nCol1 + static_cast<SCCOL>(i);
             String aVal;
-            m_pDoc->GetString(nCol, nRow, 0, aVal);
+            pDoc->GetString(nCol, nRow, 0, aVal);
             // This call is just to populate the member list for each dimension.
             ScDPSaveMember* pMem = pDim->GetMemberByName(aVal);
             pMem->SetShowDetails(true);
@@ -809,12 +854,81 @@ void Test::testDataPilot()
 
     pDPObj->SetSaveData(aSaveData);
     pDPObj->SetAlive(true);
+    pDPObj->InvalidateData();
+
+    return pDPObj;
+}
+
+}
+
+void Test::testDataPilot()
+{
+    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
+    m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Table")));
+
+    // Dimension definition
+    DPFieldDef aFields[] = {
+        { "Name",  sheet::DataPilotFieldOrientation_ROW },
+        { "Group", sheet::DataPilotFieldOrientation_COLUMN },
+        { "Score", sheet::DataPilotFieldOrientation_DATA }
+    };
+
+    // Raw data
+    struct {
+        const char* pName; const char* pGroup; int nScore;
+    } aData[] = {
+        { "Andy",    "A", 30 },
+        { "Bruce",   "A", 20 },
+        { "Charlie", "B", 45 },
+        { "David",   "B", 12 },
+        { "Edward",  "C",  8 },
+        { "Frank",   "C", 15 },
+    };
+
+    size_t nFieldCount = SAL_N_ELEMENTS(aFields);
+    size_t nDataCount = SAL_N_ELEMENTS(aData);
+
+    // Insert field names in row 0.
+    for (size_t i = 0; i < nFieldCount; ++i)
+        m_pDoc->SetString(static_cast<SCCOL>(i), 0, 0, OUString(aFields[i].pName, strlen(aFields[i].pName), RTL_TEXTENCODING_UTF8));
+
+    // Insert data into row 1 and downward.
+    for (size_t i = 0; i < nDataCount; ++i)
+    {
+        SCROW nRow = static_cast<SCROW>(i) + 1;
+        m_pDoc->SetString(0, nRow, 0, OUString(aData[i].pName, strlen(aData[i].pName), RTL_TEXTENCODING_UTF8));
+        m_pDoc->SetString(1, nRow, 0, OUString(aData[i].pGroup, strlen(aData[i].pGroup), RTL_TEXTENCODING_UTF8));
+        m_pDoc->SetValue(2, nRow, 0, aData[i].nScore);
+    }
+
+    SCROW nRow1 = 0, nRow2 = 0;
+    SCCOL nCol1 = 0, nCol2 = 0;
+    m_pDoc->GetDataArea(0, nCol1, nRow1, nCol2, nRow2, true, false);
+    CPPUNIT_ASSERT_MESSAGE("Data is expected to start from (col=0,row=0).", nCol1 == 0 && nRow1 == 0);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected data range.",
+                           nCol2 == static_cast<SCCOL>(nFieldCount - 1) && nRow2 == static_cast<SCROW>(nDataCount));
+
+    SheetPrinter printer(nRow2 - nRow1 + 1, nCol2 - nCol1 + 1);
+    for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
+    {
+        for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+        {
+            String aVal;
+            m_pDoc->GetString(nCol, nRow, 0, aVal);
+            printer.set(nRow, nCol, aVal);
+        }
+    }
+    printer.print("Data sheet content");
+    printer.clear();
+
+    ScDPObject* pDPObj = createDPFromRange(
+        m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), aFields, nFieldCount, false);
+
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     bool bSuccess = pDPs->InsertNewTable(pDPObj);
     CPPUNIT_ASSERT_MESSAGE("failed to insert a new datapilot object into document", bSuccess);
     CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
                            pDPs->GetCount() == 1);
-    pDPObj->InvalidateData();
     pDPObj->SetName(pDPs->CreateNewName());
 
     bool bOverFlow = false;
@@ -823,41 +937,261 @@ void Test::testDataPilot()
 
     pDPObj->Output(aOutRange.aStart);
     aOutRange = pDPObj->GetOutRange();
-    const ScAddress& s = aOutRange.aStart;
-    const ScAddress& e = aOutRange.aEnd;
-    printer.resize(e.Row() - s.Row() + 1, e.Col() - s.Col() + 1);
-    SCROW nOutRowSize = SAL_N_ELEMENTS(aOutputCheck);
-    SCCOL nOutColSize = SAL_N_ELEMENTS(aOutputCheck[0]);
-    CPPUNIT_ASSERT_MESSAGE("Row size of the table output is not as expected.",
-                           nOutRowSize == (e.Row()-s.Row()+1));
-    CPPUNIT_ASSERT_MESSAGE("Column size of the table output is not as expected.",
-                           nOutColSize == (e.Col()-s.Col()+1));
-    for (SCROW nRow = 0; nRow < nOutRowSize; ++nRow)
     {
-        for (SCCOL nCol = 0; nCol < nOutColSize; ++nCol)
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][5] = {
+            { "Sum - Score", "Group", 0, 0, 0 },
+            { "Name", "A", "B", "C", "Total Result" },
+            { "Andy", "30", 0, 0, "30" },
+            { "Bruce", "20", 0, 0, "20" },
+            { "Charlie", 0, "45", 0, "45" },
+            { "David", 0, "12", 0, "12" },
+            { "Edward", 0, 0, "8", "8" },
+            { "Frank", 0, 0, "15", "15" },
+            { "Total Result", "50", "57", "23", "130" }
+        };
+
+        bSuccess = checkDPTableOutput<5>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    // Update the cell values.
+    double aData2[] = { 100, 200, 300, 400, 500, 600 };
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aData2); ++i)
+    {
+        SCROW nRow = i + 1;
+        m_pDoc->SetValue(2, nRow, 0, aData2[i]);
+    }
+
+    printer.resize(nRow2 - nRow1 + 1, nCol2 - nCol1 + 1);
+    for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
+    {
+        for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
         {
             String aVal;
-            m_pDoc->GetString(nCol + s.Col(), nRow + s.Row(), s.Tab(), aVal);
+            m_pDoc->GetString(nCol, nRow, 0, aVal);
             printer.set(nRow, nCol, aVal);
-            const char* p = aOutputCheck[nRow][nCol];
-            if (p)
-            {
-                OUString aCheckVal = OUString::createFromAscii(p);
-                bool bEqual = aCheckVal.equals(aVal);
-                if (!bEqual)
-                {
-                    cerr << "Expected: " << aCheckVal << "  Actual: " << aVal << endl;
-//                    CPPUNIT_ASSERT_MESSAGE("Unexpected cell content.", false);
-                }
-            }
-            else
-                CPPUNIT_ASSERT_MESSAGE("Empty cell expected.", aVal.Len() == 0);
         }
     }
-    printer.print("DataPilot table output");
+    printer.print("Data sheet content (modified)");
     printer.clear();
 
-    // Now, delete the datapilot object.
+    // Now, create a copy of the datapilot object for the updated table, but
+    // don't clear the cache which should force the copy to use the old data
+    // from the cache.
+    ScDPObject* pDPObj2 = new ScDPObject(*pDPObj);
+    pDPs->FreeTable(pDPObj);
+    pDPs->InsertNewTable(pDPObj2);
+
+    aOutRange = pDPObj2->GetOutRange();
+    pDPObj2->ClearSource();
+    pDPObj2->Output(aOutRange.aStart);
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][5] = {
+            { "Sum - Score", "Group", 0, 0, 0 },
+            { "Name", "A", "B", "C", "Total Result" },
+            { "Andy", "30", 0, 0, "30" },
+            { "Bruce", "20", 0, 0, "20" },
+            { "Charlie", 0, "45", 0, "45" },
+            { "David", 0, "12", 0, "12" },
+            { "Edward", 0, 0, "8", "8" },
+            { "Frank", 0, 0, "15", "15" },
+            { "Total Result", "50", "57", "23", "130" }
+        };
+
+        bSuccess = checkDPTableOutput<5>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (from old cache)");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    // This time clear the cache to refresh the data from the source range.
+    CPPUNIT_ASSERT_MESSAGE("This datapilot should be based on sheet data.", pDPObj2->IsSheetData());
+    ScDPCollection::SheetCaches& rCaches = pDPs->GetSheetCaches();
+    const ScSheetSourceDesc* pDesc = pDPObj2->GetSheetDesc();
+    rCaches.removeCache(pDesc->GetSourceRange());
+    pDPObj2->ClearSource();
+    pDPObj2->Output(aOutRange.aStart);
+
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][5] = {
+            { "Sum - Score", "Group", 0, 0, 0 },
+            { "Name", "A", "B", "C", "Total Result" },
+            { "Andy", "100", 0, 0, "100" },
+            { "Bruce", "200", 0, 0, "200" },
+            { "Charlie", 0, "300", 0, "300" },
+            { "David", 0, "400", 0, "400" },
+            { "Edward", 0, 0, "500", "500" },
+            { "Frank", 0, 0, "600", "600" },
+            { "Total Result", "300", "700", "1100", "2100" }
+        };
+
+        bSuccess = checkDPTableOutput<5>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (refreshed)");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    pDPs->FreeTable(pDPObj2);
+    CPPUNIT_ASSERT_MESSAGE("There shouldn't be any data pilot table stored with the document.",
+                           pDPs->GetCount() == 0);
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testDataPilotFilters()
+{
+    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
+    m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Table")));
+
+    // Dimension definition
+    DPFieldDef aFields[] = {
+        { "Name",   sheet::DataPilotFieldOrientation_HIDDEN },
+        { "Group1", sheet::DataPilotFieldOrientation_HIDDEN },
+        { "Group2", sheet::DataPilotFieldOrientation_PAGE },
+        { "Val1",   sheet::DataPilotFieldOrientation_DATA },
+        { "Val2",   sheet::DataPilotFieldOrientation_DATA }
+    };
+
+    // Raw data
+    const char* aData[][5] = {
+        { "A", "1", "A", "1", "10" },
+        { "B", "1", "A", "1", "10" },
+        { "C", "1", "B", "1", "10" },
+        { "D", "1", "B", "1", "10" },
+        { "E", "2", "A", "1", "10" },
+        { "F", "2", "A", "1", "10" },
+        { "G", "2", "B", "1", "10" },
+        { "H", "2", "B", "1", "10" }
+    };
+
+    size_t nFieldCount = SAL_N_ELEMENTS(aFields);
+    size_t nDataCount = SAL_N_ELEMENTS(aData);
+
+    // Insert field names in row 0.
+    for (size_t i = 0; i < nFieldCount; ++i)
+        m_pDoc->SetString(static_cast<SCCOL>(i), 0, 0, OUString(aFields[i].pName, strlen(aFields[i].pName), RTL_TEXTENCODING_UTF8));
+
+    // Insert data into row 1 and downward.
+    for (size_t i = 0; i < nDataCount; ++i)
+    {
+        SCROW nRow = static_cast<SCROW>(i) + 1;
+        for (size_t j = 0; j < nFieldCount; ++j)
+        {
+            SCCOL nCol = static_cast<SCCOL>(j);
+            m_pDoc->SetString(
+                nCol, nRow, 0, OUString(aData[i][j], strlen(aData[i][j]), RTL_TEXTENCODING_UTF8));
+        }
+    }
+
+    SCROW nRow1 = 0, nRow2 = 0;
+    SCCOL nCol1 = 0, nCol2 = 0;
+    m_pDoc->GetDataArea(0, nCol1, nRow1, nCol2, nRow2, true, false);
+    CPPUNIT_ASSERT_MESSAGE("Data is expected to start from (col=0,row=0).", nCol1 == 0 && nRow1 == 0);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected data range.",
+                           nCol2 == static_cast<SCCOL>(nFieldCount - 1) && nRow2 == static_cast<SCROW>(nDataCount));
+
+    SheetPrinter printer(nRow2 - nRow1 + 1, nCol2 - nCol1 + 1);
+    for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
+    {
+        for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+        {
+            String aVal;
+            m_pDoc->GetString(nCol, nRow, 0, aVal);
+            printer.set(nRow, nCol, aVal);
+        }
+    }
+    printer.print("Data sheet content");
+    printer.clear();
+
+    ScDPObject* pDPObj = createDPFromRange(
+        m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), aFields, nFieldCount, true);
+
+    ScDPCollection* pDPs = m_pDoc->GetDPCollection();
+    bool bSuccess = pDPs->InsertNewTable(pDPObj);
+    CPPUNIT_ASSERT_MESSAGE("failed to insert a new datapilot object into document", bSuccess);
+    CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
+                           pDPs->GetCount() == 1);
+    pDPObj->SetName(pDPs->CreateNewName());
+
+    bool bOverFlow = false;
+    ScRange aOutRange = pDPObj->GetNewOutputRange(bOverFlow);
+    CPPUNIT_ASSERT_MESSAGE("Table overflow!?", !bOverFlow);
+
+    pDPObj->Output(aOutRange.aStart);
+    aOutRange = pDPObj->GetOutRange();
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][2] = {
+            { "Filter", 0 },
+            { "Group2", "- all -" },
+            { 0, 0 },
+            { "Data", 0 },
+            { "Sum - Val1", "8" },
+            { "Sum - Val2", "80" },
+            { "Total Sum - Val1", "8" },
+            { "Total Sum - Val2", "80" }
+        };
+
+        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (unfiltered)");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    // Set current page of 'Group2' to 'A'.
+    ScDPSaveData aSaveData(*pDPObj->GetSaveData());
+    ScDPSaveDimension* pDim = aSaveData.GetDimensionByName(
+        OUString(RTL_CONSTASCII_USTRINGPARAM("Group2")));
+    CPPUNIT_ASSERT_MESSAGE("Dimension not found", pDim);
+    OUString aPage(RTL_CONSTASCII_USTRINGPARAM("A"));
+    pDim->SetCurrentPage(&aPage);
+    pDPObj->SetSaveData(aSaveData);
+    pDPObj->Output(aOutRange.aStart);
+    aOutRange = pDPObj->GetOutRange();
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][2] = {
+            { "Filter", 0 },
+            { "Group2", "A" },
+            { 0, 0 },
+            { "Data", 0 },
+            { "Sum - Val1", "4" },
+            { "Sum - Val2", "40" },
+            { "Total Sum - Val1", "4" },
+            { "Total Sum - Val2", "40" }
+        };
+
+        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (filtered by page)");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    // Set query filter.
+    ScSheetSourceDesc aDesc(*pDPObj->GetSheetDesc());
+    ScQueryParam aQueryParam(aDesc.GetQueryParam());
+    CPPUNIT_ASSERT_MESSAGE("There should be at least one query entry.", aQueryParam.GetEntryCount() > 0);
+    ScQueryEntry& rEntry = aQueryParam.GetEntry(0);
+    rEntry.bDoQuery = true;
+    rEntry.nField = 1;  // Group1
+    rEntry.nVal = 1;
+    aDesc.SetQueryParam(aQueryParam);
+    pDPObj->SetSheetDesc(aDesc);
+    pDPObj->Output(aOutRange.aStart);
+    aOutRange = pDPObj->GetOutRange();
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][2] = {
+            { "Filter", 0 },
+            { "Group2", "A" },
+            { 0, 0 },
+            { "Data", 0 },
+            { "Sum - Val1", "2" },
+            { "Sum - Val2", "20" },
+            { "Total Sum - Val1", "2" },
+            { "Total Sum - Val2", "20" }
+        };
+
+        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (filtered by query)");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
     pDPs->FreeTable(pDPObj);
     CPPUNIT_ASSERT_MESSAGE("There shouldn't be any data pilot table stored with the document.",
                            pDPs->GetCount() == 0);
@@ -1629,6 +1963,83 @@ void Test::testGraphicsInGroup()
         (rNewRect.nBottom - rNewRect.nTop) <= 1);
     m_pDoc->ShowRows(0, 100, 0, true);
     CPPUNIT_ASSERT_MESSAGE("Should not change when page anchored", aOrigRect == rNewRect);
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testToggleRefFlag()
+{
+    // In this test, there is no need to insert formula string into a cell in
+    // the document, as ScRefFinder does not depend on the content of the
+    // document except for the sheet names.
+
+    OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("Test"));
+    m_pDoc->InsertTab(0, aTabName);
+
+    {
+        // Calc A1: basic 2D reference
+
+        OUString aFormula(RTL_CONSTASCII_USTRINGPARAM("=B100"));
+        ScAddress aPos(1, 5, 0);
+        ScRefFinder aFinder(aFormula, aPos, m_pDoc, formula::FormulaGrammar::CONV_OOO);
+
+        // Original
+        CPPUNIT_ASSERT_MESSAGE("Does not equal the original text.", aFormula.equals(aFinder.GetText()));
+
+        // column relative / row relative -> column absolute / row absolute
+        aFinder.ToggleRel(0, aFormula.getLength());
+        aFormula = aFinder.GetText();
+        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAscii("=$B$100"));
+
+        // column absolute / row absolute -> column relative / row absolute
+        aFinder.ToggleRel(0, aFormula.getLength());
+        aFormula = aFinder.GetText();
+        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAscii("=B$100"));
+
+        // column relative / row absolute -> column absolute / row relative
+        aFinder.ToggleRel(0, aFormula.getLength());
+        aFormula = aFinder.GetText();
+        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAscii("=$B100"));
+
+        // column absolute / row relative -> column relative / row relative
+        aFinder.ToggleRel(0, aFormula.getLength());
+        aFormula = aFinder.GetText();
+        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAscii("=B100"));
+    }
+
+    {
+        // Excel R1C1: basic 2D reference
+
+        OUString aFormula(RTL_CONSTASCII_USTRINGPARAM("=R2C1"));
+        ScAddress aPos(3, 5, 0);
+        ScRefFinder aFinder(aFormula, aPos, m_pDoc, formula::FormulaGrammar::CONV_XL_R1C1);
+
+        // Original
+        CPPUNIT_ASSERT_MESSAGE("Does not equal the original text.", aFormula.equals(aFinder.GetText()));
+
+        // column absolute / row absolute -> column relative / row absolute
+        aFinder.ToggleRel(0, aFormula.getLength());
+        aFormula = aFinder.GetText();
+        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAscii("=R2C[-3]"));
+
+        // column relative / row absolute - > column absolute / row relative
+        aFinder.ToggleRel(0, aFormula.getLength());
+        aFormula = aFinder.GetText();
+        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAscii("=R[-4]C1"));
+
+        // column absolute / row relative -> column relative / row relative
+        aFinder.ToggleRel(0, aFormula.getLength());
+        aFormula = aFinder.GetText();
+        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAscii("=R[-4]C[-3]"));
+
+        // column relative / row relative -> column absolute / row absolute
+        aFinder.ToggleRel(0, aFormula.getLength());
+        aFormula = aFinder.GetText();
+        CPPUNIT_ASSERT_MESSAGE("Wrong conversion.", aFormula.equalsAscii("=R2C1"));
+    }
+
+    // TODO: Add more test cases esp. for 3D references, Excel A1 syntax, and
+    // partial selection within formula string.
 
     m_pDoc->DeleteTab(0);
 }

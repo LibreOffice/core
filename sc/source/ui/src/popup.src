@@ -44,7 +44,7 @@ Menu RID_POPUP_CELLS
         {
             Identifier = SID_CELL_FORMAT_RESET ;
             HelpId = CMD_SID_CELL_FORMAT_RESET ;
-            Text [ en-US ] = "~Clear Direct Formatting" ;
+            Text [ en-US ] = "Clear ~Direct Formatting" ;
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };

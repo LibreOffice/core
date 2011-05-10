@@ -296,42 +296,71 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
                     pTab[i]->PutCell( j, k, aRefCell.CloneWithoutNote( *this, ScAddress( j, k, i ), SC_CLONECELL_STARTLISTENING ) );
 }
 
+namespace {
+
+bool setCacheTableReferenced(ScToken& rToken, ScExternalRefManager& rRefMgr)
+{
+    switch (rToken.GetType())
+    {
+        case svExternalSingleRef:
+            return rRefMgr.setCacheTableReferenced(
+                rToken.GetIndex(), rToken.GetString(), 1);
+        case svExternalDoubleRef:
+        {
+            const ScComplexRefData& rRef = rToken.GetDoubleRef();
+            size_t nSheets = rRef.Ref2.nTab - rRef.Ref1.nTab + 1;
+            return rRefMgr.setCacheTableReferenced(
+                    rToken.GetIndex(), rToken.GetString(), nSheets);
+        }
+        case svExternalName:
+            /* TODO: external names aren't supported yet, but would
+             * have to be marked as well, if so. Mechanism would be
+             * different. */
+            DBG_ERRORFILE("ScDocument::MarkUsedExternalReferences: implement the svExternalName case!");
+        default:
+            ;
+    }
+    return false;
+}
+
+}
+
 bool ScDocument::MarkUsedExternalReferences( ScTokenArray & rArr )
 {
+    if (!rArr.GetLen())
+        return false;
+
+    ScExternalRefManager* pRefMgr = NULL;
+    rArr.Reset();
+    ScToken* t = NULL;
     bool bAllMarked = false;
-    if (rArr.GetLen())
+    while (!bAllMarked && (t = static_cast<ScToken*>(rArr.GetNextReferenceOrName())) != NULL)
     {
-        ScExternalRefManager* pRefMgr = NULL;
-        rArr.Reset();
-        ScToken* t;
-        while (!bAllMarked && (t = static_cast<ScToken*>(rArr.GetNextReferenceOrName())) != NULL)
+        if (t->IsExternalRef())
         {
-            if (t->IsExternalRef())
+            if (!pRefMgr)
+                pRefMgr = GetExternalRefManager();
+
+            bAllMarked = setCacheTableReferenced(*t, *pRefMgr);
+        }
+        else if (t->GetType() == svIndex)
+        {
+            // this is a named range.  Check if the range contains an external
+            // reference.
+            ScRangeData* pRangeData = GetRangeName()->findByIndex(t->GetIndex());
+            if (!pRangeData)
+                continue;
+
+            ScTokenArray* pArray = pRangeData->GetCode();
+            for (t = static_cast<ScToken*>(pArray->First()); t; t = static_cast<ScToken*>(pArray->Next()))
             {
+                if (!t->IsExternalRef())
+                    continue;
+
                 if (!pRefMgr)
                     pRefMgr = GetExternalRefManager();
-                switch (t->GetType())
-                {
-                    case svExternalSingleRef:
-                        bAllMarked = pRefMgr->setCacheTableReferenced(
-                                t->GetIndex(), t->GetString(), 1);
-                        break;
-                    case svExternalDoubleRef:
-                        {
-                            const ScComplexRefData& rRef = t->GetDoubleRef();
-                            size_t nSheets = rRef.Ref2.nTab - rRef.Ref1.nTab + 1;
-                            bAllMarked = pRefMgr->setCacheTableReferenced(
-                                    t->GetIndex(), t->GetString(), nSheets);
-                        }
-                        break;
-                    case svExternalName:
-                        /* TODO: external names aren't supported yet, but would
-                         * have to be marked as well, if so. Mechanism would be
-                         * different. */
-                        DBG_ERRORFILE("ScDocument::MarkUsedExternalReferences: implement the svExternalName case!");
-                        break;
-                    default: break;
-                }
+
+                bAllMarked = setCacheTableReferenced(*t, *pRefMgr);
             }
         }
     }

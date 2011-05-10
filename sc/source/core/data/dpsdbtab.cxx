@@ -33,23 +33,6 @@
 
 // INCLUDE --------------------------------------------------------------
 
-#include <tools/debug.hxx>
-#include <vcl/msgbox.hxx>
-#include <svl/zforlist.hxx>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/types.hxx>
-
-#include <com/sun/star/sheet/DataImportMode.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/sdb/CommandType.hpp>
-#include <com/sun/star/sdb/XCompletedExecution.hpp>
-#include <com/sun/star/sdbc/DataType.hpp>
-#include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/sdbc/XRowSet.hpp>
-#include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
-
 #include "dpsdbtab.hxx"
 #include "collect.hxx"
 #include "global.hxx"
@@ -59,100 +42,41 @@
 #include "document.hxx"
 #include "dpobject.hxx"
 
+#include <com/sun/star/sheet/DataImportMode.hpp>
+#include <com/sun/star/sdb/CommandType.hpp>
+
 using namespace com::sun::star;
 
 using ::std::vector;
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::UNO_QUERY;
 
-#define SC_SERVICE_ROWSET           "com.sun.star.sdb.RowSet"
-#define SC_SERVICE_INTHANDLER       "com.sun.star.task.InteractionHandler"
-
-//! move to a header file?
-#define SC_DBPROP_DATASOURCENAME    "DataSourceName"
-#define SC_DBPROP_COMMAND           "Command"
-#define SC_DBPROP_COMMANDTYPE       "CommandType"
-
-ScDPCache* ScImportSourceDesc::CreateCache() const
+sal_Int32 ScImportSourceDesc::GetCommandType() const
 {
-    if (!mpDoc)
-        return NULL;
-
     sal_Int32 nSdbType = -1;
 
     switch ( nType )
     {
-    case sheet::DataImportMode_SQL:        nSdbType = sdb::CommandType::COMMAND;  break;
-    case sheet::DataImportMode_TABLE:   nSdbType = sdb::CommandType::TABLE;      break;
-    case sheet::DataImportMode_QUERY:  nSdbType = sdb::CommandType::QUERY;     break;
-    default:
+        case sheet::DataImportMode_SQL:   nSdbType = sdb::CommandType::COMMAND; break;
+        case sheet::DataImportMode_TABLE: nSdbType = sdb::CommandType::TABLE;   break;
+        case sheet::DataImportMode_QUERY: nSdbType = sdb::CommandType::QUERY;   break;
+        default:
+            ;
+    }
+    return nSdbType;
+}
+
+const ScDPCache* ScImportSourceDesc::CreateCache() const
+{
+    if (!mpDoc)
         return NULL;
-    }
 
-    ScDPCache* pCache = new ScDPCache(mpDoc);
+    sal_Int32 nSdbType = GetCommandType();
+    if (nSdbType < 0)
+        return NULL;
 
-    uno::Reference<sdbc::XRowSet> xRowSet ;
-    try
-    {
-        xRowSet = uno::Reference<sdbc::XRowSet>(
-            comphelper::getProcessServiceFactory()->createInstance(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_SERVICE_ROWSET )) ),
-            uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySet> xRowProp( xRowSet, uno::UNO_QUERY );
-        DBG_ASSERT( xRowProp.is(), "can't get RowSet" );
-        if ( xRowProp.is() )
-        {
-            //
-            //  set source parameters
-            //
-            uno::Any aAny;
-            aAny <<= rtl::OUString( aDBName );
-            xRowProp->setPropertyValue(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_DATASOURCENAME)), aAny );
-
-            aAny <<= rtl::OUString( aObject );
-            xRowProp->setPropertyValue(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_COMMAND)), aAny );
-
-            aAny <<= nSdbType;
-            xRowProp->setPropertyValue(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_COMMANDTYPE)), aAny );
-
-            uno::Reference<sdb::XCompletedExecution> xExecute( xRowSet, uno::UNO_QUERY );
-            if ( xExecute.is() )
-            {
-                uno::Reference<task::XInteractionHandler> xHandler(
-                    comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_SERVICE_INTHANDLER )) ),
-                    uno::UNO_QUERY);
-                xExecute->executeWithCompletion( xHandler );
-            }
-            else
-                xRowSet->execute();
-            SvNumberFormatter aFormat(mpDoc->GetServiceManager(), ScGlobal::eLnge);
-            pCache->InitFromDataBase( xRowSet, *aFormat.GetNullDate() );
-        }
-    }
-    catch ( sdbc::SQLException& rError )
-    {
-        //! store error message
-        delete pCache;
-        pCache = NULL;
-        InfoBox aInfoBox( 0, String(rError.Message) );
-        aInfoBox.Execute();
-    }
-    catch ( uno::Exception& )
-    {
-        delete pCache;
-        pCache = NULL;
-        OSL_FAIL("Unexpected exception in database");
-    }
-
-
-    ::comphelper::disposeComponent( xRowSet );
-     return pCache;
+    ScDPCollection::DBCaches& rCaches = mpDoc->GetDPCollection()->GetDBCaches();
+    return rCaches.getCache(nSdbType, aDBName, aObject);
 }
 
 ScDatabaseDPData::ScDatabaseDPData(ScDocument* pDoc, const ScImportSourceDesc& rImport) :

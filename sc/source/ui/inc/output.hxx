@@ -116,11 +116,14 @@ private:
 
         explicit DrawEditParam(const ScPatternAttr* pPattern, const SfxItemSet* pCondSet, bool bCellIsValue);
 
+        bool readCellContent(ScDocument* pDoc, bool bShowNullValues, bool bShowFormulas, bool bSyntaxMode, bool bUseStyleColor, bool bForceAutoColor, bool& rWrapFields);
+        void setPatternToEngine(bool bUseStyleColor);
         void calcMargins(long& rTop, long& rLeft, long& rBottom, long& rRight, double nPPTX, double nPPTY) const;
         void calcPaperSize(Size& rPaperSize, const Rectangle& rAlignRect, double nPPTX, double nPPTY) const;
         void getEngineSize(ScFieldEditEngine* pEngine, long& rWidth, long& rHeight) const;
         long getEngineWidth(ScFieldEditEngine* pEngine) const;
         bool hasLineBreak() const;
+        bool isHyperlinkCell() const;
 
         /**
          * When the text is vertically oriented, the text is either rotated 90
@@ -129,8 +132,20 @@ private:
          */
         bool isVerticallyOriented() const;
 
-        void setAlignmentItems(ScFieldEditEngine* pEngine, ScBaseCell* pCell);
+        /**
+         * Calculate offset position for vertically oriented (either
+         * top-bottom or bottom-top orientation) text.
+         *
+         * @param rLogicStart initial position in pixels.  When the call is
+         *                    finished, this parameter will store the new
+         *                    position.
+         */
+        void calcStartPosForVertical(Point& rLogicStart, long nCellWidth, long nEngineWidth, long nTopM, OutputDevice* pRefDevice);
+
+        void setAlignmentToEngine();
         bool adjustHorAlignment(ScFieldEditEngine* pEngine);
+        void adjustForRTL();
+        void adjustForHyperlinkInPDF(Point aURLStart, OutputDevice* pDev);
     };
 
     OutputDevice* pDev;         // Device
@@ -236,6 +251,10 @@ private:
     drawinglayer::processor2d::BaseProcessor2D*  CreateProcessor2D( );
 
     void DrawEditStandard(DrawEditParam& rParam);
+    void DrawEditBottomTop(DrawEditParam& rParam);
+    void DrawEditTopBottom(DrawEditParam& rParam);
+    void DrawEditStacked(DrawEditParam& rParam);
+    void DrawEditAsianVertical(DrawEditParam& rParam);
 
 public:
                     ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,

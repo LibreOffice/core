@@ -183,6 +183,8 @@ ScaleTabPage::ScaleTabPage(Window* pWindow,const SfxItemSet& rInAttrs) :
     aFmtFldMax.SetModifyHdl(LINK(this, ScaleTabPage, FmtFieldModifiedHdl));
     aFmtFldStepMain.SetModifyHdl(LINK(this, ScaleTabPage, FmtFieldModifiedHdl));
     aFmtFldOrigin.SetModifyHdl(LINK(this, ScaleTabPage, FmtFieldModifiedHdl));
+
+    HideAllControls();
 }
 
 IMPL_LINK( ScaleTabPage, FmtFieldModifiedHdl, FormattedField*, pFmtFied )
@@ -782,6 +784,49 @@ bool ScaleTabPage::ShowWarning( sal_uInt16 nResIdMessage, Control* pControl /* =
             pEdit->SetSelection( Selection( 0, SELECTION_MAX ));
     }
     return true;
+}
+
+void ScaleTabPage::HideAllControls()
+{
+    // We need to set these controls invisible when the class is instantiated
+    // since some code in EnableControls() depends on that logic. The real
+    // visibility of these controls depend on axis data type, and are
+    // set in EnableControls().
+
+    m_aTxt_AxisType.Hide();
+    m_aLB_AxisType.Hide();
+
+    aCbxLogarithm.Hide();
+    aTxtMin.Hide();
+    aFmtFldMin.Hide();
+    aCbxAutoMin.Hide();
+    aTxtMax.Hide();
+    aFmtFldMax.Hide();
+    aCbxAutoMax.Hide();
+    aTxtMain.Hide();
+    aFmtFldStepMain.Hide();
+    aCbxAutoStepMain.Hide();
+    aTxtHelp.Hide();
+    aTxtHelpCount.Hide();
+    aMtStepHelp.Hide();
+    aCbxAutoStepHelp.Hide();
+
+    aTxtOrigin.Hide();
+    aFmtFldOrigin.Hide();
+    aCbxAutoOrigin.Hide();
+
+    aTxtHelpCount.Hide();
+    aTxtHelp.Hide();
+
+    m_aTxt_TimeResolution.Hide();
+    m_aLB_TimeResolution.Hide();
+    m_aCbx_AutoTimeResolution.Hide();
+
+    aFmtFldStepMain.Hide();
+    m_aMt_MainDateStep.Hide();
+
+    m_aLB_MainTimeUnit.Hide();
+    m_aLB_HelpTimeUnit.Hide();
 }
 
 //.............................................................................

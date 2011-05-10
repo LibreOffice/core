@@ -39,6 +39,13 @@
 #include "token.hxx"
 #include "tokenarray.hxx"
 
+#include <com/sun/star/script/vba/VBAEventId.hpp>
+#include <com/sun/star/script/vba/XVBACompatibility.hpp>
+#include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
+#include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
+#include <com/sun/star/script/ModuleInfo.hpp>
+#include <com/sun/star/script/ModuleType.hpp>
+
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
@@ -455,6 +462,86 @@ getUnoSheetModuleObj( const uno::Reference< frame::XModel >& xModel, SCTAB nTab 
     uno::Reference< container::XIndexAccess > xSheets( xDoc->getSheets(), uno::UNO_QUERY_THROW );
     uno::Reference< sheet::XSpreadsheet > xSheet( xSheets->getByIndex( nTab ), uno::UNO_QUERY_THROW );
     return getUnoSheetModuleObj( xSheet );
+}
+
+void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& xDoc )
+{
+    uno::Reference< frame::XModel > xModel( xDoc, uno::UNO_QUERY );
+    ScDocShell* pShell = excel::getDocShell( xModel );
+    if ( pShell )
+    {
+        String aPrjName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
+        pShell->GetBasicManager()->SetName( aPrjName );
+
+        /*  Set library container to VBA compatibility mode. This will create
+            the VBA Globals object and store it in the Basic manager of the
+            document. */
+        uno::Reference<script::XLibraryContainer> xLibContainer = pShell->GetBasicContainer();
+        uno::Reference<script::vba::XVBACompatibility> xVBACompat( xLibContainer, uno::UNO_QUERY_THROW );
+        xVBACompat->setVBACompatibilityMode( sal_True );
+
+        if( xLibContainer.is() )
+        {
+            if( !xLibContainer->hasByName( aPrjName ) )
+                xLibContainer->createLibrary( aPrjName );
+            uno::Any aLibAny = xLibContainer->getByName( aPrjName );
+            uno::Reference< container::XNameContainer > xLib;
+            aLibAny >>= xLib;
+            if( xLib.is()  )
+            {
+                uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY_THROW );
+                uno::Reference< lang::XMultiServiceFactory> xSF( pShell->GetModel(), uno::UNO_QUERY_THROW);
+                uno::Reference< container::XNameAccess > xVBACodeNamedObjectAccess( xSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAObjectModuleObjectProvider"))), uno::UNO_QUERY_THROW );
+                // set up the module info for the workbook and sheets in the nealy created
+                // spreadsheet
+                ScDocument* pDoc = pShell->GetDocument();
+                String sCodeName = pDoc->GetCodeName();
+                if ( sCodeName.Len() == 0 )
+                {
+                    sCodeName = String( RTL_CONSTASCII_USTRINGPARAM("ThisWorkbook") );
+                    pDoc->SetCodeName( sCodeName );
+                }
+
+                std::vector< rtl::OUString > sDocModuleNames;
+                sDocModuleNames.push_back( sCodeName );
+
+                for ( SCTAB index = 0; index < pDoc->GetTableCount(); index++)
+                {
+                    String aName;
+                    pDoc->GetCodeName( index, aName );
+                    sDocModuleNames.push_back( aName );
+                }
+
+                std::vector<rtl::OUString>::iterator it_end = sDocModuleNames.end();
+
+                for ( std::vector<rtl::OUString>::iterator it = sDocModuleNames.begin(); it != it_end; ++it )
+                {
+                    script::ModuleInfo sModuleInfo;
+
+                    uno::Any aName= xVBACodeNamedObjectAccess->getByName( *it );
+                    sModuleInfo.ModuleObject.set( aName, uno::UNO_QUERY );
+                    sModuleInfo.ModuleType = script::ModuleType::DOCUMENT;
+                    xVBAModuleInfo->insertModuleInfo( *it, sModuleInfo );
+                    if( xLib->hasByName( *it ) )
+                        xLib->replaceByName( *it, uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Option VBASupport 1\n") ) ) );
+                    else
+                        xLib->insertByName( *it, uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Option VBASupport 1\n" ) ) ) );
+                }
+            }
+        }
+
+        /*  Trigger the Workbook_Open event, event processor will register
+            itself as listener for specific events. */
+        try
+        {
+            uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( pShell->GetDocument()->GetVbaEventProcessor(), uno::UNO_SET_THROW );
+            uno::Sequence< uno::Any > aArgs;
+            xVbaEvents->processVbaEvent( script::vba::VBAEventId::WORKBOOK_OPEN, aArgs );
+        }
+        catch( uno::Exception& )
+        {
+        }
+    }
 }
 
 SfxItemSet*

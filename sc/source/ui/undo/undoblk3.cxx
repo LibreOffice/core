@@ -602,8 +602,7 @@ ScUndoAutoFill::ScUndoAutoFill( ScDocShell* pNewDocShell,
                 const ScRange& rRange, const ScRange& rSourceArea,
                 ScDocument* pNewUndoDoc, const ScMarkData& rMark,
                 FillDir eNewFillDir, FillCmd eNewFillCmd, FillDateCmd eNewFillDateCmd,
-                double fNewStartValue, double fNewStepValue, double fNewMaxValue,
-                sal_uInt16 nMaxShIndex )
+                double fNewStartValue, double fNewStepValue, double fNewMaxValue )
         //
     :   ScBlockUndo( pNewDocShell, rRange, SC_UNDO_AUTOHEIGHT ),
         //
@@ -615,8 +614,7 @@ ScUndoAutoFill::ScUndoAutoFill( ScDocShell* pNewDocShell,
         eFillDateCmd    ( eNewFillDateCmd ),
         fStartValue     ( fNewStartValue ),
         fStepValue      ( fNewStepValue ),
-        fMaxValue       ( fNewMaxValue ),
-        nMaxSharedIndex ( nMaxShIndex)
+        fMaxValue       ( fNewMaxValue )
 {
     SetChangeTrack();
 }
@@ -626,7 +624,6 @@ ScUndoAutoFill::ScUndoAutoFill( ScDocShell* pNewDocShell,
 
 ScUndoAutoFill::~ScUndoAutoFill()
 {
-    pDocShell->GetDocument()->EraseNonUsedSharedNames(nMaxSharedIndex);
     delete pUndoDoc;
 }
 
@@ -647,26 +644,6 @@ void ScUndoAutoFill::SetChangeTrack()
             nStartChangeAction, nEndChangeAction );
     else
         nStartChangeAction = nEndChangeAction = 0;
-}
-
-namespace {
-
-bool eraseNameContaining(ScRangeName& rNames, const rtl::OUString& rCriteria)
-{
-    ScRangeName::iterator itr = rNames.begin(), itrEnd = rNames.end();
-    for (; itr != itrEnd; ++itr)
-    {
-        rtl::OUString aRName = itr->GetName();
-        if (aRName.indexOf(rCriteria) >= 0)
-        {
-            // Criteria found.  Erase this.
-            rNames.erase(itr);
-            return true;
-        }
-    }
-    return false;
-}
-
 }
 
 void ScUndoAutoFill::Undo()
@@ -697,29 +674,6 @@ void ScUndoAutoFill::Undo()
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
         pViewShell->CellContentChanged();
-
-// Shared-Names loeschen
-// Falls Undo ins Dokument gespeichert
-// => automatisches Loeschen am Ende
-// umarbeiten!!
-
-    String aName = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("___SC_"));
-    aName += String::CreateFromInt32(nMaxSharedIndex);
-    aName += '_';
-    ScRangeName* pRangeName = pDoc->GetRangeName();
-    bool bHasFound = false;
-    // Remove all range names that contain ___SC_...
-    while (true)
-    {
-        bool bErased = eraseNameContaining(*pRangeName, aName);
-        if (bErased)
-            bHasFound = true;
-        else
-            break;
-    }
-
-    if (bHasFound)
-        pRangeName->SetSharedMaxIndex(pRangeName->GetSharedMaxIndex()-1);
 
     ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
     if ( pChangeTrack )

@@ -190,6 +190,7 @@ public:
     /** Reads the entire pivot cache stream. Uses decrypter from passed stream. */
     void                ReadPivotCacheStream( XclImpStream& rStrm );
 
+    bool                HasCacheRecords() const;
     bool                IsRefreshOnLoad() const;
     bool                IsValid() const;
 

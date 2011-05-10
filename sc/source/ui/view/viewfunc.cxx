@@ -97,10 +97,13 @@ static void lcl_PostRepaintCondFormat( const ScConditionalFormat *pCondFmt, ScDo
 {
     if( pCondFmt )
     {
-        const ScRangeListRef& aRanges = pCondFmt->GetRangeInfo();
-        size_t nCount = aRanges->size();
+        const ScRangeListRef& xRanges = pCondFmt->GetRangeInfo();
+        if (!xRanges)
+            return;
+
+        size_t nCount = xRanges->size();
         for( size_t n = 0 ; n < nCount; n++ )
-            pDocSh->PostPaint( *((*aRanges)[n]), PAINT_ALL );
+            pDocSh->PostPaint( *((*xRanges)[n]), PAINT_ALL );
     }
 }
 

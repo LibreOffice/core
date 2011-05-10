@@ -176,7 +176,6 @@ class ScRangeName
 private:
     typedef ::boost::ptr_set<ScRangeData> DataType;
     DataType maData;
-    sal_uInt16  mnSharedMaxIndex;
 
 public:
     /// Map that manages stored ScRangeName instances.
@@ -203,8 +202,6 @@ public:
     void UpdateTabRef(SCTAB nTable, sal_uInt16 nFlag, SCTAB nNewTable = 0);
     void UpdateTranspose(const ScRange& rSource, const ScAddress& rDest);
     void UpdateGrow(const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY);
-    sal_uInt16 GetSharedMaxIndex();
-    void SetSharedMaxIndex(sal_uInt16 nInd);
 
     SC_DLLPUBLIC const_iterator begin() const;
     SC_DLLPUBLIC const_iterator end() const;

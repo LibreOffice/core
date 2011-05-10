@@ -1125,8 +1125,8 @@ FltError ImportExcel8::Read( void )
                     case 0x9D:  AutoFilterInfo(); break;// AUTOFILTERINFO
                     case 0x9E:  AutoFilter(); break;    // AUTOFILTER
                     case 0x0208: Row34(); break;        // ROW          [  34    ]
-                    case 0x0021:
-                    case 0x0221: Array34(); break;      // ARRAY        [  34    ]
+                    case EXC_ID2_ARRAY:
+                    case EXC_ID3_ARRAY: Array34(); break;      // ARRAY        [  34    ]
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345   ]
                     case 0x04BC: Shrfmla(); break;      // SHRFMLA      [    5   ]
                     case 0x0867: SheetProtection(); break; // SHEETPROTECTION

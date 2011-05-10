@@ -171,7 +171,6 @@ private:
     ScSortParam     aSortParam;
     CollatorWrapper*    pSortCollator;
     sal_Bool            bGlobalKeepQuery;
-    sal_Bool            bSharedNameInserted;
 
     ScRangeVec      aPrintRanges;
     bool            bPrintEntireSheet;
@@ -688,6 +687,7 @@ public:
                 /// @return  the index of the last changed row (flags and row height, auto pagebreak is ignored).
     SCROW      GetLastChangedRow() const;
 
+    bool       IsDataFiltered() const;
     sal_uInt8       GetColFlags( SCCOL nCol ) const;
     sal_uInt8       GetRowFlags( SCROW nRow ) const;
 
@@ -908,6 +908,8 @@ private:
      * position to the right.  This is called from ExtendPrintArea.
      */
     void        MaybeAddExtraColumn(SCCOL& rCol, SCROW nRow, OutputDevice* pDev, double nPPTX, double nPPTY);
+
+    void        CopyPrintRange(const ScTable& rTable);
 
     /**
      * Use this to iterate through non-empty visible cells in a single column.

@@ -4023,8 +4023,7 @@ sal_Bool ScDocFunc::FillSimple( const ScRange& rRange, const ScMarkData* pTabMar
         {
             rDocShell.GetUndoManager()->AddUndoAction(
                 new ScUndoAutoFill( &rDocShell, aDestArea, aSourceArea, pUndoDoc, aMark,
-                                    eDir, FILL_SIMPLE, FILL_DAY, MAXDOUBLE, 1.0, 1e307,
-                                    pDoc->GetRangeName()->GetSharedMaxIndex()+1 ) );
+                                    eDir, FILL_SIMPLE, FILL_DAY, MAXDOUBLE, 1.0, 1e307) );
         }
 
         rDocShell.PostPaintGridAll();
@@ -4143,8 +4142,7 @@ sal_Bool ScDocFunc::FillSeries( const ScRange& rRange, const ScMarkData* pTabMar
         {
             rDocShell.GetUndoManager()->AddUndoAction(
                 new ScUndoAutoFill( &rDocShell, aDestArea, aSourceArea, pUndoDoc, aMark,
-                                    eDir, eCmd, eDateCmd, fStart, fStep, fMax,
-                                    pDoc->GetRangeName()->GetSharedMaxIndex()+1 ) );
+                                    eDir, eCmd, eDateCmd, fStart, fStep, fMax) );
         }
 
         bSuccess = sal_True;
@@ -4271,8 +4269,7 @@ sal_Bool ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillD
     {
         rDocShell.GetUndoManager()->AddUndoAction(
             new ScUndoAutoFill( &rDocShell, aDestArea, aSourceArea, pUndoDoc, aMark,
-                                eDir, eCmd, eDateCmd, MAXDOUBLE, fStep, fMax,
-                                pDoc->GetRangeName()->GetSharedMaxIndex()+1 ) );
+                                eDir, eCmd, eDateCmd, MAXDOUBLE, fStep, fMax) );
     }
 
     rDocShell.PostPaintGridAll();
@@ -4344,17 +4341,14 @@ sal_Bool ScDocFunc::MergeCells( const ScCellMergeOption& rOption, sal_Bool bCont
                 for( aPos.SetRow( nStartRow ); !bHasNotes && (aPos.Row() <= nEndRow); aPos.IncRow() )
                     bHasNotes = ((aPos.Col() != nStartCol) || (aPos.Row() != nStartRow)) && (pDoc->GetNote( aPos ) != 0);
 
-            if (bNeedContents || bHasNotes || rOption.mbCenter)
+            if (!pUndoDoc)
             {
-                if (!pUndoDoc)
-                {
-                    pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-                    pUndoDoc->InitUndo(pDoc, nTab1, nTab2);
-                }
-                // note captions are collected by drawing undo
-                pDoc->CopyToDocument( nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab,
-                                      IDF_ALL|IDF_NOCAPTIONS, false, pUndoDoc );
+                pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+                pUndoDoc->InitUndo(pDoc, nTab1, nTab2);
             }
+            // note captions are collected by drawing undo
+            pDoc->CopyToDocument( nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab,
+                                  IDF_ALL|IDF_NOCAPTIONS, false, pUndoDoc );
             if( bHasNotes )
                 pDoc->BeginDrawUndo();
         }
