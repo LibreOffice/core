@@ -77,8 +77,7 @@ using rtl::OUString;
 using namespace com::sun::star::uno;
 using namespace com::sun::star;
 
-SwRead ReadAscii = 0, /*ReadSwg = 0, ReadSw3 = 0,*/
-                ReadHTML = 0, ReadXML = 0;
+SwRead ReadAscii = 0, ReadHTML = 0, ReadXML = 0;
 
 Reader* GetRTFReader();
 Reader* GetWW8Reader();
@@ -96,7 +95,7 @@ SwReaderWriterEntry aReaderWriter[] =
     SwReaderWriterEntry( 0,               0,                sal_True  ),
     SwReaderWriterEntry( &::GetWW8Reader, 0,                sal_True  ),
     SwReaderWriterEntry( 0,               &::GetXMLWriter,  sal_True  ),
-    SwReaderWriterEntry( 0,               &::GetASCWriter,  sal_True  ),
+    SwReaderWriterEntry( 0,               &::GetASCWriter,  sal_False ),
     SwReaderWriterEntry( 0,               &::GetASCWriter,  sal_True  )
 };
 
@@ -147,15 +146,14 @@ void _InitFilter()
 
 void _FinitFilter()
 {
-        // die Reader vernichten
-        for( sal_uInt16 n = 0; n < MAXFILTER; ++n )
-        {
-                SwReaderWriterEntry& rEntry = aReaderWriter[n];
-                if( rEntry.bDelReader && rEntry.pReader )
-                        delete rEntry.pReader, rEntry.pReader = NULL;
-        }
+    // die Reader vernichten
+    for( sal_uInt16 n = 0; n < MAXFILTER; ++n )
+    {
+        SwReaderWriterEntry& rEntry = aReaderWriter[n];
+        if( rEntry.bDelReader && rEntry.pReader )
+            delete rEntry.pReader, rEntry.pReader = NULL;
+    }
 }
-
 
 /*  */
 
