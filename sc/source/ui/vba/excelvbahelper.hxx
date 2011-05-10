@@ -30,7 +30,6 @@
 
 #include <vbahelper/vbahelper.hxx>
 #include "docsh.hxx"
-#include <com/sun/star/sheet/XDatabaseRanges.hpp>
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
 #include <com/sun/star/sheet/XUnnamedDatabaseRanges.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
@@ -65,7 +64,6 @@ sal_Bool IsR1C1ReferFormat( ScDocument* pDoc, const ::rtl::OUString& sRangeStr )
 formula::FormulaGrammar::Grammar GetFormulaGrammar( ScDocument* pDoc, const ScAddress& sAddress, const css::uno::Any& aFormula );
 void CompileExcelFormulaToODF( ScDocument* pDoc, const String& rOldFormula, String& rNewFormula );
 void CompileODFFormulaToExcel( ScDocument* pDoc, const String& rOldFormula, String& rNewFormula, const formula::FormulaGrammar::Grammar eGrammar );
-css::uno::Reference< css::sheet::XDatabaseRanges > GetDataBaseRanges( ScDocShell* pShell ) throw ( css::uno::RuntimeException );
 css::uno::Reference< css::sheet::XUnnamedDatabaseRanges > GetUnnamedDataBaseRanges( ScDocShell* pShell ) throw ( css::uno::RuntimeException );
 
 css::uno::Reference< css::sheet::XDatabaseRange > GetAutoFiltRange( ScDocShell* pShell, sal_Int16 nSheet ) throw ( css::uno::RuntimeException );

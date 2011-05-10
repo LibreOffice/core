@@ -55,17 +55,6 @@ namespace excel {
 
 // ============================================================================
 
-uno::Reference< sheet::XDatabaseRanges >
-GetDataBaseRanges( ScDocShell* pShell ) throw ( uno::RuntimeException )
-{
-    uno::Reference< frame::XModel > xModel;
-    if ( pShell )
-        xModel.set( pShell->GetModel(), uno::UNO_QUERY_THROW );
-    uno::Reference< beans::XPropertySet > xModelProps( xModel, uno::UNO_QUERY_THROW );
-    uno::Reference< sheet::XDatabaseRanges > xDBRanges( xModelProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("DatabaseRanges") ) ), uno::UNO_QUERY_THROW );
-    return xDBRanges;
-}
-
 uno::Reference< sheet::XUnnamedDatabaseRanges >
 GetUnnamedDataBaseRanges( ScDocShell* pShell ) throw ( uno::RuntimeException )
 {

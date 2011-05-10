@@ -38,7 +38,6 @@
 #include <com/sun/star/script/vba/VBAEventId.hpp>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
-#include <com/sun/star/sheet/XDatabaseRanges.hpp>
 #include <com/sun/star/sheet/XUnnamedDatabaseRanges.hpp>
 #include <com/sun/star/sheet/XGoalSeek.hpp>
 #include <com/sun/star/sheet/XSheetOperation.hpp>
