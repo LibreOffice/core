@@ -29,7 +29,6 @@
 #define SW_FLDBAS_HXX
 
 #include <i18npool/lang.h>
-#include <tools/debug.hxx>
 #include <tools/string.hxx>
 #include "swdllapi.h"
 #include <calbck.hxx>
@@ -237,7 +236,6 @@ String  FormatNumber(sal_uInt16 nNum, sal_uInt32 nFormat);
 // Instances of SwFields and those derived from it occur 0 to n times.
 // For each class there is one instance of the associated type class.
 // Base class of all field types is SwFieldType.
-DBG_NAMEEX(SwFieldType)
 
 class SW_DLLPUBLIC SwFieldType : public SwModify
 {

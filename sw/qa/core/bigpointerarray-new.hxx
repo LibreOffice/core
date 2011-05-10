@@ -30,8 +30,6 @@
 #define _BPARR_HXX
 
 #include <tools/solar.h>
-#include <tools/debug.hxx>
-
 #include <deque>
 
 class BigPtrArray;

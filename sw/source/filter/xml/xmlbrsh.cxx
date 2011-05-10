@@ -32,7 +32,6 @@
 
 
 #include "hintids.hxx"
-#include <tools/debug.hxx>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <editeng/memberids.hrc>
 

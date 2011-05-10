@@ -32,7 +32,6 @@
 #define WW_HASH_WRAP_HXX
 
 #include <boost/unordered_set.hpp>
-#include <tools/debug.hxx>
 
 //simple wrapper around boost::unordered_set to behave like sorted array
 namespace ww

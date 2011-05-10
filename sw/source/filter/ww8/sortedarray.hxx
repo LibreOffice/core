@@ -30,7 +30,6 @@
 #define WW_SORTEDARRAY_HXX
 
 #include <algorithm>
-#include <tools/debug.hxx>
 
 //simple template that manages a static [] array by sorting at construction
 

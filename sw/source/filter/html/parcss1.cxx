@@ -34,7 +34,6 @@
 #include <stdio.h>
 #include <limits.h>
 #include <rtl/ustrbuf.hxx>
-#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/htmltokn.h>
 

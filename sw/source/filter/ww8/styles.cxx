@@ -35,7 +35,6 @@
 #include <algorithm>                //std::find_if
 #include <tools/string.hxx>         //do we have to...
 
-#include <tools/debug.hxx>
 #include "staticassert.hxx"      //StaticAssert
 
 namespace

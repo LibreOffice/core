@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 #include <tools/string.hxx>
-#include <tools/debug.hxx>
 
 // local
 #include <w1struct.hxx>

@@ -44,7 +44,6 @@
 #include <comphelper/types.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/datetime.hxx>
-#include <tools/debug.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/contentbroker.hxx>
 #include <ucbhelper/content.hxx>

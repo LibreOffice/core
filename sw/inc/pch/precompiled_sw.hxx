@@ -844,7 +844,6 @@
 #include "tools/color.hxx"
 #include "tools/date.hxx"
 #include "tools/datetime.hxx"
-#include "tools/debug.hxx"
 #include "tools/errcode.hxx"
 #include "tools/errinf.hxx"
 #include "tools/fract.hxx"

@@ -34,7 +34,6 @@
 #include <osl/mutex.hxx>
 #include <svx/IAccessibleViewForwarder.hxx>
 #include <svx/IAccessibleParent.hxx>
-#include <tools/debug.hxx>
 #include <tools/fract.hxx>
 
 #include <vector>

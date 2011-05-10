@@ -35,8 +35,6 @@
 #include <vcl/window.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/unomod.hxx>
-#include <tools/debug.hxx>
-
 #include <map>
 #include <list>
 #include <accmap.hxx>

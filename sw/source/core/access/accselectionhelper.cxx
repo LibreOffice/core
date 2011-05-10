@@ -39,7 +39,6 @@
 #include <viewsh.hxx>
 #include <fesh.hxx>
 #include <vcl/svapp.hxx>        // for SolarMutex
-#include <tools/debug.hxx>
 #include <flyfrm.hxx>
 
 

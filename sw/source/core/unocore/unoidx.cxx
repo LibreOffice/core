@@ -37,7 +37,6 @@
 #include <com/sun/star/text/BibliographyDataField.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 
-#include <tools/debug.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/unolingu.hxx>

@@ -29,7 +29,6 @@
 #ifndef WW_NEEDED_CAST_HXX
 #define WW_NEEDED_CAST_HXX
 
-#include <tools/debug.hxx>
 #include "staticassert.hxx"
 
 namespace ww

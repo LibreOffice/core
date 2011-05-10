@@ -49,7 +49,6 @@
 #endif                      // dump
 #include <comphelper/processfactory.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <tools/debug.hxx>
 #include <i18npool/lang.h>
 #include <editeng/unolingu.hxx>
 #include <vcl/svapp.hxx>    // Application  #i90932#

@@ -34,7 +34,6 @@
 #include <editeng/outlobj.hxx>
 #include <tools/string.hxx>
 #include <tools/link.hxx>
-#include <tools/debug.hxx>
 #include <swrect.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/options.hxx>

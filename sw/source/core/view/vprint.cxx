@@ -44,7 +44,6 @@
 #include <editeng/pbinitem.hxx>
 #include <svx/svdview.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
-#include <tools/debug.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/syslocale.hxx>

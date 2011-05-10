@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 #include "accportions.hxx"
-#include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/i18n/Boundary.hpp>
 #include <txttypes.hxx>

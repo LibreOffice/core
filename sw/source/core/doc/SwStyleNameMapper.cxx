@@ -36,7 +36,6 @@
 #include <tools/resmgr.hxx>
 #include <poolfmt.hxx>
 #include <rcid.hrc>
-#include <tools/debug.hxx>
 #ifdef _NEED_TO_DEBUG_MAPPING
 #include <stdlib.h>
 #endif

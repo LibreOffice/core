@@ -34,7 +34,6 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/i18n/XExtendedIndexEntrySupplier.hpp>
 #include <tools/string.hxx>
-#include <tools/debug.hxx>
 #include <toxwrap.hxx>
 
 using namespace ::com::sun::star;
