@@ -45,7 +45,6 @@
 #include <boost/shared_ptr.hpp>
 
 namespace utl {
-    class SearchParam;
     class TextSearch;
 }
 
@@ -162,7 +161,6 @@ private:
     SCTAB           nTab;
     sal_uInt16          nRecalcLvl;             // recursion level Size-Recalc
     ScDocument*     pDocument;
-    utl::SearchParam*   pSearchParam;
     utl::TextSearch*    pSearchText;
 
     mutable String  aUpperName;             // #i62977# filled only on demand, reset in SetName

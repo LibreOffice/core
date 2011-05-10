@@ -260,7 +260,6 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
     nTab( nNewTab ),
     nRecalcLvl( 0 ),
     pDocument( pDoc ),
-    pSearchParam( NULL ),
     pSearchText ( NULL ),
     pSortCollator( NULL ),
     bPrintEntireSheet(true),
@@ -336,7 +335,6 @@ ScTable::~ScTable()
     delete pRowFlags;
     delete pSheetEvents;
     delete pOutlineTable;
-    delete pSearchParam;
     delete pSearchText;
     delete pRepeatColRange;
     delete pRepeatRowRange;
