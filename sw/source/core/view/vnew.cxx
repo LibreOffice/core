@@ -158,7 +158,6 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
     pDoc( &rDocument ),
     nStartAction( 0 ),
     nLockPaint( 0 ),
-    mnPrePostPaintCount(0L),
     mpPrePostOutDev(0),
     maPrePostMapMode()
 {
@@ -225,7 +224,6 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     pDoc( rShell.GetDoc() ),
     nStartAction( 0 ),
     nLockPaint( 0 ),
-    mnPrePostPaintCount(0L),
     mpPrePostOutDev(0),
     maPrePostMapMode()
 {
