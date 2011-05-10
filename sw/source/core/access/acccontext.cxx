@@ -28,15 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-#if (OSL_DEBUG_LEVEL > 1) && defined TEST_MIB
-    #ifndef _STRING_HXX
-    #include <tools/string.hxx>
-    #endif
-
-    #ifndef _STREAM_HXX
-    #include <tools/stream.hxx>
-    #endif
-#endif // #if (OSL_DEBUG_LEVEL > 1) && defined TEST_MIB
 #include <tools/debug.hxx>
 #include <vcl/window.hxx>
 #include <swtypes.hxx>
@@ -67,28 +58,6 @@
 #include <PostItMgr.hxx>
 
 using namespace sw::access;
-
-#if (OSL_DEBUG_LEVEL > 1) && defined TEST_MIB
-#define DBG_MSG( _msg ) \
-    lcl_SwAccessibleContext_DbgMsg( this, _msg, 0, sal_False );
-#define DBG_MSG_CD( _msg ) \
-    lcl_SwAccessibleContext_DbgMsg( this, _msg, 0, sal_True );
-#define DBG_MSG_PARAM( _msg, _param ) \
-    lcl_SwAccessibleContext_DbgMsg( this, _msg, _param, sal_False );
-#define DBG_MSG_THIS_PARAM( _msg, _this, _param ) \
-    lcl_SwAccessibleContext_DbgMsg( _this, _msg, _param, sal_False );
-
-void lcl_SwAccessibleContext_DbgMsg( SwAccessibleContext *pThisAcc,
-                                     const char *pMsg,
-                                     SwAccessibleContext *pChildAcc,
-                                       sal_Bool bConstrDestr );
-#else
-#define DBG_MSG( _msg )
-#define DBG_MSG_PARAM( _msg, _param )
-#define DBG_MSG_THIS_PARAM( _msg, _this, _param )
-#define DBG_MSG_CD( _msg )
-#endif
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using ::rtl::OUString;
@@ -363,7 +332,6 @@ void SwAccessibleContext::ScrolledIn()
         aEvent.NewValue <<= xThis;
 
         xParentImpl->FireAccessibleEvent( aEvent );
-        DBG_MSG_PARAM( "AccessibleChild (added)", xChildImpl.get() );
 
         if( HasCursor() )
         {
@@ -501,7 +469,6 @@ void SwAccessibleContext::FireVisibleDataEvent()
     aEvent.EventId = AccessibleEventId::VISIBLE_DATA_CHANGED;
 
     FireAccessibleEvent( aEvent );
-    DBG_MSG( "AccessibleVisibleData" )
 }
 
 void SwAccessibleContext::FireStateChangedEvent( sal_Int16 nState,
@@ -516,7 +483,6 @@ void SwAccessibleContext::FireStateChangedEvent( sal_Int16 nState,
         aEvent.OldValue <<= nState;
 
     FireAccessibleEvent( aEvent );
-    DBG_MSG( "StateChanged" )
 }
 
 void SwAccessibleContext::GetStates(
@@ -569,14 +535,11 @@ SwAccessibleContext::SwAccessibleContext( SwAccessibleMap *pM,
     , bRegisteredAtAccessibleMap( true )
 {
     InitStates();
-    DBG_MSG_CD( "constructed" )
 }
 
 SwAccessibleContext::~SwAccessibleContext()
 {
     SolarMutexGuard aGuard;
-
-    DBG_MSG_CD( "destructed" )
     RemoveFrmFromAccessibleMap();
 }
 
@@ -749,8 +712,6 @@ void SAL_CALL SwAccessibleContext::addEventListener(
             const uno::Reference< XAccessibleEventListener >& xListener )
         throw (uno::RuntimeException)
 {
-    DBG_MSG( "accessible event listener added" )
-
     if (xListener.is())
     {
         SolarMutexGuard aGuard;
@@ -764,8 +725,6 @@ void SAL_CALL SwAccessibleContext::removeEventListener(
             const uno::Reference< XAccessibleEventListener >& xListener )
         throw (uno::RuntimeException)
 {
-    DBG_MSG( "accessible event listener removed" )
-
     if (xListener.is())
     {
         SolarMutexGuard aGuard;
@@ -1102,7 +1061,6 @@ void SwAccessibleContext::Dispose( sal_Bool bRecursive )
         aEvent.EventId = AccessibleEventId::CHILD;
         aEvent.OldValue <<= xThis;
         pAcc->FireAccessibleEvent( aEvent );
-        DBG_MSG_THIS_PARAM( "AccessibleChild (removed)", pAcc, this )
     }
 
     // set defunc state (its not required to broadcast a state changed
@@ -1117,7 +1075,6 @@ void SwAccessibleContext::Dispose( sal_Bool bRecursive )
     {
         comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( nClientId, *this );
         nClientId =  0;
-        DBG_MSG_CD( "dispose" )
     }
 
     RemoveFrmFromAccessibleMap();
@@ -1516,66 +1473,5 @@ void SwAccessibleContext::GetAdditionalAccessibleChildren( std::vector< Window* 
         }
     }
 }
-
-#if (OSL_DEBUG_LEVEL > 1) && defined TEST_MIB
-void lcl_SwAccessibleContext_DbgMsg( SwAccessibleContext *pThisAcc,
-                                     const char *pMsg,
-                                     SwAccessibleContext *pChildAcc,
-                                       sal_Bool bConstrDestr )
-{
-    static SvFileStream aStrm( String::CreateFromAscii("j:\\acc.log"),
-                    STREAM_WRITE|STREAM_TRUNC|STREAM_SHARE_DENYNONE );
-    ByteString aName( String(pThisAcc->GetName()),
-                      RTL_TEXTENCODING_ISO_8859_1 );
-    if( aName.Len() )
-    {
-        aStrm << aName.GetBuffer()
-              << ": ";
-    }
-    aStrm << pMsg;
-    if( pChildAcc )
-    {
-        ByteString aChild( String(pChildAcc->GetName()),
-                           RTL_TEXTENCODING_ISO_8859_1 );
-        aStrm << ": "
-              << aChild.GetBuffer();
-    }
-    aStrm << "\r\n    (";
-
-    if( !bConstrDestr )
-    {
-        ByteString aDesc( String(pThisAcc->getAccessibleDescription()),
-                           RTL_TEXTENCODING_ISO_8859_1 );
-        aStrm << aDesc.GetBuffer()
-              << ", ";
-    }
-
-    Rectangle aVisArea( pThisAcc->GetVisArea() );
-    aStrm << "VA: "
-          << ByteString::CreateFromInt32( aVisArea.Left() ).GetBuffer()
-          << ","
-          << ByteString::CreateFromInt32( aVisArea.Top() ).GetBuffer()
-          << ","
-          << ByteString::CreateFromInt32( aVisArea.GetWidth() ).GetBuffer()
-          << ","
-          << ByteString::CreateFromInt32( aVisArea.GetHeight() ).GetBuffer();
-
-    if( pThisAcc->GetFrm() )
-    {
-        Rectangle aBounds( pThisAcc->GetBounds( pThisAcc->GetFrm() ) );
-        aStrm << ", BB: "
-              << ByteString::CreateFromInt32( aBounds.Left() ).GetBuffer()
-              << ","
-              << ByteString::CreateFromInt32( aBounds.Top() ).GetBuffer()
-              << ","
-              << ByteString::CreateFromInt32( aBounds.GetWidth() ).GetBuffer()
-              << ","
-              << ByteString::CreateFromInt32( aBounds.GetHeight() ).GetBuffer()
-              << ")\r\n";
-    }
-
-    aStrm.Flush();
-}
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
