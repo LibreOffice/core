@@ -193,6 +193,7 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com:
             if ( nPageCount )
             {
                 sal_Int32 nSel = aMultiSelection.FirstSelected();
+                sal_Int32 nCurrentPage(0);
                 while ( nSel != sal_Int32(SFX_ENDOFSELECTION) )
                 {
                     Sequence< PropertyValue >   aRenderer( rRenderable->getRenderer( nSel - 1, rSelection, rRenderOptions ) );
@@ -204,7 +205,7 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com:
                             aRenderer[ nProperty].Value >>= aPageSize;
                     }
 
-                    pPDFExtOutDevData->SetCurrentPageNumber( nSel - 1 );
+                    pPDFExtOutDevData->SetCurrentPageNumber( nCurrentPage );
 
                     GDIMetaFile                 aMtf;
                     const MapMode               aMapMode( MAP_100TH_MM );
@@ -242,6 +243,7 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com:
                         *pFirstPage <<= sal_False;
 
                     ++mnProgressValue;
+                    ++nCurrentPage;
                 }
             }
             else
