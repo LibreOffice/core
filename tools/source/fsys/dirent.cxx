@@ -547,7 +547,7 @@ static FSysPathStyle GetStyle( FSysPathStyle eStyle )
 |*
 *************************************************************************/
 
-void DirEntry::ImpTrim( FSysPathStyle eStyle )
+void DirEntry::ImpTrim( FSysPathStyle /* eStyle */ )
 {
     // Wildcards werden nicht geclipt
     if ( ( aName.Search( '*' ) != STRING_NOTFOUND ) ||
