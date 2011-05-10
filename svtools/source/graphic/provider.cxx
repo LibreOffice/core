@@ -658,7 +658,7 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
             aDummyVDev.EnableOutput( sal_False );
             aDummyVDev.SetMapMode( aNewMapMode );
 
-            for( sal_uInt32 i = 0, nObjCount = aMtf.GetActionCount(); i < nObjCount; i++ )
+            for( size_t i = 0, nObjCount = aMtf.GetActionSize(); i < nObjCount; i++ )
             {
                 MetaAction* pAction = aMtf.GetAction( i );
                 switch( pAction->GetType() )

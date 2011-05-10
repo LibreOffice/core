@@ -820,7 +820,7 @@ sal_Bool ImplVectorizer::ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rM
 
         delete[] (sal_uInt8*) pColorSet;
 
-        if( rMtf.GetActionCount() )
+        if( rMtf.GetActionSize() )
         {
             MapMode         aMap( MAP_100TH_MM );
             VirtualDevice   aVDev;

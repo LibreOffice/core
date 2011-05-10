@@ -273,11 +273,11 @@ void WMFWriter::MayCallback()
 
 void WMFWriter::CountActionsAndBitmaps( const GDIMetaFile & rMTF )
 {
-    sal_uLong nAction, nActionCount;
+    size_t nAction, nActionCount;
 
-    nActionCount = rMTF.GetActionCount();
+    nActionCount = rMTF.GetActionSize();
 
-    for ( nAction=0; nAction<nActionCount; nAction++ )
+    for ( nAction=0; nAction < nActionCount; nAction++ )
     {
         MetaAction* pMA = rMTF.GetAction( nAction );
 
@@ -1144,16 +1144,16 @@ void WMFWriter::HandleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx:
 
 void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 {
-    sal_uLong       nA, nACount;
+    size_t      nA, nACount;
     MetaAction* pMA;
 
     if( bStatus )
     {
-        nACount = rMTF.GetActionCount();
+        nACount = rMTF.GetActionSize();
 
         WMFRecord_SetStretchBltMode();
 
-        for( nA=0; nA<nACount; nA++ )
+        for( nA=0; nA < nACount; nA++ )
         {
             pMA = rMTF.GetAction( nA );
 
@@ -1663,8 +1663,8 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     const MetaEPSAction* pA = (const MetaEPSAction*)pMA;
                     const GDIMetaFile aGDIMetaFile( pA->GetSubstitute() );
 
-                    sal_Int32 nCount = aGDIMetaFile.GetActionCount();
-                    for ( sal_Int32 i = 0; i < nCount; i++ )
+                    size_t nCount = aGDIMetaFile.GetActionSize();
+                    for ( size_t i = 0; i < nCount; i++ )
                     {
                         const MetaAction* pMetaAct = aGDIMetaFile.GetAction( i );
                         if ( pMetaAct->GetType() == META_BMPSCALE_ACTION )

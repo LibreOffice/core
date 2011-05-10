@@ -562,7 +562,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
         rMtf.SetPrefSize( aPrefSz );
         rMtf.SetPrefMapMode( aMapMode );
-        sal_uInt32 nLastPolygonAction(0);
+        size_t nLastPolygonAction(0);
 
         for( sal_Int32 i = 0L; i < nActions; i++ )
         {
@@ -631,7 +631,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     ImplReadExtendedPolyPolygonAction(rIStm, aInputPolyPolygon);
 
                     // now check if it can be set somewhere
-                    if(nLastPolygonAction < rMtf.GetActionCount())
+                    if(nLastPolygonAction < rMtf.GetActionSize())
                     {
                         MetaPolyLineAction* pPolyLineAction = dynamic_cast< MetaPolyLineAction* >(rMtf.GetAction(nLastPolygonAction));
 
@@ -779,7 +779,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 case( GDI_POLYLINE_ACTION ):
                 {
                     ImplReadPoly( rIStm, aActionPoly );
-                    nLastPolygonAction = rMtf.GetActionCount();
+                    nLastPolygonAction = rMtf.GetActionSize();
 
                     if( bFatLine )
                         rMtf.AddAction( new MetaPolyLineAction( aActionPoly, aLineInfo ) );
@@ -802,7 +802,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     }
                     else
                     {
-                        nLastPolygonAction = rMtf.GetActionCount();
+                        nLastPolygonAction = rMtf.GetActionSize();
                         rMtf.AddAction( new MetaPolygonAction( aActionPoly ) );
                     }
                 }
@@ -826,7 +826,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     }
                     else
                     {
-                        nLastPolygonAction = rMtf.GetActionCount();
+                        nLastPolygonAction = rMtf.GetActionSize();
                         rMtf.AddAction( new MetaPolyPolygonAction( aPolyPoly ) );
                     }
                 }
@@ -1425,7 +1425,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                                       rtl_TextEncoding& rActualCharSet )
 {
     sal_uLong nCount = 0;
-    for( sal_uLong i = 0, nActionCount = rMtf.GetActionCount(); i < nActionCount; i++ )
+    for( size_t i = 0, nActionCount = rMtf.GetActionSize(); i < nActionCount; i++ )
     {
         const MetaAction* pAction = rMtf.GetAction( i );
 

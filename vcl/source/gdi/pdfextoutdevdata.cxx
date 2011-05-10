@@ -300,7 +300,7 @@ void PageSyncData::PushAction( const OutputDevice& rOutDev, const PDFExtOutDevDa
     PDFExtOutDevDataSync aSync;
     aSync.eAct = eAct;
     if ( pMtf )
-        aSync.nIdx = pMtf->GetActionCount();
+        aSync.nIdx = pMtf->GetActionSize();
     else
         aSync.nIdx = 0x7fffffff;    // sync not possible
     mActions.push_back( aSync );

@@ -32,9 +32,9 @@
 #include <vcl/dllapi.h>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
-#include <tools/list.hxx>
 #include <tools/string.hxx>
 #include <vcl/mapmod.hxx>
+#include <vector>
 
 class OutputDevice;
 class ImpLabelList;
@@ -51,8 +51,8 @@ class Gradient;
 // - GDIMetaFile-Types -
 // ---------------------
 
-#define GDI_METAFILE_END                ((sal_uLong)0xFFFFFFFF)
-#define GDI_METAFILE_LABEL_NOTFOUND     ((sal_uLong)0xFFFFFFFF)
+#define GDI_METAFILE_END                ((size_t)0xFFFFFFFF)
+#define GDI_METAFILE_LABEL_NOTFOUND     ((size_t)0xFFFFFFFF)
 
 #ifndef METAFILE_END
 #define METAFILE_END                    GDI_METAFILE_END
@@ -93,9 +93,11 @@ typedef BitmapEx (*BmpExchangeFnc)( const BitmapEx& rBmpEx, const void* pBmpPara
 // - GDIMetaFile -
 // ---------------
 
-class VCL_DLLPUBLIC GDIMetaFile : protected List
+class VCL_DLLPUBLIC GDIMetaFile
 {
 private:
+    ::std::vector< MetaAction* > aList;
+    size_t          nCurrentActionElement;
 
     MapMode         aPrefMapMode;
     Size            aPrefSize;
@@ -134,7 +136,7 @@ private:
                                                       const OutputDevice&   rMapDev,
                                                       const PolyPolygon&    rPolyPoly,
                                                       const Gradient&       rGrad       );
-    SAL_DLLPRIVATE bool            ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, Size rDestSize );
+    SAL_DLLPRIVATE bool          ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, Size rDestSize );
     SAL_DLLPRIVATE void          ImplDelegate2PluggableRenderer( const MetaCommentAction* pAct, OutputDevice* pOut );
 
 
@@ -148,9 +150,7 @@ public:
                     GDIMetaFile( const GDIMetaFile& rMtf );
     virtual         ~GDIMetaFile();
 
-    using List::operator==;
-    using List::operator!=;
-    GDIMetaFile&    operator=( const GDIMetaFile& rMtf );
+    GDIMetaFile&        operator=( const GDIMetaFile& rMtf );
     sal_Bool            operator==( const GDIMetaFile& rMtf ) const;
     sal_Bool            operator!=( const GDIMetaFile& rMtf ) const { return !( *this == rMtf ); }
 
@@ -186,10 +186,10 @@ public:
     void            Record( OutputDevice* pOutDev );
     sal_Bool            IsRecord() const { return bRecord; }
 
-    void            Play( GDIMetaFile& rMtf, sal_uLong nPos = GDI_METAFILE_END );
-    void            Play( OutputDevice* pOutDev, sal_uLong nPos = GDI_METAFILE_END );
+    void            Play( GDIMetaFile& rMtf, size_t nPos = GDI_METAFILE_END );
+    void            Play( OutputDevice* pOutDev, size_t nPos = GDI_METAFILE_END );
     void            Play( OutputDevice* pOutDev, const Point& rPos,
-                          const Size& rSize, sal_uLong nPos = GDI_METAFILE_END );
+                          const Size& rSize, size_t nPos = GDI_METAFILE_END );
 
     void            Pause( sal_Bool bPause );
     sal_Bool            IsPause() const { return bPause; }
@@ -198,22 +198,25 @@ public:
 
     void            WindStart();
     void            WindEnd();
-    void            Wind( sal_uLong nAction );
+    void            Wind( size_t nAction );
     void            WindPrev();
     void            WindNext();
 
-    sal_uLong           GetActionCount() const { return Count(); }
-    void            AddAction( MetaAction* pAction );
-    void            AddAction( MetaAction* pAction, sal_uLong nPos );
-    void            RemoveAction( sal_uLong nPos );
-    MetaAction*     CopyAction( sal_uLong nPos ) const;
-    MetaAction*     GetCurAction() const { return (MetaAction*) GetCurObject(); }
-    MetaAction*     GetAction( sal_uLong nAction ) const { return (MetaAction*) GetObject( nAction ); }
-    MetaAction*     FirstAction() { return (MetaAction*) First(); }
-    MetaAction*     NextAction() {  return (MetaAction*) Next(); }
-    MetaAction*     ReplaceAction( MetaAction* pAction, sal_uLong nAction ) { return (MetaAction*) Replace( pAction, nAction ); }
+    size_t          GetActionSize() const;
+    size_t          GetActionPos( const String& rLabel );
 
-    sal_uLong           GetActionPos( const String& rLabel );
+    void            AddAction( MetaAction* pAction );
+    void            AddAction( MetaAction* pAction, size_t nPos );
+    void            RemoveAction( size_t nPos );
+    void            push_back( MetaAction* pAction );
+
+    MetaAction*     FirstAction();
+    MetaAction*     NextAction();
+    MetaAction*     GetAction( size_t nAction ) const;
+    MetaAction*     CopyAction( size_t nPos ) const;
+    MetaAction*     GetCurAction() const { return GetAction( nCurrentActionElement ); }
+    MetaAction*     ReplaceAction( MetaAction* pAction, sal_uLong nAction );
+
     sal_Bool            InsertLabel( const String& rLabel, sal_uLong nActionPos );
     void            RemoveLabel( const String& rLabel );
     void            RenameLabel( const String& rLabel, const String& rNewLabel );

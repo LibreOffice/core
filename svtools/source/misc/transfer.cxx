@@ -812,7 +812,7 @@ sal_Bool TransferableHelper::SetBitmap( const Bitmap& rBitmap, const DataFlavor&
 
 sal_Bool TransferableHelper::SetGDIMetaFile( const GDIMetaFile& rMtf, const DataFlavor& )
 {
-    if( rMtf.GetActionCount() )
+    if( rMtf.GetActionSize() )
     {
         SvMemoryStream aMemStm( 65535, 65535 );
 

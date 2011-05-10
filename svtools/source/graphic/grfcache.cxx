@@ -118,7 +118,7 @@ GraphicID::GraphicID( const GraphicObject& rObj )
         {
             const GDIMetaFile aMtf( rGraphic.GetGDIMetaFile() );
 
-            mnID1 |= ( aMtf.GetActionCount() & 0x0fffffff );
+            mnID1 |= ( aMtf.GetActionSize() & 0x0fffffff );
             mnID2 = aMtf.GetPrefSize().Width();
             mnID3 = aMtf.GetPrefSize().Height();
             mnID4 = rGraphic.GetChecksum();

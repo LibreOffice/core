@@ -162,7 +162,7 @@ void GraphicObject::ImplAssignGraphicData()
     if( maGraphic.GetType() == GRAPHIC_GDIMETAFILE )
     {
         const GDIMetaFile& rMtf = GetGraphic().GetGDIMetaFile();
-        mbEPS = ( rMtf.GetActionCount() >= 1 ) && ( META_EPS_ACTION == rMtf.GetAction( 0 )->GetType() );
+        mbEPS = ( rMtf.GetActionSize() >= 1 ) && ( META_EPS_ACTION == rMtf.GetAction( 0 )->GetType() );
     }
     else
         mbEPS = sal_False;
