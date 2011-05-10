@@ -285,7 +285,6 @@ class LngSvcMgrListenerHelper :
     ::cppu::OInterfaceContainerHelper           aLngSvcMgrListeners;
     ::cppu::OInterfaceContainerHelper           aLngSvcEvtBroadcasters;
     uno::Reference< linguistic2::XDictionaryList >               xDicList;
-    uno::Reference< uno::XInterface >                        xMyEvtObj;
 
     sal_Int16   nCombinedLngSvcEvt;
 
@@ -299,8 +298,7 @@ class LngSvcMgrListenerHelper :
 
 public:
     LngSvcMgrListenerHelper( LngSvcMgr &rLngSvcMgr,
-            const uno::Reference< uno::XInterface > &rxSource,
-            const uno::Reference< linguistic2::XDictionaryList > &rxDicList );
+        const uno::Reference< linguistic2::XDictionaryList > &rxDicList );
 
     // lang::XEventListener
     virtual void SAL_CALL
@@ -334,13 +332,11 @@ public:
 
 LngSvcMgrListenerHelper::LngSvcMgrListenerHelper(
         LngSvcMgr &rLngSvcMgr,
-        const uno::Reference< uno::XInterface > &rxSource,
         const uno::Reference< linguistic2::XDictionaryList > &rxDicList  ) :
     rMyManager              ( rLngSvcMgr ),
     aLngSvcMgrListeners     ( GetLinguMutex() ),
     aLngSvcEvtBroadcasters  ( GetLinguMutex() ),
-    xDicList                ( rxDicList ),
-    xMyEvtObj               ( rxSource )
+    xDicList                ( rxDicList )
 {
     if (xDicList.is())
     {
@@ -377,7 +373,8 @@ long LngSvcMgrListenerHelper::Timeout()
         // change event source to LinguServiceManager since the listeners
         // probably do not know (and need not to know) about the specific
         // SpellChecker's or Hyphenator's.
-        linguistic2::LinguServiceEvent aEvtObj( xMyEvtObj, nCombinedLngSvcEvt );
+        linguistic2::LinguServiceEvent aEvtObj(
+            static_cast<com::sun::star::linguistic2::XLinguServiceManager*>(&rMyManager), nCombinedLngSvcEvt );
         nCombinedLngSvcEvt = 0;
 
         if (rMyManager.pSpellDsp)
@@ -470,7 +467,8 @@ void SAL_CALL
 
 void LngSvcMgrListenerHelper::LaunchEvent( sal_Int16 nLngSvcEvtFlags )
 {
-    linguistic2::LinguServiceEvent aEvt( xMyEvtObj, nLngSvcEvtFlags );
+    linguistic2::LinguServiceEvent aEvt(
+        static_cast<com::sun::star::linguistic2::XLinguServiceManager*>(&rMyManager), nLngSvcEvtFlags );
 
     // pass event on to linguistic2::XLinguServiceEventListener's
     cppu::OInterfaceIteratorHelper aIt( aLngSvcMgrListeners );
@@ -747,8 +745,7 @@ void LngSvcMgr::GetListenerHelper_Impl()
 {
     if (!pListenerHelper)
     {
-        pListenerHelper = new LngSvcMgrListenerHelper( *this,
-                (XLinguServiceManager *) this, linguistic::GetDictionaryList() );
+        pListenerHelper = new LngSvcMgrListenerHelper( *this, linguistic::GetDictionaryList() );
         xListenerHelper = (linguistic2::XLinguServiceEventListener *) pListenerHelper;
     }
 }
@@ -1811,7 +1808,7 @@ void SAL_CALL
         bDisposing = sal_True;
 
         // require listeners to release this object
-        lang::EventObject aEvtObj( (XLinguServiceManager *) this );
+        lang::EventObject aEvtObj( static_cast<XLinguServiceManager*>(this) );
         aEvtListeners.disposeAndClear( aEvtObj );
 
         if (pListenerHelper)
