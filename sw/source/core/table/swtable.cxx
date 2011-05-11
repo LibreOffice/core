@@ -2266,6 +2266,8 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                             GetChgSet()->Get( RES_BOXATR_FORMAT )).GetValue();
                 rSet.GetItemState( RES_BOXATR_FORMULA, sal_False,
                                     (const SfxPoolItem**)&pNewFml );
+                rSet.GetItemState( RES_BOXATR_VALUE, sal_False,
+                                    (const SfxPoolItem**)&pNewVal );
             }
             break;
 
