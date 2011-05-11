@@ -7294,9 +7294,11 @@ dnl ===================================================================
 AC_MSG_CHECKING([for oooblogger extension integration])
 if test "z$enable_ext_oooblogger" = "z" -o "z$enable_ext_oooblogger" = "zno" ; then
   AC_MSG_RESULT([no])
+  OOOBLOGGER_EXTENSION_PACK=""
 else
   AC_MSG_RESULT([yes])
   SCPDEFS="$SCPDEFS -DWITH_EXTENSION_OOOBLOGGER"
+  OOOBLOGGER_EXTENSION_PACK="b7b2d0e04e142f26dd96119c80757d1f-oooblogger_0.1.oxt"
 fi
 
 dnl ===================================================================
