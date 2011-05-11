@@ -197,30 +197,6 @@ namespace osl_Security
     }; // class getUserName
 
 
-
-    /** testing the method:
-        inline sal_Bool SAL_CALL getHomeDir( ::rtl::OUString& strDirectory) const;
-    */
-    class getHomeDir : public CppUnit::TestFixture
-    {
-    public:
-        sal_Bool bRes, bRes1;
-
-        void getHomeDir_001( )
-        {
-            ::osl::Security aSec;
-            ::rtl::OUString strHome;
-            bRes = aSec.getHomeDir( strHome );
-
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: getHomeDir and compare it with the info we get at the beginning.",
-                                     ( sal_True == strHomeDirectory.equals( strHome ) ) && ( sal_True == bRes ) );
-        }
-
-        CPPUNIT_TEST_SUITE( getHomeDir );
-        CPPUNIT_TEST( getHomeDir_001 );
-        CPPUNIT_TEST_SUITE_END( );
-    }; // class getHomeDir
-
     /** testing the method:
         inline sal_Bool Security::getConfigDir( rtl::OUString& strDirectory ) const
     */
@@ -341,7 +317,6 @@ CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::ctors);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::logonUser);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::getUserIdent);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::getUserName);
-CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::getHomeDir);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::getConfigDir);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::isAdministrator);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::getHandle);
@@ -393,11 +368,8 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     strUserName = ::rtl::OUString::createFromAscii( pw->pw_name );
 
     /// get home directory;
-    char *pw_dir = pw->pw_dir;
-    if( getenv( "FAKEROOTKEY" ) )
-        pw_dir = getenv("HOME");
     CPPUNIT_ASSERT_MESSAGE( "#Convert from system path to URL failed.",
-                            ::osl::File::E_None == ::osl::File::getFileURLFromSystemPath( ::rtl::OUString::createFromAscii( pw_dir ), strHomeDirectory ) );
+                            ::osl::File::E_None == ::osl::File::getFileURLFromSystemPath( ::rtl::OUString::createFromAscii( pw->pw_dir ), strHomeDirectory ) );
 
     /// get config directory;
     strConfigDirectory = strHomeDirectory.copy(0);
