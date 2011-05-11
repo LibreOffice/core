@@ -1661,6 +1661,17 @@ if ( $platform =~ m/cygwin/ )
    ToFile( "DISABLE_ACTIVEX",   "@DISABLE_ACTIVEX@","e" );
    ToFile( "DISABLE_ATL",   "@DISABLE_ATL@","e" );
    ToFile( "USE_NEW_SDK",       $USE_NEW_SDK,       "e" );
+   # Variables used when building the parts that needs to be available
+   # also as 64-bit versions in a 32-bit LibreOffice build, like
+   # the Explorer extension. If the configure script hasn't
+   # found the 64-bit (cross-)compiler, then @BUILD_X64@ will be empty.
+   ToFile( "BUILD_X64",         "@BUILD_X64@",      "e" );
+   if ( "@BUILD_X64@" eq "TRUE" ) {
+       ToFile( "CC_X64_BINARY", "@CC_X64_BINARY@",  "e" );
+       ToFile( "CXX_X64_BINARY","@CXX_X64_BINARY@", "e" );
+       ToFile( "LINK_X64_BINARY","@LINK_X64_BINARY@","e" );
+       ToFile( "LIBMGR_X64_BINARY","@LIBMGR_X64_BINARY@","e" );
+   }
 
    # Hack around dmake's mktmp not generating DOS paths.
    my $tmpdir = qx{cygpath -m "/tmp"};

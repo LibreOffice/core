@@ -449,7 +449,7 @@ AC_ARG_ENABLE(zenity,
 
 AC_ARG_ENABLE(cl-x64,
     AS_HELP_STRING([--enable-cl-x64],
-        [Use the Microsoft C/C++ x64 compiler instead of the default x86 one.]),
+        [Build a 64-bit LibreOffice using the Microsoft C/C++ x64 compiler.]),
 ,)
 
 AC_ARG_ENABLE(extra-gallery,
@@ -1556,8 +1556,8 @@ if test "$_os" = "WINNT"; then
    dnl Include twain scanners
    BUILD_TYPE="$BUILD_TYPE TWAIN"
 
-   dnl Set the CL_X64 variable.
-   AC_MSG_CHECKING([whether to use the Microsoft C/C++ x64 compiler])
+   dnl Set the CL_X64 variable if we are building a 64-bit LibreOffice.
+   AC_MSG_CHECKING([whether to build a 64-bit LibreOffice])
    if test "z$enable_cl_x64" = "z" -o "$enable_cl_x64" = "no"; then
       CL_X64=""
       AC_MSG_RESULT([no])
@@ -2189,7 +2189,7 @@ if test "$_os" = "WINNT"; then
             AC_PATH_PROG(CC, cl.exe)
         fi
 
-          if test -e "$CC"; then
+        if test -e "$CC"; then
             # This gives us a posix path with 8.3 filename restrictions
             CC=`cygpath -d "$CC"`
             CC=`cygpath -u "$CC"`
@@ -2205,7 +2205,7 @@ if test "$_os" = "WINNT"; then
             export INCLUDE=`cygpath -d "$COMPATH/Include"`
             dnl  Check which Microsoft C/C++ compiler is found
             AC_MSG_CHECKING([the Version of Microsoft C/C++ Compiler])
-dnl      The following find microsoft, matches nn.nn.nnnn then pulls numbers out.
+	    # The following finds Microsoft, matches nn.nn.nnnn then pulls numbers out.
             CCNUMVER=`$CC 2>&1 | $AWK "/Microsoft/ && /..\\...\\...../ {
                             x = match( \\\$0, /..\\...\\...../ )
                             CCversion = substr( \\\$0, RSTART, RLENGTH)
@@ -2227,6 +2227,51 @@ dnl      The following find microsoft, matches nn.nn.nnnn then pulls numbers out
         else
             AC_MSG_ERROR([Microsoft C/C++ Compiler not found. Use --with-cl-home or set path to cl.exe.])
         fi
+
+	# Check for 64-bit (cross-)compiler to use to build the 64-bit
+	# version of the Explorer extension (and maybe other small
+	# bits, too) needed when installing a 32-bit LibreOffice on a
+	# 64-bit OS. The 64-bit Explorer extension is a feature that
+	# has been present since long in OOo. Don't confuse it with
+	# building LibreOffice itself as 64-bit code, which is
+	# unfished work and highly experimental.
+
+	AC_MSG_CHECKING([for a x64 compiler])
+	BUILD_X64=
+	CC_X64_BINARY=
+	LINK_X64_BINARY=
+	LIBMGR_X64_BINARY=
+
+	# Prefer native x64 compiler to cross-compiler, in case we are running
+	# the build on a 64-bit OS.
+	if "$with_cl_home/bin/amd64/cl.exe" -? </dev/null >/dev/null 2>&1; then
+            BUILD_X64=TRUE
+	    CC_X64_BINARY="$with_cl_home/bin/amd64/cl.exe"
+	    CXX_X64_BINARY="$with_cl_home/bin/amd64/cl.exe"
+	    LINK_X64_BINARY="$with_cl_home/bin/amd64/link.exe"
+	    LIBMGR_X64_BINARY="$with_cl_home/bin/amd64/lib.exe"
+	elif "$with_cl_home/bin/x86_amd64/cl.exe" -? </dev/null >/dev/null 2>&1; then
+            BUILD_X64=TRUE
+	    CC_X64_BINARY="$with_cl_home/bin/x86_amd64/cl.exe"
+	    CXX_X64_BINARY="$with_cl_home/bin/x86_amd64/cl.exe"
+	    LINK_X64_BINARY="$with_cl_home/bin/x86_amd64/link.exe"
+	    LIBMGR_X64_BINARY="$with_cl_home/bin/x86_amd64/lib.exe"
+	fi
+	if test "$BUILD_X64" = TRUE; then
+	    AC_MSG_RESULT([found])
+	else
+	    AC_MSG_RESULT([not found])
+	    AC_MSG_WARN([Installation set will not contain the 64-bit Explorer extension])
+	fi
+	AC_SUBST(BUILD_X64)
+
+	# These are passed to the environment through set_soenv.in as usual, and then 
+	# used in set_wntx64.mk
+	AC_SUBST(CC_X64_BINARY)
+	AC_SUBST(CXX_X64_BINARY)
+	AC_SUBST(LINK_X64_BINARY)
+	AC_SUBST(LIBMGR_X64_BINARY)
+
     else
         AC_MSG_CHECKING([the MinGW C++ Compiler])
         if test `$CC -dumpmachine | $SED -e 's/^.*-//'` = "mingw32"; then
