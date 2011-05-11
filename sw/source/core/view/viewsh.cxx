@@ -918,7 +918,9 @@ void ViewShell::SetFirstVisPageInvalid()
 {
     ViewShell *pSh = this;
     do
-    {   pSh->Imp()->SetFirstVisPageInvalid();
+    {
+        if ( pSh->Imp() )
+            pSh->Imp()->SetFirstVisPageInvalid();
         pSh = (ViewShell*)pSh->GetNext();
 
     } while ( pSh != this );

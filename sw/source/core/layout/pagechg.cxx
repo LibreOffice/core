@@ -296,7 +296,7 @@ SwPageFrm::~SwPageFrm()
     //Damit der Zugriff auf zerstoerte Seiten verhindert werden kann.
     if ( !IsEmptyPage() ) //#59184# sollte fuer Leerseiten unnoetig sein.
     {
-        SwDoc *pDoc = GetFmt()->GetDoc();
+        SwDoc *pDoc = GetFmt() ? GetFmt()->GetDoc() : NULL;
         if( pDoc && !pDoc->IsInDtor() )
         {
             ViewShell *pSh = getRootFrm()->GetCurrShell();
@@ -864,7 +864,8 @@ void AdjustSizeChgNotify( SwRootFrm *pRoot )
             if( pRoot == pSh->GetLayout() )
             {
                 pSh->SizeChgNotify();
-                pSh->Imp()->NotifySizeChg( pRoot->Frm().SSize() );
+                if ( pSh->Imp() )
+                    pSh->Imp()->NotifySizeChg( pRoot->Frm().SSize() );
             }
             pSh = (ViewShell*)pSh->GetNext();
         } while ( pSh != pRoot->GetCurrShell() );
