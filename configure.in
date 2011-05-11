@@ -2236,32 +2236,35 @@ if test "$_os" = "WINNT"; then
 	# building LibreOffice itself as 64-bit code, which is
 	# unfished work and highly experimental.
 
-	AC_MSG_CHECKING([for a x64 compiler])
 	BUILD_X64=
 	CC_X64_BINARY=
 	LINK_X64_BINARY=
 	LIBMGR_X64_BINARY=
 
-	# Prefer native x64 compiler to cross-compiler, in case we are running
-	# the build on a 64-bit OS.
-	if "$with_cl_home/bin/amd64/cl.exe" -? </dev/null >/dev/null 2>&1; then
-            BUILD_X64=TRUE
-	    CC_X64_BINARY="$with_cl_home/bin/amd64/cl.exe"
-	    CXX_X64_BINARY="$with_cl_home/bin/amd64/cl.exe"
-	    LINK_X64_BINARY="$with_cl_home/bin/amd64/link.exe"
-	    LIBMGR_X64_BINARY="$with_cl_home/bin/amd64/lib.exe"
-	elif "$with_cl_home/bin/x86_amd64/cl.exe" -? </dev/null >/dev/null 2>&1; then
-            BUILD_X64=TRUE
-	    CC_X64_BINARY="$with_cl_home/bin/x86_amd64/cl.exe"
-	    CXX_X64_BINARY="$with_cl_home/bin/x86_amd64/cl.exe"
-	    LINK_X64_BINARY="$with_cl_home/bin/x86_amd64/link.exe"
-	    LIBMGR_X64_BINARY="$with_cl_home/bin/x86_amd64/lib.exe"
-	fi
-	if test "$BUILD_X64" = TRUE; then
-	    AC_MSG_RESULT([found])
-	else
-	    AC_MSG_RESULT([not found])
-	    AC_MSG_WARN([Installation set will not contain the 64-bit Explorer extension])
+	if test "$CL_X64" = ""; then
+	    AC_MSG_CHECKING([for a x64 compiler])
+
+	    # Prefer native x64 compiler to cross-compiler, in case we are running
+	    # the build on a 64-bit OS.
+	    if "$with_cl_home/bin/amd64/cl.exe" -? </dev/null >/dev/null 2>&1; then
+		BUILD_X64=TRUE
+		CC_X64_BINARY="$with_cl_home/bin/amd64/cl.exe"
+		CXX_X64_BINARY="$with_cl_home/bin/amd64/cl.exe"
+		LINK_X64_BINARY="$with_cl_home/bin/amd64/link.exe"
+		LIBMGR_X64_BINARY="$with_cl_home/bin/amd64/lib.exe"
+	    elif "$with_cl_home/bin/x86_amd64/cl.exe" -? </dev/null >/dev/null 2>&1; then
+		BUILD_X64=TRUE
+		CC_X64_BINARY="$with_cl_home/bin/x86_amd64/cl.exe"
+		CXX_X64_BINARY="$with_cl_home/bin/x86_amd64/cl.exe"
+		LINK_X64_BINARY="$with_cl_home/bin/x86_amd64/link.exe"
+		LIBMGR_X64_BINARY="$with_cl_home/bin/x86_amd64/lib.exe"
+	    fi
+	    if test "$BUILD_X64" = TRUE; then
+		AC_MSG_RESULT([found])
+	    else
+		AC_MSG_RESULT([not found])
+		AC_MSG_WARN([Installation set will not contain the 64-bit Explorer extension])
+	    fi
 	fi
 	AC_SUBST(BUILD_X64)
 
