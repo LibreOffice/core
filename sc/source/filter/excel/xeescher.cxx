@@ -119,7 +119,7 @@ using namespace oox;
 
 #define  HMM2XL(x)        ((x)/26.5)+0.5
 
-#ifdef XLSX_OOXML_FUTURE
+#if 1//def XLSX_OOXML_FUTURE
 // these function are only used within that context
 // Static Function Helpers
 static const char *ToHorizAlign( SdrTextHorzAdjust eAdjust )
@@ -1353,9 +1353,11 @@ void XclExpNote::WriteXml( sal_Int32 nAuthorId, XclExpXmlStream& rStrm )
    Export of commentPr is disabled, since the current (Oct 2010)
    version of MSO 2010 doesn't yet support commentPr
  */
-#ifdef XLSX_OOXML_FUTURE
+#if 1//def XLSX_OOXML_FUTURE
     if( rStrm.getVersion() == oox::core::ISOIEC_29500_2008 )
     {
+        rComments->startElement( FSNS( XML_mc, XML_AlternateContent ), FSEND );
+        rComments->startElement( FSNS( XML_mc, XML_Choice ), XML_Requires, "v2", FSEND );
         rComments->startElement( XML_commentPr,
                 XML_autoFill,       XclXmlUtils::ToPsz( mbAutoFill ),
                 XML_autoScale,      XclXmlUtils::ToPsz( mbAutoScale ),
@@ -1377,6 +1379,12 @@ void XclExpNote::WriteXml( sal_Int32 nAuthorId, XclExpXmlStream& rStrm )
         rComments->endElement( FSNS( XML_xdr, XML_to ) );
         rComments->endElement( XML_anchor );
         rComments->endElement( XML_commentPr );
+
+        rComments->endElement( FSNS( XML_mc, XML_Choice ) );
+        rComments->startElement( FSNS( XML_mc, XML_Fallback ), FSEND );
+        // Any fallback code ?
+        rComments->endElement( FSNS( XML_mc, XML_Fallback ) );
+        rComments->endElement( FSNS( XML_mc, XML_AlternateContent ) );
     }
 #endif
     rComments->endElement( XML_comment );
@@ -1476,10 +1484,20 @@ void XclExpComments::SaveXml( XclExpXmlStream& rStrm )
             "http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments" );
     rStrm.PushStream( rComments );
 
-    rComments->startElement( XML_comments,
+    if( rStrm.getVersion() == oox::core::ISOIEC_29500_2008 )
+        rComments->startElement( XML_comments,
+            XML_xmlns, "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+            FSNS( XML_xmlns, XML_mc ), "http://schemas.openxmlformats.org/markup-compatibility/2006",
+            FSNS( XML_xmlns, XML_xdr ), "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing",
+            FSNS( XML_xmlns, XML_v2 ), "http://schemas.openxmlformats.org/spreadsheetml/2006/main/v2",
+            FSNS( XML_mc, XML_Ignorable ), "v2",
+            FSEND );
+    else
+        rComments->startElement( XML_comments,
             XML_xmlns, "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
             FSNS( XML_xmlns, XML_xdr ), "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing",
             FSEND );
+
     rComments->startElement( XML_authors, FSEND );
 
     typedef std::set< OUString, OUStringLess > Authors;
