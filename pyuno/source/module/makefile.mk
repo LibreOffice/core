@@ -116,8 +116,7 @@ $(LB)$/lib$(TARGET).a: $(MISC)$/$(TARGET).def
 ALLTAR : \
     $(DLLDEST)$/uno.py \
     $(DLLDEST)$/unohelper.py \
-    $(MISC)$/$(PYUNORC) \
-    $(LB)$/$(TARGET)$(DLLPOST)
+    $(MISC)$/$(PYUNORC)
 .ENDIF
 .ENDIF
 
@@ -134,10 +133,12 @@ $(MISC)$/pyuno.flt : pyuno.flt
     -rm -f $@
     cat $? > $@
 
+.IF "$(DLLPRE)"!=""
 # python does not accept the "lib" prefix in the module library
 $(LB)$/$(TARGET)$(DLLPOST) : $(LB)$/$(DLLPRE)$(TARGET)$(DLLPOST)
     -rm -f $@
     ln -s $? $@
+.ENDIF
 
 .ENDIF # L10N_framework
 
