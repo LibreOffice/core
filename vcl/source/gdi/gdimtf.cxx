@@ -829,7 +829,8 @@ void GDIMetaFile::Wind( size_t nActionPos )
 void GDIMetaFile::WindPrev()
 {
     if( !bRecord )
-        nCurrentActionElement = ( nCurrentActionElement > 0 ) ? --nCurrentActionElement : 0;
+        if ( nCurrentActionElement > 0 )
+            --nCurrentActionElement;
 }
 
 // ------------------------------------------------------------------------
