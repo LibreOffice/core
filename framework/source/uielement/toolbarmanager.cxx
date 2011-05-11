@@ -314,6 +314,7 @@ ToolBarManager::~ToolBarManager()
 
 void ToolBarManager::Destroy()
 {
+    OSL_ASSERT( m_pToolBar != 0 );
     ResetableGuard aGuard( m_aLock );
     if ( m_bAddedToTaskPaneList )
     {
@@ -349,6 +350,7 @@ void ToolBarManager::Destroy()
     m_pToolBar->SetDoubleClickHdl( aEmpty );
     m_pToolBar->SetStateChangedHdl( aEmpty );
     m_pToolBar->SetDataChangedHdl( aEmpty );
+    m_pToolBar->SetCommandHdl( aEmpty );
 
     m_pToolBar = 0;
 }
