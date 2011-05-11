@@ -3168,6 +3168,10 @@ bool PrintFontManager::getMetrics( fontID nFontID, const sal_Unicode* pString, i
 
 bool PrintFontManager::getMetrics( fontID nFontID, sal_Unicode minCharacter, sal_Unicode maxCharacter, CharacterMetric* pArray, bool bVertical ) const
 {
+    OSL_PRECOND(minCharacter <= maxCharacter, "invalid char. range");
+    if (minCharacter > maxCharacter)
+        return false;
+
     PrintFont* pFont = getFont( nFontID );
     if( ! pFont )
         return false;
