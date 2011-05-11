@@ -113,9 +113,18 @@ ALLTAR : \
 $(LB)$/lib$(TARGET).a: $(MISC)$/$(TARGET).def
     dlltool --dllname $(TARGET)$(DLLPOST) --input-def=$(MISC)$/$(TARGET).def --kill-at --output-lib=$(LB)$/lib$(TARGET).a
 .ELSE
+
+.IF "$(GUI)"!="WNT"
+# For some reason the build breaks on Windows if this is listed in the
+# prerequisite list of ALLTAR, but pyuno.pyd still gets produced. Go
+# figure. But we need it on non-Windows.
+targetdll=$(LB)$/$(TARGET)$(DLLPOST)
+.ENDIF
+
 ALLTAR : \
     $(DLLDEST)$/uno.py \
     $(DLLDEST)$/unohelper.py \
+    $(targetdll) \
     $(MISC)$/$(PYUNORC)
 .ENDIF
 .ENDIF
