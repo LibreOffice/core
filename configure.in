@@ -7210,7 +7210,7 @@ if test "z$enable_ext_numbertext" = "z" -o "z$enable_ext_numbertext" = "zno" ; t
 else
   AC_MSG_RESULT([yes])
   SCPDEFS="$SCPDEFS -DWITH_EXTENSION_NUMBERTEXT"
-  NUMBERTEXT_EXTENSION_PACK="b8cbca7b3363e6ca2d02bc0ba2b63904-numbertext-0.9.4.oxt"
+  NUMBERTEXT_EXTENSION_PACK="b8cbca7b3363e6ca2d02bc0ba2b63904-numbertext_0.9.4.oxt"
 fi
 AC_SUBST(NUMBERTEXT_EXTENSION_PACK)
 
