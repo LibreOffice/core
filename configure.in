@@ -7300,6 +7300,7 @@ else
   SCPDEFS="$SCPDEFS -DWITH_EXTENSION_OOOBLOGGER"
   OOOBLOGGER_EXTENSION_PACK="b7b2d0e04e142f26dd96119c80757d1f-oooblogger_0.1.oxt"
 fi
+AC_SUBST(OOOBLOGGER_EXTENSION_PACK)
 
 dnl ===================================================================
 dnl Test whether to include Sun Professional Template Pack
