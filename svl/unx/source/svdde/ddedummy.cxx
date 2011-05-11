@@ -251,7 +251,7 @@ void DdeService::AddFormat( sal_uLong )
 {
 }
 
-void DdeService::AddTopic( const DdeTopic& )
+void DdeService::AddTopic( DdeTopic& )
 {
 }
 
