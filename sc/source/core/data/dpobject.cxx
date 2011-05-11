@@ -2556,7 +2556,7 @@ namespace {
 /**
  * Unary predicate to match DP objects by the table ID.
  */
-class MatchByTable : public unary_function<bool, ScDPObject>
+class MatchByTable : public unary_function<ScDPObject, bool>
 {
     SCTAB mnTab;
 public:
