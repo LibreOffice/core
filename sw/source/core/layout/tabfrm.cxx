@@ -1568,7 +1568,7 @@ bool SwCntntFrm::CalcLowers( SwLayoutFrm* pLay, const SwLayoutFrm* pDontLeave,
                     }
 
 #if OSL_DEBUG_LEVEL > 1
-                    OSL_FAIL( "LoopControl in SwCntntFrm::CalcLowers" )
+                    OSL_FAIL( "LoopControl in SwCntntFrm::CalcLowers" );
 #endif
                 }
             }

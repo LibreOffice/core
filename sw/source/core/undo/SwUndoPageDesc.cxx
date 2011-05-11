@@ -64,10 +64,6 @@ void DebugHeaderFooterContent( const SwPageDesc& rPageDesc )
         SwFrmFmt* pHeaderFmt = rHead.GetHeaderFmt();
         if( pHeaderFmt )
         {
-            nHeaderCount = pHeaderFmt->GetClientCount();
-            {
-                int nHeaderCount = 0;
-            }
             const SwFmtCntnt* pCntnt = &pHeaderFmt->GetCntnt();
             if( pCntnt->GetCntntIdx() )
                 nHeaderMaster = pCntnt->GetCntntIdx()->GetIndex();
@@ -77,10 +73,6 @@ void DebugHeaderFooterContent( const SwPageDesc& rPageDesc )
         SwFrmFmt* pLeftHeaderFmt = rLeftHead.GetHeaderFmt();
         if( pLeftHeaderFmt )
         {
-            nLeftHeaderCount = pLeftHeaderFmt->GetClientCount();
-            {
-                int nLeftHeaderCount = 0;
-            }
             const SwFmtCntnt* pLeftCntnt = &pLeftHeaderFmt->GetCntnt();
             if( pLeftCntnt->GetCntntIdx() )
                 nHeaderLeft = pLeftCntnt->GetCntntIdx()->GetIndex();
@@ -93,10 +85,6 @@ void DebugHeaderFooterContent( const SwPageDesc& rPageDesc )
         SwFrmFmt* pFooterFmt = rFoot.GetFooterFmt();
         if( pFooterFmt )
         {
-            nFooterCount = pFooterFmt->GetClientCount();
-            {
-                int nFooterCount = 0;
-            }
             const SwFmtCntnt* pCntnt = &pFooterFmt->GetCntnt();
             if( pCntnt->GetCntntIdx() )
                 nFooterMaster = pCntnt->GetCntntIdx()->GetIndex();
@@ -106,10 +94,6 @@ void DebugHeaderFooterContent( const SwPageDesc& rPageDesc )
         SwFrmFmt* pLeftFooterFmt = rLeftFoot.GetFooterFmt();
         if( pLeftFooterFmt )
         {
-            nLeftFooterCount = pLeftFooterFmt->GetClientCount();
-            {
-                int nLeftFooterCount = 0;
-            }
             const SwFmtCntnt* pLeftCntnt = &pLeftFooterFmt->GetCntnt();
             if( pLeftCntnt->GetCntntIdx() )
                 nFooterLeft = pLeftCntnt->GetCntntIdx()->GetIndex();
