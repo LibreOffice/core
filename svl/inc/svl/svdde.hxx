@@ -406,7 +406,7 @@ public:
     static DdeServices& GetServices();
     std::vector<DdeTopic*>& GetTopics() { return aTopics; }
 
-    void            AddTopic( DdeTopic& );
+    void            AddTopic( const DdeTopic& );
     void            RemoveTopic( const DdeTopic& );
 
     void            AddFormat( sal_uLong );

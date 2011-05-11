@@ -570,10 +570,10 @@ DdeServices& DdeService::GetServices()
 
 // --- DdeService::AddTopic() --------------------------------------
 
-void DdeService::AddTopic( DdeTopic& rTopic )
+void DdeService::AddTopic( const DdeTopic& rTopic )
 {
     RemoveTopic( rTopic );
-    aTopics.push_back(&rTopic);
+    aTopics.push_back((DdeTopic *) &rTopic);
 }
 
 // --- DdeService::RemoveTopic() -----------------------------------
