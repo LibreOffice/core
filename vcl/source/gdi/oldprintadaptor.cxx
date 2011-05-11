@@ -63,6 +63,7 @@ OldStylePrintAdaptor::OldStylePrintAdaptor( const boost::shared_ptr< Printer >& 
 
 OldStylePrintAdaptor::~OldStylePrintAdaptor()
 {
+    delete mpData;
 }
 
 void OldStylePrintAdaptor::StartPage()
