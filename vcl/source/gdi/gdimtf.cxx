@@ -701,7 +701,7 @@ void GDIMetaFile::ImplDelegate2PluggableRenderer( const MetaCommentAction* pAct,
 // ------------------------------------------------------------------------
 
 void GDIMetaFile::Play( OutputDevice* pOut, const Point& rPos,
-                        const Size& rSize, sal_uLong nPos )
+                        const Size& rSize, size_t nPos )
 {
     Region  aDrawClipRegion;
     MapMode aDrawMap( GetPrefMapMode() );
@@ -910,7 +910,7 @@ MetaAction* GDIMetaFile::CopyAction( size_t nPos ) const
 
 // ------------------------------------------------------------------------
 
-sal_uLong GDIMetaFile::GetActionPos( const String& rLabel )
+size_t GDIMetaFile::GetActionPos( const String& rLabel )
 {
     ImpLabel* pLabel = NULL;
 

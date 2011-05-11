@@ -215,7 +215,7 @@ public:
     MetaAction*     GetAction( size_t nAction ) const;
     MetaAction*     CopyAction( size_t nPos ) const;
     MetaAction*     GetCurAction() const { return GetAction( nCurrentActionElement ); }
-    MetaAction*     ReplaceAction( MetaAction* pAction, sal_uLong nAction );
+    MetaAction*     ReplaceAction( MetaAction* pAction, size_t nAction );
 
     sal_Bool            InsertLabel( const String& rLabel, sal_uLong nActionPos );
     void            RemoveLabel( const String& rLabel );
