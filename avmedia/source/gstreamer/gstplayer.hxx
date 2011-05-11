@@ -29,7 +29,7 @@
 #ifndef _PLAYER_HXX
 #define _PLAYER_HXX
 
-#include <osl/conditn.h>
+#include <osl/conditn.hxx>
 #include "gstcommon.hxx"
 
 #include "com/sun/star/media/XPlayer.hdl"
@@ -103,7 +103,7 @@ private:
     int                     mnWidth;
     int                     mnHeight;
 
-    oslCondition            maSizeCondition;
+    osl::Condition          maSizeCondition;
 };
 
 } // namespace gstreamer

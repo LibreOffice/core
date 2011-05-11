@@ -70,8 +70,7 @@ Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     mpXOverlay( NULL ),
     mnDuration( 0 ),
     mnWidth( 0 ),
-    mnHeight( 0 ),
-    maSizeCondition( osl_createCondition() )
+    mnHeight( 0 )
 {
     // Initialize GStreamer library
     int argc = 1;
@@ -234,7 +233,7 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
 #if OSL_DEBUG_LEVEL > 2
                     sal_Bool aSuccess =
 #endif
-                                          osl_setCondition( maSizeCondition );
+                                          maSizeCondition.set();
                     DBG( "%p set condition result: %d", this, aSuccess );
                 }
             }
@@ -245,7 +244,7 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
 #if OSL_DEBUG_LEVEL > 2
             sal_Bool aSuccess =
 #endif
-                                osl_setCondition( maSizeCondition );
+                                maSizeCondition.set();
             DBG( "%p set condition result: %d", this, aSuccess );
         }
     }
@@ -540,7 +539,7 @@ awt::Size SAL_CALL Player::getPreferredPlayerWindowSize(  )
 #if OSL_DEBUG_LEVEL > 2
     oslConditionResult aResult =
 #endif
-                                 osl_waitCondition( maSizeCondition, &aTimeout );
+                                 maSizeCondition.wait( &aTimeout );
 
     if( mbFakeVideo ) {
         mbFakeVideo = sal_False;
