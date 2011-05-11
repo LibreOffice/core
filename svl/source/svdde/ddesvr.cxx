@@ -31,6 +31,7 @@
 
 #define UNICODE
 #include "ddeimp.hxx"
+#include <algorithm>
 #include <svl/svdde.hxx>
 #include <svl/svarray.hxx>
 #include <tools/debug.hxx>
@@ -330,14 +331,18 @@ found:
                 if( !pItem->pImpData && pTopic->StartAdviseLoop() )
                 {
                     // dann wurde das Item ausgewechselt
-                    pTopic->aItems.erase(std::remove(pTopic->aItems.begin(),
-                                                     pTopic->aItems.end(),
-                                                     pItem));
+                    std::vector<DdeItem*>::iterator it(std::find(pTopic->aItems.begin(),
+                                                                 pTopic->aItems.end(),
+                                                                 pItem));
+                    if (it != pTopic->aItems.end())
+                        pTopic->aItems.erase(it);
 
-                    std::vector<DdeItem*> iter;
-                    for(  iter = pTopic->aItems.begin(); iter != pTopic->aItems.end(); ++iter )
+                    std::vector<DdeItem*>::iterator iter;
+                    for( iter = pTopic->aItems.begin();
+                         iter != pTopic->aItems.end();
+                         ++iter )
                     {
-                        if( *iter->pName == hText2 )
+                        if( *(*iter)->pName == hText2 )
                         {
                             // es wurde tatsaechlich ausgewechselt
                             delete pItem;
@@ -421,7 +426,7 @@ DdeTopic* DdeInternal::FindTopic( DdeService& rService, HSZ hTopic )
     do {            // middle check loop
         for ( iter = rTopics.begin(); iter != rTopics.end(); ++iter )
         {
-            if ( iter->pName == hTopic )
+            if ( *(*iter)->pName == hTopic )
                 return *iter;
         }
 
@@ -443,7 +448,7 @@ DdeTopic* DdeInternal::FindTopic( DdeService& rService, HSZ hTopic )
 
 DdeItem* DdeInternal::FindItem( DdeTopic& rTopic, HSZ hItem )
 {
-    std::vector<DdeItem>::iterator iter;
+    std::vector<DdeItem*>::iterator iter;
     std::vector<DdeItem*> &rItems = rTopic.aItems;
     DdeInstData* pInst = ImpGetInstData();
     DBG_ASSERT(pInst,"SVDDE:No instance data");
@@ -452,7 +457,7 @@ DdeItem* DdeInternal::FindItem( DdeTopic& rTopic, HSZ hItem )
     do {            // middle check loop
 
         for ( iter = rItems.begin(); iter != rItems.end(); ++iter )
-            if ( *iter->pName == hItem )
+            if ( *(*iter)->pName == hItem )
                 return *iter;
 
         bWeiter = !bWeiter;
@@ -565,7 +570,7 @@ DdeServices& DdeService::GetServices()
 
 // --- DdeService::AddTopic() --------------------------------------
 
-void DdeService::AddTopic( const DdeTopic& rTopic )
+void DdeService::AddTopic( DdeTopic& rTopic )
 {
     RemoveTopic( rTopic );
     aTopics.push_back(&rTopic);
@@ -578,7 +583,7 @@ void DdeService::RemoveTopic( const DdeTopic& rTopic )
     std::vector<DdeTopic*>::iterator iter;
     for ( iter = aTopics.begin(); iter != aTopics.end(); ++iter )
     {
-        if ( !DdeCmpStringHandles (*iter->pName, *rTopic.pName ) )
+        if ( !DdeCmpStringHandles (*(*iter)->pName, *rTopic.pName ) )
         {
             aTopics.erase(iter);
             // JP 27.07.95: und alle Conversions loeschen !!!
@@ -656,7 +661,7 @@ DdeTopic::~DdeTopic()
     std::vector<DdeItem*>::iterator iter;
     for (iter = aItems.begin(); iter != aItems.end(); ++iter)
     {
-        iter->pMyTopic = 0;
+        (*iter)->pMyTopic = 0;
         delete *iter;
     }
 
@@ -712,13 +717,13 @@ void DdeTopic::RemoveItem( const DdeItem& r )
     std::vector<DdeItem*>::iterator iter;
     for (iter = aItems.begin(); iter != aItems.end(); ++iter)
     {
-        if ( !DdeCmpStringHandles (*iter->pName, *r.pName ) )
+        if ( !DdeCmpStringHandles (*(*iter)->pName, *r.pName ) )
             break;
     }
 
     if ( iter != aItems.end() )
     {
-        iter->pMyTopic = 0;
+        (*iter)->pMyTopic = 0;
         delete *iter;
         aItems.erase(iter);
     }
@@ -733,9 +738,9 @@ void DdeTopic::NotifyClient( const String& rItem )
     DBG_ASSERT(pInst,"SVDDE:No instance data");
     for ( iter = aItems.begin(); iter != aItems.end(); ++iter)
     {
-        if ( iter->GetName() == rItem && iter->pImpData)
+        if ( (*iter)->GetName() == rItem && (*iter)->pImpData)
         {
-            DdePostAdvise( pInst->hDdeInstSvr, *pName, *iter->pName );
+            DdePostAdvise( pInst->hDdeInstSvr, *pName, *(*iter)->pName );
             break;
         }
     }
@@ -761,7 +766,7 @@ void DdeTopic::_Disconnect( long nId )
 {
     std::vector<DdeItem*>::iterator iter;
     for (iter = aItems.begin(); iter != aItems.end(); ++iter)
-        iter->DecMonitor( nId );
+        (*iter)->DecMonitor( nId );
 
     Disconnect( nId );
 }
@@ -1000,14 +1005,14 @@ String DdeService::SysItems()
     std::vector<DdeItem*>::iterator iterItem;
     for ( iter = aTopics.begin(); iter != aTopics.end(); ++iter )
     {
-        if ( iter->GetName() == reinterpret_cast<const sal_Unicode*>(SZDDESYS_TOPIC) )
+        if ( (*iter)->GetName() == reinterpret_cast<const sal_Unicode*>(SZDDESYS_TOPIC) )
         {
             short n = 0;
-            for ( iterItem = iter->aItems.begin(); iterItem != iter->aItems.end(); ++iterItem, n++ )
+            for ( iterItem = (*iter)->aItems.begin(); iterItem != (*iter)->aItems.end(); ++iterItem, n++ )
             {
                 if ( n )
                     s += '\t';
-                s += iterItem->GetName();
+                s += (*iterItem)->GetName();
             }
             s += String::CreateFromAscii("\r\n");
         }
@@ -1028,7 +1033,7 @@ String DdeService::Topics()
     {
         if ( n )
             s += '\t';
-        s += iter->GetName();
+        s += (*iter)->GetName();
     }
     s += String::CreateFromAscii("\r\n");
 

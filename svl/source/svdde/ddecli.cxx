@@ -31,6 +31,7 @@
 
 #define UNICODE
 #include <string.h> // memset
+#include <algorithm>
 #include "ddeimp.hxx"
 #include <svl/svdde.hxx>
 
@@ -86,17 +87,17 @@ HDDEDATA CALLBACK DdeInternal::CliCallback(
     if( self )
     {
         sal_Bool bFound = sal_False;
-        std::vector<DdeTransaction*> iter;
+        std::vector<DdeTransaction*>::iterator iter;
         for( iter = self->aTransactions.begin(); iter != self->aTransactions.end(); ++iter )
         {
             switch( nCode )
             {
                 case XTYP_XACT_COMPLETE:
-                    if( (DWORD)iter->nId == nInfo1 )
+                    if( (DWORD)(*iter)->nId == nInfo1 )
                     {
-                        nCode = iter->nType & (XCLASS_MASK | XTYP_MASK);
-                        iter->bBusy = sal_False;
-                        iter->Done( 0 != hData );
+                        nCode = (*iter)->nType & (XCLASS_MASK | XTYP_MASK);
+                        (*iter)->bBusy = sal_False;
+                        (*iter)->Done( 0 != hData );
                         bFound = sal_True;
                     }
                     break;
@@ -112,7 +113,7 @@ HDDEDATA CALLBACK DdeInternal::CliCallback(
                     break;
 
                 case XTYP_ADVDATA:
-                    bFound = sal_Bool( *iter->pName == hText2 );
+                    bFound = sal_Bool( *(*iter)->pName == hText2 );
                     break;
             }
             if( bFound )
@@ -142,7 +143,7 @@ HDDEDATA CALLBACK DdeInternal::CliCallback(
                 d.pImp->hData = hData;
                 d.pImp->nFmt  = DdeData::GetInternalFormat( nCbType );
                 d.Lock();
-                iter->Data( &d );
+                (*iter)->Data( &d );
                 nRet = (HDDEDATA)DDE_FACK;
                 break;
             }
@@ -200,8 +201,11 @@ DdeConnection::~DdeConnection()
     DdeInstData* pInst = ImpGetInstData();
     DBG_ASSERT(pInst,"SVDDE:No instance data");
 
-    pInst->aConnections.erase(std::remove(pInst->aConnections.begin(),
-                                          pInst->aConnections.end(),this));
+    std::vector<DdeConnection*>::iterator it(std::find(pInst->aConnections.begin(),
+                                                        pInst->aConnections.end(),
+                                                        this));
+    if (it != pInst->aConnections.end())
+        pInst->aConnections.erase(it);
 
     pInst->nInstanceCli--;
     pInst->nRefCount--;

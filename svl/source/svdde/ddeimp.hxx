@@ -135,7 +135,7 @@ struct DdeDataImp
     sal_uLong           nFmt;
 };
 
-class DdeConnections;
+class DdeConnection;
 class DdeServices;
 
 struct DdeInstData
