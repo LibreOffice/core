@@ -158,6 +158,10 @@ oslFileError getSystemPathFromFileUrl(
     sal_Unicode const * p = url.getStr();
     sal_Unicode const * end = p + url.getLength();
 
+    /* a valid file url may not start with '/' */
+    if ((p == end) || (*p == UNICHAR_SLASH))
+        return osl_File_E_INVAL;
+
     for (sal_Unicode const * p1 = p; p1 != end; ++p1) {
         if (*p1 == '?' || *p1 == '#' ||
             (*p1 == '%' && end - p1 >= 3 && p1[1] == '2' &&
