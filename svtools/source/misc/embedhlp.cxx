@@ -294,6 +294,7 @@ EmbeddedObjectRef::~EmbeddedObjectRef()
 {
     delete mpImp->pGraphic;
     Clear();
+    delete mpImp;
 }
 
 void EmbeddedObjectRef::Assign( const NS_UNO::Reference < NS_EMBED::XEmbeddedObject >& xObj, sal_Int64 nAspect )
