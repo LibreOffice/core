@@ -464,7 +464,7 @@ bool HelpCompiler::compile( void ) throw( HelpProcessingException )
             streamTable.default_helptexts = aparser.helptexts;
             streamTable.default_keywords = aparser.keywords;
         }
-        else if (modulename == module)
+        else
         {
             streamTable.dropappl();
             streamTable.appl_doc = docResolvedDoc;
@@ -472,14 +472,6 @@ bool HelpCompiler::compile( void ) throw( HelpProcessingException )
             streamTable.appl_helptexts = aparser.helptexts;
             streamTable.appl_keywords = aparser.keywords;
         }
-        else
-        {
-            std::stringstream aStrStream;
-            aStrStream << "ERROR: Found unexpected module name \"" << modulename
-                       << "\" in file" << src.native_file_string().c_str() << std::endl;
-            throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
-        }
-
     } // end iteration over all applications
 
     streamTable.document_id = documentId;
