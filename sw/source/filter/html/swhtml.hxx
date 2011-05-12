@@ -781,7 +781,7 @@ private:
     // ein Event an ein VC-Control anhaengen (htmlform.cxx)
     void InsertBasicCtrlEvent( sal_uInt16 nEvent, const String& rName );
 
-    // Einfuegen von Styles
+    // Inserting styles
 
     // <STYLE>
     void NewStyle();
@@ -796,9 +796,9 @@ private:
                              const String *pLang=0, const String *pDir=0 );
 
 
-    // Einfuegen von Controls und ::com::sun::star::form::Forms (htmlform.cxx)
+    // Inserting Controls and ::com::sun::star::form::Forms (htmlform.cxx)
 
-    // Ein Draw-Objekt in das Dokuement eintragen
+    // Insert draw object into document
     void InsertDrawObject( SdrObject* pNewDrawObj, const Size& rSpace,
                            sal_Int16 eVertOri,
                            sal_Int16 eHoriOri,
@@ -827,12 +827,10 @@ private:
     void RegisterDrawObjectToTable( HTMLTable *pCurTable, SdrObject* pObj,
                                     sal_uInt8 nWidth );
 
-
-    // eine neue Form beginnen
     void NewForm( sal_Bool bAppend=sal_True );
     void EndForm( sal_Bool bAppend=sal_True );
 
-    // die Einfuege-Methoden fuer <INPUT>, <TEXTAREA> und <SELECT>
+    // Insert methods for <INPUT>, <TEXTAREA> und <SELECT>
     void InsertInput();
 
     void NewTextArea();
@@ -844,23 +842,21 @@ private:
     void InsertSelectText();
     void EndSelect();
 
-    // Einfuegen von Tabellen (htmltab.cxx)
+    // Inserting tables (htmltab.cxx)
+public:
 
-public:         // wird in Tabellen benoetigt
-
-    // einen Boxen-Inhalt hinter dem angegebenen Node einfuegen
+    // Insert box content after the given node
     const SwStartNode *InsertTableSection( const SwStartNode *pPrevStNd );
 
-    // Einen Boxen-Inhalt am Ende der Tabelle einfuegen, in der der PaM
-    // steht un den PaM in die Zelle schieben
+    // Insert box content at the end of the table containing the PaM
+    // and move the PaM into the cell
     const SwStartNode *InsertTableSection( sal_uInt16 nPoolId );
 
-    // Einfeuge-Methoden fuer die diversen Tabellen-Tags
+    // Insert methods for various table tags
     HTMLTableCnts *InsertTableContents( sal_Bool bHead );
 
 private:
-    // Eine Section fuer die voruebergende Aufnahme der Tabellen-Ueberschrift
-    // anlegen
+    // Create a section for the temporary storage of the table caption
     SwStartNode *InsertTempTableCaptionSection();
 
     void BuildTableCell( HTMLTable *pTable, sal_Bool bReadOptions, sal_Bool bHead );
@@ -876,7 +872,7 @@ private:
                            sal_Bool bHasToFlow = sal_False );
 
 
-    // sonstiges ...
+    // misc ...
 
     void ParseMoreMetaOptions();
 
@@ -895,19 +891,18 @@ private:
     SwNodeIndex *GetFootEndNoteSection( const String& rName );
     void DeleteFootEndNoteImpl();
 
-    // Line-Break am Ende eines Absatzes entfernen
     xub_StrLen StripTrailingLF();
 
-    // Einen leeren Absatz an der PaM-Position entfernen
+    // Remove empty paragraph at the PaM position
     void StripTrailingPara();
 
-    // sind im aktuellen Absatz Fly-Frames vorhanden?
+    // Are there fly frames in the current paragraph?
     sal_Bool HasCurrentParaFlys( sal_Bool bNoSurroundOnly = sal_False,
                              sal_Bool bSurroundOnly = sal_False ) const;
 
-public:         // wird in Tabellen benoetigt
+public:         // used in tables
 
-    // generieren eines BrushItems (mit new) oder 0
+    // Create brush item (with new) or 0
     SvxBrushItem* CreateBrushItem( const Color *pColor,
                                    const String &rImageURL,
                                    const String &rStyle,
@@ -915,11 +910,11 @@ public:         // wird in Tabellen benoetigt
                                    const String &rClass );
 
 protected:
-    // wird fuer jedes Token gerufen, das in CallParser erkannt wird
+    // Executed for each token recognized by CallParser
     virtual void NextToken( int nToken );
     virtual ~SwHTMLParser();
 
-    // wird das Dok geloescht, ist auch der Parser zu loeschen
+    // If the document is removed, remove the parser as well
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
 
     virtual void AddMetaUserDefined( ::rtl::OUString const & i_rMetaName );
@@ -933,12 +928,12 @@ public:
                     SfxMedium* pMed = 0, sal_Bool bReadUTF8 = sal_False,
                     sal_Bool bIgnoreHTMLComments = sal_False );
 
-    virtual SvParserState CallParser();   // Aufruf des Parsers
+    virtual SvParserState CallParser();
 
 
     sal_uInt16 ToTwips( sal_uInt16 nPixel ) const;
 
-    // fuers asynchrone lesen aus dem SvStream
+    // for reading asynchronously from SvStream
     virtual void Continue( int nToken );
 
     virtual bool ParseMetaOptions( const ::com::sun::star::uno::Reference<

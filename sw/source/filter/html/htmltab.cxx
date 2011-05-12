@@ -89,7 +89,7 @@ static HTMLOptionEnum aHTMLTblVAlignTable[] =
 
 /*  */
 
-// Die Optionen eines Table-Tags
+// table tags options
 
 struct HTMLTableOptions
 {
@@ -123,11 +123,11 @@ struct HTMLTableOptions
 
 class _HTMLTableContext
 {
-    SwHTMLNumRuleInfo aNumRuleInfo; // Vor der Tabelle gueltige Numerierung
+    SwHTMLNumRuleInfo aNumRuleInfo; // Numbering valid before the table
 
-    SwTableNode *pTblNd;            // der Tabellen-Node
-    SwFrmFmt *pFrmFmt;              // der Fly frame::Frame, in dem die Tabelle steht
-    SwPosition *pPos;               // die Position hinter der Tabelle
+    SwTableNode *pTblNd;            // table node
+    SwFrmFmt *pFrmFmt;              // der Fly frame::Frame, containing the table
+    SwPosition *pPos;               // position behind the table
 
     sal_uInt16 nContextStAttrMin;
     sal_uInt16 nContextStMin;
@@ -138,7 +138,7 @@ class _HTMLTableContext
 
 public:
 
-    _HTMLAttrTable aAttrTab;        // und die Attribute
+    _HTMLAttrTable aAttrTab;        // attributes
 
     _HTMLTableContext( SwPosition *pPs, sal_uInt16 nCntxtStMin,
                        sal_uInt16 nCntxtStAttrMin ) :
@@ -176,16 +176,16 @@ public:
 
 /*  */
 
-// der Inhalt einer Zelle ist eine verkettete Liste mit SwStartNodes und
+// Cell content is a linked list with SwStartNodes and
 // HTMLTables.
 
 class HTMLTableCnts
 {
-    HTMLTableCnts *pNext;               // der naechste Inhalt
+    HTMLTableCnts *pNext;               // next content
 
-    // von den beiden naechsten Pointern darf nur einer gesetzt sein!
-    const SwStartNode *pStartNode;      // ein Abastz
-    HTMLTable *pTable;                  // eine Tabelle
+    // Only one of the next two pointers must be set!
+    const SwStartNode *pStartNode;      // a paragraph
+    HTMLTable *pTable;                  // a table
 
     SwHTMLTableLayoutCnts* pLayoutInfo;
 
@@ -198,17 +198,17 @@ public:
     HTMLTableCnts( const SwStartNode* pStNd );
     HTMLTableCnts( HTMLTable* pTab );
 
-    ~HTMLTableCnts();                   // nur in ~HTMLTableCell erlaubt
+    ~HTMLTableCnts();                   // only allowed in ~HTMLTableCell
 
-    // Ermitteln des SwStartNode bzw. der HTMLTable
+    // Determine SwStartNode and HTMLTable respectively
     const SwStartNode *GetStartNode() const { return pStartNode; }
     const HTMLTable *GetTable() const { return pTable; }
     HTMLTable *GetTable() { return pTable; }
 
-    // hinzufuegen eines neuen Knotens am Listenende
+    // Add a new node at the end of the list
     void Add( HTMLTableCnts* pNewCnts );
 
-    // Ermitteln des naechsten Knotens
+    // Determine next node
     const HTMLTableCnts *Next() const { return pNext; }
     HTMLTableCnts *Next() { return pNext; }
 
@@ -221,24 +221,23 @@ public:
 
 /*  */
 
-// Eine Zelle der HTML-Tabelle
-
+// Cell of a HTML table
 class HTMLTableCell
 {
-    // !!!ACHTUNG!!!!! Fuer jeden neuen Pointer muss die SetProtected-
-    // Methode (und natuerlich der Destruktor) bearbeitet werden.
-    HTMLTableCnts *pContents;       // der Inhalt der Zelle
-    SvxBrushItem *pBGBrush;         // Hintergrund der Zelle
-    // !!!ACHTUNG!!!!!
+    // !!!ATTENTION!!!!! For each new pointer the SetProtected
+    // method (and the dtor) has to be executed.
+    HTMLTableCnts *pContents;       // cell content
+    SvxBrushItem *pBGBrush;         // cell background
+    // !!!ATTENTION!!!!!
 
     sal_uInt32 nNumFmt;
-    sal_uInt16 nRowSpan;                // ROWSPAN der Zelle
-    sal_uInt16 nColSpan;                // COLSPAN der Zelle
-    sal_uInt16 nWidth;                  // WIDTH der Zelle
+    sal_uInt16 nRowSpan;                // cell ROWSPAN
+    sal_uInt16 nColSpan;                // cell COLSPAN
+    sal_uInt16 nWidth;                  // cell WIDTH
     double nValue;
-    sal_Int16 eVertOri;         // vertikale Ausrichtung der Zelle
-    sal_Bool bProtected : 1;            // Zelle darf nicht belegt werden
-    sal_Bool bRelWidth : 1;             // nWidth ist %-Angabe
+    sal_Int16 eVertOri;         // vertical alignment of the cell
+    sal_Bool bProtected : 1;            // cell must not filled
+    sal_Bool bRelWidth : 1;             // nWidth is given in %
     sal_Bool bHasNumFmt : 1;
     sal_Bool bHasValue : 1;
     sal_Bool bNoWrap : 1;
@@ -246,25 +245,25 @@ class HTMLTableCell
 
 public:
 
-    HTMLTableCell();                // neue Zellen sind immer leer
+    HTMLTableCell();                // new cells always empty
 
-    ~HTMLTableCell();               // nur in ~HTMLTableRow erlaubt
+    ~HTMLTableCell();               // only allowed in ~HTMLTableRow
 
-    // Belegen einer nicht-leeren Zelle
+    // Fill a not empty cell
     void Set( HTMLTableCnts *pCnts, sal_uInt16 nRSpan, sal_uInt16 nCSpan,
               sal_Int16 eVertOri, SvxBrushItem *pBGBrush,
               sal_Bool bHasNumFmt, sal_uInt32 nNumFmt,
               sal_Bool bHasValue, double nValue, sal_Bool bNoWrap, sal_Bool bCovered );
 
-    // Schuetzen einer leeren 1x1-Zelle
+    // Protect an empty 1x1 cell
     void SetProtected();
 
-    // Setzen/Ermitteln des Inhalts einer Zelle
+    // Set/Get cell content
     void SetContents( HTMLTableCnts *pCnts ) { pContents = pCnts; }
     const HTMLTableCnts *GetContents() const { return pContents; }
     HTMLTableCnts *GetContents() { return pContents; }
 
-    // ROWSPAN/COLSPAN der Zelle Setzen/Ermitteln
+    // Set/Get cell ROWSPAN/COLSPAN
     void SetRowSpan( sal_uInt16 nRSpan ) { nRowSpan = nRSpan; }
     sal_uInt16 GetRowSpan() const { return nRowSpan; }
 
@@ -280,7 +279,7 @@ public:
 
     sal_Int16 GetVertOri() const { return eVertOri; }
 
-    // Ist die Zelle belegt oder geschuetzt?
+    // Is the cell filled or protected ?
     sal_Bool IsUsed() const { return pContents!=0 || bProtected; }
 
     SwHTMLTableLayoutCell *CreateLayoutInfo();
@@ -290,40 +289,37 @@ public:
 
 /*  */
 
-// Eine Zeile der HTML-Tabelle
-
+// Row of a HTML table
 typedef HTMLTableCell* HTMLTableCellPtr;
 SV_DECL_PTRARR_DEL(HTMLTableCells,HTMLTableCellPtr,5,5)
 
 class HTMLTableRow
 {
-    HTMLTableCells *pCells;             // die Zellen der Zeile
+    HTMLTableCells *pCells;             // cells of the row
 
     sal_Bool bIsEndOfGroup : 1;
     sal_Bool bSplitable : 1;
 
-    sal_uInt16 nHeight;                     // Optionen von <TR>/<TD>
-    sal_uInt16 nEmptyRows;                  // wieviele Leere Zeilen folgen
+    sal_uInt16 nHeight;                     // options of <TR>/<TD>
+    sal_uInt16 nEmptyRows;                  // number of empty rows are following
 
     SvxAdjust eAdjust;
     sal_Int16 eVertOri;
-    SvxBrushItem *pBGBrush;             // Hintergrund der Zelle aus STYLE
+    SvxBrushItem *pBGBrush;             // background of cell from STYLE
 
 public:
 
-    sal_Bool bBottomBorder;                 // kommt hinter der Zeile eine Linie?
+    sal_Bool bBottomBorder;                 // Is there a line after the row?
 
-    HTMLTableRow( sal_uInt16 nCells=0 );    // die Zellen der Zeile sind leer
+    HTMLTableRow( sal_uInt16 nCells=0 );    // cells of the row are empty
 
     ~HTMLTableRow();
 
     inline void SetHeight( sal_uInt16 nHeight );
     sal_uInt16 GetHeight() const { return nHeight; }
 
-    // Ermitteln einer Zelle
     inline HTMLTableCell *GetCell( sal_uInt16 nCell ) const;
     inline const HTMLTableCells *GetCells() const { return pCells; }
-
 
     inline void SetAdjust( SvxAdjust eAdj ) { eAdjust = eAdj; }
     inline SvxAdjust GetAdjust() const { return eAdjust; }
@@ -340,25 +336,23 @@ public:
     void IncEmptyRows() { nEmptyRows++; }
     sal_uInt16 GetEmptyRows() const { return nEmptyRows; }
 
-    // Expandieren einer Zeile durch hinzufuegen leerer Zellen
+    // Expand row by adding empty cells
     void Expand( sal_uInt16 nCells, sal_Bool bOneCell=sal_False );
 
-    // Verkuerzen einer Zeile durch loesen von leeren Zellen
+    // Shrink row by deleting empty cells
     void Shrink( sal_uInt16 nCells );
 
     void SetSplitable( sal_Bool bSet ) { bSplitable = bSet; }
     sal_Bool IsSplitable() const { return bSplitable; }
 };
 
-/*  */
 
-// Eine Spalte der HTML-Tabelle
-
+// Column of a HTML table
 class HTMLTableColumn
 {
     sal_Bool bIsEndOfGroup;
 
-    sal_uInt16 nWidth;                      // Optionen von <COL>
+    sal_uInt16 nWidth;                      // options of <COL>
     sal_Bool bRelWidth;
 
     SvxAdjust eAdjust;
@@ -371,7 +365,7 @@ class HTMLTableColumn
 
 public:
 
-    sal_Bool bLeftBorder;                   // kommt vor der Spalte eine Linie
+    sal_Bool bLeftBorder;                   // is there a line before the column
 
     HTMLTableColumn();
 
@@ -394,10 +388,8 @@ public:
     SwHTMLTableLayoutColumn *CreateLayoutInfo();
 };
 
-/*  */
 
-// eine HTML-Tabelle
-
+// HTML table
 typedef HTMLTableRow* HTMLTableRowPtr;
 SV_DECL_PTRARR_DEL(HTMLTableRows,HTMLTableRowPtr,5,5)
 
@@ -413,16 +405,15 @@ class HTMLTable
     String aClass;
     String aDir;
 
-    SdrObjects *pResizeDrawObjs;// SDR-Objekte
-    SvUShorts *pDrawObjPrcWidths;   // Spalte des Zeichen-Objekts und dessen
-                                    // relative Breite
+    SdrObjects *pResizeDrawObjs;// SDR objects
+    SvUShorts *pDrawObjPrcWidths;   // column of draw object and its rel. width
 
-    HTMLTableRows *pRows;           // die Zeilen der Tabelle
-    HTMLTableColumns *pColumns;     // die Spalten der Tabelle
+    HTMLTableRows *pRows;           // table rows
+    HTMLTableColumns *pColumns;     // table columns
 
-    sal_uInt16 nRows;                   // Anzahl Zeilen
-    sal_uInt16 nCols;                   // Anzahl Spalten
-    sal_uInt16 nFilledCols;             // Anzahl tatsaechlich gefuellter Spalten
+    sal_uInt16 nRows;                   // number of rows
+    sal_uInt16 nCols;                   // number of columns
+    sal_uInt16 nFilledCols;             // number of filled columns
 
     sal_uInt16 nCurRow;                 // aktuelle Zeile
     sal_uInt16 nCurCol;                 // aktuelle Spalte
