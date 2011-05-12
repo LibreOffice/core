@@ -2444,7 +2444,7 @@ void SwSectionFrm::SwClientNotify( const SwModify& rMod, const SfxHint& rHint )
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING && &rMod == GetRegisteredIn() )
     {
-        SwSectionFrm::MoveCntntAndDelete( this, sal_True );
+        SwSectionFrm::MoveCntntAndDelete( this, sal_False );
     }
 }
 
