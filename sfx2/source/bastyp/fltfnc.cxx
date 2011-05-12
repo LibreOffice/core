@@ -188,6 +188,7 @@ SfxFilterContainer::SfxFilterContainer( const String& rName )
 
 SfxFilterContainer::~SfxFilterContainer()
 {
+    delete pImpl;
 }
 
 //----------------------------------------------------------------
