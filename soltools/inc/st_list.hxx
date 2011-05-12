@@ -44,7 +44,7 @@ class ST_List            /// Soltools-List.
                         ST_List();
                         ST_List(
                             const ST_List<XX> & i_rList );
-    virtual             ~ST_List() { }
+    virtual             ~ST_List() { delete[] inhalt; }
 
     // OPERATORS
     ST_List<XX> &       operator=(
