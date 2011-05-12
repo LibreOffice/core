@@ -190,6 +190,7 @@ LayoutManager::~LayoutManager()
 {
     Application::RemoveEventListener( LINK( this, LayoutManager, SettingsChanged ) );
     m_aAsyncLayoutTimer.Stop();
+    delete m_pGlobalSettings;
 }
 
 // Internal helper function
@@ -2934,7 +2935,7 @@ throw( RuntimeException )
         m_xFrame.clear();
         delete m_pGlobalSettings;
         m_pGlobalSettings = 0;
-                m_xDockingAreaAcceptor = Reference< ui::XDockingAreaAcceptor >();
+        m_xDockingAreaAcceptor = Reference< ui::XDockingAreaAcceptor >();
 
         bDisposeAndClear = sal_True;
     }
