@@ -669,9 +669,8 @@ private:
 
     // Create sub-documents according to the given collection.
     // If no collection is given, take chapter style of the 1st level.
-    sal_Bool SplitDoc( sal_uInt16 eDocType, const String& rPath,
-                        const SwTxtFmtColl* pSplitColl );
-    sal_Bool SplitDoc( sal_uInt16 eDocType, const String& rPath, int nOutlineLevel = 0 );
+    sal_Bool SplitDoc( sal_uInt16 eDocType, const String& rPath, sal_Bool bOutline,
+                        const SwTxtFmtColl* pSplitColl, int nOutlineLevel = 0 );
 
     // Update charts of given table.
     void _UpdateCharts( const SwTable& rTbl, ViewShell& rVSh ) const;
