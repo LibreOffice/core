@@ -41,6 +41,7 @@ PROJECTPCHSOURCE=cont_pch
 
 TARGETTYPE=CUI
 
+ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
