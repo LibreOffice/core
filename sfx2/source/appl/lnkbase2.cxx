@@ -160,6 +160,7 @@ SvBaseLink::SvBaseLink( sal_uInt16 nUpdateMode, sal_uIntPtr nContentType )
 //--------------------------------------------------------------------------
 
 SvBaseLink::SvBaseLink( const String& rLinkName, sal_uInt16 nObjectType, SvLinkSource* pObj )
+    : pImpl(0)
 {
     bVisible = bSynchron = bUseCache = sal_True;
     bWasLastEditOK = sal_False;
@@ -209,6 +210,7 @@ SvBaseLink::~SvBaseLink()
     }
 
     delete pImplData;
+    delete pImpl;
 }
 
 IMPL_LINK( SvBaseLink, EndEditHdl, String*, _pNewName )
