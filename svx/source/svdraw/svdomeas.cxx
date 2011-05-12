@@ -92,8 +92,6 @@ void SdrMeasureObj::TakeRepresentation( XubString& rStr, SdrMeasureFieldKind eMe
     bShowUnit = ((SdrMeasureShowUnitItem&)rSet.Get(SDRATTR_MEASURESHOWUNIT)).GetValue();
     sal_Int16 nNumDigits = ((SdrMeasureDecimalPlacesItem&)rSet.Get(SDRATTR_MEASUREDECIMALPLACES)).GetValue();
 
-    //SdrModel* pModel = rObj.pModel;
-
     switch(eMeasureFieldKind)
     {
         case SDRMEASUREFIELD_VALUE:
@@ -780,7 +778,7 @@ SdrHdl* SdrMeasureObj::GetHdl(sal_uInt32 nHdlNum) const
     aRec.nHelplineDist=0;
     ImpCalcGeometrics(aRec,aMPol);
     Point aPt;
-    //SdrHdlKind eHdl=HDL_POLY;
+
     switch (nHdlNum) {
         case 0: aPt=aMPol.aHelpline1.aP1; break;
         case 1: aPt=aMPol.aHelpline2.aP1; break;
@@ -1087,7 +1085,7 @@ long SdrMeasureObj::GetRotateAngle() const
 
 void SdrMeasureObj::RecalcSnapRect()
 {
-    // #94520# Added correct implementation here.
+    // Added correct implementation here.
     ImpMeasureRec aRec;
     ImpMeasurePoly aMPol;
     XPolyPolygon aXPP;
@@ -1194,7 +1192,6 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(sal_Bool bBezier) const
     {
         // four lines, middle line with gap, so there are two lines used
         // which have one arrow each
-        //sal_Int32 nStartWidth = ((const XLineStartWidthItem&)(aSet.Get(XATTR_LINESTARTWIDTH))).GetValue();
         sal_Int32 nEndWidth = ((const XLineEndWidthItem&)(aSet.Get(XATTR_LINEENDWIDTH))).GetValue();
         aSet.Put(XLineEndWidthItem(0L));
 
@@ -1225,7 +1222,6 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(sal_Bool bBezier) const
     else if(nCount == 5)
     {
         // five lines, first two are the outer ones
-        //sal_Int32 nStartWidth = ((const XLineStartWidthItem&)(aSet.Get(XATTR_LINESTARTWIDTH))).GetValue();
         sal_Int32 nEndWidth = ((const XLineEndWidthItem&)(aSet.Get(XATTR_LINEENDWIDTH))).GetValue();
 
         aSet.Put(XLineEndWidthItem(0L));
@@ -1486,8 +1482,5 @@ void SdrMeasureObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, cons
         SendUserCall(SDRUSERCALL_MOVEONLY,aBoundRect0);
     }
 }
-
-//////////////////////////////////////////////////////////////////////////////
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

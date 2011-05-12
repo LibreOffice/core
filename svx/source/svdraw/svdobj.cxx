@@ -93,7 +93,6 @@
 #include <vcl/salbtype.hxx>     // FRound
 #include <svl/whiter.hxx>
 
-// #97849#
 #include <svx/fmmodel.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/objface.hxx>
@@ -125,7 +124,7 @@
 
 using namespace ::com::sun::star;
 
-// #104018# replace macros above with type-detecting methods
+// replace macros above with type-detecting methods
 inline double ImplTwipsToMM(double fVal) { return (fVal * (127.0 / 72.0)); }
 inline double ImplMMToTwips(double fVal) { return (fVal * (72.0 / 127.0)); }
 
@@ -290,18 +289,6 @@ SdrObjPlusData* SdrObjPlusData::Clone(SdrObject* pObj1) const
     return pNeuPlusData;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//   @@@@  @@@@@  @@@@@@ @@@@@  @@@@  @@@@@@
-//  @@  @@ @@  @@     @@ @@    @@  @@   @@
-//  @@  @@ @@  @@     @@ @@    @@       @@
-//  @@  @@ @@@@@      @@ @@@@  @@       @@
-//  @@  @@ @@  @@     @@ @@    @@       @@
-//  @@  @@ @@  @@ @@  @@ @@    @@  @@   @@
-//   @@@@  @@@@@   @@@@  @@@@@  @@@@    @@
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //////////////////////////////////////////////////////////////////////////////
 // BaseProperties section
 
@@ -339,7 +326,7 @@ void SdrObject::RemoveObjectUser(sdr::ObjectUser& rOldUser)
 }
 
 //////////////////////////////////////////////////////////////////////////////
-// #110094# DrawContact section
+// DrawContact section
 
 sdr::contact::ViewContact* SdrObject::CreateObjectSpecificViewContact()
 {
@@ -410,9 +397,6 @@ SdrObject::SdrObject()
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = sal_False;
 
-    //#110094#-1
-    //bWriterFlyFrame  =sal_False;
-
     bNotMasterCachable=sal_False;
     bIsEdge=sal_False;
     bIs3DObj=sal_False;
@@ -461,7 +445,6 @@ SdrObject::~SdrObject()
         mpProperties = 0L;
     }
 
-    // #110094#
     if(mpViewContact)
     {
         delete mpViewContact;
@@ -879,7 +862,6 @@ void SdrObject::SetNavigationPosition (const sal_uInt32 nNewPosition)
 
 
 
-// #111111#
 // To make clearer that this method may trigger RecalcBoundRect and thus may be
 // expensive and somtimes problematic (inside a bigger object change You will get
 // non-useful BoundRects sometimes) i rename that method from GetBoundRect() to
@@ -894,7 +876,6 @@ const Rectangle& SdrObject::GetCurrentBoundRect() const
     return aOutRect;
 }
 
-// #111111#
 // To have a possibility to get the last calculated BoundRect e.g for producing
 // the first rectangle for repaints (old and new need to be used) without forcing
 // a RecalcBoundRect (which may be problematical and expensive sometimes) i add here
@@ -958,7 +939,6 @@ void SdrObject::BroadcastObjectChange() const
 
 void SdrObject::SetChanged()
 {
-    // #110094#-11
     // For test purposes, use the new ViewContact for change
     // notification now.
     ActionChanged();
@@ -1006,7 +986,6 @@ SdrObject& SdrObject::operator=(const SdrObject& rObj)
         mpProperties = 0L;
     }
 
-    // #110094#
     if(mpViewContact)
     {
         delete mpViewContact;
@@ -1029,11 +1008,11 @@ SdrObject& SdrObject::operator=(const SdrObject& rObj)
     bNoPrint=rObj.bNoPrint;
     mbVisible=rObj.mbVisible;
     bMarkProt=rObj.bMarkProt;
-    //EmptyPresObj wird nicht kopiert: nun doch! (25-07-1995, Joe)
+    //EmptyPresObj wird nicht kopiert: nun doch!
     bEmptyPresObj =rObj.bEmptyPresObj;
-    //NotVisibleAsMaster wird nicht kopiert: nun doch! (25-07-1995, Joe)
+    //NotVisibleAsMaster wird nicht kopiert: nun doch!
     bNotVisibleAsMaster=rObj.bNotVisibleAsMaster;
-    bSnapRectDirty=sal_True; //rObj.bSnapRectDirty;
+    bSnapRectDirty=sal_True;
     bNotMasterCachable=rObj.bNotMasterCachable;
     delete pPlusData;
     pPlusData=NULL;
@@ -1542,7 +1521,6 @@ void SdrObject::Move(const Size& rSiz)
 {
     if (rSiz.Width()!=0 || rSiz.Height()!=0) {
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-        // #110094#-14 SendRepaintBroadcast();
         NbcMove(rSiz);
         SetChanged();
         BroadcastObjectChange();
@@ -1554,7 +1532,6 @@ void SdrObject::Resize(const Point& rRef, const Fraction& xFact, const Fraction&
 {
     if (xFact.GetNumerator()!=xFact.GetDenominator() || yFact.GetNumerator()!=yFact.GetDenominator()) {
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-        // #110094#-14 SendRepaintBroadcast();
         NbcResize(rRef,xFact,yFact);
         SetChanged();
         BroadcastObjectChange();
@@ -1566,7 +1543,6 @@ void SdrObject::Rotate(const Point& rRef, long nWink, double sn, double cs)
 {
     if (nWink!=0) {
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-        // #110094#-14 SendRepaintBroadcast();
         NbcRotate(rRef,nWink,sn,cs);
         SetChanged();
         BroadcastObjectChange();
@@ -1577,7 +1553,6 @@ void SdrObject::Rotate(const Point& rRef, long nWink, double sn, double cs)
 void SdrObject::Mirror(const Point& rRef1, const Point& rRef2)
 {
     Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-    // #110094#-14 SendRepaintBroadcast();
     NbcMirror(rRef1,rRef2);
     SetChanged();
     BroadcastObjectChange();
@@ -1588,7 +1563,6 @@ void SdrObject::Shear(const Point& rRef, long nWink, double tn, bool bVShear)
 {
     if (nWink!=0) {
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-        // #110094#-14 SendRepaintBroadcast();
         NbcShear(rRef,nWink,tn,bVShear);
         SetChanged();
         BroadcastObjectChange();
@@ -1607,7 +1581,6 @@ void SdrObject::SetRelativePos(const Point& rPnt)
 {
     if (rPnt!=GetRelativePos()) {
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-        // #110094#-14 SendRepaintBroadcast();
         NbcSetRelativePos(rPnt);
         SetChanged();
         BroadcastObjectChange();
@@ -1631,7 +1604,6 @@ void SdrObject::SetAnchorPos(const Point& rPnt)
 {
     if (rPnt!=aAnchor) {
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-        // #110094#-14 SendRepaintBroadcast();
         NbcSetAnchorPos(rPnt);
         SetChanged();
         BroadcastObjectChange();
@@ -1676,7 +1648,6 @@ void SdrObject::AdjustToMaxRect( const Rectangle& rMaxRect, bool /* bShrinkOnly 
 void SdrObject::SetSnapRect(const Rectangle& rRect)
 {
     Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-    // #110094#-14 SendRepaintBroadcast();
     NbcSetSnapRect(rRect);
     SetChanged();
     BroadcastObjectChange();
@@ -1686,7 +1657,6 @@ void SdrObject::SetSnapRect(const Rectangle& rRect)
 void SdrObject::SetLogicRect(const Rectangle& rRect)
 {
     Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-    // #110094#-14 SendRepaintBroadcast();
     NbcSetLogicRect(rRect);
     SetChanged();
     BroadcastObjectChange();
@@ -1731,7 +1701,6 @@ Point SdrObject::GetPoint(sal_uInt32 /*i*/) const
 void SdrObject::SetPoint(const Point& rPnt, sal_uInt32 i)
 {
     Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-    // #110094#-14 SendRepaintBroadcast();
     NbcSetPoint(rPnt, i);
     SetChanged();
     BroadcastObjectChange();
@@ -1759,7 +1728,6 @@ void SdrObject::EndTextEdit(SdrOutliner& /*rOutl*/)
 void SdrObject::SetOutlinerParaObject(OutlinerParaObject* pTextObject)
 {
     Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-    // #110094#-14 SendRepaintBroadcast();
     NbcSetOutlinerParaObject(pTextObject);
     SetChanged();
     BroadcastObjectChange();
@@ -2127,7 +2095,7 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
         SetResizeProtect(b);
     }
 
-    /* #67368# move protect always sets size protect */
+    /* move protect always sets size protect */
     if( IsMoveProtect() )
         SetResizeProtect( true );
 
@@ -2250,7 +2218,6 @@ void SdrObject::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemov
     if(pUserCall)
         aBoundRect0 = GetLastBoundRect();
 
-    // #110094#-14 SendRepaintBroadcast();
     NbcSetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
     SetChanged();
     BroadcastObjectChange();
@@ -2317,11 +2284,6 @@ const SdrGluePointList* SdrObject::GetGluePointList() const
     return NULL;
 }
 
-//SdrGluePointList* SdrObject::GetGluePointList()
-//{
-//  if (pPlusData!=NULL) return pPlusData->pGluePoints;
-//  return NULL;
-//}
 
 SdrGluePointList* SdrObject::ForceGluePointList()
 {
@@ -2498,7 +2460,6 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, sal_Bool bForceLin
             {
                 if(eOldFillStyle != XFILL_NONE)
                 {
-                    // #107600# use new boolean here
                     bAddOriginalGeometry = true;
                 }
             }
@@ -2755,7 +2716,6 @@ void SdrObject::SendUserCall(SdrUserCallType eUserCall, const Rectangle& rBoundR
 
     if ( pUserCall )
     {
-        // UserCall ausfuehren
         pUserCall->Changed( *this, eUserCall, rBoundRect );
     }
 
@@ -3081,7 +3041,6 @@ void SdrObject::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const ba
     SetSnapRect(aBaseRect);
 }
 
-// #116168#
 // Give info if object is in destruction
 sal_Bool SdrObject::IsInDestruction() const
 {
@@ -3123,17 +3082,6 @@ void SdrObject::SetContextWritingMode( const sal_Int16 /*_nContextWritingMode*/ 
     // this base class does not support different writing modes, so ignore the call
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//   @@@@  @@@@@  @@@@@@  @@@@@  @@@@   @@@@  @@@@@@  @@@@  @@@@@  @@  @@
-//  @@  @@ @@  @@     @@  @@    @@  @@ @@  @@   @@   @@  @@ @@  @@ @@  @@
-//  @@  @@ @@  @@     @@  @@    @@  @@ @@       @@   @@  @@ @@  @@ @@  @@
-//  @@  @@ @@@@@      @@  @@@@  @@@@@@ @@       @@   @@  @@ @@@@@   @@@@
-//  @@  @@ @@  @@     @@  @@    @@  @@ @@       @@   @@  @@ @@  @@   @@
-//  @@  @@ @@  @@ @@  @@  @@    @@  @@ @@  @@   @@   @@  @@ @@  @@   @@
-//   @@@@  @@@@@   @@@@   @@    @@  @@  @@@@    @@    @@@@  @@  @@   @@
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SdrObjFactory::SdrObjFactory(sal_uInt32 nInvent, sal_uInt16 nIdent, SdrPage* pNewPage, SdrModel* pNewModel)
 {
@@ -3284,7 +3232,5 @@ namespace svx
     {
     }
 }
-
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

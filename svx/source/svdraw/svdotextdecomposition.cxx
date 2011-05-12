@@ -91,7 +91,7 @@ namespace
         // the visible area for contour text decomposition
         basegfx::B2DVector                                          maScale;
 
-        // #SJ# ClipRange for BlockText decomposition; only text portions completely
+        // ClipRange for BlockText decomposition; only text portions completely
         // inside are to be accepted, so this is different from geometric clipping
         // (which would allow e.g. upper parts of portions to remain). Only used for
         // BlockText (see there)
@@ -576,7 +576,7 @@ namespace
     {
         if(pInfo)
         {
-            // #SJ# Is clipping wanted? This is text clipping; only accept a portion
+            // Is clipping wanted? This is text clipping; only accept a portion
             // if it's completely in the range
             if(!maClipRange.isEmpty())
             {
@@ -1055,7 +1055,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
         bMirrorX ? -1.0 : 1.0, bMirrorY ? -1.0 : 1.0,
         fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
 
-    // #SJ# create ClipRange (if needed)
+    // create ClipRange (if needed)
     basegfx::B2DRange aClipRange;
 
     if(rSdrBlockTextPrimitive.getClipOnBounds())
@@ -1391,7 +1391,5 @@ void SdrTextObj::impGetScrollTextTiming(drawinglayer::animation::AnimationEntryL
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

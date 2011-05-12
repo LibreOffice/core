@@ -270,12 +270,7 @@ void SdrUnoObj::SetContextWritingMode( const sal_Int16 _nContextWritingMode )
 namespace
 {
     /** helper class to restore graphics at <awt::XView> object after <SdrUnoObj::Paint>
-
-        OD 08.05.2003 #109432#
-        Restoration of graphics necessary to assure that paint on a window
-
-        @author OD
-    */
+        Restoration of graphics necessary to assure that paint on a window  */
     class RestoreXViewGraphics
     {
         private:
@@ -624,7 +619,5 @@ bool SdrUnoObj::impl_getViewContact( ViewContactOfUnoControl*& _out_rpContact ) 
   return new ::sdr::contact::ViewContactOfUnoControl( *this );
 }
 
-// -----------------------------------------------------------------------------
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

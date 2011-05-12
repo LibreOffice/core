@@ -77,7 +77,7 @@ Point GetWinkPnt(const Rectangle& rR, long nWink)
     if (nWdt!=nHgt) {
         if (nWdt>nHgt) {
             if (nWdt!=0) {
-                // eventuelle Ueberlaeufe bei sehr grossen Objekten abfangen (Bug 23384)
+                // eventuelle Ueberlaeufe bei sehr grossen Objekten abfangen
                 if (Abs(nHgt)>32767 || Abs(aRetval.Y())>32767) {
                     aRetval.Y()=BigMulDiv(aRetval.Y(),nHgt,nWdt);
                 } else {
@@ -86,7 +86,7 @@ Point GetWinkPnt(const Rectangle& rR, long nWink)
             }
         } else {
             if (nHgt!=0) {
-                // eventuelle Ueberlaeufe bei sehr grossen Objekten abfangen (Bug 23384)
+                // eventuelle Ueberlaeufe bei sehr grossen Objekten abfangen
                 if (Abs(nWdt)>32767 || Abs(aRetval.X())>32767) {
                     aRetval.X()=BigMulDiv(aRetval.X(),nWdt,nHgt);
                 } else {
@@ -880,7 +880,6 @@ void SdrCircObj::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear
 
 void SdrCircObj::NbcMirror(const Point& rRef1, const Point& rRef2)
 {
-    //long nWink0=aGeo.nDrehWink;
     bool bFreeMirr=meCircleKind!=OBJ_CIRC;
     Point aTmpPt1;
     Point aTmpPt2;
@@ -1132,7 +1131,7 @@ void SdrCircObj::ImpSetCircInfoToAttr()
 
     if(eNewKindA != eOldKindA || nStartWink != nOldStartWink || nEndWink != nOldEndWink)
     {
-        // #81921# since SetItem() implicitly calls ImpSetAttrToCircInfo()
+        // since SetItem() implicitly calls ImpSetAttrToCircInfo()
         // setting the item directly is necessary here.
         if(eNewKindA != eOldKindA)
         {
@@ -1163,8 +1162,5 @@ SdrObject* SdrCircObj::DoConvertToPolyObj(sal_Bool bBezier) const
 
     return pRet;
 }
-
-//////////////////////////////////////////////////////////////////////////////
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -821,7 +821,5 @@ void SdrTextObj::impDecomposePathTextPrimitive(
     drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, aRetvalB);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

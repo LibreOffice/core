@@ -155,7 +155,7 @@ void SdrText::SetModel( SdrModel* pNewModel )
         sal_Bool bDefHgtChanged=nNewFontHgt!=nOldFontHgt;
         sal_Bool bSetHgtItem=bDefHgtChanged && !bHgtSet;
         if (bSetHgtItem)
-        { // #32665#
+        {
             // zunaechst das HeightItem festklopfen, damit
             // 1. Es eben bestehen bleibt und
             // 2. DoStretchChars vom richtigen Wert ausgeht
@@ -183,7 +183,7 @@ void SdrText::SetModel( SdrModel* pNewModel )
                 SetObjectItem(SvxFontHeightItem(nOldFontHgt, 100, EE_CHAR_FONTHEIGHT));
             }
         }
-        SetOutlinerParaObject(rOutliner.CreateParaObject()); // #34494#
+        SetOutlinerParaObject(rOutliner.CreateParaObject());
         mpOutlinerParaObject->ClearPortionInfo();
         mbPortionInfoChecked=sal_False;
         rOutliner.Clear();

@@ -45,7 +45,6 @@
 #include <svx/sdrpaintwindow.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// #114409#-1 Migrate PageOrigin
 class ImplPageOriginOverlay
 {
     // The OverlayObjects
@@ -108,7 +107,6 @@ void ImplPageOriginOverlay::SetPosition(const basegfx::B2DPoint& rNewPosition)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// #114409#-2 Migrate HelpLine
 class ImplHelpLineOverlay
 {
     // The OverlayObjects
@@ -187,19 +185,6 @@ void ImplHelpLineOverlay::SetPosition(const basegfx::B2DPoint& rNewPosition)
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  @@@@  @@  @@  @@@@  @@@@@   @@ @@ @@ @@@@@ @@   @@
-// @@  @@ @@@ @@ @@  @@ @@  @@  @@ @@ @@ @@    @@   @@
-// @@     @@@@@@ @@  @@ @@  @@  @@ @@ @@ @@    @@ @ @@
-//  @@@@  @@@@@@ @@@@@@ @@@@@   @@@@@ @@ @@@@  @@@@@@@
-//     @@ @@ @@@ @@  @@ @@       @@@  @@ @@    @@@@@@@
-// @@  @@ @@  @@ @@  @@ @@       @@@  @@ @@    @@@ @@@
-//  @@@@  @@  @@ @@  @@ @@        @   @@ @@@@@ @@   @@
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void SdrSnapView::ClearVars()
 {
@@ -229,30 +214,21 @@ void SdrSnapView::ClearVars()
     bEliminatePolyPoints=sal_False;
     nEliminatePolyPointLimitAngle=0;
 
-    // #114409#-1 Migrate PageOrigin
     BrkSetPageOrg();
-
-    // #114409#-2 Migrate HelpLine
     BrkDragHelpLine();
 }
 
 SdrSnapView::SdrSnapView(SdrModel* pModel1, OutputDevice* pOut):
     SdrPaintView(pModel1,pOut),
-    // #114409#-1 Migrate PageOrigin
     mpPageOriginOverlay(0L),
-    // #114409#-2 Migrate HelpLine
     mpHelpLineOverlay(0L)
 {
     ClearVars();
 }
 
-// #114409#-1 Migrate PageOrigin
 SdrSnapView::~SdrSnapView()
 {
-    // #114409#-1 Migrate PageOrigin
     BrkSetPageOrg();
-
-    // #114409#-2 Migrate HelpLine
     BrkDragHelpLine();
 }
 
@@ -379,12 +355,12 @@ sal_uInt16 SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
         a=y         ; if (Abs(a)<=my) { dy1=-a; if (Abs(dy1)<Abs(dy)) dy=dy1; } // linke Papierkante
         a=y- ys     ; if (Abs(a)<=my) { dy1=-a; if (Abs(dy1)<Abs(dy)) dy=dy1; } // rechte Papierkante
     }
-    if (bOFrmSnap || bOPntSnap /*|| (bConnVisible && bOConSnap)*/) {
+    if (bOFrmSnap || bOPntSnap) {
         sal_uIntPtr nMaxPointSnapCount=200;
         sal_uIntPtr nMaxFrameSnapCount=200;
 
-        // #97981# go back to IM_DEEPNOGROUPS runthrough for snap to object comparisons
-        SdrObjListIter aIter(*pPV->GetPage(),/*IM_FLAT*/IM_DEEPNOGROUPS,sal_True);
+        // go back to IM_DEEPNOGROUPS runthrough for snap to object comparisons
+        SdrObjListIter aIter(*pPV->GetPage(),IM_DEEPNOGROUPS,sal_True);
 
         while (aIter.IsMore() && (nMaxPointSnapCount>0 || nMaxFrameSnapCount>0)) {
             SdrObject* pO=aIter.Next();
@@ -606,7 +582,7 @@ sal_Bool SdrSnapView::BegDragHelpLine(sal_uInt16 nHelpLineNum, SdrPageView* pPV)
         {
             const SdrHelpLineList& rHelpLines = pPV->GetHelpLines();
             const SdrHelpLine& rHelpLine = rHelpLines[nHelpLineNum];
-            Point aHelpLinePos = rHelpLine.GetPos(); // + pPV->GetOffset();
+            Point aHelpLinePos = rHelpLine.GetPos();
             basegfx::B2DPoint aStartPos(aHelpLinePos.X(), aHelpLinePos.Y());
 
             DBG_ASSERT(0L == mpHelpLineOverlay, "SdrSnapView::BegDragHelpLine: There exists a ImplHelpLineOverlay (!)");
@@ -725,7 +701,5 @@ void SdrSnapView::BrkDragHelpLine()
         mpHelpLineOverlay = 0L;
     }
 }
-
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -286,7 +286,6 @@ basegfx::B2DPolyPolygon SdrCaptionObj::TakeXorPoly() const
 sal_uInt32 SdrCaptionObj::GetHdlCount() const
 {
     sal_uInt32 nAnz1(SdrRectObj::GetHdlCount());
-    // sal_uInt32 nAnz2(aTailPoly.GetSize());
     // Derzeit ist nur das Draggen des Schwanzendes implementiert
     return nAnz1 + 1L;
 }
@@ -660,7 +659,6 @@ void SdrCaptionObj::RecalcSnapRect()
 {
     SdrRectObj::RecalcSnapRect();
     // #i32599#
-    // maSnapRect.Union(aTailPoly.GetBoundRect());
     // !!!!! fehlende Impl.
 }
 
@@ -698,7 +696,6 @@ void SdrCaptionObj::SetTailPos(const Point& rPos)
 {
     if (aTailPoly.GetSize()==0 || aTailPoly[0]!=rPos) {
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-        // #110094#-14 SendRepaintBroadcast();
         NbcSetTailPos(rPos);
         SetChanged();
         BroadcastObjectChange();
@@ -756,7 +753,7 @@ void SdrCaptionObj::RestGeoData(const SdrObjGeoData& rGeo)
 }
 
 SdrObject* SdrCaptionObj::DoConvertToPolyObj(sal_Bool bBezier) const
-{ // #42334# - Convert implementiert
+{
     SdrObject* pRect=SdrRectObj::DoConvertToPolyObj(bBezier);
     SdrObject* pTail = ImpConvertMakeObj(basegfx::B2DPolyPolygon(aTailPoly.getB2DPolygon()), sal_False, bBezier);
     SdrObject* pRet=(pTail!=NULL) ? pTail : pRect;
@@ -847,7 +844,5 @@ basegfx::B2DPolygon SdrCaptionObj::getTailPolygon() const
 {
     return aTailPoly.getB2DPolygon();
 }
-
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

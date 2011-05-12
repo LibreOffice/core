@@ -423,8 +423,6 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::activatingUI()
             }
         }
     } // for(sal_Int32 i = nCount-1 ; i >= 0;--i)
-
-    //m_pClient->GetViewShell()->UIActivating( m_pClient );
 }
 
 //--------------------------------------------------------------------
@@ -575,9 +573,6 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::changedPlacement( const awt::Rectangl
         }
         else
             mpObj->ActionChanged();
-
-        // let the window size be recalculated
-        //SizeHasChanged(); // TODO: OJ
     }
 }
 // XWindowSupplier
@@ -688,7 +683,6 @@ public:
     String          aPersistName;       // name of object in persist
     SdrLightEmbeddedClient_Impl* pLightClient; // must be registered as client only using AddOwnLightClient() call
 
-    // #107645#
     // New local var to avoid repeated loading if load of OLE2 fails
     sal_Bool        mbLoadingOLEObjectFailed;
     sal_Bool        mbConnected;
@@ -699,7 +693,6 @@ public:
     SdrOle2ObjImpl()
     : pGraphicObject( NULL )
     , pLightClient ( NULL )
-    // #107645#
     // init to start situation, loading did not fail
     , mbLoadingOLEObjectFailed( sal_False )
     , mbConnected( sal_False )
@@ -776,7 +769,7 @@ SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef& rNewObjRef, bool bFrame_)
     if ( xObjRef.is() && (xObjRef->getStatus( GetAspect() ) & embed::EmbedMisc::EMBED_NEVERRESIZE ) )
         SetResizeProtect(sal_True);
 
-    // #108759# For math objects, set closed state to transparent
+    // For math objects, set closed state to transparent
     if( ImplIsMathObj( xObjRef.GetObject() ) )
         SetClosedObj( false );
 }
@@ -798,7 +791,7 @@ SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef& rNewObjRef, const XubStrin
     if ( xObjRef.is() && (xObjRef->getStatus( GetAspect() ) & embed::EmbedMisc::EMBED_NEVERRESIZE ) )
         SetResizeProtect(sal_True);
 
-    // #108759# For math objects, set closed state to transparent
+    // For math objects, set closed state to transparent
     if( ImplIsMathObj( xObjRef.GetObject() ) )
         SetClosedObj( false );
 }
@@ -821,7 +814,7 @@ SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef&  rNewObjRef, const XubStri
     if ( xObjRef.is() && (xObjRef->getStatus( GetAspect() ) & embed::EmbedMisc::EMBED_NEVERRESIZE ) )
         SetResizeProtect(sal_True);
 
-    // #108759# For math objects, set closed state to transparent
+    // For math objects, set closed state to transparent
     if( ImplIsMathObj( xObjRef.GetObject() ) )
         SetClosedObj( false );
 }
@@ -898,9 +891,6 @@ void SdrOle2Obj::SetGraphic_Impl(const Graphic* pGrf)
 
     SetChanged();
     BroadcastObjectChange();
-
-    //if ( ppObjRef->Is() && pGrf )
-    //  BroadcastObjectChange();
 }
 
 void SdrOle2Obj::SetGraphic(const Graphic* pGrf)
@@ -925,7 +915,7 @@ void SdrOle2Obj::Connect()
 
     if( mpImpl->mbConnected )
     {
-        // mba: currently there are situations where it seems to be unavoidable to have multiple connects
+        // currently there are situations where it seems to be unavoidable to have multiple connects
         // changing this would need a larger code rewrite, so for now I remove the assertion
         // OSL_FAIL("Connect() called on connected object!");
         return;
@@ -1439,12 +1429,12 @@ void SdrOle2Obj::SetObjRef( const com::sun::star::uno::Reference < com::sun::sta
     if( rNewObjRef == xObjRef.GetObject() )
         return;
 
-    // MBA: the caller of the method is responsible to control the old object, it will not be closed here
+    // the caller of the method is responsible to control the old object, it will not be closed here
     // Otherwise WW8 import crashes because it tranfers control to OLENode by this method
     if ( xObjRef.GetObject().is() )
         xObjRef.Lock( sal_False );
 
-    // MBA: avoid removal of object in Disconnect! It is definitely a HACK to call SetObjRef(0)!
+    // avoid removal of object in Disconnect! It is definitely a HACK to call SetObjRef(0)!
     // This call will try to close the objects; so if anybody else wants to keep it, it must be locked by a CloseListener
     xObjRef.Clear();
 
@@ -1461,7 +1451,7 @@ void SdrOle2Obj::SetObjRef( const com::sun::star::uno::Reference < com::sun::sta
         if ( (xObjRef->getStatus( GetAspect() ) & embed::EmbedMisc::EMBED_NEVERRESIZE ) )
             SetResizeProtect(sal_True);
 
-        // #108759# For math objects, set closed state to transparent
+        // For math objects, set closed state to transparent
         if( ImplIsMathObj( rNewObjRef ) )
             SetClosedObj( false );
 
@@ -1477,7 +1467,7 @@ void SdrOle2Obj::SetObjRef( const com::sun::star::uno::Reference < com::sun::sta
 void SdrOle2Obj::SetClosedObj( bool bIsClosed )
 {
     // TODO/LATER: do we still need this hack?
-    // #108759# Allow changes to the closed state of OLE objects
+    // Allow changes to the closed state of OLE objects
     bClosedObj = bIsClosed;
 }
 
@@ -1622,7 +1612,7 @@ SdrOle2Obj& SdrOle2Obj::operator=(const SdrOle2Obj& rObj)
 
         SdrRectObj::operator=( rObj );
 
-        // #108867# Manually copying bClosedObj attribute
+        // Manually copying bClosedObj attribute
         SetClosedObj( rObj.IsClosedObj() );
 
         mpImpl->aPersistName = rOle2Obj.mpImpl->aPersistName;
@@ -1660,30 +1650,6 @@ SdrOle2Obj& SdrOle2Obj::operator=(const SdrOle2Obj& rObj)
                 }
 
                 Connect();
-
-                /* only needed for MSOLE-Objects, now handled inside implementation of Object
-                if ( xObjRef.is() && rOle2Obj.xObjRef.is() && rOle2Obj.GetAspect() != embed::Aspects::MSOLE_ICON )
-                {
-                    try
-                    {
-                        awt::Size aVisSize = rOle2Obj.xObjRef->getVisualAreaSize( rOle2Obj.GetAspect() );
-                        if( rOle2Obj.xObjRef->getMapUnit( rOle2Obj.GetAspect() ) == xObjRef->getMapUnit( GetAspect() ) )
-                        xObjRef->setVisualAreaSize( GetAspect(), aVisSize );
-                    }
-                    catch ( embed::WrongStateException& )
-                    {
-                        // setting of VisArea not necessary for objects that don't cache it in loaded state
-                    }
-                    catch( embed::NoVisualAreaSizeException& )
-                    {
-                        // objects my not have visual areas
-                    }
-                    catch( uno::Exception& e )
-                    {
-                        (void)e;
-                        OSL_FAIL( "SdrOle2Obj::operator=(), unexpected exception caught!" );
-                    }
-                }                                                                            */
             }
         }
     }
@@ -1768,7 +1734,7 @@ void SdrOle2Obj::ImpSetVisAreaSize()
 
                 // make the new object area known to the client
                 // compared to the "else" branch aRect might have been changed by the object and no additional scaling was applied
-                // OJ: WHY this -> OSL_ASSERT( pClient );
+                // WHY this -> OSL_ASSERT( pClient );
                 if( pClient )
                     pClient->SetObjArea(aRect);
 
@@ -2013,7 +1979,6 @@ void SdrOle2Obj::GetObjRef_Impl()
 {
     if ( !xObjRef.is() && mpImpl->aPersistName.Len() && pModel && pModel->GetPersist() )
     {
-        // #107645#
         // Only try loading if it did not went wrong up to now
         if(!mpImpl->mbLoadingOLEObjectFailed)
         {
@@ -2021,7 +1986,6 @@ void SdrOle2Obj::GetObjRef_Impl()
             m_bTypeAsked = false;
             CheckFileLink_Impl();
 
-            // #107645#
             // If loading of OLE object failed, remember that to not invoke a endless
             // loop trying to load it again and again.
             if( xObjRef.is() )
@@ -2029,7 +1993,7 @@ void SdrOle2Obj::GetObjRef_Impl()
                 mpImpl->mbLoadingOLEObjectFailed = sal_True;
             }
 
-            // #108759# For math objects, set closed state to transparent
+            // For math objects, set closed state to transparent
             if( ImplIsMathObj( xObjRef.GetObject() ) )
                 SetClosedObj( false );
         }
@@ -2038,14 +2002,14 @@ void SdrOle2Obj::GetObjRef_Impl()
         {
             if( !IsEmptyPresObj() )
             {
-                // #75637# remember modified status of model
+                // remember modified status of model
                 const sal_Bool bWasChanged(pModel ? pModel->IsChanged() : sal_False);
 
                 // perhaps preview not valid anymore
-                // #75637# This line changes the modified state of the model
+                // This line changes the modified state of the model
                 SetGraphic_Impl( NULL );
 
-                // #75637# if status was not set before, force it back
+                // if status was not set before, force it back
                 // to not set, so that SetGraphic(0L) above does not
                 // set the modified state of the model.
                 if(!bWasChanged && pModel && pModel->IsChanged())
@@ -2115,7 +2079,6 @@ uno::Reference< frame::XModel > SdrOle2Obj::getXModel() const
 
 // -----------------------------------------------------------------------------
 
-// #109985#
 sal_Bool SdrOle2Obj::IsChart() const
 {
     if ( !m_bTypeAsked )
@@ -2238,8 +2201,5 @@ void SdrOle2Obj::SetWindow(const com::sun::star::uno::Reference < com::sun::star
         mpImpl->pLightClient->setWindow(_xWindow);
     }
 }
-
-//////////////////////////////////////////////////////////////////////////////
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

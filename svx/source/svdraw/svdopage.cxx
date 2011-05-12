@@ -41,8 +41,6 @@
 #include <svtools/colorcfg.hxx>
 #include <svl/itemset.hxx>
 #include <svx/sdr/properties/pageproperties.hxx>
-
-// #111111#
 #include <svx/sdr/contact/viewcontactofpageobj.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -103,20 +101,17 @@ SdrPageObj::SdrPageObj(const Rectangle& rRect, SdrPage* pNewPage)
 
 SdrPageObj::~SdrPageObj()
 {
-    // #111111#
     if(mpShownPage)
     {
         mpShownPage->RemovePageUser(*this);
     }
 }
 
-// #111111#
 SdrPage* SdrPageObj::GetReferencedPage() const
 {
     return mpShownPage;
 }
 
-// #111111#
 void SdrPageObj::SetReferencedPage(SdrPage* pNewPage)
 {
     if(mpShownPage != pNewPage)
@@ -200,7 +195,5 @@ void SdrPageObj::TakeObjNamePlural(XubString& rName) const
 {
     rName=ImpGetResStr(STR_ObjNamePluralPAGE);
 }
-
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

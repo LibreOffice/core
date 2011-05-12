@@ -42,26 +42,8 @@
 #include <sfx2/linkmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/urihelper.hxx>
-
-// #90477#
 #include <tools/tenccvt.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  @@@@  @@@@@  @@@@@@  @@@@@@ @@@@@@ @@  @@ @@@@@@  @@    @@ @@  @@ @@  @@
-// @@  @@ @@  @@     @@    @@   @@      @@@@    @@    @@    @@ @@@ @@ @@ @@
-// @@  @@ @@@@@      @@    @@   @@@@@    @@     @@    @@    @@ @@@@@@ @@@@
-// @@  @@ @@  @@ @@  @@    @@   @@      @@@@    @@    @@    @@ @@ @@@ @@ @@
-//  @@@@  @@@@@   @@@@     @@   @@@@@@ @@  @@   @@    @@@@@ @@ @@  @@ @@  @@
-//
-// ImpSdrObjTextLink zur Verbindung von SdrTextObj und LinkManager
-//
-// Einem solchen Link merke ich mir als SdrObjUserData am Objekt. Im Gegensatz
-// zum Grafik-Link werden die ObjektDaten jedoch kopiert (fuer Paint, etc.).
-// Die Information ob das Objekt ein Link ist besteht genau darin, dass dem
-// Objekt ein entsprechender UserData-Record angehaengt ist oder nicht.
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class ImpSdrObjTextLink: public ::sfx2::SvBaseLink
 {
@@ -129,15 +111,6 @@ void ImpSdrObjTextLink::Closed()
     return SUCCESS;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// @@    @@ @@  @@ @@  @@  @@  @@  @@@@@ @@@@@@ @@@@@   @@@@@   @@@@  @@@@@@  @@@@
-// @@    @@ @@@ @@ @@ @@   @@  @@ @@     @@     @@  @@  @@  @@ @@  @@   @@   @@  @@
-// @@    @@ @@@@@@ @@@@    @@  @@  @@@@  @@@@@  @@@@@   @@  @@ @@@@@@   @@   @@@@@@
-// @@    @@ @@ @@@ @@@@@   @@  @@     @@ @@     @@  @@  @@  @@ @@  @@   @@   @@  @@
-// @@@@@ @@ @@  @@ @@  @@   @@@@  @@@@@  @@@@@@ @@  @@  @@@@@  @@  @@   @@   @@  @@
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1(ImpSdrObjTextLinkUserData,SdrObjUserData);
 
@@ -165,17 +138,6 @@ SdrObjUserData* ImpSdrObjTextLinkUserData::Clone(SdrObject* pObj1) const
     return pData;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  @@@@@@ @@@@@ @@   @@ @@@@@@  @@@@  @@@@@  @@@@@@
-//    @@   @@    @@@ @@@   @@   @@  @@ @@  @@     @@
-//    @@   @@     @@@@@    @@   @@  @@ @@  @@     @@
-//    @@   @@@@    @@@     @@   @@  @@ @@@@@      @@
-//    @@   @@     @@@@@    @@   @@  @@ @@  @@     @@
-//    @@   @@    @@@ @@@   @@   @@  @@ @@  @@ @@  @@
-//    @@   @@@@@ @@   @@   @@    @@@@  @@@@@   @@@@
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void SdrTextObj::SetTextLink(const String& rFileName, const String& rFilterName, rtl_TextEncoding eCharSet)
 {
@@ -280,7 +242,6 @@ bool SdrTextObj::LoadText(const String& rFileName, const String& /*rFilterName*/
 
     if( pIStm )
     {
-        // #90477# pIStm->SetStreamCharSet( eCharSet );
         pIStm->SetStreamCharSet(GetSOLoadTextEncoding(eCharSet, (sal_uInt16)pIStm->GetVersion()));
 
         char cRTF[5];

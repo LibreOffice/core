@@ -61,7 +61,7 @@
 #include <svx/sdr/contact/viewcontactofsdrpathobj.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
-// #104018# replace macros above with type-safe methods
+// replace macros above with type-safe methods
 inline sal_Int32 ImplTwipsToMM(sal_Int32 nVal) { return ((nVal * 127 + 36) / 72); }
 inline sal_Int32 ImplMMToTwips(sal_Int32 nVal) { return ((nVal * 72 + 63) / 127); }
 inline sal_Int64 ImplTwipsToMM(sal_Int64 nVal) { return ((nVal * 127 + 36) / 72); }
@@ -128,7 +128,6 @@ struct ImpSdrPathDragData  : public SdrDragStatUserData
     sal_uInt16                      nNextNextPnt0;
     bool                        bEliminate;     // Punkt loeschen? (wird von MovDrag gesetzt)
 
-    // ##
     sal_Bool                        mbMultiPointDrag;
     const XPolyPolygon          maOrig;
     XPolyPolygon                maMove;
@@ -908,7 +907,7 @@ bool ImpPathForDragAndCreate::endPathDrag(SdrDragStat& rDrag)
 
         // Winkel anpassen fuer Text an einfacher Linie
         if (bLineGlueMirror)
-        { // #40549#
+        {
             Point aLinePt1_(aPathPolygon[0][0]);
             Point aLinePt2_(aPathPolygon[0][1]);
             bool bXMirr=(aLinePt1_.X()>aLinePt2_.X())!=(aLinePt1.X()>aLinePt2.X());
@@ -935,14 +934,6 @@ bool ImpPathForDragAndCreate::endPathDrag(SdrDragStat& rDrag)
     return true;
 }
 
-/*void ImpPathForDragAndCreate::cancelSpecialDrag( SdrDragStat& rDrag ) const
-{
-    ImpSdrPathDragData* pID=(ImpSdrPathDragData*)rDrag.GetUser();
-    if (pID!=NULL) {
-        delete pID;
-        rDrag.SetUser(NULL);
-    }
-}*/
 
 String ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag) const
 {
@@ -1180,7 +1171,7 @@ basegfx::B2DPolyPolygon ImpPathForDragAndCreate::getSpecialDragPoly(const SdrDra
     else
     {
         const XPolygon& rXP=aPathPolygon[(sal_uInt16)rDrag.GetHdl()->GetPolyNum()];
-        if (rXP.GetPointCount()<=2) { //|| rXPoly.GetFlags(1)==XPOLY_CONTROL && rXPoly.GetPointCount()<=4
+        if (rXP.GetPointCount()<=2) {
             XPolygon aXPoly(rXP);
             aXPoly[(sal_uInt16)rDrag.GetHdl()->GetPointNum()]=rDrag.GetNow();
             aRetval.Insert(aXPoly);
@@ -1342,7 +1333,7 @@ bool ImpPathForDragAndCreate::MovCreate(SdrDragStat& rStat)
         rXPoly[0]=rStat.GetPos0();
     } else nActPoint--;
     bool bFreeHand=IsFreeHand(pU->eAktKind);
-    rStat.SetNoSnap(bFreeHand /*|| (pU->bMixed && pU->eAktKind==OBJ_LINE)*/);
+    rStat.SetNoSnap(bFreeHand);
     rStat.SetOrtho8Possible(pU->eAktKind!=OBJ_CARC && pU->eAktKind!=OBJ_RECT && (!pU->bMixedCreate || pU->eAktKind!=OBJ_LINE));
     Point aActMerk(rXPoly[nActPoint]);
     rXPoly[nActPoint]=rStat.Now();
@@ -1354,7 +1345,7 @@ bool ImpPathForDragAndCreate::MovCreate(SdrDragStat& rStat)
         }
         rXPoly[0]=aPt;
     }
-    OutputDevice* pOut=pView==NULL ? NULL : pView->GetFirstOutputDevice(); // GetWin(0);
+    OutputDevice* pOut=pView==NULL ? NULL : pView->GetFirstOutputDevice();
     if (bFreeHand) {
         if (pU->nBezierStartPoint>nActPoint) pU->nBezierStartPoint=nActPoint;
         if (rStat.IsMouseDown() && nActPoint>0) {
@@ -1732,7 +1723,7 @@ void SdrPathObj::ImpForceLineWink()
         aGeo.RecalcSinCos();
         aGeo.RecalcTan();
 
-        // #101412# for SdrTextObj, keep aRect up to date
+        // for SdrTextObj, keep aRect up to date
         aRect = Rectangle(aPoint0, aPoint1);
         aRect.Justify();
     }
@@ -1776,7 +1767,7 @@ void SdrPathObj::ImpForceKind()
     }
     else
     {
-        // #i10659#, similar to #101412# but for polys with more than 2 points.
+        // #i10659#, for polys with more than 2 points.
         //
         // Here i again need to fix something, because when Path-Polys are Copy-Pasted
         // between Apps with different measurements (e.g. 100TH_MM and TWIPS) there is
@@ -2420,7 +2411,7 @@ void SdrPathObj::NbcMirror(const Point& rRefPnt1, const Point& rRefPnt2)
     aTrans.translate(rRefPnt1.X(), rRefPnt1.Y());
     maPathPolygon.transform(aTrans);
 
-    // #97538# Do Joe's special handling for lines when mirroring, too
+    // Do Joe's special handling for lines when mirroring, too
     ImpForceKind();
 
     // #i19871# first modify locally, then call parent (to get correct SnapRect with GluePoints)
@@ -2457,12 +2448,12 @@ void SdrPathObj::NbcSetSnapRect(const Rectangle& rRect)
 {
     Rectangle aOld(GetSnapRect());
 
-    // #95736# Take RECT_EMPTY into account when calculating scale factors
+    // Take RECT_EMPTY into account when calculating scale factors
     long nMulX = (RECT_EMPTY == rRect.Right()) ? 0 : rRect.Right()  - rRect.Left();
 
     long nDivX = aOld.Right()   - aOld.Left();
 
-    // #95736# Take RECT_EMPTY into account when calculating scale factors
+    // Take RECT_EMPTY into account when calculating scale factors
     long nMulY = (RECT_EMPTY == rRect.Bottom()) ? 0 : rRect.Bottom() - rRect.Top();
 
     long nDivY = aOld.Bottom()  - aOld.Top();
@@ -2827,7 +2818,7 @@ void SdrPathObj::SetPathPoly(const basegfx::B2DPolyPolygon& rPathPoly)
     }
 }
 
-void SdrPathObj::ToggleClosed() // long nOpenDistance)
+void SdrPathObj::ToggleClosed()
 {
     Rectangle aBoundRect0;
     if(pUserCall != NULL)
@@ -3118,8 +3109,5 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     aNewPolyPolygon.transform(aTransform);
     SetPathPoly(aNewPolyPolygon);
 }
-
-//////////////////////////////////////////////////////////////////////////////
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -84,7 +84,6 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// #114409#-3 Migrate Encirclement
 class ImplEncirclementOverlay
 {
     // The OverlayObjects
@@ -315,7 +314,6 @@ SdrPaintView::~SdrPaintView()
         maPaintWindows.pop_back();
     }
 
-    // #114409#-3 Migrate HelpLine
     BrkEncirclement();
 }
 
@@ -1180,14 +1178,12 @@ void SdrPaintView::InvalidateAllWin(const Rectangle& rRect, sal_Bool bPlus1Pix)
 
 void SdrPaintView::InvalidateOneWin(Window& rWin)
 {
-    // #111096#
     // do not erase background, that causes flicker (!)
     rWin.Invalidate(INVALIDATE_NOERASE);
 }
 
 void SdrPaintView::InvalidateOneWin(Window& rWin, const Rectangle& rRect)
 {
-    // #111096#
     // do not erase background, that causes flicker (!)
     rWin.Invalidate(rRect, INVALIDATE_NOERASE);
 }
@@ -1303,7 +1299,6 @@ void SdrPaintView::SetDefaultStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDo
 #endif
 }
 
-/* new interface src537 */
 sal_Bool SdrPaintView::GetAttributes(SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr) const
 {
     if(bOnlyHardAttr || !pDefaultStyleSheet)
@@ -1326,9 +1321,8 @@ sal_Bool SdrPaintView::SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAl
     return sal_True;
 }
 
-SfxStyleSheet* SdrPaintView::GetStyleSheet() const // SfxStyleSheet* SdrPaintView::GetStyleSheet(sal_Bool& rOk) const
+SfxStyleSheet* SdrPaintView::GetStyleSheet() const
 {
-    //rOk=sal_True;
     return GetDefaultStyleSheet();
 }
 
@@ -1495,7 +1489,7 @@ Color SdrPaintView::GetGridColor() const
     return maGridColor;
 }
 
-// #103834# Set background color for svx at SdrPageViews
+// Set background color for svx at SdrPageViews
 void SdrPaintView::SetApplicationBackgroundColor(Color aBackgroundColor)
 {
     if(mpPageView)
@@ -1504,7 +1498,7 @@ void SdrPaintView::SetApplicationBackgroundColor(Color aBackgroundColor)
     }
 }
 
-// #103911# Set document color for svx at SdrPageViews
+// Set document color for svx at SdrPageViews
 void SdrPaintView::SetApplicationDocumentColor(Color aDocumentColor)
 {
     if(mpPageView)
@@ -1513,13 +1507,11 @@ void SdrPaintView::SetApplicationDocumentColor(Color aDocumentColor)
     }
 }
 
-// #114898#
 bool SdrPaintView::IsBufferedOutputAllowed() const
 {
     return (mbBufferedOutputAllowed && maDrawinglayerOpt.IsPaintBuffer());
 }
 
-// #114898#
 void SdrPaintView::SetBufferedOutputAllowed(bool bNew)
 {
     if(bNew != (bool)mbBufferedOutputAllowed)
@@ -1569,7 +1561,5 @@ void SdrPaintView::SetAnimationTimer(sal_uInt32 nTime)
         }
     }
 }
-
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

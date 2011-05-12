@@ -587,7 +587,7 @@ SdrGluePoint SdrRectObj::GetCornerGluePoint(sal_uInt16 nPosNum) const
 SdrObject* SdrRectObj::DoConvertToPolyObj(sal_Bool bBezier) const
 {
     XPolygon aXP(ImpCalcXPoly(aRect,GetEckenradius()));
-    { // #40608# Nur Uebergangsweise bis zum neuen TakeContour()
+    { // Nur Uebergangsweise bis zum neuen TakeContour()
         aXP.Remove(0,1);
         aXP[aXP.GetPointCount()-1]=aXP[0];
     }
@@ -617,7 +617,5 @@ void SdrRectObj::RestGeoData(const SdrObjGeoData& rGeo)
     SdrTextObj::RestGeoData(rGeo);
     SetXPolyDirty();
 }
-
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

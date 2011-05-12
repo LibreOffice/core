@@ -612,18 +612,6 @@ void Poly2Rect(const Polygon& rPol, Rectangle& rRect, GeoStat& rGeo)
     if (rGeo.nDrehWink!=0) RotatePoint(aPt3,Point(0,0),-rGeo.nSin,rGeo.nCos); // -Sin fuer Rueckdrehung
     long nHgt=aPt3.Y();
 
-    if(aPt3.X())
-    {
-        // #i74358# the axes are not orthogonal, so for getting the correct height,
-        // calculate the length of aPt3
-
-        // #i74358# this change was wrong, in the field of the old geometry stuff
-        // it is not an error. The new height always is the same as before; shear
-        // does not change object height at all. This is different from the interactions,
-        // but obviously wanted in the old versions.
-        //
-        // nHgt = static_cast< long >(sqrt(static_cast< double >(aPt3.X() * aPt3.X() + aPt3.Y() * aPt3.Y())));
-    }
 
     long nShW=GetAngle(aPt3);
     nShW-=27000; // ShearWink wird zur Senkrechten gemessen

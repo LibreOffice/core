@@ -49,19 +49,6 @@
 #include <svx/xlnclit.hxx>
 #include <svx/xlnwtit.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  @@@@@@ @@@@@ @@   @@ @@@@@@  @@@@  @@@@@  @@@@@@
-//    @@   @@    @@@ @@@   @@   @@  @@ @@  @@     @@
-//    @@   @@     @@@@@    @@   @@  @@ @@  @@     @@
-//    @@   @@@@    @@@     @@   @@  @@ @@@@@      @@
-//    @@   @@     @@@@@    @@   @@  @@ @@  @@     @@
-//    @@   @@    @@@ @@@   @@   @@  @@ @@  @@ @@  @@
-//    @@   @@@@@ @@   @@   @@    @@@@  @@@@@   @@@@
-//
-//  Transformationen
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void SdrTextObj::NbcSetSnapRect(const Rectangle& rRect)
 {
@@ -168,15 +155,6 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     }
     else
     {
-        // #100663# aRect is NOT initialized for lines (polgon objects with two
-        // exceptionally handled points). Thus, after this call the text rotaion is
-        // gone. This error must be present since day one of this old drawing layer.
-        // It's astonishing that noone discovered it earlier.
-        // Polygon aPol(Rect2Poly(aRect,aGeo));
-        // Polygon aPol(Rect2Poly(GetSnapRect(), aGeo));
-
-        // #101412# go back to old method, side effects are impossible
-        // to calculate.
         Polygon aPol(Rect2Poly(aRect,aGeo));
 
         for(sal_uInt16 a(0); a < aPol.GetSize(); a++)
@@ -257,7 +235,7 @@ void SdrTextObj::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear
 {
     SetGlueReallyAbsolute(sal_True);
 
-    // #75889# when this is a SdrPathObj aRect maybe not initialized
+    // when this is a SdrPathObj aRect maybe not initialized
     Polygon aPol(Rect2Poly(aRect.IsEmpty() ? GetSnapRect() : aRect, aGeo));
 
     sal_uInt16 nPointCount=aPol.GetSize();
@@ -545,8 +523,5 @@ SdrObject* SdrTextObj::ImpConvertAddText(SdrObject* pObj, bool bBezier) const
         return pGrp;
     }
 }
-
-//////////////////////////////////////////////////////////////////////////////
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

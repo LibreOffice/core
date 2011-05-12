@@ -333,7 +333,6 @@ SdrGrafObj::SdrGrafObj()
     pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), SWAPGRAPHIC_TIMEOUT );
     bNoShear = sal_True;
 
-    // #111096#
     mbGrafAnimationAllowed = sal_True;
 
     // #i25616#
@@ -356,7 +355,6 @@ SdrGrafObj::SdrGrafObj(const Graphic& rGrf, const Rectangle& rRect)
     pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), SWAPGRAPHIC_TIMEOUT );
     bNoShear = sal_True;
 
-    // #111096#
     mbGrafAnimationAllowed = sal_True;
 
     // #i25616#
@@ -379,7 +377,6 @@ SdrGrafObj::SdrGrafObj( const Graphic& rGrf )
     pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), SWAPGRAPHIC_TIMEOUT );
     bNoShear = sal_True;
 
-    // #111096#
     mbGrafAnimationAllowed = sal_True;
 
     // #i25616#
@@ -451,7 +448,7 @@ const Graphic& SdrGrafObj::GetGraphic() const
 
 Graphic SdrGrafObj::GetTransformedGraphic( sal_uIntPtr nTransformFlags ) const
 {
-    // #107947# Refactored most of the code to GraphicObject, where
+    // Refactored most of the code to GraphicObject, where
     // everybody can use e.g. the cropping functionality
 
     GraphicType     eType = GetGraphicType();
@@ -461,7 +458,7 @@ Graphic SdrGrafObj::GetTransformedGraphic( sal_uIntPtr nTransformFlags ) const
     const sal_Bool      bRotate = ( ( nTransformFlags & SDRGRAFOBJ_TRANSFORMATTR_ROTATE ) != 0 ) &&
         ( aGeo.nDrehWink && aGeo.nDrehWink != 18000 ) && ( GRAPHIC_NONE != eType );
 
-    // #104115# Need cropping info earlier
+    // Need cropping info earlier
     ( (SdrGrafObj*) this )->ImpSetAttrToGrafInfo();
     GraphicAttr aActAttr;
 
@@ -485,7 +482,7 @@ Graphic SdrGrafObj::GetTransformedGraphic( sal_uIntPtr nTransformFlags ) const
             aActAttr.SetRotation( sal_uInt16(aGeo.nDrehWink / 10) );
     }
 
-    // #107947# Delegate to moved code in GraphicObject
+    // Delegate to moved code in GraphicObject
     return GetGraphicObject().GetTransformedGraphic( aDestSize, aDestMap, aActAttr );
 }
 
@@ -652,7 +649,7 @@ void SdrGrafObj::SetGraphicLink( const String& rFileName, const String& rFilterN
     ImpLinkAnmeldung();
     pGraphic->SetUserData();
 
-    // #92205# A linked graphic is per definition swapped out (has to be loaded)
+    // A linked graphic is per definition swapped out (has to be loaded)
     pGraphic->SetSwapState();
 }
 
@@ -1025,8 +1022,6 @@ void SdrGrafObj::SetModel( SdrModel* pNewModel )
 
 void SdrGrafObj::StartAnimation( OutputDevice* /*pOutDev*/, const Point& /*rPoint*/, const Size& /*rSize*/, long /*nExtraData*/)
 {
-    // #111096#
-    // use new graf animation
     SetGrafAnimationAllowed(sal_True);
 }
 
@@ -1034,8 +1029,6 @@ void SdrGrafObj::StartAnimation( OutputDevice* /*pOutDev*/, const Point& /*rPoin
 
 void SdrGrafObj::StopAnimation(OutputDevice* /*pOutDev*/, long /*nExtraData*/)
 {
-    // #111096#
-    // use new graf animation
     SetGrafAnimationAllowed(sal_False);
 }
 
@@ -1294,9 +1287,6 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
 
                     if(mbInsidePaint && !GetViewContact().HasViewObjectContacts(true))
                     {
-//                          Rectangle aSnapRect(GetSnapRect());
-//                          const Rectangle aSnapRectPixel(pOutDev->LogicToPixel(aSnapRect));
-
                         pFilterData = new com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >( 3 );
 
                         com::sun::star::awt::Size aPreviewSizeHint( 64, 64 );
@@ -1320,7 +1310,7 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
                         pGraphic->SetGraphic( aGraphic );
                         pGraphic->SetUserData( aUserData );
 
-                        // #142146# Graphic successfully swapped in.
+                        // Graphic successfully swapped in.
                         pRet = GRFMGR_AUTOSWAPSTREAM_LOADED;
                     }
                     delete pFilterData;
@@ -1357,8 +1347,6 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
 
 // -----------------------------------------------------------------------------
 
-// #111096#
-// Access to GrafAnimationAllowed flag
 sal_Bool SdrGrafObj::IsGrafAnimationAllowed() const
 {
     return mbGrafAnimationAllowed;
@@ -1391,9 +1379,6 @@ Reference< XInputStream > SdrGrafObj::getInputStream()
 
     if( pModel )
     {
-//      if( !pGraphic->HasUserData() )
-//          pGraphic->SwapOut();
-
         // kann aus dem original Doc-Stream nachgeladen werden...
         if( pGraphic->HasUserData() )
         {
@@ -1437,7 +1422,5 @@ Reference< XInputStream > SdrGrafObj::getInputStream()
 
     return xStream;
 }
-
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

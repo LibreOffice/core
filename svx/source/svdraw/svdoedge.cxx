@@ -135,8 +135,8 @@ bool SdrEdgeInfoRec::ImpIsHorzLine(SdrEdgeLineCode eLineCode, const XPolygon& rX
     sal_uInt16 nIdx=ImpGetPolyIdx(eLineCode,rXP);
     bool bHorz=nAngle1==0 || nAngle1==18000;
     if (eLineCode==OBJ2LINE2 || eLineCode==OBJ2LINE3) {
-        nIdx=rXP.GetPointCount()-nIdx; // #36314#
-        bHorz=nAngle2==0 || nAngle2==18000; // #52000#
+        nIdx=rXP.GetPointCount()-nIdx;
+        bHorz=nAngle2==0 || nAngle2==18000;
     }
     if ((nIdx & 1)==1) bHorz=!bHorz;
     return bHorz;
@@ -181,9 +181,8 @@ SdrEdgeObj::SdrEdgeObj()
     nNotifyingCount(0),
     bEdgeTrackDirty(sal_False),
     bEdgeTrackUserDefined(sal_False),
-    // #109007# Default is to allow default connects
+    // Default is to allow default connects
     mbSuppressDefaultConnect(sal_False),
-    // #110649#
     mbBoundRectCalculationRunning(sal_False)
 {
     bClosedObj=sal_False;
@@ -266,7 +265,6 @@ void SdrEdgeObj::ImpSetAttrToEdgeInfo()
         }
     }
 
-    // #84649#
     ImpDirtyEdgeTrack();
 }
 
@@ -325,7 +323,7 @@ void SdrEdgeObj::ImpSetEdgeInfoToAttr()
 
     if(n != nValAnz || nVals[0] != nVal1 || nVals[1] != nVal2 || nVals[2] != nVal3)
     {
-        // #75371# Here no more notifying is necessary, just local changes are OK.
+        // Here no more notifying is necessary, just local changes are OK.
         if(n != nValAnz)
         {
             GetProperties().SetObjectItemDirect(SdrEdgeLineDeltaAnzItem(n));
@@ -455,12 +453,12 @@ SdrGluePoint SdrEdgeObj::GetCornerGluePoint(sal_uInt16 nNum) const
 
 const SdrGluePointList* SdrEdgeObj::GetGluePointList() const
 {
-    return NULL; // Keine benutzerdefinierten Klebepunkte fuer Verbinder #31671#
+    return NULL; // Keine benutzerdefinierten Klebepunkte fuer Verbinder
 }
 
 SdrGluePointList* SdrEdgeObj::ForceGluePointList()
 {
-    return NULL; // Keine benutzerdefinierten Klebepunkte fuer Verbinder #31671#
+    return NULL; // Keine benutzerdefinierten Klebepunkte fuer Verbinder
 }
 
 bool SdrEdgeObj::IsEdge() const
@@ -555,7 +553,6 @@ void SdrEdgeObj::ImpRecalcEdgeTrack()
     if ( bEdgeTrackUserDefined && (GetModel() && GetModel()->isLocked()) )
         return;
 
-    // #110649#
     if(IsBoundRectCalculationRunning())
     {
         // this object is involved into another ImpRecalcEdgeTrack() call
@@ -582,18 +579,15 @@ void SdrEdgeObj::ImpRecalcEdgeTrack()
 
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
         SetRectsDirty();
-        // #110094#-14 if (!bEdgeTrackDirty) SendRepaintBroadcast();
         *pEdgeTrack=ImpCalcEdgeTrack(*pEdgeTrack,aCon1,aCon2,&aEdgeInfo);
         ImpSetEdgeInfoToAttr(); // Die Werte aus aEdgeInfo in den Pool kopieren
         bEdgeTrackDirty=sal_False;
 
         // Only redraw here, no object change
         ActionChanged();
-        // BroadcastObjectChange();
 
         SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
 
-        // #110649#
         ((SdrEdgeObj*)this)->mbBoundRectCalculationRunning = sal_False;
     }
 }
@@ -729,7 +723,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
     if (bCon1) {
         if (rCon1.pObj==(SdrObject*)this)
         {
-            // sicherheitshalber Abfragen #44515#
+            // sicherheitshalber Abfragen
             aBoundRect1=aOutRect;
         }
         else
@@ -752,7 +746,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
         aBewareRect1=aBoundRect1;
     }
     if (bCon2) {
-        if (rCon2.pObj==(SdrObject*)this) { // sicherheitshalber Abfragen #44515#
+        if (rCon2.pObj==(SdrObject*)this) { // sicherheitshalber Abfragen
             aBoundRect2=aOutRect;
         }
         else
@@ -1536,7 +1530,7 @@ void SdrEdgeObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     bool bObj1=aCon1.pObj!=NULL && aCon1.pObj->GetBroadcaster()==&rBC;
     bool bObj2=aCon2.pObj!=NULL && aCon2.pObj->GetBroadcaster()==&rBC;
     if (bDying && (bObj1 || bObj2)) {
-        // #35605# Dying vorher abfangen, damit AttrObj nicht
+        // Dying vorher abfangen, damit AttrObj nicht
         // wg. vermeintlicher Vorlagenaenderung rumbroadcastet
         if (bObj1) aCon1.pObj=NULL;
         if (bObj2) aCon2.pObj=NULL;
@@ -1560,12 +1554,10 @@ void SdrEdgeObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
         {
             // Broadcasting nur, wenn auf der selben Page
             Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-            // #110094#-14 if (!bEdgeTrackDirty) SendRepaintBroadcast();
             ImpDirtyEdgeTrack();
 
             // only redraw here, no objectchange
             ActionChanged();
-            // BroadcastObjectChange();
 
             SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
         }
@@ -1575,7 +1567,6 @@ void SdrEdgeObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 
 /** updates edges that are connected to the edges of this object
     as if the connected objects send a repaint broadcast
-    #103122#
 */
 void SdrEdgeObj::Reformat()
 {
@@ -1895,8 +1886,6 @@ bool SdrEdgeObj::applySpecialDrag(SdrDragStat& rDragStat)
     // save EdgeInfos and mark object as user modified
     ImpSetEdgeInfoToAttr();
     bEdgeTrackUserDefined = false;
-    //SetRectsDirty();
-    //SetChanged();
 
     if(bOriginalEdgeModified && rDragStat.GetView())
     {
@@ -2065,7 +2054,7 @@ Pointer SdrEdgeObj::GetCreatePointer() const
 bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrObjConnection& rCon, const SdrEdgeObj* pThis, OutputDevice* pOut)
 {
     rCon.ResetVars();
-    if (pOut==NULL) pOut=rPV.GetView().GetFirstOutputDevice(); // GetWin(0);
+    if (pOut==NULL) pOut=rPV.GetView().GetFirstOutputDevice();
     if (pOut==NULL) return sal_False;
     SdrObjList* pOL=rPV.GetObjList();
     const SetOfByte& rVisLayer=rPV.GetVisibleLayers();
@@ -2136,7 +2125,6 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
                     }
                     else if (bCenter && !bUserFnd && !bEdge)
                     {
-                        // #109007#
                         // Suppress default connect at object center
                         if(!pThis || !pThis->GetSuppressDefaultConnect())
                         {
@@ -2167,7 +2155,6 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
                     !bEdge &&
                     SdrObjectPrimitiveHit(*pObj, rPt, nBoundHitTol, rPV, &rVisLayer, false))
                 {
-                    // #109007#
                     // Suppress default connect at object inside bound
                     if(!pThis || !pThis->GetSuppressDefaultConnect())
                     {
@@ -2232,10 +2219,9 @@ void SdrEdgeObj::NbcResize(const Point& rRefPnt, const Fraction& aXFact, const F
     SdrTextObj::NbcResize(rRefPnt,aXFact,aXFact);
     ResizeXPoly(*pEdgeTrack,rRefPnt,aXFact,aYFact);
 
-    // #75371# if resize is not from paste, forget user distances
+    // if resize is not from paste, forget user distances
     if(!GetModel()->IsPasteResize())
     {
-        // #75735#
         aEdgeInfo.aObj1Line2 = Point();
         aEdgeInfo.aObj1Line3 = Point();
         aEdgeInfo.aObj2Line2 = Point();
@@ -2386,7 +2372,6 @@ void SdrEdgeObj::SetTailPoint( sal_Bool bTail, const Point& rPt )
 void SdrEdgeObj::setGluePointIndex( sal_Bool bTail, sal_Int32 nIndex /* = -1 */ )
 {
     Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetCurrentBoundRect();
-    // #110094#-14 BroadcastObjectChange();
 
     SdrObjConnection& rConn1 = GetConnection( bTail );
 
@@ -2396,8 +2381,7 @@ void SdrEdgeObj::setGluePointIndex( sal_Bool bTail, sal_Int32 nIndex /* = -1 */ 
 
     if( nIndex > 3 )
     {
-//      nIndex -= 4;
-        nIndex -= 3;        // SJ: the start api index is 0, whereas the implementation in svx starts from 1
+        nIndex -= 3;        // the start api index is 0, whereas the implementation in svx starts from 1
 
         // for user defined glue points we have
         // to get the id for this index first
@@ -2415,7 +2399,6 @@ void SdrEdgeObj::setGluePointIndex( sal_Bool bTail, sal_Int32 nIndex /* = -1 */ 
     SetChanged();
     SetRectsDirty();
     ImpRecalcEdgeTrack();
-    // bEdgeTrackDirty=sal_True;
 }
 
 /** this method is used by the api to return a glue point id for a connection.
@@ -2428,13 +2411,12 @@ sal_Int32 SdrEdgeObj::getGluePointIndex( sal_Bool bTail )
     {
         nId = rConn1.GetConnectorId();
         if( !rConn1.IsAutoVertex() )
-//          nId += 4;
-            nId += 3;       // SJ: the start api index is 0, whereas the implementation in svx starts from 1
+            nId += 3;       // the start api index is 0, whereas the implementation in svx starts from 1
     }
     return nId;
 }
 
-// #102344# Implementation was missing; edge track needs to be invalidated additionally.
+// Implementation was missing; edge track needs to be invalidated additionally.
 void SdrEdgeObj::NbcSetAnchorPos(const Point& rPnt)
 {
     // call parent functionality
@@ -2475,8 +2457,5 @@ void SdrEdgeObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
         return ::basegfx::B2DPolygon();
     }
 }
-
-//////////////////////////////////////////////////////////////////////////////
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

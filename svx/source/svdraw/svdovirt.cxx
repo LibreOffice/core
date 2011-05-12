@@ -48,7 +48,7 @@ sdr::properties::BaseProperties& SdrVirtObj::GetProperties() const
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// AW, OD 2004-05-03 #i27224#
+// #i27224#
 sdr::contact::ViewContact* SdrVirtObj::CreateObjectSpecificViewContact()
 {
     return new sdr::contact::ViewContactOfVirtObj(*this);
@@ -99,7 +99,6 @@ void SdrVirtObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& /*rHint*/)
 
     // Only a repaint here, rRefObj may have changed and broadcasts
     ActionChanged();
-    // BroadcastObjectChange();
 }
 
 void SdrVirtObj::NbcSetAnchorPos(const Point& rAnchorPos)
@@ -417,7 +416,6 @@ void SdrVirtObj::Move(const Size& rSiz)
 {
     if (rSiz.Width()!=0 || rSiz.Height()!=0) {
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-        // #110094#-14 SendRepaintBroadcast();
         NbcMove(rSiz);
         SetChanged();
         BroadcastObjectChange();

@@ -62,19 +62,6 @@
 #include <editeng/editeng.hxx>
 #include <editeng/postitem.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  @@@@@@ @@@@@ @@   @@ @@@@@@  @@@@  @@@@@  @@@@@@
-//    @@   @@    @@@ @@@   @@   @@  @@ @@  @@     @@
-//    @@   @@     @@@@@    @@   @@  @@ @@  @@     @@
-//    @@   @@@@    @@@     @@   @@  @@ @@@@@      @@
-//    @@   @@     @@@@@    @@   @@  @@ @@  @@     @@
-//    @@   @@    @@@ @@@   @@   @@  @@ @@  @@ @@  @@
-//    @@   @@@@@ @@   @@   @@    @@@@  @@@@@   @@@@
-//
-//  Attribute, StyleSheets und AutoGrow
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 bool SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt, bool bWdt) const
 {
@@ -121,7 +108,6 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt, bool bW
             if (aSiz.Width()<2) aSiz.Width()=2;   // Mindestgroesse 2
             if (aSiz.Height()<2) aSiz.Height()=2; // Mindestgroesse 2
 
-            // #101684#
             sal_Bool bInEditMode = IsInEditMode();
 
             if(!bInEditMode)
@@ -231,7 +217,6 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
     bool bRet=AdjustTextFrameWidthAndHeight(aNeuRect,bHgt,bWdt);
     if (bRet) {
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-        // #110094#-14 SendRepaintBroadcast();
         aRect=aNeuRect;
         SetRectsDirty();
         if (HAS_BASE(SdrRectObj,this)) { // mal wieder 'nen Hack
@@ -397,9 +382,9 @@ void SdrTextObj::NbcResizeTextAttributes(const Fraction& xFact, const Fraction& 
     }
 }
 
-/** #103836# iterates over the paragraphs of a given SdrObject and removes all
-             hard set character attributes with the which ids contained in the
-             given vector
+/**  iterates over the paragraphs of a given SdrObject and removes all
+     hard set character attributes with the which ids contained in the
+     given vector
 */
 void SdrTextObj::RemoveOutlinerCharacterAttribs( const std::vector<sal_uInt16>& rCharWhichIds )
 {
