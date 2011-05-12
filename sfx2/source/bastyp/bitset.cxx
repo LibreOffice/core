@@ -228,8 +228,8 @@ BitSet& BitSet::operator=( sal_uInt16 nBit )
     sal_uIntPtr nBitVal = 1L << (nBit % 32);
     nCount = 1;
 
-    pBitmap = new sal_uIntPtr[nBlocks];
-    memset( pBitmap + nBlocks, 0, 4 * nBlocks );
+    pBitmap = new sal_uIntPtr[nBlocks + 1];
+    memset( pBitmap, 0, 4 * (nBlocks + 1) );
 
     *(pBitmap+nBlocks) = nBitVal;
 
