@@ -460,6 +460,7 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_BUSHI,                 "buc", "YT" },
     { LANGUAGE_USER_TAHITIAN,               "ty", "PF" },
     { LANGUAGE_USER_MALAGASY_PLATEAU,      "plt", "MG" },
+    { LANGUAGE_USER_MALAGASY_PLATEAU,       "mg", "MG" },
     { LANGUAGE_USER_BAFIA,                 "ksf", "CM" },
     { LANGUAGE_USER_GIKUYU,                 "ki", "KE" },
     { LANGUAGE_USER_RUSYN_UKRAINE,         "rue", "UA" },
