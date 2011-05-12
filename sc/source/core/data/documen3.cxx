@@ -180,8 +180,8 @@ void ScDocument::SetDBCollection( ScDBCollection* pNewDBCollection, sal_Bool bRe
 
         if ( pDBCollection )
         {
-            sal_uInt16 nOldCount = pDBCollection->GetCount();
-            for (sal_uInt16 nOld=0; nOld<nOldCount; nOld++)
+            size_t nOldCount = pDBCollection->size();
+            for (size_t nOld = 0; nOld < nOldCount; ++nOld)
             {
                 ScDBData* pOldData = (*pDBCollection)[nOld];
                 if ( pOldData->HasAutoFilter() )

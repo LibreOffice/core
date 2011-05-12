@@ -160,20 +160,47 @@ public:
 
 class SC_DLLPUBLIC ScDBCollection
 {
-    typedef ::boost::ptr_set<ScDBData, ScDBData::less> NamedDBsType;
 public:
     typedef ::boost::ptr_vector<ScDBData> AnonDBsType;
+
+    class NamedDBs
+    {
+        friend class ScDBCollection;
+
+        typedef ::boost::ptr_set<ScDBData, ScDBData::less> DBsType;
+        DBsType maDBs;
+        ScDBCollection& mrParent;
+        ScDocument& mrDoc;
+        NamedDBs(ScDBCollection& rParent, ScDocument& rDoc);
+        NamedDBs(const NamedDBs& r);
+    public:
+        typedef DBsType::iterator iterator;
+        typedef DBsType::const_iterator const_iterator;
+
+        iterator begin();
+        iterator end();
+        const_iterator begin() const;
+        const_iterator end() const;
+        ScDBData* findByIndex(sal_uInt16 nIndex);
+        ScDBData* findByName(const ::rtl::OUString& rName);
+        bool insert(ScDBData* p);
+        void erase(iterator itr);
+        bool empty() const;
+        size_t size() const;
+    };
 
 private:
     Link        aRefreshHandler;
     ScDocument* pDoc;
     sal_uInt16 nEntryIndex;         // counter for unique indices
-    NamedDBsType maNamedDBs;
+    NamedDBs maNamedDBs;
     AnonDBsType maAnonDBs;
 
 public:
     ScDBCollection(ScDocument* pDocument);
     ScDBCollection(const ScDBCollection& r);
+
+    NamedDBs& getNamedDBs();
 
     const ScDBData* GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Bool bStartOnly) const;
     const ScDBData* GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
@@ -193,12 +220,6 @@ public:
     void            SetRefreshHandler( const Link& rLink )
                         { aRefreshHandler = rLink; }
     const Link&     GetRefreshHandler() const   { return aRefreshHandler; }
-
-    ScDBData* findByIndex(sal_uInt16 nIndex);
-    ScDBData* findByName(const ::rtl::OUString& rName);
-    bool insert(ScDBData* p);
-    bool empty() const;
-    size_t size() const;
 
     const ScDBData* findAnonAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) const;
     const ScDBData* findAnonByRange(const ScRange& rRange) const;

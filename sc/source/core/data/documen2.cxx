@@ -251,7 +251,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
     for (SCTAB i=1; i<=MAXTAB; i++)
         pTab[i] = NULL;
 
-    pDBCollection = new ScDBCollection( 4, 4, false, this );
+    pDBCollection = new ScDBCollection(this);
     pSelectionAttr = NULL;
     pChartCollection = new ScChartCollection;
     apTemporaryChartLock = std::auto_ptr< ScTemporaryChartLock >( new ScTemporaryChartLock(this) );
