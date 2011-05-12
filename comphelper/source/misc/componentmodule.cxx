@@ -85,7 +85,7 @@ namespace comphelper
     //-------------------------------------------------------------------------
     OModule::OModule()
         :m_nClients( 0 )
-        ,m_pImpl( new OModuleImpl )
+        ,m_pImpl( 0 )
     {
     }
 
@@ -110,17 +110,24 @@ namespace comphelper
     //--------------------------------------------------------------------------
     void OModule::onFirstClient()
     {
+        OSL_PRECOND( !m_pImpl, "called out of sequence" );
+        if ( !m_pImpl )
+            m_pImpl = new OModuleImpl;
     }
 
     //--------------------------------------------------------------------------
     void OModule::onLastClient()
     {
+        OSL_PRECOND( m_pImpl, "called out of sequence" );
+        delete m_pImpl;
+        m_pImpl = 0;
     }
 
     //--------------------------------------------------------------------------
     void OModule::registerImplementation( const ComponentDescription& _rComp )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
+        OSL_PRECOND( m_pImpl, "not initialized properly" );
         if ( !m_pImpl )
             throw RuntimeException();
 
