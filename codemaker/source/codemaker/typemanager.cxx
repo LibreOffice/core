@@ -62,7 +62,7 @@ sal_Int32 TypeManager::release()
     {
         delete m_pImpl;
     }
-    return refCount;;
+    return refCount;
 }
 
 sal_Bool TypeManager::isBaseType(const ::rtl::OString& name)
