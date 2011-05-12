@@ -76,8 +76,18 @@ namespace svt
     //--------------------------------------------------------------------
     SmartContent::~SmartContent()
     {
-        //Do not delete the content. Because the content will be used by the cache.
-        //DELETEZ( m_pContent );
+        /* This destructor originally contained the following blurb: "Do
+           not delete the content. Because the content will be used by
+           the cache." This is just plain silly, because it relies on
+           the provider caching created contents (which is done by
+           ucbhelper::ContentProviderImplHelper, but we do not actually
+           expect all providers to use that, right?) Otherwise we are
+           just leaking memory.
+
+           TODO: If there is real need for caching the content, it must
+           be done here.
+        */
+        delete m_pContent;
     }
 
     //--------------------------------------------------------------------
