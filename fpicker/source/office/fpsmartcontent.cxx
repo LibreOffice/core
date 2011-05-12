@@ -254,8 +254,8 @@ namespace svt
                 Reference< XContent > xParent( xChild->getParent(), UNO_QUERY );
                 if ( xParent.is() )
                 {
-                    String aParentURL = String( xParent->getIdentifier()->getContentIdentifier() );
-                    bRet = ( aParentURL.Len() > 0 && aParentURL != (String)(m_pContent->getURL()) );
+                    const ::rtl::OUString aParentURL( xParent->getIdentifier()->getContentIdentifier() );
+                    bRet = ( !aParentURL.isEmpty() && aParentURL != m_pContent->getURL() );
 
                     // now we're definately valid
                     m_eState = VALID;
