@@ -65,6 +65,7 @@
 #include "rtl/tencinfo.h"
 
 #include "osl/file.hxx"
+#include "osl/module.hxx"
 
 #include "tools/string.hxx"
 #include "tools/debug.hxx"
@@ -250,7 +251,7 @@ namespace {
 class CairoWrapper
 {
 private:
-    oslModule mpCairoLib;
+    osl::Module mpCairoLib;
 
     cairo_surface_t* (*mp_xlib_surface_create_with_xrender_format)(Display *, Drawable , Screen *, XRenderPictFormat *, int , int );
     void (*mp_surface_destroy)(cairo_surface_t *);
@@ -327,7 +328,6 @@ CairoWrapper& CairoWrapper::get()
 }
 
 CairoWrapper::CairoWrapper()
-:   mpCairoLib( NULL )
 {
     static const char* pDisableCairoText = getenv( "SAL_DISABLE_CAIROTEXT" );
     if( pDisableCairoText && (pDisableCairoText[0] != '0') )
@@ -342,8 +342,7 @@ CairoWrapper::CairoWrapper()
 #else
     OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( "libcairo.so.2" ));
 #endif
-    mpCairoLib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_DEFAULT );
-    if( !mpCairoLib )
+    if ( !mpCairoLib.load( aLibName, SAL_LOADMODULE_DEFAULT ) )
         return;
 
 #ifdef DEBUG
@@ -411,8 +410,7 @@ CairoWrapper::CairoWrapper()
             mp_ft_font_options_substitute
         ) )
     {
-        osl_unloadModule( mpCairoLib );
-    mpCairoLib = NULL;
+        mpCairoLib.unload();
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "not all needed symbols were found\n" );
 #endif
