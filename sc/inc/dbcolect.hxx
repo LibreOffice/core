@@ -40,11 +40,12 @@
 #include "queryparam.hxx"
 
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/ptr_container/ptr_set.hpp>
 #include <boost/scoped_ptr.hpp>
 
 class ScDocument;
 
-class ScDBData : public ScDataObject, public ScRefreshTimer
+class ScDBData : public ScRefreshTimer
 {
 private:
     ScSortParam maSortParam;
@@ -78,14 +79,17 @@ private:
     using ScRefreshTimer::operator==;
 
 public:
+    struct less : public ::std::binary_function<ScDBData, ScDBData, bool>
+    {
+        bool operator() (const ScDBData& left, const ScDBData& right) const;
+    };
+
             SC_DLLPUBLIC ScDBData(const ::rtl::OUString& rName,
                      SCTAB nTab,
                      SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                      bool bByR = true, bool bHasH = true);
             ScDBData(const ScDBData& rData);
             ~ScDBData();
-
-    virtual ScDataObject*   Clone() const;
 
             ScDBData&   operator= (const ScDBData& rData);
 
@@ -154,39 +158,27 @@ public:
             void ExtendDataArea(ScDocument* pDoc);
 };
 
-
-//------------------------------------------------------------------------
-class SC_DLLPUBLIC ScDBCollection : public ScSortedCollection
+class SC_DLLPUBLIC ScDBCollection
 {
-    typedef ::boost::ptr_vector<ScDBData> DBRangesType;
+    typedef ::boost::ptr_set<ScDBData, ScDBData::less> NamedDBsType;
 public:
-    typedef DBRangesType AnonDBsType;
+    typedef ::boost::ptr_vector<ScDBData> AnonDBsType;
 
 private:
     Link        aRefreshHandler;
     ScDocument* pDoc;
     sal_uInt16 nEntryIndex;         // counter for unique indices
+    NamedDBsType maNamedDBs;
     AnonDBsType maAnonDBs;
 
 public:
-    ScDBCollection(sal_uInt16 nLim = 4, sal_uInt16 nDel = 4, sal_Bool bDup = false, ScDocument* pDocument = NULL) :
-                    ScSortedCollection  ( nLim, nDel, bDup ),
-                    pDoc                ( pDocument ),
-                    nEntryIndex         ( SC_START_INDEX_DB_COLL )  // see above for the names
-                    {}
-
+    ScDBCollection(ScDocument* pDocument);
     ScDBCollection(const ScDBCollection& r);
 
-    virtual ScDataObject*   Clone() const { return new ScDBCollection(*this); }
-            ScDBData*   operator[]( const sal_uInt16 nIndex) const {return (ScDBData*)At(nIndex);}
-    virtual short       Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
-    virtual sal_Bool        IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) const;
-            ScDBData*   GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Bool bStartOnly) const;
-            ScDBData*   GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
-            ScDBData*   GetFilterDBAtTable(SCTAB nTab) const;
-            ScDBData*   GetDBNearCursor(SCCOL nCol, SCROW nRow, SCTAB nTab );
-
-    sal_Bool    SearchName( const String& rName, sal_uInt16& rIndex ) const;
+    const ScDBData* GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Bool bStartOnly) const;
+    const ScDBData* GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
+    const ScDBData* GetFilterDBAtTable(SCTAB nTab) const;
+    ScDBData* GetDBNearCursor(SCCOL nCol, SCROW nRow, SCTAB nTab );
 
     void    DeleteOnTab( SCTAB nTab );
     void    UpdateReference(UpdateRefMode eUpdateRefMode,
@@ -195,14 +187,18 @@ public:
                                 SCsCOL nDx, SCsROW nDy, SCsTAB nDz);
     void    UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
 
-    ScDBData* FindIndex(sal_uInt16 nIndex);
     sal_uInt16  GetEntryIndex()                 { return nEntryIndex; }
     void    SetEntryIndex(sal_uInt16 nInd)      { nEntryIndex = nInd; }
-    virtual sal_Bool Insert(ScDataObject* pScDataObject);
 
     void            SetRefreshHandler( const Link& rLink )
                         { aRefreshHandler = rLink; }
     const Link&     GetRefreshHandler() const   { return aRefreshHandler; }
+
+    ScDBData* findByIndex(sal_uInt16 nIndex);
+    ScDBData* findByName(const ::rtl::OUString& rName);
+    bool insert(ScDBData* p);
+    bool empty() const;
+    size_t size() const;
 
     const ScDBData* findAnonAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) const;
     const ScDBData* findAnonByRange(const ScRange& rRange) const;
