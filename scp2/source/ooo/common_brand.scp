@@ -570,22 +570,6 @@ File gid_Brand_File_Bin_Unopkgexe
 End
 #endif
 
-#ifdef WNT
-File gid_Brand_File_Bin_Rebaseoo
-    BIN_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Styles = (PACKED);
-    Name = "rebaseoo.exe";
-End
-
-File gid_Brand_File_Bin_Rebasegui
-    BIN_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Styles = (PACKED);
-    Name = "rebasegui.exe";
-End
-#endif
-
 #if defined UNX && !defined MACOSX
 File gid_Brand_File_Script_Unopkg
     BIN_FILE_BODY;
