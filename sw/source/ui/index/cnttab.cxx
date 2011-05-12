@@ -3187,7 +3187,7 @@ void    SwTokenWindow::InsertAtSelection(
         SwFormToken aTmpToken(TOKEN_TEXT);
         SwTOXEdit* pEdit = new SwTOXEdit(&aCtrlParentWin, this, aTmpToken);
 
-        aControlList.insert(iterInsert, pEdit);
+        iterInsert = aControlList.insert(iterInsert, pEdit);
 
         pEdit->SetText(sRight);
         pEdit->SetSizePixel(aControlSize);
