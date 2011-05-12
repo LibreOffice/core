@@ -683,7 +683,7 @@ public:
     virtual void SAL_CALL setByTable( const ::com::sun::star::table::CellRangeAddress& aRange )
                                 throw(::com::sun::star::uno::RuntimeException,
                                       ::com::sun::star::lang::IndexOutOfBoundsException );
-    virtual com::sun::star::uno::Any SAL_CALL getByTable( const sal_Int32 nTab )
+    virtual com::sun::star::uno::Any SAL_CALL getByTable( sal_Int32 nTab )
                                 throw(::com::sun::star::uno::RuntimeException,
                                 ::com::sun::star::lang::IndexOutOfBoundsException,
                                 ::com::sun::star::container::NoSuchElementException );
