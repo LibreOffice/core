@@ -1225,8 +1225,9 @@ int HTMLParser::_GetNextToken()
 
                         // fdo#34666 fdo#36080 fdo#36390: closing "/>"?:
                         // return HTML_<TOKEN>_OFF instead of HTML_<TOKEN>_ON
-                        if (aToken.Len() >= 1 && '/' == aToken.GetChar(aToken.Len()-1)) {
-                            nRet += 1; // HTML_<TOKEN>_ON -> HTML_<TOKEN>_OFF;
+                        if ((HTML_TOKEN_ONOFF & nRet) && (aToken.Len() >= 1) &&
+                            ('/' == aToken.GetChar(aToken.Len()-1))) {
+                            ++nRet; // HTML_<TOKEN>_ON -> HTML_<TOKEN>_OFF;
                         }
                         if( sal_Unicode(EOF) == nNextCh && rInput.IsEof() )
                         {
