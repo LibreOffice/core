@@ -150,13 +150,13 @@ public:
                     GDIMetaFile( const GDIMetaFile& rMtf );
     virtual         ~GDIMetaFile();
 
-    GDIMetaFile&        operator=( const GDIMetaFile& rMtf );
-    sal_Bool            operator==( const GDIMetaFile& rMtf ) const;
-    sal_Bool            operator!=( const GDIMetaFile& rMtf ) const { return !( *this == rMtf ); }
+    GDIMetaFile&    operator=( const GDIMetaFile& rMtf );
+    sal_Bool        operator==( const GDIMetaFile& rMtf ) const;
+    sal_Bool        operator!=( const GDIMetaFile& rMtf ) const { return !( *this == rMtf ); }
 
     void            Clear();
     sal_Bool        IsEqual( const GDIMetaFile& rMtf ) const;
-    sal_Bool            Mirror( sal_uLong nMirrorFlags );
+    sal_Bool        Mirror( sal_uLong nMirrorFlags );
     void            Move( long nX, long nY );
     // additional Move method getting specifics how to handle MapMode( MAP_PIXEL )
     void            Move( long nX, long nY, long nDPIX, long nDPIY );
@@ -174,17 +174,20 @@ public:
     Rectangle       GetBoundRect( OutputDevice& i_rReference );
 
     void            Adjust( short nLuminancePercent = 0, short nContrastPercent = 0,
-                            short nChannelRPercent = 0, short nChannelGPercent = 0,
-                            short nChannelBPercent = 0, double fGamma = 1.0, sal_Bool bInvert = sal_False );
+                            short nChannelRPercent = 0,  short nChannelGPercent = 0,
+                            short nChannelBPercent = 0,  double fGamma = 1.0,
+                            sal_Bool bInvert = sal_False
+                    );
+
     void            Convert( MtfConversion eConversion );
-    void            ReplaceColors( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol = 0 );
+    void            ReplaceColors( const Color& rSearchColor,  const Color& rReplaceColor, sal_uLong nTol = 0 );
     void            ReplaceColors( const Color* pSearchColors, const Color* rReplaceColors,
                                    sal_uLong nColorCount, sal_uLong* pTols = NULL );
 
     GDIMetaFile     GetMonochromeMtf( const Color& rCol ) const;
 
     void            Record( OutputDevice* pOutDev );
-    sal_Bool            IsRecord() const { return bRecord; }
+    sal_Bool        IsRecord() const { return bRecord; }
 
     void            Play( GDIMetaFile& rMtf, size_t nPos = GDI_METAFILE_END );
     void            Play( OutputDevice* pOutDev, size_t nPos = GDI_METAFILE_END );
@@ -192,7 +195,7 @@ public:
                           const Size& rSize, size_t nPos = GDI_METAFILE_END );
 
     void            Pause( sal_Bool bPause );
-    sal_Bool            IsPause() const { return bPause; }
+    sal_Bool        IsPause() const { return bPause; }
 
     void            Stop();
 
@@ -217,13 +220,13 @@ public:
     MetaAction*     GetCurAction() const { return GetAction( nCurrentActionElement ); }
     MetaAction*     ReplaceAction( MetaAction* pAction, size_t nAction );
 
-    sal_Bool            InsertLabel( const String& rLabel, sal_uLong nActionPos );
+    sal_Bool        InsertLabel( const String& rLabel, size_t nActionPos );
     void            RemoveLabel( const String& rLabel );
     void            RenameLabel( const String& rLabel, const String& rNewLabel );
-    sal_uLong           GetLabelCount() const;
-    String          GetLabel( sal_uLong nLabel );
+    size_t          GetLabelCount() const;
+    String          GetLabel( size_t nLabel );
 
-    sal_Bool            SaveStatus();
+    sal_Bool        SaveStatus();
 
     const Size&     GetPrefSize() const { return aPrefSize; }
     void            SetPrefSize( const Size& rSize ) { aPrefSize = rSize; }
@@ -234,8 +237,8 @@ public:
     void            SetHookHdl( const Link& rLink ) { aHookHdlLink = rLink; }
     const Link&     GetHookHdl() const { return aHookHdlLink; }
 
-    sal_uLong           GetChecksum() const;
-    sal_uLong           GetSizeBytes() const;
+    sal_uLong       GetChecksum() const;
+    sal_uLong       GetSizeBytes() const;
 
     // Methoden zum Lesen und Schreiben des neuen Formats;
     // die Read-Methode kann auch das alte Format lesen
@@ -247,10 +250,10 @@ public:
     friend VCL_DLLPUBLIC SvStream& operator>>( SvStream& rIStm, GDIMetaFile& rGDIMetaFile );
     friend VCL_DLLPUBLIC SvStream& operator<<( SvStream& rOStm, const GDIMetaFile& rGDIMetaFile );
 
-    sal_Bool           CreateThumbnail( sal_uInt32 nMaximumExtent, BitmapEx& rBmpEx, const BitmapEx* pOverlay = NULL, const Rectangle* pOverlayRect = NULL ) const;
+    sal_Bool        CreateThumbnail( sal_uInt32 nMaximumExtent, BitmapEx& rBmpEx, const BitmapEx* pOverlay = NULL, const Rectangle* pOverlayRect = NULL ) const;
 
-    void           UseCanvas( sal_Bool _bUseCanvas );
-    sal_Bool           GetUseCanvas() const { return bUseCanvas; }
+    void            UseCanvas( sal_Bool _bUseCanvas );
+    sal_Bool        GetUseCanvas() const { return bUseCanvas; }
 };
 
 /** Create a special metaaction that delegates rendering to specified

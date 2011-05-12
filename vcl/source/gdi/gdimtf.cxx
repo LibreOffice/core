@@ -31,7 +31,6 @@
 #include <rtl/crc.h>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
-#include <tools/list.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/outdev.hxx>
@@ -152,52 +151,95 @@ struct ImpLabel
 // - LabelList -
 // -------------
 
-class ImpLabelList : private List
+typedef ::std::vector< ImpLabel* > ImpLabelVector;
+
+class ImpLabelList
 {
+private:
+    ImpLabelVector  aList;
+    size_t          nListPos;
+
 public:
 
-                ImpLabelList() : List( 8, 4, 4 ) {}
-                ImpLabelList( const ImpLabelList& rList );
-                ~ImpLabelList();
+                   ImpLabelList() {}
+                    ImpLabelList( const ImpLabelList& rList );
+                    ~ImpLabelList();
 
-    void        ImplInsert( ImpLabel* p ) { Insert( p, LIST_APPEND ); }
-    ImpLabel*   ImplRemove( sal_uLong nPos ) { return (ImpLabel*) Remove( nPos ); }
-    void        ImplReplace( ImpLabel* p ) { Replace( (void*)p ); }
-    ImpLabel*   ImplFirst() { return (ImpLabel*) First(); }
-    ImpLabel*   ImplNext() { return (ImpLabel*) Next(); }
-    ImpLabel*   ImplGetLabel( sal_uLong nPos ) const { return (ImpLabel*) GetObject( nPos ); }
-    sal_uLong       ImplGetLabelPos( const String& rLabelName );
-    sal_uLong       ImplCount() const { return Count(); }
+    void            ImplInsert( ImpLabel* p ) { aList.push_back( p ); }
+
+    ImpLabel*       ImplFirst();
+    ImpLabel*       ImplNext();
+    ImpLabel*       ImplGetLabel( size_t nPos ) const;
+    ImpLabel*       ImplRemove( size_t nPos );
+
+    size_t          ImplGetLabelPos( const String& rLabelName );
+    size_t          ImplCount() const { return aList.size(); }
 };
 
 // ------------------------------------------------------------------------
 
-ImpLabelList::ImpLabelList( const ImpLabelList& rList ) :
-        List( rList )
+ImpLabelList::ImpLabelList( const ImpLabelList& rList )
 {
-    for( ImpLabel* pLabel = ImplFirst(); pLabel; pLabel = ImplNext() )
-        ImplReplace( new ImpLabel( *pLabel ) );
+    for( size_t i = 0, n = rList.ImplCount(); i < n; ++i )
+        aList.push_back( new ImpLabel( *rList.ImplGetLabel( i ) ) );
+    nListPos = 0;
 }
 
 // ------------------------------------------------------------------------
 
 ImpLabelList::~ImpLabelList()
 {
-    for( ImpLabel* pLabel = ImplFirst(); pLabel; pLabel = ImplNext() )
-        delete pLabel;
+    for( size_t i = 0, n = aList.size(); i < n; ++i )
+        delete aList[ i ];
+    aList.clear();
+}
+
+// ------------------------------------------------------------------------
+ImpLabel* ImpLabelList::ImplFirst()
+{
+    nListPos = 0;
+    return ( aList.empty() ) ? NULL : aList[ nListPos ];
+}
+
+// ------------------------------------------------------------------------
+ImpLabel* ImpLabelList::ImplNext()
+{
+    return ( nListPos + 1 < aList.size() ) ? aList[ ++nListPos ] : NULL;
 }
 
 // ------------------------------------------------------------------------
 
-sal_uLong ImpLabelList::ImplGetLabelPos( const String& rLabelName )
+ImpLabel* ImpLabelList::ImplGetLabel( size_t nPos ) const
 {
-    sal_uLong nLabelPos = METAFILE_LABEL_NOTFOUND;
+    return ( nPos < aList.size() ) ? aList[ nPos ] : NULL;
+}
 
-    for( ImpLabel* pLabel = ImplFirst(); pLabel; pLabel = ImplNext() )
+// ------------------------------------------------------------------------
+
+ImpLabel* ImpLabelList::ImplRemove( size_t nPos )
+{
+    ImpLabel* return_value = NULL;
+    if ( nPos < aList.size() )
     {
-        if ( rLabelName == pLabel->aLabelName )
+        ImpLabelVector::iterator it = aList.begin();
+        ::std::advance( it, nPos );
+        return_value = *it;
+        aList.erase( it );
+    }
+    return return_value;
+}
+
+// ------------------------------------------------------------------------
+
+size_t ImpLabelList::ImplGetLabelPos( const String& rLabelName )
+{
+    size_t nLabelPos = METAFILE_LABEL_NOTFOUND;
+
+    for ( size_t i = 0, n = aList.size(); i < n; ++i )
+    {
+        if ( rLabelName == aList[ i ]->aLabelName )
         {
-            nLabelPos = GetCurPos();
+            nLabelPos = i;
             break;
         }
     }
@@ -925,7 +967,7 @@ size_t GDIMetaFile::GetActionPos( const String& rLabel )
 
 // ------------------------------------------------------------------------
 
-sal_Bool GDIMetaFile::InsertLabel( const String& rLabel, sal_uLong nActionPos )
+sal_Bool GDIMetaFile::InsertLabel( const String& rLabel, size_t nActionPos )
 {
     sal_Bool bRet = sal_False;
 
@@ -969,14 +1011,14 @@ void GDIMetaFile::RenameLabel( const String& rLabel, const String& rNewLabel )
 
 // ------------------------------------------------------------------------
 
-sal_uLong GDIMetaFile::GetLabelCount() const
+size_t GDIMetaFile::GetLabelCount() const
 {
     return( pLabelList ? pLabelList->ImplCount() : 0UL );
 }
 
 // ------------------------------------------------------------------------
 
-String GDIMetaFile::GetLabel( sal_uLong nLabel )
+String GDIMetaFile::GetLabel( size_t nLabel )
 {
     String aString;
 
