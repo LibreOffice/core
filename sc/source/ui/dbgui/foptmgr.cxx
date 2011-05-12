@@ -184,9 +184,9 @@ void ScFilterOptionsMgr::Init()
         {
             ScAddress&  rStart  = theCurArea.aStart;
             ScAddress&  rEnd    = theCurArea.aEnd;
-            ScDBData*   pDBData = pDBColl->GetDBAtArea( rStart.Tab(),
-                                                        rStart.Col(), rStart.Row(),
-                                                        rEnd.Col(),   rEnd.Row() );
+            const ScDBData* pDBData = pDBColl->GetDBAtArea(
+                rStart.Tab(), rStart.Col(), rStart.Row(), rEnd.Col(), rEnd.Row());
+
             if ( pDBData )
             {
                 rBtnHeader.Check( pDBData->HasHeader() );

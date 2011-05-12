@@ -66,35 +66,28 @@ ScDBFunc::~ScDBFunc()
 //      Hilfsfunktionen
 //
 
-void ScDBFunc::GotoDBArea( const String& rDBName )
+void ScDBFunc::GotoDBArea( const ::rtl::OUString& rDBName )
 {
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScDBCollection* pDBCol = pDoc->GetDBCollection();
-
-    sal_uInt16 nFoundAt = 0;
-    if ( pDBCol->SearchName( rDBName, nFoundAt ) )
+    ScDBData* pData = pDBCol->getNamedDBs().findByName(rDBName);
+    if (pData)
     {
-        ScDBData* pData = (*pDBCol)[nFoundAt];
-        DBG_ASSERT( pData, "GotoDBArea: Datenbankbereich nicht gefunden!" );
+        SCTAB nTab = 0;
+        SCCOL nStartCol = 0;
+        SCROW nStartRow = 0;
+        SCCOL nEndCol = 0;
+        SCROW nEndRow = 0;
 
-        if ( pData )
-        {
-            SCTAB nTab = 0;
-            SCCOL nStartCol = 0;
-            SCROW nStartRow = 0;
-            SCCOL nEndCol = 0;
-            SCROW nEndRow = 0;
+        pData->GetArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow );
+        SetTabNo( nTab );
 
-            pData->GetArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow );
-            SetTabNo( nTab );
-
-            MoveCursorAbs( nStartCol, nStartRow, ScFollowMode( SC_FOLLOW_JUMP ),
-                               false, false );  // bShift,bControl
-            DoneBlockMode();
-            InitBlockMode( nStartCol, nStartRow, nTab );
-            MarkCursor( nEndCol, nEndRow, nTab );
-            SelectionChanged();
-        }
+        MoveCursorAbs( nStartCol, nStartRow, ScFollowMode( SC_FOLLOW_JUMP ),
+                       false, false );  // bShift,bControl
+        DoneBlockMode();
+        InitBlockMode( nStartCol, nStartRow, nTab );
+        MarkCursor( nEndCol, nEndRow, nTab );
+        SelectionChanged();
     }
 }
 

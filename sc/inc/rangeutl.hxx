@@ -33,6 +33,7 @@
 
 #include "address.hxx"
 #include "rangenam.hxx"
+#include "dbcolect.hxx"
 #include "scdllapi.h"
 
 #include <com/sun/star/table/CellAddress.hpp>
@@ -305,18 +306,19 @@ class SC_DLLPUBLIC ScAreaNameIterator
 {
 private:
     ScRangeName*    pRangeName;
+    ScDBCollection* pDBCollection;
     ScRangeName::const_iterator maRNPos;
     ScRangeName::const_iterator maRNEnd;
-    ScDBCollection* pDBCollection;
+    ScDBCollection::NamedDBs::const_iterator maDBPos;
+    ScDBCollection::NamedDBs::const_iterator maDBEnd;
     bool            bFirstPass;
-    size_t          nPos;
 
 public:
             ScAreaNameIterator( ScDocument* pDoc );
             ~ScAreaNameIterator() {}
 
-    sal_Bool    Next( String& rName, ScRange& rRange );
-    sal_Bool    WasDBName() const   { return !bFirstPass; }
+    bool Next( String& rName, ScRange& rRange );
+    bool WasDBName() const { return !bFirstPass; }
 };
 
 

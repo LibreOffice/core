@@ -75,7 +75,7 @@ public:
 
     sal_Bool            ImportData( const ScImportParam& rParam, sal_Bool bRecord = sal_True );
 
-    void            GotoDBArea( const String& rDBName );
+    void GotoDBArea( const ::rtl::OUString& rDBName );
 
                     // DB-Bereich vom Cursor
     ScDBData*       GetDBData( bool bMarkArea = true, ScGetDBMode eMode = SC_DB_MAKE, ScGetDBSelection eSel = SC_DBSEL_KEEP);

@@ -4823,9 +4823,6 @@ sal_Bool ScDocument::ExtendOverlapped( ScRange& rRange )
 sal_Bool ScDocument::RefreshAutoFilter( SCCOL nStartCol, SCROW nStartRow,
                                     SCCOL nEndCol, SCROW nEndRow, SCTAB nTab )
 {
-    sal_uInt16 nCount = pDBCollection->GetCount();
-    sal_uInt16 i;
-    ScDBData* pData;
     SCTAB nDBTab;
     SCCOL nDBStartCol;
     SCROW nDBStartRow;
@@ -4834,22 +4831,25 @@ sal_Bool ScDocument::RefreshAutoFilter( SCCOL nStartCol, SCROW nStartRow,
 
     //      Autofilter loeschen
 
-    sal_Bool bChange = RemoveFlagsTab( nStartCol,nStartRow, nEndCol,nEndRow, nTab, SC_MF_AUTO );
+    bool bChange = RemoveFlagsTab( nStartCol,nStartRow, nEndCol,nEndRow, nTab, SC_MF_AUTO );
 
     //      Autofilter setzen
 
-    for (i=0; i<nCount; i++)
+    const ScDBData* pData = NULL;
+    ScDBCollection::NamedDBs& rDBs = pDBCollection->getNamedDBs();
+    ScDBCollection::NamedDBs::const_iterator itr = rDBs.begin(), itrEnd = rDBs.end();
+    for (; itr != itrEnd; ++itr)
     {
-        pData = (*pDBCollection)[i];
-        if (pData->HasAutoFilter())
+        pData = &(*itr);
+        if (itr->HasAutoFilter())
         {
-            pData->GetArea( nDBTab, nDBStartCol,nDBStartRow, nDBEndCol,nDBEndRow );
+            itr->GetArea( nDBTab, nDBStartCol,nDBStartRow, nDBEndCol,nDBEndRow );
             if ( nDBTab==nTab && nDBStartRow<=nEndRow && nDBEndRow>=nStartRow &&
                                     nDBStartCol<=nEndCol && nDBEndCol>=nStartCol )
             {
                 if (ApplyFlagsTab( nDBStartCol,nDBStartRow, nDBEndCol,nDBStartRow,
                                     nDBTab, SC_MF_AUTO ))
-                    bChange = sal_True;
+                    bChange = true;
             }
         }
     }
@@ -4867,7 +4867,7 @@ sal_Bool ScDocument::RefreshAutoFilter( SCCOL nStartCol, SCROW nStartRow,
             {
                 if (ApplyFlagsTab( nDBStartCol,nDBStartRow, nDBEndCol,nDBStartRow,
                                     nDBTab, SC_MF_AUTO ))
-                    bChange = sal_True;
+                    bChange = true;
             }
         }
     }

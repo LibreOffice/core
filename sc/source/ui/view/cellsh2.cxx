@@ -723,26 +723,11 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                     if ( pDBCol )
                     {
-                        const String    aStrNoName( RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME) );
-                        List            aList;
-                        sal_uInt16          nDBCount = pDBCol->GetCount();
-                        ScDBData*       pDbData  = NULL;
-                        String*         pDBName  = NULL;
-
-                        for ( sal_uInt16 i=0; i < nDBCount; i++ )
-                        {
-                            pDbData = (ScDBData*)(pDBCol->At( i ));
-                            if ( pDbData )
-                            {
-                                pDBName = new String;
-                                *pDBName = pDbData->GetName();
-
-                                if ( *pDBName != aStrNoName )
-                                    aList.Insert( pDBName );
-                                else
-                                    DELETEZ(pDBName);
-                            }
-                        }
+                        List aList;
+                        const ScDBCollection::NamedDBs& rDBs = pDBCol->getNamedDBs();
+                        ScDBCollection::NamedDBs::const_iterator itr = rDBs.begin(), itrEnd = rDBs.end();
+                        for (; itr != itrEnd; ++itr)
+                            aList.Insert(new String(itr->GetName()));
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         DBG_ASSERT(pFact, "ScAbstractFactory create fail!");

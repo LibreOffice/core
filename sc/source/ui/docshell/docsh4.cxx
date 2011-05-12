@@ -243,17 +243,16 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 }
 
                 // bei Bedarf neuen Datenbankbereich anlegen
-                sal_Bool bMakeArea = false;
+                bool bMakeArea = false;
                 if (bIsNewArea)
                 {
                     ScDBCollection* pDBColl = aDocument.GetDBCollection();
-                    sal_uInt16 nDummy;
-                    if ( !pDBColl || !pDBColl->SearchName( sTarget, nDummy ) )
+                    if ( !pDBColl || !pDBColl->getNamedDBs().findByName(sTarget) )
                     {
                         ScAddress aPos;
                         if ( aPos.Parse( sTarget, &aDocument, aDocument.GetAddressConvention() ) & SCA_VALID )
                         {
-                            bMakeArea = sal_True;
+                            bMakeArea = true;
                             if (bUndo)
                             {
                                 String aStrImport = ScGlobal::GetRscString( STR_UNDO_IMPORTDATA );
@@ -268,7 +267,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 }
 
                 // nachfragen, bevor alter DB-Bereich ueberschrieben wird
-                sal_Bool bDo = sal_True;
+                bool bDo = true;
                 if (!bIsNewArea)
                 {
                     String aTemplate = ScGlobal::GetRscString( STR_IMPORT_REPLACE );
@@ -283,7 +282,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 if (bDo)
                 {
                     ScDBDocFunc(*this).UpdateImport( sTarget, sDBName,
-                            sDBTable, sDBSql, sal_True, nType, xResultSet,
+                            sDBTable, sDBSql, true, nType, xResultSet,
                             pSelectionList );
                     rReq.Done();
 
@@ -525,33 +524,35 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                                 ScGlobal::GetRscString(STR_REIMPORT_AFTER_LOAD) );
                         if (aBox.Execute() == RET_YES)
                         {
-                            for (sal_uInt16 i=0; i<pDBColl->GetCount(); i++)
+                            ScDBCollection::NamedDBs& rDBs = pDBColl->getNamedDBs();
+                            ScDBCollection::NamedDBs::iterator itr = rDBs.begin(), itrEnd = rDBs.end();
+                            for (; itr != itrEnd; ++itr)
                             {
-                                ScDBData* pDBData = (*pDBColl)[i];
-                                if ( pDBData->IsStripData() &&
-                                        pDBData->HasImportParam() && !pDBData->HasImportSelection() )
+                                ScDBData& rDBData = *itr;
+                                if ( rDBData.IsStripData() &&
+                                     rDBData.HasImportParam() && !rDBData.HasImportSelection() )
                                 {
-                                    pDBData->GetArea(aRange);
+                                    rDBData.GetArea(aRange);
                                     pViewSh->MarkRange(aRange);
 
                                     //  Import und interne Operationen wie SID_REFRESH_DBAREA
                                     //  (Abfrage auf Import hier nicht noetig)
 
                                     ScImportParam aImportParam;
-                                    pDBData->GetImportParam( aImportParam );
-                                    sal_Bool bContinue = pViewSh->ImportData( aImportParam );
-                                    pDBData->SetImportParam( aImportParam );
+                                    rDBData.GetImportParam( aImportParam );
+                                    bool bContinue = pViewSh->ImportData( aImportParam );
+                                    rDBData.SetImportParam( aImportParam );
 
                                     //  markieren (Groesse kann sich geaendert haben)
-                                    pDBData->GetArea(aRange);
+                                    rDBData.GetArea(aRange);
                                     pViewSh->MarkRange(aRange);
 
                                     if ( bContinue )    // Fehler beim Import -> Abbruch
                                     {
                                         //  interne Operationen, wenn welche gespeichert
 
-                                        if ( pDBData->HasQueryParam() || pDBData->HasSortParam() ||
-                                                                        pDBData->HasSubTotalParam() )
+                                        if ( rDBData.HasQueryParam() || rDBData.HasSortParam() ||
+                                             rDBData.HasSubTotalParam() )
                                             pViewSh->RepeatDB();
 
                                         //  Pivottabellen die den Bereich als Quelldaten haben
@@ -560,7 +561,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                     }
                                 }
                             }
-                            bDone = sal_True;
+                            bDone = true;
                         }
                     }
                 }

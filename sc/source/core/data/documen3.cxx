@@ -173,56 +173,56 @@ ScDBCollection* ScDocument::GetDBCollection() const
 
 void ScDocument::SetDBCollection( ScDBCollection* pNewDBCollection, sal_Bool bRemoveAutoFilter )
 {
-    if ( bRemoveAutoFilter )
+    if (pDBCollection && bRemoveAutoFilter)
     {
         //  remove auto filter attribute if new db data don't contain auto filter flag
         //  start position is also compared, so bRemoveAutoFilter must not be set from ref-undo!
 
-        if ( pDBCollection )
+        ScDBCollection::NamedDBs& rNamedDBs = pDBCollection->getNamedDBs();
+        ScDBCollection::NamedDBs::const_iterator itr = rNamedDBs.begin(), itrEnd = rNamedDBs.end();
+        for (; itr != itrEnd; ++itr)
         {
-            size_t nOldCount = pDBCollection->size();
-            for (size_t nOld = 0; nOld < nOldCount; ++nOld)
+            const ScDBData& rOldData = *itr;
+            if (!rOldData.HasAutoFilter())
+                continue;
+
+            ScRange aOldRange;
+            rOldData.GetArea(aOldRange);
+
+            bool bFound = false;
+            if (pNewDBCollection)
             {
-                ScDBData* pOldData = (*pDBCollection)[nOld];
-                if ( pOldData->HasAutoFilter() )
+                ScDBData* pNewData = pNewDBCollection->getNamedDBs().findByName(rOldData.GetName());
+                if (pNewData)
                 {
-                    ScRange aOldRange;
-                    pOldData->GetArea( aOldRange );
-
-                    sal_Bool bFound = false;
-                    sal_uInt16 nNewIndex = 0;
-                    if ( pNewDBCollection &&
-                        pNewDBCollection->SearchName( pOldData->GetName(), nNewIndex ) )
+                    if (pNewData->HasAutoFilter())
                     {
-                        ScDBData* pNewData = (*pNewDBCollection)[nNewIndex];
-                        if ( pNewData->HasAutoFilter() )
-                        {
-                            ScRange aNewRange;
-                            pNewData->GetArea( aNewRange );
-                            if ( aOldRange.aStart == aNewRange.aStart )
-                                bFound = sal_True;
-                        }
-                    }
-
-                    if ( !bFound )
-                    {
-                        aOldRange.aEnd.SetRow( aOldRange.aStart.Row() );
-                        RemoveFlagsTab( aOldRange.aStart.Col(), aOldRange.aStart.Row(),
-                                        aOldRange.aEnd.Col(),   aOldRange.aEnd.Row(),
-                                        aOldRange.aStart.Tab(), SC_MF_AUTO );
-                        RepaintRange( aOldRange );
+                        ScRange aNewRange;
+                        pNewData->GetArea(aNewRange);
+                        if (aOldRange.aStart == aNewRange.aStart)
+                            bFound = true;
                     }
                 }
+            }
+
+            if (!bFound)
+            {
+                aOldRange.aEnd.SetRow(aOldRange.aStart.Row());
+                RemoveFlagsTab( aOldRange.aStart.Col(), aOldRange.aStart.Row(),
+                                aOldRange.aEnd.Col(),   aOldRange.aEnd.Row(),
+                                aOldRange.aStart.Tab(), SC_MF_AUTO );
+                RepaintRange( aOldRange );
             }
         }
     }
 
     if (pDBCollection)
         delete pDBCollection;
+
     pDBCollection = pNewDBCollection;
 }
 
-ScDBData* ScDocument::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Bool bStartOnly) const
+const ScDBData* ScDocument::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) const
 {
     if (pDBCollection)
         return pDBCollection->GetDBAtCursor(nCol, nRow, nTab, bStartOnly);
@@ -230,7 +230,15 @@ ScDBData* ScDocument::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Bool
         return NULL;
 }
 
-ScDBData* ScDocument::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const
+ScDBData* ScDocument::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly)
+{
+    if (pDBCollection)
+        return pDBCollection->GetDBAtCursor(nCol, nRow, nTab, bStartOnly);
+    else
+        return NULL;
+}
+
+const ScDBData* ScDocument::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const
 {
     if (pDBCollection)
         return pDBCollection->GetDBAtArea(nTab, nCol1, nRow1, nCol2, nRow2);
@@ -238,12 +246,20 @@ ScDBData* ScDocument::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nC
         return NULL;
 }
 
-ScDBData* ScDocument::GetFilterDBAtTable(SCTAB nTab) const
+ScDBData* ScDocument::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
+{
+    if (pDBCollection)
+        return pDBCollection->GetDBAtArea(nTab, nCol1, nRow1, nCol2, nRow2);
+    else
+        return NULL;
+}
+
+const ScDBData* ScDocument::GetFilterDBAtTable(SCTAB nTab) const
 {
     if (pDBCollection)
         return pDBCollection->GetFilterDBAtTable(nTab);
     else
-    return NULL;
+        return NULL;
 }
 
 ScDPCollection* ScDocument::GetDPCollection()
@@ -1298,10 +1314,10 @@ sal_Bool ScDocument::CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCR
     return false;
 }
 
-sal_Bool ScDocument::HasAutoFilter( SCCOL nCurCol, SCROW nCurRow, SCTAB nCurTab )
+bool ScDocument::HasAutoFilter( SCCOL nCurCol, SCROW nCurRow, SCTAB nCurTab )
 {
-    ScDBData*       pDBData         = GetDBAtCursor( nCurCol, nCurRow, nCurTab );
-    sal_Bool            bHasAutoFilter  = ( pDBData != NULL );
+    const ScDBData* pDBData = GetDBAtCursor( nCurCol, nCurRow, nCurTab );
+    bool bHasAutoFilter = (pDBData != NULL);
 
     if ( pDBData )
     {
@@ -1474,16 +1490,13 @@ sal_Bool ScDocument::GetFormulaEntries( TypedScStrCollection& rStrings )
 
     if ( pDBCollection )
     {
-        sal_uInt16 nDBCount = pDBCollection->GetCount();
-        for ( sal_uInt16 i=0; i<nDBCount; i++ )
+        const ScDBCollection::NamedDBs& rDBs = pDBCollection->getNamedDBs();
+        ScDBCollection::NamedDBs::const_iterator itr = rDBs.begin(), itrEnd = rDBs.end();
+        for (; itr != itrEnd; ++itr)
         {
-            ScDBData* pData = (*pDBCollection)[i];
-            if (pData)
-            {
-                TypedStrData* pNew = new TypedStrData( pData->GetName(), 0.0, SC_STRTYPE_DBNAMES );
-                if ( !rStrings.Insert(pNew) )
-                    delete pNew;
-            }
+            TypedStrData* pNew = new TypedStrData(itr->GetName(), 0.0, SC_STRTYPE_DBNAMES);
+            if ( !rStrings.Insert(pNew) )
+                delete pNew;
         }
     }
 

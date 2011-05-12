@@ -2949,21 +2949,18 @@ bool ScCompiler::IsExternalNamedRange( const String& rSymbol )
     return true;
 }
 
-sal_Bool ScCompiler::IsDBRange( const String& rName )
+bool ScCompiler::IsDBRange( const String& rName )
 {
-    sal_uInt16 n;
-    ScDBCollection* pDBColl = pDoc->GetDBCollection();
-    if (pDBColl->SearchName( rName, n ) )
-    {
-        ScDBData* pData = (*pDBColl)[n];
-        ScRawToken aToken;
-        aToken.SetName(true, pData->GetIndex()); // DB range is always global.
-        aToken.eOp = ocDBArea;
-        pRawToken = aToken.Clone();
-        return sal_True;
-    }
-    else
+    ScDBCollection::NamedDBs& rDBs = pDoc->GetDBCollection()->getNamedDBs();
+    const ScDBData* p = rDBs.findByName(rName);
+    if (!p)
         return false;
+
+    ScRawToken aToken;
+    aToken.SetName(true, p->GetIndex()); // DB range is always global.
+    aToken.eOp = ocDBArea;
+    pRawToken = aToken.Clone();
+    return true;
 }
 
 sal_Bool ScCompiler::IsColRowName( const String& rName )
@@ -4026,7 +4023,7 @@ sal_Bool ScCompiler::HandleExternalReference(const FormulaToken& _aToken)
 
 //-----------------------------------------------------------------------------
 
-sal_Bool ScCompiler::HasModifiedRange()
+bool ScCompiler::HasModifiedRange()
 {
     pArr->Reset();
     for ( FormulaToken* t = pArr->Next(); t; t = pArr->Next() )
@@ -4034,17 +4031,15 @@ sal_Bool ScCompiler::HasModifiedRange()
         OpCode eOpCode = t->GetOpCode();
         if ( eOpCode == ocName )
         {
-             ScRangeData* pRangeData = pDoc->GetRangeName()->findByIndex(t->GetIndex());
-
+            ScRangeData* pRangeData = pDoc->GetRangeName()->findByIndex(t->GetIndex());
             if (pRangeData && pRangeData->IsModified())
-                return sal_True;
+                return true;
         }
         else if ( eOpCode == ocDBArea )
         {
-            ScDBData* pDBData = pDoc->GetDBCollection()->FindIndex(t->GetIndex());
-
+            ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByIndex(t->GetIndex());
             if (pDBData && pDBData->IsModified())
-                return sal_True;
+                return true;
         }
     }
     return false;
@@ -5102,7 +5097,7 @@ void ScCompiler::CreateStringFromIndex(rtl::OUStringBuffer& rBuffer,FormulaToken
         break;
         case ocDBArea:
         {
-            ScDBData* pDBData = pDoc->GetDBCollection()->FindIndex(_pTokenP->GetIndex());
+            ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByIndex(_pTokenP->GetIndex());
             if (pDBData)
                 aBuffer.append(pDBData->GetName());
         }
@@ -5395,7 +5390,7 @@ sal_Bool ScCompiler::HandleSingleRef()
 // -----------------------------------------------------------------------------
 sal_Bool ScCompiler::HandleDbData()
 {
-    ScDBData* pDBData = pDoc->GetDBCollection()->FindIndex( pToken->GetIndex() );
+    ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByIndex(pToken->GetIndex());
     if ( !pDBData )
         SetError(errNoName);
     else if ( !bCompileForFAP )

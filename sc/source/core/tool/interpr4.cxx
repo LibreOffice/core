@@ -3493,8 +3493,7 @@ void ScInterpreter::ScTableOp()
 
 void ScInterpreter::ScDBArea()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScDBArea" );
-    ScDBData* pDBData = pDok->GetDBCollection()->FindIndex( pCur->GetIndex());
+    ScDBData* pDBData = pDok->GetDBCollection()->getNamedDBs().findByIndex(pCur->GetIndex());
     if (pDBData)
     {
         ScComplexRefData aRefData;

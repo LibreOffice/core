@@ -86,9 +86,9 @@ ScAreaLink::ScAreaLink( SfxObjectShell* pShell, const String& rFile,
     aOptions        (rOpt),
     aSourceArea     (rArea),
     aDestArea       (rDest),
-    bAddUndo        (sal_True),
+    bAddUndo        (true),
     bInCreate       (false),
-    bDoInsert       (sal_True)
+    bDoInsert       (true)
 {
     DBG_ASSERT(pShell->ISA(ScDocShell), "ScAreaLink mit falscher ObjectShell");
     pImpl->m_pDocSh = static_cast< ScDocShell* >( pShell );
@@ -195,7 +195,7 @@ void ScAreaLink::SetSource(const String& rDoc, const String& rFlt, const String&
     SetName( aNewLinkName );
 }
 
-sal_Bool ScAreaLink::IsEqual( const String& rFile, const String& rFilter, const String& rOpt,
+bool ScAreaLink::IsEqual( const String& rFile, const String& rFilter, const String& rOpt,
                             const String& rSource, const ScRange& rDest ) const
 {
     return aFileName == rFile && aFilterName == rFilter && aOptions == rOpt &&
@@ -203,11 +203,10 @@ sal_Bool ScAreaLink::IsEqual( const String& rFile, const String& rFilter, const 
 }
 
 // find a range with name >rAreaName< in >pSrcDoc<, return it in >rRange<
-sal_Bool ScAreaLink::FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const String& rAreaName )
+bool ScAreaLink::FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const String& rAreaName )
 {
     bool bFound = false;
     ScRangeName* pNames = pSrcDoc->GetRangeName();
-    sal_uInt16 nPos;
     if (pNames)         // benannte Bereiche
     {
         const ScRangeData* p = pNames->findByName(rAreaName);
@@ -218,15 +217,18 @@ sal_Bool ScAreaLink::FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const S
     {
         ScDBCollection* pDBColl = pSrcDoc->GetDBCollection();
         if (pDBColl)
-            if (pDBColl->SearchName( rAreaName, nPos ))
+        {
+            const ScDBData* pDB = pDBColl->getNamedDBs().findByName(rAreaName);
+            if (pDB)
             {
                 SCTAB nTab;
                 SCCOL nCol1, nCol2;
                 SCROW nRow1, nRow2;
-                (*pDBColl)[nPos]->GetArea(nTab,nCol1,nRow1,nCol2,nRow2);
+                pDB->GetArea(nTab,nCol1,nRow1,nCol2,nRow2);
                 rRange = ScRange( nCol1,nRow1,nTab, nCol2,nRow2,nTab );
                 bFound = true;
             }
+        }
     }
     if (!bFound)        // direct reference (range or cell)
     {

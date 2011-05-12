@@ -268,17 +268,12 @@ String lcl_GetDBAreaRange( ScDocument* pDoc, const String& rDBName )
     if (pDoc)
     {
         ScDBCollection* pDbNames = pDoc->GetDBCollection();
-        sal_uInt16 nCount = pDbNames->GetCount();
-        for ( sal_uInt16 i=0; i<nCount; i++ )
+        const ScDBData* pData = pDbNames->getNamedDBs().findByName(rDBName);
+        if (pData)
         {
-            ScDBData* pData = (*pDbNames)[i];
-            if ( pData->GetName().equals(rDBName) )
-            {
-                ScRange aRange;
-                pData->GetArea(aRange);
-                aRange.Format( aRet, SCR_ABS_3D, pDoc );
-                break;
-            }
+            ScRange aRange;
+            pData->GetArea(aRange);
+            aRange.Format(aRet, SCR_ABS_3D, pDoc);
         }
     }
     return aRet;
@@ -705,15 +700,12 @@ void ScContentTree::GetDbNames()
         return;
 
     ScDBCollection* pDbNames = pDoc->GetDBCollection();
-    sal_uInt16 nCount = pDbNames->GetCount();
-    if ( nCount > 0 )
+    const ScDBCollection::NamedDBs& rDBs = pDbNames->getNamedDBs();
+    ScDBCollection::NamedDBs::const_iterator itr = rDBs.begin(), itrEnd = rDBs.end();
+    for (; itr != itrEnd; ++itr)
     {
-        for ( sal_uInt16 i=0; i<nCount; i++ )
-        {
-            ScDBData* pData = (*pDbNames)[i];
-            String aStrName = pData->GetName();
-            InsertContent( SC_CONTENT_DBAREA, aStrName );
-        }
+        const::rtl::OUString& aStrName = itr->GetName();
+        InsertContent(SC_CONTENT_DBAREA, aStrName);
     }
 }
 
@@ -995,10 +987,9 @@ sal_Bool ScContentTree::DrawNamesChanged( sal_uInt16 nType )
     return !bEqual;
 }
 
-sal_Bool lcl_GetRange( ScDocument* pDoc, sal_uInt16 nType, const String& rName, ScRange& rRange )
+bool lcl_GetRange( ScDocument* pDoc, sal_uInt16 nType, const String& rName, ScRange& rRange )
 {
-    sal_Bool bFound = false;
-    sal_uInt16 nPos;
+    bool bFound = false;
 
     if ( nType == SC_CONTENT_RANGENAME )
     {
@@ -1014,15 +1005,18 @@ sal_Bool lcl_GetRange( ScDocument* pDoc, sal_uInt16 nType, const String& rName, 
     {
         ScDBCollection* pList = pDoc->GetDBCollection();
         if (pList)
-            if (pList->SearchName( rName, nPos ))
+        {
+            const ScDBData* p = pList->getNamedDBs().findByName(rName);
+            if (p)
             {
                 SCTAB nTab;
                 SCCOL nCol1, nCol2;
                 SCROW nRow1, nRow2;
-                (*pList)[nPos]->GetArea(nTab,nCol1,nRow1,nCol2,nRow2);
-                rRange = ScRange( nCol1,nRow1,nTab, nCol2,nRow2,nTab );
-                bFound = sal_True;
+                p->GetArea(nTab, nCol1, nRow1, nCol2, nRow2);
+                rRange = ScRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab);
+                bFound = true;
             }
+        }
     }
 
     return bFound;

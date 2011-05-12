@@ -222,8 +222,8 @@ void ScConsolidateDlg::Init()
 
     ScRangeName*    pRangeNames  = pDoc->GetRangeName();
     ScDBCollection* pDbNames     = pDoc->GetDBCollection();
-    const sal_uInt16    nRangeCount  = pRangeNames ? pRangeNames->size() : 0;
-    const sal_uInt16    nDbCount     = pDbNames    ? pDbNames   ->GetCount() : 0;
+    size_t nRangeCount = pRangeNames ? pRangeNames->size() : 0;
+    size_t nDbCount = pDbNames ? pDbNames->getNamedDBs().size() : 0;
 
     nAreaDataCount = nRangeCount+nDbCount;
     pAreaData      = NULL;
@@ -269,7 +269,7 @@ void ScConsolidateDlg::FillAreaLists()
     {
         String aString;
 
-        for ( sal_uInt16 i=0;
+        for ( size_t i=0;
               (i<nAreaDataCount) && (pAreaData[i].aStrName.Len()>0);
               i++ )
         {
@@ -558,7 +558,7 @@ IMPL_LINK( ScConsolidateDlg, SelectHdl, ListBox*, pLb )
             && (nAreaDataCount > 0)
             && (pAreaData != NULL) )
         {
-            if ( nSelPos <= nAreaDataCount )
+            if ( static_cast<size_t>(nSelPos) <= nAreaDataCount )
             {
                 String aString( pAreaData[nSelPos-1].aStrArea );
 

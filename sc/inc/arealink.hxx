@@ -49,10 +49,10 @@ private:
     String          aOptions;
     String          aSourceArea;
     ScRange         aDestArea;
-    sal_Bool            bAddUndo;
-    sal_Bool            bInCreate;
-    sal_Bool            bDoInsert;      // is set to FALSE for first update
-    sal_Bool        FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const String& rAreaName );
+    bool            bAddUndo;
+    bool            bInCreate;
+    bool            bDoInsert;      // is set to FALSE for first update
+    bool FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const String& rAreaName );
 
 public:
     TYPEINFO();
@@ -70,14 +70,14 @@ public:
     sal_Bool    Refresh( const String& rNewFile, const String& rNewFilter,
                     const String& rNewArea, sal_uLong nNewRefresh );
 
-    void    SetInCreate(sal_Bool bSet)                  { bInCreate = bSet; }
-    void    SetDoInsert(sal_Bool bSet)                  { bDoInsert = bSet; }
+    void    SetInCreate(bool bSet)                  { bInCreate = bSet; }
+    void    SetDoInsert(bool bSet)                  { bDoInsert = bSet; }
     void    SetDestArea(const ScRange& rNew);
     void    SetSource(const String& rDoc, const String& rFlt, const String& rOpt,
                         const String& rArea);
 
-    sal_Bool    IsEqual( const String& rFile, const String& rFilter, const String& rOpt,
-                        const String& rSource, const ScRange& rDest ) const;
+    bool IsEqual( const String& rFile, const String& rFilter, const String& rOpt,
+                  const String& rSource, const ScRange& rDest ) const;
 
     const String&   GetFile() const         { return aFileName;     }
     const String&   GetFilter() const       { return aFilterName;   }

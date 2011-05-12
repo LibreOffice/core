@@ -62,7 +62,7 @@
 
 // -----------------------------------------------------------------
 
-sal_Bool ScDBDocFunc::AddDBRange( const String& rName, const ScRange& rRange, sal_Bool /* bApi */ )
+bool ScDBDocFunc::AddDBRange( const ::rtl::OUString& rName, const ScRange& rRange, sal_Bool /* bApi */ )
 {
 
     ScDocShellModificator aModificator( rDocShell );
@@ -82,8 +82,8 @@ sal_Bool ScDBDocFunc::AddDBRange( const String& rName, const ScRange& rRange, sa
     // #i55926# While loading XML, formula cells only have a single string token,
     // so CompileDBFormula would never find any name (index) tokens, and would
     // unnecessarily loop through all cells.
-    sal_Bool bCompile = !pDoc->IsImportingXML();
-    sal_Bool bOk;
+    bool bCompile = !pDoc->IsImportingXML();
+    bool bOk;
     if ( bCompile )
         pDoc->CompileDBFormula( sal_True );     // CreateFormulaString
     if (rtl::OUString(rName)==rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME)))
@@ -93,7 +93,7 @@ sal_Bool ScDBDocFunc::AddDBRange( const String& rName, const ScRange& rRange, sa
     }
     else
     {
-        bOk = pDocColl->Insert( pNew );
+        bOk = pDocColl->getNamedDBs().insert(pNew);
     }
     if ( bCompile )
         pDoc->CompileDBFormula( false );    // CompileFormulaString
@@ -114,18 +114,19 @@ sal_Bool ScDBDocFunc::AddDBRange( const String& rName, const ScRange& rRange, sa
 
     aModificator.SetDocumentModified();
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
-    return sal_True;
+    return true;
 }
 
-sal_Bool ScDBDocFunc::DeleteDBRange( const String& rName, sal_Bool /* bApi */ )
+bool ScDBDocFunc::DeleteDBRange(const ::rtl::OUString& rName)
 {
-    sal_Bool bDone = false;
+    bool bDone = false;
     ScDocument* pDoc = rDocShell.GetDocument();
     ScDBCollection* pDocColl = pDoc->GetDBCollection();
-    sal_Bool bUndo (pDoc->IsUndoEnabled());
+    bool bUndo = pDoc->IsUndoEnabled();
 
-    sal_uInt16 nPos = 0;
-    if (pDocColl->SearchName( rName, nPos ))
+    ScDBCollection::NamedDBs& rDBs = pDocColl->getNamedDBs();
+    const ScDBData* p = rDBs.findByName(rName);
+    if (p)
     {
         ScDocShellModificator aModificator( rDocShell );
 
@@ -133,8 +134,8 @@ sal_Bool ScDBDocFunc::DeleteDBRange( const String& rName, sal_Bool /* bApi */ )
         if (bUndo)
             pUndoColl = new ScDBCollection( *pDocColl );
 
-        pDoc->CompileDBFormula( sal_True );     // CreateFormulaString
-        pDocColl->AtFree( nPos );
+        pDoc->CompileDBFormula( true );     // CreateFormulaString
+        rDBs.erase(*p);
         pDoc->CompileDBFormula( false );    // CompileFormulaString
 
         if (bUndo)
@@ -146,40 +147,35 @@ sal_Bool ScDBDocFunc::DeleteDBRange( const String& rName, sal_Bool /* bApi */ )
 
         aModificator.SetDocumentModified();
         SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
-        bDone = sal_True;
+        bDone = true;
     }
 
     return bDone;
 }
 
-sal_Bool ScDBDocFunc::RenameDBRange( const String& rOld, const String& rNew, sal_Bool /* bApi */ )
+bool ScDBDocFunc::RenameDBRange( const String& rOld, const String& rNew )
 {
-    sal_Bool bDone = false;
+    bool bDone = false;
     ScDocument* pDoc = rDocShell.GetDocument();
     ScDBCollection* pDocColl = pDoc->GetDBCollection();
-    sal_Bool bUndo (pDoc->IsUndoEnabled());
-
-    sal_uInt16 nPos = 0;
-    sal_uInt16 nDummy = 0;
-    if ( pDocColl->SearchName( rOld, nPos ) &&
-         !pDocColl->SearchName( rNew, nDummy ) )
+    bool bUndo = pDoc->IsUndoEnabled();
+    ScDBCollection::NamedDBs& rDBs = pDocColl->getNamedDBs();
+    const ScDBData* pOld = rDBs.findByName(rOld);
+    const ScDBData* pNew = rDBs.findByName(rNew);
+    if (pOld && !pNew)
     {
         ScDocShellModificator aModificator( rDocShell );
 
-        ScDBData* pData = (*pDocColl)[nPos];
-        ScDBData* pNewData = new ScDBData(*pData);
-        pNewData->SetName(rNew);
+        ScDBData* pNewData = new ScDBData(rNew, *pOld);
 
         ScDBCollection* pUndoColl = new ScDBCollection( *pDocColl );
 
-        pDoc->CompileDBFormula( sal_True );             // CreateFormulaString
-        pDocColl->AtFree( nPos );
-        sal_Bool bInserted = pDocColl->Insert( pNewData );
+        pDoc->CompileDBFormula(true);               // CreateFormulaString
+        rDBs.erase(*pOld);
+        bool bInserted = rDBs.insert(pNewData);
         if (!bInserted)                             // Fehler -> alten Zustand wiederherstellen
-        {
-            delete pNewData;
-            pDoc->SetDBCollection( pUndoColl );     // gehoert dann dem Dokument
-        }
+            pDoc->SetDBCollection(pUndoColl);       // gehoert dann dem Dokument
+                                                    //
         pDoc->CompileDBFormula( false );            // CompileFormulaString
 
         if (bInserted)                              // Einfuegen hat geklappt
@@ -195,19 +191,19 @@ sal_Bool ScDBDocFunc::RenameDBRange( const String& rOld, const String& rNew, sal
 
             aModificator.SetDocumentModified();
             SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
-            bDone = sal_True;
+            bDone = true;
         }
     }
 
     return bDone;
 }
 
-sal_Bool ScDBDocFunc::ModifyDBData( const ScDBData& rNewData, sal_Bool /* bApi */ )
+bool ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
 {
-    sal_Bool bDone = false;
+    bool bDone = false;
     ScDocument* pDoc = rDocShell.GetDocument();
     ScDBCollection* pDocColl = pDoc->GetDBCollection();
-    sal_Bool bUndo (pDoc->IsUndoEnabled());
+    bool bUndo = pDoc->IsUndoEnabled();
 
     ScDBData* pData = NULL;
     if (rtl::OUString(rNewData.GetName())==rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME)))
@@ -218,18 +214,15 @@ sal_Bool ScDBDocFunc::ModifyDBData( const ScDBData& rNewData, sal_Bool /* bApi *
         pData = pDoc->GetAnonymousDBData(nTab);
     }
     else
-    {
-        sal_uInt16 nPos = 0;
-        if (pDocColl->SearchName( rNewData.GetName(), nPos ))
-            pData = (*pDocColl)[nPos];
-    }
+        pData = pDocColl->getNamedDBs().findByName(rNewData.GetName());
+
     if (pData)
     {
         ScDocShellModificator aModificator( rDocShell );
         ScRange aOldRange, aNewRange;
         pData->GetArea(aOldRange);
         rNewData.GetArea(aNewRange);
-        sal_Bool bAreaChanged = ( aOldRange != aNewRange );     // dann muss neu compiliert werden
+        bool bAreaChanged = ( aOldRange != aNewRange );     // dann muss neu compiliert werden
 
         ScDBCollection* pUndoColl = NULL;
         if (bUndo)
@@ -247,7 +240,7 @@ sal_Bool ScDBDocFunc::ModifyDBData( const ScDBData& rNewData, sal_Bool /* bApi *
         }
 
         aModificator.SetDocumentModified();
-        bDone = sal_True;
+        bDone = true;
     }
 
     return bDone;
@@ -255,11 +248,11 @@ sal_Bool ScDBDocFunc::ModifyDBData( const ScDBData& rNewData, sal_Bool /* bApi *
 
 // -----------------------------------------------------------------
 
-sal_Bool ScDBDocFunc::RepeatDB( const String& rDBName, sal_Bool bRecord, sal_Bool bApi, bool bIsUnnamed, SCTAB aTab )
+bool ScDBDocFunc::RepeatDB( const ::rtl::OUString& rDBName, bool bRecord, bool bApi, bool bIsUnnamed, SCTAB aTab )
 {
     //! auch fuer ScDBFunc::RepeatDB benutzen!
 
-    sal_Bool bDone = false;
+    bool bDone = false;
     ScDocument* pDoc = rDocShell.GetDocument();
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = false;
@@ -270,10 +263,9 @@ sal_Bool ScDBDocFunc::RepeatDB( const String& rDBName, sal_Bool bRecord, sal_Boo
     }
     else
     {
-        sal_uInt16 nIndex;
         ScDBCollection* pColl = pDoc->GetDBCollection();
-        if ( pColl && pColl->SearchName( rDBName, nIndex ) )
-            pDBData = (*pColl)[nIndex];
+        if (pColl)
+            pDBData = pColl->getNamedDBs().findByName(rDBName);
     }
 
     if ( pDBData )
@@ -357,7 +349,7 @@ sal_Bool ScDBDocFunc::RepeatDB( const String& rDBName, sal_Bool bRecord, sal_Boo
                 if (!pDocRange->empty())
                     pUndoRange = new ScRangeName( *pDocRange );
                 ScDBCollection* pDocDB = pDoc->GetDBCollection();
-                if (pDocDB->GetCount())
+                if (!pDocDB->empty())
                     pUndoDB = new ScDBCollection( *pDocDB );
             }
 
@@ -563,7 +555,7 @@ sal_Bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
 
         ScDBCollection* pUndoDB = NULL;
         ScDBCollection* pDocDB = pDoc->GetDBCollection();
-        if (pDocDB->GetCount())
+        if (!pDocDB->empty())
             pUndoDB = new ScDBCollection( *pDocDB );
 
         pUndoAction = new ScUndoSort( &rDocShell, nTab, rSortParam, bRepeatQuery, pUndoDoc, pUndoDB, pR );
@@ -823,7 +815,7 @@ sal_Bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
         }
 
         ScDBCollection* pDocDB = pDoc->GetDBCollection();
-        if (pDocDB->GetCount())
+        if (!pDocDB->empty())
             pUndoDB = new ScDBCollection( *pDocDB );
 
         pDoc->BeginDrawUndo();
@@ -1109,7 +1101,7 @@ sal_Bool ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
             if (!pDocRange->empty())
                 pUndoRange = new ScRangeName( *pDocRange );
             ScDBCollection* pDocDB = pDoc->GetDBCollection();
-            if (pDocDB->GetCount())
+            if (!pDocDB->empty())
                 pUndoDB = new ScDBCollection( *pDocDB );
         }
 
@@ -1461,7 +1453,7 @@ sal_Bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pN
 //      Datenbank-Import...
 
 void ScDBDocFunc::UpdateImport( const String& rTarget, const String& rDBName,
-        const String& rTableName, const String& rStatement, sal_Bool bNative,
+        const String& rTableName, const String& rStatement, bool bNative,
         sal_uInt8 nType, const ::com::sun::star::uno::Reference<
         ::com::sun::star::sdbc::XResultSet >& xResultSet,
         const SbaSelectionList* pSelection )
@@ -1470,17 +1462,8 @@ void ScDBDocFunc::UpdateImport( const String& rTarget, const String& rDBName,
 
     ScDocument* pDoc = rDocShell.GetDocument();
     ScDBCollection& rDBColl = *pDoc->GetDBCollection();
-    ScDBData* pData = NULL;
-    ScImportParam aImportParam;
-    bool bFound = false;
-    sal_uInt16 nCount = rDBColl.GetCount();
-    for (sal_uInt16 i=0; i<nCount && !bFound; i++)
-    {
-        pData = rDBColl[i];
-        if (pData->GetName().equals(rTarget))
-            bFound = true;
-    }
-    if (!bFound)
+    const ScDBData* pData = rDBColl.getNamedDBs().findByName(rTarget);
+    if (!pData)
     {
         InfoBox aInfoBox(rDocShell.GetActiveDialogParent(),
                     ScGlobal::GetRscString( STR_TARGETNOTFOUND ) );
@@ -1492,9 +1475,11 @@ void ScDBDocFunc::UpdateImport( const String& rTarget, const String& rDBName,
     SCCOL nDummyCol;
     SCROW nDummyRow;
     pData->GetArea( nTab, nDummyCol,nDummyRow,nDummyCol,nDummyRow );
+
+    ScImportParam aImportParam;
     pData->GetImportParam( aImportParam );
 
-    sal_Bool bSql = ( rStatement.Len() != 0 );
+    bool bSql = (rStatement.Len() != 0);
 
     aImportParam.aDBName    = rDBName;
     aImportParam.bSql       = bSql;
@@ -1502,7 +1487,7 @@ void ScDBDocFunc::UpdateImport( const String& rTarget, const String& rDBName,
     aImportParam.bNative    = bNative;
     aImportParam.nType      = nType;
     aImportParam.bImport    = true;
-    sal_Bool bContinue = DoImport( nTab, aImportParam, xResultSet, pSelection, sal_True );
+    bool bContinue = DoImport( nTab, aImportParam, xResultSet, pSelection, sal_True );
 
     //  DB-Operationen wiederholen
 

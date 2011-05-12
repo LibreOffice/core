@@ -481,10 +481,11 @@ public:
     SC_DLLPUBLIC ScDBCollection*    GetDBCollection() const;
     void            SetDBCollection( ScDBCollection* pNewDBCollection,
                                         sal_Bool bRemoveAutoFilter = false );
-    ScDBData*       GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                        sal_Bool bStartOnly = false) const;
-    ScDBData*       GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
-    ScDBData*       GetFilterDBAtTable(SCTAB nTab) const;
+    const ScDBData* GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly = false) const;
+    ScDBData* GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly = false);
+    const ScDBData* GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
+    ScDBData* GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
+    const ScDBData* GetFilterDBAtTable(SCTAB nTab) const;
 
 
     SC_DLLPUBLIC const ScRangeData* GetRangeAtBlock( const ScRange& rBlock, String* pName=NULL ) const;
@@ -1475,7 +1476,7 @@ public:
                                 TypedScStrCollection& rStrings, sal_Bool bLimit = false );
     sal_Bool            GetFormulaEntries( TypedScStrCollection& rStrings );
 
-    sal_Bool            HasAutoFilter( SCCOL nCol, SCROW nRow, SCTAB nTab );
+    bool HasAutoFilter( SCCOL nCol, SCROW nRow, SCTAB nTab );
 
     SC_DLLPUBLIC sal_Bool           HasColHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                     SCTAB nTab );

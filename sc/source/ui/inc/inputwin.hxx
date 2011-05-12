@@ -195,7 +195,7 @@ protected:
     virtual void    SetText( const String& rString );
     virtual String  GetText() const;
 
-    sal_Bool        UseSubTotal( ScRangeList* pRangeList ) const;
+    bool UseSubTotal( ScRangeList* pRangeList ) const;
 
 private:
     ScPosWnd        aWndPos;

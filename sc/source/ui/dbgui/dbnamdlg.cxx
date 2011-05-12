@@ -66,7 +66,6 @@ class DBSaveData;
 static DBSaveData* pSaveObj = NULL;
 
 #define ERRORBOX(s) ErrorBox(this,WinBits(WB_OK|WB_DEF_OK),s).Execute()
-#define QUERYBOX(m) QueryBox(this,WinBits(WB_YES_NO|WB_DEF_YES),m).Execute()
 
 //============================================================================
 //  class DBSaveData
@@ -166,7 +165,6 @@ ScDbNameDlg::ScDbNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 
         aStrAdd         ( ScResId( STR_ADD ) ),
         aStrModify      ( ScResId( STR_MODIFY ) ),
-        aStrNoName      ( RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME)),
         aStrInvalid     ( ScResId( STR_DB_INVALID ) ),
         //
         pViewData       ( ptrViewData ),
@@ -272,11 +270,8 @@ void ScDbNameDlg::Init()
                     && (rStart.Col() == nCol1) && (rStart.Row() == nRow1)
                     && (rEnd.Col()   == nCol2) && (rEnd.Row()   == nRow2 ) )
                 {
-                    theDbName = pDBData->GetName();
-                    if ( !theDbName.equals(aStrNoName) )
-                        aEdName.SetText( theDbName );
-                    else
-                        aEdName.SetText( EMPTY_STRING );
+                    aEdName.SetText(pDBData->GetName());
+
                     aBtnHeader.Check( pDBData->HasHeader() );
                     aBtnDoSize.Check( pDBData->IsDoSize() );
                     aBtnKeepFmt.Check( pDBData->IsKeepFmt() );
@@ -369,28 +364,20 @@ void ScDbNameDlg::SetActive()
 
 void ScDbNameDlg::UpdateNames()
 {
-    sal_uInt16  nNameCount = aLocalDbCol.GetCount();
+    typedef ScDBCollection::NamedDBs DBsType;
+
+    const DBsType& rDBs = aLocalDbCol.getNamedDBs();
 
     aEdName.SetUpdateMode( false );
     //-----------------------------------------------------------
     aEdName.Clear();
     aEdAssign.SetText( EMPTY_STRING );
 
-    if ( nNameCount > 0 )
+    if (!rDBs.empty())
     {
-        ScDBData*   pDbData = NULL;
-        ::rtl::OUString aString;
-
-        for ( sal_uInt16 i=0; i<nNameCount; i++ )
-        {
-            pDbData = (ScDBData*)(aLocalDbCol.At( i ));
-            if ( pDbData )
-            {
-                aString = pDbData->GetName();
-                if (!aString.equals(aStrNoName))
-                    aEdName.InsertEntry( aString );
-            }
-        }
+        DBsType::const_iterator itr = rDBs.begin(), itrEnd = rDBs.end();
+        for (; itr != itrEnd; ++itr)
+            aEdName.InsertEntry(itr->GetName());
     }
     else
     {
@@ -407,12 +394,8 @@ void ScDbNameDlg::UpdateNames()
 
 void ScDbNameDlg::UpdateDBData( const String& rStrName )
 {
-    String      theArea;
-    sal_uInt16      nAt;
-    ScDBData*   pData;
 
-    aLocalDbCol.SearchName( rStrName, nAt );
-    pData = (ScDBData*)(aLocalDbCol.At( nAt ));
+    const ScDBData* pData = aLocalDbCol.getNamedDBs().findByName(rStrName);
 
     if ( pData )
     {
@@ -425,6 +408,7 @@ void ScDbNameDlg::UpdateDBData( const String& rStrName )
         pData->GetArea( nTab, nColStart, nRowStart, nColEnd, nRowEnd );
         theCurArea = ScRange( ScAddress( nColStart, nRowStart, nTab ),
                               ScAddress( nColEnd,   nRowEnd,   nTab ) );
+        ::rtl::OUString theArea;
         theCurArea.Format( theArea, ABS_DREF3D, pDoc, aAddrDetails );
         aEdAssign.SetText( theArea );
         aBtnAdd.SetText( aStrModify );
@@ -505,10 +489,7 @@ IMPL_LINK( ScDbNameDlg, AddBtnHdl, void *, EMPTYARG )
                 ScAddress aStart = theCurArea.aStart;
                 ScAddress aEnd   = theCurArea.aEnd;
 
-                ScDBData* pOldEntry = NULL;
-                sal_uInt16 nFoundAt = 0;
-                if ( aLocalDbCol.SearchName( aNewName, nFoundAt ) )
-                    pOldEntry = aLocalDbCol[nFoundAt];
+                ScDBData* pOldEntry = aLocalDbCol.getNamedDBs().findByName(aNewName);
                 if (pOldEntry)
                 {
                     //  Bereich veraendern
@@ -533,8 +514,7 @@ IMPL_LINK( ScDbNameDlg, AddBtnHdl, void *, EMPTYARG )
                     pNewEntry->SetKeepFmt( aBtnKeepFmt.IsChecked() );
                     pNewEntry->SetStripData( aBtnStripData.IsChecked() );
 
-                    if ( !aLocalDbCol.Insert( pNewEntry ) )
-                        delete pNewEntry;
+                    aLocalDbCol.getNamedDBs().insert(pNewEntry);
                 }
 
                 UpdateNames();
@@ -572,36 +552,49 @@ IMPL_LINK( ScDbNameDlg, AddBtnHdl, void *, EMPTYARG )
     return 0;
 }
 
-//------------------------------------------------------------------------
+namespace {
+
+class FindByName : public ::std::unary_function<ScDBData, bool>
+{
+    const ::rtl::OUString& mrName;
+public:
+    FindByName(const ::rtl::OUString& rName) : mrName(rName) {}
+    bool operator() (const ScDBData& r) const
+    {
+        return r.GetName().equals(mrName);
+    }
+};
+
+}
 
 IMPL_LINK( ScDbNameDlg, RemoveBtnHdl, void *, EMPTYARG )
 {
-    sal_uInt16       nRemoveAt = 0;
-    const String aStrEntry = aEdName.GetText();
+    ::rtl::OUString aStrEntry = aEdName.GetText();
+    ScDBCollection::NamedDBs& rDBs = aLocalDbCol.getNamedDBs();
+    ScDBCollection::NamedDBs::iterator itr =
+        ::std::find_if(rDBs.begin(), rDBs.end(), FindByName(aStrEntry));
 
-    if ( aLocalDbCol.SearchName( aStrEntry, nRemoveAt ) )
+    if (itr != rDBs.end())
     {
         String aStrDelMsg = ScGlobal::GetRscString( STR_QUERY_DELENTRY );
-        String aMsg       = aStrDelMsg.GetToken( 0, '#' );
 
-        aMsg += aStrEntry;
-        aMsg += aStrDelMsg.GetToken( 1, '#' );
+        ::rtl::OUStringBuffer aBuf;
+        aBuf.append(aStrDelMsg.GetToken(0, '#'));
+        aBuf.append(aStrEntry);
+        aBuf.append(aStrDelMsg.GetToken(1, '#'));
+        QueryBox aBox(this, WinBits(WB_YES_NO|WB_DEF_YES), aBuf.makeStringAndClear());
 
-        if ( RET_YES == QUERYBOX(aMsg) )
+        if (RET_YES == aBox.Execute())
         {
-            ScDBData* pEntry = (ScDBData*)aLocalDbCol.At(nRemoveAt);
+            SCTAB nTab;
+            SCCOL nColStart, nColEnd;
+            SCROW nRowStart, nRowEnd;
+            itr->GetArea( nTab, nColStart, nRowStart, nColEnd, nRowEnd );
+            aRemoveList.Insert(
+                new ScRange( ScAddress( nColStart, nRowStart, nTab ),
+                             ScAddress( nColEnd,   nRowEnd,   nTab ) ) );
 
-            if ( pEntry )
-            {
-                SCTAB nTab;
-                SCCOL nColStart, nColEnd;
-                SCROW nRowStart, nRowEnd;
-                pEntry->GetArea( nTab, nColStart, nRowStart, nColEnd, nRowEnd );
-                aRemoveList.Insert(
-                    new ScRange( ScAddress( nColStart, nRowStart, nTab ),
-                                 ScAddress( nColEnd,   nRowEnd,   nTab ) ) );
-            }
-            aLocalDbCol.AtFree( nRemoveAt );
+            rDBs.erase(itr);
 
             UpdateNames();
 

@@ -681,7 +681,7 @@ bool ScValidationData::GetSelectionFromFormula( TypedScStrCollection* pStrings,
     SCSIZE  nCol, nRow, nCols, nRows, n = 0;
     pValues->GetDimensions( nCols, nRows );
 
-    sal_Bool bRef = false;
+    bool bRef = false;
     ScRange aRange;
 
     ScTokenArray* pArr = (ScTokenArray*) &rTokArr;
@@ -691,10 +691,10 @@ bool ScValidationData::GetSelectionFromFormula( TypedScStrCollection* pStrings,
     {
         if (t->GetOpCode() == ocDBArea)
         {
-            if( ScDBData* pDBData = pDocument->GetDBCollection()->FindIndex( t->GetIndex() ) )
+            if (const ScDBData* pDBData = pDocument->GetDBCollection()->getNamedDBs().findByIndex(t->GetIndex()))
             {
                 pDBData->GetArea(aRange);
-                bRef = sal_True;
+                bRef = true;
             }
         }
         else if (t->GetOpCode() == ocName)
@@ -702,7 +702,7 @@ bool ScValidationData::GetSelectionFromFormula( TypedScStrCollection* pStrings,
             ScRangeData* pName = pDocument->GetRangeName()->findByIndex( t->GetIndex() );
             if (pName && pName->IsReference(aRange))
             {
-                bRef = sal_True;
+                bRef = true;
             }
         }
         else if (t->GetType() != svIndex)
@@ -710,7 +710,7 @@ bool ScValidationData::GetSelectionFromFormula( TypedScStrCollection* pStrings,
             t->CalcAbsIfRel(rPos);
             if (pArr->IsValidReference(aRange))
             {
-                bRef = sal_True;
+                bRef = true;
             }
         }
     }

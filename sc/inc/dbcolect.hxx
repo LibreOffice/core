@@ -54,7 +54,7 @@ private:
     ScImportParam maImportParam;
 
     // DBParam
-    ::rtl::OUString aName;
+    const ::rtl::OUString aName;
     SCTAB           nTable;
     SCCOL           nStartCol;
     SCROW           nStartRow;
@@ -89,6 +89,7 @@ public:
                      SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                      bool bByR = true, bool bHasH = true);
             ScDBData(const ScDBData& rData);
+            ScDBData(const ::rtl::OUString& rName, const ScDBData& rData);
             ~ScDBData();
 
             ScDBData&   operator= (const ScDBData& rData);
@@ -97,7 +98,6 @@ public:
 
             SCTAB       GetTable() const;
             const ::rtl::OUString& GetName() const { return aName; }
-            void        SetName(const ::rtl::OUString& rName) { aName = rName; }
             void        GetArea(SCTAB& rTab, SCCOL& rCol1, SCROW& rRow1, SCCOL& rCol2, SCROW& rRow2) const;
             SC_DLLPUBLIC void GetArea(ScRange& rRange) const;
             void        SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
@@ -185,8 +185,10 @@ public:
         ScDBData* findByName(const ::rtl::OUString& rName);
         bool insert(ScDBData* p);
         void erase(iterator itr);
+        void erase(const ScDBData& r);
         bool empty() const;
         size_t size() const;
+        bool operator== (const NamedDBs& r) const;
     };
 
 private:
@@ -201,9 +203,12 @@ public:
     ScDBCollection(const ScDBCollection& r);
 
     NamedDBs& getNamedDBs();
+    const NamedDBs& getNamedDBs() const;
 
     const ScDBData* GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Bool bStartOnly) const;
+    ScDBData* GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Bool bStartOnly);
     const ScDBData* GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
+    ScDBData* GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
     const ScDBData* GetFilterDBAtTable(SCTAB nTab) const;
     ScDBData* GetDBNearCursor(SCCOL nCol, SCROW nRow, SCTAB nTab );
 
@@ -227,6 +232,9 @@ public:
     void insertAnonRange(ScDBData* pData);
 
     const AnonDBsType& getAnonRanges() const;
+
+    bool empty() const;
+    bool operator== (const ScDBCollection& r) const;
 };
 
 #endif

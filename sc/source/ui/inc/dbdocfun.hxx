@@ -82,20 +82,19 @@ public:
 
     void            UpdateImport( const String& rTarget, const String& rDBName,
                         const String& rTableName, const String& rStatement,
-                        sal_Bool bNative, sal_uInt8 nType,
+                        bool bNative, sal_uInt8 nType,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::sdbc::XResultSet >& xResultSet,
                         const SbaSelectionList* pSelection );
 
-    sal_Bool            DoImport( SCTAB nTab, const ScImportParam& rParam,
-                        const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::sdbc::XResultSet >& xResultSet,
-                        const SbaSelectionList* pSelection, sal_Bool bRecord,
-                        sal_Bool bAddrInsert = false );
+    bool DoImport( SCTAB nTab, const ScImportParam& rParam,
+                   const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& xResultSet,
+                   const SbaSelectionList* pSelection, bool bRecord,
+                   bool bAddrInsert = false );
 
-    sal_Bool            DoImportUno( const ScAddress& rPos,
-                                const com::sun::star::uno::Sequence<
-                                    com::sun::star::beans::PropertyValue>& aArgs );
+    bool DoImportUno( const ScAddress& rPos,
+                      const com::sun::star::uno::Sequence<
+                          com::sun::star::beans::PropertyValue>& aArgs );
 
     static void     ShowInBeamer( const ScImportParam& rParam, SfxViewFrame* pFrame );
 
@@ -109,12 +108,12 @@ public:
                                     const ScSortParam* pForceNewSort,
                                     sal_Bool bRecord, sal_Bool bApi );
 
-    sal_Bool            AddDBRange( const String& rName, const ScRange& rRange, sal_Bool bApi );
-    sal_Bool            DeleteDBRange( const String& rName, sal_Bool bApi );
-    sal_Bool            RenameDBRange( const String& rOld, const String& rNew, sal_Bool bApi );
-    sal_Bool            ModifyDBData( const ScDBData& rNewData, sal_Bool bApi );    // Name unveraendert
+    bool AddDBRange( const ::rtl::OUString& rName, const ScRange& rRange, sal_Bool bApi );
+    bool DeleteDBRange( const ::rtl::OUString& rName );
+    bool RenameDBRange( const String& rOld, const String& rNew );
+    bool ModifyDBData( const ScDBData& rNewData );  // Name unveraendert
 
-    sal_Bool            RepeatDB( const String& rDBName, sal_Bool bRecord, sal_Bool bApi, bool bIsUnnamed=false, SCTAB aTab = 0);
+    bool RepeatDB( const ::rtl::OUString& rDBName, bool bRecord, bool bApi, bool bIsUnnamed=false, SCTAB aTab = 0);
 
     sal_Bool            DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewObj,
                                         sal_Bool bRecord, sal_Bool bApi, sal_Bool bAllowMove = false );

@@ -615,7 +615,7 @@ class ScDatabaseRangesObj : public cppu::WeakImplHelper4<
 private:
     ScDocShell*             pDocShell;
 
-    ScDatabaseRangeObj*     GetObjectByIndex_Impl(sal_uInt16 nIndex);
+    ScDatabaseRangeObj*     GetObjectByIndex_Impl(size_t nIndex);
     ScDatabaseRangeObj*     GetObjectByName_Impl(const ::rtl::OUString& aName);
 
 public:

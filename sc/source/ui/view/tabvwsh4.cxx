@@ -1642,17 +1642,19 @@ void ScTabViewShell::Construct( sal_uInt8 nForceDesignMode )
                 }
             }
 
-            sal_Bool bReImport = false;                             // importierte Daten aktualisieren
+            bool bReImport = false;                             // importierte Daten aktualisieren
             ScDBCollection* pDBColl = pDoc->GetDBCollection();
             if ( pDBColl )
             {
-                sal_uInt16 nCount = pDBColl->GetCount();
-                for (sal_uInt16 i=0; i<nCount && !bReImport; i++)
+                const ScDBCollection::NamedDBs& rDBs = pDBColl->getNamedDBs();
+                ScDBCollection::NamedDBs::const_iterator itr = rDBs.begin(), itrEnd = rDBs.end();
+                for (; itr != itrEnd; ++itr)
                 {
-                    ScDBData* pData = (*pDBColl)[i];
-                    if ( pData->IsStripData() &&
-                            pData->HasImportParam() && !pData->HasImportSelection() )
-                        bReImport = sal_True;
+                    if (itr->IsStripData() && itr->HasImportParam() && !itr->HasImportSelection())
+                    {
+                        bReImport = true;
+                        break;
+                    }
                 }
             }
             if (bReImport)

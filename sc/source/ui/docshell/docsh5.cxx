@@ -285,18 +285,20 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
 
                 String aImport = ScGlobal::GetRscString( STR_DBNAME_IMPORT );
                 long nCount = 0;
-                sal_uInt16 nDummy;
+                const ScDBData* pDummy = NULL;
+                ScDBCollection::NamedDBs& rDBs = pColl->getNamedDBs();
                 do
                 {
                     ++nCount;
                     aNewName = aImport;
                     aNewName += String::CreateFromInt32( nCount );
+                    pDummy = rDBs.findByName(aNewName);
                 }
-                while (pColl->SearchName( aNewName, nDummy ));
+                while (pDummy);
                 pNoNameData = new ScDBData( aNewName, nTab,
                                 nStartCol,nStartRow, nEndCol,nEndRow,
                                 sal_True, bHasHeader );
-                pColl->Insert( pNoNameData );
+                rDBs.insert(pNoNameData);
             }
             else
             {
@@ -533,7 +535,7 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, sal_Bool bReco
     ScDocShellModificator aModificator( *this );
 
     ScRange aOldDest;
-    ScDBData* pDestData = aDocument.GetDBAtCursor( rParam.nCol, rParam.nRow, rParam.nTab, sal_True );
+    ScDBData* pDestData = aDocument.GetDBAtCursor( rParam.nCol, rParam.nRow, rParam.nTab, true );
     if (pDestData)
         pDestData->GetArea(aOldDest);
 

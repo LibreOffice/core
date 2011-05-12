@@ -325,16 +325,12 @@ sal_Bool ScRangeUtil::MakeRangeFromName (
     }
     else if( eScope==RUTL_DBASE )
     {
-        ScDBCollection& rDbNames = *(pDoc->GetDBCollection());
-        sal_uInt16          nAt = 0;
-
-        if ( rDbNames.SearchName( rName, nAt ) )
+        ScDBCollection::NamedDBs& rDbNames = pDoc->GetDBCollection()->getNamedDBs();
+        ScDBData* pData = rDbNames.findByName(rName);
+        if (pData)
         {
-            ScDBData* pData = rDbNames[nAt];
-
-            pData->GetArea( nTab, nColStart, nRowStart,
-                                  nColEnd,   nRowEnd );
-            bResult = sal_True;
+            pData->GetArea(nTab, nColStart, nRowStart, nColEnd, nRowEnd);
+            bResult = true;
         }
     }
     else
@@ -1042,8 +1038,7 @@ sal_Bool ScArea::operator==( const ScArea& r ) const
 ScAreaNameIterator::ScAreaNameIterator( ScDocument* pDoc ) :
     pRangeName(pDoc->GetRangeName()),
     pDBCollection(pDoc->GetDBCollection()),
-    bFirstPass(true),
-    nPos(0)
+    bFirstPass(true)
 {
     if (pRangeName)
     {
@@ -1052,7 +1047,7 @@ ScAreaNameIterator::ScAreaNameIterator( ScDocument* pDoc ) :
     }
 }
 
-sal_Bool ScAreaNameIterator::Next( String& rName, ScRange& rRange )
+bool ScAreaNameIterator::Next( String& rName, ScRange& rRange )
 {
     for (;;)
     {
@@ -1072,18 +1067,23 @@ sal_Bool ScAreaNameIterator::Next( String& rName, ScRange& rRange )
             else
             {
                 bFirstPass = false;
-                nPos = 0;
+                if (pDBCollection)
+                {
+                    const ScDBCollection::NamedDBs& rDBs = pDBCollection->getNamedDBs();
+                    maDBPos = rDBs.begin();
+                    maDBEnd = rDBs.end();
+                }
             }
         }
 
         if ( !bFirstPass )                                  // dann DB-Bereiche
         {
-            if ( pDBCollection && nPos < pDBCollection->GetCount() )
+            if (pDBCollection && maDBPos != maDBEnd)
             {
-                ScDBData* pData = (*pDBCollection)[nPos++];
-                pData->GetArea( rRange );
-                rName = pData->GetName();
-                return sal_True;                            // gefunden
+                const ScDBData& rData = *maDBPos;
+                rData.GetArea(rRange);
+                rName = rData.GetName();
+                return true;                            // gefunden
             }
             else
                 return false;                               // gibt nichts mehr

@@ -56,7 +56,7 @@ public:
     ScXMLExportDatabaseRanges(ScXMLExport& rExport);
     ~ScXMLExportDatabaseRanges();
     ScMyEmptyDatabaseRangesContainer GetEmptyDatabaseRanges();
-    void WriteDatabaseRanges(const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc);
+    void WriteDatabaseRanges();
 };
 
 #endif

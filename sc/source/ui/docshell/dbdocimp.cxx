@@ -119,10 +119,10 @@ void ScDBDocFunc::ShowInBeamer( const ScImportParam& rParam, SfxViewFrame* pFram
 
 // -----------------------------------------------------------------
 
-sal_Bool ScDBDocFunc::DoImportUno( const ScAddress& rPos,
+bool ScDBDocFunc::DoImportUno( const ScAddress& rPos,
                                 const uno::Sequence<beans::PropertyValue>& aArgs )
 {
-    sal_Bool bDone = false;
+    bool bDone = false;
 
     ScImportParam aImParam;
     aImParam.nCol1 = aImParam.nCol2 = rPos.Col();
@@ -180,7 +180,7 @@ sal_Bool ScDBDocFunc::DoImportUno( const ScAddress& rPos,
             aList.Insert( (void*)(sal_IntPtr)nEntry, LIST_APPEND );
     }
 
-    sal_Bool bAddrInsert = false;       //!???
+    bool bAddrInsert = false;       //!???
     if ( bAddrInsert )
     {
         bDone = DoImport( rPos.Tab(), aImParam, xResSet, &aList, sal_True, bAddrInsert );
@@ -204,7 +204,7 @@ sal_Bool ScDBDocFunc::DoImportUno( const ScAddress& rPos,
 
         UpdateImport( sTarget, aImParam.aDBName, aTableName, aStatement,
                 aImParam.bNative, aImParam.nType, xResSet, &aList );
-        bDone = sal_True;
+        bDone = true;
     }
 
     return bDone;
@@ -212,9 +212,9 @@ sal_Bool ScDBDocFunc::DoImportUno( const ScAddress& rPos,
 
 // -----------------------------------------------------------------
 
-sal_Bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
+bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         const uno::Reference< sdbc::XResultSet >& xResultSet,
-        const SbaSelectionList* pSelection, sal_Bool bRecord, sal_Bool bAddrInsert )
+        const SbaSelectionList* pSelection, bool bRecord, bool bAddrInsert )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
     ScChangeTrack *pChangeTrack = NULL;
@@ -223,7 +223,7 @@ sal_Bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = false;
 
-    ScDBData* pDBData = 0;
+    ScDBData* pDBData = NULL;
     if ( !bAddrInsert )
     {
         pDBData = pDoc->GetDBAtArea( nTab, rParam.nCol1, rParam.nRow1,

@@ -262,9 +262,9 @@ void ScInputWindow::SetInputHandler( ScInputHandler* pNew )
     }
 }
 
-sal_Bool ScInputWindow::UseSubTotal(ScRangeList* pRangeList) const
+bool ScInputWindow::UseSubTotal(ScRangeList* pRangeList) const
 {
-    sal_Bool bSubTotal(false);
+    bool bSubTotal = false;
     ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
     if ( pViewSh )
     {
@@ -285,7 +285,7 @@ sal_Bool ScInputWindow::UseSubTotal(ScRangeList* pRangeList) const
                     while (!bSubTotal && nRow <= nRowEnd)
                     {
                         if (pDoc->RowFiltered(nRow, nTab))
-                            bSubTotal = sal_True;
+                            bSubTotal = true;
                         else
                             ++nRow;
                     }
@@ -295,29 +295,27 @@ sal_Bool ScInputWindow::UseSubTotal(ScRangeList* pRangeList) const
             ++nRangeIndex;
         }
 
-        ScDBCollection* pDBCollection = pDoc->GetDBCollection();
-        sal_uInt16 nDBCount (pDBCollection->GetCount());
-        sal_uInt16 nDBIndex (0);
-        while (!bSubTotal && nDBIndex < nDBCount)
+        const ScDBCollection::NamedDBs& rDBs = pDoc->GetDBCollection()->getNamedDBs();
+        ScDBCollection::NamedDBs::const_iterator itr = rDBs.begin(), itrEnd = rDBs.end();
+        for (; !bSubTotal && itr != itrEnd; ++itr)
         {
-            ScDBData* pDB = (*pDBCollection)[nDBIndex];
-            if (pDB && pDB->HasAutoFilter())
+            const ScDBData& rDB = *itr;
+            if (!rDB.HasAutoFilter())
+                continue;
+
+            nRangeIndex = 0;
+            while (!bSubTotal && nRangeIndex < nRangeCount)
             {
-                nRangeIndex = 0;
-                while (!bSubTotal && nRangeIndex < nRangeCount)
+                const ScRange* pRange = (*pRangeList)[nRangeIndex];
+                if( pRange )
                 {
-                    const ScRange* pRange = (*pRangeList)[nRangeIndex];
-                    if( pRange )
-                    {
-                        ScRange aDBArea;
-                        pDB->GetArea(aDBArea);
-                        if (aDBArea.Intersects(*pRange))
-                            bSubTotal = sal_True;
-                    }
-                    ++nRangeIndex;
+                    ScRange aDBArea;
+                    rDB.GetArea(aDBArea);
+                    if (aDBArea.Intersects(*pRange))
+                        bSubTotal = true;
                 }
+                ++nRangeIndex;
             }
-            ++nDBIndex;
         }
     }
     return bSubTotal;

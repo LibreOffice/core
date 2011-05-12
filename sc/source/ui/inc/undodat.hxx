@@ -302,15 +302,15 @@ private:
 class ScUndoAutoFilter: public ScDBFuncUndo
 {
 private:
-    String          aDBName;
-    sal_Bool            bFilterSet;
+    ::rtl::OUString aDBName;
+    bool            bFilterSet;
 
-    void            DoChange( sal_Bool bUndo );
+    void            DoChange( bool bUndo );
 
 public:
                     TYPEINFO();
                     ScUndoAutoFilter( ScDocShell* pNewDocShell, const ScRange& rRange,
-                            const String& rName, sal_Bool bSet );
+                                      const ::rtl::OUString& rName, bool bSet );
     virtual         ~ScUndoAutoFilter();
 
     virtual void    Undo();

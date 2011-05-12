@@ -1090,7 +1090,7 @@ sal_Bool ScUndoQuery::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 //
 
 ScUndoAutoFilter::ScUndoAutoFilter( ScDocShell* pNewDocShell, const ScRange& rRange,
-                                    const String& rName, sal_Bool bSet ) :
+                                    const ::rtl::OUString& rName, bool bSet ) :
     ScDBFuncUndo( pNewDocShell, rRange ),
     aDBName( rName ),
     bFilterSet( bSet )
@@ -1106,14 +1106,13 @@ String ScUndoAutoFilter::GetComment() const
     return ScGlobal::GetRscString( STR_UNDO_QUERY );    // same as ScUndoQuery
 }
 
-void ScUndoAutoFilter::DoChange( sal_Bool bUndo )
+void ScUndoAutoFilter::DoChange( bool bUndo )
 {
-    sal_Bool bNewFilter = bUndo ? !bFilterSet : bFilterSet;
+    bool bNewFilter = bUndo ? !bFilterSet : bFilterSet;
 
-    sal_uInt16 nIndex;
     ScDocument* pDoc = pDocShell->GetDocument();
     ScDBData* pDBData=NULL;
-    if (rtl::OUString(aDBName) == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME)))
+    if (aDBName.equalsAscii(STR_DB_LOCAL_NONAME))
     {
         SCTAB nTab = aOriginalRange.aStart.Tab();
         pDBData = pDoc->GetAnonymousDBData(nTab);
@@ -1121,10 +1120,8 @@ void ScUndoAutoFilter::DoChange( sal_Bool bUndo )
     else
     {
         ScDBCollection* pColl = pDoc->GetDBCollection();
-        if (pColl->SearchName( aDBName, nIndex ))
-            pDBData = (*pColl)[nIndex];
+        pDBData = pColl->getNamedDBs().findByName(aDBName);
     }
-
 
     if ( pDBData )
     {
@@ -1901,17 +1898,9 @@ void ScUndoConsolidate::Undo()
         ScDBCollection* pColl = pDoc->GetDBCollection();
         if (pColl)
         {
-            sal_uInt16 nIndex;
-            if (pColl->SearchName( pUndoData->GetName(), nIndex ))
-            {
-                ScDBData* pDocData = (*pColl)[nIndex];
-                if (pDocData)
-                    *pDocData = *pUndoData;
-            }
-            else
-            {
-                OSL_FAIL("alte DB-Daten nicht gefunden");
-            }
+            ScDBData* pDocData = pColl->getNamedDBs().findByName(pUndoData->GetName());
+            if (pDocData)
+                *pDocData = *pUndoData;
         }
     }
 

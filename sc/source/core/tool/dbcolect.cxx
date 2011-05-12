@@ -115,14 +115,41 @@ ScDBData::ScDBData( const ScDBData& rData ) :
 {
 }
 
+ScDBData::ScDBData( const ::rtl::OUString& rName, const ScDBData& rData ) :
+    ScRefreshTimer      ( rData ),
+    maSortParam         (rData.maSortParam),
+    maQueryParam        (rData.maQueryParam),
+    maSubTotal          (rData.maSubTotal),
+    maImportParam       (rData.maImportParam),
+    aName               (rName),
+    nTable              (rData.nTable),
+    nStartCol           (rData.nStartCol),
+    nStartRow           (rData.nStartRow),
+    nEndCol             (rData.nEndCol),
+    nEndRow             (rData.nEndRow),
+    bByRow              (rData.bByRow),
+    bHasHeader          (rData.bHasHeader),
+    bDoSize             (rData.bDoSize),
+    bKeepFmt            (rData.bKeepFmt),
+    bStripData          (rData.bStripData),
+    bIsAdvanced         (rData.bIsAdvanced),
+    aAdvSource          (rData.aAdvSource),
+    bDBSelection        (rData.bDBSelection),
+    nIndex              (rData.nIndex),
+    bAutoFilter         (rData.bAutoFilter),
+    bModified           (rData.bModified)
+{
+}
+
 ScDBData& ScDBData::operator= (const ScDBData& rData)
 {
+    // Don't modify the name.  The name is not mutable as it is used as a key
+    // in the container to keep the db ranges sorted by the name.
     ScRefreshTimer::operator=( rData );
     maSortParam         = rData.maSortParam;
     maQueryParam        = rData.maQueryParam;
     maSubTotal          = rData.maSubTotal;
     maImportParam       = rData.maImportParam;
-    aName               = rData.aName;
     nTable              = rData.nTable;
     nStartCol           = rData.nStartCol;
     nStartRow           = rData.nStartRow;
@@ -697,6 +724,11 @@ void ScDBCollection::NamedDBs::erase(iterator itr)
     maDBs.erase(itr);
 }
 
+void ScDBCollection::NamedDBs::erase(const ScDBData& r)
+{
+    maDBs.erase(r);
+}
+
 bool ScDBCollection::NamedDBs::empty() const
 {
     return maDBs.empty();
@@ -707,6 +739,11 @@ size_t ScDBCollection::NamedDBs::size() const
     return maDBs.size();
 }
 
+bool ScDBCollection::NamedDBs::operator== (const NamedDBs& r) const
+{
+    return maDBs == r.maDBs;
+}
+
 ScDBCollection::ScDBCollection(ScDocument* pDocument) :
     pDoc(pDocument), nEntryIndex(SC_START_INDEX_DB_COLL), maNamedDBs(*this, *pDocument) {}
 
@@ -714,6 +751,11 @@ ScDBCollection::ScDBCollection(const ScDBCollection& r) :
     pDoc(r.pDoc), nEntryIndex(r.nEntryIndex), maNamedDBs(r.maNamedDBs), maAnonDBs(r.maAnonDBs) {}
 
 ScDBCollection::NamedDBs& ScDBCollection::getNamedDBs()
+{
+    return maNamedDBs;
+}
+
+const ScDBCollection::NamedDBs& ScDBCollection::getNamedDBs() const
 {
     return maNamedDBs;
 }
@@ -740,11 +782,52 @@ const ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab
     return NULL;
 }
 
+ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Bool bStartOnly)
+{
+    // First, search the global named db ranges.
+    NamedDBs::DBsType::iterator itr = find_if(
+        maNamedDBs.begin(), maNamedDBs.end(), FindByCursor(nCol, nRow, nTab, bStartOnly));
+    if (itr != maNamedDBs.end())
+        return &(*itr);
+
+    // Check for the sheet-local anonymous db range.
+    ScDBData* pNoNameData = pDoc->GetAnonymousDBData(nTab);
+    if (pNoNameData)
+        if (pNoNameData->IsDBAtCursor(nCol,nRow,nTab,bStartOnly))
+            return pNoNameData;
+
+    // Check the global anonymous db ranges.
+    const ScDBData* pData = findAnonAtCursor(nCol, nRow, nTab, bStartOnly);
+    if (pData)
+        return const_cast<ScDBData*>(pData);
+
+    return NULL;
+}
+
 const ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const
 {
     // First, search the global named db ranges.
     ScRange aRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab);
     NamedDBs::DBsType::const_iterator itr = find_if(
+        maNamedDBs.begin(), maNamedDBs.end(), FindByRange(aRange));
+    if (itr != maNamedDBs.end())
+        return &(*itr);
+
+    // Check for the sheet-local anonymous db range.
+    ScDBData* pNoNameData = pDoc->GetAnonymousDBData(nTab);
+    if (pNoNameData)
+        if (pNoNameData->IsDBAtArea(nTab, nCol1, nRow1, nCol2, nRow2))
+            return pNoNameData;
+
+    // Lastly, check the global anonymous db ranges.
+    return findAnonByRange(aRange);
+}
+
+ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
+{
+    // First, search the global named db ranges.
+    ScRange aRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab);
+    NamedDBs::DBsType::iterator itr = find_if(
         maNamedDBs.begin(), maNamedDBs.end(), FindByRange(aRange));
     if (itr != maNamedDBs.end())
         return &(*itr);
@@ -893,6 +976,17 @@ void ScDBCollection::insertAnonRange(ScDBData* pData)
 const ScDBCollection::AnonDBsType& ScDBCollection::getAnonRanges() const
 {
     return maAnonDBs;
+}
+
+bool ScDBCollection::empty() const
+{
+    return maNamedDBs.empty() && maAnonDBs.empty();
+}
+
+bool ScDBCollection::operator== (const ScDBCollection& r) const
+{
+    return maNamedDBs == r.maNamedDBs && maAnonDBs == r.maAnonDBs &&
+        nEntryIndex == r.nEntryIndex && pDoc == r.pDoc && aRefreshHandler == r.aRefreshHandler;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

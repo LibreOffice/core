@@ -100,7 +100,7 @@ private:
     ScDocument*         pDoc;
     ScRangeUtil*        pRangeUtil;
     ScAreaData*         pAreaData;
-    sal_uInt16              nAreaDataCount;
+    size_t              nAreaDataCount;
     sal_uInt16              nWhichCons;
 
     formula::RefEdit*           pRefInputEdit;

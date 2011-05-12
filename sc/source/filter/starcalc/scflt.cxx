@@ -1370,7 +1370,7 @@ void Sc10Import::LoadDataBaseCollection()
                                     ( SCROW ) pOldData->DataBaseRec.Block.y2,
                                     sal_True,
                                     ( sal_Bool) pOldData->DataBaseRec.RowHeader );
-        pDoc->GetDBCollection()->Insert( pNewData );
+        pDoc->GetDBCollection()->getNamedDBs().insert(pNewData);
     }
 }
 

@@ -346,7 +346,7 @@ private:
     sal_Bool IsMacro( const String& );
     sal_Bool IsNamedRange( const String& );
     bool IsExternalNamedRange( const String& rSymbol );
-    sal_Bool IsDBRange( const String& );
+    bool IsDBRange( const String& );
     sal_Bool IsColRowName( const String& );
     sal_Bool IsBoolean( const String& );
     void AutoCorrectParsedSymbol();
@@ -448,7 +448,7 @@ public:
     ScRangeData* UpdateDeleteTab(SCTAB nTable, sal_Bool bIsMove, sal_Bool bIsName, sal_Bool& bCompile);
     ScRangeData* UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, sal_Bool bIsName );
 
-    sal_Bool HasModifiedRange();
+    bool HasModifiedRange();
 
     /** If the character is allowed as first character in sheet names or
         references, includes '$' and '?'. */

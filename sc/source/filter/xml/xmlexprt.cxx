@@ -1729,7 +1729,7 @@ void ScXMLExport::_ExportContent()
     }
     WriteExternalRefCaches();
     WriteNamedExpressions(xSpreadDoc);
-    aExportDatabaseRanges.WriteDatabaseRanges(xSpreadDoc);
+    aExportDatabaseRanges.WriteDatabaseRanges();
     ScXMLExportDataPilot aExportDataPilot(*this);
     aExportDataPilot.WriteDataPilots(xSpreadDoc);
     WriteConsolidation();

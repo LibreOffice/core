@@ -85,7 +85,6 @@ private:
 
     const String    aStrAdd;    // "Hinzufuegen"
     const String    aStrModify; // "Aendern"
-    const String    aStrNoName; // "unbenannt"
     const String    aStrInvalid;
 
     String          aStrSource;

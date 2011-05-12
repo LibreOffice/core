@@ -67,6 +67,8 @@
 #include <comphelper/servicehelper.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 
+#include <limits>
+
 using namespace com::sun::star;
 
 SV_IMPL_PTRARR( XDBRefreshListenerArr_Impl, XDBRefreshListenerPtr );
@@ -1657,9 +1659,9 @@ ScDBData* ScDatabaseRangeObj::GetDBData_Impl() const
             ScDBCollection* pNames = pDocShell->GetDocument()->GetDBCollection();
             if (pNames)
             {
-                sal_uInt16 nPos = 0;
-                if (pNames->SearchName( aName, nPos ))
-                    pRet = (*pNames)[nPos];
+                ScDBData* p = pNames->getNamedDBs().findByName(aName);
+                if (p)
+                    pRet = p;
             }
         }
     }
@@ -1682,7 +1684,7 @@ void SAL_CALL ScDatabaseRangeObj::setName( const rtl::OUString& aNewName )
     {
         ScDBDocFunc aFunc(*pDocShell);
         String aNewStr(aNewName);
-        sal_Bool bOk = aFunc.RenameDBRange( aName, aNewStr, sal_True );
+        sal_Bool bOk = aFunc.RenameDBRange( aName, aNewStr );
         if (bOk)
             aName = aNewStr;
     }
@@ -1720,7 +1722,7 @@ void SAL_CALL ScDatabaseRangeObj::setDataArea( const table::CellRangeAddress& aD
         aNewData.SetArea( aDataArea.Sheet, (SCCOL)aDataArea.StartColumn, (SCROW)aDataArea.StartRow,
                                            (SCCOL)aDataArea.EndColumn, (SCROW)aDataArea.EndRow );
         ScDBDocFunc aFunc(*pDocShell);
-        aFunc.ModifyDBData(aNewData, sal_True);
+        aFunc.ModifyDBData(aNewData);
     }
 }
 
@@ -1792,7 +1794,7 @@ void ScDatabaseRangeObj::SetQueryParam(const ScQueryParam& rQueryParam)
         aNewData.SetQueryParam(aParam);
         aNewData.SetHeader(aParam.bHasHeader);      // not in ScDBData::SetQueryParam
         ScDBDocFunc aFunc(*pDocShell);
-        aFunc.ModifyDBData(aNewData, sal_True);
+        aFunc.ModifyDBData(aNewData);
     }
 }
 
@@ -1852,7 +1854,7 @@ void ScDatabaseRangeObj::SetSubTotalParam(const ScSubTotalParam& rSubTotalParam)
         ScDBData aNewData( *pData );
         aNewData.SetSubTotalParam(aParam);
         ScDBDocFunc aFunc(*pDocShell);
-        aFunc.ModifyDBData(aNewData, sal_True);
+        aFunc.ModifyDBData(aNewData);
     }
 }
 
@@ -2068,7 +2070,7 @@ void SAL_CALL ScDatabaseRangeObj::setPropertyValue(
         if (bDo)
         {
             ScDBDocFunc aFunc(*pDocShell);
-            aFunc.ModifyDBData(aNewData, sal_True);
+            aFunc.ModifyDBData(aNewData);
         }
     }
 }
@@ -2199,15 +2201,22 @@ void ScDatabaseRangesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // XDatabaseRanges
 
-ScDatabaseRangeObj* ScDatabaseRangesObj::GetObjectByIndex_Impl(sal_uInt16 nIndex)
+ScDatabaseRangeObj* ScDatabaseRangesObj::GetObjectByIndex_Impl(size_t nIndex)
 {
-    if (pDocShell)
-    {
-        ScDBCollection* pNames = pDocShell->GetDocument()->GetDBCollection();
-        if (pNames && nIndex < pNames->GetCount())
-            return new ScDatabaseRangeObj( pDocShell, (*pNames)[nIndex]->GetName() );
-    }
-    return NULL;
+    if (!pDocShell)
+        return NULL;
+
+    ScDBCollection* pNames = pDocShell->GetDocument()->GetDBCollection();
+    if (!pNames)
+        return NULL;
+
+    const ScDBCollection::NamedDBs& rDBs = pNames->getNamedDBs();
+    if (rDBs.empty() || nIndex >= rDBs.size())
+        return NULL;
+
+    ScDBCollection::NamedDBs::const_iterator itr = rDBs.begin();
+    ::std::advance(itr, nIndex); // boundary check is done above.
+    return new ScDatabaseRangeObj(pDocShell, itr->GetName());
 }
 
 ScDatabaseRangeObj* ScDatabaseRangesObj::GetObjectByName_Impl(const rtl::OUString& aName)
@@ -2249,7 +2258,7 @@ void SAL_CALL ScDatabaseRangesObj::removeByName( const rtl::OUString& aName )
     {
         ScDBDocFunc aFunc(*pDocShell);
         String aString(aName);
-        bDone = aFunc.DeleteDBRange( aString, sal_True );
+        bDone = aFunc.DeleteDBRange( aString );
     }
     if (!bDone)
         throw uno::RuntimeException();      // no other exceptions specified
@@ -2276,7 +2285,7 @@ sal_Int32 SAL_CALL ScDatabaseRangesObj::getCount() throw(uno::RuntimeException)
     {
         ScDBCollection* pNames = pDocShell->GetDocument()->GetDBCollection();
         if (pNames)
-            return pNames->GetCount();
+            return static_cast<sal_Int32>(pNames->getNamedDBs().size());
     }
     return 0;
 }
@@ -2286,7 +2295,10 @@ uno::Any SAL_CALL ScDatabaseRangesObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    uno::Reference<sheet::XDatabaseRange> xRange(GetObjectByIndex_Impl((sal_uInt16)nIndex));
+    if (nIndex < 0 || nIndex > ::std::numeric_limits<size_t>::max())
+        throw lang::IndexOutOfBoundsException();
+
+    uno::Reference<sheet::XDatabaseRange> xRange(GetObjectByIndex_Impl(static_cast<size_t>(nIndex)));
     if (xRange.is())
         return uno::makeAny(xRange);
     else
@@ -2332,12 +2344,11 @@ uno::Sequence<rtl::OUString> SAL_CALL ScDatabaseRangesObj::getElementNames()
         ScDBCollection* pNames = pDocShell->GetDocument()->GetDBCollection();
         if (pNames)
         {
-            sal_uInt16 nCount = pNames->GetCount();
-            String aName;
-            uno::Sequence<rtl::OUString> aSeq(nCount);
-            rtl::OUString* pAry = aSeq.getArray();
-            for (sal_uInt16 i=0; i<nCount; i++)
-                pAry[i] = (*pNames)[i]->GetName();
+            const ScDBCollection::NamedDBs& rDBs = pNames->getNamedDBs();
+            uno::Sequence<rtl::OUString> aSeq(rDBs.size());
+            ScDBCollection::NamedDBs::const_iterator itr = rDBs.begin(), itrEnd = rDBs.end();
+            for (size_t i = 0; itr != itrEnd; ++itr, ++i)
+                aSeq[i] = itr->GetName();
 
             return aSeq;
         }
@@ -2356,12 +2367,7 @@ sal_Bool SAL_CALL ScDatabaseRangesObj::hasByName( const rtl::OUString& aName )
     {
         ScDBCollection* pNames = pDocShell->GetDocument()->GetDBCollection();
         if (pNames)
-        {
-            String aString(aName);
-            sal_uInt16 nPos = 0;
-            if (pNames->SearchName( aString, nPos ))
-                return sal_True;
-        }
+            return pNames->getNamedDBs().findByName(aName) != NULL;
     }
     return false;
 }

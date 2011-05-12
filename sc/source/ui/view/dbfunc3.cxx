@@ -492,7 +492,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, sal_Bool bRecord,
             if (!pDocRange->empty())
                 pUndoRange = new ScRangeName( *pDocRange );
             ScDBCollection* pDocDB = pDoc->GetDBCollection();
-            if (pDocDB->GetCount())
+            if (!pDocDB->empty())
                 pUndoDB = new ScDBCollection( *pDocDB );
         }
 
@@ -2277,7 +2277,7 @@ void ScDBFunc::RepeatDB( sal_Bool bRecord )
             if (!pDocRange->empty())
                 pUndoRange = new ScRangeName( *pDocRange );
             ScDBCollection* pDocDB = pDoc->GetDBCollection();
-            if (pDocDB->GetCount())
+            if (!pDocDB->empty())
                 pUndoDB = new ScDBCollection( *pDocDB );
         }
 

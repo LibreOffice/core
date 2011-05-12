@@ -304,9 +304,7 @@ void ScXMLExportDatabaseRanges::WriteFilterDescriptor(const uno::Reference <shee
                 }
             }
             ScDBCollection* pDBCollection = pDoc->GetDBCollection();
-            sal_uInt16 nIndex;
-            pDBCollection->SearchName(sDatabaseRangeName, nIndex);
-            ScDBData* pDBData = (*pDBCollection)[nIndex];
+            ScDBData* pDBData = pDBCollection->getNamedDBs().findByName(sDatabaseRangeName);
             ScRange aAdvSource;
             if (pDBData->GetAdvancedQuerySource(aAdvSource))
             {
@@ -531,9 +529,7 @@ void ScXMLExportDatabaseRanges::WriteSubTotalDescriptor(const com::sun::star::un
             rExport.CheckAttrList();
             {
                 ScDBCollection* pDBCollection = pDoc->GetDBCollection();
-                sal_uInt16 nIndex;
-                pDBCollection->SearchName(sDatabaseRangeName, nIndex);
-                ScDBData* pDBData = (*pDBCollection)[nIndex];
+                ScDBData* pDBData = pDBCollection->getNamedDBs().findByName(sDatabaseRangeName);
                 ScSubTotalParam aSubTotalParam;
                 pDBData->GetSubTotalParam(aSubTotalParam);
                 if (aSubTotalParam.bDoSort)
@@ -1088,136 +1084,55 @@ private:
 
 }
 
-void ScXMLExportDatabaseRanges::WriteDatabaseRanges(const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc)
+void ScXMLExportDatabaseRanges::WriteDatabaseRanges()
 {
     typedef ::std::map<SCTAB, const ScDBData*> SheetLocalDBs;
 
     pDoc = rExport.GetDocument();
-    if (pDoc)
+    if (!pDoc)
+        return;
+
+    // Get sheet-local anonymous ranges.
+    SCTAB nTabCount = pDoc->GetTableCount();
+    SheetLocalDBs aSheetDBs;
+    for (SCTAB i = 0; i < nTabCount; ++i)
     {
-        // Get sheet-local anonymous ranges.
-        SCTAB nTabCount = pDoc->GetTableCount();
-        SheetLocalDBs aSheetDBs;
-        for (SCTAB i = 0; i < nTabCount; ++i)
-        {
-            const ScDBData* p = pDoc->GetAnonymousDBData(i);
-            if (p)
-                aSheetDBs.insert(SheetLocalDBs::value_type(i, p));
-        }
+        const ScDBData* p = pDoc->GetAnonymousDBData(i);
+        if (p)
+            aSheetDBs.insert(SheetLocalDBs::value_type(i, p));
+    }
 
-        bool bHasRanges = !aSheetDBs.empty();
+    bool bHasRanges = !aSheetDBs.empty();
 
-        // See if we have global ranges.
-        ScDBCollection* pDBCollection = pDoc->GetDBCollection();
-        if (pDBCollection)
-            if (pDBCollection->GetCount() > 0 || !pDBCollection->getAnonRanges().empty())
-                bHasRanges = true;
+    // See if we have global ranges.
+    ScDBCollection* pDBCollection = pDoc->GetDBCollection();
+    if (pDBCollection)
+    {
+        if (!pDBCollection->getNamedDBs().empty() || !pDBCollection->getAnonRanges().empty())
+            bHasRanges = true;
+    }
 
-        if (!bHasRanges)
-            // No ranges to export. Bail out.
-            return;
+    if (!bHasRanges)
+        // No ranges to export. Bail out.
+        return;
 
-        SvXMLElementExport aElemDRs(rExport, XML_NAMESPACE_TABLE, XML_DATABASE_RANGES, sal_True, sal_True);
-        uno::Reference <beans::XPropertySet> xPropertySet (xSpreadDoc, uno::UNO_QUERY);
-        if (xPropertySet.is())
-        {
-            uno::Reference <sheet::XDatabaseRanges> xDatabaseRanges(xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DATABASERNG))), uno::UNO_QUERY);
-            rExport.CheckAttrList();
-            if (xDatabaseRanges.is())
-            {
-                uno::Sequence <rtl::OUString> aRanges(xDatabaseRanges->getElementNames());
-                sal_Int32 nDatabaseRangesCount = aRanges.getLength();
-                if (nDatabaseRangesCount > 0)
-                {
-                    for (sal_Int32 i = 0; i < nDatabaseRangesCount; ++i)
-                    {
-                        rtl::OUString sDatabaseRangeName(aRanges[i]);
-                        uno::Reference <sheet::XDatabaseRange> xDatabaseRange(xDatabaseRanges->getByName(sDatabaseRangeName), uno::UNO_QUERY);
-                        if (xDatabaseRange.is())
-                        {
-                            rtl::OUString sOUUnbenannt (ScGlobal::GetRscString(STR_DB_NONAME));
-                            if (sOUUnbenannt != sDatabaseRangeName)
-                                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, sDatabaseRangeName);
-                            table::CellRangeAddress aRangeAddress(xDatabaseRange->getDataArea());
-                            rtl::OUString sOUAddress;
-                            ScRangeStringConverter::GetStringFromRange( sOUAddress, aRangeAddress, pDoc, ::formula::FormulaGrammar::CONV_OOO );
-                            rExport.AddAttribute (XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS, sOUAddress);
-                            sal_uInt16 nIndex;
-                            pDBCollection->SearchName(sDatabaseRangeName, nIndex);
-                            ScDBData* pDBData = (*pDBCollection)[nIndex];
-                            if (pDBData->HasImportSelection())
-                                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_IS_SELECTION, XML_TRUE);
-                            if (pDBData->HasAutoFilter())
-                                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_FILTER_BUTTONS, XML_TRUE);
-                            uno::Reference <beans::XPropertySet> xPropertySetDatabaseRange (xDatabaseRange, uno::UNO_QUERY);
-                            if (xPropertySetDatabaseRange.is())
-                            {
-                                if (::cppu::any2bool(xPropertySetDatabaseRange->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_KEEPFORM)))))
-                                    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ON_UPDATE_KEEP_STYLES, XML_TRUE);
-                                if (::cppu::any2bool(xPropertySetDatabaseRange->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_MOVCELLS)))))
-                                    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ON_UPDATE_KEEP_SIZE, XML_FALSE);
-                                if (::cppu::any2bool(xPropertySetDatabaseRange->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_STRIPDAT)))))
-                                    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_HAS_PERSISTENT_DATA, XML_FALSE);
-                            }
+    SvXMLElementExport aElemDRs(rExport, XML_NAMESPACE_TABLE, XML_DATABASE_RANGES, sal_True, sal_True);
 
-                            uno::Reference< sheet::XSheetFilterDescriptor2 > xSheetFilterDescriptor(
-                                    xDatabaseRange->getFilterDescriptor(), uno::UNO_QUERY );
-                            uno::Sequence <beans::PropertyValue> aSortProperties(xDatabaseRange->getSortDescriptor());
-                            if (xSheetFilterDescriptor.is())
-                            {
-                                uno::Reference <beans::XPropertySet> xFilterProperties (xSheetFilterDescriptor, uno::UNO_QUERY);
-                                if (xFilterProperties.is())
-                                {
-                                    if (!::cppu::any2bool(xFilterProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CONTHDR)))))
-                                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CONTAINS_HEADER, XML_FALSE);
+    WriteDatabaseRange func(rExport, pDoc);
 
-                                    sal_Bool bSortColumns(sal_True);
-                                    sal_Bool bFound(false);
-                                    sal_Int32 nProperty(0);
-                                    while (!bFound && (nProperty < aSortProperties.getLength()))
-                                    {
-                                        if (aSortProperties[nProperty].Name.compareToAscii(SC_UNONAME_ISSORTCOLUMNS) == 0)
-                                        {
-                                            bSortColumns = ::cppu::any2bool(aSortProperties[nProperty].Value);
-                                            bFound = sal_True;
-                                        }
-                                        else
-                                            ++nProperty;
-                                    }
-
-                                    if (bSortColumns)
-                                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORIENTATION, XML_COLUMN);
-                                }
-                            }
-                            sal_Int32 nRefresh( pDBData->GetRefreshDelay() );
-                            if( nRefresh )
-                            {
-                                rtl::OUStringBuffer sBuffer;
-                                SvXMLUnitConverter::convertTime( sBuffer, (double)nRefresh / 86400 );
-                                rExport.AddAttribute( XML_NAMESPACE_TABLE, XML_REFRESH_DELAY, sBuffer.makeStringAndClear() );
-                            }
-                            SvXMLElementExport aElemDR(rExport, XML_NAMESPACE_TABLE, XML_DATABASE_RANGE, sal_True, sal_True);
-                            rExport.CheckAttrList();
-                            WriteImportDescriptor(xDatabaseRange->getImportDescriptor());
-                            if (xSheetFilterDescriptor.is())
-                                WriteFilterDescriptor(xSheetFilterDescriptor, sDatabaseRangeName);
-                            WriteSortDescriptor(aSortProperties);
-                            WriteSubTotalDescriptor(xDatabaseRange->getSubTotalDescriptor(), sDatabaseRangeName);
-                        }
-                    }
-                }
-            }
-        }
-
-        WriteDatabaseRange func(rExport, pDoc);
-
-        // Write sheet-local ranges.
-        ::std::for_each(aSheetDBs.begin(), aSheetDBs.end(), func);
+    if (pDBCollection)
+    {
+        // Write global named ranges.
+        const ScDBCollection::NamedDBs& rNamedDBs = pDBCollection->getNamedDBs();
+        ::std::for_each(rNamedDBs.begin(), rNamedDBs.end(), func);
 
         // Add global anonymous DB ranges.
         const ScDBCollection::AnonDBsType& rAnonDBs = pDBCollection->getAnonRanges();
         ::std::for_each(rAnonDBs.begin(), rAnonDBs.end(), func);
     }
+
+    // Write sheet-local ranges.
+    ::std::for_each(aSheetDBs.begin(), aSheetDBs.end(), func);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
