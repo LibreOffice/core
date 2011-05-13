@@ -2804,9 +2804,13 @@ long SwFEShell::GetSectionWidth( SwFmt& rFmt ) const
         while( pSect );
     }
     SwIterator<SwSectionFrm,SwFmt> aIter( rFmt );
-    for ( SwSectionFrm* pSct = aIter.First(); pFrm; pFrm = aIter.Next() )
-            if( !pSct->IsFollow() )
-                return pSct->Frm().Width();
+    for ( SwSectionFrm* pSct = aIter.First(); pSct; pSct = aIter.Next() )
+    {
+        if( !pSct->IsFollow() )
+        {
+            return pSct->Frm().Width();
+        }
+    }
     return 0;
 }
 
