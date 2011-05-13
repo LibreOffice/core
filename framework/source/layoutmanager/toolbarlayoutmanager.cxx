@@ -570,6 +570,7 @@ bool ToolbarLayoutManager::showToolbar( const ::rtl::OUString& rResourceURL )
         aUIElement.m_bVisible = true;
         implts_writeWindowStateData( aUIElement );
         implts_setToolbar( aUIElement );
+        implts_sortUIElements();
         return true;
     }
 
