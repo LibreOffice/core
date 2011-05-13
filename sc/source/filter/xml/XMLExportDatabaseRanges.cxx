@@ -1108,7 +1108,7 @@ void ScXMLExportDatabaseRanges::WriteDatabaseRanges()
     ScDBCollection* pDBCollection = pDoc->GetDBCollection();
     if (pDBCollection)
     {
-        if (!pDBCollection->getNamedDBs().empty() || !pDBCollection->getAnonRanges().empty())
+        if (!pDBCollection->getNamedDBs().empty() || !pDBCollection->getAnonDBs().empty())
             bHasRanges = true;
     }
 
@@ -1127,7 +1127,7 @@ void ScXMLExportDatabaseRanges::WriteDatabaseRanges()
         ::std::for_each(rNamedDBs.begin(), rNamedDBs.end(), func);
 
         // Add global anonymous DB ranges.
-        const ScDBCollection::AnonDBsType& rAnonDBs = pDBCollection->getAnonRanges();
+        const ScDBCollection::AnonDBs& rAnonDBs = pDBCollection->getAnonDBs();
         ::std::for_each(rAnonDBs.begin(), rAnonDBs.end(), func);
     }
 

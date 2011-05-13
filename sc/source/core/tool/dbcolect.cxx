@@ -744,6 +744,83 @@ bool ScDBCollection::NamedDBs::operator== (const NamedDBs& r) const
     return maDBs == r.maDBs;
 }
 
+ScDBCollection::AnonDBs::iterator ScDBCollection::AnonDBs::begin()
+{
+    return maDBs.begin();
+}
+
+ScDBCollection::AnonDBs::iterator ScDBCollection::AnonDBs::end()
+{
+    return maDBs.end();
+}
+
+ScDBCollection::AnonDBs::const_iterator ScDBCollection::AnonDBs::begin() const
+{
+    return maDBs.begin();
+}
+
+ScDBCollection::AnonDBs::const_iterator ScDBCollection::AnonDBs::end() const
+{
+    return maDBs.end();
+}
+
+const ScDBData* ScDBCollection::AnonDBs::findAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) const
+{
+    DBsType::const_iterator itr = find_if(
+        maDBs.begin(), maDBs.end(), FindByCursor(nCol, nRow, nTab, bStartOnly));
+    return itr == maDBs.end() ? NULL : &(*itr);
+}
+
+const ScDBData* ScDBCollection::AnonDBs::findByRange(const ScRange& rRange) const
+{
+    DBsType::const_iterator itr = find_if(
+        maDBs.begin(), maDBs.end(), FindByRange(rRange));
+    return itr == maDBs.end() ? NULL : &(*itr);
+}
+
+ScDBData* ScDBCollection::AnonDBs::getByRange(const ScRange& rRange)
+{
+    const ScDBData* pData = findByRange(rRange);
+    if (!pData)
+    {
+        // Insert a new db data.  They all have identical names.
+        rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM(STR_DB_GLOBAL_NONAME));
+        ::std::auto_ptr<ScDBData> pNew(new ScDBData(
+            aName, rRange.aStart.Tab(), rRange.aStart.Col(), rRange.aStart.Row(),
+            rRange.aEnd.Col(), rRange.aEnd.Row(), true, false));
+        pData = pNew.get();
+        maDBs.push_back(pNew);
+    }
+    return const_cast<ScDBData*>(pData);
+}
+
+void ScDBCollection::AnonDBs::insert(ScDBData* p)
+{
+    rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM(STR_DB_GLOBAL_NONAME));
+    ::std::auto_ptr<ScDBData> pNew(p);
+    maDBs.push_back(pNew);
+}
+
+void ScDBCollection::AnonDBs::erase(iterator itr)
+{
+    maDBs.erase(itr);
+}
+
+bool ScDBCollection::AnonDBs::empty() const
+{
+    return maDBs.empty();
+}
+
+size_t ScDBCollection::AnonDBs::size() const
+{
+    return maDBs.size();
+}
+
+bool ScDBCollection::AnonDBs::operator== (const AnonDBs& r) const
+{
+    return maDBs == r.maDBs;
+}
+
 ScDBCollection::ScDBCollection(ScDocument* pDocument) :
     pDoc(pDocument), nEntryIndex(SC_START_INDEX_DB_COLL), maNamedDBs(*this, *pDocument) {}
 
@@ -758,6 +835,16 @@ ScDBCollection::NamedDBs& ScDBCollection::getNamedDBs()
 const ScDBCollection::NamedDBs& ScDBCollection::getNamedDBs() const
 {
     return maNamedDBs;
+}
+
+ScDBCollection::AnonDBs& ScDBCollection::getAnonDBs()
+{
+    return maAnonDBs;
+}
+
+const ScDBCollection::AnonDBs& ScDBCollection::getAnonDBs() const
+{
+    return maAnonDBs;
 }
 
 const ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Bool bStartOnly) const
@@ -775,7 +862,7 @@ const ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab
             return pNoNameData;
 
     // Check the global anonymous db ranges.
-    const ScDBData* pData = findAnonAtCursor(nCol, nRow, nTab, bStartOnly);
+    const ScDBData* pData = getAnonDBs().findAtCursor(nCol, nRow, nTab, bStartOnly);
     if (pData)
         return pData;
 
@@ -797,7 +884,7 @@ ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, sal_
             return pNoNameData;
 
     // Check the global anonymous db ranges.
-    const ScDBData* pData = findAnonAtCursor(nCol, nRow, nTab, bStartOnly);
+    const ScDBData* pData = getAnonDBs().findAtCursor(nCol, nRow, nTab, bStartOnly);
     if (pData)
         return const_cast<ScDBData*>(pData);
 
@@ -820,7 +907,7 @@ const ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1
             return pNoNameData;
 
     // Lastly, check the global anonymous db ranges.
-    return findAnonByRange(aRange);
+    return maAnonDBs.findByRange(aRange);
 }
 
 ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
@@ -839,7 +926,7 @@ ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCO
             return pNoNameData;
 
     // Lastly, check the global anonymous db ranges.
-    const ScDBData* pData = findAnonByRange(aRange);
+    const ScDBData* pData = getAnonDBs().findByRange(aRange);
     if (pData)
         return const_cast<ScDBData*>(pData);
 
@@ -934,48 +1021,6 @@ ScDBData* ScDBCollection::GetDBNearCursor(SCCOL nCol, SCROW nRow, SCTAB nTab )
     if (pNearData)
         return pNearData;               // angrenzender, wenn nichts direkt getroffen
     return pDoc->GetAnonymousDBData(nTab);                  // "unbenannt" nur zurueck, wenn sonst nichts gefunden
-}
-
-const ScDBData* ScDBCollection::findAnonAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) const
-{
-    AnonDBsType::const_iterator itr = find_if(
-        maAnonDBs.begin(), maAnonDBs.end(), FindByCursor(nCol, nRow, nTab, bStartOnly));
-    return itr == maAnonDBs.end() ? NULL : &(*itr);
-}
-
-const ScDBData* ScDBCollection::findAnonByRange(const ScRange& rRange) const
-{
-    AnonDBsType::const_iterator itr = find_if(
-        maAnonDBs.begin(), maAnonDBs.end(), FindByRange(rRange));
-    return itr == maAnonDBs.end() ? NULL : &(*itr);
-}
-
-ScDBData* ScDBCollection::getAnonByRange(const ScRange& rRange)
-{
-    const ScDBData* pData = findAnonByRange(rRange);
-    if (!pData)
-    {
-        // Insert a new db data.  They all have identical names.
-        rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM(STR_DB_GLOBAL_NONAME));
-        ::std::auto_ptr<ScDBData> pNew(new ScDBData(
-            aName, rRange.aStart.Tab(), rRange.aStart.Col(), rRange.aStart.Row(),
-            rRange.aEnd.Col(), rRange.aEnd.Row(), true, false));
-        pData = pNew.get();
-        maAnonDBs.push_back(pNew);
-    }
-    return const_cast<ScDBData*>(pData);
-}
-
-void ScDBCollection::insertAnonRange(ScDBData* pData)
-{
-    rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM(STR_DB_GLOBAL_NONAME));
-    ::std::auto_ptr<ScDBData> pNew(pData);
-    maAnonDBs.push_back(pNew);
-}
-
-const ScDBCollection::AnonDBsType& ScDBCollection::getAnonRanges() const
-{
-    return maAnonDBs;
 }
 
 bool ScDBCollection::empty() const

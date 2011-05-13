@@ -499,7 +499,7 @@ void ScXMLDatabaseRangeContext::EndElement()
         if (pData.get())
         {
             setAutoFilterFlags(*pDoc, *pData);
-            pDoc->GetDBCollection()->insertAnonRange(pData.release());
+            pDoc->GetDBCollection()->getAnonDBs().insert(pData.release());
         }
         return;
     }

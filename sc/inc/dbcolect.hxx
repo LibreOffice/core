@@ -161,8 +161,9 @@ public:
 class SC_DLLPUBLIC ScDBCollection
 {
 public:
-    typedef ::boost::ptr_vector<ScDBData> AnonDBsType;
-
+    /**
+     * Stores global named database ranges.
+     */
     class NamedDBs
     {
         friend class ScDBCollection;
@@ -191,12 +192,37 @@ public:
         bool operator== (const NamedDBs& r) const;
     };
 
+    /**
+     * Stores global anonymous database ranges.
+     */
+    class AnonDBs
+    {
+        typedef ::boost::ptr_vector<ScDBData> DBsType;
+        DBsType maDBs;
+    public:
+        typedef DBsType::iterator iterator;
+        typedef DBsType::const_iterator const_iterator;
+
+        iterator begin();
+        iterator end();
+        const_iterator begin() const;
+        const_iterator end() const;
+        const ScDBData* findAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) const;
+        const ScDBData* findByRange(const ScRange& rRange) const;
+        ScDBData* getByRange(const ScRange& rRange);
+        void insert(ScDBData* p);
+        void erase(iterator itr);
+        bool empty() const;
+        size_t size() const;
+        bool operator== (const AnonDBs& r) const;
+    };
+
 private:
     Link        aRefreshHandler;
     ScDocument* pDoc;
     sal_uInt16 nEntryIndex;         // counter for unique indices
     NamedDBs maNamedDBs;
-    AnonDBsType maAnonDBs;
+    AnonDBs maAnonDBs;
 
 public:
     ScDBCollection(ScDocument* pDocument);
@@ -204,6 +230,9 @@ public:
 
     NamedDBs& getNamedDBs();
     const NamedDBs& getNamedDBs() const;
+
+    AnonDBs& getAnonDBs();
+    const AnonDBs& getAnonDBs() const;
 
     const ScDBData* GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Bool bStartOnly) const;
     ScDBData* GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Bool bStartOnly);
@@ -225,13 +254,6 @@ public:
     void            SetRefreshHandler( const Link& rLink )
                         { aRefreshHandler = rLink; }
     const Link&     GetRefreshHandler() const   { return aRefreshHandler; }
-
-    const ScDBData* findAnonAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) const;
-    const ScDBData* findAnonByRange(const ScRange& rRange) const;
-    ScDBData* getAnonByRange(const ScRange& rRange);
-    void insertAnonRange(ScDBData* pData);
-
-    const AnonDBsType& getAnonRanges() const;
 
     bool empty() const;
     bool operator== (const ScDBCollection& r) const;

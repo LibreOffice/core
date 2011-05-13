@@ -2295,7 +2295,8 @@ uno::Any SAL_CALL ScDatabaseRangesObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    if (nIndex < 0 || nIndex > ::std::numeric_limits<size_t>::max())
+    sal_Int32 nUpper = ::std::numeric_limits<size_t>::max();
+    if (nIndex < 0 || nIndex > nUpper)
         throw lang::IndexOutOfBoundsException();
 
     uno::Reference<sheet::XDatabaseRange> xRange(GetObjectByIndex_Impl(static_cast<size_t>(nIndex)));

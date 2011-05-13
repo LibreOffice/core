@@ -340,7 +340,7 @@ ScDBData* ScDocShell::GetAnonymousDBData(const ScRange& rRange)
     if (!pColl)
         return NULL;
 
-    ScDBData* pData = pColl->getAnonByRange(rRange);
+    ScDBData* pData = pColl->getAnonDBs().getByRange(rRange);
     if (!pData)
         return NULL;
 
