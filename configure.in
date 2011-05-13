@@ -325,7 +325,7 @@ AC_ARG_ENABLE(build-mozilla,
          the mozilla source code but take precompiled zips.]),
 ,)
 
-AC_ARG_ENABLE(nss_module,
+AC_ARG_ENABLE(nss-module,
     AS_HELP_STRING([--disable-nss-module],
         [Whether to use provided NSS module.]),
 ,enable_nss_module=yes)
