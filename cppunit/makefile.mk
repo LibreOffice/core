@@ -40,6 +40,8 @@ PATCH_FILES = solarisfinite.patch warnings.patch windows.patch ldflags.patch aix
     # warnings.patch: see <https://sourceforge.net/tracker/?func=detail&
     #  aid=2912630&group_id=11795&atid=311795>
 
+.IF "$(CROSS_COMPILING)==""
+
 .IF "$(OS)" == "WNT"
 .IF "$(COM)" == "MSC"
 
@@ -93,10 +95,6 @@ OUT2BIN = ooo-install/bin/DllPlugInTester.exe \
     ooo-install/bin/cygcppunit-1-12-1.dll
 OUT2LIB = ooo-install/lib/libcppunit.dll.a
 
-.INCLUDE: set_ext.mk
-.INCLUDE: target.mk
-.INCLUDE: tg_ext.mk
-
 .ENDIF # "$(COM)" == "GCC"
 .ENDIF # "$(COM)" == "MSC"
 
@@ -136,8 +134,9 @@ OUT2LIB = ooo-install/lib/libcppunit-1.12.so.1.0
 OUT2LIB = ooo-install/lib/libcppunit-1.12.so.1
 .END
 
+.END
+.ENDIF
+
 .INCLUDE: set_ext.mk
 .INCLUDE: target.mk
 .INCLUDE: tg_ext.mk
-
-.END
