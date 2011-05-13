@@ -504,9 +504,10 @@ sal_Bool ScRangeStringConverter::GetRangeFromString(
             if ( aUIString.GetChar(0) == (sal_Unicode) '.' )
                 aUIString.Erase( 0, 1 );
             bResult = ((rRange.aStart.Parse( aUIString, const_cast<ScDocument*> (pDocument), eConv) & SCA_VALID) == SCA_VALID);
-            if (!bResult && eConv != eConv)
+            ::formula::FormulaGrammar::AddressConvention eConvUI = pDocument->GetAddressConvention();
+            if (!bResult && eConv != eConvUI)
                 bResult = ((rRange.aStart.Parse(
-                    aUIString, const_cast<ScDocument*>(pDocument), eConv) & SCA_VALID) == SCA_VALID);
+                    aUIString, const_cast<ScDocument*>(pDocument), eConvUI) & SCA_VALID) == SCA_VALID);
             rRange.aEnd = rRange.aStart;
         }
         else
@@ -531,12 +532,14 @@ sal_Bool ScRangeStringConverter::GetRangeFromString(
                                 eConv) & SCA_VALID) == SCA_VALID) &&
                           ((rRange.aEnd.Parse( aUIString.Copy((xub_StrLen)nIndex+1), const_cast<ScDocument*>(pDocument),
                                 eConv) & SCA_VALID) == SCA_VALID);
-                if (!bResult && eConv != eConv)
+
+                ::formula::FormulaGrammar::AddressConvention eConvUI = pDocument->GetAddressConvention();
+                if (!bResult && eConv != eConvUI)
                 {
                     bResult = ((rRange.aStart.Parse( aUIString.Copy(0, (xub_StrLen)nIndex), const_cast<ScDocument*>(pDocument),
-                                    eConv) & SCA_VALID) == SCA_VALID) &&
+                                    eConvUI) & SCA_VALID) == SCA_VALID) &&
                               ((rRange.aEnd.Parse( aUIString.Copy((xub_StrLen)nIndex+1), const_cast<ScDocument*>(pDocument),
-                                    eConv) & SCA_VALID) == SCA_VALID);
+                                    eConvUI) & SCA_VALID) == SCA_VALID);
                 }
             }
         }
