@@ -2052,7 +2052,7 @@ void PPDContext::getUnconstrainedValues( const PPDKey* pKey, ::std::list< const 
 
 // -------------------------------------------------------------------
 
-void* PPDContext::getStreamableBuffer( sal_uLong& rBytes ) const
+char* PPDContext::getStreamableBuffer( sal_uLong& rBytes ) const
 {
     rBytes = 0;
     if( ! m_aCurrentValues.size() )
@@ -2098,14 +2098,14 @@ void* PPDContext::getStreamableBuffer( sal_uLong& rBytes ) const
 
 // -------------------------------------------------------------------
 
-void PPDContext::rebuildFromStreamBuffer( void* pBuffer, sal_uLong nBytes )
+void PPDContext::rebuildFromStreamBuffer( char* pBuffer, sal_uLong nBytes )
 {
     if( ! m_pParser )
         return;
 
     m_aCurrentValues.clear();
 
-    char* pRun = (char*)pBuffer;
+    char* pRun = pBuffer;
     while( nBytes && *pRun )
     {
         ByteString aLine( pRun );

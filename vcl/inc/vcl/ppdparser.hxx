@@ -324,8 +324,8 @@ public:
     void getUnconstrainedValues( const PPDKey*, ::std::list< const PPDValue* >& rValues );
 
     // for printer setup
-    void*   getStreamableBuffer( sal_uLong& rBytes ) const;
-    void    rebuildFromStreamBuffer( void* pBuffer, sal_uLong nBytes );
+    char*   getStreamableBuffer( sal_uLong& rBytes ) const;
+    void    rebuildFromStreamBuffer( char* pBuffer, sal_uLong nBytes );
 
     // convenience
     int getRenderResolution() const;
