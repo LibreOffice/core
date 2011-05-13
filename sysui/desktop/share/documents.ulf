@@ -67,6 +67,18 @@ en-US = "HTML Document Template"
 [extension]
 en-US = "%PRODUCTNAME Extension"
 
+[ms-excel-sheet]
+en-US = "Microsoft Excel Worksheet"
+
+[ms-powerpoint-presentation]
+en-US = "Microsoft PowerPoint Presentation"
+
+[ms-word-document]
+en-US = "Microsoft Word Document"
+
+[ms-word-document2]
+en-US = "Microsoft Word Document"
+
 [ms-excel-sheet-12]
 en-US = "Microsoft Excel Worksheet"
 
