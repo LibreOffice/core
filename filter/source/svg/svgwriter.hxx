@@ -114,7 +114,6 @@ private:
 
                             SVGAttributeWriter();
 
-    void                    ImplGetColorStr( const Color& rColor, ::rtl::OUString& rColorStr );
     double                  ImplRound( double fVal, sal_Int32 nDecs = 3 );
 
 public:
@@ -123,7 +122,6 @@ public:
     virtual                 ~SVGAttributeWriter();
 
     ::rtl::OUString         GetFontStyle( const Font& rFont );
-    ::rtl::OUString         GetColorStyle( const Color& rColor );
     ::rtl::OUString         GetPaintStyle( const Color& rLineColor, const Color& rFillColor, const LineInfo* pLineInfo );
     void                    AddColorAttr( const char* pColorAttrName, const char* pColorOpacityAttrName, const Color& rColor );
     void                    AddGradientDef( const Rectangle& rObjRect,const Gradient& rGradient, ::rtl::OUString& rGradientId );
@@ -131,6 +129,8 @@ public:
                                           const Rectangle* pObjBoundRect = NULL, const Gradient* pFillGradient = NULL );
 
     void                    SetFontAttr( const Font& rFont );
+
+    static void             ImplGetColorStr( const Color& rColor, ::rtl::OUString& rColorStr );
 };
 
 struct SVGShapeDescriptor
@@ -165,6 +165,9 @@ class SVGActionWriter
 {
 private:
 
+    sal_Int32                               mnCurGradientId;
+    sal_Int32                               mnCurMaskId;
+    sal_Int32                               mnCurPatternId;
     Stack                                   maContextStack;
     ::std::auto_ptr< SVGShapeDescriptor >   mapCurShape;
     SVGExport&                              mrExport;
@@ -194,13 +197,20 @@ private:
                                            sal_Bool bApplyMapping = sal_True );
     void                    ImplWriteEllipse( const Point& rCenter, long nRadX, long nRadY,
                                               sal_Bool bApplyMapping = sal_True );
+    void                    ImplWritePattern( const PolyPolygon& rPolyPoly, const Hatch* pHatch, const Gradient* pGradient, sal_uInt32 nWriteFlags );
     void                    ImplWritePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bool bLineOnly,
                                                   sal_Bool bApplyMapping = sal_True );
     void                    ImplWriteShape( const SVGShapeDescriptor& rShape, sal_Bool bApplyMapping = sal_True );
     void                    ImplWriteGradientEx( const PolyPolygon& rPolyPoly, const Gradient& rGradient, sal_uInt32 nWriteFlags,
                                                  sal_Bool bApplyMapping = sal_True );
+    void                    ImplWriteGradientLinear( const PolyPolygon& rPolyPoly, const Gradient& rGradient );
+    void                    ImplWriteGradientStop( const Color& rColor, double fOffset );
+    Color                   ImplGetColorWithIntensity( const Color& rColor, sal_uInt16 nIntensity );
+    Color                   ImplGetGradientColor( const Color& rStartColor, const Color& rEndColor, double fOffset );
+    void                    ImplWriteMask( GDIMetaFile& rMtf, const Point& rDestPt, const Size& rDestSize, const Gradient& rGradient, sal_uInt32 nWriteFlags );
     void                    ImplWriteText( const Point& rPos, const String& rText, const sal_Int32* pDXArray, long nWidth,
                                            sal_Bool bApplyMapping = sal_True );
+    void                    ImplWriteText( const Point& rPos, const String& rText, const sal_Int32* pDXArray, long nWidth, Color aTextColor, sal_Bool bApplyMapping );
     void                    ImplWriteBmp( const BitmapEx& rBmpEx, const Point& rPt, const Size& rSz, const Point& rSrcPt, const Size& rSrcSz,
                                           sal_Bool bApplyMapping = sal_True );
 

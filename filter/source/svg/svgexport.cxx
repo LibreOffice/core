@@ -845,6 +845,8 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
                 {
                     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", implGetClassFromShape( rxShape ) );
                     SvXMLElementExport aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
+                    OUString    aId( B2UCONST( "DrawingGroup_" ) );
+                    OUString    aObjName( implGetValidIDFromInterface( rxShape, true ) ), aObjDesc;
 
                     Reference< XExtendedDocumentHandler > xExtDocHandler( mpSVGExport->GetDocHandler(), UNO_QUERY );
 

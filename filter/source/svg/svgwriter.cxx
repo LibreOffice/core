@@ -36,6 +36,8 @@
 #include "svgwriter.hxx"
 #include <vcl/unohelp.hxx>
 
+using ::rtl::OUString;
+
 // -----------
 // - statics -
 // -----------
@@ -386,6 +388,9 @@ void SVGAttributeWriter::SetFontAttr( const Font& rFont )
 // -------------------
 
 SVGActionWriter::SVGActionWriter( SVGExport& rExport, SVGFontExport& rFontExport ) :
+    mnCurGradientId( 1 ),
+    mnCurMaskId( 1 ),
+    mnCurPatternId( 1 ),
     mrExport( rExport ),
     mrFontExport( rFontExport ),
     mpContext( NULL ),
@@ -704,7 +709,6 @@ void SVGActionWriter::ImplWriteShape( const SVGShapeDescriptor& rShape, sal_Bool
 void SVGActionWriter::ImplWritePattern( const PolyPolygon& rPolyPoly,
                                         const Hatch* pHatch,
                                         const Gradient* pGradient,
-                                        const rtl::OUString* pStyle,
                                         sal_uInt32 nWriteFlags )
 {
     if( rPolyPoly.Count() )
@@ -713,18 +717,20 @@ void SVGActionWriter::ImplWritePattern( const PolyPolygon& rPolyPoly,
 
         ::rtl::OUString aPatternId;
         aPatternId += B2UCONST( "pattern" );
-        aPatternId += GetValueString( ImplGetNextPatternId() );
+        aPatternId += OUString::valueOf( mnCurPatternId++ );
 
         {
             SvXMLElementExport aElemDefs( mrExport, XML_NAMESPACE_NONE, aXMLElemDefs, sal_True, sal_True );
 
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrId, aPatternId.GetString() );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrId, aPatternId );
 
-            Rectangle aRect( ImplMap( rPolyPoly.GetBoundRect() ) );
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, GetValueString( aRect.Left() ) );
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, GetValueString( aRect.Top() ) );
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrWidth, GetValueString( aRect.GetWidth() ) );
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrHeight, GetValueString( aRect.GetHeight() ) );
+            Rectangle aRect;
+            ImplMap( rPolyPoly.GetBoundRect(), aRect );
+
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, OUString::valueOf( aRect.Left() ) );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, OUString::valueOf( aRect.Top() ) );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrWidth, OUString::valueOf( aRect.GetWidth() ) );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrHeight, OUString::valueOf( aRect.GetHeight() ) );
 
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrPatternUnits, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "userSpaceOnUse") ) );
 
@@ -736,11 +742,11 @@ void SVGActionWriter::ImplWritePattern( const PolyPolygon& rPolyPoly,
                 ::rtl::OUString aTransform;
                 aTransform += B2UCONST( "translate" );
                 aTransform += B2UCONST( "(" );
-                aTransform += GetValueString( -aRect.Left() );
+                aTransform += OUString::valueOf( -aRect.Left() );
                 aTransform += B2UCONST( "," );
-                aTransform += GetValueString( -aRect.Top() );
+                aTransform += OUString::valueOf( -aRect.Top() );
                 aTransform += B2UCONST( ")" );
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTransform, aTransform.GetString() );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTransform, aTransform );
 
                 {
                     SvXMLElementExport aElemG2( mrExport, XML_NAMESPACE_NONE, aXMLElemG, sal_True, sal_True );
@@ -750,19 +756,18 @@ void SVGActionWriter::ImplWritePattern( const PolyPolygon& rPolyPoly,
                         mpVDev->AddHatchActions( rPolyPoly, *pHatch, aTmpMtf );
                     else if ( pGradient )
                         mpVDev->AddGradientActions( rPolyPoly.GetBoundRect(), *pGradient, aTmpMtf );
-                    ImplWriteActions( aTmpMtf, pStyle, nWriteFlags );
+                    ImplWriteActions( aTmpMtf, nWriteFlags, NULL );
                 }
             }
         }
 
         ::rtl::OUString aPatternStyle;
         aPatternStyle += B2UCONST( "fill:url(#" );
-        aPatternStyle += aPatternId.GetString();
+        aPatternStyle += aPatternId;
         aPatternStyle += B2UCONST( ")" );
 
-        {
-            ImplWritePolyPolygon( rPolyPoly, sal_False, &aPatternStyle.GetString() );
-        }
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStyle, aPatternStyle );
+        ImplWritePolyPolygon( rPolyPoly, sal_False );
     }
 }
 
@@ -800,18 +805,19 @@ void SVGActionWriter::ImplWriteGradientLinear( const PolyPolygon& rPolyPoly,
 
         ::rtl::OUString aGradientId;
         aGradientId += B2UCONST( "gradient" );
-        aGradientId += GetValueString( ImplGetNextGradientId() );
+        aGradientId += OUString::valueOf( mnCurGradientId++ );
 
         {
             SvXMLElementExport aElemDefs( mrExport, XML_NAMESPACE_NONE, aXMLElemDefs, sal_True, sal_True );
 
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrId, aGradientId.GetString() );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrId, aGradientId );
             {
-                Rectangle aTmpRect;
-                Point aTmpCenter;
+                Rectangle aTmpRect, aRect;
+                Point aTmpCenter, aCenter;
+
                 rGradient.GetBoundRect( rPolyPoly.GetBoundRect(), aTmpRect, aTmpCenter );
-                const Rectangle aRect( ImplMap( aTmpRect) );
-                const Point aCenter( ImplMap( aTmpCenter) );
+                ImplMap( aTmpRect, aRect );
+                ImplMap( aTmpCenter, aCenter );
                 const sal_uInt16 nAngle = rGradient.GetAngle() % 3600;
 
                 Polygon aPoly( 2 );
@@ -823,10 +829,10 @@ void SVGActionWriter::ImplWriteGradientLinear( const PolyPolygon& rPolyPoly,
                 aPoly[ 1 ].Y() = aRect.Bottom();
                 aPoly.Rotate( aCenter, nAngle );
 
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX1, GetValueString( aPoly[ 0 ].X() ) );
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY1, GetValueString( aPoly[ 0 ].Y() ) );
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX2, GetValueString( aPoly[ 1 ].X() ) );
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY2, GetValueString( aPoly[ 1 ].Y() ) );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX1, OUString::valueOf( aPoly[ 0 ].X() ) );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY1, OUString::valueOf( aPoly[ 0 ].Y() ) );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX2, OUString::valueOf( aPoly[ 1 ].X() ) );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY2, OUString::valueOf( aPoly[ 1 ].Y() ) );
 
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrGradientUnits,
                                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "userSpaceOnUse" ) ) );
@@ -895,12 +901,11 @@ void SVGActionWriter::ImplWriteGradientLinear( const PolyPolygon& rPolyPoly,
         ::rtl::OUString aGradientStyle;
         aGradientStyle += B2UCONST( "fill:" );
         aGradientStyle += B2UCONST( "url(#" );
-        aGradientStyle += aGradientId.GetString();
+        aGradientStyle += aGradientId;
         aGradientStyle += B2UCONST( ")" );
 
-        {
-            ImplWritePolyPolygon( rPolyPoly, sal_False, &aGradientStyle.GetString() );
-        }
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStyle, aGradientStyle );
+        ImplWritePolyPolygon( rPolyPoly, sal_False );
     }
 }
 
@@ -908,11 +913,12 @@ void SVGActionWriter::ImplWriteGradientStop( const Color& rColor, double fOffset
 {
     mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrOffset, rtl::OUString::valueOf( fOffset ) );
 
-    ::rtl::OUString aStyle;
+    ::rtl::OUString aStyle, aColor;
     aStyle += B2UCONST( "stop-color:" );
-    aStyle += mpContext->GetColorStyle ( rColor );
+    SVGAttributeWriter::ImplGetColorStr ( rColor, aColor );
+    aStyle += aColor;
 
-    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStyle, aStyle.GetString() );
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStyle, aStyle );
     {
         SvXMLElementExport aElemStartStop( mrExport, XML_NAMESPACE_NONE, aXMLElemStop, sal_True, sal_True );
     }
@@ -952,7 +958,6 @@ void SVGActionWriter::ImplWriteMask( GDIMetaFile& rMtf,
                                      const Point& rDestPt,
                                      const Size& rDestSize,
                                      const Gradient& rGradient,
-                                     const rtl::OUString* pStyle,
                                      sal_uInt32 nWriteFlags )
 {
     Point          aSrcPt( rMtf.GetPrefMapMode().GetOrigin() );
@@ -974,12 +979,12 @@ void SVGActionWriter::ImplWriteMask( GDIMetaFile& rMtf,
 
     ::rtl::OUString aMaskId;
     aMaskId += B2UCONST( "mask" );
-    aMaskId += GetValueString( ImplGetNextMaskId() );
+    aMaskId += OUString::valueOf( mnCurMaskId++ );
 
     {
         SvXMLElementExport aElemDefs( mrExport, XML_NAMESPACE_NONE, aXMLElemDefs, sal_True, sal_True );
 
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrId, aMaskId.GetString() );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrId, aMaskId );
         {
             SvXMLElementExport aElemMask( mrExport, XML_NAMESPACE_NONE, aXMLElemMask, sal_True, sal_True );
 
@@ -994,21 +999,21 @@ void SVGActionWriter::ImplWriteMask( GDIMetaFile& rMtf,
             aGradient.SetEndColor( aTmpColor );
             aGradient.SetEndIntensity( nTmpIntensity );
 
-            ImplWriteGradientEx( aPolyPolygon, aGradient, pStyle, nWriteFlags );
+            ImplWriteGradientEx( aPolyPolygon, aGradient, nWriteFlags );
         }
     }
 
     ::rtl::OUString aMaskStyle;
     aMaskStyle += B2UCONST( "mask:url(#" );
-    aMaskStyle += aMaskId.GetString();
+    aMaskStyle += aMaskId;
     aMaskStyle += B2UCONST( ")" );
-    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStyle, aMaskStyle.GetString() );
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStyle, aMaskStyle );
 
     {
         SvXMLElementExport aElemG( mrExport, XML_NAMESPACE_NONE, aXMLElemG, sal_True, sal_True );
 
         mpVDev->Push();
-        ImplWriteActions( rMtf, pStyle, nWriteFlags );
+        ImplWriteActions( rMtf, nWriteFlags, NULL );
         mpVDev->Pop();
     }
 }
@@ -1025,7 +1030,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
 
     if( !bTextSpecial )
     {
-        ImplWriteText( rPos, rText, pDXArray, nWidth, mpVDev->GetTextColor() );
+        ImplWriteText( rPos, rText, pDXArray, nWidth, mpVDev->GetTextColor(), bApplyMapping );
     }
     else
     {
@@ -1053,8 +1058,8 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
                 aPos += aOffset;
             }
 
-            ImplWriteText( aPos, rText, pDXArray, nWidth, aReliefColor );
-            ImplWriteText( rPos, rText, pDXArray, nWidth, aTextColor );
+            ImplWriteText( aPos, rText, pDXArray, nWidth, aReliefColor, bApplyMapping );
+            ImplWriteText( rPos, rText, pDXArray, nWidth, aTextColor, bApplyMapping );
         }
         else
         {
@@ -1072,34 +1077,34 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
 
                 Point aPos( rPos );
                 aPos += Point( nOff, nOff );
-                ImplWriteText( aPos, rText, pDXArray, nWidth, aShadowColor );
+                ImplWriteText( aPos, rText, pDXArray, nWidth, aShadowColor, bApplyMapping );
 
                 if( !aMetric.IsOutline() )
                 {
-                    ImplWriteText( rPos, rText, pDXArray, nWidth, aTextColor );
+                    ImplWriteText( rPos, rText, pDXArray, nWidth, aTextColor, bApplyMapping );
                 }
             }
 
             if( aMetric.IsOutline() )
             {
                 Point aPos = rPos + Point( -6, -6 );
-                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor() );
+                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor(), bApplyMapping );
                 aPos = rPos + Point( +6, +6);
-                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor() );
+                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor(), bApplyMapping );
                 aPos = rPos + Point( -6, +0);
-                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor() );
+                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor(), bApplyMapping );
                 aPos = rPos + Point( -6, +6);
-                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor() );
+                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor(), bApplyMapping );
                 aPos = rPos + Point( +0, +6);
-                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor() );
+                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor(), bApplyMapping );
                 aPos = rPos + Point( +0, -6);
-                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor() );
+                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor(), bApplyMapping );
                 aPos = rPos + Point( +6, -1);
-                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor() );
+                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor(), bApplyMapping );
                 aPos = rPos + Point( +6, +0);
-                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor() );
+                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor(), bApplyMapping );
 
-                ImplWriteText( rPos, rText, pDXArray, nWidth, Color( COL_WHITE ) );
+                ImplWriteText( rPos, rText, pDXArray, nWidth, Color( COL_WHITE ), bApplyMapping );
             }
         }
     }
@@ -1107,9 +1112,9 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
 
 void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
                                      const sal_Int32* pDXArray, long nWidth,
-                                     Color aTextColor )
+                                     Color aTextColor, sal_Bool bApplyMapping )
 {
-    sal_Int32                               nLen = rText.Len(), i;
+    sal_Int32                               nLen = rText.Len();
     Size                                    aNormSize;
     ::std::auto_ptr< sal_Int32 >            apTmpArray;
     sal_Int32*                              pDX;
@@ -1169,6 +1174,8 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTransform, aTransform );
     }
 
+    mpContext->AddPaintAttr( COL_TRANSPARENT, aTextColor );
+
     if( nLen > 1 )
     {
         aNormSize.Width() = pDX[ nLen - 2 ] + mpVDev->GetTextWidth( rText.GetChar(  nLen - 1 ) );
@@ -1177,7 +1184,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
         {
             const double fFactor = (double) nWidth / aNormSize.Width();
 
-                for(long i = 0; i < ( nLen - 1 ); i++ )
+            for( long i = 0; i < ( nLen - 1 ); i++ )
                 pDX[ i ] = FRound( pDX[ i ] * fFactor );
         }
         else
@@ -1303,10 +1310,10 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
                     aSz = rSz;
                 }
 
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, GetValueString( aPt.X() ) );
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, GetValueString( aPt.Y() ) );
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrWidth, GetValueString( aSz.Width() ) );
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrHeight, GetValueString( aSz.Height() ) );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, OUString::valueOf( aPt.X() ) );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, OUString::valueOf( aPt.Y() ) );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrWidth, OUString::valueOf( aSz.Width() ) );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrHeight, OUString::valueOf( aSz.Height() ) );
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, aBuffer.makeStringAndClear() );
                 {
                     SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemImage, sal_True, sal_True );
@@ -1509,7 +1516,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
                     const MetaHatchAction*  pA = (const MetaHatchAction*) pAction;
-                    ImplWritePattern( pA->GetPolyPolygon(), &pA->GetHatch(), NULL, pStyle, nWriteFlags );
+                    ImplWritePattern( pA->GetPolyPolygon(), &pA->GetHatch(), NULL, nWriteFlags );
                 }
             }
             break;
@@ -1542,7 +1549,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     const MetaFloatTransparentAction*   pA = (const MetaFloatTransparentAction*) pAction;
                     GDIMetaFile                         aTmpMtf( pA->GetGDIMetaFile() );
                     ImplWriteMask( aTmpMtf, pA->GetPoint(), pA->GetSize(),
-                                   pA->GetGradient(), pStyle, nWriteFlags  );
+                                   pA->GetGradient(), nWriteFlags  );
                 }
             }
             break;

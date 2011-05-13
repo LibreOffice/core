@@ -285,27 +285,6 @@ public:
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString SVGFilter_getImplementationName ()
-    throw ( ::com::sun::star::uno::RuntimeException );
-
-// -----------------------------------------------------------------------------
-
-sal_Bool SAL_CALL SVGFilter_supportsService( const ::rtl::OUString& ServiceName )
-    throw ( ::com::sun::star::uno::RuntimeException );
-
-// -----------------------------------------------------------------------------
-
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL SVGFilter_getSupportedServiceNames(  )
-    throw ( ::com::sun::star::uno::RuntimeException );
-
-// -----------------------------------------------------------------------------
-
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-SAL_CALL SVGFilter_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr)
-    throw ( ::com::sun::star::uno::Exception );
-
-// -----------------------------------------------------------------------------
-
 class SvStream;
 class Graphic;
 

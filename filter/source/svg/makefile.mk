@@ -46,7 +46,6 @@ VISIBILITY_HIDDEN=TRUE
 SLOFILES= \
             $(SLO)$/b2dellipse.obj	\
             $(SLO)$/parserfragments.obj \
-			$(SLO)$/svguno.obj			\
             $(SLO)$/svgdialog.obj		\
             $(SLO)$/impsvgdialog.obj	\
             $(SLO)$/svgexport.obj		\
