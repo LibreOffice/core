@@ -127,7 +127,15 @@ XSLTLIB!:=$(XSLTLIB) # expand dmake variables for xslt-config
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure PATH="..$/..$/..$/bin:$$PATH"
-CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-threads --with-openssl-digests --with-xml-parser=libxml --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml
+.IF "$(OS)"=="IOS"
+CONFIGURE_FLAGS=--disable-shared
+.ELSE
+CONFIGURE_FLAGS=--disable-static
+.ENDIF
+CONFIGURE_FLAGS+= --disable-gtk-doc --with-threads --with-openssl-digests --with-xml-parser=libxml --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml
+.IF "$(CROSS_COMPILING)"!=""
+CONFIGURE_FLAGS+= --build="$(BUILD_PLATFORM)" --host="$(HOST_PLATFORM)"
+.ENDIF
 BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
@@ -138,6 +146,9 @@ OUT2INC+=src$/rasqal.h
 
 .IF "$(OS)"=="MACOSX"
 OUT2LIB+=src$/.libs$/librasqal.$(RASQAL_MAJOR).dylib src$/.libs$/librasqal.dylib
+OUT2BIN+=src/rasqal-config
+.ELIF "$(OS)"=="IOS"
+OUT2LIB+=src$/.libs$/librasqal.a
 OUT2BIN+=src/rasqal-config
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"

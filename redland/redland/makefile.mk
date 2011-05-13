@@ -131,7 +131,15 @@ XSLTLIB!:=$(XSLTLIB) # expand dmake variables for xslt-config
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure PATH="..$/..$/..$/bin:$$PATH"
-CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-threads --with-openssl-digests --with-xml-parser=libxml --with-raptor=system --with-rasqual=system --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml
+.IF "$(OS)"=="IOS"
+CONFIGURE_FLAGS=--disable-shared
+.ELSE
+CONFIGURE_FKAGS=--disable-static
+.ENDIF
+CONFIGURE_FLAGS+= --disable-gtk-doc --with-threads --with-openssl-digests --with-xml-parser=libxml --with-raptor=system --with-rasqual=system --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml
+.IF "$(CROSS_COMPILING)"!=""
+CONFIGURE_FLAGS+= --build="$(BUILD_PLATFORM)" --host="$(HOST_PLATFORM)"
+.ENDIF
 BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
@@ -142,6 +150,8 @@ OUT2INC+=librdf$/*.h
 
 .IF "$(OS)"=="MACOSX"
 OUT2LIB+=librdf$/.libs$/librdf.$(REDLAND_MAJOR).dylib
+.ELIF "$(OS)"=="IOS"
+OUT2LIB+=librdf$/.libs$/librdf.a
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
 OUT2LIB+=librdf$/.libs$/*.a

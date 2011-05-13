@@ -1,0 +1,23 @@
+--- misc/raptor-1.4.18/configure.ac
++++ misc/build/raptor-1.4.18/configure.ac
+@@ -295,7 +295,9 @@
+   return is_c99("1234567");
+ }], AC_MSG_RESULT(no),
+     AC_DEFINE(HAVE_C99_VSNPRINTF, 1, [vsnprint has C99 compatible return value])
+-    AC_MSG_RESULT(yes))
++    AC_MSG_RESULT(yes),
++    AC_DEFINE(HAVE_C99_VSNPRINTF, 1, [vsnprint has C99 compatible return value])
++    AC_MSG_RESULT([guessing yes]))
+ fi
+
+ need_libm=no
+@@ -456,7 +458,8 @@
+             AC_DEFINE(EXPAT_UTF8_BOM_CRASH, 1, [does expat crash when it sees an initial UTF8 BOM?])
+             AC_MSG_RESULT(no)
+             AC_MSG_WARN(The available expat crashes on XML UTF-8 BOM in documents)
+-            AC_MSG_WARN(Fix either by using libxml or expat 1.95.2+))
++            AC_MSG_WARN(Fix either by using libxml or expat 1.95.2+),
++	    AC_MSG_RESULT(guessing yes))
+
+   else
+     AC_MSG_RESULT(no)

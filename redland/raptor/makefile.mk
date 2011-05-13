@@ -59,6 +59,11 @@ OOO_PATCH_FILES= \
     $(TARFILE_NAME).patch.win32 \
     raptor-aix.patch
 
+.IF "$(CROSS_COMPILING)"!=""
+OOO_PATCH_FILES += \
+    $(TARFILE_NAME).patch.cross
+.ENDIF
+
 PATCH_FILES=$(OOO_PATCH_FILES)
 
 
@@ -129,9 +134,18 @@ XSLTLIB!:=$(XSLTLIB) # expand dmake variables for xslt-config
 .EXPORT: XSLTLIB
 
 CONFIGURE_DIR=
+.IF "$(OS)"=="IOS"
+CONFIGURE_ACTION=autoconf; .$/configure
+CONFIGURE_FLAGS=--disable-shared
+.ELSE
 CONFIGURE_ACTION=.$/configure
+CONFIGURE_FKAGS=--disable-static
+.ENDIF
 # do not enable grddl parser (#i93768#)
-CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-threads --with-openssl-digests --with-xml-parser=libxml --enable-parsers="rdfxml ntriples turtle trig guess rss-tag-soup" --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml
+CONFIGURE_FLAGS+= --disable-gtk-doc --with-threads --with-openssl-digests --with-xml-parser=libxml --enable-parsers="rdfxml ntriples turtle trig guess rss-tag-soup" --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml
+.IF "$(CROSS_COMPILING)"!=""
+CONFIGURE_FLAGS+= --build="$(BUILD_PLATFORM)" --host="$(HOST_PLATFORM)"
+.ENDIF
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
@@ -142,6 +156,9 @@ OUT2INC+=src$/raptor.h
 
 .IF "$(OS)"=="MACOSX"
 OUT2LIB+=src$/.libs$/libraptor.$(RAPTOR_MAJOR).dylib src$/.libs$/libraptor.dylib
+OUT2BIN+=src/raptor-config
+.ELIF "$(OS)"=="IOS"
+OUT2LIB+=src$/.libs$/libraptor.a
 OUT2BIN+=src/raptor-config
 .ELIF "$(OS)"=="AIX"
 OUT2LIB+=src$/.libs$/libraptor.so.$(RAPTOR_MAJOR) src$/.libs$/libraptor.so
