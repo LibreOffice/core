@@ -40,6 +40,8 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/sfxdefs.hxx>
 
+#include <boost/utility.hpp>
+
 class Window;
 class SfxFilter;
 class SfxFilterArr_Impl;
@@ -124,10 +126,10 @@ public:
 
 class SfxFilterMatcher_Impl;
 
-class SFX2_DLLPUBLIC SfxFilterMatcher
+class SFX2_DLLPUBLIC SfxFilterMatcher : private boost::noncopyable
 {
     friend class SfxFilterMatcherIter;
-    SfxFilterMatcher_Impl *pImpl;
+    SfxFilterMatcher_Impl &m_rImpl;
 public:
                         SfxFilterMatcher( const String& rFact );
                         SfxFilterMatcher();
@@ -152,17 +154,18 @@ public:
 };
 
 class SfxFilterContainer_Impl;
-class SFX2_DLLPUBLIC SfxFilterMatcherIter
+class SFX2_DLLPUBLIC SfxFilterMatcherIter : private boost::noncopyable
+
 {
     SfxFilterFlags nOrMask;
     SfxFilterFlags nAndMask;
     sal_uInt16 nCurrent;
-    const SfxFilterMatcher_Impl *pMatch;
+    const SfxFilterMatcher_Impl &m_rMatch;
 
     SAL_DLLPRIVATE const SfxFilter* Find_Impl();
 
 public:
-    SfxFilterMatcherIter( const SfxFilterMatcher* pMatchP, SfxFilterFlags nMask = 0, SfxFilterFlags nNotMask = SFX_FILTER_NOTINSTALLED );
+    SfxFilterMatcherIter( const SfxFilterMatcher& rMatcher, SfxFilterFlags nMask = 0, SfxFilterFlags nNotMask = SFX_FILTER_NOTINSTALLED );
     const SfxFilter* First();
     const SfxFilter* Next();
 };

@@ -351,7 +351,7 @@ const SfxFilter* SfxObjectFactory::GetTemplateFilter() const
 {
     sal_uInt16 nVersion=0;
     SfxFilterMatcher aMatcher ( String::CreateFromAscii( pShortName ) );
-    SfxFilterMatcherIter aIter( &aMatcher );
+    SfxFilterMatcherIter aIter( aMatcher );
     const SfxFilter *pFilter = 0;
     const SfxFilter *pTemp = aIter.First();
     while ( pTemp )
