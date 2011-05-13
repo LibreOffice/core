@@ -790,7 +790,10 @@ void Desktop::DeInit()
 
         // clear lockfile
         if (m_pLockfile != NULL)
-            m_pLockfile->clean();
+        {
+            delete m_pLockfile;
+            m_pLockfile = NULL;
+        }
 
         OfficeIPCThread::DisableOfficeIPCThread();
         if( pSignalHandler )
@@ -851,7 +854,12 @@ sal_Bool Desktop::QueryExit()
         {
         }
 
-        if (m_pLockfile != NULL) m_pLockfile->clean();
+        if (m_pLockfile != NULL)
+        {
+            delete m_pLockfile;
+            m_pLockfile = NULL;
+        }
+
     }
 
     return bExit;
@@ -1466,9 +1474,12 @@ sal_uInt16 Desktop::Exception(sal_uInt16 nError)
 
         default:
         {
-            if (m_pLockfile != NULL) {
-                m_pLockfile->clean();
+            if (m_pLockfile != NULL)
+            {
+                delete m_pLockfile;
+                m_pLockfile = NULL;
             }
+
             if( bRestart )
             {
                 OfficeIPCThread::DisableOfficeIPCThread();
