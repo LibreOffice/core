@@ -497,7 +497,7 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
     // Otherwise, an additional paragraph is exported for a graphic, which is
     // forced to be treated as inline, because it's anchored inside another frame.
     if ( !rFrame.IsInline() &&
-         ( ((eAn == FLY_AT_PARA) && ( bWrtWW8 || !bIsInTable )) ||
+         ( ((eAn == FLY_AT_PARA) && ( bWrtWW8 || !IsInTable() )) ||
            (eAn == FLY_AT_PAGE)) )
     // <--
     {

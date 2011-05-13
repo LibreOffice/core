@@ -539,8 +539,6 @@ public:
     sal_uInt8 bOutFirstPage : 1;     // write Attrset of FirstPageDesc
     sal_uInt8 bOutTable : 1;         // Tabelle wird ausgegeben
                                 //    ( wird zB bei Flys in Tabelle zurueckgesetzt )
-    sal_uInt8 bIsInTable : 1;        // wird sind innerhalb der Ausgabe einer Tabelle
-                                //    ( wird erst nach der Tabelle zurueckgesetzt )
     sal_uInt8 bOutGrf : 1;           // Grafik wird ausgegeben
     sal_uInt8 bInWriteEscher : 1;    // in write textboxes
     sal_uInt8 bStartTOX : 1;         // true: a TOX is startet
@@ -571,6 +569,9 @@ public:
 
     /// Iterate through the nodes and call the appropriate OutputNode() on them.
     void WriteText();
+
+    /// Return whether cuurently exported node is in table.
+    bool IsInTable() const;
 
     /// Set the pCurPam appropriately and call WriteText().
     ///

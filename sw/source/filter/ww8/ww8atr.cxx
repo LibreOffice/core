@@ -1472,7 +1472,7 @@ void WW8AttributeOutput::CharRotate( const SvxCharRotateItem& rRotate )
     if ( !rRotate.GetValue() )
         return;
 
-    if ( m_rWW8Export.bWrtWW8 && !m_rWW8Export.bIsInTable )
+    if ( m_rWW8Export.bWrtWW8 && !m_rWW8Export.IsInTable() )
     {
         // #i36867 In word the text in a table is rotated via the TC or NS_sprm::LN_TTextFlow
         // This means you can only rotate all or none of the text adding NS_sprm::LN_CEastAsianLayout
