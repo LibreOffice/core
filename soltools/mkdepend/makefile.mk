@@ -29,6 +29,7 @@ PRJNAME=soltools
 TARGET=make_makedepend
 PRJ=..
 TARGETTYPE=CUI
+TARGETPLATFORM=BUILD
 LIBTARGET=NO
 # noadjust here to have dependencies over there
 noadjust=TRUE
