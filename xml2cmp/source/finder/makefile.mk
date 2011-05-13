@@ -30,6 +30,7 @@ PRJ=..$/..
 PRJNAME=xml2cmp
 TARGET=srvdepy
 TARGETTYPE=CUI
+TARGETPLATFORM=BUILD
 
 # --- Settings -----------------------------------------------------
 
@@ -37,14 +38,11 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
-
-
 # --- Files --------------------------------------------------------
 
 OBJFILES= \
     $(OBJ)$/dependy.obj	\
     $(OBJ)$/dep_main.obj
-
 
 # --- Targets ------------------------------------------------------
 
@@ -57,11 +55,7 @@ LIBSALCPPRT=$(0)
 UWINAPILIB=$(0)
 .ENDIF
 
-
 APP1LIBS=	$(LB)$/$(TARGET).lib $(LB)$/x2c_xcdl.lib $(LB)$/x2c_support.lib
 APP1DEPN=	$(LB)$/$(TARGET).lib $(LB)$/x2c_xcdl.lib $(LB)$/x2c_support.lib
 
-
 .INCLUDE :  target.mk
-
-

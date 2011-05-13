@@ -30,16 +30,13 @@ PRJ=..$/..
 PRJNAME=xml2cmp
 TARGET=x2c_support
 TARGETTYPE=CUI
-
-
+TARGETPLATFORM=BUILD
 
 # --- Settings -----------------------------------------------------
 
 ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
-
-
 
 # --- Files --------------------------------------------------------
 
@@ -50,12 +47,7 @@ OBJFILES= \
     $(OBJ)$/syshelp.obj		\
     $(OBJ)$/badcast.obj
 
-
-
-
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-
-
 

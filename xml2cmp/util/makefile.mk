@@ -30,6 +30,7 @@ PRJ=..
 PRJNAME=xml2cmp
 TARGET=xml2cmp
 TARGETTYPE=CUI
+TARGETPLATFORM=BUILD
 
 # --- Settings -----------------------------------------------------
 ENABLE_EXCEPTIONS=TRUE
@@ -37,7 +38,6 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 
 # --- Files --------------------------------------------------------
-
 
 # --- Targets ------------------------------------------------------
 
@@ -52,5 +52,3 @@ APP1DEPN=   $(LB)$/x2c_xcd.lib $(LB)$/x2c_support.lib
 APP1RPATH=  NONE
 
 .INCLUDE :  target.mk
-
-

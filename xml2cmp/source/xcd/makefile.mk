@@ -30,10 +30,9 @@ PRJ=..$/..
 PRJNAME=xml2cmp
 TARGET=x2c_xcd
 TARGETTYPE=CUI
+TARGETPLATFORM=BUILD
 
 LIBTARGET=NO
-
-
 
 # --- Settings -----------------------------------------------------
 
@@ -41,10 +40,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
-
-
 # --- Files --------------------------------------------------------
-
 
 LIBONLYFILES=\
     $(OBJ)$/cr_html.obj		\
@@ -55,25 +51,18 @@ LIBONLYFILES=\
     $(OBJ)$/xmlelem.obj		\
     $(OBJ)$/xmltree.obj
 
-
 OBJFILES=\
     $(OBJ)$/main.obj		\
     $(LIBONLYFILES)
-
 
 LIB1TARGET=$(LB)$/$(TARGET).lib
 LIB1OBJFILES=\
     $(OBJFILES)
 
-
 LIB2TARGET=$(LB)$/$(TARGET)l.lib
 LIB2OBJFILES=\
     $(LIBONLYFILES)
 
-
-
-
 # --- Targets ------------------------------------------------------
-
 
 .INCLUDE :  target.mk
