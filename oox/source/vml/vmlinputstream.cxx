@@ -377,10 +377,6 @@ void InputStream::updateBuffer() throw (IOException, RuntimeException)
                 // no CDATA part - process the contents of the element
                 lclProcessElement( aBuffer, aElement );
             }
-            else
-            {
-                pcCurr = pcEnd;
-            }
         }
 
         maBuffer = aBuffer.makeStringAndClear();

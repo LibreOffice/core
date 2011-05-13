@@ -544,11 +544,11 @@ bool RichString::extractPlainString( OUString& orString, const Font* pFirstPorti
 
 void RichString::convert( const Reference< XText >& rxText, const Font* pFirstPortionFont ) const
 {
-    if (maFontPortions.size() == 1)
+    if (maTextPortions.size() == 1)
     {
         // Set text directly to the cell when the string has only one portion.
         // It's much faster this way.
-        RichStringPortion& rPtn = *maFontPortions.front();
+        RichStringPortion& rPtn = *maTextPortions.front();
         rxText->setString(rPtn.getText());
         rPtn.writeFontProperties(rxText, nXfId);
         return;

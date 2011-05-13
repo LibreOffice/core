@@ -622,12 +622,6 @@ ApiTokenSequence FormulaParserImpl::importBiffFormula( const CellAddress&, Formu
     return ApiTokenSequence();
 }
 
-void FormulaParserImpl::setFormula( FormulaContext& rContext, const ApiTokenSequence& rTokens )
-{
-    initializeImport( rContext );
-    finalizeImport( rTokens );
-}
-
 OUString FormulaParserImpl::resolveOleTarget( sal_Int32 nRefId, bool bUseRefSheets ) const
 {
     const ExternalLink* pExtLink = getExternalLinks().getExternalLink( nRefId, bUseRefSheets ).get();

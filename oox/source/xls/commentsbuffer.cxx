@@ -251,21 +251,7 @@ void Comment::finalizeImport()
         switch( getFilterType() )
         {
             case FILTER_OOXML:
-                if( const ::oox::vml::ShapeBase* pNoteShape = getVmlDrawing().getNoteShape( aNotePos ) )
                 {
-                    Reference< XSheetAnnotationsSupplier > xAnnosSupp( getSheet(), UNO_QUERY_THROW );
-                    Reference< XSheetAnnotations > xAnnos( xAnnosSupp->getAnnotations(), UNO_SET_THROW );
-                    xAnnos->insertNew( aNotePos, aNoteText );
-                    // receive craeted note from cell (insertNew does not return the note)
-                    Reference< XSheetAnnotationAnchor > xAnnoAnchor( getCell( aNotePos ), UNO_QUERY_THROW );
-                    Reference< XSheetAnnotation > xAnno( xAnnoAnchor->getAnnotation(), UNO_SET_THROW );
-                    Reference< XSheetAnnotationShapeSupplier > xAnnoShapeSupp( xAnno, UNO_QUERY_THROW );
-                    Reference< XShape > xAnnoShape( xAnnoShapeSupp->getAnnotationShape(), UNO_SET_THROW );
-                    Reference <XText> xText( xAnnoShape, UNO_QUERY_THROW );
-                    Reference <XTextRange> xTextRange( xText, UNO_QUERY_THROW );
-                    xTextRange->setString( OUString() ); // Clear contents
-                    maModel.mxText->convert( xText, -1 );
-
                     // Add shape formatting properties (autoFill, colHidden and rowHidden are dropped)
                     PropertySet aCommentPr( xAnnoShape );
                     aCommentPr.setProperty( PROP_TextFitToSize, maModel.mbAutoScale );
@@ -277,7 +263,6 @@ void Comment::finalizeImport()
                         xAnnoShape->setPosition( Point( maModel.maAnchor.X, maModel.maAnchor.Y ) );
                         xAnnoShape->setSize( Size( maModel.maAnchor.Width, maModel.maAnchor.Height ) );
                     }
-
 
                     // convert shape formatting
                     if( const ::oox::vml::ShapeBase* pNoteShape = getVmlDrawing().getNoteShape( aNotePos ) )
