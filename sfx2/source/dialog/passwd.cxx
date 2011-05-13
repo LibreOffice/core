@@ -165,6 +165,9 @@ SfxPasswordDialog::SfxPasswordDialog( Window* pParent, const String* pGroupText 
     // add second confirm line
     xEdits->addRow( &maConfirm2FT, &maConfirm2ED, -2, aEditSize );
 
+    // add password length warning line
+    xEdits->addWindow( &maMinLengthFT );
+
     // add a FixedLine
     FixedLine* pLine = new FixedLine( this, 0 );
     pLine->Show();
