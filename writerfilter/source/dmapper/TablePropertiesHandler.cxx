@@ -185,6 +185,7 @@ namespace dmapper {
             case NS_ooxml::LN_CT_TblPrBase_tblCellMar: //cell margins
             {
                 //contains LN_CT_TblCellMar_top, LN_CT_TblCellMar_left, LN_CT_TblCellMar_bottom, LN_CT_TblCellMar_right
+                // LN_CT_TblCellMar_start, LN_CT_TblCellMar_end
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                 if( pProperties.get())
                 {

@@ -17901,6 +17901,11 @@
           </element>
         </optional>
         <optional>
+          <element name="start">
+            <ref name="CT_TblWidth"/>
+          </element>
+        </optional>
+        <optional>
           <element name="left">
             <ref name="CT_TblWidth"/>
           </element>
@@ -17912,6 +17917,11 @@
         </optional>
         <optional>
           <element name="right">
+            <ref name="CT_TblWidth"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="end">
             <ref name="CT_TblWidth"/>
           </element>
         </optional>
@@ -22791,8 +22801,10 @@
     </resource>
     <resource name="CT_TblCellMar" resource="Properties" tag="table">
       <element name="top" tokenid="ooxml:CT_TblCellMar_top"/>
+      <element name="start" tokenid="ooxml:CT_TblCellMar_start"/>
       <element name="left" tokenid="ooxml:CT_TblCellMar_left"/>
       <element name="bottom" tokenid="ooxml:CT_TblCellMar_bottom"/>
+      <element name="end" tokenid="ooxml:CT_TblCellMar_end"/>
       <element name="right" tokenid="ooxml:CT_TblCellMar_right"/>
     </resource>
     <resource name="CT_TblBorders" resource="Properties" tag="table">

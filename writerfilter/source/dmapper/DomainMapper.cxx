@@ -2933,8 +2933,10 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     }
     break;
     case NS_ooxml::LN_CT_TblCellMar_top:
+    case NS_ooxml::LN_CT_TblCellMar_start:
     case NS_ooxml::LN_CT_TblCellMar_left:
     case NS_ooxml::LN_CT_TblCellMar_bottom:
+    case NS_ooxml::LN_CT_TblCellMar_end:
     case NS_ooxml::LN_CT_TblCellMar_right:
     {
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
@@ -2944,15 +2946,22 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             pProperties->resolve(*pMeasureHandler);
             sal_Int32 nMeasureValue = pMeasureHandler->getMeasureValue();
             PropertyIds eId = META_PROP_CELL_MAR_TOP;
+            bool rtl = false; // TODO
             switch(nSprmId)
             {
                 case NS_ooxml::LN_CT_TblCellMar_top:
+                break;
+                case NS_ooxml::LN_CT_TblCellMar_start:
+                    eId = rtl ? META_PROP_CELL_MAR_RIGHT : META_PROP_CELL_MAR_LEFT;
                 break;
                 case NS_ooxml::LN_CT_TblCellMar_left:
                     eId = META_PROP_CELL_MAR_LEFT;
                 break;
                 case NS_ooxml::LN_CT_TblCellMar_bottom:
                     eId = META_PROP_CELL_MAR_BOTTOM;
+                break;
+                case NS_ooxml::LN_CT_TblCellMar_end:
+                    eId = rtl ? META_PROP_CELL_MAR_LEFT : META_PROP_CELL_MAR_RIGHT;
                 break;
                 case NS_ooxml::LN_CT_TblCellMar_right:
                     eId = META_PROP_CELL_MAR_RIGHT;

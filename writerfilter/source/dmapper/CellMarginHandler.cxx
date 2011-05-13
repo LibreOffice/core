@@ -80,11 +80,24 @@ void CellMarginHandler::lcl_sprm(Sprm & rSprm)
     if( pProperties.get())
     {
         pProperties.get()->resolve( *this );
+        bool rtl = false; // TODO
         switch( rSprm.getId() )
         {
             case NS_ooxml::LN_CT_TblCellMar_top:
                 m_nTopMargin = m_nValue;
                 m_bTopMarginValid = true;
+            break;
+            case NS_ooxml::LN_CT_TblCellMar_start:
+                if( rtl )
+                {
+                    m_nRightMargin = m_nValue;
+                    m_bRightMarginValid = true;
+                }
+                else
+                {
+                    m_nLeftMargin = m_nValue;
+                    m_bLeftMarginValid = true;
+                }
             break;
             case NS_ooxml::LN_CT_TblCellMar_left:
                 m_nLeftMargin = m_nValue;
@@ -93,6 +106,18 @@ void CellMarginHandler::lcl_sprm(Sprm & rSprm)
             case NS_ooxml::LN_CT_TblCellMar_bottom:
                 m_nBottomMargin = m_nValue;
                 m_bBottomMarginValid = true;
+            break;
+            case NS_ooxml::LN_CT_TblCellMar_end:
+                if( rtl )
+                {
+                    m_nLeftMargin = m_nValue;
+                    m_bLeftMarginValid = true;
+                }
+                else
+                {
+                    m_nRightMargin = m_nValue;
+                    m_bRightMarginValid = true;
+                }
             break;
             case NS_ooxml::LN_CT_TblCellMar_right:
                 m_nRightMargin = m_nValue;
