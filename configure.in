@@ -1654,19 +1654,60 @@ dnl machine when doing cross-compilation
 dnl ===================================================================
 
 if test "$cross_compiling" = "yes"; then
-  export tmpdir=`mktemp -d conf.XXXXXX`
-  eval `(unset CC CXX CFLAGS
-    autoconf conf-for-build.in >$tmpdir/conf-for-build
+  AC_MSG_CHECKING([for BUILD platform configuration])
+  echo
+  export tmpdir=`mktemp -d conf-for-build.XXXXXX`
+  tar cf - \
+	configure \
+	config.guess \
+	solenv/inc/minor.mk \
+	solenv/inc/postset.mk \
+	set_soenv.in \
+	bootstrap.1 \
+	post_download.in \
+	ooo.lst.in \
+	Makefile.in \
+	makefile.rc \
+	bin/repo-list.in | (cd $tmpdir && tar xf -)
+  (
+    unset COM GUI GUIBASE OS CPU CPUNAME CC CXX CFLAGS
+    test -n "$CC_FOR_BUILD" && export CC="$CC_FOR_BUILD"
+    test -n "$CXX_FOR_BUILD" && export CXX="$CXX_FOR_BUILD"
     cd $tmpdir
-    sh ./conf-for-build 3>&1 >/dev/null)`
+    sub_conf_opts=""
+    test -n $with_external_tar && sub_conf_opts="$sub_conf_opts --with-external-tar='$with_external_tar'"
+    ./configure \
+	--disable-mozilla \
+	--disable-build-mozilla \
+	2>&1 | sed -e 's/^/    /'
+    . ./*Env.Set.sh
+    for V in COM GUI GUIBASE OS CPU CPUNAME CC CXX GXX_INCLUDE_PATH MACOSX_DEPLOYMENT_TARGET; do
+      VV='$'$V
+      VV=`eval "echo $VV"`
+      if test -n "$VV"; then
+	line=${V}_FOR_BUILD='${'${V}_FOR_BUILD:-$VV'}'
+        echo "$line" >>build-config
+      fi
+    done
+  )
+  eval `cat $tmpdir/build-config`
+  AC_MSG_RESULT([checking for BUILD platform configuration... done])
   rm -rf $tmpdir
   unset tmpdir
 else
   CC_FOR_BUILD="$CC"
   CXX_FOR_BUILD="$CXX"
 fi
+AC_SUBST(COM_FOR_BUILD)
+AC_SUBST(GUI_FOR_BUILD)
+AC_SUBST(GUIBASE_FOR_BUILD)
+AC_SUBST(OS_FOR_BUILD)
+AC_SUBST(CPU_FOR_BUILD)
+AC_SUBST(CPUNAME_FOR_BUILD)
 AC_SUBST(CC_FOR_BUILD)
 AC_SUBST(CXX_FOR_BUILD)
+AC_SUBST(GXX_INCLUDE_PATH_FOR_BUILD)
+AC_SUBST(MACOSX_DEPLOYMENT_TARGET_FOR_BUILD)
 
 dnl ===================================================================
 dnl Checks for --with-local-solenv invocation

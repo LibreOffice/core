@@ -1,9 +1,0 @@
-AC_INIT([LibreOffice], [3.3],,, [http://documentfoundation.org/])
-AC_PREREQ(2.50)
-AC_CANONICAL_SYSTEM
-AC_PROG_CC
-AC_PROG_CXX
-
-
-echo CC_FOR_BUILD='${CC_FOR_BUILD:-'$CC'}' >&3
-echo CXX_FOR_BUILD='${CXX_FOR_BUILD:-'$CXX'}' >&3

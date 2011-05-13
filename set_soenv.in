@@ -1016,9 +1016,11 @@ $XCLASSPATH           = '$JAVA_HOME'.$ds.'jre'.$LIB.$ds."rt.jar".$wps.'.';
 $L10N_MODULE = PathFormat($SRC_ROOT."/translations");
 
 # Check for poor help localizations, i.e. no help translation at all...
-opendir(DIR,$L10N_MODULE . "/source");
-@languages = readdir(DIR);
-closedir(DIR);
+@languages=();
+if (opendir(DIR,$L10N_MODULE . "/source"))
+{  @languages = readdir(DIR);
+   closedir(DIR);
+}
 $WITH_POOR_HELP_LOCALIZATIONS = "";
 
 foreach $language (@languages)
@@ -1756,10 +1758,21 @@ ToFile( "COMP_ENV",          $COMP_ENV,          "e" );
 ToFile( "JAVAHOME",          $JAVAHOME,          "e" );
 ToFile( "CC",                $CC,                "e" );
 ToFile( "CROSS_COMPILING",   "@CROSS_COMPILING@","e" );
-ToFile( "BUILD_PLATFORM",    "@build@",          "e" );
-ToFile( "HOST_PLATFORM",     "@host@",           "e" );
-ToFile( "CC_FOR_BUILD",      "@CC_FOR_BUILD@",   "e" );
-ToFile( "CXX_FOR_BUILD",     "@CXX_FOR_BUILD@",  "e" );
+if ( '@CROSS_COMPILING@' ne '' )
+{
+   ToFile( "BUILD_PLATFORM",    "@build@",          "e" );
+   ToFile( "HOST_PLATFORM",     "@host@",           "e" );
+   ToFile( "COM_FOR_BUILD",     "@COM_FOR_BUILD@",  "e" );
+   ToFile( "GUI_FOR_BUILD",     "@GUI_FOR_BUILD@",  "e" );
+   ToFile( "GUIBASE_FOR_BUILD", "@GUIBASE_FOR_BUILD@", "e" );
+   ToFile( "OS_FOR_BUILD",      "@OS_FOR_BUILD@",   "e" );
+   ToFile( "CPU_FOR_BUILD",     "@CPU_FOR_BUILD@",  "e" );
+   ToFile( "CPUNAME_FOR_BUILD", "@CPUNAME_FOR_BUILD@", "e" );
+   ToFile( "CC_FOR_BUILD",      "@CC_FOR_BUILD@",   "e" );
+   ToFile( "CXX_FOR_BUILD",     "@CXX_FOR_BUILD@",  "e" );
+   ToFile( "GXX_INCLUDE_PATH_FOR_BUILD", "@GXX_INCLUDE_PATH_FOR_BUILD@", "e" );
+   ToFile( "MACOSX_DEPLOYMENT_TARGET_FOR_BUILD", "@MACOSX_DEPLOYMENT_TARGET_FOR_BUILD@", "e" );
+}
 ToFile( "HAVE_GCC_VISIBILITY_FEATURE",
 		"@HAVE_GCC_VISIBILITY_FEATURE@", "e" );
 ToFile( "HAVE_GCC_VISIBILITY_BROKEN",
