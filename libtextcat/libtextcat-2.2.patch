@@ -366,6 +366,25 @@
  			lastnonspace = w;
  		}
  		*w++ = *p++;
+@@ -386,3 +386,18 @@
+ 	return dest;
+ }
+ 
++void *
++rpl_malloc (size_t n)
++{
++  if (n == 0)
++    n = 1;
++  return malloc (n);
++}
++
++void *
++rpl_realloc (void *ptr, size_t n)
++{
++  if (n == 0)
++    n = 1;
++  return realloc (ptr, n);
++}
 --- misc/libtextcat-2.2/src/common.h	Thu May 22 15:02:29 2003
 +++ misc/build/libtextcat-2.2/src/common.h	Mon Mar 31 11:29:14 2008
 @@ -1,28 +1,28 @@
