@@ -84,78 +84,78 @@ public:
         bool operator() (const ScDBData& left, const ScDBData& right) const;
     };
 
-            SC_DLLPUBLIC ScDBData(const ::rtl::OUString& rName,
-                     SCTAB nTab,
-                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                     bool bByR = true, bool bHasH = true);
-            ScDBData(const ScDBData& rData);
-            ScDBData(const ::rtl::OUString& rName, const ScDBData& rData);
-            ~ScDBData();
+    SC_DLLPUBLIC ScDBData(const ::rtl::OUString& rName,
+             SCTAB nTab,
+             SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+             bool bByR = true, bool bHasH = true);
+    ScDBData(const ScDBData& rData);
+    ScDBData(const ::rtl::OUString& rName, const ScDBData& rData);
+    ~ScDBData();
 
-            ScDBData&   operator= (const ScDBData& rData);
+    ScDBData&   operator= (const ScDBData& rData);
 
-            bool        operator== (const ScDBData& rData) const;
+    bool        operator== (const ScDBData& rData) const;
 
-            SCTAB       GetTable() const;
-            const ::rtl::OUString& GetName() const { return aName; }
-            void        GetArea(SCTAB& rTab, SCCOL& rCol1, SCROW& rRow1, SCCOL& rCol2, SCROW& rRow2) const;
-            SC_DLLPUBLIC void GetArea(ScRange& rRange) const;
-            void        SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
-            void        MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
-            bool        IsByRow() const                 { return bByRow; }
-            void        SetByRow(bool bByR)             { bByRow = bByR; }
-            bool        HasHeader() const               { return bHasHeader; }
-            void        SetHeader(bool bHasH)           { bHasHeader = bHasH; }
-            void        SetIndex(sal_uInt16 nInd)           { nIndex = nInd; }
-            sal_uInt16  GetIndex() const                { return nIndex; }
-            bool        IsDoSize() const                { return bDoSize; }
-            void        SetDoSize(bool bSet)            { bDoSize = bSet; }
-            bool        IsKeepFmt() const               { return bKeepFmt; }
-            void        SetKeepFmt(bool bSet)           { bKeepFmt = bSet; }
-            bool        IsStripData() const             { return bStripData; }
-            void        SetStripData(bool bSet)         { bStripData = bSet; }
+    SCTAB       GetTable() const;
+    const ::rtl::OUString& GetName() const { return aName; }
+    void        GetArea(SCTAB& rTab, SCCOL& rCol1, SCROW& rRow1, SCCOL& rCol2, SCROW& rRow2) const;
+    SC_DLLPUBLIC void GetArea(ScRange& rRange) const;
+    void        SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
+    void        MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
+    bool        IsByRow() const                 { return bByRow; }
+    void        SetByRow(bool bByR)             { bByRow = bByR; }
+    bool        HasHeader() const               { return bHasHeader; }
+    void        SetHeader(bool bHasH)           { bHasHeader = bHasH; }
+    void        SetIndex(sal_uInt16 nInd)           { nIndex = nInd; }
+    sal_uInt16  GetIndex() const                { return nIndex; }
+    bool        IsDoSize() const                { return bDoSize; }
+    void        SetDoSize(bool bSet)            { bDoSize = bSet; }
+    bool        IsKeepFmt() const               { return bKeepFmt; }
+    void        SetKeepFmt(bool bSet)           { bKeepFmt = bSet; }
+    bool        IsStripData() const             { return bStripData; }
+    void        SetStripData(bool bSet)         { bStripData = bSet; }
 
-            ::rtl::OUString GetSourceString() const;
-            ::rtl::OUString GetOperations() const;
+    ::rtl::OUString GetSourceString() const;
+    ::rtl::OUString GetOperations() const;
 
-            void        GetSortParam(ScSortParam& rSortParam) const;
-            void        SetSortParam(const ScSortParam& rSortParam);
+    void        GetSortParam(ScSortParam& rSortParam) const;
+    void        SetSortParam(const ScSortParam& rSortParam);
 
-            SC_DLLPUBLIC void       GetQueryParam(ScQueryParam& rQueryParam) const;
-            SC_DLLPUBLIC void       SetQueryParam(const ScQueryParam& rQueryParam);
-            SC_DLLPUBLIC bool       GetAdvancedQuerySource(ScRange& rSource) const;
-            SC_DLLPUBLIC void       SetAdvancedQuerySource(const ScRange* pSource);
+    SC_DLLPUBLIC void       GetQueryParam(ScQueryParam& rQueryParam) const;
+    SC_DLLPUBLIC void       SetQueryParam(const ScQueryParam& rQueryParam);
+    SC_DLLPUBLIC bool       GetAdvancedQuerySource(ScRange& rSource) const;
+    SC_DLLPUBLIC void       SetAdvancedQuerySource(const ScRange* pSource);
 
-            void        GetSubTotalParam(ScSubTotalParam& rSubTotalParam) const;
-            void        SetSubTotalParam(const ScSubTotalParam& rSubTotalParam);
+    void        GetSubTotalParam(ScSubTotalParam& rSubTotalParam) const;
+    void        SetSubTotalParam(const ScSubTotalParam& rSubTotalParam);
 
-            void        GetImportParam(ScImportParam& rImportParam) const;
-            void        SetImportParam(const ScImportParam& rImportParam);
+    void        GetImportParam(ScImportParam& rImportParam) const;
+    void        SetImportParam(const ScImportParam& rImportParam);
 
-            bool        IsDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) const;
-            bool        IsDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
+    bool        IsDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) const;
+    bool        IsDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
 
-            bool        HasImportParam() const   { return maImportParam.bImport; }
-            SC_DLLPUBLIC bool HasQueryParam() const;
-            bool        HasSortParam() const     { return maSortParam.bDoSort[0]; }
-            bool        HasSubTotalParam() const { return maSubTotal.bGroupActive[0]; }
+    bool        HasImportParam() const   { return maImportParam.bImport; }
+    SC_DLLPUBLIC bool HasQueryParam() const;
+    bool        HasSortParam() const     { return maSortParam.bDoSort[0]; }
+    bool        HasSubTotalParam() const { return maSubTotal.bGroupActive[0]; }
 
-            bool        HasImportSelection() const      { return bDBSelection; }
-            void        SetImportSelection(bool bSet)   { bDBSelection = bSet; }
+    bool        HasImportSelection() const      { return bDBSelection; }
+    void        SetImportSelection(bool bSet)   { bDBSelection = bSet; }
 
-            bool        HasAutoFilter() const       { return bAutoFilter; }
-            void        SetAutoFilter(bool bSet)    { bAutoFilter = bSet; }
+    bool        HasAutoFilter() const       { return bAutoFilter; }
+    void        SetAutoFilter(bool bSet)    { bAutoFilter = bSet; }
 
-            bool        IsModified() const          { return bModified; }
-            void        SetModified(bool bMod)      { bModified = bMod; }
+    bool        IsModified() const          { return bModified; }
+    void        SetModified(bool bMod)      { bModified = bMod; }
 
-            void    UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
-            void    UpdateReference(ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
-                                SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
-                                SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                                SCsCOL nDx, SCsROW nDy, SCsTAB nDz);
+    void    UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
+    void    UpdateReference(ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
+                        SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+                        SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
+                        SCsCOL nDx, SCsROW nDy, SCsTAB nDz);
 
-            void ExtendDataArea(ScDocument* pDoc);
+    void ExtendDataArea(ScDocument* pDoc);
 };
 
 class SC_DLLPUBLIC ScDBCollection
