@@ -17495,12 +17495,22 @@
           </element>
         </optional>
         <optional>
+          <element name="start">
+            <ref name="CT_Border"/>
+          </element>
+        </optional>
+        <optional>
           <element name="left">
             <ref name="CT_Border"/>
           </element>
         </optional>
         <optional>
           <element name="bottom">
+            <ref name="CT_Border"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="end">
             <ref name="CT_Border"/>
           </element>
         </optional>
@@ -22666,8 +22676,10 @@
     <resource name="CT_TcBorders" resource="Properties" tag="table">
       <kind name="table"/>
       <element name="top" tokenid="ooxml:CT_TcBorders_top"/>
+      <element name="start" tokenid="ooxml:CT_TcBorders_start"/>
       <element name="left" tokenid="ooxml:CT_TcBorders_left"/>
       <element name="bottom" tokenid="ooxml:CT_TcBorders_bottom"/>
+      <element name="end" tokenid="ooxml:CT_TcBorders_end"/>
       <element name="right" tokenid="ooxml:CT_TcBorders_right"/>
       <element name="insideH" tokenid="ooxml:CT_TcBorders_insideH"/>
       <element name="insideV" tokenid="ooxml:CT_TcBorders_insideV"/>

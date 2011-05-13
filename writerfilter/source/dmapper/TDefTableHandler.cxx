@@ -148,12 +148,18 @@ void TDefTableHandler::localResolve(Id rName, writerfilter::Reference<Properties
         table::BorderLine2 aBorderLine;
         ConversionHelper::MakeBorderLine( m_nLineWidth,   m_nLineType, m_nLineColor,
                                                                         aBorderLine, m_bOOXML );
-
+        bool rtl = false; // TODO
         switch( rName )
         {
             case NS_ooxml::LN_CT_TcBorders_top:
             case NS_rtf::LN_BRCTOP:
                 m_aTopBorderLines.push_back(aBorderLine);
+            break;
+            case NS_ooxml::LN_CT_TcBorders_start:
+                if( rtl )
+                    m_aRightBorderLines.push_back(aBorderLine);
+                else
+                    m_aLeftBorderLines.push_back(aBorderLine);
             break;
             case NS_ooxml::LN_CT_TcBorders_left:
             case NS_rtf::LN_BRCLEFT:
@@ -162,6 +168,12 @@ void TDefTableHandler::localResolve(Id rName, writerfilter::Reference<Properties
             case NS_ooxml::LN_CT_TcBorders_bottom:
             case NS_rtf::LN_BRCBOTTOM:
                 m_aBottomBorderLines.push_back(aBorderLine);
+            break;
+            case NS_ooxml::LN_CT_TcBorders_end:
+                if( rtl )
+                    m_aLeftBorderLines.push_back(aBorderLine);
+                else
+                    m_aRightBorderLines.push_back(aBorderLine);
             break;
             case NS_ooxml::LN_CT_TcBorders_right:
             case NS_rtf::LN_BRCRIGHT:
