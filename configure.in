@@ -1029,7 +1029,7 @@ AC_ARG_WITH(jvm-path,
     AS_HELP_STRING([--with-jvm-path],
         [Use a specific JVM search path at runtime.])
     [
-                          Usage: --with-jvm-path=<absolute path to parent of jvm home>
+                          Usage:     --with-jvm-path=<absolute path to parent of jvm home>
 
                           e. g.: --with-jvm-path=/usr/lib/
                                  to find JRE/JDK in /usr/lib/jvm/
@@ -1114,8 +1114,8 @@ AC_ARG_WITH(nsis-path,
     ],
 ,)
 
-AC_ARG_WITH(frame-home,
-    AS_HELP_STRING([--with-frame-home],
+AC_ARG_WITH(dotnet-framework-home,
+    AS_HELP_STRING([--with-dotnet-framework-home],
         [For Microsoft compiler users, please supply the path pointing to
          lib/mscoree.lib, usually something like:
          "/cygdrive/c/Program Files/Windows SDKs/Windows/v7.0"])
@@ -1123,8 +1123,8 @@ AC_ARG_WITH(frame-home,
                           Note that in most cases it will be automatically
                           found, though.
 
-                          Usage:     --with-frame-home=<absolute path to .NET
-                                                                      Framework>
+                          Usage:     --with-dotnet-framework-home=<absolute path to .NET
+                                                          Framework>
     ],
 ,)
 
@@ -1148,10 +1148,10 @@ AC_ARG_WITH(directx-home,
 
 AC_ARG_WITH(mozilla-build,
     AS_HELP_STRING([--with-mozilla-build],
-        [For Windows users, please supply the path to the mozilla build tools.])
+        [For Windows users, please supply the path to the Mozilla build tools.])
     [
                           Usage:     --with-mozilla-build=<absolute path to
-                                                            mozilla build tools>
+                                                          Mozilla build tools>
 
                           At the moment of this writing, an installer for the
                           mozilla build tools can be obtained from http://ftp.
@@ -1191,14 +1191,14 @@ AC_ARG_WITH(intro-bitmap,
 [  --with-intro-bitmap    Prefer the specified intro bitmap over the
                           the default one.
 
-                          Usage: --with-intro-bitmap=/path/my_ooo_intro.png
+                          Usage:     --with-intro-bitmap=/path/my_ooo_intro.png
 ],,)
 
 AC_ARG_WITH(about-bitmap,
 [  --with-about-bitmap    Similarly to --with-intro-bitmap, this allows
                           specification of bitmap for the About box.
 
-                          Usage: --with-about-bitmap=/path/my_ooo_about.png
+                          Usage:     --with-about-bitmap=/path/my_ooo_about.png
 ],,)
 
 AC_ARG_WITH(vendor,
@@ -2360,34 +2360,34 @@ if test "$WITH_MINGW" = "yes" || test "$COMEX" -ge "10"; then
 
     dnl Check mscoree.lib / .NET Framework dir
         AC_MSG_CHECKING(.NET Framework)
-        if test -n "$with_frame_home"; then
-        with_frame_home=`cygpath -u "$with_frame_home"`
+        if test -n "$with_dotnet_framework_home"; then
+        with_dotnet_framework_home=`cygpath -u "$with_dotnet_framework_home"`
         fi
-        if test -f "$with_frame_home/lib/mscoree.lib"; then
-            FRAME_HOME="$with_frame_home"
+        if test -f "$with_dotnet_framework_home/lib/mscoree.lib"; then
+            DOTNET_FRAMEWORK_HOME="$with_dotnet_framework_home"
         fi
-        if test -z "$FRAME_HOME" ; then
+        if test -z "$DOTNET_FRAMEWORK_HOME" ; then
           frametest=`./oowintool --dotnetsdk-dir`
           if test -f "$frametest/lib/mscoree.lib"; then
-             FRAME_HOME="$frametest"
+             DOTNET_FRAMEWORK_HOME="$frametest"
           else
              frametest=`./oowintool --psdk-home`
              if test -f "$frametest/lib/mscoree.lib"; then
-                FRAME_HOME="$frametest"
+                DOTNET_FRAMEWORK_HOME="$frametest"
              fi
           fi
         fi
-        if test ! -f "$FRAME_HOME/lib/mscoree.lib"; then
-            AC_MSG_ERROR([mscoree.lib (.NET Framework) not found. Make sure you use --with-frame-home])
+        if test ! -f "$DOTNET_FRAMEWORK_HOME/lib/mscoree.lib"; then
+            AC_MSG_ERROR([mscoree.lib (.NET Framework) not found. Make sure you use --with-dotnet-framework-home])
         fi
         AC_MSG_RESULT(found)
     # Convert to posix path with 8.3 filename restrictions ( No spaces )
-    FRAME_HOME=`cygpath -d "$FRAME_HOME"`
-    FRAME_HOME=`cygpath -u "$FRAME_HOME"`
+    DOTNET_FRAMEWORK_HOME=`cygpath -d "$DOTNET_FRAMEWORK_HOME"`
+    DOTNET_FRAMEWORK_HOME=`cygpath -u "$DOTNET_FRAMEWORK_HOME"`
 fi
 AC_SUBST(MIDL_PATH)
 AC_SUBST(CSC_PATH)
-AC_SUBST(FRAME_HOME)
+AC_SUBST(DOTNET_FRAMEWORK_HOME)
 fi
 
 dnl ===================================================================

@@ -82,7 +82,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
      $MSPDB_PATH, $MIDL_PATH, $CSC_PATH,
      $PATH, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARLIB, $JAVALIB,
      $SOLARINC, $LOCALINI, $FRAMEWORKSHOME, $COMEX, $PERL,
-     $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $DIRECTXSDK_LIB, $USE_NEW_SDK, $FRAME_HOME,
+     $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $DIRECTXSDK_LIB, $USE_NEW_SDK, $DOTNET_FRAMEWORK_HOME,
      $USE_DIRECTX5, $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $TMPDIR,
      $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
      $WIN_GNUCOPY, $WIN_TOUCH, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB, $MOZILLABUILD,
@@ -649,7 +649,7 @@ elsif ( $platform =~ m/cygwin/ )
       $PSDK_HOME      = PathFormat('@PSDK_HOME@');
       $DIRECTXSDK_LIB = PathFormat('@DIRECTXSDK_LIB@');
       $USE_DIRECTX5   = "";
-      $FRAME_HOME     = PathFormat('@FRAME_HOME@');
+      $DOTNET_FRAMEWORK_HOME = PathFormat('@DOTNET_FRAMEWORK_HOME@');
       $USE_NEW_SDK    = "TRUE";
       $CPUNAME        = "INTEL";
       $CPUNAME        = "X86_64" if $CL_X64;
@@ -1061,7 +1061,7 @@ if ($platform =~ m/cygwin/)
 	      $ILIB   .= $wps.$COMPATH.$LIB.$ds."amd64".
 		             $wps.$PSDK_HOME.$LIB64;
 	  }
-      $ILIB       .= $wps.$FRAME_HOME.$LIB;
+      $ILIB       .= $wps.$DOTNET_FRAMEWORK_HOME.$LIB;
       if ( '@ENABLE_DIRECTX@' ne "" ) {
           $ILIB   .= $wps.$DIRECTXSDK_LIB;
       }
@@ -1208,7 +1208,7 @@ elsif ($platform =~ m/cygwin/)
        $PATH          .= $ps.$tmppath;
    }
    # path to sn.exe (signing) for Windows users.
-   my $sn_path = PathFormat('@FRAME_HOME@/bin');
+   my $sn_path = PathFormat('@DOTNET_FRAMEWORK_HOME@/bin');
    $tmppath = CygFormat($sn_path);
    if ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
        $PATH          .= $ps.$tmppath;
