@@ -13714,11 +13714,15 @@
           <choice>
             <!-- No Tab Stop -->
             <value>clear</value>
-            <!-- Left Tab -->
+            <!-- Leading Tab -->
+            <value>start</value>
+            <!-- Left Tab (ecma) -->
             <value>left</value>
             <!-- Centered Tab -->
             <value>center</value>
-            <!-- Right Tab -->
+            <!-- Trailing Tab -->
+            <value>end</value>
+            <!-- Right Tab (ecma) -->
             <value>right</value>
             <!-- Decimal Tab -->
             <value>decimal</value>
@@ -21598,8 +21602,10 @@
     </resource>
     <resource name="ST_TabJc" resource="List">
       <value tokenid="ooxml:Value_ST_TabJc_clear">clear</value>
+      <value tokenid="0">start</value>
       <value tokenid="0">left</value>
       <value tokenid="1">center</value>
+      <value tokenid="2">end</value>
       <value tokenid="2">right</value>
       <value tokenid="3">decimal</value>
       <value tokenid="4">bar</value>
