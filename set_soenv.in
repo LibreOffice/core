@@ -1773,6 +1773,16 @@ if ( '@CROSS_COMPILING@' ne '' )
    ToFile( "GXX_INCLUDE_PATH_FOR_BUILD", "@GXX_INCLUDE_PATH_FOR_BUILD@", "e" );
    ToFile( "MACOSX_DEPLOYMENT_TARGET_FOR_BUILD", "@MACOSX_DEPLOYMENT_TARGET_FOR_BUILD@", "e" );
 }
+ToFile( "SIZEOF_SHORT",         "@SIZEOF_SHORT@", "e" );
+ToFile( "SIZEOF_INT",           "@SIZEOF_INT@",  "e" );
+ToFile( "SIZEOF_LONG",          "@SIZEOF_LONG@", "e" );
+ToFile( "SIZEOF_LONGLONG",      "@SIZEOF_LONGLONG@", "e" );
+ToFile( "SIZEOF_DOUBLE",        "@SIZEOF_DOUBLE@", "e" );
+ToFile( "SIZEOF_POINTER",       "@SIZEOF_POINTER@", "e" );
+ToFile( "ALIGNOF_SHORT",        "@ALIGNOF_SHORT@", "e" );
+ToFile( "ALIGNOF_INT",          "@ALIGNOF_INT@", "e" );
+ToFile( "ALIGNOF_LONG",         "@ALIGNOF_LONG@", "e" );
+ToFile( "ALIGNOF_DOUBLE",       "@ALIGNOF_DOUBLE@", "e" );
 ToFile( "HAVE_GCC_VISIBILITY_FEATURE",
 		"@HAVE_GCC_VISIBILITY_FEATURE@", "e" );
 ToFile( "HAVE_GCC_VISIBILITY_BROKEN",

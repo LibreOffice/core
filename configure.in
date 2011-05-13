@@ -2492,9 +2492,45 @@ else
    WORDS_BIGENDIAN=no
    LFS_CFLAGS=''
 fi
-AC_SUBST(SIZEOF_LONG)
 AC_SUBST(WORDS_BIGENDIAN)
 AC_SUBST(LFS_CFLAGS)
+
+AC_CHECK_SIZEOF(short)
+AC_CHECK_SIZEOF(int)
+if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
+AC_CHECK_SIZEOF(long long)
+else
+AC_CHECK_SIZEOF(__int64)
+ac_cv_sizeof_long_long=$ac_cv_sizeof___int64
+fi
+AC_CHECK_SIZEOF(double)
+AC_CHECK_SIZEOF(void*)
+AC_CHECK_ALIGNOF(short)
+AC_CHECK_ALIGNOF(int)
+AC_CHECK_ALIGNOF(long)
+AC_CHECK_ALIGNOF(double)
+
+SIZEOF_SHORT=$ac_cv_sizeof_short
+SIZEOF_INT=$ac_cv_sizeof_int
+SIZEOF_LONGLONG=$ac_cv_sizeof_long_long
+SIZEOF_DOUBLE=$ac_cv_sizeof_double
+SIZEOF_POINTER=$ac_cv_sizeof_voidp
+
+ALIGNOF_SHORT=$ac_cv_alignof_short
+ALIGNOF_INT=$ac_cv_alignof_int
+ALIGNOF_LONG=$ac_cv_alignof_long
+ALIGNOF_DOUBLE=$ac_cv_alignof_double
+
+AC_SUBST(SIZEOF_SHORT)
+AC_SUBST(SIZEOF_INT)
+AC_SUBST(SIZEOF_LONG)
+AC_SUBST(SIZEOF_LONGLONG)
+AC_SUBST(SIZEOF_DOUBLE)
+AC_SUBST(SIZEOF_POINTER)
+AC_SUBST(ALIGNOF_SHORT)
+AC_SUBST(ALIGNOF_INT)
+AC_SUBST(ALIGNOF_LONG)
+AC_SUBST(ALIGNOF_DOUBLE)
 
 dnl ===================================================================
 dnl Check if valgrind.h is available 
