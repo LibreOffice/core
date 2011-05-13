@@ -30,6 +30,7 @@ PRJ=..
 PRJNAME=soltools
 TARGET=javadep
 TARGETTYPE=CUI
+TARGETPLATFORM=BUILD
 NO_DEFAULT_STL=TRUE
 
 # --- Settings -----------------------------------------------------

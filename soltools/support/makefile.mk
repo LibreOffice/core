@@ -30,6 +30,7 @@ PRJ=..
 PRJNAME=soltools
 TARGET=soltools_support
 TARGETTYPE=CUI
+TARGETPLATFORM=BUILD
 
 # --- Settings -----------------------------------------------------
 

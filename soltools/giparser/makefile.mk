@@ -30,6 +30,7 @@ PRJ=..
 PRJNAME=soltools
 TARGET=soltools_giparser
 TARGETTYPE=CUI
+TARGETPLATFORM=BUILD
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------

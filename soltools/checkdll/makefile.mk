@@ -40,7 +40,7 @@ NO_DEFAULT_STL=TRUE
 # --- Files --------------------------------------------------------
 
 
-.IF "$(GUI)"=="UNX"
+.IF "$(GUI)"=="UNX" && "$(OS)"!="IOS"
 LIBSALCPPRT=$(0)
 APP1TARGET	= 	checkdll
 APP1OBJS	=	$(OBJ)$/checkdll.obj
