@@ -2073,9 +2073,9 @@ void* PPDContext::getStreamableBuffer( sal_uLong& rBytes ) const
         rBytes += 1; // for '\0'
     }
     rBytes += 1;
-    void* pBuffer = new char[ rBytes ];
+    char* pBuffer = new char[ rBytes ];
     memset( pBuffer, 0, rBytes );
-    char* pRun = (char*)pBuffer;
+    char* pRun = pBuffer;
     for( it = m_aCurrentValues.begin(); it != m_aCurrentValues.end(); ++it )
     {
         ByteString aCopy( it->first->getKey(), RTL_TEXTENCODING_MS_1252 );
