@@ -94,10 +94,19 @@ CONFIGURE_DIR=out
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION= \
     ..$/dist$/configure
-CONFIGURE_FLAGS=--disable-cxx --enable-dynamic --enable-shared --enable-compat185
+CONFIGURE_FLAGS=--disable-cxx --enable-dynamic --enable-compat185
+.IF "$(OS)"=="IOS"
+CONFIGURE_FLAGS+= --disable-shared
+.ELSE
+CONFIGURE_FLAGS+= --enable-shared
+.ENDIF
 .IF "$(OS)"=="MACOSX"
 CONFIGURE_FLAGS+=CPPFLAGS="$(EXTRA_CDEFS)"
 .ENDIF
+.IF "$(CROSS_COMPILING)"!=""
+CONFIGURE_FLAGS+= --build="$(BUILD_PLATFORM)" --host="$(HOST_PLATFORM)"
+.ENDIF
+
 # just pass ARCH_FLAGS to native build
 CFLAGS+:=$(ARCH_FLAGS)
 CXXFLAGS+:=$(ARCH_FLAGS)
@@ -107,7 +116,11 @@ BUILD_DIR=$(CONFIGURE_DIR)
 BUILD_DIR_OUT=$(CONFIGURE_DIR)
 BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
 
+.IF "$(OS)"=="IOS"
+OUT2LIB=$(BUILD_DIR)$/libdb*.a
+.ELSE
 OUT2LIB=$(BUILD_DIR)$/.libs$/libdb*$(DLLPOST)
+.ENDIF
 OUT2INC= \
     $(BUILD_DIR)$/db.h
 
