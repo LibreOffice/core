@@ -664,8 +664,9 @@ void SwWrtShell::MoveObjectIfActive( svt::EmbeddedObjectRef& xObj, const Point& 
 
 
 void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
-                             const SwRect *pFlyPrtRect,
-                             const SwRect *pFlyFrmRect )
+                                  const SwRect *pFlyPrtRect,
+                                  const SwRect *pFlyFrmRect,
+                                  const bool bNoTxtFrmPrtAreaChanged )
 {
     //Einstellen der Skalierung am Client. Diese ergibt sich aus der Differenz
     //zwischen der VisArea des Objektes und der ObjArea.
@@ -747,12 +748,13 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
     SfxInPlaceClient* pCli = GetView().FindIPClient( xObj.GetObject(), &GetView().GetEditWin() );
     if ( !pCli )
     {
-        if ( (embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY & nMisc) || bLinkingChart
+        if ( (embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY & nMisc)
+             || bLinkingChart
             // TODO/LATER: ResizeOnPrinterChange
              //|| SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE & xObj->GetMiscStatus()
-             || nMisc & embed::EmbedMisc::EMBED_NEVERRESIZE // non-resizable objects need to be
-                                                            // set the size back by this method
-             )
+             // --> OD #i117189# - refine condition for non-resizable objects
+             // non-resizable objects need to be set the size back by this method
+             || ( bNoTxtFrmPrtAreaChanged && nMisc & embed::EmbedMisc::EMBED_NEVERRESIZE ) )
         {
             pCli = new SwOleClient( &GetView(), &GetView().GetEditWin(), xObj );
         }

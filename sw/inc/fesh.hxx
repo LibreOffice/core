@@ -410,7 +410,8 @@ public:
     // Else the size is provided via GetCurFlyRect().
     virtual void CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                                   const SwRect *pFlyPrtRect = 0,
-                                  const SwRect *pFlyFrmRect = 0 ) = 0;
+                                  const SwRect *pFlyFrmRect = 0,
+                                  const bool bNoTxtFrmPrtAreaChanged = false ) = 0;
 
     // Connect objects with ActivateWhenVisible at Paint.
     // Called by notxtfrm::Paint, implemented in wrtsh.
