@@ -5810,13 +5810,12 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
             {
                 SwBorderAttrAccess aAccess( SwFrm::GetCache(), (SwFrm*)pFrm );
                 const SwBorderAttrs &rTmpAttrs = *aAccess.Get();
-                /// OD 06.08.2002 #99657# - paint border before painting background
-                if ( bLowerBorder )
-                    pFrm->PaintBorder( aBorderRect, pPage, rTmpAttrs );
                 if ( ( pFrm->IsLayoutFrm() && bLowerBorder ) ||
                      aFrmRect.IsOver( aRect ) )
                     pFrm->PaintBackground( aRect, pPage, rTmpAttrs, bLowMode,
                                            bLowerBorder );
+                if ( bLowerBorder )
+                    pFrm->PaintBorder( aBorderRect, pPage, rTmpAttrs );
             }
             pFrm = pFrm->GetNext();
         } while ( pFrm && pFrm->GetUpper() == this &&
