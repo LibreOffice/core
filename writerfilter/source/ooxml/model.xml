@@ -17547,6 +17547,11 @@
           </element>
         </optional>
         <optional>
+          <element name="start">
+            <ref name="CT_TblWidth"/>
+          </element>
+        </optional>
+        <optional>
           <element name="left">
             <ref name="CT_TblWidth"/>
           </element>
@@ -17558,6 +17563,11 @@
         </optional>
         <optional>
           <element name="right">
+            <ref name="CT_TblWidth"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="end">
             <ref name="CT_TblWidth"/>
           </element>
         </optional>
@@ -22689,8 +22699,10 @@
     <resource name="CT_TcMar" resource="Properties" tag="table">
       <kind name="table"/>
       <element name="top" tokenid="ooxml:CT_TcMar_top"/>
+      <element name="start" tokenid="ooxml:CT_TcMar_start"/>
       <element name="left" tokenid="ooxml:CT_TcMar_left"/>
       <element name="bottom" tokenid="ooxml:CT_TcMar_bottom"/>
+      <element name="end" tokenid="ooxml:CT_TcMar_end"/>
       <element name="right" tokenid="ooxml:CT_TcMar_right"/>
     </resource>
     <resource name="ST_Merge" resource="List">
