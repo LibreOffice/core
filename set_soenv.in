@@ -102,7 +102,7 @@ my ( $dmake, $build, $build_client, $nmake, $mkout, $deliver, $zipdep );
 #
 # $platform is needed for PathFormat()
 #
-$platform       = '@host_alias@';
+$platform       = '@host@';
 
 $UPD            = '@UPD@';          # the project's UPD
 $newline        = "\n";             # Perl newline character
@@ -1756,8 +1756,8 @@ ToFile( "COMP_ENV",          $COMP_ENV,          "e" );
 ToFile( "JAVAHOME",          $JAVAHOME,          "e" );
 ToFile( "CC",                $CC,                "e" );
 ToFile( "CROSS_COMPILING",   "@CROSS_COMPILING@","e" );
-ToFile( "BUILD_ALIAS",       "@build_alias@",    "e" );
-ToFile( "HOST_ALIAS",        "@host_alias@",     "e" );
+ToFile( "BUILD_PLATFORM",    "@build@",          "e" );
+ToFile( "HOST_PLATFORM",     "@host@",           "e" );
 ToFile( "CC_FOR_BUILD",      "@CC_FOR_BUILD@",   "e" );
 ToFile( "CXX_FOR_BUILD",     "@CXX_FOR_BUILD@",  "e" );
 ToFile( "HAVE_GCC_VISIBILITY_FEATURE",
