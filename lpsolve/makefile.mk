@@ -45,7 +45,7 @@ PATCH_FILES=lp_solve_5.5-windows.patch
 PATCH_FILES=\
     lp_solve_5.5.patch \
     lp_solve-aix.patch
-ADDITIONAL_FILES=lpsolve55$/ccc.solaris lpsolve55$/ccc.os2
+ADDITIONAL_FILES=lpsolve55$/ccc.solaris lpsolve55$/ccc.ios lpsolve55$/ccc.os2
 .ENDIF
 
 .IF "$(OS)"=="OPENBSD"
@@ -79,6 +79,10 @@ OUT2LIB=$(BUILD_DIR)$/liblpsolve55.lib
 .EXPORT: EXTRA_CDEFS EXTRA_LINKFLAGS
 BUILD_ACTION=sh ccc.osx
 OUT2LIB=$(BUILD_DIR)$/liblpsolve55.dylib
+.ELIF "$(OS)"=="IOS"
+.EXPORT: EXTRA_CDEFS EXTRA_LINKFLAGS
+BUILD_ACTION=sh ccc.ios
+OUT2LIB=$(BUILD_DIR)$/liblpsolve55.a
 .ELSE
 .IF "$(COMNAME)"=="sunpro5"
 BUILD_ACTION=sh ccc.solaris
