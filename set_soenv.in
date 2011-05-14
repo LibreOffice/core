@@ -57,7 +57,7 @@ my ( $CALL_CDECL, $COMMON_OUTDIR,
 # Platform dependent constant values.
 my ( $COM, $ARCH, $CPU, $CPUNAME, $GLIBC, $GUI, $GUIBASE,
       $GVER, $OS, $OSVERSION, $OUTPATH, $INPATH, $PATH_SEPERATOR,
-      $DYNAMIC_CRT, $SET_EXCEPTIONS, $use_shl_versions, $JRELIBDIR,
+      $DYNAMIC_CRT, $use_shl_versions, $JRELIBDIR,
       $JRETOOLKITDIR, $JRETHREADDIR,
       $FLIPCMD );
 #
@@ -647,7 +647,6 @@ elsif ( $platform =~ m/cygwin/ )
       $GVER           = "NT351";
       $OS             = "WNT";
       $DYNAMIC_CRT    = "TRUE";
-      $SET_EXCEPTIONS = "TRUE";
       $use_shl_versions = "TRUE";
       $wps = ';'; # Windows style path seperator
   if ( $MINGW eq "yes" )
@@ -1614,7 +1613,6 @@ ToFile( "INPATH",            $INPATH,            "e" );
 ToFile( "PATH_SEPERATOR",    $PATH_SEPERATOR,    "e" );
 ToFile( "COMEX",             $COMEX,             "e" );
 ToFile( "DYNAMIC_CRT",       $DYNAMIC_CRT,       "e" );
-ToFile( "SET_EXCEPTIONS",    $SET_EXCEPTIONS,    "e" );
 ToFile( "use_shl_versions",  $use_shl_versions,  "e" );
 ToFile( "FLIPCMD",           $FLIPCMD,           "e" );
 if ( $platform =~ m/darwin/ && $platform !~ m/^arm/)
