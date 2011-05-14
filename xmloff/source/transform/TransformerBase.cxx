@@ -325,7 +325,7 @@ void SAL_CALL XMLTransformerBase::startElement( const OUString& rName,
 }
 
 void SAL_CALL XMLTransformerBase::endElement( const OUString&
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
 rName
 #endif
 )
@@ -336,7 +336,7 @@ rName
         // Get topmost context
         ::rtl::Reference< XMLTransformerContext > xContext = m_pContexts->back();
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
         OSL_ENSURE( xContext->GetQName() == rName,
                 "XMLTransformerBase::endElement: popped context has wrong lname" );
 #endif
