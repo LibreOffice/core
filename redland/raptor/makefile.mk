@@ -139,7 +139,7 @@ CONFIGURE_ACTION=autoconf; .$/configure
 CONFIGURE_FLAGS=--disable-shared
 .ELSE
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FKAGS=--disable-static
+CONFIGURE_FLAGS=--disable-static
 .ENDIF
 # do not enable grddl parser (#i93768#)
 CONFIGURE_FLAGS+= --disable-gtk-doc --with-threads --with-openssl-digests --with-xml-parser=libxml --enable-parsers="rdfxml ntriples turtle trig guess rss-tag-soup" --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml
