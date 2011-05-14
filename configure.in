@@ -1307,7 +1307,11 @@ dnl checks build and host OSes
 dnl ===================================================================
 AC_CANONICAL_SYSTEM
 
-CROSS_COMPILING=$cross_compiling
+if test "$cross_compiling" = "yes"; then
+  CROSS_COMPILING=YES
+else
+  CROSS_COMPILING=
+fi
 AC_SUBST(CROSS_COMPILING)
 
 dnl ===================================================================
