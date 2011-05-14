@@ -76,11 +76,10 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
      $L10N_MODULE, $WITH_POOR_HELP_LOCALIZATIONS,
      $UPD, $WORK_STAMP, $gb_REPOS, $BUILD_TYPE,
      $SOLARSRC, $DEVROOT, $SOLARVER, $SOLARVERSION, $WORKDIR, $OUTDIR, $SOLARENV, $SOLARDEFIMG,
-     $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI,
      $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH,
      $MSPDB_PATH, $MIDL_PATH, $CSC_PATH,
      $PATH, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARLIB, $JAVALIB,
-     $SOLARINC, $LOCALINI, $FRAMEWORKSHOME, $COMEX, $PERL,
+     $SOLARINC, $FRAMEWORKSHOME, $COMEX, $PERL,
      $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $DIRECTXSDK_LIB, $DOTNET_FRAMEWORK_HOME,
      $USE_DIRECTX5, $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $TMPDIR,
      $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
@@ -967,18 +966,6 @@ $SOLARDEFIMG          = PathFormat($SRC_ROOT.$DEFIMGS);
 
 
 $SOLARENVINC          = '$SOLARENV'.$INC;
-# Location of
-$LOCALINI             = '$SOLARENV'.$CONFIG;
-# Location of
-$STAR_INIROOT         = '$SOLARENV'.$CONFIG;
-# Location of
-$STAR_INIROOTOLD      = '$SOLARENV'.$CONFIG;
-# Location of
-$STAR_STANDLST        = '$SOLARENV'.$CONFIG.$ds."stand.lst";
-# Location of
-$STAR_SSCOMMON        = '$SOLARENV'.$CONFIG.$ds."ssolar.cmn";
-# Location of
-$STAR_SSOLARINI       = '$SOLARENV'.$CONFIG.$ds."ssolar.ini";
 # Location of dmake resource.
 $DMAKEROOT            = '$SOLARENVINC'.$ds."startup";
 # Location of JDK classes .zip file.
@@ -1683,12 +1670,6 @@ ToFile( "OUTDIR",            $OUTDIR,            "e" );
 ToFile( "SOLARENV",          $SOLARENV,          "e" );
 ToFile( "SOLARDEFIMG",       $SOLARDEFIMG,       "e" );
 ToFile( "SOLARENVINC",       $SOLARENVINC,       "e" );
-ToFile( "LOCALINI",          $LOCALINI,          "e" );
-ToFile( "STAR_INIROOT",      $STAR_INIROOT,      "e" );
-ToFile( "STAR_INIROOTOLD",   $STAR_INIROOTOLD,   "e" );
-ToFile( "STAR_STANDLST",     $STAR_STANDLST,     "e" );
-ToFile( "STAR_SSCOMMON",     $STAR_SSCOMMON,     "e" );
-ToFile( "STAR_SSOLARINI",    $STAR_SSOLARINI,    "e" );
 ToFile( "DMAKEROOT",         $DMAKEROOT,         "e" );
 if ( $JDK ne "gcj" ) {
    ToFile( "CLASSPATH",         $CLASSPATH,         "e" );

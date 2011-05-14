@@ -301,15 +301,7 @@ sub replace_cyg_env {
         'SOLARVERSION',
         'SOLARVER',
         'SRC_ROOT',
-        'LOCALINI',
-        'GLOBALINI',
         'SOLARENV',
-        'STAR_INSTPATH',
-        'STAR_SOLARPATH',
-        'STAR_PACKMISC',
-        'STAR_SOLARENVPATH',
-        'STAR_INITROOT',
-        'STAR_STANDLST',
         'CLASSPATH',
         'JAVA_HOME'
     );
