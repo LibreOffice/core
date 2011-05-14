@@ -81,7 +81,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
      $MSPDB_PATH, $MIDL_PATH, $CSC_PATH,
      $PATH, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARLIB, $JAVALIB,
      $SOLARINC, $LOCALINI, $FRAMEWORKSHOME, $COMEX, $PERL,
-     $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $DIRECTXSDK_LIB, $USE_NEW_SDK, $DOTNET_FRAMEWORK_HOME,
+     $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $DIRECTXSDK_LIB, $DOTNET_FRAMEWORK_HOME,
      $USE_DIRECTX5, $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $TMPDIR,
      $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
      $WIN_GNUCOPY, $WIN_TOUCH, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB, $MOZILLABUILD,
@@ -637,7 +637,6 @@ elsif ( $platform =~ m/cygwin/ )
       $DIRECTXSDK_LIB = PathFormat('@DIRECTXSDK_LIB@');
       $USE_DIRECTX5   = "";
       $DOTNET_FRAMEWORK_HOME = PathFormat('@DOTNET_FRAMEWORK_HOME@');
-      $USE_NEW_SDK    = "TRUE";
       $CPUNAME        = "INTEL";
       $CPUNAME        = "X86_64" if $CL_X64;
       $CPU            = "I";
@@ -1644,7 +1643,6 @@ if ( $platform =~ m/cygwin/ )
    ToFile( "NSIS_PATH",         $NSIS_PATH,         "e" );
    ToFile( "DISABLE_ACTIVEX",   "@DISABLE_ACTIVEX@","e" );
    ToFile( "DISABLE_ATL",   "@DISABLE_ATL@","e" );
-   ToFile( "USE_NEW_SDK",       $USE_NEW_SDK,       "e" );
    # Variables used when building the parts that needs to be available
    # also as 64-bit versions in a 32-bit LibreOffice build, like
    # the Explorer extension. If the configure script hasn't

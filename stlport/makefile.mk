@@ -209,12 +209,10 @@ $(PACKAGE_DIR)$/so_custom_patch :  $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
 
 $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/so_custom_patch
 
-.IF "$(USE_NEW_SDK)"!=""
 $(PACKAGE_DIR)$/win32_sdk_patch :  $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
     win32_sdk.bat $(PACKAGE_DIR) $(BACK_PATH) && $(TOUCH) $@
 
 $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/win32_sdk_patch
-.ENDIF			# "$(USE_NEW_SDK)"!=""
 .ENDIF			# COMVER<=001300000000
 .ENDIF "$(COM)"=="GCC"
 .ENDIF          # "$(GUI)"=="WNT"
