@@ -965,14 +965,7 @@ if ('@TARFILE_LOCATION@' eq "DEFAULT")
 
 #
 $DEVROOT              = '$SRC_ROOT';
-# Set solenv and solver to given or default values.
-# Location of the solenv tree.
-if ('@LOCAL_SOLENV@' eq "DEFAULT")
-{  $SOLARENV          = PathFormat($SRC_ROOT.$SOLENV);
-}
-else
-{  $SOLARENV          =  PathFormat('@LOCAL_SOLENV@');
-}
+$SOLARENV             = PathFormat($SRC_ROOT.$SOLENV);
 # Location of the solver tree.
 if ('@LOCAL_SOLVER@' eq "DEFAULT")
 {  $SOLARVER          = $SRC_ROOT.$SOLVER.$ds.$UPD;

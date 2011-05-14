@@ -1160,14 +1160,6 @@ AC_ARG_WITH(mozilla-build,
     MOZILLABUILD=$withval ,
 )
 
-AC_ARG_WITH(local-solenv,
-    AS_HELP_STRING([--with-local-solenv],
-        [If you have solenv in a location other than ./solenv, please supply the path here.])
-    [
-                          Usage:     --with-local-solenv=<abs. path to solenv>
-    ],
-,)
-
 AC_ARG_WITH(local-solver,
     AS_HELP_STRING([--with-local-solver],
         [If you have solver in a location other than ./solver, please supply the path here.])
@@ -1713,35 +1705,14 @@ AC_SUBST(CXX_FOR_BUILD)
 AC_SUBST(GXX_INCLUDE_PATH_FOR_BUILD)
 AC_SUBST(MACOSX_DEPLOYMENT_TARGET_FOR_BUILD)
 
-dnl ===================================================================
-dnl Checks for --with-local-solenv invocation
-dnl TODO: Is this still required?
-dnl ===================================================================
-AC_MSG_CHECKING([for solenv environment])
-if test -z "$with_local_solenv"; then
-   LOCAL_SOLENV="DEFAULT"
-   AC_MSG_RESULT([default])
-else
-   LOCAL_SOLENV=$with_local_solenv
-   AC_MSG_RESULT([$with_local_solenv])
-fi
-AC_SUBST(LOCAL_SOLENV)
-
-if test "$LOCAL_SOLENV" = "DEFAULT"; then
-  _solenv="./solenv"
-else
-  _solenv="$LOCAL_SOLENV"
-fi
-AC_SUBST(_solenv)
-
-if test -e $_solenv/inc/minor.mk; then
+if test -e solenv/inc/minor.mk; then
    # Get UPD number from ./solenv/inc/minor.mk
-   UPD="`grep RSCVERSION= $_solenv/inc/minor.mk | $AWK -F"=" '{ print $2 }'`"
+   UPD="`grep RSCVERSION= solenv/inc/minor.mk | $AWK -F"=" '{ print $2 }'`"
    AC_SUBST(UPD)
-   SOURCEVERSION="`grep SOURCEVERSION= $_solenv/inc/minor.mk | $AWK -F"=" '{ print $2 }'`"
+   SOURCEVERSION="`grep SOURCEVERSION= solenv/inc/minor.mk | $AWK -F"=" '{ print $2 }'`"
    AC_SUBST(SOURCEVERSION)
 else
-   AC_MSG_ERROR([$_solenv/inc/minor.mk missing but needed for architecture/os detecion and proper environment script generation...])
+   AC_MSG_ERROR([solenv/inc/minor.mk missing but needed for architecture/os detecion and proper environment script generation...])
 fi
 
 dnl ===================================================================
