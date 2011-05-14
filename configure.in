@@ -38,7 +38,7 @@ AC_ARG_ENABLE(ext-lightproof,
 
 AC_ARG_ENABLE(ext-mysql-connector,
     AS_HELP_STRING([--enable-ext-mysql-connector],
-        [Enables the build of the MySQL Connector/LibO extension. This requires
+        [Enables the build of the MySQL Connector/LibreOffice extension. This requires
          access to the MySQL Connector/C (aka libmysql) to be given, too, with
          either the --with-system-mysql or --with-libmysql-path option.]),
 ,)
@@ -142,7 +142,7 @@ AC_ARG_ENABLE(fetch-external,
 
 AC_ARG_ENABLE(lockdown,
     AS_HELP_STRING([--disable-lockdown],
-        [Disables the gconf integration work in LibO.]),
+        [Disables the gconf integration work in LibreOffice.]),
 ,enable_lockdown=yes)
 
 AC_ARG_ENABLE(vba,
@@ -157,24 +157,24 @@ AC_ARG_ENABLE(pch,
 
 AC_ARG_ENABLE(mozilla,
     AS_HELP_STRING([--disable-mozilla],
-        [LibO usually includes a strangely hacked up mozilla binary for your
+        [LibreOffice usually includes a strangely hacked up Mozilla binary for your
          platform, to build without this version, use this option.]),
 ,enable_mozilla=yes)
 
 AC_ARG_ENABLE(epm,
     AS_HELP_STRING([--enable-epm],
-        [LibO includes self-packaging code, that requires epm, however epm is
+        [LibreOffice includes self-packaging code, that requires epm, however epm is
          useless for large scale package building.]),
 ,enable_epm=no)
 
 AC_ARG_ENABLE(activex_component,
     AS_HELP_STRING([--disable-activex-component],
-        [Remove support for ActiveX embedding of LibO.]),
+        [Remove support for ActiveX embedding of LibreOffice.]),
 ,enable_activex_component=yes)
 
 AC_ARG_ENABLE(odk,
     AS_HELP_STRING([--disable-odk],
-        [LibO includes an ODK, office development kit which some packagers may
+        [LibreOffice includes an ODK, office development kit which some packagers may
          wish to build without.]),
 ,enable_odk=yes)
 
@@ -207,7 +207,7 @@ AC_ARG_ENABLE(directx,
 
 AC_ARG_ENABLE(activex,
     AS_HELP_STRING([--disable-activex],
-        [Disable the use of ActiveX for windows build.])
+        [Disable the use of ActiveX for a Windows build.])
     [
                           This switch is mandatory when using VC++ 2008 Express.
     ],
@@ -215,7 +215,7 @@ AC_ARG_ENABLE(activex,
 
 AC_ARG_ENABLE(atl,
     AS_HELP_STRING([--disable-atl],
-        [Disable the use of ATL for windows build.])
+        [Disable the use of ATL for a Windows build.])
     [
                           This switch is mandatory when using VC++ 2008 Express.
     ],
@@ -310,8 +310,8 @@ AC_ARG_ENABLE(gio,
 
 AC_ARG_ENABLE(static-gtk,
     AS_HELP_STRING([--enable-static-gtk],
-        [Modules that are linked against gtk libraries use the static libraries
-         instead of the dynamic ones. (Enables -Bstatic linker flag for gtk libraries.)]),
+        [Modules that are linked against GTK+ libraries use the static libraries
+         instead of the dynamic ones. (Enables -Bstatic linker flag for GTK+ libraries.)]),
 ,)
 
 AC_ARG_ENABLE(layout,
@@ -321,8 +321,8 @@ AC_ARG_ENABLE(layout,
 
 AC_ARG_ENABLE(build-mozilla,
     AS_HELP_STRING([--disable-build-mozilla],
-        [Use this option if you do not want to build the mozilla components from
-         the mozilla source code but take precompiled zips.]),
+        [Use this option if you do not want to build the Mozilla components from
+         the Mozilla source code but take precompiled zips.]),
 ,)
 
 AC_ARG_ENABLE(nss-module,
@@ -564,7 +564,7 @@ AC_ARG_WITH(helppack-integration,
 
 AC_ARG_WITH(fonts,
     AS_HELP_STRING([--without-fonts],
-        [LibO includes some third-party fonts to provide a reliable basis for
+        [LibreOffice includes some third-party fonts to provide a reliable basis for
          help content, templates, samples, etc. When these fonts are already
          known to be available on the system then you should use this option.]),
 ,)
@@ -599,7 +599,7 @@ AC_ARG_WITH(epm,
 
 AC_ARG_WITH(package-format,
     AS_HELP_STRING([--with-package-format],
-        [Specify package format(s) for LibO installsets. Default is the
+        [Specify package format(s) for LibreOffice installsets. Default is the
          "normal" one of the OS/Distribution. Possible values: aix, bsd, deb,
          inst, tardist, osx, pkg, rpm, setld, native, portable, archive, dmg,
           installed, msi. Example: --with-package-format="deb dmg"]),
@@ -617,13 +617,13 @@ AC_ARG_WITH(system-cairo,
 
 AC_ARG_WITH(mozilla-version,
     AS_HELP_STRING([--with-mozilla-version],
-        [Choose which version of mozilla to use while building mozilla.
+        [Choose which version of Mozilla to use while building Mozilla.
          (default=1.7.5) Note that not all versions are supported.]),
 ,)
 
 AC_ARG_WITH(mozilla-toolkit,
     AS_HELP_STRING([--with-mozilla-toolkit],
-        [Choose which GUI toolkit to use while building mozilla components. (default=gtk2)]),
+        [Choose which GUI toolkit to use while building Mozilla components. (default=gtk2)]),
 ,)
 
 AC_ARG_WITH(myspell-dicts,
@@ -755,13 +755,13 @@ AC_ARG_WITH(lucene-analyzers-jar,
 
 AC_ARG_WITH(system-mysql,
     AS_HELP_STRING([--with-system-mysql],
-        [Use MySQL libraries already on system, for building the MySQL Connector/LibO
+        [Use MySQL libraries already on system, for building the MySQL Connector/LibreOffice
          extension. Requires MYSQLCONFIG to point to the mysql_config executable.]))
 
 AC_ARG_WITH(libmysql-path,
     AS_HELP_STRING([--with-libmysql-path],
         [Use Connector/C (libmysql) installation for building the MySQL
-         Connector/LibO extension.])
+         Connector/LibreOffice extension.])
     [
                           Usage:     --with-libmysql-path=<absolute path to
                                                   your Connector/C installation>
@@ -962,8 +962,8 @@ AC_ARG_WITH(system-redland,
 
 AC_ARG_WITH(system-mozilla,
     AS_HELP_STRING([--with-system-mozilla],
-        [Use mozilla already on system. Note that some components cannot be built
-         against a contemporary mozilla. The flavour used can be specified by
+        [Use Mozilla already on system. Note that some components cannot be built
+         against a contemporary Mozilla. The flavour used can be specified by
          --with-system-mozilla=<flavour>. Supported are: libxul (default),
          xulrunner, firefox, seamonkey, mozilla.]),
     WITH_SYSTEM_MOZILLA=$withval ,
@@ -1228,7 +1228,7 @@ AC_ARG_WITH(os-version,
 
 AC_ARG_WITH(zip-home,
     AS_HELP_STRING([--with-zip-home],
-        [If you use a non standard zip, for example windows please supply the path for zip.])
+        [If you use a non standard zip, for example Windows please supply the path for zip.])
     [
                           Usage:     --with-zip-home=<path to zip executable>
     ],
@@ -1371,27 +1371,27 @@ case "$host_os" in
         _os=SunOS
         AC_PATH_PROG( GNUTAR, gtar,,$PATH:/usr/sfw/bin)
         if test -z "$GNUTAR"; then
-            AC_MSG_ERROR([gtar (gnu tar) not found but needed. Install it (SUN Freeware package).])
+            AC_MSG_ERROR([gtar (GNU tar) not found but needed. Install it (Sun Freeware package).])
         fi
         AC_SUBST(GNUTAR)
 
         dnl ===========================================================
-        dnl check whether we're using solaris 6,7,8 - sparc or intel.
+        dnl Check whether we're using Solaris 6,7,8 - SPARC or Intel.
         dnl ===========================================================
            AC_MSG_CHECKING([the Solaris operating system release])
            _os_release=`echo $host_os | $SED -e s/solaris2\.//`
         if test "$_os_release" -lt "6"; then
-                  AC_MSG_ERROR([use solaris >= 6 to build LibreOffice])
+                  AC_MSG_ERROR([use Solaris >= 6 to build LibreOffice])
            else
                   AC_MSG_RESULT([ok ($_os_release)])
            fi
 
-           dnl check whether we're using a sparc or i386 processor
+           dnl Check whether we're using a SPARC or i386 processor
            AC_MSG_CHECKING([the processor type])
            if test "$host_cpu" = "sparc" -o "$host_cpu" = "i386"; then
                   AC_MSG_RESULT([ok ($host_cpu)])
            else
-                  AC_MSG_ERROR([only sparc and i386 processors are supported])
+                  AC_MSG_ERROR([only SPARC and i386 processors are supported])
            fi
         ;;
     linux-gnu*|k*bsd*-gnu*)
@@ -1506,10 +1506,10 @@ AC_SUBST(PTHREAD_LIBS)
 if test $_os = "WINNT"; then
    AC_MSG_CHECKING([Windows build environment sanity])
    dnl ===================================================================
-   dnl Sanity check! Native windows programs cannot use cygwin symlinks!
+   dnl Sanity check! Native Windows programs cannot use Cygwin symlinks!
    dnl ===================================================================
    dnl As long as awk instead of $AWK is used somewhere in the sources,
-   dnl check for $AWK and awk. $AWK is pointing to gawk in cygwin.
+   dnl check for $AWK and awk. $AWK is pointing to gawk in Cygwin.
       if test -L $AWK -o -L `which awk` -o -L `which tar` -o -L `which gunzip` ; then
          AC_MSG_ERROR([$AWK, awk, tar or gunzip is a Cygwin symlink!
 Native Windows programs cannot use Cygwin symlinks. Remove the symbolic
@@ -1536,9 +1536,9 @@ fi
 AC_SUBST(WITH_MINGW)
 
 dnl ===================================================================
-dnl Extra check for Windows. cygwin builds need gcc to build dmake
+dnl Extra check for Windows. Cygwin builds need gcc to build dmake
 dnl and g++ to build guw.exe although MS cl (or MinGW) is used to
-dnl build LibO.
+dnl build LibreOffice.
 dnl ===================================================================
 if test "_os" = "WINNT" ; then
    AC_MSG_CHECKING([for Cygwin gcc/g++])
@@ -2038,7 +2038,7 @@ fi
 AC_SUBST(GNUMAKE)
 
 dnl ===================================================================
-dnl  Test the solaris compiler version
+dnl  Test the Solaris compiler version
 dnl ===================================================================
 if test "$_os" = "SunOS"; then
    if test "$CC" = "cc"; then
@@ -2124,7 +2124,7 @@ fi
 
 dnl ===================================================================
 dnl Testing for Perl version 5 or greater.
-dnl $] is the perl version variable, it is returned as an integer
+dnl $] is the Perl version variable, it is returned as an integer
 dnl ===================================================================
 if test "$PERL"; then
    AC_MSG_CHECKING([the Perl version])
@@ -2425,7 +2425,7 @@ AC_SUBST(DOTNET_FRAMEWORK_HOME)
 fi
 
 dnl ===================================================================
-dnl Check if stdc headers are available excluding windows.
+dnl Check if stdc headers are available excluding Windows.
 dnl ===================================================================
 if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
    AC_HEADER_STDC
@@ -2735,7 +2735,7 @@ _ACEOF
 fi
 
 dnl ===================================================================
-dnl Extra checking for the SUN OS compiler
+dnl Extra checking for the SunOS compiler
 dnl ===================================================================
 if test "$_os" = "SunOS"; then
    dnl SunStudio C++ compiler packaged with SunStudio C compiler
@@ -3179,8 +3179,8 @@ else
    AC_MSG_RESULT([no])
    SOLAR_JAVA=""
 
-   AC_MSG_WARN([building without java will mean some features will not be available])
-   echo "building without java will mean some features will not be available" >>warn
+   AC_MSG_WARN([building without Java will mean some features will not be available])
+   echo "building without Java will mean some features will not be available" >>warn
 fi
 AC_SUBST(SOLAR_JAVA)
 
@@ -3232,7 +3232,7 @@ if test "$SOLAR_JAVA" != ""; then
       AC_PATH_PROG(JAVAINTERPRETER, $WITH_JAVA)
    else
       _java_path="$with_jdk_home/bin/$WITH_JAVA"
-      dnl Check if there is a java interpreter at all.
+      dnl Check if there is a Java interpreter at all.
       if test -x "$_java_path"; then
          JAVAINTERPRETER=$_java_path
       else
@@ -3257,9 +3257,9 @@ if test "$SOLAR_JAVA" != ""; then
       JAVAINTERPRETER=`cygpath -d "$JAVAINTERPRETER"`
       JAVAINTERPRETER=`cygpath -u "$JAVAINTERPRETER"`
    elif test "$_os" = "Darwin"; then
-      dnl HACK:  There currently is only a 32 bit version of LibO for Mac OS X,
-      dnl and Tiger java complains about -d32 while Snow Leopard java needs it
-      dnl to run in 32 bit mode and be able to load LibO jnilibs:
+      dnl HACK:  There currently is only a 32 bit version of LibreOffice for Mac OS X,
+      dnl and Tiger Java complains about -d32 while Snow Leopard Java needs it
+      dnl to run in 32 bit mode and be able to load LibreOffice jnilibs:
       AC_MSG_CHECKING([whether to pass -d32 to Java interpreter])
       if "$JAVAINTERPRETER" -d32 >&5 2>&5; then
          AC_MSG_RESULT([yes])
@@ -3311,7 +3311,7 @@ you must use the "--with-jdk-home" configure option explicitly])
       else
         JDK=sun
 
-        dnl SUN JDK specific tests
+        dnl Sun JDK specific tests
         _jdk=`$JAVAINTERPRETER -version 2>&1 | $AWK -F'"' '{ print \$2 }' | $SED s/[[-A-Za-z]]*//`
         _jdk_ver=`echo "$_jdk" | $AWK -F. '{ print (($1 * 100) + $2) * 100 + $3;}'`
 
@@ -3334,10 +3334,10 @@ fi
 
 _java_target_ver="1.5"
 dnl ===================================================================
-dnl Check for target java bytecode version
+dnl Check for target Java bytecode version
 dnl ===================================================================
 if test "$SOLAR_JAVA" != ""; then
-    AC_MSG_CHECKING([for target java bytecode version])
+    AC_MSG_CHECKING([for target Java bytecode version])
     if test "$JDK" = "gcj" -o "$JDK" = "kaffe"; then
     AC_MSG_RESULT([default by $JDK])
     if test -n "$with_java_target_version" -a "$with_java_target_version" != "no" ; then
@@ -3351,7 +3351,7 @@ if test "$SOLAR_JAVA" != ""; then
         _java_target_ver=`echo "$_jdk_ver" | $AWK '{ maj=substr($0,1,1); min=substr($0,2,2); print int(maj)"."int(min) }'`
         AC_MSG_RESULT([$_java_target_ver])
     else
-            AC_MSG_ERROR([Unable to guess java bytecode version from java version!])
+            AC_MSG_ERROR([Unable to guess Java bytecode version from Java version!])
     fi
     fi
 
@@ -3363,7 +3363,7 @@ if test "$SOLAR_JAVA" != ""; then
         "$_java_target_ver" = "1.5" -o \
         "$_java_target_ver" = "1.6" -o \
         "$_java_target_ver" = "5" ; then
-        AC_MSG_ERROR([$_java_target_ver is not supported java bytecode version!])
+        AC_MSG_ERROR([$_java_target_ver is not a supported Java bytecode version!])
     fi
 
     JAVA_SOURCE_VER="$_java_target_ver"
@@ -3383,7 +3383,7 @@ if test "$SOLAR_JAVA" != ""; then
         AC_PATH_PROG(JAVACOMPILER, $javacompiler)
     else
         _javac_path="$with_jdk_home/bin/$javacompiler"
-        dnl Check if there is a java compiler at all.
+        dnl Check if there is a Java compiler at all.
         if test -x "$_javac_path"; then
             JAVACOMPILER=$_javac_path
         fi
@@ -3665,7 +3665,7 @@ BUILD_EPM=NO
 if test "$enable_epm" = "yes"; then
    AC_MSG_RESULT([yes])
    dnl ===================================================================
-   dnl Check for epm - not needed for windows
+   dnl Check for epm - not needed for Windows
    dnl ===================================================================
    if test "$_os" != "WINNT"; then
       if test -n "$with_epm"; then
@@ -3765,7 +3765,7 @@ rpm - RedHat software distribution
 setld - Tru64 (setld) software distribution
 native - "Native" software distribution for the platform
 portable - Portable software distribution
-LibO additionally supports:
+LibreOffice additionally supports:
 archive - .tar.gz or .zip
 dmg - Mac OS X .dmg
 installed - installation tree
@@ -3823,7 +3823,7 @@ msi - Windows .msi
       echo "$PKGFORMAT" | $EGREP pkg 2>&1 >/dev/null; then
           if test "$EPM" != "no" && test "$EPM" != "internal"; then
            if test "`echo $EPM_VERSION | cut -d'.' -f1`" -lt "4"; then
-               AC_MSG_CHECKING([whether epm is patched for LibOs needs])
+               AC_MSG_CHECKING([whether epm is patched for LibreOffice's needs])
                if grep "Patched for LibreOffice" $EPM >/dev/null 2>/dev/null; then
                   AC_MSG_RESULT([yes])
                else
@@ -4661,8 +4661,8 @@ if test -n "$with_system_saxon" -o -n "$with_system_libs" && \
         fi
 
 dnl Saxon comes in two practically available versions, the out-of-date saxonb which
-dnl supports the java extensions that LibO uses, and the up-to-date saxon he
-dnl "home edition" version, which is crippled to not support those java extensions.
+dnl supports the Java extensions that LibreOffice uses, and the up-to-date saxon he
+dnl "home edition" version, which is crippled to not support those Java extensions.
 dnl And as an aside the he one also needs to be tweaked to include
 dnl a META-INF/services to broadcast that it supports the jaxp transform factory
 
@@ -4987,7 +4987,7 @@ AC_OUTPUT([ooo.lst])
 dnl ===================================================================
 dnl Check for system mozilla
 dnl ===================================================================
-AC_MSG_CHECKING([which mozilla to use])
+AC_MSG_CHECKING([which Mozilla to use])
 if test -n "$with_system_mozilla" && test "$with_system_mozilla" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_MOZILLA=YES
@@ -5088,7 +5088,7 @@ else
 if test -z "$with_mozilla_version"; then
    MOZILLA_VERSION=
 else
-   AC_MSG_CHECKING([which mozilla version to build])
+   AC_MSG_CHECKING([which Mozilla version to build])
    MOZILLA_VERSION=$with_mozilla_version
    enable_build_mozilla=1
    AC_MSG_RESULT([$MOZILLA_VERSION])
@@ -5096,7 +5096,7 @@ fi
 
 AC_SUBST(MOZILLA_VERSION)
 
-AC_MSG_CHECKING([for toolkit mozilla should use])
+AC_MSG_CHECKING([for toolkit Mozilla should use])
 if test -z "$with_mozilla_toolkit"; then
    if test "$_os" != "WINNT" ; then
       if test "$_os" = "Darwin" ; then
@@ -5188,7 +5188,7 @@ if test "$BUILD_MOZAB" = "TRUE"; then
    fi
    MOZILLA_SOURCE_VERSION="seamonkey-${MOZILLA_VERSION}.source"
    MOZILLA_FETCH_FILE=`grep $MOZILLA_SOURCE_VERSION ooo.lst`
-   AC_MSG_CHECKING([for mozilla sources])
+   AC_MSG_CHECKING([for Mozilla sources])
    if test -z "$MOZILLA_FETCH_FILE"; then
       AC_MSG_RESULT([not found])
       HAVE_MOZILLA_TARBALL=n
@@ -5221,12 +5221,12 @@ Use "./fetch_tarballs.sh ooo.lst" to download.])
       fi
    elif test "$_os" = "Darwin"; then
       if test "$MOZILLA_TOOLKIT" = "gtk2"; then
-         AC_MSG_NOTICE([checking whether mozilla can be built...])
-         PKG_CHECK_MODULES(MOZGTK2, gtk+-2.0 >= 2.4 libIDL-2.0 >= 0.8, AC_MSG_NOTICE([OK - can build mozilla]), AC_MSG_ERROR([Prerequisites to build mozilla not met. Either use the precompiled mozilla binaries or install the missing packages]))
+         AC_MSG_NOTICE([checking whether Mozilla can be built...])
+         PKG_CHECK_MODULES(MOZGTK2, gtk+-2.0 >= 2.4 libIDL-2.0 >= 0.8, AC_MSG_NOTICE([OK - can build Mozilla]), AC_MSG_ERROR([Prerequisites to build Mozilla not met. Either use the precompiled Mozilla binaries or install the missing packages]))
       else
          PKG_CHECK_MODULES(MOZLIBREQ, libIDL-2.0 >= 0.6.3,  MOZIDL="TRUE", MOZIDL="")
          if test -z "$MOZIDL"; then
-            AC_MSG_ERROR([libIDL 0.6.3 or newer is needed to build mozilla with mac toolkit.])
+            AC_MSG_ERROR([libIDL 0.6.3 or newer is needed to build Mozilla with Mac toolkit.])
          fi
       fi
    else
@@ -5234,20 +5234,20 @@ Use "./fetch_tarballs.sh ooo.lst" to download.])
       if test "$MOZILLA_TOOLKIT" = "gtk2"; then
          PKG_CHECK_MODULES(MOZLIBREQ, gtk+-2.0, MOZGTK="TRUE", MOZGTK="")
          if test -z "$MOZGTK"; then
-            AC_MSG_ERROR([GTK2 is needed to build mozilla.])
+            AC_MSG_ERROR([GTK2 is needed to build Mozilla.])
          fi
          PKG_CHECK_MODULES(MOZLIBREQ, libIDL-2.0 >= 0.8.0, MOZIDL="TRUE", MOZIDL="")
          if test -z "$MOZIDL"; then
-            AC_MSG_ERROR([libIDL >= 0.8.0 is needed when using GTK2 to build mozilla.])
+            AC_MSG_ERROR([libIDL >= 0.8.0 is needed when using GTK2 to build Mozilla.])
          fi
       else
          PKG_CHECK_MODULES(MOZLIBREQ, gtk+ >= 1.2.3, MOZGTK="TRUE", MOZGTK="")
          if test -z "$MOZGTK"; then
-            AC_MSG_ERROR([gtk 1.2 is needed when not using GTK2 to build mozilla.])
+            AC_MSG_ERROR([GTK+ 1.2 is needed when not using GTK2 to build Mozilla.])
          fi
          PKG_CHECK_MODULES(MOZLIBREQ, libidl >= 0.6.3 libidl <= 0.6.8, MOZIDL="TRUE", MOZIDL="")
          if test -z "$MOZIDL"; then
-            AC_MSG_ERROR([libIDL 0.6.3 - 0.6.8 is needed when not using GTK2 to build mozilla.])
+            AC_MSG_ERROR([libIDL 0.6.3 - 0.6.8 is needed when not using GTK2 to build Mozilla.])
          fi
       fi
    fi
@@ -5447,9 +5447,9 @@ AC_SUBST(XAU_LIBS)
 
 if test "$_os" != "WINNT" -a "$_os" != "Darwin"; then
    dnl ===================================================================
-   dnl Check for Composite.h for mozilla plugin
+   dnl Check for Composite.h for Mozilla plugin
    dnl ===================================================================
-   AC_CHECK_HEADERS(X11/Composite.h,[],[AC_MSG_ERROR([Xt include headers not found])],
+   AC_CHECK_HEADERS(X11/Composite.h,[],[AC_MSG_ERROR([Xt headers not found])],
      [#include <X11/Intrinsic.h>])
 fi
 
@@ -6095,7 +6095,7 @@ dnl Zip must be a specific type for different build types.
 dnl ===================================================================
 if test "$_os" = "WINNT"; then
     if test -n "`$ZIP -h | grep -i WinNT`" ; then
-AC_MSG_ERROR([$ZIP found in the path is not the required cygwin version of Info-ZIPs zip.exe.])
+AC_MSG_ERROR([$ZIP found in the path is not the required Cygwin version of Info-ZIPs zip.exe.])
     fi
 fi
 AC_SUBST(ZIP_HOME)
@@ -6343,7 +6343,7 @@ else
         fi
 
       else
-        AC_MSG_RESULT([not on windows])
+        AC_MSG_RESULT([not on Windows])
       fi
    else
       AC_MSG_RESULT([no])
@@ -6431,7 +6431,7 @@ AS_IF([test "x$enable_ext_wiki_publisher" = "xyes"], [
   ENABLE_MEDIAWIKI=YES
   BUILD_TYPE="$BUILD_TYPE SWEXT"
   if test  "x$WITH_JAVA" = "xno"; then
-    AC_MSG_ERROR([wiki publisher requires Java! Enable java if you want to build it.])
+    AC_MSG_ERROR([Wiki Publisher requires Java! Enable Java if you want to build it.])
   fi
 ],[
   AC_MSG_RESULT([no])
@@ -6652,7 +6652,7 @@ AC_SUBST(LIBREPOSITORY_JAR)
 AC_SUBST(LIBFONTS_JAR)
 AC_SUBST(LIBSERIALIZER_JAR)
 
-# this has to be here because both the wiki publisher and the SRB use
+# this has to be here because both the Wiki Publisher and the SRB use
 # commons-logging
 if test "$ENABLE_MEDIAWIKI" = "YES" -o "$ENABLE_REPORTBUILDER" = "YES"; then
   AC_MSG_CHECKING([which Apache commons-* libs to use])
@@ -7603,7 +7603,7 @@ dnl ===================================================================
 dnl Test whether to enable ActiveX embedding
 dnl ===================================================================
 if test "$_os" = "WINNT"; then
-  AC_MSG_CHECKING([whether to enable ActiveX embedding of LibO components])
+  AC_MSG_CHECKING([whether to enable ActiveX embedding of LibreOffice components])
   if test "$enable_activex_component" = "yes" -o "$enable_activex_component" = "TRUE" -o "$enable_activex_component" = ""; then
     ENABLE_ACTIVEX_COMPONENT="TRUE"
     AC_MSG_RESULT([yes])
@@ -7807,7 +7807,7 @@ AC_SUBST(ANT_LIB)
 ant_minver=1.6.0
 ant_minminor1=`echo $ant_minver | cut -d"." -f2`
 
-AC_MSG_CHECKING([whether ant is >= $ant_minver])
+AC_MSG_CHECKING([whether Ant is >= $ant_minver])
 ant_version=`$ANT -version | $AWK '{ print $4; }'`
 ant_version_major=`echo $ant_version | cut -d. -f1`
 ant_version_minor=`echo $ant_version | cut -d. -f2`
@@ -7819,11 +7819,11 @@ if test "$ant_version_major" -ge "2"; then
 elif test "$ant_version_major" = "1" && test "$ant_version_minor" -ge "$ant_minminor1"; then
    AC_MSG_RESULT([yes, $ant_version])
 else
-   AC_MSG_ERROR([no, you need at least ant >= $ant_minver])
+   AC_MSG_ERROR([no, you need at least Ant >= $ant_minver])
 fi
 
 if test "$ENABLE_MEDIAWIKI" = "YES"; then
-AC_MSG_CHECKING([whether ant supports mapper type="regexp"])
+AC_MSG_CHECKING([whether Ant supports mapper type="regexp"])
 rm -rf confdir
 mkdir confdir
 cat > conftest.java << EOF
@@ -8047,7 +8047,7 @@ AC_SUBST(ENABLE_ZENITY)
 
 
 dnl ===================================================================
-dnl Hook up LibOs nodep environmental variable to automake's equivalent
+dnl Hook up LibreOffice's nodep environmental variable to automake's equivalent
 dnl --enable-dependency-tracking configure option
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable dependency tracking])
