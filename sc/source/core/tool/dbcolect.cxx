@@ -711,10 +711,10 @@ bool ScDBCollection::NamedDBs::insert(ScDBData* p)
 
     pair<DBsType::iterator, bool> r = maDBs.insert(pData);
 
-    if (r.second && pData->HasImportParam() && !pData->HasImportSelection())
+    if (r.second && p->HasImportParam() && !p->HasImportSelection())
     {
-        pData->SetRefreshHandler(mrParent.GetRefreshHandler());
-        pData->SetRefreshControl(mrDoc.GetRefreshTimerControlAddress());
+        p->SetRefreshHandler(mrParent.GetRefreshHandler());
+        p->SetRefreshControl(mrDoc.GetRefreshTimerControlAddress());
     }
     return r.second;
 }
