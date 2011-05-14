@@ -151,7 +151,7 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
     bFilterSkipDuplicates(false),
     bFilterUseRegularExpressions(false),
     bFilterConditionSourceRange(false),
-    meRangeType(GlobalNamed)
+    meRangeType(ScDBCollection::GlobalNamed)
 {
     nSourceType = sheet::DataImportMode_NONE;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -223,9 +223,9 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
     }
 
     if (sDatabaseRangeName.matchAsciiL(STR_DB_LOCAL_NONAME, strlen(STR_DB_LOCAL_NONAME)))
-        meRangeType = SheetAnonymous;
+        meRangeType = ScDBCollection::SheetAnonymous;
     else if (sDatabaseRangeName.matchAsciiL(STR_DB_GLOBAL_NONAME, strlen(STR_DB_GLOBAL_NONAME)))
-        meRangeType = GlobalAnonymous;
+        meRangeType = ScDBCollection::GlobalAnonymous;
 }
 
 ScXMLDatabaseRangeContext::~ScXMLDatabaseRangeContext()
@@ -476,7 +476,7 @@ void ScXMLDatabaseRangeContext::EndElement()
     if (!pDoc)
         return;
 
-    if (meRangeType == SheetAnonymous)
+    if (meRangeType == ScDBCollection::SheetAnonymous)
     {
         OUString aName(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME));
         ::std::auto_ptr<ScDBData> pData(ConvertToDBData(aName));
@@ -491,7 +491,7 @@ void ScXMLDatabaseRangeContext::EndElement()
         }
         return;
     }
-    else if (meRangeType == GlobalAnonymous)
+    else if (meRangeType == ScDBCollection::GlobalAnonymous)
     {
         OUString aName(RTL_CONSTASCII_USTRINGPARAM(STR_DB_GLOBAL_NONAME));
         ::std::auto_ptr<ScDBData> pData(ConvertToDBData(aName));
@@ -503,7 +503,7 @@ void ScXMLDatabaseRangeContext::EndElement()
         }
         return;
     }
-    else if (meRangeType == GlobalNamed)
+    else if (meRangeType == ScDBCollection::GlobalNamed)
     {
         ::std::auto_ptr<ScDBData> pData(ConvertToDBData(sDatabaseRangeName));
 

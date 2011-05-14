@@ -161,6 +161,8 @@ public:
 class SC_DLLPUBLIC ScDBCollection
 {
 public:
+    enum RangeType { GlobalNamed, GlobalAnonymous, SheetAnonymous };
+
     /**
      * Stores global named database ranges.
      */

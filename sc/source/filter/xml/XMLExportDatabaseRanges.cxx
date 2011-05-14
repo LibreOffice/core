@@ -576,12 +576,25 @@ namespace {
 
 class WriteDatabaseRange : public ::std::unary_function<ScDBData, void>
 {
+    ScXMLExport& mrExport;
+    ScDocument* mpDoc;
+    sal_Int32 mnCounter;
+    ScDBCollection::RangeType meRangeType;
 public:
+
     WriteDatabaseRange(ScXMLExport& rExport, ScDocument* pDoc) :
-        mrExport(rExport), mpDoc(pDoc), mnCounter(0) {}
+        mrExport(rExport), mpDoc(pDoc), mnCounter(0), meRangeType(ScDBCollection::GlobalNamed) {}
+
+    void setRangeType(ScDBCollection::RangeType eNew)
+    {
+        meRangeType = eNew;
+    }
 
     void operator() (const ::std::pair<SCTAB, const ScDBData*>& r)
     {
+        if (meRangeType != ScDBCollection::SheetAnonymous)
+            return;
+
         // name
         OUStringBuffer aBuf;
         aBuf.appendAscii(STR_DB_LOCAL_NONAME);
@@ -592,12 +605,17 @@ public:
 
     void operator() (const ScDBData& rData)
     {
-        // name
-        OUStringBuffer aBuf;
-        aBuf.appendAscii(STR_DB_GLOBAL_NONAME);
-        aBuf.append(++mnCounter); // 1-based, for entirely arbitrary reasons.  The numbers are ignored on import.
+        if (meRangeType == ScDBCollection::GlobalAnonymous)
+        {
+            // name
+            OUStringBuffer aBuf;
+            aBuf.appendAscii(STR_DB_GLOBAL_NONAME);
+            aBuf.append(++mnCounter); // 1-based, for entirely arbitrary reasons.  The numbers are ignored on import.
 
-        write(aBuf.makeStringAndClear(), rData);
+            write(aBuf.makeStringAndClear(), rData);
+        }
+        else if (meRangeType == ScDBCollection::GlobalNamed)
+            write(rData.GetName(), rData);
     }
 
 private:
@@ -1075,11 +1093,6 @@ private:
             }
         }
     }
-
-private:
-    ScXMLExport& mrExport;
-    ScDocument* mpDoc;
-    sal_Int32 mnCounter;
 };
 
 }
@@ -1123,15 +1136,18 @@ void ScXMLExportDatabaseRanges::WriteDatabaseRanges()
     if (pDBCollection)
     {
         // Write global named ranges.
+        func.setRangeType(ScDBCollection::GlobalNamed);
         const ScDBCollection::NamedDBs& rNamedDBs = pDBCollection->getNamedDBs();
         ::std::for_each(rNamedDBs.begin(), rNamedDBs.end(), func);
 
         // Add global anonymous DB ranges.
+        func.setRangeType(ScDBCollection::GlobalAnonymous);
         const ScDBCollection::AnonDBs& rAnonDBs = pDBCollection->getAnonDBs();
         ::std::for_each(rAnonDBs.begin(), rAnonDBs.end(), func);
     }
 
     // Write sheet-local ranges.
+    func.setRangeType(ScDBCollection::SheetAnonymous);
     ::std::for_each(aSheetDBs.begin(), aSheetDBs.end(), func);
 }
 
