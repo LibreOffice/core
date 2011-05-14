@@ -464,18 +464,6 @@ sub init_globals
     my $updater       = $ENV{'UPDATER'};
     my $work_stamp    = $ENV{'WORK_STAMP'};
 
-    # special security check for release engineers
-    if ( defined($updater) && !$opt_force) {
-        my $path = getcwd();
-        if ( $path !~ /$work_stamp/io ) {
-            print_error("can't deliver from local directory to SOLARVERSION");
-            print STDERR "\nDANGER! Release Engineer:\n";
-            print STDERR "do you really want to deliver from $path to SOLARVERSION?\n";
-            print STDERR "If so, please use the -force switch\n\n";
-            exit(7);
-        }
-    }
-
     # do we have a valid environment?
     if ( !defined($inpath) ) {
             print_error("no environment", 0);
