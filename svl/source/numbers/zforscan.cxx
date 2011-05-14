@@ -1400,11 +1400,12 @@ bool ImpSvNumberformatScan::InsertSymbol( sal_uInt16 & nPos, svt::NfSymbolType e
 {
     if (nAnzStrings >= NF_MAX_FORMAT_SYMBOLS || nPos > nAnzStrings)
         return false;
-    ++nAnzResStrings;
     if (nPos > 0 && nTypeArray[nPos-1] == NF_SYMBOLTYPE_EMPTY)
         --nPos;     // reuse position
     else
     {
+        if (nAnzStrings + 1 >= NF_MAX_FORMAT_SYMBOLS)
+            return false;
         ++nAnzStrings;
         for (size_t i = nAnzStrings; i > nPos; --i)
         {
@@ -1412,6 +1413,7 @@ bool ImpSvNumberformatScan::InsertSymbol( sal_uInt16 & nPos, svt::NfSymbolType e
             sStrArray[i] = sStrArray[i-1];
         }
     }
+    ++nAnzResStrings;
     nTypeArray[nPos] = static_cast<short>(eType);
     sStrArray[nPos] = rStr;
     return true;
