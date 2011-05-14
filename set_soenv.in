@@ -57,7 +57,7 @@ my ( $CALL_CDECL, $COMMON_OUTDIR,
 # Platform dependent constant values.
 my ( $COM, $ARCH, $CPU, $CPUNAME, $GLIBC, $GUI, $GUIBASE,
       $GVER, $OS, $OSVERSION, $OUTPATH, $INPATH, $PATH_SEPERATOR,
-      $DYNAMIC_CRT, $SET_EXCEPTIONS, $use_shl_versions, $CDPATHx, $JRELIBDIR,
+      $DYNAMIC_CRT, $SET_EXCEPTIONS, $use_shl_versions, $JRELIBDIR,
       $JRETOOLKITDIR, $JRETHREADDIR,
       $FLIPCMD );
 #
@@ -1613,7 +1613,6 @@ ToFile( "OUTPATH",           $OUTPATH,           "e" );
 ToFile( "INPATH",            $INPATH,            "e" );
 ToFile( "PATH_SEPERATOR",    $PATH_SEPERATOR,    "e" );
 ToFile( "COMEX",             $COMEX,             "e" );
-ToFile( "CDPATHx",           $CDPATHx,           "e" );
 ToFile( "DYNAMIC_CRT",       $DYNAMIC_CRT,       "e" );
 ToFile( "SET_EXCEPTIONS",    $SET_EXCEPTIONS,    "e" );
 ToFile( "use_shl_versions",  $use_shl_versions,  "e" );
