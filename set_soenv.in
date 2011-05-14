@@ -50,7 +50,7 @@ my ( $outfile, $bootfile, $newline, $comment,
 # Platform independent constant values.
 my ( $CALL_CDECL, $COMMON_OUTDIR,
      $common_build, $NO_REC_RES, $SO3, $SOLAR_JAVA,
-     $SOLAR_PLUGIN, $UPDATER, $BUILD_DELIVER, $VCL,
+     $SOLAR_PLUGIN, $UPDATER, $VCL,
      $CC, $CXX,
      $ENABLEUNICODE, $NO_BSYMBOLIC);
 #
@@ -178,7 +178,6 @@ $SO3                  = "TRUE";
 $SOLAR_JAVA           = "@SOLAR_JAVA@";
 $SOLAR_PLUGIN         = "TRUE";
 $UPDATER              = "YES";
-$BUILD_DELIVER        = "true";
 $VCL                  = "TRUE";
 $ENABLEUNICODE        = "TRUE";
 $NO_BSYMBOLIC         = "TRUE";
@@ -1512,7 +1511,6 @@ ToFile( "NO_REC_RES",        $NO_REC_RES,        "e" );
 ToFile( "SO3",               $SO3,               "e" );
 ToFile( "SOLAR_PLUGIN",      $SOLAR_PLUGIN,      "e" );
 ToFile( "UPDATER",           $UPDATER,           "e" );
-ToFile( "build_deliver",     $BUILD_DELIVER,     "e" );
 ToFile( "VCL",               $VCL,               "e" );
 ToFile( "ENABLEUNICODE",     $ENABLEUNICODE,     "e" );
 ToFile( "NO_BSYMBOLIC",      $NO_BSYMBOLIC,      "e" );
