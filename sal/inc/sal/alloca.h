@@ -50,6 +50,13 @@
 #define INCLUDED_SYS_TYPES_H
 #endif
 
+#elif defined (IOS)
+
+#ifndef INCLUDED_SYS_TYPES_H
+#include <sys/types.h>
+#define INCLUDED_SYS_TYPES_H
+#endif
+
 #elif defined (WNT)
 
 #ifndef INCLUDED_MALLOC_H

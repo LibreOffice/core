@@ -45,6 +45,8 @@
 #endif
 #elif defined MACOSX
 #define THIS_OS "MacOSX"
+#elif defined IOS
+#define THIS_OS "iOS"
 #elif defined NETBSD
 #define THIS_OS "NetBSD"
 #elif defined FREEBSD
@@ -108,9 +110,5 @@ this is inserted for the case that the preprocessor ignores error
 #endif
 
 #endif
-
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

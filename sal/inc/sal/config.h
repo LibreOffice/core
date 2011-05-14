@@ -98,6 +98,17 @@
 #define SAL_SYSCONFIGFILE( name ) "." name "rc"
 #endif
 
+#ifdef IOS
+#define SAL_UNX
+#define SAL_DLLEXTENSION
+#define SAL_DLLPREFIX "lib"
+#define SAL_PRGEXTENSION ".bin"
+#define SAL_PATHSEPARATOR ':'
+#define SAL_PATHDELIMITER '/'
+#define SAL_CONFIGFILE( name ) name "rc"
+#define SAL_SYSCONFIGFILE( name ) "." name "rc"
+#endif
+
 #ifdef sun
 #undef sun
 #define sun sun

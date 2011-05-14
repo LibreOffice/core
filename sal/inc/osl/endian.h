@@ -130,13 +130,31 @@ extern "C" {
 #   endif
 #endif
 
+#ifdef IOS
+#   include <machine/endian.h>
+#   if BYTE_ORDER == LITTLE_ENDIAN
+#       ifndef _LITTLE_ENDIAN
+#       define _LITTLE_ENDIAN
+#       endif
+#   elif BYTE_ORDER == BIG_ENDIAN
+#       ifndef _BIG_ENDIAN
+#       define _BIG_ENDIAN
+#       endif
+#   elif BYTE_ORDER == PDP_ENDIAN
+#       ifndef _PDP_ENDIAN
+#       define _PDP_ENDIAN
+#       endif
+#   endif
+#endif
+
 /** Check supported platform.
  */
 #if !defined(_WIN32)  && \
     !defined(LINUX)   && !defined(NETBSD) && \
     !defined(AIX)     && !defined(OPENBSD) && \
     !defined(SOLARIS) && !defined(MACOSX) && !defined(FREEBSD) && \
-    !defined(DRAGONFLY)
+    !defined(DRAGONFLY) && \
+    !defined(IOS)
 #   error "Target platform not specified !"
 #endif
 
