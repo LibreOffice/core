@@ -40,7 +40,7 @@ PATCH_FILES = solarisfinite.patch warnings.patch windows.patch ldflags.patch aix
     # warnings.patch: see <https://sourceforge.net/tracker/?func=detail&
     #  aid=2912630&group_id=11795&atid=311795>
 
-.IF "$(CROSS_COMPILING)==""
+.IF "$(CROSS_COMPILING)"==""
 
 .IF "$(OS)" == "WNT"
 .IF "$(COM)" == "MSC"
