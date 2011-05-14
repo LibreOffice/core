@@ -36,11 +36,8 @@ ZIP_VERBOSITY=-q
 JARCOMPRESS_FLAG=0
 .ENDIF
 
-.IF "$(NEW_JAR_PACK)"!=""
 $(JARTARGETN) : $(JARMANIFEST) $(JAVACLASSFILES) $(JAVATARGET)
-.ENDIF			# "$(NEW_JAR_PACK)"!=""
 
-.IF "$(NEW_JAR_PACK)"!=""
 .IF "$(JARMANIFEST)"!=""
 
 .IF "$(CUSTOMMANIFESTFILE)"!=""
@@ -65,7 +62,6 @@ $(JARMANIFEST) .PHONY : $(CUSTOMMANIFESTFILEDEP)
     $(COMMAND_ECHO)$(TYPE) $(MISC)/$(TARGET)_$(CUSTOMMANIFESTFILE:f) >> $@
 .ENDIF			# "$(CUSTOMMANIFESTFILE)"!=""
 .ENDIF			# "$(JARMANIFEST)"!=""
-.ENDIF			# "$(NEW_JAR_PACK)"!=""
 
 .IF "$(JARCLASSEXCLUDES)" == ""
 ZIPJAR_EXCLUDE=
@@ -78,14 +74,8 @@ ZIPJAR_EXCLUDE=$(foreach,i,$(JARCLASSEXCLUDES) -x "$i")
 #
 # build jar 
 #
-.IF "$(NOJARDEP)"!="" || "$(NEW_JAR_PACK)"!=""
 $(JARTARGETN) .PHONY :
 #  $(JARMANIFEST)
-.ELSE			# "$(NOJARDEP)"!="" || "$(NEW_JAR_PACK)"!=""
-.DIRCACHE = no
-$(JARTARGETN) :
-#$(JARTARGETN) .SETDIR=$(CLASSDIR) .SEQUENTIAL : $(JARTARGETDEP) $(shell @-cat -s $(MISC)/$(JARTARGETN).dep )
-.ENDIF			# "$(NOJARDEP)"!="" || "$(NEW_JAR_PACK)"!=""
 .IF "$(OS)$(CPU)"=="SOLARISS"
     @-find . -type d -user $(USER) ! -perm -5 -print | xargs test "$$1" != "" && chmod +r $$1 
 .ENDIF
