@@ -35,7 +35,6 @@
 #include <tools/stream.hxx>
 #include <tools/geninfo.hxx>
 #include "bootstrp/prj.hxx"
-#include "bootstrp/inimgr.hxx"
 
 #if defined(WNT) || defined(OS2)
 #define LIST_DELIMETER ';'
