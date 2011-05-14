@@ -1516,7 +1516,6 @@ ToFile( "build_deliver",     $BUILD_DELIVER,     "e" );
 ToFile( "VCL",               $VCL,               "e" );
 ToFile( "ENABLEUNICODE",     $ENABLEUNICODE,     "e" );
 ToFile( "NO_BSYMBOLIC",      $NO_BSYMBOLIC,      "e" );
-ToFile( "TF_FILTER",         "TRUE",             "e" );
 if ("@ENABLE_DEBUG@" eq "TRUE") {
 ToFile( "debug",             "true",             "e" );
 }
