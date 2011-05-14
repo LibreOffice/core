@@ -55,7 +55,7 @@ my ( $CALL_CDECL, $COMMON_OUTDIR,
      $ENABLEUNICODE, $NO_BSYMBOLIC);
 #
 # Platform dependent constant values.
-my ( $BIG_SVX, $COM, $ARCH, $CPU, $CPUNAME, $GLIBC, $GUI, $GUIBASE,
+my ( $COM, $ARCH, $CPU, $CPUNAME, $GLIBC, $GUI, $GUIBASE,
       $GVER, $OS, $OSVERSION, $OUTPATH, $INPATH, $PATH_SEPERATOR,
       $DYNAMIC_CRT, $SET_EXCEPTIONS, $use_shl_versions, $CDPATHx, $JRELIBDIR,
       $JRETOOLKITDIR, $JRETHREADDIR,
@@ -220,7 +220,6 @@ if ( $platform =~ m/solaris/ )
    }
 
    $COM            = "GCC";
-   $BIG_SVX        = "TRUE";
    $COMPATH        = '@COMPATH@';
    $GUI            = "UNX";
    $GUIBASE        = "unx";
@@ -278,7 +277,6 @@ elsif ( $platform =~ m/netbsd/ )
    }
    # General NetBSD settings:
       $OUTPATH        = $OUTPATH."3";
-      $BIG_SVX        = "TRUE";
       $COM            = "GCC";
       $COMPATH        = '@COMPATH@';
       $GUI            = "UNX";
@@ -291,7 +289,6 @@ elsif ( $platform =~ m/netbsd/ )
 elsif ( $platform =~ m/kfreebsd/ )
 {
 # General GNU/kFreeBSD settings:
-      $BIG_SVX        = "TRUE";
       $COM            = "GCC";
       $COMPATH        = '@COMPATH@';
       $GLIBC          = "2REDHAT60";
@@ -329,8 +326,7 @@ elsif ( $platform =~ m/kfreebsd/ )
    $INPATH         = $OUTPATH.$PROEXT;
 }
 elsif ( $platform =~ m/freebsd/ )
-{     $BIG_SVX        = "TRUE";
-      $COM            = "GCC";
+{     $COM            = "GCC";
       $COMPATH        = '@COMPATH@';
       $GUI            = "UNX";
       $GUIBASE        = "unx";
@@ -375,8 +371,7 @@ elsif ( $platform =~ m/freebsd/ )
       $INPATH         = $OUTPATH.$PROEXT;
 }
 elsif ( $platform =~ m/openbsd/ )
-{     $BIG_SVX        = "TRUE";
-      $COM            = "GCC";
+{     $COM            = "GCC";
       $COMPATH        = '@COMPATH@';
       $GUI            = "UNX";
       $GUIBASE        = "unx";
@@ -412,7 +407,6 @@ elsif ( $platform =~ m/openbsd/ )
 elsif ( $platform =~ m/linux/ )
 {
 # General Linux settings:
-      $BIG_SVX        = "TRUE";
       $COM            = "GCC";
       $COMPATH        = '@COMPATH@';
       $GLIBC          = "2REDHAT60";
@@ -699,8 +693,7 @@ elsif ( $platform =~ m/cygwin/ )
   }
 }
 elsif ( $platform =~ m/darwin/ )
-{     $BIG_SVX        = "TRUE";
-      $COM            = "GCC";
+{     $COM            = "GCC";
       $COMPATH        = '@COMPATH@';
       if ($platform =~ m/^arm/)
       {
@@ -761,7 +754,6 @@ elsif ( $platform =~ m/dragonfly/ )
      exit 1;
    }
    # General DragonFly settings:
-      $BIG_SVX        = "TRUE";
       $COM            = "GCC";
       $COMPATH        = '@COMPATH@';
       $GUI            = "UNX";
@@ -783,7 +775,6 @@ elsif ( $platform =~ m/aix/ )
    $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc";
    $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."classic";
    $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."native_threads";
-   $BIG_SVX        = "TRUE";
    $COM            = "GCC";
    $COMPATH        = '@COMPATH@';
    $GUI            = "UNX";
@@ -1606,7 +1597,6 @@ ToFile( "GIT_REPO_NAMES", "@GIT_REPO_NAMES@",  "e" );
 # (c = comment, e = environment variable, a = alias )
 ToFile( "Platform dependent constant values.", $empty, "c" );
 ToFile( "SOLAR_JAVA",        $SOLAR_JAVA,        "e" );
-ToFile( "BIG_SVX",           $BIG_SVX,           "e" );
 ToFile( "COM",               $COM,               "e" );
 ToFile( "COMPATH",           $COMPATH,           "e" );
 ToFile( "CPU",               $CPU,               "e" );
