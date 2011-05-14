@@ -582,15 +582,11 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
             case 0x67:
             case 0x27: // Erroneous Constant Reference Subexpr. [322 272]
                 aIn.Ignore( 6 );   // mehr steht da nicht!
-//               aPool << ocBad;
-//               aPool >> aStack;
                 break;
             case 0x48:
             case 0x68:
             case 0x28: // Incomplete Constant Reference Subexpr.[331 281]
                 aIn.Ignore( 6 );   // mehr steht da nicht!
-//               aPool << ocBad;
-//               aPool >> aStack;
                 break;
             case 0x49:
             case 0x69:
@@ -645,15 +641,11 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
             case 0x6E:
             case 0x2E: // Reference Subexpression Within a Name [332 282]
                 aIn.Ignore( 2 );   // mehr steht da nicht!
-//               aPool << ocBad;
-//               aPool >> aStack;
                 break;
             case 0x4F:
             case 0x6F:
             case 0x2F: // Incomplete Reference Subexpression... [332 282]
                 aIn.Ignore( 2 );   // mehr steht da nicht!
-//               aPool << ocBad;
-//               aPool >> aStack;
                 break;
             case 0x58:
             case 0x78:
@@ -769,7 +761,6 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 }
                 else
                 {
-                    //aStack << ocNoName;
                     aPool << ocBad;
                     aPool >> aStack;
                 }
@@ -1566,7 +1557,6 @@ sal_Bool ExcelToSc8::GetAbsRefs( ScRangeList& r, XclImpStream& aIn, sal_Size nLe
                 goto _common;
     _common:
                 // do not check abs/rel flags, linked controls have set them!
-//               if( !(( nCol1 & 0xC000 ) || ( nCol2 & 0xC000 )) )
                 {
                     ScRange aScRange;
                     nCol1 &= 0x3FFF;
@@ -1673,9 +1663,5 @@ sal_Bool ExcelToSc8::GetAbsRefs( ScRangeList& r, XclImpStream& aIn, sal_Size nLe
 
     return !r.empty();
 }
-
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
