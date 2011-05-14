@@ -458,7 +458,6 @@ sub init_globals
         $umask = 22;
     }
 
-    my $build_sosl    = $ENV{'BUILD_SOSL'};
     my $common_outdir = $ENV{'COMMON_OUTDIR'};
     my $inpath        = $ENV{'INPATH'};
     my $solarversion  = $ENV{'SOLARVERSION'};
@@ -466,7 +465,7 @@ sub init_globals
     my $work_stamp    = $ENV{'WORK_STAMP'};
 
     # special security check for release engineers
-    if ( defined($updater) && !defined($build_sosl) && !$opt_force) {
+    if ( defined($updater) && !$opt_force) {
         my $path = getcwd();
         if ( $path !~ /$work_stamp/io ) {
             print_error("can't deliver from local directory to SOLARVERSION");

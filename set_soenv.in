@@ -52,7 +52,7 @@ my ( $CALL_CDECL, $COMMON_OUTDIR, $BMP_WRITES_FLAG,
      $common_build, $NO_REC_RES, $SO3, $SOLAR_JAVA,
      $SOLAR_PLUGIN, $UPDATER, $BUILD_DELIVER, $VCL,
      $CC, $CXX,
-     $BUILD_SOSL, $ENABLEUNICODE, $NEW_JAR_PACK, $NO_BSYMBOLIC);
+     $ENABLEUNICODE, $NEW_JAR_PACK, $NO_BSYMBOLIC);
 #
 # Platform dependent constant values.
 my ( $BIG_SVX, $COM, $ARCH, $CPU, $CPUNAME, $GLIBC, $GUI, $GUIBASE,
@@ -181,7 +181,6 @@ $SOLAR_PLUGIN         = "TRUE";
 $UPDATER              = "YES";
 $BUILD_DELIVER        = "true";
 $VCL                  = "TRUE";
-$BUILD_SOSL           = "true";
 $ENABLEUNICODE        = "TRUE";
 $NEW_JAR_PACK         = "TRUE";
 $NO_BSYMBOLIC         = "TRUE";
@@ -1493,7 +1492,6 @@ ToFile( "ANT_LIB",           PathFormat("@ANT_LIB@"), "e" );
 ToFile( "ANT",               PathFormat("@ANT@"), "e" );
 ToFile( "JDKLIB",            $JAVA_LIB,          "e" );
 ToFile( "ASM_PATH",          $ASM_PATH,          "e" );
-ToFile( "BUILD_SOSL",        $BUILD_SOSL,        "e" );
 ToFile( "FRAMEWORKSHOME",    $FRAMEWORKSHOME,    "e" );
 ToFile( "Empty",             $empty,             "n" );
 

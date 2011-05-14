@@ -225,7 +225,6 @@
     if ($prepare) {
         get_platforms(\%platforms);
 
-        $deliver_env{'BUILD_SOSL'}++;
         $deliver_env{'COMMON_OUTDIR'}++;
         $deliver_env{'GUI'}++;
         $deliver_env{'INPATH'}++;
