@@ -137,7 +137,7 @@
 #include <scitems.hxx>
 #include <svl/srchitem.hxx>
 #include <cellsuno.hxx>
-#include <dbcolect.hxx>
+#include <dbdata.hxx>
 #include "docfunc.hxx"
 #include <docuno.hxx>
 

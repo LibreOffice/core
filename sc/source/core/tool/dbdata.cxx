@@ -33,7 +33,7 @@
 #include <tools/debug.hxx>
 #include <unotools/transliterationwrapper.hxx>
 
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "global.hxx"
 #include "globalnames.hxx"
 #include "refupdat.hxx"

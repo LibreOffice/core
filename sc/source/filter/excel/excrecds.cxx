@@ -82,7 +82,7 @@
 #include "progress.hxx"
 #include "dociter.hxx"
 #include "rangenam.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "stlsheet.hxx"
 #include "stlpool.hxx"
 #include "editutil.hxx"

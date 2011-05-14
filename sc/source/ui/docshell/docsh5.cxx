@@ -58,7 +58,7 @@
 #include "dpshttab.hxx"
 #include "dbdocfun.hxx"
 #include "consoli.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "olinetab.hxx"
 #include "patattr.hxx"
 #include "attrib.hxx"

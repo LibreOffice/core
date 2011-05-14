@@ -244,7 +244,7 @@
 #include <basic/sbxcore.hxx>
 #include <vcl/ctrl.hxx>
 #include <svx/xenum.hxx>
-#include <dbcolect.hxx>
+#include <dbdata.hxx>
 #include <sot/exchange.hxx>
 #include <math.h>
 #include <vcl/wrkwin.hxx>

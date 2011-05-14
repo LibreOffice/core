@@ -83,7 +83,7 @@
 #include "docpool.hxx"
 #include "attrib.hxx"
 #include "conditio.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "globalnames.hxx"
 #include "editutil.hxx"
 #include "markdata.hxx"

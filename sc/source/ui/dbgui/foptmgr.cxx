@@ -40,7 +40,7 @@
 
 #include "anyrefdg.hxx"
 #include "rangeutl.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "viewdata.hxx"
 #include "document.hxx"
 #include "queryparam.hxx"

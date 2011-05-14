@@ -84,7 +84,7 @@
 #include "scmod.hxx"
 #include "document.hxx"
 #include "attrib.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "stlpool.hxx"
 #include "printfun.hxx"
 #include "cbutton.hxx"

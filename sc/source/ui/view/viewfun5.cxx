@@ -68,7 +68,7 @@
 #include "drawview.hxx"
 #include "impex.hxx"
 #include "dbfunc.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "sc.hrc"
 #include "filter.hxx"
 #include "scextopt.hxx"

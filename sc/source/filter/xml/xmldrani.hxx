@@ -39,7 +39,7 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/table/TableOrientation.hpp>
 
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 
 class ScDBData;
 class ScXMLImport;

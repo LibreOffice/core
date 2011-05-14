@@ -38,7 +38,7 @@
 #include "refundo.hxx"
 #include "undobase.hxx"
 #include "document.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "rangenam.hxx"
 #include "pivot.hxx"
 #include "chartarr.hxx"

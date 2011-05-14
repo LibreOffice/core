@@ -67,7 +67,7 @@
 #include "appoptio.hxx"
 #include "rangenam.hxx"
 #include <formula/compiler.hrc>
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "rangeutl.hxx"
 #include "docfunc.hxx"
 #include "funcdesc.hxx"

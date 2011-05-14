@@ -45,7 +45,7 @@
 #include "attrib.hxx"
 #include "sc.hrc"
 #include "undodat.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "globstr.hrc"
 #include "global.hxx"
 #include "dbdocfun.hxx"

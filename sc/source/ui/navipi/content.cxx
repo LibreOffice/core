@@ -53,7 +53,7 @@
 #include "docsh.hxx"
 #include "scmod.hxx"
 #include "rangenam.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "tablink.hxx"          // fuer Loader
 #include "popmenu.hxx"
 #include "drwlayer.hxx"

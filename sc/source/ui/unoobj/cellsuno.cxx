@@ -101,7 +101,7 @@
 #include "undotab.hxx"
 #include "undoblk.hxx"      // fuer lcl_ApplyBorder - nach docfunc verschieben!
 #include "stlsheet.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "attrib.hxx"
 #include "chartarr.hxx"
 #include "chartlis.hxx"

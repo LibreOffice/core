@@ -50,7 +50,7 @@
 #include "document.hxx"
 #include "attrib.hxx"
 #include "patattr.hxx"          // InvertSimple
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "docoptio.hxx"
 #include "notemark.hxx"
 #include "dbfunc.hxx"           // oder GetPageBreakData an die ViewData

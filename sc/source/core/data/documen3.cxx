@@ -46,7 +46,7 @@
 #include "cell.hxx"
 #include "table.hxx"
 #include "rangenam.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "pivot.hxx"
 #include "docpool.hxx"
 #include "poolhelp.hxx"

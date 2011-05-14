@@ -118,7 +118,7 @@
 #include "xmlwrap.hxx"
 #include "drwlayer.hxx"
 #include "refreshtimer.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "scextopt.hxx"
 #include "compiler.hxx"
 #include "cfgids.hxx"

@@ -96,7 +96,7 @@ using namespace ::com::sun::star;
 #include "undocell.hxx"
 #include "undotab.hxx"
 #include "inputhdl.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "servobj.hxx"
 #include "rangenam.hxx"
 #include "scmod.hxx"

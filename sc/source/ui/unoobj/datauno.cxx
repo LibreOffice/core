@@ -53,7 +53,7 @@
 #include "miscuno.hxx"
 #include "targuno.hxx"
 #include "rangeutl.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "docsh.hxx"
 #include "dbdocfun.hxx"
 #include "unonames.hxx"

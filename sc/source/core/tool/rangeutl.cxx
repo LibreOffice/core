@@ -38,7 +38,7 @@
 #include "rangeutl.hxx"
 #include "document.hxx"
 #include "global.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "rangenam.hxx"
 #include "scresid.hxx"
 #include "globstr.hrc"

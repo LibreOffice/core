@@ -44,7 +44,7 @@
 #include "uiitems.hxx"
 #include "global.hxx"
 #include "globalnames.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "scresid.hxx"
 
 #include "sc.hrc"

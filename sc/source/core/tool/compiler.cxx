@@ -56,7 +56,7 @@
 #include <math.h>
 #include "compiler.hxx"
 #include "rangenam.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "document.hxx"
 #include "callform.hxx"
 #include "addincol.hxx"

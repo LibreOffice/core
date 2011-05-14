@@ -50,7 +50,7 @@
 #include "tabvwsh.hxx"
 #include "rangenam.hxx"
 #include "rangeutl.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "stlpool.hxx"
 #include "stlsheet.hxx"
 #include "globstr.hrc"

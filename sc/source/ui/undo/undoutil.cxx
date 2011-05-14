@@ -40,7 +40,7 @@
 #include "docsh.hxx"
 #include "tabvwsh.hxx"
 #include "document.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "globstr.hrc"
 #include "globalnames.hxx"
 #include "global.hxx"

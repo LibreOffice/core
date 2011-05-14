@@ -33,7 +33,7 @@
 
 #include "address.hxx"
 #include "rangenam.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "scdllapi.h"
 
 #include <com/sun/star/table/CellAddress.hpp>

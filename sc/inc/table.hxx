@@ -38,7 +38,7 @@
 #include "column.hxx"
 #include "sortparam.hxx"
 #include "compressedarray.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 
 #include <memory>
 #include <set>

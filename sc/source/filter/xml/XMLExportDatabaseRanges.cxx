@@ -41,7 +41,7 @@
 #include "XMLExportIterator.hxx"
 #include "XMLConverter.hxx"
 #include "unonames.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "document.hxx"
 #include "globstr.hrc"
 #include "globalnames.hxx"

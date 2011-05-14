@@ -98,7 +98,7 @@
 #include "dpobject.hxx"
 #include "dpsdbtab.hxx"     // ScImportSourceDesc
 #include "dpshttab.hxx"     // ScSheetSourceDesc
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "docsh.hxx"
 
 #include "globstr.hrc"

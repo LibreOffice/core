@@ -39,7 +39,7 @@
 
 #include "tabvwsh.hxx"
 #include "uiitems.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "rangenam.hxx"
 #include "rangeutl.hxx"
 #include "reffact.hxx"

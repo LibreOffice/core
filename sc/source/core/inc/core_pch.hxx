@@ -196,7 +196,7 @@
 #include <rangenam.hxx>
 #include <scmatrix.hxx>
 #include <svx/pageitem.hxx>
-#include <dbcolect.hxx>
+#include <dbdata.hxx>
 #include <userlist.hxx>
 #include <editeng/editdata.hxx>
 #include <basic/sbxvar.hxx>

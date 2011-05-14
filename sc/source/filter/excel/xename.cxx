@@ -35,7 +35,7 @@
 #include "globstr.hrc"
 #include "document.hxx"
 #include "rangenam.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "xehelper.hxx"
 #include "xelink.hxx"
 #include "globalnames.hxx"

@@ -55,7 +55,7 @@
 
 #include "interpre.hxx"
 #include "global.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "cell.hxx"
 #include "callform.hxx"
 #include "addincol.hxx"

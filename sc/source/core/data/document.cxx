@@ -68,7 +68,7 @@
 #include "stlsheet.hxx"
 #include "globstr.hrc"
 #include "rechead.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "pivot.hxx"
 #include "chartlis.hxx"
 #include "rangelst.hxx"

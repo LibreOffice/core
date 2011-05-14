@@ -166,7 +166,7 @@
 #include "transobj.hxx"
 #include "drwtrans.hxx"
 #include "rangenam.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "impex.hxx"            // Sylk-ID fuer CB
 #include "chgtrack.hxx"
 #include "waitoff.hxx"

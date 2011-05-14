@@ -57,7 +57,7 @@
 #include "attrib.hxx"
 #include "patattr.hxx"
 #include "rangenam.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "pivot.hxx"
 #include "docpool.hxx"
 #include "stlpool.hxx"

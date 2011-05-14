@@ -44,7 +44,7 @@
 #include "document.hxx"
 #include "global.hxx"
 #include "globalnames.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "userlist.hxx"
 #include "rangeutl.hxx"
 #include "scresid.hxx"

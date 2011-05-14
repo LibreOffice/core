@@ -51,7 +51,7 @@
 #include "dociter.hxx"
 #include "document.hxx"
 #include "rangenam.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "global.hxx"
 #include "globstr.hrc"
 #include "progress.hxx"

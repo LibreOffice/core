@@ -47,7 +47,7 @@
 #include "document.hxx"
 #include "docsh.hxx"
 #include "rangenam.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "undoblk.hxx"
 #include "globstr.hrc"
 #include "markdata.hxx"

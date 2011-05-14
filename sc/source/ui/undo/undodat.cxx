@@ -40,7 +40,7 @@
 #include "docsh.hxx"
 #include "tabvwsh.hxx"
 #include "olinetab.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "rangenam.hxx"
 #include "pivot.hxx"
 #include "globstr.hrc"

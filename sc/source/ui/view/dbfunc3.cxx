@@ -59,7 +59,7 @@
 #include "sc.hrc"
 #include "undotab.hxx"
 #include "undodat.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "rangenam.hxx"
 #include "rangeutl.hxx"
 #include "docsh.hxx"

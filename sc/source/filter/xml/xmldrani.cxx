@@ -41,7 +41,7 @@
 #include "globstr.hrc"
 #include "globalnames.hxx"
 #include "docuno.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "datauno.hxx"
 #include "attrib.hxx"
 #include "unonames.hxx"

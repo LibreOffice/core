@@ -48,7 +48,7 @@
 #include "tabvwsh.hxx"
 #include "docsh.hxx"
 #include "document.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "rangenam.hxx"
 #include "rangeutl.hxx"
 #include "popmenu.hxx"

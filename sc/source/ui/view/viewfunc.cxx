@@ -68,7 +68,7 @@
 #include "undoblk.hxx"
 #include "undotab.hxx"
 #include "refundo.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "olinetab.hxx"
 #include "rangeutl.hxx"
 #include "rangenam.hxx"

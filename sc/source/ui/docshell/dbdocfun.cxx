@@ -41,7 +41,7 @@
 
 #include "dbdocfun.hxx"
 #include "sc.hrc"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "undodat.hxx"
 #include "docsh.hxx"
 #include "docfunc.hxx"

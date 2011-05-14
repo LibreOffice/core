@@ -41,7 +41,7 @@
 #include "tabvwsh.hxx"
 #include "undoolk.hxx"
 #include "undodraw.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "attrib.hxx"
 #include "queryparam.hxx"
 #include "subtotalparam.hxx"

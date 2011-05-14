@@ -56,7 +56,7 @@
 #include "docsh.hxx"
 #include "globstr.hrc"
 #include "scerrors.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "markdata.hxx"
 #include "undodat.hxx"
 #include "progress.hxx"

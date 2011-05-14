@@ -55,7 +55,7 @@
 #include "rechead.hxx"
 #include "globstr.hrc"
 #include "rangenam.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 
 #include <math.h>
 #include <memory>

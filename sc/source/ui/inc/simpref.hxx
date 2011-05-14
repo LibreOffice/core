@@ -37,7 +37,7 @@
 
 #include <vcl/morebtn.hxx>
 #include "anyrefdg.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "expftext.hxx"
 
 class ScViewData;

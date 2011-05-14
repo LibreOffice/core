@@ -66,7 +66,7 @@
 #include "subtotal.hxx"
 #include "markdata.hxx"
 #include "compiler.hxx"         // ScTokenArray GetCodeLen
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "fillinfo.hxx"
 #include "segmenttree.hxx"
 #include "docparam.hxx"

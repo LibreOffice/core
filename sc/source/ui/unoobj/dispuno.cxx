@@ -44,7 +44,7 @@
 #include "dispuno.hxx"
 #include "tabvwsh.hxx"
 #include "dbdocfun.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 
 using namespace com::sun::star;
 

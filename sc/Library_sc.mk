@@ -167,7 +167,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/core/tool/collect  \
 	sc/source/core/tool/compiler \
 	sc/source/core/tool/consoli  \
-	sc/source/core/tool/dbcolect \
+	sc/source/core/tool/dbdata \
 	sc/source/core/tool/ddelink \
 	sc/source/core/tool/detdata  \
 	sc/source/core/tool/detfunc \
