@@ -51,15 +51,9 @@ all:
                 STLport-4.5-gcc43_warnings.patch \
                 STLport-4.5-cxx0x.patch
 .ELIF "$(GUI)"=="WNT"
-    .IF "$(CCNUMVER)"<="001300000000"
-        TARFILE_NAME=STLport-4.0
-        TARFILE_MD5=c441926f3a552ed3e5b274b62e86af16
-        PATCH_FILES=STLport-4.0.patch
-    .ELSE
-        TARFILE_NAME=STLport-4.5-0119
-        TARFILE_MD5=7376930b0d3f3d77a685d94c4a3acda8
-        PATCH_FILES=STLport-4.5-0119.patch
-    .ENDIF
+    TARFILE_NAME=STLport-4.5-0119
+    TARFILE_MD5=7376930b0d3f3d77a685d94c4a3acda8
+    PATCH_FILES=STLport-4.5-0119.patch
 .ELSE
     TARFILE_NAME=STLport-4.0
     TARFILE_MD5=c441926f3a552ed3e5b274b62e86af16
@@ -99,11 +93,7 @@ BUILD_DIR=src
 
 .IF "$(COM)"=="MSC"
 BUILD_ACTION=nmake
-.IF "$(CCNUMVER)"<="001400000000"
-BUILD_FLAGS=-f vc7.mak EXFLAGS="/EHsc"
-.ELSE			# "$(CCNUMVER)"<="001400000000"
 BUILD_FLAGS=-f vc7.mak EXFLAGS="/EHa /Zc:wchar_t-" CCNUMVER=$(CCNUMVER)
-.ENDIF			# "$(CCNUMVER)"<="001400000000"
 .ENDIF
 
 .IF "$(COM)"=="GCC"
@@ -191,30 +181,5 @@ OUT2LIB= \
 .INCLUDE : 	set_ext.mk
 .INCLUDE :	target.mk
 .INCLUDE :	tg_ext.mk
-
-.IF "$(GUI)"=="WNT"
-.IF "$(COM)"!="GCC"
-.IF "$(CCNUMVER)"<="001300000000"
-
-$(MISC)$/$(TARFILE_ROOTDIR) : avoid_win32_patches
-avoid_win32_patches :
-    @$(ECHONL)
-    @echo ERROR! this module can't use automated patch creation
-    @echo on windows.
-    @$(ECHONL)
-    force_dmake_to_error
-
-$(PACKAGE_DIR)$/so_custom_patch :  $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
-    win32_custom.bat $(PACKAGE_DIR) $(BACK_PATH) && $(TOUCH) $@
-
-$(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/so_custom_patch
-
-$(PACKAGE_DIR)$/win32_sdk_patch :  $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
-    win32_sdk.bat $(PACKAGE_DIR) $(BACK_PATH) && $(TOUCH) $@
-
-$(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/win32_sdk_patch
-.ENDIF			# COMVER<=001300000000
-.ENDIF "$(COM)"=="GCC"
-.ENDIF          # "$(GUI)"=="WNT"
 
 .ENDIF # "$(WITH_STLPORT)"!="YES"
