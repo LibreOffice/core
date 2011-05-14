@@ -52,8 +52,7 @@ my ( $CALL_CDECL, $COMMON_OUTDIR, $BMP_WRITES_FLAG,
      $common_build, $NO_REC_RES, $SO3, $SOLAR_JAVA,
      $SOLAR_PLUGIN, $UPDATER, $BUILD_DELIVER, $VCL,
      $CC, $CXX,
-     $BUILD_SOSL, $ENABLEUNICODE, $NEW_JAR_PACK, $NO_BSYMBOLIC,
-     $BUILD_SOSL_RELEASE);
+     $BUILD_SOSL, $ENABLEUNICODE, $NEW_JAR_PACK, $NO_BSYMBOLIC);
 #
 # Platform dependent constant values.
 my ( $BIG_SVX, $COM, $ARCH, $CPU, $CPUNAME, $GLIBC, $GUI, $GUIBASE,
@@ -172,7 +171,6 @@ chomp( $oldPATH );                  # cut off new line
 # Setting platform independent constant values.
 # NB: Language options now set at 'ToFile' stage.
 $BMP_WRITES_FLAG      = "TRUE";
-$BUILD_SOSL_RELEASE   = "TRUE";
 $CALL_CDECL           = "TRUE";
 $COMMON_OUTDIR        = "";
 $common_build         = "";
@@ -1515,7 +1513,6 @@ ToFile( "CALL_CDECL",        $CALL_CDECL,        "e" );
 ToFile( "COMMON_OUTDIR",     $COMMON_OUTDIR,     "e" );
 ToFile( "common_build",      $common_build,      "e" );
 ToFile( "BMP_WRITES_FLAG",   $BMP_WRITES_FLAG,   "e" );
-ToFile( "BUILD_SOSL_RELEASE", $BUILD_SOSL_RELEASE, "e" );
 ToFile( "NO_REC_RES",        $NO_REC_RES,        "e" );
 ToFile( "SO3",               $SO3,               "e" );
 ToFile( "SOLAR_PLUGIN",      $SOLAR_PLUGIN,      "e" );
