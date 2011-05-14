@@ -192,7 +192,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
         aSRD.InitFlags();
         aCRD.InitFlags();
 
-        switch( nOp )   //                              Buch Seite:
+        switch( nOp )   //                              book page:
         {           //                                      SDK4 SDK5
             case 0x01: // Array Formula                         [325    ]
                        // Array Formula or Shared Formula       [    277]
@@ -207,7 +207,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 aPool >> aStack;
                 break;
             case 0x04: // Subtraction                           [313 264]
-                // SECOMD-TOP minus TOP
+                // SECOND-TOP minus TOP
                 aStack >> nMerk0;
                 aPool << aStack << ocSub << nMerk0;
                 aPool >> aStack;
@@ -223,7 +223,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 aPool << aStack << ocDiv << nMerk0;
                 aPool >> aStack;
                 break;
-            case 0x07: // Exponetiation                         [313 265]
+            case 0x07: // Exponentiation                            [313 265]
                 // raise SECOND-TOP to power of TOP
                 aStack >> nMerk0;
                 aPool << aStack << ocPow << nMerk0;
@@ -254,19 +254,19 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 aPool >> aStack;
                 break;
             case 0x0C: // Greater Than or Equal                 [313 265]
-                // SECOND-TOP == TOP
+                // SECOND-TOP >= TOP
                 aStack >> nMerk0;
                 aPool << aStack << ocGreaterEqual << nMerk0;
                 aPool >> aStack;
                 break;
             case 0x0D: // Greater Than                          [313 265]
-                // SECOND-TOP == TOP
+                // SECOND-TOP > TOP
                 aStack >> nMerk0;
                 aPool << aStack << ocGreater << nMerk0;
                 aPool >> aStack;
                 break;
             case 0x0E: // Not Equal                             [313 265]
-                // SECOND-TOP == TOP
+                // SECOND-TOP != TOP
                 aStack >> nMerk0;
                 aPool << aStack << ocNotEqual << nMerk0;
                 aPool >> aStack;
@@ -277,7 +277,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 aPool >> aStack;
                 break;
             case 0x10: // Union                                 [314 265]
-                // ocSep behelfsweise statt 'ocUnion'
+                // ocSep instead of 'ocUnion'
                 aStack >> nMerk0;
                 aPool << aStack << ocSep << nMerk0;
                     // doesn't fit exactly, but is more Excel-like
@@ -392,7 +392,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 nFakt = 2;
 
                 if( nOpt & 0x04 )
-                {// nFakt -> Bytes oder Words ueberlesen    AttrChoose
+                {// nFakt -> skip bytes or words    AttrChoose
                     nData++;
                     aIn.Ignore( nData * nFakt );
                 }
@@ -576,22 +576,22 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
             case 0x66:
             case 0x26: // Constant Reference Subexpression      [321 271]
                 aExtensions.push_back( EXTENSION_MEMAREA );
-                aIn.Ignore( 6 );       // mehr steht da nicht!
+                aIn.Ignore( 6 );       // There isn't any more
                 break;
             case 0x47:
             case 0x67:
             case 0x27: // Erroneous Constant Reference Subexpr. [322 272]
-                aIn.Ignore( 6 );   // mehr steht da nicht!
+                aIn.Ignore( 6 );   // There isn't any more
                 break;
             case 0x48:
             case 0x68:
             case 0x28: // Incomplete Constant Reference Subexpr.[331 281]
-                aIn.Ignore( 6 );   // mehr steht da nicht!
+                aIn.Ignore( 6 );   // There isn't any more
                 break;
             case 0x49:
             case 0x69:
             case 0x29: // Variable Reference Subexpression      [331 281]
-                aIn.Ignore( 2 );   // mehr steht da nicht!
+                aIn.Ignore( 2 );   // There isn't any more
                 break;
             case 0x4C:
             case 0x6C:
@@ -640,12 +640,12 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
             case 0x4E:
             case 0x6E:
             case 0x2E: // Reference Subexpression Within a Name [332 282]
-                aIn.Ignore( 2 );   // mehr steht da nicht!
+                aIn.Ignore( 2 );   // There isn't any more
                 break;
             case 0x4F:
             case 0x6F:
             case 0x2F: // Incomplete Reference Subexpression... [332 282]
-                aIn.Ignore( 2 );   // mehr steht da nicht!
+                aIn.Ignore( 2 );   // There isn't any more
                 break;
             case 0x58:
             case 0x78:
@@ -945,7 +945,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
 ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal_Size nFormulaLen,
                               SCsTAB nTab, const FORMULA_TYPE eFT )
 {
-    sal_uInt8                   nOp, nLen;//, nByte;
+    sal_uInt8                   nOp, nLen;
     sal_Bool                    bError = false;
     const sal_Bool              bRangeName = eFT == FT_RangeName;
     const sal_Bool              bSharedFormula = eFT == FT_SharedFormula;
@@ -975,7 +975,7 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
         aSRD.InitFlags();
         aCRD.InitFlags();
 
-        switch( nOp )   //                              Buch Seite:
+        switch( nOp )   //                              book page:
         {           //                                      SDK4 SDK5
             case 0x01: // Array Formula                         [325    ]
                        // Array Formula or Shared Formula       [    277]
@@ -1019,7 +1019,7 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
                 nFakt = 2;
 
                 if( nOpt & 0x04 )
-                {// nFakt -> Bytes oder Words ueberlesen    AttrChoose
+                {// nFakt -> skip bytes or words    AttrChoose
                     nData++;
                     aIn.Ignore( nData * nFakt );
                 }
@@ -1111,12 +1111,12 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
             case 0x48:
             case 0x68:
             case 0x28: // Incomplete Constant Reference Subexpr.[331 281]
-                aIn.Ignore( 6 );   // mehr steht da nicht!
+                aIn.Ignore( 6 );   // There isn't any more
                 break;
             case 0x49:
             case 0x69:
             case 0x29: // Variable Reference Subexpression      [331 281]
-                aIn.Ignore( 2 );   // mehr steht da nicht!
+                aIn.Ignore( 2 );   // There isn't any more
                 break;
             case 0x4A:
             case 0x6A:
@@ -1649,7 +1649,7 @@ sal_Bool ExcelToSc8::GetAbsRefs( ScRangeList& r, XclImpStream& aIn, sal_Size nLe
                 sal_uInt8   nOpt;
                 aIn >> nOpt >> nData;
                 if( nOpt & 0x04 )
-                {// nFakt -> Bytes oder Words ueberlesen    AttrChoose
+                {// nFakt -> skip bytes or words    AttrChoose
                     nData++;
                     nSeek = nData * 2;
             }

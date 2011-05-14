@@ -121,7 +121,7 @@ void ImportExcel::Formula( const XclAddress& rXclPos,
     ScAddress aScPos( ScAddress::UNINITIALIZED );
     if( GetAddressConverter().ConvertAddress( aScPos, rXclPos, GetCurrScTab(), true ) )
     {
-        // jetzt steht Lesemarke auf Formel, Laenge in nFormLen
+        // Formula will be read next, length in nFormLen
         const ScTokenArray* pErgebnis = 0;
         sal_Bool                bConvert;
 
@@ -238,7 +238,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
         aSRD.InitFlags();
         aCRD.InitFlags();
 
-        switch( nOp )   //                              Buch Seite:
+        switch( nOp )   //                              book page:
         {           //                                      SDK4 SDK5
             case 0x01: // Array Formula                         [325    ]
                        // Array Formula or Shared Formula       [    277]
@@ -258,7 +258,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 aPool >> aStack;
                 break;
             case 0x04: // Subtraction                           [313 264]
-                // SECOMD-TOP minus TOP
+                // SECOND-TOP minus TOP
                 aStack >> nMerk0;
                 aPool << aStack << ocSub << nMerk0;
                 aPool >> aStack;
@@ -274,7 +274,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 aPool << aStack << ocDiv << nMerk0;
                 aPool >> aStack;
                 break;
-            case 0x07: // Exponetiation                         [313 265]
+            case 0x07: // Exponentiation                            [313 265]
                 // raise SECOND-TOP to power of TOP
                 aStack >> nMerk0;
                 aPool << aStack << ocPow << nMerk0;
@@ -305,19 +305,19 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 aPool >> aStack;
                 break;
             case 0x0C: // Greater Than or Equal                 [313 265]
-                // SECOND-TOP == TOP
+                // SECOND-TOP >= TOP
                 aStack >> nMerk0;
                 aPool << aStack << ocGreaterEqual << nMerk0;
                 aPool >> aStack;
                 break;
             case 0x0D: // Greater Than                          [313 265]
-                // SECOND-TOP == TOP
+                // SECOND-TOP > TOP
                 aStack >> nMerk0;
                 aPool << aStack << ocGreater << nMerk0;
                 aPool >> aStack;
                 break;
             case 0x0E: // Not Equal                             [313 265]
-                // SECOND-TOP == TOP
+                // SECOND-TOP != TOP
                 aStack >> nMerk0;
                 aPool << aStack << ocNotEqual << nMerk0;
                 aPool >> aStack;
@@ -328,7 +328,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 aPool >> aStack;
                 break;
             case 0x10: // Union                                 [314 265]
-                // ocSep behelfsweise statt 'ocUnion'
+                // ocSep instead of 'ocUnion'
                 aStack >> nMerk0;
                 aPool << aStack << ocSep << nMerk0;
                     // doesn't fit exactly, but is more Excel-like
@@ -385,7 +385,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 }
 
                 if( nOpt & 0x04 )
-                {// nFakt -> Bytes oder Words ueberlesen    AttrChoose
+                {// nFakt -> skip bytes or words    AttrChoose
                     nData++;
                     aIn.Ignore( nData * nFakt );
                 }
@@ -516,7 +516,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                     case EXC_BIFF5: aIn.Ignore( 12 );   break;
                     default:
                         OSL_FAIL(
-                        "-ExcelToSc::Convert(): Ein wenig vergesslich, was?" );
+                        "-ExcelToSc::Convert(): A little oblivious?" );
                 }
                 const XclImpName* pName = GetNameManager().GetName( nUINT16 );
                 if(pName && !pName->GetScRangeData())
@@ -721,22 +721,22 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 aIn >> nTabFirst >> nTabLast >> nRow >> nCol;
 
                 if( nExtSheet >= 0 )
-                {   // von extern
+                {   // from external
                     if( rR.pExtSheetBuff->GetScTabIndex( nExtSheet, nTabLast ) )
                     {
                         nTabFirst = nTabLast;
-                        nExtSheet = 0;      // gefunden
+                        nExtSheet = 0;      // found
                     }
                     else
                     {
                         aPool << ocBad;
                         aPool >> aStack;
-                        nExtSheet = 1;      // verhindert Erzeugung einer SingleRef
+                        nExtSheet = 1;      // don't create a SingleRef
                     }
                 }
 
                 if( nExtSheet <= 0 )
-                {   // in aktuellem Workbook
+                {   // in current Workbook
                     aSRD.nTab = static_cast<SCTAB>(nTabFirst);
                     aSRD.SetFlag3D( sal_True );
                     aSRD.SetTabRel( false );
@@ -790,19 +790,19 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                     if( rR.pExtSheetBuff->GetScTabIndex( nExtSheet, nTabLast ) )
                     {
                         nTabFirst = nTabLast;
-                        nExtSheet = 0;      // gefunden
+                        nExtSheet = 0;      // found
                     }
                     else
                     {
                         aPool << ocBad;
                         aPool >> aStack;
-                        nExtSheet = 1;      // verhindert Erzeugung einer CompleteRef
+                        nExtSheet = 1;      // don't create a CompleteRef
                     }
                 }
 
                 if( nExtSheet <= 0 )
-                {// in aktuellem Workbook
-                    // erster Teil des Bereichs
+                {// in current Workbook
+                    // first part of range
                     ScSingleRefData&    rR1 = aCRD.Ref1;
                     ScSingleRefData&    rR2 = aCRD.Ref2;
 
@@ -838,7 +838,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                         rR2.SetTabDeleted( sal_True );
 
                     aStack << aPool.Store( aCRD );
-                }//ENDE in aktuellem Workbook
+                }//END in current Workbook
             }
                 break;
             default: bError = sal_True;
@@ -928,7 +928,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
         aSRD.InitFlags();
         aCRD.InitFlags();
 
-        switch( nOp )   //                              Buch Seite:
+        switch( nOp )   //                              book page:
         {           //                                      SDK4 SDK5
             case 0x01: // Array Formula                         [325    ]
                        // Array Formula or Shared Formula       [    277]
@@ -982,7 +982,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
                 }
 
                 if( nOpt & 0x04 )
-                {// nFakt -> Bytes oder Words ueberlesen    AttrChoose
+                {// nFakt -> skip bytes or words    AttrChoose
                     nData++;
                     aIn.Ignore( nData * nFakt );
                 }
@@ -1042,7 +1042,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
                     case EXC_BIFF3:
                     case EXC_BIFF4: nIgnore = 10;   break;
                     case EXC_BIFF5: nIgnore = 14;   break;
-                    default:        OSL_FAIL( "-ExcelToSc::Convert(): Ein wenig vergesslich, was?" );
+                    default:        OSL_FAIL( "-ExcelToSc::Convert(): A little oblivious?" );
                 }
                 break;
             case 0x44:
@@ -1184,23 +1184,23 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
                 aIn >> nTabFirst >> nTabLast >> nRow >> nCol;
 
                 if( nExtSheet >= 0 )
-                    // von extern
+                    // from external
                 {
                     if( rR.pExtSheetBuff->GetScTabIndex( nExtSheet, nTabLast ) )
                     {
                         nTabFirst = nTabLast;
-                        nExtSheet = 0;      // gefunden
+                        nExtSheet = 0;      // found
                     }
                     else
                     {
                         aPool << ocBad;
                         aPool >> aStack;
-                        nExtSheet = 1;      // verhindert Erzeugung einer SingleRef
+                        nExtSheet = 1;      // don't create a SingleRef
                     }
                 }
 
                 if( nExtSheet <= 0 )
-                {// in aktuellem Workbook
+                {// in current Workbook
                     sal_Bool b3D = ( static_cast<SCTAB>(nTabFirst) != aEingPos.Tab() ) || bRangeName;
                     aSRD.nTab = static_cast<SCTAB>(nTabFirst);
                     aSRD.SetFlag3D( b3D );
@@ -1239,24 +1239,24 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
                     >> nColFirst >> nColLast;
 
                 if( nExtSheet >= 0 )
-                    // von extern
+                    // from external
                 {
                     if( rR.pExtSheetBuff->GetScTabIndex( nExtSheet, nTabLast ) )
                     {
                         nTabFirst = nTabLast;
-                        nExtSheet = 0;      // gefunden
+                        nExtSheet = 0;      // found
                     }
                     else
                     {
                         aPool << ocBad;
                         aPool >> aStack;
-                        nExtSheet = 1;      // verhindert Erzeugung einer CompleteRef
+                        nExtSheet = 1;      // don't create a CompleteRef
                     }
                 }
 
                 if( nExtSheet <= 0 )
-                {// in aktuellem Workbook
-                    // erster Teil des Bereichs
+                {// in current Workbook
+                    // first part of range
                     ScSingleRefData &rR1 = aCRD.Ref1;
                     ScSingleRefData &rR2 = aCRD.Ref2;
 
@@ -1276,7 +1276,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
                         SetComplRow( aCRD );
 
                     rRangeList.Append( aCRD, nTab );
-                }//ENDE in aktuellem Workbook
+                }//END in current Workbook
             }
                 break;
             case 0x5C:
@@ -1396,7 +1396,6 @@ sal_Bool ExcelToSc::GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sa
                 goto _common;
     _common:
                 // do not check abs/rel flags, linked controls have set them!
-//               if( !(( nCol1 & 0xC000 ) || ( nCol2 & 0xC000 )) )
                 {
                     ScRange aScRange;
                     nRow1 &= 0x3FFF;
@@ -1532,7 +1531,7 @@ void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nAnz )
 
     if( eId == ocCeil || eId == ocFloor )
     {
-        aStack << aPool.Store( 1.0 );   // default, da in Excel nicht vorhanden
+        aStack << aPool.Store( 1.0 );   // default, because not present in Excel
         nAnz++;
     }
 
@@ -1570,11 +1569,11 @@ void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nAnz )
 
         sal_Int16 nLast = nAnz - 1;
 
-        // Funktionen, bei denen Parameter wegfallen muessen
+        // functions for which parameters have to be skipped
         if( eId == ocPercentrank && nAnz == 3 )
-            nSkipEnd = 0;       // letzten Parameter bei Bedarf weglassen
+            nSkipEnd = 0;       // skip last parameter if necessary
 
-        // Joost-Spezialfaelle
+        // Joost special cases
         else if( eId == ocIf )
         {
             sal_uInt16          nNullParam = 0;
@@ -1626,11 +1625,11 @@ void ExcelToSc::ExcRelToScRel( sal_uInt16 nRow, sal_uInt8 nCol, ScSingleRefData 
         if( nRow & 0x8000 )
         {//                                                         rel Row
             rSRD.SetRowRel( sal_True );
-            if( nRow & 0x2000 ) // Bit 13 gesetzt?
-                //                                              -> Row negativ
+            if( nRow & 0x2000 ) // Bit 13 set?
+                //                                              -> Row negative
                 rSRD.nRelRow = static_cast<SCsROW>(static_cast<sal_Int16>(nRow | 0xC000));
             else
-                //                                              -> Row positiv
+                //                                              -> Row positive
                 rSRD.nRelRow = static_cast<SCsROW>(nRow & nRowMask);
         }
         else
@@ -1763,8 +1762,7 @@ void ExcelToSc::SetError( ScFormulaCell &rCell, const ConvErr eErr )
         case ConvErrNoMem:      nInd = errCodeOverflow; break;
         case ConvErrExternal:   nInd = errNoName; break;
         case ConvErrCount:      nInd = errCodeOverflow; break;
-        default:                nInd = errNoCode;   // hier fiel mir nichts
-                                                    //  Besseres ein...
+        default:                nInd = errNoCode;   // I had no better idea
     }
 
     rCell.SetErrCode( nInd );
@@ -1792,8 +1790,6 @@ void ExcelToSc::SetComplRow( ScComplexRefData &rCRD )
 
 void ExcelToSc::ReadExtensionArray( unsigned int n, XclImpStream& aIn )
 {
-    // printf( "inline array;\n" );
-
     sal_uInt8        nByte;
     sal_uInt16      nUINT16;
     double      fDouble;
@@ -1896,8 +1892,6 @@ void ExcelToSc::ReadExtensionArray( unsigned int n, XclImpStream& aIn )
 
 void ExcelToSc::ReadExtensionNlr( XclImpStream& aIn )
 {
-    // printf( "natural lang fmla;\n" );
-
     sal_uInt32 nFlags;
     aIn >> nFlags;
 
@@ -1907,8 +1901,6 @@ void ExcelToSc::ReadExtensionNlr( XclImpStream& aIn )
 
 void ExcelToSc::ReadExtensionMemArea( XclImpStream& aIn )
 {
-    // printf( "mem area;\n" );
-
     sal_uInt16 nCount;
     aIn >> nCount;
 
