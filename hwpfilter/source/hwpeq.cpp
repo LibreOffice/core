@@ -669,7 +669,7 @@ static bool eq_sentence(MzString& outs, istream *strm, const char *end)
 static char eq2ltxconv(MzString& sstr, istream *strm, const char *sentinel)
 {
   MzString  white, token;
-  char      key[20];
+  char      key[256];
   int       ch, result;
   hwpeq     *eq = 0;
 
