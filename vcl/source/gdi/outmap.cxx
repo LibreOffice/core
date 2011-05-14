@@ -1861,9 +1861,9 @@ Region OutputDevice::PixelToLogic( const Region& rDeviceRegion,
 #define ENTER3( eUnitSource, eUnitDest )                                \
     long nNumerator      = 1;       \
     long nDenominator    = 1;       \
-    DBG_ASSERT( eUnitSource < MAP_LASTENUMDUMMY, "Invalid source map unit");    \
-    DBG_ASSERT( eUnitDest < MAP_LASTENUMDUMMY, "Invalid destination map unit"); \
-    if( (eUnitSource < MAP_LASTENUMDUMMY) && (eUnitDest < MAP_LASTENUMDUMMY) )  \
+    DBG_ASSERT( eUnitSource <= MAP_PIXEL, "nonpermitted source map unit");  \
+    DBG_ASSERT( eUnitDest <= MAP_PIXEL, "nonpermitted destination map unit");   \
+    if( (eUnitSource <= MAP_PIXEL) && (eUnitDest <= MAP_PIXEL) )    \
     {   \
         nNumerator   = aImplNumeratorAry[eUnitSource] *             \
                            aImplDenominatorAry[eUnitDest];              \
