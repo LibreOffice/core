@@ -48,7 +48,7 @@ my ( $outfile, $bootfile, $newline, $comment,
 #-------------------------------------------------
 #
 # Platform independent constant values.
-my ( $CALL_CDECL, $COMMON_OUTDIR, $BMP_WRITES_FLAG,
+my ( $CALL_CDECL, $COMMON_OUTDIR,
      $common_build, $NO_REC_RES, $SO3, $SOLAR_JAVA,
      $SOLAR_PLUGIN, $UPDATER, $BUILD_DELIVER, $VCL,
      $CC, $CXX,
@@ -170,7 +170,6 @@ chomp( $oldPATH );                  # cut off new line
 #
 # Setting platform independent constant values.
 # NB: Language options now set at 'ToFile' stage.
-$BMP_WRITES_FLAG      = "TRUE";
 $CALL_CDECL           = "TRUE";
 $COMMON_OUTDIR        = "";
 $common_build         = "";
@@ -1510,7 +1509,6 @@ ToFile( "WITH_POOR_HELP_LOCALIZATIONS", $WITH_POOR_HELP_LOCALIZATIONS, "e" );
 ToFile( "CALL_CDECL",        $CALL_CDECL,        "e" );
 ToFile( "COMMON_OUTDIR",     $COMMON_OUTDIR,     "e" );
 ToFile( "common_build",      $common_build,      "e" );
-ToFile( "BMP_WRITES_FLAG",   $BMP_WRITES_FLAG,   "e" );
 ToFile( "NO_REC_RES",        $NO_REC_RES,        "e" );
 ToFile( "SO3",               $SO3,               "e" );
 ToFile( "SOLAR_PLUGIN",      $SOLAR_PLUGIN,      "e" );
