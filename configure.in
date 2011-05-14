@@ -2479,7 +2479,28 @@ dnl ===================================================================
    fi
 
    AC_CHECK_SIZEOF(long)
+   AC_CHECK_SIZEOF(short)
+   AC_CHECK_SIZEOF(int)
+   AC_CHECK_SIZEOF(long long)
+   AC_CHECK_SIZEOF(double)
+   AC_CHECK_SIZEOF(void*)
+   AC_CHECK_ALIGNOF(short)
+   AC_CHECK_ALIGNOF(int)
+   AC_CHECK_ALIGNOF(long)
+   AC_CHECK_ALIGNOF(double)
+
+   SIZEOF_SHORT=$ac_cv_sizeof_short
+   SIZEOF_INT=$ac_cv_sizeof_int
    SIZEOF_LONG=$ac_cv_sizeof_long
+   SIZEOF_LONGLONG=$ac_cv_sizeof_long_long
+   SIZEOF_DOUBLE=$ac_cv_sizeof_double
+   SIZEOF_POINTER=$ac_cv_sizeof_voidp
+
+   ALIGNOF_SHORT=$ac_cv_alignof_short
+   ALIGNOF_INT=$ac_cv_alignof_int
+   ALIGNOF_LONG=$ac_cv_alignof_long
+   ALIGNOF_DOUBLE=$ac_cv_alignof_double
+
    AC_C_BIGENDIAN
    WORDS_BIGENDIAN=$ac_cv_c_bigendian
 
@@ -2492,38 +2513,25 @@ dnl ===================================================================
       LFS_CFLAGS="$LFS_CFLAGS -D_LARGE_FILES"
    fi
 else
+   # Hardcode for MSVC
+   SIZEOF_SHORT=2
+   SIZEOF_INT=4
    SIZEOF_LONG=4
+   SIZEOF_LONGLONG=8
+   if test "$CL_X64" = ""; then
+     SIZEOF_POINTER=4
+   else
+     SIZEOF_POINTER=8
+   fi
+   ALIGNOF_SHORT=1
+   ALIGNOF_INT=1
+   ALIGNOF_LONG=1
+   ALIGNOF_DOUBLE=1
    WORDS_BIGENDIAN=no
    LFS_CFLAGS=''
 fi
 AC_SUBST(WORDS_BIGENDIAN)
 AC_SUBST(LFS_CFLAGS)
-
-AC_CHECK_SIZEOF(short)
-AC_CHECK_SIZEOF(int)
-if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
-AC_CHECK_SIZEOF(long long)
-else
-AC_CHECK_SIZEOF(__int64)
-ac_cv_sizeof_long_long=$ac_cv_sizeof___int64
-fi
-AC_CHECK_SIZEOF(double)
-AC_CHECK_SIZEOF(void*)
-AC_CHECK_ALIGNOF(short)
-AC_CHECK_ALIGNOF(int)
-AC_CHECK_ALIGNOF(long)
-AC_CHECK_ALIGNOF(double)
-
-SIZEOF_SHORT=$ac_cv_sizeof_short
-SIZEOF_INT=$ac_cv_sizeof_int
-SIZEOF_LONGLONG=$ac_cv_sizeof_long_long
-SIZEOF_DOUBLE=$ac_cv_sizeof_double
-SIZEOF_POINTER=$ac_cv_sizeof_voidp
-
-ALIGNOF_SHORT=$ac_cv_alignof_short
-ALIGNOF_INT=$ac_cv_alignof_int
-ALIGNOF_LONG=$ac_cv_alignof_long
-ALIGNOF_DOUBLE=$ac_cv_alignof_double
 
 AC_SUBST(SIZEOF_SHORT)
 AC_SUBST(SIZEOF_INT)
