@@ -652,7 +652,7 @@ elsif ( $platform =~ m/cygwin/ )
       print "Setting Windows NT cygwin MinGW specific values... ";
       $FLIPCMD        = "slfl.pl";
       $PATH_SEPERATOR = ';';
-      $outfile        = "winmingw.set.sh";
+      $outfile        = "WindowsMinGWEnv.Set.sh";
       $COMPATH        = PathFormat('@COMPATH@/bin');
       $COMPATH        =~ s/\/bin$//i;
       $COM            = "GCC";
@@ -661,7 +661,7 @@ elsif ( $platform =~ m/cygwin/ )
       $ATL_INCLUDE = '$SOLARVER'.$ds.'$INPATH'.$ds."inc".$ds."external".$ds."mingw".$ds."include".$ds."atl". " ".'$PSDK_HOME'.$ds."include".$ds."atl";
   }
   else # The MSVC section starts here
-  {   $outfile        = "winenv.set.sh";
+  {   $outfile        = "WindowsMSVCEnv.Set.sh";
       $COMPATH        = PathFormat('@COMPATH@');
       $COM            = "MSC";
       $OUTPATH        = "wntmsci@COMEX@";
