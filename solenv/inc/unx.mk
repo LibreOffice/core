@@ -111,6 +111,10 @@
 .INCLUDE : unxlngr.mk
 .ENDIF
 
+.IF "$(COM)$(OS)$(CPU)" == "GCCANDROIDR"
+.INCLUDE : unxandr.mk
+.ENDIF
+
 .IF "$(COM)$(OS)$(CPU)" == "GCCLINUXA"
 .INCLUDE : unxlnga.mk
 .ENDIF
