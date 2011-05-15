@@ -50,10 +50,10 @@ struct ScComplexRefData;
 enum ConvErr
 {
     ConvOK = 0,
-    ConvErrNi,      // nicht implemntierter/unbekannter Opcode aufgetreten
-    ConvErrNoMem,   // Fehler beim Speicheranfordern
-    ConvErrExternal,// Add-Ins aus Excel werden nicht umgesetzt
-    ConvErrCount    // Nicht alle Bytes der Formel 'erwischt'
+    ConvErrNi,      // unimplemented/unknown opcode occurred
+    ConvErrNoMem,   // alloc error
+    ConvErrExternal,// excel add-ins are not converted
+    ConvErrCount    // did not get all bytes of formula
 };
 
 enum FORMULA_TYPE
@@ -87,12 +87,12 @@ public:
 class ConverterBase
 {
 protected:
-    TokenPool           aPool;          // User Token + Predefined Token
+    TokenPool           aPool;          // user token + predefined token
     TokenStack          aStack;
     ScAddress           aEingPos;
     ConvErr             eStatus;
-    sal_Char*           pBuffer;        // Universal-Puffer
-    sal_uInt16              nBufferSize;    // ...und seine Groesse
+    sal_Char*           pBuffer;        // universal buffer
+    sal_uInt16              nBufferSize;    // ...and its size
 
                         ConverterBase( sal_uInt16 nNewBuffer );
     virtual             ~ConverterBase();
