@@ -42,6 +42,9 @@ case "$host_os" in
     dragonfly*)
         _os=DragonFly
         ;;
+    androideabi*)
+        _os=Android
+        ;;
    *)
    AC_MSG_ERROR([$host_os operating system is not suitable for LibreOffice!])
    ;;
