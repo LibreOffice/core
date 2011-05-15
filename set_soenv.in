@@ -585,8 +585,8 @@ elsif ( $platform =~ m/linux/ )
    }
    elsif ($platform =~ m/^arm.*-androideabi/)
    {  print "Setting Android ARM specific values... ";
+      $GUIBASE        = "android";
       $OS             = "ANDROID";
-      
       $outfile        = "AndroidARMEnv.Set.sh";
       $CPU            = "R";
       $CPUNAME        = "ARM";
