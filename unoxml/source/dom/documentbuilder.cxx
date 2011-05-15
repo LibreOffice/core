@@ -316,7 +316,6 @@ namespace DOM
         saxex.Message = make_error_message(ctxt);
         saxex.LineNumber = static_cast<sal_Int32>(ctxt->lastError.line);
         saxex.ColumnNumber = static_cast<sal_Int32>(ctxt->lastError.int2);
-        xmlFreeParserCtxt(ctxt);
         throw saxex;
     }
 

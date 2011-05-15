@@ -98,8 +98,7 @@ public class DOMTest
         //FIXME TODO
     }
 
-    // fd#35668 disabled, this crashes LibreOffice
-    //@Test
+    @Test
     public void testXDocumentBuilder() throws Exception
     {
         XDocumentBuilder xBuilder =
