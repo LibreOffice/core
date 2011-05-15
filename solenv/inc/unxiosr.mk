@@ -27,11 +27,6 @@
 
 # --- Unix Environment for iOS cross-compilation -------------
 
-.IF "$(TARGETPLATFORM)"=="BUILD"
-CC:=$(CC_FOR_BUILD)
-CXX:=$(CXX_FOR_BUILD)
-.ENDIF
-
 CFLAGS=-c $(EXTRA_CFLAGS)
 
 LINKC*=$(CC)
