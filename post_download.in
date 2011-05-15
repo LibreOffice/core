@@ -11,7 +11,7 @@ dnl ===================================================================
 dnl The following is a list of supported systems.
 dnl ===================================================================
 AC_CANONICAL_SYSTEM
-case "$build_os" in
+case "$host_os" in
     solaris*)
         _os=SunOS
         ;;
@@ -43,7 +43,7 @@ case "$build_os" in
         _os=DragonFly
         ;;
    *)
-   AC_MSG_ERROR([$_os operating system is not suitable to build LibreOffice!])
+   AC_MSG_ERROR([$host_os operating system is not suitable for LibreOffice!])
    ;;
 esac
 
