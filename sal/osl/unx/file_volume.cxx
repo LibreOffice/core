@@ -426,7 +426,7 @@ oslFileError osl_unmountVolumeDevice( oslVolumeDeviceHandle Handle )
 
             tErr = osl_unmountFloppy(Handle);
 
-            OSL_ENSURE( tErr, "osl_unmountvolumeDevice: CWD was set to volume mount point" );
+            OSL_ENSURE( tErr, "osl_unmountVolumeDevice: CWD was set to volume mount point" );
         }
     }
 
