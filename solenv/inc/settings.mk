@@ -34,6 +34,24 @@ MKFILENAME:=SETTINGS.MK
 force_dmake_to_error
 .ENDIF
 
+# If we are building a target that should run on the build platform,
+# set variables for suitable for that, and not the host ("target")
+# platform.
+.IF "$(CROSS_COMPILING)"!="" && "$(TARGETPLATFORM)"=="BUILD"
+# I wonder if one could use some dmake foreach loop here...
+COM:=$(COM_FOR_BUILD)
+GUI:=$(GUI_FOR_BUILD)
+GUIBASE:=$(GUIBASE_FOR_BUILD)
+OS:=$(OS_FOR_BUILD)
+CPU:=$(CPU_FOR_BUILD)
+CPUNAME:=$(CPUNAME_FOR_BUILD)
+CC:=$(CC_FOR_BUILD)
+CXX:=$(CXX_FOR_BUILD)
+GXX_INCLUDE_PATH:=$(GXX_INCLUDE_PATH_FOR_BUILD)
+MACOSX_DEPLOYMENT_TARGET:=$(MACOSX_DEPLOYMENT_TARGET_FOR_BUILD)
+.EXPORT: MACOSX_DEPLOYMENT_TARGET
+.ENDIF
+
 .INCLUDE .IGNORE : ooo_vendor.mk
 
 # --- common tool makros --------------------------------------
