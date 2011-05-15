@@ -1494,8 +1494,21 @@ case "$host_os" in
         PTHREAD_LIBS="-pthread"
         _os=DragonFly
         ;;
+    androideabi*)
+        build_gstreamer=no
+	test_cairo=no
+	test_cups=no
+        test_fontconfig=no
+        test_freetype=no
+        test_gtk=no
+        test_kde=no
+        test_kde4=no
+        test_randr=no
+        test_unix_quickstarter=no
+        _os=Android
+        ;;
    *)
-   AC_MSG_ERROR([$_os operating system is not suitable to build LibreOffice!])
+   AC_MSG_ERROR([$host_os operating system is not suitable to build LibreOffice!])
    ;;
 esac
 
@@ -1656,6 +1669,7 @@ if test "$cross_compiling" = "yes"; then
   tar cf - \
 	configure \
 	config.guess \
+	oowintool \
 	solenv/inc/minor.mk \
 	solenv/inc/postset.mk \
 	set_soenv.in \
@@ -1671,11 +1685,14 @@ if test "$cross_compiling" = "yes"; then
     test -n "$CXX_FOR_BUILD" && export CXX="$CXX_FOR_BUILD"
     cd $tmpdir
     sub_conf_opts=""
-    test -n $with_external_tar && sub_conf_opts="$sub_conf_opts --with-external-tar='$with_external_tar'"
+    test -n $with_ant_home && sub_conf_opts="$sub_conf_opts --with-ant-home=$with_ant_home"
+    test $with_junit = no && sub_conf_opts="$sub_conf_opts --without-junit"
     ./configure \
 	--disable-mozilla \
 	--disable-build-mozilla \
+        $sub_conf_opts \
 	2>&1 | sed -e 's/^/    /'
+    test -f ./*Env.Set.sh 2>/dev/null || exit
     . ./*Env.Set.sh
     for V in COM GUI GUIBASE OS CPU CPUNAME CC CXX GXX_INCLUDE_PATH MACOSX_DEPLOYMENT_TARGET; do
       VV='$'$V
@@ -1686,6 +1703,7 @@ if test "$cross_compiling" = "yes"; then
       fi
     done
   )
+  test -f $tmpdir/build-config || AC_MSG_ERROR([Running configure script for BUILD system failed, see $tmpdir/config.log])
   eval `cat $tmpdir/build-config`
   AC_MSG_RESULT([checking for BUILD platform configuration... done])
   rm -rf $tmpdir
@@ -5395,7 +5413,7 @@ if test "$_os" = "Darwin" -a "x$x_includes" = "xno_x_includes"; then
    echo "Do Nothing for _os = Darwin"
    dnl Mac OS X using Aqua graphics. Don't check for X11.
    :
-elif test "$_os" != "WINNT" ; then
+elif test "$_os" != "WINNT" -a "$_os" != "Android"; then
    AC_PATH_X
    AC_PATH_XTRA
    CPPFLAGS="$CPPFLAGS $X_CFLAGS"
@@ -5445,7 +5463,7 @@ fi
 AC_SUBST(XLIB)
 AC_SUBST(XAU_LIBS)
 
-if test "$_os" != "WINNT" -a "$_os" != "Darwin"; then
+if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$_os" != "Android"; then
    dnl ===================================================================
    dnl Check for Composite.h for Mozilla plugin
    dnl ===================================================================
