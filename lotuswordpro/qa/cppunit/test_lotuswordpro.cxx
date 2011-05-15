@@ -82,6 +82,10 @@ namespace
         const char* pSrcRoot = getenv( "SRC_ROOT" );
         CPPUNIT_ASSERT_MESSAGE("SRC_ROOT env variable not set", pSrcRoot != NULL && pSrcRoot[0] != 0);
 
+#ifdef WNT
+        if (pSrcRoot[1] == ':')
+            m_aSrcRoot += rtl::OUString::createFromAscii( "/" );
+#endif
         m_aSrcRoot += rtl::OUString::createFromAscii( pSrcRoot );
 
         //Without this we're crashing because callees are using
@@ -143,8 +147,8 @@ namespace
 
     void LotusWordProTest::test()
     {
-        recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/lotuswordpro/qa/cppunit/data/pass")), true);
-        recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/lotuswordpro/qa/cppunit/data/fail/")), false);
+        recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/filters/lotuswordpro/qa/cppunit/data/pass")), true);
+        recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/filters/lotuswordpro/qa/cppunit/data/fail/")), false);
 
         printf("LotusWordPro: tested %d files\n", m_nLoadedDocs);
     }
