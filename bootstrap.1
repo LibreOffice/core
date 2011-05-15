@@ -18,7 +18,7 @@ if test "$BUILD_DMAKE" != "NO"; then
         cd "$SRC_ROOT/dmake" || exit
 
 	# If cross-compiling then don't use the cross compilers to build dmake.
-	if test "$CROSS_COMPILING" = "yes"; then
+	if test "$CROSS_COMPILING" = "YES"; then
             CC=""
             CXX=""
             export CC
