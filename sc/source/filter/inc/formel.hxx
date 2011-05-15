@@ -98,12 +98,6 @@ protected:
     virtual             ~ConverterBase();
 
     void                Reset();
-
-public:
-    inline SCCOL        GetEingabeCol( void ) const { return aEingPos.Col(); }
-    inline SCROW        GetEingabeRow( void ) const { return aEingPos.Row(); }
-    inline SCTAB        GetEingabeTab( void ) const { return aEingPos.Tab(); }
-    inline ScAddress    GetEingPos( void ) const    { return aEingPos; }
 };
 
 
