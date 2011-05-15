@@ -18,9 +18,15 @@ if test "$BUILD_DMAKE" != "NO"; then
         cd "$SRC_ROOT/dmake" || exit
 
 	# If cross-compiling then don't use the cross compilers to build dmake.
-	if test "$CROSS_COMPILING" = "YES"; then
-            CC=""
-            CXX=""
+        if test "$CROSS_COMPILING" = "YES"; then
+            if test "$GUI_FOR_BUILD" = "WNT"; then
+                # Let the Cygwin gcc be found
+                CC=""
+                CXX=""
+            else
+                CC="$CC_FOR_BUILD"
+                CXX="$CXX_FOR_BUILD"
+            fi
             export CC
             export CXX
         fi
