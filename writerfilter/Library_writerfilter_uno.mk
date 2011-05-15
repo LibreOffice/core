@@ -37,7 +37,7 @@ $(eval $(call gb_Library_set_include,writerfilter_uno,\
 
 $(eval $(call gb_Library_set_defs,writerfilter_uno,\
 	$$(DEFS) \
-	-DWRITERFILTER_DLLIMPLEMENTATION \
+	-DWRITERFILTER_WRITERFILTER_UNO_DLLIMPLEMENTATION \
 	$(if $(filter YES,$(SYSTEM_LIBXML)),$(filter-out -I%,$(LIBXML_CFLAGS))) \
 ))
 

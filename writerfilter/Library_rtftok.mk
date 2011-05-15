@@ -37,7 +37,7 @@ include debug_setup.mk
 
 $(eval $(call gb_Library_set_defs,rtftok,\
 	$$(DEFS) \
-	-DWRITERFILTER_DLLIMPLEMENTATION \
+	-DWRITERFILTER_RTFTOK_DLLIMPLEMENTATION \
 	$(writerfilter_debug_flags) \
 ))
 

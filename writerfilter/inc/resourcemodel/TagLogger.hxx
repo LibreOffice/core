@@ -47,7 +47,7 @@ namespace writerfilter
         virtual std::string toString(const Id & id) const = 0;
     };
 
-    class WRITERFILTER_DLLPUBLIC TagLogger
+    class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC TagLogger
     {
     public:
         typedef TagLogger* Pointer_t;

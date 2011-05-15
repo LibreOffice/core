@@ -42,7 +42,7 @@ include $(SRCDIR)/writerfilter/debug_setup.mk
 
 $(eval $(call gb_Library_set_defs,doctok,\
 	$$(DEFS) \
-	-DWRITERFILTER_DLLIMPLEMENTATION \
+	-DWRITERFILTER_DOCTOK_DLLIMPLEMENTATION \
 	$(writerfilter_debug_flags) \
 	$(if $(filter YES,$(SYSTEM_LIBXML)),$(filter-out -I%,$(LIBXML_CFLAGS))) \
 ))

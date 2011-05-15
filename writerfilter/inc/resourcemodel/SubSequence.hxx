@@ -50,7 +50,7 @@ void dumpLine(OutputWithDepth<string> & o, SubSequence<T> & rSeq,
               sal_uInt32 nOffset, sal_uInt32 nStep);
 
 template <class T>
-class WRITERFILTER_DLLPUBLIC SubSequence
+class SubSequence
 {
     typedef boost::shared_ptr<com::sun::star::uno::Sequence<T> >
     SequencePointer;

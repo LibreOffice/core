@@ -41,7 +41,7 @@ template <typename T, typename PropertiesPointer>
 /**
    Class containing the data to describe a table cell.
  */
-class WRITERFILTER_DLLPUBLIC CellData
+class CellData
 {
     /**
        Handle to start of cell.
@@ -126,7 +126,7 @@ template <typename T, typename PropertiesPointer>
 /**
    Class to handle data of a table row.
  */
-class WRITERFILTER_DLLPUBLIC RowData
+class RowData
 {
     typedef typename CellData<T, PropertiesPointer>::Pointer_t
         CellDataPointer_t;
@@ -275,7 +275,7 @@ template <typename T, typename PropertiesPointer>
 /**
    Class that holds the data of a table.
  */
-class WRITERFILTER_DLLPUBLIC TableData
+class TableData
 {
     typedef typename RowData<T, PropertiesPointer>::Pointer_t RowPointer_t;
     typedef ::std::vector<RowPointer_t> Rows;

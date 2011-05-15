@@ -36,7 +36,7 @@
 namespace writerfilter
 {
 
-class WRITERFILTER_DLLPUBLIC LoggedResourcesHelper
+class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC LoggedResourcesHelper
 {
 public:
     explicit LoggedResourcesHelper(TagLogger::Pointer_t pLogger, const string & sPrefix);
@@ -56,7 +56,7 @@ private:
     string msPrefix;
 };
 
-class WRITERFILTER_DLLPUBLIC LoggedStream : public Stream
+class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC LoggedStream : public Stream
 {
 public:
     explicit LoggedStream(TagLogger::Pointer_t pLogger, const string & sPrefix);
@@ -96,7 +96,7 @@ protected:
     LoggedResourcesHelper mHelper;
 };
 
-class WRITERFILTER_DLLPUBLIC LoggedProperties : public Properties
+class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC LoggedProperties : public Properties
 {
 public:
     explicit LoggedProperties(TagLogger::Pointer_t pLogger, const string & sPrefix);
@@ -112,7 +112,7 @@ protected:
     LoggedResourcesHelper mHelper;
 };
 
-class WRITERFILTER_DLLPUBLIC LoggedTable : public Table
+class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC LoggedTable : public Table
 {
 public:
     explicit LoggedTable(TagLogger::Pointer_t pLogger, const string & sPrefix);
