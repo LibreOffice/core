@@ -31,10 +31,12 @@
 #include "WW8ResourceModel.hxx"
 #include "TagLogger.hxx"
 
+#include <WriterFilterDllApi.hxx>
+
 namespace writerfilter
 {
 
-class LoggedResourcesHelper
+class WRITERFILTER_DLLPUBLIC LoggedResourcesHelper
 {
 public:
     explicit LoggedResourcesHelper(TagLogger::Pointer_t pLogger, const string & sPrefix);
