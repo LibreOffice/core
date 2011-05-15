@@ -35,6 +35,7 @@ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
+.IF "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
 .IF "$(L10N_framework)"==""
 JDKINCS=
 
@@ -54,6 +55,6 @@ ALL: $(MOZFILES)
 
 # --- Targets ------------------------------------------------------
 .ENDIF 		# L10N_framework
+.ENDIF		# iOS or Android
 
 .INCLUDE :	target.mk
-
