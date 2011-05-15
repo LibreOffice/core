@@ -1234,21 +1234,6 @@ AC_ARG_WITH(zip-home,
     ],
 ,)
 
-AC_ARG_WITH(mingw,
-    AS_HELP_STRING([--with-mingw],
-        [For Windows users, use the MinGW compiler within a Cygwin environment.])
-    [
-                          Usage:     --with-mingw=yes
-
-                          For non-Windows use, use the MinGW C++ compiler to
-                          (re-)build unowinreg.dll. Specify the MinGW C++
-                          Compilers name.
-
-                          Usage:     --with-mingw=i586-mingw32msvc-g++
-    ],
-    WITH_MINGW=$withval ,
-WITH_MINGW=0)
-
 AC_ARG_WITH(build-version,
     AS_HELP_STRING([--with-build-version],
         [Allows the builder to add a custom version tag that will appear in the
@@ -1409,13 +1394,22 @@ case "$host_os" in
         test_cups=no
         _os=GNU
         ;;
-    cygwin*|interix*) # Windows
+    cygwin*|interix*|mingw32*) # Windows
         test_cups=no
         test_randr=no
         test_freetype=no
         test_cairo=no
         test_fontconfig=no
         _os=WINNT
+	# Confusingly, if the host OS matches "mingw32*", that means
+	# we are using the MinGW compiler, either natively (unlikely)
+	# or cross-compiling. We use WITH_MINGW to indicate
+	# use of MinGW in both cases
+	case "$host_os" in
+	    mingw32*)
+		WITH_MINGW=yes
+		;;
+	esac
         ;;
     darwin*) # Mac OS X or iOS
         test_gtk=yes
@@ -1512,12 +1506,13 @@ case "$host_os" in
    ;;
 esac
 
+AC_SUBST(WITH_MINGW)
 AC_SUBST(OSVERSION)
 AC_SUBST(PTHREAD_CFLAGS)
 AC_SUBST(PTHREAD_LIBS)
 
-if test $_os = "WINNT"; then
-   AC_MSG_CHECKING([Windows build environment sanity])
+if test $build_os = "cygwin"; then
+   AC_MSG_CHECKING([Cygwin build environment sanity])
    dnl ===================================================================
    dnl Sanity check! Native Windows programs cannot use Cygwin symlinks!
    dnl ===================================================================
@@ -1529,31 +1524,23 @@ Native Windows programs cannot use Cygwin symlinks. Remove the symbolic
 link, and copy the program to the name of the link.])
       fi
    dnl ===================================================================
-   dnl If $CC is set to a MinGW compiler, e.g. "gcc -mno-cygwin" enable
-   dnl $WITH_MINGW
+   dnl If $CC is set to a MinGW compiler, set WITH_MINGW
    dnl ===================================================================
-      if test -n "$CC";then
+      if test "$WITH_MINGW" != "yes" -a -n "$CC"; then
          if test "`$CC -dumpmachine 2>/dev/null | $SED -e 's/^.*-//'`" = "mingw32"; then
             WITH_MINGW="yes"
          fi
       fi
    dnl ===================================================================
-   if test "$WITH_MINGW" = "yes" ; then
-      if test -z "$CC"; then
-         CC="gcc -mno-cygwin"
-         CXX="g++ -mno-cygwin"
-      fi
-   fi
    AC_MSG_RESULT([ok])
 fi
-AC_SUBST(WITH_MINGW)
 
 dnl ===================================================================
 dnl Extra check for Windows. Cygwin builds need gcc to build dmake
-dnl and g++ to build guw.exe although MS cl (or MinGW) is used to
+dnl and g++ to build guw.exe although MSVC or MinGW is used to
 dnl build LibreOffice.
 dnl ===================================================================
-if test "_os" = "WINNT" ; then
+if test "build_os" = "cygwin" ; then
    AC_MSG_CHECKING([for Cygwin gcc/g++])
    if which gcc > /dev/null && which g++ > /dev/null ; then
       AC_MSG_RESULT([found])
@@ -2129,9 +2116,7 @@ dnl ===================================================================
 if test -z "$with_perl_home"; then
    AC_PATH_PROG(PERL, perl)
 else
-   if test "$_os" = "WINNT"; then
-      with_perl_home=`cygpath -u "$with_perl_home"`
-   fi
+   test "$build_os" = "cygwin" && with_perl_home=`cygpath -u "$with_perl_home"`
    _perl_path="$with_perl_home/bin/perl"
    if test -x "$_perl_path"; then
       PERL=$_perl_path
@@ -2352,8 +2337,7 @@ dnl that to mean Visual Studio .NET 2003 ? And does this also
 dnl in fact apply equally to what we actually support, i.e.
 dnl Visual Studio 2008 and 2010?)
 dnl ===================================================================
-if test "$_os" = "WINNT"; then
-if test "$WITH_MINGW" = "yes" || test "$COMEX" -ge "10"; then
+if test "$build_os" = "cygwin"; then
     dnl Check midl.exe
     AC_PATH_PROG(MIDL_PATH, midl.exe)
     if test -n "$MIDL_PATH";then
@@ -2436,10 +2420,9 @@ if test "$WITH_MINGW" = "yes" || test "$COMEX" -ge "10"; then
     # Convert to posix path with 8.3 filename restrictions ( No spaces )
     DOTNET_FRAMEWORK_HOME=`cygpath -d "$DOTNET_FRAMEWORK_HOME"`
     DOTNET_FRAMEWORK_HOME=`cygpath -u "$DOTNET_FRAMEWORK_HOME"`
-fi
-AC_SUBST(MIDL_PATH)
-AC_SUBST(CSC_PATH)
-AC_SUBST(DOTNET_FRAMEWORK_HOME)
+    AC_SUBST(MIDL_PATH)
+    AC_SUBST(CSC_PATH)
+    AC_SUBST(DOTNET_FRAMEWORK_HOME)
 fi
 
 dnl ===================================================================
@@ -2536,7 +2519,7 @@ AC_SUBST(ALIGNOF_DOUBLE)
 dnl ===================================================================
 dnl Check if valgrind.h is available 
 dnl ===================================================================
-if test -n "$enable_dbgutil" && test "$enable_dbgutil" != "no"; then
+if test "$cross_compiling" != "yes" -a "$enable_dbgutil" != "no"; then
    dnl Test $prefix (currently only testing for /usr and /usr/local)
    dnl so that VALGRIND_CFLAGS = -I$prefix/include/valgrind
    VALGRIND_CFLAGS=""
@@ -2634,7 +2617,7 @@ if test "$GXX" = "yes"; then
       if test "$with_gxx_include_path" = "/usr/libexec/(null)/include"; then
           with_gxx_include_path="/usr/include"
       fi
-      if test "$WITH_MINGW" = "yes"; then
+      if test "$build_os" = "cygwin" -a "$WITH_MINGW" = "yes"; then
          with_gxx_include_path=`cygpath -d "$with_gxx_include_path"`
          with_gxx_include_path=`cygpath -u "$with_gxx_include_path"`
       fi
@@ -2656,7 +2639,7 @@ GXX_INCLUDE_PATH="$with_gxx_include_path"
 AC_SUBST(GXX_INCLUDE_PATH)
 
 dnl ===================================================================
-dnl Set the mingw runtime library include directories
+dnl Set the MinGW include directories
 dnl ===================================================================
 if test "$WITH_MINGW" = "yes"; then
    AC_MSG_CHECKING([for MinGW runtime include path])
@@ -2666,7 +2649,7 @@ if test "$WITH_MINGW" = "yes"; then
 _ACEOF
    _mingw_lib_include_path=`$CXX -E -xc++ conftest.$ac_ext | $SED -n -e '/.*1*"\(.*\)\/stddef.h".*/s//\1/p' -e '/.*1*"\(.*\)\/bits\/c++config.h".*/s//\1/p' | sort -u | xargs echo`
    rm conftest.$ac_ext
-   if test -n "$_mingw_lib_include_path"; then
+   if test "$build_os" = "cygwin" -a -n "$_mingw_lib_include_path"; then
       _temp=""
       for a in $_mingw_lib_include_path
          do
@@ -2677,7 +2660,7 @@ _ACEOF
    fi
    if test -z "$_mingw_lib_include_path"; then
       _mingw_lib_include_path="NO_LIB_INCLUDE"
-      AC_MSG_RESULT([no MinGW runtime includes])
+      AC_MSG_RESULT([no MinGW include path])
    else
       AC_MSG_RESULT([$_mingw_lib_include_path])
    fi
@@ -2690,7 +2673,7 @@ dnl mingw gcc 4.4.0 needs backward in include path to use hash_set/hash_map
 _ACEOF
    _mingw_backward_include_path=`$CXX -E -xc++ -Wno-deprecated conftest.$ac_ext 2>&5| $SED -n -e '/.*1*"\(.*\)\/hash_set".*/s//\1/p' | sort -u | xargs echo`
    rm conftest.$ac_ext
-   if test -n "$_mingw_backward_include_path"; then
+   if test "$build_os" = "cygwin" -a -n "$_mingw_backward_include_path"; then
       _mingw_backward_include_path=`cygpath -d $_mingw_backward_include_path`
       _mingw_backward_include_path=`cygpath -u $_mingw_backward_include_path`
       AC_MSG_RESULT([$_mingw_backward_include_path])
@@ -2702,8 +2685,10 @@ _ACEOF
   AC_SUBST(MINGW_BACKWARD_INCLUDE_PATH)
   mingw_crtbegin=`$CC -print-file-name=crtbegin.o`
   MINGW_CLIB_DIR=`dirname $mingw_crtbegin`
+
+  # How to do this crack when cross-compiling?
   AC_MSG_CHECKING([whether to use dynamic libgcc])
-  if test -e "$MINGW_CLIB_DIR/libgcc_s.a"; then
+  if test "$build_os" = "cygwin" -a -e "$MINGW_CLIB_DIR/libgcc_s.a"; then
     AC_MSG_CHECKING([dynamic libgcc name])
     MINGW_GCCDLL_pattern=`nm $MINGW_CLIB_DIR/libgcc_s.a | $SED -ne 's@.* _libgcc\(.*\)_dll_iname@libgcc\1.dll@p' | uniq | $SED -e 's@_@?@g'`
     MINGW_GCCDLL=`cd $COMPATH/bin && ls $MINGW_GCCDLL_pattern 2>/dev/null`
@@ -2719,6 +2704,7 @@ _ACEOF
   if test -e "$MINGW_CLIB_DIR/libgcc_eh.a"; then
       MINGW_GCCLIB_EH=YES
   fi
+
   AC_MSG_CHECKING([whether to use dynamic libstdc++])
   MINGW_SHARED_LIBSTDCPP=
   if test -e "$MINGW_CLIB_DIR/libstdc++_s.a" ; then
@@ -2727,7 +2713,7 @@ _ACEOF
   if test -e "$MINGW_CLIB_DIR/libstdc++.dll.a" ; then
     MINGW_SHARED_LIBSTDCPP=stdc++.dll
   fi
-  if test -n "$MINGW_SHARED_LIBSTDCPP" ; then
+  if test "$build_os" = "cygwin" -a -n "$MINGW_SHARED_LIBSTDCPP" ; then
     AC_MSG_CHECKING([dynamic libstdc++ name])
     MINGW_GXXDLL_pattern=`nm $MINGW_CLIB_DIR/lib$MINGW_SHARED_LIBSTDCPP.a | sed -ne 's@.* _libstdc__\(.*\)_dll_iname@libstdc++\1.dll@p' | uniq | sed -e 's@_@?@g'`
     MINGW_GXXDLL=`cd $COMPATH/bin && ls $MINGW_GXXDLL_pattern 2>/dev/null`
@@ -2742,7 +2728,7 @@ _ACEOF
   else
     AC_MSG_RESULT([no])
   fi
-  MINGW_CLIB_DIR=`cygpath $MINGW_CLIB_DIR`
+  test "$build_os" = "cygwin" && MINGW_CLIB_DIR=`cygpath $MINGW_CLIB_DIR`
   AC_SUBST(MINGW_CLIB_DIR)
   AC_SUBST(MINGW_SHARED_GCCLIB)
   AC_SUBST(MINGW_GCCLIB_EH)
@@ -3240,7 +3226,7 @@ if test "$SOLAR_JAVA" != ""; then
 	    AC_MSG_ERROR([No JDK found by oowintool, pass the --with-jdk-home option pointing to a $bitness JDK])
 	 fi
       else
-	 with_jdk_home=`cygpath -u "$with_jdk_home"`
+	 test "$build_os" = "cygwin" && with_jdk_home=`cygpath -u "$with_jdk_home"`
 	 howfound="you passed"
       fi
    fi
@@ -3258,7 +3244,7 @@ if test "$SOLAR_JAVA" != ""; then
       fi
    fi
 
-   if test "$_os" = "WINNT"; then
+   if test "$build_os" = "cygwin" -a "$_os" = "WINNT"; then
       # Check that the JDK found is correct architecture
       shortjdkhome=`cygpath -d "$with_jdk_home"`
       if test "$CL_X64" != "" -a -f "$with_jdk_home/bin/java.exe" -a "`$shortjdkhome/bin/java.exe -version 2>&1 | grep -i 64-bit`" == "" >/dev/null; then
@@ -5159,7 +5145,7 @@ if test "$enable_nss_module" != "no"; then
    ENABLE_NSS_MODULE="YES"
    BUILD_TYPE="$BUILD_TYPE NSS"
    AC_MSG_RESULT([yes])
-   if test "$_os" = "WINNT"; then
+   if test "$build_os" = "cygwin"; then
       AC_MSG_CHECKING([for Mozilla build tooling])
       if test -z "$MOZILLABUILD" ; then
 AC_MSG_ERROR([Mozilla build tooling not found.
