@@ -66,12 +66,6 @@ BUILD_ACTION = cd src/cppunit && dmake -f ooo-cppunit_dll.mk debug=$(debug) verb
 
 OUTDIR2INC = include/cppunit
 
-.INCLUDE: set_ext.mk
-.INCLUDE: target.mk
-.INCLUDE: tg_ext.mk
-
-$(PACKAGE_DIR)/$(CONFIGURE_FLAG_FILE): ooo-cppunit_dll.mk ooo-DllPlugInTester.mk
-
 .ELSE
 .IF "$(COM)" == "GCC"
 EXTRA_CFLAGS += -mthreads
@@ -140,3 +134,7 @@ OUT2LIB = ooo-install/lib/libcppunit-1.12.so.1
 .INCLUDE: set_ext.mk
 .INCLUDE: target.mk
 .INCLUDE: tg_ext.mk
+
+.IF "$(COM)" == "MSC"
+$(PACKAGE_DIR)/$(CONFIGURE_FLAG_FILE): ooo-cppunit_dll.mk ooo-DllPlugInTester.mk
+.ENDIF
