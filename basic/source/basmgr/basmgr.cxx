@@ -1569,18 +1569,18 @@ sal_Bool BasicManager::RemoveLib( sal_uInt16 nLib, sal_Bool bDelBasicFromStorage
 
                 // If no further stream available,
                 // delete the SubStorage.
-                SvStorageInfoList aInfoList( 0, 4 );
+                SvStorageInfoList aInfoList;
                 xBasicStorage->FillInfoList( &aInfoList );
-                if ( !aInfoList.Count() )
+                if ( aInfoList.empty() )
                 {
                     xBasicStorage.Clear();
                     xStorage->Remove( String(RTL_CONSTASCII_USTRINGPARAM(szBasicStorage)) );
                     xStorage->Commit();
                     // If no further Streams or SubStorages available,
                     // delete the Storage, too.
-                    aInfoList.Clear();
+                    aInfoList.clear();
                     xStorage->FillInfoList( &aInfoList );
-                    if ( !aInfoList.Count() )
+                    if ( aInfoList.empty() )
                     {
                         String aName_( xStorage->GetName() );
                         xStorage.Clear();
