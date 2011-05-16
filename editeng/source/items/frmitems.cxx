@@ -2509,6 +2509,7 @@ void SvxBoxInfoItem::SetLine( const SvxBorderLine* pNew, sal_uInt16 nLine )
     }
     else
     {
+        delete pTmp;
         OSL_FAIL( "wrong line" );
     }
 }
