@@ -3309,9 +3309,9 @@ sal_Bool StatementCommand::UnpackStorage( SotStorageRef xStorage, DirEntry &aBas
     SvStorageInfoList aList;
     xStorage->FillInfoList( &aList );
 
-    for( sal_uInt16 i = 0; i < aList.Count(); i++ )
+    for( size_t i = 0; i < aList.size(); i++ )
     {
-        SvStorageInfo& rInfo = aList.GetObject( i );
+        SvStorageInfo& rInfo = aList[ i ];
         String aName = rInfo.GetName();
         DirEntry aPath ( aBaseDir );
         aPath += DirEntry( aName );
