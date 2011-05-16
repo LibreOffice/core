@@ -253,7 +253,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
                 pvMoreParLcl = new SbiExprListVector();
             SbiParameters* pAddPar = new SbiParameters( pParser );
             pvMoreParLcl->push_back( pAddPar );
-            bError |= !pPar->IsValid();
+            bError |= !pAddPar->IsValid();
             eTok = pParser->Peek();
         }
     }
