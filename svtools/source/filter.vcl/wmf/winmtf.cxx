@@ -37,6 +37,7 @@
 #include <vcl/graphictools.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/svapp.hxx>
 #include <rtl/tencinfo.h>
 
 // ------------------------------------------------------------------------
@@ -1617,6 +1618,8 @@ void WinMtfOutput::DrawText( Point& rPosition, String& rText, sal_Int32* pDXArry
         sal_Int32* pDX = pDXArry;
         if ( !pDXArry )
         {
+            SolarMutexGuard aGuard;
+
             pDX = new sal_Int32[ rText.Len() ];
             if ( !pVDev )
                 pVDev = new VirtualDevice;
