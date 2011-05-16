@@ -263,7 +263,7 @@ namespace drawinglayer
                         double fOldRotate, fOldShearX;
                         rTextCandidate.getTextTransform().decompose(aOldFontScaling, aOldTranslate, fOldRotate, fOldShearX);
 
-                        long nWidthToFill = rTextCandidate.getWidthToFill( ) * aFontScaling.getX() / aOldFontScaling.getX();
+                        long nWidthToFill = static_cast<long>(rTextCandidate.getWidthToFill( ) * aFontScaling.getX() / aOldFontScaling.getX());
 
                         long nWidth = mpOutputDevice->GetTextArray(
                             rTextCandidate.getText(), pDXArray, 0, 1 );

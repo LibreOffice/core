@@ -85,7 +85,7 @@ ScVbaUserForm::Show(  ) throw (uno::RuntimeException)
 
             uno::Reference< awt::XControl > xControl( m_xDialog, uno::UNO_QUERY_THROW );
             uno::Reference< awt::XWindow > xControlWindow( xControl->getPeer(), uno::UNO_QUERY_THROW );
-            xControlWindow->setPosSize( (aPosSize.Width - getWidth()) / 2.0, (aPosSize.Height - getHeight()) / 2.0, 0, 0, awt::PosSize::POS );
+            xControlWindow->setPosSize(static_cast<sal_Int32>((aPosSize.Width - getWidth()) / 2.0), static_cast<sal_Int32>((aPosSize.Height - getHeight()) / 2.0), 0, 0, awt::PosSize::POS );
         }
         catch( uno::Exception& )
         {

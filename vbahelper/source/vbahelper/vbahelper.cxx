@@ -719,7 +719,7 @@ double PointsToPixels( css::uno::Reference< css::awt::XDevice >& xDevice, double
 double PixelsToPoints( css::uno::Reference< css::awt::XDevice >& xDevice, double fPixels, sal_Bool bVertical)
 {
     double fConvertFactor = getPixelTo100thMillimeterConversionFactor( xDevice, bVertical );
-    return HmmToPoints( fPixels/fConvertFactor );
+    return HmmToPoints(static_cast<sal_Int32>(fPixels/fConvertFactor));
 }
 
 sal_Int32 PointsToHmm( double fPoints )
@@ -899,7 +899,7 @@ double UserFormGeometryHelper::getLeft()
 //---------------------------------------------
 void UserFormGeometryHelper::setLeft( double nLeft )
 {
-    mxWindow->setPosSize( nLeft, mxWindow->getPosSize().Y, 0, 0, awt::PosSize::POS );
+    mxWindow->setPosSize(static_cast<sal_Int32>(nLeft), mxWindow->getPosSize().Y, 0, 0, awt::PosSize::POS );
 }
 
 //---------------------------------------------
@@ -911,7 +911,7 @@ double UserFormGeometryHelper::getTop()
 //---------------------------------------------
 void UserFormGeometryHelper::setTop( double nTop )
 {
-    mxWindow->setPosSize( mxWindow->getPosSize().X, nTop, 0, 0, awt::PosSize::POS );
+    mxWindow->setPosSize( mxWindow->getPosSize().X, static_cast<sal_Int32>(nTop), 0, 0, awt::PosSize::POS );
 }
 
 //---------------------------------------------
@@ -934,7 +934,7 @@ double UserFormGeometryHelper::getWidth()
 //---------------------------------------------
 void UserFormGeometryHelper::setWidth( double nWidth )
 {
-    sal_Int64 nNewWidth = nWidth;
+    sal_Int64 nNewWidth = static_cast<sal_Int64>(nWidth);
 
     if ( mbDialog )
     {
@@ -948,8 +948,8 @@ void UserFormGeometryHelper::setWidth( double nWidth )
                 sal_Int64 nDecor = aRDecor.getWidth();
                 sal_Int64 nUnDecor = mxWindow->getPosSize().Width;
                 if ( nWidth < nDecor - nUnDecor )
-                    nUnDecor = nDecor - nWidth; // avoid negative size
-                nNewWidth = nWidth + nUnDecor - nDecor;
+                    nUnDecor = static_cast<sal_Int64>(nDecor - nWidth); // avoid negative size
+                nNewWidth = static_cast<sal_Int64>(nWidth + nUnDecor - nDecor);
             }
         }
     }
@@ -977,7 +977,7 @@ double UserFormGeometryHelper::getHeight()
 //---------------------------------------------
 void UserFormGeometryHelper::setHeight( double nHeight )
 {
-    sal_Int64 nNewHeight = nHeight;
+    sal_Int64 nNewHeight = static_cast<sal_Int64>(nHeight);
     if ( mbDialog )
     {
         const Window* pWindow = VCLUnoHelper::GetWindow( mxWindow );
@@ -990,8 +990,8 @@ void UserFormGeometryHelper::setHeight( double nHeight )
                 sal_Int64 nDecor = aRDecor.getHeight();
                 sal_Int64 nUnDecor = mxWindow->getPosSize().Height;
                 if ( nHeight < nDecor - nUnDecor )
-                    nUnDecor = nDecor - nHeight; // avoid negative size
-                nNewHeight = nHeight + nUnDecor - nDecor;
+                    nUnDecor = static_cast<sal_Int64>(nDecor - nHeight); // avoid negative size
+                nNewHeight = static_cast<sal_Int64>(nHeight + nUnDecor - nDecor);
             }
         }
     }
