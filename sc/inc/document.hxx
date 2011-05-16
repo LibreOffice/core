@@ -49,6 +49,7 @@
 #include <map>
 #include <set>
 #include <list>
+#include <vector>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 namespace editeng { class SvxBorderLine; }
@@ -185,6 +186,7 @@ namespace com { namespace sun { namespace star {
 #define SC_ASIANCOMPRESSION_INVALID     0xff
 #define SC_ASIANKERNING_INVALID         0xff
 
+typedef ::std::vector<ScTable*>::iterator ScTableIterator;
 
 enum ScDocumentMode
     {
@@ -239,7 +241,7 @@ private:
     ScConditionalFormatList* pCondFormList;             // conditional formats
     ScValidationDataList* pValidationList;              // validity
     SvNumberFormatterIndexTable*    pFormatExchangeList;    // for application of number formats
-    ScTable*            pTab[MAXTABCOUNT];
+    ::std::vector<ScTable*> pTab;
     mutable ScRangeName* pRangeName;
     ScDBCollection*     pDBCollection;
     ScDPCollection*     pDPCollection;

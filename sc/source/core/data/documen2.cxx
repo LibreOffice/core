@@ -139,6 +139,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         pCondFormList( NULL ),
         pValidationList( NULL ),
         pFormatExchangeList( NULL ),
+        pTab( 10 ),
         pRangeName(NULL),
         pDPCollection( NULL ),
         pLinkManager( NULL ),
@@ -235,22 +236,16 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
 
         xPoolHelper = new ScPoolHelper( this );
 
-        pTab[0]  = NULL;
         pBASM = new ScBroadcastAreaSlotMachine( this );
         pChartListenerCollection = new ScChartListenerCollection( this );
         pRefreshTimerControl = new ScRefreshTimerControl;
     }
     else
     {
-        pTab[0]     = NULL;
         pBASM       = NULL;
         pChartListenerCollection = NULL;
         pRefreshTimerControl = NULL;
     }
-
-    for (SCTAB i=1; i<=MAXTAB; i++)
-        pTab[i] = NULL;
-
     pDBCollection = new ScDBCollection(this);
     pSelectionAttr = NULL;
     pChartCollection = new ScChartCollection;
@@ -556,14 +551,14 @@ ScNoteEditEngine& ScDocument::GetNoteEngine()
 }
 
 
-void ScDocument::ResetClip( ScDocument* pSourceDoc, const ScMarkData* pMarks )
+void ScDocument::ResetClip( ScDocument* pSourceDoc, const ScMarkData* pMarks )//TODO:FIXME
 {
     if (bIsClip)
     {
         InitClipPtrs(pSourceDoc);
 
-        for (SCTAB i = 0; i <= MAXTAB; i++)
-            if (pSourceDoc->pTab[i])
+        for (ScTableIterator it = pTab.begin(); it != pTab.end(); ++it)
+            if (pSourceDoc->pTab[i] )//TODO:FIXME
                 if (!pMarks || pMarks->GetTableSelect(i))
                 {
                     String aString;

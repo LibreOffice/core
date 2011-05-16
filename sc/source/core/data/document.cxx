@@ -2014,7 +2014,7 @@ void ScDocument::CopyBlockFromClip( SCCOL nCol1, SCROW nRow1,
                                     SCsCOL nDx, SCsROW nDy,
                                     const ScCopyBlockFromClipParams* pCBFCP )
 {
-    ScTable** ppClipTab = pCBFCP->pClipDoc->pTab;
+    ::std::vector<ScTable*>& ppClipTab = pCBFCP->pClipDoc->pTab;
     SCTAB nTabEnd = pCBFCP->nTabEnd;
     SCTAB nClipTab = 0;
     for (SCTAB i = pCBFCP->nTabStart; i <= nTabEnd; i++)
@@ -2103,7 +2103,7 @@ void ScDocument::CopyNonFilteredFromClip( SCCOL nCol1, SCROW nRow1,
 
     //  filtered state is taken from first used table in clipboard (as in GetClipArea)
     SCTAB nFlagTab = 0;
-    ScTable** ppClipTab = pCBFCP->pClipDoc->pTab;
+    std::vector<ScTable*>& ppClipTab = pCBFCP->pClipDoc->pTab;
     while ( nFlagTab < MAXTAB && !ppClipTab[nFlagTab] )
         ++nFlagTab;
 
