@@ -210,7 +210,7 @@ if [ "$GUI" = "WNT" -a -n "$md5sum" ]; then
 	fi
         $TARFILE_LOCATION/dbghinst.EXE /T:$TMPUNPACK /C
         sum=`$md5sum $md5special $TARFILE_LOCATION/tmp/dbghelp.exe | sed "s/ .*//"`
-        if [ "$sum" == "cd3086a91e37965dd761ef5fd5df5b15" ]; then
+        if [ "$sum" = "cd3086a91e37965dd761ef5fd5df5b15" ]; then
             unzip -LL -j -o -d ./external/dbghelp $TARFILE_LOCATION/tmp/dbghelp.exe
         fi
     fi
@@ -237,7 +237,7 @@ if [ "$GUI" = "WNT" -a -n "$md5sum" ]; then
 	if [ -f $TARFILE_LOCATION/tmp/$gdiplus_dll_path ]; then
 	    echo "Extraction succeeded"
 	    sum=`$md5sum $md5special $TARFILE_LOCATION/tmp/$gdiplus_dll_path | sed "s/ .*//"`
-	    if [ "$sum" == "4721ab485e0c29cd1617a5f296b9cc47" ]; then
+	    if [ "$sum" = "4721ab485e0c29cd1617a5f296b9cc47" ]; then
 		cp $TARFILE_LOCATION/tmp/$gdiplus_dll_path ./external/gdiplus/gdiplus.dll
 	    else
 		echo "But unexpected checksum of $gdiplus_dll_path"
