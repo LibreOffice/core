@@ -101,7 +101,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
             const SvxColorTableItem* pColorItem = (const SvxColorTableItem*)
                                     GetView().GetDocShell()->GetItem(SID_COLOR_TABLE);
-            if(pColorItem->GetColorTable() == XColorTable::GetStdColorTable())
+            if(pColorItem->GetColorTable() == &XColorTable::GetStdColorTable())
                 pDlg->DontDeleteColorTable();
             if (pDlg->Execute() == RET_OK)
             {

@@ -434,7 +434,7 @@ SwDocShell::SwDocShell( SwDoc *pD, SfxObjectCreateMode eMode ):
     {
         XColorTable* pTable = pColItem->GetColorTable();
         // when a new Table was created, it has to be deleted as well.
-        if((void*)pTable  != (void*)(XColorTable::GetStdColorTable()) )
+        if(pTable  != &XColorTable::GetStdColorTable())
             delete pTable;
     }
 

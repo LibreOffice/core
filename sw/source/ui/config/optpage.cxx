@@ -1978,11 +1978,11 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet&  )
     aDeletedColorLB.InsertEntry(sAuthor);
     aChangedColorLB.InsertEntry(sAuthor);
 
-    XColorTable* pColorTbl = XColorTable::GetStdColorTable();
+    XColorTable& rColorTbl = XColorTable::GetStdColorTable();
     sal_uInt16 i;
-    for( i = 0; i < pColorTbl->Count(); ++i )
+    for( i = 0; i < rColorTbl.Count(); ++i )
     {
-        XColorEntry* pEntry = pColorTbl->GetColor( i );
+        XColorEntry* pEntry = rColorTbl.GetColor( i );
         Color aColor = pEntry->GetColor();
         String sName = pEntry->GetName();
 

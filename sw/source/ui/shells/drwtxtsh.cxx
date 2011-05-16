@@ -304,7 +304,7 @@ void SwDrawTextShell::GetFormTextState(SfxItemSet& rSet)
     else
     {
         if ( pDlg )
-            pDlg->SetColorTable(XColorTable::GetStdColorTable());
+            pDlg->SetColorTable(&XColorTable::GetStdColorTable());
 
         pDrView->GetAttributes( rSet );
     }
