@@ -515,6 +515,8 @@ throw(  SAXException, RuntimeException )
 
                 if ( m_pExternalImages )
                     m_pExternalImages->Insert( pItem, m_pExternalImages->Count() );
+                else
+                    delete pItem;
             }
             break;
 
