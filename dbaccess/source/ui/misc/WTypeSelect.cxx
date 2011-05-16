@@ -465,7 +465,7 @@ void OWizTypeSelect::fillColumnList(sal_uInt32 nRows)
     DBG_CHKTHIS(OWizTypeSelect,NULL);
     if(m_pParserStream)
     {
-        sal_uInt32 nTell = m_pParserStream->Tell(); // verändert vielleicht die Position des Streams
+        sal_uInt32 nTell = m_pParserStream->Tell(); // might change seek position of stream
 
         SvParser *pReader = createReader(nRows);
         if(pReader)
