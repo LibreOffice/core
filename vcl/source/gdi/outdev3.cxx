@@ -512,7 +512,7 @@ Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
         MsLangId::convertLanguageToLocale( eLang, aLocale );
     }
 
-    utl::DefaultFontConfiguration& rDefaults = *utl::DefaultFontConfiguration::get();
+    utl::DefaultFontConfiguration& rDefaults = utl::DefaultFontConfiguration::get();
     String aSearch = rDefaults.getUserInterfaceFont( aLocale ); // ensure a fallback
     String aDefault = rDefaults.getDefaultFont( aLocale, nType );
     if( aDefault.Len() )
@@ -1665,7 +1665,7 @@ void ImplDevFontList::InitMatchData() const
     mbMatchData = true;
 
     // calculate MatchData for all entries
-    const FontSubstConfiguration& rFontSubst = *FontSubstConfiguration::get();
+    const FontSubstConfiguration& rFontSubst = FontSubstConfiguration::get();
 
     DevFontList::const_iterator it = maDevFontList.begin();
     for(; it != maDevFontList.end(); ++it )
@@ -1681,7 +1681,7 @@ void ImplDevFontList::InitMatchData() const
 ImplDevFontListData* ImplDevFontList::ImplFindByLocale( com::sun::star::lang::Locale& rLocale ) const
 {
     // get the default font for a specified locale
-    const DefaultFontConfiguration& rDefaults = *DefaultFontConfiguration::get();
+    const DefaultFontConfiguration& rDefaults = DefaultFontConfiguration::get();
     const String aDefault = rDefaults.getUserInterfaceFont( rLocale );
     ImplDevFontListData* pFontData = ImplFindByTokenNames( aDefault );
     if( pFontData )
@@ -2057,7 +2057,7 @@ ImplDevFontListData* ImplDevFontList::FindDefaultFont() const
 {
     // try to find one of the default fonts of the
     // UNICODE, SANSSERIF, SERIF or FIXED default font lists
-    const DefaultFontConfiguration& rDefaults = *DefaultFontConfiguration::get();
+    const DefaultFontConfiguration& rDefaults = DefaultFontConfiguration::get();
     com::sun::star::lang::Locale aLocale( OUString( RTL_CONSTASCII_USTRINGPARAM("en") ), OUString(), OUString() );
     String aFontname = rDefaults.getDefaultFont( aLocale, DEFAULTFONT_SANS_UNICODE );
     ImplDevFontListData* pFoundData = ImplFindByTokenNames( aFontname );
@@ -2591,7 +2591,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( ImplFontSelectData& rFSD,
     {
         // get fallback info using FontSubstConfiguration and
         // the target name, it's shortened name and family name in that order
-        const FontSubstConfiguration& rFontSubst = *FontSubstConfiguration::get();
+        const FontSubstConfiguration& rFontSubst = FontSubstConfiguration::get();
         pFontAttr = rFontSubst.getSubstInfo( aSearchName );
         if ( !pFontAttr && (aSearchShortName != aSearchName) )
             pFontAttr = rFontSubst.getSubstInfo( aSearchShortName );
@@ -2611,7 +2611,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( ImplFontSelectData& rFSD,
     if( rFSD.IsSymbolFont() )
     {
         com::sun::star::lang::Locale aDefaultLocale( OUString( RTL_CONSTASCII_USTRINGPARAM("en") ), OUString(), OUString() );
-        aSearchName = DefaultFontConfiguration::get()->getDefaultFont( aDefaultLocale, DEFAULTFONT_SYMBOL );
+        aSearchName = DefaultFontConfiguration::get().getDefaultFont( aDefaultLocale, DEFAULTFONT_SYMBOL );
         ImplDevFontListData* pFoundData = ImplFindByTokenNames( aSearchName );
         if( pFoundData )
             return pFoundData;
@@ -2647,7 +2647,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( ImplFontSelectData& rFSD,
 
         // get fallback info using FontSubstConfiguration and
         // the target name, it's shortened name and family name in that order
-        const FontSubstConfiguration& rFontSubst = *FontSubstConfiguration::get();
+        const FontSubstConfiguration& rFontSubst = FontSubstConfiguration::get();
         const FontNameAttr* pTempFontAttr = rFontSubst.getSubstInfo( aSearchName );
         if ( !pTempFontAttr && (aTempShortName != aSearchName) )
             pTempFontAttr = rFontSubst.getSubstInfo( aTempShortName );

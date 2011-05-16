@@ -168,7 +168,7 @@ void Impl_Font::AskConfig()
     mbConfigLookup = true;
 
     // prepare the FontSubst configuration lookup
-    const utl::FontSubstConfiguration* pFontSubst = utl::FontSubstConfiguration::get();
+    const utl::FontSubstConfiguration& rFontSubst = utl::FontSubstConfiguration::get();
 
     String      aShortName;
     String      aFamilyName;
@@ -181,11 +181,11 @@ void Impl_Font::AskConfig()
         aShortName, aFamilyName, eWeight, eWidthType, nType );
 
     // lookup the font name in the configuration
-    const utl::FontNameAttr* pFontAttr = pFontSubst->getSubstInfo( aMapName );
+    const utl::FontNameAttr* pFontAttr = rFontSubst.getSubstInfo( aMapName );
 
     // if the direct lookup failed try again with an alias name
     if ( !pFontAttr && (aShortName != aMapName) )
-        pFontAttr = pFontSubst->getSubstInfo( aShortName );
+        pFontAttr = rFontSubst.getSubstInfo( aShortName );
 
     if( pFontAttr )
     {
