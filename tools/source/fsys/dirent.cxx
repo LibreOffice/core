@@ -2273,6 +2273,10 @@ FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
                         }
                         else
                         {
+                            if ( fpIN )
+                                fclose( fpIN );
+                            if ( fpOUT )
+                                fclose( fpOUT );
                             return Sys2SolarError_Impl( EXDEV );
                         }
                 }
