@@ -841,8 +841,10 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
             }
         }
         break;
+    case RES_FRMFMT:
+        break;
     default:
-        OSL_ENSURE( !this, "Was wird hier ausgegeben ??? " );
+        OSL_ENSURE( !this, "Which format is exported here?" );
         break;
     }
 
