@@ -1884,7 +1884,7 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
         SwFldUpdateFlags nFldUpdFlag;
         std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();//swmod 080320
         std::set<SwRootFrm*>::iterator pLayIter = aAllLayouts.begin();
-        for ( ;pLayIter != aAllLayouts.end();pLayIter++ )
+        for ( ;pLayIter != aAllLayouts.end();++pLayIter )
         {
             if ((*pLayIter)->IsIdleFormat())
             {

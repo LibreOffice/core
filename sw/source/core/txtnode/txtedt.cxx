@@ -1730,7 +1730,7 @@ void SwTxtNode::TransliterateText(
             delete pIter;
         }
 
-        if (aChanges.size() > 0)
+        if (!aChanges.empty())
         {
             // now apply the changes from end to start to leave the offsets of the
             // yet unchanged text parts remain the same.

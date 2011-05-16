@@ -965,13 +965,13 @@ lcl_ExportBkmAndRedline(
     SwSoftPageBreakList& rBreakArr,
     const sal_uLong nIndex)
 {
-    if (rBkmArr.size())
+    if (!rBkmArr.empty())
         lcl_ExportBookmark(rPortions, xParent, pUnoCrsr, rBkmArr, nIndex);
 
-    if (rRedlineArr.size())
+    if (!rRedlineArr.empty())
         lcl_ExportRedline(rPortions, xParent, pUnoCrsr, rRedlineArr, nIndex);
 
-    if (rBreakArr.size())
+    if (!rBreakArr.empty())
         lcl_ExportSoftPageBreak(rPortions, xParent, pUnoCrsr, rBreakArr, nIndex);
 }
 
@@ -1013,7 +1013,7 @@ lcl_GetNextIndex(
         SwXBookmarkPortion_ImplSharedPtr pPtr = (*rBkmArr.begin());
         nRet = pPtr->getIndex();
     }
-    if(rRedlineArr.size())
+    if(!rRedlineArr.empty())
     {
         SwXRedlinePortion_ImplSharedPtr pPtr = (*rRedlineArr.begin());
         sal_Int32 nTmp = pPtr->getRealIndex();

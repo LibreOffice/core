@@ -1983,7 +1983,7 @@ void SwFEShell::GetConnectableFrmFmts(SwFrmFmt & rFmt,
 
         ::std::vector< const SwFrmFmt * >::const_iterator aIt;
 
-        for (aIt = aTmpSpzArray.begin(); aIt != aTmpSpzArray.end(); aIt++)
+        for (aIt = aTmpSpzArray.begin(); aIt != aTmpSpzArray.end(); ++aIt)
         {
             String  aString = (*aIt)->GetName();
 

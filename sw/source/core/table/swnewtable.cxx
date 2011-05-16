@@ -73,7 +73,7 @@ public:
     std::vector<const SwSelBoxes*> aBoxes;
     long mnMergeWidth;
     SwBoxSelection() : mnMergeWidth(0) {}
-    bool isEmpty() const { return aBoxes.size() == 0; }
+    bool isEmpty() const { return aBoxes.empty(); }
     void insertBoxes( const SwSelBoxes* pNew ){ aBoxes.insert( aBoxes.end(), pNew ); }
 };
 
@@ -1231,7 +1231,7 @@ void lcl_SophisticatedFillLineIndices( SwLineOffsetArray &rArr,
     // in the resulting array the index has to be _on_ the line
     // nSum is to evaluate the wished value
     sal_uInt16 nSum = 1;
-    while( aBoxes.size() )
+    while( !aBoxes.empty() )
     {
         // I. step:
         // Looking for the "smallest" line end with the smallest row span

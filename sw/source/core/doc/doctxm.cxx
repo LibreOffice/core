@@ -1056,7 +1056,7 @@ sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "_Head" ));
 
     aN2L.RestoreUpperFrms( pDoc->GetNodes(), nIdx, nIdx + 1 );
     std::set<SwRootFrm*> aAllLayouts = pDoc->GetAllLayouts();
-    for ( std::set<SwRootFrm*>::iterator pLayoutIter = aAllLayouts.begin(); pLayoutIter != aAllLayouts.end(); pLayoutIter++)
+    for ( std::set<SwRootFrm*>::iterator pLayoutIter = aAllLayouts.begin(); pLayoutIter != aAllLayouts.end(); ++pLayoutIter)
     {
         SwFrm::CheckPageDescs( (SwPageFrm*)(*pLayoutIter)->Lower() );
     }//swmod 080310

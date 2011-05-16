@@ -486,7 +486,7 @@ WW8TableInfo * WW8TableNodeInfo::getParent() const
 
 sal_uInt32 WW8TableNodeInfo::getDepth() const
 {
-    if (mInners.size() > 0)
+    if (!mInners.empty())
         return mInners.begin()->second->getDepth();
 
     return mnDepth;
@@ -551,7 +551,7 @@ const WW8TableNodeInfoInner::Pointer_t WW8TableNodeInfo::getFirstInner() const
 {
     WW8TableNodeInfoInner::Pointer_t pResult;
 
-    if (mInners.size() > 0)
+    if (!mInners.empty())
         pResult = mInners.begin()->second;
 
     return pResult;

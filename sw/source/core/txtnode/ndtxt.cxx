@@ -2484,7 +2484,7 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, sal_Bool bNext,
             }
         }
 
-        if ( 0 != aClearWhichIds.size() )
+        if ( !aClearWhichIds.empty() )
             bRemoveFromCache = 0 != ClearItemsFromAttrSet( aClearWhichIds );
 
         if( !bNext && bRemoveFromCache && IsInCache() )

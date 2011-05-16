@@ -1131,12 +1131,12 @@ static void lcl_AdjustWidthsInLine( SwTableLine* pLine, ChangeList& rOldNew,
 static void lcl_CalcNewWidths( std::list<sal_uInt16> &rSpanPos, ChangeList& rChanges,
     SwTableLine* pLine, long nWish, long nWidth, bool bTop )
 {
-    if( !rChanges.size() )
+    if( rChanges.empty() )
     {
         rSpanPos.clear();
         return;
     }
-    if( !rSpanPos.size() )
+    if( rSpanPos.empty() )
     {
         rChanges.clear();
         return;
@@ -1332,14 +1332,14 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
             }
             lcl_CalcNewWidths( aRowSpanPos, aCopy, rLines[nCurr],
                 rParm.nOldWish, nOldWidth, true );
-            bool bGoOn = aRowSpanPos.size() > 0;
+            bool bGoOn = !aRowSpanPos.empty();
             sal_uInt16 j = nCurr;
             while( bGoOn )
             {
                 lcl_CalcNewWidths( aRowSpanPos, aCopy, rLines[--j],
                     rParm.nOldWish, nOldWidth, true );
                 lcl_AdjustWidthsInLine( rLines[j], aCopy, rParm, 0 );
-                bGoOn = aRowSpanPos.size() > 0 && j > 0;
+                bGoOn = !aRowSpanPos.empty() && j > 0;
             };
             aRowSpanPos.clear();
         }
@@ -1356,14 +1356,14 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
             }
             lcl_CalcNewWidths( aRowSpanPos, aCopy, rLines[nCurr],
                 rParm.nOldWish, nOldWidth, false );
-            bool bGoOn = aRowSpanPos.size() > 0;
+            bool bGoOn = !aRowSpanPos.empty();
             sal_uInt16 j = nCurr;
             while( bGoOn )
             {
                 lcl_CalcNewWidths( aRowSpanPos, aCopy, rLines[++j],
                     rParm.nOldWish, nOldWidth, false );
                 lcl_AdjustWidthsInLine( rLines[j], aCopy, rParm, 0 );
-                bGoOn = aRowSpanPos.size() > 0 && j+1 < rLines.Count();
+                bGoOn = !aRowSpanPos.empty() && j+1 < rLines.Count();
             };
         }
         ::lcl_AdjustWidthsInLine( rLines[nCurr], aOldNew, rParm, 1 );

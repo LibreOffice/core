@@ -980,7 +980,7 @@ void RtfAttributeOutput::EndTableRow( )
         m_aAfterRuns.append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_NESTTABLEPROPRS);
         if (m_aRowDefs.getLength() > 0)
             m_aAfterRuns.append(m_aRowDefs.makeStringAndClear());
-        else if (m_aTables.size() > 0)
+        else if (!m_aTables.empty())
         {
             m_aAfterRuns.append(m_aTables.back());
             m_aTables.pop_back();
@@ -989,7 +989,7 @@ void RtfAttributeOutput::EndTableRow( )
     }
     else
     {
-        if (m_aTables.size() > 0)
+        if (!m_aTables.empty())
         {
             m_aAfterRuns.append(m_aTables.back());
             m_aTables.pop_back();

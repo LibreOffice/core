@@ -1305,9 +1305,9 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
         sal_uInt32 nRedlinePortions = lcl_CountRedlines(rLastPortions);
         if((rLastPortions.size() - nRedlinePortions) == rNewPortions.size())
         {
-            OSL_ENSURE( rNewPortions.size() > 0, "rNewPortions should not be empty here" );
-            OSL_ENSURE( rLastPortions.size() > 0, "rLastPortions should not be empty here" );
-            OSL_ENSURE( rLastPositions.size() > 0, "rLastPositions should not be empty here" );
+            OSL_ENSURE( !rNewPortions.empty(), "rNewPortions should not be empty here" );
+            OSL_ENSURE( !rLastPortions.empty(), "rLastPortions should not be empty here" );
+            OSL_ENSURE( !rLastPositions.empty(), "rLastPositions should not be empty here" );
 
             //the simple case: the same number of elements on both sides
             //each changed element has to be applied to the corresponding source element
@@ -1372,7 +1372,7 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
         }
         else
         {
-            OSL_ENSURE( rLastPositions.size() > 0, "rLastPositions should not be empty here" );
+            OSL_ENSURE( !rLastPositions.empty(), "rLastPositions should not be empty here" );
 
             //select the complete sentence
             SpellContentPositions::const_iterator aCurrentEndPosition = rLastPositions.end();
