@@ -2312,6 +2312,7 @@ void SvxBoxItem::SetLine( const SvxBorderLine* pNew, sal_uInt16 nLine )
             pRight = pTmp;
             break;
         default:
+            delete pTmp;
             OSL_FAIL( "wrong line" );
     }
 }
