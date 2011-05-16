@@ -342,7 +342,6 @@ public:
     static bool hasUTF8ByteOrderMarker( const ByteString &rString );
     static void RemoveUTF8ByteOrderMarkerFromFile( const ByteString &rFilename );
     static bool fileHasUTF8ByteOrderMarker( const ByteString &rString );
-    static ByteString GetIsoLangByIndex( sal_uInt16 nIndex );
     static void QuotHTML( ByteString &rString );
     static bool CopyFile( const ByteString& source , const ByteString& dest );
 
