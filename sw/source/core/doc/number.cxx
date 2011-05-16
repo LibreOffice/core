@@ -1045,15 +1045,7 @@ namespace numfunc
     class SwDefBulletConfig : private utl::ConfigItem
     {
         public:
-            static SwDefBulletConfig* getInstance()
-            {
-                if ( mpInstance == 0 )
-                {
-                    mpInstance = new SwDefBulletConfig;
-                }
-
-                return mpInstance;
-            }
+            static SwDefBulletConfig& getInstance();
 
             inline const String& GetFontname() const
             {
@@ -1089,8 +1081,9 @@ namespace numfunc
                 return mnLevelChars[p_nListLevel];
             }
 
-        private:
             SwDefBulletConfig();
+            ~SwDefBulletConfig();
+        private:
 
             /** sets internal default bullet configuration data to default values
 
@@ -1124,8 +1117,6 @@ namespace numfunc
             virtual void Notify( const uno::Sequence<rtl::OUString>& aPropertyNames );
             virtual void Commit();
 
-            static SwDefBulletConfig* mpInstance;
-
             // default bullet list configuration data
             String msFontname;
             bool mbUserDefinedFontname;
@@ -1137,7 +1128,16 @@ namespace numfunc
             Font* mpFont;
     };
 
-    SwDefBulletConfig* SwDefBulletConfig::mpInstance = 0;
+    namespace
+    {
+        class theSwDefBulletConfig
+            : public rtl::Static<SwDefBulletConfig, theSwDefBulletConfig>{};
+    }
+
+    SwDefBulletConfig& SwDefBulletConfig::getInstance()
+    {
+        return theSwDefBulletConfig::get();
+    }
 
     SwDefBulletConfig::SwDefBulletConfig()
         : ConfigItem( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Writer/Numbering/DefaultBulletList")) ),
@@ -1154,6 +1154,11 @@ namespace numfunc
 
         // enable notification for changes on default bullet configuration change
         EnableNotification( GetPropNames() );
+    }
+
+    SwDefBulletConfig::~SwDefBulletConfig()
+    {
+        delete mpFont;
     }
 
     void SwDefBulletConfig::SetToDefault()
@@ -1276,22 +1281,22 @@ namespace numfunc
 
     const String& GetDefBulletFontname()
     {
-        return SwDefBulletConfig::getInstance()->GetFontname();
+        return SwDefBulletConfig::getInstance().GetFontname();
     }
 
     bool IsDefBulletFontUserDefined()
     {
-        return SwDefBulletConfig::getInstance()->IsFontnameUserDefined();
+        return SwDefBulletConfig::getInstance().IsFontnameUserDefined();
     }
 
     const Font& GetDefBulletFont()
     {
-        return SwDefBulletConfig::getInstance()->GetFont();
+        return SwDefBulletConfig::getInstance().GetFont();
     }
 
     sal_Unicode GetBulletChar( sal_uInt8 nLevel )
     {
-        return SwDefBulletConfig::getInstance()->GetChar( nLevel );
+        return SwDefBulletConfig::getInstance().GetChar( nLevel );
     }
 
     /** class containing configuration data about user interface behavior
@@ -1304,23 +1309,16 @@ namespace numfunc
     class SwNumberingUIBehaviorConfig : private utl::ConfigItem
     {
         public:
-            static SwNumberingUIBehaviorConfig* getInstance()
-            {
-                if ( mpInstance == 0 )
-                {
-                    mpInstance = new SwNumberingUIBehaviorConfig();
-                }
-
-                return mpInstance;
-            }
+            static SwNumberingUIBehaviorConfig& getInstance();
 
             inline sal_Bool ChangeIndentOnTabAtFirstPosOfFirstListItem() const
             {
                 return mbChangeIndentOnTabAtFirstPosOfFirstListItem;
             }
 
-        private:
             SwNumberingUIBehaviorConfig();
+
+        private:
 
             /** sets internal configuration data to default values
 
@@ -1347,13 +1345,19 @@ namespace numfunc
             virtual void Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames );
             virtual void Commit();
 
-            static SwNumberingUIBehaviorConfig* mpInstance;
-
             // configuration data
             sal_Bool mbChangeIndentOnTabAtFirstPosOfFirstListItem;
     };
 
-    SwNumberingUIBehaviorConfig* SwNumberingUIBehaviorConfig::mpInstance = 0;
+    namespace
+    {
+        class theSwNumberingUIBehaviorConfig : public rtl::Static<SwNumberingUIBehaviorConfig, theSwNumberingUIBehaviorConfig>{};
+    }
+
+    SwNumberingUIBehaviorConfig& SwNumberingUIBehaviorConfig::getInstance()
+    {
+        return theSwNumberingUIBehaviorConfig::get();
+    }
 
     SwNumberingUIBehaviorConfig::SwNumberingUIBehaviorConfig()
         : ConfigItem( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Writer/Numbering/UserInterfaceBehavior")) ),
@@ -1422,7 +1426,7 @@ namespace numfunc
 
     sal_Bool ChangeIndentOnTabAtFirstPosOfFirstListItem()
     {
-        return SwNumberingUIBehaviorConfig::getInstance()->ChangeIndentOnTabAtFirstPosOfFirstListItem();
+        return SwNumberingUIBehaviorConfig::getInstance().ChangeIndentOnTabAtFirstPosOfFirstListItem();
     }
 
     SvxNumberFormat::SvxNumPositionAndSpaceMode GetDefaultPositionAndSpaceMode()
