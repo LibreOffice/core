@@ -29,6 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_hwpfilter.hxx"
 
+#include <boost/shared_ptr.hpp>
+
 #include "hwpreader.hxx"
 #include <math.h>
 //#ifndef UDK100
@@ -83,6 +85,20 @@ static hchar gstr[1024];
 static hchar sbuf[256];
 static hchar *field = 0L;
 static char buf[1024];
+
+namespace
+{
+
+template<typename T>
+struct Free
+{
+    void operator()(T* const ptr)
+    {
+        free(ptr);
+    }
+};
+
+}
 
 struct HwpReaderPrivate
 {
@@ -1781,7 +1797,8 @@ void HwpReader::makePageStyle()
              if( hwpinfo->back_info.type == 2 ){
                  rstartEl(ascii("office:binary-data"), rList);
                  pList->clear();
-                 rchars(ascii(base64_encode_string((unsigned char *) hwpinfo->back_info.data, hwpinfo->back_info.size )));
+                 boost::shared_ptr<char> pStr(base64_encode_string((unsigned char *) hwpinfo->back_info.data, hwpinfo->back_info.size ), Free<char>());
+                 rchars(ascii(pStr.get()));
                  rendEl(ascii("office:binary-data"));
              }
              rendEl(ascii("style:background-image"));
@@ -3993,7 +4010,10 @@ void HwpReader::makePicture(Picture * hbox)
                      if( hbox->pictype == PICTYPE_EMBED ){
                          EmPicture *emp = hwpfile.GetEmPicture(hbox);
                          if( emp )
-                              rchars(ascii(base64_encode_string( emp->data, emp->size )));
+                         {
+                             boost::shared_ptr<char> pStr(base64_encode_string( emp->data, emp->size ), Free<char>());
+                             rchars(ascii(pStr.get()));
+                         }
                      }
                      else{
                          if( hwpfile.oledata ){
@@ -4015,7 +4035,8 @@ void HwpReader::makePicture(Picture * hbox)
                                      rchars(ascii(""));
                                  }
                                  else{
-                                     rchars(ascii(base64_encode_string( (uchar *)pObj, strlen((char *)pObj) )));
+                                     boost::shared_ptr<char> pStr(base64_encode_string( (uchar *)pObj, strlen((char *)pObj)), Free<char>());
+                                     rchars(ascii(pStr.get()));
                                      pObj->Release();
                                      srcsto->Release();
                                  }
