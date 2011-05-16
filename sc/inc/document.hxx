@@ -186,7 +186,7 @@ namespace com { namespace sun { namespace star {
 #define SC_ASIANCOMPRESSION_INVALID     0xff
 #define SC_ASIANKERNING_INVALID         0xff
 
-typedef ::std::vector<ScTable*>::iterator ScTableIterator;
+typedef ::std::vector<ScTable*> TableContainer;
 
 enum ScDocumentMode
     {

@@ -846,7 +846,7 @@ sal_Bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pO
     SetAutoCalc( false );   // Mehrfachberechnungen vermeiden
     if (bValid)
     {
-        if (nNewPos == pTab.size())
+        if (nNewPos >= pTab.size())
         {
             pTab.push_back( new ScTable(this, nMaxTableNumber, aName) );
         }
@@ -873,7 +873,7 @@ sal_Bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pO
                     pUnoBroadcaster->Broadcast( ScUpdateRefHint( URM_INSDEL, aRange, 0,0,1 ) );
 
                 SCTAB i;
-                for (ScTableIterator it = pTab.begin(); it != pTab.end(); ++it)
+                for (TableContainer::iterator it = pTab.begin(); it != pTab.end(); ++it)
                     if (*it && it != (pTab.begin() + nOldPos))
                         (*it)->UpdateInsertTab(nNewPos);
                 for (i = pTab.size(); i > nNewPos; i--)
@@ -882,11 +882,11 @@ sal_Bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pO
                     nOldPos++;
                 pTab[nNewPos] = new ScTable(this, nNewPos, aName);
                 bValid = sal_True;
-                for (ScTableIterator it = pTab.begin(); it != pTab.end(); ++it)
+                for (TableContainer::iterator it = pTab.begin(); it != pTab.end(); ++it)
                     if (*it && it != pTab.begin()+nOldPos && it != pTab.begin() + nNewPos)
                         (*it)->UpdateCompile();
                 SetNoListening( false );
-                for (ScTableIterator it = pTab.begin(); it != pTab.end(); ++it)
+                for (TableContainer::iterator it = pTab.begin(); it != pTab.end(); ++it)
                     if (*it && it != pTab.begin()+nOldPos && it != pTab.begin()+nNewPos)
                         (*it)->StartAllListeners();
 
