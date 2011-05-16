@@ -593,7 +593,6 @@ void SbiParser::DefType( sal_Bool bPrivate )
             break;
 
             default:
-                pDim = NULL;
                 pElem = VarDecl(&pDim,sal_False,sal_False);
                 if( !pElem )
                     bDone = sal_True;   // Error occurred
@@ -659,9 +658,9 @@ void SbiParser::DefType( sal_Bool bPrivate )
                         }
                     }
                 }
-                delete pDim;
                 pTypeMembers->Insert( pTypeElem, pTypeMembers->Count() );
             }
+            delete pDim, pDim = NULL;
             delete pElem;
         }
     }
