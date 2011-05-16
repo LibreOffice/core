@@ -106,25 +106,45 @@ void BorderHandler::lcl_attribute(Id rName, Value & rVal)
 
 void BorderHandler::lcl_sprm(Sprm & rSprm)
 {
+    BorderPosition pos = BORDER_COUNT; // invalid pos
+    bool rtl = false; // TODO detect
     switch( rSprm.getId())
     {
         case NS_ooxml::LN_CT_TblBorders_top:
+            pos = BORDER_TOP;
+            break;
+        case NS_ooxml::LN_CT_TblBorders_start:
+            pos = rtl ? BORDER_RIGHT : BORDER_LEFT;
+            break;
         case NS_ooxml::LN_CT_TblBorders_left:
+            pos = BORDER_LEFT;
+            break;
         case NS_ooxml::LN_CT_TblBorders_bottom:
+            pos = BORDER_BOTTOM;
+            break;
+        case NS_ooxml::LN_CT_TblBorders_end:
+            pos = rtl ? BORDER_LEFT : BORDER_RIGHT;
+            break;
         case NS_ooxml::LN_CT_TblBorders_right:
+            pos = BORDER_RIGHT;
+            break;
         case NS_ooxml::LN_CT_TblBorders_insideH:
+            pos = BORDER_HORIZONTAL;
+            break;
         case NS_ooxml::LN_CT_TblBorders_insideV:
-        {
-            writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-            if( pProperties.get())
-                pProperties->resolve(*this);
-            ConversionHelper::MakeBorderLine( m_nLineWidth,   m_nLineType, m_nLineColor,
-                                   m_aBorderLines[rSprm.getId() - NS_ooxml::LN_CT_TblBorders_top], m_bOOXML );
-
-            m_aFilledLines[ rSprm.getId( ) - NS_ooxml::LN_CT_TblBorders_top] = true;
-        }
-        break;
-        default:;
+            pos = BORDER_VERTICAL;
+            break;
+        default:
+            break;
+    }
+    if( pos != BORDER_COUNT )
+    {
+        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+        if( pProperties.get())
+            pProperties->resolve(*this);
+        ConversionHelper::MakeBorderLine( m_nLineWidth,   m_nLineType, m_nLineColor,
+                               m_aBorderLines[ pos ], m_bOOXML );
+        m_aFilledLines[ pos ] = true;
     }
 }
 
