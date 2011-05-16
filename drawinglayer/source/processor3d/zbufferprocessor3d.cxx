@@ -130,8 +130,8 @@ namespace
                     }
                 }
 
-                delete pContent;
-                delete pAlpha;
+                aContent.ReleaseAccess(pContent);
+                aAlpha.ReleaseAccess(pAlpha);
             }
 
             aRetval = BitmapEx(aContent, aAlpha);
