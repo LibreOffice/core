@@ -1404,7 +1404,7 @@ bool ImpSvNumberformatScan::InsertSymbol( sal_uInt16 & nPos, svt::NfSymbolType e
         --nPos;     // reuse position
     else
     {
-        if (nAnzStrings + 1 >= NF_MAX_FORMAT_SYMBOLS)
+        if ((size_t) (nAnzStrings + 1) >= NF_MAX_FORMAT_SYMBOLS)
             return false;
         ++nAnzStrings;
         for (size_t i = nAnzStrings; i > nPos; --i)
