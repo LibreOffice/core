@@ -640,7 +640,7 @@ elsif ( $platform =~ m/linux/ )
 
    $INPATH         = $OUTPATH.$PROEXT;
 }
-elsif ( $platform =~ m/cygwin/ )
+elsif ( $platform =~ m/cygwin|mingw32/ )
 {
       $MSPDB_PATH     = PathFormat('@MSPDB_PATH@');
       $MIDL_PATH      = PathFormat('@MIDL_PATH@');
@@ -659,22 +659,25 @@ elsif ( $platform =~ m/cygwin/ )
       $OS             = "WNT";
       $DYNAMIC_CRT    = "TRUE";
       $use_shl_versions = "TRUE";
-      $wps = ';'; # Windows style path seperator
+      $wps = ';' if '@build_os@' eq 'cygwin'; # Windows style path seperator
   if ( $MINGW eq "yes" )
-  {   # At the moment this implies the use of tcsh, wtf?
-      print "Setting Windows NT cygwin MinGW specific values... ";
+  {   print "Setting Windows (MinGW) specific values... ";
+      # At the moment this implies the use of tcsh
+      # WTF does that mean?
       $FLIPCMD        = "slfl.pl";
-      $PATH_SEPERATOR = ';';
+      $PATH_SEPERATOR = ';' if '@build_os@' eq 'cygwin';
       $outfile        = "WindowsMinGWEnv.Set.sh";
       $COMPATH        = PathFormat('@COMPATH@/bin');
       $COMPATH        =~ s/\/bin$//i;
       $COM            = "GCC";
       $OUTPATH        = "wntgcci";
+      $OUTPATH        = "wntgccx" if $platform =~ m/^x86_64/;
       $INPATH         = $OUTPATH.$PROEXT;
       $ATL_INCLUDE = '$SOLARVER'.$ds.'$INPATH'.$ds."inc".$ds."external".$ds."mingw".$ds."include".$ds."atl". " ".'$WINDOWS_SDK_HOME'.$ds."include".$ds."atl";
   }
   else # The MSVC section starts here
-  {   $outfile        = "WindowsMSVCEnv.Set.sh";
+  {   print "Setting Windows (MSVC) specific values... ";
+      $outfile        = "WindowsMSVCEnv.Set.sh";
       $COMPATH        = PathFormat('@COMPATH@');
       $COM            = "MSC";
       $OUTPATH        = "wntmsci@COMEX@";
@@ -696,7 +699,6 @@ elsif ( $platform =~ m/cygwin/ )
           $ATL_LIB     .= $ds."amd64";
           $MFC_LIB     .= $ds."amd64";
       }
-      print "Setting Windows build specific values... ";
       # No speacial treatment for CC an CXX anymore.
       $FLIPCMD        = "slfl.pl";
       $PATH_SEPERATOR = ';';
@@ -795,8 +797,7 @@ elsif ( $platform =~ m/aix/ )
    $PATH_SEPERATOR = $ps;
 }
 else {
-	print "\nset_soenv:  Cannot figure out what platform you are running\n";
-	print "For $platform.\n";
+	print "\nset_soenv:  Cannot recognize the platform you are building for: $platform.\n";
 	exit 1;
 }
 print "done\n";
@@ -917,7 +918,7 @@ if ($platform =~ m/cygwin/)
    # Change $SYSTEMDRIVE to lower case.
    $SYSTEMDRIVE          = lc $SYSTEMDRIVE;
    use Env qw(SYSTEMROOT);
-   $CYGWIN_PATH          = PathFormat('@CYGWIN_PATH@'); # Windows bash path
+   $CYGWIN_PATH          = PathFormat('/usr/bin'); # Windows bash path
    $WIN_GREP             = '$CYGWIN_PATH'.$ds."grep.exe";
    $WIN_FIND             = '$CYGWIN_PATH'.$ds."find.exe";
    $WIN_LS               = '$CYGWIN_PATH'.$ds."ls.exe";
@@ -1025,7 +1026,7 @@ elsif ($platform =~ m/darwin/ && $platform !~ m/^arm/)
 {  $SOLAREXTRALIB     = $L.$LIB.
                         $L.$USR.$LIB;
 }
-elsif ($platform !~ m/cygwin/ && $platform !~ m/^arm-apple/)
+elsif ($platform !~ m/cygwin/ && $platform !~ m/mingw32/ && $platform !~ m/^arm-apple/)
 {  AddWarning( "set_soenv", "$platform not configured for linkage create libraries" );
 }
 
@@ -1237,7 +1238,15 @@ elsif ($platform =~ m/cygwin/)
    # The path now is in cygwin posix format
 
 }
+elsif ($platform =~ m/mingw32/)
+{
+   $PATH              = $cur_dir.
+#                        $ps.CygFormat($SOLARVER).$ds.$INPATH.$BIN.
+                        $ps.CygFormat($SOLARENV).$ds."bin".
+                        $ps.CygFormat($SOLARENV).$ds.$OUTPATH.$BIN;
 
+  $PATH              .= $ps.$oldPATH;
+}
 elsif ($platform =~ m/darwin/)
 {  $PATH              = $cur_dir.
 #                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
@@ -1412,6 +1421,9 @@ elsif ($platform =~ m/cygwin/)
    if ( $COM ne "MSC" && '@ENABLE_DIRECTX@' ne "" ) {
        $SOLARINC   .= $I.PathFormat('@DIRECTXSDK_HOME@').$INCLUDE;
    }
+}
+elsif ($platform =~ m/mingw32/)
+{
 }
 elsif ($platform =~ m/darwin/ && $platform !~ m/^arm/)
 {  $SOLARINC         .= $I.$FRAMEWORKSHOME.$ds."JavaVM.framework".$ds."Versions".$ds."Current".$ds."Headers".
@@ -1717,10 +1729,10 @@ ToFile( "COMP_ENV",          $COMP_ENV,          "e" );
 ToFile( "JAVAHOME",          $JAVAHOME,          "e" );
 ToFile( "CC",                $CC,                "e" );
 ToFile( "CROSS_COMPILING",   "@CROSS_COMPILING@","e" );
+ToFile( "BUILD_PLATFORM",    "@build@",          "e" );
+ToFile( "HOST_PLATFORM",     "@host@",           "e" );
 if ( '@CROSS_COMPILING@' ne '' )
 {
-   ToFile( "BUILD_PLATFORM",    "@build@",          "e" );
-   ToFile( "HOST_PLATFORM",     "@host@",           "e" );
    ToFile( "COM_FOR_BUILD",     "@COM_FOR_BUILD@",  "e" );
    ToFile( "GUI_FOR_BUILD",     "@GUI_FOR_BUILD@",  "e" );
    ToFile( "GUIBASE_FOR_BUILD", "@GUIBASE_FOR_BUILD@", "e" );
@@ -1731,6 +1743,18 @@ if ( '@CROSS_COMPILING@' ne '' )
    ToFile( "CXX_FOR_BUILD",     "@CXX_FOR_BUILD@",  "e" );
    ToFile( "GXX_INCLUDE_PATH_FOR_BUILD", "@GXX_INCLUDE_PATH_FOR_BUILD@", "e" );
    ToFile( "MACOSX_DEPLOYMENT_TARGET_FOR_BUILD", "@MACOSX_DEPLOYMENT_TARGET_FOR_BUILD@", "e" );
+}
+else
+{
+   ToFile( "COM_FOR_BUILD",     $COM,            "e" );
+   ToFile( "GUI_FOR_BUILD",     $GUI,            "e" );
+   ToFile( "GUIBASE_FOR_BUILD", $GUIBASE,        "e" );
+   ToFile( "OS_FOR_BUILD",      $OS,             "e" );
+   ToFile( "CPU_FOR_BUILD",     $CPU,            "e" );
+   ToFile( "CPUNAME_FOR_BUILD", $CPUNAME,        "e" );
+   ToFile( "CC_FOR_BUILD",      $CC,             "e" );
+   ToFile( "CXX_FOR_BUILD",     $CXX,            "e" );
+   ToFile( "GXX_INCLUDE_PATH_FOR_BUILD", PathFormat("@GXX_INCLUDE_PATH@"), "e" );
 }
 ToFile( "SIZEOF_SHORT",         "@SIZEOF_SHORT@", "e" );
 ToFile( "SIZEOF_INT",           "@SIZEOF_INT@",  "e" );

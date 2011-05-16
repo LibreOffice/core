@@ -1,7 +1,7 @@
 
 # executables are *.exe for WNT. This variable is necessary since Cygwin 1.5.x
 # Use spawn instead of fork when building dmake on cygwin. 
-if test "$GUI" = "WNT"; then
+if test "$GUI_FOR_BUILD" = "WNT"; then
     EXEEXT=".exe"
     DMAKE_CONF="--enable-spawn"
 else
@@ -17,27 +17,14 @@ if test "$BUILD_DMAKE" != "NO"; then
     if test ! -x "$SRC_ROOT/dmake/dmake$EXEEXT"; then
         cd "$SRC_ROOT/dmake" || exit
 
-	# If cross-compiling then don't use the cross compilers to build dmake.
-        if test "$CROSS_COMPILING" = "YES"; then
-            if test "$GUI_FOR_BUILD" = "WNT"; then
-                # Let the Cygwin gcc be found
-                CC=""
-                CXX=""
-            else
-                CC="$CC_FOR_BUILD"
-                CXX="$CXX_FOR_BUILD"
-            fi
-            export CC
-            export CXX
-        fi
-
-        # Special case! The w32/tcsh build needs CC pointing to the MSVC++ compiler
-        # but we need a cygwin/gcc build dmake to understand the posix paths
-        if test "$GUI" = "WNT"; then
-            CC=""
-            CXX=""
-            export CC
-            export CXX
+        # If cross-compiling then don't use the cross compilers to build dmake.
+        if test "$GUI_FOR_BUILD" = "WNT"; then
+            # Let the Cygwin gcc be found
+            export CC=""
+            export CXX=""
+        elif test "$CROSS_COMPILING" = "YES"; then
+            export CC="$CC_FOR_BUILD"
+            export CXX="$CXX_FOR_BUILD"
         fi
 
         # For normal unixy systems
@@ -55,7 +42,7 @@ if test "$BUILD_DMAKE" != "NO"; then
 
         cd ..
     else
-	echo "dmake/dmake already built"
+        echo "dmake/dmake already built"
     fi
 fi
 
@@ -64,18 +51,6 @@ if test "$BUILD_DMAKE" != "NO"; then
     cp -f "$SRC_ROOT/dmake/dmake$EXEEXT" "$SOLARENV/$OUTPATH/bin" || exit
     echo ""
     echo "dmake copied to $SOLARENV/$OUTPATH/bin/dmake$EXEEXT"
-fi
-
-if test "$GUI" = "WNT" -a ! -x "$SOLARENV/$OUTPATH/bin/guw$EXEEXT"; then
-  echo ""
-  echo "Calling $GNUMAKE in guw"
-  cd "$SRC_ROOT/guw" || exit
-  $GNUMAKE || exit
-  echo ""
-  echo "guw has been successfully made"
-  cp -f "$SRC_ROOT/guw/guw$EXEEXT" "$SOLARENV/$OUTPATH/bin" || exit
-  echo ""
-  echo "guw copied to $SOLARENV/$OUTPATH/bin/guw$EXEEXT"
 fi
 
 #make sure build.pl is executable 

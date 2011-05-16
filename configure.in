@@ -1105,9 +1105,9 @@ AC_ARG_WITH(csc-path,
 
 AC_ARG_WITH(nsis-path,
     AS_HELP_STRING([--with-nsis-path],
-        [For Windows users, please supply the path to the "Nullsoft Scriptable
-         Install System" (NSIS). If NSIS is found in the path or this option is
-         supplied a self contained executable installer for LibreOffice will
+        [For Windows builds, please supply the directory where makensis
+         is located. If makensis is found in PATH or this option is
+         supplied a self-contained  executable installer for LibreOffice will
          be created.])
     [
                           Usage:     --with-nsis-path=<abs. path to nsis.exe>
@@ -1290,6 +1290,13 @@ else
   CROSS_COMPILING=
 fi
 AC_SUBST(CROSS_COMPILING)
+
+if test "$build_os" = "cygwin"; then
+  BUILD_EXEEXT=.exe
+else
+  BUILD_EXEEXT=
+fi
+
 
 dnl ===================================================================
 dnl check for required programs (grep, awk, sed, bash)
@@ -1755,7 +1762,7 @@ if test "$_os" = "WINNT"; then
    AC_SUBST(CL_X64)
 
    AC_MSG_CHECKING([whether to use DirectX])
-   if test "$enable_directx" = "yes" -o "$enable_directx" = "TRUE" -o "$enable_directx" = ""; then
+   if test "$enable_directx" = "yes" -o "$enable_directx" = ""; then
       ENABLE_DIRECTX="TRUE"
       AC_MSG_RESULT([yes])
    else
@@ -5786,67 +5793,75 @@ dnl Check for the Windows  SDK.
 dnl =========================================
 dnl FIXME: I don't know yet if the Windows SDK works with MinGW, keep it until I know better,
 dnl and add "-a \( "$WITH_MINGW" != "yes" \)" then
-if test \( "$_os" = "WINNT" \) ; then
+if test "$_os" = "WINNT"; then
     AC_MSG_CHECKING([for Windows SDK])
-    if test -z "$with_windows_sdk_home"; then
-        # This first line will detect a February 2003 Microsoft Platform SDK
-        WINDOWS_SDK_HOME=`./oowintool --windows-sdk-home`
-        # But there might be also an April 2005 PSDK, unfortunately MS changed
-        # the registry entry. (we prefer the old version!?)
-        if test -z "$WINDOWS_SDK_HOME"; then
-          WINDOWS_SDK_HOME=`cat /proc/registry/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/InstalledSDKs/*/Install\ Dir 2> /dev/null | tr '\000' '\n' | head -n 1`
-        fi
+    if test "$build_os" = "cygwin"; then
+        if test -z "$with_windows_sdk_home"; then
+            # This first line will detect a February 2003 Microsoft Platform SDK
+            WINDOWS_SDK_HOME=`./oowintool --windows-sdk-home`
+            # But there might be also an April 2005 PSDK, unfortunately MS changed
+            # the registry entry. (we prefer the old version!?)
+            if test -z "$WINDOWS_SDK_HOME"; then
+                WINDOWS_SDK_HOME=`cat /proc/registry/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/InstalledSDKs/*/Install\ Dir 2> /dev/null | tr '\000' '\n' | head -n 1`
+            fi
             # normalize if found
             if test -n "$WINDOWS_SDK_HOME"; then
-              WINDOWS_SDK_HOME=`cygpath -d "$WINDOWS_SDK_HOME"`
-              WINDOWS_SDK_HOME=`cygpath -u "$WINDOWS_SDK_HOME"`
-           fi
-    else
-           WINDOWS_SDK_HOME=`cygpath -u "$with_windows_sdk_home"`
+                WINDOWS_SDK_HOME=`cygpath -d "$WINDOWS_SDK_HOME"`
+                WINDOWS_SDK_HOME=`cygpath -u "$WINDOWS_SDK_HOME"`
+            fi
+        else
+            WINDOWS_SDK_HOME=`cygpath -u "$with_windows_sdk_home"`
+        fi
     fi
+    if test -n "$WINDOWS_SDK_HOME"; then
         # Remove a possible trailing backslash
         WINDOWS_SDK_HOME=`echo $WINDOWS_SDK_HOME | $SED 's/\/$//'`
-    # Problem with current PSDK (iz 49865)
-    if test -f "$WINDOWS_SDK_HOME/Lib/libcp.lib"; then
-        AC_MSG_ERROR([
-
+        # Problem with current PSDK (iz 49865)
+        # (What "current" does that mean?)
+        if test -f "$WINDOWS_SDK_HOME/Lib/libcp.lib"; then
+            AC_MSG_ERROR([
 Some modules do not build correctly with MS Platform SDK - April 2005
 Edition if the library ($WINDOWS_SDK_HOME/Lib/libcp.lib) is found.
 Remove/rename/backup that file and restart configure. Details about this
 problem can be found in issue 49856.])
+        fi
+
+        if test -f "$WINDOWS_SDK_HOME/Include/adoint.h" \
+             -a -f "$WINDOWS_SDK_HOME/Include/SqlUcode.h" \
+             -a -f "$WINDOWS_SDK_HOME/Include/usp10.h"; then
+            HAVE_PSDK_H="yes"
+        else
+            HAVE_PSDK_H="no"
+        fi
+        if test -f "$WINDOWS_SDK_HOME/lib/user32.lib"; then
+            HAVE_PSDK_LIB="yes"
+        else
+            HAVE_PSDK_LIB="no"
+        fi
+
+        if test "$HAVE_PSDK_H" = "no" -o "$HAVE_PSDK_LIB" = "no"; then
+            AC_MSG_ERROR([Some (all?) Windows SDK files not found, please check if all needed parts of
+the  Windows SDK are installed.])
+        fi
+
+        if test ! -x "$WINDOWS_SDK_HOME/bin/msiinfo.exe" \
+             -o ! -x "$WINDOWS_SDK_HOME/bin/msidb.exe" \
+             -o ! -x "$WINDOWS_SDK_HOME/bin/uuidgen.exe" \
+             -o ! -x "$WINDOWS_SDK_HOME/bin/msitran.exe" ; then
+            AC_MSG_ERROR([Some (all) files of the Windows Installer SDK are missing, please install.])
+        fi
     fi
-# Windows SDK has different headers
-    if test \( -f "$WINDOWS_SDK_HOME/Include/adoint.h" \) \
-         -a \( -f "$WINDOWS_SDK_HOME/Include/SqlUcode.h" \) \
-         -a \( -f "$WINDOWS_SDK_HOME/Include/usp10.h" \); then
-        HAVE_PSDK_H="yes"
-    else
-        HAVE_PSDK_H="no"
-    fi
-    if test -f "$WINDOWS_SDK_HOME/lib/user32.lib"; then
-        HAVE_PSDK_LIB="yes"
-    else
-        HAVE_PSDK_LIB="no"
-    fi
-    if test "$HAVE_PSDK_H" = "no" -o "$HAVE_PSDK_LIB" = "no"; then
-        AC_MSG_ERROR([Some (all?) Windows SDK files not found, please check if all needed Winows SDKs
-are installed or use --with-windows-sdk-home .])
-    fi
-    if test ! -x "$WINDOWS_SDK_HOME/bin/msiinfo.exe" \
-         -o ! -x "$WINDOWS_SDK_HOME/bin/msidb.exe" \
-         -o ! -x "$WINDOWS_SDK_HOME/bin/uuidgen.exe" \
-         -o ! -x "$WINDOWS_SDK_HOME/bin/msitran.exe" ; then
-        AC_MSG_ERROR([Some (all) files of the Windows Installer SDK are missing, please install.])
-    fi
-dnl Check if this is the right SDK.
-    if echo $WINDOWS_SDK_HOME | grep "v6.1" >/dev/null 2>/dev/null; then
+
+    if test -z "$WINDOWS_SDK_HOME"; then
+        AC_MSG_RESULT([no, hoping the necessary headers and libraries will be found anyway])
+    elif echo $WINDOWS_SDK_HOME | grep "v6.1" >/dev/null 2>/dev/null; then
         AC_MSG_RESULT([found Windows SDK 6.1 ($WINDOWS_SDK_HOME)])
     elif echo $WINDOWS_SDK_HOME | grep "v6.0" >/dev/null 2>/dev/null; then
         AC_MSG_RESULT([found Windows SDK 6.0 ($WINDOWS_SDK_HOME)])
     elif echo $WINDOWS_SDK_HOME | grep "v7" >/dev/null 2>/dev/null; then
         AC_MSG_RESULT([found Windows SDK 7 ($WINDOWS_SDK_HOME)])
     else
-        AC_MSG_ERROR([Found Legacy Windows Platform SDK ($WINDOWS_SDK_HOME)])
+        AC_MSG_ERROR([Found legacy Windows Platform SDK ($WINDOWS_SDK_HOME)])
     fi
 fi
 AC_SUBST(WINDOWS_SDK_HOME)
@@ -5854,47 +5869,49 @@ AC_SUBST(WINDOWS_SDK_HOME)
 dnl =========================================
 dnl Check for the Microsoft DirectX SDK.
 dnl =========================================
-if test \( "$_os" = "WINNT" \) ; then
-    AC_MSG_CHECKING([for DirectX SDK files])
-    if test -z "$with_directx_home"; then
-        dnl A standard installation of the DirectX SDK sets $DXSDK_DIR
-        if test -n "$DXSDK_DIR"; then
-            DIRECTXSDK_HOME=`cygpath -d "$DXSDK_DIR"`
-            DIRECTXSDK_HOME=`cygpath -u "$DIRECTXSDK_HOME"`
+if test -n "$ENABLE_DIRECTX" -a "$_os" = "WINNT"; then
+    AC_MSG_CHECKING([for DirectX SDK])
+    if test "$build_os" = "cygwin"; then
+        if test -z "$with_directx_home"; then
+            dnl A standard installation of the DirectX SDK sets $DXSDK_DIR
+            if test -n "$DXSDK_DIR"; then
+                DIRECTXSDK_HOME=`cygpath -d "$DXSDK_DIR"`
+                DIRECTXSDK_HOME=`cygpath -u "$DIRECTXSDK_HOME"`
+            fi
+            # At this point $DIRECTXSDK_HOME might still be undefined. This will lead to
+            # the "DirectX SDK not found" error later
+        else
+            DIRECTXSDK_HOME=`cygpath -u "$with_directx_home"`
         fi
-        # At this point $DIRECTXSDK_HOME might still be undefined. This will lead to
-        # the "DirectX SDK files not found" error later
-    else
-    DIRECTXSDK_HOME=`cygpath -u "$with_directx_home"`
+        # Remove a possible trailing backslash
+        DIRECTXSDK_HOME=`echo $DIRECTXSDK_HOME | $SED 's/\/$//'`
+    elif test -n "$with_directx_home"; then
+        DIRECTXSDK_HOME="$with_directx_home"
     fi
-    # Remove a possible trailing backslash
-    DIRECTXSDK_HOME=`echo $DIRECTXSDK_HOME | $SED 's/\/$//'`
 
     if test -f "$DIRECTXSDK_HOME/Include/ddraw.h" -o -f "$DIRECTXSDK_HOME/Include/d3d9.h" ; then
         HAVE_DIRECTXSDK_H="yes"
     else
         HAVE_DIRECTXSDK_H="no"
     fi
-    # MS changed the location of the libraries with dec 2004 directx sdk
+
+    # MS changed the location of the libraries with Dec 2004 DirectX SDK
     if test -d "$DIRECTXSDK_HOME/lib/x86" ; then
         DIRECTXSDK_LIB="$DIRECTXSDK_HOME/lib/x86"
     else
         DIRECTXSDK_LIB="$DIRECTXSDK_HOME/lib"
     fi
+
     if test -f "$DIRECTXSDK_LIB/ddraw.lib" -o -f "$DIRECTXSDK_LIB/d3d9.lib" ; then
         HAVE_DIRECTXSDK_LIB="yes"
     else
         HAVE_DIRECTXSDK_LIB="no"
     fi
-    if test -n "$ENABLE_DIRECTX"; then
-        if test "$HAVE_DIRECTXSDK_H" = "yes" -a "$HAVE_DIRECTXSDK_LIB" = "yes"; then
-            AC_MSG_RESULT([found])
-        else
-            AC_MSG_ERROR([DirectX SDK files not found, please use --with-directx-home or -disable-directx.])
-        fi
+
+    if test "$HAVE_DIRECTXSDK_H" = "yes" -a "$HAVE_DIRECTXSDK_LIB" = "yes"; then
+        AC_MSG_RESULT([found])
     else
-        DIRECTXSDK_HOME=""
-        AC_MSG_RESULT([disabled])
+        AC_MSG_RESULT([no, hoping the necessary headers and libraries will be found anyway])
     fi
 fi
 AC_SUBST(DIRECTXSDK_HOME)
@@ -5905,37 +5922,43 @@ dnl Check for Nullsoft Scriptable Install System
 dnl ============================================
 NSIS_PATH=""
 if test "$_os" = "WINNT" ; then
-    AC_MSG_CHECKING([for NSIS])
-    AC_PATH_PROG(NSIS_PATH, nsis.exe)
-    if test -n "$NSIS_PATH"; then
-        NSIS_PATH=`dirname "$NSIS_PATH"`
-    fi
-    if test -n "$with_nsis_path"; then
-        with_nsis_path=`cygpath -u "$with_nsis_path"`
-    fi
-    if test -e "$with_nsis_path/nsis.exe"; then
-        NSIS_PATH="$with_nsis_path"
-    fi
-    nsistest=`./oowintool --nsis-dir`;
-    if test -x "$nsistest/nsis.exe"; then
-        NSIS_PATH="$nsistest"
-    fi
-    if test -z "$NSIS_PATH"; then
-        AC_MSG_RESULT([NSIS not found, no self contained installer will be build.])
+    if test -z "$with_nsis_path"; then
+        AC_PATH_PROG(NSIS_PATH, makensis)
+        if test -n "$NSIS_PATH"; then
+            NSIS_PATH=`dirname "$NSIS_PATH"`
+        fi
     else
-        NSIS_PATH=`cygpath -d "$NSIS_PATH"`
-        NSIS_PATH=`cygpath -u "$NSIS_PATH"`
-        AC_MSG_RESULT([found ($NSIS_PATH)])
+	AC_MSG_CHECKING([for NSIS])
+        if test "$build_os" = "cygwin"; then
+            with_nsis_path=`cygpath -u "$with_nsis_path"`
+        fi
+        if test -e "$with_nsis_path/makensis$BUILD_EXEEXT"; then
+            NSIS_PATH="$with_nsis_path"
+        elif test "$build_os" = "cygwin"; then
+	    nsistest=`./oowintool --nsis-dir`;
+	    if test -x "$nsistest/nsis.exe"; then
+		NSIS_PATH="$nsistest"
+	    fi
+        fi
+        if test -z "$NSIS_PATH"; then
+            AC_MSG_RESULT([no, no self-contained installer will be built.])
+        else
+	    if test "$build_os" = "cygwin"; then
+		NSIS_PATH=`cygpath -d "$NSIS_PATH"`
+		NSIS_PATH=`cygpath -u "$NSIS_PATH"`
+	    fi
+	    AC_MSG_RESULT([found ($NSIS_PATH)])
+        fi
     fi
 fi
 AC_SUBST(NSIS_PATH)
 
 dnl ***************************************
-dnl testing bison and flex exist
+dnl Checking for bison and flex
 dnl ***************************************
 AC_PATH_PROG(BISON, bison)
 if test -z "$BISON"; then
-   AC_MSG_ERROR([no bison found in \$PATH, install bison])
+   AC_MSG_ERROR([no bison found in \$PATH, install it])
 else
    AC_MSG_CHECKING([the bison version])
    _bison_version=`$BISON --version | grep GNU | $SED -e 's@^[[^0-9]]*@@' -e 's@ .*@@' -e 's@,.*@@'`;
@@ -5954,14 +5977,14 @@ else
 fi
 AC_PATH_PROG(FLEX, flex)
 if test -z "$FLEX"; then
-   AC_MSG_ERROR([no flex found in \$PATH, install flex])
+   AC_MSG_ERROR([no flex found in \$PATH, install it])
 fi
 dnl ***************************************
-dnl testing that patch exists
+dnl Checking for patch
 dnl ***************************************
 AC_PATH_PROG(PATCH, patch)
 if test -z "$PATCH"; then
-   AC_MSG_ERROR([\"patch\" not found in \$PATH, install the development tool named\"patch"\])
+   AC_MSG_ERROR([\"patch\" not found in \$PATH, install it])
 fi
 
 dnl On Solaris, FreeBSD or MacOS X, check if --with-gnu-patch was used
@@ -6018,29 +6041,16 @@ AC_SUBST(GNUPATCH)
 AC_SUBST(GNUCP)
 
 dnl ***************************************
-dnl testing bash tools path on Windows
-dnl ***************************************
-if test "$_os" = "WINNT"; then
-    CYGWIN_PATH=""
-    AC_PATH_PROG(CYGWIN_PATH, bash)
-    CYGWIN_PATH=`dirname "$CYGWIN_PATH"`
-fi
-if test -z "$CYGWIN_PATH"; then
-   CYGWIN_PATH="NO_CYGWIN"
-fi
-AC_SUBST(CYGWIN_PATH)
-
-dnl ***************************************
 dnl testing assembler path
 dnl ***************************************
-if test "$CL_X64" = ""; then
-  assembler=ml.exe
-  assembler_bin=bin
-else
-  assembler=ml64.exe
-  assembler_bin=bin/amd64
-fi
 if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
+  if test "$CL_X64" = ""; then
+    assembler=ml.exe
+    assembler_bin=bin
+  else
+    assembler=ml64.exe
+    assembler_bin=bin/amd64
+  fi
   if test -n "$with_asm_home"; then
     with_asm_home=`cygpath -u "$with_asm_home"`
   fi

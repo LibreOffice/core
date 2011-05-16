@@ -52,18 +52,6 @@ MACOSX_DEPLOYMENT_TARGET:=$(MACOSX_DEPLOYMENT_TARGET_FOR_BUILD)
 .EXPORT: MACOSX_DEPLOYMENT_TARGET
 .ENDIF
 
-# To simplify some of these .mk files we occasionally check FOO_FOR_BUILD
-# variables even when not cross-compiling, so set them. (set_soenv.in doesn't
-# except when CROSS_COMPILING==YES.)
-.IF "$(CROSS_COMPILING)"==""
-COM_FOR_BUILD:=$(COM)
-GUI_FOR_BUILD:=$(GUI)
-GUIBASE_FOR_BUILD:=$(GUIBASE)
-OS_FOR_BUILD:=$(OS)
-CPU_FOR_BUILD:=$(CPU)
-CPUNAME_FOR_BUILD:=$(CPUNAME)
-.ENDIF
-
 .INCLUDE .IGNORE : ooo_vendor.mk
 
 # --- common tool makros --------------------------------------
