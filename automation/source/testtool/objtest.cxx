@@ -2760,6 +2760,8 @@ SbxVariable* TestToolObj::Find( const String& aStr, SbxClassType aType)
         {
             ADD_ERROR(SbxERR_PROC_UNDEFINED,GEN_RES_STR1(S_UNKNOWN_SLOT_CONTROL, aStr) );
         }
+
+        delete pWhatName;
     }
     return NULL;
 }
