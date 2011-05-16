@@ -79,7 +79,7 @@ charp_to_ustr( const char *pStr )
 }
 
 /* Easier debugging of rtl_uString values. */
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
 static void
 ustr_debug( const char *pMessage, rtl_uString *pStr )
 {
@@ -236,7 +236,7 @@ get_md5hash( rtl_uString *pText )
     if ( !pText )
         return NULL;
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
     rtl_String *pOut = ustr_to_str( pText );
     fprintf (stderr, "Generate pipe md5 for '%s'\n", pOut->buffer);
     rtl_string_release( pOut );
@@ -697,7 +697,7 @@ read_percent( ChildInfo *info, int *pPercent )
         }
     }
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "Got status: %s\n", pBegin );
 #endif
     if ( !strncasecmp( pBegin, "end", 3 ) )
@@ -884,7 +884,7 @@ exec_javaldx (Args *args)
             *chomp = '\0';
     }
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
     fprintf (stderr, "Adding javaldx path of '%s'\n", newpath);
 #endif
     extend_library_path (newpath);
@@ -932,7 +932,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
 
         close( fd );
     }
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
     else
         ustr_debug( "Failed to connect to pipe", pPipePath );
 #endif
@@ -990,7 +990,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
                     bShortWait = sal_False;
                 }
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "Polling, result is %s\n",
                          ( eResult == ProgressContinue )? "continue" :
                          ( ( eResult == ProgressRestart )? "restart" : "exit" ) );
