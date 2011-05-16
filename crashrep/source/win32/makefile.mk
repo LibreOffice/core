@@ -67,7 +67,7 @@ STDLIB1=\
     $(COMCTL32LIB)\
     $(COMDLG32LIB)\
     $(ADVAPI32LIB)\
-    $(WSOCK32LIB)\
+    $(WS2_32LIB)\
     $(SHELL32LIB)\
     $(DBGHELPLIB)\
     psapi.lib
