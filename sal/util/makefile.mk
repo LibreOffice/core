@@ -95,7 +95,7 @@ UWINAPILIB=     $(LB)$/uwinapi.lib
 SHL1STDLIBS=	\
                 $(UWINAPILIB)\
                 $(ADVAPI32LIB)\
-                $(WSOCK32LIB)\
+                $(WS2_32LIB)\
                 $(MPRLIB)\
                 $(SHELL32LIB)\
                 $(COMDLG32LIB)\
