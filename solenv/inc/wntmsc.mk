@@ -367,7 +367,6 @@ WINSPOOLLIB=winspool.lib
 IMM32LIB=imm32.lib
 VERSIONLIB=version.lib
 WINMMLIB=winmm.lib
-WSOCK32LIB=wsock32.lib
 MPRLIB=mpr.lib
 WS2_32LIB=ws2_32.lib
 KERNEL32LIB=kernel32.lib

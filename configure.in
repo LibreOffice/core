@@ -1097,7 +1097,7 @@ AC_ARG_WITH(midl-path,
 AC_ARG_WITH(csc-path,
     AS_HELP_STRING([--with-csc-path],
         [For Windows builds, please supply the path pointing to the csc.exe.
-         Usually found automatically.])
+         Usually found automatically when building on Windows.])
     [
                           Usage:     --with-csc-path=<abs. path to csc.exe>
     ],
@@ -1128,12 +1128,12 @@ AC_ARG_WITH(dotnet-framework-home,
     ],
 ,)
 
-AC_ARG_WITH(psdk-home,
-    AS_HELP_STRING([--with-psdk-home],
-        [For Windows users, please supply the path to the Windnows SDK.
-         Usually found automatically.])
+AC_ARG_WITH(windows-sdk-home,
+    AS_HELP_STRING([--with-windows-sdk-home],
+        [For Windows builds, please supply the path to the Windows SDK.
+         Usually found automatically when building on Windows.])
     [
-                          Usage:     --with-psdk-home=<abs. path to Windows SDK>
+                          Usage:     --with-windows-sdk-home=<absolute path to Windows SDK>
     ],
 ,)
 
@@ -2359,13 +2359,13 @@ if test "$build_os" = "cygwin"; then
       fi
     fi
     if test -z "$MIDL_PATH" ; then
-        psdktest=`./oowintool --psdk-home`
-        if test -x "$psdktest/Bin/midl.exe" ; then
-            MIDL_PATH="$psdktest/Bin"
+        winsdktest=`./oowintool --windows-sdk-home`
+        if test -x "$winsdktest/Bin/midl.exe" ; then
+            MIDL_PATH="$winsdktest/Bin"
         fi
     fi
     if test ! -x "$MIDL_PATH/midl.exe"; then
-        AC_MSG_ERROR([midl.exe not found. Make sure it's in the path or use --with-midl-path])
+        AC_MSG_ERROR([midl.exe not found. Make sure it's in PATH or use --with-midl-path])
     fi
     # Convert to posix path with 8.3 filename restrictions ( No spaces )
     MIDL_PATH=`cygpath -d "$MIDL_PATH"`
@@ -2407,7 +2407,7 @@ if test "$build_os" = "cygwin"; then
           if test -f "$frametest/lib/mscoree.lib"; then
              DOTNET_FRAMEWORK_HOME="$frametest"
           else
-             frametest=`./oowintool --psdk-home`
+             frametest=`./oowintool --windows-sdk-home`
              if test -f "$frametest/lib/mscoree.lib"; then
                 DOTNET_FRAMEWORK_HOME="$frametest"
              fi
@@ -5782,79 +5782,74 @@ AC_SUBST(HAVE_READDIR_R)
 AC_SUBST(SYSTEM_LIBC)
 
 dnl =========================================
-dnl Check for the Microsoft Platform SDK.
+dnl Check for the Windows  SDK.
 dnl =========================================
-dnl FIXME: I don't know yet if PSDK works with MinGW, keep it until I know better,
+dnl FIXME: I don't know yet if the Windows SDK works with MinGW, keep it until I know better,
 dnl and add "-a \( "$WITH_MINGW" != "yes" \)" then
 if test \( "$_os" = "WINNT" \) ; then
-    AC_MSG_CHECKING([for PSDK files])
-    if test -z "$with_psdk_home"; then
+    AC_MSG_CHECKING([for Windows SDK])
+    if test -z "$with_windows_sdk_home"; then
         # This first line will detect a February 2003 Microsoft Platform SDK
-        PSDK_HOME=`./oowintool --psdk-home`
+        WINDOWS_SDK_HOME=`./oowintool --windows-sdk-home`
         # But there might be also an April 2005 PSDK, unfortunately MS changed
         # the registry entry. (we prefer the old version!?)
-        if test -z "$PSDK_HOME"; then
-          PSDK_HOME=`cat /proc/registry/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/InstalledSDKs/*/Install\ Dir 2> /dev/null | tr '\000' '\n' | head -n 1`
+        if test -z "$WINDOWS_SDK_HOME"; then
+          WINDOWS_SDK_HOME=`cat /proc/registry/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/InstalledSDKs/*/Install\ Dir 2> /dev/null | tr '\000' '\n' | head -n 1`
         fi
             # normalize if found
-            if test -n "$PSDK_HOME"; then
-              PSDK_HOME=`cygpath -d "$PSDK_HOME"`
-              PSDK_HOME=`cygpath -u "$PSDK_HOME"`
+            if test -n "$WINDOWS_SDK_HOME"; then
+              WINDOWS_SDK_HOME=`cygpath -d "$WINDOWS_SDK_HOME"`
+              WINDOWS_SDK_HOME=`cygpath -u "$WINDOWS_SDK_HOME"`
            fi
     else
-           PSDK_HOME=`cygpath -u "$with_psdk_home"`
+           WINDOWS_SDK_HOME=`cygpath -u "$with_windows_sdk_home"`
     fi
         # Remove a possible trailing backslash
-        PSDK_HOME=`echo $PSDK_HOME | $SED 's/\/$//'`
+        WINDOWS_SDK_HOME=`echo $WINDOWS_SDK_HOME | $SED 's/\/$//'`
     # Problem with current PSDK (iz 49865)
-    if test -f "$PSDK_HOME/Lib/libcp.lib"; then
+    if test -f "$WINDOWS_SDK_HOME/Lib/libcp.lib"; then
         AC_MSG_ERROR([
 
 Some modules do not build correctly with MS Platform SDK - April 2005
-Edition if the library ($PSDK_HOME/Lib/libcp.lib) is found.
+Edition if the library ($WINDOWS_SDK_HOME/Lib/libcp.lib) is found.
 Remove/rename/backup that file and restart configure. Details about this
 problem can be found in issue 49856.])
     fi
-# WIndows SDK has different headers
-    if test \( -f "$PSDK_HOME/Include/adoint.h" \) \
-         -a \( -f "$PSDK_HOME/Include/SqlUcode.h" \) \
-         -a \( -f "$PSDK_HOME/Include/usp10.h" \); then
+# Windows SDK has different headers
+    if test \( -f "$WINDOWS_SDK_HOME/Include/adoint.h" \) \
+         -a \( -f "$WINDOWS_SDK_HOME/Include/SqlUcode.h" \) \
+         -a \( -f "$WINDOWS_SDK_HOME/Include/usp10.h" \); then
         HAVE_PSDK_H="yes"
     else
         HAVE_PSDK_H="no"
     fi
-    if test -f "$PSDK_HOME/lib/user32.lib"; then
+    if test -f "$WINDOWS_SDK_HOME/lib/user32.lib"; then
         HAVE_PSDK_LIB="yes"
     else
         HAVE_PSDK_LIB="no"
     fi
     if test "$HAVE_PSDK_H" = "no" -o "$HAVE_PSDK_LIB" = "no"; then
-        AC_MSG_ERROR([Some (all?) PSDK files not found, please check if all needed Platform SDKs
-are installed or use --with-psdk-home .])
+        AC_MSG_ERROR([Some (all?) Windows SDK files not found, please check if all needed Winows SDKs
+are installed or use --with-windows-sdk-home .])
     fi
-    if test ! -x "$PSDK_HOME/bin/msiinfo.exe" \
-         -o ! -x "$PSDK_HOME/bin/msidb.exe" \
-         -o ! -x "$PSDK_HOME/bin/uuidgen.exe" \
-         -o ! -x "$PSDK_HOME/bin/msitran.exe" ; then
+    if test ! -x "$WINDOWS_SDK_HOME/bin/msiinfo.exe" \
+         -o ! -x "$WINDOWS_SDK_HOME/bin/msidb.exe" \
+         -o ! -x "$WINDOWS_SDK_HOME/bin/uuidgen.exe" \
+         -o ! -x "$WINDOWS_SDK_HOME/bin/msitran.exe" ; then
         AC_MSG_ERROR([Some (all) files of the Windows Installer SDK are missing, please install.])
     fi
-    AC_MSG_RESULT([SDK files found ...)])
 dnl Check if this is the right SDK.
-    if echo $PSDK_HOME | grep "v6.1" >/dev/null 2>/dev/null; then
-        AC_MSG_RESULT([Found Windows SDK 6.1 ($PSDK_HOME)])
-        WINDOWS_VISTA_PSDK=TRUE
-    elif echo $PSDK_HOME | grep "v6.0" >/dev/null 2>/dev/null; then
-        AC_MSG_RESULT([Found Windows SDK 6.0 ($PSDK_HOME)])
-        WINDOWS_VISTA_PSDK=TRUE
-    elif echo $PSDK_HOME | grep "v7" >/dev/null 2>/dev/null; then
-        AC_MSG_RESULT([Found Windows SDK 7 ($PSDK_HOME)])
-        WINDOWS_VISTA_PSDK=TRUE
+    if echo $WINDOWS_SDK_HOME | grep "v6.1" >/dev/null 2>/dev/null; then
+        AC_MSG_RESULT([found Windows SDK 6.1 ($WINDOWS_SDK_HOME)])
+    elif echo $WINDOWS_SDK_HOME | grep "v6.0" >/dev/null 2>/dev/null; then
+        AC_MSG_RESULT([found Windows SDK 6.0 ($WINDOWS_SDK_HOME)])
+    elif echo $WINDOWS_SDK_HOME | grep "v7" >/dev/null 2>/dev/null; then
+        AC_MSG_RESULT([found Windows SDK 7 ($WINDOWS_SDK_HOME)])
     else
-        AC_MSG_RESULT([Found Legacy Windows Platform SDK ($PSDK_HOME)])
+        AC_MSG_ERROR([Found Legacy Windows Platform SDK ($WINDOWS_SDK_HOME)])
     fi
 fi
-AC_SUBST(PSDK_HOME)
-AC_SUBST(WINDOWS_VISTA_PSDK)
+AC_SUBST(WINDOWS_SDK_HOME)
 
 dnl =========================================
 dnl Check for the Microsoft DirectX SDK.

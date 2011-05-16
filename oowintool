@@ -48,9 +48,9 @@ sub print_syntax()
     print "   --msvc-copy-dlls <dest> - copy msvc[pr]??.dlls into <dest>/msvcp??/\n";
     print "   --msvc-productdir       - dump productdir\n";
     print "   --msvs-productdir       - dump productdir\n";
-    print "   --dotnetsdk-dir         - dump .Net SDK path\n";
-    print "   --csc-compilerdir       - dump .Net SDK compiler path\n";
-    print "   --psdk-home             - dump psdk install dir\n";
+    print "   --dotnetsdk-dir         - dump .NET SDK path\n";
+    print "   --csc-compilerdir       - dump .NET SDK compiler path\n";
+    print "   --windows-sdk-home      - dump Windows SDK install dir\n";
     print "   --jdk-home              - dump the jdk install dir\n";
     print "   --nsis-dir              - dump NSIS path\n";
     print "   --help                  - this message\n";
@@ -91,7 +91,7 @@ sub print_path($$)
     print $path;
 }
 
-sub print_psdk_home()
+sub print_windows_sdk_home()
 {
     my ($value, $key);
     $value = reg_get_value ('HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v6.1/InstallationFolder');
@@ -114,7 +114,7 @@ sub print_psdk_home()
 		$value = `/bin/find "$dir" -iname platformsdk | head -n 1`;
     }
 
-    defined $value || die "psdk not found";
+    defined $value || die "Windows Sdk not found";
 
     print cygpath ($value, 'w', $output_format);
 }
@@ -319,8 +319,8 @@ while (@commands) {
 	print_dotnetsdk_dir();
     } elsif ($opt eq '--csc-compilerdir') {
 	print_csc_compiler_dir();
-    } elsif ($opt eq '--psdk-home') {
-	print_psdk_home();
+    } elsif ($opt eq '--windows-sdk-home') {
+	print_windows_sdk_home();
     } elsif ($opt eq '--jdk-home') {
 	print_jdk_dir();
     } elsif ($opt eq '--nsis-dir') {

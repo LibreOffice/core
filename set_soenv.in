@@ -80,7 +80,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
      $MSPDB_PATH, $MIDL_PATH, $CSC_PATH,
      $PATH, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARLIB, $JAVALIB,
      $SOLARINC, $FRAMEWORKSHOME, $COMEX, $PERL,
-     $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $DIRECTXSDK_LIB, $DOTNET_FRAMEWORK_HOME,
+     $COMP_ENV, $ILIB, $JAVAHOME, $WINDOWS_SDK_HOME, $DIRECTXSDK_LIB, $DOTNET_FRAMEWORK_HOME,
      $USE_DIRECTX5, $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $TMPDIR,
      $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
      $WIN_GNUCOPY, $WIN_TOUCH, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB, $MOZILLABUILD,
@@ -645,7 +645,7 @@ elsif ( $platform =~ m/cygwin/ )
       $MSPDB_PATH     = PathFormat('@MSPDB_PATH@');
       $MIDL_PATH      = PathFormat('@MIDL_PATH@');
       $CSC_PATH       = PathFormat('@CSC_PATH@');
-      $PSDK_HOME      = PathFormat('@PSDK_HOME@');
+      $WINDOWS_SDK_HOME      = PathFormat('@WINDOWS_SDK_HOME@');
       $DIRECTXSDK_LIB = PathFormat('@DIRECTXSDK_LIB@');
       $USE_DIRECTX5   = "";
       $DOTNET_FRAMEWORK_HOME = PathFormat('@DOTNET_FRAMEWORK_HOME@');
@@ -671,7 +671,7 @@ elsif ( $platform =~ m/cygwin/ )
       $COM            = "GCC";
       $OUTPATH        = "wntgcci";
       $INPATH         = $OUTPATH.$PROEXT;
-      $ATL_INCLUDE = '$SOLARVER'.$ds.'$INPATH'.$ds."inc".$ds."external".$ds."mingw".$ds."include".$ds."atl". " ".'$PSDK_HOME'.$ds."include".$ds."atl";
+      $ATL_INCLUDE = '$SOLARVER'.$ds.'$INPATH'.$ds."inc".$ds."external".$ds."mingw".$ds."include".$ds."atl". " ".'$WINDOWS_SDK_HOME'.$ds."include".$ds."atl";
   }
   else # The MSVC section starts here
   {   $outfile        = "WindowsMSVCEnv.Set.sh";
@@ -682,15 +682,15 @@ elsif ( $platform =~ m/cygwin/ )
       $INPATH         = $OUTPATH.$PROEXT;
       $COMEX          = '@COMEX@';
       if ( "@DISABLE_ACTIVEX@" ) {
-          $ATL_LIB     = $PSDK_HOME.$ds."lib"; # Doesn't exist for VSE
-          $ATL_INCLUDE = $PSDK_HOME.$ds."include".$ds."atl";
-          $MFC_LIB     = $PSDK_HOME.$ds."lib"; # Doesn't exist for VSE
-          $MFC_INCLUDE = $PSDK_HOME.$ds."include".$ds."mfc";
+          $ATL_LIB     = $WINDOWS_SDK_HOME.$ds."lib"; # Doesn't exist for VSE
+          $ATL_INCLUDE = $WINDOWS_SDK_HOME.$ds."include".$ds."atl";
+          $MFC_LIB     = $WINDOWS_SDK_HOME.$ds."lib"; # Doesn't exist for VSE
+          $MFC_INCLUDE = $WINDOWS_SDK_HOME.$ds."include".$ds."mfc";
       } else {
           $ATL_LIB     = $COMPATH.$ds."atlmfc".$ds."lib";
           $ATL_INCLUDE = $COMPATH.$ds."atlmfc".$ds."include";
           $MFC_LIB     = $COMPATH.$ds."atlmfc".$ds."lib";
-          $MFC_INCLUDE = $PSDK_HOME.$ds."include".$ds."mfc";
+          $MFC_INCLUDE = $WINDOWS_SDK_HOME.$ds."include".$ds."mfc";
       }
       if ($CL_X64) {
           $ATL_LIB     .= $ds."amd64";
@@ -1045,10 +1045,10 @@ if ($platform =~ m/cygwin/)
       }
       if ( $CL_X64 ne "TRUE" ) {
           $ILIB   .= $wps.$COMPATH.$LIB.
-		             $wps.$PSDK_HOME.$LIB;
+		             $wps.$WINDOWS_SDK_HOME.$LIB;
 	  } else {
 	      $ILIB   .= $wps.$COMPATH.$LIB.$ds."amd64".
-		             $wps.$PSDK_HOME.$LIB64;
+		             $wps.$WINDOWS_SDK_HOME.$LIB64;
 	  }
       $ILIB       .= $wps.$DOTNET_FRAMEWORK_HOME.$LIB;
       if ( '@ENABLE_DIRECTX@' ne "" ) {
@@ -1069,7 +1069,7 @@ if ($platform =~ m/cygwin/)
       {  $ILIB       .= $wps.$COMPATH.$LIB;
       }
       $ILIB       .= $wps.PathFormat("@MINGW_CLIB_DIR@").
-                     $wps.$PSDK_HOME.$LIB;
+                     $wps.$WINDOWS_SDK_HOME.$LIB;
       if ( '@ENABLE_DIRETX@' )
       {   $ILIB   .= $wps.PathFormat("@DIRECTXSDK_LIB@");
       }
@@ -1155,13 +1155,13 @@ elsif ($platform =~ m/cygwin/)
            $PATH .= $ps.$tmppath;
        }
        # Installer needs some files if the Windows Installer SDK
-       $tmppath = CygFormat($PSDK_HOME);
+       $tmppath = CygFormat($WINDOWS_SDK_HOME);
        if ( $PATH !~ /(?:[:]|\A)(?:$tmppath\/bin)(?:[:]|\Z)/i ) {
            $PATH .= $ps.$tmppath.$BIN;
        }
    } else { # Mingw is different
 	   # Native installer needs some files if the Windows Installer SDK
-               $tmppath = CygFormat($PSDK_HOME);
+               $tmppath = CygFormat($WINDOWS_SDK_HOME);
 	   if ( $PATH !~ /(?:[:]|\A)(?:$tmppath\/bin)(?:[:]|\Z)/i ) {
 		   $PATH .= $ps.$tmppath.$BIN;
 	   }
@@ -1383,7 +1383,7 @@ elsif ($platform =~ m/cygwin/)
    }
    # Mingw is different
    if ( $COM eq "MSC" )
-   {  $SOLARINC       .= $I.'$PSDK_HOME'.$INCLUDE.
+   {  $SOLARINC       .= $I.'$WINDOWS_SDK_HOME'.$INCLUDE.
                          $I.'$COMPATH'.$INCLUDE;
       if ( '@ENABLE_DIRECTX@' ne "" ) {
           $SOLARINC   .= $I.PathFormat('@DIRECTXSDK_HOME@').$INCLUDE;
@@ -1407,7 +1407,7 @@ elsif ($platform =~ m/cygwin/)
            }
        }
      $SOLARINC .= $I.PathFormat("@GXX_INCLUDE_PATH@").$I.PathFormat("@GXX_INCLUDE_PATH@".$ds."mingw32").
-                  $I.'$PSDK_HOME'.$INCLUDE;
+                  $I.'$WINDOWS_SDK_HOME'.$INCLUDE;
    }
    if ( $COM ne "MSC" && '@ENABLE_DIRECTX@' ne "" ) {
        $SOLARINC   .= $I.PathFormat('@DIRECTXSDK_HOME@').$INCLUDE;
@@ -1630,11 +1630,10 @@ if ( $platform =~ m/darwin/ && $platform !~ m/^arm/)
 ToFile( "Variable values.",  $empty,             "c" );
 if ( $platform =~ m/cygwin/ )
 {  ToFile( "CYGWIN_PATH",       $CYGWIN_PATH,       "e" );
-   ToFile( "PSDK_HOME",         $PSDK_HOME,         "e" );
-   ToFile( "WINDOWS_VISTA_PSDK","@WINDOWS_VISTA_PSDK@","e" );
+   ToFile( "WINDOWS_SDK_HOME",  $WINDOWS_SDK_HOME,  "e" );
    ToFile( "DIRECTXSDK_LIB",    $DIRECTXSDK_LIB,    "e" );
    ToFile( "USE_DIRECTX5",      $USE_DIRECTX5,      "e" );
-   ToFile( "ATL_LIB",           $ATL_LIB,         "e" );
+   ToFile( "ATL_LIB",           $ATL_LIB,           "e" );
    if ( $MINGW ne "yes" )
    {  ToFile( "ATL_INCLUDE",       $ATL_INCLUDE,       "e" );
    }

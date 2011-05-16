@@ -79,7 +79,7 @@ gb_Library_ILIBFILENAMES:=\
     uuid \
 
 gb_Library_DLLFILENAMES := $(filter-out $(foreach lib,$(gb_Library_ILIBFILENAMES),$(lib):%),$(gb_Library_DLLFILENAMES))
-gb_Library_DLLFILENAMES += $(foreach lib,$(gb_Library_ILIBFILENAMES),$(lib):$(PSDK_HOME)/lib/$(lib)$(gb_Library_ILIBEXT))
+gb_Library_DLLFILENAMES += $(foreach lib,$(gb_Library_ILIBFILENAMES),$(lib):$(WINDOWS_SDK_HOME)/lib/$(lib)$(gb_Library_ILIBEXT))
 
 gb_Library_DLLFILENAMES := $(patsubst comphelper:comphelper%,comphelper:comphelp%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst cppunit:cppunit%,cppunit:cygcppunit-1-12-1%,$(gb_Library_DLLFILENAMES))
