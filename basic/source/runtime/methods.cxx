@@ -3978,6 +3978,7 @@ RTLFUNC(StrConv)
         }
         pChar[nSize] = '\0';
         ::rtl::OString aOStr(pChar);
+        delete[] pChar;
 
         // there is no concept about default codepage in unix. so it is incorrectly in unix
         ::rtl::OUString aOUStr = ::rtl::OStringToOUString(aOStr, osl_getThreadTextEncoding());
