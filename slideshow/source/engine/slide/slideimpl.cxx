@@ -1158,7 +1158,7 @@ bool SlideImpl::loadShapes()
                 }
                 addPolygons(aMPShapesFunctor.getPolygons());
 
-                nCurrCount = aMPShapesFunctor.getImportedShapesCount();
+                nCurrCount = static_cast<sal_Int32>(aMPShapesFunctor.getImportedShapesCount());
             }
             catch( uno::RuntimeException& )
             {

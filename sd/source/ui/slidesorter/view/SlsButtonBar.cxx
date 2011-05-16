@@ -155,7 +155,7 @@ namespace {
                 for (sal_Int32 nX = 0; nX<nWidth; ++nX)
                 {
                     const sal_uInt8 nValue (255 - pSourceBitmap->GetPixel(nY, nX).GetBlueOrIndex());
-                    const sal_uInt8 nNewValue (nValue * (1-nAlpha));
+                    const sal_uInt8 nNewValue (static_cast<sal_uInt8>(nValue * (1-nAlpha)));
                     pBitmap->SetPixel(nY, nX, 255-nNewValue);
                 }
         }
@@ -756,8 +756,8 @@ void ButtonBar::StartFadeAnimation (
                 ::boost::ref(mrSlideSorter.GetView()),
                 ::boost::bind(aButtonBlendFunctor, _1),
                 ::boost::bind(aButtonBarBlendFunctor, _1)),
-            nDelay,
-            nDuration,
+            static_cast<sal_Int32>(nDelay),
+            static_cast<sal_Int32>(nDuration),
             ::boost::bind(
                 &model::VisualState::SetButtonAlphaAnimationId,
                 ::boost::ref(pDescriptor->GetVisualState()),

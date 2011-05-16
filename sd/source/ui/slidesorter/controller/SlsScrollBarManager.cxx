@@ -195,7 +195,7 @@ void ScrollBarManager::PlaceVerticalScrollBar (const Rectangle& aArea)
     mpVerticalScrollBar->SetPosSizePixel(aPosition, aSize);
 
     // Restore the position.
-    mpVerticalScrollBar->SetThumbPos(nThumbPosition);
+    mpVerticalScrollBar->SetThumbPos(static_cast<long>(nThumbPosition));
     mnVerticalPosition = nThumbPosition / double(mpVerticalScrollBar->GetRange().Len());
 }
 
