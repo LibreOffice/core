@@ -1333,7 +1333,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             //remove the temporary files
             ::std::vector<String>::iterator aFileIter;
             for(aFileIter = aFilesToRemove.begin();
-                        aFileIter != aFilesToRemove.end(); aFileIter++)
+                        aFileIter != aFilesToRemove.end(); ++aFileIter)
                 SWUnoHelper::UCB_DeleteFile( *aFileIter );
 
             // unlock all dispatchers

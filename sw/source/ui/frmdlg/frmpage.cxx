@@ -456,23 +456,23 @@ void lcl_InsertVectors(ListBox& rBox,
 {
     ::std::vector< String >::const_iterator aIt;
     sal_uInt16 nEntry = 0;
-    for(aIt = rPrev.begin(); aIt != rPrev.end(); aIt++)
+    for(aIt = rPrev.begin(); aIt != rPrev.end(); ++aIt)
         nEntry = rBox.InsertEntry(*aIt);
-    for(aIt = rThis.begin(); aIt != rThis.end(); aIt++)
+    for(aIt = rThis.begin(); aIt != rThis.end(); ++aIt)
         nEntry = rBox.InsertEntry(*aIt);
-    for(aIt = rNext.begin(); aIt != rNext.end(); aIt++)
+    for(aIt = rNext.begin(); aIt != rNext.end(); ++aIt)
         nEntry = rBox.InsertEntry(*aIt);
     rBox.SetSeparatorPos(nEntry);
     //now insert all strings sorted
     sal_uInt16 nStartPos = rBox.GetEntryCount();
 
-    for(aIt = rPrev.begin(); aIt != rPrev.end(); aIt++)
+    for(aIt = rPrev.begin(); aIt != rPrev.end(); ++aIt)
         ::InsertStringSorted(*aIt, rBox, nStartPos );
-    for(aIt = rThis.begin(); aIt != rThis.end(); aIt++)
+    for(aIt = rThis.begin(); aIt != rThis.end(); ++aIt)
         ::InsertStringSorted(*aIt, rBox, nStartPos );
-    for(aIt = rNext.begin(); aIt != rNext.end(); aIt++)
+    for(aIt = rNext.begin(); aIt != rNext.end(); ++aIt)
         ::InsertStringSorted(*aIt, rBox, nStartPos );
-    for(aIt = rRemain.begin(); aIt != rRemain.end(); aIt++)
+    for(aIt = rRemain.begin(); aIt != rRemain.end(); ++aIt)
         ::InsertStringSorted(*aIt, rBox, nStartPos );
 }
 

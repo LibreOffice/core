@@ -443,7 +443,7 @@ bool SwPostItMgr::CalcRects()
                 SwPosition aPosition = pItem->GetAnchorPosition();
                 pItem->mLayoutStatus = SwPostItHelper::getLayoutInfos( aInfo, aPosition );
             }
-            if( aInfo.size() )
+            if( !aInfo.empty() )
             {
                 pItem->maLayoutInfo = aInfo[0];
             }
@@ -656,7 +656,7 @@ void SwPostItMgr::LayoutPostIts()
                         }
                     }
 
-                    if ((aVisiblePostItList.size()>0) && ShowNotes())
+                    if ((!aVisiblePostItList.empty()) && ShowNotes())
                     {
                         bool bOldScrollbar = mPages[n]->bScrollbar;
                         if (ShowNotes())

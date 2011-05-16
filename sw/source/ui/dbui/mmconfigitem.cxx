@@ -601,7 +601,7 @@ void  SwMailMergeConfigItem_Impl::Commit()
 
     ::std::vector<DBAddressDataAssignment>::iterator aAssignIter;
     for(aAssignIter = aAddressDataAssignments.begin();
-                aAssignIter != aAddressDataAssignments.end(); aAssignIter++)
+                aAssignIter != aAddressDataAssignments.end(); ++aAssignIter)
     {
         if(aAssignIter->bColumnAssignmentsChanged)
         {
@@ -1248,7 +1248,7 @@ Sequence< ::rtl::OUString> SwMailMergeConfigItem::GetColumnAssignment(
     Sequence< ::rtl::OUString> aRet;
     ::std::vector<DBAddressDataAssignment>::iterator aAssignIter;
     for(aAssignIter = m_pImpl->aAddressDataAssignments.begin();
-                aAssignIter != m_pImpl->aAddressDataAssignments.end(); aAssignIter++)
+                aAssignIter != m_pImpl->aAddressDataAssignments.end(); ++aAssignIter)
     {
         if(aAssignIter->aDBData == rDBData)
         {
@@ -1278,7 +1278,7 @@ void SwMailMergeConfigItem::SetColumnAssignment( const SwDBData& rDBData,
     ::std::vector<DBAddressDataAssignment>::iterator aAssignIter;
     sal_Bool bFound = sal_False;
     for(aAssignIter = m_pImpl->aAddressDataAssignments.begin();
-                aAssignIter != m_pImpl->aAddressDataAssignments.end(); aAssignIter++)
+                aAssignIter != m_pImpl->aAddressDataAssignments.end(); ++aAssignIter)
     {
         if(aAssignIter->aDBData == rDBData)
         {

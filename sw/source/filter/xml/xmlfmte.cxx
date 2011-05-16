@@ -306,7 +306,7 @@ void SwXMLAutoStylePoolP::exportStyleAttributes(
         for( ::std::vector< XMLPropertyState >::const_iterator
                     aProperty = rProperties.begin();
              aProperty != rProperties.end();
-              aProperty++ )
+              ++aProperty )
         {
             if (aProperty->mnIndex != -1) // #i26762#
             {
