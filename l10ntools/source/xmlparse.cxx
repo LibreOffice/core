@@ -330,9 +330,6 @@ void XMLFile::WriteString( ofstream &rStream, const String &sString )
 
 sal_Bool XMLFile::Write( ofstream &rStream , XMLNode *pCur )
 {
-    XMLUtil& xmlutil = XMLUtil::Instance();
-    (void) xmlutil;
-
     if ( !pCur )
         Write( rStream, this );
     else {
@@ -351,11 +348,11 @@ sal_Bool XMLFile::Write( ofstream &rStream , XMLNode *pCur )
                     for ( size_t j = 0; j < pElement->GetAttributeList()->size(); j++ ) {
                         rStream << " ";
                         String sData(* (*pElement->GetAttributeList())[ j ] );
-                        xmlutil.QuotHTML( sData );
+                        XMLUtil::QuotHTML( sData );
                         WriteString( rStream , sData );
                         rStream << "=\"";
                         sData = (*pElement->GetAttributeList())[ j ]->GetValue();
-                        xmlutil.QuotHTML(  sData );
+                        XMLUtil::QuotHTML( sData );
                         WriteString( rStream , sData  );
                         rStream << "\"";
                     }
@@ -374,7 +371,7 @@ sal_Bool XMLFile::Write( ofstream &rStream , XMLNode *pCur )
             case XML_NODE_TYPE_DATA: {
                 XMLData *pData = ( XMLData * ) pCur;
                 String sData( pData->GetData());
-                xmlutil.QuotHTML( sData );
+                XMLUtil::QuotHTML( sData );
                 WriteString( rStream, sData );
             }
             break;
@@ -1415,37 +1412,6 @@ void XMLUtil::UnQuotData( String &rString_in ){
     rString_in = String(sReturn , RTL_TEXTENCODING_UTF8 );
 
 
-}
-
-XMLUtil::XMLUtil(){
-}
-
-
-/*****************************************************************************/
-void XMLUtil::dump(){
-/*****************************************************************************/
-    int cnt=1;
-    printf("size=%lu\n",static_cast<unsigned long>(lMap.size()));
-    for(HashMap::iterator pos = lMap.begin(); pos != lMap.end() ; ++pos){
-        fprintf(stdout,"key=%s , value=%d , no=%d\n",pos->first.GetBuffer(),pos->second,cnt++);
-    }
-}
-/*****************************************************************************/
-XMLUtil&  XMLUtil::Instance(){
-/*****************************************************************************/
-    static XMLUtil instance;
-    return instance;
-}
-/*****************************************************************************/
-XMLUtil::~XMLUtil(){}
-/*****************************************************************************/
-/*****************************************************************************/
-ByteString XMLUtil::GetIsoLangByIndex( sal_uInt16 nIndex )
-/*****************************************************************************/
-{
-    if(nIndex > 0 && MAX_LANGUAGES >= nIndex )
-        return isoArray[nIndex];
-    return "";
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

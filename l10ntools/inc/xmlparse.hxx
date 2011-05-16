@@ -270,31 +270,9 @@ public:
 
     /// UnQuot the XML characters and restore \n \t
     static void         UnQuotHTML  ( String &rString );
-
-    /// Return the numeric iso language code
-    //sal_uInt16                GetLangByIsoLang( const ByteString &rIsoLang );
-
-    /// Return the alpha strings representation
-    ByteString          GetIsoLangByIndex( sal_uInt16 nIndex );
-
-    static XMLUtil&     Instance();
-    ~XMLUtil();
-
-    void         dump();
-
 private:
-    /// Mapping iso alpha string code <-> iso numeric code
-    HashMap      lMap;
-
-    /// Mapping iso numeric code      <-> iso alpha string code
-    ByteString   isoArray[MAX_LANGUAGES];
-
     static void UnQuotData( String &rString );
     static void UnQuotTags( String &rString );
-
-    XMLUtil();
-    XMLUtil(const XMLUtil&);
-
 };
 
 
