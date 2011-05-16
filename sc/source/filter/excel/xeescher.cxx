@@ -196,8 +196,8 @@ static void lcl_GetFromTo( const XclExpRoot& rRoot, const Rectangle &aRect, sal_
             }
             if( r.Left() > aRect.Left() && r.Top() > aRect.Top() )
             {
-                aFrom = Rectangle( nCol-1, HMM2XL( nColOff ),
-                                   nRow-1, HMM2XL( nRowOff ) );
+                aFrom = Rectangle( nCol-1, static_cast<long>(HMM2XL( nColOff )),
+                                   nRow-1, static_cast<long>(HMM2XL( nRowOff )) );
                 bTo=true;
             }
         }
@@ -209,8 +209,8 @@ static void lcl_GetFromTo( const XclExpRoot& rRoot, const Rectangle &aRect, sal_
                 nRow++;
             if( r.Right() >= aRect.Right() && r.Bottom() >= aRect.Bottom() )
             {
-                aTo = Rectangle( nCol, HMM2XL( aRect.Right() - r.Left() ),
-                                 nRow, HMM2XL( aRect.Bottom() - r.Top() ));
+                aTo = Rectangle( nCol, static_cast<long>(HMM2XL( aRect.Right() - r.Left() )),
+                                 nRow, static_cast<long>(HMM2XL( aRect.Bottom() - r.Top() )));
                 break;
             }
         }

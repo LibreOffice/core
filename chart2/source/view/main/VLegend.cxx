@@ -898,8 +898,8 @@ void VLegend::createShapes(
                     RelativeSize aRelativeSize;
                     if ((xLegendProp->getPropertyValue( C2U( "RelativeSize" )) >>= aRelativeSize))
                     {
-                        aLegendSize.Width = ::rtl::math::approxCeil( aRelativeSize.Primary * rPageSize.Width );
-                        aLegendSize.Height = ::rtl::math::approxCeil( aRelativeSize.Secondary * rPageSize.Height );
+                        aLegendSize.Width = static_cast<sal_Int32>(::rtl::math::approxCeil( aRelativeSize.Primary * rPageSize.Width ));
+                        aLegendSize.Height = static_cast<sal_Int32>(::rtl::math::approxCeil( aRelativeSize.Secondary * rPageSize.Height ));
                     }
                     else
                         eExpansion = ::com::sun::star::chart::ChartLegendExpansion_HIGH;

@@ -552,8 +552,8 @@ namespace
     Point lcl_calcAvailableDiff(ScDocument &rDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, const Point &aWantedDiff)
     {
         Point aAvailableDiff(aWantedDiff);
-        long nHeight = rDoc.GetRowHeight( nRow, nTab ) * HMM_PER_TWIPS;
-        long nWidth = rDoc.GetColWidth( nCol, nTab ) * HMM_PER_TWIPS;
+        long nHeight = static_cast<long>(rDoc.GetRowHeight( nRow, nTab ) * HMM_PER_TWIPS);
+        long nWidth  = static_cast<long>(rDoc.GetColWidth(  nCol, nTab ) * HMM_PER_TWIPS);
         if (aAvailableDiff.Y() > nHeight)
             aAvailableDiff.Y() = nHeight;
         if (aAvailableDiff.X() > nWidth)
@@ -565,8 +565,8 @@ namespace
     {
         rCalcPoly.setB2DPoint(nWhichPoint, basegfx::B2DPoint(rPos.X(), rPos.Y()));
         basegfx::B2DRange aRange(basegfx::tools::getRange(rCalcPoly));
-        return Rectangle(aRange.getMinX(), aRange.getMinY(),
-            aRange.getMaxX(), aRange.getMaxY());
+        return Rectangle(static_cast<long>(aRange.getMinX()), static_cast<long>(aRange.getMinY()),
+            static_cast<long>(aRange.getMaxX()), static_cast<long>(aRange.getMaxY()));
     }
 }
 

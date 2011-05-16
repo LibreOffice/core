@@ -846,8 +846,8 @@ size_t ScDPHorFieldControl::CalcNewFieldIndex(SCsCOL nDX, SCsROW nDY) const
     size_t nFldCount = GetFieldCount();
     SCsROW nRow = nSel % mnFieldBtnRowCount;
     SCsCOL nCol = nSel / mnFieldBtnRowCount;
-    SCsCOL nColUpper = ceil(
-        static_cast<double>(nFldCount) / static_cast<double>(mnFieldBtnRowCount)) - 1;
+    SCsCOL nColUpper = static_cast<SCsCOL>(ceil(
+        static_cast<double>(nFldCount) / static_cast<double>(mnFieldBtnRowCount)) - 1);
     SCsROW nRowUpper = mnFieldBtnRowCount - 1;
 
     nCol += nDX;
@@ -912,8 +912,8 @@ void ScDPHorFieldControl::ScrollToShowSelection()
 void ScDPHorFieldControl::ResetScrollBar()
 {
     long nOldMax = maScroll.GetRangeMax();
-    long nNewMax = ceil(
-        static_cast<double>(GetFieldCount()) / static_cast<double>(mnFieldBtnRowCount));
+    long nNewMax = static_cast<long>(ceil(
+        static_cast<double>(GetFieldCount()) / static_cast<double>(mnFieldBtnRowCount)));
 
     if (nOldMax != nNewMax)
     {
@@ -1281,7 +1281,7 @@ ScDPFieldType ScDPDataFieldControl::GetFieldType() const
 Size ScDPDataFieldControl::GetFieldSize() const
 {
     Size aWndSize = GetSizePixel();
-    long nFieldObjWidth = aWndSize.Width() / 2.0 - OUTER_MARGIN_HOR - DATA_FIELD_BTN_GAP/2;
+    long nFieldObjWidth = static_cast<long>(aWndSize.Width() / 2.0 - OUTER_MARGIN_HOR - DATA_FIELD_BTN_GAP/2);
     Size aFieldSize(nFieldObjWidth, FIELD_BTN_HEIGHT);
     return aFieldSize;
 }
