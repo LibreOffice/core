@@ -131,7 +131,7 @@ namespace utl
     public:
         // singleton impl-class
         class Impl;
-        static Impl const& data(); // the data related to the bootstrap.ini file
+        static const Impl& data(); // the data related to the bootstrap.ini file
     };
 //-----------------------------------------------------------------------------
 } // namespace utl

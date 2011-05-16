@@ -86,9 +86,21 @@ namespace utl
 // Implementation class: Bootstrap::Impl
 // ---------------------------------------------------------------------------------------
 
+    namespace
+    {
+        rtl::OUString makeImplName()
+        {
+            rtl::OUString uri;
+            rtl::Bootstrap::get(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BRAND_BASE_DIR")),
+                uri);
+            return uri + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/program/"BOOTSTRAP_DATA_NAME));
+        }
+    }
+
     class Bootstrap::Impl
     {
-        OUString const m_aImplName;
+        const OUString m_aImplName;
     public: // struct to cache the result of a path lookup
         struct PathData
         {
@@ -115,9 +127,7 @@ namespace utl
         Status status_;
 
     public: // construction and initialization
-        explicit
-        Impl(OUString const& _aImplName)
-        : m_aImplName(_aImplName)
+        Impl() : m_aImplName(makeImplName())
         {
             status_ = initialize();
         }
@@ -134,26 +144,16 @@ namespace utl
         bool initBaseInstallationData(rtl::Bootstrap& _rData);
         bool initUserInstallationData(rtl::Bootstrap& _rData);
     };
-// ---------------------------------------------------------------------------------------
-    static OUString getExecutableDirectory();
-// ---------------------------------------------------------------------------------------
 
     static Bootstrap::Impl* s_pData = NULL;
 
-    Bootstrap::Impl const& Bootstrap::data()
+    const Bootstrap::Impl& Bootstrap::data()
     {
-
         if (!s_pData)
         {
             using namespace osl;
             MutexGuard aGuard( Mutex::getGlobalMutex() );
-
-            // static Impl s_theData(getExecutableDirectory() + OUString(RTL_CONSTASCII_USTRINGPARAM("/"BOOTSTRAP_DATA_NAME)));
-            // s_pData = &s_theData;
-            rtl::OUString uri;
-            rtl::Bootstrap::get(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BRAND_BASE_DIR")), uri);
-            s_pData = new Impl(uri + OUString(RTL_CONSTASCII_USTRINGPARAM("/program/"BOOTSTRAP_DATA_NAME)));
+            s_pData = new Impl;
         }
         return *s_pData;
     }
