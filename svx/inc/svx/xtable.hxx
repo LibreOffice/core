@@ -316,7 +316,7 @@ public:
     virtual sal_Bool    CreateBitmapsForUI();
     virtual Bitmap* CreateBitmapForUI( long nIndex, sal_Bool bDelete = sal_True );
 
-    static XColorTable* GetStdColorTable();
+    static XColorTable& GetStdColorTable();
 };
 
 // -------------------

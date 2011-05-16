@@ -57,12 +57,6 @@ static char const aChckColor[]  = { 0x04, 0x00, 'S','O','C','L'};   // < 5.2
 static char const aChckColor0[] = { 0x04, 0x00, 'S','O','C','0'};   // = 5.2
 static char const aChckXML[]    = { '<', '?', 'x', 'm', 'l' };      // = 6.0
 
-// ------------------
-// class XColorTable
-// ------------------
-
-static XColorTable* pTable=0;
-
 /*************************************************************************
 |*
 |* XColorTable::XColorTable()
@@ -84,11 +78,10 @@ XColorTable::~XColorTable()
 {
 }
 
-XColorTable* XColorTable::GetStdColorTable()
+XColorTable& XColorTable::GetStdColorTable()
 {
-    if ( !pTable )
-        pTable = new XColorTable( SvtPathOptions().GetPalettePath() );
-    return pTable;
+    static XColorTable aTable(SvtPathOptions().GetPalettePath());
+    return aTable;
 }
 
 /************************************************************************/
