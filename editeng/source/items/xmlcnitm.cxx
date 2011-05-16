@@ -119,7 +119,7 @@ bool SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, sal
     }
     else
     {
-        SvXMLAttrContainerData* pNewImpl = new SvXMLAttrContainerData;
+        std::auto_ptr<SvXMLAttrContainerData> pNewImpl(new SvXMLAttrContainerData);
 
         try
         {
@@ -168,19 +168,12 @@ bool SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, sal
             }
 
             if( nAttr == nCount )
-            {
-                delete pImpl;
-                pImpl = pNewImpl;
-            }
+                pImpl = pNewImpl.release();
             else
-            {
-                delete pNewImpl;
                 return false;
-            }
         }
         catch(...)
         {
-            delete pNewImpl;
             return false;
         }
     }
