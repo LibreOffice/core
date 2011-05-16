@@ -166,6 +166,8 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
     struct sockaddr_un addr;
 
     sal_Char     name[PATH_MAX + 1];
+    size_t nNameLength = 0;
+    int bNameTooLong = 0;
     oslPipe  pPipe;
 
     if (access(PIPEDEFAULTPATH, R_OK|W_OK) == 0)
@@ -176,25 +178,40 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
     {
         strncpy(name, PIPEALTERNATEPATH, sizeof(name));
     }
+    name[sizeof(name) - 1] = '\0';  // ensure the string is NULL-terminated
+    nNameLength = strlen(name);
+    bNameTooLong = nNameLength > sizeof(name) - 2;
 
-
-    strncat(name, "/", sizeof(name));
-
-    if (Security)
+    if (!bNameTooLong)
     {
-        sal_Char Ident[256];
+        size_t nRealLength = 0;
 
-        Ident[0] = '\0';
+        strcat(name, "/");
+        ++nNameLength;
 
-        OSL_VERIFY(osl_psz_getUserIdent(Security, Ident, sizeof(Ident)));
+        if (Security)
+        {
+            sal_Char Ident[256];
 
-        snprintf(&name[strlen(name)], sizeof(name), SECPIPENAMEMASK, Ident, pszPipeName);
+            Ident[0] = '\0';
+
+            OSL_VERIFY(osl_psz_getUserIdent(Security, Ident, sizeof(Ident)));
+
+            nRealLength = snprintf(&name[nNameLength], sizeof(name) - nNameLength, SECPIPENAMEMASK, Ident, pszPipeName);
+        }
+        else
+        {
+            nRealLength = snprintf(&name[nNameLength], sizeof(name) - nNameLength, PIPENAMEMASK, pszPipeName);
+        }
+
+        bNameTooLong = nRealLength > sizeof(name) - nNameLength - 1;
     }
-    else
+
+    if (bNameTooLong)
     {
-        snprintf(&name[strlen(name)], sizeof(name), PIPENAMEMASK, pszPipeName);
+        OSL_TRACE("osl_createPipe: pipe name too long");
+        return NULL;
     }
-
 
     /* alloc memory */
     pPipe= __osl_createPipeImpl();
