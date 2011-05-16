@@ -205,10 +205,10 @@ void LwpSdwGroupLoaderV0102::BeginDrawObjects(std::vector <XFFrame*>* pDrawObjVe
             // placement: centered
             if (pMyFrameLayout->GetScaleCenter())
             {
-                Rectangle aBoundRect(left*m_aTransformData.fScaleX + fLeftMargin,
-                    top*m_aTransformData.fScaleY + fTopMargin,
-                    right * m_aTransformData.fScaleX,
-                    bottom * m_aTransformData.fScaleY);
+                Rectangle aBoundRect(static_cast<long>(left*m_aTransformData.fScaleX + fLeftMargin),
+                    static_cast<long>(top    * m_aTransformData.fScaleY + fTopMargin),
+                    static_cast<long>(right  * m_aTransformData.fScaleX),
+                    static_cast<long>(bottom * m_aTransformData.fScaleY));
                 Point aCenter = aBoundRect.Center();
 
                 double fNewCenterX = (double(left)/TWIPS_PER_CM + fFrameWidth/*-fOffsetX*/) / 2;

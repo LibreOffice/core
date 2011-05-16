@@ -191,7 +191,7 @@ bool FormControlHelper::createCheckbox(uno::Reference<text::XTextRange> xTextRan
             static ::rtl::OUString sCharHeight(RTL_CONSTASCII_USTRINGPARAM("CharHeight"));
             float fCheckBoxHeight = 0.0;
             xTextRangeProps->getPropertyValue(sCharHeight) >>= fCheckBoxHeight;
-            nCheckBoxHeight = floor(fCheckBoxHeight * 35.3);
+            nCheckBoxHeight = static_cast<sal_uInt32>(floor(fCheckBoxHeight * 35.3));
         }
         catch (beans::UnknownPropertyException & rException)
         {

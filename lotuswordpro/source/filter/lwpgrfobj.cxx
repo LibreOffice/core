@@ -316,11 +316,11 @@ void LwpGraphicObject::GetRect(sal_Int32& nLeft, sal_Int32& nTop, sal_Int32& nRi
                 double fHeight = 0;
                 GetGrafScaledSize(fWidth, fHeight);
 
-                sal_Int32 nWidth = fWidth * UNITS_PER_INCH /CM_PER_INCH;
-                sal_Int32 nHeight = fHeight * UNITS_PER_INCH /CM_PER_INCH;
+                sal_Int32 nWidth  = static_cast<sal_Int32>(fWidth  * UNITS_PER_INCH /CM_PER_INCH);
+                sal_Int32 nHeight = static_cast<sal_Int32>(fHeight * UNITS_PER_INCH /CM_PER_INCH);
 
-                nLeft = pLayout->GetMarginsValue(MARGIN_LEFT) * UNITS_PER_INCH /CM_PER_INCH;
-                nTop = pLayout->GetMarginsValue(MARGIN_TOP)* UNITS_PER_INCH /CM_PER_INCH;
+                nLeft = static_cast<sal_Int32>(pLayout->GetMarginsValue(MARGIN_LEFT) * UNITS_PER_INCH /CM_PER_INCH);
+                nTop  = static_cast<sal_Int32>(pLayout->GetMarginsValue(MARGIN_TOP)  * UNITS_PER_INCH /CM_PER_INCH);
                 nRight = nLeft+nWidth;
                 nBottom = nTop+nHeight;
             }
