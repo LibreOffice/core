@@ -2031,7 +2031,7 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                                         sal_uInt32 i;
 
                                         sal_Bool bCopied = sal_True;
-                                        for ( i = 0; i < aList.Count(); i++ )   // copy all entrys
+                                        for ( i = 0; i < aList.size(); i++ )    // copy all entrys
                                         {
                                             const SvStorageInfo& rInfo = aList[ i ];
                                             if ( !xSource->CopyTo( rInfo.GetName(), xMacros, rInfo.GetName() ) )

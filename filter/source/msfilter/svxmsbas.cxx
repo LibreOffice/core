@@ -159,9 +159,9 @@ bool SvxImportMSVBasic::ImportForms_Impl( VBA_Impl& rVBA, const String& rStorage
     std::vector<String> aUserForms;
     SvStorageInfoList aContents;
     xVBAStg->FillInfoList(&aContents);
-    for (sal_uInt16 nI = 0; nI < aContents.Count(); ++nI)
+    for (sal_uInt16 nI = 0; nI < aContents.size(); ++nI)
     {
-          SvStorageInfo& rInfo = aContents.GetObject(nI);
+          SvStorageInfo& rInfo = aContents[ nI ];
           if (!rInfo.IsStream() && rInfo.GetName() != rSubStorageName)
               aUserForms.push_back(rInfo.GetName());
     }
