@@ -1520,7 +1520,6 @@ char *name;
 int  ignore;
 {
    STRINGPTR   new_dir;
-   int         freedir=FALSE;
 
    DB_ENTER( "Push_dir" );
 
@@ -1528,12 +1527,9 @@ int  ignore;
    if( *dir == '\'' && dir[strlen(dir)-1] == '\'' ) {
       dir = DmStrDup(dir+1);
       dir[strlen(dir)-1]='\0';
-      freedir=TRUE;
    }
-   else if (strchr(dir,'$') != NIL(char)) {
+   else if (strchr(dir,'$') != NIL(char))
       dir = Expand(dir);
-      freedir=TRUE;
-   }
    else
       dir = DmStrDup(dir);
 
@@ -1541,7 +1537,7 @@ int  ignore;
       if( !ignore )
          Fatal( "Unable to change to directory `%s', target is [%s]",
             dir, name );
-      if (freedir) FREE(dir);
+      FREE(dir);
       DB_RETURN( 0 );
    }
 
@@ -1549,7 +1545,7 @@ int  ignore;
    if( Verbose & V_DIR_SET )
       printf( "%s:  Changed to directory [%s]\n", Pname, dir  );
 
-   if (freedir) FREE( dir );
+   FREE( dir );
    TALLOC( new_dir, 1, STRING );
    new_dir->st_next   = dir_stack;
    dir_stack          = new_dir;
