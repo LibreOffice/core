@@ -1044,6 +1044,7 @@ char *pat;
       cmp1 = DmStrPbrk(pfx,DirBrkStr);
       result = DmStrJoin(result,up,-1,TRUE);
    }
+   FREE(up);
 
    pat = DmStrSpn(pat,DirBrkStr);
    /* Append pat to result. */
