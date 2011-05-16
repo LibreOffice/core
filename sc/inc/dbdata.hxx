@@ -166,7 +166,7 @@ public:
     /**
      * Stores global named database ranges.
      */
-    class NamedDBs
+    class SC_DLLPUBLIC NamedDBs
     {
         friend class ScDBCollection;
 
