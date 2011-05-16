@@ -917,6 +917,7 @@ int eflag;
    puts("    -x   - export macro values to environment");
    puts("    -X   - ignore #! lines at start of makefile");
    }
+   FREE(fill);
 
    Quit(0);
 }
