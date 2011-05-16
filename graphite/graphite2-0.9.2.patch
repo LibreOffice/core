@@ -402,3 +402,52 @@ diff current src/List.h
    #ifdef GR2_EXPORTING
      #ifdef __GNUC__
        #define GR2_API    __attribute__((dllexport))
+diff -r b3a86877ec68 src/Pass.cpp
+--- misc/build/graphite2-0.9.2/src/Pass.cpp	Wed May 11 09:34:52 2011 +0700
++++ misc/build/graphite2-0.9.2/src/Pass.cpp	Mon May 16 13:54:00 2011 +0700
+@@ -513,6 +513,7 @@
+ bool Pass::testConstraint(const Rule &r, Machine & m) const
+ {
+     if (r.sort - r.preContext > (int)m.slotMap().size() - m.slotMap().context())    return false;
++    if (m.slotMap().context() - r.preContext < 0) return false;
+     if (!*r.constraint)                 return true;
+     assert(r.constraint->constraint());
+ 
+@@ -527,6 +528,7 @@
+     Machine::status_t status = Machine::finished;
+     for (int n = r.sort; n && map; --n, ++map)
+     {
++	if (!*map) continue;
+         const int32 ret = r.constraint->run(m, map, status);
+         if (!ret || status != Machine::finished)
+         {
+diff -r b3a86877ec68 src/Rule.h
+--- misc/build/graphite2-0.9.2/src/Rule.h	Wed May 11 09:34:52 2011 +0700
++++ misc/build/graphite2-0.9.2/src/Rule.h	Mon May 16 13:54:00 2011 +0700
+@@ -187,8 +187,9 @@
+   // Merge the new sorted rules list into the current sorted result set.
+   const RuleEntry * lre = begin(), * rre = state.rules;
+   RuleEntry * out = m_rules + (m_begin == m_rules)*MAX_RULES;    
++  const RuleEntry * lrend = out + MAX_RULES;
+   m_begin = out; 
+-  while (lre != end())
++  while (lre != end() && out != lrend)
+   {
+     if (*lre < *rre)      *out++ = *lre++;
+     else if (*rre < *lre) { *out++ = *rre++; }
+@@ -196,12 +197,12 @@
+ 
+     if (rre == state.rules_end) 
+     { 
+-      while (lre != end()) { *out++ = *lre++; }
++      while (lre != end() && out != lrend) { *out++ = *lre++; }
+       m_end = out;
+       return;
+     }
+   }
+-  while (rre != state.rules_end) { *out++ = *rre++; }
++  while (rre != state.rules_end && out != lrend) { *out++ = *rre++; }
+   m_end = out;
+ }
+ 
+
