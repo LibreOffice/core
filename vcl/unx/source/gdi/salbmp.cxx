@@ -792,7 +792,7 @@ bool X11SalBitmap::Create( const ::com::sun::star::uno::Reference< ::com::sun::s
 
                 mbGrey = bMask;
                 bool bSuccess = ImplCreateFromDrawable( pixmapHandle, 0, depth, 0, 0, (long) rSize.Width(), (long) rSize.Height() );
-                bool bFreePixmap;
+                bool bFreePixmap = false;
                 if( bSuccess && (args[0] >>= bFreePixmap) && bFreePixmap )
                     XFreePixmap( GetX11SalData()->GetDisplay()->GetDisplay(), pixmapHandle );
 
