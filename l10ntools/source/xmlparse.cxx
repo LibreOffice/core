@@ -188,7 +188,7 @@ int XMLParentNode::GetPosition( ByteString id ){
 }
 
 /*****************************************************************************/
-size_t XMLParentNode::RemoveChild( XMLElement *pRefElement )
+int XMLParentNode::RemoveChild( XMLElement *pRefElement )
 /*****************************************************************************/
 {
     XMLElement* a;

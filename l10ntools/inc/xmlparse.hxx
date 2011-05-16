@@ -176,7 +176,7 @@ public:
     );
 
     virtual int GetPosition( ByteString id );
-    size_t RemoveChild( XMLElement *pRefElement );
+    int RemoveChild( XMLElement *pRefElement );
     void RemoveAndDeleteAllChilds();
 
     /// returns a child element which matches the given one
