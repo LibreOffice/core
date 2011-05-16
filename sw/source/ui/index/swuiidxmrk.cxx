@@ -59,7 +59,7 @@
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <multmrk.hxx>
-#include <swundo.hxx>                   // fuer Undo-Ids
+#include <swundo.hxx>                   // for Undo-Ids
 #include <cmdid.h>
 #include <index.hrc>
 #include <idxmrk.hrc>
@@ -95,7 +95,7 @@ using namespace ::comphelper;
 using namespace ::com::sun::star;
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Dialog zum Einfuegen einer Verzeichnismarkierung
+     Description:   dialog to insert a directory selection
  --------------------------------------------------------------------*/
 SwIndexMarkDlg::SwIndexMarkDlg(Window *pParent,
                                sal_Bool bNewDlg,
@@ -227,13 +227,12 @@ SwIndexMarkDlg::SwIndexMarkDlg(Window *pParent,
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Controls neu initialisieren mit der aktuellen
-                    Markierung
+     Description: Newly initialise controls with the new selection
  --------------------------------------------------------------------*/
 void SwIndexMarkDlg::InitControls()
 {
     OSL_ENSURE(pSh && pTOXMgr, "no shell?");
-    // Inhalts-Verzeichnis
+    // contents index
     const SwTOXType* pType = pTOXMgr->GetTOXType(TOX_CONTENT, 0);
     OSL_ENSURE(pType, "Kein Verzeichnistyp !!");
     String sTmpTypeSelection;
@@ -242,38 +241,38 @@ void SwIndexMarkDlg::InitControls()
     aTypeDCB.Clear();
     aTypeDCB.InsertEntry(pType->GetTypeName());
 
-    // Stichwort-Verzeichnis
+    // keyword index
     pType = pTOXMgr->GetTOXType(TOX_INDEX, 0);
     OSL_ENSURE(pType, "Kein Verzeichnistyp !!");
     aTypeDCB.InsertEntry(pType->GetTypeName());
 
-    // Benutzerverzeichnisse
+    // user index
     sal_uInt16 nCount = pSh->GetTOXTypeCount(TOX_USER);
     sal_uInt16 i;
     for( i = 0; i < nCount; ++i )
         aTypeDCB.InsertEntry( pSh->GetTOXType(TOX_USER, i)->GetTypeName() );
 
-    // KeyWords Primary einlesen
+    // read keywords primary
     SvStringsSort aArr;
     nCount = pSh->GetTOIKeys( TOI_PRIMARY, aArr );
     for(i=0; i < nCount; ++i)
         aKeyDCB.InsertEntry( *aArr[ i ] );
 
-    // KeyWords Secondary einlesen
+    // read keywords secondary
     nCount = pSh->GetTOIKeys( TOI_SECONDARY, aArr );
     for(i=0; i < nCount; ++i)
         aKey2DCB.InsertEntry( *aArr[ i ] );
 
     UpdateLanguageDependenciesForPhoneticReading();
 
-    // Aktueller Eintrag
+    // current entry
     const SwTOXMark* pMark = pTOXMgr->GetCurTOXMark();
     if( pMark && !bNewMark)
     {
         // Controls-Handling
 
-        // nur wenn mehr als eins vorhanden
-        // wenn gleich landet es auf dem gleichen Eintrag
+        // onyl if there are more than one
+        // if equal it lands at the same entry
         pSh->SttCrsrMove();
 
         const SwTOXMark* pMoveMark;
@@ -317,7 +316,7 @@ void SwIndexMarkDlg::InitControls()
         UpdateDialog();
     }
     else
-    {   // aktuelle Selektion (1.Element) anzeigen  ????
+    {   // display current selection (first element) ????
         sal_uInt16 nCnt = pSh->GetCrsrCnt();
         if (nCnt < 2)
         {
@@ -325,8 +324,8 @@ void SwIndexMarkDlg::InitControls()
             aOrgStr = pSh->GetView().GetSelectionTextParam(sal_True, sal_False);
             aEntryED.SetText(aOrgStr);
 
-            //alle gleichen Eintraege aufzunehmen darf nur im Body und auch da nur
-            //bei vorhandener einfacher Selektion erlaubt werden
+            //to include all equal entries may only be allowed in the body and even there
+            //only when a simple selection exists
             const sal_uInt16 nFrmType = pSh->GetFrmType(0,sal_True);
             aApplyToAllCB.Show();
             aSearchCaseSensitiveCB.Show();
@@ -336,7 +335,7 @@ void SwIndexMarkDlg::InitControls()
             SearchTypeHdl(&aApplyToAllCB);
         }
 
-        // Verzeichnistyp ist default
+        // index type is default
         if( sTmpTypeSelection.Len() &&
             LISTBOX_ENTRY_NOTFOUND != aTypeDCB.GetEntryPos( sTmpTypeSelection ) )
             aTypeDCB.SelectEntry(sTmpTypeSelection);
@@ -408,7 +407,7 @@ String  SwIndexMarkDlg::GetDefaultPhoneticReading( const String& rText )
  --------------------------------------------------*/
 void    SwIndexMarkDlg::Activate()
 {
-    // aktuelle Selektion (1.Element) anzeigen  ????
+    // display current selection (first element) ????
     if(bNewMark)
     {
         sal_uInt16 nCnt = pSh->GetCrsrCnt();
@@ -418,8 +417,8 @@ void    SwIndexMarkDlg::Activate()
             aOrgStr = pSh->GetView().GetSelectionTextParam(sal_True, sal_False);
             aEntryED.SetText(aOrgStr);
 
-            //alle gleichen Eintraege aufzunehmen darf nur im Body und auch da nur
-            //bei vorhandener einfacher Selektion erlaubt werden
+            //to include all equal entries may only be allowed in the body and even there
+            //only when a simple selection exists
             const sal_uInt16 nFrmType = pSh->GetFrmType(0,sal_True);
             aApplyToAllCB.Show();
             aSearchCaseSensitiveCB.Show();
@@ -433,7 +432,7 @@ void    SwIndexMarkDlg::Activate()
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Ok-Button auswerten
+     Description:   evaluate Ok-Button
  --------------------------------------------------------------------*/
 void SwIndexMarkDlg::Apply()
 {
@@ -443,7 +442,7 @@ void SwIndexMarkDlg::Apply()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Aenderungen uebernehmen
+    Description: apply changes
  --------------------------------------------------------------------*/
 void SwIndexMarkDlg::InsertUpdate()
 {
@@ -482,7 +481,7 @@ void SwIndexMarkDlg::InsertUpdate()
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Marke einfuegen
+     Description:   insert mark
  --------------------------------------------------------------------*/
 static void lcl_SelectSameStrings(SwWrtShell& rSh, sal_Bool bWordOnly, sal_Bool bCaseSensitive)
 {
@@ -520,7 +519,7 @@ void SwIndexMarkDlg::InsertMark()
     switch(nPos)
     {
         case POS_CONTENT : break;
-        case POS_INDEX:     // Stichwortverzeichnismarke
+        case POS_INDEX:     // keyword index mark
         {
             UpdateKeyBoxes();
             String  aPrim(aKeyDCB.GetText());
@@ -533,7 +532,7 @@ void SwIndexMarkDlg::InsertMark()
             aDesc.SetPhoneticReadingOfSecKey(aPhoneticED2.GetText());
         }
         break;
-        default:            // Userdefinedverz.-Marke
+        default:            // Userdefined index mark
         {
             String aName(aTypeDCB.GetSelectEntry());
             aDesc.SetTOUName(aName);
@@ -546,8 +545,8 @@ void SwIndexMarkDlg::InsertMark()
     sal_Bool bCaseSensitive = aSearchCaseSensitiveCB.IsChecked();
 
     pSh->StartAllAction();
-    // hier muessen alle gleichen Strings selektiert werden
-    // damit der Eintrag auf alle gleichen Strings angewandt wird
+    // all equal strings have to be selected here so that the
+    // entry is apllied to all equal strings
     if(bApplyAll)
     {
         lcl_SelectSameStrings(*pSh, bWordOnly, bCaseSensitive);
@@ -562,7 +561,7 @@ void SwIndexMarkDlg::InsertMark()
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Marke Updaten
+     Description:   update mark
  --------------------------------------------------------------------*/
 void SwIndexMarkDlg::UpdateMark()
 {
@@ -604,7 +603,7 @@ void SwIndexMarkDlg::UpdateMark()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Neue Keys eintragen
+    Description: insert new keys
  --------------------------------------------------------------------*/
 void SwIndexMarkDlg::UpdateKeyBoxes()
 {
@@ -612,7 +611,7 @@ void SwIndexMarkDlg::UpdateKeyBoxes()
     sal_uInt16 nPos = aKeyDCB.GetEntryPos(aKey);
 
     if(nPos == LISTBOX_ENTRY_NOTFOUND && aKey.Len() > 0)
-    {   // neuen Key erzeugen
+    {   // create new key
         aKeyDCB.InsertEntry(aKey);
     }
 
@@ -620,7 +619,7 @@ void SwIndexMarkDlg::UpdateKeyBoxes()
     nPos = aKey2DCB.GetEntryPos(aKey);
 
     if(nPos == LISTBOX_ENTRY_NOTFOUND && aKey.Len() > 0)
-    {   // neuen Key erzeugen
+    {   // create new key
         aKey2DCB.InsertEntry(aKey);
     }
 }
@@ -714,13 +713,13 @@ IMPL_LINK( SwIndexMarkDlg, CloseHdl, Button *, EMPTYARG )
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung:  VerzeichnisTyp auswaehlen nur bei Einfuegen
+     Description:   select index type only when inserting
  --------------------------------------------------------------------*/
 IMPL_LINK( SwIndexMarkDlg, ModifyHdl, ListBox *, pBox )
 {
     if(&aTypeDCB == pBox)
     {
-        // Verzeichnistyp setzen
+        // set index type
         sal_uInt16 nPos = aTypeDCB.GetEntryPos(aTypeDCB.GetSelectEntry());
         sal_Bool bLevelEnable = sal_False,
              bKeyEnable   = sal_False,
@@ -845,7 +844,7 @@ IMPL_LINK( SwIndexMarkDlg, DelHdl, Button *, EMPTYARG )
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung: Dialoganzeige erneuern
+     Description: renew dialog view
  --------------------------------------------------------------------*/
 void SwIndexMarkDlg::UpdateDialog()
 {
@@ -860,7 +859,7 @@ void SwIndexMarkDlg::UpdateDialog()
     aOrgStr = pMark->GetText();
     aEntryED.SetText(aOrgStr);
 
-    // Verzeichnistyp setzen
+    // set index type
     sal_Bool bLevelEnable = sal_True,
          bKeyEnable   = sal_False,
          bKey2Enable  = sal_False,
@@ -904,10 +903,10 @@ void SwIndexMarkDlg::UpdateDialog()
     aPhoneticFT2.Enable(bKeyEnable&&bKey2HasText&&bIsPhoneticReadingEnabled);
     aPhoneticED2.Enable(bKeyEnable&&bKey2HasText&&bIsPhoneticReadingEnabled);
 
-    // Verzeichnis-Typ setzen
+    // set index type
     aTypeDCB.SelectEntry(pMark->GetTOXType()->GetTypeName());
 
-    // Next - Prev - Buttons setzen
+    // set Next - Prev - Buttons
     pSh->SttCrsrMove();
     if( aPrevBT.IsVisible() )
     {
@@ -969,7 +968,7 @@ IMPL_LINK( SwIndexMarkDlg, PhoneticEDModifyHdl, Edit *, pEdit )
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung: Enable Disable des 2. Schluessels
+     Description: Enable Disable of the 2nd key
  --------------------------------------------------------------------*/
 IMPL_LINK( SwIndexMarkDlg, KeyDCBModifyHdl, ComboBox *, pBox )
 {
@@ -1027,7 +1026,7 @@ IMPL_LINK( SwIndexMarkDlg, KeyDCBModifyHdl, ComboBox *, pBox )
 }
 
 /*--------------------------------------------------
- dtor ueberladen
+ overload dtor
 --------------------------------------------------*/
 SwIndexMarkDlg::~SwIndexMarkDlg()
 {

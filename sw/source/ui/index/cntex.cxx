@@ -353,7 +353,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                             case TOKEN_ENTRY_NO     :
                                 sTokenType.AssignAscii(RTL_CONSTASCII_STRINGPARAM(
                                                         "TokenEntryNumber"));
-                                // fuer Inhaltsverzeichnis Numerierung
+                                // numbering for content index
                             break;
                             case TOKEN_ENTRY_TEXT   :
                             case TOKEN_ENTRY        :

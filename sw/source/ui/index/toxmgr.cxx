@@ -41,7 +41,7 @@
 #include <globals.hrc>
 
 /*--------------------------------------------------------------------
-    Beschreibung: Handhabung der Verzeichnisse durch TOXMgr
+    Description: handle indexes with TOXMgr
  --------------------------------------------------------------------*/
 
 
@@ -53,7 +53,7 @@ SwTOXMgr::SwTOXMgr(SwWrtShell* pShell):
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Aktuelle TOXMarks behandeln
+    Description: handle current TOXMarks
  --------------------------------------------------------------------*/
 
 
@@ -83,7 +83,7 @@ void SwTOXMgr::DeleteTOXMark()
         pSh->DeleteTOXMark( pCurTOXMark );
         pSh->SetModified();
     }
-    // zur naechsten wandern
+    // go to next one
     pCurTOXMark = pNext;
 }
 
@@ -147,7 +147,7 @@ void    SwTOXMgr::InsertTOXMark(const SwTOXMarkDescription& rDesc)
     pSh->EndAllAction();
 }
 /*--------------------------------------------------------------------
-    Beschreibung: Update eines TOXMarks
+    Description: Update of TOXMarks
  --------------------------------------------------------------------*/
 
 
@@ -198,8 +198,8 @@ void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
 
     if(rDesc.GetAltStr())
     {
-        // JP 26.08.96: Bug 30344 - entweder der Text aus dem Doc oder
-        //                          ein Alternativ-Text, beides gibts nicht!
+        // JP 26.08.96: Bug 30344 - either the text of a Doc or an alternative test,
+        //                          not both!
         sal_Bool bReplace = pCurTOXMark->IsAlternativeText();
         if( bReplace )
             pCurTOXMark->SetAlternativeText( *rDesc.GetAltStr() );
@@ -215,7 +215,7 @@ void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
     }
     pSh->SetModified();
     pSh->EndAllAction();
-    // Bug 36207 pCurTOXMark zeigt hier in den Wald!
+    // Bug 36207 pCurTOXMark points nowhere here!
     if(!pCurTOXMark)
     {
         pSh->Left(CRSR_SKIP_CHARS, sal_False, 1, sal_False );
@@ -226,7 +226,7 @@ void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
 
 
 /*--------------------------------------------------------------------
-    Beschreibung:   UserTypeID ermitteln
+    Description:    determine UserTypeID
  --------------------------------------------------------------------*/
 
 
@@ -245,7 +245,7 @@ sal_uInt16 SwTOXMgr::GetUserTypeID(const String& rStr)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Traveling zwischen den TOXMarks
+    Description: traveling between TOXMarks
  --------------------------------------------------------------------*/
 
 
@@ -271,7 +271,7 @@ void SwTOXMgr::PrevTOXMark(sal_Bool bSame)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Stichwortverzeichnis einfuegen
+    Description: insert keyword index
  --------------------------------------------------------------------*/
 const SwTOXBase* SwTOXMgr::GetCurTOX()
 {
@@ -430,8 +430,8 @@ sal_Bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
 
     if(!pCurTOX || (ppBase && !(*ppBase)) )
     {
-        // wird ppBase uebergeben, dann wird das TOXBase hier nur erzeugt
-        // und dann ueber den Dialog in ein Globaldokument eingefuegt
+        // when ppBase is passed over, TOXBase is only created here
+        // and then inserted in a global document by the dialog
         if(ppBase)
             (*ppBase) = pNewTOX;
         else

@@ -100,8 +100,8 @@ using ::rtl::OUString;
 using namespace ::sfx2;
 #include <svtools/editbrowsebox.hxx>
 
-static const sal_Unicode aDeliStart = '['; //fuer die form
-static const sal_Unicode aDeliEnd    = ']'; //fuer die form
+static const sal_Unicode aDeliStart = '['; // for the form
+static const sal_Unicode aDeliEnd    = ']'; // for the form
 
 #define POS_GRF     0
 #define POS_OLE     1
@@ -3751,13 +3751,13 @@ void    SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
     aParaLayLB.Clear();
     aLevelLB.Clear();
 
-    // kein Hyperlink fuer Benutzerverzeichnisse
+    // not hyperlink for user directories
 
     sal_uInt16 i, nSize = m_pCurrentForm->GetFormMax();
 
-    // form-Pattern anzeigen ohne Titel
+    // display form pattern without title
 
-    //1. TemplateEntry  anzeigen
+    // display 1st TemplateEntry
     String aStr( SW_RES( STR_TITLE ));
     if( m_pCurrentForm->GetTemplate( 0 ).Len() )
     {
@@ -3791,7 +3791,7 @@ void    SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
         aLevelLB.InsertEntry( aCpy );
     }
 
-    // Templates initialisieren
+    // initialise templates
     const SwTxtFmtColl *pColl;
     SwWrtShell& rSh = ((SwMultiTOXTabDialog*)GetTabDialog())->GetWrtShell();
     const sal_uInt16 nSz = rSh.GetTxtFmtCollCount();
@@ -3800,7 +3800,7 @@ void    SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
         if( !(pColl = &rSh.GetTxtFmtColl( i ))->IsDefault() )
             aParaLayLB.InsertEntry( pColl->GetName() );
 
-    // Pool-Collections abfragen und fuer das Verzeichnis setzen
+    // query pool collections and set them for the directory
     for( i = 0; i < m_pCurrentForm->GetFormMax(); ++i )
     {
         aStr = m_pCurrentForm->GetTemplate( i );
@@ -3841,7 +3841,7 @@ IMPL_LINK( SwTOXStylesTabPage, EditStyleHdl, Button *, pBtn )
     return 0;
 }
 /*--------------------------------------------------------------------
-     Beschreibung: Vorlagen zuweisen
+     Description: allocate templates
  --------------------------------------------------------------------*/
 IMPL_LINK( SwTOXStylesTabPage, AssignHdl, Button *, EMPTYARG )
 {
@@ -3900,7 +3900,7 @@ IMPL_LINK_INLINE_START( SwTOXStylesTabPage, DoubleClickHdl, Button *, EMPTYARG )
 IMPL_LINK_INLINE_END( SwTOXStylesTabPage, DoubleClickHdl, Button *, EMPTYARG )
 
 /*--------------------------------------------------------------------
-     Beschreibung: nur wenn selektiert enable
+     Description: enable only when selected
  --------------------------------------------------------------------*/
 IMPL_LINK( SwTOXStylesTabPage, EnableSelectHdl, ListBox *, EMPTYARG )
 {
@@ -3966,9 +3966,9 @@ SwEntryBrowseBox::SwEntryBrowseBox(Window* pParent, const ResId& rId,
     xCheckController = new ::svt::CheckBoxCellController(&aCellCheckBox);
 
     //////////////////////////////////////////////////////////////////////
-    // HACK: BrowseBox invalidiert nicht ihre Childs, wie es eigentlich sein sollte.
-    // Deshalb wird WB_CLIPCHILDREN zurueckgesetzt, wodurch das Invalidieren
-    // der Childs erzwungen wird.
+    // HACK: BrowseBox doesn't invalidate its childs, how it should be.
+    // That's why WB_CLIPCHILDREN is reset in order to enforce the
+    // childs' invalidation
     WinBits aStyle = GetStyle();
     if( aStyle & WB_CLIPCHILDREN )
     {

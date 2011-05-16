@@ -55,7 +55,7 @@
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <multmrk.hxx>
-#include <swundo.hxx>                   // fuer Undo-Ids
+#include <swundo.hxx>                   // for Undo-Ids
 #include <cmdid.h>
 #include <index.hrc>
 #include <idxmrk.hrc>
