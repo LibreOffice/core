@@ -861,8 +861,6 @@ extern "C" { static void s_createComponentContext_v(va_list * pParam)
         xContext = xDelegate;
     }
 
-    delete[] pEntries;
-
     *ppContext = pTarget2curr->mapInterface(xContext.get(), ::getCppuType(&xContext));
 }}
 
