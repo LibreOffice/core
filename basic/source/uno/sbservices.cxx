@@ -50,6 +50,7 @@ namespace basic
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
             if ( !bInitialized )
             {
+                static BasicModuleClient aClient;
                 createRegistryInfo_SfxDialogLibraryContainer();
                 createRegistryInfo_SfxScriptLibraryContainer();
             }
