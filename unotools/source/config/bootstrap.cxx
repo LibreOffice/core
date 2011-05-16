@@ -129,10 +129,10 @@ namespace utl
     public: // construction and initialization
         Impl() : m_aImplName(makeImplName())
         {
-            status_ = initialize();
+            initialize();
         }
 
-        Status initialize();
+        void initialize();
 
         // access helper
         OUString getBootstrapValue(OUString const& _sName, OUString const& _sDefault) const;
@@ -841,19 +841,17 @@ bool Bootstrap::Impl::initUserInstallationData(rtl::Bootstrap& _rData)
 }
 // ---------------------------------------------------------------------------------------
 
-Bootstrap::Status Bootstrap::Impl::initialize()
+void Bootstrap::Impl::initialize()
 {
-    Bootstrap::Status result;
-
     rtl::Bootstrap aData( m_aImplName );
 
     if (!initBaseInstallationData(aData))
     {
-        result = INVALID_BASE_INSTALL;
+        status_ = INVALID_BASE_INSTALL;
     }
     else if (!initUserInstallationData(aData))
     {
-        result = INVALID_USER_INSTALL;
+        status_ = INVALID_USER_INSTALL;
 
         if (aUserInstall_.status >= DATA_MISSING)
         {
@@ -861,12 +859,12 @@ Bootstrap::Status Bootstrap::Impl::initialize()
             {
             case PATH_EXISTS:
             case PATH_VALID:
-                result = MISSING_USER_INSTALL;
+                status_ = MISSING_USER_INSTALL;
                 break;
 
             case DATA_INVALID:
             case DATA_MISSING:
-                result = INVALID_BASE_INSTALL;
+                status_ = INVALID_BASE_INSTALL;
                 break;
             default:
                 break;
@@ -875,9 +873,8 @@ Bootstrap::Status Bootstrap::Impl::initialize()
     }
     else
     {
-        result = DATA_OK;
+        status_ = DATA_OK;
     }
-    return result;
 }
 // ---------------------------------------------------------------------------------------
 
