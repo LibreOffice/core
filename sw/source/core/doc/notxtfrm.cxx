@@ -818,6 +818,12 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
 
     if( pGrfNd )
     {
+        // Fix for bug #33781
+        if (pShell->Imp()->GetDrawView()->IsAntiAliasing())
+        {
+            pOut->SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
+        }
+
         sal_Bool bForceSwap = sal_False, bContinue = sal_True;
         GraphicObject& rGrfObj = pGrfNd->GetGrfObj();
 
