@@ -215,6 +215,7 @@ SwUndoInsert::~SwUndoInsert()
     else if( pTxt )     // der eingefuegte Text
         delete pTxt;
     delete pRedlData;
+    delete pUndoTxt;
 }
 
 
