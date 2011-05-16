@@ -38,6 +38,7 @@
 #include <sot/factory.hxx>
 #include <tools/stream.hxx>
 #include <tools/errcode.hxx>
+#include "sot/storinfo.hxx"
 #include "sot/sotdllapi.h"
 
 #define STORAGE_FAILIFTHERE     0x02
@@ -108,7 +109,6 @@ namespace ucbhelper
     class Content;
 }
 
-class  SvStorageInfoList;
 class  BaseStorage;
 class  UNOStorageHolder;
 class SOT_DLLPUBLIC SotStorage : virtual public SotObject

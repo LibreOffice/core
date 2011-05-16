@@ -34,21 +34,6 @@
 #include <sot/exchange.hxx>
 
 
-/************** class SvStorageInfoList **********************************
-*************************************************************************/
-PRV_SV_IMPL_OWNER_LIST(SvStorageInfoList,SvStorageInfo)
-
-const SvStorageInfo * SvStorageInfoList::Get( const String & rEleName )
-{
-    for( sal_uLong i = 0; i < Count(); i++ )
-    {
-        const SvStorageInfo & rType = GetObject( i );
-        if( rType.GetName() == rEleName )
-            return &rType;
-    }
-    return NULL;
-}
-
 /************** class SvStorageInfo **************************************
 *************************************************************************/
 sal_uLong ReadClipboardFormat( SvStream & rStm )

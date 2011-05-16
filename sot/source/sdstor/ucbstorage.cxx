@@ -2674,7 +2674,7 @@ void UCBStorage::FillInfoList( SvStorageInfoList* pList ) const
             if ( pElement->m_xStream.Is() )
                 nSize = pElement->m_xStream->GetSize();
             SvStorageInfo aInfo( pElement->m_aName, nSize, pElement->m_bIsStorage );
-            pList->Append( aInfo );
+            pList->push_back( aInfo );
         }
     }
 }

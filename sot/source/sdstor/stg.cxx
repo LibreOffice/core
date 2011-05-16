@@ -549,7 +549,7 @@ void Storage::FillInfoList( SvStorageInfoList* pList ) const
             if( !p->bInvalid )
             {
                 SvStorageInfo aInfo( *p );
-                pList->Append( aInfo );
+                pList->push_back( aInfo );
             }
             p = aIter.Next();
         }
@@ -806,9 +806,9 @@ sal_Bool Storage::CopyTo( BaseStorage* pDest ) const
     SvStorageInfoList aList;
     FillInfoList( &aList );
     sal_Bool bRes = sal_True;
-    for( sal_uInt16 i = 0; i < aList.Count() && bRes; i++ )
+    for( size_t i = 0; i < aList.size() && bRes; i++ )
     {
-        SvStorageInfo& rInfo = aList.GetObject( i );
+        SvStorageInfo& rInfo = aList[ i ];
         bRes = pThis->CopyTo( rInfo.GetName(), pDest, rInfo.GetName() );
     }
     if( !bRes )

@@ -37,7 +37,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include "unostorageholder.hxx"
-#include <sot/storinfo.hxx>
+#include "sot/storinfo.hxx"
 
 
 using namespace ::com::sun::star;
@@ -140,7 +140,7 @@ void SAL_CALL UNOStorageHolder::commited( const lang::EventObject& /*aEvent*/ )
 
     SvStorageInfoList aSubStorInfoList;
     m_rSotStorage->FillInfoList( &aSubStorInfoList );
-    for ( sal_uInt32 nInd = 0; nInd < aSubStorInfoList.Count(); nInd++ )
+    for ( sal_uInt32 nInd = 0; nInd < aSubStorInfoList.size(); nInd++ )
     {
         m_rSotStorage->Remove( aSubStorInfoList[nInd].GetName() );
         if ( m_rSotStorage->GetError() )

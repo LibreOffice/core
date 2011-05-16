@@ -31,7 +31,7 @@
 
 #include <tools/pstm.hxx>
 #include <tools/globname.hxx>
-#include <tools/ownlist.hxx>
+#include <vector>
 #include "sot/sotdllapi.h"
 
 class StgDirEntry;
@@ -40,8 +40,8 @@ class SvStorageInfo
 friend class SvStorage;
     String          aName;
     SvGlobalName    aClassName;
-    sal_uLong           nSize;
-    sal_Bool            bStream:1,
+    sal_uLong       nSize;
+    sal_Bool        bStream:1,
                     bStorage:1;
 
                             SvStorageInfo(){}; // Fuer SvStorage
@@ -61,11 +61,7 @@ public:
     sal_uLong                   GetSize() const { return nSize;      }
 };
 
-class SOT_DLLPUBLIC SvStorageInfoList
-{
-    PRV_SV_DECL_OWNER_LIST(SvStorageInfoList,SvStorageInfo)
-    const SvStorageInfo * Get( const String & rName );
-};
+typedef ::std::vector< SvStorageInfo > SvStorageInfoList;
 
 SOT_DLLPUBLIC sal_uLong ReadClipboardFormat( SvStream & rStm );
 SOT_DLLPUBLIC void WriteClipboardFormat( SvStream & rStm, sal_uLong nFormat );

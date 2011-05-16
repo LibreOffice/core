@@ -42,9 +42,11 @@
 #include <tools/rtti.hxx>
 #include <tools/stream.hxx>
 #include <tools/globname.hxx>
+#include "sot/storinfo.hxx"
 #include "sot/sotdllapi.h"
 
 #include <list>
+
 class UNOStorageHolder;
 typedef ::std::list< UNOStorageHolder* > UNOStorageHolderList;
 
@@ -99,7 +101,6 @@ public:
     virtual sal_Bool    Equals( const BaseStorageStream& rStream ) const = 0;
 };
 
-class SvStorageInfoList;
 class BaseStorage : public StorageBase
 {
 public:

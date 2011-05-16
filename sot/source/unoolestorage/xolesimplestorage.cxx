@@ -566,8 +566,8 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OLESimpleStorage::getElementNames()
         throw uno::RuntimeException(); // TODO:
     }
 
-    uno::Sequence< ::rtl::OUString > aSeq( aList.Count() );
-    for ( sal_uInt32 nInd = 0; nInd < aList.Count(); nInd++ )
+    uno::Sequence< ::rtl::OUString > aSeq( aList.size() );
+    for ( sal_uInt32 nInd = 0; nInd < aList.size(); nInd++ )
         aSeq[nInd] = aList[nInd].GetName();
 
     return aSeq;
@@ -629,7 +629,7 @@ sal_Bool SAL_CALL OLESimpleStorage::hasElements()
         throw uno::RuntimeException(); // TODO:
     }
 
-    return ( aList.Count() != 0 );
+    return ( aList.size() != 0 );
 }
 
 //____________________________________________________________________________________________________
