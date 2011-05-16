@@ -54,6 +54,7 @@
 #include <svtools/imagemgr.hrc>
 #include <svtools/svtdata.hxx>
 #include <osl/mutex.hxx>
+#include <boost/scoped_ptr.hpp>
 
 // globals *******************************************************************
 
@@ -537,36 +538,34 @@ static Image GetImageFromList_Impl( sal_uInt16 nImageId, sal_Bool bBig )
 
     ImageList* pList = NULL;
 
-    static ImageList* _pSmallImageList = NULL;
-    static ImageList* _pBigImageList = NULL;
+    static boost::scoped_ptr<ImageList> xSmallImageList;
+    static boost::scoped_ptr<ImageList> xBigImageList;
     static sal_uLong nStyle = Application::GetSettings().GetStyleSettings().GetSymbolsStyle();
 
     // If the style has been changed, throw away our cache of the older images
     if ( nStyle != Application::GetSettings().GetStyleSettings().GetSymbolsStyle() )
     {
-        delete _pSmallImageList, _pSmallImageList = NULL;
-        delete _pBigImageList, _pBigImageList = NULL;
+        xSmallImageList.reset();
+        xBigImageList.reset();
         nStyle = Application::GetSettings().GetStyleSettings().GetSymbolsStyle();
     }
 
     if ( bBig )
     {
-        if ( !_pBigImageList )
-            _pBigImageList = new ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_BIG ) );
-        pList = _pBigImageList;
+        if ( !xBigImageList )
+            xBigImageList.reset(new ImageList(SvtResId(RID_SVTOOLS_IMAGELIST_BIG)));
+        pList = xBigImageList.get();
     }
     else
     {
-        if ( !_pSmallImageList )
-            _pSmallImageList = new ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_SMALL ) );
-        pList = _pSmallImageList;
+        if ( !xSmallImageList )
+            xSmallImageList.reset(new ImageList(SvtResId(RID_SVTOOLS_IMAGELIST_SMALL)));
+        pList = xSmallImageList.get();
     }
 
     if ( pList->HasImageAtPos( nImageId ) )
         return pList->GetImage( nImageId );
-    else
-        return Image();
-//      return GetOfficeImageFromList_Impl( nImageId, bBig );
+    return Image();
 }
 
 String SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder )
