@@ -605,6 +605,7 @@ void SAL_CALL SpellChecker::dispose()
         bDisposing = sal_True;
         EventObject aEvtObj( (XSpellChecker *) this );
         aEvtListeners.disposeAndClear( aEvtObj );
+        xPropHelper.clear();
     }
 }
 
