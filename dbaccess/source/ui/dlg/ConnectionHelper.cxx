@@ -70,9 +70,6 @@
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <sfx2/docfilt.hxx>
-#if !defined(WINDOWS_VISTA_PSDK) && defined(WNT)
-#define _ADO_DATALINK_BROWSE_
-#endif
 
 #ifdef _ADO_DATALINK_BROWSE_
 #include <vcl/sysdata.hxx>
