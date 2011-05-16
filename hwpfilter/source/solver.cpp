@@ -43,6 +43,7 @@ double** mgcLinearSystemD::NewMatrix (int N)
     {
       for (int i = 0; i < row; i++)
     delete[] A[i];
+      delete[] A;
       return 0;
     }
     for (int col = 0; col < N; col++)
