@@ -70,9 +70,19 @@ $ENV{LOCAL_COMMON_OUT} = $ENV{OUT};
 # the installer to use the English localization of the file instead.
 $ENV{DEFAULT_TO_ENGLISH_FOR_PACKING} = 1;
 
+my @larr;
 $langs=$ENV{WITH_LANG};
 $langs='en-US' if $langs eq '';
-my @larr = grep { $_ ne '' } split(/ /, $langs);
+if ($langs eq 'ALL') {
+    opendir(DIR,$ENV{L10N_MODULE} . "/source");
+    @larr = readdir(DIR);
+    @larr = grep { $_ ne '.' } @larr;
+    @larr = grep { $_ ne '..' } @larr;
+    closedir(DIR);
+}
+else {
+    @larr = grep { $_ ne '' } split(/ /, $langs);
+}
 $langs = join (",", @larr);
 
 $destdir='';
