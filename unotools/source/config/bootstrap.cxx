@@ -41,6 +41,7 @@
 #include <osl/diagnose.h>
 // ---------------------------------------------------------------------------------------
 #include <rtl/bootstrap.hxx>
+#include <rtl/instance.hxx>
 #include <osl/process.h> // for osl_getExecutableFile
 #include "tools/getprocessworkingdir.hxx"
 
@@ -145,25 +146,19 @@ namespace utl
         bool initUserInstallationData(rtl::Bootstrap& _rData);
     };
 
-    static Bootstrap::Impl* s_pData = NULL;
+    namespace
+    {
+        class theImpl : public rtl::Static<Bootstrap::Impl, theImpl> {};
+    }
 
     const Bootstrap::Impl& Bootstrap::data()
     {
-        if (!s_pData)
-        {
-            using namespace osl;
-            MutexGuard aGuard( Mutex::getGlobalMutex() );
-            s_pData = new Impl;
-        }
-        return *s_pData;
+        return theImpl::get();
     }
 
     void Bootstrap::reloadData()
     {
-        if (s_pData != NULL) {
-            delete s_pData;
-            s_pData = NULL;
-        }
+        theImpl::get().initialize();
     }
 
 // ---------------------------------------------------------------------------------------
