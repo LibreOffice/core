@@ -553,7 +553,7 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
                 {
                     if ( j == nRawRunGlyphCount )
                     {
-                        nNewWidth = pNextPos->fX - pPos->fX;
+                        nNewWidth = static_cast<int>(pNextPos->fX - pPos->fX);
                         break;
                     }
 
@@ -566,7 +566,7 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
                     int nNextGlyphWidth = rNextGM.GetCharWidth();
                     if ( nNextGlyphWidth > 0 )
                     {
-                        nNewWidth = pNextPos->fX - pPos->fX;
+                        nNewWidth = static_cast<int>(pNextPos->fX - pPos->fX);
                         break;
                     }
                 }

@@ -319,25 +319,25 @@ bool BorderWidthImpl::operator== ( const BorderWidthImpl& r ) const
 
 long BorderWidthImpl::GetLine1( long nWidth ) const
 {
-    long result = m_nRate1;
+    long result = static_cast<long>(m_nRate1);
     if ( ( m_nFlags & CHANGE_LINE1 ) > 0 )
-        result = m_nRate1 * nWidth;
+        result = static_cast<long>(m_nRate1 * nWidth);
     return result;
 }
 
 long BorderWidthImpl::GetLine2( long nWidth ) const
 {
-    long result = m_nRate2;
+    long result = static_cast<long>(m_nRate2);
     if ( ( m_nFlags & CHANGE_LINE2 ) > 0 )
-        result = m_nRate2 * nWidth;
+        result = static_cast<long>(m_nRate2 * nWidth);
     return result;
 }
 
 long BorderWidthImpl::GetGap( long nWidth ) const
 {
-    long result = m_nRateGap;
+    long result = static_cast<long>(m_nRateGap);
     if ( ( m_nFlags & CHANGE_DIST ) > 0 )
-        result = m_nRateGap * nWidth;
+        result = static_cast<long>(m_nRateGap * nWidth);
 
     // Avoid having too small distances (less than 1pt)
     if ( result < 20 && m_nRate1 > 0 && m_nRate2 > 0 )

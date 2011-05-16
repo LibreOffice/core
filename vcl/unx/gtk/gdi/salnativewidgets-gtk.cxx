@@ -1056,7 +1056,7 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
 
             pango_font_metrics_unref( metrics );
 
-            arrow_extent = arrow_size * arrow_scaling;
+            arrow_extent = static_cast<gint>(arrow_size * arrow_scaling);
 
             rNativeContentRegion = Rectangle( Point( 0, 0 ),
                                               Size( arrow_extent, arrow_extent ));

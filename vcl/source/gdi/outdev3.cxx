@@ -6132,7 +6132,7 @@ void OutputDevice::forceFallbackFontToFit(SalLayout &rFallback, ImplFontEntry &r
         if (fScale < 1)
         {
             long nOrigHeight = rFontSelData.mnHeight;
-            rFontSelData.mnHeight *= fScale;
+            rFontSelData.mnHeight = static_cast<int>(static_cast<float>(rFontSelData.mnHeight) * fScale);
             rFallbackFont.mnSetFontFlags = mpGraphics->SetFont( &rFontSelData, nFallbackLevel );
             rFontSelData.mnHeight = nOrigHeight;
         }
