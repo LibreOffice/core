@@ -233,12 +233,14 @@ get_md5hash( rtl_uString *pText )
     rtl_uString *pResult = NULL;
     sal_Int32 nCapacity = 100;
 
-#if OSL_DEBUG_LEVEL > 0
-    fprintf (stderr, "Generate pipe md5 for '%s'\n", ustr_to_str (pText)->buffer);
-#endif
-
     if ( !pText )
         return NULL;
+
+#if OSL_DEBUG_LEVEL > 0
+    rtl_String *pOut = ustr_to_str( pText );
+    fprintf (stderr, "Generate pipe md5 for '%s'\n", pOut->buffer);
+    rtl_string_release( pOut );
+#endif
 
     unsigned char *pData = (unsigned char *)rtl_uString_getStr( pText );
     sal_uInt32   nSize = rtl_uString_getLength( pText ) * sizeof( sal_Unicode );
