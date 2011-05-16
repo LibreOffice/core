@@ -45,9 +45,9 @@ all:
 
 # --- Files --------------------------------------------------------
 .IF "$(ENABLE_GRAPHITE)"=="TRUE"
-TARFILE_NAME=graphite2-0.9.4
-TARFILE_MD5=1a5ae56d15e704a709010c5478fdf384
-PATCH_FILES= graphite2-0.9.4.patch \
+TARFILE_NAME=graphite2-0.9.2
+TARFILE_MD5=0625a7d661f899a8ce263fc8a9879108
+PATCH_FILES= graphite2-0.9.2.patch \
         graphite_make.patch
 
 ADDITIONAL_FILES= \
