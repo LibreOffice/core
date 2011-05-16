@@ -892,6 +892,7 @@ Reference< XComponentContext > SAL_CALL createComponentContext(
     void * mapped_delegate = curr2source.mapInterface(xDelegate.get(), ::getCppuType(&xDelegate));
     XComponentContext * pXComponentContext = NULL;
     source_env.invoke(s_createComponentContext_v, mapped_entries, nEntries, mapped_delegate, &pXComponentContext, &source2curr);
+    delete[] mapped_entries;
 
     return Reference<XComponentContext>(pXComponentContext, SAL_NO_ACQUIRE);
 }
