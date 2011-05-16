@@ -638,6 +638,7 @@ void SAL_CALL
                     xDic->removeDictionaryEventListener( xDicEvtLstnrHelper );
             }
         }
+        xDicEvtLstnrHelper.clear();
     }
 }
 
