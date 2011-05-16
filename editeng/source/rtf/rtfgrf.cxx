@@ -29,6 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_editeng.hxx"
 
+#include <boost/scoped_ptr.hpp>
+
 #include <osl/endian.h>
 #include <tools/cachestr.hxx>
 #include <vcl/graph.hxx>
@@ -274,7 +276,7 @@ sal_Bool SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
     SetSrcEncoding( RTL_TEXTENCODING_MS_1252 );
 
     const sal_Char* pFilterNm = 0;
-    SvCacheStream* pTmpFile = 0;
+    boost::scoped_ptr<SvCacheStream> pTmpFile;
 
     int nToken = 0;
     bool bValidBmp = true, bFirstTextToken = true;
@@ -326,7 +328,7 @@ sal_Bool SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
             {
                 rPicType.eStyle = SvxRTFPictureType::MAC_QUICKDRAW;
                 // Mac-Pict gets a empty header above
-                pTmpFile = new SvCacheStream;
+                pTmpFile.reset(new SvCacheStream);
                 ByteString aStr;
                 aStr.Fill( 512, '\0' );
                 pTmpFile->Write( aStr.GetBuffer(), aStr.Len() );
@@ -373,7 +375,7 @@ sal_Bool SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
                 }
 
                 rPicType.nType = nVal;
-                pTmpFile = new SvCacheStream;
+                pTmpFile.reset(new SvCacheStream);
             }
             break;
 
@@ -503,7 +505,6 @@ sal_Bool SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
             pTmpFile->Seek( STREAM_SEEK_TO_BEGIN );
             bValidBmp = 0 == pGF->ImportGraphic( rGrf, sTmpStr, *pTmpFile, nImportFilter, NULL, 0, pAPMHeader );
         }
-        delete pTmpFile;
     }
 
     if( !bValidBmp )
