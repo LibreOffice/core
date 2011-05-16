@@ -113,10 +113,10 @@ IMPL_LINK( SwFootNotePage, HeightModify, MetricField *, EMPTYARG )
 
 IMPL_LINK( SwFootNotePage, LineWidthChanged_Impl, void *, EMPTYARG )
 {
-    sal_Int64 nVal = MetricField::ConvertDoubleValue(
+    sal_Int64 nVal = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
                 aLineWidthEdit.GetValue( ),
                 aLineWidthEdit.GetDecimalDigits( ),
-                aLineWidthEdit.GetUnit(), MAP_TWIP );
+                aLineWidthEdit.GetUnit(), MAP_TWIP ));
     aLineTypeBox.SetWidth( nVal );
 
     return 0;
@@ -216,9 +216,9 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
     // Separator width
     aLineWidthEdit.SetModifyHdl( LINK( this, SwFootNotePage, LineWidthChanged_Impl ) );
 
-    sal_Int64 nWidthPt = MetricField::ConvertDoubleValue(
+    sal_Int64 nWidthPt = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
             sal_Int64( pFtnInfo->GetLineWidth() ), aLineWidthEdit.GetDecimalDigits(),
-            MAP_TWIP, aLineWidthEdit.GetUnit( ) );
+            MAP_TWIP, aLineWidthEdit.GetUnit( ) ));
     aLineWidthEdit.SetValue( nWidthPt );
 
     // Separator style
@@ -313,10 +313,10 @@ sal_Bool SwFootNotePage::FillItemSet(SfxItemSet &rSet)
     rFtnInfo.SetLineStyle( ::editeng::SvxBorderStyle( aLineTypeBox.GetSelectEntryStyle() ) );
 
     // Separator width
-    long nWidth = MetricField::ConvertDoubleValue(
+    long nWidth = static_cast<long>(MetricField::ConvertDoubleValue(
                    aLineWidthEdit.GetValue( ),
                    aLineWidthEdit.GetDecimalDigits( ),
-                   aLineWidthEdit.GetUnit(), MAP_TWIP );
+                   aLineWidthEdit.GetUnit(), MAP_TWIP ));
     rFtnInfo.SetLineWidth( nWidth );
 
     // Separator color

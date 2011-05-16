@@ -774,9 +774,9 @@ void lcl_DrawDashedRect( OutputDevice * pOut, SwLineRect & rLRect )
     }
 
     long startX = rLRect.Left(  );
-    long startY = rLRect.Top(  ) + nHalfLWidth;
+    long startY = rLRect.Top(  ) + static_cast<long>(nHalfLWidth);
     long endX = rLRect.Left(  ) + rLRect.Width(  );
-    long endY = rLRect.Top(  ) + nHalfLWidth;
+    long endY = rLRect.Top(  ) + static_cast<long>(nHalfLWidth);
 
     if ( rLRect.Height(  ) > rLRect.Width(  ) )
     {
@@ -789,9 +789,9 @@ void lcl_DrawDashedRect( OutputDevice * pOut, SwLineRect & rLRect )
         {
             nHalfLWidth = 1;
         }
-        startX = rLRect.Left(  ) + nHalfLWidth;
+        startX = rLRect.Left(  ) + static_cast<long>(nHalfLWidth);
         startY = rLRect.Top(  );
-        endX = rLRect.Left(  ) + nHalfLWidth;
+        endX = rLRect.Left(  ) + static_cast<long>(nHalfLWidth);
         endY = rLRect.Top(  ) + rLRect.Height(  );
     }
 

@@ -540,10 +540,10 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
     aLineTypeDLB.InsertEntry( ::editeng::SvxBorderLine::getWidthImpl( ::editeng::DOTTED ), ::editeng::DOTTED );
     aLineTypeDLB.InsertEntry( ::editeng::SvxBorderLine::getWidthImpl( ::editeng::DASHED ), ::editeng::DASHED );
 
-    long nLineWidth = MetricField::ConvertDoubleValue(
+    long nLineWidth = static_cast<long>(MetricField::ConvertDoubleValue(
             aLineWidthEdit.GetValue( ),
             aLineWidthEdit.GetDecimalDigits( ),
-            aLineWidthEdit.GetUnit(), MAP_TWIP );
+            aLineWidthEdit.GetUnit(), MAP_TWIP ));
     aLineTypeDLB.SetWidth( nLineWidth );
 
     // Fill the color listbox
@@ -731,10 +731,10 @@ IMPL_LINK( SwColumnPage, UpdateColMgr, void *, /*pField*/ )
         sal_Bool bEnable = 0 != nPos;
         aLineHeightEdit.Enable( bEnable );
         aLineHeightLbl.Enable( bEnable );
-        long nLineWidth = MetricField::ConvertDoubleValue(
+        long nLineWidth = static_cast<long>(MetricField::ConvertDoubleValue(
                 aLineWidthEdit.GetValue( ),
                 aLineWidthEdit.GetDecimalDigits( ),
-                aLineWidthEdit.GetUnit(), MAP_TWIP );
+                aLineWidthEdit.GetUnit(), MAP_TWIP ));
         if( !bEnable )
             pColMgr->SetNoLine();
         else if( LISTBOX_ENTRY_NOTFOUND != nPos )

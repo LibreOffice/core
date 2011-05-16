@@ -1,0 +1,7 @@
+--- sw/source/core/doc/doclay.cxx
++++ sw/source/core/doc/doclay.cxx
+@@ -2357,4 +2357,4 @@
+     return aAllLayouts;
+ }//swmod 070825
+ 
+-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

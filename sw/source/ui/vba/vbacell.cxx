@@ -87,7 +87,7 @@ void SAL_CALL SwVbaCell::setHeightRule( ::sal_Int32 _heightrule ) throw (css::un
 void SAL_CALL SwVbaCell::SetWidth( float width, sal_Int32 /*rulestyle*/ ) throw (css::uno::RuntimeException)
 {
     // FIXME: handle the argument: rulestyle
-    setWidth( width );
+    setWidth( static_cast<sal_Int32>(width) );
 }
 
 void SAL_CALL SwVbaCell::SetHeight( float height, sal_Int32 heightrule ) throw (css::uno::RuntimeException)

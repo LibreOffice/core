@@ -221,7 +221,7 @@ sal_Int32 SwVbaTableHelper::GetColWidth( sal_Int32 nCol, sal_Int32 nRow, sal_Boo
 
     sal_Int32 nTableWidth = getTableWidth( );
     double dAbsWidth = ( (double)nWidth / UNO_TABLE_COLUMN_SUM ) * (double) nTableWidth;
-    return ( sal_Int32 )Millimeter::getInPoints( dAbsWidth );
+    return ( sal_Int32 )Millimeter::getInPoints( static_cast<int>(dAbsWidth) );
 }
 
 sal_Int32 SwVbaTableHelper::GetColWidth( SwTabCols& rCols, sal_Int32 nNum ) throw (uno::RuntimeException)
