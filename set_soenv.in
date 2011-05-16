@@ -665,7 +665,8 @@ elsif ( $platform =~ m/cygwin|mingw32/ )
       # At the moment this implies the use of tcsh
       # WTF does that mean?
       $FLIPCMD        = "slfl.pl";
-      $PATH_SEPERATOR = ';' if '@build_os@' eq 'cygwin';
+      $PATH_SEPERATOR = ';';
+      $PATH_SEPERATOR = ':' if '@build_os@' ne 'cygwin';
       $outfile        = "WindowsMinGWEnv.Set.sh";
       $COMPATH        = PathFormat('@COMPATH@/bin');
       $COMPATH        =~ s/\/bin$//i;

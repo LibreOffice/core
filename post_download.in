@@ -21,7 +21,7 @@ case "$host_os" in
     gnu)
         _os=GNU
         ;;
-    cygwin*) # Windows
+    cygwin*|mingw32*) # Windows
         _os=WINNT
         ;;
     darwin*) # Mac OS X or iOS
@@ -69,7 +69,7 @@ fi
 dnl ===================================================================
 dnl Windows builds - use oowintool to copy CRT dlls and manifest
 dnl ===================================================================
-if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
+if test "$COM" = "MSC"; then
    if ./oowintool --msvc-copy-dlls ./external/msvcp ; then
        :
     else
@@ -95,7 +95,7 @@ fi
 dnl ===================================================================
 dnl Windows builds need vcredist_x86.exe and vcredist_x64.exe in external/vcredist/
 dnl ===================================================================
-if test "$_os" = "WINNT"; then
+if test "$COM" = "MSC"; then
    AC_MSG_CHECKING([for vcredist_x86.exe])
    if test -e ./external/vcredist/vcredist_x86.exe; then
       AC_MSG_RESULT([found])

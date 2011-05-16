@@ -320,11 +320,11 @@ dbgutil=
 # ---------------------------------------------------------------------------
 
 DMAKE_WORK_DIR*:=$(subst,/,/ $(PWD))
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI_FOR_BUILD)"=="WNT"
 posix_PWD:=/cygdrive/$(PWD:s/://)
-.ELSE			#GUI)"=="WNT"
+.ELSE
 posix_PWD:=$(PWD)
-.ENDIF			#GUI)"=="WNT"
+.ENDIF
 
 
 .IF "$(TMP)"!=""

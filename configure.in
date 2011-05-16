@@ -1292,11 +1292,11 @@ fi
 AC_SUBST(CROSS_COMPILING)
 
 if test "$build_os" = "cygwin"; then
-  BUILD_EXEEXT=.exe
+  EXEEXT_FOR_BUILD=.exe
 else
-  BUILD_EXEEXT=
+  EXEEXT_FOR_BUILD=
 fi
-
+AC_SUBST(EXEEXT_FOR_BUILD)
 
 dnl ===================================================================
 dnl check for required programs (grep, awk, sed, bash)
@@ -5932,7 +5932,7 @@ if test "$_os" = "WINNT" ; then
         if test "$build_os" = "cygwin"; then
             with_nsis_path=`cygpath -u "$with_nsis_path"`
         fi
-        if test -e "$with_nsis_path/makensis$BUILD_EXEEXT"; then
+        if test -e "$with_nsis_path/makensis$EXEEXT_FOR_BUILD"; then
             NSIS_PATH="$with_nsis_path"
         elif test "$build_os" = "cygwin"; then
 	    nsistest=`./oowintool --nsis-dir`;

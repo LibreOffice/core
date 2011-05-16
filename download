@@ -28,7 +28,7 @@
 
 # environment setup yet?
 if [ -z "$TARFILE_LOCATION" ]; then
-    . ./*[Ee]nv.[Ss]et.sh
+    . ./*Env.Set.sh
 fi
 
 # we want to clone if we are in the bootstrap git repo and clone does not exist yet
@@ -173,7 +173,7 @@ for i in $filelist ; do
     fi
 done
 
-if [ "$GUI" = "WNT" ]; then
+if [ "$COM" = "MSC" ]; then
     downloaditem "http://download.microsoft.com/download/platformsdk/Redist/5.0.2195.1/W9XNT4/EN-US/" "dbghinst.EXE" "096f1d53d9ba09cde27d6f7c2ea6cc47"
     downloaditem "http://download.microsoft.com/download/a/b/c/abc45517-97a0-4cee-a362-1957be2f24e1/" "WindowsXP-KB975337-x86-ENU.exe" "946d00d87e4094f3a6e425e2d538eadd"
 
@@ -201,7 +201,8 @@ if [ ! -z "$failed" ]; then
     exit 1
 fi
 
-if [ "$GUI" = "WNT" -a -n "$md5sum" ]; then
+if [ "$COM" = "MSC" -a -n "$md5sum" ]; then
+    # This can be run only on Windows itself (Cygwin)
     TMPUNPACK=`cygpath -d $TARFILE_LOCATION/tmp`
     chmod a+w $TARFILE_LOCATION/tmp
     if [ ! -f ./external/dbghelp/dbghelp.dll -a -f $TARFILE_LOCATION/dbghinst.EXE ]; then

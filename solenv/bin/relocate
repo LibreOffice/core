@@ -45,7 +45,7 @@ sub sniff_set($)
 
     opendir ($dirhandle, $build_dir) || die "Can't open $build_dir";
     while ($fname = readdir ($dirhandle)) {
-	$fname =~ /[Ss]et.sh$/ && last;
+	$fname =~ /Set.sh$/ && last;
     }
     closedir ($dirhandle);
 
