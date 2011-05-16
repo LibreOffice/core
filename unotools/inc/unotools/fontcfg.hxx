@@ -97,7 +97,7 @@ class UNOTOOLS_DLLPUBLIC DefaultFontConfiguration
     public:
     ~DefaultFontConfiguration();
 
-    static DefaultFontConfiguration* get();
+    static DefaultFontConfiguration& get();
 
     rtl::OUString getDefaultFont( const com::sun::star::lang::Locale& rLocale, int nType ) const;
     rtl::OUString getUserInterfaceFont( const com::sun::star::lang::Locale& rLocale ) const;

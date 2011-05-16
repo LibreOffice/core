@@ -59,8 +59,6 @@ using namespace com::sun::star::container;
 
 using ::rtl::OUString;
 
-static DefaultFontConfiguration* mpDefaultFontConfiguration = 0;
-
 /*
  * DefaultFontConfiguration
  */
@@ -98,11 +96,10 @@ static const char* getKeyType( int nKeyType )
     }
 }
 
-DefaultFontConfiguration* DefaultFontConfiguration::get()
+DefaultFontConfiguration& DefaultFontConfiguration::get()
 {
-    if( !mpDefaultFontConfiguration )
-        mpDefaultFontConfiguration = new DefaultFontConfiguration();
-    return mpDefaultFontConfiguration;
+    static DefaultFontConfiguration aDefaultFontConfiguration;
+    return aDefaultFontConfiguration;
 }
 
 DefaultFontConfiguration::DefaultFontConfiguration()
