@@ -313,7 +313,7 @@ static AtkRole mapToAtkRole( sal_Int16 nRole )
         initialized = true;
     }
 
-    static const sal_Int32 nMapSize = sizeof(roleMap)/sizeof(sal_Int16);
+    static const sal_Int32 nMapSize = SAL_N_ELEMENTS(roleMap);
     if( 0 <= nRole &&  nMapSize > nRole )
         role = roleMap[nRole];
 
