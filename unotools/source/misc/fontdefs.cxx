@@ -542,7 +542,7 @@ String GetSubsFontName( const String& rName, sal_uLong nFlags )
       ||  aOrgName.EqualsAscii( "opensymbol" ) ) )
         return aName;
 
-    const utl::FontNameAttr* pAttr = utl::FontSubstConfiguration::get()->getSubstInfo( aOrgName );
+    const utl::FontNameAttr* pAttr = utl::FontSubstConfiguration::get().getSubstInfo( aOrgName );
     if ( pAttr )
     {
         for( int i = 0; i < 3; i++ )

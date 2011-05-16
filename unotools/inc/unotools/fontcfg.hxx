@@ -211,7 +211,7 @@ private:
 public:
     ~FontSubstConfiguration();
 
-    static FontSubstConfiguration* get();
+    static FontSubstConfiguration& get();
 
     const FontNameAttr* getSubstInfo(
                                      const String& rFontName,

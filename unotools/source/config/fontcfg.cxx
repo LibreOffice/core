@@ -61,8 +61,6 @@ using ::rtl::OUString;
 
 static DefaultFontConfiguration* mpDefaultFontConfiguration = 0;
 
-static FontSubstConfiguration* mpFontSubstConfiguration = 0;
-
 /*
  * DefaultFontConfiguration
  */
@@ -375,11 +373,10 @@ OUString DefaultFontConfiguration::getUserInterfaceFont( const Locale& rLocale )
  *  FontSubstConfigItem::get
  */
 
-FontSubstConfiguration* FontSubstConfiguration::get()
+FontSubstConfiguration& FontSubstConfiguration::get()
 {
-    if( !mpFontSubstConfiguration )
-        mpFontSubstConfiguration = new FontSubstConfiguration();
-    return mpFontSubstConfiguration;
+    static FontSubstConfiguration aFontSubstConfiguration;
+    return aFontSubstConfiguration;
 }
 
 /*
