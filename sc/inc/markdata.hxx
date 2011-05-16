@@ -33,6 +33,8 @@
 #include <tools/solar.h>
 #include "scdllapi.h"
 
+#include <set>
+
 class ScMarkArray;
 class ScRangeList;
 
@@ -47,7 +49,7 @@ private:
     ScRange         aMarkRange;             // area
     ScRange         aMultiRange;            // maximum area altogether
     ScMarkArray*    pMultiSel;              // multi selection
-    sal_Bool            bTabMarked[MAXTABCOUNT];// table marked
+    ::std::set<SCTAB> maTabMarked;
     sal_Bool            bMarked;                // rectangle marked
     sal_Bool            bMultiMarked;
 
@@ -77,8 +79,8 @@ public:
 
     void        SetAreaTab( SCTAB nTab );
 
-    void        SelectTable( SCTAB nTab, sal_Bool bNew )        { bTabMarked[nTab] = bNew; }
-    sal_Bool        GetTableSelect( SCTAB nTab ) const          { return bTabMarked[nTab]; }
+    void        SelectTable( SCTAB nTab, bool bNew );
+    bool        GetTableSelect( SCTAB nTab ) const;
 
     void        SelectOneTable( SCTAB nTab );
     SCTAB       GetSelectCount() const;
