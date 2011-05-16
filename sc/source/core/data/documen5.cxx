@@ -136,7 +136,7 @@ void ScDocument::UpdateAllCharts()
 
     sal_uInt16 nPos;
 
-    for (SCTAB nTab=0; nTab<=MAXTAB; nTab++)
+    for (SCTAB nTab=0; nTab< static_cast<SCTAB>(pTab.size()); nTab++)
     {
         if (pTab[nTab])
         {
@@ -206,9 +206,9 @@ void ScDocument::UpdateAllCharts()
 
 sal_Bool ScDocument::HasChartAtPoint( SCTAB nTab, const Point& rPos, String* pName )
 {
-    if (pDrawLayer && pTab[nTab])
+    if (pDrawLayer && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
     {
-        SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
+        SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));//TODO:REWORK
         DBG_ASSERT(pPage,"Page ?");
 
         SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
@@ -252,7 +252,7 @@ uno::Reference< chart2::XChartDocument > ScDocument::GetChartByName( const Strin
     if (pDrawLayer)
     {
         sal_uInt16 nCount = pDrawLayer->GetPageCount();
-        for (sal_uInt16 nTab=0; nTab<nCount; nTab++)
+        for (sal_uInt16 nTab=0; nTab<nCount&& nTab < static_cast<SCTAB>(pTab.size()); nTab++)
         {
             SdrPage* pPage = pDrawLayer->GetPage(nTab);
             DBG_ASSERT(pPage,"Page ?");
@@ -317,7 +317,7 @@ void ScDocument::GetOldChartParameters( const String& rName,
         return;
 
     sal_uInt16 nCount = pDrawLayer->GetPageCount();
-    for (sal_uInt16 nTab=0; nTab<nCount; nTab++)
+    for (sal_uInt16 nTab=0; nTab<nCount && nTab < static_cast<SCTAB>(pTab.size()); nTab++)
     {
         SdrPage* pPage = pDrawLayer->GetPage(nTab);
         DBG_ASSERT(pPage,"Page ?");
@@ -364,7 +364,7 @@ void ScDocument::UpdateChartArea( const String& rChartName,
     if (!pDrawLayer)
         return;
 
-    for (SCTAB nTab=0; nTab<=MAXTAB && pTab[nTab]; nTab++)
+    for (SCTAB nTab=0; nTab< static_cast<SCTAB>(pTab.size()) && pTab[nTab]; nTab++)
     {
         SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
         DBG_ASSERT(pPage,"Page ?");
@@ -599,7 +599,7 @@ void ScDocument::SetChartRangeList( const String& rChartName,
     if (!pDrawLayer)
         return;
 
-    for (SCTAB nTab=0; nTab<=MAXTAB && pTab[nTab]; nTab++)
+    for (SCTAB nTab=0; nTab< static_cast<SCTAB>(pTab.size()) && pTab[nTab]; nTab++)
     {
         SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
         DBG_ASSERT(pPage,"Page ?");
@@ -639,7 +639,7 @@ void ScDocument::SetChartRangeList( const String& rChartName,
 
 sal_Bool ScDocument::HasData( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
-    if (pTab[nTab])
+    if (nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
         return pTab[nTab]->HasData( nCol, nRow );
     else
         return false;
@@ -701,7 +701,7 @@ void ScDocument::UpdateChartListenerCollection()
         ScRange aRange;
         // Range for searching is not important
         ScChartListener aCLSearcher( EMPTY_STRING, this, aRange );
-        for (SCTAB nTab=0; nTab<=MAXTAB; nTab++)
+        for (SCTAB nTab=0; nTab< static_cast<SCTAB>(pTab.size()); nTab++)
         {
             if (pTab[nTab])
             {

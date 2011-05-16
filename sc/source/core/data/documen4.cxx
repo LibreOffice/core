@@ -62,7 +62,7 @@ using namespace formula;
 // -----------------------------------------------------------------------
 
 // Nach der Regula Falsi Methode
-sal_Bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
+sal_Bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,//TODO:REWORK
                         SCCOL nVCol, SCROW nVRow, SCTAB nVTab,
                         const String& sValStr, double& nX)
 {
@@ -135,16 +135,17 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
     SCCOL j;
     SCROW k;
     i = 0;
-    sal_Bool bStop = false;
-    while (i <= MAXTAB && !bStop)               // erste markierte Tabelle finden
+    bool bStop = false;
+    for (;i < static_cast<SCTAB>(pTab.size()); ++i)
     {
         if (pTab[i] && rMark.GetTableSelect(i))
-            bStop = sal_True;
-        else
-            i++;
+        {
+            bStop = true;
+            break;
+        }
     }
     nTab1 = i;
-    if (i == MAXTAB + 1)
+    if (!bStop)
     {
         Sound::Beep();
         OSL_FAIL("ScDocument::InsertMatrixFormula Keine Tabelle markiert");
@@ -158,7 +159,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
     else
         pCell = new ScFormulaCell( this, aPos, rFormula, eGram, MM_FORMULA );
     pCell->SetMatColsRows( nCol2 - nCol1 + 1, nRow2 - nRow1 + 1 );
-    for (i = 0; i <= MAXTAB; i++)
+    for (i = 0; i < static_cast<SCTAB>(pTab.size()); i++)
     {
         if (pTab[i] && rMark.GetTableSelect(i))
         {
@@ -182,7 +183,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
     ScTokenArray aArr;
     ScToken* t = static_cast<ScToken*>(aArr.AddMatrixSingleReference( aRefData));
 
-    for (i = 0; i <= MAXTAB; i++)
+    for (i = 0; i < static_cast<SCTAB>(pTab.size()); i++)
     {
         if (pTab[i] && rMark.GetTableSelect(i))
         {
@@ -222,16 +223,17 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
     SCCOL j;
     SCROW k;
     i = 0;
-    sal_Bool bStop = false;
-    while (i <= MAXTAB && !bStop)               // erste markierte Tabelle finden
+    bool bStop = false;
+    for (;i < static_cast<SCTAB>(pTab.size()); ++i)
     {
         if (pTab[i] && rMark.GetTableSelect(i))
-            bStop = sal_True;
-        else
-            i++;
+        {
+            bStop = true;
+            break;
+        }
     }
     nTab1 = i;
-    if (i == MAXTAB + 1)
+    if (!bStop)
     {
         Sound::Beep();
         OSL_FAIL("ScDocument::InsertTableOp: Keine Tabelle markiert");
@@ -291,7 +293,7 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
            formula::FormulaGrammar::GRAM_NATIVE, MM_NONE );
     for( j = nCol1; j <= nCol2; j++ )
         for( k = nRow1; k <= nRow2; k++ )
-            for (i = 0; i <= MAXTAB; i++)
+            for (i = 0; i < static_cast<SCTAB>(pTab.size()); i++)
                 if( pTab[i] && rMark.GetTableSelect(i) )
                     pTab[i]->PutCell( j, k, aRefCell.CloneWithoutNote( *this, ScAddress( j, k, i ), SC_CLONECELL_STARTLISTENING ) );
 }
@@ -370,7 +372,7 @@ bool ScDocument::MarkUsedExternalReferences( ScTokenArray & rArr )
 sal_Bool ScDocument::GetNextSpellingCell(SCCOL& nCol, SCROW& nRow, SCTAB nTab,
                         sal_Bool bInSel, const ScMarkData& rMark) const
 {
-    if (ValidTab(nTab) && pTab[nTab])
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
         return pTab[nTab]->GetNextSpellingCell( nCol, nRow, bInSel, rMark );
     else
         return false;
@@ -379,7 +381,7 @@ sal_Bool ScDocument::GetNextSpellingCell(SCCOL& nCol, SCROW& nRow, SCTAB nTab,
 sal_Bool ScDocument::GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, SCTAB nTab,
                                         const ScMarkData& rMark )
 {
-    if (ValidTab(nTab) && pTab[nTab])
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
         return pTab[nTab]->GetNextMarkedCell( rCol, rRow, rMark );
     else
         return false;
@@ -390,7 +392,7 @@ sal_Bool ScDocument::ReplaceStyle(const SvxSearchItem& rSearchItem,
                               ScMarkData& rMark,
                               sal_Bool bIsUndoP)
 {
-    if (pTab[nTab])
+    if (nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
         return pTab[nTab]->ReplaceStyle(rSearchItem, nCol, nRow, rMark, bIsUndoP);
     else
         return false;
@@ -398,7 +400,7 @@ sal_Bool ScDocument::ReplaceStyle(const SvxSearchItem& rSearchItem,
 
 void ScDocument::CompileDBFormula()
 {
-    for (SCTAB i=0; i<=MAXTAB; i++)
+    for (SCTAB i=0; i< static_cast<SCTAB>(pTab.size()); i++)
     {
         if (pTab[i]) pTab[i]->CompileDBFormula();
     }
@@ -406,7 +408,7 @@ void ScDocument::CompileDBFormula()
 
 void ScDocument::CompileDBFormula( sal_Bool bCreateFormulaString )
 {
-    for (SCTAB i=0; i<=MAXTAB; i++)
+    for (SCTAB i=0; i< static_cast<SCTAB>(pTab.size()); i++)
     {
         if (pTab[i]) pTab[i]->CompileDBFormula( bCreateFormulaString );
     }
@@ -417,7 +419,7 @@ void ScDocument::CompileNameFormula( sal_Bool bCreateFormulaString )
     if ( pCondFormList )
         pCondFormList->CompileAll();    // nach ScNameDlg noetig
 
-    for (SCTAB i=0; i<=MAXTAB; i++)
+    for (SCTAB i=0; i< static_cast<SCTAB>(pTab.size()); i++)
     {
         if (pTab[i]) pTab[i]->CompileNameFormula( bCreateFormulaString );
     }
@@ -425,7 +427,7 @@ void ScDocument::CompileNameFormula( sal_Bool bCreateFormulaString )
 
 void ScDocument::CompileColRowNameFormula()
 {
-    for (SCTAB i=0; i<=MAXTAB; i++)
+    for (SCTAB i=0; i< static_cast<SCTAB>(pTab.size()); i++)
     {
         if (pTab[i]) pTab[i]->CompileColRowNameFormula();
     }
@@ -433,7 +435,7 @@ void ScDocument::CompileColRowNameFormula()
 
 void ScDocument::DoColResize( SCTAB nTab, SCCOL nCol1, SCCOL nCol2, SCSIZE nAdd )
 {
-    if (ValidTab(nTab) && pTab[nTab])
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
         pTab[nTab]->DoColResize( nCol1, nCol2, nAdd );
     else
     {
@@ -443,7 +445,7 @@ void ScDocument::DoColResize( SCTAB nTab, SCCOL nCol1, SCCOL nCol2, SCSIZE nAdd 
 
 void ScDocument::InvalidateTableArea()
 {
-    for (SCTAB nTab=0; nTab<=MAXTAB && pTab[nTab]; nTab++)
+    for (SCTAB nTab=0; nTab< static_cast<SCTAB>(pTab.size()) && pTab[nTab]; nTab++)
     {
         pTab[nTab]->InvalidateTableArea();
         if ( pTab[nTab]->IsScenario() )
@@ -454,7 +456,7 @@ void ScDocument::InvalidateTableArea()
 sal_Int32 ScDocument::GetMaxStringLen( SCTAB nTab, SCCOL nCol,
         SCROW nRowStart, SCROW nRowEnd, CharSet eCharSet ) const
 {
-    if (ValidTab(nTab) && pTab[nTab])
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
         return pTab[nTab]->GetMaxStringLen( nCol, nRowStart, nRowEnd, eCharSet );
     else
         return 0;
@@ -464,7 +466,7 @@ xub_StrLen ScDocument::GetMaxNumberStringLen( sal_uInt16& nPrecision, SCTAB nTab
                                     SCCOL nCol,
                                     SCROW nRowStart, SCROW nRowEnd ) const
 {
-    if (ValidTab(nTab) && pTab[nTab])
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
         return pTab[nTab]->GetMaxNumberStringLen( nPrecision, nCol,
             nRowStart, nRowEnd );
     else
@@ -486,7 +488,7 @@ sal_Bool ScDocument::GetSelectionFunction( ScSubTotalFunc eFunc,
     SCCOL nEndCol = aSingle.aEnd.Col();
     SCROW nEndRow = aSingle.aEnd.Row();
 
-    for (SCTAB nTab=0; nTab<=MAXTAB && !aData.bError; nTab++)
+    for (SCTAB nTab=0; nTab< static_cast<SCTAB>(pTab.size()) && !aData.bError; nTab++)
         if (pTab[nTab] && rMark.GetTableSelect(nTab))
             pTab[nTab]->UpdateSelectionFunction( aData,
                             nStartCol, nStartRow, nEndCol, nEndRow, rMark );
@@ -712,13 +714,13 @@ const ScValidationData* ScDocument::GetValidationEntry( sal_uLong nIndex ) const
 
 void ScDocument::FindConditionalFormat( sal_uLong nKey, ScRangeList& rRanges )
 {
-    for (SCTAB i=0; i<=MAXTAB && pTab[i]; i++)
+    for (SCTAB i=0; i< static_cast<SCTAB>(pTab.size()) && pTab[i]; i++)
         pTab[i]->FindConditionalFormat( nKey, rRanges );
 }
 
 void ScDocument::FindConditionalFormat( sal_uLong nKey, ScRangeList& rRanges, SCTAB nTab )
 {
-    if(VALIDTAB(nTab) && pTab[nTab])
+    if(VALIDTAB(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
         pTab[nTab]->FindConditionalFormat( nKey, rRanges );
 }
 
@@ -960,7 +962,7 @@ void ScDocument::FindOrder( SCCOLROW* pOtherRows, SCCOLROW nThisEndRow, SCCOLROW
     }
 }
 
-void ScDocument::CompareDocument( ScDocument& rOtherDoc )
+void ScDocument::CompareDocument( ScDocument& rOtherDoc )//TODO:REWORK
 {
     if (!pChangeTrack)
         return;

@@ -138,7 +138,7 @@ typedef std::set<ScDefaultAttr, ScLessDefaultAttr>  ScDefaultAttrSet;
 
 void ScDocument::MakeTable( SCTAB nTab,bool _bNeedsNameCheck )
 {
-    if ( ValidTab(nTab) && ( nTab < static_cast<SCTAB>(pTab.size()) ||!pTab[nTab]) )
+    if ( ValidTab(nTab) && ( nTab >= static_cast<SCTAB>(pTab.size()) ||!pTab[nTab]) )
     {
         String aString = ScGlobal::GetRscString(STR_TABLE_DEF); //"Table"
         aString += String::CreateFromInt32(nTab+1);
@@ -227,14 +227,14 @@ sal_Bool ScDocument::GetTable( const String& rName, SCTAB& rTab ) const
 
 ScDBData* ScDocument::GetAnonymousDBData(SCTAB nTab)
 {
-    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(pTab.size()))
+    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
         return pTab[nTab]->GetAnonymousDBData();
     return NULL;
 }
 
 void ScDocument::SetAnonymousDBData(SCTAB nTab, ScDBData* pDBData)
 {
-    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(pTab.size()))
+    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
         pTab[nTab]->SetAnonymousDBData(pDBData);
 }
 

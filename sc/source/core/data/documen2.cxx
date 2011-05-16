@@ -139,7 +139,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         pCondFormList( NULL ),
         pValidationList( NULL ),
         pFormatExchangeList( NULL ),
-        pTab( 10 ),
+        pTab( 0 ),
         pRangeName(NULL),
         pDPCollection( NULL ),
         pLinkManager( NULL ),
@@ -551,7 +551,7 @@ ScNoteEditEngine& ScDocument::GetNoteEngine()
 }
 
 
-void ScDocument::ResetClip( ScDocument* pSourceDoc, const ScMarkData* pMarks )//TODO:FIXME
+void ScDocument::ResetClip( ScDocument* pSourceDoc, const ScMarkData* pMarks )
 {
     if (bIsClip)
     {
@@ -631,7 +631,7 @@ void ScDocument::PutCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
             sal_Bool bExtras = !bIsUndo;        // Spaltenbreiten, Zeilenhoehen, Flags
             if ( nTab >= static_cast<SCTAB>(pTab.size()) )
             {
-                while( nTab > pTab.size() )
+                while( nTab > static_cast<SCTAB>(pTab.size()) )
                 {
                     pTab.push_back( NULL );
                 }
@@ -752,7 +752,7 @@ sal_Bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos )
     {
         if (pTab[nOldPos])
         {
-            SCTAB nTabCount = pTab.size();
+            SCTAB nTabCount = static_cast<SCTAB>(pTab.size());
             if (nTabCount > 1)
             {
                 sal_Bool bOldAutoCalc = GetAutoCalc();
@@ -796,15 +796,15 @@ sal_Bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos )
                 for (i = nTabCount - 1; i > nNewPos; i--)
                     pTab[i] = pTab[i - 1];
                 pTab[nNewPos] = pSaveTab;
-                for (i = 0; i < pTab.size(); i++)
+                for (i = 0; i < static_cast<SCTAB>(pTab.size()); i++)
                     if (pTab[i])
                         pTab[i]->UpdateMoveTab( nOldPos, nNewPos, i, *pProgress );
                 delete pProgress;   // freimachen fuer evtl. andere
-                for (i = 0; i < pTab.size(); i++)
+                for (i = 0; i < static_cast<SCTAB>(pTab.size()); i++)
                     if (pTab[i])
                         pTab[i]->UpdateCompile();
                 SetNoListening( false );
-                for (i = 0; i < pTab.size(); i++)
+                for (i = 0; i < static_cast<SCTAB>(pTab.size()); i++)
                     if (pTab[i])
                         pTab[i]->StartAllListeners();
                 // sheet names of references may not be valid until sheet is moved
@@ -824,7 +824,7 @@ sal_Bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos )
 
 sal_Bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyMarked )
 {
-    if (SC_TAB_APPEND == nNewPos ) nNewPos = pTab.size();
+    if (SC_TAB_APPEND == nNewPos ) nNewPos = static_cast<SCTAB>(pTab.size());
     String aName;
     GetName(nOldPos, aName);
 
@@ -846,13 +846,13 @@ sal_Bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pO
     SetAutoCalc( false );   // Mehrfachberechnungen vermeiden
     if (bValid)
     {
-        if (nNewPos >= pTab.size())
+        if (nNewPos >= static_cast<SCTAB>(pTab.size()))
         {
             pTab.push_back( new ScTable(this, nMaxTableNumber, aName) );
         }
         else
         {
-            if (VALIDTAB(nNewPos) && (nNewPos < pTab.size()))
+            if (VALIDTAB(nNewPos) && (nNewPos < static_cast<SCTAB>(pTab.size())))
             {
                 SetNoListening( sal_True );
 
@@ -876,7 +876,7 @@ sal_Bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pO
                 for (TableContainer::iterator it = pTab.begin(); it != pTab.end(); ++it)
                     if (*it && it != (pTab.begin() + nOldPos))
                         (*it)->UpdateInsertTab(nNewPos);
-                for (i = pTab.size(); i > nNewPos; i--)
+                for (i = static_cast<SCTAB>(pTab.size())-1; i > nNewPos; i--)
                     pTab[i] = pTab[i - 1];
                 if (nNewPos <= nOldPos)
                     nOldPos++;
@@ -958,7 +958,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
     }
     else                        // bestehende Tabelle ersetzen
     {
-        if (VALIDTAB(nDestPos) && nDestPos < pTab.size() && pTab[nDestPos])
+        if (VALIDTAB(nDestPos) && nDestPos < static_cast<SCTAB>(pTab.size()) && pTab[nDestPos])
         {
             pTab[nDestPos]->DeleteArea( 0,0, MAXCOL,MAXROW, IDF_ALL );
         }
@@ -1151,7 +1151,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
 
 void ScDocument::SetError( SCCOL nCol, SCROW nRow, SCTAB nTab, const sal_uInt16 nError)
 {
-    if (VALIDTAB(nTab))
+    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(pTab.size()))
         if (pTab[nTab])
             pTab[nTab]->SetError( nCol, nRow, nError );
 }

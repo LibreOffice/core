@@ -472,7 +472,7 @@ public:
     SC_DLLPUBLIC ScRangeName* GetRangeName() const;
     void SetRangeName(SCTAB nTab, ScRangeName* pNew);
     void SetRangeName( ScRangeName* pNewRangeName );
-    SCTAB           GetMaxTableNumber() { return nMaxTableNumber; }
+    SCTAB           GetMaxTableNumber() { return static_cast<SCTAB>(pTab.size()); }
     void            SetMaxTableNumber(SCTAB nNumber) { nMaxTableNumber = nNumber; }
 
     ScRangePairList*    GetColNameRanges() { return &xColNameRanges; }
@@ -534,7 +534,7 @@ public:
     SC_DLLPUBLIC void            SetAnonymousDBData(SCTAB nTab, ScDBData* pDBData);
     SC_DLLPUBLIC ScDBData*       GetAnonymousDBData(SCTAB nTab);
 
-    SC_DLLPUBLIC inline SCTAB   GetTableCount() const { return nMaxTableNumber; }
+    SC_DLLPUBLIC inline SCTAB   GetTableCount() const { return static_cast<SCTAB>(pTab.size()); }
     SvNumberFormatterIndexTable* GetFormatExchangeList() const { return pFormatExchangeList; }
 
     SC_DLLPUBLIC ScDocProtection* GetDocProtection() const;

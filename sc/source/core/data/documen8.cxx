@@ -429,7 +429,7 @@ void ScDocument::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress
     {
         const SCTAB nTab = pAdrFrom->Tab();
 
-        if ( pTab[nTab] )
+        if (nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab] )
             pTab[nTab]->InvalidateTextWidth( pAdrFrom, NULL, bNumFormatChanged, bBroadcast );
     }
     else
@@ -437,7 +437,7 @@ void ScDocument::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress
         const SCTAB nTabStart = pAdrFrom ? pAdrFrom->Tab() : 0;
         const SCTAB nTabEnd   = pAdrTo   ? pAdrTo->Tab()   : MAXTAB;
 
-        for ( SCTAB nTab=nTabStart; nTab<=nTabEnd; nTab++ )
+        for ( SCTAB nTab=nTabStart; nTab<=nTabEnd && nTab < static_cast<SCTAB>(pTab.size()); nTab++ )
             if ( pTab[nTab] )
                 pTab[nTab]->InvalidateTextWidth( pAdrFrom, pAdrTo, bNumFormatChanged, bBroadcast );
     }
@@ -472,7 +472,7 @@ sal_Bool ScDocument::IdleCalcTextWidth()            // sal_True = demnaechst wie
         nRow = 0, nCol--;
     if ( nCol < 0 )
         nCol = MAXCOL, nTab++;
-    if ( !ValidTab(nTab) || !pTab[nTab] )
+    if ( !ValidTab(nTab) || nTab >= static_cast<SCTAB>(pTab.size()) || !pTab[nTab] )
         nTab = 0;
 
     //  SearchMask/Family muss gemerkt werden,
@@ -551,7 +551,7 @@ sal_Bool ScDocument::IdleCalcTextWidth()            // sal_True = demnaechst wie
                     bNewTab = sal_True;
                 }
 
-                if ( !ValidTab(nTab) || !pTab[nTab] )
+                if ( !ValidTab(nTab) || nTab >= static_cast<SCTAB>(pTab.size()) || !pTab[nTab] )
                 {
                     nTab = 0;
                     nRestart++;
@@ -671,11 +671,11 @@ sal_Bool ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& 
     SCCOL nCol = rSpellRange.aStart.Col();      // iterator always starts on the left edge
     SCROW nRow = rSpellPos.Row();
     SCTAB nTab = rSpellPos.Tab();
-    if ( !pTab[nTab] )                          // sheet deleted?
+    if ( nTab >= static_cast<SCTAB>(pTab.size()) || !pTab[nTab] )                           // sheet deleted?
     {
         nTab = rSpellRange.aStart.Tab();
         nRow = rSpellRange.aStart.Row();
-        if ( !pTab[nTab] )
+        if ( nTab >= static_cast<SCTAB>(pTab.size()) || !pTab[nTab] )
         {
             //  may happen for visible range
             return false;
@@ -796,7 +796,7 @@ sal_Bool ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& 
     if (!pCell)         // end of range reached -> next sheet
     {
         ++nTab;
-        if ( nTab > rSpellRange.aEnd.Tab() || !pTab[nTab] )
+        if ( nTab > rSpellRange.aEnd.Tab() || nTab >= static_cast<SCTAB>(pTab.size()) || !pTab[nTab] )
             nTab = rSpellRange.aStart.Tab();
         nCol = rSpellRange.aStart.Col();
         nRow = rSpellRange.aStart.Row();
@@ -888,7 +888,7 @@ void ScDocument::RemoveAutoSpellObj()
 {
     //  alle Spelling-Informationen entfernen
 
-    for (SCTAB nTab=0; nTab<=MAXTAB && pTab[nTab]; nTab++)
+    for (SCTAB nTab=0; nTab< static_cast<SCTAB>(pTab.size()) && pTab[nTab]; nTab++)
         pTab[nTab]->RemoveAutoSpellObj();
 }
 
