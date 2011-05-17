@@ -29,6 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_hwpfilter.hxx"
 
+#include <deque>
+
 #include <boost/shared_ptr.hpp>
 
 #include "hwpreader.hxx"
@@ -1012,7 +1014,7 @@ void HwpReader::makeMasterStyles()
 
     int i;
     int nMax = hwpfile.getMaxSettedPage();
-    PageSetting *pSet = new PageSetting[nMax + 1];
+    std::deque<PageSetting> pSet(nMax + 1);
 
     for( i = 0 ; i < hwpfile.getPageNumberCount() ; i++ )
     {
