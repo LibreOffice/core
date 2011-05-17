@@ -157,7 +157,6 @@ void MkFilter::Filter()
             fprintf( stderr, "\nunroll begin\n" );
             nState = 1;
         }
-        ;
 
         if ( nState == 0  )
         {
