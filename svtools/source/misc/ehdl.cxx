@@ -175,8 +175,7 @@ SfxErrorHandler::SfxErrorHandler(sal_uInt16 nIdP, sal_uLong lStartP, sal_uLong l
 
 SfxErrorHandler::~SfxErrorHandler()
 {
-    if( pFreeMgr )
-        delete pFreeMgr;
+    delete pFreeMgr;
 }
 
 //-------------------------------------------------------------------------
