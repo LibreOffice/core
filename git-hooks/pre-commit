@@ -21,12 +21,15 @@ sub fix_whitespace($$) {
     open( IN, "$file" ) || die "Cannot open $file for reading";
     my ( $out, $tmpfile ) = mkstemp( "/tmp/whitespace-fixing-XXXXXX" );
 
+    my $changed = 0;
     my $line_no = 1;
     while ( my $line = <IN> ) {
         if ( $lines->{$line_no} && $line =~ /^(.*[^ \t])[ \t]+$/ ) {
+            $changed = 1;
             print $out "$1\n";
         }
         elsif ( $lines->{$line_no} && $line =~ /^[ \t]+$/ ) {
+            $changed = 1;
             print $out "\n";
         }
         else {
@@ -37,10 +40,13 @@ sub fix_whitespace($$) {
     close( $out );
     close( IN );
 
-    move( $tmpfile, $file ) or die "Cannot move '$tmpfile' to '$file'";
+    if ( $changed )
+    {
+        move( $tmpfile, $file ) or die "Cannot move '$tmpfile' to '$file'";
 
-    system( "git add $file" );
-    print "Fixed whitespace in '$file'\n";
+        system( "git add $file" );
+        print "Fixed whitespace in '$file'\n";
+    }
 }
 
 # go through the patch and collect lines to fix
