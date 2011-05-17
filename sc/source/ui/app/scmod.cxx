@@ -167,7 +167,7 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
 
     //  ErrorHandler anlegen - war in Init()
     //  zwischen OfficeApplication::Init und ScGlobal::Init
-    SvxErrorHandler::Get();
+    SvxErrorHandler::ensure();
     pErrorHdl    = new SfxErrorHandler( RID_ERRHDLSC,
                                         ERRCODE_AREA_SC,
                                         ERRCODE_AREA_APP2-1,
