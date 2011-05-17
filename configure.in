@@ -1,4 +1,5 @@
-dnl configure.in serves as input for the GNU autoconf package
+dnl -*- Mode: Autoconf; tab-width: 4; indent-tabs-mode: nil -*-
+dnl configure.in serves as input for the GNU autoconf package 
 dnl in order to create a configure script.
 
 AC_INIT([LibreOffice], [3.5],,, [http://documentfoundation.org/])
@@ -1668,6 +1669,7 @@ dnl Set up a different compiler to produce tools to run on the build
 dnl machine when doing cross-compilation
 dnl ===================================================================
 
+m4_pattern_allow([PKG_CONFIG_FOR_BUILD])
 if test "$cross_compiling" = "yes"; then
   AC_MSG_CHECKING([for BUILD platform configuration])
   echo
@@ -1686,9 +1688,10 @@ if test "$cross_compiling" = "yes"; then
 	makefile.rc \
 	bin/repo-list.in | (cd $tmpdir && tar xf -)
   (
-    unset COM GUI GUIBASE OS CPU CPUNAME CC CXX CFLAGS
+    unset COM GUI GUIBASE OS CPU CPUNAME CC CXX CFLAGS PKG_CONFIG
     test -n "$CC_FOR_BUILD" && export CC="$CC_FOR_BUILD"
     test -n "$CXX_FOR_BUILD" && export CXX="$CXX_FOR_BUILD"
+    test -n "$PKG_CONFIG_FOR_BUILD" && export PKG_CONFIG="$PKG_CONFIG_FOR_BUILD"
     cd $tmpdir
     sub_conf_opts=""
     test -n $with_ant_home && sub_conf_opts="$sub_conf_opts --with-ant-home=$with_ant_home"
@@ -4377,49 +4380,60 @@ fi
 AC_SUBST(SYSTEM_TRANSLATE_TOOLKIT)
 
 dnl ===================================================================
-dnl Check for system berkley db
+dnl Check for system Berkeley db
 dnl ===================================================================
 AC_MSG_CHECKING([which db to use])
 if test -n "$with_system_db" -o -n "$with_system_libs" && \
     test "$with_system_db" != "no"; then
     SYSTEM_DB=YES
     AC_MSG_RESULT([external])
-    for dbver in -5.1 5.1 -5.0 5.0 -5 5 -4.8 4.8 -4.7 4.7 -4 4 ''; do
-        AC_MSG_CHECKING([for db$dbver/db.h])
-        for inc_dir in /usr/include /usr/local/include /usr/pkg/include; do
-            if test -r "$inc_dir/db$dbver/db.h"; then
-                DB_INCLUDES="$inc_dir/db$dbver"
-                db_header="db$dbver/db.h"
-                AC_MSG_RESULT([yes])
-                break 2
-            fi
+
+    db_header=
+    for dbver in 5.1 5.0 5 4.8 4.7 4; do
+        for dash in - ''; do
+            AC_CHECK_HEADER([db$dash$dbver/db.h],
+                [ db_header="db$dash$dbver/db.h"; break ])
         done
-        AC_MSG_RESULT([no])
     done
 
-    if test "$db_header" = ""; then
-       AC_CHECK_HEADER(db.h, [ DB_INCLUDES=/usr/include; db_header="db.h" ],
-           [ AC_MSG_ERROR(no. install the db4-dev package) ])
+    if test -z "$db_header"; then
+        AC_CHECK_HEADER([db/db.h], [db_header='db/db.h'])
     fi
+
+    if test -z "$db_header"; then
+       AC_CHECK_HEADER(db.h, [ db_header='db.h' ])
+    fi
+
+    if test -z "$db_header"; then
+        AC_MSG_ERROR([db.h not found. Use the correct -I flag, or install the Berkeley db development package.])
+    fi
+
     AC_MSG_CHECKING([whether db is at least 4.1])
-    AC_TRY_RUN([
-#include <$db_header>
+    AC_TRY_COMPILE([#include <$db_header>],
+        [int array[(DB_VERSION_MAJOR > 4 || (DB_VERSION_MAJOR == 4 && DB_VERSION_MINOR >= 1))-1];],
+        [AC_MSG_RESULT([yes])],
+        [AC_MSG_ERROR([no. you need at least db 4.1])])
 
-int main(int argc, char **argv) {
-       if(DB_VERSION_MAJOR > 4 || (DB_VERSION_MAJOR == 4 && DB_VERSION_MINOR >= 1)) return 0;
-       else return 1;
-}
-    ], [AC_MSG_RESULT([yes])], [AC_MSG_ERROR([no. you need at least db 4.1])])
     DB_LIB=
-    for dbver in '' -5.1 5.1 -5.0 5.0 -5 5 -4.8 4.8 -4.7 4.7 -4 4; do
-        AC_CHECK_LIB(db$dbver, dbopen, [ DB_LIB="db$dbver"; DB_CPPLIB="db_cxx$dbver"; break; ] ,
-            AC_CHECK_LIB(db$dbver, __db185_open, [ DB_LIB="db$dbver"; DB_CPPLIB="db_cxx$dbver"; break; ]
-            )
-        )
+    for dbver in 5.1 5.0 5 4.8 4.7 4 ''; do
+        for dash in - ''; do
+            AC_CHECK_LIB(db$dash$dbver, dbopen, 
+                [ DB_LIB="db$dash$dbver"; DB_CPPLIB="db_cxx$dash$dbver"; break ])
+            AC_CHECK_LIB(db$dash$dbver, __db185_open, 
+                [ DB_LIB="db$dash$dbver"; DB_CPPLIB="db_cxx$dash$dbver"; break ])
+         done
     done
-    if test -z "$DB_LIB" ; then 
-        AC_MSG_ERROR([db not installed or functional])
+
+    if test -z "$DB_LIB"; then
+        AC_CHECK_LIB(db, dbopen, 
+            [ DB_LIB="db"; DB_CPPLIB="db_cxx" ])
     fi
+
+    if test -z "$DB_LIB" ; then 
+        AC_MSG_ERROR([db library not found. Use the correct -L flag,
+or install the Berkeley db development package.])
+    fi
+
     SCPDEFS="$SCPDEFS -DSYSTEM_DB"
 else
     AC_MSG_RESULT([internal])
@@ -4427,11 +4441,8 @@ else
     BUILD_TYPE="$BUILD_TYPE BERKELEYDB"
 fi
 AC_SUBST(SYSTEM_DB)
-AC_SUBST(DB_VERSION)
 AC_SUBST(DB_LIB)
 AC_SUBST(DB_CPPLIB)
-AC_SUBST(DB_INCLUDES)
-AC_SUBST(DB_JAR)
 
 dnl ===================================================================
 dnl Check for system lucene
@@ -8227,3 +8238,5 @@ else
    fi
    echo
 fi
+
+dnl vim:set shiftwidth=4 softtabstop=4 expandtab:
