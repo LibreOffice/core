@@ -1191,8 +1191,7 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
             //sich weiter zu suchen.
             if ( pDownLst->IsInTab() && pDownFrm->IsInTab() )
             {
-                while ( pDownFrm && ( ( nDown.nMain != LONG_MAX && nDownLst < nDownLst
-                        && pDownFrm->IsInTab()) || bBody != pDownFrm->IsInDocBody() ) )
+                while ( pDownFrm && ( ( nDown.nMain != LONG_MAX && pDownFrm->IsInTab()) || bBody != pDownFrm->IsInDocBody() ) )
                 {
                     pDownFrm = pDownFrm->GetNextCntntFrm();
                     if ( pDownFrm )
