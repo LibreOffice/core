@@ -29,6 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
+#include <boost/scoped_ptr.hpp>
+
 #include <vcl/menu.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
@@ -2562,7 +2564,7 @@ IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox )
             TIB_DROPDOWN == (pBox->GetItemBits(nEntry)&TIB_DROPDOWN))
     {
         //create a popup menu in Writer
-        PopupMenu *pMenu = new PopupMenu;
+        boost::scoped_ptr<PopupMenu> pMenu(new PopupMenu);
         uno::Reference< container::XNameAccess > xNameAccess(
                     ::comphelper::getProcessServiceFactory()->
                     createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
@@ -2607,7 +2609,6 @@ IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox )
         catch(uno::Exception&)
         {
         }
-        delete pMenu;
         pBox->Invalidate();
     }
     return 0;
