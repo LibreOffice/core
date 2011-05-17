@@ -56,7 +56,7 @@ namespace editeng { class SvxBorderLine; }
 
 //-----------------------------------------------------------------------
 
-class SwWriteTableCell
+class SW_DLLPUBLIC SwWriteTableCell
 {
     const SwTableBox *pBox;     // SwTableBox der Zelle
     const SvxBrushItem *pBackground;    // geerbter Hintergrund einer Zeile
@@ -111,7 +111,7 @@ SV_DECL_PTRARR_DEL( SwWriteTableCells, SwWriteTableCellPtr, 5, 5 )
 
 //-----------------------------------------------------------------------
 
-class SwWriteTableRow
+class SW_DLLPUBLIC SwWriteTableRow
 {
     SwWriteTableCells aCells;       // Alle Zellen der Rows
     const SvxBrushItem *pBackground;// Hintergrund
@@ -180,7 +180,7 @@ SV_DECL_PTRARR_SORT_DEL( SwWriteTableRows, SwWriteTableRowPtr, 5, 5 )
 
 //-----------------------------------------------------------------------
 
-class SwWriteTableCol
+class SW_DLLPUBLIC SwWriteTableCol
 {
     sal_uInt32 nPos;                        // End Position der Spalte
 
