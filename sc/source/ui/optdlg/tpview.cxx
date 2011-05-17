@@ -335,7 +335,7 @@ void ScTpContentOptions::InitGridOpt()
                 pColorTable = ((SvxColorTableItem*)pItem)->GetColorTable();
         }
         else
-            pColorTable = XColorTable::GetStdColorTable();
+            pColorTable = &XColorTable::GetStdColorTable();
 
         if ( !pColorTable )
             return;

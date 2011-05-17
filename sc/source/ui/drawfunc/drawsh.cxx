@@ -422,7 +422,7 @@ void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
     // (see SwDrawShell::ExecDrawDlg)
     const SvxColorTableItem* pColorItem =
         static_cast<const SvxColorTableItem*>( pViewData->GetSfxDocShell()->GetItem(SID_COLOR_TABLE) );
-    if (pColorItem->GetColorTable() == XColorTable::GetStdColorTable())
+    if (pColorItem->GetColorTable() == &XColorTable::GetStdColorTable())
         pDlg->DontDeleteColorTable();
 
     if ( nTabPage != 0xffff )
