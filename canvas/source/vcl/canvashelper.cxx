@@ -948,8 +948,7 @@ namespace vclcanvas
         Bitmap aBitmap( rOutDev.GetBitmap(aRect.TopLeft(),
                                           aRect.GetSize()) );
 
-        ScopedBitmapReadAccess pReadAccess( aBitmap.AcquireReadAccess(),
-                                            aBitmap );
+        Bitmap::ScopedReadAccess pReadAccess( aBitmap );
 
         ENSURE_OR_THROW( pReadAccess.get() != NULL,
                          "Could not acquire read access to OutDev bitmap" );
@@ -1014,8 +1013,7 @@ namespace vclcanvas
             Bitmap aTmpBitmap( rOutDev.GetBitmap( aEmptyPoint,
                                                   aSize ) );
 
-            ScopedBitmapReadAccess pReadAccess( aTmpBitmap.AcquireReadAccess(),
-                                                aTmpBitmap );
+            Bitmap::ScopedReadAccess pReadAccess( aTmpBitmap );
 
             pPalette = &pReadAccess->GetPalette();
         }
@@ -1026,8 +1024,7 @@ namespace vclcanvas
         bool bCopyBack( false ); // only copy something back, if we
                                  // actually changed some pixel
         {
-            ScopedBitmapWriteAccess pWriteAccess( aBitmap.AcquireWriteAccess(),
-                                                  aBitmap );
+            Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
 
             ENSURE_OR_THROW( pWriteAccess.get() != NULL,
                              "Could not acquire write access to OutDev bitmap" );

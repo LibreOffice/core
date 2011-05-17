@@ -97,6 +97,7 @@ mkdir: %_DEST%\inc%_EXT%\vcl
 ..\inc\vcl\salgtype.hxx %_DEST%\inc%_EXT%\vcl\salgtype.hxx
 ..\inc\vcl\salstype.hxx %_DEST%\inc%_EXT%\vcl\salstype.hxx
 ..\inc\vcl\salnativewidgets.hxx %_DEST%\inc%_EXT%\vcl\salnativewidgets.hxx
+..\inc\vcl\scopedbitmapaccess.hxx %_DEST%\inc%_EXT%\vcl\scopedbitmapaccess.hxx
 ..\inc\vcl\scrbar.hxx %_DEST%\inc%_EXT%\vcl\scrbar.hxx
 ..\inc\vcl\seleng.hxx %_DEST%\inc%_EXT%\vcl\seleng.hxx
 ..\inc\vcl\settings.hxx %_DEST%\inc%_EXT%\vcl\settings.hxx

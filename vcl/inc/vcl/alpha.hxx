@@ -100,6 +100,11 @@ public:
     BitmapWriteAccess*      AcquireWriteAccess() { return Bitmap::AcquireWriteAccess(); }
     void                    ReleaseAccess( BitmapReadAccess* pAccess );
 
+    typedef vcl::ScopedBitmapAccess< BitmapReadAccess, AlphaMask, &AlphaMask::AcquireReadAccess >
+        ScopedReadAccess;
+    typedef vcl::ScopedBitmapAccess< BitmapWriteAccess, AlphaMask, &AlphaMask::AcquireWriteAccess >
+        ScopedWriteAccess;
+
 public:
 
     sal_Bool                    Read( SvStream& rIStm, sal_Bool bFileHeader = sal_True ) { return Bitmap::Read( rIStm, bFileHeader ); }

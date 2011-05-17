@@ -220,8 +220,8 @@ namespace vcl
                           sal_Int32                                                  nHeight,
                           const rendering::IntegerBitmapLayout&                      rLayout,
                           const uno::Reference< rendering::XIntegerReadOnlyBitmap >& xInputBitmap,
-                          ScopedBitmapWriteAccess&                                   rWriteAcc,
-                          ScopedBitmapWriteAccess&                                   rAlphaAcc )
+                          Bitmap::ScopedWriteAccess&                                   rWriteAcc,
+                          Bitmap::ScopedWriteAccess&                                   rAlphaAcc )
             {
                 rendering::IntegerBitmapLayout      aCurrLayout;
                 geometry::IntegerRectangle2D        aRect;
@@ -433,9 +433,8 @@ namespace vcl
                                            sal::static_int_cast<sal_uInt16>(1L << nAlphaDepth)) );
 
                 { // limit scoped access
-                    ScopedBitmapWriteAccess pWriteAccess( aBitmap.AcquireWriteAccess(),
-                                                          aBitmap );
-                    ScopedBitmapWriteAccess pAlphaWriteAccess( nAlphaDepth ? aAlpha.AcquireWriteAccess() : NULL,
+                    Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
+                    Bitmap::ScopedWriteAccess pAlphaWriteAccess( nAlphaDepth ? aAlpha.AcquireWriteAccess() : NULL,
                                                                aAlpha );
 
                     ENSURE_OR_THROW(pWriteAccess.get() != NULL,

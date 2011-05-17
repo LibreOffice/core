@@ -173,8 +173,7 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
     int      nDepth = nOriginalDepth;
 
     {
-        ScopedBitmapReadAccess pAcc( aContainedBmp.AcquireReadAccess(),
-                                     aContainedBmp );
+        Bitmap::ScopedReadAccess pAcc( aContainedBmp );
         nDepth = pAcc->GetBitCount();
     }
 
@@ -324,8 +323,7 @@ void checkBitmapImport( const rtl::Reference<VclCanvasBitmap>& xBmp,
     int      nDepth = nOriginalDepth;
 
     {
-        ScopedBitmapReadAccess pAcc( aContainedBmp.AcquireReadAccess(),
-                                     aContainedBmp );
+        Bitmap::ScopedReadAccess pAcc( aContainedBmp );
         nDepth = pAcc->GetBitCount();
     }
 
@@ -888,8 +886,7 @@ void TestWindow::Paint( const Rectangle& )
             Bitmap aBitmap(Size(200,200),nDepth);
             aBitmap.Erase(COL_WHITE);
             {
-                ScopedBitmapWriteAccess pAcc(aBitmap.AcquireWriteAccess(),
-                                             aBitmap);
+                Bitmap::ScopedWriteAccess pAcc(aBitmap);
                 if( pAcc.get() )
                 {
                     BitmapColor aBlack(0);
@@ -919,8 +916,7 @@ void TestWindow::Paint( const Rectangle& )
             Bitmap aMask(Size(200,200),1);
             aMask.Erase(COL_WHITE);
             {
-                ScopedBitmapWriteAccess pAcc(aMask.AcquireWriteAccess(),
-                                             aMask);
+                Bitmap::ScopedWriteAccess pAcc(aMask);
                 if( pAcc.get() )
                 {
                     pAcc->SetFillColor(COL_BLACK);

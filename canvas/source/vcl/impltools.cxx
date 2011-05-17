@@ -277,9 +277,8 @@ namespace vclcanvas
                     aSrcAlpha = rBitmap.GetMask();
             }
 
-            ScopedBitmapReadAccess pReadAccess( aSrcBitmap.AcquireReadAccess(),
-                                                aSrcBitmap );
-            ScopedBitmapReadAccess pAlphaReadAccess( rBitmap.IsTransparent() ?
+            Bitmap::ScopedReadAccess pReadAccess( aSrcBitmap );
+            Bitmap::ScopedReadAccess pAlphaReadAccess( rBitmap.IsTransparent() ?
                                                      aSrcAlpha.AcquireReadAccess() :
                                                      (BitmapReadAccess*)NULL,
                                                      aSrcAlpha );
@@ -334,10 +333,8 @@ namespace vclcanvas
                 // copy-constructing the resulting bitmap. This will
                 // rule out the possibility that cached accessor data
                 // is not yet written back.
-                ScopedBitmapWriteAccess pWriteAccess( aDstBitmap.AcquireWriteAccess(),
-                                                      aDstBitmap );
-                ScopedBitmapWriteAccess pAlphaWriteAccess( aDstAlpha.AcquireWriteAccess(),
-                                                           aDstAlpha );
+                Bitmap::ScopedWriteAccess pWriteAccess( aDstBitmap );
+                Bitmap::ScopedWriteAccess pAlphaWriteAccess( aDstAlpha );
 
 
                 if( pWriteAccess.get() != NULL &&

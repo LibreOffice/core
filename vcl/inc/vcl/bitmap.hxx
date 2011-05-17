@@ -34,6 +34,7 @@
 #include <vcl/mapmod.hxx>
 #include <tools/rc.hxx>
 #include <vcl/region.hxx>
+#include <vcl/scopedbitmapaccess.hxx>
 
 // -----------
 // - Defines -
@@ -751,6 +752,11 @@ public:
     BitmapReadAccess*       AcquireReadAccess();
     BitmapWriteAccess*      AcquireWriteAccess();
     void                    ReleaseAccess( BitmapReadAccess* pAccess );
+
+    typedef vcl::ScopedBitmapAccess< BitmapReadAccess, Bitmap, &Bitmap::AcquireReadAccess >
+        ScopedReadAccess;
+    typedef vcl::ScopedBitmapAccess< BitmapWriteAccess, Bitmap, &Bitmap::AcquireWriteAccess >
+        ScopedWriteAccess;
 
 public:
 

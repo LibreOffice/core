@@ -149,9 +149,8 @@ namespace vclcanvas
         Bitmap aBitmap( mpBackBuffer->getBitmapReference().GetBitmap() );
         Bitmap aAlpha( mpBackBuffer->getBitmapReference().GetAlpha().GetBitmap() );
 
-        ScopedBitmapReadAccess pReadAccess( aBitmap.AcquireReadAccess(),
-                                            aBitmap );
-        ScopedBitmapReadAccess pAlphaReadAccess( aAlpha.IsEmpty() ?
+        Bitmap::ScopedReadAccess pReadAccess( aBitmap );
+        Bitmap::ScopedReadAccess pAlphaReadAccess( aAlpha.IsEmpty() ?
                                                  (BitmapReadAccess*)NULL : aAlpha.AcquireReadAccess(),
                                                  aAlpha );
 
@@ -229,9 +228,8 @@ namespace vclcanvas
                                  // actually changed a pixel
 
         {
-            ScopedBitmapWriteAccess pWriteAccess( aBitmap.AcquireWriteAccess(),
-                                                  aBitmap );
-            ScopedBitmapWriteAccess pAlphaWriteAccess( aAlpha.IsEmpty() ?
+            Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
+            Bitmap::ScopedWriteAccess pAlphaWriteAccess( aAlpha.IsEmpty() ?
                                                        (BitmapWriteAccess*)NULL : aAlpha.AcquireWriteAccess(),
                                                        aAlpha );
 
@@ -471,9 +469,8 @@ namespace vclcanvas
                                  // actually changed a pixel
 
         {
-            ScopedBitmapWriteAccess pWriteAccess( aBitmap.AcquireWriteAccess(),
-                                                  aBitmap );
-            ScopedBitmapWriteAccess pAlphaWriteAccess( aAlpha.IsEmpty() ?
+            Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
+            Bitmap::ScopedWriteAccess pAlphaWriteAccess( aAlpha.IsEmpty() ?
                                                        (BitmapWriteAccess*)NULL : aAlpha.AcquireWriteAccess(),
                                                        aAlpha );
 
@@ -525,9 +522,8 @@ namespace vclcanvas
         Bitmap aBitmap( mpBackBuffer->getBitmapReference().GetBitmap() );
         Bitmap aAlpha( mpBackBuffer->getBitmapReference().GetAlpha().GetBitmap() );
 
-        ScopedBitmapReadAccess pReadAccess( aBitmap.AcquireReadAccess(),
-                                            aBitmap );
-        ScopedBitmapReadAccess pAlphaReadAccess( aAlpha.IsEmpty() ?
+        Bitmap::ScopedReadAccess pReadAccess( aBitmap );
+        Bitmap::ScopedReadAccess pAlphaReadAccess( aAlpha.IsEmpty() ?
                                                  (BitmapReadAccess*)NULL : aAlpha.AcquireReadAccess(),
                                                  aAlpha );
         ENSURE_OR_THROW( pReadAccess.get() != NULL,

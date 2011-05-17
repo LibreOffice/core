@@ -1189,8 +1189,7 @@ void TestWindow::Paint( const Rectangle& /*rRect*/ )
 
     // Fill bitmap with generated content
     {
-        ScopedBitmapWriteAccess pWriteAccess( aBitmap.AcquireWriteAccess(),
-                                              aBitmap );
+        Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
         for( int y=0; y<aTestSize.getY(); ++y )
             for( int x=0; x<aTestSize.getX(); ++x )
                 pWriteAccess->SetPixel(y,x,
