@@ -75,7 +75,7 @@ LIB2FILES= \
     $(SLB)$/wpsimp.lib
 SHL2LIBS=$(LIB2TARGET)
 SHL2STDLIBS+= \
-    $(SVLLIB)	\
+    $(SVLLIB) \
     $(SOTLIB) \
     $(SO2LIB) \
     $(SVTOOLLIB) \
@@ -103,7 +103,7 @@ LIB3FILES= \
     $(SLB)$/wpgimp.lib
 SHL3LIBS=$(LIB3TARGET)
 SHL3STDLIBS+= \
-    $(SVLLIB)	\
+    $(SVLLIB) \
     $(SOTLIB) \
     $(SO2LIB) \
     $(SVTOOLLIB) \
@@ -131,7 +131,7 @@ LIB4FILES= \
     $(SLB)$/vsdimp.lib
 SHL4LIBS=$(LIB4TARGET)
 SHL4STDLIBS+= \
-    $(SVLLIB)	\
+    $(SVLLIB) \
     $(SOTLIB) \
     $(SO2LIB) \
     $(SVTOOLLIB) \
@@ -143,7 +143,7 @@ SHL4STDLIBS+= \
     $(CPPULIB) \
     $(SALLIB) \
     $(XMLOFFLIB) \
-	$(LIBVISIO) \
+    $(LIBVISIO) \
     $(LIBWPG) \
     $(LIBWPD)
 
