@@ -102,7 +102,7 @@ SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
     pSearchItem = new SvxSearchItem(SID_SEARCH_ITEM);
     pSearchItem->SetAppFlag(SVX_SEARCHAPP_DRAW);
     StartListening( *SFX_APP() );
-    SvxErrorHandler::Get();
+    SvxErrorHandler::ensure();
     mpErrorHdl = new SfxErrorHandler( RID_SD_ERRHDL,
                                          ERRCODE_AREA_SD,
                                          ERRCODE_AREA_SD_END,
