@@ -25,6 +25,9 @@
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
+
+#include <stdlib.h>
+
 #include "FilterInternal.hxx"
 #include "PageSpan.hxx"
 #include "DocumentElement.hxx"
