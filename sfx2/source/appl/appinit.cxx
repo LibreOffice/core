@@ -264,9 +264,6 @@ bool SfxApplication::Initialize_Impl()
     pAppData_Impl->m_pSbxErrorHdl = new SfxErrorHandler(
         RID_BASIC_START, ERRCODE_AREA_SBX, ERRCODE_AREA_SBX_END );
 
-    // diverse Pointer
-    SfxPickList::GetOrCreate( SvtHistoryOptions().GetSize( ePICKLIST ) );
-
     DBG_ASSERT( !pAppData_Impl->pAppDispat, "AppDispatcher already exists" );
     pAppData_Impl->pAppDispat = new SfxDispatcher((SfxDispatcher*)0);
     pAppData_Impl->pSlotPool = new SfxSlotPool;

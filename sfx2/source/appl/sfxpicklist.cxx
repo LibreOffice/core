@@ -170,28 +170,10 @@ SfxPickList::PickListEntry* SfxPickList::GetPickListEntry( sal_uInt32 nIndex )
         return 0;
 }
 
-SfxPickList& SfxPickList::GetOrCreate( const sal_uInt32 nMenuSize )
-{
-    if ( !pUniqueInstance )
-    {
-        ::osl::MutexGuard aGuard( thePickListMutex::get() );
-        if ( !pUniqueInstance )
-            pUniqueInstance = new SfxPickList( nMenuSize );
-    }
-
-    return *pUniqueInstance;
-}
-
 SfxPickList& SfxPickList::Get()
 {
-    ::osl::MutexGuard aGuard( thePickListMutex::get() );
-    return *pUniqueInstance;
-}
-
-void SfxPickList::Delete()
-{
-    ::osl::MutexGuard aGuard( thePickListMutex::get() );
-    DELETEZ( pUniqueInstance );
+    static SfxPickList aUniqueInstance(SvtHistoryOptions().GetSize(ePICKLIST));
+    return aUniqueInstance;
 }
 
 SfxPickList::SfxPickList( sal_uInt32 nAllowedMenuSize ) :

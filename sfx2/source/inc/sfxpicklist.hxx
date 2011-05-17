@@ -67,9 +67,7 @@ class SfxPickList : public SfxListener
     void                    RemovePickListEntries();
 
     public:
-        static SfxPickList& GetOrCreate( const sal_uInt32 nMenuSize );
         static SfxPickList& Get();
-        static void         Delete();
 
         sal_uInt32          GetAllowedMenuSize() { return m_nAllowedMenuSize; }
         sal_uInt32          GetNumOfEntries() const { return m_aPicklistVector.size(); }
