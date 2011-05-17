@@ -39,7 +39,7 @@ TARGET=lpsolve
 TARFILE_NAME=lp_solve_5.5
 TARFILE_MD5=26b3e95ddf3d9c077c480ea45874b3b8
 
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI_FOR_BUILD)"=="WNT"
 PATCH_FILES=lp_solve_5.5-windows.patch
 .ELSE
 PATCH_FILES=\
@@ -65,7 +65,12 @@ lpsolve_LDFLAGS=-shared-libgcc
 .IF "$(MINGW_SHARED_GXXLIB)"=="YES"
 lpsolve_LIBS=$(MINGW_SHARED_LIBSTDCPP)
 .ENDIF
+.IF "$(GUI_FOR_BUILD)"=="WNT"
 BUILD_ACTION=lpsolve_LDFLAGS=$(lpsolve_LDFLAGS) lpsolve_LIBS=$(lpsolve_LIBS) cmd /c cgcc.bat
+.ELSE
+BUILD_ACTION=sh ccc
+OUT2LIB=$(BUILD_DIR)$/liblpsolve55.a
+.ENDIF
 .ELSE
 BUILD_ACTION=cmd /c cvc6.bat
 OUT2LIB=$(BUILD_DIR)$/lpsolve55.lib
