@@ -185,7 +185,7 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
 {
     SetName( String::CreateFromAscii("StarWriter") );
     pSwResMgr = GetResMgr();
-    SvxErrorHandler::Get();
+    SvxErrorHandler::ensure();
     pErrorHdl = new SfxErrorHandler( RID_SW_ERRHDL,
                                      ERRCODE_AREA_SW,
                                      ERRCODE_AREA_SW_END,
