@@ -419,7 +419,7 @@ static t_type2ptr::iterator findType(t_type2ptr *pMap, const Type & rKey )
     {
         if (iter->first == rKey)
             break;
-        iter++;
+        ++iter;
     }
     return iter;
 }
@@ -532,7 +532,7 @@ static t_long2ptr::iterator findLong(t_long2ptr *pMap, sal_Int32 nKey )
     {
         if (iter->first == nKey)
             break;
-        iter++;
+        ++iter;
     }
     return iter;
 }

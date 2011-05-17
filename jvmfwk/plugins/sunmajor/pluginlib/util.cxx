@@ -490,7 +490,7 @@ bool getJavaProps(const OUString & exePath,
         props.push_back(std::make_pair(sKey, sVal));
     }
 
-    if (rs != FileHandleReader::RESULT_ERROR && props.size()>0)
+    if (rs != FileHandleReader::RESULT_ERROR && !props.empty())
         ret = true;
 
     //process error stream data
@@ -649,7 +649,7 @@ bool getJREInfoFromRegistry(vector<OUString>& vecJavaHome)
 
 void bubbleSortVersion(vector<rtl::Reference<VendorBase> >& vec)
 {
-    if(vec.size() == 0)
+    if(vec.empty())
         return;
     int size= vec.size() - 1;
     int cIter= 0;
@@ -694,7 +694,7 @@ void bubbleSortVersion(vector<rtl::Reference<VendorBase> >& vec)
                 vec.at(j)= less;
             }
         }
-        cIter++;
+        ++cIter;
     }
 }
 
@@ -1022,7 +1022,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
             break;
     }
 
-    if (props.size() == 0)
+    if (props.empty())
         return rtl::Reference<VendorBase>();
 
     //find java.vendor property

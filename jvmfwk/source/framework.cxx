@@ -802,7 +802,7 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
             if (plerr == JFW_PLUGIN_E_NONE)
             {
                 //check if the vendor of the found JRE is supported
-                if (vecVendors.size() == 0)
+                if (vecVendors.empty())
                 {
                     //vendor does not matter
                     *ppInfo = pInfo;

@@ -49,7 +49,7 @@ public:
      */
     CXPathObjectPtr & operator = (xmlXPathObject* pObj);
     xmlXPathObject* operator -> ();
-    operator xmlXPathObject* ();
+    operator xmlXPathObject* () const;
 };
 
 //===========================================================
@@ -65,7 +65,7 @@ public:
     CXPathContextPtr & operator = (xmlXPathContextPtr pObj);
     ~CXPathContextPtr();
     xmlXPathContext* operator -> ();
-    operator xmlXPathContext* ();
+    operator xmlXPathContext* () const;
 };
 
 //===========================================================
@@ -84,7 +84,7 @@ public:
     CXmlDocPtr & operator = (xmlDoc* pObj);
     ~CXmlDocPtr();
     xmlDoc* operator -> ();
-    operator xmlDoc* ();
+    operator xmlDoc* () const;
 };
 
 //===========================================================
@@ -100,8 +100,7 @@ public:
     CXmlCharPtr(const ::rtl::OUString &);
     ~CXmlCharPtr();
     CXmlCharPtr & operator = (xmlChar* pObj);
-//    xmlChar* operator -> ();
-    operator xmlChar* ();
+    operator xmlChar* () const;
     operator ::rtl::OUString ();
     operator ::rtl::OString ();
 };

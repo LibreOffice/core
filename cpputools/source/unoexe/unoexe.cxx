@@ -738,7 +738,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc,)
             }
         }
 
-        if (aReadOnlyRegistries.size() > 0 ||
+        if ((!aReadOnlyRegistries.empty()) ||
             aReadWriteRegistry.getLength() > 0)
         {
             //#### create registry #############################################
