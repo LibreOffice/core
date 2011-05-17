@@ -36,6 +36,7 @@ LIBVISIO=-lvisiolib
 LIBWPD=$(LIBPRE) wpdlib.lib
 LIBWPS=$(LIBPRE) wpslib.lib
 LIBWPG=$(LIBPRE) wpglib.lib
+LIBVISIO=$(LIBPRE) visiolib.lib
 
 .ENDIF
 
@@ -150,7 +151,7 @@ SHL4TARGET = visioimport$(DLLPOSTFIX)
 SHL4IMPLIB = i$(SHL4TARGET)
 SHL4LIBS = $(LIB4TARGET)
 SHL4VERSIONMAP = $(SOLARENV)/src/component.map
-DEF3NAME = $(SHL4TARGET)
+DEF4NAME = $(SHL4TARGET)
 
 .INCLUDE :  target.mk
 
