@@ -410,7 +410,7 @@ void SfxStateCache::SetVisibleState( sal_Bool bShow )
         if ( pInternalController )
             pInternalController->StateChanged( nId, eState, pState );
 
-        if ( !bDeleteItem )
+        if ( bDeleteItem )
             delete pState;
     }
 }
