@@ -94,9 +94,9 @@
 
 class SVX_DLLPUBLIC SvxErrorHandler : private SfxErrorHandler
 {
-  public:
+public:
     SvxErrorHandler();
-    static void Get();
+    static void ensure();
 };
 
 #endif

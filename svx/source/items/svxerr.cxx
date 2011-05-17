@@ -37,20 +37,23 @@
 
 #include <svx/dialogs.hrc>
 
-static SvxErrorHandler* pHandler=NULL;
+#include <rtl/instance.hxx>
 
 SvxErrorHandler::SvxErrorHandler() :
-
   SfxErrorHandler(
       RID_SVXERRCODE, ERRCODE_AREA_SVX, ERRCODE_AREA_SVX_END, &DIALOG_MGR() )
 {
-    pHandler = this;
 }
 
-void SvxErrorHandler::Get()
+namespace
 {
-    if ( !pHandler )
-        new SvxErrorHandler;
+    class theSvxErrorHandler
+        : public rtl::Static<SvxErrorHandler, theSvxErrorHandler> {};
+}
+
+void SvxErrorHandler::ensure()
+{
+    theSvxErrorHandler::get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
