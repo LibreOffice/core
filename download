@@ -273,5 +273,21 @@ done
 
 [ -x "post_download" ] || { echo "'post_download' script not found, run ./autogen.sh." ; exit 1 ; }
 
-./post_download --build=$BUILD_PLATFORM --host=$HOST_PLATFORM || exit 1
+# Save the config.log from the main configure script
+# and restore it after running post_download.
+mv config.log config.log.save
+
+./post_download --build=$BUILD_PLATFORM --host=$HOST_PLATFORM
+post_download_status=$?
+
+test -f config.log && mv config.log post_download.log
+mv config.log.save config.log
+
+exit $post_download_status
+
+# Local Variables:
+# tab-width: 4
+# indent-tabs-mode: nil
+# End:
+
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
