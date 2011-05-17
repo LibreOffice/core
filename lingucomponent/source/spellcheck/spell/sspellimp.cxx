@@ -76,8 +76,8 @@ using ::rtl::OString;
 
 ///////////////////////////////////////////////////////////////////////////
 
-SpellChecker::SpellChecker() :
-    aEvtListeners   ( GetLinguMutex() )
+SpellChecker::SpellChecker()
+    : aEvtListeners(GetLinguMutex())
 {
     aDicts = NULL;
     aDEncs = NULL;
@@ -88,30 +88,28 @@ SpellChecker::SpellChecker() :
     numdict = 0;
 }
 
-
 SpellChecker::~SpellChecker()
 {
     if (aDicts)
     {
-       for (int i = 0; i < numdict; i++)
+       for (int i = 0; i < numdict; ++i)
        {
-            if (aDicts[i]) delete aDicts[i];
+            delete aDicts[i];
             aDicts[i] = NULL;
        }
        delete[] aDicts;
     }
     aDicts = NULL;
     numdict = 0;
-    if (aDEncs) delete[] aDEncs;
+    delete[] aDEncs;
     aDEncs = NULL;
-    if (aDLocs) delete[] aDLocs;
+    delete[] aDLocs;
     aDLocs = NULL;
-    if (aDNames) delete[] aDNames;
+    delete[] aDNames;
     aDNames = NULL;
-    if (pPropHelper)
+    if (xPropHelper.is())
         pPropHelper->RemoveAsPropListener();
 }
-
 
 PropertyHelper_Spell & SpellChecker::GetPropHelper_Impl()
 {
