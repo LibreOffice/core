@@ -771,7 +771,7 @@ bool openAreaDialog( const uno::Reference<report::XShape >& _xShape,const uno::R
             // #i74099# by default, the dialog deletes the current color table if a different one is loaded
             // (see SwDrawShell::ExecDrawDlg)
             const SvxColorTableItem* pColorItem = static_cast<const SvxColorTableItem*>( pDescriptor->GetItem(SID_COLOR_TABLE) );
-            if (pColorItem && pColorItem->GetColorTable() == XColorTable::GetStdColorTable())
+            if (pColorItem && pColorItem->GetColorTable() == &XColorTable::GetStdColorTable())
                 pDialog->DontDeleteColorTable();
             bSuccess = ( RET_OK == pDialog->Execute() );
             if ( bSuccess )
