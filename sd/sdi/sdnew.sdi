@@ -1,0 +1,77 @@
+//--------------------------------------------------------------------------
+SfxBoolItem VerticalTextFitToSizeTool SID_TEXT_FITTOSIZE_VERTICAL
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    Synchron;
+
+    Readonly = FALSE,
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_FORMAT;
+]
+
+SvxObjectItem RulerObject SID_RULER_OBJECT
+
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Synchron;
+
+    /* plugin: */
+    Container = FALSE,
+
+    /* api: */
+    Export = TRUE,
+    IsCollection = FALSE,
+    Readonly = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = ;
+]
+
+SfxBoolItem OutputQualityContrast SID_OUTPUT_QUALITY_CONTRAST
+
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    Asynchron;
+
+    Readonly = FALSE,
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_VIEW;
+]

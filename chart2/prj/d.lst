@@ -1,0 +1,27 @@
+mkdir: %COMMON_DEST%\bin%_EXT%\hid
+mkdir: %_DEST%\xml%_EXT%\uiconfig
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\schart
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\schart\menubar
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\schart\toolbar
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\schart\statusbar
+
+..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
+..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
+..\%__SRC%\class\*.jar %_DEST%\bin%_EXT%\*.jar
+..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
+..\%__SRC%\lib\*.sl %_DEST%\lib%_EXT%\*.sl
+..\%__SRC%\bin\*.bin %_DEST%\bin%_EXT%\*.bin
+..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
+..\%__SRC%\bin\*.rdb %_DEST%\rdb%_EXT%\*.rdb
+
+..\uiconfig\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\schart\menubar\*.xml
+..\uiconfig\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\schart\toolbar\*.xml
+..\uiconfig\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\schart\statusbar\*.xml
+
+mkdir: %_DEST%\inc%_EXT%\chart2
+..\%__SRC%\misc\chartcontroller.component %_DEST%\xml%_EXT%\chartcontroller.component
+..\%__SRC%\misc\chartmodel.component %_DEST%\xml%_EXT%\chartmodel.component
+..\%__SRC%\misc\charttools.component %_DEST%\xml%_EXT%\charttools.component
+..\%__SRC%\misc\chartview.component %_DEST%\xml%_EXT%\chartview.component

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="0.1">
+  <LC_INFO>
+    <Language>
+      <LangID>ts</LangID>
+      <DefaultName>Tsonga</DefaultName>
+    </Language>
+    <Country>
+      <CountryID>ZA</CountryID>
+      <DefaultName>South Africa</DefaultName>
+    </Country>
+  </LC_INFO>
+  <LC_CTYPE ref="en_ZA"/>
+  <LC_FORMAT ref="en_ZA" replaceTo="[$R-431]"/>
+  <LC_COLLATION ref="en_US"/>
+  <LC_SEARCH ref="en_US"/>
+  <LC_INDEX>
+    <IndexKey unoid="alphanumeric" default="true" phonetic="false">A-S Š T-Z</IndexKey>
+    <UnicodeScript>0</UnicodeScript>
+    <UnicodeScript>2</UnicodeScript>
+    <FollowPageWord>p.</FollowPageWord>
+    <FollowPageWord>pp.</FollowPageWord>
+  </LC_INDEX>
+  <LC_CALENDAR>
+    <Calendar unoid="gregorian" default="true">
+      <DaysOfWeek>
+        <Day>
+          <DayID>sun</DayID>
+          <DefaultAbbrvName>Son</DefaultAbbrvName>
+          <DefaultFullName>Sonto</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>mon</DayID>
+          <DefaultAbbrvName>Mus</DefaultAbbrvName>
+          <DefaultFullName>Musumbhunuku</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>tue</DayID>
+          <DefaultAbbrvName>Bir</DefaultAbbrvName>
+          <DefaultFullName>Ravumbirhi</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>wed</DayID>
+          <DefaultAbbrvName>Har</DefaultAbbrvName>
+          <DefaultFullName>Ravunharhu</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>thu</DayID>
+          <DefaultAbbrvName>Ne</DefaultAbbrvName>
+          <DefaultFullName>Ravumune</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>fri</DayID>
+          <DefaultAbbrvName>Tlh</DefaultAbbrvName>
+          <DefaultFullName>Ravuntlhanu</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>sat</DayID>
+          <DefaultAbbrvName>Mug</DefaultAbbrvName>
+          <DefaultFullName>Mugqivela</DefaultFullName>
+        </Day>
+      </DaysOfWeek>
+      <MonthsOfYear>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>Sun</DefaultAbbrvName>
+          <DefaultFullName>Sunguti</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>Yan</DefaultAbbrvName>
+          <DefaultFullName>Nyenyenyani</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>Kul</DefaultAbbrvName>
+          <DefaultFullName>Nyenyankulu</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>Dzi</DefaultAbbrvName>
+          <DefaultFullName>Dzivamisoko</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>Mud</DefaultAbbrvName>
+          <DefaultFullName>Mudyaxihi</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>Kho</DefaultAbbrvName>
+          <DefaultFullName>Khotavuxika</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>Maw</DefaultAbbrvName>
+          <DefaultFullName>Mawuwani</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>Mha</DefaultAbbrvName>
+          <DefaultFullName>Mhawuri</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>Ndz</DefaultAbbrvName>
+          <DefaultFullName>Ndzhati</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>Nhl</DefaultAbbrvName>
+          <DefaultFullName>Nhlangula</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>Huk</DefaultAbbrvName>
+          <DefaultFullName>Hukuri</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>N'w</DefaultAbbrvName>
+          <DefaultFullName>N'wendzamhala</DefaultFullName>
+        </Month>
+      </MonthsOfYear>
+      <Eras>
+        <Era>
+          <EraID>bc</EraID>
+          <DefaultAbbrvName>BC</DefaultAbbrvName>
+          <DefaultFullName>BC</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>ad</EraID>
+          <DefaultAbbrvName>AD</DefaultAbbrvName>
+          <DefaultFullName>AD</DefaultFullName>
+        </Era>
+      </Eras>
+      <StartDayOfWeek>
+        <DayID>sun</DayID>
+      </StartDayOfWeek>
+      <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
+    </Calendar>
+  </LC_CALENDAR>
+  <LC_CURRENCY ref="en_ZA"/>
+  <LC_TRANSLITERATION ref="en_US"/>
+  <LC_MISC>
+    <ReservedWords>
+      <trueWord>ntiyiso</trueWord>
+      <falseWord>vunwa</falseWord>
+      <quarter1Word>Kotara yo sungula</quarter1Word>
+      <quarter2Word>Kotara ya vumbirhi</quarter2Word>
+      <quarter3Word>Kotara ya vunharhu</quarter3Word>
+      <quarter4Word>Kotara ya vumune</quarter4Word>
+      <aboveWord>henhla</aboveWord>
+      <belowWord>hansi</belowWord>
+      <quarter1Abbreviation>K1</quarter1Abbreviation>
+      <quarter2Abbreviation>K2</quarter2Abbreviation>
+      <quarter3Abbreviation>K3</quarter3Abbreviation>
+      <quarter4Abbreviation>K4</quarter4Abbreviation>
+    </ReservedWords>
+  </LC_MISC>
+  <LC_NumberingLevel ref="en_US"/>
+  <LC_OutLineNumberingLevel ref="en_US"/>
+</Locale>

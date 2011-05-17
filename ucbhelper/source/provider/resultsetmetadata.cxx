@@ -1,0 +1,585 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_ucbhelper.hxx"
+
+/**************************************************************************
+                                TODO
+ **************************************************************************
+
+ *************************************************************************/
+
+#include "osl/diagnose.h"
+#include <com/sun/star/beans/Property.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/sdbc/XArray.hpp>
+#include <com/sun/star/sdbc/XBlob.hpp>
+#include <com/sun/star/sdbc/XClob.hpp>
+#include <com/sun/star/sdbc/XRef.hpp>
+#include <com/sun/star/util/Date.hpp>
+#include <com/sun/star/util/Time.hpp>
+#include <com/sun/star/util/DateTime.hpp>
+#include <ucbhelper/resultsetmetadata.hxx>
+
+using namespace com::sun::star::beans;
+using namespace com::sun::star::io;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::sdbc;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::util;
+
+using ::rtl::OUString;
+
+namespace ucbhelper_impl {
+
+struct ResultSetMetaData_Impl
+{
+    osl::Mutex                                      m_aMutex;
+    std::vector< ::ucbhelper::ResultSetColumnData > m_aColumnData;
+    sal_Bool                                        m_bObtainedTypes;
+    sal_Bool                                        m_bGlobalReadOnlyValue;
+
+    ResultSetMetaData_Impl( sal_Int32 nSize )
+    : m_aColumnData( nSize ), m_bObtainedTypes( sal_False ),
+      m_bGlobalReadOnlyValue( sal_True ) {}
+
+    ResultSetMetaData_Impl(
+        const std::vector< ::ucbhelper::ResultSetColumnData >& rColumnData )
+    : m_aColumnData( rColumnData ), m_bObtainedTypes( sal_False ),
+      m_bGlobalReadOnlyValue( sal_False ) {}
+};
+
+}
+
+using namespace ucbhelper_impl;
+
+namespace ucbhelper {
+
+//=========================================================================
+//=========================================================================
+//
+// ResultSetMetaData Implementation.
+//
+//=========================================================================
+//=========================================================================
+
+ResultSetMetaData::ResultSetMetaData(
+                        const Reference< XMultiServiceFactory >& rxSMgr,
+                        const Sequence< Property >& rProps,
+                        sal_Bool bReadOnly )
+: m_pImpl( new ResultSetMetaData_Impl( rProps.getLength() ) ),
+  m_xSMgr( rxSMgr ),
+  m_aProps( rProps ),
+  m_bReadOnly( bReadOnly )
+{
+}
+
+//=========================================================================
+ResultSetMetaData::ResultSetMetaData(
+                        const Reference< XMultiServiceFactory >& rxSMgr,
+                        const Sequence< Property >& rProps,
+                        const std::vector< ResultSetColumnData >& rColumnData )
+: m_pImpl( new ResultSetMetaData_Impl( rColumnData ) ),
+  m_xSMgr( rxSMgr ),
+  m_aProps( rProps ),
+  m_bReadOnly( sal_True )
+{
+    OSL_ENSURE( rColumnData.size() == sal_uInt32( rProps.getLength() ),
+                "ResultSetMetaData ctor - different array sizes!" );
+}
+
+//=========================================================================
+// virtual
+ResultSetMetaData::~ResultSetMetaData()
+{
+    delete m_pImpl;
+}
+
+//=========================================================================
+//
+// XInterface methods.
+//
+//=========================================================================
+
+XINTERFACE_IMPL_2( ResultSetMetaData,
+                   XTypeProvider,
+                   XResultSetMetaData );
+
+//=========================================================================
+//
+// XTypeProvider methods.
+//
+//=========================================================================
+
+XTYPEPROVIDER_IMPL_2( ResultSetMetaData,
+                      XTypeProvider,
+                      XResultSetMetaData );
+
+//=========================================================================
+//
+// XResultSetMetaData methods.
+//
+//=========================================================================
+
+// virtual
+sal_Int32 SAL_CALL ResultSetMetaData::getColumnCount()
+    throw( SQLException, RuntimeException )
+{
+    return m_aProps.getLength();
+}
+
+//=========================================================================
+// virtual
+sal_Bool SAL_CALL ResultSetMetaData::isAutoIncrement( sal_Int32 column )
+    throw( SQLException, RuntimeException )
+{
+    /*
+        Checks whether column is automatically numbered, which makes it
+        read-only.
+     */
+
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return sal_False;
+
+    return m_pImpl->m_aColumnData[ column - 1 ].isAutoIncrement;
+}
+
+//=========================================================================
+// virtual
+sal_Bool SAL_CALL ResultSetMetaData::isCaseSensitive( sal_Int32 column )
+    throw( SQLException, RuntimeException )
+{
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return sal_False;
+
+    return m_pImpl->m_aColumnData[ column - 1 ].isCaseSensitive;
+}
+
+//=========================================================================
+// virtual
+sal_Bool SAL_CALL ResultSetMetaData::isSearchable( sal_Int32 column )
+    throw( SQLException, RuntimeException )
+{
+    /*
+        Checks whether the value stored in column can be used in a
+        WHERE clause.
+     */
+
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return sal_False;
+
+    return m_pImpl->m_aColumnData[ column - 1 ].isSearchable;
+}
+
+//=========================================================================
+// virtual
+sal_Bool SAL_CALL ResultSetMetaData::isCurrency( sal_Int32 column )
+    throw( SQLException, RuntimeException )
+{
+    /*
+        Checks whether column is a cash value.
+     */
+
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return sal_False;
+
+    return m_pImpl->m_aColumnData[ column - 1 ].isCurrency;
+}
+
+//=========================================================================
+// virtual
+sal_Int32 SAL_CALL ResultSetMetaData::isNullable( sal_Int32 column )
+    throw( SQLException, RuntimeException )
+{
+    /*
+        Checks whether a NULL can be stored in column.
+        Possible values: see com/sun/star/sdbc/ColumnValue.idl
+     */
+
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return ColumnValue::NULLABLE;
+
+    return m_pImpl->m_aColumnData[ column - 1 ].isNullable;
+}
+
+//=========================================================================
+// virtual
+sal_Bool SAL_CALL ResultSetMetaData::isSigned( sal_Int32 column )
+    throw( SQLException, RuntimeException )
+{
+    /*
+        Checks whether the value stored in column is a signed number.
+     */
+
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return sal_False;
+
+    return m_pImpl->m_aColumnData[ column - 1 ].isSigned;
+}
+
+//=========================================================================
+// virtual
+sal_Int32 SAL_CALL ResultSetMetaData::getColumnDisplaySize( sal_Int32 column )
+    throw( SQLException, RuntimeException )
+{
+    /*
+        Gets the normal maximum width in characters for column.
+     */
+
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return 16;
+
+    return m_pImpl->m_aColumnData[ column - 1 ].columnDisplaySize;
+}
+
+//=========================================================================
+// virtual
+OUString SAL_CALL ResultSetMetaData::getColumnLabel( sal_Int32 column )
+    throw( SQLException, RuntimeException )
+{
+    /*
+        Gets the suggested column title for column, to be used in print-
+        outs and displays.
+     */
+
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return OUString();
+
+    OUString aLabel = m_pImpl->m_aColumnData[ column - 1 ].columnLabel;
+    if ( aLabel.getLength() )
+        return aLabel;
+
+    return m_aProps.getConstArray()[ column - 1 ].Name;
+}
+
+//=========================================================================
+// virtual
+OUString SAL_CALL ResultSetMetaData::getColumnName( sal_Int32 column )
+    throw( SQLException, RuntimeException )
+{
+    /*
+        Gets the name of column.
+     */
+
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return OUString();
+
+    return m_aProps.getConstArray()[ column - 1 ].Name;
+}
+
+//=========================================================================
+// virtual
+OUString SAL_CALL ResultSetMetaData::getSchemaName( sal_Int32 column )
+    throw( SQLException, RuntimeException )
+{
+    /*
+        Gets the schema name for the table from which column of this
+        result set was derived.
+        Because this feature is not widely supported, the return value
+        for many DBMSs will be an empty string.
+     */
+
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return OUString();
+
+    return m_pImpl->m_aColumnData[ column - 1 ].schemaName;
+}
+
+//=========================================================================
+// virtual
+sal_Int32 SAL_CALL ResultSetMetaData::getPrecision( sal_Int32 column )
+    throw( SQLException, RuntimeException )
+{
+    /*
+        For number types, getprecision gets the number of decimal digits
+        in column.
+        For character types, it gets the maximum length in characters for
+        column.
+        For binary types, it gets the maximum length in bytes for column.
+     */
+
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return -1;
+
+    return m_pImpl->m_aColumnData[ column - 1 ].precision;
+}
+
+//=========================================================================
+// virtual
+sal_Int32 SAL_CALL ResultSetMetaData::getScale( sal_Int32 column )
+    throw( SQLException, RuntimeException )
+{
+    /*
+        Gets the number of digits to the right of the decimal point for
+        values in column.
+     */
+
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return 0;
+
+    return m_pImpl->m_aColumnData[ column - 1 ].scale;
+}
+
+//=========================================================================
+// virtual
+OUString SAL_CALL ResultSetMetaData::getTableName( sal_Int32 column )
+    throw( SQLException, RuntimeException )
+{
+    /*
+        Gets the name of the table from which column of this result set
+        was derived or "" if there is none (for example, for a join).
+        Because this feature is not widely supported, the return value
+        for many DBMSs will be an empty string.
+     */
+
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return OUString();
+
+    return m_pImpl->m_aColumnData[ column - 1 ].tableName;
+}
+
+//=========================================================================
+// virtual
+OUString SAL_CALL ResultSetMetaData::getCatalogName( sal_Int32 column )
+    throw( SQLException, RuntimeException )
+{
+    /*
+        Gets the catalog name for the table from which column of this
+        result set was derived.
+        Because this feature is not widely supported, the return value
+        for many DBMSs will be an empty string.
+     */
+
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return OUString();
+
+    return m_pImpl->m_aColumnData[ column - 1 ].catalogName;
+}
+
+//=========================================================================
+// virtual
+sal_Int32 SAL_CALL ResultSetMetaData::getColumnType( sal_Int32 column )
+    throw( SQLException, RuntimeException )
+{
+    /*
+        Gets the JDBC type for the value stored in column. ... The STRUCT
+        and DISTINCT type codes are always returned for structured and
+        distinct types, regardless of whether the value will be mapped
+        according to the standard mapping or be a custom mapping.
+     */
+
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return DataType::SQLNULL;
+
+    if ( m_aProps.getConstArray()[ column - 1 ].Type
+            == getCppuVoidType() )
+    {
+        // No type given. Try UCB's Properties Manager...
+
+        osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+
+        if ( !m_pImpl->m_bObtainedTypes )
+        {
+            try
+            {
+                Reference< XPropertySetInfo > xInfo(
+                            m_xSMgr->createInstance(
+                                OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "com.sun.star.ucb.PropertiesManager" )) ),
+                            UNO_QUERY );
+                if ( xInfo.is() )
+                {
+
+    // Less (remote) calls...
+
+                    Sequence< Property > aProps = xInfo->getProperties();
+                    const Property* pProps1 = aProps.getConstArray();
+                    sal_Int32 nCount1 = aProps.getLength();
+
+                    sal_Int32 nCount = m_aProps.getLength();
+                    Property* pProps = m_aProps.getArray();
+                    for ( sal_Int32 n = 0; n < nCount; ++n )
+                    {
+                        Property& rProp = pProps[ n ];
+
+                        for ( sal_Int32 m = 0; m < nCount1; ++m )
+                        {
+                            const Property& rProp1 = pProps1[ m ];
+                            if ( rProp.Name == rProp1.Name )
+                            {
+                                // Found...
+                                rProp.Type = rProp1.Type;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            catch ( RuntimeException& )
+            {
+                throw;
+            }
+            catch ( Exception& )
+            {
+                // createInstance
+            }
+
+            m_pImpl->m_bObtainedTypes = sal_True;
+        }
+    }
+
+    const Type& rType = m_aProps.getConstArray()[ column - 1 ].Type;
+    sal_Int32 nType = DataType::OTHER;
+
+    if ( rType == getCppuType( static_cast< const rtl::OUString * >( 0 ) ) )
+        nType = DataType::VARCHAR;  // XRow::getString
+    else if ( rType == getCppuBooleanType() )
+        nType = DataType::BIT;      // XRow::getBoolean
+    else if ( rType == getCppuType( static_cast< const sal_Int32 * >( 0 ) ) )
+        nType = DataType::INTEGER;  // XRow::getInt
+    else if ( rType == getCppuType( static_cast< const sal_Int64 * >( 0 ) ) )
+        nType = DataType::BIGINT;   // XRow::getLong
+    else if ( rType == getCppuType( static_cast< const sal_Int16 * >( 0 ) ) )
+        nType = DataType::SMALLINT; // XRow::getShort
+    else if ( rType == getCppuType( static_cast< const sal_Int8 * >( 0 ) ) )
+        nType = DataType::TINYINT;  // XRow::getByte
+    else if ( rType == getCppuType( static_cast< const float * >( 0 ) ) )
+        nType = DataType::REAL;     // XRow::getFloat
+    else if ( rType == getCppuType( static_cast< const double * >( 0 ) ) )
+        nType = DataType::DOUBLE;   // XRow::getDouble
+    else if ( rType == getCppuType( static_cast< const Sequence< sal_Int8 > * >( 0 ) ) )
+        nType = DataType::VARBINARY;// XRow::getBytes
+    else if ( rType == getCppuType( static_cast< const Date * >( 0 ) ) )
+        nType = DataType::DATE;     // XRow::getDate
+    else if ( rType == getCppuType( static_cast< const Time * >( 0 ) ) )
+        nType = DataType::TIME;     // XRow::getTime
+    else if ( rType == getCppuType( static_cast< const DateTime * >( 0 ) ) )
+        nType = DataType::TIMESTAMP;// XRow::getTimestamp
+    else if ( rType == getCppuType( static_cast< Reference< XInputStream > * >( 0 ) ) )
+        nType = DataType::LONGVARBINARY;    // XRow::getBinaryStream
+//      nType = DataType::LONGVARCHAR;      // XRow::getCharacterStream
+    else if ( rType == getCppuType( static_cast< Reference< XClob > * >( 0 ) ) )
+        nType = DataType::CLOB; // XRow::getClob
+    else if ( rType == getCppuType( static_cast< Reference< XBlob > * >( 0 ) ) )
+        nType = DataType::BLOB; // XRow::getBlob
+    else if ( rType == getCppuType( static_cast< Reference< XArray > * >( 0 ) ) )
+        nType = DataType::ARRAY;// XRow::getArray
+    else if ( rType == getCppuType( static_cast< Reference< XRef > * >( 0 ) ) )
+        nType = DataType::REF;// XRow::getRef
+    else
+        nType = DataType::OBJECT;// XRow::getObject
+
+    return nType;
+}
+
+//=========================================================================
+// virtual
+OUString SAL_CALL ResultSetMetaData::getColumnTypeName( sal_Int32 column )
+    throw( SQLException, RuntimeException )
+{
+    /*
+        Gets the type name used by this particular data source for the
+        values stored in column. If the type code for the type of value
+        stored in column is STRUCT, DISTINCT or JAVA_OBJECT, this method
+        returns a fully-qualified SQL type name.
+     */
+
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return OUString();
+
+    return m_pImpl->m_aColumnData[ column - 1 ].columnTypeName;
+}
+
+//=========================================================================
+// virtual
+sal_Bool SAL_CALL ResultSetMetaData::isReadOnly( sal_Int32 column )
+    throw( SQLException, RuntimeException )
+{
+    if ( m_pImpl->m_bGlobalReadOnlyValue )
+        return m_bReadOnly;
+
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return sal_True;
+
+    // autoincrement==true => readonly
+    return m_pImpl->m_aColumnData[ column - 1 ].isAutoIncrement ||
+           m_pImpl->m_aColumnData[ column - 1 ].isReadOnly;
+}
+
+//=========================================================================
+// virtual
+sal_Bool SAL_CALL ResultSetMetaData::isWritable( sal_Int32 column )
+    throw( SQLException, RuntimeException )
+{
+    if ( m_pImpl->m_bGlobalReadOnlyValue )
+        return !m_bReadOnly;
+
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return sal_False;
+
+    return m_pImpl->m_aColumnData[ column - 1 ].isWritable;
+}
+
+//=========================================================================
+// virtual
+sal_Bool SAL_CALL ResultSetMetaData::isDefinitelyWritable( sal_Int32 column )
+    throw( SQLException, RuntimeException )
+{
+    if ( m_pImpl->m_bGlobalReadOnlyValue )
+        return !m_bReadOnly;
+
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return sal_False;
+
+    return m_pImpl->m_aColumnData[ column - 1 ].isDefinitelyWritable;
+}
+
+//=========================================================================
+// virtual
+OUString SAL_CALL ResultSetMetaData::getColumnServiceName( sal_Int32 column )
+    throw( SQLException, RuntimeException )
+{
+    /*
+          Returns the fully-qualified name of the service whose instances
+         are manufactured if XResultSet::getObject is called to retrieve
+        a value from the column.
+     */
+
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return OUString();
+
+    return m_pImpl->m_aColumnData[ column - 1 ].columnServiceName;
+}
+
+} // namespace ucbhelper
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

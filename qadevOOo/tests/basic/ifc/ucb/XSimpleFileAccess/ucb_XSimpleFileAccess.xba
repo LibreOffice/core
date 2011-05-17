@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="ucb_XSimpleFileAccess" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.ucb.XSimpleFileAccess
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim testDir As String
+    Dim cSubFolder As String
+    Dim cFile1 As String
+    Dim cFile2 As String
+    Dim cFile3 As String
+    Dim oFC As Variant
+    Dim oDT As Object
+    Dim oOS As Object
+    Dim oIS As Object
+    Dim cFileName As String
+    Dim cCrDate As String
+    Dim cType As String
+    Dim i As Integer
+    Dim k As Integer
+    Dim oIH As Object
+
+    Dim Bytes(5) As Integer
+    for i = 0 to 5
+        Bytes(i) = i
+    next i
+
+    testDir = utils.Path2URL(cTestDocsDir + "XSimpleFileAccessBASIC")
+    Out.Log("Test directory is '" + testDir + "'")
+    cSubFolder = utils.getTempFileURL( + "/SubFolder")
+    cFile1 = utils.Path2URL(testDir + "/File1.txt")
+    cFile2 = utils.Path2URL(testDir + "/File2.txt")
+    cFile3 = utils.Path2URL(cSubFolder + "/File3.txt")
+    if FileExists(cFile3) then kill(cFile3)
+    if (FileExists(cSubFolder)) then rmDir(cSubFolder)
+
+    Out.Log("Test that files are in place...")
+    bOK = true
+    bOK = bOK AND FileExists(cFile1)
+    bOK = bOK AND FileExists(cFile2)
+    if (NOT bOK) then
+        Out.Log("Can't find '" + cFile1 + "' and/or '" + cFile2 + "'")
+        Exit Sub
+    end if
+
+    Test.StartMethod("createFolder()")
+    bOK = true
+    Out.Log("Creating subfolder '" + cSubFolder + "'")
+    oObj.createFolder(cSubFolder)
+    bOK = bOK AND FileExists(cSubFolder)
+    Test.MethodTested("createFolder()", bOK)
+
+    Test.StartMethod("isFolder()")
+    bOK = true
+    bOK = bOK AND oObj.isFolder(cSubFolder)
+    bOK = bOK AND NOT oObj.isFolder(cFile1)
+    Test.MethodTested("isFolder()", bOK)
+
+    Test.StartMethod("getFolderContents()")
+    bOK = true
+    Out.Log("Getting content of folder '" + utils.Path2URL(cTestDocsDir) + "'")
+    oFC = oObj.getFolderContents(utils.Path2URL(cTestDocsDir), False)
+    ' Getting files amount (without folders)
+    cFileName = Dir(utils.Path2URL(cTestDocsDir))
+    i = 0
+    Out.Log("File list :")
+    while (cFileName &lt;&gt; "")
+        Out.Log("   " + cFileName)
+        i = i + 1
+        cFileName = Dir()
+    wend
+
+    bOK = bOK AND ubound(oFC) = i - 1
+    if (bOK) then
+        for k = 0 to i - 1
+            bOK = bOK AND FileExists(oFC(k))
+        next k
+    else
+        Out.Log("Amount of files in list is wrong: " + (ubound(oFC) + 1) + "," + i)
+        
+    end if
+
+    Test.MethodTested("getFolderContents()", bOK)
+
+    Test.StartMethod("move()")
+    bOK = true
+    oObj.move(cFile2, cFile3)
+    bOK = bOK AND FileExists(cFile3) AND NOT FileExists(cFile2)
+    Test.MethodTested("move()", bOK)
+
+    Test.StartMethod("copy()")
+    bOK = true
+    oObj.copy(cFile3, cFile2)
+    bOK = bOK AND FileExists(cFile3) AND FileExists(cFile2)
+    Test.MethodTested("copy()", bOK)
+
+    Test.StartMethod("openFileWrite()")
+    bOK = true
+
+    Test.StartMethod("kill()")
+    bOK = true
+    oObj.kill(cFile3)
+    bOK = bOK AND NOT FileExists(cFile3)
+    Test.MethodTested("kill()", bOK)
+
+    Test.StartMethod("exists()")
+    bOK = true
+    bOK = bOK AND oObj.exists(cFile1) = FileExists(cFile1) AND oObj.exists(cFile3) = FileExists(cFile3)
+    Test.MethodTested("exists()", bOK)
+
+    Out.Log("creating a new file '" + cFile3 + "'")
+    oOS = oObj.openFileWrite(cFile3)
+    bOK = bOK AND NOT isNULL(oOS)
+    bOK = bOK AND FileExists(cFile3)
+    if (bOK) then
+        oOS.writeBytes(Bytes())
+        oOS.closeOutput()
+    end if
+    Test.MethodTested("openFileWrite()", bOK)
+
+    Test.StartMethod("getSize()")
+    bOK = true
+    Out.Log("Actual: " + oObj.getSize(cFile3) + " Expected: " + (ubound(Bytes()) + 1))
+    bOK = bOK AND oObj.getSize(cFile3) = (ubound(Bytes()) + 1)
+    Test.MethodTested("getSize()", bOK)
+
+    Test.StartMethod("setReadOnly()")
+    Test.StartMethod("isReadOnly()")
+    bOK = true
+    oObj.setReadOnly(cSubFolder, true)
+    bOK = bOK AND oObj.isReadOnly(cSubFolder)
+    oObj.setReadOnly(cSubFolder, false)
+    bOK = bOK AND NOT oObj.isReadOnly(cSubFolder)
+    Test.MethodTested("isReadOnly()", bOK)
+    Test.MethodTested("setReadOnly()", bOK)
+
+    Test.StartMethod("getContentType()")
+    bOK = true
+    cType = oObj.getContentType(cFile3)
+    Out.Log("Content Type is '" + cType + "'")
+    Test.MethodTested("getContentType()", bOK)
+
+    Test.StartMethod("getDateTimeModified()")
+    bOK = true
+    oDT = oObj.getDateTimeModified(cFile3)
+    cCrDate = Date()
+
+
+    bOK = bOK AND Day(cCrDate) = oDT.Day
+    bOK = bOK AND Month(cCrDate) = oDT.Month
+    bOK = bOK AND Year(cCrDate) = oDT.Year
+
+    if (NOT bOK) then
+        Out.Log("FileDateTime returned '" + cCrDate + "'")
+        Out.Log("getDateTimeModified returned '" + oDT.Day + "/" _
+                                                + oDT.Month + "/" _
+                                                + oDT.Year + " " _
+                                                + oDT.Hours + ":" _
+                                                + oDT.Minutes + ":" _
+                                                + oDT.Seconds + "'")
+    end if
+    Test.MethodTested("getDateTimeModified()", bOK)
+
+    Test.StartMethod("openFileRead()")
+    bOK = true
+    oIS = oObj.openFileRead(cFile3)
+    bOK = bOK AND NOT isNULL(oIS)
+    Dim rData(10) As Integer
+    Dim nRb As Integer
+    nRb = oIS.readBytes(rData(), 100)
+    bOK = bOK AND nRb = ubound(Bytes()) + 1
+    if (NOT bOK) then
+        Out.Log("Amount of read files is wrong")
+    else
+        for i = 0 to nRb - 1
+            bOK = bOK AND Bytes(i) = rData(i)
+        next i
+    end if
+    oIS.closeInput()
+    Test.MethodTested("openFileRead()", bOK)
+
+    Test.StartMethod("openFileReadWrite()")
+    bOK = true
+    oIS = oObj.openFileReadWrite(cFile3)
+    bOK = bOK AND hasUnoInterfaces(oIS, "com.sun.star.io.XStream")
+    Test.MethodTested("openFileReadWrite()", bOK)
+
+    Test.StartMethod("setInteractionHandler()")
+    bOK = true
+    oIH = createUNOInterface("com.sun.star.sdb.InteractionHandler")
+    oObj.setInteractionHandler(oIH)
+    Test.MethodTested("setInteractionHandler()", bOK)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

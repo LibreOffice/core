@@ -1,0 +1,12 @@
+    <node oor:name="calc_StarOffice_XML_Calc" oor:op="replace" >
+        <prop oor:name="DetectService"><value>com.sun.star.comp.calc.FormatDetector</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>sxc</value></prop>
+        <prop oor:name="MediaType"><value>application/vnd.sun.xml.calc</value></prop>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>StarOffice XML (Calc)</value></prop>
+        <prop oor:name="UIName">
+            <value>Calc 6.0</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"><value>Calc 6.0</value></prop>
+    </node>

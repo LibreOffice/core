@@ -1,0 +1,43 @@
+Testing workbench and editor for Layout engine.
+
+* Configure using --enable-layout.
+
+* [d]make all
+
+* export OOO_INSTALL_PREFIX=$(pwd)/ooo-layout
+
+* [d]make install DESTDIR=$OOO_INSTALL_PREFIX
+
+* Compile test program in toolkit/workben/layout
+
+  cd toolkit/workben/layout && dmake all
+
+* FIXME: New three layer install/rpath feature needs these workarounds
+|
+|  test -d $OOO_INSTALL_PREFIX/openoffice.org3 && export OOO_PREFIX_BRAND=$OOO_INSTALL_PREFIX/openoffice.org3 || export OOO_PREFIX_BRAND=$OOO_INSTALL_PREFIX
+|  cp -f ../..$INPATH/lib/libtkx.so $OOO_PREFIX/openoffice.org/basis3.0/program
+|  export LD_LIBRARY_PATH=$OOO_PREFIX_BRAND/basis-link/program:$OOO_PREFIX_BRAND/basis-link/ure-link/lib
+|
+|  (see source/layout/helper.cxx)
+
+* Run it on any .xml file
+
+  ../../$INPATH/bin/test [--inst $OOO_INSTALL_PREFIX] zoom.xml
+
+* Run it for specific dialogs, see test.cxx
+
+   ../../$INPATH/bin/test [--inst $OOO_INSTALL_PREFIX] --test zoom
+   ../../$INPATH/bin/test [--inst $OOO_INSTALL_PREFIX] --test wordcount
+
+* Or source refresh in workben/layout, do something like
+
+   cd toolkit/workben/layout && . ./refresh [--inst $OOO_INSTALL_PREFIX]
+
+Integration into OOo:
+
+* After instaling, run
+
+  cd ooo-cvs/program
+  ./soffice.bin
+
+  Start a [Writer] document and choose View/Zoom or Extra/Word count.

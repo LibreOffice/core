@@ -1,0 +1,23 @@
+#ifndef __com_sun_star_script_XErrorQuery_idl__
+#define __com_sun_star_script_XErrorQuery_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+module com { module sun { module star { module script {
+//==============================================================================
+
+interface XErrorQuery : ::com::sun::star::uno::XInterface
+{
+  //-----------------------------------------------------------------------
+  /**
+    Returns whether this object has an error
+
+    @return
+    <atom>boolean</atom> indicating an error or not
+  */
+  boolean hasError();
+
+};
+
+};  };  };  };
+#endif

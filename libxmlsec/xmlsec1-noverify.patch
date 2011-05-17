@@ -1,0 +1,59 @@
+--- misc/xmlsec1-1.2.14/src/mscrypto/x509vfy.c	2009-06-25 22:53:18.000000000 +0200
++++ misc/build/xmlsec1-1.2.14/src/mscrypto/x509vfy.c	2009-09-23 10:01:07.237316078 +0200
+@@ -567,9 +567,16 @@
+             CertFreeCertificateContext(nextCert);                
+         }
+ 
+-        if((selected == 1) && xmlSecMSCryptoX509StoreConstructCertsChain(store, cert, certs, keyInfoCtx)) {
+-            return(cert);
+-        }
++        /* JL: OpenOffice.org implements its own certificate verification routine. 
++           The goal is to seperate validation of the signature
++           and the certificate. For example, OOo could show that the document signature is valid,
++           but the certificate could not be verified. If we do not prevent the verification of
++           the certificate by libxmlsec and the verification fails, then the XML signature will not be 
++           verified. This would happen, for example, if the root certificate is not installed.                
++         */
++/*      if((selected == 1) && xmlSecMSCryptoX509StoreConstructCertsChain(store, cert, certs, keyInfoCtx)) { */
++        if (selected == 1)
++            return cert;
+     }
+ 
+     return (NULL);
+--- misc/xmlsec1-1.2.14/src/nss/x509vfy.c	2009-09-23 10:06:52.989793254 +0200
++++ misc/build/xmlsec1-1.2.14/src/nss/x509vfy.c	2009-09-23 10:05:03.183042205 +0200
+@@ -191,13 +191,27 @@
+ 	    continue;
+ 	}
+ 
+-	status = CERT_VerifyCertificate(CERT_GetDefaultCertDB(), 
+-					cert, PR_FALSE, 
+-					(SECCertificateUsage)0,
+-                			timeboundary , NULL, NULL, NULL);
+-	if (status == SECSuccess) {
+-	    break;
+-	}
++
++	/*
++      JL: OpenOffice.org implements its own certificate verification routine. 
++      The goal is to seperate validation of the signature
++      and the certificate. For example, OOo could show that the document signature is valid,
++      but the certificate could not be verified. If we do not prevent the verification of
++      the certificate by libxmlsec and the verification fails, then the XML signature may not be 
++      verified. This would happen, for example, if the root certificate is not installed.
++      
++      status = CERT_VerifyCertificate(CERT_GetDefaultCertDB(), 
++          cert, PR_FALSE, 
++          (SECCertificateUsage)0,
++          timeboundary , NULL, NULL, NULL);
++      if (status == SECSuccess) {
++         break;
++      }
++	 
++    */
++	status = SECSuccess;
++	break;
++
+     }
+ 
+     if (status == SECSuccess) {

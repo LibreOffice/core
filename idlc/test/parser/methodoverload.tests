@@ -1,0 +1,124 @@
+#*************************************************************************
+#
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# OpenOffice.org - a multi-platform office productivity suite
+#
+# This file is part of OpenOffice.org.
+#
+# OpenOffice.org is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License version 3
+# only, as published by the Free Software Foundation.
+#
+# OpenOffice.org is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License version 3 for more details
+# (a copy is included in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU Lesser General Public License
+# version 3 along with OpenOffice.org.  If not, see
+# <http://www.openoffice.org/license.html>
+# for a copy of the LGPLv3 License.
+#
+#*************************************************************************
+
+EXPECT FAILURE "methodoverload.tests 1":
+interface Derived {
+	void f();
+	void f();
+};
+
+
+EXPECT FAILURE "methodoverload.tests 2":
+interface Base {
+	void f();
+};
+interface Derived {
+	interface Base;
+	void f();
+};
+
+
+EXPECT FAILURE "methodoverload.tests 3":
+interface Base {
+	void f();
+};
+interface Derived {
+	void f();
+	interface Base;
+};
+
+
+EXPECT FAILURE "methodoverload.tests 4":
+interface Base {
+	void f();
+};
+interface Derived {
+	[optional] interface Base;
+	void f();
+};
+
+
+EXPECT FAILURE "methodoverload.tests 5":
+interface Base {
+	void f();
+};
+interface Derived {
+	void f();
+	[optional] interface Base;
+};
+
+
+EXPECT FAILURE "methodoverload.tests 6":
+interface Base1 {
+	void f();
+};
+interface Base2 {
+	void f();
+};
+interface Derived {
+	interface Base1;
+	interface Base2;
+};
+
+
+EXPECT FAILURE "methodoverload.tests 7":
+interface Base1 {
+	void f();
+};
+interface Base2 {
+	void f();
+};
+interface Derived {
+	[optional] interface Base1;
+	interface Base2;
+};
+
+
+EXPECT FAILURE "methodoverload.tests 8":
+interface Base1 {
+	void f();
+};
+interface Base2 {
+	void f();
+};
+interface Derived {
+	interface Base1;
+	[optional] interface Base2;
+};
+
+
+EXPECT SUCCESS "methodoverload.tests 9":
+interface Base1 {
+	void f();
+};
+interface Base2 {
+	void f();
+};
+interface Derived {
+	[optional] interface Base1;
+	[optional] interface Base2;
+};

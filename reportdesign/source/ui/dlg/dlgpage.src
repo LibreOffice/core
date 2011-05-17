@@ -1,0 +1,300 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include <svx/dialogs.hrc>
+#include "RptResId.hrc"
+
+TabDialog RID_PAGEDIALOG_PAGE
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 289 , 176 ) ;
+    Text [ en-US ] = "Page Setup" ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_PAGE ;
+                Text [ en-US ] = "Page" ;
+                PageResID = RID_SVXPAGE_PAGE ;
+                Text [ x-comment ] = " ";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_BACKGROUND ;
+                Text [ en-US ] = "Background" ;
+                PageResID = RID_SVXPAGE_BACKGROUND ;
+                Text [ x-comment ] = " ";
+            };
+        };
+    };
+    OKButton 1
+    {
+        Pos = MAP_APPFONT ( 6 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    CancelButton 1
+    {
+        Pos = MAP_APPFONT ( 60 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton 1
+    {
+        Pos = MAP_APPFONT ( 114 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton 1
+    {
+        Pos = MAP_APPFONT ( 169 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "Return" ;
+        TabStop = TRUE ;
+    };
+    Text [ x-comment ] = " ";
+
+    String 1
+    {
+        Text [ en-US ] = "Page" ;
+    };
+    String 2
+    {
+        Text [ en-US ] = "Background" ;
+    };
+};
+
+TabDialog RID_PAGEDIALOG_BACKGROUND
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 289 , 176 ) ;
+    Text [ en-US ] = "Section Setup" ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+    };
+    OKButton 1
+    {
+        Pos = MAP_APPFONT ( 6 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    CancelButton 1
+    {
+        Pos = MAP_APPFONT ( 60 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton 1
+    {
+        Pos = MAP_APPFONT ( 114 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton 1
+    {
+        Pos = MAP_APPFONT ( 169 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "Return" ;
+        TabStop = TRUE ;
+        Text [ x-comment ] = " ";
+    };
+    Text [ x-comment ] = " ";
+
+    String 1
+    {
+        Text [ en-US ] = "Background" ;
+    };
+};
+TabDialog RID_PAGEDIALOG_CHAR
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 289 , 176 ) ;
+    Text [ en-US ] = "Character Settings" ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = RID_PAGE_CHAR ;
+                Text [ en-US ] = "Font" ;
+                PageResID = RID_PAGE_CHAR ;
+                Text [ x-comment ] = " ";
+            };
+            PageItem
+            {
+                Identifier = RID_PAGE_EFFECTS ;
+                Text [ en-US ] = "Font Effects" ;
+                PageResID = RID_PAGE_EFFECTS ;
+                Text [ x-comment ] = " ";
+            };
+            PageItem
+            {
+                Identifier = RID_PAGE_POSITION ;
+                PageResID = RID_PAGE_POSITION ;
+                Text [ en-US ] = "Position";
+            };
+            PageItem
+            {
+                Identifier = RID_PAGE_TWOLN ;
+                PageResID = RID_PAGE_TWOLN;
+                Text [ en-US ] = "Asian Layout";
+            };
+            PageItem
+            {
+                Identifier = RID_PAGE_BACKGROUND ;
+                Text [ en-US ] = "Background" ;
+                PageResID = RID_PAGE_BACKGROUND ;
+                Text [ x-comment ] = " ";
+            };
+            PageItem
+            {
+                Identifier = RID_PAGE_ALIGNMENT ;
+                Text [ en-US ] = "Alignment" ;
+                PageResID = RID_PAGE_ALIGNMENT ;
+                Text [ x-comment ] = " ";
+            };
+        };
+    };
+    OKButton 1
+    {
+        Pos = MAP_APPFONT ( 6 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    CancelButton 1
+    {
+        Pos = MAP_APPFONT ( 60 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton 1
+    {
+        Pos = MAP_APPFONT ( 114 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton 1
+    {
+        Pos = MAP_APPFONT ( 169 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "Return" ;
+        TabStop = TRUE ;
+        Text [ x-comment ] = " ";
+    };
+    Text [ x-comment ] = " ";
+
+    String 1
+    {
+        Text [ en-US ] = "Character" ;
+    };
+};
+TabDialog RID_PAGEDIALOG_LINE
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 289 , 176 ) ;
+    Text [ en-US ] = "Line" ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 3 , 3 ) ;
+        Size = MAP_APPFONT ( 260 , 135 ) ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_LINE ;
+                Text [ en-US ] = "Line" ;
+                PageResID = RID_SVXPAGE_LINE ;
+                Text [ x-comment ] = " ";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_LINE_DEF ;
+                Text [ en-US ] = "Line Styles" ;
+                PageResID = RID_SVXPAGE_LINE_DEF ;
+                Text [ x-comment ] = " ";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_LINEEND_DEF ;
+                Text [ en-US ] = "Arrow Styles" ;
+                PageResID = RID_SVXPAGE_LINEEND_DEF ;
+                Text [ x-comment ] = " ";
+            };
+        };
+    };
+    OKButton 1
+    {
+        Pos = MAP_APPFONT ( 6 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    CancelButton 1
+    {
+        Pos = MAP_APPFONT ( 60 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton 1
+    {
+        Pos = MAP_APPFONT ( 114 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton 1
+    {
+        Pos = MAP_APPFONT ( 169 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "Return" ;
+        TabStop = TRUE ;
+        Text [ x-comment ] = " ";
+    };
+    Text [ x-comment ] = " ";
+
+    String 1
+    {
+        Text [ en-US ] = "Line" ;
+    };
+};

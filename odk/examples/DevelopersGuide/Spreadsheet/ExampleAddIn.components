@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://openoffice.org/2010/uno-components">
+  <component loader="com.sun.star.loader.Java2" uri="ExampleAddIn.uno.jar">
+    <implementation name="ExampleAddIn$_ExampleAddIn">
+      <service name="com.sun.star.sheet.AddIn"/>
+      <service name="org.openoffice.sheet.addin.ExampleAddIn"/>
+    </implementation>
+  </component>
+</components>

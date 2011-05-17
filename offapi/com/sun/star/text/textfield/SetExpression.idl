@@ -1,0 +1,101 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_text_textfield_SetExpression_idl__
+#define __com_sun_star_text_textfield_SetExpression_idl_
+
+#include <com/sun/star/text/TextField.idl>
+#include <com/sun/star/text/DependentTextField.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module text { module textfield {
+
+//=============================================================================
+/** specifies service of an expression text field.
+    @see com::sun::star::text::TextField
+*/
+published service SetExpression
+{
+    service  com::sun::star::text::DependentTextField;
+
+    /** contains the textual content of the field.
+     */
+    [property]string Content;
+    /** contains the current content of the text field.
+        <p> This property is especially useful for import/export purposes. </p>
+     */
+    [property]string CurrentPresentation;
+
+    /** this is the number format for this field.
+        @see com::sun::star::util::NumberFormatter
+    */
+    [property]long NumberFormat;
+    /** specifies the type of the numbering as
+        <type scope="com::sun::star::style">NumberingType</type>
+     */
+    [property]short NumberingType;
+    /** determines whether the content is displayed or evaluated.
+     */
+    [property]boolean IsShowFormula;
+    /** contains an informational text that is displayed at the user
+     interface if it's an input field.
+      */
+    [property]string Hint;
+    /** determines whether this field is an input field.
+     */
+    [property]boolean IsInput;
+    /** determines whether the field is visible.
+     */
+    [property]boolean IsVisible;
+    /** contains the sequence value when this field is used as sequence field.
+     */
+    [property]short SequenceValue;
+    /** determines the type of the variable as described in
+        <type scope="com::sun::star::text">SetVariableType</type>
+     */
+    [property]short SubType;
+    /** contains the numerical value of the field.
+     */
+    [property]double Value;
+    /** contains the name of the set expression field master this field is connected to.
+     */
+    [property]string VariableName;
+    /** determines whether changes in language attributes at the position the text field
+        is located also change the number format as appropriate for this language.
+
+    @since OOo 1.1.2
+     */
+    [optional, property] boolean IsFixedLanguage;
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif
+

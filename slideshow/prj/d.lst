@@ -1,0 +1,8 @@
+..\%__SRC%\bin\OGLTrans.uno.dll %_DEST%\bin%_EXT%\OGLTrans.uno.dll
+..\%__SRC%\bin\slidesho*.dll %_DEST%\bin%_EXT%\slidesho*.dll
+..\%__SRC%\bin\*.rdb %_DEST%\bin%_EXT%\*.rdb
+..\%__SRC%\lib\slideshow.uno.so %_DEST%\lib%_EXT%\slideshow.uno.so
+..\%__SRC%\lib\OGLTrans.uno.so %_DEST%\lib%_EXT%\OGLTrans.uno.so
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
+..\%__SRC%\misc\ogltrans.component %_DEST%\xml%_EXT%\ogltrans.component
+..\%__SRC%\misc\slideshow.component %_DEST%\xml%_EXT%\slideshow.component

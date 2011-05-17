@@ -1,0 +1,168 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include <svx/dialogs.hrc>
+#include <helpid.hrc>
+ // pragma ----------------------------------------------------------------
+
+/*
+ * Bitmaps f"ur SvxFrameWindow
+ */
+
+#define MASKCOLOR   MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+
+Image RID_SVX_RELOAD_NORMAL
+{
+    ImageBitmap = Bitmap { File = "reload.bmp" ; };
+    MASKCOLOR
+};
+
+Image RID_SVX_RELOAD_SPECIAL
+{
+    ImageBitmap = Bitmap { File = "reloads.bmp" ; };
+    MASKCOLOR
+};
+
+ImageList RID_SVXIL_FRAME
+{
+    Prefix = "fr";
+    IdList = { 1 ; 2 ; 3 ; 4 ; 5 ; 6 ; 7 ; 8 ; 9 ; 10 ; 11 ; 12 ; };
+    IdCount = { 12 ; };
+    MASKCOLOR
+};
+
+String RID_SVXSTR_TRANSPARENT
+{
+    Text [ en-US ] = "No Fill" ;
+};
+String RID_SVXSTR_FILLPATTERN
+
+{
+    Text [ en-US ] = "Pattern" ;
+};
+
+String RID_SVXSTR_FRAME
+{
+    Text [ en-US ] = "Borders" ;
+};
+
+String RID_SVXSTR_FRAME_STYLE
+{
+    Text [ en-US ] = "Border Style" ;
+};
+
+String RID_SVXSTR_FRAME_COLOR
+{
+    Text [ en-US ] = "Border Color" ;
+};
+
+ComboBox RID_SVXTBX_STYLE
+{
+    HelpId = HID_STYLE_LISTBOX ;
+    Size = MAP_APPFONT ( 67 , 86 ) ;
+    DropDown = TRUE ;
+    Sort = TRUE ;
+    AutoHScroll = TRUE ;
+    DDExtraWidth = TRUE ;
+    Border = TRUE ;
+    Hide = TRUE ;
+};
+
+String RID_SVXSTR_EXTRAS_CHARBACKGROUND
+{
+    Text [ en-US ] = "Highlighting" ;
+};
+
+String RID_SVXSTR_BACKGROUND
+{
+    Text [ en-US ] = "Background";
+};
+
+String RID_SVXSTR_AUTOMATIC
+{
+    Text [ en-US ] = "Automatic";
+};
+
+String RID_SVXSTR_PAGES
+{
+    Text [ en-US ] = "Pages";
+};
+
+Image RID_SVXIMG_GRAF_RED
+{
+    ImageBitmap = Bitmap { File = "sc10865.bmp" ; };
+    MASKCOLOR
+};
+Image RID_SVXIMG_GRAF_GREEN
+{
+    ImageBitmap = Bitmap { File = "sc10866.bmp" ; };
+    MASKCOLOR
+};
+Image RID_SVXIMG_GRAF_BLUE
+{
+    ImageBitmap = Bitmap { File = "sc10867.bmp" ; };
+    MASKCOLOR
+};
+Image RID_SVXIMG_GRAF_LUMINANCE
+{
+    ImageBitmap = Bitmap { File = "sc10863.bmp" ; };
+    MASKCOLOR
+};
+Image RID_SVXIMG_GRAF_CONTRAST
+{
+    ImageBitmap = Bitmap { File = "sc10864.bmp" ; };
+    MASKCOLOR
+};
+Image RID_SVXIMG_GRAF_GAMMA
+{
+    ImageBitmap = Bitmap { File = "sc10868.bmp" ; };
+    MASKCOLOR
+};
+Image RID_SVXIMG_GRAF_TRANSPARENCE
+{
+    ImageBitmap = Bitmap { File = "sc10869.bmp" ; };
+    MASKCOLOR
+};
+
+String RID_SVXSTR_CLEARFORM
+{
+    Text [ en-US ] = "Clear formatting";
+};
+
+String RID_SVXSTR_MORE
+{
+    Text [ en-US ] = "More...";
+};
+
+//IAccessibility2 Implementation 2009-----
+String RID_SVXSTR_TEXTCOLOR
+{
+    Text [ en-US ] = "Font color";
+};
+//-----IAccessibility2 Implementation 2009
+// ********************************************************************** EOF
+

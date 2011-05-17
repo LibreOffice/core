@@ -1,0 +1,15 @@
+#!/bin/bash
+# $Id: gcov_all,v 1.4 2005-11-02 17:23:43 kz Exp $
+# This helper run lists all c and cxx files from selected directories.
+
+# PRJ points to the flat project directory
+PRJ='../../..'
+
+# selected directories
+FILES=`/bin/ls $PRJ/osl/unx/*.c $PRJ/osl/unx/*.cxx $PRJ/rtl/source/*.c $PRJ/rtl/source/*.cxx $PRJ/osl/all/*.c $PRJ/osl/all/*.cxx $PRJ/textenc/*.c`
+
+# Use gcov_filter on every c/cxx file.
+for file in $FILES; do
+    # echo $file
+    perl gcov_filter.pl -o $PRJ/unxlngi6/slo -i $PRJ/util/sal.map $file $*
+done

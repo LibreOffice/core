@@ -1,0 +1,8 @@
+"Pipe";"com::sun::star::io::XOutputStream";"writeBytes()"
+"Pipe";"com::sun::star::io::XOutputStream";"flush()"
+"Pipe";"com::sun::star::io::XOutputStream";"closeOutput()"
+"Pipe";"com::sun::star::io::XInputStream";"readBytes()"
+"Pipe";"com::sun::star::io::XInputStream";"readSomeBytes()"
+"Pipe";"com::sun::star::io::XInputStream";"skipBytes()"
+"Pipe";"com::sun::star::io::XInputStream";"available()"
+"Pipe";"com::sun::star::io::XInputStream";"closeInput()"

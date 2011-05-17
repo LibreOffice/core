@@ -1,0 +1,299 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sd.hxx"
+#include <com/sun/star/util/XCloneable.hpp>
+#include <com/sun/star/animations/XAnimationNode.hpp>
+#include "CustomAnimationCloner.hxx"
+
+#include "undoanim.hxx"
+#include "glob.hrc"
+#include "sdpage.hxx"
+#include "sdresid.hxx"
+#include "CustomAnimationEffect.hxx"
+#include "drawdoc.hxx"
+
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::util::XCloneable;
+using namespace ::com::sun::star::animations;
+
+
+namespace sd
+{
+
+struct UndoAnimationImpl
+{
+    SdPage*         mpPage;
+    Reference< XAnimationNode > mxOldNode;
+    Reference< XAnimationNode > mxNewNode;
+    bool            mbNewNodeSet;
+};
+
+UndoAnimation::UndoAnimation( SdDrawDocument* pDoc, SdPage* pThePage )
+: SdrUndoAction( *pDoc ), mpImpl( new UndoAnimationImpl )
+{
+    mpImpl->mpPage = pThePage;
+    mpImpl->mbNewNodeSet = false;
+
+    try
+    {
+        if( pThePage->mxAnimationNode.is() )
+            mpImpl->mxOldNode = ::sd::Clone( pThePage->getAnimationNode() );
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+        OSL_FAIL("sd::UndoAnimation::UndoAnimation(), exception caught!");
+    }
+}
+
+UndoAnimation::~UndoAnimation()
+{
+    delete mpImpl;
+}
+
+void UndoAnimation::Undo()
+{
+    try
+    {
+        if( !mpImpl->mbNewNodeSet )
+        {
+            if( mpImpl->mpPage->mxAnimationNode.is() )
+                mpImpl->mxNewNode.set( ::sd::Clone( mpImpl->mpPage->mxAnimationNode ) );
+            mpImpl->mbNewNodeSet = true;
+        }
+
+        Reference< XAnimationNode > xOldNode;
+        if( mpImpl->mxOldNode.is() )
+            xOldNode = ::sd::Clone( mpImpl->mxOldNode );
+
+        mpImpl->mpPage->setAnimationNode( xOldNode );
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+        OSL_FAIL("sd::UndoAnimation::Undo(), exception caught!");
+    }
+}
+
+void UndoAnimation::Redo()
+{
+    try
+    {
+        Reference< XAnimationNode > xNewNode;
+        if( mpImpl->mxNewNode.is() )
+            xNewNode = ::sd::Clone( mpImpl->mxNewNode );
+        mpImpl->mpPage->setAnimationNode( xNewNode );
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+        OSL_FAIL("sd::UndoAnimation::Redo(), exception caught!");
+    }
+}
+
+String UndoAnimation::GetComment() const
+{
+    return String(SdResId(STR_UNDO_ANIMATION));
+}
+
+struct UndoAnimationPathImpl
+{
+    SdPage*         mpPage;
+    sal_Int32       mnEffectOffset;
+    ::rtl::OUString msUndoPath;
+    ::rtl::OUString msRedoPath;
+
+    UndoAnimationPathImpl( SdPage* pThePage, const com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
+        : mpPage( pThePage )
+        , mnEffectOffset( -1 )
+    {
+        if( mpPage && xNode.is() )
+        {
+            boost::shared_ptr< sd::MainSequence > pMainSequence( mpPage->getMainSequence() );
+            if( pMainSequence.get() )
+            {
+                CustomAnimationEffectPtr pEffect( pMainSequence->findEffect( xNode ) );
+                if( pEffect.get() )
+                {
+                    mnEffectOffset = pMainSequence->getOffsetFromEffect( pEffect );
+                    msUndoPath = pEffect->getPath();
+                }
+            }
+        }
+    }
+
+    CustomAnimationEffectPtr getEffect() const
+    {
+        CustomAnimationEffectPtr pEffect;
+        if( mpPage && (mnEffectOffset >= 0) )
+        {
+            boost::shared_ptr< sd::MainSequence > pMainSequence( mpPage->getMainSequence() );
+            if( pMainSequence.get() )
+                pEffect = pMainSequence->getEffectFromOffset( mnEffectOffset );
+        }
+        return pEffect;
+    }
+
+    private:
+        UndoAnimationPathImpl( const UndoAnimationPathImpl& ); //not implemented
+        const UndoAnimationPathImpl& operator=( const UndoAnimationPathImpl& ); // not implemented
+
+};
+
+UndoAnimationPath::UndoAnimationPath( SdDrawDocument* pDoc, SdPage* pThePage, const com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
+: SdrUndoAction( *pDoc )
+, mpImpl( new UndoAnimationPathImpl( pThePage, xNode ) )
+{
+}
+
+UndoAnimationPath::~UndoAnimationPath()
+{
+}
+
+void UndoAnimationPath::Undo()
+{
+    CustomAnimationEffectPtr pEffect = mpImpl->getEffect();
+    if( pEffect.get() )
+    {
+        mpImpl->msRedoPath = pEffect->getPath();
+        pEffect->setPath( mpImpl->msUndoPath );
+    }
+}
+
+void UndoAnimationPath::Redo()
+{
+    CustomAnimationEffectPtr pEffect = mpImpl->getEffect();
+    if( pEffect.get() )
+    {
+        pEffect->setPath( mpImpl->msRedoPath );
+    }
+}
+
+String UndoAnimationPath::GetComment() const
+{
+    return String(SdResId(STR_UNDO_ANIMATION));
+}
+
+struct UndoTransitionImpl
+{
+    SdPage*         mpPage;
+
+    sal_Int16 mnNewTransitionType;
+    sal_Int16 mnNewTransitionSubtype;
+    sal_Bool mbNewTransitionDirection;
+    sal_Int32 mnNewTransitionFadeColor;
+    double mfNewTransitionDuration;
+    String maNewSoundFile;
+    bool mbNewSoundOn;
+    bool mbNewLoopSound;
+    bool mbNewStopSound;
+
+    sal_Int16 mnOldTransitionType;
+    sal_Int16 mnOldTransitionSubtype;
+    sal_Bool mbOldTransitionDirection;
+    sal_Int32 mnOldTransitionFadeColor;
+    double mfOldTransitionDuration;
+    String maOldSoundFile;
+    bool mbOldSoundOn;
+    bool mbOldLoopSound;
+    bool mbOldStopSound;
+};
+
+UndoTransition::UndoTransition( SdDrawDocument* _pDoc, SdPage* pThePage )
+: SdUndoAction( _pDoc ), mpImpl( new UndoTransitionImpl )
+{
+    mpImpl->mpPage = pThePage;
+
+    mpImpl->mnNewTransitionType = -1;
+    mpImpl->mnOldTransitionType = pThePage->mnTransitionType;
+    mpImpl->mnOldTransitionSubtype = pThePage->mnTransitionSubtype;
+    mpImpl->mbOldTransitionDirection = pThePage->mbTransitionDirection;
+    mpImpl->mnOldTransitionFadeColor = pThePage->mnTransitionFadeColor;
+    mpImpl->mfOldTransitionDuration = pThePage->mfTransitionDuration;
+    mpImpl->maOldSoundFile = pThePage->maSoundFile;
+    mpImpl->mbOldSoundOn = pThePage->mbSoundOn;
+    mpImpl->mbOldLoopSound = pThePage->mbLoopSound;
+    mpImpl->mbOldStopSound = pThePage->mbStopSound;
+}
+
+UndoTransition::~UndoTransition()
+{
+    delete mpImpl;
+}
+
+void UndoTransition::Undo()
+{
+    if( mpImpl->mnNewTransitionType == -1 )
+    {
+        mpImpl->mnNewTransitionType = mpImpl->mpPage->mnTransitionType;
+        mpImpl->mnNewTransitionSubtype = mpImpl->mpPage->mnTransitionSubtype;
+        mpImpl->mbNewTransitionDirection = mpImpl->mpPage->mbTransitionDirection;
+        mpImpl->mnNewTransitionFadeColor = mpImpl->mpPage->mnTransitionFadeColor;
+        mpImpl->mfNewTransitionDuration = mpImpl->mpPage->mfTransitionDuration;
+        mpImpl->maNewSoundFile = mpImpl->mpPage->maSoundFile;
+        mpImpl->mbNewSoundOn = mpImpl->mpPage->mbSoundOn;
+        mpImpl->mbNewLoopSound = mpImpl->mpPage->mbLoopSound;
+        mpImpl->mbNewStopSound = mpImpl->mpPage->mbStopSound;
+    }
+
+    mpImpl->mpPage->mnTransitionType = mpImpl->mnOldTransitionType;
+    mpImpl->mpPage->mnTransitionSubtype = mpImpl->mnOldTransitionSubtype;
+    mpImpl->mpPage->mbTransitionDirection = mpImpl->mbOldTransitionDirection;
+    mpImpl->mpPage->mnTransitionFadeColor = mpImpl->mnOldTransitionFadeColor;
+    mpImpl->mpPage->mfTransitionDuration = mpImpl->mfOldTransitionDuration;
+    mpImpl->mpPage->maSoundFile = mpImpl->maOldSoundFile;
+    mpImpl->mpPage->mbSoundOn = mpImpl->mbOldSoundOn;
+    mpImpl->mpPage->mbLoopSound = mpImpl->mbOldLoopSound;
+    mpImpl->mpPage->mbStopSound = mpImpl->mbOldStopSound;
+}
+
+void UndoTransition::Redo()
+{
+    mpImpl->mpPage->mnTransitionType = mpImpl->mnNewTransitionType;
+    mpImpl->mpPage->mnTransitionSubtype = mpImpl->mnNewTransitionSubtype;
+    mpImpl->mpPage->mbTransitionDirection = mpImpl->mbNewTransitionDirection;
+    mpImpl->mpPage->mnTransitionFadeColor = mpImpl->mnNewTransitionFadeColor;
+    mpImpl->mpPage->mfTransitionDuration = mpImpl->mfNewTransitionDuration;
+    mpImpl->mpPage->maSoundFile = mpImpl->maNewSoundFile;
+    mpImpl->mpPage->mbSoundOn = mpImpl->mbNewSoundOn;
+    mpImpl->mpPage->mbLoopSound = mpImpl->mbNewLoopSound;
+    mpImpl->mpPage->mbStopSound = mpImpl->mbNewStopSound;
+}
+
+String UndoTransition::GetComment() const
+{
+    return String(SdResId(STR_UNDO_SLIDE_PARAMS));
+}
+
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,131 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include <addresslistdialog.hrc>
+#include <dbui.hrc>
+#include <helpid.h>
+
+
+ModalDialog DLG_MM_ADDRESSLISTDIALOG
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    HelpID = HID_MM_ADDRESSLISTDIALOG;
+    Size = MAP_APPFONT ( 260 , 182 ) ;
+    Moveable = TRUE ;
+
+    Text [ en-US ] = "Select Address List";
+
+    FixedText       FI_DESCRIPTION
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 24 ) ;
+        WordBreak = TRUE;
+        Text [ en-US ] = "Select an address list. Click '%1' to select recipients from a different list. If you do not have an address list you can create one by clicking '%2'.";
+    };
+    FixedText       FT_LIST
+    {
+        Pos = MAP_APPFONT ( 6 , 30 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Your recipients are currently selected from:";
+    };
+    Control         LB_LIST
+    {
+        Pos = MAP_APPFONT ( 6 , 43 ) ;
+        Size = MAP_APPFONT ( 182 , 102 ) ;
+        Border = TRUE;
+        TabStop = TRUE ;
+    };
+    PushButton       PB_LOADLIST
+    {
+        HelpID = "sw:PushButton:DLG_MM_ADDRESSLISTDIALOG:PB_LOADLIST";
+        Pos = MAP_APPFONT ( 194 , 43 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text [ en-US ] = "~Add...";
+    };
+    PushButton PB_CREATELIST
+    {
+        HelpID = "sw:PushButton:DLG_MM_ADDRESSLISTDIALOG:PB_CREATELIST";
+        Pos = MAP_APPFONT ( 194 , 60 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text [ en-US ] = "~Create...";
+    };
+    PushButton      PB_FILTER
+    {
+        HelpID = "sw:PushButton:DLG_MM_ADDRESSLISTDIALOG:PB_FILTER";
+        Pos = MAP_APPFONT ( 194 , 77 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text [ en-US ] = "~Filter...";
+    };
+    PushButton PB_EDIT
+    {
+        HelpID = "sw:PushButton:DLG_MM_ADDRESSLISTDIALOG:PB_EDIT";
+        Pos = MAP_APPFONT ( 194 , 94 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text [ en-US ] = "~Edit...";
+    };
+    PushButton PB_TABLE
+    {
+        HelpID = "sw:PushButton:DLG_MM_ADDRESSLISTDIALOG:PB_TABLE";
+        Pos = MAP_APPFONT ( 194 , 111 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text [ en-US ] = "Change ~Table...";
+    };
+    FixedLine FL_SEPARATOR
+    {
+        Pos = MAP_APPFONT ( 0 , 151 ) ;
+        Size = MAP_APPFONT ( 260 , 8 ) ;
+    };
+    OKButton        PB_OK
+    {
+        Pos = MAP_APPFONT ( 95 , 162 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+    };
+    CancelButton        PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 148 , 162 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton      PB_HELP
+    {
+        Pos = MAP_APPFONT ( 204 , 162 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    String  ST_NAME
+    {
+        Text [ en-US ] = "Name";
+    };
+    String  ST_TABLE
+    {
+        Text [ en-US ] = "Table";
+    };
+    String ST_CONNECTING
+    {
+        Text [ en-US ] = "Connecting to data source...";
+    };
+};
+

@@ -1,0 +1,102 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include <com/sun/star/uno/XInterface.idl>
+
+module ModuleA
+{
+    exception ExceptionA
+    {
+        boolean aBoolean;
+    };
+
+    struct StructA
+    {
+        long aLong;
+        short aShort;
+    };
+
+    struct StructB : StructA
+    {
+        double aDouble;
+        float   aFloat;
+    };
+
+    struct StructC : StructB
+    {
+        string                              aString;
+        sequence<com::sun::star::uno::XInterface>   aInterfaceSeq;
+    };
+
+    exception ExceptionB : ExceptionA
+    {
+        StructC aStructC;
+    };
+
+    interface XInterface1 : com::sun::star::uno::XInterface
+    {
+    };
+
+    exception ExceptionC : ExceptionB
+    {
+        XInterface1 aInterface1;
+    };
+
+    module ModuleB
+    {
+        enum EnumA { VAL_1, VAL_2, VAL_3 = 17};
+    };
+
+};
+
+module ModuleC
+{
+    const boolean           aConstBoolean   = True;
+    const byte              aConstByte      = 0;
+    const short             aConstShort     = -1;
+    const unsigned short    aConstUShort    = 1;
+    const long              aConstLong      = -2;
+    const unsigned long     aConstULong     = 2;
+//      const hyper             aConstHyper     = -3;
+//      const unsigned hyper    aConstUHyper    = 3;
+    const float             aConstFloat     = 3.14;
+    const double            aConstDouble    = 3.14e-10;
+
+
+    interface XInterfaceA : com::sun::star::uno::XInterface
+    {
+        void methodA();
+        [oneway] void methodB([in] short aShort);
+        sequence<ModuleA::StructB> methodC([in] ModuleA::StructC aStructC, [inout] ModuleA::StructA aStructA);
+    };
+
+    interface XInterfaceB : XInterfaceA
+    {
+        [attribute] string aString;
+
+        XInterfaceA methodD([in] ModuleA::ModuleB::EnumA aEnumA) raises (ModuleA::ExceptionA, ModuleA::ExceptionB, ModuleA::ExceptionC);
+    };
+};

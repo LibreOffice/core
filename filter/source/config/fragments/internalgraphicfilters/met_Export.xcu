@@ -1,0 +1,10 @@
+    <node oor:name="met_Export" oor:op="replace"  >
+        <prop oor:name="Type"><value>met_OS2_Metafile</value></prop>
+        <prop oor:name="FormatName"><value>eme</value></prop>
+        <prop oor:name="RealFilterName"/>
+        <prop oor:name="UIComponent"><value>com.sun.star.svtools.SvFilterOptionsDialog</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">MET - OS/2 Metafile</value>
+        </prop>
+        <prop oor:name="Flags"><value>EXPORT</value></prop>
+    </node>

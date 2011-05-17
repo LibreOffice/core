@@ -1,0 +1,240 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _EXTENSIONS_DBP_DBPRESID_HRC_
+#include "dbpresid.hrc"
+#endif
+
+TabPage RID_PAGE_GROUPRADIOSELECTION
+{
+    HelpID = "extensions:TabPage:RID_PAGE_GROUPRADIOSELECTION";
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
+    Text [ en-US ] = "Data";
+
+    FixedLine FL_DATA
+    {
+        Pos = MAP_APPFONT ( 4 , 40  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 8 , 8 ) ;
+    };
+    FixedText FT_RADIOLABELS
+    {
+        Pos = MAP_APPFONT ( 7 , 52  ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 13, 24 ) ;
+        WordBreak = TRUE;
+        Group = TRUE;
+        Text [ en-US ] = "Which ~names do you want to give the option fields?";
+    };
+    Edit ET_RADIOLABELS
+    {
+        HelpID = "extensions:Edit:RID_PAGE_GROUPRADIOSELECTION:ET_RADIOLABELS";
+        Pos = MAP_APPFONT ( 7 , 79  ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 13, 12 ) ;
+        SVLook = TRUE ;
+        Border = TRUE ;
+    };
+    PushButton PB_MOVETORIGHT
+    {
+        HelpID = "extensions:PushButton:RID_PAGE_GROUPRADIOSELECTION:PB_MOVETORIGHT";
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 , 79  ) ;
+        Size = MAP_APPFONT ( ITEM_BUTTON_SIZE_X , ITEM_BUTTON_SIZE_Y ) ;
+        Text = "~>>";
+    };
+    PushButton PB_MOVETOLEFT
+    {
+        HelpID = "extensions:PushButton:RID_PAGE_GROUPRADIOSELECTION:PB_MOVETOLEFT";
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 , 79 + ITEM_BUTTON_SIZE_Y + 3 ) ;
+        Size = MAP_APPFONT ( ITEM_BUTTON_SIZE_X , ITEM_BUTTON_SIZE_Y ) ;
+        Text = "~<<";
+    };
+    FixedText FT_RADIOBUTTONS
+    {
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + ITEM_BUTTON_SIZE_X / 2 + 6 , 52  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 6 - 7, 8 ) ;
+        Group = TRUE;
+        Text [ en-US ] = "~Option fields";
+    };
+    ListBox LB_RADIOBUTTONS
+    {
+        HelpID = "extensions:ListBox:RID_PAGE_GROUPRADIOSELECTION:LB_RADIOBUTTONS";
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + ITEM_BUTTON_SIZE_X / 2 + 6 , 79  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 6 - 7, WINDOW_SIZE_Y - 79 - 6 ) ;
+        SVLook = TRUE ;
+        Border = TRUE ;
+        AutoHScroll = TRUE ;
+        Sort = FALSE;
+    };
+};
+
+TabPage RID_PAGE_DEFAULTFIELDSELECTION
+{
+    HelpID = "extensions:TabPage:RID_PAGE_DEFAULTFIELDSELECTION";
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
+    Text [ en-US ] = "Default Field Selection";
+
+    FixedLine FL_DEFAULTSELECTION
+    {
+        Pos = MAP_APPFONT ( 4 , 3  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 8 , 8 ) ;
+    };
+    FixedText FT_DEFAULTSELECTION
+    {
+        Pos = MAP_APPFONT ( 7 , 15  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 14, 24 ) ;
+        WordBreak = TRUE;
+
+        Text [ en-US ] = "Should one option field be selected as a default?";
+    };
+    RadioButton RB_DEFSELECTION_YES
+    {
+        HelpID = "extensions:RadioButton:RID_PAGE_DEFAULTFIELDSELECTION:RB_DEFSELECTION_YES";
+        Pos = MAP_APPFONT ( 7 , 44  ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, 10 ) ;
+        Group = TRUE;
+        TabStop = TRUE;
+        Text [ en-US ] = "~Yes, the following:";
+    };
+    ListBox LB_DEFSELECTIONFIELD
+    {
+        HelpID = "extensions:ListBox:RID_PAGE_DEFAULTFIELDSELECTION:LB_DEFSELECTIONFIELD";
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 , 42  ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, 14 ) ;
+        TabStop = TRUE;
+        SVLook = TRUE ;
+        Border = TRUE ;
+        DropDown = TRUE;
+        AutoHScroll = TRUE ;
+        Sort = FALSE;
+    };
+    RadioButton RB_DEFSELECTION_NO
+    {
+        HelpID = "extensions:RadioButton:RID_PAGE_DEFAULTFIELDSELECTION:RB_DEFSELECTION_NO";
+        Pos = MAP_APPFONT ( 7 , 59  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 14, 10 ) ;
+        TabStop = FALSE;
+        Text [ en-US ] = "No, one particular field is not going to be selected.";
+    };
+};
+
+TabPage RID_PAGE_OPTIONVALUES
+{
+    HelpID = "extensions:TabPage:RID_PAGE_OPTIONVALUES";
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
+    Text [ en-US ] = "Field Values";
+
+    FixedLine FL_OPTIONVALUES
+    {
+        Pos = MAP_APPFONT ( 4 , 3  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 8 , 8 ) ;
+    };
+    FixedText FT_OPTIONVALUES_EXPL
+    {
+        Pos = MAP_APPFONT ( 7 , 15  ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, 24 ) ;
+        WordBreak = TRUE;
+        Text [ en-US ] = "When you select an option, the option group is given a specific value.";
+    };
+    FixedText FT_OPTIONVALUES
+    {
+        Pos = MAP_APPFONT ( 7 , 42  ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, 16 ) ;
+        WordBreak = TRUE;
+        Group = TRUE;
+        Text [ en-US ] = "Which ~value do you want to assign to each option?";
+    };
+    Edit ET_OPTIONVALUE
+    {
+        HelpID = "extensions:Edit:RID_PAGE_OPTIONVALUES:ET_OPTIONVALUE";
+        Pos = MAP_APPFONT ( 7 , 61 ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, 12 ) ;
+        SVLook = TRUE ;
+        Border = TRUE ;
+        TabStop = TRUE;
+    };
+    FixedText FT_RADIOBUTTONS
+    {
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 , 15  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 14 , 8 ) ;
+        Text [ en-US ] = "~Option fields";
+    };
+    ListBox LB_RADIOBUTTONS
+    {
+        HelpID = "extensions:ListBox:RID_PAGE_OPTIONVALUES:LB_RADIOBUTTONS";
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 , 26  ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10 , WINDOW_SIZE_Y - 32 ) ;
+        SVLook = TRUE ;
+        Border = TRUE ;
+        AutoHScroll = TRUE ;
+        DropDown = FALSE;
+    };
+};
+
+TabPage RID_PAGE_OPTIONS_FINAL
+{
+    HelpID = "extensions:TabPage:RID_PAGE_OPTIONS_FINAL";
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
+    Text [ en-US ] = "Create Option Group";
+
+    FixedLine FL_NAMEIT
+    {
+        Pos = MAP_APPFONT ( 4 , 3  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 8 , 8 ) ;
+    };
+    FixedText FT_NAMEIT
+    {
+        Pos = MAP_APPFONT ( 7 , 15  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 14, 16 ) ;
+        WordBreak = TRUE;
+        Text [ en-US ] = "Which ~caption is to be given to your option group?";
+    };
+    Edit ET_NAMEIT
+    {
+        HelpID = "extensions:Edit:RID_PAGE_OPTIONS_FINAL:ET_NAMEIT";
+        Pos = MAP_APPFONT ( 7 , 34 ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 14, 12 ) ;
+        SVLook = TRUE ;
+        Border = TRUE ;
+    };
+    FixedText FT_THATSALL
+    {
+        Pos = MAP_APPFONT ( 7 , WINDOW_SIZE_Y - 22  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 14, 16 ) ;
+        WordBreak = TRUE;
+        Center = TRUE;
+        Text [ en-US ] = "These were all details needed to create the option group.";
+    };
+};
+
+String RID_STR_GROUPWIZ_DBFIELD
+{
+    Text [ en-US ] = "You can either save the value of the option group in a database field or use it for a later action.";
+};
+
+

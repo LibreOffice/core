@@ -1,0 +1,10 @@
+    <node oor:name="chart8" oor:op="replace">
+        <prop oor:name="Flags"><value>IMPORT EXPORT OWN DEFAULT NOTINFILEDIALOG NOTINCHOOSER PREFERRED ENCRYPTION</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="FilterService"><value>com.sun.star.comp.chart2.XMLFilter</value></prop>
+        <prop oor:name="UserData"><value>XML</value></prop>
+        <prop oor:name="FileFormatVersion"><value>6800</value></prop>
+        <prop oor:name="Type"><value>chart8</value></prop>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="DocumentService"><value>com.sun.star.chart2.ChartDocument</value></prop>
+    </node>

@@ -1,0 +1,76 @@
+UDK_3.1 { # OOo 1.1.2 SDK
+    global:
+        __1cJsalhelperJCondition2t6MrnDoslFMutex__v_;
+        __1cJsalhelperJCondition2t5B6MrnDoslFMutex__v_;
+        __1cJsalhelperJCondition2T6M_v_;
+        __1cJsalhelperJCondition2T5B6M_v_;
+        __1cJsalhelperbF__RTTI__1nJsalhelperJCondition__;
+        __1cJsalhelperbH__RTTI__1CpnJsalhelperJCondition__;
+        __1cJsalhelperbI__RTTI__1CpknJsalhelperJCondition__;
+
+        __1cJsalhelperRConditionModifier2t6Mrn0AJCondition__v_;
+        __1cJsalhelperRConditionModifier2t5B6Mrn0AJCondition__v_;
+        __1cJsalhelperRConditionModifier2T6M_v_;
+        __1cJsalhelperRConditionModifier2T5B6M_v_;
+
+        __1cJsalhelperPConditionWaiter2t6Mrn0AJCondition__v_;
+        __1cJsalhelperPConditionWaiter2t5B6Mrn0AJCondition__v_;
+        __1cJsalhelperPConditionWaiter2t6Mrn0AJCondition_L_v_; #S-ILP32
+        __1cJsalhelperPConditionWaiter2t6Mrn0AJCondition_I_v_; #S-LP64
+        __1cJsalhelperPConditionWaiter2t5B6Mrn0AJCondition_L_v_; #S-ILP32
+        __1cJsalhelperPConditionWaiter2t5B6Mrn0AJCondition_I_v_; #S-LP64
+        __1cJsalhelperPConditionWaiter2T6M_v_;
+        __1cJsalhelperPConditionWaiter2T5B6M_v_;
+
+        __1cJsalhelperPConditionWaiterItimedout2t6M_v_;
+        __1cJsalhelperPConditionWaiterItimedout2t5B6M_v_;
+        __1cJsalhelperPConditionWaiterItimedout2t6Mrk2_v_;
+        __1cJsalhelperPConditionWaiterItimedout2t5B6Mrk2_v_;
+        __1cJsalhelperPConditionWaiterItimedout2T6M_v_;
+        __1cJsalhelperPConditionWaiterItimedout2T5B6M_v_;
+        __1cJsalhelperPConditionWaiterItimedout2G6Mrk2_r2_;
+        __1cJsalhelperbU__RTTI__1nJsalhelperPConditionWaiterItimedout__;
+        __1cJsalhelperbW__RTTI__1CpnJsalhelperPConditionWaiterItimedout__;
+        __1cJsalhelperbX__RTTI__1CpknJsalhelperPConditionWaiterItimedout__;
+} UDK_3.0;
+
+UDK_3.0 {
+    global:
+GetVersionInfo;
+__1cJsalhelperSORealDynamicLoaderLnewInstance6Fpp1rknDrtlIOUString_7_2_;
+__1cJsalhelperSORealDynamicLoader2t5B6Mpp1rknDrtlIOUString_7pv8_v_;
+__1cJsalhelperSORealDynamicLoader2t6Mpp1rknDrtlIOUString_7pv8_v_;
+__1cJsalhelperSORealDynamicLoaderG__vtbl_;
+__1cJsalhelperSORealDynamicLoader2T5B6M_v_;
+__1cJsalhelperSORealDynamicLoader2T6M_v_;
+__1cJsalhelperbR__RTTI__1CpknJsalhelperSORealDynamicLoader__;
+__1cJsalhelperbQ__RTTI__1CpnJsalhelperSORealDynamicLoader__;
+__1cJsalhelperbO__RTTI__1nJsalhelperSORealDynamicLoader__;
+__1cJsalhelperSORealDynamicLoaderHacquire6M_L_; #S-ILP32
+__1cJsalhelperSORealDynamicLoaderHacquire6M_I_; #S-LP64
+__1cJsalhelperSORealDynamicLoaderHrelease6M_L_; #S-ILP32
+__1cJsalhelperSORealDynamicLoaderHrelease6M_I_; #S-LP64
+__1cJsalhelperSORealDynamicLoaderGgetApi6kM_pv_;
+__1cJsalhelperVSimpleReferenceObject2T5B6M_v_;
+__1cJsalhelperVSimpleReferenceObject2T6M_v_;
+__1cJsalhelperVSimpleReferenceObject2k6Fpv_v_;
+__1cJsalhelperVSimpleReferenceObject2k6FpvrknDstdJnothrow_t__v_;
+__1cJsalhelperVSimpleReferenceObject2n6FI_pv_; #S-ILP32
+__1cJsalhelperVSimpleReferenceObject2n6FL_pv_; #S-LP64
+__1cJsalhelperVSimpleReferenceObject2n6FIrknDstdJnothrow_t__pv_; #S-ILP32
+__1cJsalhelperVSimpleReferenceObject2n6FLrknDstdJnothrow_t__pv_; #S-LP64
+__1cJsalhelperVSimpleReferenceObjectG__vtbl_;
+__1cJsalhelperbR__RTTI__1nJsalhelperVSimpleReferenceObject__;
+__1cJsalhelperbT__RTTI__1CpnJsalhelperVSimpleReferenceObject__;
+__1cJsalhelperbU__RTTI__1CpknJsalhelperVSimpleReferenceObject__;
+    local:
+        *;
+} SALHLP_1_0;
+
+SALHLP_1_0 { # WEAK (backward compatibility, should have been UDK_3.0)
+};
+
+{ # BASE
+_init;
+_fini;
+};

@@ -1,0 +1,8 @@
+"ScDDELinkObj";"com::sun::star::util::XRefreshable";"refresh()"
+"ScDDELinkObj";"com::sun::star::util::XRefreshable";"addRefreshListener()"
+"ScDDELinkObj";"com::sun::star::util::XRefreshable";"removeRefreshListener()"
+"ScDDELinkObj";"com::sun::star::sheet::XDDELink";"getApplication()"
+"ScDDELinkObj";"com::sun::star::sheet::XDDELink";"getTopic()"
+"ScDDELinkObj";"com::sun::star::sheet::XDDELink";"getItem()"
+"ScDDELinkObj";"com::sun::star::container::XNamed";"getName()"
+"ScDDELinkObj";"com::sun::star::container::XNamed";"setName()"

@@ -1,0 +1,115 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include "basic/ttglobal.hrc"
+
+
+// Here are the messages of /basic/source/app included
+
+///////////////////////////////
+// Error message that go to the Resultfile.
+// *********************
+// ***  !!ATTENTION!!    ***
+// *********************
+// Theses numbers MUST NOT change ever!
+// Because they are stored in the Resultfiles and if you showed them again
+// the appropriate new or no Strings are viewed.
+///////////////////////////////
+
+#define S_GPF_ABORT                                 ( SVT_START +   0 )
+#define S_APP_SHUTDOWN                              ( SVT_START +   1 )
+#define S_SID_EXECUTE_FAILED_NO_DISPATCHER          ( SVT_START +   2 )
+#define S_SID_EXECUTE_FAILED                        ( SVT_START +   3 )
+#define S_UNO_PROPERTY_NITIALIZE_FAILED             ( SVT_START +   4 )
+#define S_RESETAPPLICATION_FAILED_COMPLEX           ( SVT_START +   5 )
+#define S_RESETAPPLICATION_FAILED_UNKNOWN           ( SVT_START +   6 )
+#define S_NO_ACTIVE_WINDOW                          ( SVT_START +   7 )
+#define S_NO_DIALOG_IN_GETACTIVE                    ( SVT_START +   8 )
+#define S_NO_POPUP                                  ( SVT_START +   9 )
+#define S_NO_SUBMENU                                ( SVT_START +  10 )
+#define S_CONTROLTYPE_NOT_SUPPORTED                 ( SVT_START +  11 )
+#define S_SELECTION_BY_ATTRIBUTE_ONLY_DIRECTORIES   ( SVT_START +  12 )
+#define S_NO_MORE_FILES                             ( SVT_START +  13 )
+#define S_UNKNOWN_METHOD                            ( SVT_START +  14 )
+#define S_INVALID_PARAMETERS                        ( SVT_START +  15 )
+#define S_POINTER_OUTSIDE_APPWIN                    ( SVT_START +  16 )
+#define S_UNKNOWN_COMMAND                           ( SVT_START +  17 )
+#define S_WIN_NOT_FOUND                             ( SVT_START +  18 )
+#define S_WIN_INVISIBLE                             ( SVT_START +  19 )
+#define S_WIN_DISABLED                              ( SVT_START +  20 )
+#define S_NUMBER_TOO_BIG                            ( SVT_START +  21 )
+#define S_NUMBER_TOO_SMALL                          ( SVT_START +  22 )
+#define S_WINDOW_DISAPPEARED                        ( SVT_START +  23 )
+#define S_ERROR_SAVING_IMAGE                        ( SVT_START +  24 )
+#define S_INVALID_POSITION                          ( SVT_START +  25 )
+#define S_SPLITWIN_NOT_FOUND                        ( SVT_START +  26 )
+#define S_INTERNAL_ERROR                            ( SVT_START +  27 )
+#define S_NO_STATUSBAR                              ( SVT_START +  28 )
+#define S_ITEMS_INVISIBLE                           ( SVT_START +  29 )
+#define S_TABPAGE_NOT_FOUND                         ( SVT_START +  30 )
+#define S_TRISTATE_NOT_ALLOWED                      ( SVT_START +  31 )
+#define S_ERROR_IN_SET_TEXT                         ( SVT_START +  32 )
+#define S_ATTEMPT_TO_WRITE_READONLY                 ( SVT_START +  33 )
+#define S_NO_SELECT_FALSE                           ( SVT_START +  34 )
+#define S_ENTRY_NOT_FOUND                           ( SVT_START +  35 )
+#define S_METHOD_FAILED                             ( SVT_START +  36 )
+#define S_HELPID_ON_TOOLBOX_NOT_FOUND               ( SVT_START +  37 )
+#define S_BUTTON_DISABLED_ON_TOOLBOX                ( SVT_START +  38 )
+#define S_BUTTON_HIDDEN_ON_TOOLBOX                  ( SVT_START +  39 )
+#define S_CANNOT_MAKE_BUTTON_VISIBLE_IN_TOOLBOX     ( SVT_START +  40 )
+#define S_TEAROFF_FAILED                            ( SVT_START +  41 )
+#define S_NO_SELECTED_ENTRY_DEPRECATED              ( SVT_START +  42 ) // Has to stay in for old res files
+#define S_SELECT_DESELECT_VIA_STRING_NOT_IMPLEMENTED ( SVT_START +  43 )
+#define S_ALLOWED_ONLY_IN_FLOATING_MODE             ( SVT_START +  44 )
+#define S_ALLOWED_ONLY_IN_DOCKING_MODE              ( SVT_START +  45 )
+#define S_SIZE_NOT_CHANGEABLE                       ( SVT_START +  46 )
+#define S_NO_OK_BUTTON                              ( SVT_START +  47 )
+#define S_NO_CANCEL_BUTTON                          ( SVT_START +  48 )
+#define S_NO_YES_BUTTON                             ( SVT_START +  49 )
+#define S_NO_NO_BUTTON                              ( SVT_START +  50 )
+#define S_NO_RETRY_BUTTON                           ( SVT_START +  51 )
+#define S_NO_HELP_BUTTON                            ( SVT_START +  52 )
+#define S_NO_DEFAULT_BUTTON                         ( SVT_START +  53 )
+#define S_BUTTON_ID_NOT_THERE                       ( SVT_START +  54 )
+#define S_BUTTONID_REQUIRED                         ( SVT_START +  55 )
+#define S_UNKNOWN_TYPE                              ( SVT_START +  56 )
+#define S_UNPACKING_STORAGE_FAILED                  ( SVT_START +  57 )
+#define S_NO_LIST_BOX_BUTTON                        ( SVT_START +  58 )
+#define S_UNO_URL_EXECUTE_FAILED_NO_DISPATCHER      ( SVT_START +  59 )
+#define S_UNO_URL_EXECUTE_FAILED_NO_FRAME           ( SVT_START +  60 )
+#define S_NO_MENU                                   ( SVT_START +  61 )
+#define S_NO_SELECTED_ENTRY                         ( SVT_START +  62 )
+#define S_UNO_URL_EXECUTE_FAILED_DISABLED           ( SVT_START +  63 )
+#define S_NO_SCROLLBAR                              ( SVT_START +  64 )
+#define S_NO_SAX_PARSER                             ( SVT_START +  65 )
+#define S_CANNOT_CREATE_DIRECTORY                   ( SVT_START +  66 )
+#define S_DIRECTORY_NOT_EMPTY                       ( SVT_START +  67 )
+#define S_DEPRECATED                                ( SVT_START +  68 )
+#define S_SIZE_BELOW_MINIMUM                        ( SVT_START +  69 )
+#define S_CANNOT_FIND_FLOATING_WIN                  ( SVT_START +  70 )
+#define S_NO_LIST_BOX_STRING                        ( SVT_START +  71 )
+#define S_SLOT_IN_EXECUTE                           ( SVT_START +  72 )
+#define S_MENU_NOT_CLOSING                          ( SVT_START +  73 )

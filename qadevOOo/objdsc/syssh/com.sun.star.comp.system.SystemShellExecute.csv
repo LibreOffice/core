@@ -1,0 +1,6 @@
+"SystemShellExecute";"com::sun::star::system::XSystemShellExecute";"execute()"
+"SystemShellExecute";"com::sun::star::lang::XServiceInfo";"getImplementationName()"
+"SystemShellExecute";"com::sun::star::lang::XServiceInfo";"supportsService()"
+"SystemShellExecute";"com::sun::star::lang::XServiceInfo";"getSupportedServiceNames()"
+"SystemShellExecute";"com::sun::star::lang::XTypeProvider";"getTypes()"
+"SystemShellExecute";"com::sun::star::lang::XTypeProvider";"getImplementationId()"

@@ -1,0 +1,12 @@
+    <node oor:name="tga_Truevision_TARGA" oor:op="replace" >
+        <prop oor:name="DetectService"><value>com.sun.star.comp.draw.FormatDetector</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>tga</value></prop>
+        <prop oor:name="MediaType"><value>image/x-targa</value></prop>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>TGA - Truevision TARGA</value></prop>
+        <prop oor:name="UIName">
+            <value>TGA - Truevision Targa</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"/>
+    </node>

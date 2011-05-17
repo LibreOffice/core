@@ -1,0 +1,375 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _SVTOOLS_HRC
+#define _SVTOOLS_HRC
+
+#include <svl/solar.hrc>
+
+#define RID_SVTOOLS_BITMAP_START        (RID_SVTOOLS_START + 0)
+#define RID_SVTOOLS_IMAGELIST_START     (RID_SVTOOLS_START + 0)
+
+//#define ABOUT_STR_COPYRIGHT             (RID_SVTOOLS_START + 1)
+//#define ABOUT_STR_DEVELOPER_ARY         (RID_SVTOOLS_START + 2)
+
+//.............................................................................
+// various unsorted stuff
+
+#define DLG_TWAIN_SOURCE                (RID_SVTOOLS_START+3)
+
+#define DLG_SVT_EXPLORERFILE            (RID_SVTOOLS_START+4)
+#define DLG_SVT_QUERYFOLDERNAME         (RID_SVTOOLS_START+5)
+#define DLG_SVT_QUERYDELETE             (RID_SVTOOLS_START+6)
+
+#define STR_SVT_AUTOMATIC_COLOR         (RID_SVTOOLS_START+16)
+
+#define STR_SVT_FILEVIEW_COLUMN_TITLE   (RID_SVTOOLS_START + 20)
+#define STR_SVT_FILEVIEW_COLUMN_SIZE    (RID_SVTOOLS_START + 21)
+#define STR_SVT_FILEVIEW_COLUMN_DATE    (RID_SVTOOLS_START + 22)
+#define STR_SVT_FOLDER                  (RID_SVTOOLS_START + 23)
+#define STR_SVT_FILEVIEW_ERR_MAKEFOLDER (RID_SVTOOLS_START + 24)
+#define STR_SVT_BYTES                   (RID_SVTOOLS_START + 25)
+#define STR_SVT_KB                      (RID_SVTOOLS_START + 26)
+#define STR_SVT_MB                      (RID_SVTOOLS_START + 27)
+#define STR_SVT_GB                      (RID_SVTOOLS_START + 28)
+#define STR_FILTERNAME_ALL              (RID_SVTOOLS_START + 29)
+#define STR_SVT_NEW_FOLDER              (RID_SVTOOLS_START + 30)
+#define STR_SVT_ALREADYEXISTOVERWRITE   (RID_SVTOOLS_START + 31)
+#define STR_SVT_FILEVIEW_COLUMN_TYPE    (RID_SVTOOLS_START + 32)
+#define RID_FILEVIEW_CONTEXTMENU        (RID_SVTOOLS_START + 33)
+#define RID_FILEOPEN_INVALIDFOLDER      (RID_SVTOOLS_START + 34)
+#define RID_FILEOPEN_NOTEXISTENTFILE    (RID_SVTOOLS_START + 35)
+#define STR_SVT_NOREMOVABLEDEVICE       (RID_SVTOOLS_START + 36)
+#define STR_SVT_ALLFORMATS              (RID_SVTOOLS_START + 37)
+
+// doc template dialog
+#define DLG_DOCTEMPLATE                 (RID_SVTOOLS_START+50)
+#define CTRL_FILEVIEW                   (RID_SVTOOLS_START+51)
+#define STR_SVT_NEWDOC                  (RID_SVTOOLS_START+52)
+#define STR_SVT_MYDOCS                  (RID_SVTOOLS_START+53)
+#define STR_SVT_TEMPLATES               (RID_SVTOOLS_START+54)
+#define STR_SVT_SAMPLES                 (RID_SVTOOLS_START+55)
+#define TB_SVT_FILEVIEW                 (RID_SVTOOLS_START+56)
+#define TB_SVT_FRAMEWIN                 (RID_SVTOOLS_START+57)
+#define STRARY_SVT_DOCINFO              (RID_SVTOOLS_START+58)
+#define STR_SVT_NEWDOC_HELP             (RID_SVTOOLS_START+63)
+#define STR_SVT_MYDOCS_HELP             (RID_SVTOOLS_START+64)
+#define STR_SVT_TEMPLATES_HELP          (RID_SVTOOLS_START+65)
+#define STR_SVT_SAMPLES_HELP            (RID_SVTOOLS_START+66)
+
+#define STR_WARNING_ITEM                (RID_SVTOOLS_START+90)
+
+#define CONFIG_BASIC_FORMAT_START       (RID_SVTOOLS_START+102)
+#define STR_BASICKEY_FORMAT_ON          (RID_SVTOOLS_START+103)
+#define STR_BASICKEY_FORMAT_OFF         (RID_SVTOOLS_START+104)
+#define STR_BASICKEY_FORMAT_YES         (RID_SVTOOLS_START+105)
+#define STR_BASICKEY_FORMAT_NO          (RID_SVTOOLS_START+106)
+#define STR_BASICKEY_FORMAT_TRUE        (RID_SVTOOLS_START+107)
+#define STR_BASICKEY_FORMAT_FALSE       (RID_SVTOOLS_START+108)
+#define CONFIG_BASIC_FORMAT_END         (RID_SVTOOLS_START+109)
+#define STR_UNDO                        (RID_SVTOOLS_START+110)
+#define STR_REDO                        (RID_SVTOOLS_START+111)
+#define STR_REPEAT                      (RID_SVTOOLS_START+112)
+
+
+#define STR_INVALIDTRYBUY               (RID_SVTOOLS_START+120)
+#define STR_OLDTRYBUY                   (RID_SVTOOLS_START+121)
+#define STR_TRYBUY                      (RID_SVTOOLS_START+122)
+#define STR_PVER_LANGUAGECODE           (RID_SVTOOLS_START+124)
+#define STR_PVER_LONG_LANGUAGECODE      (RID_SVTOOLS_START+125)
+#define STR_INVALIDPUFF                 (RID_SVTOOLS_START+126)
+#define STR_LIMITEDPUFF                 (RID_SVTOOLS_START+127)
+#define STR_OLDLIMITEDPUFF              (RID_SVTOOLS_START+128)
+#define RID_REGISTER_DIALOG             (RID_SVTOOLS_START+129)
+#define STR_BASICKEY_FORMAT_CURRENCY    (RID_SVTOOLS_START+130)
+#define STR_KEYERR_GENERAL_HELP         (RID_SVTOOLS_START+131)
+#define STR_KEYERR_INVALID_KEY          (RID_SVTOOLS_START+132)
+#define STR_KEYERR_INVALID_USERDATA     (RID_SVTOOLS_START+133)
+#define STR_KEYERR_INVALID_ADDRESSDATA  (RID_SVTOOLS_START+134)
+#define STR_KEYERR_INVALID_LICENSE      (RID_SVTOOLS_START+135)
+#define STR_KEYERR_INVALID_LANGUAGE     (RID_SVTOOLS_START+136)
+#define STR_KEYERR_INVALID_OS           (RID_SVTOOLS_START+137)
+#define STR_KEYERR_INVALID_NO_CNR       (RID_SVTOOLS_START+138)
+#define STR_KEYERR_INVALID_CNR          (RID_SVTOOLS_START+139)
+#define RID_LIMITED_DIALOG              (RID_SVTOOLS_START+140)
+
+#define STR_SVT_PRNDLG_START                (RID_SVTOOLS_START+141)
+#define DLG_SVT_PRNDLG_PRNSETUPDLG          (STR_SVT_PRNDLG_START+0)
+#define DLG_SVT_PRNDLG_PRINTDLG             (STR_SVT_PRNDLG_START+1)
+#define STR_SVT_PRNDLG_READY                (STR_SVT_PRNDLG_START+2)
+#define STR_SVT_PRNDLG_PAUSED               (STR_SVT_PRNDLG_START+3)
+#define STR_SVT_PRNDLG_PENDING              (STR_SVT_PRNDLG_START+4)
+#define STR_SVT_PRNDLG_BUSY                 (STR_SVT_PRNDLG_START+5)
+#define STR_SVT_PRNDLG_INITIALIZING         (STR_SVT_PRNDLG_START+6)
+#define STR_SVT_PRNDLG_WAITING              (STR_SVT_PRNDLG_START+7)
+#define STR_SVT_PRNDLG_WARMING_UP           (STR_SVT_PRNDLG_START+8)
+#define STR_SVT_PRNDLG_PROCESSING           (STR_SVT_PRNDLG_START+9)
+#define STR_SVT_PRNDLG_PRINTING             (STR_SVT_PRNDLG_START+10)
+#define STR_SVT_PRNDLG_OFFLINE              (STR_SVT_PRNDLG_START+11)
+#define STR_SVT_PRNDLG_ERROR                (STR_SVT_PRNDLG_START+12)
+#define STR_SVT_PRNDLG_SERVER_UNKNOWN       (STR_SVT_PRNDLG_START+13)
+#define STR_SVT_PRNDLG_PAPER_JAM            (STR_SVT_PRNDLG_START+14)
+#define STR_SVT_PRNDLG_PAPER_OUT            (STR_SVT_PRNDLG_START+15)
+#define STR_SVT_PRNDLG_MANUAL_FEED          (STR_SVT_PRNDLG_START+16)
+#define STR_SVT_PRNDLG_PAPER_PROBLEM        (STR_SVT_PRNDLG_START+17)
+#define STR_SVT_PRNDLG_IO_ACTIVE            (STR_SVT_PRNDLG_START+18)
+#define STR_SVT_PRNDLG_OUTPUT_BIN_FULL      (STR_SVT_PRNDLG_START+19)
+#define STR_SVT_PRNDLG_TONER_LOW            (STR_SVT_PRNDLG_START+20)
+#define STR_SVT_PRNDLG_NO_TONER             (STR_SVT_PRNDLG_START+21)
+#define STR_SVT_PRNDLG_PAGE_PUNT            (STR_SVT_PRNDLG_START+22)
+#define STR_SVT_PRNDLG_USER_INTERVENTION    (STR_SVT_PRNDLG_START+23)
+#define STR_SVT_PRNDLG_OUT_OF_MEMORY        (STR_SVT_PRNDLG_START+24)
+#define STR_SVT_PRNDLG_DOOR_OPEN            (STR_SVT_PRNDLG_START+25)
+#define STR_SVT_PRNDLG_POWER_SAVE           (STR_SVT_PRNDLG_START+26)
+#define STR_SVT_PRNDLG_DEFPRINTER           (STR_SVT_PRNDLG_START+27)
+#define STR_SVT_PRNDLG_JOBCOUNT             (STR_SVT_PRNDLG_START+28)
+#define STR_SVT_PRNDLG_END              (RID_IMG_PRNDLG_NOCOLLATE)
+
+#define STR_SVT_CALENDAR_START              (STR_SVT_PRNDLG_END+1)
+#define STR_SVT_CALENDAR_DAY                (STR_SVT_CALENDAR_START+0)
+#define STR_SVT_CALENDAR_WEEK               (STR_SVT_CALENDAR_START+1)
+#define STR_SVT_CALENDAR_TODAY              (STR_SVT_CALENDAR_START+2)
+#define STR_SVT_CALENDAR_NONE               (STR_SVT_CALENDAR_START+3)
+#define STR_SVT_CALENDAR_END                (STR_SVT_CALENDAR_NONE)
+
+#define STR_SVT_PVER_START                  (STR_SVT_CALENDAR_END+1)
+#define STR_SVT_PVER_INTERNAL               (STR_SVT_PVER_START+0)
+#define STR_SVT_PVER_PERSONAL_DELUXE        (STR_SVT_PVER_START+1)
+#define STR_SVT_PVER_PERSONAL               (STR_SVT_PVER_START+2)
+#define STR_SVT_PVER_PROFESSIONAL           (STR_SVT_PVER_START+3)
+#define STR_SVT_PVER_BUSINESS               (STR_SVT_PVER_START+4)
+#define STR_SVT_PVER_ENTERPRICE             (STR_SVT_PVER_START+5)
+#define STR_SVT_PVER_EDUCATION              (STR_SVT_PVER_START+6)
+#define STR_SVT_PVER_DEMO                   (STR_SVT_PVER_START+7)
+#define STR_SVT_PVER_BETA                   (STR_SVT_PVER_START+8)
+#define STR_SVT_PVER_OEM                    (STR_SVT_PVER_START+9)
+#define STR_SVT_PVER_NOT_REGISTERED         (STR_SVT_PVER_START+10)
+#define STR_SVT_PVER_PILOT                  (STR_SVT_PVER_START+11)
+#define STR_SVT_PVER_CAMPUS                 (STR_SVT_PVER_START+12)
+#define STR_SVT_PVER_EVALUATION             (STR_SVT_PVER_START+13)
+#define STR_SVT_PVER_PARTNER                (STR_SVT_PVER_START+14)
+#define STR_SVT_PVER_SMALLBUSINESS          (STR_SVT_PVER_START+15)
+#define STR_SVT_PVER_OEM_PROFESSIONAL       (STR_SVT_PVER_START+16)
+#define STR_SVT_PVER_END                    (STR_SVT_PVER_OEM_PROFESSIONAL)
+
+#define STR_SVT_STYLE_START                 (STR_SVT_PVER_END+1)
+#define STR_SVT_STYLE_LIGHT                 (STR_SVT_STYLE_START+0)
+#define STR_SVT_STYLE_LIGHT_ITALIC          (STR_SVT_STYLE_START+1)
+#define STR_SVT_STYLE_NORMAL                (STR_SVT_STYLE_START+2)
+#define STR_SVT_STYLE_NORMAL_ITALIC         (STR_SVT_STYLE_START+3)
+#define STR_SVT_STYLE_BOLD                  (STR_SVT_STYLE_START+4)
+#define STR_SVT_STYLE_BOLD_ITALIC           (STR_SVT_STYLE_START+5)
+#define STR_SVT_STYLE_BLACK                 (STR_SVT_STYLE_START+6)
+#define STR_SVT_STYLE_BLACK_ITALIC          (STR_SVT_STYLE_START+7)
+#define STR_SVT_STYLE_END                   (STR_SVT_STYLE_BLACK_ITALIC)
+
+#define STR_SVT_FONTMAP_START               (STR_SVT_STYLE_END+1)
+#define STR_SVT_FONTMAP_BOTH                (STR_SVT_FONTMAP_START+0)
+#define STR_SVT_FONTMAP_PRINTERONLY         (STR_SVT_FONTMAP_START+1)
+#define STR_SVT_FONTMAP_SCREENONLY          (STR_SVT_FONTMAP_START+2)
+#define STR_SVT_FONTMAP_SIZENOTAVAILABLE    (STR_SVT_FONTMAP_START+3)
+#define STR_SVT_FONTMAP_STYLENOTAVAILABLE   (STR_SVT_FONTMAP_START+4)
+#define STR_SVT_FONTMAP_NOTAVAILABLE        (STR_SVT_FONTMAP_START+5)
+#define STR_SVT_FONTMAP_END                 (STR_SVT_FONTMAP_NOTAVAILABLE)
+
+#define STR_SVT_ERRORCONTEXT_START          (STR_SVT_FONTMAP_END+1)
+#define STR_ERR_HDLMESS                     (STR_SVT_ERRORCONTEXT_START+0)
+#define RID_ERRHDL_CLASS                    (STR_SVT_ERRORCONTEXT_START+1)
+#define RID_ERRCTX                          (STR_SVT_ERRORCONTEXT_START+2)
+#define RID_ERRHDL                          (STR_SVT_ERRORCONTEXT_START+3)
+#define STR_SVT_ERRORCONTEXT_END            (RID_ERRHDL)
+
+#define STR_WIZARDDIALOG_START              (STR_SVT_ERRORCONTEXT_END + 1)
+#define STR_WIZDLG_FINISH                   (STR_WIZARDDIALOG_START + 0)
+#define STR_WIZDLG_NEXT                     (STR_WIZARDDIALOG_START + 1)
+#define STR_WIZDLG_PREVIOUS                 (STR_WIZARDDIALOG_START + 2)
+#define STR_WIZDLG_ROADMAP_TITLE            (STR_WIZARDDIALOG_START + 3)
+#define STR_WIZARDDIALOG_END                (STR_WIZDLG_ROADMAP_TITLE)
+
+#define STR_SVT_COLLATE_START               (STR_WIZARDDIALOG_END+1)
+#define STR_SVT_COLLATE_NORMAL              (STR_SVT_COLLATE_START+0)
+#define STR_SVT_COLLATE_DICTIONARY          (STR_SVT_COLLATE_START+1)
+#define STR_SVT_COLLATE_PINYIN              (STR_SVT_COLLATE_START+2)
+#define STR_SVT_COLLATE_STROKE              (STR_SVT_COLLATE_START+3)
+#define STR_SVT_COLLATE_RADICAL             (STR_SVT_COLLATE_START+4)
+#define STR_SVT_COLLATE_CHARSET             (STR_SVT_COLLATE_START+5)
+#define STR_SVT_COLLATE_ZHUYIN              (STR_SVT_COLLATE_START+6)
+#define STR_SVT_COLLATE_ALPHANUMERIC        (STR_SVT_COLLATE_START+7)
+#define STR_SVT_COLLATE_UNICODE             (STR_SVT_COLLATE_START+8)
+#define STR_SVT_COLLATE_PHONEBOOK           (STR_SVT_COLLATE_START+9)
+#define STR_SVT_COLLATE_PHONETIC_F          (STR_SVT_COLLATE_START+10)
+#define STR_SVT_COLLATE_PHONETIC_L          (STR_SVT_COLLATE_START+11)
+#define STR_SVT_COLLATE_END                 (STR_SVT_COLLATE_PHONETIC_L)
+
+#define STR_SVT_FILEPICKER_START                    (STR_SVT_COLLATE_END+1)
+#define STR_SVT_FILEPICKER_AUTO_EXTENSION           (STR_SVT_FILEPICKER_START+ 0)
+#define STR_SVT_FILEPICKER_PASSWORD                 (STR_SVT_FILEPICKER_START+ 1)
+#define STR_SVT_FILEPICKER_FILTER_OPTIONS           (STR_SVT_FILEPICKER_START+ 2)
+#define STR_SVT_FILEPICKER_READONLY                 (STR_SVT_FILEPICKER_START+ 3)
+#define STR_SVT_FILEPICKER_INSERT_AS_LINK           (STR_SVT_FILEPICKER_START+ 4)
+#define STR_SVT_FILEPICKER_SHOW_PREVIEW             (STR_SVT_FILEPICKER_START+ 5)
+#define STR_SVT_FILEPICKER_PLAY                     (STR_SVT_FILEPICKER_START+ 6)
+#define STR_SVT_FILEPICKER_VERSION                  (STR_SVT_FILEPICKER_START+ 7)
+#define STR_SVT_FILEPICKER_TEMPLATES                (STR_SVT_FILEPICKER_START+ 8)
+#define STR_SVT_FILEPICKER_IMAGE_TEMPLATE           (STR_SVT_FILEPICKER_START+ 9)
+#define STR_SVT_FILEPICKER_SELECTION                (STR_SVT_FILEPICKER_START+10)
+#define STR_SVT_FILEPICKER_FILTER_TITLE             (STR_SVT_FILEPICKER_START+11)
+#define STR_SVT_FOLDERPICKER_DEFAULT_TITLE          (STR_SVT_FILEPICKER_START+12)
+#define STR_SVT_FOLDERPICKER_DEFAULT_DESCRIPTION    (STR_SVT_FILEPICKER_START+13)
+#define STR_SVT_FILEPICKER_END                      (STR_SVT_FOLDERPICKER_DEFAULT_DESCRIPTION)
+
+// String-Ids for accessibility
+#define STR_SVT_ACC_BEGIN                   (STR_SVT_FILEPICKER_END+1)
+#define STR_SVT_TOOL_PANEL_BUTTON_FWD       (STR_SVT_ACC_BEGIN+0)
+#define STR_SVT_TOOL_PANEL_BUTTON_BACK      (STR_SVT_ACC_BEGIN+1)
+#define STR_SVT_ACC_DESC_TABLISTBOX         (STR_SVT_ACC_BEGIN+2)
+#define STR_SVT_ACC_DESC_FILEVIEW           (STR_SVT_ACC_BEGIN+3)
+#define STR_SVT_ACC_DESC_FOLDER             (STR_SVT_ACC_BEGIN+4)
+#define STR_SVT_ACC_DESC_FILE               (STR_SVT_ACC_BEGIN+5)
+#define STR_SVT_ACC_EMPTY_FIELD             (STR_SVT_ACC_BEGIN+6)
+//IAccessible2 implementation
+#define STR_SVT_ACC_LISTENTRY_SELCTED_STATE     (STR_SVT_ACC_BEGIN+7)
+#define STR_SVT_ACC_RULER_VERT_NAME (STR_SVT_ACC_BEGIN+8)
+#define STR_SVT_ACC_RULER_HORZ_NAME (STR_SVT_ACC_BEGIN+9)
+#define STR_SVT_ACC_END                     (STR_SVT_ACC_EMPTY_FIELD)
+
+#define STR_SVT_INDEXENTRY_START            (STR_SVT_ACC_END + 1)
+#define STR_SVT_INDEXENTRY_ALPHANUMERIC     (STR_SVT_INDEXENTRY_START+0)
+#define STR_SVT_INDEXENTRY_DICTIONARY       (STR_SVT_INDEXENTRY_START+1)
+#define STR_SVT_INDEXENTRY_PINYIN           (STR_SVT_INDEXENTRY_START+2)
+#define STR_SVT_INDEXENTRY_RADICAL          (STR_SVT_INDEXENTRY_START+3)
+#define STR_SVT_INDEXENTRY_STROKE           (STR_SVT_INDEXENTRY_START+4)
+#define STR_SVT_INDEXENTRY_ZHUYIN           (STR_SVT_INDEXENTRY_START+5)
+#define STR_SVT_INDEXENTRY_PHONETIC_FS      (STR_SVT_INDEXENTRY_START+6)
+#define STR_SVT_INDEXENTRY_PHONETIC_FC      (STR_SVT_INDEXENTRY_START+7)
+#define STR_SVT_INDEXENTRY_PHONETIC_LS      (STR_SVT_INDEXENTRY_START+8)
+#define STR_SVT_INDEXENTRY_PHONETIC_LC      (STR_SVT_INDEXENTRY_START+9)
+#define STR_SVT_INDEXENTRY_END              (STR_SVT_INDEXENTRY_PHONETIC_LC)
+
+//String - Ids for Java errors, messages
+//These strings come from project desktop
+//There was no time for translation, therefore the defines needed to
+//remain the same.
+#define STR_SVT_JAVAERROR_START             (STR_SVT_INDEXENTRY_END + 1)
+#define STR_QUESTION_JAVADISABLED           (STR_SVT_JAVAERROR_START+0)
+#define STR_ERROR_JVMCREATIONFAILED         (STR_SVT_JAVAERROR_START+1)
+#define STR_WARNING_JAVANOTFOUND            (STR_SVT_JAVAERROR_START+2)
+#define STR_WARNING_INVALIDJAVASETTINGS     (STR_SVT_JAVAERROR_START+3)
+#define STR_ERROR_RESTARTREQUIRED           (STR_SVT_JAVAERROR_START+4)
+#define STR_SVT_JAVAERROR_END               (STR_ERROR_RESTARTREQUIRED)
+
+// String array to match UI language names to LanguageType values and vice versa
+#define STR_ARR_SVT_LANGUAGE_TABLE_START    (STR_SVT_JAVAERROR_END + 1)
+#define STR_ARR_SVT_LANGUAGE_TABLE          (STR_ARR_SVT_LANGUAGE_TABLE_START + 0)
+//due to some horror wizards/com/sun/star/wizards/letter/LocaleCodes.java needs to be kept
+//manually in sync with STR_ARR_SVT_LANGUAGE_TABLE
+#define STR_ARR_SVT_LANGUAGE_TABLE_END      (STR_ARR_SVT_LANGUAGE_TABLE)
+
+//.............................................................................
+// dialogs
+#define DLG_EXPORT_START                (STR_ARR_SVT_LANGUAGE_TABLE_END + 1)
+#define DLG_EXPORT                      (DLG_EXPORT_START)
+#define DLG_EXPORT_TITLE                (DLG_EXPORT_START+1)
+#define DLG_EXPORT_END                  (DLG_EXPORT_TITLE)
+
+#define DLG_LOGIN                       (RID_SVTOOLS_START+113)
+#define DLG_ADDRESSBOOKSOURCE           (RID_SVTOOLS_START+114)
+
+#define DLG_REGISTRATION_REQUEST        (RID_SVTOOLS_START+115)
+
+//.............................................................................
+// bitmaps
+
+#define BMP_DEMO_FINGER                 (RID_SVTOOLS_BITMAP_START +   0)
+#define BMP_HELP_AGENT_IMAGE            (RID_SVTOOLS_BITMAP_START +   1)
+#define BMP_HELP_AGENT_CLOSER           (RID_SVTOOLS_BITMAP_START +   2)
+#define BMP_PLUGIN                      (RID_SVTOOLS_BITMAP_START +   3)
+#define BMP_LIST_ADD                    (RID_SVTOOLS_BITMAP_START +   4)
+
+//.............................................................................
+// image lists
+
+#define RID_IMG_EXPANDER                            (RID_SVTOOLS_IMAGELIST_START +  0)
+#define RID_SVTOOLS_IMAGELIST_BIG                   (RID_SVTOOLS_IMAGELIST_START +  1)
+#define RID_SVTOOLS_IMAGELIST_SMALL                 (RID_SVTOOLS_IMAGELIST_START +  2)
+#define RID_SVTOOLS_IMAGELIST_EDITBROWSEBOX         (RID_SVTOOLS_IMAGELIST_START +  3)
+#define RID_FILEPICKER_IMAGES                       (RID_SVTOOLS_IMAGELIST_START +  7)
+
+//.............................................................................
+// error boxes
+#define ERRBOX_REG_NOSYSBROWSER             ( RID_SVTOOLS_START +  0 )
+#define ERRBOX_CHECK_PLZ                    ( RID_SVTOOLS_START + 11 )
+
+// Java message boxes
+//These strings come from project desktop
+//There was no time for translation, therefore the defines needed to
+//remain the same.
+#define QBX_JAVADISABLED                    (RID_SVTOOLS_START+20)
+#define ERRORBOX_JVMCREATIONFAILED          (RID_SVTOOLS_START+21)
+#define WARNINGBOX_JAVANOTFOUND             (RID_SVTOOLS_START+22)
+#define WARNINGBOX_INVALIDJAVASETTINGS      (RID_SVTOOLS_START+23)
+#define ERRORBOX_RESTARTREQUIRED            (RID_SVTOOLS_START+24)
+
+//.............................................................................
+// images
+#define RID_IMG_TREENODE_COLLAPSED      (RID_SVTOOLS_START +  0)
+#define RID_IMG_TREENODE_EXPANDED       (RID_SVTOOLS_START +  1)
+
+#define RID_IMG_PRINTERFONT             (RID_SVTOOLS_START + 12)
+#define RID_IMG_BITMAPFONT              (RID_SVTOOLS_START + 13)
+#define RID_IMG_SCALABLEFONT            (RID_SVTOOLS_START + 14)
+
+#define IMG_TRIANGLE_RIGHT              (RID_SVTOOLS_START + 18)
+#define IMG_TRIANGLE_DOWN               (RID_SVTOOLS_START + 20)
+
+#define IMG_SVT_FOLDER                  (RID_SVTOOLS_START + 40)
+
+#define IMG_SVT_NEWDOC                  (RID_SVTOOLS_START + 52)
+#define IMG_SVT_MYDOCS                  (RID_SVTOOLS_START + 53)
+#define IMG_SVT_TEMPLATES               (RID_SVTOOLS_START + 54)
+#define IMG_SVT_SAMPLES                 (RID_SVTOOLS_START + 55)
+
+#define IMG_SVT_DOCTEMPLATE_BACK_SMALL      (RID_SVTOOLS_START + 70)
+#define IMG_SVT_DOCTEMPLATE_BACK_LARGE      (RID_SVTOOLS_START + 71)
+#define IMG_SVT_DOCTEMPLATE_PREV_SMALL      (RID_SVTOOLS_START + 72)
+#define IMG_SVT_DOCTEMPLATE_PREV_LARGE      (RID_SVTOOLS_START + 73)
+#define IMG_SVT_DOCTEMPLATE_PRINT_SMALL     (RID_SVTOOLS_START + 74)
+#define IMG_SVT_DOCTEMPLATE_PRINT_LARGE     (RID_SVTOOLS_START + 75)
+#define IMG_SVT_DOCTEMPLATE_DOCINFO_SMALL   (RID_SVTOOLS_START + 76)
+#define IMG_SVT_DOCTEMPLATE_DOCINFO_LARGE   (RID_SVTOOLS_START + 77)
+#define IMG_SVT_DOCTEMPLATE_PREVIEW_SMALL   (RID_SVTOOLS_START + 78)
+#define IMG_SVT_DOCTEMPLATE_PREVIEW_LARGE   (RID_SVTOOLS_START + 79)
+
+#define RID_IMG_PRNDLG_COLLATE              (STR_SVT_PRNDLG_START + 29)
+#define RID_IMG_PRNDLG_NOCOLLATE            (STR_SVT_PRNDLG_START + 30)
+
+// IAccessible2 implementation in 2009
+#define STR_PARAGRAPH_START                 (STR_SVT_PRNDLG_START + 50)
+#define STR_PARAGRAPH                       (STR_PARAGRAPH_START + 0)
+#define STR_PARAGRAPH_END                   (STR_PARAGRAPH)
+
+#endif  // #ifndef _SVTOOLS_HRC
+

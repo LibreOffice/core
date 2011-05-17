@@ -1,0 +1,413 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_chart2.hxx"
+
+#include "BaseCoordinateSystem.hxx"
+#include "macros.hxx"
+#include "PropertyHelper.hxx"
+#include "UserDefinedProperties.hxx"
+#include "ContainerHelper.hxx"
+#include "CloneHelper.hxx"
+#include "Axis.hxx"
+#include "AxisHelper.hxx"
+#include <com/sun/star/chart2/AxisType.hpp>
+
+#include <algorithm>
+
+#if OSL_DEBUG_LEVEL > 1
+#include <rtl/math.hxx>
+#endif
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+
+using namespace ::com::sun::star;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
+using ::rtl::OUString;
+using ::com::sun::star::beans::Property;
+
+namespace
+{
+enum
+{
+    PROP_COORDINATESYSTEM_SWAPXANDYAXIS
+};
+
+void lcl_AddPropertiesToVector(
+    ::std::vector< Property > & rOutProperties )
+{
+    rOutProperties.push_back(
+        Property( C2U( "SwapXAndYAxis" ),
+                  PROP_COORDINATESYSTEM_SWAPXANDYAXIS,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
+}
+
+struct StaticCooSysDefaults_Initializer
+{
+    ::chart::tPropertyValueMap* operator()()
+    {
+        static ::chart::tPropertyValueMap aStaticDefaults;
+        lcl_AddDefaultsToMap( aStaticDefaults );
+        return &aStaticDefaults;
+    }
+private:
+    void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
+    {
+        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_COORDINATESYSTEM_SWAPXANDYAXIS, false );
+    }
+};
+
+struct StaticCooSysDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticCooSysDefaults_Initializer >
+{
+};
+
+struct StaticCooSysInfoHelper_Initializer
+{
+    ::cppu::OPropertyArrayHelper* operator()()
+    {
+        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
+        return &aPropHelper;
+    }
+
+private:
+    Sequence< Property > lcl_GetPropertySequence()
+    {
+        ::std::vector< ::com::sun::star::beans::Property > aProperties;
+        lcl_AddPropertiesToVector( aProperties );
+        ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
+
+        ::std::sort( aProperties.begin(), aProperties.end(),
+                     ::chart::PropertyNameLess() );
+
+        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
+    }
+};
+
+struct StaticCooSysInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticCooSysInfoHelper_Initializer >
+{
+};
+
+struct StaticCooSysInfo_Initializer
+{
+    uno::Reference< beans::XPropertySetInfo >* operator()()
+    {
+        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticCooSysInfoHelper::get() ) );
+        return &xPropertySetInfo;
+    }
+};
+
+struct StaticCooSysInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticCooSysInfo_Initializer >
+{
+};
+
+} // anonymous namespace
+
+namespace chart
+{
+
+BaseCoordinateSystem::BaseCoordinateSystem(
+    const Reference< uno::XComponentContext > & xContext,
+    sal_Int32 nDimensionCount /* = 2 */,
+    sal_Bool bSwapXAndYAxis /* = sal_False */ ) :
+        ::property::OPropertySet( m_aMutex ),
+        m_xContext( xContext ),
+        m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder()),
+        m_nDimensionCount( nDimensionCount )
+ {
+    m_aAllAxis.resize( m_nDimensionCount );
+    for( sal_Int32 nN=0; nN<m_nDimensionCount; nN++ )
+    {
+        m_aAllAxis[nN].resize( 1 );
+        Reference< chart2::XAxis > xAxis( new Axis(m_xContext) );
+        m_aAllAxis[nN][0] = xAxis;
+
+        ModifyListenerHelper::addListenerToAllElements( m_aAllAxis[nN], m_xModifyEventForwarder );
+        chart2::ScaleData aScaleData( xAxis->getScaleData() );
+        if(nN==0)
+        {
+            aScaleData.AxisType = chart2::AxisType::CATEGORY;
+        }
+        else if( nN==1)
+        {
+            aScaleData.AxisType = chart2::AxisType::REALNUMBER;
+        }
+        else if( nN==2)
+        {
+            aScaleData.AxisType = chart2::AxisType::SERIES;
+        }
+        xAxis->setScaleData( aScaleData );
+    }
+
+    m_aOrigin.realloc( m_nDimensionCount );
+    for( sal_Int32 i = 0; i < m_nDimensionCount; ++i )
+        m_aOrigin[ i ] = uno::makeAny( double( 0.0 ) );
+
+    setFastPropertyValue_NoBroadcast( PROP_COORDINATESYSTEM_SWAPXANDYAXIS, uno::makeAny( sal_Bool( bSwapXAndYAxis )));
+}
+
+// explicit
+BaseCoordinateSystem::BaseCoordinateSystem(
+    const BaseCoordinateSystem & rSource ) :
+        impl::BaseCoordinateSystem_Base(),
+        MutexContainer(),
+        ::property::OPropertySet( rSource, m_aMutex ),
+    m_xContext( rSource.m_xContext ),
+    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder()),
+    m_nDimensionCount( rSource.m_nDimensionCount ),
+    m_aOrigin( rSource.m_aOrigin )
+{
+    m_aAllAxis.resize(rSource.m_aAllAxis.size());
+    tAxisVecVecType::size_type nN=0;
+    for( nN=0; nN<m_aAllAxis.size(); nN++ )
+        CloneHelper::CloneRefVector< Reference< chart2::XAxis > >( rSource.m_aAllAxis[nN], m_aAllAxis[nN] );
+    CloneHelper::CloneRefVector< Reference< chart2::XChartType > >( rSource.m_aChartTypes, m_aChartTypes );
+
+    for( nN=0; nN<m_aAllAxis.size(); nN++ )
+        ModifyListenerHelper::addListenerToAllElements( m_aAllAxis[nN], m_xModifyEventForwarder );
+    ModifyListenerHelper::addListenerToAllElements( m_aChartTypes, m_xModifyEventForwarder );
+}
+
+BaseCoordinateSystem::~BaseCoordinateSystem()
+{
+    try
+    {
+        for( tAxisVecVecType::size_type nN=0; nN<m_aAllAxis.size(); nN++ )
+            ModifyListenerHelper::removeListenerFromAllElements( m_aAllAxis[nN], m_xModifyEventForwarder );
+        ModifyListenerHelper::removeListenerFromAllElements( m_aChartTypes, m_xModifyEventForwarder );
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+}
+
+// ____ XCoordinateSystem ____
+sal_Int32 SAL_CALL BaseCoordinateSystem::getDimension()
+    throw (uno::RuntimeException)
+{
+    return m_nDimensionCount;
+}
+
+void SAL_CALL BaseCoordinateSystem::setAxisByDimension(
+    sal_Int32 nDimensionIndex,
+    const Reference< chart2::XAxis >& xAxis,
+    sal_Int32 nIndex )
+    throw (lang::IndexOutOfBoundsException,
+           uno::RuntimeException)
+{
+    if( nDimensionIndex < 0 || nDimensionIndex >= getDimension() )
+        throw lang::IndexOutOfBoundsException();
+
+    if( nIndex < 0 )
+        throw lang::IndexOutOfBoundsException();
+
+    if( m_aAllAxis[ nDimensionIndex ].size() < static_cast< tAxisVecVecType::size_type >( nIndex+1 ))
+    {
+        m_aAllAxis[ nDimensionIndex ].resize( nIndex+1 );
+        m_aAllAxis[ nDimensionIndex ][nIndex] = 0;
+    }
+
+    Reference< chart2::XAxis > xOldAxis( m_aAllAxis[ nDimensionIndex ][nIndex] );
+    if( xOldAxis.is())
+        ModifyListenerHelper::removeListener( xOldAxis, m_xModifyEventForwarder );
+    m_aAllAxis[ nDimensionIndex ][nIndex] = xAxis;
+    if( xAxis.is())
+        ModifyListenerHelper::addListener( xAxis, m_xModifyEventForwarder );
+    fireModifyEvent();
+}
+
+Reference< chart2::XAxis > SAL_CALL BaseCoordinateSystem::getAxisByDimension(
+            sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex )
+    throw (lang::IndexOutOfBoundsException,
+           uno::RuntimeException)
+{
+    if( nDimensionIndex < 0 || nDimensionIndex >= getDimension() )
+        throw lang::IndexOutOfBoundsException();
+
+    OSL_ASSERT( m_aAllAxis.size() == static_cast< size_t >( getDimension()));
+
+    if( nAxisIndex < 0 || nAxisIndex > this->getMaximumAxisIndexByDimension(nDimensionIndex) )
+        throw lang::IndexOutOfBoundsException();
+
+    return m_aAllAxis[ nDimensionIndex ][nAxisIndex];
+}
+
+sal_Int32 SAL_CALL BaseCoordinateSystem::getMaximumAxisIndexByDimension( sal_Int32 nDimensionIndex )
+        throw (lang::IndexOutOfBoundsException,
+           uno::RuntimeException)
+{
+    if( nDimensionIndex < 0 || nDimensionIndex >= getDimension() )
+        throw lang::IndexOutOfBoundsException();
+
+    OSL_ASSERT( m_aAllAxis.size() == static_cast< size_t >( getDimension()));
+
+    sal_Int32 nRet = m_aAllAxis[ nDimensionIndex ].size();
+    if(nRet)
+        nRet-=1;
+
+    return nRet;
+}
+
+// ____ XChartTypeContainer ____
+void SAL_CALL BaseCoordinateSystem::addChartType( const Reference< chart2::XChartType >& aChartType )
+    throw (lang::IllegalArgumentException,
+           uno::RuntimeException)
+{
+    if( ::std::find( m_aChartTypes.begin(), m_aChartTypes.end(), aChartType )
+        != m_aChartTypes.end())
+        throw lang::IllegalArgumentException();
+
+    m_aChartTypes.push_back( aChartType );
+    ModifyListenerHelper::addListener( aChartType, m_xModifyEventForwarder );
+    fireModifyEvent();
+}
+
+void SAL_CALL BaseCoordinateSystem::removeChartType( const Reference< chart2::XChartType >& aChartType )
+    throw (container::NoSuchElementException,
+           uno::RuntimeException)
+{
+    ::std::vector< uno::Reference< chart2::XChartType > >::iterator
+          aIt( ::std::find( m_aChartTypes.begin(), m_aChartTypes.end(), aChartType ));
+    if( aIt == m_aChartTypes.end())
+        throw container::NoSuchElementException(
+            C2U( "The given chart type is no element of the container" ),
+            static_cast< uno::XWeak * >( this ));
+
+    m_aChartTypes.erase( aIt );
+    ModifyListenerHelper::removeListener( aChartType, m_xModifyEventForwarder );
+    fireModifyEvent();
+}
+
+Sequence< Reference< chart2::XChartType > > SAL_CALL BaseCoordinateSystem::getChartTypes()
+    throw (uno::RuntimeException)
+{
+    return ContainerHelper::ContainerToSequence( m_aChartTypes );
+}
+
+void SAL_CALL BaseCoordinateSystem::setChartTypes( const Sequence< Reference< chart2::XChartType > >& aChartTypes )
+    throw (lang::IllegalArgumentException,
+           uno::RuntimeException)
+{
+    ModifyListenerHelper::removeListenerFromAllElements( m_aChartTypes, m_xModifyEventForwarder );
+    m_aChartTypes = ContainerHelper::SequenceToVector( aChartTypes );
+    ModifyListenerHelper::addListenerToAllElements( m_aChartTypes, m_xModifyEventForwarder );
+    fireModifyEvent();
+}
+
+// ____ XModifyBroadcaster ____
+void SAL_CALL BaseCoordinateSystem::addModifyListener( const Reference< util::XModifyListener >& aListener )
+    throw (uno::RuntimeException)
+{
+    try
+    {
+        Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
+        xBroadcaster->addModifyListener( aListener );
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+}
+
+void SAL_CALL BaseCoordinateSystem::removeModifyListener( const Reference< util::XModifyListener >& aListener )
+    throw (uno::RuntimeException)
+{
+    try
+    {
+        Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
+        xBroadcaster->removeModifyListener( aListener );
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+}
+
+// ____ XModifyListener ____
+void SAL_CALL BaseCoordinateSystem::modified( const lang::EventObject& aEvent )
+    throw (uno::RuntimeException)
+{
+    m_xModifyEventForwarder->modified( aEvent );
+}
+
+// ____ XEventListener (base of XModifyListener) ____
+void SAL_CALL BaseCoordinateSystem::disposing( const lang::EventObject& /* Source */ )
+    throw (uno::RuntimeException)
+{
+    // nothing
+}
+
+// ____ OPropertySet ____
+void BaseCoordinateSystem::firePropertyChangeEvent()
+{
+    fireModifyEvent();
+}
+
+void BaseCoordinateSystem::fireModifyEvent()
+{
+    m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
+}
+
+
+// ____ OPropertySet ____
+uno::Any BaseCoordinateSystem::GetDefaultValue( sal_Int32 nHandle ) const
+    throw(beans::UnknownPropertyException)
+{
+    const tPropertyValueMap& rStaticDefaults = *StaticCooSysDefaults::get();
+    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
+    if( aFound == rStaticDefaults.end() )
+        return uno::Any();
+    return (*aFound).second;
+}
+
+// ____ OPropertySet ____
+::cppu::IPropertyArrayHelper & SAL_CALL BaseCoordinateSystem::getInfoHelper()
+{
+    return *StaticCooSysInfoHelper::get();
+}
+
+
+// ____ XPropertySet ____
+Reference< beans::XPropertySetInfo > SAL_CALL BaseCoordinateSystem::getPropertySetInfo()
+    throw (uno::RuntimeException)
+{
+    return *StaticCooSysInfo::get();
+}
+
+using impl::BaseCoordinateSystem_Base;
+
+IMPLEMENT_FORWARD_XINTERFACE2( BaseCoordinateSystem, BaseCoordinateSystem_Base, ::property::OPropertySet )
+IMPLEMENT_FORWARD_XTYPEPROVIDER2( BaseCoordinateSystem, BaseCoordinateSystem_Base, ::property::OPropertySet )
+
+} //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

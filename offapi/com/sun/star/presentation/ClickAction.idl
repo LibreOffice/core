@@ -1,0 +1,132 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_presentation_ClickAction_idl__
+#define __com_sun_star_presentation_ClickAction_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module presentation {
+
+//=============================================================================
+
+/** This enumeration specifies the actions which can be processed when
+    a user clicks on an object.
+ */
+published enum ClickAction
+{
+    //-------------------------------------------------------------------------
+
+    /** No action is performed on click.
+     */
+    NONE,
+
+    //-------------------------------------------------------------------------
+
+    /** The presentation jumps to the previous page.
+     */
+    PREVPAGE,
+
+    //-------------------------------------------------------------------------
+
+    /** The presentation jumps to the next page.
+     */
+    NEXTPAGE,
+
+    //-------------------------------------------------------------------------
+
+    /** The presentation continues with the first page.
+     */
+    FIRSTPAGE,
+
+    //-------------------------------------------------------------------------
+
+    /** The presentation continues with the last page.
+     */
+    LASTPAGE,
+
+    //-------------------------------------------------------------------------
+
+    /** The presentation jumps to a bookmark.
+     */
+    BOOKMARK,
+
+    //-------------------------------------------------------------------------
+
+    /** The presentation jumps to another document.
+     */
+    DOCUMENT,
+
+    //-------------------------------------------------------------------------
+
+    /** The object renders itself invisible after a click.
+     */
+    INVISIBLE,
+
+    //-------------------------------------------------------------------------
+
+    /** A sound is played after a click.
+     */
+    SOUND,
+
+    //-------------------------------------------------------------------------
+
+    /** An OLE verb is performed on this object.
+     */
+    VERB,
+
+    //-------------------------------------------------------------------------
+
+    /** The object vanishes with its effect.
+     */
+    VANISH,
+
+    //-------------------------------------------------------------------------
+
+    /** Another program is executed after a click.
+     */
+    PROGRAM,
+
+    //-------------------------------------------------------------------------
+
+    /** A star basic macro is executed after the click.
+     */
+    MACRO,
+
+    //-------------------------------------------------------------------------
+
+    /** The presentation is stopped after the click.
+     */
+    STOPPRESENTATION
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

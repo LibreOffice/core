@@ -1,0 +1,175 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_reflection_XTypeDescriptionEnumerationAccess_idl__
+#define __com_sun_star_reflection_XTypeDescriptionEnumerationAccess_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/uno/TypeClass.idl>
+#include <com/sun/star/reflection/XTypeDescriptionEnumeration.idl>
+#include <com/sun/star/reflection/TypeDescriptionSearchDepth.idl>
+#include <com/sun/star/reflection/NoSuchTypeNameException.idl>
+#include <com/sun/star/reflection/InvalidTypeNameException.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module reflection {
+
+//=============================================================================
+
+/** Defines an interface for creating enumerations for type descriptions.
+
+    @since OOo 1.1.2
+
+  */
+published interface XTypeDescriptionEnumerationAccess : com::sun::star::uno::XInterface
+{
+    /** Creates an enumeration for type descriptions.
+
+        <p>An enumeration is always created for an UNOIDL module. The
+        enumeration contents can be restricted by specifying type classes.
+        Only types that match one of the supplied type classes will be part of
+        the collection. Additionally, it is possible to specify the depth
+        for the search within the underlying type description tree.
+
+        @param moduleName
+            contains the name of an UNOIDL module. Modules are seperated by a
+            single '.' (i.e., "com.sun.star.reflection"). The root of the module
+            hierarchy is specified with an empty string. Module names are always
+            absolute, never relative.
+
+        @param types
+            restricts the contents of the enumeration. It will only contain
+            type descriptions that match one of the supplied type classes. An
+            empty sequence specifies that the enumeration shall contain all
+            type descriptions.
+
+            <p>Valid types classes are:
+            <ul>
+            <li><member scope="com::sun::star::uno">TypeClass::MODULE</member>
+            <li><member scope="com::sun::star::uno">TypeClass::INTERFACE</member>
+            <li><member scope="com::sun::star::uno">TypeClass::SERVICE</member>
+            <li><member scope="com::sun::star::uno">TypeClass::STRUCT</member>
+            <li><member scope="com::sun::star::uno">TypeClass::ENUM</member>
+            <li><member scope="com::sun::star::uno">TypeClass::EXCEPTION</member>
+            <li><member scope="com::sun::star::uno">TypeClass::TYPEDEF</member>
+            <li><member scope="com::sun::star::uno">TypeClass::CONSTANT</member>
+            <li><member scope="com::sun::star::uno">TypeClass::CONSTANTS</member>
+            <li><member scope="com::sun::star::uno">TypeClass::SINGLETON</member>
+            </ul>
+
+        @param depth
+            specifies the depth of search in the underlying tree of type
+            descriptions. Clients should be aware of the fact that specifiying
+            <member>TypeDescriptionSearchDepth::INFINITE</member> can lead to
+            larger delays when constructing or using the
+            <type>XTypeDescriptionEnumeration</type> instance.
+
+        @returns
+            an enumeration of type descriptions.
+
+            <p>The enumeration returns implementations of
+            <type>XTypeDescription</type>. Following concrete UNOIDL parts
+            represented by specialized interfaces derived from
+            <type>XTypeDescription</type> can be returned by the enumerator:
+
+            <table border="1">
+                <thead><tr><th>IDL</th><th>interface</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td>enum</td>
+                        <td><type>XEnumTypeDescription</type></td>
+                    </tr>
+                    <tr>
+                        <td>struct</td>
+                        <td><type>XCompoundTypeDescription</type> (the returned
+                        object should actually implement
+                        <type>XStructTypeDescription</type>)</td>
+                    </tr>
+                    <tr>
+                        <td>exception</td>
+                        <td><type>XCompoundTypeDescription</type></td>
+                    </tr>
+                    <tr>
+                        <td>interface</td>
+                        <td><type>XInterfaceTypeDescription</type> (the returned
+                        object should actually implement
+                        <type>XInterfaceTypeDescription2</type>)</td>
+                    </tr>
+                    <tr>
+                        <td>service</td>
+                        <td><type>XServiceTypeDescription</type> (the returned
+                        object should actually implement
+                        <type>XServiceTypeDescription2</type>)</td>
+                    </tr>
+                    <tr>
+                        <td>singleton</td>
+                        <td><type>XSingletonTypeDescription</type> (the returned
+                        object should actually implement
+                        <type>XSingletonTypeDescription2</type>)</td>
+                    </tr>
+                    <tr>
+                        <td>module</td>
+                        <td><type>XModuleTypeDescription</type></td>
+                    </tr>
+                    <tr>
+                        <td>typedef</td>
+                        <td><type>XIndirectTypeDescription</type></td>
+                    </tr>
+                    <tr>
+                        <td>constant</td>
+                        <td><type>XConstantTypeDescription</type></td>
+                    </tr>
+                    <tr>
+                        <td>constants</td>
+                        <td><type>XConstantsTypeDescription</type></td>
+                    </tr>
+                </tbody>
+            </table>
+
+        @throws NoSuchTypeNameException
+            in case that the given module name does not exist. This exception
+            will never be thrown in case moduleName is the empty string.
+
+        @throws InvalidTypeNameException
+            in case that the given module name does exist, but does not specify
+            an UNOIDL module. This exception will never be thrown in case
+            moduleName is the empty string.
+      */
+    XTypeDescriptionEnumeration
+    createTypeDescriptionEnumeration(
+            [in] string moduleName,
+            [in] sequence< com::sun::star::uno::TypeClass > types,
+            [in] TypeDescriptionSearchDepth depth )
+        raises( NoSuchTypeNameException, InvalidTypeNameException );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

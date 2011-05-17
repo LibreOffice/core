@@ -1,0 +1,187 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_task_InteractionHandler_idl__
+#define __com_sun_star_task_InteractionHandler_idl__
+
+module com { module sun { module star {
+    module lang { published interface XInitialization; };
+    module task { published interface XInteractionHandler; };
+}; }; };
+
+module com { module sun { module star { module task {
+
+//============================================================================
+/** An interaction request handler that lets the user handle requests via GUI dialogs.
+
+    <p>The interaction handler service has a number of <a href="#built_in_handler">built-in handlers</a>, responsible
+    for a lot of well known interactions. Additionally, there's a configuration module which allows to
+    <a href="#configuring_handlers">configure additional handlers</a>, responsible for arbitrary requests.</a></p>
+
+    <a name="built_in_handler"></a>
+    <h3>Built-in Handlers</h3>
+    The following well-known requests can be dealt with by the built-in handlers:
+    <UL>
+        <LI><type scope="com::sun::star::ucb">AuthenticationRequest</type></LI>
+        <LI><type scope="com::sun::star::ucb">CertificateValidationRequest</type></LI>
+        <LI><type scope="com::sun::star::sync2">BadPartnershipException</type>*</LI>
+        <LI><type scope="com::sun::star::ucb">HandleCookiesRequest</type></LI>
+        <LI><type scope="com::sun::star::ucb">InteractiveAugmentedIOException</type>*</LI>
+        <LI><type scope="com::sun::star::ucb">InteractiveCHAOSException</type>*</LI>
+        <LI><type scope="com::sun::star::ucb">InteractiveFileIOException</type>*</LI>
+        <LI><type scope="com::sun::star::ucb">InteractiveIOException</type>*</LI>
+        <LI><type scope="com::sun::star::ucb">InteractiveNetworkConnectException</type>*</LI>
+        <LI><type scope="com::sun::star::ucb">InteractiveNetworkException</type>*</LI>
+        <LI><type scope="com::sun::star::ucb">InteractiveNetworkGeneralException</type>*</LI>
+        <LI><type scope="com::sun::star::ucb">InteractiveNetworkOffLineException</type>*</LI>
+        <LI><type scope="com::sun::star::ucb">InteractiveNetworkReadException</type>*</LI>
+        <LI><type scope="com::sun::star::ucb">InteractiveNetworkResolveNameException</type>*</LI>
+        <LI><type scope="com::sun::star::ucb">InteractiveNetworkWriteException</type>*</LI>
+        <LI><type scope="com::sun::star::ucb">InteractiveWrongMediumException</type>*</LI>
+        <LI><type scope="com::sun::star::task">PasswordRequest</type></LI>
+        <LI><type scope="com::sun::star::java">WrongJavaVersionException</type>*</LI>
+        <LI><type scope="com::sun::star::task">DocumentMacroConfirmationRequest</type></LI>
+    </UL>
+    The requests marked with an asterisk are only handled if (a) their
+    continuations match certain restrictions (see below), and (b) the
+    necessary resource strings are available (this can be exploited by
+    applications that carry only a subset of all resource files with
+    them).</P>
+
+    <P>The continuation restrictions are as follows:  Let <VAR>C</VAR> be the
+    subset of the provided continuations that are of type
+    <type scope="com::sun::star::task">XInteractionApprove</type>,
+    <type scope="com::sun::star::task">XInteractionDisapprove</type>,
+    <type scope="com::sun::star::task">XInteractionRetry</type>, or
+    <type scope="com::sun::star::task">XInteractionAbort</type> (or of a
+    derived type).  All other continuations are ignored for these requests.
+    The request is only handled if the set <VAR>C</VAR> is any of the
+    following:
+    <UL>
+        <LI>Abort</LI>
+        <LI>Retry, Abort</LI>
+        <LI>Approve</LI>
+        <LI>Approve, Abort</LI>
+        <LI>Approve, Disapprove</LI>
+        <LI>Approve, Disapprove, Abort</LI>
+    </UL></P>
+
+    <P>An
+    <type scope="com::sun::star::ucb">InteractiveAugmentedIOException</type>
+    carries with it a sequence of arguments, which should be
+    <type scope="com::sun::star::beans">PropertyValue</type>s.  The following
+    details which properties are interpreted by the interaction handler,
+    depending on the request's
+    <type scope="com::sun::star::ucb">IOErrorCode</type>:
+    <DL>
+        <DT><code>"Uri"</code></DT>
+        <DD>All error codes except
+        <const scope="com::sun::star::ucb">IOErrorCode::DIFFERENT_DEVICES</const>.
+        The URI of the involved resource (a <atom>string</atom>).</DD>
+
+        <DT><code>"ResourceName"</code></DT>
+        <DD>All error codes except
+        <const scope="com::sun::star::ucb">IOErrorCode::DIFFERENT_DEVICES</const>.
+        A name for the involved resource (a <atom>string</atom>) that might be
+        more meaningful to the user than the URI.  For example, a
+        (platform-dependent) path notation for file system resources.</DD>
+
+        <DT><code>"ResourceType"</code></DT>
+        <DD><const scope="com::sun::star::ucb">IOErrorCode::DEVICE_NOT_READY</const>
+        and
+        <const scope="com::sun::star::ucb">IOErrorCode::NOT_EXISTING</const>
+        only.  An identifier for the type of resource involved (a
+        <atom>string</atom>).  Currently understood values are
+        <code>"volume"</code> (e.g., a file system volume) and
+        <code>"folder"</code> (i.e., a resource that contains other
+        resources).</DD>
+
+        <DT><code>"Removable"</code></DT>
+        <DD><const scope="com::sun::star::ucb">IOErrorCode::NOT_EXISTING</const>
+        only.  A flag indicating whether the resource resides on a storage
+        medium that can be removed by the user (a <atom>boolean</atom>).</DD>
+
+        <DT><code>"Folder"</code></DT>
+        <DD><const scope="com::sun::star::ucb">IOErrorCode::CANT_CREATE</const>
+        only.  The name of the folder in which a resource cannot be created (a
+        <atom>string</atom>).</DD>
+
+        <DT><code>"Volume"</code> and <code>"OtherVolume"</code></DT>
+        <DD><const scope="com::sun::star::ucb">IOErrorCode::DIFFERENT_DEVICES</const>
+        only.  The names of the two volumes involved (two
+        <atom>string</atom>s).</DD>
+    </DL></P>
+
+    <a name="configuring_handlers"></a>
+    <h3>Configuring additional Handlers</h3>
+
+    <p>It is possible to configure additional interaction handlers, to which certain requests can be delegated. The
+    configuration node <code>/org.openoffice.Interaction/InteractionHandlers</code> is evaluated and respected
+    by the <code>InteractionHandler</code> implementation.</p>
+
+    <p>A custom interaction handler can declare itself responsible for an arbitrary number of UNO types, specified
+    by full-qualified type name. Also, for each type, it can specify whether it is responsible for only this particular
+    type, or all possibly existent derived types.</p>
+
+    <p>Whenever the <code>InteractionHandler</code> encounters a request it cannot fulfill itself, it will examine
+    the configuration, to find a handler implementation for the request, and delegate it to the first matching
+    handler.</p>
+
+    <p>If multiple custom interaction handlers declare themselves responsible for the same request type, it is not
+    defined which handler will actually be invoked. Thus, when deploying a custom interaction handler, ensure
+    that the types you specify are general enough to cover all requests you want to handle, but also specific
+    enough to not cover requests which other handlers might be interested in.</p>
+ */
+published service InteractionHandler
+{
+    //------------------------------------------------------------------------
+    /** Handle an interaction request.
+     */
+    interface com::sun::star::task::XInteractionHandler;
+
+    //------------------------------------------------------------------------
+    /** Initialize the interaction handler.
+
+        <P>The arguments must be a sequence of
+        <type scope="com::sun::star::beans">PropertyValue</type>s.  The
+        currently supported properties are:
+        <UL>
+            <LI><code>"Parent"</code> of type
+            <type scope="com::sun::star::awt">XWindow</type> denotes the
+            parent window for any GUI dialogs the interaction handler pops up;
+            it is strongly recommended that this property is supplied;</LI>
+            <LI><code>"Context"</code> of type <atom>string</atom> is a
+            textual description of the current context (used, e.g., as a first
+            line of text in error boxes); this property is optional.</LI>
+        </UL></P>
+     */
+    interface com::sun::star::lang::XInitialization;
+};
+
+}; }; }; };
+
+#endif

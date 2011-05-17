@@ -1,0 +1,7 @@
+"DataFormatTranslator";"com::sun::star::lang::XServiceInfo";"getImplementationName()"
+"DataFormatTranslator";"com::sun::star::lang::XServiceInfo";"supportsService()"
+"DataFormatTranslator";"com::sun::star::lang::XServiceInfo";"getSupportedServiceNames()"
+"DataFormatTranslator";"com::sun::star::lang::XTypeProvider";"getTypes()"
+"DataFormatTranslator";"com::sun::star::lang::XTypeProvider";"getImplementationId()"
+"DataFormatTranslator";"com::sun::star::datatransfer::XDataFormatTranslator";"getSystemDataTypeFromDataFlavor()"
+"DataFormatTranslator";"com::sun::star::datatransfer::XDataFormatTranslator";"getDataFlavorFromSystemDataType()"

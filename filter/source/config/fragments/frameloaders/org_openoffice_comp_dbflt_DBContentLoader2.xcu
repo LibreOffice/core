@@ -1,0 +1,3 @@
+    <node oor:name="org.openoffice.comp.dbflt.DBContentLoader2" oor:op="replace">
+        <prop oor:name="Types"><value>StarBase</value></prop>
+    </node>

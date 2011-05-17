@@ -1,0 +1,10 @@
+    <node oor:name="ras_Import" oor:op="replace"  >
+        <prop oor:name="Type"><value>ras_Sun_Rasterfile</value></prop>
+        <prop oor:name="FormatName"><value>ira</value></prop>
+        <prop oor:name="RealFilterName"><value>RAS - Sun Rasterfile</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">RAS - Sun Raster Image</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT</value></prop>
+    </node>

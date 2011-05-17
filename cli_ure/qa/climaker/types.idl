@@ -1,0 +1,483 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "com/sun/star/lang/ClassNotFoundException.idl"
+#include "com/sun/star/lang/IllegalAccessException.idl"
+#include "com/sun/star/uno/DeploymentException.idl"
+#include "com/sun/star/uno/Exception.idl"
+#include "com/sun/star/uno/RuntimeException.idl"
+#include "com/sun/star/uno/XInterface.idl"
+#include "com/sun/star/uno/XNamingService.idl"
+#include "com/sun/star/lang/XComponent.idl"
+module test { module cliure { module climaker {
+
+enum Enum1 { VALUE1 = -100, VALUE2 = 100 };
+
+enum Enum2 { VALUE0 = 0, VALUE1 = 1, VALUE2 = 2, VALUE4 = 4 };
+
+struct Struct1 { long member1; };
+
+struct PolyStruct<if,else> {
+    if member1;
+    long member2;
+};
+
+struct PolyStruct2<a> {
+    a member1;
+    long member2;
+};
+
+struct PolyStruct3<a,b> {
+    a member1;
+    b member2;
+};
+
+interface XTest {
+    boolean test();
+
+    [attribute, bound] long A1;
+    [attribute, bound, readonly] long A2;
+    [attribute] long A3 {
+        get raises
+            (com::sun::star::uno::Exception,
+             com::sun::star::lang::ClassNotFoundException);
+        set raises (com::sun::star::uno::RuntimeException);
+    };
+    [attribute, readonly] long A4 {
+        get raises (com::sun::star::uno::DeploymentException);
+    };
+
+    [oneway] void testOneway();
+
+    void testExceptions()
+        raises( com::sun::star::uno::Exception,
+                com::sun::star::lang::ClassNotFoundException);
+
+
+    PolyStruct<char,long> testPolyStruct([in] PolyStruct<char, long> val);
+
+
+    void inParameters([in] boolean aBool, [in] byte aByte, [in] short aShort,
+                      [in] unsigned short aUShort, [in] long aLong, [in] unsigned long aULong,
+                      [in] hyper aHyper, [in] unsigned hyper aUHyper, [in] float aFloat,
+                      [in] double aDouble, [in] char aChar, [in] string aString,
+                      [in] type aType, [in] any aAny, [in] Enum2 aEnum, [in] Struct1 aStruct,
+                      [in] com::sun::star::uno::XInterface aXInterface,
+                      [in] com::sun::star::lang::XComponent aXComponent,
+                      [in] sequence<boolean> seqBool);
+
+    void outParameters([out] boolean aBool, [out] byte aByte, [out] short aShort,
+                      [out] unsigned short aUShort, [out] long aLong, [out] unsigned long aULong,
+                      [out] hyper aHyper, [out] unsigned hyper aUHyper, [out] float aFloat,
+                      [out] double aDouble, [out] char aChar, [out] string aString,
+                      [out] type aType, [out] any aAny, [out] Enum2 aEnum, [out] Struct1 aStruct,
+                      [out] com::sun::star::uno::XInterface aXInterface,
+                      [out] com::sun::star::lang::XComponent aXComponent,
+                      [out] sequence<boolean> seqBool);
+
+    void inoutParameters([inout] boolean aBool, [inout] byte aByte, [inout] short aShort,
+                         [inout] unsigned short aUShort, [inout] long aLong,
+                         [inout] unsigned long aULong,
+                         [inout] hyper aHyper, [inout] unsigned hyper aUHyper,
+                         [inout] float aFloat,
+                         [inout] double aDouble, [inout] char aChar, [inout] string aString,
+                         [inout] type aType, [inout] any aAny, [inout] Enum2 aEnum,
+                         [inout] Struct1 aStruct,
+                         [inout] com::sun::star::uno::XInterface aXInterface,
+                         [inout] com::sun::star::lang::XComponent aXComponent,
+                         [inout] sequence<boolean> seqBool);
+    boolean retBoolean();
+    byte retByte();
+    short retShort();
+    unsigned short retUShort();
+    long retLong();
+    unsigned long retULong();
+    hyper retHyper();
+    unsigned hyper retUHyper();
+    float retFloat();
+    double retDouble();
+    char retChar();
+    string retString();
+    type retType();
+    any retAny();
+    Enum2 retEnum();
+    Struct1 retStruct1();
+    com::sun::star::uno::XInterface retXInterface();
+    com::sun::star::lang::XComponent retXComponent();
+    sequence<boolean> retSeqBool();
+
+    [attribute] boolean attrBoolean;
+    [attribute] byte attrByte;
+    [attribute] short attrShort;
+    [attribute] unsigned short attrUShort;
+    [attribute] long attrLong;
+    [attribute] unsigned long attrULong;
+    [attribute] hyper attrHyper;
+    [attribute] unsigned hyper attrUHyper;
+    [attribute] float attrFloat;
+    [attribute] double attrDouble;
+    [attribute] char attrChar;
+    [attribute] string attrString;
+    [attribute] type attrType;
+    [attribute] any attrAny;
+    [attribute] Enum2 attrEnum2;
+    [attribute] Struct1 attrStruct1;
+    [attribute] com::sun::star::uno::XInterface attrXInterface;
+    [attribute] com::sun::star::lang::XComponent attrXComponent;
+    [attribute] sequence<boolean> attrSeqBoolean;
+ };
+
+typedef boolean Boolean;
+typedef byte Byte;
+typedef short Short;
+typedef unsigned short UnsignedShort;
+typedef long Long;
+typedef unsigned long UnsignedLong;
+typedef hyper Hyper;
+typedef unsigned hyper UnsignedHyper;
+typedef float Float;
+typedef double Double;
+typedef char Char;
+typedef string String;
+typedef type Type;
+typedef any Any;
+typedef Enum2 Enum;
+typedef Struct1 Struct;
+typedef com::sun::star::uno::XInterface XInterface;
+typedef com::sun::star::uno::XNamingService XNamingService;
+typedef com::sun::star::lang::XComponent XComponent;
+
+typedef sequence< Boolean > SequenceBoolean;
+typedef sequence< Byte > SequenceByte;
+typedef sequence< Short > SequenceShort;
+typedef sequence< UnsignedShort > SequenceUnsignedShort;
+typedef sequence< Long > SequenceLong;
+typedef sequence< UnsignedLong > SequenceUnsignedLong;
+typedef sequence< Hyper > SequenceHyper;
+typedef sequence< UnsignedHyper > SequenceUnsignedHyper;
+typedef sequence< Float > SequenceFloat;
+typedef sequence< Double > SequenceDouble;
+typedef sequence< Char > SequenceChar;
+typedef sequence< String > SequenceString;
+typedef sequence< Type > SequenceType;
+typedef sequence< Any > SequenceAny;
+typedef sequence< Enum > SequenceEnum;
+typedef sequence< Struct > SequenceStruct;
+typedef sequence< XInterface > SequenceXInterface;
+typedef sequence< XNamingService > SequenceXNamingService;
+typedef sequence< XComponent > SequenceXComponent;
+
+struct Struct2 {
+    boolean p1;
+    byte p2;
+    short p3;
+    unsigned short p4;
+    long p5;
+    unsigned long p6;
+    hyper p7;
+    unsigned hyper p8;
+    float p9;
+    double p10;
+    char p11;
+    string p12;
+    type p13;
+    any p14;
+    Enum2 p15;
+    Struct1 p16;
+    com::sun::star::uno::XInterface p17;
+    com::sun::star::uno::XNamingService p18;
+    Boolean t1;
+    Byte t2;
+    Short t3;
+    UnsignedShort t4;
+    Long t5;
+    UnsignedLong t6;
+    Hyper t7;
+    UnsignedHyper t8;
+    Float t9;
+    Double t10;
+    Char t11;
+    String t12;
+    Type t13;
+    Any t14;
+    Enum t15;
+    Struct t16;
+    XInterface t17;
+    XNamingService t18;
+    sequence< boolean > a1;
+    sequence< byte > a2;
+    sequence< short > a3;
+    sequence< unsigned short > a4;
+    sequence< long > a5;
+    sequence< unsigned long > a6;
+    sequence< hyper > a7;
+    sequence< unsigned hyper > a8;
+    sequence< float > a9;
+    sequence< double > a10;
+    sequence< char > a11;
+    sequence< string > a12;
+    sequence< type > a13;
+    sequence< any > a14;
+    sequence< Enum2 > a15;
+    sequence< Struct1 > a16;
+    sequence< com::sun::star::uno::XInterface > a17;
+    sequence< com::sun::star::uno::XNamingService > a18;
+    sequence< sequence< boolean > > aa1;
+    sequence< sequence< byte > > aa2;
+    sequence< sequence< short > > aa3;
+    sequence< sequence< unsigned short > > aa4;
+    sequence< sequence< long > > aa5;
+    sequence< sequence< unsigned long > > aa6;
+    sequence< sequence< hyper > > aa7;
+    sequence< sequence< unsigned hyper > > aa8;
+    sequence< sequence< float > > aa9;
+    sequence< sequence< double > > aa10;
+    sequence< sequence< char > > aa11;
+    sequence< sequence< string > > aa12;
+    sequence< sequence< type > > aa13;
+    sequence< sequence< any > > aa14;
+    sequence< sequence< Enum2 > > aa15;
+    sequence< sequence< Struct1 > > aa16;
+    sequence< sequence< com::sun::star::uno::XInterface > > aa17;
+    sequence< sequence< com::sun::star::uno::XNamingService > > aa18;
+    sequence< SequenceBoolean > at1;
+    sequence< SequenceByte > at2;
+    sequence< SequenceShort > at3;
+    sequence< SequenceUnsignedShort > at4;
+    sequence< SequenceLong > at5;
+    sequence< SequenceUnsignedLong > at6;
+    sequence< SequenceHyper > at7;
+    sequence< SequenceUnsignedHyper > at8;
+    sequence< SequenceFloat > at9;
+    sequence< SequenceDouble > at10;
+    sequence< SequenceChar > at11;
+    sequence< SequenceString > at12;
+    sequence< SequenceType > at13;
+    sequence< SequenceAny > at14;
+    sequence< SequenceEnum > at15;
+    sequence< SequenceStruct > at16;
+    sequence< SequenceXInterface > at17;
+    sequence< SequenceXNamingService > at18;
+};
+
+struct Struct3
+{
+    XTest iTest;
+};
+
+struct Struct4: Struct3
+{
+    long n;
+};
+
+struct Struct5
+{
+    Struct3 m;
+    Struct4 n;
+};
+
+struct Struct6
+{
+    Struct4 m;
+};
+
+struct Struct7
+{
+    sequence<sequence<Struct6> > seqseqStruct6;
+};
+
+service S1: XTest {
+    create1();
+
+    create2([in] any... create2)
+        raises (com::sun::star::uno::RuntimeException,
+                com::sun::star::lang::ClassNotFoundException,
+                com::sun::star::uno::Exception,
+                com::sun::star::lang::IllegalAccessException,
+                com::sun::star::uno::DeploymentException);
+
+    create3([in] sequence<any> S1)
+        raises (com::sun::star::uno::RuntimeException,
+                com::sun::star::lang::ClassNotFoundException,
+                com::sun::star::lang::IllegalAccessException,
+                com::sun::star::uno::DeploymentException);
+
+    create4([in] long javamaker, [in] long S1, [in] long create4);
+
+    create5(
+        [in] boolean p1,
+        [in] byte p2,
+        [in] short p3,
+        [in] unsigned short p4,
+        [in] long p5,
+        [in] unsigned long p6,
+        [in] hyper p7,
+        [in] unsigned hyper p8,
+        [in] float p9,
+        [in] double p10,
+        [in] char p11,
+        [in] string p12,
+        [in] type p13,
+        [in] any p14,
+        [in] Enum2 p15,
+        [in] Struct1 p16,
+        [in] PolyStruct<char, short> p17,
+        [in] PolyStruct<any, short> p18,
+        [in] com::sun::star::uno::XInterface p19,
+        [in] com::sun::star::lang::XComponent p20,
+        [in] Boolean t1,
+        [in] Byte t2,
+        [in] Short t3,
+        [in] UnsignedShort t4,
+        [in] Long t5,
+        [in] UnsignedLong t6,
+        [in] Hyper t7,
+        [in] UnsignedHyper t8,
+        [in] Float t9,
+        [in] Double t10,
+        [in] Char t11,
+        [in] String t12,
+        [in] Type t13,
+        [in] Any t14,
+        [in] Enum t15,
+        [in] Struct t16,
+        [in] XInterface t17,
+        [in] XComponent t18,
+        [in] sequence< boolean > a1,
+        [in] sequence< byte > a2,
+        [in] sequence< short > a3,
+        [in] sequence< unsigned short > a4,
+        [in] sequence< long > a5,
+        [in] sequence< unsigned long > a6,
+        [in] sequence< hyper > a7,
+        [in] sequence< unsigned hyper > a8,
+        [in] sequence< float > a9,
+        [in] sequence< double > a10,
+        [in] sequence< char > a11,
+        [in] sequence< string > a12,
+        [in] sequence< type > a13,
+        [in] sequence< any > a14,
+        [in] sequence< Enum2 > a15,
+        [in] sequence< Struct1 > a16,
+        [in] sequence< com::sun::star::uno::XInterface > a17,
+        [in] sequence< com::sun::star::lang::XComponent > a18,
+        [in] sequence< sequence< boolean > > aa1,
+        [in] sequence< sequence< byte > > aa2,
+        [in] sequence< sequence< short > > aa3,
+        [in] sequence< sequence< unsigned short > > aa4,
+        [in] sequence< sequence< long > > aa5,
+        [in] sequence< sequence< unsigned long > > aa6,
+        [in] sequence< sequence< hyper > > aa7,
+        [in] sequence< sequence< unsigned hyper > > aa8,
+        [in] sequence< sequence< float > > aa9,
+        [in] sequence< sequence< double > > aa10,
+        [in] sequence< sequence< char > > aa11,
+        [in] sequence< sequence< string > > aa12,
+        [in] sequence< sequence< type > > aa13,
+        [in] sequence< sequence< any > > aa14,
+        [in] sequence< sequence< Enum2 > > aa15,
+        [in] sequence< sequence< Struct1 > > aa16,
+        [in] sequence< sequence< com::sun::star::uno::XInterface > > aa17,
+        [in] sequence< sequence< com::sun::star::lang::XComponent > > aa18,
+        [in] sequence< SequenceBoolean > at1,
+        [in] sequence< SequenceByte > at2,
+        [in] sequence< SequenceShort > at3,
+        [in] sequence< SequenceUnsignedShort > at4,
+        [in] sequence< SequenceLong > at5,
+        [in] sequence< SequenceUnsignedLong > at6,
+        [in] sequence< SequenceHyper > at7,
+        [in] sequence< SequenceUnsignedHyper > at8,
+        [in] sequence< SequenceFloat > at9,
+        [in] sequence< SequenceDouble > at10,
+        [in] sequence< SequenceChar > at11,
+        [in] sequence< SequenceString > at12,
+        [in] sequence< SequenceType > at13,
+        [in] sequence< SequenceAny > at14,
+        [in] sequence< SequenceEnum > at15,
+        [in] sequence< SequenceStruct > at16,
+        [in] sequence< SequenceXInterface > at17,
+        [in] sequence< SequenceXComponent > at18
+         );
+
+    create6(
+        [in] PolyStruct2<type> arg1,
+        [in] PolyStruct2<any> arg2,
+        [in] PolyStruct2<boolean> arg3,
+        [in] PolyStruct2<byte> arg4,
+        [in] PolyStruct2<char> arg5,
+        [in] PolyStruct2<short> arg6,
+        [in] PolyStruct2<long> arg7,
+        [in] PolyStruct2<hyper> arg8,
+        [in] PolyStruct2<string> arg9,
+        [in] PolyStruct2<float> arg10,
+        [in] PolyStruct2<double> arg11,
+        [in] PolyStruct2<com::sun::star::uno::XInterface> arg12,
+        [in] PolyStruct2<com::sun::star::lang::XComponent> arg13,
+        [in] PolyStruct2<PolyStruct<char,any> > arg14,
+        [in] PolyStruct2<PolyStruct<PolyStruct<char,any>,string> > arg15,
+        [in] PolyStruct<string, PolyStruct<char, PolyStruct2<any> > > arg16,
+        [in] PolyStruct<PolyStruct<char,any>, PolyStruct2<char> > arg17,
+        [in] PolyStruct2<sequence<type> > arg101,
+        [in] PolyStruct2<sequence<any> > arg102,
+        [in] PolyStruct2<sequence<boolean> > arg103,
+        [in] PolyStruct2<sequence<byte> > arg104,
+        [in] PolyStruct2<sequence<char> > arg105,
+        [in] PolyStruct2<sequence<short> > arg106,
+        [in] PolyStruct2<sequence<long> > arg107,
+        [in] PolyStruct2<sequence<hyper> > arg108,
+        [in] PolyStruct2<sequence<string> > arg109,
+        [in] PolyStruct2<sequence<float> > arg110,
+        [in] PolyStruct2<sequence<double> > arg111,
+        [in] PolyStruct2<sequence<com::sun::star::uno::XInterface> > arg112,
+        [in] PolyStruct2<sequence<com::sun::star::lang::XComponent> > arg113,
+        [in] PolyStruct2<sequence<PolyStruct<char, sequence<any> > > > arg114,
+        [in] PolyStruct2<sequence<PolyStruct<PolyStruct2<char>, sequence<any> > > > arg115,
+        [in] PolyStruct2<sequence<sequence<char> > > arg201,
+        [in] sequence<PolyStruct2< char > > arg301,
+        [in] sequence<PolyStruct2<PolyStruct<char,any> > > arg302,
+        [in] sequence<PolyStruct2<PolyStruct<PolyStruct<char,any>,string> > > arg303,
+        [in] sequence<PolyStruct<string, PolyStruct<char, PolyStruct2<any> > > > arg304,
+        [in] sequence<PolyStruct<PolyStruct<char,any>, PolyStruct2<char> > > arg305,
+        [in] sequence<sequence<PolyStruct2< char > > > arg401,
+        [in] sequence<sequence<PolyStruct2<PolyStruct<char,any> > > >arg402,
+        [in] sequence<sequence<PolyStruct2<PolyStruct<PolyStruct<char,any>,string> > > > arg403,
+        [in] sequence<sequence<PolyStruct<string, PolyStruct<char, PolyStruct2<any> > > > > arg404,
+        [in] sequence<sequence<PolyStruct<PolyStruct<char,any>, PolyStruct2<char> > > > arg405
+
+        );
+};
+
+service S2: XTest;
+
+service S3 { interface XTest; };
+
+singleton S4: XTest;
+
+singleton S5 { service S2; };
+
+
+}; }; };

@@ -1,0 +1,34 @@
+..\%__SRC%\slb\*.lib %_DEST%\lib%_EXT%\*.lib
+..\%__SRC%\slb\*.a %_DEST%\lib%_EXT%\*.a
+..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%
+..\%__SRC%\lib\*.uno.so %_DEST%\lib%_EXT%\*.uno.so
+..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
+..\%__SRC%\bin\*.exe %_DEST%\bin%_EXT%\*.exe
+..\%__SRC%\bin\x64\shlxthdl.dll %_DEST%\bin%_EXT%\shlxthdl_x64.dll
+..\%__SRC%\bin\x64\ooofiltproxy.dll %_DEST%\bin%_EXT%\ooofiltproxy_x64.dll
+..\%__SRC%\bin\x64\ooofilt.dll %_DEST%\bin%_EXT%\ooofilt_x64.dll
+..\%__SRC%\bin\x64\propertyhdl.dll %_DEST%\bin%_EXT%\propertyhdl_x64.dll
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
+..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
+..\%__SRC%\misc\cmdmail.component %_DEST%\xml%_EXT%\cmdmail.component
+
+..\%__SRC%\bin\open-url %_DEST%\bin%_EXT%\open-url
+..\%__SRC%\bin\cde-open-url %_DEST%\bin%_EXT%\cde-open-url
+..\%__SRC%\bin\kde-open-url %_DEST%\bin%_EXT%\kde-open-url
+..\%__SRC%\bin\gnome-open-url %_DEST%\bin%_EXT%\gnome-open-url
+..\%__SRC%\bin\gnome-open-url.bin %_DEST%\bin%_EXT%\gnome-open-url.bin
+..\%__SRC%\bin\senddoc %_DEST%\bin%_EXT%\senddoc
+..\%__SRC%\bin\uri-encode %_DEST%\bin%_EXT%\uri-encode
+
+..\%__SRC%\misc\*.xml %_DEST%\xml%_EXT%\*.xml
+
+..\%__SRC%\misc\desktopbe1.component  %_DEST%\xml%_EXT%\desktopbe1.component
+..\%__SRC%\misc\gconfbe1.component  %_DEST%\xml%_EXT%\gconfbe1.component
+..\%__SRC%\misc\kde4be1.component  %_DEST%\xml%_EXT%\kde4be1.component
+..\%__SRC%\misc\kdebe1.component  %_DEST%\xml%_EXT%\kdebe1.component
+..\inc\kde_headers.h %_DEST%\inc%_EXT%\shell\kde_headers.h
+..\%__SRC%\misc\localebe1.component %_DEST%\xml%_EXT%\localebe1.component
+..\%__SRC%\misc\macbe1.component %_DEST%\xml%_EXT%\macbe1.component
+..\%__SRC%\misc\smplmail.component %_DEST%\xml%_EXT%\smplmail.component
+..\%__SRC%\misc\syssh.component %_DEST%\xml%_EXT%\syssh.component
+..\%__SRC%\misc\wininetbe1.component %_DEST%\xml%_EXT%\wininetbe1.component

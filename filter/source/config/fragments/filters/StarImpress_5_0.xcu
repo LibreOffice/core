@@ -1,0 +1,13 @@
+    <node oor:name="StarImpress 5.0" oor:op="replace">
+        <prop oor:name="Flags"><value>IMPORT TEMPLATE OWN ALIEN 3RDPARTYFILTER PREFERRED</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="FilterService"><value>com.sun.star.comp.office.BF_MigrateFilter</value></prop>
+        <prop oor:name="UserData"><value></value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="x-default">StarImpress 5.0</value>
+        </prop>
+        <prop oor:name="FileFormatVersion"><value>5050</value></prop>
+        <prop oor:name="Type"><value>impress_StarImpress_50</value></prop>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="DocumentService"><value>com.sun.star.presentation.PresentationDocument</value></prop>
+    </node>

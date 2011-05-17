@@ -1,0 +1,10 @@
+xt	xmlscript :	comphelper tools offapi LIBXSLT:libxslt NULL
+xt	xmlscript							usr1	-	all	xt_mkout NULL
+xt	xmlscript\inc						nmake	-	all	xt_inc NULL
+xt	xmlscript\source\xml_helper			nmake	-	all	xt_xml_helper xt_inc NULL
+xt	xmlscript\source\xmldlg_imexp		nmake	-	all	xt_xmldlg_imexp xt_inc NULL
+xt	xmlscript\source\xmllib_imexp		nmake	-	all	xt_xmllib_imexp xt_inc NULL
+xt	xmlscript\source\xmlmod_imexp		nmake	-	all	xt_xmlmod_imexp xt_inc NULL
+xt	xmlscript\source\xmlflat_imexp		nmake	-	all	xt_xmlflat_imexp xt_inc NULL
+xt	xmlscript\source\misc				nmake	-	all xt_misc xt_inc NULL
+xt	xmlscript\util						nmake	-	all	xt_util xt_xml_helper xt_xmldlg_imexp xt_xmllib_imexp xt_xmlmod_imexp xt_xmlflat_imexp xt_misc NULL

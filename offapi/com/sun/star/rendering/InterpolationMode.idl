@@ -1,0 +1,97 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_rendering_InterpolationMode_idl__
+#define __com_sun_star_rendering_InterpolationMode_idl__
+
+module com { module sun { module star { module rendering {
+
+/** These constants specify the interpolation type for animation
+    frames.<p>
+
+    With this constants, one specifies the way of interpolation that
+    takes place between two consecutive frames of a discrete animation
+    sequence.
+
+    @since OOo 2.0
+ */
+constants InterpolationMode
+{
+    /** Perform a nearest neighbor interpolation.<p>
+
+        That is, when interpolating between two values v0 and v1,
+        positioned at t0 and t1, take the one which has the closest t
+        coordinate.<p>
+     */
+    const byte NEAREST_NEIGHBOR=1;
+
+    //-------------------------------------------------------------------------
+
+    /** Perform a linear interpolation.<p>
+
+        That is, when interpolating at position t between two values
+        v0 and v1, positioned at t0 and t1, take the sum of v0
+        weighted with (t-t0) and v1 weighted with (t1-t).<p>
+     */
+    const byte LINEAR=2;
+
+    //-------------------------------------------------------------------------
+
+    /** Perform a cubic interpolation.<p>
+
+        That is, when interpolating at position t, take the four
+        closest data points v0, v1, v2, and v3, fit a cubic curve
+        through them, and take the interpolated value from this cubic
+        curve.<p>
+     */
+    const byte CUBIC=3;
+
+    //-------------------------------------------------------------------------
+
+    /** Perform a cubic Bezier spline interpolation.<p>
+
+        That is, when interpolating at position t, take the three
+        closest data points v0, v1, and v2, fit a cubic Bezier spline
+        through them, and take the interpolated value from this cubic
+        curve.<p>
+     */
+    const byte BEZIERSPLINE3=4;
+
+    //-------------------------------------------------------------------------
+
+    /** Perform a quadric Bezier spline interpolation.<p>
+
+        That is, when interpolating at position t, take the four
+        closest data points v0, v1, v2, and v3, fit a quadric Bezier
+        spline through them, and take the interpolated value from this
+        quadric curve.<p>
+     */
+    const byte BEZIERSPLINE4=5;
+};
+
+}; }; }; };
+
+#endif

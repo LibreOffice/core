@@ -1,0 +1,93 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include "HelpIds.hrc"
+#include "SchSlotIds.hxx"
+#include "tp_Wizard_TitlesAndObjects.hrc"
+#include "res_Titlesx.hrc"
+#include "res_SecondaryAxisCheckBoxes.hrc"
+#include "dlg_CreationWizard.hrc"
+#include "res_LegendPosition.hrc"
+
+#ifndef _SVT_CONTROLDIMS_HRC_
+#include <svtools/controldims.hrc>
+#endif
+
+#define MASKCOLOR MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; }
+#define WIZ_TITLES_WIDTH 130
+
+#define WIZ_POSX1      6
+#define WIZ_POSX1_A   (WIZ_POSX1)
+#define WIZ_POSX_VERTICAL   (WIZ_POSX1+WIZ_TITLES_WIDTH+6)
+#define WIZ_POSX2       (WIZ_POSX_VERTICAL+RSC_CD_FIXEDLINE_WIDTH+2)
+#define WIZ_POSX2_A     (WIZ_POSX2)
+#define WIZ_POSX2_B     (WIZ_POSX2_A+9)
+
+#define WIZ_SECOND_FIXEDLINE_WIDTH (CHART_WIZARD_PAGEWIDTH-10-(WIZ_POSX2))
+#define WIZ_COMPLETE_FIXEDLINE_WIDTH (CHART_WIZARD_PAGEWIDTH-10-(WIZ_POSX1))
+#define WIZ_VERTICAL_FIXEDLINE_HEIGHT ( 88 )
+
+#define WIZ_POSY1    8
+#define WIZ_POSY1_A (WIZ_POSY1  + RSC_CD_FIXEDTEXT_HEIGHT +5)
+#define WIZ_POSY1_B (WIZ_POSY1_A+ RSC_CD_FIXEDTEXT_HEIGHT +7)
+
+#define WIZ_POSY2 110
+#define WIZ_POSY_GRID (WIZ_POSY2+RSC_CD_FIXEDTEXT_HEIGHT+6)
+
+TabPage TP_WIZARD_TITLEANDOBJECTS
+{
+    HelpID = "chart2:TabPage:TP_WIZARD_TITLEANDOBJECTS";
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( CHART_WIZARD_PAGEWIDTH , CHART_WIZARD_PAGEHEIGHT ) ;
+
+    FixedText FT_TITLEDESCRIPTION
+    {
+        Pos = MAP_APPFONT ( WIZ_POSX1 , WIZ_POSY1 ) ;
+        Size = MAP_APPFONT ( WIZ_COMPLETE_FIXEDLINE_WIDTH , RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Text [ en-US ] = "Choose titles, legend, and grid settings";
+    };
+    FixedLine FL_VERTICAL
+    {
+        Pos = MAP_APPFONT ( WIZ_POSX_VERTICAL , WIZ_POSY1+3+RSC_CD_FIXEDLINE_HEIGHT ) ;
+        Size = MAP_APPFONT ( RSC_CD_FIXEDLINE_WIDTH, WIZ_VERTICAL_FIXEDLINE_HEIGHT ) ;
+        Vert = TRUE ;
+    };
+
+    TITLES(WIZ_POSX1_A,WIZ_POSY1_A,WIZ_TITLES_WIDTH,0,0)
+    RESOURCE_LEGENDDISPLAY( WIZ_POSX2_A, WIZ_POSY1_A )
+    RESOURCE_LEGENDPOSITION( WIZ_POSX2_B, WIZ_POSY1_B )
+
+
+    FixedLine FL_GRIDS
+    {
+        Pos = MAP_APPFONT ( WIZ_POSX1 , WIZ_POSY2 ) ;
+        Size = MAP_APPFONT ( WIZ_COMPLETE_FIXEDLINE_WIDTH , RSC_CD_FIXEDLINE_HEIGHT ) ;
+        Text [ en-US ] = "Display grids";
+    };
+
+    SECONDARYAXISCHECKBOXES( WIZ_POSX1_A, WIZ_POSY_GRID, 43, 0 )
+};

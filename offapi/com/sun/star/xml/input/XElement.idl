@@ -1,0 +1,120 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#if ! defined INCLUDED__com_sun_star_xml_input_XElement_idl__
+#define INCLUDED__com_sun_star_xml_input_XElement_idl__
+
+#include <com/sun/star/xml/input/XAttributes.idl>
+#include <com/sun/star/xml/sax/SAXException.idl>
+
+
+module com { module sun { module star { module xml { module input {
+
+/** Capsule around an XML element.
+
+    @internal
+*/
+interface XElement : com::sun::star::uno::XInterface
+{
+    /** Gets the parent context.
+
+        @return
+                parent context
+    */
+    XElement getParent();
+
+    /** Gets the local name of this element.
+
+        @return
+                local name of this element
+    */
+    string getLocalName();
+
+    /** Gets the namespace uid of this element.
+
+        @return
+                namespace uid of this element
+    */
+    long getUid();
+
+    /** Gets the attributes of this element.
+
+        @return
+                attributes of this element
+    */
+    XAttributes getAttributes();
+
+    /** Called upon each occurring child element.
+
+        @param uid
+               namespace uid of element
+        @param localName
+               local name of element
+        @param xAttributes
+               attributes of element
+        @return
+                child import context
+    */
+    XElement startChildElement(
+        [in] long uid, [in] string localName, [in] XAttributes xAttributes )
+        raises (com::sun::star::xml::sax::SAXException);
+
+    /** Called upon retrieval of characters.
+
+        @param chars
+               characters
+    */
+    void characters( [in] string chars )
+        raises (com::sun::star::xml::sax::SAXException);
+
+    /** Receives notification of white space that can be ignored.
+
+        @param whitespace
+               white space characters
+    */
+    void ignorableWhitespace( [in] string whitespace )
+        raises (com::sun::star::xml::sax::SAXException);
+
+    /** Receives notification of a processing instruction.
+
+        @param target
+               target
+        @param data
+               data
+    */
+    void processingInstruction(
+        [in] string target, [in] string data )
+        raises (com::sun::star::xml::sax::SAXException);
+
+    /** Receives notification of element closing.
+     */
+    void endElement()
+        raises (com::sun::star::xml::sax::SAXException);
+};
+
+}; }; }; }; };
+
+#endif

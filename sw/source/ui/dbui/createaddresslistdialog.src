@@ -1,0 +1,232 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include <createaddresslistdialog.hrc>
+#include <dbui.hrc>
+#include <helpid.h>
+
+ModalDialog DLG_MM_CREATEADDRESSLIST
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    HelpID = HID_MM_CREATEADDRESSLIST;
+    Size = MAP_APPFONT ( 318 , 231 ) ;
+    Moveable = TRUE ;
+
+    Text [ en-US ] = "New Address List";
+
+    FixedText               FI_ADDRESSINFORMATION
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 150 , 8 ) ;
+        Text [ en-US ] = "Address Information";
+    };
+    Control  CT_ADDRESS
+    {
+        Pos = MAP_APPFONT ( 6 , 14 ) ;
+        Size = MAP_APPFONT ( 250 , 160 ) ;
+        Border = TRUE;
+        DialogControl = TRUE;
+        OutputSize = TRUE ;
+
+        ScrollBar SCR_1
+        {
+            Pos = MAP_APPFONT ( 240 , 0 ) ;
+            Size = MAP_APPFONT ( 10 , 160 ) ;
+        };
+        Window WIN_DATA
+        {
+            Pos = MAP_APPFONT ( 0 , 0 ) ;
+            Size = MAP_APPFONT ( 240 , 160 ) ;
+            DialogControl = TRUE;
+        };
+    };
+    PushButton              PB_NEW
+    {
+        HelpID = "sw:PushButton:DLG_MM_CREATEADDRESSLIST:PB_NEW";
+        Pos = MAP_APPFONT ( 262 , 14 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~New";
+    };
+    PushButton              PB_DELETE
+    {
+        HelpID = "sw:PushButton:DLG_MM_CREATEADDRESSLIST:PB_DELETE";
+        Pos = MAP_APPFONT ( 262 , 32 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Delete";
+    };
+    PushButton              PB_FIND
+    {
+        HelpID = "sw:PushButton:DLG_MM_CREATEADDRESSLIST:PB_FIND";
+        Pos = MAP_APPFONT ( 262 , 50 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Find...";
+    };
+    PushButton              PB_CUSTOMIZE
+    {
+        HelpID = "sw:PushButton:DLG_MM_CREATEADDRESSLIST:PB_CUSTOMIZE";
+        Pos = MAP_APPFONT ( 262 , 68 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "C~ustomize...";
+    };
+    FixedText               FI_VIEWENTRIES
+    {
+        Pos = MAP_APPFONT ( 6 , 183 ) ;
+        Size = MAP_APPFONT ( 92 , 8 ) ;
+        Text [ en-US ] = "Sho~w entry number";
+    };
+    PushButton              PB_START
+    {
+        HelpID = "sw:PushButton:DLG_MM_CREATEADDRESSLIST:PB_START";
+        Pos = MAP_APPFONT ( 100 , 180 ) ;
+        Size = MAP_APPFONT ( 20 , 14 ) ;
+        Text = "|<";
+    };
+    PushButton              PB_PREV
+    {
+        HelpID = "sw:PushButton:DLG_MM_CREATEADDRESSLIST:PB_PREV";
+        Pos = MAP_APPFONT ( 123 , 180 ) ;
+        Size = MAP_APPFONT ( 20 , 14 ) ;
+        Text = "<";
+    };
+    NumericField            NF_SETNO
+    {
+        HelpID = "sw:NumericField:DLG_MM_CREATEADDRESSLIST:NF_SETNO";
+        Pos = MAP_APPFONT ( 146 , 180 ) ;
+        Size = MAP_APPFONT ( 20 , 14 ) ;
+        Border = TRUE;
+        Left = TRUE ;
+        First = 1 ;
+        Minimum = 1 ;
+        Value = 1;
+        Repeat = TRUE ;
+        Spin = FALSE ;
+        TabStop = TRUE ;
+    };
+    PushButton              PB_NEXT
+    {
+        HelpID = "sw:PushButton:DLG_MM_CREATEADDRESSLIST:PB_NEXT";
+        Pos = MAP_APPFONT ( 169 , 180 ) ;
+        Size = MAP_APPFONT ( 20 , 14 ) ;
+        Text = ">";
+    };
+    PushButton              PB_END
+    {
+        HelpID = "sw:PushButton:DLG_MM_CREATEADDRESSLIST:PB_END";
+        Pos = MAP_APPFONT ( 192 , 180 ) ;
+        Size = MAP_APPFONT ( 20 , 14 ) ;
+        Text = ">|";
+    };
+    FixedLine               FL_SEPARATOR
+    {
+        Pos = MAP_APPFONT ( 0 , 200 ) ;
+        Size = MAP_APPFONT ( 318 , 8 ) ;
+    };
+
+    OKButton                PB_OK
+    {
+        Pos = MAP_APPFONT ( 153 , 211 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE;
+    };
+    CancelButton            PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 206 , 211 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton              PB_HELP
+    {
+        Pos = MAP_APPFONT ( 262 , 211 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+
+    String ST_FILTERNAME
+    {
+        Text [ en-US ] = "%PRODUCTNAME Address List (.csv)";
+    };
+};
+
+ModelessDialog DLG_MM_FIND_ENTRY
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    HelpID = HID_MM_FIND_ENTRY;
+    Size = MAP_APPFONT ( 188 , 63 ) ;
+    Moveable = TRUE ;
+
+    Text [ en-US ] = "Find Entry";
+
+    FixedText FT_FIND
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Text [ en-US ] = "F~ind";
+    };
+    Edit      ED_FIND
+    {
+        HelpID = "sw:Edit:DLG_MM_FIND_ENTRY:ED_FIND";
+        Pos = MAP_APPFONT ( 6 ,  14) ;
+        Size = MAP_APPFONT ( 120 , 12 ) ;
+        Border = TRUE;
+    };
+    CheckBox  CB_FINDONLY
+    {
+        HelpID = "sw:CheckBox:DLG_MM_FIND_ENTRY:CB_FINDONLY";
+        Pos = MAP_APPFONT ( 6 , 32 ) ;
+        Size = MAP_APPFONT ( 120 , 10 ) ;
+        Text [ en-US ] = "Find ~only in";
+    };
+    ListBox   LB_FINDONLY
+    {
+        HelpID = "sw:ListBox:DLG_MM_FIND_ENTRY:LB_FINDONLY";
+        Pos = MAP_APPFONT ( 12 , 45 ) ;
+        Size = MAP_APPFONT ( 114 , 50 ) ;
+        Border = TRUE;
+        DropDown = TRUE;
+    };
+    PushButton  PB_FIND
+    {
+        HelpID = "sw:PushButton:DLG_MM_FIND_ENTRY:PB_FIND";
+        Pos = MAP_APPFONT ( 132 , 3 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE;
+        Text [ en-US ] = "~Find";
+    };
+    CancelButton            PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 132 , 20 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Close";
+    };
+    HelpButton              PB_HELP
+    {
+        Pos = MAP_APPFONT ( 132 , 40 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+};
+
+

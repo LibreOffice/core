@@ -1,0 +1,10 @@
+    <node oor:name="emf_Import" oor:op="replace"  >
+        <prop oor:name="Type"><value>emf_MS_Windows_Metafile</value></prop>
+        <prop oor:name="FormatName"><value>SVEMF</value></prop>
+        <prop oor:name="RealFilterName"><value>EMF - MS Windows Metafile</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">EMF - Enhanced Metafile</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT</value></prop>
+    </node>

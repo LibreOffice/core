@@ -1,0 +1,82 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_reflection_TypeDescriptionProvider_idl__
+#define __com_sun_star_reflection_TypeDescriptionProvider_idl__
+
+#include <com/sun/star/container/XHierarchicalNameAccess.idl>
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/reflection/XTypeDescriptionEnumerationAccess.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module reflection {
+
+//=============================================================================
+
+/** This service provides type descriptions, i.e. concrete
+    service implementations read from source like the persistent registry
+    database format.<br>
+
+    @see com::sun::star::reflection::TypeDescriptionManager
+    @see com::sun::star::reflection::XTypeDescription
+*/
+published service TypeDescriptionProvider
+{
+    /** Interface to retrieve type descriptions.
+
+        <p>Names are given in dotted notation, for example
+        <code>"com.sun.star.uno.XInterface"</code>.  The returned values are of
+        interface type <type>XTypeDescription</type>.</p>
+
+        <p>Even though the name of this interface suggests that the used type
+        names are hierarchic, this need not be the case.</p>
+    */
+    interface com::sun::star::container::XHierarchicalNameAccess;
+
+    /** Interface to signal shutdown to the provider.<br>
+        This has to be done manually, because usually each provider references
+        its manager (which may implement type caching) for late resolution of
+        partial types (e.g. parameter types).
+    */
+    interface com::sun::star::lang::XComponent;
+
+    /** Interface for creating enumerations for type descriptions supported
+        by this <type>TypeDescriptionProvider</type>
+
+    @since OOo 1.1.2
+    */
+    [optional] interface XTypeDescriptionEnumerationAccess;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

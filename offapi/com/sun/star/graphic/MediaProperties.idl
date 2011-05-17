@@ -1,0 +1,128 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef com_sun_star_graphic_MediaProperties_idl
+#define com_sun_star_graphic_MediaProperties_idl
+
+#include <com/sun/star/beans/PropertyValues.idl>
+#include <com/sun/star/io/XInputStream.idl>
+#include <com/sun/star/io/XStream.idl>
+
+module com { module sun { module star { module graphic
+{
+
+/** This service describes the properties that are used
+    when using the <type>XGraphicProvider</type> interface methods
+*/
+published service MediaProperties
+{
+    /** Property that describes the location of the source or target
+        of the graphic as URL.
+
+        <p>A URL can be used instead of the
+        <member>InputStream</member> or <member>OutputStream</member>
+        property</p>
+
+        <p>In addition to the normal protocols like file:// or http://
+        you can use private URLs as follows to get access to graphics
+        lying inside the resource system within an Office context:
+
+        <ul>
+            <li>private:resource/projectshortname/bitmap/12345</li>
+            <li>private:resource/projectshortname/bitmapex/12345</li>
+            <li>private:resource/projectshortname/image/12345</li>
+            <li>private:resource/projectshortname/imagelist/12345</li>
+            <li>private:resource/projectshortname/imagelist/12345/12</li>
+        </ul>
+And additionally, GraphicObject scheme URLs like
+            <ul> <li>vnd.sun.star.GraphicObject:10000000000001940000012FB99807BD</li> </ul>
+              can be used to access graphics held by the GraphicCache implementation.
+        </p>
+
+        <p>Yet more, you can access graphics in the application-wide image
+        repository by specifying URLs of the form
+        <code>private:graphicrepository/<em>&lt;path_in_repository&gt;</em></code>.
+</p>
+    */
+    [optional, property ] string URL;
+
+    /** This property is only used for loading graphics or querying
+        graphic descriptors
+
+        <p>A <member>InputStream</member> can be used instead of the
+        <member>URL</member> property</p>
+
+        @see com::sun::star::io::XInputStream
+    */
+    [optional, property ] ::com::sun::star::io::XInputStream InputStream;
+
+    /** This property is only used for storing graphics
+
+        <p>A <member>OutputStream</member> can be used instead of the
+        <member>URL</member> property</p>
+
+        @see com::sun::star::io::XStream
+    */
+    [optional, property ] ::com::sun::star::io::XStream OutputStream;
+
+    /** This property is only used for storing graphics and describes the
+        format into which the graphic is to be converted
+
+        <p>At the moment, the following mime types are supported for storing
+        graphics:</p>
+
+        <ul>
+            <li>image/bmp</li>
+            <li>image/gif</li>
+            <li>image/jpeg</li>
+            <li>image/png</li>
+            <li>image/tiff</li>
+            <li>image/svg+xml</li>
+            <li>image/x-cmu-raster</li>
+            <li>image/x-emf</li>
+            <li>image/x-eps</li>
+            <li>image/x-met</li>
+            <li>image/x-pict</li>
+            <li>image/x-portable-bitmap</li>
+            <li>image/x-portable-pixmap</li>
+            <li>image/x-wmf</li>
+            <li>image/x-svm</li>
+            <li>image/x-xpixmap</li>
+            <li>image/x-vclgraphic</li>
+        </ul>
+    */
+    [optional, property ] string MimeType;
+
+    /** Additional properties that will be passed to the
+    appropriate filter module.
+    */
+    [optional, property] ::com::sun::star::beans::PropertyValues FilterData;
+};
+
+} ; } ; } ; } ;
+
+#endif

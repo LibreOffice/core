@@ -1,0 +1,8 @@
+io	io	: LIBXSLT:libxslt rdbmaker NULL
+io	io										usr1	-	all	io_mkout NULL
+io	io\inc									nmake	-	all	io_inc NULL
+io	io\source\acceptor						nmake	-	all	io_acceptor io_connector io_inc NULL
+io	io\source\connector						nmake	-	all	io_connector io_inc NULL
+io	io\source\stm							nmake	-	all	io_stm io_inc NULL
+io	io\source\TextInputStream				nmake	-	all	io_txtistr io_inc NULL
+io	io\source\TextOutputStream				nmake	-	all	io_txtostr io_inc NULL

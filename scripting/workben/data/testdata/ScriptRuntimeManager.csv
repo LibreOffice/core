@@ -1,0 +1,8 @@
+_resolve;description=Try to resolve a valid document URI;location=script_in_class_file.sxw;logicalname=script://doc.jsuite.testMethod;expected=XScriptInfo.class
+_resolve;description=Try to resolve a valid user URI;location=user;logicalname=script://user.jsuite.test;expected=XScriptInfo.class
+_resolve;description=Try to resolve a valid share URI;location=share;logicalname=script://share.jsuite.test;expected=XScriptInfo.class
+_resolve;description=Try to resolve an invalid URI;location=user;logicalname=scrpit://user.jsuite.test;expected=com.sun.star.lang.IllegalArgumentException
+_resolve;description=Try to resolve a valid but non existent URI;location=user;logicalname=script://non.existent.test;expected=null
+_invoke;description=Try to invoke a valid user level URI;location=user;context=null;logicalname=script://user.jsuite.test;expected=success
+_invoke;description=Try to invoke a valid user level URI with a valid context;location=user;context=xscriptcontext_test_document.sxw;logicalname=script://xscriptcontext.jsuite.test;expected=success
+_invoke;description=Try to invoke a valid user level script in a jar file;location=user;context=null;logicalname=script://jarscript.jsuite.test;expected=success

@@ -1,0 +1,201 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#define __com_sun_star_beans_XPropertySet_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/beans/XPropertySetInfo.idl>
+
+#include <com/sun/star/beans/UnknownPropertyException.idl>
+
+#include <com/sun/star/beans/PropertyVetoException.idl>
+
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+#include <com/sun/star/lang/WrappedTargetException.idl>
+
+#include <com/sun/star/beans/XPropertyChangeListener.idl>
+
+#include <com/sun/star/beans/XVetoableChangeListener.idl>
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module beans {
+
+//=============================================================================
+
+/** provides information about and access to the
+    properties from an implementation.
+
+    <p>There are three types of properties: </p>
+
+    <ul>
+        <li>bound properties </li>
+        <li>constrained properties </li>
+        <li>free properties </li>
+    </ul>
+
+    <p>You can listen to changes of bound properties with the
+    <type>XPropertyChangeListener</type> and you can veto changes
+    of constrained properties with the <type>XVetoableChangeListener</type>.  </p>
+
+    <p>To implement inaccurate name access, you must support the
+    interface <type>XExactName</type>. </p>
+
+    @see com::sun::star::beans::XExactName
+ */
+published interface XPropertySet: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** @returns
+            the <type>XPropertySetInfo</type> interface, which
+            describes all properties of the object which supplies this
+            interface.
+
+        @returns
+            <const>NULL</const> if the implementation cannot or will
+            not provide information about the properties; otherwise the
+            interface <type>XPropertySetInfo</type> is returned.
+     */
+    com::sun::star::beans::XPropertySetInfo getPropertySetInfo();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the value of the property with the specified name.
+
+        <p>If it is a bound property the value will be changed before
+        the change event is fired.  If it is a constrained property
+        a vetoable event is fired before the property value can be
+        changed.  </p>
+
+        @throws com::sun::star::beans::PropertyVetoException
+            if the property is read-only or vetoable
+            and one of the listeners throws this exception
+            because of an unaccepted new value.
+     */
+    void setPropertyValue( [in] string aPropertyName,
+             [in] any aValue )
+            raises( com::sun::star::beans::UnknownPropertyException,
+                    com::sun::star::beans::PropertyVetoException,
+                    com::sun::star::lang::IllegalArgumentException,
+                    com::sun::star::lang::WrappedTargetException );
+
+    //-------------------------------------------------------------------------
+
+    /** @returns
+            the value of the property with the specified name.
+
+        @param PropertyName
+            This parameter specifies the name of the property.
+
+        @throws UnknownPropertyException
+            if the property does not exist.
+
+        @throws com::sun::star::lang::WrappedTargetException
+            if the implementation has an internal reason for the exception.
+            In this case the original exception is wrapped into that
+            <type scope="com::sun::star::lang">WrappedTargetException</type>.
+     */
+    any getPropertyValue( [in] string PropertyName )
+            raises( com::sun::star::beans::UnknownPropertyException,
+                    com::sun::star::lang::WrappedTargetException );
+
+    //-------------------------------------------------------------------------
+
+    /** adds an <type>XPropertyChangeListener</type> to the specified property.
+
+        <p>An empty name ("") registers the listener to all bound
+        properties. If the property is not bound, the behavior is
+        not specified.  </p>
+
+        <p>It is suggested to allow multiple registration of the same listener,
+        thus for each time a listener is added, it has to be removed.
+
+        @see removePropertyChangeListener
+     */
+    void addPropertyChangeListener( [in] string aPropertyName,
+             [in] com::sun::star::beans::XPropertyChangeListener xListener )
+            raises( com::sun::star::beans::UnknownPropertyException,
+                    com::sun::star::lang::WrappedTargetException );
+
+    //-------------------------------------------------------------------------
+
+    /** removes an <type>XPropertyChangeListener</type> from
+        the listener list.
+
+        <p>It is a "noop" if the listener is not registered.  </p>
+
+        <p>It is suggested to allow multiple registration of the same listener,
+        thus for each time a listener is added, it has to be removed.
+
+        @see addPropertyChangeListener
+     */
+    void removePropertyChangeListener( [in] string aPropertyName,
+             [in] com::sun::star::beans::XPropertyChangeListener aListener )
+            raises( com::sun::star::beans::UnknownPropertyException,
+                    com::sun::star::lang::WrappedTargetException );
+
+    //-------------------------------------------------------------------------
+
+    /** adds an <type>XVetoableChangeListener</type> to the specified
+        property with the name PropertyName.
+
+        <p>An empty name ("") registers the listener to all
+        constrained properties. If the property is not constrained,
+        the behavior is not specified.  </p>
+
+        @see removeVetoableChangeListener
+     */
+    void addVetoableChangeListener( [in] string PropertyName,
+             [in] com::sun::star::beans::XVetoableChangeListener aListener )
+            raises( com::sun::star::beans::UnknownPropertyException,
+                    com::sun::star::lang::WrappedTargetException );
+
+    //-------------------------------------------------------------------------
+
+    /** removes an <type>XVetoableChangeListener</type> from the
+        listener list.
+
+        <p>It is a "noop" if the listener is not registered.  </p>
+
+        @see addVetoableChangeListener
+     */
+    void removeVetoableChangeListener( [in] string PropertyName,
+             [in] com::sun::star::beans::XVetoableChangeListener aListener )
+            raises( com::sun::star::beans::UnknownPropertyException,
+                    com::sun::star::lang::WrappedTargetException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

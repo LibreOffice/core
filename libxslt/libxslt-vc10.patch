@@ -1,0 +1,15 @@
+--- misc/build/libxslt-1.1.26/win32/Makefile.msvc.old	2010-10-20 01:02:55.359375000 +0200
++++ misc/build/libxslt-1.1.26/win32/Makefile.msvc	2010-10-20 01:03:05.187500000 +0200
+@@ -71,8 +71,12 @@
+ LDFLAGS = $(LDFLAGS) /DEBUG
+ !else
+ CFLAGS = $(CFLAGS) /D "NDEBUG" /O2 
++!if "$(_NMAKE_VER)" >= "10.00.30319.01"
++LDFLAGS = $(LDFLAGS)
++!else
+ LDFLAGS = $(LDFLAGS) /OPT:NOWIN98
+ !endif
++!endif
+ 
+ # Libxslt object files.
+ XSLT_OBJS = $(XSLT_INTDIR)\attributes.obj\

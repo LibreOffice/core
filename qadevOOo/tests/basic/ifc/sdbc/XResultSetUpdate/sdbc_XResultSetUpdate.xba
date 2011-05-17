@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="sdbc_XResultSetUpdate" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+'*************************************************************************
+' This Interface/Service test depends on the following GLOBAL variables,
+' which must be specified in the object creation:
+
+'     - Global textColumn As String
+
+'*************************************************************************
+
+
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.sdbc.XResultSetUpdate
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim iCount As Integer
+    Dim cString As String
+    Dim colIdx As Integer
+    
+    colIdx = oObj.findColumn(textColumn)
+
+    Test.StartMethod("insertRow()")
+    bOK = true
+    iCount = countRows()
+    Out.Log("Initially " + countRows() + " records")
+    oObj.moveToInsertRow()
+    oObj.updateString(colIdx, "New string")
+    oObj.insertRow()
+    Out.Log("After inserting " + countRows() + " records")
+    oObj.last()
+    bOK = bOK AND oObj.getString(colIdx) = "New string"
+    bOK = bOK AND iCount = countRows() - 1
+    Test.MethodTested("insertRow()", bOK)
+
+    Test.StartMethod("cancelRowUpdates()")
+    bOK = true
+    oObj.last()
+    oObj.updateString(colIdx, "Changed string")
+    oObj.cancelRowUpdates()
+    bOK = bOK AND oObj.getString(colIdx) = "New string"
+    bOK = bOK AND iCount = countRows() - 1
+    Test.MethodTested("cancelRowUpdates()", bOK)
+
+    Test.StartMethod("updateRow()")
+    bOK = true
+    oObj.last()
+    oObj.updateString(colIdx, "Changed string")
+    oObj.updateRow()
+    bOK = bOK AND oObj.getString(colIdx) = "Changed string"
+    bOK = bOK AND iCount = countRows() - 1
+    Test.MethodTested("updateRow()", bOK)
+
+    Test.StartMethod("deleteRow()")
+    Dim rowsBefore As Integer, rowsAfter As Integer
+    bOK = true
+    rowsBefore = countRows()
+    oObj.Last()
+    oObj.deleteRow()
+    rowsAfter = countRows()
+    Out.Log("Rows before: " + rowsBefore + ", rows after: " + rowsAfter)
+    bOK = bOK AND iCount = rowsAfter
+    oObj.Last()
+    Out.Log(oObj.getString(colIdx))
+    Test.MethodTested("deleteRow()", bOK)
+
+    Test.StartMethod("moveToInsertRow()")
+    bOK = true
+    oObj.moveToInsertRow()
+    bOK = bOK AND oObj.getString(colIdx) = ""
+    Test.MethodTested("moveToInsertRow()", bOK)
+
+    Test.StartMethod("moveToCurrentRow()")
+    bOK = true
+    oObj.first()
+    oObj.next()
+    cString = oObj.getString(colIdx)
+    oObj.moveToInsertRow()
+    oObj.moveToCurrentRow()
+    bOK = bOK AND oObj.getString(colIdx) = cString
+    Test.MethodTested("moveToCurrentRow()", bOK)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+Function countRows() As Integer
+    Dim iCount As Integer
+    iCount = 0
+    oObj.first()
+    while NOT oObj.isAfterLast()
+        iCount = iCount + 1
+        oObj.next()
+    wend
+    countRows() = iCount
+End Function
+</script:module>

@@ -1,0 +1,84 @@
+# This file contain a list of todos for testshl2 automated tests.
+# 
+# Legend:
+# there exist 2 formats
+# 1. file
+# 2. path ; file
+#
+# 1. if only a file exist, it will be assume, that a directory with name 'file'
+# exist, and a library with name 'file' create.
+# 2. if the path to the file differ from the library file, use this format.
+#
+
+
+# LLA: marked as deprecated by Stephan Bergmann
+ByteSequence  ; rtl_ByteSequence
+
+OStringBuffer ; rtl_OStringBuffer
+
+rtl_strings   ; rtl_OUString
+rtl_strings   ; rtl_OString
+rtl_strings   ; rtl_OUStringBuffer
+
+# replacements for old rtl::XString tests
+rtl/oustring  ; rtl_OUString2
+rtl/ostring   ; rtl_OString2
+
+osl/file      ; osl_File
+# LLA: temporaly removed, there are lot of problems with our environment
+osl/socket    ; osl_StreamSocket
+osl/socket    ; osl_DatagramSocket
+osl/socket    ; osl_SocketAddr
+osl/socket    ; osl_Socket2
+osl/socket    ; osl_ConnectorSocket
+osl/socket    ; osl_AcceptorSocket
+
+osl/mutex     ; osl_Mutex
+osl/pipe      ; osl_Pipe
+osl/semaphore ; osl_Semaphore
+osl/condition ; osl_Condition
+osl/module    ; osl_Module
+osl/security  ; osl_Security
+
+rtl/math      ; rtl_math
+rtl/math      ; rtl_math2
+
+# new 20040315
+rtl/alloc     ; rtl_Alloc
+rtl/crc32     ; rtl_crc32
+rtl/digest    ; rtl_digest
+rtl/bootstrap ; rtl_Bootstrap
+rtl/ostring   ; rtl_str
+rtl/ostring   ; rtl_string
+rtl/random    ; rtl_Random
+
+# new 20040324
+rtl/oustring  ; rtl_ustr
+
+# new 20040326
+rtl/cipher    ; rtl_cipher
+
+# new 20040331
+rtl/locale    ; rtl_locale
+rtl/uuid      ; rtl_Uuid
+rtl/process   ; rtl_Process
+
+# new 20040413
+rtl/textenc   ; rtl_textcvt
+rtl/textenc   ; rtl_tencinfo
+rtl/oustringbuffer; rtl_OUStringBuffer2
+
+# new 20040420
+rtl/uri       ; rtl_Uri
+rtl/logfile   ; rtl_logfile
+
+# LLA: Due to the fact, that thread testing seams to be little bit error prone, now
+# check this at the end.
+osl/process   ; osl_Thread
+
+# not ready yet
+# strings ; test_oustring
+
+# new 20041025
+rtl/doublelock ; rtl_doublelocking
+

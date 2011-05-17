@@ -1,0 +1,2 @@
+..\%__SRC%\bin\svidl.exe %_DEST%\bin%_EXT%\svidl.exe
+..\%__SRC%\bin\svidl %_DEST%\bin%_EXT%\svidl

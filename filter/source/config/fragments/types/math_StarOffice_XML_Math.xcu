@@ -1,0 +1,12 @@
+    <node oor:name="math_StarOffice_XML_Math" oor:op="replace" >
+        <prop oor:name="DetectService"><value>com.sun.star.comp.math.FormatDetector</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>sxm</value></prop>
+        <prop oor:name="MediaType"><value>application/vnd.sun.xml.math</value></prop>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>StarOffice XML (Math)</value></prop>
+        <prop oor:name="UIName">
+            <value>%productname% %formatversion% Formel</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"><value>Math 6.0</value></prop>
+    </node>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<article id="article">
+<articleinfo>
+<title>Unit Test: revhistory.001.xml</title>
+<releaseinfo role="CVS">$Id: revhistory.001.xml,v 1.2 2008-07-11 07:56:24 rt Exp $</releaseinfo>
+<author><firstname>Norman</firstname><surname>Walsh</surname>
+        <affiliation><address><email>ndw@nwalsh.com</email></address></affiliation>
+</author>
+<revhistory>
+<revision>
+<revnumber>1.0</revnumber>
+<date>13 Mar 2002</date>
+<authorinitials>ndw</authorinitials>
+<revremark>Some remark.</revremark>
+</revision>
+<revision>
+<revnumber>0.9</revnumber>
+<date>20 Nov 1998</date>
+<authorinitials>ndw</authorinitials>
+<revremark>Some remark about the revision</revremark>
+</revision>
+<revision>
+<revnumber>0.8</revnumber>
+<date>19 Nov 1998</date>
+<authorinitials>ndw</authorinitials>
+<revremark>Some remark about the revision</revremark>
+</revision>
+<revision>
+<revnumber>0.7</revnumber>
+<date>18 Nov 1998</date>
+<authorinitials>ndw</authorinitials>
+<revremark>Some remark about the revision</revremark>
+</revision>
+</revhistory>
+</articleinfo>
+
+<para>This article tests revhistory. It appears in the articleinfo.</para>
+
+</article>

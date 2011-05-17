@@ -1,0 +1,326 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+interface TextInTable
+[ uuid = "63C33940-69D8-101D-9757-C667E8298000" ]
+{
+    import Text;
+        import TextTable;
+}
+
+interface ListInTable
+[ uuid="7F1A6E20-69D8-101D-9757-C667E8298000" ]
+{
+    import Text;
+        import TextList;
+        import TextTable;
+}
+
+interface ListInText
+[ uuid = "8A4C07E0-69D8-101D-9757-C667E8298000"]
+{
+    import TextList;
+    import Text;
+}
+
+interface TextEditView : BaseTextEditView
+[
+    uuid = "09782660-111A-101D-9757-6E74207A7520"
+]
+{
+     // Slots, die nicht in der WebDocShell gebraucht werden
+    FN_INSERT_OBJ_CTRL
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        Export = FALSE ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_INSERT_CAPTION // status()
+    [
+        ExecMethod = ExecDlgExt ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_EDIT_FOOTNOTE // status(final|play)
+    [
+        ExecMethod = ExecDlgExt ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_HYPHENATE_OPT_DLG // status(final|play)
+    [
+        ExecMethod = ExecLingu ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_CHANGE_PAGENUM // status(final)
+    [
+        ExecMethod = ExecDlg ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_INSERT_DRAW // status()
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_FONTWORK_GALLERY_FLOATER
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAWTBX_CS_BASIC
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAWTBX_CS_SYMBOL
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAWTBX_CS_ARROW
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAWTBX_CS_FLOWCHART
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAWTBX_CS_CALLOUT
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAWTBX_CS_STAR
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_CS_ID
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_FM_CREATE_CONTROL // status()
+    [
+        ExecMethod = ExecDraw ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_FM_CREATE_FIELDCONTROL
+    [
+        ExecMethod = ExecDraw ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+}
+ //=========================================================================
+
+shell SwView
+
+{
+    import TextEditView [Automation];
+//  import TextPage "Page";
+//  import SearchSettings;
+//  import SearchAttributes;
+//  import ReplaceAttributes;
+}
+
+interface TextPrintPreview
+[ uuid = "1622A480-111A-101D-9757-6E74207A7520" ]
+{
+    SID_BROWSER_MODE
+    [
+        StateMethod = GetState;
+    ]
+    FN_PRINT_LAYOUT
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    FN_REFRESH_VIEW // status(final|play)
+    [
+        StateMethod = GetState ;
+    ]
+    FN_CHAR_LEFT // status(final|play)
+    [
+        ExecMethod = Execute;
+        StateMethod = NoState ;
+    ]
+    FN_CHAR_RIGHT // status(final|play)
+    [
+        ExecMethod = Execute;
+        StateMethod = NoState ;
+    ]
+    FN_LINE_UP // status(final|play)
+    [
+        ExecMethod = Execute;
+        StateMethod = NoState ;
+    ]
+    FN_LINE_DOWN // status(final|play)
+    [
+        ExecMethod = Execute;
+        StateMethod = NoState ;
+    ]
+    FN_PAGEUP // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_PAGEDOWN // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_START_OF_DOCUMENT // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_END_OF_DOCUMENT // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_SHOW_TWO_PAGES // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_SHOW_MULTIPLE_PAGES // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_SHOW_BOOKVIEW // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_PRINT_PAGEPREVIEW // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_PRINTDOC // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_PRINTDOCDIRECT // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_PRINTPREVIEW // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_CLOSE_PAGEPREVIEW
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_ZOOM_IN
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_ZOOM_OUT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_PREVIEW_ZOOM
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_UNDO // status()
+    [
+        StateMethod = StateUndo ;
+    ]
+    SID_REDO // status()
+    [
+        StateMethod = StateUndo ;
+    ]
+    SID_REPEAT // status()
+    [
+        StateMethod = StateUndo ;
+    ]
+     //---------------------------------------------------------------------
+     //Ab hier Statusleiste
+    FN_STAT_ZOOM // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_ATTR_ZOOM // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_STAT_PAGE // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_START_OF_LINE // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_END_OF_LINE // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_INSERT_BREAK // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+        SID_ATTR_ZOOMSLIDER // status()
+        [
+                ExecMethod = Execute ;
+                StateMethod = GetState ;
+        ]
+     //----------------------------------------------
+     //End mit Statusleiste
+}
+
+ //=========================================================================
+
+shell SwPagePreView
+{
+    import TextPrintPreview[Automation];
+}
+
+

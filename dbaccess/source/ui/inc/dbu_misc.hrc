@@ -1,0 +1,62 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _DBU_MISC_HRC_
+#define _DBU_MISC_HRC_
+
+#ifndef _DBU_RESOURCE_HRC_
+#include "dbu_resource.hrc"
+#endif
+
+// free
+// free
+#define STR_WIZ_COLUMN_SELECT_TITEL         RID_STR_MISC_START +  2
+#define STR_WIZ_TYPE_SELECT_TITEL           RID_STR_MISC_START +  3
+#define STR_WIZ_PKEY_ALREADY_DEFINED        RID_STR_MISC_START +  4
+#define STR_WIZ_NAME_MATCHING_TITEL         RID_STR_MISC_START +  5
+#define STR_WIZ_TABLE_COPY                  RID_STR_MISC_START +  6
+#define STR_COPYTABLE_TITLE_COPY            RID_STR_MISC_START +  7
+#define STR_COULDNOTOPEN_LINKEDDOC          RID_STR_MISC_START +  8
+#define STR_SUGGEST_APPEND_TABLE_DATA       RID_STR_MISC_START +  9
+#define STR_UNDO_COLON                      RID_STR_MISC_START + 10
+#define STR_REDO_COLON                      RID_STR_MISC_START + 11
+#define STR_UNKNOWN_TYPE_FOUND              RID_STR_MISC_START + 12
+#define STR_FILE_DOES_NOT_EXIST             RID_STR_MISC_START + 13
+#define STR_WARNINGS_DURING_CONNECT         RID_STR_MISC_START + 14
+#define STR_NAMED_OBJECT_ALREADY_EXISTS     RID_STR_MISC_START + 15
+#define STR_INVALID_TABLE_NAME              RID_STR_MISC_START + 16
+#define STR_INVALID_TABLE_NAME_LENGTH       RID_STR_MISC_START + 17
+
+// please adjust checking before insert new strings
+
+#if STR_INVALID_TABLE_NAME_LENGTH > RID_STR_MISC_END
+#error Resource-Id Ueberlauf in #file, #line
+#endif
+
+#endif // _DBU_MISC_HRC_
+
+
+

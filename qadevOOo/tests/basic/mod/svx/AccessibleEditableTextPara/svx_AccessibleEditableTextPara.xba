@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="AccessibleEditableTextPara" script:language="StarBasic">
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+' REQUIRED VARIABLES for interface/service tests:
+
+' "com::sun::star::accessibility::XAccessibleEditableText#optional"
+ ' needs the following object relation:
+	global hasChangeableAttrs as boolean
+
+' "com::sun::star::accessibility::XAccessibleSelection#optional"
+ ' needs the following object relation:
+'	Global multiSelection As Boolean
+
+' "com::sun::star::accessibility::XAccessibleText"
+ ' needs the following object relation:
+   Global accText as String
+   Global readOnly as Boolean
+
+
+Sub CreateObj()
+
+'*************************************************************************
+' COMPONENT: 
+' com.sun.star.AccessibleEditableTextPara
+'*************************************************************************
+On Error Goto ErrHndl
+
+    oDoc = utils.createDocument("sdraw", cObjectName)
+
+    Dim oShape As Object
+    oShape = oDoc.createInstance("com.sun.star.drawing.TextShape")
+
+    oDoc.DrawPages(0).add(oShape)
+    
+    Dim oSize As new com.sun.star.awt.Size
+    Dim oPos As new com.sun.star.awt.Point
+    oSize.Width = 7500
+    oSize.Height = 5000
+    oPos.X = 5000
+    oPos.Y = 3500
+    oShape.Size = oSize
+    oShape.Position = oPos
+
+    Dim cursor As Object
+    cursor = oShape.createTextCursor()
+
+    oShape.insertString(cursor, "Paragraph 1", false)
+    oShape.insertControlCharacter(cursor, com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK, false)
+
+    Dim oWin as Object
+    Dim xRoot as Object
+    
+    oWin = utils.at_getCurrentWindow(oDoc)
+    xRoot = utils.at_getAccessibleObject(oWin)
+    oObj = utils.at_getAccessibleObjectForRole(xRoot, _
+             com.sun.star.accessibility.AccessibleRole.PARAGRAPH,"Paragraph 0")
+    Out.Log("Implementation Name: "+oObj.getImplementationName())
+    accText = "My AccessibleEditableTextPara text"
+    oObj.setText(accText)
+    readOnly = false
+    hasChangeableAttrs = false
+    
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+
+Sub fireEvent()
+    Dim myText as String
+    myText = oObj.getText()
+    oObj.setText(myText + "dummy")
+    wait(1000)
+    oObj.setText(myText)
+    wait(1000)
+End Sub
+</script:module>

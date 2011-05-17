@@ -1,0 +1,186 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _SVX_DATANAVI_HRC
+#define _SVX_DATANAVI_HRC
+
+// global
+#define FL_DATANAV_BTN          100
+#define BTN_DATANAV_OK          101
+#define BTN_DATANAV_ESC         102
+#define BTN_DATANAV_HELP        103
+
+// class XFormsInstancePage
+// Controls
+#define TB_ITEMS                10
+#define LB_ITEMS                11
+
+// Menu items
+#define MID_INSERT_CONTROL      100
+
+// ToolBox items
+#define TBI_ITEM_ADD            10
+#define TBI_ITEM_ADD_ELEMENT    11
+#define TBI_ITEM_ADD_ATTRIBUTE  12
+#define TBI_ITEM_EDIT           13
+#define TBI_ITEM_REMOVE         14
+
+// ImageLists
+#define IL_TBX_BMPS             20
+
+// ImageIndexes
+#define IID_ITEM_ADD            1
+#define IID_ITEM_ADD_ELEMENT    2
+#define IID_ITEM_ADD_ATTRIBUTE  3
+#define IID_ITEM_EDIT           4
+#define IID_ITEM_REMOVE         5
+
+// class DataNavigatorWindow
+// Controls
+#define LB_MODELS               10
+#define MB_MODELS               11
+#define TC_ITEMS                12
+#define MB_INSTANCES            13
+
+// MenuItems
+#define MID_MODELS_ADD          10
+#define MID_MODELS_EDIT         11
+#define MID_MODELS_REMOVE       12
+#define MID_INSTANCES_ADD       20
+#define MID_INSTANCES_EDIT      21
+#define MID_INSTANCES_REMOVE    22
+#define MID_SHOW_DETAILS        30
+
+// TabPage Ids
+#define TID_SUBMISSION          10
+#define TID_BINDINGS            11
+#define TID_INSTANCE            12
+
+// ImageLists
+#define IL_ITEM_BMPS            30
+
+// ImageIndexes
+#define IID_GROUP_CLOSED        1
+#define IID_GROUP_OPEN          2
+#define IID_ELEMENT             3
+#define IID_ATTRIBUTE           4
+#define IID_TEXT                5
+#define IID_OTHER               6
+
+// class AddDataItemDialog
+#define FL_ITEM                 10
+#define FT_NAME                 11
+#define ED_NAME                 12
+#define FT_DEFAULT              13
+#define ED_DEFAULT              14
+#define PB_DEFAULT              15
+#define FL_SETTINGS             16
+#define FT_DATATYPE             17
+#define LB_DATATYPE             18
+#define CB_REQUIRED             19
+#define PB_REQUIRED             20
+#define CB_RELEVANT             21
+#define PB_RELEVANT             22
+#define CB_CONSTRAINT           23
+#define PB_CONSTRAINT           24
+#define CB_READONLY             25
+#define PB_READONLY             26
+#define CB_CALCULATE            27
+#define PB_CALCULATE            28
+
+#define STR_FIXEDLINE_ELEMENT   10
+#define STR_FIXEDLINE_ATTRIBUTE 11
+#define STR_FIXEDLINE_BINDING   12
+#define STR_FIXEDTEXT_BINDING   13
+
+// class AddConditionDialog
+#define FT_CONDITION            10
+#define ED_CONDITION            11
+#define FT_RESULT               12
+#define FT_RESULT_PREVIEW       13
+#define PB_EDIT_NAMESPACES      14
+
+// class NamespaceItemDialog
+#define FT_NAMESPACES           10
+#define LB_NAMESPACES           11
+#define PB_ADD_NAMESPACE        12
+#define PB_EDIT_NAMESPACE       13
+#define PB_DELETE_NAMESPACE     14
+
+#define STR_HEADER_PREFIX       10
+#define STR_HEADER_URL          11
+
+// class ManageNamespaceDialog
+#define FT_PREFIX               10
+#define ED_PREFIX               11
+#define FT_URL                  12
+#define ED_URL                  13
+
+#define STR_EDIT_TEXT           10
+
+// class AddSubmissionDialog
+#define FL_SUBMISSION           10
+#define FT_SUBMIT_NAME          11
+#define ED_SUBMIT_NAME          12
+#define FT_SUBMIT_ACTION        13
+#define ED_SUBMIT_ACTION        14
+#define FT_SUBMIT_METHOD        15
+#define LB_SUBMIT_METHOD        16
+#define FT_SUBMIT_REF           17
+#define ED_SUBMIT_REF           18
+#define PB_SUBMIT_REF           19
+#define FT_SUBMIT_BIND          20
+#define LB_SUBMIT_BIND          21
+#define FT_SUBMIT_REPLACE       22
+#define LB_SUBMIT_REPLACE       23
+
+#define STR_METHOD_POST         10
+#define STR_METHOD_PUT          11
+#define STR_METHOD_GET          12
+#define STR_REPLACE_NONE        13
+#define STR_REPLACE_INST        14
+#define STR_REPLACE_DOC         15
+
+// class AddModelDialog
+#define FL_MODEL                10
+#define FT_MODEL_NAME           11
+#define ED_MODEL_NAME           12
+
+// class AddInstanceDialog
+#define FL_INSTANCE             10
+#define FT_INST_NAME            11
+#define ED_INST_NAME            12
+#define FT_INST_URL             13
+#define ED_INST_URL             14
+#define PB_FILEPICKER           15
+#define CB_INST_LINKINST        16
+
+// class AddModelDialog
+#define CB_MODIFIES_DOCUMENT    1
+
+#endif //_SVX_DATANAVI_HRC
+

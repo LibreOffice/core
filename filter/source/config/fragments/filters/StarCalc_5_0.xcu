@@ -1,0 +1,13 @@
+    <node oor:name="StarCalc 5.0" oor:op="replace">
+        <prop oor:name="Flags"><value>IMPORT TEMPLATE OWN ALIEN 3RDPARTYFILTER</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="FilterService"><value>com.sun.star.comp.office.BF_MigrateFilter</value></prop>
+        <prop oor:name="UserData"><value></value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="x-default">StarCalc 5.0</value>
+        </prop>
+        <prop oor:name="FileFormatVersion"><value>5050</value></prop>
+        <prop oor:name="Type"><value>calc_StarCalc_50</value></prop>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
+    </node>

@@ -1,0 +1,84 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _INPUTWIN_HRC
+#define _INPUTWIN_HRC
+
+
+//PopupMenu Id's
+#define MN_CALC_PHD         1
+#define MN_CALC_SQRT        2
+#define MN_CALC_OR          3
+#define MN_CALC_XOR         4
+#define MN_CALC_AND         5
+#define MN_CALC_NOT         6
+#define MN_CALC_EQ          7
+#define MN_CALC_NEQ         8
+#define MN_CALC_LEQ         9
+#define MN_CALC_GEQ         10
+#define MN_CALC_LES         11
+#define MN_CALC_GRE         12
+#define MN_CALC_SUM         13
+#define MN_CALC_MEAN        14
+#define MN_CALC_MIN         15
+#define MN_CALC_MAX         16
+#define MN_CALC_SIN         17
+#define MN_CALC_COS         18
+#define MN_CALC_TAN         19
+#define MN_CALC_ASIN        20
+#define MN_CALC_ACOS        21
+#define MN_CALC_ATAN        22
+#define MN_CALC_POW         23
+#define MN_CALC_LISTSEP     24
+#define MN_CALC_ROUND       25
+
+#define MN_POP_OPS          29
+#define MN_POP_STATISTICS   30
+#define MN_POP_FUNC         31
+#define MN_RSC_END          32
+
+#define TBX_FORMULA         1
+#define ED_POS              2
+#define ED_FORMULA          3
+
+#endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

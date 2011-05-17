@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook SVG Module V1.0beta2//EN"
+                         "http://www.oasis-open.org/docbook/xml/svg/1.0beta2/dbsvg.dtd">
+<article>
+<articleinfo>
+<title>Unit Test: svg.002.xml</title>
+<releaseinfo role="CVS">$Id: svg.002.xml,v 1.2 2008-07-11 08:00:32 rt Exp $</releaseinfo>
+<author><firstname>Norman</firstname><surname>Walsh</surname>
+        <affiliation><address><email>ndw@nwalsh.com</email></address></affiliation>
+</author>
+</articleinfo>
+
+<para>This article contains an SVG diagram (external).</para>
+
+<mediaobject>
+  <imageobject>
+    <imagedata
+      align="center"
+      format="SVG"
+      fileref="graphics/svg-001.xml"/>
+  </imageobject>
+  <imageobject>
+    <imagedata
+      align="center"
+      fileref="graphics/svg-001-fallback.png"/>
+  </imageobject>
+  <textobject><phrase>Example SVG polygons</phrase></textobject>
+  <caption><para>Polygons</para></caption>
+</mediaobject>
+
+</article>

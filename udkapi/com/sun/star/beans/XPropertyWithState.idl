@@ -1,0 +1,111 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_beans_XPropertyWithState_idl__
+#define __com_sun_star_beans_XPropertyWithState_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/beans/PropertyState.idl>
+
+#include <com/sun/star/lang/WrappedTargetException.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module beans {
+
+//=============================================================================
+
+/** makes it possible to query information about the state of
+    this object, seen as a property contained in a property set.
+
+    <p> This interface provides direct access to operations
+        that are available if the containing property set
+        implements <type>XPropertyState</type>.
+    </p>
+
+    <p>The state contains the information if:</p>
+    <ul>
+        <li>a value is available or void</li>
+        <li>the value is stored in the object itself, or if a default value is being used</li>
+        <li>or if the value cannot be determined, due to ambiguity
+            (multi selection with multiple values).</li>
+    </ul>
+
+    <p> Generally objects that implement this interface
+        also implement <type>XProperty</type>.
+    </p>
+ */
+published interface XPropertyWithState: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** @returns
+                the state of this as a property.
+     */
+    com::sun::star::beans::PropertyState getStateAsProperty( );
+
+    //-------------------------------------------------------------------------
+
+    /** sets this to its default value.
+
+        <p> The value depends on the implementation of this interface.
+            If this is a bound property, the value changes before
+            the change events are fired.  If this is a constrained property,
+            the vetoable event is fired before the property value changes.
+        </p>
+
+            @throws  com::sun::star::lang::WrappedTargetException
+                if the implementation has an internal reason for the exception.
+                In this case the original exception is wrapped into that
+                <type scope="com::sun::star::lang">WrappedTargetException</type>.
+     */
+    void setToDefaultAsProperty( )
+            raises( com::sun::star::lang::WrappedTargetException );
+
+    //-------------------------------------------------------------------------
+
+    /**     @returns
+                an object representing the default state of this object (as a property).
+
+            <p> If no default exists, is not known or is void,
+                then the return value is <NULL/>.
+            </p>
+
+            @throws  com::sun::star::lang::WrappedTargetException
+                if the implementation has an internal reason for the exception.
+                In this case the original exception is wrapped into that
+                <type scope="com::sun::star::lang">WrappedTargetException</type>.
+     */
+    com::sun::star::uno::XInterface getDefaultAsProperty( )
+            raises( com::sun::star::lang::WrappedTargetException );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

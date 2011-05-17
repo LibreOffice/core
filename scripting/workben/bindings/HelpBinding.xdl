@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="HelpBinding" dlg:left="100" dlg:top="8" dlg:width="213" dlg:height="388" dlg:closeable="true" dlg:moveable="true" dlg:title="Office Help - Help about the Assign Script Dialogs">
+ <dlg:styles>
+  <dlg:style dlg:style-id="0" dlg:text-color="0xff"/>
+  <dlg:style dlg:style-id="1" dlg:font-height="10"/>
+ </dlg:styles>
+ <dlg:bulletinboard>
+  <dlg:text dlg:id="Label2" dlg:tab-index="0" dlg:left="14" dlg:top="6" dlg:width="179" dlg:height="12" dlg:value="Integrated Help For Scripting Framework is not currently available." dlg:multiline="true"/>
+  <dlg:text dlg:id="Label1" dlg:tab-index="1" dlg:left="14" dlg:top="24" dlg:width="185" dlg:height="34" dlg:value="Assign Script Dialogs for Menus, Keys and Events allow you to bind a script written in a supported language (currently Java and BeanShell) to a menu item, key combo, Office event or document event." dlg:multiline="true"/>
+  <dlg:text dlg:id="Label3" dlg:tab-index="2" dlg:left="14" dlg:top="66" dlg:width="185" dlg:height="26" dlg:value="The location combo box will be populated with User, Share or Document.  The default value will be User which will display all scripts (with the selected language type) in the User area.&#x0a;" dlg:multiline="true"/>
+  <dlg:titledbox dlg:id="FrameControl1" dlg:tab-index="3" dlg:left="9" dlg:top="20" dlg:width="196" dlg:height="346"/>
+  <dlg:text dlg:id="Label4" dlg:tab-index="4" dlg:left="14" dlg:top="92" dlg:width="185" dlg:height="18" dlg:value="The language combo box is populated with the list of supported languages. The default language is set to Java." dlg:multiline="true"/>
+  <dlg:button dlg:id="HelpOKButton" dlg:tab-index="5" dlg:left="167" dlg:top="371" dlg:width="36" dlg:height="13" dlg:value="OK">
+   <script:event script:event-name="on-performaction" script:location="application" script:macro-name="ScriptBindingLibrary.ScriptBinding.HelpOKButton" script:language="StarBasic"/>
+  </dlg:button>
+  <dlg:text dlg:id="Label5" dlg:tab-index="6" dlg:left="14" dlg:top="144" dlg:width="185" dlg:height="34" dlg:value="In the Script combo box the script&apos;s display name will always be visible, if two or more scripts have the same display name (or if the Detailed View check box is selected) the script will be displayed as follows: display name [function name]" dlg:multiline="true"/>
+  <dlg:text dlg:id="Label6" dlg:tab-index="7" dlg:left="14" dlg:top="342" dlg:width="185" dlg:height="10" dlg:value="For further information see the User Guide at:" dlg:multiline="true"/>
+  <dlg:text dlg:style-id="0" dlg:id="Label7" dlg:tab-index="8" dlg:left="14" dlg:top="351" dlg:width="185" dlg:height="10" dlg:value="http://framework.openoffice.org/scripting/user-guide.html" dlg:multiline="true"/>
+  <dlg:text dlg:style-id="1" dlg:id="Label8" dlg:tab-index="9" dlg:left="14" dlg:top="55" dlg:width="185" dlg:height="11" dlg:value="Information common to all dialogs" dlg:multiline="true"/>
+  <dlg:text dlg:style-id="1" dlg:id="Label9" dlg:tab-index="10" dlg:left="14" dlg:top="198" dlg:width="185" dlg:height="18" dlg:value="Assign Script to Menu Dialog" dlg:multiline="true"/>
+  <dlg:text dlg:style-id="1" dlg:id="Label10" dlg:tab-index="11" dlg:left="14" dlg:top="247" dlg:width="185" dlg:height="16" dlg:value="Assign Script to Key Dialog" dlg:multiline="true"/>
+  <dlg:text dlg:style-id="1" dlg:id="Label11" dlg:tab-index="12" dlg:left="14" dlg:top="285" dlg:width="185" dlg:height="12" dlg:value="Assign Script to Event Dialog" dlg:multiline="true"/>
+  <dlg:text dlg:id="Label12" dlg:tab-index="13" dlg:left="14" dlg:top="211" dlg:width="185" dlg:height="36" dlg:value="To assign, select the Top-Level menu and Sub-Menu under which you wish to add the new script menu. Enter the script menu name and click New. To delete a script menu, select the script menu and click Delete." dlg:multiline="true"/>
+  <dlg:text dlg:id="Label13" dlg:tab-index="14" dlg:left="14" dlg:top="259" dlg:width="185" dlg:height="26" dlg:value="To assign, select the Key group and the Shortcut key, then click Assign. To delete, select the Shortcut to which the script is assigned and click Delete." dlg:multiline="true"/>
+  <dlg:text dlg:id="Label14" dlg:tab-index="15" dlg:left="14" dlg:top="297" dlg:width="185" dlg:height="42" dlg:value="To assign scripts to an event, select the Event then click Assign. Scripts can be assigned to application wide events or to the current document by selecting the appropriate application or document radio button.  To delete, select the Event to which the script is assigned and click Delete." dlg:multiline="true"/>
+  <dlg:text dlg:id="Label16" dlg:tab-index="16" dlg:left="14" dlg:top="177" dlg:width="185" dlg:height="22" dlg:value="To assign a script, first you must select the script from the Script combo box, then follow the appropriate instructions below. " dlg:multiline="true"/>
+  <dlg:text dlg:id="Label15" dlg:tab-index="17" dlg:left="14" dlg:top="110" dlg:width="185" dlg:height="34" dlg:value="When the location is set to &quot;filesystem&quot;, and the language is set to something other than &quot;Java&quot;, the &quot;Browse&quot; button is enabled. This allows open a filechooser and populate the Script combo box with scripts located on the filesystem." dlg:multiline="true"/>
+ </dlg:bulletinboard>
+</dlg:window>

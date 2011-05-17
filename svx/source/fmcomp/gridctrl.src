@@ -1,0 +1,259 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "svx/fmresids.hrc"
+#include <svx/svxids.hrc>
+#include "globlmn_tmpl.hrc"
+#include "fmhelp.hrc"
+#include <svx/svxcommands.h>
+
+Menu RID_SVXMNU_ROWS
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = SID_FM_DELETEROWS ;
+            HelpId = HID_FM_DELETEROWS ;
+            Text [ en-US ] = "Delete Rows" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_RECORD_SAVE ;
+            HelpId = CMD_SID_FM_RECORD_SAVE ;
+            Text [ en-US ] = "Save Record" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_RECORD_UNDO ;
+            HelpId = CMD_SID_FM_RECORD_UNDO ;
+            Text [ en-US ] = "Undo: Data entry" ;
+        };
+    };
+};
+Menu RID_SVXMNU_COLS
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = SID_FM_INSERTCOL ;
+            HelpId = HID_FM_INSERTCOL ;
+            Text [ en-US ] = "Insert ~Column" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = SID_FM_EDIT ;
+                        HelpId = CMD_SID_FM_EDIT ;
+                        Text [ en-US ] = "Text Box" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_FM_CHECKBOX ;
+                        HelpId = CMD_SID_FM_CHECKBOX ;
+                        Text [ en-US ] = "Check Box" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_FM_COMBOBOX ;
+                        HelpId = CMD_SID_FM_COMBOBOX ;
+                        Text [ en-US ] = "Combo Box" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_FM_LISTBOX ;
+                        HelpId = CMD_SID_FM_LISTBOX ;
+                        Text [ en-US ] = "List Box" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_FM_DATEFIELD ;
+                        HelpId = CMD_SID_FM_DATEFIELD ;
+                        Text [ en-US ] = "Date Field" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_FM_TIMEFIELD ;
+                        HelpId = CMD_SID_FM_TIMEFIELD ;
+                        Text [ en-US ] = "Time Field" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_FM_NUMERICFIELD ;
+                        HelpId = CMD_SID_FM_NUMERICFIELD ;
+                        Text [ en-US ] = "Numeric Field" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_FM_CURRENCYFIELD ;
+                        HelpId = CMD_SID_FM_CURRENCYFIELD ;
+                        Text [ en-US ] = "Currency Field" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_FM_PATTERNFIELD ;
+                        HelpId = CMD_SID_FM_PATTERNFIELD ;
+                        Text [ en-US ] = "Pattern Field" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_FM_FORMATTEDFIELD ;
+                        HelpId = CMD_SID_FM_FORMATTEDFIELD ;
+                        Text [ en-US ] = "Formatted Field" ;
+                    };
+                    MenuItem
+                    {
+                        // this is a dummy which is never used herein but for copy to newly built menus
+                        Identifier = SID_FM_TWOFIELDS_DATE_N_TIME;
+                        HelpId = HID_CONTROLS_DATE_N_TIME;
+                        Text [ en-US ] = "Date and Time Field" ;
+                        Disable = True;
+                    };
+                };
+            };
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CHANGECOL ;
+            HelpId = HID_FM_CHANGECOL ;
+            Text [ en-US ] = "~Replace with" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_DELETECOL ;
+            HelpId = HID_FM_DELETECOL ;
+            Text [ en-US ] = "Delete Column" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_HIDECOL ;
+            HelpId = HID_FM_HIDECOL ;
+            Text [ en-US ] = "~Hide Column";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_SHOWCOLS ;
+            HelpId = HID_FM_SHOWCOLS ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = SID_FM_SHOWCOLS_MORE ;
+                        HelpId = HID_FM_SHOWCOLS_MORE ;
+                        Text [ en-US ] = "~More...";
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_FM_SHOWALLCOLS ;
+                        HelpId = HID_FM_SHOWALLCOLS ;
+                        Text [ en-US ] = "~All";
+                    };
+                };
+            };
+            Text [ en-US ] = "~Show Columns";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_SHOW_PROPERTY_BROWSER ;
+            HelpId = CMD_SID_FM_SHOW_PROPERTY_BROWSER ;
+            Text [ en-US ] = "Column..." ;
+        };
+    };
+};
+
+Menu RID_SVXMNU_CELL
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            ITEM_EDIT_COPY
+        };
+    };
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,5 @@
+    <node oor:name="chart8">
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">ODF Chart</value>
+                    </prop>
+    </node>

@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="io_XMarkableStream" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.io.XMarkableStream
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim Bytes(20) As Integer
+    Dim rBytes(0)
+    Dim lastRByte As Integer
+    Dim i As Integer
+    Dim oOutStream As Object
+    Dim oInStream As Object
+    Dim iMark1 As Integer
+    Dim iMark2 As Integer
+    Dim iByte As Integer
+    Dim iBytes As Integer
+    Dim iByteAfterMark As Integer
+    Dim iByteAfterMark1 As Integer
+    Dim iByteAfterMark2 As Integer
+    Dim iOffset As Integer
+    Dim sFileStr As String
+
+    if (cObjectName = "stm.MarkableInputStream" OR cObjectName = "stm.ObjectInputStream") then
+
+        for i = 0 to ubound(Bytes())
+            Bytes(i) = i * 2
+        next i
+
+        Out.Log("First reset streams and write some bytes...")
+        oOutStream = getOutStream()
+        oOutStream.writeBytes(Bytes())
+        ResetStreams()
+
+        Test.StartMethod("createMark()")
+        bOK = true
+        Out.Log("Skip 3 bytes.")
+        oObj.skipBytes(3)
+        iMark1 = oObj.createMark()
+        Out.Log("Mark" + iMark1 + " was created.")
+
+        oObj.readBytes(rBytes(), 1)
+        iByteAfterMark1 = rBytes(0)
+        Out.Log("Byte after Mark" + iMark1 + " is " + int(iByteAfterMark1))
+
+        Out.Log("Skip 5 bytes.")
+        oObj.skipBytes(5)
+        iMark2 = oObj.createMark()
+        Out.Log("Mark" + iMark2 + " was created.")
+
+        oObj.readBytes(rBytes(), 1)
+        iByteAfterMark2 = rBytes(0)
+        Out.Log("Byte after Mark" + iMark2 + " is " + int(iByteAfterMark2))
+
+        Out.Log("Skip 7 bytes.")
+        oObj.skipBytes(7)
+        oObj.readBytes(rBytes(), 1)
+        lastRByte = rBytes(0)
+
+        Out.Log("Jump to Mark" + iMark2)
+        oObj.jumpToMark(iMark2)
+        oObj.readBytes(rBytes(), 1)
+        iByteAfterMark = rBytes(0)
+        Out.Log("Byte after Mark" + iMark2 + " is " + int(iByteAfterMark) + ", expected " + int(iByteAfterMark2))
+        bOK = bOK AND iByteAfterMark = iByteAfterMark2
+
+        Out.Log("Jump to Mark" + iMark1)
+        oObj.jumpToMark(iMark1)
+        oObj.readBytes(rBytes(), 1)
+        iByteAfterMark = rBytes(0)
+        Out.Log("Byte after Mark" + iMark1 + " is " + int(iByteAfterMark) + ", expected " + int(iByteAfterMark1))
+        bOK = bOK AND iByteAfterMark = iByteAfterMark1
+
+        Test.MethodTested("createMark()", bOK)
+        Test.MethodTested("jumpToMark()", bOK)
+
+        Test.StartMethod("offsetToMark()")
+        bOK = true
+        iOffset = oObj.offsetToMark(iMark2)
+        Out.Log("Offset from current position to Mark" + iMark2 + " is " + iOffset)
+        bOK = bOK AND iOffset = -5
+        Test.MethodTested("offsetToMark()", bOK)
+
+        Test.StartMethod("deleteMark()")
+        bOK = true
+        Out.Log("Delete Mark" + iMark1)
+        oObj.deleteMark(iMark1)
+        On Error goto ErrHndl1
+            Out.Log("Trying to jump to deleted mark")
+            oObj.jumpToMark(iMark1)
+            Out.Log("No exception occurred. FAILED")
+            bOK = false
+            goto Cont1
+        ErrHndl1:
+            Out.Log("Expected exception: " + error)
+        Cont1:
+        Test.MethodTested("deleteMark()", bOK)
+
+        Test.StartMethod("jumpToFurthest()")
+        bOK = true
+        oObj.readBytes(rBytes(), 1)
+        iByte = rBytes(0)
+        Out.Log("Perform a reading operation from the current position. Byte " + int(iByte) + " was read.")
+        Out.Log("Changing position.")
+        oObj.jumpToMark(iMark2)
+        Out.Log("Changing position with jumpToFurthest()")
+        oObj.jumpToFurthest()
+        oObj.readBytes(rBytes(), 1)
+        Out.Log("From the current position byte " + int(rBytes(0)) + " was read. Expected byte is " + int(lastRByte) + 2)
+        bOK = bOK AND lastRByte + 2 = rBytes(0)
+        Test.MethodTested("jumpToFurthest()", bOK)
+    else
+        bOK = true
+        Out.Log("Write 3 bytes to stream")
+        ReDim Bytes(2) As Integer
+        for i = 0 to ubound(Bytes())
+            Bytes(i) = i
+        next i
+        oObj.writeBytes(Bytes())
+        Out.Log("Creating a Mark.")
+        iMark1 = oObj.createMark()
+        Out.Log("Write 4 bytes to stream")
+        ReDim Bytes(3) As Integer
+        for i = 0 to ubound(Bytes())
+            Bytes(i) = i + 3
+        next i
+        oObj.writeBytes(Bytes())
+        Out.Log("Creating a Mark.")
+        iMark2 = oObj.createMark()
+
+        iOffset = oObj.offsetToMark(iMark1)
+        Out.Log("Offset from current position to Mark" + iMark1 + " is " + iOffset)
+        bOK = bOK AND iOffset = 4
+        Test.MethodTested("offsetToMark()", bOK)
+
+        Out.Log("Write 5 bytes to stream")
+        ReDim Bytes(4) As Integer
+        for i = 0 to ubound(Bytes())
+            Bytes(i) = i + 7
+        next i
+        oObj.writeBytes(Bytes())
+
+        Out.Log("Testing jumpToMark()")
+        Out.Log("Testing deleteMark()")
+        bOK = true
+        Out.Log("Deleting Mark1")
+        oObj.deleteMark(iMark2)
+        On Error goto ErrHndl2
+            Out.Log("Trying to jump to Mark1")
+            oObj.jumpToMark(iMark2)
+            Out.Log("No exception occurred - FAILED")
+            bOK = false
+            goto Cont2
+        ErrHndl2:
+            Out.Log("Expected exception: " + error)
+        Cont2:
+
+        Test.MethodTested("deleteMark()", bOK)
+
+        bOK = true
+
+        Out.Log("Jump to Mark0")
+        oObj.jumpToMark(iMark1)
+        Test.MethodTested("jumpToMark()", bOK)
+        Test.MethodTested("createMark()", bOK)
+
+        bOK = true
+        Out.Log("Write 2 bytes to stream")
+        ReDim Bytes(1) As Integer
+
+        for i = 0 to ubound(Bytes())
+            Bytes(i) = i + 12
+        next i
+
+        oObj.writeBytes(Bytes())
+        Out.Log("Changing position")
+        oObj.jumpToMark(iMark1)
+        Out.Log("Changing position with jumpToFurthest()")
+        oObj.jumpToFurthest()
+
+        Out.Log("Write 2 bytes to stream")
+        ReDim Bytes(1) As Integer
+        for i = 0 to ubound(Bytes())
+            Bytes(i) = i + 14
+        next i
+        oObj.writeBytes(Bytes())
+
+        Out.Log("Comparing file with expected {0, 1, 2, 12, 13, 5, 6, 7, 8, 9, 10, 11, 14, 15}")
+        oInStream = getInStream()
+        iBytes = oInStream.readBytes(rBytes(), 20)
+        Out.Log("There are " + iBytes + " in stream:")
+        sFileStr = "" + int(rBytes(0))
+        for i = 1 to ubound(rBytes())
+            sFileStr = sFileStr + ", " + int(rBytes(i))
+        next i
+        Out.Log("They are {" + sFileStr + "}")
+        bOK = bOK AND sFileStr = "0, 1, 2, 12, 13, 5, 6, 7, 8, 9, 10, 11, 14, 15"
+
+        Test.MethodTested("jumpToFurthest()", bOK)
+    end if
+
+    ResetStreams()
+    DisposeObj()
+    CreateObj()
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

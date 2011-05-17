@@ -1,0 +1,145 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _DBA_DBACCESS_HELPID_HRC_
+#include "dbaccess_helpid.hrc"
+#endif
+#ifndef _DBU_DLG_HRC_
+#include "dbu_dlg.hrc"
+#endif
+#ifndef _DBAUI_SQLMESSAGE_HRC_
+#include "sqlmessage.hrc"
+#endif
+
+//-------------------------------------------------------------------------
+Image BMP_EXCEPTION_ERROR
+{
+    ImageBitmap = Bitmap { File = "exerror.png"; };
+    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+};
+
+Image BMP_EXCEPTION_WARNING
+{
+    ImageBitmap = Bitmap { File = "exwarning.png"; };
+    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+};
+
+Image BMP_EXCEPTION_INFO
+{
+    ImageBitmap = Bitmap { File = "exinfo.png"; };
+    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+};
+
+ModalDialog DLG_SQLEXCEPTIONCHAIN
+{
+    HelpID = "dbaccess:ModalDialog:DLG_SQLEXCEPTIONCHAIN";
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 240 , 150 ) ;
+    Text [ en-US ] = "%PRODUCTNAME Base" ;
+
+    FixedLine FL_DETAILS
+    {
+        Pos = MAP_APPFONT ( 6, 3 ) ;
+        Size = MAP_APPFONT ( 228, 8 ) ;
+        Text [ en-US ] = "Details";
+    };
+    FixedText FT_ERRORLIST
+    {
+        Pos = MAP_APPFONT ( 12, 12 ) ;
+        Size = MAP_APPFONT ( 85, 10 ) ;
+        Text [ en-US ] = "Error ~list:";
+        Group = TRUE;
+    };
+    Control CTL_ERRORLIST
+    {
+        Pos = MAP_APPFONT ( 12, 25 ) ;
+        Size = MAP_APPFONT ( 85, 93 ) ;
+        Border = TRUE;
+        TabStop = TRUE;
+        HelpId = HID_SQLERROR_EXCHAIN_ERRORS;
+    };
+    FixedText FT_DESCRIPTION
+    {
+        Pos = MAP_APPFONT ( 103, 12 ) ;
+        Size = MAP_APPFONT ( 125, 10 ) ;
+        Text [ en-US ] = "~Description:";
+        Group = TRUE;
+    };
+    MultiLineEdit ME_DESCRIPTION
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 103 , 25 ) ;
+        Size = MAP_APPFONT ( 125 , 93 ) ;
+        TabStop = TRUE ;
+        VScroll = TRUE ;
+        HelpId = HID_SQLERROR_EXCHAIN_TEXT;
+    };
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 95 , 130 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+
+    String STR_EXCEPTION_STATUS
+    {
+        Text [ en-US ] = "SQL Status";
+    };
+    String STR_EXCEPTION_ERRORCODE
+    {
+        Text [ en-US ] = "Error code";
+    };
+};
+
+String STR_EXPLAN_STRINGCONVERSION_ERROR
+{
+    Text [ en-US ] = "A frequent reason for this error is an inappropriate character set setting for the language of your database. Check the setting by choosing Edit - Database - Properties.";
+};
+
+String STR_EXCEPTION_ERROR
+{
+    Text [ en-US ] = "Error";
+};
+
+String STR_EXCEPTION_WARNING
+{
+    Text [ en-US ] = "Warning";
+};
+
+String STR_EXCEPTION_INFO
+{
+    Text [ en-US ] = "Information";
+};
+
+String STR_EXCEPTION_DETAILS
+{
+    Text [ en-US ] = "Details";
+};

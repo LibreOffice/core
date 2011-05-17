@@ -1,0 +1,27 @@
+#ifndef com_sun_star_chart2_CoordinateSystemType_idl
+#define com_sun_star_chart2_CoordinateSystemType_idl
+
+
+module com {  module sun {  module star {  module chart2 {
+
+/**
+<p>
+The service CoordinateSystemType represents a special type of coordinate system.
+For example a 2 dimensional Cartesian coordinate system is a CoordinateSystemType
+and different from for example a 3 dimensional spherical coordinate system.
+</p>
+<p>A CoordinateSystemType is a stateless service which has no owner and does not
+enable cyclic references, thus it's lifetime can be handled by reference or it
+may be implemented as a singleton.</p>
+*/
+
+service CoordinateSystemType
+{
+    /** required interface
+    */
+//  interface ::com::sun::star::chart2::XCoordinateSystemType;
+};
+
+}; }; }; };
+
+#endif

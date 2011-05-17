@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
+ <toolbar:toolbaritem xlink:href=".uno:SelectMode" toolbar:helpid="helpid:10198"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:ManageLanguage" toolbar:helpid="helpid:30820" />
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:TestMode" toolbar:helpid="helpid:10199"  />
+ <toolbar:toolbaritem xlink:href=".uno:ShowPropBrowser" toolbar:helpid="helpid:10943"  />
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertPushbutton" toolbar:helpid="helpid:10146"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:InsertImageControl" toolbar:helpid="helpid:10926"  toolbar:style="radio" />
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:Checkbox" toolbar:helpid="helpid:10148"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:Radiobutton" toolbar:helpid="helpid:10147"  toolbar:style="radio" />
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertFixedText" toolbar:helpid="helpid:10188"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:InsertEdit" toolbar:helpid="helpid:10190"  toolbar:style="radio" />
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertListbox" toolbar:helpid="helpid:10191"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:Combobox" toolbar:helpid="helpid:10192"  toolbar:style="radio" />
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:HScrollbar" toolbar:helpid="helpid:10194"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:VScrollbar" toolbar:helpid="helpid:10195"  toolbar:style="radio" />
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:Groupbox" toolbar:helpid="helpid:10189"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:ProgressBar" toolbar:helpid="helpid:10927"  toolbar:style="radio" />
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:HFixedLine" toolbar:helpid="helpid:10928"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:VFixedLine" toolbar:helpid="helpid:10929"  toolbar:style="radio" />
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:AddDateField" toolbar:helpid="helpid:10936"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:InsertTimeField" toolbar:helpid="helpid:10937"  toolbar:style="radio" />
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertNumericField" toolbar:helpid="helpid:10938"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:InsertCurrencyField" toolbar:helpid="helpid:10939"  toolbar:style="radio" />
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertFormattedField" toolbar:helpid="helpid:10940"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:InsertPatternField" toolbar:helpid="helpid:10941"  toolbar:style="radio" />
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertFileControl" toolbar:helpid="helpid:10942"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:InsertTreeControl" toolbar:style="radio" />
+ <toolbar:toolbarbreak/>
+</toolbar:toolbar>

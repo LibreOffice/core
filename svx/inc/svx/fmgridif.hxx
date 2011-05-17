@@ -1,0 +1,553 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _SVX_FMGRIDIF_HXX
+#define _SVX_FMGRIDIF_HXX
+
+#include "svx/svxdllapi.h"
+
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/container/XContainer.hpp>
+#include <com/sun/star/container/XContainerListener.hpp>
+#include <com/sun/star/sdbc/XRowSetListener.hpp>
+#include <com/sun/star/sdb/XRowSetSupplier.hpp>
+#include <com/sun/star/form/XReset.hpp>
+#include <com/sun/star/form/XBoundComponent.hpp>
+#include <com/sun/star/form/XLoadListener.hpp>
+#include <com/sun/star/form/XGridControl.hpp>
+#include <com/sun/star/form/XGridPeer.hpp>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XStatusListener.hpp>
+#include <com/sun/star/frame/XDispatchProviderInterception.hpp>
+#include <com/sun/star/view/XSelectionChangeListener.hpp>
+#include <com/sun/star/util/XModeSelector.hpp>
+#include <com/sun/star/util/XModifyListener.hpp>
+#include <com/sun/star/util/XModifyBroadcaster.hpp>
+
+#include <tools/wintypes.hxx>
+#include <toolkit/controls/unocontrol.hxx>
+#include <toolkit/awt/vclxwindow.hxx>
+#include <comphelper/uno3.hxx>
+#include <cppuhelper/implbase10.hxx>
+
+#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_19)
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_19
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 19
+#include <comphelper/implbase_var.hxx>
+#endif
+
+
+class DbGridColumn;
+
+class OWeakSubObject : public ::cppu::OWeakObject
+{
+protected:
+    ::cppu::OWeakObject&    m_rParent;
+
+public:
+    OWeakSubObject(::cppu::OWeakObject& rParent) : m_rParent(rParent) { }
+
+    virtual void SAL_CALL acquire() throw() { m_rParent.acquire(); }
+    virtual void SAL_CALL release() throw() { m_rParent.release(); }
+};
+
+//==================================================================
+// FmXModifyMultiplexer
+//==================================================================
+class FmXModifyMultiplexer  :public OWeakSubObject
+                            ,public ::cppu::OInterfaceContainerHelper
+                            ,public ::com::sun::star::util::XModifyListener
+{
+public:
+    FmXModifyMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex );
+    DECLARE_UNO3_DEFAULTS(FmXModifyMultiplexer,OWeakSubObject);
+    virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::lang::XEventListener
+    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::util::XModifyListener
+    virtual void SAL_CALL modified(const ::com::sun::star::lang::EventObject& Source) throw(::com::sun::star::uno::RuntimeException);
+
+// resolve ambiguity : both OWeakObject and OInterfaceContainerHelper have these memory operators
+    void * SAL_CALL operator new( size_t size ) throw() { return OWeakSubObject::operator new(size); }
+    void SAL_CALL operator delete( void * p ) throw() { OWeakSubObject::operator delete(p); }
+};
+
+//==================================================================
+// FmXUpdateMultiplexer
+//==================================================================
+class FmXUpdateMultiplexer : public OWeakSubObject,
+                             public ::cppu::OInterfaceContainerHelper,
+                             public ::com::sun::star::form::XUpdateListener
+{
+public:
+    FmXUpdateMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex );
+    DECLARE_UNO3_DEFAULTS(FmXUpdateMultiplexer,OWeakSubObject);
+
+    virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::lang::XEventListener
+    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::form::XUpdateListener
+    virtual sal_Bool SAL_CALL approveUpdate(const ::com::sun::star::lang::EventObject &) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL updated(const ::com::sun::star::lang::EventObject &) throw(::com::sun::star::uno::RuntimeException);
+
+// resolve ambiguity : both OWeakObject and OInterfaceContainerHelper have these memory operators
+    void * SAL_CALL operator new( size_t size ) throw() { return OWeakSubObject::operator new(size); }
+    void SAL_CALL operator delete( void * p ) throw() { OWeakSubObject::operator delete(p); }
+};
+
+//==================================================================
+// FmXSelectionMultiplexer
+//==================================================================
+class FmXSelectionMultiplexer   :public OWeakSubObject
+                                ,public ::cppu::OInterfaceContainerHelper
+                                ,public ::com::sun::star::view::XSelectionChangeListener
+{
+public:
+    FmXSelectionMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex );
+    DECLARE_UNO3_DEFAULTS(FmXSelectionMultiplexer, OWeakSubObject);
+
+    virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::lang::XEventListener
+    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::view::XSelectionChangeListener
+    virtual void SAL_CALL selectionChanged( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
+
+// resolve ambiguity : both OWeakObject and OInterfaceContainerHelper have these memory operators
+    void * SAL_CALL operator new( size_t size ) throw() { return OWeakSubObject::operator new(size); }
+    void SAL_CALL operator delete( void * p ) throw() { OWeakSubObject::operator delete(p); }
+};
+
+//==================================================================
+// FmXGridControlMultiplexer
+//==================================================================
+class FmXGridControlMultiplexer :public OWeakSubObject
+                                ,public ::cppu::OInterfaceContainerHelper
+                                ,public ::com::sun::star::form::XGridControlListener
+{
+public:
+    FmXGridControlMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex );
+    DECLARE_UNO3_DEFAULTS( FmXGridControlMultiplexer, OWeakSubObject );
+
+    virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::lang::XEventListener
+    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::view::XSelectionChangeListener
+    virtual void SAL_CALL columnChanged( const ::com::sun::star::lang::EventObject& _event ) throw (::com::sun::star::uno::RuntimeException);
+
+// resolve ambiguity : both OWeakObject and OInterfaceContainerHelper have these memory operators
+    void * SAL_CALL operator new( size_t size ) throw() { return OWeakSubObject::operator new(size); }
+    void SAL_CALL operator delete( void * p ) throw() { OWeakSubObject::operator delete(p); }
+};
+
+//==================================================================
+// FmXContainerMultiplexer
+//==================================================================
+class FmXContainerMultiplexer : public OWeakSubObject,
+                                public ::cppu::OInterfaceContainerHelper,
+                                public ::com::sun::star::container::XContainerListener
+{
+public:
+    FmXContainerMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex);
+    DECLARE_UNO3_DEFAULTS(FmXContainerMultiplexer,OWeakSubObject);
+    virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::lang::XEventListener
+    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::container::XContainerListener
+    virtual void SAL_CALL elementInserted(const ::com::sun::star::container::ContainerEvent& Event) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL elementRemoved(const ::com::sun::star::container::ContainerEvent& Event) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL elementReplaced(const ::com::sun::star::container::ContainerEvent& Event) throw(::com::sun::star::uno::RuntimeException);
+
+// resolve ambiguity : both OWeakObject and OInterfaceContainerHelper have these memory operators
+    void * SAL_CALL operator new( size_t size ) throw() { return OWeakSubObject::operator new(size); }
+    void SAL_CALL operator delete( void * p ) throw() { OWeakSubObject::operator delete(p); }
+};
+
+//==================================================================
+// FmXGridControl
+//==================================================================
+typedef ::cppu::ImplHelper10<   ::com::sun::star::form::XBoundComponent,
+                                ::com::sun::star::form::XGridControl,
+                                ::com::sun::star::util::XModifyBroadcaster,
+                                ::com::sun::star::container::XIndexAccess,
+                                ::com::sun::star::container::XEnumerationAccess,
+                                ::com::sun::star::util::XModeSelector,
+                                ::com::sun::star::container::XContainer,
+                                ::com::sun::star::frame::XDispatchProvider,
+                                ::com::sun::star::frame::XDispatchProviderInterception,
+                                ::com::sun::star::view::XSelectionSupplier
+                            >   FmXGridControl_BASE;
+
+class FmXGridPeer;
+class SVX_DLLPUBLIC FmXGridControl  :public UnoControl
+                        ,public FmXGridControl_BASE
+{
+    FmXModifyMultiplexer        m_aModifyListeners;
+    FmXUpdateMultiplexer        m_aUpdateListeners;
+    FmXContainerMultiplexer     m_aContainerListeners;
+    FmXSelectionMultiplexer     m_aSelectionListeners;
+    FmXGridControlMultiplexer   m_aGridControlListeners;
+
+protected:
+    sal_uInt16  m_nPeerCreationLevel;
+    sal_Bool    m_bInDraw;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceFactory;
+
+public:
+    FmXGridControl(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
+    virtual ~FmXGridControl();
+
+    // UNO connection
+    DECLARE_UNO3_AGG_DEFAULTS(FmXGridControl, UnoControl);
+    virtual ::com::sun::star::uno::Any  SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
+
+// XTypeProvider
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::lang::XComponent
+    virtual void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::lang::XServiceInfo
+    virtual sal_Bool SAL_CALL supportsService(const ::rtl::OUString& ServiceName) throw();
+    virtual ::rtl::OUString SAL_CALL getImplementationName() throw();
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw();
+
+// ::com::sun::star::awt::XControl
+    virtual void SAL_CALL createPeer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& _rToolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL setModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& Model) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setDesignMode(sal_Bool bOn) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::awt::XView
+    virtual void SAL_CALL draw( sal_Int32 x, sal_Int32 y ) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::form::XBoundComponent
+    virtual void SAL_CALL addUpdateListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XUpdateListener >& l) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeUpdateListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XUpdateListener >& l) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL commit() throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::container::XElementAccess
+    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::container::XEnumerationAccess
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >  SAL_CALL createEnumeration() throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::container::XIndexAccess
+    virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getByIndex(sal_Int32 _rIndex) throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::form::XGridControl
+    virtual void SAL_CALL addGridControlListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XGridControlListener >& _listener ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeGridControlListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XGridControlListener >& _listener ) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::form::XGrid (base of XGridControl)
+    virtual sal_Int16 SAL_CALL getCurrentColumnPosition() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setCurrentColumnPosition(sal_Int16 nPos) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::form::XGridFieldDataSupplier (base of XGridControl)
+    virtual ::com::sun::star::uno::Sequence< sal_Bool > SAL_CALL queryFieldDataType( const ::com::sun::star::uno::Type& xType ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL queryFieldData( sal_Int32 nRow, const ::com::sun::star::uno::Type& xType ) throw(::com::sun::star::uno::RuntimeException);
+
+// UnoControl
+    virtual ::rtl::OUString GetComponentServiceName();
+
+// ::com::sun::star::util::XModifyBroadcaster
+    virtual void SAL_CALL addModifyListener(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& l) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeModifyListener(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& l) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::util::XModeSelector
+    virtual void SAL_CALL setMode(const ::rtl::OUString& Mode) throw(::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getMode() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL getSupportedModes() throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsMode(const ::rtl::OUString& Mode) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::container::XContainer
+    virtual void SAL_CALL addContainerListener(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& l) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeContainerListener(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& l) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::frame::XDispatchProvider
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL queryDispatch(const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  > SAL_CALL queryDispatches(const ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchDescriptor >& aDescripts) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::frame::XDispatchProviderInterception
+    virtual void SAL_CALL registerDispatchProviderInterceptor(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >& xInterceptor) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL releaseDispatchProviderInterceptor(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >& xInterceptor) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::view::XSelectionSupplier
+    virtual sal_Bool SAL_CALL select( const ::com::sun::star::uno::Any& aSelection ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getSelection(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+
+protected:
+    virtual FmXGridPeer*    imp_CreatePeer(Window* pParent);
+        // ImplCreatePeer would be better, but doesn't work because it's not exported
+
+};
+
+//==================================================================
+// FmXGridPeer -> Peer for the Gridcontrol
+//==================================================================
+typedef ::comphelper::ImplHelper19  <   ::com::sun::star::form::XGridPeer,
+                                        ::com::sun::star::form::XBoundComponent,
+                                        ::com::sun::star::form::XGridControl,
+                                        ::com::sun::star::sdb::XRowSetSupplier,
+                                        ::com::sun::star::util::XModifyBroadcaster,
+                                        ::com::sun::star::beans::XPropertyChangeListener,
+                                        ::com::sun::star::container::XContainerListener,
+                                        ::com::sun::star::sdbc::XRowSetListener,
+                                        ::com::sun::star::form::XLoadListener,
+                                        ::com::sun::star::view::XSelectionChangeListener,
+                                        ::com::sun::star::container::XIndexAccess,
+                                        ::com::sun::star::container::XEnumerationAccess,
+                                        ::com::sun::star::util::XModeSelector,
+                                        ::com::sun::star::container::XContainer,
+                                        ::com::sun::star::frame::XStatusListener,
+                                        ::com::sun::star::frame::XDispatchProvider,
+                                        ::com::sun::star::frame::XDispatchProviderInterception,
+                                        ::com::sun::star::form::XResetListener,
+                                        ::com::sun::star::view::XSelectionSupplier
+                                    >   FmXGridPeer_BASE;
+class FmGridControl;
+class SVX_DLLPUBLIC FmXGridPeer :public VCLXWindow
+                    ,public FmXGridPeer_BASE
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >    m_xColumns;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >                 m_xCursor;
+    ::cppu::OInterfaceContainerHelper       m_aModifyListeners,
+                                            m_aUpdateListeners,
+                                            m_aContainerListeners,
+                                            m_aSelectionListeners,
+                                            m_aGridControlListeners;
+
+    ::rtl::OUString         m_aMode;
+    sal_Int32               m_nCursorListening;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >   m_xFirstDispatchInterceptor;
+
+    sal_Bool                                m_bInterceptingDispatch;
+
+    sal_Bool*                               m_pStateCache;
+        // one bool for each supported url
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > *                        m_pDispatchers;
+        // one dispatcher for each supported url
+        // (I would like to have a vector here but including the stl in an exported file seems
+        // very risky to me ....)
+
+    class GridListenerDelegator;
+    friend class GridListenerDelegator;
+    GridListenerDelegator*  m_pGridListener;
+
+protected:
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceFactory;
+    ::osl::Mutex                                                                        m_aMutex;
+
+public:
+    FmXGridPeer(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
+    ~FmXGridPeer();
+
+    // spaeter Constructor, immer nach dem realen Constructor zu rufen !
+    void Create(Window* pParent, WinBits nStyle);
+
+// UNO connection
+    DECLARE_UNO3_DEFAULTS(FmXGridPeer, VCLXWindow);
+    virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
+
+// XTypeProvider
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::lang::XUnoTunnel
+    static const ::com::sun::star::uno::Sequence< sal_Int8 >&   getUnoTunnelImplementationId() throw();
+    static FmXGridPeer*                                         getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxIFace ) throw();
+    sal_Int64                                                   SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& _rIdentifier ) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::form::XGridPeer
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > SAL_CALL getColumns(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setColumns( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& aColumns ) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::lang::XComponent
+    virtual void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::lang::XEventListener
+    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::form::XBoundComponent
+    virtual void SAL_CALL addUpdateListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XUpdateListener >& l) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeUpdateListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XUpdateListener >& l) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL commit() throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::container::XElementAccess
+    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::container::XEnumerationAccess
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL createEnumeration() throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::container::XIndexAccess
+    virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getByIndex(sal_Int32 _rIndex) throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::beans::XPropertyChangeListener
+    virtual void SAL_CALL SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::form::XLoadListener
+    virtual void SAL_CALL loaded(const ::com::sun::star::lang::EventObject& rEvent) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL unloaded(const ::com::sun::star::lang::EventObject& rEvent) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL unloading(const ::com::sun::star::lang::EventObject& aEvent) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL reloading(const ::com::sun::star::lang::EventObject& aEvent) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL reloaded(const ::com::sun::star::lang::EventObject& aEvent) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::sdbc::XRowSetListener
+    virtual void SAL_CALL cursorMoved(const ::com::sun::star::lang::EventObject& event) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL rowChanged(const ::com::sun::star::lang::EventObject& event) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL rowSetChanged(const ::com::sun::star::lang::EventObject& event) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::container::XContainerListener
+    virtual void SAL_CALL elementInserted(const ::com::sun::star::container::ContainerEvent& Event) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL elementRemoved(const ::com::sun::star::container::ContainerEvent& Event) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL elementReplaced(const ::com::sun::star::container::ContainerEvent& Event) throw(::com::sun::star::uno::RuntimeException);
+
+// VCLXWindow
+    virtual void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+                    CreateAccessibleContext();
+
+// ::com::sun::star::form::XGridControl
+    virtual void SAL_CALL addGridControlListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XGridControlListener >& _listener ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeGridControlListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XGridControlListener >& _listener ) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::form::XGrid (base of XGridControl)
+    virtual sal_Int16 SAL_CALL getCurrentColumnPosition() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setCurrentColumnPosition(sal_Int16 nPos) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::form::XGridFieldDataSupplier (base of XGridControl)
+    virtual ::com::sun::star::uno::Sequence< sal_Bool > SAL_CALL queryFieldDataType( const ::com::sun::star::uno::Type& xType ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL queryFieldData( sal_Int32 nRow, const ::com::sun::star::uno::Type& xType ) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::sdb::XRowSetSupplier
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >  SAL_CALL getRowSet() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setRowSet(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xDataSource) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::util::XModifyBroadcaster
+    virtual void SAL_CALL addModifyListener(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& l) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeModifyListener(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& l) throw(::com::sun::star::uno::RuntimeException);
+
+// UnoControl
+    virtual void SAL_CALL SAL_CALL setDesignMode(sal_Bool bOn) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isDesignMode() throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::view::XSelectionChangeListener
+    virtual void SAL_CALL selectionChanged(const ::com::sun::star::lang::EventObject& aEvent) throw(::com::sun::star::uno::RuntimeException);
+
+    void CellModified();
+
+// PropertyListening
+    void updateGrid(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& _rDatabaseCursor);
+    void startCursorListening();
+    void stopCursorListening();
+
+// ::com::sun::star::util::XModeSelector
+    virtual void SAL_CALL setMode(const ::rtl::OUString& Mode) throw(::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getMode() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedModes() throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsMode(const ::rtl::OUString& Mode) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::container::XContainer
+    virtual void SAL_CALL addContainerListener(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& l) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeContainerListener(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& l) throw(::com::sun::star::uno::RuntimeException);
+
+    void columnVisible(DbGridColumn* pColumn);
+    void columnHidden(DbGridColumn* pColumn);
+
+// ::com::sun::star::awt::XView
+    virtual void SAL_CALL draw( sal_Int32 x, sal_Int32 y ) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::frame::XDispatchProvider
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL queryDispatch(const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  > SAL_CALL queryDispatches(const ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchDescriptor >& aDescripts) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::frame::XDispatchProviderInterception
+    virtual void SAL_CALL registerDispatchProviderInterceptor(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >& xInterceptor) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL releaseDispatchProviderInterceptor(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >& xInterceptor) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::frame::XStatusListener
+    virtual void SAL_CALL statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::form::XResetListener
+    virtual sal_Bool SAL_CALL approveReset(const ::com::sun::star::lang::EventObject& rEvent) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL resetted(const ::com::sun::star::lang::EventObject& rEvent) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::view::XSelectionSupplier
+    virtual sal_Bool SAL_CALL select( const ::com::sun::star::uno::Any& aSelection ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getSelection(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+
+protected:
+    virtual FmGridControl*  imp_CreateControl(Window* pParent, WinBits nStyle);
+
+    static ::com::sun::star::uno::Sequence< ::com::sun::star::util::URL>&       getSupportedURLs();
+    static ::com::sun::star::uno::Sequence<sal_uInt16>& getSupportedGridSlots();
+    void    ConnectToDispatcher();
+    void    DisConnectFromDispatcher();
+    void    UpdateDispatches(); // will connect if not already connected and just update else
+
+    /** If a derived class wants to listen at some column properties, it doesn't have
+        to overload all methods affecting columns (setColumns, elementInserted, elementRemoved ...)
+        Instead it may use addColumnListeners and removeColumnListeners which are called in all
+        the cases.
+    */
+    virtual void addColumnListeners(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xCol);
+    virtual void removeColumnListeners(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xCol);
+
+    void selectionChanged();
+    void columnChanged();
+
+    DECL_LINK(OnQueryGridSlotState, void*);
+    DECL_LINK(OnExecuteGridSlot, void*);
+};
+
+
+
+#endif // _SVX_FMGRID_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

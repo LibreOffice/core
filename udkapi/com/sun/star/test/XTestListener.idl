@@ -1,0 +1,80 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_test_XTestListener_idl__
+#define __com_sun_star_test_XTestListener_idl__
+
+#include <com/sun/star/lang/XEventListener.idl>
+#include <com/sun/star/test/TestEvent.idl>
+
+
+//=============================================================================
+
+module com { module sun { module star { module test {
+
+//=============================================================================
+/** is used to handle errors/exceptions and warnings during tests.
+*/
+published interface XTestListener: com::sun::star::lang::XEventListener
+{
+    //-------------------------------------------------------------------------
+    /** gets called when an error occurs while performing an test.
+        If the error results from an exception, the exception
+        can be found in the Exception member of the TestEvent
+
+        @param evt
+        This property contains the <type>TestEvent</type> object that
+        describes the event source and error description.
+    */
+    void notifyError( [in] com::sun::star::test::TestEvent evt );
+
+    //-------------------------------------------------------------------------
+    /** gets called when an warning occurs while performing an test.
+
+        @param evt
+        This property contains the <type>TestEvent</type> object that
+        describes the event source and warning description.
+    */
+    void notifyWarning( [in] com::sun::star::test::TestEvent evt );
+
+    //-------------------------------------------------------------------------
+    /** can be called by the broadcaster to inform the listener about
+        the progress of the test. The listener can use this information
+        for example to write it into a test protocol file.
+
+        @param evt
+        This property contains the <type>TestEvent</type> object that
+        describes the protocol message.
+    */
+    void protocol( [in] com::sun::star::test::TestEvent evt );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

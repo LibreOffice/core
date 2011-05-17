@@ -1,0 +1,171 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+
+#include "scendlg.hrc"
+ModalDialog RID_SCDLG_NEWSCENARIO
+{
+    HelpID = "sc:ModalDialog:RID_SCDLG_NEWSCENARIO";
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 260 , 165 ) ;
+    Text [ en-US ] = "Create Scenario" ;
+    Moveable = TRUE ;
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 204 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 204 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 204 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    MultiLineEdit ED_COMMENT
+    {
+        HelpID = "sc:MultiLineEdit:RID_SCDLG_NEWSCENARIO:ED_COMMENT";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 43 ) ;
+        Size = MAP_APPFONT ( 183 , 46 ) ;
+        TabStop = TRUE ;
+        MaxTextLength = 512 ;
+        VScroll = TRUE ;
+        IgnoreTab = TRUE ;
+    };
+    Edit ED_NAME
+    {
+        HelpID = "sc:Edit:RID_SCDLG_NEWSCENARIO:ED_NAME";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 183 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    CheckBox CB_SHOWFRAME
+    {
+        HelpID = "sc:CheckBox:RID_SCDLG_NEWSCENARIO:CB_SHOWFRAME";
+        Pos = MAP_APPFONT ( 12 , 107 ) ;
+        Size = MAP_APPFONT ( 109 , 10 ) ;
+        Text [ en-US ] = "~Display border";
+    };
+    ListBox LB_COLOR
+    {
+        HelpID = "sc:ListBox:RID_SCDLG_NEWSCENARIO:LB_COLOR";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 125 , 105 ) ;
+        Size = MAP_APPFONT ( 70 , 86 ) ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+    };
+    CheckBox CB_PRINTFRAME
+    {
+        HelpID = "sc:CheckBox:RID_SCDLG_NEWSCENARIO:CB_PRINTFRAME";
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 121 , 243 ) ;
+        Size = MAP_APPFONT ( 83 , 10 ) ;
+        Text [ en-US ] = "Print border" ;
+    };
+    CheckBox CB_TWOWAY
+    {
+        HelpID = "sc:CheckBox:RID_SCDLG_NEWSCENARIO:CB_TWOWAY";
+        Pos = MAP_APPFONT ( 12 , 121 ) ;
+        Size = MAP_APPFONT ( 183 , 10 ) ;
+        Text [ en-US ] = "Copy ~back" ;
+    };
+    CheckBox CB_ATTRIB
+    {
+        HelpID = "sc:CheckBox:RID_SCDLG_NEWSCENARIO:CB_ATTRIB";
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 20 , 243 ) ;
+        Size = MAP_APPFONT ( 83 , 10 ) ;
+        Text [ en-US ] = "Attributes" ;
+    };
+    CheckBox CB_VALUE
+    {
+        HelpID = "sc:CheckBox:RID_SCDLG_NEWSCENARIO:CB_VALUE";
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 230 , 243 ) ;
+        Size = MAP_APPFONT ( 83 , 10 ) ;
+        Text [ en-US ] = "Copy values only" ;
+    };
+    CheckBox CB_COPYALL
+    {
+        HelpID = "sc:CheckBox:RID_SCDLG_NEWSCENARIO:CB_COPYALL";
+        Pos = MAP_APPFONT ( 12 , 135 ) ;
+        Size = MAP_APPFONT ( 183 , 10 ) ;
+        Text [ en-US ] = "Copy ~entire sheet" ;
+    };
+    CheckBox CB_PROTECT
+    {
+        HelpID = "sc:CheckBox:RID_SCDLG_NEWSCENARIO:CB_PROTECT";
+        Pos = MAP_APPFONT ( 12 , 149 ) ;
+        Size = MAP_APPFONT ( 183 , 10 ) ;
+        Text [ en-US ] = "~Prevent changes" ;
+    };
+    String STR_EDIT
+    {
+        Text [ en-US ] = "Edit Scenario" ;
+    };
+    String STR_CREATEDBY
+    {
+        Text [ en-US ] = "Created by" ;
+    };
+    String STR_ON
+    {
+        Text [ en-US ] = "on" ;
+    };
+    String STR_COLOR
+    {
+        Text [ en-US ] = "Display border in" ;
+    };
+    FixedLine FL_NAME
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 192 , 8 ) ;
+        Text [ en-US ] = "~Name of scenario";
+    };
+    FixedLine FL_COMMENT
+    {
+        Pos = MAP_APPFONT ( 6 , 32 ) ;
+        Size = MAP_APPFONT ( 192 , 8 ) ;
+        Text [ en-US ] = "~Comment";
+    };
+    FixedLine FL_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 6 , 95 ) ;
+        Size = MAP_APPFONT ( 192 , 8 ) ;
+        Text [ en-US ] = "Settings";
+    };
+};

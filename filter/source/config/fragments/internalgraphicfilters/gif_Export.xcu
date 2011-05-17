@@ -1,0 +1,10 @@
+    <node oor:name="gif_Export" oor:op="replace"  >
+        <prop oor:name="Type"><value>gif_Graphics_Interchange</value></prop>
+        <prop oor:name="FormatName"><value>egi</value></prop>
+        <prop oor:name="RealFilterName"/>
+        <prop oor:name="UIComponent"><value>com.sun.star.svtools.SvFilterOptionsDialog</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">GIF - Graphics Interchange Format</value>
+        </prop>
+        <prop oor:name="Flags"><value>EXPORT</value></prop>
+    </node>

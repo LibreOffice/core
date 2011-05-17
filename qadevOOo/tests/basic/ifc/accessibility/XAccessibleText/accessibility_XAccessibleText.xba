@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="accessibility_XAccessibleText" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+'*************************************************************************
+' This Interface/Service test depends on the following GLOBAL variables,
+' which must be specified in the object creation:
+
+'   Global accText as String
+'   Global readOnly as Boolean
+
+'*************************************************************************
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.accessibility.XAccessibleText
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim chCount As Integer
+    Dim accTextSegment as new com.sun.star.accessibility.TextSegment
+
+    Test.StartMethod("getCharacterCount()")
+    bOK = true
+    chCount = oObj.getCharacterCount()
+    Out.Log("Character count: "+chCount)
+    bOK = bOK AND (len(accText) = chCount)
+    Test.MethodTested("getCharacterCount()",bOK)
+
+    Test.StartMethod("getCaretPosition()")
+    Test.StartMethod("setCaretPosition()")
+    bOK = true
+    Dim carPos As Integer
+    oObj.setCaretPosition(chCount - 1)
+    carPos = oObj.getCaretPosition()
+    if not readOnly then
+        Out.Log("getCaretPosition: " + carPos)
+        bOK = bOK AND (carPos = chCount - 1)
+    else
+        Out.Log("Object is read only and Caret position couldn't be set")
+    end if
+    Test.MethodTested("getCaretPosition()",bOK)
+    Test.MethodTested("setCaretPosition()",bOK)
+
+    Test.StartMethod("getCharacter()")
+    Dim i As Integer
+    bOK = true
+    for i = 0 to chCount-1
+        bOK = bOK AND (chr(oObj.getCharacter(i)) = _
+                                                utils.getCharacter(i+1,accText))
+    next i
+    Test.MethodTested("getCharacter()",bOK)
+
+    Test.StartMethod("getCharacterAttributes()")
+    Dim attrs() As Variant
+    Dim ReqAttrs(0) as String
+    bOK = true
+    attrs = oObj.getCharacterAttributes(chCount - 1, ReqAttrs())
+    bOK = bOK AND NOT isNull(attrs)
+    Out.Log("Properties ubound: "+ubound(attrs))
+    Test.MethodTested("getCharacterAttributes()",bOK)
+
+    Test.StartMethod("getCharacterBounds()")
+    Dim chBounds As new com.sun.star.awt.Rectangle
+    bOK = true
+    chBounds = oObj.getCharacterBounds(chCount - 1)
+    Out.Log("Character boundbox: "+chBounds.X+", "+chBounds.Y+", "+ _
+    chBounds.Width+", "+chBounds.Height)
+    bOK = bOK AND NOT isNull(chBounds)
+    Test.MethodTested("getCharacterBounds()",bOK)
+
+    Test.StartMethod("getIndexAtPoint()")
+    Dim index As Integer
+    Dim point As new com.sun.star.awt.Point
+    bOK = true
+    point.X = chBounds.X + 1
+    point.Y = chBounds.Y + 1
+    index = oObj.getIndexAtPoint(point)
+    bOK = bOK AND (index = chCount -1)
+    Test.MethodTested("getIndexAtPoint()",bOK)
+
+    Test.StartMethod("getSelectedText()")
+    bOK = true
+    oObj.setSelection(0, chCount)
+    if not readOnly then
+        bOK = bOK AND (accText = oObj.getSelectedText())
+    else
+        Out.Log("Object is unselectable")
+    end if
+    Test.MethodTested("getSelectedText()",bOK)
+
+    Test.StartMethod("getSelectionStart()")
+    bOK = true
+    oObj.setSelection(chCount-1,chCount)
+    if not readOnly then
+        bOK = bOK AND (oObj.getSelectionStart() = chCount -1)
+    else
+        Out.Log("Object is unselectable")
+    end if
+    Test.MethodTested("getSelectionStart()",bOK)
+
+    Test.StartMethod("getSelectionEnd()")
+    bOK = true
+    oObj.setSelection(0,chCount - 1)
+    if not readOnly then
+        bOK = bOK AND (oObj.getSelectionEnd() = chCount - 1)
+    else
+        Out.Log("Object is unselectable")
+    end if
+    Test.MethodTested("getSelectionEnd()",bOK)
+
+    Test.StartMethod("setSelection()")
+    bOK = true
+    if not readOnly then
+        bOK = bOK AND oObj.setSelection(0,chCount)
+    else
+        Out.Log("Object is unselectable")
+    end if
+    Test.MethodTested("setSelection()",bOK)
+
+    Test.StartMethod("getText()")
+    bOK = true
+    bOK = bOK AND (accText = oObj.getText())
+    Test.MethodTested("getText()",bOK)
+
+    Test.StartMethod("getTextRange()")
+    bOK = true
+    bOK = bOK AND (accText = oObj.getTextRange(0,chCount))
+    Test.MethodTested("getTextRange()",bOK)
+
+    Test.StartMethod("getTextAtIndex()")
+    bOK = true
+    accTextSegment = oObj.getTextAtIndex(chCount - 1, 4)
+    bOK = bOK AND (accText = accTextSegment.SegmentText)
+    Test.MethodTested("getTextAtIndex()",bOK)
+
+    Test.StartMethod("getTextBeforeIndex()")
+    bOK = true
+    accTextSegment = oObj.getTextBeforeIndex(1, 1)
+    bOK = bOK AND (accTextSegment.SegmentText = utils.getCharacter(1,accText))
+    Test.MethodTested("getTextBeforeIndex()",bOK)
+
+    Test.StartMethod("getTextBehindIndex()")
+    bOK = true
+    accTextSegment = oObj.getTextBehindIndex(chCount-2,1)
+    bOK = bOK AND (accTextSegment.SegmentText = utils.getCharacter(chCount,accText))
+    Test.MethodTested("getTextBehindIndex()",bOK)
+
+    Test.StartMethod("copyText()")
+    bOK = true
+    bOK = bOK AND oObj.copyText(0,chCount)
+    if readOnly then bOK = true
+    Test.MethodTested("copyText()",bOK)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

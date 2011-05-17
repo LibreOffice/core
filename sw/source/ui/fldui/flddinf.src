@@ -1,0 +1,141 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "globals.hrc"
+#include "fldtdlg.hrc"
+#include "helpid.h"
+TabPage TP_FLD_DOKINF
+{
+    HelpID = HID_FLD_DOKINF ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    FixedText FT_DOKINFTYPE
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 76 , 8 ) ;
+        Text [ en-US ] = "~Type" ;
+        Left = TRUE ;
+    };
+    Control TLB_DOKINFTYPE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 16 ) ;
+        Size = MAP_APPFONT ( 76 , 163 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_DOKINFSELECTION
+    {
+        Pos = MAP_APPFONT ( 88 , 3 ) ;
+        Size = MAP_APPFONT ( 76 , 8 ) ;
+        Text [ en-US ] = "S~elect" ;
+        Left = TRUE ;
+    };
+    ListBox LB_DOKINFSELECTION
+    {
+        HelpID = "sw:ListBox:TP_FLD_DOKINF:LB_DOKINFSELECTION";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 88 , 16 ) ;
+        Size = MAP_APPFONT ( 76 , 163 ) ;
+        TabStop = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "Author" ; > ;
+            < "Time" ; > ;
+            < "Date" ; > ;
+            < "Date Time Author" ; > ;
+        };
+    };
+    FixedText FT_DOKINFFORMAT
+    {
+        Pos = MAP_APPFONT ( 170 , 3 ) ;
+        Size = MAP_APPFONT ( 84 , 8 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "F~ormat" ;
+    };
+    ListBox LB_DOKINFFORMAT
+    {
+        HelpID = "sw:ListBox:TP_FLD_DOKINF:LB_DOKINFFORMAT";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 170 , 16 ) ;
+        Size = MAP_APPFONT ( 84 , 148 ) ;
+        TabStop = TRUE ;
+        AutoHScroll = TRUE ;
+    };
+    CheckBox CB_DOKINFFIXEDCONTENT
+    {
+        HelpID = "sw:CheckBox:TP_FLD_DOKINF:CB_DOKINFFIXEDCONTENT";
+        Pos = MAP_APPFONT ( 170 , 170 ) ;
+        Size = MAP_APPFONT ( 72 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Fixed content" ;
+    };
+    Bitmap BMP_DOKINFROOT_OPENED
+    {
+        File = "plus.bmp" ;
+    };
+    Bitmap BMP_DOKINFROOT_CLOSED
+    {
+        File = "minus.bmp" ;
+    };
+    String STR_DOKINF_INFO
+    {
+        Text [ en-US ] = "Info" ;
+    };
+    Text [ en-US ] = "DocInformation" ;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

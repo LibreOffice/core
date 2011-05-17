@@ -1,0 +1,368 @@
+%*************************************************************************
+%
+% DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+% 
+% Copyright 2000, 2010 Oracle and/or its affiliates.
+%
+% OpenOffice.org - a multi-platform office productivity suite
+%
+% This file is part of OpenOffice.org.
+%
+% OpenOffice.org is free software: you can redistribute it and/or modify
+% it under the terms of the GNU Lesser General Public License version 3
+% only, as published by the Free Software Foundation.
+%
+% OpenOffice.org is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU Lesser General Public License version 3 for more details
+% (a copy is included in the LICENSE file that accompanied this code).
+%
+% You should have received a copy of the GNU Lesser General Public License
+% version 3 along with OpenOffice.org.  If not, see
+% <http://www.openoffice.org/license.html>
+% for a copy of the LGPLv3 License.
+%
+%*************************************************************************
+
+%
+%
+% readpath
+%
+% The intention of readpath is to save disk space since the vcl clip region routines 
+% produce a huge amount of lineto/moveto commands
+%
+% The principal idea is to maintain the current point on stack and to provide only deltas
+% in the command. These deltas are added to the current point. The new point is used for
+% the lineto and moveto command and saved on stack for the next command.
+%
+% pathdict implements binary/hex representation of lineto and moveto commands. 
+% The command consists of a 1byte opcode to switch between lineto and moveto and the size
+% of the following delta-x and delta-y values. The opcode is read with /rcmd, the two 
+% coordinates are read with /rhex. The whole command is executed with /xcmd
+%
+% 
+
+/pathdict dup 8 dict def load 
+begin
+
+	% the command is of the bit format cxxyy
+	% with c=0 meaning lineto
+	%      c=1 meaning moveto
+	% xx is a 2bit value for the number of bytes for x position
+	% yy is the same for y, values are off by one: 00 means 1; 11 means 4 !
+	% the command has been added to 'A' to be always in the ascii character
+	% range. the command is followed by 2*xx + 2*yy hexchars. 
+	% '~' denotes the special case of EOD 
+	/rcmd  	{ 
+				{ 
+					currentfile 1 string readstring % s bool
+					pop								% s
+					0 get							% s[0]
+													% --- check wether s[0] is CR, LF ...
+					dup 32 gt						% s > ' ' ? then read on
+					{ exit }
+					{ pop  }
+					ifelse
+				}
+				loop
+
+				dup 126 eq { pop exit } if		% -- Exit loop if cmd is '~'
+				65 sub							% cmd=s[0]-'A'
+												% -- Separate yy bits
+				dup 16#3 and 1 add				% cmd yy
+												% -- Separate xx bits
+				exch							% yy cmd
+				dup 16#C and -2 bitshift 
+				16#3 and 1 add exch 			% yy xx cmd
+												% -- Separate command bit
+				16#10 and 16#10 eq				% yy xx bool
+				3 1 roll exch					% bool xx yy
+			} def
+
+	% length rhex -- reads a signed hex value of given length
+	% the left most bit of char 0 is considered as the sign (0 means '+', 1 means '-')
+	% the rest of the bits is considered to be the abs value. Please note that this 
+	% does not match the C binary representation of integers 
+	/rhex 	{ 
+				dup 1 sub exch 			% l-1 l
+				currentfile exch string readhexstring 	% l-1 substring[l] bool
+				pop 
+				dup 0 get dup 			% l-1 s s[0] s[0]
+										% -- Extract the sign
+				16#80 and 16#80 eq dup  % l-1 s s[0] sign=- sign=-
+										% -- Mask out the sign bit and put value back
+				3 1 roll				% l-1 s sign=- s[0] sign=-
+				{ 16#7f and } if		% l-1 s sign=- +s[0]
+				2 index 0 				% l-1 s sign=- +s[0] s 0
+				3 -1 roll put			% l-1 s sign=- s 0 +s[0]
+										% -- Read loop: add to prev sum, mul with 256
+				3 1 roll 0			    % sign=- l-1 s Sum=0 
+				0 1 5 -1 roll			% sign=- s Sum=0 0 1 l-1
+				{						% sign=- s Sum idx
+					2 index exch		% sign=- s Sum s idx 
+					get 				% sign=- s Sum s[idx]
+					add	256 mul			% sign=- s Sum=(s[idx]+Sum)*256
+				}
+				for
+										% -- mul was once too often, weave in the sign
+				256 div					% sign=- s Sum/256
+				exch pop 				% sign=- Sum/256
+				exch { neg } if 		% (sign=- ? -Sum : Sum) 
+		  	} def
+
+	% execute a single command, the former x and y position is already on stack
+	% only offsets are read from cmdstring 
+	/xcmd	{							% x y
+				rcmd					% x y bool wx wy
+				exch rhex				% x y bool wy Dx
+				exch rhex				% x y bool Dx Dy
+				exch 5 -1 roll			% y bool Dy Dx x
+				add exch				% y bool X Dy
+				4 -1 roll add			% bool X Y
+				1 index 1 index			% bool X Y X Y
+				5 -1 roll				% X Y X Y bool
+				{ moveto }
+				{ lineto }
+				ifelse					% X Y
+			} def
+end
+
+/readpath
+{	
+	0 0		% push initial-x initial-y 
+	pathdict begin
+		{ xcmd } loop 
+	end
+	pop pop % pop final-x final-y
+} def
+
+%
+%
+% if languagelevel is not in the systemdict then its level 1 interpreter:
+% provide compatibility routines
+%
+%
+
+systemdict /languagelevel known not
+{
+	% string numarray xxshow -
+ 	% does only work for single byte fonts
+	/xshow {
+		exch dup 					% a s s
+		length 0 1					% a s l(s) 1 1
+		3 -1 roll 1 sub				% a s 0 1 l(s)-1
+		{							% a s idx
+			dup 					% a s idx idx
+									% -- extract the delta offset
+			3 index exch get		% a s idx a[idx]
+									% -- extract the character
+			exch 					% a s a[idx] idx
+			2 index exch get		% a s a[idx] s[idx]
+									% -- create a tmp string for show
+			1 string dup 0			% a s a[idx] s[idx] s1 s1 0
+			4 -1 roll				% a s a[idx] s1 s1 0 s[idx]
+			put						% a s a[idx] s1
+									% -- store the current point
+			currentpoint 3 -1 roll	% a s a[idx] x y s1
+									% -- draw the character
+			show					% a s a[idx] x y  
+									% -- move to the offset
+			moveto 0 rmoveto		% a s
+		}
+		for
+		pop pop						% -
+	} def
+
+	% x y width height rectfill
+	% x y width height rectshow
+	% in contrast to the languagelevel 2 operator 
+	% they use and change the currentpath
+	/rectangle {
+		4 -2 roll			% width height x y 
+		moveto				% width height
+		1 index 0 rlineto	% width height	% rmoveto(width,  0)
+		0 exch rlineto		% width   		% rmoveto(0,      height)
+		neg 0 rlineto 		% -  			% rmoveto(-width, 0)
+		closepath
+	} def 
+
+	/rectfill   { rectangle fill   } def
+	/rectstroke { rectangle stroke } def
+}
+if 
+
+% -- small test program
+% 75 75 moveto /Times-Roman findfont 12 scalefont setfont
+% <292a2b2c2d2e2f30313233343536373839>
+% [5 5 6 6 6 6 6 6 6 6 6 6 7 7 7 7 5] xshow <21>[0] xshow 
+% showpage
+
+%
+%
+% shortcuts for image header with compression
+%
+%
+
+/psp_lzwfilter { 
+    currentfile /ASCII85Decode filter /LZWDecode filter 
+} def
+/psp_ascii85filter { 
+    currentfile /ASCII85Decode filter 
+} def
+/psp_lzwstring { 
+    psp_lzwfilter 1024 string readstring 
+} def
+/psp_ascii85string { 
+    psp_ascii85filter 1024 string readstring 
+} def
+/psp_imagedict {
+    /psp_bitspercomponent { 
+        3 eq 
+        { 1 }
+        { 8 } 
+        ifelse 
+    } def
+    /psp_decodearray { 
+        [ [0 1 0 1 0 1] [0 255] [0 1] [0 255] ] exch get 
+    } def 
+
+    7 dict dup
+        /ImageType 1                    put dup
+        /Width 7 -1 roll                put dup
+        /Height 5 index                 put dup
+        /BitsPerComponent 4 index 
+            psp_bitspercomponent        put dup
+        /Decode 5 -1 roll 
+            psp_decodearray             put dup
+        /ImageMatrix [1 0 0 1 0 0] dup 
+            5 8 -1 roll put             put dup
+        /DataSource 4 -1 roll 
+            1 eq 
+            { psp_lzwfilter } 
+            { psp_ascii85filter } 
+            ifelse                      put
+} def
+
+
+%
+%
+% font encoding and reencoding
+%
+%
+
+/ISO1252Encoding [
+    /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+    /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+    /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+    /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+    /space /exclam /quotedbl /numbersign /dollar /percent /ampersand /quotesingle
+    /parenleft /parenright /asterisk /plus /comma /hyphen /period /slash
+    /zero /one /two /three /four /five /six /seven
+    /eight /nine /colon /semicolon /less /equal /greater /question
+    /at /A /B /C /D /E /F /G
+    /H /I /J /K /L /M /N /O
+    /P /Q /R /S /T /U /V /W
+    /X /Y /Z /bracketleft /backslash /bracketright /asciicircum /underscore
+    /grave /a /b /c /d /e /f /g
+    /h /i /j /k /l /m /n /o
+    /p /q /r /s /t /u /v /w
+    /x /y /z /braceleft /bar /braceright /asciitilde /unused
+    /Euro /unused /quotesinglbase /florin /quotedblbase /ellipsis /dagger /daggerdbl
+    /circumflex /perthousand /Scaron /guilsinglleft /OE /unused /Zcaron /unused
+    /unused /quoteleft /quoteright /quotedblleft /quotedblright /bullet /endash /emdash
+    /tilde /trademark /scaron /guilsinglright /oe /unused /zcaron /Ydieresis
+    /space /exclamdown /cent /sterling /currency /yen /brokenbar /section
+    /dieresis /copyright /ordfeminine /guillemotleft /logicalnot /hyphen /registered /macron
+    /degree /plusminus /twosuperior /threesuperior /acute /mu /paragraph /periodcentered
+    /cedilla /onesuperior /ordmasculine /guillemotright /onequarter /onehalf /threequarters /questiondown
+    /Agrave /Aacute /Acircumflex /Atilde /Adieresis /Aring /AE /Ccedilla
+    /Egrave /Eacute /Ecircumflex /Edieresis /Igrave /Iacute /Icircumflex /Idieresis
+    /Eth /Ntilde /Ograve /Oacute /Ocircumflex /Otilde /Odieresis /multiply
+    /Oslash /Ugrave /Uacute /Ucircumflex /Udieresis /Yacute /Thorn /germandbls
+    /agrave /aacute /acircumflex /atilde /adieresis /aring /ae /ccedilla
+    /egrave /eacute /ecircumflex /edieresis /igrave /iacute /icircumflex /idieresis
+    /eth /ntilde /ograve /oacute /ocircumflex /otilde /odieresis /divide
+    /oslash /ugrave /uacute /ucircumflex /udieresis /yacute /thorn /ydieresis
+] def
+
+% /fontname /encoding psp_findfont 
+/psp_findfont {
+    exch dup                % encoding fontname fontname 
+    findfont                % encoding fontname
+    dup length dict 
+    begin
+    {  
+        1 index /FID ne
+        { def }
+        { pop pop }
+        ifelse
+    } forall
+    /Encoding 3 -1 roll def
+    currentdict 
+    end
+    /psp_reencodedfont exch definefont
+} def
+
+% bshow shows a text in artificial bold
+% this is achieved by first showing the text
+% then stroking its outline over it with
+% the linewidth set to the second parameter
+% usage: (string) num bshow
+
+/bshow {
+  currentlinewidth		% save current linewidth
+  3 1 roll				% move it to the last stack position
+  currentpoint			% save the current point
+  3 index				% copy the string to show
+  show					% show it
+  moveto				% move to the original coordinates again
+  setlinewidth			% set the linewidth
+  false charpath		% create the outline path of the shown string
+  stroke				% and stroke it
+  setlinewidth			% reset the stored linewidth
+} def
+
+% bxshow shows a text with a delta array in artificial bold
+% that is it does what bshow does for show
+% usage: (string) [deltaarray] num bxshow
+
+/bxshow {
+  currentlinewidth		% save linewidth
+  4 1 roll				% move it to the last stack position
+  setlinewidth			% set the new linewidth
+  exch					% exchange string and delta array
+  dup
+  length				% get length of string
+  1 sub					% prepare parameters for {} for
+  0 1
+  3 -1 roll
+  {
+    1 string			% create a string object length 1
+    2 index				% get the text
+    2 index				% get charpos (for index variable)
+    get					% have char value at charpos
+    1 index				% prepare string for put
+    exch
+    0
+    exch
+    put					% put into string of length 1
+    dup					% duplicate the it
+    currentpoint		% save current position
+    3 -1 roll			% prepare show
+    show				% show the character
+    moveto				% move back to beginning
+    currentpoint		% save current position
+    3 -1 roll			% prepare outline path of character
+    false charpath
+    stroke				% stroke it
+    moveto				% move back
+    % now move to next point
+    2 index				% get advance array
+    exch				% get charpos
+    get					% get advance element
+    0 rmoveto			% advance current position
+  } for
+  pop pop				% remove string and delta array
+  setlinewidth			% restore linewidth
+} def

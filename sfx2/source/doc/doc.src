@@ -1,0 +1,503 @@
+﻿/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include <sfx2/sfx.hrc>
+#include "doc.hrc"
+#define __RSC
+#include <svl/inetdef.hxx>
+
+
+ // -----------------------------------------------------------------------
+QueryBox MSG_CONFIRM_FILTER
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_YES ;
+    Message [ en-US ] = "Saving in external formats may have caused\n information loss. Do you still want to close?" ;
+};
+QueryBox MSG_CONFIRM_OVERWRITE_TEMPLATE
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_NO ;
+    Message [ en-US ] = "Name already in use.\nDo you want to overwrite document template?" ;
+};
+String STR_DELETE_REGION
+{
+    Text [ en-US ] = "Are you sure you want to delete the region \"$1\"?" ;
+};
+String STR_DELETE_TEMPLATE
+{
+    Text [ en-US ] = "Are you sure you want to delete the entry \"$1\"?" ;
+};
+QueryBox MSG_REGION_NOTEMPTY
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_NO ;
+    Message [ en-US ] = "The category is not empty.\nDelete anyway?" ;
+};
+String STR_QUERY_SAVE_DOCUMENT
+{
+    Text [ en-US ] = "The document \"$(DOC)\" has been modified.\nDo you want to save your changes?" ;
+};
+Bitmap BMP_STYLES_CLOSED { File = "newex.bmp" ; };
+Bitmap BMP_STYLES_OPENED { File = "newex.bmp" ; };
+
+String STR_STYLES
+{
+    Text [ en-US ] = "Styles" ;
+};
+String STR_MACROS
+{
+    Text [ en-US ] = "Macros" ;
+};
+String STR_CONFIG
+{
+    Text [ en-US ] = "Configuration" ;
+};
+String STR_PRINT_STYLES_HEADER
+{
+    Text [ en-US ] = "Styles in " ;
+};
+String STR_PRINT_STYLES
+{
+    Text [ en-US ] = "Printing Styles" ;
+};
+Bitmap BMP_STYLES_FAMILY1 { File = "styfam1.bmp" ; };
+Bitmap BMP_STYLES_FAMILY2 { File = "styfam2.bmp" ; };
+Bitmap BMP_STYLES_FAMILY3 { File = "styfam3.bmp" ; };
+Bitmap BMP_STYLES_FAMILY4 { File = "styfam4.bmp" ; };
+
+ErrorBox MSG_PRINT_ERROR
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message [ en-US ] = "The print job could not be started." ;
+};
+String STR_BACKUP_COPY
+{
+    Text [ en-US ] = "Copy" ;
+};
+InfoBox MSG_CANT_OPEN_TEMPLATE
+{
+    Message [ en-US ] = "The template could not be opened." ;
+};
+InfoBox MSG_VIEW_OPEN_CANT_SAVE
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message [ en-US ] = "Document already open for editing." ;
+};
+String STR_ERROR_SAVE
+{
+    Text [ en-US ] = "Error recording document " ;
+};
+String STR_TEMPLATE_FILTER
+{
+    Text [ en-US ] = "Templates" ;
+};
+String STR_ERROR_COPY_TEMPLATE
+{
+    Text [ en-US ] = "Error copying template \"$1\". \nA template with this name may already exist." ;
+};
+String STR_ERROR_DELETE_TEMPLATE
+{
+    Text [ en-US ] = "The template \"$1\" can not be deleted." ;
+};
+String STR_ERROR_MOVE_TEMPLATE
+{
+    Text [ en-US ] = "Error moving template \"$1\"." ;
+};
+ErrorBox MSG_ERROR_RESCAN
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message [ en-US ] = "The update could not be saved." ;
+};
+String STR_ERROR_SAVE_TEMPLATE
+{
+    Text [ en-US ] = "Error saving template " ;
+};
+ErrorBox MSG_ERROR_RENAME_TEMPLATE
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message [ en-US ] = "Error renaming template." ;
+};
+ErrorBox MSG_ERROR_RENAME_TEMPLATE_REGION
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message [ en-US ] = "Error renaming template category." ;
+};
+ErrorBox MSG_ERROR_EMPTY_NAME
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message [ en-US ] = "Please specify a name." ;
+};
+ErrorBox MSG_ERROR_UNIQ_NAME
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message [ en-US ] = "Please specify a unique name.\nEntries must not be case specific." ;
+};
+String STR_QUERY_DEFAULT_TEMPLATE
+{
+    Text [ en-US ] = "Should the template \"$(TEXT)\" become the default template?" ;
+};
+QueryBox MSG_QUERY_RESET_DEFAULT_TEMPLATE
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_NO ;
+    Message [ en-US ] = "Do you want to reset the default template?" ;
+};
+InfoBox MSG_TEMPLATE_DIR_NOT_EXIST
+{
+    Message [ en-US ] = "Template directory\n$(DIR)\ndoes not exist." ;
+};
+InfoBox MSG_DOCINFO_CANTREAD
+{
+    Message [ en-US ] = "Document info cannot be read." ;
+};
+String STR_ERROR_NOSTORAGE
+{
+    Text [ en-US ] = "The selected file has an incorrect format." ;
+};
+String STR_QUERY_MUSTOWNFORMAT
+{
+    Text [ en-US ] = "Documents cannot be saved in $(FORMAT) format. Do you\nwant to save your changes using the $(OWNFORMAT) format?" ;
+};
+String STR_SAVEDOC
+{
+    Text [ en-US ] = "~Save" ;
+};
+String STR_UPDATEDOC
+{
+    Text [ en-US ] = "~Update" ;
+};
+String STR_SAVEASDOC
+{
+    Text [ en-US ] = "Save ~As..." ;
+};
+String STR_SAVECOPYDOC
+{
+    Text [ en-US ] = "Save Copy ~as..." ;
+};
+String STR_CLOSEDOC
+{
+    Text [ en-US ] = "~Close" ;
+};
+String STR_CLOSEDOC_ANDRETURN
+{
+    Text [ en-US ] = "~Close & Return to " ;
+};
+String STR_WIZARD
+{
+    Text [ en-US ] = " AutoPilot" ;
+};
+String RID_STR_FILTCONFIG
+{
+    Text [ en-US ] = "Configurations" ;
+};
+String RID_STR_FILTBASIC
+{
+    Text [ en-US ] = "%PRODUCTNAME Basic libraries" ;
+};
+String RID_STR_WARNSTYLEOVERWRITE
+{
+    Text [ en-US ] = "Should the \"$(ARG1)\" Style be replaced?" ;
+};
+String STR_DOC_LOADING
+{
+    Text [ en-US ] = "Loading Document" ;
+};
+Resource RID_DLSTATUS
+{
+    String INET_NAME_RESOLVE_START
+    {
+        Text [ en-US ] = "Connection to: $(HOST). Waiting for response..." ;
+    };
+    String INET_CONNECT_START
+    {
+        Text [ en-US ] = "Opening $(TARGET) at $(HOST)" ;
+    };
+    String INET_READ_STATUS
+    {
+        Text [ en-US ] = "Loading: $(TARGET) from $(HOST). Loaded: $(BYTE)" ;
+    };
+    String INET_CONNECTION_CLOSED
+    {
+        Text [ en-US ] = "Disconnected" ;
+    };
+};
+QueryBox MSG_OPEN_READONLY
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_YES ;
+    Message [ en-US ] = "Document cannot be opened for editing.\nDo you want to open it as read-only?" ;
+};
+String STR_EDIT
+{
+    Text [ en-US ] = "Edit" ;
+};
+String RID_OFFICEFILTER
+{
+    Text [ en-US ] = "%PRODUCTNAME Documents" ;
+};
+String RID_OFFICEFILTER_WILDCARD
+{
+    Text = "*.sdw;*.sdd;*.sda;*.sdc;*.smf;*.sds;*.sd;*.sdm;*.smd" ;
+};
+String RID_OFFICEFILTER_MACTYPE
+{
+    Text = "SVsd0;SW/\2510;SVsc0;SVsm0;SVsh0;SVsd1;SW/\2511;SVsc1;SVsm1;SVsh1;MAIL" ;
+};
+String RID_OFFICEFILTER_OS2TYPE
+{
+    Text = "StarWriter 4.0;StarWriter 3.0;StarDraw 4.0;StarDraw 3.0;StarCalc 4.0;StarCalc 3.0;StarMath 4.0;StarMath 3.0;StarChart 4.0;StarChart 3.0;StarFrameSet;StarMessage" ;
+};
+String STR_FRAMEOBJECT_PROPERTIES
+{
+    Text [ en-US ] = "Propert~ies..." ;
+};
+String STR_FSET_FILTERNAME0
+{
+    Text [ en-US ] = "HTML (FrameSet)" ;
+};
+String STR_FSET_FILTERNAME1
+{
+    // only translate 'Document'
+    Text [ en-US ] = "%PRODUCTNAME Frame Document" ;
+};
+String STR_TEMPL_MOVED
+{
+    Text [ en-US ] = "The template \"$(TEMPLATE)\" was not found at the original location. A template with the same name exists at \"$(FOUND)\". Should this template be used in the future when comparing?" ;
+};
+String STR_TEMPL_RESET
+{
+    Text [ en-US ] = "The template \"$(TEMPLATE)\" has not been found. Should the template be looked for the next time the document is opened ?" ;
+};
+String STR_AUTOMATICVERSION
+{
+    Text [ en-US ] = "Automatically saved version" ;
+};
+
+String STR_DOCTYPENAME_SW
+{
+    Text [ en-US ] = "Text Document";
+};
+
+String STR_DOCTYPENAME_SWWEB
+{
+    Text [ en-US ] = "HTML Document";
+};
+
+String STR_DOCTYPENAME_SWGLOB
+{
+    Text [ en-US ] = "Master Document";
+};
+
+String STR_DOCTYPENAME_SC
+{
+    Text [ en-US ] = "Spreadsheet";
+};
+
+String STR_DOCTYPENAME_SI
+{
+    Text [ en-US ] = "Presentation";
+};
+
+String STR_DOCTYPENAME_SD
+{
+    Text [ en-US ] = "Drawing";
+};
+
+String STR_DOCTYPENAME_MESSAGE
+{
+    Text [ en-US ] = "Message";
+};
+
+String STR_NOSAVEANDCLOSE
+{
+    Text [ en-US ] = "~Discard" ;
+};
+
+String STR_PACKNGO_NOACCESS
+{
+    Text [ en-US ] = "Access to the current data medium not possible." ;
+};
+
+String STR_PACKNGO_NEWMEDIUM
+{
+    Text [ en-US ] = "Insert the next data carrier and click OK." ;
+};
+
+String STR_OBJECT
+{
+    Text [ en-US ] = "Object" ;
+};
+
+QueryBox DLG_MACROQUERY
+{
+    Buttons = WB_OK_CANCEL;
+    Title [ en-US ] = "Run Macro" ;
+
+    Message [ en-US ] = "This document contains macros. $(TEXT)";
+};
+
+String BTN_OK
+{
+    Text [ en-US ] = "Run" ;
+};
+String BTN_CANCEL
+{
+    Text [ en-US ] = "Do Not Run" ;
+};
+String FT_CANCEL
+{
+    Text [ en-US ] = "According to the security settings, the macros in this document should not be run. Do you want to run them anyway?";
+};
+String FT_OK
+{
+    Text [ en-US ] = "Do you want to allow these macros to be run?";
+};
+
+String STR_EXPORTASPDF_TITLE
+{
+    Text [ en-US ] = "Export as PDF";
+};
+
+String STR_EXPORTWITHCFGBUTTON
+{
+    Text [ en-US ] = "Export...";
+};
+
+String STR_EXPORTBUTTON
+{
+    Text [ en-US ] = "Export" ;
+};
+
+String RID_SVXSTR_SECURITY_ADDPATH
+{
+    Text [ en-US ] = "Add this directory to the list of secure paths: " ;
+};
+
+String STR_LABEL_FILEFORMAT
+{
+    Text [ en-US ] = "File format:" ;
+};
+
+String STR_HIDDENINFO_CONTAINS
+{
+    Text [ en-US ] = "This document contains:\n\n" ;
+};
+String STR_HIDDENINFO_RECORDCHANGES
+{
+    Text [ en-US ] = "Recorded changes" ;
+};
+String STR_HIDDENINFO_NOTES
+{
+    Text [ en-US ] = "Notes" ;
+};
+String STR_HIDDENINFO_DOCVERSIONS
+{
+    Text [ en-US ] = "Document versions" ;
+};
+String STR_HIDDENINFO_FIELDS
+{
+    Text [ en-US ] = "Fields" ;
+};
+String STR_HIDDENINFO_LINKDATA
+{
+    Text [ en-US ] = "Linked data..." ;
+};
+String STR_HIDDENINFO_CONTINUE_SAVING
+{
+    Text [ en-US ] = "Do you want to continue saving the document?" ;
+};
+String STR_HIDDENINFO_CONTINUE_PRINTING
+{
+    Text [ en-US ] = "Do you want to continue printing the document?" ;
+};
+String STR_HIDDENINFO_CONTINUE_SIGNING
+{
+    Text [ en-US ] = "Do you want to continue signing the document?" ;
+};
+String STR_HIDDENINFO_CONTINUE_CREATEPDF
+{
+    Text [ en-US ] = "Do you want to continue creating a PDF file?" ;
+};
+
+String STR_NEW_FILENAME_SAVE
+{
+    Text [ en-US ] = "If you do not want to overwrite the original document, you should save your work under a new filename." ;
+};
+
+String STR_ERROR_DELETE_TEMPLATE_DIR
+{
+    Text [ en-US ] = "Some template files are protected and can not be deleted.";
+};
+
+String STR_DOCINFO_INFOFIELD
+{
+    Text [ en-US ] = "Info %1";
+    Text [ x-comment ] = "pb: %1 == a number [1-4]";
+};
+
+String STR_SHARED
+{
+    Text [ en-US ] = " (shared)";
+    Text [ x-comment ] = "Used in the title of a shared document.";
+};
+
+String STR_XMLSEC_ODF12_EXPECTED
+{
+    Text [ en-US ] = "The document format version is set to ODF 1.1 (OpenOffice.org 2.x) in Tools-Options-Load/Save-General. Signing documents requires ODF 1.2 (OpenOffice.org 3.x).";
+};
+
+QueryBox MSG_XMLSEC_QUERY_SAVESIGNEDBEFORESIGN
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_YES ;
+    Message [ en-US ] = "The document has to be saved before it can be signed. Saving the document removes all present signatures.\nDo you want to save the document?";
+};
+
+String STR_QRYTEMPL_MESSAGE
+{
+    Text [ en-US ] = "The template '$(ARG1)' on which this document is based, has been modified. Do you want to update style based formattings according to the modified template?";
+};
+
+String STR_QRYTEMPL_UPDATE_BTN
+{
+    Text [ en-US ] = "~Update Styles";
+};
+
+String STR_QRYTEMPL_KEEP_BTN
+{
+    Text [ en-US ] = "~Keep Old Styles";
+};
+
+// ******************************************************************* EOF
+

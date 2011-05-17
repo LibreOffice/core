@@ -1,0 +1,68 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart2_PropertyPool_idl
+#define com_sun_star_chart2_PropertyPool_idl
+
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/style/Style.idl>
+#include <com/sun/star/style/XDefaultsSupplier.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+
+service PropertyPool
+{
+    /** must be usable as a style
+     */
+    service  ::com::sun::star::style::Style;
+
+    /** must provide defaults for all properties
+
+        <p>As the service
+        <type scope="com::sun::star::style">Style</type> implies the
+        implementation of
+        <type scope="com::sun::star::beans">XPropertySet</type>, the
+        method
+        <member scope="com::sun::star::style">XDefaultsSupplier::getDefaults</member>
+        should return itself.
+     */
+    interface  ::com::sun::star::style::XDefaultsSupplier;
+};
+
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+
+#endif

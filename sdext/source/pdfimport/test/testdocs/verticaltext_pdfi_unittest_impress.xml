@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document office:version="1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+<office:automatic-styles >
+<style:page-layout style:name="page-layout2" >
+<style:page-layout-properties fo:margin-bottom="10mm" fo:margin-left="36mm" fo:margin-right="10mm" fo:margin-top="60mm" fo:page-height="297.03mm" fo:page-width="209.9mm" style:print-orientation="portrait" style:writing-mode="lr-tb" >
+
+</style:page-layout-properties>
+
+</style:page-layout>
+<style:style style:family="graphic" style:name="graphic5" >
+<style:graphic-properties draw:auto-grow-height="true" draw:auto-grow-width="true" draw:fill="none" draw:stroke="none" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="top" fo:padding-bottom="0cm" fo:padding-left="0cm" fo:padding-right="0cm" fo:padding-top="0cm" >
+
+</style:graphic-properties>
+
+</style:style>
+<style:style style:family="text" style:name="text7" >
+<style:text-properties fo:color="#000000" fo:font-family="Albany" fo:font-size="18pt" style:font-size-asian="18pt" style:font-size-complex="18pt" >
+
+</style:text-properties>
+
+</style:style>
+</office:automatic-styles>
+<office:styles >
+</office:styles>
+<office:master-styles >
+<style:master-page style:name="master-page3" style:page-layout-name="page-layout2" >
+
+</style:master-page>
+</office:master-styles>
+<office:body >
+<office:presentation >
+<draw:page draw:master-page-name="master-page3" >
+<draw:frame draw:style-name="graphic5" draw:transform="rotate( -1.5707963267949 ) translate( 121.28mm 64.24mm )" draw:z-index="13" svg:height="6.35mm" svg:width="4.22mm" >
+<draw:text-box >
+<text:p >
+<text:span text:style-name="text7" >
+B
+</text:span>
+</text:p>
+</draw:text-box>
+</draw:frame>
+<draw:frame draw:style-name="graphic5" draw:transform="rotate( -1.5707963267949 ) translate( 121.28mm 60mm )" draw:z-index="12" svg:height="6.35mm" svg:width="4.22mm" >
+<draw:text-box >
+<text:p >
+<text:span text:style-name="text7" >
+A
+</text:span>
+</text:p>
+</draw:text-box>
+</draw:frame>
+<draw:frame draw:style-name="graphic5" draw:transform="rotate( -1.5707963267949 ) translate( 121.28mm 68.47mm )" draw:z-index="14" svg:height="6.35mm" svg:width="4.22mm" >
+<draw:text-box >
+<text:p >
+<text:span text:style-name="text7" >
+S
+</text:span>
+</text:p>
+</draw:text-box>
+</draw:frame>
+<draw:frame draw:style-name="graphic5" draw:transform="rotate( -1.5707963267949 ) translate( 121.28mm 72.71mm )" draw:z-index="15" svg:height="6.35mm" svg:width="3.53mm" >
+<draw:text-box >
+<text:p >
+<text:span text:style-name="text7" >
+4
+</text:span>
+</text:p>
+</draw:text-box>
+</draw:frame>
+<draw:frame draw:style-name="graphic5" draw:transform="rotate( 1.5707963267949 ) translate( 151.23mm 78.45mm )" draw:z-index="7" svg:height="6.35mm" svg:width="3.53mm" >
+<draw:text-box >
+<text:p >
+<text:span text:style-name="text7" >
+2
+</text:span>
+</text:p>
+</draw:text-box>
+</draw:frame>
+<draw:frame draw:style-name="graphic5" draw:transform="rotate( 1.5707963267949 ) translate( 151.23mm 82.69mm )" draw:z-index="6" svg:height="6.35mm" svg:width="4.22mm" >
+<draw:text-box >
+<text:p >
+<text:span text:style-name="text7" >
+S
+</text:span>
+</text:p>
+</draw:text-box>
+</draw:frame>
+<draw:frame draw:style-name="graphic5" draw:transform="rotate( 1.5707963267949 ) translate( 151.23mm 86.96mm )" draw:z-index="5" svg:height="6.35mm" svg:width="4.22mm" >
+<draw:text-box >
+<text:p >
+<text:span text:style-name="text7" >
+B
+</text:span>
+</text:p>
+</draw:text-box>
+</draw:frame>
+<draw:frame draw:style-name="graphic5" draw:transform="rotate( 1.5707963267949 ) translate( 151.23mm 91.15mm )" draw:z-index="4" svg:height="6.35mm" svg:width="4.22mm" >
+<draw:text-box >
+<text:p >
+<text:span text:style-name="text7" >
+A
+</text:span>
+</text:p>
+</draw:text-box>
+</draw:frame>
+<draw:frame draw:style-name="graphic5" draw:transform="rotate( -1.5707963267949 ) translate( 48.78mm 102.51mm )" draw:z-index="0" svg:height="6.35mm" svg:width="4.22mm" >
+<draw:text-box >
+<text:p >
+<text:span text:style-name="text7" >
+A
+</text:span>
+</text:p>
+</draw:text-box>
+</draw:frame>
+<draw:frame draw:style-name="graphic5" draw:transform="rotate( -1.5707963267949 ) translate( 48.78mm 110.98mm )" draw:z-index="2" svg:height="6.35mm" svg:width="4.22mm" >
+<draw:text-box >
+<text:p >
+<text:span text:style-name="text7" >
+S
+</text:span>
+</text:p>
+</draw:text-box>
+</draw:frame>
+<draw:frame draw:style-name="graphic5" draw:transform="rotate( -1.5707963267949 ) translate( 48.78mm 106.75mm )" draw:z-index="1" svg:height="6.35mm" svg:width="4.22mm" >
+<draw:text-box >
+<text:p >
+<text:span text:style-name="text7" >
+B
+</text:span>
+</text:p>
+</draw:text-box>
+</draw:frame>
+<draw:frame draw:style-name="graphic5" draw:transform="rotate( -1.5707963267949 ) translate( 48.78mm 115.22mm )" draw:z-index="3" svg:height="6.35mm" svg:width="3.53mm" >
+<draw:text-box >
+<text:p >
+<text:span text:style-name="text7" >
+1
+</text:span>
+</text:p>
+</draw:text-box>
+</draw:frame>
+<draw:frame draw:style-name="graphic5" draw:transform="rotate( 1.5707963267949 ) translate( 161.71mm 159.76mm )" draw:z-index="19" svg:height="6.35mm" svg:width="3.53mm" >
+<draw:text-box >
+<text:p >
+<text:span text:style-name="text7" >
+5
+</text:span>
+</text:p>
+</draw:text-box>
+</draw:frame>
+<draw:frame draw:style-name="graphic5" draw:transform="rotate( 1.5707963267949 ) translate( 161.71mm 162.94mm )" draw:z-index="18" svg:height="6.35mm" svg:width="3.17mm" >
+<draw:text-box >
+<text:p >
+<text:span text:style-name="text7" >
+s
+</text:span>
+</text:p>
+</draw:text-box>
+</draw:frame>
+<draw:frame draw:style-name="graphic5" draw:transform="rotate( 1.5707963267949 ) translate( 161.71mm 170.7mm )" draw:z-index="16" svg:height="6.35mm" svg:width="4.22mm" >
+<draw:text-box >
+<text:p >
+<text:span text:style-name="text7" >
+A
+</text:span>
+</text:p>
+</draw:text-box>
+</draw:frame>
+<draw:frame draw:style-name="graphic5" draw:transform="rotate( 1.5707963267949 ) translate( 161.71mm 166.47mm )" draw:z-index="17" svg:height="6.35mm" svg:width="3.53mm" >
+<draw:text-box >
+<text:p >
+<text:span text:style-name="text7" >
+b
+</text:span>
+</text:p>
+</draw:text-box>
+</draw:frame>
+<draw:frame draw:style-name="graphic5" draw:transform="rotate( 1.5707963267949 ) translate( 36.69mm 230.18mm )" draw:z-index="11" svg:height="6.35mm" svg:width="3.53mm" >
+<draw:text-box >
+<text:p >
+<text:span text:style-name="text7" >
+3
+</text:span>
+</text:p>
+</draw:text-box>
+</draw:frame>
+<draw:frame draw:style-name="graphic5" draw:transform="rotate( 1.5707963267949 ) translate( 36.69mm 233.35mm )" draw:z-index="10" svg:height="6.35mm" svg:width="3.17mm" >
+<draw:text-box >
+<text:p >
+<text:span text:style-name="text7" >
+s
+</text:span>
+</text:p>
+</draw:text-box>
+</draw:frame>
+<draw:frame draw:style-name="graphic5" draw:transform="rotate( 1.5707963267949 ) translate( 36.69mm 241.12mm )" draw:z-index="8" svg:height="6.35mm" svg:width="4.22mm" >
+<draw:text-box >
+<text:p >
+<text:span text:style-name="text7" >
+A
+</text:span>
+</text:p>
+</draw:text-box>
+</draw:frame>
+<draw:frame draw:style-name="graphic5" draw:transform="rotate( 1.5707963267949 ) translate( 36.69mm 236.88mm )" draw:z-index="9" svg:height="6.35mm" svg:width="3.53mm" >
+<draw:text-box >
+<text:p >
+<text:span text:style-name="text7" >
+b
+</text:span>
+</text:p>
+</draw:text-box>
+</draw:frame>
+</draw:page>
+</office:presentation>
+</office:body>
+</office:document>

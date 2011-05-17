@@ -1,0 +1,195 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _DBU_QRY_HRC_
+#include "dbu_qry.hrc"
+#endif
+#ifndef DBAUI_QUERYDLG_HRC
+#include "querydlg.hrc"
+#endif
+#include "dbaccess_helpid.hrc"
+
+ModalDialog DLG_QRY_JOIN
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    HelpId = HID_DLG_QRY_JOIN ;
+    Size = MAP_APPFONT ( 265, 219 ) ;
+
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+
+    Window WND_JOIN_CONTROL
+    {
+        Pos = MAP_APPFONT( 0, 0 );
+        Size = MAP_APPFONT( 203, 44 );
+        DialogControl = TRUE;
+        HelpId        = HID_DLG_QRY_JOIN_CONTROL ;
+        FixedLine FL_JOIN
+        {
+            Pos = MAP_APPFONT ( 6 , 3 ) ;
+            Size = MAP_APPFONT ( 191 , 8 ) ;
+            Text [ en-US ] = "Options";
+        };
+
+        FixedText FT_LISTBOXTITLE
+        {
+            Pos = MAP_APPFONT ( 12 , 16 ) ;
+            Size = MAP_APPFONT ( 89 , 8 ) ;
+
+            Text [ en-US ] = "~Type";
+        };
+
+        ListBox LB_JOINTYPE
+        {
+            Pos             = MAP_APPFONT ( 101 , 15 ) ;
+            Size            = MAP_APPFONT ( 90 , 60 ) ;
+            HelpId          = HID_DLG_QRY_JOINTYPE ;
+
+            DropDown        = TRUE;
+            DDExtraWidth    = TRUE;
+            StringList [ en-US ] =
+            {
+                < "Inner join"          ; ID_INNER_JOIN;    > ;
+                < "Left join"           ; ID_LEFT_JOIN;     > ;
+                < "Right join"          ; ID_RIGHT_JOIN;    > ;
+                < "Full (outer) join"   ; ID_FULL_JOIN;     > ;
+                < "Cross join"          ; ID_CROSS_JOIN;    > ;
+            };
+        };
+        CheckBox CB_NATURAL
+        {
+            HelpID = "dbaccess:CheckBox:DLG_QRY_JOIN:CB_NATURAL";
+            Pos = MAP_APPFONT ( 101 , 31 ) ;
+            Size = MAP_APPFONT ( 89 , 8 ) ;
+
+            Text [ en-US ] = "Natural";
+        };
+    };
+
+    Window WND_CONTROL
+    {
+        Pos = MAP_APPFONT( 0, 0 );
+        Size = MAP_APPFONT( 203, 153 );
+        DialogControl = TRUE;
+        HelpId        = HID_DLG_QRY_WINDOW_CONTROL ;
+
+        FixedLine FL_INVOLVED_TABLES
+        {
+            Pos = MAP_APPFONT ( 6 , 3 ) ;
+            Size = MAP_APPFONT ( 191 , 8 ) ;
+            Text [ en-US ] = "Tables involved";
+        };
+
+        ListBox LB_LEFT_TABLE
+        {
+            Border = TRUE;
+            Pos = MAP_APPFONT( 12, 14 );
+            Size = MAP_APPFONT( 87, 60 );
+            HelpId        = HID_DLG_QRY_LEFT_TABLE ;
+            DropDown = TRUE;
+            TabStop = TRUE;
+        };
+
+        ListBox LB_RIGHT_TABLE
+        {
+            Border = TRUE;
+            Pos = MAP_APPFONT( 104, 14 );
+            Size = MAP_APPFONT( 87, 60 );
+            HelpId        = HID_DLG_QRY_RIGHT_TABLE ;
+            DropDown = TRUE;
+            TabStop = TRUE;
+        };
+
+        FixedLine FL_INVOLVED_FIELDS
+        {
+            Pos = MAP_APPFONT ( 6 , 29 ) ;
+            Size = MAP_APPFONT ( 191 , 8 ) ;
+            Text [ en-US ] = "Fields involved";
+        };
+    };
+
+    FixedText ML_HELPTEXT
+    {
+        Pos             = MAP_APPFONT ( 12 , 159 ) ;
+        Size            = MAP_APPFONT ( 179 , 49 ) ;
+        UniqueId        = HID_DLG_QRY_HELPTEXT ;
+        SVLook          = TRUE;
+        WordBreak       = TRUE;
+    };
+
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 206 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 206 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 206 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+
+    Text [ en-US ] = "Join Properties";
+};
+
+String STR_JOIN_TYPE_HINT
+{
+    Text [ en-US ] = "Please note that some databases may not support this join type.";
+};
+
+String STR_QUERY_INNER_JOIN
+{
+    Text [ en-US ] = "Includes only records for which the contents of the related fields of both tables are identical.";
+};
+
+String STR_QUERY_LEFTRIGHT_JOIN
+{
+    Text [ en-US ] = "Contains ALL records from table '%1' but only records from table '%2' where the values in the related fields are matching.";
+};
+
+String STR_QUERY_FULL_JOIN
+{
+    Text [ en-US ] = "Contains ALL records from '%1' and from '%2'.";
+};
+
+String STR_QUERY_CROSS_JOIN
+{
+    Text [ en-US ] = "Contains the cartesian product of ALL records from '%1' and from '%2'.";
+};
+
+String STR_QUERY_NATURAL_JOIN
+{
+    Text [ en-US ] = "Contains only one column for each pair of equally-named columns from '%1' and from '%2'.";
+};

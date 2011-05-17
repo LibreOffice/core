@@ -1,0 +1,72 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_ui_dialogs_XFilterGroupManager_idl__
+#define __com_sun_star_ui_dialogs_XFilterGroupManager_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/beans/StringPair.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+module com {  module sun {  module star {  module ui { module dialogs {
+
+//=============================================================================
+/** Specifies an interface which allows manipulation of groups of filters
+    for the <type>FilePicker</type> service.
+*/
+published interface XFilterGroupManager : com::sun::star::uno::XInterface
+{
+    /** Appends a group of filters to the current filter list.
+
+        <p>It is implementation dependent how the filter groups are presented to the user.<br/>
+        It is not even guaranteed that the groups are visualized: implementations are free to simply
+        append all the filters separately, with ignoring the group title.</p>
+
+    @param sGroupTitle
+        The title of the filter group. Usually, the caller should localize this title, as it is to be presented to
+        the user.
+
+    @param aFilters
+        The filters which form a group. Every filter consists of two strings, where the first one is a display name
+        (as for <arg>sGroupTitle</arg>, it holds that these strings should be localized), and the second one the
+        semicolon separated list of wildcard expressions for the filter.<br/>
+        Usually, the expressions are simply extensions (e.g. "*.txt"), but this must no necessarily be the case.
+
+    @throws com::sun::star::lang::IllegalArgumentException
+    if one or more filters in the given filter list already exist.
+
+    @see com::sun::star::ui::dialogs::XFilterManager
+    @see com::sun::star::ui::dialogs::FilePicker
+    */
+    void appendFilterGroup(
+        [in] string sGroupTitle,
+        [in] sequence< com::sun::star::beans::StringPair > aFilters
+    )
+    raises( com::sun::star::lang::IllegalArgumentException );
+};
+
+}; }; }; }; };
+#endif

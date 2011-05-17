@@ -1,0 +1,14 @@
+..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%
+..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
+
+..\source\win32\clipb\sysdtrans.xml %_DEST%\xml%_EXT%\sysdtrans.xml
+..\source\win32\dnd\dnd.xml %_DEST%\xml%_EXT%\dnd.xml
+..\source\win32\ftransl\ftransl.xml %_DEST%\xml%_EXT%\ftransl.xml
+..\source\cnttype\mcnttype.xml %_DEST%\xml%_EXT%\mcnttype.xml
+..\source\generic\dtrans.xml %_DEST%\xml%_EXT%\dtrans.xml
+..\%__SRC%\misc\dnd.component %_DEST%\xml%_EXT%\dnd.component
+..\%__SRC%\misc\dtrans.component %_DEST%\xml%_EXT%\dtrans.component
+..\%__SRC%\misc\ftransl.component %_DEST%\xml%_EXT%\ftransl.component
+..\%__SRC%\misc\mcnttype.component %_DEST%\xml%_EXT%\mcnttype.component
+..\%__SRC%\misc\sysdtrans.component %_DEST%\xml%_EXT%\sysdtrans.component

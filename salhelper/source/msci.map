@@ -1,0 +1,50 @@
+UDK_3_0_0 {
+    global:
+GetVersionInfo
+??0ORealDynamicLoader@salhelper@@IAE@PAPAV01@ABVOUString@rtl@@1PAX2@Z
+??1ORealDynamicLoader@salhelper@@MAE@XZ
+??_7ORealDynamicLoader@salhelper@@6B@
+?acquire@ORealDynamicLoader@salhelper@@QAAKXZ
+?getApi@ORealDynamicLoader@salhelper@@QBAPAXXZ
+?newInstance@ORealDynamicLoader@salhelper@@SAPAV12@PAPAV12@ABVOUString@rtl@@1@Z
+?release@ORealDynamicLoader@salhelper@@QAAKXZ
+??1SimpleReferenceObject@salhelper@@MAE@XZ
+??2SimpleReferenceObject@salhelper@@SAPAXI@Z
+??2SimpleReferenceObject@salhelper@@SAPAXIABUnothrow_t@std@@@Z
+??3SimpleReferenceObject@salhelper@@SAXPAX@Z
+??3SimpleReferenceObject@salhelper@@SAXPAXABUnothrow_t@std@@@Z
+    local:
+        *;
+};
+
+UDK_3.1 {
+    global:
+        ??_VSimpleReferenceObject@salhelper@@KAXPAX@Z;
+        ??_7SimpleReferenceObject@salhelper@@6B@;
+
+        ??0Condition@salhelper@@QAE@AAVMutex@osl@@@Z;
+        ??1Condition@salhelper@@UAE@XZ;
+
+        ??0ConditionModifier@salhelper@@QAE@AAVCondition@1@@Z;
+        ??1ConditionModifier@salhelper@@QAE@XZ;
+
+        ??0ConditionWaiter@salhelper@@QAE@AAVCondition@1@@Z;
+        ??0ConditionWaiter@salhelper@@QAE@AAVCondition@1@K@Z;
+        ??1ConditionWaiter@salhelper@@QAE@XZ;
+
+        ??0timedout@ConditionWaiter@salhelper@@QAE@XZ;
+        ??0timedout@ConditionWaiter@salhelper@@QAE@ABU012@@Z;
+        ??1timedout@ConditionWaiter@salhelper@@UAE@XZ;
+        ??4timedout@ConditionWaiter@salhelper@@QAEAAU012@ABU012@@Z;
+
+        ??0Timer@salhelper@@QAE@XZ;
+        ??0Timer@salhelper@@QAE@ABUTTimeValue@1@@Z;
+        ??0Timer@salhelper@@QAE@ABUTTimeValue@1@0@Z;
+        ??1Timer@salhelper@@MAE@XZ;
+
+        ?isExpired@Timer@salhelper@@QBAEXZ;
+        ?isTicking@Timer@salhelper@@QBAEXZ;
+        ?setRemainingTime@Timer@salhelper@@QAAXABUTTimeValue@2@@Z;
+        ?start@Timer@salhelper@@QAAXXZ;
+        ?stop@Timer@salhelper@@QAAXXZ;
+} UDK_3_0_0;

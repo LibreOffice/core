@@ -1,0 +1,104 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_connection_SocketPermission_idl__
+#define __com_sun_star_connection_SocketPermission_idl__
+
+//=============================================================================
+
+module com {  module sun {  module star {  module connection {
+
+//=============================================================================
+
+/** This permission represents access to a network via sockets.
+    A SocketPermission consists of a host specification and a set of actions
+    specifying ways to connect to that host.  The host is specified as
+    <pre>
+    host = (hostname | IPaddress)[:portrange]
+    portrange = portnumber | -portnumber | portnumber-[portnumber]
+    </pre>
+    The host is expressed as a DNS name, as a numerical IP address, or as
+    <code>"localhost"</code> (for the local machine).  The wildcard <code>"*"</code>
+     may be included once
+    in a DNS name host specification.  If it is included, it must be in the
+    leftmost position, as in <code>"*.sun.com"</code>.
+    <br>
+    The port or portrange is optional.  A port specification of the form <code>"N-"</code>,
+    where <code>N</code> is a port number, signifies all ports numbered <code>N</code> and above,
+    while a specification of the form <code>"-N"</code> indicates all ports numbered
+    <code>N</code> and below.
+
+    <p>
+    The possible ways to connect to the host are
+    <ul>
+    <li><code>accept</code></li>
+    <li><code>connect</code></li>
+    <li><code>listen</code></li>
+    <li><code>resolve</code></li>
+    </ul><br>
+    The <code>"listen"</code> action is only meaningful when used with <code>"localhost"</code>.
+    The <code>"resolve"</code> (resolve host/ip name service lookups) action is implied when
+    any of the other actions are present.
+    <br>
+    As an example of the creation and meaning of SocketPermissions, note that if
+    the following permission
+<pre>
+SocketPermission("foo.bar.com:7777", "connect,accept");
+</pre>
+    is granted, it allows to connect to port 7777 on foo.bar.com, and to
+    accept connections on that port.
+    <br>
+    Similarly, if the following permission
+<pre>
+SocketPermission("localhost:1024-", "accept,connect,listen");
+</pre>
+    is granted, it allows that code to accept connections on, connect to, or listen
+    on any port between 1024 and 65535 on the local host.
+    </p>
+
+    @attention
+    Granting code permission to accept or make connections to remote hosts may be
+    dangerous because malevolent code can then more easily transfer and share
+    confidential data among parties who may not otherwise have access to the data.
+    </p>
+
+    @since OOo 1.1.2
+*/
+published struct SocketPermission
+{
+    /** target host with optional portrange
+    */
+    string Host;
+    /** comma separated actions list
+    */
+    string Actions;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

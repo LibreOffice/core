@@ -1,0 +1,78 @@
+/*************************************************************************
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+************************************************************************/
+
+#ifndef EXTENSIONS_BIBLIOGRAPHY_HRC
+#define EXTENSIONS_BIBLIOGRAPHY_HRC
+
+#define HID_BIB_CHANGESOURCE                            "EXTENSIONS_HID_BIB_CHANGESOURCE"
+#define HID_BIB_MAPPINGDLG                              "EXTENSIONS_HID_BIB_MAPPINGDLG"
+#define HID_BIB_TBX_TABLE                               "EXTENSIONS_HID_BIB_TBX_TABLE"
+#define HID_BIB_TBX_SEARCH                              "EXTENSIONS_HID_BIB_TBX_SEARCH"
+#define HID_BIB_TBX_AUTOFILTER                          "EXTENSIONS_HID_BIB_TBX_AUTOFILTER"
+#define HID_BIB_IDENTIFIER_POS                          "EXTENSIONS_HID_BIB_IDENTIFIER_POS"
+#define HID_BIB_AUTHORITYTYPE_POS                       "EXTENSIONS_HID_BIB_AUTHORITYTYPE_POS"
+#define HID_BIB_AUTHOR_POS                              "EXTENSIONS_HID_BIB_AUTHOR_POS"
+#define HID_BIB_TITLE_POS                               "EXTENSIONS_HID_BIB_TITLE_POS"
+#define HID_BIB_YEAR_POS                                "EXTENSIONS_HID_BIB_YEAR_POS"
+#define HID_BIB_ISBN_POS                                "EXTENSIONS_HID_BIB_ISBN_POS"
+#define HID_BIB_BOOKTITLE_POS                           "EXTENSIONS_HID_BIB_BOOKTITLE_POS"
+#define HID_BIB_CHAPTER_POS                             "EXTENSIONS_HID_BIB_CHAPTER_POS"
+#define HID_BIB_EDITION_POS                             "EXTENSIONS_HID_BIB_EDITION_POS"
+#define HID_BIB_EDITOR_POS                              "EXTENSIONS_HID_BIB_EDITOR_POS"
+#define HID_BIB_HOWPUBLISHED_POS                        "EXTENSIONS_HID_BIB_HOWPUBLISHED_POS"
+#define HID_BIB_INSTITUTION_POS                         "EXTENSIONS_HID_BIB_INSTITUTION_POS"
+#define HID_BIB_JOURNAL_POS                             "EXTENSIONS_HID_BIB_JOURNAL_POS"
+#define HID_BIB_MONTH_POS                               "EXTENSIONS_HID_BIB_MONTH_POS"
+#define HID_BIB_NOTE_POS                                "EXTENSIONS_HID_BIB_NOTE_POS"
+#define HID_BIB_ANNOTE_POS                              "EXTENSIONS_HID_BIB_ANNOTE_POS"
+#define HID_BIB_NUMBER_POS                              "EXTENSIONS_HID_BIB_NUMBER_POS"
+#define HID_BIB_ORGANIZATIONS_POS                       "EXTENSIONS_HID_BIB_ORGANIZATIONS_POS"
+#define HID_BIB_PAGES_POS                               "EXTENSIONS_HID_BIB_PAGES_POS"
+#define HID_BIB_PUBLISHER_POS                           "EXTENSIONS_HID_BIB_PUBLISHER_POS"
+#define HID_BIB_ADDRESS_POS                             "EXTENSIONS_HID_BIB_ADDRESS_POS"
+#define HID_BIB_SCHOOL_POS                              "EXTENSIONS_HID_BIB_SCHOOL_POS"
+#define HID_BIB_SERIES_POS                              "EXTENSIONS_HID_BIB_SERIES_POS"
+#define HID_BIB_REPORTTYPE_POS                          "EXTENSIONS_HID_BIB_REPORTTYPE_POS"
+#define HID_BIB_VOLUME_POS                              "EXTENSIONS_HID_BIB_VOLUME_POS"
+#define HID_BIB_URL_POS                                 "EXTENSIONS_HID_BIB_URL_POS"
+#define HID_BIB_CUSTOM1_POS                             "EXTENSIONS_HID_BIB_CUSTOM1_POS"
+#define HID_BIB_CUSTOM2_POS                             "EXTENSIONS_HID_BIB_CUSTOM2_POS"
+#define HID_BIB_CUSTOM3_POS                             "EXTENSIONS_HID_BIB_CUSTOM3_POS"
+#define HID_BIB_CUSTOM4_POS                             "EXTENSIONS_HID_BIB_CUSTOM4_POS"
+#define HID_BIB_CUSTOM5_POS                             "EXTENSIONS_HID_BIB_CUSTOM5_POS"
+#define HID_BIB_DB_TBX                                  "EXTENSIONS_HID_BIB_DB_TBX"
+#define HID_BIB_DB_GHIDCTRL                             "EXTENSIONS_HID_BIB_DB_GHIDCTRL"
+#define HID_BIB_CONTROL_PAGE                            "EXTENSIONS_HID_BIB_CONTROL_PAGE"
+#define HID_BIB_CONTROL_PARENT                          "EXTENSIONS_HID_BIB_CONTROL_PARENT"
+#define UID_BIB_FRAME_WINDOW                            "EXTENSIONS_UID_BIB_FRAME_WINDOW"
+#define HID_BIB_DELETE_RECORD                           "EXTENSIONS_HID_BIB_DELETE_RECORD"
+#define HID_BIB_INSERT_RECORD                           "EXTENSIONS_HID_BIB_INSERT_RECORD"
+#define HID_BIB_DB_GRIDCTRL                             "EXTENSIONS_HID_BIB_DB_GRIDCTRL"
+#define HID_DLG_MAPPING                                 "EXTENSIONS_HID_DLG_MAPPING"
+#define HID_DLG_DBCHANGE                                "EXTENSIONS_HID_DLG_DBCHANGE"
+#define HID_SELECTION_TLB                               "EXTENSIONS_HID_SELECTION_TLB"
+
+#endif // EXTENSIONS_BIBLIOGRAPHY_HRC

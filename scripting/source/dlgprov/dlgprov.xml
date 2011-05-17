@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <module-name>dlgprov</module-name>
+
+    <component-description>
+        <author>Thomas Benisch</author>
+        <name>com.sun.star.comp.scripting.DialogProvider</name>
+        <description>provider for dialogs</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="drafts"/>
+        <supported-service>com.sun.star.awt.DialogProvider</supported-service>
+        <type>com.sun.star.awt.XControl</type>
+        <type>com.sun.star.awt.XControlContainer</type>
+        <type>com.sun.star.awt.XDialog</type>
+        <type>com.sun.star.awt.XDialogProvider</type>
+        <type>com.sun.star.awt.XWindowPeer</type>
+        <type>com.sun.star.beans.XPropertySet</type>
+        <type>com.sun.star.frame.XModel</type>
+        <type>com.sun.star.io.XInputStreamProvider</type>
+        <type>com.sun.star.lang.IllegalArgumentException</type>
+        <type>com.sun.star.lang.XInitialization</type>
+        <type>com.sun.star.lang.XMultiComponentFactory</type>
+        <type>com.sun.star.lang.XServiceInfo</type>
+        <type>com.sun.star.reflection.InvocationTargetException</type>
+        <type>com.sun.star.script.CannotConvertException</type>
+        <type>com.sun.star.script.ScriptEventDescriptor</type>
+        <type>com.sun.star.script.XAllListener</type>
+        <type>com.sun.star.script.XEventAttacher</type>
+        <type>com.sun.star.script.XLibraryContainer</type>
+        <type>com.sun.star.script.XScriptEventsAttacher</type>
+        <type>com.sun.star.script.XScriptEventsSupplier</type>
+        <type>com.sun.star.script.XScriptListener</type>
+        <type>com.sun.star.uno.Exception</type>
+        <type>com.sun.star.uno.RuntimeException</type>
+        <type>com.sun.star.uno.XComponentContext</type>
+        <type>com.sun.star.script.provider.XScript</type>
+        <type>com.sun.star.script.provider.XScriptProvider</type>
+        <type>  com.sun.star.uri.XUriReference </type>
+        <type>  com.sun.star.uri.XUriReferenceFactory </type>
+        <type>  com.sun.star.uri.XVndSunStarScriptUrl </type>
+    </component-description>
+
+    <project-build-dependency>sfx2</project-build-dependency>
+    <project-build-dependency>xmlscript</project-build-dependency>
+    <project-build-dependency>cppuhelper</project-build-dependency>
+    <project-build-dependency>cppu</project-build-dependency>
+    <project-build-dependency>sal</project-build-dependency>
+
+    <runtime-module-dependency>sfx2</runtime-module-dependency>
+    <runtime-module-dependency>xcr</runtime-module-dependency>
+    <runtime-module-dependency>cppuhelper3$(COM)</runtime-module-dependency>
+    <runtime-module-dependency>cppu3</runtime-module-dependency>
+    <runtime-module-dependency>sal3</runtime-module-dependency>
+
+</module-description>

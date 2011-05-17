@@ -1,0 +1,49 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "../inc/helpid.hrc"
+
+hidspecial HID_AUTOCORR_HELP_ACORSENTWORD   { HelpID =  HID_AUTOCORR_HELP_ACORSENTWORD;};
+hidspecial HID_AUTOCORR_HELP_ACORSENTWORDENEMDASH   { HelpID =  HID_AUTOCORR_HELP_ACORSENTWORDENEMDASH;};
+hidspecial HID_AUTOCORR_HELP_ACORWORD       { HelpID =  HID_AUTOCORR_HELP_ACORWORD;};
+hidspecial HID_AUTOCORR_HELP_ACORWORDENEMDASH       { HelpID =  HID_AUTOCORR_HELP_ACORWORDENEMDASH;};
+hidspecial HID_AUTOCORR_HELP_CHGFRACTIONSYMBOL  { HelpID =  HID_AUTOCORR_HELP_CHGFRACTIONSYMBOL;};
+hidspecial HID_AUTOCORR_HELP_CHGORDINALNUMBER   { HelpID =  HID_AUTOCORR_HELP_CHGORDINALNUMBER;};
+hidspecial HID_AUTOCORR_HELP_CHGQUOTES          { HelpID =  HID_AUTOCORR_HELP_CHGQUOTES;};
+hidspecial HID_AUTOCORR_HELP_CHGSGLQUOTES       { HelpID =  HID_AUTOCORR_HELP_CHGSGLQUOTES;};
+hidspecial HID_AUTOCORR_HELP_CHGTOENEMDASH      { HelpID =  HID_AUTOCORR_HELP_CHGTOENEMDASH;};
+hidspecial HID_AUTOCORR_HELP_CHGWEIGHTUNDERL    { HelpID =  HID_AUTOCORR_HELP_CHGWEIGHTUNDERL;};
+hidspecial HID_AUTOCORR_HELP_INGNOREDOUBLESPACE { HelpID =  HID_AUTOCORR_HELP_INGNOREDOUBLESPACE;};
+hidspecial HID_AUTOCORR_HELP_SENT           { HelpID =  HID_AUTOCORR_HELP_SENT;};
+hidspecial HID_AUTOCORR_HELP_SENTENEMDASH           { HelpID =  HID_AUTOCORR_HELP_SENTENEMDASH;};
+hidspecial HID_AUTOCORR_HELP_SENTWORD       { HelpID =  HID_AUTOCORR_HELP_SENTWORD;};
+hidspecial HID_AUTOCORR_HELP_SENTWORDENEMDASH       { HelpID =  HID_AUTOCORR_HELP_SENTWORDENEMDASH;};
+hidspecial HID_AUTOCORR_HELP_SETINETATTR        { HelpID =  HID_AUTOCORR_HELP_SETINETATTR;};
+hidspecial HID_AUTOCORR_HELP_WORD           { HelpID =  HID_AUTOCORR_HELP_WORD;};
+hidspecial HID_AUTOCORR_HELP_WORDENEMDASH           { HelpID =  HID_AUTOCORR_HELP_WORDENEMDASH;};
+
+

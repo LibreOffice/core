@@ -1,0 +1,90 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _MAILMRGE_HRC
+#define _MAILMRGE_HRC
+
+#include "envelp.hrc"
+
+// elements -----------------------------------------------------------------
+
+#define FL_RECORD               1
+#define RB_ALL          2
+#define RB_MARKED       3
+#define RB_FROM         4
+#define NF_FROM         5
+#define FT_BIS          6
+#define NF_TO           7
+#define BTN_OK          8
+#define BTN_CANCEL      9
+#define BTN_HELP        10
+#define RB_PRINTER      11
+#define RB_MAILING      12
+#define FT_ADDRESS      13
+#define LB_ADDRESSFLD   14
+#define FT_SUBJECT      15
+#define ED_SUBJECT      16
+#define FL_DEST                 17
+#define CB_SINGLE_JOBS  18
+#define FT_FORMAT       19
+#define CB_FORMAT_SW    20
+#define CB_FORMAT_HTML  21
+#define CB_FORMAT_RTF   22
+#define RB_FILE         23
+#define FT_PATH         24
+#define ED_PATH         25
+#define PB_PATH         26
+#define LB_COLUMN       30
+#define FT_ATTACH       32
+#define ED_ATTACH       33
+#define PB_ATTACH       34
+#define WIN_BEAMER      35
+#define FL_SEPARATOR    36
+#define FL_BOTTOM_SEPARATOR             37
+#define FL_SAVE_MERGED_DOCUMENT         38
+#define RB_SAVE_SINGLE_DOC              39
+#define RB_SAVE_INDIVIDUAL              40
+#define RB_GENERATE_FROM_DATABASE       41
+#define FT_COLUMN                       42
+#define FT_FILTER                       43
+#define LB_FILTER                       44
+
+#define FL_CREATEFROM   1
+#define RB_THISDOC      2
+#define RB_TEMPLATE     3
+#define BT_OK           4
+#define BT_CANCEL       5
+#define BT_HELP         6
+#define FL_CONNECTIONS  7
+#define RB_USEEXISTING  8
+#define RB_CREATENEW    9
+#define FT_INFO         10
+
+
+#endif
+
+

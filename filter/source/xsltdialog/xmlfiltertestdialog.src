@@ -1,0 +1,210 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "xmlfiltertestdialog.hrc"
+#include "xmlfilterhelpids.hrc"
+
+#define DIALOG_WIDTH    200
+#define DIALOG_HEIGHT   230
+
+#define SPACING         3
+
+#define FIRST_ROW_X         6
+#define FIRST_ROW_Y         6
+#define COLUMN_WIDTH        ((DIALOG_WIDTH-(5*SPACING))/2)
+
+#define SECOND_ROW_X        FIRST_ROW_X + COLUMN_WIDTH+SPACING
+
+#define FIXED_TEXT_OFFSET   3
+
+#define ROW_HEIGHT          14
+
+ModalDialog DLG_XML_FILTER_TEST_DIALOG
+{
+    HelpId                  = HID_XML_FILTER_TEST_DIALOG;
+    Size                    = MAP_APPFONT( DIALOG_WIDTH, DIALOG_HEIGHT );
+    OutputSize              = TRUE ;
+    SVLook                  = TRUE ;
+    Moveable                = TRUE ;
+    Closeable               = TRUE ;
+    Text [ en-US ]      = "Test XML Filter: %s" ;
+
+    FixedLine FL_EXPORT
+    {
+        Pos                 = MAP_APPFONT( 4, FIRST_ROW_Y + 0 * ROW_HEIGHT + 0 * SPACING + FIXED_TEXT_OFFSET);
+        Size                = MAP_APPFONT( DIALOG_WIDTH - 2*SPACING, 8 );
+        Text [ en-US ]  = "Export";
+    };
+
+    FixedText FT_EXPORT_XSLT
+    {
+        Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 1 * ROW_HEIGHT + 1 * SPACING + FIXED_TEXT_OFFSET ) ;
+        Size                = MAP_APPFONT ( COLUMN_WIDTH , 8 ) ;
+        Text [ en-US ]  = "XSLT for export";
+    };
+
+    FixedText FT_EXPORT_XSLT_FILE
+    {
+        Pos                 = MAP_APPFONT ( SECOND_ROW_X , FIRST_ROW_Y + 1 * ROW_HEIGHT + 1 * SPACING + FIXED_TEXT_OFFSET ) ;
+        Size                = MAP_APPFONT ( 2*COLUMN_WIDTH , 8 ) ;
+        HelpId              = HID_XML_FILTER_TEST_EXPORT_XSLT_FILE;
+    };
+
+    FixedText FT_TRANSFORM_DOCUMENT
+    {
+        Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 2 * ROW_HEIGHT + 2 * SPACING + FIXED_TEXT_OFFSET ) ;
+        Size                = MAP_APPFONT ( COLUMN_WIDTH , 8 ) ;
+        Text [ en-US ]  = "Transform document";
+    };
+
+    PushButton PB_EXPORT_BROWSE
+    {
+        Pos                 = MAP_APPFONT ( SECOND_ROW_X , FIRST_ROW_Y + 2 * ROW_HEIGHT + 2 * SPACING ) ;
+        Size                = MAP_APPFONT ( COLUMN_WIDTH , 14 ) ;
+        TabStop             = TRUE ;
+        HelpId              = HID_XML_FILTER_TEST_EXPORT_BROWSE;
+        Text [ en-US ]  = "~Browse...";
+    };
+
+    PushButton PB_CURRENT_DOCUMENT
+    {
+        Pos                 = MAP_APPFONT ( SECOND_ROW_X , FIRST_ROW_Y + 3 * ROW_HEIGHT + 3 * SPACING ) ;
+        Size                = MAP_APPFONT ( COLUMN_WIDTH , 14 ) ;
+        HelpId              = HID_XML_FILTER_TEST_EXPORT_CURRENT;
+        TabStop             = TRUE ;
+        Text [ en-US ]  = "~Current Document";
+    };
+
+    FixedText FT_NAME_OF_CURRENT_FILE
+    {
+        Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 4 * ROW_HEIGHT + 4 * SPACING + FIXED_TEXT_OFFSET ) ;
+        Size                = MAP_APPFONT ( 2*COLUMN_WIDTH , 8 ) ;
+        HelpId              = HID_XML_FILTER_TEST_EXPORT_CURRENT_FILE;
+        Right               = TRUE;
+    };
+
+    // import ---------------------------------------------------------
+
+    FixedLine FL_IMPORT
+    {
+        Pos                 = MAP_APPFONT( 4, FIRST_ROW_Y + 5 * ROW_HEIGHT + 5 * SPACING + FIXED_TEXT_OFFSET );
+        Size                = MAP_APPFONT( DIALOG_WIDTH - 2*SPACING, 8 );
+        Text [ en-US ]  = "Import";
+    };
+
+    FixedText FT_IMPORT_XSLT
+    {
+        Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 6 * ROW_HEIGHT + 6 * SPACING + FIXED_TEXT_OFFSET ) ;
+        Size                = MAP_APPFONT ( COLUMN_WIDTH , 8 ) ;
+        Text [ en-US ]  = "XSLT for import";
+    };
+
+    FixedText FT_IMPORT_XSLT_FILE
+    {
+        Pos                 = MAP_APPFONT ( SECOND_ROW_X , FIRST_ROW_Y + 6 * ROW_HEIGHT + 6 * SPACING + FIXED_TEXT_OFFSET ) ;
+        Size                = MAP_APPFONT ( 2*COLUMN_WIDTH , 8 ) ;
+        HelpId              = HID_XML_FILTER_TEST_IMPORT_XSLT_FILE;
+    };
+
+    FixedText FT_IMPORT_TEMPLATE
+    {
+        Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 7 * ROW_HEIGHT + 7 * SPACING + FIXED_TEXT_OFFSET ) ;
+        Size                = MAP_APPFONT ( COLUMN_WIDTH , 8 ) ;
+        Text [ en-US ]  = "Template for import";
+    };
+
+    FixedText FT_IMPORT_TEMPLATE_FILE
+    {
+        Pos                 = MAP_APPFONT ( SECOND_ROW_X , FIRST_ROW_Y + 7 * ROW_HEIGHT + 7 * SPACING + FIXED_TEXT_OFFSET ) ;
+        Size                = MAP_APPFONT ( 2*COLUMN_WIDTH , 8 ) ;
+        HelpId              = HID_XML_FILTER_TEST_IMPORT_TEMPLATE_FILE;
+    };
+
+    FixedText FT_TRANSFORM_FILE
+    {
+        Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 8 * ROW_HEIGHT + 8 * SPACING + FIXED_TEXT_OFFSET ) ;
+        Size                = MAP_APPFONT ( COLUMN_WIDTH , 8 ) ;
+        Text [ en-US ]  = "Transform file";
+    };
+
+    CheckBox CBX_DISPLAY_SOURCE
+    {
+        Pos                 = MAP_APPFONT ( SECOND_ROW_X , FIRST_ROW_Y + 8 * ROW_HEIGHT + 8 * SPACING + 1 ) ;
+        Size                = MAP_APPFONT ( COLUMN_WIDTH , 10 ) ;
+        HelpId              = HID_XML_FILTER_TEST_IMPORT_DISPLAY_SOURCE;
+        Text [ en-US ]  = "~Display source";
+    };
+
+    PushButton PB_IMPORT_BROWSE
+    {
+        Pos                 = MAP_APPFONT ( SECOND_ROW_X , FIRST_ROW_Y + 9 * ROW_HEIGHT + 9 * SPACING ) ;
+        Size                = MAP_APPFONT ( COLUMN_WIDTH , 14 ) ;
+        HelpId              = HID_XML_FILTER_TEST_IMPORT_BROWSE;
+        TabStop             = TRUE ;
+        Text [ en-US ]  = "B~rowse...";
+    };
+
+    PushButton PB_RECENT_DOCUMENT
+    {
+        Pos                 = MAP_APPFONT ( SECOND_ROW_X , FIRST_ROW_Y + 10 * ROW_HEIGHT + 10 * SPACING ) ;
+        Size                = MAP_APPFONT ( COLUMN_WIDTH , 14 ) ;
+        HelpId              = HID_XML_FILTER_TEST_IMPORT_RECENT;
+        TabStop             = TRUE ;
+        Text [ en-US ]  = "~Recent File";
+    };
+
+    FixedText FT_NAME_OF_RECENT_FILE
+    {
+        Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 11 * ROW_HEIGHT + 11 * SPACING + FIXED_TEXT_OFFSET ) ;
+        Size                = MAP_APPFONT ( 2*COLUMN_WIDTH, 8 ) ;
+        HelpId              = HID_XML_FILTER_TEST_IMPORT_RECENT_FILE;
+        Right               = TRUE;
+    };
+
+    PushButton PB_CLOSE
+    {
+        Pos                 = MAP_APPFONT ( DIALOG_WIDTH - 2*50 - 2*6 , DIALOG_HEIGHT - 6 - 14 ) ;
+        Size                = MAP_APPFONT ( 50 , 14 ) ;
+        HelpId              = HID_XML_FILTER_TEST_CLOSE;
+        TabStop             = TRUE ;
+        Text [ en-US ]  = "~Close";
+    };
+
+    HelpButton PB_HELP
+    {
+        Pos                 = MAP_APPFONT ( DIALOG_WIDTH - 1*50 - 1*6 , DIALOG_HEIGHT - 6 - 14 );
+        Size                = MAP_APPFONT ( 50, 14 );
+    };
+};
+
+
+
+
+
+
+
+

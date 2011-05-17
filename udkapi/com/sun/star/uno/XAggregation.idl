@@ -1,0 +1,122 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_uno_XAggregation_idl__
+#define __com_sun_star_uno_XAggregation_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module uno {
+
+//=============================================================================
+/** Objects which implement this interface can become aggregates of
+    a delegator.
+
+    <p>That means if an object "A" aggregates "B", "A" can provide all
+    or some of the interfaces of "B". Whenever the method
+    <member>XInterface::queryInterface()</member>
+    is called on either of the objects, the call will be forwarded
+    to object "A". Object "A" now can determine whether to use the
+    interfaces of "A" or "B" or neither. Actually, any number of
+    aggregates can be used, even nested ones (aggregated objects which are
+    delegators by themselves).
+
+    <p>The following rules are to be observed:
+    <ol>
+    <li>All calls to <member>XInterface::acquire()</member>
+    which are made before the delegator was set (using the method
+    <member>XAggregation::setDelegator()</member>) must not be taken back
+    (using the method <member>XInterface::release()</member>)
+    before the delegation is removed by calling
+    <code>xAggregation-&gt;setDelegator(NULL)</code>.
+
+    <li>The constructor of a delegator has to increment its
+    own reference count by calling its method
+    <member>XInterface::acquire()</member>
+    before it sets itself to any aggregate using the method
+    <member>XAggregation::setDelegator()</member>. After that
+    call it has to reset its own reference count without the
+    destructor getting called.
+
+    <li>The destructor of a delegator has to reset the delegator in
+    its aggregated objects by calling their method
+    <member>XAggregation::setDelegator()</member> with
+    <const>NULL</const> before it releases its reference to
+    its aggregated objects.
+    </ol>
+
+    @deprecated
+    Aggregation will no longer be supported as a high-level concept of UNO.
+    You may still have the option to implement an UNO object consisting of
+    several single objects in your specific programming language, though this
+    depends on your programming language.
+*/
+published interface XAggregation: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** sets the object to which all calls to the method
+        <member>XInterface::queryInterface()</member>
+        have to be forwarded. @
+
+        @param xDelegator
+        specifies the object which handles the calls to
+        <member>XInterface::queryInterface()</member>.
+        If <var>xDelegator</var> is <const>NULL</const>, the delegator is
+        removed and thus the object becomes its own delegator and has
+        to handle calls to the method
+        <member>XInterface::queryInterface()</member>
+        itself.
+
+        @see XAggregation::queryAggregation
+    */
+    void setDelegator( [in] com::sun::star::uno::XInterface pDelegator );
+
+    //-------------------------------------------------------------------------
+    /** is similar to <member>XInterface::queryInterface()</member>,
+        but it is to be processed directly without being forwarded to the
+        delegator. @
+
+        <p>This method is only called from within an implementation of
+        <member>XInterface::queryInterface()</member>
+        or <member>XAggregation::queryAggregation()</member>. This method
+        is to be called by the delegator if it does not implement the
+        interface itself. An object which got aggregated cannot depend
+        on getting its own interface when it calls the method
+        <member>XInterface::queryInterface()</member>.
+
+        @see XAggregation::setDelegator
+    */
+    any queryAggregation( [in] type aType );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

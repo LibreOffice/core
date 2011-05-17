@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="sdbc_XRowUpdate" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+'*************************************************************************
+' This Interface/Service test depends on the following GLOBAL variables,
+' which must be specified in the object creation:
+
+'     - Global rowTypes As Variant
+'       must be an array of Strings with description of column types
+'     - Global rowTypesCol As Variant
+'       corresponding column numbers
+
+'*************************************************************************
+
+
+
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.sdbc.XRowUpdate
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean, bNullOK As Boolean
+    Dim i As Integer
+    Dim getV As Variant, newV As Variant, resV As Variant
+    Dim colType As String
+
+    if NOT hasUnoInterfaces(oObj, "com.sun.star.sdbc.XRow") then
+        Out.Log("The interface com.sun.star.sdbc.XRow isn't supported by the component.")
+        Out.Log("The test must be upgraded !!!")
+        exit Sub
+    end if
+    
+    Test.RecreateObj()
+
+    bNullOK = true
+
+    Test.StartMethod("updateBoolean()")
+    colType = "boolean"
+    i = findColumn(colType)
+    if i >= 0 then 
+        bOK = true
+        getV = oObj.getBoolean(i+1)
+        newV = NOT getV
+        oObj.updateBoolean(i+1, newV)
+        resV = oObj.getBoolean(i+1)
+        Out.Log("Was: " + getv + ", New: " + newV + ", Res: " + resV)
+        bOK = bOK AND (resV = newV)
+        Test.MethodTested("updateBoolean()", bOK)
+
+        oObj.updateNull(i+1)
+        oObj.getBoolean(i+1)
+        bNullOK = bNullOK AND oObj.wasNull()
+    else
+        Out.Log("!!! Column of type '" + colType + "' is not found. No test performed.")
+        Out.Log("Nevertheless status is OK")
+        Test.MethodTested("updateBoolean()", true)
+    end if 
+            
+    Test.StartMethod("updateByte()")
+    colType = "byte"
+    i = findColumn(colType)
+    if i >= 0 then 
+        bOK = true
+        getV = oObj.getByte(i+1)
+        newV = getV + 1
+        oObj.updateByte(i+1, newV)
+        resV = oObj.getByte(i+1)
+        Out.Log("Was: " + getv + ", New: " + newV + ", Res: " + resV)
+        bOK = bOK AND (resV = newV)
+        Test.MethodTested("updateByte()", bOK)
+
+        oObj.updateNull(i+1)
+        oObj.getByte(i+1)
+        bNullOK = bNullOK AND oObj.wasNull()
+    else
+        Out.Log("!!! Column of type '" + colType + "' is not found. No test performed.")
+        Out.Log("Nevertheless status is OK")
+        Test.MethodTested("updateByte()", true)
+    end if 
+
+    Test.StartMethod("updateShort()")
+    colType = "short"
+    i = findColumn(colType)
+    if i >= 0 then 
+        bOK = true
+        getV = oObj.getShort(i+1)
+        newV = getV + 1
+        oObj.updateShort(i+1, newV)
+        resV = oObj.getShort(i+1)
+        Out.Log("Was: " + getv + ", New: " + newV + ", Res: " + resV)
+        bOK = bOK AND (resV = newV)
+        Test.MethodTested("updateShort()", bOK)
+
+        oObj.updateNull(i+1)
+        oObj.getShort(i+1)
+        bNullOK = bNullOK AND oObj.wasNull()
+    else
+        Out.Log("!!! Column of type '" + colType + "' is not found. No test performed.")
+        Out.Log("Nevertheless status is OK")
+        Test.MethodTested("updateShort()", true)
+    end if 
+
+    Test.StartMethod("updateInt()")
+    colType = "int"
+    i = findColumn(colType)
+    if i >= 0 then 
+        bOK = true
+        getV = oObj.getInt(i+1)
+        newV = getV + 1
+        oObj.updateInt(i+1, newV)
+        resV = oObj.getInt(i+1)
+        Out.Log("Was: " + getv + ", New: " + newV + ", Res: " + resV)
+        bOK = bOK AND (resV = newV)
+        Test.MethodTested("updateInt()", bOK)
+
+        oObj.updateNull(i+1)
+        oObj.getInt(i+1)
+        bNullOK = bNullOK AND oObj.wasNull()
+    else
+        Out.Log("!!! Column of type '" + colType + "' is not found. No test performed.")
+        Out.Log("Nevertheless status is OK")
+        Test.MethodTested("updateInt()", true)
+    end if 
+        
+    Test.StartMethod("updateLong()")
+    colType = "long"
+    i = findColumn(colType)
+    if i >= 0 then 
+        bOK = true
+        getV = oObj.getLong(i+1)
+        newV = getV + 1
+        oObj.updateLong(i+1, newV)
+        resV = oObj.getLong(i+1)
+        Out.Log("Was: " + getv + ", New: " + newV + ", Res: " + resV)
+        bOK = bOK AND (resV = newV)
+        Test.MethodTested("updateLong()", bOK)
+
+        oObj.updateNull(i+1)
+        oObj.getLong(i+1)
+        bNullOK = bNullOK AND oObj.wasNull()
+    else
+        Out.Log("!!! Column of type '" + colType + "' is not found. No test performed.")
+        Out.Log("Nevertheless status is OK")
+        Test.MethodTested("updateLong()", true)
+    end if 
+
+    Test.StartMethod("updateFloat()")
+    colType = "float"
+    i = findColumn(colType)
+    if i >= 0 then 
+        bOK = true
+        getV = oObj.getFloat(i+1)
+        newV = getV + 1.3
+        oObj.updateFloat(i+1, newV)
+        resV = oObj.getFloat(i+1)
+        Out.Log("Was: " + getv + ", New: " + newV + ", Res: " + resV)
+        bOK = bOK AND (resV = newV)
+        Test.MethodTested("updateFloat()", bOK)
+
+        oObj.updateNull(i+1)
+        oObj.getFloat(i+1)
+        bNullOK = bNullOK AND oObj.wasNull()
+    else
+        Out.Log("!!! Column of type '" + colType + "' is not found. No test performed.")
+        Out.Log("Nevertheless status is OK")
+        Test.MethodTested("updateFloat()", true)
+    end if 
+
+    Test.StartMethod("updateDouble()")
+    colType = "double"
+    i = findColumn(colType)
+    if i >= 0 then 
+        bOK = true
+        getV = oObj.getDouble(i+1)
+        newV = getV + 1.5
+        oObj.updateDouble(i+1, newV)
+        resV = oObj.getDouble(i+1)
+        Out.Log("Was: " + getv + ", New: " + newV + ", Res: " + resV)
+        bOK = bOK AND (resV = newV)
+        Test.MethodTested("updateDouble()", bOK)
+
+        oObj.updateNull(i+1)
+        oObj.getDouble(i+1)
+        bNullOK = bNullOK AND oObj.wasNull()
+    else
+        Out.Log("!!! Column of type '" + colType + "' is not found. No test performed.")
+        Out.Log("Nevertheless status is OK")
+        Test.MethodTested("updateDouble()", true)
+    end if 
+
+    Test.StartMethod("updateString()")
+    colType = "string"
+    i = findColumn(colType)
+    if i >= 0 then 
+        bOK = true
+        getV = oObj.getString(i+1)
+        newV = "_" + getV
+        oObj.updateString(i+1, newV)
+        resV = oObj.getString(i+1)
+        Out.Log("Was: '" + getv + "', New: '" + newV + "', Res: '" + resV + "'")
+        bOK = bOK AND (resV = newV)
+        Test.MethodTested("updateString()", bOK)
+
+        oObj.updateNull(i+1)
+        oObj.getString(i+1)
+        bNullOK = bNullOK AND oObj.wasNull()
+    else
+        Out.Log("!!! Column of type '" + colType + "' is not found. No test performed.")
+        Out.Log("Nevertheless status is OK")
+        Test.MethodTested("updateString()", true)
+    end if 
+
+    Test.StartMethod("updateBytes()")
+    colType = "bytes"
+    i = findColumn(colType)
+    if i >= 0 then 
+        bOK = true
+        getV = oObj.getBytes(i+1)
+        
+        if (oObj.wasNull() OR ubound(getV()) &lt; 0) then
+            newV = Array(1,2,3)
+        else
+            newV = getV
+            newV(0) = newV(0) + 1
+        end if
+        
+        oObj.updateBytes(i+1, newV)
+        resV = oObj.getBytes(i+1)
+
+        Out.Log("Was: " + getv(0) + ", New: " + newV(0) + ", Res: " + resV(0))
+        bOK = bOK AND (resV(0) = newV(0))
+        Test.MethodTested("updateBytes()", bOK)
+
+        oObj.updateNull(i+1)
+        oObj.getBytes(i+1)
+        bNullOK = bNullOK AND oObj.wasNull()
+    else
+        Out.Log("!!! Column of type '" + colType + "' is not found. No test performed.")
+        Out.Log("Nevertheless status is OK")
+        Test.MethodTested("updateBytes()", true)
+    end if 
+
+
+    Dim dat As com.sun.star.util.Date
+    Test.StartMethod("updateDate()")
+    colType = "date"
+    i = findColumn(colType)
+    if i >= 0 then 
+        bOK = true
+        getV = oObj.getDate(i+1)
+        if (oObj.wasNull() OR isNull(getV)) then
+            newV = dat
+        else
+            newV = getV
+            newV.Year = newV.Year + 1
+        end if
+        
+        oObj.updateDate(i+1, newV)
+        resV = oObj.getDate(i+1)
+        Out.Log("Was: '" + getv.Year + "', New: '" + newV.Year + "', Res: '" + resV.Year + "'")
+        bOK = bOK AND (resV.Year = newV.Year)
+        Test.MethodTested("updateDate()", bOK)
+
+        oObj.updateNull(i+1)
+        oObj.getDate(i+1)
+        bNullOK = bNullOK AND oObj.wasNull()
+    else
+        Out.Log("!!! Column of type '" + colType + "' is not found. No test performed.")
+        Out.Log("Nevertheless status is OK")
+        Test.MethodTested("updateDate()", true)
+    end if 
+
+    Dim tim As com.sun.star.util.Time
+    Test.StartMethod("updateTime()")
+    colType = "time"
+    i = findColumn(colType)
+    if i >= 0 then 
+        bOK = true
+        getV = oObj.getTime(i+1)
+        if (oObj.wasNull() OR isNull(getV)) then
+            newV = tim
+        else
+            newV = getV
+            newV.Seconds = newV.Seconds + 1
+        end if
+        
+        oObj.updateTime(i+1, newV)
+        resV = oObj.getTime(i+1)
+        Out.Log("Was: '" + getv.Seconds + "', New: '" + newV.Seconds + "', Res: '" + resV.Seconds + "'")
+        bOK = bOK AND (resV.Seconds = newV.Seconds)
+        Test.MethodTested("updateTime()", bOK)
+
+        oObj.updateNull(i+1)
+        oObj.getTime(i+1)
+        bNullOK = bNullOK AND oObj.wasNull()
+    else
+        Out.Log("!!! Column of type '" + colType + "' is not found. No test performed.")
+        Out.Log("Nevertheless status is OK")
+        Test.MethodTested("updateTime()", true)
+    end if 
+
+    Dim dattm As com.sun.star.util.DateTime
+    Test.StartMethod("updateTimestamp()")
+    colType = "timestamp"
+    i = findColumn(colType)
+    if i >= 0 then 
+        bOK = true
+        getV = oObj.getTimestamp(i+1)
+        if (oObj.wasNull() OR isNull(getV)) then
+            newV = dattm
+        else
+            newV = getV
+            newV.Year = newV.Year + 1
+        end if
+        
+        oObj.updateTimestamp(i+1, newV)
+        resV = oObj.getTimestamp(i+1)
+        Out.Log("Was: '" + getv.Year + "', New: '" + newV.Year + "', Res: '" + resV.Year + "'")
+        bOK = bOK AND (resV.Year = newV.Year)
+        Test.MethodTested("updateTimestamp()", bOK)
+
+        oObj.updateNull(i+1)
+        oObj.getTimestamp(i+1)
+        bNullOK = bNullOK AND oObj.wasNull()
+    else
+        Out.Log("!!! Column of type '" + colType + "' is not found. No test performed.")
+        Out.Log("Nevertheless status is OK")
+        Test.MethodTested("updateTimestamp()", true)
+    end if 
+
+    Dim bytes As Variant, nBytes As Long
+    Test.StartMethod("updateCharacterStream()")
+    colType = "characterstream"
+    i = findColumn(colType)
+    if i >= 0 then 
+        bOK = true
+        newV = createUnoService("com.sun.star.io.Pipe")
+        newV.writeBytes(Array(123, 234))
+        oObj.updateCharacterStream(i+1, newV)
+        resV = oObj.getCharacterStream(i+1)
+        'Out.Log("Was: '" + getv + "', New: '" + newV + "', Res: '" + resV + "'")
+        bOK = bOK AND NOT oObj.wasNull() AND NOT isNull(resV)
+        
+        if bOK then
+            Out.Log("Testing further ...")
+            nBytes = resV.readBytes(bytes, 2)
+            bOK = bOK AND (nBytes = 2) AND (bytes(0) = 123) AND (bytes(1) = 234)
+        end if
+
+        Test.MethodTested("updateCharacterStream()", bOK)
+
+        oObj.updateNull(i+1)
+        oObj.getCharacterStream(i+1)
+        bNullOK = bNullOK AND oObj.wasNull()
+    else
+        Out.Log("!!! Column of type '" + colType + "' is not found. No test performed.")
+        Out.Log("Nevertheless status is OK")
+        Test.MethodTested("updateCharacterStream()", true)
+    end if 
+
+    Test.StartMethod("updateBinaryStream()")
+    colType = "binarystream"
+    i = findColumn(colType)
+    if i >= 0 then 
+        bOK = true
+        newV = createUnoService("com.sun.star.io.Pipe")
+        newV.writeBytes(Array(123, 234))
+        oObj.updateBinaryStream(i+1, newV)
+        resV = oObj.getBinaryStream(i+1)
+        'Out.Log("Was: '" + getv + "', New: '" + newV + "', Res: '" + resV + "'")
+        bOK = bOK AND NOT oObj.wasNull() AND NOT isNull(resV)
+        
+        if bOK then
+            Out.Log("Testing further ...")
+            nBytes = resV.readBytes(bytes, 2)
+            bOK = bOK AND (nBytes = 2) AND (bytes(0) = 123) AND (bytes(1) = 234)
+        end if
+
+        Test.MethodTested("updateBinaryStream()", bOK)
+
+        oObj.updateNull(i+1)
+        oObj.getBinaryStream(i+1)
+        bNullOK = bNullOK AND oObj.wasNull()
+    else
+        Out.Log("!!! Column of type '" + colType + "' is not found. No test performed.")
+        Out.Log("Nevertheless status is OK")
+        Test.MethodTested("updateBinaryStream()", true)
+    end if 
+
+    Test.StartMethod("updateObject()")
+    colType = "object"
+    i = findColumn(colType)
+    if i >= 0 then 
+        bOK = true
+        getV = oObj.getObject(i+1)
+        if (NOT hasUnoInterfaces(getV, "com.sun.star.io.XInputStream")) then
+            newV = createUnoService("com.sun.star.io.DataInputStream")
+        else
+            newV = createUnoService("com.sun.star.io.DataOutputStream")
+        end if
+        
+        oObj.updateObject(i+1, newV)
+        resV = oObj.getObject(i+1)
+        
+        bOK = bOK AND (hasUnoInterfaces(newV, "com.sun.star.io.XInputStream") = _
+                       hasUnoInterfaces(resV, "com.sun.star.io.XInputStream")) AND _
+                      (hasUnoInterfaces(newV, "com.sun.star.io.XOutputStream") = _
+                       hasUnoInterfaces(resV, "com.sun.star.io.XOutputStream"))
+                       
+        Test.MethodTested("updateObject()", bOK)
+
+        oObj.updateNull(i+1)
+        oObj.getObject(i+1)
+        bNullOK = bNullOK AND oObj.wasNull()
+    else
+        Out.Log("!!! Column of type '" + colType + "' is not found. No test performed.")
+        Out.Log("Nevertheless status is OK")
+        Test.MethodTested("updateObject()", true)
+    end if 
+
+    Test.StartMethod("updateNumericObject()")
+    colType = "numericobject"
+    i = findColumn(colType)
+    if i >= 0 then 
+        bOK = true
+        getV = oObj.getNumericObject(i+1)
+        if (NOT hasUnoInterfaces(getV, "com.sun.star.io.XInputStream")) then
+            newV = createUnoService("com.sun.star.io.DataInputStream")
+        else
+            newV = createUnoService("com.sun.star.io.DataOutputStream")
+        end if
+        
+        oObj.updateNumericObject(i+1, newV, 0)
+        resV = oObj.getNumericObject(i+1)
+        
+        bOK = bOK AND (hasUnoInterfaces(newV, "com.sun.star.io.XInputStream") = _
+                       hasUnoInterfaces(resV, "com.sun.star.io.XInputStream")) AND _
+                      (hasUnoInterfaces(newV, "com.sun.star.io.XOutputStream") = _
+                       hasUnoInterfaces(resV, "com.sun.star.io.XOutputStream"))
+                       
+        Test.MethodTested("updateNumericObject()", bOK)
+
+        oObj.updateNull(i+1)
+        oObj.getNumericObject(i+1)
+        bNullOK = bNullOK AND oObj.wasNull()
+    else
+        Out.Log("!!! Column of type '" + colType + "' is not found. No test performed.")
+        Out.Log("Nevertheless status is OK")
+        Test.MethodTested("updateNumericObject()", true)
+    end if 
+            
+    Test.StartMethod("updateNull()")
+    Test.MethodTested("updateNull()", bNullOK)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+
+Function findColumn(cType As String) As Integer
+    Dim i As Integer
+    
+    for i = lbound(rowTypes()) to ubound(rowTypes())
+        if rowTypes(i) = cType then
+            findColumn() = rowTypesCol(i) - 1
+            exit function
+        end if    
+    next i
+    
+    findColumn() = -1 
+End function
+</script:module>

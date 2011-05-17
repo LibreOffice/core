@@ -1,0 +1,715 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_canvas.hxx"
+// This code strongly inspired by Miguel / Federico's Gnome Canvas demo code.
+
+#include <comphelper/processfactory.hxx>
+#include <comphelper/regpathhelper.hxx>
+#include <cppuhelper/servicefactory.hxx>
+#include <cppuhelper/bootstrap.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/registry/XSimpleRegistry.hpp>
+
+#include <ucbhelper/contentbroker.hxx>
+#include <ucbhelper/configurationkeys.hxx>
+
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/tools/canvastools.hxx>
+
+#include <vcl/window.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/msgbox.hxx>
+#include <vcl/unowrap.hxx>
+#include <vcl/canvastools.hxx>
+
+#include <rtl/bootstrap.hxx>
+#include <sal/macros.h>
+
+#include <com/sun/star/rendering/XCanvas.hpp>
+#include <com/sun/star/rendering/FillRule.hpp>
+#include <com/sun/star/rendering/ViewState.hpp>
+#include <com/sun/star/rendering/RenderState.hpp>
+#include <com/sun/star/rendering/PathCapType.hpp>
+#include <com/sun/star/rendering/PathJoinType.hpp>
+#include <com/sun/star/rendering/XSpriteCanvas.hpp>
+#include <com/sun/star/rendering/XGraphicDevice.hpp>
+#include <com/sun/star/rendering/CompositeOperation.hpp>
+#include <com/sun/star/rendering/XBitmap.hpp>
+
+#include <stdio.h>
+#include <unistd.h>
+
+
+// never import whole leaf namespaces, since this will result in
+// absolutely weird effects during (Koenig) name lookup
+using namespace ::com::sun::star;
+
+
+class DemoApp : public Application
+{
+public:
+    virtual void Main();
+    virtual USHORT  Exception( USHORT nError );
+};
+
+static void PrintHelp()
+{
+    fprintf( stdout, "canvasdemo - Exercise the new canvas impl\n" );
+}
+
+class TestWindow : public Dialog
+{
+    public:
+        TestWindow() : Dialog( (Window *) NULL )
+        {
+            SetText( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Canvas test" )) );
+            SetSizePixel( Size( 600, 450 ) );
+            EnablePaint( true );
+            Show();
+        }
+        virtual ~TestWindow() {}
+        virtual void MouseButtonUp( const MouseEvent& /*rMEvt*/ )
+        {
+            //TODO: do something cool
+            EndDialog();
+        }
+        virtual void Paint( const Rectangle& rRect );
+};
+
+class DemoRenderer
+{
+    public:
+        Size maSize;
+        Size maBox;
+        rendering::ViewState   maViewState;
+        rendering::RenderState maRenderState;
+        uno::Sequence< double > maColorBlack;
+        uno::Sequence< double > maColorWhite;
+        uno::Sequence< double > maColorRed;
+        uno::Reference< rendering::XCanvas > mxCanvas;
+        uno::Reference< rendering::XCanvasFont > mxDefaultFont;
+        uno::Reference< rendering::XGraphicDevice > mxDevice;
+
+        DemoRenderer( uno::Reference< rendering::XGraphicDevice > xDevice,
+                      uno::Reference< rendering::XCanvas > xCanvas,
+                      Size aSize ) :
+            maSize(aSize),
+            maBox(),
+            maViewState(),
+            maRenderState(),
+            maColorBlack( vcl::unotools::colorToStdColorSpaceSequence( Color(COL_BLACK)) ),
+            maColorWhite( vcl::unotools::colorToStdColorSpaceSequence( Color(COL_WHITE)) ),
+            maColorRed( vcl::unotools::colorToStdColorSpaceSequence( Color(COL_RED)) ),
+            mxCanvas(xCanvas),
+            mxDefaultFont(),
+            mxDevice( xDevice )
+        {
+            // Geometry init
+            geometry::AffineMatrix2D aUnit( 1,0, 0,
+                                            0,1, 0 );
+            maViewState.AffineTransform = aUnit;
+            maRenderState.AffineTransform = aUnit;
+            maRenderState.DeviceColor = maColorBlack;
+
+            //I can't figure out what the compsiteoperation stuff does
+            //it doesn't seem to do anything in either VCL or cairocanvas
+            //I was hoping that CLEAR would clear the canvas before we paint,
+            //but nothing changes
+            maRenderState.CompositeOperation = rendering::CompositeOperation::OVER;
+
+            maBox.Width() = aSize.Width() / 3;
+            maBox.Height() = aSize.Height() / 3;
+
+            lang::Locale aLocale;
+            rendering::FontInfo aFontInfo;
+            aFontInfo.FamilyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Swiss" ));
+            aFontInfo.StyleName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SansSerif" ));
+            geometry::Matrix2D aFontMatrix( 1, 0,
+                                            0, 1 );
+            rendering::FontRequest aFontRequest( aFontInfo, 12.0, 0.0, aLocale );
+            uno::Sequence< beans::PropertyValue > aExtraFontProperties;
+             mxDefaultFont = xCanvas->createFont( aFontRequest, aExtraFontProperties, aFontMatrix );
+            if( !mxDefaultFont.is() )
+                fprintf( stderr, "Failed to create font\n" );
+        }
+
+        void drawGrid()
+        {
+            double d, dIncr = maSize.Width() / 3;
+            for ( d = 0; d <= maSize.Width(); d += dIncr )
+                mxCanvas->drawLine( geometry::RealPoint2D( d, 0 ),
+                                    geometry::RealPoint2D( d, maSize.Height() ),
+                                    maViewState, maRenderState );
+            dIncr = maSize.Height() / 3;
+            for ( d = 0; d <= maSize.Height(); d += dIncr )
+                mxCanvas->drawLine( geometry::RealPoint2D( 0, d ),
+                                    geometry::RealPoint2D( maSize.Width(), d ),
+                                    maViewState, maRenderState );
+        }
+
+        void drawStringAt( ::rtl::OString aString, double x, double y )
+        {
+            rendering::StringContext aText;
+            aText.Text = ::rtl::OStringToOUString( aString, RTL_TEXTENCODING_UTF8 );
+            aText.StartPosition = 0;
+            aText.Length = aString.getLength();
+            rendering::RenderState aRenderState( maRenderState );
+            aRenderState.AffineTransform.m02 += x;
+            aRenderState.AffineTransform.m12 += y;
+
+            mxCanvas->drawText( aText, mxDefaultFont, maViewState, aRenderState, 0);
+        }
+
+        void drawRect( Rectangle rRect, uno::Sequence< double > &aColor, int /*nWidth*/ )
+        {
+            uno::Sequence< geometry::RealPoint2D > aPoints(4);
+            uno::Reference< rendering::XLinePolyPolygon2D > xPoly;
+
+            aPoints[0] = geometry::RealPoint2D( rRect.Left(),  rRect.Top() );
+            aPoints[1] = geometry::RealPoint2D( rRect.Left(),  rRect.Bottom() );
+            aPoints[2] = geometry::RealPoint2D( rRect.Right(), rRect.Bottom() );
+            aPoints[3] = geometry::RealPoint2D( rRect.Right(), rRect.Top() );
+
+            uno::Sequence< uno::Sequence< geometry::RealPoint2D > > aPolys(1);
+            aPolys[0] = aPoints;
+            xPoly = mxDevice->createCompatibleLinePolyPolygon( aPolys );
+            xPoly->setClosed( 0, true );
+            uno::Reference< rendering::XPolyPolygon2D> xPP( xPoly, uno::UNO_QUERY );
+
+            rendering::RenderState aRenderState( maRenderState );
+            aRenderState.DeviceColor = aColor;
+            mxCanvas->drawPolyPolygon( xPP, maViewState, aRenderState );
+        }
+
+        void translate( double x, double y)
+        {
+            maRenderState.AffineTransform.m02 += x;
+            maRenderState.AffineTransform.m12 += y;
+        }
+
+        void drawPolishDiamond( double center_x, double center_y)
+        {
+            const int    VERTICES = 10;
+            const double RADIUS = 60.0;
+            int i, j;
+            double a;
+
+            rendering::RenderState maOldRenderState = maRenderState; // push
+            translate( center_x, center_y );
+
+            for (i = 0; i < VERTICES; i++)
+            {
+                a = 2.0 * M_PI * i / VERTICES;
+                geometry::RealPoint2D aSrc( RADIUS * cos (a), RADIUS * sin (a) );
+
+                for (j = i + 1; j < VERTICES; j++)
+                {
+                    a = 2.0 * M_PI * j / VERTICES;
+
+//                  FIXME: set cap_style to 'ROUND'
+                    mxCanvas->drawLine( aSrc,
+                                        geometry::RealPoint2D( RADIUS * cos (a),
+                                                               RADIUS * sin (a) ),
+                                        maViewState, maRenderState );
+                }
+            }
+
+            maRenderState = maOldRenderState; // pop
+        }
+
+        void drawHilbert( double anchor_x, double anchor_y )
+        {
+            const double SCALE=7.0;
+            const char hilbert[] = "urdrrulurulldluuruluurdrurddldrrruluurdrurddldrddlulldrdldrrurd";
+            int nLength = SAL_N_ELEMENTS( hilbert );
+
+            uno::Sequence< geometry::RealPoint2D > aPoints( nLength );
+            uno::Reference< rendering::XLinePolyPolygon2D > xPoly;
+
+            aPoints[0] = geometry::RealPoint2D( anchor_x, anchor_y );
+            for (int i = 0; i < nLength; i++ )
+            {
+                switch( hilbert[i] )
+                {
+                    case 'u':
+                        aPoints[i+1] = geometry::RealPoint2D( aPoints[i].X,
+                                                            aPoints[i].Y - SCALE );
+                        break;
+                    case 'd':
+                        aPoints[i+1] = geometry::RealPoint2D( aPoints[i].X,
+                                                            aPoints[i].Y + SCALE );
+                        break;
+                    case 'l':
+                        aPoints[i+1] = geometry::RealPoint2D( aPoints[i].X - SCALE,
+                                                            aPoints[i].Y );
+                        break;
+                    case 'r':
+                        aPoints[i+1] = geometry::RealPoint2D( aPoints[i].X + SCALE,
+                                                            aPoints[i].Y );
+                        break;
+                }
+            }
+
+            uno::Sequence< uno::Sequence< geometry::RealPoint2D > > aPolys(1);
+            aPolys[0] = aPoints;
+
+            xPoly = mxDevice->createCompatibleLinePolyPolygon( aPolys );
+            xPoly->setClosed( 0, false );
+            uno::Reference< rendering::XPolyPolygon2D> xPP( xPoly, uno::UNO_QUERY );
+
+            rendering::RenderState aRenderState( maRenderState );
+            aRenderState.DeviceColor = maColorRed;
+//          aRenderState.DeviceColor[3] = 0.5;
+            rendering::StrokeAttributes aStrokeAttrs;
+            aStrokeAttrs.StrokeWidth = 4.0;
+            aStrokeAttrs.MiterLimit = 2.0; // ?
+            aStrokeAttrs.StartCapType = rendering::PathCapType::BUTT;
+            aStrokeAttrs.EndCapType = rendering::PathCapType::BUTT;
+            aStrokeAttrs.JoinType = rendering::PathJoinType::MITER;
+            //fprintf( stderr, "FIXME: stroking a PolyPolygon doesn't show up\n" );
+            //yes it does
+            mxCanvas->strokePolyPolygon( xPP, maViewState, aRenderState, aStrokeAttrs );
+            // FIXME: do this instead:
+            //mxCanvas->drawPolyPolygon( xPP, maViewState, aRenderState );
+        }
+
+        void drawTitle( rtl::OString aTitle )
+        {
+            // FIXME: text anchoring to be done
+            double nStringWidth = aTitle.getLength() * 8.0;
+            drawStringAt ( aTitle, (maBox.Width() - nStringWidth) / 2, 15 );
+        }
+
+        void drawRectangles()
+        {
+            rendering::RenderState maOldRenderState = maRenderState; // push
+
+            drawTitle( ::rtl::OString( "Rectangles" ) );
+
+            drawRect( Rectangle( 20, 30, 70, 60 ), maColorRed, 8 );
+            // color mediumseagreen, stipple fill, outline black
+            drawRect( Rectangle( 90, 40, 180, 100 ), maColorBlack, 4 );
+            // color steelblue, filled, no outline
+            drawRect( Rectangle( 10, 80, 80, 140 ), maColorBlack, 1 );
+
+            maRenderState = maOldRenderState; // pop
+        }
+
+        void drawEllipses()
+        {
+            rendering::RenderState maOldRenderState = maRenderState; // push
+            translate( maBox.Width(), 0.0 );
+
+            drawTitle( ::rtl::OString( "Ellipses" ) );
+
+            const basegfx::B2DPoint aCenter( maBox.Width()*.5,
+                                             maBox.Height()*.5 );
+            const basegfx::B2DPoint aRadii( maBox.Width()*.3,
+                                            maBox.Height()*.3 );
+            const basegfx::B2DPolygon& rEllipse(
+                basegfx::tools::createPolygonFromEllipse( aCenter,
+                                                          aRadii.getX(),
+                                                          aRadii.getY() ));
+
+            uno::Reference< rendering::XPolyPolygon2D > xPoly(
+                basegfx::unotools::xPolyPolygonFromB2DPolygon(mxDevice,
+                                                              rEllipse) );
+
+            rendering::StrokeAttributes aStrokeAttrs;
+            aStrokeAttrs.StrokeWidth = 4.0;
+            aStrokeAttrs.MiterLimit = 2.0; // ?
+            aStrokeAttrs.StartCapType = rendering::PathCapType::BUTT;
+            aStrokeAttrs.EndCapType = rendering::PathCapType::BUTT;
+            aStrokeAttrs.JoinType = rendering::PathJoinType::MITER;
+            mxCanvas->strokePolyPolygon( xPoly, maViewState, maRenderState, aStrokeAttrs );
+
+            maRenderState = maOldRenderState; // pop
+        }
+
+        void drawText()
+        {
+            rendering::RenderState maOldRenderState = maRenderState; // push
+            translate( maBox.Width() * 2.0, 0.0 );
+
+            drawTitle( ::rtl::OString( "Text" ) );
+
+            translate( 0.0,
+                       maBox.Height() * .5 );
+            drawTitle( ::rtl::OString( "This is lame" ) );
+
+            maRenderState = maOldRenderState; // pop
+        }
+
+        void drawImages()
+        {
+            rendering::RenderState maOldRenderState = maRenderState; // push
+            translate( 0.0, maBox.Height() );
+
+            drawTitle( ::rtl::OString( "Images" ) );
+
+            uno::Reference< rendering::XBitmap > xBitmap(mxCanvas, uno::UNO_QUERY);
+
+            if( !xBitmap.is() )
+                return;
+
+            translate( maBox.Width()*0.1, maBox.Height()*0.2 );
+            maRenderState.AffineTransform.m00 *= 4.0/15;
+            maRenderState.AffineTransform.m11 *= 3.0/15;
+
+            mxCanvas->drawBitmap(xBitmap, maViewState, maRenderState);
+
+            // uno::Reference< rendering::XBitmap > xBitmap2( xBitmap->getScaledBitmap(geometry::RealSize2D(48, 48), false) );
+            // mxCanvas->drawBitmap(xBitmap2, maViewState, maRenderState); //yes, but where?
+            //cairo-canvas says:
+            //called CanvasHelper::getScaledBitmap, we return NULL, TODO
+            //Exception 'BitmapEx vclcanvas::tools::bitmapExFromXBitmap(const com::sun::star::uno::Reference<com::sun::star::rendering::XBitmap>&),
+            //bitmapExFromXBitmap(): could not extract BitmapEx' thrown
+            //
+            //vcl-canvas says:
+            //Exception 'BitmapEx vclcanvas::tools::bitmapExFromXBitmap(const com::sun::star::uno::Reference<com::sun::star::rendering::XBitmap>&),
+            //bitmapExFromXBitmap(): could not extract bitmap' thrown
+            //  Thorsten says that this is a bug, and Thorsten never lies.
+
+            maRenderState = maOldRenderState; // pop
+        }
+
+        void drawLines()
+        {
+            rendering::RenderState maOldRenderState = maRenderState; // push
+            translate( maBox.Width(), maBox.Height() );
+
+            drawTitle( ::rtl::OString( "Lines" ) );
+
+            drawPolishDiamond( 70.0, 80.0 );
+            drawHilbert( 140.0, 140.0 );
+
+            maRenderState = maOldRenderState; // pop
+        }
+
+        void drawCurves()
+        {
+            rendering::RenderState maOldRenderState = maRenderState; // push
+            translate( maBox.Width() * 2.0, maBox.Height() );
+
+            drawTitle( ::rtl::OString( "Curves" ) );
+
+            translate( maBox.Width() * .5, maBox.Height() * .5 );
+
+            const double r= 30.0;
+            const int num_curves = 3;
+
+            //hacky hack hack
+            uno::Sequence< geometry::RealBezierSegment2D > aBeziers (num_curves);
+            uno::Reference< rendering::XBezierPolyPolygon2D > xPoly;
+
+            for (int i= 0; i < num_curves; i++)
+                aBeziers[i]= geometry::RealBezierSegment2D( r * cos(i*2*M_PI/num_curves), //Px
+                                                            r * sin(i*2*M_PI/num_curves), //py
+                                                            r * 2 * cos((i*2*M_PI + 2*M_PI)/num_curves),  //C1x
+                                                            r * 2 * sin((i*2*M_PI + 2*M_PI)/num_curves),  //C1y
+                                                            r * 2 * cos((i*2*M_PI + 2*M_PI)/num_curves),  //C2x
+                                                            r * 2 * sin((i*2*M_PI + 2*M_PI)/num_curves)); //C2y
+            uno::Sequence< uno::Sequence< geometry::RealBezierSegment2D > > aPolys(1);
+            aPolys[0] = aBeziers;
+            xPoly = mxDevice->createCompatibleBezierPolyPolygon(aPolys);
+            xPoly->setClosed( 0, true );
+            //uno::Reference< rendering::XBezierPolyPolygon2D> xPP( xPoly, uno::UNO_QUERY );
+            //compiles, but totally screws up.  I think it is interpretting the bezier as a line
+            uno::Reference< rendering::XPolyPolygon2D> xPP( xPoly, uno::UNO_QUERY );
+
+            rendering::StrokeAttributes aStrokeAttrs;
+            aStrokeAttrs.StrokeWidth = 4.0;
+            aStrokeAttrs.MiterLimit = 2.0; // ?
+            aStrokeAttrs.StartCapType = rendering::PathCapType::BUTT;
+            aStrokeAttrs.EndCapType = rendering::PathCapType::BUTT;
+            aStrokeAttrs.JoinType = rendering::PathJoinType::MITER;
+            mxCanvas->strokePolyPolygon( xPP, maViewState, maRenderState, aStrokeAttrs );
+            //you can't draw a BezierPolyPolygon2D with this, even though it is derived from it
+            //mxCanvas->drawPolyPolygon( xPP, maViewState, maRenderState );
+
+            maRenderState = maOldRenderState; // pop
+        }
+
+    double gimmerand()
+        {
+            return (double)(rand()) / RAND_MAX * 100 + 50;
+        }
+
+        void drawArcs()
+        {
+            rendering::RenderState maOldRenderState = maRenderState; // push
+            translate( 0.0, maBox.Height() * 2.0 );
+
+            drawTitle( ::rtl::OString( "Arcs" ) );
+
+
+            //begin hacks
+            //This stuff doesn't belong here, but probably in curves
+            //This stuff doesn't work in VCL b/c vcl doesn't do beziers
+            //Hah!  Everytime the window redraws, we do this
+            double ax;
+            double ay;
+            double bx;
+            double by;
+            bx= gimmerand();
+            by= gimmerand();
+
+            for (int i= 0; i < 1; i++)
+            {
+                //point a= point b;
+                ax= bx;
+                ay= by;
+                //point b= rand;
+                bx= gimmerand();
+                by= gimmerand();
+                double c1x= gimmerand();
+                double c1y= gimmerand();
+                double c2x= gimmerand();
+                double c2y= gimmerand();
+                maRenderState.DeviceColor = maColorRed;
+                mxCanvas->drawLine(geometry::RealPoint2D(ax, ay), geometry::RealPoint2D(c1x, c1y), maViewState, maRenderState);
+                mxCanvas->drawLine(geometry::RealPoint2D(c1x, c1y), geometry::RealPoint2D(c2x, c2y), maViewState, maRenderState);
+                mxCanvas->drawLine(geometry::RealPoint2D(bx, by), geometry::RealPoint2D(c2x, c2y), maViewState, maRenderState);
+                 //draw from a to b
+                geometry::RealBezierSegment2D aBezierSegment(
+                    ax, //Px
+                    ay, //Py
+                    c1x,
+                    c1x,
+                    c2x,
+                    c2y
+                    );
+                geometry::RealPoint2D aEndPoint(bx, by);
+                maRenderState.DeviceColor = maColorBlack;
+                mxCanvas->drawBezier(
+                    aBezierSegment,
+                    aEndPoint,
+                    maViewState, maRenderState );
+            }
+            maRenderState = maOldRenderState; // pop
+        }
+
+
+    void drawRegularPolygon(double centerx, double centery, int sides, double r)
+        {
+            //hacky hack hack
+            uno::Sequence< geometry::RealPoint2D > aPoints (sides);
+            uno::Reference< rendering::XLinePolyPolygon2D > xPoly;
+
+            for (int i= 0; i < sides; i++)
+            {
+                aPoints[i]= geometry::RealPoint2D( centerx + r * cos(i*2 * M_PI/sides),
+                                                   centery + r * sin(i*2 * M_PI/sides));
+            }
+            uno::Sequence< uno::Sequence< geometry::RealPoint2D > > aPolys(1);
+            aPolys[0] = aPoints;
+            xPoly = mxDevice->createCompatibleLinePolyPolygon( aPolys );
+            xPoly->setClosed( 0, true );
+            rendering::RenderState aRenderState( maRenderState );
+            aRenderState.DeviceColor = maColorRed;
+            uno::Reference< rendering::XPolyPolygon2D> xPP( xPoly, uno::UNO_QUERY );
+            mxCanvas->drawPolyPolygon( xPP, maViewState, aRenderState);
+            mxCanvas->fillPolyPolygon( xPP,
+                                       maViewState,
+                                       aRenderState );
+        }
+
+        void drawPolygons()
+        {
+            rendering::RenderState maOldRenderState = maRenderState; // push
+            translate( maBox.Width() * 1.0, maBox.Height() * 2.0 );
+
+            drawTitle( ::rtl::OString( "Polgyons" ) );
+
+            int sides= 3;
+            for (int i= 1; i <= 4; i++)
+            {
+                drawRegularPolygon(35*i, 35, sides, 15);
+                sides++;
+            }
+
+            maRenderState = maOldRenderState; // pop
+        }
+
+        void drawWidgets() // FIXME: prolly makes no sense
+        {
+            rendering::RenderState maOldRenderState = maRenderState; // push
+            translate( maBox.Width() * 2.0, maBox.Height() * 2.0 );
+
+            drawTitle( ::rtl::OString( "Widgets" ) );
+
+            maRenderState = maOldRenderState; // pop
+        }
+};
+
+
+void TestWindow::Paint( const Rectangle& /*rRect*/ )
+{
+    try
+    {
+        const Size aVDevSize(300,300);
+        VirtualDevice aVDev(*this);
+        aVDev.SetOutputSizePixel(aVDevSize);
+        uno::Reference< rendering::XCanvas > xVDevCanvas( aVDev.GetCanvas(),
+                                                          uno::UNO_QUERY_THROW );
+        uno::Reference< rendering::XGraphicDevice > xVDevDevice( xVDevCanvas->getDevice(),
+                                                                 uno::UNO_QUERY_THROW );
+        DemoRenderer aVDevRenderer( xVDevDevice, xVDevCanvas, aVDevSize);
+        xVDevCanvas->clear();
+        aVDevRenderer.drawGrid();
+        aVDevRenderer.drawRectangles();
+        aVDevRenderer.drawEllipses();
+        aVDevRenderer.drawText();
+        aVDevRenderer.drawLines();
+        aVDevRenderer.drawCurves();
+        aVDevRenderer.drawArcs();
+        aVDevRenderer.drawPolygons();
+
+        uno::Reference< rendering::XCanvas > xCanvas( GetSpriteCanvas(),
+                                                          uno::UNO_QUERY_THROW );
+        uno::Reference< rendering::XGraphicDevice > xDevice( xCanvas->getDevice(),
+                                                             uno::UNO_QUERY_THROW );
+
+        DemoRenderer aRenderer( xDevice, xCanvas, GetSizePixel() );
+        xCanvas->clear();
+        aRenderer.drawGrid();
+        aRenderer.drawRectangles();
+        aRenderer.drawEllipses();
+        aRenderer.drawText();
+        aRenderer.drawLines();
+        aRenderer.drawCurves();
+        aRenderer.drawArcs();
+        aRenderer.drawPolygons();
+        aRenderer.drawWidgets();
+        aRenderer.drawImages();
+
+        // check whether virdev actually contained something
+        uno::Reference< rendering::XBitmap > xBitmap(xVDevCanvas, uno::UNO_QUERY);
+        if( !xBitmap.is() )
+            return;
+
+        aRenderer.maRenderState.AffineTransform.m02 += 100;
+        aRenderer.maRenderState.AffineTransform.m12 += 100;
+        xCanvas->drawBitmap(xBitmap, aRenderer.maViewState, aRenderer.maRenderState);
+
+        uno::Reference< rendering::XSpriteCanvas > xSpriteCanvas( xCanvas,
+                                                                  uno::UNO_QUERY );
+        if( xSpriteCanvas.is() )
+            xSpriteCanvas->updateScreen( sal_True ); // without
+                                                     // updateScreen(),
+                                                     // nothing is
+                                                     // visible
+    }
+    catch (const uno::Exception &e)
+    {
+        fprintf( stderr, "Exception '%s' thrown\n" ,
+                 (const sal_Char *) ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ) );
+    }
+}
+
+USHORT DemoApp::Exception( USHORT nError )
+{
+    switch( nError & EXC_MAJORTYPE )
+    {
+        case EXC_RSCNOTLOADED:
+            Abort( String::CreateFromAscii( "Error: could not load language resources.\nPlease check your installation.\n" ) );
+            break;
+    }
+    return 0;
+}
+
+void DemoApp::Main()
+{
+    bool bHelp = false;
+
+    for( USHORT i = 0; i < GetCommandLineParamCount(); i++ )
+    {
+        ::rtl::OUString aParam = GetCommandLineParam( i );
+
+        if( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--help" ) ) ||
+            aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-h" ) ) )
+                bHelp = true;
+    }
+
+    if( bHelp )
+    {
+        PrintHelp();
+        return;
+    }
+
+    //-------------------------------------------------
+    // create the global service-manager
+    //-------------------------------------------------
+    uno::Reference< lang::XMultiServiceFactory > xFactory;
+    try
+    {
+        uno::Reference< uno::XComponentContext > xCtx = ::cppu::defaultBootstrap_InitialComponentContext();
+        xFactory = uno::Reference< lang::XMultiServiceFactory >(  xCtx->getServiceManager(),
+                                                                  uno::UNO_QUERY );
+        if( xFactory.is() )
+            ::comphelper::setProcessServiceFactory( xFactory );
+    }
+    catch( uno::Exception& )
+    {
+    }
+
+    if( !xFactory.is() )
+    {
+        fprintf( stderr, "Could not bootstrap UNO, installation must be in disorder. Exiting.\n" );
+        exit( 1 );
+    }
+
+    // Create UCB.
+    uno::Sequence< uno::Any > aArgs( 2 );
+    aArgs[ 0 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY1_LOCAL ));
+    aArgs[ 1 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY2_OFFICE ));
+    ::ucbhelper::ContentBroker::initialize( xFactory, aArgs );
+
+    InitVCL( xFactory );
+    TestWindow pWindow;
+    pWindow.Execute();
+    DeInitVCL();
+
+    // clean up UCB
+    ::ucbhelper::ContentBroker::deinitialize();
+}
+
+DemoApp aDemoApp;
+
+// TODO
+//   - bouncing clip-rectangle mode - bounce a clip-rect around the window ...
+//   - complete all of pre-existing canvas bits
+//   - affine transform tweakage ...
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

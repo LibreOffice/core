@@ -1,0 +1,127 @@
+UDK_3_0_0 {
+    global:
+        typelib_typedescription_new;
+        typelib_typedescription_newInterface;
+        typelib_typedescription_newInterfaceMethod;
+        typelib_typedescription_newInterfaceAttribute;
+        typelib_typedescription_newEnum;
+        typelib_typedescription_newUnion;
+        typelib_typedescription_newArray;
+        typelib_typedescription_acquire;
+        typelib_typedescription_release;
+        typelib_typedescription_register;
+        typelib_typedescription_equals;
+        typelib_typedescription_isAssignableFrom;
+        typelib_typedescription_getByName;
+        typelib_typedescription_registerCallback;
+        typelib_typedescription_revokeCallback;
+        typelib_typedescriptionreference_new;
+        typelib_typedescriptionreference_acquire;
+        typelib_typedescriptionreference_release;
+        typelib_typedescriptionreference_getDescription;
+        typelib_typedescriptionreference_equals;
+        typelib_typedescriptionreference_assign;
+        typelib_typedescriptionreference_isAssignableFrom;
+
+        typelib_setCacheSize;
+
+        typelib_typedescriptionreference_newByAsciiName;
+        typelib_static_type_getByTypeClass;
+        typelib_static_type_init;
+        typelib_static_sequence_type_init;
+        typelib_static_compound_type_init;
+        typelib_static_interface_type_init;
+        typelib_static_enum_type_init;
+        typelib_static_array_type_init;
+        typelib_typedescription_complete;
+
+        uno_equalData;
+        uno_type_equalData;
+        uno_constructData;
+        uno_type_constructData;
+        uno_destructData;
+        uno_type_destructData;
+        uno_copyData;
+        uno_type_copyData;
+        uno_copyAndConvertData;
+        uno_type_copyAndConvertData;
+        uno_assignData;
+        uno_type_assignData;
+        uno_type_isAssignableFromData;
+
+        uno_any_assign;
+        uno_type_any_assign;
+        uno_any_construct;
+        uno_type_any_construct;
+        uno_any_constructAndConvert;
+        uno_type_any_constructAndConvert;
+        uno_any_destruct;
+        uno_any_clear;
+
+        uno_sequence_assign;
+        uno_type_sequence_assign;
+        uno_sequence_construct;
+        uno_type_sequence_construct;
+        uno_sequence_reference2One;
+        uno_type_sequence_reference2One;
+        uno_sequence_realloc;
+        uno_type_sequence_realloc;
+
+        uno_createEnvironment;
+        uno_getEnvironment;
+        uno_getRegisteredEnvironments;
+        uno_dumpEnvironment;
+        uno_dumpEnvironmentByName;
+        uno_getMapping;
+        uno_getMappingByName;
+        uno_registerMapping;
+        uno_revokeMapping;
+        uno_registerMappingCallback;
+        uno_revokeMappingCallback;
+
+        uno_getCurrentContext;
+        uno_setCurrentContext;
+
+        uno_bindIdToCurrentThread;
+        uno_getIdOfCurrentThread;
+        uno_releaseIdFromCurrentThread;
+        uno_threadpool_enter;
+        uno_threadpool_create;
+        uno_threadpool_destroy;
+        uno_threadpool_putJob;
+        uno_threadpool_dispose;
+        uno_threadpool_attach;
+        uno_threadpool_detach;
+
+        cppu_unsatisfied_iquery_msg;
+    local:
+        *;
+};
+
+UDK_3.1 {
+    global:
+        typelib_static_mi_interface_type_init;
+        typelib_static_struct_type_init;
+        typelib_typedescription_newExtendedInterfaceAttribute;
+        typelib_typedescription_newMIInterface;
+        typelib_typedescription_newStruct;
+    cppu_Any_extraction_failure_msg;
+} UDK_3_0_0;
+
+UDK_3.2 {
+    global:
+        uno_EnvDcp_getTypeName;
+        uno_EnvDcp_getPurpose;
+
+        uno_getCurrentEnvironment;
+        uno_Environment_invoke_v;
+        uno_Environment_invoke;
+        uno_Environment_enter;
+
+        uno_Environment_isValid;
+} UDK_3.1;
+
+UDK_3.3 {   # OOo 2.4
+    global:
+        cppu_unsatisfied_iset_msg;
+} UDK_3.2;

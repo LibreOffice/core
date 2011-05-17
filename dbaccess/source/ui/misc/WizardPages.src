@@ -1,0 +1,592 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef DBAUI_WIZARD_PAGES_HRC
+#include "WizardPages.hrc"
+#endif
+#ifndef _DBU_MISC_HRC_
+#include "dbu_misc.hrc"
+#endif
+#ifndef _DBA_DBACCESS_HELPID_HRC_
+#include "dbaccess_helpid.hrc"
+#endif
+
+#include "dbaccess_slotid.hrc"
+
+#define WINDOW_SIZE_X   276
+#define WINDOW_SIZE_Y   185
+
+#define WINDOW_BORDER_X  12
+#define WINDOW_BORDER_Y  14
+
+#define BUTTON_SIZE_X    50
+#define BUTTON_SIZE_Y    14
+
+String STR_WIZ_COLUMN_SELECT_TITEL
+{
+    Text [ en-US ] = "Apply columns";
+};
+
+String STR_WIZ_TYPE_SELECT_TITEL
+{
+    Text [ en-US ] = "Type formatting";
+};
+
+String STR_WIZ_PKEY_ALREADY_DEFINED
+{
+    Text [ en-US ] = "The following fields have already been set as primary keys:\n";
+};
+
+String STR_WIZ_NAME_MATCHING_TITEL
+{
+    Text [ en-US ]  = "Assign columns" ;
+};
+
+ModalDialog WIZ_RTFCOPYTABLE
+{
+    HelpID = "dbaccess:ModalDialog:WIZ_RTFCOPYTABLE";
+
+    Text [ en-US ] = "Copy RTF Table" ;
+
+    OutputSize      = TRUE ;
+    SVLook          = TRUE ;
+    Moveable        = TRUE ;
+    Closeable       = TRUE ;
+    Hide            = TRUE;
+
+    HelpButton PB_HELP
+    {
+        TabStop             = TRUE ;
+        Size                = MAP_APPFONT ( BUTTON_SIZE_X , BUTTON_SIZE_Y ) ;
+        Text [ en-US ] = "~Help";
+    };
+    CancelButton PB_CANCEL
+    {
+        TabStop             = TRUE ;
+        Size                = MAP_APPFONT ( BUTTON_SIZE_X , BUTTON_SIZE_Y ) ;
+        Text [ en-US ] = "~Cancel";
+    };
+    PushButton PB_PREV
+    {
+        HelpID = "dbaccess:PushButton:WIZ_RTFCOPYTABLE:PB_PREV";
+        TabStop             = TRUE ;
+        Size                = MAP_APPFONT ( BUTTON_SIZE_X , BUTTON_SIZE_Y ) ;
+        Text [ en-US ] = "< ~Back";
+    };
+    PushButton PB_NEXT
+    {
+        HelpID = "dbaccess:PushButton:WIZ_RTFCOPYTABLE:PB_NEXT";
+        TabStop             = TRUE ;
+        Size                = MAP_APPFONT ( BUTTON_SIZE_X , BUTTON_SIZE_Y ) ;
+        Text [ en-US ] = "~Next>";
+    };
+    OKButton PB_OK
+    {
+        TabStop             = TRUE ;
+        Size                = MAP_APPFONT ( BUTTON_SIZE_X , BUTTON_SIZE_Y ) ;
+        Text [ en-US ] = "C~reate";
+    };
+
+};
+
+//==================================================================
+ // TAB_WIZ_COLUMN_SELECT
+ //==================================================================
+TabPage TAB_WIZ_COLUMN_SELECT
+{
+    SVLook  = TRUE ;
+    Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
+
+    HelpId  = HID_TAB_WIZ_COLUMN_SELECT;
+    Hide    = TRUE;
+
+    FixedLine FL_COLUMN_SELECT
+    {
+        Pos             = MAP_APPFONT ( 6 , 3  ) ;
+        Size            = MAP_APPFONT ( WINDOW_SIZE_X - 12 , 8 ) ;
+        Text [ en-US ]  = "Existing columns" ;
+    };
+    MultiListBox LB_ORG_COLUMN_NAMES
+    {
+        HelpID = "dbaccess:MultiListBox:TAB_WIZ_COLUMN_SELECT:LB_ORG_COLUMN_NAMES";
+        Border              = TRUE ;
+        Pos                 = MAP_APPFONT ( WINDOW_BORDER_X , WINDOW_BORDER_Y ) ;
+        Size                = MAP_APPFONT ( 95 , WINDOW_SIZE_Y - 23 ) ;
+        TabStop             = TRUE ;
+        HScroll             = TRUE;
+        VScroll             = TRUE;
+        AutoHScroll         = TRUE;
+        SimpleMode          = TRUE;
+        Sort                = FALSE;
+    };
+    ImageButton IB_COLUMN_RH
+    {
+        HelpID = "dbaccess:ImageButton:TAB_WIZ_COLUMN_SELECT:IB_COLUMN_RH";
+        Pos                 = MAP_APPFONT ( WINDOW_BORDER_X + 116 , WINDOW_BORDER_Y + 25 ) ;
+        Size                = MAP_APPFONT ( 20 , 14 ) ;
+        TabStop             = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "one_right.png" ;
+            };
+            MaskColor = Color
+            {
+                Red   = 0xFFFF;
+                Green = 0x0000;
+                Blue  = 0xFFFF;
+            };
+        };
+    };
+    ImageButton IB_COLUMNS_RH
+    {
+        HelpID = "dbaccess:ImageButton:TAB_WIZ_COLUMN_SELECT:IB_COLUMNS_RH";
+        Pos                 = MAP_APPFONT ( WINDOW_BORDER_X + 116 , WINDOW_BORDER_Y + 45 ) ;
+        Size                = MAP_APPFONT ( 20 , 14 ) ;
+        TabStop             = TRUE;
+        DefButton           = TRUE;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "all_right.png" ;
+            };
+            MaskColor = Color
+            {
+                Red   = 0xFFFF;
+                Green = 0x0000;
+                Blue  = 0xFFFF;
+            };
+        };
+    };
+    ImageButton IB_COLUMN_LH
+    {
+        HelpID = "dbaccess:ImageButton:TAB_WIZ_COLUMN_SELECT:IB_COLUMN_LH";
+        Pos                 = MAP_APPFONT ( WINDOW_BORDER_X + 116 , WINDOW_BORDER_Y + 65) ;
+        Size                = MAP_APPFONT ( 20 , 14 ) ;
+        TabStop             = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "one_left.png1" ;
+            };
+            MaskColor = Color
+            {
+                Red   = 0xFFFF;
+                Green = 0x0000;
+                Blue  = 0xFFFF;
+            };
+        };
+    };
+    ImageButton IB_COLUMNS_LH
+    {
+        HelpID = "dbaccess:ImageButton:TAB_WIZ_COLUMN_SELECT:IB_COLUMNS_LH";
+        Pos                 = MAP_APPFONT ( WINDOW_BORDER_X + 116 , WINDOW_BORDER_Y + 85) ;
+        Size                = MAP_APPFONT ( 20 , 14 ) ;
+        TabStop             = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "all_left.png" ;
+            };
+            MaskColor = Color
+            {
+                Red   = 0xFFFF;
+                Green = 0x0000;
+                Blue  = 0xFFFF;
+            };
+        };
+    };
+
+    MultiListBox LB_NEW_COLUMN_NAMES
+    {
+        HelpID = "dbaccess:MultiListBox:TAB_WIZ_COLUMN_SELECT:LB_NEW_COLUMN_NAMES";
+        Border              = TRUE ;
+        Pos                 = MAP_APPFONT ( WINDOW_BORDER_X + 157, WINDOW_BORDER_Y) ;
+        Size                = MAP_APPFONT ( 95 , WINDOW_SIZE_Y - 23 ) ;
+        TabStop             = TRUE ;
+        HScroll             = TRUE;
+        VScroll             = TRUE;
+        AutoHScroll         = TRUE;
+        SimpleMode          = TRUE;
+        Sort                = FALSE;
+    };
+};
+
+//==================================================================
+ // TAB_WIZ_TYPE_SELECT
+ //==================================================================
+TabPage TAB_WIZ_TYPE_SELECT
+{
+    SVLook  = TRUE ;
+    Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
+
+    HelpId  = HID_TAB_WIZ_TYPE_SELECT;
+    Hide    = TRUE;
+
+    MultiListBox LB_NEW_COLUMN_NAMES
+    {
+        HelpID = "dbaccess:MultiListBox:TAB_WIZ_TYPE_SELECT:LB_NEW_COLUMN_NAMES";
+        Border              = TRUE ;
+        Pos                 = MAP_APPFONT ( 6 , 6 ) ;
+        Size                = MAP_APPFONT ( 87 , WINDOW_SIZE_Y - 12 ) ;
+        TabStop             = TRUE ;
+        HScroll             = TRUE;
+        VScroll             = TRUE;
+        AutoHScroll         = TRUE;
+        SimpleMode          = TRUE;
+    };
+
+    FixedLine FL_COLUMN_NAME
+    {
+        Pos                 = MAP_APPFONT ( 99 , 3  ) ;
+        Size                = MAP_APPFONT ( WINDOW_SIZE_X -  105, 8 ) ;
+        Text [ en-US ] = "Column information" ;
+    };
+
+    TabPage CONTROL_CONTAINER
+    {
+        HelpID = "dbaccess:TabPage:CONTROL_CONTAINER";
+        Pos                 = MAP_APPFONT ( 102 , WINDOW_BORDER_Y  ) ;
+        Size                = MAP_APPFONT ( WINDOW_SIZE_X -  111, WINDOW_SIZE_Y - WINDOW_BORDER_Y - 67 );
+        SVLook              = TRUE;
+        DialogControl       = TRUE;
+    };
+
+    FixedLine FL_AUTO_TYPE
+    {
+        Pos                 = MAP_APPFONT ( 99 , WINDOW_SIZE_Y - WINDOW_BORDER_Y - 41  ) ;
+        Size                = MAP_APPFONT ( WINDOW_SIZE_X - 105, 8 ) ;
+        Text [ en-US ] = "Automatic type recognition" ;
+    };
+
+    FixedText FT_AUTO
+    {
+        Pos                 = MAP_APPFONT ( 105 , WINDOW_SIZE_Y - WINDOW_BORDER_Y - 28 ) ;
+        Size                = MAP_APPFONT ( 40 , 8 ) ;
+        Text [ en-US ] = "Lines (ma~x)";
+    };
+
+    NumericField ET_AUTO
+    {
+        HelpID = "dbaccess:NumericField:TAB_WIZ_TYPE_SELECT:ET_AUTO";
+        Border              = TRUE ;
+        Pos                 = MAP_APPFONT ( 151 , WINDOW_SIZE_Y - WINDOW_BORDER_Y - 29) ;
+        Size                = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop             = TRUE ;
+    };
+
+    PushButton PB_AUTO
+    {
+        HelpID = "dbaccess:PushButton:TAB_WIZ_TYPE_SELECT:PB_AUTO";
+        Pos                 = MAP_APPFONT ( WINDOW_SIZE_X - 62 , WINDOW_SIZE_Y - WINDOW_BORDER_Y - 30 ) ;
+        Size                = MAP_APPFONT ( BUTTON_SIZE_X , BUTTON_SIZE_Y ) ;
+        TabStop             = TRUE ;
+        Text                = "~Auto" ;
+    };
+};
+
+Menu RID_SBA_RTF_PKEYPOPUP
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier      = SID_TABLEDESIGN_TABED_PRIMARYKEY ;
+            HelpID          = HID_TABLEDESIGN_TABED_PRIMARYKEY ;
+            Checkable       = TRUE ;
+            Text [ en-US ] = "Primary Key" ;
+        };
+    };
+};
+
+//==================================================================
+ // TAB_WIZ_NAME_MATCHING
+ //==================================================================
+TabPage TAB_WIZ_NAME_MATCHING
+{
+    HelpID = "dbaccess:TabPage:TAB_WIZ_NAME_MATCHING";
+    SVLook  = TRUE ;
+    Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
+
+    Hide    = TRUE;
+
+    FixedText FT_TABLE_LEFT
+    {
+        Pos                 = MAP_APPFONT ( 52 , 6  ) ;
+        Size                = MAP_APPFONT ( 75 , 20) ;
+        Text [ en-US ] = "Source table: \n";
+    };
+
+    FixedText FT_TABLE_RIGHT
+    {
+        Pos                 = MAP_APPFONT ( 144, 6  ) ;
+        Size                = MAP_APPFONT ( 75 , 20) ;
+        Text [ en-US ] = "Destination table: \n";
+    };
+
+    Control CTRL_LEFT
+    {
+        Border              = TRUE;
+        Pos                 = MAP_APPFONT ( 52, 28) ;
+        Size                = MAP_APPFONT ( 82 , WINDOW_SIZE_Y - 34 ) ;
+        TabStop             = TRUE;
+        HelpId              = HID_TAB_NAMEMATCHING_COLS_AVAIL;
+        /*DialogControl       = TRUE;*/
+    };
+
+    Control CTRL_RIGHT
+    {
+        Border              = TRUE ;
+        Pos                 = MAP_APPFONT ( 144, 28) ;
+        Size                = MAP_APPFONT ( 82 , WINDOW_SIZE_Y - 34 ) ;
+        TabStop             = TRUE;
+        HelpId              = HID_TAB_NAMEMATCHING_COLS_ASSIGN;
+        /*DialogControl       = TRUE;*/
+    };
+
+    ImageButton IB_COLUMN_UP
+    {
+        HelpID = "dbaccess:ImageButton:TAB_WIZ_NAME_MATCHING:IB_COLUMN_UP";
+        Pos                 = MAP_APPFONT ( 19 ,  45 ) ;
+        Size                = MAP_APPFONT ( 14 , 14 ) ;
+        TabStop             = TRUE;
+        DefButton           = TRUE;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "sortup.png" ;
+            };
+            MaskColor = Color
+            {
+                Red = 0xFFFF ;
+                Green = 0x0000 ;
+                Blue = 0xFFFF ;
+            };
+        };
+    };
+    ImageButton IB_COLUMN_DOWN
+    {
+        HelpID = "dbaccess:ImageButton:TAB_WIZ_NAME_MATCHING:IB_COLUMN_DOWN";
+        Pos                 = MAP_APPFONT ( 19 ,  63 ) ;
+        Size                = MAP_APPFONT ( 14 , 14 ) ;
+        TabStop             = TRUE;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "sortdown.png" ;
+            };
+            MaskColor = Color
+            {
+                Red = 0xFFFF ;
+                Green = 0x0000 ;
+                Blue = 0xFFFF ;
+            };
+        };
+    };
+    ImageButton IB_COLUMN_UP_RIGHT
+    {
+        HelpID = "dbaccess:ImageButton:TAB_WIZ_NAME_MATCHING:IB_COLUMN_UP_RIGHT";
+        Pos                 = MAP_APPFONT ( WINDOW_SIZE_X - 33, 45 ) ;
+        Size                = MAP_APPFONT ( 14 , 14 ) ;
+        TabStop             = TRUE;
+        DefButton           = TRUE;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "sortup.png" ;
+            };
+            MaskColor = Color
+            {
+                Red = 0xFFFF ;
+                Green = 0x0000 ;
+                Blue = 0xFFFF ;
+            };
+        };
+    };
+    ImageButton IB_COLUMN_DOWN_RIGHT
+    {
+        HelpID = "dbaccess:ImageButton:TAB_WIZ_NAME_MATCHING:IB_COLUMN_DOWN_RIGHT";
+        Pos                 = MAP_APPFONT ( WINDOW_SIZE_X - 33, 63) ;
+        Size                = MAP_APPFONT ( 14 , 14 ) ;
+        TabStop             = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "sortdown.png" ;
+            };
+            MaskColor = Color
+            {
+                Red = 0xFFFF ;
+                Green = 0x0000 ;
+                Blue = 0xFFFF ;
+            };
+        };
+    };
+
+    PushButton PB_ALL
+    {
+        HelpID = "dbaccess:PushButton:TAB_WIZ_NAME_MATCHING:PB_ALL";
+        Pos                 = MAP_APPFONT ( 6, 83) ;
+        Size                = MAP_APPFONT ( 40 , 14 ) ;
+        TabStop             = TRUE ;
+        Text [ en-US ]  = "~All" ;
+    };
+
+    PushButton PB_NONE
+    {
+        HelpID = "dbaccess:PushButton:TAB_WIZ_NAME_MATCHING:PB_NONE";
+        Pos                 = MAP_APPFONT ( 6, 103) ;
+        Size                = MAP_APPFONT ( 40 , 14 ) ;
+        TabStop             = TRUE ;
+        Text [ en-US ]  = "Non~e" ;
+    };
+};
+
+TabPage TAB_WIZ_COPYTABLE
+{
+    SVLook  = TRUE ;
+    Size    = MAP_APPFONT ( WINDOW_SIZE_X, WINDOW_SIZE_Y ) ;
+
+    HelpId  = HID_TAB_WIZ_COPYTABLE;
+    Hide    = TRUE;
+
+    FixedText FT_TABLENAME
+    {
+        Pos                 = MAP_APPFONT ( 12 , 11) ;
+        Size                = MAP_APPFONT ( 60 , 8 ) ;
+        Text [ en-US ] = "Ta~ble name";
+    };
+
+    Edit ET_TABLENAME
+    {
+        HelpId              = HID_TAB_WIZ_TABLENAME_EDIT;
+        Border              = TRUE ;
+        Pos                 = MAP_APPFONT ( 80 , 9) ;
+        Size                = MAP_APPFONT ( WINDOW_SIZE_X - 92 , 12 ) ;
+        TabStop             = TRUE ;
+    };
+
+    FixedLine FL_OPTIONS
+    {
+        Pos                 = MAP_APPFONT ( 6 , 24 ) ;
+        Size                = MAP_APPFONT ( WINDOW_SIZE_X - 12 , 8 ) ;
+        Text [ en-US ] = "Options" ;
+    };
+    RadioButton RB_DEFDATA
+    {
+        HelpID = "dbaccess:RadioButton:TAB_WIZ_COPYTABLE:RB_DEFDATA";
+        Pos                 = MAP_APPFONT ( 12 , 35 ) ;
+        Size                = MAP_APPFONT ( 73 , 10 ) ;
+        Text [ en-US ] = "De~finition and data" ;
+    };
+    RadioButton RB_DEF
+    {
+        HelpID = "dbaccess:RadioButton:TAB_WIZ_COPYTABLE:RB_DEF";
+        Pos                 = MAP_APPFONT ( 12, 49 ) ;
+        Size                = MAP_APPFONT ( 73 , 10 ) ;
+        Text [ en-US ] = "Def~inition" ;
+    };
+
+    RadioButton RB_VIEW
+    {
+        HelpID = "dbaccess:RadioButton:TAB_WIZ_COPYTABLE:RB_VIEW";
+        Pos                 = MAP_APPFONT ( 12, 63 ) ;
+        Size                = MAP_APPFONT ( 73 , 10 ) ;
+        Text [ en-US ] = "A~s table view";
+    };
+
+    RadioButton RB_APPENDDATA
+    {
+        HelpID = "dbaccess:RadioButton:TAB_WIZ_COPYTABLE:RB_APPENDDATA";
+        Pos                 = MAP_APPFONT ( 12, 77 ) ;
+        Size                = MAP_APPFONT ( 73 , 10 ) ;
+        Text [ en-US ] = "Append ~data" ;
+    };
+
+    CheckBox CB_USEHEADERLINE
+    {
+        HelpID = "dbaccess:CheckBox:TAB_WIZ_COPYTABLE:CB_USEHEADERLINE";
+        Pos                 = MAP_APPFONT ( 12, 93 ) ;
+        Size                = MAP_APPFONT ( WINDOW_SIZE_X - 18, 10 ) ;
+        Text [ en-US ] = "Use first ~line as column names" ;
+    };
+
+    CheckBox CB_PRIMARY_COLUMN
+    {
+        HelpID = "dbaccess:CheckBox:TAB_WIZ_COPYTABLE:CB_PRIMARY_COLUMN";
+        Pos                 = MAP_APPFONT ( 12, 107 ) ;
+        Size                = MAP_APPFONT ( 90 , 10 ) ;
+        Text [ en-US ] = "Crea~te primary key";
+    };
+    FixedText FT_KEYNAME
+    {
+        Pos                 = MAP_APPFONT ( 21 , 122 ) ;
+        Size                = MAP_APPFONT ( 39 , 8 ) ;
+        Text [ en-US ] = "Name";
+    };
+
+    Edit ET_KEYNAME
+    {
+        HelpID = "dbaccess:Edit:TAB_WIZ_COPYTABLE:ET_KEYNAME";
+        Pos                 = MAP_APPFONT ( 80, 120 ) ;
+        Size                = MAP_APPFONT ( 65 , 12 ) ;
+        TabStop             = TRUE ;
+        Border              = TRUE ;
+    };
+};
+
+String STR_WIZ_TABLE_COPY
+{
+    Text [ en-US ] = "Copy table" ;
+};
+
+String STR_COPYTABLE_TITLE_COPY
+{
+    Text [ en-US ] = "Copy table" ;
+};
+
+String STR_INVALID_TABLE_NAME
+{
+    Text [ en-US ] = "This table name is not valid in the current database.";
+};
+String STR_SUGGEST_APPEND_TABLE_DATA
+{
+    Text [ en-US ] = "Choose the option 'Append data' on the first page to append data to an existing table.";
+};
+
+String STR_INVALID_TABLE_NAME_LENGTH
+{
+    Text [ en-US ] = "Please change the table name. It is too long.";
+};

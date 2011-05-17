@@ -1,0 +1,206 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "globals.hrc"
+#include "fldtdlg.hrc"
+#include "helpid.h"
+TabPage TP_FLD_DB
+{
+    HelpID = HID_FLD_DB ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    FixedText FT_DBTYPE
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 76 , 8 ) ;
+        Text [ en-US ] = "~Type" ;
+        Left = TRUE ;
+    };
+    ListBox LB_DBTYPE
+    {
+        HelpID = "sw:ListBox:TP_FLD_DB:LB_DBTYPE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 14 ) ;
+        Size = MAP_APPFONT ( 76 , 104 ) ;
+        TabStop = TRUE ;
+        Sort = TRUE ;
+        AutoHScroll = TRUE ;
+        /*        StringList =
+        {
+            < "Beliebiger Datensatz" ; > ;
+            < "Datensatznummer" ; > ;
+            < "Nächster Datensatz" ; > ;
+            < "Serienbrieffeld" ; > ;
+            < "Datenbankname" ; > ;
+        };*/
+    };
+    FixedText FT_DBCONDITION
+    {
+        Pos = MAP_APPFONT ( 6 , 126 ) ;
+        Size = MAP_APPFONT ( 76 , 8 ) ;
+        Text [ en-US ] = "~Condition" ;
+        Left = TRUE ;
+    };
+    Edit ED_DBCONDITION
+    {
+        HelpID = "sw:Edit:TP_FLD_DB:ED_DBCONDITION";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 137 ) ;
+        Size = MAP_APPFONT ( 76 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+    };
+    FixedText FT_DBSETNUMBER
+    {
+        Pos = MAP_APPFONT ( 6 , 156 ) ;
+        Size = MAP_APPFONT ( 76 , 8 ) ;
+        Text [ en-US ] = "Record number" ;
+        Left = TRUE ;
+    };
+    Edit ED_DBSETNUMBER
+    {
+        HelpID = "sw:Edit:TP_FLD_DB:ED_DBSETNUMBER";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 167 ) ;
+        Size = MAP_APPFONT ( 76 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+    };
+    FixedText FT_DBSELECTION
+    {
+        Pos = MAP_APPFONT ( 88 , 3 ) ;
+        Size = MAP_APPFONT ( 166 , 8 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "Database s~election" ;
+    };
+    Control TLB_DBLIST
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 88 , 14 ) ;
+        Size = MAP_APPFONT ( 160 , 104 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_ADDDB
+    {
+        Pos = MAP_APPFONT ( 88 , 123) ;
+        Size = MAP_APPFONT ( 105 , 8 ) ;
+        Text [ en-US ] = "Add database file" ;
+    };
+    PushButton PB_ADDDB
+    {
+        HelpID = "sw:PushButton:TP_FLD_DB:PB_ADDDB";
+        Pos = MAP_APPFONT ( 198 , 121) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "Browse..." ;
+    };
+
+    RadioButton RB_DBOWNFORMAT
+    {
+        HelpID = "sw:RadioButton:TP_FLD_DB:RB_DBOWNFORMAT";
+        Pos = MAP_APPFONT ( 94 , 153 ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
+        Check = TRUE ;
+        Text [ en-US ] = "From database" ;
+    };
+    RadioButton RB_DBFORMAT
+    {
+        HelpID = "sw:RadioButton:TP_FLD_DB:RB_DBFORMAT";
+        Pos = MAP_APPFONT ( 94 , 166 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Text [ en-US ] = "User-defined" ;
+    };
+    ListBox LB_DBNUMFORMAT
+    {
+        HelpID = "sw:ListBox:TP_FLD_DB:LB_DBNUMFORMAT";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 195 , 164 ) ;
+        Size = MAP_APPFONT ( 53 , 60 ) ;
+        TabStop = TRUE ;
+        AutoHScroll = TRUE ;
+        DropDown = TRUE ;
+    };
+    ListBox LB_DBFORMAT
+    {
+        HelpID = "sw:ListBox:TP_FLD_DB:LB_DBFORMAT";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 195 , 163 ) ;
+        Size = MAP_APPFONT ( 53 , 60 ) ;
+        TabStop = TRUE ;
+        AutoHScroll = TRUE ;
+        DropDown = TRUE ;
+        Sort = FALSE ;
+        Hide = TRUE ;
+    };
+    FixedLine FL_DBFORMAT
+    {
+        Pos = MAP_APPFONT ( 88 , 141 ) ;
+        Size = MAP_APPFONT ( 166 , 8 ) ;
+        Text [ en-US ] = "Format" ;
+    };
+    FixedLine FL_DBFORMAT_VERT
+    {
+        Pos = MAP_APPFONT ( 87 , 152 ) ;
+        Size = MAP_APPFONT ( 4 , 28 ) ;
+        Vert = TRUE;
+    };
+    Text [ en-US ] = "Database" ;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

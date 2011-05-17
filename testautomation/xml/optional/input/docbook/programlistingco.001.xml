@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<article>
+<articleinfo>
+<title>Unit Test: programlistingco.001</title>
+<releaseinfo role="CVS">$Id: programlistingco.001.xml,v 1.2 2008-07-11 07:54:40 rt Exp $</releaseinfo>
+<author><firstname>Norman</firstname><surname>Walsh</surname>
+        <affiliation><address><email>ndw@nwalsh.com</email></address></affiliation>
+</author>
+</articleinfo>
+
+<programlistingco>
+<areaspec>
+<area coords="1" id="prologue"/>
+<area coords="4" id="skipeof"/>
+<areaset coords="" id="xreq">
+<area coords="9" id="require1"/>
+<area coords="10" id="require2"/>
+</areaset>
+<area coords="11 12" id="use"/>
+<area coords="27" id="funccall"/>
+</areaspec>
+<programlisting>@rem = '--*-Perl-*--
+@echo off
+perl.exe %_batchname %$
+goto endofperl
+@rem ';
+
+# Compress mail...
+
+require 'n:/home/nwalsh/lib/cygnus.pl';
+require 'timelocal.pl';
+use Cwd;
+
+select (STDERR); $| = 1;
+select (STDOUT); $| = 1;
+
+@DIRS = ("/home/nwalsh/Mail");
+while (@DIRS) {
+    $dir = shift @DIRS;
+    opendir (DIR, $dir);
+    while ($fname = readdir(DIR)) {
+        $file = "$dir/$fname";
+        next if ! -d $file;
+        next if $fname =~ /^\.\.?$/;
+
+        print "$file\n";
+        push (@DIRS, $file);
+        &amp;compress ($file);
+    }
+}
+
+exit;</programlisting>
+<calloutlist>
+<callout arearefs="prologue">
+<para>The prologue handles embedding a Perl script in a DOS batch file.</para>
+</callout>
+<callout arearefs="skipeof">
+<para>The <literal>goto</literal> statement, interpreted by the DOS batch
+file interpreter, skips over the body of the Perl script.</para>
+</callout>
+<callout arearefs="require1">
+<para>The <literal>require</literal> statement sources in external program
+fragments.</para>
+</callout>
+<callout arearefs="use">
+<para>The <literal>use</literal> statement is similar, but has additional
+utility.  It is a Perl5 function.  (Note that this callout area specifies
+both a line and a column.)</para>
+</callout>
+<callout arearefs="funccall">
+<para>This is a user subroutine call.</para>
+</callout>
+</calloutlist>
+</programlistingco>
+
+</article>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="cached_CachedContentResultSetStubFactory" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+' REQUIRED VARIABLES for interface/service tests:
+
+' Required for com.sun.star.ucb.XCachedContentResultSetStubFactory
+  Global oContentResultSet As Object
+
+
+Sub CreateObj()
+
+'*************************************************************************
+' COMPONENT: 
+' cached.CachedContentResultSetStubFactory
+'*************************************************************************
+On Error Goto ErrHndl
+
+    oObj = createUnoService("com.sun.star.ucb.CachedContentResultSetStubFactory")
+
+    Dim args As Variant
+    Dim oUCB As Object
+    args = Array("Local", "Office")
+    oUCB = createUnoService("com.sun.star.ucb.UniversalContentBroker")
+    oUCB.initialize(args())    
+
+    Dim sURL, sCntURL As String
+    Dim oCI, oContent As Object
+    sURL = utils.Path2URL(cTestDocsDir &amp; "solibrary.jar")
+    sURL = utils.utils.StrReplace(sURL, "/", "%2F")
+    sCntURL = "vnd.sun.star.pkg://" &amp; sURL &amp; "/"
+    
+    oCI = oUCB.createContentIdentifier(sCntUrl)
+    oContent = oUCB.queryContent(oCI)
+    
+    Dim props(0) As new com.sun.star.beans.Property
+    Dim cmd As new com.sun.star.ucb.Command
+    Dim ocArg As new com.sun.star.ucb.OpenCommandArgument2
+    Dim sortInfo() As new com.sun.star.ucb.NumberedSortingInfo
+    Dim oDynResSet, oStubFactory As Object
+
+    props(0).Name = "Title"
+
+    ocArg.Mode = com.sun.star.ucb.OpenMode.ALL
+    ocArg.Priority = 10000
+    ocArg.Properties = props()
+    ocArg.SortingInfo = sortInfo()
+
+    cmd.Name = "open"
+    cmd.Handle = -1
+    cmd.Argument = ocArg
+
+    oDynResSet = oContent.execute(cmd, 0, NULL_OBJECT)
+    oContentResultSet = oDynResSet.getStaticResultSet()    
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+</script:module>

@@ -1,0 +1,107 @@
+[text]
+en-US = "%PRODUCTNAME Text Document"
+
+[text-template]
+en-US = "%PRODUCTNAME Text Document Template"
+
+[master-document]
+en-US = "%PRODUCTNAME Master Document"
+
+[formula]
+en-US = "%PRODUCTNAME Formula"
+
+[presentation]
+en-US = "%PRODUCTNAME Presentation"
+
+[presentation-template]
+en-US = "%PRODUCTNAME Presentation Template"
+
+[drawing]
+en-US = "%PRODUCTNAME Drawing"
+
+[drawing-template]
+en-US = "%PRODUCTNAME Drawing Template"
+
+[spreadsheet]
+en-US = "%PRODUCTNAME Spreadsheet"
+
+[spreadsheet-template]
+en-US = "%PRODUCTNAME Spreadsheet Template"
+
+[oasis-text]
+en-US = "OpenDocument Text"
+
+[oasis-text-template]
+en-US = "OpenDocument Text Template"
+
+[oasis-master-document]
+en-US = "OpenDocument Master Document"
+
+[oasis-formula]
+en-US = "OpenDocument Formula"
+
+[oasis-presentation]
+en-US = "OpenDocument Presentation"
+
+[oasis-presentation-template]
+en-US = "OpenDocument Presentation Template"
+
+[oasis-drawing]
+en-US = "OpenDocument Drawing"
+
+[oasis-drawing-template]
+en-US = "OpenDocument Drawing Template"
+
+[oasis-spreadsheet]
+en-US = "OpenDocument Spreadsheet"
+
+[oasis-spreadsheet-template]
+en-US = "OpenDocument Spreadsheet Template"
+
+[oasis-database]
+en-US = "OpenDocument Database"
+
+[oasis-web-template]
+en-US = "HTML Document Template"
+
+[extension]
+en-US = "%PRODUCTNAME Extension"
+
+[ms-excel-sheet-12]
+en-US = "Microsoft Excel Worksheet"
+
+[ms-excel-template-12]
+en-US = "Microsoft Excel Worksheet Template"
+
+[ms-powerpoint-presentation-12]
+en-US = "Microsoft PowerPoint Presentation"
+
+[ms-powerpoint-template-12]
+en-US = "Microsoft PowerPoint Presentation Template"
+
+[ms-word-document-12]
+en-US = "Microsoft Word Document"
+
+[ms-word-template-12]
+en-US = "Microsoft Word Document Template"
+
+[openxmlformats-officedocument-presentationml-presentation]
+en-US = "Microsoft PowerPoint Presentation"
+
+[openxmlformats-officedocument-presentationml-template]
+en-US = "Microsoft PowerPoint Presentation Template"
+
+[openxmlformats-officedocument-spreadsheetml-sheet]
+en-US = "Microsoft Excel Worksheet"
+
+[openxmlformats-officedocument-spreadsheetml-template]
+en-US = "Microsoft Excel Worksheet Template"
+
+[openxmlformats-officedocument-wordprocessingml-document]
+en-US = "Microsoft Word Document"
+
+[openxmlformats-officedocument-wordprocessingml-template]
+en-US = "Microsoft Word Document Template"
+
+[ms-excel-sheet-binary-12]
+en-US = "Microsoft Excel Worksheet"

@@ -1,0 +1,123 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_i18n_TransliterationModules_idl__
+#define __com_sun_star_i18n_TransliterationModules_idl__
+
+//=============================================================================
+
+module com {  module sun {  module star {  module i18n {
+
+//=============================================================================
+
+/** Old transliteration module enumeration.
+
+    <p> Use with <member>XTransliteration::loadModule()</member> and
+    <member scope="com::sun::star::util">SearchOptions::transliterateFlags</member> </p>
+
+    <p> Note that values &gt;=0x100 are logically or'ed with other values! </p>
+ */
+
+published enum TransliterationModules
+{
+    /// Transliterate a string from upper case to lower case
+    UPPERCASE_LOWERCASE            = 1,
+    /// Transliterate a string from lower case to upper case
+    LOWERCASE_UPPERCASE            = 2,
+    /// Transliterate a string from half width character to full width character
+    HALFWIDTH_FULLWIDTH            = 3,
+    /// Transliterate a string from full width character to half width character
+    FULLWIDTH_HALFWIDTH            = 4,
+    /// Transliterate a Japanese string from Katakana to Hiragana
+    KATAKANA_HIRAGANA              = 5,
+    /// Transliterate a Japanese string from Hiragana to Katakana
+    HIRAGANA_KATAKANA              = 6,
+    /// Transliterate an ASCII number string to Simplified Chinese lower case number string in spellout format
+    NumToTextLower_zh_CN           = 7,
+    /// Transliterate an ASCII number string to Simplified Chinese upper case number string in spellout format
+    NumToTextUpper_zh_CN           = 8,
+    /// Transliterate an ASCII number string to Traditional Chinese lower case number string in spellout format
+    NumToTextLower_zh_TW           = 9,
+    /// Transliterate an ASCII number string to Traditional Chinese upper case number string in spellout format
+    NumToTextUpper_zh_TW           = 10,
+    /// Transliterate an ASCII number string to formal Korean Hangul number string in spellout format
+    NumToTextFormalHangul_ko       = 11,
+    /// Transliterate an ASCII number string to formal Korean Hanja lower case number string in spellout format
+    NumToTextFormalLower_ko        = 12,
+    /// Transliterate an ASCII number string to formal Korean Hanja upper case number string in spellout format
+    NumToTextFormalUpper_ko        = 13,
+    NON_IGNORE_MASK                = 0x000000ff,
+    IGNORE_MASK                    = -0x100,
+    /// Ignore case when comparing strings by transliteration service
+    IGNORE_CASE                    = 0x00000100,
+    /// Ignore Hiragana and Katakana when comparing strings by transliteration service
+    IGNORE_KANA                    = 0x00000200, // ja_JP
+    /// Ignore full width and half width character when comparing strings by transliteration service
+    IGNORE_WIDTH                   = 0x00000400, // ja_JP
+    // not used yet                = 0x00000800,
+    /// Ignore Japanese traditional Kanji character in Japanese fuzzy search
+    ignoreTraditionalKanji_ja_JP   = 0x00001000,
+    /// Ignore Japanese traditional Katakana and Hiragana character in Japanese fuzzy search
+    ignoreTraditionalKana_ja_JP    = 0x00002000,
+    /// Ignore dash or minus sign in Japanese fuzzy search
+    ignoreMinusSign_ja_JP          = 0x00004000,
+    /// Ignore Hiragana and Katakana iteration mark in Japanese fuzzy search
+    ignoreIterationMark_ja_JP      = 0x00008000,
+    /// Ignore separator punctuations in Japanese fuzzy search
+    ignoreSeparator_ja_JP          = 0x00010000,
+    /// Ignore Katakana and Hiragana Zi/Zi and Zu/Zu  in Japanese fuzzy search
+    ignoreZiZu_ja_JP               = 0x00020000,
+    /// Ignore Katakana and Hiragana Ba/Gua and Ha/Fa in Japanese fuzzy search
+    ignoreBaFa_ja_JP               = 0x00040000,
+    /// Ignore Katakana and Hiragana Tsui/Tea/Ti and Dyi/Ji in Japanese fuzzy search
+    ignoreTiJi_ja_JP               = 0x00080000,
+    /// Ignore Katakana and Hiragana Hyu/Fyu and Byu/Gyu in Japanese fuzzy search
+    ignoreHyuByu_ja_JP             = 0x00100000,
+    /// Ignore Katakana and Hiragana Se/Sye and Ze/Je in Japanese fuzzy search
+    ignoreSeZe_ja_JP               = 0x00200000,
+    /// Ignore Katakana YA/A which follows the character in either I or E row in Japanese fuzzy search
+    ignoreIandEfollowedByYa_ja_JP  = 0x00400000,
+    /// Ignore Katakana KI/KU which follows the character in SA column in Japanese fuzzy search
+    ignoreKiKuFollowedBySa_ja_JP   = 0x00800000,
+    /// Ignore Japanese normal and small sized character in Japanese fuzzy search
+    ignoreSize_ja_JP               = 0x01000000,
+    /// Ignore Japanese prolonged sound mark in Japanese fuzzy search
+    ignoreProlongedSoundMark_ja_JP = 0x02000000,
+    /// Ignore middle dot in Japanese fuzzy search
+    ignoreMiddleDot_ja_JP          = 0x04000000,
+    /// Ignore white space characters, include space, TAB, return, etc. in Japanese fuzzy search
+    ignoreSpace_ja_JP              = 0x08000000,
+    /// transliterate Japanese small sized character to normal sized character
+    smallToLarge_ja_JP             = 0x10000000,
+    /// transliterate Japanese normal sized character to small sized character
+    largeToSmall_ja_JP             = 0x20000000,
+    END_OF_MODULE                  = 0
+};
+
+//=============================================================================
+}; }; }; };
+
+#endif

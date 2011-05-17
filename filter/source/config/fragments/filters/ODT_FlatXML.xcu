@@ -1,0 +1,13 @@
+    <node oor:name="OpenDocument Text Flat XML" oor:op="replace">
+        <prop oor:name="FileFormatVersion"><value>0</value></prop>
+        <prop oor:name="Type"><value>writer_ODT_FlatXML</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.text.TextDocument</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UserData"><value oor:separator=",">com.sun.star.comp.filter.OdfFlatXml,,com.sun.star.comp.Writer.XMLOasisImporter,com.sun.star.comp.Writer.XMLOasisExporter,,,true</value></prop>
+        <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.XmlFilterAdaptor</value></prop>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="UIName">
+            <value>OpenDocument Text (Flat XML)</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT OWN 3RDPARTYFILTER</value></prop>
+    </node>

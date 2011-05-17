@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="awt_XTabController" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+'*************************************************************************
+' This Interface/Service test depends on the following GLOBAL variables,
+' which must be specified in the object creation:
+
+'      Global oXTabControllerModel as Object
+'       Global oXTabControllerContainer as Object
+'       Global bHasNoModel as Boolean
+
+'*************************************************************************
+
+
+
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.awt.XTabController
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim vControls As Variant
+    Dim n As Integer
+
+    Out.Log("This interface is DEPRECATED !!!")
+    Out.Log("All test results are OK now")
+
+    Test.StartMethod("setModel()")
+    Test.StartMethod("getModel()")
+    oObj.setModel(oXTabControllerModel)
+    bOK = (bHasNoModel = True) or hasUnoInterfaces(oObj.getModel(), "com.sun.star.awt.XTabControllerModel")
+    Test.MethodTested("setModel()", true)
+    Test.MethodTested("getModel()", bOK)
+
+    Test.StartMethod("setContainer()")
+    Test.StartMethod("getContainer()")
+    oObj.setContainer(oXTabControllerContainer)
+    bOK = hasUnoInterfaces(oObj.getContainer(), "com.sun.star.awt.XControlContainer")
+    Test.MethodTested("setContainer()", true)
+    Test.MethodTested("getContainer()", bOK)
+
+    Test.StartMethod("getControls()")
+    bOK = true
+    vControls = oObj.getcontrols()
+    For n = uBound(vControls) To lBound(vControls)
+      bOK = bOK AND hasUnoInterfaces(vControls(n), "com.sun.star.awt.XControl")
+    Next
+    Test.MethodTested("getControls()", true)
+
+    Test.StartMethod("autoTabOrder()")
+    oObj.autoTabOrder()
+    bOK = true
+    Test.MethodTested("autoTabOrder()", true)
+
+    Test.StartMethod("activateTabOrder()")
+    oObj.activateTabOrder()
+    bOK = true
+    Test.MethodTested("activateTabOrder()", true)
+
+    Test.StartMethod("activateFirst()")
+    oObj.activateFirst()
+    bOK = true
+    Test.MethodTested("activateFirst()", true)
+
+    Test.StartMethod("activateLast()")
+    oObj.activateLast()
+    bOK = true
+    Test.MethodTested("activateLast()", true)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

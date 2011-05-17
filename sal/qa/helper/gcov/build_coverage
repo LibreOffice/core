@@ -1,0 +1,23 @@
+
+# this is a helper, to build sal with the right compiler parameters
+# IMPORTANT, this works only within Linux
+
+if ( `uname` == "Linux" ) then
+	echo "running on Linux Intel, ok."
+
+    build killobj
+
+    # setenv OLDCFLAGS $ENVCFLAGS 
+
+    setenv ENVCFLAGS "-fprofile-arcs -ftest-coverage"
+
+    build
+
+    # setenv ENVCFLAGS $OLDCFLAGS
+
+else
+
+    echo "Sorry, gcov works only within Linux environment."
+
+endif
+

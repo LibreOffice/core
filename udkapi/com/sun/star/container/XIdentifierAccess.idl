@@ -1,0 +1,78 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_container_XIdentifierAccess_idl__
+#define __com_sun_star_container_XIdentifierAccess_idl__
+
+#include <com/sun/star/container/XElementAccess.idl>
+
+#include <com/sun/star/container/NoSuchElementException.idl>
+
+#include <com/sun/star/lang/WrappedTargetException.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module container {
+
+//=============================================================================
+
+/** provides access to the elements of a collection through a unique identifier.
+ */
+published interface XIdentifierAccess: com::sun::star::container::XElementAccess
+{
+    /** @returns
+            the element with the specified identifier
+
+        @param Identifier
+            specifies the identifier of the element that should be retrieved.
+
+        @throws com::sun::star::lang::NoSuchElementException
+            If the identifier is not existing.
+
+        @throws  com::sun::star::lang::WrappedTargetException
+            If the implementation has internal reasons for exceptions,
+            then wrap these in a <typee scope="com::sun::star::lang">WrappedTargetException</type>
+            exception.
+     */
+    any getByIdentifier( [in] long Identifierr )
+            raises( com::sun::star::container::NoSuchElementException,
+                    com::sun::star::lang::WrappedTargetException );
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    /** @returns
+            a sequence of all identifiers in this container.
+
+        <p>The order of the identifiers is not specified. </p>
+     */
+    sequence<long> getIdentifiers();
+}
+;
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,158 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_ui_ItemStyle_idl__
+#define __com_sun_star_ui_ItemStyle_idl__
+
+//=============================================================================
+
+module com {  module sun {  module star {  module ui {
+
+/**
+    specifies styles which influence the appearance and the behavior of an
+    user interface item.
+
+    <p>
+    These styles are only valid if the item describes a toolbar or statusbar item.
+    The style values can be combined with the OR operator. Styles which are not valid
+    for an item will be ignored by the implementation.<br/>
+    There are two styles where
+    only one value is valid:
+    Alignment:
+    <ul>
+        <li>ALIGN_LEFT</li>
+        <li>ALIGN_CENTER</li>
+        <li>ALIGN_RIGHT</li>
+    </ul>
+    Drawing:
+    <ul>
+        <li>DRAW_OUT3D</li>
+        <li>DRAW_IN3D</li>
+        <li>DRAW_FLAT</li>
+    </ul>
+    </p>
+
+    @since OOo 2.0
+*/
+constants ItemStyle
+{
+    //-------------------------------------------------------------------------
+    /** specifies how the output of the item is aligned in the bounding box of
+        the user interface element.
+        <p>This style is only valid for an item which describes a statusbar item.
+        Draw item with a left aligned output.</p>
+    */
+    const short ALIGN_LEFT   = 1;
+
+    /** specifies how the output of the item is aligned in the bounding box of
+        the user interface element.
+        <p>This style is only valid for an item which describes a statusbar item.
+        Draw item with a centered aligned output.</p>
+    */
+    const short ALIGN_CENTER = 2;
+
+    /** specifies how the output of the item is aligned in the bounding box of
+        the user interface element.
+        <p>This style is only valid for an item which describes a statusbar item.
+        Draw item with a right aligned output.</p>
+    */
+    const short ALIGN_RIGHT  = 3;
+
+    //-------------------------------------------------------------------------
+    /** specifies how the implementation should draw the item.
+        <p>This style is only valid for an item which describes a statusbar item.
+        Draw item with an embossed 3D effect.</p>
+    */
+    const short DRAW_OUT3D   = 4;
+
+    /** specifies how the implementation should draw the item.
+        <p>This style is only valid for an item which describes a statusbar item.
+        Draw item with an impressed 3D effect.</p>
+    */
+    const short DRAW_IN3D    = 8;
+
+    /** specifies how the implementation should draw the item.
+        <p>This style is only valid for an item which describes a statusbar item.
+        Draw item without an 3D effect.</p>
+    */
+    const short DRAW_FLAT    = 12;
+
+    //-------------------------------------------------------------------------
+    /** specifies whether or not a item is displayed using an external function.
+        <p>This style is only valid if the item describes a statusbar item.</p>
+    */
+    const short OWNER_DRAW    = 16;
+
+    //-------------------------------------------------------------------------
+    /** specifies whether or not the size of the item is set automatically by
+        the parent user interface element.
+        <p>This style is only valid if the item describes a toolbar or statusbar item.</p>
+    */
+    const short AUTO_SIZE     = 32;
+
+    //-------------------------------------------------------------------------
+    /**  determines whether the item unchecks neighbor entries which have also this style set.
+         <p>This style is only valid if the item describes a toolbar item.</p>
+    */
+    const short RADIO_CHECK   = 64;
+
+    //-------------------------------------------------------------------------
+    /** specifies if an icon is placed on left side of the text, like an entry in a taskbar.
+        <p>This style is only valid if the item describes a toolbar item and visible if
+        style of the toolbar is set to symboltext.</p>
+        <p> This style can also be used for custom toolbars and menus, in a custom toolbar an item's Style setting can used to override the toolbar container setting, the style can be bitwise OR-ed with <member scope="::com::sun::star::ui::ItemStyle">TEXT</member> to define text, text+icon or icon only is to be displayed. Similarly for menu items, an items Style can override the application setting to display either text or icon ( note: for menu an icon only setting interpreted as icon+text ) </p>
+    */
+    const short ICON          = 128;
+
+    //-------------------------------------------------------------------------
+    /** specifies that the item supports a dropdown menu or toolbar for additional functions.
+        <p>This style is only valid if the item describes a toolbar item.</p>
+    */
+    const short DROP_DOWN     = 256;
+
+    //-------------------------------------------------------------------------
+    /** indicates that the item continues to execute the command while you click and hold
+        the mouse button.
+        <p>This style is only valid if the item describes a toolbar item.</p>
+    */
+    const short REPEAT        = 512;
+
+    //-------------------------------------------------------------------------
+    /** indicates that the item only supports a dropdown menu or toolbar for
+        additional functions. There is no function on the button itself.
+        <p>This style is only valid if the item describes a toolbar item.</p>
+    */
+    const short DROPDOWN_ONLY = 1024;
+    /** indicates if icon, text or text+icon is displayed for the item.
+        <p> This style can be used for custom toolbars and menus, in a custom toolbar an item's Style setting can used to override the toolbar container setting, the style can be bitwise OR-ed with <member scope="com::sun::star::ui::ItemStyle">ICON</member> to define text, text+icon or icon only is to be displayed. Similarly for menu items, an items Style can override the application setting to display either text or icon ( note: for menu an icon only setting interpreted as icon+text ) </p>
+    */
+    const short TEXT = 2048;
+};
+
+}; }; }; };
+
+#endif

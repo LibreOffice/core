@@ -1,0 +1,171 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_io_XInputStream_idl__
+#define __com_sun_star_io_XInputStream_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/io/NotConnectedException.idl>
+
+#include <com/sun/star/io/BufferSizeExceededException.idl>
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module io {
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::io::XInputStream
+/** This is the basic interface to read data from a stream.
+    <p>
+    See the <a href="http://udk.openoffice.org/common/man/concept/streams.html">
+    streaming document</a> for further information on chaining and piping streams.
+ */
+published interface XInputStream: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::XInputStream::readBytes
+    /** reads the specified number of bytes in the given sequence.
+
+        <p>The return value specifies the number of bytes which have been
+        put into the sequence. A difference between <var>nBytesToRead</var>
+        and the return value indicates that EOF has been reached. This means
+        that the method blocks until the specified number of bytes are
+        available or the EOF is reached.  </p>
+       @param aData
+             after the call, the byte sequence contains the requested number
+             of bytes (or less as a sign of EOF).
+
+             <p>
+             C++ only : Note that for unbridged (e.g., in-process)
+             calls, using the same sequence for repetive readBytes()-calls
+             can bear a performance advantage. The callee can put the data
+             directly into the sequence so that no buffer reallocation is
+             necessary.
+             But this holds only when
+             <ol>
+              <li> neither caller nor callee keep a second reference to the same
+                   sequence.
+              <li> the sequence is pre-allocated with the requested number of bytes.
+              <li> the same sequence is reused ( simply preallocationg a new
+                   sequence for every call bears no advantage ).
+              <li> the call is not bridged (e.g., betweeen different compilers
+                   or different processes ).
+             </ol>
+
+             If the same 'optimized' code runs against an interface in a different process,
+             there is an unnecessary memory allocation/deallocation (the out parameter
+             is of course NOT transported over the connection), but this should
+             be negligible compared to a synchron call.
+         @param nBytesToRead
+        the total number of bytes to read
+     */
+    long readBytes( [out] sequence<byte> aData,
+             [in] long nBytesToRead )
+            raises( com::sun::star::io::NotConnectedException,
+                    com::sun::star::io::BufferSizeExceededException,
+                    com::sun::star::io::IOException);
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::XInputStream::readSomeBytes
+    /** reads the available number of bytes, at maximum
+        <var>nMaxBytesToRead</var>.
+
+        <p>This method is very similar to the readBytes method, except that
+           it has different blocking behaviour.
+           The method blocks as long as at least 1 byte is available or
+           EOF has been reached. EOF has only been reached, when the method
+           returns 0 and the corresponding byte sequence is empty.
+           Otherwise, after the call, aData contains the available,
+           but no more than nMaxBytesToRead, bytes.
+        @param aData contains the data read from the stream.
+        @param nMaxBytesToRead The maximum number of bytes to be read from this
+                               stream during the call.
+        @see com::sun::star::io::XInputStream::readBytes
+     */
+    long readSomeBytes( [out] sequence<byte> aData,
+             [in] long nMaxBytesToRead )
+            raises( com::sun::star::io::NotConnectedException,
+                    com::sun::star::io::BufferSizeExceededException,
+                    com::sun::star::io::IOException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::XInputStream::skipBytes
+    /** skips the next <var>nBytesToSkip</var> bytes (must be positive).
+
+        <p>It is up to the implementation whether this method is
+        blocking the thread or not.  </p>
+      @param nBytesToSkip
+        number of bytes to skip
+     */
+    void skipBytes( [in] long nBytesToSkip )
+            raises( com::sun::star::io::NotConnectedException,
+                    com::sun::star::io::BufferSizeExceededException,
+                    com::sun::star::io::IOException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::XInputStream::available
+    /** states how many bytes can be read or skipped without blocking.
+
+        <p>Note: This method offers no information on whether the EOF
+        has been reached.  </p>
+     */
+    long available()
+            raises( com::sun::star::io::NotConnectedException,
+                    com::sun::star::io::IOException
+                    );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::XInputStream::closeInput
+    /** closes the stream.
+
+        <p>Users must close the stream explicitly when no further
+        reading should be done. (There may exist ring references to
+        chained objects that can only be released during this call.
+        Thus not calling this method would result in a leak of memory or
+        external resources.) </p>
+     */
+    void closeInput()
+            raises( com::sun::star::io::NotConnectedException,
+                    com::sun::star::io::IOException);
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

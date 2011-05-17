@@ -1,0 +1,13 @@
+    <node oor:name="StarWriter 5.0 (StarWriter/Web)" oor:op="replace">
+        <prop oor:name="Flags"><value>TEMPLATE ALIEN 3RDPARTYFILTER</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="FilterService"><value>com.sun.star.comp.office.BF_MigrateFilter</value></prop>
+        <prop oor:name="UserData"><value>CSW5</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="x-default">StarWriter 5.0 (%productname% Writer/Web)</value>
+        </prop>
+        <prop oor:name="FileFormatVersion"><value>5050</value></prop>
+        <prop oor:name="Type"><value>writer_StarWriter_50</value></prop>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="DocumentService"><value>com.sun.star.text.WebDocument</value></prop>
+    </node>

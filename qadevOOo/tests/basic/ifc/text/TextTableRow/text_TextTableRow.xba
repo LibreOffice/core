@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="text_TextTableRow" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' SERVICE: 
+' com.sun.star.text.TextTableRow
+'*************************************************************************
+On Error Goto ErrHndl
+    PropertyTester.TestProperty("BackColor")
+    PropertyTester.TestProperty("BackTransparent")
+    PropertyTester.TestProperty("BackGraphicURL")
+    PropertyTester.TestProperty("BackGraphicFilter")
+
+    Dim locations As Variant
+    locations = Array(_
+      com.sun.star.style.GraphicLocation.LEFT_TOP,_
+      com.sun.star.style.GraphicLocation.MIDDLE_TOP,_
+      com.sun.star.style.GraphicLocation.RIGHT_TOP,_
+      com.sun.star.style.GraphicLocation.LEFT_MIDDLE,_
+      com.sun.star.style.GraphicLocation.MIDDLE_MIDDLE,_
+      com.sun.star.style.GraphicLocation.RIGHT_MIDDLE,_
+      com.sun.star.style.GraphicLocation.LEFT_BOTTOM,_
+      com.sun.star.style.GraphicLocation.MIDDLE_BOTTOM,_
+      com.sun.star.style.GraphicLocation.RIGHT_BOTTOM,_
+      com.sun.star.style.GraphicLocation.AREA,_
+      com.sun.star.style.GraphicLocation.TILED )
+    PropertyTester.TestProperty("BackGraphicLocation", locations)
+    PropertyTester.TestProperty("TableColumnSeparators")
+    PropertyTester.TestProperty("Height")
+    PropertyTester.TestProperty("IsAutoHeight")
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    resume next
+End Sub
+</script:module>

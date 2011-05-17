@@ -1,0 +1,335 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+/* HelpID ressource file */
+/* HelpID ressource file */
+
+#include "cmdid.h"
+#include "helpid.h"
+#include "globals.hrc"
+#include "ribbar.hrc"
+#include "inputwin.hrc"
+ToolBox RID_TBX_FORMULA
+{
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 600 , 14 ) ;
+    HelpID = HID_CALC_TOOLBOX ;
+    SVLook = TRUE ;
+    Border = TRUE ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = FN_FORMULA_CALC ;
+            HelpId = HID_TBX_FORMULA_CALC ;
+            DropDown = TRUE ;
+            Text [ en-US ] = "Formula" ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_FORMULA_CANCEL ;
+            HelpId = HID_TBX_FORMULA_CANCEL ;
+            Text [ en-US ] = "Cancel" ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_FORMULA_APPLY ;
+            HelpId = HID_TBX_FORMULA_APPLY ;
+            Text [ en-US ] = "Apply" ;
+        };
+    };
+    Edit ED_POS
+    {
+        Border = TRUE ;
+        Size = MAP_APPFONT ( 45 , 11 ) ;
+        ReadOnly = TRUE ;
+        SVLook = TRUE ;
+        Center = TRUE ;
+    };
+    Edit ED_FORMULA
+    {
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Size = MAP_APPFONT ( 500 , 11 ) ;
+        SVLook = TRUE ;
+    };
+};
+Menu MN_CALC_POPUP
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = MN_CALC_SUM ;
+            HelpID = HID_MN_CALC_SUM ;
+            Text [ en-US ] = "Sum" ;
+        };
+        MenuItem
+        {
+            Identifier = MN_CALC_ROUND ;
+            HelpID = HID_MN_CALC_ROUND ;
+            Text [ en-US ] = "Round" ;
+        };
+        MenuItem
+        {
+            Identifier = MN_CALC_PHD ;
+            HelpID = HID_MN_CALC_PHD ;
+            Text [ en-US ] = "Percent" ;
+        };
+        MenuItem
+        {
+            Identifier = MN_CALC_SQRT ;
+            HelpID = HID_MN_CALC_SQRT ;
+            Text [ en-US ] = "Square Root" ;
+        };
+        MenuItem
+        {
+            Identifier = MN_CALC_POW ;
+            HelpID = HID_MN_CALC_POW ;
+            Text [ en-US ] = "Power" ;
+        };
+        MenuItem
+        {
+            Identifier = MN_POP_OPS ;
+            HelpID = HID_MN_POP_OPS ;
+            Text [ en-US ] = "Operators" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_LISTSEP ;
+                        HelpID = HID_MN_CALC_LISTSEP ;
+                        Text [ en-US ] = "List Separator" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_EQ ;
+                        HelpID = HID_MN_CALC_EQ ;
+                        Text [ en-US ] = "Equal" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_NEQ ;
+                        HelpID = HID_MN_CALC_NEQ ;
+                        Text [ en-US ] = "Not Equal" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_LEQ ;
+                        HelpID = HID_MN_CALC_LEQ ;
+                        Text [ en-US ] = "Less Than or Equal" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_GEQ ;
+                        HelpID = HID_MN_CALC_GEQ ;
+                        Text [ en-US ] = "Greater Than or Equal" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_LES ;
+                        HelpID = HID_MN_CALC_LES ;
+                        Text [ en-US ] = "Less" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_GRE ;
+                        HelpID = HID_MN_CALC_GRE ;
+                        Text [ en-US ] = "Greater" ;
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_OR ;
+                        HelpID = HID_MN_CALC_OR ;
+                        Text [ en-US ] = "Boolean Or" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_XOR ;
+                        HelpID = HID_MN_CALC_XOR ;
+                        Text [ en-US ] = "Boolean Xor" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_AND ;
+                        HelpID = HID_MN_CALC_AND ;
+                        Text [ en-US ] = "Boolean And" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_NOT ;
+                        HelpID = HID_MN_CALC_NOT ;
+                        Text [ en-US ] = "Boolean Not" ;
+                    };
+                };
+            };
+        };
+        MenuItem
+        {
+            Identifier = MN_POP_STATISTICS ;
+            HelpID = HID_MN_POP_STATISTICS ;
+            Text [ en-US ] = "Statistical Functions" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_MEAN ;
+                        HelpID = HID_MN_CALC_MEAN ;
+                        Text [ en-US ] = "Mean" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_MIN ;
+                        HelpID = HID_MN_CALC_MIN ;
+                        Text [ en-US ] = "Minimum" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_MAX ;
+                        HelpID = HID_MN_CALC_MAX ;
+                        Text [ en-US ] = "Maximum" ;
+                    };
+                };
+            };
+        };
+        MenuItem
+        {
+            Identifier = MN_POP_FUNC ;
+            HelpID = HID_MN_POP_FUNC ;
+            Text [ en-US ] = "Functions" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_SIN ;
+                        HelpID = HID_MN_CALC_SIN ;
+                        Text [ en-US ] = "Sine" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_COS ;
+                        HelpID = HID_MN_CALC_COS ;
+                        Text [ en-US ] = "Cosine" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_TAN ;
+                        HelpID = HID_MN_CALC_TAN ;
+                        Text [ en-US ] = "Tangent" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_ASIN ;
+                        HelpID = HID_MN_CALC_ASIN ;
+                        Text [ en-US ] = "Arcsine" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_ACOS ;
+                        HelpID = HID_MN_CALC_ACOS ;
+                        Text [ en-US ] = "Arccosine" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_ATAN ;
+                        HelpID = HID_MN_CALC_ATAN ;
+                        Text [ en-US ] = "Arctangent" ;
+                    };
+                };
+            };
+        };
+    };
+};
+String STR_TBL_FORMULA
+{
+    Text [ en-US ] = "Text formula" ;
+};
+#define TB_INPUT  \
+    ToolBoxItem\
+    {\
+        Identifier = FN_FORMULA_CALC ; \
+        HelpID = HID_TBX_FORMULA_CALC ; \
+        Text [ en-US ] = "Formula" ; \
+    };\
+    ToolBoxItem\
+    {\
+        Identifier = FN_FORMULA_CANCEL ; \
+        HelpId = HID_TBX_FORMULA_CANCEL ; \
+        Text [ en-US ] = "Cancel" ; \
+    };\
+    ToolBoxItem\
+    {\
+        Identifier = FN_FORMULA_APPLY ; \
+        HelpID = HID_TBX_FORMULA_APPLY ; \
+        Text [ en-US ] = "Apply" ; \
+    };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

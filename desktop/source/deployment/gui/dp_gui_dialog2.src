@@ -1,0 +1,236 @@
+﻿/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "svtools/controldims.hrc"
+#include "dp_gui.hrc"
+
+ModelessDialog RID_DLG_EXTENSION_MANAGER
+{
+    HelpId = HID_PACKAGE_MANAGER;
+    Text [ en-US ] = "Extension Manager";
+
+    Size = MAP_APPFONT( 300, 200 );
+    OutputSize = TRUE;
+    SVLook = TRUE;
+    Moveable = TRUE;
+    Closeable = TRUE;
+    Sizeable = TRUE;
+    Hide = TRUE;
+
+    PushButton RID_EM_BTN_ADD
+    {
+        HelpID = "desktop:PushButton:RID_DLG_EXTENSION_MANAGER:RID_EM_BTN_ADD";
+        TabStop = TRUE;
+        Text [ en-US ] = "~Add...";
+        Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+    };
+
+    PushButton RID_EM_BTN_CHECK_UPDATES
+    {
+        HelpID = "desktop:PushButton:RID_DLG_EXTENSION_MANAGER:RID_EM_BTN_CHECK_UPDATES";
+        TabStop = TRUE;
+        Text [ en-US ] = "Check for ~Updates...";
+        Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+    };
+
+    FixedText RID_EM_FT_GET_EXTENSIONS
+    {
+        NoLabel = TRUE;
+        TabStop = TRUE;
+        Text [ en-US ] = "Get more extensions online...";
+        Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
+    };
+
+    FixedText RID_EM_FT_PROGRESS
+    {
+        Hide = TRUE;
+        Right = TRUE;
+        Text [ en-US ] = "Adding %EXTENSION_NAME";
+        Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
+    };
+
+    CancelButton RID_EM_BTN_CANCEL
+    {
+        TabStop = TRUE;
+        Hide = TRUE;
+        Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+    };
+
+    OKButton RID_EM_BTN_CLOSE
+    {
+        TabStop = TRUE;
+        DefButton = TRUE;
+        Text [ en-US ] = "Close";
+        Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+    };
+
+    HelpButton RID_EM_BTN_HELP
+    {
+        TabStop = TRUE;
+        Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+    };
+};
+
+ModalDialog RID_DLG_UPDATE_REQUIRED
+{
+    HelpId = HID_PACKAGE_MANAGER_UPD_REQ;
+    Text [ en-US ] = "Extension Update Required";
+
+    Size = MAP_APPFONT( 300, 200 );
+    OutputSize = TRUE;
+    SVLook = TRUE;
+    Moveable = TRUE;
+    Closeable = TRUE;
+    Sizeable = TRUE;
+    Hide = TRUE;
+
+    FixedText RID_EM_FT_MSG
+    {
+        Text [ en-US ] = "%PRODUCTNAME has been updated to a new version. Some installed %PRODUCTNAME extensions are not compatible with this version and need to be updated before they can be used.";
+        WordBreak = TRUE;
+        NoLabel = TRUE;
+        Size = MAP_APPFONT( 280, 3*RSC_BS_CHARHEIGHT );
+        Pos = MAP_APPFONT( 5, 5 );
+    };
+
+    FixedText RID_EM_FT_PROGRESS
+    {
+        Hide = TRUE;
+        Right = TRUE;
+        Text [ en-US ] = "Adding %EXTENSION_NAME";
+        Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
+    };
+
+    HelpButton RID_EM_BTN_HELP
+    {
+        TabStop = TRUE;
+        Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+    };
+
+    PushButton RID_EM_BTN_CHECK_UPDATES
+    {
+        HelpID = "desktop:PushButton:RID_DLG_UPDATE_REQUIRED:RID_EM_BTN_CHECK_UPDATES";
+        TabStop = TRUE;
+        Text [ en-US ] = "Check for ~Updates...";
+        Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+    };
+
+    PushButton RID_EM_BTN_CLOSE
+    {
+        HelpID = "desktop:PushButton:RID_DLG_UPDATE_REQUIRED:RID_EM_BTN_CLOSE";
+        TabStop = TRUE;
+        DefButton = TRUE;
+        Text [ en-US ] = "Disable all";
+        Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+    };
+
+    CancelButton RID_EM_BTN_CANCEL
+    {
+        TabStop = TRUE;
+        Hide = TRUE;
+        Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+    };
+
+};
+
+Image RID_IMG_WARNING
+{
+    ImageBitmap = Bitmap { File = "caution_16.png"; };
+};
+
+Image RID_IMG_LOCKED
+{
+    ImageBitmap = Bitmap { File = "lock_16.png"; };
+};
+
+Image RID_IMG_SHARED
+{
+    ImageBitmap = Bitmap { File = "shared_16.png"; };
+};
+
+Image RID_IMG_EXTENSION
+{
+    ImageBitmap = Bitmap { File = "extension_32.png"; };
+};
+
+QueryBox RID_QUERYBOX_INSTALL_FOR_ALL
+{
+    Buttons = WB_YES_NO_CANCEL;
+    DefButton = WB_DEF_YES;
+    Message[en-US] = "Make sure that no further users are working with the same %PRODUCTNAME, when installing an extension for all users in a multi user environment.\n\nFor whom do you want to install the extension?\n";
+};
+
+
+// Dialog layout
+// ---------------------------------------------------
+//  row 1 | multi line edit
+// ---------------------------------------------------
+//  row 2 | fixed text
+// ---------------------------------------------------
+//  row 3 | img   | fixed text   | fixed text | button
+// ----------------------------------------------------
+//  row 4 | img   | fixed text   | fixed text
+// ---------------------------------------------------
+//  row 5 |fixed line
+// ---------------------------------------------------
+//  row 6 |       |       |button  | button
+// ---------------------------------------------------
+//        | col 1 | col 2 | col3   | col4      | col5
+
+//To change the overall size of the multi line edit change
+//ROW1_HEIGHT and COL3_WIDTH
+
+#define ROW1_Y RSC_SP_DLG_INNERBORDER_TOP
+#define ROW1_HEIGHT 16*RSC_CD_FIXEDTEXT_HEIGHT
+#define ROW2_Y  ROW1_Y+ROW1_HEIGHT+RSC_SP_CTRL_GROUP_Y
+#define ROW2_HEIGHT 2*RSC_CD_FIXEDTEXT_HEIGHT
+#define ROW3_Y ROW2_Y+ROW2_HEIGHT+RSC_SP_CTRL_GROUP_Y
+#define ROW3_HEIGHT 3*RSC_CD_FIXEDTEXT_HEIGHT
+#define ROW4_Y ROW3_Y+ROW3_HEIGHT+RSC_SP_CTRL_GROUP_Y
+#define ROW4_HEIGHT 3*RSC_CD_FIXEDTEXT_HEIGHT
+#define ROW5_Y ROW4_Y+ROW4_HEIGHT+RSC_SP_CTRL_GROUP_Y
+#define ROW5_HEIGHT RSC_CD_FIXEDTEXT_HEIGHT
+#define ROW6_Y ROW5_Y+ROW5_HEIGHT+RSC_SP_CTRL_GROUP_Y
+#define ROW6_HEIGHT RSC_CD_PUSHBUTTON_HEIGHT
+
+#define LIC_DLG_HEIGHT ROW6_Y+ROW6_HEIGHT+RSC_SP_DLG_INNERBORDER_BOTTOM
+
+#define COL1_X RSC_SP_DLG_INNERBORDER_LEFT
+#define IMG_ARROW_WIDTH 16
+#define COL1_WIDTH IMG_ARROW_WIDTH
+#define COL2_X COL1_X+COL1_WIDTH
+#define COL2_WIDTH 10
+#define COL3_X COL2_X+COL2_WIDTH+RSC_SP_CTRL_GROUP_X
+#define COL3_WIDTH 150
+#define COL4_X COL3_X+COL3_WIDTH
+#define COL4_WIDTH RSC_CD_PUSHBUTTON_WIDTH+RSC_SP_CTRL_GROUP_X
+#define COL5_X COL4_X+COL4_WIDTH
+
+#define LIC_DLG_WIDTH COL5_X+RSC_CD_PUSHBUTTON_WIDTH+RSC_SP_DLG_INNERBORDER_RIGHT
+#define BODYWIDTH LIC_DLG_WIDTH-RSC_SP_DLG_INNERBORDER_LEFT-RSC_SP_DLG_INNERBORDER_RIGHT
+
+

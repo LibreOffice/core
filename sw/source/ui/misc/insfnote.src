@@ -1,0 +1,181 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "misc.hrc"
+#include "insfnote.hrc"
+#include "helpid.h"
+ // #define DLG_INS_FOOTNOTE 257
+ModalDialog DLG_INS_FOOTNOTE
+{
+    HelpID = "sw:ModalDialog:DLG_INS_FOOTNOTE";
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 160 , 100 ) ;
+    Text [ en-US ] = "Insert Footnote/Endnote" ;
+    Moveable = TRUE ;
+    Edit ED_NUMBER_CHAR
+    {
+        HelpID = "sw:Edit:DLG_INS_FOOTNOTE:ED_NUMBER_CHAR";
+        Disable = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 69 , 27 ) ;
+        Size = MAP_APPFONT ( 23 , 12 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        Left = TRUE ;
+    };
+    //IAccessibility2 Implementation 2009-----
+    String STR_CHAR
+    {
+        Text [ en-US ] = "Character" ;
+    };
+    //-----IAccessibility2 Implementation 2009
+    OKButton BT_OK
+    {
+        Pos = MAP_APPFONT ( 104 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BT_CANCEL
+    {
+        Pos = MAP_APPFONT ( 104 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+    };
+    HelpButton BT_HELP
+    {
+        Pos = MAP_APPFONT ( 104 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+    };
+    ImageButton BT_PREV
+    {
+        HelpID = "sw:ImageButton:DLG_INS_FOOTNOTE:BT_PREV";
+        Pos = MAP_APPFONT ( 104 , 82 ) ;
+        Size = MAP_APPFONT ( 24 , 14 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+        SYMBOL = IMAGEBUTTON_PREV ;
+    };
+    ImageButton BT_NEXT
+    {
+        HelpID = "sw:ImageButton:DLG_INS_FOOTNOTE:BT_NEXT";
+        Pos = MAP_APPFONT ( 130 , 82 ) ;
+        Size = MAP_APPFONT ( 24 , 14 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+        SYMBOL = IMAGEBUTTON_NEXT ;
+    };
+    RadioButton RB_NUMBER_AUTO
+    {
+        HelpID = "sw:RadioButton:DLG_INS_FOOTNOTE:RB_NUMBER_AUTO";
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 79 , 10 ) ;
+        Text [ en-US ] = "~Automatic" ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        Check = TRUE ;
+    };
+    RadioButton RB_NUMBER_CHAR
+    {
+        HelpID = "sw:RadioButton:DLG_INS_FOOTNOTE:RB_NUMBER_CHAR";
+        Pos = MAP_APPFONT ( 12 , 27 ) ;
+        Size = MAP_APPFONT ( 54 , 10 ) ;
+        Text [ en-US ] = "~Character" ;
+    };
+    FixedLine FL_NUMBER
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 92 , 8 ) ;
+        Text [ en-US ] = "Numbering" ;
+    };
+    PushButton BT_NUMBER_CHAR
+    {
+        HelpID = "sw:PushButton:DLG_INS_FOOTNOTE:BT_NUMBER_CHAR";
+        Pos = MAP_APPFONT ( 69 , 42 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Text = "..." ;
+    };
+    RadioButton RB_TYPE_FTN
+    {
+        HelpID = "sw:RadioButton:DLG_INS_FOOTNOTE:RB_TYPE_FTN";
+        Pos = MAP_APPFONT ( 12 , 70 ) ;
+        Size = MAP_APPFONT ( 79 , 10 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        Check = TRUE ;
+        Text [ en-US ] = "~Footnote" ;
+    };
+    RadioButton RB_TYPE_ENDNOTE
+    {
+        HelpID = "sw:RadioButton:DLG_INS_FOOTNOTE:RB_TYPE_ENDNOTE";
+        Pos = MAP_APPFONT ( 12 , 83 ) ;
+        Size = MAP_APPFONT ( 79 , 10 ) ;
+        Text [ en-US ] = "~Endnote" ;
+    };
+    FixedLine FL_TYPE
+    {
+        Pos = MAP_APPFONT ( 6 , 60 ) ;
+        Size = MAP_APPFONT ( 92 , 8 ) ;
+        Text [ en-US ] = "Type" ;
+    };
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

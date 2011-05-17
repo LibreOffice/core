@@ -1,0 +1,167 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _FLDTDLG_HRC
+#define _FLDTDLG_HRC
+
+#define RC_FLDTDLG_BEGIN    0
+
+// database field TabPage:
+#define RC_TP_DB_START      (RC_FLDTDLG_BEGIN)
+#define FT_DBTYPE           (RC_TP_DB_START + 1)
+#define LB_DBTYPE           (RC_TP_DB_START + 2)
+#define FL_DBFORMAT                     (RC_TP_DB_START + 3)
+#define FT_DBSELECTION      (RC_TP_DB_START + 4)
+#define TLB_DBLIST          (RC_TP_DB_START + 5)
+#define FT_DBCONDITION      (RC_TP_DB_START + 6)
+#define FT_DBSETNUMBER      (RC_TP_DB_START + 7)
+#define ED_DBCONDITION      (RC_TP_DB_START + 8)
+#define ED_DBSETNUMBER      (RC_TP_DB_START + 9)
+#define LB_DBFORMAT         (RC_TP_DB_START + 10)
+#define LB_DBNUMFORMAT      (RC_TP_DB_START + 11)
+#define RB_DBFORMAT         (RC_TP_DB_START + 12)
+#define RB_DBOWNFORMAT      (RC_TP_DB_START + 13)
+#define RC_TP_DB_END        (RC_TP_DB_START + 14)
+#define FL_DBFORMAT_VERT    (RC_TP_DB_START + 15)
+#define FT_ADDDB            (RC_TP_DB_START + 16)
+#define PB_ADDDB            (RC_TP_DB_START + 17)
+
+// Documentinfo-TabPage:
+#define RC_TP_DOCINF_START  (RC_TP_DB_END)
+#define FT_DOKINFTYPE       (RC_TP_DOCINF_START + 1)
+#define TLB_DOKINFTYPE      (RC_TP_DOCINF_START + 2)
+#define FT_DOKINFSELECTION  (RC_TP_DOCINF_START + 3)
+#define LB_DOKINFSELECTION  (RC_TP_DOCINF_START + 4)
+#define FT_DOKINFFORMAT     (RC_TP_DOCINF_START + 5)
+#define LB_DOKINFFORMAT     (RC_TP_DOCINF_START + 6)
+#define CB_DOKINFFIXEDCONTENT   (RC_TP_DOCINF_START + 7)
+#define BMP_DOKINFROOT_OPENED   (RC_TP_DOCINF_START + 8)
+#define BMP_DOKINFROOT_CLOSED   (RC_TP_DOCINF_START + 9)
+#define STR_DOKINF_INFO     (RC_TP_DOCINF_START + 10)
+#define RC_TP_DOCINF_END    (RC_TP_DOCINF_START + 11)
+
+// Variable-TabPage:
+#define RC_TP_VAR_START     (RC_TP_DOCINF_END)
+#define FT_VARTYPE          (RC_TP_VAR_START + 1)
+#define LB_VARTYPE          (RC_TP_VAR_START + 2)
+#define FT_VARSELECTION     (RC_TP_VAR_START + 3)
+#define LB_VARSELECTION     (RC_TP_VAR_START + 4)
+#define FT_VARNAME          (RC_TP_VAR_START + 5)
+#define ED_VARNAME          (RC_TP_VAR_START + 6)
+#define FT_VARVALUE         (RC_TP_VAR_START + 7)
+#define ED_VARVALUE         (RC_TP_VAR_START + 8)
+#define FT_VARFORMAT        (RC_TP_VAR_START + 9)
+#define LB_VARNUMFORMAT     (RC_TP_VAR_START + 10)
+#define LB_VARFORMAT        (RC_TP_VAR_START + 11)
+#define FT_VARCHAPTERHEADER (RC_TP_VAR_START + 12)
+#define FT_VARCHAPTERLEVEL  (RC_TP_VAR_START + 13)
+#define LB_VARCHAPTERLEVEL  (RC_TP_VAR_START + 14)
+#define CB_VARINVISIBLE     (RC_TP_VAR_START + 15)
+#define FT_VARSEPARATOR     (RC_TP_VAR_START + 16)
+#define ED_VARSEPARATOR     (RC_TP_VAR_START + 17)
+#define TBX_VARNEWDEL       (RC_TP_VAR_START + 18)
+#define BT_VARAPPLY         (RC_TP_VAR_START + 19)
+#define BT_VARDELETE        (RC_TP_VAR_START + 20)
+#define RC_TP_VAR_END       (RC_TP_VAR_START + 21)
+
+// Document-TabPage:
+#define RC_TP_DOC_START     (RC_TP_VAR_END)
+#define FT_DOKTYPE          (RC_TP_DOC_START + 1)
+#define LB_DOKTYPE          (RC_TP_DOC_START + 2)
+#define FT_DOKSELECTION     (RC_TP_DOC_START + 3)
+#define LB_DOKSELECTION     (RC_TP_DOC_START + 4)
+#define LB_DOKNUMFORMAT     (RC_TP_DOC_START + 5)
+#define LB_DOKFORMAT        (RC_TP_DOC_START + 6)
+#define FT_DOKFORMAT        (RC_TP_DOC_START + 7)
+#define FT_DOKVALUE         (RC_TP_DOC_START + 8)
+#define ED_DOKVALUE         (RC_TP_DOC_START + 9)
+#define ED_DOKLEVEL         (RC_TP_DOC_START + 10)
+#define ED_DOKDATEOFF       (RC_TP_DOC_START + 11)
+#define CB_DOKFIXEDCONTENT  (RC_TP_DOC_START + 12)
+#define STR_DOKDATEOFF      (RC_TP_DOC_START + 13)
+#define STR_DOKTIMEOFF      (RC_TP_DOC_START + 14)
+#define BMP_DOKROOT_OPENED  (RC_TP_DOC_START + 15)
+#define BMP_DOKROOT_CLOSED  (RC_TP_DOC_START + 16)
+#define RC_TP_DOC_END       (RC_TP_DOC_START + 17)
+
+// Function-TabPage:
+#define RC_TP_FUNC_START    (RC_TP_DOC_END)
+#define FT_FUNCTYPE         (RC_TP_FUNC_START + 1)
+#define LB_FUNCTYPE         (RC_TP_FUNC_START + 2)
+#define LB_FUNCSELECTION    (RC_TP_FUNC_START + 3)
+#define FT_FUNCSELECTION    (RC_TP_FUNC_START + 4)
+#define FT_FUNCFORMAT       (RC_TP_FUNC_START + 5)
+#define LB_FUNCFORMAT       (RC_TP_FUNC_START + 6)
+#define FT_FUNCNAME         (RC_TP_FUNC_START + 7)
+#define ED_FUNCNAME         (RC_TP_FUNC_START + 8)
+#define FT_FUNCVALUE        (RC_TP_FUNC_START + 9)
+#define ED_FUNCVALUE        (RC_TP_FUNC_START + 10)
+#define FT_FUNCCOND1        (RC_TP_FUNC_START + 11)
+#define ED_FUNCCOND1        (RC_TP_FUNC_START + 12)
+#define FT_FUNCCOND2        (RC_TP_FUNC_START + 13)
+#define ED_FUNCCOND2        (RC_TP_FUNC_START + 14)
+#define BT_FUNCMACRO        (RC_TP_FUNC_START + 15)
+#define RC_TP_FUNC_END      (RC_TP_FUNC_START + 16)
+#define FT_LISTITEM         (RC_TP_FUNC_START + 17)
+#define ED_LISTITEM         (RC_TP_FUNC_START + 18)
+#define PB_LISTADD          (RC_TP_FUNC_START + 19)
+#define FT_LISTITEMS        (RC_TP_FUNC_START + 20)
+#define LB_LISTITEMS        (RC_TP_FUNC_START + 21)
+#define PB_LISTREMOVE       (RC_TP_FUNC_START + 22)
+#define PB_LISTUP           (RC_TP_FUNC_START + 23)
+#define PB_LISTDOWN         (RC_TP_FUNC_START + 24)
+#define FT_LISTNAME         (RC_TP_FUNC_START + 25)
+#define ED_LISTNAME         (RC_TP_FUNC_START + 26)
+
+// Reference-TabPage:
+#define RC_TP_REF_START     (RC_TP_FUNC_END)
+#define FT_REFTYPE          (RC_TP_REF_START + 1)
+#define LB_REFTYPE          (RC_TP_REF_START + 2)
+#define FT_REFSELECTION     (RC_TP_REF_START + 3)
+#define LB_REFSELECTION         (RC_TP_REF_START + 4)
+#define LB_REFSELECTION_TOOLTIP (RC_TP_REF_START + 5)
+#define LB_REFFORMAT            (RC_TP_REF_START + 6)
+#define FT_REFFORMAT            (RC_TP_REF_START + 7)
+#define FT_REFNAME              (RC_TP_REF_START + 8)
+#define ED_REFNAME              (RC_TP_REF_START + 9)
+#define FT_REFVALUE             (RC_TP_REF_START + 10)
+#define ED_REFVALUE             (RC_TP_REF_START + 11)
+#define STR_REFBOOKMARK         (RC_TP_REF_START + 12)
+#define STR_REFFOOTNOTE         (RC_TP_REF_START + 13)
+#define STR_REFENDNOTE          (RC_TP_REF_START + 14)
+#define STR_REFHEADING          (RC_TP_REF_START + 15)
+#define STR_REFNUMITEM          (RC_TP_REF_START + 16)
+#define RC_TP_REF_END           (RC_TP_REF_START + 17)
+
+#define RC_TP_END           (RC_TP_REF_END)
+
+// Strings ------------------------------------------------------------------
+
+#define STR_FLD_INSERT          (RC_TP_END + 1)
+#define STR_FLD_CLOSE           (RC_TP_END + 2)
+
+#endif

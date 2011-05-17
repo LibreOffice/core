@@ -1,0 +1,174 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_xml_dom_events_EventType_idl__
+#define __com_sun_star_xml_dom_events_EventType_idl__
+
+module com { module sun { module star { module xml { module dom { module events {
+
+enum EventType
+{
+    DOMFocusIn,
+    /*
+    The DOMFocusIn event occurs when an EventTarget receives focus, for instance via a pointing device being moved onto an element or by tabbing navigation to the element. Unlike the HTML event focus, DOMFocusIn can be applied to any focusable EventTarget, not just FORM controls.
+    * Bubbles: Yes
+    * Cancelable: No
+    * Context Info: None
+    */
+
+    DOMFocusOut,
+    /*
+    The DOMFocusOut event occurs when a EventTarget loses focus, for instance via a pointing device being moved out of an element or by tabbing navigation out of the element. Unlike the HTML event blur, DOMFocusOut can be applied to any focusable EventTarget, not just FORM controls.
+    * Bubbles: Yes
+    * Cancelable: No
+    * Context Info: None
+    */
+
+    DOMActivate,
+    /*
+    The activate event occurs when an element is activated, for instance, through a mouse click or a key press. A numerical argument is provided to give an indication of the type of activation that occurs: 1 for a simple activation (e.g. a simple click or Enter), 2 for hyper activation (for instance a double click or Shift Enter).
+    * Bubbles: Yes
+    * Cancelable: Yes
+    * Context Info: detail (the numerical value)
+    */
+
+    click,
+    /*
+    The click event occurs when the pointing device button is clicked over an element.
+    A click is defined as a mousedown and mouseup over the same screen location.
+    The sequence of these events is:
+
+    mousedown
+    mouseup
+    click
+
+    If multiple clicks occur at the same screen location, the sequence repeats with the detail attribute incrementing with each repetition. This event is valid for most elements.
+
+    * Bubbles: Yes
+    * Cancelable: Yes
+    * Context Info: screenX, screenY, clientX, clientY, altKey, ctrlKey, shiftKey, metaKey, button, detail
+    */
+
+    mousedown,
+    /*
+    The mousedown event occurs when the pointing device button is pressed over an element. This event is valid for most elements.
+    * Bubbles: Yes
+    * Cancelable: Yes
+    * Context Info: screenX, screenY, clientX, clientY, altKey, ctrlKey, shiftKey, metaKey, button, detail
+    */
+
+    mouseup,
+    /*
+    The mouseup event occurs when the pointing device button is released over an element. This event is valid for most elements.
+    * Bubbles: Yes
+    * Cancelable: Yes
+    * Context Info: screenX, screenY, clientX, clientY, altKey, ctrlKey, shiftKey, metaKey, button, detail
+    */
+
+    mouseover,
+    /*
+    The mouseover event occurs when the pointing device is moved onto an element. This event is valid for most elements.
+    * Bubbles: Yes
+    * Cancelable: Yes
+    * Context Info: screenX, screenY, clientX, clientY, altKey, ctrlKey, shiftKey, metaKey, relatedTarget indicates the EventTarget the pointing device is exiting.
+    */
+
+    mousemove,
+    /*
+    The mousemove event occurs when the pointing device is moved while it is over an element. This event is valid for most elements.
+    * Bubbles: Yes
+    * Cancelable: No
+    * Context Info: screenX, screenY, clientX, clientY, altKey, ctrlKey, shiftKey, metaKey
+    */
+
+    mouseout,
+    /*
+    The mouseout event occurs when the pointing device is moved away from an element. This event is valid for most elements..
+    * Bubbles: Yes
+    * Cancelable: Yes
+    * Context Info: screenX, screenY, clientX, clientY, altKey, ctrlKey, shiftKey, metaKey, relatedTarget indicates the EventTarget the pointing device is entering.
+    */
+
+    DOMSubtreeModified,
+    /*
+    This is a general event for notification of all changes to the document. It can be used instead of the more specific events listed below. It may be fired after a single modification to the document or, at the implementation's discretion, after multiple changes have occurred. The latter use should generally be used to accommodate multiple changes which occur either simultaneously or in rapid succession. The target of this event is the lowest common parent of the changes which have taken place. This event is dispatched after any other events caused by the mutation have fired.
+    * Bubbles: Yes
+    * Cancelable: No
+    * Context Info: None
+    */
+
+    DOMNodeInserted,
+    /*
+    Fired when a node has been added as a child of another node. This event is dispatched after the insertion has taken place. The target of this event is the node being inserted.
+    * Bubbles: Yes
+    * Cancelable: No
+    * Context Info: relatedNode holds the parent node
+    */
+
+    DOMNodeRemoved,
+    /*
+    Fired when a node is being removed from its parent node. This event is dispatched before the node is removed from the tree. The target of this event is the node being removed.
+    * Bubbles: Yes
+    * Cancelable: No
+    * Context Info: relatedNode holds the parent node
+    */
+
+    DOMNodeRemovedFromDocument,
+    /*
+    Fired when a node is being removed from a document, either through direct removal of the Node or removal of a subtree in which it is contained. This event is dispatched before the removal takes place. The target of this event is the Node being removed. If the Node is being directly removed the DOMNodeRemoved event will fire before the DOMNodeRemovedFromDocument event.
+    * Bubbles: No
+    * Cancelable: No
+    * Context Info: None
+    */
+
+    DOMNodeInsertedIntoDocument,
+    /*
+    Fired when a node is being inserted into a document, either through direct insertion of the Node or insertion of a subtree in which it is contained. This event is dispatched after the insertion has taken place. The target of this event is the node being inserted. If the Node is being directly inserted the DOMNodeInserted event will fire before the DOMNodeInsertedIntoDocument event.
+    * Bubbles: No
+    * Cancelable: No
+    * Context Info: None
+    */
+
+    DOMAttrModified,
+    /*
+    Fired after an Attr has been modified on a node. The target of this event is the Node whose Attr changed. The value of attrChange indicates whether the Attr was modified, added, or removed. The value of relatedNode indicates the Attr node whose value has been affected. It is expected that string based replacement of an Attr value will be viewed as a modification of the Attr since its identity does not change. Subsequently replacement of the Attr node with a different Attr node is viewed as the removal of the first Attr node and the addition of the second.
+    * Bubbles: Yes
+    * Cancelable: No
+    * Context Info: attrName, attrChange, prevValue, newValue, relatedNode
+    */
+
+    DOMCharacterDataModified
+    /*
+    Fired after CharacterData within a node has been modified but the node itself has not been inserted or deleted. This event is also triggered by modifications to PI elements. The target of this event is the CharacterData node.
+    * Bubbles: Yes
+    * Cancelable: No
+    * Context Info: prevValue, newValue
+    */
+};
+}; }; }; }; }; };
+
+#endif

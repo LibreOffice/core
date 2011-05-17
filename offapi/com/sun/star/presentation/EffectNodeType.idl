@@ -1,0 +1,81 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_presentation_EffectNodeType_idl__
+#define __com_sun_star_presentation_EffectNodeType_idl__
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module presentation {
+
+//=============================================================================
+
+/** This constants defines a type for an animation effect node.
+    <br>
+    This is stored with the name <i>node-type</i> inside the
+    <member>::com::sun::star::animations::XAnimationNode::UserData</member> sequence.
+    <br>
+    This does not manipulate the timing or synchronization.
+    It can be used to quickly identify semantic blocks inside an animation hierarchy.
+
+    @see ::com::sun::star::animations::AnimationNode
+*/
+constants EffectNodeType
+{
+    /** This node has no special meaning.
+    */
+    const short DEFAULT = 0;
+
+    /** This node contains an effect that starts on click.
+    */
+    const short ON_CLICK = 1;
+
+    /** This node contains an effect that starts with a previous effect.
+    */
+    const short WITH_PREVIOUS = 2;
+
+    /** This node contains an effect that starts after a previous effect has finished.
+    */
+    const short AFTER_PREVIOUS = 3;
+
+    /** This is the main sequence for effects that is automatically started.
+    */
+    const short MAIN_SEQUENCE = 4;
+
+    /** This is the root sequence.
+    */
+    const short TIMING_ROOT = 5;
+
+    /** This is a sequence with effects that starts due to user interaction.
+    */
+    const short INTERACTIVE_SEQUENCE = 6;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

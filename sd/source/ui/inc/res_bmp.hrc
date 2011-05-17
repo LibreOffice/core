@@ -1,0 +1,301 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include "sfx2/sfx.hrc"
+#include "cfgids.hxx"
+
+// -----------
+// - Defines -
+// -----------
+
+#define IMAGE_MASK_STDCOLOR Color{ Red = 0xff00; Green = 0x0000; Blue = 0xff00; }
+#define IMAGE_MASK_STDCOLOR_HC IMAGE_MASK_STDCOLOR
+#define IMAGE_STDBTN_COLOR_HC COL_LIGHTMAGENTA
+
+#define RID_ALIGNMENT             RID_APP_START+1
+#define RID_ZOOM                  RID_APP_START+2
+#define RID_CONTROLS              RID_APP_START+3
+#define RID_IMPRESS_DOCWINDOWICON RID_APP_START+4
+
+#define RID_ALIGNMENT_TBX       RID_APP_START+5
+#define RID_ZOOM_TBX            RID_APP_START+6
+#define RID_CHOOSE_MODE         RID_APP_START+7
+#define RID_CHOOSE_MODE_TBX     RID_APP_START+8
+
+#define RID_TEXT                RID_APP_START+10
+#define RID_TEXT_TBX            RID_APP_START+11
+#define RID_RECTANGLES          RID_APP_START+12
+#define RID_RECTANGLES_TBX      RID_APP_START+13
+#define RID_ELLIPSES            RID_APP_START+14
+#define RID_ELLIPSES_TBX        RID_APP_START+15
+#define RID_LINES               RID_APP_START+16
+#define RID_LINES_TBX           RID_APP_START+17
+#define RID_3D_OBJECTS          RID_APP_START+18
+#define RID_3D_OBJECTS_TBX      RID_APP_START+19
+#define RID_INSERT              RID_APP_START+20
+#define RID_INSERT_TBX          RID_APP_START+21
+#define RID_POSITION            RID_APP_START+22
+#define RID_POSITION_TBX        RID_APP_START+23
+#define RID_CONNECTORS          RID_APP_START+24
+#define RID_CONNECTORS_TBX      RID_APP_START+25
+#define RID_ARROWS              RID_APP_START+26
+#define RID_ARROWS_TBX          RID_APP_START+27
+#define RID_DRAW_DOCWINDOWICON  RID_APP_START+28
+#define RID_GRAFFILTERS         RID_APP_START+29
+#define RID_GRAFFILTERS_TBX     RID_APP_START+30
+
+// Bitmaps fuer Tree-ListBox im Effekte-TabDialog
+#define BMP_PAGE                RID_APP_START+42
+#define BMP_PAGEOBJS            RID_APP_START+43
+#define BMP_OBJECTS             RID_APP_START+44
+#define BMP_DOC_OPEN            RID_APP_START+45
+#define BMP_DOC_CLOSED          RID_APP_START+46
+#define BMP_DOC_TEXT            RID_APP_START+47
+#define BMP_OLE                 RID_APP_START+48
+#define BMP_PAGE_EXCLUDED       RID_APP_START+49
+#define BMP_PAGEOBJS_EXCLUDED   RID_APP_START+50
+#define BMP_EXPAND              RID_APP_START+51
+#define BMP_COLLAPSE            RID_APP_START+52
+#define BMP_GRAPHIC             RID_APP_START+53
+
+// Bimaps fuer ValueSet im EffekteWindow
+#define BMP_EFFECT_NONE                     RID_APP_START+105
+#define BMP_TEXTEFFECT_DISCARD_FROM_T       RID_APP_START+106
+#define BMP_TEXTEFFECT_FADE_FROM_CENTER     RID_APP_START+107
+#define BMP_EFFECT_HIDE                     RID_APP_START+108
+#define BMP_EFFECT_APPEAR                   RID_APP_START+109
+
+// -----------------------------------------------------------------------------
+
+#define BMP_FOIL_NONE                       RID_APP_START+120
+#define BMP_GROUP                           RID_APP_START+121
+#define BMP_WAIT_ICON                       RID_APP_START+124
+
+// -----------------------------------------------------------------------------
+// additional effects
+#define BMP_EFFECT_DISCARD_FROM_UL          RID_APP_START+130
+#define BMP_EFFECT_DISCARD_FROM_UR          RID_APP_START+131
+#define BMP_EFFECT_DISCARD_FROM_LR          RID_APP_START+132
+#define BMP_EFFECT_DISCARD_FROM_LL          RID_APP_START+133
+#define BMP_EFFECT_DISCARD_S_FROM_L         RID_APP_START+134
+#define BMP_EFFECT_DISCARD_S_FROM_UL        RID_APP_START+135
+#define BMP_EFFECT_DISCARD_S_FROM_T         RID_APP_START+136
+#define BMP_EFFECT_DISCARD_S_FROM_UR        RID_APP_START+137
+#define BMP_EFFECT_DISCARD_S_FROM_R         RID_APP_START+138
+#define BMP_EFFECT_DISCARD_S_FROM_LR        RID_APP_START+139
+#define BMP_EFFECT_DISCARD_S_FROM_B         RID_APP_START+140
+#define BMP_EFFECT_DISCARD_S_FROM_LL        RID_APP_START+141
+#define BMP_EFFECT_VERTICAL_CHECKERBOARD    RID_APP_START+142
+#define BMP_EFFECT_HORIZONTAL_CHECKERBOARD  RID_APP_START+143
+#define BMP_EFFECT_STRTCH_FROM_L            RID_APP_START+144
+#define BMP_EFFECT_STRTCH_FROM_UL           RID_APP_START+145
+#define BMP_EFFECT_STRTCH_FROM_T            RID_APP_START+146
+#define BMP_EFFECT_STRTCH_FROM_UR           RID_APP_START+147
+#define BMP_EFFECT_STRTCH_FROM_R            RID_APP_START+148
+#define BMP_EFFECT_STRTCH_FROM_LR           RID_APP_START+149
+#define BMP_EFFECT_STRTCH_FROM_B            RID_APP_START+150
+#define BMP_EFFECT_STRTCH_FROM_LL           RID_APP_START+151
+
+#define BMP_EFFECT_STRTCH_HORIZONTAL        RID_APP_START+152
+#define BMP_EFFECT_STRTCH_VERTICAL          RID_APP_START+153
+#define BMP_EFFECT_ROTATE_HORIZONTAL        RID_APP_START+154
+#define BMP_EFFECT_ROTATE_VERTICAL          RID_APP_START+155
+
+#define BMP_FOIL_21                         RID_APP_START+156
+#define BMP_FOIL_22                         RID_APP_START+157
+#define BMP_FOIL_23                         RID_APP_START+158
+#define BMP_FOIL_24                         RID_APP_START+159
+
+#define BMP_EFFECT_UNCOVER_TO_L             RID_APP_START+165
+#define BMP_EFFECT_UNCOVER_TO_UL            RID_APP_START+166
+#define BMP_EFFECT_UNCOVER_TO_T             RID_APP_START+167
+#define BMP_EFFECT_UNCOVER_TO_UR            RID_APP_START+168
+#define BMP_EFFECT_UNCOVER_TO_R             RID_APP_START+169
+#define BMP_EFFECT_UNCOVER_TO_LR            RID_APP_START+170
+#define BMP_EFFECT_UNCOVER_TO_B             RID_APP_START+171
+#define BMP_EFFECT_UNCOVER_TO_LL            RID_APP_START+172
+
+#define BMP_FOIL_NONE_H                     RID_SD_START+225
+#define BMP_WAIT_ICON_H                     RID_SD_START+229
+
+#define BMP_FADE_EFFECT_INDICATOR           RID_SD_START+331
+
+#define BMP_COMMENTS_INDICATOR              RID_SD_START+338
+
+#define BMP_LAYOUT_EMPTY                    RID_SD_START+340
+#define BMP_LAYOUT_HEAD01                   RID_SD_START+342
+#define BMP_LAYOUT_HEAD02                   RID_SD_START+344
+#define BMP_LAYOUT_HEAD02A                  RID_SD_START+346
+#define BMP_LAYOUT_HEAD02B                  RID_SD_START+348
+#define BMP_LAYOUT_HEAD03                   RID_SD_START+350
+#define BMP_LAYOUT_HEAD03A                  RID_SD_START+352
+#define BMP_LAYOUT_HEAD03B                  RID_SD_START+354
+#define BMP_LAYOUT_HEAD03C                  RID_SD_START+356
+#define BMP_LAYOUT_HEAD04                   RID_SD_START+358
+#define BMP_LAYOUT_HEAD06                   RID_SD_START+360
+#define BMP_LAYOUT_TEXTONLY                 RID_SD_START+362
+#define BMP_LAYOUT_VERTICAL01               RID_SD_START+364
+#define BMP_LAYOUT_VERTICAL02               RID_SD_START+366
+
+#define BMP_FOILH_01                        RID_SD_START+388
+#define BMP_FOILH_02                        RID_SD_START+390
+#define BMP_FOILH_03                        RID_SD_START+392
+#define BMP_FOILH_04                        RID_SD_START+394
+#define BMP_FOILH_06                        RID_SD_START+396
+#define BMP_FOILH_09                        RID_SD_START+398
+
+#define BMP_FOILN_01                        RID_SD_START+400
+
+#define BMP_PLACEHOLDER_SMALL_START         (RID_SD_START+402)      // these ids must stay in order!
+#define BMP_PLACEHOLDER_TABLE_SMALL         (RID_SD_START+402)
+#define BMP_PLACEHOLDER_CHART_SMALL         (RID_SD_START+403)
+#define BMP_PLACEHOLDER_IMAGE_SMALL         (RID_SD_START+404)
+#define BMP_PLACEHOLDER_MOVIE_SMALL         (RID_SD_START+405)
+#define BMP_PLACEHOLDER_TABLE_SMALL_HOVER   (RID_SD_START+406)
+#define BMP_PLACEHOLDER_CHART_SMALL_HOVER   (RID_SD_START+407)
+#define BMP_PLACEHOLDER_IMAGE_SMALL_HOVER   (RID_SD_START+408)
+#define BMP_PLACEHOLDER_MOVIE_SMALL_HOVER   (RID_SD_START+409)
+#define BMP_PLACEHOLDER_SMALL_END           (RID_SD_START+410)
+#define BMP_PLACEHOLDER_LARGE_START         (RID_SD_START+410)
+#define BMP_PLACEHOLDER_TABLE_LARGE         (RID_SD_START+410)
+#define BMP_PLACEHOLDER_CHART_LARGE         (RID_SD_START+411)
+#define BMP_PLACEHOLDER_IMAGE_LARGE         (RID_SD_START+412)
+#define BMP_PLACEHOLDER_MOVIE_LARGE         (RID_SD_START+413)
+#define BMP_PLACEHOLDER_TABLE_LARGE_HOVER   (RID_SD_START+414)
+#define BMP_PLACEHOLDER_CHART_LARGE_HOVER   (RID_SD_START+415)
+#define BMP_PLACEHOLDER_IMAGE_LARGE_HOVER   (RID_SD_START+416)
+#define BMP_PLACEHOLDER_MOVIE_LARGE_HOVER   (RID_SD_START+417)
+#define BMP_PLACEHOLDER_LARGE_END           (RID_SD_START+418)      // until here!
+
+// -----------------------------------------------------------------------------
+
+/*
+ *  ResourceIDs fuer Popup-Menues brauchen keinen Dummy-String !!!
+ */
+
+#define RID_DRAW_TEXTOBJ_POPUP              RID_APP_START+43
+#define RID_DRAW_GEOMOBJ_POPUP              RID_APP_START+44
+#define RID_DRAW_NOSEL_POPUP                RID_APP_START+45
+#define RID_SLIDE_SORTER_IMPRESS_SEL_POPUP  RID_APP_START+46
+#define RID_BEZIER_POPUP                    RID_APP_START+47
+#define RID_DRAW_LINEOBJ_POPUP              RID_APP_START+48
+#define RID_DRAW_MULTISELECTION_POPUP       RID_APP_START+49
+#define RID_DRAW_PAGETAB_POPUP              RID_APP_START+50
+#define RID_LAYERTAB_POPUP                  RID_APP_START+51
+#define RID_DRAW_GRAPHIC_POPUP              RID_APP_START+52
+#define RID_DRAW_OLE2_POPUP                 RID_APP_START+53
+#define RID_DRAW_TEXTOBJ_INSIDE_POPUP       RID_APP_START+54
+#define RID_SLIDE_SORTER_IMPRESS_NOSEL_POPUP RID_APP_START+55
+#define RID_OUTLINE_POPUP                   RID_APP_START+56
+#define RID_MASTERPAGE_POPUP                RID_APP_START+57
+#define RID_DRAW_GROUPOBJ_POPUP             RID_APP_START+58
+#define RID_DRAW_3DOBJ_POPUP                RID_APP_START+59
+#define RID_DRAW_MEASUREOBJ_POPUP           RID_APP_START+60
+#define RID_DRAW_EDGEOBJ_POPUP              RID_APP_START+61
+#define RID_DRAW_BMP_CONVERT_POPUP          RID_APP_START+62
+#define RID_DRAW_POLYLINEOBJ_POPUP          RID_APP_START+63
+#define RID_DRAW_3DSCENE_POPUP              RID_APP_START+64
+#define RID_DRAW_3DSCENE2_POPUP             RID_APP_START+65
+#define RID_DRAW_CUSTOMSHAPE_POPUP          RID_APP_START+66
+#define RID_TASKPANE_MASTERPAGESSELECTOR_POPUP  RID_APP_START+67
+#define RID_TASKPANE_LAYOUTMENU_POPUP       RID_APP_START+68
+#define RID_DRAW_MEDIA_POPUP                RID_APP_START+69
+
+// Draw (Graphic)
+#define RID_GRAPHIC_TEXTOBJ_POPUP           RID_APP_START+70
+#define RID_GRAPHIC_GEOMOBJ_POPUP           RID_APP_START+71
+#define RID_GRAPHIC_NOSEL_POPUP             RID_APP_START+72
+#define RID_GRAPHIC_LINEOBJ_POPUP           RID_APP_START+73
+#define RID_GRAPHIC_MULTISELECTION_POPUP    RID_APP_START+74
+#define RID_GRAPHIC_PAGETAB_POPUP           RID_APP_START+75
+#define RID_GRAPHIC_GRAPHIC_POPUP           RID_APP_START+76
+#define RID_GRAPHIC_OLE2_POPUP              RID_APP_START+77
+#define RID_GRAPHIC_GROUPOBJ_POPUP          RID_APP_START+78
+#define RID_GRAPHIC_3DOBJ_POPUP             RID_APP_START+79
+#define RID_GRAPHIC_MEASUREOBJ_POPUP        RID_APP_START+80
+#define RID_GRAPHIC_EDGEOBJ_POPUP           RID_APP_START+81
+#define RID_GRAPHIC_POLYLINEOBJ_POPUP       RID_APP_START+82
+#define RID_GRAPHIC_3DSCENE_POPUP           RID_APP_START+83
+#define RID_GRAPHIC_3DSCENE2_POPUP          RID_APP_START+84
+#define RID_GRAPHIC_CUSTOMSHAPE_POPUP       RID_APP_START+85
+#define RID_GRAPHIC_MEDIA_POPUP             RID_APP_START+86
+
+#define RID_SLIDE_SORTER_DRAW_SEL_POPUP     RID_APP_START+87
+#define RID_SLIDE_SORTER_DRAW_NOSEL_POPUP   RID_APP_START+88
+#define RID_SLIDE_SORTER_MASTER_SEL_POPUP   RID_APP_START+89
+#define RID_SLIDE_SORTER_MASTER_NOSEL_POPUP RID_APP_START+90
+
+#define RID_DRAW_TABLE_POPUP                RID_APP_START+91
+#define RID_GRAPHIC_TABLE_POPUP             RID_APP_START+92
+
+#define RID_TASKPANE_CURRENT_MASTERPAGESSELECTOR_POPUP  RID_APP_START+93
+
+#define RID_DRAW_TABLEOBJ_INSIDE_POPUP      RID_APP_START+94
+
+#define RID_DRAW_OUTLINETEXTOBJ_POPUP       RID_APP_START+95
+#define RID_GRAPHIC_OUTLINETEXTOBJ_POPUP    RID_APP_START+96
+
+/*
+ * Pointer (Mauszeiger)
+ */
+#define PTR_WATERCAN            RID_APP_START+100
+#define PTR_PENCIL              RID_APP_START+101
+
+
+/*
+ * Globale Dialog-IDs
+ */
+#define DLG_FONTWORK            RID_APP_START+150
+
+/*
+ *  ResourceIDs fuer Toolboxen nicht aendern, ohne die Strings in
+ *  strings.hrc auf die selben IDs zu setzen (eine Toolbox und sein
+ *  Konfigurationsstring muessen dieselbe ResourceID haben!).
+ */
+
+// --> Jetzt in cfgids.hxx
+/*
+#define _RID_DRAW_TOOLBOX           RID_APP_START+200
+#define _RID_SLIDE_TOOLBOX          RID_APP_START+201
+#define _RID_DRAW_OBJ_TOOLBOX       RID_APP_START+202
+#define _RID_SLIDE_OBJ_TOOLBOX      RID_APP_START+203
+#define _RID_BEZIER_TOOLBOX         RID_APP_START+204
+#define _RID_TEXT_TOOLBOX           RID_APP_START+205
+#define _RID_OUTLINE_TOOLBOX        RID_APP_START+206
+#define _RID_DRAW_POLYLINEOBJ_POPUP RID_APP_START+207
+#define _RID_GLUEPOINTS_TOOLBOX     RID_APP_START+208
+*/
+
+
+#define RID_DRAW_SNAPOBJECT_POPUP           RID_APP_START+390
+#define RID_DRAW_GLUEPOINT_POPUP            RID_APP_START+392
+#define RID_DRAW_CONTROL_POPUP              RID_APP_START+393
+#define RID_FORM_CONTROL_POPUP              RID_APP_START+394
+
+#define RID_GRAPHICSTYLEFAMILY      RID_APP_START+395
+#define RID_PRESENTATIONSTYLEFAMILY RID_APP_START+396
+#define RID_GRAPHICSCELLFAMILY      RID_APP_START+397
+

@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+  <Author>Gavin Lu</Author>
+  <LastAuthor>Gavin Lu</LastAuthor>
+  <Created>2003-07-07T03:56:37Z</Created>
+  <Company>Sun China Engineering &amp; Research Institute</Company>
+  <Version>11.5329</Version>
+ </DocumentProperties>
+ <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
+  <WindowHeight>9000</WindowHeight>
+  <WindowWidth>13860</WindowWidth>
+  <WindowTopX>240</WindowTopX>
+  <WindowTopY>75</WindowTopY>
+  <ActiveSheet>1</ActiveSheet>
+  <ProtectStructure>False</ProtectStructure>
+  <ProtectWindows>False</ProtectWindows>
+ </ExcelWorkbook>
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Center"/>
+   <Borders/>
+   <Font ss:FontName="宋体" x:CharSet="134" ss:Size="12"/>
+   <Interior/>
+   <NumberFormat/>
+   <Protection/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="Sheet1">
+  <Table ss:ExpandedColumnCount="2" ss:ExpandedRowCount="2" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultColumnWidth="54" ss:DefaultRowHeight="14.25">
+   <Row ss:AutoFitHeight="0"/>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="2"><Data ss:Type="String">headers and footers</Data></Cell>
+   </Row>
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <PageSetup>
+    <Header x:Data="&amp;L&amp;P&amp;C&amp;N&amp;R&amp;D"/>
+    <Footer x:Data="&amp;L&amp;T&amp;C&amp;F&amp;R&amp;A"/>
+   </PageSetup>
+   <Unsynced/>
+   <Print>
+    <ValidPrinterInfo/>
+    <PaperSizeIndex>9</PaperSizeIndex>
+    <HorizontalResolution>600</HorizontalResolution>
+    <VerticalResolution>600</VerticalResolution>
+   </Print>
+   <Panes>
+    <Pane>
+     <Number>3</Number>
+     <ActiveRow>30</ActiveRow>
+     <ActiveCol>2</ActiveCol>
+    </Pane>
+   </Panes>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+ <Worksheet ss:Name="Sheet2">
+  <Table ss:ExpandedColumnCount="0" ss:ExpandedRowCount="0" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultColumnWidth="54" ss:DefaultRowHeight="14.25"/>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <PageSetup>
+    <Header x:Margin="0.51181102362204722" x:Data="&amp;L&amp;F&amp;C&amp;D&amp;&quot;宋体,Italic&quot;&amp;T&amp;R&amp;A"/>
+    <Footer x:Margin="0.51181102362204722"
+     x:Data="&amp;LGa&amp;&quot;宋体,Bold Italic&quot;&amp;XSuper&amp;&quot;宋体,Regular&quot;&amp;Xv&amp;&quot;Courier New,Italic&quot;&amp;14&amp;Sin&amp;&quot;宋体,Regular&quot;&amp;12&amp;SL2u&amp;&quot;宋体,Bold&quot;&amp;Ysub&amp;&quot;宋体,Italic&quot;&amp;U&amp;Yun&amp;Ede&amp;Er&amp;11 2&amp;CPage &amp;P&amp;R&amp;D"/>
+    <PageMargins x:Bottom="0.98425196850393704" x:Left="0.74803149606299213"
+     x:Right="0.74803149606299213" x:Top="0.98425196850393704"/>
+   </PageSetup>
+   <Unsynced/>
+   <Print>
+    <ValidPrinterInfo/>
+    <PaperSizeIndex>9</PaperSizeIndex>
+    <HorizontalResolution>600</HorizontalResolution>
+    <VerticalResolution>600</VerticalResolution>
+   </Print>
+   <Selected/>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+ <Worksheet ss:Name="Sheet3">
+  <Table ss:ExpandedColumnCount="0" ss:ExpandedRowCount="0" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultColumnWidth="54" ss:DefaultRowHeight="14.25"/>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <Unsynced/>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+</Workbook>

@@ -1,0 +1,152 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_frame_XModel2_idl__
+#define __com_sun_star_frame_XModel2_idl__
+
+#include <com/sun/star/frame/XController2.idl>
+#include <com/sun/star/frame/XModel.idl>
+#include <com/sun/star/container/XEnumeration.idl>
+#include <com/sun/star/awt/XWindow.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module frame {
+
+//=============================================================================
+/** extends interface XModel.
+
+    The following functions are added:
+
+    - enumeration of all currently connected controller objects.
+      (not getCurrentController() only, which depends on focus)
+
+    - establish new view controller factory methods, which will make
+      it possible to create new views for this model.
+ */
+interface XModel2 : com::sun::star::frame::XModel
+{
+    //-------------------------------------------------------------------------
+    /** provides list of all currently connected controller objects.
+
+        <p>
+        Please note: Because this interface will might be used inside
+        multi threaded environments those list can contain still disposed items
+        or it new added controller will be missing (if they was added after this
+        enumeration was created).
+        </P>
+
+        @returns
+            list of controller objects.
+            Enumeration can be empty but not NULL.
+     */
+    com::sun::star::container::XEnumeration getControllers();
+
+    //-------------------------------------------------------------------------
+    /** provides the available names of the factory to be used to create views.
+
+        <p>The names are usually logical view names. The following names have
+        a defined meaning, i.e. every concrete implementation which returns such
+        a name must ensure it has the same meaning, and if a concrete implementation
+        has a view with the given meaning, it must give it the name as defined here:
+        <ul>
+            <li><b>Default</b> specifies the default view of the document.</li>
+            <li><b>Preview</b> specifies a preview of the document. A minimal implementation of such a view
+                is a <em>Default</em> view which is read-only.</li>
+            <li><b>PrintPreview</b> specifies a print preview of the document.</li>
+        </ul>
+        </p>
+
+        <p>Implementations of this interface might decide to support additional
+        view names, which then are documented in the respective service descriptions.</p>
+
+        @see createView
+
+        @returns
+            a sequence of names of all supported views for this document.
+     */
+    sequence< string > getAvailableViewControllerNames();
+
+    //-------------------------------------------------------------------------
+    /** creates the default view instance for this model.
+
+        <p>Effectively, this method is equivalent to calling <member>createView</member> with
+        the <code>ViewName</code> being <code>&quot;Default&quot;</code>.</p>
+
+        @param Frame
+               used to place the new created view there
+
+        @return the new view controller instance
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+                if one of the given parameter was wrong
+
+        @throws ::com::sun::star::uno::Exception
+                if creation of a new view failed by other reasons
+     */
+    com::sun::star::frame::XController2 createDefaultViewController( [in]  com::sun::star::frame::XFrame Frame )
+        raises (com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::uno::Exception                );
+
+    //-------------------------------------------------------------------------
+    /** creates a new view instance classified by the specified name and arguments.
+
+        <p>The newly created controller must not be connected with the document and the
+        frame. That is, you should neither call <member>XFrame::setComponent</member>, nor
+        <member>XController::attachFrame</member>, nor <member>XController::attachModel</member>,
+        nor <member>XModel::connectController</member>, not <member>XModel::setCurrentController</member>.
+        All of this is the responsibility of the caller, which will do it in the proper order.</p>
+
+        @param ViewName
+               classified name of instance
+
+        @param Arguments
+               arguments used for creation
+
+        @param Frame
+               used to place the new created view there
+
+        @return the new view controller instance
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+                if one of the given parameter was wrong
+
+        @throws ::com::sun::star::uno::Exception
+                if creation of a new view failed by other reasons
+     */
+    com::sun::star::frame::XController2 createViewController( [in]  string                                           ViewName       ,
+                                                              [in]  sequence< com::sun::star::beans::PropertyValue > Arguments      ,
+                                                              [in]  com::sun::star::frame::XFrame                    Frame          )
+        raises (com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::uno::Exception                );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

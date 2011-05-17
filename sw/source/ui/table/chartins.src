@@ -1,0 +1,128 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+/* StarView ressource file */
+#include "chartins.hrc"
+#include "helpid.h"
+ModelessDialog DLG_INSERT_CHART
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 297 , 169 ) ;
+    Moveable = TRUE ;
+    HelpID = HID_INSERT_CHART ;
+    Hide = TRUE ;
+    Text [ en-US ] = "AutoFormat Chart (1-4)" ;
+    FixedLine FL_1
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 285 , 8 ) ;
+        Text [ en-US ] = "Selection" ;
+    };
+    FixedText FT_RANGE
+    {
+        Pos = MAP_APPFONT ( 12 , 16 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Text [ en-US ] = "A~rea" ;
+    };
+    Edit ED_RANGE
+    {
+        HelpID = "sw:Edit:DLG_INSERT_CHART:ED_RANGE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 56 , 14 ) ;
+        Size = MAP_APPFONT ( 229 , 12 ) ;
+    };
+    CheckBox CB_FIRST_ROW
+    {
+        HelpID = "sw:CheckBox:DLG_INSERT_CHART:CB_FIRST_ROW";
+        Pos = MAP_APPFONT ( 12 , 32 ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~First row as caption" ;
+        Check = TRUE ;
+    };
+    CheckBox CB_FIRST_COL
+    {
+        HelpID = "sw:CheckBox:DLG_INSERT_CHART:CB_FIRST_COL";
+        Pos = MAP_APPFONT ( 12 , 46 ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "First ~column as caption" ;
+        Check = TRUE ;
+    };
+    FixedText FT_TEXT
+    {
+        Pos = MAP_APPFONT ( 6 , 72 ) ;
+        Size = MAP_APPFONT ( 285 , 62 ) ;
+        Text [ en-US ] = "If the selected cells do not contain the desired data, select the data range now.\n\nInclude the cells containing column and row labels if you want them to be included in your chart." ;
+        WordBreak = TRUE ;
+    };
+    FixedLine FL_HLINE
+    {
+        Pos = MAP_APPFONT ( 0 , 140 ) ;
+        Size = MAP_APPFONT ( 297 , 8 ) ;
+    };
+    HelpButton BT_HELP
+    {
+        Pos = MAP_APPFONT ( 6 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    CancelButton BT_CANCEL
+    {
+        Pos = MAP_APPFONT ( 60 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton BT_PREV
+    {
+        HelpID = "sw:PushButton:DLG_INSERT_CHART:BT_PREV";
+        Pos = MAP_APPFONT ( 130 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Disable = TRUE ;
+        Text [ en-US ] = "<< ~Back" ;
+    };
+    PushButton BT_NEXT
+    {
+        HelpID = "sw:PushButton:DLG_INSERT_CHART:BT_NEXT";
+        Pos = MAP_APPFONT ( 185 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Disable = TRUE ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Next >>" ;
+    };
+    PushButton BT_FINISH
+    {
+        HelpID = "sw:PushButton:DLG_INSERT_CHART:BT_FINISH";
+        Pos = MAP_APPFONT ( 240 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Cre~ate" ;
+    };
+};
+
+

@@ -1,0 +1,68 @@
+[OKLabel]
+en-US = "Ok"
+
+[InstallLabel]
+en-US = "Install"
+
+[AbortLabel]
+en-US = "Abort"
+
+[IntroText1]
+en-US = "Welcome to the [FULLPRODUCTNAME] Installation Wizard"
+
+[IntroText2]
+en-US = "This installation will update your installed versions of [PRODUCTNAME]"
+
+[IntroText3]
+en-US = "This might take a moment."
+
+[ChooseMyOwnText]
+en-US = "Not listed (choose location in an extra step)"
+
+[ListPromptText]
+en-US = "Choose [PRODUCTNAME] [PRODUCTVERSION] installation for which you want to install the [FULLPRODUCTNAME]"
+
+[ChooseManualText]
+en-US = "Point the dialog to your [PRODUCTNAME] [PRODUCTVERSION] installation."
+
+[ListOKLabelText]
+en-US = "Install"
+
+[ListCancelLabel]
+en-US = "Abort"
+
+[AppInvalidText1]
+en-US = "This is not a valid [PRODUCTNAME] [PRODUCTVERSION] installation."
+
+[AppInvalidText2]
+en-US = "Run the installer again and choose a valid [PRODUCTNAME] [PRODUCTVERSION] installation"
+
+[StartInstallText1]
+en-US = "Click Install to start the installation"
+
+[StartInstallText2]
+en-US = "Installation might take a minute..."
+
+[IdentifyQText]
+en-US = "Installation failed, most likely your account does not have the necessary privileges."
+
+[IdentifyQText2]
+en-US = "Do you want to identify as administrator and try again?"
+
+[IdentifyYES]
+en-US = "Yes, identify"
+
+[IdentifyNO]
+en-US = "No, abort installation"
+
+[InstallFailedText]
+en-US = "Installation failed."
+
+[InstallCompleteText]
+en-US = "Installation of [PRODUCTNAME] language pack completed." 
+
+[InstallCompleteText2]
+en-US = "Call '[PRODUCTNAME]-Preferences-Language Settings-Languages' to change the user interface language."
+
+[InstallCompleteTextPatch]
+en-US = "Installation of [FULLPRODUCTNAME] completed"

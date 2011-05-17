@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="frame_XFrameLoader" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+'*************************************************************************
+' This Interface/Service test depends on the following GLOBAL variables,
+' which must be specified in the object creation:
+
+' Global FrameLoaderURL As String
+'Global FrameLoaderFrame As Object ' optional
+'Global FrameLoaderArgs As Variant ' optional
+
+'*************************************************************************
+
+
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.form.XFrameLoader
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim frame As Object
+    Dim args As Variant
+    Dim listener As Object
+
+    if IsNULL(FrameLoaderFrame) then
+        Out.log("Frame is NULL")
+        Dim oDsk As Object
+        oDsk = createUnoService("com.sun.star.frame.Desktop")
+        frame = oDsk.getCurrentFrame()
+    else
+        frame = FrameLoaderFrame
+    endif
+
+    if IsArray(FrameLoaderArgs) then
+        Out.log("Args isn't array")
+        Dim emptyAr As Variant
+        args = emptyAr
+    else
+        args = FrameLoaderArgs
+    endif
+
+    listener = createUnoListener("L_", "com.sun.star.frame.XLoadEventListener")
+    initListener()
+
+    Test.StartMethod("cancel()")
+
+    oObj.load(frame, FrameLoaderURL, args, listener)
+    oObj.cancel()
+    wait(200)
+
+    bOK = loadCancelled OR loadFinished
+
+    Test.MethodTested("cancel()", bOK)
+
+    Test.StartMethod("load()")
+
+    initListener()
+    oObj.load(frame, FrameLoaderURL, args, listener)
+    wait(200)
+    bOK = loadFinished AND Not loadCancelled
+
+    Test.MethodTested("load()", bOK)
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+
+Sub initListener()
+    loadFinished = false
+    loadCancelled = false
+End Sub
+
+Dim loadFinished As Boolean
+Dim loadCancelled As Boolean
+
+Sub L_loadFinished()
+   Out.Log("Listener: loadFinished")
+   loadFinished = true
+End Sub
+
+Sub L_loadCancelled()
+   Out.Log("Listener: loadCancelled")
+   loadCancelled = true
+End Sub
+</script:module>

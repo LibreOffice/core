@@ -1,0 +1,215 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+ // include -----------------------------------------------------------------
+#include "optfltr.hrc"
+#include <cuires.hrc>
+ // pragma ------------------------------------------------------------------
+
+// RID_OFAPAGE_MSFILTEROPT -----------------------------------------------------
+TabPage RID_OFAPAGE_MSFILTEROPT
+{
+    HelpID = "cui:TabPage:RID_OFAPAGE_MSFILTEROPT";
+    OutputSize = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+
+    FixedLine GB_WORD
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Microsoft Word 97/2000/XP";
+    };
+    CheckBox CB_WBAS_CODE
+    {
+        HelpID = "cui:CheckBox:RID_OFAPAGE_MSFILTEROPT:CB_WBAS_CODE";
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Load Basic ~code";
+    };
+    CheckBox CB_WBAS_WBCTBL
+    {
+        Pos = MAP_APPFONT ( 22 , 28 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "E~xecutable code";
+    };
+    CheckBox CB_WBAS_STG
+    {
+        HelpID = "cui:CheckBox:RID_OFAPAGE_MSFILTEROPT:CB_WBAS_STG";
+        Pos = MAP_APPFONT ( 12 , 42 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Save ~original Basic code";
+    };
+
+    FixedLine GB_EXCEL
+    {
+        Pos = MAP_APPFONT ( 6 , 58 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Microsoft Excel 97/2000/XP";
+    };
+    CheckBox CB_EBAS_CODE
+    {
+        HelpID = "cui:CheckBox:RID_OFAPAGE_MSFILTEROPT:CB_EBAS_CODE";
+        Pos = MAP_APPFONT ( 12 , 69 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Lo~ad Basic code";
+    };
+    CheckBox CB_EBAS_EXECTBL
+    {
+        HelpID = "cui:CheckBox:RID_OFAPAGE_MSFILTEROPT:CB_EBAS_EXECTBL";
+        Pos = MAP_APPFONT ( 22 , 83 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "E~xecutable code";
+    };
+    CheckBox CB_EBAS_STG
+    {
+        HelpID = "cui:CheckBox:RID_OFAPAGE_MSFILTEROPT:CB_EBAS_STG";
+        Pos = MAP_APPFONT ( 12 , 97 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Sa~ve original Basic code";
+    };
+
+    FixedLine GB_PPOINT
+    {
+        Pos = MAP_APPFONT ( 6 , 113 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Microsoft PowerPoint 97/2000/XP";
+    };
+    CheckBox CB_PBAS_CODE
+    {
+        HelpID = "cui:CheckBox:RID_OFAPAGE_MSFILTEROPT:CB_PBAS_CODE";
+        Pos = MAP_APPFONT ( 12 , 124 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Load Ba~sic code";
+    };
+    CheckBox CB_PBAS_STG
+    {
+        HelpID = "cui:CheckBox:RID_OFAPAGE_MSFILTEROPT:CB_PBAS_STG";
+        Pos = MAP_APPFONT ( 12 , 138 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Sav~e original Basic code";
+    };
+};
+
+// RID_OFAPAGE_MSFILTEROPT2 -----------------------------------------------------
+TabPage RID_OFAPAGE_MSFILTEROPT2
+{
+    HelpID = "cui:TabPage:RID_OFAPAGE_MSFILTEROPT2";
+    OutputSize = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+
+    Control CLB_SETTINGS
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 248 , 147 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+    String ST_HEADER1
+    {
+        Text [ en-US ] = "[L]";
+    };
+    String ST_HEADER2
+    {
+        Text [ en-US ] = "[S]";
+    };
+    FixedText FT_HEADER1_EXPLANATION
+    {
+        Pos = MAP_APPFONT ( 6 , 160 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "[L]: Load and convert the object";
+    };
+    FixedText FT_HEADER2_EXPLANATION
+    {
+        Pos = MAP_APPFONT ( 6 , 171 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "[S]: Convert and save the object";
+    };
+    String ST_CHG_MATH
+    {
+        Text [ en-US ] = "MathType to %PRODUCTNAME Math or reverse";
+    };
+    String ST_CHG_WRITER
+    {
+        Text [ en-US ] = "WinWord to %PRODUCTNAME Writer or reverse";
+    };
+    String ST_CHG_CALC
+    {
+        Text [ en-US ] = "Excel to %PRODUCTNAME Calc or reverse";
+    };
+    String ST_CHG_IMPRESS
+    {
+        Text [ en-US ] = "PowerPoint to %PRODUCTNAME Impress or reverse";
+    };
+};
+
+ // ******************************************************************* EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

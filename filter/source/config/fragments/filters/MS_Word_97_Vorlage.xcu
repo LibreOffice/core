@@ -1,0 +1,10 @@
+    <node oor:name="MS Word 97 Vorlage" oor:op="replace">
+        <prop oor:name="Flags"><value>IMPORT TEMPLATE TEMPLATEPATH ALIEN ENCRYPTION PASSWORDTOMODIFY</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="UserData"><value>CWW8</value></prop>
+        <prop oor:name="FileFormatVersion"><value>0</value></prop>
+        <prop oor:name="Type"><value>writer_MS_Word_97_Vorlage</value></prop>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="DocumentService"><value>com.sun.star.text.TextDocument</value></prop>
+    </node>
