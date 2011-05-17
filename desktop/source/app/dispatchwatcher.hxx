@@ -118,8 +118,6 @@ class DispatchWatcher : public ::cppu::WeakImplHelper1< ::com::sun::star::frame:
 
         DispatchWatcherHashMap      m_aRequestContainer;
 
-        static ::osl::Mutex*        pWatcherMutex;
-
         sal_Int16                   m_nRequestCount;
 };
 

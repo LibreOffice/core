@@ -63,6 +63,7 @@
 
 #include <vector>
 #include <osl/thread.hxx>
+#include <rtl/instance.hxx>
 
 using ::rtl::OUString;
 using namespace ::osl;
@@ -122,18 +123,14 @@ static OUString impl_GuessFilter( OUString aUrlIn, OUString aUrlOut )
     return  impl_GetFilterFromExt( aUrlOut, SFX_FILTER_EXPORT, aAppl );
 }
 
-Mutex* DispatchWatcher::pWatcherMutex = NULL;
+namespace
+{
+    class theWatcherMutex : public rtl::Static<Mutex, theWatcherMutex> {};
+}
 
 Mutex& DispatchWatcher::GetMutex()
 {
-    if ( !pWatcherMutex )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if ( !pWatcherMutex )
-            pWatcherMutex = new osl::Mutex();
-    }
-
-    return *pWatcherMutex;
+    return theWatcherMutex::get();
 }
 
 // Create or get the dispatch watcher implementation. This implementation must be
