@@ -139,7 +139,7 @@ CodeExplorer::CurToken() const
 Cpp_PE &
 CodeExplorer::CurEnv() const
 {
-    csv_assert(aEnvironments.size() > 0);
+    csv_assert(!aEnvironments.empty());
     csv_assert(aEnvironments.back() != 0);
 
     return *aEnvironments.back();
