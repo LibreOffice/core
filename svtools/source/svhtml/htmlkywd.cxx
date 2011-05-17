@@ -849,7 +849,7 @@ struct HTML_ColorEntry
         const sal_Char* sName;
         const String *pUName;
     };
-    sal_uLong nColor;
+    sal_uInt32 nColor;
 };
 
 // Flag: color table has already been sorted
@@ -1037,7 +1037,7 @@ static int
 
 }
 
-sal_uLong GetHTMLColor( const String& rName )
+sal_uInt32 GetHTMLColor( const String& rName )
 {
     if( !bSortColorKeyWords )
     {
@@ -1048,7 +1048,7 @@ sal_uLong GetHTMLColor( const String& rName )
         bSortColorKeyWords = sal_True;
     }
 
-    sal_uLong nRet = ULONG_MAX;
+    sal_uInt32 nRet = HTML_NO_COLOR;
     void* pFound;
     HTML_ColorEntry aSrch;
     aSrch.pUName = &rName;
