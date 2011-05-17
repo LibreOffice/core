@@ -144,7 +144,6 @@ SHL4STDLIBS+= \
     $(SALLIB) \
     $(XMLOFFLIB) \
     $(LIBVISIO) \
-    $(LIBWPG) \
     $(LIBWPD)
 
 SHL4TARGET = visioimport$(DLLPOSTFIX)
