@@ -4422,6 +4422,7 @@ if test -n "$with_system_db" -o -n "$with_system_libs" && \
             AC_CHECK_LIB(db$dash$dbver, __db185_open, 
                 [ DB_LIB="db$dash$dbver"; DB_CPPLIB="db_cxx$dash$dbver"; break ])
          done
+        test -n "$DB_LIB" && break
     done
 
     if test -z "$DB_LIB"; then
