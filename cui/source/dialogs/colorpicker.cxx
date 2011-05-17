@@ -624,7 +624,7 @@ void ColorFieldControl::MouseButtonUp( const MouseEvent& )
 void ColorFieldControl::KeyMove( int dx, int dy )
 {
     Size aSize( GetOutputSizePixel() );
-    Point aPos( mdX * aSize.Width(), (1.0 - mdY) * aSize.Height() );
+    Point aPos(static_cast<long>(mdX * aSize.Width()), static_cast<long>((1.0 - mdY) * aSize.Height()));
     aPos.X() += dx;
     aPos.Y() += dy;
     if( aPos.X() < 0 )
@@ -741,7 +741,7 @@ double ColorFieldControl::GetY()
 void ColorFieldControl::UpdatePosition()
 {
     Size aSize( GetOutputSizePixel() );
-    ShowPosition( Point( mdX * aSize.Width(), (1.0 - mdY) * aSize.Height() ), false );
+    ShowPosition( Point(static_cast<long>(mdX * aSize.Width()), static_cast<long>((1.0 - mdY) * aSize.Height())), false );
 }
 
 // ====================================================================
@@ -998,7 +998,7 @@ void ColorSliderControl::SetValue( const Color& rColor, ColorMode eMode, double 
     {
         maColor = rColor;
         mdValue = dValue;
-        mnLevel = (1.0-dValue) * GetOutputSizePixel().Height();
+        mnLevel = static_cast<sal_Int16>((1.0-dValue) * GetOutputSizePixel().Height());
         meMode = eMode;
         if( bUpdateBitmap )
             UpdateBitmap();

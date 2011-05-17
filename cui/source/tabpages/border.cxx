@@ -506,9 +506,9 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
         if( bWidthEq )
         {
             // Determine the width first as some styles can be missing depending on it
-            sal_Int64 nWidthPt = MetricField::ConvertDoubleValue(
+            sal_Int64 nWidthPt =  static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
                         sal_Int64( nWidth ), aLineWidthMF.GetDecimalDigits( ),
-                        MAP_TWIP, aLineWidthMF.GetUnit() );
+                        MAP_TWIP,aLineWidthMF.GetUnit() ));
             aLineWidthMF.SetValue( nWidthPt );
             aLbLineStyle.SetWidth( nWidth );
 
@@ -879,10 +879,10 @@ IMPL_LINK( SvxBorderTabPage, SelColHdl_Impl, ListBox *, pLb )
 
 IMPL_LINK( SvxBorderTabPage, ModifyWidthHdl_Impl, void *, EMPTYARG )
 {
-    sal_Int64 nVal = MetricField::ConvertDoubleValue(
+    sal_Int64 nVal = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
                 aLineWidthMF.GetValue( ),
                 aLineWidthMF.GetDecimalDigits( ),
-                aLineWidthMF.GetUnit(), MAP_TWIP );
+                aLineWidthMF.GetUnit(), MAP_TWIP ));
     aLbLineStyle.SetWidth( nVal );
 
     aFrameSel.SetStyleToSelection( nVal,
@@ -897,10 +897,10 @@ IMPL_LINK( SvxBorderTabPage, SelStyleHdl_Impl, ListBox *, pLb )
 {
     if ( pLb == &aLbLineStyle )
     {
-        sal_Int64 nVal = MetricField::ConvertDoubleValue(
+        sal_Int64 nVal = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
                     aLineWidthMF.GetValue( ),
                     aLineWidthMF.GetDecimalDigits( ),
-                    aLineWidthMF.GetUnit(), MAP_TWIP );
+                    aLineWidthMF.GetUnit(), MAP_TWIP ));
         aFrameSel.SetStyleToSelection ( nVal,
             SvxBorderStyle( aLbLineStyle.GetSelectEntryStyle() ) );
     }
@@ -1091,10 +1091,10 @@ void SvxBorderTabPage::FillLineListBox_Impl()
     aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( INSET ), INSET, 10,
            &SvxBorderLine::darkColor, &SvxBorderLine::lightColor );
 
-    sal_Int64 nVal = MetricField::ConvertDoubleValue(
+    sal_Int64 nVal = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
                 aLineWidthMF.GetValue( ),
                 aLineWidthMF.GetDecimalDigits( ),
-                aLineWidthMF.GetUnit(), MAP_TWIP );
+                aLineWidthMF.GetUnit(), MAP_TWIP ));
     aLbLineStyle.SetWidth( nVal );
 }
 
