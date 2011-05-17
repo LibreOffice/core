@@ -273,14 +273,7 @@ void SfxEventConfiguration::ConfigureEvent( rtl::OUString aName, const SvxMacro&
     SvxMacro *pMacro = NULL;
     if ( rMacro.GetMacName().Len() )
         pMacro = new SvxMacro( rMacro.GetMacName(), rMacro.GetLibName(), rMacro.GetScriptType() );
-    if ( pDoc )
-    {
-        PropagateEvent_Impl( pDoc, aName, pMacro );
-    }
-    else
-    {
-        PropagateEvent_Impl( NULL, aName, pMacro );
-    }
+    PropagateEvent_Impl( pDoc ? pDoc : 0, aName, pMacro );
 }
 
 // -------------------------------------------------------------------------------------------------------
