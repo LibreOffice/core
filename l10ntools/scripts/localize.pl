@@ -73,9 +73,6 @@ my $srcpath                 = '';
 my $languages;
 #my %sl_modules;     # Contains all modules where en-US and de is source language
 my $use_default_date = '0';
-my $force_ooo_module = '0';
-my %is_ooo_module;
-my %is_so_module;
 
          #         (                           leftpart                                                     )            (           rightpart                    )
          #            prj      file      dummy     type       gid       lid      helpid    pform     width      lang       text    helptext  qhelptext   title    timestamp
@@ -90,9 +87,6 @@ parse_options();
 
 my $binpath = '';
 $binpath = $ENV{SOLARVER}."/".$ENV{INPATH}."/bin/" ;
-
-#%sl_modules = fetch_sourcelanguage_dirlist();
-
 
 if   ( $mode eq "merge"    )    {
     if ( ! $no_gsicheck ){
@@ -133,9 +127,6 @@ sub splitfile{
 
 #    my %lang_hash;
     my %string_hash_ooo;
-    my %string_hash_so;
-    my %so_modules;
-    $so_modules{ "extras_full" } = "TRUE";
 
     while( <MYFILE>){
          if( /$sdf_regex/ ){
@@ -151,14 +142,7 @@ sub splitfile{
             next if( $prj eq "binfilter" );     # Don't merge strings into binfilter module
             chomp( $line );
 
-            if( $force_ooo_module )
-            {
-                $string_hash_ooo { $lang }{ "$prj\t$file\t$type\t$gid\t$lid\t$helpid\t$plattform\t$lang" } = $line;
-            }
-            else
-            {
-                $string_hash_so{ $lang }{ "$prj\t$file\t$type\t$gid\t$lid\t$helpid\t$plattform\t$lang" } = $line;
-            }
+            $string_hash_ooo { $lang }{ "$prj\t$file\t$type\t$gid\t$lid\t$helpid\t$plattform\t$lang" } = $line;
         }
     }
     close( MYFILE );
@@ -169,20 +153,9 @@ sub splitfile{
     }
     my $src_root = $ENV{SRC_ROOT};
     my $ooo_src_root = $ENV{SRC_ROOT};
-    my $so_l10n_path  = $src_root."/sun/l10n_so/source";
     my $ooo_l10n_path = $ooo_src_root."/translations/source";
 
-    #print "$so_l10n_path\n";
-    #print "$ooo_l10n_path\n";
-
-    if( $force_ooo_module )
-    {
-        write_sdf( \%string_hash_ooo , $ooo_l10n_path );
-    }
-    else
-    {
-        write_sdf( \%string_hash_so , $so_l10n_path );
-    }
+    write_sdf( \%string_hash_ooo , $ooo_l10n_path );
 }
 
 sub write_sdf
@@ -329,7 +302,6 @@ sub add_paths
     my $langhash_ref            = shift;
     my $root_dir = $ENV{ SRC_ROOT };
     my $ooo_l10n_dir = "$root_dir/translations/source";
-    my $so_l10n_dir  = "$root_dir/l10n_so/source";
 
     if( -e $ooo_l10n_dir )
     {
@@ -344,20 +316,6 @@ sub add_paths
         }
     }
     else { die "ERROR: Can not find directory $ooo_l10n_dir!!!" }
-    if( -e $so_l10n_dir )
-    {
-        foreach my $lang ( keys( %{ $langhash_ref } ) )
-        {
-            my $loc_file = "$so_l10n_dir/$lang/localize.sdf";
-            if( -e $loc_file )
-            {
-                push @sdfparticles , "$ooo_l10n_dir/$lang/localize.sdf";
-            }
-            else { #print "WARNING: $loc_file not found ....\n";
-            }
-        }
-
-    }
 }
 sub collectfiles{
     print STDOUT "### Localize\n";
@@ -855,7 +813,7 @@ sub parse_options{
     my $extract;
     my $success = GetOptions('f=s' => \$sdffile , 'l=s' => \$languages , 's=s' => \$srcpath ,  'h' => \$help , 'v' => \$bVerbose ,
                              'm' => \$merge , 'e' => \$extract , 'x' => \$no_sort , 'd' => \$use_default_date , 'c' => \$create_dirs ,
-                             'n' => \$no_gsicheck , 'o' => \$force_ooo_module );
+                             'n' => \$no_gsicheck );
     $outputfile = $sdffile;
 
     #print STDOUT "DBG: lang = $languages\n";
@@ -912,7 +870,6 @@ sub usage{
     print STDERR "    -h              File with localize.sdf's\n!";
     print STDERR "    -n              No gsicheck\n";
     print STDERR "    -i              Module to merge\n";
-    print STDERR "    -o              force using ooo localization from the l10n module instead of l10n_so; \n";
     print STDERR "                    useful if the type can't be detected by the .svn tags; \n";
     print STDERR "    -v              Verbose\n";
     print STDERR "\nExample:\n";
