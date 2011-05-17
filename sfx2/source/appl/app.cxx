@@ -147,6 +147,7 @@
 #include <framework/addonsoptions.hxx>
 #include <svtools/ttprops.hxx>
 #include <unotools/extendedsecurityoptions.hxx>
+#include <rtl/instance.hxx>
 
 using namespace ::com::sun::star;
 
@@ -155,118 +156,110 @@ SfxApplication* SfxApplication::pApp = NULL;
 static BasicDLL*       pBasic   = NULL;
 static SfxHelp*        pSfxHelp = NULL;
 
-class SfxPropertyHandler : public PropertyHandler
+namespace
 {
-    virtual void Property( ApplicationProperty& );
-};
-
-static SfxPropertyHandler*  pPropertyHandler = 0;
-
-SfxPropertyHandler* GetOrCreatePropertyHandler()
-{
-    if ( !pPropertyHandler )
+    class SfxPropertyHandler : public PropertyHandler
     {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if ( !pPropertyHandler )
-            pPropertyHandler = new SfxPropertyHandler;
-    }
+        virtual void Property( ApplicationProperty& );
+    };
 
-    return pPropertyHandler;
-}
-
-void SfxPropertyHandler::Property( ApplicationProperty& rProp )
-{
-    TTProperties* pTTProperties = PTR_CAST( TTProperties, &rProp );
-    if ( pTTProperties )
+    void SfxPropertyHandler::Property( ApplicationProperty& rProp )
     {
-        pTTProperties->nPropertyVersion = TT_PROPERTIES_VERSION;
-        switch ( pTTProperties->nActualPR )
+        TTProperties* pTTProperties = PTR_CAST( TTProperties, &rProp );
+        if ( pTTProperties )
         {
-            case TT_PR_SLOTS:
+            pTTProperties->nPropertyVersion = TT_PROPERTIES_VERSION;
+            switch ( pTTProperties->nActualPR )
             {
-                pTTProperties->nSidOpenUrl = SID_OPENURL;
-                pTTProperties->nSidFileName = SID_FILE_NAME;
-                pTTProperties->nSidNewDocDirect = SID_NEWDOCDIRECT;
-                pTTProperties->nSidCopy = SID_COPY;
-                pTTProperties->nSidPaste = SID_PASTE;
-                pTTProperties->nSidSourceView = SID_SOURCEVIEW;
-                pTTProperties->nSidSelectAll = SID_SELECTALL;
-                pTTProperties->nSidReferer = SID_REFERER;
-                pTTProperties->nActualPR = 0;
-            }
-            break;
-            case TT_PR_DISPATCHER:
-            {
-                // interface for TestTool
-                SfxViewFrame* pViewFrame=0;
-                SfxDispatcher* pDispatcher=0;
-                pViewFrame = SfxViewFrame::Current();
-                if ( !pViewFrame )
-                    pViewFrame = SfxViewFrame::GetFirst();
-                if ( pViewFrame )
-                    pDispatcher = pViewFrame->GetDispatcher();
-                else
-                    pDispatcher = NULL;
-                if ( !pDispatcher )
-                    pTTProperties->nActualPR = TT_PR_ERR_NODISPATCHER;
-                else
+                case TT_PR_SLOTS:
                 {
-                    pDispatcher->SetExecuteMode(EXECUTEMODE_DIALOGASYNCHRON);
-                    if ( pTTProperties->mnSID == SID_NEWDOCDIRECT
-                      || pTTProperties->mnSID == SID_OPENDOC )
-                    {
-                        SfxPoolItem** pArgs = pTTProperties->mppArgs;
-                        SfxAllItemSet aSet( SFX_APP()->GetPool() );
-                        if ( pArgs && *pArgs )
-                        {
-                            for ( SfxPoolItem **pArg = pArgs; *pArg; ++pArg )
-                                aSet.Put( **pArg );
-                        }
-                        if ( pTTProperties->mnSID == SID_NEWDOCDIRECT )
-                        {
-                            String aFactory = String::CreateFromAscii("private:factory/");
-                            if ( pArgs && *pArgs )
-                            {
-                                SFX_ITEMSET_ARG( &aSet, pFactoryName, SfxStringItem, SID_NEWDOCDIRECT, sal_False );
-                                if ( pFactoryName )
-                                    aFactory += pFactoryName->GetValue();
-                                else
-                                    aFactory += String::CreateFromAscii("swriter");
-                            }
-                            else
-                                aFactory += String::CreateFromAscii("swriter");
-
-                            aSet.Put( SfxStringItem( SID_FILE_NAME, aFactory ) );
-                            aSet.ClearItem( SID_NEWDOCDIRECT );
-                            pTTProperties->mnSID = SID_OPENDOC;
-                        }
-
-                        aSet.Put( SfxStringItem( SID_TARGETNAME, DEFINE_CONST_UNICODE("_blank") ) );
-                        if ( pDispatcher->ExecuteFunction( pTTProperties->mnSID, aSet, pTTProperties->mnMode )
-                                    == EXECUTE_NO )
-                            pTTProperties->nActualPR = TT_PR_ERR_NOEXECUTE;
-                        else
-                            pTTProperties->nActualPR = 0;
-                    }
+                    pTTProperties->nSidOpenUrl = SID_OPENURL;
+                    pTTProperties->nSidFileName = SID_FILE_NAME;
+                    pTTProperties->nSidNewDocDirect = SID_NEWDOCDIRECT;
+                    pTTProperties->nSidCopy = SID_COPY;
+                    pTTProperties->nSidPaste = SID_PASTE;
+                    pTTProperties->nSidSourceView = SID_SOURCEVIEW;
+                    pTTProperties->nSidSelectAll = SID_SELECTALL;
+                    pTTProperties->nSidReferer = SID_REFERER;
+                    pTTProperties->nActualPR = 0;
+                }
+                break;
+                case TT_PR_DISPATCHER:
+                {
+                    // interface for TestTool
+                    SfxViewFrame* pViewFrame=0;
+                    SfxDispatcher* pDispatcher=0;
+                    pViewFrame = SfxViewFrame::Current();
+                    if ( !pViewFrame )
+                        pViewFrame = SfxViewFrame::GetFirst();
+                    if ( pViewFrame )
+                        pDispatcher = pViewFrame->GetDispatcher();
+                    else
+                        pDispatcher = NULL;
+                    if ( !pDispatcher )
+                        pTTProperties->nActualPR = TT_PR_ERR_NODISPATCHER;
                     else
                     {
-                        if ( pDispatcher->ExecuteFunction(
-                                pTTProperties->mnSID, pTTProperties->mppArgs, pTTProperties->mnMode )
-                            == EXECUTE_NO )
-                            pTTProperties->nActualPR = TT_PR_ERR_NOEXECUTE;
+                        pDispatcher->SetExecuteMode(EXECUTEMODE_DIALOGASYNCHRON);
+                        if ( pTTProperties->mnSID == SID_NEWDOCDIRECT
+                          || pTTProperties->mnSID == SID_OPENDOC )
+                        {
+                            SfxPoolItem** pArgs = pTTProperties->mppArgs;
+                            SfxAllItemSet aSet( SFX_APP()->GetPool() );
+                            if ( pArgs && *pArgs )
+                            {
+                                for ( SfxPoolItem **pArg = pArgs; *pArg; ++pArg )
+                                    aSet.Put( **pArg );
+                            }
+                            if ( pTTProperties->mnSID == SID_NEWDOCDIRECT )
+                            {
+                                String aFactory = String::CreateFromAscii("private:factory/");
+                                if ( pArgs && *pArgs )
+                                {
+                                    SFX_ITEMSET_ARG( &aSet, pFactoryName, SfxStringItem, SID_NEWDOCDIRECT, sal_False );
+                                    if ( pFactoryName )
+                                        aFactory += pFactoryName->GetValue();
+                                    else
+                                        aFactory += String::CreateFromAscii("swriter");
+                                }
+                                else
+                                    aFactory += String::CreateFromAscii("swriter");
+
+                                aSet.Put( SfxStringItem( SID_FILE_NAME, aFactory ) );
+                                aSet.ClearItem( SID_NEWDOCDIRECT );
+                                pTTProperties->mnSID = SID_OPENDOC;
+                            }
+
+                            aSet.Put( SfxStringItem( SID_TARGETNAME, DEFINE_CONST_UNICODE("_blank") ) );
+                            if ( pDispatcher->ExecuteFunction( pTTProperties->mnSID, aSet, pTTProperties->mnMode )
+                                        == EXECUTE_NO )
+                                pTTProperties->nActualPR = TT_PR_ERR_NOEXECUTE;
+                            else
+                                pTTProperties->nActualPR = 0;
+                        }
                         else
-                            pTTProperties->nActualPR = 0;
+                        {
+                            if ( pDispatcher->ExecuteFunction(
+                                    pTTProperties->mnSID, pTTProperties->mppArgs, pTTProperties->mnMode )
+                                == EXECUTE_NO )
+                                pTTProperties->nActualPR = TT_PR_ERR_NOEXECUTE;
+                            else
+                                pTTProperties->nActualPR = 0;
+                        }
                     }
                 }
+                break;
+                default:
+                {
+                    pTTProperties->nPropertyVersion = 0;
+                }
             }
-            break;
-            default:
-            {
-                pTTProperties->nPropertyVersion = 0;
-            }
+            return;
         }
-        return;
     }
+
+    class thePropertyHandler
+        : public rtl::Static<SfxPropertyHandler, thePropertyHandler> {};
 }
 
 #include <framework/imageproducer.hxx>
@@ -325,7 +318,7 @@ SfxApplication::SfxApplication()
     RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxApplication::SfxApplication" );
 
     SetName( DEFINE_CONST_UNICODE("StarOffice") );
-    GetpApp()->SetPropertyHandler( GetOrCreatePropertyHandler() );
+    GetpApp()->SetPropertyHandler( &thePropertyHandler::get() );
 
     SvtViewOptions::AcquireOptions();
 
