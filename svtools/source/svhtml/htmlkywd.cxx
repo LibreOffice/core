@@ -29,14 +29,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include <ctype.h>
-#include <stdlib.h>
-#include <string.h>
-#include <limits.h>
-
-#include <svtools/svparser.hxx>
-#include <svtools/htmlkywd.hxx>
+#include <limits.h>                     // for USHRT_MAX
+#include <sal/types.h>                  // for sal_Char, sal_Unicode, etc
+#include <stdlib.h>                     // for bsearch, qsort
+#include <string.h>                     // for strcmp
 #include <svtools/htmltokn.h>
+#include <tools/solar.h>                // for String
+#include <svtools/htmlkywd.hxx>
+#include <tools/string.hxx>             // for String::CompareToAscii, etc
 
 // Table has still to be sorted
 struct HTML_TokenEntry
@@ -50,7 +50,7 @@ struct HTML_TokenEntry
 };
 
 // Flag: RTF token table has already been sorted
-static int bSortKeyWords = sal_False;
+static bool bSortKeyWords = false;
 
 static HTML_TokenEntry aHTMLTokenTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_area},            HTML_AREA}, // Netscape 2.0
@@ -203,11 +203,7 @@ static HTML_TokenEntry aHTMLTokenTab[] = {
 extern "C"
 {
 
-static int
-#if defined( WNT )
- __cdecl
-#endif
-    HTMLKeyCompare( const void *pFirst, const void *pSecond)
+static int SAL_CALL HTMLKeyCompare( const void *pFirst, const void *pSecond)
 {
     int nRet = 0;
     if( -1 == ((HTML_TokenEntry*)pFirst)->nToken )
@@ -242,7 +238,7 @@ int GetHTMLToken( const String& rName )
                 sizeof( aHTMLTokenTab ) / sizeof( HTML_TokenEntry ),
                 sizeof( HTML_TokenEntry ),
                 HTMLKeyCompare );
-        bSortKeyWords = sal_True;
+        bSortKeyWords = true;
     }
 
     int nRet = 0;
@@ -275,7 +271,7 @@ struct HTML_CharEntry
 };
 
 // Flag: RTF token table has already been sorted
-static int bSortCharKeyWords = sal_False;
+static bool bSortCharKeyWords = false;
 
 static HTML_CharEntry aHTMLCharNameTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_C_lt},             60},
@@ -553,11 +549,15 @@ static HTML_CharEntry aHTMLCharNameTab[] = {
 extern "C"
 {
 
+<<<<<<< HEAD
 static int
 #if defined( WNT )
  __cdecl
 #endif
     HTMLCharNameCompare( const void *pFirst, const void *pSecond)
+=======
+static int SAL_CALL HTMLCharNameCompare( const void *pFirst, const void *pSecond)
+>>>>>>> Use SAL_CALL / refurbish #include's (IWYU) / sal_Bool->bool
 {
     int nRet = 0;
     if( USHRT_MAX == ((HTML_CharEntry*)pFirst)->cChar )
@@ -592,7 +592,7 @@ sal_Unicode GetHTMLCharName( const String& rName )
                 sizeof( aHTMLCharNameTab ) / sizeof( HTML_CharEntry ),
                 sizeof( HTML_CharEntry ),
                 HTMLCharNameCompare );
-        bSortCharKeyWords = sal_True;
+        bSortCharKeyWords = true;
     }
 
     sal_Unicode cRet = 0;
@@ -611,7 +611,7 @@ sal_Unicode GetHTMLCharName( const String& rName )
 }
 
 // Flag: Options table has already been sorted
-static int bSortOptionKeyWords = sal_False;
+static bool bSortOptionKeyWords = false;
 
 static HTML_TokenEntry aHTMLOptionTab[] = {
 
@@ -823,7 +823,7 @@ int GetHTMLOption( const String& rName )
                 sizeof( aHTMLOptionTab ) / sizeof( HTML_TokenEntry ),
                 sizeof( HTML_TokenEntry ),
                 HTMLKeyCompare );
-        bSortOptionKeyWords = sal_True;
+        bSortOptionKeyWords = true;
     }
 
     int nRet = HTML_O_UNKNOWN;
@@ -853,7 +853,7 @@ struct HTML_ColorEntry
 };
 
 // Flag: color table has already been sorted
-static int bSortColorKeyWords = sal_False;
+static bool bSortColorKeyWords = false;
 
 #define HTML_NO_COLOR 0xffffffffUL
 
@@ -1006,11 +1006,15 @@ static HTML_ColorEntry aHTMLColorNameTab[] = {
 extern "C"
 {
 
+<<<<<<< HEAD
 static int
 #if defined( WNT )
  __cdecl
 #endif
     HTMLColorNameCompare( const void *pFirst, const void *pSecond)
+=======
+static int SAL_CALL HTMLColorNameCompare( const void *pFirst, const void *pSecond)
+>>>>>>> Use SAL_CALL / refurbish #include's (IWYU) / sal_Bool->bool
 {
     int nRet = 0;
     if( HTML_NO_COLOR == ((HTML_ColorEntry*)pFirst)->nColor )
@@ -1045,7 +1049,7 @@ sal_uInt32 GetHTMLColor( const String& rName )
                 sizeof( aHTMLColorNameTab ) / sizeof( HTML_ColorEntry ),
                 sizeof( HTML_ColorEntry ),
                 HTMLColorNameCompare );
-        bSortColorKeyWords = sal_True;
+        bSortColorKeyWords = true;
     }
 
     sal_uInt32 nRet = HTML_NO_COLOR;
