@@ -4093,8 +4093,7 @@ dnl ===================================================================
 dnl Check for system libvisio
 dnl ===================================================================
 AC_MSG_CHECKING([which libvisio to use])
-if test -n "$with_system_libvisio" -o -n "$with_system_libs" && \
-        test "$with_system_libvisio" != "no"; then
+if test -n "$with_system_libvisio" -a "$with_system_libvisio" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_LIBVISIO=YES
     PKG_CHECK_MODULES( LIBVISIO, libvisio-0.0 )
