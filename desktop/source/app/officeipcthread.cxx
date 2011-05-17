@@ -50,7 +50,8 @@
 #include <rtl/strbuf.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
-#include "rtl/process.h"
+#include <rtl/process.h>
+#include <rtl/instance.hxx>
 #include "tools/getprocessworkingdir.hxx"
 
 using namespace desktop;
@@ -223,7 +224,6 @@ bool addArgument(
 
 OfficeIPCThread*    OfficeIPCThread::pGlobalOfficeIPCThread = 0;
     namespace { struct Security : public rtl::Static<osl::Security, Security> {}; }
-::osl::Mutex*       OfficeIPCThread::pOfficeIPCThreadMutex = 0;
 
 // Turns a string in aMsg such as file:///home/foo/.libreoffice/3
 // Into a hex string of well known length ff132a86...
@@ -360,19 +360,15 @@ throw( RuntimeException )
 {
 }
 
-// ----------------------------------------------------------------------------
-
-::osl::Mutex&   OfficeIPCThread::GetMutex()
+namespace
 {
-    // Get or create our mutex for thread-saftey
-    if ( !pOfficeIPCThreadMutex )
-    {
-        ::osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
-        if ( !pOfficeIPCThreadMutex )
-            pOfficeIPCThreadMutex = new osl::Mutex;
-    }
+    class theOfficeIPCThreadMutex
+        : public rtl::Static<osl::Mutex, theOfficeIPCThreadMutex> {};
+}
 
-    return *pOfficeIPCThreadMutex;
+::osl::Mutex& OfficeIPCThread::GetMutex()
+{
+    return theOfficeIPCThreadMutex::get();
 }
 
 void OfficeIPCThread::SetDowning()

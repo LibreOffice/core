@@ -74,7 +74,6 @@ class OfficeIPCThread : public osl::Thread
 {
   private:
     static OfficeIPCThread*     pGlobalOfficeIPCThread;
-    static ::osl::Mutex*        pOfficeIPCThreadMutex;
 
     osl::Pipe                   maPipe;
     osl::StreamPipe             maStreamPipe;
