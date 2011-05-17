@@ -123,7 +123,7 @@ public:
 
     SvxAutoCorrCfg();
     virtual ~SvxAutoCorrCfg();
-    static SvxAutoCorrCfg*      Get();
+    static SvxAutoCorrCfg& Get();
 };
 
 
