@@ -34,16 +34,16 @@
 // 				version information
 // -----------------------------------------------------------------------
 
-VS_VERSION_INFO versioninfo
+VS_VERSION_INFO VERSIONINFO
 #ifndef SUBVERSION
-	fileversion    VERSION, 0, VERVARIANT, VER_COUNT
-	productversion VERSION, 0, VERVARIANT, VER_COUNT
+	FILEVERSION    VERSION, 0, VERVARIANT, VER_COUNT
+	PRODUCTVERSION VERSION, 0, VERVARIANT, VER_COUNT
 #else
-	fileversion    VERSION, SUBVERSION, VERVARIANT, VER_COUNT
-	productversion VERSION, SUBVERSION, VERVARIANT, VER_COUNT
+	FILEVERSION    VERSION, SUBVERSION, VERVARIANT, VER_COUNT
+	PRODUCTVERSION VERSION, SUBVERSION, VERVARIANT, VER_COUNT
 #endif
-	fileflagsmask 0x3F
-	fileflags
+	FILEFLAGSMASK 0x3F
+	FILEFLAGS
 #if defined(DEBUG)
 	VS_FF_DEBUG |
 #endif
@@ -51,27 +51,27 @@ VS_VERSION_INFO versioninfo
 	VS_FF_PRERELEASE |
 #endif
 	0
-	fileos VOS_NT_WINDOWS32
-	filetype VFT_APP
+	FILEOS VOS_NT_WINDOWS32
+	FILETYPE VFT_APP
 	{
-		block "StringFileInfo"
+		BLOCK "StringFileInfo"
 		{
-			block "040904E4"
+			BLOCK "040904E4"
 			{
 				// International StringTable
-                value "CompanyName",		"The Document Foundation\0"
-				value "FileVersion",		PPS(VER_LEVEL) "\0"
-				value "OriginalFilename",	PPS(ORG_NAME) "\0"
-				value "InternalName", 		PPS(INTERNAL_NAME) "\0"
-                value "LegalCopyright", 	S_CRIGHT " The Document Foundation\0"
+                VALUE "CompanyName",		"The Document Foundation\0"
+				VALUE "FileVersion",		PPS(VER_LEVEL) "\0"
+				VALUE "OriginalFilename",	PPS(ORG_NAME) "\0"
+				VALUE "InternalName", 		PPS(INTERNAL_NAME) "\0"
+                VALUE "LegalCopyright", 	S_CRIGHT " The Document Foundation\0"
 				ADDITIONAL_VERINFO1
 				ADDITIONAL_VERINFO2
 				ADDITIONAL_VERINFO3
 			}
 		}
 
-		block "VarFileInfo"
+		BLOCK "VarFileInfo"
 		{
-			value "Translation", 0x0409, 1252
+			VALUE "Translation", 0x0409, 1252
 		}
 	}
