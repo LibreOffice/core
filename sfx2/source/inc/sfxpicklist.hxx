@@ -53,7 +53,6 @@ class SfxPickList : public SfxListener
     };
 
     static SfxPickList*             pUniqueInstance;
-    static osl::Mutex*              pMutex;
 
     std::vector< PickListEntry* >   m_aPicklistVector;
     sal_uInt32                      m_nAllowedMenuSize;
@@ -61,8 +60,6 @@ class SfxPickList : public SfxListener
 
                             SfxPickList( sal_uInt32 nMenuSize );
                             ~SfxPickList();
-
-    static osl::Mutex*      GetOrCreateMutex();
 
     void                    CreatePicklistMenuTitle( Menu* pMenu, sal_uInt16 nItemId, const String& aURL, sal_uInt32 nNo );
     PickListEntry*          GetPickListEntry( sal_uInt32 nIndex );

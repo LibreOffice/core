@@ -58,6 +58,8 @@
 #include "objshimp.hxx"
 #include <sfx2/docfilt.hxx>
 
+#include <rtl/instance.hxx>
+
 #include <algorithm>
 
 // ----------------------------------------------------------------------------
@@ -68,7 +70,6 @@ using namespace ::com::sun::star::util;
 
 // ----------------------------------------------------------------------------
 
-osl::Mutex*     SfxPickList::pMutex = 0;
 SfxPickList*    SfxPickList::pUniqueInstance = 0;
 
 // ----------------------------------------------------------------------------
@@ -86,20 +87,6 @@ class StringLength : public ::cppu::WeakImplHelper1< XStringWidth >
             return aString.getLength();
         }
 };
-
-// ----------------------------------------------------------------------------
-
-osl::Mutex* SfxPickList::GetOrCreateMutex()
-{
-    if ( !pMutex )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if ( !pMutex )
-            pMutex = new osl::Mutex;
-    }
-
-    return pMutex;
-}
 
 void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, sal_uInt16 nItemId, const String& aURLString, sal_uInt32 nNo )
 {
@@ -159,9 +146,15 @@ void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, sal_uInt16 nItemId, cons
     pMenu->SetAccessibleName( nItemId, aAccessibleName );
 }
 
+namespace
+{
+    class thePickListMutex
+        : public rtl::Static<osl::Mutex, thePickListMutex> {};
+}
+
 void SfxPickList::RemovePickListEntries()
 {
-    ::osl::MutexGuard aGuard( GetOrCreateMutex() );
+    ::osl::MutexGuard aGuard( thePickListMutex::get() );
     for ( sal_uInt32 i = 0; i < m_aPicklistVector.size(); i++ )
         delete m_aPicklistVector[i];
     m_aPicklistVector.clear();
@@ -181,7 +174,7 @@ SfxPickList*    SfxPickList::GetOrCreate( const sal_uInt32 nMenuSize )
 {
     if ( !pUniqueInstance )
     {
-        ::osl::MutexGuard aGuard( GetOrCreateMutex() );
+        ::osl::MutexGuard aGuard( thePickListMutex::get() );
         if ( !pUniqueInstance )
             pUniqueInstance = new SfxPickList( nMenuSize );
     }
@@ -191,13 +184,13 @@ SfxPickList*    SfxPickList::GetOrCreate( const sal_uInt32 nMenuSize )
 
 SfxPickList* SfxPickList::Get()
 {
-    ::osl::MutexGuard aGuard( GetOrCreateMutex() );
+    ::osl::MutexGuard aGuard( thePickListMutex::get() );
     return pUniqueInstance;
 }
 
 void SfxPickList::Delete()
 {
-    ::osl::MutexGuard aGuard( GetOrCreateMutex() );
+    ::osl::MutexGuard aGuard( thePickListMutex::get() );
     DELETEZ( pUniqueInstance );
 }
 
@@ -267,7 +260,7 @@ void SfxPickList::CreateMenuEntries( Menu* pMenu )
 {
     static sal_Bool bPickListMenuInitializing = sal_False;
 
-    ::osl::MutexGuard aGuard( GetOrCreateMutex() );
+    ::osl::MutexGuard aGuard( thePickListMutex::get() );
 
     if ( bPickListMenuInitializing ) // method is not reentrant!
         return;
@@ -300,7 +293,7 @@ void SfxPickList::CreateMenuEntries( Menu* pMenu )
 
 void SfxPickList::ExecuteEntry( sal_uInt32 nIndex )
 {
-    ::osl::ClearableMutexGuard aGuard( GetOrCreateMutex() );
+    ::osl::ClearableMutexGuard aGuard( thePickListMutex::get() );
 
     PickListEntry *pPick = SfxPickList::Get()->GetPickListEntry( nIndex );
 
