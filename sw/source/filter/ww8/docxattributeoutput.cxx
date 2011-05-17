@@ -1825,6 +1825,23 @@ void DocxAttributeOutput::TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer
         m_pSerializer->singleElementNS( XML_w, XML_textDirection,
                FSNS( XML_w, XML_val ), "tbRl",
                FSEND );
+
+    const SwWriteTableRows& aRows = m_pTableWrt->GetRows( );
+    SwWriteTableRow *pRow = aRows[ pTableTextNodeInfoInner->getRow( ) ];
+    SwWriteTableCell *pCell = pRow->GetCells( )[ pTableTextNodeInfoInner->getCell( ) ];
+    switch( pCell->GetVertOri())
+    {
+        case text::VertOrientation::TOP:
+            break;
+        case text::VertOrientation::CENTER:
+            m_pSerializer->singleElementNS( XML_w, XML_vAlign,
+                FSNS( XML_w, XML_val ), "center", FSEND );
+            break;
+        case text::VertOrientation::BOTTOM:
+            m_pSerializer->singleElementNS( XML_w, XML_vAlign,
+                FSNS( XML_w, XML_val ), "bottom", FSEND );
+            break;
+    }
 }
 
 void DocxAttributeOutput::TableNodeInfo( ww8::WW8TableNodeInfo::Pointer_t /*pNodeInfo*/ )
