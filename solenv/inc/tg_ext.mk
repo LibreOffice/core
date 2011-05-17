@@ -199,7 +199,7 @@ $(PACKAGE_DIR)/$(PATCH_FLAG_FILE) : $(PACKAGE_DIR)/$(ADD_FILES_FLAG_FILE)
 .ENDIF          # "$(GUI)"=="WNT"
 .ENDIF			# "$(PATCH_FILES)"=="none" ||	"$(PATCH_FILES)"==""
 .IF "$(T_ADDITIONAL_FILES)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI_FOR_BUILD)"=="WNT"
 # Native W32 tools generate only filedates with even seconds, cygwin also with odd seconds
     $(DELAY) 2
 .ENDIF # "$(GUI)"=="WNT"
