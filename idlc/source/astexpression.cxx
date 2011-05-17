@@ -785,13 +785,14 @@ AstExprValue* AstExpression::coerce(ExprType t, sal_Bool bAssign)
             break;
     }
 
-    if (bAssign)
-    {
-        m_exprValue = coerce_value(copy, t);
-        return m_exprValue;
-    }
+    AstExprValue* const coerced(coerce_value(copy, t));
+    if (!coerced)
+        delete copy;
 
-    return coerce_value(copy, t);
+    if (bAssign)
+        m_exprValue = coerced;
+
+    return coerced;
 }
 
 void AstExpression::evaluate(EvalKind ek)
