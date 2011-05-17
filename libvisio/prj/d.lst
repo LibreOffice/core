@@ -1,0 +1,5 @@
+mkdir: %_DEST%\inc%_EXT%\libvisio
+..\%__SRC%\misc\build\libvisio*\src\lib\libvisio.h %_DEST%\inc%_EXT%\libvisio
+..\%__SRC%\misc\build\libvisio*\src\lib\VisioDocument.h %_DEST%\inc%_EXT%\libvisio\
+..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
+..\%__SRC%\slb\*.lib %_DEST%\lib%_EXT%\*.lib
