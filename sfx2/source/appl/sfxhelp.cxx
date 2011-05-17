@@ -788,7 +788,7 @@ sal_Bool SfxHelp::Start_Impl( const String& rURL, const Window* pWindow, const S
             if ( rURL.Search( sHelpIdScheme ) != 0 )
                 sKeyword = ::rtl::OUString( rURL );
 
-            if ( pWindow && SfxContentHelper::IsHelpErrorDocument( aHelpURL ) )
+            if ( impl_hasHelpInstalled() && pWindow && SfxContentHelper::IsHelpErrorDocument( aHelpURL ) )
             {
                 // no help found -> try with parent help id.
                 Window* pParent = pWindow->GetParent();
