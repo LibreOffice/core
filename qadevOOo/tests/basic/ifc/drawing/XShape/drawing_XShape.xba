@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="drawing_XShape" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.drawing.XShape
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim oPosition As Object
+    Dim oSetPos As New com.sun.star.awt.Point
+    Dim objPosition As Object
+
+    Dim oSize As Object
+    Dim oSetSize As New com.sun.star.awt.Size
+    Dim objSize As Object
+    Dim bRO As Boolean
+
+
+    Test.StartMethod("setPosition()")
+    Test.StartMethod("getPosition()")
+
+    bOK = true
+
+    if (cObjectName = "sw.SwXTextEmbeddedObject") OR _
+       (cObjectName = "sw.SwXTextGraphicObject") OR _
+       (cObjectName = "sw.SwXTextFrame") OR _
+       (cObjectName = "svx.SvxShapeConnector") then
+        Out.Log("Methods get/setPosition doesn't work with this object.")
+    else      
+        oPosition = oObj.getPosition()
+        Out.Log("Current object's position (" + oPosition.X + ", " + oPosition.Y + ")")
+
+        oSetPos.X = 1234
+        oSetPos.Y = 4321
+
+        Out.Log("Trying to set object's position to (" + oSetPos.X + ", " + oSetPos.Y + ")")
+        oObj.setPosition(oSetPos)
+
+        objPosition = oObj.getPosition()
+        Out.Log("Actual position is (" + objPosition.X + ", " + objPosition.Y + ")")
+
+
+        bOK = bOK AND ((abs(objPosition.X - oSetPos.X) &lt;= 1) AND (abs(objPosition.Y - oSetPos.Y) &lt;= 1))
+
+        Out.Log("Return previous position...")
+        oObj.setPosition(oPosition)
+    end if
+
+    Test.MethodTested("getPosition()", bOK)
+    Test.MethodTested("setPosition()", bOK)
+
+
+    Test.StartMethod("setSize()")
+    Test.StartMethod("getSize()")
+    bOK = true
+
+    bRO = (cObjectName = "sch.ChartLegend") OR _
+          (cObjectName = "sch.ChartTitle") OR _
+          (cObjectName = "svx.SvxShapeConnector") 
+    if (bRO) then
+        Out.Log("Size cannot be changed for this object.")
+    end if
+
+    oSize = oObj.getSize()
+    Out.Log("Current object's size (" + oSize.Width + " x " + oSize.Height + ")")
+
+    oSetSize.Width = 1235
+    oSetSize.Height = 4322
+
+    Out.Log("Trying to set object's size to (" + oSetSize.Width + " x " + oSetSize.Height + ")")
+    oObj.setSize(oSetSize)
+    objSize = oObj.getSize()
+    Out.Log("Actual size is (" + objSize.Width + " x " + objSize.Height + ")")
+
+    if (bRO) then
+        bOK = bOK AND ((abs(objSize.Width - oSize.Width) &lt;= 1) AND (abs(objSize.Height - oSize.Height) &lt;= 1))
+    else
+        bOK = bOK AND ((abs(objSize.Width - oSetSize.Width) &lt;= 1) AND (abs(objSize.Height - oSetSize.Height) &lt;= 1))
+    end if
+
+    Out.Log("Return previous size...")
+    oObj.setSize(oSize)
+
+    Test.MethodTested("getSize()", bOK)
+    Test.MethodTested("setSize()", bOK)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

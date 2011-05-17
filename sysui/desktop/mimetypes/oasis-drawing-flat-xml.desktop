@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Hidden=false
+Icon=oasis-drawing
+Type=MimeType
+Patterns=*.fodg
+MimeType=application/vnd.oasis.opendocument.graphics-flat-xml
+Comment=OpenDocument Drawing (Flat XML)

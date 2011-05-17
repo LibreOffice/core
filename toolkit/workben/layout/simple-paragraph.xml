@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dialog xmlns="http://openoffice.org/2007/layout"
+        xmlns:cnt="http://openoffice.org/2007/layout/container"
+        id="dialog" title="Paragraph test" optimumsize="true"
+        has_border="true" sizeable="true" moveable="true">
+    <vbox>
+        <listbox id="line-spacing-list" dropdown="true" cnt:expand="false"
+                 string-item-list="Single:1.5 lines:Double:Proportional" />
+    </vbox>
+</dialog>

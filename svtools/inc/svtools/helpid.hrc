@@ -1,0 +1,130 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _SVT_HELPID_HRC
+#define _SVT_HELPID_HRC
+
+#define HID_FILEDLG_OPENDLG                                    "SVT_HID_FILEDLG_OPENDLG"
+#define HID_FILEDLG_PATHDLG                                    "SVT_HID_FILEDLG_PATHDLG"
+#define HID_FILEDLG_DIR                                        "SVT_HID_FILEDLG_DIR"
+#define HID_FILEDLG_EDIT                                       "SVT_HID_FILEDLG_EDIT"
+#define HID_FILEDLG_DIRS                                       "SVT_HID_FILEDLG_DIRS"
+#define HID_FILEDLG_DRIVE                                      "SVT_HID_FILEDLG_DRIVE"
+#define HID_FILEDLG_DRIVES                                     "SVT_HID_FILEDLG_DRIVES"
+#define HID_FILEDLG_NEWDIR                                     "SVT_HID_FILEDLG_NEWDIR"
+#define HID_FILEDLG_HOME                                       "SVT_HID_FILEDLG_HOME"
+#define HID_FILEDLG_FILE                                       "SVT_HID_FILEDLG_FILE"
+#define HID_FILEDLG_FILES                                      "SVT_HID_FILEDLG_FILES"
+#define HID_FILEDLG_PATH                                       "SVT_HID_FILEDLG_PATH"
+#define HID_FILEDLG_TYPE                                       "SVT_HID_FILEDLG_TYPE"
+#define HID_FILEDLG_TYPES                                      "SVT_HID_FILEDLG_TYPES"
+#define HID_FILEDLG_LINK_CB                                    "SVT_HID_FILEDLG_LINK_CB"
+#define HID_FILEDLG_PREVIEW_CB                                 "SVT_HID_FILEDLG_PREVIEW_CB"
+#define HID_FILEDLG_STANDARD                                  "SVT_HID_FILEDLG_STANDARD"
+#define HID_FILEDLG_MANAGER                                   "SVT_HID_FILEDLG_MANAGER"
+#define HID_FILEDLG_URL                                       "SVT_HID_FILEDLG_URL"
+#define HID_FILEDLG_USE_PASSWD                                "SVT_HID_FILEDLG_USE_PASSWD"
+#define HID_FILEDLG_READ_ONLY                                 "SVT_HID_FILEDLG_READ_ONLY"
+#define HID_FILEDLG_AUTOCOMPLETEBOX                           "SVT_HID_FILEDLG_AUTOCOMPLETEBOX"
+#define HID_FILEDLG_SAVE_BTN                                  "SVT_HID_FILEDLG_SAVE_BTN"
+#define HID_FILEDLG_SAVE_FILENAME                             "SVT_HID_FILEDLG_SAVE_FILENAME"
+#define HID_FILEDLG_SAVE_FILETYPE                             "SVT_HID_FILEDLG_SAVE_FILETYPE"
+#define HID_FILEDLG_INSERT_BTN                                "SVT_HID_FILEDLG_INSERT_BTN"
+#define HID_FILEDLG_PATH_BTN                                  "SVT_HID_FILEDLG_PATH_BTN"
+#define HID_FILEDLG_PATH_FILENAME                             "SVT_HID_FILEDLG_PATH_FILENAME"
+#define HID_FILEDLG_FOLDER_BTN                                "SVT_HID_FILEDLG_FOLDER_BTN"
+#define HID_FILEDLG_FOLDER_FILENAME                           "SVT_HID_FILEDLG_FOLDER_FILENAME"
+#define HID_FILEDLG_SRCHFOLDER_BTN                            "SVT_HID_FILEDLG_SRCHFOLDER_BTN"
+#define HID_FILEDLG_EDIT_FAVORITES                            "SVT_HID_FILEDLG_EDIT_FAVORITES"
+#define HID_FILEDLG_NEW_FAVORITE                              "SVT_HID_FILEDLG_NEW_FAVORITE"
+#define HID_FILEDLG_EDIT_FAVORITES_LISTBOX                    "SVT_HID_FILEDLG_EDIT_FAVORITES_LISTBOX"
+#define HID_FILEDLG_EDIT_FAVORITES_HEADERBAR                  "SVT_HID_FILEDLG_EDIT_FAVORITES_HEADERBAR"
+#define HID_FILEDLG_EXPORTASPDF                               "SVT_HID_FILEDLG_EXPORTASPDF"
+
+// HelpID's fuer die Textkomponente
+#define HID_TEXTCPNT_OPEN_LINK                                 "SVT_HID_TEXTCPNT_OPEN_LINK"
+#define HID_TEXTCPNT_OPEN_LINK_NEW                             "SVT_HID_TEXTCPNT_OPEN_LINK_NEW"
+#define HID_TEXTCPNT_DOWNLOAD                                  "SVT_HID_TEXTCPNT_DOWNLOAD"
+#define HID_TEXTCPNT_ADD_BOOKMARK                              "SVT_HID_TEXTCPNT_ADD_BOOKMARK"
+#define HID_TEXTCPNT_COPY_LINK                                 "SVT_HID_TEXTCPNT_COPY_LINK"
+
+// HelpID's fuer RegisterDialog
+#define HID_LIMITED_DIALOG                                     "SVT_HID_LIMITED_DIALOG"
+
+// Help ids of template dialog
+#define HID_TEMPLATEDLG_DIALOG                                 "SVT_HID_TEMPLATEDLG_DIALOG"
+#define HID_TEMPLATEDLG_ICONCTRL                               "SVT_HID_TEMPLATEDLG_ICONCTRL"
+#define HID_TEMPLATEDLG_FILEVIEW                               "SVT_HID_TEMPLATEDLG_FILEVIEW"
+#define HID_TEMPLATEDLG_TB_BACK                                "SVT_HID_TEMPLATEDLG_TB_BACK"
+#define HID_TEMPLATEDLG_TB_PREV                                "SVT_HID_TEMPLATEDLG_TB_PREV"
+#define HID_TEMPLATEDLG_TB_PRINT                               "SVT_HID_TEMPLATEDLG_TB_PRINT"
+#define HID_TEMPLATEDLG_TB_DOCINFO                             "SVT_HID_TEMPLATEDLG_TB_DOCINFO"
+#define HID_TEMPLATEDLG_TB_PREVIEW                             "SVT_HID_TEMPLATEDLG_TB_PREVIEW"
+
+#define HID_ADDRTEMPL_FIELD_ASSIGNMENT                         "SVT_HID_ADDRTEMPL_FIELD_ASSIGNMENT"
+
+// Help ids for the filepicker dialogs
+#define HID_EXPLORERDLG_FILE                                   "SVT_HID_EXPLORERDLG_FILE"
+
+// help ids for fileview contextmenu
+#define HID_FILEVIEW_MENU_DELETE                               "SVT_HID_FILEVIEW_MENU_DELETE"
+#define HID_FILEVIEW_MENU_RENAME                               "SVT_HID_FILEVIEW_MENU_RENAME"
+
+// help ids for the different modi of the file picker dialog
+    // FREE
+#define HID_FILESAVE_LEVELUP                                   "SVT_HID_FILESAVE_LEVELUP"
+#define HID_FILESAVE_CREATEDIRECTORY                           "SVT_HID_FILESAVE_CREATEDIRECTORY"
+#define HID_FILESAVE_DEFAULTDIRECTORY                          "SVT_HID_FILESAVE_DEFAULTDIRECTORY"
+#define HID_FILESAVE_FILEVIEW                                  "SVT_HID_FILESAVE_FILEVIEW"
+#define HID_FILESAVE_TEMPLATE                                  "SVT_HID_FILESAVE_TEMPLATE"
+#define HID_FILESAVE_FILEURL                                   "SVT_HID_FILESAVE_FILEURL"
+#define HID_FILESAVE_FILETYPE                                  "SVT_HID_FILESAVE_FILETYPE"
+#define HID_FILESAVE_DOSAVE                                    "SVT_HID_FILESAVE_DOSAVE"
+#define HID_FILESAVE_AUTOEXTENSION                             "SVT_HID_FILESAVE_AUTOEXTENSION"
+#define HID_FILESAVE_SAVEWITHPASSWORD                          "SVT_HID_FILESAVE_SAVEWITHPASSWORD"
+#define HID_FILESAVE_CUSTOMIZEFILTER                           "SVT_HID_FILESAVE_CUSTOMIZEFILTER"
+#define HID_FILESAVE_SELECTION                                 "SVT_HID_FILESAVE_SELECTION"
+#define HID_FILESAVE_DIALOG                                    "SVT_HID_FILESAVE_DIALOG"
+#define HID_FILESAVE_DOPLAY                                    "SVT_HID_FILESAVE_DOPLAY"
+
+#define HID_FILEOPEN_READONLY                                  "SVT_HID_FILEOPEN_READONLY"
+#define HID_FILEOPEN_VERSION                                   "SVT_HID_FILEOPEN_VERSION"
+#define HID_FILEOPEN_IMAGE_TEMPLATE                            "SVT_HID_FILEOPEN_IMAGE_TEMPLATE"
+
+// uniqueid for the helpagent window (testtool)
+#define HID_HELPAGENT_WINDOW                                   "SVT_HID_HELPAGENT_WINDOW"
+
+// registration dialog
+#define HID_REGISTRATION_DIALOG                                "SVT_HID_REGISTRATION_DIALOG"
+
+#define HID_PRINTDIALOG_TOFILE                                 "SVT_HID_PRINTDIALOG_TOFILE"
+
+#define HID_WIZARD_NEXT                                        "SVT_HID_WIZARD_NEXT"
+#define HID_WIZARD_PREVIOUS                                    "SVT_HID_WIZARD_PREVIOUS"
+
+#endif
+

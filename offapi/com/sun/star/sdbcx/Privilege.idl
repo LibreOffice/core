@@ -1,0 +1,91 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdbcx_Privilege_idl__
+#define __com_sun_star_sdbcx_Privilege_idl__
+
+ module com {  module sun {  module star {  module sdbcx {
+
+
+/** defines a list of flags (bitmaps) which determines the access rights of a
+     user or a user group. This list may grow in the future.
+ */
+published constants Privilege
+{
+    //-------------------------------------------------------------------------
+
+    /** indicates that a user is allowed to read the data.
+     */
+    const long SELECT       = 0x00000001;
+    //-------------------------------------------------------------------------
+
+    /** indicates that a user is allowed to insert new data.
+     */
+    const long INSERT       = 0x00000002;
+    //-------------------------------------------------------------------------
+
+    /** indicates that a user is allowed to update data.
+     */
+    const long UPDATE       = 0x00000004;
+    //-------------------------------------------------------------------------
+
+    /** indicates that a user is allowed to delete data.
+     */
+    const long DELETE       = 0x00000008;
+    //-------------------------------------------------------------------------
+
+    /** indicates that a user is allowed to read the structure of a definition object.
+     */
+    const long READ         = 0x00000010;
+    //-------------------------------------------------------------------------
+
+    /** indicates that a user is allowed to create a definition object.
+     */
+    const long CREATE       = 0x00000020;
+    //-------------------------------------------------------------------------
+
+    /** indicates that a user is allowed to alter an existing object.
+     */
+    const long ALTER        = 0x00000040;
+    //-------------------------------------------------------------------------
+
+    /** indicates that a user is allowed to set foreign keys for a table.
+     */
+    const long REFERENCE    = 0x00000080;
+    //-------------------------------------------------------------------------
+
+    /** indicates that a user is allowed to drop a definition object.
+     */
+    const long DROP         = 0x00000100;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

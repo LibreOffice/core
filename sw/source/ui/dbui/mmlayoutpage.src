@@ -1,0 +1,165 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include <mmlayoutpage.hrc>
+#include <dbui.hrc>
+#include <helpid.h>
+
+TabPage DLG_MM_LAYOUT_PAGE
+{
+    HelpID = HID_MM_LAYOUT_PAGE;
+    Size = MAP_APPFONT ( 260 , 250 ) ;
+    Hide = TRUE ;
+
+    FixedText FI_HEADER
+    {
+        Pos = MAP_APPFONT ( 6 , 8 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text[ en-US ] = "Adjust layout of address block and salutation";
+    };
+    FixedLine       FL_POSITION
+    {
+        Pos = MAP_APPFONT ( 6 , 27 ) ;
+        Size = MAP_APPFONT ( 118 , 8 ) ;
+        Text[ en-US ] = "Address block position";
+    };
+    CheckBox CB_ALIGN
+    {
+        HelpID = "sw:CheckBox:DLG_MM_LAYOUT_PAGE:CB_ALIGN";
+        Pos = MAP_APPFONT ( 6 , 40 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
+        Text[ en-US ] = "Align to text body";
+    };
+    FixedText       FT_LEFT
+    {
+        Pos = MAP_APPFONT ( 15 , 54 ) ;
+        Size = MAP_APPFONT ( 63 , 8 ) ;
+        Text[ en-US ] = "From ~left";
+    };
+    MetricField     MF_LEFT
+    {
+        HelpID = "sw:MetricField:DLG_MM_LAYOUT_PAGE:MF_LEFT";
+        Pos = MAP_APPFONT ( 78 , 52 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Border = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 99999 ;
+        DecimalDigits = 2 ;
+        Value = 200 ;
+        Unit = FUNIT_CM ;
+        First = 10 ;
+        Last = 99999 ;
+        SpinSize = 10 ;
+    };
+    FixedText       FT_TOP
+    {
+        Pos = MAP_APPFONT ( 15 , 69 ) ;
+        Size = MAP_APPFONT ( 62 , 8 ) ;
+        Text[ en-US ] = "~From top";
+    };
+    MetricField     MF_TOP
+    {
+        HelpID = "sw:MetricField:DLG_MM_LAYOUT_PAGE:MF_TOP";
+        Pos = MAP_APPFONT ( 78 , 67 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Border = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 99999 ;
+        DecimalDigits = 2 ;
+        Value = 200 ;
+        Unit = FUNIT_CM ;
+        First = 10 ;
+        Last = 99999 ;
+        SpinSize = 10 ;
+    };
+    FixedLine       FL_GREETINGLINE
+    {
+        Pos = MAP_APPFONT ( 6 , 85 ) ;
+        Size = MAP_APPFONT ( 118 , 8 ) ;
+        Text[ en-US ] = "Salutation position";
+    };
+    FixedText       FT_UP
+    {
+        Pos = MAP_APPFONT ( 15 , 98 ) ;
+        Size = MAP_APPFONT ( 45 , 8 ) ;
+        Text[ en-US ] = "Move";
+    };
+    PushButton      MF_UP
+    {
+        HelpID = "sw:PushButton:DLG_MM_LAYOUT_PAGE:MF_UP";
+        Pos = MAP_APPFONT ( 68 , 96 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text[ en-US ] = "~Up";
+    };
+    FixedText       FT_DOWN
+    {
+        Pos = MAP_APPFONT ( 15 , 115 ) ;
+        Size = MAP_APPFONT ( 45 , 8 ) ;
+        Text[ en-US ] = "Move";
+    };
+    PushButton      PB_DOWN
+    {
+        HelpID = "sw:PushButton:DLG_MM_LAYOUT_PAGE:PB_DOWN";
+        Pos = MAP_APPFONT ( 68 , 113 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text[ en-US ] = "~Down";
+    };
+    Window          WIN_EXAMPLECONTAINER
+    {
+        Pos = MAP_APPFONT ( 130 , 20 ) ;
+        Size = MAP_APPFONT ( 124 , 159 ) ;
+        Border = TRUE;
+    };
+    FixedText       FT_ZOOM
+    {
+        Pos = MAP_APPFONT ( 161 , 185 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Right = TRUE;
+        Text[ en-US ] = "~Zoom";
+    };
+    ListBox        LB_ZOOM
+    {
+        HelpID = "sw:ListBox:DLG_MM_LAYOUT_PAGE:LB_ZOOM";
+        Pos = MAP_APPFONT ( 204 , 182 ) ;
+        Size = MAP_APPFONT ( 50 , 50 ) ;
+        Border = TRUE;
+        DropDown = TRUE;
+        StringList [en-US]=    \
+        {                           \
+            < "Entire page" ; > ;        \
+        };
+    };
+
+};
+
+
+

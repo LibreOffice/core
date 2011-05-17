@@ -1,0 +1,87 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __FRAMEWORK_CLASSES_RESOURCE_HRC_
+#define __FRAMEWORK_CLASSES_RESOURCE_HRC_
+
+#define RID_STR_START       2000
+#define RID_MENU_START      10000
+#define RID_IMAGE_START     15000
+#define RID_FWK_DIALOG_START 0
+
+#define STR_MENU_ADDONS                         (RID_STR_START+0)
+#define STR_MENU_ADDONHELP                      (RID_STR_START+1)
+#define STR_MENU_HEADFOOTALL                    (RID_STR_START+2)
+#define STR_UPDATEDOC                           (RID_STR_START+3)
+#define STR_CLOSEDOC_ANDRETURN                  (RID_STR_START+4)
+#define STR_SAVECOPYDOC                         (RID_STR_START+5)
+#define STR_NODOCUMENT                          (RID_STR_START+6)
+#define STR_TOOLBAR_TITLE_ADDON                 (RID_STR_START+7)
+#define STR_STATUSBAR_LOGOTEXT                  (RID_STR_START+8)
+#define STR_FULL_DISC_RETRY_BUTTON              (RID_STR_START+9)  // used by AuotSave to show error state: full disc
+#define STR_FULL_DISC_MSG                       (RID_STR_START+10) // used by AuotSave to show error state: full disc
+#define STR_RESTORE_TOOLBARS                    (RID_STR_START+11)
+#define STR_CORRUPT_UICFG_SHARE                 (RID_STR_START+12)
+#define STR_CORRUPT_UICFG_USER                  (RID_STR_START+13)
+#define STR_CORRUPT_UICFG_GENERAL               (RID_STR_START+14)
+#define STR_LANGSTATUS_MULTIPLE_LANGUAGES       (RID_STR_START+15)
+#define STR_LANGSTATUS_NONE                     (RID_STR_START+16)
+#define STR_LANGSTATUS_MORE                     (RID_STR_START+17)
+#define STR_SET_LANGUAGE_FOR_SELECTION          (RID_STR_START+18)
+#define STR_SET_LANGUAGE_FOR_PARAGRAPH          (RID_STR_START+19)
+#define STR_SET_LANGUAGE_FOR_ALL_TEXT           (RID_STR_START+20)
+#define STR_UNTITLED_DOCUMENT                   (RID_STR_START+21)
+#define STR_RESET_TO_DEFAULT_LANGUAGE           (RID_STR_START+22)
+
+#define POPUPMENU_TOOLBAR_QUICKCUSTOMIZATION    (RID_MENU_START+0)
+
+#define MENUITEM_TOOLBAR_VISIBLEBUTTON          1
+#define MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR       2
+#define MENUITEM_TOOLBAR_DOCKTOOLBAR            3
+#define MENUITEM_TOOLBAR_DOCKALLTOOLBAR         4
+#define MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION    5
+#define MENUITEM_TOOLBAR_CLOSE                  6
+
+#define RID_IMAGE_STATUSBAR_LOGO                (RID_IMAGE_START+0)
+
+// License Dialog
+#define DLG_LICENSE                             (RID_FWK_DIALOG_START+256)
+#define ML_LICENSE                              (RID_FWK_DIALOG_START+11)
+#define FT_INFO1                                (RID_FWK_DIALOG_START+12)
+#define FT_INFO2                                (RID_FWK_DIALOG_START+13)
+#define FT_INFO3                                (RID_FWK_DIALOG_START+14)
+#define FT_INFO2_1                              (RID_FWK_DIALOG_START+15)
+#define FT_INFO3_1                              (RID_FWK_DIALOG_START+16)
+#define FL_DIVIDE                               (RID_FWK_DIALOG_START+17)
+#define PB_PAGEDOWN                             (RID_FWK_DIALOG_START+18)
+#define IMG_ARROW                               (RID_FWK_DIALOG_START+19)
+#define LICENSE_ACCEPT                          (RID_FWK_DIALOG_START+20)
+#define LICENSE_NOTACCEPT                       (RID_FWK_DIALOG_START+21)
+#define PB_DECLINE                              (RID_FWK_DIALOG_START+22)
+#define PB_ACCEPT                               (RID_FWK_DIALOG_START+23)
+
+#endif

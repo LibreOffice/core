@@ -1,0 +1,885 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef SD_TOOLBOX
+#define SD_TOOLBOX RID_DRAW_TOOLBOX
+#include "tbxids_tmpl.src"
+#include <svx/svxids.hrc>
+#include <svx/globlmn.hrc>
+#endif
+ //
+ // Werkzeugleiste
+ //
+ToolBox SD_TOOLBOX
+{
+    HelpId = HID_SD_DRAW_TOOLBOX ;
+    LineSpacing = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Scroll = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Customize = TRUE ;
+    MenuStrings = TRUE ;
+    Size = MAP_APPFONT ( 0 , 0 ) ;
+    Align = BOXALIGN_LEFT ;
+    ItemList =
+    {
+        TBI_OBJECT_SELECT
+        SEPARATOR
+        TBI_ZOOM_TOOLBOX
+        SEPARATOR
+        TBI_DRAWTBX_TEXT
+        TBI_DRAWTBX_RECTANGLES
+        TBI_DRAWTBX_ELLIPSES
+        TBI_DRAWTBX_3D_OBJECTS
+        TBI_DRAWTBX_LINES
+        TBI_DRAWTBX_ARROWS
+        TBI_DRAWTBX_CONNECTORS
+        TBI_FONTWORK_GALLERY_FLOATER
+        SEPARATOR
+        TBI_DRAWTBX_CS_BASIC
+        TBI_DRAWTBX_CS_SYMBOL
+        TBI_DRAWTBX_CS_ARROW
+        TBI_DRAWTBX_CS_FLOWCHART
+        TBI_DRAWTBX_CS_CALLOUT
+        TBI_DRAWTBX_CS_STAR
+        SEPARATOR
+#if SD_TOOLBOX != RID_DRAW_TOOLBOX
+        TBI_OBJECT_CHOOSE_MODE
+#endif
+#if SD_TOOLBOX == RID_DRAW_TOOLBOX
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_OBJECT_ROTATE
+            Checkable = TRUE ;
+            RadioCheck = TRUE ;
+        };
+#endif
+        TBI_OBJECT_ALIGN
+        TBI_POSITION
+        SEPARATOR
+        TBI_DRAWTBX_INSERT
+        ToolboxItem
+        {
+            ITEM_FORM_CONFIG
+            Hide = TRUE;
+        };
+        SEPARATOR
+#if SD_TOOLBOX == RID_DRAW_TOOLBOX
+        /* TBI_EFFECT_WIN */
+        TBI_ANIMATION_EFFECTS
+        TBI_ANIMATION_OBJECTS
+#endif
+        TBI_3D_WIN
+#if SD_TOOLBOX == RID_DRAW_TOOLBOX
+        SEPARATOR
+        TBI_PRESENTATION
+#endif
+        TBI_ZOOM_IN
+        TBI_ZOOM_OUT
+        TBI_ATTR_TRANSFORM
+        TBI_MIRROR
+        SEPARATOR
+        ToolboxItem
+        {
+            Identifier = SID_CHANGEBEZIER;
+            HelpID = SID_CHANGEBEZIER;
+            Hide = TRUE;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_CHANGEPOLYGON;
+            HelpID = SID_CHANGEPOLYGON;
+            Hide = TRUE;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_CONVERT_TO_3D;
+            HelpID = SID_CONVERT_TO_3D;
+            Hide = TRUE;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_CONVERT_TO_3D_LATHE_FAST;
+            HelpID = SID_CONVERT_TO_3D_LATHE_FAST;
+            Hide = TRUE;
+        };
+    };
+};
+ //
+ // Objektleiste
+ //
+#if SD_TOOLBOX == RID_DRAW_TOOLBOX
+ToolBox RID_DRAW_OBJ_TOOLBOX
+#elif SD_TOOLBOX == RID_GRAPHIC_TOOLBOX
+ToolBox RID_GRAPHIC_OBJ_TOOLBOX
+#endif
+{
+    HelpId = HID_SD_DRAW_OBJ_TOOLBOX ;
+    LineSpacing = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Scroll = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Customize = TRUE ;
+    MenuStrings = TRUE ;
+    Size = MAP_APPFONT ( 0 , 0 ) ;
+    Align = BOXALIGN_TOP ;
+    ItemList =
+    {
+        TBI_FORMAT_BEZIER_EDIT_RC
+        SEPARATOR
+        TBI ( ITEM_FORMAT_ATTRIBUTES_LINE )
+        TBI ( ITEM_TOOLBAR_ATTR_LINEEND_STYLE )
+        TBI ( ITEM_TOOLBAR_ATTR_LINE_STYLE )
+        TBI ( ITEM_TOOLBAR_ATTR_LINE_WIDTH )
+        TBI ( ITEM_TOOLBAR_ATTR_LINE_COLOR )
+        SEPARATOR
+        TBI ( ITEM_FORMAT_ATTRIBUTES_AREA )
+        TBI ( ITEM_TOOLBAR_ATTR_FILL_STYLE )
+        SEPARATOR
+        TBI_ATTR_FILL_SHADOW
+#if SD_TOOLBOX == RID_DRAW_TOOLBOX
+        TBI_TOGGLECOMMONTASKBAR
+#endif
+        TBI_IMAGEMAP
+    };
+};
+ //
+ // Optionsleiste
+ //
+#if SD_TOOLBOX == RID_DRAW_TOOLBOX
+ToolBox RID_DRAW_OPTIONS_TOOLBOX
+#elif SD_TOOLBOX == RID_GRAPHIC_TOOLBOX
+ToolBox RID_GRAPHIC_OPTIONS_TOOLBOX
+#endif
+{
+    HelpId = HID_SD_DRAW_OPTIONS_TOOLBOX ;
+    LineSpacing = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Scroll = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Customize = TRUE ;
+    MenuStrings = TRUE ;
+    Size = MAP_APPFONT ( 0 , 0 ) ;
+    Align = BOXALIGN_TOP ;
+    ItemList =
+    {
+        TBI_FORMAT_BEZIER_EDIT
+        TBI_GLUE_EDITMODE
+        SEPARATOR
+        TBI_CLICK_CHANGE_ROTATION
+        SEPARATOR
+        TBI_GRID_VISIBLE
+        TBI_HELPLINES_VISIBLE
+        TBI_HELPLINES_MOVE
+        SEPARATOR
+        TBI_GRID_USE
+        TBI_HELPLINES_USE
+        TBI_SNAP_BORDER
+        TBI_SNAP_FRAME
+        TBI_SNAP_POINTS
+        SEPARATOR
+        TBI_QUICKEDIT
+        TBI_PICK_THROUGH
+        TBI_DOUBLECLICK_TEXTEDIT
+        SEPARATOR
+        TBI_HANDLES_DRAFT
+        TBI_BIG_HANDLES
+#if SD_TOOLBOX != RID_DRAW_TOOLBOX
+        TBI_SOLID_CREATE
+#endif
+        SEPARATOR
+        TBI_LEAVE_ALL_GROUPS
+    };
+};
+#if SD_TOOLBOX == RID_DRAW_TOOLBOX
+ToolBox RID_DRAW_TEXT_TOOLBOX
+#elif SD_TOOLBOX == RID_GRAPHIC_TOOLBOX
+ToolBox RID_GRAPHIC_TEXT_TOOLBOX
+#endif
+{
+    HelpId = HID_SD_TEXT_TOOLBOX ;
+    LineSpacing = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Scroll = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Customize = TRUE ;
+    MenuStrings = TRUE ;
+    Size = MAP_APPFONT ( 0 , 0 ) ;
+    Align = BOXALIGN_TOP ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            ITEM_FORMAT_ATTR_CHAR_FONT
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_ATTR_CHAR_FONTHEIGHT
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_ATTR_CHAR_WEIGHT
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_ATTR_CHAR_POSTURE
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_ATTR_CHAR_UNDERLINE
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_ATTR_CHAR_OVERLINE
+        };
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_ATTR_CHAR_COLOR
+            DropDown = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_ATTR_PARA_ADJUST_LEFT
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_ATTR_PARA_ADJUST_CENTER
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_ATTR_PARA_ADJUST_RIGHT
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_ADJUST_BLOCK ;
+            HelpID = SID_ATTR_PARA_ADJUST_BLOCK ;
+            RadioCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_LEFT_TO_RIGHT;
+            HelpID = SID_ATTR_PARA_LEFT_TO_RIGHT;
+            RadioCheck = TRUE ;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_RIGHT_TO_LEFT;
+            HelpID = SID_ATTR_PARA_RIGHT_TO_LEFT;
+            RadioCheck = TRUE ;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_PARASPACE_INCREASE ;
+            HelpID = SID_PARASPACE_INCREASE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_PARASPACE_DECREASE ;
+            HelpID = SID_PARASPACE_DECREASE ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+#if SD_TOOLBOX != RID_DRAW_TOOLBOX
+        ToolBoxItem
+        {
+            ITEM_FORMAT_PARA_LINESPACE_10
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_PARA_LINESPACE_15
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_PARA_LINESPACE_20
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_NUM_BULLET_ON ;
+            HelpID = FN_NUM_BULLET_ON ;
+        };
+#else
+        ToolBoxItem
+        {
+            ITEM_FORMAT_PARA_LINESPACE_10
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_PARA_LINESPACE_15
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_PARA_LINESPACE_20
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_NUM_BULLET_ON ;
+            HelpID = FN_NUM_BULLET_ON ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_OUTLINE_LEFT ;
+            HelpID = SID_OUTLINE_LEFT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_OUTLINE_RIGHT ;
+            HelpID = SID_OUTLINE_RIGHT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_OUTLINE_UP ;
+            HelpID = SID_OUTLINE_UP ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_OUTLINE_DOWN ;
+            HelpID = SID_OUTLINE_DOWN ;
+        };
+#endif
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_TEXTDIRECTION_LEFT_TO_RIGHT ;
+            HelpID = SID_TEXTDIRECTION_LEFT_TO_RIGHT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_TEXTDIRECTION_TOP_TO_BOTTOM ;
+            HelpID = SID_TEXTDIRECTION_TOP_TO_BOTTOM ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_CHAR_DLG
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_PARA_DLG
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+#if SD_TOOLBOX == RID_DRAW_TOOLBOX
+        ToolBoxItem
+        {
+            Identifier = SID_OUTLINE_BULLET ;
+            HelpID = SID_OUTLINE_BULLET ;
+        };
+#endif
+        ToolBoxItem
+        {
+            Identifier = SID_CHARMAP;
+            HelpId = SID_CHARMAP;
+            Hide = TRUE;
+        };
+    };
+    ItemList[ar] =
+    {
+        ToolBoxItem
+        {
+            ITEM_FORMAT_ATTR_CHAR_FONT
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_ATTR_CHAR_FONTHEIGHT
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_ATTR_CHAR_WEIGHT
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_ATTR_CHAR_POSTURE
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_ATTR_CHAR_UNDERLINE
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_ATTR_CHAR_OVERLINE
+        };
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_ATTR_CHAR_COLOR
+            DropDown = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_ATTR_PARA_ADJUST_RIGHT
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_ATTR_PARA_ADJUST_CENTER
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_ATTR_PARA_ADJUST_LEFT
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_ADJUST_BLOCK ;
+            HelpID = SID_ATTR_PARA_ADJUST_BLOCK ;
+            RadioCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_RIGHT_TO_LEFT;
+            HelpID = SID_ATTR_PARA_RIGHT_TO_LEFT;
+            RadioCheck = TRUE ;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_LEFT_TO_RIGHT;
+            HelpID = SID_ATTR_PARA_LEFT_TO_RIGHT;
+            RadioCheck = TRUE ;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_PARASPACE_INCREASE ;
+            HelpID = SID_PARASPACE_INCREASE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_PARASPACE_DECREASE ;
+            HelpID = SID_PARASPACE_DECREASE ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+#if SD_TOOLBOX != RID_DRAW_TOOLBOX
+        ToolBoxItem
+        {
+            ITEM_FORMAT_PARA_LINESPACE_10
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_PARA_LINESPACE_15
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_PARA_LINESPACE_20
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_NUM_BULLET_ON ;
+            HelpID = FN_NUM_BULLET_ON ;
+        };
+#else
+        ToolBoxItem
+        {
+            ITEM_FORMAT_PARA_LINESPACE_10
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_PARA_LINESPACE_15
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_PARA_LINESPACE_20
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_NUM_BULLET_ON ;
+            HelpID = FN_NUM_BULLET_ON ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_OUTLINE_LEFT ;
+            HelpID = SID_OUTLINE_LEFT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_OUTLINE_RIGHT ;
+            HelpID = SID_OUTLINE_RIGHT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_OUTLINE_UP ;
+            HelpID = SID_OUTLINE_UP ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_OUTLINE_DOWN ;
+            HelpID = SID_OUTLINE_DOWN ;
+        };
+#endif
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_TEXTDIRECTION_LEFT_TO_RIGHT ;
+            HelpID = SID_TEXTDIRECTION_LEFT_TO_RIGHT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_TEXTDIRECTION_TOP_TO_BOTTOM ;
+            HelpID = SID_TEXTDIRECTION_TOP_TO_BOTTOM ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_CHAR_DLG
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_PARA_DLG
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+#if SD_TOOLBOX == RID_DRAW_TOOLBOX
+        ToolBoxItem
+        {
+            Identifier = SID_OUTLINE_BULLET ;
+            HelpID = SID_OUTLINE_BULLET ;
+        };
+#endif
+        ToolBoxItem
+        {
+            Identifier = SID_CHARMAP;
+            HelpId = SID_CHARMAP;
+            Hide = TRUE;
+        };
+    };
+    ItemList[he] =
+    {
+        ToolBoxItem
+        {
+            ITEM_FORMAT_ATTR_CHAR_FONT
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_ATTR_CHAR_FONTHEIGHT
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_ATTR_CHAR_WEIGHT
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_ATTR_CHAR_POSTURE
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_ATTR_CHAR_UNDERLINE
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_ATTR_CHAR_OVERLINE
+        };
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_ATTR_CHAR_COLOR
+            DropDown = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_ATTR_PARA_ADJUST_RIGHT
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_ATTR_PARA_ADJUST_CENTER
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_ATTR_PARA_ADJUST_LEFT
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_ADJUST_BLOCK ;
+            HelpID = SID_ATTR_PARA_ADJUST_BLOCK ;
+            RadioCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_RIGHT_TO_LEFT;
+            HelpID = SID_ATTR_PARA_RIGHT_TO_LEFT;
+            RadioCheck = TRUE ;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_LEFT_TO_RIGHT;
+            HelpID = SID_ATTR_PARA_LEFT_TO_RIGHT;
+            RadioCheck = TRUE ;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_PARASPACE_INCREASE ;
+            HelpID = SID_PARASPACE_INCREASE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_PARASPACE_DECREASE ;
+            HelpID = SID_PARASPACE_DECREASE ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+#if SD_TOOLBOX != RID_DRAW_TOOLBOX
+        ToolBoxItem
+        {
+            ITEM_FORMAT_PARA_LINESPACE_10
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_PARA_LINESPACE_15
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_PARA_LINESPACE_20
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_NUM_BULLET_ON ;
+            HelpID = FN_NUM_BULLET_ON ;
+        };
+#else
+        ToolBoxItem
+        {
+            ITEM_FORMAT_PARA_LINESPACE_10
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_PARA_LINESPACE_15
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_PARA_LINESPACE_20
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_NUM_BULLET_ON ;
+            HelpID = FN_NUM_BULLET_ON ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_OUTLINE_LEFT ;
+            HelpID = SID_OUTLINE_LEFT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_OUTLINE_RIGHT ;
+            HelpID = SID_OUTLINE_RIGHT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_OUTLINE_UP ;
+            HelpID = SID_OUTLINE_UP ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_OUTLINE_DOWN ;
+            HelpID = SID_OUTLINE_DOWN ;
+        };
+#endif
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_TEXTDIRECTION_LEFT_TO_RIGHT ;
+            HelpID = SID_TEXTDIRECTION_LEFT_TO_RIGHT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_TEXTDIRECTION_TOP_TO_BOTTOM ;
+            HelpID = SID_TEXTDIRECTION_TOP_TO_BOTTOM ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_CHAR_DLG
+        };
+        ToolBoxItem
+        {
+            ITEM_FORMAT_PARA_DLG
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+#if SD_TOOLBOX == RID_DRAW_TOOLBOX
+        ToolBoxItem
+        {
+            Identifier = SID_OUTLINE_BULLET ;
+            HelpID = SID_OUTLINE_BULLET ;
+        };
+#endif
+        ToolBoxItem
+        {
+            Identifier = SID_CHARMAP;
+            HelpId = SID_CHARMAP;
+            Hide = TRUE;
+        };
+    };
+};
+

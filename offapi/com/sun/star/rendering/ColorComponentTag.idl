@@ -1,0 +1,140 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_rendering_ColorComponentTag_idl__
+#define __com_sun_star_rendering_ColorComponentTag_idl__
+
+module com { module sun { module star { module rendering {
+
+/** A collection of tags for the individual components of a color.<p>
+
+    Color components usually correspond to physical attributes like the
+    amount of red colorant contained in an output color. This constant
+    field enumerates the most common ones.
+
+    @since OOo 2.3
+ */
+constants ColorComponentTag
+{
+    /// Unspecified device color value
+    const byte DEVICE=0;
+
+    /// Red colorant from RGB color space
+    const byte RGB_RED=1;
+
+    /// Green colorant from RGB color space
+    const byte RGB_GREEN=2;
+
+    /// Blue colorant from RGB color space
+    const byte RGB_BLUE=3;
+
+    /// Cyan colorant from CMYK color space
+    const byte CMYK_CYAN=4;
+
+    /// Magenta colorant from CMYK color space
+    const byte CMYK_MAGENTA=5;
+
+    /// Yellow colorant from CMYK color space
+    const byte CMYK_YELLOW=6;
+
+    /// Black colorant from CMYK color space
+    const byte CMYK_BLACK=7;
+
+    /// Orange colorant from hexachrome color space
+    const byte CMYKOG_ORANGE=8;
+
+    /// Green colorant from hexachrome color space
+    const byte CMYKOG_GREEN=9;
+
+    /// Arbitrary extra spot color, e.g. Pantone
+    const byte SPOT=10;
+
+    /// Index into palette
+    const byte INDEX=11;
+
+    /// Alpha channel
+    const byte ALPHA=12;
+
+    /// Grey value. Used for monochrome color spaces
+    const byte GREY=13;
+
+    /** Premultiplied alpha channel<p>
+
+       Note that this alpha format actually influences the other color
+       components, in that their values are pre-multiplied with the
+       alpha value.<p>
+     */
+    const byte PREMULTIPLIED_ALPHA=14;
+
+    /// CieXYZ X value
+    const byte CIEXYZ_X=15;
+
+    /// CieXYZ Y value
+    const byte CIEXYZ_Y=16;
+
+    /// CieXYZ Z value
+    const byte CIEXYZ_Z=17;
+
+    /// CieLab L value
+    const byte CIELAB_L=18;
+
+    /// CieLab a value
+    const byte CIELAB_A=19;
+
+    /// CieLab b value
+    const byte CIELAB_B=20;
+
+    /// HSV H value
+    const byte HSV_H=21;
+
+    /// HSV S value
+    const byte HSV_S=22;
+
+    /// HSV V value
+    const byte HSV_V=23;
+
+    /// HSL H value
+    const byte HSL_H=24;
+
+    /// HSL S value
+    const byte HSL_S=25;
+
+    /// HSL L value
+    const byte HSL_L=26;
+
+    /// YCbCr Y value
+    const byte YCBCR_Y=27;
+
+    /// YCbCr Cb value
+    const byte YCBCR_CB=28;
+
+    /// YCbCr Cr value
+    const byte YCBCR_CR=29;
+};
+
+}; }; }; };
+
+#endif

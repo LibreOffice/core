@@ -1,0 +1,10 @@
+0x2461: extra alignment:
+
+        4: distributed
+        8: justify low
+        5: justify middle
+        7: justify high
+        9: Thai Distribute
+
+
+        

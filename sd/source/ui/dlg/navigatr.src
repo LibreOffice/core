@@ -1,0 +1,156 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "navigatr.hrc"
+#include "helpids.h"
+#include "res_bmp.hrc"
+#define BUTTON_WIDTH 13
+#define BUTTON_COUNT 7
+#define BUTTON_SIZE MAP_APPFONT( BUTTON_WIDTH, BUTTON_WIDTH );
+Window FLT_NAVIGATOR
+{
+    HelpId = HID_SD_NAVIGATOR ;
+    Size = MAP_APPFONT ( 12 + BUTTON_WIDTH * BUTTON_COUNT , 105 ) ;
+    Text = "Navigator" ;
+    SVLook = TRUE ;
+    DialogControl = TRUE;
+    Control TLB_OBJECTS
+    {
+        HelpId = HID_SD_NAVIGATOR_TLB ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 3 , 20 ) ;
+        Size = MAP_APPFONT ( 6 + BUTTON_WIDTH * BUTTON_COUNT , 67 ) ;
+        TabStop = TRUE ;
+    };
+    ToolBox 1
+    {
+        HelpId = HID_SD_NAVIGATOR_TBX ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 3 , 3 ) ;
+        Size = MAP_APPFONT ( 6 + BUTTON_WIDTH , 15 ) ;
+        TabStop = TRUE ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                AutoCheck = TRUE ;
+                Identifier = TBI_PEN ;
+                HelpId = HID_SD_NAVIGATOR_TBI_PEN ;
+                Text [ en-US ] = "Pointer" ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_FIRST ;
+                HelpId = HID_SD_NAVIGATOR_TBI_FIRST ;
+                 //Symbol = IMAGEBUTTON_FIRST ;
+                Text [ en-US ] = "First Slide" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_PREVIOUS ;
+                HelpId = HID_SD_NAVIGATOR_TBI_PREV ;
+                 //Symbol = IMAGEBUTTON_PREV ;
+                Text [ en-US ] = "Previous Slide" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_NEXT ;
+                HelpId = HID_SD_NAVIGATOR_TBI_NEXT ;
+                 //Symbol = IMAGEBUTTON_NEXT ;
+                Text [ en-US ] = "Next Slide" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_LAST ;
+                HelpId = HID_SD_NAVIGATOR_TBI_LAST ;
+                 //Symbol = IMAGEBUTTON_LAST ;
+                Text [ en-US ] = "Last Slide" ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_DRAGTYPE ;
+                HelpId = HID_SD_NAVIGATOR_TBI_DRAGTYPE ;
+                DropDown = TRUE ;
+                 //Left = FALSE;
+                Text [ en-US ] = "Drag Mode" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_SHAPE_FILTER ;
+                HelpId = HID_SD_NAVIGATOR_TBI_SHAPE_FILTER ;
+                DropDown = TRUE ;
+                Text [ en-US ] = "Show Shapes" ;
+            };
+        };
+    };
+    ListBox LB_DOCS
+    {
+        HelpId = HID_SD_NAVIGATOR_LB ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 3 , 89 ) ;
+        Size = MAP_APPFONT ( 6 + BUTTON_WIDTH * BUTTON_COUNT , 90 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        QuickHelpText [ en-US ] = "Documents" ;
+    };
+
+    #define NAVIGATR_IDLIST \
+        IdList =            \
+        {                   \
+            TBI_PEN ;   \
+            TBI_FIRST ; \
+            TBI_PREVIOUS ;  \
+            TBI_NEXT ;  \
+            TBI_LAST ;  \
+            TBI_EMBEDDED ;  \
+            TBI_LINK ; \
+            TBI_HYPERLINK ; \
+        };                 \
+        IdCount = { 8 ; };
+
+    #define IMAGE_STDBTN_COLOR Color { Red = 0xff00; Green = 0x0000; Blue = 0xff00; }
+
+    ImageList IL_NAVIGATR
+    {
+        Prefix = "nv";
+        MaskColor = IMAGE_STDBTN_COLOR ;
+        NAVIGATR_IDLIST
+    };
+};
+
+String STR_OBJECTS_TREE
+{
+    Text [ en-US ] = "Page Tree";
+};

@@ -1,0 +1,88 @@
+: # -*- perl -*-
+#*************************************************************************
+#
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# OpenOffice.org - a multi-platform office productivity suite
+#
+# This file is part of OpenOffice.org.
+#
+# OpenOffice.org is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License version 3
+# only, as published by the Free Software Foundation.
+#
+# OpenOffice.org is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License version 3 for more details
+# (a copy is included in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU Lesser General Public License
+# version 3 along with OpenOffice.org.  If not, see
+# <http://www.openoffice.org/license.html>
+# for a copy of the LGPLv3 License.
+#
+#*************************************************************************
+
+# generates of the component schema list an ldap schema in slapd format
+
+eval 'exec perl -wS $0 ${1+"$@"}'
+	if 0;
+
+#creating the output file
+open(OUTFILE, ">$ARGV[0]") or die "can't open >$ARGV[0]";
+
+#open the makefile
+open(INFILE, "makefile.mk") or die "can't open makefile.mk";
+
+$inxcs=0;
+
+#search all schemas in the makefile except userprofile and format them as e.g org.openoffice.Inet
+while(<INFILE>) {
+	tr/\r\n//d;
+	
+	if (/^\s*XCSFILES/) {
+		$inxcs++;
+	}
+	next unless $inxcs;
+
+	if ($inxcs) {
+		
+		$inxcs=0 unless /\\$/;
+
+		next if (/^\s*XCSFILES/);
+		next if (/UserProfile/);
+
+		s/^\s+//;
+		s/\s*\\$//;
+		s/\.xcs.*$//;		
+		s#\$/#.#g;
+
+		push(@comp_names, $_);
+	}	
+}
+close(INFILE);
+
+# generate the schema in slapd format
+
+foreach (@comp_names) {	
+		
+	s#org.openoffice.#oo-#g;
+	s#\.#-#g;
+
+	$myLdapName=lc $_;	
+
+	print OUTFILE "attribute $myLdapName-attr $myLdapName-attr-oid cis single\n";
+	print OUTFILE "objectclass $myLdapName-class\n";
+	print OUTFILE "\toid\n";
+	print OUTFILE "\t\t$myLdapName-class-oid\n";
+	print OUTFILE "\tsuperior top\n";
+	print OUTFILE "\tallows\n";
+	print OUTFILE "\t$myLdapName-attr\n";
+}
+
+close(OUTFILE);
+
+exit 0;

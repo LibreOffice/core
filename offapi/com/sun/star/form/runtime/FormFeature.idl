@@ -1,0 +1,155 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_form_runtime_FormFeature_idl__
+#define __com_sun_star_form_runtime_FormFeature_idl__
+
+//=============================================================================
+
+module com { module sun { module star { module form { module runtime {
+
+//=============================================================================
+
+/** specifies the operations on a user interface form, as supported by the
+    <type>XFormOperations</type> interface.
+
+    @since OOo 2.2
+*/
+constants FormFeature
+{
+    /** moves the form to a record given by absolute position.
+
+        <p>This operation cannot be executed without arguments. When executing it (i.e.
+        when calling <member scope="com::sun::star::form::runtime">XFormOperations::executeWithArguments</member>),
+        you need to specify a parameter named <em>Position</em> of type <code>long</code>, which
+        denotes the position to move the form to.</p>
+    */
+    const short MoveAbsolute        = 1;
+
+    /** determines the number of total records in the form,
+        including the potentially active insertion row.
+
+        <p>This is not strictly an operation you can do on a form, but rather a
+        state you can retrieve (and display to the user) using the <type>XFormOperations</type>'s
+        respective methods.</p>
+
+        <p>The state obtained here is a string, not a number. This is because in an UI
+        form, the fact that the current record count is not yet known (since not all
+        records have been visited, yet) is indicated by an asterisk (<code>*</code>) besides
+        the record count.</p>
+    */
+    const short TotalRecords        = 2;
+
+    /// moves the form to the first record
+    const short MoveToFirst         = 3;
+
+    /// moves the form to the record before the current record, if there is any
+    const short MoveToPrevious      = 4;
+
+    /// moves the form to the record after the current record, if there is any
+    const short MoveToNext          = 5;
+
+    /// moves the form to the last record
+    const short MoveToLast          = 6;
+
+    /// moves the form to the insertion row, if privileges allow
+    const short MoveToInsertRow     = 7;
+
+    /** saves all changes in the form's current record, including changes in the current
+        control which had not yet been committed to the form
+    */
+    const short SaveRecordChanges   = 8;
+
+    /** reverts all changes in the form's current record, including changes in the current
+        control which had not yet been committed to the form
+    */
+    const short UndoRecordChanges   = 9;
+
+    /** deletes the current record, while honoring any registered
+        <type scope="com::sun::star::form">XConfirmDeleteListener</type>s
+    */
+    const short DeleteRecord        = 10;
+
+    /// reloads the form content
+    const short ReloadForm          = 11;
+
+    /// sorts the form ascending by the field which the active form control is bound to.
+    const short SortAscending       = 12;
+
+    /// sorts the form descending by the field which the active form control is bound to.
+    const short SortDescending      = 13;
+
+    /// opens a dialog which allows the user to interactively specify a form sorting order
+    const short InteractiveSort     = 14;
+
+    /** adds a filter to the form, which is defined by the active form control and its
+        current value
+
+        <p>For instance, if the currently active form control is bound to a table field
+        named <code>Price</code>, and currently has a value of <code>100</code>, then invoking
+        the <code>AutoFilter</code> operation will put an additional filter <code>Price = 100</code>
+        on the form.</p>
+    */
+    const short AutoFilter          = 15;
+
+    /// opens a dialog which allows the user to interactively specify a form filter
+    const short InteractiveFilter   = 16;
+
+    /** toggles the <member scope="com::sun::star::sdb">RowSet::ApplyFilter</member> property
+        of a the form.
+    */
+    const short ToggleApplyFilter   = 17;
+
+    /** removes all filter and sort criteria put on the form.
+
+        <p>Note that this does not apply to criteria which are part of the form's
+        data source. That is, if you bind the form to the SQL command <code>SELECT * FROM
+        Articles WHERE Price &gt; 100</code>, then the <code>Price &gt; 100</code> filter
+        will not be removed.</p>
+
+        <p>Effectively, this operation resets the <member scope="com::sun::star::sdb">RowSet::Filter</member>
+        and <member scope="com::sun::star::sdb">RowSet::Order</member> properties of the form.</p>
+    */
+    const short RemoveFilterAndSort = 18;
+
+    /** refreshes the current control
+
+        <p>Basically, this means calling XRefreshable::refresh on the current control, if it supports
+        this interface.</p>
+
+        @since OOo 3.1
+    */
+    const short RefreshCurrentControl = 19;
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+//=============================================================================
+
+#endif

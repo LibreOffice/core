@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<parcel language="JavaScript" xmlns:parcel="scripting.dtd">
+  <script language="JavaScript">
+    <locale lang="en">
+      <displayname value="ShowDialog" />
+      <description>
+        Example of how to show a dialog from JavaScript
+      </description>
+    </locale>
+    <functionname value="ShowDialog.js" />
+    <logicalname value="ShowDialog.JavaScript" />
+  </script>
+  <script language="JavaScript">
+    <locale lang="en">
+      <displayname value="ButtonPressHandler" />
+      <description>
+        Example of handle button press events for the Dialog
+      </description>
+    </locale>
+    <functionname value="ButtonPressHandler.js" />
+    <logicalname value="ButtonPressHandler.JavaScript" />
+  </script>
+</parcel>
+

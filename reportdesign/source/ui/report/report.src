@@ -1,0 +1,670 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include "RptResId.hrc"
+#include "rptui_slotid.hrc"
+#ifndef _GLOBLMN_HRC
+#include <svx/globlmn.hrc>
+#endif
+#ifndef _SBASLTID_HRC
+#include <svx/svxids.hrc>
+#endif
+#include "helpids.hrc"
+
+// Dialog Controls ---------------------------------------------------------------
+
+String RID_STR_CLASS_FIXEDTEXT
+{
+    Text = "Label" ;
+};
+String RID_STR_CLASS_FIXEDLINE
+{
+    Text = "Line" ;
+};
+String RID_STR_CLASS_IMAGECONTROL
+{
+    Text = "Graphic" ;
+};
+String RID_STR_CLASS_FORMATTEDFIELD
+{
+    Text = "FormattedField" ;
+};
+
+
+// Property Browser Headline ----------------------------------------------------------------
+
+String RID_STR_BRWTITLE_PROPERTIES
+{
+    Text [ en-US ] = "Properties: ";
+};
+String RID_STR_BRWTITLE_NO_PROPERTIES
+{
+    Text [ en-US ] = "No Control marked";
+};
+String RID_STR_BRWTITLE_MULTISELECT
+{
+    Text [ en-US ] = "Multiselection";
+};
+
+String RID_STR_PROPTITLE_IMAGECONTROL
+{
+    Text [ en-US ] = "Image Control" ;
+};
+String RID_STR_PROPTITLE_FIXEDTEXT
+{
+    Text [ en-US ] = "Label field" ;
+};
+String RID_STR_PROPTITLE_FIXEDLINE
+{
+    Text [ en-US ] = "Line" ;
+    Text [ x-comment ] = " ";
+};
+String RID_STR_PROPTITLE_FORMATTED
+{
+    Text [ en-US ] = "Formatted Field";
+    Text [ x-comment ] = " ";
+};
+String RID_STR_PROPTITLE_SHAPE
+{
+    Text [ en-US ] = "Shape";
+    Text [ x-comment ] = " ";
+};
+String RID_STR_PROPTITLE_REPORT
+{
+    Text [ en-US ] = "Report";
+};
+String RID_STR_PROPTITLE_SECTION
+{
+    Text [ en-US ] = "Section";
+};
+String RID_STR_PROPTITLE_FUNCTION
+{
+    Text [ en-US ] = "Function";
+};
+String RID_STR_PROPTITLE_GROUP
+{
+    Text [ en-US ] = "Group";
+};
+// -----------------------------------------------------------------------
+
+Image RID_IMG_TREENODE_COLLAPSED
+{
+    ImageBitmap = Bitmap { File = "plus.png"; } ;
+    MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; };
+};
+
+Image RID_IMG_TREENODE_EXPANDED
+{
+    ImageBitmap = Bitmap { File = "minus.png"; } ;
+    MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; };
+};
+
+String STR_SHOW_RULER
+{
+    Text [ en-US ] = "Show ruler";
+};
+
+String STR_SHOW_GRID
+{
+    Text [ en-US ] = "Show grid";
+};
+
+String RID_STR_UNDO_CHANGEPOSITION
+{
+    Text [ en-US ] = "Change Object";
+};
+String RID_STR_UNDO_MOVE_GROUP
+{
+    Text [ en-US ] = "Move Group(s)";
+};
+String RID_STR_UNDO_CONDITIONAL_FORMATTING
+{
+    Text [ en-US ] = "Conditional Formatting";
+};
+String RID_STR_UNDO_REMOVE_REPORTHEADERFOOTER
+{
+    Text [ en-US ] = "Remove report header / report footer";
+};
+
+String RID_STR_UNDO_ADD_REPORTHEADERFOOTER
+{
+    Text [ en-US ] = "Add report header / report footer";
+};
+
+String RID_STR_UNDO_REMOVE_PAGEHEADERFOOTER
+{
+    Text [ en-US ] = "Remove page header / page footer";
+};
+
+String RID_STR_UNDO_ADD_PAGEHEADERFOOTER
+{
+    Text [ en-US ] = "Add page header / page footer";
+};
+
+String RID_STR_UNDO_PROPERTY
+{
+    Text [ en-US ] = "Change property '#'";
+    Text = "The # character is used for replacing";
+};
+
+String RID_STR_UNDO_ADD_GROUP_HEADER
+{
+    Text [ en-US ] = "Add group header ";
+};
+
+String RID_STR_UNDO_REMOVE_GROUP_HEADER
+{
+    Text [ en-US ] = "Remove group header ";
+};
+
+String RID_STR_UNDO_ADD_GROUP_FOOTER
+{
+    Text [ en-US ] = "Add group footer ";
+};
+
+String RID_STR_UNDO_REMOVE_GROUP_FOOTER
+{
+    Text [ en-US ] = "Remove group footer ";
+};
+String RID_STR_UNDO_ADDFUNCTION
+{
+    Text [ en-US ] = "Add function";
+};
+
+String RID_STR_UNDO_DELETEFUNCTION
+{
+    Text [ en-US ] = "Delete function";
+};
+
+String RID_STR_DESIGN_VIEW
+{
+    Text [ en-US ] = "Design";
+};
+
+String RID_STR_PREVIEW_VIEW
+{
+    Text [ en-US ] = "Preview";
+};
+
+String STR_RPT_TITLE
+{
+    Text [ en-US ] = "Report #" ;
+    Text [ x-comment ] = " ";
+};
+
+String STR_RPT_LABEL
+{
+    Text [ en-US ] = "~Report name" ;
+};
+
+String RID_STR_UNDO_REMOVE_GROUP
+{
+    Text [ en-US ] = "Delete Group" ;
+};
+
+String RID_STR_UNDO_APPEND_GROUP
+{
+    Text [ en-US ] = "Add Group" ;
+};
+
+String RID_STR_UNDO_REMOVE_SELECTION
+{
+    Text [ en-US ] = "Delete Selection" ;
+};
+String RID_STR_UNDO_REMOVE_FUNCTION
+{
+    Text [ en-US ] = "Delete Function" ;
+};
+
+String RID_STR_UNDO_CHANGE_SIZE
+{
+    Text [ en-US ] = "Change Size" ;
+};
+
+String RID_STR_UNDO_PASTE
+{
+    Text [ en-US ] = "Paste" ;
+};
+
+String RID_STR_UNDO_INSERT_CONTROL
+{
+    Text [ en-US ] = "Insert Control" ;
+};
+
+String RID_STR_UNDO_DELETE_CONTROL
+{
+    Text [ en-US ] = "Delete Control" ;
+};
+
+String RID_STR_UNDO_GROUP
+{
+    Text [ en-US ] = "Insert Group" ;
+};
+
+String RID_STR_UNDO_UNGROUP
+{
+    Text [ en-US ] = "Delete Group" ;
+};
+
+String RID_STR_GROUPHEADER
+{
+    Text [ en-US ] = "GroupHeader";
+    Text [ x-comment ] = "Please try to avoid spaces in the name. It is used as a programatic one.";
+};
+String RID_STR_GROUPFOOTER
+{
+    Text [ en-US ] = "GroupFooter";
+    Text [ x-comment ] = "Please try to avoid spaces in the name. It is used as a programatic one.";
+};
+Menu RID_MENU_REPORT
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = SID_SORTINGANDGROUPING;
+            Command = ".uno:DbSortingAndGrouping";
+            Text [ en-US ] = "Sorting and Grouping...";
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = SID_ATTR_CHAR_COLOR_BACKGROUND;
+            Command = ".uno:DBBackgroundColor";
+            Text [ en-US ] = "Background Color...";
+        };
+        MenuItem
+        {
+            Identifier = SID_RULER;
+            Command = ".uno:ShowRuler";
+            Checkable = TRUE;
+            Text [ en-US ] = "Ruler...";
+        };
+        MenuItem
+        {
+            Identifier = SID_GRID_VISIBLE;
+            Command = ".uno:GridVisible";
+            Checkable = TRUE;
+            Text [ en-US ] = "Grid...";
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = SID_PAGEHEADERFOOTER;
+            Command = ".uno:PageHeaderFooter";
+            Checkable = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = SID_REPORTHEADERFOOTER;
+            Command = ".uno:ReportHeaderFooter";
+            Checkable = TRUE;
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = SID_ARRANGEMENU ;
+            Command = ".uno:ArrangeMenu" ;
+            Text [ en-US ] = "~Arrange" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        ITEM_FORMAT_FRAME_TO_TOP
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_FRAME_UP ;
+                        HelpId = ".uno:ObjectForwardOne";
+                        Text [ en-US ] = "Bring ~Forward" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_FRAME_DOWN ;
+                        HelpId = ".uno:ObjectBackOne";
+                        Text [ en-US ] = "Send Back~ward" ;
+                    };
+                    MenuItem
+                    {
+                        ITEM_FORMAT_FRAME_TO_BOTTOM
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE;
+                    };
+                    MenuItem
+                    {
+                        ITEM_FORMAT_OBJECT_HEAVEN
+                    };
+                    MenuItem
+                    {
+                        ITEM_FORMAT_OBJECT_HELL
+                    };
+                };
+            };
+        };
+        MenuItem
+        {
+            ITEM_FORMAT_OBJECT_ALIGN
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        ITEM_FORMAT_OBJECT_ALIGN_LEFT
+                    };
+                    MenuItem
+                    {
+                        ITEM_FORMAT_OBJECT_ALIGN_CENTER
+                    };
+                    MenuItem
+                    {
+                        ITEM_FORMAT_OBJECT_ALIGN_RIGHT
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE;
+                    };
+                    MenuItem
+                    {
+                        ITEM_FORMAT_OBJECT_ALIGN_UP
+                    };
+                    MenuItem
+                    {
+                        ITEM_FORMAT_OBJECT_ALIGN_MIDDLE
+                    };
+                    MenuItem
+                    {
+                        ITEM_FORMAT_OBJECT_ALIGN_DOWN
+                    };
+                };
+            };
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+
+        MenuItem
+        {
+            Identifier = SID_OBJECT_RESIZING ;
+            Command = ".uno:ObjectResize" ;
+            Text [ en-US ] = "~Object Resizing" ;
+            Text [ x-comment ] = " ";
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = SID_OBJECT_SMALLESTWIDTH ;
+                        Command = ".uno:SmallestWidth" ;
+                        Text [ en-US ] = "~Fit to smallest width" ;
+                        Text [ x-comment ] = " ";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_OBJECT_GREATESTWIDTH ;
+                        Command = ".uno:GreatestWidth" ;
+                        Text [ en-US ] = "~Fit to greatest width" ;
+                        Text [ x-comment ] = " ";
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE;
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_OBJECT_SMALLESTHEIGHT ;
+                        Command = ".uno:SmallestHeight" ;
+                        Text [ en-US ] = "~Fit to smallest height" ;
+                        Text [ x-comment ] = " ";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_OBJECT_GREATESTHEIGHT ;
+                        Command = ".uno:GreatestHeight" ;
+                        Text [ en-US ] = "~Fit to greatest height" ;
+                        Text [ x-comment ] = " ";
+                    };
+                };
+            };
+        };
+
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = SID_SECTION_SHRINK_MENU ;
+            Command = ".uno:SectionShrinkMenu" ;
+            Text [ en-US ] = "Section" ;
+            Text [ x-comment ] = " ";
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = SID_SECTION_SHRINK ;
+                        Command = ".uno:SectionShrink" ;
+                        Text [ en-US ] = "Shrink" ;
+                        Text [ x-comment ] = " ";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_SECTION_SHRINK_TOP ;
+                        Command = ".uno:SectionShrinkTop" ;
+                        Text [ en-US ] = "Shrink from top" ;
+                        Text [ x-comment ] = " ";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_SECTION_SHRINK_BOTTOM ;
+                        Command = ".uno:SectionShrinkBottom" ;
+                        Text [ en-US ] = "Shrink from bottom" ;
+                        Text [ x-comment ] = " ";
+                    };
+                };
+            };
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = SID_DISTRIBUTION;
+            Command = ".uno:Distribution";
+            Text [ en-US ] = "Distribution..." ;
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = SID_SHOW_PROPERTYBROWSER;
+            Command = ".uno:FormProperties";
+            Text [ en-US ] = "Properties...";
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            ITEM_EDIT_CUT
+        };
+        MenuItem
+        {
+            ITEM_EDIT_COPY
+        };
+        MenuItem
+        {
+            ITEM_EDIT_PASTE
+        };
+    };
+};
+String RID_STR_FIELDSELECTION
+{
+    Text [ en-US ] = "Add field:";
+};
+
+String RID_STR_FILTER
+{
+    Text [ en-US ] = "Filter" ;
+};
+
+String RID_APP_TITLE
+{
+    Text [ en-US ] = " - %PRODUCTNAME Base Report" ;
+};
+
+String RID_APP_NEW_DOC
+{
+    Text [ en-US ] = "Untitled" ;
+};
+String RID_STR_UNDO_ALIGNMENT
+{
+    Text [ en-US ] = "Change Alignment" ;
+};
+String RID_STR_HEADER
+{
+    Text [ en-US ] = "# Header" ;
+    Text[ x-comment ] = "# will be replaced with a name.";
+};
+String RID_STR_FOOTER
+{
+    Text [ en-US ] = "# Footer" ;
+    Text[ x-comment ] = "# will be replaced with a name.";
+};
+String RID_STR_IMPORT_GRAPHIC
+{
+    Text [ en-US ] = "Insert graphics" ;
+};
+String RID_STR_DELETE
+{
+    Text [ en-US ] = "Delete" ;
+};
+String RID_STR_FUNCTION
+{
+    Text [ en-US ] = "Function" ;
+};
+Image REPORT_TREE_ICON
+{
+    ImageBitmap = Bitmap { File = "report_16"; };
+    MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; };
+};
+String RID_STR_COULD_NOT_CREATE_REPORT
+{
+    Text [ en-US ] = "An error occurred while creating the report." ;
+};
+String RID_STR_CAUGHT_FOREIGN_EXCEPTION
+{
+    Text [ en-US ] = "An exception of type $type$ was caught." ;
+};
+String RID_STR_UNDO_CHANGEFONT
+{
+    Text [ en-US ] = "Change font";
+};
+String RID_STR_UNDO_CHANGEPAGE
+{
+    Text [ en-US ] = "Change page attributes";
+};
+String RID_STR_PAGEHEADERFOOTER_INSERT
+{
+    Text [ en-US ] = "Insert Page Header/Footer";
+};
+String RID_STR_PAGEHEADERFOOTER_DELETE
+{
+    Text [ en-US ] = "Delete Page Header/Footer";
+};
+String RID_STR_COLUMNHEADERFOOTER_INSERT
+{
+    Text [ en-US ] = "Insert Column Header/Footer";
+};
+String RID_STR_COLUMNHEADERFOOTER_DELETE
+{
+    Text [ en-US ] = "Delete Column Header/Footer";
+};
+String RID_STR_REPORTHEADERFOOTER_INSERT
+{
+    Text [ en-US ] = "Insert Report Header/Footer";
+};
+String RID_STR_REPORTHEADERFOOTER_DELETE
+{
+    Text [ en-US ] = "Delete Report Header/Footer";
+};
+String RID_ERR_NO_COMMAND
+{
+    Text [ en-US ] = "The report can not be executed unless it is bound to content.";
+};
+String RID_ERR_NO_OBJECTS
+{
+    Text [ en-US ] = "The report can not be executed unless at least one object has been inserted.";
+};
+String RID_STR_UNDO_SHRINK
+{
+    Text [ en-US ] = "Shrink Section";
+};
+String RID_STR_DETAIL
+{
+    Text [ en-US ] = "Detail";
+};
+String RID_STR_PAGE_HEADER
+{
+    Text [ en-US ] = "Page Header";
+};
+String RID_STR_PAGE_FOOTER
+{
+    Text [ en-US ] = "Page Footer";
+};
+String RID_STR_REPORT_HEADER
+{
+    Text [ en-US ] = "Report Header";
+};
+String RID_STR_REPORT_FOOTER
+{
+    Text [ en-US ] = "Report Footer";
+};
+String RID_STR_INSERT
+{
+    Text [ en-US ] = "Insert";
+};

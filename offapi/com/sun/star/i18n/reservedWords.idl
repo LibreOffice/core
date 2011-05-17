@@ -1,0 +1,80 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_i18n_reservedWords_idl__
+#define __com_sun_star_i18n_reservedWords_idl__
+
+//============================================================================
+
+module com {  module sun {  module star {  module i18n {
+
+//============================================================================
+
+/**
+    Offsets into the sequence of strings returned by
+    <member>XLocaleData::getReservedWord()</member>.
+
+    @see XLocaleData
+        for links to DTD of XML locale data files.
+ */
+
+published constants reservedWords
+{
+    /// "true"
+    const short TRUE_WORD             = 0;
+    /// "false"
+    const short FALSE_WORD            = 1;
+    /// "1st quarter"
+    const short QUARTER1_WORD         = 2;
+    /// "2nd quarter"
+    const short QUARTER2_WORD         = 3;
+    /// "3rd quarter"
+    const short QUARTER3_WORD         = 4;
+    /// "4th quarter"
+    const short QUARTER4_WORD         = 5;
+    /// "above"
+    const short ABOVE_WORD            = 6;
+    /// "below"
+    const short BELOW_WORD            = 7;
+    /// "Q1"
+    const short QUARTER1_ABBREVIATION = 8;
+    /// "Q2"
+    const short QUARTER2_ABBREVIATION = 9;
+    /// "Q3"
+    const short QUARTER3_ABBREVIATION = 10;
+    /// "Q4"
+    const short QUARTER4_ABBREVIATION = 11;
+
+    //! Yes, this must be the count of known reserved words and one more than
+    //! the maximum number used above!
+    /// Count of known reserved words.
+    const short COUNT                 = 12;
+};
+
+//============================================================================
+}; }; }; };
+
+#endif

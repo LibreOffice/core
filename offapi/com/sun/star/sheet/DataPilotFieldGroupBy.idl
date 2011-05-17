@@ -1,0 +1,138 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_DataPilotFieldGroupBy_idl__
+#define __com_sun_star_sheet_DataPilotFieldGroupBy_idl__
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** These constants select different types for grouping members of a DataPilot
+    field by date or time.
+
+    @see DataPilotFieldGroupInfo
+ */
+published constants DataPilotFieldGroupBy
+{
+    // -----------------------------------------------------------------------
+    /** Groups all members of a DataPilot field containing a date/time value
+        by their current value for seconds.
+
+        <p>Example: The group <em>:02</em> will contain all members that
+        contain a time with a seconds value of 2, regardless of the date,
+        hours and minutes of the member, e.g. <em>2002-Jan-03 00:00:02</em> or
+        <em>1999-May-02 12:45:02</em>.</p>
+     */
+    const long SECONDS = 1;
+
+    // -----------------------------------------------------------------------
+    /** Groups all members of a DataPilot field containing a date/time value
+        by their current value for minutes.
+
+        <p>Example: The group <em>:02</em> will contain all members that
+        contain a time with a minutes value of 2, regardless of the date,
+        hours and seconds of the member, e.g. <em>2002-Jan-03 00:02:00</em> or
+        <em>1999-May-02 12:02:45</em>.</p>
+     */
+    const long MINUTES = 2;
+
+    // -----------------------------------------------------------------------
+    /** Groups all members of a DataPilot field containing a date/time value
+        by their current value for hours.
+
+        <p>Example: The group <em>02</em> will contain all members that
+        contain a time with a hour value of 2, regardless of the date, minutes
+        and seconds of the member, e.g. <em>2002-Jan-03 02:00:00</em> or
+        <em>1999-May-02 02:12:45</em>.</p>
+     */
+    const long HOURS = 4;
+
+    // -----------------------------------------------------------------------
+    /** Groups all members of a DataPilot field containing a date/time value
+        by their calendar day, or by ranges of days.
+
+        <p>Examples:
+        <ul>
+        <li>Calendar day grouping: The group <em>Jan 03</em> will contain all
+        members that contain the January 3rd, regardless of the year or time
+        of the member, e.g. <em>2002-Jan-03 00:00:00</em> or
+        <em>1999-Jan-03 02:12:45</em>.</li>
+
+        <li>Day range grouping: The group <em>2002-Jan-03 - 2002-Jan-09</em>
+        will contain all members with a date/time in the range from
+        2002-Jan-03 00:00:00 through 2002-Jan-09 23:59:59.</li>
+        </ul></p>
+
+        <p>See descriptions for <member>XDataPilotFieldGrouping::createDateGroup
+        </member> for more details about day grouping.</p>
+     */
+    const long DAYS = 8;
+
+    // -----------------------------------------------------------------------
+    /** Groups all members of a DataPilot field containing a date/time value
+        by their month.
+
+        <p>Example: The group <em>Jan</em> will contain all members with a
+        date in the month January, regardless of the year, day, or time of the
+        member, e.g. <em>2002-Jan-03 00:00:00</em> or
+        <em>1999-Jan-02 02:12:45</em>.</p>
+     */
+    const long MONTHS = 16;
+
+    // -----------------------------------------------------------------------
+    /** Groups all members of a DataPilot field containing a date/time value
+        by their quarter.
+
+        <p>Example: The group <em>Q1</em> will contain all members with a
+        date in the first quarter of a year (i.e. the months January,
+        February, and march), regardless of the year, day, or time of the
+        member, e.g. <em>2002-Jan-03 00:00:00</em> or
+        <em>1999-Mar-02 02:12:45</em>.</p>
+     */
+    const long QUARTERS = 32;
+
+    // -----------------------------------------------------------------------
+    /** Groups all members of a DataPilot field containing a date/time value
+        by their year.
+
+        <p>Example: The group <em>1999</em> will contain all members with a
+        date in the year 1999, regardless of the month, day, or time of the
+        member, e.g. <em>1999-Jan-03 00:00:00</em> or
+        <em>1999-May-02 02:12:45</em>.</p>
+     */
+    const long YEARS = 64;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

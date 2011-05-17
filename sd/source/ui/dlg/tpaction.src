@@ -1,0 +1,208 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "app.hrc"
+#include "helpids.h"
+#include "tpaction.hrc"
+#include <svtools/controldims.hrc>
+
+TabPage TP_ANIMATION
+{
+    HelpID = CMD_SID_ANIMATION_EFFECTS ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 260 , 164 ) ;
+    Hide = TRUE;
+    // always visible ---------------------------------------------------------------------
+#define MA_ACTIONLB_TOP     (RSC_SP_DLG_INNERBORDER_TOP + (2*RSC_CD_PUSHBUTTON_HEIGHT + RSC_SP_CTRL_GROUP_Y - RSC_CD_DROPDOWN_HEIGHT) / 2)
+#define MA_ACTIONLB_LEFT    (103)
+    FixedText FT_ACTION
+    {
+        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT , MA_ACTIONLB_TOP + 1 ) ;
+        Size = MAP_APPFONT ( 86 , 10 ) ;
+        Hide = TRUE ;
+        Text [ en-US ] = "Action at mouse click" ;
+    };
+    ListBox LB_ACTION
+    {
+        HelpID = "sd:ListBox:TP_ANIMATION:LB_ACTION";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MA_ACTIONLB_LEFT , MA_ACTIONLB_TOP ) ;
+        Size = MAP_APPFONT ( 150 - RSC_SP_GRP_INNERBORDER_RIGHT , 79 ) ;
+        Hide = TRUE ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+
+    // sometimes visible ---------------------------------------------------------------------
+
+#define MA_Y0 (MA_ACTIONLB_TOP + RSC_CD_DROPDOWN_HEIGHT + RSC_SP_FLGR_SPACE_Y + RSC_SP_FLGR_INNERBORDER_BOTTOM)
+#define MA_Y1 (MA_Y0 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP)
+#define MA_Y2 (MA_Y1 + RSC_CD_DROPDOWN_HEIGHT + RSC_SP_CTRL_GROUP_Y)
+#define MA_Y3 (MA_Y2 + 3*(RSC_CD_RADIOBUTTON_HEIGHT + RSC_SP_CTRL_GROUP_Y))
+#define MA_Y4 (MA_Y3 + RSC_CD_DROPDOWN_HEIGHT + RSC_SP_CTRL_GROUP_Y)
+
+    Edit EDT_SOUND
+    {
+        HelpID = "sd:Edit:TP_ANIMATION:EDT_SOUND";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + RSC_SP_CHK_TEXTINDENT , MA_Y4 + RSC_CD_CHECKBOX_HEIGHT + 1 ) ;
+        Size = MAP_APPFONT ( 247 - 65 - 10 - (RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + RSC_SP_CHK_TEXTINDENT) , 12 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+    };
+
+     // Es ist schon wichtig, daﬂ Durchsuchen (search) und Suchen (seek/find) unter-
+     // schiedlich heissen, da sie eben auch eine unterschiedliche Bedeutung haben
+    PushButton BTN_SEARCH
+    {
+        HelpID = "sd:PushButton:TP_ANIMATION:BTN_SEARCH";
+        Pos = MAP_APPFONT ( 247 - 65, MA_Y4 + RSC_CD_CHECKBOX_HEIGHT ) ;
+        Size = MAP_APPFONT ( 65 , 14 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+        Text [ en-US ] = "~Browse..." ;
+    };
+
+    //------------------------------------
+    // Goto page/object/document stuff
+    FixedText FT_TREE
+    {
+        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT , MA_Y0 + 4 );
+        Size = MAP_APPFONT ( 86 , 10 ) ;
+        Hide = TRUE ;
+    };
+    Control LB_TREE
+    {
+        HelpID = HID_CTL_ACTION_DLG_1 ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MA_ACTIONLB_LEFT, MA_Y0 + 3 ) ;
+        Size = MAP_APPFONT ( 150 - RSC_SP_GRP_INNERBORDER_RIGHT , 77 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+    };
+    Control LB_TREE_DOCUMENT
+    {
+        HelpID = HID_CTL_ACTION_DLG_2 ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MA_ACTIONLB_LEFT, MA_Y0 + 3 ) ;
+        Size = MAP_APPFONT ( 150 - RSC_SP_GRP_INNERBORDER_RIGHT , 77 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+    };
+    ListBox LB_OLE_ACTION
+    {
+        HelpID = "sd:ListBox:TP_ANIMATION:LB_OLE_ACTION";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MA_ACTIONLB_LEFT, MA_Y0 + 3 ) ;
+        Size = MAP_APPFONT ( 150 - RSC_SP_GRP_INNERBORDER_RIGHT , 77 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+    };
+    FixedLine FL_SEPARATOR
+    {
+        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT , MA_Y1 + 63 + RSC_SP_FLGR_SPACE_Y + RSC_SP_FLGR_INNERBORDER_BOTTOM + 6 ) ;
+        Size = MAP_APPFONT ( 247 , 8 ) ;
+        Hide = TRUE ;
+    };
+    Edit EDT_BOOKMARK
+    {
+        HelpID = "sd:Edit:TP_ANIMATION:EDT_BOOKMARK";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT , MA_Y4 + RSC_CD_CHECKBOX_HEIGHT + 1 ) ;
+        Size = MAP_APPFONT ( 247 - 65 - 10 - (RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT) , 12 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+    };
+    Edit EDT_DOCUMENT
+    {
+        HelpID = "sd:Edit:TP_ANIMATION:EDT_DOCUMENT";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT , MA_Y4 + RSC_CD_CHECKBOX_HEIGHT + 1 ) ;
+        Size = MAP_APPFONT ( 247 - 65 - 10 - (RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT) , 12 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+    };
+    Edit EDT_PROGRAM
+    {
+        HelpID = "sd:Edit:TP_ANIMATION:EDT_PROGRAM";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT , MA_Y4 + RSC_CD_CHECKBOX_HEIGHT + 1 ) ;
+        Size = MAP_APPFONT ( 247 - 65 - 10 - (RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT) , 12 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+    };
+    Edit EDT_MACRO
+    {
+        HelpID = "sd:Edit:TP_ANIMATION:EDT_MACRO";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT , MA_Y4 + RSC_CD_CHECKBOX_HEIGHT + 1 ) ;
+        Size = MAP_APPFONT ( 247 - 65 - 10 - (RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT) , 12 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+    };
+    PushButton BTN_SEEK
+    {
+        HelpID = "sd:PushButton:TP_ANIMATION:BTN_SEEK";
+        Pos = MAP_APPFONT ( 247 - 65, MA_Y4 + RSC_CD_CHECKBOX_HEIGHT ) ;
+        Size = MAP_APPFONT ( 65 , 14 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+        Text [ en-US ] = "~Find" ;
+    };
+    String STR_PATHNAME
+    {
+       Text [ en-US ] = "Path Name";
+    };
+    Text [ en-US ] = "Interaction";
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

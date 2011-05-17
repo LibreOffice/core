@@ -1,0 +1,107 @@
+/*************************************************************************
+*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+************************************************************************/
+#define __RSC
+
+
+#ifndef UUI_IDS_HRC
+#include <ids.hrc>
+#endif
+#ifndef UUI_SSLWARN_HRC
+#include <sslwarndlg.hrc>
+#endif
+
+ModalDialog DLG_UUI_SSLWARN
+{
+    HelpId = HID_DLG_SSLWARN_UUI;
+    Border = TRUE ;
+    Moveable = TRUE ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT( DLG_WIDTH, DLG_HEIGHT );
+
+    Text [ en-US ] = "Security Warning: ";
+
+    FixedText FT_LABEL_1
+    {
+        Pos = MAP_APPFONT( DLG_TEXT_START_X, RSC_SP_DLG_INNERBORDER_TOP );
+        Size = MAP_APPFONT( 195, DLG_TEXT_1_HEIGHT );
+
+        Text [ en-US ] = "No Text";
+
+        Border = FALSE;
+        WordBreak = TRUE;
+    };
+
+    PushButton PB_VIEW__CERTIFICATE
+    {
+        HelpID = "uui:PushButton:DLG_UUI_SSLWARN:PB_VIEW__CERTIFICATE";
+        Pos = MAP_APPFONT( DLG_CTLBTN_CERT_START_X, DLG_CTLBTN_START_Y );
+        Size = MAP_APPFONT( DLG_CTLBTN_CERT_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+
+        Text [ en-US ] = "View Certificate";
+
+    };
+
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT( DLG_CTLBTN_CANCEL_START_X, DLG_CTLBTN_START_Y );
+        Size = MAP_APPFONT( DLG_CTLBTN_CANCEL_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+
+        Text [ en-US ] = "Cancel Connection";
+
+    };
+
+    PushButton PB_OK
+    {
+        HelpID = "uui:PushButton:DLG_UUI_SSLWARN:PB_OK";
+        Pos = MAP_APPFONT( DLG_CTLBTN_OK_START_X, DLG_CTLBTN_START_Y );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+
+        Text [ en-US ] = "Continue";
+
+    };
+
+    FixedImage IMG_WARN
+    {
+        Pos = MAP_APPFONT( RSC_SP_DLG_INNERBORDER_LEFT, RSC_SP_DLG_INNERBORDER_TOP );
+        Size = MAP_APPFONT( DLG_WARMIMG_WIDTH , DLG_WARMIMG_HEIGHT );
+
+        Fixed = Image
+        {
+            /* ImageBitmap = Bitmap { File = "certificate_40x56.png"; }; */
+            MaskColor = Color{Red=0xffff;Green=0x0000;Blue=0xffff;};
+        };
+
+    };
+
+    FixedLine FL_LINE
+    {
+        Pos = MAP_APPFONT( 0, DLG_CTLBTN_START_Y - RSC_SP_FLGR_INNERBORDER_TOP -  RSC_CD_FIXEDLINE_HEIGHT );
+        Size = MAP_APPFONT( DLG_WIDTH,  RSC_CD_FIXEDLINE_HEIGHT );
+    };
+};
+

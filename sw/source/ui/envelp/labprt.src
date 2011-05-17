@@ -1,0 +1,156 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+ // #pragma ******************************************************************
+
+#include "labprt.hrc"
+#include "helpid.h"
+ // TP_LAB_PRT ---------------------------------------------------------------
+TabPage TP_LAB_PRT
+{
+    HelpID = HID_LAB_PRT ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Hide = TRUE ;
+    RadioButton BTN_PAGE
+    {
+        HelpID = "sw:RadioButton:TP_LAB_PRT:BTN_PAGE";
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        Text [ en-US ] = "~Entire page" ;
+    };
+    RadioButton BTN_SINGLE
+    {
+        HelpID = "sw:RadioButton:TP_LAB_PRT:BTN_SINGLE";
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text [ en-US ] = "~Single label" ;
+    };
+    FixedText TXT_COL
+    {
+        Pos = MAP_APPFONT ( 127 , 29 ) ;
+        Size = MAP_APPFONT ( 30 , 8 ) ;
+        Text [ en-US ] = "Colu~mn" ;
+        Left = TRUE ;
+    };
+    NumericField FLD_COL
+    {
+        HelpID = "sw:NumericField:TP_LAB_PRT:FLD_COL";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 160 , 27 ) ;
+        Size = MAP_APPFONT ( 24 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        First = 1 ;
+    };
+    FixedText TXT_ROW
+    {
+        Pos = MAP_APPFONT ( 191 , 29 ) ;
+        Size = MAP_APPFONT ( 30 , 8 ) ;
+        Text [ en-US ] = "Ro~w" ;
+        Left = TRUE ;
+    };
+    NumericField FLD_ROW
+    {
+        HelpID = "sw:NumericField:TP_LAB_PRT:FLD_ROW";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 224 , 27 ) ;
+        Size = MAP_APPFONT ( 24 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        First = 1 ;
+    };
+    CheckBox CB_SYNCHRON
+    {
+        HelpID = "sw:CheckBox:TP_LAB_PRT:CB_SYNCHRON";
+        Pos = MAP_APPFONT ( 12 , 43 ) ;
+        Size = MAP_APPFONT ( 120 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Synchroni~ze contents" ;
+    };
+    FixedLine FL_DONTKNOW
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Distribute";
+    };
+    FixedText INF_PRINTER
+    {
+        Pos = MAP_APPFONT ( 12 , 73 ) ;
+        Size = MAP_APPFONT ( 182 , 8 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "Printer Name" ;
+    };
+    PushButton BTN_PRTSETUP
+    {
+        HelpID = "sw:PushButton:TP_LAB_PRT:BTN_PRTSETUP";
+        Pos = MAP_APPFONT ( 198 , 70 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Setup..." ;
+    };
+    FixedLine FL_PRINTER
+    {
+        Pos = MAP_APPFONT ( 6 , 59 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = " Printer " ;
+    };
+};
+ // **************************************************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

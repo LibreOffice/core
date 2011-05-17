@@ -1,0 +1,225 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_accessibility_AccessibleStateType_idl__
+#define __com_sun_star_accessibility_AccessibleStateType_idl__
+
+module com { module sun { module star { module accessibility {
+
+/** Collection of state types.
+
+    <p>This list of constants defines the available set of states that an
+    object that implements <type>XAccessibleContext</type> can be in.</p>
+
+    <p>The comments describing the states is taken verbatim from the Java
+    Accessibility API 1.4 documentation.</p>
+
+    <p>We are using constants instead of a more typesafe enum.  The reason
+    for this is that IDL enums may not be extended.  Therefore, in order to
+    include future extensions to the set of roles we have to use constants
+    here.</p>
+
+    @since OOo 1.1.2
+*/
+published constants AccessibleStateType
+{
+    /** Indicates an invalid state.
+    */
+    const short INVALID = 0;
+
+    /** Indicates a window is currently the active window.
+    */
+    const short ACTIVE = 1;
+
+    /** Indicates that the object is armed.
+    */
+    const short ARMED = 2;
+
+    /** Indicates the current object is busy.
+    */
+    const short BUSY = 3;
+
+    /** Indicates this object is currently checked.
+    */
+    const short CHECKED = 4;
+
+    /** User interface object corresponding to this object no longer exists.
+
+        <p>Indicates the user interface object corresponding to this object
+        no longer exists.</p>
+    */
+    const short DEFUNC = 5;
+
+    /** Indicates the user can change the contents of this object.
+    */
+    const short EDITABLE = 6;
+
+    /** Indicates this object is enabled.
+    */
+    const short ENABLED = 7;
+
+    /** Indicates this object allows progressive disclosure of its children.
+    */
+    const short EXPANDABLE = 8;
+
+    /** Indicates this object is expanded.
+    */
+    const short EXPANDED = 9;
+
+    /** Object can accept the keyboard focus.
+
+        <p>Indicates this object can accept keyboard focus, which means all
+        events resulting from typing on the keyboard will normally be passed
+        to it when it has focus.</p>
+    */
+    const short FOCUSABLE = 10;
+
+    /** Indicates this object currently has the keyboard focus.
+    */
+    const short FOCUSED = 11;
+
+    /** Indicates the orientation of this object is horizontal.
+    */
+    const short HORIZONTAL = 12;
+
+    /** Indicates this object is minimized and is represented only by an
+        icon.
+    */
+    const short ICONIFIED = 13;
+
+    /** Sometimes UI elements can have a state indeterminate.
+        This can happen e.g. if a check box reflects the bold state of text in a text processor.
+        When the current selection contains text which is bold and also text which is not bold, the state is indeterminate.
+
+    */
+    const short INDETERMINATE = 14;
+
+    /** Indicates the most (all) children are transient and it is not
+        necessary to add listener to the children. Only the active descendant
+        (given by the event) should be not transient to make it possible
+        to add listener to this object and recognize changes in this object.
+
+        The state is added to make a performance improvement. Now it is no
+        longer necessary to iterate over all children to find out whether
+        they are transient or not to decide whether to add listener or not.
+        If there is a object with this state no one should iterate over the
+        children to add listener. Only the active descendant should get
+        listener if it is not transient.
+    */
+    const short MANAGES_DESCENDANTS = 15;
+
+    /** Object is modal.
+
+        <p>Indicates something must be done with this object before the user
+        can interact with an object in a different window.</p>
+    */
+    const short MODAL = 16;
+
+    /** Indicates this (text) object can contain multiple lines of text
+    */
+    const short MULTI_LINE = 17;
+
+    /** More than one child may be selected at the same time.
+
+        <p>Indicates this object allows more than one of its children to be
+        selected at the same time.</p>
+    */
+    const short MULTI_SELECTABLE = 18;
+
+    /** Indicates this object paints every pixel within its rectangular
+        region.
+    */
+    const short OPAQUE = 19;
+
+    /** Indicates this object is currently pressed.
+    */
+    const short PRESSED = 20;
+
+    /** Indicates the size of this object is not fixed.
+    */
+    const short RESIZABLE = 21;
+
+    /** Object is selectable.
+
+        <p>Indicates this object is the child of an object that allows its
+        children to be selected, and that this child is one of those
+        children that can be selected.</p>
+    */
+    const short SELECTABLE = 22;
+
+    /** Object is selected.
+
+        <p>Indicates this object is the child of an object that allows its
+        children to be selected, and that this child is one of those
+        children that has been selected.</p>
+    */
+    const short SELECTED = 23;
+
+    /** Indicates this object is sensitive.
+    */
+    const short SENSITIVE = 24;
+
+    /** Object is displayed on the screen.
+
+        <p>An object has set the <const>SHOWING</const> state if itself and
+        all of its parents have set the <const>VISIBLE</const> state and it
+        lies at least partly inside the visible area of its parent.  It is,
+        though, not necessarily visible on the screen because it may be
+        occluded by other objects.</p>
+    */
+    const short SHOWING = 25;
+
+    /** Indicates this (text) object can contain only a single line of text
+    */
+    const short SINGLE_LINE = 26;
+
+    /** ???
+    */
+    const short STALE = 27;
+
+    /** Indicates this object is transient.
+    */
+    const short TRANSIENT= 28;
+
+    /** Indicates the orientation of this object is vertical.
+    */
+    const short VERTICAL = 29;
+
+    /** Object wants to be displayed on the screen.
+
+        <p>A set <const>VISIBLE</const> state indicates that an object wants
+        to be displayed on the screen.  It is displayed, as indicated by a
+        set <const>SHOWING</const> state, if all of its parents have also
+        set the <const>VISIBLE</const> state and the object lies at least
+        partly in the visible area of its parent.</p>
+    */
+    const short VISIBLE = 30;
+};
+
+}; }; }; };
+
+#endif

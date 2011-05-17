@@ -1,0 +1,52 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include "Strings.hrc"
+
+String STR_INVALID_NUMBER
+{
+    Text [ en-US ] = "Numbers are required. Check your input." ;
+};
+String STR_STEP_GT_ZERO
+{
+    Text [ en-US ] = "The major interval requires a positive number. Check your input." ;
+};
+String STR_BAD_LOGARITHM
+{
+    Text [ en-US ] = "The logarithmic scale requires positive numbers. Check your input." ;
+};
+String STR_MIN_GREATER_MAX
+{
+    Text [ en-US ] = "The minimum must be lower than the maximum. Check your input." ;
+};
+String STR_INVALID_INTERVALS
+{
+    Text [ en-US ] = "The major interval needs to be greater than the minor interval. Check your input." ;
+};
+String STR_INVALID_TIME_UNIT
+{
+    Text [ en-US ] = "The major and minor interval need to be greater or equal to the resolution. Check your input." ;
+};

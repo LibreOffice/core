@@ -1,0 +1,104 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_beans_XPropertyContainer_idl__
+#define __com_sun_star_beans_XPropertyContainer_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/reflection/XIdlClass.idl>
+
+#include <com/sun/star/beans/PropertyExistException.idl>
+
+#include <com/sun/star/beans/IllegalTypeException.idl>
+
+#include <com/sun/star/beans/UnknownPropertyException.idl>
+
+#include <com/sun/star/beans/NotRemoveableException.idl>
+
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module beans {
+
+//=============================================================================
+
+/** makes it possible to add and remove properties to or from an object.
+
+    <p>Some scripting engines cannot access properties directly when the
+    property set is changed.  Please use <member>XPropertySet::getPropertyValue</member>
+    etc. in this case. </p>
+ */
+published interface XPropertyContainer: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** adds a property to the object.
+
+        @param aName
+            specifies the name of the new property.
+
+        @param Attributes
+            specifies the property attributes, see <type>PropertyAttribute</type>.
+
+        @param DefaultValue
+            specifies the type of the new property and a potential default value.
+
+        @throws PropertyExistException
+            if a property with the same name already exists.
+
+        @throws IllegalTypeException
+            if the specified type is not allowed.
+
+     */
+    void addProperty( [in] string Name,
+                       [in] short Attributes,
+                      [in] any DefaultValue )
+            raises( com::sun::star::beans::PropertyExistException,
+                    com::sun::star::beans::IllegalTypeException,
+                    com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+
+    /** removes a property from the object.
+
+        @param aName
+            specified the name of the property.
+
+        @throws UnknownPropertyException
+            if the property does not exist.
+     */
+    void removeProperty( [in] string Name )
+            raises( com::sun::star::beans::UnknownPropertyException,
+                    com::sun::star::beans::NotRemoveableException );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

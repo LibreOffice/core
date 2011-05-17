@@ -1,0 +1,787 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "table.hrc"
+#include "tabledlg.hrc"
+#include "helpid.h"
+#define TEXT_TEXTFLOW  \
+    Text [ en-US ] = "Text Flow" ; \
+
+/**************************************************************************/
+/*                                                                        */
+/*                                                                        */
+/*                                                                        */
+/**************************************************************************/
+TabDialog DLG_FORMAT_TABLE
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Text [ en-US ] = "Table Format" ;
+    Moveable = TRUE ;
+    TabControl 1
+    {
+        SVLook = TRUE ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = TP_FORMAT_TABLE ;
+                Text [ en-US ] = "Table" ;
+                PageResID = TP_FORMAT_TABLE ;
+            };
+            PageItem
+            {
+                Identifier = TP_TABLE_TEXTFLOW ;
+                TEXT_TEXTFLOW
+            };
+            PageItem
+            {
+                Identifier = TP_TABLE_COLUMN ;
+                Text [ en-US ] = "Columns" ;
+                PageResID = TP_TABLE_COLUMN ;
+            };
+            PageItem
+            {
+                Identifier = TP_BORDER ;
+                Text [ en-US ] = "Borders" ;
+                PageResID = TP_BORDER ;
+            };
+            PageItem
+            {
+                Identifier = TP_BACKGROUND ;
+                Text [ en-US ] = "Background" ;
+                PageResID = TP_BACKGROUND ;
+            };
+        };
+    };
+};
+/**************************************************************************/
+/*                                                                        */
+/*                                                                        */
+/*                                                                        */
+/**************************************************************************/
+TabPage TP_FORMAT_TABLE
+{
+    HelpID = HID_FORMAT_TABLE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Hide = TRUE;
+    FixedText FT_NAME
+    {
+        Pos = MAP_APPFONT ( 12 , 16 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Text [ en-US ] = "~Name" ;
+    };
+    Edit ED_NAME
+    {
+        HelpID = "sw:Edit:TP_FORMAT_TABLE:ED_NAME";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 75 , 14 ) ;
+        Size = MAP_APPFONT ( 112 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_WIDTH
+    {
+        Pos = MAP_APPFONT ( 12 , 32 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text [ en-US ] = "W~idth" ;
+    };
+    MetricField ED_WIDTH
+    {
+        HelpID = "sw:MetricField:TP_FORMAT_TABLE:ED_WIDTH";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 75 , 30 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 9999 ;
+        DecimalDigits = 2 ;
+        Value = 0 ;
+        Unit = FUNIT_CM ;
+        First = 0 ;
+        Last = 9999 ;
+        SpinSize = 5 ;
+    };
+    CheckBox CB_REL_WIDTH
+    {
+        HelpID = "sw:CheckBox:TP_FORMAT_TABLE:CB_REL_WIDTH";
+        Pos = MAP_APPFONT ( 118 , 32 ) ;
+        Size = MAP_APPFONT ( 69 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Relati~ve" ;
+    };
+    FixedLine FL_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 184 , 8 ) ;
+        Text [ en-US ] = "Properties" ;
+    };
+    RadioButton RB_FULL
+    {
+        HelpID = "sw:RadioButton:TP_FORMAT_TABLE:RB_FULL";
+        Pos = MAP_APPFONT ( 202 , 14 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "A~utomatic" ;
+    };
+    RadioButton RB_LEFT
+    {
+        HelpID = "sw:RadioButton:TP_FORMAT_TABLE:RB_LEFT";
+        Pos = MAP_APPFONT ( 202 , 28 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text [ en-US ] = "~Left" ;
+        TabStop = TRUE ;
+    };
+    RadioButton RB_FROM_LEFT
+    {
+        HelpID = "sw:RadioButton:TP_FORMAT_TABLE:RB_FROM_LEFT";
+        Pos = MAP_APPFONT ( 202 , 42 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~From left";
+    };
+    RadioButton RB_RIGHT
+    {
+        HelpID = "sw:RadioButton:TP_FORMAT_TABLE:RB_RIGHT";
+        Pos = MAP_APPFONT ( 202 , 56 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text [ en-US ] = "R~ight" ;
+        TabStop = TRUE ;
+    };
+    RadioButton RB_CENTER
+    {
+        HelpID = "sw:RadioButton:TP_FORMAT_TABLE:RB_CENTER";
+        Pos = MAP_APPFONT ( 202 , 70 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text [ en-US ] = "~Center" ;
+        TabStop = TRUE ;
+    };
+    RadioButton RB_FREE
+    {
+        HelpID = "sw:RadioButton:TP_FORMAT_TABLE:RB_FREE";
+        Pos = MAP_APPFONT ( 202 , 84 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Manual" ;
+    };
+    FixedLine FL_POS
+    {
+        Pos = MAP_APPFONT ( 196 , 3 ) ;
+        Size = MAP_APPFONT ( 58 , 8 ) ;
+        Text [ en-US ] = "Alignment" ;
+    };
+    FixedLine FL_DIST
+    {
+        Pos = MAP_APPFONT ( 6 , 48 ) ;
+        Size = MAP_APPFONT ( 184 , 8 ) ;
+        Text [ en-US ] = "Spacing" ;
+    };
+    FixedText FT_LEFT_DIST
+    {
+        Pos = MAP_APPFONT ( 12 , 61 ) ;
+        Size = MAP_APPFONT ( 130 , 8 ) ;
+        Text [ en-US ] = "Lef~t" ;
+    };
+    MetricField ED_LEFT_DIST
+    {
+        HelpID = "sw:MetricField:TP_FORMAT_TABLE:ED_LEFT_DIST";
+        Pos = MAP_APPFONT ( 147 , 59 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = -9999 ;
+        Maximum = 9999 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        First = 0 ;
+        Last = 9999 ;
+        SpinSize = 5 ;
+    };
+    FixedText FT_RIGHT_DIST
+    {
+        Pos = MAP_APPFONT ( 12 , 77 ) ;
+        Size = MAP_APPFONT ( 130 , 8 ) ;
+        Text [ en-US ] = "Ri~ght" ;
+    };
+
+    MetricField ED_RIGHT_DIST
+    {
+        HelpID = "sw:MetricField:TP_FORMAT_TABLE:ED_RIGHT_DIST";
+        Pos = MAP_APPFONT ( 147 , 75 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = -9999 ;
+        Maximum = 9999 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        First = 0 ;
+        Last = 9999 ;
+        SpinSize = 5 ;
+    };
+    FixedText FT_TOP_DIST
+    {
+        Pos = MAP_APPFONT ( 12 , 93 ) ;
+        Size = MAP_APPFONT ( 130 , 8 ) ;
+        Text [ en-US ] = "~Above" ;
+    };
+    MetricField ED_TOP_DIST
+    {
+        HelpID = "sw:MetricField:TP_FORMAT_TABLE:ED_TOP_DIST";
+        Pos = MAP_APPFONT ( 147 , 91 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 9999 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        First = 0 ;
+        Last = 9999 ;
+        SpinSize = 5 ;
+    };
+    FixedText FT_BOTTOM_DIST
+    {
+        Pos = MAP_APPFONT ( 12 , 109 ) ;
+        Size = MAP_APPFONT ( 130 , 8 ) ;
+        Text [ en-US ] = "~Below" ;
+    };
+    MetricField ED_BOTTOM_DIST
+    {
+        HelpID = "sw:MetricField:TP_FORMAT_TABLE:ED_BOTTOM_DIST";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 147 , 107 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 1000 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        First = 0 ;
+        Last = 9999 ;
+        SpinSize = 5 ;
+    };
+    FixedLine   FL_PROPERTIES
+    {
+        Pos = MAP_APPFONT ( 6 , 125 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Hide = TRUE ;
+        Text [ en-US ] = "Properties";
+    };
+    FixedText   FT_TEXTDIRECTION
+    {
+        Pos = MAP_APPFONT ( 12 , 138 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Hide = TRUE ;
+        Text [ en-US ] = "Text ~direction";
+    };
+    ListBox     LB_TEXTDIRECTION
+    {
+        HelpID = "sw:ListBox:TP_FORMAT_TABLE:LB_TEXTDIRECTION";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 75 , 136 ) ;
+        Size = MAP_APPFONT ( 176 , 50 ) ;
+        DropDown = TRUE ;
+        Hide = TRUE ;
+    StringList [ en-US ] =
+    {
+         < "Left-to-right" ; 0; > ;
+        < "Right-to-left" ; 1; > ;
+        < "Use superordinate object settings" ; 4; > ;
+    };
+    };
+};
+/**************************************************************************/
+/*                                                                        */
+/*                                                                        */
+/*                                                                        */
+/**************************************************************************/
+TabPage TP_TABLE_COLUMN
+{
+    HelpID = HID_TABLE_COLUMN ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Hide = TRUE;
+    CheckBox CB_MOD_TBL
+    {
+        HelpID = "sw:CheckBox:TP_TABLE_COLUMN:CB_MOD_TBL";
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 180 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Adapt table ~width" ;
+    };
+    CheckBox CB_PROP
+    {
+        HelpID = "sw:CheckBox:TP_TABLE_COLUMN:CB_PROP";
+        Pos = MAP_APPFONT ( 6 , 20 ) ;
+        Size = MAP_APPFONT ( 180 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Ad~just columns proportionally" ;
+    };
+    FixedText FT_SPACE
+    {
+        Pos = MAP_APPFONT ( 6 , 36 ) ;
+        Size = MAP_APPFONT ( 85 , 8 ) ;
+        Text [ en-US ] = "Remaining space" ;
+    };
+    MetricField ED_SPACE
+    {
+        HelpID = "sw:MetricField:TP_TABLE_COLUMN:ED_SPACE";
+        ReadOnly = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 95 , 34 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Minimum = 0 ;
+        Maximum = 5600 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        First = 10 ;
+        Last = 5600 ;
+        SpinSize = 10 ;
+    };
+    ImageButton COL_BTN_DOWN
+    {
+        HelpID = "sw:ImageButton:TP_TABLE_COLUMN:COL_BTN_DOWN";
+        Disable = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 65 ) ;
+        Size = MAP_APPFONT ( 10 , 10 ) ;
+        TabStop = TRUE ;
+        SYMBOL = IMAGEBUTTON_ARROW_LEFT ;
+    };
+    ImageButton COL_BTN_UP
+    {
+        HelpID = "sw:ImageButton:TP_TABLE_COLUMN:COL_BTN_UP";
+        Disable = TRUE ;
+        Pos = MAP_APPFONT ( 234 , 65 ) ;
+        Size = MAP_APPFONT ( 10 , 10 ) ;
+        TabStop = TRUE ;
+        SYMBOL = IMAGEBUTTON_ARROW_RIGHT ;
+    };
+    FixedText COL_FT_1
+    {
+        Disable = TRUE ;
+        Pos = MAP_APPFONT ( 30 , 65 ) ;
+        Size = MAP_APPFONT ( 9 , 8 ) ;
+        Text = "~1" ;
+        Left = TRUE ;
+        Center = TRUE ;
+        Right = TRUE ;
+    };
+    MetricField COL_MF_1
+    {
+        HelpID = "sw:MetricField:TP_TABLE_COLUMN:COL_MF_1";
+        Disable = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 13 , 81 ) ;
+        Size = MAP_APPFONT ( 36 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 5600 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        First = 10 ;
+        Last = 5600 ;
+        SpinSize = 10 ;
+    };
+    FixedText COL_FT_2
+    {
+        Disable = TRUE ;
+        Pos = MAP_APPFONT ( 68 , 65 ) ;
+        Size = MAP_APPFONT ( 9 , 8 ) ;
+        Text = "~2" ;
+        Left = TRUE ;
+        Right = TRUE ;
+    };
+    MetricField COL_MF_2
+    {
+        HelpID = "sw:MetricField:TP_TABLE_COLUMN:COL_MF_2";
+        Disable = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 52 , 81 ) ;
+        Size = MAP_APPFONT ( 36 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 5600 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        First = 10 ;
+        Last = 5600 ;
+        SpinSize = 10 ;
+    };
+    FixedText COL_FT_3
+    {
+        Disable = TRUE ;
+        Pos = MAP_APPFONT ( 107 , 65 ) ;
+        Size = MAP_APPFONT ( 9 , 8 ) ;
+        Text = "~3" ;
+        Left = TRUE ;
+        Right = TRUE ;
+    };
+    MetricField COL_MF_3
+    {
+        HelpID = "sw:MetricField:TP_TABLE_COLUMN:COL_MF_3";
+        Disable = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 91 , 81 ) ;
+        Size = MAP_APPFONT ( 36 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 5600 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        First = 10 ;
+        Last = 5600 ;
+        SpinSize = 10 ;
+    };
+    FixedText COL_FT_4
+    {
+        Disable = TRUE ;
+        Pos = MAP_APPFONT ( 146 , 65 ) ;
+        Size = MAP_APPFONT ( 9 , 8 ) ;
+        Text = "~4" ;
+        Left = TRUE ;
+        Right = TRUE ;
+    };
+    MetricField COL_MF_4
+    {
+        HelpID = "sw:MetricField:TP_TABLE_COLUMN:COL_MF_4";
+        Disable = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 130 , 81 ) ;
+        Size = MAP_APPFONT ( 36 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 5600 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        First = 10 ;
+        Last = 5600 ;
+        SpinSize = 10 ;
+    };
+    FixedText COL_FT_5
+    {
+        Disable = TRUE ;
+        Pos = MAP_APPFONT ( 185 , 65 ) ;
+        Size = MAP_APPFONT ( 9 , 8 ) ;
+        Text = "~5" ;
+        Left = TRUE ;
+        Right = TRUE ;
+    };
+    MetricField COL_MF_5
+    {
+        HelpID = "sw:MetricField:TP_TABLE_COLUMN:COL_MF_5";
+        Disable = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 169 , 81 ) ;
+        Size = MAP_APPFONT ( 36 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 5600 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        First = 10 ;
+        Last = 5600 ;
+        SpinSize = 10 ;
+    };
+    FixedText COL_FT_6
+    {
+        Disable = TRUE ;
+        Pos = MAP_APPFONT ( 204 , 65 ) ;
+        Size = MAP_APPFONT ( 9 , 8 ) ;
+        Text = "~6" ;
+        Left = TRUE ;
+        Right = TRUE ;
+    };
+    MetricField COL_MF_6
+    {
+        HelpID = "sw:MetricField:TP_TABLE_COLUMN:COL_MF_6";
+        Disable = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 208 , 81 ) ;
+        Size = MAP_APPFONT ( 36 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 5600 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        First = 10 ;
+        Last = 5600 ;
+        SpinSize = 10 ;
+    };
+    FixedLine COL_FL_LAYOUT
+    {
+        Pos = MAP_APPFONT ( 6 , 50 ) ;
+        Size = MAP_APPFONT ( 240 , 8 ) ;
+        Text [ en-US ] = "Column width" ;
+    };
+};
+/**************************************************************************/
+/*                                                                        */
+/*  Textfluss                                                                        */
+/*                                                                        */
+/**************************************************************************/
+TabPage TP_TABLE_TEXTFLOW
+{
+    HelpId = HID_TABLE_TEXTFLOW ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    TEXT_TEXTFLOW
+    Hide = TRUE;
+    FixedLine FL_FLOW
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        TEXT_TEXTFLOW
+    };
+    CheckBox CB_PAGEBREAK
+    {
+        HelpID = "sw:CheckBox:TP_TABLE_TEXTFLOW:CB_PAGEBREAK";
+         //         Disable = TRUE;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Text [ en-US ] = "~Break" ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+    };
+    RadioButton RB_BREAKPAGE
+    {
+        HelpID = "sw:RadioButton:TP_TABLE_TEXTFLOW:RB_BREAKPAGE";
+        Pos = MAP_APPFONT ( 105 , 14 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text [ en-US ] = "~Page" ;
+        Group = TRUE ;
+        Check = TRUE ;
+    };
+    RadioButton RB_BREAKCOLUMN
+    {
+        HelpID = "sw:RadioButton:TP_TABLE_TEXTFLOW:RB_BREAKCOLUMN";
+         //         Disable = TRUE;
+        Pos = MAP_APPFONT ( 178 , 14 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text [ en-US ] = "Col~umn" ;
+    };
+    RadioButton RB_PAGEBREAKBEFORE
+    {
+        HelpID = "sw:RadioButton:TP_TABLE_TEXTFLOW:RB_PAGEBREAKBEFORE";
+         //         Disable = TRUE;
+        Pos = MAP_APPFONT ( 105 , 28 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text [ en-US ] = "Be~fore" ;
+        Group = TRUE ;
+        Check = TRUE ;
+    };
+    RadioButton RB_PAGEBREAKAFTER
+    {
+        HelpID = "sw:RadioButton:TP_TABLE_TEXTFLOW:RB_PAGEBREAKAFTER";
+         //         Disable = TRUE;
+        Pos = MAP_APPFONT ( 178 , 28 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text [ en-US ] = "~After" ;
+    };
+    CheckBox CB_PAGECOLL
+    {
+        HelpID = "sw:CheckBox:TP_TABLE_TEXTFLOW:CB_PAGECOLL";
+         //         Disable = TRUE;
+        Pos = MAP_APPFONT ( 12 , 44 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text [ en-US ] = "With Page St~yle" ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+    };
+    ListBox LB_PAGECOLL
+    {
+        HelpID = "sw:ListBox:TP_TABLE_TEXTFLOW:LB_PAGECOLL";
+        Pos = MAP_APPFONT ( 105 , 42 ) ;
+        Size = MAP_APPFONT ( 61 , 50 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    FixedText FT_PAGENUM
+    {
+        Pos = MAP_APPFONT ( 171 , 44 ) ;
+        Size = MAP_APPFONT ( 47 , 10 ) ;
+        Text [ en-US ] = "Page ~number" ;
+    };
+    NumericField NF_PAGENUM
+    {
+        HelpID = "sw:NumericField:TP_TABLE_TEXTFLOW:NF_PAGENUM";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 222 , 42 ) ;
+        Size = MAP_APPFONT ( 26 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 9999 ;
+        Value = 0 ;
+        First = 0 ;
+        Last = 9999 ;
+    };
+    CheckBox CB_SPLIT
+    {
+        HelpID = "sw:CheckBox:TP_TABLE_TEXTFLOW:CB_SPLIT";
+        Pos = MAP_APPFONT ( 12 , 58 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Allow ~table to split across pages and columns" ;
+    };
+    TriStateBox CB_SPLIT_ROW
+    {
+        HelpID = "sw:TriStateBox:TP_TABLE_TEXTFLOW:CB_SPLIT_ROW";
+        Pos = MAP_APPFONT ( 21 , 71 ) ;
+        Size = MAP_APPFONT ( 227 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Allow row to break a~cross pages and columns" ;
+    };
+    CheckBox CB_KEEP
+    {
+        HelpID = "sw:CheckBox:TP_TABLE_TEXTFLOW:CB_KEEP";
+        Pos = MAP_APPFONT ( 12 , 85 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        Text [ en-US ] = "~Keep with next paragraph" ;
+        TabStop = TRUE ;
+    };
+    CheckBox CB_HEADLINE
+    {
+        HelpID = "sw:CheckBox:TP_TABLE_TEXTFLOW:CB_HEADLINE";
+        Pos = MAP_APPFONT ( 12 , 99 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "R~epeat heading" ;
+    };
+    FixedText FT_REPEAT_HEADER
+    {
+        Pos = MAP_APPFONT ( 31 , 114 ) ;
+        Size = MAP_APPFONT ( 95 , 10 ) ;
+        Text [ en-US ] = "The first %POSITION_OF_CONTROL rows" ;
+    };
+    NumericField NF_REPEAT_HEADER
+    {
+        HelpID = "sw:NumericField:TP_TABLE_TEXTFLOW:NF_REPEAT_HEADER";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 131 , 113 ) ;
+        Size = MAP_APPFONT ( 28 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 1000 ;
+        First = 1 ;
+    };
+    Window WIN_REPEAT_HEADER
+    {
+        Pos = MAP_APPFONT ( 21 , 113 ) ;
+        Size = MAP_APPFONT ( 2 , 1 ) ;
+    };
+    FixedText FT_TEXTDIRECTION
+    {
+        Pos = MAP_APPFONT ( 12 , 132 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text [ en-US ] = "Text ~direction" ;
+    };
+    ListBox LB_TEXTDIRECTION
+    {
+        HelpID = "sw:ListBox:TP_TABLE_TEXTFLOW:LB_TEXTDIRECTION";
+        Pos = MAP_APPFONT ( 85 , 130 ) ;
+        Size = MAP_APPFONT ( 163 , 50 ) ;
+        DropDown = TRUE;
+        Border = TRUE;
+        StringList [ en-US ] =
+        {
+             < "Left-to-right" ; 0; > ;
+             < "Right-to-left (vertical)" ; 2; > ;
+             < "Use superordinate object settings" ; 4; > ;
+        };
+    };
+    FixedLine FL_VERT_ORIENT
+    {
+        Pos = MAP_APPFONT ( 6 , 149 ) ;
+        Size = MAP_APPFONT ( 251 , 8 ) ;
+        Text [ en-US ] = "Alignment" ;
+    };
+
+    FixedText FT_VERTORIENT
+    {
+        Pos = MAP_APPFONT ( 12 , 164 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text [ en-US ] = "~Vertical alignment" ;
+    };
+    ListBox LB_VERTORIENT
+    {
+        HelpID = "sw:ListBox:TP_TABLE_TEXTFLOW:LB_VERTORIENT";
+        Pos = MAP_APPFONT ( 85 , 162 ) ;
+        Size = MAP_APPFONT ( 61 , 50 ) ;
+        DropDown = TRUE;
+        Border = TRUE;
+        StringList [ en-US ] =
+        {
+            < "Top" ; 0; > ;
+            < "Centered" ; 1; > ;
+            < "Bottom" ; 2; > ;
+        };
+    };
+};
+InfoBox MSG_WRONG_TABLENAME
+{
+    Message [ en-US ] = "The name of the table must not contain spaces." ;
+};

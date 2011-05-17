@@ -1,0 +1,12 @@
+    <node oor:name="calc_StarCalc_10" oor:op="replace" >
+        <prop oor:name="DetectService"><value>com.sun.star.comp.calc.FormatDetector</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>sdc</value></prop>
+        <prop oor:name="MediaType"/>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>StarCalc 1.0</value></prop>
+        <prop oor:name="UIName">
+            <value>StarCalc 1.0</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"/>
+    </node>

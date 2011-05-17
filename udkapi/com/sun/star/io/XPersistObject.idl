@@ -1,0 +1,113 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_io_XPersistObject_idl__
+#define __com_sun_star_io_XPersistObject_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/io/IOException.idl>
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module io {
+
+ published interface XObjectInputStream;
+ published interface XObjectOutputStream;
+
+//=============================================================================
+
+/** allows to make UNO objects persistent
+
+  <p>Every UNO object, that wants to be serializable, should implement
+     this interface. The object stores stores itself, when the
+     write method is called.
+     <p>
+     The object needs to be created before it deserializes
+     itself again (by using the read method). Therefor it must be
+     createable by name via a factory, which is in general
+     the global service manager. The create and read mechanism
+     is implemented by the <type scope="com::sun::star::io">ObjectInputStream</type>.
+
+     <p>The serialization format (the series of strings, integers, objects) must
+     be specified at the specification of the concrete service.
+
+     <p>The interface does not support any special versioning mechanism.
+
+     @see com::sun::star::io::XObjectOutputStream
+     @see com::sun::star::io::XObjectInputStream
+ */
+published interface XPersistObject: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** gives the service name of the object
+
+      @returns
+            the service name that specifies the behavior and the
+            persistent data format of this implementation.
+
+        <p>This name is used to create such an object by a factory
+        during deserialization. </p>
+
+        @see com::sun::star::lang::XServiceInfo::getAvailableServiceNames
+     */
+    string getServiceName();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::XPersistObject::write
+    /** writes all the persistent data of the object to the stream.
+        <p>The implementation
+        must write the data in the order documented in the service specification.
+        @param OutStream the stream, the data shall be written to. The stream
+               supports simple types and other XPersistObject implementations.
+     */
+    void write( [in] com::sun::star::io::XObjectOutputStream OutStream )
+            raises( com::sun::star::io::IOException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::XPersistObject::read
+    /** reads all the persistent data of the object from the stream.
+        <p>In case
+        other XPersistObjects are read from the stream, the implementation uses a factory
+        to create these objects (in general the global service manager).
+        <p> The implementation must read the data in the order documented at
+        the service specification.
+        @param InStream the stream, the data shall be read from.
+     */
+    void read( [in] com::sun::star::io::XObjectInputStream InStream )
+            raises( com::sun::star::io::IOException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,81 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_beans_PropertyValue_idl__
+#define __com_sun_star_beans_PropertyValue_idl__
+
+#include <com/sun/star/beans/Property.idl>
+
+#include <com/sun/star/beans/PropertyState.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module beans {
+
+//=============================================================================
+
+/** specifies a property value.
+ */
+published struct PropertyValue
+{
+    /** specifies the name of the property.
+
+        <p>The name is unique within a sequence of <type>PropertyValue</type>s.
+        Upper and lower case are distinguished.</p>
+     */
+    string Name;
+
+    //-------------------------------------------------------------------------
+
+    /** contains an implementation-specific handle for the property.
+
+        <p>It may be -1 if the implementation has no handle. If available
+        it can be used for fast lookups.</p>
+     */
+    long Handle;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the value of the property or <void/>,
+        if no value is available.
+     */
+    any Value;
+
+    //-------------------------------------------------------------------------
+
+    /** determines if the value comes from the object itself or from
+        a default and if the value cannot be determined exactly.
+     */
+    com::sun::star::beans::PropertyState State;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,94 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#if ! defined INCLUDED_com_sun_star_deployment_XPackageTypeInfo_idl
+#define INCLUDED_com_sun_star_deployment_XPackageTypeInfo_idl
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/deployment/ExtensionRemovedException.idl>
+
+module com { module sun { module star { module deployment {
+
+/** Objects of this interface provide information about a package's type.
+
+    @since OOo 2.0
+*/
+interface XPackageTypeInfo
+{
+    /** returns the media type of a package, e.g.
+        <code>application/vnd.sun.star.basic-script</code>.
+
+        @return
+                media type of package
+    */
+    string getMediaType();
+
+    /** returns a description string to describe a package type.
+
+        @return
+                description
+    */
+    string getDescription()
+        raises (ExtensionRemovedException);
+
+    /** returns a short description string to describe a package type
+        (one line only).
+
+        @return
+                description
+    */
+    string getShortDescription()
+        raises (ExtensionRemovedException);
+
+    /** returns a file filter string for the file picker user interface.
+        Both, the short description string and file filter string
+        will be passed to
+        <member scope="com::sun::star::ui::dialogs">XFilterManager::appendFilter</member>.
+
+        @return
+                file filter string
+    */
+    string getFileFilter();
+
+    /** returns an icon for a package.
+
+        @param highContrast
+               return high contrast icon
+        @param smallIcon
+               return a small icon (e.g. 16x16 pixel),
+               else return a big one (e.g. 26x26 pixel)
+        @return
+                currently an unsigned short
+                (resource id for deploymentgui resource file),
+                <void/> any if none is available
+    */
+    any getIcon( [in] boolean highContrast, [in] boolean smallIcon );
+};
+
+}; }; }; };
+
+#endif

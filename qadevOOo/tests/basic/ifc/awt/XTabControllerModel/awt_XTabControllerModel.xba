@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="awt_XTabControllerModel" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+'*************************************************************************
+' This Interface/Service test depends on the following GLOBAL variables,
+' which must be specified in the object creation:
+
+'      Global XTabControlModel1 as Object
+'       Global XTabControlModel2 as Object
+
+'*************************************************************************
+
+
+
+
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.awt.XTabControllerModel
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim ModelSeq1(0), ModelSeq2(0) As Variant
+    Dim ReturnModel(), ReturnSeq2(), ReturnSeq1() As Variant
+    Dim ReturnName, cName As String
+
+    cName = "XTabControllerModel"
+
+    Test.StartMethod("setGroupControl()")
+    bOK = true
+    oObj.setGroupControl(false)
+    Test.StartMethod("getGroupControl()")
+    bOK = bOK AND NOT oObj.getGroupControl()
+    oObj.setGroupControl(true)
+    bOK = bOK AND oObj.getGroupControl()
+    Test.MethodTested("getGroupControl()", bOK)
+    Test.MethodTested("setGroupControl()", bOK)
+
+    Test.StartMethod("setControlModels()")
+    bOK = true
+    ModelSeq1(0) = XTabControlModel1
+    oObj.setControlModels(ModelSeq1())
+    Test.StartMethod("getControlModels()")
+    ReturnSeq1 = oObj.getControlModels()
+    bOK = bOk AND (uBound(ReturnSeq1()) = uBound(ModelSeq1()))
+    Test.MethodTested("setControlModels()", bOK)
+    Test.MethodTested("getControlModels()", bOK)
+
+    Test.StartMethod("setGroup()")
+    bOK = true
+    ModelSeq2(0) = XTabControlModel2
+    oObj.setGroup(ModelSeq2(), cName)
+    Test.StartMethod("getGroup()")
+    oObj.getGroup(0,ReturnSeq2(), ReturnName)
+    bOK = bOK AND (ReturnName = cName)
+    bOK = bOK AND (uBound(ReturnSeq2()) = uBound(ModelSeq2()))
+    Test.MethodTested("setGroup()", bOK)
+    Test.MethodTested("getGroup()", bOK)
+
+    Test.StartMethod("getGroupCount()")
+    bOK = true
+    bOK = bOK AND (oObj.getGroupCount() &gt; 0)
+    bOK = bOK AND isNumeric(oObj.getGroupCount())
+    Test.MethodTested("getGroupCount()", bOK)
+
+    Test.StartMethod("getGroupByName()")
+    bOK = true
+    oObj.getGroupByName(cName, ReturnModel())
+    Test.MethodTested("getGroupByName()", bOK)
+
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

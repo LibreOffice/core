@@ -1,0 +1,135 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#define __RSC
+
+#ifndef UUI_IDS_HRC
+#include <ids.hrc>
+#endif
+#ifndef UUI_MASTERPASSCRTDLG_HRC
+#include <masterpasscrtdlg.hrc>
+#endif
+
+ModalDialog DLG_UUI_MASTERPASSWORD_CRT
+{
+    HelpId = HID_DLG_MASTERPASSWORD_CRT ;
+    Border = TRUE ;
+    Moveable = TRUE ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( DLG_WIDTH , DLG_HEIGHT ) ;
+    Text [ en-US ] = "Set Master Password";
+    FixedText FT_INFOTEXT
+    {
+        Pos = MAP_APPFONT ( COL_0 , ROW_0 ) ;
+        Size = MAP_APPFONT ( CTRL_WIDTH , 7*RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        WordBreak = TRUE ;
+        Text [ en-US ] = "Passwords for web connections are protected by a master password. You will be asked to enter it once per session, if %PRODUCTNAME retrieves a password from the protected password list.";
+    };
+    FixedLine FL_INFOTEXT
+    {
+        Pos = MAP_APPFONT ( 0 , ROW_1 ) ;
+        Size = MAP_APPFONT ( DLG_WIDTH , RSC_CD_FIXEDLINE_HEIGHT ) ;
+    };
+    FixedText FT_MASTERPASSWORD_CRT
+    {
+        Pos = MAP_APPFONT ( COL_0 , ROW_2 ) ;
+        Size = MAP_APPFONT ( CTRL_WIDTH , RSC_CD_FIXEDLINE_HEIGHT ) ;
+        Text [ en-US ] = "~Enter password";
+    };
+    Edit ED_MASTERPASSWORD_CRT
+    {
+        HelpID = "uui:Edit:DLG_UUI_MASTERPASSWORD_CRT:ED_MASTERPASSWORD_CRT";
+        Pos = MAP_APPFONT ( COL_0 , ROW_3 ) ;
+        Size = MAP_APPFONT ( CTRL_WIDTH , RSC_CD_TEXTBOX_HEIGHT ) ;
+        Border = TRUE ;
+        PassWord = TRUE ;
+    };
+    FixedText FT_MASTERPASSWORD_REPEAT
+    {
+        Pos = MAP_APPFONT ( COL_0 , ROW_4 ) ;
+        Size = MAP_APPFONT ( CTRL_WIDTH , RSC_CD_FIXEDLINE_HEIGHT ) ;
+        Text [ en-US ] = "~Reenter password";
+    };
+    Edit ED_MASTERPASSWORD_REPEAT
+    {
+        HelpID = "uui:Edit:DLG_UUI_MASTERPASSWORD_CRT:ED_MASTERPASSWORD_REPEAT";
+        Pos = MAP_APPFONT ( COL_0 , ROW_5 ) ;
+        Size = MAP_APPFONT ( CTRL_WIDTH , RSC_CD_TEXTBOX_HEIGHT ) ;
+        Border = TRUE ;
+        PassWord = TRUE ;
+    };
+    FixedText FT_CAUTIONTEXT
+    {
+        Pos = MAP_APPFONT ( COL_0 , ROW_6 ) ;
+        Size = MAP_APPFONT ( CTRL_WIDTH , 8*RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        WordBreak = TRUE ;
+        Text [ en-US ] = "Caution: If you forget the master password, you will be unable to access any of the information protected by it. Passwords are case-sensitive.";
+    };
+    FixedLine FL_CAUTIONTEXT
+    {
+        Pos = MAP_APPFONT ( 0 , ROW_7 ) ;
+        Size = MAP_APPFONT ( DLG_WIDTH , RSC_CD_FIXEDLINE_HEIGHT ) ;
+    };
+    HelpButton BTN_MASTERPASSCRT_HELP
+    {
+        Pos = MAP_APPFONT ( COL_0 , ROW_8 ) ;
+        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
+    };
+    OKButton BTN_MASTERPASSCRT_OK
+    {
+        Pos = MAP_APPFONT ( COL_1 , ROW_8 ) ;
+        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_MASTERPASSCRT_CANCEL
+    {
+        Pos = MAP_APPFONT ( COL_2 , ROW_8 ) ;
+        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
+    };
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

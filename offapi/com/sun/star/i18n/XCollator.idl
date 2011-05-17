@@ -1,0 +1,174 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_i18n_XCollator_idl__
+#define __com_sun_star_i18n_XCollator_idl__
+
+#include <com/sun/star/uno/Exception.idl>
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/Locale.idl>
+//=============================================================================
+
+module com { module sun { module star { module i18n {
+
+/** provides locale-sensitive collation algorithms for string comparison.
+
+*/
+published interface XCollator: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** Compare 2 substrings in specific locale and algorithm.
+
+        @param aStr1
+            First string.
+
+        @param nOff1
+            Offset (from 0) of the first string.
+
+        @param nLen1
+            Length (from offset) of the first substring.
+
+        @param aStr2
+            Second string
+
+        @param nOff2
+            Offset (from 0) of the second string.
+
+        @param nLen2
+            Length (from offset) of the second substring.
+
+        @returns
+            1 if the first string is greater than the second string <br/>
+            0 if the first string is equal to the second string <br/>
+            -1 if the first string is less than the second string
+    */
+    long compareSubstring(  [in] string aStr1, [in] long nOff1, [in] long nLen1,
+                            [in] string aStr2, [in] long nOff2, [in] long nLen2 );
+
+    //-------------------------------------------------------------------------
+    /** Compare 2 strings in specific locale and algorithm.
+
+        @param aStr1
+            First string.
+
+        @param aStr2
+            Second string.
+
+        @returns
+            1 if the first string is greater than the second string <br/>
+            0 if the first string is equal to the second string <br/>
+            -1 if the first string is less than the second string
+    */
+    long compareString( [in] string aStr1, [in] string aStr2 );
+
+    //-------------------------------------------------------------------------
+    /** Load the collator with default algorithm defined in
+        locale data.
+
+        @param aLocale
+            The locale for this collator.
+
+        @param nCollatorOptions
+            A mask of <type>CollatorOptions</type>.
+
+        @returns
+            Returns 0 when loading was successful,
+            otherwise throws runtime exception. In fact the return value
+            should be ignored and the exception be caught instead.
+    */
+    long loadDefaultCollator(   [in] ::com::sun::star::lang::Locale aLocale,
+                                [in] long nCollatorOptions );
+
+    //-------------------------------------------------------------------------
+    /** Load a particular collator algorithm for the locale.
+
+        @param aAlgorithmName
+            The algorithm to load.
+
+        @param aLocale
+            The locale for this collator.
+
+        @param nCollatorOptions
+            A mask of <type>CollatorOptions</type>.
+
+        @returns
+            Returns 0 when loading was successful,
+            otherwise throws runtime exception.
+    */
+    long loadCollatorAlgorithm( [in] string aAlgorithmName,
+                                [in] ::com::sun::star::lang::Locale aLocale,
+                                [in] long nCollatorOptions );
+
+    //-------------------------------------------------------------------------
+    /** List all collator algorithms for a given locale.
+
+        @param aLocale
+            The locale for which to list algorithms.
+
+        @returns
+            A sequence of algorithm names.
+    */
+    sequence <string> listCollatorAlgorithms(
+                                [in] ::com::sun::star::lang::Locale aLocale );
+
+    //-------------------------------------------------------------------------
+    /** Load a collator algorithm with options chosen by end user.
+
+        @param aAlgorithmName
+            The algorithm name to load.
+
+        @param aLocale
+            The locale for this collator.
+
+        @param aCollatorOptions
+            A sequence of end user collator options like those returned
+            by <member>XCollator::listCollatorOptions()</member>.
+    */
+    void loadCollatorAlgorithmWithEndUserOption(
+                                [in] string aAlgorithmName,
+                                [in] ::com::sun::star::lang::Locale aLocale,
+                                [in] sequence<long> aCollatorOptions );
+
+    //-------------------------------------------------------------------------
+    /** List all end user collator options for a given algorithm.
+
+        @param aAlgorithmName
+            The algorithm name for this collator.
+
+        @returns
+            An array of end user options available for the algorithm.
+    */
+    sequence <long> listCollatorOptions( [in] string aAlgorithmName );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+//=============================================================================
+
+#endif

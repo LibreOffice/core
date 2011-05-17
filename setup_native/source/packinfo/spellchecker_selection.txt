@@ -1,0 +1,54 @@
+# This file defines the languages of the spellchecker, that are
+# included into the language specific installation sets.
+# First column: Language in the installation set.
+# Second column: Assigned spellchecker languages. Comma separated list.
+
+# The first entry after the "=" is the entry, that will be included into
+# a language pack of the corresponding language. If no spellchecker
+# shall be included into the language pack, the keyword "EMPTY" can
+# be used as first entry.
+
+af = "af"
+ar = "EMPTY"
+ca = "ca,es,fr"
+cs = "cs"
+da = "da,de-DE"
+de = "de-DE,de-AT,de-CH,fr,it"
+en-US = "en,es,fr"
+en-GB = "en,es,fr"
+es = "es,fr,pt"
+et = "et"
+fr = "fr,es"
+gl = "gl,pt,es"
+he = "he"
+hu = "hu,de-DE"
+hr = "hr,de-DE"
+it = "it,de-DE,fr"
+ja = "EMPTY"
+ko = "EMPTY"
+ku = "ku-TR"
+lt = "lt"
+nb = "no,fr,de-DE,es"
+ne = "ne"
+nl = "nl,fr,de-DE"
+nn = "no,fr,de-DE,es"
+oc = "oc,fr"
+pl = "pl,de-DE,ru"
+pt-BR = "pt,es"
+pt = "pt,es"
+ro = "ro,de-DE,hu"
+ru = "ru,de-DE"
+sk = "sk"
+sl = "sl"
+sv = "sv,de-DE"
+sr = "sr"
+# ! Note the package 'sr' also holds the dictionaries for 'sh' !
+sh = "sr"
+sw = "sw"
+th = "th"
+uk = "uk,ru"
+vi = "vi,fr"
+zh-TW = "EMPTY"
+zh-CN = "EMPTY"
+zu = "zu"
+

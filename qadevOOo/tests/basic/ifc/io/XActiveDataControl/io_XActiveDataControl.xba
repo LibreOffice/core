@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="io_XActiveDataControl" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+'*************************************************************************
+' This Interface/Service test depends on the following GLOBAL variables,
+' which must be specified in the object creation:
+
+'     - Global oPipe As Object
+'     - Global PumpOUTFileName As String
+
+'*************************************************************************
+
+
+
+
+Dim oListener1 As Object
+Dim oListener2 As Object
+Dim CB1Started As Integer
+Dim CB1Closed As Integer
+Dim CB1Terminated As Integer
+Dim CB1Error As Integer
+Dim CB2Started As Integer
+Dim CB2Closed As Integer
+Dim CB2Terminated As Integer
+Dim CB2Error As Integer
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.io.XActiveDataControl
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim iSize As Integer
+
+    oFileAcc = createUnoService("com.sun.star.ucb.SimpleFileAccess")
+
+    Dim aBytes(10) As Integer
+    for i = 0 to ubound(aBytes())
+        aBytes(i) = i * 3
+    next i
+
+    Test.StartMethod("start()")
+    Test.StartMethod("terminate()")
+    bOK = true
+
+    Out.Log("Writing some bytes to Pipe")
+
+    oPipe.writeBytes(aBytes())
+
+    Out.Log("The pump was not started yet. So, PumpOUT should be of zero size")
+    Out.Log("Terminating a pipe to have an opportunity to get a file size")
+    oObj.terminate()
+
+    iSize = oFileAcc.getSize(PumpOUTFileName)
+    Out.Log("Size of file is " &amp; iSize)
+    bOK = bOK AND iSize = 0
+    DisposeObj()
+    CreateObj()
+
+    Out.Log("Writing bytes again (because object was destroyed)")
+    oPipe.writeBytes(aBytes())
+    Out.Log("... and starting pump")
+    oObj.start()
+    wait(100)
+    Out.Log("Now PumpOUT should have size " &amp; ubound(aBytes()) + 1)
+    Out.Log("Terminating a pipe to have an opportunity to get a file size")
+    oObj.terminate()
+    iSize = oFileAcc.getSize(PumpOUTFileName)
+    Out.Log("Size of file is " &amp; iSize)
+    bOK = bOK AND iSize = ubound(aBytes()) + 1
+
+    Test.MethodTested("start()", bOK)
+    Test.MethodTested("terminate()", bOK)
+
+    DisposeObj()
+    CreateObj()
+    ResetCounters()
+
+    oListener1 = createUnoListener("CB1_", "com.sun.star.io.XStreamListener")
+    oListener2 = createUnoListener("CB2_", "com.sun.star.io.XStreamListener")
+
+    Test.StartMethod("addListener()")
+    bOK = true
+    Out.Log("adding two listeners")
+    oObj.addListener(oListener1)
+    oObj.addListener(oListener2)
+    oPipe.writeBytes(aBytes())
+    oObj.start()
+    wait(100) ' for listeners to change counters
+    bOK = CB1Started = 1 AND CB2Started = 1
+    Test.MethodTested("addListener()", bOK)
+
+    DisposeObj()
+    CreateObj()
+    ResetCounters()
+
+    Test.StartMethod("removeListener()")
+    bOK = true
+    Out.Log("adding two listeners")
+    oObj.addListener(oListener1)
+    oObj.addListener(oListener2)
+    Out.Log("Removing first listener...")
+    oObj.removeListener(oListener1)
+    oPipe.writeBytes(aBytes())
+    oObj.start()
+    wait(100)
+    bOK = CB1Started = 0 AND CB2Started = 1
+    Test.MethodTested("removeListener()", bOK)
+    DisposeObj()
+    CreateObj()
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+
+Sub ResetCounters()
+    CB1Started = 0
+    CB1Closed = 0
+    CB1Terminated = 0
+    CB1Error = 0
+    CB2Started = 0
+    CB2Closed = 0
+    CB2Terminated = 0
+    CB2Error = 0
+End Sub
+
+Sub CB1_Started()
+    Out.Log("CB1_Started called")
+    CB1Started = CB1Started + 1
+End Sub
+
+Sub CB2_Started()
+    Out.Log("CB2_Started called")
+    CB2Started = CB2Started + 1
+End Sub
+
+Sub CB1_Closed()
+    Out.Log("CB1_Closed called")
+    CB1Closed = CB1Closed + 1
+End Sub
+
+Sub CB2_Closed()
+    Out.Log("CB2_Closed called")
+    CB2Closed = CB2Closed + 1
+End Sub
+
+Sub CB1_Terminated()
+    Out.Log("CB1_Terminated called")
+    CB1Terminated = CB1Terminated + 1
+End Sub
+
+Sub CB2_Terminated()
+    Out.Log("CB2_Terminated called")
+    CB2Terminated = CB2Terminated + 1
+End Sub
+
+Sub CB1_Error(aError As Object)
+    Out.Log("CB1_Error called")
+    CB1Error = CB1Error + 1
+End Sub
+
+Sub CB2_Error(aError As Object)
+    Out.Log("CB2_Error called")
+    CB2Error = CB2Error + 1
+End Sub
+</script:module>

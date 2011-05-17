@@ -1,0 +1,117 @@
+--- How layout / hierarchy should work ---
+
+On-screen:
+
++-------------------+
+| Label:   [Entry]  |
+| - - - - - - - - - |                  |
+|             [ Ok ]|
++-------------------+
+
+AWT Window hierarcy:
+	Window
+		+ Label
+		+ Entry
+		+ Ok
+
+	ie. unchanged, and backwards compatible - a flat
+representation.
+
+Toolkit Hierachy
+
+	WindowContainer [Bin?]
+		+ Vbox
+			+ HBox
+				+ Label
+				+ Entry
+		+ Alignment
+			+ Ok
+
+	the layout process would happen inside the toolkit code
+(perhaps eventually genericisd itself), and the result from the
+(re-)layout process would be a set of SetPosition/SetSize calls made
+to VCL.
+
+--- code pointers ---
+
+** AWT interfaces:
+    + offapi/com/sun/star/awt/* - eg. XButton.idl
+	+ 'XLayoutConstrains.idl' [ published & mis-named ! ]
+
+    + We can build 'Layout' into the AWT at the toolkit level
+	+ this should be fairly easy, and wouldn't touch VCL much.
+
+** Toolkit (awt) implementation:
+    + toolkit/source/awt/vclxwindows.cxx:
+	+ much of the implementation lurks in here ...
+    + The size information is in 'vclxwindows.cxx' ...
+
+    + toolkit/source/helper/unowrapper.cxx
+	+ factories / code to associate UNO peers with VCL windows
+	+ pWindow->
+
+--- Tests ---
+
+Integration tests:
+    cf. http://www.openoffice.org/issues/show_bug.cgi?id=78747
+
+
+--- more thoughts ---
+
+** Extra Design constraints: [!?]
+	+ accessibility
+	+ QA test-tool-age ... - tests ~will need re-write (unfortunately)
+
+* New functionality we would like:
+	+ ShowAll (vs. Show/Hide) && HideAll ...
+
+Necessary to re- build && deliver svtools/ having delivered toolkit ...
+    rm unxlngi6.pro/slo/textwindowaccessibility.* # first ...
+
+** Layout containers:
+    + XIndexAccess ? - sorted container (?)
+
+* Consider 'XLayoutRoot' top-level ...
+    + inherit from XNameContainer - widgets by name / id ...
+    + hack a VCL dialog ?
+	+ we need a handle we can pass back of some form:
+	+ XWindowPeer getPeer() ... [ can use that I guess ? ]
+    + also need a service interface ?
+	+ or parameters passed as Anys ? [ugh]
+
+* Decided
+    + use 'layout' by itself & small patches
+      to toolkit/ in ooo-build.
+
+* TODO:
+    + need a 'queueResize' method ...
+	+ trigger on show/hide ...
+    + allocateSize should take an awt::Rectangle ...
+    + impl. XLayoutRoot
+    + special cases:
+        + radio-button-group
+	+ notebook
+
+* svx/source/dialog/zoom*
+
+Michael's Todo:
+    + handle MetricField: 'unit' enum etc. - introspection ? or ...
+    + make OK/Cancel buttons function as they should ...
+    + merge layout-svtools.diff into CWS as last step before inclusion ...
+    + FixedLine:
+	+ get sizing right ...
+	+ hook up new virtual methods into toolkit/ (m225) - i#80754
+	+ copy the crud from toolkit's custom vclxwindows.cxx
+	  "calcMinimumSize" logic ...
+    + get ok/help/cancel buttons working ...
+
+    + fix / rationalise property adding in toolkit ...
+	+ simplify it with the new VCLWindow base :-)
+	+ simplify it ...
+	    + spreadsheet ...
+	+ VCLXImageConsumer - can't be instantiated itself
+             anyway ! -> bin the 'true' & just add all these
+	     props unconditionally ...	
+
+    + switch construction attributes into their own xmlns to
+      avoid treading on other properties ...

@@ -1,0 +1,202 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#define __RSC
+
+#include "globals.hrc"
+#include "app.hrc"
+#include "swerror.h"
+#include "comcore.hrc" // MS:   Why are there resources at the Core-Side now
+
+/*--------------------------------------------------------------------
+    Description:    Strings
+ --------------------------------------------------------------------*/
+
+String STR_COMCORE_READERROR
+{
+    Text [ en-US ] = "Read-Error" ;
+};
+String STR_COMCORE_CANT_SHOW
+{
+    Text [ en-US ] = "Graphic cannot be displayed." ;
+};
+/*--------------------------------------------------------------------
+    Description:    Boxes
+ --------------------------------------------------------------------*/
+InfoBox ERR_CLPBRD_WRITE
+{
+    Message [ en-US ] = "Error while copying to the clipboard." ;
+};
+InfoBox ERR_CLPBRD_READ
+{
+    Message [ en-US ] = "Error reading from the clipboard." ;
+};
+
+
+#define ERR_CODE( class, err )  (class | (err - ERROR_SW_BASE))
+#define WARN_CODE( class, err ) (class | ( err - WARN_SW_BASE))
+
+Resource RID_SW_ERRHDL
+{
+     // Import-Errors
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_FILE_FORMAT_ERROR )
+    {
+        Text [ en-US ] = "File format error found." ;
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_READ_ERROR )
+    {
+        Text [ en-US ] = "Error reading file." ;
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_INPUT_FILE )
+    {
+        Text [ en-US ] = "Input file error." ;
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_NOWRITER_FILE )
+    {
+        Text [ en-US ] = "This is not a %PRODUCTNAME Writer file." ;
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_UNEXPECTED_EOF )
+    {
+        Text [ en-US ] = "Unexpected end of file." ;
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_PASSWD )
+    {
+        Text [ en-US ] = "Password-protected files cannot be opened." ;
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_WW6_NO_WW6_FILE_ERR )
+    {
+        Text [ en-US ] = "This is not a WinWord6 file." ;
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_WW6_FASTSAVE_ERR )
+    {
+        Text [ en-US ] = "This file was saved with WinWord in 'Fast Save' mode. Please unmark the WinWord option 'Allow Fast Saves' and save the file again." ;
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_FORMAT_ROWCOL )
+    {
+        Text [ en-US ] = "File format error found at $(ARG1)(row,col)." ;
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_NEW_VERSION )
+    {
+        Text [ en-US ] = "File has been written in a newer version." ;
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_WW8_NO_WW8_FILE_ERR )
+    {
+        Text [ en-US ] = "This is not a WinWord97 file.";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_FORMAT_FILE_ROWCOL )
+    {
+        Text [ en-US ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col).";
+    };
+     // Export-Errors
+    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_WRITE_ERROR )
+    {
+        Text [ en-US ] = "Error writing file." ;
+    };
+    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_OLD_GLOSSARY )
+    {
+        Text [ en-US ] = "Wrong AutoText document version." ;
+    };
+    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_WRITE_ERROR_FILE )
+    {
+        Text [ en-US ] = "Error in writing sub-document $(ARG1).";
+    };
+     // Import-/Export-Errors
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_INTERNAL_ERROR )
+    {
+        Text [ en-US ] = "Internal error in %PRODUCTNAME Writer file format." ;
+    };
+    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_INTERNAL_ERROR )
+    {
+        Text [ en-US ] = "Internal error in %PRODUCTNAME Writer file format." ;
+    };
+    String ERR_CODE ( ERRCODE_CLASS_LOCKING , ERR_TXTBLOCK_NEWFILE_ERROR )
+    {
+        Text [ en-US ] = "$(ARG1) has changed." ;
+    };
+    String ERR_CODE ( ERRCODE_CLASS_PATH , ERR_AUTOPATH_ERROR )
+    {
+        Text [ en-US ] = "$(ARG1) does not exist." ;
+    };
+    String ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLSPLIT_ERROR )
+    {
+        Text [ en-US ] = "Cells cannot be further split." ;
+    };
+    String ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLINSCOL_ERROR )
+    {
+        Text [ en-US ] = "Additional columns cannot be inserted." ;
+    };
+    String ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLDDECHG_ERROR )
+    {
+        Text [ en-US ] = "The structure of a linked table cannot be modified." ;
+    };
+     // -------------------- Warnings -----------------------------------
+    String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_NO_DRAWINGS )
+    {
+        Text [ en-US ] = "No drawings could be read." ;
+    };
+    String WARN_CODE ( ERRCODE_CLASS_READ , WARN_WW6_FASTSAVE_ERR )
+    {
+        Text [ en-US ] = "This file was saved with WinWord in 'Fast Save' mode. Please unmark the WinWord option 'Allow Fast Saves' and save the file again." ;
+    };
+    String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_FEATURES_LOST )
+    {
+        Text [ en-US ] = "Not all attributes could be read." ;
+    };
+    String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_FEATURES_LOST )
+    {
+        Text [ en-US ] = "Not all attributes could be recorded." ;
+    };
+    String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_OLE )
+    {
+        Text [ en-US ] = "Some OLE objects could only be loaded as graphics." ;
+    };
+    String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_OLE )
+    {
+        Text [ en-US ] = "Some OLE objects could only be saved as graphics." ;
+    };
+    String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_POOR_LOAD )
+    {
+        Text [ en-US ] = "Document could not be completely loaded." ;
+    };
+    String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_POOR_LOAD )
+    {
+        Text [ en-US ] = "Document could not be completely saved." ;
+    };
+    String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_HTML_NO_MACROS)
+    {
+        Text [ en-US ] = "This HTML document contains %PRODUCTNAME Basic macros.\nThey were not saved with the current export settings.";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_WRITE , WARN_WRITE_ERROR_FILE )
+    {
+        Text [ en-US ] = "Error in writing sub-document $(ARG1).";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_WRITE , WARN_FORMAT_FILE_ROWCOL )
+    {
+        Text [ en-US ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col).";
+    };
+};
+

@@ -1,0 +1,69 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_uno_XUnloadingPreference_idl__
+#define __com_sun_star_uno_XUnloadingPreference_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module uno {
+
+//=============================================================================
+/** Components can implement <code>XUnloadingPreference</code> in order to indicate
+    how they should be treated when their hosting library is to be unloaded.
+
+   When someone calls <code>rtl_unloadUnusedModules</code> then the unloading
+    listeners are notified by calling previously registered callback
+    functions. A listener is an entity that employs, registers, and
+    unregisters the callback functions on its behalf. Upon notification
+    (the callback function is being called)
+    a listener may release references to UNO components. Thus, the
+    loaded libraries can be unloaded, if no one else keeps any
+    objects from the library alive. <br>
+    Before a listener releases references, it should ask for this interface.
+    If the interface is not implemented, then the listener may release the
+    object; otherwise, it calls <code>releaseOnNotification</code>. If the function
+    returns false then the listener should keep the reference, otherwise
+    it may release it.
+*/
+published interface XUnloadingPreference: com::sun::star::uno::XInterface
+{
+    /**
+        The return value determines if the object wants to stay
+        alive in case of an unloading procedure.
+        @return
+        <FALSE/>do not release references to this object,otherwise
+        <TRUE/>
+    */
+    boolean releaseOnNotification();
+};
+//=============================================================================
+
+}; }; }; };
+
+#endif

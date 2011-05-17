@@ -1,0 +1,99 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef SC_TABOPPARAMS_HXX
+#define SC_TABOPPARAMS_HXX
+
+#include "global.hxx"
+#include "address.hxx"
+
+#include <vector>
+
+class ScFormulaCell;
+
+struct ScInterpreterTableOpParams
+{
+    ScAddress   aOld1;
+    ScAddress   aNew1;
+    ScAddress   aOld2;
+    ScAddress   aNew2;
+    ScAddress   aFormulaPos;
+    ::std::vector< ScFormulaCell* > aNotifiedFormulaCells;
+    ::std::vector< ScAddress >      aNotifiedFormulaPos;
+    sal_Bool        bValid;
+    sal_Bool        bRefresh;
+    sal_Bool        bCollectNotifications;
+
+    ScInterpreterTableOpParams()
+            : bValid( false )
+            , bRefresh( false )
+            , bCollectNotifications( sal_True )
+    {
+    }
+
+    ScInterpreterTableOpParams( const ScInterpreterTableOpParams& r )
+            : aOld1(                 r.aOld1 )
+            , aNew1(                 r.aNew1 )
+            , aOld2(                 r.aOld2 )
+            , aNew2(                 r.aNew2 )
+            , aFormulaPos(           r.aFormulaPos )
+            , aNotifiedFormulaPos(   r.aNotifiedFormulaPos )
+            , bValid(                r.bValid )
+            , bRefresh(              r.bRefresh )
+            , bCollectNotifications( r.bCollectNotifications )
+    {
+    }
+
+    ScInterpreterTableOpParams& operator =( const ScInterpreterTableOpParams& r )
+    {
+        aOld1                 = r.aOld1;
+        aNew1                 = r.aNew1;
+        aOld2                 = r.aOld2;
+        aNew2                 = r.aNew2;
+        aFormulaPos           = r.aFormulaPos;
+        ::std::vector< ScFormulaCell* >().swap( aNotifiedFormulaCells );
+        aNotifiedFormulaPos   = r.aNotifiedFormulaPos;
+        bValid                = r.bValid;
+        bRefresh              = r.bRefresh;
+        bCollectNotifications = r.bCollectNotifications;
+        return *this;
+    }
+
+    sal_Bool operator ==( const ScInterpreterTableOpParams& r )
+    {
+        return
+            bValid && r.bValid &&
+            aOld1       == r.aOld1 &&
+            aOld2       == r.aOld2 &&
+            aFormulaPos == r.aFormulaPos ;
+    }
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

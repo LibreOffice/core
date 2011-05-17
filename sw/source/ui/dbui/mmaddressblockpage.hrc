@@ -1,0 +1,115 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _MAILMERGEADDRESSBLOCKPAGE_HRC
+#define _MAILMERGEADDRESSBLOCKPAGE_HRC
+
+#define FI_ADDRESSLIST          1
+#define PB_ADDRESSLIST          2
+#define FI_SETTINGS             3
+#define WIN_SETTINGS            4
+#define PB_SETTINGS             5
+#define CB_ADDRESS              6
+#define FI_PREVIEW              7
+#define WIN_PREVIEW             8
+#define PB_ASSIGN               9
+#define FI_DOCINDEX             10
+#define IB_PREVSET              11
+#define IB_NEXTSET              12
+#define STR_DOCUMENT            13
+#define FI_HEADER               14
+#define FI_CURRENTADDRESS       15
+#define STR_CHANGEADDRESS       16
+#define FI_SECOND               17
+#define FI_THIRD                18
+#define FI_MATCH_FIELDS         19
+
+#define FT_SELECT               20
+#define PB_NEW                  21
+#define PB_DELETE               22
+#define PB_CUSTOMIZE            23
+
+#define RB_NEVER                25
+#define RB_ALWAYS               26
+#define RB_DEPENDENT            27
+#define ED_COUNTRY              28
+#define FL_SEPARATOR            29
+#define PB_OK                   30
+#define PB_CANCEL               31
+#define PB_HELP                 32
+
+#define FT_ADDRESSELEMENTS      40
+#define LB_ADDRESSELEMENTS      41
+#define IB_INSERTFIELD          42
+#define IB_REMOVEFIELD          43
+#define FT_DRAG                 48
+#define ED_DRAG                 49
+#define IB_UP                   50
+#define IB_LEFT                 51
+#define IB_RIGHT                52
+#define IB_DOWN                 53
+#define FT_FIELD                54
+#define CB_FIELD                55
+#define ST_SALUTATION           56
+#define ST_PUNCTUATION          57
+#define ST_TEXT                 58
+#define RA_SALUTATION_MALE      59
+#define RA_SALUTATION_FEMALE    60
+#define RA_PUNCTUATION          61
+#define ST_TITLE_MALE           62
+#define ST_TITLE_FEMALE         63
+#define ST_SALUTATIONELEMENTS   64
+#define ST_INSERTSALUTATIONFIELD 65
+#define ST_REMOVESALUTATIONFIELD 66
+#define ST_DRAGSALUTATION       67
+#define ST_TITLE_EDIT           68
+
+
+#define FI_MATCHING             70
+#define CT_FIELDS               71
+#define ST_SALUTATIONPREVIEW    72
+#define ST_SALUTATIONMATCHING   73
+#define ST_SALUTATIONELEMENT   74
+#define CB_HIDE_EMPTY_PARA     75
+#define FI_FIRST                76
+#define FL_FIRST                77
+#define FL_SECOND               78
+#define FL_THIRD                79
+#define FI_FOURTH               80
+
+#define SCR_1                   1
+#define ST_ADDRESSELEMENT       2
+#define ST_MATCHESTO            3
+#define ST_PREVIEW              4
+#define FT_FIELDS               5
+#define LB_FIELDS               6
+#define FT_PREVIEW              7
+#define ST_NONE                 8
+#define WIN_DATA                9
+
+#endif
+
+

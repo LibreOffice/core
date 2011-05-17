@@ -1,0 +1,12 @@
+    <node oor:name="calc_StarCalc_50" oor:op="replace" >
+        <prop oor:name="DetectService"><value>com.sun.star.comp.sfx2.BinaryFormatDetector</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>sdc</value></prop>
+        <prop oor:name="MediaType"><value>application/vnd.stardivision.calc</value></prop>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>StarCalc 5.0</value></prop>
+        <prop oor:name="UIName">
+            <value>StarCalc 5.0</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"><value>StarCalc 5.0</value></prop>
+    </node>

@@ -1,0 +1,99 @@
+Index: convert/po2oo.py
+===================================================================
+--- misc/translate-toolkit-1.8.1/translate/convert/po2oo.py	(revision 17314)
++++ misc/build/translate-toolkit-1.8.1/translate/convert/po2oo.py	(working copy)
+@@ -188,7 +188,7 @@
+ filter = oocheckfilter(options, [checks.OpenOfficeChecker, checks.StandardUnitChecker], checks.openofficeconfig)
+ 
+ 
+-def convertoo(inputfile, outputfile, templatefile, sourcelanguage=None, targetlanguage=None, timestamp=None, includefuzzy=False, multifilestyle="single", filteraction=None):
++def convertoo(inputfile, outputfile, templatefile, sourcelanguage=None, targetlanguage=None, timestamp=None, includefuzzy=False, multifilestyle="single", skip_source=False, filteraction=None):
+     inputstore = factory.getobject(inputfile)
+     inputstore.filename = getattr(inputfile, 'name', '')
+     if not targetlanguage:
+@@ -205,7 +205,7 @@
+         convertor = reoo(templatefile, languages=languages, timestamp=timestamp, includefuzzy=includefuzzy, long_keys=multifilestyle != "single", filteraction=filteraction)
+     outputstore = convertor.convertstore(inputstore)
+     # TODO: check if we need to manually delete missing items
+-    outputfile.write(str(outputstore))
++    outputfile.write(outputstore.__str__(skip_source, targetlanguage))
+     return True
+ 
+ 
+@@ -223,6 +223,7 @@
+             help="don't change the timestamps of the strings")
+     parser.add_option("", "--nonrecursiveoutput", dest="allowrecursiveoutput", default=True, action="store_false", help="don't treat the output oo as a recursive store")
+     parser.add_option("", "--nonrecursivetemplate", dest="allowrecursivetemplate", default=True, action="store_false", help="don't treat the template oo as a recursive store")
++    parser.add_option("", "--skipsource", dest="skip_source", default=False, action="store_true", help="don't output the source language, but fallback to it where needed")
+     parser.add_option("", "--filteraction", dest="filteraction", default="none", metavar="ACTION",
+             help="action on pofilter failure: none (default), warn, exclude-serious, exclude-all")
+     parser.add_fuzzy_option()
+@@ -230,6 +231,7 @@
+     parser.passthrough.append("sourcelanguage")
+     parser.passthrough.append("targetlanguage")
+     parser.passthrough.append("timestamp")
++    parser.passthrough.append("skip_source")
+     parser.passthrough.append("filteraction")
+     parser.run(argv)
+ 
+Index: convert/test_po2oo.py
+===================================================================
+--- misc/translate-toolkit-1.8.1/translate/convert/test_po2oo.py	(revision 17280)
++++ misc/build/translate-toolkit-1.8.1/translate/convert/test_po2oo.py	(working copy)
+@@ -170,6 +170,7 @@
+         options = self.help_check(options, "--nonrecursiveoutput")
+         options = self.help_check(options, "--nonrecursivetemplate")
+         options = self.help_check(options, "--filteraction")
++        options = self.help_check(options, "--skipsource")
+         options = self.help_check(options, "--fuzzy")
+         options = self.help_check(options, "--nofuzzy")
+         options = self.help_check(options, "-t TEMPLATE, --template=TEMPLATE")
+Index: storage/oo.py
+===================================================================
+--- misc/translate-toolkit-1.8.1/translate/storage/oo.py	(revision 17301)
++++ misc/build/translate-toolkit-1.8.1/translate/storage/oo.py	(working copy)
+@@ -246,9 +246,18 @@
+         """convert to a string. double check that unicode is handled"""
+         return encode_if_needed_utf8(self.getoutput())
+ 
+-    def getoutput(self):
++    def getoutput(self, skip_source=False, fallback_lang=None):
+         """return the lines in tab-delimited form"""
+-        return "\r\n".join([str(line) for line in self.lines])
++        if skip_source:
++            lines = self.lines[1:]
++            if not lines:
++                # Untranslated, so let's do fall-back: (bug 1883)
++                new_line = ooline(self.lines[0].getparts())
++                new_line.languageid = fallback_lang
++                lines = [new_line]
++        else:
++            lines = self.lines
++        return "\r\n".join([str(line) for line in lines])
+ 
+ 
+ class oofile:
+@@ -295,11 +304,11 @@
+             thisline = ooline(parts)
+             self.addline(thisline)
+ 
+-    def __str__(self):
++    def __str__(self, skip_source=False, fallback_lang=None):
+         """convert to a string. double check that unicode is handled"""
+-        return encode_if_needed_utf8(self.getoutput())
++        return encode_if_needed_utf8(self.getoutput(skip_source, fallback_lang))
+ 
+-    def getoutput(self):
++    def getoutput(self, skip_source=False, fallback_lang=None):
+         """converts all the lines back to tab-delimited form"""
+         lines = []
+         for oe in self.units:
+@@ -307,7 +316,7 @@
+                 warnings.warn("contains %d lines (should be 2 at most): languages %r" % (len(oe.lines), oe.languages))
+                 oekeys = [line.getkey() for line in oe.lines]
+                 warnings.warn("contains %d lines (should be 2 at most): keys %r" % (len(oe.lines), oekeys))
+-            oeline = str(oe) + "\r\n"
++            oeline = oe.getoutput(skip_source, fallback_lang) + "\r\n"
+             lines.append(oeline)
+         return "".join(lines)
+ 

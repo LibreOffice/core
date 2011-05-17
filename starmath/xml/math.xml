@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+    <module-name>sm</module-name>
+    <component-description>
+        <author>Oliver Specht</author>
+        <name>math.SmModel</name>
+        <description>This component provides access to various settings of a formula.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+        <supported-service>com.sun.star.formula.FormulaProperties</supported-service>
+    </component-description>
+    <!-- XML-based filter: Math import components
+       (full, styles, content, meta, settings)
+    -->
+    <component-description>
+        <author>xmloff development team</author>
+        <name>com.sun.star.comp.Math.XMLMetaImporter</name>
+        <description>This component imports the meta.xml stream into a math document.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+        <supported-service>com.sun.star.xml.XMLImportFilter</supported-service>
+    </component-description>
+    <component-description>
+        <author>xmloff development team</author>
+        <name>com.sun.star.comp.Math.XMLImporter</name>
+        <description>This component imports a single XML document stream into a math document.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+        <supported-service>com.sun.star.xml.XMLImportFilter</supported-service>
+    </component-description>
+    <component-description>
+        <author>xmloff development team</author>
+        <name>com.sun.star.comp.Math.XMLSettingsImporter</name>
+        <description>This component imports the settings.xml stream into a math document.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+        <supported-service>com.sun.star.xml.XMLImportFilter</supported-service>
+    </component-description>
+    <!-- XML-based filter: Math export components
+       (full, styles, content, meta, settings)
+    -->
+    <component-description>
+        <author>xmloff development team</author>
+        <name>com.sun.star.comp.Math.XMLMetaExporter</name>
+        <description>This component exports the meta of a math document.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+        <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
+    </component-description>
+    <component-description>
+        <author>xmloff development team</author>
+        <name>com.sun.star.comp.Math.XMLExporter</name>
+        <description>This component exports a math document into a single XML document stream.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+        <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
+    </component-description>
+    <component-description>
+        <author>xmloff development team</author>
+        <name>com.sun.star.comp.Math.XMLSettingsExporter</name>
+        <description>This component exports a the settings of a math document.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+        <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
+    </component-description>
+    <component-description>
+                <author>TL</author>
+                <name>SmGraphicAccessible</name>
+                <description>The accessible view of a formula documents visual representation.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+                <supported-service>com.sun.star.formula.AccessibleFormulaView</supported-service>
+    </component-description>
+    <component-description>
+                <author>TL</author>
+                <name>SmEditAccessible</name>
+                <description>The accessible view of a formula documents command text.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+                <supported-service>com.sun.star.formula.AccessibleFormulaText</supported-service>
+    </component-description>
+</module-description>

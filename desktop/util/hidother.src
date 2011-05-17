@@ -1,0 +1,54 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "../source/inc/helpid.hrc"
+
+hidspecial HID_PACKAGE_MANAGER { HelpID = HID_PACKAGE_MANAGER; };
+hidspecial HID_PACKAGE_MANAGER_MENU_ITEM { HelpID = HID_PACKAGE_MANAGER_MENU_ITEM; };
+hidspecial HID_PACKAGE_MANAGER_TREELISTBOX { HelpID = HID_PACKAGE_MANAGER_TREELISTBOX; };
+hidspecial HID_PACKAGE_MANAGER_PROGRESS { HelpID = HID_PACKAGE_MANAGER_PROGRESS; };
+hidspecial HID_PACKAGE_MANAGER_PROGRESS_CANCEL { HelpID = HID_PACKAGE_MANAGER_PROGRESS_CANCEL; };
+
+hidspecial HID_PACKAGE_MANAGER_UPD_REQ { HelpID = HID_PACKAGE_MANAGER_UPD_REQ; };
+
+hidspecial HID_FIRSTSTART_PREV { HelpId = HID_FIRSTSTART_PREV;};
+hidspecial HID_FIRSTSTART_NEXT { HelpId = HID_FIRSTSTART_NEXT;};
+hidspecial HID_FIRSTSTART_CANCEL { HelpId = HID_FIRSTSTART_CANCEL;};
+hidspecial HID_FIRSTSTART_FINISH { HelpId = HID_FIRSTSTART_FINISH;};
+hidspecial UID_FIRSTSTART_HELP { HelpId = UID_FIRSTSTART_HELP;};
+
+hidspecial UID_BTN_LICENSE_ACCEPT { HelpId = UID_BTN_LICENSE_ACCEPT;};
+
+hidspecial HID_DEPLOYMENT_GUI_UPDATE { HelpId = HID_DEPLOYMENT_GUI_UPDATE;};
+hidspecial HID_DEPLOYMENT_GUI_UPDATEINSTALL { HelpId = HID_DEPLOYMENT_GUI_UPDATEINSTALL;};
+
+hidspecial HID_EXTENSION_MANAGER_LISTBOX         { HelpId = HID_EXTENSION_MANAGER_LISTBOX; };
+hidspecial HID_EXTENSION_MANAGER_LISTBOX_OPTIONS { HelpId = HID_EXTENSION_MANAGER_LISTBOX_OPTIONS; };
+hidspecial HID_EXTENSION_MANAGER_LISTBOX_ENABLE  { HelpId = HID_EXTENSION_MANAGER_LISTBOX_ENABLE; };
+hidspecial HID_EXTENSION_MANAGER_LISTBOX_DISABLE { HelpId = HID_EXTENSION_MANAGER_LISTBOX_DISABLE; };
+hidspecial HID_EXTENSION_MANAGER_LISTBOX_REMOVE  { HelpId = HID_EXTENSION_MANAGER_LISTBOX_REMOVE; };
+

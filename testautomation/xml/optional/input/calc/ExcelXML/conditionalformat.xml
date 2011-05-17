@@ -1,0 +1,583 @@
+<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns:u1="urn:schemas-microsoft-com:office:excel2">
+ <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+  <Title>Insurance Policy Renewal System</Title>
+  <Subject>Wide World Importers</Subject>
+  <Author>Plan Administrator</Author>
+  <Description>Prepared by: Admin *** email: pa@contoso.com *** phone: (555) 555-1212</Description>
+  <LastAuthor>Guang Gavin Lu</LastAuthor>
+  <Created>2003-01-21T21:12:32Z</Created>
+  <LastSaved>2003-01-15T18:24:40Z</LastSaved>
+  <Category>Policy</Category>
+  <Manager>J. R. Contoso</Manager>
+  <Company>Contoso, LLC</Company>
+  <Version>11.5329</Version>
+ </DocumentProperties>
+ <CustomDocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+  <RequestorName dt:dt="string">Plan Administrator</RequestorName>
+  <RequestorID dt:dt="string">Admin</RequestorID>
+  <RequestorEmail dt:dt="string">pa@contoso.com</RequestorEmail>
+  <RequestorPhone dt:dt="string">(555) 555-1212</RequestorPhone>
+  <SupervisorName dt:dt="string">J. R. Contoso</SupervisorName>
+  <SupervisorID dt:dt="string">rc@contoso.com</SupervisorID>
+  <ApplicationName dt:dt="string">Insurance Policy Renewal System</ApplicationName>
+  <AccountNumber dt:dt="string">WWIMP</AccountNumber>
+  <Customer dt:dt="string">Wide World Importers</Customer>
+  <Address1 dt:dt="string">305 - 14th Ave. S.</Address1>
+  <Address2 dt:dt="string">Suite 3B</Address2>
+  <City dt:dt="string">Seattle</City>
+  <StateOrProvince dt:dt="string">WA</StateOrProvince>
+  <PostalCode dt:dt="string">98128</PostalCode>
+  <CountryOrRegion dt:dt="string">USA</CountryOrRegion>
+  <ContactName dt:dt="string">Karl Jablonski</ContactName>
+  <ContactTitle dt:dt="string">Owner</ContactTitle>
+ </CustomDocumentProperties>
+ <OfficeDocumentSettings xmlns="urn:schemas-microsoft-com:office:office">
+  <DownloadComponents/>
+  <LocationOfComponents HRef="file:///C:\MSOCache\All%20Users\20000409-6000-11D3-8CFE-0150048383C9\"/>
+  <Colors>
+   <Color>
+    <Index>17</Index>
+    <RGB>#DCDCDC</RGB>
+   </Color>
+   <Color>
+    <Index>18</Index>
+    <RGB>#D7D7D7</RGB>
+   </Color>
+   <Color>
+    <Index>19</Index>
+    <RGB>#2A66C9</RGB>
+   </Color>
+   <Color>
+    <Index>20</Index>
+    <RGB>#C9DBFA</RGB>
+   </Color>
+   <Color>
+    <Index>21</Index>
+    <RGB>#DDECFE</RGB>
+   </Color>
+  </Colors>
+ </OfficeDocumentSettings>
+ <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
+  <WindowHeight>15480</WindowHeight>
+  <WindowWidth>19320</WindowWidth>
+  <WindowTopX>120</WindowTopX>
+  <WindowTopY>75</WindowTopY>
+  <ProtectStructure>False</ProtectStructure>
+  <ProtectWindows>False</ProtectWindows>
+ </ExcelWorkbook>
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Bottom"/>
+   <Borders/>
+   <Font x:Family="Swiss"/>
+   <Interior/>
+   <NumberFormat/>
+   <Protection/>
+  </Style>
+  <Style ss:ID="s21">
+   <Alignment ss:Vertical="Center"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#808080"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#808080"/>
+   </Borders>
+   <Font x:Family="Swiss" ss:Color="#FFCC99"/>
+   <Interior ss:Color="#333399" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="s22">
+   <Alignment ss:Vertical="Center"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#808080"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#808080"/>
+   </Borders>
+   <Font x:Family="Swiss" ss:Size="16" ss:Color="#FFCC99" ss:Bold="1"/>
+   <Interior ss:Color="#333399" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="s23">
+   <Alignment ss:Vertical="Center"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#808080"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#808080"/>
+   </Borders>
+   <Font x:Family="Swiss" ss:Color="#333399"/>
+   <Interior ss:Color="#C9DBFA" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="s24">
+   <Alignment ss:Vertical="Center"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#808080"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#808080"/>
+   </Borders>
+   <Font x:Family="Swiss" ss:Size="16" ss:Color="#333399" ss:Bold="1"/>
+   <Interior ss:Color="#C9DBFA" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="s25">
+   <Interior ss:Color="#C0C0C0" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="s26">
+   <Alignment ss:Horizontal="Right" ss:Vertical="Bottom"/>
+   <Font x:Family="Swiss" ss:Bold="1"/>
+   <Interior ss:Color="#C0C0C0" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="s27">
+   <NumberFormat ss:Format="@"/>
+  </Style>
+  <Style ss:ID="s28">
+   <Font x:Family="Swiss" ss:Color="#333399" ss:Bold="1" ss:Underline="Single"/>
+   <Interior ss:Color="#C0C0C0" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="s29">
+   <Interior ss:Color="#C0C0C0" ss:Pattern="Solid"/>
+   <NumberFormat ss:Format="@"/>
+  </Style>
+  <Style ss:ID="s30">
+   <Borders>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#808080"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#FFFFFF"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#808080"/>
+   </Borders>
+   <NumberFormat/>
+  </Style>
+  <Style ss:ID="s31">
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+   <Interior ss:Color="#C0C0C0" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="s32">
+   <Alignment ss:Vertical="Center"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#808080"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#808080"/>
+   </Borders>
+   <Interior ss:Color="#C9DBFA" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="s33">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Bottom"/>
+   <Borders>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#808080"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#FFFFFF"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#808080"/>
+   </Borders>
+   <NumberFormat/>
+  </Style>
+  <Style ss:ID="s34">
+   <Protection/>
+  </Style>
+  <Style ss:ID="s35">
+   <Alignment ss:Vertical="Top"/>
+  </Style>
+  <Style ss:ID="s36">
+   <Alignment ss:Horizontal="Right" ss:Vertical="Top"/>
+   <Font x:Family="Swiss" ss:Bold="1" ss:Underline="Single"/>
+  </Style>
+  <Style ss:ID="s37">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Top"/>
+   <Font x:Family="Swiss" ss:Bold="1" ss:Underline="Single"/>
+  </Style>
+  <Style ss:ID="s38">
+   <Alignment ss:Vertical="Top"/>
+   <Font x:Family="Swiss" ss:Underline="Single"/>
+   <Protection/>
+  </Style>
+  <Style ss:ID="s39">
+   <Alignment ss:Horizontal="Right" ss:Vertical="Bottom"/>
+  </Style>
+  <Style ss:ID="s40">
+   <Alignment ss:Vertical="Bottom"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#808080"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#FFFFFF"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#808080"/>
+   </Borders>
+   <Interior ss:Color="#DCDCDC" ss:Pattern="Solid"/>
+   <NumberFormat
+    ss:Format="_(&quot;$&quot;* #,##0.00_);_(&quot;$&quot;* \(#,##0.00\);_(&quot;$&quot;* &quot;-&quot;??_);_(@_)"/>
+  </Style>
+  <Style ss:ID="s41">
+   <NumberFormat
+    ss:Format="_(&quot;$&quot;* #,##0.00_);_(&quot;$&quot;* \(#,##0.00\);_(&quot;$&quot;* &quot;-&quot;??_);_(@_)"/>
+  </Style>
+  <Style ss:ID="s42">
+   <NumberFormat
+    ss:Format="_(&quot;$&quot;* #,##0.00_);_(&quot;$&quot;* \(#,##0.00\);_(&quot;$&quot;* &quot;-&quot;??_);_(@_)"/>
+   <Protection/>
+  </Style>
+ </Styles>
+ <Names>
+  <NamedRange ss:Name="Summary" ss:RefersTo="=RateSheet!R20C3:R28C8"/>
+ </Names>
+ <Worksheet ss:Name="RateSheet">
+  <Table ss:ExpandedColumnCount="19" ss:ExpandedRowCount="29" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultColumnWidth="56.25">
+   <Column ss:Index="4" ss:Width="57"/>
+   <Column ss:Index="6" ss:Width="57"/>
+   <Column ss:Index="8" ss:Width="58.5"/>
+   <Column ss:Index="19" ss:Width="57"/>
+   <Row ss:AutoFitHeight="0" ss:Height="32.25" ss:StyleID="s21">
+    <Cell ss:StyleID="s22"><Data ss:Type="String">Rates Table for Policy Renewals</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="Number">1</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:Index="19"><Data ss:Type="Number">2</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="20.25" ss:StyleID="s23">
+    <Cell ss:StyleID="s24"><Data ss:Type="String">Coverage Type</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="Number">3</Data></Cell>
+   </Row>
+   <Row ss:StyleID="s25">
+    <Cell ss:Index="17" ss:StyleID="s26"><Data ss:Type="String">Dental</Data></Cell>
+    <Cell ss:StyleID="s27"><Data ss:Type="String">False</Data></Cell>
+    <Cell><Data ss:Type="Number">4</Data></Cell>
+   </Row>
+   <Row ss:StyleID="s25">
+    <Cell ss:Index="2" ss:StyleID="s26"><Data ss:Type="String">Medical:</Data></Cell>
+    <Cell ss:StyleID="s28"><Data ss:Type="String">INCLUDED</Data></Cell>
+    <Cell ss:Index="5" ss:StyleID="s26"><Data ss:Type="String">Dental Coverage:</Data></Cell>
+    <Cell ss:StyleID="s28"
+     ss:Formula="=IF(R[-1]C[12]=&quot;True&quot;,&quot;INCLUDED&quot;,&quot;EXCLUDED&quot;)"><Data
+      ss:Type="String">EXCLUDED</Data></Cell>
+    <Cell ss:Index="8" ss:StyleID="s26"><Data ss:Type="String">Prescription Plan:</Data></Cell>
+    <Cell ss:StyleID="s28" ss:Formula="=IF(RC[9]=&quot;True&quot;,&quot;INCLUDED&quot;,&quot;EXCLUDED&quot;)"><Data
+      ss:Type="String">INCLUDED</Data></Cell>
+    <Cell ss:Index="11" ss:StyleID="s29"/>
+    <Cell ss:StyleID="s29"/>
+    <Cell ss:Index="15" ss:StyleID="s29"/>
+    <Cell ss:Index="17" ss:StyleID="s26"><Data ss:Type="String">Pharmaceutical</Data></Cell>
+    <Cell ss:StyleID="s30"><Data ss:Type="String">True</Data></Cell>
+    <Cell><Data ss:Type="Number">5</Data></Cell>
+   </Row>
+   <Row ss:StyleID="s31">
+    <Cell ss:Index="19"><Data ss:Type="Number">6</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:Index="19"><Data ss:Type="Number">7</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="20.25" ss:StyleID="s32">
+    <Cell ss:StyleID="s24"><Data ss:Type="String">Policy Type</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="Number">8</Data></Cell>
+   </Row>
+   <Row ss:StyleID="s25">
+    <Cell ss:Index="19"><Data ss:Type="Number">9</Data></Cell>
+   </Row>
+   <Row ss:StyleID="s25">
+    <Cell ss:Index="2" ss:StyleID="s26"><Data ss:Type="String">Plan Type</Data></Cell>
+    <Cell ss:StyleID="s33"><Data ss:Type="String">PPO</Data></Cell>
+    <Cell ss:Index="5" ss:StyleID="s26"><Data ss:Type="String">Period</Data></Cell>
+    <Cell ss:StyleID="s33"><Data ss:Type="String">Annual</Data></Cell>
+    <Cell ss:Index="8" ss:StyleID="s26"><Data ss:Type="String">Company Size</Data></Cell>
+    <Cell ss:StyleID="s33"><Data ss:Type="String">1-9</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="Number">10</Data></Cell>
+   </Row>
+   <Row ss:StyleID="s31">
+    <Cell ss:Index="19"><Data ss:Type="Number">11</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:Index="19"><Data ss:Type="Number">12</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="20.25" ss:StyleID="s32">
+    <Cell ss:StyleID="s24"><Data ss:Type="String">Options &amp; Limits</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="Number">13</Data></Cell>
+   </Row>
+   <Row ss:StyleID="s25">
+    <Cell ss:Index="19"><Data ss:Type="Number">14</Data></Cell>
+   </Row>
+   <Row ss:StyleID="s25">
+    <Cell ss:Index="2" ss:StyleID="s26"><Data ss:Type="String">Deductible</Data></Cell>
+    <Cell ss:StyleID="s33"><Data ss:Type="String">$500</Data></Cell>
+    <Cell ss:Index="5" ss:StyleID="s26"><Data ss:Type="String">Out of Pocket Limit</Data></Cell>
+    <Cell ss:StyleID="s33"><Data ss:Type="String">$2,500</Data></Cell>
+    <Cell ss:Index="8" ss:StyleID="s26"><Data ss:Type="String">Lifetime Limit</Data></Cell>
+    <Cell ss:StyleID="s33"><Data ss:Type="String">$1,000,000</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="Number">15</Data></Cell>
+   </Row>
+   <Row ss:StyleID="s31">
+    <Cell ss:Index="19"><Data ss:Type="Number">16</Data></Cell>
+   </Row>
+   <Row ss:Index="19">
+    <Cell ss:Index="3" ss:StyleID="s34"/>
+   </Row>
+   <Row ss:Index="21" ss:AutoFitHeight="0" ss:Height="20.0625" ss:StyleID="s35">
+    <Cell ss:Index="3" ss:StyleID="s36"><Data ss:Type="String">Rates</Data><Comment
+      ss:Author="Underwriter"><ss:Data xmlns="http://www.w3.org/TR/REC-html40"><B>         <Font
+         html:Face="Tahoma" x:Family="Swiss" html:Size="8" html:Color="#000000">Policy Note:</Font>        </B>        <Font
+        html:Face="Tahoma" x:Family="Swiss" html:Size="8" html:Color="#000000"> These rates are good for thirty (30) days.</Font>       </ss:Data></Comment><NamedCell
+      ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s37"><Data ss:Type="String">Monthly</Data><NamedCell
+      ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s38"><NamedCell ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s37"><Data ss:Type="String">Semi-Annual</Data><NamedCell
+      ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s38"><NamedCell ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s37"><Data ss:Type="String">Annual</Data><NamedCell
+      ss:Name="Summary"/></Cell>
+   </Row>
+   <Row>
+    <Cell ss:Index="3" ss:StyleID="s39"><Data ss:Type="String">Individual</Data><NamedCell
+      ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s40"><Data ss:Type="Number">54.5</Data><NamedCell
+      ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s41"><NamedCell ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s40" ss:Formula="=RC4*6"><Data ss:Type="Number">327</Data><NamedCell
+      ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s41"><NamedCell ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s40" ss:Formula="=RC4*12"><Data ss:Type="Number">654</Data><NamedCell
+      ss:Name="Summary"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="6">
+    <Cell ss:Index="3" ss:StyleID="s39"><NamedCell ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s41"><NamedCell ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s41"><NamedCell ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s41"><NamedCell ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s41"><NamedCell ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s41"><NamedCell ss:Name="Summary"/></Cell>
+    <Cell ss:Index="10" ss:StyleID="s27"/>
+   </Row>
+   <Row>
+    <Cell ss:Index="3" ss:StyleID="s39"><Data ss:Type="String">Individual &amp; Spouse</Data><NamedCell
+      ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s40"><Data ss:Type="Number">105.75</Data><NamedCell
+      ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s41"><NamedCell ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s40" ss:Formula="=RC4*6"><Data ss:Type="Number">634.5</Data><NamedCell
+      ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s41"><NamedCell ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s40" ss:Formula="=RC4*12"><Data ss:Type="Number">1269</Data><NamedCell
+      ss:Name="Summary"/></Cell>
+    <Cell ss:Index="10" ss:StyleID="s27"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="6">
+    <Cell ss:Index="3" ss:StyleID="s39"><NamedCell ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s41"><NamedCell ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s41"><NamedCell ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s41"><NamedCell ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s41"><NamedCell ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s41"><NamedCell ss:Name="Summary"/></Cell>
+    <Cell ss:Index="10" ss:StyleID="s27"/>
+   </Row>
+   <Row>
+    <Cell ss:Index="3" ss:StyleID="s39"><Data ss:Type="String">Individual &amp; One Dependent</Data><NamedCell
+      ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s40"><Data ss:Type="Number">112</Data><NamedCell
+      ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s41"><NamedCell ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s40" ss:Formula="=RC4*6"><Data ss:Type="Number">672</Data><NamedCell
+      ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s41"><NamedCell ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s40" ss:Formula="=RC4*12"><Data ss:Type="Number">1344</Data><NamedCell
+      ss:Name="Summary"/></Cell>
+    <Cell ss:Index="10" ss:StyleID="s27"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="6">
+    <Cell ss:Index="3" ss:StyleID="s39"><NamedCell ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s41"><NamedCell ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s41"><NamedCell ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s41"><NamedCell ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s41"><NamedCell ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s41"><NamedCell ss:Name="Summary"/></Cell>
+    <Cell ss:Index="10" ss:StyleID="s27"/>
+   </Row>
+   <Row>
+    <Cell ss:Index="3" ss:StyleID="s39"><Data ss:Type="String">Individual &amp; Family</Data><NamedCell
+      ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s40"><Data ss:Type="Number">152.25</Data><NamedCell
+      ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s41"><NamedCell ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s40" ss:Formula="=RC4*6"><Data ss:Type="Number">913.5</Data><NamedCell
+      ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s41"><NamedCell ss:Name="Summary"/></Cell>
+    <Cell ss:StyleID="s40" ss:Formula="=RC4*12"><Data ss:Type="Number">1827</Data><NamedCell
+      ss:Name="Summary"/></Cell>
+    <Cell ss:Index="10" ss:StyleID="s27"/>
+   </Row>
+   <Row>
+    <Cell ss:Index="6" ss:StyleID="s42"/>
+    <Cell ss:Index="8" ss:StyleID="s42"/>
+   </Row>
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <Print>
+    <ValidPrinterInfo/>
+    <HorizontalResolution>600</HorizontalResolution>
+    <VerticalResolution>600</VerticalResolution>
+   </Print>
+   <Selected/>
+   <DoNotDisplayGridlines/>
+   <Panes>
+    <Pane>
+     <Number>3</Number>
+     <ActiveRow>6</ActiveRow>
+     <ActiveCol>4</ActiveCol>
+    </Pane>
+   </Panes>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+  <ConditionalFormatting xmlns="urn:schemas-microsoft-com:office:excel">
+   <Range>R5C9</Range>
+   <Condition>
+    <Qualifier>Equal</Qualifier>
+    <Value1>&quot;INCLUDED&quot;</Value1>
+    <Format Style='color:#333399;text-underline-style:single'/>
+   </Condition>
+   <Condition>
+    <Qualifier>Equal</Qualifier>
+    <Value1>&quot;EXCLUDED&quot;</Value1>
+    <Format Style='color:red;font-weight:700;text-underline-style:single'/>
+   </Condition>
+  </ConditionalFormatting>
+  <ConditionalFormatting xmlns="urn:schemas-microsoft-com:office:excel">
+   <Range>R5C6</Range>
+   <Condition>
+    <Qualifier>Equal</Qualifier>
+    <Value1>&quot;INCLUDED&quot;</Value1>
+    <Format Style='color:#333399;text-underline-style:single'/>
+   </Condition>
+   <Condition>
+    <Qualifier>Equal</Qualifier>
+    <Value1>&quot;EXCLUDED&quot;</Value1>
+    <Format Style='color:red;font-style:italic;font-weight:400;text-underline-style:
+     single;border:.5pt dotted windowtext;background:#FF9900'/>
+   </Condition>
+  </ConditionalFormatting>
+  <ConditionalFormatting xmlns="urn:schemas-microsoft-com:office:excel">
+   <Range>R7C5</Range>
+   <Condition>
+    <Qualifier>NotBetween</Qualifier>
+    <Value1>2</Value1>
+    <Value2>2</Value2>
+    <Format Style='color:olive;font-style:italic;font-weight:700;border:.5pt solid windowtext;
+     background:aqua'/>
+   </Condition>
+  </ConditionalFormatting>
+ </Worksheet>
+ <u1:MapInfo u1:HideInactiveListBorder="true" u1:SelectionNamespaces="xmlns:ns1='urn:schemas-microsoft-com.office11demos.unlockdata:finance'" u1:HideSingleMappedCellBorder="true">
+   <u1:Schema u1:ID="Schema1" u1:Namespace="urn:schemas-microsoft-com.office11demos.unlockdata:finance">
+    <xsd:schema targetNamespace="urn:schemas-microsoft-com.office11demos.unlockdata:finance" xmlns="urn:schemas-microsoft-com.office11demos.unlockdata:finance" elementFormDefault="qualified">
+     <xsd:element name="UnlockData.Finance">
+      <xsd:complexType mixed="true">
+       <xsd:all>
+        <xsd:element name="PlanType" type="xsd:string" minOccurs="0"/>
+        <xsd:element name="EmployeeCount" type="xsd:string" minOccurs="0"/>
+        <xsd:element name="CoverageLength" type="xsd:string" minOccurs="0"/>
+        <xsd:element name="Deductible" type="xsd:string" minOccurs="0"/>
+        <xsd:element name="OutOfPocketLimit" type="xsd:string" minOccurs="0"/>
+        <xsd:element name="Dental" type="xsd:string" minOccurs="0"/>
+        <xsd:element name="Pharmaceutical" type="xsd:string" minOccurs="0"/>
+        <xsd:element name="LifetimeLimit" type="xsd:string" minOccurs="0"/>
+       </xsd:all>
+      </xsd:complexType>
+     </xsd:element>
+    </xsd:schema>
+   </u1:Schema>
+   <u1:Map u1:ID="UnlockData.Finance_Map" u1:SchemaID="Schema1" u1:RootElement="UnlockData.Finance">
+    <u1:Entry u1:Type="single" u1:ID="9">
+     <u1:Range>RateSheet!R10C3</u1:Range>
+     <x:FilterOn>False</x:FilterOn>
+     <u1:XPath>/ns1:UnlockData.Finance/ns1:PlanType</u1:XPath>
+     <u1:Field>
+      <u1:XSDType>string</u1:XSDType>
+      <ss:Cell>      </ss:Cell>
+      <u1:Aggregate>None</u1:Aggregate>
+     </u1:Field>
+    </u1:Entry>
+    <u1:Entry u1:Type="single" u1:ID="10">
+     <u1:Range>RateSheet!R10C9</u1:Range>
+     <x:FilterOn>False</x:FilterOn>
+     <u1:XPath>/ns1:UnlockData.Finance/ns1:EmployeeCount</u1:XPath>
+     <u1:Field>
+      <u1:XSDType>string</u1:XSDType>
+      <ss:Cell>      </ss:Cell>
+      <u1:Aggregate>None</u1:Aggregate>
+     </u1:Field>
+    </u1:Entry>
+    <u1:Entry u1:Type="single" u1:ID="11">
+     <u1:Range>RateSheet!R10C6</u1:Range>
+     <x:FilterOn>False</x:FilterOn>
+     <u1:XPath>/ns1:UnlockData.Finance/ns1:CoverageLength</u1:XPath>
+     <u1:Field>
+      <u1:XSDType>string</u1:XSDType>
+      <ss:Cell>      </ss:Cell>
+      <u1:Aggregate>None</u1:Aggregate>
+     </u1:Field>
+    </u1:Entry>
+    <u1:Entry u1:Type="single" u1:ID="12">
+     <u1:Range>RateSheet!R15C3</u1:Range>
+     <x:FilterOn>False</x:FilterOn>
+     <u1:XPath>/ns1:UnlockData.Finance/ns1:Deductible</u1:XPath>
+     <u1:Field>
+      <u1:XSDType>string</u1:XSDType>
+      <ss:Cell>      </ss:Cell>
+      <u1:Aggregate>None</u1:Aggregate>
+     </u1:Field>
+    </u1:Entry>
+    <u1:Entry u1:Type="single" u1:ID="13">
+     <u1:Range>RateSheet!R15C6</u1:Range>
+     <x:FilterOn>False</x:FilterOn>
+     <u1:XPath>/ns1:UnlockData.Finance/ns1:OutOfPocketLimit</u1:XPath>
+     <u1:Field>
+      <u1:XSDType>string</u1:XSDType>
+      <ss:Cell>      </ss:Cell>
+      <u1:Aggregate>None</u1:Aggregate>
+     </u1:Field>
+    </u1:Entry>
+    <u1:Entry u1:Type="single" u1:ID="14">
+     <u1:Range>RateSheet!R4C18</u1:Range>
+     <x:FilterOn>False</x:FilterOn>
+     <u1:XPath>/ns1:UnlockData.Finance/ns1:Dental</u1:XPath>
+     <u1:Field>
+      <u1:XSDType>string</u1:XSDType>
+      <ss:Cell>      </ss:Cell>
+      <u1:Aggregate>None</u1:Aggregate>
+     </u1:Field>
+    </u1:Entry>
+    <u1:Entry u1:Type="single" u1:ID="16">
+     <u1:Range>RateSheet!R15C9</u1:Range>
+     <x:FilterOn>False</x:FilterOn>
+     <u1:XPath>/ns1:UnlockData.Finance/ns1:LifetimeLimit</u1:XPath>
+     <u1:Field>
+      <u1:XSDType>string</u1:XSDType>
+      <ss:Cell>      </ss:Cell>
+      <u1:Aggregate>None</u1:Aggregate>
+     </u1:Field>
+    </u1:Entry>
+    <u1:Entry u1:Type="single" u1:ID="17">
+     <u1:Range>RateSheet!R5C18</u1:Range>
+     <x:FilterOn>False</x:FilterOn>
+     <u1:XPath>/ns1:UnlockData.Finance/ns1:Pharmaceutical</u1:XPath>
+     <u1:Field>
+      <u1:XSDType>string</u1:XSDType>
+      <ss:Cell>      </ss:Cell>
+      <u1:Aggregate>None</u1:Aggregate>
+     </u1:Field>
+    </u1:Entry>
+   </u1:Map>
+  </u1:MapInfo>
+</Workbook>

@@ -1,0 +1,124 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_lang_ServiceManager_idl__
+#define __com_sun_star_lang_ServiceManager_idl__
+
+#include <com/sun/star/lang/MultiServiceFactory.idl>
+
+#include <com/sun/star/lang/XComponent.idl>
+
+#include <com/sun/star/container/XSet.idl>
+
+#include <com/sun/star/container/XContentEnumerationAccess.idl>
+
+#include <com/sun/star/lang/XMultiServiceFactory.idl>
+#include <com/sun/star/lang/XMultiComponentFactory.idl>
+
+#include <com/sun/star/lang/XServiceInfo.idl>
+
+#include <com/sun/star/beans/XPropertySet.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module lang {
+
+//=============================================================================
+
+/** Provides a collection of implementations for services.  This is a singleton
+    you commonly find in your component context under key
+    <code>/singletons/com.sun.star.lang.theServiceManager</code>.
+
+    <p>
+    The factories are accessed with a service name. It is possible to
+    access the factories with their implementation names, but you should
+    avoid this.
+    </p>
+
+    <p>Service factories added via <type scope="com::sun::star::container">XSet</type>
+    should support the following interfaces: </p>
+
+    <dl>
+    <dt><type>XServiceInfo</type></dt>
+    <dd>supported interfaces/ implementation name</dd>
+
+    <dt><type>XSingleComponentFactory</type>(optional)</dt>
+    <dd>is used to create instances of the implementation.</dd>
+
+    <dt><type>XComponent</type> (optional)</dt>
+    <dd>The service manager calls the method
+    <member scope="com::sun::star::lang">XComponent::dispose</member>
+    on the factory when going down (i.e. it is commonly disposed by the component context).</dd>
+    </dl>
+
+    @see com::sun::star::uno::XComponentContext
+*/
+published service ServiceManager
+{
+    /** This is a derived MultiServiceFactory service.
+    */
+    service com::sun::star::lang::MultiServiceFactory;
+
+    /** Disposing of service manager.
+        <p>
+        The component context disposes its service manager singleton when going down
+        (i.e. when the component context is disposed).
+        </p>
+    */
+    interface com::sun::star::lang::XComponent;
+
+    /** Management of service factories.
+    */
+    interface com::sun::star::container::XSet;
+
+    /** Enumeration of all service factories.
+        <p>
+        It is possible to enumerate all implementations that support the
+        service specified with the argument of the
+        <member scope="com::sun::star::container">XContentEnumerationAccess::createContentEnumeration</member> method.
+        The enumerator commonly returns <type>XSingleComponentFactory</type>
+        interfaces.
+        </p>
+    */
+    interface com::sun::star::container::XContentEnumerationAccess;
+
+    /** Property access.
+    */
+    [optional] interface com::sun::star::beans::XPropertySet;
+    /** specifies the default component context to be used, if instanciating services
+        via <type>XMultiServiceFactory</type>
+    */
+    [optional, property] com::sun::star::uno::XComponentContext DefaultContext;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

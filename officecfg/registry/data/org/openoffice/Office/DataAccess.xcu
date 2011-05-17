@@ -1,0 +1,738 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************ -->
+<!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
+<oor:component-data oor:name="DataAccess" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <node oor:name="ConnectionPool">
+    <node oor:name="DriverSettings">
+      <node oor:name="com.sun.star.comp.sdbcx.adabas.ODriver" oor:op="replace">
+        <prop oor:name="DriverName">
+          <value>com.sun.star.comp.sdbcx.adabas.ODriver</value>
+        </prop>
+        <prop oor:name="Enable">
+          <value>false</value>
+        </prop>
+        <prop oor:name="Timeout">
+          <value>60</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.comp.sdbc.evoab.OEvoabDriver" oor:op="replace">
+         <prop oor:name="DriverName">
+           <value>com.sun.star.comp.sdbc.evoab.OEvoabDriver</value>
+         </prop>
+         <prop oor:name="Enable">
+           <value>false</value>
+         </prop>
+         <prop oor:name="Timeout">
+           <value>60</value>
+         </prop>
+      </node>
+      <node oor:name="com.sun.star.comp.sdbc.kab.Driver" oor:op="replace">
+         <prop oor:name="DriverName">
+           <value>com.sun.star.comp.sdbc.kab.Driver</value>
+         </prop>
+         <prop oor:name="Enable">
+           <value>false</value>
+         </prop>
+         <prop oor:name="Timeout">
+           <value>60</value>
+         </prop>
+      </node>
+      <node oor:name="com.sun.star.comp.sdbc.ado.ODriver" oor:op="replace">
+        <prop oor:name="DriverName">
+          <value>com.sun.star.comp.sdbc.ado.ODriver</value>
+        </prop>
+        <prop oor:name="Enable">
+          <value>false</value>
+        </prop>
+        <prop oor:name="Timeout">
+          <value>60</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.comp.sdbc.flat.ODriver" oor:op="replace">
+        <prop oor:name="DriverName">
+          <value>com.sun.star.comp.sdbc.flat.ODriver</value>
+        </prop>
+        <prop oor:name="Enable">
+          <value>false</value>
+        </prop>
+        <prop oor:name="Timeout">
+          <value>60</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.comp.sdbc.calc.ODriver" oor:op="replace">
+        <prop oor:name="DriverName">
+          <value>com.sun.star.comp.sdbc.calc.ODriver</value>
+        </prop>
+        <prop oor:name="Enable">
+          <value>false</value>
+        </prop>
+        <prop oor:name="Timeout">
+          <value>60</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.comp.sdbc.dbase.ODriver" oor:op="replace">
+        <prop oor:name="DriverName">
+          <value>com.sun.star.comp.sdbc.dbase.ODriver</value>
+        </prop>
+        <prop oor:name="Enable">
+          <value>false</value>
+        </prop>
+        <prop oor:name="Timeout">
+          <value>60</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.comp.sdbc.JDBCDriver" oor:op="replace">
+        <prop oor:name="DriverName">
+          <value>com.sun.star.comp.sdbc.JDBCDriver</value>
+        </prop>
+        <prop oor:name="Enable">
+          <value>false</value>
+        </prop>
+        <prop oor:name="Timeout">
+          <value>60</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.comp.sdbc.MozabDriver" oor:op="replace">
+        <prop oor:name="DriverName">
+          <value>com.sun.star.comp.sdbc.MozabDriver</value>
+        </prop>
+        <prop oor:name="Enable">
+          <value>false</value>
+        </prop>
+        <prop oor:name="Timeout">
+          <value>60</value>
+        </prop>
+      </node>
+      <node oor:name="org.openoffice.comp.drivers.MySQL.Driver" oor:op="replace">
+        <prop oor:name="DriverName">
+          <value>org.openoffice.comp.drivers.MySQL.Driver</value>
+        </prop>
+        <prop oor:name="Enable">
+          <value>false</value>
+        </prop>
+        <prop oor:name="Timeout">
+          <value>60</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.comp.sdbc.ODBCDriver" oor:op="replace">
+        <prop oor:name="DriverName">
+          <value>com.sun.star.comp.sdbc.ODBCDriver</value>
+        </prop>
+        <prop oor:name="Enable">
+          <value>false</value>
+        </prop>
+        <prop oor:name="Timeout">
+          <value>60</value>
+        </prop>
+      </node>
+    </node>
+  </node>
+  <node oor:name="RegisteredNames">
+    <node oor:name="EvolutionLocal" oor:op="replace" install:module="evoab2">
+        <prop oor:name="Location" oor:type="xs:string">
+            <value>$(userurl)/database/evolocal.odb</value>
+        </prop>
+        <prop oor:name="Name" oor:type="xs:string">
+            <value>EvolutionLocal</value>
+        </prop>
+    </node>
+    <node oor:name="org.openoffice.Bibliography" oor:op="replace">
+        <prop oor:name="Location" oor:type="xs:string">
+            <value>$(userurl)/database/biblio.odb</value>
+        </prop>
+        <prop oor:name="Name" oor:type="xs:string">
+            <value>Bibliography</value>
+        </prop>
+    </node>
+  </node>
+  <node oor:name="Bibliography">
+    <node oor:name="CurrentDataSource">
+      <prop oor:name="DataSourceName">
+        <value>Bibliography</value>
+      </prop>
+      <prop oor:name="Command">
+        <value>biblio</value>
+      </prop>
+      <prop oor:name="CommandType">
+        <value>0</value>
+      </prop>
+    </node>
+    <node oor:name="DataSourceHistory">
+      <node oor:name="Default" oor:op="replace">
+        <prop oor:name="DataSourceName">
+          <value>Bibliography</value>
+        </prop>
+        <prop oor:name="Command">
+          <value>biblio</value>
+        </prop>
+        <prop oor:name="CommandType">
+          <value>0</value>
+        </prop>
+        <node oor:name="Fields">
+          <node oor:name="ShortName" oor:op="replace">
+            <prop oor:name="ProgrammaticFieldName">
+              <value>Identifier</value>
+            </prop>
+            <prop oor:name="AssignedFieldName">
+              <value>Identifier</value>
+            </prop>
+          </node>
+          <node oor:name="Type" oor:op="replace">
+            <prop oor:name="ProgrammaticFieldName">
+              <value>BibliographyType</value>
+            </prop>
+            <prop oor:name="AssignedFieldName">
+              <value>Type</value>
+            </prop>
+          </node>
+          <node oor:name="Author" oor:op="replace">
+            <prop oor:name="ProgrammaticFieldName">
+              <value>Author</value>
+            </prop>
+            <prop oor:name="AssignedFieldName">
+              <value>Author</value>
+            </prop>
+          </node>
+          <node oor:name="Title" oor:op="replace">
+            <prop oor:name="ProgrammaticFieldName">
+              <value>Title</value>
+            </prop>
+            <prop oor:name="AssignedFieldName">
+              <value>Title</value>
+            </prop>
+          </node>
+          <node oor:name="Year" oor:op="replace">
+            <prop oor:name="ProgrammaticFieldName">
+              <value>Year</value>
+            </prop>
+            <prop oor:name="AssignedFieldName">
+              <value>Year</value>
+            </prop>
+          </node>
+          <node oor:name="ISBN" oor:op="replace">
+            <prop oor:name="ProgrammaticFieldName">
+              <value>ISBN</value>
+            </prop>
+            <prop oor:name="AssignedFieldName">
+              <value>ISBN</value>
+            </prop>
+          </node>
+          <node oor:name="Booktitle" oor:op="replace">
+            <prop oor:name="ProgrammaticFieldName">
+              <value>Booktitle</value>
+            </prop>
+            <prop oor:name="AssignedFieldName">
+              <value>Booktitle</value>
+            </prop>
+          </node>
+          <node oor:name="Chapter" oor:op="replace">
+            <prop oor:name="ProgrammaticFieldName">
+              <value>Chapter</value>
+            </prop>
+            <prop oor:name="AssignedFieldName">
+              <value>Chapter</value>
+            </prop>
+          </node>
+          <node oor:name="Edition" oor:op="replace">
+            <prop oor:name="ProgrammaticFieldName">
+              <value>Edition</value>
+            </prop>
+            <prop oor:name="AssignedFieldName">
+              <value>Edition</value>
+            </prop>
+          </node>
+          <node oor:name="Editor" oor:op="replace">
+            <prop oor:name="ProgrammaticFieldName">
+              <value>Editor</value>
+            </prop>
+            <prop oor:name="AssignedFieldName">
+              <value>Editor</value>
+            </prop>
+          </node>
+          <node oor:name="PublicationType" oor:op="replace">
+            <prop oor:name="ProgrammaticFieldName">
+              <value>Howpublished</value>
+            </prop>
+            <prop oor:name="AssignedFieldName">
+              <value>Howpublish</value>
+            </prop>
+          </node>
+          <node oor:name="Institution" oor:op="replace">
+            <prop oor:name="ProgrammaticFieldName">
+              <value>Institution</value>
+            </prop>
+            <prop oor:name="AssignedFieldName">
+              <value>Institutn</value>
+            </prop>
+          </node>
+          <node oor:name="Journal" oor:op="replace">
+            <prop oor:name="ProgrammaticFieldName">
+              <value>Journal</value>
+            </prop>
+            <prop oor:name="AssignedFieldName">
+              <value>Journal</value>
+            </prop>
+          </node>
+          <node oor:name="Month" oor:op="replace">
+            <prop oor:name="ProgrammaticFieldName">
+              <value>Month</value>
+            </prop>
+            <prop oor:name="AssignedFieldName">
+              <value>Month</value>
+            </prop>
+          </node>
+          <node oor:name="Note" oor:op="replace">
+            <prop oor:name="ProgrammaticFieldName">
+              <value>Note</value>
+            </prop>
+            <prop oor:name="AssignedFieldName">
+              <value>Note</value>
+            </prop>
+          </node>
+          <node oor:name="Annotation" oor:op="replace">
+            <prop oor:name="ProgrammaticFieldName">
+              <value>Annote</value>
+            </prop>
+            <prop oor:name="AssignedFieldName">
+              <value>Annote</value>
+            </prop>
+          </node>
+          <node oor:name="Number" oor:op="replace">
+            <prop oor:name="ProgrammaticFieldName">
+              <value>Number</value>
+            </prop>
+            <prop oor:name="AssignedFieldName">
+              <value>Number</value>
+            </prop>
+          </node>
+          <node oor:name="Organization" oor:op="replace">
+            <prop oor:name="ProgrammaticFieldName">
+              <value>Organizations</value>
+            </prop>
+            <prop oor:name="AssignedFieldName">
+              <value>Organizat</value>
+            </prop>
+          </node>
+          <node oor:name="Page" oor:op="replace">
+            <prop oor:name="ProgrammaticFieldName">
+              <value>Pages</value>
+            </prop>
+            <prop oor:name="AssignedFieldName">
+              <value>Pages</value>
+            </prop>
+          </node>
+          <node oor:name="Publisher" oor:op="replace">
+            <prop oor:name="ProgrammaticFieldName">
+              <value>Publisher</value>
+            </prop>
+            <prop oor:name="AssignedFieldName">
+              <value>Publisher</value>
+            </prop>
+          </node>
+          <node oor:name="Address" oor:op="replace">
+            <prop oor:name="ProgrammaticFieldName">
+              <value>Address</value>
+            </prop>
+            <prop oor:name="AssignedFieldName">
+              <value>Address</value>
+            </prop>
+          </node>
+          <node oor:name="University" oor:op="replace">
+            <prop oor:name="ProgrammaticFieldName">
+              <value>School</value>
+            </prop>
+            <prop oor:name="AssignedFieldName">
+              <value>School</value>
+            </prop>
+          </node>
+          <node oor:name="Series" oor:op="replace">
+            <prop oor:name="ProgrammaticFieldName">
+              <value>Series</value>
+            </prop>
+            <prop oor:name="AssignedFieldName">
+              <value>Series</value>
+            </prop>
+          </node>
+          <node oor:name="Report" oor:op="replace">
+            <prop oor:name="ProgrammaticFieldName">
+              <value>ReportType</value>
+            </prop>
+            <prop oor:name="AssignedFieldName">
+              <value>RepType</value>
+            </prop>
+          </node>
+          <node oor:name="Volume" oor:op="replace">
+            <prop oor:name="ProgrammaticFieldName">
+              <value>Volume</value>
+            </prop>
+            <prop oor:name="AssignedFieldName">
+              <value>Volume</value>
+            </prop>
+          </node>
+          <node oor:name="URL" oor:op="replace">
+            <prop oor:name="ProgrammaticFieldName">
+              <value>URL</value>
+            </prop>
+            <prop oor:name="AssignedFieldName">
+              <value>URL</value>
+            </prop>
+          </node>
+          <node oor:name="UserDefined1" oor:op="replace">
+            <prop oor:name="ProgrammaticFieldName">
+              <value>Custom1</value>
+            </prop>
+            <prop oor:name="AssignedFieldName">
+              <value>Custom1</value>
+            </prop>
+          </node>
+          <node oor:name="UserDefined2" oor:op="replace">
+            <prop oor:name="ProgrammaticFieldName">
+              <value>Custom2</value>
+            </prop>
+            <prop oor:name="AssignedFieldName">
+              <value>Custom2</value>
+            </prop>
+          </node>
+          <node oor:name="UserDefined3" oor:op="replace">
+            <prop oor:name="ProgrammaticFieldName">
+              <value>Custom3</value>
+            </prop>
+            <prop oor:name="AssignedFieldName">
+              <value>Custom3</value>
+            </prop>
+          </node>
+          <node oor:name="UserDefined4" oor:op="replace">
+            <prop oor:name="ProgrammaticFieldName">
+              <value>Custom4</value>
+            </prop>
+            <prop oor:name="AssignedFieldName">
+              <value>Custom4</value>
+            </prop>
+          </node>
+          <node oor:name="UserDefined5" oor:op="replace">
+            <prop oor:name="ProgrammaticFieldName">
+              <value>Custom5</value>
+            </prop>
+            <prop oor:name="AssignedFieldName">
+              <value>Custom5</value>
+            </prop>
+          </node>
+        </node>
+      </node>
+    </node>
+  </node>
+  <node oor:name="DriverSettings">
+    <node oor:name="com.sun.star.comp.sdbc.MozabDriver">
+      <node oor:name="MozillaPreferences">
+        <prop oor:name="PabDescription" >
+
+          <value xml:lang="en-US">Personal Address book</value>
+    </prop>
+        <prop oor:name="HisDescription">
+
+          <value xml:lang="en-US">Collected Addresses</value>
+           </prop>
+      </node>
+      <node oor:name="ColumnAliases">
+        <prop oor:name="FirstName">
+
+          <value xml:lang="en-US">First Name</value>
+        </prop>
+        <prop oor:name="LastName">
+
+          <value xml:lang="en-US">Last Name</value>
+        </prop>
+        <prop oor:name="DisplayName">
+
+          <value xml:lang="en-US">Display Name</value>
+        </prop>
+        <prop oor:name="NickName">
+
+          <value xml:lang="en-US">Nickname</value>
+        </prop>
+        <prop oor:name="PrimaryEmail">
+
+          <value xml:lang="en-US">E-mail</value>
+        </prop>
+        <prop oor:name="SecondEmail">
+
+          <value xml:lang="en-US">E-mail (2)</value>
+        </prop>
+        <prop oor:name="PreferMailFormat">
+
+          <value xml:lang="en-US">Mail Format</value>
+        </prop>
+        <prop oor:name="WorkPhone">
+
+          <value xml:lang="en-US">Phone (Work)</value>
+        </prop>
+        <prop oor:name="HomePhone">
+
+          <value xml:lang="en-US">Phone (Home)</value>
+        </prop>
+        <prop oor:name="FaxNumber">
+
+          <value xml:lang="en-US">Fax</value>
+        </prop>
+        <prop oor:name="PagerNumber">
+
+          <value xml:lang="en-US">Pager</value>
+        </prop>
+        <prop oor:name="CellularNumber">
+
+          <value xml:lang="en-US">Mobile</value>
+        </prop>
+        <prop oor:name="HomeAddress">
+
+          <value xml:lang="en-US">Address 1</value>
+        </prop>
+        <prop oor:name="HomeAddress2">
+
+          <value xml:lang="en-US">Address 2</value>
+        </prop>
+        <prop oor:name="HomeCity">
+
+          <value xml:lang="en-US">City</value>
+        </prop>
+        <prop oor:name="HomeState">
+
+          <value xml:lang="en-US">State</value>
+        </prop>
+        <prop oor:name="HomeZipCode">
+
+          <value xml:lang="en-US">ZIP/Postal (Home)</value>
+        </prop>
+        <prop oor:name="HomeCountry">
+
+          <value xml:lang="en-US">Country</value>
+        </prop>
+        <prop oor:name="WorkAddress">
+
+          <value xml:lang="en-US">Work Address</value>
+        </prop>
+        <prop oor:name="WorkAddress2">
+
+          <value xml:lang="en-US">Work Address 2</value>
+        </prop>
+        <prop oor:name="WorkCity">
+
+          <value xml:lang="en-US">City (Work)</value>
+        </prop>
+        <prop oor:name="WorkState">
+
+          <value xml:lang="en-US">State (Work)</value>
+        </prop>
+        <prop oor:name="WorkZipCode">
+
+          <value xml:lang="en-US">Zip/Postal (Work)</value>
+        </prop>
+        <prop oor:name="WorkCountry">
+
+          <value xml:lang="en-US">Country (Work)</value>
+        </prop>
+        <prop oor:name="JobTitle">
+
+          <value xml:lang="en-US">Job Title</value>
+        </prop>
+        <prop oor:name="Department">
+
+          <value xml:lang="en-US">Department</value>
+        </prop>
+        <prop oor:name="Company">
+
+          <value xml:lang="en-US">Company</value>
+        </prop>
+        <prop oor:name="WebPage1">
+
+          <value xml:lang="en-US">Web Page (Work)</value>
+        </prop>
+        <prop oor:name="WebPage2">
+
+          <value xml:lang="en-US">Web Page (Home)</value>
+        </prop>
+        <prop oor:name="BirthYear">
+
+          <value xml:lang="en-US">Birth Year</value>
+        </prop>
+        <prop oor:name="BirthMonth">
+
+          <value xml:lang="en-US">Birth Month</value>
+        </prop>
+        <prop oor:name="BirthDay">
+
+          <value xml:lang="en-US">Birth Day</value>
+        </prop>
+        <prop oor:name="Custom1">
+
+          <value xml:lang="en-US">Custom 1</value>
+        </prop>
+        <prop oor:name="Custom2">
+
+          <value xml:lang="en-US">Custom 2</value>
+        </prop>
+        <prop oor:name="Custom3">
+
+          <value xml:lang="en-US">Custom 3</value>
+        </prop>
+        <prop oor:name="Custom4">
+
+          <value xml:lang="en-US">Custom 4</value>
+        </prop>
+        <prop oor:name="Notes">
+
+          <value xml:lang="en-US">Comments</value>
+        </prop>
+      </node>
+    </node>
+    <node oor:name="com.sun.star.comp.sdbc.evoab.OEvoabDriver">
+      <node oor:name="EvolutionPreferences">
+        <prop oor:name="FullPathExportingCommand">
+          <value>file:///usr/share/evolution/*/evolution-addressbook-export</value>
+        </prop>
+      </node>
+      <node oor:name="ColumnAliases">
+        <prop oor:name="FirstName">
+          <value>given_name</value>
+        </prop>
+        <prop oor:name="LastName">
+          <value>family_name</value>
+        </prop>
+        <prop oor:name="DisplayName">
+          <value>full_name</value>
+        </prop>
+        <prop oor:name="NickName">
+          <value>nickname</value>
+        </prop>
+        <prop oor:name="PrimaryEmail">
+          <value>email</value>
+        </prop>
+        <prop oor:name="SecondEmail">
+          <value>email_2</value>
+        </prop>
+        <prop oor:name="PreferMailFormat">
+          <value>wants_html</value>
+        </prop>
+        <prop oor:name="WorkPhone">
+          <value>business_phone</value>
+        </prop>
+        <prop oor:name="HomePhone">
+          <value>home_phone</value>
+        </prop>
+        <prop oor:name="FaxNumber">
+          <value>business_fax</value>
+        </prop>
+        <prop oor:name="PagerNumber">
+          <value>pager</value>
+        </prop>
+        <prop oor:name="CellularNumber">
+          <value>mobile_phone</value>
+        </prop>
+        <prop oor:name="HomeAddress">
+          <value>Home Address</value>
+        </prop>
+        <prop oor:name="HomeAddress2">
+          <value>Home Address2</value>
+        </prop>
+        <prop oor:name="HomeCity">
+          <value>Home Address City</value>
+        </prop>
+        <prop oor:name="HomeState">
+          <value>Home Address State</value>
+        </prop>
+        <prop oor:name="HomeZipCode">
+          <value>Home Address PostCode</value>
+        </prop>
+        <prop oor:name="HomeCountry">
+          <value>Home Address Country</value>
+        </prop>
+        <prop oor:name="WorkAddress">
+          <value>Business Address</value>
+        </prop>
+        <prop oor:name="WorkAddress2">
+          <value>Business Address2</value>
+        </prop>
+        <prop oor:name="WorkCity">
+          <value>Business Address City</value>
+        </prop>
+        <prop oor:name="WorkState">
+          <value>Business Address State</value>
+        </prop>
+        <prop oor:name="WorkZipCode">
+          <value>Business Address PostCode</value>
+        </prop>
+        <prop oor:name="WorkCountry">
+          <value>Business Address Country</value>
+        </prop>
+        <prop oor:name="JobTitle">
+          <value>title</value>
+        </prop>
+        <prop oor:name="Department">
+          <value>office</value>
+        </prop>
+        <prop oor:name="Company">
+          <value>org</value>
+        </prop>
+        <prop oor:name="WebPage1">
+          <value>url</value>
+        </prop>
+        <prop oor:name="WebPage2">
+          <value>caluri</value>
+        </prop>
+        <prop oor:name="BirthYear">
+          <value>Birth Year</value>
+        </prop>
+        <prop oor:name="BirthMonth">
+          <value>Birth Month</value>
+        </prop>
+        <prop oor:name="BirthDay">
+          <value>Birth Day</value>
+        </prop>
+        <prop oor:name="Notes">
+          <value>note</value>
+        </prop>
+      </node>
+    </node>
+  </node>
+</oor:component-data>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

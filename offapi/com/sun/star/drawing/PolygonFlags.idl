@@ -1,0 +1,81 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_drawing_PolygonFlags_idl__
+#define __com_sun_star_drawing_PolygonFlags_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module drawing {
+
+//=============================================================================
+
+// DocMerge from xml: enum com::sun::star::drawing::PolygonFlags
+/** defines how a Bezier curve goes through a point.
+ */
+published enum PolygonFlags
+{
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR PolygonFlags:: NORMAL,
+
+    // DocMerge from xml: value com::sun::star::drawing::PolygonFlags::NORMAL
+    /** the point is normal, from the curve discussion view.
+     */
+    NORMAL,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR PolygonFlags:: SMOOTH,
+
+    // DocMerge from xml: value com::sun::star::drawing::PolygonFlags::SMOOTH
+    /** the point is smooth, the first derivation from the curve discussion view.
+     */
+    SMOOTH,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR PolygonFlags:: CONTROL,
+
+    // DocMerge from xml: value com::sun::star::drawing::PolygonFlags::CONTROL
+    /** the point is a control point, to control the curve from the user interface.
+     */
+    CONTROL,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR PolygonFlags:: SYMMETRIC
+
+    // DocMerge from xml: value com::sun::star::drawing::PolygonFlags::SYMMETRIC
+    /** the point is symmetric, the second derivation from the curve discussion view.
+     */
+    SYMMETRIC
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

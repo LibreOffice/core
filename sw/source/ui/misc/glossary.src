@@ -1,0 +1,392 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "misc.hrc"
+#include "glossary.hrc"
+#include "cmdid.h"
+#include "helpid.h"
+#include "access.hrc"
+
+ // #define DLG_GLOSSARY 256
+ModalDialog DLG_GLOSSARY
+{
+    HelpID = CMD_FN_GLOSSARY_DLG ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 375 , 164 ) ;
+    Text [ en-US ] = "AutoText" ;
+    Moveable = TRUE ;
+    CheckBox CB_INSERT_TIP
+    {
+        HelpID = "sw:CheckBox:DLG_GLOSSARY:CB_INSERT_TIP";
+        Pos = MAP_APPFONT ( 12 , 12 ) ;
+        Size = MAP_APPFONT ( 200 , 12 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Display remainder of name as suggestion while typing" ;
+    };
+    FixedText FT_NAME
+    {
+        Pos = MAP_APPFONT ( 12 , 31 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Text [ en-US ] = "~Name" ;
+        Left = TRUE ;
+    };
+    Edit ED_NAME
+    {
+        HelpID = "sw:Edit:DLG_GLOSSARY:ED_NAME";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 55 , 29 ) ;
+        Size = MAP_APPFONT ( 85 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+    };
+    FixedText FT_SHORTNAME
+    {
+        Disable = TRUE ;
+        Pos = MAP_APPFONT ( 143 , 31 ) ;
+        Size = MAP_APPFONT ( 57 , 8 ) ;
+        Text [ en-US ] = "~Shortcut" ;
+        Right = TRUE ;
+    };
+    Edit ED_SHORTNAME
+    {
+        HelpID = "sw:Edit:DLG_GLOSSARY:ED_SHORTNAME";
+        Disable = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 203 , 29 ) ;
+        Size = MAP_APPFONT ( 21 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+    };
+    Control LB_BIB
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 44 ) ;
+        Size = MAP_APPFONT ( 212 , 84 ) ;
+        TabStop = TRUE ;
+         //        Sort = TRUE ;
+         //        CurPos = 0 ;
+        String ST_READONLY
+        {
+            Text [ en-US ] = "read-only";
+        };
+    };
+    FixedLine FL_RELATIVE
+    {
+        Pos = MAP_APPFONT (    6 , 134 ) ;
+        Size = MAP_APPFONT ( 221 , 8 ) ;
+        Text [ en-US ] = "Save links relative to";
+    };
+    CheckBox CB_FILE_REL
+    {
+        HelpID = "sw:CheckBox:DLG_GLOSSARY:CB_FILE_REL";
+        Pos = MAP_APPFONT ( 14 , 145 ) ;
+        Size = MAP_APPFONT ( 90 , 12 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~File system" ;
+    };
+    CheckBox CB_NET_REL
+    {
+        HelpID = "sw:CheckBox:DLG_GLOSSARY:CB_NET_REL";
+        Pos = MAP_APPFONT ( 109 , 145 ) ;
+        Size = MAP_APPFONT ( 90 , 12 ) ;
+        Text [ en-US ] = "Inte~rnet" ;
+    };
+    Window WIN_EXAMPLE
+    {
+        Pos = MAP_APPFONT ( 231 , 14 ) ;
+        Size = MAP_APPFONT ( 82 , 124 ) ;
+    };
+    Window WIN_EXAMPLE_DUMMY
+    {
+        Pos = MAP_APPFONT ( 231 , 14 ) ;
+        Size = MAP_APPFONT ( 82 , 124 ) ;
+        Border = TRUE;
+    };
+    CheckBox CB_SHOW_EXAMPLE
+    {
+        HelpID = "sw:CheckBox:DLG_GLOSSARY:CB_SHOW_EXAMPLE";
+        Pos = MAP_APPFONT ( 231 , 145 ) ;
+        Size = MAP_APPFONT ( 82 , 12 ) ;
+        Text [ en-US ] = "Sho~w preview";
+    };
+    OKButton PB_INSERT
+    {
+        Pos = MAP_APPFONT ( 319 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Insert" ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton PB_CLOSE
+    {
+        Pos = MAP_APPFONT ( 319 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Close" ;
+        TabStop = TRUE ;
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 319 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    MenuButton PB_EDIT
+    {
+        HelpID = "sw:MenuButton:DLG_GLOSSARY:PB_EDIT";
+        Pos = MAP_APPFONT ( 319 , 60 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "AutoTe~xt" ;
+        TabStop = TRUE ;
+    };
+    PushButton PB_BIB
+    {
+        HelpID = "sw:PushButton:DLG_GLOSSARY:PB_BIB";
+        Pos = MAP_APPFONT ( 319 , 77 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "C~ategories..." ;
+        TabStop = TRUE ;
+    };
+    PushButton PB_PATH
+    {
+        HelpID = "sw:PushButton:DLG_GLOSSARY:PB_PATH";
+        Pos = MAP_APPFONT ( 319 , 94 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Path..." ;
+    };
+    String ST_READONLY_PATH
+    {
+        Text [ en-US ] = "The 'AutoText' directories are read-only. Do you want to call the path settings dialog?";
+    };
+    Menu MNU_EDIT
+    {
+        ItemList =
+        {
+            MenuItem
+            {
+                Identifier = FN_GL_DEFINE ;
+                HelpID = HID_MD_GLOS_DEFINE ;
+                Text [ en-US ] = "~New" ;
+            };
+            MenuItem
+            {
+                Identifier = FN_GL_DEFINE_TEXT ;
+                HelpID = HID_MD_GLOS_DEFINE_TEXT ;
+                Text [ en-US ] = "New (text only)" ;
+            };
+            MenuItem
+            {
+                Identifier = FN_GL_COPY_TO_CLIPBOARD;
+                HelpID = HID_MD_COPY_TO_CLIPBOARD;
+                Text [ en-US ] = "~Copy";
+            };
+            MenuItem
+            {
+                Identifier = FN_GL_REPLACE ;
+                HelpID = HID_MD_GLOS_REPLACE ;
+                Text [ en-US ] = "Replace" ;
+            };
+            MenuItem
+            {
+                Identifier = FN_GL_REPLACE_TEXT;
+                HelpID = HID_MD_GLOS_REPLACE;
+                Text [ en-US ] = "Rep~lace (text only)" ;
+            };
+            MenuItem
+            {
+                Identifier = FN_GL_RENAME ;
+                HelpID = HID_MD_GLOS_RENAME ;
+                Text [ en-US ] = "Rename..." ;
+            };
+            MenuItem
+            {
+                Identifier = FN_GL_DELETE ;
+                HelpID = HID_MD_GLOS_DELETE ;
+                Text [ en-US ] = "~Delete" ;
+            };
+            MenuItem
+            {
+                Separator = TRUE ;
+            };
+            MenuItem
+            {
+                Identifier = FN_GL_EDIT ;
+                HelpID = HID_MD_GLOS_EDIT ;
+                Text [ en-US ] = "~Edit" ;
+            };
+            MenuItem
+            {
+                Separator = TRUE ;
+            };
+            MenuItem
+            {
+                Identifier = FN_GL_MACRO ;
+                HelpID = HID_MD_GLOS_MACRO ;
+                Text [ en-US ] = "~Macro..." ;
+            };
+            MenuItem
+            {
+                Separator = TRUE ;
+            };
+            MenuItem
+            {
+                Identifier = FN_GL_IMPORT;
+                HelpID = HID_MD_GLOS_IMPORT ;
+                Text [ en-US ] = "~Import...";
+            };
+        };
+    };
+};
+InfoBox MSG_DOUBLE_SHORTNAME
+{
+    Message [ en-US ] = "Shortcut name already exists. Please choose another name." ;
+};
+QueryBox MSG_QUERY_DELETE
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_NO ;
+    Message [ en-US ] = "Delete AutoText?" ;
+};
+String STR_QUERY_DELETE_GROUP1
+{
+    Text [ en-US ] = "Delete the category " ;
+};
+String STR_QUERY_DELETE_GROUP2
+{
+    Text [ en-US ] = "?" ;
+};
+String STR_GLOSSARY
+{
+    Text [ en-US ] = "AutoText :" ;
+};
+/*IAccessibility2 Implementation 2009-----*/
+String STR_ACCESS_SW_CATEGORY
+{
+    Text [ en-US ] = "Category" ;
+};
+/*-----IAccessibility2 Implementation 2009*/
+ModalDialog DLG_RENAME_GLOS
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 287 , 47 ) ;
+    Moveable = TRUE ;
+    HelpID = HID_RENAME_GLOSSARY ;
+    OKButton BT_OKNEW
+    {
+        Disable = TRUE ;
+        Pos = MAP_APPFONT ( 231 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+        TabStop = TRUE ;
+    };
+    CancelButton BT_CANCEL
+    {
+        Pos = MAP_APPFONT ( 231 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_ON
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 30 , 8 ) ;
+        Text [ en-US ] = "Na~me" ;
+    };
+    Edit ED_ON
+    {
+        HelpID = "sw:Edit:DLG_RENAME_GLOS:ED_ON";
+        ReadOnly = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 44 , 12 ) ;
+        Size = MAP_APPFONT ( 100 , 12 ) ;
+        Left = TRUE ;
+    };
+    FixedText FT_OS
+    {
+        Pos = MAP_APPFONT ( 147 , 14 ) ;
+        Size = MAP_APPFONT ( 52 , 8 ) ;
+        Text [ en-US ] = "Short~cut" ;
+    };
+    Edit ED_OS
+    {
+        HelpID = "sw:Edit:DLG_RENAME_GLOS:ED_OS";
+        ReadOnly = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 200 , 12 ) ;
+        Size = MAP_APPFONT ( 21 , 12 ) ;
+        Left = TRUE ;
+    };
+    FixedText FT_NN
+    {
+        Pos = MAP_APPFONT ( 12 , 29 ) ;
+        Size = MAP_APPFONT ( 30 , 8 ) ;
+        Text [ en-US ] = "~New" ;
+    };
+    Edit ED_NN
+    {
+        HelpID = "sw:Edit:DLG_RENAME_GLOS:ED_NN";
+        TabStop = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 44 , 27 ) ;
+        Size = MAP_APPFONT ( 100 , 12 ) ;
+        Left = TRUE ;
+    };
+    FixedText FT_NS
+    {
+        Pos = MAP_APPFONT ( 147 , 29 ) ;
+        Size = MAP_APPFONT ( 52 , 8 ) ;
+        Text [ en-US ] = "~Shortcut" ;
+    };
+    Edit ED_NS
+    {
+        HelpID = "sw:Edit:DLG_RENAME_GLOS:ED_NS";
+        TabStop = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 200 , 27 ) ;
+        Size = MAP_APPFONT ( 21 , 12 ) ;
+        Left = TRUE ;
+    };
+    FixedLine FL_NN
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 219 , 8 ) ;
+    };
+    Text [ en-US ] = "Rename AutoText" ;
+};
+String STR_SAVE_GLOSSARY
+{
+    Text[ en-US ] = "Save AutoText";
+};
+InfoBox MSG_NO_GLOSSARIES
+{
+    Message [ en-US ] = "There is no AutoText in this file.";
+};
+
+String STR_MY_AUTOTEXT
+{
+    Text[ en-US ] = "My AutoText";
+};

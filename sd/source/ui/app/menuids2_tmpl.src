@@ -1,0 +1,981 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _MENUIDS2_SRC
+#define _MENUIDS2_SRC
+#define MI(x)                   MenuItem { x };
+#define SEPARATOR       MenuItem { Separator = TRUE; };
+ // SubMenu-IDs
+#define MN_SUB_VIEW                     91
+#define MN_SUB_TOOLBAR              92
+#define MN_SUB_GRAPHIC              93
+#define MN_SUB_SPELLING             94
+#define MN_SUB_TEMPLATES            95
+#define MN_SUB_POSITION             96
+#define MN_SUB_MASTERPAGE           97
+#define MN_SUB_SEND                 98
+#define MN_SUB_FIELD                99
+#define MN_SUB_OUTPUT_QUALITY       100
+#define MN_SUB_PREVIEW_OUTPUT_QUALITY   101
+#define MN_SUB_GROUP                    102
+#define MN_TEMPLATES                    103
+#define MN_SUB_MASTER_LAYOUTS           104
+
+ // Windowmenu-ID (wird in globlmn.hrc gebraucht)
+#ifndef MN_WIN
+#define MN_WIN
+#endif
+ // Helpmenu-ID (wird in globlmn.hrc gebraucht)
+#ifndef MN_HELP
+#define MN_HELP
+#endif
+ //
+ // Datei-Menu
+ //
+#define MN_NEWDOCDIRECT \
+    MenuItem\
+    {\
+        Identifier = SID_NEWDOCDIRECT ; \
+        HelpId = CMD_SID_NEWDOCDIRECT ; \
+        Text [ en-US ] = "~New" ; \
+    };
+
+#define MN_EXPORTDOC \
+    MenuItem\
+    {\
+        Identifier = SID_EXPORTDOC ; \
+        HelpId = CMD_SID_EXPORTDOC ; \
+        Text [ en-US ] = "~Export..." ; \
+    };
+
+#define MN_EXPORTPDF \
+    MenuItem\
+    {\
+        Identifier = SID_EXPORTDOCASPDF ; \
+        HelpId = CMD_SID_EXPORTDOCASPDF ; \
+        Text [ en-US ] = "Export as PDF..." ; \
+    };
+
+#define MNSUB_SEND \
+    MenuItem\
+    {\
+        Identifier = MN_SUB_SEND ; \
+        HelpID = HID_MN_SUB_SEND ; \
+        Command = ".uno:SendMenu" ; \
+        Text [ en-US ] = "Sen~d" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MI ( ITEM_FILE_MAIL_SENDDOC ) \
+                MI ( ITEM_FILE_MAIL_SENDDOCASPDF ) \
+            };\
+        };\
+    };
+
+#define MN_PAGESETUP \
+    MenuItem\
+    {\
+        Identifier = SID_PAGESETUP ; \
+        HelpId = CMD_SID_PAGESETUP ; \
+        Text [ en-US ] = "~Page..." ; \
+    };
+ //
+ // Bearbeiten-Menu
+ //
+#define MN_EDIT \
+    Identifier = 20 ; \
+    HelpID = "what a hack!" ; \
+    Command = ".uno:EditMenu"; \
+    Text [ en-US ] = "~Edit" ; \
+
+#define MN_PASTE2 \
+    MenuItem\
+    {\
+        Identifier = SID_PASTE2 ; \
+        HelpId = CMD_SID_PASTE2 ; \
+        Text [ en-US ] = "Paste ~Special..." ; \
+        };
+
+#define MN_COPYOBJECTS \
+    MenuItem\
+    {\
+        Identifier = SID_COPYOBJECTS ; \
+        HelpId = CMD_SID_COPYOBJECTS ; \
+        Text [ en-US ] = "Duplicat~e..." ; \
+    };
+
+#define MN_POLYGON_MORPHING \
+    MenuItem\
+    {\
+        Identifier = SID_POLYGON_MORPHING ; \
+        HelpId = CMD_SID_POLYGON_MORPHING ; \
+        Text [ en-US ] = "Cross-fading..." ; \
+    };
+
+#define MN_MODIFY_FIELD \
+    MenuItem\
+    {\
+        Identifier = SID_MODIFY_FIELD ; \
+        HelpId = CMD_SID_MODIFY_FIELD ; \
+        Text [ en-US ] = "F~ields..." ; \
+    };
+
+#define MN_DELETE_LAYER \
+    MenuItem\
+    {\
+        Identifier = SID_DELETE_LAYER ; \
+        HelpId = CMD_SID_DELETE_LAYER ; \
+        Text [ en-US ] = "Delete ~Layer..." ; \
+    };
+
+#define MN_MANAGE_LINKS \
+    MenuItem\
+    {\
+        Identifier = SID_MANAGE_LINKS ; \
+        HelpId = CMD_SID_MANAGE_LINKS ; \
+        Text [ en-US ] = "Lin~ks..." ; \
+    };
+ //
+ // Ansicht-Menu
+ //
+#define MN_VIEW \
+    Identifier = 23 ; \
+    HelpID = "what a hack!" ; \
+    Command = ".uno:ViewMenu" ; \
+    Text [ en-US ] = "~View" ; \
+
+#define MN_TOGGLETOOLBAR \
+    MenuItem\
+    {\
+        Identifier = SID_TOGGLETOOLBAR ; \
+        HelpId = CMD_SID_TOGGLETOOLBAR ; \
+        Text [ en-US ] = "Main ~Toolbar" ; \
+        };
+
+#define MN_TOGGLEOPTIONBAR \
+    MenuItem\
+    {\
+        Identifier = SID_TOGGLEOPTIONBAR ; \
+        HelpId = CMD_SID_TOGGLEOPTIONBAR ; \
+        Text [ en-US ] = "Optio~n Bar" ; \
+    };
+
+#define MN_TOGGLECOMMONTASKBAR \
+    MenuItem\
+    {\
+        Identifier = SID_TOGGLECOMMONTASKBAR ; \
+        HelpId = CMD_SID_TOGGLECOMMONTASKBAR ; \
+        Text [ en-US ] = "~Presentation" ; \
+    };
+
+#define MN_CUSTOMIZETOOLBOX \
+    MenuItem\
+    {\
+        Identifier = SID_CUSTOMIZETOOLBOX ; \
+        HelpId = CMD_SID_CUSTOMIZETOOLBOX ; \
+        Text [ en-US ] = "Customi~ze..." ; \
+    };
+
+#define MN_RULER \
+    MenuItem\
+    {\
+        Identifier = SID_RULER ; \
+        HelpId = CMD_SID_RULER ; \
+        Command = ".uno:ShowRuler" ; \
+        Text [ en-US ] = "~Rulers" ; \
+    };
+
+#define MN_NOTESMODE \
+    MenuItem\
+    {\
+        Identifier = SID_NOTESMODE ; \
+        HelpId = CMD_SID_NOTESMODE ; \
+        Check = TRUE ; \
+        Text [ en-US ] = "~Notes View" ; \
+    };
+
+#define MN_HANDOUTMODE \
+    MenuItem\
+    {\
+        Identifier = SID_HANDOUTMODE ; \
+        HelpId = CMD_SID_HANDOUTMODE ; \
+        Check = TRUE ; \
+        Text [ en-US ] = "~Handout View" ; \
+    };
+
+#define MN_PREVIEW_WIN \
+    MenuItem\
+    {\
+        Identifier = SID_PREVIEW_WIN ; \
+        HelpId = CMD_SID_PREVIEW_WIN ; \
+        Text [ en-US ] = "~Preview" ; \
+    };
+
+#define MN_PAGEMODE \
+    MenuItem\
+    {\
+        Identifier = SID_PAGEMODE ; \
+        HelpId = CMD_SID_PAGEMODE ; \
+        Check = TRUE ; \
+        Text [ en-US ] = "S~lide" ; \
+    };
+
+#define MN_SLIDE_MASTERPAGE \
+    MenuItem\
+    {\
+        Identifier = SID_SLIDE_MASTERPAGE ; \
+        HelpId = CMD_SID_SLIDE_MASTERPAGE ; \
+        Check = TRUE ; \
+        Text [ en-US ] = "~Slide Master" ; \
+    };
+
+#define MN_TITLE_MASTERPAGE \
+    MenuItem\
+    {\
+        Identifier = SID_TITLE_MASTERPAGE ; \
+        HelpId = CMD_SID_TITLE_MASTERPAGE ; \
+        Check = TRUE ; \
+        Text [ en-US ] = "~Title" ; \
+    };
+
+#define MN_NOTES_MASTERPAGE \
+    MenuItem\
+    {\
+        Identifier = SID_NOTES_MASTERPAGE ; \
+        HelpId = CMD_SID_NOTES_MASTERPAGE ; \
+        Check = TRUE ; \
+        Text [ en-US ] = "~Notes" ; \
+    };
+
+#define MN_HANDOUT_MASTERPAGE \
+    MenuItem\
+    {\
+        Identifier = SID_HANDOUT_MASTERPAGE ; \
+        HelpId = CMD_SID_HANDOUT_MASTERPAGE ; \
+        Check = TRUE ; \
+        Text [ en-US ] = "~Handout" ; \
+    };
+
+#define MN_LAYERMODE \
+    MenuItem\
+    {\
+        Identifier = SID_LAYERMODE ; \
+        HelpId = CMD_SID_LAYERMODE ; \
+        Check = TRUE ; \
+        Text [ en-US ] = "La~yer" ; \
+    };
+
+#define MN_HEADERANDFOOTER \
+    MenuItem\
+    {\
+        Identifier = SID_HEADER_AND_FOOTER ; \
+        HelpId = CMD_SID_HEADER_AND_FOOTER ; \
+        Text = "Kopf- und Fußzeile.."; \
+    };
+
+#define MN_INSERT_PAGE_NUMBER \
+    MenuItem\
+    {\
+        Identifier = SID_INSERT_PAGE_NUMBER ; \
+        HelpId = CMD_SID_INSERT_PAGE_NUMBER ; \
+        Text = "Seitenzahl..." ; \
+    };
+
+#define MN_INSERT_DATE_AND_TIME \
+    MenuItem\
+    {\
+        Identifier = SID_INSERT_DATE_TIME ; \
+        HelpId = CMD_SID_INSERT_DATE_TIME ; \
+        Text = "Datum und Uhrzeit..." ; \
+    };
+
+#define MN_MASTER_LAYOUTS \
+    MenuItem\
+    {\
+        Identifier = MN_SUB_MASTER_LAYOUTS ; \
+        HelpId = HID_MN_SUB_MASTER_LAYOUTS; \
+        Text = "Masterlayouts";\
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    Identifier = SID_MASTER_LAYOUTS_SLIDE ; \
+                    HelpId = CMD_SID_MASTER_LAYOUTS_SLIDE ; \
+                    Text = "Masterlayout..." ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_MASTER_LAYOUTS_NOTES ; \
+                    HelpId = CMD_SID_MASTER_LAYOUTS_NOTES ; \
+                    Text = "Notizenmasterlayout..." ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_MASTER_LAYOUTS_HANDOUTS ; \
+                    HelpId = CMD_SID_MASTER_LAYOUTS_HANDOUTS ; \
+                    Text = "Handzettelmasterlayout..." ; \
+                };\
+            };\
+        };\
+    };
+
+ //#define MNSUB_TOOLBAR \ -> menu.src
+#define MNSUB_VIEW \
+    MenuItem\
+    {\
+        Identifier = MN_SUB_VIEW ; \
+        HelpID = HID_MN_SUB_VIEW ; \
+        Command = ".uno:WorkspaceMenu" ; \
+        Text [ en-US ] = "Wor~kspace" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MN_DRAWINGMODE\
+                MN_OUTLINEMODE\
+                MN_DIAMODE\
+                MN_NOTESMODE\
+                MN_HANDOUTMODE\
+            };\
+        };\
+    };
+
+#define MNSUB_MASTERPAGE \
+    MenuItem\
+    {\
+        Identifier = MN_SUB_MASTERPAGE ; \
+        HelpID = HID_MN_SUB_MASTERPAGE ; \
+        Command = ".uno:MasterPageMenu" ; \
+        Text [ en-US ] = "~Master" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MN_SLIDE_MASTERPAGE\
+                MN_TITLE_MASTERPAGE\
+                MN_NOTES_MASTERPAGE\
+                MN_HANDOUT_MASTERPAGE\
+            };\
+        };\
+    };
+ //
+ // Einfuegen-Menu
+ //
+#define MN_INSERT \
+    Identifier = 21 ; \
+    HelpID = "what a hack" ; \
+    Command = ".uno:InsertMenu" ; \
+    Text [ en-US ] = "~Insert" ; \
+
+#define MN_INSERTPAGE \
+    MenuItem\
+    {\
+        Identifier = SID_INSERTPAGE ; \
+        HelpId = CMD_SID_INSERTPAGE ; \
+        Text [ en-US ] = "Slid~e..." ; \
+        };
+
+#define MN_INSERTPAGE_DRAW \
+    MenuItem\
+    {\
+        Identifier = SID_INSERTPAGE ; \
+        HelpId = CMD_SID_INSERTPAGE ; \
+        Text [ en-US ] = "Slid~e" ; \
+    };
+
+#define MN_DUPLICATE_PAGE \
+    MenuItem\
+    {\
+        Identifier = SID_DUPLICATE_PAGE ; \
+        HelpId = CMD_SID_DUPLICATE_PAGE ; \
+        Text [ en-US ] = "D~uplicate Slide" ; \
+    };
+
+#define MN_EXPAND_PAGE \
+    MenuItem\
+    {\
+        Identifier = SID_EXPAND_PAGE ; \
+        HelpId = CMD_SID_EXPAND_PAGE ; \
+        Text [ en-US ] = "E~xpand Slide" ; \
+    };
+
+#define MN_SUMMARY_PAGE \
+    MenuItem\
+    {\
+        Identifier = SID_SUMMARY_PAGE ; \
+        HelpId = CMD_SID_SUMMARY_PAGE ; \
+        Text [ en-US ] = "Su~mmary Slide" ; \
+    };
+
+#define MN_INSERTLAYER \
+    MenuItem\
+    {\
+        Identifier = SID_INSERTLAYER ; \
+        HelpId = CMD_SID_INSERTLAYER ; \
+        Text [ en-US ] = "~Layer..." ; \
+    };
+
+#define MN_INSERT_FLD_DATE_FIX \
+    MenuItem\
+    {\
+        Identifier = SID_INSERT_FLD_DATE_FIX ; \
+        HelpId = CMD_SID_INSERT_FLD_DATE_FIX ; \
+        Text [ en-US ] = "~Date (fixed)" ; \
+    };
+
+#define MN_INSERT_FLD_DATE_VAR \
+    MenuItem\
+    {\
+        Identifier = SID_INSERT_FLD_DATE_VAR ; \
+        HelpId = CMD_SID_INSERT_FLD_DATE_VAR ; \
+        Text [ en-US ] = "Dat~e (variable)" ; \
+    };
+
+#define MN_INSERT_FLD_TIME_FIX \
+    MenuItem\
+    {\
+        Identifier = SID_INSERT_FLD_TIME_FIX ; \
+        HelpId = CMD_SID_INSERT_FLD_TIME_FIX ; \
+        Text [ en-US ] = "~Time (fixed)" ; \
+    };
+
+#define MN_INSERT_FLD_TIME_VAR \
+    MenuItem\
+    {\
+        Identifier = SID_INSERT_FLD_TIME_VAR ; \
+        HelpId = CMD_SID_INSERT_FLD_TIME_VAR ; \
+        Text [ en-US ] = "T~ime (variable)" ; \
+    };
+
+#define MN_INSERT_FLD_PAGE \
+    MenuItem\
+    {\
+        Identifier = SID_INSERT_FLD_PAGE ; \
+        HelpId = CMD_SID_INSERT_FLD_PAGE ; \
+        Text [ en-US ] = "~Page Number" ; \
+    };
+
+#define MN_INSERT_FLD_FILE \
+    MenuItem\
+    {\
+        Identifier = SID_INSERT_FLD_FILE ; \
+        HelpId = CMD_SID_INSERT_FLD_FILE ; \
+        Text [ en-US ] = "~File Name" ; \
+    };
+
+#define MN_INSERT_FLD_AUTHOR \
+    MenuItem\
+    {\
+        Identifier = SID_INSERT_FLD_AUTHOR ; \
+        HelpId = CMD_SID_INSERT_FLD_AUTHOR ; \
+        Text [ en-US ] = "~Author" ; \
+    };
+
+#define MN_TWAIN_SELECT \
+    MenuItem\
+    {\
+        Identifier = SID_TWAIN_SELECT ; \
+        HelpId = CMD_SID_TWAIN_SELECT ; \
+        Text [ en-US ] = "~Select Source..." ; \
+    };
+
+#define MN_TWAIN_TRANSFER \
+    MenuItem\
+    {\
+        Identifier = SID_TWAIN_TRANSFER ; \
+        HelpId = CMD_SID_TWAIN_TRANSFER ; \
+        Text [ en-US ] = "~Request..." ; \
+    };
+
+#define MN_ATTR_TABLE \
+    MenuItem\
+    {\
+        Identifier = SID_ATTR_TABLE ; \
+        HelpId = CMD_SID_ATTR_TABLE ; \
+        Text [ en-US ] = "Sp~readsheet" ; \
+    };
+
+#define MN_INSERT_INSERT_GRAPHIC \
+    MenuItem\
+    {\
+        ITEM_INSERT_INSERT_GRAPHIC\
+        Text [ en-US ] = "From ~File..." ; \
+    };
+
+#define MN_INSERT_INSERT_DIAGRAM \
+    MenuItem\
+    {\
+        Identifier = SID_INSERT_DIAGRAM ; \
+        HelpId = CMD_SID_INSERT_DIAGRAM ; \
+        Text [ en-US ] = "Chart" ; \
+    };
+
+#define MN_INSERT_FLOATINGFRAME \
+    MenuItem\
+    {\
+        Identifier = SID_INSERT_FLOATINGFRAME ; \
+        HelpId = CMD_SID_INSERT_FLOATINGFRAME ; \
+        Text [ en-US ] = "Float~ing Frame..." ; \
+    };
+
+#define MN_INSERTFILE \
+    MenuItem\
+    {\
+        Identifier = SID_INSERTFILE ; \
+        HelpId = CMD_SID_INSERTFILE ; \
+        Text [ en-US ] = "~File..." ; \
+    };
+
+#define MNSUB_FIELD \
+    MenuItem\
+    {\
+        Identifier = MN_SUB_FIELD ; \
+        HelpID = HID_MN_SUB_FIELD ; \
+        Command = ".uno:FieldMenu" ; \
+        Text [ en-US ] = "Fiel~ds" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MN_INSERT_FLD_DATE_FIX\
+                MN_INSERT_FLD_DATE_VAR\
+                MN_INSERT_FLD_TIME_FIX\
+                MN_INSERT_FLD_TIME_VAR\
+                SEPARATOR\
+                MN_INSERT_FLD_AUTHOR\
+                MN_INSERT_FLD_PAGE\
+                MN_INSERT_FLD_FILE\
+            };\
+        };\
+    };
+
+#define MNSUB_SCAN \
+    ITEM_INSERT_TWAIN_MENU
+
+#define MNSUB_GRAPHIC \
+    MenuItem\
+    {\
+        ITEM_INSERT_INSERT_GRAPHIC \
+    };
+
+
+ //
+ // Format-Menu
+ //
+#define MN_FORMAT \
+    Identifier = 22 ; \
+    HelpID = "what a hack!" ; \
+    Command = ".uno:FormatMenu" ; \
+    Text [ en-US ] = "F~ormat" ; \
+
+#define MN_TEXTATTR_DLG \
+    MenuItem\
+    {\
+        Identifier = SID_TEXTATTR_DLG ; \
+        HelpId = CMD_SID_TEXTATTR_DLG ; \
+        Text [ en-US ] = "Te~xt..." ; \
+    };
+
+#define MN_MEASURE_DLG \
+    MenuItem\
+    {\
+        Identifier = SID_MEASURE_DLG ; \
+        HelpId = CMD_SID_MEASURE_DLG ; \
+        Text [ en-US ] = "Dimen~sions..." ; \
+    };
+
+#define MN_CONNECTION_DLG \
+    MenuItem\
+    {\
+        Identifier = SID_CONNECTION_DLG ; \
+        HelpId = CMD_SID_CONNECTION_DLG ; \
+        Text [ en-US ] = "~Connector..." ; \
+    };
+
+#define MN_MODIFYLAYER \
+    MenuItem\
+    {\
+        Identifier = SID_MODIFYLAYER ; \
+        HelpId = CMD_SID_MODIFYLAYER ; \
+        Text [ en-US ] = "~Layer..." ; \
+    };
+
+ // Seiten-Attribute
+#define MN_MODIFYPAGE \
+    MenuItem\
+    {\
+        Identifier = SID_MODIFYPAGE ; \
+        HelpId = CMD_SID_MODIFYPAGE ; \
+        Text [ en-US ] = "Modify ~Layout..." ; \
+    };
+
+#define MNSUB_TEMPLATES \
+    MenuItem\
+    {\
+        Identifier = MN_SUB_TEMPLATES ; \
+        HelpID = HID_MN_SUB_TEMPLATES ; \
+        Command = ".uno:TemplatesMenu" ; \
+        Text [ en-US ] = "Styl~es" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MI ( ITEM_FORMAT_TEMPLATECATALOG ) \
+                MN_PRESENTATION_LAYOUT\
+            };\
+        };\
+    };
+
+ //
+ // Extras-Menu
+ //
+#define MN_EXTRAS \
+    Identifier = ITEM_TOOLS_ID ; \
+    HelpID = "what a hack!" ; \
+    Command = ".uno:ToolsMenu" ; \
+    Text [ en-US ] = "~Tools" ; \
+
+ //
+ // Praesentations-Menu
+ //
+#define MN_SLIDESHOW \
+    Identifier = 26 ; \
+    HelpID = "what a hack!" ; \
+    Command = ".uno:SlideShowMenu" ; \
+    Text [ en-US ] = "~Slide Show" ; \
+
+#define MN_SPELLING \
+    MenuItem\
+    {\
+        Identifier = SID_SPELL_DIALOG ; \
+        HelpId = CMD_SID_SPELL_DIALOG ; \
+        Text [ en-US ] = "~Check..." ; \
+    };
+
+#define MN_AUTOSPELL_CHECK \
+    MenuItem\
+    {\
+        Identifier = SID_AUTOSPELL_CHECK ; \
+        HelpId = CMD_SID_AUTOSPELL_CHECK ; \
+        Text [ en-US ] = "~AutoSpellcheck" ; \
+    };
+
+#define MN_THESAURUS \
+    MenuItem\
+    {\
+        Identifier = SID_THESAURUS ; \
+        HelpId = CMD_SID_THESAURUS ; \
+        Text [ en-US ] = "~Thesaurus..." ; \
+    };
+
+#define MN_HYPHENATION \
+    MenuItem\
+    {\
+        Identifier = SID_HYPHENATION ; \
+        HelpId = CMD_SID_HYPHENATION ; \
+        Text [ en-US ] = "~Hyphenation" ; \
+    };
+
+#define MN_AUTO_CORRECT_DLG \
+    MenuItem\
+    {\
+        Identifier = SID_AUTO_CORRECT_DLG ; \
+        HelpId = CMD_SID_AUTO_CORRECT_DLG ; \
+        Text [ en-US ] = "~AutoCorrect..." ; \
+    };
+
+#define MN_PRESENTATION_DLG \
+    MenuItem\
+    {\
+        Identifier = SID_PRESENTATION_DLG ; \
+        HelpId = CMD_SID_PRESENTATION_DLG ; \
+        Text [ en-US ] = "~Slide Show Settings..." ; \
+    };
+
+#define MN_CUSTOMSHOW_DLG \
+    MenuItem\
+    {\
+        Identifier = SID_CUSTOMSHOW_DLG ; \
+        HelpId = CMD_SID_CUSTOMSHOW_DLG ; \
+        Text [ en-US ] = "~Custom Slide Show..." ; \
+    };
+
+#define MN_ANIMATION_OBJECTS \
+    MenuItem\
+    {\
+        Identifier = SID_ANIMATION_OBJECTS ; \
+        HelpId = CMD_SID_ANIMATION_OBJECTS ; \
+        Text [ en-US ] = "~Animation" ; \
+    };
+
+#define MN_ANIMATION_EFFECTS \
+    MenuItem\
+    {\
+        Identifier = SID_ANIMATION_EFFECTS ; \
+        HelpId = CMD_SID_ANIMATION_EFFECTS ; \
+        Text [ en-US ] = "~Interaction..." ; \
+    };
+
+#define MNSUB_SPELLING \
+    MenuItem\
+    {\
+        Identifier = MN_SUB_SPELLING ; \
+        HelpID = HID_MN_SUB_SPELLING ; \
+        Command = ".uno:SpellingMenu" ; \
+        Text [ en-US ] = "~Spellcheck" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MN_SPELLING\
+                MN_AUTOSPELL_CHECK\
+            };\
+        };\
+    };
+ //
+ // Aendern-Menu
+ //
+#define MN_MODIFY \
+    Identifier = 24 ; \
+    HelpID = "what a hack!" ; \
+    Command = ".uno:ModifyMenu" ; \
+    Text [ en-US ] = "~Modify" ; \
+
+#define MN_MOREFRONT \
+    MenuItem\
+    {\
+        Identifier = SID_MOREFRONT ; \
+        HelpId = CMD_SID_MOREFRONT ; \
+        Text [ en-US ] = "Bring ~Forward" ; \
+        };
+
+#define MN_MOREBACK \
+    MenuItem\
+    {\
+        Identifier = SID_MOREBACK ; \
+        HelpId = CMD_SID_MOREBACK ; \
+        Text [ en-US ] = "Send Back~ward" ; \
+    };
+
+#define MN_BEFORE_OBJ \
+    MenuItem\
+    {\
+        Identifier = SID_BEFORE_OBJ ; \
+        HelpId = CMD_SID_BEFORE_OBJ ; \
+        Text [ en-US ] = "In Front of ~Object" ; \
+    };
+
+#define MN_BEHIND_OBJ \
+    MenuItem\
+    {\
+        Identifier = SID_BEHIND_OBJ ; \
+        HelpId = CMD_SID_BEHIND_OBJ ; \
+        Text [ en-US ] = "Be~hind Object" ; \
+    };
+
+#define MN_REVERSE_ORDER \
+    MenuItem\
+    {\
+        Identifier = SID_REVERSE_ORDER ; \
+        HelpId = CMD_SID_REVERSE_ORDER ; \
+        Text [ en-US ] = "~Reverse" ; \
+    };
+
+#define MN_BMPMASK \
+    MenuItem\
+    {\
+        Identifier = SID_BMPMASK ; \
+        HelpId = CMD_SID_BMPMASK ; \
+        Text [ en-US ] = "~Eyedropper" ; \
+    };
+
+#define MN_GALLERY \
+    MenuItem\
+    {\
+        Identifier = SID_GALLERY; \
+        HelpId = CMD_SID_GALLERY; \
+        Text [ en-US ] = "~Gallery" ; \
+    };
+
+#define MN_OUTPUT_QUALITY_COLOR \
+    MenuItem\
+    {\
+        Identifier = SID_OUTPUT_QUALITY_COLOR ; \
+        HelpId = CMD_SID_OUTPUT_QUALITY_COLOR ; \
+        RadioCheck = TRUE ; \
+        Text [ en-US ] = "~Color" ; \
+    };
+
+#define MN_OUTPUT_QUALITY_GRAYSCALE \
+    MenuItem\
+    {\
+        Identifier = SID_OUTPUT_QUALITY_GRAYSCALE ; \
+        HelpId = CMD_SID_OUTPUT_QUALITY_GRAYSCALE ; \
+        RadioCheck = TRUE ; \
+        Text [ en-US ] = "~Grayscale" ; \
+    };
+
+#define MN_OUTPUT_QUALITY_BLACKWHITE \
+    MenuItem\
+    {\
+        Identifier = SID_OUTPUT_QUALITY_BLACKWHITE ; \
+        HelpId = CMD_SID_OUTPUT_QUALITY_BLACKWHITE ; \
+        RadioCheck = TRUE ; \
+        Text [ en-US ] = "~Black and White" ; \
+    };
+
+#define MN_OUTPUT_QUALITY_CONTRAST \
+    MenuItem\
+    {\
+        Identifier = SID_OUTPUT_QUALITY_CONTRAST ; \
+        HelpId = CMD_SID_OUTPUT_QUALITY_CONTRAST ; \
+        RadioCheck = TRUE ; \
+        Text [ en-US ] = "~High Contrast";\
+    };
+
+#define MN_PREVIEW_QUALITY_COLOR \
+    MenuItem\
+    {\
+        Identifier = SID_PREVIEW_QUALITY_COLOR ; \
+        HelpId = CMD_SID_PREVIEW_QUALITY_COLOR ; \
+        RadioCheck = TRUE ; \
+        Text [ en-US ] = "~Color" ; \
+    };
+
+#define MN_PREVIEW_QUALITY_GRAYSCALE \
+    MenuItem\
+    {\
+        Identifier = SID_PREVIEW_QUALITY_GRAYSCALE ; \
+        HelpId = CMD_SID_PREVIEW_QUALITY_GRAYSCALE ; \
+        RadioCheck = TRUE ; \
+        Text [ en-US ] = "~Grayscale" ; \
+    };
+
+#define MN_PREVIEW_QUALITY_BLACKWHITE \
+    MenuItem\
+    {\
+        Identifier = SID_PREVIEW_QUALITY_BLACKWHITE ; \
+        HelpId = CMD_SID_PREVIEW_QUALITY_BLACKWHITE ; \
+        RadioCheck = TRUE ; \
+        Text [ en-US ] = "~Black and White" ; \
+    };
+
+#define MN_PREVIEW_QUALITY_CONTRAST \
+    MenuItem\
+    {\
+        Identifier = SID_PREVIEW_QUALITY_CONTRAST ; \
+        HelpId = CMD_SID_PREVIEW_QUALITY_CONTRAST ; \
+        RadioCheck = TRUE ; \
+        Text [ en-US ] = "~High Contrast";\
+    };
+
+#define MNSUB_POSITION \
+    MenuItem\
+    {\
+        Identifier = MN_SUB_POSITION ; \
+        HelpID = HID_MN_SUB_POSITION ; \
+        Command = ".uno:ArrangeMenu" ; \
+        Text [ en-US ] = "~Arrange" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MI ( ITEM_FORMAT_FRAME_TO_TOP ) \
+                MN_MOREFRONT\
+                MN_MOREBACK\
+                MI ( ITEM_FORMAT_FRAME_TO_BOTTOM ) \
+                SEPARATOR\
+                MN_BEFORE_OBJ\
+                MN_BEHIND_OBJ\
+                SEPARATOR\
+                MN_REVERSE_ORDER\
+            };\
+        };\
+    };
+
+#define MNSUB_OBJECT_ALIGN \
+    MenuItem\
+    {\
+        ITEM_FORMAT_OBJECT_ALIGN\
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MI ( ITEM_FORMAT_OBJECT_ALIGN_LEFT ) \
+                MI ( ITEM_FORMAT_OBJECT_ALIGN_CENTER ) \
+                MI ( ITEM_FORMAT_OBJECT_ALIGN_RIGHT ) \
+                SEPARATOR\
+                MI ( ITEM_FORMAT_OBJECT_ALIGN_UP ) \
+                MI ( ITEM_FORMAT_OBJECT_ALIGN_MIDDLE ) \
+                MI ( ITEM_FORMAT_OBJECT_ALIGN_DOWN ) \
+            };\
+        };\
+    };
+
+#define MNSUB_OUTPUT_QUALITY \
+    MenuItem\
+    {\
+        Identifier = MN_SUB_OUTPUT_QUALITY ; \
+        HelpID = HID_MN_SUB_OUTPUT_QUALITY ; \
+        Command = ".uno:DisplayQualityMenu" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MN_OUTPUT_QUALITY_COLOR\
+                MN_OUTPUT_QUALITY_GRAYSCALE\
+                MN_OUTPUT_QUALITY_BLACKWHITE\
+                MN_OUTPUT_QUALITY_CONTRAST\
+            };\
+        };\
+        Text [ en-US ] = "~Display Quality" ; \
+    };
+
+#define MNSUB_PREVIEW_OUTPUT_QUALITY \
+    MenuItem\
+    {\
+        Identifier = MN_SUB_PREVIEW_OUTPUT_QUALITY ; \
+        HelpID = HID_MN_SUB_PREVIEW_OUTPUT_QUALITY ; \
+        Command = ".uno:PreviewDisplayQualityMenu" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MN_PREVIEW_QUALITY_COLOR\
+                MN_PREVIEW_QUALITY_GRAYSCALE\
+                MN_PREVIEW_QUALITY_BLACKWHITE\
+                MN_PREVIEW_QUALITY_CONTRAST\
+            };\
+        };\
+        Text [ en-US ] = "Pre~view Mode" ; \
+    };
+
+#endif // _MENUIDS2_SRC
+

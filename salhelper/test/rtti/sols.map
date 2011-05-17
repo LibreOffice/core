@@ -1,0 +1,32 @@
+UDK_3_0_0 {
+    global:
+GetVersionInfo;
+_fini;
+_init;
+
+__1cIMyClassAFfuncA6M_v_;
+__1cIMyClassAFfuncB6M_v_;
+__1cIMyClassAFfuncC6M_v_;
+__1cIMyClassAG__vtbl_;
+__1cIMyClassBFfuncA6M_v_;
+__1cIMyClassBFfuncB6M_v_;
+__1cIMyClassBFfuncC6M_v_;
+__1cIMyClassBG__vtbl_;
+__RTTI__1CpknIMyClassA_;
+__RTTI__1CpknIMyClassB_;
+__RTTI__1CpnIMyClassA_;
+__RTTI__1CpnIMyClassB_;
+__RTTI__1nIMyClassA_;
+__RTTI__1nIMyClassB_;
+
+local:
+        *;
+};
+
+
+
+
+
+
+
+

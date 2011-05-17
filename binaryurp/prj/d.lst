@@ -1,0 +1,4 @@
+..\%__SRC%\bin\binaryurp.uno.dll %_DEST%\bin%_EXT%\binaryurp.uno.dll
+..\%__SRC%\lib\binaryurp.uno.dylib %_DEST%\lib%_EXT%\binaryurp.uno.dylib
+..\%__SRC%\lib\binaryurp.uno.so %_DEST%\lib%_EXT%\binaryurp.uno.so
+..\%__SRC%\misc\binaryurp.component %_DEST%\xml%_EXT%\binaryurp.component

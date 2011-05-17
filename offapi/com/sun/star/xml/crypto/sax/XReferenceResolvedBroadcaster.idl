@@ -1,0 +1,82 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+//i20156 - new file for XML security module
+
+/** -- idl definition -- **/
+
+#ifndef __com_sun_star_xml_crypto_sax_xreferenceresolvedbroadcaster_idl_
+#define __com_sun_star_xml_crypto_sax_xreferenceresolvedbroadcaster_idl_
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/uno/Exception.idl>
+
+module com { module sun { module star { module xml { module crypto { module sax {
+
+interface XReferenceResolvedListener;
+
+/**
+ * Interface of Reference Resolved Broadcaster.
+ * <p>
+ * This interface is used to manipulate reference resolved listener.
+ */
+interface XReferenceResolvedBroadcaster : com::sun::star::uno::XInterface
+{
+    /**
+     * Adds a new reference resolved listener for a element collector.
+     * <p>
+     * When the element collector has completely collected that element,
+     * this listener will receive a notification.
+     *
+     * @param referenceId   the id of the element collector for which
+     *                      the new listener is added
+     * @param listener      the listener to be added
+     */
+    void addReferenceResolvedListener(
+        [in] long referenceId,
+        [in] XReferenceResolvedListener listener);
+
+    /**
+     * Removes a listener from a element collector.
+     * <p>
+     * When a listener is removed, it will not receive notification when
+     * collection completes.
+     *
+     * @param referenceId   the id of the element collector from which
+     *                      the listener is removed
+     * @param listener      the listener to be removed
+     */
+    void removeReferenceResolvedListener(
+        [in] long referenceId,
+        [in] XReferenceResolvedListener listener);
+};
+
+} ; } ; } ; } ; } ; } ;
+
+
+#endif
+

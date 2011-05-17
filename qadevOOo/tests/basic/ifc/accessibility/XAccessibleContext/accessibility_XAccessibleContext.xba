@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="accessibility_XAccessibleContext" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.accessibility.XAccessibleContext
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim childCount As Long, i As Integer
+    Dim oParent As Object
+
+    Test.StartMethod("getAccessibleChildCount()")
+    bOK = true
+    childCount = oObj.getAccessibleChildCount()    
+    bOK = bOK AND (childCount &gt; -1)
+    Test.MethodTested("getAccessibleChildCount()",bOK)
+
+
+    Test.StartMethod("getAccessibleChild()")
+    Dim childContext As Object
+    Dim mCount As Integer
+    bOK = true
+    i = 0
+    if (childCount &gt; 50) then 
+        mCount = 50
+    else 
+        mCount = childCount
+    End If
+    while (i &lt; mCount)
+        childContext = oObj.getAccessibleChild(i).getAccessibleContext()
+        Out.Log("  Child " + i + ": " + childContext.getAccessibleDescription())
+        bOK = bOK AND utils.at_equals(childContext.getAccessibleParent(), oObj)
+        i = i + 1
+    wend
+    Test.MethodTested("getAccessibleChild()",bOK)
+
+
+    Test.StartMethod("getAccessibleParent()")
+    bOK = true
+    oParent = oObj.getAccessibleParent()
+    bOK = bOK AND NOT isNull(oParent)
+    Test.MethodTested("getAccessibleParent()",bOK)
+
+
+    Test.StartMethod("getAccessibleIndexInParent()")
+    Dim idx As Integer
+    Dim parentAC As Object
+    bOK = true
+    idx = oObj.getAccessibleIndexInParent()
+    parentAC = oParent.getAccessibleContext()
+    bOK = bOK AND utils.at_equals(parentAC.getAccessibleChild(idx), oObj)
+    Test.MethodTested("getAccessibleIndexInParent()",bOK)
+
+
+    Test.StartMethod("getAccessibleRole()")
+    Dim role As Integer
+    bOK = true
+    role = oObj.getAccessibleRole()
+    Out.Log("The role is " + role)
+    bOK = bOK AND (role &gt; -1)
+    Test.MethodTested("getAccessibleRole()",bOK)
+
+
+    Test.StartMethod("getAccessibleDescription()")
+    Dim descr As String
+    bOK = true
+    descr = oObj.getAccessibleDescription()
+    Out.Log("The description is " + descr)
+    bOK = bOK AND NOT isNull(descr)
+    Test.MethodTested("getAccessibleDescription()",bOK)
+
+
+    Test.StartMethod("getAccessibleName()")
+    Dim oName As String
+    bOK = true
+    oName = oObj.getAccessibleName()
+    Out.Log("The name is " + oName)
+    bOK = bOK AND NOT isNull(oName)
+    Test.MethodTested("getAccessibleName()",bOK)
+
+
+    Test.StartMethod("getAccessibleRelationSet()")
+    Dim oSet As Variant
+    bOK = true
+    oSet = oObj.getAccessibleRelationSet()
+	' Relationset could be null
+	if not isNull(oSet) then
+		oSet.getRelationCount()
+	end if
+    Test.MethodTested("getAccessibleRelationSet()",bOK)
+
+
+    Test.StartMethod("getAccessibleStateSet()")
+    bOK = true
+    oSet = oObj.getAccessibleStateSet()
+    bOK = bOK AND NOT isNull(oSet)
+    if NOT bOK then Out.Log("This object does not support states")
+    Test.MethodTested("getAccessibleStateSet()",bOK)
+
+
+    Test.StartMethod("getLocale()")
+    Dim oLoc As Variant
+    bOK = true
+    oLoc = oObj.getLocale()
+    Out.Log("The locale is "+oLoc.Language+", "+oLoc.Country)
+    bOK = bOK AND NOT isNull(oLoc) AND (len(oLoc.Language) &gt; 0) AND (len(oLoc.Country) &gt; 0)
+    Test.MethodTested("getLocale()",bOK)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

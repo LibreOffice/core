@@ -1,0 +1,363 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#if ! defined INCLUDED_com_sun_star_deployment_XExtensionManager_idl
+#define INCLUDED_com_sun_star_deployment_XExtensionManager_idl
+
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/task/XAbortChannel.idl>
+#include <com/sun/star/util/XModifyBroadcaster.idl>
+#include <com/sun/star/deployment/XPackage.idl>
+#include <com/sun/star/deployment/XPackageTypeInfo.idl>
+#include <com/sun/star/ucb/XCommandEnvironment.idl>
+#include <com/sun/star/deployment/DeploymentException.idl>
+#include <com/sun/star/container/NoSuchElementException.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/beans/NamedValue.idl>
+
+module com { module sun { module star { module deployment {
+
+/** The <type>XExtensionManager</type> interface is used to manage extensions
+    in the user, shared and bundled repository.
+
+    @see ExtensionManager
+    @since OOo 3.3
+*/
+interface XExtensionManager
+{
+    /** interface to notify disposing
+     */
+    interface com::sun::star::lang::XComponent;
+
+    /** interface to notify changes of the set of deployed packages of
+        this manager
+    */
+    interface com::sun::star::util::XModifyBroadcaster;
+
+
+    /** gets the supported <type>XPackageTypeInfo</type>s.
+
+        @return
+                supported <type>XPackageTypeInfo</type>s.
+    */
+    sequence<XPackageTypeInfo> getSupportedPackageTypes();
+
+    /** creates a command channel to be used to asynchronously abort a command.
+
+        @return
+                abort channel
+    */
+    com::sun::star::task::XAbortChannel createAbortChannel();
+
+    /** adds an extension.
+
+        The properties argument is currently only used to suppress the license information
+        for shared extensions.
+
+        @param url
+               package URL, must be UCB conform
+        @param properties
+               additional properties, for example, that the license is to be
+               suppressed (if supported by the extension)
+        @param repository
+               the name of the repository
+        @param xAbortChannel
+               abort channel to asynchronously abort the adding process,
+               or null
+        @param xCmdEnv
+               command environment for error and progress handling
+        @return
+               object representing the extension.
+    */
+    XPackage addExtension( [in] string url,
+                           [in] sequence<com::sun::star::beans::NamedValue> properties,
+                           [in] string repository,
+                           [in] com::sun::star::task::XAbortChannel xAbortChannel,
+                           [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException,
+                com::sun::star::ucb::CommandFailedException,
+                com::sun::star::ucb::CommandAbortedException,
+                com::sun::star::lang::IllegalArgumentException);
+
+    /** removes an extension.
+
+        @param identifier
+               package identifier
+        @param fileName
+               package file name
+        @param repository
+               the name of the repository
+        @param xAbortChannel
+               abort channel to asynchronously abort the removing process,
+               or null
+        @param xCmdEnv
+               command environment for error and progress handling
+    */
+    void removeExtension(
+        [in] string identifier,
+        [in] string fileName,
+        [in] string repository,
+        [in] com::sun::star::task::XAbortChannel xAbortChannel,
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException,
+                com::sun::star::ucb::CommandFailedException,
+                com::sun::star::ucb::CommandAbortedException,
+                com::sun::star::lang::IllegalArgumentException);
+
+
+    /** enable an extension.
+
+        If the extension is not from the user repository then an
+        IllegalArgumentException is thrown.
+
+        @param extension
+               the extension which is to be enabled.
+        @param xAbortChannel
+               abort channel to asynchronously abort the removing process,
+               or null
+        @param xCmdEnv
+               command environment for error and progress handling
+    */
+    void enableExtension(
+        [in] XPackage extension,
+        [in] com::sun::star::task::XAbortChannel xAbortChannel,
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException,
+                com::sun::star::ucb::CommandFailedException,
+                com::sun::star::ucb::CommandAbortedException,
+                com::sun::star::lang::IllegalArgumentException);
+
+    /** disable an extension.
+
+        If the extension is not from the user repository then an
+        IllegalArgumentException is thrown.
+
+        @param extension
+               the extension which is to be disabled
+        @param xAbortChannel
+               abort channel to asynchronously abort the removing process,
+               or null
+        @param xCmdEnv
+               command environment for error and progress handling
+     */
+    void  disableExtension(
+        [in] XPackage extension,
+        [in] com::sun::star::task::XAbortChannel xAbortChannel,
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException,
+                com::sun::star::ucb::CommandFailedException,
+                com::sun::star::ucb::CommandAbortedException,
+                com::sun::star::lang::IllegalArgumentException);
+
+    /** gets all currently installed extensions, including disabled
+        user extensions.
+
+        @param repository
+               the repository from which the extensions are returned
+        @param xAbortChannel
+               abort channel to asynchronously abort the removing process,
+               or null
+        @param xCmdEnv
+               command environment for error and progress handling
+        @return
+               all currently installed packages
+    */
+    sequence<XPackage> getDeployedExtensions(
+        [in] string repository,
+        [in] com::sun::star::task::XAbortChannel xAbortChannel,
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException,
+                com::sun::star::ucb::CommandFailedException,
+                com::sun::star::ucb::CommandAbortedException,
+                com::sun::star::lang::IllegalArgumentException);
+
+
+    /** gets an installed extensions.
+
+        @param repositroy
+               the name of the repository
+        @param identifier
+               extension identifier
+        @param fileName
+               extension file name
+        @param xCmdEnv
+               command environment for error and progress handling
+        @return
+               <type>XPackage</type> object
+    */
+    XPackage getDeployedExtension(
+        [in] string repository,
+        [in] string identifier,
+        [in] string fileName,
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException,
+                com::sun::star::ucb::CommandFailedException,
+                com::sun::star::lang::IllegalArgumentException);
+
+    /** gets all extensions with the same identifier from all repositories.
+
+        The extension at the first position in the returned sequence represents
+        the extension from the user repository. The next element is from the shared
+        and the last one is from the bundled repository.
+        If one repository does not contain this extension, then the respective
+        element is a null reference.
+    */
+    sequence<XPackage> getExtensionsWithSameIdentifier(
+        [in] string identifier,
+        [in] string fileName,
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException,
+                com::sun::star::ucb::CommandFailedException,
+                com::sun::star::lang::IllegalArgumentException);
+
+
+    /** returns a sequence containing all installed extensions.
+
+        The members of the returned sequence correspond to an extension with a
+        particular extension identifier. The members are also sequences which
+        contain as many elements as there are repositories. Those are ordered
+        according to the priority of the repository. That is, the first member
+        is the extension from the user repository, the second is from the shared
+        repository and the last is from the bundled repository.
+     */
+    sequence<sequence<XPackage> > getAllExtensions(
+        [in] com::sun::star::task::XAbortChannel xAbortChannel,
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException,
+                com::sun::star::ucb::CommandFailedException,
+                com::sun::star::ucb::CommandAbortedException,
+                com::sun::star::lang::IllegalArgumentException);
+
+
+    /** Expert feature: erases the underlying registry cache and reinstalls
+        all previously added extensions.  Please keep in mind that all
+        registration status get lost.
+        <p>
+        Please use this in case of suspected cache inconsistencies only.
+        </p>
+        @param repositroy
+               the name of the repository
+        @param xAbortChannel
+               abort channel to asynchronously abort the adding process
+        @param xCmdEnv
+               command environment for error and progress handling
+    */
+    void reinstallDeployedExtensions(
+        [in] string repository,
+        [in] com::sun::star::task::XAbortChannel xAbortChannel,
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException,
+                com::sun::star::ucb::CommandFailedException,
+                com::sun::star::ucb::CommandAbortedException,
+                com::sun::star::lang::IllegalArgumentException);
+
+
+    /** synchronizes the extension database with the contents of the extensions
+       folder of shared and bundled extensions.
+
+       Added extensions will be added to the database and removed extensions
+       will be removed from the database.
+       The active extensions are determined. That is, shared or bundled extensions
+       are not necessaryly registered (<member>XPackage::registerPackage</member>).
+
+       @return
+              If true - then at least one extension was removed or added. Otherwise
+              nothing was changed.
+    */
+    boolean synchronize(
+        [in] com::sun::star::task::XAbortChannel xAbortChannel,
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException,
+                com::sun::star::ucb::CommandFailedException,
+                com::sun::star::ucb::CommandAbortedException,
+                com::sun::star::lang::IllegalArgumentException);
+
+
+    /** synchronizes the special bundled_prereg repository, which is based on
+       the bundled extensions and has its registration data folder at
+       $BUNDLED_EXTENSIONS_PREREG (for example openoffice.org3/share/prereg).
+
+       All bundled extensions are registered (<member>XPackage::registerPackage</member>).
+       The active extensions are NOT determined, because this function only works
+       with bundled extensions.
+
+       This function is intended to be called during the installation of OOo.
+       OOo will copy parts of the registration data folder to the user installation at the
+       first startup.
+    */
+
+    void synchronizeBundledPrereg(
+        [in] com::sun::star::task::XAbortChannel xAbortChannel,
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException);
+
+
+    /** returns all extensions which are currently not in use
+        because the user did not accept the license.
+
+        The function will not return any object for the user repository, because
+        a user extension will not be kept in the user repository if its license
+        is declined. Only extensions which are registered at start-up of OOo,
+        that is, shared and bundled extensions, can be returned.
+
+        Extensions which allow the license to be suppressed, that is, it does not
+        need to be displayed, and which are installed with the corresponding option,
+        are also not returned.
+
+        Extensions returned by this functions are not returned by
+        <member>XExtensionManger::getDeployedExtension</member>
+        <member>XExtensionManger::getDeployedExtensions</member>
+        <member>XExtensionManger::getAllExtensions</member>
+        <member>XExtensionManger::getExtensionsWithSameIdentifier</member>
+    */
+    sequence<XPackage> getExtensionsWithUnacceptedLicenses(
+        [in] string repository,
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException,
+                com::sun::star::lang::IllegalArgumentException);
+
+    /** check if all prerequisites for the extension are fulfilled
+        and activates it, if possible.
+    */
+    long checkPrerequisitesAndEnable(
+        [in] XPackage extension,
+        [in] com::sun::star::task::XAbortChannel xAbortChannel,
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException,
+                com::sun::star::ucb::CommandFailedException,
+                com::sun::star::ucb::CommandAbortedException,
+                com::sun::star::lang::IllegalArgumentException);
+
+    /** determines if the current user has write access to the extensions folder
+        of the repository.
+    */
+    boolean isReadOnlyRepository([in] string repository);
+};
+
+}; }; }; };
+
+#endif

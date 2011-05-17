@@ -1,0 +1,285 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "dpgroupdlg.hrc"
+
+// ----------------------------------------------------------------------------
+
+ModalDialog RID_SCDLG_DPNUMGROUP
+{
+    Size = MAP_APPFONT ( 220 , 110 ) ;
+    HelpId = HID_SC_DPNUMGROUP ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    Hide = TRUE ;
+    FixedLine FL_START
+    {
+        Pos = MAP_APPFONT ( 6, 3 ) ;
+        Size = MAP_APPFONT ( 152, 8 ) ;
+        Text [ en-US ] = "Start" ;
+    };
+    RadioButton RB_AUTOSTART
+    {
+        HelpID = "sc:RadioButton:RID_SCDLG_DPNUMGROUP:RB_AUTOSTART";
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Automatically" ;
+    };
+    RadioButton RB_MANSTART
+    {
+        HelpID = "sc:RadioButton:RID_SCDLG_DPNUMGROUP:RB_MANSTART";
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Manually at" ;
+    };
+    Edit ED_START
+    {
+        HelpID = "sc:Edit:RID_SCDLG_DPNUMGROUP:ED_START";
+        Pos = MAP_APPFONT ( 94 , 26 ) ;
+        Size = MAP_APPFONT ( 58 , 12 ) ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+    };
+    FixedLine FL_END
+    {
+        Pos = MAP_APPFONT ( 6 , 42 ) ;
+        Size = MAP_APPFONT ( 152 , 8 ) ;
+        Text [ en-US ] = "End" ;
+    };
+    RadioButton RB_AUTOEND
+    {
+        HelpID = "sc:RadioButton:RID_SCDLG_DPNUMGROUP:RB_AUTOEND";
+        Pos = MAP_APPFONT ( 12 , 53 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "A~utomatically" ;
+    };
+    RadioButton RB_MANEND
+    {
+        HelpID = "sc:RadioButton:RID_SCDLG_DPNUMGROUP:RB_MANEND";
+        Pos = MAP_APPFONT ( 12 , 67 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Ma~nually at" ;
+    };
+    Edit ED_END
+    {
+        HelpID = "sc:Edit:RID_SCDLG_DPNUMGROUP:ED_END";
+        Pos = MAP_APPFONT ( 94 , 65 ) ;
+        Size = MAP_APPFONT ( 58 , 12 ) ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+    };
+    FixedLine FL_BY
+    {
+        Pos = MAP_APPFONT ( 6 , 81 ) ;
+        Size = MAP_APPFONT ( 152 , 8 ) ;
+        Text [ en-US ] = "~Group by" ;
+    };
+    Edit ED_BY
+    {
+        HelpID = "sc:Edit:RID_SCDLG_DPNUMGROUP:ED_BY";
+        Pos = MAP_APPFONT ( 94 , 92 ) ;
+        Size = MAP_APPFONT ( 58 , 12 ) ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 164 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 164 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 164 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    Text [ en-US ] = "Grouping" ;
+} ;
+
+// ----------------------------------------------------------------------------
+
+ModalDialog RID_SCDLG_DPDATEGROUP
+{
+    Size = MAP_APPFONT ( 220 , 180 ) ;
+    HelpId = HID_SC_DPDATEGROUP ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    Hide = TRUE ;
+    FixedLine FL_START
+    {
+        Pos = MAP_APPFONT ( 6, 3 ) ;
+        Size = MAP_APPFONT ( 152, 8 ) ;
+        Text [ en-US ] = "Start" ;
+    };
+    RadioButton RB_AUTOSTART
+    {
+        HelpID = "sc:RadioButton:RID_SCDLG_DPDATEGROUP:RB_AUTOSTART";
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Automatically" ;
+    };
+    RadioButton RB_MANSTART
+    {
+        HelpID = "sc:RadioButton:RID_SCDLG_DPDATEGROUP:RB_MANSTART";
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Manually at" ;
+    };
+    DateField ED_START
+    {
+        HelpID = "sc:DateField:RID_SCDLG_DPDATEGROUP:ED_START";
+        Pos = MAP_APPFONT ( 94 , 26 ) ;
+        Size = MAP_APPFONT ( 58 , 12 ) ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+    };
+    FixedLine FL_END
+    {
+        Pos = MAP_APPFONT ( 6 , 42 ) ;
+        Size = MAP_APPFONT ( 152 , 8 ) ;
+        Text [ en-US ] = "End" ;
+    };
+    RadioButton RB_AUTOEND
+    {
+        HelpID = "sc:RadioButton:RID_SCDLG_DPDATEGROUP:RB_AUTOEND";
+        Pos = MAP_APPFONT ( 12 , 53 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "A~utomatically" ;
+    };
+    RadioButton RB_MANEND
+    {
+        HelpID = "sc:RadioButton:RID_SCDLG_DPDATEGROUP:RB_MANEND";
+        Pos = MAP_APPFONT ( 12 , 67 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Ma~nually at" ;
+    };
+    DateField ED_END
+    {
+        HelpID = "sc:DateField:RID_SCDLG_DPDATEGROUP:ED_END";
+        Pos = MAP_APPFONT ( 94 , 65 ) ;
+        Size = MAP_APPFONT ( 58 , 12 ) ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+    };
+    FixedLine FL_BY
+    {
+        Pos = MAP_APPFONT ( 6 , 81 ) ;
+        Size = MAP_APPFONT ( 152 , 8 ) ;
+        Text [ en-US ] = "Group by" ;
+    };
+    RadioButton RB_NUMDAYS
+    {
+        HelpID = "sc:RadioButton:RID_SCDLG_DPDATEGROUP:RB_NUMDAYS";
+        Pos = MAP_APPFONT ( 12 , 94 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Number of ~days" ;
+    };
+    RadioButton RB_UNITS
+    {
+        HelpID = "sc:RadioButton:RID_SCDLG_DPDATEGROUP:RB_UNITS";
+        Pos = MAP_APPFONT ( 12 , 110 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Intervals" ;
+    };
+    NumericField ED_NUMDAYS
+    {
+        HelpID = "sc:NumericField:RID_SCDLG_DPDATEGROUP:ED_NUMDAYS";
+        Pos = MAP_APPFONT ( 94, 92 ) ;
+        Size = MAP_APPFONT ( 35, 12 ) ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        Minimum = 1 ;
+        Maximum = 32767 ;
+        SpinSize = 1 ;
+    };
+    Control LB_UNITS
+    {
+        Pos = MAP_APPFONT( 94, 110 );
+        Size = MAP_APPFONT( 58, 64 );
+        TabStop = TRUE;
+        Border = TRUE;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 164 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 164 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 164 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    StringArray STR_UNITS
+    {
+        ItemList [ en-US ] =
+        {
+            < "Seconds" ; Default ; > ;
+            < "Minutes" ; Default ; > ;
+            < "Hours" ; Default ; > ;
+            < "Days" ; Default ; > ;
+            < "Months" ; Default ; > ;
+            < "Quarters" ; Default ; > ;
+            < "Years" ; Default ; > ;
+        } ;
+    } ;
+    Text [ en-US ] = "Grouping" ;
+} ;
+
+// ----------------------------------------------------------------------------

@@ -1,0 +1,71 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define TAB_CONTROL 55
+#define INDENT_FRM 1
+#define LEFT_LABEL 2
+#define FLINE_LABEL 3
+#define RIGHT_LABEL 4
+#define LEFT_INDENT 5
+#define FLINE_INDENT 6
+#define RIGHT_INDENT 7
+#define DIST_FRM 8
+#define TOP_LABEL 9
+#define TOP_DIST 10
+#define BOTTOM_LABEL 11
+#define BOTTOM_DIST 12
+#define ALG_LEFT 13
+#define ALG_RIGHT 50
+#define ALG_CENTER 51
+#define ALG_JUSTIFY 52
+#define ALG_FRM 14
+#define LINEDIST_FRM 15
+#define LINEDIST_BOX 16
+#define LINEDIST_AT_LABEL 17
+#define LINEDIST_AT_PERCENTBOX 18
+#define LINEDIST_AT_METRICBOX 19
+#define HYPHEN_FRM 21
+#define HYPHEN_BOX_AFTER 44
+#define HYPHEN_BOX_BEFORE 22
+#define EXTHYPHEN_BOX_AFTER 42
+#define EXTHYPHEN_BOX_BEFORE 23
+#define HYPHEN_LABEL_AFTER 43
+#define HYPHEN_LABEL_BEFORE 24
+#define EXTEND_FRM 25
+#define PAGEBREAK_BOX 26
+#define PAGEBREAK_DAVOR 27
+#define PAGEBREAK_DAHINTER 28
+#define KEEP_TOGETHER_BOX 29
+#define WIDOW_BOX 31
+#define WIDOW_ROW_NO 32
+#define WIDOW_ROW_LABEL 33
+#define ORPHAN_BOX 34
+#define ORPHAN_ROW_NO 35
+#define ORPHAN_ROW_LABEL 36
+#define PAGE_COLL_BTN 40
+#define PAGE_COLL_BOX 41
+#define OK_BTN 50
+#define CANCEL_BTN 51

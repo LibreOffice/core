@@ -1,0 +1,386 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include "menuids.src"
+#include "menuids3.src"
+#include "menuids4.src"
+#ifndef SD_MENU_PORTAL
+#define SD_MENU_PORTAL RID_DRAW_PORTALMENU
+#include "menuids2.src"
+#endif
+
+#define DEFINE_SLOTID_FOR_NUMBER_BULLETS    SID_OUTLINE_BULLET
+
+Menu SD_MENU_PORTAL
+{
+    ItemList =
+    {
+         //
+         // Datei-Menu
+         //
+        MenuItem
+        {
+            ITEM_FILE_PICKLIST
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MN_NEWDOCDIRECT
+                    MI ( ITEM_FILE_OPENDOC )
+                    ITEM_FILE_AUTOPILOT
+                    SEPARATOR
+                    MI ( ITEM_FILE_CLOSEDOC )
+                    MI ( ITEM_FILE_SAVEDOC )
+                    MI ( ITEM_FILE_SAVEASDOC )
+                    MI ( ITEM_FILE_SAVEDOCS )
+                    MI ( ITEM_FILE_LASTVERSIONDOC )
+                    MI ( ITEM_FILE_VERSIONDIALOG )
+                    SEPARATOR
+                    MN_EXPORTDOC
+                    MNSUB_SEND
+                    SEPARATOR
+                    MI ( ITEM_FILE_DOCINFO )
+                    MI ( ITEM_FILE_DOCTEMPLATE )
+                    SEPARATOR
+                    MI ( ITEM_FILE_PRINTDOC )
+                    MI ( ITEM_FILE_SETUPPRINTER )
+                    SEPARATOR
+                    MI ( ITEM_FILE_LOGOUT )
+                };
+            };
+        };
+         //
+         // Bearbeiten-Menu
+         //
+        MenuItem
+        {
+            MN_EDIT
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MI ( ITEM_EDIT_UNDO )
+                    MI ( ITEM_EDIT_REDO )
+                    MI ( ITEM_EDIT_REPEAT )
+                    SEPARATOR
+                    MI ( ITEM_EDIT_CUT )
+                    MI ( ITEM_EDIT_COPY )
+                    MI ( ITEM_EDIT_PASTE )
+                    MN_PASTE2
+                    MI ( ITEM_EDIT_SELECTALL )
+                    SEPARATOR
+                    MI ( ITEM_EDIT_SEARCH_DLG )
+                    MI ( ITEM_EDIT_NAVIGATOR )
+                    SEPARATOR
+                    MN_COPYOBJECTS
+#if SD_MENU_PORTAL != RID_DRAW_PORTALMENU
+                    MN_POLYGON_MORPHING
+#endif
+                    MN_MODIFY_FIELD
+                    MN_DELETE_PAGE
+#if SD_MENU_PORTAL != RID_DRAW_PORTALMENU
+                    MN_DELETE_LAYER
+#endif
+                    SEPARATOR
+                    MN_MANAGE_LINKS
+                    MI ( ITEM_EDIT_IMAP )
+                    MI ( ITEM_EDIT_OBJECT )
+                    MN_EDIT_HYPERLINK
+                };
+            };
+        };
+         //
+         // Ansicht-Menu
+         //
+        MenuItem
+        {
+            MN_VIEW
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MI ( ITEM_VIEW_ATTR_ZOOM )
+                    SEPARATOR
+                     //MNSUB_TOOLBAR
+                    MenuItem
+                    {
+                        Identifier = MN_SUB_TOOLBAR ;
+                        HelpID = MN_SUB_TOOLBAR ;
+                        Text [ en-US ] = "~Toolbars" ;
+                        SubMenu = Menu
+                        {
+                            ItemList =
+                            {
+                                MI ( ITEM_VIEW_TOGGLEFUNCTIONBAR )
+                                MI ( ITEM_VIEW_TOGGLEOBJECTBAR )
+                                MN_TOGGLETOOLBAR
+                                MN_TOGGLEOPTIONBAR
+#if SD_MENU_PORTAL == RID_DRAW_PORTALMENU
+                                MN_TOGGLECOMMONTASKBAR
+#endif
+                                MI ( ITEM_VIEW_COLORBAR )
+                                SEPARATOR
+                                MN_CUSTOMIZETOOLBOX
+                            };
+                        };
+                    };
+                    MN_RULER
+                    MI ( ITEM_VIEW_TOGGLESTATUSBAR )
+                    MI ( ITEM_VIEW_TOGGLEIMESTATUSWINDOW )
+                    SEPARATOR
+#if SD_MENU_PORTAL == RID_DRAW_PORTALMENU
+                    MNSUB_VIEW
+#endif
+                    MNSUB_OUTPUT_QUALITY
+#if SD_MENU_PORTAL == RID_DRAW_PORTALMENU
+                    SEPARATOR
+#endif
+                    MN_PREVIEW_WIN
+                    MNSUB_PREVIEW_OUTPUT_QUALITY
+                    SEPARATOR
+                    MN_PAGEMODE
+#if SD_MENU_PORTAL == RID_DRAW_PORTALMENU
+                    MNSUB_MASTERPAGE
+#endif
+                    MN_LAYERMODE
+                    SEPARATOR
+                    ITEM_VIEW_SCREENMODE
+                };
+            };
+        };
+         //
+         // Einfuegen-Menu
+         //
+        MenuItem
+        {
+            MN_INSERT
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+#if SD_MENU_PORTAL == RID_DRAW_PORTALMENU
+                    MN_INSERTPAGE
+#else
+                    MN_INSERTPAGE_DRAW
+#endif
+                    MN_DUPLICATE_PAGE
+#if SD_MENU_PORTAL == RID_DRAW_PORTALMENU
+                    MN_EXPAND_PAGE
+                    MN_SUMMARY_PAGE
+#endif
+#if SD_MENU_PORTAL != RID_DRAW_PORTALMENU
+                    MN_INSERTLAYER
+                    MN_CAPTUREPOINT
+#endif
+                    MNSUB_FIELD
+                    MN_BULLET
+                    ITEM_HYPERLINK_DIALOG
+                    SEPARATOR
+                    MN_ATTR_TABLE
+                    MNSUB_GRAPHIC_PORTAL
+                    ITEM_INSERT_OBJECT_PORTAL
+                    MN_INSERT_INSERT_DIAGRAM
+                    MN_INSERT_FLOATINGFRAME
+                    SEPARATOR
+                    MN_INSERTFILE
+                };
+            };
+        };
+         //
+         // Format-Menu
+         //
+        MenuItem
+        {
+            MN_FORMAT
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MN_SET_DEFAULT
+                    SEPARATOR
+                    MI ( ITEM_FORMAT_ATTRIBUTES_LINE )
+                    MI ( ITEM_FORMAT_ATTRIBUTES_AREA )
+                    MN_TEXTATTR_DLG
+                    MI ( ITEM_FORMAT_ATTR_TRANSFORM )
+                    MI ( ITEM_FORM_CONTROL_PROPERTIES )
+                    MI ( ITEM_FORM_PROPERTIES )
+#if SD_MENU_PORTAL != RID_DRAW_PORTALMENU
+                    MN_MEASURE_DLG
+#endif
+                    MN_CONNECTION_DLG
+                    SEPARATOR
+                    MI ( ITEM_FORMAT_CHAR_DLG )
+                    ITEM_FORMAT_NUMBERING
+                    MI ( ITEM_FORMAT_PARA_DLG )
+                    MN_PAGESETUP
+                    SEPARATOR
+#if SD_MENU_PORTAL == RID_DRAW_PORTALMENU
+                    MN_MODIFYPAGE
+#endif
+#if SD_MENU_PORTAL != RID_DRAW_PORTALMENU
+                    MN_MODIFYLAYER
+#endif
+                    SEPARATOR
+                    MNSUB_TEMPLATES
+                    MI ( ITEM_FORMAT_TEMPLATE )
+                    SEPARATOR
+                    MI ( ITEM_FORMAT_FONTWORK )
+                    MN_3D_WIN
+#if SD_MENU_PORTAL == RID_DRAW_PORTALMENU
+                    MNSUB_GROUP
+#endif
+                };
+            };
+        };
+         //
+         // Extras-Menu
+         //
+        MenuItem
+        {
+            MN_EXTRAS
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MN_THESAURUS
+                    MN_HYPHENATION
+                    SEPARATOR
+                    MN_AUTO_CORRECT_DLG
+                    SEPARATOR
+                    MN_GALLERY
+                    MN_BMPMASK
+                    SEPARATOR
+                    MI ( ITEM_TOOLS_BASICCHOOSER )
+                    MI ( ITEM_TOOLS_CONFIG )
+                    ITEM_MN_OPTIONS
+                };
+            };
+        };
+#if SD_MENU_PORTAL != RID_DRAW_PORTALMENU
+         //
+         // Aendern-Menu
+         //
+        MenuItem
+        {
+            MN_MODIFY
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MNSUB_MIRROR
+                    MNSUB_CONVERT
+                    SEPARATOR
+                    MNSUB_POSITION
+                    MNSUB_OBJECT_ALIGN
+                    MN_DISTRIBUTE
+
+                    //-#i68101#----------------------
+                    SEPARATOR
+                    MN_OBJECT_TITLE_DESCRIPTION
+                    MN_NAME_GROUP
+                    //-#i68101#----------------------
+
+                    SEPARATOR
+                    MN_GROUP
+                    MN_UNGROUP
+                    MN_ENTER_GROUP
+                    MN_LEAVE_GROUP
+                    SEPARATOR
+                    MN_COMBINE
+                    MN_DISMANTLE
+                    MNSUB_FORMEN
+                    SEPARATOR
+                    MN_CONNECT
+                    MN_BREAK
+                };
+            };
+        };
+#endif
+#if SD_MENU_PORTAL == RID_DRAW_PORTALMENU
+         //
+         // Praesentations-Menu
+         //
+        MenuItem
+        {
+            MN_SLIDESHOW
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MN_PRESENTATION
+                    MN_REHEARSE_TIMINGS
+                    SEPARATOR
+                    MN_PRESENTATION_DLG
+                    MN_CUSTOMSHOW_DLG
+                    SEPARATOR
+                    MN_DIA
+                    MN_HIDE_SLIDE
+                    SEPARATOR
+                    MN_ANIMATION_OBJECTS
+//                  MN_EFFECT_WIN
+                    MN_ANIMATION_EFFECTS
+                };
+            };
+        };
+#endif
+         //
+         // Fenster-Menu
+         //
+        ITEM_WINDOW_MENU
+
+         //
+         // Hilfe-Menu
+         //
+        ITEM_HELP_MENU
+    };
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

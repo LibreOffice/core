@@ -1,0 +1,123 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sdb_ui_XTableUIProvider_idl__
+#define __com_sun_star_sdb_ui_XTableUIProvider_idl__
+
+#include <com/sun/star/graphic/XGraphic.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/lang/WrappedTargetException.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module sdb { module application {
+
+interface XDatabaseDocumentUI;
+
+//=============================================================================
+
+/** is used by the database application to obtain non-default user
+    interface information and/or components for database tables.
+
+    @see com::sun::star::sdb::Connection
+
+    @since OOo 2.2
+ */
+interface XTableUIProvider
+{
+    /** provides the icon which should be used to represent the table in the
+        database application window.
+
+        <p>The icon will usually be requested once per table, and cached. It
+        might be requested again if the application settings change, for instance,
+        if another desktop theme has been activated.</p>
+
+        @param TableName
+            denotes the fully qualified name of the database table.
+
+        @param ColorMode
+            denotes the color mode of the graphic to retrieve, being one of the
+            <type scope="com::sun::star::graphic">GraphicColorMode</type> constants.
+        @return
+            the icon which should be used to represent the table in the
+            database application window, or <NULL/> if the default icon
+            should be used.
+    */
+    com::sun::star::graphic::XGraphic getTableIcon(
+        [in] string TableName, [in] long ColorMode );
+
+    /** returns a component which can be used to edit the definition of an
+        existing table.
+
+        @param DocumentUI
+            provides access to the UI in which the database document is
+            currently displayed.<br/>
+            In particular, this parameter provides access to the application's main
+            window, which is needed in case the table editor should be a dialog.
+
+        @param TableName
+            denotes the fully qualified name of an existing table.
+
+        @return
+            a component which can be used to edit the definition of an
+            existing table, or <NULL/> if the default component should
+            be used.<br/>
+            Two component types are supported so far
+            <ul><li>modal dialogs<br/>
+                    If the returned component supports the
+                    <type scope="com::sun::star::ui::dialogs">XExecutableDialog</type>
+                    interface, the dialog will be executed modally.</li>
+                <li>modeless frames<br/>
+                    If the returned component supports the
+                    <type scope="com::sun::star::frame">XController</type>
+                    interface, it is assumed that it represents a controller,
+                    loaded into a new frame, which is a modeless and, in its lifetime,
+                    depends on the application main window.</li>
+            </ul>
+            If the returned component does not support any of the above-mentioned
+            interfaces, it's discarded.
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if the given <arg>TableName</arg> does not denote an existing table
+
+        @throws ::com::sun::star::lang::WrappedTargetException
+            if an error occurs while creating the table editor component.
+    */
+    com::sun::star::uno::XInterface getTableEditor(
+        [in] XDatabaseDocumentUI DocumentUI,
+        [in] string TableName )
+        raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException);
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+//=============================================================================
+
+#endif
+

@@ -1,0 +1,14 @@
+#
+# Collation of Hungarian letters
+#
+& c < cs <<< Cs <<< CS
+& d < dz <<< DZ < dzs <<< Dzs <<< DZS
+& g < gy <<< Gy <<< GY
+& l < ly <<< Ly <<< LY
+& n < ny <<< Ny <<< NY
+& o < ö <<< Ö <<< ő <<< Ő
+& s < sz <<< Sz <<< SZ
+& t < ty <<< Ty <<< TY
+& u < ü <<< Ü <<< ű <<< Ű
+& z < zs <<< Zs <<< ZS
+

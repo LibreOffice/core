@@ -1,0 +1,340 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _COLLECTION_HXX
+#define _COLLECTION_HXX
+
+#include "enumeration.hxx"
+
+#include <cppuhelper/implbase3.hxx>
+#include <com/sun/star/container/ElementExistException.hpp>
+#include <com/sun/star/container/NoSuchElementException.hpp>
+#include <com/sun/star/container/XEnumeration.hpp>
+#include <com/sun/star/container/XIndexReplace.hpp>
+#include <com/sun/star/container/XSet.hpp>
+#include <com/sun/star/container/XContainer.hpp>
+#include <com/sun/star/container/XContainerListener.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/lang/WrappedTargetException.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Type.hxx>
+#include <vector>
+#include <algorithm>
+
+
+typedef cppu::WeakImplHelper3<
+    com::sun::star::container::XIndexReplace,
+    com::sun::star::container::XSet,
+    com::sun::star::container::XContainer>
+Collection_t;
+
+template<class ELEMENT_TYPE>
+class Collection : public Collection_t
+{
+public:
+    typedef ELEMENT_TYPE T;
+    typedef com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> XContainerListener_t;
+    typedef std::vector<XContainerListener_t> Listeners_t;
+
+protected:
+    std::vector<T> maItems;
+    Listeners_t maListeners;
+
+public:
+
+    Collection() {}
+    virtual ~Collection() {}
+
+    const T& getItem( sal_Int32 n ) const
+    {
+        OSL_ENSURE( isValidIndex(n), "invalid index" );
+        OSL_ENSURE( isValid( maItems[n] ), "invalid item found" );
+        return maItems[n];
+    }
+
+    void setItem( sal_Int32 n, const T& t)
+    {
+        OSL_ENSURE( isValidIndex(n), "invalid index" );
+        OSL_ENSURE( isValid ( t ), "invalid item" );
+
+        T& aRef = maItems[ n ];
+        _elementReplaced( n, t );
+        _remove( aRef );
+        aRef = t;
+        _insert( t );
+    }
+
+    bool hasItem( const T& t ) const
+    {
+        return maItems.end() != std::find( maItems.begin(), maItems.end(), t );
+    }
+
+    sal_Int32 addItem( const T& t )
+    {
+        OSL_ENSURE( !hasItem( t ), "item to be added already present" );
+        OSL_ENSURE( isValid( t ), "invalid item" );
+
+        maItems.push_back( t );
+        _insert( t );
+        _elementInserted( maItems.size() - 1 );
+        return ( maItems.size() - 1 );
+    }
+
+    void removeItem( const T& t )
+    {
+        OSL_ENSURE( hasItem( t ), "item to be removed not present" );
+        OSL_ENSURE( isValid( t ), "an invalid item, funny that!" );
+
+        _elementRemoved( t );
+        _remove( t );
+        maItems.erase( std::find( maItems.begin(), maItems.end(), t ) );
+    }
+
+    bool hasItems() const
+    {
+        return maItems.size() != 0;
+    }
+
+    sal_Int32 countItems() const
+    {
+        return static_cast<sal_Int32>( maItems.size() );
+    }
+
+    bool isValidIndex( sal_Int32 n ) const
+    {
+        return n >= 0  &&  n < static_cast<sal_Int32>( maItems.size() );
+    }
+
+
+    // the following method may be overriden by sub-classes for
+    // customized behaviour
+
+    /// called before insertion to determine whether item is valid
+    virtual bool isValid( const T& ) const { return true; }
+
+
+protected:
+
+    // the following methods may be overriden by sub-classes for
+    // customized behaviour
+
+    /// called after item has been inserted into the collection
+    virtual void _insert( const T& ) { }
+
+    /// called before item is removed from the collection
+    virtual void _remove( const T& ) { }
+
+public:
+
+    typedef com::sun::star::uno::Type Type_t;
+    typedef com::sun::star::uno::Any Any_t;
+    typedef com::sun::star::uno::RuntimeException RuntimeException_t;
+    typedef com::sun::star::lang::IllegalArgumentException IllegalArgumentException_t;
+    typedef com::sun::star::container::NoSuchElementException NoSuchElementException_t;
+    typedef com::sun::star::lang::IndexOutOfBoundsException IndexOutOfBoundsException_t;
+    typedef com::sun::star::uno::Reference<com::sun::star::container::XEnumeration> XEnumeration_t;
+    typedef com::sun::star::lang::WrappedTargetException WrappedTargetException_t;
+    typedef com::sun::star::container::ElementExistException ElementExistException_t;
+
+
+    // XElementAccess
+    virtual Type_t SAL_CALL getElementType()
+        throw( RuntimeException_t )
+    {
+        return getCppuType( static_cast<T*>( NULL ) );
+    }
+
+    virtual sal_Bool SAL_CALL hasElements()
+        throw( RuntimeException_t )
+    {
+        return hasItems();
+    }
+
+    // XIndexAccess : XElementAccess
+    virtual sal_Int32 SAL_CALL getCount()
+        throw( RuntimeException_t )
+    {
+        return countItems();
+    }
+
+    virtual Any_t SAL_CALL getByIndex( sal_Int32 nIndex )
+        throw( IndexOutOfBoundsException_t,
+               WrappedTargetException_t,
+               RuntimeException_t)
+    {
+        if( isValidIndex( nIndex ) )
+            return com::sun::star::uno::makeAny( getItem( nIndex ) );
+        else
+            throw IndexOutOfBoundsException_t();
+    }
+
+    // XIndexReplace : XIndexAccess
+    virtual void SAL_CALL replaceByIndex( sal_Int32 nIndex,
+                                          const Any_t& aElement )
+        throw( IllegalArgumentException_t,
+               IndexOutOfBoundsException_t,
+               WrappedTargetException_t,
+               RuntimeException_t)
+    {
+        T t;
+        if( isValidIndex( nIndex) )
+            if( ( aElement >>= t )  &&  isValid( t ) )
+                setItem( nIndex, t );
+            else
+                throw IllegalArgumentException_t();
+        else
+            throw IndexOutOfBoundsException_t();
+    }
+
+    // XEnumerationAccess : XElementAccess
+    virtual XEnumeration_t SAL_CALL createEnumeration()
+        throw( RuntimeException_t )
+    {
+        return new Enumeration( this );
+    }
+
+
+    // XSet : XEnumerationAccess
+    virtual sal_Bool SAL_CALL has( const Any_t& aElement )
+        throw( RuntimeException_t )
+    {
+        T t;
+        return ( aElement >>= t ) ? hasItem( t ) : sal_False;
+    }
+
+    virtual void SAL_CALL insert( const Any_t& aElement )
+        throw( IllegalArgumentException_t,
+               ElementExistException_t,
+               RuntimeException_t )
+    {
+        T t;
+        if( ( aElement >>= t )  &&  isValid( t ) )
+            if( ! hasItem( t ) )
+                addItem( t );
+            else
+                throw ElementExistException_t();
+        else
+            throw IllegalArgumentException_t();
+    }
+
+    virtual void SAL_CALL remove( const Any_t& aElement )
+        throw( IllegalArgumentException_t,
+               NoSuchElementException_t,
+               RuntimeException_t )
+    {
+        T t;
+        if( aElement >>= t )
+            if( hasItem( t ) )
+                removeItem( t );
+            else
+                throw NoSuchElementException_t();
+        else
+            throw IllegalArgumentException_t();
+    }
+
+
+    // XContainer
+    virtual void SAL_CALL addContainerListener(
+        const XContainerListener_t& xListener )
+        throw( RuntimeException_t )
+    {
+        OSL_ENSURE( xListener.is(), "need listener!" );
+        if( std::find( maListeners.begin(), maListeners.end(), xListener)
+            == maListeners.end() )
+            maListeners.push_back( xListener );
+    }
+
+    virtual void SAL_CALL removeContainerListener(
+        const XContainerListener_t& xListener )
+        throw( RuntimeException_t )
+    {
+        OSL_ENSURE( xListener.is(), "need listener!" );
+        Listeners_t::iterator aIter =
+            std::find( maListeners.begin(), maListeners.end(), xListener );
+        if( aIter != maListeners.end() )
+            maListeners.erase( aIter );
+    }
+
+protected:
+
+    // call listeners:
+    void _elementInserted( sal_Int32 nPos )
+    {
+        OSL_ENSURE( isValidIndex(nPos), "invalid index" );
+        com::sun::star::container::ContainerEvent aEvent(
+            static_cast<com::sun::star::container::XIndexReplace*>( this ),
+            com::sun::star::uno::makeAny( nPos ),
+            com::sun::star::uno::makeAny( getItem( nPos ) ),
+            com::sun::star::uno::Any() );
+        for( Listeners_t::iterator aIter = maListeners.begin();
+             aIter != maListeners.end();
+             aIter++ )
+        {
+            (*aIter)->elementInserted( aEvent );
+        }
+    }
+
+    void _elementRemoved( const T& aOld )
+    {
+        com::sun::star::container::ContainerEvent aEvent(
+            static_cast<com::sun::star::container::XIndexReplace*>( this ),
+            com::sun::star::uno::Any(),
+            com::sun::star::uno::makeAny( aOld ),
+            com::sun::star::uno::Any() );
+        for( Listeners_t::iterator aIter = maListeners.begin();
+             aIter != maListeners.end();
+             aIter++ )
+        {
+            (*aIter)->elementRemoved( aEvent );
+        }
+    }
+
+    void _elementReplaced( const sal_Int32 nPos, const T& aNew )
+    {
+        OSL_ENSURE( isValidIndex(nPos), "invalid index" );
+        com::sun::star::container::ContainerEvent aEvent(
+            static_cast<com::sun::star::container::XIndexReplace*>( this ),
+            com::sun::star::uno::makeAny( nPos ),
+            com::sun::star::uno::makeAny( getItem( nPos ) ),
+            com::sun::star::uno::makeAny( aNew ) );
+        for( Listeners_t::iterator aIter = maListeners.begin();
+             aIter != maListeners.end();
+             aIter++ )
+        {
+            (*aIter)->elementReplaced( aEvent );
+        }
+    }
+
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

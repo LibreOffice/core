@@ -1,0 +1,26 @@
+#ifndef com_sun_star_chart_XLegend_idl
+#define com_sun_star_chart_XLegend_idl
+
+#include <com/sun/star/uno/XInterface.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+
+/** interface for the legend of a diagram
+ */
+interface XLegend : ::com::sun::star::uno::XInterface
+{
+};
+
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+#endif

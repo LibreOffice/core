@@ -1,0 +1,9 @@
+UDK_3_0_0 {
+    global:
+        __1cEcppuGhelperHpurpenvNcreateMapping6FppnM_uno_Mapping_pnQ_uno_Environment_7pFbpv8pnbH_typelib_TypeDescriptionReference_pnY_typelib_MethodParameter_lpknY_typelib_TypeDescription_8p8ppnI_uno_Any__v8_v_; # S-ILP32
+        __1cEcppuGhelperHpurpenvNcreateMapping6FppnM_uno_Mapping_pnQ_uno_Environment_7pFbpv8pnbH_typelib_TypeDescriptionReference_pnY_typelib_MethodParameter_ipknY_typelib_TypeDescription_8p8ppnI_uno_Any__v8_v_; # S-LP64
+        __1cEcppuGhelperHpurpenvbDEnvironment_initWithEnterable6FpnQ_uno_Environment_pn0AJEnterable__v_;
+
+    local:
+        *;
+};

@@ -1,0 +1,380 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include "sortdlg.hrc"
+
+TabPage RID_SCPAGE_SORT_FIELDS
+{
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    HelpId = HID_SCPAGE_SORT_FIELDS ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    ListBox LB_SORT1
+    {
+        HelpID = "sc:ListBox:RID_SCPAGE_SORT_FIELDS:LB_SORT1";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 19 ) ;
+        Size = MAP_APPFONT ( 154 , 90 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    RadioButton BTN_UP1
+    {
+        HelpID = "sc:RadioButton:RID_SCPAGE_SORT_FIELDS:BTN_UP1";
+        Pos = MAP_APPFONT ( 172 , 14 ) ;
+        Size = MAP_APPFONT ( 79 , 10 ) ;
+        Text [ en-US ] = "~Ascending" ;
+        TabStop = TRUE ;
+    };
+    RadioButton BTN_DOWN1
+    {
+        HelpID = "sc:RadioButton:RID_SCPAGE_SORT_FIELDS:BTN_DOWN1";
+        Pos = MAP_APPFONT ( 172 , 28 ) ;
+        Size = MAP_APPFONT ( 79 , 10 ) ;
+        Text [ en-US ] = "~Descending" ;
+        TabStop = TRUE ;
+    };
+    FixedLine FL_SORT1
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Sort ~by" ;
+    };
+    ListBox LB_SORT2
+    {
+        HelpID = "sc:ListBox:RID_SCPAGE_SORT_FIELDS:LB_SORT2";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 60 ) ;
+        Size = MAP_APPFONT ( 154 , 90 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    RadioButton BTN_UP2
+    {
+        HelpID = "sc:RadioButton:RID_SCPAGE_SORT_FIELDS:BTN_UP2";
+        Pos = MAP_APPFONT ( 172 , 55 ) ;
+        Size = MAP_APPFONT ( 79 , 10 ) ;
+        Text [ en-US ] = "A~scending" ;
+        TabStop = TRUE ;
+    };
+    RadioButton BTN_DOWN2
+    {
+        HelpID = "sc:RadioButton:RID_SCPAGE_SORT_FIELDS:BTN_DOWN2";
+        Pos = MAP_APPFONT ( 172 , 69 ) ;
+        Size = MAP_APPFONT ( 79 , 10 ) ;
+        Text [ en-US ] = "D~escending" ;
+        TabStop = TRUE ;
+    };
+    FixedLine FL_SORT2
+    {
+        Pos = MAP_APPFONT ( 6 , 44 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Then b~y" ;
+    };
+    ListBox LB_SORT3
+    {
+        HelpID = "sc:ListBox:RID_SCPAGE_SORT_FIELDS:LB_SORT3";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 101 ) ;
+        Size = MAP_APPFONT ( 154 , 90 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    RadioButton BTN_UP3
+    {
+        HelpID = "sc:RadioButton:RID_SCPAGE_SORT_FIELDS:BTN_UP3";
+        Pos = MAP_APPFONT ( 172 , 96 ) ;
+        Size = MAP_APPFONT ( 79 , 10 ) ;
+        Text [ en-US ] = "As~cending" ;
+        TabStop = TRUE ;
+    };
+    RadioButton BTN_DOWN3
+    {
+        HelpID = "sc:RadioButton:RID_SCPAGE_SORT_FIELDS:BTN_DOWN3";
+        Pos = MAP_APPFONT ( 172 , 110 ) ;
+        Size = MAP_APPFONT ( 79 , 10 ) ;
+        Text [ en-US ] = "Desce~nding" ;
+        TabStop = TRUE ;
+    };
+    FixedLine FL_SORT3
+    {
+        Pos = MAP_APPFONT ( 6 , 85 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "T~hen by" ;
+    };
+};
+
+TabPage RID_SCPAGE_SORT_OPTIONS
+{
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    HelpId = HID_SCPAGE_SORT_OPTIONS ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    CheckBox BTN_CASESENSITIVE
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_SORT_OPTIONS:BTN_CASESENSITIVE";
+        Pos = MAP_APPFONT ( 12 , 6 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
+        Text [ en-US ] = "Case ~sensitive" ;
+        TabStop = TRUE ;
+    };
+    CheckBox BTN_LABEL
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_SORT_OPTIONS:BTN_LABEL";
+        Pos = MAP_APPFONT ( 12 , 20 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
+        TabStop = TRUE ;
+    };
+    String STR_COL_LABEL
+    {
+        Text [ en-US ] = "Range contains column la~bels" ;
+    };
+    String STR_ROW_LABEL
+    {
+        Text [ en-US ] = "Range contains ~row labels" ;
+    };
+    CheckBox BTN_FORMATS
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_SORT_OPTIONS:BTN_FORMATS";
+        Pos = MAP_APPFONT ( 12 , 34 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
+        Text [ en-US ] = "Include ~formats" ;
+        TabStop = TRUE ;
+    };
+    CheckBox BTN_NATURALSORT
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_SORT_OPTIONS:BTN_COPYRESULT";
+        Pos = MAP_APPFONT ( 12 , 48 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
+        Text [ de ] = "Enable ~natural sort" ;
+        Text [ en-US ] = "Enable ~natural sort" ;
+        Text [ cs ] = "Aktivovat přirozené třídění" ;
+        Text [ sk ] = "Aktivovať prirodzené triedenie" ;
+        TabStop = TRUE ;
+        Text [ x-comment ] = " " ;
+    };
+    CheckBox BTN_COPYRESULT
+    {
+        Pos = MAP_APPFONT ( 12 , 62 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
+        Text [ en-US ] = "~Copy sort results to:" ;
+        TabStop = TRUE ;
+    };
+    ListBox LB_OUTAREA
+    {
+        HelpID = "sc:ListBox:RID_SCPAGE_SORT_OPTIONS:LB_OUTAREA";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 20 , 73 ) ;
+        Size = MAP_APPFONT ( 93 , 90 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    Edit ED_OUTAREA
+    {
+        HelpID = "sc:Edit:RID_SCPAGE_SORT_OPTIONS:ED_OUTAREA";
+        Disable = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 119 , 73 ) ;
+        Size = MAP_APPFONT ( 132 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    CheckBox BTN_SORT_USER
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_SORT_OPTIONS:BTN_SORT_USER";
+        Pos = MAP_APPFONT ( 12 , 89 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
+        Text [ en-US ] = "Custom sort ~order" ;
+        TabStop = TRUE ;
+    };
+    ListBox LB_SORT_USER
+    {
+        HelpID = "sc:ListBox:RID_SCPAGE_SORT_OPTIONS:LB_SORT_USER";
+        Disable = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 20 , 100 ) ;
+        Size = MAP_APPFONT ( 231 , 90 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    FixedText FT_LANGUAGE
+    {
+        Pos = MAP_APPFONT ( 12 , 118 ) ;
+        Size = MAP_APPFONT ( 101 , 8 ) ;
+        Text [ en-US ] = "~Language";
+    };
+    ListBox LB_LANGUAGE
+    {
+        HelpID = "sc:ListBox:RID_SCPAGE_SORT_OPTIONS:LB_LANGUAGE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 129 ) ;
+        Size = MAP_APPFONT ( 101 , 90 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        Sort = TRUE ;
+    };
+    FixedText FT_ALGORITHM
+    {
+        Pos = MAP_APPFONT ( 119 , 118 ) ;
+        Size = MAP_APPFONT ( 132 , 8 ) ;
+        Text [ en-US ] = "O~ptions";
+    };
+    ListBox LB_ALGORITHM
+    {
+        HelpID = "sc:ListBox:RID_SCPAGE_SORT_OPTIONS:LB_ALGORITHM";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 119 , 129 ) ;
+        Size = MAP_APPFONT ( 132 , 90 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    FixedLine FL_DIRECTION
+    {
+        Pos = MAP_APPFONT ( 6 , 147 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Direction" ;
+    };
+    RadioButton BTN_TOP_DOWN
+    {
+        HelpID = "sc:RadioButton:RID_SCPAGE_SORT_OPTIONS:BTN_TOP_DOWN";
+        Pos = MAP_APPFONT ( 12 , 158 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
+        Text [ en-US ] = "~Top to bottom (sort rows)" ;
+        TabStop = TRUE ;
+    };
+    RadioButton BTN_LEFT_RIGHT
+    {
+        HelpID = "sc:RadioButton:RID_SCPAGE_SORT_OPTIONS:BTN_LEFT_RIGHT";
+        Pos = MAP_APPFONT ( 12 , 172 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
+        Text [ en-US ] = "L~eft to right (sort columns)" ;
+        TabStop = TRUE ;
+    };
+};
+
+TabDialog RID_SCDLG_SORT
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 220 , 175 ) ;
+    Text [ en-US ] = "Sort" ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 0 , 0 ) ;
+        Size = MAP_APPFONT ( 210 , 170 ) ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = TP_FIELDS ;
+                PageResID = TP_FIELDS ;
+                Text [ en-US ] = "Sort Criteria" ;
+            };
+            PageItem
+            {
+                Identifier = TP_OPTIONS ;
+                PageResID = TP_OPTIONS ;
+                Text [ en-US ] = "Options" ;
+            };
+        };
+    };
+    OKButton 1
+    {
+        Pos = MAP_APPFONT ( 3 , 157 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    CancelButton 1
+    {
+        Pos = MAP_APPFONT ( 49 , 157 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton 1
+    {
+        Pos = MAP_APPFONT ( 137 , 157 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton 1
+    {
+        Pos = MAP_APPFONT ( 94 , 157 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+    };
+};
+
+ModalDialog RID_SCDLG_SORT_WARNING
+{
+    HelpID = "sc:ModalDialog:RID_SCDLG_SORT_WARNING";
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 180 , 91 ) ;
+    Text [ en-US ] = "Sort Range" ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    FixedText FT_TEXT
+    {
+        Pos = MAP_APPFONT ( 8 , 3 ) ;
+        Size = MAP_APPFONT ( 170 , 33 ) ;
+        WordBreak = TRUE;
+        Text [ en-US ] = "The cells next to the current selection also contain data. Do you want to extend the sort range to %1, or sort the currently selected range, %2?";
+    };
+    FixedText FT_TIP
+    {
+        Pos = MAP_APPFONT ( 8 , 55 ) ;
+        Size = MAP_APPFONT ( 170 , 33 ) ;
+        WordBreak = TRUE ;
+        Text [ en-US ] = "Tip: The sort range can be detected automatically. Place the cell cursor inside a list and execute sort. The whole range of neighboring non-empty cells will then be sorted.";
+    };
+    PushButton BTN_EXTSORT
+    {
+        HelpID = "sc:PushButton:RID_SCDLG_SORT_WARNING:BTN_EXTSORT";
+        Pos = MAP_APPFONT ( 6 , 39 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+        Text [ en-US ] = "Extend selection";
+    };
+    PushButton BTN_CURSORT
+    {
+        HelpID = "sc:PushButton:RID_SCDLG_SORT_WARNING:BTN_CURSORT";
+        Pos = MAP_APPFONT ( 70 , 39 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Current selection";
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 134 , 39 ) ;
+        Size = MAP_APPFONT ( 40 , 14 ) ;
+        TabStop = TRUE ;
+    };
+};
+

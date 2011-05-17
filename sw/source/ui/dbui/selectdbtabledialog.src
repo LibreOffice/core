@@ -1,0 +1,99 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include <selectdbtabledialog.hrc>
+#include <dbui.hrc>
+#include <helpid.h>
+
+ModalDialog DLG_MM_SELECTDBTABLEDDIALOG
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    HelpID = HID_MM_SELECTDBTABLEDDIALOG;
+    Size = MAP_APPFONT ( 250 , 135 ) ;
+    Moveable = TRUE ;
+
+    Text [ en-US ] = "Select Table";
+
+    FixedText       FI_SELECT
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 238 , 24 ) ;
+        WordBreak = TRUE;
+        Text [ en-US ] = "The file you have selected contains more than one table. Please select the table containing the address list you want to use.";
+    };
+    Control LB_TABLE
+    {
+        Pos = MAP_APPFONT ( 6 , 30 ) ;
+        Size = MAP_APPFONT ( 238 , 50 ) ;
+        Border = TRUE;
+    };
+    PushButton      PB_PREVIEW
+    {
+        HelpID = "sw:PushButton:DLG_MM_SELECTDBTABLEDDIALOG:PB_PREVIEW";
+        Pos = MAP_APPFONT ( 6 , 84 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Preview";
+    };
+    FixedLine FL_SEPARATOR
+    {
+        Pos = MAP_APPFONT ( 6 , 104 ) ;
+        Size = MAP_APPFONT ( 238 , 8 ) ;
+    };
+    OKButton        PB_OK
+    {
+        Pos = MAP_APPFONT ( 85 , 115 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    CancelButton    PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 138 , 115 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton      PB_HELP
+    {
+        Pos = MAP_APPFONT ( 194 , 115 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    String ST_NAME
+    {
+        Text [ en-US ] = "Name";
+    };
+    String ST_TYPE
+    {
+        Text [ en-US ] = "Type";
+    };
+    String ST_TABLE
+    {
+        Text [ en-US ] = "Table";
+    };
+    String ST_QUERY
+    {
+        Text [ en-US ] = "Query";
+    };
+
+};

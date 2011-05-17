@@ -1,0 +1,1183 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "datanavi.hrc"
+#include "globlmn.hrc"
+#include "svx/fmresids.hrc"
+#include "fmhelp.hrc"
+
+#define MASKCOLOR   MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+
+TabPage RID_SVX_XFORMS_TABPAGES
+{
+    HelpID = "svx:TabPage:RID_SVX_XFORMS_TABPAGES";
+    Hide = TRUE ;
+    DialogControl = TRUE;
+    Size = MAP_APPFONT ( 63 , 100 ) ;
+    ToolBox TB_ITEMS
+    {
+        HelpId = HID_XFORMS_TOOLBOX ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 0 , 0 ) ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = TBI_ITEM_ADD ;
+                HelpId = HID_XFORMS_TOOLBOX_ITEM_ADD ;
+                Text [ en-US ] = "Add Item" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_ITEM_ADD_ELEMENT ;
+                HelpId = HID_XFORMS_TOOLBOX_ITEM_ADD_ELEMENT ;
+                Text [ en-US ] = "Add Element" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_ITEM_ADD_ATTRIBUTE ;
+                HelpId = HID_XFORMS_TOOLBOX_ITEM_ADD_ATTRIBUTE ;
+                Text [ en-US ] = "Add Attribute" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_ITEM_EDIT ;
+                HelpId = HID_XFORMS_TOOLBOX_ITEM_EDIT ;
+                Text [ en-US ] = "Edit" ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_ITEM_REMOVE ;
+                HelpId = HID_XFORMS_TOOLBOX_ITEM_REMOVE ;
+                Text [ en-US ] = "Delete" ;
+            };
+        };
+    };
+    Control LB_ITEMS
+    {
+        HelpId = HID_XFORMS_ITEMS_LIST ;
+        Pos = MAP_APPFONT ( 0 , 0 ) ;
+        Size = MAP_APPFONT ( 63 , 100 ) ;
+        Border = TRUE ;
+        TabStop = TRUE;
+    };
+#define IMG_LST                 \
+IdList =                        \
+{                               \
+    IID_ITEM_ADD ;              \
+    IID_ITEM_ADD_ELEMENT ;      \
+    IID_ITEM_ADD_ATTRIBUTE ;    \
+    IID_ITEM_EDIT ;             \
+    IID_ITEM_REMOVE ;           \
+};                              \
+IdCount = { 5 ; } ;
+
+    ImageList IL_TBX_BMPS
+    {
+        Prefix = "tb";
+        MASKCOLOR
+        IMG_LST
+    };
+#undef IMG_LST
+};
+
+Window RID_SVXWIN_DATANAVIGATOR
+{
+    OutputSize = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    DialogControl = TRUE ;
+    HelpId = HID_DATA_NAVIGATOR_WIN ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 300 , 400 ) ;
+    ListBox LB_MODELS
+    {
+        HelpId = HID_XFORMS_MODELS_LIST ;
+        Pos = MAP_APPFONT ( 3 , 4 ) ;
+        Size = MAP_APPFONT ( 63 , 45 ) ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+    };
+    MenuButton MB_MODELS
+    {
+        HelpId = HID_XFORMS_MODELS_MENUBTN ;
+        Pos = MAP_APPFONT ( 69 , 3 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Models";
+        ButtonMenu = Menu
+        {
+            ItemList =
+            {
+                MenuItem
+                {
+                    Identifier = MID_MODELS_ADD ;
+                    HelpId = HID_MN_XFORMS_MODELS_ADD ;
+                    Text [ en-US ] = "~Add..." ;
+                };
+                MenuItem
+                {
+                    Identifier = MID_MODELS_EDIT ;
+                    HelpId = HID_MN_XFORMS_MODELS_EDIT ;
+                    Text [ en-US ] = "~Edit..." ;
+                };
+                MenuItem
+                {
+                    Identifier = MID_MODELS_REMOVE ;
+                    HelpId = HID_MN_XFORMS_MODELS_REMOVE ;
+                    Text [ en-US ] = "~Remove" ;
+                };
+            };
+        };
+    };
+    TabControl TC_ITEMS
+    {
+        HelpId = HID_XFORMS_TAB_CONTROL ;
+        Pos = MAP_APPFONT ( 3, 20 ) ;
+        TabStop = TRUE;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = TID_INSTANCE ;
+                Text [ en-US ] = "Instance";
+            };
+            PageItem
+            {
+                Identifier = TID_SUBMISSION ;
+                Text [ en-US ] = "Submissions";
+            };
+            PageItem
+            {
+                Identifier = TID_BINDINGS ;
+                Text [ en-US ] = "Bindings";
+            };
+        };
+    };
+    MenuButton MB_INSTANCES
+    {
+        HelpId = HID_XFORMS_INSTANCES_MENUBTN ;
+        Pos = MAP_APPFONT ( 69 , 133 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Instances";
+        ButtonMenu = Menu
+        {
+            ItemList =
+            {
+                MenuItem
+                {
+                    Identifier = MID_INSTANCES_ADD ;
+                    HelpId = HID_MN_XFORMS_INSTANCES_ADD ;
+                    Text [ en-US ] = "~Add..." ;
+                };
+                MenuItem
+                {
+                    Identifier = MID_INSTANCES_EDIT ;
+                    HelpId = HID_MN_XFORMS_INSTANCES_EDIT ;
+                    Text [ en-US ] = "~Edit..." ;
+                };
+                MenuItem
+                {
+                    Identifier = MID_INSTANCES_REMOVE ;
+                    HelpId = HID_MN_XFORMS_INSTANCES_REMOVE ;
+                    Text [ en-US ] = "~Remove" ;
+                };
+                MenuItem
+                {
+                    Separator = TRUE;
+                };
+                MenuItem
+                {
+                    Identifier = MID_SHOW_DETAILS ;
+                    HelpId = HID_MN_XFORMS_SHOW_DETAILS ;
+                    Text [ en-US ] = "~Show Details" ;
+                };
+            };
+        };
+    };
+
+#define IMG_LST2            \
+IdList =                    \
+{                           \
+    IID_GROUP_CLOSED ;      \
+    IID_GROUP_OPEN ;        \
+    IID_ELEMENT ;           \
+    IID_ATTRIBUTE ;         \
+    IID_TEXT ;              \
+    IID_OTHER ;             \
+};                          \
+IdCount = { 6 ; } ;
+
+    ImageList IL_ITEM_BMPS
+    {
+        Prefix = "da";
+        MASKCOLOR
+        IMG_LST2
+    };
+};
+
+QueryBox RID_QRY_REMOVE_MODEL
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_NO ;
+    Message [ en-US ] = "Deleting the model '$MODELNAME' affects all controls currently bound to this model.\nDo you really want to delete this model?" ;
+};
+
+QueryBox RID_QRY_REMOVE_INSTANCE
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_NO ;
+    Message [ en-US ] = "Deleting the instance '$INSTANCENAME' affects all controls currently bound to this instance.\nDo you really want to delete this instance?" ;
+};
+
+QueryBox RID_QRY_REMOVE_ELEMENT
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_NO ;
+    Message [ en-US ] = "Deleting the element '$ELEMENTNAME' affects all controls currently bound to this element.\nDo you really want to delete this element?" ;
+};
+
+QueryBox RID_QRY_REMOVE_ATTRIBUTE
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_NO ;
+    Message [ en-US ] = "Do you really want to delete the attribute '$ATTRIBUTENAME'?" ;
+};
+
+QueryBox RID_QRY_REMOVE_SUBMISSION
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_NO ;
+    Message [ en-US ] = "Deleting the submission '$SUBMISSIONNAME' affects all controls currently bound to this submission.\n\nDo you really want to delete this submission?" ;
+};
+
+QueryBox RID_QRY_REMOVE_BINDING
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_NO ;
+    Message [ en-US ] = "Deleting the binding '$BINDINGNAME' affects all controls currently bound to this binding.\n\nDo you really want to delete this binding?" ;
+};
+
+MessBox RID_QRY_LINK_WARNING
+{
+    Buttons = 0 ;
+    Message [ en-US ] = "This instance is linked with the form.\n\nThe changes you make to this instance will be lost when the form is reloaded.\n\nHow do you want to proceed?" ;
+};
+
+ErrorBox RID_ERR_INVALID_XMLNAME
+{
+    Buttons = WB_OK ;
+    Message [ en-US ] = "The name '%1' is not valid in XML. Please enter a different name." ;
+};
+
+ErrorBox RID_ERR_INVALID_XMLPREFIX
+{
+    Buttons = WB_OK ;
+    Message [ en-US ] = "The prefix '%1' is not valid in XML. Please enter a different prefix." ;
+};
+
+ErrorBox RID_ERR_DOUBLE_MODELNAME
+{
+    Buttons = WB_OK ;
+    Message [ en-US ] = "The name '%1' already exists. Please enter a new name." ;
+};
+
+ErrorBox RID_ERR_EMPTY_SUBMISSIONNAME
+{
+    Buttons = WB_OK ;
+    Message [ en-US ] = "The submission must have a name." ;
+};
+
+ModalDialog RID_SVXDLG_ADD_DATAITEM
+{
+    HelpID = HID_XFORMS_ADDDATAITEM_DLG ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 180 , 186 ) ;
+    Moveable = TRUE ;
+    FixedLine FL_ITEM
+    {
+        Pos = MAP_APPFONT ( 4 , 3 ) ;
+        Size = MAP_APPFONT ( 172 , 8 ) ;
+        Text [ en-US ] = "Item" ;
+    };
+    FixedText FT_NAME
+    {
+        Pos = MAP_APPFONT ( 6 , 15 ) ;
+        Size = MAP_APPFONT ( 69 , 8 ) ;
+        LeftLabel = TRUE ;
+        Text [ en-US ] = "~Name" ;
+    };
+    Edit ED_NAME
+    {
+        HelpID = "svx:Edit:RID_SVXDLG_ADD_DATAITEM:ED_NAME";
+        Pos = MAP_APPFONT ( 78 , 14 ) ;
+        Size = MAP_APPFONT ( 96 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_DEFAULT
+    {
+        Pos = MAP_APPFONT ( 6 , 30 ) ;
+        Size = MAP_APPFONT ( 69 , 8 ) ;
+        LeftLabel = TRUE ;
+        Text [ en-US ] = "~Default Value" ;
+    };
+    Edit ED_DEFAULT
+    {
+        HelpID = "svx:Edit:RID_SVXDLG_ADD_DATAITEM:ED_DEFAULT";
+        Pos = MAP_APPFONT ( 78 , 29 ) ;
+        Size = MAP_APPFONT ( 96 , 12 ) ;
+        Border = TRUE ;
+    };
+    PushButton PB_DEFAULT
+    {
+        HelpID = "svx:PushButton:RID_SVXDLG_ADD_DATAITEM:PB_DEFAULT";
+        Pos = MAP_APPFONT ( 160 , 29 ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+        Text = "..." ;
+    };
+    FixedLine FL_SETTINGS
+    {
+        Pos = MAP_APPFONT ( 4 , 44 ) ;
+        Size = MAP_APPFONT ( 172 , 8 ) ;
+        Text [ en-US ] = "Settings" ;
+    };
+    FixedText FT_DATATYPE
+    {
+        Pos = MAP_APPFONT ( 6 , 56 ) ;
+        Size = MAP_APPFONT ( 69 , 8 ) ;
+        LeftLabel = TRUE ;
+        Text [ en-US ] = "~Data Type" ;
+    };
+    ListBox LB_DATATYPE
+    {
+        HelpID = "svx:ListBox:RID_SVXDLG_ADD_DATAITEM:LB_DATATYPE";
+        Pos = MAP_APPFONT ( 78 , 55 ) ;
+        Size = MAP_APPFONT ( 96 , 45 ) ;
+        Border = TRUE ;
+        DropDown = TRUE;
+    };
+    CheckBox CB_REQUIRED
+    {
+        HelpID = "svx:CheckBox:RID_SVXDLG_ADD_DATAITEM:CB_REQUIRED";
+        Pos = MAP_APPFONT ( 6 , 72 ) ;
+        Size = MAP_APPFONT ( 69 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Required" ;
+    };
+    PushButton PB_REQUIRED
+    {
+        HelpID = "svx:PushButton:RID_SVXDLG_ADD_DATAITEM:PB_REQUIRED";
+        Pos = MAP_APPFONT ( 78 , 70 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Condition" ;
+    };
+    CheckBox CB_RELEVANT
+    {
+        HelpID = "svx:CheckBox:RID_SVXDLG_ADD_DATAITEM:CB_RELEVANT";
+        Pos = MAP_APPFONT ( 6 , 89 ) ;
+        Size = MAP_APPFONT ( 69 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "R~elevant" ;
+    };
+    PushButton PB_RELEVANT
+    {
+        HelpID = "svx:PushButton:RID_SVXDLG_ADD_DATAITEM:PB_RELEVANT";
+        Pos = MAP_APPFONT ( 78 , 87 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Condition" ;
+    };
+    CheckBox CB_CONSTRAINT
+    {
+        HelpID = "svx:CheckBox:RID_SVXDLG_ADD_DATAITEM:CB_CONSTRAINT";
+        Pos = MAP_APPFONT ( 6 , 106 ) ;
+        Size = MAP_APPFONT ( 69 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Constraint" ;
+    };
+    PushButton PB_CONSTRAINT
+    {
+        HelpID = "svx:PushButton:RID_SVXDLG_ADD_DATAITEM:PB_CONSTRAINT";
+        Pos = MAP_APPFONT ( 78 , 104 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Condition" ;
+    };
+    CheckBox CB_READONLY
+    {
+        HelpID = "svx:CheckBox:RID_SVXDLG_ADD_DATAITEM:CB_READONLY";
+        Pos = MAP_APPFONT ( 6 , 123 ) ;
+        Size = MAP_APPFONT ( 69 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Read-~only" ;
+    };
+    PushButton PB_READONLY
+    {
+        HelpID = "svx:PushButton:RID_SVXDLG_ADD_DATAITEM:PB_READONLY";
+        Pos = MAP_APPFONT ( 78 , 121 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Condition" ;
+    };
+    CheckBox CB_CALCULATE
+    {
+        HelpID = "svx:CheckBox:RID_SVXDLG_ADD_DATAITEM:CB_CALCULATE";
+        Pos = MAP_APPFONT ( 6 , 140 ) ;
+        Size = MAP_APPFONT ( 69 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Calc~ulate" ;
+    };
+    PushButton PB_CALCULATE
+    {
+        HelpID = "svx:PushButton:RID_SVXDLG_ADD_DATAITEM:PB_CALCULATE";
+        Pos = MAP_APPFONT ( 78 , 138 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Condition" ;
+    };
+    FixedLine FL_DATANAV_BTN
+    {
+        Pos = MAP_APPFONT ( 4 , 155 ) ;
+        Size = MAP_APPFONT ( 172 , 8 ) ;
+    };
+    OKButton BTN_DATANAV_OK
+    {
+        Pos = MAP_APPFONT ( 15 , 166 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_DATANAV_ESC
+    {
+        Pos = MAP_APPFONT ( 68 , 166 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_DATANAV_HELP
+    {
+        Pos = MAP_APPFONT ( 124 , 166 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    String STR_FIXEDLINE_ELEMENT
+    {
+        Text [ en-US ] = "Element" ;
+    };
+    String STR_FIXEDLINE_ATTRIBUTE
+    {
+        Text [ en-US ] = "Attribute" ;
+    };
+    String STR_FIXEDLINE_BINDING
+    {
+        Text [ en-US ] = "Binding" ;
+    };
+    String STR_FIXEDTEXT_BINDING
+    {
+        Text [ en-US ] = "Binding expression" ;
+    };
+};
+
+Menu RID_MENU_DATANAVIGATOR
+{
+    ItemList =
+    {
+        // MID_INSERT_CONTROL not implemented, yet (#i99890#)
+        /*MenuItem
+        {
+            Identifier = MID_INSERT_CONTROL ;
+            HelpId = HID_XFORMS_MID_INSERT_CONTROL ;
+            Text [ en-US ] = "Insert Control" ;
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };*/
+        MenuItem
+        {
+            Identifier = TBI_ITEM_ADD ;
+            HelpId = HID_XFORMS_TOOLBOX_ITEM_ADD ;
+            Text [ en-US ] = "Add Item" ;
+        };
+        MenuItem
+        {
+            Identifier = TBI_ITEM_ADD_ELEMENT ;
+            HelpId = HID_XFORMS_TOOLBOX_ITEM_ADD_ELEMENT ;
+            Text [ en-US ] = "Add Element" ;
+        };
+        MenuItem
+        {
+            Identifier = TBI_ITEM_ADD_ATTRIBUTE ;
+            HelpId = HID_XFORMS_TOOLBOX_ITEM_ADD_ATTRIBUTE ;
+            Text [ en-US ] = "Add Attribute" ;
+        };
+        MenuItem
+        {
+            Identifier = TBI_ITEM_EDIT ;
+            HelpId = HID_XFORMS_TOOLBOX_ITEM_EDIT ;
+            Text [ en-US ] = "Edit" ;
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = TBI_ITEM_REMOVE ;
+            HelpId = HID_XFORMS_TOOLBOX_ITEM_REMOVE ;
+            Text [ en-US ] = "Delete" ;
+        };
+    };
+};
+
+ModalDialog RID_SVXDLG_ADD_CONDITION
+{
+    HelpID = HID_XFORMS_ADDCONDITION_DLG ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 210 , 150 ) ;
+    Text [ en-US ] = "Add Condition" ;
+    Moveable = TRUE ;
+    FixedText FT_CONDITION
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 198 , 8 ) ;
+        LeftLabel = TRUE ;
+        Text [ en-US ] = "~Condition" ;
+    };
+    MultiLineEdit ED_CONDITION
+    {
+        HelpID = "svx:MultiLineEdit:RID_SVXDLG_ADD_CONDITION:ED_CONDITION";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 14 ) ;
+        Size = MAP_APPFONT ( 198 , 34 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        IgnoreTab = TRUE;
+    };
+    FixedText FT_RESULT
+    {
+        Pos = MAP_APPFONT ( 6 , 51 ) ;
+        Size = MAP_APPFONT ( 198 , 8 ) ;
+        LeftLabel = TRUE ;
+        Text [ en-US ] = "~Result" ;
+    };
+    FixedText FT_RESULT_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 6 , 62 ) ;
+        Size = MAP_APPFONT ( 198 , 34 ) ;
+        Border = TRUE;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        WordBreak = TRUE ;
+    };
+    PushButton PB_EDIT_NAMESPACES
+    {
+        HelpID = "svx:PushButton:RID_SVXDLG_ADD_CONDITION:PB_EDIT_NAMESPACES";
+        Pos = MAP_APPFONT ( 132 , 102 ) ;
+        Size = MAP_APPFONT ( 72 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Edit Namespaces..." ;
+    };
+    FixedLine FL_DATANAV_BTN
+    {
+        Pos = MAP_APPFONT ( 4 , 119 ) ;
+        Size = MAP_APPFONT ( 202 , 8 ) ;
+    };
+    OKButton BTN_DATANAV_OK
+    {
+        Pos = MAP_APPFONT ( 45 , 130 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_DATANAV_ESC
+    {
+        Pos = MAP_APPFONT ( 98 , 130 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_DATANAV_HELP
+    {
+        Pos = MAP_APPFONT ( 154 , 130 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+};
+
+ModalDialog RID_SVXDLG_NAMESPACE_ITEM
+{
+    HelpID = HID_XFORMS_NAMESPACEITEM_DLG ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 240 , 120 ) ;
+    Text [ en-US ] = "Namespaces for Forms" ;
+    Moveable = TRUE ;
+    FixedText FT_NAMESPACES
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 228 , 8 ) ;
+        LeftLabel = TRUE ;
+        Text [ en-US ] = "~Namespaces" ;
+    };
+    Control LB_NAMESPACES
+    {
+        HelpId = HID_XFORMS_NAMESPACEITEM_LIST;
+        Pos = MAP_APPFONT ( 6 , 14 ) ;
+        Size = MAP_APPFONT ( 175 , 72 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+    PushButton PB_ADD_NAMESPACE
+    {
+        HelpID = "svx:PushButton:RID_SVXDLG_NAMESPACE_ITEM:PB_ADD_NAMESPACE";
+        Pos = MAP_APPFONT ( 184 , 14 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Add..." ;
+    };
+    PushButton PB_EDIT_NAMESPACE
+    {
+        HelpID = "svx:PushButton:RID_SVXDLG_NAMESPACE_ITEM:PB_EDIT_NAMESPACE";
+        Pos = MAP_APPFONT ( 184 , 31 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Edit..." ;
+    };
+    PushButton PB_DELETE_NAMESPACE
+    {
+        HelpID = "svx:PushButton:RID_SVXDLG_NAMESPACE_ITEM:PB_DELETE_NAMESPACE";
+        Pos = MAP_APPFONT ( 184 , 48 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Delete" ;
+    };
+    FixedLine FL_DATANAV_BTN
+    {
+        Pos = MAP_APPFONT ( 4 , 89 ) ;
+        Size = MAP_APPFONT ( 232 , 8 ) ;
+    };
+    OKButton BTN_DATANAV_OK
+    {
+        Pos = MAP_APPFONT ( 75 , 100 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_DATANAV_ESC
+    {
+        Pos = MAP_APPFONT ( 128 , 100 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_DATANAV_HELP
+    {
+        Pos = MAP_APPFONT ( 184 , 100 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    String STR_HEADER_PREFIX
+    {
+        Text [ en-US ] = "Prefix" ;
+    };
+    String STR_HEADER_URL
+    {
+        Text [ en-US ] = "URL" ;
+    };
+};
+
+ModalDialog RID_SVXDLG_MANAGE_NAMESPACE
+{
+    HelpID = HID_XFORMS_MANAGENAMESPACE_DLG ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 210 , 60 ) ;
+    Text [ en-US ] = "Add Namespace" ;
+    Moveable = TRUE ;
+    FixedText FT_PREFIX
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 45 , 8 ) ;
+        LeftLabel = TRUE ;
+        Text [ en-US ] = "~Prefix" ;
+    };
+    Edit ED_PREFIX
+    {
+        HelpID = "svx:Edit:RID_SVXDLG_MANAGE_NAMESPACE:ED_PREFIX";
+        Pos = MAP_APPFONT ( 6 , 14 ) ;
+        Size = MAP_APPFONT ( 45 , 12 ) ;
+        Border = TRUE;
+    };
+    FixedText FT_URL
+    {
+        Pos = MAP_APPFONT ( 54 , 3 ) ;
+        Size = MAP_APPFONT ( 150 , 8 ) ;
+        LeftLabel = TRUE ;
+        Text [ en-US ] = "~URL" ;
+    };
+    Edit ED_URL
+    {
+        HelpID = "svx:Edit:RID_SVXDLG_MANAGE_NAMESPACE:ED_URL";
+        Pos = MAP_APPFONT ( 54 , 14 ) ;
+        Size = MAP_APPFONT ( 150 , 12 ) ;
+        Border = TRUE;
+    };
+    FixedLine FL_DATANAV_BTN
+    {
+        Pos = MAP_APPFONT ( 4 , 29 ) ;
+        Size = MAP_APPFONT ( 202 , 8 ) ;
+    };
+    OKButton BTN_DATANAV_OK
+    {
+        Pos = MAP_APPFONT ( 45 , 40 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_DATANAV_ESC
+    {
+        Pos = MAP_APPFONT ( 98 , 40 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_DATANAV_HELP
+    {
+        Pos = MAP_APPFONT ( 154 , 40 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    String STR_EDIT_TEXT
+    {
+        Text [ en-US ] = "Edit Namespace" ;
+    };
+};
+
+ModalDialog RID_SVXDLG_ADD_SUBMISSION
+{
+    HelpID = HID_XFORMS_ADDSUBMISSION_DLG ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 180 , 136 ) ;
+    Text [ en-US ] = "Add Submission" ;
+    Moveable = TRUE ;
+    FixedLine FL_SUBMISSION
+    {
+        Pos = MAP_APPFONT ( 4 , 3 ) ;
+        Size = MAP_APPFONT ( 172 , 8 ) ;
+        Text [ en-US ] = "Submission" ;
+    };
+    FixedText FT_SUBMIT_NAME
+    {
+        Pos = MAP_APPFONT ( 6 , 16 ) ;
+        Size = MAP_APPFONT ( 69 , 8 ) ;
+        LeftLabel = TRUE ;
+        Text [ en-US ] = "~Name" ;
+    };
+    Edit ED_SUBMIT_NAME
+    {
+        HelpID = "svx:Edit:RID_SVXDLG_ADD_SUBMISSION:ED_SUBMIT_NAME";
+        Pos = MAP_APPFONT ( 78 , 14 ) ;
+        Size = MAP_APPFONT ( 96 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_SUBMIT_ACTION
+    {
+        Pos = MAP_APPFONT ( 6 , 31 ) ;
+        Size = MAP_APPFONT ( 69 , 8 ) ;
+        LeftLabel = TRUE ;
+        Text [ en-US ] = "~Action" ;
+    };
+    Edit ED_SUBMIT_ACTION
+    {
+        HelpID = "svx:Edit:RID_SVXDLG_ADD_SUBMISSION:ED_SUBMIT_ACTION";
+        Pos = MAP_APPFONT ( 78 , 29 ) ;
+        Size = MAP_APPFONT ( 96 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_SUBMIT_METHOD
+    {
+        Pos = MAP_APPFONT ( 6 , 46 ) ;
+        Size = MAP_APPFONT ( 69 , 8 ) ;
+        LeftLabel = TRUE ;
+        Text [ en-US ] = "~Method" ;
+    };
+    ListBox LB_SUBMIT_METHOD
+    {
+        HelpID = "svx:ListBox:RID_SVXDLG_ADD_SUBMISSION:LB_SUBMIT_METHOD";
+        Pos = MAP_APPFONT ( 78 , 44 ) ;
+        Size = MAP_APPFONT ( 96 , 51 ) ;
+        Border = TRUE ;
+        DropDown = TRUE;
+    };
+    FixedText FT_SUBMIT_REF
+    {
+        Pos = MAP_APPFONT ( 6 , 62 ) ;
+        Size = MAP_APPFONT ( 69 , 8 ) ;
+        LeftLabel = TRUE ;
+        Text [ en-US ] = "Binding e~xpression" ;
+    };
+    Edit ED_SUBMIT_REF
+    {
+        HelpID = "svx:Edit:RID_SVXDLG_ADD_SUBMISSION:ED_SUBMIT_REF";
+        Pos = MAP_APPFONT ( 78 , 60 ) ;
+        Size = MAP_APPFONT ( 79, 12 ) ;
+        Border = TRUE ;
+    };
+    PushButton PB_SUBMIT_REF
+    {
+        HelpID = "svx:PushButton:RID_SVXDLG_ADD_SUBMISSION:PB_SUBMIT_REF";
+        Pos = MAP_APPFONT ( 159 , 59 ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~..." ;
+    };
+    FixedText FT_SUBMIT_BIND
+    {
+        Pos = MAP_APPFONT ( 6 , 77 ) ;
+        Size = MAP_APPFONT ( 69 , 8 ) ;
+        LeftLabel = TRUE ;
+        Text [ en-US ] = "~Binding" ;
+    };
+    ListBox LB_SUBMIT_BIND
+    {
+        HelpID = "svx:ListBox:RID_SVXDLG_ADD_SUBMISSION:LB_SUBMIT_BIND";
+        Pos = MAP_APPFONT ( 78 , 75 ) ;
+        Size = MAP_APPFONT ( 96 , 51 ) ;
+        Border = TRUE ;
+        DropDown = TRUE;
+    };
+    FixedText FT_SUBMIT_REPLACE
+    {
+        Pos = MAP_APPFONT ( 6 , 92 ) ;
+        Size = MAP_APPFONT ( 69 , 8 ) ;
+        LeftLabel = TRUE ;
+        Text [ en-US ] = "~Replace" ;
+    };
+    ListBox LB_SUBMIT_REPLACE
+    {
+        HelpID = "svx:ListBox:RID_SVXDLG_ADD_SUBMISSION:LB_SUBMIT_REPLACE";
+        Pos = MAP_APPFONT ( 78 , 90 ) ;
+        Size = MAP_APPFONT ( 96 , 51 ) ;
+        Border = TRUE ;
+        DropDown = TRUE;
+    };
+    FixedLine FL_DATANAV_BTN
+    {
+        Pos = MAP_APPFONT ( 4 , 105 ) ;
+        Size = MAP_APPFONT ( 172 , 8 ) ;
+    };
+    OKButton BTN_DATANAV_OK
+    {
+        Pos = MAP_APPFONT ( 15 , 116 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_DATANAV_ESC
+    {
+        Pos = MAP_APPFONT ( 68 , 116 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_DATANAV_HELP
+    {
+        Pos = MAP_APPFONT ( 124 , 116 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+
+    String STR_METHOD_POST
+    {
+        Text [ en-US ] = "Post" ;
+    };
+    String STR_METHOD_PUT
+    {
+        Text [ en-US ] = "Put" ;
+    };
+    String STR_METHOD_GET
+    {
+        Text [ en-US ] = "Get" ;
+    };
+    String STR_REPLACE_NONE
+    {
+        Text [ en-US ] = "None" ;
+    };
+    String STR_REPLACE_INST
+    {
+        Text [ en-US ] = "Instance" ;
+    };
+    String STR_REPLACE_DOC
+    {
+        Text [ en-US ] = "Document" ;
+    };
+};
+
+ModalDialog RID_SVXDLG_ADD_MODEL
+{
+    HelpID = HID_XFORMS_ADDMODEL_DLG ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 180 , 82 ) ;
+    Text [ en-US ] = "Add Model" ;
+    Moveable = TRUE ;
+    FixedLine FL_INSTANCE
+    {
+        Pos = MAP_APPFONT ( 4 , 3 ) ;
+        Size = MAP_APPFONT ( 172 , 8 ) ;
+        Text [ en-US ] = "Model" ;
+    };
+    FixedText FT_INST_NAME
+    {
+        Pos = MAP_APPFONT ( 6 , 14 ) ;
+        Size = MAP_APPFONT ( 51 , 12 ) ;
+        LeftLabel = TRUE ;
+        VCenter = TRUE;
+        Text [ en-US ] = "~Name" ;
+    };
+    Edit ED_INST_NAME
+    {
+        HelpID = "svx:Edit:RID_SVXDLG_ADD_MODEL:ED_INST_NAME";
+        Pos = MAP_APPFONT ( 60 , 14 ) ;
+        Size = MAP_APPFONT ( 114 , 12 ) ;
+        Border = TRUE ;
+    };
+    CheckBox CB_MODIFIES_DOCUMENT
+    {
+        HelpID = "svx:CheckBox:RID_SVXDLG_ADD_MODEL:CB_MODIFIES_DOCUMENT";
+        Pos = MAP_APPFONT( 6, 32 );
+        Size = MAP_APPFONT( 168, 16 );
+        Top = TRUE;
+        WordBreak = TRUE;
+
+        Text [ en-US ] = "Model data updates change document's modification status";
+    };
+    FixedLine FL_DATANAV_BTN
+    {
+        Pos = MAP_APPFONT ( 4 , 51 ) ;
+        Size = MAP_APPFONT ( 172 , 8 ) ;
+    };
+    OKButton BTN_DATANAV_OK
+    {
+        Pos = MAP_APPFONT ( 15 , 62 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_DATANAV_ESC
+    {
+        Pos = MAP_APPFONT ( 68 , 62 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_DATANAV_HELP
+    {
+        Pos = MAP_APPFONT ( 124 , 62 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    String STR_EDIT_TEXT
+    {
+        Text [ en-US ] = "Edit Model" ;
+    };
+};
+
+ModalDialog RID_SVXDLG_ADD_INSTANCE
+{
+    HelpID = HID_XFORMS_ADDINSTANCE_DLG ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 210 , 88 ) ;
+    Text [ en-US ] = "Add Instance" ;
+    Moveable = TRUE ;
+    FixedLine FL_INSTANCE
+    {
+        Pos = MAP_APPFONT ( 4 , 3 ) ;
+        Size = MAP_APPFONT ( 202 , 8 ) ;
+        Text [ en-US ] = "Instance" ;
+    };
+    FixedText FT_INST_NAME
+    {
+        Pos = MAP_APPFONT ( 6 , 15 ) ;
+        Size = MAP_APPFONT ( 51 , 8 ) ;
+        LeftLabel = TRUE ;
+        Text [ en-US ] = "~Name" ;
+    };
+    Edit ED_INST_NAME
+    {
+        HelpID = "svx:Edit:RID_SVXDLG_ADD_INSTANCE:ED_INST_NAME";
+        Pos = MAP_APPFONT ( 60 , 14 ) ;
+        Size = MAP_APPFONT ( 144 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_INST_URL
+    {
+        Pos = MAP_APPFONT ( 6 , 30 ) ;
+        Size = MAP_APPFONT ( 51 , 8 ) ;
+        LeftLabel = TRUE ;
+        Text [ en-US ] = "~URL" ;
+    };
+    ComboBox ED_INST_URL
+    {
+        HelpID = "svx:ComboBox:RID_SVXDLG_ADD_INSTANCE:ED_INST_URL";
+        Pos = MAP_APPFONT ( 60 , 29 ) ;
+        Size = MAP_APPFONT ( 127 , 48 ) ;
+        DropDown = TRUE ;
+        Border = TRUE ;
+    };
+    PushButton PB_FILEPICKER
+    {
+        HelpID = "svx:PushButton:RID_SVXDLG_ADD_INSTANCE:PB_FILEPICKER";
+        Pos = MAP_APPFONT ( 190 , 28 ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
+        TabStop = TRUE ;
+        Text = "~..." ;
+    };
+    CheckBox CB_INST_LINKINST
+    {
+        HelpID = "svx:CheckBox:RID_SVXDLG_ADD_INSTANCE:CB_INST_LINKINST";
+        Pos = MAP_APPFONT ( 6 , 44 ) ;
+        Size = MAP_APPFONT ( 198 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Link instance" ;
+    };
+    FixedLine FL_DATANAV_BTN
+    {
+        Pos = MAP_APPFONT ( 4 , 57 ) ;
+        Size = MAP_APPFONT ( 202 , 8 ) ;
+    };
+    OKButton BTN_DATANAV_OK
+    {
+        Pos = MAP_APPFONT ( 45 , 68 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_DATANAV_ESC
+    {
+        Pos = MAP_APPFONT ( 98 , 68 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_DATANAV_HELP
+    {
+        Pos = MAP_APPFONT ( 154 , 68 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    String STR_EDIT_TEXT
+    {
+        Text [ en-US ] = "Edit Instance" ;
+    };
+};
+
+String RID_STR_DATANAV_SUBM_PARENT
+{
+    Text [ en-US ] = "Submission: " ;
+};
+String RID_STR_DATANAV_SUBM_ID
+{
+    Text [ en-US ] = "ID: " ;
+};
+String RID_STR_DATANAV_SUBM_BIND
+{
+    Text [ en-US ] = "Binding: " ;
+};
+String RID_STR_DATANAV_SUBM_REF
+{
+    Text [ en-US ] = "Reference: " ;
+};
+String RID_STR_DATANAV_SUBM_ACTION
+{
+    Text [ en-US ] = "Action: " ;
+};
+String RID_STR_DATANAV_SUBM_METHOD
+{
+    Text [ en-US ] = "Method: " ;
+};
+String RID_STR_DATANAV_SUBM_REPLACE
+{
+    Text [ en-US ] = "Replace: " ;
+};
+String RID_STR_DATANAV_ADD_ELEMENT
+{
+    Text [ en-US ] = "Add Element" ;
+};
+String RID_STR_DATANAV_EDIT_ELEMENT
+{
+    Text [ en-US ] = "Edit Element" ;
+};
+String RID_STR_DATANAV_REMOVE_ELEMENT
+{
+    Text [ en-US ] = "Delete Element" ;
+};
+String RID_STR_DATANAV_ADD_ATTRIBUTE
+{
+    Text [ en-US ] = "Add Attribute" ;
+};
+String RID_STR_DATANAV_EDIT_ATTRIBUTE
+{
+    Text [ en-US ] = "Edit Attribute" ;
+};
+String RID_STR_DATANAV_REMOVE_ATTRIBUTE
+{
+    Text [ en-US ] = "Delete Attribute" ;
+};
+String RID_STR_DATANAV_ADD_BINDING
+{
+    Text [ en-US ] = "Add Binding" ;
+};
+String RID_STR_DATANAV_EDIT_BINDING
+{
+    Text [ en-US ] = "Edit Binding" ;
+};
+String RID_STR_DATANAV_REMOVE_BINDING
+{
+    Text [ en-US ] = "Delete Binding" ;
+};
+String RID_STR_DATANAV_ADD_SUBMISSION
+{
+    Text [ en-US ] = "Add Submission" ;
+};
+String RID_STR_DATANAV_EDIT_SUBMISSION
+{
+    Text [ en-US ] = "Edit Submission" ;
+};
+String RID_STR_DATANAV_REMOVE_SUBMISSION
+{
+    Text [ en-US ] = "Delete Submission" ;
+};
+String RID_STR_DATANAV_LINKWARN_BUTTON
+{
+    Text [ en-US ] = "~Edit" ;
+};
+

@@ -1,0 +1,228 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "svx/fmresids.hrc"
+#include <svx/svxids.hrc>
+#include <svx/dialogs.hrc>
+#include <sfx2/sfxsids.hrc>
+#include "globlmn_tmpl.hrc"
+#include "helpid.hrc"
+#include "fmhelp.hrc"
+
+Menu RID_FM_TEXTATTRIBUTE_MENU
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            ITEM_FORMAT_ATTR_CHAR_FONT
+        };
+        MenuItem
+        {
+            ITEM_FORMAT_ATTR_CHAR_FONTHEIGHT
+        };
+        MenuItem
+        {
+            Identifier = MENU_FM_TEXTATTRIBITES_STYLE;
+            HelpID = HID_MENU_FM_TEXTATTRIBUTES_STYLE;
+            Text [ en-US ] = "St~yle";
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        ITEM_FORMAT_ATTR_CHAR_WEIGHT
+                    };
+                    MenuItem
+                    {
+                        ITEM_FORMAT_ATTR_CHAR_POSTURE
+                    };
+                    MenuItem
+                    {
+                        ITEM_FORMAT_ATTR_CHAR_OVERLINE
+                    };
+                    MenuItem
+                    {
+                        ITEM_FORMAT_ATTR_CHAR_UNDERLINE
+                    };
+                    MenuItem
+                    {
+                        ITEM_FORMAT_ATTR_CHAR_STRIKEOUT
+                    };
+                    MenuItem
+                    {
+                        ITEM_FORMAT_ATTR_CHAR_SHADOWED
+                    };
+                    MenuItem
+                    {
+                        ITEM_FORMAT_ATTR_CHAR_CONTOUR
+                    };
+                    MenuItem { Separator = TRUE; };
+                    MenuItem
+                    {
+                        ITEM_FORMAT_SET_SUPER_SCRIPT
+                    };
+                    MenuItem
+                    {
+                        ITEM_FORMAT_SET_SUB_SCRIPT
+                    };
+                };
+            };
+        };
+        MenuItem
+        {
+            Identifier = MENU_FM_TEXTATTRIBITES_ALIGNMENT;
+            HelpID = HID_MENU_FM_TEXTATTRIBUTES_ALIGNMENT;
+            Text [ en-US ] = "~Alignment";
+            RadioCheck = TRUE;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        RadioCheck = TRUE;
+                        ITEM_FORMAT_ATTR_PARA_ADJUST_LEFT
+                    };
+                    MenuItem
+                    {
+                        RadioCheck = TRUE;
+                        ITEM_FORMAT_ATTR_PARA_ADJUST_RIGHT
+                    };
+                    MenuItem
+                    {
+                        RadioCheck = TRUE;
+                        ITEM_FORMAT_ATTR_PARA_ADJUST_CENTER
+                    };
+                    MenuItem
+                    {
+                        ITEM_FORMAT_ATTR_PARA_ADJUST_BLOCK
+                        RadioCheck = TRUE;
+                    };
+                };
+            };
+        };
+        MenuItem
+        {
+            Identifier = MENU_FM_TEXTATTRIBITES_SPACING;
+            HelpID = HID_MENU_FM_TEXTATTRIBUTES_SPACING;
+            Text [ en-US ] = "~Line Spacing";
+            _MenuItemFlags = MIB_RADIOCHECK;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        RadioCheck = TRUE;
+                        ITEM_FORMAT_PARA_LINESPACE_10
+                    };
+                    MenuItem
+                    {
+                        RadioCheck = TRUE;
+                        ITEM_FORMAT_PARA_LINESPACE_15
+                    };
+                    MenuItem
+                    {
+                        RadioCheck = TRUE;
+                        ITEM_FORMAT_PARA_LINESPACE_20
+                    };
+                };
+            };
+        };
+    };
+};
+
+TabDialog RID_SVXDLG_TEXTCONTROL_CHARATTR
+{
+    OutputSize = TRUE;
+    SVLook = TRUE;
+    Moveable = TRUE;
+
+    Text [ en-US ] = "Character";
+
+    TabControl 1
+    {
+        OutputSize = TRUE;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_CHAR_NAME;
+                Text [ en-US ] = "Font";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_CHAR_EFFECTS;
+                Text [ en-US ] = "Font Effects";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_CHAR_POSITION;
+                Text [ en-US ] = "Position";
+            };
+        };
+    };
+};
+
+TabDialog RID_SVXDLG_TEXTCONTROL_PARAATTR
+{
+    OutputSize = TRUE;
+    SVLook = TRUE;
+    Moveable = TRUE;
+
+    Text [ en-US ] = "Paragraph";
+
+    TabControl 1
+    {
+        OutputSize = TRUE;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_STD_PARAGRAPH;
+                Text [ en-US ] = "Indents & Spacing";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_ALIGN_PARAGRAPH;
+                Text [ en-US ] = "Alignment";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_PARA_ASIAN;
+                Text [ en-US ] = "Asian Typography";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_TABULATOR;
+                Text [ en-US ] = "Tabs";
+            };
+        };
+    };
+};

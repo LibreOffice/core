@@ -1,0 +1,150 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "globals.hrc"
+#include "fldtdlg.hrc"
+#include "helpid.h"
+TabPage TP_FLD_REF
+{
+    HelpID = HID_FLD_REF ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    FixedText FT_REFTYPE
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 76 , 8 ) ;
+        Text [ en-US ] = "~Type" ;
+        Left = TRUE ;
+    };
+    ListBox LB_REFTYPE
+    {
+        HelpID = "sw:ListBox:TP_FLD_REF:LB_REFTYPE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 14 ) ;
+        Size = MAP_APPFONT ( 76 , 165 ) ;
+        TabStop = TRUE ;
+        AutoHScroll = TRUE ;
+    };
+    FixedText FT_REFSELECTION
+    {
+        Pos = MAP_APPFONT ( 88 , 3 ) ;
+        Size = MAP_APPFONT ( 76 , 8 ) ;
+        Text [ en-US ] = "S~election" ;
+        Left = TRUE ;
+    };
+    ListBox LB_REFSELECTION
+    {
+        HelpID = "sw:ListBox:TP_FLD_REF:LB_REFSELECTION";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 88 , 14 ) ;
+        Size = MAP_APPFONT ( 166 , 73 ) ;
+        TabStop = TRUE ;
+        Sort = TRUE ;
+    };
+    /* TreeListBox in order to have tool tips - shares window position and size with LB_REFSELECTION */
+    Control LB_REFSELECTION_TOOLTIP
+    {
+        HelpID = HID_REFSELECTION_TOOLTIP ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 88 , 14 ) ;
+        Size = MAP_APPFONT ( 166 , 73 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_REFFORMAT
+    {
+        Pos = MAP_APPFONT ( 88 , 93 ) ;
+        Size = MAP_APPFONT ( 76 , 8 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "Insert ~reference to" ;
+    };
+    ListBox LB_REFFORMAT
+    {
+        HelpID = "sw:ListBox:TP_FLD_REF:LB_REFFORMAT";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 88 , 104 ) ;
+        Size = MAP_APPFONT ( 76 , 75 ) ;
+        TabStop = TRUE ;
+        DropDown = FALSE ;
+         // Sort = TRUE;
+    };
+    FixedText FT_REFNAME
+    {
+        Pos = MAP_APPFONT ( 170 , 93 ) ;
+        Size = MAP_APPFONT ( 84 , 10 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "Na~me" ;
+    };
+    Edit ED_REFNAME
+    {
+        HelpID = "sw:Edit:TP_FLD_REF:ED_REFNAME";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 170 , 104 ) ;
+        Size = MAP_APPFONT ( 84 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+    };
+    FixedText FT_REFVALUE
+    {
+        Pos = MAP_APPFONT ( 170 , 122 ) ;
+        Size = MAP_APPFONT ( 84 , 8 ) ;
+        Text [ en-US ] = "~Value" ;
+        Disable = TRUE ;
+        Left = TRUE ;
+    };
+    Edit ED_REFVALUE
+    {
+        HelpID = "sw:Edit:TP_FLD_REF:ED_REFVALUE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 170 , 136 ) ;
+        Size = MAP_APPFONT ( 84 , 12 ) ;
+        TabStop = TRUE ;
+        Disable = TRUE ;
+        Left = TRUE ;
+    };
+    String STR_REFBOOKMARK
+    {
+        Text [ en-US ] = "Bookmarks" ;
+    };
+    String STR_REFFOOTNOTE
+    {
+        Text [ en-US ] = "Footnotes" ;
+    };
+    String STR_REFENDNOTE
+    {
+        Text [ en-US ] = "Endnotes" ;
+    };
+    String STR_REFHEADING
+    {
+        Text [ en-US ] = "Headings" ;
+    };
+    String STR_REFNUMITEM
+    {
+        Text [ en-US ] = "Numbered Paragraphs" ;
+    };
+    Text [ en-US ] = "Cross-references" ;
+};

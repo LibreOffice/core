@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE statusbar:statusbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "statusbar.dtd">
+<statusbar:statusbar xmlns:statusbar="http://openoffice.org/2001/statusbar" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <statusbar:statusbaritem xlink:href=".uno:StatusGetTitle" statusbar:align="left" statusbar:autosize="true" statusbar:width="240" statusbar:helpid="helpid:30808"/>
+ <statusbar:statusbaritem xlink:href=".uno:ModifiedStatus" statusbar:align="center" statusbar:width="14" statusbar:helpid="helpid:5584"/>
+ <statusbar:statusbaritem xlink:href=".uno:StatusGetPosition" statusbar:align="left" statusbar:width="120" statusbar:helpid="helpid:30806"/>
+ <statusbar:statusbaritem xlink:href=".uno:InsertMode" statusbar:align="center" statusbar:width="41" statusbar:helpid="helpid:10221"/>
+ <statusbar:statusbaritem xlink:href=".uno:Signature" statusbar:align="center" statusbar:ownerdraw="true" statusbar:width="16" statusbar:helpid="helpid:5699"/>
+ <statusbar:statusbaritem xlink:href=".uno:Size" statusbar:align="left" statusbar:autosize="true" statusbar:ownerdraw="true" statusbar:width="160" statusbar:helpid="helpid:10224"/>
+</statusbar:statusbar>

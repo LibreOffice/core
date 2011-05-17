@@ -1,0 +1,167 @@
+07/07/2004 (SB): BugID=i29741
+  Reference registries for the OOo 2.0 branch copied from the OOo 1.1 branch:
+    OO_20/types.rdb <- OO_11/types.rdb 1.6
+    OO_20/types_doc.rdb <- OO_11/types_doc.rdb 1.8
+  Changed accumulation-based services to single-interface--based ones
+  (types_doc.rdb only):
+    com.sun.star.bridge.UnoUrlResolver
+    com.sun.star.connection.Acceptor
+    com.sun.star.connection.Connector
+
+07/08/2004 (SB): BugID=i29741
+  Changed accumulation-based services to single-interface--based ones
+  (types_doc.rdb only):
+    com.sun.star.sdb.InteractionHandler
+    com.sun.star.sdbc.ConnectionPool
+
+07/12/2004 (SB): BugID=i29741
+  Resync'ed OO_20/types_doc.rdb <- OO_11/types_doc.rdb 1.10 (plus all
+  modifications listed above)
+
+08/18/2004 (JSC/JL): BugID=i31702
+  remove needs entry in com.sun.star.system.SimpleCommandMail because needs is
+  deprecated and it caused an assertion in the cli_ure project while generating
+  the cli interfaces from type library.
+
+11/19/2004 (JSC/TL): BugID=i36687
+  adjust ChainedTextFrame service. Remove XChainable interface and insert propeties.
+  Interface was never implmented and the functionality was supported by properties.
+
+01/20/2005 (JSC): BugID=i40985
+  change const value com.sun.star.configuration.backend.NodeAttribute:MASK to
+  0x7F00 insterad of 0xFF00. Necessary because of a bug fix in idlc and possible
+  because only 3 bits are masked.
+
+02/18/05 (JSC/TL): BugID=i42890
+  change ForBiddenCharacters property of com.sun.star.document.Settings
+  -> remove the readonly flag, it should never have been readonly.
+
+05/10/05 (JSC/TL): BugID=i43697
+  we removed the duplicated reference to XEnumerationAccess.
+
+08/26/05 (JSC): TaskID=i53814
+  I've exchanged the current type library to the type library of OO2.0 (build m125)
+  for all further compatibility type checks.
+
+10/21/05 (JSC): TaskID=i56329
+  Correct com.sun.star.sdb.OfficeDatabaseDocument, it supports one more interface
+  and it is not published -> compatible change.
+  Correct com.sun.star.text.XEnumerationAccess, remove duplicate interface from
+  published service. Also a compatible change.
+  Probably the regcompare tools needs to be improved
+
+10/26/05 (JSC): TaskID=i25406, i25472, i50417
+  ..style.CharacterPropertiesAsian -> remove 3 wrong paragraph properties
+  ..style.PageProperties -> for 93 properties related to footer and header
+  the attribute maybevoid was inserted
+  ..text.textfield.DateTime -> NumberFormat changed from short to long
+  to ensure that the same format is used in all applications
+
+01/25/06 (JSC): TaskID=i611389
+  change the compatibility test to use always the type library in the type_reference
+  directory. We need only one reference per source stand. I have also removed the
+  types_doc.rdb because all type info is already in the normal types.rdb, even
+  the service nad singleton type info.
+  In the same step i have updated the reference type library with the rdb of
+  OOo2.0.1 and have patched the following singleton types to ensure that we need
+  only one type ibrary:
+    - com.sun.star.script.browse.theBrowseNodeFactory
+    - com.sun.star.script.provider.theMasterScriptProviderFactory
+    - com.sun.star.util.theMacroExpander
+    - com.sun.star.util.theOfficeInstallationDirectories
+
+01/25/06 (JSC): TaskID=i49101
+  adapt com.sun.star.text.GenericTextDocument service. Insert support of
+  com.sun.star.lang.XMultiServiceFactory because this interface was missing but
+  is substantial for text documents and was implemented from the beginning.
+
+03/15/06 (JSC): TaskID=i63172
+  update the reference type library with the released version of OOo2.0.2
+  (OOB680m5). This type library doesn't contain the already inserted singletons:
+    - com.sun.star.script.browse.theBrowseNodeFactory
+    - com.sun.star.script.provider.theMasterScriptProviderFactory
+    - com.sun.star.util.theOfficeInstallationDirectories
+  This of course is accepted to have a 1:1 relation between the reference and
+  OOo2.0.2. With the next update we get in sync and depending versioning processes
+  won't be affected.
+
+05/15/06 (JSC, TL): TaskID=i54823,i62825
+  adapt the documentation because of specification errors which have never matched
+  the existing implmentation.
+  Style -> FollowStyle property is now of type string instead of boolean
+  TextTableRow -> TableColumnSeparators is now a sequence instead of the single return
+
+05/31/06 (TL, JSC)): TaskID i50628
+   Exchange property UserDefinedAttributes with service UserDefinedAttributesSupplier
+   including this property to provide a unique description at a single place for
+   the property.
+
+07/19/06 (JSC): TaskID=i67534
+  update reference type library with the released version of OOo2.0.3. The
+  new reference type library is taken from the release source tree OOC680m7.
+  The last two changes of TL are integrated in the type library as well, at least
+  the conflicting files:
+  com/sun/star/style/Style.idl
+  com/sun/star/text/CellProperties.idl
+  com/sun/star/text/TextTableRow.idl
+
+10/25/06 (JSC): TaskID=i70808
+  update reference type library with the released version of OOo2.0.4. The
+  new reference type library is taken from the release source tree OOD680m5.
+
+04/03/07 (JSC): TaskID=i76046
+  update reference type library with the rleased version of OO0.2.2.0. The new
+  reference type library is taken from the release source tree OOF680 m14.
+
+06/13/07 (MBA): TaskID=i26672
+  removed deprecated and unsupported properties; added long supported but
+  never documented properties.
+
+09/26/07 (JSC): TaskID=i80473
+  update reference type library with the rleased version of OO.org 2.3. The new
+  reference type library is taken from the release source tree OOG680 m5.
+
+03/17/08 (TL, JSC): TaskID=i85576
+  remove two never implemented properties 'TopMargin' and 'ButtomMargin' from
+  com.sun.star.text.CellRange. 
+  
+06/26/08 (TL, JSC): TaskID=i86515
+  change css.text.IllustrationIndex into css.text.IllustrationsIndex because the 
+  implementation used the plural version.
+
+07/23/08 (TL, JSC): TaskID=i48676
+  change return type of css.linguistic2.XDictionary:getcount from short to long 
+  to support bigger user dictionaries.
+  
+04/12/08 (JSC): TaskID=i96902
+  update reference rdb with the released version from OO.org 3.0 (ooo300m9)
+  
+04/17/09 (tl, JSC): TaskID=i96846
+  changed old and not longer used properties in css.linguistic2.LinguProperties
+  to maybevoid and deprecate. They should be removed in a future version. The 
+  implementation will never return them.
+  
+02/25/09 (MST, JSC): TaskID=i96209
+  rename module css.text.FieldMaster to css.text.fieldmaster.
+  the implementation handles both variants.
+
+05/15/09 (MST, JSC): TaskID=i101965
+  fix read-only status of properties of css.text.TextPortion
+
+02/12/10 (JSC): TaskID=i107712, i107695
+  correct typo in com.sun.star.text.RedlinePortion. Property 
+  RedLineDataTime have to be RedlineDateTime.
+  Update reference type library with the version of OOo 3.2. The new
+  reference type library is taken from the release source tree OOO320 m12.
+
+02/06/10 (JSC): TaskID=i112019
+  Update reference type library with the version of OOo 3.2.1. The new
+  reference type library is taken from the release source tree OOO320 m19.
+
+11/09/10 (JSC): TaskID=i114887
+  remove drafts module from reference rdb. The odl drafts type are not used 
+  and i cleaned up the module and the type library.
+
+01/28/11 (JSC): TaskID=116682
+  Update css.awt.UnoControlDialog to reflect the supported XDialog2 interface
+  additionally to XDialog

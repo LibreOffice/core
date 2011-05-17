@@ -1,0 +1,185 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include <svtools/svtools.hrc>
+
+#ifndef IMAGE_STDBTN_COLOR
+#define IMAGE_STDBTN_COLOR Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; }
+#endif
+
+
+IMAGE RID_IMG_SCALABLEFONT
+{
+    ImageBitmap = Bitmap { File = "scalfont.png" ; };
+    MaskColor = IMAGE_STDBTN_COLOR ;
+};
+
+IMAGE RID_IMG_PRINTERFONT
+{
+    ImageBitmap = Bitmap { File = "prnfont.png" ; };
+    MaskColor = IMAGE_STDBTN_COLOR ;
+};
+
+IMAGE RID_IMG_BITMAPFONT
+{
+    ImageBitmap = Bitmap { File = "bmpfont.png" ; };
+    MaskColor = IMAGE_STDBTN_COLOR ;
+};
+
+String STR_SVT_AUTOMATIC_COLOR
+{
+    Text [ en-US ] = "Automatic";
+};
+
+/*
+ * resources for CollatorRessource / CollatorRessourceData resp.
+ */
+
+String STR_SVT_COLLATE_ALPHANUMERIC
+{
+    /* alphanumeric sorting algorithm */
+    Text [ en-US ] = "Alphanumeric";
+};
+
+String STR_SVT_COLLATE_NORMAL
+{
+    /* default or normal sorting algorithm */
+    Text [ en-US ] = "Normal";
+};
+
+String STR_SVT_COLLATE_CHARSET
+{
+    /* default or normal sorting algorithm */
+    Text [ en-US ] = "Character set";
+};
+
+String STR_SVT_COLLATE_DICTIONARY
+{
+    /* german dictionary word order / sorting */
+    Text [ en-US ] = "Dictionary";
+};
+
+String STR_SVT_COLLATE_PINYIN
+{
+    /* chinese sorting algorithm */
+    Text [ en-US ] = "Pinyin";
+};
+
+String STR_SVT_COLLATE_STROKE
+{
+    /* chinese sorting algorithm */
+    Text [ en-US ] = "Stroke";
+};
+
+String STR_SVT_COLLATE_RADICAL
+{
+    /* chinese sorting algorithm */
+    Text [ en-US ] = "Radical";
+};
+
+String STR_SVT_COLLATE_UNICODE
+{
+    /* sorting according to the unicode code point of the character */
+    Text [ en-US ] = "Unicode";
+};
+
+String STR_SVT_COLLATE_ZHUYIN
+{
+    /* chinese sorting algorithm */
+    Text [ en-US ] = "Zhuyin";
+};
+
+String STR_SVT_COLLATE_PHONEBOOK
+{
+    /* phone book sorting algorithm. e.g. German */
+    Text [ en-US ] = "Phone book";
+};
+
+String STR_SVT_COLLATE_PHONETIC_F
+{
+    Text [ en-US ] = "Phonetic (alphanumeric first)";
+};
+
+String STR_SVT_COLLATE_PHONETIC_L
+{
+    Text [ en-US ] = "Phonetic (alphanumeric last)";
+};
+
+String STR_SVT_INDEXENTRY_ALPHANUMERIC
+{
+    /* alphanumeric indexentry algorithm */
+    Text [ en-US ] = "Alphanumeric";
+};
+
+String STR_SVT_INDEXENTRY_DICTIONARY
+{
+    /* korean dictionary indexentry algorithm */
+    Text [ en-US ] = "Dictionary";
+};
+
+String STR_SVT_INDEXENTRY_PINYIN
+{
+    /* chinese sorting algorithm */
+    Text [ en-US ] = "Pinyin";
+};
+
+String STR_SVT_INDEXENTRY_RADICAL
+{
+    /* chinese indexentry algorithm */
+    Text [ en-US ] = "Radical";
+};
+
+String STR_SVT_INDEXENTRY_STROKE
+{
+    /* chinese indexentry algorithm */
+    Text [ en-US ] = "Stroke";
+};
+
+String STR_SVT_INDEXENTRY_ZHUYIN
+{
+    /* chinese indexentry algorithm */
+    Text [ en-US ] = "Zhuyin";
+};
+
+String STR_SVT_INDEXENTRY_PHONETIC_FS
+{
+    Text [ en-US ] = "Phonetic (alphanumeric first, grouped by syllables)";
+};
+
+String STR_SVT_INDEXENTRY_PHONETIC_FC
+{
+    Text [ en-US ] = "Phonetic (alphanumeric first, grouped by consonants)";
+};
+
+String STR_SVT_INDEXENTRY_PHONETIC_LS
+{
+    Text [ en-US ] = "Phonetic (alphanumeric last, grouped by syllables)";
+};
+
+String STR_SVT_INDEXENTRY_PHONETIC_LC
+{
+    Text [ en-US ] = "Phonetic (alphanumeric last, grouped by consonants)";
+};

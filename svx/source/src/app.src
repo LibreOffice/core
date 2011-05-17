@@ -1,0 +1,76 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include <svx/svxids.hrc>
+#include "app.hrc"
+
+ //----------------------------------------------------------------------------
+String RID_APPTITLE
+{
+    Text = "%PRODUCTNAME %PRODUCTVERSION %PRODUCTEXTENSION" ;
+};
+
+#define MASKCOLOR       MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; };
+
+ErrorBox RID_ERRBOX_MODULENOTINSTALLED
+{
+    Buttons = WB_OK ;
+    Message [ en-US ] = "The action could not be executed. The %PRODUCTNAME program module needed for this action is currently not installed.";
+};
+
+#define IMAGE_ID_LIST\
+    IdList = {\
+        SID_HLINKBAR_LINK; \
+        SID_HLINKBAR_SEARCH; \
+        SID_HLINKBAR_TARGET; \
+        SID_HYPERLINK_DIALOG; \
+    };\
+    IdCount = {\
+        4;\
+    };
+
+ImageList RID_DEFAULTIMAGELIST_SC
+{
+    Prefix = "sc";
+    MASKCOLOR
+    IMAGE_ID_LIST
+};
+
+ImageList RID_DEFAULTIMAGELIST_LC
+{
+    Prefix = "lc";
+    MASKCOLOR
+    IMAGE_ID_LIST
+};
+
+// Strings ---------------------------------------------------------------
+
+String RID_DESKTOP
+{
+    Text = "%PRODUCTNAME" ;
+};
+

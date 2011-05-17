@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns="http://openoffice.org/extensions/update/2006"
+             xmlns:xlink="http://www.w3.org/1999/xlink">
+    <version value="2.0" />
+
+    <identifier value="org.openoffice/framework/desktop/test/deployment/update/website_update/web3"/>
+
+    <update-website>
+      <src xlink:href="http://extensions.openoffice.org/testarea/desktop/website_update/update/web1_de.html" lang="de" />
+      <src xlink:href="http://extensions.openoffice.org/testarea/desktop/website_update/update/web1_en.html" lang="en" />
+      <src xlink:href="http://extensions.openoffice.org/testarea/desktop/website_update/update/web1_de-DE.html" lang="de-DE" />
+      <src xlink:href="http://extensions.openoffice.org/testarea/desktop/website_update/update/web1_de-DE-altmark.html" lang="de-DE-altmark" />
+      <src xlink:href="http://extensions.openoffice.org/testarea/desktop/website_update/update/web1_en-GB.html" lang="en-GB" />
+      <src xlink:href="http://extensions.openoffice.org/testarea/desktop/website_update/update/web1_en-region3.html" lang="en-region3" />
+    </update-website>
+</description>
+

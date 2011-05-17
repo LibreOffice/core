@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+    <module-name>   invocadapt.uno  </module-name>
+    <component-description>
+        <author> Daniel Boelzle </author>
+        <name>  com.sun.star.comp.stoc.InvocationAdapterFactory </name>
+        <description>
+You can create adapter interfaces of any given type for an invocation
+interface by using an adapter factory instance.
+</description>
+        <loader-name>   com.sun.star.loader.SharedLibrary   </loader-name>
+        <language>  C++ </language>
+        <status value="final"/>
+        <supported-service> com.sun.star.script.InvocationAdapterFactory    </supported-service>
+        <type>  com.sun.star.script.XTypeConverter      </type>
+        <type>  com.sun.star.script.XInvocationAdapterFactory       </type>
+        <type>  com.sun.star.script.XInvocationAdapterFactory2      </type>
+        <type>  com.sun.star.lang.XTypeProvider                     </type>
+        <type>  com.sun.star.lang.XServiceInfo                      </type>
+        <type>  com.sun.star.lang.XSingleServiceFactory             </type>
+        <type>  com.sun.star.lang.XMultiServiceFactory              </type>
+        <type>  com.sun.star.registry.XSimpleRegistry               </type>
+        <type>  com.sun.star.registry.XRegistryKey                  </type>
+        <type>  com.sun.star.uno.XAggregation                       </type>
+        <type>  com.sun.star.uno.XComponentContext          </type>
+        <type>  com.sun.star.lang.XSingleComponentFactory       </type>
+        <type>  com.sun.star.uno.XWeak                              </type>
+        <type>  com.sun.star.uno.TypeClass                          </type>
+        <type>  com.sun.star.container.XEnumerationAccess           </type>
+        <type>  com.sun.star.container.XNameContainer               </type>
+        <type>  com.sun.star.container.XIndexContainer              </type>
+        <type>  com.sun.star.reflection.InvocationTargetException   </type>
+    </component-description>
+    <project-build-dependency>  cppuhelper  </project-build-dependency>
+    <project-build-dependency>  cppu        </project-build-dependency>
+    <project-build-dependency>  sal         </project-build-dependency>
+    <runtime-module-dependency> cppuhelper3$(COM)   </runtime-module-dependency>
+    <runtime-module-dependency> cppu3       </runtime-module-dependency>
+    <runtime-module-dependency> sal3        </runtime-module-dependency>
+</module-description>

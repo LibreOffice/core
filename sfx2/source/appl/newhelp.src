@@ -1,0 +1,517 @@
+﻿/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "app.hrc"
+#include "newhelp.hrc"
+#include "helpid.hrc"
+
+Window WIN_HELPINDEX
+{
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 120 , 200 ) ;
+    DialogControl = TRUE;
+    ListBox LB_ACTIVE
+    {
+        HelpId = HID_HELP_LISTBOX;
+        Border = TRUE ;
+        DropDown = TRUE;
+        Pos = MAP_APPFONT ( 3 , 3 ) ;
+        Size = MAP_APPFONT ( 114 , 40 ) ;
+    };
+    FixedLine FL_ACTIVE
+    {
+        Hide = True;
+        Pos = MAP_APPFONT ( 2, 19 ) ;
+        Size = MAP_APPFONT ( 118 , 1 ) ;
+    };
+    TabControl TC_INDEX
+    {
+        HelpId = HID_HELP_TABCONTROL;
+        Pos = MAP_APPFONT ( 3, 19 ) ;
+        TabStop = TRUE;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = HELP_INDEX_PAGE_CONTENTS ;
+                Text [ en-US ] = "Contents";
+            };
+            PageItem
+            {
+                Identifier = HELP_INDEX_PAGE_INDEX ;
+                Text [ en-US ] = "Index";
+            };
+            PageItem
+            {
+                Identifier = HELP_INDEX_PAGE_SEARCH ;
+                Text [ en-US ] = "Find";
+            };
+            PageItem
+            {
+                Identifier = HELP_INDEX_PAGE_BOOKMARKS ;
+                Text [ en-US ] = "Bookmarks";
+            };
+        };
+    };
+};
+
+TabPage TP_HELP_INDEX
+{
+    HelpId = HID_HELP_TABPAGE_INDEX;
+    Hide = TRUE ;
+    DialogControl = TRUE;
+    Size = MAP_APPFONT ( 120 , 200 ) ;
+    FixedText FT_EXPRESSION
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Text [ en-US ] = "~Search term" ;
+    };
+    ComboBox CB_INDEX
+    {
+        HelpID = "sfx2:ComboBox:TP_HELP_INDEX:CB_INDEX";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 17 ) ;
+        Size = MAP_APPFONT ( 108 , 97 ) ;
+    };
+    PushButton PB_OPEN_INDEX
+    {
+        HelpID = "sfx2:PushButton:TP_HELP_INDEX:PB_OPEN_INDEX";
+        Pos = MAP_APPFONT ( 64 , 115 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Display" ;
+    };
+};
+
+TabPage TP_HELP_SEARCH
+{
+    HelpId = HID_HELP_TABPAGE_SEARCH;
+    Hide = TRUE ;
+    DialogControl = TRUE;
+    Size = MAP_APPFONT ( 140 , 122 ) ;
+    FixedText FT_SEARCH
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 128 , 10 ) ;
+        Text [ en-US ] = "S~earch term" ;
+    };
+    ComboBox ED_SEARCH
+    {
+        HelpID = "sfx2:ComboBox:TP_HELP_SEARCH:ED_SEARCH";
+        Border = TRUE ;
+        DropDown = TRUE;
+        Pos = MAP_APPFONT ( 6 , 17 ) ;
+        Size = MAP_APPFONT ( 92 , 40 ) ;
+    };
+    PushButton PB_SEARCH
+    {
+        HelpID = "sfx2:PushButton:TP_HELP_SEARCH:PB_SEARCH";
+        Pos = MAP_APPFONT ( 101 , 17 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Find";
+    };
+    CheckBox CB_FULLWORDS
+    {
+        HelpID = "sfx2:CheckBox:TP_HELP_SEARCH:CB_FULLWORDS";
+        Pos = MAP_APPFONT ( 6, 34 ) ;
+        Size = MAP_APPFONT ( 128 , 10 ) ;
+        Text [ en-US ] = "~Complete words only";
+    };
+    CheckBox CB_SCOPE
+    {
+        HelpID = "sfx2:CheckBox:TP_HELP_SEARCH:CB_SCOPE";
+        Pos = MAP_APPFONT ( 6, 47 ) ;
+        Size = MAP_APPFONT ( 128 , 10 ) ;
+        Text [ en-US ] = "Find in ~headings only";
+    };
+    ListBox LB_RESULT
+    {
+        HelpID = "sfx2:ListBox:TP_HELP_SEARCH:LB_RESULT";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 60 ) ;
+        Size = MAP_APPFONT ( 128 , 30 ) ;
+    };
+    PushButton PB_OPEN_SEARCH
+    {
+        HelpID = "sfx2:PushButton:TP_HELP_SEARCH:PB_OPEN_SEARCH";
+        Pos = MAP_APPFONT ( 84 , 182 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Display" ;
+    };
+};
+
+TabPage TP_HELP_BOOKMARKS
+{
+    HelpId = HID_HELP_TABPAGE_BOOKMARKS;
+    Hide = TRUE ;
+    DialogControl = TRUE;
+    Size = MAP_APPFONT ( 120 , 200 ) ;
+    FixedText FT_BOOKMARKS
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Text [ en-US ] = "~Bookmarks" ;
+    };
+    ListBox LB_BOOKMARKS
+    {
+        HelpID = "sfx2:ListBox:TP_HELP_BOOKMARKS:LB_BOOKMARKS";
+        Border = TRUE ;
+        Sort = TRUE;
+        Pos = MAP_APPFONT ( 6 , 19 ) ;
+        Size = MAP_APPFONT ( 108 , 97 ) ;
+    };
+    PushButton PB_BOOKMARKS
+    {
+        HelpID = "sfx2:PushButton:TP_HELP_BOOKMARKS:PB_BOOKMARKS";
+        Pos = MAP_APPFONT ( 64 , 119 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Display" ;
+    };
+};
+
+TabPage TP_HELP_CONTENT
+{
+    HelpId = HID_HELP_TABPAGE_CONTENTS;
+    Hide = TRUE ;
+    DialogControl = TRUE;
+    Size = MAP_APPFONT ( 120 , 200 ) ;
+    Control LB_CONTENTS
+    {
+        HelpId = HID_HELP_TREELISTBOX_CONTENTS ;
+        Border = TRUE ;
+        TabStop = TRUE;
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 108 , 188 ) ;
+    };
+};
+
+#define MASKCOLOR_MAGENTA \
+    MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+
+Image IMG_HELP_TOOLBOX_INDEX_ON
+{
+    ImageBitmap = Bitmap { File = "indexon_small.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+
+Image IMG_HELP_TOOLBOX_INDEX_OFF
+{
+    ImageBitmap = Bitmap { File = "indexoff_small.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+
+Image IMG_HELP_TOOLBOX_START
+{
+    ImageBitmap = Bitmap { File = "sc06303.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+
+Image IMG_HELP_TOOLBOX_PREV
+{
+    ImageBitmap = Bitmap { File = "sc06301.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+
+Image IMG_HELP_TOOLBOX_NEXT
+{
+    ImageBitmap = Bitmap { File = "sc06300.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+
+Image IMG_HELP_TOOLBOX_PRINT
+{
+    ImageBitmap = Bitmap { File = "sc05504.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+
+Image IMG_HELP_TOOLBOX_BOOKMARKS
+{
+    ImageBitmap = Bitmap { File = "favourite.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+
+Image IMG_HELP_TOOLBOX_SEARCHDIALOG
+{
+    ImageBitmap = Bitmap { File = "sc05961.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+
+Image IMG_HELP_TOOLBOX_COPY
+{
+    ImageBitmap = Bitmap { File = "sc05711.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+
+Image IMG_HELP_CONTENT_BOOK_OPEN
+{
+    ImageBitmap = Bitmap { File = "hlpbookopen.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+
+Image IMG_HELP_CONTENT_BOOK_CLOSED
+{
+    ImageBitmap = Bitmap { File = "hlpbookclosed.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+
+Image IMG_HELP_CONTENT_DOC
+{
+    ImageBitmap = Bitmap { File = "hlpdoc.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+
+String STR_HELP_WINDOW_TITLE
+{
+    Text [ en-US ] = "%PRODUCTNAME Help";
+};
+
+String STR_HELP_BUTTON_INDEX_ON
+{
+    Text [ en-US ] = "Show Navigation Pane";
+};
+
+String STR_HELP_BUTTON_INDEX_OFF
+{
+    Text [ en-US ] = "Hide Navigation Pane";
+};
+
+String STR_HELP_BUTTON_START
+{
+    Text [ en-US ] = "First Page";
+};
+
+String STR_HELP_BUTTON_PREV
+{
+    Text [ en-US ] = "Previous Page";
+};
+
+String STR_HELP_BUTTON_NEXT
+{
+    Text [ en-US ] = "Next Page";
+};
+
+String STR_HELP_BUTTON_PRINT
+{
+    Text [ en-US ] = "Print...";
+};
+
+String STR_HELP_BUTTON_ADDBOOKMARK
+{
+    Text [ en-US ] = "Add to Bookmarks...";
+};
+
+String STR_HELP_BUTTON_SEARCHDIALOG
+{
+    Text [ en-US ] = "Find on this Page...";
+};
+
+String STR_HELP_BUTTON_SOURCEVIEW
+{
+    Text [ en-US ] = "HTML Source";
+};
+
+String STR_HELP_FIRST_MESSAGE
+{
+    Text [ en-US ] = "The Help is being started...";
+};
+
+String STR_HELP_FIRST_HTML
+{
+    Text = "<html></head><body><center><br></br><br></br><p><tt>%1</tt></center></body></html>";
+};
+
+String STR_HELP_MENU_TEXT_SELECTION_MODE
+{
+    Text [ en-US ] = "Select Text";
+};
+
+String STR_HELP_MENU_TEXT_COPY
+{
+    Text [ en-US ] = "~Copy" ;
+};
+
+ModalDialog DLG_HELP_ADDBOOKMARK
+{
+    HelpID = "sfx2:ModalDialog:DLG_HELP_ADDBOOKMARK";
+    Size = MAP_APPFONT ( 208 , 43 ) ;
+    Text [ en-US ] = "Add to Bookmarks";
+    MOVEABLE = TRUE ;
+    CLOSEABLE = TRUE ;
+    OUTPUTSIZE = TRUE ;
+    SVLOOK = TRUE ;
+    FixedText FT_BOOKMARK_TITLE
+    {
+        PosSize = MAP_APPFONT ( 6 , 6 , 140 , 10 ) ;
+        Text [ en-US ] = "Bookmark:" ;
+        TABSTOP = FALSE ;
+        GROUP = TRUE ;
+        LEFT = TRUE ;
+    };
+    Edit ED_BOOKMARK_TITLE
+    {
+        HelpID = "sfx2:Edit:DLG_HELP_ADDBOOKMARK:ED_BOOKMARK_TITLE";
+        PosSize = MAP_APPFONT ( 6 , 19 , 140 , 12 ) ;
+        TABSTOP = TRUE ;
+        BORDER = TRUE ;
+    };
+    OKButton PB_BOOKMARK_OK
+    {
+        PosSize = MAP_APPFONT ( 152 , 6 , 50 , 14 ) ;
+        HIDE = FALSE ;
+        TABSTOP = TRUE ;
+        GROUP = TRUE ;
+        Disable = FALSE ;
+        DefButton = TRUE ;
+    };
+    CancelButton PB_BOOKMARK_CANCEL
+    {
+        PosSize = MAP_APPFONT ( 152 , 23 , 50 , 14 ) ;
+        TABSTOP = TRUE ;
+        GROUP = TRUE ;
+    };
+    HelpButton PB_BOOKMARK_HELP
+    {
+        PosSize = MAP_APPFONT ( 152 , 43 , 50 , 14 ) ;
+        TABSTOP = TRUE ;
+        GROUP = TRUE ;
+        Hide = TRUE;
+    };
+    String STR_BOOKMARK_RENAME
+    {
+        Text [ en-US ] = "Rename Bookmark";
+    };
+};
+
+Menu MENU_HELP_BOOKMARKS
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = MID_OPEN ;
+            HelpId = HID_HELP_BOOKMARKS_OPEN;
+            Text [ en-US ] = "Display";
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = MID_RENAME ;
+            HelpId = HID_HELP_BOOKMARKS_RENAME;
+            Text [ en-US ] = "Rename...";
+        };
+        MenuItem
+        {
+            Identifier = MID_DELETE ;
+            HelpId = HID_HELP_BOOKMARKS_DELETE;
+            Text [ en-US ] = "Delete";
+        };
+    };
+};
+
+InfoBox RID_INFO_NOSEARCHRESULTS
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message [ en-US ] = "No topics found.";
+};
+
+InfoBox RID_INFO_NOSEARCHTEXTFOUND
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message [ en-US ] = "The text you entered was not found.";
+};
+
+Image IMG_HELP_TOOLBOX_L_INDEX_ON
+{
+    ImageBitmap = Bitmap { File = "indexon_big.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+
+Image IMG_HELP_TOOLBOX_L_INDEX_OFF
+{
+    ImageBitmap = Bitmap { File = "indexoff_big.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+
+Image IMG_HELP_TOOLBOX_L_START
+{
+    ImageBitmap = Bitmap { File = "lc06303.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+
+Image IMG_HELP_TOOLBOX_L_PREV
+{
+    ImageBitmap = Bitmap { File = "lc06301.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+
+Image IMG_HELP_TOOLBOX_L_NEXT
+{
+    ImageBitmap = Bitmap { File = "lc06300.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+
+Image IMG_HELP_TOOLBOX_L_PRINT
+{
+    ImageBitmap = Bitmap { File = "lc05504.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+
+Image IMG_HELP_TOOLBOX_L_BOOKMARKS
+{
+    ImageBitmap = Bitmap { File = "favourite_big.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+
+Image IMG_HELP_TOOLBOX_L_SEARCHDIALOG
+{
+    ImageBitmap = Bitmap { File = "lc05961.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+
+Image IMG_HELP_TOOLBOX_L_COPY
+{
+    ImageBitmap = Bitmap { File = "lc05711.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+
+CheckBox RID_HELP_ONSTARTUP_BOX
+{
+    HelpId = HID_HELP_ONSTARTUP_BOX;
+    Hide = TRUE;
+    TabStop = TRUE;
+    Size = MAP_APPFONT ( 200 , 10 ) ;
+};
+
+String RID_HELP_ONSTARTUP_TEXT
+{
+    Text [ en-US ] = "~Display %PRODUCTNAME %MODULENAME Help at Startup";
+};

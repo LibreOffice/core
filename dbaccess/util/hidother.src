@@ -1,0 +1,503 @@
+/*************************************************************************
+*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+************************************************************************/
+
+#include "../inc/dbaccess_helpid.hrc"
+
+hidspecial HID_DLG_FILTERCRIT                           { HelpId = HID_DLG_FILTERCRIT; };
+hidspecial HID_DLG_ORDERCRIT                            { HelpId = HID_DLG_ORDERCRIT; };
+hidspecial HID_DATABROWSE_HEADER                        { HelpId = HID_DATABROWSE_HEADER; };
+hidspecial HID_CTL_TABBROWSER                           { HelpId = HID_CTL_TABBROWSER; };
+hidspecial UID_DATABROWSE_DATAWINDOW                    { HelpId = UID_DATABROWSE_DATAWINDOW; };
+hidspecial HID_CTL_TREEVIEW                             { HelpId = HID_CTL_TREEVIEW; };
+hidspecial UID_CTL_CONTENT                              { HelpId = UID_CTL_CONTENT; };
+hidspecial HID_TLB_TABBROWSER                           { HelpId = HID_TLB_TABBROWSER; };
+hidspecial HID_TLB_TREELISTBOX                          { HelpId = HID_TLB_TREELISTBOX; };
+
+hidspecial HID_DSADMIN_DIALOG                           { HelpId = HID_DSADMIN_DIALOG; };
+hidspecial HID_DSADMIN_CHARSET                          { HelpId = HID_DSADMIN_CHARSET; };
+hidspecial HID_DSADMIN_TABCONTROL                       { HelpId = HID_DSADMIN_TABCONTROL; };
+hidspecial HID_DSADMIN_PAGE_GENERAL                     { HelpId = HID_DSADMIN_PAGE_GENERAL; };
+hidspecial HID_DSADMIN_PAGE_DBASE                       { HelpId = HID_DSADMIN_PAGE_DBASE; };
+hidspecial HID_DSADMIN_PAGE_JDBC                        { HelpId = HID_DSADMIN_PAGE_JDBC; };
+hidspecial HID_DSADMIN_PAGE_ODBC                        { HelpId = HID_DSADMIN_PAGE_ODBC; };
+hidspecial HID_DSADMIN_PAGE_ADABAS                      { HelpId = HID_DSADMIN_PAGE_ADABAS; };
+hidspecial HID_DSADMIN_PAGE_TEXT                        { HelpId = HID_DSADMIN_PAGE_TEXT; };
+hidspecial HID_DSADMIN_TABLE_SUBSCRIPTION               { HelpId = HID_DSADMIN_TABLE_SUBSCRIPTION; };
+hidspecial HID_DSADMIN_DSACTIONS_NEWDS                  { HelpId = HID_DSADMIN_DSACTIONS_NEWDS; };
+hidspecial HID_DSADMIN_DSACTIONS_DELETEDS               { HelpId = HID_DSADMIN_DSACTIONS_DELETEDS; };
+hidspecial HID_DSADMIN_DSACTIONS_RESTOREDS              { HelpId = HID_DSADMIN_DSACTIONS_RESTOREDS; };
+hidspecial HID_DSADMIN_DSNAME                           { HelpId = HID_DSADMIN_DSNAME; };
+hidspecial HID_DSADMIN_DSTYPE                           { HelpId = HID_DSADMIN_DSTYPE; };
+hidspecial HID_DSADMIN_URL_GENERAL                      { HelpId = HID_DSADMIN_URL_GENERAL; };
+hidspecial HID_DSADMIN_BROWSECONN                       { HelpId = HID_DSADMIN_BROWSECONN; };
+hidspecial HID_DSADMIN_LOGINTIMEOUT_NUMBER              { HelpId = HID_DSADMIN_LOGINTIMEOUT_NUMBER; };
+hidspecial HID_DSADMIN_LOGINTIMEOUT_UNIT                { HelpId = HID_DSADMIN_LOGINTIMEOUT_UNIT; };
+hidspecial HID_DSADMIN_SHOWDELETED                      { HelpId = HID_DSADMIN_SHOWDELETED; };
+hidspecial HID_DSADMIN_ALLOWLONG                        { HelpId = HID_DSADMIN_ALLOWLONG; };
+hidspecial HID_DSADMIN_DBASE_INDICIES                   { HelpId = HID_DSADMIN_DBASE_INDICIES; };
+hidspecial HID_DSADMIN_DRIVERCLASS                      { HelpId = HID_DSADMIN_DRIVERCLASS; };
+hidspecial HID_DSADMIN_ODBC_OPTIONS                     { HelpId = HID_DSADMIN_ODBC_OPTIONS; };
+hidspecial HID_DSADMIN_TEXT_HEADER                      { HelpId = HID_DSADMIN_TEXT_HEADER; };
+hidspecial HID_DSADMIN_FIELD_SEPARATOR                  { HelpId = HID_DSADMIN_FIELD_SEPARATOR; };
+hidspecial HID_DSADMIN_TEXT_SEPARATOR                   { HelpId = HID_DSADMIN_TEXT_SEPARATOR; };
+hidspecial HID_DSADMIN_DECIMAL_SEPARATOR                { HelpId = HID_DSADMIN_DECIMAL_SEPARATOR; };
+hidspecial HID_DSADMIN_THOUSANDS_SEPARATOR              { HelpId = HID_DSADMIN_THOUSANDS_SEPARATOR; };
+hidspecial HID_DSADMIN_EXTENSION                        { HelpId = HID_DSADMIN_EXTENSION; };
+hidspecial HID_DSADMIN_ALL_TABLES                       { HelpId = HID_DSADMIN_ALL_TABLES; };
+hidspecial HID_DSADMIN_NO_TABLES                        { HelpId = HID_DSADMIN_NO_TABLES; };
+hidspecial HID_DSADMIN_SELECT_TABLES                    { HelpId = HID_DSADMIN_SELECT_TABLES; };
+hidspecial HID_DSADMIN_TABLE_SELECTOR                   { HelpId = HID_DSADMIN_TABLE_SELECTOR; };
+hidspecial HID_DSADMIN_SUPPRESS_VERSIONCL               { HelpId = HID_DSADMIN_SUPPRESS_VERSIONCL; };
+hidspecial HID_GENERIC_SQL_ERROR                        { HelpId = HID_GENERIC_SQL_ERROR; };
+hidspecial HID_BROWSER_COLUMNFORMAT                     { HelpId = HID_BROWSER_COLUMNFORMAT; };
+hidspecial HID_BROWSER_COLUMNWIDTH                      { HelpId = HID_BROWSER_COLUMNWIDTH; };
+hidspecial HID_BROWSER_TABLEFORMAT                      { HelpId = HID_BROWSER_TABLEFORMAT; };
+hidspecial HID_BROWSER_ROWHEIGHT                        { HelpId = HID_BROWSER_ROWHEIGHT; };
+hidspecial HID_BROWSER_EDIT_DATABASE                    { HelpId = HID_BROWSER_EDIT_DATABASE; };
+hidspecial HID_BROWSER_CLOSECONN                        { HelpId = HID_BROWSER_CLOSECONN; };
+hidspecial HID_BROWSER_REFRESHCONN                      { HelpId = HID_BROWSER_REFRESHCONN; };
+hidspecial HID_DSADMIN_SPECIAL_MESSAGE                  { HelpId = HID_DSADMIN_SPECIAL_MESSAGE; };
+
+hidspecial HID_DLG_ROWHEIGHT                            { HelpId = HID_DLG_ROWHEIGHT; };
+hidspecial HID_DLG_COLWIDTH                             { HelpId = HID_DLG_COLWIDTH; };
+hidspecial HID_TLB_QUERYDESIGN                          { HelpId = HID_TLB_QUERYDESIGN; };
+hidspecial HID_CTL_QRYSQLEDIT                           { HelpId = HID_CTL_QRYSQLEDIT; };
+
+hidspecial HID_DSADMIN_SPECIAL_MESSAGE                  { HelpId = HID_DSADMIN_SPECIAL_MESSAGE; };
+
+hidspecial HID_BROWSER_QUERY_CREATE_DESIGN              { HelpId = HID_BROWSER_QUERY_CREATE_DESIGN; };
+hidspecial HID_BROWSER_QUERY_CREATE_TEXT                { HelpId = HID_BROWSER_QUERY_CREATE_TEXT; };
+
+hidspecial HID_DLG_ERROR                                { HelpId = HID_DLG_ERROR; };
+hidspecial HID_DLG_TEXT                                 { HelpId = HID_DLG_TEXT; };
+hidspecial UID_SQLERROR_BUTTONMORE                      { HelpId = UID_SQLERROR_BUTTONMORE; };
+hidspecial HID_DLG_SAVE_AS                              { HelpId = HID_DLG_SAVE_AS; };
+hidspecial HID_BROWSER_QUERY_EDIT                       { HelpId = HID_BROWSER_QUERY_EDIT; };
+hidspecial HID_BROWSER_QUERY_DELETE                     { HelpId = HID_BROWSER_QUERY_DELETE; };
+
+hidspecial HID_DSADMIN_USER_ADO                         { HelpId = HID_DSADMIN_USER_ADO; };
+hidspecial HID_DSADMIN_PWDREC_ADO                       { HelpId = HID_DSADMIN_PWDREC_ADO; };
+hidspecial HID_DSADMIN_CONNURL_ADOPAGE                  { HelpId = HID_DSADMIN_CONNURL_ADOPAGE; };
+hidspecial HID_DSADMIN_PAGE_ADO                         { HelpId = HID_DSADMIN_PAGE_ADO; };
+
+hidspecial HID_JOINSH_ADDTAB_CLOSE                      { HelpId = HID_JOINSH_ADDTAB_CLOSE; };
+hidspecial HID_JOINSH_ADDTAB_TABLELIST                  { HelpId = HID_JOINSH_ADDTAB_TABLELIST; };
+hidspecial HID_JOINSH_ADDTAB_QUERYLIST                  { HelpId = HID_JOINSH_ADDTAB_QUERYLIST; };
+hidspecial HID_CTL_QRYDGNTAB                            { HelpId = HID_CTL_QRYDGNTAB; };
+hidspecial HID_DLG_QRY_JOIN                             { HelpId = HID_DLG_QRY_JOIN; };
+hidspecial HID_DLG_QRY_JOINTYPE                         { HelpId = HID_DLG_QRY_JOINTYPE; };
+hidspecial HID_DLG_QRY_HELPTEXT                         { HelpId = HID_DLG_QRY_HELPTEXT; };
+
+hidspecial HID_CTL_QRYDGNCRIT                           { HelpId = HID_CTL_QRYDGNCRIT; };
+hidspecial HID_QRYDGN_ROW_VISIBLE                       { HelpId = HID_QRYDGN_ROW_VISIBLE; };
+hidspecial HID_QRYDGN_ROW_TABLE                         { HelpId = HID_QRYDGN_ROW_TABLE; };
+hidspecial HID_QRYDGN_ROW_FIELD                         { HelpId = HID_QRYDGN_ROW_FIELD; };
+hidspecial HID_QRYDGN_ROW_ORDER                         { HelpId = HID_QRYDGN_ROW_ORDER; };
+hidspecial HID_QRYDGN_ROW_FUNCTION                      { HelpId = HID_QRYDGN_ROW_FUNCTION; };
+hidspecial HID_QRYDGN_ROW_ALIAS                         { HelpId = HID_QRYDGN_ROW_ALIAS; };
+hidspecial HID_QRYDGN_ROW_CRIT                          { HelpId = HID_QRYDGN_ROW_CRIT; };
+
+hidspecial HID_QUERY_FUNCTION                           { HelpId = HID_QUERY_FUNCTION; };
+hidspecial HID_QUERY_TABLENAME                          { HelpId = HID_QUERY_TABLENAME; };
+hidspecial HID_QUERY_ALIASNAME                          { HelpId = HID_QUERY_ALIASNAME; };
+hidspecial HID_QUERY_DISTINCT                           { HelpId = HID_QUERY_DISTINCT; };
+
+hidspecial HID_DSADMIN_QUERYADMINISTRATION              { HelpId = HID_DSADMIN_QUERYADMINISTRATION; };
+hidspecial HID_DSADMIN_QUERIES                          { HelpId = HID_DSADMIN_QUERIES; };
+hidspecial HID_DSADMIN_QUERIES_NEW                      { HelpId = HID_DSADMIN_QUERIES_NEW; };
+hidspecial HID_DSADMIN_QUERIES_EDIT                     { HelpId = HID_DSADMIN_QUERIES_EDIT; };
+hidspecial HID_DSADMIN_QUERIES_DELETE                   { HelpId = HID_DSADMIN_QUERIES_DELETE; };
+
+hidspecial HID_TAB_DESIGN_TABLE_DESC                    { HelpId = HID_TAB_DESIGN_TABLE_DESC; };
+hidspecial HID_TAB_DESIGN_FIELDCONTROL                  { HelpId = HID_TAB_DESIGN_FIELDCONTROL; };
+hidspecial HID_TABLE_DESIGN_HELP_WINDOW                 { HelpId = HID_TABLE_DESIGN_HELP_WINDOW; };
+hidspecial HID_TAB_DESIGN_DESCWIN                       { HelpId = HID_TAB_DESIGN_DESCWIN; };
+hidspecial HID_TAB_DESIGN_TABLE_PROPS                   { HelpId = HID_TAB_DESIGN_TABLE_PROPS; };
+hidspecial HID_TABDESIGN_BACKGROUND                     { HelpId = HID_TABDESIGN_BACKGROUND; };
+hidspecial HID_CTL_TABLEEDIT                            { HelpId = HID_CTL_TABLEEDIT; };
+hidspecial HID_TABDESIGN_NAMECELL                       { HelpId = HID_TABDESIGN_NAMECELL; };
+hidspecial HID_TABDESIGN_TYPECELL                       { HelpId = HID_TABDESIGN_TYPECELL; };
+hidspecial HID_TABDESIGN_COMMENTCELL                    { HelpId = HID_TABDESIGN_COMMENTCELL; };
+hidspecial HID_TABDESIGN_HELPTEXT                       { HelpId = HID_TABDESIGN_HELPTEXT; };
+
+/*
+hidspecial SID_TABLEDESIGN_INSERTROWS                   { HelpId = SID_TABLEDESIGN_INSERTROWS; };
+hidspecial SID_TABLEDESIGN_TABED_PRIMARYKEY             { HelpId = SID_TABLEDESIGN_TABED_PRIMARYKEY; };
+*/
+
+hidspecial HID_TLB_TABLEDESIGN                          { HelpId = HID_TLB_TABLEDESIGN; };
+hidspecial HID_TAB_DESIGN_HELP_TEXT_FRAME               { HelpId = HID_TAB_DESIGN_HELP_TEXT_FRAME; };
+hidspecial HID_TABLE_DESIGN_TABPAGE_GENERAL             { HelpId = HID_TABLE_DESIGN_TABPAGE_GENERAL; };
+hidspecial HID_TAB_ENT_DEFAULT                          { HelpId = HID_TAB_ENT_DEFAULT; };
+hidspecial HID_TAB_ENT_FORMAT_SAMPLE                    { HelpId = HID_TAB_ENT_FORMAT_SAMPLE; };
+hidspecial HID_TAB_ENT_FORMAT                           { HelpId = HID_TAB_ENT_FORMAT; };
+hidspecial HID_TAB_ENT_BOOL_DEFAULT                     { HelpId = HID_TAB_ENT_BOOL_DEFAULT; };
+hidspecial HID_TAB_ENT_REQUIRED                         { HelpId = HID_TAB_ENT_REQUIRED; };
+hidspecial HID_TAB_ENT_AUTOINCREMENT                    { HelpId = HID_TAB_ENT_AUTOINCREMENT; };
+hidspecial HID_TAB_ENT_TEXT_LEN                         { HelpId = HID_TAB_ENT_TEXT_LEN; };
+hidspecial HID_TAB_ENT_TYPE                             { HelpId = HID_TAB_ENT_TYPE; };
+hidspecial HID_TAB_ENT_COLUMNNAME                       { HelpId = HID_TAB_ENT_COLUMNNAME; };
+hidspecial HID_TAB_ENT_NUMTYP                           { HelpId = HID_TAB_ENT_NUMTYP; };
+hidspecial HID_TAB_ENT_LEN                              { HelpId = HID_TAB_ENT_LEN; };
+hidspecial HID_TAB_ENT_SCALE                            { HelpId = HID_TAB_ENT_SCALE; };
+hidspecial HID_BROWSER_TABLE_CREATE_DESIGN              { HelpId = HID_BROWSER_TABLE_CREATE_DESIGN; };
+hidspecial HID_BROWSER_TABLE_EDIT                       { HelpId = HID_BROWSER_TABLE_EDIT; };
+hidspecial HID_BROWSER_TABLE_DELETE                     { HelpId = HID_BROWSER_TABLE_DELETE; };
+hidspecial HID_SQLERROR_EXCHAIN_ERRORS                  { HelpId = HID_SQLERROR_EXCHAIN_ERRORS; };
+hidspecial HID_SQLERROR_EXCHAIN_TEXT                    { HelpId = HID_SQLERROR_EXCHAIN_TEXT; };
+hidspecial HID_TAB_WIZ_COLUMN_SELECT                    { HelpId = HID_TAB_WIZ_COLUMN_SELECT; };
+hidspecial HID_TAB_WIZ_TYPE_SELECT                      { HelpId = HID_TAB_WIZ_TYPE_SELECT; };
+hidspecial HID_TAB_NAMEMATCHING_COLS_AVAIL              { HelpId = HID_TAB_NAMEMATCHING_COLS_AVAIL; };
+hidspecial HID_TAB_NAMEMATCHING_COLS_ASSIGN             { HelpId = HID_TAB_NAMEMATCHING_COLS_ASSIGN; };
+hidspecial HID_TAB_WIZ_COPYTABLE                        { HelpId = HID_TAB_WIZ_COPYTABLE; };
+hidspecial HID_TAB_WIZ_TABLENAME_EDIT                   { HelpId = HID_TAB_WIZ_TABLENAME_EDIT; };
+hidspecial HID_CTL_RELATIONTAB                          { HelpId = HID_CTL_RELATIONTAB; };
+hidspecial HID_TLB_RELATIONDESIGN                       { HelpId = HID_TLB_RELATIONDESIGN ; };
+hidspecial HID_RELATIONDIALOG_LEFTFIELDCELL             { HelpId = HID_RELATIONDIALOG_LEFTFIELDCELL ; };
+hidspecial HID_RELATIONDIALOG_RIGHTFIELDCELL            { HelpId = HID_RELATIONDIALOG_RIGHTFIELDCELL ; };
+hidspecial HID_RELDLG_KEYFIELDS                         { HelpId = HID_RELDLG_KEYFIELDS ; };
+hidspecial HID_BROWSER_RELATION_DESIGN                  { HelpId = HID_BROWSER_RELATION_DESIGN ; };
+hidspecial HID_TABLE_DESIGN_NO_CONNECTION               { HelpId = HID_TABLE_DESIGN_NO_CONNECTION ; };
+hidspecial HID_DSADMIN_CREATEDATABASE                   { HelpId = HID_DSADMIN_CREATEDATABASE ; };
+hidspecial HID_BROWSER_COLUMNINFO                       { HelpId = HID_BROWSER_COLUMNINFO ; };
+hidspecial HID_DSADMIN_USECATALOG                       { HelpId = HID_DSADMIN_USECATALOG ; };
+hidspecial HID_BROWSER_VIEW_CREATE_DESIGN               { HelpId = HID_BROWSER_VIEW_CREATE_DESIGN ; };
+hidspecial HID_DSADMIN_DOCUMENTS                        { HelpId = HID_DSADMIN_DOCUMENTS ; };
+hidspecial HID_DSADMIN_DOCUMENTLINKS                    { HelpId = HID_DSADMIN_DOCUMENTLINKS ; };
+
+hidspecial HID_DSADMIN_FILTER_EXPLANATION               { HelpId = HID_DSADMIN_FILTER_EXPLANATION ; };
+hidspecial HID_CONFIRM_DROP_BUTTON_ALL                  { HelpId = HID_CONFIRM_DROP_BUTTON_ALL ; };
+hidspecial HID_DSBROWSER_BOOKMARK_SELECTED              { HelpId = HID_DSBROWSER_BOOKMARK_SELECTED ; };
+hidspecial HID_DSADMIN_TABLE_TOOLBOX                    { HelpId = HID_DSADMIN_TABLE_TOOLBOX ; };
+hidspecial HID_DSADMIN_QUERY_TOOLBOX                    { HelpId = HID_DSADMIN_QUERY_TOOLBOX ; };
+hidspecial HID_DSADMIN_BOOKMARK_TOOLBOX                 { HelpId = HID_DSADMIN_BOOKMARK_TOOLBOX ; };
+hidspecial HID_DSADMIN_PAGE_LDAP                        { HelpId = HID_DSADMIN_PAGE_LDAP ; };
+hidspecial HID_DSADMIN_LDAP_HOSTNAME                    { HelpId = HID_DSADMIN_LDAP_HOSTNAME ; };
+hidspecial HID_DSADMIN_LDAP_BASEDN                      { HelpId = HID_DSADMIN_LDAP_BASEDN ; };
+hidspecial HID_DSADMIN_LDAP_PORTNUMBER                  { HelpId = HID_DSADMIN_LDAP_PORTNUMBER ; };
+hidspecial HID_DSADMIN_PAGE_MOZILLA                     { HelpId = HID_DSADMIN_PAGE_MOZILLA ; };
+hidspecial HID_DSADMIN_MOZILLA_PROFILE_NAME             { HelpId = HID_DSADMIN_MOZILLA_PROFILE_NAME ; };
+
+hidspecial HID_TAB_PAGE_USERADMIN                       { HelpId = HID_TAB_PAGE_USERADMIN ; };
+hidspecial HID_TAB_PAGE_PBUSER                          { HelpId = HID_TAB_PAGE_PBUSER ; };
+hidspecial HID_TAB_PAGE_PBCHGPWD                        { HelpId = HID_TAB_PAGE_PBCHGPWD ; };
+hidspecial HID_TAB_PAGE_PBUSERDELETE                    { HelpId = HID_TAB_PAGE_PBUSERDELETE ; };
+hidspecial HID_TAB_PAGE_TBLGRANTS                       { HelpId = HID_TAB_PAGE_TBLGRANTS ; };
+hidspecial HID_TAB_PAGE_LBUSER                          { HelpId = HID_TAB_PAGE_LBUSER ; };
+hidspecial HID_DSBROWSER_BOOKMARKSELECTED               { HelpId = HID_DSBROWSER_BOOKMARKSELECTED ; };
+hidspecial HID_DSBROWSER_DISCONNECTING                  { HelpId = HID_DSBROWSER_DISCONNECTING ; };
+hidspecial HID_DSBROWSER_DIRECTSQL                      { HelpId = HID_DSBROWSER_DIRECTSQL   ; };
+hidspecial HID_DSADMIN_LDAP_ROWCOUNT                    { HelpId = HID_DSADMIN_LDAP_ROWCOUNT     ; };
+hidspecial HID_DLG_PASSWORD                             { HelpId = HID_DLG_PASSWORD  ; };
+hidspecial HID_BROWSER_QUERY_EDITSQL                    { HelpId = HID_BROWSER_QUERY_EDITSQL     ; };
+hidspecial HID_BROWSER_OPEN_DOCUMENT                    { HelpId = HID_BROWSER_OPEN_DOCUMENT ; };
+hidspecial HID_BROWSER_EDIT_DOCUMENT                    { HelpId = HID_BROWSER_EDIT_DOCUMENT ; };
+hidspecial HID_BROWSER_BEW_DOCUMENT                     { HelpId = HID_BROWSER_BEW_DOCUMENT ; };
+
+hidspecial HID_DLGIDX_NEWINDEX                          { HelpId = HID_DLGIDX_NEWINDEX; }
+hidspecial HID_DLGIDX_DROPINDEX                         { HelpId = HID_DLGIDX_DROPINDEX; }
+hidspecial HID_DLGIDX_RENAMEINDEX                       { HelpId = HID_DLGIDX_RENAMEINDEX; }
+hidspecial HID_DLGIDX_SAVEINDEX                         { HelpId = HID_DLGIDX_SAVEINDEX; }
+hidspecial HID_DLGIDX_RESETINDEX                        { HelpId = HID_DLGIDX_RESETINDEX; }
+hidspecial HID_DLGIDX_INDEXLIST                         { HelpId = HID_DLGIDX_INDEXLIST; }
+hidspecial UID_DLGINDEX_INDEXDETAILS_BACK               { HelpId = UID_DLGINDEX_INDEXDETAILS_BACK; }
+hidspecial UID_DLGINDEX_INDEXDETAILS_MAIN               { HelpId = UID_DLGINDEX_INDEXDETAILS_MAIN; }
+hidspecial HID_DLGINDEX_INDEXDETAILS_FIELD              { HelpId = HID_DLGINDEX_INDEXDETAILS_FIELD; }
+hidspecial HID_DLGINDEX_INDEXDETAILS_SORTORDER          { HelpId = HID_DLGINDEX_INDEXDETAILS_SORTORDER; }
+hidspecial HID_DOCLINKEDIT_URL                          { HelpId = HID_DOCLINKEDIT_URL; }
+
+hidspecial HID_QUERY_SQLMODE                            { HelpId = HID_QUERY_SQLMODE ; };
+hidspecial HID_BROWSER_REFRESH_REBUILDVIEW              { HelpId = HID_BROWSER_REFRESH_REBUILDVIEW ; };
+hidspecial HID_BROWSER_RENAME_ENTRY                     { HelpId = HID_BROWSER_RENAME_ENTRY ; };
+
+hidspecial HID_QUERY_EDIT_JOINCONNECTION                { HelpId = HID_QUERY_EDIT_JOINCONNECTION ; };
+
+hidspecial HID_DLG_QRY_WINDOW_CONTROL                   { HelpId = HID_DLG_QRY_WINDOW_CONTROL ; };
+hidspecial HID_DLG_QRY_LEFT_TABLE                       { HelpId = HID_DLG_QRY_LEFT_TABLE ; };
+hidspecial HID_DLG_QRY_RIGHT_TABLE                      { HelpId = HID_DLG_QRY_RIGHT_TABLE ; };
+
+hidspecial HID_DLG_REL_CASC_DEL                         { HelpId = HID_DLG_REL_CASC_DEL ; };
+hidspecial HID_DLG_REL_NO_CASC_DEL                      { HelpId = HID_DLG_REL_NO_CASC_DEL ; };
+hidspecial HID_DLG_REL_CASC_DEL_NULL                    { HelpId = HID_DLG_REL_CASC_DEL_NULL ; };
+hidspecial HID_DLG_REL_CASC_DEL_DEFAULT                 { HelpId = HID_DLG_REL_CASC_DEL_DEFAULT ; };
+
+hidspecial HID_DLG_REL_CASC_UPD                         { HelpId = HID_DLG_REL_CASC_UPD ; };
+hidspecial HID_DLG_REL_NO_CASC_UPD                      { HelpId = HID_DLG_REL_NO_CASC_UPD ; };
+hidspecial HID_DLG_REL_CASC_UPD_NULL                    { HelpId = HID_DLG_REL_CASC_UPD_NULL ; };
+hidspecial HID_DLG_REL_CASC_UPD_DEFAULT                 { HelpId = HID_DLG_REL_CASC_UPD_DEFAULT ; };
+hidspecial HID_BROWSER_SAVE_RECORD                      { HelpId = HID_BROWSER_SAVE_RECORD ; };
+hidspecial HID_BROWSER_UNDO_RECORD                      { HelpId = HID_BROWSER_UNDO_RECORD ; };
+
+/*
+// missing pre processor for helpids so we have to include them here
+hidspecial SID_RELATION_ADD_RELATION                    { HelpId = SID_RELATION_ADD_RELATION ; };
+hidspecial SID_FM_NATIVESQL                             { HelpId = SID_FM_NATIVESQL ; };
+hidspecial SID_FM_ADDTABLE                              { HelpId = SID_FM_ADDTABLE ; };
+hidspecial SID_FM_EXECUTE                               { HelpId = SID_FM_EXECUTE ; };
+*/
+
+hidspecial HID_DSADMIN_SQL92CHECK                       { HelpId = HID_DSADMIN_SQL92CHECK ; };
+hidspecial HID_DSADMIN_AUTOINCREMENTVALUE               { HelpId = HID_DSADMIN_AUTOINCREMENTVALUE ; };
+hidspecial HID_TAB_AUTOINCREMENTVALUE                   { HelpId = HID_TAB_AUTOINCREMENTVALUE ; };
+hidspecial HID_DOCUMENT_CREATE_REPWIZ                   { HelpId = HID_DOCUMENT_CREATE_REPWIZ ; };
+hidspecial HID_DSADMIN_RETRIEVE_AUTO                    { HelpId = HID_DSADMIN_RETRIEVE_AUTO ; };
+hidspecial HID_DSADMIN_AUTORETRIEVEENABLED              { HelpId = HID_DSADMIN_AUTORETRIEVEENABLED ; };
+
+hidspecial HID_DSADMIN_PAGE_MYSQL_ODBC                  { HelpId = HID_DSADMIN_PAGE_MYSQL_ODBC ; };
+hidspecial HID_DSADMIN_PAGE_MYSQL_JDBC                  { HelpId = HID_DSADMIN_PAGE_MYSQL_JDBC ; };
+hidspecial HID_TAB_PAGE_TABLEPRIVILEGES                 { HelpId = HID_TAB_PAGE_TABLEPRIVILEGES ; };
+
+hidspecial HID_DSADMIN_PAGE_USERDRIVER                  { HelpId = HID_DSADMIN_PAGE_USERDRIVER ; };
+hidspecial HID_DSADMIN_USER_DEFINED                     { HelpId = HID_DSADMIN_USER_DEFINED ; };
+hidspecial HID_DSADMIN_USERDEF_OPTIONS                  { HelpId = HID_DSADMIN_USERDEF_OPTIONS ; };
+hidspecial HID_DSADMIN_CHARSET_USERDEF                  { HelpId = HID_DSADMIN_CHARSET_USERDEF ; };
+
+hidspecial HID_DLG_RENAME                               { HelpId = HID_DLG_RENAME ; };
+
+hidspecial HID_DSADMIN_DBASE_PATH                       { HelpId = HID_DSADMIN_DBASE_PATH ; };
+hidspecial HID_DSADMIN_MYSQL_DATABASE                   { HelpId = HID_DSADMIN_MYSQL_DATABASE ; };
+hidspecial HID_DSADMIN_MYSQL_ODBC_DATASOURCE            { HelpId = HID_DSADMIN_MYSQL_ODBC_DATASOURCE ; };
+hidspecial HID_DSADMIN_ODBC_DATASOURCE                  { HelpId = HID_DSADMIN_ODBC_DATASOURCE ; };
+hidspecial HID_DSADMIN_ADABAS_DATABASE                  { HelpId = HID_DSADMIN_ADABAS_DATABASE ; };
+hidspecial HID_DSADMIN_MSACCESS_MDB_FILE                { HelpId = HID_DSADMIN_MSACCESS_MDB_FILE ; };
+hidspecial HID_DSADMIN_PAGE_MSACCESS                    { HelpId = HID_DSADMIN_PAGE_MSACCESS ; };
+hidspecial HID_DSADMIN_FLAT_PATH                        { HelpId = HID_DSADMIN_FLAT_PATH ; };
+hidspecial HID_DSADMIN_CALC_PATH                        { HelpId = HID_DSADMIN_CALC_PATH ; };
+hidspecial HID_DSADMIN_ADVANCED                         { HelpId = HID_DSADMIN_ADVANCED ; };
+hidspecial HID_DSADMIN_BOOLEANCOMPARISON                { HelpId = HID_DSADMIN_BOOLEANCOMPARISON ; };
+hidspecial HID_DSADMIN_ORACLE_DATABASE                  { HelpId = HID_DSADMIN_ORACLE_DATABASE ; };
+
+hidspecial UID_APP_VIEW                                 { HelpId = UID_APP_VIEW ; };
+hidspecial HID_APP_TABLE_TREE                           { HelpId = HID_APP_TABLE_TREE ; };
+hidspecial HID_APP_FORM_TREE                            { HelpId = HID_APP_FORM_TREE ; };
+hidspecial HID_APP_QUERY_TREE                           { HelpId = HID_APP_QUERY_TREE ; };
+hidspecial HID_APP_REPORT_TREE                          { HelpId = HID_APP_REPORT_TREE  ; };
+hidspecial UID_APP_DETAIL_VIEW                          { HelpId = UID_APP_DETAIL_VIEW; };
+hidspecial UID_APP_VIEW_VERT_SPLIT                      { HelpId = UID_APP_VIEW_VERT_SPLIT ; };
+hidspecial UID_APP_VIEW_BORDER_WIN                      { HelpId = UID_APP_VIEW_BORDER_WIN ; };
+hidspecial HID_APP_CREATION_LIST                        { HelpId = HID_APP_CREATION_LIST ; };
+hidspecial UID_APP_SWAP_VIEW                            { HelpId = UID_APP_SWAP_VIEW ; };
+hidspecial HID_APP_SWAP_ICONCONTROL                     { HelpId = HID_APP_SWAP_ICONCONTROL ; };
+
+hidspecial HID_DSADMIN_APPENDTABLEALIAS                 { HelpId = HID_DSADMIN_APPENDTABLEALIAS ; };
+hidspecial HID_DSADMIN_AS_BEFORE_CORRELATION_NAME       { HelpId = HID_DSADMIN_AS_BEFORE_CORRELATION_NAME ; };
+hidspecial HID_DSADMIN_CHECK_REQUIRED_FIELDS            { HelpId = HID_DSADMIN_CHECK_REQUIRED_FIELDS ; };
+hidspecial HID_DSADMIN_PARAMETERNAMESUBST               { HelpId = HID_DSADMIN_PARAMETERNAMESUBST ; };
+hidspecial HID_DSADMIN_IGNOREDRIVER_PRIV                { HelpId = HID_DSADMIN_IGNOREDRIVER_PRIV ; };
+hidspecial HID_DSADMIN_HOSTNAME                         { HelpId = HID_DSADMIN_HOSTNAME ; };
+hidspecial HID_DSADMIN_PORTNUMBER                       { HelpId = HID_DSADMIN_PORTNUMBER ; };
+
+hidspecial HID_APP_HELP_TEXT                            { HelpId = HID_APP_HELP_TEXT ; };
+hidspecial HID_EXPLORERDLG_COLLECTION                   { HelpId = HID_EXPLORERDLG_COLLECTION ; };
+hidspecial UID_APP_DATABASE_VIEW                        { HelpId = UID_APP_DATABASE_VIEW ; };
+hidspecial UID_APP_TASKS_VIEW                           { HelpId = UID_APP_TASKS_VIEW ; };
+hidspecial UID_APP_CONTAINER_VIEW                       { HelpId = UID_APP_CONTAINER_VIEW ; };
+hidspecial UID_APP_TASKS_WINDOW                         { HelpId = UID_APP_TASKS_WINDOW ; };
+hidspecial HID_APP_DESCRIPTION_TEXT                     { HelpId = HID_APP_DESCRIPTION_TEXT ; };
+hidspecial UID_APP_DETAILPAGE_HELPER                    { HelpId = UID_APP_DETAILPAGE_HELPER ; };
+
+hidspecial HID_APP_VIEW_PREVIEW_CB                      { HelpId = HID_APP_VIEW_PREVIEW_CB ; };
+hidspecial HID_APP_VIEW_PREVIEW_1                       { HelpId = HID_APP_VIEW_PREVIEW_1 ; };
+hidspecial HID_APP_VIEW_PREVIEW_2                       { HelpId = HID_APP_VIEW_PREVIEW_2 ; };
+hidspecial UID_APP_VIEW_HORZ_SPLIT                      { HelpId = UID_APP_VIEW_HORZ_SPLIT ; };
+hidspecial UID_APP_VIEW_PREVIEW_1                       { HelpId = UID_APP_VIEW_PREVIEW_1 ; };
+hidspecial HID_APP_VIEW_PREVIEW_3                       { HelpId = HID_APP_VIEW_PREVIEW_3 ; };
+
+hidspecial HID_DSADMIN_TYPE_DIALOG                      { HelpId = HID_DSADMIN_TYPE_DIALOG ; };
+hidspecial HID_DSADMIN_ENABLEOUTERJOIN                  { HelpId = HID_DSADMIN_ENABLEOUTERJOIN ; };
+hidspecial HID_DSADMIN_ADABASADMIN                      { HelpId = HID_DSADMIN_ADABASADMIN ; };
+hidspecial HID_DSADMIN_USERADMIN                        { HelpId = HID_DSADMIN_USERADMIN ; };
+
+hidspecial HID_DBWIZ_PREVIOUS                           { HelpId = HID_DBWIZ_PREVIOUS ; };
+hidspecial HID_DBWIZ_NEXT                               { HelpId = HID_DBWIZ_NEXT ; };
+hidspecial HID_DBWIZ_CANCEL                             { HelpId = HID_DBWIZ_CANCEL ; };
+hidspecial HID_DBWIZ_FINISH                             { HelpId = HID_DBWIZ_FINISH ; };
+hidspecial UID_DBWIZ_HELP                               { HelpId = UID_DBWIZ_HELP ; };
+
+hidspecial HID_DSADMIN_CATALOG                          { HelpId = HID_DSADMIN_CATALOG ; };
+hidspecial HID_DSADMIN_SCHEMA                           { HelpId = HID_DSADMIN_SCHEMA ; };
+hidspecial HID_DSADMIN_IGNOREINDEXAPPENDIX              { HelpId = HID_DSADMIN_IGNOREINDEXAPPENDIX ; };
+
+hidspecial HID_PAGE_DBWIZARD_GENERALPAGE                        { HelpId = HID_PAGE_DBWIZARD_GENERALPAGE ; };
+hidspecial HID_PAGE_DBWIZARD_GENERAL_RB_CREATEDBDATABASE        { HelpId = HID_PAGE_DBWIZARD_GENERAL_RB_CREATEDBDATABASE ; };
+hidspecial HID_PAGE_DBWIZARD_GENERAL_RB_GETEXISTINGDATABASE     { HelpId = HID_PAGE_DBWIZARD_GENERAL_RB_GETEXISTINGDATABASE ; };
+
+hidspecial HID_PAGE_DBWIZARD_DBASE_ET_DBASELOCATION             { HelpId = HID_PAGE_DBWIZARD_DBASE_ET_DBASELOCATION ; };
+hidspecial HID_PAGE_DBWIZARD_DBASE_PB_DBASELOCATION             { HelpId = HID_PAGE_DBWIZARD_DBASE_PB_DBASELOCATION ; };
+
+/*
+hidspecial SID_INDEXDESIGN { HelpId = SID_INDEXDESIGN; };
+hidspecial SID_DOCUMENT_DATA_SOURCE { HelpId = SID_DOCUMENT_DATA_SOURCE; };
+hidspecial SID_DB_NEW { HelpId = SID_DB_NEW; };
+hidspecial SID_DB_APP_DISABLE_PREVIEW { HelpId = SID_DB_APP_DISABLE_PREVIEW; };
+hidspecial SID_DB_APP_DSCONNECTION_TYPE { HelpId = SID_DB_APP_DSCONNECTION_TYPE; };
+hidspecial SID_DB_APP_DSADVANCED_SETTINGS { HelpId = SID_DB_APP_DSADVANCED_SETTINGS; };
+hidspecial SID_DB_APP_VIEW_DOCINFO_PREVIEW { HelpId = SID_DB_APP_VIEW_DOCINFO_PREVIEW; };
+hidspecial SID_DB_APP_VIEW_DOC_PREVIEW { HelpId = SID_DB_APP_VIEW_DOC_PREVIEW; };
+hidspecial SID_DB_APP_VIEW_TABLES { HelpId = SID_DB_APP_VIEW_TABLES; };
+hidspecial SID_DB_APP_VIEW_QUERIES { HelpId = SID_DB_APP_VIEW_QUERIES; };
+hidspecial SID_DB_APP_DSIMPORT { HelpId = SID_DB_APP_DSIMPORT; };
+hidspecial SID_DB_APP_VIEW_FORMS { HelpId = SID_DB_APP_VIEW_FORMS; };
+hidspecial SID_DB_APP_DSRELDESIGN { HelpId = SID_DB_APP_DSRELDESIGN; };
+hidspecial SID_DB_APP_DSUSERADMIN { HelpId = SID_DB_APP_DSUSERADMIN; };
+hidspecial SID_DB_APP_TABLEFILTER { HelpId = SID_DB_APP_TABLEFILTER; };
+hidspecial SID_DB_APP_CLOSECONNECTION { HelpId = SID_DB_APP_CLOSECONNECTION; };
+hidspecial SID_DB_APP_DSPROPS { HelpId = SID_DB_APP_DSPROPS; };
+hidspecial SID_DB_APP_DBADMIN { HelpId = SID_DB_APP_DBADMIN; };
+hidspecial SID_DB_APP_CONVERTTOVIEW { HelpId = SID_DB_APP_CONVERTTOVIEW; };
+hidspecial SID_DB_APP_REFRESH_TABLES { HelpId = SID_DB_APP_REFRESH_TABLES; };
+hidspecial SID_DB_APP_VIEW_REPORTS { HelpId = SID_DB_APP_VIEW_REPORTS; };
+hidspecial SID_DB_APP_DSEXPORT { HelpId = SID_DB_APP_DSEXPORT; };
+hidspecial SID_DB_APP_TABLE_DELETE { HelpId = SID_DB_APP_TABLE_DELETE; };
+hidspecial SID_DB_APP_TABLE_RENAME { HelpId = SID_DB_APP_TABLE_RENAME; };
+hidspecial SID_DB_APP_TABLE_EDIT { HelpId = SID_DB_APP_TABLE_EDIT; };
+hidspecial SID_DB_APP_TABLE_OPEN { HelpId = SID_DB_APP_TABLE_OPEN; };
+hidspecial SID_DB_APP_QUERY_DELETE { HelpId = SID_DB_APP_QUERY_DELETE; };
+hidspecial SID_DB_APP_QUERY_RENAME { HelpId = SID_DB_APP_QUERY_RENAME; };
+hidspecial SID_DB_APP_QUERY_EDIT { HelpId = SID_DB_APP_QUERY_EDIT; };
+hidspecial SID_DB_APP_QUERY_OPEN { HelpId = SID_DB_APP_QUERY_OPEN; };
+hidspecial SID_DB_APP_FORM_DELETE { HelpId = SID_DB_APP_FORM_DELETE; };
+hidspecial SID_DB_APP_FORM_RENAME { HelpId = SID_DB_APP_FORM_RENAME; };
+hidspecial SID_DB_APP_FORM_EDIT { HelpId = SID_DB_APP_FORM_EDIT; };
+hidspecial SID_DB_APP_FORM_OPEN { HelpId = SID_DB_APP_FORM_OPEN; };
+hidspecial SID_DB_APP_REPORT_DELETE { HelpId = SID_DB_APP_REPORT_DELETE; };
+hidspecial SID_DB_APP_REPORT_RENAME { HelpId = SID_DB_APP_REPORT_RENAME; };
+hidspecial SID_DB_APP_REPORT_EDIT { HelpId = SID_DB_APP_REPORT_EDIT; };
+hidspecial SID_DB_APP_REPORT_OPEN { HelpId = SID_DB_APP_REPORT_OPEN; };
+hidspecial SID_DB_APP_DELETE { HelpId = SID_DB_APP_DELETE; };
+hidspecial SID_DB_APP_RENAME { HelpId = SID_DB_APP_RENAME; };
+hidspecial SID_DB_APP_EDIT { HelpId = SID_DB_APP_EDIT; };
+hidspecial SID_DB_APP_EDIT_SQL_VIEW { HelpId = SID_DB_APP_EDIT_SQL_VIEW; };
+hidspecial SID_DB_APP_OPEN { HelpId = SID_DB_APP_OPEN; };
+hidspecial SID_BROWSER_CLEAR_QUERY { HelpId = SID_BROWSER_CLEAR_QUERY; };
+hidspecial SID_RELATION_ADD_RELATION { HelpId = SID_RELATION_ADD_RELATION; };
+hidspecial SID_QUERY_VIEW_FUNCTIONS { HelpId = SID_QUERY_VIEW_FUNCTIONS; };
+hidspecial SID_QUERY_VIEW_TABLES { HelpId = SID_QUERY_VIEW_TABLES; };
+hidspecial SID_QUERY_VIEW_ALIASES { HelpId = SID_QUERY_VIEW_ALIASES; };
+hidspecial SID_QUERY_DISTINCT_VALUES { HelpId = SID_QUERY_DISTINCT_VALUES; };
+hidspecial SID_FORM_CREATE_REPWIZ_PRE_SEL { HelpId = SID_FORM_CREATE_REPWIZ_PRE_SEL; };
+hidspecial SID_REPORT_CREATE_REPWIZ_PRE_SEL { HelpId = SID_REPORT_CREATE_REPWIZ_PRE_SEL; };
+hidspecial SID_APP_NEW_REPORT_PRE_SEL { HelpId = SID_APP_NEW_REPORT_PRE_SEL; };
+hidspecial SID_APP_NEW_FOLDER { HelpId = SID_APP_NEW_FOLDER; };
+hidspecial SID_APP_NEW_FORM { HelpId = SID_APP_NEW_FORM; };
+hidspecial SID_DB_APP_PASTE_SPECIAL { HelpId = SID_DB_APP_PASTE_SPECIAL; };
+hidspecial SID_DB_QUERY_PREVIEW { HelpId = SID_DB_QUERY_PREVIEW; };
+hidspecial SID_DB_APP_STATUS_TYPE { HelpId = SID_DB_APP_STATUS_TYPE; };
+hidspecial SID_DB_APP_STATUS_DBNAME { HelpId = SID_DB_APP_STATUS_DBNAME; };
+hidspecial SID_DB_APP_STATUS_USERNAME { HelpId = SID_DB_APP_STATUS_USERNAME; };
+hidspecial SID_DB_APP_STATUS_HOSTNAME { HelpId = SID_DB_APP_STATUS_HOSTNAME; };
+hidspecial SID_DB_APP_SENDREPORTASMAIL { HelpId = SID_DB_APP_SENDREPORTASMAIL; };
+hidspecial SID_DB_APP_SENDREPORTTOWRITER { HelpId = SID_DB_APP_SENDREPORTTOWRITER; };
+hidspecial SID_DB_NEW_VIEW_SQL { HelpId = SID_DB_NEW_VIEW_SQL; };
+*/
+
+hidspecial HID_PAGE_DBWIZARD_TEXT_ET_LOCATIONTEXTFILE           { HelpId = HID_PAGE_DBWIZARD_TEXT_ET_LOCATIONTEXTFILE ; };
+hidspecial HID_PAGE_DBWIZARD_TEXT_PB_LOCATIONTEXTFILE           { HelpId = HID_PAGE_DBWIZARD_TEXT_PB_LOCATIONTEXTFILE ; };
+hidspecial HID_PAGE_DBWIZARD_TEXT_RB_ACCESSTXTFILES             { HelpId = HID_PAGE_DBWIZARD_TEXT_RB_ACCESSTXTFILES ; };
+hidspecial HID_PAGE_DBWIZARD_TEXT_RB_ACCESSCSVFILES             { HelpId = HID_PAGE_DBWIZARD_TEXT_RB_ACCESSCSVFILES ; };
+hidspecial HID_PAGE_DBWIZARD_TEXT_RB_ACCESSOTHERFILES           { HelpId = HID_PAGE_DBWIZARD_TEXT_RB_ACCESSOTHERFILES ; };
+hidspecial HID_PAGE_DBWIZARD_TEXT_ET_OWNEXTENSION               { HelpId = HID_PAGE_DBWIZARD_TEXT_ET_OWNEXTENSION ; };
+hidspecial HID_PAGE_DBWIZARD_TEXT_CB_FIELDSEPARATOR             { HelpId = HID_PAGE_DBWIZARD_TEXT_CB_FIELDSEPARATOR ; };
+hidspecial HID_PAGE_DBWIZARD_TEXT_CB_TEXTSEPARATOR              { HelpId = HID_PAGE_DBWIZARD_TEXT_CB_TEXTSEPARATOR ; };
+hidspecial HID_PAGE_DBWIZARD_TEXT_CB_DECIMALSEPARATOR           { HelpId = HID_PAGE_DBWIZARD_TEXT_CB_DECIMALSEPARATOR ; };
+hidspecial HID_PAGE_DBWIZARD_TEXT_CB_THOUSANDSSEPARATOR         { HelpId = HID_PAGE_DBWIZARD_TEXT_CB_THOUSANDSSEPARATOR ; };
+hidspecial HID_PAGE_DBWIZARD_MSACCESS_ET_MSACCESSLOCATION       { HelpId = HID_PAGE_DBWIZARD_MSACCESS_ET_MSACCESSLOCATION ; };
+hidspecial HID_PAGE_DBWIZARD_MSACCESS_PB_MSACCESSLOCATION       { HelpId = HID_PAGE_DBWIZARD_MSACCESS_PB_MSACCESSLOCATION ; };
+hidspecial HID_PAGE_DBWIZARD_LDAP_ET_HOSTSERVER                 { HelpId = HID_PAGE_DBWIZARD_LDAP_ET_HOSTSERVER ; };
+hidspecial HID_PAGE_DBWIZARD_LDAP_ET_BASEDN                     { HelpId = HID_PAGE_DBWIZARD_LDAP_ET_BASEDN ; };
+hidspecial HID_PAGE_DBWIZARD_LDAP_ET_PORTNUMBER                 { HelpId = HID_PAGE_DBWIZARD_LDAP_ET_PORTNUMBER ; };
+hidspecial HID_PAGE_DBWIZARD_LDAP_CB_USESSL                     { HelpId = HID_PAGE_DBWIZARD_LDAP_CB_USESSL ; };
+hidspecial HID_PAGE_DBWIZARD_LDAP_PB_TESTLDAPCONNECTION         { HelpId = HID_PAGE_DBWIZARD_LDAP_PB_TESTLDAPCONNECTION ; };
+hidspecial HID_PAGE_DBWIZARD_ADABAS_ET_ADABASNAME               { HelpId = HID_PAGE_DBWIZARD_ADABAS_ET_ADABASNAME ; };
+hidspecial HID_PAGE_DBWIZARD_ADABAS_PB_ADABASNAME               { HelpId = HID_PAGE_DBWIZARD_ADABAS_PB_ADABASNAME ; };
+hidspecial HID_PAGE_DBWIZARD_MYSQL_RB_CONNECTVIAODBC            { HelpId = HID_PAGE_DBWIZARD_MYSQL_RB_CONNECTVIAODBC ; };
+hidspecial HID_PAGE_DBWIZARD_MYSQL_RB_CONNECTVIAJDBC            { HelpId = HID_PAGE_DBWIZARD_MYSQL_RB_CONNECTVIAJDBC ; };
+hidspecial HID_PAGE_DBWIZARD_ORACLE_ET_ORACLEDBNAME             { HelpId = HID_PAGE_DBWIZARD_ORACLE_ET_ORACLEDBNAME ; };
+hidspecial HID_PAGE_DBWIZARD_ORACLE_ET_ORACLEHOSTSERVER         { HelpId = HID_PAGE_DBWIZARD_ORACLE_ET_ORACLEHOSTSERVER ; };
+hidspecial HID_PAGE_DBWIZARD_ORACLE_ET_ORACLEPORT               { HelpId = HID_PAGE_DBWIZARD_ORACLE_ET_ORACLEPORT ; };
+hidspecial HID_PAGE_DBWIZARD_ORACLE_ET_ORACLECLASS              { HelpId = HID_PAGE_DBWIZARD_ORACLE_ET_ORACLECLASS ; };
+hidspecial HID_PAGE_DBWIZARD_ORACLE_PB_TESTORACLECLASS          { HelpId = HID_PAGE_DBWIZARD_ORACLE_PB_TESTORACLECLASS ; };
+hidspecial HID_PAGE_DBWIZARD_JDBC_ET_JDBCURL                    { HelpId = HID_PAGE_DBWIZARD_JDBC_ET_JDBCURL ; };
+hidspecial HID_PAGE_DBWIZARD_JDBC_PB_JDBCURL                    { HelpId = HID_PAGE_DBWIZARD_JDBC_PB_JDBCURL ; };
+hidspecial HID_PAGE_DBWIZARD_JDBC_ET_MYSQLDBNAME                { HelpId = HID_PAGE_DBWIZARD_JDBC_ET_MYSQLDBNAME ; };
+hidspecial HID_PAGE_DBWIZARD_JDBC_ET_MYSQLHOSTSERVER            { HelpId = HID_PAGE_DBWIZARD_JDBC_ET_MYSQLHOSTSERVER ; };
+hidspecial HID_PAGE_DBWIZARD_JDBC_ET_MYSQLPORT                  { HelpId = HID_PAGE_DBWIZARD_JDBC_ET_MYSQLPORT ; };
+hidspecial HID_PAGE_DBWIZARD_JDBC_ET_MYSQLCLASS                 { HelpId = HID_PAGE_DBWIZARD_JDBC_ET_MYSQLCLASS ; };
+hidspecial HID_PAGE_DBWIZARD_JDBC_PB_TESTMYSQLCLASS             { HelpId = HID_PAGE_DBWIZARD_JDBC_PB_TESTMYSQLCLASS ; };
+
+hidspecial HID_PAGE_DBWIZARD_ADO_ET_ADOURL                      { HelpId = HID_PAGE_DBWIZARD_ADO_ET_ADOURL ; };
+hidspecial HID_PAGE_DBWIZARD_ADO_PB_ADOURL                      { HelpId = HID_PAGE_DBWIZARD_ADO_PB_ADOURL ; };
+hidspecial HID_PAGE_DBWIZARD_ADO_PB_TESTADOCONNECTION           { HelpId = HID_PAGE_DBWIZARD_ADO_PB_TESTADOCONNECTION ; };
+
+hidspecial HID_PAGE_DBWIZARD_ODBC_ET_NAMEOFODBCDATASOURCE       { HelpId = HID_PAGE_DBWIZARD_ODBC_ET_NAMEOFODBCDATASOURCE ; };
+hidspecial HID_PAGE_DBWIZARD_ODBC_PB_NAMEOFODBCDATASOURCE       { HelpId = HID_PAGE_DBWIZARD_ODBC_PB_NAMEOFODBCDATASOURCE ; };
+
+hidspecial HID_PAGE_DBWIZARD_SPREADSHEET_ET_SPREADSHEETPATH                 { HelpId = HID_PAGE_DBWIZARD_SPREADSHEET_ET_SPREADSHEETPATH ; };
+hidspecial HID_PAGE_DBWIZARD_SPREADSHEET_PB_SPREADSHEETPATH                 { HelpId = HID_PAGE_DBWIZARD_SPREADSHEET_PB_SPREADSHEETPATH ; };
+hidspecial HID_PAGE_DBWIZARD_SPREADSHEET_CB_SPREADSHEETPASSWORDREQUIRED     { HelpId = HID_PAGE_DBWIZARD_SPREADSHEET_CB_SPREADSHEETPASSWORDREQUIRED ; };
+
+hidspecial HID_PAGE_DBWIZARD_AUTHENTIFICATION_CB_GENERALPASSWORDREQUIRED    { HelpId = HID_PAGE_DBWIZARD_AUTHENTIFICATION_CB_GENERALPASSWORDREQUIRED ; };
+hidspecial HID_PAGE_DBWIZARD_AUTHENTIFICATION_ET_GENERALUSERNAME            { HelpId = HID_PAGE_DBWIZARD_AUTHENTIFICATION_ET_GENERALUSERNAME ; };
+hidspecial HID_PAGE_DBWIZARD_FINAL_RB_REGISTERDATASOURCE                    { HelpId = HID_PAGE_DBWIZARD_FINAL_RB_REGISTERDATASOURCE ; };
+hidspecial HID_PAGE_DBWIZARD_FINAL_RB_DONTREGISTERDATASOURCE                { HelpId = HID_PAGE_DBWIZARD_FINAL_RB_DONTREGISTERDATASOURCE ; };
+hidspecial HID_PAGE_DBWIZARD_FINAL_CB_STARTTABLEWIZARD                      { HelpId = HID_PAGE_DBWIZARD_FINAL_CB_STARTTABLEWIZARD ; };
+hidspecial HID_PAGE_DBWIZARD_FINAL_CB_OPENAFTERWARDS                        { HelpId = HID_PAGE_DBWIZARD_FINAL_CB_OPENAFTERWARDS ; };
+hidspecial HID_DSADMIN_USESSL_LDAP                                          { HelpId = HID_DSADMIN_USESSL_LDAP ; };
+hidspecial HID_DSADMIN_DOSLINEENDS                                          { HelpId = HID_DSADMIN_DOSLINEENDS ; };
+
+/*
+hidspecial SID_DB_QUERY_PREVIEW                                             { HelpId = SID_DB_QUERY_PREVIEW ; };
+*/
+
+hidspecial HID_PAGE_DBWIZARD_USERDEFINED_ET_BROWSE                          { HelpId = HID_PAGE_DBWIZARD_USERDEFINED_ET_BROWSE ; };
+hidspecial HID_PAGE_DBWIZARD_USERDEFINED_BROWSE                             { HelpId = HID_PAGE_DBWIZARD_USERDEFINED_BROWSE ; };
+hidspecial HID_DLG_DATABASE_WIZARD                                          { HelpId = HID_DLG_DATABASE_WIZARD ; };
+hidspecial HID_BROWSER_ADMINISTRATE                                         { HelpId = HID_BROWSER_ADMINISTRATE ; };
+hidspecial HID_DSADMIN_IGNORECURRENCY                                       { HelpId = HID_DSADMIN_IGNORECURRENCY ; };
+hidspecial HID_DLG_QRY_JOIN_CONTROL                                         { HelpId = HID_DLG_QRY_JOIN_CONTROL ; };
+hidspecial HID_EXTENSION_NOT_PRESENT_DLG                                    { HelpId = HID_EXTENSION_NOT_PRESENT_DLG ; };
+hidspecial HID_DLG_ADABAS_NEWDB                                             { HelpId = HID_DLG_ADABAS_NEWDB; };
+hidspecial HID_DLG_ADABAS_DBNAME                                            { HelpId = HID_DLG_ADABAS_DBNAME            ; };
+hidspecial HID_DLG_ADABAS_SYSUSR                                            { HelpId = HID_DLG_ADABAS_SYSUSR            ; };
+hidspecial HID_DLG_ADABAS_SYSPWD                                            { HelpId = HID_DLG_ADABAS_SYSPWD            ; };
+hidspecial HID_DLG_ADABAS_CONUSR                                            { HelpId = HID_DLG_ADABAS_CONUSR            ; };
+hidspecial HID_DLG_ADABAS_CONPWD                                            { HelpId = HID_DLG_ADABAS_CONPWD            ; };
+hidspecial HID_DLG_ADABAS_DATADEVSPACE_SIZE                                 { HelpId = HID_DLG_ADABAS_DATADEVSPACE_SIZE ; };
+hidspecial HID_DLG_ADABAS_CACHE_SIZE                                        { HelpId = HID_DLG_ADABAS_CACHE_SIZE        ; };
+hidspecial HID_DLG_ADABAS_USR                                               { HelpId = HID_DLG_ADABAS_USR               ; };
+hidspecial HID_DLG_ADABAS_DOMAINPWD                                         { HelpId = HID_DLG_ADABAS_DOMAINPWD         ; };
+hidspecial HID_DLG_ADABAS_RESTORE                                           { HelpId = HID_DLG_ADABAS_RESTORE           ; };
+hidspecial HID_DLG_ADABAS_PBRESTORE                                         { HelpId = HID_DLG_ADABAS_PBRESTORE         ; };
+hidspecial HID_DLG_ADABAS_SYSDEVSPACE                                       { HelpId = HID_DLG_ADABAS_SYSDEVSPACE       ; };
+hidspecial HID_DLG_ADABAS_PBSYSDEVSPACE                                     { HelpId = HID_DLG_ADABAS_PBSYSDEVSPACE     ; };
+hidspecial HID_DLG_ADABAS_TRANSACTIONLOG                                    { HelpId = HID_DLG_ADABAS_TRANSACTIONLOG    ; };
+hidspecial HID_DLG_ADABAS_PBTRANSACTIONLOG                                  { HelpId = HID_DLG_ADABAS_PBTRANSACTIONLOG  ; };
+hidspecial HID_DLG_ADABAS_DATADEVSPACE                                      { HelpId = HID_DLG_ADABAS_DATADEVSPACE      ; };
+hidspecial HID_DLG_ADABAS_PBDATADEVSPACE                                    { HelpId = HID_DLG_ADABAS_PBDATADEVSPACE    ; };
+hidspecial HID_DLG_ADABAS_TRANSACTIONLOG_SIZE                               { HelpId = HID_DLG_ADABAS_TRANSACTIONLOG_SIZE; };
+
+hidspecial HID_MACRO_MIGRATION_BACKUP_LOCATION                              { HelpId = HID_MACRO_MIGRATION_BACKUP_LOCATION; };

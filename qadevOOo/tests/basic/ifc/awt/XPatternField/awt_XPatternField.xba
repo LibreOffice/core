@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="awt_XPatternField" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.awt.XPatternField
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim oldVal, newVal As Variant
+    Dim eMask, lMask, eMaskOld, lMaskOld As String
+
+    Test.StartMethod("getMasks()")
+    Test.StartMethod("setMasks()")
+    bOK = true
+    oObj.getMasks(eMaskOld, lMaskOld)
+    Out.Log("value before: {"+eMaskOld+", "+lMaskOld+"}")
+    oObj.setMasks(eMaskOld+"__NEW", lMaskOld+"__NEW")
+    oObj.getMasks(eMask, lMask)
+    Out.Log("value after: {"+eMask+", "+lMask+"}")
+    bOK = bOK AND (eMask &lt;&gt; eMaskOld) AND (lMask &lt;&gt; lMaskOld)
+    Test.MethodTested("setMasks()", bOK)
+    Test.MethodTested("getMasks()", bOK)
+    
+    Test.StartMethod("getString()")
+    Test.StartMethod("setString()")
+    bOK = true
+    oldVal = oObj.getString()
+    Out.Log("value before: "+oldVal)
+    oObj.setString(oldVal+"__NEW")
+    newVal = oObj.getString()
+    Out.Log("value after: "+newVal)
+    bOK = bOK AND (oldVal &lt;&gt; newVal)
+    Test.MethodTested("setString()", bOK)
+    Test.MethodTested("getString()", bOK)
+    
+    Test.StartMethod("isStrictFormat()")
+    Test.StartMethod("setStrictFormat()")
+    bOK = true
+    oldVal = oObj.isStrictFormat()
+    Out.Log("value before: "+oldVal)
+    if (oldVal) then 
+        oObj.setStrictFormat(false)
+    else
+        oObj.setStrictFormat(true)
+    endif
+    newVal = oObj.isStrictFormat()
+    Out.Log("value after: "+newVal)
+    bOK = bOK AND (oldVal &lt;&gt; newVal)
+    Test.MethodTested("setStrictFormat()", bOK)
+    Test.MethodTested("isStrictFormat()", bOK)
+    
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

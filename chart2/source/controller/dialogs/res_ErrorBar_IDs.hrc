@@ -1,0 +1,63 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#define FL_ERROR 1
+#define FL_INDICATE 2
+#define FL_PARAMETERS 3
+
+#define FT_POSITIVE 1
+#define FT_NEGATIVE 2
+
+#define RB_NONE 1
+#define RB_CONST 2
+#define RB_PERCENT 3
+#define RB_FUNCTION 4
+#define RB_BOTH 5
+#define RB_POSITIVE 6
+#define RB_NEGATIVE 7
+#define RB_RANGE 8
+
+#define ED_RANGE_POSITIVE 1
+#define ED_RANGE_NEGATIVE 2
+
+#define FI_BOTH 1
+#define FI_POSITIVE 2
+#define FI_NEGATIVE 3
+#define IB_RANGE_POSITIVE 4
+#define IB_RANGE_NEGATIVE 5
+
+#define LB_FUNCTION 1
+
+#define MF_POSITIVE 1
+#define MF_NEGATIVE 2
+
+#define CB_SYN_POS_NEG 1
+
+#define CHART_LB_FUNCTION_STD_ERROR     0
+#define CHART_LB_FUNCTION_STD_DEV       1
+#define CHART_LB_FUNCTION_VARIANCE      2
+#define CHART_LB_FUNCTION_ERROR_MARGIN  3

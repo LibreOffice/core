@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="style_ParagraphProperties" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' SERVICE: 
+' com.sun.star.style.ParagraphProperties
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+
+    if hasUnoInterfaces(oObj, "com.sun.star.text.XTextRange") then
+        oObj.String = "This is an example string from ParagraphProperties..."
+    end if
+
+    Dim nParaAdjust(3) As Integer
+    nParaAdjust(0) = com.sun.star.style.ParagraphAdjust.LEFT
+    nParaAdjust(1) = com.sun.star.style.ParagraphAdjust.RIGHT
+    nParaAdjust(2) = com.sun.star.style.ParagraphAdjust.BLOCK
+    nParaAdjust(3) = com.sun.star.style.ParagraphAdjust.CENTER
+    ' STRETCH????
+
+    Dim nLastLineAdjust(2) As Integer
+    nLastLineAdjust(0) = com.sun.star.style.ParagraphAdjust.LEFT
+    nLastLineAdjust(1) = com.sun.star.style.ParagraphAdjust.BLOCK
+    nLastLineAdjust(2) = com.sun.star.style.ParagraphAdjust.CENTER
+    ' STRETCH????
+
+    Out.Log("Starting ...")
+
+    PropertyTester.TestProperty("ParaAdjust",nParaAdjust())
+
+    PropertyTester.TestProperty("ParaLineSpacing")
+
+    PropertyTester.TestProperty("ParaBackColor")
+
+    PropertyTester.TestProperty("ParaBackTransparent")
+
+    PropertyTester.TestProperty("ParaBackGraphicURL")
+
+    PropertyTester.TestProperty("ParaBackGraphicFilter")
+
+    PropertyTester.TestProperty("ParaBackGraphicLocation")
+
+    Out.Log("set ParaAdjust to com.sun.star.style.ParagraphAdjust.BLOCK")
+    oObj.ParaAdjust = com.sun.star.style.ParagraphAdjust.BLOCK
+    PropertyTester.TestProperty("ParaLastLineAdjust",nLastLineAdjust())
+    oObj.ParaAdjust = com.sun.star.style.ParagraphAdjust.LEFT
+
+    PropertyTester.TestProperty("ParaExpandSingleWord")
+
+    Dim margins(2) As Integer
+    margins(0) = 0
+    margins(1) = 50
+    margins(2) = 100
+
+    PropertyTester.TestProperty("ParaLeftMargin",margins())
+
+    PropertyTester.TestProperty("ParaRightMargin",margins())
+
+    PropertyTester.TestProperty("ParaTopMargin",margins())
+
+    PropertyTester.TestProperty("ParaBottomMargin",margins())
+
+    PropertyTester.TestProperty("ParaLineNumberCount")
+
+    PropertyTester.TestProperty("ParaLineNumberStartValue")
+
+    Dim cPageDescName(0 To 1) As String
+    cPageDescName(0) = "HTML"
+    cPageDescName(1) = "Standard"
+    PropertyTester.TestProperty("PageDescName",cPageDescName())
+
+    PropertyTester.TestProperty("PageNumberOffset")
+
+    PropertyTester.TestProperty("ParaRegisterModeActive")
+
+    PropertyTester.TestProperty("ParaTabStops")
+
+    Dim cParaStyleName(0 to 3) As String
+    cParaStyleName(0) = "Heading 1"
+    cParaStyleName(1) = "First line indent"
+    cParaStyleName(2) = "Text body"
+    cParaStyleName(3) = "Standard"
+    PropertyTester.TestProperty("ParaStyleName",cParaStyleName())
+
+    PropertyTester.TestProperty("DropCapFormat")
+
+    PropertyTester.TestProperty("DropCapWholeWord")
+
+    PropertyTester.TestProperty("ParaKeepTogether")
+
+    PropertyTester.TestProperty("ParaSplit")
+
+    Dim nLevel(0 to 1) As Integer
+    nLevel(0) = 3
+    nLevel(1) = 0
+    Out.Log("Set NumberingStyleName to 'List 2' "
+    if PropertyTester.isAvailable("NumberingStyleName") then
+        oObj.NumberingStyleName = "List 2"
+    end if
+    PropertyTester.TestProperty("NumberingLevel",nLevel())
+
+    PropertyTester.TestProperty("NumberingRules")
+
+    PropertyTester.TestProperty("NumberingStartValue")
+
+    PropertyTester.TestProperty("ParaIsNumberingRestart")
+
+    Dim cStyleName(0 to 1) As String
+    cStyleName(0) = "List 1"
+    cStyleName(1) = "Numbering 2"
+    PropertyTester.TestProperty("NumberingStyleName",cStyleName())
+
+    PropertyTester.TestProperty("ParaOrphans")
+
+    PropertyTester.TestProperty("ParaWidows")
+
+    PropertyTester.TestProperty("ParaShadowFormat")
+
+    PropertyTester.TestProperty("LeftBorder")
+
+    PropertyTester.TestProperty("RightBorder")
+
+    PropertyTester.TestProperty("TopBorder")
+
+    PropertyTester.TestProperty("BottomBorder")
+
+    PropertyTester.TestProperty("BorderDistance")
+
+    PropertyTester.TestProperty("LeftBorderDistance")
+
+    PropertyTester.TestProperty("RightBorderDistance")
+
+    PropertyTester.TestProperty("TopBorderDistance")
+
+    PropertyTester.TestProperty("BottomBorderDistance")
+
+    PropertyTester.TestProperty("BreakType")
+
+	Dim cCharStyles(1) as String
+	cCharStyles(0) = "Emphasis"
+	CCharStyles(1) = "Teletype"
+
+    PropertyTester.TestProperty("DropCapCharStyleName",cCharStyles())
+
+    PropertyTester.TestProperty("ParaFirstLineIndent")
+
+    PropertyTester.TestProperty("ParaIsAutoFirstLineIndent")
+
+    PropertyTester.TestProperty("ParaHyphenationMaxHyphens")
+
+    PropertyTester.TestProperty("ParaHyphenationMaxLeadingChars")
+
+    PropertyTester.TestProperty("ParaHyphenationMaxTrailingChars")
+
+	Dim VertAlign(0 to 4) as Integer
+	Dim nCount as Integer
+	for nCount = 0 to uBound(VertAlign())
+		VertAlign(nCount) = nCount
+	next nCount
+    PropertyTester.TestProperty("ParaVertAlignment", VertAlign())
+
+    PropertyTester.TestProperty("ParaUserDefinedAttributes")
+
+    PropertyTester.TestProperty("ParaIsHyphenation")
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

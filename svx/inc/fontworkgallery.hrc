@@ -1,0 +1,62 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include <svx/dialogs.hrc>
+
+#define FL_FAVORITES    1
+#define CTL_FAVORITES   2
+#define BTN_OK          3
+#define BTN_CANCEL      4
+#define MF_VALUE        7
+#define FT_VALUE        8
+#define BTN_HELP        9
+
+#define STR_CLICK_TO_ADD_TEXT   1
+
+
+#define STR_ALIGN_LEFT                      1
+#define STR_ALIGN_CENTER                    2
+#define STR_ALIGN_RIGHT                     3
+#define STR_ALIGN_WORD                      4
+#define STR_ALIGN_STRETCH                   5
+#define STR_CHARS_SPACING_VERY_TIGHT        6
+#define STR_CHARS_SPACING_TIGHT             7
+#define STR_CHARS_SPACING_NORMAL            8
+#define STR_CHARS_SPACING_LOOSE             9
+#define STR_CHARS_SPACING_VERY_LOOSE        10
+#define STR_CHARS_SPACING_CUSTOM            11
+#define STR_CHARS_SPACING_KERN_PAIRS        12
+
+#define IMG_FONTWORK_ALIGN_LEFT_16          1
+#define IMG_FONTWORK_ALIGN_LEFT_26          3
+#define IMG_FONTWORK_ALIGN_CENTER_16        5
+#define IMG_FONTWORK_ALIGN_CENTER_26        7
+#define IMG_FONTWORK_ALIGN_RIGHT_16         9
+#define IMG_FONTWORK_ALIGN_RIGHT_26         11
+#define IMG_FONTWORK_ALIGN_WORD_16          13
+#define IMG_FONTWORK_ALIGN_WORD_26          15
+#define IMG_FONTWORK_ALIGN_STRETCH_16       17
+#define IMG_FONTWORK_ALIGN_STRETCH_26       19

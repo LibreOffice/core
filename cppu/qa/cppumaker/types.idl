@@ -1,0 +1,717 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+/*TODO: Do not depend on types for which C++ header files are only generated
+  later in the build process in offuh: */
+#include "com/sun/star/lang/ClassNotFoundException.idl"
+#include "com/sun/star/lang/IllegalAccessException.idl"
+#include "com/sun/star/lang/Locale.idl"
+#include "com/sun/star/uno/DeploymentException.idl"
+#include "com/sun/star/uno/Exception.idl"
+#include "com/sun/star/uno/RuntimeException.idl"
+#include "com/sun/star/uno/XInterface.idl"
+#include "com/sun/star/uno/XNamingService.idl"
+
+singleton FILE: com::sun::star::uno::XInterface;
+singleton lconv: com::sun::star::uno::XInterface;
+singleton tm: com::sun::star::uno::XInterface;
+
+singleton std: com::sun::star::uno::XInterface;
+
+module test { module codemaker { module cppumaker {
+
+interface XTest {
+    boolean test();
+
+    [attribute, bound] long A1;
+    [attribute, bound, readonly] long A2;
+    [attribute] long A3 {
+        get raises
+            (com::sun::star::uno::Exception,
+             com::sun::star::lang::ClassNotFoundException);
+        set raises (com::sun::star::uno::RuntimeException);
+    };
+    [attribute, readonly] long A4 {
+        get raises (com::sun::star::uno::DeploymentException);
+    };
+};
+
+typedef boolean Boolean;
+typedef byte Byte;
+typedef short Short;
+typedef unsigned short UnsignedShort;
+typedef long Long;
+typedef unsigned long UnsignedLong;
+typedef hyper Hyper;
+typedef unsigned hyper UnsignedHyper;
+typedef float Float;
+typedef double Double;
+typedef char Char;
+typedef string String;
+typedef type Type;
+typedef any Any;
+typedef com::sun::star::lang::Locale Locale;
+typedef com::sun::star::uno::XInterface XInterface;
+typedef com::sun::star::uno::XNamingService XNamingService;
+
+typedef sequence< Boolean > SequenceBoolean;
+typedef sequence< Byte > SequenceByte;
+typedef sequence< Short > SequenceShort;
+typedef sequence< UnsignedShort > SequenceUnsignedShort;
+typedef sequence< Long > SequenceLong;
+typedef sequence< UnsignedLong > SequenceUnsignedLong;
+typedef sequence< Hyper > SequenceHyper;
+typedef sequence< UnsignedHyper > SequenceUnsignedHyper;
+typedef sequence< Float > SequenceFloat;
+typedef sequence< Double > SequenceDouble;
+typedef sequence< Char > SequenceChar;
+typedef sequence< String > SequenceString;
+typedef sequence< Type > SequenceType;
+typedef sequence< Any > SequenceAny;
+typedef sequence< Locale > SequenceLocale;
+typedef sequence< XInterface > SequenceXInterface;
+typedef sequence< XNamingService > SequenceXNamingService;
+
+service S1: XTest {
+    create1();
+
+    create2([in] any... create2)
+        raises (com::sun::star::uno::RuntimeException,
+                com::sun::star::lang::ClassNotFoundException,
+                com::sun::star::uno::Exception,
+                com::sun::star::lang::IllegalAccessException,
+                com::sun::star::uno::DeploymentException);
+
+    create3([in] sequence<any> S1)
+        raises (com::sun::star::uno::RuntimeException,
+                com::sun::star::lang::ClassNotFoundException,
+                com::sun::star::lang::IllegalAccessException,
+                com::sun::star::uno::DeploymentException);
+
+    create4([in] long javamaker, [in] long S1, [in] long create4);
+
+    create5(
+        [in] boolean p1,
+        [in] byte p2,
+        [in] short p3,
+        [in] unsigned short p4,
+        [in] long p5,
+        [in] unsigned long p6,
+        [in] hyper p7,
+        [in] unsigned hyper p8,
+        [in] float p9,
+        [in] double p10,
+        [in] char p11,
+        [in] string p12,
+        [in] type p13,
+        [in] any p14,
+        [in] com::sun::star::lang::Locale p15,
+        [in] com::sun::star::uno::XInterface p16,
+        [in] com::sun::star::uno::XNamingService p17,
+        [in] Boolean t1,
+        [in] Byte t2,
+        [in] Short t3,
+        [in] UnsignedShort t4,
+        [in] Long t5,
+        [in] UnsignedLong t6,
+        [in] Hyper t7,
+        [in] UnsignedHyper t8,
+        [in] Float t9,
+        [in] Double t10,
+        [in] Char t11,
+        [in] String t12,
+        [in] Type t13,
+        [in] Any t14,
+        [in] Locale t15,
+        [in] XInterface t16,
+        [in] XNamingService t17,
+        [in] sequence< sequence< boolean > > a1,
+        [in] sequence< sequence< byte > > a2,
+        [in] sequence< sequence< short > > a3,
+        [in] sequence< sequence< unsigned short > > a4,
+        [in] sequence< sequence< long > > a5,
+        [in] sequence< sequence< unsigned long > > a6,
+        [in] sequence< sequence< hyper > > a7,
+        [in] sequence< sequence< unsigned hyper > > a8,
+        [in] sequence< sequence< float > > a9,
+        [in] sequence< sequence< double > > a10,
+        [in] sequence< sequence< char > > a11,
+        [in] sequence< sequence< string > > a12,
+        [in] sequence< sequence< type > > a13,
+        [in] sequence< sequence< any > > a14,
+        [in] sequence< sequence< com::sun::star::lang::Locale > > a15,
+        [in] sequence< sequence< com::sun::star::uno::XInterface > > a16,
+        [in] sequence< sequence<
+            com::sun::star::uno::XNamingService > > a17,
+        [in] sequence< SequenceBoolean > at1,
+        [in] sequence< SequenceByte > at2,
+        [in] sequence< SequenceShort > at3,
+        [in] sequence< SequenceUnsignedShort > at4,
+        [in] sequence< SequenceLong > at5,
+        [in] sequence< SequenceUnsignedLong > at6,
+        [in] sequence< SequenceHyper > at7,
+        [in] sequence< SequenceUnsignedHyper > at8,
+        [in] sequence< SequenceFloat > at9,
+        [in] sequence< SequenceDouble > at10,
+        [in] sequence< SequenceChar > at11,
+        [in] sequence< SequenceString > at12,
+        [in] sequence< SequenceType > at13,
+        [in] sequence< SequenceAny > at14,
+        [in] sequence< SequenceLocale > at15,
+        [in] sequence< SequenceXInterface > at16,
+        [in] sequence< SequenceXNamingService > at17);
+};
+
+service S2: XTest;
+
+service S3 { interface XTest; };
+
+singleton S4 { service S2; };
+
+module services {
+
+service asm: com::sun::star::uno::XInterface { asm([in] long asm); };
+service auto: com::sun::star::uno::XInterface { auto([in] long auto); };
+service bool: com::sun::star::uno::XInterface { bool([in] long bool); };
+service break: com::sun::star::uno::XInterface { break([in] long break); };
+//TODO: service case: com::sun::star::uno::XInterface { case([in] long case); };
+service catch: com::sun::star::uno::XInterface { catch([in] long catch); };
+//TODO: service char: com::sun::star::uno::XInterface { char([in] long char); };
+service class: com::sun::star::uno::XInterface { class([in] long class); };
+//TODO: service const: com::sun::star::uno::XInterface {
+//    const([in] long const); };
+service continue: com::sun::star::uno::XInterface {
+    continue([in] long continue); };
+//TODO: service default: com::sun::star::uno::XInterface {
+//    default([in] long default); };
+service delete: com::sun::star::uno::XInterface { delete([in] long delete); };
+service do: com::sun::star::uno::XInterface { do([in] long do); };
+//TODO: service double: com::sun::star::uno::XInterface {
+//    double([in] long double); };
+service else: com::sun::star::uno::XInterface { else([in] long else); };
+//TODO: service enum: com::sun::star::uno::XInterface { enum([in] long enum); };
+service explicit: com::sun::star::uno::XInterface {
+    explicit([in] long explicit); };
+service export: com::sun::star::uno::XInterface { export([in] long export); };
+service extern: com::sun::star::uno::XInterface { extern([in] long extern); };
+service false: com::sun::star::uno::XInterface { false([in] long false); };
+//TODO: service float: com::sun::star::uno::XInterface {
+//    float([in] long float); };
+service for: com::sun::star::uno::XInterface { for([in] long for); };
+service friend: com::sun::star::uno::XInterface { friend([in] long friend); };
+service goto: com::sun::star::uno::XInterface { goto([in] long goto); };
+service if: com::sun::star::uno::XInterface { if([in] long if); };
+service inline: com::sun::star::uno::XInterface { inline([in] long inline); };
+service int: com::sun::star::uno::XInterface { int([in] long int); };
+//TODO: service long: com::sun::star::uno::XInterface { long([in] long long); };
+service mutable: com::sun::star::uno::XInterface {
+    mutable([in] long mutable); };
+service namespace: com::sun::star::uno::XInterface {
+    namespace([in] long namespace); };
+service new: com::sun::star::uno::XInterface { new([in] long new); };
+service operator: com::sun::star::uno::XInterface {
+    operator([in] long operator); };
+service private: com::sun::star::uno::XInterface {
+    private([in] long private); };
+service protected: com::sun::star::uno::XInterface {
+    protected([in] long protected); };
+service public: com::sun::star::uno::XInterface { public([in] long public); };
+service register: com::sun::star::uno::XInterface {
+    register([in] long register); };
+service return: com::sun::star::uno::XInterface { return([in] long return); };
+//TODO: service short: com::sun::star::uno::XInterface {
+//    short([in] long short); };
+service signed: com::sun::star::uno::XInterface { signed([in] long signed); };
+service sizeof: com::sun::star::uno::XInterface { sizeof([in] long sizeof); };
+service static: com::sun::star::uno::XInterface { static([in] long static); };
+//TODO: service struct: com::sun::star::uno::XInterface {
+//    struct([in] long struct); };
+//TODO: service switch: com::sun::star::uno::XInterface {
+//    switch([in] long switch); };
+service template: com::sun::star::uno::XInterface {
+    template([in] long template); };
+service this: com::sun::star::uno::XInterface { this([in] long this); };
+service throw: com::sun::star::uno::XInterface { throw([in] long throw); };
+service true: com::sun::star::uno::XInterface { true([in] long true); };
+service try: com::sun::star::uno::XInterface { try([in] long try); };
+//TODO: service typedef: com::sun::star::uno::XInterface {
+//    typedef([in] long typedef); };
+service typeid: com::sun::star::uno::XInterface { typeid([in] long typeid); };
+service typename: com::sun::star::uno::XInterface {
+    typename([in] long typename); };
+//TODO: service union: com::sun::star::uno::XInterface {
+//    union([in] long union); };
+//TODO: service unsigned: com::sun::star::uno::XInterface {
+//    unsigned([in] long unsigned); };
+service using: com::sun::star::uno::XInterface { using([in] long using); };
+service virtual: com::sun::star::uno::XInterface {
+    virtual([in] long virtual); };
+//TODO: service void: com::sun::star::uno::XInterface { void([in] long void); };
+service volatile: com::sun::star::uno::XInterface {
+    volatile([in] long volatile); };
+service while: com::sun::star::uno::XInterface { while([in] long while); };
+
+service and: com::sun::star::uno::XInterface { and([in] long and); };
+service bitand: com::sun::star::uno::XInterface { bitand([in] long bitand); };
+service bitor: com::sun::star::uno::XInterface { bitor([in] long bitor); };
+service compl: com::sun::star::uno::XInterface { compl([in] long compl); };
+service not: com::sun::star::uno::XInterface { not([in] long not); };
+service or: com::sun::star::uno::XInterface { or([in] long or); };
+service xor: com::sun::star::uno::XInterface { xor([in] long xor); };
+
+service BUFSIZ: com::sun::star::uno::XInterface { BUFSIZ([in] long BUFSIZ); };
+service CLOCKS_PER_SEC: com::sun::star::uno::XInterface {
+    CLOCKS_PER_SEC([in] long CLOCKS_PER_SEC); };
+service EDOM: com::sun::star::uno::XInterface { EDOM([in] long EDOM); };
+service EOF: com::sun::star::uno::XInterface { EOF([in] long EOF); };
+service ERANGE: com::sun::star::uno::XInterface { ERANGE([in] long ERANGE); };
+service EXIT_FAILURE: com::sun::star::uno::XInterface {
+    EXIT_FAILURE([in] long EXIT_FAILURE); };
+service EXIT_SUCCESS: com::sun::star::uno::XInterface {
+    EXIT_SUCCESS([in] long EXIT_SUCCESS); };
+service FILENAME_MAX: com::sun::star::uno::XInterface {
+    FILENAME_MAX([in] long FILENAME_MAX); };
+service FOPEN_MAX: com::sun::star::uno::XInterface {
+    FOPEN_MAX([in] long FOPEN_MAX); };
+service HUGE_VAL: com::sun::star::uno::XInterface {
+    HUGE_VAL([in] long HUGE_VAL); };
+service LC_ALL: com::sun::star::uno::XInterface { LC_ALL([in] long LC_ALL); };
+service LC_COLLATE: com::sun::star::uno::XInterface {
+    LC_COLLATE([in] long LC_COLLATE); };
+service LC_CTYPE: com::sun::star::uno::XInterface {
+    LC_CTYPE([in] long LC_CTYPE); };
+service LC_MONETARY: com::sun::star::uno::XInterface {
+    LC_MONETARY([in] long LC_MONETARY); };
+service LC_NUMERIC: com::sun::star::uno::XInterface {
+    LC_NUMERIC([in] long LC_NUMERIC); };
+service LC_TIME: com::sun::star::uno::XInterface {
+    LC_TIME([in] long LC_TIME); };
+service L_tmpnam: com::sun::star::uno::XInterface {
+    L_tmpnam([in] long L_tmpnam); };
+service MB_CUR_MAX: com::sun::star::uno::XInterface {
+    MB_CUR_MAX([in] long MB_CUR_MAX); };
+service NULL: com::sun::star::uno::XInterface { NULL([in] long NULL); };
+service RAND_MAX: com::sun::star::uno::XInterface {
+    RAND_MAX([in] long RAND_MAX); };
+service SEEK_CUR: com::sun::star::uno::XInterface {
+    SEEK_CUR([in] long SEEK_CUR); };
+service SEEK_END: com::sun::star::uno::XInterface {
+    SEEK_END([in] long SEEK_END); };
+service SEEK_SET: com::sun::star::uno::XInterface {
+    SEEK_SET([in] long SEEK_SET); };
+service SIGABRT: com::sun::star::uno::XInterface {
+    SIGABRT([in] long SIGABRT); };
+service SIGFPE: com::sun::star::uno::XInterface { SIGFPE([in] long SIGFPE); };
+service SIGILL: com::sun::star::uno::XInterface { SIGILL([in] long SIGILL); };
+service SIGINT: com::sun::star::uno::XInterface { SIGINT([in] long SIGINT); };
+service SIGSEGV: com::sun::star::uno::XInterface {
+    SIGSEGV([in] long SIGSEGV); };
+service SIGTERM: com::sun::star::uno::XInterface {
+    SIGTERM([in] long SIGTERM); };
+service SIG_DFL: com::sun::star::uno::XInterface {
+    SIG_DFL([in] long SIG_DFL); };
+service SIG_ERR: com::sun::star::uno::XInterface {
+    SIG_ERR([in] long SIG_ERR); };
+service SIG_IGN: com::sun::star::uno::XInterface {
+    SIG_IGN([in] long SIG_IGN); };
+service TMP_MAX: com::sun::star::uno::XInterface {
+    TMP_MAX([in] long TMP_MAX); };
+service WCHAR_MAX: com::sun::star::uno::XInterface {
+    WCHAR_MAX([in] long WCHAR_MAX); };
+service WCHAR_MIN: com::sun::star::uno::XInterface {
+    WCHAR_MIN([in] long WCHAR_MIN); };
+service WEOF: com::sun::star::uno::XInterface { WEOF([in] long WEOF); };
+service assert: com::sun::star::uno::XInterface { assert([in] long assert); };
+service errno: com::sun::star::uno::XInterface { errno([in] long errno); };
+service offsetof: com::sun::star::uno::XInterface {
+    offsetof([in] long offsetof); };
+service setjmp: com::sun::star::uno::XInterface { setjmp([in] long setjmp); };
+service stderr: com::sun::star::uno::XInterface { stderr([in] long stderr); };
+service stdin: com::sun::star::uno::XInterface { stdin([in] long stdin); };
+service stdout: com::sun::star::uno::XInterface { stdout([in] long stdout); };
+
+service CHAR_BIT: com::sun::star::uno::XInterface {
+    CHAR_BIT([in] long CHAR_BIT); };
+service CHAR_MAX: com::sun::star::uno::XInterface {
+    CHAR_MAX([in] long CHAR_MAX); };
+service CHAR_MIN: com::sun::star::uno::XInterface {
+    CHAR_MIN([in] long CHAR_MIN); };
+service DBL_DIG: com::sun::star::uno::XInterface {
+    DBL_DIG([in] long DBL_DIG); };
+service DBL_EPSILON: com::sun::star::uno::XInterface {
+    DBL_EPSILON([in] long DBL_EPSILON); };
+service DBL_MANT_DIG: com::sun::star::uno::XInterface {
+    DBL_MANT_DIG([in] long DBL_MANT_DIG); };
+service DBL_MAX: com::sun::star::uno::XInterface {
+    DBL_MAX([in] long DBL_MAX); };
+service DBL_MAX_10_EXP: com::sun::star::uno::XInterface {
+    DBL_MAX_10_EXP([in] long DBL_MAX_10_EXP); };
+service DBL_MAX_EXP: com::sun::star::uno::XInterface {
+    DBL_MAX_EXP([in] long DBL_MAX_EXP); };
+service DBL_MIN: com::sun::star::uno::XInterface {
+    DBL_MIN([in] long DBL_MIN); };
+service DBL_MIN_10_EXP: com::sun::star::uno::XInterface {
+    DBL_MIN_10_EXP([in] long DBL_MIN_10_EXP); };
+service DBL_MIN_EXP: com::sun::star::uno::XInterface {
+    DBL_MIN_EXP([in] long DBL_MIN_EXP); };
+service FLT_DIG: com::sun::star::uno::XInterface {
+    FLT_DIG([in] long FLT_DIG); };
+service FLT_EPSILON: com::sun::star::uno::XInterface {
+    FLT_EPSILON([in] long FLT_EPSILON); };
+service FLT_MANT_DIG: com::sun::star::uno::XInterface {
+    FLT_MANT_DIG([in] long FLT_MANT_DIG); };
+service FLT_MAX: com::sun::star::uno::XInterface {
+    FLT_MAX([in] long FLT_MAX); };
+service FLT_MAX_10_EXP: com::sun::star::uno::XInterface {
+    FLT_MAX_10_EXP([in] long FLT_MAX_10_EXP); };
+service FLT_MAX_EXP: com::sun::star::uno::XInterface {
+    FLT_MAX_EXP([in] long FLT_MAX_EXP); };
+service FLT_MIN: com::sun::star::uno::XInterface {
+    FLT_MIN([in] long FLT_MIN); };
+service FLT_MIN_10_EXP: com::sun::star::uno::XInterface {
+    FLT_MIN_10_EXP([in] long FLT_MIN_10_EXP); };
+service FLT_MIN_EXP: com::sun::star::uno::XInterface {
+    FLT_MIN_EXP([in] long FLT_MIN_EXP); };
+service FLT_RADIX: com::sun::star::uno::XInterface {
+    FLT_RADIX([in] long FLT_RADIX); };
+service FLT_ROUNDS: com::sun::star::uno::XInterface {
+    FLT_ROUNDS([in] long FLT_ROUNDS); };
+service INT_MAX: com::sun::star::uno::XInterface {
+    INT_MAX([in] long INT_MAX); };
+service INT_MIN: com::sun::star::uno::XInterface {
+    INT_MIN([in] long INT_MIN); };
+service LDBL_DIG: com::sun::star::uno::XInterface {
+    LDBL_DIG([in] long LDBL_DIG); };
+service LDBL_EPSILON: com::sun::star::uno::XInterface {
+    LDBL_EPSILON([in] long LDBL_EPSILON); };
+service LDBL_MANT_DIG: com::sun::star::uno::XInterface {
+    LDBL_MANT_DIG([in] long LDBL_MANT_DIG); };
+service LDBL_MAX: com::sun::star::uno::XInterface {
+    LDBL_MAX([in] long LDBL_MAX); };
+service LDBL_MAX_10_EXP: com::sun::star::uno::XInterface {
+    LDBL_MAX_10_EXP([in] long LDBL_MAX_10_EXP); };
+service LDBL_MAX_EXP: com::sun::star::uno::XInterface {
+    LDBL_MAX_EXP([in] long LDBL_MAX_EXP); };
+service LDBL_MIN: com::sun::star::uno::XInterface {
+    LDBL_MIN([in] long LDBL_MIN); };
+service LDBL_MIN_10_EXP: com::sun::star::uno::XInterface {
+    LDBL_MIN_10_EXP([in] long LDBL_MIN_10_EXP); };
+service LDBL_MIN_EXP: com::sun::star::uno::XInterface {
+    LDBL_MIN_EXP([in] long LDBL_MIN_EXP); };
+service LONG_MAX: com::sun::star::uno::XInterface {
+    LONG_MAX([in] long LONG_MAX); };
+service LONG_MIN: com::sun::star::uno::XInterface {
+    LONG_MIN([in] long LONG_MIN); };
+service MB_LEN_MAX: com::sun::star::uno::XInterface {
+    MB_LEN_MAX([in] long MB_LEN_MAX); };
+service SCHAR_MAX: com::sun::star::uno::XInterface {
+    SCHAR_MAX([in] long SCHAR_MAX); };
+service SCHAR_MIN: com::sun::star::uno::XInterface {
+    SCHAR_MIN([in] long SCHAR_MIN); };
+service SHRT_MAX: com::sun::star::uno::XInterface {
+    SHRT_MAX([in] long SHRT_MAX); };
+service SHRT_MIN: com::sun::star::uno::XInterface {
+    SHRT_MIN([in] long SHRT_MIN); };
+service UCHAR_MAX: com::sun::star::uno::XInterface {
+    UCHAR_MAX([in] long UCHAR_MAX); };
+service UINT_MAX: com::sun::star::uno::XInterface {
+    UINT_MAX([in] long UINT_MAX); };
+service ULONG_MAX: com::sun::star::uno::XInterface {
+    ULONG_MAX([in] long ULONG_MAX); };
+service USHRT_MAX: com::sun::star::uno::XInterface {
+    USHRT_MAX([in] long USHRT_MAX); };
+
+service FILE: com::sun::star::uno::XInterface { FILE([in] long FILE); };
+service lconv: com::sun::star::uno::XInterface { lconv([in] long lconv); };
+service tm: com::sun::star::uno::XInterface { tm([in] long tm); };
+
+service std: com::sun::star::uno::XInterface { std([in] long std); };
+
+service NDEBUG: com::sun::star::uno::XInterface { NDEBUG([in] long NDEBUG); };
+
+service create: com::sun::star::uno::XInterface;
+
+};
+
+module singletons {
+
+singleton asm: com::sun::star::uno::XInterface;
+singleton auto: com::sun::star::uno::XInterface;
+singleton bool: com::sun::star::uno::XInterface;
+singleton break: com::sun::star::uno::XInterface;
+//TODO: singleton case: com::sun::star::uno::XInterface;
+singleton catch: com::sun::star::uno::XInterface;
+//TODO: singleton char: com::sun::star::uno::XInterface;
+singleton class: com::sun::star::uno::XInterface;
+//TODO: singleton const: com::sun::star::uno::XInterface;
+singleton continue: com::sun::star::uno::XInterface;
+//TODO: singleton default: com::sun::star::uno::XInterface;
+singleton delete: com::sun::star::uno::XInterface;
+singleton do: com::sun::star::uno::XInterface;
+//TODO: singleton double: com::sun::star::uno::XInterface;
+singleton else: com::sun::star::uno::XInterface;
+//TODO: singleton enum: com::sun::star::uno::XInterface;
+singleton explicit: com::sun::star::uno::XInterface;
+singleton export: com::sun::star::uno::XInterface;
+singleton extern: com::sun::star::uno::XInterface;
+singleton false: com::sun::star::uno::XInterface;
+//TODO: singleton float: com::sun::star::uno::XInterface;
+singleton for: com::sun::star::uno::XInterface;
+singleton friend: com::sun::star::uno::XInterface;
+singleton goto: com::sun::star::uno::XInterface;
+singleton if: com::sun::star::uno::XInterface;
+singleton inline: com::sun::star::uno::XInterface;
+singleton int: com::sun::star::uno::XInterface;
+//TODO: singleton long: com::sun::star::uno::XInterface;
+singleton mutable: com::sun::star::uno::XInterface;
+singleton namespace: com::sun::star::uno::XInterface;
+singleton new: com::sun::star::uno::XInterface;
+singleton operator: com::sun::star::uno::XInterface;
+singleton private: com::sun::star::uno::XInterface;
+singleton protected: com::sun::star::uno::XInterface;
+singleton public: com::sun::star::uno::XInterface;
+singleton register: com::sun::star::uno::XInterface;
+singleton return: com::sun::star::uno::XInterface;
+//TODO: singleton short: com::sun::star::uno::XInterface;
+singleton signed: com::sun::star::uno::XInterface;
+singleton sizeof: com::sun::star::uno::XInterface;
+singleton static: com::sun::star::uno::XInterface;
+//TODO: singleton struct: com::sun::star::uno::XInterface;
+//TODO: singleton switch: com::sun::star::uno::XInterface;
+singleton template: com::sun::star::uno::XInterface;
+singleton this: com::sun::star::uno::XInterface;
+singleton throw: com::sun::star::uno::XInterface;
+singleton true: com::sun::star::uno::XInterface;
+singleton try: com::sun::star::uno::XInterface;
+//TODO: singleton typedef: com::sun::star::uno::XInterface;
+singleton typeid: com::sun::star::uno::XInterface;
+singleton typename: com::sun::star::uno::XInterface;
+//TODO: singleton union: com::sun::star::uno::XInterface;
+//TODO: singleton unsigned: com::sun::star::uno::XInterface;
+singleton using: com::sun::star::uno::XInterface;
+singleton virtual: com::sun::star::uno::XInterface;
+//TODO: singleton void: com::sun::star::uno::XInterface;
+singleton volatile: com::sun::star::uno::XInterface;
+singleton while: com::sun::star::uno::XInterface;
+
+singleton and: com::sun::star::uno::XInterface;
+singleton bitand: com::sun::star::uno::XInterface;
+singleton bitor: com::sun::star::uno::XInterface;
+singleton compl: com::sun::star::uno::XInterface;
+singleton not: com::sun::star::uno::XInterface;
+singleton or: com::sun::star::uno::XInterface;
+singleton xor: com::sun::star::uno::XInterface;
+
+singleton BUFSIZ: com::sun::star::uno::XInterface;
+singleton CLOCKS_PER_SEC: com::sun::star::uno::XInterface;
+singleton EDOM: com::sun::star::uno::XInterface;
+singleton EOF: com::sun::star::uno::XInterface;
+singleton ERANGE: com::sun::star::uno::XInterface;
+singleton EXIT_FAILURE: com::sun::star::uno::XInterface;
+singleton EXIT_SUCCESS: com::sun::star::uno::XInterface;
+singleton FILENAME_MAX: com::sun::star::uno::XInterface;
+singleton FOPEN_MAX: com::sun::star::uno::XInterface;
+singleton HUGE_VAL: com::sun::star::uno::XInterface;
+singleton LC_ALL: com::sun::star::uno::XInterface;
+singleton LC_COLLATE: com::sun::star::uno::XInterface;
+singleton LC_CTYPE: com::sun::star::uno::XInterface;
+singleton LC_MONETARY: com::sun::star::uno::XInterface;
+singleton LC_NUMERIC: com::sun::star::uno::XInterface;
+singleton LC_TIME: com::sun::star::uno::XInterface;
+singleton L_tmpnam: com::sun::star::uno::XInterface;
+singleton MB_CUR_MAX: com::sun::star::uno::XInterface;
+singleton NULL: com::sun::star::uno::XInterface;
+singleton RAND_MAX: com::sun::star::uno::XInterface;
+singleton SEEK_CUR: com::sun::star::uno::XInterface;
+singleton SEEK_END: com::sun::star::uno::XInterface;
+singleton SEEK_SET: com::sun::star::uno::XInterface;
+singleton SIGABRT: com::sun::star::uno::XInterface;
+singleton SIGFPE: com::sun::star::uno::XInterface;
+singleton SIGILL: com::sun::star::uno::XInterface;
+singleton SIGINT: com::sun::star::uno::XInterface;
+singleton SIGSEGV: com::sun::star::uno::XInterface;
+singleton SIGTERM: com::sun::star::uno::XInterface;
+singleton SIG_DFL: com::sun::star::uno::XInterface;
+singleton SIG_ERR: com::sun::star::uno::XInterface;
+singleton SIG_IGN: com::sun::star::uno::XInterface;
+singleton TMP_MAX: com::sun::star::uno::XInterface;
+singleton WCHAR_MAX: com::sun::star::uno::XInterface;
+singleton WCHAR_MIN: com::sun::star::uno::XInterface;
+singleton WEOF: com::sun::star::uno::XInterface;
+singleton assert: com::sun::star::uno::XInterface;
+singleton errno: com::sun::star::uno::XInterface;
+singleton offsetof: com::sun::star::uno::XInterface;
+singleton setjmp: com::sun::star::uno::XInterface;
+singleton stderr: com::sun::star::uno::XInterface;
+singleton stdin: com::sun::star::uno::XInterface;
+singleton stdout: com::sun::star::uno::XInterface;
+
+singleton CHAR_BIT: com::sun::star::uno::XInterface;
+singleton CHAR_MAX: com::sun::star::uno::XInterface;
+singleton CHAR_MIN: com::sun::star::uno::XInterface;
+singleton DBL_DIG: com::sun::star::uno::XInterface;
+singleton DBL_EPSILON: com::sun::star::uno::XInterface;
+singleton DBL_MANT_DIG: com::sun::star::uno::XInterface;
+singleton DBL_MAX: com::sun::star::uno::XInterface;
+singleton DBL_MAX_10_EXP: com::sun::star::uno::XInterface;
+singleton DBL_MAX_EXP: com::sun::star::uno::XInterface;
+singleton DBL_MIN: com::sun::star::uno::XInterface;
+singleton DBL_MIN_10_EXP: com::sun::star::uno::XInterface;
+singleton DBL_MIN_EXP: com::sun::star::uno::XInterface;
+singleton FLT_DIG: com::sun::star::uno::XInterface;
+singleton FLT_EPSILON: com::sun::star::uno::XInterface;
+singleton FLT_MANT_DIG: com::sun::star::uno::XInterface;
+singleton FLT_MAX: com::sun::star::uno::XInterface;
+singleton FLT_MAX_10_EXP: com::sun::star::uno::XInterface;
+singleton FLT_MAX_EXP: com::sun::star::uno::XInterface;
+singleton FLT_MIN: com::sun::star::uno::XInterface;
+singleton FLT_MIN_10_EXP: com::sun::star::uno::XInterface;
+singleton FLT_MIN_EXP: com::sun::star::uno::XInterface;
+singleton FLT_RADIX: com::sun::star::uno::XInterface;
+singleton FLT_ROUNDS: com::sun::star::uno::XInterface;
+singleton INT_MAX: com::sun::star::uno::XInterface;
+singleton INT_MIN: com::sun::star::uno::XInterface;
+singleton LDBL_DIG: com::sun::star::uno::XInterface;
+singleton LDBL_EPSILON: com::sun::star::uno::XInterface;
+singleton LDBL_MANT_DIG: com::sun::star::uno::XInterface;
+singleton LDBL_MAX: com::sun::star::uno::XInterface;
+singleton LDBL_MAX_10_EXP: com::sun::star::uno::XInterface;
+singleton LDBL_MAX_EXP: com::sun::star::uno::XInterface;
+singleton LDBL_MIN: com::sun::star::uno::XInterface;
+singleton LDBL_MIN_10_EXP: com::sun::star::uno::XInterface;
+singleton LDBL_MIN_EXP: com::sun::star::uno::XInterface;
+singleton LONG_MAX: com::sun::star::uno::XInterface;
+singleton LONG_MIN: com::sun::star::uno::XInterface;
+singleton MB_LEN_MAX: com::sun::star::uno::XInterface;
+singleton SCHAR_MAX: com::sun::star::uno::XInterface;
+singleton SCHAR_MIN: com::sun::star::uno::XInterface;
+singleton SHRT_MAX: com::sun::star::uno::XInterface;
+singleton SHRT_MIN: com::sun::star::uno::XInterface;
+singleton UCHAR_MAX: com::sun::star::uno::XInterface;
+singleton UINT_MAX: com::sun::star::uno::XInterface;
+singleton ULONG_MAX: com::sun::star::uno::XInterface;
+singleton USHRT_MAX: com::sun::star::uno::XInterface;
+
+singleton FILE: com::sun::star::uno::XInterface;
+singleton lconv: com::sun::star::uno::XInterface;
+singleton tm: com::sun::star::uno::XInterface;
+
+singleton std: com::sun::star::uno::XInterface;
+
+singleton NDEBUG: com::sun::star::uno::XInterface;
+
+singleton get: com::sun::star::uno::XInterface;
+
+};
+
+enum HelperEnum { ZERO, ONE };
+
+struct HelperStruct { boolean m1; com::sun::star::uno::XInterface m2; };
+
+typedef byte TDByte;
+typedef HelperEnum TDEnum1;
+typedef TDEnum1 TDEnum;
+
+struct BigStruct {
+    boolean m1;
+    byte m2;
+    short m3;
+    unsigned short m4;
+    long m5;
+    unsigned long m6;
+    hyper m7;
+    unsigned hyper m8;
+    float m9;
+    double m10;
+    char m11;
+    string m12;
+    type m13;
+    any m14;
+    sequence<boolean> m15;
+    HelperEnum m16;
+    HelperStruct m17;
+    com::sun::star::uno::XInterface m18;
+    TDByte m19;
+    TDEnum m20;
+    sequence<unsigned short> m21;
+    sequence<char> m22;
+    sequence< sequence<char> > m23;
+};
+
+struct Struct<T, U> {
+    T member1;
+    sequence<SequenceAny> member2;
+};
+
+struct StructUsage {
+    Struct< long, short > member1;
+    sequence<
+        sequence<
+            Struct<
+                sequence< Struct< any, boolean > >,
+                com::sun::star::uno::XInterface > > >
+                    member2;
+};
+
+struct AlignmentBaseStruct {
+    double member1;
+    short member2;
+};
+
+struct AlignmentDerivedStruct: AlignmentBaseStruct {
+    short member3;
+};
+
+exception TestException1: com::sun::star::uno::RuntimeException {
+    long m1;
+    any m2;
+    HelperEnum m3;
+    Struct<long, long> m4;
+    unsigned short m5;
+};
+
+exception TestException2: TestException1 {};
+
+constants Constants {
+    const byte byteMin = -128;
+    const byte byteMax = 127;
+    const byte byteNeg = 255;
+    const short shortMin = -32768;
+    const short shortMax = 32767;
+    const unsigned short unsignedShortMin = 0;
+    const unsigned short unsignedShortMax = 65535;
+    const long longMin = -2147483648;
+    const long longMax = 2147483647;
+    const unsigned long unsignedLongMin = 0;
+    const unsigned long unsignedLongMax = 4294967295;
+    const hyper hyperMin = -9223372036854775808;
+    const hyper hyperMax = 9223372036854775807;
+    const unsigned hyper unsignedHyperMin = 0;
+    const unsigned hyper unsignedHyperMax = 18446744073709551615;
+};
+
+}; }; };

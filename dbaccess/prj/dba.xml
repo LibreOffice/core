@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+    <module-name>dbaccess</module-name>
+    <component-description>
+        <author>Frank Schönheit</author>
+        <name>com.sun.star.comp.dba.ODatabaseContext</name>
+        <description/>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.sdb.DatabaseContext</supported-service>
+        <service-dependency>com.sun.star.configuration.ConfigurationProvider</service-dependency>
+    </component-description>
+    <component-description>
+        <author>Frank Schönheit</author>
+        <name>com.sun.star.comp.dba.ODatabaseSource</name>
+        <description/>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.sdb.DocumentDataSource</supported-service>
+        <service-dependency>com.sun.star.sdb.QueryDefinition</service-dependency>
+        <service-dependency>com.sun.star.sdbc.DriverManager</service-dependency>
+        <service-dependency>com.sun.star.util.NumberFormatsSupplier</service-dependency>
+        <service-dependency>com.sun.star.io.ObjectInputStream</service-dependency>
+        <service-dependency>com.sun.star.io.ObjectOutputStream</service-dependency>
+    </component-description>
+    <component-description>
+        <author>Ocke Janssen</author>
+        <name>com.sun.star.comp.dba.ODatabaseDocument</name>
+        <description/>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.sdb.OfficeDatabaseDocument</supported-service>
+        <service-dependency>com.sun.star.sdb.Forms</service-dependency>
+        <service-dependency>com.sun.star.sdb.Reports</service-dependency>
+        <service-dependency>com.sun.star.document.OfficeDocument</service-dependency>
+        <service-dependency>com.sun.star.util.NumberFormatsSupplier</service-dependency>
+        <service-dependency>com.sun.star.io.ObjectInputStream</service-dependency>
+        <service-dependency>com.sun.star.io.ObjectOutputStream</service-dependency>
+    </component-description>
+    <component-description>
+        <author>Frank Schönheit</author>
+        <name>com.sun.star.comp.dba.OCommandDefinition</name>
+        <description/>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.sdb.QueryDefinition</supported-service>
+        <service-dependency>com.sun.star.configuration.ConfigurationProvider</service-dependency>
+    </component-description>
+    <component-description>
+        <author>Ocke Janssen</author>
+        <name>com.sun.star.comp.dba.ORowSet</name>
+        <description/>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.sdb.RowSet</supported-service>
+        <supported-service>com.sun.star.sdbc.RowSet</supported-service>
+        <supported-service>com.sun.star.sdb.ResultSet</supported-service>
+        <supported-service>com.sun.star.sdbcx.ResultSet</supported-service>
+        <supported-service>com.sun.star.sdbc.ResultSet</supported-service>
+        <service-dependency>com.sun.star.sdb.DatabaseContext</service-dependency>
+        <service-dependency>com.sun.star.i18n.LocaleData</service-dependency>
+        <service-dependency>com.sun.star.util.NumberFormatter</service-dependency>
+    </component-description>
+    <component-description>
+        <author>Ocke Janssen</author>
+        <name>org.openoffice.comp.dba.OSingleSelectQueryComposer</name>
+        <description>Represents a service for composing a single select statement.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.sdb.SingleSelectQueryComposer</supported-service>
+        <supported-service>com.sun.star.sdb.SingleSelectQueryAnalyzer</supported-service>
+        <service-dependency>com.sun.star.sdb.DatabaseContext</service-dependency>
+        <service-dependency>com.sun.star.sdb.Connection</service-dependency>
+        <service-dependency>com.sun.star.i18n.LocaleData</service-dependency>
+        <service-dependency>com.sun.star.util.NumberFormatter</service-dependency>
+    </component-description>
+    <component-description>
+        <author>Ocke Janssen</author>
+        <name>com.sun.star.sdb.dbaccess.OQuery</name>
+        <description>Represents a service for query.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.sdb.Query</supported-service>
+        <service-dependency>com.sun.star.sdb.DatabaseContext</service-dependency>
+        <service-dependency>com.sun.star.sdb.Connection</service-dependency>
+        <service-dependency>com.sun.star.i18n.LocaleData</service-dependency>
+        <service-dependency>com.sun.star.util.NumberFormatter</service-dependency>
+    </component-description>
+</module-description>

@@ -1,0 +1,139 @@
+#*************************************************************************
+#
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# OpenOffice.org - a multi-platform office productivity suite
+#
+# This file is part of OpenOffice.org.
+#
+# OpenOffice.org is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License version 3
+# only, as published by the Free Software Foundation.
+#
+# OpenOffice.org is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License version 3 for more details
+# (a copy is included in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU Lesser General Public License
+# version 3 along with OpenOffice.org.  If not, see
+# <http://www.openoffice.org/license.html>
+# for a copy of the LGPLv3 License.
+#
+#*************************************************************************
+
+Start
+module = "gid_Module_Root_Brand"
+# script = "shellscripts_brand.txt"
+solarispackagename = "%WITHOUTDOTUNIXPACKAGENAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPACKAGENAME%BRANDPACKAGEVERSION"
+requires = "%UREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure,%BASISPACKAGEPREFIX%OOOBASEVERSION-core01,%BASISPACKAGEPREFIX%OOOBASEVERSION-core02,%BASISPACKAGEPREFIX%OOOBASEVERSION-core03,%BASISPACKAGEPREFIX%OOOBASEVERSION-core04,%BASISPACKAGEPREFIX%OOOBASEVERSION-core05,%BASISPACKAGEPREFIX%OOOBASEVERSION-core06,%BASISPACKAGEPREFIX%OOOBASEVERSION-core07,%BASISPACKAGEPREFIX%OOOBASEVERSION-images"
+solarisrequires = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure (Name="UNO Runtime Environment"), %BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core01 (Name="Core module for %PRODUCTNAME %PRODUCTVERSION"), %BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core02 (Name="Core module for %PRODUCTNAME %PRODUCTVERSION"), %BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core03 (Name="Core module for %PRODUCTNAME %PRODUCTVERSION"), %BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core04 (Name="Core module for %PRODUCTNAME %PRODUCTVERSION"), %BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core05 (Name="Core module for %PRODUCTNAME %PRODUCTVERSION"), %BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core06 (Name="Core module for %PRODUCTNAME %PRODUCTVERSION"), %BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core07 (Name="Core module for %PRODUCTNAME %PRODUCTVERSION"), %BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-images (Name="Images module for %PRODUCTNAME %PRODUCTVERSION")"
+copyright = "1999-2009 by %PRODUCTNAME"
+solariscopyright = "solariscopyrightfile"
+vendor = "%PRODUCTNAME"
+description = "Brand module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Brand_Prg_Wrt"
+solarispackagename = "%WITHOUTDOTUNIXPACKAGENAME%BRANDPACKAGEVERSION-writer"
+packagename = "%UNIXPACKAGENAME%BRANDPACKAGEVERSION-writer"
+requires = "%UNIXPACKAGENAME%BRANDPACKAGEVERSION,%BASISPACKAGEPREFIX%OOOBASEVERSION-writer"
+solarisrequires = "%WITHOUTDOTUNIXPACKAGENAME%BRANDPACKAGEVERSION,%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-writer"
+copyright = "1999-2009 by %PRODUCTNAME"
+solariscopyright = "solariscopyrightfile"
+vendor = "%PRODUCTNAME"
+description = "Writer brand module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Brand_Prg_Calc"
+solarispackagename = "%WITHOUTDOTUNIXPACKAGENAME%BRANDPACKAGEVERSION-calc"
+packagename = "%UNIXPACKAGENAME%BRANDPACKAGEVERSION-calc"
+requires = "%UNIXPACKAGENAME%BRANDPACKAGEVERSION,%BASISPACKAGEPREFIX%OOOBASEVERSION-calc"
+solarisrequires = "%WITHOUTDOTUNIXPACKAGENAME%BRANDPACKAGEVERSION,%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-calc"
+copyright = "1999-2009 by %PRODUCTNAME"
+solariscopyright = "solariscopyrightfile"
+vendor = "%PRODUCTNAME"
+description = "Calc brand module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Brand_Prg_Impress"
+solarispackagename = "%WITHOUTDOTUNIXPACKAGENAME%BRANDPACKAGEVERSION-impress"
+packagename = "%UNIXPACKAGENAME%BRANDPACKAGEVERSION-impress"
+requires = "%UNIXPACKAGENAME%BRANDPACKAGEVERSION,%BASISPACKAGEPREFIX%OOOBASEVERSION-impress"
+solarisrequires = "%WITHOUTDOTUNIXPACKAGENAME%BRANDPACKAGEVERSION,%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-impress"
+copyright = "1999-2009 by %PRODUCTNAME"
+solariscopyright = "solariscopyrightfile"
+vendor = "%PRODUCTNAME"
+description = "Impress brand module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Brand_Prg_Draw"
+solarispackagename = "%WITHOUTDOTUNIXPACKAGENAME%BRANDPACKAGEVERSION-draw"
+packagename = "%UNIXPACKAGENAME%BRANDPACKAGEVERSION-draw"
+requires = "%UNIXPACKAGENAME%BRANDPACKAGEVERSION,%BASISPACKAGEPREFIX%OOOBASEVERSION-draw"
+solarisrequires = "%WITHOUTDOTUNIXPACKAGENAME%BRANDPACKAGEVERSION,%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-draw"
+copyright = "1999-2009 by %PRODUCTNAME"
+solariscopyright = "solariscopyrightfile"
+vendor = "%PRODUCTNAME"
+description = "Draw brand module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Brand_Prg_Math"
+solarispackagename = "%WITHOUTDOTUNIXPACKAGENAME%BRANDPACKAGEVERSION-math"
+packagename = "%UNIXPACKAGENAME%BRANDPACKAGEVERSION-math"
+requires = "%UNIXPACKAGENAME%BRANDPACKAGEVERSION,%BASISPACKAGEPREFIX%OOOBASEVERSION-math"
+solarisrequires = "%WITHOUTDOTUNIXPACKAGENAME%BRANDPACKAGEVERSION,%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-math"
+copyright = "1999-2009 by %PRODUCTNAME"
+solariscopyright = "solariscopyrightfile"
+vendor = "%PRODUCTNAME"
+description = "Math brand module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Brand_Prg_Base"
+solarispackagename = "%WITHOUTDOTUNIXPACKAGENAME%BRANDPACKAGEVERSION-base"
+packagename = "%UNIXPACKAGENAME%BRANDPACKAGEVERSION-base"
+requires = "%UNIXPACKAGENAME%BRANDPACKAGEVERSION,%BASISPACKAGEPREFIX%OOOBASEVERSION-base"
+solarisrequires = "%WITHOUTDOTUNIXPACKAGENAME%BRANDPACKAGEVERSION,%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-base"
+copyright = "1999-2009 by %PRODUCTNAME"
+solariscopyright = "solariscopyrightfile"
+vendor = "%PRODUCTNAME"
+description = "Base brand module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
+module = "gid_Module_Langpack_Brand"
+solarispackagename = "%WITHOUTDOTUNIXPACKAGENAME%BRANDPACKAGEVERSION-%LANGUAGESTRING"
+packagename = "%UNIXPACKAGENAME%BRANDPACKAGEVERSION-%LANGUAGESTRING"
+requires = "%UNIXPACKAGENAME%BRANDPACKAGEVERSION,%BASISPACKAGEPREFIX%OOOBASEVERSION-%LANGUAGESTRING,%BASISPACKAGEPREFIX%OOOBASEVERSION-%LANGUAGESTRING-base,%BASISPACKAGEPREFIX%OOOBASEVERSION-%LANGUAGESTRING-calc,%BASISPACKAGEPREFIX%OOOBASEVERSION-%LANGUAGESTRING-math,%BASISPACKAGEPREFIX%OOOBASEVERSION-%LANGUAGESTRING-res,%BASISPACKAGEPREFIX%OOOBASEVERSION-%LANGUAGESTRING-writer"
+solarisrequires = "%WITHOUTDOTUNIXPACKAGENAME%BRANDPACKAGEVERSION,%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING (Name="Language module for %PRODUCTNAME %PRODUCTVERSION\, language %LANGUAGESTRING"),%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-base (Name="Base language module for %PRODUCTNAME %PRODUCTVERSION\, language %LANGUAGESTRING"),%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-calc (Name="Calc language module for %PRODUCTNAME %PRODUCTVERSION\, language %LANGUAGESTRING"),%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-math (Name="Math language module for %PRODUCTNAME %PRODUCTVERSION\, language %LANGUAGESTRING"),%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-res (Name="Resource language module for %PRODUCTNAME %PRODUCTVERSION\, language %LANGUAGESTRING"),%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-writer (Name="Writer language module for %PRODUCTNAME %PRODUCTVERSION\, language %LANGUAGESTRING")"
+copyright = "1999-2009 by %PRODUCTNAME"
+solariscopyright = "solariscopyrightfile"
+vendor = "%PRODUCTNAME"
+description = "Brand language module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End

@@ -1,0 +1,656 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _DBAUI_DBADMINSETUP_HRC_
+#include "dbadminsetup.hrc"
+#endif
+
+#ifndef _DBAUI_AUTOCONTROLS_HRC_
+#include "AutoControls.hrc"
+#endif
+
+
+#define CHECKBOX_HEIGHT     8
+#define FIXEDTEXT_HEIGHT    8
+#define RELATED_CONTROLS    4
+#define UNRELATED_CONTROLS  7
+#define EDIT_HEIGHT         12
+#define EDIT_X              101
+
+
+// -----------------------------------------------------------------------------
+ModalDialog DLG_DATABASE_WIZARD
+{
+    OutputSize = TRUE ;
+    Moveable = TRUE;
+    Closeable = TRUE ;
+    HelpId = HID_DLG_DATABASE_WIZARD;
+    Hide = TRUE;
+    Text[ en-US ]  = "Database Wizard" ;
+
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        HelpId = HID_DSADMIN_TABCONTROL;
+    };
+
+    String STR_DBWIZARDTITLE
+    {
+        Text[ en-US ]  = "Database Wizard" ;
+    };
+
+    String STR_PAGETITLE_INTROPAGE
+    {
+        Text[ en-US ]  = "Select database" ;
+    };
+
+    String STR_PAGETITLE_DBASE
+    {
+        Text[ en-US ]  = "Set up dBASE connection" ;
+
+    };
+
+    String STR_PAGETITLE_TEXT
+    {
+        Text[ en-US ]  = "Set up a connection to text files" ;
+    };
+
+
+    String STR_PAGETITLE_MSACCESS
+    {
+        Text[ en-US ]  = "Set up Microsoft Access connection" ;
+    };
+
+    String STR_PAGETITLE_LDAP
+    {
+        Text[ en-US ]  = "Set up LDAP connection" ;
+    };
+
+    String STR_PAGETITLE_ADABAS
+    {
+        Text[ en-US ]  = "Set up Adabas D connection" ;
+    };
+
+    String STR_PAGETITLE_ADO
+    {
+        Text[ en-US ]  = "Set up ADO connection" ;
+    };
+
+    String STR_PAGETITLE_JDBC
+    {
+        Text[ en-US ]  = "Set up JDBC connection" ;
+    };
+
+    String STR_PAGETITLE_ORACLE
+    {
+        Text[ en-US ] = "Set up Oracle database connection" ;
+    };
+
+    String STR_PAGETITLE_MYSQL
+    {
+        Text[ en-US ] = "Set up MySQL connection" ;
+    };
+
+    String STR_PAGETITLE_ODBC
+    {
+        Text[ en-US ] = "Set up ODBC connection" ;
+    };
+
+    String STR_PAGETITLE_SPREADSHEET
+    {
+        Text[ en-US ] = "Set up Spreadsheet connection" ;
+    };
+
+    String STR_PAGETITLE_AUTHENTIFICATION
+    {
+        Text[ en-US ] = "Set up user authentication" ;
+    };
+
+    String STR_PAGETITLE_MYSQL_NATIVE
+    {
+        Text [ en-US ] = "Set up MySQL server data";
+    };
+
+    String STR_PAGETITLE_FINAL
+    {
+        Text[ en-US ] = "Save and proceed" ;
+    };
+};
+
+String STR_DATABASEDEFAULTNAME
+{
+    Text[ en-US ]  = "New Database" ;
+};
+
+
+TabPage PAGE_DBWIZARD_MYSQL_INTRO
+{
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_MYSQL_INTRO";
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
+    Hide = TRUE ;
+
+    FixedText FT_MYSQL_HEADERTEXT
+    {
+        Pos = MAP_APPFONT ( START_X , 8 ) ;
+        Size = MAP_APPFONT ( (WIZARD_PAGE_X - START_X) - 12 , 2 * FIXEDTEXT_HEIGHT ) ;
+        Text[ en-US ] = "Set up a connection to a MySQL database";
+        WordBreak = TRUE;
+    };
+
+    FixedText FT_MYSQL_HELPTEXT
+    {
+        Pos = MAP_APPFONT (START_X , 27 )  ;
+        Size = MAP_APPFONT ( 213 , 48 ) ;
+        Text[ en-US ]   = "You can connect to a MySQL database using either ODBC or JDBC.\nPlease contact your system administrator if you are unsure about the following settings.";
+        WordBreak = TRUE ;
+    };
+
+    FixedText FT_MYSQLCONNECTIONMODE
+    {
+        Pos = MAP_APPFONT (START_X , 79 )  ;
+        Size = MAP_APPFONT ( 209 , 8 ) ;
+        Text[ en-US ] = "How do you want to connect to your MySQL database?" ;
+    };
+
+    RadioButton RB_CONNECTVIAODBC
+    {
+        HelpId = HID_PAGE_DBWIZARD_MYSQL_RB_CONNECTVIAODBC ;
+        Pos = MAP_APPFONT (START_X + 6 , 91 )  ;
+        Size = MAP_APPFONT ( 205 , 9 ) ;
+        Text[ en-US ] = "Connect using ODBC (Open Database Connectivity)" ;
+    };
+
+    RadioButton RB_CONNECTVIAJDBC
+    {
+        HelpId = HID_PAGE_DBWIZARD_MYSQL_RB_CONNECTVIAJDBC ;
+        Pos = MAP_APPFONT (START_X + 6, 103 )  ;
+        Size = MAP_APPFONT ( 208 , 8 ) ;
+        Text[ en-US ] = "Connect using JDBC (Java Database Connectivity)" ;
+    };
+    RadioButton RB_CONNECTVIANATIVE
+    {
+        HelpID = "dbaccess:RadioButton:PAGE_DBWIZARD_MYSQL_INTRO:RB_CONNECTVIANATIVE";
+        Pos = MAP_APPFONT (START_X + 6 , 115 )  ;
+        Size = MAP_APPFONT ( 205 , 9 ) ;
+        Text[ en-US ] = "Connect directly" ;
+        Hide = TRUE ;
+    };
+};
+
+#define AUTHENTEDIT_X   (EDIT_X - 10)
+
+TabPage PAGE_DBWIZARD_AUTHENTIFICATION
+{
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_AUTHENTIFICATION";
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
+    Hide = TRUE ;
+
+    FixedText FT_AUTHENTIFICATIONHEADERTEXT
+    {
+        Pos = MAP_APPFONT ( START_X , 8 ) ;
+        Size = MAP_APPFONT ( (WIZARD_PAGE_X - START_X) - 12 , 2 * FIXEDTEXT_HEIGHT ) ;
+        Text[ en-US ] = "Set up the user authentication";
+        WordBreak = TRUE;
+    };
+
+    FixedText FT_AUTHENTIFICATIONHELPTEXT\
+    {
+        Pos = MAP_APPFONT (START_X , 27 )  ;
+        Size = MAP_APPFONT ( WIZARD_PAGE_X - START_X - 6, 3*FIXEDTEXT_HEIGHT ) ;
+        Text[ en-US ] = "Some databases require you to enter a user name." ;\
+        WordBreak = TRUE ;
+    };
+
+    FixedText FT_GENERALUSERNAME
+    {
+        Pos = MAP_APPFONT (START_X , 62 ) ;
+        Size = MAP_APPFONT ( AUTHENTEDIT_X - START_X  , FIXEDTEXT_HEIGHT ) ;
+        Text[ en-US ] = "~User name" ;
+    };
+
+    Edit ET_GENERALUSERNAME
+    {
+        Border = TRUE ;
+        HelpId = HID_PAGE_DBWIZARD_AUTHENTIFICATION_ET_GENERALUSERNAME ;
+        Pos = MAP_APPFONT (AUTHENTEDIT_X , 60 )  ;
+        Size = MAP_APPFONT ( (WIZARD_PAGE_X - AUTHENTEDIT_X - 6), EDIT_HEIGHT ) ;
+    };
+
+    CheckBox CB_GENERALPASSWORDREQUIRED
+    {
+        HelpId = HID_PAGE_DBWIZARD_AUTHENTIFICATION_CB_GENERALPASSWORDREQUIRED ;
+        Pos = MAP_APPFONT (AUTHENTEDIT_X , 76 );
+        Size = MAP_APPFONT ( 93 , CHECKBOX_HEIGHT );
+        Text[ en-US ] = "Password re~quired" ;
+    };
+
+    PushButton PB_TESTCONNECTION
+    {
+        HelpId = HID_PAGE_DBWIZARD_AUTHENTIFICATION_PB_TESTCONNECTION ;
+        Pos = MAP_APPFONT (WIZARD_PAGE_X - BUTTON_WIDTH - UNRELATED_CONTROLS , WIZARD_PAGE_Y - 18 ) ;
+        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        Text[ en-US ] = "~Test Connection" ;
+    };
+};
+
+
+TabPage PAGE_DBWIZARD_FINAL
+{
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_FINAL";
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
+    Hide = TRUE ;
+
+    FixedText FT_FINALHEADER
+    {
+        Pos = MAP_APPFONT ( START_X , 8 ) ;
+        Size = MAP_APPFONT ( WIZARD_PAGE_X - START_X - 6 , 2* FIXEDTEXT_HEIGHT ) ;
+        Text[ en-US ] = "Decide how to proceed after saving the database";
+        WordBreak = TRUE;
+    };
+
+    FixedText FT_FINALHELPTEXT
+    {
+        Pos = MAP_APPFONT (START_X , 27 )  ;
+        Size = MAP_APPFONT ( WIZARD_PAGE_X - START_X - 6, 2*FIXEDTEXT_HEIGHT ) ;
+        Text[ en-US ] = "Do you want the wizard to register the database in %PRODUCTNAME?" ;
+        WordBreak = TRUE ;
+    };
+
+    RadioButton RB_REGISTERDATASOURCE
+    {
+        HelpId = HID_PAGE_DBWIZARD_FINAL_RB_REGISTERDATASOURCE;
+        Pos = MAP_APPFONT (START_X + 6 , 45 )  ;
+        Size = MAP_APPFONT ( 205 , 9 ) ;
+        Group = TRUE;
+        Text[ en-US ] = "~Yes, register the database for me" ;
+    };
+
+    RadioButton RB_DONTREGISTERDATASOURCE
+    {
+        HelpId = HID_PAGE_DBWIZARD_FINAL_RB_DONTREGISTERDATASOURCE ;
+        Pos = MAP_APPFONT (START_X + 6, 57 )  ;
+        Size = MAP_APPFONT ( 208 , 8 ) ;
+        Text[ en-US ] = "N~o, do not register the database" ;
+    };
+
+    FixedText FT_ADDITIONALSETTINGS
+    {
+        Pos = MAP_APPFONT (START_X , 100 )  ;
+        Size = MAP_APPFONT ( WIZARD_PAGE_X - START_X - 6 , 8 ) ;
+        Text[ en-US ] = "After the database file has been saved, what do you want to do?" ;
+    };
+
+    CheckBox CB_OPENAFTERWARDS
+    {
+        HelpId = HID_PAGE_DBWIZARD_FINAL_CB_OPENAFTERWARDS ;
+        Pos = MAP_APPFONT (START_X + 6, 118 )  ;
+        Size = MAP_APPFONT ( WIZARD_PAGE_X - START_X , 8 ) ;
+        Text[ en-US ] = "Open the database for editing" ;
+    };
+
+    CheckBox CB_STARTTABLEWIZARD
+    {
+        HelpId = HID_PAGE_DBWIZARD_FINAL_CB_STARTTABLEWIZARD ;
+        Pos = MAP_APPFONT (START_X + 6, 130 )  ;
+        Size = MAP_APPFONT ( WIZARD_PAGE_X - START_X - 12 , 8 ) ;
+        Text[ en-US ] = "Create tables using the table wizard" ;
+    };
+
+
+    FixedText FT_FINALTEXT
+    {
+        Pos = MAP_APPFONT ( START_X , 173 ) ;
+        Size = MAP_APPFONT ( WIZARD_PAGE_X - START_X - 6 , 2* FIXEDTEXT_HEIGHT ) ;
+        Text[ en-US ]  = "Click 'Finish' to save the database.";
+        WordBreak = TRUE;
+    };
+};
+
+TabPage PAGE_DBWIZARD_MYSQL_JDBC
+{
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_MYSQL_JDBC";
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
+    Hide = TRUE ;
+
+    String STR_MYSQLJDBC_HEADERTEXT
+    {
+        Text[ en-US ] = "Set up connection to a MySQL database using JDBC" ;
+    };
+
+    String STR_MYSQLJDBC_HELPTEXT
+    {
+        Text[ en-US ] = "Please enter the required information to connect to a MySQL database using JDBC. Note that a JDBC driver class must be installed on your system and registered with %PRODUCTNAME.\nPlease contact your system administrator if you are unsure about the following settings.";
+    };
+
+    String STR_MYSQL_DRIVERCLASSTEXT
+    {
+        Text [  en-US  ] = "MySQL JDBC d~river class:";
+    };
+
+
+    String STR_MYSQL_DEFAULT
+    {
+        Text[ en-US ] = "Default: 3306";
+    };
+
+    AUTOHELP_JDBCCONTROLGROUP(HID_PAGE_DBWIZARD_JDBC_ET_MYSQLDBNAME,HID_PAGE_DBWIZARD_JDBC_ET_MYSQLHOSTSERVER,HID_PAGE_DBWIZARD_JDBC_ET_MYSQLPORT,HID_PAGE_DBWIZARD_JDBC_ET_MYSQLCLASS,HID_PAGE_DBWIZARD_JDBC_PB_TESTMYSQLCLASS)
+};
+
+TabPage PAGE_DBWIZARD_MYSQL_NATIVE
+{
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_MYSQL_NATIVE";
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0, 0 ) ;
+    Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
+    Hide = TRUE ;
+
+    FixedText FT_SETUP_WIZARD_HEADER
+    {
+        Pos = MAP_APPFONT ( START_X , 8 ) ;
+        Size = MAP_APPFONT ( WIZARD_PAGE_X - START_X - 12 , 2 * FIXEDTEXT_HEIGHT ) ;
+        Text[ en-US ] = "Set up connection to a MySQL database" ;
+        WordBreak = TRUE;
+    };
+
+    FixedText FT_SETUP_WIZARD_HELP
+    {
+        Pos = MAP_APPFONT ( START_X , INIT_Y ) ;
+        Size = MAP_APPFONT ( WIZARD_PAGE_X - START_X - 12 , 3 * FIXEDTEXT_HEIGHT ) ;
+        Text [ en-US ] = "Please enter the required information to connect to a MySQL database.";
+        WordBreak = TRUE;
+    };
+};
+
+
+TabPage PAGE_DBWIZARD_DBASE
+{
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_DBASE";
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
+    Hide = TRUE ;
+
+    String STR_DBASE_HEADERTEXT
+    {
+        Text[ en-US ] = "Set up a connection to dBASE files" ;
+    };
+
+    String STR_DBASE_HELPTEXT
+    {
+        Text[ en-US ]  = "Select the folder where the dBASE files are stored." ;
+    };
+
+     AUTO_HELP_BROWSECONTROLGROUP( 3, HID_PAGE_DBWIZARD_DBASE_ET_DBASELOCATION,HID_PAGE_DBWIZARD_DBASE_PB_DBASELOCATION)
+};
+
+TabPage PAGE_DBWIZARD_TEXT
+{
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_TEXT";
+    String STR_TEXT_HEADERTEXT
+    {
+        Text[ en-US ]   = "Set up a connection to text files" ;
+    };
+
+    String STR_TEXT_HELPTEXT
+    {
+        Text[ en-US ]   = "Select the folder where the CSV (Comma Separated Values) text files are stored. %PRODUCTNAME Base will open these files in read-only mode." ;
+    };
+
+    String STR_TEXT_PATH_OR_FILE{
+        Text[ en-US ]  = "Path to text files";
+    };
+
+    AUTO_HELP_BROWSECONTROLGROUP(3, HID_PAGE_DBWIZARD_TEXT_ET_LOCATIONTEXTFILE,HID_PAGE_DBWIZARD_TEXT_PB_LOCATIONTEXTFILE)
+    AUTO_SEPARATORCONTROLGROUP(82, WIZARD_PAGE_X)
+ };
+
+TabPage PAGE_DBWIZARD_MSACCESS
+{
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_MSACCESS";
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
+    Hide = TRUE ;
+
+    String STR_MSACCESS_HEADERTEXT
+    {
+        Text[ en-US ] = "Set up a connection to a Microsoft Access database" ;
+    };
+
+    String STR_MSACCESS_HELPTEXT
+    {
+        Text[ en-US ] = "Please select the Microsoft Access file you want to access.";
+    };
+
+    AUTO_HELP_BROWSECONTROLGROUP(3, HID_PAGE_DBWIZARD_MSACCESS_ET_MSACCESSLOCATION, HID_PAGE_DBWIZARD_MSACCESS_PB_MSACCESSLOCATION)
+};
+
+TabPage PAGE_DBWIZARD_LDAP
+{
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_LDAP";
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
+    Hide = TRUE ;
+
+    FixedText FT_LDAP_HEADERTEXT
+    {
+        Pos = MAP_APPFONT ( START_X , 8 ) ;
+        Size = MAP_APPFONT ( (WIZARD_PAGE_X - START_X) - 12 , 2 * FIXEDTEXT_HEIGHT ) ;
+        Text[ en-US ] = "Set up a connection to an LDAP directory";
+        WordBreak = TRUE;
+    };
+
+    FixedText FT_LDAP_HELPTEXT
+    {
+        Pos = MAP_APPFONT (START_X , 27 )  ;
+        Size = MAP_APPFONT (WIZARD_PAGE_X - START_X - 6, 5 * FIXEDTEXT_HEIGHT ) ;
+        Text[ en-US ] = "Please enter the required information to connect to an LDAP directory.\nPlease contact your system administrator if you are unsure about the following settings." ;
+        WordBreak = TRUE ;
+    };
+    AUTO_HOSTCONTROLGROUP(  INIT_Y + 7 * FIXEDTEXT_HEIGHT +     UNRELATED_CONTROLS,                         HID_PAGE_DBWIZARD_LDAP_ET_HOSTSERVER)
+    AUTO_BASEDNCONTROLGROUP(INIT_Y + 7 * FIXEDTEXT_HEIGHT +     UNRELATED_CONTROLS +     EDIT_HEIGHT +     RELATED_CONTROLS,    HID_PAGE_DBWIZARD_LDAP_ET_BASEDN)
+    AUTO_PORTCONTROLGROUP(  INIT_Y + 7 * FIXEDTEXT_HEIGHT +     UNRELATED_CONTROLS + 2 * EDIT_HEIGHT + 2 * RELATED_CONTROLS,    HID_PAGE_DBWIZARD_LDAP_ET_PORTNUMBER)
+
+    String STR_LDAP_DEFAULT{
+        Text[ en-US ] = "Default: 389" ;
+    };
+
+    CheckBox CB_WIZ_USESSL
+    {
+        HelpId = HID_PAGE_DBWIZARD_LDAP_CB_USESSL ;
+        Pos = MAP_APPFONT (START_X , INIT_Y + 7 * FIXEDTEXT_HEIGHT +        UNRELATED_CONTROLS + 3 * EDIT_HEIGHT + 4 * RELATED_CONTROLS )  ;
+        Size = MAP_APPFONT ( 212 , 8 ) ;
+        Text[ en-US ] = "Use ~secure connection (SSL)" ;
+    };
+};
+
+TabPage PAGE_DBWIZARD_ADABAS
+{
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_ADABAS";
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
+    Hide = TRUE ;
+
+    String STR_ADABAS_HEADERTEXT
+    {
+        Text[ en-US ]   = "Set up a connection to an Adabas D database" ;
+    };
+
+    String STR_ADABAS_HELPTEXT{
+        Text[ en-US ] = "Enter the name of the Adabas D database you want to connect to.\nClick 'Browse...' to select an Adabas D database that is already registered in %PRODUCTNAME." ;
+    };
+
+    AUTO_HELP_BROWSECONTROLGROUP(4, HID_PAGE_DBWIZARD_ADABAS_ET_ADABASNAME, HID_PAGE_DBWIZARD_ADABAS_PB_ADABASNAME)
+};
+
+TabPage PAGE_DBWIZARD_ADO
+{
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_ADO";
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
+    Hide = TRUE ;
+
+    String STR_ADO_HEADERTEXT
+    {
+        Text[ en-US ] = "Set up a connection to an ADO database" ;
+    };
+
+    String STR_ADO_HELPTEXT{
+        Text[ en-US ] = "Please enter the URL of the ADO data source you want to connect to.\nClick 'Browse' to configure provider-specific settings.\nPlease contact your system administrator if you are unsure about the following settings." ;
+    };
+
+    AUTO_HELP_BROWSECONTROLGROUP(5, HID_PAGE_DBWIZARD_ADO_ET_ADOURL, HID_PAGE_DBWIZARD_ADO_PB_ADOURL)
+};
+
+
+TabPage PAGE_DBWIZARD_ODBC
+{
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_ODBC";
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
+    Hide = TRUE ;
+
+    String STR_ODBC_HEADERTEXT
+    {
+        Text[ en-US ] = "Set up a connection to an ODBC database" ;
+    };
+
+    String STR_ODBC_HELPTEXT{
+        Text[ en-US ] = "Enter the name of the ODBC database you want to connect to.\nClick 'Browse...' to select an ODBC database that is already registered in %PRODUCTNAME.\nPlease contact your system administrator if you are unsure about the following settings." ;
+    };
+
+    AUTO_HELP_BROWSECONTROLGROUP(6, HID_PAGE_DBWIZARD_ODBC_ET_NAMEOFODBCDATASOURCE, HID_PAGE_DBWIZARD_ODBC_PB_NAMEOFODBCDATASOURCE)
+};
+
+TabPage PAGE_DBWIZARD_USERDEFINED
+{
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_USERDEFINED";
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
+    Hide = TRUE ;
+
+    AUTO_HELP_BROWSECONTROLGROUP(6, HID_PAGE_DBWIZARD_USERDEFINED_ET_BROWSE, HID_PAGE_DBWIZARD_USERDEFINED_BROWSE)
+};
+
+TabPage PAGE_DBWIZARD_JDBC
+{
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_JDBC";
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
+    Hide = TRUE ;
+
+    String STR_JDBC_HEADERTEXT
+    {
+        Text[ en-US ] = "Set up a connection to a JDBC database" ;
+    };
+
+    String STR_JDBC_HELPTEXT{
+        Text[ en-US ] = "Please enter the required information to connect to a JDBC database.\nPlease contact your system administrator if you are unsure about the following settings." ;
+    };
+
+    AUTO_HELP_BROWSECONTROLGROUP(4, HID_PAGE_DBWIZARD_JDBC_ET_JDBCURL, HID_PAGE_DBWIZARD_JDBC_PB_JDBCURL)
+    AUTO_JDBCDRIVERCLASSGROUP(119, HID_PAGE_DBWIZARD_JDBC_ET_JDBCCLASS, HID_PAGE_DBWIZARD_JDBC_PB_TESTJDBCCLASS)
+};
+
+
+
+TabPage PAGE_DBWIZARD_ORACLE
+{
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_ORACLE";
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
+    Hide = TRUE ;
+
+    String STR_ORACLE_HEADERTEXT
+    {
+        Text[ en-US ] = "Set up a connection to an Oracle database";
+    };
+
+    String STR_ORACLE_DEFAULT
+    {
+        Text[ en-US ] = "Default: 1521" ;
+    };
+
+    String STR_ORACLE_DRIVERCLASSTEXT{
+        Text [ en-US ] = "Oracle JDBC ~driver class";
+    };
+
+    String STR_ORACLE_HELPTEXT{
+        Text[ en-US ] = "Please enter the required information to connect to an Oracle database.Note that a JDBC Driver Class must be installed on your system and registered with %PRODUCTNAME.\nPlease contact your system administrator if you are unsure about the following settings." ;
+    };
+
+    AUTOHELP_JDBCCONTROLGROUP(HID_PAGE_DBWIZARD_ORACLE_ET_ORACLEDBNAME,HID_PAGE_DBWIZARD_ORACLE_ET_ORACLEHOSTSERVER,HID_PAGE_DBWIZARD_ORACLE_ET_ORACLEPORT,HID_PAGE_DBWIZARD_ORACLE_ET_ORACLECLASS,HID_PAGE_DBWIZARD_ORACLE_PB_TESTORACLECLASS)
+};
+
+
+TabPage PAGE_DBWIZARD_SPREADSHEET
+{
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_SPREADSHEET";
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
+    Hide = TRUE ;
+
+    String STR_SPREADSHEET_HEADERTEXT
+    {
+        Text[ en-US ] = "Set up a connection to spreadsheets";
+    };
+
+    String STR_SPREADSHEET_HELPTEXT{
+        Text[ en-US ] = "Click 'Browse...' to select a %PRODUCTNAME spreadsheet or Microsoft Excel workbook.\n%PRODUCTNAME will open this file in read-only mode." ;
+    };
+
+    AUTO_HELP_BROWSECONTROLGROUP(3, HID_PAGE_DBWIZARD_SPREADSHEET_ET_SPREADSHEETPATH,HID_PAGE_DBWIZARD_SPREADSHEET_PB_SPREADSHEETPATH )
+
+    String STR_SPREADSHEETPATH{
+        Text[ en-US ] = "~Location and file name" ;
+    };
+
+
+    CheckBox CB_SPREADSHEETPASSWORDREQUIRED
+    {
+        HelpId = HID_PAGE_DBWIZARD_SPREADSHEET_CB_SPREADSHEETPASSWORDREQUIRED ;
+        Pos = MAP_APPFONT (START_X + UNRELATED_CONTROLS , 83 )  ;
+        Size = MAP_APPFONT ( 93 , 11 ) ;
+        Text[ en-US ] = "~Password required" ;
+    };
+};

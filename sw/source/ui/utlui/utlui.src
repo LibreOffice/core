@@ -1,0 +1,379 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "globals.hrc"
+#include "utlui.hrc"
+#include "helpid.h"
+#include "comcore.hrc"
+
+
+Resource RID_SHELLRES_AUTOFMTSTRS
+{
+    String STR_AUTOFMTREDL_DEL_EMPTY_PARA+1
+    {
+        Text [ en-US ] = "Remove empty paragraphs" ;
+    };
+    String STR_AUTOFMTREDL_USE_REPLACE+1
+    {
+        Text [ en-US ] = "Use replacement table" ;
+    };
+    String STR_AUTOFMTREDL_CPTL_STT_WORD+1
+    {
+        Text [ en-US ] = "Correct TWo INitial CApitals" ;
+    };
+    String STR_AUTOFMTREDL_CPTL_STT_SENT+1
+    {
+        Text [ en-US ] = "Capitalize first letter of sentences" ;
+    };
+    String STR_AUTOFMTREDL_TYPO+1
+    {
+        Text [ en-US ] = "Replace \"standard\" quotes with %1 \bcustom%2 quotes" ;
+    };
+    String STR_AUTOFMTREDL_USER_STYLE+1
+    {
+        Text [ en-US ] = "Replace Custom Styles" ;
+    };
+    String STR_AUTOFMTREDL_BULLET+1
+    {
+        Text [ en-US ] = "Bullets replaced";
+    };
+    String STR_AUTOFMTREDL_UNDER+1
+    {
+        Text [ en-US ] = "Automatic _underline_";
+    };
+    String STR_AUTOFMTREDL_BOLD+1
+    {
+        Text [ en-US ] = "Automatic *bold*";
+    };
+    String STR_AUTOFMTREDL_FRACTION+1
+    {
+        Text [ en-US ] = "Replace 1/2 ... with ½ ..." ;
+    };
+    String STR_AUTOFMTREDL_DETECT_URL+1
+    {
+        Text [ en-US ] = "URL recognition" ;
+    };
+    String STR_AUTOFMTREDL_DASH+1
+    {
+        Text [ en-US ] = "Replace dashes" ;
+    };
+    String STR_AUTOFMTREDL_ORDINAL+1
+    {
+        Text [ en-US ] = "Replace 1st... with 1^st..." ;
+    };
+    String STR_AUTOFMTREDL_RIGHT_MARGIN+1
+    {
+        Text [ en-US ] = "Combine single line paragraphs";
+    };
+
+    String STR_AUTOFMTREDL_SET_TMPL_TEXT +1
+    {
+        Text [ en-US ] = "Set \"Text body\" Style";
+    };
+    String STR_AUTOFMTREDL_SET_TMPL_INDENT  +1
+    {
+        Text [ en-US ] = "Set \"Text body indent\" Style";
+    };
+    String STR_AUTOFMTREDL_SET_TMPL_NEG_INDENT  +1
+    {
+        Text [ en-US ] = "Set \"Hanging indent\" Style";
+    };
+    String STR_AUTOFMTREDL_SET_TMPL_TEXT_INDENT +1
+    {
+        Text [ en-US ] = "Set \"Text body indent\" Style";
+    };
+    String STR_AUTOFMTREDL_SET_TMPL_HEADLINE +1
+    {
+        Text [ en-US ] = "Set \"Heading $(ARG1)\" Style";
+    };
+    String STR_AUTOFMTREDL_SET_NUMBULET +1
+    {
+        Text [ en-US ] = "Set \"Bullet\" or \"Numbering\" Style";
+    };
+
+    String STR_AUTOFMTREDL_DEL_MORELINES +1
+    {
+        Text [ en-US ] = "Combine paragraphs";
+    };
+    String STR_AUTOFMTREDL_NON_BREAK_SPACE +1
+    {
+        Text [ en-US ] = "Add non breaking space";
+    };
+
+};
+
+/*---------------------------------------------------------------------
+    Diverses
+ ---------------------------------------------------------------------*/
+String STR_EVENT_OBJECT_SELECT
+{
+    Text [ en-US ] = "Click object" ;
+};
+String STR_EVENT_START_INS_GLOSSARY
+{
+    Text [ en-US ] = "Before inserting AutoText";
+};
+String STR_EVENT_END_INS_GLOSSARY
+{
+    Text [ en-US ] = "After inserting AutoText";
+};
+String STR_EVENT_MOUSEOVER_OBJECT
+{
+    Text [ en-US ] = "Mouse over object" ;
+};
+String STR_EVENT_MOUSECLICK_OBJECT
+{
+    Text [ en-US ] = "Trigger hyperlink" ;
+};
+String STR_EVENT_MOUSEOUT_OBJECT
+{
+    Text [ en-US ] = "Mouse leaves object" ;
+};
+String STR_EVENT_IMAGE_LOAD
+{
+    Text [ en-US ] = "Graphics load successful" ;
+};
+String STR_EVENT_IMAGE_ABORT
+{
+    Text [ en-US ] = "Graphics load terminated" ;
+};
+String STR_EVENT_IMAGE_ERROR
+{
+    Text [ en-US ] = "Graphics load faulty" ;
+};
+String STR_EVENT_FRM_KEYINPUT_A
+{
+    Text [ en-US ] = "Input of alphanumeric characters" ;
+};
+String STR_EVENT_FRM_KEYINPUT_NOA
+{
+    Text [ en-US ] = "Input of non-alphanumeric characters" ;
+};
+String STR_EVENT_FRM_RESIZE
+{
+    Text [ en-US ] = "Resize frame" ;
+};
+String STR_EVENT_FRM_MOVE
+{
+    Text [ en-US ] = "Move frame" ;
+};
+String STR_CONTENT_TYPE_OUTLINE
+{
+    Text [ en-US ] = "Headings" ;
+};
+String STR_CONTENT_TYPE_TABLE
+{
+    Text [ en-US ] = "Tables" ;
+};
+String STR_CONTENT_TYPE_FRAME
+{
+    Text [ en-US ] = "Text frames" ;
+};
+String STR_CONTENT_TYPE_GRAPHIC
+{
+    Text [ en-US ] = "Graphics" ;
+};
+String STR_CONTENT_TYPE_OLE
+{
+    Text [ en-US ] = "OLE objects" ;
+};
+String STR_CONTENT_TYPE_BOOKMARK
+{
+    Text [ en-US ] = "Bookmarks" ;
+};
+String STR_CONTENT_TYPE_REGION
+{
+    Text [ en-US ] = "Sections" ;
+};
+String STR_CONTENT_TYPE_URLFIELD
+{
+    Text [ en-US ] = "Hyperlinks" ;
+};
+String STR_CONTENT_TYPE_REFERENCE
+{
+    Text [ en-US ] = "References" ;
+};
+String STR_CONTENT_TYPE_INDEX
+{
+    Text [ en-US ] = "Indexes" ;
+};
+String STR_CONTENT_TYPE_DRAWOBJECT
+{
+    Text [ en-US ] = "Draw objects" ;
+};
+String STR_CONTENT_TYPE_POSTIT
+{
+    Text [ en-US ] = "Comments" ;
+};
+String STR_CONTENT_TYPE_SINGLE_OUTLINE
+{
+    Text [ en-US ] = "Heading" ;
+};
+String STR_CONTENT_TYPE_SINGLE_TABLE
+{
+    Text [ en-US ] = "Table" ;
+};
+String STR_CONTENT_TYPE_SINGLE_FRAME
+{
+    Text [ en-US ] = "Text frame" ;
+};
+String STR_CONTENT_TYPE_SINGLE_GRAPHIC
+{
+    Text [ en-US ] = "Graphics" ;
+};
+String STR_CONTENT_TYPE_SINGLE_OLE
+{
+    Text [ en-US ] = "OLE object" ;
+};
+String STR_CONTENT_TYPE_SINGLE_BOOKMARK
+{
+    Text [ en-US ] = "Bookmark" ;
+};
+String STR_CONTENT_TYPE_SINGLE_REGION
+{
+    Text [ en-US ] = "Section" ;
+};
+String STR_CONTENT_TYPE_SINGLE_URLFIELD
+{
+    Text [ en-US ] = "Hyperlink" ;
+};
+String STR_CONTENT_TYPE_SINGLE_REFERENCE
+{
+    Text [ en-US ] = "Reference" ;
+};
+String STR_CONTENT_TYPE_SINGLE_INDEX
+{
+    Text [ en-US ] = "Index" ;
+};
+String STR_CONTENT_TYPE_SINGLE_POSTIT
+{
+    Text [ en-US ] = "Comment" ;
+};
+String STR_CONTENT_TYPE_SINGLE_DRAWOBJECT
+{
+    Text [ en-US ] = "Draw object" ;
+};
+String STR_DEFINE_NUMBERFORMAT
+{
+    Text [ en-US ] = "Additional formats..." ;
+};
+String RID_STR_SYSTEM
+{
+    Text [ en-US ] = "[System]";
+};
+String STR_MULT_INTERACT_SPELL_WARN
+{
+    Text [ en-US ] = "The interactive spellcheck is already active\nin a different document";
+};
+String STR_MULT_INTERACT_HYPH_WARN
+{
+    Text [ en-US ] = "The interactive hyphenation is already active\nin a different document";
+};
+String STR_SPELL_TITLE
+{
+    Text [ en-US ] = "Spellcheck";
+};
+String STR_HYPH_TITLE
+{
+    Text [ en-US ] = "Hyphenation";
+};
+
+#define IMGLIST_IDS\
+    IdList = \
+    { \
+        IMG_COLLAPSE;\
+        IMG_EXPAND  ;\
+        IMG_DB      ;\
+        IMG_DBTABLE ;\
+        IMG_DBQUERY ;\
+    }; \
+    IdCount = 5
+
+ImageList ILIST_DB_DLG
+{
+    Prefix = "sx";
+    MaskColor = IMAGE_MASK_COLOR;
+    IMGLIST_IDS;
+};
+Image IMG_VIEWLAYOUT_AUTOMATIC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "twopages_11x25.png" ;
+    };
+    MaskColor = IMAGE_MASK_COLOR;
+};
+Image IMG_VIEWLAYOUT_AUTOMATIC_ACTIVE
+{
+    ImageBitmap = Bitmap
+    {
+        File = "twopages_a_11x25.png" ;
+    };
+    MaskColor = IMAGE_MASK_COLOR;
+};
+
+Image IMG_VIEWLAYOUT_BOOKMODE
+{
+    ImageBitmap = Bitmap
+    {
+        File = "doublepage_11x23.png" ;
+    };
+    MaskColor = IMAGE_MASK_COLOR;
+};
+Image IMG_VIEWLAYOUT_BOOKMODE_ACTIVE
+{
+    ImageBitmap = Bitmap
+    {
+        File = "doublepage_a_11x23.png" ;
+    };
+    MaskColor = IMAGE_MASK_COLOR;
+};
+
+Image IMG_VIEWLAYOUT_SINGLECOLUMN
+{
+    ImageBitmap = Bitmap
+    {
+        File = "emptypage_11x15.png" ;
+    };
+    MaskColor = IMAGE_MASK_COLOR;
+};
+Image IMG_VIEWLAYOUT_SINGLECOLUMN_ACTIVE
+{
+    ImageBitmap = Bitmap
+    {
+        File = "emptypage_a_11x15.png" ;
+    };
+    MaskColor = IMAGE_MASK_COLOR;
+};
+String STR_HYPERCTRL_SEL
+{
+    Text [ en-US ] = "SEL";
+};
+String STR_HYPERCTRL_HYP
+{
+    Text [ en-US ] = "HYP";
+};

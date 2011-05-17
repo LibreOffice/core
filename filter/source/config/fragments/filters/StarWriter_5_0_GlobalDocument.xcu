@@ -1,0 +1,10 @@
+    <node oor:name="StarWriter 5.0/GlobalDocument" oor:op="replace">
+        <prop oor:name="Flags"><value>IMPORT TEMPLATE OWN ALIEN 3RDPARTYFILTER</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="FilterService"><value>com.sun.star.comp.office.BF_MigrateFilter</value></prop>
+        <prop oor:name="UserData"><value>CSW5</value></prop>
+        <prop oor:name="FileFormatVersion"><value>5050</value></prop>
+        <prop oor:name="Type"><value>writer_globaldocument_StarWriter_50GlobalDocument</value></prop>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="DocumentService"><value>com.sun.star.text.GlobalDocument</value></prop>
+    </node>

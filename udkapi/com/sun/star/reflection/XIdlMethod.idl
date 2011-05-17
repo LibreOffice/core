@@ -1,0 +1,131 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_reflection_XIdlMethod_idl__
+#define __com_sun_star_reflection_XIdlMethod_idl__
+
+#include <com/sun/star/reflection/XIdlMember.idl>
+
+#include <com/sun/star/reflection/ParamInfo.idl>
+
+#include <com/sun/star/reflection/MethodMode.idl>
+
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+#include <com/sun/star/reflection/InvocationTargetException.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module reflection {
+
+ published interface XIdlClass;
+
+//=============================================================================
+
+/** Reflects an IDL interface method.
+*/
+published interface XIdlMethod: com::sun::star::reflection::XIdlMember
+{
+    /** Returns the return type of the reflected method.
+
+        @return
+                return type of reflected method
+    */
+    XIdlClass getReturnType();
+
+    /** Returns the formal parameter types of the reflected method in order of IDL
+        declaration.
+
+        @return
+                formal parameter types of reflected method
+    */
+    sequence<XIdlClass> getParameterTypes();
+
+    /** Returns formal parameter informations of the reflected method
+        in order of IDL declaration.
+        Parameter information reflects the parameter's access mode (in, out, inout),
+        the parameter's name and formal type.
+
+        @return
+                parameter informations of reflected method
+    */
+    sequence<ParamInfo> getParameterInfos();
+
+    /** Returns the declared exceptions types of the reflected method.
+
+        @return
+                declared exception types of reflected method
+    */
+    sequence<com::sun::star::reflection::XIdlClass> getExceptionTypes();
+
+    /** Returns the method mode in which calls are run, i.e. either oneway or
+        twoway.  Method mode oneway denotes that a call may be run asynchronously
+        (thus having no out parameters or return value)
+
+        @return
+                method mode of reflected method
+    */
+    com::sun::star::reflection::MethodMode getMode();
+
+    /** Invokes the reflected method on a given object with the given parameters.
+        The parameters may be widening converted to fit their exact IDL type,
+        meaning no loss of information.
+
+        @param obj
+               object to call on
+        @param args
+               arguments passed to the method
+        @return
+                return value of the method call (may be empty for methods returning void)
+
+        @throws IllegalArgumentException
+        if the given object is a nuull reference or does not support the reflected
+        method's interface
+        @throws IllegalArgumentException
+        if the given number of arguments differ from the expected number
+        or the given arguments' types differ from the expected ones (even a
+        widening conversion was not possible)
+        @throws InvocationTargetException
+        if the reflected method that has been invoked has thrown an exception.
+        The original exception will be wrapped up and signalled by the
+        InvocationTargetException
+    */
+    any invoke(
+        [in] any obj,
+        [inout] sequence<any> args )
+        raises( com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::reflection::InvocationTargetException );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

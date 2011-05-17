@@ -1,0 +1,246 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _EDIT_SVXIDS_HRC
+#define _EDIT_SVXIDS_HRC
+
+// include ------------------------------------------------------------------
+
+#include <svl/solar.hrc>
+
+#define SID_ATTR_BRUSH                                  ( SID_SVX_START + 1 )
+#define SID_ATTR_TABSTOP                                ( SID_SVX_START + 2 )
+#define SID_ATTR_TABSTOP_DEFAULTS                       ( SID_SVX_START + 3 )
+#define SID_ATTR_TABSTOP_POS                            ( SID_SVX_START + 4 )
+#define SID_ATTR_TABSTOP_OFFSET                         ( SID_SVX_START + 5 )
+#define SID_ATTR_CHAR                                   ( SID_SVX_START + 6 )
+#define SID_ATTR_CHAR_FONT                              ( SID_SVX_START + 7 )
+#define SID_ATTR_CHAR_POSTURE                           ( SID_SVX_START + 8 )
+#define SID_ATTR_CHAR_WEIGHT                            ( SID_SVX_START + 9 )
+#define SID_ATTR_CHAR_SHADOWED                          ( SID_SVX_START + 10 )
+#define SID_ATTR_CHAR_WORDLINEMODE                      ( SID_SVX_START + 11 )
+#define SID_ATTR_CHAR_CONTOUR                           ( SID_SVX_START + 12 )
+#define SID_ATTR_CHAR_STRIKEOUT                         ( SID_SVX_START + 13 )
+#define SID_ATTR_CHAR_UNDERLINE                         ( SID_SVX_START + 14 )
+#define SID_ATTR_CHAR_FONTHEIGHT                        ( SID_SVX_START + 15 )
+#define SID_ATTR_CHAR_PROPSIZE                          ( SID_SVX_START + 16 )
+#define SID_ATTR_CHAR_COLOR                             ( SID_SVX_START + 17 )
+#define SID_ATTR_CHAR_KERNING                           ( SID_SVX_START + 18 )
+#define SID_ATTR_CHAR_CASEMAP                           ( SID_SVX_START + 19 )
+#define SID_ATTR_CHAR_LANGUAGE                          ( SID_SVX_START + 20 )
+#define SID_ATTR_CHAR_ESCAPEMENT                        ( SID_SVX_START + 21 )
+#define SID_ATTR_CHAR_FONTLIST                          ( SID_SVX_START + 22 )
+#define SID_ATTR_BORDER_OUTER                           ( SID_SVX_START + 24 )
+#define SID_ATTR_BORDER_SHADOW                          ( SID_SVX_START + 25 )
+#define SID_ATTR_PARA                                   ( SID_SVX_START + 26 )
+#define SID_ATTR_PARA_ADJUST                            ( SID_SVX_START + 27 )
+#define SID_ATTR_PARA_ADJUST_LEFT                       ( SID_SVX_START + 28 )
+#define SID_ATTR_PARA_ADJUST_RIGHT                      ( SID_SVX_START + 29 )
+#define SID_ATTR_PARA_ADJUST_CENTER                     ( SID_SVX_START + 30 )
+#define SID_ATTR_PARA_ADJUST_BLOCK                      ( SID_SVX_START + 31 )
+#define SID_ATTR_PARA_ADJUST_BLOCKLINE                  ( SID_SVX_START + 32 )
+#define SID_ATTR_PARA_LINESPACE                         ( SID_SVX_START + 33 )
+#define SID_ATTR_PARA_LINESPACE_10                      ( SID_SVX_START + 34 )
+#define SID_ATTR_PARA_LINESPACE_15                      ( SID_SVX_START + 35 )
+#define SID_ATTR_PARA_LINESPACE_20                      ( SID_SVX_START + 36 )
+#define SID_ATTR_PARA_PAGEBREAK                         ( SID_SVX_START + 37 )
+#define SID_ATTR_PARA_HYPHENZONE                        ( SID_SVX_START + 38 )
+#define SID_ATTR_PARA_SPLIT                             ( SID_SVX_START + 39 )
+#define SID_ATTR_PARA_ORPHANS                           ( SID_SVX_START + 40 )
+#define SID_ATTR_PARA_WIDOWS                            ( SID_SVX_START + 41 )
+#define SID_ATTR_PARA_ULSPACE                           ( SID_SVX_START + 42 )
+#define SID_ATTR_PARA_LRSPACE                           ( SID_SVX_START + 43 )
+#define SID_ATTR_LRSPACE                                ( SID_SVX_START + 48 )
+#define SID_ATTR_ULSPACE                                ( SID_SVX_START + 49 )
+#define SID_ATTR_CHAR_MAPTYPE                           ( SID_SVX_START + 64 )
+#define SID_ATTR_PARA_MODEL                             ( SID_SVX_START + 65 )
+#define SID_ATTR_PARA_KEEP                              ( SID_SVX_START + 66 )
+#define SID_ATTR_CHAR_AUTOKERN                          ( SID_SVX_START + 67 )
+#define SID_ATTR_PARA_BULLET                            ( SID_SVX_START + 250 )
+#define SID_ATTR_PARA_OUTLLEVEL                         ( SID_SVX_START + 300 )
+#define SID_FIELD                                       ( SID_SVX_START + 363 )
+#define SID_ATTR_PARA_REGISTER                          ( SID_SVX_START + 413 )
+#define SID_ATTR_PARA_PAGENUM                           ( SID_SVX_START + 457 )
+#define SID_ATTR_PARA_NUMRULE                           ( SID_SVX_START + 587 )
+#define SID_ATTR_BRUSH_CHAR                             ( SID_SVX_START + 591 )
+#define SID_ATTR_NUMBERING_RULE                         ( SID_SVX_START + 855 )
+#define SID_ATTR_CHAR_CHARSETCOLOR                      ( SID_SVX_START + 877 )
+#define SID_ATTR_CHAR_CJK_FONT                          ( SID_SVX_START + 887 )
+#define SID_ATTR_CHAR_CJK_FONTHEIGHT                    ( SID_SVX_START + 888 )
+#define SID_ATTR_CHAR_CJK_LANGUAGE                      ( SID_SVX_START + 889 )
+#define SID_ATTR_CHAR_CJK_POSTURE                       ( SID_SVX_START + 890 )
+#define SID_ATTR_CHAR_CJK_WEIGHT                        ( SID_SVX_START + 891 )
+#define SID_ATTR_CHAR_CTL_FONT                          ( SID_SVX_START + 892 )
+#define SID_ATTR_CHAR_CTL_FONTHEIGHT                    ( SID_SVX_START + 893 )
+#define SID_ATTR_CHAR_CTL_LANGUAGE                      ( SID_SVX_START + 894 )
+#define SID_ATTR_CHAR_CTL_POSTURE                       ( SID_SVX_START + 895 )
+#define SID_ATTR_CHAR_CTL_WEIGHT                        ( SID_SVX_START + 896 )
+#define SID_ATTR_CHAR_TWO_LINES                         ( SID_SVX_START + 897 )
+#define SID_ATTR_CHAR_CJK_RUBY                          ( SID_SVX_START + 898 )
+#define SID_ATTR_CHAR_EMPHASISMARK                      ( SID_SVX_START + 899 )
+#define SID_ATTR_CHAR_SCRIPTTYPE                        ( SID_SVX_START + 900 )
+#define SID_ATTR_PARA_SCRIPTSPACE                       ( SID_SVX_START + 901 )
+#define SID_ATTR_PARA_HANGPUNCTUATION                   ( SID_SVX_START + 902 )
+#define SID_ATTR_PARA_FORBIDDEN_RULES                   ( SID_SVX_START + 903 )
+#define SID_ATTR_CHAR_VERTICAL                          ( SID_SVX_START + 905 )
+#define SID_ATTR_CHAR_ROTATED                           ( SID_SVX_START + 910 )
+#define SID_ATTR_CHAR_SCALEWIDTH                        ( SID_SVX_START + 911 )
+#define SID_ATTR_CHAR_WIDTH_FIT_TO_LINE                 ( SID_SVX_START + 919 )
+#define SID_ATTR_CHAR_RELIEF                            ( SID_SVX_START + 920 )
+#define SID_PARA_VERTALIGN                              ( SID_SVX_START + 925 )
+#define SID_ATTR_FRAMEDIRECTION                         ( SID_SVX_START + 944 )
+#define SID_ATTR_PARA_SNAPTOGRID                        ( SID_SVX_START + 945 )
+#define SID_ATTR_PARA_LRSPACE_VERTICAL                  ( SID_SVX_START + 947 )
+#define SID_ATTR_PARA_LEFT_TO_RIGHT                     ( SID_SVX_START + 950 )
+#define SID_ATTR_PARA_RIGHT_TO_LEFT                     ( SID_SVX_START + 951 )
+#define SID_ATTR_CHAR_HIDDEN                            ( SID_SVX_START + 989 )
+#define SID_ATTR_CHAR_LATIN_FONT                        ( SID_SVX_START + 994 )
+#define SID_ATTR_CHAR_LATIN_FONTHEIGHT                  ( SID_SVX_START + 995 )
+#define SID_ATTR_CHAR_LATIN_LANGUAGE                    ( SID_SVX_START + 996 )
+#define SID_ATTR_CHAR_LATIN_POSTURE                     ( SID_SVX_START + 997 )
+#define SID_ATTR_CHAR_LATIN_WEIGHT                      ( SID_SVX_START + 998 )
+#define SID_ATTR_PARA_OUTLINE_LEVEL                     ( SID_SVX_START +1092 )
+
+// this ID didn't exist prior to the svx split
+#define SID_ATTR_CHAR_OVERLINE                          ( SID_EDIT_START + 68 )
+#define SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD               ( SID_EDIT_START + 69 )
+#define SID_ATTR_ALIGN_VER_JUSTIFY_METHOD               ( SID_EDIT_START + 70 )
+#define SID_ATTR_ALIGN_HOR_JUSTIFY                      ( SID_EDIT_START + 71 )
+#define SID_ATTR_ALIGN_VER_JUSTIFY                      ( SID_EDIT_START + 72 )
+
+/*
+// planned, but not doable: changing value of SIDs will break code that uses them for WhichRanges
+#define SID_PARA_VERTALIGN                              ( SID_EDIT_START )
+#define SID_ATTR_BORDER_OUTER                           ( SID_EDIT_START + 1 )
+#define SID_ATTR_BORDER_SHADOW                          ( SID_EDIT_START + 2 )
+#define SID_ATTR_BRUSH                                  ( SID_EDIT_START + 3 )
+#define SID_ATTR_BRUSH_CHAR                             ( SID_EDIT_START + 4 )
+
+
+#define SID_FIELD                                       ( SID_EDIT_START + 7 )
+#define SID_ATTR_FRAMEDIRECTION                         ( SID_EDIT_START + 8 )
+#define SID_ATTR_PARA                                   ( SID_EDIT_START + 9 )
+#define SID_ATTR_PARA_ADJUST                            ( SID_EDIT_START + 10 )
+#define SID_ATTR_PARA_ADJUST_LEFT                       ( SID_EDIT_START + 11 )
+#define SID_ATTR_PARA_BULLET                            ( SID_EDIT_START + 12 )
+#define SID_ATTR_PARA_OUTLLEVEL                         ( SID_EDIT_START + 13 )
+#define SID_ATTR_PARA_REGISTER                          ( SID_EDIT_START + 14 )
+#define SID_ATTR_PARA_PAGENUM                           ( SID_EDIT_START + 15 )
+#define SID_ATTR_PARA_NUMRULE                           ( SID_EDIT_START + 16 )
+#define SID_ATTR_PARA_SCRIPTSPACE                       ( SID_EDIT_START + 17 )
+#define SID_ATTR_PARA_HANGPUNCTUATION                   ( SID_EDIT_START + 18 )
+#define SID_ATTR_PARA_FORBIDDEN_RULES                   ( SID_EDIT_START + 19 )
+#define SID_ATTR_PARA_SNAPTOGRID                        ( SID_EDIT_START + 20 )
+#define SID_ATTR_PARA_LRSPACE_VERTICAL                  ( SID_EDIT_START + 21 )
+#define SID_ATTR_PARA_LEFT_TO_RIGHT                     ( SID_EDIT_START + 22 )
+#define SID_ATTR_PARA_RIGHT_TO_LEFT                     ( SID_EDIT_START + 23 )
+#define SID_ATTR_PARA_OUTLINE_LEVEL                     ( SID_EDIT_START + 24 )
+#define SID_ATTR_PARA_ADJUST_RIGHT                      ( SID_EDIT_START + 25 )
+#define SID_ATTR_PARA_ADJUST_CENTER                     ( SID_EDIT_START + 26 )
+#define SID_ATTR_PARA_ADJUST_BLOCK                      ( SID_EDIT_START + 27 )
+#define SID_ATTR_PARA_ADJUST_BLOCKLINE                  ( SID_EDIT_START + 28 )
+#define SID_ATTR_PARA_LINESPACE                         ( SID_EDIT_START + 29 )
+#define SID_ATTR_PARA_LINESPACE_10                      ( SID_EDIT_START + 30 )
+#define SID_ATTR_PARA_LINESPACE_15                      ( SID_EDIT_START + 31 )
+#define SID_ATTR_PARA_LINESPACE_20                      ( SID_EDIT_START + 32 )
+#define SID_ATTR_PARA_PAGEBREAK                         ( SID_EDIT_START + 33 )
+#define SID_ATTR_PARA_HYPHENZONE                        ( SID_EDIT_START + 34 )
+#define SID_ATTR_PARA_SPLIT                             ( SID_EDIT_START + 35 )
+#define SID_ATTR_PARA_ORPHANS                           ( SID_EDIT_START + 36 )
+#define SID_ATTR_PARA_WIDOWS                            ( SID_EDIT_START + 37 )
+#define SID_ATTR_PARA_ULSPACE                           ( SID_EDIT_START + 38 )
+#define SID_ATTR_PARA_LRSPACE                           ( SID_EDIT_START + 39 )
+#define SID_ATTR_PARA_MODEL                             ( SID_EDIT_START + 40 )
+#define SID_ATTR_PARA_KEEP                              ( SID_EDIT_START + 41 )
+#define SID_ATTR_NUMBERING_RULE                         ( SID_EDIT_START + 42 )
+#define SID_ATTR_LRSPACE                                ( SID_EDIT_START + 43 )
+#define SID_ATTR_ULSPACE                                ( SID_EDIT_START + 44 )
+#define SID_ATTR_TABSTOP                                ( SID_EDIT_START + 45 )
+#define SID_ATTR_TABSTOP_DEFAULTS                       ( SID_EDIT_START + 46 )
+#define SID_ATTR_TABSTOP_POS                            ( SID_EDIT_START + 47 )
+#define SID_ATTR_TABSTOP_OFFSET                         ( SID_EDIT_START + 48 )
+#define SID_ATTR_CHAR                                   ( SID_EDIT_START + 49 )
+#define SID_ATTR_CHAR_FONT                              ( SID_EDIT_START + 50 )
+#define SID_ATTR_CHAR_POSTURE                           ( SID_EDIT_START + 51 )
+#define SID_ATTR_CHAR_WEIGHT                            ( SID_EDIT_START + 52 )
+#define SID_ATTR_CHAR_SHADOWED                          ( SID_EDIT_START + 53 )
+#define SID_ATTR_CHAR_WORDLINEMODE                      ( SID_EDIT_START + 54 )
+#define SID_ATTR_CHAR_CONTOUR                           ( SID_EDIT_START + 55 )
+#define SID_ATTR_CHAR_STRIKEOUT                         ( SID_EDIT_START + 56 )
+#define SID_ATTR_CHAR_UNDERLINE                         ( SID_EDIT_START + 57 )
+#define SID_ATTR_CHAR_FONTHEIGHT                        ( SID_EDIT_START + 58 )
+#define SID_ATTR_CHAR_PROPSIZE                          ( SID_EDIT_START + 59 )
+#define SID_ATTR_CHAR_COLOR                             ( SID_EDIT_START + 60 )
+#define SID_ATTR_CHAR_KERNING                           ( SID_EDIT_START + 61 )
+#define SID_ATTR_CHAR_CASEMAP                           ( SID_EDIT_START + 62 )
+#define SID_ATTR_CHAR_LANGUAGE                          ( SID_EDIT_START + 63 )
+#define SID_ATTR_CHAR_ESCAPEMENT                        ( SID_EDIT_START + 64 )
+#define SID_ATTR_CHAR_FONTLIST                          ( SID_EDIT_START + 65 )
+#define SID_ATTR_CHAR_MAPTYPE                           ( SID_EDIT_START + 66 )
+#define SID_ATTR_CHAR_AUTOKERN                          ( SID_EDIT_START + 67 )
+#define SID_ATTR_CHAR_OVERLINE                          ( SID_EDIT_START + 68 )
+#define SID_ATTR_CHAR_CHARSETCOLOR                      ( SID_EDIT_START + 69 )
+#define SID_ATTR_CHAR_CJK_FONT                          ( SID_EDIT_START + 70 )
+#define SID_ATTR_CHAR_CJK_FONTHEIGHT                    ( SID_EDIT_START + 71 )
+#define SID_ATTR_CHAR_CJK_LANGUAGE                      ( SID_EDIT_START + 72 )
+#define SID_ATTR_CHAR_CJK_POSTURE                       ( SID_EDIT_START + 73 )
+#define SID_ATTR_CHAR_CJK_WEIGHT                        ( SID_EDIT_START + 74 )
+#define SID_ATTR_CHAR_CTL_FONT                          ( SID_EDIT_START + 75 )
+#define SID_ATTR_CHAR_CTL_FONTHEIGHT                    ( SID_EDIT_START + 76 )
+#define SID_ATTR_CHAR_CTL_LANGUAGE                      ( SID_EDIT_START + 77 )
+#define SID_ATTR_CHAR_CTL_POSTURE                       ( SID_EDIT_START + 78 )
+#define SID_ATTR_CHAR_CTL_WEIGHT                        ( SID_EDIT_START + 79 )
+#define SID_ATTR_CHAR_TWO_LINES                         ( SID_EDIT_START + 80 )
+#define SID_ATTR_CHAR_CJK_RUBY                          ( SID_EDIT_START + 81 )
+#define SID_ATTR_CHAR_EMPHASISMARK                      ( SID_EDIT_START + 82 )
+#define SID_ATTR_CHAR_SCRIPTTYPE                        ( SID_EDIT_START + 83 )
+#define SID_ATTR_CHAR_VERTICAL                          ( SID_EDIT_START + 84 )
+#define SID_ATTR_CHAR_ROTATED                           ( SID_EDIT_START + 85 )
+#define SID_ATTR_CHAR_SCALEWIDTH                        ( SID_EDIT_START + 86 )
+#define SID_ATTR_CHAR_WIDTH_FIT_TO_LINE                 ( SID_EDIT_START + 87 )
+#define SID_ATTR_CHAR_RELIEF                            ( SID_EDIT_START + 88 )
+#define SID_ATTR_CHAR_HIDDEN                            ( SID_EDIT_START + 89 )
+#define SID_ATTR_CHAR_LATIN_FONT                        ( SID_EDIT_START + 90 )
+#define SID_ATTR_CHAR_LATIN_FONTHEIGHT                  ( SID_EDIT_START + 91 )
+#define SID_ATTR_CHAR_LATIN_LANGUAGE                    ( SID_EDIT_START + 92 )
+#define SID_ATTR_CHAR_LATIN_POSTURE                     ( SID_EDIT_START + 93 )
+#define SID_ATTR_CHAR_LATIN_WEIGHT                      ( SID_EDIT_START + 94 )
+*/
+
+#if 94 > (SID_EDIT_END-SID_EDIT_START)
+#error Resource-Ueberlauf in #line, #file
+#endif
+
+#define SID_TEXT_ALIGNLEFT                                SID_ATTR_PARA_ADJUST_LEFT
+#define SID_TEXT_ALIGNRIGHT                               SID_ATTR_PARA_ADJUST_RIGHT
+#define SID_TEXT_ALIGNCENTER                              SID_ATTR_PARA_ADJUST_CENTER
+#define SID_TEXT_ALIGNBLOCK                               SID_ATTR_PARA_ADJUST_BLOCK
+#define SID_DRAW_TEXT_VERTICAL                            SID_ATTR_CHAR_VERTICAL
+
+#endif
+
+// ******************************************************************* EOF
+

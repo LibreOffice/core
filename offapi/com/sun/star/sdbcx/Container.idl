@@ -1,0 +1,101 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdbcx_Container_idl__
+#define __com_sun_star_sdbcx_Container_idl__
+
+ module com {  module sun {  module star {  module container {
+ published interface XNameAccess;
+ published interface XIndexAccess;
+ published interface XEnumerationAccess;
+};};};};
+
+ module com {  module sun {  module star {  module util {
+ published interface XRefreshable;
+};};};};
+
+ module com {  module sun {  module star {  module sdbcx {
+
+ published interface XDataDescriptorFactory;
+ published interface XAppend;
+ published interface XDrop;
+
+
+/** describes every container which is used for data definition. Each
+    container must support access to its elements by the element's name or
+    by the element's position.
+
+    <p>
+    Simple enumeration must be supported as well.
+    </p>
+    <p>
+    To reflect the changes with the underlying database, a refresh mechanism
+    needs to be supported.
+    </p>
+    <p>
+    A container may support the possibility to add new elements or to drop
+    existing elements. Additions are always done by descriptors which define the
+    properties of the new element.
+    </p>
+ */
+published service Container
+{
+    // gives access to the elements by name.
+    interface com::sun::star::container::XNameAccess;
+
+    // gives access to the elements by index.
+    interface com::sun::star::container::XIndexAccess;
+
+    // used to create an enumeration of the elements.
+    interface com::sun::star::container::XEnumerationAccess;
+
+
+    /** is optional for implementation. Used to reflect changes.
+     */
+    [optional] interface com::sun::star::util::XRefreshable;
+
+    /** optional for implementation. Allows to create descriptor elements which then could be used to append new elements.
+     */
+    [optional] interface XDataDescriptorFactory;
+
+    /** optional for implementation, provides the possibility of adding
+                a new element to the container.
+     */
+    [optional] interface XAppend;
+
+    /** optional for implementation, provides the possibility of dropping
+                an element from the container.
+     */
+    [optional] interface XDrop;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

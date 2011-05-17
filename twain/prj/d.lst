@@ -1,0 +1,3 @@
+mkdir: %_DEST%\inc%_EXT%\external
+mkdir: %_DEST%\inc%_EXT%\external\twain
+..\%__SRC%\inc\twain.h %_DEST%\inc%_EXT%\external\twain\twain.h

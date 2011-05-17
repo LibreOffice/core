@@ -1,0 +1,164 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include <customizeaddresslistdialog.hrc>
+#include <dbui.hrc>
+#include <helpid.h>
+
+ModalDialog DLG_MM_CUSTOMIZE_ADDRESS_LIST
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    HelpID = HID_MM_CUSTOMIZE_ADDRESS_LIST;
+    Size = MAP_APPFONT ( 200 , 171 ) ;
+    Moveable = TRUE ;
+
+    Text [ en-US ] = "Customize Address List";
+
+    FixedText               FT_FIELDS
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 100 , 8 ) ;
+        Text [ en-US ] = "A~ddress list elements";
+    };
+    ListBox                 LB_FIELDS
+    {
+        HelpID = "sw:ListBox:DLG_MM_CUSTOMIZE_ADDRESS_LIST:LB_FIELDS";
+        Pos = MAP_APPFONT ( 6 , 14 ) ;
+        Size = MAP_APPFONT ( 112 , 120 ) ;
+        Border = TRUE;
+    };
+    PushButton              PB_ADD
+    {
+        HelpID = "sw:PushButton:DLG_MM_CUSTOMIZE_ADDRESS_LIST:PB_ADD";
+        Pos = MAP_APPFONT ( 144 , 3 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Add...";
+    };
+    PushButton              PB_DELETE
+    {
+        HelpID = "sw:PushButton:DLG_MM_CUSTOMIZE_ADDRESS_LIST:PB_DELETE";
+        Pos = MAP_APPFONT ( 144 , 20 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Delete";
+    };
+    PushButton              PB_RENAME
+    {
+        HelpID = "sw:PushButton:DLG_MM_CUSTOMIZE_ADDRESS_LIST:PB_RENAME";
+        Pos = MAP_APPFONT ( 144 , 37 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Rename...";
+    };
+    ImageButton              PB_UP
+    {
+        HelpID = "sw:ImageButton:DLG_MM_CUSTOMIZE_ADDRESS_LIST:PB_UP";
+        Pos = MAP_APPFONT ( 124 , 58 ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
+        SYMBOL = IMAGEBUTTON_ARROW_UP;
+        QuickHelpText[ en-US ] = "Move up";
+    };
+    ImageButton              PB_DOWN
+    {
+        HelpID = "sw:ImageButton:DLG_MM_CUSTOMIZE_ADDRESS_LIST:PB_DOWN";
+        Pos = MAP_APPFONT ( 124 , 75 ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
+        SYMBOL = IMAGEBUTTON_ARROW_DOWN;
+        QuickHelpText[ en-US ] = "Move down";
+    };
+    FixedLine               FL_SEPARATOR
+    {
+        Pos = MAP_APPFONT ( 0 , 140 ) ;
+        Size = MAP_APPFONT ( 200 , 8 ) ;
+    };
+    OKButton                PB_OK
+    {
+        Pos = MAP_APPFONT ( 35 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE;
+    };
+    CancelButton            PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 88 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton              PB_HELP
+    {
+        Pos = MAP_APPFONT ( 144 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+};
+
+ModalDialog DLG_MM_ADD_RENAME_ENTRY
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    HelpID = HID_MM_ADD_RENAME_ENTRY;
+    Size = MAP_APPFONT ( 188 , 60 ) ;
+    Moveable = TRUE ;
+
+    Text [ en-US ] = "Add Element";
+
+    FixedText  FT_FIELDNAME
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text [ en-US ] = "Element ~name";
+    };
+    Edit       ED_FIELDNAME
+    {
+        HelpID = "sw:Edit:DLG_MM_ADD_RENAME_ENTRY:ED_FIELDNAME";
+        Pos = MAP_APPFONT ( 6 , 14 ) ;
+        Size = MAP_APPFONT ( 120 , 12 ) ;
+        Border = TRUE;
+    };
+
+    OKButton                PB_OK
+    {
+        Pos = MAP_APPFONT ( 132 , 3 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE;
+    };
+    CancelButton            PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 132 , 20 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton              PB_HELP
+    {
+        Pos = MAP_APPFONT ( 132 , 40 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    String ST_RENAME_TITLE
+    {
+        Text [ en-US ] = "Rename Element";
+    };
+    String ST_ADD_BUTTON
+    {
+        Text [ en-US ] = "Add";
+    };
+};
+

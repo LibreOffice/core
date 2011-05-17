@@ -1,0 +1,99 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_script_XTypeConverter_idl__
+#define __com_sun_star_script_XTypeConverter_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/reflection/XIdlClass.idl>
+
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+#include <com/sun/star/script/CannotConvertException.idl>
+
+#include <com/sun/star/uno/TypeClass.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module script {
+
+//=============================================================================
+
+/** Interface to provide standard type conversions.
+
+    @see Converter
+*/
+published interface XTypeConverter: com::sun::star::uno::XInterface
+{
+    /** Converts the value <code>aFrom</code> to the specified type
+        <code>xDestinationType</code>.
+        Throws an <type>CannotConvertException</type> if the conversion
+        failed.
+        @param aFrom
+               source value
+        @param xDestinationType
+               destination type
+        @return
+                converted value (any carrying value of type <code>xDestinationType</code>
+    */
+    any convertTo(
+        [in] any aFrom,
+        [in] type xDestinationType )
+        raises( com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::script::CannotConvertException );
+
+    /** Converts the value <code>aFrom</code> to the specified simple type
+        <code>aDestinationType</code>.
+        Throws an <type>CannotConvertException</type> if the conversion
+        failed and an <type scope="com::sun::star::lang">IllegalArgumentException</type>
+        if the destination
+        <type scope="com::sun::star::uno">TypeClass</type> is not simple,
+        e.g. not long or byte.
+
+        @param aFrom
+               source value
+        @param aDestinationType
+               destination type class
+        @return
+                converted value (any carrying value of type <code>aDestinationType</code>
+    */
+    any convertToSimpleType(
+        [in] any aFrom,
+        [in] com::sun::star::uno::TypeClass aDestinationType )
+        raises( com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::script::CannotConvertException );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

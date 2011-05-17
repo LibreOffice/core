@@ -1,0 +1,281 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _PAD_PADIALOG_HRC_
+#define _PAD_PADIALOG_HRC_
+
+#define RID_PADIALOG                        1000
+#define RID_PA_BTN_CANCEL                   1
+#define RID_PA_BTN_STD                      2
+#define RID_PA_BTN_DEL                      3
+#define RID_PA_LB_DEV                       4
+#define RID_PA_FL_PRINTERS                   5
+#define RID_PA_BTN_CONF                     6
+#define RID_PA_BTN_RENAME                   7
+#define RID_PA_TESTPAGE                     8
+#define RID_PA_BTN_FONTS                    9
+#define RID_PA_TXT_DRIVER                   10
+#define RID_PA_TXT_DRIVER_STRING            11
+#define RID_PA_TXT_LOCATION                 12
+#define RID_PA_TXT_LOCATION_STRING          13
+#define RID_PA_TXT_COMMAND                  14
+#define RID_PA_TXT_COMMAND_STRING           15
+#define RID_PA_TXT_COMMENT                  16
+#define RID_PA_TXT_COMMENT_STRING           17
+#define RID_PA_STR_DEFPRT                   18
+#define RID_PA_BTN_ADD                      19
+#define RID_PA_BTN_ADDFONTS                 20
+#define RID_PA_STR_RENAME                   21
+#define RID_PA_FL_SEPBUTTON                 22
+#define RID_PA_FL_CUPSUSAGE                 23
+#define RID_PA_CB_CUPSUSAGE                 23
+
+#define RID_STRINGQUERYDLG         1003
+#define RID_STRQRY_TXT_RENAME         1
+#define RID_STRQRY_EDT_NEWNAME        2
+#define RID_STRQRY_BTN_OK             3
+#define RID_STRQRY_BTN_CANCEL         4
+#define RID_STRQRY_BOX_NEWNAME         5
+
+#define RID_PPDIMPORT_DLG          1004
+#define RID_PPDIMP_BTN_OK             1
+#define RID_PPDIMP_BTN_CANCEL         2
+#define RID_PPDIMP_BTN_SEARCH         3
+#define RID_PPDIMP_TXT_DRIVER         4
+#define RID_PPDIMP_LB_DRIVER          5
+#define RID_PPDIMP_LB_PATH            6
+#define RID_PPDIMP_GROUP_PATH         7
+#define RID_PPDIMP_GROUP_DRIVER       8
+#define RID_PPDIMP_TXT_PATH           9
+#define RID_PPDIMP_STR_LOADINGPPD    10
+
+#define RID_PA_TXT_TESTPAGE_PRINTED 1005
+
+#define RID_ERR_PRINTERNOTREMOVEABLE    1006
+#define RID_ERR_COMMANDCONNECTED      1007
+#define RID_ERR_FILENOTFOUND       1008
+#define RID_ERR_NOWRITE            1009
+#define RID_ERR_NOPRINTER          1013
+#define RID_ERR_FILEOPENREAD       1016
+#define RID_ERR_FILEOPENWRITE      1017
+#define RID_QRY_PRTNAME            1022
+
+#define RID_FONTLISTDLG            1026
+#define RID_FLDLG_BTN_OK              1
+#define RID_FLDLG_LB_FONTS            2
+#define RID_FLDLG_BTN_REMOVE          3
+#define RID_FLDLG_TXT                 4
+
+#define RID_METRICOPTIONS_DLG      1029
+#define RID_METDLG_BTN_OK             1
+#define RID_METDLG_BTN_CANCEL         2
+#define RID_METDLG_BTN_SELECTION      3
+#define RID_METDLG_BTN_ALL            4
+#define RID_METDLG_BTN_CORRECT        5
+
+#define RID_FONTNAMEDIALOG              1030
+#define RID_FNTNM_FIXED                    1
+#define RID_FNTNM_BTN_OK                   2
+#define RID_FNTNM_BTN_REMOVE               3
+#define RID_FNTNM_LB_FONTS                 4
+#define RID_FNTNM_BTN_IMPORT               5
+#define RID_FNTNM_BTN_RENAME                6
+#define RID_FNTNM_STR_RENAME                7
+#define RID_FNTNM_STR_TTCRENAME         8
+#define RID_FNTNM_STR_NOTRENAMABLE          9
+
+#define RID_TXT_REFETCH                 1031
+
+#define RID_BXT_TESTPAGE                1034
+#define RID_BXT_ENVIRONMENT             1035
+
+#define RID_YOU_SURE                    1040
+
+#define RID_ERR_REMOVEDRIVERFAILED          1041
+
+#define RID_BUTTERFLY                   1047
+
+#define RID_COMMAND_TXT_MODIFY              1049
+#define RID_COMMAND_TXT_ADDENTRY            1050
+#define RID_ERR_REMOVESGENPRT               1051
+#define RID_PA_TXT_NOWRITE              1052
+#define RID_DOUBLEFONTFILE              1053
+#define RID_INVALIDFONTPATH             1054
+#define RID_TESTPAGESAVE                1055
+#define RID_FNTNM_FONTNAME_TXT          1056
+#define RID_FNTNM_NOFONT_TXT            1057
+#define RID_QUERY_REMOVEDRIVER          1058
+#define RID_QUERY_REMOVEPRINTER         1059
+#define RID_QUERY_REMOVEFONTFROMLIST        1060
+#define RID_QUERY_DRIVERUSED            1062
+#define RID_ERR_REMOVEDEFAULTDRIVER         1063
+#define RID_ERR_WRITEFONTSDIR           1064
+
+#define RID_FONTIMPORT_DIALOG                   1065
+#define RID_FIMP_BTN_OK                         1
+#define RID_FIMP_BTN_CANCEL                     2
+#define RID_FIMP_EDT_FROM                       3
+#define RID_FIMP_BTN_FROM                       4
+#define RID_FIMP_FL_FROM                        5
+#define RID_FIMP_BTN_SELECTALL                  6
+#define RID_FIMP_BOX_NEWFONTS                   7
+#define RID_FIMP_TXT_HELP                        8
+#define RID_FIMP_STR_IMPORTOP                   9
+#define RID_FIMP_STR_QUERYOVERWRITE             10
+#define RID_FIMP_STR_OVERWRITEALL               11
+#define RID_FIMP_STR_OVERWRITENONE              12
+#define RID_FIMP_STR_NOAFM                      13
+#define RID_FIMP_STR_AFMCOPYFAILED              14
+#define RID_FIMP_STR_FONTCOPYFAILED             15
+#define RID_FIMP_STR_NOWRITEABLEFONTSDIR        16
+#define RID_FIMP_STR_NUMBEROFFONTSIMPORTED      17
+#define RID_FIMP_BOX_LINKONLY                    18
+#define RID_FIMP_BOX_SUBDIRS                     19
+#define RID_FIMP_FL_TARGETOPTS                   20
+
+#define RID_TXT_IMPORTTITLE                      1066
+#define RID_TXT_FONTS2IMPORT                    1067
+#define RID_TXT_TESTPAGE_MODEL                   1068
+#define RID_TXT_TESTPAGE_QUEUE                   1069
+#define RID_TXT_TESTPAGE_DATE                    1070
+#define RID_TXT_TESTPAGE_TIME                    1071
+#define RID_TXT_PRINTERALREADYEXISTS            1072
+#define RID_TXT_PRINTERWITHOUTCOMMAND            1073
+#define RID_TXT_PRINTERADDFAILED                1074
+#define RID_TXT_DRIVERDOESNOTEXIST               1075
+#define RID_TXT_TESTPAGE_COMMENT                1076
+#define RID_TXT_TESTPAGE_NAME                    1077
+
+#define RID_TXT_FONT_ITALIC                  1078
+#define RID_TXT_FONT_OBLIQUE                     1079
+#define RID_TXT_FONT_THIN                        1080
+#define RID_TXT_FONT_ULTRALIGHT              1081
+#define RID_TXT_FONT_LIGHT                       1082
+#define RID_TXT_FONT_SEMILIGHT                   1083
+#define RID_TXT_FONT_SEMIBOLD                    1084
+#define RID_TXT_FONT_BOLD                        1085
+#define RID_TXT_FONT_ULTRABOLD                   1086
+#define RID_TXT_FONT_ULTRACONDENSED          1087
+#define RID_TXT_FONT_EXTRACONDENSED          1088
+#define RID_TXT_FONT_CONDENSED                   1089
+#define RID_TXT_FONT_SEMICONDENSED              1090
+#define RID_TXT_FONT_SEMIEXPANDED                1091
+#define RID_TXT_FONT_EXPANDED                    1092
+#define RID_TXT_FONT_EXTRAEXPANDED               1093
+#define RID_TXT_FONT_ULTRAEXPANDED               1094
+#define RID_TXT_FONT_REGULAR                     1095
+
+#define RID_BMP_SMALL_PRINTER                    1096
+#define RID_BMP_SMALL_FAX                        1098
+#define RID_BMP_SMALL_PDF                        1100
+#define RID_BMP_PRINTER                          1102
+
+#define RID_AFMERROR_OK                         1300
+#define RID_AFMERROR_NO_FONT_NAME               1301
+#define RID_AFMERROR_NO_FULL_NAME               1302
+#define RID_AFMERROR_NO_FAMILY_NAME             1303
+#define RID_AFMERROR_MOVETO_FAILED              1304
+#define RID_AFMERROR_STREAM_READ_FAILED         1305
+#define RID_AFMERROR_STREAM_WRITE_FAILED        1306
+#define RID_AFMERROR_NOT_A_METRIC               1307
+
+#define RID_AFMERROR_BOX_TXT                    1350
+
+#define RID_PROGRESS_DLG                        1400
+#define RID_PROGRESS_BTN_CANCEL                 1
+#define RID_PROGRESS_OPERATION_TXT              2
+#define RID_PROGRESS_PROGRESS_TXT               3
+#define RID_PROGRESS_STATUSBAR                  5
+#define RID_PROGRESS_FILENAME_TXT               6
+
+#define RID_OPERATION_FONTINTEGRATE             1402
+#define RID_OPERATION_FONTADD                   1403
+#define RID_OPERATION_CONVERTMETRIC             1406
+#define RID_OPERATION_FONTCOLLECT               1407
+#define RID_OPERATION_FONTIMPORT                1408
+
+#define RID_ADD_PRINTER_DIALOG                  2000
+#define RID_ADDP_BTN_FINISH                     1
+#define RID_ADDP_BTN_CANCEL                     2
+#define RID_ADDP_BTN_NEXT                       3
+#define RID_ADDP_BTN_PREV                       4
+#define RID_ADDP_LINE                           5
+#define RID_ADDP_CTRL_TITLE                     6
+#define RID_ADDP_STR_TITLE                       127
+
+#define RID_ADDP_PAGE_CHOOSEDEV                 2001
+#define RID_ADDP_CHDEV_TXT_OVER                 1
+#define RID_ADDP_CHDEV_BTN_PRINTER              2
+#define RID_ADDP_CHDEV_BTN_FAX                  3
+#define RID_ADDP_CHDEV_BTN_PDF                  4
+#define RID_ADDP_CHDEV_BTN_OLD                  5
+
+#define RID_ADDP_PAGE_CHOOSEDRIVER              2002
+#define RID_ADDP_CHDRV_TXT_DRIVER               1
+#define RID_ADDP_CHDRV_BOX_DRIVER               2
+#define RID_ADDP_CHDRV_BTN_ADD                  3
+#define RID_ADDP_CHDRV_BTN_REMOVE               4
+#define RID_ADDP_CHDRV_STR_REMOVE               5
+
+#define RID_ADDP_PAGE_NAME                      2003
+#define RID_ADDP_NAME_TXT_NAME                  1
+#define RID_ADDP_NAME_TXT_FAXNAME               2
+#define RID_ADDP_NAME_TXT_PDFNAME               3
+#define RID_ADDP_NAME_EDT_NAME                  4
+#define RID_ADDP_NAME_EDT_FAXNAME               5
+#define RID_ADDP_NAME_EDT_PDFNAME               6
+#define RID_ADDP_NAME_BOX_DEFAULT               7
+#define RID_ADDP_NAME_BOX_FAXSWALLOW            8
+
+#define RID_ADDP_PAGE_COMMAND                   2004
+#define RID_ADDP_CMD_TXT_COMMAND                1
+#define RID_ADDP_CMD_BOX_COMMAND                2
+#define RID_ADDP_CMD_BTN_HELP                   3
+#define RID_ADDP_CMD_STR_FAXHELP                4
+#define RID_ADDP_CMD_STR_PDFHELP                5
+#define RID_ADDP_CMD_TXT_PDFDIR                 6
+#define RID_ADDP_CMD_EDT_PDFDIR                 7
+#define RID_ADDP_CMD_BTN_PDFDIR                 8
+#define RID_ADDP_CMD_BOX_PDFCOMMAND             9
+
+#define RID_ADDP_PAGE_OLDPRINTERS               2005
+#define RID_ADDP_OLD_TXT_PRINTERS               1
+#define RID_ADDP_OLD_BOX_PRINTERS               2
+#define RID_ADDP_OLD_BTN_SELECTALL              3
+
+#define RID_ADDP_PAGE_FAXDRIVER                 2006
+#define RID_ADDP_FAXDRV_TXT_DRIVER              1
+#define RID_ADDP_FAXDRV_BTN_DEFAULT             2
+#define RID_ADDP_FAXDRV_BTN_SELECT              3
+
+#define RID_ADDP_PAGE_PDFDRIVER                 2007
+#define RID_ADDP_PDFDRV_TXT_DRIVER              1
+#define RID_ADDP_PDFDRV_BTN_DEFAULT             2
+#define RID_ADDP_PDFDRV_BTN_DIST                3
+#define RID_ADDP_PDFDRV_BTN_SELECT              4
+
+#endif

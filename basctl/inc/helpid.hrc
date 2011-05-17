@@ -1,0 +1,79 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _BASCTL_HELPID_HRC
+#define _BASCTL_HELPID_HRC
+
+#define HID_BASICIDE_TOOLBOX                              "BASCTL_HID_BASICIDE_TOOLBOX"
+#define HID_BASICIDE_OBJECTS                              "BASCTL_HID_BASICIDE_OBJECTS"
+#define HID_MACRO_OPTIONS                                 "BASCTL_HID_MACRO_OPTIONS"
+#define HID_BASICIDE_BRKPNTS                              "BASCTL_HID_BASICIDE_BRKPNTS"
+#define HID_BASICIDE_MODULS                               "BASCTL_HID_BASICIDE_MODULS"
+#define HID_BASICIDE_LIBS_TP                              "BASCTL_HID_BASICIDE_LIBS_TP"
+#define HID_BASICIDE_LIBS_DLG                             "BASCTL_HID_BASICIDE_LIBS_DLG"
+#define HID_BASICIDE_CONTROLS                             "BASCTL_HID_BASICIDE_CONTROLS"
+#define HID_BASICIDE_MACROS                               "BASCTL_HID_BASICIDE_MACROS"
+#define HID_BASICIDE_LIBS                                 "BASCTL_HID_BASICIDE_LIBS"
+#define HID_BASICIDE_ORG_TC                               "BASCTL_HID_BASICIDE_ORG_TC"
+
+#define HID_BASICIDE_MODULES_TREE                         "BASCTL_HID_BASICIDE_MODULES_TREE"
+#define HID_BASICIDE_LIBS_TREE                            "BASCTL_HID_BASICIDE_LIBS_TREE"
+#define HID_BASICIDE_LIBSDLG_TREE                         "BASCTL_HID_BASICIDE_LIBSDLG_TREE"
+#define HID_BASICIDE_OBJECTCAT                            "BASCTL_HID_BASICIDE_OBJECTCAT"
+
+#define HID_BASICIDE_PROP_BROWSER                         "BASCTL_HID_BASICIDE_PROP_BROWSER"
+
+#define HID_BASICIDE_PROP_BROWSER_LBOX                    "BASCTL_HID_BASICIDE_PROP_BROWSER_LBOX"
+
+#define HID_BASICIDE_OBJCAT_SHOW                          "BASCTL_HID_BASICIDE_OBJCAT_SHOW"
+#define HID_BASICIDE_OBJCAT_PROPS                         "BASCTL_HID_BASICIDE_OBJCAT_PROPS"
+#define HID_BASICIDE_OBJCAT_HELP                          "BASCTL_HID_BASICIDE_OBJCAT_HELP"
+
+#define HID_BASICIDE_BRKDLG                               "BASCTL_HID_BASICIDE_BRKDLG"
+#define HID_BASICIDE_ACTIV                                "BASCTL_HID_BASICIDE_ACTIV"
+#define HID_BASICIDE_BRKPROPS                             "BASCTL_HID_BASICIDE_BRKPROPS"
+#define HID_BASICIDE_REMOVEWATCH                          "BASCTL_HID_BASICIDE_REMOVEWATCH"
+#define HID_BASICIDE_GOTOALL                              "BASCTL_HID_BASICIDE_GOTOALL"
+
+#define HID_BASICIDE_MODULWINDOW                          "BASCTL_HID_BASICIDE_MODULWINDOW"
+#define HID_BASICIDE_DIALOGWINDOW                         "BASCTL_HID_BASICIDE_DIALOGWINDOW"
+
+#define HID_BASICIDE_EDITORWINDOW                         "BASCTL_HID_BASICIDE_EDITORWINDOW"
+#define HID_BASICIDE_BREAKPOINTWINDOW                     "BASCTL_HID_BASICIDE_BREAKPOINTWINDOW"
+#define HID_BASICIDE_WATCHWINDOW                          "BASCTL_HID_BASICIDE_WATCHWINDOW"
+#define HID_BASICIDE_STACKWINDOW                          "BASCTL_HID_BASICIDE_STACKWINDOW"
+#define HID_BASICIDE_TABBAR                               "BASCTL_HID_BASICIDE_TABBAR"
+#define HID_BASICIDE_WATCHWINDOW_EDIT                     "BASCTL_HID_BASICIDE_WATCHWINDOW_EDIT"
+#define HID_BASICIDE_WATCHWINDOW_LIST                     "BASCTL_HID_BASICIDE_WATCHWINDOW_LIST"
+#define HID_BASICIDE_STACKWINDOW_LIST                     "BASCTL_HID_BASICIDE_STACKWINDOW_LIST"
+
+#define HID_BASICIDE_MANAGE_LANGUAGE                      "BASCTL_HID_BASICIDE_MANAGE_LANGUAGE"
+#define HID_BASICIDE_SETDEFAULT_LANGUAGE                  "BASCTL_HID_BASICIDE_SETDEFAULT_LANGUAGE"
+#define HID_BASICIDE_ADDNEW_LANGUAGE                      "BASCTL_HID_BASICIDE_ADDNEW_LANGUAGE"
+#define HID_BASICIDE_ADDNEW_CONTROL                       "BASCTL_HID_BASICIDE_ADDNEW_CONTROL"
+
+#endif
+

@@ -1,0 +1,12 @@
+    <node oor:name="calc_Lotus" oor:op="replace" >
+        <prop oor:name="DetectService"><value>com.sun.star.comp.calc.FormatDetector</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>wk1 wks 123</value></prop>
+        <prop oor:name="MediaType"/>
+        <prop oor:name="Preferred"><value>true</value></prop>
+        <prop oor:name="PreferredFilter"><value>Lotus</value></prop>
+        <prop oor:name="UIName">
+            <value>Lotus</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"/>
+    </node>

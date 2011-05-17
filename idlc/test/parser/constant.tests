@@ -1,0 +1,295 @@
+#*************************************************************************
+#
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# OpenOffice.org - a multi-platform office productivity suite
+#
+# This file is part of OpenOffice.org.
+#
+# OpenOffice.org is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License version 3
+# only, as published by the Free Software Foundation.
+#
+# OpenOffice.org is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License version 3 for more details
+# (a copy is included in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU Lesser General Public License
+# version 3 along with OpenOffice.org.  If not, see
+# <http://www.openoffice.org/license.html>
+# for a copy of the LGPLv3 License.
+#
+#*************************************************************************
+
+EXPECT SUCCESS "constant.tests 1":
+constants C {
+    const boolean C1 = FALSE;
+    const byte C2 = 0;
+    const short C3 = 0;
+    const unsigned short C4 = 0;
+    const long C5 = 0;
+    const unsigned long C6 = 0;
+    const hyper C7 = 0;
+    const unsigned hyper C8 = 0;
+    const float C9 = 0.0;
+    const double C10 = 0.0;
+};
+
+
+EXPECT SUCCESS "constant.tests 2":
+module m {
+    const boolean C1 = FALSE;
+    const byte C2 = 0;
+    const short C3 = 0;
+    const unsigned short C4 = 0;
+    const long C5 = 0;
+    const unsigned long C6 = 0;
+    const hyper C7 = 0;
+    const unsigned hyper C8 = 0;
+    const float C9 = 0.0;
+    const double C10 = 0.0;
+};
+
+
+EXPECT FAILURE "constant.tests 3":
+constants C {
+    const char C1 = 'A';
+};
+
+
+EXPECT FAILURE "constant.tests 4":
+module m {
+    const char C1 = 'A';
+};
+
+
+EXPECT FAILURE "constant.tests 5":
+constants C {
+    const string C1 = "";
+};
+
+
+EXPECT FAILURE "constant.tests 6":
+module m {
+    const string C1 = "";
+};
+
+
+EXPECT SUCCESS "constant.tests 7":
+constants C {};
+
+
+EXPECT SUCCESS "constant.tests 8":
+module m {
+    const byte C1 = -128;
+    const byte C2 = -0200;
+    const byte C3 = -0x80;
+    const byte C4 = 255;
+    const byte C5 = 0377;
+    const byte C6 = 0xFF;
+    const short C7 = -32768;
+    const short C8 = -0100000;
+    const short C9 = -0x8000;
+    const short C10 = 32767;
+    const short C11 = 077777;
+    const short C12 = 0x7FFF;
+    const unsigned short C13 = 0;
+    const unsigned short C14 = 0x0;
+    const unsigned short C15 = 65535;
+    const unsigned short C16 = 0177777;
+    const unsigned short C17 = 0xFFFF;
+    const long C18 = -2147483648;
+    const long C19 = -020000000000;
+    const long C20 = -0x80000000;
+    const long C21 = 2147483647;
+    const long C22 = 017777777777;
+    const long C23 = 0x7FFFFFFF;
+    const unsigned long C24 = 0;
+    const unsigned long C25 = 0x0;
+    const unsigned long C26 = 4294967295;
+    const unsigned long C27 = 037777777777;
+	const unsigned long C28 = 0xFFFFFFFF;
+	const hyper C29 = -9223372036854775808;
+    const hyper C30 = -01000000000000000000000;
+    const hyper C31 = -0x8000000000000000;
+	const hyper C32 = 9223372036854775807;
+    const hyper C33 = 0777777777777777777777;
+    const hyper C34 = 0x7FFFFFFFFFFFFFFF;
+    const unsigned hyper C35 = 0;
+    const unsigned hyper C36 = 0x0;
+    const unsigned hyper C37 = 18446744073709551615;
+    const unsigned hyper C38 = 01777777777777777777777;
+    const unsigned hyper C39 = 0xFFFFFFFFFFFFFFFF;
+};
+
+
+EXPECT FAILURE "constant.tests 9":
+module m { const byte C = -129; };
+
+
+EXPECT FAILURE "constant.tests 10":
+module m { const byte C = -0201; };
+
+
+EXPECT FAILURE "constant.tests 11":
+module m { const byte C = -0x81; };
+
+
+EXPECT FAILURE "constant.tests 12":
+module m { const byte C = 256; };
+
+
+EXPECT FAILURE "constant.tests 13":
+module m { const byte C = 0400; };
+
+
+EXPECT FAILURE "constant.tests 14":
+module m { const byte C = 0x100; };
+
+
+EXPECT FAILURE "constant.tests 15":
+module m { const short C = -32769; };
+
+
+EXPECT FAILURE "constant.tests 16":
+module m { const short C = -0100001; };
+
+
+EXPECT FAILURE "constant.tests 17":
+module m { const short C = -0x8001; };
+
+
+EXPECT FAILURE "constant.tests 18":
+module m { const short C = 32768; };
+
+
+EXPECT FAILURE "constant.tests 19":
+module m { const short C = 0100000; };
+
+
+EXPECT FAILURE "constant.tests 20":
+module m { const short C = 0x8000; };
+
+
+EXPECT FAILURE "constant.tests 21":
+module m { const unsigned short C = -1; };
+
+
+EXPECT FAILURE "constant.tests 22":
+module m { const unsigned short C = -01; };
+
+
+EXPECT FAILURE "constant.tests 23":
+module m { const unsigned short C = -0x1; };
+
+
+EXPECT FAILURE "constant.tests 24":
+module m { const unsigned short C = 65536; };
+
+
+EXPECT FAILURE "constant.tests 25":
+module m { const unsigned short C = 0200000; };
+
+
+EXPECT FAILURE "constant.tests 26":
+module m { const unsigned short C = 0x10000; };
+
+
+EXPECT FAILURE "constant.tests 27":
+module m { const long C = -2147483649; };
+
+
+EXPECT FAILURE "constant.tests 28":
+module m { const long C = -020000000001; };
+
+
+EXPECT FAILURE "constant.tests 29":
+module m { const long C = -0x80000001; };
+
+
+EXPECT FAILURE "constant.tests 30":
+module m { const long C = 2147483648; };
+
+
+EXPECT FAILURE "constant.tests 31":
+module m { const long C = 020000000000; };
+
+
+EXPECT FAILURE "constant.tests 32":
+module m { const long C = 0x80000000; };
+
+
+EXPECT FAILURE "constant.tests 33":
+module m { const unsigned long C = -1; };
+
+
+EXPECT FAILURE "constant.tests 34":
+module m { const unsigned long C = -01; };
+
+
+EXPECT FAILURE "constant.tests 35":
+module m { const unsigned long C = -0x1; };
+
+
+EXPECT FAILURE "constant.tests 36":
+module m { const unsigned long C = 4294967296; };
+
+
+EXPECT FAILURE "constant.tests 37":
+module m { const unsigned long C = 040000000000; };
+
+
+EXPECT FAILURE "constant.tests 38":
+module m { const unsigned long C = 0x100000000; };
+
+
+EXPECT FAILURE "constant.tests 39":
+module m { const hyper C = -9223372036854775809; };
+
+
+EXPECT FAILURE "constant.tests 40":
+module m { const hyper C = -01000000000000000000001; };
+
+
+EXPECT FAILURE "constant.tests 41":
+module m { const hyper C = -0x8000000000000001; };
+
+
+EXPECT FAILURE "constant.tests 42":
+module m { const hyper C = 9223372036854775808; };
+
+
+EXPECT FAILURE "constant.tests 43":
+module m { const hyper C = 01000000000000000000000; };
+
+
+EXPECT FAILURE "constant.tests 44":
+module m { const hyper C = 0x8000000000000000; };
+
+
+EXPECT FAILURE "constant.tests 45":
+module m { const unsigned hyper C = -1; };
+
+
+EXPECT FAILURE "constant.tests 46":
+module m { const unsigned hyper C = -01; };
+
+
+EXPECT FAILURE "constant.tests 47":
+module m { const unsigned hyper C = -0x1; };
+
+
+EXPECT FAILURE "constant.tests 48":
+module m { const unsigned hyper C = 18446744073709551616; };
+
+
+EXPECT FAILURE "constant.tests 49":
+module m { const unsigned hyper C = 02000000000000000000000; };
+
+
+EXPECT FAILURE "constant.tests 50":
+module m { const unsigned hyper C = 0x10000000000000000; };

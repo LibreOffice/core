@@ -1,0 +1,78 @@
+--- misc/zlib-1.2.3/deflate.c
++++ misc/build/zlib-1.2.3/deflate.c
+@@ -288,6 +288,8 @@
+     s->prev   = (Posf *)  ZALLOC(strm, s->w_size, sizeof(Pos));
+     s->head   = (Posf *)  ZALLOC(strm, s->hash_size, sizeof(Pos));
+ 
++    s->high_water = 0;      /* nothing written to s->window yet */
++
+     s->lit_bufsize = 1 << (memLevel + 6); /* 16K elements by default */
+ 
+     overlay = (ushf *) ZALLOC(strm, s->lit_bufsize, sizeof(ush)+2);
+@@ -1355,6 +1355,40 @@
+          */
+ 
+     } while (s->lookahead < MIN_LOOKAHEAD && s->strm->avail_in != 0);
++
++    /* If the WIN_INIT bytes after the end of the current data have never been
++     * written, then zero those bytes in order to avoid memory check reports of
++     * the use of uninitialized (or uninitialised as Julian writes) bytes by
++     * the longest match routines.  Update the high water mark for the next
++     * time through here.  WIN_INIT is set to MAX_MATCH since the longest match
++     * routines allow scanning to strstart + MAX_MATCH, ignoring lookahead.
++     */
++    if (s->high_water < s->window_size) {
++        ulg curr = s->strstart + (ulg)(s->lookahead);
++        ulg init;
++
++        if (s->high_water < curr) {
++            /* Previous high water mark below current data -- zero WIN_INIT
++             * bytes or up to end of window, whichever is less.
++             */
++            init = s->window_size - curr;
++            if (init > WIN_INIT)
++                init = WIN_INIT;
++            zmemzero(s->window + curr, (unsigned)init);
++            s->high_water = curr + init;
++        }
++        else if (s->high_water < (ulg)curr + WIN_INIT) {
++            /* High water mark at or above current data, but below current data
++             * plus WIN_INIT -- zero out to current data plus WIN_INIT, or up
++             * to end of window, whichever is less.
++             */
++            init = (ulg)curr + WIN_INIT - s->high_water;
++            if (init > s->window_size - s->high_water)
++                init = s->window_size - s->high_water;
++            zmemzero(s->window + s->high_water, (unsigned)init);
++            s->high_water += init;
++        }
++    }
+ }
+ 
+ /* ===========================================================================
+--- misc/zlib-1.2.3/deflate.h
++++ misc/build/zlib-1.2.3/deflate.h
+@@ -260,6 +260,12 @@
+      * are always zero.
+      */
+ 
++    ulg high_water;
++    /* High water mark offset in window for initialized bytes -- bytes above
++     * this are set to zero in order to avoid memory check warnings when
++     * longest match routines access bytes past the input.  This is then
++     * updated to the new high water mark.
++     */
+ } FAR deflate_state;
+ 
+ /* Output a byte on the stream.
+@@ -278,6 +284,10 @@
+  * distances are limited to MAX_DIST instead of WSIZE.
+  */
+ 
++#define WIN_INIT MAX_MATCH
++/* Number of bytes after end of data in window to initialize in order to avoid
++   memory checker errors from longest match routines */
++
+         /* in trees.c */
+ void _tr_init         OF((deflate_state *s));
+ int  _tr_tally        OF((deflate_state *s, unsigned dist, unsigned lc));
