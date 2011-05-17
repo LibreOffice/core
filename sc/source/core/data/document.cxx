@@ -361,7 +361,7 @@ sal_Bool ScDocument::InsertTab( SCTAB nPos, const String& rName,
         }
         else
         {
-            if (VALIDTAB(nPos) && (nPos < nTabCount))
+            if (VALIDTAB(nPos) && (nPos < nTabCount))//TODO:REWORK
             {
                 ScRange aRange( 0,0,nPos, MAXCOL,MAXROW,MAXTAB );
                 xColNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,1 );
@@ -384,6 +384,7 @@ sal_Bool ScDocument::InsertTab( SCTAB nPos, const String& rName,
                     if (pTab[i])
                         pTab[i]->UpdateInsertTab(nPos);
 
+                pTab.push_back(NULL);
                 for (i = nTabCount; i > nPos; i--)
                 {
                     pTab[i] = pTab[i - 1];
@@ -1402,7 +1403,7 @@ void ScDocument::DeleteAreaTab( const ScRange& rRange, sal_uInt16 nDelFlag )
 }
 
 
-void ScDocument::InitUndoSelected( ScDocument* pSrcDoc, const ScMarkData& rTabSelection,//TODO:REWORK
+void ScDocument::InitUndoSelected( ScDocument* pSrcDoc, const ScMarkData& rTabSelection,
                                 sal_Bool bColInfo, sal_Bool bRowInfo )
 {
     if (bIsUndo)
@@ -1412,11 +1413,21 @@ void ScDocument::InitUndoSelected( ScDocument* pSrcDoc, const ScMarkData& rTabSe
         xPoolHelper = pSrcDoc->xPoolHelper;
 
         String aString;
-        for (SCTAB nTab = 0; nTab <= MAXTAB; nTab++)
+        for (SCTAB nTab = 0; nTab < rTabSelection.GetLastSelected(); nTab++)
             if ( rTabSelection.GetTableSelect( nTab ) )
             {
-                pTab[nTab] = new ScTable(this, nTab, aString, bColInfo, bRowInfo);
-                nMaxTableNumber = nTab + 1;
+                ScTable* pTable = new ScTable(this, nTab, aString, bColInfo, bRowInfo);
+                if (nTab < static_cast<SCTAB>(pTab.size()))
+                    pTab[nTab] = pTable;
+                else
+                    pTab.push_back(pTable);
+            }
+            else
+            {
+                if (nTab < static_cast<SCTAB>(pTab.size()))
+                    pTab[nTab]=NULL;
+                else
+                    pTab.push_back(NULL);
             }
     }
     else
@@ -1426,7 +1437,7 @@ void ScDocument::InitUndoSelected( ScDocument* pSrcDoc, const ScMarkData& rTabSe
 }
 
 
-void ScDocument::InitUndo( ScDocument* pSrcDoc, SCTAB nTab1, SCTAB nTab2,//TODO:REWORK
+void ScDocument::InitUndo( ScDocument* pSrcDoc, SCTAB nTab1, SCTAB nTab2,
                                 sal_Bool bColInfo, sal_Bool bRowInfo )
 {
     if (bIsUndo)
@@ -1436,8 +1447,16 @@ void ScDocument::InitUndo( ScDocument* pSrcDoc, SCTAB nTab1, SCTAB nTab2,//TODO:
         xPoolHelper = pSrcDoc->xPoolHelper;
 
         String aString;
+        while ( nTab1 > static_cast<SCTAB>(pTab.size()))
+            pTab.push_back(NULL);
         for (SCTAB nTab = nTab1; nTab <= nTab2; nTab++)
-            pTab[nTab] = new ScTable(this, nTab, aString, bColInfo, bRowInfo);
+        {
+            ScTable* pTable = new ScTable(this, nTab, aString, bColInfo, bRowInfo);
+            if (nTab < static_cast<SCTAB>(pTab.size()))
+                pTab[nTab] = pTable;
+            else
+                pTab.push_back(pTable);
+        }
 
         nMaxTableNumber = nTab2 + 1;
     }

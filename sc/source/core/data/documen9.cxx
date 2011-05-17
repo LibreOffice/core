@@ -154,14 +154,14 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
 
         SCTAB nDrawPages = 0;
         SCTAB nTab;
-        for (nTab=0; nTab< static_cast<SCTAB>(pTab.size()); nTab++)
+        for (nTab=0; nTab < static_cast<SCTAB>(pTab.size()); nTab++)
             if (pTab[nTab])
                 nDrawPages = nTab + 1;          // needed number of pages
 
-        for (nTab=0; nTab<nDrawPages; nTab++)
+        for (nTab=0; nTab<nDrawPages && nTab < static_cast<SCTAB>(pTab.size()); nTab++)
         {
             pDrawLayer->ScAddPage( nTab );      // always add page, with or without the table
-            if (nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
+            if (pTab[nTab])
             {
                 String aTabName;
                 pTab[nTab]->GetName(aTabName);

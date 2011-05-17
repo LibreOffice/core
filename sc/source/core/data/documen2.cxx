@@ -744,11 +744,11 @@ sal_Bool ScDocument::GetDataStart( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRo
     return false;
 }
 
-sal_Bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos )
+sal_Bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos )//TODO:REWORK
 {
     if (nOldPos == nNewPos) return false;
     sal_Bool bValid = false;
-    if (VALIDTAB(nOldPos))
+    if (VALIDTAB(nOldPos) && nOldPos < static_cast<SCTAB>(pTab.size()))
     {
         if (pTab[nOldPos])
         {
@@ -760,7 +760,7 @@ sal_Bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos )
                 SetNoListening( sal_True );
                 ScProgress* pProgress = new ScProgress( GetDocumentShell(),
                     ScGlobal::GetRscString(STR_UNDO_MOVE_TAB), GetCodeCount() );
-                if (nNewPos == SC_TAB_APPEND)
+                if (nNewPos = SC_TAB_APPEND || nNewPos >= static_cast<SCTAB>(pTab.size()))
                     nNewPos = nTabCount-1;
 
                 //  Referenz-Updaterei
@@ -824,7 +824,8 @@ sal_Bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos )
 
 sal_Bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyMarked )
 {
-    if (SC_TAB_APPEND == nNewPos ) nNewPos = static_cast<SCTAB>(pTab.size());
+    if (SC_TAB_APPEND == nNewPos  || nNewPos >= static_cast<SCTAB>(pTab.size()))
+        nNewPos = static_cast<SCTAB>(pTab.size());
     String aName;
     GetName(nOldPos, aName);
 
@@ -848,7 +849,7 @@ sal_Bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pO
     {
         if (nNewPos >= static_cast<SCTAB>(pTab.size()))
         {
-            pTab.push_back( new ScTable(this, nMaxTableNumber, aName) );
+            pTab.push_back( new ScTable(this, static_cast<SCTAB>(pTab.size()), aName) );
         }
         else
         {
@@ -876,6 +877,7 @@ sal_Bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pO
                 for (TableContainer::iterator it = pTab.begin(); it != pTab.end(); ++it)
                     if (*it && it != (pTab.begin() + nOldPos))
                         (*it)->UpdateInsertTab(nNewPos);
+                pTab.push_back(NULL);
                 for (i = static_cast<SCTAB>(pTab.size())-1; i > nNewPos; i--)
                     pTab[i] = pTab[i - 1];
                 if (nNewPos <= nOldPos)

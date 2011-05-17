@@ -44,7 +44,8 @@
 //------------------------------------------------------------------------
 
 ScMarkData::ScMarkData() :
-    pMultiSel( NULL )
+    pMultiSel( NULL ),
+    maTabMarked()
 {
     ResetMark();
 }
@@ -193,7 +194,7 @@ void ScMarkData::SelectTable( SCTAB nTab, bool bNew )
     }
     else
     {
-        maTabMarked.erase( maTabMarked.find( nTab ) );
+        maTabMarked.erase( nTab );
     }
 }
 
@@ -219,6 +220,15 @@ SCTAB ScMarkData::GetFirstSelected() const
         return (*maTabMarked.begin());
 
     OSL_FAIL("GetFirstSelected: keine markiert");
+    return 0;
+}
+
+SCTAB ScMarkData::GetLastSelected() const
+{
+    if (maTabMarked.size() > 0)
+        return (*maTabMarked.rbegin());
+
+    OSL_FAIL("GetLastSelected: keine markiert");
     return 0;
 }
 

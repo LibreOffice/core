@@ -85,6 +85,7 @@ public:
     void        SelectOneTable( SCTAB nTab );
     SCTAB       GetSelectCount() const;
     SCTAB       GetFirstSelected() const;
+    SCTAB       GetLastSelected() const;
 
     void        SetMarkNegative( sal_Bool bFlag )   { bMarkIsNeg = bFlag; }
     sal_Bool        IsMarkNegative() const          { return bMarkIsNeg;  }
