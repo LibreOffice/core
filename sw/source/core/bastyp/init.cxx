@@ -729,7 +729,7 @@ void _InitCore()
 
     pGlobalOLEExcludeList = new SvPtrarr;
 
-    const SvxSwAutoFmtFlags& rAFlags = SvxAutoCorrCfg::Get()->GetAutoCorrect()->GetSwFlags();
+    const SvxSwAutoFmtFlags& rAFlags = SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags();
     SwDoc::pACmpltWords = new SwAutoCompleteWord( rAFlags.nAutoCmpltListLen,
                                             rAFlags.nAutoCmpltWordLen );
 }
