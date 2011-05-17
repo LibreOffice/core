@@ -162,8 +162,7 @@ void MkFilter::Filter()
         {
             fprintf( stderr, "." );
             MkLine *pMkLine = new MkLine();
-            ByteString *pStr = new ByteString( aLineBuf );
-            pMkLine->aLine = *pStr;
+            pMkLine->aLine = aLineBuf;
             pMkLine->bOut = sal_False;
 
             pLst->push_back( pMkLine );
@@ -178,8 +177,7 @@ void MkFilter::Filter()
                 fprintf( stderr, ";\nunroll end\n" );
                 MkLine *p_MkLine = new MkLine();
                 p_MkLine->bHier = sal_True;
-                ByteString *pByteString = new ByteString("# do not delete this line === mkfilter3i\n");
-                p_MkLine->aLine = *pByteString;
+                p_MkLine->aLine = ByteString("# do not delete this line === mkfilter3i\n");
                 p_MkLine->bOut = sal_False;
                 p_MkLine->pPrivateTnrLst = pTnrLst;
                 pTnrLst = new ByteStringList();
@@ -187,8 +185,7 @@ void MkFilter::Filter()
                 nState = 0;
                 bInTnrList = sal_False;
             }
-            ByteString *pStr = new ByteString( aLineBuf );
-            pMkLine->aLine = *pStr;
+            pMkLine->aLine = ByteString( aLineBuf );
             pMkLine->bOut = sal_False;
 
             if ( bInTnrList )
