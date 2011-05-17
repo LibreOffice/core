@@ -29,7 +29,6 @@
 #define _SWTHREADJOINER_HXX
 
 #include "com/sun/star/util/XJobManager.hpp"
-#include <osl/mutex.hxx>
 
 /** Testing
 
@@ -45,7 +44,6 @@ class SwThreadJoiner
 
     private:
         static ::com::sun::star::uno::Reference< ::com::sun::star::util::XJobManager > mpThreadJoiner;
-        static osl::Mutex* mpGetJoinerMutex;
 
         SwThreadJoiner();
 };

@@ -30,6 +30,8 @@
 #include <finalthreadmanager.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
+#include <osl/mutex.hxx>
+#include <rtl/instance.hxx>
 
 /** Testing
 
@@ -38,11 +40,15 @@
 using namespace ::com::sun::star;
 
 uno::Reference< util::XJobManager > SwThreadJoiner::mpThreadJoiner;
-osl::Mutex* SwThreadJoiner::mpGetJoinerMutex = new osl::Mutex();
+
+namespace
+{
+    class theJoinerMutex : public rtl::Static<osl::Mutex, theJoinerMutex> {};
+}
 
 uno::Reference< util::XJobManager >& SwThreadJoiner::GetThreadJoiner()
 {
-    osl::MutexGuard aGuard(*mpGetJoinerMutex);
+    osl::MutexGuard aGuard(theJoinerMutex::get());
 
     if ( !mpThreadJoiner.is() )
     {
