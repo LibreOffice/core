@@ -46,6 +46,7 @@
 
 #include <xmloff/attrlist.hxx>
 
+#include <libvisio/libvisio.h>
 #include "filter/DocumentHandler.hxx"
 #include "filter/OdgGenerator.hxx"
 #include "VisioImportFilter.hxx"

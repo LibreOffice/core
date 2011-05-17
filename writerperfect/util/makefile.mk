@@ -25,6 +25,12 @@ LIBWPG=$(LIBWPG_LIBS)
 LIBWPG=-lwpglib
 .ENDIF
 
+.IF "$(SYSTEM_LIBVISIO)" == "YES"
+LIBWPG=$(LIBVISIO_LIBS)
+.ELSE
+LIBWPG=-lvisiolib
+.ENDIF
+
 .ELSE
 
 LIBWPD=$(LIBPRE) wpdlib.lib
@@ -117,11 +123,11 @@ SHL3LIBS = $(LIB3TARGET)
 SHL3VERSIONMAP = $(SOLARENV)/src/component.map
 DEF3NAME = $(SHL3TARGET)
 
-LIB4TARGET= $(SLB)$/wpgimport.lib
+LIB4TARGET= $(SLB)$/visioimport.lib
 LIB4FILES= \
     $(SLB)$/stream.lib  \
     $(SLB)$/filter.lib  \
-    $(SLB)$/vpsimp.lib
+    $(SLB)$/vsdimp.lib
 SHL4LIBS=$(LIB4TARGET)
 SHL4STDLIBS+= \
     $(SVLLIB)	\
