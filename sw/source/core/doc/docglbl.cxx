@@ -91,7 +91,7 @@ sal_Bool SwDoc::GenerateHTMLDoc( const String& rPath,
 }
 
 // two helpers for outline mode
-SwNodePtr GetSttNode( SwOutlineNodes* pOutlNds, int nOutlineLevel, sal_uInt16* nOutl )
+SwNodePtr GetStartNode( SwOutlineNodes* pOutlNds, int nOutlineLevel, sal_uInt16* nOutl )
 {
     SwNodePtr pNd;
 
@@ -124,7 +124,7 @@ SwNodePtr GetEndNode( SwOutlineNodes* pOutlNds, int nOutlineLevel, sal_uInt16* n
 }
 
 // two helpers for collection mode
-SwNodePtr GetSttNode( const SwOutlineNodes* pOutlNds, const SwTxtFmtColl* pSplitColl, sal_uInt16* nOutl )
+SwNodePtr GetStartNode( const SwOutlineNodes* pOutlNds, const SwTxtFmtColl* pSplitColl, sal_uInt16* nOutl )
 {
     SwNodePtr pNd;
     for( ; *nOutl < pOutlNds->Count(); ++(*nOutl) )
@@ -173,7 +173,7 @@ sal_Bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, sal_Bool bOu
 
     sal_uInt16 nOutl = 0;
     SwOutlineNodes* pOutlNds = (SwOutlineNodes*)&GetNodes().GetOutLineNds();
-    SwNodePtr pSttNd;
+    SwNodePtr pStartNd;
 
     if ( !bOutline) {
     if( pSplitColl )
@@ -260,11 +260,11 @@ sal_Bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, sal_Bool bOu
 
     do {
         if( bOutline )
-            pSttNd = GetSttNode( pOutlNds, nOutlineLevel, &nOutl );
+            pStartNd = GetStartNode( pOutlNds, nOutlineLevel, &nOutl );
         else
-            pSttNd = GetSttNode( pOutlNds, pSplitColl, &nOutl );
+            pStartNd = GetStartNode( pOutlNds, pSplitColl, &nOutl );
 
-        if( pSttNd )
+        if( pStartNd )
         {
             SwNodePtr pEndNd;
             if( bOutline )
@@ -276,7 +276,7 @@ sal_Bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, sal_Bool bOu
 
             // die Nodes komplett rausschreiben
             String sFileName;
-            if( pSttNd->GetIndex() + 1 < aEndIdx.GetIndex() )
+            if( pStartNd->GetIndex() + 1 < aEndIdx.GetIndex() )
             {
                 SfxObjectShellLock xDocSh( new SwDocShell( SFX_CREATE_MODE_INTERNAL ));
                 if( xDocSh->DoInitNew( 0 ) )
@@ -303,7 +303,7 @@ sal_Bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, sal_Bool bOu
                     String sTitle( xDocProps->getTitle() );
                     if( sTitle.Len() )
                         sTitle.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ));
-                    sTitle += ((SwTxtNode*)pSttNd)->GetExpandTxt();
+                    sTitle += ((SwTxtNode*)pStartNd)->GetExpandTxt();
                     xDocProps->setTitle( sTitle );
 
                     // Vorlagen ersetzen
@@ -313,7 +313,7 @@ sal_Bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, sal_Bool bOu
                     if( pOutlineRule )
                         pDoc->SetOutlineNumRule( *pOutlineRule );
 
-                    SwNodeRange aRg( *pSttNd, 0, aEndIdx.GetNode() );
+                    SwNodeRange aRg( *pStartNd, 0, aEndIdx.GetNode() );
                     SwNodeIndex aTmpIdx( pDoc->GetNodes().GetEndOfContent() );
                     GetNodes()._Copy( aRg, aTmpIdx, sal_False );
 
@@ -364,10 +364,10 @@ sal_Bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, sal_Bool bOu
                         // loesche alle Nodes im Bereich und setze im "Start-
                         // Node" den Link auf das gespeicherte Doc
                         sal_uLong nNodeDiff = aEndIdx.GetIndex() -
-                                            pSttNd->GetIndex() - 1;
+                                            pStartNd->GetIndex() - 1;
                         if( nNodeDiff )
                         {
-                            SwPaM aTmp( *pSttNd, aEndIdx.GetNode(), 1, -1 );
+                            SwPaM aTmp( *pStartNd, aEndIdx.GetNode(), 1, -1 );
                             aTmp.GetPoint()->nContent.Assign( 0, 0 );
                             aTmp.GetMark()->nContent.Assign( 0, 0 );
                             SwNodeIndex aSIdx( aTmp.GetMark()->nNode );
@@ -409,13 +409,13 @@ sal_Bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, sal_Bool bOu
 
                         // dann setze im StartNode noch den Link:
                         SwFmtINetFmt aINet( sFileName , aEmptyStr );
-                        SwTxtNode* pTNd = (SwTxtNode*)pSttNd;
+                        SwTxtNode* pTNd = (SwTxtNode*)pStartNd;
                         pTNd->InsertItem( aINet, 0, pTNd->GetTxt().Len() );
 
                         // wenn der nicht mehr gefunden wird, kann das nur
                         // ein Bug sein!
-                        if( !pOutlNds->Seek_Entry( pSttNd, &nOutl ))
-                            pSttNd = 0;
+                        if( !pOutlNds->Seek_Entry( pStartNd, &nOutl ))
+                            pStartNd = 0;
                         ++nOutl;
                     }
                     break;
@@ -436,13 +436,13 @@ sal_Bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, sal_Bool bOu
                         // JP 06.07.99 - Bug 67361 - is any Section ends or
                         // starts in the new sectionrange, they must end or
                         // start before or behind the range!
-                        SwSectionNode* pSectNd = pSttNd->FindSectionNode();
+                        SwSectionNode* pSectNd = pStartNd->FindSectionNode();
                         while( pSectNd && pSectNd->EndOfSectionIndex()
                                 <= aEndIdx.GetIndex() )
                         {
                             const SwNode* pSectEnd = pSectNd->EndOfSectionNode();
                             if( pSectNd->GetIndex() + 1 ==
-                                    pSttNd->GetIndex() )
+                                    pStartNd->GetIndex() )
                             {
                                 sal_Bool bMvIdx = aEndIdx == *pSectEnd;
                                 DelSectionFmt( pSectNd->GetSection().GetFmt() );
@@ -451,16 +451,16 @@ sal_Bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, sal_Bool bOu
                             }
                             else
                             {
-                                SwNodeRange aRg( *pSttNd, *pSectEnd );
+                                SwNodeRange aRg( *pStartNd, *pSectEnd );
                                 SwNodeIndex aIdx( *pSectEnd, 1 );
                                 GetNodes()._MoveNodes( aRg, GetNodes(), aIdx );
                             }
-                            pSectNd = pSttNd->FindSectionNode();
+                            pSectNd = pStartNd->FindSectionNode();
                         }
 
                         pSectNd = aEndIdx.GetNode().FindSectionNode();
                         while( pSectNd && pSectNd->GetIndex() >
-                                pSttNd->GetIndex() )
+                                pStartNd->GetIndex() )
                         {
                             // #i15712# don't attempt to split sections if
                             // they are fully enclosed in [pSectNd,aEndIdx].
@@ -471,12 +471,12 @@ sal_Bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, sal_Bool bOu
                                 GetNodes()._MoveNodes( aRg, GetNodes(), aIdx );
                             }
 
-                            pSectNd = pSttNd->FindSectionNode();
+                            pSectNd = pStartNd->FindSectionNode();
                         }
 
                         // -> #i26762#
                         // Ensure order of start and end of section is sane.
-                        SwNodeIndex aStartIdx(*pSttNd);
+                        SwNodeIndex aStartIdx(*pStartNd);
 
                         if (aEndIdx >= aStartIdx)
                         {
@@ -496,7 +496,7 @@ sal_Bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, sal_Bool bOu
                 }
             }
         }
-    } while( pSttNd );
+    } while( pStartNd );
 
     if( pOutlNds != &GetNodes().GetOutLineNds() )
         delete pOutlNds;
