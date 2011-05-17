@@ -154,6 +154,11 @@ void SfxApplication::Deinitialize()
     //TODO/CLEANTUP
     //ReleaseArgs could be used instead!
     pAppData_Impl->pPool = NULL;
+    NoChaos::ReleaseItemPool();
+
+    delete pAppData_Impl->m_pSbxErrorHdl;
+    delete pAppData_Impl->m_pSoErrorHdl;
+    delete pAppData_Impl->m_pToolsErrorHdl;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

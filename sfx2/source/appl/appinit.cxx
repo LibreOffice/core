@@ -257,16 +257,15 @@ bool SfxApplication::Initialize_Impl()
     // not processed are given to SFX as Errorcode 1.
     new SimpleErrorHandler;
 #endif
-    new SfxErrorHandler(RID_ERRHDL, ERRCODE_AREA_TOOLS, ERRCODE_AREA_LIB1);
-
-    new SfxErrorHandler(
+    pAppData_Impl->m_pToolsErrorHdl = new SfxErrorHandler(
+        RID_ERRHDL, ERRCODE_AREA_TOOLS, ERRCODE_AREA_LIB1);
+    pAppData_Impl->m_pSoErrorHdl = new SfxErrorHandler(
         RID_SO_ERROR_HANDLER, ERRCODE_AREA_SO, ERRCODE_AREA_SO_END);
-    new SfxErrorHandler(
+    pAppData_Impl->m_pSbxErrorHdl = new SfxErrorHandler(
         RID_BASIC_START, ERRCODE_AREA_SBX, ERRCODE_AREA_SBX_END );
 
     // diverse Pointer
     SfxPickList::GetOrCreate( SvtHistoryOptions().GetSize( ePICKLIST ) );
-
 
     DBG_ASSERT( !pAppData_Impl->pAppDispat, "AppDispatcher already exists" );
     pAppData_Impl->pAppDispat = new SfxDispatcher((SfxDispatcher*)0);
