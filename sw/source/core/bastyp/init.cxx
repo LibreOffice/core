@@ -134,6 +134,8 @@
 
 #include <fmtmeta.hxx>
 
+#include <rtl/instance.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 
@@ -446,7 +448,6 @@ SwCheckIt* pCheckIt = 0;
 CharClass* pAppCharClass = 0;
 
 CollatorWrapper* pCollator = 0, *pCaseCollator = 0;
-::utl::TransliterationWrapper* pTransWrp = 0;
 
 /******************************************************************************
  *  void _InitCore()
@@ -881,21 +882,37 @@ CollatorWrapper& GetAppCaseCollator()
     return *pCaseCollator;
 }
 
+namespace
+{
+    class TransWrp
+    {
+    private:
+        boost::scoped_ptr< ::utl::TransliterationWrapper > xTransWrp;
+    public:
+        TransWrp()
+        {
+            uno::Reference< lang::XMultiServiceFactory > xMSF =
+                ::comphelper::getProcessServiceFactory();
+
+            xTransWrp.reset(new ::utl::TransliterationWrapper( xMSF,
+                    i18n::TransliterationModules_IGNORE_CASE |
+                    i18n::TransliterationModules_IGNORE_KANA |
+                    i18n::TransliterationModules_IGNORE_WIDTH ));
+
+            xTransWrp->loadModuleIfNeeded( static_cast<sal_uInt16>(GetAppLanguage()) );
+        }
+        const ::utl::TransliterationWrapper& getTransliterationWrapper() const
+        {
+            return *xTransWrp;
+        }
+    };
+
+    class theTransWrp : public rtl::Static<TransWrp, theTransWrp> {};
+}
+
 const ::utl::TransliterationWrapper& GetAppCmpStrIgnore()
 {
-    if( !pTransWrp )
-    {
-        uno::Reference<
-            lang::XMultiServiceFactory > xMSF =
-                                    ::comphelper::getProcessServiceFactory();
-
-        pTransWrp = new ::utl::TransliterationWrapper( xMSF,
-                i18n::TransliterationModules_IGNORE_CASE |
-                i18n::TransliterationModules_IGNORE_KANA |
-                i18n::TransliterationModules_IGNORE_WIDTH );
-        pTransWrp->loadModuleIfNeeded( static_cast<sal_uInt16>(GetAppLanguage()) );
-    }
-    return *pTransWrp;
+    return theTransWrp::get().getTransliterationWrapper();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
