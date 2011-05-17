@@ -40,14 +40,11 @@ AFLAGS=/c /Cp /coff
 # exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
 ARCH_FLAGS*=-march=pentium
 
-CXX*=gcc
-### Der gcc vertraegt kein Semikolon im Include-Pfad         RT
-# old:
-#CFLAGS=-c -Wall -I$(INCLUDE) $(OLE2DEF)
-# new:
-#CYGINC=$(INCLUDE:s/-I /-I/:+"  ":s/;/ -I/:s/-I  //:s/   / /)
-CFLAGS=-fmessage-length=0 -c -nostdinc $(OLE2DEF)
-###
+CC*=i686-w64-mingw32-gcc
+CXX*=i686-w64-mingw32-g++
+
+CFLAGS+=-fmessage-length=0 -c
+
 CFLAGSCC=-pipe $(ARCH_FLAGS)
 CFLAGSCXX=-pipe $(ARCH_FLAGS)
 CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
