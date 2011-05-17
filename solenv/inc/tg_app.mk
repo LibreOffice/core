@@ -164,7 +164,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @echo mingw
 .IF "$(APP$(TNR)LINKRES)" != "" || "$(APP$(TNR)RES)" != ""
     @cat $(APP$(TNR)LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP$(TNR)RES)) >  $(MISC)/$(@:b)_all.res
-    windres $(MISC)/$(@:b)_all.res $(APP$(TNR)RESO)
+    $(WINDRES) $(MISC)/$(@:b)_all.res $(APP$(TNR)RESO)
 .ENDIF
     @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(MINGWSSTDOBJ) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
         $(APP$(TNR)BASEX) $(APP$(TNR)STACKN) -o $@ $(APP$(TNR)OBJS) \

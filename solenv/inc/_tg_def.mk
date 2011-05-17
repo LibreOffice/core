@@ -26,7 +26,7 @@ $(DEF1EXPORTFILE) : $(SHL1VERSIONMAP)
     $(COMMAND_ECHO)-$(GREP) "\*\|?" $@ > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
-    $(COMMAND_ECHO)nm -gP $(SHL1OBJS) \
+    $(COMMAND_ECHO)$(NM) -gP $(SHL1OBJS) \
         `$(TYPE) /dev/null $(foreach,j,$(SHL1LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
         | $(SOLARENV)/bin/addsym-mingw.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
@@ -195,7 +195,7 @@ $(DEF2EXPORTFILE) : $(SHL2VERSIONMAP)
     $(COMMAND_ECHO)-$(GREP) "\*\|?" $@ > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
-    $(COMMAND_ECHO)nm -gP $(SHL2OBJS) \
+    $(COMMAND_ECHO)$(NM) -gP $(SHL2OBJS) \
         `$(TYPE) /dev/null $(foreach,j,$(SHL2LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
         | $(SOLARENV)/bin/addsym-mingw.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
@@ -364,7 +364,7 @@ $(DEF3EXPORTFILE) : $(SHL3VERSIONMAP)
     $(COMMAND_ECHO)-$(GREP) "\*\|?" $@ > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
-    $(COMMAND_ECHO)nm -gP $(SHL3OBJS) \
+    $(COMMAND_ECHO)$(NM) -gP $(SHL3OBJS) \
         `$(TYPE) /dev/null $(foreach,j,$(SHL3LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
         | $(SOLARENV)/bin/addsym-mingw.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
@@ -533,7 +533,7 @@ $(DEF4EXPORTFILE) : $(SHL4VERSIONMAP)
     $(COMMAND_ECHO)-$(GREP) "\*\|?" $@ > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
-    $(COMMAND_ECHO)nm -gP $(SHL4OBJS) \
+    $(COMMAND_ECHO)$(NM) -gP $(SHL4OBJS) \
         `$(TYPE) /dev/null $(foreach,j,$(SHL4LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
         | $(SOLARENV)/bin/addsym-mingw.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
@@ -702,7 +702,7 @@ $(DEF5EXPORTFILE) : $(SHL5VERSIONMAP)
     $(COMMAND_ECHO)-$(GREP) "\*\|?" $@ > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
-    $(COMMAND_ECHO)nm -gP $(SHL5OBJS) \
+    $(COMMAND_ECHO)$(NM) -gP $(SHL5OBJS) \
         `$(TYPE) /dev/null $(foreach,j,$(SHL5LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
         | $(SOLARENV)/bin/addsym-mingw.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
@@ -871,7 +871,7 @@ $(DEF6EXPORTFILE) : $(SHL6VERSIONMAP)
     $(COMMAND_ECHO)-$(GREP) "\*\|?" $@ > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
-    $(COMMAND_ECHO)nm -gP $(SHL6OBJS) \
+    $(COMMAND_ECHO)$(NM) -gP $(SHL6OBJS) \
         `$(TYPE) /dev/null $(foreach,j,$(SHL6LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
         | $(SOLARENV)/bin/addsym-mingw.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
@@ -1040,7 +1040,7 @@ $(DEF7EXPORTFILE) : $(SHL7VERSIONMAP)
     $(COMMAND_ECHO)-$(GREP) "\*\|?" $@ > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
-    $(COMMAND_ECHO)nm -gP $(SHL7OBJS) \
+    $(COMMAND_ECHO)$(NM) -gP $(SHL7OBJS) \
         `$(TYPE) /dev/null $(foreach,j,$(SHL7LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
         | $(SOLARENV)/bin/addsym-mingw.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
@@ -1209,7 +1209,7 @@ $(DEF8EXPORTFILE) : $(SHL8VERSIONMAP)
     $(COMMAND_ECHO)-$(GREP) "\*\|?" $@ > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
-    $(COMMAND_ECHO)nm -gP $(SHL8OBJS) \
+    $(COMMAND_ECHO)$(NM) -gP $(SHL8OBJS) \
         `$(TYPE) /dev/null $(foreach,j,$(SHL8LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
         | $(SOLARENV)/bin/addsym-mingw.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
@@ -1378,7 +1378,7 @@ $(DEF9EXPORTFILE) : $(SHL9VERSIONMAP)
     $(COMMAND_ECHO)-$(GREP) "\*\|?" $@ > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
-    $(COMMAND_ECHO)nm -gP $(SHL9OBJS) \
+    $(COMMAND_ECHO)$(NM) -gP $(SHL9OBJS) \
         `$(TYPE) /dev/null $(foreach,j,$(SHL9LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
         | $(SOLARENV)/bin/addsym-mingw.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
@@ -1547,7 +1547,7 @@ $(DEF10EXPORTFILE) : $(SHL10VERSIONMAP)
     $(COMMAND_ECHO)-$(GREP) "\*\|?" $@ > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
-    $(COMMAND_ECHO)nm -gP $(SHL10OBJS) \
+    $(COMMAND_ECHO)$(NM) -gP $(SHL10OBJS) \
         `$(TYPE) /dev/null $(foreach,j,$(SHL10LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
         | $(SOLARENV)/bin/addsym-mingw.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated

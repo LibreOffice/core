@@ -267,16 +267,16 @@ $(SHL1TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL1TARGET:b) >> $(MISC)/$(SHL1DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL1DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL1DEFAULTRES:b).rc
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL1DEFAULTRES:b).rc $(RCFLAGSOUTRES)$(SHL1DEFAULTRES)
 .ENDIF			# "$(SHL1DEFAULTRES)"!=""
 .IF "$(SHL1ALLRES)"!=""
     $(COMMAND_ECHO)$(TYPE) $(SHL1ALLRES) > $(SHL1LINKRES)
 .IF "$(COM)"=="GCC"
-    windres $(SHL1LINKRES) $(SHL1LINKRESO)
+    $(WINDRES) $(SHL1LINKRES) $(SHL1LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL1ALLRES)"!=""
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
-    @echo dlltool --dllname $(SHL1TARGET)$(DLLPOST) \
+    @echo $(DLLTOOL) --dllname $(SHL1TARGET)$(DLLPOST) \
         --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_1.cmd
     @noop $(assign ALL1OBJLIST:=$(STDOBJ) $(SHL1OBJS) $(SHL1LINKRESO) $(shell $(TYPE) /dev/null $(SHL1LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB1NAME)"!=""	# do not have to include objs
@@ -736,16 +736,16 @@ $(SHL2TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL2TARGET:b) >> $(MISC)/$(SHL2DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL2DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL2DEFAULTRES:b).rc
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL2DEFAULTRES:b).rc $(RCFLAGSOUTRES)$(SHL2DEFAULTRES)
 .ENDIF			# "$(SHL2DEFAULTRES)"!=""
 .IF "$(SHL2ALLRES)"!=""
     $(COMMAND_ECHO)$(TYPE) $(SHL2ALLRES) > $(SHL2LINKRES)
 .IF "$(COM)"=="GCC"
-    windres $(SHL2LINKRES) $(SHL2LINKRESO)
+    $(WINDRES) $(SHL2LINKRES) $(SHL2LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL2ALLRES)"!=""
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
-    @echo dlltool --dllname $(SHL2TARGET)$(DLLPOST) \
+    @echo $(DLLTOOL) --dllname $(SHL2TARGET)$(DLLPOST) \
         --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_2.cmd
     @noop $(assign ALL2OBJLIST:=$(STDOBJ) $(SHL2OBJS) $(SHL2LINKRESO) $(shell $(TYPE) /dev/null $(SHL2LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB2NAME)"!=""	# do not have to include objs
@@ -1205,16 +1205,16 @@ $(SHL3TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL3TARGET:b) >> $(MISC)/$(SHL3DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL3DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL3DEFAULTRES:b).rc
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL3DEFAULTRES:b).rc $(RCFLAGSOUTRES)$(SHL3DEFAULTRES)
 .ENDIF			# "$(SHL3DEFAULTRES)"!=""
 .IF "$(SHL3ALLRES)"!=""
     $(COMMAND_ECHO)$(TYPE) $(SHL3ALLRES) > $(SHL3LINKRES)
 .IF "$(COM)"=="GCC"
-    windres $(SHL3LINKRES) $(SHL3LINKRESO)
+    $(WINDRES) $(SHL3LINKRES) $(SHL3LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL3ALLRES)"!=""
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
-    @echo dlltool --dllname $(SHL3TARGET)$(DLLPOST) \
+    @echo $(DLLTOOL) --dllname $(SHL3TARGET)$(DLLPOST) \
         --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_3.cmd
     @noop $(assign ALL3OBJLIST:=$(STDOBJ) $(SHL3OBJS) $(SHL3LINKRESO) $(shell $(TYPE) /dev/null $(SHL3LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB3NAME)"!=""	# do not have to include objs
@@ -1674,16 +1674,16 @@ $(SHL4TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL4TARGET:b) >> $(MISC)/$(SHL4DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL4DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL4DEFAULTRES:b).rc
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL4DEFAULTRES:b).rc $(RCFLAGSOUTRES)$(SHL4DEFAULTRES)
 .ENDIF			# "$(SHL4DEFAULTRES)"!=""
 .IF "$(SHL4ALLRES)"!=""
     $(COMMAND_ECHO)$(TYPE) $(SHL4ALLRES) > $(SHL4LINKRES)
 .IF "$(COM)"=="GCC"
-    windres $(SHL4LINKRES) $(SHL4LINKRESO)
+    $(WINDRES) $(SHL4LINKRES) $(SHL4LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL4ALLRES)"!=""
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
-    @echo dlltool --dllname $(SHL4TARGET)$(DLLPOST) \
+    @echo $(DLLTOOL) --dllname $(SHL4TARGET)$(DLLPOST) \
         --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_4.cmd
     @noop $(assign ALL4OBJLIST:=$(STDOBJ) $(SHL4OBJS) $(SHL4LINKRESO) $(shell $(TYPE) /dev/null $(SHL4LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB4NAME)"!=""	# do not have to include objs
@@ -2143,16 +2143,16 @@ $(SHL5TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL5TARGET:b) >> $(MISC)/$(SHL5DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL5DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL5DEFAULTRES:b).rc
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL5DEFAULTRES:b).rc $(RCFLAGSOUTRES)$(SHL5DEFAULTRES)
 .ENDIF			# "$(SHL5DEFAULTRES)"!=""
 .IF "$(SHL5ALLRES)"!=""
     $(COMMAND_ECHO)$(TYPE) $(SHL5ALLRES) > $(SHL5LINKRES)
 .IF "$(COM)"=="GCC"
-    windres $(SHL5LINKRES) $(SHL5LINKRESO)
+    $(WINDRES) $(SHL5LINKRES) $(SHL5LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL5ALLRES)"!=""
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
-    @echo dlltool --dllname $(SHL5TARGET)$(DLLPOST) \
+    @echo $(DLLTOOL) --dllname $(SHL5TARGET)$(DLLPOST) \
         --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_5.cmd
     @noop $(assign ALL5OBJLIST:=$(STDOBJ) $(SHL5OBJS) $(SHL5LINKRESO) $(shell $(TYPE) /dev/null $(SHL5LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB5NAME)"!=""	# do not have to include objs
@@ -2612,16 +2612,16 @@ $(SHL6TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL6TARGET:b) >> $(MISC)/$(SHL6DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL6DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL6DEFAULTRES:b).rc
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL6DEFAULTRES:b).rc $(RCFLAGSOUTRES)$(SHL6DEFAULTRES)
 .ENDIF			# "$(SHL6DEFAULTRES)"!=""
 .IF "$(SHL6ALLRES)"!=""
     $(COMMAND_ECHO)$(TYPE) $(SHL6ALLRES) > $(SHL6LINKRES)
 .IF "$(COM)"=="GCC"
-    windres $(SHL6LINKRES) $(SHL6LINKRESO)
+    $(WINDRES) $(SHL6LINKRES) $(SHL6LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL6ALLRES)"!=""
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
-    @echo dlltool --dllname $(SHL6TARGET)$(DLLPOST) \
+    @echo $(DLLTOOL) --dllname $(SHL6TARGET)$(DLLPOST) \
         --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_6.cmd
     @noop $(assign ALL6OBJLIST:=$(STDOBJ) $(SHL6OBJS) $(SHL6LINKRESO) $(shell $(TYPE) /dev/null $(SHL6LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB6NAME)"!=""	# do not have to include objs
@@ -3081,16 +3081,16 @@ $(SHL7TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL7TARGET:b) >> $(MISC)/$(SHL7DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL7DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL7DEFAULTRES:b).rc
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL7DEFAULTRES:b).rc $(RCFLAGSOUTRES)$(SHL7DEFAULTRES)
 .ENDIF			# "$(SHL7DEFAULTRES)"!=""
 .IF "$(SHL7ALLRES)"!=""
     $(COMMAND_ECHO)$(TYPE) $(SHL7ALLRES) > $(SHL7LINKRES)
 .IF "$(COM)"=="GCC"
-    windres $(SHL7LINKRES) $(SHL7LINKRESO)
+    $(WINDRES) $(SHL7LINKRES) $(SHL7LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL7ALLRES)"!=""
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
-    @echo dlltool --dllname $(SHL7TARGET)$(DLLPOST) \
+    @echo $(DLLTOOL) --dllname $(SHL7TARGET)$(DLLPOST) \
         --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_7.cmd
     @noop $(assign ALL7OBJLIST:=$(STDOBJ) $(SHL7OBJS) $(SHL7LINKRESO) $(shell $(TYPE) /dev/null $(SHL7LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB7NAME)"!=""	# do not have to include objs
@@ -3550,16 +3550,16 @@ $(SHL8TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL8TARGET:b) >> $(MISC)/$(SHL8DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL8DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL8DEFAULTRES:b).rc
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL8DEFAULTRES:b).rc $(RCFLAGSOUTRES)$(SHL8DEFAULTRES)
 .ENDIF			# "$(SHL8DEFAULTRES)"!=""
 .IF "$(SHL8ALLRES)"!=""
     $(COMMAND_ECHO)$(TYPE) $(SHL8ALLRES) > $(SHL8LINKRES)
 .IF "$(COM)"=="GCC"
-    windres $(SHL8LINKRES) $(SHL8LINKRESO)
+    $(WINDRES) $(SHL8LINKRES) $(SHL8LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL8ALLRES)"!=""
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
-    @echo dlltool --dllname $(SHL8TARGET)$(DLLPOST) \
+    @echo $(DLLTOOL) --dllname $(SHL8TARGET)$(DLLPOST) \
         --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_8.cmd
     @noop $(assign ALL8OBJLIST:=$(STDOBJ) $(SHL8OBJS) $(SHL8LINKRESO) $(shell $(TYPE) /dev/null $(SHL8LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB8NAME)"!=""	# do not have to include objs
@@ -4019,16 +4019,16 @@ $(SHL9TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL9TARGET:b) >> $(MISC)/$(SHL9DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL9DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL9DEFAULTRES:b).rc
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL9DEFAULTRES:b).rc $(RCFLAGSOUTRES)$(SHL9DEFAULTRES)
 .ENDIF			# "$(SHL9DEFAULTRES)"!=""
 .IF "$(SHL9ALLRES)"!=""
     $(COMMAND_ECHO)$(TYPE) $(SHL9ALLRES) > $(SHL9LINKRES)
 .IF "$(COM)"=="GCC"
-    windres $(SHL9LINKRES) $(SHL9LINKRESO)
+    $(WINDRES) $(SHL9LINKRES) $(SHL9LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL9ALLRES)"!=""
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
-    @echo dlltool --dllname $(SHL9TARGET)$(DLLPOST) \
+    @echo $(DLLTOOL) --dllname $(SHL9TARGET)$(DLLPOST) \
         --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_9.cmd
     @noop $(assign ALL9OBJLIST:=$(STDOBJ) $(SHL9OBJS) $(SHL9LINKRESO) $(shell $(TYPE) /dev/null $(SHL9LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB9NAME)"!=""	# do not have to include objs
@@ -4488,16 +4488,16 @@ $(SHL10TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL10TARGET:b) >> $(MISC)/$(SHL10DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL10DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL10DEFAULTRES:b).rc
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL10DEFAULTRES:b).rc $(RCFLAGSOUTRES)$(SHL10DEFAULTRES)
 .ENDIF			# "$(SHL10DEFAULTRES)"!=""
 .IF "$(SHL10ALLRES)"!=""
     $(COMMAND_ECHO)$(TYPE) $(SHL10ALLRES) > $(SHL10LINKRES)
 .IF "$(COM)"=="GCC"
-    windres $(SHL10LINKRES) $(SHL10LINKRESO)
+    $(WINDRES) $(SHL10LINKRES) $(SHL10LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL10ALLRES)"!=""
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
-    @echo dlltool --dllname $(SHL10TARGET)$(DLLPOST) \
+    @echo $(DLLTOOL) --dllname $(SHL10TARGET)$(DLLPOST) \
         --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_10.cmd
     @noop $(assign ALL10OBJLIST:=$(STDOBJ) $(SHL10OBJS) $(SHL10LINKRESO) $(shell $(TYPE) /dev/null $(SHL10LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB10NAME)"!=""	# do not have to include objs
@@ -4714,9 +4714,7 @@ $(SHL1IMPLIBN):	\
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
-    @echo no ImportLibs on mingw
-    @-$(RM) $@
-    @$(TOUCH) $@
+    $(DLLTOOL) --output-lib=$(SHL1IMPLIBN) --input-def=$(SHL1DEF)
 .ELSE			# "$(COM)=="GCC"
 # bei use_deffile implib von linker erstellt
 .IF "$(USE_DEFFILE)"==""
@@ -4761,9 +4759,7 @@ $(SHL2IMPLIBN):	\
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
-    @echo no ImportLibs on mingw
-    @-$(RM) $@
-    @$(TOUCH) $@
+    $(DLLTOOL) --output-lib=$(SHL2IMPLIBN) --input-def=$(SHL2DEF)
 .ELSE			# "$(COM)=="GCC"
 # bei use_deffile implib von linker erstellt
 .IF "$(USE_DEFFILE)"==""
@@ -4808,9 +4804,7 @@ $(SHL3IMPLIBN):	\
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
-    @echo no ImportLibs on mingw
-    @-$(RM) $@
-    @$(TOUCH) $@
+    $(DLLTOOL) --output-lib=$(SHL3IMPLIBN) --input-def=$(SHL3DEF)
 .ELSE			# "$(COM)=="GCC"
 # bei use_deffile implib von linker erstellt
 .IF "$(USE_DEFFILE)"==""
@@ -4855,9 +4849,7 @@ $(SHL4IMPLIBN):	\
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
-    @echo no ImportLibs on mingw
-    @-$(RM) $@
-    @$(TOUCH) $@
+    $(DLLTOOL) --output-lib=$(SHL4IMPLIBN) --input-def=$(SHL4DEF)
 .ELSE			# "$(COM)=="GCC"
 # bei use_deffile implib von linker erstellt
 .IF "$(USE_DEFFILE)"==""
@@ -4902,9 +4894,7 @@ $(SHL5IMPLIBN):	\
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
-    @echo no ImportLibs on mingw
-    @-$(RM) $@
-    @$(TOUCH) $@
+    $(DLLTOOL) --output-lib=$(SHL5IMPLIBN) --input-def=$(SHL5DEF)
 .ELSE			# "$(COM)=="GCC"
 # bei use_deffile implib von linker erstellt
 .IF "$(USE_DEFFILE)"==""
@@ -4949,9 +4939,7 @@ $(SHL6IMPLIBN):	\
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
-    @echo no ImportLibs on mingw
-    @-$(RM) $@
-    @$(TOUCH) $@
+    $(DLLTOOL) --output-lib=$(SHL6IMPLIBN) --input-def=$(SHL6DEF)
 .ELSE			# "$(COM)=="GCC"
 # bei use_deffile implib von linker erstellt
 .IF "$(USE_DEFFILE)"==""
@@ -4996,9 +4984,7 @@ $(SHL7IMPLIBN):	\
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
-    @echo no ImportLibs on mingw
-    @-$(RM) $@
-    @$(TOUCH) $@
+    $(DLLTOOL) --output-lib=$(SHL7IMPLIBN) --input-def=$(SHL7DEF)
 .ELSE			# "$(COM)=="GCC"
 # bei use_deffile implib von linker erstellt
 .IF "$(USE_DEFFILE)"==""
@@ -5043,9 +5029,7 @@ $(SHL8IMPLIBN):	\
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
-    @echo no ImportLibs on mingw
-    @-$(RM) $@
-    @$(TOUCH) $@
+    $(DLLTOOL) --output-lib=$(SHL8IMPLIBN) --input-def=$(SHL8DEF)
 .ELSE			# "$(COM)=="GCC"
 # bei use_deffile implib von linker erstellt
 .IF "$(USE_DEFFILE)"==""
@@ -5090,9 +5074,7 @@ $(SHL9IMPLIBN):	\
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
-    @echo no ImportLibs on mingw
-    @-$(RM) $@
-    @$(TOUCH) $@
+    $(DLLTOOL) --output-lib=$(SHL9IMPLIBN) --input-def=$(SHL9DEF)
 .ELSE			# "$(COM)=="GCC"
 # bei use_deffile implib von linker erstellt
 .IF "$(USE_DEFFILE)"==""
@@ -5137,9 +5119,7 @@ $(SHL10IMPLIBN):	\
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
-    @echo no ImportLibs on mingw
-    @-$(RM) $@
-    @$(TOUCH) $@
+    $(DLLTOOL) --output-lib=$(SHL10IMPLIBN) --input-def=$(SHL10DEF)
 .ELSE			# "$(COM)=="GCC"
 # bei use_deffile implib von linker erstellt
 .IF "$(USE_DEFFILE)"==""

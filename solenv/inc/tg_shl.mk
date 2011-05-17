@@ -296,16 +296,16 @@ $(SHL$(TNR)TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL$(TNR)TARGET:b) >> $(MISC)/$(SHL$(TNR)DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL$(TNR)DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL$(TNR)DEFAULTRES:b).rc
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL$(TNR)DEFAULTRES:b).rc $(RCFLAGSOUTRES)$(SHL$(TNR)DEFAULTRES)
 .ENDIF			# "$(SHL$(TNR)DEFAULTRES)"!=""
 .IF "$(SHL$(TNR)ALLRES)"!=""
     $(COMMAND_ECHO)$(TYPE) $(SHL$(TNR)ALLRES) > $(SHL$(TNR)LINKRES)
 .IF "$(COM)"=="GCC"
-    windres $(SHL$(TNR)LINKRES) $(SHL$(TNR)LINKRESO)
+    $(WINDRES) $(SHL$(TNR)LINKRES) $(SHL$(TNR)LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL$(TNR)ALLRES)"!=""
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
-    @echo dlltool --dllname $(SHL$(TNR)TARGET)$(DLLPOST) \
+    @echo $(DLLTOOL) --dllname $(SHL$(TNR)TARGET)$(DLLPOST) \
         --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
     @noop $(assign ALL$(TNR)OBJLIST:=$(STDOBJ) $(SHL$(TNR)OBJS) $(SHL$(TNR)LINKRESO) $(shell $(TYPE) /dev/null $(SHL$(TNR)LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB$(TNR)NAME)"!=""	# do not have to include objs
@@ -529,9 +529,7 @@ $(SHL$(TNR)IMPLIBN):	\
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
-    @echo no ImportLibs on mingw
-    @-$(RM) $@
-    @$(TOUCH) $@
+    $(DLLTOOL) --output-lib=$(SHL$(TNR)IMPLIBN) --input-def=$(SHL$(TNR)DEF)
 .ELSE			# "$(COM)=="GCC"
 # bei use_deffile implib von linker erstellt
 .IF "$(USE_DEFFILE)"==""

@@ -42,6 +42,10 @@ ARCH_FLAGS*=-march=pentium
 
 CC*=i686-w64-mingw32-gcc
 CXX*=i686-w64-mingw32-g++
+NM*=i686-w64-mingw32-nm
+AR*=i686-w64-mingw32-ar
+WINDRES*=i686-w64-mingw32-windres -v
+DLLTOOL*=i686-w64-mingw32-dlltool
 
 CFLAGS+=-fmessage-length=0 -c
 
@@ -106,18 +110,18 @@ LINK*=$(CXX)
 LINKC*=$(CC)
 
 CYGLIB=$(LIB:s/;/ -L/)
-LINKFLAGS=-nostdlib -Wl,--enable-stdcall-fixup,--enable-runtime-pseudo-reloc-v2 -L$(CYGLIB)
+LINKFLAGS= -Wl,--enable-stdcall-fixup,--enable-runtime-pseudo-reloc-v2 -L$(CYGLIB)
 .IF "$(USE_MINGW)"=="cygwin"
 MINGWLIBDIR=$(COMPATH)$/lib$/mingw
 .ELSE
 MINGWLIBDIR=$(COMPATH)$/lib
 .ENDIF
-MINGWSSTDOBJ=$(MINGW_CLIB_DIR)$/crtbegin.o
-MINGWSSTDENDOBJ=$(MINGW_CLIB_DIR)$/crtend.o
-LINKFLAGSAPPGUI=-mwindows $(MINGWLIBDIR)$/crt2.o
-LINKFLAGSSHLGUI=--warn-once -mwindows -shared $(MINGWLIBDIR)$/dllcrt2.o
-LINKFLAGSAPPCUI=-mconsole $(MINGWLIBDIR)$/crt2.o
-LINKFLAGSSHLCUI=--warn-once -mconsole -shared $(MINGWLIBDIR)$/dllcrt2.o
+MINGWSSTDOBJ=
+MINGWSSTDENDOBJ=
+LINKFLAGSAPPGUI=-mwindows 
+LINKFLAGSSHLGUI=--warn-once -mwindows -shared 
+LINKFLAGSAPPCUI=-mconsole 
+LINKFLAGSSHLCUI=--warn-once -mconsole -shared
 LINKFLAGSTACK=
 LINKFLAGSPROF=
 LINKFLAGSDEBUG=-g
@@ -160,17 +164,15 @@ STDLIBCUIMT+=-lmingw32 -lmoldname -lmingwex -Wl,--end-group $(UWINAPILIB) -lm -l
 STDSHLGUIMT+=-lmingw32 -lmoldname -lmingwex -Wl,--end-group $(UWINAPILIB) -lm -lkernel32 -luser32 -lmsvcrt
 STDSHLCUIMT+=-lmingw32 -lmoldname -lmingwex -Wl,--end-group $(UWINAPILIB) -lm -lkernel32 -luser32 -lmsvcrt
 
-LIBMGR=ar
+LIBMGR=$(AR)
 LIBFLAGS=-rsu
 
-IMPLIB=ld
-IMPLIBFLAGS=
-
-MAPSYM=tmapsym
+MAPSYM=
 MAPSYMFLAGS=
 
-RC=rc
-RCFLAGS=-D__MINGW32__ -DWIN32 -D_WIN32_IE=0x400 -fo$@ $(RCFILES)
+RC=$(WINDRES)
+RCFLAGS=-D__MINGW32__ -DWIN32 -D_WIN32_IE=0x400 $(RCFILES)
+RCFLAGSOUTRES=
 RCLINK=
 RCLINKFLAGS=
 RCSETVERSION=

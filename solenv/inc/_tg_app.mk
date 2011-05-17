@@ -135,7 +135,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @echo mingw
 .IF "$(APP1LINKRES)" != "" || "$(APP1RES)" != ""
     @cat $(APP1LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP1RES)) >  $(MISC)/$(@:b)_all.res
-    windres $(MISC)/$(@:b)_all.res $(APP1RESO)
+    $(WINDRES) $(MISC)/$(@:b)_all.res $(APP1RESO)
 .ENDIF
     @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(MINGWSSTDOBJ) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
         $(APP1BASEX) $(APP1STACKN) -o $@ $(APP1OBJS) \
@@ -347,7 +347,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @echo mingw
 .IF "$(APP2LINKRES)" != "" || "$(APP2RES)" != ""
     @cat $(APP2LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP2RES)) >  $(MISC)/$(@:b)_all.res
-    windres $(MISC)/$(@:b)_all.res $(APP2RESO)
+    $(WINDRES) $(MISC)/$(@:b)_all.res $(APP2RESO)
 .ENDIF
     @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(MINGWSSTDOBJ) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
         $(APP2BASEX) $(APP2STACKN) -o $@ $(APP2OBJS) \
@@ -559,7 +559,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @echo mingw
 .IF "$(APP3LINKRES)" != "" || "$(APP3RES)" != ""
     @cat $(APP3LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP3RES)) >  $(MISC)/$(@:b)_all.res
-    windres $(MISC)/$(@:b)_all.res $(APP3RESO)
+    $(WINDRES) $(MISC)/$(@:b)_all.res $(APP3RESO)
 .ENDIF
     @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(MINGWSSTDOBJ) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
         $(APP3BASEX) $(APP3STACKN) -o $@ $(APP3OBJS) \
@@ -771,7 +771,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @echo mingw
 .IF "$(APP4LINKRES)" != "" || "$(APP4RES)" != ""
     @cat $(APP4LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP4RES)) >  $(MISC)/$(@:b)_all.res
-    windres $(MISC)/$(@:b)_all.res $(APP4RESO)
+    $(WINDRES) $(MISC)/$(@:b)_all.res $(APP4RESO)
 .ENDIF
     @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(MINGWSSTDOBJ) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
         $(APP4BASEX) $(APP4STACKN) -o $@ $(APP4OBJS) \
@@ -983,7 +983,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @echo mingw
 .IF "$(APP5LINKRES)" != "" || "$(APP5RES)" != ""
     @cat $(APP5LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP5RES)) >  $(MISC)/$(@:b)_all.res
-    windres $(MISC)/$(@:b)_all.res $(APP5RESO)
+    $(WINDRES) $(MISC)/$(@:b)_all.res $(APP5RESO)
 .ENDIF
     @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(MINGWSSTDOBJ) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
         $(APP5BASEX) $(APP5STACKN) -o $@ $(APP5OBJS) \
@@ -1195,7 +1195,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @echo mingw
 .IF "$(APP6LINKRES)" != "" || "$(APP6RES)" != ""
     @cat $(APP6LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP6RES)) >  $(MISC)/$(@:b)_all.res
-    windres $(MISC)/$(@:b)_all.res $(APP6RESO)
+    $(WINDRES) $(MISC)/$(@:b)_all.res $(APP6RESO)
 .ENDIF
     @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(MINGWSSTDOBJ) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
         $(APP6BASEX) $(APP6STACKN) -o $@ $(APP6OBJS) \
@@ -1407,7 +1407,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @echo mingw
 .IF "$(APP7LINKRES)" != "" || "$(APP7RES)" != ""
     @cat $(APP7LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP7RES)) >  $(MISC)/$(@:b)_all.res
-    windres $(MISC)/$(@:b)_all.res $(APP7RESO)
+    $(WINDRES) $(MISC)/$(@:b)_all.res $(APP7RESO)
 .ENDIF
     @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(MINGWSSTDOBJ) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
         $(APP7BASEX) $(APP7STACKN) -o $@ $(APP7OBJS) \
@@ -1619,7 +1619,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @echo mingw
 .IF "$(APP8LINKRES)" != "" || "$(APP8RES)" != ""
     @cat $(APP8LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP8RES)) >  $(MISC)/$(@:b)_all.res
-    windres $(MISC)/$(@:b)_all.res $(APP8RESO)
+    $(WINDRES) $(MISC)/$(@:b)_all.res $(APP8RESO)
 .ENDIF
     @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(MINGWSSTDOBJ) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
         $(APP8BASEX) $(APP8STACKN) -o $@ $(APP8OBJS) \
@@ -1831,7 +1831,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @echo mingw
 .IF "$(APP9LINKRES)" != "" || "$(APP9RES)" != ""
     @cat $(APP9LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP9RES)) >  $(MISC)/$(@:b)_all.res
-    windres $(MISC)/$(@:b)_all.res $(APP9RESO)
+    $(WINDRES) $(MISC)/$(@:b)_all.res $(APP9RESO)
 .ENDIF
     @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(MINGWSSTDOBJ) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
         $(APP9BASEX) $(APP9STACKN) -o $@ $(APP9OBJS) \
@@ -2043,7 +2043,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @echo mingw
 .IF "$(APP10LINKRES)" != "" || "$(APP10RES)" != ""
     @cat $(APP10LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP10RES)) >  $(MISC)/$(@:b)_all.res
-    windres $(MISC)/$(@:b)_all.res $(APP10RESO)
+    $(WINDRES) $(MISC)/$(@:b)_all.res $(APP10RESO)
 .ENDIF
     @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(MINGWSSTDOBJ) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
         $(APP10BASEX) $(APP10STACKN) -o $@ $(APP10OBJS) \
