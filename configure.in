@@ -694,6 +694,11 @@ AC_ARG_WITH(system-expat,
         [Use expat already on system.]),
 ,)
 
+AC_ARG_WITH(system-libvisio,
+    AS_HELP_STRING([--with-system-libvisio],
+        [Use libvisio already on system.]),
+,)
+
 AC_ARG_WITH(system-libwpd,
     AS_HELP_STRING([--with-system-libwpd],
         [Use libwpd already on system.]),
@@ -4083,6 +4088,25 @@ else
     BUILD_TYPE="$BUILD_TYPE EXPAT"
 fi
 AC_SUBST(SYSTEM_EXPAT)
+
+dnl ===================================================================
+dnl Check for system libvisio
+dnl ===================================================================
+AC_MSG_CHECKING([which libvisio to use])
+if test -n "$with_system_libvisio" -o -n "$with_system_libs" && \
+        test "$with_system_libvisio" != "no"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_LIBVISIO=YES
+    PKG_CHECK_MODULES( LIBVISIO, libvisio-0.0 )
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_LIBVISIO=NO
+    BUILD_TYPE="$BUILD_TYPE LIBVISIO"
+fi
+AC_SUBST(SYSTEM_LIBVISIO)
+AC_SUBST(LIBVISIO_CFLAGS)
+AC_SUBST(LIBVISIO_LIBS)
+
 
 dnl ===================================================================
 dnl Check for system libwpd
