@@ -1632,22 +1632,6 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
         }
     }
 
-    if (   nCommand == SVX_SEARCHCMD_REPLACE
-        || nCommand == SVX_SEARCHCMD_REPLACE_ALL )
-    {
-        for ( SCTAB j = nStartTab; j <= nEndTab; j++ )
-        {
-            if ( (bAllTables || rMark.GetTableSelect( j )) &&
-                    pDoc->IsTabProtected( j ) )
-            {
-                if ( pOldSelectedTables )
-                    delete [] pOldSelectedTables;
-                ErrorMessage(STR_PROTECTIONERR);
-                return;
-            }
-        }
-    }
-
     if (   nCommand == SVX_SEARCHCMD_FIND
         || nCommand == SVX_SEARCHCMD_FIND_ALL)
         bAddUndo = false;

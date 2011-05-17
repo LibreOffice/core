@@ -148,7 +148,8 @@ sal_Bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW
                 !( (eCellType == CELLTYPE_FORMULA &&
                 ((cMatrixFlag = ((ScFormulaCell*)pCell)->GetMatrixFlag()) == MM_REFERENCE))
                 // kein UndoDoc => Matrix nicht wiederherstellbar => nicht ersetzen
-                || (cMatrixFlag != MM_NONE && !pUndoDoc) )
+                || (cMatrixFlag != MM_NONE && !pUndoDoc) ) &&
+             IsBlockEditable(nCol, nRow, nCol, nRow)
             )
         {
             if ( cMatrixFlag == MM_NONE && rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE )
