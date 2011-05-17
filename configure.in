@@ -353,6 +353,13 @@ AC_ARG_ENABLE(kde4,
          both KDE3 and KDE4.]),
 ,)
 
+AC_ARG_ENABLE(unix-qstart-libpng,
+    AS_HELP_STRING([--disable-unix-qstart-libpng],
+        [On UNIX systems, we have a faster splash app, that can use libpng to
+	 render its splash, if we can safely link to the system libpng then
+	 enabling this is a good idea (ie. for Linux Distro packaging).]),
+,enable_unix_libpng=yes)
+
 AC_ARG_ENABLE(binfilter,
     AS_HELP_STRING([--enable-binfilter],
         [Enable legacy binary file formats filters build.]),
@@ -6136,16 +6143,17 @@ AC_SUBST(ENABLE_SYSTRAY_GTK)
 AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)
 
-AC_ARG_ENABLE(unix-qstart,
-    AS_HELP_STRING([--disable-unix-qstart],
-        [On UNIX systems, we can enable a faster splash app that accelerates
-         startup, if we can link to the system libpng, use this if you are
-         a Linux Distro packager.]),
-,enable_unix_quickstarter=yes)
-
 PKG_CHECK_MODULES( LIBPNG, libpng, ENABLE_QUICKSTART_LIBPNG="TRUE", ENABLE_QUICKSTART_LIBPNG="" )
 AC_SUBST(LIBPNG_LIBS)
 AC_SUBST(LIBPNG_CFLAGS)
+
+AC_MSG_CHECKING([whether to enable libpng linking in quickstarter])
+if test "x$enable_unix_libpng" = "xyes"; then
+   AC_MSG_RESULT([yes])
+else
+   AC_MSG_RESULT([no])
+   ENABLE_QUICKSTART_LIBPNG=""
+fi
 AC_SUBST(ENABLE_QUICKSTART_LIBPNG)
 
 ENABLE_BROFFICE=""
