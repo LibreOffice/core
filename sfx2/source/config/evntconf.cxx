@@ -28,6 +28,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
+
+#include <boost/scoped_ptr.hpp>
+
 #include <vcl/msgbox.hxx>
 #include <tools/resary.hxx>
 #include <svl/lstner.hxx>
@@ -270,10 +273,10 @@ void PropagateEvent_Impl( SfxObjectShell *pDoc, rtl::OUString aEventName, const 
 //--------------------------------------------------------------------------------------------------------
 void SfxEventConfiguration::ConfigureEvent( rtl::OUString aName, const SvxMacro& rMacro, SfxObjectShell *pDoc )
 {
-    SvxMacro *pMacro = NULL;
+    boost::scoped_ptr<SvxMacro> pMacro;
     if ( rMacro.GetMacName().Len() )
-        pMacro = new SvxMacro( rMacro.GetMacName(), rMacro.GetLibName(), rMacro.GetScriptType() );
-    PropagateEvent_Impl( pDoc ? pDoc : 0, aName, pMacro );
+        pMacro.reset( new SvxMacro( rMacro.GetMacName(), rMacro.GetLibName(), rMacro.GetScriptType() ) );
+    PropagateEvent_Impl( pDoc ? pDoc : 0, aName, pMacro.get() );
 }
 
 // -------------------------------------------------------------------------------------------------------
