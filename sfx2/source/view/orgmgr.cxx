@@ -491,26 +491,22 @@ sal_Bool    SfxOrganizeMgr::Delete(SfxOrganizeListBox_Impl *pCaller,
         if ( pGroupToDelete )
         {
             sal_uInt16 nItemNum = (sal_uInt16)( pCaller->GetModel()->GetChildCount( pGroupToDelete ) );
-            sal_uInt16 nToDeleteNum = 0;
-            SvLBoxEntry **pEntriesToDelete = new SvLBoxEntry*[nItemNum];
+            typedef std::deque<SvLBoxEntry*> BoxEntries;
+            BoxEntries pEntriesToDelete;
 
             sal_uInt16 nInd = 0;
-            for ( nInd = 0; nInd < nItemNum; nInd++ )
-                pEntriesToDelete[nInd] = NULL;
-
             for ( nInd = 0; nInd < nItemNum; nInd++ )
             {
                 // TODO/LATER: check that nInd is the same index that is used in pTemplates
                 if ( pTemplates->Delete( nRegion, nInd ) )
                 {
                     bModified = 1;
-                    pEntriesToDelete[nToDeleteNum++] = pCaller->SvLBox::GetEntry( pGroupToDelete, nInd );
+                    pEntriesToDelete.push_back( pCaller->SvLBox::GetEntry( pGroupToDelete, nInd ) );
                 }
             }
 
-            for ( nInd = 0; nInd < nToDeleteNum; nInd++ )
-                if ( pEntriesToDelete[nInd] )
-                    pCaller->GetModel()->Remove( pEntriesToDelete[nInd] );
+            for ( BoxEntries::const_iterator aIt( pEntriesToDelete.begin() ), aEnd( pEntriesToDelete.end() ); aIt != aEnd; ++aIt )
+                pCaller->GetModel()->Remove( *aIt );
 
             if ( !pCaller->GetModel()->GetChildCount( pGroupToDelete ) )
             {
