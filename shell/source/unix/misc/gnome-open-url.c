@@ -47,28 +47,6 @@ typedef enum {
   GNOME_VFS_OK
 } GnomeVFSResult;
 
-
-/*
- * HACK: avoid error messages caused by not setting a GNOME program name
- */
-
-gchar* gnome_gconf_get_gnome_libs_settings_relative (const gchar *subkey)
-{
-    void* handle = dlopen("libglib-2.0.so.0", RTLD_LAZY);
-
-    (void)subkey; /* avoid warning due to unused parameter */
-
-    if( NULL != handle )
-    {
-        gchar* (* g_strdup)(const gchar*) = (gchar* (*)(const gchar*)) dlsym(handle, "g_strdup");
-
-        if( NULL != g_strdup)
-            return g_strdup("/apps/gnome-settings/gnome-open-url");
-    }
-
-    return NULL;
-}
-
 /*
  * Wrapper function which extracs gnome_url_show from libgnome
  */
