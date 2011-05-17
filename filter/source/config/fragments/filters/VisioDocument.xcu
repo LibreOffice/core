@@ -1,0 +1,13 @@
+    <node oor:name="Visio Document" oor:op="replace">
+        <prop oor:name="Flags"><value>IMPORT ALIEN USESOPTIONS 3RDPARTYFILTER PREFERRED</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="FilterService"><value>com.sun.star.comp.Draw.VisioImportFilter</value></prop>
+        <prop oor:name="UserData"><value></value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="x-default">Visio Document</value>
+        </prop>
+        <prop oor:name="FileFormatVersion"><value>0</value></prop>
+        <prop oor:name="Type"><value>draw_Visio_Document</value></prop>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="DocumentService"><value>com.sun.star.drawing.DrawingDocument</value></prop>
+    </node>

@@ -81,7 +81,6 @@ SHL2STDLIBS+= \
     $(SALLIB) \
     $(XMLOFFLIB) \
     $(LIBWPS) \
-    $(LIBWPG) \
     $(LIBWPD)
 
 SHL2TARGET = msworks$(DLLPOSTFIX)
@@ -118,6 +117,35 @@ SHL3LIBS = $(LIB3TARGET)
 SHL3VERSIONMAP = $(SOLARENV)/src/component.map
 DEF3NAME = $(SHL3TARGET)
 
+LIB4TARGET= $(SLB)$/wpgimport.lib
+LIB4FILES= \
+    $(SLB)$/stream.lib  \
+    $(SLB)$/filter.lib  \
+    $(SLB)$/vpsimp.lib
+SHL4LIBS=$(LIB4TARGET)
+SHL4STDLIBS+= \
+    $(SVLLIB)	\
+    $(SOTLIB) \
+    $(SO2LIB) \
+    $(SVTOOLLIB) \
+    $(UNOTOOLSLIB) \
+    $(TOOLSLIB) \
+    $(COMPHELPERLIB) \
+    $(UCBHELPERLIB) \
+    $(CPPUHELPERLIB) \
+    $(CPPULIB) \
+    $(SALLIB) \
+    $(XMLOFFLIB) \
+	$(LIBVISIO) \
+    $(LIBWPG) \
+    $(LIBWPD)
+
+SHL4TARGET = visioimport$(DLLPOSTFIX)
+SHL4IMPLIB = i$(SHL4TARGET)
+SHL4LIBS = $(LIB4TARGET)
+SHL4VERSIONMAP = $(SOLARENV)/src/component.map
+DEF3NAME = $(SHL4TARGET)
+
 .INCLUDE :  target.mk
 
 ALLTAR : $(MISC)/wpft.component $(MISC)/wpgfilter.component $(MISC)/msworksfilter.component
@@ -139,3 +167,9 @@ $(MISC)/msworksfilter.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xsl
     $(XSLTPROC) --nonet --stringparam uri \
         '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL2TARGETN:f)' -o $@ \
         $(SOLARENV)/bin/createcomponent.xslt msworksfilter.component
+
+$(MISC)/visiofilter.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        visiofilter.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL4TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt visiofilter.component
