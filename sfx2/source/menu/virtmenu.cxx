@@ -899,7 +899,7 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
         // ggf. Pick-Menu erzeugen
         if ( pParent && pSVMenu == pParent->pPickMenu )
         {
-            SfxPickList::Get()->CreateMenuEntries( pParent->pPickMenu );
+            SfxPickList::Get().CreateMenuEntries( pParent->pPickMenu );
         }
         else
             pPickMenu = pSVMenu->GetPopupMenu(SID_PICKLIST);
@@ -1068,7 +1068,7 @@ IMPL_LINK( SfxVirtualMenu, Select, Menu *, pMenu )
     }
     else if ( nSlotId >= START_ITEMID_PICKLIST && nSlotId <= END_ITEMID_PICKLIST )
     {
-        SfxPickList::Get()->ExecuteMenuEntry( nSlotId );
+        SfxPickList::Get().ExecuteMenuEntry( nSlotId );
         return sal_True;
     }
 

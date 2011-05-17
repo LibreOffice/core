@@ -170,7 +170,7 @@ SfxPickList::PickListEntry* SfxPickList::GetPickListEntry( sal_uInt32 nIndex )
         return 0;
 }
 
-SfxPickList*    SfxPickList::GetOrCreate( const sal_uInt32 nMenuSize )
+SfxPickList& SfxPickList::GetOrCreate( const sal_uInt32 nMenuSize )
 {
     if ( !pUniqueInstance )
     {
@@ -179,13 +179,13 @@ SfxPickList*    SfxPickList::GetOrCreate( const sal_uInt32 nMenuSize )
             pUniqueInstance = new SfxPickList( nMenuSize );
     }
 
-    return pUniqueInstance;
+    return *pUniqueInstance;
 }
 
-SfxPickList* SfxPickList::Get()
+SfxPickList& SfxPickList::Get()
 {
     ::osl::MutexGuard aGuard( thePickListMutex::get() );
-    return pUniqueInstance;
+    return *pUniqueInstance;
 }
 
 void SfxPickList::Delete()
@@ -258,9 +258,9 @@ void SfxPickList::CreatePickListEntries()
 
 void SfxPickList::CreateMenuEntries( Menu* pMenu )
 {
-    static sal_Bool bPickListMenuInitializing = sal_False;
-
     ::osl::MutexGuard aGuard( thePickListMutex::get() );
+
+    static sal_Bool bPickListMenuInitializing = sal_False;
 
     if ( bPickListMenuInitializing ) // method is not reentrant!
         return;
@@ -295,7 +295,7 @@ void SfxPickList::ExecuteEntry( sal_uInt32 nIndex )
 {
     ::osl::ClearableMutexGuard aGuard( thePickListMutex::get() );
 
-    PickListEntry *pPick = SfxPickList::Get()->GetPickListEntry( nIndex );
+    PickListEntry *pPick = SfxPickList::Get().GetPickListEntry( nIndex );
 
     if ( pPick )
     {
@@ -327,7 +327,7 @@ void SfxPickList::ExecuteMenuEntry( sal_uInt16 nId )
 
 String SfxPickList::GetMenuEntryTitle( sal_uInt32 nIndex )
 {
-    PickListEntry *pPick = SfxPickList::Get()->GetPickListEntry( nIndex );
+    PickListEntry *pPick = SfxPickList::Get().GetPickListEntry( nIndex );
 
     if ( pPick )
         return pPick->aTitle;
