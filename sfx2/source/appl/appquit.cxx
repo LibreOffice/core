@@ -159,6 +159,9 @@ void SfxApplication::Deinitialize()
     delete pAppData_Impl->m_pSbxErrorHdl;
     delete pAppData_Impl->m_pSoErrorHdl;
     delete pAppData_Impl->m_pToolsErrorHdl;
+#ifdef DBG_UTIL
+    delete pAppData_Impl->m_pSimpleErrorHdl;
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
