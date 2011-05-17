@@ -2463,10 +2463,6 @@ dnl ===================================================================
    AC_CHECK_SIZEOF(long long)
    AC_CHECK_SIZEOF(double)
    AC_CHECK_SIZEOF(void*)
-   AC_CHECK_ALIGNOF(short)
-   AC_CHECK_ALIGNOF(int)
-   AC_CHECK_ALIGNOF(long)
-   AC_CHECK_ALIGNOF(double)
 
    SIZEOF_SHORT=$ac_cv_sizeof_short
    SIZEOF_INT=$ac_cv_sizeof_int
@@ -2474,6 +2470,28 @@ dnl ===================================================================
    SIZEOF_LONGLONG=$ac_cv_sizeof_long_long
    SIZEOF_DOUBLE=$ac_cv_sizeof_double
    SIZEOF_POINTER=$ac_cv_sizeof_voidp
+
+   dnl Allow build without AC_CHECK_ALIGNOF, grrr
+   m4_pattern_allow([AC_CHECK_ALIGNOF])
+   m4_ifdef([AC_CHECK_ALIGNOF],
+      ,
+      [ 
+         dnl We know that the ALIGNOF_ variables are used only when cross-compiling
+         dnl in sal/typesconfig/makefile.mk...
+         if test "$cross_compiling" = "yes"; then
+            AC_MSG_ERROR([When cross-compiling you must use a recent Autoconf with [AC_][CHECK_ALIGNOF]])
+         fi
+         m4_define([AC_CHECK_ALIGNOF],
+            [
+               AC_MSG_WARN([Cannot determine alignment of $1])
+               AS_TR_SH([ac_cv_alignof_$3])=unknown
+            ])
+      ])
+
+   AC_CHECK_ALIGNOF(short,[#include <stddef.h>])
+   AC_CHECK_ALIGNOF(int,[#include <stddef.h>])
+   AC_CHECK_ALIGNOF(long,[#include <stddef.h>])
+   AC_CHECK_ALIGNOF(double,[#include <stddef.h>])
 
    ALIGNOF_SHORT=$ac_cv_alignof_short
    ALIGNOF_INT=$ac_cv_alignof_int
@@ -2502,10 +2520,10 @@ else
    else
      SIZEOF_POINTER=8
    fi
-   ALIGNOF_SHORT=1
-   ALIGNOF_INT=1
-   ALIGNOF_LONG=1
-   ALIGNOF_DOUBLE=1
+   ALIGNOF_SHORT=2
+   ALIGNOF_INT=4
+   ALIGNOF_LONG=4
+   ALIGNOF_DOUBLE=8
    WORDS_BIGENDIAN=no
    LFS_CFLAGS=''
 fi
