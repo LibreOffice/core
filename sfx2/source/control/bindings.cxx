@@ -1173,6 +1173,8 @@ const SfxPoolItem* SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem*
         DeleteItemOnIdle( pVoid );
         return pVoid;
     }
+    else if ( pCache )  // just in case it was created, but GetDispatch() is 0
+        DELETEZ( pCache );
 
     // slot is handled internally by SfxDispatcher
     if ( pImp->bMsgDirty )
