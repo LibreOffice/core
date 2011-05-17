@@ -40,7 +40,7 @@ TARGET = deploy
 .INCLUDE : $(PRJ)$/source$/deployment$/inc$/dp_misc.mk
 
 .IF "$(SYSTEM_DB)" == "YES"
-CFLAGS+=-DSYSTEM_DB -I$(DB_INCLUDES)
+CFLAGS+=-DSYSTEM_DB
 .ENDIF
  
 INCPRE += inc
