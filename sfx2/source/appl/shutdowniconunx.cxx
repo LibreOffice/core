@@ -90,10 +90,10 @@ static GdkPixbuf * ResIdToPixbuf( sal_uInt16 nResId )
     Bitmap pInSalBitmap = aIcon.GetBitmap();
     AlphaMask pInSalAlpha = aIcon.GetAlpha();
 
-    BitmapReadAccess* pSalBitmap = pInSalBitmap.AcquireReadAccess();
-    BitmapReadAccess* pSalAlpha = pInSalAlpha.AcquireReadAccess();
+    Bitmap::ScopedReadAccess pSalBitmap(pInSalBitmap);
+    AlphaMask::ScopedReadAccess pSalAlpha(pInSalAlpha);
 
-    g_return_val_if_fail( pSalBitmap != NULL, NULL );
+    g_return_val_if_fail( pSalBitmap, NULL );
 
     Size aSize( pSalBitmap->Width(), pSalBitmap->Height() );
     if (pSalAlpha)
@@ -122,10 +122,6 @@ static GdkPixbuf * ResIdToPixbuf( sal_uInt16 nResId )
             pDestData += 4;
         }
     }
-
-    pInSalBitmap.ReleaseAccess( pSalBitmap );
-    if( pSalAlpha )
-        pInSalAlpha.ReleaseAccess( pSalAlpha );
 
     return gdk_pixbuf_new_from_data( pPixbufData,
         GDK_COLORSPACE_RGB, sal_True, 8,
