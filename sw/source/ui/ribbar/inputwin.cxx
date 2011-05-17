@@ -165,6 +165,7 @@ void SwInputWindow::CleanupUglyHackWithUndo()
         {
             SW_MOD()->GetUndoOptions().SetUndoCount(0);
         }
+        m_bResetUndo = sal_False;
     }
 }
 
