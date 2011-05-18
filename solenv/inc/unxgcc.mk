@@ -248,7 +248,7 @@ X11LINK_DYNAMIC = -Wl,--as-needed -lXext -lX11 -Wl,--no-as-needed
 LIBSALCPPRT*=-Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
 
 # name of library manager
-LIBMGR*=ar
+LIBMGR*=$(AR)
 LIBFLAGS=-r
 
 # tool for generating import libraries
