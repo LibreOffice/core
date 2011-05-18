@@ -31,7 +31,7 @@
 #include <boost/noncopyable.hpp>
 
 #ifdef SYSTEM_DB_HEADER
-#include SYSTEM_DB_H_HEADER
+#include SYSTEM_DB_HEADER
 #else
 #include <berkeleydb/db.h>
 #endif
