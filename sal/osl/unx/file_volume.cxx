@@ -59,7 +59,6 @@
 #include <sys/mnttab.h>
 #include <sys/statvfs.h>
 #define  HAVE_STATFS_H
-#include <sys/fs/ufs_quota.h>
 static const sal_Char* MOUNTTAB="/etc/mnttab";
 
 #elif defined(LINUX)
@@ -67,7 +66,6 @@ static const sal_Char* MOUNTTAB="/etc/mnttab";
 #include <mntent.h>
 #include <sys/vfs.h>
 #define  HAVE_STATFS_H
-#include <sys/quota.h>
 static const sal_Char* MOUNTTAB="/etc/mtab";
 
 #elif defined(NETBSD) || defined(FREEBSD) || defined(OPENBSD) || defined(DRAGONFLY)
@@ -75,9 +73,6 @@ static const sal_Char* MOUNTTAB="/etc/mtab";
 #include <sys/param.h>
 #include <sys/ucred.h>
 #include <sys/mount.h>
-#ifndef NETBSD
-#include <ufs/ufs/quota.h>
-#endif
 #define  HAVE_STATFS_H
 
 /* No mounting table on *BSD
@@ -86,7 +81,6 @@ static const sal_Char* MOUNTTAB="/etc/mtab";
 
 #elif defined(MACOSX)
 
-#include <ufs/ufs/quota.h>
 #include <sys/param.h>
 #include <sys/mount.h>
 #define HAVE_STATFS_H
