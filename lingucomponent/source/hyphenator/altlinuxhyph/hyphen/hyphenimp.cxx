@@ -103,7 +103,11 @@ Hyphenator::~Hyphenator()
     if (numdict && aDicts)
     {
         for (int i=0; i < numdict; ++i)
+        {
             delete aDicts[i].apCC;
+            if (aDicts[i].aPtr)
+                hnj_hyphen_free(aDicts[i].aPtr);
+        }
     }
 
     delete[] aDicts;
