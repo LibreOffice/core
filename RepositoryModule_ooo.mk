@@ -41,7 +41,6 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     lotuswordpro \
     oox \
     padmin \
-    reportbuilder \
     sc \
     sd \
     sfx2 \
