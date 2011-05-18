@@ -25,10 +25,10 @@
 #
 #*************************************************************************
 
-# mk file for Android Linux ARM using GCC, please make generic modifications to unxlng.mk
+# mk file for Android Linux ARM using GCC, please make generic modifications to unxgcc.mk
 
 CDEFAULTOPT=-Os
-.INCLUDE : unxlng.mk
+.INCLUDE : unxgcc.mk
 CDEFS+=-DARM32
 CFLAGS+=-fno-omit-frame-pointer
-DLLPOSTFIX=lr
+DLLPOSTFIX=ar
