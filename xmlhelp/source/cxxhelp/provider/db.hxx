@@ -28,8 +28,8 @@
 #ifndef BERKELEYDBPROXY_DB_HXX_
 #define BERKELEYDBPROXY_DB_HXX_
 
-#ifdef SYSTEM_DB
-#include <db.h>
+#ifdef SYSTEM_DB_HEADER
+#include SYSTEM_DB_H_HEADER
 #else
 #include <berkeleydb/db.h>
 #endif

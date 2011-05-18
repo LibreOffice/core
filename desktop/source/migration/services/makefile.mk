@@ -43,9 +43,7 @@ DLLPRE =
 
 .INCLUDE :  cppumaker.mk
 
-.IF "$(SYSTEM_DB)" == "YES"
-CFLAGS+=-DSYSTEM_DB
-.ENDIF
+CFLAGS+= $(SYSTEM_DB_CFLAGS)
 
 SLOFILES= \
         $(SLO)$/jvmfwk.obj \
