@@ -35,7 +35,7 @@
 #include <tools/globname.hxx>
 #include <sot/formats.hxx>
 
-#include <svl/ownlist.hxx>
+#include <vector>
 #include <svtools/transfer.hxx>
 
 class SvObjectServer
@@ -53,13 +53,27 @@ public:
     const String &          GetHumanName() const { return aHumanName; }
 };
 
+typedef ::std::vector< SvObjectServer > SvObjectServerList_impl;
+
 class SVT_DLLPUBLIC SvObjectServerList
 {
-    PRV_SV_DECL_OWNER_LIST(SvObjectServerList,SvObjectServer)
+private:
+    SvObjectServerList_impl aObjectServerList;
+
+public:
     const SvObjectServer *  Get( const String & rHumanName ) const;
     const SvObjectServer *  Get( const SvGlobalName & ) const;
     void                    Remove( const SvGlobalName & );
     void                    FillInsertObjects();
+    size_t                  Count() const
+                            {
+                                return aObjectServerList.size();
+                            }
+
+    const SvObjectServer    operator[]( size_t n ) const
+                            {
+                                return aObjectServerList[ n ];
+                            }
 };
 
 class SVT_DLLPUBLIC SvPasteObjectHelper

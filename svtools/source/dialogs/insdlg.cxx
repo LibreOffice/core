@@ -70,7 +70,6 @@ struct OleObjectDescriptor
 
 /********************** SvObjectServerList ********************************
 **************************************************************************/
-PRV_SV_IMPL_OWNER_LIST( SvObjectServerList, SvObjectServer )
 
 /*************************************************************************
 |*    SvObjectServerList::SvObjectServerList()
@@ -79,10 +78,10 @@ PRV_SV_IMPL_OWNER_LIST( SvObjectServerList, SvObjectServer )
 *************************************************************************/
 const SvObjectServer * SvObjectServerList::Get( const String & rHumanName ) const
 {
-    for( sal_uLong i = 0; i < Count(); i++ )
+    for( size_t i = 0; i < aObjectServerList.size(); i++ )
     {
-        if( rHumanName == GetObject( i ).GetHumanName() )
-            return &GetObject( i );
+        if( rHumanName == aObjectServerList[ i ].GetHumanName() )
+            return &aObjectServerList[ i ];
     }
     return NULL;
 }
@@ -94,26 +93,27 @@ const SvObjectServer * SvObjectServerList::Get( const String & rHumanName ) cons
 *************************************************************************/
 const SvObjectServer * SvObjectServerList::Get( const SvGlobalName & rName ) const
 {
-    for( sal_uLong i = 0; i < Count(); i++ )
+    for( size_t i = 0; i < aObjectServerList.size(); i++ )
     {
-        if( rName == GetObject( i ).GetClassName() )
-            return &GetObject( i );
+        if( rName == aObjectServerList[ i ].GetClassName() )
+            return &aObjectServerList[ i ];
     }
     return NULL;
 }
 
 void SvObjectServerList::Remove( const SvGlobalName & rName )
 {
-    SvObjectServer * pS = (SvObjectServer *)aTypes.First();
-    while( pS )
+    for( size_t i = 0; i < aObjectServerList.size(); )
     {
-        if( rName == pS->GetClassName() )
+        if( aObjectServerList[ i ].GetClassName() == rName )
         {
-            Remove();
-            pS = (SvObjectServer *)aTypes.GetCurObject();
+            SvObjectServerList_impl::iterator it = aObjectServerList.begin() + i;
+            aObjectServerList.erase( it );
         }
         else
-            pS = (SvObjectServer *)aTypes.Next();
+        {
+            ++i;
+        }
     }
 }
 
@@ -208,7 +208,7 @@ void SvObjectServerList::FillInsertObjects()
                         {
                             if( !Get( aClassName ) )
                                 // noch nicht eingetragen
-                                Append( SvObjectServer( aClassName, String( aUIName.getStr() ) ) );
+                                aObjectServerList.push_back( SvObjectServer( aClassName, String( aUIName.getStr() ) ) );
                         }
                     }
                 }
@@ -220,7 +220,7 @@ void SvObjectServerList::FillInsertObjects()
 #ifdef WNT
     SvGlobalName aOleFact( SO3_OUT_CLASSID );
     String aOleObj( SvtResId( STR_FURTHER_OBJECT ) );
-    Append( SvObjectServer( aOleFact, aOleObj ) );
+    aObjectServerList.push_back( SvObjectServer( aOleFact, aOleObj ) );
 #endif
 
     }catch( container::NoSuchElementException)
