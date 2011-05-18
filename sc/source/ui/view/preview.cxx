@@ -82,7 +82,7 @@
 
 #define SC_PREVIEW_SHADOWSIZE   2
 
-long lcl_GetDisplayStart( SCTAB nTab, ScDocument* pDoc, long* pPages )
+long lcl_GetDisplayStart( SCTAB nTab, ScDocument* pDoc, std::vector<long>& nPages )
 {
     long nDisplayStart = 0;
     for (SCTAB i=0; i<nTab; i++)
@@ -90,7 +90,7 @@ long lcl_GetDisplayStart( SCTAB nTab, ScDocument* pDoc, long* pPages )
         if ( pDoc->NeedPageResetAfterTab(i) )
             nDisplayStart = 0;
         else
-            nDisplayStart += pPages[i];
+            nDisplayStart += nPages[i];
     }
     return nDisplayStart;
 }
@@ -102,6 +102,8 @@ ScPreview::ScPreview( Window* pParent, ScDocShell* pDocSh, ScPreviewShell* pView
     nZoom( 100 ),
     bValid( false ),
     nTabsTested( 0 ),
+    nPages(),
+    nFirstAttr(),
     nTab( 0 ),
     nTabStart( 0 ),
     nDisplayStart( 0 ),
@@ -191,10 +193,10 @@ void ScPreview::TestLastPage()
         if (nTotalPages)
         {
             nPageNo = nTotalPages - 1;
-            nTab = nTabCount - 1;
+            nTab = static_cast<SCTAB>(nPages.size()) -1;
             while (nTab > 0 && !nPages[nTab])       // letzte nicht leere Tabelle
                 --nTab;
-            DBG_ASSERT(nPages[nTab],"alle Tabellen leer?");
+            DBG_ASSERT(0 < static_cast<SCTAB>(nPages.size()),"alle Tabellen leer?");
             nTabPage = nPages[nTab] - 1;
             nTabStart = 0;
             for (sal_uInt16 i=0; i<nTab; i++)
@@ -246,8 +248,16 @@ void ScPreview::CalcPages( SCTAB /*nToWhichTab*/ )
     ScMarkData aMarkData;
     aMarkData.SelectTable( nCurTab, true );
 
+    while (nStart > static_cast<SCTAB>(nPages.size()))
+        nPages.push_back(0);
+    while (nStart > static_cast<SCTAB>(nFirstAttr.size()))
+        nFirstAttr.push_back(0);
     for (SCTAB i=nStart; i<nAnz; i++)
     {
+        if ( i == static_cast<SCTAB>(nPages.size()))
+            nPages.push_back(0);
+        if ( i == static_cast<SCTAB>(nFirstAttr.size()))
+            nFirstAttr.push_back(0);
         if (!aOptions.GetAllSheets() && !aMarkData.GetTableSelect( i )) {
             nPages[i] = 0;
             nFirstAttr[i] = 0;
@@ -309,7 +319,7 @@ void ScPreview::RecalcPages()                   // nur nPageNo geaendert
     if (!bDone)
     {
         long nPartPages = 0;
-        for (SCTAB i=0; i<nTabsTested; i++)
+        for (SCTAB i=0; i<nTabsTested && nTab < static_cast<SCTAB>(nPages.size()); i++)
         {
             long nThisStart = nPartPages;
             nPartPages += nPages[i];
@@ -807,6 +817,8 @@ void ScPreview::SetPageNo( long nPage )
 
 long ScPreview::GetFirstPage(SCTAB nTabP)
 {
+    if (nTabP >= static_cast<SCTAB>(nPages.size()) )
+        OSL_FAIL("nPages out ouf bounds, FIX IT");
     SCTAB nDocTabCount = pDocShell->GetDocument()->GetTableCount();
     if (nTabP >= nDocTabCount)
         nTabP = nDocTabCount-1;

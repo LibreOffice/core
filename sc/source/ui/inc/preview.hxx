@@ -32,6 +32,8 @@
 #include <vcl/window.hxx>
 #include "printfun.hxx"     // ScPrintState
 
+#include <vector>
+
 class ScDocShell;
 class ScPreviewShell;
 class FmFormView;
@@ -48,8 +50,8 @@ private:
     sal_Bool            bValid;             // folgende Werte gueltig
     SCTAB           nTabCount;
     SCTAB           nTabsTested;        // fuer wieviele Tabellen ist nPages gueltig?
-    long            nPages[MAXTABCOUNT];
-    long            nFirstAttr[MAXTABCOUNT];
+    std::vector<long>       nPages;
+    std::vector<long>       nFirstAttr;
     SCTAB           nTab;               // Tabelle
     long            nTabPage;           // Seite von Tabelle
     long            nTabStart;          // erste Seite der Tabelle (wirklich)
