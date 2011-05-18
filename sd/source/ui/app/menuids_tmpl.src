@@ -987,7 +987,7 @@
     {\
         Identifier = SID_GRID_VISIBLE ; \
         HelpId = CMD_SID_GRID_VISIBLE ; \
-        Text [ en-US ] = "~Visible Grid" ; \
+        Text [ en-US ] = "~Display Grid" ; \
     };
 
 #define MN_GRID_USE\
@@ -1028,7 +1028,7 @@
     {\
         Identifier = SID_HELPLINES_VISIBLE ; \
         HelpId = CMD_SID_HELPLINES_VISIBLE ; \
-        Text [ en-US ] = "~Snap Lines Visible" ; \
+        Text [ en-US ] = "~Display Snap Lines" ; \
     };
 
 #define MN_HELPLINES_USE\
@@ -1036,7 +1036,7 @@
     {\
         Identifier = SID_HELPLINES_USE ; \
         HelpId = CMD_SID_HELPLINES_USE ; \
-        Text [ en-US ] = "Snap to Snap Lines"; \
+        Text [ en-US ] = "~Snap to Snap Lines"; \
     };
 
 #define MN_HELPLINES_FRONT\
@@ -1044,7 +1044,7 @@
     {\
         Identifier = SID_HELPLINES_FRONT ; \
         HelpId = CMD_SID_HELPLINES_FRONT ; \
-        Text [ en-US ] = "Snap Lines to Front" ; \
+        Text [ en-US ] = "Snap Lines to ~Front" ; \
     };
 
 #define MN_HELPLINES \

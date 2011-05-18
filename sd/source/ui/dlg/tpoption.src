@@ -57,7 +57,7 @@ TabPage TP_OPTIONS_CONTENTS
         Pos = MAP_APPFONT ( 12 , 97 - 69 ) ;
         Size = MAP_APPFONT ( 160 , 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "~Guides when moving" ;
+        Text [ en-US ] = "~Snap Lines when moving" ;
     };
     CheckBox CBX_HANDLES_BEZIER
     {
