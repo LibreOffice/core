@@ -399,16 +399,19 @@ int StreamToFile(TrueTypeCreator *_this, const char* fname)
     FILE* fd;
 
     if ((r = StreamToMemory(_this, &ptr, &length)) != SF_OK) return r;
-    if (!fname) return SF_BADFILE;
-    if ((fd = fopen(fname, "wb")) == NULL) return SF_BADFILE;
-
-    if (fwrite(ptr, 1, length, fd) != length) {
-        r = SF_FILEIO;
-    } else {
-        r = SF_OK;
+    if (fname && (fd = fopen(fname, "wb")) != NULL)
+    {
+        if (fwrite(ptr, 1, length, fd) != length) {
+            r = SF_FILEIO;
+        } else {
+            r = SF_OK;
+        }
+        fclose(fd);
     }
-
-    fclose(fd);
+    else
+    {
+        r = SF_BADFILE;
+    }
     free(ptr);
     return r;
 }
