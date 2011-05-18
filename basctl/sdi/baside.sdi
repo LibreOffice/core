@@ -57,6 +57,11 @@ shell BasicIDEShell
         StateMethod = GetState;
     ]
 
+    SID_SELECTALL
+    [
+        ExecMethod  = ExecuteCurrent;
+    ]
+
     SID_CUT
     [
         ExecMethod  = ExecuteCurrent;

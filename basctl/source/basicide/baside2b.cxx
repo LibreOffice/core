@@ -417,9 +417,7 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
 
     if ( !bDone && ( !TextEngine::DoesKeyChangeText( rKEvt ) || ImpCanModify()  ) )
     {
-        if ( ( rKEvt.GetKeyCode().GetCode() == KEY_A) && rKEvt.GetKeyCode().IsMod1() && !rKEvt.GetKeyCode().IsMod2() )
-            pEditView->SetSelection( TextSelection( TextPaM( 0, 0 ), TextPaM( 0xFFFFFFFF, 0xFFFF ) ) );
-        else if ( ( rKEvt.GetKeyCode().GetCode() == KEY_Y ) && rKEvt.GetKeyCode().IsMod1() )
+        if ( ( rKEvt.GetKeyCode().GetCode() == KEY_Y ) && rKEvt.GetKeyCode().IsMod1() )
             bDone = sal_True; // CTRL-Y schlucken, damit kein Vorlagenkatalog
         else
         {
