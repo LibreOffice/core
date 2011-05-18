@@ -1157,7 +1157,7 @@ void PrinterInfoManager::setDefaultPaper( PPDContext& rContext ) const
     {
         #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "not setting default paper, already set %s\n",
-        OUStringToOString( rContext.getValue( pPageSizeKey )->m_aOption, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+                 ::rtl::OUStringToOString( rContext.getValue( pPageSizeKey )->m_aOption, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
         #endif
         return;
     }
@@ -1174,12 +1174,12 @@ void PrinterInfoManager::setDefaultPaper( PPDContext& rContext ) const
     if( pPaperVal )
     {
         #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "setting default paper %s\n", OUStringToOString( pPaperVal->m_aOption, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+        fprintf( stderr, "setting default paper %s\n", ::rtl::OUStringToOString( pPaperVal->m_aOption, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
         #endif
         rContext.setValue( pPageSizeKey, pPaperVal );
         #if OSL_DEBUG_LEVEL > 1
         pPaperVal = rContext.getValue( pPageSizeKey );
-        fprintf( stderr, "-> got paper %s\n", OUStringToOString( pPaperVal->m_aOption, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+        fprintf( stderr, "-> got paper %s\n", ::rtl::OUStringToOString( pPaperVal->m_aOption, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
         #endif
     }
 }
