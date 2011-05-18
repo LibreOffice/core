@@ -385,7 +385,7 @@
             </node>
             <node oor:name=".uno:SnapLinesMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Guides</value>
+                    <value xml:lang="en-US">~Snap Lines</value>
                 </prop>
             </node>
             <node oor:name=".uno:ObjectResize" oor:op="replace">
