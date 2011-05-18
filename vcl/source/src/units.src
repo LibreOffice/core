@@ -42,7 +42,7 @@ StringArray SV_FUNIT_STRINGS
         < "twips" ; FUNIT_TWIP ; > ;
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
-        < "pi" ; FUNIT_PICA ; > ;
+        < "pc" ; FUNIT_PICA ; > ;
         < "\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
