@@ -52,7 +52,7 @@ $(LIB$(TNR)ARCHIV) :	$(LIB$(TNR)TARGET)
 .IF "$(GUI)$(COM)"=="WNTGCC"
     @+-$(RM) $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
     @+echo $(LIBMGR) $(LIB$(TNR)FLAGS) $(LIBFLAGS) $(LIB$(TNR)ARCHIV) `cat $(LIB$(TNR)TARGET) | sed s#'^'$(ROUT)#$(PRJ)/$(ROUT)#g` > $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
-    @+echo  ranlib $(LIB$(TNR)ARCHIV) >> $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
+    @+echo $(RANLIB) $(LIB$(TNR)ARCHIV) >> $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
 .IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
 .ENDIF

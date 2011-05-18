@@ -23,7 +23,7 @@ $(LIB1ARCHIV) :	$(LIB1TARGET)
 .IF "$(GUI)$(COM)"=="WNTGCC"
     @+-$(RM) $(MISC)/$(LIB1ARCHIV:b).cmd
     @+echo $(LIBMGR) $(LIB1FLAGS) $(LIBFLAGS) $(LIB1ARCHIV) `cat $(LIB1TARGET) | sed s#'^'$(ROUT)#$(PRJ)/$(ROUT)#g` > $(MISC)/$(LIB1ARCHIV:b).cmd
-    @+echo  ranlib $(LIB1ARCHIV) >> $(MISC)/$(LIB1ARCHIV:b).cmd
+    @+echo $(RANLIB) $(LIB1ARCHIV) >> $(MISC)/$(LIB1ARCHIV:b).cmd
 .IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(LIB1ARCHIV:b).cmd
 .ENDIF
@@ -108,7 +108,7 @@ $(LIB2ARCHIV) :	$(LIB2TARGET)
 .IF "$(GUI)$(COM)"=="WNTGCC"
     @+-$(RM) $(MISC)/$(LIB2ARCHIV:b).cmd
     @+echo $(LIBMGR) $(LIB2FLAGS) $(LIBFLAGS) $(LIB2ARCHIV) `cat $(LIB2TARGET) | sed s#'^'$(ROUT)#$(PRJ)/$(ROUT)#g` > $(MISC)/$(LIB2ARCHIV:b).cmd
-    @+echo  ranlib $(LIB2ARCHIV) >> $(MISC)/$(LIB2ARCHIV:b).cmd
+    @+echo $(RANLIB) $(LIB2ARCHIV) >> $(MISC)/$(LIB2ARCHIV:b).cmd
 .IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(LIB2ARCHIV:b).cmd
 .ENDIF
@@ -193,7 +193,7 @@ $(LIB3ARCHIV) :	$(LIB3TARGET)
 .IF "$(GUI)$(COM)"=="WNTGCC"
     @+-$(RM) $(MISC)/$(LIB3ARCHIV:b).cmd
     @+echo $(LIBMGR) $(LIB3FLAGS) $(LIBFLAGS) $(LIB3ARCHIV) `cat $(LIB3TARGET) | sed s#'^'$(ROUT)#$(PRJ)/$(ROUT)#g` > $(MISC)/$(LIB3ARCHIV:b).cmd
-    @+echo  ranlib $(LIB3ARCHIV) >> $(MISC)/$(LIB3ARCHIV:b).cmd
+    @+echo $(RANLIB) $(LIB3ARCHIV) >> $(MISC)/$(LIB3ARCHIV:b).cmd
 .IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(LIB3ARCHIV:b).cmd
 .ENDIF
@@ -278,7 +278,7 @@ $(LIB4ARCHIV) :	$(LIB4TARGET)
 .IF "$(GUI)$(COM)"=="WNTGCC"
     @+-$(RM) $(MISC)/$(LIB4ARCHIV:b).cmd
     @+echo $(LIBMGR) $(LIB4FLAGS) $(LIBFLAGS) $(LIB4ARCHIV) `cat $(LIB4TARGET) | sed s#'^'$(ROUT)#$(PRJ)/$(ROUT)#g` > $(MISC)/$(LIB4ARCHIV:b).cmd
-    @+echo  ranlib $(LIB4ARCHIV) >> $(MISC)/$(LIB4ARCHIV:b).cmd
+    @+echo $(RANLIB) $(LIB4ARCHIV) >> $(MISC)/$(LIB4ARCHIV:b).cmd
 .IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(LIB4ARCHIV:b).cmd
 .ENDIF
@@ -363,7 +363,7 @@ $(LIB5ARCHIV) :	$(LIB5TARGET)
 .IF "$(GUI)$(COM)"=="WNTGCC"
     @+-$(RM) $(MISC)/$(LIB5ARCHIV:b).cmd
     @+echo $(LIBMGR) $(LIB5FLAGS) $(LIBFLAGS) $(LIB5ARCHIV) `cat $(LIB5TARGET) | sed s#'^'$(ROUT)#$(PRJ)/$(ROUT)#g` > $(MISC)/$(LIB5ARCHIV:b).cmd
-    @+echo  ranlib $(LIB5ARCHIV) >> $(MISC)/$(LIB5ARCHIV:b).cmd
+    @+echo $(RANLIB) $(LIB5ARCHIV) >> $(MISC)/$(LIB5ARCHIV:b).cmd
 .IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(LIB5ARCHIV:b).cmd
 .ENDIF
@@ -448,7 +448,7 @@ $(LIB6ARCHIV) :	$(LIB6TARGET)
 .IF "$(GUI)$(COM)"=="WNTGCC"
     @+-$(RM) $(MISC)/$(LIB6ARCHIV:b).cmd
     @+echo $(LIBMGR) $(LIB6FLAGS) $(LIBFLAGS) $(LIB6ARCHIV) `cat $(LIB6TARGET) | sed s#'^'$(ROUT)#$(PRJ)/$(ROUT)#g` > $(MISC)/$(LIB6ARCHIV:b).cmd
-    @+echo  ranlib $(LIB6ARCHIV) >> $(MISC)/$(LIB6ARCHIV:b).cmd
+    @+echo $(RANLIB) $(LIB6ARCHIV) >> $(MISC)/$(LIB6ARCHIV:b).cmd
 .IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(LIB6ARCHIV:b).cmd
 .ENDIF
@@ -533,7 +533,7 @@ $(LIB7ARCHIV) :	$(LIB7TARGET)
 .IF "$(GUI)$(COM)"=="WNTGCC"
     @+-$(RM) $(MISC)/$(LIB7ARCHIV:b).cmd
     @+echo $(LIBMGR) $(LIB7FLAGS) $(LIBFLAGS) $(LIB7ARCHIV) `cat $(LIB7TARGET) | sed s#'^'$(ROUT)#$(PRJ)/$(ROUT)#g` > $(MISC)/$(LIB7ARCHIV:b).cmd
-    @+echo  ranlib $(LIB7ARCHIV) >> $(MISC)/$(LIB7ARCHIV:b).cmd
+    @+echo $(RANLIB) $(LIB7ARCHIV) >> $(MISC)/$(LIB7ARCHIV:b).cmd
 .IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(LIB7ARCHIV:b).cmd
 .ENDIF
@@ -618,7 +618,7 @@ $(LIB8ARCHIV) :	$(LIB8TARGET)
 .IF "$(GUI)$(COM)"=="WNTGCC"
     @+-$(RM) $(MISC)/$(LIB8ARCHIV:b).cmd
     @+echo $(LIBMGR) $(LIB8FLAGS) $(LIBFLAGS) $(LIB8ARCHIV) `cat $(LIB8TARGET) | sed s#'^'$(ROUT)#$(PRJ)/$(ROUT)#g` > $(MISC)/$(LIB8ARCHIV:b).cmd
-    @+echo  ranlib $(LIB8ARCHIV) >> $(MISC)/$(LIB8ARCHIV:b).cmd
+    @+echo $(RANLIB) $(LIB8ARCHIV) >> $(MISC)/$(LIB8ARCHIV:b).cmd
 .IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(LIB8ARCHIV:b).cmd
 .ENDIF
@@ -703,7 +703,7 @@ $(LIB9ARCHIV) :	$(LIB9TARGET)
 .IF "$(GUI)$(COM)"=="WNTGCC"
     @+-$(RM) $(MISC)/$(LIB9ARCHIV:b).cmd
     @+echo $(LIBMGR) $(LIB9FLAGS) $(LIBFLAGS) $(LIB9ARCHIV) `cat $(LIB9TARGET) | sed s#'^'$(ROUT)#$(PRJ)/$(ROUT)#g` > $(MISC)/$(LIB9ARCHIV:b).cmd
-    @+echo  ranlib $(LIB9ARCHIV) >> $(MISC)/$(LIB9ARCHIV:b).cmd
+    @+echo $(RANLIB) $(LIB9ARCHIV) >> $(MISC)/$(LIB9ARCHIV:b).cmd
 .IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(LIB9ARCHIV:b).cmd
 .ENDIF
