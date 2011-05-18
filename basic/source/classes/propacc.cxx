@@ -239,7 +239,7 @@ sal_Int32 PropertySetInfoImpl::GetIndex_Impl( const ::rtl::OUString &rPropName )
             bsearch( &rPropName, _aProps.getConstArray(), _aProps.getLength(),
                       sizeof( Property ),
                       SbCompare_UString_Property_Impl );
-    return pP ? sal::static_int_cast<sal_Int32>( (pP-_aProps.getConstArray()) / sizeof(pP) ) : -1;
+    return pP ? sal::static_int_cast<sal_Int32>( pP - _aProps.getConstArray() ) : -1;
 }
 
 Sequence< Property > PropertySetInfoImpl::getProperties(void) throw()
