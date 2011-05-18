@@ -60,7 +60,6 @@ public:\
     const T& GetObject( sal_uInt16 nPos ) const; \
     T& GetObject( sal_uInt16 nPos ); \
 \
-    void Insert( sal_uInt16 nPos, ARR& rIns, sal_uInt16 nStart = 0, sal_uInt16 nEnd = USHRT_MAX );\
     void Insert( sal_uInt16 nPos, const T& rElem );\
     void Insert( sal_uInt16 nPos, const T& rElems, sal_uInt16 nLen );\
     void Append( const T& rElem );\
@@ -76,11 +75,6 @@ public:\
     sal_Bool Contains( const T& rItem ) const;\
     void Clear() { Remove( 0, Count() ); }\
 };\
-\
-inline void ARR::Insert( sal_uInt16 nPos, ARR& rIns, sal_uInt16 nStart, sal_uInt16 nEnd )\
-{\
-    Insert( nPos, *(rIns.pData+(sizeof(T)*nStart)), nStart-nEnd+1 );\
-}\
 \
 inline void ARR::Insert( sal_uInt16 nPos, const T& rElem )\
 {\
