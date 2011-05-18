@@ -75,7 +75,9 @@ static const sal_Char* MOUNTTAB="/etc/mtab";
 #include <sys/param.h>
 #include <sys/ucred.h>
 #include <sys/mount.h>
+#ifndef NETBSD
 #include <ufs/ufs/quota.h>
+#endif
 #define  HAVE_STATFS_H
 
 /* No mounting table on *BSD
