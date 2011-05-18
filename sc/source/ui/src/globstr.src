@@ -363,7 +363,7 @@ Resource RID_GLOBSTR
     };
     String STR_UNDO_TRANSLITERATE
     {
-        Text [ en-US ] = "Case/Characters";
+        Text [ en-US ] = "~Change Case";
     };
     String STR_DB_NONAME
     {

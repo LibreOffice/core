@@ -480,7 +480,7 @@ TabPage RID_SCPAGE_CONTENT
         HelpID = "sc:CheckBox:RID_SCPAGE_CONTENT:CB_GUIDELINE";
         Pos = MAP_APPFONT ( 12 , 56 ) ;
         Size = MAP_APPFONT ( 112 , 10 ) ;
-        Text [ en-US ] = "Guides ~while moving";
+        Text [ en-US ] = "Helplines ~While Moving";
     };
     CheckBox CB_HANDLES
     {
