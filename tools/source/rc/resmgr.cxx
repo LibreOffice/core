@@ -120,7 +120,7 @@ class InternalResMgr
     void *                  LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
                                            void **pResHandle );
 public:
-    void                    FreeGlobalRes( void *, void * );
+    static void                 FreeGlobalRes( void *, void * );
 
     SvStream *              GetBitmapStream( sal_uInt32 nResId );
 };
@@ -962,7 +962,7 @@ void ResMgr::Init( const OUString& rFileName )
         pVoid = pImpRes->LoadGlobalRes( RSC_VERSIONCONTROL, RSCVERSION_ID,
                                         &aResHandle );
         if ( pVoid )
-            pImpRes->FreeGlobalRes( aResHandle, pVoid );
+            InternalResMgr::FreeGlobalRes( aResHandle, pVoid );
         else
         {
             ByteString aStr( "Wrong version:\n" );
@@ -997,7 +997,7 @@ ResMgr::~ResMgr()
     while( nCurStack > 0 )
     {
         if( ( aStack[nCurStack].Flags & (RC_GLOBAL | RC_NOTFOUND) ) == RC_GLOBAL )
-            pImpRes->FreeGlobalRes( aStack[nCurStack].aResHandle,
+            InternalResMgr::FreeGlobalRes( aStack[nCurStack].aResHandle,
                                     aStack[nCurStack].pResource );
         nCurStack--;
     }
@@ -1284,7 +1284,7 @@ void ResMgr::PopContext( const Resource* pResObj )
         // Resource freigeben
         if( (pTop->Flags & (RC_GLOBAL | RC_NOTFOUND)) == RC_GLOBAL )
             // kann auch Fremd-Ressource sein
-            pImpRes->FreeGlobalRes( pTop->aResHandle, pTop->pResource );
+            InternalResMgr::FreeGlobalRes( pTop->aResHandle, pTop->pResource );
         decStack();
     }
 }
@@ -2027,7 +2027,7 @@ UniString SimpleResMgr::ReadString( sal_uInt32 nId )
 
     // not neccessary with te current implementation which holds the string table permanently, but to be sure ....
     // note: pFallback cannot be NULL here and is either the fallback or m_pResImpl
-    pFallback->FreeGlobalRes( pResHeader, pResHandle );
+    InternalResMgr::FreeGlobalRes( pResHeader, pResHandle );
     if( m_pResImpl != pFallback )
     {
         osl::Guard<osl::Mutex> aGuard2( getResMgrMutex() );
