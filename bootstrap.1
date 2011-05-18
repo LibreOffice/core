@@ -20,11 +20,11 @@ if test "$BUILD_DMAKE" != "NO"; then
         # If cross-compiling then don't use the cross compilers to build dmake.
         if test "$GUI_FOR_BUILD" = "WNT"; then
             # Let the Cygwin gcc be found
-            export CC=""
-            export CXX=""
+            unset CC CXX AR NM OBJDUMP PKG_CONFIG RANLIB STRIP
         elif test "$CROSS_COMPILING" = "YES"; then
             export CC="$CC_FOR_BUILD"
             export CXX="$CXX_FOR_BUILD"
+            unset AR NM OBJDUMP PKG_CONFIG RANLIB STRIP
         fi
 
         # For normal unixy systems
