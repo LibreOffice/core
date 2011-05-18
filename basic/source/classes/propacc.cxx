@@ -120,7 +120,7 @@ sal_Int32 SbPropertyValues::GetIndex_Impl( const ::rtl::OUString &rPropName ) co
             bsearch( &rPropName, _aPropVals.GetData(), _aPropVals.Count(),
                       sizeof( PropertyValue* ),
                       SbCompare_UString_PropertyValue_Impl );
-    return ppPV ? ( (ppPV-_aPropVals.GetData()) / sizeof(ppPV) ) : USHRT_MAX;
+    return ppPV ? ppPV - _aPropVals.GetData() : USHRT_MAX;
 }
 
 //----------------------------------------------------------------------------
