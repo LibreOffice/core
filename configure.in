@@ -4414,6 +4414,8 @@ if test -n "$with_system_db" -o -n "$with_system_libs" && \
         [AC_MSG_RESULT([yes])],
         [AC_MSG_ERROR([no. you need at least db 4.1])])
 
+    SYSTEM_DB_CFLAGS="-DSYSTEM_DB_HEADER='<$db_header>'"
+
     DB_LIB=
     for dbver in 5.1 5.0 5 4.8 4.7 4 ''; do
         for dash in - ''; do
@@ -4442,6 +4444,7 @@ else
     BUILD_TYPE="$BUILD_TYPE BERKELEYDB"
 fi
 AC_SUBST(SYSTEM_DB)
+AC_SUBST(SYSTEM_DB_CFLAGS)
 AC_SUBST(DB_LIB)
 AC_SUBST(DB_CPPLIB)
 
