@@ -557,12 +557,19 @@ sal_Bool ScRangeStringConverter::GetRangeListFromString(
     while( nOffset >= 0 )
     {
         ScRange* pRange = new ScRange;
-        if (  GetRangeFromString( *pRange, rRangeListStr, pDocument, eConv, nOffset, cSeperator, cQuote )
-           && (nOffset >= 0)
+        if (
+             GetRangeFromString( *pRange, rRangeListStr, pDocument, eConv, nOffset, cSeperator, cQuote ) &&
+             (nOffset >= 0)
            )
+        {
             rRangeList.push_back( pRange );
+            pRange = NULL;
+        }
         else if (nOffset > -1)
             bRet = false;
+        //if ownership transferred to rRangeList pRange was NULLed, otherwwise
+        //delete it
+        delete pRange;
     }
     return bRet;
 }
