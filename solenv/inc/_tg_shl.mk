@@ -267,7 +267,13 @@ $(SHL1TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL1TARGET:b) >> $(MISC)/$(SHL1DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL1DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL1DEFAULTRES:b).rc $(RCFLAGSOUTRES)$(SHL1DEFAULTRES)
+.IF "$(RCFLAGSOUTRES)"!=""
+    # rc, takes separate flag naming output file, source .rc file last
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(RCFLAGSOUTRES)$(SHL1DEFAULTRES) $(MISC)/$(SHL1DEFAULTRES:b).rc
+.ELSE
+    # windres, just takes output file last
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL1DEFAULTRES:b).rc $(SHL1DEFAULTRES)
+.ENDIF
 .ENDIF			# "$(SHL1DEFAULTRES)"!=""
 .IF "$(SHL1ALLRES)"!=""
     $(COMMAND_ECHO)$(TYPE) $(SHL1ALLRES) > $(SHL1LINKRES)
@@ -736,7 +742,13 @@ $(SHL2TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL2TARGET:b) >> $(MISC)/$(SHL2DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL2DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL2DEFAULTRES:b).rc $(RCFLAGSOUTRES)$(SHL2DEFAULTRES)
+.IF "$(RCFLAGSOUTRES)"!=""
+    # rc, takes separate flag naming output file, source .rc file last
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(RCFLAGSOUTRES)$(SHL2DEFAULTRES) $(MISC)/$(SHL2DEFAULTRES:b).rc
+.ELSE
+    # windres, just takes output file last
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL2DEFAULTRES:b).rc $(SHL2DEFAULTRES)
+.ENDIF
 .ENDIF			# "$(SHL2DEFAULTRES)"!=""
 .IF "$(SHL2ALLRES)"!=""
     $(COMMAND_ECHO)$(TYPE) $(SHL2ALLRES) > $(SHL2LINKRES)
@@ -1205,7 +1217,13 @@ $(SHL3TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL3TARGET:b) >> $(MISC)/$(SHL3DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL3DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL3DEFAULTRES:b).rc $(RCFLAGSOUTRES)$(SHL3DEFAULTRES)
+.IF "$(RCFLAGSOUTRES)"!=""
+    # rc, takes separate flag naming output file, source .rc file last
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(RCFLAGSOUTRES)$(SHL3DEFAULTRES) $(MISC)/$(SHL3DEFAULTRES:b).rc
+.ELSE
+    # windres, just takes output file last
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL3DEFAULTRES:b).rc $(SHL3DEFAULTRES)
+.ENDIF
 .ENDIF			# "$(SHL3DEFAULTRES)"!=""
 .IF "$(SHL3ALLRES)"!=""
     $(COMMAND_ECHO)$(TYPE) $(SHL3ALLRES) > $(SHL3LINKRES)
@@ -1674,7 +1692,13 @@ $(SHL4TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL4TARGET:b) >> $(MISC)/$(SHL4DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL4DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL4DEFAULTRES:b).rc $(RCFLAGSOUTRES)$(SHL4DEFAULTRES)
+.IF "$(RCFLAGSOUTRES)"!=""
+    # rc, takes separate flag naming output file, source .rc file last
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(RCFLAGSOUTRES)$(SHL4DEFAULTRES) $(MISC)/$(SHL4DEFAULTRES:b).rc
+.ELSE
+    # windres, just takes output file last
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL4DEFAULTRES:b).rc $(SHL4DEFAULTRES)
+.ENDIF
 .ENDIF			# "$(SHL4DEFAULTRES)"!=""
 .IF "$(SHL4ALLRES)"!=""
     $(COMMAND_ECHO)$(TYPE) $(SHL4ALLRES) > $(SHL4LINKRES)
@@ -2143,7 +2167,13 @@ $(SHL5TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL5TARGET:b) >> $(MISC)/$(SHL5DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL5DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL5DEFAULTRES:b).rc $(RCFLAGSOUTRES)$(SHL5DEFAULTRES)
+.IF "$(RCFLAGSOUTRES)"!=""
+    # rc, takes separate flag naming output file, source .rc file last
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(RCFLAGSOUTRES)$(SHL5DEFAULTRES) $(MISC)/$(SHL5DEFAULTRES:b).rc
+.ELSE
+    # windres, just takes output file last
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL5DEFAULTRES:b).rc $(SHL5DEFAULTRES)
+.ENDIF
 .ENDIF			# "$(SHL5DEFAULTRES)"!=""
 .IF "$(SHL5ALLRES)"!=""
     $(COMMAND_ECHO)$(TYPE) $(SHL5ALLRES) > $(SHL5LINKRES)
@@ -2612,7 +2642,13 @@ $(SHL6TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL6TARGET:b) >> $(MISC)/$(SHL6DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL6DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL6DEFAULTRES:b).rc $(RCFLAGSOUTRES)$(SHL6DEFAULTRES)
+.IF "$(RCFLAGSOUTRES)"!=""
+    # rc, takes separate flag naming output file, source .rc file last
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(RCFLAGSOUTRES)$(SHL6DEFAULTRES) $(MISC)/$(SHL6DEFAULTRES:b).rc
+.ELSE
+    # windres, just takes output file last
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL6DEFAULTRES:b).rc $(SHL6DEFAULTRES)
+.ENDIF
 .ENDIF			# "$(SHL6DEFAULTRES)"!=""
 .IF "$(SHL6ALLRES)"!=""
     $(COMMAND_ECHO)$(TYPE) $(SHL6ALLRES) > $(SHL6LINKRES)
@@ -3081,7 +3117,13 @@ $(SHL7TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL7TARGET:b) >> $(MISC)/$(SHL7DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL7DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL7DEFAULTRES:b).rc $(RCFLAGSOUTRES)$(SHL7DEFAULTRES)
+.IF "$(RCFLAGSOUTRES)"!=""
+    # rc, takes separate flag naming output file, source .rc file last
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(RCFLAGSOUTRES)$(SHL7DEFAULTRES) $(MISC)/$(SHL7DEFAULTRES:b).rc
+.ELSE
+    # windres, just takes output file last
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL7DEFAULTRES:b).rc $(SHL7DEFAULTRES)
+.ENDIF
 .ENDIF			# "$(SHL7DEFAULTRES)"!=""
 .IF "$(SHL7ALLRES)"!=""
     $(COMMAND_ECHO)$(TYPE) $(SHL7ALLRES) > $(SHL7LINKRES)
@@ -3550,7 +3592,13 @@ $(SHL8TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL8TARGET:b) >> $(MISC)/$(SHL8DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL8DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL8DEFAULTRES:b).rc $(RCFLAGSOUTRES)$(SHL8DEFAULTRES)
+.IF "$(RCFLAGSOUTRES)"!=""
+    # rc, takes separate flag naming output file, source .rc file last
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(RCFLAGSOUTRES)$(SHL8DEFAULTRES) $(MISC)/$(SHL8DEFAULTRES:b).rc
+.ELSE
+    # windres, just takes output file last
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL8DEFAULTRES:b).rc $(SHL8DEFAULTRES)
+.ENDIF
 .ENDIF			# "$(SHL8DEFAULTRES)"!=""
 .IF "$(SHL8ALLRES)"!=""
     $(COMMAND_ECHO)$(TYPE) $(SHL8ALLRES) > $(SHL8LINKRES)
@@ -4019,7 +4067,13 @@ $(SHL9TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL9TARGET:b) >> $(MISC)/$(SHL9DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL9DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL9DEFAULTRES:b).rc $(RCFLAGSOUTRES)$(SHL9DEFAULTRES)
+.IF "$(RCFLAGSOUTRES)"!=""
+    # rc, takes separate flag naming output file, source .rc file last
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(RCFLAGSOUTRES)$(SHL9DEFAULTRES) $(MISC)/$(SHL9DEFAULTRES:b).rc
+.ELSE
+    # windres, just takes output file last
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL9DEFAULTRES:b).rc $(SHL9DEFAULTRES)
+.ENDIF
 .ENDIF			# "$(SHL9DEFAULTRES)"!=""
 .IF "$(SHL9ALLRES)"!=""
     $(COMMAND_ECHO)$(TYPE) $(SHL9ALLRES) > $(SHL9LINKRES)
@@ -4488,7 +4542,13 @@ $(SHL10TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL10TARGET:b) >> $(MISC)/$(SHL10DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL10DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL10DEFAULTRES:b).rc $(RCFLAGSOUTRES)$(SHL10DEFAULTRES)
+.IF "$(RCFLAGSOUTRES)"!=""
+    # rc, takes separate flag naming output file, source .rc file last
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(RCFLAGSOUTRES)$(SHL10DEFAULTRES) $(MISC)/$(SHL10DEFAULTRES:b).rc
+.ELSE
+    # windres, just takes output file last
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL10DEFAULTRES:b).rc $(SHL10DEFAULTRES)
+.ENDIF
 .ENDIF			# "$(SHL10DEFAULTRES)"!=""
 .IF "$(SHL10ALLRES)"!=""
     $(COMMAND_ECHO)$(TYPE) $(SHL10ALLRES) > $(SHL10LINKRES)

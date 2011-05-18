@@ -679,6 +679,8 @@ elsif ( $platform =~ m/cygwin|mingw32/ )
   else # The MSVC section starts here
   {   print "Setting Windows (MSVC) specific values... ";
       $outfile        = "WindowsMSVCEnv.Set.sh";
+      # Temporary hack: remove the old winenv.set.sh to avoid confusion... drop after a few weeks
+      unlink('winenv.set.sh');
       $COMPATH        = PathFormat('@COMPATH@');
       $COM            = "MSC";
       $OUTPATH        = "wntmsci@COMEX@";
