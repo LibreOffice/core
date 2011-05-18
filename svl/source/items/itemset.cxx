@@ -1876,12 +1876,12 @@ static SfxItemArray AddItem_Impl(SfxItemArray pItems, sal_uInt16 nOldSize, sal_u
     {
         // alte Items vor nPos kopieren
         if ( nPos )
-            memcpy( (void*) pNew, pItems, nPos * sizeof(SfxPoolItem **) );
+            memcpy( (void*) pNew, pItems, nPos * sizeof(SfxPoolItem *) );
 
         // alte Items hinter nPos kopieren
         if ( nPos < nOldSize )
             memcpy( (void*) (pNew + nPos + 1), pItems + nPos,
-                    (nOldSize-nPos) * sizeof(SfxPoolItem **) );
+                    (nOldSize-nPos) * sizeof(SfxPoolItem *) );
     }
 
     // neues Item initialisieren
