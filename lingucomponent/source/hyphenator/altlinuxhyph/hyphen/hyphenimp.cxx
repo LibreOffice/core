@@ -95,25 +95,19 @@ Hyphenator::Hyphenator() :
     numdict = 0;
 }
 
-
 Hyphenator::~Hyphenator()
 {
     if (pPropHelper)
         pPropHelper->RemoveAsPropListener();
 
-    if ((numdict) && (aDicts))
+    if (numdict && aDicts)
     {
-        for (int i=0; i < numdict; i++)
-        {
-            if (aDicts[i].apCC) delete aDicts[i].apCC;
-            aDicts[i].apCC = NULL;
-        }
+        for (int i=0; i < numdict; ++i)
+            delete aDicts[i].apCC;
     }
-    if (aDicts) delete[] aDicts;
-    aDicts = NULL;
-    numdict = 0;
-}
 
+    delete[] aDicts;
+}
 
 PropertyHelper_Hyphen & Hyphenator::GetPropHelper_Impl()
 {
