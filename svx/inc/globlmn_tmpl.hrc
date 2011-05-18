@@ -654,7 +654,7 @@
     MenuItem\
     {\
         Identifier = DEFINE_SLOTID_FOR_NUMBER_BULLETS ; \
-        Text [ en-US ] = "~Numbering/Bullets..." ; \
+        Text [ en-US ] = "~Bullets and Numbering..." ; \
             };
 
 
@@ -1209,7 +1209,7 @@
                 };\
             };\
         };\
-        Text [ en-US ] = "Case/Characters";\
+        Text [ en-US ] = "~Change Case";\
             };
 
 #define ITEM_OPEN_HYPERLINK \

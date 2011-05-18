@@ -1301,8 +1301,8 @@
 					<!-- UIHints: Tools - Options - Text document - Layout - [Section] Lines -->
 					<info>
 						<author>OS</author>
-						<desc>Displays guides around the frames when frames are moved.</desc>
-						<label>Guides</label>
+						<desc>Displays helplines around the frames when frames are moved.</desc>
+						<label>Helplines</label>
 					</info>
 					<value>false</value>
 				</prop>

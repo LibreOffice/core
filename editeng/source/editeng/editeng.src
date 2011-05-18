@@ -70,7 +70,7 @@ String RID_EDITUNDO_SETSTYLE
 
 String RID_EDITUNDO_TRANSLITERATE
 {
-    Text [ en-US ] = "Case/Characters";
+    Text [ en-US ] = "~Change Case";
 };
 
 

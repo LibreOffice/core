@@ -326,8 +326,8 @@
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Lines -->
 					<info>
 						<author>NN</author>
-						<desc>Specifies whether guides are displayed when moving objects.</desc>
-						<label>Guides</label>
+						<desc>Specifies whether helplines are displayed when moving objects.</desc>
+						<label>Helplines</label>
 					</info>
 					<value>false</value>
 				</prop>

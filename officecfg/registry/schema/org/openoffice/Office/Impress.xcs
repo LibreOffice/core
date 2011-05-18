@@ -126,7 +126,7 @@
           <!-- UIHints: Tools - Options - Presentation - Layout - [Section] Display -->
           <info>
             <desc>Indicates whether to show help-lines when moving an object.</desc>
-            <label>Guides when moving</label>
+            <label>Helplines While Moving</label>
           </info>
           <value>false</value>
         </prop>
