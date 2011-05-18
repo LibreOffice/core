@@ -287,7 +287,7 @@ void ScTableConditionalFormat::AddEntry_Impl(const ScCondFormatEntryItem& aEntry
 
 ScTableConditionalEntry* ScTableConditionalFormat::GetObjectByIndex_Impl(sal_uInt16 nIndex) const
 {
-    return aEntries[nIndex];
+    return nIndex < aEntries.size() ? aEntries[nIndex] : NULL;
 }
 
 void SAL_CALL ScTableConditionalFormat::addNew(
