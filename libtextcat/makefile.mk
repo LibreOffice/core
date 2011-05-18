@@ -73,7 +73,13 @@ CONFIGURE_FLAGS+= --build="$(BUILD_PLATFORM)" --host="$(HOST_PLATFORM)"
 
 BUILD_ACTION=make
 
+.IF "$(OS)"=="ANDROID"
+# The libtool in the libtextcat-2.2 tarball doesn't build
+# shared libraries on Android, for some reason.
+OUT2LIB=$(BUILD_DIR)$/src$/.libs$/libtextcat*.a
+.ELSE
 OUT2LIB=$(BUILD_DIR)$/src$/.libs$/libtextcat*$(DLLPOST)
+.ENDIF
 
 .ENDIF # "$(GUI)"=="UNX"
 
