@@ -59,7 +59,7 @@ TabPage TP_CONTENT_OPT
         HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_CROSS";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text [ en-US ] = "Guides ~while moving";
+        Text [ en-US ] = "Helplines ~While Moving";
     };
     CheckBox CB_HANDLE
     {
