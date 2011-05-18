@@ -64,7 +64,7 @@ Status ~Bar
 Input M~ethod Status
 ~Ruler
 Gr~id
-~Guides
+~Snap Lines
 
 ~Zoom...
 ********** ~Insert

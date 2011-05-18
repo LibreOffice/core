@@ -699,10 +699,10 @@ testcase tiFormatCaseCharacter
     printlog "move curser 1 time to the left"
     hTypeKeys "<left>"
     
-    printlog "Format->Case/Characters->Uppercase"
+    printlog "Format->~Change Case->Uppercase"
     FormatChangeCaseUpper
     WaitSlot (1000)
-    printlog "Format->Case/Characters->Lowercase"
+    printlog "Format->~Change Case->Lowercase"
     FormatChangeCaseLower
     WaitSlot (2000)
     if bAsianLan then
@@ -711,28 +711,28 @@ testcase tiFormatCaseCharacter
         end if
         printlog "if asian language (81/82/86/88):"
         try
-           printlog "+ Format->Case/Characters->Half-width"
+           printlog "+ Format->~Change Case->Half-width"
             FormatChangeCaseHalfWidth
         catch
             Warnlog "Format / Change Case / Half Width does not work."
         endcatch
         WaitSlot (1000)
         try
-           printlog "+ Format->Case/Characters->Full-width"
+           printlog "+ Format->~Change Case->Full-width"
             FormatChangeCaseFullWidth
         catch
             Warnlog "Format / Change Case / Full Width does not work!"
         endcatch
         sleep 1
         try
-           printlog "+ Format->Case/Characters->Hiragana"
+           printlog "+ Format->~Change Case->Hiragana"
             FormatChangeCaseHiragana
         catch
             Warnlog "Format / Change Case / Hiragana does not work."
         endcatch
         sleep 1
         try
-           printlog "+ Format->Case/Characters->Katatana"
+           printlog "+ Format->~Change Case->Katatana"
             FormatChangeCaseKatagana
         catch
             Warnlog "Format / Change Case / Katagana does not work."
