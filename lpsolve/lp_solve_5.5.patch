@@ -23,9 +23,9 @@
 +else
 +     so=so
 +     soprefix=lib
-+     libs=-lc -lm -ldl
++     libs="-lc -lm -ldl"
 +     pic=-fpic
-+     ldflags=-Wl,-Bsymbolic -Wl,-soname,liblpsolve55.$so
++     ldflags="-Wl,-Bsymbolic -Wl,-soname,liblpsolve55.$so"
  fi
 @@ -19,3 +19,3 @@
 -  $c -fpic -s -c -I.. -I../shared -I../bfp -I../bfp/bfp_LUSOL -I../bfp/bfp_LUSOL/LUSOL -I../colamd -I. $opts -DYY_NEVER_INTERACTIVE -DPARSER_LP -DINVERSE_ACTIVE=INVERSE_LUSOL -DRoleIsExternalInvEngine $src
