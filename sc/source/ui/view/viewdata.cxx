@@ -296,7 +296,8 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
 }
 
 ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh )
-    :   pDocShell   ( pDocSh ),
+    :   pTabData(),
+        pDocShell   ( pDocSh ),
         pDoc        ( NULL ),
         pView       ( pViewSh ),
         pViewShell  ( pViewSh ),
@@ -331,9 +332,8 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh )
 
     aScrSize = Size( (long) ( STD_COL_WIDTH           * PIXEL_PER_TWIPS * OLE_STD_CELLS_X ),
                      (long) ( ScGlobal::nStdRowHeight * PIXEL_PER_TWIPS * OLE_STD_CELLS_Y ) );
-    pTabData[0] = new ScViewDataTable;
+    pTabData.push_back( new ScViewDataTable() );
     for ( SCTAB i = 1; i <= MAXTAB; i++ )
-        pTabData[i] = NULL;
     pThisTab = pTabData[nTabNo];
     for (sal_uInt16 j=0; j<4; j++)
     {
@@ -355,9 +355,11 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh )
     if (pDoc && !pDoc->IsVisible(nTabNo))
     {
         while ( !pDoc->IsVisible(nTabNo) && pDoc->HasTable(nTabNo+1) )
+        {
             ++nTabNo;
-
-        pTabData[nTabNo] = new ScViewDataTable;
+            pTabData.push_back(NULL);
+        }
+        pTabData[nTabNo] = new ScViewDataTable() ;
         pThisTab = pTabData[nTabNo];
     }
 
@@ -365,7 +367,8 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh )
 }
 
 ScViewData::ScViewData( const ScViewData& rViewData )
-    :   pDocShell   ( rViewData.pDocShell ),
+    :   pTabData( rViewData.pTabData ),
+        pDocShell   ( rViewData.pDocShell ),
         pDoc        ( rViewData.pDoc ),
         pView       ( rViewData.pView ),
         pViewShell  ( rViewData.pViewShell ),
@@ -398,11 +401,7 @@ ScViewData::ScViewData( const ScViewData& rViewData )
     SetOutlineMode  ( rViewData.IsOutlineMode() );
 
     aScrSize = rViewData.aScrSize;
-    for ( SCTAB i = 0; i <= MAXTAB; i++ )
-        if (rViewData.pTabData[i])
-            pTabData[i] = new ScViewDataTable( *rViewData.pTabData[i] );
-        else
-            pTabData[i] = NULL;
+
     pThisTab = pTabData[nTabNo];
     for (sal_uInt16 j=0; j<4; j++)
     {
@@ -436,10 +435,6 @@ ScDocument* ScViewData::GetDocument() const
 
 ScViewData::~ScViewData()
 {
-    for (SCTAB i=0; i<=MAXTAB; i++)
-        if (pTabData[i])
-            delete pTabData[i];
-
     KillEditView();
     delete pOptions;
 }
@@ -454,7 +449,9 @@ void ScViewData::UpdateThis()
             if (nTabNo>0)
                 --nTabNo;
             else
-                pThisTab = pTabData[0] = new ScViewDataTable;
+            {
+                pThisTab = pTabData[0] = new ScViewDataTable();
+            }
 
                 // hier keine Assertion, weil sonst Paints kommen, bevor alles initialisiert ist!
         }
@@ -464,12 +461,7 @@ void ScViewData::UpdateThis()
 
 void ScViewData::InsertTab( SCTAB nTab )
 {
-    delete pTabData[MAXTAB];
-
-    for (SCTAB i=MAXTAB; i>nTab; i--)
-        pTabData[i] = pTabData[i-1];
-
-    pTabData[nTab] = NULL;      // force creating new
+    pTabData.insert( pTabData.begin() + nTab, NULL );
     CreateTabData( nTab );
 
     UpdateThis();
@@ -480,11 +472,7 @@ void ScViewData::DeleteTab( SCTAB nTab )
 {
     delete pTabData[nTab];
 
-    for (SCTAB i=nTab; i<MAXTAB; i++)
-        pTabData[i] = pTabData[i+1];
-
-    pTabData[MAXTAB] = NULL;
-
+    pTabData.erase(pTabData.begin() + nTab);
     UpdateThis();
     aMarkData.DeleteTab( nTab );
 }
@@ -500,15 +488,10 @@ void ScViewData::CopyTab( SCTAB nSrcTab, SCTAB nDestTab )
         return;
     }
 
-    delete pTabData[MAXTAB];
-
-    for (SCTAB i=MAXTAB; i>nDestTab; i--)
-        pTabData[i] = pTabData[i-1];
-
     if ( pTabData[nSrcTab] )
-        pTabData[nDestTab] = new ScViewDataTable( *pTabData[nSrcTab] );
+        pTabData.insert(pTabData.begin() + nDestTab, new ScViewDataTable( *pTabData[nSrcTab] ));
     else
-        pTabData[nDestTab] = NULL;
+        pTabData.insert(pTabData.begin() + nDestTab, NULL);
 
     UpdateThis();
     aMarkData.InsertTab( nDestTab );
@@ -519,25 +502,13 @@ void ScViewData::MoveTab( SCTAB nSrcTab, SCTAB nDestTab )
     if (nDestTab==SC_TAB_APPEND)
         nDestTab = pDoc->GetTableCount() - 1;
 
-    SCTAB i;
     ScViewDataTable* pTab = pTabData[nSrcTab];
-
-    SCTAB nInsTab = nDestTab;
-    if ( nSrcTab < nDestTab )
-    {
-        --nInsTab;
-        for (i=nSrcTab; i<nDestTab; i++)
-            pTabData[i] = pTabData[i+1];
-    }
-    else
-        for (i=nSrcTab; i>nDestTab; i--)
-            pTabData[i] = pTabData[i-1];
-
-    pTabData[nDestTab] = pTab;
+    pTabData.erase( pTabData.begin() + nSrcTab );
+    pTabData.insert( pTabData.begin() + nDestTab, pTab );
 
     UpdateThis();
     aMarkData.DeleteTab( nSrcTab );
-    aMarkData.InsertTab( nInsTab );         // ggf. angepasst
+    aMarkData.InsertTab( nDestTab );            // ggf. angepasst
 }
 
 void ScViewData::CreateTabData( std::vector< SCTAB >& rvTabs )
@@ -557,7 +528,7 @@ void ScViewData::SetZoomType( SvxZoomType eNew, std::vector< SCTAB >& tabs )
 
     if ( bAll )
     {
-        for ( SCTAB i = 0; i <= MAXTAB; ++i )
+        for ( SCTAB i = 0; i < static_cast<SCTAB>(pTabData.size()); ++i )
         {
             if ( pTabData[i] )
                 pTabData[i]->eZoomType = eNew;
@@ -571,7 +542,7 @@ void ScViewData::SetZoomType( SvxZoomType eNew, std::vector< SCTAB >& tabs )
         for ( ; it != it_end; ++it )
         {
             SCTAB i = *it;
-            if ( pTabData[i] )
+            if ( *it < static_cast<SCTAB>(pTabData.size()) && pTabData[i] )
                 pTabData[i]->eZoomType = eNew;
         }
     }
@@ -614,7 +585,7 @@ void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY, std::vec
 
     if ( bAll )
     {
-        for ( SCTAB i = 0; i <= MAXTAB; ++i )
+        for ( SCTAB i = 0; i < static_cast<SCTAB>(pTabData.size()); ++i )
         {
             if ( pTabData[i] )
             {
@@ -648,7 +619,7 @@ void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY, std::vec
         for ( ; it != it_end; ++it )
         {
             SCTAB i = *it;
-            if ( pTabData[i] )
+            if ( i < static_cast<SCTAB>(pTabData.size()) && pTabData[i] )
             {
                 if ( bPagebreak )
                 {
@@ -1423,7 +1394,7 @@ void ScViewData::CreateTabData( SCTAB nNewTab )
 
 void ScViewData::CreateSelectedTabData()
 {
-    SCTAB nTabCount = pDoc->GetTableCount();
+    SCTAB nTabCount = aMarkData.GetLastSelected();
     for (SCTAB i=0; i<nTabCount; i++)
         if ( aMarkData.GetTableSelect(i) && !pTabData[i] )
             CreateTabData( i );
@@ -2181,7 +2152,7 @@ void ScViewData::WriteUserData(String& rData)
     for (SCTAB i=0; i<nTabCount; i++)
     {
         rData += ';';                   // Numerierung darf auf keinen Fall durcheinanderkommen
-        if (pTabData[i])
+        if (i < static_cast<SCTAB>(pTabData.size()) && pTabData[i])
         {
             sal_Unicode cTabSep = SC_OLD_TABSEP;                // wie 3.1
             if ( pTabData[i]->nCurY > MAXROW_30 ||
@@ -2280,6 +2251,10 @@ void ScViewData::ReadUserData(const String& rData)
     while ( nCount > nPos+nTabStart )
     {
         aTabOpt = rData.GetToken(static_cast<xub_StrLen>(nPos+nTabStart));
+        while(nPos >= static_cast<SCTAB>(pTabData.size()))
+        {
+            pTabData.push_back(NULL);
+        }
         if (!pTabData[nPos])
             pTabData[nPos] = new ScViewDataTable;
 
@@ -2356,7 +2331,7 @@ void ScViewData::WriteExtOptions( ScExtDocOptions& rDocOpt ) const
         rDocSett.mfTabBarWidth = pView->GetRelTabBarWidth();
 
     // sheet settings
-    for( SCTAB nTab = 0, nTabCount = pDoc->GetTableCount(); nTab < nTabCount; ++nTab )
+    for( SCTAB nTab = 0; nTab < static_cast<SCTAB>(pTabData.size()); ++nTab )
     {
         if( const ScViewDataTable* pViewTab = pTabData[ nTab ] )
         {
@@ -2458,7 +2433,7 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
     pView->SetPendingRelTabBarWidth( rDocSett.mfTabBarWidth );
 
     // sheet settings
-    for( SCTAB nTab = 0, nTabCount = pDoc->GetTableCount(); nTab < nTabCount; ++nTab )
+    for( SCTAB nTab = 0; nTab < static_cast<SCTAB>(pTabData.size()); ++nTab )
     {
         if( const ScExtTabSettings* pTabSett = rDocOpt.GetTabSettings( nTab ) )
         {
@@ -2605,7 +2580,6 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
         SvXMLUnitConverter::convertNumber(sBuffer, static_cast<sal_Int32>(nViewID));
         pSettings[SC_VIEW_ID].Value <<= sBuffer.makeStringAndClear();
 
-        SCTAB nTabCount (pDoc->GetTableCount());
         uno::Reference<lang::XMultiServiceFactory> xServiceFactory =
                                         comphelper::getProcessServiceFactory();
         DBG_ASSERT( xServiceFactory.is(), "got no service manager" );
@@ -2615,7 +2589,7 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
             uno::Reference<container::XNameContainer> xNameContainer = uno::Reference<container::XNameContainer>(xServiceFactory->createInstance(sName), uno::UNO_QUERY);
             if (xNameContainer.is())
             {
-                for (SCTAB nTab=0; nTab<nTabCount; nTab++)
+                for (SCTAB nTab=0; nTab<static_cast<SCTAB>(pTabData.size()); nTab++)
                 {
                     if (pTabData[nTab])
                     {
@@ -2855,7 +2829,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
     }
 
     // copy default zoom to sheets where a different one wasn't specified
-    for (SCTAB nZoomTab=0; nZoomTab<=MAXTAB; ++nZoomTab)
+    for (SCTAB nZoomTab=0; nZoomTab< static_cast<SCTAB>(pTabData.size()); ++nZoomTab)
         if (pTabData[nZoomTab] && ( nZoomTab >= static_cast<SCTAB>(aHasZoomVect.size()) || !aHasZoomVect[nZoomTab] ))
         {
             pTabData[nZoomTab]->eZoomType  = eDefZoomType;
