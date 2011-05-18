@@ -572,6 +572,10 @@ void SAL_CALL ChartModel::dispose() throw(uno::RuntimeException)
     m_xCurrentController.clear();
 
     DisposeHelper::DisposeAndClear( m_xRangeHighlighter );
+
+    if( m_xOldModelAgg.is())
+        m_xOldModelAgg->setDelegator( NULL );
+
     OSL_TRACE( "ChartModel: dispose() called" );
 }
 
