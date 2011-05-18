@@ -3287,10 +3287,10 @@ if test "$SOLAR_JAVA" != ""; then
    if test "$build_os" = "cygwin" -a "$_os" = "WINNT"; then
       # Check that the JDK found is correct architecture
       shortjdkhome=`cygpath -d "$with_jdk_home"`
-      if test "$CL_X64" != "" -a -f "$with_jdk_home/bin/java.exe" -a "`$shortjdkhome/bin/java.exe -version 2>&1 | grep -i 64-bit`" == "" >/dev/null; then
+      if test "$CL_X64" != "" -a -f "$with_jdk_home/bin/java.exe" -a "`$shortjdkhome/bin/java.exe -version 2>&1 | grep -i 64-bit`" = "" >/dev/null; then
 	 AC_MSG_WARN([You are building 64-bit binaries but the JDK $howfound is 32-bit])
 	 AC_MSG_ERROR([You should pass the --with-jdk-home option pointing to a 64-bit JDK])
-      elif test "$CL_X64" == "" -a -f "$_jdk_home/bin/java.exe" -a "`$shortjdkhome/bin/java.exe -version 2>&1 | grep -i 64-bit`" != ""  >/dev/null; then
+      elif test "$CL_X64" = "" -a -f "$_jdk_home/bin/java.exe" -a "`$shortjdkhome/bin/java.exe -version 2>&1 | grep -i 64-bit`" != ""  >/dev/null; then
 	 AC_MSG_WARN([You are building 32-bit binaries but the JDK $howfound is 64-bit])
 	 AC_MSG_ERROR([You should pass the --with-jdk-home option pointing to a (32-bit) JDK])
       fi
