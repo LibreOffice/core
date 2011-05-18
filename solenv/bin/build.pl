@@ -266,7 +266,7 @@
         if (open (CMD_FILE, ">>$cmd_file")) {
             select CMD_FILE;
             $echo = 'echo ';
-            if ($ENV{GUI} ne 'UNX') {
+            if ($ENV{GUI_FOR_BUILD} ne 'UNX') {
                 $new_line = "echo.\n";
                 print "\@$echo off\npushd\n";
             } else {
@@ -306,7 +306,7 @@
         print $new_line;
         do_exit(1) if ($checkparents);
     };
-    if (($ENV{GUI} ne 'UNX') && $cmd_file) {
+    if (($ENV{GUI_FOR_BUILD} ne 'UNX') && $cmd_file) {
         print "popd\n";
     };
     $ENV{mk_tmp} = '';
@@ -791,7 +791,7 @@ sub dmake_dir {
         #if dmake fails, have a go at regenerating the dependencies
         #and try again. dmakes normal failure is 255, while death on signal is 254
         my $real_exit_code = $error_code >> 8;
-        if (($real_exit_code == 255) && ($ENV{nodep} eq '') && ($ENV{depend} eq '')) {
+        if (($ENV{GUI_FOR_BUILD} eq 'WNT') && ($real_exit_code == 255) && ($ENV{nodep} eq '') && ($ENV{depend} eq '')) {
             print "Retrying $job_name\n";
             $error_code = run_job($dmake, $job_name);
         }
@@ -1118,7 +1118,7 @@ sub get_commands {
     check_dmake();
 
     if ($cmd_file) {
-        if ($ENV{GUI} eq 'UNX') {
+        if ($ENV{GUI_FOR_BUILD} eq 'UNX') {
             $check_error_string = "if \"\$?\" != \"0\" exit\n";
         } else {
             $check_error_string = "if \"\%?\" != \"0\" quit\n";
@@ -1741,7 +1741,7 @@ sub store_error {
     }
 
     my $child_nick = $processes_hash{$pid};
-    if ($ENV{GUI} eq 'WNT') {
+    if ($ENV{GUI_FOR_BUILD} eq 'WNT') {
         if (!defined $had_error{$child_nick}) {
             $had_error{$child_nick}++;
             return 1;
@@ -2052,7 +2052,7 @@ sub do_custom_job {
         $error_code = run_job($job, $module_paths{$module}, $module_job);
         if ($error_code) {
             # give windows one more chance
-            if ($ENV{GUI} eq 'WNT') {
+            if ($ENV{GUI_FOR_BUILD} eq 'WNT') {
                 $error_code = run_job($job, $module_paths{$module}, $module_job);
             };
         };
@@ -3239,7 +3239,7 @@ sub start_server_on_port {
     my $port = shift;
     my $socket_obj = shift;
     $client_timeout = 1 if (!$parent_process);
-    if ($ENV{GUI} eq 'WNT') {
+    if ($ENV{GUI_FOR_BUILD} eq 'WNT') {
         $$socket_obj = new IO::Socket::INET (#LocalAddr => hostname(),
                                   LocalPort => $port,
                                   Proto     => 'tcp',
