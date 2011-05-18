@@ -1478,6 +1478,8 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
 
     // Cell prefered width
     SwTwips nWidth = GetGridCols( pTableTextNodeInfoInner )->at( pTableTextNodeInfoInner->getCell() );
+    if ( pTableTextNodeInfoInner->getCell() )
+        nWidth = nWidth - GetGridCols( pTableTextNodeInfoInner )->at( pTableTextNodeInfoInner->getCell() - 1 );
     m_pSerializer->singleElementNS( XML_w, XML_tcW,
            FSNS( XML_w, XML_w ), OString::valueOf( sal_Int32( nWidth ) ).getStr( ),
            FSNS( XML_w, XML_type ), "dxa",
@@ -1712,12 +1714,16 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
 
     // Write the table grid infos
     m_pSerializer->startElementNS( XML_w, XML_tblGrid, FSEND );
-
+    sal_Int32 nPrv = 0;
     ww8::GridColsPtr pGridCols = GetGridCols( pTableTextNodeInfoInner );
     for ( ww8::GridCols::const_iterator it = pGridCols->begin(); it != pGridCols->end(); ++it )
+    {
+        sal_Int32 nWidth  =  sal_Int32( *it ) - nPrv;
         m_pSerializer->singleElementNS( XML_w, XML_gridCol,
-               FSNS( XML_w, XML_w ), OString::valueOf( sal_Int32( *it ) ).getStr( ),
+               FSNS( XML_w, XML_w ), OString::valueOf( nWidth ).getStr( ),
                FSEND );
+        nPrv = sal_Int32( *it );
+    }
 
     m_pSerializer->endElementNS( XML_w, XML_tblGrid );
 }
