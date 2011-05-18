@@ -237,7 +237,7 @@ for REPO in $DIRS ; do
 
             # do it!
             if [ "$COMMAND" != "clone" -o ! -d $DIR ] ; then
-                if [ "$REPORT_REPOS" = "1" ] ; then
+                if [ "$REPORT_REPOS" = "1" -a "$COMMAND" != "grep" ] ; then
                     if [ "$REPORT_COMPACT" = "1" ] ; then
                         echo -n "${REPO}:"
                     else
