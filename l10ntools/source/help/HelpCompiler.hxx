@@ -38,8 +38,8 @@
 #include <sstream>
 #include <algorithm>
 #include <ctype.h>
-#ifdef SYSTEM_DB
-#include <db.h>
+#ifdef SYSTEM_DB_HEADER
+#include SYSTEM_DB_HEADER
 #else
 #include <berkeleydb/db.h>
 #endif
