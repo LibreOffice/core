@@ -330,6 +330,14 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
         maData.maHorPageBreaks.push_back(nRow);
     }
 
+    if (maData.maHorPageBreaks.size() > 1026)
+    {
+        // Excel allows only up to 1026 page breaks.  Trim any excess page breaks.
+        ScfUInt16Vec::iterator itr = maData.maHorPageBreaks.begin();
+        ::std::advance(itr, 1026);
+        maData.maHorPageBreaks.erase(itr, maData.maHorPageBreaks.end());
+    }
+
     set<SCCOL> aColBreaks;
     rDoc.GetAllColBreaks(aColBreaks, nScTab, false, true);
     for (set<SCCOL>::const_iterator itr = aColBreaks.begin(), itrEnd = aColBreaks.end(); itr != itrEnd; ++itr)
