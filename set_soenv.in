@@ -1732,6 +1732,14 @@ ToFile( "COMP_ENV",          $COMP_ENV,          "e" );
 ToFile( "JAVAHOME",          $JAVAHOME,          "e" );
 ToFile( "CC",                $CC,                "e" );
 ToFile( "CROSS_COMPILING",   "@CROSS_COMPILING@","e" );
+ToFile( "AR",                "@AR@",             "e" );
+ToFile( "DLLTOOL",           "@DLLTOOL@",        "e" );
+ToFile( "NM",                "@NM@",             "e" );
+ToFile( "OBJDUMP",           "@OBJDUMP@",        "e" );
+ToFile( "PKG_CONFIG",        "@PKG_CONFIG@",     "e" );
+ToFile( "RANLIB",            "@RANLIB@",         "e" );
+ToFile( "STRIP",             "@STRIP@",          "e" );
+ToFile( "WINDRES",           "@WINDRES@",        "e" );
 ToFile( "BUILD_PLATFORM",    "@build@",          "e" );
 ToFile( "HOST_PLATFORM",     "@host@",           "e" );
 if ( '@CROSS_COMPILING@' ne '' )

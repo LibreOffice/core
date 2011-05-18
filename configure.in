@@ -1,4 +1,4 @@
-dnl -*- Mode: Autoconf; tab-width: 4; indent-tabs-mode: nil -*-
+dnl -*- Mode: Autoconf; tab-width: 8; indent-tabs-mode: nil -*-
 dnl configure.in serves as input for the GNU autoconf package 
 dnl in order to create a configure script.
 
@@ -1247,6 +1247,17 @@ AC_ARG_WITH(zip-home,
     ],
 ,)
 
+AC_ARG_WITH(mingw-cross-compiler,
+    AS_HELP_STRING([--with-mingw-cross-compiler],
+        [Specify the MinGW cross-compiler to use.])
+    [
+                          Usage:     --with-mingw-cross-compiler=<mingw32-g++ command>
+
+                          When building on the ODK on Unix and building unowinreg.dll,
+                          specify the MinGW C++ cross-compiler.
+    ],
+,)
+
 AC_ARG_WITH(build-version,
     AS_HELP_STRING([--with-build-version],
         [Allows the builder to add a custom version tag that will appear in the
@@ -1415,21 +1426,37 @@ case "$host_os" in
         _os=GNU
         ;;
     cygwin*|interix*|mingw32*) # Windows
+
+        # When building on Windows normally with MSVC under Cygwin,
+        # configure thinks that the host platform (the platform the
+        # built code will run on) is Cygwin, even if it obviously is
+        # Windows, which in Autoconf terminology is called
+        # "mingw32". (Which is misleading as MinGW is the name of the
+        # tool-chain, not an operating system.)
+
+        # Somewhat confusing, yes. But this configure script doesn't
+        # look at $host etc that much, it mostly uses its own $_os
+        # variable, set here in this case statement.
+
+        # When cross-compiling to Windows from Unix, the host platform
+        # is "mingw32" (because in that case it is the MinGW
+        # tool-chain that is used).
+
         test_cups=no
         test_randr=no
         test_freetype=no
         test_cairo=no
         test_fontconfig=no
         _os=WINNT
-	# Confusingly, if the host OS matches "mingw32*", that means
-	# we are using the MinGW compiler, either natively (unlikely)
-	# or cross-compiling. We use WITH_MINGW to indicate
-	# use of MinGW in both cases
-	case "$host_os" in
-	    mingw32*)
-		WITH_MINGW=yes
-		;;
-	esac
+        # Confusingly, if the host OS matches "mingw32*", that means
+        # we are using the MinGW compiler, either natively (unlikely)
+        # or cross-compiling. We use WITH_MINGW to indicate
+        # use of MinGW in both cases.
+        case "$host_os" in
+            mingw32*)
+            WITH_MINGW=yes
+            ;;
+        esac
         ;;
     darwin*) # Mac OS X or iOS
         test_gtk=yes
@@ -1538,21 +1565,19 @@ if test $build_os = "cygwin"; then
    dnl ===================================================================
    dnl As long as awk instead of $AWK is used somewhere in the sources,
    dnl check for $AWK and awk. $AWK is pointing to gawk in Cygwin.
-      if test -L $AWK -o -L `which awk` -o -L `which tar` -o -L `which gunzip` ; then
-         AC_MSG_ERROR([$AWK, awk, tar or gunzip is a Cygwin symlink!
+   if test -L $AWK -o -L `which awk` -o -L `which tar` -o -L `which gunzip` ; then
+      AC_MSG_ERROR([$AWK, awk, tar or gunzip is a Cygwin symlink!
 Native Windows programs cannot use Cygwin symlinks. Remove the symbolic
 link, and copy the program to the name of the link.])
-      fi
+   fi
+   AC_MSG_RESULT([ok])
+
    dnl ===================================================================
    dnl If $CC is set to a MinGW compiler, set WITH_MINGW
    dnl ===================================================================
-      if test "$WITH_MINGW" != "yes" -a -n "$CC"; then
-         if test "`$CC -dumpmachine 2>/dev/null | $SED -e 's/^.*-//'`" = "mingw32"; then
-            WITH_MINGW="yes"
-         fi
-      fi
-   dnl ===================================================================
-   AC_MSG_RESULT([ok])
+   if test "$WITH_MINGW" != "yes" -a -n "$CC" -a "`$CC -dumpmachine 2>/dev/null | $SED -e 's/^.*-//'`" = "mingw32"; then
+      WITH_MINGW="yes"
+   fi
 fi
 
 dnl ===================================================================
@@ -1688,7 +1713,9 @@ if test "$cross_compiling" = "yes"; then
 	makefile.rc \
 	bin/repo-list.in | (cd $tmpdir && tar xf -)
   (
-    unset COM GUI GUIBASE OS CPU CPUNAME CC CXX CFLAGS PKG_CONFIG
+    unset COM GUI GUIBASE OS CPU CPUNAME
+    unset CC CXX CFLAGS
+    unset AR NM OBJDUMP PKG_CONFIG RANLIB STRIP
     test -n "$CC_FOR_BUILD" && export CC="$CC_FOR_BUILD"
     test -n "$CXX_FOR_BUILD" && export CXX="$CXX_FOR_BUILD"
     test -n "$PKG_CONFIG_FOR_BUILD" && export PKG_CONFIG="$PKG_CONFIG_FOR_BUILD"
@@ -2167,6 +2194,7 @@ AC_SUBST(PERL)
 dnl ===================================================================
 dnl Testing for required Perl modules
 dnl ===================================================================
+
 AC_MSG_CHECKING([for required Perl modules])
 if `$PERL -e 'use Archive::Zip;'`; then
     AC_MSG_RESULT([all modules found])
@@ -2335,22 +2363,49 @@ if test "$_os" = "WINNT"; then
 	AC_SUBST(LIBMGR_X64_BINARY)
 
     else
-        AC_MSG_CHECKING([the MinGW C++ Compiler])
-        if test `$CC -dumpmachine | $SED -e 's/^.*-//'` = "mingw32"; then
-            AC_MSG_RESULT([found.])
+        AC_MSG_CHECKING([the compiler is MinGW])
+        MACHINE_PREFIX=`$CC -dumpmachine`
+        if echo $MACHINE_PREFIX | grep -q mingw32; then
+            AC_MSG_RESULT([yes])
             if $CC -dumpspecs | grep -q "mno-cygwin"; then
                 USE_MINGW="cygwin"
             else
                 USE_MINGW="pure-mingw"
             fi
         else
-            AC_MSG_ERROR([MinGW C++ Compiler not found.])
+            AC_MSG_ERROR([Compiler is not MinGW.])
         fi
     fi
 fi
 AC_SUBST(COMEX)
 AC_SUBST(MSPDB_PATH)
 AC_SUBST(USE_MINGW)
+
+if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
+
+   # If you use CC=/path/to/compiler/foo-gcc or even CC="ccache
+   # /path/to/compiler/foo-gcc" you need to set the AR etc env vars
+   # explicitly. Or put /path/to/compiler in PATH yourself.
+
+   AC_CHECK_TOOL(AR,ar)
+   AC_CHECK_TOOL(NM,nm)
+   AC_CHECK_TOOL(OBJDUMP,objdump)
+   AC_CHECK_TOOL(PKG_CONFIG,pkg-config)
+   AC_CHECK_TOOL(RANLIB,ranlib)
+   AC_CHECK_TOOL(STRIP,strip)
+   if test "$_os" = "WINNT"; then
+      AC_CHECK_TOOL(DLLTOOL,dlltool)
+      AC_CHECK_TOOL(WINDRES,windres)
+   fi
+fi
+AC_SUBST(AR)
+AC_SUBST(DLLTOOL)
+AC_SUBST(NM)
+AC_SUBST(OBJDUMP)
+AC_SUBST(PKG_CONFIG)
+AC_SUBST(RANLIB)
+AC_SUBST(STRIP)
+AC_SUBST(WINDRES)
 
 dnl ===================================================================
 dnl  .NET needs special treatment
@@ -2448,29 +2503,32 @@ if test "$build_os" = "cygwin"; then
 fi
 
 dnl ===================================================================
-dnl Check if stdc headers are available excluding Windows.
+dnl Check if stdc headers are available excluding MSVC.
 dnl ===================================================================
 if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
    AC_HEADER_STDC
 fi
 
-dnl ===================================================================
-dnl Find pre-processors.
-dnl ===================================================================
 if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
+   dnl ===================================================================
+   dnl Find pre-processors.
+   dnl ===================================================================
+
    AC_PROG_CXXCPP
 
-dnl Check whether there's a C pre-processor.
-dnl ===================================================================
-dnl When using SunStudio compiler, there is a bug with the cc
-dnl preprocessor, so use CC preprocessor as the cc preprocessor
-dnl See Issuezilla #445.
-dnl ===================================================================
+   dnl Check whether there's a C pre-processor.
+   dnl ===================================================================
+   dnl When using SunStudio compiler, there is a bug with the cc
+   dnl preprocessor, so use CC preprocessor as the cc preprocessor
+   dnl See Issuezilla #445.
+   dnl ===================================================================
    if test "$_os" = "SunOS"; then
       CPP=$CXXCPP
    else
       AC_PROG_CPP
    fi
+
+   dnl Find integral type sizes and alignments
 
    AC_CHECK_SIZEOF(long)
    AC_CHECK_SIZEOF(short)
@@ -3928,7 +3986,7 @@ dnl # Note that if there is a possibility the first call to
 dnl # PKG_CHECK_MODULES might not happen, you should be sure to include an
 dnl # explicit call to PKG_PROG_PKG_CONFIG in your configure.ac
 dnl ===================================================================
-if test "$_os" != "WNT"; then
+if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
     PKG_PROG_PKG_CONFIG
 fi
 
@@ -3951,70 +4009,44 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether to build the ODK])
 if test "z$enable_odk" = "z" -o "$enable_odk" != "no"; then
    AC_MSG_RESULT([yes])
+
    if test "$WITH_JAVA" != "no"; then
-   AC_MSG_CHECKING([whether to build unowinreg.dll])
-   if test "$_os" = "WINNT" -a "z$enable_build_unowinreg" = "z" ; then
-        # build on Win by default
-        enable_build_unowinreg=yes
-   fi
-   if test "z$enable_build_unowinreg" = "z" -o "$enable_build_unowinreg" = "no"; then
-      AC_MSG_RESULT([no])
-      BUILD_UNOWINREG=NO
-   else
-      AC_MSG_RESULT([yes])
-      BUILD_UNOWINREG=YES
-   fi
-   if test "$_os" != "WINNT" && test "$BUILD_UNOWINREG" = "YES"; then
-      if test -z "$WITH_MINGW" || test "$WITH_MINGW" = "0"; then
-         AC_MSG_ERROR([for rebuilding unowinreg.dll you need the MinGW C++ compiler.
-         Specify mingw32 g++ executable name with --with-mingw.
-         Or use prebuilt one from http://tools.openoffice.org/unowinreg_prebuild/680/ and
-         put it into external/unowinreg])
+      AC_MSG_CHECKING([whether to build unowinreg.dll])
+      if test "$_os" = "WINNT" -a "z$enable_build_unowinreg" = "z" ; then
+           # build on Win by default
+           enable_build_unowinreg=yes
       fi
-      if echo "$WITH_MINGW" | $EGREP -q "/"; then
-         if ! test -x "$WITH_MINGW"; then MINGWCXX=false; else MINGWCXX=`basename $WITH_MINGW`; fi
+      if test "z$enable_build_unowinreg" = "z" -o "$enable_build_unowinreg" = "no"; then
+         AC_MSG_RESULT([no])
+         BUILD_UNOWINREG=NO
       else
-         AC_CHECK_TOOL(MINGWCXX, $WITH_MINGW, false)
+         AC_MSG_RESULT([yes])
+         BUILD_UNOWINREG=YES
       fi
-      if test "$MINGWCXX" = "false"; then
-         AC_MSG_ERROR(specified MinGW32 C++ cross-compiler not found. Install it or correct name.)
-      fi
-      AC_MSG_CHECKING(whether we are using the MinGW32 cross C++ compiler)
-      if ! echo "`$MINGWCXX -dumpmachine`" | grep -q mingw32; then
-         AC_MSG_ERROR(no)
-      else
-         AC_MSG_RESULT(yes)
-      fi
-      if echo "$WITH_MINGW" | $EGREP -q "/"; then
-         if ! test -x "`echo $WITH_MINGW | $SED -e s/[cg]++/strip/`"; then MINGWSTRIP=false; else MINGWSTRIP=$(basename $(echo $WITH_MINGW | $SED -e s/[cg]++/strip/)); fi
-      else
-         AC_CHECK_TOOL(MINGWSTRIP, `echo $WITH_MINGW | $SED -e s/[cg]++/strip/`, false)
-      fi
-      if test "$MINGWSTRIP" = "false"; then
-         AC_MSG_ERROR(MinGW32 binutils needed. Install them.)
-      fi
-      AC_LANG_PUSH([C++])
-      save_CXX=$CXX
-      save_CXXCPP=$CXXCPP
-      CXX=$MINGWCXX
-      CXXCPP="$MINGWCXX -E"
-      save_CXXFLAGS=$CXXFLAGS
-      save_CPPFLAGS=$CPPFLAGS
-      CXXFLAGS="$CXXFLAGS -I$JAVA_HOME/include"
-      CPPFLAGS="$CPPFLAGS -I$JAVA_HOME/include"
-      # LIBS contains -lcrypt etc due to teh AC_CHECK_LIBS which obviously
-      # do not make sense here (and 'd make the check fail)
-      save_LIBS=$LIBS
-      LIBS=""
-      AC_HAVE_LIBRARY(kernel32)
-      AC_HAVE_LIBRARY(advapi32)
-      AC_CHECK_HEADER(windows.h, [], [AC_MSG_ERROR([windows.h missing])])
-      CXXFLAGS=$save_CXXFLAGS
-      CPPFLAGS=$save_CPPFLAGS
-      CXX=$save_CXX
-      CXXCPP=$save_CXXCPP
-      LIBS=$save_LIBS
-      AC_LANG_POP([C++])
+      if test "$_os" != "WINNT" -a "$BUILD_UNOWINREG" = "YES"; then
+         if test -z "$with_mingw_cross_compiler"; then
+            dnl Guess...
+            AC_CHECK_PROGS(MINGWCXX,i386-mingw32msvc-g++ i586-pc-mingw32-g++ i686-pc-mingw32-g++ i686-w64-mingw32-g++,false)
+         elif test -x "$with_mingw_cross_compiler"; then 
+             MINGWCXX="$with_mingw_cross_compiler"
+         else
+            AC_CHECK_TOOL(MINGWCXX, "$with_mingw_cross_compiler", false)
+         fi
+
+         if test "$MINGWCXX" = "false"; then
+            AC_MSG_ERROR([MinGW32 C++ cross-compiler not found.])
+         fi
+
+         mingwstrip_test="`echo $MINGWCXX | $SED -e s/g++/strip/`"
+         if test -x "$mingwstrip_test"; then
+            MINGWSTRIP="$mingwstrip_test"
+         else
+            AC_CHECK_TOOL(MINGWSTRIP, "$mingwstrip_test", false)
+         fi
+
+         if test "$MINGWSTRIP" = "false"; then
+            AC_MSG_ERROR(MinGW32 binutils not found.)
+         fi
       fi
    fi
    BUILD_TYPE="$BUILD_TYPE ODK"

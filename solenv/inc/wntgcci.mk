@@ -42,10 +42,6 @@ ARCH_FLAGS*=-march=pentium
 
 CC*=i686-w64-mingw32-gcc
 CXX*=i686-w64-mingw32-g++
-NM*=i686-w64-mingw32-nm
-AR*=i686-w64-mingw32-ar
-WINDRES*=i686-w64-mingw32-windres -v
-DLLTOOL*=i686-w64-mingw32-dlltool
 
 CFLAGS+=-fmessage-length=0 -c
 
