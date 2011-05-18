@@ -655,7 +655,7 @@ const PPDParser* PPDParser::getParser( const String& rFile )
     if( ! aFile.Len() )
     {
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "Could not get printer PPD file \"%s\" !\n", OUStringToOString( rFile, osl_getThreadTextEncoding() ).getStr() );
+        fprintf( stderr, "Could not get printer PPD file \"%s\" !\n", ::rtl::OUStringToOString( rFile, osl_getThreadTextEncoding() ).getStr() );
 #endif
         return NULL;
     }
