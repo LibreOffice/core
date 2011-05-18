@@ -56,6 +56,10 @@ INCPRE+=$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc$/libwpg
 
 TARFILE_NAME=libvisio-0.0.0
 TARFILE_MD5=763bb9b14eec5ba9a533d7a9279301db
+
+PATCH_FILES=\
+    libvisio-mingw-cross.patch
+
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 BUILD_DIR=src$/lib
 
