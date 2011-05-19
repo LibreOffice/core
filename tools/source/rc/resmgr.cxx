@@ -465,7 +465,7 @@ InternalResMgr* ResMgrContainer::getNextFallback( InternalResMgr* pMgr )
     }
     InternalResMgr* pNext = getResMgr( pMgr->aPrefix, aLocale, pMgr->bSingular );
     // prevent recursion
-    if( pNext == pMgr || pNext->aResName.equals( pMgr->aResName ) )
+    if( pNext == pMgr || ( pNext && pNext->aResName.equals( pMgr->aResName ) ) )
     {
         if( pNext->bSingular )
             delete pNext;
