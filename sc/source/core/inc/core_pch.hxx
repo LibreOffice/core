@@ -122,7 +122,6 @@
 #include <vcl/ptrstyle.hxx>
 #include <tools/wintypes.hxx>
 #include <vcl/event.hxx>
-#include <tools/ownlist.hxx>
 #include <svl/itempool.hxx>
 #include <tools/datetime.hxx>
 #include <attrib.hxx>

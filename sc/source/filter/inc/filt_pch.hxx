@@ -177,7 +177,6 @@
 #include <tools/wintypes.hxx>
 #include <vcl/inputctx.hxx>
 #include <vcl/event.hxx>
-#include <tools/ownlist.hxx>
 #include <vcl/cmdevt.hxx>
 #include <vcl/vclenum.hxx>
 #include <cell.hxx>

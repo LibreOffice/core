@@ -68,7 +68,6 @@
 #include <sot/object.hxx>
 #include <sot/sotdata.hxx>
 #include <sot/factory.hxx>
-#include <tools/ownlist.hxx>
 #include <vcl/font.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/settings.hxx>
