@@ -2219,6 +2219,7 @@ INetURLObject::getPrefix(sal_Unicode const *& rBegin,
             { "vnd.sun.star.webdav:", 0, INET_PROT_VND_SUN_STAR_WEBDAV,
               PrefixInfo::OFFICIAL },
             { "sftp:", 0, INET_PROT_SFTP, PrefixInfo::OFFICIAL } };
+    /* This list needs to be sorted, or you'll introduce serious bugs */
 
     PrefixInfo const * pFirst = aMap + 1;
     PrefixInfo const * pLast = aMap + sizeof aMap / sizeof (PrefixInfo) - 1;
