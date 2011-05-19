@@ -3883,7 +3883,7 @@ const GraphicObject* SvxBrushItem::GetGraphicObject() const
                 Graphic aGraphic;
                 int nRes;
                 pImpl->pStream->Seek( STREAM_SEEK_TO_BEGIN );
-                nRes = GraphicFilter::GetGraphicFilter()->
+                nRes = GraphicFilter::GetGraphicFilter().
                     ImportGraphic( aGraphic, *pStrLink, *pImpl->pStream,
                                    GRFILTER_FORMAT_DONTKNOW, NULL, GRFILTER_I_FLAGS_DONT_SET_LOGSIZE_FOR_JPEG );
 
