@@ -861,7 +861,7 @@ SfxTabPage* TPGalleryThemeProperties::Create( Window* pParent, const SfxItemSet&
 
 void TPGalleryThemeProperties::FillFilterList()
 {
-    GraphicFilter*      pFilter = GraphicFilter::GetGraphicFilter();
+    GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
     String              aExt;
     String              aName;
     FilterEntry*        pFilterEntry;
@@ -870,10 +870,10 @@ void TPGalleryThemeProperties::FillFilterList()
     sal_Bool                bInList;
 
     // graphic filters
-    for( i = 0, nKeyCount = pFilter->GetImportFormatCount(); i < nKeyCount; i++ )
+    for( i = 0, nKeyCount = rFilter.GetImportFormatCount(); i < nKeyCount; i++ )
     {
-        aExt = pFilter->GetImportFormatShortName( i );
-        aName = pFilter->GetImportFormatName( i );
+        aExt = rFilter.GetImportFormatShortName( i );
+        aName = rFilter.GetImportFormatName( i );
         pTestEntry = (FilterEntry*) aFilterEntryList.First();
         bInList = sal_False;
 
@@ -882,7 +882,7 @@ void TPGalleryThemeProperties::FillFilterList()
         String sWildcard;
         while( sal_True )
         {
-            sWildcard = pFilter->GetImportWildcard( i, j++ );
+            sWildcard = rFilter.GetImportWildcard( i, j++ );
             if ( !sWildcard.Len() )
                 break;
             if ( aExtensions.Search( sWildcard ) == STRING_NOTFOUND )
@@ -943,7 +943,7 @@ void TPGalleryThemeProperties::FillFilterList()
         String sWildcard;
         while( sal_True )
         {
-            sWildcard = pFilter->GetImportWildcard( i, j++ );
+            sWildcard = rFilter.GetImportWildcard( i, j++ );
             if ( !sWildcard.Len() )
                 break;
             if ( aExtensions.Search( sWildcard ) == STRING_NOTFOUND )
