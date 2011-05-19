@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,6 @@ $(eval $(call gb_Package_add_file,tools_inc,inc/tools/list.hxx,tools/list.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/mapunit.hxx,tools/mapunit.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/mempool.hxx,tools/mempool.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/multisel.hxx,tools/multisel.hxx))
-$(eval $(call gb_Package_add_file,tools_inc,inc/tools/ownlist.hxx,tools/ownlist.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/pathutils.hxx,tools/pathutils.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/poly.hxx,tools/poly.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/postsys.h,tools/postsys.h))
