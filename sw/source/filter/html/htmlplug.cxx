@@ -1172,7 +1172,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         SvCommandList aCommands;
         aCommands.FillFromSequence( aProps );
         SvULongs aParams;
-        sal_uLong i = aCommands.Count();
+        size_t i = aCommands.size();
         while( i > 0 )
         {
             const SvCommand& rCommand = aCommands[ --i ];
@@ -1213,7 +1213,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         }
 
         rHTMLWrt.DecIndentLevel(); // Inhalt von Applet einruecken
-        if( aCommands.Count() )
+        if( aCommands.size() )
             rHTMLWrt.OutNewLine();
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_applet, sal_False );
     }
@@ -1228,7 +1228,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
         SvCommandList aCommands;
         aCommands.FillFromSequence( aProps );
-        for( sal_uLong i=0; i<aCommands.Count(); i++ )
+        for( size_t i = 0; i < aCommands.size(); i++ )
         {
             const SvCommand& rCommand = aCommands[ i ];
             const String& rName = rCommand.GetCommand();

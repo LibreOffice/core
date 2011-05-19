@@ -310,7 +310,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                                             INetURLObject(), sClassLocation,
                                             URIHelper::GetMaybeFileHdl()) ) ) );
                         uno::Sequence< beans::PropertyValue > aSeq;
-                        if ( aCommandList.Count() )
+                        if ( aCommandList.size() )
                         {
                             aCommandList.FillSequence( aSeq );
                             xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginCommands")), uno::makeAny( aSeq ) );

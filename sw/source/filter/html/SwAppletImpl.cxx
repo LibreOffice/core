@@ -164,8 +164,8 @@ sal_Bool SwApplet_Impl::CreateApplet( const String& rBaseURL )
     String aCode, aName, aCodeBase;
     sal_Bool bMayScript = sal_False;
 
-    sal_uInt32 nArgCount = aCommandList.Count();
-    for( sal_uInt32 i=0; i<nArgCount; i++ )
+    size_t nArgCount = aCommandList.size();
+    for( size_t i = 0; i < nArgCount; i++ )
     {
         const SvCommand& rArg = aCommandList[i];
         const String& rName = rArg.GetCommand();
