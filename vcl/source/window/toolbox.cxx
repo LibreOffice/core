@@ -569,7 +569,7 @@ void ToolBox::ImplDrawTransparentBackground( ToolBox* pThis, const Region &rRegi
 {
     // just invalidate to trigger paint of the parent
 
-    const bool      bOldPaintLock = pThis->mpData->mbIsPaintLocked;
+    const bool        bOldPaintLock = pThis->mpData->mbIsPaintLocked;
     pThis->mpData->mbIsPaintLocked = true;
 
     // send an invalidate to the first opaque parent and invalidate the whole hierarchy from there (noclipchildren)
@@ -1574,7 +1574,7 @@ void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
     ImplGetWindowImpl()->mbToolBox         = sal_True;
     mpBtnDev          = NULL;
     mpFloatSizeAry    = NULL;
-    mpData              = new ImplToolBoxPrivateData;
+    mpData                = new ImplToolBoxPrivateData;
     mpFloatWin        = NULL;
     mnDX              = 0;
     mnDY              = 0;
@@ -1593,7 +1593,7 @@ void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
     mnCurItemId       = 0;
     mnDownItemId      = 0;
     mnCurPos          = TOOLBOX_ITEM_NOTFOUND;
-    mnFocusPos        = TOOLBOX_ITEM_NOTFOUND;  // current position during keyboard access
+    mnFocusPos        = TOOLBOX_ITEM_NOTFOUND;    // current position during keyboard access
     mnLines           = 1;
     mnCurLine         = 1;
     mnCurLines        = 1;
@@ -1618,7 +1618,7 @@ void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
     mbCustomizeMode   = sal_False;
     mbDragging        = sal_False;
     mbMenuStrings     = sal_False;
-    mbIsShift         = sal_False;
+    mbIsShift          = sal_False;
     mbIsKeyEvent = sal_False;
     mbChangingHighlight = sal_False;
     meButtonType      = BUTTON_SYMBOL;
@@ -1626,7 +1626,7 @@ void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
     meLastStyle       = POINTER_ARROW;
     mnWinStyle        = nStyle;
     mnLastFocusItemId          = 0;
-    mnKeyModifier     = 0;
+    mnKeyModifier      = 0;
     mnActivateCount   = 0;
 
     maTimer.SetTimeout( 50 );
@@ -3462,7 +3462,7 @@ static void ImplDrawButton( ToolBox* pThis, const Rectangle &rRect, sal_uInt16 h
         ControlState        nState = 0;
 
         if ( highlight == 1 )   nState |= CTRL_STATE_PRESSED;
-        if ( highlight == 2 )   nState |= CTRL_STATE_ROLLOVER;
+        if ( highlight == 2 )     nState |= CTRL_STATE_ROLLOVER;
         if ( bEnabled )         nState |= CTRL_STATE_ENABLED;
 
         aControlValue.setTristateVal( bChecked ? BUTTONVALUE_ON : BUTTONVALUE_OFF );
