@@ -744,7 +744,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
                of temporary auto correction is now undoable two and
                must reside in the same undo group.*/
 
-            // nur aufnehmen, wenn es NICHT schon in der Autokorrektur vorhanden ist
+            // record only if it's NOT already present in autocorrection
             SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get()->GetAutoCorrect();
 
             String aOrigWord( bGrammarResults ? OUString() : xSpellAlt->getWord() ) ;

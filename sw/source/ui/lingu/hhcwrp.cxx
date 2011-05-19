@@ -36,7 +36,7 @@
 #include <hintids.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
-#include <swundo.hxx>         // fuer Undo-Ids
+#include <swundo.hxx>         // for Undo-Ids
 #include <globals.hrc>
 #include <splargs.hxx>
 
@@ -77,7 +77,7 @@ using namespace ::com::sun::star::i18n;
 #define CHAR_PAR_BRK    ((sal_Char) 0x0D)
 
 //////////////////////////////////////////////////////////////////////
-//     Beschreibung: Ggf. Rahmen/Objektshell abschalten
+//     Description: Turn off frame/object shell if applicable
 
 static void lcl_ActivateTextShell( SwWrtShell & rWrtSh )
 {
@@ -418,7 +418,7 @@ void SwHHCWrapper::ReplaceUnit(
 
     lcl_ActivateTextShell( rWrtShell );
 
-    // Das aktuelle Wort austauschen
+    // replace the current word
     rWrtShell.StartAllAction();
 
     // select current unit
@@ -672,14 +672,13 @@ sal_Bool SwHHCWrapper::ConvNext_impl( )
 {
     //! modified version of SvxSpellWrapper::SpellNext
 
-    // Keine Richtungsaenderung, also ist der gewuenschte Bereich ( bStartChk )
-    // vollstaendig abgearbeitet.
+    // no change of direction so the desired region is fully processed
     if( bStartChk )
         bStartDone = sal_True;
     else
         bEndDone = sal_True;
 
-    if( bIsOtherCntnt && bStartDone && bEndDone ) // Dokument komplett geprueft?
+    if( bIsOtherCntnt && bStartDone && bEndDone ) // document completely checked?
     {
         bInfoBox = sal_True;
         return sal_False;
@@ -695,7 +694,7 @@ sal_Bool SwHHCWrapper::ConvNext_impl( )
     }
     else if ( bStartDone && bEndDone )
     {
-        // Bodybereich erledigt, Frage nach Sonderbereich
+        // body region done, ask about special region
         if( bIsConvSpecial && HasOtherCnt_impl() )
         {
             ConvStart_impl( pConvArgs, SVX_SPELL_OTHER );

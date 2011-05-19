@@ -56,7 +56,7 @@ using namespace ::com::sun::star;
 using ::rtl::OUString;
 
 /*--------------------------------------------------------------------
-     Beschreibung: Interaktive Trennung
+     Description: interactive separation
  --------------------------------------------------------------------*/
 
 SwHyphWrapper::SwHyphWrapper( SwView* pVw,
@@ -94,7 +94,7 @@ void SwHyphWrapper::SpellStart( SvxSpellArea eSpell )
 
 sal_Bool SwHyphWrapper::SpellContinue()
 {
-    // Fuer autom. Trennung Aktionen erst am Ende sichtbar machen
+    // for automatic separation, make actions visible only at the end
     SwWait *pWait = 0;
     if( bAutomatic )
     {
@@ -107,7 +107,7 @@ sal_Bool SwHyphWrapper::SpellContinue()
                 PSH->HyphContinue( &nPageCount, &nPageStart );
         SetLast( xHyphWord );
 
-    // Fuer autom. Trennung Aktionen erst am Ende sichtbar machen
+    // for automatic separation, make actions visible only at the end
     if( bAutomatic )
     {
         PSH->EndAllAction();
