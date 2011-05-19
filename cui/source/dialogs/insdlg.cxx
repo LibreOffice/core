@@ -475,15 +475,13 @@ static void Plugin_ImplFillCommandSequence( const String& aCommands, uno::Sequen
     SvCommandList aLst;
     aLst.AppendCommands( aCommands, &nEaten );
 
-    const sal_Int32 nCount = aLst.Count();
+    const size_t nCount = aLst.size();
     aCommandSequence.realloc( nCount );
-    for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
+    for( size_t nIndex = 0; nIndex < nCount; nIndex++ )
     {
-        const SvCommand& rCommand = aLst[ nIndex ];
-
-        aCommandSequence[nIndex].Name = rCommand.GetCommand();
+        aCommandSequence[nIndex].Name = aLst[ nIndex ].GetCommand();
         aCommandSequence[nIndex].Handle = -1;
-        aCommandSequence[nIndex].Value = makeAny( OUString( rCommand.GetArgument() ) );
+        aCommandSequence[nIndex].Value = makeAny( OUString( aLst[ nIndex ].GetArgument() ) );
         aCommandSequence[nIndex].State = beans::PropertyState_DIRECT_VALUE;
     }
 }
