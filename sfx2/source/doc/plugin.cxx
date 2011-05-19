@@ -116,14 +116,13 @@ throw( uno::RuntimeException )
         pWin->SetBackground();
         pWin->Show();
 
-        sal_uIntPtr nCount = maCmdList.Count();
+        size_t nCount = maCmdList.size();
         uno::Sequence < ::rtl::OUString > aCmds( nCount ), aArgs( nCount );
         ::rtl::OUString *pCmds = aCmds.getArray(), *pArgs = aArgs.getArray();
-        for( sal_uIntPtr i = 0; i < nCount; i++ )
+        for( size_t i = 0; i < nCount; i++ )
         {
-            SvCommand & rCmd = maCmdList.GetObject( i );
-            pCmds[i] = rCmd.GetCommand();
-            pArgs[i] = rCmd.GetArgument();
+            pCmds[i] = maCmdList[ i ].GetCommand();
+            pArgs[i] = maCmdList[ i ].GetArgument();
         }
 
         mxPlugin = xPMgr->createPluginFromURL(
@@ -216,7 +215,7 @@ void SAL_CALL PluginObject::setPropertyValue(const ::rtl::OUString& aPropertyNam
     }
     else if ( aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PluginCommands")) )
     {
-        maCmdList.Clear();
+        maCmdList.clear();
         uno::Sequence < beans::PropertyValue > aCommandSequence;
         if( aAny >>= aCommandSequence )
             maCmdList.FillFromSequence( aCommandSequence );
