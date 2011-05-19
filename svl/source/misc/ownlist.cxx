@@ -39,8 +39,6 @@ using namespace com::sun::star;
 //=========================================================================
 //============== SvCommandList ============================================
 //=========================================================================
-PRV_SV_IMPL_OWNER_LIST(SvCommandList,SvCommand)
-
 
 static String parseString(const String & rCmd, sal_uInt16 * pIndex)
 {
@@ -110,78 +108,11 @@ sal_Bool SvCommandList::AppendCommands
             value = (rCmd.GetChar(index) == '\"') ? parseString(rCmd, &index) : parseWord(rCmd, &index);
         }
 
-        SvCommand * pCmd = new SvCommand(name, value);
-        aTypes.Insert(pCmd, LIST_APPEND);
+        aCommandList.push_back( SvCommand(name, value));
     }
 
     *pEaten = index;
 
-//      sal_uInt16 nPos = 0;
-//      while( nPos < rCmd.Len() )
-//      {
-//          // ein Zeichen ? Dann faengt hier eine Option an
-//          if( isalpha( rCmd[nPos] ) )
-//          {
-//              String aValue;
-//              sal_uInt16 nStt = nPos;
-//              register char c;
-
-//              while( nPos < rCmd.Len() &&
-//                      ( isalnum(c=rCmd[nPos]) || '-'==c || '.'==c ) )
-//                  nPos++;
-
-//              String aToken( rCmd.Copy( nStt, nPos-nStt ) );
-
-//              while( nPos < rCmd.Len() &&
-//                      ( !String::IsPrintable( (c=rCmd[nPos]),
-//                      RTL_TEXTENCODING_MS_1252 ) || isspace(c) ) )
-//                  nPos++;
-
-//              // hat die Option auch einen Wert?
-//              if( nPos!=rCmd.Len() && '='==c )
-//              {
-//                  nPos++;
-
-//                  while( nPos < rCmd.Len() &&
-//                          ( !String::IsPrintable( (c=rCmd[nPos]),
-//                          RTL_TEXTENCODING_MS_1252 ) || isspace(c) ) )
-//                      nPos++;
-
-//                  if( nPos != rCmd.Len() )
-//                  {
-//                      sal_uInt16 nLen = 0;
-//                      nStt = nPos;
-//                      if( '"' == c )
-//                      {
-//                          nPos++; nStt++;
-//                          while( nPos < rCmd.Len() &&
-//                                  '"' != rCmd[nPos] )
-//                              nPos++, nLen++;
-//                          if( nPos!=rCmd.Len() )
-//                              nPos++;
-//                      }
-//                      else
-//                          // hier sind wir etwas laxer als der
-//                          // Standard und erlauben alles druckbare
-//                          while( nPos < rCmd.Len() &&
-//                                  String::IsPrintable( (c=rCmd[nPos]),
-//                                  RTL_TEXTENCODING_MS_1252 ) &&
-//                                  !isspace( c ) )
-//                              nPos++, nLen++;
-
-//                      if( nLen )
-//                          aValue = rCmd( nStt, nLen );
-//                  }
-//              }
-
-//              SvCommand * pCmd = new SvCommand( aToken, aValue );
-//              aTypes.Insert( pCmd, LIST_APPEND );
-//          }
-//          else
-//              // white space un unerwartete Zeichen ignorieren wie
-//              nPos++;
-//      }
-//      *pEaten = nPos;
     return sal_True;
 }
 
@@ -199,16 +130,16 @@ String SvCommandList::GetCommands() const
 */
 {
     String aRet;
-    for( sal_uLong i = 0; i < aTypes.Count(); i++ )
+    for( sal_uLong i = 0; i < aCommandList.size(); i++ )
     {
         if( i != 0 )
             aRet += ' ';
-        SvCommand * pCmd = (SvCommand *)aTypes.GetObject( i );
-        aRet += pCmd->GetCommand();
-        if( pCmd->GetArgument().Len() )
+        SvCommand aCmd = aCommandList[ i ];
+        aRet += aCmd.GetCommand();
+        if( aCmd.GetArgument().Len() )
         {
             aRet.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "=\"" ) );
-            aRet += pCmd->GetArgument();
+            aRet += aCmd.GetArgument();
             aRet.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "\"" ) );
         }
     }
@@ -231,9 +162,8 @@ SvCommand & SvCommandList::Append
     SvCommand &     Das erteugte Objekt wird zur"uckgegeben.
 */
 {
-    SvCommand * pCmd = new SvCommand( rCommand, rArg );
-    aTypes.Insert( pCmd, LIST_APPEND );
-    return *pCmd;
+    aCommandList.push_back( SvCommand( rCommand, rArg ) );
+    return aCommandList.back();
 }
 
 //=========================================================================
@@ -259,9 +189,9 @@ SvStream & operator >>
     {
         while( nCount-- )
         {
-            SvCommand * pCmd = new SvCommand();
-            rStm >> *pCmd;
-            rThis.aTypes.Insert( pCmd, LIST_APPEND );
+            SvCommand aCmd;
+            rStm >> aCmd;
+            rThis.aCommandList.push_back( aCmd );
         }
     }
     return rStm;
@@ -284,13 +214,12 @@ SvStream & operator <<
     SvStream &      Der "ubergebene Stream.
 */
 {
-    sal_uInt32 nCount = rThis.aTypes.Count();
+    sal_uInt32 nCount = rThis.aCommandList.size();
     rStm << nCount;
 
     for( sal_uInt32 i = 0; i < nCount; i++ )
     {
-        SvCommand * pCmd = (SvCommand *)rThis.aTypes.GetObject( i );
-        rStm << *pCmd;
+        rStm << rThis.aCommandList[ i ];
     }
     return rStm;
 }
@@ -314,14 +243,13 @@ sal_Bool SvCommandList::FillFromSequence( const com::sun::star::uno::Sequence < 
 
 void SvCommandList::FillSequence( com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& aCommandSequence )
 {
-    const sal_Int32 nCount = Count();
+    const sal_Int32 nCount = aCommandList.size();
     aCommandSequence.realloc( nCount );
     for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
     {
-        const SvCommand& rCommand = (*this)[ nIndex ];
-        aCommandSequence[nIndex].Name = rCommand.GetCommand();
+        aCommandSequence[nIndex].Name = aCommandList[ nIndex ].GetCommand();
         aCommandSequence[nIndex].Handle = -1;
-        aCommandSequence[nIndex].Value = uno::makeAny( ::rtl::OUString( rCommand.GetArgument() ) );
+        aCommandSequence[nIndex].Value = uno::makeAny( ::rtl::OUString( aCommandList[ nIndex ].GetArgument() ) );
         aCommandSequence[nIndex].State = beans::PropertyState_DIRECT_VALUE;
     }
 }
