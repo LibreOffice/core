@@ -4687,7 +4687,7 @@ void SwWW8ImplReader::Read_Border(sal_uInt16 , const sal_uInt8* , short nLen)
         if( pAktColl )
             nBorder = ::lcl_ReadBorders(bVer67, aBrcs, 0, pStyles);
         else
-            nBorder = ::lcl_ReadBorders(bVer67, aBrcs, pPlcxMan->GetPapPLCF());
+            nBorder = ::lcl_ReadBorders(bVer67, aBrcs, pPlcxMan ? pPlcxMan->GetPapPLCF() : NULL);
 
         if( nBorder )                                   // Border
         {
