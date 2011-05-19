@@ -124,8 +124,8 @@ XMLIndexTOCContext::XMLIndexTOCContext(
         {
             // check for array index:
             OSL_ENSURE(nTmp < (SAL_N_ELEMENTS(aIndexServiceMap)), "index out of range");
-            OSL_ENSURE(sizeof(aIndexServiceMap) ==
-                       sizeof(aIndexSourceElementMap),
+            OSL_ENSURE(SAL_N_ELEMENTS(aIndexServiceMap) ==
+                       SAL_N_ELEMENTS(aIndexSourceElementMap),
                        "service and source element maps must be same size");
 
             eIndexType = static_cast<IndexTypeEnum>(nTmp);
