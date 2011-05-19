@@ -1194,7 +1194,7 @@ elsif ($platform =~ m/cygwin/)
    if ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
       $PATH           .= $ps.$tmppath;
    }
-   # nsis path for Windows users.
+   # makensis directory
    $NSIS_PATH = PathFormat('@NSIS_PATH@');
    $tmppath = CygFormat($NSIS_PATH);
    if ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
@@ -1243,12 +1243,20 @@ elsif ($platform =~ m/cygwin/)
 }
 elsif ($platform =~ m/mingw32/)
 {
+   my ( $tmppath );
+
    $PATH              = $cur_dir.
 #                        $ps.CygFormat($SOLARVER).$ds.$INPATH.$BIN.
                         $ps.CygFormat($SOLARENV).$ds."bin".
                         $ps.CygFormat($SOLARENV).$ds.$OUTPATH.$BIN;
 
-  $PATH              .= $ps.$oldPATH;
+   # makensis directory
+   $NSIS_PATH = PathFormat('@NSIS_PATH@');
+   $tmppath = CygFormat($NSIS_PATH);
+   if ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
+       $PATH          .= $ps.$tmppath;
+   }
+   $PATH              .= $ps.$oldPATH;
 }
 elsif ($platform =~ m/darwin/)
 {  $PATH              = $cur_dir.
@@ -1679,6 +1687,10 @@ if ( $platform =~ m/cygwin/ )
       ToFile( "TMP", "$ENV{'TMP'}", "e" );
    }
 }
+elsif ( $platform =~ m/mingw32/ )
+{  ToFile( "NSIS_PATH",         $NSIS_PATH,         "e" );
+}
+
 if ("@WITH_VC_REDIST@" eq "TRUE") {
 ToFile( "WITH_VC_REDIST", "TRUE",  "e" );
 }
@@ -1996,6 +2008,7 @@ ToFile( "SYSTEM_LIBTEXTCAT_DATA","@SYSTEM_LIBTEXTCAT_DATA@","e" );
 ToFile( "XAU_LIBS",          "@XAU_LIBS@",         "e" );
 ToFile( "GXX_INCLUDE_PATH",  PathFormat("@GXX_INCLUDE_PATH@"), "e" );
 ToFile( "COMMON_BUILD_TOOLS",$COMMON_BUILD_TOOLS,  "e" );
+
 if ($platform !~ m/cygwin/) {
    if ( !defined $ENV{"TMPDIR"} || $ENV{"TMPDIR"} eq "" ) {
       ToFile( "TMPDIR",      "/tmp",               "e" );
