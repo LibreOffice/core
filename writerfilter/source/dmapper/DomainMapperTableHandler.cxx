@@ -33,6 +33,7 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <dmapperLoggers.hxx>
+#include <comphelper/anytostring.hxx>
 
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
 #include <PropertyMapHelper.hxx>
@@ -51,6 +52,33 @@ using namespace ::std;
 #define DEF_BORDER_DIST 190  //0,19cm
 #define DEFAULT_CELL_MARGIN 108 //default cell margin, not documented
 
+void dumpSequenceOfSequence( const char* msg, const uno::Sequence< uno::Sequence< beans::PropertyValue > >& seqOfSeq )
+{
+    if ( msg )
+        osl_trace("%s", msg);
+    for ( int row=0; row < seqOfSeq.getLength(); ++row )
+    {
+        const uno::Sequence< beans::PropertyValue >& props = seqOfSeq[ row ];
+        for ( int index=0; index < props.getLength(); ++index )
+        {
+            rtl::OUString sVal( ::comphelper::anyToString( props[ index ].Value ) );
+
+            osl_trace( "seq[%d][%d] prop name %s, value %s", row,index,
+                rtl::OUStringToOString( props[ index ].Name, RTL_TEXTENCODING_UTF8 ).getStr() ,
+                rtl::OUStringToOString( sVal, RTL_TEXTENCODING_UTF8 ).getStr() );
+        }
+    }
+}
+
+void dumpSequenceOfSequenceOfSequence( const char* msg, const uno::Sequence< uno::Sequence< uno::Sequence< beans::PropertyValue > > >& seqOfSeqOfSeq )
+{
+    for ( int index=0; index < seqOfSeqOfSeq.getLength(); ++index )
+    {
+        osl_trace("dumping seqOfseq[ %d ]", index );
+        uno::Sequence< uno::Sequence< beans::PropertyValue > > seqOfSeq = seqOfSeqOfSeq[ index ];
+        dumpSequenceOfSequence( msg, seqOfSeq );
+    }
+}
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
 static void  lcl_printProperties( PropertyMapPtr pProps )
 {
@@ -708,6 +736,9 @@ void DomainMapperTableHandler::endTable()
     {
         try
         {
+            osl_trace("about to convert the table");
+            dumpSequenceOfSequenceOfSequence( "dumping the cell properties", aCellProperties );
+            dumpSequenceOfSequence( "dumping the row properties", aRowProperties );
             uno::Reference<text::XTextTable> xTable = m_xText->convertToTable(*m_pTableSeq,
                                     aCellProperties,
                                     aRowProperties,
