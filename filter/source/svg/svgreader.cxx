@@ -2318,7 +2318,7 @@ struct ShapeRenderingVisitor
                                         STREAM_READ);
                     sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW;
                     sal_uInt16 pDeterminedFormat = GRFILTER_FORMAT_DONTKNOW;
-                    GraphicFilter::GetGraphicFilter()->ImportGraphic( aGraphic, String(), aSrc ,nFormat,&pDeterminedFormat );
+                    GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, String(), aSrc ,nFormat,&pDeterminedFormat );
 
                     if (pDeterminedFormat == GRFILTER_FORMAT_DONTKNOW)
                     {
@@ -2361,7 +2361,7 @@ struct ShapeRenderingVisitor
                                     if (nStreamLen_)
                                     {
                                         pDest->Seek(0L);
-                                        GraphicFilter::GetGraphicFilter()->ImportGraphic( aGraphic, String(), *pDest ,nFormat,&pDeterminedFormat );
+                                        GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, String(), *pDest ,nFormat,&pDeterminedFormat );
                                     }
                                 }
                                 delete pDest;

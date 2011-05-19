@@ -3725,12 +3725,12 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const ByteSt
                     nErrCode = GraphicConverter::Export( aStream, aGraphic, ( eGraphicType == GRAPHIC_BITMAP ) ? CVT_PNG  : CVT_EMF );
                 else
                 {   // to store a animation, a gif has to be included into the msOG chunk of a png  #I5583#
-                    GraphicFilter*  pFilter = GraphicFilter::GetGraphicFilter();
+                    GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
                     SvMemoryStream  aGIFStream;
                     ByteString      aVersion( "MSOFFICE9.0" );
                     aGIFStream.Write( aVersion.GetBuffer(), aVersion.Len() );
-                    nErrCode = pFilter->ExportGraphic( aGraphic, String(), aGIFStream,
-                        pFilter->GetExportFormatNumberForShortName( String( RTL_CONSTASCII_USTRINGPARAM( "GIF" ) ) ), NULL );
+                    nErrCode = rFilter.ExportGraphic( aGraphic, String(), aGIFStream,
+                        rFilter.GetExportFormatNumberForShortName( String( RTL_CONSTASCII_USTRINGPARAM( "GIF" ) ) ), NULL );
                     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aFilterData( 1 );
                     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aAdditionalChunkSequence( 1 );
                     sal_uInt32 nGIFSreamLen = aGIFStream.Tell();
@@ -3745,8 +3745,8 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const ByteSt
                     aFilterProp.Name = String( RTL_CONSTASCII_USTRINGPARAM( "AdditionalChunks" ) );
                     aFilterProp.Value <<= aAdditionalChunkSequence;
                     aFilterData[ 0 ] = aFilterProp;
-                    nErrCode = pFilter->ExportGraphic( aGraphic, String(), aStream,
-                        pFilter->GetExportFormatNumberForShortName( String( RTL_CONSTASCII_USTRINGPARAM( "PNG" ) ) ), &aFilterData );
+                    nErrCode = rFilter.ExportGraphic( aGraphic, String(), aStream,
+                        rFilter.GetExportFormatNumberForShortName( String( RTL_CONSTASCII_USTRINGPARAM( "PNG" ) ) ), &aFilterData );
                 }
                 if ( nErrCode == ERRCODE_NONE )
                 {

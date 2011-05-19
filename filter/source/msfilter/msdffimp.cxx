@@ -4542,9 +4542,9 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
 
                 if( aURLObj.GetProtocol() != INET_PROT_NOT_VALID )
                 {
-                    GraphicFilter* pGrfFilter = GraphicFilter::GetGraphicFilter();
-                    aFilterName = pGrfFilter->GetImportFormatName(
-                                    pGrfFilter->GetImportFormatNumberForShortName( aURLObj.getExtension() ) );
+                    GraphicFilter &rGrfFilter = GraphicFilter::GetGraphicFilter();
+                    aFilterName = rGrfFilter.GetImportFormatName(
+                                    rGrfFilter.GetImportFormatNumberForShortName( aURLObj.getExtension() ) );
                 }
 
                 aLinkFileName = aName;
@@ -6933,9 +6933,9 @@ sal_Bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, 
         }
         else
         {   // und unsere feinen Filter darauf loslassen
-            GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
+            GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
             String aEmptyStr;
-            nRes = pGF->ImportGraphic( rData, aEmptyStr, *pGrStream, GRFILTER_FORMAT_DONTKNOW );
+            nRes = rGF.ImportGraphic( rData, aEmptyStr, *pGrStream, GRFILTER_FORMAT_DONTKNOW );
 
             // SJ: I40472, sometimes the aspect ratio (aMtfSize100) does not match and we get scaling problems,
             // then it is better to use the prefsize that is stored within the metafile. Bug #72846# for what the
