@@ -169,7 +169,7 @@ void FuInsertGraphic::DoExecute( SfxRequest&  )
         }
         else
         {
-            SdGRFFilter::HandleGraphicFilterError( (sal_uInt16)nError, GraphicFilter::GetGraphicFilter()->GetLastError().nStreamError );
+            SdGRFFilter::HandleGraphicFilterError( (sal_uInt16)nError, GraphicFilter::GetGraphicFilter().GetLastError().nStreamError );
         }
     }
 }

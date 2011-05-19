@@ -361,7 +361,6 @@ SdFilterDetect::~SdFilterDetect()
 
                             const String        aFileName( aMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
                             GraphicDescriptor   aDesc( *pStm, &aFileName );
-                            GraphicFilter*      pGrfFilter = GraphicFilter::GetGraphicFilter();
                             if( !aDesc.Detect( sal_False ) )
                             {
                                 pFilter = 0;
@@ -385,7 +384,8 @@ SdFilterDetect::~SdFilterDetect()
                             else
                             {
                                 String aShortName( aDesc.GetImportFormatShortName( aDesc.GetFileFormat() ) );
-                                const String aName( pGrfFilter->GetImportFormatTypeName( pGrfFilter->GetImportFormatNumberForShortName( aShortName ) ) );
+                                GraphicFilter &rGrfFilter = GraphicFilter::GetGraphicFilter();
+                                const String aName( rGrfFilter.GetImportFormatTypeName( rGrfFilter.GetImportFormatNumberForShortName( aShortName ) ) );
 
                                 if ( pFilter && aShortName.EqualsIgnoreCaseAscii( "PCD" ) )    // there is a multiple pcd selection possible
                                 {

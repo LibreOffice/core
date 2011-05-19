@@ -386,14 +386,14 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, EMPTYARG )
             aURL = INetURLObject( aURLStr );
         }
 
-        GraphicFilter*  pGraphicFilter = GraphicFilter::GetGraphicFilter();
+        GraphicFilter&  rGraphicFilter = GraphicFilter::GetGraphicFilter();
         Graphic         aGraphic;
 
         aCurrentDropFile = aURL.GetMainURL( INetURLObject::NO_DECODE );
 
         if( !::avmedia::MediaWindow::isMediaURL( aCurrentDropFile ) )
         {
-            if( !pGraphicFilter->ImportGraphic( aGraphic, aURL ) )
+            if( !rGraphicFilter.ImportGraphic( aGraphic, aURL ) )
             {
                 sal_Int8    nTempAction = ( aIter == maDropFileVector.begin() ) ? mnAction : 0;
                 InsertGraphic( aGraphic, nTempAction, maDropPos, NULL, NULL );
