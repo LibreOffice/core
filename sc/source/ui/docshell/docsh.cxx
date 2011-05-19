@@ -246,9 +246,7 @@ SCTAB ScDocShell::GetSaveTab()
     if (pSh)
     {
         const ScMarkData& rMark = pSh->GetViewData()->GetMarkData();
-        for ( nTab = 0; nTab <= MAXTAB; nTab++ )    // erste markierte Tabelle
-            if ( rMark.GetTableSelect( nTab ) )
-                break;
+        nTab = rMark.GetFirstSelected();
     }
     return nTab;
 }

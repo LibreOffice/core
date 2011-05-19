@@ -1684,15 +1684,8 @@ void lcl_MarkedTabs( const ScMarkData& rMark, SCTAB& rStartTab, SCTAB& rEndTab )
 {
     if (rMark.GetSelectCount() > 1)
     {
-        sal_Bool bFirst = sal_True;
-        for (SCTAB i=0; i<=MAXTAB; i++)
-            if (rMark.GetTableSelect(i))
-            {
-                if (bFirst)
-                    rStartTab = i;
-                rEndTab = i;
-                bFirst = false;
-            }
+        rEndTab = rMark.GetLastSelected();
+        rStartTab = rMark.GetFirstSelected();
     }
 }
 
