@@ -490,7 +490,7 @@ protected:
               it != maAdvanced.end(); ++it )
             if ( *it == w )
             {
-                lst.erase( it );
+                it = lst.erase( it );
                 return *it;
             }
         return 0;
