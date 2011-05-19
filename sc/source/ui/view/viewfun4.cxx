@@ -653,15 +653,15 @@ sal_Bool ScViewFunc::PasteFile( const Point& rPos, const String& rFile, sal_Bool
 
     sal_uInt16 nFilterFormat;
     Graphic aGraphic;
-    GraphicFilter* pGraphicFilter = GraphicFilter::GetGraphicFilter();
+    GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
 
 
-    if (!pGraphicFilter->ImportGraphic(aGraphic, aURL,
+    if (!rGraphicFilter.ImportGraphic(aGraphic, aURL,
             GRFILTER_FORMAT_DONTKNOW, &nFilterFormat ))
     {
         if ( bLink )
         {
-            String aFltName = pGraphicFilter->GetImportFormatName(nFilterFormat);
+            String aFltName = rGraphicFilter.GetImportFormatName(nFilterFormat);
             return PasteGraphic( rPos, aGraphic, aStrURL, aFltName );
         }
         else

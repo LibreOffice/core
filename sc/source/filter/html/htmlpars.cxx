@@ -82,9 +82,9 @@ ScHTMLParser::ScHTMLParser( EditEngine* pEditEngine, ScDocument* pDoc ) :
     ScEEParser( pEditEngine ),
     mpDoc( pDoc )
 {
-    SvxHtmlOptions* pHtmlOptions = SvxHtmlOptions::Get();
+    SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
     for( sal_uInt16 nIndex = 0; nIndex < SC_HTML_FONTSIZES; ++nIndex )
-        maFontHeights[ nIndex ] = pHtmlOptions->GetFontSize( nIndex ) * 20;
+        maFontHeights[ nIndex ] = rHtmlOptions.GetFontSize( nIndex ) * 20;
 }
 
 ScHTMLParser::~ScHTMLParser()
@@ -1285,9 +1285,9 @@ void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
 
     sal_uInt16 nFormat;
     Graphic* pGraphic = new Graphic;
-    GraphicFilter* pFilter = GraphicFilter::GetGraphicFilter();
+    GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
     if ( GRFILTER_OK != GraphicFilter::LoadGraphic( pImage->aURL, pImage->aFilterName,
-            *pGraphic, pFilter, &nFormat ) )
+            *pGraphic, &rFilter, &nFormat ) )
     {
         delete pGraphic;
         return ;        // dumm gelaufen
@@ -1297,7 +1297,7 @@ void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
         pActEntry->bHasGraphic = sal_True;
         pActEntry->aAltText.Erase();
     }
-    pImage->aFilterName = pFilter->GetImportFormatName( nFormat );
+    pImage->aFilterName = rFilter.GetImportFormatName( nFormat );
     pImage->pGraphic = pGraphic;
     if ( !(pImage->aSize.Width() && pImage->aSize.Height()) )
     {

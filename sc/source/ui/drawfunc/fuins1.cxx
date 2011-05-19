@@ -224,7 +224,7 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
             bAsLink = ((const SfxBoolItem*)pItem)->GetValue();
 
         Graphic aGraphic;
-        int nError = GraphicFilter::LoadGraphic( aFileName, aFilterName, aGraphic, GraphicFilter::GetGraphicFilter() );
+        int nError = GraphicFilter::LoadGraphic( aFileName, aFilterName, aGraphic, &GraphicFilter::GetGraphicFilter() );
         if ( nError == GRFILTER_OK )
         {
             lcl_InsertGraphic( aGraphic, aFileName, aFilterName, bAsLink, sal_True, pViewSh, pWindow, pView );
