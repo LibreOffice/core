@@ -53,24 +53,21 @@ namespace css = ::com::sun::star;
 
 
 
-CacheUpdateListener::CacheUpdateListener(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR        ,
-                                         const css::uno::Reference< css::uno::XInterface >&            xConfigAccess,
-                                               FilterCache::EItemType                                  eConfigType  )
-    : BaseLock     (             )
-    , m_xSMGR      (xSMGR        )
-    , m_rCache     (             )
-    , m_xConfig    (xConfigAccess)
-    , m_eConfigType(eConfigType  )
+CacheUpdateListener::CacheUpdateListener(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR,
+                                         FilterCache &rFilterCache,
+                                         const css::uno::Reference< css::uno::XInterface >& xConfigAccess,
+                                         FilterCache::EItemType eConfigType)
+    : BaseLock()
+    , m_xSMGR(xSMGR)
+    , m_rCache(rFilterCache)
+    , m_xConfig(xConfigAccess)
+    , m_eConfigType(eConfigType)
 {
 }
-
-
 
 CacheUpdateListener::~CacheUpdateListener()
 {
 }
-
-
 
 void CacheUpdateListener::startListening()
 {
@@ -201,7 +198,7 @@ void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEven
         const ::rtl::OUString& sItem = *pIt;
         try
         {
-            m_rCache->refreshItem(eType, sItem);
+            m_rCache.refreshItem(eType, sItem);
         }
         catch(const css::container::NoSuchElementException&)
             {

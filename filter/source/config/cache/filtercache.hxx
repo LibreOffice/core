@@ -43,6 +43,7 @@
 #include <com/sun/star/util/ChangesEvent.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Any.h>
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 
 //_______________________________________________
@@ -50,6 +51,8 @@
 
 namespace filter{
     namespace config{
+
+class CacheUpdateListener;
 
 //_______________________________________________
 // definitions
@@ -272,6 +275,9 @@ class FilterCache : public BaseLock
         //---------------------------------------
         /// readonly acccess to the module configuration of OOo
         css::uno::Reference< css::container::XNameAccess > m_xModuleCfg;
+
+        rtl::Reference< CacheUpdateListener > m_xTypesChglisteners;
+        rtl::Reference< CacheUpdateListener > m_xFiltersChgListener;
 
     //-------------------------------------------
     // interface

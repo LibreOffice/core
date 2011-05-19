@@ -72,7 +72,6 @@ BaseContainer::BaseContainer()
     , m_lListener  (m_aLock)
 {
     m_rCache->load(FilterCache::E_CONTAINS_STANDARD);
-
     thePerformanceOptimizer::get();
 }
 

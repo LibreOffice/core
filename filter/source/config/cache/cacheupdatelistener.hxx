@@ -67,7 +67,7 @@ class CacheUpdateListener : public BaseLock // must be the first one to guarante
 
         /** @short  reference to the singleton(!) filter cache implementation,
                     which should be updated by this thread. */
-        ::salhelper::SingletonRef< FilterCache > m_rCache;
+        FilterCache &m_rCache;
 
         /** @short  holds the configuration access, where we listen alive. */
         css::uno::Reference< css::uno::XInterface > m_xConfig;
@@ -103,9 +103,10 @@ class CacheUpdateListener : public BaseLock // must be the first one to guarante
             @param  eConfigType
                     specify the type of configuration.
          */
-        CacheUpdateListener(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR        ,
-                            const css::uno::Reference< css::uno::XInterface >&            xConfigAccess,
-                                  FilterCache::EItemType                                  eConfigType  );
+        CacheUpdateListener(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR,
+                            FilterCache &rFilterCache,
+                            const css::uno::Reference< css::uno::XInterface >& xConfigAccess,
+                            FilterCache::EItemType eConfigType);
 
         //---------------------------------------
 

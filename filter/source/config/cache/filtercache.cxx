@@ -94,6 +94,10 @@ FilterCache::FilterCache()
 FilterCache::~FilterCache()
 {
     RTL_LOGFILE_TRACE("} (as96863) FilterCache lifetime");
+    if (m_xTypesChglisteners.is())
+        m_xTypesChglisteners->stopListening();
+    if (m_xFiltersChgListener.is())
+        m_xFiltersChgListener->stopListening();
 }
 
 
@@ -822,15 +826,12 @@ CacheItemList& FilterCache::impl_getItemList(EItemType eType) const
 css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfigProvider eProvider)
     throw(css::uno::Exception)
 {
-    // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     ::rtl::OUString                              sPath      ;
     css::uno::Reference< css::uno::XInterface >* pConfig = 0;
     css::uno::Reference< css::uno::XInterface >  xOld       ;
     ::rtl::OString                               sRtlLog    ;
-    FilterCache::EItemType                       eItemType( FilterCache::E_TYPE ) ;
-    sal_Bool                                     bStartListening = sal_False;
 
     switch(eProvider)
     {
@@ -840,8 +841,6 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
                 return m_xConfigTypes;
             sPath           = CFGPACKAGE_TD_TYPES;
             pConfig         = &m_xConfigTypes;
-            eItemType       = FilterCache::E_TYPE;
-            bStartListening = sal_True;
             sRtlLog         = ::rtl::OString("framework (as96863) ::FilterCache::impl_openconfig(E_PROVIDER_TYPES)");
         }
         break;
@@ -852,8 +851,6 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
                 return m_xConfigFilters;
             sPath           = CFGPACKAGE_TD_FILTERS;
             pConfig         = &m_xConfigFilters;
-            eItemType       = FilterCache::E_FILTER;
-            bStartListening = sal_True;
             sRtlLog         = ::rtl::OString("framework (as96863) ::FilterCache::impl_openconfig(E_PROVIDER_FILTERS)");
         }
         break;
@@ -864,7 +861,6 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
                 return m_xConfigOthers;
             sPath   = CFGPACKAGE_TD_OTHERS;
             pConfig = &m_xConfigOthers;
-            eItemType = FilterCache::E_TYPE;
             sRtlLog = ::rtl::OString("framework (as96863) ::FilterCache::impl_openconfig(E_PROVIDER_OTHERS)");
         }
         break;
@@ -889,17 +885,27 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
                                            sal_True );  // bLocalesMode
     }
 
+
     // Start listening for changes on that configuration access.
-    // We must not control the lifetime of this listener. Itself
-    // checks, when ist time to die :-)
-    if (bStartListening)
+    switch(eProvider)
     {
-        CacheUpdateListener* pListener = new CacheUpdateListener(m_xSMGR, *pConfig, eItemType);
-        pListener->startListening();
+        case E_PROVIDER_TYPES:
+        {
+            m_xTypesChglisteners.set(new CacheUpdateListener(m_xSMGR, *this, *pConfig, FilterCache::E_TYPE));
+            m_xTypesChglisteners->startListening();
+        }
+        break;
+        case E_PROVIDER_FILTERS:
+        {
+            m_xFiltersChgListener.set(new CacheUpdateListener(m_xSMGR, *this, *pConfig, FilterCache::E_FILTER));
+            m_xFiltersChgListener->startListening();
+        }
+        break;
+        default:
+        break;
     }
 
     return *pConfig;
-    // <- SAFE
 }
 
 
