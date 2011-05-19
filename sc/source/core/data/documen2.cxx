@@ -790,12 +790,14 @@ sal_Bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos )//TODO:REWORK
 
                 ScTable* pSaveTab = pTab[nOldPos];
                 SCTAB i;
-                for (i = nOldPos + 1; i < nTabCount; i++)
-                    pTab[i - 1] = pTab[i];
-                pTab[i-1] = NULL;
-                for (i = nTabCount - 1; i > nNewPos; i--)
-                    pTab[i] = pTab[i - 1];
-                pTab[nNewPos] = pSaveTab;
+                pTab.erase(pTab.begin()+nOldPos);
+                pTab.insert(pTab.begin()+nNewPos, pSaveTab);
+//                for (i = nOldPos + 1; i < nTabCount; i++)
+//                    pTab[i - 1] = pTab[i];
+//                pTab[i-1] = NULL;
+//                for (i = nTabCount - 1; i > nNewPos; i--)
+//                    pTab[i] = pTab[i - 1];
+//                pTab[nNewPos] = pSaveTab;
                 for (i = 0; i < static_cast<SCTAB>(pTab.size()); i++)
                     if (pTab[i])
                         pTab[i]->UpdateMoveTab( nOldPos, nNewPos, i, *pProgress );

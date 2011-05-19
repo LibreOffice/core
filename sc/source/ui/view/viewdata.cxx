@@ -333,7 +333,6 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh )
     aScrSize = Size( (long) ( STD_COL_WIDTH           * PIXEL_PER_TWIPS * OLE_STD_CELLS_X ),
                      (long) ( ScGlobal::nStdRowHeight * PIXEL_PER_TWIPS * OLE_STD_CELLS_Y ) );
     pTabData.push_back( new ScViewDataTable() );
-    for ( SCTAB i = 1; i <= MAXTAB; i++ )
     pThisTab = pTabData[nTabNo];
     for (sal_uInt16 j=0; j<4; j++)
     {
@@ -461,6 +460,8 @@ void ScViewData::UpdateThis()
 
 void ScViewData::InsertTab( SCTAB nTab )
 {
+    while( nTab >= static_cast<SCTAB>(pTabData.size()))
+        pTabData.push_back(NULL);
     pTabData.insert( pTabData.begin() + nTab, NULL );
     CreateTabData( nTab );
 
@@ -488,6 +489,11 @@ void ScViewData::CopyTab( SCTAB nSrcTab, SCTAB nDestTab )
         return;
     }
 
+    if (nSrcTab >= static_cast<SCTAB>(pTabData.size()))
+        OSL_FAIL("pTabData out of bounds, FIX IT");
+
+    while( nDestTab >= static_cast<SCTAB>(pTabData.size()))
+        pTabData.push_back(NULL);
     if ( pTabData[nSrcTab] )
         pTabData.insert(pTabData.begin() + nDestTab, new ScViewDataTable( *pTabData[nSrcTab] ));
     else
@@ -501,10 +507,23 @@ void ScViewData::MoveTab( SCTAB nSrcTab, SCTAB nDestTab )
 {
     if (nDestTab==SC_TAB_APPEND)
         nDestTab = pDoc->GetTableCount() - 1;
+    ScViewDataTable* pTab;
+    if (nSrcTab < static_cast<SCTAB>(pTabData.size()))
+    {
+        pTab = pTabData[nSrcTab];
+        pTabData.erase( pTabData.begin() + nSrcTab );
+    }
+    else
+        pTab = NULL;
 
-    ScViewDataTable* pTab = pTabData[nSrcTab];
-    pTabData.erase( pTabData.begin() + nSrcTab );
-    pTabData.insert( pTabData.begin() + nDestTab, pTab );
+    if (nDestTab < static_cast<SCTAB>(pTabData.size()))
+        pTabData.insert( pTabData.begin() + nDestTab, pTab );
+    else
+    {
+        while (nDestTab > static_cast<SCTAB>(pTabData.size()))
+            pTabData.push_back(NULL);
+        pTabData.push_back(pTab);
+    }
 
     UpdateThis();
     aMarkData.DeleteTab( nSrcTab );
@@ -1380,6 +1399,8 @@ void ScViewData::GetEditView( ScSplitPos eWhich, EditView*& rViewPtr, SCCOL& rCo
 
 void ScViewData::CreateTabData( SCTAB nNewTab )
 {
+    while(nNewTab >= static_cast<SCTAB>(pTabData.size()))
+        pTabData.push_back(NULL);
     if (!pTabData[nNewTab])
     {
         pTabData[nNewTab] = new ScViewDataTable;

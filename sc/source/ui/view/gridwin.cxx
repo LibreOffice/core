@@ -3951,22 +3951,21 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
             {
                 ScDocShell* pSrcShell = pTransObj->GetSourceDocShell();
 
-                SCTAB nTabs[MAXTABCOUNT];
+                std::vector<SCTAB> nTabs;
 
                 ScMarkData  aMark       = pTransObj->GetSourceMarkData();
                 SCTAB       nTabCount   = pSourceDoc->GetTableCount();
-                SCTAB       nTabSelCount = 0;
 
                 for(SCTAB i=0; i<nTabCount; i++)
                 {
                     if(aMark.GetTableSelect(i))
                     {
-                        nTabs[nTabSelCount++]=i;
+                        nTabs.push_back(i);
                         for(SCTAB j=i+1;j<nTabCount;j++)
                         {
                             if((!pSourceDoc->IsVisible(j))&&(pSourceDoc->IsScenario(j)))
                             {
-                                nTabs[nTabSelCount++]=j;
+                                nTabs.push_back( j );
                                 i=j;
                             }
                             else break;
@@ -3974,7 +3973,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                     }
                 }
 
-                pView->ImportTables( pSrcShell,nTabSelCount, nTabs, bIsLink, nThisTab );
+                pView->ImportTables( pSrcShell,static_cast<SCTAB>(nTabs.size()), &nTabs[0], bIsLink, nThisTab );
                 bDone = sal_True;
             }
         }

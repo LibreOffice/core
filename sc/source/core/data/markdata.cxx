@@ -600,14 +600,14 @@ sal_Bool ScMarkData::HasAnyMultiMarks() const
     return false;       // nix
 }
 
-void ScMarkData::InsertTab( SCTAB nTab )
+void ScMarkData::InsertTab( SCTAB nTab )//TODO:REWORK
 {
     maTabMarked.insert( nTab );
 }
 
-void ScMarkData::DeleteTab( SCTAB nTab )
+void ScMarkData::DeleteTab( SCTAB nTab )//TODO:REWORK
 {
-    maTabMarked.erase( maTabMarked.find( nTab ) );
+    maTabMarked.erase( nTab );
 }
 
 

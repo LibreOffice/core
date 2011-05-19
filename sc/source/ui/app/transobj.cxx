@@ -160,7 +160,7 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
     SCTAB nTab1=0;
     SCTAB nTab2=0;
     sal_Bool bFirst = sal_True;
-    for (SCTAB i=0; i<=MAXTAB; i++)
+    for (SCTAB i=0; i< pDoc->GetTableCount(); i++)
         if (pDoc->HasTable(i))
         {
             if (bFirst)
@@ -766,10 +766,10 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
     //  In a clipboard doc the data don't have to be on the first sheet
 
     SCTAB nSrcTab = 0;
-    while (nSrcTab<MAXTAB && !pDoc->HasTable(nSrcTab))
+    while (nSrcTab<pDoc->GetTableCount() && !pDoc->HasTable(nSrcTab))
         ++nSrcTab;
     SCTAB nDestTab = 0;
-    while (nDestTab<MAXTAB && !pDestDoc->HasTable(nDestTab))
+    while (nDestTab<pDestDoc->GetTableCount() && !pDestDoc->HasTable(nDestTab))
         ++nDestTab;
 
     if (!pDoc->HasTable(nSrcTab) || !pDestDoc->HasTable(nDestTab))
