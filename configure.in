@@ -2222,6 +2222,8 @@ if test "$_os" = "WINNT"; then
         else
             with_cl_home=`cygpath -u "$with_cl_home"`
         fi
+        with_cl_home=`cygpath -d "$with_cl_home"`
+        with_cl_home=`cygpath -u "$with_cl_home"`
         AC_MSG_RESULT([done])
 
         dnl ===========================================================
