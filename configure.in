@@ -8188,10 +8188,6 @@ dnl ===================================================================
 AC_MSG_CHECKING([for maximum of jobs per processor])
 BUILD_MAX_JOBS="1"
 if test "z$with_max_jobs" != "z"; then
-    if test "$with_max_jobs" -gt "10"; then
-        AC_MSG_WARN([dmake is limited to 10 jobs, using --with-max-jobs=10 (instead of $with_max_jobs).])
-        with_max_jobs="10"
-    fi
     BUILD_MAX_JOBS="$with_max_jobs"
 else
    if test -n "$enable_icecream" && test "$enable_icecream" != "no" ; then
