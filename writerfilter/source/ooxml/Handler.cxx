@@ -309,7 +309,7 @@ OOXMLHyperlinkHandler::~OOXMLHyperlinkHandler()
     sReturn += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\""));
     sReturn += mFieldCode;
 
-    mpFastContext->text(sReturn);
+    mpFastContext->characters(sReturn);
 }
 
 void OOXMLHyperlinkHandler::attribute(Id name, Value & val)
