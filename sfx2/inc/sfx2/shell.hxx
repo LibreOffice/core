@@ -36,7 +36,6 @@
 #include <tools/rtti.hxx>
 #include <svl/brdcst.hxx>
 
-#include <tools/ownlist.hxx>
 #include <tools/unqid.hxx>
 #include <tools/string.hxx>
 
