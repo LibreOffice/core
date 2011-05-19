@@ -380,7 +380,7 @@ elsif ( $platform =~ m/openbsd/ )
       $OSVERSION      = '@OSVERSION@';
       $OUTPATH        = "unxobsd";
       $outfile        = "OpenBSDEnv.Set.sh";
-   if ($platform =~ m/^amd64/)
+   if ($platform =~ m/^(amd64|x86_64)/)
    {
       print "Setting OpenBSD AMD64 specific values... ";
       $CPU            = "X";
