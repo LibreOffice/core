@@ -3476,7 +3476,7 @@ static void ImplDrawButton( ToolBox* pThis, const Rectangle &rRect, sal_uInt16 h
         pThis->DrawSelectionBackground( rRect, bIsWindow ? 3 : highlight, bChecked, sal_True, bIsWindow, 2, NULL, NULL );
 }
 
-void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_Bool bHighlight, sal_Bool bPaint, sal_Bool bLayout )
+void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 bHighlight, sal_Bool bPaint, sal_Bool bLayout )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
