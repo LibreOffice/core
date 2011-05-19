@@ -66,7 +66,6 @@
 #include <sal/types.h>
 #include <sal/config.h>
 #include <tools/date.hxx>
-#include <tools/ownlist.hxx>
 #include <vcl/accel.hxx>
 #include <tools/resid.hxx>
 #include <tools/rc.hxx>
