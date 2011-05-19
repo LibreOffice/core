@@ -429,7 +429,7 @@ String ExportGraphic( const Graphic &rGraphic, const String &rGrfName )
     aURL.SetSmartURL( aName );
     aDlgHelper.SetFileName( aURL.GetName() );
 
-    GraphicFilter& rGF = *GraphicFilter::GetGraphicFilter();
+    GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
     const sal_uInt16 nCount = rGF.GetExportFormatCount();
 
     String aExt( aURL.GetExtension() );

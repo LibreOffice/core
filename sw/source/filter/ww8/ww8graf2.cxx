@@ -252,7 +252,7 @@ extern void WW8PicShadowToReal(  WW8_PIC_SHADOW*  pPicS,  WW8_PIC*  pPic );
 
 bool SwWW8ImplReader::GetPictGrafFromStream(Graphic& rGraphic, SvStream& rSrc)
 {
-    return 0 == GraphicFilter::GetGraphicFilter()->ImportGraphic(rGraphic, aEmptyStr, rSrc,
+    return 0 == GraphicFilter::GetGraphicFilter().ImportGraphic(rGraphic, aEmptyStr, rSrc,
         GRFILTER_FORMAT_DONTKNOW);
 }
 

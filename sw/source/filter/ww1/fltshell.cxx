@@ -1081,7 +1081,7 @@ void SwFltShell::NextPage()
 SwFltShell& SwFltShell::AddGraphic( const String& rPicName )
 {
     // embedded:
-    GraphicFilter* pFilter = GraphicFilter::GetGraphicFilter();
+    GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
     Graphic aGraphic;
     // one of: GFF_NOT GFF_BMP GFF_GIF GFF_JPG GFF_PCD GFF_PCX GFF_PNG
     // GFF_TIF GFF_XBM GFF_DXF GFF_MET GFF_PCT GFF_SGF GFF_SVM GFF_WMF
@@ -1090,7 +1090,7 @@ SwFltShell& SwFltShell::AddGraphic( const String& rPicName )
         URIHelper::SmartRel2Abs(
             INetURLObject(GetBaseURL()), rPicName,
             URIHelper::GetMaybeFileHdl()) );
-    switch (pFilter->ImportGraphic(aGraphic, aDir))
+    switch (rFilter.ImportGraphic(aGraphic, aDir))
     {
         case GRFILTER_OK:
             *this << aGraphic;

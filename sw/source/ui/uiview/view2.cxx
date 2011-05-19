@@ -222,7 +222,7 @@ int SwView::InsertGraphic( const String &rPath, const String &rFilter,
     else
     {
         if( !pFlt )
-            pFlt = GraphicFilter::GetGraphicFilter();
+            pFlt = &GraphicFilter::GetGraphicFilter();
         nRes = GraphicFilter::LoadGraphic( rPath, rFilter, aGrf, pFlt );
     }
 
@@ -420,11 +420,11 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
 
         rSh.StartUndo(UNDO_INSERT, &aRewriter);
 
-        int nError = InsertGraphic( aFileName, aFilterName, bAsLink, GraphicFilter::GetGraphicFilter() );
+        int nError = InsertGraphic( aFileName, aFilterName, bAsLink, &GraphicFilter::GetGraphicFilter() );
 
         // Format ist ungleich Current Filter, jetzt mit auto. detection
         if( nError == GRFILTER_FORMATERROR )
-            nError = InsertGraphic( aFileName, aEmptyStr, bAsLink, GraphicFilter::GetGraphicFilter() );
+            nError = InsertGraphic( aFileName, aEmptyStr, bAsLink, &GraphicFilter::GetGraphicFilter() );
         if ( rSh.IsFrmSelected() )
         {
             SwFrmFmt* pFmt = pDoc->FindFrmFmtByName( sGraphicFormat );

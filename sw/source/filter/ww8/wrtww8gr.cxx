@@ -183,14 +183,14 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
                 if ( pGraphicStream && !pGraphicStream->GetError() )
                 {
                     Graphic aGr1;
-                    GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
-                    if( pGF->ImportGraphic( aGr1, aEmptyStr, *pGraphicStream, GRFILTER_FORMAT_DONTKNOW ) == GRFILTER_OK )
+                    GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
+                    if( rGF.ImportGraphic( aGr1, aEmptyStr, *pGraphicStream, GRFILTER_FORMAT_DONTKNOW ) == GRFILTER_OK )
                     {
                         Graphic aGr2;
                         delete pGraphicStream;
                         pGraphicStream =
                                 ::utl::UcbStreamHelper::CreateStream( aCnt.GetGraphicStream( pRet->GetObjRef() ) );
-                        if( pGF->ImportGraphic( aGr2, aEmptyStr, *pGraphicStream, GRFILTER_FORMAT_DONTKNOW ) == GRFILTER_OK )
+                        if( rGF.ImportGraphic( aGr2, aEmptyStr, *pGraphicStream, GRFILTER_FORMAT_DONTKNOW ) == GRFILTER_OK )
                         {
                             if ( aGr1 == aGr2 )
                                 bGraphicNeeded = false;
@@ -775,8 +775,8 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
                 if ( pGraphicStream && !pGraphicStream->GetError() )
                 {
                     Graphic aGr;
-                    GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
-                    if( pGF->ImportGraphic( aGr, aEmptyStr, *pGraphicStream, GRFILTER_FORMAT_DONTKNOW ) == GRFILTER_OK )
+                    GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
+                    if( rGF.ImportGraphic( aGr, aEmptyStr, *pGraphicStream, GRFILTER_FORMAT_DONTKNOW ) == GRFILTER_OK )
                     {
                         //TODO/LATER: do we really want to use GDIMetafile?!
                         GDIMetaFile aMtf;

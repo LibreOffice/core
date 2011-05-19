@@ -120,7 +120,7 @@ void EditWithExternalTool(GraphicObject *pGraphicObject, SwWrtShell *rSh)
     osl::File::move(tempFileBase, tempFileName);
 
     //Write Graphic to the Temp File
-    GraphicFilter& rGF = *GraphicFilter::GetGraphicFilter();
+    GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
     sal_uInt16 nFilter(rGF.GetExportFormatNumber(fExt));
     String aFilter(rGF.GetExportFormatShortName(nFilter));
     String sPath(tempFileName.getStr());
