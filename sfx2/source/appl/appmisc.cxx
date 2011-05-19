@@ -296,8 +296,8 @@ static bool impl_loadBitmap(
         // Use graphic class to also support more graphic formats (bmp,png,...)
         Graphic aGraphic;
 
-        GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
-        pGF->ImportGraphic( aGraphic, String(), aStrm, GRFILTER_FORMAT_DONTKNOW );
+        GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
+        rGF.ImportGraphic( aGraphic, String(), aStrm, GRFILTER_FORMAT_DONTKNOW );
 
         // Default case, we load the intro bitmap from a seperate file
         // (e.g. staroffice_intro.bmp or starsuite_intro.bmp)

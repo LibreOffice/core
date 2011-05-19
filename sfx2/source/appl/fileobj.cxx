@@ -313,10 +313,10 @@ sal_Bool SvFileObject::LoadFile_Impl()
 
 sal_Bool SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
 {
-    GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
+    GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
 
-    const sal_uInt16 nFilter = sFilter.Len() && pGF->GetImportFormatCount()
-                            ? pGF->GetImportFormatNumber( sFilter )
+    const sal_uInt16 nFilter = sFilter.Len() && rGF.GetImportFormatCount()
+                            ? rGF.GetImportFormatNumber( sFilter )
                             : GRFILTER_FORMAT_DONTKNOW;
 
     String aEmptyStr;
@@ -329,16 +329,16 @@ sal_Bool SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
 
     if( !pStream )
         nRes = xMed.Is() ? GRFILTER_OPENERROR
-                         : pGF->ImportGraphic( rGrf, INetURLObject(sFileNm),
+                         : rGF.ImportGraphic( rGrf, INetURLObject(sFileNm),
                             nFilter );
     else if( !pDownLoadData )
     {
         pStream->Seek( STREAM_SEEK_TO_BEGIN );
-        nRes = pGF->ImportGraphic( rGrf, aEmptyStr, *pStream, nFilter );
+        nRes = rGF.ImportGraphic( rGrf, aEmptyStr, *pStream, nFilter );
     }
     else
     {
-        nRes = pGF->ImportGraphic( pDownLoadData->aGrf, aEmptyStr,
+        nRes = rGF.ImportGraphic( pDownLoadData->aGrf, aEmptyStr,
                                     *pStream, nFilter );
 
         if( pDownLoadData )

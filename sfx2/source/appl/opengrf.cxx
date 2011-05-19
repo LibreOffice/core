@@ -127,12 +127,12 @@ short SvxOpenGraphicDialog::Execute()
     {
         if( GetPath().Len() )
         {
-            GraphicFilter*  pFilter = GraphicFilter::GetGraphicFilter();
+            GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
             INetURLObject aObj( GetPath() );
 
             // check whether we can load the graphic
             String  aCurFilter( GetCurrentFilter() );
-            sal_uInt16  nFormatNum = pFilter->GetImportFormatNumber( aCurFilter );
+            sal_uInt16  nFormatNum = rFilter.GetImportFormatNumber( aCurFilter );
             sal_uInt16  nRetFormat = 0;
             sal_uInt16  nFound = USHRT_MAX;
 
@@ -144,23 +144,23 @@ short SvxOpenGraphicDialog::Execute()
                 SvStream* pStream = aMed.GetInStream();
 
                 if( pStream )
-                    nImpRet = pFilter->CanImportGraphic( aObj.GetMainURL( INetURLObject::NO_DECODE ), *pStream, nFormatNum, &nRetFormat );
+                    nImpRet = rFilter.CanImportGraphic( aObj.GetMainURL( INetURLObject::NO_DECODE ), *pStream, nFormatNum, &nRetFormat );
                 else
-                    nImpRet = pFilter->CanImportGraphic( aObj, nFormatNum, &nRetFormat );
+                    nImpRet = rFilter.CanImportGraphic( aObj, nFormatNum, &nRetFormat );
 
                 if ( GRFILTER_OK != nImpRet )
                 {
                     if ( !pStream )
-                        nImpRet = pFilter->CanImportGraphic( aObj, GRFILTER_FORMAT_DONTKNOW, &nRetFormat );
+                        nImpRet = rFilter.CanImportGraphic( aObj, GRFILTER_FORMAT_DONTKNOW, &nRetFormat );
                     else
-                        nImpRet = pFilter->CanImportGraphic( aObj.GetMainURL( INetURLObject::NO_DECODE ), *pStream,
+                        nImpRet = rFilter.CanImportGraphic( aObj.GetMainURL( INetURLObject::NO_DECODE ), *pStream,
                                                              GRFILTER_FORMAT_DONTKNOW, &nRetFormat );
                 }
             }
             else
             {
-                if( (nImpRet=pFilter->CanImportGraphic( aObj, nFormatNum, &nRetFormat )) != GRFILTER_OK )
-                    nImpRet = pFilter->CanImportGraphic( aObj, GRFILTER_FORMAT_DONTKNOW, &nRetFormat );
+                if( (nImpRet=rFilter.CanImportGraphic( aObj, nFormatNum, &nRetFormat )) != GRFILTER_OK )
+                    nImpRet = rFilter.CanImportGraphic( aObj, GRFILTER_FORMAT_DONTKNOW, &nRetFormat );
             }
 
             if ( GRFILTER_OK == nImpRet )
@@ -175,9 +175,9 @@ short SvxOpenGraphicDialog::Execute()
             else
             {
                 // setup appropriate filter (so next time, it will work)
-                if( pFilter->GetImportFormatCount() )
+                if( rFilter.GetImportFormatCount() )
                 {
-                    String  aFormatName(pFilter->GetImportFormatName(nFound));
+                    String  aFormatName(rFilter.GetImportFormatName(nFound));
                     SetCurrentFilter(aFormatName);
                 }
 
