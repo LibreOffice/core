@@ -246,11 +246,13 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
                 }
 
                 // importing slide page
-                pSlidePersistPtr->setMasterPersist( pMasterPersistPtr );
-                pSlidePersistPtr->setTheme( pMasterPersistPtr->getTheme() );
-                Reference< drawing::XMasterPageTarget > xMasterPageTarget( pSlidePersistPtr->getPage(), UNO_QUERY );
-                if( xMasterPageTarget.is() )
-                    xMasterPageTarget->setMasterPage( pMasterPersistPtr->getPage() );
+                if (pMasterPersistPtr.get()) {
+                    pSlidePersistPtr->setMasterPersist( pMasterPersistPtr );
+                    pSlidePersistPtr->setTheme( pMasterPersistPtr->getTheme() );
+                    Reference< drawing::XMasterPageTarget > xMasterPageTarget( pSlidePersistPtr->getPage(), UNO_QUERY );
+                    if( xMasterPageTarget.is() )
+                        xMasterPageTarget->setMasterPage( pMasterPersistPtr->getPage() );
+                }
                 rFilter.getDrawPages().push_back( pSlidePersistPtr );
                 rFilter.setActualSlidePersist( pSlidePersistPtr );
                 importSlide( xSlideFragmentHandler, pSlidePersistPtr );
