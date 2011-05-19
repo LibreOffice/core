@@ -1988,7 +1988,7 @@ int Desktop::doShutdown()
 
 IMPL_LINK( Desktop, ImplInitFilterHdl, ConvertData*, pData )
 {
-    return GraphicFilter::GetGraphicFilter()->GetFilterCallback().Call( pData );
+    return GraphicFilter::GetGraphicFilter().GetFilterCallback().Call( pData );
 }
 
 sal_Bool Desktop::InitializeConfiguration()
