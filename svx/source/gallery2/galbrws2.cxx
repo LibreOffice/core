@@ -1172,12 +1172,12 @@ String GalleryBrowser2::GetFilterName() const
 
         if( ( SGA_OBJ_BMP == eObjKind ) || ( SGA_OBJ_ANIM == eObjKind ) )
         {
-            GraphicFilter*      pFilter = GraphicFilter::GetGraphicFilter();
+            GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
             INetURLObject       aURL; mpCurTheme->GetURL( mnCurActionPos, aURL );
-            sal_uInt16          nFilter = pFilter->GetImportFormatNumberForShortName( aURL.GetExtension() );
+            sal_uInt16          nFilter = rFilter.GetImportFormatNumberForShortName( aURL.GetExtension() );
 
             if( GRFILTER_FORMAT_DONTKNOW != nFilter )
-                aFilterName = pFilter->GetImportFormatName( nFilter );
+                aFilterName = rFilter.GetImportFormatName( nFilter );
         }
     }
 

@@ -95,9 +95,9 @@ bool GalleryPreview::SetGraphic( const INetURLObject& _aURL )
     }
     else
     {
-        GraphicFilter*  pFilter = GraphicFilter::GetGraphicFilter();
-        GalleryProgress aProgress( pFilter );
-        if( pFilter->ImportGraphic( aGraphic, _aURL, GRFILTER_FORMAT_DONTKNOW ) )
+        GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+        GalleryProgress aProgress( &rFilter );
+        if( rFilter.ImportGraphic( aGraphic, _aURL, GRFILTER_FORMAT_DONTKNOW ) )
             bRet = false;
     }
 

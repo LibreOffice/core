@@ -101,11 +101,13 @@ SvxShapeGroup::SvxShapeGroup( SdrObject* pObj, SvxDrawPage* pDrawPage  )  throw(
     SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_GROUP), getSvxMapProvider().GetPropertySet(SVXMAP_GROUP, SdrObject::GetGlobalDrawObjectItemPool()) ),
     mxPage( pDrawPage )
 {
+    fprintf(stderr, "SvxShapeGroup::SvxShapeGroup ctor %p\n", this);
 }
 
 //----------------------------------------------------------------------
 SvxShapeGroup::~SvxShapeGroup() throw()
 {
+    fprintf(stderr, "SvxShapeGroup::SvxShapeGroup dtor %p\n", this);
 }
 
 //----------------------------------------------------------------------
@@ -1730,8 +1732,8 @@ bool SvxGraphicObject::setPropertyValueImpl( const ::rtl::OUString& rName, const
 
                     if( aURLObj.GetProtocol() != INET_PROT_NOT_VALID )
                     {
-                        GraphicFilter* pGrfFilter = GraphicFilter::GetGraphicFilter();
-                        aFilterName = pGrfFilter->GetImportFormatName( pGrfFilter->GetImportFormatNumberForShortName( aURLObj.getExtension() ) );
+                        GraphicFilter &rGrfFilter = GraphicFilter::GetGraphicFilter();
+                        aFilterName = rGrfFilter.GetImportFormatName( rGrfFilter.GetImportFormatNumberForShortName( aURLObj.getExtension() ) );
                     }
                 }
                 else

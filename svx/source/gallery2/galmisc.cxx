@@ -126,13 +126,13 @@ sal_uInt16 GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
 
     if( pIStm )
     {
-        GraphicFilter*      pGraphicFilter = GraphicFilter::GetGraphicFilter();
-        GalleryProgress*    pProgress = bShowProgress ? new GalleryProgress( pGraphicFilter ) : NULL;
+        GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
+        GalleryProgress*    pProgress = bShowProgress ? new GalleryProgress( &rGraphicFilter ) : NULL;
         sal_uInt16              nFormat;
 
-        if( !pGraphicFilter->ImportGraphic( rGraphic, rURL.GetMainURL( INetURLObject::NO_DECODE ), *pIStm, GRFILTER_FORMAT_DONTKNOW, &nFormat ) )
+        if( !rGraphicFilter.ImportGraphic( rGraphic, rURL.GetMainURL( INetURLObject::NO_DECODE ), *pIStm, GRFILTER_FORMAT_DONTKNOW, &nFormat ) )
         {
-            rFilterName = pGraphicFilter->GetImportFormatName( nFormat );
+            rFilterName = rGraphicFilter.GetImportFormatName( nFormat );
             nRet = SGA_IMPORT_FILE;
         }
 

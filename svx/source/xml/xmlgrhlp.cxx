@@ -139,7 +139,7 @@ SvXMLGraphicInputStream::SvXMLGraphicInputStream( const ::rtl::OUString& rGraphi
             {
                 if( aGraphic.GetType() == GRAPHIC_BITMAP )
                 {
-                    GraphicFilter*  pFilter = GraphicFilter::GetGraphicFilter();
+                    GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
                     String          aFormat;
 
                     if( aGraphic.IsAnimated() )
@@ -147,7 +147,7 @@ SvXMLGraphicInputStream::SvXMLGraphicInputStream( const ::rtl::OUString& rGraphi
                     else
                         aFormat = String( RTL_CONSTASCII_USTRINGPARAM( "png" ) );
 
-                    bRet = ( pFilter->ExportGraphic( aGraphic, String(), *pStm, pFilter->GetExportFormatNumberForShortName( aFormat ) ) == 0 );
+                    bRet = ( rFilter.ExportGraphic( aGraphic, String(), *pStm, rFilter.GetExportFormatNumberForShortName( aFormat ) ) == 0 );
                 }
                 else if( aGraphic.GetType() == GRAPHIC_GDIMETAFILE )
                 {
@@ -331,7 +331,7 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
         mpOStm->Seek( 0 );
         sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW;
         sal_uInt16 pDeterminedFormat = GRFILTER_FORMAT_DONTKNOW;
-        GraphicFilter::GetGraphicFilter()->ImportGraphic( aGraphic, String(), *mpOStm ,nFormat,&pDeterminedFormat );
+        GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, String(), *mpOStm ,nFormat,&pDeterminedFormat );
 
         if (pDeterminedFormat == GRFILTER_FORMAT_DONTKNOW)
         {
@@ -374,7 +374,7 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
                         if (nStreamLen_)
                         {
                             pDest->Seek(0L);
-                            GraphicFilter::GetGraphicFilter()->ImportGraphic( aGraphic, String(), *pDest ,nFormat,&pDeterminedFormat );
+                            GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, String(), *pDest ,nFormat,&pDeterminedFormat );
                         }
                     }
                     delete pDest;
@@ -569,7 +569,7 @@ Graphic SvXMLGraphicHelper::ImplReadGraphic( const ::rtl::OUString& rPictureStor
     if( aStream.xStream.is() )
     {
         SvStream* pStream = utl::UcbStreamHelper::CreateStream( aStream.xStream );
-        GraphicFilter::GetGraphicFilter()->ImportGraphic( aGraphic, String(), *pStream );
+        GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, String(), *pStream );
         delete pStream;
     }
 
@@ -615,7 +615,7 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
             {
                 if( aGraphic.GetType() == GRAPHIC_BITMAP )
                 {
-                    GraphicFilter*  pFilter = GraphicFilter::GetGraphicFilter();
+                    GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
                     String          aFormat;
 
                     if( aGraphic.IsAnimated() )
@@ -623,8 +623,8 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
                     else
                         aFormat = String( RTL_CONSTASCII_USTRINGPARAM( "png" ) );
 
-                    bRet = ( pFilter->ExportGraphic( aGraphic, String(), *pStream,
-                                                     pFilter->GetExportFormatNumberForShortName( aFormat ) ) == 0 );
+                    bRet = ( rFilter.ExportGraphic( aGraphic, String(), *pStream,
+                                                     rFilter.GetExportFormatNumberForShortName( aFormat ) ) == 0 );
                 }
                 else if( aGraphic.GetType() == GRAPHIC_GDIMETAFILE )
                 {

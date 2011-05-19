@@ -100,10 +100,10 @@ const Graphic ImpLoadLinkedGraphic( const String& rFileName, const String& rFilt
     if ( pInStrm )
     {
         pInStrm->Seek( STREAM_SEEK_TO_BEGIN );
-        GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
+        GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
 
-        const sal_uInt16 nFilter = rFilterName.Len() && pGF->GetImportFormatCount()
-                            ? pGF->GetImportFormatNumber( rFilterName )
+        const sal_uInt16 nFilter = rFilterName.Len() && rGF.GetImportFormatCount()
+                            ? rGF.GetImportFormatNumber( rFilterName )
                             : GRFILTER_FORMAT_DONTKNOW;
 
         String aEmptyStr;
@@ -115,7 +115,7 @@ const Graphic ImpLoadLinkedGraphic( const String& rFileName, const String& rFilt
         // there we should create a new service to provide this data if needed
         aFilterData[ 0 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CreateNativeLink" ) );
         aFilterData[ 0 ].Value = Any( sal_True );
-        pGF->ImportGraphic( aGraphic, aEmptyStr, *pInStrm, nFilter, NULL, 0, &aFilterData );
+        rGF.ImportGraphic( aGraphic, aEmptyStr, *pInStrm, nFilter, NULL, 0, &aFilterData );
     }
     return aGraphic;
 }
@@ -1299,7 +1299,7 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
                         mbIsPreview = sal_True;
                     }
 
-                    if( !GraphicFilter::GetGraphicFilter()->ImportGraphic( aGraphic, String(), *pStream,
+                    if( !GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, String(), *pStream,
                                                         GRFILTER_FORMAT_DONTKNOW, NULL, 0, pFilterData ) )
                     {
                         const String aUserData( pGraphic->GetUserData() );
