@@ -123,7 +123,7 @@ XMLIndexTOCContext::XMLIndexTOCContext(
         if (SvXMLUnitConverter::convertEnum(nTmp, rLocalName, aIndexTypeMap))
         {
             // check for array index:
-            OSL_ENSURE(nTmp < (sizeof(aIndexServiceMap)/sizeof(sal_Char*)), "index out of range");
+            OSL_ENSURE(nTmp < (SAL_N_ELEMENTS(aIndexServiceMap)), "index out of range");
             OSL_ENSURE(sizeof(aIndexServiceMap) ==
                        sizeof(aIndexSourceElementMap),
                        "service and source element maps must be same size");
