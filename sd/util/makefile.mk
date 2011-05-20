@@ -297,5 +297,5 @@ $(MISC)/sdd.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
 $(MISC)/sdfilt.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
         sdfilt.component
     $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL2TARGETN:f)' -o $@ \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL5TARGETN:f)' -o $@ \
         $(SOLARENV)/bin/createcomponent.xslt sdfilt.component
