@@ -1522,7 +1522,7 @@ void PushButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
         else
             aStyleSettings.SetFaceColor( GetSettings().GetStyleSettings().GetFaceColor() );
         aSettings.SetStyleSettings( aStyleSettings );
-        pDev->SetSettings( aSettings );
+        pDev->OutputDevice::SetSettings( aSettings );
     }
     pDev->SetTextFillColor();
 
