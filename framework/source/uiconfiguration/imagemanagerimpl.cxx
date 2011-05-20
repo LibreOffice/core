@@ -109,8 +109,8 @@ namespace framework
     static GlobalImageList*     pGlobalImageList = 0;
     static const char* ImageType_Prefixes[ImageType_COUNT] =
     {
-        "res/commandimagelist/sc_",
-        "res/commandimagelist/lc_"
+        "cmd/sc_",
+        "cmd/lc_"
     };
 
 typedef GraphicNameAccess CmdToXGraphicNameAccess;
