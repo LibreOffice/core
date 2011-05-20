@@ -998,7 +998,7 @@ with_stlport=auto)
 AC_ARG_WITH(jdk-home,
     AS_HELP_STRING([--with-jdk-home],
         [If you have installed JDK 1.3 or later on your system please supply the
-         path here. Note that this is not the location of the Java binary but the
+         path here. Note that this is not the location of the java command but the
          location of the entire distribution.])
     [
                           Usage:     --with-jdk-home=<absolute path to JDK home>
@@ -1016,15 +1016,18 @@ AC_ARG_WITH(gxx_include_path,
 
 AC_ARG_WITH(java,
     AS_HELP_STRING([--with-java],
-        [Build with(out) Java support. If you use --without-java/--with-java=no
-         then the build will have no support for Java components, applets,
-         accessibility or XML filters.]),
-    if test "$withval" = "yes"; then
-        WITH_JAVA=java;
-    else
-        WITH_JAVA=$withval;
-    fi ,
-WITH_JAVA=java)
+        [Specify the name of the Java interpreter command. Typically "java"
+         which is the default.
+
+         To build without support for Java components, applets, accessibility
+         or the XML filters written in Java, use --without-java or --with-java=no.])
+    [
+                          Usage:     --with-java==<java command>
+                                     --without-java
+    ],
+    [ test -z "$with_java" -o "$with_java" = "yes" && with_java=java ],
+    [ with_java=java ]
+)
 
 AC_ARG_WITH(java_target_version,
     AS_HELP_STRING([--with-java-target-version],
@@ -1048,6 +1051,7 @@ AC_ARG_WITH(jvm-path,
                                  to find JRE/JDK in /usr/lib/jvm/
     ],
 ,)
+
 AC_ARG_WITH(ant-home,
     AS_HELP_STRING([--with-ant-home],
         [If you have installed Jakarta Ant on your system, please supply the path here.
@@ -1069,7 +1073,7 @@ AC_ARG_WITH(junit,
 
 AC_ARG_WITH(perl-home,
     AS_HELP_STRING([--with-perl-home],
-        [If you have installed the Perl 5 Distribution, on your system, please
+        [If you have installed Perl 5 Distribution, on your system, please
          supply the path here. Note that this is not the location of the Perl
          binary but the location of the entire distribution.])
     [
@@ -3276,17 +3280,25 @@ dnl ===================================================================
 dnl Java support enable
 dnl ===================================================================
 AC_MSG_CHECKING([whether to build with Java support])
-if test "$WITH_JAVA" != "no"; then
+if test "$with_java" != "no"; then
    AC_MSG_RESULT([yes])
    SOLAR_JAVA="TRUE"
 else
    AC_MSG_RESULT([no])
    SOLAR_JAVA=""
-
-   AC_MSG_WARN([building without Java will mean some features will not be available])
-   echo "building without Java will mean some features will not be available" >>warn
 fi
+
 AC_SUBST(SOLAR_JAVA)
+
+dnl SOLAR_JAVA (yes, silly name, should rename) indicates whether we
+dnl want there to be *run-time* support for Java extensions in the
+dnl built LibreOffice. We might need a different test for whether
+dnl there is Java at *build-time*.
+
+dnl If we don't have access to Java at build-time we can't have
+dnl run-time Java support either. But I think there are some uses of
+dnl Java at build-time even if no run-time Java support is wanted. Or
+dnl is there? This is a bit unclear to me.
 
 if test "$_os" = "Linux" && test "$host_cpu" = "powerpc"; then
    # IBMs JDK needs this...
@@ -3305,7 +3317,7 @@ dnl ===================================================================
 if test "$SOLAR_JAVA" != ""; then
 
    # Windows-specific tests
-   if test "$_os" = "WINNT"; then
+   if test "$build_os" = "cygwin" -a "$_os" = "WINNT"; then
       if test "$CL_X64" != ""; then
 	 bitness="64-bit"
 	 otherbitness="32-bit"
@@ -3313,6 +3325,7 @@ if test "$SOLAR_JAVA" != ""; then
 	 bitness="32-bit"
 	 otherbitness="64-bit"
       fi
+
       if test -z "$with_jdk_home"; then
 
 	 # Unfortunately apparently no way to find, if needed, the 64-bit
@@ -3333,9 +3346,9 @@ if test "$SOLAR_JAVA" != ""; then
 
    JAVA_HOME=; export JAVA_HOME
    if test -z "$with_jdk_home"; then
-      AC_PATH_PROG(JAVAINTERPRETER, $WITH_JAVA)
+      AC_PATH_PROG(JAVAINTERPRETER, $with_java)
    else
-      _java_path="$with_jdk_home/bin/$WITH_JAVA"
+      _java_path="$with_jdk_home/bin/$with_java"
       dnl Check if there is a Java interpreter at all.
       if test -x "$_java_path"; then
          JAVAINTERPRETER=$_java_path
@@ -3346,6 +3359,8 @@ if test "$SOLAR_JAVA" != ""; then
 
    if test "$build_os" = "cygwin" -a "$_os" = "WINNT"; then
       # Check that the JDK found is correct architecture
+      # Why is this necessary, we don't link with any library from the JDK I think,
+
       shortjdkhome=`cygpath -d "$with_jdk_home"`
       if test "$CL_X64" != "" -a -f "$with_jdk_home/bin/java.exe" -a "`$shortjdkhome/bin/java.exe -version 2>&1 | grep -i 64-bit`" = "" >/dev/null; then
 	 AC_MSG_WARN([You are building 64-bit binaries but the JDK $howfound is 32-bit])
@@ -3429,7 +3444,7 @@ you must use the "--with-jdk-home" configure option explicitly])
         fi
       fi
    else
-      AC_MSG_ERROR([JAVA not found. You need at least jdk-1.5, or gcj-4])
+      AC_MSG_ERROR([Java not found. You need at least jdk-1.5, or gcj-4])
    fi
 else
    dnl Java disabled
@@ -3479,7 +3494,7 @@ dnl Checks for javac
 dnl ===================================================================
 if test "$SOLAR_JAVA" != ""; then
     if test "$JDK" = "gcj"; then
-        javacompiler=`echo $WITH_JAVA | $SED -e "s/gij/gcj/g" | $SED -e "s/java/javac/g"`
+        javacompiler=`echo $with_java | $SED -e "s/gij/gcj/g" | $SED -e "s/java/javac/g"`
     else
         javacompiler="javac"
     fi
@@ -3495,7 +3510,7 @@ if test "$SOLAR_JAVA" != ""; then
     if test -z "$JAVACOMPILER"; then
       AC_MSG_ERROR([$javacompiler not found set with_jdk_home])
     fi
-    if test "$_os" = "WINNT"; then
+    if test "$build_os" = "cygwin" -a "$_os" = "WINNT"; then
        if test x`echo "$JAVACOMPILER" | grep -i '\.exe$'` = x; then
           JAVACOMPILER="${JAVACOMPILER}.exe"
        fi
@@ -3553,7 +3568,7 @@ if test "$SOLAR_JAVA" != ""; then
     if test -z "$JAVADOC"; then
       AC_MSG_ERROR([$_javadoc_path not found set with_jdk_home])
     fi
-    if test "$_os" = "WINNT"; then
+    if test "$build_os" = "cygwin" -a "$_os" = "WINNT"; then
         if test x`echo "$JAVADOC" | grep -i '\.exe$'` = x; then
             JAVADOC="${JAVADOC}.exe"
         fi
@@ -3637,7 +3652,7 @@ _ACEOF
           AC_MSG_ERROR([gij does not know its java.home - use --with-jdk-home])
         fi
       else
-        JAVA_HOME=`echo $JAVAINTERPRETER | $SED -n "s,//*bin//*$WITH_JAVA,,p"`
+        JAVA_HOME=`echo $JAVAINTERPRETER | $SED -n "s,//*bin//*$with_java,,p"`
       fi
     fi
 
@@ -4012,7 +4027,7 @@ AC_MSG_CHECKING([whether to build the ODK])
 if test "z$enable_odk" = "z" -o "$enable_odk" != "no"; then
    AC_MSG_RESULT([yes])
 
-   if test "$WITH_JAVA" != "no"; then
+   if test "$with_java" != "no"; then
       AC_MSG_CHECKING([whether to build unowinreg.dll])
       if test "$_os" = "WINNT" -a "z$enable_build_unowinreg" = "z" ; then
            # build on Win by default
@@ -6543,7 +6558,7 @@ AS_IF([test "x$enable_ext_wiki_publisher" = "xyes"], [
   AC_MSG_CHECKING([for swext module])
   ENABLE_MEDIAWIKI=YES
   BUILD_TYPE="$BUILD_TYPE SWEXT"
-  if test  "x$WITH_JAVA" = "xno"; then
+  if test  "x$with_java" = "xno"; then
     AC_MSG_ERROR([Wiki Publisher requires Java! Enable Java if you want to build it.])
   fi
 ],[
@@ -6573,7 +6588,7 @@ AC_SUBST(SYSTEM_SERVLETAPI)
 AC_SUBST(SERVLETAPI_JAR)
 
 AC_MSG_CHECKING([whether to build the Report Builder extension])
-if test -n "$enable_ext_report_builder" -a "$enable_ext_report_builder" != "no" && test "$WITH_JAVA" != "no"; then
+if test -n "$enable_ext_report_builder" -a "$enable_ext_report_builder" != "no" && test "$with_java" != "no"; then
   AC_MSG_RESULT([yes])
   ENABLE_REPORTBUILDER=YES
   AC_MSG_CHECKING([for reportbuilder module])

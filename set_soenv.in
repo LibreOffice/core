@@ -1434,7 +1434,20 @@ elsif ($platform =~ m/cygwin/)
    }
 }
 elsif ($platform =~ m/mingw32/)
-{
+{  if ($JAVA_HOME ne "" && $JAVA_HOME ne "NO_JAVA_HOME")
+   {  if (  '@build_os' eq 'cygwin' )
+      {  # Using MinGW from Cygwin. Use the normal Windows JDK
+         # headers
+         $SOLARINC       .= $I.'$JAVA_HOME'.$INCLUDE.$ds."win32".
+                            $I.'$JAVA_HOME'.$INCLUDE;
+      }
+      else
+      {  # Cross-compilation. Use our fake jni_md.h
+         # and othewise the build platform JDK headers
+         $SOLARINC       .= $I.$SOLARENVINC.$ds."win32".
+                            $I.'$JAVA_HOME'.$INCLUDE;
+      }
+   }
 }
 elsif ($platform =~ m/darwin/ && $platform !~ m/^arm/)
 {  $SOLARINC         .= $I.$FRAMEWORKSHOME.$ds."JavaVM.framework".$ds."Versions".$ds."Current".$ds."Headers".
