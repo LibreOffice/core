@@ -48,7 +48,6 @@
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <svtools/treelist.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
