@@ -51,11 +51,9 @@ using ::rtl::OUString;
 
 X11Transferable::X11Transferable(
     SelectionManager& rManager,
-    const Reference< XInterface >& xCreator,
     Atom selection
     ) :
         m_rManager( rManager ),
-        m_xCreator( xCreator ),
         m_aSelection( selection )
 {
 }

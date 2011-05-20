@@ -259,6 +259,7 @@ namespace x11 {
         oslThread                   m_aDragExecuteThread;
         ::osl::Condition            m_aDragRunning;
         XLIB_Window                 m_aWindow;
+        com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop > m_xDesktop;
         com::sun::star::uno::Reference< ::com::sun::star::awt::XDisplayConnection >
                                     m_xDisplayConnection;
         com::sun::star::uno::Reference< com::sun::star::script::XInvocation >

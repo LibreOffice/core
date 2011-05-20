@@ -463,7 +463,7 @@ void SelectionManager::initialize( const Sequence< Any >& arguments ) throw (::c
                 // just interested in SelectionClear/Notify/Request and PropertyChange
                 XSelectInput( m_pDisplay, m_aWindow, PropertyChangeMask );
                 // create the transferable for Drag operations
-                m_xDropTransferable = new X11Transferable( *this, static_cast< OWeakObject* >(this), m_nXdndSelection );
+                m_xDropTransferable = new X11Transferable( *this, m_nXdndSelection );
                 registerHandler( m_nXdndSelection, *this );
 
                 m_aThread = osl_createSuspendedThread( call_SelectionManager_run, this );
@@ -517,12 +517,6 @@ SelectionManager::~SelectionManager()
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "shutting down SelectionManager\n" );
 #endif
-
-    if( m_xDisplayConnection.is() )
-    {
-        m_xDisplayConnection->removeEventHandler( Any(), this );
-        m_xDisplayConnection.clear();
-    }
 
     if( m_pDisplay )
     {
@@ -3773,9 +3767,9 @@ void SelectionManager::run( void* pThis )
     css::uno::Reference< XMultiServiceFactory > xFact( ::comphelper::getProcessServiceFactory() );
     if( xFact.is() )
     {
-        css::uno::Reference< XDesktop > xDesktop( xFact->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), UNO_QUERY );
-        if( xDesktop.is() )
-            xDesktop->addTerminateListener(This);
+        This->m_xDesktop.set(xFact->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), UNO_QUERY);
+        if (This->m_xDesktop.is())
+            This->m_xDesktop->addTerminateListener(This);
     }
 
     while( osl_scheduleThread(This->m_aThread) )
@@ -3820,12 +3814,22 @@ void SelectionManager::run( void* pThis )
 
 void SelectionManager::shutdown() throw()
 {
+    #if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "SelectionManager got app termination event\n" );
+    #endif
+
     osl::ResettableMutexGuard aGuard(m_aMutex);
+
     if( m_bShutDown )
-    {
         return;
-    }
     m_bShutDown = true;
+
+    if ( m_xDesktop.is() )
+        m_xDesktop->removeTerminateListener(this);
+
+    if( m_xDisplayConnection.is() )
+        m_xDisplayConnection->removeEventHandler(Any(), this);
+
     // stop dispatching
     if( m_aThread )
     {
@@ -3856,8 +3860,9 @@ void SelectionManager::shutdown() throw()
         m_aThread = NULL;
         aGuard.reset();
     }
-    m_xDisplayConnection->removeEventHandler( Any(), this );
+    m_xDesktop.clear();
     m_xDisplayConnection.clear();
+    m_xDropTransferable.clear();
 }
 
 // ------------------------------------------------------------------------
@@ -3897,9 +3902,11 @@ sal_Bool SelectionManager::handleEvent( const Any& event ) throw()
     return sal_True;
 }
 
-void SAL_CALL SelectionManager::disposing( const ::com::sun::star::lang::EventObject& )
+void SAL_CALL SelectionManager::disposing( const ::com::sun::star::lang::EventObject& rEvt )
     throw( ::com::sun::star::uno::RuntimeException )
 {
+    if (rEvt.Source == m_xDesktop || rEvt.Source == m_xDisplayConnection)
+        shutdown();
 }
 
 void SAL_CALL SelectionManager::queryTermination( const ::com::sun::star::lang::EventObject& )
@@ -3915,13 +3922,7 @@ void SAL_CALL SelectionManager::queryTermination( const ::com::sun::star::lang::
 void SAL_CALL SelectionManager::notifyTermination( const ::com::sun::star::lang::EventObject& rEvent )
     throw( ::com::sun::star::uno::RuntimeException )
 {
-    css::uno::Reference< XDesktop > xDesktop( rEvent.Source, UNO_QUERY );
-    if( xDesktop.is() == sal_True )
-        xDesktop->removeTerminateListener( this );
-    #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "SelectionManager got app termination event\n" );
-    #endif
-    shutdown();
+    disposing(rEvent);
 }
 
 // ------------------------------------------------------------------------

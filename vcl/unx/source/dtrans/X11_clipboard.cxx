@@ -155,7 +155,7 @@ Reference< XTransferable > SAL_CALL X11Clipboard::getContents()
     MutexGuard aGuard(m_rSelectionManager.getMutex());
 
     if( ! m_aContents.is() )
-        m_aContents = new X11Transferable( SelectionManager::get(), static_cast< OWeakObject* >(this), m_aSelection );
+        m_aContents = new X11Transferable( SelectionManager::get(), m_aSelection );
     return m_aContents;
 }
 
