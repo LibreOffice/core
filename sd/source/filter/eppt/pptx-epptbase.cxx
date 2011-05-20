@@ -165,7 +165,7 @@ PPTWriterBase::PPTWriterBase( const Reference< XModel > & rXModel,
 
 PPTWriterBase::~PPTWriterBase()
 {
-    if ( mbStatusIndicator )
+    if ( mbStatusIndicator && mXStatusIndicator.is() ))
         mXStatusIndicator->end();
 }
 
