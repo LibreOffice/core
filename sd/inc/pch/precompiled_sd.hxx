@@ -548,7 +548,6 @@
 #include "svl/svstdarr.hxx"
 #include "unotools/syslocale.hxx"
 #include "svtools/tabbar.hxx"
-#include "svtools/treelist.hxx"
 #include "svl/undo.hxx"
 #include "svtools/unoimap.hxx"
 #include "svl/urihelper.hxx"

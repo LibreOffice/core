@@ -44,7 +44,6 @@
 #include "CustomAnimationPane.hrc"
 #include "CustomAnimation.hrc"
 #include "CustomAnimationPreset.hxx"
-#include <svtools/treelist.hxx>
 #include <vcl/svapp.hxx>
 #include "sdresid.hxx"
 
