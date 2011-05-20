@@ -560,6 +560,12 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
         SetVertical( pAttrSet->GetCharRotate().GetValue() );
     else
         SetVertical( 0 );
+    if( pIDocumentSettingAccess && pIDocumentSettingAccess->get( IDocumentSettingAccess::SMALL_CAPS_PERCENTAGE_66 ))
+    {
+        aSub[ SW_LATIN ].smallCapsPercentage66 = true;
+        aSub[ SW_CJK ].smallCapsPercentage66 = true;
+        aSub[ SW_CTL ].smallCapsPercentage66 = true;
+    }
 }
 
 SwSubFont& SwSubFont::operator=( const SwSubFont &rFont )
@@ -571,6 +577,7 @@ SwSubFont& SwSubFont::operator=( const SwSubFont &rFont )
     nOrgAscent = rFont.nOrgAscent;
     nPropWidth = rFont.nPropWidth;
     aSize = rFont.aSize;
+    smallCapsPercentage66 = rFont.smallCapsPercentage66;
     return *this;
 }
 

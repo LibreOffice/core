@@ -622,8 +622,13 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
     else
         pBigFont = pLastFont;
 
-    // Hier entsteht der Kleinbuchstabenfont:
-    aFont.SetProportion( (aFont.GetPropr() * SMALL_CAPS_PERCENTAGE ) / 100L );
+    // Older LO versions had 66 as the small caps percentage size, later changed to 80,
+    // therefore a backwards compatibility option is kept (otherwise layout is changed).
+    // NOTE: There are more uses of SMALL_CAPS_PERCENTAGE in editeng, but it seems they
+    // do not matter for Writer (and if they did it'd be pretty ugly to propagate
+    // the option there).
+    int smallCapsPercentage = smallCapsPercentage66 ? 66 : SMALL_CAPS_PERCENTAGE;
+    aFont.SetProportion( (aFont.GetPropr() * smallCapsPercentage ) / 100L );
     pMagic2 = NULL;
     nIndex2 = 0;
     SwFntAccess *pSmallFontAccess = new SwFntAccess( pMagic2, nIndex2, &aFont,
