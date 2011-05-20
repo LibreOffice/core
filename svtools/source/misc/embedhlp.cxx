@@ -437,9 +437,9 @@ void EmbeddedObjectRef::GetReplacement( sal_Bool bUpdate )
     SvStream* pGraphicStream = GetGraphicStream( bUpdate );
     if ( pGraphicStream )
     {
-        GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
+        GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
         if( mpImp->pGraphic )
-            pGF->ImportGraphic( *mpImp->pGraphic, String(), *pGraphicStream, GRFILTER_FORMAT_DONTKNOW );
+            rGF.ImportGraphic( *mpImp->pGraphic, String(), *pGraphicStream, GRFILTER_FORMAT_DONTKNOW );
         mpImp->mnGraphicVersion++;
         delete pGraphicStream;
     }
@@ -530,8 +530,8 @@ void EmbeddedObjectRef::SetGraphicStream( const uno::Reference< io::XInputStream
 
     if ( pGraphicStream )
     {
-        GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
-        pGF->ImportGraphic( *mpImp->pGraphic, String(), *pGraphicStream, GRFILTER_FORMAT_DONTKNOW );
+        GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
+        rGF.ImportGraphic( *mpImp->pGraphic, String(), *pGraphicStream, GRFILTER_FORMAT_DONTKNOW );
         mpImp->mnGraphicVersion++;
 
         if ( mpImp->pContainer )

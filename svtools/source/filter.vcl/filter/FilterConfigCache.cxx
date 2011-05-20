@@ -107,7 +107,7 @@ sal_Bool FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const OUSt
             if ( sFilterName.EqualsIgnoreCaseAscii( *pPtr ) )
                 bIsPixelFormat = sal_True;
         }
-        rtl::OUString sTemp(OUString(RTL_CONSTASCII_USTRINGPARAM(SVLIBRARY("?") )));
+        rtl::OUString sTemp(RTL_CONSTASCII_USTRINGPARAM(SVLIBRARY("?")));
         sal_Int32 nIndex = sTemp.indexOf(static_cast<sal_Unicode>('?'));
         sFilterName = sTemp.replaceAt(nIndex, 1, sFilterName);
     }
@@ -348,7 +348,6 @@ FilterConfigCache::FilterConfigCache( sal_Bool bConfig ) :
 
 FilterConfigCache::~FilterConfigCache()
 {
-
 }
 
 String FilterConfigCache::GetImportFilterName( sal_uInt16 nFormat )

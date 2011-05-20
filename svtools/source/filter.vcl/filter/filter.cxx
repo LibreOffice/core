@@ -110,8 +110,6 @@ static ::osl::Mutex& getListMutex()
     return s_aListProtection;
 }
 
-static GraphicFilter* pGraphicFilter=0;
-
 // -------------------------
 // - ImpFilterOutputStream -
 // -------------------------
@@ -1019,6 +1017,7 @@ GraphicFilter::GraphicFilter( sal_Bool bConfig ) :
     bUseConfig        ( bConfig ),
     nExpGraphHint     ( 0 )
 {
+    fprintf(stderr, "GraphicFilter::GraphicFilter ctor %p\n", this);
     ImplInit();
 }
 
@@ -1026,6 +1025,7 @@ GraphicFilter::GraphicFilter( sal_Bool bConfig ) :
 
 GraphicFilter::~GraphicFilter()
 {
+    fprintf(stderr, "GraphicFilter::GraphicFilter dtor %p\n", this);
     {
         ::osl::MutexGuard aGuard( getListMutex() );
         pFilterHdlList->Remove( (void*)this );
@@ -2144,16 +2144,24 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData*, pData )
     return nRet;
 }
 
-// ------------------------------------------------------------------------
-
-GraphicFilter* GraphicFilter::GetGraphicFilter()
+namespace
 {
-    if( !pGraphicFilter )
+    class StandardGraphicFilter
     {
-        pGraphicFilter = new GraphicFilter;
-        pGraphicFilter->GetImportFormatCount();
-    }
-    return pGraphicFilter;
+    public:
+        StandardGraphicFilter()
+        {
+            m_aFilter.GetImportFormatCount();
+        }
+        GraphicFilter m_aFilter;
+    };
+
+    class theGraphicFilter : public rtl::Static<StandardGraphicFilter, theGraphicFilter> {};
+}
+
+GraphicFilter& GraphicFilter::GetGraphicFilter()
+{
+    return theGraphicFilter::get().m_aFilter;
 }
 
 int GraphicFilter::LoadGraphic( const String &rPath, const String &rFilterName,
@@ -2161,7 +2169,7 @@ int GraphicFilter::LoadGraphic( const String &rPath, const String &rFilterName,
                  sal_uInt16* pDeterminedFormat )
 {
     if ( !pFilter )
-        pFilter = GetGraphicFilter();
+        pFilter = &GetGraphicFilter();
 
     const sal_uInt16 nFilter = rFilterName.Len() && pFilter->GetImportFormatCount()
                     ? pFilter->GetImportFormatNumber( rFilterName )

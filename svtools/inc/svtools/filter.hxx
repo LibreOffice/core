@@ -360,7 +360,7 @@ public:
     void                    ResetLastError();
 
     const Link      GetFilterCallback() const;
-    static          GraphicFilter* GetGraphicFilter();
+    static GraphicFilter& GetGraphicFilter();
     static int      LoadGraphic( const String& rPath, const String& rFilter,
                      Graphic& rGraphic,
                      GraphicFilter* pFilter = NULL,
