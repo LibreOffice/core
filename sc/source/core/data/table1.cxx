@@ -1400,7 +1400,12 @@ void ScTable::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
 
 void ScTable::UpdateInsertTab(SCTAB nTable)
 {
-    if (nTab >= nTable) nTab++;
+    if (nTab >= nTable)
+    {
+        nTab++;
+        if (pDBDataNoName)
+            pDBDataNoName->UpdateMoveTab(nTab - 1 ,nTab);
+    }
     for (SCCOL i=0; i <= MAXCOL; i++) aCol[i].UpdateInsertTab(nTable);
 
     if (IsStreamValid())
@@ -1409,7 +1414,12 @@ void ScTable::UpdateInsertTab(SCTAB nTable)
 
 void ScTable::UpdateDeleteTab( SCTAB nTable, sal_Bool bIsMove, ScTable* pRefUndo )
 {
-    if (nTab > nTable) nTab--;
+    if (nTab > nTable)
+    {
+        nTab--;
+        if (pDBDataNoName)
+            pDBDataNoName->UpdateMoveTab(nTab + 1,nTab);
+    }
 
     SCCOL i;
     if (pRefUndo)
