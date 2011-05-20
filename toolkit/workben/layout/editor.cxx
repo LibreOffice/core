@@ -1329,16 +1329,16 @@ public:
     {
         mpListBox->SetSelectHdl( LINK( this, SortListBox, ItemSelectedHdl ) );
 
-        mpUpButton->SetModeImage( layout::Image ( "res/commandimagelist/lc_moveup.png" ) );
+        mpUpButton->SetModeImage( layout::Image ( "cmd/lc_moveup.png" ) );
         mpUpButton->SetImageAlign( IMAGEALIGN_LEFT );
         mpUpButton->SetClickHdl( LINK( this, SortListBox, UpPressedHdl ) );
 
-        mpDownButton->SetModeImage( layout::Image ( "res/commandimagelist/lc_movedown.png" ) );
+        mpDownButton->SetModeImage( layout::Image ( "cmd/lc_movedown.png" ) );
         mpDownButton->SetImageAlign( IMAGEALIGN_LEFT );
         mpDownButton->SetClickHdl( LINK( this, SortListBox, DownPressedHdl ) );
 
-        // "res/commandimagelist/lch_delete.png", "res/commandimagelist/lc_delete.png"
-        mpRemoveButton->SetModeImage( layout::Image ( "res/commandimagelist/sc_closedoc.png" ) );
+        // "cmd/lch_delete.png", "cmd/lc_delete.png"
+        mpRemoveButton->SetModeImage( layout::Image ( "cmd/sc_closedoc.png" ) );
         mpRemoveButton->SetImageAlign( IMAGEALIGN_LEFT );
         mpRemoveButton->SetClickHdl( LINK( this, SortListBox, RemovePressedHdl ) );
 
@@ -1659,7 +1659,7 @@ EditorImpl::EditorImpl( layout::Dialog *dialog,
         pBtn->SetClickHdl( LINK( this, EditorImpl, CreateWidgetHdl ) );
         if ( WIDGETS_SPECS[ i ].pIconName != NULL )
         {
-            rtl::OString aPath ("res/commandimagelist/");
+            rtl::OString aPath ("cmd/");
             aPath += WIDGETS_SPECS[ i ].pIconName;
             layout::Image aImg( aPath );
             pBtn->SetModeImage( aImg );

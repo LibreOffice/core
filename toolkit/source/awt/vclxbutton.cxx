@@ -57,70 +57,70 @@ VCLXIconButton::VCLXIconButton( Window *p, rtl::OUString aDefaultLabel, char con
 
 VCLXOKButton::VCLXOKButton( Window *p )
     : VCLXIconButton( p, Button::GetStandardText( BUTTON_OK ),
-                         "res/commandimagelist/sc_ok.png" )
+                         "cmd/sc_ok.png" )
 {
 }
 
 VCLXCancelButton::VCLXCancelButton( Window *p )
     : VCLXIconButton( p, Button::GetStandardText( BUTTON_CANCEL ),
 //    : VCLXIconButton( xButton, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("~Cancel ")),
-                         "res/commandimagelist/sc_cancel.png" )
+                         "cmd/sc_cancel.png" )
 {
 }
 
 VCLXYesButton::VCLXYesButton( Window *p )
     : VCLXIconButton( p, Button::GetStandardText( BUTTON_YES ),
-                  "res/commandimagelist/sc_yes.png" )
+                  "cmd/sc_yes.png" )
 {
 }
 
 VCLXNoButton::VCLXNoButton( Window *p )
     : VCLXIconButton( p, Button::GetStandardText( BUTTON_NO ),
-                  "res/commandimagelist/sc_no.png" )
+                  "cmd/sc_no.png" )
 {
 }
 
 VCLXRetryButton::VCLXRetryButton( Window *p )
     : VCLXIconButton( p, Button::GetStandardText( BUTTON_RETRY ),
-                  "res/commandimagelist/sc_retry.png" )
+                  "cmd/sc_retry.png" )
 {
 }
 
 VCLXIgnoreButton::VCLXIgnoreButton( Window *p )
     : VCLXIconButton( p, Button::GetStandardText( BUTTON_IGNORE ),
-                  "res/commandimagelist/sc_ignore.png" )
+                  "cmd/sc_ignore.png" )
 {
 }
 
 VCLXResetButton::VCLXResetButton( Window *p )
     : VCLXIconButton( p, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("~Reset ")),
-                  "res/commandimagelist/sc_reset.png" )
+                  "cmd/sc_reset.png" )
 {
 }
 
 VCLXApplyButton::VCLXApplyButton( Window *p )
     : VCLXIconButton( p, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Apply")),
-                  "res/commandimagelist/sc_apply.png" )
+                  "cmd/sc_apply.png" )
 {
 }
 
 VCLXHelpButton::VCLXHelpButton( Window *p )
     : VCLXIconButton( p, Button::GetStandardText( BUTTON_HELP ),
-                  "res/commandimagelist/sc_help.png" )
+                  "cmd/sc_help.png" )
 {
 }
 
 VCLXMoreButton::VCLXMoreButton( Window *p )
     : VCLXIconButton( p, Button::GetStandardText( BUTTON_MORE ),
 //    : VCLXIconButton( p, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("More ")),
-                  "res/commandimagelist/sc_more.png" )
+                  "cmd/sc_more.png" )
 {
 }
 
 VCLXAdvancedButton::VCLXAdvancedButton( Window *p )
 //    : VCLXIconButton( p, Button::GetStandardText( BUTTON_ADVANCED ),
     : VCLXIconButton( p, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Advanced ")),
-                  "res/commandimagelist/sc_advanced.png" )
+                  "cmd/sc_advanced.png" )
 {
 }
 

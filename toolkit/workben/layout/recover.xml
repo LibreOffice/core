@@ -10,7 +10,7 @@
              has_border="true" sizeable="true" moveable="true">
     <vbox spacing="5" border="5" width="640">
         <hbox spacing="5" cnt:expand="false">
-        <fixedimage id="FI_HEADER" cnt:expand="false" graphic="res/commandimagelist/sc_apply.png" />
+        <fixedimage id="FI_HEADER" cnt:expand="false" graphic="cmd/sc_apply.png" />
         <fixedtext id="FT_HEADER" _label="OpenOffice.org Document Restore"/>
     </hbox>
     <fixedline id="FL_HEADER"/>
@@ -24,22 +24,22 @@ LINE TEST"/>
     <vbox cnt:fill="true" cnt:expand="true" cnt:padding="20" border="20" spacing="20">
         <hbox>
         <checkbox id="CB_DOC" state="1" cnt:expand="false" scale="false"/>
-        <fixedimage id="FI_DOC" cnt:v-align="0.5" image-align="0.5" cnt:expand="false" scale="false" graphic="res/commandimagelist/lc_insertdoc.png"/>
+        <fixedimage id="FI_DOC" cnt:v-align="0.5" image-align="0.5" cnt:expand="false" scale="false" graphic="cmd/lc_insertdoc.png"/>
         <fixedtext id="FT_DOC" _label="My document"/>
         </hbox>
         <hbox>
         <checkbox id="CB_SHEET" state="1" cnt:expand="false" scale="false" />
-        <fixedimage id="FI_SHEET" cnt:expand="false" scale="false" graphic="res/commandimagelist/lc_inserttable.png" />
+        <fixedimage id="FI_SHEET" cnt:expand="false" scale="false" graphic="cmd/lc_inserttable.png" />
         <fixedtext id="FT_SHEET" _label="My spreadsheet"/>
         </hbox>
         <hbox>
         <checkbox id="CB_DRAW" state="1" cnt:expand="false" scale="false"/>
-        <fixedimage id="FI_DRAW" cnt:expand="false" scale="false" graphic="res/commandimagelist/lc_insertdraw.png" />
+        <fixedimage id="FI_DRAW" cnt:expand="false" scale="false" graphic="cmd/lc_insertdraw.png" />
         <fixedtext id="FT_DRAW" _label="My drawing"/>
         </hbox>
         <hbox>
         <checkbox id="CB_PRESENT" state="1" cnt:expand="false" scale="false" />
-        <fixedimage id="FI_PRESENT" cnt:expand="false" scale="false" graphic="res/commandimagelist/lc_insertvideo.png" />
+        <fixedimage id="FI_PRESENT" cnt:expand="false" scale="false" graphic="cmd/lc_insertvideo.png" />
         <fixedtext id="FT_PRESENT" _label="My presentation"/>
         </hbox>
         <hbox border="5">
