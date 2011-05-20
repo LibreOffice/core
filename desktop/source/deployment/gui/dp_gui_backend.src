@@ -81,6 +81,6 @@ Image RID_IMG_JAVA_TYPELIB
 
 Image RID_IMG_HELP
 {
-    ImageBitmap = Bitmap { File = "commandimagelist/sc_helperdialog.bmp"; };
+    ImageBitmap = Bitmap { File = "sc_helperdialog.bmp"; };
     MASKCOLOR
 };
