@@ -2928,7 +2928,7 @@ IMPL_LINK( ToolBox, ImplDropdownLongClickHdl, ToolBox*, EMPTYARG )
         {
             // no floater was opened
             Deactivate();
-            ImplDrawItem( mnCurPos, sal_False );
+            ImplDrawItem( mnCurPos, 0 );
 
             mnCurPos         = TOOLBOX_ITEM_NOTFOUND;
             mnCurItemId      = 0;
@@ -3476,7 +3476,7 @@ static void ImplDrawButton( ToolBox* pThis, const Rectangle &rRect, sal_uInt16 h
         pThis->DrawSelectionBackground( rRect, bIsWindow ? 3 : highlight, bChecked, sal_True, bIsWindow, 2, NULL, NULL );
 }
 
-void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 bHighlight, sal_Bool bPaint, sal_Bool bLayout )
+void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, sal_Bool bPaint, sal_Bool bLayout )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
@@ -3495,7 +3495,7 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 bHighlight, sal_Bool bPa
     String* pDisplayText = bLayout ? &mpData->m_pLayoutData->m_aDisplayText : NULL;
 
     if(!pItem->mbEnabled)
-        bHighlight = 0;
+        nHighlight = 0;
 
     // Falls Rechteck ausserhalb des sichbaren Bereichs liegt
     if ( pItem->maRect.IsEmpty() )
@@ -3618,7 +3618,7 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 bHighlight, sal_Bool bPa
     {
         nStyle |= BUTTON_DRAW_DONTKNOW;
     }
-    if ( bHighlight == 1 )
+    if ( nHighlight == 1 )
     {
         nStyle |= BUTTON_DRAW_PRESSED;
     }
@@ -3627,7 +3627,7 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 bHighlight, sal_Bool bPa
     {
         nOffX = OUTBUTTON_OFF_NORMAL_X;
         nOffY = OUTBUTTON_OFF_NORMAL_Y;
-        if ( bHighlight )
+        if ( nHighlight != 0 )
         {
             nOffX++;
             nOffY++;
@@ -3640,7 +3640,7 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 bHighlight, sal_Bool bPa
         {
             if ( (pItem->meState != STATE_NOCHECK) || !bPaint )
             {
-                ImplErase( this, pItem->maRect, bHighlight, bHasOpenPopup );
+                ImplErase( this, pItem->maRect, nHighlight != 0, bHasOpenPopup );
             }
         }
         else
@@ -3679,7 +3679,7 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 bHighlight, sal_Bool bPa
     if ( bImage && ! bLayout )
     {
         const Image* pImage;
-        if ( bHighlight && (!(pItem->maHighImage)) == sal_False )
+        if ( (nHighlight != 0) && (!(pItem->maHighImage)) == sal_False )
             pImage = &(pItem->maHighImage);
         else
             pImage = &(pItem->maImage);
@@ -3713,14 +3713,14 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 bHighlight, sal_Bool bPa
             nImageOffX += (nBtnWidth-aImageSize.Width())/2;
             nImageOffY += (nBtnHeight-aImageSize.Height())/2;
         }
-        if ( bHighlight || (pItem->meState == STATE_CHECK) )
+        if ( nHighlight != 0 || (pItem->meState == STATE_CHECK) )
         {
             if( bHasOpenPopup )
                 ImplDrawFloatwinBorder( pItem );
             else
-                ImplDrawButton( this, aButtonRect, bHighlight, pItem->meState == STATE_CHECK, pItem->mbEnabled && IsEnabled(), pItem->mbShowWindow ? sal_True : sal_False );
+                ImplDrawButton( this, aButtonRect, nHighlight, pItem->meState == STATE_CHECK, pItem->mbEnabled && IsEnabled(), pItem->mbShowWindow ? sal_True : sal_False );
 
-            if( bHighlight )
+            if( nHighlight != 0 )
             {
                 if( bHighContrastWhite )
                     nImageStyle |= IMAGE_DRAW_COLORTRANSFORM;
@@ -3779,12 +3779,12 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 bHighlight, sal_Bool bPa
         }
 
         // draw selection only if not already drawn during image output (see above)
-        if ( !bLayout && !bImage && (bHighlight || (pItem->meState == STATE_CHECK) ) )
+        if ( !bLayout && !bImage && (nHighlight != 0 || (pItem->meState == STATE_CHECK) ) )
         {
             if( bHasOpenPopup )
                 ImplDrawFloatwinBorder( pItem );
             else
-                ImplDrawButton( this, pItem->maRect, bHighlight, pItem->meState == STATE_CHECK, pItem->mbEnabled && IsEnabled(), pItem->mbShowWindow ? sal_True : sal_False );
+                ImplDrawButton( this, pItem->maRect, nHighlight, pItem->meState == STATE_CHECK, pItem->mbEnabled && IsEnabled(), pItem->mbShowWindow ? sal_True : sal_False );
         }
 
         sal_uInt16 nTextStyle = 0;
@@ -3819,14 +3819,14 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 bHighlight, sal_Bool bPa
         // dropdown only will be painted without inner border
         if( (pItem->mnBits & TIB_DROPDOWNONLY) != TIB_DROPDOWNONLY )
         {
-            ImplErase( this, aDropDownRect, bHighlight, bHasOpenPopup );
+            ImplErase( this, aDropDownRect, nHighlight != 0, bHasOpenPopup );
 
-            if( bHighlight || (pItem->meState == STATE_CHECK) )
+            if( nHighlight != 0 || (pItem->meState == STATE_CHECK) )
             {
                 if( bHasOpenPopup )
                     ImplDrawFloatwinBorder( pItem );
                 else
-                    ImplDrawButton( this, aDropDownRect, bHighlight, pItem->meState == STATE_CHECK, pItem->mbEnabled && IsEnabled(), sal_False );
+                    ImplDrawButton( this, aDropDownRect, nHighlight, pItem->meState == STATE_CHECK, pItem->mbEnabled && IsEnabled(), sal_False );
             }
         }
         ImplDrawDropdownArrow( this, aDropDownRect, bSetColor, bRotate );
@@ -3937,7 +3937,7 @@ void ToolBox::ImplFloatControl( sal_Bool bStart, FloatingWindow* pFloatWindow )
         mpFloatWin = pFloatWindow;
 
         // redraw item, to trigger drawing of a special border
-        ImplDrawItem( mnCurPos, sal_True );
+        ImplDrawItem( mnCurPos, 1 );
 
         mbDrag = sal_False;
         EndTracking();
@@ -4018,7 +4018,7 @@ sal_Bool ToolBox::ImplHandleMouseMove( const MouseEvent& rMEvt, sal_Bool bRepeat
         {
             if ( !mnCurItemId )
             {
-                ImplDrawItem( mnCurPos, sal_True );
+                ImplDrawItem( mnCurPos, 1 );
                 mnCurItemId = pItem->mnId;
                 Highlight();
             }
@@ -4157,17 +4157,17 @@ sal_Bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, sal_Bool bCa
                 // Items nicht geloescht, im Select-Handler
                 if ( mnCurItemId )
                 {
-                    sal_Bool bHighlight;
+                    sal_uInt16 nHighlight;
                     if ( (mnCurItemId == mnHighItemId) && (mnOutStyle & TOOLBOX_STYLE_FLAT) )
-                        bHighlight = 2;
+                        nHighlight = 2;
                     else
-                        bHighlight = sal_False;
+                        nHighlight = 0;
                     // Get current pos for the case that items are inserted/removed
                     // in the toolBox
                     mnCurPos = GetItemPos( mnCurItemId );
                     if ( mnCurPos != TOOLBOX_ITEM_NOTFOUND )
                     {
-                        ImplDrawItem( mnCurPos, bHighlight );
+                        ImplDrawItem( mnCurPos, nHighlight );
                         Flush();
                     }
                 }
@@ -4286,7 +4286,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
             if ( mnCurPos != TOOLBOX_ITEM_NOTFOUND )
             {
                 mnCurItemId = mnHighItemId = it->mnId;
-                ImplDrawItem( mnCurPos, 2 /*sal_True*/ ); // always use shadow effect (2)
+                ImplDrawItem( mnCurPos, 2 ); // always use shadow effect (2)
             }
             else
                 mnCurItemId = mnHighItemId = 0;
@@ -4416,7 +4416,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
                 sal_uInt16 nClearPos = GetItemPos( mnHighItemId );
                 if ( nClearPos != TOOLBOX_ITEM_NOTFOUND )
                 {
-                    ImplDrawItem( nClearPos, (nClearPos == mnCurPos) ? sal_True : sal_False );
+                    ImplDrawItem( nClearPos, (nClearPos == mnCurPos) ? 1 : 0 );
                     if( nClearPos != mnCurPos )
                         ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, reinterpret_cast< void* >( nClearPos ) );
                 }
@@ -4528,7 +4528,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
 
             if ( mbSelection )
             {
-                ImplDrawItem( mnCurPos, sal_True );
+                ImplDrawItem( mnCurPos, 1 );
                 Highlight();
             }
             else
@@ -4545,7 +4545,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
 
                 if ( mbDrag )
                 {
-                    ImplDrawItem( mnCurPos, sal_True );
+                    ImplDrawItem( mnCurPos, 1 );
                     Highlight();
                 }
 
@@ -4566,7 +4566,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
                         {
                             // no floater was opened
                             Deactivate();
-                            ImplDrawItem( mnCurPos, sal_False );
+                            ImplDrawItem( mnCurPos, 0 );
 
                             mnCurPos         = TOOLBOX_ITEM_NOTFOUND;
                             mnCurItemId      = 0;
@@ -4760,12 +4760,12 @@ void ToolBox::Paint( const Rectangle& rPaintRect )
         // Nur malen, wenn Rechteck im PaintRectangle liegt
         if ( !pItem->maRect.IsEmpty() && rPaintRect.IsOver( pItem->maRect ) )
         {
-            sal_Bool bHighlight = sal_False;
+            sal_uInt16 nHighlight = 0;
             if ( i == mnCurPos )
-                bHighlight = 1;
+                nHighlight = 1;
             else if ( i == nHighPos )
-                bHighlight = 2;
-            ImplDrawItem( i, bHighlight );
+                nHighlight = 2;
+            ImplDrawItem( i, nHighlight );
         }
     }
     ImplShowFocus();
@@ -6051,7 +6051,7 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, sal_Bool bNoGrabFocus )
         // which will in turn ImplShowFocus again
         // set mnHighItemId to 0 already to prevent this hen/egg problem
         mnHighItemId = 0;
-        ImplDrawItem( nPos, sal_False );
+        ImplDrawItem( nPos, 0 );
         ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, reinterpret_cast< void* >( nPos ) );
     }
 

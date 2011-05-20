@@ -261,7 +261,7 @@ private:
     SAL_DLLPRIVATE void            ImplDrawSpin( sal_Bool bUpperIn, sal_Bool bLowerIn );
     SAL_DLLPRIVATE void            ImplDrawNext( sal_Bool bIn );
     SAL_DLLPRIVATE void            ImplDrawSeparator( sal_uInt16 nPos, Rectangle rRect );
-    SAL_DLLPRIVATE void            ImplDrawItem( sal_uInt16 nPos, sal_uInt16 bHighlight = sal_False, sal_Bool bPaint = sal_False, sal_Bool bLayout = sal_False );
+    SAL_DLLPRIVATE void            ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight = 0, sal_Bool bPaint = sal_False, sal_Bool bLayout = sal_False );
     using Window::ImplInvalidate;
     SAL_DLLPRIVATE void            ImplInvalidate( sal_Bool bNewCalc = sal_False, sal_Bool bFullPaint = sal_False );
     SAL_DLLPRIVATE void            ImplUpdateItem( sal_uInt16 nIndex = 0xFFFF );
