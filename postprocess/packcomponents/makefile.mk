@@ -152,6 +152,7 @@ my_components = \
     sdbc2 \
     sdbt \
     sdd \
+    sdfilt \
     simplecanvas \
     slideshow \
     $(SM_COMPONENTS)\
