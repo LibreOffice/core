@@ -78,15 +78,6 @@ public:
     sal_Int32& mrLock;
 };
 
-// --------------------------------------------------------------------
-
-class ImplGraphicItem : public SvLBoxBmp
-{
-public:
-    ImplGraphicItem( SvLBoxEntry* pEntry, sal_uInt16 nFlags, Image& aImage ) : SvLBoxBmp( pEntry, nFlags, aImage ) {}
-
-    OUString msGraphicURL;
-};
 
 // --------------------------------------------------------------------
 
@@ -125,7 +116,7 @@ private:
 
 // --------------------------------------------------------------------
 
-class SVT_DLLPUBLIC UnoTreeListItem : public SvLBoxItem
+class UnoTreeListItem : public SvLBoxItem
 {
 public:
                     UnoTreeListItem( SvLBoxEntry* );
