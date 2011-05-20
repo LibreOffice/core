@@ -1534,7 +1534,11 @@ void PrintDialog::setupOptionalUI()
             }
             else
             {
-                OSL_FAIL( "Unsupported UI option" );
+                rtl::OStringBuffer sMessage;
+                sMessage.append(RTL_CONSTASCII_STRINGPARAM("Unsupported UI option: \""));
+                sMessage.append(rtl::OUStringToOString(aCtrlType, RTL_TEXTENCODING_UTF8));
+                sMessage.append('"');
+                OSL_FAIL( sMessage.getStr() );
             }
 
             pCurColumn = pSaveCurColumn;
