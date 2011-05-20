@@ -192,11 +192,8 @@ ContentInfo::ContentInfo( SfxItemPool& rPool ) : aParaAttribs( rPool, EE_PARA_ST
 // the real Copy constructor is nonsens, since I have to work with another Pool!
 ContentInfo::ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse )
     : aParaAttribs( rPoolToUse, EE_PARA_START, EE_CHAR_END )
+    , pWrongs(0)
 {
-    pWrongs = NULL;
-
-    if ( rCopyFrom.GetWrongList() )
-        pWrongs = rCopyFrom.GetWrongList()->Clone();
     // this should ensure that the Items end up in the correct Pool!
     aParaAttribs.Set( rCopyFrom.GetParaAttribs() );
     aText = rCopyFrom.GetText();
@@ -210,7 +207,6 @@ ContentInfo::ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse 
         aAttribs.Insert( pMyAttr, aAttribs.Count()  );
     }
 
-    pWrongs = NULL;
     if ( rCopyFrom.GetWrongList() )
         pWrongs = rCopyFrom.GetWrongList()->Clone();
 }
