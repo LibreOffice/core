@@ -39,14 +39,12 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
+#include <rtl/instance.hxx>
+
 using namespace utl;
 using namespace com::sun::star::uno;
 
 using ::rtl::OUString;
-
-#define C2U(cChar) OUString::createFromAscii(cChar)
-
-static SvxAutoCorrCfg* pAutoCorrCfg = 0;
 
 SvxAutoCorrCfg::SvxAutoCorrCfg() :
     aBaseConfig(*this),
@@ -230,7 +228,7 @@ void SvxBaseAutoCorrCfg::Load(sal_Bool bInit)
 }
 
 SvxBaseAutoCorrCfg::SvxBaseAutoCorrCfg(SvxAutoCorrCfg& rPar) :
-    utl::ConfigItem(C2U("Office.Common/AutoCorrect")),
+    utl::ConfigItem(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/AutoCorrect"))),
     rParent(rPar)
 {
 }
@@ -539,7 +537,7 @@ void SvxSwAutoCorrCfg::Load(sal_Bool bInit)
 }
 
 SvxSwAutoCorrCfg::SvxSwAutoCorrCfg(SvxAutoCorrCfg& rPar) :
-    utl::ConfigItem(C2U("Office.Writer/AutoFunction")),
+    utl::ConfigItem(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Writer/AutoFunction"))),
     rParent(rPar)
 {
 }
@@ -650,11 +648,14 @@ void SvxSwAutoCorrCfg::Notify( const Sequence<OUString>& /* aPropertyNames */ )
     Load(sal_False);
 }
 
-SvxAutoCorrCfg* SvxAutoCorrCfg::Get()
+namespace
 {
-    if( !pAutoCorrCfg )
-        pAutoCorrCfg = new SvxAutoCorrCfg;
-    return pAutoCorrCfg;
+    class theSvxAutoCorrCfg : public rtl::Static<SvxAutoCorrCfg, theSvxAutoCorrCfg>{};
+}
+
+SvxAutoCorrCfg& SvxAutoCorrCfg::Get()
+{
+    return theSvxAutoCorrCfg::get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
