@@ -1017,7 +1017,6 @@ GraphicFilter::GraphicFilter( sal_Bool bConfig ) :
     bUseConfig        ( bConfig ),
     nExpGraphHint     ( 0 )
 {
-    fprintf(stderr, "GraphicFilter::GraphicFilter ctor %p\n", this);
     ImplInit();
 }
 
@@ -1025,7 +1024,6 @@ GraphicFilter::GraphicFilter( sal_Bool bConfig ) :
 
 GraphicFilter::~GraphicFilter()
 {
-    fprintf(stderr, "GraphicFilter::GraphicFilter dtor %p\n", this);
     {
         ::osl::MutexGuard aGuard( getListMutex() );
         pFilterHdlList->Remove( (void*)this );
@@ -1035,7 +1033,6 @@ GraphicFilter::~GraphicFilter()
             delete pConfig;
         }
     }
-
 
     delete pErrorEx;
 }
