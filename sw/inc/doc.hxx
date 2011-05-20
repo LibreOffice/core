@@ -580,6 +580,7 @@ private:
     bool mbInvertBorderSpacing                      : 1;
     bool mbCollapseEmptyCellPara                    : 1;
     bool mbTabAtLeftIndentForParagraphsInList;             // #i89181# - see above
+    bool mbSmallCapsPercentage66;
 
     bool mbLastBrowseMode                           : 1;
 

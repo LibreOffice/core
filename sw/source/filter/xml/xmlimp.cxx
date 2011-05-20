@@ -1189,6 +1189,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     aSet.insert(String("UpdateFromTemplate", RTL_TEXTENCODING_ASCII_US));
     aSet.insert(String("PrinterIndependentLayout", RTL_TEXTENCODING_ASCII_US));
     aSet.insert(String("PrintEmptyPages", RTL_TEXTENCODING_ASCII_US));
+    aSet.insert(String("SmallCapsPercentage66", RTL_TEXTENCODING_ASCII_US));
 
     sal_Int32 nCount = aConfigProps.getLength();
     const PropertyValue* pValues = aConfigProps.getConstArray();
@@ -1217,6 +1218,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bClipAsCharacterAnchoredWriterFlyFrames( false );
     bool bUnixForceZeroExtLeading = false;
     bool bUseOldPrinterMetrics = false;
+    bool bSmallCapsPercentage66 = false;
 
     OUString sRedlineProtectionKey( RTL_CONSTASCII_USTRINGPARAM( "RedlineProtectionKey" ) );
 
@@ -1284,6 +1286,8 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                     bUnixForceZeroExtLeading = true;
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UseOldPrinterMetrics")) )
                     bUseOldPrinterMetrics = true;
+                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SmallCapsPercentage66")) )
+                    bSmallCapsPercentage66 = true;
             }
             catch( Exception& )
             {
@@ -1428,6 +1432,16 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
             OUString( RTL_CONSTASCII_USTRINGPARAM("UseOldPrinterMetrics") ), makeAny( true ) );
     }
     // <--
+
+    // Old LO versions had 66 as the value for small caps percentage, later changed to 80.
+    // In order to keep backwards compatibility, SmallCapsPercentage66 option is written to .odt
+    // files, and the default for new documents is 'false'. Files without this option
+    // are considered to be old files, so set the compatibility option too.
+    if ( !bSmallCapsPercentage66 )
+    {
+        xProps->setPropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("SmallCapsPercentage66") ), makeAny( true ) );
+    }
 
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
     Reference < XText > xText = xTextDoc->getText();

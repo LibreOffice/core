@@ -58,8 +58,9 @@ class SwSubFont : public SvxFont
     sal_uInt16      nOrgHeight;     // Hoehe inkl. Escapement/Proportion
     sal_uInt16      nOrgAscent;     // Ascent inkl. Escapement/Proportion
     sal_uInt16      nPropWidth;     // proportional width
+    bool smallCapsPercentage66;
     inline SwSubFont() : aSize(0,0)
-    { pMagic = NULL; nFntIndex = nOrgHeight = nOrgAscent = 0; nPropWidth =100; }
+    { pMagic = NULL; nFntIndex = nOrgHeight = nOrgAscent = 0; nPropWidth =100; smallCapsPercentage66 = false; }
 
     sal_uInt16 CalcEscAscent( const sal_uInt16 nOldAscent ) const;
     sal_uInt16 CalcEscHeight( const sal_uInt16 nOldHeight,
