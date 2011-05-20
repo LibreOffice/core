@@ -76,22 +76,24 @@
 #include <editeng/forbiddencharacterstable.hxx>
 #include <editeng/justifyitem.hxx>
 #include <comphelper/processfactory.hxx>
-
-static EditDLL* pDLL=0;
+#include <rtl/instance.hxx>
 
 using namespace ::com::sun::star;
 
-EditDLL* EditDLL::Get()
+namespace
 {
-    if ( !pDLL )
-        pDLL = new EditDLL;
-    return pDLL;
+    class theEditDLL : public rtl::Static<EditDLL, theEditDLL> {};
+}
+
+EditDLL& EditDLL::Get()
+{
+    return theEditDLL::get();
 }
 
 GlobalEditData::GlobalEditData()
+    : m_aStdRefDevice(::com::sun::star::uno::Reference<com::sun::star::lang::XComponent>(::comphelper::getProcessComponentContext(), ::com::sun::star::uno::UNO_QUERY_THROW))
 {
     ppDefItems = NULL;
-    pStdRefDevice = NULL;
 }
 
 GlobalEditData::~GlobalEditData()
@@ -100,7 +102,6 @@ GlobalEditData::~GlobalEditData()
     // Or simply keep them, since at end of excecution?!
     if ( ppDefItems )
         SfxItemPool::ReleaseDefaults( ppDefItems, EDITITEMCOUNT, sal_True );
-    delete pStdRefDevice;
 }
 
 SfxPoolItem** GlobalEditData::GetDefItems()
@@ -208,30 +209,27 @@ uno::Reference< linguistic2::XLanguageGuessing > GlobalEditData::GetLanguageGues
 
 OutputDevice* GlobalEditData::GetStdRefDevice()
 {
-    if ( !pStdRefDevice )
+    if ( !m_aStdRefDevice )
     {
-        pStdRefDevice = new VirtualDevice;
-        pStdRefDevice->SetMapMode( MAP_TWIP );
+        m_aStdRefDevice.reset(new VirtualDevice);
+        m_aStdRefDevice->SetMapMode( MAP_TWIP );
     }
-    return pStdRefDevice;
+    return m_aStdRefDevice.get();
 }
 
 EditResId::EditResId( sal_uInt16 nId ):
-    ResId( nId, *EE_DLL()->GetResMgr() )
+    ResId( nId, *EE_DLL().GetResMgr() )
 {
 }
 
 EditDLL::EditDLL()
 {
     pGlobalData = new GlobalEditData;
-    ByteString aResMgrName( "editeng" );
-    pResMgr = ResMgr::CreateResMgr(
-        aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
+    pResMgr = ResMgr::CreateResMgr( "editeng", Application::GetSettings().GetUILocale() );
 }
 
 EditDLL::~EditDLL()
 {
-    delete pResMgr;
     delete pGlobalData;
 }
 

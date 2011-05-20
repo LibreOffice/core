@@ -1055,7 +1055,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         Reference< XSpellAlternatives >  xSpellAlt =
                 xSpeller->spell( aSelected, PIMPEE->GetLanguage( aPaM2 ), aPropVals );
 
-        Reference< XLanguageGuessing >  xLangGuesser( EE_DLL()->GetGlobalData()->GetLanguageGuesser() );
+        Reference< XLanguageGuessing >  xLangGuesser( EE_DLL().GetGlobalData()->GetLanguageGuesser() );
 
         // check if text might belong to a different language...
         LanguageType nGuessLangWord = LANGUAGE_NONE;
@@ -1272,7 +1272,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         {
             DBG_ASSERT(nId - MN_AUTOSTART < aAlt.getLength(), "index out of range");
             String aWord = pAlt[nId - MN_AUTOSTART];
-            SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
+            SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
             if ( pAutoCorrect )
                 pAutoCorrect->PutText( aSelected, aWord, PIMPEE->GetLanguage( aPaM2 ) );
             InsertText( aWord );

@@ -1121,7 +1121,7 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                     xub_Unicode nCharCode = rKeyEvent.GetCharCode();
                     pEditView->pImpEditView->DrawSelection();
                     // Autocorrection?
-                    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
+                    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
                     if ( ( pImpEditEngine->GetStatus().DoAutoCorrect() ) &&
                         ( SvxAutoCorrect::IsAutoCorrectChar( nCharCode ) ||
                           pAutoCorrect->HasRunNext() ) )

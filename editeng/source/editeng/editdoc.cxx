@@ -2262,8 +2262,7 @@ EditEngineItemPool::EditEngineItemPool( sal_Bool bPersistenRefCounts )
     SetVersionMap( 4, 3994, 4022, aV4Map );
     SetVersionMap( 5, 3994, 4037, aV5Map );
 
-    DBG_ASSERT( EE_DLL(), "EditDLL?!" );
-    SfxPoolItem** ppDefItems = EE_DLL()->GetGlobalData()->GetDefItems();
+    SfxPoolItem** ppDefItems = EE_DLL().GetGlobalData()->GetDefItems();
     SetDefaults( ppDefItems );
 }
 

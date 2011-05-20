@@ -160,7 +160,7 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     aOnlineSpellTimer.SetTimeout( 100 );
     aOnlineSpellTimer.SetTimeoutHdl( LINK( this, ImpEditEngine, OnlineSpellHdl ) );
 
-    pRefDev             = EE_DLL()->GetGlobalData()->GetStdRefDevice();
+    pRefDev             = EE_DLL().GetGlobalData()->GetStdRefDevice();
 
     // Access data already from here on!
     SetRefDevice( pRefDev );
@@ -206,7 +206,7 @@ void ImpEditEngine::SetRefDevice( OutputDevice* pRef )
     bOwnerOfRefDev = sal_False;
 
     if ( !pRef )
-        pRefDev = EE_DLL()->GetGlobalData()->GetStdRefDevice();
+        pRefDev = EE_DLL().GetGlobalData()->GetStdRefDevice();
 
     nOnePixelInRef = (sal_uInt16)pRefDev->PixelToLogic( Size( 1, 0 ) ).Width();
 
@@ -223,7 +223,7 @@ void ImpEditEngine::SetRefMapMode( const MapMode& rMapMode )
         return;
 
     // When RefDev == GlobalRefDev => create own!
-    if ( !bOwnerOfRefDev && ( pRefDev == EE_DLL()->GetGlobalData()->GetStdRefDevice() ) )
+    if ( !bOwnerOfRefDev && ( pRefDev == EE_DLL().GetGlobalData()->GetStdRefDevice() ) )
     {
         pRefDev = new VirtualDevice;
         pRefDev->SetMapMode( MAP_TWIP );
@@ -2521,7 +2521,7 @@ EditPaM ImpEditEngine::AutoCorrect( const EditSelection& rCurSel, xub_Unicode c,
                                     sal_Bool bOverwrite, Window* pFrameWin )
 {
     EditSelection aSel( rCurSel );
-    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
+    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     if ( pAutoCorrect )
     {
         if ( aSel.HasRange() )
@@ -4452,13 +4452,13 @@ rtl::Reference<SvxForbiddenCharactersTable> ImpEditEngine::GetForbiddenCharsTabl
 {
     rtl::Reference<SvxForbiddenCharactersTable> xF = xForbiddenCharsTable;
     if ( !xF.is() && bGetInternal )
-        xF = EE_DLL()->GetGlobalData()->GetForbiddenCharsTable();
+        xF = EE_DLL().GetGlobalData()->GetForbiddenCharsTable();
     return xF;
 }
 
 void ImpEditEngine::SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars )
 {
-    EE_DLL()->GetGlobalData()->SetForbiddenCharsTable( xForbiddenChars );
+    EE_DLL().GetGlobalData()->SetForbiddenCharsTable( xForbiddenChars );
 }
 
 svtools::ColorConfig& ImpEditEngine::GetColorConfig()

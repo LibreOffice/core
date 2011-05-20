@@ -47,12 +47,12 @@ class EditDLL
     GlobalEditData* pGlobalData;
 
 public:
-                    EditDLL();
-                    ~EditDLL();
+    EditDLL();
+    ~EditDLL();
 
     ResMgr*         GetResMgr() const       { return pResMgr; }
     GlobalEditData* GetGlobalData() const   { return pGlobalData; }
-    static EditDLL* Get();
+    static EditDLL& Get();
 };
 
 #define EE_DLL() EditDLL::Get()
