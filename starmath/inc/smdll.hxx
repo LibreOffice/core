@@ -42,9 +42,6 @@ class SmDLL
 public:
     static void Init();
     static void Exit();
-
-    static sal_uLong DetectFilter( SfxMedium& rMedium, const SfxFilter **ppFilter,
-                               SfxFilterFlags nMust, SfxFilterFlags nDont );
 };
 
 #endif
