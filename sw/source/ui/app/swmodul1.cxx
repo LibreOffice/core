@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <boost/scoped_ptr.hpp>
 
 #include <hintids.hxx>
 #include <sfx2/request.hxx>
@@ -81,14 +82,14 @@ using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::lang;
 
 
-void lcl_SetUIPrefs(const SwViewOption* pPref, SwView* pView, ViewShell* pSh )
+void lcl_SetUIPrefs(const SwViewOption &rPref, SwView* pView, ViewShell* pSh )
 {
     // in FrameSets the actual visibility can differ from the ViewOption's setting
-    sal_Bool bVScrollChanged = pPref->IsViewVScrollBar() != pSh->GetViewOptions()->IsViewVScrollBar();
-    sal_Bool bHScrollChanged = pPref->IsViewHScrollBar() != pSh->GetViewOptions()->IsViewHScrollBar();
-    sal_Bool bVAlignChanged = pPref->IsVRulerRight() != pSh->GetViewOptions()->IsVRulerRight();
+    sal_Bool bVScrollChanged = rPref.IsViewVScrollBar() != pSh->GetViewOptions()->IsViewVScrollBar();
+    sal_Bool bHScrollChanged = rPref.IsViewHScrollBar() != pSh->GetViewOptions()->IsViewHScrollBar();
+    sal_Bool bVAlignChanged = rPref.IsVRulerRight() != pSh->GetViewOptions()->IsVRulerRight();
 
-    pSh->SetUIOptions(*pPref);
+    pSh->SetUIOptions(rPref);
     const SwViewOption* pNewPref = pSh->GetViewOptions();
 
     // Scrollbars on / off
@@ -199,24 +200,24 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
         bReadonly = pDocSh->IsReadOnly();
     else //Use existing option if DocShell missing
         bReadonly = pSh->GetViewOptions()->IsReadonly();
-    SwViewOption* pViewOpt;
-    if(!bViewOnly)
-        pViewOpt = new SwViewOption( *pPref );
+    boost::scoped_ptr<SwViewOption> xViewOpt;
+    if (!bViewOnly)
+        xViewOpt.reset(new SwViewOption(*pPref));
     else
-        pViewOpt = new SwViewOption( rUsrPref );
-    pViewOpt->SetReadonly( bReadonly );
-    if( !(*pSh->GetViewOptions() == *pViewOpt) )
+        xViewOpt.reset(new SwViewOption(rUsrPref));
+    xViewOpt->SetReadonly( bReadonly );
+    if( !(*pSh->GetViewOptions() == *xViewOpt) )
     {
         //is maybe only a ViewShell
         pSh->StartAction();
-        pSh->ApplyViewOptions( *pViewOpt );
-        ((SwWrtShell*)pSh)->SetReadOnlyAvailable(pViewOpt->IsCursorInProtectedArea());
+        pSh->ApplyViewOptions( *xViewOpt );
+        ((SwWrtShell*)pSh)->SetReadOnlyAvailable(xViewOpt->IsCursorInProtectedArea());
         pSh->EndAction();
     }
     if ( pSh->GetViewOptions()->IsReadonly() != bReadonly )
         pSh->SetReadonlyOption(bReadonly);
 
-    lcl_SetUIPrefs(pViewOpt, pCurrView, pSh);
+    lcl_SetUIPrefs(*xViewOpt, pCurrView, pSh);
 
     // in the end the Idle-Flag is set again
     pPref->SetIdle(sal_True);

@@ -144,7 +144,7 @@ using namespace com::sun::star;
 
 SvxAutoCorrect* lcl_IsAutoCorr()
 {
-       SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get()->GetAutoCorrect();
+    SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
     if( pACorr && !pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
                             AddNonBrkSpace | ChgOrdinalNumber |
                             ChgToEnEmDash | SetINetAttr | Autocorrect ))

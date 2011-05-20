@@ -317,7 +317,7 @@ void SwViewOption::Init( Window *pWin )
 
 sal_Bool SwViewOption::IsAutoCompleteWords() const
 {
-    const SvxSwAutoFmtFlags& rFlags = SvxAutoCorrCfg::Get()->GetAutoCorrect()->GetSwFlags();
+    const SvxSwAutoFmtFlags& rFlags = SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags();
     return rFlags.bAutoCmpltCollectWords;
 }
 
@@ -334,8 +334,8 @@ sal_uInt16      GetHtmlMode(const SwDocShell* pShell)
     if(!pShell || PTR_CAST(SwWebDocShell, pShell))
     {
         nRet = HTMLMODE_ON;
-        SvxHtmlOptions* pHtmlOpt = SvxHtmlOptions::Get();
-        switch ( pHtmlOpt->GetExportMode() )
+        SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
+        switch ( rHtmlOpt.GetExportMode() )
         {
             case HTML_CFG_MSIE_40:
                 nRet |= HTMLMODE_PARA_BORDER|HTMLMODE_SMALL_CAPS|

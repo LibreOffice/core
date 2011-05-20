@@ -1403,7 +1403,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
             rView.GetViewFrame()->GetBindings().GetRecorder();
     if ( !xRecorder.is() )
     {
-        pACfg = SvxAutoCorrCfg::Get();
+        pACfg = &SvxAutoCorrCfg::Get();
         pACorr = pACfg->GetAutoCorrect();
     }
 
@@ -4829,8 +4829,8 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                     // works on the last input character, this is escpecially in Korean text often done
                     // quotes that are inside of the string are not replaced!
                     const sal_Unicode aCh = sRecord.GetChar(sRecord.Len() - 1);
-                    SvxAutoCorrCfg* pACfg = SvxAutoCorrCfg::Get();
-                    SvxAutoCorrect* pACorr = pACfg->GetAutoCorrect();
+                    SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
+                    SvxAutoCorrect* pACorr = rACfg.GetAutoCorrect();
                     if(pACorr &&
                         (( pACorr->IsAutoCorrFlag( ChgQuotes ) && ('\"' == aCh ))||
                         ( pACorr->IsAutoCorrFlag( ChgSglQuotes ) && ( '\'' == aCh))))
@@ -4888,14 +4888,14 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                         rView.GetViewFrame()->GetBindings().GetRecorder();
                 if(!xRecorder.is())
                 {
-                    SvxAutoCorrCfg* pACfg = SvxAutoCorrCfg::Get();
-                    SvxAutoCorrect* pACorr = pACfg->GetAutoCorrect();
-                    if( pACfg && pACorr &&
-                        ( pACfg->IsAutoTextTip() ||
+                    SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
+                    SvxAutoCorrect* pACorr = rACfg.GetAutoCorrect();
+                    if( pACorr &&
+                        ( rACfg.IsAutoTextTip() ||
                           pACorr->GetSwFlags().bAutoCompleteWords ) &&
                         rSh.GetPrevAutoCorrWord( *pACorr, sWord ) )
                     {
-                        ShowAutoTextCorrectQuickHelp(sWord, pACfg, pACorr, sal_True);
+                        ShowAutoTextCorrectQuickHelp(sWord, &rACfg, pACorr, sal_True);
                     }
                 }
         }

@@ -456,7 +456,7 @@ void SwAutoCorrExceptWord::CheckChar( const SwPosition& rPos, sal_Unicode cChr )
         rPos.nContent.GetIndex() == nCntnt )
     {
         // die akt. Autokorrektur besorgen:
-        SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get()->GetAutoCorrect();
+        SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
 
         // dann in die Liste aufnehmen:
         if( CptlSttWrd & nFlags )

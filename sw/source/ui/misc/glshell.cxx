@@ -109,7 +109,7 @@ void lcl_GetState( SwDocShell& rSh, SfxItemSet& rSet )
 sal_Bool lcl_Save( SwWrtShell& rSh, const String& rGroupName,
                 const String& rShortNm, const String& rLongNm )
 {
-    const SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
+    const SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
     SwTextBlocks * pBlock = ::GetGlossaries()->GetGroupDoc( rGroupName );
 
     SvxMacro aStart(aEmptyStr, aEmptyStr);
@@ -120,7 +120,7 @@ sal_Bool lcl_Save( SwWrtShell& rSh, const String& rGroupName,
     pGlosHdl->GetMacros( rShortNm, aStart, aEnd, pBlock );
 
     sal_uInt16 nRet = rSh.SaveGlossaryDoc( *pBlock, rLongNm, rShortNm,
-                                pCfg->IsSaveRelFile(),
+                                rCfg.IsSaveRelFile(),
                                 pBlock->IsOnlyTextBlock( rShortNm ) );
 
     if(aStart.GetMacName().Len() || aEnd.GetMacName().Len() )

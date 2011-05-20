@@ -172,9 +172,9 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             sal_Unicode cIns = FN_INSERT_HARD_SPACE == nSlot ? CHAR_HARDBLANK
                                                              : CHAR_HARDHYPHEN;
 
-            SvxAutoCorrCfg* pACfg = SvxAutoCorrCfg::Get();
-            SvxAutoCorrect* pACorr = pACfg->GetAutoCorrect();
-            if( pACorr && pACfg->IsAutoFmtByInput() &&
+            SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
+            SvxAutoCorrect* pACorr = rACfg.GetAutoCorrect();
+            if( pACorr && rACfg.IsAutoFmtByInput() &&
                     pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
                                 AddNonBrkSpace | ChgOrdinalNumber |
                                 ChgToEnEmDash | SetINetAttr | Autocorrect ))
@@ -513,8 +513,8 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         sal_Bool bSingleCol = sal_False;
         if( 0!= dynamic_cast< SwWebDocShell*>( GetView().GetDocShell()) )
         {
-            SvxHtmlOptions* pHtmlOpt = SvxHtmlOptions::Get();
-            sal_uInt16 nExport = pHtmlOpt->GetExportMode();
+            SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
+            sal_uInt16 nExport = rHtmlOpt.GetExportMode();
             if( HTML_CFG_MSIE == nExport ||
                 HTML_CFG_HTML32 == nExport ||
                 HTML_CFG_MSIE_40 == nExport ||
@@ -799,8 +799,8 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
                     rSet.DisableItem( nWhich );
                 else if(SID_INSERT_FLOATINGFRAME == nWhich && nHtmlMode&HTMLMODE_ON)
                 {
-                    SvxHtmlOptions* pHtmlOpt = SvxHtmlOptions::Get();
-                    sal_uInt16 nExport = pHtmlOpt->GetExportMode();
+                    SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
+                    sal_uInt16 nExport = rHtmlOpt.GetExportMode();
                     if(HTML_CFG_MSIE_40 != nExport && HTML_CFG_WRITER != nExport )
                         rSet.DisableItem(nWhich);
                 }

@@ -858,8 +858,8 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             sBodyMimeType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("text/html; charset="));
             sBodyMimeType += ::rtl::OUString::createFromAscii(
                                 rtl_getBestMimeCharsetFromTextEncoding( eEncoding ));
-            SvxHtmlOptions* pHtmlOptions = SvxHtmlOptions::Get();
-            eEncoding = pHtmlOptions->GetTextEncoding();
+            SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
+            eEncoding = rHtmlOptions.GetTextEncoding();
         }
         else
             sBodyMimeType =

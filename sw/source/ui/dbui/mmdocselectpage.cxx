@@ -151,7 +151,7 @@ IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, PushButton*, pButton)
 
         SfxObjectFactory &rFact = m_pWizard->GetSwView()->GetDocShell()->GetFactory();
         SfxFilterMatcher aMatcher( String::CreateFromAscii(rFact.GetShortName()) );
-        SfxFilterMatcherIter aIter( &aMatcher );
+        SfxFilterMatcherIter aIter( aMatcher );
         Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
         const SfxFilter* pFlt = aIter.First();
         while( pFlt )

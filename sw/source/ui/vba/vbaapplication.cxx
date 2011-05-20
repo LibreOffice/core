@@ -165,12 +165,12 @@ SwVbaApplication::ListGalleries( const uno::Any& index ) throw (uno::RuntimeExce
 
 sal_Bool SAL_CALL SwVbaApplication::getDisplayAutoCompleteTips() throw (css::uno::RuntimeException)
 {
-    return SvxAutoCorrCfg::Get()->IsAutoTextTip();
+    return SvxAutoCorrCfg::Get().IsAutoTextTip();
 }
 
 void SAL_CALL SwVbaApplication::setDisplayAutoCompleteTips( sal_Bool _displayAutoCompleteTips ) throw (css::uno::RuntimeException)
 {
-    SvxAutoCorrCfg::Get()->SetAutoTextTip( _displayAutoCompleteTips );
+    SvxAutoCorrCfg::Get().SetAutoTextTip( _displayAutoCompleteTips );
 }
 
 sal_Int32 SAL_CALL SwVbaApplication::getEnableCancelKey() throw (css::uno::RuntimeException)

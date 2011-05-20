@@ -1065,7 +1065,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
             //the method SwIOSystemGetFilterOfFormat( ) returns the template filter
             //because it uses the same user data :-(
             SfxFilterMatcher aMatcher( pFilterContainer->GetName() );
-            SfxFilterMatcherIter aIter( &aMatcher );
+            SfxFilterMatcherIter aIter( aMatcher );
             const SfxFilter* pFilter = aIter.First();
             String sFilterUserData( String::CreateFromAscii( FILTER_WW8 ));
             while ( pFilter )
@@ -1083,8 +1083,8 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         case MM_DOCTYPE_HTML:
         {
             bAsBody = true;
-            SvxHtmlOptions* pHtmlOptions = SvxHtmlOptions::Get();
-            eEncoding = pHtmlOptions->GetTextEncoding();
+            SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
+            eEncoding = rHtmlOptions.GetTextEncoding();
         }
         break;
         case MM_DOCTYPE_TEXT:

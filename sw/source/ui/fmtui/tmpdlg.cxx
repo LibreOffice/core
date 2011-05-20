@@ -206,8 +206,8 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
             SvtCJKOptions aCJKOptions;
             if(nHtmlMode & HTMLMODE_ON)
             {
-                SvxHtmlOptions* pHtmlOpt = SvxHtmlOptions::Get();
-                if (!pHtmlOpt->IsPrintLayoutExtension())
+                SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
+                if (!rHtmlOpt.IsPrintLayoutExtension())
                     RemoveTabPage(TP_PARA_EXT);
                 RemoveTabPage(TP_PARA_ASIAN);
                 RemoveTabPage(TP_TABULATOR);

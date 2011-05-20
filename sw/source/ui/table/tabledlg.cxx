@@ -1527,8 +1527,8 @@ sal_Bool  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
 void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
 {
     const SfxPoolItem* pItem;
-    SvxHtmlOptions* pHtmlOpt = SvxHtmlOptions::Get();
-    sal_Bool bFlowAllowed = !bHtmlMode || pHtmlOpt->IsPrintLayoutExtension();
+    SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
+    sal_Bool bFlowAllowed = !bHtmlMode || rHtmlOpt.IsPrintLayoutExtension();
     if(bFlowAllowed)
     {
         // Einfuegen der vorhandenen Seitenvorlagen in die Listbox

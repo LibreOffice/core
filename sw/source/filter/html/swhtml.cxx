@@ -338,16 +338,16 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     memset( &aAttrTab, 0, sizeof( _HTMLAttrTable ));
 
     // Die Font-Groessen 1-7 aus der INI-Datei lesen
-    SvxHtmlOptions* pHtmlOptions = SvxHtmlOptions::Get();
-    aFontHeights[0] = pHtmlOptions->GetFontSize( 0 ) * 20;
-    aFontHeights[1] = pHtmlOptions->GetFontSize( 1 ) * 20;
-    aFontHeights[2] = pHtmlOptions->GetFontSize( 2 ) * 20;
-    aFontHeights[3] = pHtmlOptions->GetFontSize( 3 ) * 20;
-    aFontHeights[4] = pHtmlOptions->GetFontSize( 4 ) * 20;
-    aFontHeights[5] = pHtmlOptions->GetFontSize( 5 ) * 20;
-    aFontHeights[6] = pHtmlOptions->GetFontSize( 6 ) * 20;
+    SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
+    aFontHeights[0] = rHtmlOptions.GetFontSize( 0 ) * 20;
+    aFontHeights[1] = rHtmlOptions.GetFontSize( 1 ) * 20;
+    aFontHeights[2] = rHtmlOptions.GetFontSize( 2 ) * 20;
+    aFontHeights[3] = rHtmlOptions.GetFontSize( 3 ) * 20;
+    aFontHeights[4] = rHtmlOptions.GetFontSize( 4 ) * 20;
+    aFontHeights[5] = rHtmlOptions.GetFontSize( 5 ) * 20;
+    aFontHeights[6] = rHtmlOptions.GetFontSize( 6 ) * 20;
 
-    bKeepUnknown = pHtmlOptions->IsImportUnknown();
+    bKeepUnknown = rHtmlOptions.IsImportUnknown();
 
     if(bReadNewDoc)
     {
@@ -365,7 +365,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     pDoc->set(IDocumentSettingAccess::HTML_MODE, true);
 
     pCSS1Parser = new SwCSS1Parser( pDoc, aFontHeights, sBaseURL, IsNewDoc() );
-    pCSS1Parser->SetIgnoreFontFamily( pHtmlOptions->IsIgnoreFontFamily() );
+    pCSS1Parser->SetIgnoreFontFamily( rHtmlOptions.IsIgnoreFontFamily() );
 
     if( bReadUTF8 )
     {

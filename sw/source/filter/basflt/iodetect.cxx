@@ -126,7 +126,7 @@ const SfxFilter* SwIoSystem::GetFilterOfFormat(const String& rFmtNm,
         if( pFltCnt )
         {
             SfxFilterMatcher aMatcher( pFltCnt->GetName() );
-            SfxFilterMatcherIter aIter( &aMatcher );
+            SfxFilterMatcherIter aIter( aMatcher );
             const SfxFilter* pFilter = aIter.First();
             while ( pFilter )
             {
@@ -234,7 +234,7 @@ sal_Bool SwIoSystem::IsFileFilter( SfxMedium& rMedium, const String& rFmtName,
     }
 
     SfxFilterMatcher aMatcher( rFltContainer.GetName() );
-    SfxFilterMatcherIter aIter( &aMatcher );
+    SfxFilterMatcherIter aIter( aMatcher );
     const SfxFilter* pFltr = aIter.First();
     while ( pFltr )
     {
@@ -298,7 +298,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
         return 0;
 
     SfxFilterMatcher aMatcher( pFCntnr->GetName() );
-    SfxFilterMatcherIter aIter( &aMatcher );
+    SfxFilterMatcherIter aIter( aMatcher );
     const SfxFilter* pFilter = aIter.First();
     if ( !pFilter )
         return 0;

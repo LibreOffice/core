@@ -127,20 +127,20 @@ SwHTMLWriter::~SwHTMLWriter()
 sal_uLong SwHTMLWriter::WriteStream()
 {
     // neue Konfiguration setzen
-    SvxHtmlOptions* pHtmlOptions = SvxHtmlOptions::Get();
+    SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
 
     // die Fontgroessen 1-7
-    aFontHeights[0] = pHtmlOptions->GetFontSize( 0 ) * 20;
-    aFontHeights[1] = pHtmlOptions->GetFontSize( 1 ) * 20;
-    aFontHeights[2] = pHtmlOptions->GetFontSize( 2 ) * 20;
-    aFontHeights[3] = pHtmlOptions->GetFontSize( 3 ) * 20;
-    aFontHeights[4] = pHtmlOptions->GetFontSize( 4 ) * 20;
-    aFontHeights[5] = pHtmlOptions->GetFontSize( 5 ) * 20;
-    aFontHeights[6] = pHtmlOptions->GetFontSize( 6 ) * 20;
+    aFontHeights[0] = rHtmlOptions.GetFontSize( 0 ) * 20;
+    aFontHeights[1] = rHtmlOptions.GetFontSize( 1 ) * 20;
+    aFontHeights[2] = rHtmlOptions.GetFontSize( 2 ) * 20;
+    aFontHeights[3] = rHtmlOptions.GetFontSize( 3 ) * 20;
+    aFontHeights[4] = rHtmlOptions.GetFontSize( 4 ) * 20;
+    aFontHeights[5] = rHtmlOptions.GetFontSize( 5 ) * 20;
+    aFontHeights[6] = rHtmlOptions.GetFontSize( 6 ) * 20;
 
     // ueberhaupt Styles ausgeben
     // (dann auch obere und untere Absatz-Abstaende)
-    nExportMode = pHtmlOptions->GetExportMode();
+    nExportMode = rHtmlOptions.GetExportMode();
     nHTMLMode = GetHtmlMode(0);
     if( HTML_CFG_WRITER==nExportMode ||
         HTML_CFG_NS40==nExportMode )
@@ -187,7 +187,7 @@ sal_uLong SwHTMLWriter::WriteStream()
 
     sal_Bool bWriteUTF8 = bWriteClipboardDoc;
     eDestEnc = bWriteUTF8 ? RTL_TEXTENCODING_UTF8
-                          : pHtmlOptions->GetTextEncoding();
+                          : rHtmlOptions.GetTextEncoding();
     const sal_Char *pCharSet =
         rtl_getBestMimeCharsetFromTextEncoding( eDestEnc );
     eDestEnc = rtl_getTextEncodingFromMimeCharset( pCharSet );
@@ -195,10 +195,10 @@ sal_uLong SwHTMLWriter::WriteStream()
     // Nur noch fuer den MS-IE ziehen wir den Export von Styles vor.
     bCfgPreferStyles = HTML_CFG_MSIE==nExportMode;
 
-    bCfgStarBasic = pHtmlOptions->IsStarBasic();
+    bCfgStarBasic = rHtmlOptions.IsStarBasic();
 
     bCfgFormFeed = !IsHTMLMode(HTMLMODE_PRINT_EXT);
-    bCfgCpyLinkedGrfs = pHtmlOptions->IsSaveGraphicsLocal();
+    bCfgCpyLinkedGrfs = rHtmlOptions.IsSaveGraphicsLocal();
 
     // die HTML-Vorlage holen
     sal_Bool bOldHTMLMode = sal_False;

@@ -271,9 +271,9 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
     aNameED.SetMaxTextLen(LONG_LENGTH);
     FreeResource();
 
-    const SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
+    const SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
 
-    aShowExampleCB.Check( pCfg->IsAutoTextPreview());
+    aShowExampleCB.Check( rCfg.IsAutoTextPreview());
     ShowPreviewHdl(&aShowExampleCB);
 
     bIsDocReadOnly = pSh->GetView().GetDocShell()->IsReadOnly() ||
@@ -294,8 +294,8 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
 
 SwGlossaryDlg::~SwGlossaryDlg()
 {
-    SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
-    pCfg->SetAutoTextPreview(aShowExampleCB.IsChecked()) ;
+    SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
+    rCfg.SetAutoTextPreview(aShowExampleCB.IsChecked()) ;
 
     aCategoryBox.Clear();
     aEditBtn.SetPopupMenu(0);
@@ -626,7 +626,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
 
             uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
             SfxFilterMatcher aMatcher( String::CreateFromAscii(SwDocShell::Factory().GetShortName()) );
-            SfxFilterMatcherIter aIter( &aMatcher );
+            SfxFilterMatcherIter aIter( aMatcher );
             const SfxFilter* pFilter = aIter.First();
             while ( pFilter )
             {
@@ -823,12 +823,12 @@ void SwGlossaryDlg::Init()
     aCategoryBox.SetUpdateMode( sal_True );
     aCategoryBox.Update();
 
-    const SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
-    aFileRelCB.Check( pCfg->IsSaveRelFile() );
+    const SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
+    aFileRelCB.Check( rCfg.IsSaveRelFile() );
     aFileRelCB.SetClickHdl(LINK(this, SwGlossaryDlg, CheckBoxHdl));
-    aNetRelCB.Check( pCfg->IsSaveRelNet() );
+    aNetRelCB.Check( rCfg.IsSaveRelNet() );
     aNetRelCB.SetClickHdl(LINK(this, SwGlossaryDlg, CheckBoxHdl));
-    aInsertTipCB.Check( pCfg->IsAutoTextTip() );
+    aInsertTipCB.Check( rCfg.IsAutoTextTip() );
     aInsertTipCB.SetClickHdl(LINK(this, SwGlossaryDlg, CheckBoxHdl));
 }
 
@@ -883,14 +883,14 @@ IMPL_LINK( SwNewGlosNameDlg, Rename, Button *, EMPTYARG )
 
 IMPL_LINK( SwGlossaryDlg, CheckBoxHdl, CheckBox *, pBox )
 {
-    SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
+    SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
     sal_Bool bCheck = pBox->IsChecked();
     if( pBox == &aInsertTipCB )
-        pCfg->SetAutoTextTip(bCheck);
+        rCfg.SetAutoTextTip(bCheck);
     else if(pBox == &aFileRelCB)
-        pCfg->SetSaveRelFile(bCheck);
+        rCfg.SetSaveRelFile(bCheck);
     else
-        pCfg->SetSaveRelNet(bCheck);
+        rCfg.SetSaveRelNet(bCheck);
     return 0;
 }
 

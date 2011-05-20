@@ -636,7 +636,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
     {
         case SID_AUTO_CORRECT_DLG:
         {
-            SvxSwAutoFmtFlags* pAFlags = &SvxAutoCorrCfg::Get()->GetAutoCorrect()->GetSwFlags();
+            SvxSwAutoFmtFlags* pAFlags = &SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags();
             SwAutoCompleteWord& rACW = SwDoc::GetAutoCompleteWords();
 
             bool bOldLocked = rACW.IsLockWordLstLocked(),
@@ -801,7 +801,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                         SfxObjectFactory &rFact = GetFactory();
                         SfxFilterMatcher aMatcher( String::CreateFromAscii(rFact.GetShortName()) );
-                        SfxFilterMatcherIter aIter( &aMatcher );
+                        SfxFilterMatcherIter aIter( aMatcher );
                         uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
                         const SfxFilter* pFlt = aIter.First();
                         while( pFlt )
@@ -1585,11 +1585,11 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
     // A EnterBasicCall is not needed here, because nothing is called and
     // there can't be any Dok-Basic, that has not yet been loaded inside
     // of an HTML document.
-    SvxHtmlOptions* pHtmlOptions = SvxHtmlOptions::Get();
+    SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
     //#59620# HasBasic() shows, that there already is a BasicManager at the DocShell.
     //          That was always generated in HTML-Import, when there are
     //          Macros in the source code.
-    if( pHtmlOptions && pHtmlOptions->IsStarBasic() && HasBasic())
+    if( rHtmlOptions.IsStarBasic() && HasBasic())
     {
         BasicManager *pBasicMan = GetBasicManager();
         if( pBasicMan && (pBasicMan != SFX_APP()->GetBasicManager()) )

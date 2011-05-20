@@ -604,7 +604,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
         case FN_AUTOFORMAT_REDLINE_APPLY:
         {
-            SvxSwAutoFmtFlags aFlags(SvxAutoCorrCfg::Get()->GetAutoCorrect()->GetSwFlags());
+            SvxSwAutoFmtFlags aFlags(SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags());
             // das muss fuer die Nachbearbeitung immer sal_False sein
             aFlags.bAFmtByInput = sal_False;
             aFlags.bWithRedlining = sal_True;
@@ -648,7 +648,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
         case FN_AUTOFORMAT_APPLY:
         {
-            SvxSwAutoFmtFlags aFlags(SvxAutoCorrCfg::Get()->GetAutoCorrect()->GetSwFlags());
+            SvxSwAutoFmtFlags aFlags(SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags());
             // das muss fuer die Nachbearbeitung immer sal_False sein
             aFlags.bAFmtByInput = sal_False;
             rWrtSh.AutoFormat( &aFlags );
@@ -657,11 +657,11 @@ void SwTextShell::Execute(SfxRequest &rReq)
         break;
         case FN_AUTOFORMAT_AUTO:
         {
-            SvxAutoCorrCfg* pACfg = SvxAutoCorrCfg::Get();
-            sal_Bool bSet = pItem ? ((const SfxBoolItem*)pItem)->GetValue() : !pACfg->IsAutoFmtByInput();
-            if( bSet != pACfg->IsAutoFmtByInput() )
+            SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
+            sal_Bool bSet = pItem ? ((const SfxBoolItem*)pItem)->GetValue() : !rACfg.IsAutoFmtByInput();
+            if( bSet != rACfg.IsAutoFmtByInput() )
             {
-                pACfg->SetAutoFmtByInput( bSet );
+                rACfg.SetAutoFmtByInput( bSet );
                 GetView().GetViewFrame()->GetBindings().Invalidate( nSlot );
                 if ( !pItem )
                     rReq.AppendItem( SfxBoolItem( GetPool().GetWhich(nSlot), bSet ) );
@@ -673,7 +673,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             // erstmal auf Blank defaulten
             sal_Unicode cChar = ' ';
-            rWrtSh.AutoCorrect( *SvxAutoCorrCfg::Get()->GetAutoCorrect(), cChar );
+            rWrtSh.AutoCorrect( *SvxAutoCorrCfg::Get().GetAutoCorrect(), cChar );
             rReq.Done();
         }
         break;
@@ -1424,7 +1424,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             break;
         case FN_AUTOFORMAT_AUTO:
             {
-                rSet.Put( SfxBoolItem( nWhich, SvxAutoCorrCfg::Get()->IsAutoFmtByInput() ));
+                rSet.Put( SfxBoolItem( nWhich, SvxAutoCorrCfg::Get().IsAutoFmtByInput() ));
             }
             break;
         case FN_GLOSSARY_DLG:

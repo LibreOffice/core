@@ -424,7 +424,7 @@ void SwAutoCompleteWord::DocumentDying(const SwDoc& rDoc)
 {
     pImpl->RemoveDocument(rDoc);
 
-    SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get()->GetAutoCorrect();
+    SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
     const sal_Bool bDelete = !pACorr->GetSwFlags().bAutoCmpltKeepList;
     for(sal_uInt16 nPos = aWordLst.Count(); nPos; nPos--)
     {

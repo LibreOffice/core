@@ -1526,8 +1526,8 @@ SwInsertSectionTabDialog::SwInsertSectionTabDialog(
     AddTabPage(TP_SECTION_FTNENDNOTES, SwSectionFtnEndTabPage::Create, 0);
     AddTabPage(TP_SECTION_INDENTS, SwSectionIndentTabPage::Create, 0);
 
-    SvxHtmlOptions* pHtmlOpt = SvxHtmlOptions::Get();
-    long nHtmlMode = pHtmlOpt->GetExportMode();
+    SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
+    long nHtmlMode = rHtmlOpt.GetExportMode();
 
     sal_Bool bWeb = 0 != PTR_CAST( SwWebDocShell, rSh.GetView().GetDocShell() );
     if(bWeb)
@@ -2206,8 +2206,8 @@ SwSectionPropertyTabDialog::SwSectionPropertyTabDialog(
     AddTabPage(TP_SECTION_FTNENDNOTES, SwSectionFtnEndTabPage::Create, 0);
     AddTabPage(TP_SECTION_INDENTS, SwSectionIndentTabPage::Create, 0);
 
-    SvxHtmlOptions* pHtmlOpt = SvxHtmlOptions::Get();
-    long nHtmlMode = pHtmlOpt->GetExportMode();
+    SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
+    long nHtmlMode = rHtmlOpt.GetExportMode();
     sal_Bool bWeb = 0 != PTR_CAST( SwWebDocShell, rSh.GetView().GetDocShell() );
     if(bWeb)
     {

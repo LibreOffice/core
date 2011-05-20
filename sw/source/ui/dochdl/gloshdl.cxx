@@ -361,10 +361,10 @@ sal_Bool SwGlossaryHdl::NewGlossary(const String& rName, const String& rShortNam
         pOnlyTxt = &sOnlyTxt;
     }
 
-    const SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
+    const SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
 
     const sal_uInt16 nSuccess = pWrtShell->MakeGlossary( *pTmp, rName, rShortName,
-                            pCfg->IsSaveRelFile(), pOnlyTxt );
+                            rCfg.IsSaveRelFile(), pOnlyTxt );
     if(nSuccess == (sal_uInt16) -1 )
     {
         InfoBox(pWrtShell->GetView().GetWindow(), SW_RES(MSG_ERR_INSERT_GLOS)).Execute();
@@ -441,8 +441,8 @@ sal_Bool SwGlossaryHdl::Expand( const String& rShortName,
     sal_Bool bCancel = sal_False;
     // search for text block
     // - don't prefer current group depending on configuration setting
-    const SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
-    sal_uInt16 nFound = !pCfg->IsSearchInAllCategories() ? pGlossary->GetIndex( aShortName ) : -1;
+    const SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
+    sal_uInt16 nFound = !rCfg.IsSearchInAllCategories() ? pGlossary->GetIndex( aShortName ) : -1;
     // if not found then search in all groups
     if( nFound == (sal_uInt16) -1 )
     {
@@ -794,9 +794,9 @@ sal_Bool SwGlossaryHdl::ImportGlossaries( const String& rName )
                 SwReader aReader( *pMed, rName );
                 if( aReader.HasGlossaries( *pR ) )
                 {
-                    const SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
+                    const SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
                     bRet = aReader.ReadGlossaries( *pR, *pGlossary,
-                                pCfg->IsSaveRelFile() );
+                                rCfg.IsSaveRelFile() );
                 }
             }
         }

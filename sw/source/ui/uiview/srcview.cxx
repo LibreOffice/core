@@ -197,9 +197,9 @@ rtl_TextEncoding lcl_GetStreamCharSet(rtl_TextEncoding eLoadEncoding)
     rtl_TextEncoding eRet = eLoadEncoding;
     if(RTL_TEXTENCODING_DONTKNOW == eRet)
     {
-        SvxHtmlOptions* pHtmlOptions = SvxHtmlOptions::Get();
+        SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
         const sal_Char *pCharSet =
-            rtl_getBestMimeCharsetFromTextEncoding( pHtmlOptions->GetTextEncoding() );
+            rtl_getBestMimeCharsetFromTextEncoding( rHtmlOptions.GetTextEncoding() );
         eRet = rtl_getTextEncodingFromMimeCharset( pCharSet );
     }
     return eRet;
@@ -779,9 +779,9 @@ void SwSrcView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
 void SwSrcView::Load(SwDocShell* pDocShell)
 {
-    SvxHtmlOptions* pHtmlOptions = SvxHtmlOptions::Get();
+    SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
     const sal_Char *pCharSet =
-        rtl_getBestMimeCharsetFromTextEncoding( pHtmlOptions->GetTextEncoding() );
+        rtl_getBestMimeCharsetFromTextEncoding( rHtmlOptions.GetTextEncoding() );
     rtl_TextEncoding eDestEnc = rtl_getTextEncodingFromMimeCharset( pCharSet );
 
     aEditWin.SetReadonly(pDocShell->IsReadOnly());
