@@ -257,7 +257,7 @@
                 </prop>
             </node>
 
-            <!-- U will find corresponding icons in default_images/res/commandimagelist. -->
+            <!-- U will find corresponding icons in default_images/cmd. -->
             <!-- The name has no .uno: prefix but lc_ or lch_ or sc_ or sch_ -->
 
             <node oor:name=".uno:EditShapeMenu" oor:op="replace">
