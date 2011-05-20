@@ -165,7 +165,11 @@ PPTWriterBase::PPTWriterBase( const Reference< XModel > & rXModel,
 
 PPTWriterBase::~PPTWriterBase()
 {
-    if ( mbStatusIndicator && mXStatusIndicator.is() ))
+    // Possibly unnecessary sanity check for mXStatusIndicator.is().
+    // In 3.3 we had a bug report of a crash where it was null,
+    // https://bugzilla.novell.com/show_bug.cgi?id=694119 (non-public,
+    // bug report, sorry).
+    if ( mbStatusIndicator && mXStatusIndicator.is() )
         mXStatusIndicator->end();
 }
 
