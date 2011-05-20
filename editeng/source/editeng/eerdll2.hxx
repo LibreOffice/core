@@ -32,6 +32,7 @@
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <rtl/ref.hxx>
+#include <comphelper/scoped_disposing_ptr.hxx>
 
 class SfxPoolItem;
 
@@ -40,8 +41,8 @@ class GlobalEditData
 private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XLanguageGuessing >  xLanguageGuesser;
+    comphelper::scoped_disposing_solar_mutex_reset_ptr<OutputDevice> m_aStdRefDevice;
     SfxPoolItem**   ppDefItems;
-    OutputDevice*   pStdRefDevice;
 
     rtl::Reference<SvxForbiddenCharactersTable> xForbiddenCharsTable;
 
