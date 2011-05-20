@@ -1263,10 +1263,14 @@ IMPL_LINK(UpdateDialog, selectionHandler, void *, EMPTYARG)
             }
             case DISABLED_UPDATE:
             {
-                bInserted = showDescription( m_disabledUpdates[pos].aUpdateInfo );
+                if ( !m_disabledUpdates.empty() )
+                    bInserted = showDescription( m_disabledUpdates[pos].aUpdateInfo );
 
                 if ( p->m_bIgnored )
                     b.append( m_ignoredUpdate );
+
+                if ( m_disabledUpdates.empty() )
+                    break;
 
                 UpdateDialog::DisabledUpdate & data = m_disabledUpdates[ pos ];
                 if (data.unsatisfiedDependencies.getLength() != 0)
