@@ -207,7 +207,7 @@ SwDocTest::SwDocTest()
 
     InitVCL(xSM);
 
-    SwDLL::Init();
+    SwGlobals::ensure();
 
     ErrorHandler::RegisterDisplay(&aWndFunc);
 }

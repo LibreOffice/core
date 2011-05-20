@@ -147,6 +147,8 @@ sal_Bool     bNoInterrupt     = sal_False;
 
 #include <unomid.h>
 
+#include "swdllimpl.hxx"
+
 using namespace com::sun::star;
 
 
@@ -202,12 +204,9 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
     pAuthorNames = new SvStringsDtor(5, 1);    // All Redlining-Authors
 
     // replace SvxAutocorrect with SwAutocorrect
-    SvxAutoCorrCfg*    pACfg = SvxAutoCorrCfg::Get();
-    if( pACfg )
-    {
-        const SvxAutoCorrect* pOld = pACfg->GetAutoCorrect();
-        pACfg->SetAutoCorrect(new SwAutoCorrect( *pOld ));
-    }
+    SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
+    const SvxAutoCorrect* pOld = rACfg.GetAutoCorrect();
+    rACfg.SetAutoCorrect(new SwAutoCorrect( *pOld ));
 
     StartListening( *SFX_APP() );
 
@@ -254,8 +253,6 @@ uno::Reference< linguistic2::XLanguageGuessing > SwModule::GetLanguageGuesser()
 
 SwModule::~SwModule()
 {
-    SetPool(0);
-    SfxItemPool::Free(pAttrPool);
     delete pErrorHdl;
     EndListening( *SFX_APP() );
 }

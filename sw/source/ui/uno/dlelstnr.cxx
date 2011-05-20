@@ -155,9 +155,9 @@ void SAL_CALL SwLinguServiceEventListener::disposing(
 {
     SolarMutexGuard aGuard;
 
-    if (xLngSvcMgr.is()  &&  rEventObj.Source == xLngSvcMgr)
+    if (xLngSvcMgr.is() && rEventObj.Source == xLngSvcMgr)
         xLngSvcMgr = 0;
-    if (xLngSvcMgr.is()  &&  rEventObj.Source == xGCIterator)
+    if (xLngSvcMgr.is() && rEventObj.Source == xGCIterator)
         xGCIterator = 0;
 }
 

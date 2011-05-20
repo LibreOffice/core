@@ -66,7 +66,7 @@ uno::Reference< uno::XInterface > SAL_CALL SwTextDocument_createInstance(
     throw( uno::Exception )
 {
     SolarMutexGuard aGuard;
-    SwDLL::Init();
+    SwGlobals::ensure();
     SfxObjectShell* pShell = new SwDocShell( _nCreationFlags );
     return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }
@@ -95,7 +95,7 @@ uno::Reference< uno::XInterface > SAL_CALL SwWebDocument_createInstance(
         throw( uno::Exception )
 {
     SolarMutexGuard aGuard;
-    SwDLL::Init();
+    SwGlobals::ensure();
     SfxObjectShell* pShell = new SwWebDocShell( SFX_CREATE_MODE_STANDARD );
     return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }
@@ -122,7 +122,7 @@ uno::Reference< uno::XInterface > SAL_CALL SwGlobalDocument_createInstance(
         throw( uno::Exception )
 {
     SolarMutexGuard aGuard;
-    SwDLL::Init();
+    SwGlobals::ensure();
     SfxObjectShell* pShell = new SwGlobalDocShell( SFX_CREATE_MODE_STANDARD );
     return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }

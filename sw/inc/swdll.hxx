@@ -28,40 +28,18 @@
 #ifndef SW_SWDLL_HXX
 #define SW_SWDLL_HXX
 
-class StatusBar;
-
 #include <sfx2/sfxdefs.hxx>
 #include <sfx2/module.hxx>
-
-#include <tools/shl.hxx>
-
-//-------------------------------------------------------------------------
-
-class SwDLL
 
 /**
  * This class is a wrapper for a Load-On-Demand-DLL. One instance
  * per SfxApplication will be created for the runtime of
  * SfxApplication-subclass::Main().
- *
- * Remember: Do export this class! It is used by the application.
 */
-
+namespace SwGlobals
 {
-
-    static void RegisterFactories();
-    static void RegisterInterfaces();
-    static void RegisterControls();
-public:
-                    // Ctor/Dtor must be linked to the application
-                    SwDLL();
-                    ~SwDLL();
-
-    static void     Init();     // called directly after loading the DLL
-    static void     Exit();     // called directly befor unloading the DLL
-};
-
-//-------------------------------------------------------------------------
+    void ensure();
+}
 
 #define SW_DLL() ( *(SwModule**) GetAppData(SHL_WRITER) )
 

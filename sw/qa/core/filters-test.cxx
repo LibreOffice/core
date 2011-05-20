@@ -206,7 +206,7 @@ FiltersTest::FiltersTest()
 
     InitVCL(xSM);
 
-    //This is a bit of a fudge, we do this to ensure that SwDLL::Init, which is
+    //This is a bit of a fudge, we do this to ensure that SwGlobals::ensure, which is
     //a private symbol to us, gets called
     m_xWriterComponent =
         xSM->createInstance(rtl::OUString(

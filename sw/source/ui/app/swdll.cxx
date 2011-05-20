@@ -46,6 +46,8 @@
 #include <cfgid.h>
 
 #include <unotools/moduleoptions.hxx>
+#include <comphelper/scoped_disposing_ptr.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <svx/fmobjfac.hxx>
 #include <svx/svdfield.hxx>
@@ -53,7 +55,32 @@
 
 #include <unomid.h>
 
-void SwDLL::Init()
+#include "swdllimpl.hxx"
+
+namespace
+{
+    //Holds a SwDLL and release it on exit, or dispose of the
+    //default XComponent, whichever comes first
+    class SwDLLInstance : public comphelper::scoped_disposing_solar_mutex_reset_ptr<SwDLL>
+    {
+    public:
+        SwDLLInstance() : comphelper::scoped_disposing_solar_mutex_reset_ptr<SwDLL>(::com::sun::star::uno::Reference<com::sun::star::lang::XComponent>(comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))), ::com::sun::star::uno::UNO_QUERY_THROW), new SwDLL)
+        {
+        }
+    };
+
+    struct theSwDLLInstance : public rtl::Static<SwDLLInstance, theSwDLLInstance> {};
+}
+
+namespace SwGlobals
+{
+    void ensure()
+    {
+        theSwDLLInstance::get();
+    }
+}
+
+SwDLL::SwDLL()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDLL" );
 
@@ -115,11 +142,8 @@ void SwDLL::Init()
     RegisterControls();
 }
 
-void SwDLL::Exit()
+SwDLL::~SwDLL()
 {
-    // called directly befor unloading the DLL
-    // do whatever you want, Sw-DLL is accessible
-
     // Pool has to be deleted before statics are
     SW_MOD()->RemoveAttrPool();
 
@@ -128,10 +152,12 @@ void SwDLL::Exit()
     ::_FinitCore();
     // sign out Objekt-Factory
     SdrObjFactory::RemoveMakeObjectHdl(LINK(&aSwObjectFactory, SwObjectFactory, MakeObject ));
+#if 0
     // the SwModule must be destroyed
     SwModule** ppShlPtr = (SwModule**) GetAppData(SHL_WRITER);
     delete (*ppShlPtr);
     (*ppShlPtr) = NULL;
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

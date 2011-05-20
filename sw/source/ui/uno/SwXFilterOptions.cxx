@@ -185,7 +185,7 @@ uno::Reference<uno::XInterface> SAL_CALL SwXFilterOptions_createInstance(
                         const uno::Reference<lang::XMultiServiceFactory>& )
 {
     SolarMutexGuard aGuard;
-    SwDLL::Init();
+    SwGlobals::ensure();
     return (::cppu::OWeakObject*) new SwXFilterOptions;
 }
 

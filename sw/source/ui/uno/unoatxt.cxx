@@ -76,7 +76,7 @@ uno::Reference< uno::XInterface > SAL_CALL SwXAutoTextContainer_createInstance(
 {
     //the module may not be loaded
     SolarMutexGuard aGuard;
-    SwDLL::Init();
+    SwGlobals::ensure();
     static uno::Reference< uno::XInterface > xAText = (cppu::OWeakObject*)new SwXAutoTextContainer();;
     return xAText;
 }
@@ -415,12 +415,12 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
             pOnlyTxt = &sOnlyTxt;
         }
 
-        const SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
+        const SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
 
         SwDoc* pGDoc = pGlosGroup->GetDoc();
 
         // Bis es eine Option dafuer gibt, base util::URL loeschen
-        if(pCfg->IsSaveRelFile())
+        if(rCfg.IsSaveRelFile())
         {
             INetURLObject aTemp(pGlosGroup->GetFileName());
             pGlosGroup->SetBaseURL( aTemp.GetMainURL(INetURLObject::NO_DECODE));

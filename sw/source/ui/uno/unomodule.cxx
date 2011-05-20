@@ -71,7 +71,7 @@ void SAL_CALL SwUnoModule::dispatchWithNotification( const util::URL& aURL, cons
     uno::Reference< uno::XInterface > xThis(static_cast< frame::XNotifyingDispatch* >(this));
 
     SolarMutexGuard aGuard;
-    SwDLL::Init();
+    SwGlobals::ensure();
     const SfxSlot* pSlot = SW_MOD()->GetInterface()->GetSlot( aURL.Complete );
 
     sal_Int16 aState = frame::DispatchResultState::DONTKNOW;
@@ -138,7 +138,7 @@ REFERENCE< XDISPATCH > SAL_CALL SwUnoModule::queryDispatch(
     REFERENCE< XDISPATCH > xReturn;
 
     SolarMutexGuard aGuard;
-    SwDLL::Init();
+    SwGlobals::ensure();
     const SfxSlot* pSlot = SW_MOD()->GetInterface()->GetSlot( aURL.Complete );
     if ( pSlot )
         xReturn = REFERENCE< XDISPATCH >(static_cast< XDISPATCH* >(this), uno::UNO_QUERY);

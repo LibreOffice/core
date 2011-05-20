@@ -1872,7 +1872,7 @@ void SwAutoFormat::BuildHeadLine( sal_uInt16 nLvl )
         // dann lasse doch mal das AutoCorrect auf den akt. TextNode los
 void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
 {
-    SvxAutoCorrect* pATst = SvxAutoCorrCfg::Get()->GetAutoCorrect();
+    SvxAutoCorrect* pATst = SvxAutoCorrCfg::Get().GetAutoCorrect();
     long aSvxFlags = pATst->GetFlags( );
     bool bReplaceQuote = ( aSvxFlags & ChgQuotes ) > 0;
     bool bReplaceSglQuote = ( aSvxFlags & ChgSglQuotes ) > 0;
