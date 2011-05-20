@@ -700,8 +700,8 @@ OHTMLImportExport::OHTMLImportExport(const ::svx::ODataAccessDescriptor& _aDataD
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLImportExport::OHTMLImportExport" );
     // set HTML configuration
-    SvxHtmlOptions* pHtmlOptions = SvxHtmlOptions::Get();
-    m_eDestEnc = pHtmlOptions->GetTextEncoding();
+    SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
+    m_eDestEnc = rHtmlOptions.GetTextEncoding();
     strncpy( sIndent, sIndentSource ,std::min(sizeof(sIndent),sizeof(sIndentSource)));
     sIndent[0] = 0;
 }
