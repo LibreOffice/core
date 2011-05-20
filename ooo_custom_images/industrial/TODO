@@ -1,6 +1,6 @@
 To Do:
 	An incomplete list of missing and/or not-yet-mapped icons:
-	Most of these icons live in res/commandimagelist/
+	Most of these icons live in cmd/
 
 * Mapping/hacking errors
 	+ 'New' button with 'database' icon (most odd)
