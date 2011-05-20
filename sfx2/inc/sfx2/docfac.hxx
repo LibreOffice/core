@@ -122,20 +122,16 @@ private:
 //=========================================================================
 
 #define SFX_DECL_OBJECTFACTORY()                                            \
-private:                                                                    \
-    static SfxObjectFactory*    pObjectFactory;                             \
 public:                                                                     \
     static SfxObjectFactory&    Factory();                                  \
     virtual SfxObjectFactory&   GetFactory() const { return Factory(); }
 
 #define SFX_IMPL_OBJECTFACTORY(ClassName,GlobName,Flags,ShortName)          \
-    SfxObjectFactory*           ClassName::pObjectFactory = 0;              \
-    SfxObjectFactory&           ClassName::Factory()                          \
-                                { if (!pObjectFactory)                      \
-                                    pObjectFactory =                        \
-                                        new SfxObjectFactory( GlobName, Flags, ShortName ); \
-                                  return *pObjectFactory;                    \
-                                }
+    SfxObjectFactory& ClassName::Factory()                                  \
+    {                                                                       \
+        static SfxObjectFactory aObjectFactory(GlobName, Flags, ShortName); \
+        return aObjectFactory;                                              \
+    }
 #endif // #ifndef _SFX_OBJFAC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
