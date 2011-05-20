@@ -3494,7 +3494,8 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_Bool bHighlight, sal_Bool bPain
     MetricVector* pVector = bLayout ? &mpData->m_pLayoutData->m_aUnicodeBoundRects : NULL;
     String* pDisplayText = bLayout ? &mpData->m_pLayoutData->m_aDisplayText : NULL;
 
-    bHighlight = bHighlight && pItem->mbEnabled;
+    if(!pItem->mbEnabled)
+        bHighlight = 0;
 
     // Falls Rechteck ausserhalb des sichbaren Bereichs liegt
     if ( pItem->maRect.IsEmpty() )
