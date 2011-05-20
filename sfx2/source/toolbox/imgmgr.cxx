@@ -31,6 +31,7 @@
 
 #include <stdio.h>
 #include <boost/unordered_map.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include "sfx2/imgmgr.hxx"
 #include <sfx2/sfx.hrc>
@@ -60,30 +61,24 @@ struct ToolBoxInf_Impl
 class SfxImageManager_Impl
 {
 public:
-    sal_Int16                       m_nSymbolsSize;
     SvtMiscOptions                  m_aOpt;
     std::vector< ToolBoxInf_Impl* > m_aToolBoxes;
+    sal_Int16                       m_nSymbolsSize;
     ImageList*                      m_pImageList[IMAGELIST_COUNT];
     SfxModule*                      m_pModule;
+    bool                            m_bAppEventListener;
 
     ImageList*              GetImageList( bool bBig );
     Image                   GetImage( sal_uInt16 nId, bool bBig );
     void                    SetSymbolsSize_Impl( sal_Int16 );
 
     DECL_LINK( OptionsChanged_Impl, void* );
-    DECL_LINK( SettingsChanged_Impl, void* );
+    DECL_LINK( SettingsChanged_Impl, VclWindowEvent* );
 
 
     SfxImageManager_Impl( SfxModule* pModule );
     ~SfxImageManager_Impl();
 };
-
-typedef boost::unordered_map< sal_Int64, sal_Int64 > SfxImageManagerMap;
-
-// global image lists
-static SfxImageManager_Impl* pGlobalImageManager = 0;
-static SfxImageManagerMap    m_ImageManager_ImplMap;
-static SfxImageManagerMap    m_ImageManagerMap;
 
 static SfxImageManager_Impl* GetImageManager( SfxModule* pModule )
 {
@@ -91,23 +86,21 @@ static SfxImageManager_Impl* GetImageManager( SfxModule* pModule )
 
     if ( pModule == 0 )
     {
-        if ( !pGlobalImageManager )
-            pGlobalImageManager = new SfxImageManager_Impl( 0 );
-        return pGlobalImageManager;
+        static SfxImageManager_Impl aGlobalImageManager(0);
+        return &aGlobalImageManager;
     }
     else
     {
+        typedef boost::unordered_map< SfxModule*, boost::shared_ptr<SfxImageManager_Impl> > SfxImageManagerImplMap;
+        static SfxImageManagerImplMap  m_ImageManager_ImplMap;
         SfxImageManager_Impl* pImpl( 0 );
-        SfxImageManagerMap::const_iterator pIter = m_ImageManager_ImplMap.find( sal::static_int_cast< sal_Int64>( reinterpret_cast< sal_IntPtr >( pModule )));
+        SfxImageManagerImplMap::const_iterator pIter = m_ImageManager_ImplMap.find(pModule);
         if ( pIter != m_ImageManager_ImplMap.end() )
-            pImpl = reinterpret_cast< SfxImageManager_Impl* >( sal::static_int_cast< sal_IntPtr >( pIter->second ));
+            pImpl = pIter->second.get();
         else
         {
-            pImpl = new SfxImageManager_Impl( pModule );
-            m_ImageManager_ImplMap.insert(
-                SfxImageManagerMap::value_type(
-                    sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( pModule )),
-                    sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( pImpl )) ));
+            m_ImageManager_ImplMap[pModule].reset(new SfxImageManager_Impl(pModule));
+            pImpl = m_ImageManager_ImplMap[pModule].get();
         }
         return pImpl;
     }
@@ -145,15 +138,18 @@ static sal_Int16 impl_convertBools( sal_Bool bLarge )
 
 //=========================================================================
 
-SfxImageManager_Impl::SfxImageManager_Impl( SfxModule* pModule ) :
-    m_nSymbolsSize( SvtMiscOptions().GetCurrentSymbolsSize() ),
-    m_pModule( pModule )
+SfxImageManager_Impl::SfxImageManager_Impl( SfxModule* pModule )
+    : m_pModule(pModule)
+    , m_bAppEventListener(false)
 {
+    m_nSymbolsSize = m_aOpt.GetCurrentSymbolsSize();
+
     for ( sal_uInt32 i = 0; i < IMAGELIST_COUNT; i++ )
         m_pImageList[i] = 0;
 
     m_aOpt.AddListenerLink( LINK( this, SfxImageManager_Impl, OptionsChanged_Impl ) );
     Application::AddEventListener( LINK( this, SfxImageManager_Impl, SettingsChanged_Impl ) );
+    m_bAppEventListener = true;
 }
 
 //-------------------------------------------------------------------------
@@ -161,8 +157,8 @@ SfxImageManager_Impl::SfxImageManager_Impl( SfxModule* pModule ) :
 SfxImageManager_Impl::~SfxImageManager_Impl()
 {
     m_aOpt.RemoveListenerLink( LINK( this, SfxImageManager_Impl, OptionsChanged_Impl ) );
-    Application::RemoveEventListener( LINK( this, SfxImageManager_Impl, SettingsChanged_Impl ) );
-
+    if (m_bAppEventListener)
+        Application::RemoveEventListener( LINK( this, SfxImageManager_Impl, SettingsChanged_Impl ) );
     for ( sal_uInt32 i = 0; i < m_aToolBoxes.size(); i++ )
         delete m_aToolBoxes[i];
 }
@@ -243,18 +239,37 @@ void SfxImageManager_Impl::SetSymbolsSize_Impl( sal_Int16 nNewSymbolsSize )
 
 IMPL_LINK( SfxImageManager_Impl, OptionsChanged_Impl, void*, EMPTYARG )
 {
-    SetSymbolsSize_Impl( SvtMiscOptions().GetCurrentSymbolsSize() );
+    SetSymbolsSize_Impl( m_aOpt.GetCurrentSymbolsSize() );
     return 0L;
 }
 
 //-------------------------------------------------------------------------
 
-IMPL_LINK( SfxImageManager_Impl, SettingsChanged_Impl, void*, EMPTYARG )
+IMPL_LINK( SfxImageManager_Impl, SettingsChanged_Impl, VclWindowEvent*, pEvent)
 {
-    // Check if toolbar button size have changed and we have to use system settings
-    sal_Int16 nSymbolsSize = SvtMiscOptions().GetCurrentSymbolsSize();
-    if ( m_nSymbolsSize != nSymbolsSize )
-        SetSymbolsSize_Impl( nSymbolsSize );
+    if (pEvent)
+    {
+        switch (pEvent->GetId())
+        {
+            case VCLEVENT_OBJECT_DYING:
+                if (m_bAppEventListener)
+                {
+                    Application::RemoveEventListener( LINK( this, SfxImageManager_Impl, SettingsChanged_Impl ) );
+                    m_bAppEventListener = false;
+                }
+                break;
+            case VCLEVENT_APPLICATION_DATACHANGED:
+                // Check if toolbar button size have changed and we have to use system settings
+                {
+                    sal_Int16 nSymbolsSize = m_aOpt.GetCurrentSymbolsSize();
+                    if (m_nSymbolsSize != nSymbolsSize)
+                        SetSymbolsSize_Impl(nSymbolsSize);
+                }
+                break;
+            default:
+                break;
+        }
+    }
     return 0L;
 }
 
@@ -278,19 +293,20 @@ SfxImageManager::~SfxImageManager()
 SfxImageManager* SfxImageManager::GetImageManager( SfxModule* pModule )
 {
     SolarMutexGuard aGuard;
+    SfxImageManager* pSfxImageManager(0);
 
-    SfxImageManagerMap::const_iterator pIter =
-        m_ImageManagerMap.find( sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( pModule )));
+    typedef boost::unordered_map< SfxModule*, boost::shared_ptr<SfxImageManager> > SfxImageManagerMap;
+    static SfxImageManagerMap m_ImageManagerMap;
+
+    SfxImageManagerMap::const_iterator pIter = m_ImageManagerMap.find(pModule);
     if ( pIter != m_ImageManagerMap.end() )
-        return reinterpret_cast< SfxImageManager* >( sal::static_int_cast< sal_IntPtr >( pIter->second ));
+        pSfxImageManager = pIter->second.get();
     else
     {
-        SfxImageManager* pSfxImageManager = new SfxImageManager( pModule );
-        m_ImageManagerMap.insert( SfxImageManagerMap::value_type(
-            sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( pModule )),
-            sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( pSfxImageManager )) ));
-        return pSfxImageManager;
+        m_ImageManagerMap[pModule].reset(new SfxImageManager(pModule));
+        pSfxImageManager = m_ImageManagerMap[pModule].get();
     }
+    return pSfxImageManager;
 }
 
 //-------------------------------------------------------------------------
