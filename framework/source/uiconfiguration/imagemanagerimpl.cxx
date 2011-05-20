@@ -91,6 +91,8 @@ static const char   IMAGE_FOLDER[]        = "images";
 static const char   BITMAPS_FOLDER[]      = "Bitmaps";
 static const char   IMAGE_EXTENSION[]     = ".png";
 
+static const char   ModuleImageList[]     = "private:resource/images/moduleimages";
+
 static const char*  IMAGELIST_XML_FILE[]  =
 {
     "sc_imagelist.xml",
@@ -105,7 +107,6 @@ static const char*  BITMAP_FILE_NAMES[]   =
 
 namespace framework
 {
-    static char ModuleImageList[] = "private:resource/images/moduleimages";
     static GlobalImageList*     pGlobalImageList = 0;
     static const char* ImageType_Prefixes[ImageType_COUNT] =
     {
