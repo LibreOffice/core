@@ -28,7 +28,6 @@
 # mk file for Window Intel using GCC
 
 SOLAR_JAVA*=
-FULL_DESK=TRUE
 JAVAFLAGSDEBUG=-g
 
 # SOLAR JAva Unterstuetzung nur fuer wntmsci
