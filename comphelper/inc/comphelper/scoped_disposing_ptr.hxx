@@ -33,25 +33,28 @@
 #include <boost/scoped_ptr.hpp>
 
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
 
-#include <stdio.h>
+// for locking SolarMutex: svapp + mutex
+#include <vcl/svapp.hxx>
+#include <osl/mutex.hxx>
 
 namespace comphelper
 {
-//Similar to boost::scoped_ptr, except additionally releases the ptr on rComponent::disposing
+//Similar to boost::scoped_ptr, except additionally releases the ptr on XComponent::disposing and/or XTerminateListener::notifyTermination if supported
 template<class T> class scoped_disposing_ptr : private boost::noncopyable
 {
 private:
     boost::scoped_ptr<T> m_aItem;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener> m_xDisposingListener;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTerminateListener> m_xTerminateListener;
 public:
     scoped_disposing_ptr( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > &rComponent, T * p = 0 )
         : m_aItem(p)
     {
-        m_xDisposingListener = new DisposingListener(rComponent, m_aItem);
+        m_xTerminateListener = new TerminateListener(rComponent, *this);
     }
 
-    void reset(T * p = 0)
+    virtual void reset(T * p = 0)
     {
         m_aItem.reset(p);
     }
@@ -81,42 +84,91 @@ public:
         reset();
     }
 private:
-    class DisposingListener : public ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener >
+    class TerminateListener : public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XTerminateListener >
     {
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > m_xComponent;
-        boost::scoped_ptr<T>& m_rItem;
+        scoped_disposing_ptr<T>& m_rItem;
     public:
-        DisposingListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > &rComponent,
-            boost::scoped_ptr<T>& rItem) : m_xComponent(rComponent), m_rItem(rItem)
+        TerminateListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > &rComponent,
+            scoped_disposing_ptr<T>& rItem) : m_xComponent(rComponent), m_rItem(rItem)
         {
             if (m_xComponent.is())
-                m_xComponent->addEventListener( this );
+            {
+                ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop> xDesktop(m_xComponent, ::com::sun::star::uno::UNO_QUERY);
+                if (xDesktop.is())
+                    xDesktop->addTerminateListener(this);
+                else
+                    m_xComponent->addEventListener(this);
+            }
         }
 
-        ~DisposingListener()
+        ~TerminateListener()
         {
             if ( m_xComponent.is() )
-                m_xComponent->removeEventListener( this );
+            {
+                ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop> xDesktop(m_xComponent, ::com::sun::star::uno::UNO_QUERY);
+                if (xDesktop.is())
+                    xDesktop->removeTerminateListener(this);
+                else
+                    m_xComponent->removeEventListener(this);
+            }
         }
 
     private:
         // XEventListener
-        virtual void SAL_CALL disposing( ::com::sun::star::lang::EventObject const & rEvt )
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& rEvt )
             throw (::com::sun::star::uno::RuntimeException)
         {
             bool shutDown = (rEvt.Source == m_xComponent);
 
-            if ( shutDown && m_xComponent.is() )
+            if (shutDown && m_xComponent.is())
             {
-                m_xComponent->removeEventListener( this );
+                ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop> xDesktop(m_xComponent, ::com::sun::star::uno::UNO_QUERY);
+                if (xDesktop.is())
+                    xDesktop->removeTerminateListener(this);
+                else
+                    m_xComponent->removeEventListener(this);
                 m_xComponent.clear();
             }
 
-            if ( shutDown )
+            if (shutDown)
                m_rItem.reset();
         }
-    };
+
+        // XTerminateListener
+        virtual void SAL_CALL queryTermination( const ::com::sun::star::lang::EventObject& )
+            throw(::com::sun::star::frame::TerminationVetoException,
+                  ::com::sun::star::uno::RuntimeException)
+        {
+        }
+
+        virtual void SAL_CALL notifyTermination( const ::com::sun::star::lang::EventObject& rEvt )
+            throw (::com::sun::star::uno::RuntimeException)
+        {
+            disposing(rEvt);
+        }
+   };
+};
+
+//Something like an OutputDevice requires the SolarMutex to be taken before use
+//for threadsafety. The user can ensure this, except in the case of its dtor
+//being called from reset due to a terminate on the XComponent being called
+//from an aribitrary thread
+template<class T> class scoped_disposing_solar_mutex_reset_ptr
+    : public scoped_disposing_ptr<T>
+{
+public:
+    scoped_disposing_solar_mutex_reset_ptr( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > &rComponent, T * p = 0 )
+        : scoped_disposing_ptr<T>(rComponent, p)
+    {
+    }
+
+    virtual void reset(T * p = 0)
+    {
+        SolarMutexGuard aGuard;
+        scoped_disposing_ptr<T>::reset(p);
+    }
 };
 
 }
