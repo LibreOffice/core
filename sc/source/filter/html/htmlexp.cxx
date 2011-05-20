@@ -257,12 +257,12 @@ ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const String& rBaseURL, ScDocument
     sIndent[0] = 0;
 
     // set HTML configuration
-    SvxHtmlOptions* pHtmlOptions = SvxHtmlOptions::Get();
-    eDestEnc = (pDoc->IsClipOrUndo() ? RTL_TEXTENCODING_UTF8 : pHtmlOptions->GetTextEncoding());
-    bCopyLocalFileToINet = pHtmlOptions->IsSaveGraphicsLocal();
+    SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
+    eDestEnc = (pDoc->IsClipOrUndo() ? RTL_TEXTENCODING_UTF8 : rHtmlOptions.GetTextEncoding());
+    bCopyLocalFileToINet = rHtmlOptions.IsSaveGraphicsLocal();
     for ( sal_uInt16 j=0; j < SC_HTML_FONTSIZES; j++ )
     {
-        sal_uInt16 nSize = pHtmlOptions->GetFontSize( j );
+        sal_uInt16 nSize = rHtmlOptions.GetFontSize( j );
         // remember in Twips, like our SvxFontHeightItem
         if ( nSize )
             nFontSize[j] = nSize * 20;

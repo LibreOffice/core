@@ -2640,7 +2640,7 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
 
         if ( aString.GetChar(0) == '=' )
         {
-            SvxAutoCorrect* pAuto = SvxAutoCorrCfg::Get()->GetAutoCorrect();
+            SvxAutoCorrect* pAuto = SvxAutoCorrCfg::Get().GetAutoCorrect();
             if ( pAuto )
             {
                 sal_Unicode cReplace = pAuto->GetStartDoubleQuote();
