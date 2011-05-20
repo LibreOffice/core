@@ -61,7 +61,8 @@
 #include <vcl/pngread.hxx>
 #include <vcl/pngwrite.hxx>
 #include <rtl/logfile.hxx>
-#include "svtools/miscopt.hxx"
+#include <rtl/instance.hxx>
+#include <svtools/miscopt.hxx>
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Sequence;
@@ -105,7 +106,6 @@ static const char*  BITMAP_FILE_NAMES[]   =
 namespace framework
 {
     static char ModuleImageList[] = "private:resource/images/moduleimages";
-    static osl::Mutex*          pImageListWrapperMutex = 0;
     static GlobalImageList*     pGlobalImageList = 0;
     static const char* ImageType_Prefixes[ImageType_COUNT] =
     {
@@ -115,16 +115,15 @@ namespace framework
 
 typedef GraphicNameAccess CmdToXGraphicNameAccess;
 
+namespace
+{
+    class theGlobalImageListMutex
+        : public rtl::Static<osl::Mutex, theGlobalImageListMutex> {};
+}
+
 static osl::Mutex& getGlobalImageListMutex()
 {
-    if ( pImageListWrapperMutex == 0 )
-    {
-        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
-        if ( pImageListWrapperMutex == 0 )
-            pImageListWrapperMutex = new osl::Mutex;
-    }
-
-    return *pImageListWrapperMutex;
+    return theGlobalImageListMutex::get();
 }
 
 static GlobalImageList* getGlobalImageList( const uno::Reference< XMultiServiceFactory >& rServiceManager )
