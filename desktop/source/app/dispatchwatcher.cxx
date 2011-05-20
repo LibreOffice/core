@@ -96,6 +96,7 @@ static String impl_GetFilterFromExt( OUString aUrl, SfxFilterFlags nFlags,
     String aFilter;
     SfxMedium* pMedium = new SfxMedium( aUrl,
                                         STREAM_STD_READ, sal_False );
+
     const SfxFilter *pSfxFilter = NULL;
     if( nFlags == SFX_FILTER_EXPORT )
     {
@@ -105,6 +106,7 @@ static String impl_GetFilterFromExt( OUString aUrl, SfxFilterFlags nFlags,
     {
         SFX_APP()->GetFilterMatcher().GuessFilter( *pMedium, &pSfxFilter, nFlags, 0 );
     }
+
     if( pSfxFilter )
         aFilter = ( nFlags == SFX_FILTER_EXPORT ) ? pSfxFilter->GetFilterName() :
                                                     pSfxFilter->GetServiceName();
