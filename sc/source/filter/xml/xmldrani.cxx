@@ -466,21 +466,17 @@ void ScXMLDatabaseRangeContext::EndElement()
 
         if (pData.get())
         {
-            // Infer sheet index from the name.
-            OUString aStrNum = sDatabaseRangeName.copy(aName.getLength());
-            SCTAB nTab = static_cast<SCTAB>(aStrNum.toInt32());
-
+            ScRange aRange;
+            pData->GetArea(aRange);
             if (pData->HasAutoFilter())
             {
                 // Set autofilter flags so that the buttons get displayed.
-                ScRange aRange;
-                pData->GetArea(aRange);
                 pDoc->ApplyFlagsTab(
                     aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(), aRange.aStart.Row(),
                     aRange.aStart.Tab(), SC_MF_AUTO);
             }
 
-            pDoc->SetAnonymousDBData(nTab, pData.release());
+            pDoc->SetAnonymousDBData(aRange.aStart.Tab(), pData.release());
         }
         return;
     }
@@ -499,9 +495,10 @@ void ScXMLDatabaseRangeContext::EndElement()
                 pDoc->ApplyFlagsTab(
                     aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(), aRange.aStart.Row(),
                     aRange.aStart.Tab(), SC_MF_AUTO);
+                pDoc->SetAnonymousDBData(aRange.aStart.Tab(), pData.release());
             }
-
-            pDoc->GetDBCollection()->insertAnonRange(pData.release());
+            else
+                pDoc->GetDBCollection()->insertAnonRange(pData.release());
         }
         return;
     }
