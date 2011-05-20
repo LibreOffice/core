@@ -123,6 +123,9 @@ using namespace ::com::sun::star::beans;
 #include <sfx2/appuno.hxx>
 #include <sfx2/viewfrm.hxx>
 
+#include <boost/ptr_container/ptr_vector.hpp>
+#include <functional>
+
 namespace
 {
     class theSfxFilterListener : public rtl::Static<SfxFilterListener, theSfxFilterListener> {};
@@ -255,9 +258,6 @@ const SfxFilter* SfxFilterContainer::GetDefaultFilter_Impl( const String& rName 
 
 //----------------------------------------------------------------
 
-class SfxFilterMatcherArr_Impl;
-static SfxFilterMatcherArr_Impl* pImplArr = 0;
-
 // Impl-Data is shared between all FilterMatchers of the same factory
 class SfxFilterMatcher_Impl
 {
@@ -265,56 +265,75 @@ public:
     ::rtl::OUString     aName;
     SfxFilterList_Impl* pList;      // is created on demand
 
-    void                InitForIterating() const;
-    void                Update();
-                        SfxFilterMatcher_Impl()
-                            : pList(0)
-                        {}
+    void InitForIterating() const;
+    void Update();
+    SfxFilterMatcher_Impl(const ::rtl::OUString &rName)
+        : aName(rName)
+        , pList(0)
+    {
+    }
 };
 
-DECL_PTRARRAY( SfxFilterMatcherArr_Impl, SfxFilterMatcher_Impl*, 2, 2 )
-
-SfxFilterMatcher::SfxFilterMatcher( const String& rName )
-    : pImpl( 0 )
+namespace
 {
-    if ( !pImplArr )
-        // keep track of created filter matchers to recycle the FilterLists
-        pImplArr = new SfxFilterMatcherArr_Impl;
+    typedef boost::ptr_vector<SfxFilterMatcher_Impl> SfxFilterMatcherArr_Impl;
+    static SfxFilterMatcherArr_Impl aImplArr;
+    static int nSfxFilterMatcherCount;
 
-    String aName = SfxObjectShell::GetServiceNameFromFactory( rName );
-    DBG_ASSERT(aName.Len(), "Found boes type :-)");
-    for ( sal_uInt16 n=0; n<pImplArr->Count(); n++ )
+    class hasName :
+        public std::unary_function<SfxFilterMatcher_Impl, bool>
     {
-        // find the impl-Data of any comparable FilterMatcher that was created before
-        SfxFilterMatcher_Impl* pImp = pImplArr->GetObject(n);
-        if ( String(pImp->aName) == aName )
-            pImpl = pImp;
-    }
+    private:
+        const rtl::OUString& mrName;
+    public:
+        hasName(const rtl::OUString &rName) : mrName(rName) {}
+        bool operator() (const SfxFilterMatcher_Impl& rImpl) const
+        {
+            return rImpl.aName == mrName;
+        }
+    };
 
-    if ( !pImpl )
+    SfxFilterMatcher_Impl & getSfxFilterMatcher_Impl(const rtl::OUString &rName)
     {
+        rtl::OUString aName;
+
+        if (rName.getLength())
+            aName = SfxObjectShell::GetServiceNameFromFactory(rName);
+
+        // find the impl-Data of any comparable FilterMatcher that was created
+        // previously
+        SfxFilterMatcherArr_Impl::iterator aEnd = aImplArr.end();
+        SfxFilterMatcherArr_Impl::iterator aIter =
+            std::find_if(aImplArr.begin(), aEnd, hasName(rName));
+        if (aIter != aEnd)
+            return *aIter;
+
         // first Matcher created for this factory
-        pImpl = new SfxFilterMatcher_Impl;
-        pImpl->aName = aName;
-        pImplArr->Insert( pImplArr->Count(), pImpl );
+        SfxFilterMatcher_Impl *pImpl = new SfxFilterMatcher_Impl(aName);
+        aImplArr.push_back(pImpl);
+        return *pImpl;
     }
 }
 
-SfxFilterMatcher::SfxFilterMatcher()
+SfxFilterMatcher::SfxFilterMatcher( const String& rName )
+    : m_rImpl( getSfxFilterMatcher_Impl(rName) )
 {
-    // global FilterMatcher always uses global filter array (also created on demand)
-    pImpl = new SfxFilterMatcher_Impl;
+    ++nSfxFilterMatcherCount;
+}
+
+SfxFilterMatcher::SfxFilterMatcher()
+    : m_rImpl( getSfxFilterMatcher_Impl(::rtl::OUString()) )
+{
+    // global FilterMatcher always uses global filter array (also created on
+    // demand)
+    ++nSfxFilterMatcherCount;
 }
 
 SfxFilterMatcher::~SfxFilterMatcher()
 {
-    if ( !pImpl->aName.getLength() )
-    {
-        // only the global Matcher owns his ImplData
-        if( pImplArr )
-            pImplArr->Remove( pImpl );
-        delete pImpl;
-    }
+    --nSfxFilterMatcherCount;
+    if (nSfxFilterMatcherCount == 0)
+        aImplArr.clear();
 }
 
 void SfxFilterMatcher_Impl::Update()
@@ -356,10 +375,10 @@ void SfxFilterMatcher_Impl::InitForIterating() const
 
 const SfxFilter* SfxFilterMatcher::GetAnyFilter( SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
-    pImpl->InitForIterating();
-    for ( size_t i = 0, n = pImpl->pList->size(); i < n; ++i )
+    m_rImpl.InitForIterating();
+    for ( size_t i = 0, n = m_rImpl.pList->size(); i < n; ++i )
     {
-        const SfxFilter* pFilter = pImpl->pList->at( i );
+        const SfxFilter* pFilter = m_rImpl.pList->at( i );
         SfxFilterFlags nFlags = pFilter->GetFilterFlags();
         if ( (nFlags & nMust) == nMust && !(nFlags & nDont ) )
             return pFilter;
@@ -390,7 +409,7 @@ sal_uInt32  SfxFilterMatcher::GuessFilterIgnoringContent(
     if ( sTypeName.getLength() )
     {
         // make sure filter list is initialized
-        pImpl->InitForIterating();
+        m_rImpl.InitForIterating();
         *ppFilter = GetFilter4EA( sTypeName, nMust, nDont );
     }
 
@@ -449,8 +468,8 @@ sal_uInt32  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, c
             aDescriptor[::comphelper::MediaDescriptor::PROP_INPUTSTREAM()       ] <<= xInStream;
             aDescriptor[::comphelper::MediaDescriptor::PROP_INTERACTIONHANDLER()] <<= rMedium.GetInteractionHandler();
 
-            if ( pImpl->aName.getLength() )
-                aDescriptor[::comphelper::MediaDescriptor::PROP_DOCUMENTSERVICE()] <<= pImpl->aName;
+            if ( m_rImpl.aName.getLength() )
+                aDescriptor[::comphelper::MediaDescriptor::PROP_DOCUMENTSERVICE()] <<= m_rImpl.aName;
 
             if ( pOldFilter )
             {
@@ -624,14 +643,14 @@ const SfxFilter* SfxFilterMatcher::GetFilterForProps( const com::sun::star::uno:
                     // pFilter == 0: if preferred filter is a Writer filter, but Writer module is not installed
                     continue;
 
-                if ( pImpl->aName.getLength() )
+                if ( m_rImpl.aName.getLength() )
                 {
                     // if this is not the global FilterMatcher: check if filter matches the document type
                     ::rtl::OUString aService;
-                    if ( pFilter->GetServiceName() != String(pImpl->aName) )
+                    if ( pFilter->GetServiceName() != String(m_rImpl.aName) )
                     {
                         // preferred filter belongs to another document type; now we must search the filter
-                        pImpl->InitForIterating();
+                        m_rImpl.InitForIterating();
                         aProps[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"))] >>= aValue;
                         pFilter = GetFilter4EA( aValue, nMust, nDont );
                         if ( pFilter )
@@ -651,11 +670,11 @@ const SfxFilter* SfxFilterMatcher::GetFilterForProps( const com::sun::star::uno:
 
 const SfxFilter* SfxFilterMatcher::GetFilter4Mime( const String& rMediaType,SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
-    if ( pImpl->pList )
+    if ( m_rImpl.pList )
     {
-        for ( size_t i = 0, n = pImpl->pList->size(); i < n; ++i )
+        for ( size_t i = 0, n = m_rImpl.pList->size(); i < n; ++i )
         {
-            const SfxFilter* pFilter = pImpl->pList->at( i );
+            const SfxFilter* pFilter = m_rImpl.pList->at( i );
             SfxFilterFlags nFlags = pFilter->GetFilterFlags();
             if ( (nFlags & nMust) == nMust && !(nFlags & nDont ) && pFilter->GetMimeType() == rMediaType )
                 return pFilter;
@@ -672,12 +691,12 @@ const SfxFilter* SfxFilterMatcher::GetFilter4Mime( const String& rMediaType,SfxF
 
 const SfxFilter* SfxFilterMatcher::GetFilter4EA( const String& rType,SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
-    if ( pImpl->pList )
+    if ( m_rImpl.pList )
     {
         const SfxFilter* pFirst = 0;
-        for ( size_t i = 0, n = pImpl->pList->size(); i < n; ++i )
+        for ( size_t i = 0, n = m_rImpl.pList->size(); i < n; ++i )
         {
-            const SfxFilter* pFilter = pImpl->pList->at( i );
+            const SfxFilter* pFilter = m_rImpl.pList->at( i );
             SfxFilterFlags nFlags = pFilter->GetFilterFlags();
             if ( (nFlags & nMust) == nMust && !(nFlags & nDont ) && pFilter->GetTypeName() == rType )
             {
@@ -701,11 +720,11 @@ const SfxFilter* SfxFilterMatcher::GetFilter4EA( const String& rType,SfxFilterFl
 
 const SfxFilter* SfxFilterMatcher::GetFilter4Extension( const String& rExt, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
-    if ( pImpl->pList )
+    if ( m_rImpl.pList )
     {
-        for ( size_t i = 0, n = pImpl->pList->size(); i < n; ++i )
+        for ( size_t i = 0, n = m_rImpl.pList->size(); i < n; ++i )
         {
-            const SfxFilter* pFilter = pImpl->pList->at( i );
+            const SfxFilter* pFilter = m_rImpl.pList->at( i );
             SfxFilterFlags nFlags = pFilter->GetFilterFlags();
             if ( (nFlags & nMust) == nMust && !(nFlags & nDont ) )
             {
@@ -754,11 +773,11 @@ const SfxFilter* SfxFilterMatcher::GetFilter4ClipBoardId( sal_uInt32 nId, SfxFil
 
 const SfxFilter* SfxFilterMatcher::GetFilter4UIName( const String& rName, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
-    pImpl->InitForIterating();
+    m_rImpl.InitForIterating();
     const SfxFilter* pFirstFilter=0;
-    for ( size_t i = 0, n = pImpl->pList->size(); i < n; ++i )
+    for ( size_t i = 0, n = m_rImpl.pList->size(); i < n; ++i )
     {
-        const SfxFilter* pFilter = pImpl->pList->at( i );
+        const SfxFilter* pFilter = m_rImpl.pList->at( i );
         SfxFilterFlags nFlags = pFilter->GetFilterFlags();
         if ( (nFlags & nMust) == nMust &&
              !(nFlags & nDont ) && pFilter->GetUIName() == rName )
@@ -812,7 +831,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4FilterName( const String& rName, Sf
         }
     }
 
-    SfxFilterList_Impl* pList = pImpl->pList;
+    SfxFilterList_Impl* pList = m_rImpl.pList;
     if ( !pList )
         pList = pFilterArr;
 
@@ -839,14 +858,14 @@ IMPL_STATIC_LINK( SfxFilterMatcher, MaybeFileHdl_Impl, String*, pString )
 //----------------------------------------------------------------
 
 SfxFilterMatcherIter::SfxFilterMatcherIter(
-    const SfxFilterMatcher* pMatchP,
+    const SfxFilterMatcher& rMatcher,
     SfxFilterFlags nOrMaskP, SfxFilterFlags nAndMaskP )
     : nOrMask( nOrMaskP ), nAndMask( nAndMaskP ),
-      nCurrent(0), pMatch( pMatchP->pImpl)
+      nCurrent(0), m_rMatch(rMatcher.m_rImpl)
 {
     if( nOrMask == 0xffff ) //Due to falty build on s
         nOrMask = 0;
-    pMatch->InitForIterating();
+    m_rMatch.InitForIterating();
 }
 
 //----------------------------------------------------------------
@@ -854,9 +873,9 @@ SfxFilterMatcherIter::SfxFilterMatcherIter(
 const SfxFilter* SfxFilterMatcherIter::Find_Impl()
 {
     const SfxFilter* pFilter = 0;
-    while( nCurrent < pMatch->pList->size() )
+    while( nCurrent < m_rMatch.pList->size() )
     {
-        pFilter = pMatch->pList->at( nCurrent++ );
+        pFilter = m_rMatch.pList->at( nCurrent++ );
         SfxFilterFlags nFlags = pFilter->GetFilterFlags();
         if( ((nFlags & nOrMask) == nOrMask ) && !(nFlags & nAndMask ) )
             break;
@@ -1157,11 +1176,12 @@ void SfxFilterContainer::ReadFilters_Impl( sal_Bool bUpdate )
         DBG_ASSERT( sal_False, "SfxFilterContainer::ReadFilter()\nException detected. Possible not all filters could be cached.\n" );
     }
 
-    if ( pImplArr && bUpdate )
+    if ( bUpdate )
     {
-        // global filter arry was modified, factory specific ones might need an update too
-        for ( sal_uInt16 n=0; n<pImplArr->Count(); n++ )
-            pImplArr->GetObject(n)->Update();
+        // global filter arry was modified, factory specific ones might need an
+        // update too
+        std::for_each(aImplArr.begin(), aImplArr.end(),
+            std::mem_fun_ref(&SfxFilterMatcher_Impl::Update));
     }
 }
 
