@@ -168,11 +168,10 @@ bool JobData::getStreamBuffer( void*& pData, int& bytes )
     // now append the PPDContext stream buffer
     aStream.WriteLine( "PPDContexData" );
     sal_uLong nBytes;
-    // getStreamableBuffer allocates the buffer using new[]
-    void* pContextBuffer = m_aContext.getStreamableBuffer( nBytes );
+    char* pContextBuffer = m_aContext.getStreamableBuffer( nBytes );
     if( nBytes )
         aStream.Write( pContextBuffer, nBytes );
-    delete[] reinterpret_cast<char*>(pContextBuffer);
+    delete [] pContextBuffer;
 
     // success
     pData = rtl_allocateMemory( bytes = aStream.Tell() );
@@ -254,7 +253,7 @@ bool JobData::constructFromStreamBuffer( void* pData, int bytes, JobData& rJobDa
                 {
                     rJobData.m_aContext.setParser( rJobData.m_pParser );
                     int nBytes = bytes - aStream.Tell();
-                    void* pRemain = alloca( bytes - aStream.Tell() );
+                    char* pRemain = (char*)alloca( bytes - aStream.Tell() );
                     aStream.Read( pRemain, nBytes );
                     rJobData.m_aContext.rebuildFromStreamBuffer( pRemain, nBytes );
                     bContext = true;
