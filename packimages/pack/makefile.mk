@@ -54,7 +54,7 @@ $(SORTED_LIST) : image-sort.lst
 $(RES)$/img$/commandimagelist.ilst .PHONY : $(SORTED_LIST)
     @@-$(MKDIR) $(RES)$/img
 #+-$(RM) $@ $@.$(INPATH)
-    $(FIND) $(SOLARSRC)$/$(RSCDEFIMG)/res/commandimagelist -name "*.png" | sed "s#$(SOLARSRC)$/$(RSCDEFIMG)/res#%GLOBALRES%#" | $(PERL) $(SOLARENV)$/bin$/sort.pl > $@.$(INPATH)
+    $(FIND) $(SOLARSRC)$/$(RSCDEFIMG)/cmd -name "*.png" | sed "s#$(SOLARSRC)$/$(RSCDEFIMG)#%MODULE%#" | $(PERL) $(SOLARENV)$/bin$/sort.pl > $@.$(INPATH)
     $(PERL) $(SOLARENV)$/bin$/diffmv.pl $@.$(INPATH) $@
 
 $(COMMONBIN)$/images.zip .PHONY: $(RES)$/img$/commandimagelist.ilst
