@@ -449,8 +449,6 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
     aLinePosLbl(this,       SW_RES(FT_POSITION)),
     aLinePosDLB(this,       SW_RES(LB_POSITION)),
 
-    aVertFL(this,         SW_RES(FL_VERT)),
-    aPropertiesFL(  this,    SW_RES( FL_PROPERTIES    )),
     aTextDirectionFT( this,  SW_RES( FT_TEXTDIRECTION )),
     aTextDirectionLB( this,  SW_RES( LB_TEXTDIRECTION )),
 
@@ -1332,25 +1330,8 @@ void SwColumnPage::SetInSection(sal_Bool bSet)
     if(!SW_MOD()->GetCTLOptions().IsCTLFontEnabled())
         return;
 
-    aVertFL.Show(bSet);
-    aPropertiesFL.Show(bSet);
     aTextDirectionFT.Show(bSet);
     aTextDirectionLB.Show(bSet);
-    if(bSet)
-    {
-        //resize line type FixedLine
-        Point aLtPos = aFLLineType.GetPosPixel();
-        Point aPropPos = aPropertiesFL.GetPosPixel();
-        Size aSz = aFLLineType.GetSizePixel();
-        aSz.Width() = aPropPos.X() - aLtPos.X() - LogicToPixel(Size(8, 8), MAP_APPFONT).Width();
-        aFLLineType.SetSizePixel(aSz);
-    }
-    else
-    {
-        Size aSz = aFLLineType.GetSizePixel();
-        aSz.Width() = LogicToPixel(Size(248, 248), MAP_APPFONT).Width();
-        aFLLineType.SetSizePixel(aSz);
-    }
 }
 
 void ColumnValueSet::UserDraw( const UserDrawEvent& rUDEvt )
