@@ -169,7 +169,7 @@ PPTWriterBase::~PPTWriterBase()
     // In 3.3 we had a bug report of a crash where it was null,
     // https://bugzilla.novell.com/show_bug.cgi?id=694119 (non-public,
     // bug report, sorry).
-    if ( mbStatusIndicator && mXStatusIndicator.is() ))
+    if ( mbStatusIndicator && mXStatusIndicator.is() )
         mXStatusIndicator->end();
 }
 
