@@ -121,7 +121,8 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_MODIFYPASSWORDINFO,
     HANDLE_MATH_BASELINE_ALIGNMENT,
     HANDLE_INVERT_BORDER_SPACING,
-    HANDLE_COLLAPSE_EMPTY_CELL_PARA
+    HANDLE_COLLAPSE_EMPTY_CELL_PARA,
+    HANDLE_SMALL_CAPS_PERCENTAGE_66
 };
 
 MasterPropertySetInfo * lcl_createSettingsInfo()
@@ -179,6 +180,7 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("MathBaselineAlignment"), HANDLE_MATH_BASELINE_ALIGNMENT, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("InvertBorderSpacing"), HANDLE_INVERT_BORDER_SPACING, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("CollapseEmptyCellPara"), HANDLE_COLLAPSE_EMPTY_CELL_PARA, CPPUTYPE_BOOLEAN, 0, 0},
+        { RTL_CONSTASCII_STRINGPARAM("SmallCapsPercentage66"), HANDLE_SMALL_CAPS_PERCENTAGE_66, CPPUTYPE_BOOLEAN, 0, 0},
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
  * find another solution before adding them to this property set - MTG
@@ -703,6 +705,12 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->set(IDocumentSettingAccess::COLLAPSE_EMPTY_CELL_PARA, bTmp);
         }
         break;
+        case HANDLE_SMALL_CAPS_PERCENTAGE_66:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->set(IDocumentSettingAccess::SMALL_CAPS_PERCENTAGE_66, bTmp);
+        }
+        break;
         default:
             throw UnknownPropertyException();
     }
@@ -1044,6 +1052,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_COLLAPSE_EMPTY_CELL_PARA:
         {
             sal_Bool bTmp = mpDoc->get( IDocumentSettingAccess::COLLAPSE_EMPTY_CELL_PARA );
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
+        case HANDLE_SMALL_CAPS_PERCENTAGE_66:
+        {
+            sal_Bool bTmp = mpDoc->get( IDocumentSettingAccess::SMALL_CAPS_PERCENTAGE_66 );
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
