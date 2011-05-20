@@ -148,6 +148,7 @@ SfxObjectFactory::~SfxObjectFactory()
     for ( sal_uInt16 i = 0; i < nCount; ++i )
         delete pImpl->aFilterArr[i];
     delete pImpl->pNameResId;
+    delete pImpl->pFilterContainer;
     delete pImpl;
 }
 
