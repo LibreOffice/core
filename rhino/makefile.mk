@@ -49,7 +49,7 @@ PATCH_FILES=rhino1_5R5.patch \
     rhino1_5R5-find_swing.patch \
     rhino1_5R5-updateToolTip.patch
 
-.IF "$(OS)"=="WNT"
+.IF "$(OS_FOR_BUILD)"=="WNT"
 FIXED_TARFILE_LOCATION=`cygpath -m -s "$(TARFILE_LOCATION)"`
 .ELSE
 FIXED_TARFILE_LOCATION=$(TARFILE_LOCATION)
