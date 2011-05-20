@@ -745,7 +745,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
                must reside in the same undo group.*/
 
             // record only if it's NOT already present in autocorrection
-            SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get()->GetAutoCorrect();
+            SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
 
             String aOrigWord( bGrammarResults ? OUString() : xSpellAlt->getWord() ) ;
             String aNewWord( aSuggestions[ nAltIdx ] );
