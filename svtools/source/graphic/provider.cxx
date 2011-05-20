@@ -498,13 +498,12 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
 
     if( pIStm )
     {
-        ::GraphicFilter* pFilter = ::GraphicFilter::GetGraphicFilter();
+        ::GraphicFilter& rFilter = ::GraphicFilter::GetGraphicFilter();
 
-        if( pFilter )
         {
             ::Graphic aVCLGraphic;
 
-            if( ( pFilter->ImportGraphic( aVCLGraphic, aPath, *pIStm ) == GRFILTER_OK ) &&
+            if( ( rFilter.ImportGraphic( aVCLGraphic, aPath, *pIStm ) == GRFILTER_OK ) &&
                 ( aVCLGraphic.GetType() != GRAPHIC_NONE ) )
             {
                 ::unographic::Graphic* pUnoGraphic = new ::unographic::Graphic;
@@ -826,9 +825,8 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
 
         if( pFilterShortName )
         {
-            ::GraphicFilter* pFilter = ::GraphicFilter::GetGraphicFilter();
+            ::GraphicFilter& rFilter = ::GraphicFilter::GetGraphicFilter();
 
-            if( pFilter )
             {
                 const uno::Reference< XInterface >  xIFace( rxGraphic, uno::UNO_QUERY );
                 const ::Graphic*                    pGraphic = ::unographic::Graphic::getImplementation( xIFace );
@@ -846,8 +844,8 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
                         aMemStrm << aGraphic;
                     else
                     {
-                        pFilter->ExportGraphic( aGraphic, aPath, aMemStrm,
-                                                pFilter->GetExportFormatNumberForShortName( ::rtl::OUString::createFromAscii( pFilterShortName ) ),
+                        rFilter.ExportGraphic( aGraphic, aPath, aMemStrm,
+                                                rFilter.GetExportFormatNumberForShortName( ::rtl::OUString::createFromAscii( pFilterShortName ) ),
                                                     ( aFilterDataSeq.getLength() ? &aFilterDataSeq : NULL ) );
                     }
                     aMemStrm.Seek( STREAM_SEEK_TO_END );
