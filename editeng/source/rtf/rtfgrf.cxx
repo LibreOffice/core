@@ -477,15 +477,15 @@ sal_Bool SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
 
         if( bValidBmp )
         {
-            GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
+            GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
             sal_uInt16 nImportFilter = GRFILTER_FORMAT_DONTKNOW;
 
             if( pFilterNm )
             {
                 String sTmp;
-                for( sal_uInt16 n = pGF->GetImportFormatCount(); n; )
+                for( sal_uInt16 n = rGF.GetImportFormatCount(); n; )
                 {
-                    sTmp = pGF->GetImportFormatShortName( --n );
+                    sTmp = rGF.GetImportFormatShortName( --n );
                     if( sTmp.EqualsAscii( pFilterNm ))
                     {
                         nImportFilter = n;
@@ -503,7 +503,7 @@ sal_Bool SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
 
             WMF_APMFILEHEADER *pAPMHeader=(aAPMHeader.right>0 && aAPMHeader.bottom>0?&aAPMHeader:NULL);
             pTmpFile->Seek( STREAM_SEEK_TO_BEGIN );
-            bValidBmp = 0 == pGF->ImportGraphic( rGrf, sTmpStr, *pTmpFile, nImportFilter, NULL, 0, pAPMHeader );
+            bValidBmp = 0 == rGF.ImportGraphic( rGrf, sTmpStr, *pTmpFile, nImportFilter, NULL, 0, pAPMHeader );
         }
     }
 
