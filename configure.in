@@ -4898,22 +4898,30 @@ if test -n "$with_system_curl" -o -n "$with_system_libs" && \
    AC_MSG_RESULT([external])
    SYSTEM_CURL=YES
 
-   AC_PATH_PROG( CURLCONFIG, curl-config)
-   if test -z "$CURLCONFIG"; then
-      AC_MSG_ERROR([install curl to run this script])
+   if test "$cross_compiling" = "yes"; then
+      PKG_CHECK_MODULES(CURL, libcurl)
+      curl_version=`$PKG_CONFIG --modversion libcurl`
+   else
+      AC_PATH_PROG(CURLCONFIG, curl-config)
+      if test -z "$CURLCONFIG"; then
+         AC_MSG_ERROR([install curl to run this script])
+      fi
+      CURL_LIBS=`$CURLCONFIG --libs`
+      CURL_CFLAGS=`$CURLCONFIG --cflags`
+      curl_version=`$CURLCONFIG --version`
    fi
 
-   # check curl version
-   AC_MSG_CHECKING([whether curl is >= 7.13.1])
-   if test "`$CURLCONFIG --version | $AWK -F' ' '{print $2}' | $AWK -F. '{ print $1 }'`" -gt "7" -a \
-    "`$CURLCONFIG --version | $AWK -F' ' '{print $2}' | $AWK -F. '{ print $2 }'`" -gt "13" -a \
-    "`$CURLCONFIG --version | $AWK -F' ' '{print $2}' | $AWK -F. '{ print $3 }'`" -gt "1"; then
-      AC_MSG_ERROR([no, you need at least curl 7.13,1])
-   else
-      AC_MSG_RESULT([yes])
-   fi
-   CURL_LIBS=`$CURLCONFIG --libs`
-   CURL_CFLAGS=`$CURLCONFIG --cflags`
+   AC_MSG_CHECKING([whether libcurl is >= 7.13.1])
+   case $curl_version in
+   dnl brackets doubled below because Autoconf uses them as m4 quote characters,
+   dnl so they need to be doubled to end up in the configure script
+   7.13.1|7.1[[4-9]].*|7.[[2-9]]?.*|7.???.*|[[8-9]].*|[[1-9]][[0-9]].*)
+      AC_MSG_RESULT([yes, you have $curl_version])
+      ;;
+   *)
+      AC_MSG_ERROR([no, you have $curl_version])
+      ;;
+   esac
 else
    AC_MSG_RESULT([internal])
    SYSTEM_CURL=NO
