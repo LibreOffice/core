@@ -991,20 +991,16 @@ void SwSvxNumBulletTabDialog::PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage)
             rCharFmtLB.InsertEntry( ViewShell::GetShellRes()->aStrNone );
             SwDocShell* pDocShell = rWrtSh.GetView().GetDocShell();
             ::FillCharStyleListBox(rCharFmtLB,  pDocShell);
-            List aList;
-            for(sal_uInt16 j = 0; j < rCharFmtLB.GetEntryCount(); j++)
-            {
 
-                 aList.Insert( new XubString(rCharFmtLB.GetEntry(j)), LIST_APPEND );
-            }
+            std::vector<String> aList;
+            for(sal_uInt16 j = 0; j < rCharFmtLB.GetEntryCount(); j++)
+                 aList.push_back( String(rCharFmtLB.GetEntry(j)));
+
             aSet.Put( SfxStringListItem( SID_CHAR_FMT_LIST_BOX,&aList ) ) ;
 
             FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebDocShell, pDocShell));
             aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric) ) );
             rPage.PageCreated(aSet);
-            for( sal_uInt16 i = (sal_uInt16)aList.Count(); i; --i )
-                    delete (XubString*)aList.Remove(i);
-            aList.Clear();
         }
         break;
     case RID_SVXPAGE_NUM_POSITION:
