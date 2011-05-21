@@ -384,23 +384,14 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                         if (!aSecurityOptions.IsReadOnly(SvtSecurityOptions::E_SECUREURLS))
                         {
                             ::com::sun::star::uno::Sequence< ::rtl::OUString > seqURLs = aSecurityOptions.GetSecureURLs();
-                            List aList;
+                            std::vector<String> aList;
                             sal_uInt32 nCount = seqURLs.getLength();
                             sal_uInt32 nURL;
                             for( nURL=0; nURL<nCount; ++nURL )
-                            {
-                                aList.Insert( new String( seqURLs[nURL] ), LIST_APPEND );
-                            }
-                            if( !rSet.Put( SfxStringListItem( rPool.GetWhich(SID_SECURE_URL),
-                                    &aList ) ) )
-                            {
+                                aList.push_back(seqURLs[nURL]);
+
+                            if( !rSet.Put( SfxStringListItem( rPool.GetWhich(SID_SECURE_URL), &aList ) ) )
                                 bRet = sal_False;
-                            }
-                            for( nURL=0; nURL<nCount; ++nURL )
-                            {
-                                delete (String*)aList.GetObject(nURL);
-                            }
-                            aList.Clear();
                         }
                     }
                     break;
@@ -774,13 +765,12 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         DELETEZ(pAppData_Impl->pSecureURLs);
 
         DBG_ASSERT(pItem->ISA(SfxStringListItem), "StringListItem expected");
-        const List *pList = ((SfxStringListItem*)pItem)->GetList();
-        sal_uInt32 nCount = pList->Count();
+        const std::vector<String> &aList = ((SfxStringListItem*)pItem)->GetList();
+        sal_uInt32 nCount = aList.size();
         ::com::sun::star::uno::Sequence< ::rtl::OUString > seqURLs(nCount);
         for( sal_uInt32 nPosition=0;nPosition<nCount;++nPosition)
-        {
-            seqURLs[nPosition] = *(const String*)(pList->GetObject(nPosition));
-        }
+            seqURLs[nPosition] = aList[nPosition];
+
         aSecurityOptions.SetSecureURLs( seqURLs );
     }
 
