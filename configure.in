@@ -4347,8 +4347,12 @@ else
    AC_SUBST(DISABLE_PYTHON)
 fi
 
-AC_MSG_CHECKING([which python to use])
-if test "$_os" = "WINNT"; then
+AC_MSG_CHECKING([which Python to use])
+if test "$build_os" = "cygwin"; then
+   # When building on Windows there is no system Python (When cross-compiling
+   # to Windows from Linux using the mingw32-cross compiler from OBS, use
+   # mingw32-python from OBS, and ditto for other MinGW cross-compilation
+   # setups.)
    with_system_python=no
 fi
 if test "$_os" = "Darwin" && test "$with_system_python" != "no"; then
