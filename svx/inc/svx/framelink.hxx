@@ -116,11 +116,11 @@ class SVX_DLLPUBLIC Style
 {
 public:
     /** Constructs an invisible frame style. */
-    inline explicit     Style() : meRefMode( REFMODE_CENTERED ), mnPrim( 0 ), mnDist( 0 ), mnSecn( 0 ), mnType( editeng::SOLID ) {}
+    inline explicit     Style() : meRefMode( REFMODE_CENTERED ), mnType( editeng::SOLID ) { Clear(); }
     /** Constructs a frame style with passed line widths. */
     inline explicit     Style( sal_uInt16 nP, sal_uInt16 nD, sal_uInt16 nS, editeng::SvxBorderStyle nType ) :
                             meRefMode( REFMODE_CENTERED ), mnType( nType )
-                            { Set( nP, nD, nS ); }
+                            { Clear(); Set( nP, nD, nS ); }
     /** Constructs a frame style with passed color and line widths. */
     inline explicit     Style( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor,
                             sal_uInt16 nP, sal_uInt16 nD, sal_uInt16 nS, editeng::SvxBorderStyle nType ) :
