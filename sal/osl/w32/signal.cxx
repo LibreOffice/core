@@ -39,7 +39,7 @@
 #ifndef __MINGW32__
 #include <DbgHelp.h>
 #endif
-#include <ErrorRep.h>
+#include <errorrep.h>
 #include <systools/win32/uwinapi.h>
 #include <sal/macros.h>
 

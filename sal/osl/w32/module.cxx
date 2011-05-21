@@ -26,7 +26,13 @@
 *
 ************************************************************************/
 
+#ifdef __MINGW32__
+extern "C" {
+#endif
 #include "system.h"
+#ifdef __MINGW32__
+}
+#endif
 #include <tlhelp32.h>
 
 #include "file_url.h"
@@ -81,13 +87,13 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 /*nRtldM
     {
         std::vector<sal_Unicode, rtl::Allocator<sal_Unicode> > vec(Module->length + 1);
         DWORD len = GetShortPathNameW(reinterpret_cast<LPCWSTR>(Module->buffer),
-                                      &vec[0], Module->length + 1);
+                                      reinterpret_cast<LPWSTR>(&vec[0]), Module->length + 1);
         if (len )
         {
-            hInstance = LoadLibraryW(&vec[0]);
+            hInstance = LoadLibraryW(reinterpret_cast<LPWSTR>(&vec[0]));
 
             if (hInstance == NULL)
-                hInstance = LoadLibraryExW(&vec[0], NULL,
+                hInstance = LoadLibraryExW(reinterpret_cast<LPWSTR>(&vec[0]), NULL,
                                   LOAD_WITH_ALTERED_SEARCH_PATH);
         }
     }
