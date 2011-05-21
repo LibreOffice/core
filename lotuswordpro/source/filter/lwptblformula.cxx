@@ -69,6 +69,8 @@
 
 #include "lwptablelayout.hxx"
 
+#include <boost/scoped_array.hpp>
+
 //////////////////////////////////////////////////////////////////
  LwpFormulaInfo::LwpFormulaInfo(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpCellList(objHdr, pStrm)
@@ -120,7 +122,7 @@ sal_Bool LwpFormulaInfo::ReadText()
     m_pObjStrm->QuickReadInt16(); //Disk Size
     nStrLen = m_pObjStrm->QuickReadInt16();
 
-    auto_ptr<char> pBuf(new char[nStrLen+1]);
+    boost::scoped_array<char> pBuf(new char[nStrLen+1]);
     m_pObjStrm->QuickRead( pBuf.get(), nStrLen );
     *(pBuf.get()+nStrLen)='\0';
     String aText;
