@@ -43,9 +43,6 @@
 #define _UNICODE
 #endif
 #include <tchar.h>
-#ifdef __MINGW32__
-#include <excpt.h>
-#endif
 
 // #i71984
 extern "C" sal_Bool SAL_CALL hasInternetConnection()
@@ -53,13 +50,7 @@ extern "C" sal_Bool SAL_CALL hasInternetConnection()
     DWORD   dwFlags;
     TCHAR   szConnectionName[1024];
 
-#ifdef __MINGW32__
-        jmp_buf jmpbuf;
-        __SEHandler han;
-        if (__builtin_setjmp(jmpbuf) == 0)
-        {
-        han.Set(jmpbuf, NULL, (__SEHandler::PF)EXCEPTION_EXECUTE_HANDLER);
-#else
+#ifndef __MINGW32__
     __try {
 #endif
     BOOL fIsConnected = InternetGetConnectedStateEx(
@@ -70,11 +61,7 @@ extern "C" sal_Bool SAL_CALL hasInternetConnection()
 
     return fIsConnected ? sal_True : sal_False;
 
-#ifdef __MINGW32__
-        }
-        else return sal_False;
-        han.Reset();
-#else
+#ifndef __MINGW32__
     } __except( EXCEPTION_EXECUTE_HANDLER ) {
         return sal_False;
     }

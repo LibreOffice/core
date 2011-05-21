@@ -4,6 +4,10 @@
 #include <stdarg.h>
 #include <stdio.h>
 
+#ifdef __MINGW32__
+/* MinGW-w64 doesn't have a _tcsinc() inline or library function */
+#define _MB_MAP_DIRECT
+#endif
 #include <tchar.h>
 #include <systools/win32/snprintf.h>
 

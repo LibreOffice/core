@@ -49,7 +49,7 @@ CFLAGSCXX+=-Wno-unused-parameter -Wno-return-type
 
 SLOFILES=
 
-.IF "$(CPU)"=="I"
+.IF "$(CPU)"=="I" && "$(CROSS_COMPILING)"==""
 
 SLOFILES+=\
         $(SLO)$/CheckTokenMembership.obj\
@@ -149,7 +149,7 @@ SHL1STDLIBS+=\
 ALL: ALLTAR $(LB)$/libuwinapi.a
 
 $(LB)$/libuwinapi.a: $(MISC)$/uwinapi.def
-    dlltool --dllname uwinapi.dll --input-def=$(MISC)$/uwinapi.def --kill-at --output-lib=$(LB)$/libuwinapi.a
+    $(DLLTOOL) --dllname uwinapi.dll --input-def=$(MISC)$/uwinapi.def --kill-at --output-lib=$(LB)$/libuwinapi.a
 .ENDIF
 
 .INCLUDE : target.mk

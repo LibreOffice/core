@@ -41,7 +41,7 @@
 #   ifdef UNICODE
 #       define _UNICODE
 #   endif
-#   include <TCHAR.H>
+#   include <tchar.h>
 #endif
 
 // Globally disable "warning C4100: unreferenced formal parameter" caused by
