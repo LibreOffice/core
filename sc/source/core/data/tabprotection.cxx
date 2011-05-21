@@ -32,7 +32,6 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "tabprotection.hxx"
-#include "tools/debug.hxx"
 #include "svl/PasswordHelper.hxx"
 #include <comphelper/docpasswordhelper.hxx>
 #include "document.hxx"

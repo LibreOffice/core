@@ -31,8 +31,6 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <tools/debug.hxx>
-
 #include "refupdat.hxx"
 #include "document.hxx"
 #include "compiler.hxx"
@@ -376,7 +374,7 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eUpdateRefMo
     else if (eUpdateRefMode == URM_REORDER)
     {
         //  bisher nur fuer nDz (MoveTab)
-        DBG_ASSERT ( !nDx && !nDy, "URM_REORDER fuer x und y noch nicht implementiert" );
+        OSL_ENSURE ( !nDx && !nDy, "URM_REORDER fuer x und y noch nicht implementiert" );
 
         if ( nDz && (theCol1 >= nCol1) && (theCol2 <= nCol2) &&
                     (theRow1 >= nRow1) && (theRow2 <= nRow2) )
@@ -870,7 +868,7 @@ void ScRefUpdate::DoTranspose( SCsCOL& rCol, SCsROW& rRow, SCsTAB& rTab,
         while (nNewTab>=nCount) nNewTab = sal::static_int_cast<SCsTAB>( nNewTab - nCount );
         rTab = nNewTab;
     }
-    DBG_ASSERT( rCol>=rSource.aStart.Col() && rRow>=rSource.aStart.Row(),
+    OSL_ENSURE( rCol>=rSource.aStart.Col() && rRow>=rSource.aStart.Row(),
                 "UpdateTranspose: Pos. falsch" );
 
     SCsCOL nRelX = rCol - (SCsCOL)rSource.aStart.Col();

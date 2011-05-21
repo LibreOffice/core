@@ -32,7 +32,6 @@
 
 //------------------------------------------------------------------------
 
-#include <tools/debug.hxx>
 #include <string.h>
 #include <memory>
 #include <unotools/collatorwrapper.hxx>
@@ -190,7 +189,7 @@ void ScRangeData::GuessPosition()
     //  setzt eine Position, mit der alle relative Referenzen bei CalcAbsIfRel
     //  ohne Fehler verabsolutiert werden koennen
 
-    DBG_ASSERT(aPos == ScAddress(), "die Position geht jetzt verloren");
+    OSL_ENSURE(aPos == ScAddress(), "die Position geht jetzt verloren");
 
     SCsCOL nMinCol = 0;
     SCsROW nMinRow = 0;

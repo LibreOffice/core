@@ -32,7 +32,6 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/debug.hxx>
 
 #include "zforauto.hxx"
 #include "global.hxx"

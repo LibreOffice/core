@@ -109,7 +109,7 @@ sal_Bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
             if (pCell)
             {
                 // FIXME FIXME FIXME this might need to be reworked now that we have formula::FormulaErrorToken and ScFormulaResult, double check !!!
-                DBG_ERRORFILE("ScDocument::Solver: -> ScFormulaCell::GetValueAlways might need reimplementation");
+                OSL_FAIL("ScDocument::Solver: -> ScFormulaCell::GetValueAlways might need reimplementation");
                 pCell->Interpret();
                 sal_uInt16 nErrCode = pCell->GetErrCode();
                 nX = pCell->GetValueAlways();
@@ -316,7 +316,7 @@ bool setCacheTableReferenced(ScToken& rToken, ScExternalRefManager& rRefMgr)
             /* TODO: external names aren't supported yet, but would
              * have to be marked as well, if so. Mechanism would be
              * different. */
-            DBG_ERRORFILE("ScDocument::MarkUsedExternalReferences: implement the svExternalName case!");
+            OSL_FAIL("ScDocument::MarkUsedExternalReferences: implement the svExternalName case!");
         default:
             ;
     }
@@ -818,7 +818,7 @@ sal_uInt16 ScDocument::RowDifferences( SCROW nThisRow, SCTAB nThisTab,
     if (nUsed > 0)
         return static_cast<sal_uInt16>((nDif*64)/nUsed);            // max.256 (SC_DOCCOMP_MAXDIFF)
 
-    DBG_ASSERT(!nDif,"Diff ohne Used");
+    OSL_ENSURE(!nDif,"Diff ohne Used");
     return 0;
 }
 
@@ -859,7 +859,7 @@ sal_uInt16 ScDocument::ColDifferences( SCCOL nThisCol, SCTAB nThisTab,
     if (nUsed > 0)
         return static_cast<sal_uInt16>((nDif*64)/nUsed);    // max.256
 
-    DBG_ASSERT(!nDif,"Diff ohne Used");
+    OSL_ENSURE(!nDif,"Diff ohne Used");
     return 0;
 }
 

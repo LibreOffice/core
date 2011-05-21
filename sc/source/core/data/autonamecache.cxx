@@ -92,7 +92,7 @@ const ScAutoNameAddresses& ScAutoNameCache::GetNameOccurrences( const String& rN
                 case CELLTYPE_VALUE:
                 case CELLTYPE_NOTE:
                 case CELLTYPE_SYMBOLS:
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
                 case CELLTYPE_DESTROYED:
 #endif
                     ;   // nothing, prevent compiler warning

@@ -85,7 +85,7 @@ double lcl_IterateInverse( const ScDistFunc& rFunction, double fAx, double fBx, 
     const double fYEps = 1.0E-307;
     const double fXEps = ::std::numeric_limits<double>::epsilon();
 
-    DBG_ASSERT(fAx<fBx, "IterateInverse: wrong interval");
+    OSL_ENSURE(fAx<fBx, "IterateInverse: wrong interval");
 
     //  find enclosing interval
 
@@ -1740,7 +1740,7 @@ void ScInterpreter::ScHypGeomDist()
         fCDenomVarLower = N - n - 2.0*(M - x) + 1.0;
     }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     double fCNumLower = N - n - fCNumVarUpper;
 #endif
     double fCDenomUpper = N - n - M + x + 1.0 - fCDenomVarLower;
@@ -1762,12 +1762,12 @@ void ScInterpreter::ScHypGeomDist()
             else
             {
                 // overlap
-                DBG_ASSERT( fCNumLower < n + 1.0, "ScHypGeomDist: wrong assertion" );
+                OSL_ENSURE( fCNumLower < n + 1.0, "ScHypGeomDist: wrong assertion" );
                 lcl_PutFactorialElements( cnNumer, N - 2.0*n, fCNumVarUpper, N - n );
                 lcl_PutFactorialElements( cnDenom, 0.0, n - 1.0, N );
             }
 
-            DBG_ASSERT( fCDenomUpper <= N - M, "ScHypGeomDist: wrong assertion" );
+            OSL_ENSURE( fCDenomUpper <= N - M, "ScHypGeomDist: wrong assertion" );
 
             if ( fCDenomUpper < n - x + 1.0 )
                 // no overlap
@@ -1797,7 +1797,7 @@ void ScInterpreter::ScHypGeomDist()
                 lcl_PutFactorialElements( cnDenom, 0.0, n - 1.0, N );
             }
 
-            DBG_ASSERT( fCDenomUpper <= n, "ScHypGeomDist: wrong assertion" );
+            OSL_ENSURE( fCDenomUpper <= n, "ScHypGeomDist: wrong assertion" );
 
             if ( fCDenomUpper < n - x + 1.0 )
                 // no overlap
@@ -1810,7 +1810,7 @@ void ScInterpreter::ScHypGeomDist()
             }
         }
 
-        DBG_ASSERT( fCDenomUpper <= M, "ScHypGeomDist: wrong assertion" );
+        OSL_ENSURE( fCDenomUpper <= M, "ScHypGeomDist: wrong assertion" );
     }
     else
     {
@@ -1846,8 +1846,8 @@ void ScInterpreter::ScHypGeomDist()
         {
             // Case 4
 
-            DBG_ASSERT( M >= n - x, "ScHypGeomDist: wrong assertion" );
-            DBG_ASSERT( M - x <= N - M + 1.0, "ScHypGeomDist: wrong assertion" );
+            OSL_ENSURE( M >= n - x, "ScHypGeomDist: wrong assertion" );
+            OSL_ENSURE( M - x <= N - M + 1.0, "ScHypGeomDist: wrong assertion" );
 
             if ( N - n < N - M + 1.0 )
             {
@@ -1858,8 +1858,7 @@ void ScInterpreter::ScHypGeomDist()
             else
             {
                 // Overlap
-                DBG_ASSERT( fCNumLower <= N - M + 1.0, "ScHypGeomDist: wrong assertion" );
-
+                OSL_ENSURE( fCNumLower <= N - M + 1.0, "ScHypGeomDist: wrong assertion" );
                 lcl_PutFactorialElements( cnNumer, M - n, fCNumVarUpper, N - n );
                 lcl_PutFactorialElements( cnDenom, 0.0, n - 1.0, N );
             }
@@ -1876,7 +1875,7 @@ void ScInterpreter::ScHypGeomDist()
             }
             else
             {
-                DBG_ASSERT( M <= fCDenomUpper, "ScHypGeomDist: wrong assertion" );
+                OSL_ENSURE( M <= fCDenomUpper, "ScHypGeomDist: wrong assertion" );
                 lcl_PutFactorialElements( cnDenom, fCDenomVarLower, N - n - 2.0*M + x,
                         N - n - M + x + 1.0 );
 
@@ -1885,7 +1884,7 @@ void ScInterpreter::ScHypGeomDist()
             }
         }
 
-        DBG_ASSERT( fCDenomUpper <= n, "ScHypGeomDist: wrong assertion" );
+        OSL_ENSURE( fCDenomUpper <= n, "ScHypGeomDist: wrong assertion" );
 
         fDNumVarLower = 0.0;
     }
@@ -3114,14 +3113,14 @@ double ScInterpreter::GetPercentile( vector<double> & rArray, double fPercentile
     {
         size_t nIndex = (size_t)::rtl::math::approxFloor( fPercentile * (nSize-1));
         double fDiff = fPercentile * (nSize-1) - ::rtl::math::approxFloor( fPercentile * (nSize-1));
-        DBG_ASSERT(nIndex < nSize, "GetPercentile: wrong index(1)");
+        OSL_ENSURE(nIndex < nSize, "GetPercentile: wrong index(1)");
         vector<double>::iterator iter = rArray.begin() + nIndex;
         ::std::nth_element( rArray.begin(), iter, rArray.end());
         if (fDiff == 0.0)
             return *iter;
         else
         {
-            DBG_ASSERT(nIndex < nSize-1, "GetPercentile: wrong index(2)");
+            OSL_ENSURE(nIndex < nSize-1, "GetPercentile: wrong index(2)");
             double fVal = *iter;
             iter = rArray.begin() + nIndex+1;
             ::std::nth_element( rArray.begin(), iter, rArray.end());
@@ -3332,7 +3331,7 @@ void ScInterpreter::ScTrimMean()
         if (nIndex % 2 != 0)
             nIndex--;
         nIndex /= 2;
-        DBG_ASSERT(nIndex < nSize, "ScTrimMean: falscher Index");
+        OSL_ENSURE(nIndex < nSize, "ScTrimMean: falscher Index");
         double fSum = 0.0;
         for (SCSIZE i = nIndex; i < nSize-nIndex; i++)
             fSum += aSortArray[i];

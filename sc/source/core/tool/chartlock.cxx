@@ -63,7 +63,7 @@ std::vector< WeakReference< frame::XModel > > lcl_getAllLivingCharts( ScDocument
         if (pDoc->HasTable(nTab))
         {
             SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-            DBG_ASSERT(pPage,"Page ?");
+            OSL_ENSURE(pPage,"Page ?");
 
             SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
             SdrObject* pObject = aIter.Next();

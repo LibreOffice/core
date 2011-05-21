@@ -64,7 +64,7 @@ sal_uInt16 lcl_DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, sal_Bool
     for (sal_uInt16 nPageNo=0; nPageNo<nPageCount; nPageNo++)
     {
         SdrPage* pPage = pModel->GetPage(nPageNo);
-        DBG_ASSERT(pPage,"Page ?");
+        OSL_ENSURE(pPage,"Page ?");
 
         SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
         SdrObject* pObject = aIter.Next();

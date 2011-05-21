@@ -352,7 +352,7 @@ void ScGlobal::SetUserList( const ScUserList* pNewList )
 
 const String& ScGlobal::GetRscString( sal_uInt16 nIndex )
 {
-    DBG_ASSERT( nIndex < STR_COUNT, "ScGlobal::GetRscString - invalid string index");
+    OSL_ENSURE( nIndex < STR_COUNT, "ScGlobal::GetRscString - invalid string index");
     if( !ppRscString[ nIndex ] )
     {
         OpCode eOp = ocNone;
@@ -1068,7 +1068,7 @@ sal_uInt16 ScGlobal::GetScriptedWhichID( sal_uInt8 nScriptType, sal_uInt16 nWhic
 
 void ScGlobal::AddLanguage( SfxItemSet& rSet, SvNumberFormatter& rFormatter )
 {
-    DBG_ASSERT( rSet.GetItemState( ATTR_LANGUAGE_FORMAT, false ) == SFX_ITEM_DEFAULT,
+    OSL_ENSURE( rSet.GetItemState( ATTR_LANGUAGE_FORMAT, false ) == SFX_ITEM_DEFAULT,
         "ScGlobal::AddLanguage - language already added");
 
     const SfxPoolItem* pHardItem;
@@ -1105,7 +1105,7 @@ utl::TransliterationWrapper* ScGlobal::GetpTransliteration()
             ::comphelper::getProcessServiceFactory(), SC_TRANSLITERATION_IGNORECASE );
         pTransliteration->loadModuleIfNeeded( eOfficeLanguage );
     }
-    DBG_ASSERT(
+    OSL_ENSURE(
         pTransliteration,
         "ScGlobal::GetpTransliteration() called before ScGlobal::Init()");
     return pTransliteration;
@@ -1113,7 +1113,7 @@ utl::TransliterationWrapper* ScGlobal::GetpTransliteration()
 
 const LocaleDataWrapper* ScGlobal::GetpLocaleData()
 {
-    DBG_ASSERT(
+    OSL_ENSURE(
         pLocaleData,
         "ScGlobal::GetpLocaleData() called before ScGlobal::Init()");
     return pLocaleData;

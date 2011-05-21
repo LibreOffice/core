@@ -459,7 +459,7 @@ sal_Bool ScTable::SetOptimalHeight( SCROW nStartRow, SCROW nEndRow, sal_uInt16 n
                                 const Fraction& rZoomX, const Fraction& rZoomY,
                                 sal_Bool bForce, ScProgress* pOuterProgress, sal_uLong nProgressStart )
 {
-    DBG_ASSERT( nExtra==0 || bForce, "autom. OptimalHeight mit Extra" );
+    OSL_ENSURE( nExtra==0 || bForce, "autom. OptimalHeight mit Extra" );
 
     if ( !pDocument->IsAdjustHeightEnabled() )
     {
@@ -492,7 +492,7 @@ void ScTable::SetOptimalHeightOnly( SCROW nStartRow, SCROW nEndRow, sal_uInt16 n
                                 const Fraction& rZoomX, const Fraction& rZoomY,
                                 sal_Bool bForce, ScProgress* pOuterProgress, sal_uLong nProgressStart )
 {
-    DBG_ASSERT( nExtra==0 || bForce, "autom. OptimalHeight mit Extra" );
+    OSL_ENSURE( nExtra==0 || bForce, "autom. OptimalHeight mit Extra" );
 
     if ( !pDocument->IsAdjustHeightEnabled() )
         return;
@@ -1064,7 +1064,7 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
     nCol = sal::static_int_cast<SCsCOL>( nCol + nMovX );
     nRow = sal::static_int_cast<SCsROW>( nRow + nMovY );
 
-    DBG_ASSERT( !nMovY || !bUnprotected,
+    OSL_ENSURE( !nMovY || !bUnprotected,
                 "GetNextPos mit bUnprotected horizontal nicht implementiert" );
 
     if ( nMovY && bMarked )
@@ -1219,7 +1219,7 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
 sal_Bool ScTable::GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, const ScMarkData& rMark )
 {
     const ScMarkArray* pMarkArray = rMark.GetArray();
-    DBG_ASSERT(pMarkArray,"GetNextMarkedCell ohne MarkArray");
+    OSL_ENSURE(pMarkArray,"GetNextMarkedCell ohne MarkArray");
     if ( !pMarkArray )
         return false;
 

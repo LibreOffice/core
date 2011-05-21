@@ -1199,7 +1199,7 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
         for (i = 0; i < nDelCount; i++)
         {
             ScBaseCell* pCell = ppDelCells[i];
-            DBG_ASSERT( pCell->IsBlank(), "sichtbare Zelle weggeschoben" );
+            OSL_ENSURE( pCell->IsBlank(), "sichtbare Zelle weggeschoben" );
             SvtBroadcaster* pBC = pCell->GetBroadcaster();
             if (pBC)
             {
@@ -2042,7 +2042,7 @@ void ScColumn::CalcAll()
                     nNewVal = pFCell->GetValue();
                 else
                     nNewVal = nOldVal;  // random(), jetzt() etc.
-                DBG_ASSERT( nOldVal==nNewVal, "CalcAll: nOldVal != nNewVal" );
+                OSL_ENSURE( nOldVal==nNewVal, "CalcAll: nOldVal != nNewVal" );
 #endif
             }
         }

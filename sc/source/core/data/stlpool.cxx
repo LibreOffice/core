@@ -137,7 +137,7 @@ SfxStyleSheetBase* ScStyleSheetPool::Create(
 
 SfxStyleSheetBase* ScStyleSheetPool::Create( const SfxStyleSheetBase& rStyle )
 {
-    DBG_ASSERT( rStyle.ISA(ScStyleSheet), "Invalid StyleSheet-class! :-/" );
+    OSL_ENSURE( rStyle.ISA(ScStyleSheet), "Invalid StyleSheet-class! :-/" );
     return new ScStyleSheet( (const ScStyleSheet&) rStyle );
 }
 
@@ -147,7 +147,7 @@ void ScStyleSheetPool::Remove( SfxStyleSheetBase* pStyle )
 {
     if ( pStyle )
     {
-        DBG_ASSERT( IS_SET( SFXSTYLEBIT_USERDEF, pStyle->GetMask() ),
+        OSL_ENSURE( IS_SET( SFXSTYLEBIT_USERDEF, pStyle->GetMask() ),
                     "SFXSTYLEBIT_USERDEF not set!" );
 
         ((ScDocumentPool&)rPool).StyleDeleted((ScStyleSheet*)pStyle);

@@ -1309,7 +1309,7 @@ void ScRange::Justify()
 
 void ScRange::ExtendTo( const ScRange& rRange )
 {
-    DBG_ASSERT( rRange.IsValid(), "ScRange::ExtendTo - cannot extend to invalid range" );
+    OSL_ENSURE( rRange.IsValid(), "ScRange::ExtendTo - cannot extend to invalid range" );
     if( IsValid() )
     {
         aStart.SetCol( ::std::min( aStart.Col(), rRange.aStart.Col() ) );

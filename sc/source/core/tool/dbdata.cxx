@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-#include <tools/debug.hxx>
 #include <unotools/transliterationwrapper.hxx>
 
 #include "dbdata.hxx"
@@ -366,7 +364,7 @@ void ScDBData::GetQueryParam( ScQueryParam& rQueryParam ) const
 
 void ScDBData::SetQueryParam(const ScQueryParam& rQueryParam)
 {
-    DBG_ASSERT( rQueryParam.GetEntryCount() <= MAXQUERY ||
+    OSL_ENSURE( rQueryParam.GetEntryCount() <= MAXQUERY ||
                 !rQueryParam.GetEntry(MAXQUERY).bDoQuery,
                 "zuviele Eintraege bei ScDBData::SetQueryParam" );
 

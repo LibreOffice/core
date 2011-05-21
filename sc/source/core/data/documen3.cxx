@@ -476,7 +476,7 @@ sal_Bool ScDocument::LinkExternalTab( SCTAB& rTab, const String& aDocTab,
 {
     if ( IsClipboard() )
     {
-        DBG_ERRORFILE( "LinkExternalTab in Clipboard" );
+        OSL_FAIL( "LinkExternalTab in Clipboard" );
         return false;
     }
     rTab = 0;
@@ -494,7 +494,7 @@ sal_Bool ScDocument::LinkExternalTab( SCTAB& rTab, const String& aDocTab,
     {
         if ( !InsertTab( SC_TAB_APPEND, aDocTab, sal_True ) )
         {
-            DBG_ERRORFILE("can't insert external document table");
+            OSL_FAIL("can't insert external document table");
             return false;
         }
         rTab = GetTableCount() - 1;
@@ -827,7 +827,7 @@ void ScDocument::RemoveUnoObject( SfxListener& rObject )
             {
                 //  BroadcastUno is always called with the SolarMutex locked, so if it
                 //  can be acquired, this is within the same thread (should not happen)
-                DBG_ERRORFILE( "RemoveUnoObject called from BroadcastUno" );
+                OSL_FAIL( "RemoveUnoObject called from BroadcastUno" );
                 rSolarMutex.release();
             }
             else
@@ -877,7 +877,7 @@ void ScDocument::BroadcastUno( const SfxHint &rHint )
 void ScDocument::AddUnoListenerCall( const uno::Reference<util::XModifyListener>& rListener,
                                         const lang::EventObject& rEvent )
 {
-    DBG_ASSERT( bInUnoBroadcast, "AddUnoListenerCall is supposed to be called from BroadcastUno only" );
+    OSL_ENSURE( bInUnoBroadcast, "AddUnoListenerCall is supposed to be called from BroadcastUno only" );
 
     if ( !pUnoListenerCalls )
         pUnoListenerCalls = new ScUnoListenerCalls;
@@ -886,7 +886,7 @@ void ScDocument::AddUnoListenerCall( const uno::Reference<util::XModifyListener>
 
 void ScDocument::BeginUnoRefUndo()
 {
-    DBG_ASSERT( !pUnoRefUndoList, "BeginUnoRefUndo twice" );
+    OSL_ENSURE( !pUnoRefUndoList, "BeginUnoRefUndo twice" );
     delete pUnoRefUndoList;
 
     pUnoRefUndoList = new ScUnoRefList;
@@ -997,7 +997,7 @@ void ScDocument::UpdateReference( UpdateRefMode eUpdateRefMode,
 void ScDocument::UpdateTranspose( const ScAddress& rDestPos, ScDocument* pClipDoc,
                                         const ScMarkData& rMark, ScDocument* pUndoDoc )
 {
-    DBG_ASSERT(pClipDoc->bIsClip, "UpdateTranspose: kein Clip");
+    OSL_ENSURE(pClipDoc->bIsClip, "UpdateTranspose: kein Clip");
 
     ScRange aSource;
     ScClipParam& rClipParam = GetClipParam();
@@ -1850,13 +1850,13 @@ void ScDocument::CopyTabProtection(SCTAB nTabSrc, SCTAB nTabDest)
 
 const ScDocOptions& ScDocument::GetDocOptions() const
 {
-    DBG_ASSERT( pDocOptions, "No DocOptions! :-(" );
+    OSL_ENSURE( pDocOptions, "No DocOptions! :-(" );
     return *pDocOptions;
 }
 
 void ScDocument::SetDocOptions( const ScDocOptions& rOpt )
 {
-    DBG_ASSERT( pDocOptions, "No DocOptions! :-(" );
+    OSL_ENSURE( pDocOptions, "No DocOptions! :-(" );
     bool bUpdateFuncNames = pDocOptions->GetUseEnglishFuncName() != rOpt.GetUseEnglishFuncName();
 
     *pDocOptions = rOpt;
@@ -1891,13 +1891,13 @@ void ScDocument::SetDocOptions( const ScDocOptions& rOpt )
 
 const ScViewOptions& ScDocument::GetViewOptions() const
 {
-    DBG_ASSERT( pViewOptions, "No ViewOptions! :-(" );
+    OSL_ENSURE( pViewOptions, "No ViewOptions! :-(" );
     return *pViewOptions;
 }
 
 void ScDocument::SetViewOptions( const ScViewOptions& rOpt )
 {
-    DBG_ASSERT( pViewOptions, "No ViewOptions! :-(" );
+    OSL_ENSURE( pViewOptions, "No ViewOptions! :-(" );
     *pViewOptions = rOpt;
 }
 

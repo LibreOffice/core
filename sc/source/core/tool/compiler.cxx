@@ -251,7 +251,7 @@ void ScCompiler::InitCharClassEnglish()
 
 void ScCompiler::SetGrammar( const FormulaGrammar::Grammar eGrammar )
 {
-    DBG_ASSERT( eGrammar != FormulaGrammar::GRAM_UNSPECIFIED, "ScCompiler::SetGrammar: don't pass FormulaGrammar::GRAM_UNSPECIFIED");
+    OSL_ENSURE( eGrammar != FormulaGrammar::GRAM_UNSPECIFIED, "ScCompiler::SetGrammar: don't pass FormulaGrammar::GRAM_UNSPECIFIED");
     if (eGrammar == GetGrammar())
         return;     // nothing to be done
 
@@ -265,7 +265,7 @@ void ScCompiler::SetGrammar( const FormulaGrammar::Grammar eGrammar )
         FormulaGrammar::Grammar eMyGrammar = eGrammar;
         const sal_Int32 nFormulaLanguage = FormulaGrammar::extractFormulaLanguage( eMyGrammar);
         OpCodeMapPtr xMap = GetOpCodeMap( nFormulaLanguage);
-        DBG_ASSERT( xMap, "ScCompiler::SetGrammar: unknown formula language");
+        OSL_ENSURE( xMap, "ScCompiler::SetGrammar: unknown formula language");
         if (!xMap)
         {
             xMap = GetOpCodeMap( ::com::sun::star::sheet::FormulaLanguage::NATIVE);
@@ -1826,7 +1826,7 @@ void ScCompiler::SetRefConvention( const ScCompiler::Convention *pConvP )
 {
     pConv = pConvP;
     meGrammar = FormulaGrammar::mergeToGrammar( meGrammar, pConv->meConv);
-    DBG_ASSERT( FormulaGrammar::isSupported( meGrammar),
+    OSL_ENSURE( FormulaGrammar::isSupported( meGrammar),
             "ScCompiler::SetRefConvention: unsupported grammar resulting");
 }
 
@@ -2224,7 +2224,7 @@ Label_MaskStateMachine:
                     bool bAddToSymbol = true;
                     if ((nMask & SC_COMPILER_C_ODF_RBRACKET) && !(nRefInName & kOpen))
                     {
-                        DBG_ASSERT( nRefInName & (kPast | kDefName),
+                        OSL_ENSURE( nRefInName & (kPast | kDefName),
                                 "ScCompiler::NextSymbol: reference: "
                                 "closing bracket ']' without prior sheet name separator '.' violates ODF spec");
                         // eaten, not added to pSym
@@ -2282,7 +2282,7 @@ Label_MaskStateMachine:
                             }
                             else if (!(nRefInName & kOpen))
                             {
-                                DBG_ERRORFILE("ScCompiler::NextSymbol: reference: "
+                                OSL_FAIL("ScCompiler::NextSymbol: reference: "
                                         "a ''' without the name being enclosed in '...' violates ODF spec");
                             }
                             else if (nRefInName & kQuote)
@@ -2319,7 +2319,7 @@ Label_MaskStateMachine:
                         }
                         else if (':' == c && !(nRefInName & kOpen))
                         {
-                            DBG_ERRORFILE("ScCompiler::NextSymbol: reference: "
+                            OSL_FAIL("ScCompiler::NextSymbol: reference: "
                                     "range operator ':' without prior sheet name separator '.' violates ODF spec");
                             nRefInName = 0;
                             ++mnPredetectedReference;
@@ -3019,7 +3019,7 @@ sal_Bool ScCompiler::IsColRowName( const String& rName )
                             case CELLTYPE_VALUE:
                             case CELLTYPE_NOTE:
                             case CELLTYPE_SYMBOLS:
-#if DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
                             case CELLTYPE_DESTROYED:
 #endif
                                 ;   // nothing, prevent compiler warning
@@ -3148,7 +3148,7 @@ sal_Bool ScCompiler::IsColRowName( const String& rName )
                         case CELLTYPE_VALUE:
                         case CELLTYPE_NOTE:
                         case CELLTYPE_SYMBOLS:
-#if DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
                         case CELLTYPE_DESTROYED:
 #endif
                             ;   // nothing, prevent compiler warning
@@ -3643,7 +3643,7 @@ void ScCompiler::CreateStringFromXMLTokenArray( String& rFormula, String& rFormu
 {
     bool bExternal = GetGrammar() == FormulaGrammar::GRAM_EXTERNAL;
     sal_uInt16 nExpectedCount = bExternal ? 2 : 1;
-    DBG_ASSERT( pArr->GetLen() == nExpectedCount, "ScCompiler::CreateStringFromXMLTokenArray - wrong number of tokens" );
+    OSL_ENSURE( pArr->GetLen() == nExpectedCount, "ScCompiler::CreateStringFromXMLTokenArray - wrong number of tokens" );
     if( pArr->GetLen() == nExpectedCount )
     {
         FormulaToken** ppTokens = pArr->GetArray();
@@ -3865,7 +3865,7 @@ ScTokenArray* ScCompiler::CompileString( const String& rFormula )
 
 ScTokenArray* ScCompiler::CompileString( const String& rFormula, const String& rFormulaNmsp )
 {
-    DBG_ASSERT( (GetGrammar() == FormulaGrammar::GRAM_EXTERNAL) || (rFormulaNmsp.Len() == 0),
+    OSL_ENSURE( (GetGrammar() == FormulaGrammar::GRAM_EXTERNAL) || (rFormulaNmsp.Len() == 0),
         "ScCompiler::CompileString - unexpected formula namespace for internal grammar" );
     if( GetGrammar() == FormulaGrammar::GRAM_EXTERNAL ) try
     {
@@ -4985,7 +4985,7 @@ void ScCompiler::CreateStringFromExternal(rtl::OUStringBuffer& rBuffer, FormulaT
         default:
             // warning, not error, otherwise we may end up with a never
             // ending message box loop if this was the cursor cell to be redrawn.
-            DBG_WARNING("ScCompiler::CreateStringFromToken: unknown type of ocExternalRef");
+            OSL_FAIL("ScCompiler::CreateStringFromToken: unknown type of ocExternalRef");
     }
 }
 

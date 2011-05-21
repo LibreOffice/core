@@ -276,7 +276,7 @@ enum CellType
         CELLTYPE_NOTE,
         CELLTYPE_EDIT,
         CELLTYPE_SYMBOLS        // for load/save
-#if DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
            ,CELLTYPE_DESTROYED
 #endif
     };

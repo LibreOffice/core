@@ -37,7 +37,6 @@
 #include "addincol.hxx"
 #include "funcdesc.hxx"
 #include <unotools/charclass.hxx>
-#include <tools/debug.hxx>
 #include <osl/diagnose.h>
 #include <sal/macros.h>
 #include <string.h>
@@ -222,7 +221,7 @@ void ScParameterClassification::Init()
         const RawData* pRaw = &pRawData[i];
         if ( pRaw->eOp > SC_OPCODE_LAST_OPCODE_ID )
         {
-            DBG_ASSERT( pRaw->eOp == ocNone, "RawData OpCode error");
+            OSL_ENSURE( pRaw->eOp == ocNone, "RawData OpCode error");
         }
         else
         {

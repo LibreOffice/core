@@ -49,7 +49,7 @@ ScPoolHelper::ScPoolHelper( ScDocument* pSourceDoc )
 ,pEnginePool(NULL)
 ,m_pSourceDoc(pSourceDoc)
 {
-    DBG_ASSERT( pSourceDoc, "ScPoolHelper: no document" );
+    OSL_ENSURE( pSourceDoc, "ScPoolHelper: no document" );
     pDocPool = new ScDocumentPool;
     pDocPool->FreezeIdRanges();
 

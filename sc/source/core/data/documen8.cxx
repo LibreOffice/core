@@ -185,7 +185,7 @@ void ScDocument::SetPrinter( SfxPrinter* pNewPrinter )
 void ScDocument::SetPrintOptions()
 {
     if ( !pPrinter ) GetPrinter(); // setzt pPrinter
-    DBG_ASSERT( pPrinter, "Error in printer creation :-/" );
+    OSL_ENSURE( pPrinter, "Error in printer creation :-/" );
 
     if ( pPrinter )
     {
@@ -490,7 +490,7 @@ sal_Bool ScDocument::IdleCalcTextWidth()            // sal_True = demnaechst wie
     pStyle = (ScStyleSheet*)pStylePool->Find( pTable->aPageStyle,
                                               SFX_STYLE_FAMILY_PAGE );
 
-    DBG_ASSERT( pStyle, "Missing StyleSheet :-/" );
+    OSL_ENSURE( pStyle, "Missing StyleSheet :-/" );
 
     sal_Bool bProgress = false;
     if ( pStyle && 0 == GET_SCALEVALUE(pStyle->GetItemSet(),ATTR_PAGE_SCALETOPAGES) )
@@ -1005,7 +1005,7 @@ void ScDocument::SetInLinkUpdate(sal_Bool bSet)
 {
     //  called from TableLink and AreaLink
 
-    DBG_ASSERT( bInLinkUpdate != bSet, "SetInLinkUpdate twice" );
+    OSL_ENSURE( bInLinkUpdate != bSet, "SetInLinkUpdate twice" );
     bInLinkUpdate = bSet;
 }
 
@@ -1302,7 +1302,7 @@ bool ScDocument::CreateDdeLink( const String& rAppl, const String& rTopic, const
         unwanted connections. First try to find existing link. Set result array
         on existing and new links. */
     //! store DDE links additionally at document (for efficiency)?
-    DBG_ASSERT( nMode != SC_DDE_IGNOREMODE, "ScDocument::CreateDdeLink - SC_DDE_IGNOREMODE not allowed here" );
+    OSL_ENSURE( nMode != SC_DDE_IGNOREMODE, "ScDocument::CreateDdeLink - SC_DDE_IGNOREMODE not allowed here" );
     if( GetLinkManager() && (nMode != SC_DDE_IGNOREMODE) )
     {
         ScDdeLink* pDdeLink = lclGetDdeLink( pLinkManager, rAppl, rTopic, rItem, nMode );
@@ -1552,7 +1552,7 @@ void lcl_TransliterateEditEngine( ScEditEngineDefaulter& rEngine,
 
 void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nType )
 {
-    DBG_ASSERT( rMultiMark.IsMultiMarked(), "TransliterateText: no selection" );
+    OSL_ENSURE( rMultiMark.IsMultiMarked(), "TransliterateText: no selection" );
 
     utl::TransliterationWrapper aTranslitarationWrapper( xServiceManager, nType );
     sal_Bool bConsiderLanguage = aTranslitarationWrapper.needLanguageForTheMode();

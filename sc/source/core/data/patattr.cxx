@@ -376,7 +376,7 @@ void ScPatternAttr::GetFont(
         eLang =
         ((const SvxLanguageItem&)rItemSet.Get( nLangId )).GetLanguage();
     }
-    DBG_ASSERT(pFontAttr,"nanu?");
+    OSL_ENSURE(pFontAttr,"nanu?");
 
     //  auswerten
 
@@ -1005,7 +1005,7 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
 
     if ( pDestDoc != pSrcDoc )
     {
-        DBG_ASSERT( pStyle, "Missing Pattern-Style! :-/" );
+        OSL_ENSURE( pStyle, "Missing Pattern-Style! :-/" );
 
         // wenn Vorlage im DestDoc vorhanden, dieses benutzen, sonst Style
         // mit Parent-Vorlagen kopieren/ggF. erzeugen und dem DestDoc hinzufuegen
@@ -1260,7 +1260,7 @@ sal_uLong ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter ) const
 sal_uLong ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter,
                                         const SfxItemSet* pCondSet ) const
 {
-    DBG_ASSERT(pFormatter,"GetNumberFormat ohne Formatter");
+    OSL_ENSURE(pFormatter,"GetNumberFormat ohne Formatter");
 
     const SfxPoolItem* pFormItem;
     if ( !pCondSet || pCondSet->GetItemState(ATTR_VALUE_FORMAT,sal_True,&pFormItem) != SFX_ITEM_SET )

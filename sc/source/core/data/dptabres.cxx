@@ -33,7 +33,6 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <tools/debug.hxx>
 #include <osl/diagnose.h>
 #include <rtl/math.hxx>
 
@@ -271,7 +270,7 @@ ScDPInitState::~ScDPInitState()
 
 void ScDPInitState::AddMember( long nSourceIndex, SCROW nMember )
 {
-    DBG_ASSERT( nCount < SC_DAPI_MAXFIELDS, "too many InitState members" );
+    OSL_ENSURE( nCount < SC_DAPI_MAXFIELDS, "too many InitState members" );
     if ( nCount < SC_DAPI_MAXFIELDS )
     {
         pIndex[nCount] = nSourceIndex;
@@ -282,7 +281,7 @@ void ScDPInitState::AddMember( long nSourceIndex, SCROW nMember )
 
 void ScDPInitState::RemoveMember()
 {
-    DBG_ASSERT( nCount > 0, "RemoveColIndex without index" );
+    OSL_ENSURE( nCount > 0, "RemoveColIndex without index" );
     if ( nCount > 0 )
         --nCount;
 }
@@ -357,7 +356,7 @@ ScDPRunningTotalState::~ScDPRunningTotalState()
 
 void ScDPRunningTotalState::AddColIndex( long nVisible, long nSorted )
 {
-    DBG_ASSERT( nColIndexPos < SC_DAPI_MAXFIELDS, "too many column indexes" );
+    OSL_ENSURE( nColIndexPos < SC_DAPI_MAXFIELDS, "too many column indexes" );
     if ( nColIndexPos < SC_DAPI_MAXFIELDS )
     {
         pColVisible[nColIndexPos] = nVisible;
@@ -370,7 +369,7 @@ void ScDPRunningTotalState::AddColIndex( long nVisible, long nSorted )
 
 void ScDPRunningTotalState::AddRowIndex( long nVisible, long nSorted )
 {
-    DBG_ASSERT( nRowIndexPos < SC_DAPI_MAXFIELDS, "too many row indexes" );
+    OSL_ENSURE( nRowIndexPos < SC_DAPI_MAXFIELDS, "too many row indexes" );
     if ( nRowIndexPos < SC_DAPI_MAXFIELDS )
     {
         pRowVisible[nRowIndexPos] = nVisible;
@@ -383,7 +382,7 @@ void ScDPRunningTotalState::AddRowIndex( long nVisible, long nSorted )
 
 void ScDPRunningTotalState::RemoveColIndex()
 {
-    DBG_ASSERT( nColIndexPos > 0, "RemoveColIndex without index" );
+    OSL_ENSURE( nColIndexPos > 0, "RemoveColIndex without index" );
     if ( nColIndexPos > 0 )
     {
         --nColIndexPos;
@@ -394,7 +393,7 @@ void ScDPRunningTotalState::RemoveColIndex()
 
 void ScDPRunningTotalState::RemoveRowIndex()
 {
-    DBG_ASSERT( nRowIndexPos > 0, "RemoveRowIndex without index" );
+    OSL_ENSURE( nRowIndexPos > 0, "RemoveRowIndex without index" );
     if ( nRowIndexPos > 0 )
     {
         --nRowIndexPos;
@@ -611,42 +610,42 @@ sal_Bool ScDPAggData::IsCalculated() const
 
 double ScDPAggData::GetResult() const
 {
-    DBG_ASSERT( IsCalculated(), "ScDPAggData not calculated" );
+    OSL_ENSURE( IsCalculated(), "ScDPAggData not calculated" );
 
     return fVal;        // use calculated value
 }
 
 sal_Bool ScDPAggData::HasError() const
 {
-    DBG_ASSERT( IsCalculated(), "ScDPAggData not calculated" );
+    OSL_ENSURE( IsCalculated(), "ScDPAggData not calculated" );
 
     return ( nCount == SC_DPAGG_RESULT_ERROR );
 }
 
 sal_Bool ScDPAggData::HasData() const
 {
-    DBG_ASSERT( IsCalculated(), "ScDPAggData not calculated" );
+    OSL_ENSURE( IsCalculated(), "ScDPAggData not calculated" );
 
     return ( nCount != SC_DPAGG_RESULT_EMPTY );     // values or error
 }
 
 void ScDPAggData::SetResult( double fNew )
 {
-    DBG_ASSERT( IsCalculated(), "ScDPAggData not calculated" );
+    OSL_ENSURE( IsCalculated(), "ScDPAggData not calculated" );
 
     fVal = fNew;        // don't reset error flag
 }
 
 void ScDPAggData::SetError()
 {
-    DBG_ASSERT( IsCalculated(), "ScDPAggData not calculated" );
+    OSL_ENSURE( IsCalculated(), "ScDPAggData not calculated" );
 
     nCount = SC_DPAGG_RESULT_ERROR;
 }
 
 void ScDPAggData::SetEmpty( sal_Bool bSet )
 {
-    DBG_ASSERT( IsCalculated(), "ScDPAggData not calculated" );
+    OSL_ENSURE( IsCalculated(), "ScDPAggData not calculated" );
 
     if ( bSet )
         nCount = SC_DPAGG_RESULT_EMPTY;
@@ -657,7 +656,7 @@ void ScDPAggData::SetEmpty( sal_Bool bSet )
 double ScDPAggData::GetAuxiliary() const
 {
     // after Calculate, fAux is used as auxiliary value for running totals and reference values
-    DBG_ASSERT( IsCalculated(), "ScDPAggData not calculated" );
+    OSL_ENSURE( IsCalculated(), "ScDPAggData not calculated" );
 
     return fAux;
 }
@@ -665,7 +664,7 @@ double ScDPAggData::GetAuxiliary() const
 void ScDPAggData::SetAuxiliary( double fNew )
 {
     // after Calculate, fAux is used as auxiliary value for running totals and reference values
-    DBG_ASSERT( IsCalculated(), "ScDPAggData not calculated" );
+    OSL_ENSURE( IsCalculated(), "ScDPAggData not calculated" );
 
     fAux = fNew;
 }
@@ -699,7 +698,7 @@ ScDPRowTotals::~ScDPRowTotals()
 
 ScDPAggData* lcl_GetChildTotal( ScDPAggData* pFirst, long nMeasure )
 {
-    DBG_ASSERT( nMeasure >= 0, "GetColTotal: no measure" );
+    OSL_ENSURE( nMeasure >= 0, "GetColTotal: no measure" );
 
     ScDPAggData* pAgg = pFirst;
     long nSkip = nMeasure;
@@ -848,19 +847,19 @@ long ScDPResultData::GetRowStartMeasure() const
 
 ScSubTotalFunc ScDPResultData::GetMeasureFunction(long nMeasure) const
 {
-    DBG_ASSERT( pMeasFuncs && nMeasure < nMeasCount, "bumm" );
+    OSL_ENSURE( pMeasFuncs && nMeasure < nMeasCount, "bumm" );
     return pMeasFuncs[nMeasure];
 }
 
 const sheet::DataPilotFieldReference& ScDPResultData::GetMeasureRefVal(long nMeasure) const
 {
-    DBG_ASSERT( pMeasRefs && nMeasure < nMeasCount, "bumm" );
+    OSL_ENSURE( pMeasRefs && nMeasure < nMeasCount, "bumm" );
     return pMeasRefs[nMeasure];
 }
 
 sal_uInt16 ScDPResultData::GetMeasureRefOrient(long nMeasure) const
 {
-    DBG_ASSERT( pMeasRefOrient && nMeasure < nMeasCount, "bumm" );
+    OSL_ENSURE( pMeasRefOrient && nMeasure < nMeasCount, "bumm" );
     return pMeasRefOrient[nMeasure];
 }
 
@@ -881,7 +880,7 @@ String ScDPResultData::GetMeasureString(long nMeasure, sal_Bool bForce, ScSubTot
     }
     else
     {
-        DBG_ASSERT( pMeasNames && nMeasure < nMeasCount, "bumm" );
+        OSL_ENSURE( pMeasNames && nMeasure < nMeasCount, "bumm" );
         ScDPDimension* pDataDim = pSource->GetDataDimension(nMeasure);
         if (pDataDim)
         {
@@ -1371,7 +1370,7 @@ void ScDPResultMember::FillMemberResults( uno::Sequence<sheet::MemberResult>* pS
 
     long nSize = GetSize(nMeasure);
     sheet::MemberResult* pArray = pSequences->getArray();
-    DBG_ASSERT( rPos+nSize <= pSequences->getLength(), "bumm" );
+    OSL_ENSURE( rPos+nSize <= pSequences->getLength(), "bumm" );
 
     sal_Bool bIsNumeric = false;
     String aName;
@@ -1615,7 +1614,7 @@ void ScDPResultMember::FillDataResults( const ScDPResultMember* pRefMember,
                     else if ( pResultData->GetColStartMeasure() == SC_DPMEASURE_ALL )
                         nMemberMeasure = SC_DPMEASURE_ALL;
 
-                    DBG_ASSERT( rRow < rSequence.getLength(), "bumm" );
+                    OSL_ENSURE( rRow < rSequence.getLength(), "bumm" );
                     uno::Sequence<sheet::DataResult>& rSubSeq = rSequence.getArray()[rRow];
                     long nSeqCol = 0;
                     pDataRoot->FillDataRow( pRefMember, rSubSeq, nSeqCol, nMemberMeasure, bHasChild, aSubState );
@@ -1974,7 +1973,7 @@ double ScDPDataMember::GetAggregate( long nMeasure, const ScDPSubTotalState& rSu
 
 ScDPAggData* ScDPDataMember::GetAggData( long nMeasure, const ScDPSubTotalState& rSubState )
 {
-    DBG_ASSERT( nMeasure >= 0, "GetAggData: no measure" );
+    OSL_ENSURE( nMeasure >= 0, "GetAggData: no measure" );
 
     ScDPAggData* pAgg = &aAggregate;
     long nSkip = nMeasure;
@@ -1992,7 +1991,7 @@ ScDPAggData* ScDPDataMember::GetAggData( long nMeasure, const ScDPSubTotalState&
 
 const ScDPAggData* ScDPDataMember::GetConstAggData( long nMeasure, const ScDPSubTotalState& rSubState ) const
 {
-    DBG_ASSERT( nMeasure >= 0, "GetConstAggData: no measure" );
+    OSL_ENSURE( nMeasure >= 0, "GetConstAggData: no measure" );
 
     const ScDPAggData* pAgg = &aAggregate;
     long nSkip = nMeasure;
@@ -2017,7 +2016,7 @@ void ScDPDataMember::FillDataRow( const ScDPResultMember* pRefMember,
                                     long& rCol, long nMeasure, sal_Bool bIsSubTotalRow,
                                     const ScDPSubTotalState& rSubState ) const
 {
-    DBG_ASSERT( pRefMember == pResultMember || !pResultMember, "bla" );
+    OSL_ENSURE( pRefMember == pResultMember || !pResultMember, "bla" );
 
     if ( pRefMember->IsVisible() )  //! here or in ScDPDataDimension::FillDataRow ???
     {
@@ -2098,7 +2097,7 @@ void ScDPDataMember::FillDataRow( const ScDPResultMember* pRefMember,
                     if ( nMeasure == SC_DPMEASURE_ALL )
                         nMemberMeasure = nSubCount;
 
-                    DBG_ASSERT( rCol < rSequence.getLength(), "bumm" );
+                    OSL_ENSURE( rCol < rSequence.getLength(), "bumm" );
                     sheet::DataResult& rRes = rSequence.getArray()[rCol];
 
                     if ( HasData( nMemberMeasure, aLocalSubState ) )
@@ -2135,7 +2134,7 @@ void ScDPDataMember::UpdateDataRow( const ScDPResultMember* pRefMember,
                                 long nMeasure, sal_Bool bIsSubTotalRow,
                                 const ScDPSubTotalState& rSubState )
 {
-    DBG_ASSERT( pRefMember == pResultMember || !pResultMember, "bla" );
+    OSL_ENSURE( pRefMember == pResultMember || !pResultMember, "bla" );
 
     // Calculate must be called even if not visible (for use as reference value)
     const ScDPDataDimension* pDataChild = GetChildDimension();
@@ -2206,7 +2205,7 @@ void ScDPDataMember::UpdateDataRow( const ScDPResultMember* pRefMember,
 
 void ScDPDataMember::SortMembers( ScDPResultMember* pRefMember )
 {
-    DBG_ASSERT( pRefMember == pResultMember || !pResultMember, "bla" );
+    OSL_ENSURE( pRefMember == pResultMember || !pResultMember, "bla" );
 
     if ( pRefMember->IsVisible() )  //! here or in ScDPDataDimension ???
     {
@@ -2219,7 +2218,7 @@ void ScDPDataMember::SortMembers( ScDPResultMember* pRefMember )
 
 void ScDPDataMember::DoAutoShow( ScDPResultMember* pRefMember )
 {
-    DBG_ASSERT( pRefMember == pResultMember || !pResultMember, "bla" );
+    OSL_ENSURE( pRefMember == pResultMember || !pResultMember, "bla" );
 
     if ( pRefMember->IsVisible() )  //! here or in ScDPDataDimension ???
     {
@@ -2244,7 +2243,7 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
                                 const ScDPSubTotalState& rSubState, ScDPRunningTotalState& rRunning,
                                 ScDPRowTotals& rTotals, const ScDPResultMember& rRowParent )
 {
-    DBG_ASSERT( pRefMember == pResultMember || !pResultMember, "bla" );
+    OSL_ENSURE( pRefMember == pResultMember || !pResultMember, "bla" );
 
     if ( pRefMember->IsVisible() )  //! here or in ScDPDataDimension::UpdateRunningTotals ???
     {
@@ -2490,7 +2489,7 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
                                     {
                                         const ScDPAggData* pOtherAggData = pSelectMember->
                                                             GetConstAggData( nMemberMeasure, aLocalSubState );
-                                        DBG_ASSERT( pOtherAggData, "no agg data" );
+                                        OSL_ENSURE( pOtherAggData, "no agg data" );
                                         if ( pOtherAggData )
                                         {
                                             // Reference member may be visited before or after this one,
@@ -2839,9 +2838,7 @@ void ScDPResultDimension::LateInitFrom( LateInitParams& rParams/* const vector<S
 {
     if ( rParams.IsEnd( nPos ) )
         return;
-#ifdef DBG_UTIL
-    DBG_ASSERT( nPos <= pItemData.size(), ByteString::CreateFromInt32( pItemData.size()).GetBuffer() );
-#endif
+    OSL_ENSURE( nPos <= pItemData.size(), ByteString::CreateFromInt32( pItemData.size()).GetBuffer() );
     ScDPDimension* pThisDim = rParams.GetDim( nPos );
     ScDPLevel* pThisLevel = rParams.GetLevel( nPos );
     SCROW rThisData = pItemData[nPos];
@@ -2960,7 +2957,7 @@ long ScDPResultDimension::GetSize(long nMeasure) const
     long nMemberCount = maMemberArray.size();
     if (bIsDataLayout)
     {
-        DBG_ASSERT(nMeasure == SC_DPMEASURE_ALL || pResultData->GetMeasureCount() == 1,
+        OSL_ENSURE(nMeasure == SC_DPMEASURE_ALL || pResultData->GetMeasureCount() == 1,
                     "DataLayout dimension twice?");
         //  repeat first member...
         nTotal = nMemberCount * maMemberArray[0]->GetSize(0);   // all measures have equal size
@@ -3053,7 +3050,7 @@ void ScDPResultDimension::FillDataResults( const ScDPResultMember* pRefMember,
         const ScDPResultMember* pMember;
         if (bIsDataLayout)
         {
-            DBG_ASSERT(nMeasure == SC_DPMEASURE_ALL || pResultData->GetMeasureCount() == 1,
+            OSL_ENSURE(nMeasure == SC_DPMEASURE_ALL || pResultData->GetMeasureCount() == 1,
                         "DataLayout dimension twice?");
             pMember = maMemberArray[0];
             nMemberMeasure = nSorted;
@@ -3076,7 +3073,7 @@ void ScDPResultDimension::UpdateDataResults( const ScDPResultMember* pRefMember,
         const ScDPResultMember* pMember;
         if (bIsDataLayout)
         {
-            DBG_ASSERT(nMeasure == SC_DPMEASURE_ALL || pResultData->GetMeasureCount() == 1,
+            OSL_ENSURE(nMeasure == SC_DPMEASURE_ALL || pResultData->GetMeasureCount() == 1,
                         "DataLayout dimension twice?");
             pMember = maMemberArray[0];
             nMemberMeasure = i;
@@ -3097,7 +3094,7 @@ void ScDPResultDimension::SortMembers( ScDPResultMember* pRefMember )
     {
         // sort members
 
-        DBG_ASSERT( aMemberOrder.empty(), "sort twice?" );
+        OSL_ENSURE( aMemberOrder.empty(), "sort twice?" );
         aMemberOrder.resize( nCount );
         for (long nPos=0; nPos<nCount; nPos++)
             aMemberOrder[nPos] = nPos;
@@ -3206,7 +3203,7 @@ void ScDPResultDimension::UpdateRunningTotals( const ScDPResultMember* pRefMembe
 
         if (bIsDataLayout)
         {
-            DBG_ASSERT(nMeasure == SC_DPMEASURE_ALL || pResultData->GetMeasureCount() == 1,
+            OSL_ENSURE(nMeasure == SC_DPMEASURE_ALL || pResultData->GetMeasureCount() == 1,
                         "DataLayout dimension twice?");
             pMember = maMemberArray[0];
             nMemberMeasure = nSorted;
@@ -3231,7 +3228,7 @@ ScDPDataMember* ScDPResultDimension::GetRowReferenceMember( const ScDPRelativePo
 {
     // get named, previous/next, or first member of this dimension (first existing if pRelativePos and pName are NULL)
 
-    DBG_ASSERT( pRelativePos == NULL || pName == NULL, "can't use position and name" );
+    OSL_ENSURE( pRelativePos == NULL || pName == NULL, "can't use position and name" );
 
     ScDPDataMember* pColMember = NULL;
 
@@ -3244,7 +3241,7 @@ ScDPDataMember* ScDPResultDimension::GetRowReferenceMember( const ScDPRelativePo
         nDirection = pRelativePos->nDirection;
         nMemberIndex = pRelativePos->nBasePos + nDirection;     // bounds are handled below
 
-        DBG_ASSERT( nDirection == 1 || nDirection == -1, "Direction must be 1 or -1" );
+        OSL_ENSURE( nDirection == 1 || nDirection == -1, "Direction must be 1 or -1" );
     }
     else if ( pName )
     {
@@ -3318,7 +3315,7 @@ ScDPDataMember* ScDPResultDimension::GetRowReferenceMember( const ScDPRelativePo
 ScDPDataMember* ScDPResultDimension::GetColReferenceMember( const ScDPRelativePos* pRelativePos, const String* pName,
                             long nRefDimPos, const ScDPRunningTotalState& rRunning )
 {
-    DBG_ASSERT( pRelativePos == NULL || pName == NULL, "can't use position and name" );
+    OSL_ENSURE( pRelativePos == NULL || pName == NULL, "can't use position and name" );
 
     const long* pColIndexes = rRunning.GetColIndexes();
     const long* pRowIndexes = rRunning.GetRowIndexes();
@@ -3569,8 +3566,8 @@ void ScDPDataDimension::FillDataRow( const ScDPResultDimension* pRefDim,
                                     long nCol, long nMeasure, sal_Bool bIsSubTotalRow,
                                     const ScDPSubTotalState& rSubState ) const
 {
-    DBG_ASSERT( pRefDim && pRefDim->GetMemberCount() == aMembers.Count(), "dimensions don't match" );
-    DBG_ASSERT( pRefDim == pResultDimension, "wrong dim" );
+    OSL_ENSURE( pRefDim && pRefDim->GetMemberCount() == aMembers.Count(), "dimensions don't match" );
+    OSL_ENSURE( pRefDim == pResultDimension, "wrong dim" );
 
     const ScMemberSortOrder& rMemberOrder = pRefDim->GetMemberOrder();
 
@@ -3584,7 +3581,7 @@ void ScDPDataDimension::FillDataRow( const ScDPResultDimension* pRefDim,
         long nMemberPos = nSorted;
         if (bIsDataLayout)
         {
-            DBG_ASSERT(nMeasure == SC_DPMEASURE_ALL || pResultData->GetMeasureCount() == 1,
+            OSL_ENSURE(nMeasure == SC_DPMEASURE_ALL || pResultData->GetMeasureCount() == 1,
                         "DataLayout dimension twice?");
             nMemberPos = 0;
             nMemberMeasure = nSorted;
@@ -3604,8 +3601,8 @@ void ScDPDataDimension::UpdateDataRow( const ScDPResultDimension* pRefDim,
                                     long nMeasure, sal_Bool bIsSubTotalRow,
                                     const ScDPSubTotalState& rSubState ) const
 {
-    DBG_ASSERT( pRefDim && pRefDim->GetMemberCount() == aMembers.Count(), "dimensions don't match" );
-    DBG_ASSERT( pRefDim == pResultDimension, "wrong dim" );
+    OSL_ENSURE( pRefDim && pRefDim->GetMemberCount() == aMembers.Count(), "dimensions don't match" );
+    OSL_ENSURE( pRefDim == pResultDimension, "wrong dim" );
 
     long nMemberMeasure = nMeasure;
     long nCount = aMembers.Count();
@@ -3614,7 +3611,7 @@ void ScDPDataDimension::UpdateDataRow( const ScDPResultDimension* pRefDim,
         long nMemberPos = i;
         if (bIsDataLayout)
         {
-            DBG_ASSERT(nMeasure == SC_DPMEASURE_ALL || pResultData->GetMeasureCount() == 1,
+            OSL_ENSURE(nMeasure == SC_DPMEASURE_ALL || pResultData->GetMeasureCount() == 1,
                         "DataLayout dimension twice?");
             nMemberPos = 0;
             nMemberMeasure = i;
@@ -3636,7 +3633,7 @@ void ScDPDataDimension::SortMembers( ScDPResultDimension* pRefDim )
         // sort members
 
         ScMemberSortOrder& rMemberOrder = pRefDim->GetMemberOrder();
-        DBG_ASSERT( rMemberOrder.empty(), "sort twice?" );
+        OSL_ENSURE( rMemberOrder.empty(), "sort twice?" );
         rMemberOrder.resize( nCount );
         for (long nPos=0; nPos<nCount; nPos++)
             rMemberOrder[nPos] = nPos;
@@ -3647,8 +3644,8 @@ void ScDPDataDimension::SortMembers( ScDPResultDimension* pRefDim )
 
     // handle children
 
-    DBG_ASSERT( pRefDim && pRefDim->GetMemberCount() == aMembers.Count(), "dimensions don't match" );
-    DBG_ASSERT( pRefDim == pResultDimension, "wrong dim" );
+    OSL_ENSURE( pRefDim && pRefDim->GetMemberCount() == aMembers.Count(), "dimensions don't match" );
+    OSL_ENSURE( pRefDim == pResultDimension, "wrong dim" );
 
     // for data layout, call only once - sorting measure is always taken from settings
     long nLoopCount = bIsDataLayout ? 1 : nCount;
@@ -3669,8 +3666,8 @@ void ScDPDataDimension::DoAutoShow( ScDPResultDimension* pRefDim )
 
     // handle children first, before changing the visible state
 
-    DBG_ASSERT( pRefDim && pRefDim->GetMemberCount() == aMembers.Count(), "dimensions don't match" );
-    DBG_ASSERT( pRefDim == pResultDimension, "wrong dim" );
+    OSL_ENSURE( pRefDim && pRefDim->GetMemberCount() == aMembers.Count(), "dimensions don't match" );
+    OSL_ENSURE( pRefDim == pResultDimension, "wrong dim" );
 
     // for data layout, call only once - sorting measure is always taken from settings
     long nLoopCount = bIsDataLayout ? 1 : nCount;
@@ -3758,8 +3755,8 @@ void ScDPDataDimension::UpdateRunningTotals( const ScDPResultDimension* pRefDim,
                                     const ScDPSubTotalState& rSubState, ScDPRunningTotalState& rRunning,
                                     ScDPRowTotals& rTotals, const ScDPResultMember& rRowParent ) const
 {
-    DBG_ASSERT( pRefDim && pRefDim->GetMemberCount() == aMembers.Count(), "dimensions don't match" );
-    DBG_ASSERT( pRefDim == pResultDimension, "wrong dim" );
+    OSL_ENSURE( pRefDim && pRefDim->GetMemberCount() == aMembers.Count(), "dimensions don't match" );
+    OSL_ENSURE( pRefDim == pResultDimension, "wrong dim" );
 
     long nMemberMeasure = nMeasure;
     long nCount = aMembers.Count();
@@ -3771,7 +3768,7 @@ void ScDPDataDimension::UpdateRunningTotals( const ScDPResultDimension* pRefDim,
         long nMemberPos = nSorted;
         if (bIsDataLayout)
         {
-            DBG_ASSERT(nMeasure == SC_DPMEASURE_ALL || pResultData->GetMeasureCount() == 1,
+            OSL_ENSURE(nMeasure == SC_DPMEASURE_ALL || pResultData->GetMeasureCount() == 1,
                         "DataLayout dimension twice?");
             nMemberPos = 0;
             nMemberMeasure = nSorted;

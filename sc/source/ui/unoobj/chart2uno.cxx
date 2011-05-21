@@ -2419,7 +2419,7 @@ void ScChart2DataSequence::BuildDataCache()
                                 }
                             }
                             break;
-#if DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
                             case CELLTYPE_DESTROYED:
 #endif
                             case CELLTYPE_EDIT:

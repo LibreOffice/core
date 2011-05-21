@@ -2795,7 +2795,7 @@ void lclAppendDigit( ByteString& rText, sal_Int32 nDigit )
         case 7: rText.UTF8_APPEND( UTF8_TH_7 ); break;
         case 8: rText.UTF8_APPEND( UTF8_TH_8 ); break;
         case 9: rText.UTF8_APPEND( UTF8_TH_9 ); break;
-        default:    DBG_ERRORFILE( "lclAppendDigit - illegal digit" );
+        default:    OSL_FAIL( "lclAppendDigit - illegal digit" );
     }
 }
 
@@ -2805,7 +2805,7 @@ void lclAppendDigit( ByteString& rText, sal_Int32 nDigit )
  */
 void lclAppendPow10( ByteString& rText, sal_Int32 nDigit, sal_Int32 nPow10 )
 {
-    DBG_ASSERT( (1 <= nDigit) && (nDigit <= 9), "lclAppendPow10 - illegal digit" );
+    OSL_ENSURE( (1 <= nDigit) && (nDigit <= 9), "lclAppendPow10 - illegal digit" );
     lclAppendDigit( rText, nDigit );
     switch( nPow10 )
     {
@@ -2813,14 +2813,14 @@ void lclAppendPow10( ByteString& rText, sal_Int32 nDigit, sal_Int32 nPow10 )
         case 3: rText.UTF8_APPEND( UTF8_TH_1E3 );   break;
         case 4: rText.UTF8_APPEND( UTF8_TH_1E4 );   break;
         case 5: rText.UTF8_APPEND( UTF8_TH_1E5 );   break;
-        default:    DBG_ERRORFILE( "lclAppendPow10 - illegal power" );
+        default:    OSL_FAIL( "lclAppendPow10 - illegal power" );
     }
 }
 
 /** Appends a block of 6 digits (value from 1 to 999,999) to the passed string. */
 void lclAppendBlock( ByteString& rText, sal_Int32 nValue )
 {
-    DBG_ASSERT( (1 <= nValue) && (nValue <= 999999), "lclAppendBlock - illegal value" );
+    OSL_ENSURE( (1 <= nValue) && (nValue <= 999999), "lclAppendBlock - illegal value" );
     if( nValue >= 100000 )
     {
         lclAppendPow10( rText, nValue / 100000, 5 );

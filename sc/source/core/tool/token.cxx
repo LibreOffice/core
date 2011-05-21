@@ -38,7 +38,6 @@
 
 #include <string.h>
 #include <tools/mempool.hxx>
-#include <tools/debug.hxx>
 #include <osl/diagnose.h>
 
 #include "token.hxx"
@@ -655,83 +654,83 @@ FormulaTokenRef ScToken::ExtendRangeReference( FormulaToken & rTok1, FormulaToke
 
 const ScSingleRefData& ScToken::GetSingleRef() const
 {
-    DBG_ERRORFILE( "ScToken::GetSingleRef: virtual dummy called" );
+    OSL_FAIL( "ScToken::GetSingleRef: virtual dummy called" );
     static ScSingleRefData aDummySingleRef = lcl_ScToken_InitSingleRef();
     return aDummySingleRef;
 }
 
 ScSingleRefData& ScToken::GetSingleRef()
 {
-    DBG_ERRORFILE( "ScToken::GetSingleRef: virtual dummy called" );
+    OSL_FAIL( "ScToken::GetSingleRef: virtual dummy called" );
     static ScSingleRefData aDummySingleRef = lcl_ScToken_InitSingleRef();
     return aDummySingleRef;
 }
 
 const ScComplexRefData& ScToken::GetDoubleRef() const
 {
-    DBG_ERRORFILE( "ScToken::GetDoubleRef: virtual dummy called" );
+    OSL_FAIL( "ScToken::GetDoubleRef: virtual dummy called" );
     static ScComplexRefData aDummyDoubleRef = lcl_ScToken_InitDoubleRef();
     return aDummyDoubleRef;
 }
 
 ScComplexRefData& ScToken::GetDoubleRef()
 {
-    DBG_ERRORFILE( "ScToken::GetDoubleRef: virtual dummy called" );
+    OSL_FAIL( "ScToken::GetDoubleRef: virtual dummy called" );
     static ScComplexRefData aDummyDoubleRef = lcl_ScToken_InitDoubleRef();
     return aDummyDoubleRef;
 }
 
 const ScSingleRefData& ScToken::GetSingleRef2() const
 {
-    DBG_ERRORFILE( "ScToken::GetSingleRef2: virtual dummy called" );
+    OSL_FAIL( "ScToken::GetSingleRef2: virtual dummy called" );
     static ScSingleRefData aDummySingleRef = lcl_ScToken_InitSingleRef();
     return aDummySingleRef;
 }
 
 ScSingleRefData& ScToken::GetSingleRef2()
 {
-    DBG_ERRORFILE( "ScToken::GetSingleRef2: virtual dummy called" );
+    OSL_FAIL( "ScToken::GetSingleRef2: virtual dummy called" );
     static ScSingleRefData aDummySingleRef = lcl_ScToken_InitSingleRef();
     return aDummySingleRef;
 }
 
 void ScToken::CalcAbsIfRel( const ScAddress& /* rPos */ )
 {
-    DBG_ERRORFILE( "ScToken::CalcAbsIfRel: virtual dummy called" );
+    OSL_FAIL( "ScToken::CalcAbsIfRel: virtual dummy called" );
 }
 
 void ScToken::CalcRelFromAbs( const ScAddress& /* rPos */ )
 {
-    DBG_ERRORFILE( "ScToken::CalcRelFromAbs: virtual dummy called" );
+    OSL_FAIL( "ScToken::CalcRelFromAbs: virtual dummy called" );
 }
 
 const ScMatrix* ScToken::GetMatrix() const
 {
-    DBG_ERRORFILE( "ScToken::GetMatrix: virtual dummy called" );
+    OSL_FAIL( "ScToken::GetMatrix: virtual dummy called" );
     return NULL;
 }
 
 ScMatrix* ScToken::GetMatrix()
 {
-    DBG_ERRORFILE( "ScToken::GetMatrix: virtual dummy called" );
+    OSL_FAIL( "ScToken::GetMatrix: virtual dummy called" );
     return NULL;
 }
 
 
 ScJumpMatrix* ScToken::GetJumpMatrix() const
 {
-    DBG_ERRORFILE( "ScToken::GetJumpMatrix: virtual dummy called" );
+    OSL_FAIL( "ScToken::GetJumpMatrix: virtual dummy called" );
     return NULL;
 }
 const ScRefList* ScToken::GetRefList() const
 {
-    DBG_ERRORFILE( "ScToken::GetRefList: virtual dummy called" );
+    OSL_FAIL( "ScToken::GetRefList: virtual dummy called" );
     return NULL;
 }
 
 ScRefList* ScToken::GetRefList()
 {
-    DBG_ERRORFILE( "ScToken::GetRefList: virtual dummy called" );
+    OSL_FAIL( "ScToken::GetRefList: virtual dummy called" );
     return NULL;
 }
 // ==========================================================================
@@ -1086,7 +1085,7 @@ void ScMatrixFormulaCellToken::Assign( const formula::FormulaToken& r )
         ScMatrixCellResultToken::Assign( *p);
     else
     {
-        DBG_ASSERT( r.GetType() != svMatrix, "ScMatrixFormulaCellToken::operator=: assigning ScMatrixToken to ScMatrixFormulaCellToken is not proper, use ScMatrixCellResultToken instead");
+        OSL_ENSURE( r.GetType() != svMatrix, "ScMatrixFormulaCellToken::operator=: assigning ScMatrixToken to ScMatrixFormulaCellToken is not proper, use ScMatrixCellResultToken instead");
         if (r.GetType() == svMatrix)
         {
             xUpperLeft = NULL;
@@ -1115,7 +1114,7 @@ void ScMatrixFormulaCellToken::SetUpperLeftDouble( double f )
             // fall thru
         default:
             {
-                DBG_ERRORFILE("ScMatrixFormulaCellToken::SetUpperLeftDouble: not modifying unhandled token type");
+                OSL_FAIL("ScMatrixFormulaCellToken::SetUpperLeftDouble: not modifying unhandled token type");
             }
     }
 }
@@ -1669,7 +1668,7 @@ sal_Bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
                 return false;
         break;
         default:
-            DBG_ERRORFILE( "unknown Direction" );
+            OSL_FAIL( "unknown Direction" );
             return false;
     }
     if ( pRPN && nRPN )

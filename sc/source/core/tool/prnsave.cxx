@@ -33,8 +33,6 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <tools/debug.hxx>
-
 #include "prnsave.hxx"
 #include "global.hxx"
 #include "address.hxx"
@@ -108,13 +106,13 @@ ScPrintRangeSaver::~ScPrintRangeSaver()
 
 ScPrintSaverTab& ScPrintRangeSaver::GetTabData(SCTAB nTab)
 {
-    DBG_ASSERT(nTab<nTabCount,"ScPrintRangeSaver Tab zu gross");
+    OSL_ENSURE(nTab<nTabCount,"ScPrintRangeSaver Tab zu gross");
     return pData[nTab];
 }
 
 const ScPrintSaverTab& ScPrintRangeSaver::GetTabData(SCTAB nTab) const
 {
-    DBG_ASSERT(nTab<nTabCount,"ScPrintRangeSaver Tab zu gross");
+    OSL_ENSURE(nTab<nTabCount,"ScPrintRangeSaver Tab zu gross");
     return pData[nTab];
 }
 

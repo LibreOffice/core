@@ -518,7 +518,7 @@ ScChartPositionMap::ScChartPositionMap( SCCOL nChartCols, SCROW nChartRows,
         nColCount( nChartCols ),
         nRowCount( nChartRows )
 {
-    DBG_ASSERT( nColCount && nRowCount, "ScChartPositionMap without dimension" );
+    OSL_ENSURE( nColCount && nRowCount, "ScChartPositionMap without dimension" );
 
     ScAddress* pPos;
     SCCOL nCol;

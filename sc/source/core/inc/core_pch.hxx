@@ -50,7 +50,6 @@
 #include <global.hxx>
 #include <tools/color.hxx>
 #include <i18npool/lang.h>
-#include <tools/debug.hxx>
 #include <tools/gen.hxx>
 #include <svl/svarray.hxx>
 #include <markarr.hxx>

@@ -33,15 +33,13 @@
 
 #include "sheetevents.hxx"
 #include <com/sun/star/script/vba/VBAEventId.hpp>
-#include <tools/debug.hxx>
-
 // -----------------------------------------------------------------------
 
 rtl::OUString ScSheetEvents::GetEventName(sal_Int32 nEvent)
 {
     if (nEvent<0 || nEvent>=SC_SHEETEVENT_COUNT)
     {
-        DBG_ERRORFILE("invalid event number");
+        OSL_FAIL("invalid event number");
         return rtl::OUString();
     }
 
@@ -63,7 +61,7 @@ sal_Int32 ScSheetEvents::GetVbaSheetEventId(sal_Int32 nEvent)
     using namespace ::com::sun::star::script::vba::VBAEventId;
     if (nEvent<0 || nEvent>=SC_SHEETEVENT_COUNT)
     {
-        DBG_ERRORFILE("invalid event number");
+        OSL_FAIL("invalid event number");
         return NO_EVENT;
     }
 
@@ -135,7 +133,7 @@ const rtl::OUString* ScSheetEvents::GetScript(sal_Int32 nEvent) const
 {
     if (nEvent<0 || nEvent>=SC_SHEETEVENT_COUNT)
     {
-        DBG_ERRORFILE("invalid event number");
+        OSL_FAIL("invalid event number");
         return NULL;
     }
 
@@ -148,7 +146,7 @@ void ScSheetEvents::SetScript(sal_Int32 nEvent, const rtl::OUString* pNew)
 {
     if (nEvent<0 || nEvent>=SC_SHEETEVENT_COUNT)
     {
-        DBG_ERRORFILE("invalid event number");
+        OSL_FAIL("invalid event number");
         return;
     }
 

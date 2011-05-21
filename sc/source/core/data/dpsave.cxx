@@ -39,7 +39,6 @@
 #include "global.hxx"
 
 #include <sal/types.h>
-#include <tools/debug.hxx>
 
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
@@ -162,7 +161,7 @@ void ScDPSaveMember::RemoveLayoutName()
 void ScDPSaveMember::WriteToSource( const uno::Reference<uno::XInterface>& xMember, sal_Int32 nPosition )
 {
     uno::Reference<beans::XPropertySet> xMembProp( xMember, uno::UNO_QUERY );
-    DBG_ASSERT( xMembProp.is(), "no properties at member" );
+    OSL_ENSURE( xMembProp.is(), "no properties at member" );
     if ( xMembProp.is() )
     {
         // exceptions are caught at ScDPSaveData::WriteToSource
@@ -550,7 +549,7 @@ void ScDPSaveDimension::SetMemberPosition( const ::rtl::OUString& rName, sal_Int
 void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xDim )
 {
     uno::Reference<beans::XPropertySet> xDimProp( xDim, uno::UNO_QUERY );
-    DBG_ASSERT( xDimProp.is(), "no properties at dimension" );
+    OSL_ENSURE( xDimProp.is(), "no properties at dimension" );
     if ( xDimProp.is() )
     {
         // exceptions are caught at ScDPSaveData::WriteToSource
@@ -632,7 +631,7 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
         {
             uno::Reference<uno::XInterface> xLevel = ScUnoHelpFunctions::AnyToInterface( xLevels->getByIndex(nLev) );
             uno::Reference<beans::XPropertySet> xLevProp( xLevel, uno::UNO_QUERY );
-            DBG_ASSERT( xLevProp.is(), "no properties at level" );
+            OSL_ENSURE( xLevProp.is(), "no properties at level" );
             if ( xLevProp.is() )
             {
                 uno::Any aAny;
@@ -1042,7 +1041,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
     // source options must be first!
 
     uno::Reference<beans::XPropertySet> xSourceProp( xSource, uno::UNO_QUERY );
-    DBG_ASSERT( xSourceProp.is(), "no properties at source" );
+    OSL_ENSURE( xSourceProp.is(), "no properties at source" );
     if ( xSourceProp.is() )
     {
         // source options are not available for external sources
@@ -1073,7 +1072,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
         // reset all orientations
         //! "forgetSettings" or similar at source ?????
         //! reset all duplicated dimensions, or reuse them below !!!
-        OSL_TRACE( "ScDPSaveData::WriteToSource" );
+        OSL_FAIL( "ScDPSaveData::WriteToSource" );
 
         lcl_ResetOrient( xSource );
 
@@ -1123,7 +1122,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
                             aBuf.append(sal_Unicode('*')); //! modify name at creation of SaveDimension
 
                         uno::Reference<util::XCloneable> xCloneable( xIntDim, uno::UNO_QUERY );
-                        DBG_ASSERT( xCloneable.is(), "cannot clone dimension" );
+                        OSL_ENSURE( xCloneable.is(), "cannot clone dimension" );
                         if (xCloneable.is())
                         {
                             uno::Reference<util::XCloneable> xNew = xCloneable->createClone();
@@ -1139,7 +1138,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
                         iter->WriteToSource( xIntDim );
                 }
             }
-            DBG_ASSERT(bFound, "WriteToSource: Dimension not found");
+            OSL_ENSURE(bFound, "WriteToSource: Dimension not found");
         }
 
         if ( xSourceProp.is() )
@@ -1271,7 +1270,7 @@ void ScDPSaveData::Refresh( const uno::Reference<sheet::XDimensionsSupplier>& xS
                 {
                     deletedDims.push_back( aName );
                     iter = aDimList.erase(iter);
-                    OSL_TRACE( "\n Remove dim: \t" );
+                    OSL_FAIL( "\n Remove dim: \t" );
                     OSL_TRACE( "%s", aName.getStr() );
                 }
 
@@ -1328,16 +1327,16 @@ void ScDPSaveDimension::Refresh( const com::sun::star::uno::Reference<
             switch( pReferenceValue->ReferenceType)
             {
             case sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE: //both
-                OSL_TRACE( "\n sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE \n" );
+                OSL_FAIL( "\n sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE \n" );
                 break;
             case sheet::DataPilotFieldReferenceType::ITEM_DIFFERENCE: //both
-                OSL_TRACE( "\n sheet::DataPilotFieldReferenceType::ITEM_DIFFERENCE \n" );
+                OSL_FAIL( "\n sheet::DataPilotFieldReferenceType::ITEM_DIFFERENCE \n" );
                 break;
             case sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE_DIFFERENCE: //both
-                OSL_TRACE( "\n sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE_DIFFERENCE \n" );
+                OSL_FAIL( "\n sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE_DIFFERENCE \n" );
                 break;
             case sheet::DataPilotFieldReferenceType::RUNNING_TOTAL:
-                OSL_TRACE( "\n sheet::DataPilotFieldReferenceType::RUNNING_TOTAL \n" ); //enable name
+                OSL_FAIL( "\n sheet::DataPilotFieldReferenceType::RUNNING_TOTAL \n" ); //enable name
                 break;
             }
 #endif
@@ -1379,7 +1378,7 @@ void ScDPSaveDimension::Refresh( const com::sun::star::uno::Reference<
         { //check sortinfo
             if ( pSortInfo->Mode == DataPilotFieldSortMode::DATA )
             {
-                OSL_TRACE( "\n DataPilotFieldSortMode::DATA \n" );
+                OSL_FAIL( "\n DataPilotFieldSortMode::DATA \n" );
                 const ::rtl::OUString& sFieldDimName = pSortInfo->Field;
                 std::list<rtl::OUString>::const_iterator iter = std::find( deletedDims.begin(), deletedDims.end(), sFieldDimName );
                 if ( iter != deletedDims.end() && pCache->GetDimensionIndex( sFieldDimName ) == -1 )

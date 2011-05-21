@@ -34,7 +34,6 @@
 
 #define SC_RANGELST_CXX         //fuer ICC
 
-#include <tools/debug.hxx>
 #include <stdlib.h>             // qsort
 #include <unotools/collatorwrapper.hxx>
 
@@ -900,7 +899,7 @@ ScRangePair** ScRangePairList::CreateNameSortedArray( size_t& nListCount,
         ScDocument* pDoc ) const
 {
     nListCount = maPairs.size();
-    DBG_ASSERT( nListCount * sizeof(ScRangePairNameSort) <= (size_t)~0x1F,
+    OSL_ENSURE( nListCount * sizeof(ScRangePairNameSort) <= (size_t)~0x1F,
         "ScRangePairList::CreateNameSortedArray nListCount * sizeof(ScRangePairNameSort) > (size_t)~0x1F" );
     ScRangePairNameSort* pSortArray = (ScRangePairNameSort*)
         new sal_uInt8 [ nListCount * sizeof(ScRangePairNameSort) ];

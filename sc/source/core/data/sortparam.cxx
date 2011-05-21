@@ -37,8 +37,6 @@
 #include "queryparam.hxx"
 #include "subtotalparam.hxx"
 
-#include <tools/debug.hxx>
-
 
 //------------------------------------------------------------------------
 

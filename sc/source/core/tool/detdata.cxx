@@ -33,8 +33,6 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <tools/debug.hxx>
-
 #include "detdata.hxx"
 #include "refupdat.hxx"
 #include "rechead.hxx"

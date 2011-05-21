@@ -490,7 +490,7 @@ sal_Bool ScTable::ReplaceAll(const SvxSearchItem& rSearchItem, ScMarkData& rMark
                             String& rUndoStr, ScDocument* pUndoDoc)
 {
     sal_Bool bOldDouble = ScColumn::bDoubleAlloc;       // sollte immer sal_False sein?
-    DBG_ASSERT(!bOldDouble,"bDoubleAlloc ???");
+    OSL_ENSURE(!bOldDouble,"bDoubleAlloc ???");
     ScColumn::bDoubleAlloc = sal_True;                  // fuer Undo-Doc
 
     sal_Bool bFound = sal_True;
