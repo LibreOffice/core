@@ -179,6 +179,6 @@ $(BOOTSTRAPMK) : $(APP1TARGETN)
 .ELSE
 
 $(BOOTSTRAPMK) :
-    (echo '#include "macro.hxx"'; echo RTL_OS:=THIS_OS; echo RTL_ARCH:=THIS_ARCH) | $(CC) -E $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CDEFS) $(CFLAGSAPPEND) - | grep '^RTL_' >$@ 
+    (echo '#include "macro.hxx"'; echo RTL_OS:=THIS_OS; echo RTL_ARCH:=THIS_ARCH) | $(CC) -E $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CDEFS) $(CFLAGSAPPEND) - | grep '^RTL_' | sed -e 's/"//g' >$@ 
 
 .ENDIF
