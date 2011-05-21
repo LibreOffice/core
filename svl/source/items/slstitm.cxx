@@ -51,7 +51,7 @@ public:
 
             SfxImpStringList() { nRefCount = 1; }
             ~SfxImpStringList();
-    void    Sort( sal_Bool bAscending, List* );
+    void    Sort( sal_Bool bAscending);
 };
 
 //------------------------------------------------------------------------
@@ -70,9 +70,8 @@ SfxImpStringList::~SfxImpStringList()
 
 //------------------------------------------------------------------------
 
-void SfxImpStringList::Sort( sal_Bool bAscending, List* pParallelList )
+void SfxImpStringList::Sort( sal_Bool bAscending)
 {
-    DBG_ASSERT(!pParallelList || pParallelList->Count() >= aList.Count(),"Sort:ParallelList too small");
     sal_uLong nCount = aList.Count();
     if( nCount > 1 )
     {
@@ -102,13 +101,6 @@ void SfxImpStringList::Sort( sal_Bool bAscending, List* pParallelList )
                     bSwapped = sal_True;
                     aList.Replace( pStr1, nCur + 1 );
                     aList.Replace( pStr2, nCur );
-                    if( pParallelList )
-                    {
-                        void* p1 = pParallelList->GetObject( nCur );
-                        void* p2 = pParallelList->GetObject( nCur + 1 );
-                        pParallelList->Replace( p1, nCur + 1 );
-                        pParallelList->Replace( p2, nCur );
-                    }
                 }
             }
         }
@@ -355,11 +347,11 @@ int SfxStringListItem::IsPoolable() const
 
 //------------------------------------------------------------------------
 
-void SfxStringListItem::Sort( sal_Bool bAscending, List* pParallelList )
+void SfxStringListItem::Sort( sal_Bool bAscending)
 {
     DBG_ASSERT(GetRefCount()==0,"Sort:RefCount!=0");
     if( pImp )
-        pImp->Sort( bAscending, pParallelList );
+        pImp->Sort( bAscending);
 }
 
 //----------------------------------------------------------------------------

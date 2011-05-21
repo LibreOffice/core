@@ -75,7 +75,7 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create( SvStream &, sal_uInt16 nVersion ) const;
     virtual SvStream&       Store( SvStream &, sal_uInt16 nItemVersion ) const;
-    void                    Sort( sal_Bool bAscending = sal_True, List* pParallelList = 0 );
+    void                    Sort( sal_Bool bAscending = sal_True);
 
     virtual bool            PutValue  ( const com::sun::star::uno::Any& rVal,
                                          sal_uInt8 nMemberId = 0 );
