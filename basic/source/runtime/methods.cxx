@@ -98,7 +98,7 @@ using namespace com::sun::star::script;
 
 SbxVariable* getDefaultProp( SbxVariable* pRef );
 
-#if defined (WNT) || defined (OS2)
+#if defined (WNT)
 #include <direct.h>   // _getdcwd get current work directory, _chdrive
 #endif
 
@@ -415,7 +415,7 @@ RTLFUNC(CurDir)
     // DirEntry-Funktionalitaet keine Moeglichkeit besteht, das aktuelle so
     // zu ermitteln, dass eine virtuelle URL geliefert werden koennte.
 
-#if defined (WNT) || defined (OS2)
+#if defined (WNT)
     int nCurDir = 0;  // Current dir // JSM
     if ( rPar.Count() == 2 )
     {
@@ -438,10 +438,6 @@ RTLFUNC(CurDir)
         }
     }
     char* pBuffer = new char[ _MAX_PATH ];
-#ifdef OS2
-    if( !nCurDir )
-        nCurDir = _getdrive();
-#endif
     if ( _getdcwd( nCurDir, pBuffer, _MAX_PATH ) != 0 )
         rPar.Get(0)->PutString( String::CreateFromAscii( pBuffer ) );
     else

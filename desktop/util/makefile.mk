@@ -47,9 +47,6 @@ VERINFONAME=verinfo
 .IF "$(GUI)" == "WNT"
 RCFILES=verinfo.rc
 .ENDIF
-.IF "$(GUI)" == "OS2"
-RCFILES=ooverinfo2.rc
-.ENDIF
 
 # --- Linken der Applikation ---------------------------------------
 
@@ -63,7 +60,6 @@ RESLIB1SRSFILES=	$(SRS)$/desktop.srs
 
 .IF "$(L10N_framework)"==""
 .IF "$(LINK_SO)"=="TRUE"
-.IF "$(GUI)" != "OS2"
 APP1TARGET=so$/$(TARGET)
 APP1NOSAL=TRUE
 APP1RPATH=BRAND
@@ -79,8 +75,6 @@ APP1LINKRES=$(MISC)$/$(TARGET)1.res
 APP1STACK=10000000
 
 .ENDIF # WNT
-
-.ENDIF # "$(GUI)" != "OS2"
 
 .ENDIF # "$(LINK_SO)"=="TRUE"
 
@@ -103,14 +97,6 @@ APP5VERINFO=ooverinfo.rc
 APP5LINKRES=$(MISC)$/ooffice5.res
 APP5STACK=10000000
 .ENDIF # WNT
-
-.IF "$(GUI)" == "OS2"
-APP5DEF= # automatic
-APP5RES=    $(RES)$/oodesktop.res
-APP5ICON=$(SOLARRESDIR)$/icons/ooo-main-app.ico
-APP5VERINFO=ooverinfo2.rc
-APP5LINKRES=$(MISC)$/ooffice.res
-.ENDIF # OS2
 
 .IF "$(GUI)" == "WNT"
 .IF "$(LINK_SO)"=="TRUE"
@@ -179,14 +165,9 @@ ALLTAR: $(BIN)$/so$/$(TARGET).bin
 .ENDIF # "$(LINK_SO)"=="TRUE"
 .ENDIF # WNT
 
-.IF "$(GUI)" == "OS2"
-ALLTAR: $(BIN)$/$(TARGET).bin
-.ENDIF # OS2
-
 $(BIN)$/soffice_oo$(EXECPOST) : $(APP5TARGETN)
     $(COPY) $< $@
 
-.IF "$(GUI)" != "OS2"
 .IF "$(LINK_SO)"=="TRUE"
 $(BIN)$/so$/soffice_so$(EXECPOST) : $(APP1TARGETN)
     $(COPY) $< $@
@@ -194,7 +175,6 @@ $(BIN)$/so$/soffice_so$(EXECPOST) : $(APP1TARGETN)
 ALLTAR : $(BIN)$/so$/soffice_so$(EXECPOST)
 .ENDIF # "$(LINK_SO)"=="TRUE"
 ALLTAR : $(BIN)$/soffice_oo$(EXECPOST)
-.ENDIF
 
 .IF "$(OS)" == "MACOSX"
 .IF "$(LINK_SO)"=="TRUE"
@@ -246,11 +226,6 @@ $(BIN)$/so$/$(TARGET).bin: $(BIN)$/so$/$(TARGET)$(EXECPOST)
    $(COPY) $< $@
 
 .ENDIF # WNT
-
-.IF "$(GUI)" == "OS2"
-$(BIN)$/$(TARGET).bin: $(BIN)$/$(TARGET)$(EXECPOST)
-   $(COPY) $< $@
-.ENDIF # OS2
 
 $(MISC)$/binso_created.flg :
     @@-$(MKDIRHIER) $(BIN)$/so && $(TOUCH) $@

@@ -32,9 +32,7 @@
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #endif
-#ifndef OS2
 #include <windows.h>
-#endif
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif

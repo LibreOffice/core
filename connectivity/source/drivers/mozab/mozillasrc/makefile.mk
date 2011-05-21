@@ -44,7 +44,7 @@ VISIBILITY_HIDDEN=TRUE
 
 .INCLUDE : settings.mk
 
-.IF  ("$(SYSTEM_MOZILLA)" == "YES" && "$(WITH_MOZILLA)" == "YES") || "$(WITH_MOZILLA)" == "NO" || "$(OS)" == "OS2"
+.IF  ("$(SYSTEM_MOZILLA)" == "YES" && "$(WITH_MOZILLA)" == "YES") || "$(WITH_MOZILLA)" == "NO"
 dummy:
     @echo "		Not building the mozillasrc stuff in LibreOffice build"
     @echo "		dependency to Mozilla developer snapshots not feasable at the moment"

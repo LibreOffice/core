@@ -33,9 +33,7 @@
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #endif
-#ifndef OS2
 #include <windows.h>
-#endif
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
@@ -91,9 +89,7 @@ bool HasOnlySpaces(const std::wstring& String);
 std::wstring getShortPathName( const std::wstring& aLongName );
 
 
-#ifndef OS2
 LCID LocaleSetToLCID( const LocaleSet_t & Locale );
-#endif
 
 //----------------------------------------------------------
 #ifdef DEBUG

@@ -52,7 +52,7 @@ DEF1NAME = $(SHL1TARGET)
 
 ALLTAR: TEST
 
-.IF "$(OS)" == "OS2" || "$(OS)" == "WNT"
+.IF "$(OS)" == "WNT"
 MY_INI = .ini
 .ELSE
 MY_INI = rc

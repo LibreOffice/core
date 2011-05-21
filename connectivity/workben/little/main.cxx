@@ -55,7 +55,7 @@ using namespace cppu;
 using ::rtl::OUString;
 
 
-#if (defined UNX) || (defined OS2)
+#if (defined UNX)
 void main( int argc, char * argv[] )
 #else
 void _cdecl main( int argc, char * argv[] )

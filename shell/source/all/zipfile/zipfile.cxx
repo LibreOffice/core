@@ -38,12 +38,6 @@
 
 #include <string.h>
 
-#ifdef OS2
-#include <alloca.h>
-#define _alloca alloca
-#define ERROR_NOT_ENOUGH_MEMORY 8
-#endif
-
 namespace internal
 {
     /* for case in-sensitive string comparison */

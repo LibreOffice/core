@@ -41,12 +41,6 @@
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 
-#ifdef OS2
-#define INCL_DOS
-#define INCL_DOSPROCESS
-#include <svpm.h>
-#endif
-
 #ifndef CLK_TCK
 #define CLK_TCK CLOCKS_PER_SEC
 #endif
@@ -509,8 +503,6 @@ RTLFUNC(GetGUIType)
         // 17.7.2000 Make simple solution for testtool / fat office
 #if defined (WNT)
         rPar.Get(0)->PutInteger( 1 );
-#elif defined OS2
-        rPar.Get(0)->PutInteger( 2 );
 #elif defined UNX
         rPar.Get(0)->PutInteger( 4 );
 #else

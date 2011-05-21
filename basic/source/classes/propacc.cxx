@@ -54,7 +54,7 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
 #ifdef WNT
 #define CDECL _cdecl
 #endif
-#if defined(UNX) || defined(OS2)
+#if defined(UNX)
 #define CDECL
 #endif
 

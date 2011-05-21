@@ -634,7 +634,7 @@ void menuMain()
     PRINTSTR("4 Open OE Address Book\n")
     PRINTSTR("Please Input your choice:")
 }
-#if (defined UNX) || (defined OS2)
+#if (defined UNX)
 int main( int argc, char * argv[] )
 #else
 int _cdecl main( int argc, char * argv[] )

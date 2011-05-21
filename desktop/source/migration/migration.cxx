@@ -676,11 +676,6 @@ strings_vr MigrationImpl::compileFileList()
     strings_vr vrExclude;
     strings_vr vrTemp;
 
-#ifdef SAL_OS2
-    if (m_aInfo.userdata.getLength() == 0)
-        return vrResult;
-#endif
-
     // get a list of all files:
     strings_vr vrFiles = getAllFiles(m_aInfo.userdata);
 

@@ -31,10 +31,6 @@ PRJNAME=SV
 TARGET=svdem
 LIBTARGET=NO
 
-.IF "$(GUI)" == "OS2"
-TARGETTYPE=GUI
-.ENDIF
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	svpre.mk

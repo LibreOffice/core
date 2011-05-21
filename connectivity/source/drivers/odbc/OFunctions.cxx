@@ -123,24 +123,11 @@ sal_Bool LoadLibrary_ODBC3(::rtl::OUString &_rPath)
         _rPath = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("libodbc.so"));
  #endif   /* MACOSX */
 #endif
-#ifdef OS2
-    _rPath = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ODBC"));
-#endif
 
     if ( !pODBCso )
         pODBCso = osl_loadModule( _rPath.pData,SAL_LOADMODULE_NOW );
     if( !pODBCso)
-#ifdef OS2
-    {
-        delete pODBCso;
-        _rPath = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WOD402"));
-        pODBCso = osl_loadModule( _rPath.pData,SAL_LOADMODULE_NOW );
-        if( !pODBCso)
-            return sal_False;
-    }
-#else
         return sal_False;
-#endif
 
     return bLoaded = LoadFunctions(pODBCso);
 }

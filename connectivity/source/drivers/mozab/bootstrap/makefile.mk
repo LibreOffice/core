@@ -31,11 +31,6 @@ PRJINC=..$/..$/..
 PRJNAME=connectivity
 TARGET=mozbootstrap
 
-.IF "$(OS)" == "OS2"
-all: 
-    @echo "    Not building under OS/2"
-.ENDIF
-
 # --- Settings ----------------------------------
 
 USE_DEFFILE=TRUE

@@ -48,11 +48,6 @@ SLOFILES=$(SLO)$/recently_used_file.obj \
          $(SLO)$/recently_used_file_handler.obj
 
 SHL1TARGET=recentfile
-.IF "$(GUI)" == "OS2"
-SHL1IMPLIB=i$(TARGET)
-SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
-DEF1NAME=       $(SHL1TARGET)
-.ENDIF
 
 SHL1STDLIBS=$(EXPATASCII3RDLIB)\
     $(SALLIB)

@@ -251,11 +251,6 @@ $(eval $(call gb_Library_set_defs,sfx,\
 ))
 endif
 
-ifeq ($(OS),OS2)
-$(eval $(call gb_Library_add_exception_objects,sfx,\
-    sfx2/source/appl/shutdowniconOs2.ob \
-))
-endif
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_add_objcxxobjects,sfx,\
     sfx2/source/appl/shutdowniconaqua \

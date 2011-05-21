@@ -388,9 +388,7 @@ sal_Bool FirstStartWizard::onFinish()
     // return sal_True;
     if ( svt::RoadmapWizard::onFinish() )
     {
-#ifndef OS2 // cannot enable quickstart on first startup, see shutdownicon.cxx comments.
         enableQuickstart();
-#endif
         disableWizard();
         return sal_True;
     }

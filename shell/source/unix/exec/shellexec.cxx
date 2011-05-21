@@ -93,10 +93,8 @@ void escapeForShell( rtl::OStringBuffer & rBuffer, const rtl::OString & rURL)
     {
         // escape every non alpha numeric characters (excluding a few "known good") by prepending a '\'
         sal_Char c = rURL[n];
-#ifndef OS2 // YD shell does not support escaped chars
         if( ( c < 'A' || c > 'Z' ) && ( c < 'a' || c > 'z' ) && ( c < '0' || c > '9' )  && c != '/' && c != '.' )
             rBuffer.append( '\\' );
-#endif
 
         rBuffer.append( c );
     }
@@ -199,19 +197,6 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
                 OUString(RTL_CONSTASCII_USTRINGPARAM("Cound not convert executable path")),
                 static_cast < XSystemShellExecute * > (this), ENOENT );
         }
-
-#ifdef OS2
-        OStringBuffer aProg = OUStringToOString(aProgram, osl_getThreadTextEncoding());
-        aProg.append("open-url.exe");
-        OString aUrl = OUStringToOString(aURL, osl_getThreadTextEncoding());
-        if ( -1 == spawnl(P_NOWAIT, aProg.getStr(), aProg.getStr(), aUrl.getStr() , NULL) )
-        {
-            int nerr = errno;
-            throw SystemShellExecuteException(OUString::createFromAscii( strerror( nerr ) ),
-                static_cast < XSystemShellExecute * > (this), nerr );
-        }
-        return;
-#endif
 
         OString aTmp = OUStringToOString(aProgram, osl_getThreadTextEncoding());
         escapeForShell(aBuffer, aTmp);

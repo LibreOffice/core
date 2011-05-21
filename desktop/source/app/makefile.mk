@@ -47,13 +47,11 @@ CFLAGS+=-DGNOME_VFS_ENABLED
 # .ELSE
 # DEPLOYMENTMISCLIB = ideploymentmisc$(DLLPOSTFIX).lib
 # .ENDIF
-# .ELIF "$(OS)" == "OS2"
-# DEPLOYMENTMISCLIB = ideploymentmisc$(DLLPOSTFIX).lib
 # .ELSE
 # DEPLOYMENTMISCLIB = -ldeploymentmisc$(DLLPOSTFIX)
 # .ENDIF
 
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2" || "$(GUIBASE)"=="aqua" || "$(ENABLE_SYSTRAY_GTK)"=="TRUE"
+.IF "$(GUI)"=="WNT" || "$(GUIBASE)"=="aqua" || "$(ENABLE_SYSTRAY_GTK)"=="TRUE"
 CFLAGS+=-DENABLE_QUICKSTART_APPLET
 .ENDIF
 
@@ -102,11 +100,8 @@ DEF1NAME = $(SHL1TARGET)
 
 OBJFILES = \
     $(OBJ)$/copyright_ascii_ooo.obj \
-    $(OBJ)$/main.obj
-.IF "$(GUI)" != "OS2"
-OBJFILES += \
+    $(OBJ)$/main.obj \
     $(OBJ)$/copyright_ascii_sun.obj
-.ENDIF
 
 SLOFILES = $(SHL1OBJS)
 

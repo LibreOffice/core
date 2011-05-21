@@ -61,14 +61,6 @@
 
 //--------------------------------------------------------------------------
 
-#ifdef OS2
-#define ALLREADY_HAVE_OS2_TYPES
-#define DONT_TD_VOID
-#include <svpm.h>
-#include <odbc/sqlext.h>
-#define SDB_ODBC_CHAR UCHAR
-#endif // OS2
-
 #ifdef OS2__00
 
 #ifdef ODBCIMP

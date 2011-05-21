@@ -131,12 +131,6 @@
 #include "appbaslib.hxx"
 #include "appdata.hxx"
 
-#ifdef OS2
-#include <osl/file.hxx>
-#include <stdio.h>
-#include <sys/ea.h>
-#endif
-
 #include "../appl/app.hrc"
 
 extern sal_uInt32 CheckPasswd_Impl( SfxObjectShell*, SfxItemPool&, SfxMedium* );
@@ -1714,66 +1708,6 @@ sal_Bool SfxObjectShell::SaveTo_Impl
         catch( Exception& )
         {
         }
-
-#ifdef OS2
-        {
-#define CHAR_POINTER(THE_OUSTRING) ::rtl::OUStringToOString (THE_OUSTRING, RTL_TEXTENCODING_UTF8).pData->buffer
-            // Header for a single-valued ASCII EA data item
-            typedef struct _EA_ASCII_header {
-            sal_uInt16      usAttr;                 /* value: EAT_ASCII                        */
-            sal_uInt16      usLen;                  /* length of data                          */
-            CHAR        szType[_MAX_PATH];      /* ASCII data fits in here ...             */
-            } EA_ASCII_HEADER;
-            char   filePath[_MAX_PATH];
-            char   fileExt[_MAX_PATH];
-            char   docType[_MAX_PATH];
-            int    rc;
-            oslFileError eRet;
-            ::rtl::OUString aSystemFileURL;
-            const ::rtl::OUString aFileURL = rMedium.GetName();
-            // close medium
-            rMedium.Close();
-
-            // convert file URL to system path
-            if (osl::FileBase::getSystemPathFromFileURL( aFileURL, aSystemFileURL) == osl::FileBase::E_None) {
-            EA_ASCII_HEADER eaAscii;
-            struct _ea eaType;
-            strcpy( filePath, CHAR_POINTER( aSystemFileURL));
-            strcpy( docType, CHAR_POINTER( rMedium.GetFilter()->GetServiceName()));
-#if OSL_DEBUG_LEVEL > 1
-            printf( "file name: %s\n", filePath);
-            printf( "filter name: %s\n", CHAR_POINTER(rMedium.GetFilter()->GetFilterName()));
-            printf( "service name: %s\n", docType);
-#endif
-            // initialize OS/2 EA data structure
-            eaAscii.usAttr = EAT_ASCII;
-            _splitpath ( filePath, NULL, NULL, NULL, fileExt);
-            if (!stricmp( fileExt, ".pdf"))
-                strcpy( eaAscii.szType, "Acrobat Document");
-            else if (!strcmp( docType, "com.sun.star.text.TextDocument"))
-                strcpy( eaAscii.szType, "OpenOfficeOrg Writer Document");
-            else if (!strcmp( docType, "com.sun.star.sheet.SpreadsheetDocument"))
-                strcpy( eaAscii.szType, "OpenOfficeOrg Calc Document");
-            else if (!strcmp( docType, "com.sun.star.presentation.PresentationDocument"))
-                strcpy( eaAscii.szType, "OpenOfficeOrg Impress Document");
-            else if (!strcmp( docType, "com.sun.star.drawing.DrawingDocument"))
-                strcpy( eaAscii.szType, "OpenOfficeOrg Draw Document");
-            else
-                strcpy( eaAscii.szType, "OpenOfficeOrg Document");
-            eaAscii.usLen = strlen( eaAscii.szType);
-            // fill libc EA data structure
-            eaType.flags = 0;
-            eaType.size = sizeof(sal_uInt16)*2 + eaAscii.usLen;
-            eaType.value = &eaAscii;
-            // put EA to file
-            rc = _ea_put( &eaType, filePath, 0, ".TYPE");
-#if OSL_DEBUG_LEVEL > 1
-            printf( "ea name: %s, rc %d, errno %d\n", eaAscii.szType, rc, errno);
-#endif
-        }
-    }
-#endif
-
     }
 
     return bOk;

@@ -35,10 +35,6 @@ USE_PCH :=
 ENABLE_PCH :=
 PRJINC:=..$/..
 
-.IF "$(GUI)"=="OS2"
-TARGET = deplgui
-.ENDIF
-
 .INCLUDE : settings.mk
 .INCLUDE : $(PRJ)$/source$/deployment$/inc$/dp_misc.mk
 DLLPRE =

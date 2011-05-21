@@ -31,7 +31,7 @@ TARGET=mozab
 TARGET2=$(TARGET)drv
 VISIBILITY_HIDDEN=TRUE
 
-.IF ( "$(SYSTEM_MOZILLA)" == "YES" && "$(WITH_MOZILLA)" == "YES") || "$(WITH_MOZILLA)" == "NO" || ( "$(OS)" == "MACOSX" ) || ( "$(OS)" == "OS2" )
+.IF ( "$(SYSTEM_MOZILLA)" == "YES" && "$(WITH_MOZILLA)" == "YES") || "$(WITH_MOZILLA)" == "NO" || ( "$(OS)" == "MACOSX" )
 all: 
     @echo "    Not building the mozilla address book driver"
     @echo "    dependency to Mozilla developer snapshots not feasable at the moment"

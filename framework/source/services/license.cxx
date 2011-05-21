@@ -96,7 +96,7 @@ static const char *szLicensePath = "/share/readme";
 #ifdef UNX
 static const char *szUNXLicenseName = "/LICENSE";
 static const char *szUNXLicenseExt = "";
-#elif defined(WNT) || defined(OS2)
+#elif defined(WNT)
 static const char *szWNTLicenseName = "/license";
 static const char *szWNTLicenseExt = ".txt";
 #endif
@@ -279,7 +279,7 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
                 aLangString += aLocale.Variant;
             }
         }
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
         ::rtl::OUString aLicensePath =
             aBaseInstallPath + ::rtl::OUString::createFromAscii(szLicensePath)
             + ::rtl::OUString::createFromAscii(szWNTLicenseName)

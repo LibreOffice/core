@@ -329,7 +329,7 @@ namespace
     void    convertStringListToUrls( const String& _rColonSeparatedList, ::std::vector< String >& _rTokens, bool _bFinalSlash )
     {
         const sal_Unicode s_cSeparator =
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
             ';'
 #else
             ':'
@@ -369,7 +369,7 @@ namespace
         void operator()( String& _rURL )
         {
             INetURLObject aURL( _rURL );
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
             if ( aURL.getSegmentCount() > 1 )
 #endif
                 aURL.removeFinalSlash( );
@@ -2563,7 +2563,7 @@ sal_Bool SvtFileDialog::IsolateFilterFromPath_Impl( String& rPath, String& rFilt
         if ( nPathTokenPos == STRING_NOTFOUND )
         {
             String aDelim(
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
                     '\\'
 #else
                     '/'
@@ -2571,12 +2571,6 @@ sal_Bool SvtFileDialog::IsolateFilterFromPath_Impl( String& rPath, String& rFilt
             );
 
             nPathTokenPos = aReversePath.Search( aDelim );
-#if defined(OS2)
-            if ( nPathTokenPos == STRING_NOTFOUND )
-            {
-                nPathTokenPos = aReversePath.Search( '/' );
-            }
-#endif
 #if !defined( UNX )
             if ( nPathTokenPos == STRING_NOTFOUND )
             {

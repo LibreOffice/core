@@ -1593,11 +1593,7 @@ int SfxTabDialog::FillOutputItemSet()
 #ifdef WNT
 int __cdecl TabDlgCmpUS_Impl( const void* p1, const void* p2 )
 #else
-#if defined(OS2) && defined(ICC)
-int _Optlink TabDlgCmpUS_Impl( const void* p1, const void* p2 )
-#else
 extern "C" int TabDlgCmpUS_Impl( const void* p1, const void* p2 )
-#endif
 #endif
 
 /*  [Description]

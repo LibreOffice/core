@@ -32,10 +32,6 @@ TARGET = deployment
 ENABLE_EXCEPTIONS = TRUE
 NO_BSYMBOLIC = TRUE
 
-.IF "$(GUI)"=="OS2"
-TARGET = deploy
-.ENDIF
-
 .INCLUDE : settings.mk
 .INCLUDE : $(PRJ)$/source$/deployment$/inc$/dp_misc.mk
 
@@ -99,11 +95,7 @@ RESLIB1SRSFILES = \
         $(SRS)$/deployment_manager.srs \
     $(SRS)$/deployment_unopkg.srs
 
-.IF "$(GUI)"=="OS2"
-RESLIB1SRSFILES += $(SRS)$/deplmisc.srs
-.ELSE
 RESLIB1SRSFILES += $(SRS)$/deployment_misc.srs
-.ENDIF
 
 .INCLUDE : target.mk
 

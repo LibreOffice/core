@@ -465,7 +465,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
     {
         aIniName    = aIniName.copy( 0, lastIndex+1 );
         aIniName    += OUString( RTL_CONSTASCII_USTRINGPARAM( "perftune" ));
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
         aIniName    += OUString( RTL_CONSTASCII_USTRINGPARAM( ".ini" ));
 #else
         aIniName    += OUString( RTL_CONSTASCII_USTRINGPARAM( "rc" ));
@@ -836,8 +836,6 @@ void SAL_CALL OfficeIPCThread::run()
                     aHelpURLBuffer.appendAscii("&System=UNX");
 #elif defined WNT
                     aHelpURLBuffer.appendAscii("&System=WIN");
-#elif defined OS2
-                    aHelpURLBuffer.appendAscii("&System=OS2");
 #endif
                     ApplicationEvent* pAppEvent =
                         new ApplicationEvent( aEmpty, aEmpty,

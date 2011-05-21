@@ -90,7 +90,7 @@ sal_Bool FileMove_Impl( const String & rFile1, const String & rFile2, sal_Bool b
     return 0 == aF2.Kill();
 }
 
-#if defined( UNX ) || defined (__MINGW32__) || defined( OS2 )
+#if defined( UNX ) || defined (__MINGW32__)
 int main ( int argc, char ** argv)
 {
 #else

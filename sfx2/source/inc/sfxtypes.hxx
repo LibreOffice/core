@@ -104,7 +104,7 @@ String SfxShellIdent_Impl( const SfxShell *pSh );
 
 //------------------------------------------------------------------------
 
-#if defined(DBG_UTIL) && ( defined(WNT) || defined(OS2) )
+#if defined(DBG_UTIL) && defined(WNT)
 
 class SfxStack
 {

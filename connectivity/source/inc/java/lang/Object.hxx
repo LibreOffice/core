@@ -42,11 +42,6 @@
 
 #ifdef HAVE_64BIT_POINTERS
 #error "no 64 bit pointer"
-#else
-#ifdef OS2
-#define PVOID_TO_INT64(x) (jlong)(sal_Int32)x
-#define INT64_TO_PVOID(x) (void *)x
-#endif // OS2
 #endif //HAVE_64BIT_POINTERS
 
 namespace comphelper

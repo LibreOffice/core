@@ -47,23 +47,6 @@ SCRIPTFILES = \
     $(BIN)$/gnome-open-url \
     $(BIN)$/kde-open-url
 
-.IF "$(GUI)" == "OS2"
-
-APP1TARGET = open-url
-APP1OBJS = \
-    $(OBJ)$/open-url.obj \
-    open-url.def
-APP1LIBS =
-
-APP2TARGET = senddoc
-APP2OBJS = \
-    $(OBJ)$/senddoc.obj \
-    senddoc.def
-APP2LIBS =
-APP2STDLIBS =
-
-.ELSE
-
 APP1TARGET = gnome-open-url.bin
 APP1OBJS = \
     $(OBJ)$/gnome-open-url.obj
@@ -79,7 +62,6 @@ APP2LIBS =
 APP2STDLIBS =
 
 OBJFILES = $(APP1OBJS) $(APP2OBJS)
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 

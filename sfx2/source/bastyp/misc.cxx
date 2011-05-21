@@ -33,7 +33,7 @@
 
 //--------------------------------------------------------------------
 
-#if defined(DBG_UTIL) && ( defined(WNT) || defined(OS2) )
+#if defined(DBG_UTIL) && defined(WNT)
 unsigned SfxStack::nLevel = 0;
 #endif
 

@@ -110,12 +110,6 @@ SHL1STDLIBS+=\
     $(OLEAUT32LIB)
 
 DEF1EXPORTFILE=	exports.dxp
-.ELIF "$(GUI)"=="OS2"
-
-SHL1STDLIBS+=\
-    iembobj.lib
-
-DEF1EXPORTFILE=	exports.dxp
 
 .ENDIF
 

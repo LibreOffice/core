@@ -42,12 +42,6 @@
 #include <vector>
 #include <map>
 
-#ifdef XP_OS2
-#define INCL_DOSERRORS
-#define INCL_DOSFILEMGR
-#include <os2.h>
-#endif
-
 using namespace com::sun::star::mozilla;
 class nsProfile;
 namespace connectivity

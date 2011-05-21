@@ -990,11 +990,7 @@ void SfxSingleTabDialog::SetInfoLink( const Link& rLink )
 #ifdef WNT
 int __cdecl BaseDlgsCmpUS_Impl( const void* p1, const void* p2 )
 #else
-#if defined(OS2) && defined(ICC)
-int _Optlink BaseDlgsCmpUS_Impl(        const void* p1, const void* p2 )
-#else
 extern "C" int BaseDlgsCmpUS_Impl( const void* p1, const void* p2 )
-#endif
 #endif
 {
     return *(sal_uInt16*)p1 - *(sal_uInt16*)p2;
