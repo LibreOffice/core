@@ -158,15 +158,18 @@ void ListToStrArr_Impl( sal_uInt16 nId, SvStringsDtor& rStrLst, ComboBox& rCBox 
 {
     SfxStringListItem* pSrchItem =
         (SfxStringListItem*)SFX_APP()->GetItem( nId );
-    List* pLst = pSrchItem ? pSrchItem->GetList() : 0;
 
-    if ( pLst )
-        for ( sal_uInt16 i = 0; i < pLst->Count(); ++i )
+    if (pSrchItem)
+    {
+        std::vector<String> aLst = pSrchItem->GetList();
+
+        for ( sal_uInt16 i = 0; i < aLst.size(); ++i )
         {
-            String* pTmp = new String( *(String*)( pLst->GetObject(i) ) );
+            String* pTmp = new String(aLst[i]);
             rStrLst.Insert( pTmp, rStrLst.Count() );
             rCBox.InsertEntry( *pTmp );
         }
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -174,10 +177,10 @@ void ListToStrArr_Impl( sal_uInt16 nId, SvStringsDtor& rStrLst, ComboBox& rCBox 
 void StrArrToList_Impl( sal_uInt16 nId, const SvStringsDtor& rStrLst )
 {
     DBG_ASSERT( rStrLst.Count(), "check in advance");
-    List aLst;
+    std::vector<String> aLst;
 
     for ( sal_uInt16 i = 0; i < rStrLst.Count(); ++i )
-        aLst.Insert( rStrLst[ i ], LIST_APPEND );
+        aLst.push_back( *rStrLst[ i ]);
 
     SFX_APP()->PutItem( SfxStringListItem( nId, &aLst ) );
 }
