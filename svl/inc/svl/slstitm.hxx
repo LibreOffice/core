@@ -52,8 +52,7 @@ public:
 
     List *                  GetList();
 
-    const List *            GetList() const
-    { return SAL_CONST_CAST(SfxStringListItem *, this)->GetList(); }
+    const List *            GetList() const;
 
 #ifndef TF_POOLABLE
     virtual int             IsPoolable() const;

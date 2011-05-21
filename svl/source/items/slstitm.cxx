@@ -198,6 +198,11 @@ List* SfxStringListItem::GetList()
     return &(pImp->aList);
 }
 
+const List* SfxStringListItem::GetList () const
+{
+    return SAL_CONST_CAST(SfxStringListItem *, this)->GetList();
+}
+
 //------------------------------------------------------------------------
 
 int SfxStringListItem::operator==( const SfxPoolItem& rItem ) const
