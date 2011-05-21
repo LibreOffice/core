@@ -492,7 +492,7 @@
 +#endif
 --- misc/neon-0.29.5/src/makefile.mk	2011-02-03 10:32:38.000000000 +0100
 +++ misc/build/neon-0.29.5/src/makefile.mk	2011-02-03 10:26:19.000000000 +0100
-@@ -1,1 +1,99 @@
+@@ -1,1 +1,96 @@
 -dummy
 +PRJ=..$/..$/..$/..$/..
 +
@@ -578,9 +578,6 @@
 +	.IF "$(OS)"=="SOLARIS"
 +		SHL1STDLIBS+= -lnsl -lsocket -ldl
 +	.ENDIF # SOLARIS
-+	.IF "$(OS)"=="OS2"
-+		SHL1STDLIBS+= pthread.lib libz.lib
-+	.ENDIF # OS2
 +	.IF "$(SYSTEM_OPENSSL)"=="YES"
 +		SHL1STDLIBS+= $(OPENSSLLIB)
 +	.ELSE

@@ -135,19 +135,6 @@ OUT2LIB=$(BUILD_DIR)$/libcurl.lib
 .ENDIF
 .ENDIF			# "$(GUI)"=="WNT"
 
-.IF "$(GUI)"=="OS2"
-BUILD_DIR=.$/lib
-.IF "$(debug)"==""
-BUILD_ACTION=make -f Makefile.os2
-.ELSE
-BUILD_ACTION=make -f Makefile.os2
-.ENDIF
-
-OUT2BIN=$(BUILD_DIR)$/libcurl.dll
-OUT2LIB=$(BUILD_DIR)$/libcurl.lib
-
-.ENDIF			# "$(GUI)"=="OS2"
-
 OUT2INC= \
     include$/curl$/easy.h  			\
     include$/curl$/multi.h  		\
