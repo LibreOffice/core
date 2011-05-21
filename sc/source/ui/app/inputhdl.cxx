@@ -1335,7 +1335,7 @@ void ScInputHandler::PasteManualTip()
 
         ESelection aSel = pActiveView->GetSelection();
         aSel.Adjust();
-        DBG_ASSERT( !aSel.nStartPara && !aSel.nEndPara, "Zuviele Absaetze in Formel" );
+        OSL_ENSURE( !aSel.nStartPara && !aSel.nEndPara, "Zuviele Absaetze in Formel" );
         if ( !aSel.nStartPos )  // Selektion ab Anfang?
         {
             if ( aSel.nEndPos == pEngine->GetTextLen(0) )
@@ -1418,7 +1418,7 @@ void ScInputHandler::SkipClosingPar()
             pTableView->SetSelection( aSel );
     }
 
-    DBG_ASSERT(nAutoPar, "SkipClosingPar: count is wrong");
+    OSL_ENSURE(nAutoPar, "SkipClosingPar: count is wrong");
     --nAutoPar;
 }
 
@@ -2002,7 +2002,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
 
 void lcl_SetTopSelection( EditView* pEditView, ESelection& rSel )
 {
-    DBG_ASSERT( rSel.nStartPara==0 && rSel.nEndPara==0, "SetTopSelection: Para != 0" );
+    OSL_ENSURE( rSel.nStartPara==0 && rSel.nEndPara==0, "SetTopSelection: Para != 0" );
 
     EditEngine* pEngine = pEditView->GetEditEngine();
     sal_uInt16 nCount = pEngine->GetParagraphCount();
@@ -2851,7 +2851,7 @@ void ScInputHandler::SetReference( const ScRange& rRef, ScDocument* pDoc )
     {
         //  Referenz auf anderes Dokument
 
-        DBG_ASSERT(rRef.aStart.Tab()==rRef.aEnd.Tab(), "nStartTab!=nEndTab");
+        OSL_ENSURE(rRef.aStart.Tab()==rRef.aEnd.Tab(), "nStartTab!=nEndTab");
 
         String aTmp;
         rRef.Format( aTmp, SCA_VALID|SCA_TAB_3D, pDoc, aAddrDetails );      // immer 3d
@@ -3728,7 +3728,7 @@ void ScInputHandler::InputReplaceSelection( const String& rStr )
     if (!pRefViewSh)
         pRefViewSh = pActiveViewSh;
 
-    DBG_ASSERT(nFormSelEnd>=nFormSelStart,"Selektion kaputt...");
+    OSL_ENSURE(nFormSelEnd>=nFormSelStart,"Selektion kaputt...");
 
     xub_StrLen nOldLen = nFormSelEnd-nFormSelStart;
     xub_StrLen nNewLen = rStr.Len();

@@ -189,7 +189,7 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
 
 ScModule::~ScModule()
 {
-    DBG_ASSERT( !pSelTransfer, "Selection Transfer object not deleted" );
+    OSL_ENSURE( !pSelTransfer, "Selection Transfer object not deleted" );
 
     //  InputHandler braucht nicht mehr geloescht zu werden (gibt keinen an der App mehr)
 
@@ -481,7 +481,7 @@ void ScModule::Execute( SfxRequest& rReq )
             if (pReqArgs)
             {
                 const SfxUInt16Item& rItem = (const SfxUInt16Item&)pReqArgs->Get(SID_PSZ_FUNCTION);
-                DBG_ASSERT(rItem.ISA(SfxUInt16Item),"falscher Parameter");
+                OSL_ENSURE(rItem.ISA(SfxUInt16Item),"falscher Parameter");
 
                 ScAppOptions aNewOpts( GetAppOptions() );
                 aNewOpts.SetStatusFunc( rItem.GetValue() );
@@ -692,7 +692,7 @@ void ScModule::SetDragJump( ScDocument* pLocalDoc, const String& rTarget, const 
 
 void ScModule::SetClipObject( ScTransferObj* pCellObj, ScDrawTransferObj* pDrawObj )
 {
-    DBG_ASSERT( !pCellObj || !pDrawObj, "SetClipObject: not allowed to set both objects" );
+    OSL_ENSURE( !pCellObj || !pDrawObj, "SetClipObject: not allowed to set both objects" );
 
     aClipData.pCellClipboard = pCellObj;
     aClipData.pDrawClipboard = pDrawObj;
@@ -957,11 +957,11 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 
     if (!pAppCfg)
         GetAppOptions();
-    DBG_ASSERT( pAppCfg, "AppOptions not initialised :-(" );
+    OSL_ENSURE( pAppCfg, "AppOptions not initialised :-(" );
 
     if (!pInputCfg)
         GetInputOptions();
-    DBG_ASSERT( pInputCfg, "InputOptions not initialised :-(" );
+    OSL_ENSURE( pInputCfg, "InputOptions not initialised :-(" );
 
     //--------------------------------------------------------------
 
@@ -1352,7 +1352,7 @@ ScInputHandler* ScModule::GetInputHdl( ScTabViewShell* pViewSh, sal_Bool bUseRef
         pHdl = pViewSh->GetInputHandler();      // Viewshell hat jetzt immer einen
 
     //  wenn keine ViewShell uebergeben oder aktiv, kann NULL herauskommen
-    DBG_ASSERT( pHdl || !pViewSh, "GetInputHdl: kein InputHandler gefunden" );
+    OSL_ENSURE( pHdl || !pViewSh, "GetInputHdl: kein InputHandler gefunden" );
     return pHdl;
 }
 
@@ -1711,7 +1711,7 @@ void ScModule::SetReference( const ScRange& rRef, ScDocument* pDoc,
     if( nCurRefDlgId )
     {
         SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
-        DBG_ASSERT( pChildWnd, "NoChildWin" );
+        OSL_ENSURE( pChildWnd, "NoChildWin" );
         if ( pChildWnd )
         {
             if ( nCurRefDlgId == SID_OPENDLG_CONSOLIDATE && pMarkData )
@@ -1751,7 +1751,7 @@ void ScModule::AddRefEntry()                        // "Mehrfachselektion"
     if ( nCurRefDlgId )
     {
         SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
-        DBG_ASSERT( pChildWnd, "NoChildWin" );
+        OSL_ENSURE( pChildWnd, "NoChildWin" );
         if ( pChildWnd )
         {
             IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
@@ -1778,7 +1778,7 @@ void ScModule::EndReference()
     if ( nCurRefDlgId )
     {
         SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
-        DBG_ASSERT( pChildWnd, "NoChildWin" );
+        OSL_ENSURE( pChildWnd, "NoChildWin" );
         if ( pChildWnd )
         {
             IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
@@ -1994,7 +1994,7 @@ SfxTabPage*  ScModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const Sfx
 {
     SfxTabPage* pRet = NULL;
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
     switch(nId)
     {
         case SID_SC_TP_LAYOUT:
@@ -2066,7 +2066,7 @@ SfxTabPage*  ScModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const Sfx
         }
     }
 
-    DBG_ASSERT( pRet, "ScModule::CreateTabPage(): no valid ID for TabPage!" );
+    OSL_ENSURE( pRet, "ScModule::CreateTabPage(): no valid ID for TabPage!" );
 
     return pRet;
 }

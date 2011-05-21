@@ -1056,7 +1056,7 @@ void ScCellTextData::UpdateData()
 {
     if ( bDoUpdate )
     {
-        DBG_ASSERT(pEditEngine != NULL, "no EditEngine for UpdateData()");
+        OSL_ENSURE(pEditEngine != NULL, "no EditEngine for UpdateData()");
         if ( pDocShell && pEditEngine )
         {
             //  during the own UpdateData call, bDataValid must not be reset,

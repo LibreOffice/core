@@ -487,7 +487,7 @@ void ScTabView::TestHintWindow()
     if ( pItem->GetValue() )
     {
         const ScValidationData* pData = pDoc->GetValidationEntry( pItem->GetValue() );
-        DBG_ASSERT(pData,"ValidationData nicht gefunden");
+        OSL_ENSURE(pData,"ValidationData nicht gefunden");
         String aTitle, aMessage;
         if ( pData && pData->GetInput( aTitle, aMessage ) && aMessage.Len() > 0 )
         {
@@ -1396,7 +1396,7 @@ void ScTabView::MarkDataChanged()
 void ScTabView::SelectNextTab( short nDir, sal_Bool bExtendSelection )
 {
     if (!nDir) return;
-    DBG_ASSERT( nDir==-1 || nDir==1, "SelectNextTab: falscher Wert");
+    OSL_ENSURE( nDir==-1 || nDir==1, "SelectNextTab: falscher Wert");
 
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB nTab = aViewData.GetTabNo();
@@ -2312,7 +2312,7 @@ void ScTabView::ActivateView( sal_Bool bActivate, sal_Bool bFirst )
         if ( bFirst )
         {
             ScSplitPos eWin = aViewData.GetActivePart();
-            DBG_ASSERT( pGridWin[eWin], "rottes Dokument, nicht alle SplitPos in GridWin" );
+            OSL_ENSURE( pGridWin[eWin], "rottes Dokument, nicht alle SplitPos in GridWin" );
             if ( !pGridWin[eWin] )
             {
                 eWin = SC_SPLIT_BOTTOMLEFT;
@@ -2327,7 +2327,7 @@ void ScTabView::ActivateView( sal_Bool bActivate, sal_Bool bFirst )
                             break;  // for
                         }
                     }
-                    DBG_ASSERT( i<4, "und BUMM" );
+                    OSL_ENSURE( i<4, "und BUMM" );
                 }
                 aViewData.SetActivePart( eWin );
             }

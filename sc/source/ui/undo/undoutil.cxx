@@ -101,7 +101,7 @@ ScDBData* ScUndoUtil::GetOldDBData( ScDBData* pUndoData, ScDocument* pDoc, SCTAB
             if (aName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME)))
                 bWasTemp = true;
         }
-        DBG_ASSERT(bWasTemp, "Undo: didn't find database range");
+        OSL_ENSURE(bWasTemp, "Undo: didn't find database range");
         (void)bWasTemp;
         pRet = pDoc->GetAnonymousDBData(nTab);
         if (!pRet)

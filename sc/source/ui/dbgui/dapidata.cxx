@@ -35,7 +35,6 @@
 
 //------------------------------------------------------------------
 
-#include <tools/debug.hxx>
 #include <vcl/waitobj.hxx>
 #include <comphelper/processfactory.hxx>
 
@@ -221,7 +220,7 @@ void ScDataPilotDatabaseDlg::FillObjects()
     catch(uno::Exception&)
     {
         //  this may happen if an invalid database is selected -> no DBG_ERROR
-        DBG_WARNING("exception in database");
+        OSL_FAIL("exception in database");
     }
 }
 

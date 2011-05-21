@@ -443,7 +443,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         //  vorneweg testen, ob der Prefix als gueltig erkannt wird
                         //  wenn nicht, nur doppelte vermeiden
                         sal_Bool bPrefix = pDoc->ValidTabName( aBaseName );
-                        DBG_ASSERT(bPrefix, "ungueltiger Tabellenname");
+                        OSL_ENSURE(bPrefix, "ungueltiger Tabellenname");
 
                         while ( pDoc->IsScenario(nTab+i) )
                             i++;
@@ -483,10 +483,10 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         {
                             sal_Bool bSheetProtected = pDoc->IsTabProtected(nTab);
                             ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                            DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+                            OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                             AbstractScNewScenarioDlg* pNewDlg = pFact->CreateScNewScenarioDlg( pTabViewShell->GetDialogParent(), aName, RID_SCDLG_NEWSCENARIO, false,bSheetProtected);
-                            DBG_ASSERT(pNewDlg, "Dialog create fail!");
+                            OSL_ENSURE(pNewDlg, "Dialog create fail!");
                             if ( pNewDlg->Execute() == RET_OK )
                             {
                                 pNewDlg->GetScenarioData( aName, aComment, aColor, nFlags );
@@ -537,7 +537,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                                                 GetRowHeight( pData->GetCurY(),
                                                               pData->GetTabNo() );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+                    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                     AbstractScMetricInputDlg* pDlg = pFact->CreateScMetricInputDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_ROW_MAN,
                                                                                     nCurHeight,
@@ -546,7 +546,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                                                                                     eMetric,
                                                                                     2,
                                                                                     MAX_COL_HEIGHT);
-                    DBG_ASSERT(pDlg, "Dialog create fail!");
+                    OSL_ENSURE(pDlg, "Dialog create fail!");
 
                     if ( pDlg->Execute() == RET_OK )
                     {
@@ -582,7 +582,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     FieldUnit eMetric = SC_MOD()->GetAppOptions().GetAppMetric();
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+                    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                     AbstractScMetricInputDlg* pDlg = pFact->CreateScMetricInputDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_ROW_OPT,
                                                                                     ScGlobal::nLastRowHeightExtra,
@@ -591,7 +591,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                                                                                     eMetric,
                                                                                     1,
                                                                                     MAX_EXTRA_HEIGHT);
-                    DBG_ASSERT(pDlg, "Dialog create fail!");
+                    OSL_ENSURE(pDlg, "Dialog create fail!");
 
                     if ( pDlg->Execute() == RET_OK )
                     {
@@ -629,7 +629,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                                                 GetColWidth( pData->GetCurX(),
                                                              pData->GetTabNo() );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+                    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                     AbstractScMetricInputDlg* pDlg = pFact->CreateScMetricInputDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_COL_MAN,
                                                                                     nCurHeight,
@@ -638,7 +638,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                                                                                     eMetric,
                                                                                     2,
                                                                                     MAX_COL_WIDTH);
-                    DBG_ASSERT(pDlg, "Dialog create fail!");
+                    OSL_ENSURE(pDlg, "Dialog create fail!");
 
                     if ( pDlg->Execute() == RET_OK )
                     {
@@ -674,7 +674,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     FieldUnit eMetric = SC_MOD()->GetAppOptions().GetAppMetric();
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+                    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                     AbstractScMetricInputDlg* pDlg = pFact->CreateScMetricInputDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_COL_OPT,
                                                                                     ScGlobal::nLastColWidthExtra,
@@ -683,7 +683,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                                                                                     eMetric,
                                                                                     1,
                                                                                     MAX_EXTRA_WIDTH);
-                    DBG_ASSERT(pDlg, "Dialog create fail!");
+                    OSL_ENSURE(pDlg, "Dialog create fail!");
                     if ( pDlg->Execute() == RET_OK )
                     {
                         long nVal = pDlg->GetInputValue();
@@ -767,7 +767,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     if ( pReqArgs &&
                         pReqArgs->GetItemState(nSlot, sal_True, &pItem) == SFX_ITEM_SET )
                     {
-                        DBG_ASSERT(pItem && pItem->ISA(SfxBoolItem), "falsches Item");
+                        OSL_ENSURE(pItem && pItem->ISA(SfxBoolItem), "falsches Item");
                         bMoveContents = ((const SfxBoolItem*)pItem)->GetValue();
                     }
 
@@ -829,10 +829,10 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         ScGlobal::ClearAutoFormat();
                         ScAutoFormatData* pNewEntry = pTabViewShell->CreateAutoFormatData();
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+                        OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                         AbstractScAutoFormatDlg* pDlg = pFact->CreateScAutoFormatDlg( pDlgParent, ScGlobal::GetAutoFormat(), pNewEntry,GetViewData()->GetDocument(), RID_SCDLG_AUTOFORMAT );
-                        DBG_ASSERT(pDlg, "Dialog create fail!");
+                        OSL_ENSURE(pDlg, "Dialog create fail!");
 
                         if ( pDlg->Execute() == RET_OK )
                         {

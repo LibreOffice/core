@@ -158,7 +158,7 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
             if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
             {
                 uno::Reference<awt::XControlModel> xControlModel = pUnoCtrl->GetUnoControlModel();
-                DBG_ASSERT( xControlModel.is(), "uno control without model" );
+                OSL_ENSURE( xControlModel.is(), "uno control without model" );
                 if ( xControlModel.is() )
                 {
                     uno::Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY );
@@ -434,7 +434,7 @@ sal_Bool ScDrawTransferObj::GetData( const ::com::sun::star::datatransfer::DataF
             // SdrExchangeView aView( pModel );
             SdrView aView( pModel );
             SdrPageView* pPv = aView.ShowSdrPage(aView.GetModel()->GetPage(0));
-            DBG_ASSERT( pPv, "pPv not there..." );
+            OSL_ENSURE( pPv, "pPv not there..." );
             aView.MarkAllObj( pPv );
             if ( nFormat == SOT_FORMAT_GDIMETAFILE )
                 bOK = SetGDIMetaFile( aView.GetAllMarkedMetaFile( sal_True ), rFlavor );
@@ -504,7 +504,7 @@ sal_Bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
                 const SvxFontHeightItem& rDefaultFontHeight = (const SvxFontHeightItem&)rItemPool.GetDefaultItem(EE_CHAR_FONTHEIGHT);
 
                 // SW should have no MasterPages
-                DBG_ASSERT(0L == pModel->GetMasterPageCount(), "SW with MasterPages (!)");
+                OSL_ENSURE(0L == pModel->GetMasterPageCount(), "SW with MasterPages (!)");
 
                 for(sal_uInt16 a(0); a < pModel->GetPageCount(); a++)
                 {
@@ -665,7 +665,7 @@ void lcl_InitMarks( SdrMarkView& rDest, const SdrMarkView& rSource, SCTAB nTab )
 {
     rDest.ShowSdrPage(rDest.GetModel()->GetPage(nTab));
     SdrPageView* pDestPV = rDest.GetSdrPageView();
-    DBG_ASSERT(pDestPV,"PageView ?");
+    OSL_ENSURE(pDestPV,"PageView ?");
 
     const SdrMarkList& rMarkList = rSource.GetMarkedObjectList();
     sal_uLong nCount = rMarkList.GetMarkCount();

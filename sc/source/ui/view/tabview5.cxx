@@ -214,7 +214,7 @@ void ScTabView::MakeDrawView( sal_uInt8 nForceDesignMode )
     if (!pDrawView)
     {
         ScDrawLayer* pLayer = aViewData.GetDocument()->GetDrawLayer();
-        DBG_ASSERT(pLayer, "wo ist der Draw Layer ??");
+        OSL_ENSURE(pLayer, "wo ist der Draw Layer ??");
 
         sal_uInt16 i;
         pDrawView = new ScDrawView( pGridWin[SC_SPLIT_BOTTOMLEFT], &aViewData );

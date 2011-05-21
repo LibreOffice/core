@@ -1138,7 +1138,7 @@ ScUndoRemoveLink::ScUndoRemoveLink( ScDocShell* pShell, const String& rDoc ) :
                 }
                 else
                 {
-                    DBG_ASSERT(aFltName == pDoc->GetLinkFlt(i) &&
+                    OSL_ENSURE(aFltName == pDoc->GetLinkFlt(i) &&
                                aOptions == pDoc->GetLinkOpt(i),
                                     "verschiedene Filter fuer ein Dokument?");
                 }
@@ -1571,7 +1571,7 @@ SdrObject* ScUndoRenameObject::GetObject()
         for (sal_uInt16 nTab=0; nTab<nCount; nTab++)
         {
             SdrPage* pPage = pDrawLayer->GetPage(nTab);
-            DBG_ASSERT(pPage,"Page ?");
+            OSL_ENSURE(pPage,"Page ?");
 
             SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
             SdrObject* pObject = aIter.Next();

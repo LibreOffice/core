@@ -31,7 +31,6 @@
 #include "DrawModelBroadcaster.hxx"
 #include <svx/svdmodel.hxx>
 #include <svx/unomod.hxx>
-#include <tools/debug.hxx>
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star;

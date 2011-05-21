@@ -77,7 +77,7 @@ void ScZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState
     sal_uInt16                  nId  = GetId();
     ToolBox&                rTbx = GetToolBox();
     ScZoomSliderWnd*        pBox = (ScZoomSliderWnd*)(rTbx.GetItemWindow( nId ));
-    DBG_ASSERT( pBox ,"Control not found!" );
+    OSL_ENSURE( pBox ,"Control not found!" );
 
     if ( SFX_ITEM_AVAILABLE != eState || pState->ISA( SfxVoidItem ) )
     {
@@ -88,10 +88,10 @@ void ScZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState
     else
     {
         pBox->Enable();
-        DBG_ASSERT( pState->ISA( SvxZoomSliderItem ), "invalid item type" );
+        OSL_ENSURE( pState->ISA( SvxZoomSliderItem ), "invalid item type" );
         const SvxZoomSliderItem* pZoomSliderItem = dynamic_cast< const SvxZoomSliderItem* >( pState );
 
-        DBG_ASSERT( pZoomSliderItem, "Sc::ScZoomSliderControl::StateChanged(), wrong item type!" );
+        OSL_ENSURE( pZoomSliderItem, "Sc::ScZoomSliderControl::StateChanged(), wrong item type!" );
         if( pZoomSliderItem )
             pBox->UpdateFromItem( pZoomSliderItem );
     }
@@ -380,7 +380,7 @@ void ScZoomSliderWnd::UpdateFromItem( const SvxZoomSliderItem* pZoomSliderItem )
         mpImpl->mnMinZoom     = pZoomSliderItem->GetMinZoom();
         mpImpl->mnMaxZoom     = pZoomSliderItem->GetMaxZoom();
 
-        DBG_ASSERT( mpImpl->mnMinZoom <= mpImpl->mnCurrentZoom &&
+        OSL_ENSURE( mpImpl->mnMinZoom <= mpImpl->mnCurrentZoom &&
             mpImpl->mnMinZoom <  mpImpl->mnSliderCenter &&
             mpImpl->mnMaxZoom >= mpImpl->mnCurrentZoom &&
             mpImpl->mnMaxZoom > mpImpl->mnSliderCenter,

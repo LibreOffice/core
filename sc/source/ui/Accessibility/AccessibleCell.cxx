@@ -51,7 +51,6 @@
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 #include <rtl/uuid.h>
-#include <tools/debug.hxx>
 #include <editeng/brshitem.hxx>
 #include <comphelper/sequence.hxx>
 #include <float.h>
@@ -444,7 +443,7 @@ void ScAccessibleCell::AddRelation(const ScRange& rRange,
                     ++nPos;
                 }
             }
-            DBG_ASSERT(nCount == nPos, "something wents wrong");
+            OSL_ENSURE(nCount == nPos, "something wents wrong");
         }
         AccessibleRelation aRelation;
         aRelation.RelationType = aRelationType;

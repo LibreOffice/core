@@ -229,7 +229,7 @@ const uno::Sequence<beans::PropertyValue>& ScSolverOptionsDialog::GetProperties(
     }
     else
     {
-        DBG_ERRORFILE( "wrong count" );
+        OSL_FAIL( "wrong count" );
     }
 
     return maProperties;

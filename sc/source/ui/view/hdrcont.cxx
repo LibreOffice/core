@@ -110,7 +110,7 @@ ScHeaderControl::ScHeaderControl( Window* pParent, SelectionEngine* pSelectionEn
 
 void ScHeaderControl::SetWidth( long nNew )
 {
-    DBG_ASSERT( bVertical, "SetDigits nur fuer Zeilenkoepfe erlaubt" );
+    OSL_ENSURE( bVertical, "SetDigits nur fuer Zeilenkoepfe erlaubt" );
     if ( nNew != nWidth )
     {
         Size aSize( nNew, GetSizePixel().Height() );    // Hoehe nicht aendern

@@ -33,7 +33,6 @@
 
 #include "scitems.hxx"
 #include <editeng/memberids.hrc>
-#include <tools/debug.hxx>
 #include <tools/shl.hxx>
 #include <svl/poolitem.hxx>
 #include <vcl/svapp.hxx>
@@ -451,7 +450,7 @@ ScAutoFormatObj::~ScAutoFormatObj()
 
 void ScAutoFormatObj::InitFormat( sal_uInt16 nNewIndex )
 {
-    DBG_ASSERT( nFormatIndex == SC_AFMTOBJ_INVALID, "ScAutoFormatObj::InitFormat mehrfach" );
+    OSL_ENSURE( nFormatIndex == SC_AFMTOBJ_INVALID, "ScAutoFormatObj::InitFormat mehrfach" );
     nFormatIndex = nNewIndex;
     //! Listening !!!
 }
@@ -578,7 +577,7 @@ void SAL_CALL ScAutoFormatObj::setName( const rtl::OUString& aNewName )
             !lcl_FindAutoFormatIndex( *pFormats, aNewString, nDummy ))
     {
         ScAutoFormatData* pData = (*pFormats)[nFormatIndex];
-        DBG_ASSERT(pData,"AutoFormat Daten nicht da");
+        OSL_ENSURE(pData,"AutoFormat Daten nicht da");
 
         ScAutoFormatData* pNew = new ScAutoFormatData(*pData);
         pNew->SetName( aNewString );
@@ -626,7 +625,7 @@ void SAL_CALL ScAutoFormatObj::setPropertyValue(
     if (pFormats && IsInserted() && nFormatIndex < pFormats->GetCount())
     {
         ScAutoFormatData* pData = (*pFormats)[nFormatIndex];
-        DBG_ASSERT(pData,"AutoFormat Daten nicht da");
+        OSL_ENSURE(pData,"AutoFormat Daten nicht da");
 
         String aPropString(aPropertyName);
         sal_Bool bBool = sal_Bool();
@@ -661,7 +660,7 @@ uno::Any SAL_CALL ScAutoFormatObj::getPropertyValue( const rtl::OUString& aPrope
     if (pFormats && IsInserted() && nFormatIndex < pFormats->GetCount())
     {
         ScAutoFormatData* pData = (*pFormats)[nFormatIndex];
-        DBG_ASSERT(pData,"AutoFormat Daten nicht da");
+        OSL_ENSURE(pData,"AutoFormat Daten nicht da");
 
         sal_Bool bValue;
         sal_Bool bError = false;

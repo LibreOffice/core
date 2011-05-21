@@ -122,7 +122,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
 
     ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl(pScViewShell);
 
-    DBG_ASSERT( pInputHdl, "Missing input handler :-/" );
+    OSL_ENSURE( pInputHdl, "Missing input handler :-/" );
 
     if ( pInputHdl )
         pInputHdl->NotifyChange( NULL );
@@ -152,7 +152,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
         pData->SetInputHandler(pScMod->GetInputHdl());
         pData->SetDocShell(pViewData->GetDocShell());
 
-        DBG_ASSERT(pData,"FormEditData ist nicht da");
+        OSL_ENSURE(pData,"FormEditData ist nicht da");
 
         formula::FormulaDlgMode eMode = FORMULA_FORMDLG_FORMULA;            // Default...
 
@@ -430,7 +430,7 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
         {
             //  Referenz auf anderes Dokument - wie inputhdl.cxx
 
-            DBG_ASSERT(rRef.aStart.Tab()==rRef.aEnd.Tab(), "nStartTab!=nEndTab");
+            OSL_ENSURE(rRef.aStart.Tab()==rRef.aEnd.Tab(), "nStartTab!=nEndTab");
 
             String aTmp;
             rRef.Format( aTmp, SCA_VALID|SCA_TAB_3D, pRefDoc );     // immer 3d

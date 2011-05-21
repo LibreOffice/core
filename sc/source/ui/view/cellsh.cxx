@@ -763,7 +763,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                         String  aComment;
                         sal_uInt16  nDummyFlags;
                         pDoc->GetScenarioData( nTab, aComment, aDummyCol, nDummyFlags );
-                        DBG_ASSERT( aList.empty(), "List not empty!" );
+                        OSL_ENSURE( aList.empty(), "List not empty!" );
                         aList.push_back(aComment);
                     }
 

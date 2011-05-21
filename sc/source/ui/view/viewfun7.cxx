@@ -75,7 +75,7 @@ using namespace com::sun::star;
 void lcl_AdjustInsertPos( ScViewData* pData, Point& rPos, Size& rSize )
 {
     SdrPage* pPage = pData->GetScDrawView()->GetModel()->GetPage( static_cast<sal_uInt16>(pData->GetTabNo()) );
-    DBG_ASSERT(pPage,"pPage ???");
+    OSL_ENSURE(pPage,"pPage ???");
     Size aPgSize( pPage->GetSize() );
     if (aPgSize.Width() < 0)
         aPgSize.Width() = -aPgSize.Width();
@@ -155,7 +155,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
             SdrModel* pDrawModel = pDragEditView->GetModel();
             SCTAB nTab = GetViewData()->GetTabNo();
             SdrPage* pDestPage = pDrawModel->GetPage( static_cast< sal_uInt16 >( nTab ) );
-            DBG_ASSERT(pDestPage,"nanu, Page?");
+            OSL_ENSURE(pDestPage,"nanu, Page?");
 
             ::std::vector< ::rtl::OUString > aExcludedChartNames;
             if ( pDestPage )
@@ -226,7 +226,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         ::std::vector< ::rtl::OUString > aExcludedChartNames;
         SCTAB nTab = GetViewData()->GetTabNo();
         SdrPage* pPage = pScDrawView->GetModel()->GetPage( static_cast< sal_uInt16 >( nTab ) );
-        DBG_ASSERT( pPage, "Page?" );
+        OSL_ENSURE( pPage, "Page?" );
         if ( pPage )
         {
             ScChartHelper::GetChartNames( aExcludedChartNames, pPage );

@@ -990,7 +990,7 @@ double ScTabView::GetPendingRelTabBarWidth() const
 Window* ScTabView::GetActiveWin()
 {
     ScSplitPos ePos = aViewData.GetActivePart();
-    DBG_ASSERT(pGridWin[ePos],"kein aktives Fenster");
+    OSL_ENSURE(pGridWin[ePos],"kein aktives Fenster");
     return pGridWin[ePos];
 }
 
@@ -1577,7 +1577,7 @@ void ScTabView::UpdateHeaderWidth( const ScVSplitPos* pWhich, const SCROW* pPosY
 
 inline void ShowHide( Window* pWin, sal_Bool bShow )
 {
-    DBG_ASSERT(pWin || !bShow, "Fenster ist nicht da");
+    OSL_ENSURE(pWin || !bShow, "Fenster ist nicht da");
     if (pWin)
         pWin->Show(bShow);
 }
@@ -1878,7 +1878,7 @@ Point ScTabView::GetChartInsertPos( const Size& rSize, const ScRange& rCellRange
         eUsedPart = (WhichH(eUsedPart)==SC_SPLIT_LEFT) ? SC_SPLIT_BOTTOMLEFT : SC_SPLIT_BOTTOMRIGHT;
 
     ScGridWindow* pWin = pGridWin[eUsedPart];
-    DBG_ASSERT( pWin, "Window not found" );
+    OSL_ENSURE( pWin, "Window not found" );
     if (pWin)
     {
         ActivatePart( eUsedPart );
@@ -1995,7 +1995,7 @@ Point ScTabView::GetChartDialogPos( const Size& rDialogSize, const Rectangle& rL
         eUsedPart = (WhichH(eUsedPart)==SC_SPLIT_LEFT) ? SC_SPLIT_BOTTOMLEFT : SC_SPLIT_BOTTOMRIGHT;
 
     ScGridWindow* pWin = pGridWin[eUsedPart];
-    DBG_ASSERT( pWin, "Window not found" );
+    OSL_ENSURE( pWin, "Window not found" );
     if (pWin)
     {
         MapMode aDrawMode = pWin->GetDrawMapMode();

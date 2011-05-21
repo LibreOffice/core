@@ -213,7 +213,7 @@ void ScDocShell::UpdateOle( const ScViewData* pViewData, sal_Bool bSnapSize )
     if (GetCreateMode() == SFX_CREATE_MODE_STANDARD)
         return;
 
-    DBG_ASSERT(pViewData,"pViewData==0 bei ScDocShell::UpdateOle");
+    OSL_ENSURE(pViewData,"pViewData==0 bei ScDocShell::UpdateOle");
 
     Rectangle aOldArea = SfxObjectShell::GetVisArea();
     Rectangle aNewArea = aOldArea;

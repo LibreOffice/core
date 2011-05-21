@@ -192,7 +192,7 @@ sal_uInt16 ScDPFunctionListBox::GetSelection() const
 
 void ScDPFunctionListBox::FillFunctionNames()
 {
-    DBG_ASSERT( !GetEntryCount(), "ScDPFunctionListBox::FillFunctionNames - do not add texts to resource" );
+    OSL_ENSURE( !GetEntryCount(), "ScDPFunctionListBox::FillFunctionNames - do not add texts to resource" );
     Clear();
     ResStringArray aArr( ScResId( SCSTR_DPFUNCLISTBOX ) );
     for( sal_uInt16 nIndex = 0, nCount = sal::static_int_cast<sal_uInt16>(aArr.Count()); nIndex < nCount; ++nIndex )

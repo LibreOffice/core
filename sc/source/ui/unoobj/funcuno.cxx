@@ -31,7 +31,6 @@
 
 
 
-#include <tools/debug.hxx>
 #include <sfx2/app.hxx>
 #include <svl/itemprop.hxx>
 
@@ -136,19 +135,19 @@ ScTempDocCache::ScTempDocCache() :
 
 ScTempDocCache::~ScTempDocCache()
 {
-    DBG_ASSERT( !bInUse, "ScTempDocCache dtor: bInUse" );
+    OSL_ENSURE( !bInUse, "ScTempDocCache dtor: bInUse" );
     delete pDoc;
 }
 
 void ScTempDocCache::SetDocument( ScDocument* pNew )
 {
-    DBG_ASSERT( !pDoc, "ScTempDocCache::SetDocument: already set" );
+    OSL_ENSURE( !pDoc, "ScTempDocCache::SetDocument: already set" );
     pDoc = pNew;
 }
 
 void ScTempDocCache::Clear()
 {
-    DBG_ASSERT( !bInUse, "ScTempDocCache::Clear: bInUse" );
+    OSL_ENSURE( !bInUse, "ScTempDocCache::Clear: bInUse" );
     delete pDoc;
     pDoc = NULL;
 }

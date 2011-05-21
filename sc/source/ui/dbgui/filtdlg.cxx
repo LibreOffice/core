@@ -541,7 +541,7 @@ void ScFilterDlg::UpdateValueList( sal_uInt16 nList )
                     if ( pEntryLists[nColumn]->Insert( pNewEntry ) )
                     {
                         nHeaderPos[nColumn] = pEntryLists[nColumn]->IndexOf( pNewEntry );
-                        DBG_ASSERT( nHeaderPos[nColumn] != USHRT_MAX,
+                        OSL_ENSURE( nHeaderPos[nColumn] != USHRT_MAX,
                                     "Header-Eintrag nicht wiedergefunden" );
                     }
                     else

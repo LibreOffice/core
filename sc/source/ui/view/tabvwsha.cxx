@@ -294,7 +294,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                     ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
                     SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyleName,
                                                     SFX_STYLE_FAMILY_PAGE );
-                    DBG_ASSERT( pStyleSheet, "PageStyle not found" );
+                    OSL_ENSURE( pStyleSheet, "PageStyle not found" );
                     if ( pStyleSheet )
                     {
                         SfxItemSet& rStyleSet = pStyleSheet->GetItemSet();
@@ -512,10 +512,10 @@ void ScTabViewShell::ExecuteCellFormatDlg( SfxRequest& rReq, sal_uInt16 nTabPage
 
     bInFormatDialog = true;
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
     pDlg = pFact->CreateScAttrDlg( GetViewFrame(), GetDialogParent(), pOldSet, RID_SCDLG_ATTR);
-    DBG_ASSERT(pDlg, "Dialog create fail!");
+    OSL_ENSURE(pDlg, "Dialog create fail!");
     if ( nTabPage != 0xffff )
         pDlg->SetCurPageId( nTabPage );
     short nResult = pDlg->Execute();

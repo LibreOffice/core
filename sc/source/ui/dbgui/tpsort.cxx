@@ -149,7 +149,7 @@ void ScTabPageSortFields::Init()
 
     pViewData = rSortItem.GetViewData();
 
-    DBG_ASSERT( pViewData, "ViewData not found!" );
+    OSL_ENSURE( pViewData, "ViewData not found!" );
 
     nFieldArr[0] = 0;
     nFirstCol = 0;
@@ -276,7 +276,7 @@ sal_Bool ScTabPageSortFields::FillItemSet( SfxItemSet& rArgSet )
     sal_uInt16  nSort2Pos = aLbSort2.GetSelectEntryPos();
     sal_uInt16  nSort3Pos = aLbSort3.GetSelectEntryPos();
 
-    DBG_ASSERT(    (nSort1Pos <= SC_MAXFIELDS)
+    OSL_ENSURE(    (nSort1Pos <= SC_MAXFIELDS)
                 && (nSort2Pos <= SC_MAXFIELDS)
                 && (nSort3Pos <= SC_MAXFIELDS),
                 "Array-Range Fehler!" );
@@ -641,7 +641,7 @@ void ScTabPageSortOptions::Init()
     pViewData = rSortItem.GetViewData();
     pDoc      = pViewData ? pViewData->GetDocument() : NULL;
 
-    DBG_ASSERT( pViewData, "ViewData not found! :-/" );
+    OSL_ENSURE( pViewData, "ViewData not found! :-/" );
 
     if ( pViewData && pDoc )
     {

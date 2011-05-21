@@ -544,7 +544,7 @@ void ScOutlineWindow::DrawRectRel(
 
 void ScOutlineWindow::DrawImageRel( long nLevelPos, long nEntryPos, sal_uInt16 nId )
 {
-    DBG_ASSERT( mpSymbols, "ScOutlineWindow::DrawImageRel - no images" );
+    OSL_ENSURE( mpSymbols, "ScOutlineWindow::DrawImageRel - no images" );
     const Image& rImage = mpSymbols->GetImage( nId );
     SetLineColor();
     SetFillColor( GetBackground().GetColor() );
@@ -558,7 +558,7 @@ void ScOutlineWindow::DrawBorderRel( size_t nLevel, size_t nEntry, bool bPressed
     Point aPos;
     if ( GetImagePos( nLevel, nEntry, aPos ) )
     {
-        DBG_ASSERT( mpSymbols, "ScOutlineWindow::DrawBorderRel - no images" );
+        OSL_ENSURE( mpSymbols, "ScOutlineWindow::DrawBorderRel - no images" );
         sal_uInt16 nId = bPressed ? SC_OL_IMAGE_PRESSED : SC_OL_IMAGE_NOTPRESSED;
         bool bClip = (nEntry != SC_OL_HEADERENTRY);
         if ( bClip )
@@ -723,8 +723,8 @@ void ScOutlineWindow::Paint( const Rectangle& /* rRect */ )
     @return  true = value wrapped. */
 bool lcl_RotateValue( size_t& rnValue, size_t nMin, size_t nMax, bool bForward )
 {
-    DBG_ASSERT( nMin <= nMax, "lcl_RotateValue - invalid range" );
-    DBG_ASSERT( nMax < static_cast< size_t >( -1 ), "lcl_RotateValue - range overflow" );
+    OSL_ENSURE( nMin <= nMax, "lcl_RotateValue - invalid range" );
+    OSL_ENSURE( nMax < static_cast< size_t >( -1 ), "lcl_RotateValue - range overflow" );
     bool bWrap = false;
     if ( bForward )
     {

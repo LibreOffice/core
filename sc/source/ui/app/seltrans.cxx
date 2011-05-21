@@ -64,7 +64,7 @@ sal_Bool lcl_IsURLButton( SdrObject* pObject )
     if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
        {
         uno::Reference<awt::XControlModel> xControlModel = pUnoCtrl->GetUnoControlModel();
-        DBG_ASSERT( xControlModel.is(), "uno control without model" );
+        OSL_ENSURE( xControlModel.is(), "uno control without model" );
         if ( xControlModel.is() )
         {
             uno::Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY );
@@ -173,7 +173,7 @@ ScSelectionTransferObj::~ScSelectionTransferObj()
         pScMod->SetSelectionTransfer( NULL );
     }
 
-    DBG_ASSERT( !pView, "ScSelectionTransferObj dtor: ForgetView not called" );
+    OSL_ENSURE( !pView, "ScSelectionTransferObj dtor: ForgetView not called" );
 }
 
 sal_Bool ScSelectionTransferObj::StillValid()
@@ -273,7 +273,7 @@ void ScSelectionTransferObj::AddSupportedFormats()
 
 void ScSelectionTransferObj::CreateCellData()
 {
-    DBG_ASSERT( !pCellData, "CreateCellData twice" );
+    OSL_ENSURE( !pCellData, "CreateCellData twice" );
     if ( pView )
     {
         ScViewData* pViewData = pView->GetViewData();
@@ -328,7 +328,7 @@ void ScSelectionTransferObj::CreateCellData()
                 delete pClipDoc;
         }
     }
-    DBG_ASSERT( pCellData, "can't create CellData" );
+    OSL_ENSURE( pCellData, "can't create CellData" );
 }
 
 //! make static member of ScDrawView
@@ -336,7 +336,7 @@ extern void lcl_CheckOle( const SdrMarkList& rMarkList, sal_Bool& rAnyOle, sal_B
 
 void ScSelectionTransferObj::CreateDrawData()
 {
-    DBG_ASSERT( !pDrawData, "CreateDrawData twice" );
+    OSL_ENSURE( !pDrawData, "CreateDrawData twice" );
     if ( pView )
     {
         //  similar to ScDrawView::BeginDrag
@@ -380,7 +380,7 @@ void ScSelectionTransferObj::CreateDrawData()
             pDrawData->acquire();       // keep ref count up - released in ForgetView
         }
     }
-    DBG_ASSERT( pDrawData, "can't create DrawData" );
+    OSL_ENSURE( pDrawData, "can't create DrawData" );
 }
 
 ScTransferObj* ScSelectionTransferObj::GetCellData()

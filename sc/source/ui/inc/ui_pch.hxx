@@ -85,7 +85,6 @@
 #include <vcl/window.hxx>
 #include <global.hxx>
 #include <vcl/syswin.hxx>
-#include <tools/debug.hxx>
 #include <svl/svarray.hxx>
 #include <vcl/ctrl.hxx>
 #include <svl/hint.hxx>

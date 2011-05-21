@@ -289,7 +289,7 @@ void ScDocShell::BeforeXMLLoading()
     aDocument.DisableIdle( sal_True );
 
     // prevent unnecessary broadcasts and updates
-    DBG_ASSERT(pModificator == NULL, "The Modificator should not exist");
+    OSL_ENSURE(pModificator == NULL, "The Modificator should not exist");
     pModificator = new ScDocShellModificator( *this );
 
     aDocument.SetImportingXML( sal_True );
@@ -2059,7 +2059,7 @@ sal_Bool ScDocShell::ConvertTo( SfxMedium &rMed )
     if (GetCreateMode()== SFX_CREATE_MODE_STANDARD)
         SfxObjectShell::SetVisArea( Rectangle() );     // normal bearbeitet -> keine VisArea
 
-    DBG_ASSERT( rMed.GetFilter(), "Filter == 0" );
+    OSL_ENSURE( rMed.GetFilter(), "Filter == 0" );
 
     sal_Bool bRet = false;
     String aFltName = rMed.GetFilter()->GetFilterName();
@@ -2735,9 +2735,9 @@ SfxDocumentInfoDialog* ScDocShell::CreateDocumentInfoDialog(
     if( pDocSh == this )
     {
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+        OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
         ::CreateTabPage ScDocStatPageCreate =   pFact->GetTabPageCreatorFunc( RID_SCPAGE_STAT );
-        DBG_ASSERT(ScDocStatPageCreate, "Tabpage create fail!");
+        OSL_ENSURE(ScDocStatPageCreate, "Tabpage create fail!");
         pDlg->AddTabPage( 42,
             ScGlobal::GetRscString( STR_DOC_STAT ),
             ScDocStatPageCreate,

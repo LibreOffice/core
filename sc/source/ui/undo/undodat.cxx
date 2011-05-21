@@ -1702,7 +1702,7 @@ void ScUndoDataPilot::Undo()
 
         ScDPObject* pDocObj = pDoc->GetDPAtCursor(
                             aNewRange.aStart.Col(), aNewRange.aStart.Row(), aNewRange.aStart.Tab() );
-        DBG_ASSERT(pDocObj, "DPObject not found");
+        OSL_ENSURE(pDocObj, "DPObject not found");
         if (pDocObj)
         {
             if ( pOldDPObject )
@@ -1774,7 +1774,7 @@ void ScUndoDataPilot::Redo()
         ScRange aOldRange = pOldDPObject->GetOutRange();
         pSourceObj = pDoc->GetDPAtCursor(
                         aOldRange.aStart.Col(), aOldRange.aStart.Row(), aOldRange.aStart.Tab() );
-        DBG_ASSERT(pSourceObj, "DPObject not found");
+        OSL_ENSURE(pSourceObj, "DPObject not found");
     }
 
     ScDBDocFunc aFunc( *pDocShell );

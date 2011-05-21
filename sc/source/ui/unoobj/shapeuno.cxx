@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-#include <tools/debug.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/stl_types.hxx>
 #include <svtools/unoevent.hxx>
@@ -428,13 +427,13 @@ void SAL_CALL ScShapeObj::setPropertyValue(
 
                                     if (aAddress.StartRow != aAddress.EndRow) //should be a Spreadsheet
                                     {
-                                        DBG_ASSERT(aAddress.StartRow == 0 && aAddress.EndRow == MAXROW &&
+                                        OSL_ENSURE(aAddress.StartRow == 0 && aAddress.EndRow == MAXROW &&
                                             aAddress.StartColumn == 0 && aAddress.EndColumn == MAXCOL, "here should be a XSpreadsheet");
                                         ScDrawLayer::SetPageAnchored(*pObj);
                                     }
                                     else
                                     {
-                                        DBG_ASSERT(aAddress.StartRow == aAddress.EndRow &&
+                                        OSL_ENSURE(aAddress.StartRow == aAddress.EndRow &&
                                             aAddress.StartColumn == aAddress.EndColumn, "here should be a XCell");
                                         ScDrawObjData aAnchor;
                                         aAnchor.maStart = ScAddress(aAddress.StartColumn, aAddress.StartRow, aAddress.Sheet);
@@ -1302,7 +1301,7 @@ uno::Sequence<uno::Type> SAL_CALL ScShapeObj::getTypes() throw(uno::RuntimeExcep
     uno::Reference<lang::XTypeProvider> xBaseProvider;
     if ( mxShapeAgg.is() )
         mxShapeAgg->queryAggregation( getCppuType((uno::Reference<lang::XTypeProvider>*) 0) ) >>= xBaseProvider;
-    DBG_ASSERT( xBaseProvider.is(), "ScShapeObj: No XTypeProvider from aggregated shape!" );
+    OSL_ENSURE( xBaseProvider.is(), "ScShapeObj: No XTypeProvider from aggregated shape!" );
 
     uno::Sequence< uno::Type > aAggTypes;
     if( xBaseProvider.is() )
@@ -1410,7 +1409,7 @@ public:
                 if ( pProperties->Value >>= sValue )
                 {
                     ScMacroInfo* pInfo = getInfo( sal_True );
-                    DBG_ASSERT( pInfo, "shape macro info could not be created!" );
+                    OSL_ENSURE( pInfo, "shape macro info could not be created!" );
                     if ( !pInfo )
                         break;
                     if ( pProperties->Name == SC_EVENTACC_SCRIPT )

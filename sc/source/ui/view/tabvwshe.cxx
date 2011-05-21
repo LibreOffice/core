@@ -216,7 +216,7 @@ void ScTabViewShell::InsertURLField( const String& rName, const String& rURL, co
 
     EditView*       pTopView    = pHdl->GetTopView();
     EditView*       pTableView  = pHdl->GetTableView();
-    DBG_ASSERT( pTopView || pTableView, "No EditView" );
+    OSL_ENSURE( pTopView || pTableView, "No EditView" );
 
     if ( bSelectFirst )
     {
@@ -255,7 +255,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                 if ( pReqArgs &&
                      SFX_ITEM_SET == pReqArgs->GetItemState(SID_SEARCH_ITEM, false, &pItem) )
                 {
-                    DBG_ASSERT( pItem->ISA(SvxSearchItem), "falsches Item" );
+                    OSL_ENSURE( pItem->ISA(SvxSearchItem), "falsches Item" );
                     const SvxSearchItem* pSearchItem = (const SvxSearchItem*) pItem;
 
                     ScGlobal::SetSearchItem( *pSearchItem );
@@ -270,7 +270,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                             pReqArgs->GetItemState(SID_SEARCH_ITEM, false, &pItem))
             {
                 //  Search-Item merken
-                DBG_ASSERT( pItem->ISA(SvxSearchItem), "falsches Item" );
+                OSL_ENSURE( pItem->ISA(SvxSearchItem), "falsches Item" );
                 ScGlobal::SetSearchItem( *(const SvxSearchItem*) pItem );
             }
             else

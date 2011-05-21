@@ -723,7 +723,7 @@ bool ScRefHandler::EnterRefMode()
 
     ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl(pScViewShell);
 
-    DBG_ASSERT( pInputHdl, "Missing input handler :-/" );
+    OSL_ENSURE( pInputHdl, "Missing input handler :-/" );
 
     if ( pInputHdl )
         pInputHdl->NotifyChange( NULL );

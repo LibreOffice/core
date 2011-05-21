@@ -190,15 +190,15 @@ struct TokenTable
     void push_back( FormulaToken* pToken )
     {
         maTokens.push_back( pToken );
-        DBG_ASSERT( maTokens.size()<= static_cast<sal_uInt32>( mnColCount*mnRowCount ), "too much tokens" );
+        OSL_ENSURE( maTokens.size()<= static_cast<sal_uInt32>( mnColCount*mnRowCount ), "too much tokens" );
     }
 
     sal_uInt32 getIndex(SCCOL nCol, SCROW nRow) const
     {
-        DBG_ASSERT( nCol<mnColCount, "wrong column index" );
-        DBG_ASSERT( nRow<mnRowCount, "wrong row index" );
+        OSL_ENSURE( nCol<mnColCount, "wrong column index" );
+        OSL_ENSURE( nRow<mnRowCount, "wrong row index" );
         sal_uInt32 nRet = static_cast<sal_uInt32>(nCol*mnRowCount + nRow);
-        DBG_ASSERT( maTokens.size()>= static_cast<sal_uInt32>( mnColCount*mnRowCount ), "too few tokens" );
+        OSL_ENSURE( maTokens.size()>= static_cast<sal_uInt32>( mnColCount*mnRowCount ), "too few tokens" );
         return nRet;
     }
 
@@ -1710,7 +1710,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
     // parse given data source and collect infos
     {
         SolarMutexGuard aGuard;
-        DBG_ASSERT( m_pDocument, "No Document -> no detectArguments" );
+        OSL_ENSURE( m_pDocument, "No Document -> no detectArguments" );
         if(!m_pDocument ||!xDataSource.is())
             return lcl_VectorToSequence( aResult );
 
@@ -1980,7 +1980,7 @@ uno::Reference< chart2::data::XDataSequence > SAL_CALL
     SolarMutexGuard aGuard;
     uno::Reference< chart2::data::XDataSequence > xResult;
 
-    DBG_ASSERT( m_pDocument, "No Document -> no createDataSequenceByRangeRepresentation" );
+    OSL_ENSURE( m_pDocument, "No Document -> no createDataSequenceByRangeRepresentation" );
     if(!m_pDocument || (aRangeRepresentation.getLength() == 0))
         return xResult;
 
@@ -2260,7 +2260,7 @@ ScChart2DataSequence::ScChart2DataSequence( ScDocument* pDoc,
     , m_bGotDataChangedHint(false)
     , m_bExtDataRebuildQueued(false)
 {
-    DBG_ASSERT(pTokens, "reference token list is null");
+    OSL_ENSURE(pTokens, "reference token list is null");
 
     if ( m_pDocument )
     {
@@ -2550,7 +2550,7 @@ void ScChart2DataSequence::UpdateTokensFromRanges(const ScRangeList& rRanges)
     {
         ScTokenRef pToken;
         const ScRange* pRange = rRanges[i];
-        DBG_ASSERT(pRange, "range object is NULL.");
+        OSL_ENSURE(pRange, "range object is NULL.");
 
         ScRefTokenHelper::getTokenFromRange(pToken, *pRange);
         sal_uInt32 nOrigPos = (*m_pRangeIndices)[i];
@@ -2677,7 +2677,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
             }
         }
 
-        DBG_ASSERT(m_pRangeIndices->size() == static_cast<size_t>(aRanges.size()),
+        OSL_ENSURE(m_pRangeIndices->size() == static_cast<size_t>(aRanges.size()),
                    "range list and range index list have different sizes.");
 
         auto_ptr<ScRangeList> pUndoRanges;
@@ -2690,7 +2690,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
 
         if (bChanged)
         {
-            DBG_ASSERT(m_pRangeIndices->size() == aRanges.size(),
+            OSL_ENSURE(m_pRangeIndices->size() == aRanges.size(),
                        "range list and range index list have different sizes after the reference update.");
 
             // Bring the change back from the range list to the token list.
@@ -2879,7 +2879,7 @@ uno::Sequence< rtl::OUString > SAL_CALL ScChart2DataSequence::getTextualData(  )
 {
     SolarMutexGuard aGuard;
     OUString aStr;
-    DBG_ASSERT( m_pDocument, "No Document -> no SourceRangeRepresentation" );
+    OSL_ENSURE( m_pDocument, "No Document -> no SourceRangeRepresentation" );
     if (m_pDocument && m_pTokens.get())
         lcl_convertTokensToString(aStr, *m_pTokens, m_pDocument);
 
@@ -3408,7 +3408,7 @@ uno::Sequence< rtl::OUString > SAL_CALL ScChart2EmptyDataSequence::getTextualDat
     sal_Int32 nCount = 0;
     ScRange* p;
 
-    DBG_ASSERT(m_xRanges->Count() == 1, "not handled count of ranges");
+    OSL_ENSURE(m_xRanges->Count() == 1, "not handled count of ranges");
 
     for ( p = m_xRanges->First(); p; p = m_xRanges->Next())
     {
@@ -3450,7 +3450,7 @@ uno::Sequence< rtl::OUString > SAL_CALL ScChart2EmptyDataSequence::getTextualDat
 {
     SolarMutexGuard aGuard;
     String  aStr;
-    DBG_ASSERT( m_pDocument, "No Document -> no SourceRangeRepresentation" );
+    OSL_ENSURE( m_pDocument, "No Document -> no SourceRangeRepresentation" );
     if( m_pDocument )
         m_xRanges->Format( aStr, SCR_ABS_3D, m_pDocument, m_pDocument->GetAddressConvention() );
     return aStr;

@@ -294,7 +294,7 @@ void ScGridWindow::DoInvertRect( const Rectangle& rPixel )
         aInvertRect = Rectangle();      // aufheben
     else
     {
-        DBG_ASSERT( aInvertRect.IsEmpty(), "DoInvertRect nicht paarig" );
+        OSL_ENSURE( aInvertRect.IsEmpty(), "DoInvertRect nicht paarig" );
 
         aInvertRect = rPixel;           // neues Rechteck merken
     }
@@ -411,7 +411,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     PutInOrder( nX1, nX2 );
     PutInOrder( nY1, nY2 );
 
-    DBG_ASSERT( ValidCol(nX2) && ValidRow(nY2), "GridWin Draw Bereich zu gross" );
+    OSL_ENSURE( ValidCol(nX2) && ValidRow(nY2), "GridWin Draw Bereich zu gross" );
 
     UpdateVisibleRange();
 
@@ -887,7 +887,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     //  ist das jetzt durcheinandergekommen und es muss neu gemalt werden
     //
 
-    DBG_ASSERT(nPaintCount, "nPaintCount falsch");
+    OSL_ENSURE(nPaintCount, "nPaintCount falsch");
     --nPaintCount;
     if (!nPaintCount)
         CheckNeedsRepaint();

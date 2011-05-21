@@ -294,7 +294,7 @@ void ScImportExport::EndPaste()
 sal_Bool ScImportExport::ImportData( const String& /* rMimeType */,
                      const ::com::sun::star::uno::Any & /* rValue */ )
 {
-    DBG_ASSERT( !this, "Implementation is missing" );
+    OSL_ENSURE( !this, "Implementation is missing" );
     return false;
 }
 
@@ -343,7 +343,7 @@ sal_Bool ScImportExport::ImportString( const ::rtl::OUString& rText, sal_uLong n
 
 sal_Bool ScImportExport::ExportString( ::rtl::OUString& rText, sal_uLong nFmt )
 {
-    DBG_ASSERT( nFmt == FORMAT_STRING, "ScImportExport::ExportString: Unicode not supported for other formats than FORMAT_STRING" );
+    OSL_ENSURE( nFmt == FORMAT_STRING, "ScImportExport::ExportString: Unicode not supported for other formats than FORMAT_STRING" );
     if ( nFmt != FORMAT_STRING )
     {
         rtl_TextEncoding eEnc = gsl_getSystemTextEncoding();
@@ -375,7 +375,7 @@ sal_Bool ScImportExport::ExportString( ::rtl::OUString& rText, sal_uLong nFmt )
 
 sal_Bool ScImportExport::ExportByteString( ByteString& rText, rtl_TextEncoding eEnc, sal_uLong nFmt )
 {
-    DBG_ASSERT( eEnc != RTL_TEXTENCODING_UNICODE, "ScImportExport::ExportByteString: Unicode not supported" );
+    OSL_ENSURE( eEnc != RTL_TEXTENCODING_UNICODE, "ScImportExport::ExportByteString: Unicode not supported" );
     if ( eEnc == RTL_TEXTENCODING_UNICODE )
         eEnc = gsl_getSystemTextEncoding();
 
@@ -472,7 +472,7 @@ sal_Bool ScImportExport::ExportStream( SvStream& rStrm, const String& rBaseURL, 
                 aDocName = pShell->GetTitle( SFX_TITLE_FULLNAME );
         }
 
-        DBG_ASSERT( aDocName.Len(), "ClipBoard document has no name! :-/" );
+        OSL_ENSURE( aDocName.Len(), "ClipBoard document has no name! :-/" );
         if( aDocName.Len() )
         {
             // Always use Calc A1 syntax for paste link.

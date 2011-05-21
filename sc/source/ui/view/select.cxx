@@ -70,7 +70,7 @@ ScViewFunctionSet::ScViewFunctionSet( ScViewData* pNewViewData ) :
         bAnchor( false ),
         bStarted( false )
 {
-    DBG_ASSERT(pViewData, "ViewData==0 bei FunctionSet");
+    OSL_ENSURE(pViewData, "ViewData==0 bei FunctionSet");
 }
 
 ScSplitPos ScViewFunctionSet::GetWhich()
@@ -597,7 +597,7 @@ sal_Bool ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, sal_Boo
         sal_uInt8 nMode = pViewData->GetFillMode();
         if ( nMode == SC_FILL_EMBED_LT || nMode == SC_FILL_EMBED_RB )
         {
-            DBG_ASSERT( pDoc->IsEmbedded(), "!pDoc->IsEmbedded()" );
+            OSL_ENSURE( pDoc->IsEmbedded(), "!pDoc->IsEmbedded()" );
             ScRange aRange;
             pDoc->GetEmbedded( aRange);
             ScRefType eRefMode = (nMode == SC_FILL_EMBED_LT) ? SC_REFTYPE_EMBED_LT : SC_REFTYPE_EMBED_RB;
@@ -777,7 +777,7 @@ ScHeaderFunctionSet::ScHeaderFunctionSet( ScViewData* pNewViewData ) :
         bAnchor( false ),
         nCursorPos( 0 )
 {
-    DBG_ASSERT(pViewData, "ViewData==0 bei FunctionSet");
+    OSL_ENSURE(pViewData, "ViewData==0 bei FunctionSet");
 }
 
 void ScHeaderFunctionSet::SetColumn( sal_Bool bSet )

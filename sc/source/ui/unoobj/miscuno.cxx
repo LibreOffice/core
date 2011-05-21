@@ -31,7 +31,6 @@
 
 
 
-#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 
 #include "miscuno.hxx"

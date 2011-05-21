@@ -280,7 +280,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                                 if(pFact)
                                 {
                                     SfxAbstractTabDialog* pDlg = pFact->CreateSvxTransformTabDialog( pWin, &aNewAttr,pView );
-                                    DBG_ASSERT(pDlg, "Dialog creation failed!");
+                                    OSL_ENSURE(pDlg, "Dialog creation failed!");
                                     if (pDlg->Execute() == RET_OK)
                                     {
                                         rReq.Done(*(pDlg->GetOutputItemSet()));
@@ -376,13 +376,13 @@ void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
         pView->MergeAttrFromMarked( aNewAttr, false );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet Factory fail!");
+        OSL_ENSURE(pFact, "Dialogdiet Factory fail!");
         SfxAbstractTabDialog * pDlg = pFact->CreateSvxLineTabDialog( pViewData->GetDialogParent(),
                     &aNewAttr,
                 pViewData->GetDocument()->GetDrawLayer(),
                 pObj,
                 bHasMarked);
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");
+        OSL_ENSURE(pDlg, "Dialogdiet fail!");
     if ( nTabPage != 0xffff )
         pDlg->SetCurPageId( nTabPage );
 
@@ -411,12 +411,12 @@ void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
 
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet Factory fail!");
+    OSL_ENSURE(pFact, "Dialogdiet Factory fail!");
     AbstractSvxAreaTabDialog * pDlg = pFact->CreateSvxAreaTabDialog( pViewData->GetDialogParent(),
                                                                     &aNewAttr,
                                                             pViewData->GetDocument()->GetDrawLayer(),
                                                             pView);
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");
+    OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
     // #i74099# by default, the dialog deletes the current color table if a different one is loaded
     // (see SwDrawShell::ExecDrawDlg)

@@ -52,7 +52,6 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 
 #include <unotools/accessiblestatesethelper.hxx>
-#include <tools/debug.hxx>
 #include <tools/gen.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdobj.hxx>
@@ -432,14 +431,14 @@ sal_Bool ScChildrenShapes::ReplaceChild (::accessibility::AccessibleShape* pCurr
     sal_Bool bResult(false);
     if (pCurrentChild && pReplacement)
     {
-        DBG_ASSERT(pCurrentChild->GetXShape().get() == pReplacement->GetXShape().get(), "XShape changes and should be inserted sorted");
+        OSL_ENSURE(pCurrentChild->GetXShape().get() == pReplacement->GetXShape().get(), "XShape changes and should be inserted sorted");
         SortedShapes::iterator aItr;
         FindShape(pCurrentChild->GetXShape(), aItr);
         if (aItr != maZOrderedShapes.end() && (*aItr))
         {
             if ((*aItr)->pAccShape)
             {
-                DBG_ASSERT((*aItr)->pAccShape == pCurrentChild, "wrong child found");
+                OSL_ENSURE((*aItr)->pAccShape == pCurrentChild, "wrong child found");
                 AccessibleEventObject aEvent;
                 aEvent.EventId = AccessibleEventId::CHILD;
                 aEvent.Source = uno::Reference< XAccessibleContext >(mpAccessibleDocument);
@@ -545,7 +544,7 @@ uno::Reference< XAccessible > ScChildrenShapes::GetAt(const awt::Point& rPoint) 
                 }
                 else
                 {
-                    DBG_ERRORFILE("I should have an accessible shape now!");
+                    OSL_FAIL("I should have an accessible shape now!");
                 }
             }
             else
@@ -573,7 +572,7 @@ sal_Bool ScChildrenShapes::IsSelected(sal_Int32 nIndex,
     bResult = maZOrderedShapes[nIndex]->bSelected;
     rShape = maZOrderedShapes[nIndex]->xShape;
 
-#ifdef DBG_UTIL // test whether it is truly selected by a slower method
+#if OSL_DEBUG_LEVEL > 0 // test whether it is truly selected by a slower method
     uno::Reference< drawing::XShape > xReturnShape;
     sal_Bool bDebugResult(false);
     uno::Reference<container::XIndexAccess> xIndexAccess;
@@ -600,7 +599,7 @@ sal_Bool ScChildrenShapes::IsSelected(sal_Int32 nIndex,
             }
         }
     }
-    DBG_ASSERT((bResult == bDebugResult) && ((bResult && (rShape.get() == xReturnShape.get())) || !bResult), "found the wrong shape or result");
+    OSL_ENSURE((bResult == bDebugResult) && ((bResult && (rShape.get() == xReturnShape.get())) || !bResult), "found the wrong shape or result");
 #endif
 
     return bResult;
@@ -666,7 +665,7 @@ void ScChildrenShapes::DeselectAll()
     }
     catch (lang::IllegalArgumentException&)
     {
-        DBG_ERRORFILE("nothing selected before");
+        OSL_FAIL("nothing selected before");
         bSomethingSelected = false;
     }
 
@@ -796,7 +795,7 @@ void ScChildrenShapes::Deselect(sal_Int32 nChildIndex)
             }
             catch (lang::IllegalArgumentException&)
             {
-                DBG_ERRORFILE("something not selectable");
+                OSL_FAIL("something not selectable");
             }
 
             maZOrderedShapes[nChildIndex]->bSelected = false;
@@ -933,7 +932,7 @@ sal_Bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawin
             }
             else
             {
-                DBG_ERRORFILE("here is a selected shape which is not in the childlist");
+                OSL_FAIL("here is a selected shape which is not in the childlist");
                 ++aXShapesItr;
                 --mnShapesSelected;
             }
@@ -1095,7 +1094,7 @@ void ScChildrenShapes::AddShape(const uno::Reference<drawing::XShape>& xShape, s
     }
     else
     {
-        DBG_ERRORFILE("shape is always in the list");
+        OSL_FAIL("shape is always in the list");
     }
 }
 
@@ -1126,7 +1125,7 @@ void ScChildrenShapes::RemoveShape(const uno::Reference<drawing::XShape>& xShape
     }
     else
     {
-        DBG_ERRORFILE("shape was not in internal list");
+        OSL_FAIL("shape was not in internal list");
     }
 }
 
@@ -1140,7 +1139,7 @@ sal_Bool ScChildrenShapes::FindShape(const uno::Reference<drawing::XShape>& xSha
     if ((rItr != maZOrderedShapes.end()) && (*rItr != NULL) && ((*rItr)->xShape.get() == xShape.get()))
         bResult = sal_True; // if the shape is found
 
-#ifdef DBG_UTIL // test whether it finds truly the correct shape (perhaps it is not really sorted)
+#if OSL_DEBUG_LEVEL > 0 // test whether it finds truly the correct shape (perhaps it is not really sorted)
     SortedShapes::iterator aDebugItr = maZOrderedShapes.begin();
     SortedShapes::iterator aEndItr = maZOrderedShapes.end();
     sal_Bool bFound(false);
@@ -1152,7 +1151,7 @@ sal_Bool ScChildrenShapes::FindShape(const uno::Reference<drawing::XShape>& xSha
             ++aDebugItr;
     }
     sal_Bool bResult2 = (aDebugItr != maZOrderedShapes.end());
-    DBG_ASSERT((bResult == bResult2) && ((bResult && (rItr == aDebugItr)) || !bResult), "wrong Shape found");
+    OSL_ENSURE((bResult == bResult2) && ((bResult && (rItr == aDebugItr)) || !bResult), "wrong Shape found");
 #endif
     return bResult;
 }
@@ -1279,11 +1278,11 @@ void SAL_CALL ScAccessibleDocument::disposing( const lang::EventObject& /* Sourc
 
 IMPL_LINK( ScAccessibleDocument, WindowChildEventListener, VclSimpleEvent*, pEvent )
 {
-    DBG_ASSERT( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
+    OSL_ENSURE( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
     if ( pEvent && pEvent->ISA( VclWindowEvent ) )
     {
         VclWindowEvent *pVclEvent = static_cast< VclWindowEvent * >( pEvent );
-        DBG_ASSERT( pVclEvent->GetWindow(), "Window???" );
+        OSL_ENSURE( pVclEvent->GetWindow(), "Window???" );
         switch ( pVclEvent->GetId() )
         {
         case VCLEVENT_WINDOW_SHOW:  // send create on show for direct accessible children
@@ -1754,7 +1753,7 @@ uno::Reference<XAccessible > SAL_CALL
             xAccessible = GetAccessibleSpreadsheet();
     }
 
-    DBG_ASSERT(xAccessible.is(), "here should always be an accessible object or a exception throwed");
+    OSL_ENSURE(xAccessible.is(), "here should always be an accessible object or a exception throwed");
 
     return xAccessible;
 }
@@ -2036,7 +2035,7 @@ sal_Bool ScAccessibleDocument::IsEditable(
 
 void ScAccessibleDocument::AddChild(const uno::Reference<XAccessible>& xAcc, sal_Bool bFireEvent)
 {
-    DBG_ASSERT(!mxTempAcc.is(), "this object should be removed before");
+    OSL_ENSURE(!mxTempAcc.is(), "this object should be removed before");
     if (xAcc.is())
     {
         mxTempAcc = xAcc;
@@ -2053,10 +2052,10 @@ void ScAccessibleDocument::AddChild(const uno::Reference<XAccessible>& xAcc, sal
 
 void ScAccessibleDocument::RemoveChild(const uno::Reference<XAccessible>& xAcc, sal_Bool bFireEvent)
 {
-    DBG_ASSERT(mxTempAcc.is(), "this object should be added before");
+    OSL_ENSURE(mxTempAcc.is(), "this object should be added before");
     if (xAcc.is())
     {
-        DBG_ASSERT(xAcc.get() == mxTempAcc.get(), "only the same object should be removed");
+        OSL_ENSURE(xAcc.get() == mxTempAcc.get(), "only the same object should be removed");
         if( bFireEvent )
         {
             AccessibleEventObject aEvent;

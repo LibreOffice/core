@@ -2650,7 +2650,7 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String
 {
     SfxObjectShell& rDocSh = *rDoc.GetDocumentShell();
     uno::Reference< script::XLibraryContainer > xLibContainer = rDocSh.GetBasicContainer();
-    DBG_ASSERT( xLibContainer.is(), "No BasicContainer!" );
+    OSL_ENSURE( xLibContainer.is(), "No BasicContainer!" );
 
     uno::Reference< container::XNameContainer > xLib;
     if( xLibContainer.is() )
@@ -2696,7 +2696,7 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String
 void VBA_DeleteModule( ScDocShell& rDocSh, String& sModuleName )
 {
     uno::Reference< script::XLibraryContainer > xLibContainer = rDocSh.GetBasicContainer();
-    DBG_ASSERT( xLibContainer.is(), "No BasicContainer!" );
+    OSL_ENSURE( xLibContainer.is(), "No BasicContainer!" );
 
     uno::Reference< container::XNameContainer > xLib;
     if( xLibContainer.is() )
@@ -3421,7 +3421,7 @@ void ScDocFunc::ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect )
     if (pDoc->IsUndoEnabled())
     {
         ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
-        DBG_ASSERT(pProtect, "ScDocFunc::Unprotect: ScTableProtection pointer is NULL!");
+        OSL_ENSURE(pProtect, "ScDocFunc::Unprotect: ScTableProtection pointer is NULL!");
         if (pProtect)
         {
             ::std::auto_ptr<ScTableProtection> p(new ScTableProtection(*pProtect));
@@ -3451,7 +3451,7 @@ sal_Bool ScDocFunc::Protect( SCTAB nTab, const String& rPassword, sal_Bool /*bAp
         if (pDoc->IsUndoEnabled())
         {
             ScDocProtection* pProtect = pDoc->GetDocProtection();
-            DBG_ASSERT(pProtect, "ScDocFunc::Unprotect: ScDocProtection pointer is NULL!");
+            OSL_ENSURE(pProtect, "ScDocFunc::Unprotect: ScDocProtection pointer is NULL!");
             if (pProtect)
             {
                 ::std::auto_ptr<ScDocProtection> p(new ScDocProtection(*pProtect));
@@ -3473,7 +3473,7 @@ sal_Bool ScDocFunc::Protect( SCTAB nTab, const String& rPassword, sal_Bool /*bAp
         if (pDoc->IsUndoEnabled())
         {
             ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
-            DBG_ASSERT(pProtect, "ScDocFunc::Unprotect: ScTableProtection pointer is NULL!");
+            OSL_ENSURE(pProtect, "ScDocFunc::Unprotect: ScTableProtection pointer is NULL!");
             if (pProtect)
             {
                 ::std::auto_ptr<ScTableProtection> p(new ScTableProtection(*pProtect));
@@ -4515,7 +4515,7 @@ bool ScDocFunc::SetNewRangeNames( ScRangeName* pNewRanges, bool bModifyDoc )    
 {
     ScDocShellModificator aModificator( rDocShell );
 
-    DBG_ASSERT( pNewRanges, "pNewRanges is 0" );
+    OSL_ENSURE( pNewRanges, "pNewRanges is 0" );
     ScDocument* pDoc = rDocShell.GetDocument();
     sal_Bool bUndo(pDoc->IsUndoEnabled());
 
@@ -4630,7 +4630,7 @@ sal_Bool ScDocFunc::CreateNames( const ScRange& rRange, sal_uInt16 nFlags, sal_B
     SCCOL nEndCol = rRange.aEnd.Col();
     SCROW nEndRow = rRange.aEnd.Row();
     SCTAB nTab = rRange.aStart.Tab();
-    DBG_ASSERT(rRange.aEnd.Tab() == nTab, "CreateNames: mehrere Tabellen geht nicht");
+    OSL_ENSURE(rRange.aEnd.Tab() == nTab, "CreateNames: mehrere Tabellen geht nicht");
 
     sal_Bool bValid = sal_True;
     if ( nFlags & ( NAME_TOP | NAME_BOTTOM ) )

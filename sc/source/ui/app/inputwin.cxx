@@ -159,7 +159,7 @@ ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
         if ( pViewFrm )
             pViewSh = PTR_CAST( ScTabViewShell, pViewFrm->GetViewShell() );
     }
-    DBG_ASSERT( pViewSh, "no view shell for input window" );
+    OSL_ENSURE( pViewSh, "no view shell for input window" );
 
     // Positionsfenster, 3 Buttons, Eingabefenster
     InsertWindow    ( 1, &aWndPos, 0,                                     0 );

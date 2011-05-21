@@ -207,8 +207,8 @@ void ScEditWindow::SetCharAttriutes()
     ScTabViewShell* pTabViewSh = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
 
 
-    DBG_ASSERT( pDocSh,  "Current DocShell not found" );
-    DBG_ASSERT( pViewSh, "Current ViewShell not found" );
+    OSL_ENSURE( pDocSh,  "Current DocShell not found" );
+    OSL_ENSURE( pViewSh, "Current ViewShell not found" );
 
     if ( pDocSh && pViewSh )
     {
@@ -217,11 +217,11 @@ void ScEditWindow::SetCharAttriutes()
         SfxItemSet aSet( pEdView->GetAttribs() );
 
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+        OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
         SfxAbstractTabDialog* pDlg = pFact->CreateScCharDlg(  GetParent(),  &aSet,
                                                             pDocSh,RID_SCDLG_CHAR );
-        DBG_ASSERT(pDlg, "Dialog create fail!");
+        OSL_ENSURE(pDlg, "Dialog create fail!");
         pDlg->SetText( ScGlobal::GetRscString( STR_TEXTATTRS ) );
         if ( pDlg->Execute() == RET_OK )
         {

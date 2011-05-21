@@ -187,7 +187,7 @@ void ScTpUserLists::Reset( const SfxItemSet& rCoreAttrs )
                                            rCoreAttrs.Get( nWhichUserLists );
     const ScUserList*     pCoreList     = rUserListItem.GetUserList();
 
-    DBG_ASSERT( pCoreList, "UserList not found :-/" );
+    OSL_ENSURE( pCoreList, "UserList not found :-/" );
 
     if ( pCoreList )
     {
@@ -297,7 +297,7 @@ sal_uInt16 ScTpUserLists::UpdateUserListBox()
         for ( sal_uInt16 i=0; i<nCount; i++ )
         {
             aEntry = (*pUserLists)[i]->GetString();
-            DBG_ASSERT( aEntry.Len() > 0, "Empty UserList-entry :-/" );
+            OSL_ENSURE( aEntry.Len() > 0, "Empty UserList-entry :-/" );
             aLbLists.InsertEntry( aEntry );
         }
     }
@@ -631,7 +631,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
         {
             sal_uInt16 nSelList = aLbLists.GetSelectEntryPos();
 
-            DBG_ASSERT( nSelList != LISTBOX_ENTRY_NOTFOUND, "Modify without List :-/" );
+            OSL_ENSURE( nSelList != LISTBOX_ENTRY_NOTFOUND, "Modify without List :-/" );
 
             if ( theEntriesStr.Len() > 0 )
             {

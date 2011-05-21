@@ -485,7 +485,7 @@ void ScDrawView::MarkListHasChanged()
     if ( pOle2Obj && !bOle )
     {
         uno::Reference < embed::XEmbeddedObject > xObj = pOle2Obj->GetObjRef();
-        DBG_ASSERT( xObj.is(), "SdrOle2Obj ohne ObjRef" );
+        OSL_ENSURE( xObj.is(), "SdrOle2Obj ohne ObjRef" );
         if (xObj.is())
             xObj->getSupportedVerbs();
     }
@@ -593,7 +593,7 @@ sal_Bool ScDrawView::SelectObject( const String& rName )
         for (SCTAB i=0; i<nTabCount && !pFound; i++)
         {
             SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(i));
-            DBG_ASSERT(pPage,"Page ?");
+            OSL_ENSURE(pPage,"Page ?");
             if (pPage)
             {
                 SdrObjListIter aIter( *pPage, IM_DEEPWITHGROUPS );
@@ -617,7 +617,7 @@ sal_Bool ScDrawView::SelectObject( const String& rName )
         if ( nObjectTab != nTab )                               // Tabelle umschalten
             pView->SetTabNo( nObjectTab );
 
-        DBG_ASSERT( nTab == nObjectTab, "Tabellen umschalten hat nicht geklappt" );
+        OSL_ENSURE( nTab == nObjectTab, "Tabellen umschalten hat nicht geklappt" );
 
         pView->ScrollToObject( pFound );
 
@@ -700,12 +700,12 @@ void ScDrawView::DeleteMarked()
 
         // remove the cell note from document, we are its owner now
         ScPostIt* pNote = pDoc->ReleaseNote( pCaptData->maStart );
-        DBG_ASSERT( pNote, "ScDrawView::DeleteMarked - cell note missing in document" );
+        OSL_ENSURE( pNote, "ScDrawView::DeleteMarked - cell note missing in document" );
         if( pNote )
         {
             // rescue note data for undo (with pointer to caption object)
             ScNoteData aNoteData = pNote->GetNoteData();
-            DBG_ASSERT( aNoteData.mpCaption == pCaptObj, "ScDrawView::DeleteMarked - caption object does not match" );
+            OSL_ENSURE( aNoteData.mpCaption == pCaptObj, "ScDrawView::DeleteMarked - caption object does not match" );
             // collect the drawing undo action created while deleting the note
             if( bUndo )
                 pDrawLayer->BeginCalcUndo();

@@ -235,7 +235,7 @@ void ScGridWindow::DrawSdrGrid( const Rectangle& rDrawingRect, OutputDevice* pCo
     if ( pDrView && pDrView->IsGridVisible() )
     {
         SdrPageView* pPV = pDrView->GetSdrPageView();
-        DBG_ASSERT(pPV, "keine PageView");
+        OSL_ENSURE(pPV, "keine PageView");
         if (pPV)
         {
             pContentDev->SetLineColor(COL_GRAY);

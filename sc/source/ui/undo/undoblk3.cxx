@@ -1177,7 +1177,7 @@ void ScUndoReplace::Undo()
 
     if (pUndoDoc)       // nur bei ReplaceAll !!
     {
-        DBG_ASSERT(pSearchItem->GetCommand() == SVX_SEARCHCMD_REPLACE_ALL,
+        OSL_ENSURE(pSearchItem->GetCommand() == SVX_SEARCHCMD_REPLACE_ALL,
                    "ScUndoReplace:: Falscher Modus");
 
         SetViewMarkData( aMarkData );
@@ -1213,7 +1213,7 @@ void ScUndoReplace::Undo()
     else if (pSearchItem->GetCellType() == SVX_SEARCHIN_NOTE)
     {
         ScPostIt* pNote = pDoc->GetNote( aCursorPos );
-        DBG_ASSERT( pNote, "ScUndoReplace::Undo - cell does not contain a note" );
+        OSL_ENSURE( pNote, "ScUndoReplace::Undo - cell does not contain a note" );
         if (pNote)
             pNote->SetText( aCursorPos, aUndoStr );
         if (pViewShell)
@@ -1465,7 +1465,7 @@ String ScUndoConversion::GetComment() const
         case SC_CONVERSION_SPELLCHECK:      aText = ScGlobal::GetRscString( STR_UNDO_SPELLING );    break;
         case SC_CONVERSION_HANGULHANJA:     aText = ScGlobal::GetRscString( STR_UNDO_HANGULHANJA ); break;
         case SC_CONVERSION_CHINESE_TRANSL:  aText = ScGlobal::GetRscString( STR_UNDO_CHINESE_TRANSLATION ); break;
-        default: DBG_ERRORFILE( "ScUndoConversion::GetComment - unknown conversion type" );
+        default: OSL_FAIL( "ScUndoConversion::GetComment - unknown conversion type" );
     }
     return aText;
 }
@@ -1717,7 +1717,7 @@ void ScUndoRefreshLink::Undo()
 
 void ScUndoRefreshLink::Redo()
 {
-    DBG_ASSERT(pRedoDoc, "Kein RedoDoc bei ScUndoRefreshLink::Redo");
+    OSL_ENSURE(pRedoDoc, "Kein RedoDoc bei ScUndoRefreshLink::Redo");
 
     BeginUndo();
 
@@ -1995,7 +1995,7 @@ ScUndoUpdateAreaLink::ScUndoUpdateAreaLink( ScDocShell* pShell,
         nNewRefresh ( nNewRD ),
         bWithInsert ( bDoInsert )
 {
-    DBG_ASSERT( aOldRange.aStart == aNewRange.aStart, "AreaLink verschoben ?" );
+    OSL_ENSURE( aOldRange.aStart == aNewRange.aStart, "AreaLink verschoben ?" );
 }
 
 

@@ -656,7 +656,7 @@ void ScUndoPrintZoom::DoChange( sal_Bool bUndo )
     String aStyleName = pDoc->GetPageStyle( nTab );
     ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
     SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyleName, SFX_STYLE_FAMILY_PAGE );
-    DBG_ASSERT( pStyleSheet, "PageStyle not found" );
+    OSL_ENSURE( pStyleSheet, "PageStyle not found" );
     if ( pStyleSheet )
     {
         SfxItemSet& rSet = pStyleSheet->GetItemSet();
@@ -832,7 +832,7 @@ ScUndoReplaceNote::ScUndoReplaceNote( ScDocShell& rDocShell, const ScAddress& rP
     maPos( rPos ),
     mpDrawUndo( pDrawUndo )
 {
-    DBG_ASSERT( rNoteData.mpCaption, "ScUndoReplaceNote::ScUndoReplaceNote - missing note caption" );
+    OSL_ENSURE( rNoteData.mpCaption, "ScUndoReplaceNote::ScUndoReplaceNote - missing note caption" );
     (bInsert ? maNewData : maOldData) = rNoteData;
 }
 
@@ -844,8 +844,8 @@ ScUndoReplaceNote::ScUndoReplaceNote( ScDocShell& rDocShell, const ScAddress& rP
     maNewData( rNewData ),
     mpDrawUndo( pDrawUndo )
 {
-    DBG_ASSERT( maOldData.mpCaption || maNewData.mpCaption, "ScUndoReplaceNote::ScUndoReplaceNote - missing note captions" );
-    DBG_ASSERT( !maOldData.mxInitData.get() && !maNewData.mxInitData.get(), "ScUndoReplaceNote::ScUndoReplaceNote - unexpected unitialized note" );
+    OSL_ENSURE( maOldData.mpCaption || maNewData.mpCaption, "ScUndoReplaceNote::ScUndoReplaceNote - missing note captions" );
+    OSL_ENSURE( !maOldData.mxInitData.get() && !maNewData.mxInitData.get(), "ScUndoReplaceNote::ScUndoReplaceNote - unexpected unitialized note" );
 }
 
 ScUndoReplaceNote::~ScUndoReplaceNote()
@@ -899,7 +899,7 @@ void ScUndoReplaceNote::DoInsertNote( const ScNoteData& rNoteData )
     if( rNoteData.mpCaption )
     {
         ScDocument& rDoc = *pDocShell->GetDocument();
-        DBG_ASSERT( !rDoc.GetNote( maPos ), "ScUndoReplaceNote::DoInsertNote - unexpected cell note" );
+        OSL_ENSURE( !rDoc.GetNote( maPos ), "ScUndoReplaceNote::DoInsertNote - unexpected cell note" );
         ScPostIt* pNote = new ScPostIt( rDoc, maPos, rNoteData, false );
         rDoc.TakeNote( maPos, pNote );
     }
@@ -910,7 +910,7 @@ void ScUndoReplaceNote::DoRemoveNote( const ScNoteData& rNoteData )
     if( rNoteData.mpCaption )
     {
         ScDocument& rDoc = *pDocShell->GetDocument();
-        DBG_ASSERT( rDoc.GetNote( maPos ), "ScUndoReplaceNote::DoRemoveNote - missing cell note" );
+        OSL_ENSURE( rDoc.GetNote( maPos ), "ScUndoReplaceNote::DoRemoveNote - missing cell note" );
         if( ScPostIt* pNote = rDoc.ReleaseNote( maPos ) )
         {
             /*  Forget pointer to caption object to suppress removing the

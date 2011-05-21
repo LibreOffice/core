@@ -121,7 +121,7 @@ SvxCellHorJustify lclConvertSlotToHAlign( sal_uInt16 nSlot )
         case SID_ALIGN_ANY_HCENTER:     eHJustify = SVX_HOR_JUSTIFY_CENTER;     break;
         case SID_ALIGN_ANY_RIGHT:       eHJustify = SVX_HOR_JUSTIFY_RIGHT;      break;
         case SID_ALIGN_ANY_JUSTIFIED:   eHJustify = SVX_HOR_JUSTIFY_BLOCK;      break;
-        default:    DBG_ERRORFILE( "lclConvertSlotToHAlign - invalid slot" );
+        default:    OSL_FAIL( "lclConvertSlotToHAlign - invalid slot" );
     }
     return eHJustify;
 }
@@ -135,7 +135,7 @@ SvxCellVerJustify lclConvertSlotToVAlign( sal_uInt16 nSlot )
         case SID_ALIGN_ANY_TOP:         eVJustify = SVX_VER_JUSTIFY_TOP;        break;
         case SID_ALIGN_ANY_VCENTER:     eVJustify = SVX_VER_JUSTIFY_CENTER;     break;
         case SID_ALIGN_ANY_BOTTOM:      eVJustify = SVX_VER_JUSTIFY_BOTTOM;     break;
-        default:    DBG_ERRORFILE( "lclConvertSlotToVAlign - invalid slot" );
+        default:    OSL_FAIL( "lclConvertSlotToVAlign - invalid slot" );
     }
     return eVJustify;
 }
@@ -788,10 +788,10 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                 pTabViewShell->SetInFormatDialog(sal_True);
 
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+                OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                 pDlg = pFact->CreateScStyleDlg( pParent, *pStyleSheet, nRsc, nRsc );
-                DBG_ASSERT(pDlg, "Dialog create fail!");
+                OSL_ENSURE(pDlg, "Dialog create fail!");
                 short nResult = pDlg->Execute();
                 pTabViewShell->SetInFormatDialog(false);
 

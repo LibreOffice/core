@@ -30,7 +30,6 @@
 #define _SC_TYPEDETECT_HXX
 
 #include <rtl/ustring.hxx>
-#include <tools/debug.hxx>
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.h>

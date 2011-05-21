@@ -903,7 +903,7 @@ sal_Bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
             {
                 const ScPatternAttr* pSrcPattern = pAttribDoc->GetPattern(
                                                     nCol, nAttrRow, nDestTab );
-                DBG_ASSERT(pSrcPattern,"Pattern ist 0");
+                OSL_ENSURE(pSrcPattern,"Pattern ist 0");
                 if (pSrcPattern)
                 {
                     pDoc->ApplyPatternAreaTab( nCol, nAttrRow, nCol, aLocalParam.nRow2,
@@ -1286,7 +1286,7 @@ sal_Bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pN
                     pNewObj->WriteSourceDataTo( *pOldObj );     // copy source data
 
                     ScDPSaveData* pData = pNewObj->GetSaveData();
-                    DBG_ASSERT( pData, "no SaveData from living DPObject" );
+                    OSL_ENSURE( pData, "no SaveData from living DPObject" );
                     if ( pData )
                         pOldObj->SetSaveData( *pData );     // copy SaveData
                 }
@@ -1348,7 +1348,7 @@ sal_Bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pN
                 if ( bOverflow )
                 {
                     //  like with STR_PROTECTIONERR, use undo to reverse everything
-                    DBG_ASSERT( bRecord, "DataPilotUpdate: can't undo" );
+                    OSL_ENSURE( bRecord, "DataPilotUpdate: can't undo" );
                     bUndoSelf = sal_True;
                     nErrId = STR_PIVOT_ERROR;
                 }
@@ -1362,7 +1362,7 @@ sal_Bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pN
 
                         //  quick solution: proceed to end, use undo action
                         //  to reverse everything:
-                        DBG_ASSERT( bRecord, "DataPilotUpdate: can't undo" );
+                        OSL_ENSURE( bRecord, "DataPilotUpdate: can't undo" );
                         bUndoSelf = sal_True;
                         nErrId = aTester.GetMessageId();
                     }
@@ -1386,7 +1386,7 @@ sal_Bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pN
                         if (aBox.Execute() == RET_NO)
                         {
                             //! like above (not editable), use undo to reverse everything
-                            DBG_ASSERT( bRecord, "DataPilotUpdate: can't undo" );
+                            OSL_ENSURE( bRecord, "DataPilotUpdate: can't undo" );
                             bUndoSelf = sal_True;
                         }
                     }

@@ -725,7 +725,7 @@ void ScDocShell::CompareDocument( ScDocument& rOtherDoc )
                 GetModel(), uno::UNO_QUERY_THROW);
             uno::Reference<document::XDocumentProperties> xDocProps(
                 xDPS->getDocumentProperties());
-            DBG_ASSERT(xDocProps.is(), "no DocumentProperties");
+            OSL_ENSURE(xDocProps.is(), "no DocumentProperties");
             String aDocUser = xDocProps->getModifiedBy();
 
             if ( aDocUser.Len() )
@@ -810,7 +810,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
     {   // anschalten
         aDocument.StartChangeTracking();
         pThisTrack = aDocument.GetChangeTrack();
-        DBG_ASSERT(pThisTrack,"ChangeTracking nicht angeschaltet?");
+        OSL_ENSURE(pThisTrack,"ChangeTracking nicht angeschaltet?");
         if ( !bShared )
         {
             // visuelles RedLining einschalten
@@ -951,7 +951,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                 //  -> wird weggelassen
                 //! ??? Loesch-Aktion rueckgaengig machen ???
                 //! ??? Aktion irgendwo anders speichern  ???
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
                 String aValue;
                 if ( eSourceType == SC_CAT_CONTENT )
                     ((const ScChangeActionContent*)pSourceAction)->GetNewString( aValue );
@@ -1015,7 +1015,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                             //! Test, ob es ganz unten im Dokument war, dann automatisches
                             //! Zeilen-Einfuegen ???
 
-                            DBG_ASSERT( aSourceRange.aStart == aSourceRange.aEnd, "huch?" );
+                            OSL_ENSURE( aSourceRange.aStart == aSourceRange.aEnd, "huch?" );
                             ScAddress aPos = aSourceRange.aStart;
                             String aValue;
                             ((const ScChangeActionContent*)pSourceAction)->GetNewString( aValue );
@@ -1045,7 +1045,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                                 case MM_REFERENCE :     // do nothing
                                 break;
                                 case MM_FAKE :
-                                    DBG_WARNING( "MergeDocument: MatrixFlag MM_FAKE" );
+                                    OSL_FAIL( "MergeDocument: MatrixFlag MM_FAKE" );
                                     pViewSh->EnterData( aPos.Col(), aPos.Row(), aPos.Tab(), aValue );
                                 break;
                                 default:
@@ -1119,10 +1119,8 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                     ScChangeAction* pAct = pThisTrack->GetLast();
                     if ( pAct && pAct->GetActionNumber() > nOldActionMax )
                         pAct->SetComment( rComment );
-#ifdef DBG_UTIL
                     else
                         OSL_FAIL( "MergeDocument: wohin mit dem Kommentar?!?" );
-#endif
                 }
 
                 // Referenzen anpassen

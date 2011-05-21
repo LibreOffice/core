@@ -228,7 +228,7 @@ ScPrintUIOptions::ScPrintUIOptions()
     sal_Bool bSuppress = rPrintOpt.GetSkipEmpty();
 
     ResStringArray aStrings( ScResId( SCSTR_PRINT_OPTIONS ) );
-    DBG_ASSERT( aStrings.Count() >= 10, "resource incomplete" );
+    OSL_ENSURE( aStrings.Count() >= 10, "resource incomplete" );
     if( aStrings.Count() < 10 ) // bad resource ?
         return;
 
@@ -725,7 +725,7 @@ bool lcl_ParseTarget( const String& rTarget, ScRange& rTargetRange, Rectangle& r
             for (SCTAB i=0; i<nTabCount && !bRangeValid; i++)
             {
                 SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(i));
-                DBG_ASSERT(pPage,"Page ?");
+                OSL_ENSURE(pPage,"Page ?");
                 if (pPage)
                 {
                     SdrObjListIter aIter( *pPage, IM_DEEPWITHGROUPS );
@@ -760,8 +760,8 @@ sal_Bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
                                      ScMarkData& rMark,
                                      ScPrintSelectionStatus& rStatus, String& rPagesStr ) const
 {
-    DBG_ASSERT( !rMark.IsMarked() && !rMark.IsMultiMarked(), "FillRenderMarkData: MarkData must be empty" );
-    DBG_ASSERT( pDocShell, "FillRenderMarkData: DocShell must be set" );
+    OSL_ENSURE( !rMark.IsMarked() && !rMark.IsMultiMarked(), "FillRenderMarkData: MarkData must be empty" );
+    OSL_ENSURE( pDocShell, "FillRenderMarkData: DocShell must be set" );
 
     sal_Bool bDone = false;
 
@@ -1558,7 +1558,7 @@ uno::Reference< container::XIndexAccess > SAL_CALL ScModelObj::getViewData(  )
             xRet.set(uno::Reference < container::XIndexAccess >::query(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.IndexedPropertyValues")))));
 
             uno::Reference < container::XIndexContainer > xCont( xRet, uno::UNO_QUERY );
-            DBG_ASSERT( xCont.is(), "ScModelObj::getViewData() failed for OLE object" );
+            OSL_ENSURE( xCont.is(), "ScModelObj::getViewData() failed for OLE object" );
             if( xCont.is() )
             {
                 uno::Sequence< beans::PropertyValue > aSeq;
@@ -2301,11 +2301,11 @@ uno::Reference<drawing::XDrawPage> ScDrawPagesObj::GetObjectByIndex_Impl(sal_Int
     if (pDocShell)
     {
         ScDrawLayer* pDrawLayer = pDocShell->MakeDrawLayer();
-        DBG_ASSERT(pDrawLayer,"kann Draw-Layer nicht anlegen");
+        OSL_ENSURE(pDrawLayer,"kann Draw-Layer nicht anlegen");
         if ( pDrawLayer && nIndex >= 0 && nIndex < pDocShell->GetDocument()->GetTableCount() )
         {
             SdrPage* pPage = pDrawLayer->GetPage((sal_uInt16)nIndex);
-            DBG_ASSERT(pPage,"Draw-Page nicht gefunden");
+            OSL_ENSURE(pPage,"Draw-Page nicht gefunden");
             if (pPage)
             {
                 return uno::Reference<drawing::XDrawPage> (pPage->getUnoPage(), uno::UNO_QUERY);
@@ -3430,7 +3430,7 @@ void SAL_CALL ScAnnotationsObj::insertNew(
     SolarMutexGuard aGuard;
     if (pDocShell)
     {
-        DBG_ASSERT( aPosition.Sheet == nTab, "addAnnotation mit falschem Sheet" );
+        OSL_ENSURE( aPosition.Sheet == nTab, "addAnnotation mit falschem Sheet" );
         ScAddress aPos( (SCCOL)aPosition.Column, (SCROW)aPosition.Row, nTab );
 
         ScDocFunc aFunc( *pDocShell );
@@ -3595,7 +3595,7 @@ void SAL_CALL ScScenariosObj::addNewByName( const rtl::OUString& aName,
             const table::CellRangeAddress* pAry = aRanges.getConstArray();
             for (sal_uInt16 i=0; i<nRangeCount; i++)
             {
-                DBG_ASSERT( pAry[i].Sheet == nTab, "addScenario mit falscher Tab" );
+                OSL_ENSURE( pAry[i].Sheet == nTab, "addScenario mit falscher Tab" );
                 ScRange aRange( (SCCOL)pAry[i].StartColumn, (SCROW)pAry[i].StartRow, nTab,
                                 (SCCOL)pAry[i].EndColumn,   (SCROW)pAry[i].EndRow,   nTab );
 

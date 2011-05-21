@@ -74,9 +74,9 @@ ScShareDocumentDlg::ScShareDocumentDlg( Window* pParent, ScViewData* pViewData )
     ,mpViewData           ( pViewData )
     ,mpDocShell           ( NULL )
 {
-    DBG_ASSERT( mpViewData, "ScShareDocumentDlg CTOR: mpViewData is null!" );
+    OSL_ENSURE( mpViewData, "ScShareDocumentDlg CTOR: mpViewData is null!" );
     mpDocShell = ( mpViewData ? mpViewData->GetDocShell() : NULL );
-    DBG_ASSERT( mpDocShell, "ScShareDocumentDlg CTOR: mpDocShell is null!" );
+    OSL_ENSURE( mpDocShell, "ScShareDocumentDlg CTOR: mpDocShell is null!" );
 
     FreeResource();
 

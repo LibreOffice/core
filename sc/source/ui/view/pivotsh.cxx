@@ -112,7 +112,7 @@ void ScPivotShell::Execute( SfxRequest& rReq )
                 ScQueryParam aQueryParam;
                 SCTAB nSrcTab = 0;
                 const ScSheetSourceDesc* pDesc = pDPObj->GetSheetDesc();
-                DBG_ASSERT( pDesc, "no sheet source for DP filter dialog" );
+                OSL_ENSURE( pDesc, "no sheet source for DP filter dialog" );
                 if( pDesc )
                 {
                     aQueryParam = pDesc->GetQueryParam();
@@ -125,12 +125,12 @@ void ScPivotShell::Execute( SfxRequest& rReq )
                 aArgSet.Put( ScQueryItem( SCITEM_QUERYDATA, pViewData, &aQueryParam ) );
 
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+                OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                 AbstractScPivotFilterDlg* pDlg = pFact->CreateScPivotFilterDlg( pViewShell->GetDialogParent(),
                                                                                 aArgSet, nSrcTab,
                                                                                 RID_SCDLG_PIVOTFILTER);
-                DBG_ASSERT(pDlg, "Dialog create fail!");
+                OSL_ENSURE(pDlg, "Dialog create fail!");
 
                 if( pDlg->Execute() == RET_OK )
                 {

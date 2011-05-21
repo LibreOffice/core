@@ -1785,7 +1785,7 @@ sal_Bool ScUndoEnterMatrix::CanRepeat(SfxRepeatTarget& rTarget) const
 
 ScRange lcl_GetMultiMarkRange( const ScMarkData& rMark )
 {
-    DBG_ASSERT( rMark.IsMultiMarked(), "wrong mark type" );
+    OSL_ENSURE( rMark.IsMultiMarked(), "wrong mark type" );
 
     ScRange aRange;
     rMark.GetMultiMarkArea( aRange );
@@ -1922,7 +1922,7 @@ ScUndoClearItems::ScUndoClearItems( ScDocShell* pNewDocShell, const ScMarkData& 
     pUndoDoc( pNewUndoDoc ),
     pWhich( NULL )
 {
-    DBG_ASSERT( pW, "ScUndoClearItems: Which-Pointer ist 0" );
+    OSL_ENSURE( pW, "ScUndoClearItems: Which-Pointer ist 0" );
 
     sal_uInt16 nCount = 0;
     while ( pW[nCount] )

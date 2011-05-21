@@ -220,7 +220,7 @@ Size ScPreviewShell::GetOptimalSizePixel() const
                                             pDoc->GetPageStyle( nCurTab ),
                                             SFX_STYLE_FAMILY_PAGE );
 
-        DBG_ASSERT( pStyleSheet, "PageStyle not found :-/" );
+        OSL_ENSURE( pStyleSheet, "PageStyle not found :-/" );
 
         if ( pStyleSheet )
         {
@@ -280,7 +280,7 @@ void ScPreviewShell::UpdateScrollBars()
     ScStyleSheetPool*   pStylePool  = pDoc->GetStyleSheetPool();
     SfxStyleSheetBase*  pStyleSheet = pStylePool->Find( pDoc->GetPageStyle( nTab ),
                                                         SFX_STYLE_FAMILY_PAGE );
-    DBG_ASSERT(pStyleSheet,"StyleSheet nicht gefunden");
+    OSL_ENSURE(pStyleSheet,"StyleSheet nicht gefunden");
     if (!pStyleSheet) return;
     const SfxItemSet* pParamSet = &pStyleSheet->GetItemSet();
 
@@ -479,7 +479,7 @@ sal_uInt16 ScPreviewShell::SetPrinter( SfxPrinter *pNewPrinter, sal_uInt16 nDiff
 SfxTabPage* ScPreviewShell::CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions )
 {
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
     ::CreateTabPage ScTpPrintOptionsCreate =    pFact->GetTabPageCreatorFunc( RID_SCPAGE_PRINT );
     if ( ScTpPrintOptionsCreate )
         return  (*ScTpPrintOptionsCreate)( pParent, rOptions);
@@ -595,7 +595,7 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
                     if(pFact)
                     {
                         AbstractSvxZoomDialog* pDlg = pFact->CreateSvxZoomDialog(NULL, aSet);
-                        DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                        OSL_ENSURE(pDlg, "Dialogdiet fail!");
                         pDlg->SetLimits( 20, 400 );
                         pDlg->HideButton( ZOOMBTN_OPTIMAL );
                         bCancel = ( RET_CANCEL == pDlg->Execute() );
@@ -684,7 +684,7 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
                 String aOldName                 = pDocShell->GetDocument()->GetPageStyle( pPreview->GetTab() );
                 ScStyleSheetPool* pStylePool    = pDocShell->GetDocument()->GetStyleSheetPool();
                 SfxStyleSheetBase* pStyleSheet  = pStylePool->Find( aOldName, SFX_STYLE_FAMILY_PAGE );
-                DBG_ASSERT( pStyleSheet, "PageStyle not found! :-/" );
+                OSL_ENSURE( pStyleSheet, "PageStyle not found! :-/" );
 
                 if ( pReqArgs && pStyleSheet && SFX_ITEM_SET == pReqArgs->GetItemState( SID_PREVIEW_SCALINGFACTOR, sal_True, &pItem ) )
                 {
@@ -793,7 +793,7 @@ void ScPreviewShell::GetState( SfxItemSet& rSet )
                         String aOldName                 = pDocShell->GetDocument()->GetPageStyle( pPreview->GetTab() );
                         ScStyleSheetPool* pStylePool    = pDocShell->GetDocument()->GetStyleSheetPool();
                         SfxStyleSheetBase* pStyleSheet  = pStylePool->Find( aOldName, SFX_STYLE_FAMILY_PAGE );
-                        DBG_ASSERT( pStyleSheet, "PageStyle not found! :-/" );
+                        OSL_ENSURE( pStyleSheet, "PageStyle not found! :-/" );
 
                         if ( pStyleSheet )
                         {

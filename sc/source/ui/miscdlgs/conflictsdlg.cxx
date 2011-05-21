@@ -305,7 +305,7 @@ ScConflictsResolver::ScConflictsResolver( ScChangeTrack* pTrack, ScConflictsList
     :mpTrack ( pTrack )
     ,mrConflictsList ( rConflictsList )
 {
-    DBG_ASSERT( mpTrack, "ScConflictsResolver CTOR: mpTrack is null!" );
+    OSL_ENSURE( mpTrack, "ScConflictsResolver CTOR: mpTrack is null!" );
 }
 
 ScConflictsResolver::~ScConflictsResolver()
@@ -436,14 +436,14 @@ ScConflictsDlg::ScConflictsDlg( Window* pParent, ScViewData* pViewData, ScDocume
     ,mbInSelectHdl      ( false )
     ,mbInDeselectHdl    ( false )
 {
-    DBG_ASSERT( mpViewData, "ScConflictsDlg CTOR: mpViewData is null!" );
+    OSL_ENSURE( mpViewData, "ScConflictsDlg CTOR: mpViewData is null!" );
     mpOwnDoc = ( mpViewData ? mpViewData->GetDocument() : NULL );
-    DBG_ASSERT( mpOwnDoc, "ScConflictsDlg CTOR: mpOwnDoc is null!" );
+    OSL_ENSURE( mpOwnDoc, "ScConflictsDlg CTOR: mpOwnDoc is null!" );
     mpOwnTrack = ( mpOwnDoc ? mpOwnDoc->GetChangeTrack() : NULL );
-    DBG_ASSERT( mpOwnTrack, "ScConflictsDlg CTOR: mpOwnTrack is null!" );
-    DBG_ASSERT( mpSharedDoc, "ScConflictsDlg CTOR: mpSharedDoc is null!" );
+    OSL_ENSURE( mpOwnTrack, "ScConflictsDlg CTOR: mpOwnTrack is null!" );
+    OSL_ENSURE( mpSharedDoc, "ScConflictsDlg CTOR: mpSharedDoc is null!" );
     mpSharedTrack = ( mpSharedDoc ? mpSharedDoc->GetChangeTrack() : NULL );
-    DBG_ASSERT( mpSharedTrack, "ScConflictsDlg CTOR: mpSharedTrack is null!" );
+    OSL_ENSURE( mpSharedTrack, "ScConflictsDlg CTOR: mpSharedTrack is null!" );
 
     FreeResource();
 
@@ -507,8 +507,8 @@ String ScConflictsDlg::GetActionString( const ScChangeAction* pAction, ScDocumen
 {
     String aString;
 
-    DBG_ASSERT( pAction, "ScConflictsDlg::GetActionString(): pAction is null!" );
-    DBG_ASSERT( pDoc, "ScConflictsDlg::GetActionString(): pDoc is null!" );
+    OSL_ENSURE( pAction, "ScConflictsDlg::GetActionString(): pAction is null!" );
+    OSL_ENSURE( pDoc, "ScConflictsDlg::GetActionString(): pDoc is null!" );
     if ( pAction && pDoc )
     {
         String aDesc;

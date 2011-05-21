@@ -161,7 +161,7 @@ void ScAccessibleCsvControl::SendFocusEvent( bool bFocused )
 
 void ScAccessibleCsvControl::SendCaretEvent()
 {
-    DBG_ERRORFILE( "ScAccessibleCsvControl::SendCaretEvent - Illegal call" );
+    OSL_FAIL( "ScAccessibleCsvControl::SendCaretEvent - Illegal call" );
 }
 
 void ScAccessibleCsvControl::SendVisibleEvent()
@@ -182,17 +182,17 @@ void ScAccessibleCsvControl::SendSelectionEvent()
 
 void ScAccessibleCsvControl::SendTableUpdateEvent( sal_uInt32 /* nFirstColumn */, sal_uInt32 /* nLastColumn */, bool /* bAllRows */ )
 {
-    DBG_ERRORFILE( "ScAccessibleCsvControl::SendTableUpdateEvent - Illegal call" );
+    OSL_FAIL( "ScAccessibleCsvControl::SendTableUpdateEvent - Illegal call" );
 }
 
 void ScAccessibleCsvControl::SendInsertColumnEvent( sal_uInt32 /* nFirstColumn */, sal_uInt32 /* nLastColumn */ )
 {
-    DBG_ERRORFILE( "ScAccessibleCsvControl::SendInsertColumnEvent - Illegal call" );
+    OSL_FAIL( "ScAccessibleCsvControl::SendInsertColumnEvent - Illegal call" );
 }
 
 void ScAccessibleCsvControl::SendRemoveColumnEvent( sal_uInt32 /* nFirstColumn */, sal_uInt32 /* nLastColumn */ )
 {
-    DBG_ERRORFILE( "ScAccessibleCsvControl::SendRemoveColumnEvent - Illegal call" );
+    OSL_FAIL( "ScAccessibleCsvControl::SendRemoveColumnEvent - Illegal call" );
 }
 
 
@@ -231,7 +231,7 @@ void ScAccessibleCsvControl::ensureAlive() const throw( DisposedException )
 
 ScCsvControl& ScAccessibleCsvControl::implGetControl() const
 {
-    DBG_ASSERT( mpControl, "ScAccessibleCsvControl::implGetControl - missing control" );
+    OSL_ENSURE( mpControl, "ScAccessibleCsvControl::implGetControl - missing control" );
     return *mpControl;
 }
 
@@ -337,7 +337,7 @@ sal_Int32 lcl_GetRulerPos( sal_Int32 nApiPos )
 /** Expands the sequence's size and returns the base index of the new inserted elements. */
 inline sal_Int32 lcl_ExpandSequence( Sequence< PropertyValue >& rSeq, sal_Int32 nExp )
 {
-    DBG_ASSERT( nExp > 0, "lcl_ExpandSequence - invalid value" );
+    OSL_ENSURE( nExp > 0, "lcl_ExpandSequence - invalid value" );
     rSeq.realloc( rSeq.getLength() + nExp );
     return rSeq.getLength() - nExp;
 }

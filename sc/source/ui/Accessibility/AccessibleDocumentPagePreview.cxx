@@ -52,7 +52,6 @@
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 
 #include <unotools/accessiblestatesethelper.hxx>
-#include <tools/debug.hxx>
 #include <tools/gen.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdobj.hxx>
@@ -250,11 +249,11 @@ uno::Reference<XAccessible> ScNotesChilds::GetChild(sal_Int32 nIndex) const
             ScAccNotes::iterator aItr = std::find_if(maMarks.begin(), aEndItr, aParaFound);
             if (aItr != aEndItr)
             {
-                DBG_ASSERT((aItr->maNoteCell == maMarks[nIndex].maNoteCell) && (aItr->mbMarkNote == maMarks[nIndex].mbMarkNote), "wrong note found");
+                OSL_ENSURE((aItr->maNoteCell == maMarks[nIndex].maNoteCell) && (aItr->mbMarkNote == maMarks[nIndex].mbMarkNote), "wrong note found");
             }
             else
             {
-                DBG_ERRORFILE("wrong note found");
+                OSL_FAIL("wrong note found");
             }
             if (!aItr->mpTextHelper)
                 aItr->mpTextHelper = CreateTextHelper(maMarks[nIndex].maNoteText, maMarks[nIndex].maRect, maMarks[nIndex].maNoteCell, maMarks[nIndex].mbMarkNote, nIndex + mnOffset); // the marks are the first and every mark has only one paragraph
@@ -319,7 +318,7 @@ uno::Reference<XAccessible> ScNotesChilds::GetAt(const awt::Point& rPoint) const
 
 sal_Int8 ScNotesChilds::CompareCell(const ScAddress& aCell1, const ScAddress& aCell2)
 {
-    DBG_ASSERT(aCell1.Tab() == aCell2.Tab(), "the notes should be on the same table");
+    OSL_ENSURE(aCell1.Tab() == aCell2.Tab(), "the notes should be on the same table");
     sal_Int8 nResult(0);
     if (aCell1 != aCell2)
     {
@@ -384,7 +383,7 @@ sal_Int32 ScNotesChilds::CheckChanges(const ScPreviewLocationData& rData,
                         {
                             aNote.mpTextHelper->SetOffset(aNote.maRect.TopLeft());
                             aNote.mpTextHelper->UpdateChildren();
-                            //DBG_ASSERT(aItr->maRect.GetSize() == aNote.maRect.GetSize(), "size should be the same, because the text is not changed");
+                            //OSL_ENSURE(aItr->maRect.GetSize() == aNote.maRect.GetSize(), "size should be the same, because the text is not changed");
                             // could be changed, because only a part of the note is visible
                         }
                     }
@@ -902,7 +901,7 @@ sal_Bool ScShapeChilds::ReplaceChild (::accessibility::AccessibleShape* /* pCurr
         const long /* _nIndex */, const ::accessibility::AccessibleShapeTreeInfo& /* _rShapeTreeInfo */)
         throw (uno::RuntimeException)
 {
-    DBG_ERRORFILE("should not be called in the page preview");
+    OSL_FAIL("should not be called in the page preview");
     return false;
 }
 
@@ -1102,7 +1101,7 @@ uno::Reference<XAccessible> ScShapeChilds::GetBackgroundShapeAt(const awt::Point
 
 void ScShapeChilds::FillShapes(const Rectangle& aPixelPaintRect, const MapMode& aMapMode, sal_uInt8 nRangeId)
 {
-    DBG_ASSERT(nRangeId < maShapeRanges.size(), "this is not a valid range for draw objects");
+    OSL_ENSURE(nRangeId < maShapeRanges.size(), "this is not a valid range for draw objects");
     SdrPage* pPage = GetDrawPage();
     Window* pWin = mpViewShell->GetWindow();
     if (pPage && pWin)
@@ -1158,7 +1157,7 @@ void ScShapeChilds::FillShapes(const Rectangle& aPixelPaintRect, const MapMode& 
                             break;
                             default:
                             {
-                                DBG_ERRORFILE("I don't know this layer.");
+                                OSL_FAIL("I don't know this layer.");
                             }
                             break;
                         }

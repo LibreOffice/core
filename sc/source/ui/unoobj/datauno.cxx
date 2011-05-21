@@ -31,7 +31,6 @@
 
 
 
-#include <tools/debug.hxx>
 #include <svl/smplhint.hxx>
 #include <svl/zforlist.hxx>
 #include <rtl/uuid.h>
@@ -214,7 +213,7 @@ long ScImportDescriptor::GetPropertyCount()
 
 void ScImportDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rSeq, const ScImportParam& rParam )
 {
-    DBG_ASSERT( rSeq.getLength() == GetPropertyCount(), "falscher Count" );
+    OSL_ENSURE( rSeq.getLength() == GetPropertyCount(), "falscher Count" );
 
     beans::PropertyValue* pArray = rSeq.getArray();
 
@@ -324,7 +323,7 @@ long ScSortDescriptor::GetPropertyCount()
 
 void ScSortDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rSeq, const ScSortParam& rParam )
 {
-    DBG_ASSERT( rSeq.getLength() == GetPropertyCount(), "falscher Count" );
+    OSL_ENSURE( rSeq.getLength() == GetPropertyCount(), "falscher Count" );
 
     beans::PropertyValue* pArray = rSeq.getArray();
 
@@ -513,7 +512,7 @@ ScSubTotalFieldObj::ScSubTotalFieldObj( ScSubTotalDescriptorBase* pDesc, sal_uIn
     rParent( *pDesc ),
     nPos( nP )
 {
-    DBG_ASSERT(pDesc, "ScSubTotalFieldObj: Parent ist 0");
+    OSL_ENSURE(pDesc, "ScSubTotalFieldObj: Parent ist 0");
 }
 
 ScSubTotalFieldObj::~ScSubTotalFieldObj()
@@ -1067,7 +1066,7 @@ void ScFilterDescriptorBase::fillQueryParam(
     const uno::Sequence<sheet::TableFilterField2>& aFilterFields)
 {
     SCSIZE nCount = static_cast<SCSIZE>(aFilterFields.getLength());
-    DBG_ASSERT( nCount <= MAXQUERY, "setFilterFields: zu viele" );
+    OSL_ENSURE( nCount <= MAXQUERY, "setFilterFields: zu viele" );
 
     rParam.Resize( nCount );
 
@@ -1316,7 +1315,7 @@ void SAL_CALL ScFilterDescriptorBase::setFilterFields(
     GetData(aParam);
 
     SCSIZE nCount = static_cast<SCSIZE>(aFilterFields.getLength());
-    DBG_ASSERT( nCount <= MAXQUERY, "setFilterFields: zu viele" );
+    OSL_ENSURE( nCount <= MAXQUERY, "setFilterFields: zu viele" );
 
     aParam.Resize( nCount );
 

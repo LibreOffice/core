@@ -30,8 +30,6 @@
 #include "precompiled_sc.hxx"
 
 
-#include <tools/debug.hxx>
-
 #include "formdata.hxx"
 
 //============================================================================

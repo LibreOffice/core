@@ -137,7 +137,7 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
     bUsedForLink( false ),
     bUseInApi( false )
 {
-    DBG_ASSERT(pDoc->IsClipboard(), "wrong document");
+    OSL_ENSURE(pDoc->IsClipboard(), "wrong document");
 
     //
     // get aBlock from clipboard doc
@@ -168,7 +168,7 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
             nTab2 = i;
             bFirst = false;
         }
-    DBG_ASSERT(!bFirst, "no sheet selected");
+    OSL_ENSURE(!bFirst, "no sheet selected");
 
     //  only limit to used cells if whole sheet was marked
     //  (so empty cell areas can be copied)
@@ -760,7 +760,7 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
     if (!pDestDoc)
     {
         pDestDoc = pDoc;
-        DBG_ASSERT(nSubX==0&&nSubY==0, "can't move within the document");
+        OSL_ENSURE(nSubX==0&&nSubY==0, "can't move within the document");
     }
 
     //  In a clipboard doc the data don't have to be on the first sheet

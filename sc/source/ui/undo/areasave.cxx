@@ -36,7 +36,6 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include <sfx2/linkmgr.hxx>
-#include <tools/debug.hxx>
 
 #include "areasave.hxx"
 #include "arealink.hxx"

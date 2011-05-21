@@ -36,7 +36,6 @@
 #include "impex.hxx"
 #include "scuiasciiopt.hxx"
 #include "asciiopt.hrc"
-#include <tools/debug.hxx>
 #include <rtl/tencinfo.h>
 #include <unotools/transliterationwrapper.hxx>
 // ause
@@ -608,7 +607,7 @@ void ScImportAsciiDlg::UpdateVertical()
 
 IMPL_LINK( ScImportAsciiDlg, RbSepFixHdl, RadioButton*, pButton )
 {
-    DBG_ASSERT( pButton, "ScImportAsciiDlg::RbSepFixHdl - missing sender" );
+    OSL_ENSURE( pButton, "ScImportAsciiDlg::RbSepFixHdl - missing sender" );
 
     if( (pButton == &aRbFixed) || (pButton == &aRbSeparated) )
     {
@@ -626,8 +625,8 @@ IMPL_LINK( ScImportAsciiDlg, RbSepFixHdl, RadioButton*, pButton )
 
 IMPL_LINK( ScImportAsciiDlg, SeparatorHdl, Control*, pCtrl )
 {
-    DBG_ASSERT( pCtrl, "ScImportAsciiDlg::SeparatorHdl - missing sender" );
-    DBG_ASSERT( !aRbFixed.IsChecked(), "ScImportAsciiDlg::SeparatorHdl - not allowed in fixed width" );
+    OSL_ENSURE( pCtrl, "ScImportAsciiDlg::SeparatorHdl - missing sender" );
+    OSL_ENSURE( !aRbFixed.IsChecked(), "ScImportAsciiDlg::SeparatorHdl - not allowed in fixed width" );
 
     /*  #i41550# First update state of the controls. The GetSeparators()
         function needs final state of the check boxes. */
@@ -651,7 +650,7 @@ IMPL_LINK( ScImportAsciiDlg, SeparatorHdl, Control*, pCtrl )
 
 IMPL_LINK( ScImportAsciiDlg, CharSetHdl, SvxTextEncodingBox*, pCharSetBox )
 {
-    DBG_ASSERT( pCharSetBox, "ScImportAsciiDlg::CharSetHdl - missing sender" );
+    OSL_ENSURE( pCharSetBox, "ScImportAsciiDlg::CharSetHdl - missing sender" );
 
     if( (pCharSetBox == &aLbCharSet) && (pCharSetBox->GetSelectEntryCount() == 1) )
     {
@@ -670,14 +669,14 @@ IMPL_LINK( ScImportAsciiDlg, CharSetHdl, SvxTextEncodingBox*, pCharSetBox )
 
 IMPL_LINK( ScImportAsciiDlg, FirstRowHdl, NumericField*, pNumField )
 {
-    DBG_ASSERT( pNumField, "ScImportAsciiDlg::FirstRowHdl - missing sender" );
+    OSL_ENSURE( pNumField, "ScImportAsciiDlg::FirstRowHdl - missing sender" );
     maTableBox.Execute( CSVCMD_SETFIRSTIMPORTLINE, sal::static_int_cast<sal_Int32>( pNumField->GetValue() - 1 ) );
     return 0;
 }
 
 IMPL_LINK( ScImportAsciiDlg, LbColTypeHdl, ListBox*, pListBox )
 {
-    DBG_ASSERT( pListBox, "ScImportAsciiDlg::LbColTypeHdl - missing sender" );
+    OSL_ENSURE( pListBox, "ScImportAsciiDlg::LbColTypeHdl - missing sender" );
     if( pListBox == &aLbType )
         maTableBox.Execute( CSVCMD_SETCOLUMNTYPE, pListBox->GetSelectEntryPos() );
     return 0;
@@ -712,7 +711,7 @@ IMPL_LINK( ScImportAsciiDlg, UpdateTextHdl, ScCsvTableBox*, EMPTYARG )
 
 IMPL_LINK( ScImportAsciiDlg, ColTypeHdl, ScCsvTableBox*, pTableBox )
 {
-    DBG_ASSERT( pTableBox, "ScImportAsciiDlg::ColTypeHdl - missing sender" );
+    OSL_ENSURE( pTableBox, "ScImportAsciiDlg::ColTypeHdl - missing sender" );
 
     sal_Int32 nType = pTableBox->GetSelColumnType();
     sal_Int32 nTypeCount = aLbType.GetEntryCount();

@@ -307,7 +307,7 @@ sal_Bool ScSpecialFilterDlg::IsRefInputMode() const
 
 IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
 {
-    DBG_ASSERT( pDoc && pViewData, "Document or ViewData not found. :-/" );
+    OSL_ENSURE( pDoc && pViewData, "Document or ViewData not found. :-/" );
 
     if ( (pBtn == &aBtnOk) && pDoc && pViewData )
     {

@@ -45,7 +45,6 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
 #include <rtl/uuid.h>
-#include <tools/debug.hxx>
 #include <tools/gen.hxx>
 #include <svtools/colorcfg.hxx>
 #include <vcl/svapp.hxx>
@@ -308,7 +307,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 ScRange aRange(rRef.GetRange());
                 if ((nX < 0) || (nY < 0))
                 {
-                    DBG_ASSERT(!((nX < 0) && (nY < 0)), "should not be possible to remove row and column at the same time");
+                    OSL_ENSURE(!((nX < 0) && (nY < 0)), "should not be possible to remove row and column at the same time");
                     nId = AccessibleTableModelChangeType::DELETE;
                     if (nX < 0)
                     {
@@ -323,7 +322,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 }
                 else if ((nX > 0) || (nY > 0))
                 {
-                    DBG_ASSERT(!((nX > 0) && (nY > 0)), "should not be possible to add row and column at the same time");
+                    OSL_ENSURE(!((nX > 0) && (nY > 0)), "should not be possible to add row and column at the same time");
                     nId = AccessibleTableModelChangeType::INSERT;
                     if (nX < 0)
                         nY = aRange.aEnd.Row() - aRange.aStart.Row();

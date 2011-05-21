@@ -112,7 +112,7 @@ ScFilterOptionsMgr::~ScFilterOptionsMgr()
 void ScFilterOptionsMgr::Init()
 {
 //moggi:TODO
-    DBG_ASSERT( pViewData && pDoc, "Init failed :-/" );
+    OSL_ENSURE( pViewData && pDoc, "Init failed :-/" );
 
     rLbCopyPos.SetSelectHdl  ( LINK( this, ScFilterOptionsMgr, LbPosSelHdl ) );
     rEdCopyPos.SetModifyHdl  ( LINK( this, ScFilterOptionsMgr, EdPosModifyHdl ) );

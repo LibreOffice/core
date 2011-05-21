@@ -31,8 +31,6 @@
 
 
 #include <string.h>
-#include <tools/debug.hxx>
-
 
 #include "pagedata.hxx"
 
@@ -98,11 +96,11 @@ ScPageBreakData::~ScPageBreakData()
 
 ScPrintRangeData& ScPageBreakData::GetData(size_t nPos)
 {
-    DBG_ASSERT(nPos < nAlloc, "ScPageBreakData::GetData bumm");
+    OSL_ENSURE(nPos < nAlloc, "ScPageBreakData::GetData bumm");
 
     if ( nPos >= nUsed )
     {
-        DBG_ASSERT(nPos == nUsed, "ScPageBreakData::GetData falsche Reihenfolge");
+        OSL_ENSURE(nPos == nUsed, "ScPageBreakData::GetData falsche Reihenfolge");
         nUsed = nPos+1;
     }
 

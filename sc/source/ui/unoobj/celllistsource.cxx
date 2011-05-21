@@ -161,7 +161,7 @@ namespace calc
     void SAL_CALL OCellListSource::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
     {
         DBG_CHKTHIS( OCellListSource, checkConsistency_static );
-        DBG_ASSERT( _nHandle == PROP_HANDLE_RANGE_ADDRESS, "OCellListSource::getFastPropertyValue: invalid handle!" );
+        OSL_ENSURE( _nHandle == PROP_HANDLE_RANGE_ADDRESS, "OCellListSource::getFastPropertyValue: invalid handle!" );
             // we only have this one property ....
         (void)_nHandle;     // avoid warning in product version
 
@@ -393,13 +393,13 @@ namespace calc
             {
                 // first the sheets collection
                 Reference< XIndexAccess > xSheets(m_xDocument->getSheets( ), UNO_QUERY);
-                DBG_ASSERT( xSheets.is(), "OCellListSource::initialize: could not retrieve the sheets!" );
+                OSL_ENSURE( xSheets.is(), "OCellListSource::initialize: could not retrieve the sheets!" );
 
                 if ( xSheets.is() )
                 {
                     // the concrete sheet
                     Reference< XCellRange > xSheet(xSheets->getByIndex( aRangeAddress.Sheet ), UNO_QUERY);
-                    DBG_ASSERT( xSheet.is(), "OCellListSource::initialize: NULL sheet, but no exception!" );
+                    OSL_ENSURE( xSheet.is(), "OCellListSource::initialize: NULL sheet, but no exception!" );
 
                     // the concrete cell
                     if ( xSheet.is() )
@@ -407,7 +407,7 @@ namespace calc
                         m_xRange.set(xSheet->getCellRangeByPosition(
                             aRangeAddress.StartColumn, aRangeAddress.StartRow,
                             aRangeAddress.EndColumn, aRangeAddress.EndRow));
-                        DBG_ASSERT( Reference< XCellRangeAddressable >( m_xRange, UNO_QUERY ).is(), "OCellListSource::initialize: either NULL range, or cell without address access!" );
+                        OSL_ENSURE( Reference< XCellRangeAddressable >( m_xRange, UNO_QUERY ).is(), "OCellListSource::initialize: either NULL range, or cell without address access!" );
                     }
                 }
             }

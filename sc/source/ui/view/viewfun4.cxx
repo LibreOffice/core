@@ -415,7 +415,7 @@ void ScViewFunc::DoThesaurus( sal_Bool bRecord )
     //  language is now in EditEngine attributes -> no longer passed to StartThesaurus
 
     eState = pEditView->StartThesaurus();
-    DBG_ASSERT(eState != EE_SPELL_NOSPELLER, "No SpellChecker");
+    OSL_ENSURE(eState != EE_SPELL_NOSPELLER, "No SpellChecker");
 
     if (eState == EE_SPELL_ERRORFOUND)              // sollte spaeter durch Wrapper geschehen!
     {
@@ -548,7 +548,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, sal_Boo
                 pDoc->GetEnginePool(), rViewData, rConvParam, pUndoDoc, pRedoDoc );
         break;
         default:
-            DBG_ERRORFILE( "ScViewFunc::DoSheetConversion - unknown conversion type" );
+            OSL_FAIL( "ScViewFunc::DoSheetConversion - unknown conversion type" );
     }
 
     MakeEditView( pEngine, nCol, nRow );

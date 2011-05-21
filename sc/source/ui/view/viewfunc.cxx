@@ -816,7 +816,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const EditTextOb
                     ++nPos;
                 }
 
-            DBG_ASSERT( nPos==nSelCount, "nPos!=nSelCount" );
+            OSL_ENSURE( nPos==nSelCount, "nPos!=nSelCount" );
 
             pUndoData = pData->Clone();
         }
@@ -1964,7 +1964,7 @@ void ScViewFunc::DeleteContents( sal_uInt16 nFlags, sal_Bool bRecord )
     aFuncMark.SetMarking(false);        // for MarkToMulti
     aFuncMark.MarkToSimple();           // before bMulti test below
 
-    DBG_ASSERT( aFuncMark.IsMarked() || aFuncMark.IsMultiMarked() || bSimple, "delete what?" );
+    OSL_ENSURE( aFuncMark.IsMarked() || aFuncMark.IsMultiMarked() || bSimple, "delete what?" );
 
     ScDocument* pUndoDoc = NULL;
     sal_Bool bMulti = !bSimple && aFuncMark.IsMultiMarked();
@@ -2860,7 +2860,7 @@ void ScViewFunc::ChangeNumFmtDecimals( sal_Bool bIncrement )
             short nNewType = 0;
             sal_Bool bOk = pFormatter->PutEntry( aNewPicture, nErrPos,
                                                 nNewType, nNewFormat, eLanguage );
-            DBG_ASSERT( bOk, "falsches Zahlformat generiert" );
+            OSL_ENSURE( bOk, "falsches Zahlformat generiert" );
             if (!bOk)
                 bError = sal_True;
         }
