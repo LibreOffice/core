@@ -4908,7 +4908,7 @@ if test -n "$with_system_curl" -o -n "$with_system_libs" && \
       fi
       CURL_LIBS=`$CURLCONFIG --libs`
       CURL_CFLAGS=`$CURLCONFIG --cflags`
-      curl_version=`$CURLCONFIG --version`
+      curl_version=`$CURLCONFIG --version | $SED -e 's/^libcurl //'`
    fi
 
    AC_MSG_CHECKING([whether libcurl is >= 7.13.1])
