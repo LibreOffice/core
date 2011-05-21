@@ -128,10 +128,12 @@ OBJFILES=   \
             $(OBJ)$/alloc_fini.obj
 
 
+.IF "$(CROSS_COMPILING)"==""
 APP1TARGET=gen_makefile
 APP1OBJS=$(SLO)$/gen_makefile.obj
 APP1LIBSALCPPRT=
 APP1RPATH=NONE
+.ENDIF
 
 .ENDIF
 
@@ -169,6 +171,14 @@ $(ALWAYSDBGFILES):
 
 ALLTAR : $(BOOTSTRAPMK)
 
+.IF "$(CROSS_COMPILING)"==""
+
 $(BOOTSTRAPMK) : $(APP1TARGETN)
     $(AUGMENT_LIBRARY_PATH) $< > $@
 
+.ELSE
+
+$(BOOTSTRAPMK) :
+    (echo '#include "macro.hxx"'; echo RTL_OS:=THIS_OS; echo RTL_ARCH:=THIS_ARCH) | $(CC) -E $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CDEFS) $(CFLAGSAPPEND) - | grep '^RTL_' >$@ 
+
+.ENDIF
