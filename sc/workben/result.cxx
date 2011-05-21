@@ -30,7 +30,6 @@
 #pragma hdrstop
 #endif
 
-#include <tools/debug.hxx>
 #include <usr/ustring.hxx>
 
 #include "result.hxx"

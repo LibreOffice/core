@@ -320,7 +320,7 @@ void TokenPool::GetElement( const sal_uInt16 nId )
     {
         switch( pType[ nId ] )
         {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
             case T_Id:
                 OSL_FAIL( "-TokenPool::GetElement(): hier hast Du nichts zu suchen!" );
                 break;
@@ -425,7 +425,7 @@ void TokenPool::GetElement( const sal_uInt16 nId )
 
 void TokenPool::GetElementRek( const sal_uInt16 nId )
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     nRek++;
     OSL_ENSURE( nRek <= nP_Id, "*TokenPool::GetElement(): Rekursion loopt!?" );
 #endif
@@ -541,7 +541,7 @@ void TokenPool::GetElementRek( const sal_uInt16 nId )
     }
 
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     nRek--;
 #endif
 }

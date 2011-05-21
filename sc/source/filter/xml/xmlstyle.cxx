@@ -48,7 +48,6 @@
 #include <xmloff/attrlist.hxx>
 #include <xmloff/contextid.hxx>
 #include <xmloff/txtprmap.hxx>
-#include <tools/debug.hxx>
 #include <com/sun/star/util/CellProtection.hpp>
 #include <com/sun/star/table/CellOrientation.hpp>
 #include <com/sun/star/table/CellVertJustify2.hpp>

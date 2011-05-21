@@ -35,7 +35,6 @@
 #include <xmloff/xmlaustp.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <tools/string.hxx>
-#include <tools/debug.hxx>
 
 #include "sheetdata.hxx"
 

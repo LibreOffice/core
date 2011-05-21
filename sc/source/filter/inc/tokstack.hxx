@@ -30,7 +30,6 @@
 #define SC_TOKSTACK_HXX
 
 #include <string.h>
-#include <tools/debug.hxx>
 #include "compiler.hxx"
 #include "tokenarray.hxx"
 
@@ -178,7 +177,7 @@ class TokenPool
         sal_uInt16                      nElementAkt;
 
         static const sal_uInt16         nScTokenOff;// Offset fuer SC-Token
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
         sal_uInt16                      nRek;       // Rekursionszaehler
 #endif
         ScTokenArray*               pScToken;   // Tokenbastler
@@ -386,7 +385,7 @@ const inline ScTokenArray* TokenPool::operator []( const TokenId nId )
 
     if( nId )
     {//...nur wenn nId > 0!
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
         nRek = 0;
 #endif
         GetElement( ( sal_uInt16 ) nId - 1 );

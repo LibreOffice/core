@@ -45,7 +45,6 @@
 #include <comphelper/extract.hxx>
 #include <xmloff/xmlprcon.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <tools/debug.hxx>
 #include "XMLTableHeaderFooterContext.hxx"
 #include "XMLConverter.hxx"
 #include "XMLTableShapeImportHelper.hxx"

@@ -34,7 +34,6 @@
 #include "document.hxx"
 #include "chgviset.hxx"
 #include "rangeutl.hxx"
-#include <tools/debug.hxx>
 #include <tools/datetime.hxx>
 #include <svl/zforlist.hxx>
 #include <xmloff/xmluconv.hxx>

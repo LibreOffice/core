@@ -76,7 +76,7 @@ using namespace ::com::sun::star;
 
 // Global data ================================================================
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
 XclDebugObjCounter::~XclDebugObjCounter()
 {
     OSL_ENSURE( mnObjCnt == 0, "XclDebugObjCounter::~XclDebugObjCounter - wrong root object count" );
@@ -174,7 +174,7 @@ XclRootData::~XclRootData()
 XclRoot::XclRoot( XclRootData& rRootData ) :
     mrData( rRootData )
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     ++mrData.mnObjCnt;
 #endif
 
@@ -188,14 +188,14 @@ XclRoot::XclRoot( XclRootData& rRootData ) :
 XclRoot::XclRoot( const XclRoot& rRoot ) :
     mrData( rRoot.mrData )
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     ++mrData.mnObjCnt;
 #endif
 }
 
 XclRoot::~XclRoot()
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     --mrData.mnObjCnt;
 #endif
 }

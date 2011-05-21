@@ -46,7 +46,6 @@
 #include <vcl/outdev.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <tools/debug.hxx>
 #include <svx/sdasitm.hxx>
 
 #include <sot/exchange.hxx>

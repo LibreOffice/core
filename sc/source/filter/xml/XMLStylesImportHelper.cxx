@@ -34,7 +34,6 @@
 // INCLUDE ---------------------------------------------------------------
 #include "XMLStylesImportHelper.hxx"
 #include "xmlimprt.hxx"
-#include <tools/debug.hxx>
 #include <com/sun/star/util/NumberFormat.hpp>
 
 using namespace com::sun::star;

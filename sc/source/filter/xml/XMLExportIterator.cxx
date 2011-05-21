@@ -38,7 +38,6 @@
 #include <com/sun/star/sheet/CellFlags.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationsSupplier.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <tools/debug.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include "dociter.hxx"
 #include "convuno.hxx"

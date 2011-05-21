@@ -85,7 +85,6 @@
 
 #include <rtl/ustring.hxx>
 
-#include <tools/debug.hxx>
 #include "tools/color.hxx"
 #include <rtl/math.hxx>
 #include <svl/zforlist.hxx>
@@ -1111,7 +1110,7 @@ void ScXMLExport::WriteRowContent()
 {
     ScMyRowFormatRange aRange;
     sal_Int32 nIndex(-1);
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     sal_Int32 nPrevCol(0);
 #endif
     sal_Int32 nCols(0);
@@ -1120,7 +1119,7 @@ void ScXMLExport::WriteRowContent()
     sal_Bool bIsFirst(sal_True);
     while (pRowFormatRanges->GetNext(aRange))
     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
         OSL_ENSURE(bIsFirst || (!bIsFirst && (nPrevCol + nCols == aRange.nStartColumn)), "here are some columns missing");
 #endif
         if (bIsFirst)
@@ -1130,7 +1129,7 @@ void ScXMLExport::WriteRowContent()
             bIsAutoStyle = aRange.bIsAutoStyle;
             nCols = aRange.nRepeatColumns;
             bIsFirst = false;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
             nPrevCol = aRange.nStartColumn;
 #endif
         }
@@ -1157,7 +1156,7 @@ void ScXMLExport::WriteRowContent()
                 bIsAutoStyle = aRange.bIsAutoStyle;
                 nCols = aRange.nRepeatColumns;
                 nPrevValidationIndex = aRange.nValidationIndex;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
                 nPrevCol = aRange.nStartColumn;
 #endif
             }

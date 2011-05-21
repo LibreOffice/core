@@ -33,8 +33,6 @@
 
 //------------------------------------------------------------------------
 
-#include <tools/debug.hxx>
-
 #include "dociter.hxx"
 #include "cell.hxx"
 #include "document.hxx"

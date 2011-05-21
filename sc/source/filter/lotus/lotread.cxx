@@ -195,7 +195,7 @@ FltError ImportLotus::Read()
             case S_END:                                             // S_END
             break;
             // -----------------------------------------------------------
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
             default:
             OSL_FAIL( "*ImportLotus::Read(): State unbekannt!" );
             eAkt = S_END;

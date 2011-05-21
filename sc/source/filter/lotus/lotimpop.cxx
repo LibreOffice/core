@@ -81,7 +81,7 @@ ImportLotus::~ImportLotus()
     delete pLotusRoot->pAttrTable;
     delete pLotusRoot;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     pLotusRoot = NULL;
 #endif
 

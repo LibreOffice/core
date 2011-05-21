@@ -33,7 +33,6 @@
 #include <rsc/rscsfx.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
-#include <tools/debug.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
@@ -220,7 +219,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
         else
         {
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
             ByteString aError( "SAX parse exception catched while importing:\n" );
             aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
             OSL_FAIL( aError.GetBuffer() );
@@ -256,7 +255,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
         else
         {
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
             ByteString aError( "SAX exception catched while importing:\n" );
             aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
             OSL_FAIL( aError.GetBuffer() );
@@ -268,7 +267,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
     }
     catch( packages::zip::ZipIOException& r )
     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
         ByteString aError( "Zip exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
         OSL_FAIL( aError.GetBuffer() );
@@ -279,7 +278,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
     }
     catch( io::IOException& r )
     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
         ByteString aError( "IO exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
         OSL_FAIL( aError.GetBuffer() );
@@ -290,7 +289,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
     }
     catch( uno::Exception& r )
     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
         ByteString aError( "uno exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
         OSL_FAIL( aError.GetBuffer() );

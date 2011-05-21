@@ -34,7 +34,6 @@
 // INCLUDE ---------------------------------------------------------------
 #include "XMLExportSharedData.hxx"
 #include "XMLExportIterator.hxx"
-#include <tools/debug.hxx>
 
 using namespace com::sun::star;
 

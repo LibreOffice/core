@@ -2131,7 +2131,7 @@ XclExpStyle::XclExpStyle( sal_uInt32 nXFId, const String& rStyleName ) :
     mnLevel( EXC_STYLE_NOLEVEL )
 {
     OSL_ENSURE( maName.Len(), "XclExpStyle::XclExpStyle - empty style name" );
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     sal_uInt8 nStyleId, nLevel; // do not use members for debug tests
     OSL_ENSURE( !XclTools::GetBuiltInStyleId( nStyleId, nLevel, maName ),
         "XclExpStyle::XclExpStyle - this is a built-in style" );

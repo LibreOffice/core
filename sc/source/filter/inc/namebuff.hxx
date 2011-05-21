@@ -29,7 +29,6 @@
 #ifndef SC_NAMEBUFF_HXX
 #define SC_NAMEBUFF_HXX
 
-#include <tools/debug.hxx>
 #include <tools/string.hxx>
 #include "compiler.hxx"
 #include "root.hxx"

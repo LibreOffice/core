@@ -187,7 +187,7 @@ void XclExpString::AppendByte( sal_Unicode cChar, rtl_TextEncoding eTextEnc )
 void XclExpString::SetFormats( const XclFormatRunVec& rFormats )
 {
     maFormats = rFormats;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     if( IsRich() )
     {
         XclFormatRunVec::const_iterator aCurr = maFormats.begin();

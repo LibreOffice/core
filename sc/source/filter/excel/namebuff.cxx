@@ -86,7 +86,7 @@ void NameBuffer::operator <<( const String &rNewString )
 }
 
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
 sal_uInt16  nShrCnt;
 #endif
 
@@ -102,7 +102,7 @@ ShrfmlaBuffer::ShrfmlaBuffer( RootData* pRD ) :
     ExcRoot( pRD ),
     mnCurrIdx (nBase)
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     nShrCnt = 0;
 #endif
 }

@@ -1000,7 +1000,7 @@ sal_uLong Sc10Import::Import()
     if (!nError) { ImportNameCollection();      pPrgrsBar->Progress(); }
     pDoc->SetViewOptions( aSc30ViewOpt );
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     if (nError)
     {
         OSL_FAIL( ByteString::CreateFromInt32( nError ).GetBuffer() );
@@ -1008,7 +1008,7 @@ sal_uLong Sc10Import::Import()
 #endif
 
     delete pPrgrsBar;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     pPrgrsBar = NULL;
 #endif
 

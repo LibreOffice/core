@@ -32,7 +32,6 @@
 #include <math.h>
 
 #include <svl/zforlist.hxx>
-#include <tools/debug.hxx>
 
 #include "attrib.hxx"
 #include "cell.hxx"

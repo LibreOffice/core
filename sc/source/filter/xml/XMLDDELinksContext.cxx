@@ -40,7 +40,6 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <tools/debug.hxx>
 
 using namespace com::sun::star;
 using namespace xmloff::token;

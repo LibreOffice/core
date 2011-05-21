@@ -41,7 +41,6 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <com/sun/star/util/DateTime.hpp>
-#include <tools/debug.hxx>
 #include <tools/datetime.hxx>
 #include <svl/zforlist.hxx>
 
@@ -153,7 +152,7 @@ void ScChangeTrackingExportHelper::WriteChangeInfo(const ScChangeAction* pAction
 
 void ScChangeTrackingExportHelper::WriteGenerated(const ScChangeAction* pGeneratedAction)
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     sal_uInt32 nActionNumber(pGeneratedAction->GetActionNumber());
     OSL_ENSURE(pChangeTrack->IsGenerated(nActionNumber), "a not generated action found");
 #endif

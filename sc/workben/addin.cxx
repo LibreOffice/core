@@ -35,7 +35,6 @@
 #include <usr/reflserv.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/debug.hxx>
 #include <tools/date.hxx>
 #include <svl/itemprop.hxx>
 #include <usr/proptypehlp.hxx>

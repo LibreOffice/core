@@ -36,7 +36,6 @@
 #include "XMLConverter.hxx"
 #include "rangeutl.hxx"
 #include "reftokenhelper.hxx"
-#include <tools/debug.hxx>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

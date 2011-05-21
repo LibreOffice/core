@@ -57,7 +57,6 @@
 #include <tools/errcode.hxx>
 #include <tools/ref.hxx>
 #include <tools/link.hxx>
-#include <tools/debug.hxx>
 #include <tools/time.hxx>
 #include <tools/date.hxx>
 #include <svl/svarray.hxx>

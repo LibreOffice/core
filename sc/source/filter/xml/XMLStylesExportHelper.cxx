@@ -42,7 +42,6 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/XMLEventExport.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <tools/debug.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/XSheetCondition.hpp>

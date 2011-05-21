@@ -38,7 +38,6 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <tools/debug.hxx>
 #include <com/sun/star/text/XTextCursor.hpp>
 
 using namespace com::sun::star;

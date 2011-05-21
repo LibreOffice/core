@@ -29,7 +29,6 @@
 #ifndef SC_XCLEXPCHANGETRACK_HXX
 #define SC_XCLEXPCHANGETRACK_HXX
 
-#include <tools/debug.hxx>
 #include <tools/datetime.hxx>
 #include <rtl/uuid.h>
 #include "bigrange.hxx"
