@@ -222,7 +222,7 @@ public:
     void                SetPaperFormatRanges( Paper eStart, Paper eEnd )
                             { ePaperStart = eStart, ePaperEnd = eEnd; }
 
-    void                SetCollectionList(const List* pList);
+    void                SetCollectionList(const std::vector<String> &aList);
     virtual void        PageCreated (SfxAllItemSet aSet);
 };
 

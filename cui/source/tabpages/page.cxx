@@ -1640,13 +1640,13 @@ IMPL_LINK_INLINE_END( SvxPageDescPage, CenterHdl_Impl, CheckBox *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-void SvxPageDescPage::SetCollectionList(const List* pList)
+void SvxPageDescPage::SetCollectionList(const std::vector<String> &aList)
 {
-    sStandardRegister = *(String*)pList->GetObject(0);
-    for( sal_uInt16 i = 1; i < pList->Count(); i++   )
-    {
-        aRegisterLB.InsertEntry(*(String*)pList->GetObject(i));
-    }
+    OSL_ENSURE(!aList.empty(), "Empty string list");
+
+    sStandardRegister = aList[0];
+    for( sal_uInt16 i = 1; i < aList.size(); i++   )
+        aRegisterLB.InsertEntry(aList[i]);
 
     aRegisterCB  .Show();
     aRegisterFT  .Show();
