@@ -32,7 +32,6 @@
 
 #include "svl/svldllapi.h"
 #include <tools/rtti.hxx>
-#include <tools/list.hxx>
 #include <svl/poolitem.hxx>
 #include <com/sun/star/uno/Sequence.h>
 
