@@ -297,10 +297,10 @@ $(SHL$(TNR)TARGETN) : \
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL$(TNR)DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
 .IF "$(RCFLAGSOUTRES)"!=""
-    # rc, takes separate flag naming output file, source .rc file last
+# rc, takes separate flag naming output file, source .rc file last
     $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(RCFLAGSOUTRES)$(SHL$(TNR)DEFAULTRES) $(MISC)/$(SHL$(TNR)DEFAULTRES:b).rc
 .ELSE
-    # windres, just takes output file last
+# windres, just takes output file last
     $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL$(TNR)DEFAULTRES:b).rc $(SHL$(TNR)DEFAULTRES)
 .ENDIF
 .ENDIF			# "$(SHL$(TNR)DEFAULTRES)"!=""
