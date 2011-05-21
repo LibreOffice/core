@@ -180,7 +180,7 @@ SHELL32LIB=-lshell32
 GDI32LIB=-lgdi32
 OLE32LIB=-lole32
 OLEAUT32LIB=-loleaut32
-UUIDLIB=$(WINDOWS_SDK_HOME)$/lib$/uuid.lib
+UUIDLIB=-luuid
 WINSPOOLLIB=-lwinspool
 IMM32LIB=-limm32
 VERSIONLIB=-lversion
@@ -192,14 +192,26 @@ USER32LIB=-luser32
 LIBCMT=-lmsvcrt
 COMDLG32LIB=-lcomdlg32
 COMCTL32LIB=-lcomctl32
-CRYPT32LIB=$(WINDOWS_SDK_HOME)$/lib$/crypt32.lib
-GDIPLUSLIB=$(WINDOWS_SDK_HOME)$/lib$/gdiplus.lib
-DBGHELPLIB=$(WINDOWS_SDK_HOME)$/lib$/dbghelp.lib
-MSILIB=$(WINDOWS_SDK_HOME)$/lib$/msi.lib
-DDRAWLIB=$(DIRECTXSDK_LIB)/ddraw.lib
-SHLWAPILIB=$(WINDOWS_SDK_HOME)$/lib$/shlwapi.lib
-URLMONLIB=$(WINDOWS_SDK_HOME)$/lib$/urlmon.lib
+CRYPT32LIB=-lcrypt32
+DDRAWLIB=-lddraw
+SHLWAPILIB=-lshlwapi
 WININETLIB=-lwininet
 OLDNAMESLIB=-lmoldname
-MSIMG32LIB=$(WINDOWS_SDK_HOME)$/lib$/msimg32.lib
+MSIMG32LIB=-lmsimg32
 PROPSYSLIB=-lpropsys
+
+# Libraries that neither mingw.org or mingw-w64 have.
+# Thus have to use the Windows SDK ones.
+GDIPLUSLIB=$(WINDOWS_SDK_HOME)$/lib$/gdiplus.lib
+MSILIB=$(WINDOWS_SDK_HOME)$/lib$/msi.lib
+URLMONLIB=$(WINDOWS_SDK_HOME)$/lib$/urlmon.lib
+
+# Libraries that mingw-w64 has but mingw.org doesn't. At least the OBS MinGW
+# cross-compiler is based on mingw-w64. When using MinGW natively on Windows
+# (which as such I don't think we want to support) let's use the Windows SDK
+# libraries.
+.IF "$(CROSS_COMPILING)"=="YES"
+DBGHELPLIB=-ldbghelp
+.ELSE
+DBGHELPLIB=$(WINDOWS_SDK_HOME)$/lib$/dbghelp.lib
+.ENDIF
