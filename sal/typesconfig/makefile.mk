@@ -42,17 +42,23 @@ CXXFLAGS+= $(LFS_CFLAGS)
 
 # --- Files --------------------------------------------------------
 
+.IF "$(CROSS_COMPILING)"=="" && "$(COM)"!="MSC"
+
 APP1TARGET=	$(TARGET)
 APP1OBJS=		$(OBJ)$/typesconfig.obj
 APP1STDLIBS=
 APP1DEF=
+
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
 
 .IF "$(L10N-framework)"==""
+.IF "$(COM)"!="MSC"
 ALLTAR : $(INCCOM)$/sal$/typesizes.h
+.ENDIF
 .ENDIF			# "$(L10N-framework)"==""
 
 .IF "$(CROSS_COMPILING)"==""

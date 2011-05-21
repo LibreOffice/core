@@ -1,7 +1,7 @@
 sa	sal	:	xml2cmp external BOOST:boost CPPUNIT:cppunit NULL
 sa	sal										usr1	-	all	sa_mkout NULL
 sa	sal\inc									nmake	-	all	sa_inc NULL
-sa	sal\typesconfig							nmake	-	u	sa_tc sa_inc NULL
+sa	sal\typesconfig							nmake	-	all	sa_tc sa_inc NULL
 sa	sal\cpprt								nmake	-	u	sa_cpprt sa_util sa_inc NULL
 sa	sal\rtl\source							nmake	-	all	sa_rtl sa_tc.u sa_inc NULL
 sa	sal\textenc								nmake	-	all	sa_textenc sa_tc.u sa_inc NULL
