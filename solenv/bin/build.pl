@@ -71,14 +71,6 @@
     };
 #### script id #####
 
-    ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
-    my $id_str = ' $Revision: 275224 $ ';
-    my $script_rev = 0;
-    $id_str =~ /Revision:\s+(\S+)\s+\$/
-      ? ($script_rev = $1) : ($script_rev = "-");
-
-    print "$script_name -- version: $script_rev\n";
-
 #########################
 #                       #
 #   Global Variables    #

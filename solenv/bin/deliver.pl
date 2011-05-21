@@ -43,11 +43,6 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 275594 $ ';
-$id_str =~ /Revision:\s+(\S+)\s+\$/
-  ? ($script_rev = $1) : ($script_rev = "-");
-
-
 #### globals ####
 
 ### valid actions ###
@@ -140,8 +135,6 @@ use sigtrap 'handler' => \&cleanup_and_die, 'normal-signals';
 #### main ####
 
 parse_options();
-
-print "$script_name -- version: $script_rev\n" if !$opt_silent;
 
 if ( ! $opt_delete ) {
     if ( $ENV{GUI} eq 'WNT' ) {
