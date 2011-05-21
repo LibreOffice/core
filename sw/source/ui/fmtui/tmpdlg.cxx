@@ -505,10 +505,10 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         case TP_PAGE_STD:
             if(0 == (nHtmlMode & HTMLMODE_ON ))
             {
-                List aList;
-                String* pNew = new String;
-                SwStyleNameMapper::FillUIName( RES_POOLCOLL_TEXT, *pNew );
-                aList.Insert( pNew, (sal_uLong)0 );
+                std::vector<String> aList;
+                String aNew;
+                SwStyleNameMapper::FillUIName( RES_POOLCOLL_TEXT, aNew );
+                aList.push_back( aNew );
                 if( pWrtShell )
                 {
                     SfxStyleSheetBasePool* pStyleSheetPool = pWrtShell->
@@ -517,15 +517,12 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
                     SfxStyleSheetBase *pFirstStyle = pStyleSheetPool->First();
                     while(pFirstStyle)
                     {
-                        aList.Insert( new String(pFirstStyle->GetName()),
-                                        aList.Count());
+                        aList.push_back( pFirstStyle->GetName() );
                         pFirstStyle = pStyleSheetPool->Next();
                     }
                 }
                 aSet.Put (SfxStringListItem(SID_COLLECT_LIST, &aList));
                 rPage.PageCreated(aSet);
-                for( sal_uInt16 i = (sal_uInt16)aList.Count(); i; --i )
-                    delete (String*)aList.Remove(i);
             }
             break;
 
@@ -557,19 +554,15 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             rCharFmtLB.InsertEntry( ViewShell::GetShellRes()->aStrNone );
             SwDocShell* pDocShell = ::GetActiveWrtShell()->GetView().GetDocShell();
             ::FillCharStyleListBox(rCharFmtLB,  pDocShell);
-            List aList;
-            for(sal_uInt16 j = 0; j < rCharFmtLB.GetEntryCount(); j++)
-            {
 
-                 aList.Insert( new XubString(rCharFmtLB.GetEntry(j)), LIST_APPEND );
-            }
+            std::vector<String> aList;
+            for(sal_uInt16 j = 0; j < rCharFmtLB.GetEntryCount(); j++)
+                 aList.push_back( rCharFmtLB.GetEntry(j) );
+
             aSet.Put( SfxStringListItem( SID_CHAR_FMT_LIST_BOX,&aList ) ) ;
             FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebDocShell, pDocShell));
             aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric)));
             rPage.PageCreated(aSet);
-            for( sal_uInt16 i = (sal_uInt16)aList.Count(); i; --i )
-                    delete (XubString*)aList.Remove(i);
-            aList.Clear();
         }
         break;
         case RID_SVXPAGE_NUM_POSITION:
