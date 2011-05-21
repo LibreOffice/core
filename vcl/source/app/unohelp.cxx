@@ -77,7 +77,7 @@ static VCLRegServiceInfo aVCLComponentsArray[] =
     {"dtransX11", sal_True},
 #endif
 #endif
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
     {"sysdtrans", sal_False},
 #endif
     {"dtrans", sal_False},
@@ -177,7 +177,7 @@ uno::Reference < i18n::XCharacterClassification > vcl::unohelper::CreateCharacte
 
     OUString aLibName;
 
-#if defined( WNT) || defined(OS2)
+#if defined( WNT)
     aLibName = OUString::createFromAscii( pModName );
     if ( bSUPD )
     {

@@ -36,7 +36,7 @@
 #include <tools/geninfo.hxx>
 #include "bootstrp/prj.hxx"
 
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
 #define LIST_DELIMETER ';'
 #define PATH_DELIMETER '\\'
 #elif defined UNX

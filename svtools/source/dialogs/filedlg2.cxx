@@ -144,7 +144,7 @@ ImpPathDialog::~ImpPathDialog()
     delete pOkBtn;
     delete pCancelBtn;
     delete pNewDirBtn;
-#   if defined(UNX) || defined(OS2)
+#   if defined(UNX)
     delete pHomeBtn;
 #   endif
 }
@@ -207,7 +207,7 @@ void ImpPathDialog::InitControls()
     nTextWidth = pDlg->GetTextWidth( aNewDirStr )+nExtraWidth;
     if( nTextWidth > aBtnSiz.Width() )
         aBtnSiz.Width() = nTextWidth;
-#if defined(UNX) || defined(OS2)
+#if defined(UNX)
     String aHomeDirStr( SvtResId( STR_FILEDLG_HOME ) );
     nTextWidth = pDlg->GetTextWidth( aHomeDirStr )+nExtraWidth;
     if( nTextWidth > aBtnSiz.Width() )
@@ -224,7 +224,7 @@ void ImpPathDialog::InitControls()
     aPnt.Y() += aBtnSiz.Height() + a3Siz.Height();
     INITCONTROL( pNewDirBtn, PushButton, WB_DEFBUTTON,
                  aPnt, aBtnSiz, aNewDirStr, HID_FILEDLG_NEWDIR );
-#if defined(UNX) || defined(OS2)
+#if defined(UNX)
     aPnt.Y() += aBtnSiz.Height() + a3Siz.Height();
     INITCONTROL( pHomeBtn, PushButton, WB_DEFBUTTON,
                  aPnt, aBtnSiz, aHomeDirStr, HID_FILEDLG_HOME );

@@ -231,7 +231,7 @@ class   SalBitmap;
 
 struct BitmapSystemData
 {
-    #if defined( WNT ) || defined( OS2 )
+    #if defined( WNT )
     void* pDIB; // device independent byte buffer
     void* pDDB; // if not NULL then this is actually an HBITMAP
     #elif defined( QUARTZ )

@@ -41,7 +41,7 @@
 HDDEDATA CALLBACK DdeInternal::InfCallback(
                 WORD, WORD, HCONV, HSZ, HSZ, HDDEDATA, DWORD, DWORD )
 #else
-#if ( defined ( GCC ) && defined ( OS2 )) || defined( ICC )
+#if defined( ICC )
 HDDEDATA CALLBACK DdeInternal::InfCallback(
                 WORD, WORD, HCONV, HSZ, HSZ, HDDEDATA, DWORD, DWORD )
 #else

@@ -102,35 +102,6 @@ DBG_NAME( Menu )
 // document closer
 #define IID_DOCUMENTCLOSE 1
 
-#ifdef OS2
-
-#include <xwphook.h>
-
-// return sal_True if hilite should be executed: left mouse button down
-// or xwp mouse hook enabled
-static sal_Bool ImplHilite( const MouseEvent& rMEvt )
-{
-    static sal_Bool init = sal_False;
-    static HOOKCONFIG hc;
-
-    // read XWP settings at program startup
-    if (init == sal_False) {
-        sal_Bool    rc;
-        sal_uLong   cb = sizeof(HOOKCONFIG);
-        memset(&hc, 0, sizeof(HOOKCONFIG));
-        rc = PrfQueryProfileData( HINI_USER, INIAPP_XWPHOOK, INIKEY_HOOK_CONFIG,
-            &hc, &cb);
-        init = sal_True;
-    }
-    // check mouse left button
-    if (rMEvt.GetButtons() == MOUSE_LEFT)
-        return sal_True;
-    // return xwp flag
-    return hc.fSlidingMenus;
-}
-
-#endif
-
 static sal_Bool ImplAccelDisabled()
 {
     // display of accelerator strings may be suppressed via configuration
@@ -4565,10 +4536,6 @@ void MenuFloatingWindow::MouseMove( const MouseEvent& rMEvt )
 
     if ( rMEvt.IsLeaveWindow() )
     {
-#ifdef OS2
-        if ( ImplHilite(rMEvt) )
-        {
-#endif
         // #102461# do not remove highlight if a popup menu is open at this position
         MenuItemData* pData = pMenu ? pMenu->pItemList->GetDataFromPos( nHighlightedItem ) : NULL;
         // close popup with some delayed if we leave somewhere else
@@ -4577,17 +4544,11 @@ void MenuFloatingWindow::MouseMove( const MouseEvent& rMEvt )
 
         if( !pActivePopup || (pData && pData->pSubMenu != pActivePopup ) )
             ChangeHighlightItem( ITEMPOS_INVALID, sal_False );
-#ifdef OS2
-        }
-#endif
 
         if ( IsScrollMenu() )
             ImplScroll( rMEvt.GetPosPixel() );
     }
     else
-#ifdef OS2
-        if ( ImplHilite(rMEvt) )
-#endif
     {
         aSubmenuCloseTimer.Stop();
         if( bIgnoreFirstMove )
@@ -5550,9 +5511,6 @@ void MenuBarWindow::MouseMove( const MouseEvent& rMEvt )
 
     sal_uInt16 nEntry = ImplFindEntry( rMEvt.GetPosPixel() );
     if ( ( nEntry != ITEMPOS_INVALID )
-#ifdef OS2
-       && ( ImplHilite(rMEvt) )
-#endif
        && ( nEntry != nHighlightedItem ) )
         ChangeHighlightItem( nEntry, sal_False );
 }

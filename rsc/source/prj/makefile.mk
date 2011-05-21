@@ -45,9 +45,7 @@ APP1TARGET= rsc
 APP1STDLIBS=$(TOOLSLIB) $(I18NISOLANGLIB)  $(SALLIB) # $(RTLLIB)
 APP1LIBS=   $(LB)$/rsctoo.lib
 APP1OBJS=   $(OBJ)$/start.obj
-.IF "$(GUI)" != "OS2"
 APP1STACK=64000
-.ENDIF
 APP1RPATH=NONE
 
 APP2TARGET= rsc2
@@ -58,9 +56,7 @@ APP2LIBS=   $(LB)$/rsctoo.lib \
             $(LB)$/rscrsc.lib \
             $(LB)$/rscmis.lib
 APP2OBJS=   $(OBJ)$/gui.obj
-.IF "$(GUI)" != "OS2"
 APP2STACK=64000
-.ENDIF
 APP2RPATH=NONE
 
 # --- Targets ------------------------------------------------------------

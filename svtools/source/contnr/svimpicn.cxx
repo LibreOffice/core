@@ -1636,16 +1636,6 @@ sal_Bool SvImpIconView::KeyInput( const KeyEvent& rKEvt )
             }
             break;
 
-#ifdef OS2
-        case KEY_F9:
-            if( rKEvt.GetKeyCode().IsShift() )
-            {
-                if( pCursor && pView->IsInplaceEditingEnabled() )
-                    pView->EditEntry( pCursor );
-            }
-            break;
-#endif
-
         case KEY_SPACE:
             if( pCursor )
             {
@@ -1693,9 +1683,6 @@ void SvImpIconView::PositionScrollBars( long nRealWidth, long nRealHeight )
     Point aPos( 0, nRealHeight );
     aPos.Y() -= nHorSBarHeight;
 
-#ifdef OS2
-    aPos.Y()++;
-#endif
     if( aHorSBar.GetPosPixel() != aPos )
         aHorSBar.SetPosPixel( aPos );
 
@@ -1706,11 +1693,6 @@ void SvImpIconView::PositionScrollBars( long nRealWidth, long nRealHeight )
 #if defined(WNT)
     aPos.X()++;
     aPos.Y()--;
-#endif
-
-#ifdef OS2
-    aPos.Y()--;
-    aPos.X()++;
 #endif
 
     if( aVerSBar.GetPosPixel() != aPos )
@@ -1798,9 +1780,6 @@ void SvImpIconView::AdjustScrollBars()
 #if defined(WNT)
     aSize.Height() += 2;
 #endif
-#ifdef OS2
-    aSize.Height() += 3;
-#endif
     if( aSize != aVerSBar.GetSizePixel() )
         aVerSBar.SetSizePixel( aSize );
     aVerSBar.SetVisibleSize( nVisibleHeight );
@@ -1822,11 +1801,6 @@ void SvImpIconView::AdjustScrollBars()
     aSize.Height() = nHorSBarHeight;
 #if defined(WNT)
     aSize.Width()++;
-#endif
-#ifdef OS2
-    aSize.Width() += 3;
-    if( nResult & 0x0001 ) // vertikale Scrollbar ?
-        aSize.Width()--;
 #endif
 #if defined(WNT)
     if( nResult & 0x0001 ) // vertikale Scrollbar ?
@@ -1850,17 +1824,10 @@ void SvImpIconView::AdjustScrollBars()
         aHorSBar.Hide();
     }
 
-#ifdef OS2
-    nRealWidth++;
-#endif
     aOutputSize.Width() = nRealWidth;
 #if defined(WNT)
     if( nResult & 0x0002 ) // hor scrollbar ?
         nRealHeight++; // weil unterer Rand geclippt wird
-#endif
-#ifdef OS2
-    if( nResult & 0x0002 ) // hor scrollbar ?
-        nRealHeight++;
 #endif
     aOutputSize.Height() = nRealHeight;
 }
@@ -2025,11 +1992,7 @@ void SvImpIconView::PaintEmphasis( const Rectangle& rRect, sal_Bool bSelected,
     }
     else
     {
-#ifndef OS2
         aNewColor =rStyleSettings.GetFieldColor();
-#else
-        aNewColor = pOut->GetBackground().GetColor();
-#endif
     }
 
     if( bCursored )
@@ -3712,13 +3675,9 @@ const Size& SvImpIconView::GetItemSize( SvIconView* pIconView,
 
 Rectangle SvImpIconView::CalcFocusRect( SvLBoxEntry* pEntry )
 {
-#if !defined(OS2)
     SvLBoxString* pStringItem = (SvLBoxString*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
     DBG_ASSERT(pStringItem,"Text not set");
     return CalcTextRect( pEntry, pStringItem );
-#else
-    return CalcBmpRect( pEntry );
-#endif
 }
 
 

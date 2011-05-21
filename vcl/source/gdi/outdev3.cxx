@@ -82,8 +82,6 @@
 
 #if defined UNX
 #define GLYPH_FONT_HEIGHT   128
-#elif defined OS2
-#define GLYPH_FONT_HEIGHT   176
 #else
 #define GLYPH_FONT_HEIGHT   256
 #endif

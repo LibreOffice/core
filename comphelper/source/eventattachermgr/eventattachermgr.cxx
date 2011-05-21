@@ -31,7 +31,7 @@
 
 #include <deque>
 
-#if defined( OS2 ) || defined( UNX )
+#if defined( UNX )
 #include <wchar.h>
 #endif
 #include <osl/mutex.hxx>

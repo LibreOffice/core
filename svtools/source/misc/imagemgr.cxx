@@ -186,35 +186,6 @@ static SvtExtensionResIdMapping_Impl const ExtensionMap_Impl[] =
     { 0, sal_False, 0, 0 }
 };
 
-#ifdef OS2
-    SvtExtensionResIdMapping_Impl Mappings[] =
-    {
-    {"StarWriter 4.0",         sal_False,STR_DESCRIPTION_SWRITER_DOC, IMG_WRITER},
-    {"StarWriter 3.0",         sal_False,STR_DESCRIPTION_SWRITER_DOC, IMG_WRITER},
-    {"StarCalc 4.0",           sal_False,STR_DESCRIPTION_SCALC_DOC,   IMG_CALC},
-    {"StarCalc 3.0",           sal_False,STR_DESCRIPTION_SCALC_DOC,   IMG_CALC},
-    {"StarImpress 4.0",        sal_False,STR_DESCRIPTION_SIMPRESS_DOC,IMG_IMPRESS},
-    {"StarDraw 4.0",           sal_False,STR_DESCRIPTION_SDRAW_DOC,   IMG_DRAW},
-    {"StarDraw 3.0",           sal_False,STR_DESCRIPTION_SDRAW_DOC,   IMG_DRAW},
-    {"StarChart 3.0",          sal_False,STR_DESCRIPTION_SCHART_DOC,  IMG_CHART},
-    {"StarChart 4.0",          sal_False,STR_DESCRIPTION_SCHART_DOC,  IMG_CHART},
-    {"Bitmap",                 sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_BITMAP},
-    {"AutoCAD",                sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_SIM},
-    {"Gif-File",               sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_GIF},
-    {"JPEG-File",              sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_JPG},
-    {"Metafile ",              sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_SIM},
-    {"Photo-CD ",              sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_PCD},
-    {"Mac Pict",               sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_PCT},
-    {"PCX-File ",              sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_PCX},
-    {"PNG-File",               sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_SIM},
-    {"SV-Metafile",            sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_SIM},
-    {"TIFF-File",              sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_TIFF},
-    {"MS-Metafile",            sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_WMF},
-    {"XBM-File",               sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_BITMAP},
-    {NULL, 0}
-    };
-#endif
-
 struct SvtFactory2ExtensionMapping_Impl
 {
     const char*   _pFactory;

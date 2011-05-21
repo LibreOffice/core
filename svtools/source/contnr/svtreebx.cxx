@@ -1287,12 +1287,6 @@ void SvTreeListBox::EditItemText( SvLBoxEntry* pEntry, SvLBoxString* pItem,
     aPos += aOrigin; // in Win-Koord umrechnen
     aSize.Width() -= aOrigin.X();
     Rectangle aRect( aPos, aSize );
-#ifdef OS2
-    // Platz lassen fuer WB_BORDER
-    aRect.Left() -= 2;
-    aRect.Top() -= 3;
-    aRect.Bottom() += 3;
-#endif
     EditText( pItem->GetText(), aRect, rSelection );
 }
 
@@ -1472,9 +1466,6 @@ void SvTreeListBox::ImplInitStyle()
         GetModel()->SetSortMode( SortNone );
         GetModel()->SetCompareHdl( Link() );
     }
-#ifdef OS2
-    nWindowStyle |= WB_VSCROLL;
-#endif
     pImp->SetStyle( nWindowStyle );
     pImp->Resize();
     Invalidate();

@@ -114,7 +114,6 @@ namespace vcl
     };
 
 /** Value of the width member of the TTGlobalFontInfo struct */
-#ifndef OS2
     enum WidthClass {
         FWIDTH_ULTRA_CONDENSED = 1,         /**< 50% of normal                      */
         FWIDTH_EXTRA_CONDENSED = 2,         /**< 62.5% of normal                    */
@@ -126,7 +125,6 @@ namespace vcl
         FWIDTH_EXTRA_EXPANDED = 8,          /**< 150% of normal                     */
         FWIDTH_ULTRA_EXPANDED = 9           /**< 200% of normal                     */
     };
-#endif // OS2
 #endif /* FW_THIN */
 
 /** Type of the 'kern' table, stored in _TrueTypeFont::kerntype */
@@ -290,7 +288,7 @@ namespace vcl
  * @ingroup sft
  */
     int OpenTTFontBuffer(void* pBuffer, sal_uInt32 nLen, sal_uInt32 facenum, TrueTypeFont** ttf); /*FOLD01*/
-#if !defined(WIN32) && !defined(OS2)
+#if !defined(WIN32)
 /**
  * TrueTypeFont constructor.
  * Reads the font file and allocates the memory for the structure.

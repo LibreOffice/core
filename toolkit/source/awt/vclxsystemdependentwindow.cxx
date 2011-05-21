@@ -92,11 +92,6 @@ IMPL_XTYPEPROVIDER_END
             {
                  aRet <<= (sal_Int32)pSysData->hWnd;
             }
-#elif (defined OS2)
-            if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_OS2 )
-            {
-                 aRet <<= (sal_Int32)pSysData->hWnd;
-            }
 #elif (defined QUARTZ)
             if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_MAC )
             {

@@ -42,7 +42,7 @@ OBJFILES = \
 
 APP1TARGET = solar
 APP1OBJS = $(OBJ)$/solar.obj
-.IF "$(GUI)" == "UNX" || "$(GUI)" == "OS2"
+.IF "$(GUI)" == "UNX"
 APP1STDLIBS = $(TOOLSLIB)
 .ELSE
 APP1LIBS = $(LB)$/itools.lib
@@ -50,7 +50,7 @@ APP1LIBS = $(LB)$/itools.lib
 
 APP2TARGET = urltest
 APP2OBJS = $(OBJ)$/urltest.obj
-.IF "$(GUI)" == "UNX" || "$(GUI)" == "OS2"
+.IF "$(GUI)" == "UNX"
 APP2STDLIBS = $(TOOLSLIB) $(VOSLIB) $(SALLIB) $(CPPULIB) $(CPPUHELPERLIB)
 .ELSE
 APP2STDLIBS = $(LB)$/itools.lib $(VOSLIB) $(SALLIB) $(CPPULIB) $(CPPUHELPERLIB)

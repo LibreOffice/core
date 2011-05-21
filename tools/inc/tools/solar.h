@@ -221,8 +221,6 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
   #define __DLLEXTENSION "mi"
 #elif defined WNT && defined _MSC_VER && defined X86_64
   #define __DLLEXTENSION "mx"
-#elif defined OS2
-  #define __DLLEXTENSION "go"
 #elif defined AIX
   #define __DLLEXTENSION "ap.so"
 #elif defined SOLARIS && defined SPARC && defined IS_LP64
@@ -310,7 +308,7 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
 #define LIBRARY_CONCAT4( s1, s2, s3, s4 ) \
     s1 s2 s3 s4
 
-#if defined WNT || defined OS2
+#if defined WNT
 #define SVLIBRARY( Base ) \
     LIBRARY_CONCAT3( Base, __DLLEXTENSION, ".DLL" )
 #define SVLIBRARYLANG( Base, Lang ) \

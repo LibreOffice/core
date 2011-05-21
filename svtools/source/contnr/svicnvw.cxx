@@ -547,21 +547,6 @@ void SvIconView::EditItemText( SvLBoxEntry* pEntry, SvLBoxItem* pItem,
 
     aRect.Bottom() += 2; // sieht huebscher aus
 
-#ifdef OS2
-
-#if OS2_SINGLE_LINE_EDIT
-    aRect.Left() -= 3;
-    aRect.Right() += 3;
-    aRect.Top() -= 3;
-    aRect.Bottom() += 3;
-#else
-    aRect.Left() -= 10;
-    aRect.Right() += 10;
-    aRect.Top() -= 5;
-    aRect.Bottom() += 5;
-#endif
-
-#endif // OS2
     EditText( ((SvLBoxString*)pItem)->GetText(), aRect, rSel, sal_True );
 }
 

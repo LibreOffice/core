@@ -133,8 +133,6 @@ enum StringCompare { COMPARE_LESS = -1, COMPARE_EQUAL = 0, COMPARE_GREATER = 1 }
 
 #ifdef SAL_W32
 #pragma pack(push, 8)
-#elif defined(SAL_OS2)
-#pragma pack(1)
 #endif
 
 typedef struct _ByteStringData
@@ -146,8 +144,6 @@ typedef struct _ByteStringData
 
 #ifdef SAL_W32
 #pragma pack(pop)
-#elif defined(SAL_OS2)
-#pragma pack()
 #endif
 
 // --------------
@@ -421,8 +417,6 @@ inline ByteString ByteString::GetQuotedToken( xub_StrLen nToken, const ByteStrin
 
 #ifdef SAL_W32
 #pragma pack(push, 4)
-#elif defined(SAL_OS2)
-#pragma pack(1)
 #endif
 
 typedef struct _UniStringData
@@ -434,8 +428,6 @@ typedef struct _UniStringData
 
 #ifdef SAL_W32
 #pragma pack(pop)
-#elif defined(SAL_OS2)
-#pragma pack()
 #endif
 
 // -------------

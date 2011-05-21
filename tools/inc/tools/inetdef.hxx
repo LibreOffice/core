@@ -32,8 +32,6 @@
 //============================================================================
 #if defined WNT
 #define TOOLS_INETDEF_OS "Win32"
-#elif defined OS2
-#define TOOLS_INETDEF_OS "OS/2"
 #elif defined UNX
 #if defined AIX
 #define TOOLS_INETDEF_OS "AIX"

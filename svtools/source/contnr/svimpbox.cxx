@@ -2094,11 +2094,6 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
     if ( !rMEvt.IsLeft() && !rMEvt.IsRight())
         return;
 
-#ifdef OS2
-    // unter OS/2 kommt zwischen MouseButtonDown und
-    // MouseButtonUp ein MouseMove
-    nFlags |= F_IGNORE_NEXT_MOUSEMOVE;
-#endif
     aEditTimer.Stop();
     Point aPos( rMEvt.GetPosPixel());
 
@@ -2181,9 +2176,6 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
 
 void SvImpLBox::MouseButtonUp( const MouseEvent& rMEvt)
 {
-#ifdef OS2
-    nFlags &= (~F_IGNORE_NEXT_MOUSEMOVE);
-#endif
     if ( !ButtonUpCheckCtrl( rMEvt ) && ( aSelEng.GetSelectionMode() != NO_SELECTION ) )
         aSelEng.SelMouseButtonUp( rMEvt );
     EndScroll();
@@ -2199,13 +2191,6 @@ void SvImpLBox::MouseButtonUp( const MouseEvent& rMEvt)
 
 void SvImpLBox::MouseMove( const MouseEvent& rMEvt)
 {
-#ifdef OS2
-    if( nFlags & F_IGNORE_NEXT_MOUSEMOVE )
-    {
-        nFlags &= (~F_IGNORE_NEXT_MOUSEMOVE);
-        return;
-    }
-#endif
     SvLBoxEntry* pEntry = GetClickedEntry( rMEvt.GetPosPixel() );
     if ( !MouseMoveCheckCtrl( rMEvt, pEntry ) && ( aSelEng.GetSelectionMode() != NO_SELECTION ) )
         aSelEng.SelMouseMove( rMEvt );

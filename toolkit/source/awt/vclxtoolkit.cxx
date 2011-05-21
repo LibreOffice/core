@@ -131,8 +131,6 @@ namespace css = ::com::sun::star;
 
 #if (defined WNT)
 #define SYSTEM_DEPENDENT_TYPE ::com::sun::star::lang::SystemDependent::SYSTEM_WIN32
-#elif (defined OS2)
-#define SYSTEM_DEPENDENT_TYPE ::com::sun::star::lang::SystemDependent::SYSTEM_OS2
 #elif (defined QUARTZ)
 #define SYSTEM_DEPENDENT_TYPE ::com::sun::star::lang::SystemDependent::SYSTEM_MAC
 #elif (defined UNX)
@@ -345,9 +343,6 @@ extern "C"
 static int
 #if defined( WNT )
  __cdecl
-#endif
-#if defined( ICC ) && defined( OS2 )
-_Optlink
 #endif
      ComponentInfoCompare( const void* pFirst, const void* pSecond)
 {
@@ -989,8 +984,6 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                                     aParentData.bXEmbedSupport = bXEmbed;
                                     #elif defined WNT
                                     aParentData.hWnd = reinterpret_cast<HWND>(nWindowHandle);
-                                    #elif defined OS2
-                                    aParentData.hWnd = (HWND)nWindowHandle;
                                     #endif
                                     pNewWindow = new WorkWindow( &aParentData );
                                 }
@@ -1215,8 +1208,6 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
             aParentData.bXEmbedSupport = bXEmbed;
             #elif defined WNT
             aParentData.hWnd = reinterpret_cast<HWND>(nWindowHandle);
-            #elif defined OS2
-            aParentData.hWnd = (HWND)nWindowHandle;
             #endif
             SolarMutexGuard aGuard;
             try

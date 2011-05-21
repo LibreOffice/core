@@ -41,12 +41,7 @@
 
 #include <io.h>
 #include <process.h>
-#if defined ( OS2 ) && !defined ( GCC )
-#include <direct.h>
-#endif
-#if !defined ( OS2 )
 #include <dos.h>
-#endif
 
 #endif // UNX
 #include <rsctools.hxx>
@@ -151,11 +146,7 @@ static sal_Bool CallPrePro( const ByteString& rPrePro,
         pCmdL = &aRespCmdL;
         for( i = 0; i < (int)(aNewCmdL.GetCount() -1); i++ )
         {
-#ifdef OS2
-            fprintf( fRspFile, "%s\n", (const char *)aNewCmdL.GetEntry( i ) );
-#else
             fprintf( fRspFile, "%s ", (const char *)aNewCmdL.GetEntry( i ) );
-#endif
         }
         fclose( fRspFile );
 
@@ -171,7 +162,7 @@ static sal_Bool CallPrePro( const ByteString& rPrePro,
         }
     }
 
-#if defined UNX || defined OS2
+#if defined UNX
     nExit = spawnvp( P_WAIT, rPrePro.GetBuffer(), (char* const*)pCmdL->GetBlock() );
 #else
     nExit = spawnvp( P_WAIT, (char*)rPrePro.GetBuffer(), (const char**)pCmdL->GetBlock() );
@@ -238,28 +229,16 @@ static sal_Bool CallRsc2( ByteString aRsc2Name,
             {
             }
             else
-#ifdef OS2
-                fprintf( fRspFile, "%s\n",
-#else
                 fprintf( fRspFile, "%s ",
-#endif
                          (const char *)pCmdLine->GetEntry( i ) );
         };
 
-#ifdef OS2
-        fprintf( fRspFile, "%s\n", aSrsName.GetBuffer() );
-#else
         fprintf( fRspFile, "%s", aSrsName.GetBuffer() );
-#endif
 
         for ( size_t i = 0, n = pInputList->size(); i < n; ++i )
         {
             pString = (*pInputList)[ i ];
-#ifdef OS2
-            fprintf( fRspFile, "%s\n", pString->GetBuffer() );
-#else
             fprintf( fRspFile, " %s", pString->GetBuffer() );
-#endif
         };
 
         fclose( fRspFile );
@@ -281,7 +260,7 @@ static sal_Bool CallRsc2( ByteString aRsc2Name,
         printf( "\n" );
     }
 
-#if defined UNX || defined OS2
+#if defined UNX
     nExit = spawnvp( P_WAIT, aRsc2Name.GetBuffer(), (char* const*)aNewCmdL.GetBlock() );
 #else
     nExit = spawnvp( P_WAIT, (char*)aRsc2Name.GetBuffer(), (const char**)aNewCmdL.GetBlock() );

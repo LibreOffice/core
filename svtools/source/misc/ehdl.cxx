@@ -34,9 +34,6 @@
 #include <tools/wintypes.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
-#if defined(OS2)
-#include <vcl/sound.hxx>
-#endif
 
 #include <svtools/ehdl.hxx>
 #include <svtools/svtdata.hxx>

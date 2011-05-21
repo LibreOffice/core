@@ -72,19 +72,9 @@ typedef sal_uInt8* PDIBBYTE;
 #endif
 
 
-#if defined ( OS2 ) || defined ( UNX )
+#if defined ( UNX )
 void ReadBitmap( SvStream& rIStream, Bitmap& rBmp, sal_uInt16 nDefaultHeight = 0, sal_uLong nOffBits = 0 );
 void ReplaceInfoHeader( SvStream& rStm, sal_uInt8* pBuffer );
-
-#ifdef OS2
-#define RGBQUAD             RGBQUADOS2
-#define BITMAPFILEHEADER    BITMAPFILEHEADEROS2
-#define PBITMAPFILEHEADER   PBITMAPFILEHEADEROS2
-#define BITMAPINFOHEADER    BITMAPINFOHEADEROS2
-#define PBITMAPINFOHEADER   PBITMAPINFOHEADEROS2
-#define BITMAPINFO          BITMAPINFOOS2
-#define PBITMAPINFO         PBITMAPINFOOS2
-#endif
 
 typedef struct RGBQUAD
 {

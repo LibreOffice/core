@@ -42,9 +42,6 @@ LIB1FILES=	$(SLB)$/client.lib \
             $(SLB)$/provider.lib
 
 SHL1TARGET=	$(TARGET)$(UCBHELPER_MAJOR)$(COMID)
-.IF "$(GUI)" == "OS2"
-SHL1TARGET=	ucbh$(UCBHELPER_MAJOR)
-.ENDIF
 SHL1STDLIBS = \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \

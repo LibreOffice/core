@@ -1191,9 +1191,6 @@ static int
 #if defined( WNT )
  __cdecl
 #endif
-#if defined( ICC ) && defined( OS2 )
-_Optlink
-#endif
     RTFKeyCompare( const void *pFirst, const void *pSecond)
 {
     int nRet = 0;

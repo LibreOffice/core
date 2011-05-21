@@ -29,24 +29,9 @@
 #ifndef _DDEIMP_HXX
 #define _DDEIMP_HXX
 
-#ifdef OS2
-
-#include "ddemlos2.h"
-
-#define WORD sal_uInt16
-#define DWORD sal_uLong
-#define LPBYTE sal_uInt8*
-#define LPWORD sal_uInt16*
-#define LPDWORD sal_uLong*
-#define LPCTSTR PCSZ
-
-#else
-
 #include <windows.h>
 #include <ddeml.h>
 #include "ddewrap.hxx"
-
-#endif
 
 #include <tools/string.hxx>
 #include <tools/shl.hxx>
@@ -83,7 +68,7 @@ public:
     static HDDEDATA CALLBACK InfCallback
            ( WORD, WORD, HCONV, HSZ, HSZ, HDDEDATA, DWORD, DWORD );
 #else
-#if (defined ( GCC ) && defined ( OS2 )) || defined( ICC )
+#if defined( ICC )
     static HDDEDATA CALLBACK CliCallback
            ( WORD, WORD, HCONV, HSZ, HSZ, HDDEDATA, DWORD, DWORD );
     static HDDEDATA CALLBACK SvrCallback

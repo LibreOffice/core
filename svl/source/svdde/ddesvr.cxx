@@ -61,7 +61,7 @@ HDDEDATA CALLBACK DdeInternal::SvrCallback(
             WORD nCode, WORD nCbType, HCONV hConv, HSZ hText1, HSZ hText2,
             HDDEDATA hData, DWORD, DWORD )
 #else
-#if ( defined ( GCC ) && defined ( OS2 )) || defined( ICC )
+#if defined( ICC )
 HDDEDATA CALLBACK DdeInternal::SvrCallback(
             WORD nCode, WORD nCbType, HCONV hConv, HSZ hText1, HSZ hText2,
             HDDEDATA hData, DWORD, DWORD )
@@ -1065,28 +1065,8 @@ String DdeService::Formats()
             case CF_BITMAP:
                 p = reinterpret_cast<LPCTSTR>(String::CreateFromAscii("BITMAP").GetBuffer());
                 break;
-#ifdef OS2
-            case CF_DSPTEXT:
-                p = String::CreateFromAscii("TEXT").GetBuffer();
-                break;
-            case CF_DSPBITMAP:
-                p = String::CreateFromAscii("BITMAP").GetBuffer();
-                break;
-            case CF_METAFILE:
-                p = String::CreateFromAscii("METAFILE").GetBuffer();
-                break;
-            case CF_DSPMETAFILE:
-                p = String::CreateFromAscii("METAFILE").GetBuffer();
-                break;
-            case CF_PALETTE:
-                p = String::CreateFromAscii("PALETTE").GetBuffer();
-                break;
-            default:
-                p= String::CreateFromAscii("PRIVATE").GetBuffer();
-#else
             default:
                 GetClipboardFormatName( (UINT)f, buf, sizeof(buf) / sizeof(TCHAR) );
-#endif
         }
         s += String( reinterpret_cast<const sal_Unicode*>(p) );
     }

@@ -36,9 +36,6 @@
 #if defined (WNT )
 #include <direct.h>
 #endif
-#if defined ( OS2 ) && !defined ( GCC )
-#include <direct.h>
-#endif
 #include <string.h>
 #include <ctype.h>
 

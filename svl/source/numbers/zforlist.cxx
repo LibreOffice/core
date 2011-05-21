@@ -4429,8 +4429,6 @@ sal_Char NfCurrencyEntry::GetEuroSymbol( rtl_TextEncoding eTextEncoding )
         default:                                // default system
 #if WNT
             return '\x80';
-#elif OS2
-            return '\xD5';
 #elif UNX
 //          return '\xA4';      // #56121# 0xA4 waere korrekt fuer iso-8859-15
             return '\x80';      // aber Windoze-Code fuer die konvertierten TrueType-Fonts

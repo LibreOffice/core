@@ -43,7 +43,7 @@ int GetStackAlignment(void);
 void PrintArgs( int p, ... );
 int check( TestFunc func, Type eT, void* p );
 
-#if defined (UNX) || defined (WNT) || defined (OS2)
+#if defined (UNX) || defined (WNT)
 
 #ifdef UNX
 #include <unistd.h>
@@ -123,7 +123,7 @@ int GetStackAlignment()
 
 
 
-#if defined (UNX) || defined (WNT) || defined (OS2)
+#if defined (UNX) || defined (WNT)
 
 #ifdef I_STDARG
 void PrintArgs( int p, ... )
@@ -154,7 +154,7 @@ va_dcl
 #ifndef USE_FORK_TO_CHECK
 static jmp_buf check_env;
 static int bSignal;
-#if defined (UNX) || defined (OS2)
+#if defined (UNX)
 void SignalHandler( int sig )
 #else
 void __cdecl SignalHandler( int sig )

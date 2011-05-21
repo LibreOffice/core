@@ -78,22 +78,10 @@
 
 #define PMGCHUNG_msOG       0x6d734f47      // Microsoft Office Animated GIF
 
-#if (defined OS2 && !defined ICC)
-
-#define IMPORT_FUNCTION_NAME    "_GraphicImport"
-#define EXPORT_FUNCTION_NAME    "_GraphicExport"
-#define IMPDLG_FUNCTION_NAME    "_DoImportDialog"
-#define EXPDLG_FUNCTION_NAME    "_DoExportDialog"
-
-#else
-
 #define IMPORT_FUNCTION_NAME    "GraphicImport"
 #define EXPORT_FUNCTION_NAME    "GraphicExport"
 #define IMPDLG_FUNCTION_NAME    "DoImportDialog"
 #define EXPDLG_FUNCTION_NAME    "DoExportDialog"
-
-#endif
-
 
 // -----------
 // - statics -

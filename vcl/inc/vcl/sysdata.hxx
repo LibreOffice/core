@@ -41,7 +41,7 @@ typedef struct CGLayer   *CGLayerRef;
 class NSView;
 #endif
 #endif
-#if defined( WNT ) || defined( OS2 )
+#if defined( WNT )
 #include <windef.h>
 #endif
 
@@ -52,7 +52,7 @@ class NSView;
 struct SystemEnvData
 {
     unsigned long       nSize;          // size in bytes of this structure
-#if defined( WNT ) || defined( OS2 )
+#if defined( WNT )
     HWND                hWnd;           // the window hwnd
 #elif defined( QUARTZ )
     NSView*               pView;          // the cocoa (NSView *) implementing this object
@@ -80,7 +80,7 @@ struct SystemEnvData
 struct SystemParentData
 {
     unsigned long   nSize;            // size in bytes of this structure
-#if defined( WNT ) || defined( OS2 )
+#if defined( WNT )
     HWND            hWnd;             // the window hwnd
 #elif defined( QUARTZ )
     NSView*         pView;            // the cocoa (NSView *) implementing this object

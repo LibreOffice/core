@@ -226,11 +226,7 @@ DdeConnection::~DdeConnection()
 sal_Bool DdeConnection::IsConnected()
 {
     CONVINFO c;
-#ifdef OS2
-    c.nSize = sizeof( c );
-#else
     c.cb = sizeof( c );
-#endif
     if ( DdeQueryConvInfo( pImp->hConv, QID_SYNC, &c ) )
         return sal_True;
     else

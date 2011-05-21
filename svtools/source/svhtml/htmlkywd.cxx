@@ -207,9 +207,6 @@ static int
 #if defined( WNT )
  __cdecl
 #endif
-#if defined( ICC ) && defined( OS2 )
- _Optlink
-#endif
     HTMLKeyCompare( const void *pFirst, const void *pSecond)
 {
     int nRet = 0;
@@ -561,9 +558,6 @@ extern "C"
 static int
 #if defined( WNT )
  __cdecl
-#endif
-#if defined( ICC ) && defined( OS2 )
- _Optlink
 #endif
     HTMLCharNameCompare( const void *pFirst, const void *pSecond)
 {
@@ -1022,9 +1016,6 @@ extern "C"
 static int
 #if defined( WNT )
  __cdecl
-#endif
-#if defined( ICC ) && defined( OS2 )
- _Optlink
 #endif
     HTMLColorNameCompare( const void *pFirst, const void *pSecond)
 {
