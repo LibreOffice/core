@@ -735,8 +735,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case SID_SELECT_SCENARIO:
                 {
-                    List        aList;
-
+                    std::vector<String> aList;
                     Color   aDummyCol;
 
                     if ( !pDoc->IsScenario(nTab) )
@@ -750,12 +749,12 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                         while ( pDoc->IsScenario(nScTab) )
                         {
                             pDoc->GetName( nScTab, aStr );
-                            aList.Insert( new String( aStr ), LIST_APPEND );
+                            aList.push_back(aStr);
                             pDoc->GetScenarioData( nScTab, aStr, aDummyCol, nFlags );
-                            aList.Insert( new String( aStr ), LIST_APPEND );
+                            aList.push_back(aStr);
                             // Protection is sal_True if both Sheet and Scenario are protected
                             aProtect = (bSheetProtected && (nFlags & SC_SCENARIO_PROTECT)) ? '1' : '0';
-                            aList.Insert( new String( aProtect), LIST_APPEND );
+                            aList.push_back(aProtect);
                             ++nScTab;
                         }
                     }
@@ -764,15 +763,11 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                         String  aComment;
                         sal_uInt16  nDummyFlags;
                         pDoc->GetScenarioData( nTab, aComment, aDummyCol, nDummyFlags );
-                        DBG_ASSERT( aList.Count() == 0, "List not empty!" );
-                        aList.Insert( new String( aComment ) );
+                        DBG_ASSERT( aList.empty(), "List not empty!" );
+                        aList.push_back(aComment);
                     }
 
                     rSet.Put( SfxStringListItem( nWhich, &aList ) );
-
-                    sal_uLong nCount = aList.Count();
-                    for ( sal_uLong i=0; i<nCount; i++ )
-                        delete (String*) aList.GetObject(i);
                 }
                 break;
 
