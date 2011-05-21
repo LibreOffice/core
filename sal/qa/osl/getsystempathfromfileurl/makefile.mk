@@ -37,6 +37,8 @@ ENABLE_EXCEPTIONS = TRUE
 
 .INCLUDE: settings.mk
 
+.IF "$(CROSS_COMPILING)"==""
+
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
 DLLPRE =
@@ -50,6 +52,8 @@ SHL1VERSIONMAP = version.map
 DEF1NAME = $(SHL1TARGET)
 
 SLOFILES = $(SHL1OBJS)
+
+.ENDIF
 
 .INCLUDE: target.mk
 .INCLUDE: _cppunit.mk

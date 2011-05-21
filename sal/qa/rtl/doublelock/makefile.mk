@@ -35,6 +35,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(CROSS_COMPILING)"==""
+
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
@@ -63,6 +65,8 @@ SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
 # do this here, so we get right dependencies
 
 SLOFILES=$(SHL1OBJS)
+
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 

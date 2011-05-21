@@ -33,6 +33,8 @@ ENABLE_EXCEPTIONS = TRUE
 
 .INCLUDE: settings.mk
 
+.IF "$(CROSS_COMPILING)"==""
+
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
 OBJFILES = $(APP1OBJS)
@@ -41,5 +43,7 @@ APP1OBJS = $(OBJ)/cppunittester.obj
 APP1RPATH = NONE
 APP1STDLIBS = $(CPPUNITLIB) $(SALLIB)
 APP1TARGET = cppunittester
+
+.ENDIF
 
 .INCLUDE: target.mk

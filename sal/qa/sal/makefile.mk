@@ -33,6 +33,8 @@ ENABLE_EXCEPTIONS := TRUE
 
 .INCLUDE: settings.mk
 
+.IF "$(CROSS_COMPILING)"==""
+
 SHL1TARGET = $(TARGET)_types
 SHL1OBJS = $(SLO)$/test_types.obj
 SHL1STDLIBS = $(SALLIB) $(CPPUNITLIB)
@@ -41,6 +43,8 @@ SHL1IMPLIB = i$(SHL1TARGET)
 DEF1NAME = $(SHL1TARGET)
 
 SLOFILES = $(SHL1OBJS)
+
+.ENDIF
 
 .INCLUDE: target.mk
 .INCLUDE: $(PRJ)$/qa$/cppunit_local.mk

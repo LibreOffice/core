@@ -36,6 +36,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(CROSS_COMPILING)"==""
+
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
@@ -54,7 +56,10 @@ SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
 # auto generated Target:Condition
 # END ------------------------------------------------------------------
 
+.ENDIF
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
 .INCLUDE : $(PRJ)$/qa$/cppunit_local.mk
+

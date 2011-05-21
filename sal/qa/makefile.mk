@@ -47,6 +47,8 @@ TARGET=whole_sal_qa
 ALLTAR : test_all
 .ENDIF
 
+.IF "$(CROSS_COMPILING)"==""
+
 # OTHER STUFF ------------------------------------------------------
 # test : test_all
 
@@ -60,3 +62,5 @@ test_all:
         @echo - start sal unit tests
         @echo ----------------------------------------------------------
         $(PERL) buildall.pl $(TESTOPT)
+
+.ENDIF

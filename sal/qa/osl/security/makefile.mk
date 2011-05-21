@@ -36,6 +36,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(CROSS_COMPILING)"==""
+
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
@@ -57,6 +59,8 @@ DEF1NAME    =$(SHL1TARGET)
 SHL1VERSIONMAP= $(PRJ)$/qa$/export.map
 # auto generated Target:Security
 # END ------------------------------------------------------------------
+
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 
