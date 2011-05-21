@@ -32,7 +32,6 @@
 #include <basegfx/vector/b3dvector.hxx>
 
 #if defined( WNT )
-#elif defined( OS2 )
 #elif defined( QUARTZ )
 #include <OpenGL/gl.h>
 #elif defined( UNX ) && !defined( QUARTZ )

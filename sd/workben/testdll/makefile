@@ -71,31 +71,3 @@ $(MISC)\$(SHL1TARGET).def:  makefile
     @echo EXPORTS                                                   >>$@
 	@echo _CreateWindow @2 								>>$@
 !ENDIF
-
-!IF "$(GUI)" == "OS2"
-
-$(MISC)\$(SHL1TARGET).def:  makefile
-	@echo ================================================================
-	@echo building $@
-	@echo ----------------------------------------------------------------
-!IF "$(COM)"!="WTC"
-	echo  LIBRARY		INITINSTANCE TERMINSTANCE			>$@
-	echo  DESCRIPTION	'StarOne Test-DLL'           					>>$@
-	echo  PROTMODE										   >>$@
-    	@echo CODE        LOADONCALL 			              >>$@
-	@echo DATA		  PRELOAD MULTIPLE NONSHARED					  >>$@
-    	@echo EXPORTS                                                   >>$@
-!IF "$(COM)"!="ICC"
-	@echo _CreateWindow @2 								>>$@
-!ELSE
-	@echo CreateWindow @2 								>>$@
-!ENDIF
-
-!ELSE
-    	@echo option DESCRIPTION 'StarOne Test-DLL'		                    >$@
-    	@echo name $(BIN)\$(SHL1TARGET).dll                         >>$@
-	@echo CreateWindow_ @2 								>>$@
-	@gawk -f s:\util\exp.awk temp.def				>>$@
-	del temp.def
-!ENDIF
-!ENDIF

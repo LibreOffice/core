@@ -63,7 +63,6 @@
 #if defined( WNT )
     #define GL_TEXTURE_MAX_ANISOTROPY_EXT 0x84FE
     #define GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT 0x84FF
-#elif defined( OS2 )
 #elif defined( QUARTZ )
     #include "premac.h"
     #include <Cocoa/Cocoa.h>
@@ -212,7 +211,6 @@ private:
     HWND                    hWnd;
     HDC                     hDC;
     HGLRC                   hRC;
-#elif defined( OS2 )
 #elif defined( QUARTZ )
 #elif defined( UNX )
     unx::Display*           dpy;
