@@ -453,7 +453,7 @@ void ScXMLExportDatabaseRanges::WriteSortDescriptor(const uno::Sequence <beans::
         sal_Bool bCaseSensitive(aSortFields[0].IsCaseSensitive);
         for (i = 1; i < nSortFields; ++i)
         {
-            DBG_ASSERT(bCaseSensitive == aSortFields[i].IsCaseSensitive, "seems that it is now possible to have every field case sensitive");
+            OSL_ENSURE(bCaseSensitive == aSortFields[i].IsCaseSensitive, "seems that it is now possible to have every field case sensitive");
         }
 #endif
         if (aSortFields[0].CollatorLocale.Language.getLength())
@@ -468,9 +468,9 @@ void ScXMLExportDatabaseRanges::WriteSortDescriptor(const uno::Sequence <beans::
         rtl::OUString sAlgorithm(aSortFields[0].CollatorAlgorithm);
         for (i = 1; i < nSortFields; ++i)
         {
-            DBG_ASSERT(sLanguage == aSortFields[i].CollatorLocale.Language, "seems that it is now possible to have every field localized");
-            DBG_ASSERT(sCountry == aSortFields[i].CollatorLocale.Country, "seems that it is now possible to have every field localized");
-            DBG_ASSERT(sAlgorithm == aSortFields[i].CollatorAlgorithm, "seems that it is now possible to have every field localized");
+            OSL_ENSURE(sLanguage == aSortFields[i].CollatorLocale.Language, "seems that it is now possible to have every field localized");
+            OSL_ENSURE(sCountry == aSortFields[i].CollatorLocale.Country, "seems that it is now possible to have every field localized");
+            OSL_ENSURE(sAlgorithm == aSortFields[i].CollatorAlgorithm, "seems that it is now possible to have every field localized");
         }
 #endif
         SvXMLElementExport aElemS(rExport, XML_NAMESPACE_TABLE, XML_SORT, sal_True, sal_True);

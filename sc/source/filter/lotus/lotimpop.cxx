@@ -131,7 +131,7 @@ sal_Bool ImportLotus::BofFm3( void )
 
 void ImportLotus::Columnwidth( sal_uInt16 nRecLen )
 {
-    DBG_ASSERT( nRecLen >= 4, "*ImportLotus::Columnwidth(): Record zu kurz!" );
+    OSL_ENSURE( nRecLen >= 4, "*ImportLotus::Columnwidth(): Record zu kurz!" );
 
     sal_uInt8    nLTab, nWindow2;
     sal_uInt16  nCnt = ( nRecLen - 4 ) / 2;
@@ -163,7 +163,7 @@ void ImportLotus::Columnwidth( sal_uInt16 nRecLen )
 
 void ImportLotus::Hiddencolumn( sal_uInt16 nRecLen )
 {
-    DBG_ASSERT( nRecLen >= 4, "*ImportLotus::Hiddencolumn(): Record zu kurz!" );
+    OSL_ENSURE( nRecLen >= 4, "*ImportLotus::Hiddencolumn(): Record zu kurz!" );
 
     sal_uInt8    nLTab, nWindow2;
     sal_uInt16  nCnt = ( nRecLen - 4 ) / 2;
@@ -271,7 +271,7 @@ void ImportLotus::Smallnumcell( void )
 
 ScFormulaCell *ImportLotus::Formulacell( sal_uInt16 n )
     {
-    DBG_ASSERT( pIn, "-ImportLotus::Formulacell(): Null-Stream -> Rums!" );
+    OSL_ENSURE( pIn, "-ImportLotus::Formulacell(): Null-Stream -> Rums!" );
 
     ScAddress           aAddr;
 
@@ -305,7 +305,7 @@ void ImportLotus::Read( String &r )
 
 void ImportLotus::RowPresentation( sal_uInt16 nRecLen )
 {
-    DBG_ASSERT( nRecLen > 4, "*ImportLotus::RowPresentation(): Record zu kurz!" );
+    OSL_ENSURE( nRecLen > 4, "*ImportLotus::RowPresentation(): Record zu kurz!" );
 
     sal_uInt8    nLTab, nFlags;
     sal_uInt16  nRow, nHeight;
@@ -401,7 +401,7 @@ void ImportLotus::Font_Ysize( void )
 
 void ImportLotus::_Row( const sal_uInt16 nRecLen )
     {
-    DBG_ASSERT( nExtTab >= 0, "*ImportLotus::_Row(): Kann hier nicht sein!" );
+    OSL_ENSURE( nExtTab >= 0, "*ImportLotus::_Row(): Kann hier nicht sein!" );
 
     sal_uInt16          nRow;
     sal_uInt16          nHeight;

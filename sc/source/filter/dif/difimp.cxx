@@ -129,7 +129,7 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
             case T_UNKNOWN:
                 break;
             default:
-                DBG_ERRORFILE( "ScImportDif - missing enum" );
+                OSL_FAIL( "ScImportDif - missing enum" );
         }
 
     }
@@ -249,7 +249,7 @@ DifParser::DifParser( SvStream& rNewIn, const sal_uInt32 nOption, ScDocument& rD
     eCharSet = e;
     if ( rIn.GetStreamCharSet() != eCharSet )
     {
-        DBG_ERRORFILE( "CharSet passed overrides and modifies StreamCharSet" );
+        OSL_FAIL( "CharSet passed overrides and modifies StreamCharSet" );
         rIn.SetStreamCharSet( eCharSet );
     }
     rIn.StartReadingUnicodeText( eCharSet );
@@ -378,7 +378,7 @@ TOPIC DifParser::GetNextTopic( void )
             }
                 break;
             case S_Data:
-                DBG_ASSERT( aLine.Len() >= 2,
+                OSL_ENSURE( aLine.Len() >= 2,
                     "+GetNextTopic(): <String> ist zu kurz!" );
                 if( aLine.Len() > 2 )
                     aData = aLine.Copy( 1, aLine.Len() - 2 );
@@ -387,7 +387,7 @@ TOPIC DifParser::GetNextTopic( void )
                 eS = S_END;
                 break;
             case S_END:
-                DBG_ERRORFILE( "DifParser::GetNextTopic - unexpected state" );
+                OSL_FAIL( "DifParser::GetNextTopic - unexpected state" );
                 break;
             case S_UNKNOWN:
                 // 2 Zeilen ueberlesen
@@ -398,7 +398,7 @@ TOPIC DifParser::GetNextTopic( void )
                 eS = S_END;
                 break;
             default:
-                DBG_ERRORFILE( "DifParser::GetNextTopic - missing enum" );
+                OSL_FAIL( "DifParser::GetNextTopic - missing enum" );
         }
     }
 
@@ -435,7 +435,7 @@ DATASET DifParser::GetNumberDataset( const sal_Unicode* pPossibleNumericData )
     }
     else
     {   // ...und zur Strafe mit'm Numberformatter...
-        DBG_ASSERT( pNumFormatter, "-DifParser::GetNextDataset(): No Formatter, more fun!" );
+        OSL_ENSURE( pNumFormatter, "-DifParser::GetNextDataset(): No Formatter, more fun!" );
         String aTestVal( pPossibleNumericData );
         sal_uInt32 nFormat = 0;
         double fTmpVal;
@@ -472,7 +472,7 @@ bool DifParser::LookAhead()
     const sal_Unicode* pAktBuffer;
     bool bValidStructure = false;
 
-    DBG_ASSERT( aLookAheadLine.Len() == 0, "*DifParser::LookAhead(): LookAhead called twice in a row" );
+    OSL_ENSURE( aLookAheadLine.Len() == 0, "*DifParser::LookAhead(): LookAhead called twice in a row" );
     rIn.ReadUniOrByteStringLine( aLookAheadLine );
 
     pAktBuffer = aLookAheadLine.GetBuffer();
@@ -795,10 +795,10 @@ sal_Bool DifParser::ScanFloatVal( const sal_Unicode* pStart )
                 }
                 break;
             case S_END:
-                DBG_ERRORFILE( "DifParser::ScanFloatVal - unexpected state" );
+                OSL_FAIL( "DifParser::ScanFloatVal - unexpected state" );
                 break;
             default:
-                DBG_ERRORFILE( "DifParser::ScanFloatVal - missing enum" );
+                OSL_FAIL( "DifParser::ScanFloatVal - missing enum" );
         }
         pStart++;
     }
@@ -829,11 +829,11 @@ DifColumn::DifColumn ()
 
 void DifColumn::SetLogical( SCROW nRow )
 {
-    DBG_ASSERT( ValidRow(nRow), "*DifColumn::SetLogical(): Row zu gross!" );
+    OSL_ENSURE( ValidRow(nRow), "*DifColumn::SetLogical(): Row zu gross!" );
 
     if( pAkt )
     {
-        DBG_ASSERT( nRow > 0, "*DifColumn::SetLogical(): weitere koennen nicht 0 sein!" );
+        OSL_ENSURE( nRow > 0, "*DifColumn::SetLogical(): weitere koennen nicht 0 sein!" );
 
         nRow--;
 
@@ -854,15 +854,15 @@ void DifColumn::SetLogical( SCROW nRow )
 
 void DifColumn::SetNumFormat( SCROW nRow, const sal_uInt32 nNumFormat )
 {
-    DBG_ASSERT( ValidRow(nRow), "*DifColumn::SetNumFormat(): Row zu gross!" );
+    OSL_ENSURE( ValidRow(nRow), "*DifColumn::SetNumFormat(): Row zu gross!" );
 
     if( nNumFormat > 0 )
     {
         if(pAkt)
         {
-            DBG_ASSERT( nRow > 0,
+            OSL_ENSURE( nRow > 0,
                 "*DifColumn::SetNumFormat(): weitere koennen nicht 0 sein!" );
-            DBG_ASSERT( nRow > pAkt->nEnd,
+            OSL_ENSURE( nRow > pAkt->nEnd,
                 "*DifColumn::SetNumFormat(): Noch 'mal von vorne?" );
 
             if( pAkt->nNumFormat == nNumFormat && pAkt->nEnd == nRow - 1 )
@@ -902,7 +902,7 @@ void DifColumn::Apply( ScDocument& rDoc, const SCCOL nCol, const SCTAB nTab )
 
     for (boost::ptr_vector<ENTRY>::const_iterator it = aEntries.begin(); it != aEntries.end(); ++it)
     {
-        DBG_ASSERT( it->nNumFormat > 0,
+        OSL_ENSURE( it->nNumFormat > 0,
             "+DifColumn::Apply(): Numberformat darf hier nicht 0 sein!" );
 
         rItemSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, it->nNumFormat ) );
@@ -934,8 +934,8 @@ DifAttrCache::~DifAttrCache()
 
 void DifAttrCache::SetLogical( const SCCOL nCol, const SCROW nRow )
 {
-    DBG_ASSERT( ValidCol(nCol), "-DifAttrCache::SetLogical(): Col zu gross!" );
-    DBG_ASSERT( bPlain, "*DifAttrCache::SetLogical(): muss Plain sein!" );
+    OSL_ENSURE( ValidCol(nCol), "-DifAttrCache::SetLogical(): Col zu gross!" );
+    OSL_ENSURE( bPlain, "*DifAttrCache::SetLogical(): muss Plain sein!" );
 
     if( !ppCols[ nCol ] )
         ppCols[ nCol ] = new DifColumn;
@@ -945,8 +945,8 @@ void DifAttrCache::SetLogical( const SCCOL nCol, const SCROW nRow )
 
 void DifAttrCache::SetNumFormat( const SCCOL nCol, const SCROW nRow, const sal_uInt32 nNumFormat )
 {
-    DBG_ASSERT( ValidCol(nCol), "-DifAttrCache::SetNumFormat(): Col zu gross!" );
-    DBG_ASSERT( !bPlain, "*DifAttrCache::SetNumFormat(): sollte nicht Plain sein!" );
+    OSL_ENSURE( ValidCol(nCol), "-DifAttrCache::SetNumFormat(): Col zu gross!" );
+    OSL_ENSURE( !bPlain, "*DifAttrCache::SetNumFormat(): sollte nicht Plain sein!" );
 
     if( !ppCols[ nCol ] )
         ppCols[ nCol ] = new DifColumn;

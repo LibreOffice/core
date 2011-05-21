@@ -88,7 +88,7 @@ void lcl_WriteDateTime( XclExpStream& rStrm, const DateTime& rDateTime )
 void lcl_WriteFixedString( XclExpStream& rStrm, const XclExpString& rString, sal_Size nLength )
 {
     sal_Size nStrBytes = rString.GetBufferSize();
-    DBG_ASSERT( nLength >= nStrBytes, "lcl_WriteFixedString - String too long" );
+    OSL_ENSURE( nLength >= nStrBytes, "lcl_WriteFixedString - String too long" );
     if( rString.Len() > 0 )
         rStrm << rString;
     if( nLength > nStrBytes )
@@ -489,7 +489,7 @@ XclExpChTrTabIdBuffer::~XclExpChTrTabIdBuffer()
 
 void XclExpChTrTabIdBuffer::InitFill( sal_uInt16 nIndex )
 {
-    DBG_ASSERT( nIndex < nLastId, "XclExpChTrTabIdBuffer::Insert - out of range" );
+    OSL_ENSURE( nIndex < nLastId, "XclExpChTrTabIdBuffer::Insert - out of range" );
 
     sal_uInt16 nFreeCount = 0;
     for( sal_uInt16* pElem = pBuffer; pElem <= pLast; pElem++ )
@@ -515,13 +515,13 @@ void XclExpChTrTabIdBuffer::InitFillup()
 
 sal_uInt16 XclExpChTrTabIdBuffer::GetId( sal_uInt16 nIndex ) const
 {
-    DBG_ASSERT( nIndex < nBufSize, "XclExpChTrTabIdBuffer::GetId - out of range" );
+    OSL_ENSURE( nIndex < nBufSize, "XclExpChTrTabIdBuffer::GetId - out of range" );
     return pBuffer[ nIndex ];
 }
 
 void XclExpChTrTabIdBuffer::Remove()
 {
-    DBG_ASSERT( pBuffer <= pLast, "XclExpChTrTabIdBuffer::Remove - buffer empty" );
+    OSL_ENSURE( pBuffer <= pLast, "XclExpChTrTabIdBuffer::Remove - buffer empty" );
     sal_uInt16* pElem = pBuffer;
     while( (pElem <= pLast) && (*pElem != nLastId) )
         pElem++;
@@ -681,7 +681,7 @@ void XclExpChTrAction::SetIndex( sal_uInt32& rIndex )
 
 void XclExpChTrAction::SaveCont( XclExpStream& rStrm )
 {
-    DBG_ASSERT( nOpCode != EXC_CHTR_OP_UNKNOWN, "XclExpChTrAction::SaveCont - unknown action" );
+    OSL_ENSURE( nOpCode != EXC_CHTR_OP_UNKNOWN, "XclExpChTrAction::SaveCont - unknown action" );
     rStrm   << nLength
             << nIndex
             << nOpCode
@@ -742,7 +742,7 @@ void XclExpChTrData::Clear()
 
 void XclExpChTrData::WriteFormula( XclExpStream& rStrm, const XclExpChTrTabIdBuffer& rTabIdBuffer )
 {
-    DBG_ASSERT( mxTokArr && !mxTokArr->Empty(), "XclExpChTrData::Write - no formula" );
+    OSL_ENSURE( mxTokArr && !mxTokArr->Empty(), "XclExpChTrData::Write - no formula" );
     rStrm << *mxTokArr;
 
     for( XclExpRefLog::const_iterator aIt = maRefLog.begin(), aEnd = maRefLog.end(); aIt != aEnd; ++aIt )
@@ -778,7 +778,7 @@ void XclExpChTrData::Write( XclExpStream& rStrm, const XclExpChTrTabIdBuffer& rT
             rStrm << fValue;
         break;
         case EXC_CHTR_TYPE_STRING:
-            DBG_ASSERT( pString, "XclExpChTrData::Write - no string" );
+            OSL_ENSURE( pString, "XclExpChTrData::Write - no string" );
             rStrm << *pString;
         break;
         case EXC_CHTR_TYPE_FORMULA:
@@ -1342,7 +1342,7 @@ XclExpChTrActionStack::~XclExpChTrActionStack()
 
 void XclExpChTrActionStack::Push( XclExpChTrAction* pNewRec )
 {
-    DBG_ASSERT( pNewRec, "XclExpChTrActionStack::Push - NULL pointer" );
+    OSL_ENSURE( pNewRec, "XclExpChTrActionStack::Push - NULL pointer" );
     if( pNewRec )
         Stack::Push( pNewRec );
 }
@@ -1357,7 +1357,7 @@ XclExpChTrRecordList::~XclExpChTrRecordList()
 
 void XclExpChTrRecordList::Append( ExcRecord* pNewRec )
 {
-    DBG_ASSERT( pNewRec, "XclExpChTrRecordList::Append - NULL pointer" );
+    OSL_ENSURE( pNewRec, "XclExpChTrRecordList::Append - NULL pointer" );
     if( pNewRec )
         List::Insert( pNewRec, LIST_APPEND );
 }
@@ -1472,7 +1472,7 @@ XclExpChangeTrack::XclExpChangeTrack( const XclExpRoot& rRoot ) :
     pHeader( NULL ),
     bValidGUID( false )
 {
-    DBG_ASSERT( GetOldRoot().pTabId, "XclExpChangeTrack::XclExpChangeTrack - root data incomplete" );
+    OSL_ENSURE( GetOldRoot().pTabId, "XclExpChangeTrack::XclExpChangeTrack - root data incomplete" );
     if( !GetOldRoot().pTabId )
         return;
 
@@ -1564,13 +1564,13 @@ ScChangeTrack* XclExpChangeTrack::CreateTempChangeTrack()
 {
     // get original change track
     ScChangeTrack* pOrigChangeTrack = GetDoc().GetChangeTrack();
-    DBG_ASSERT( pOrigChangeTrack, "XclExpChangeTrack::CreateTempChangeTrack - no change track data" );
+    OSL_ENSURE( pOrigChangeTrack, "XclExpChangeTrack::CreateTempChangeTrack - no change track data" );
     if( !pOrigChangeTrack )
         return NULL;
 
     // create empty document
     pTempDoc = new ScDocument;
-    DBG_ASSERT( pTempDoc, "XclExpChangeTrack::CreateTempChangeTrack - no temp document" );
+    OSL_ENSURE( pTempDoc, "XclExpChangeTrack::CreateTempChangeTrack - no temp document" );
     if( !pTempDoc )
         return NULL;
 
@@ -1582,7 +1582,7 @@ ScChangeTrack* XclExpChangeTrack::CreateTempChangeTrack()
         pTempDoc->CreateValidTabName( sTabName );
         pTempDoc->InsertTab( SC_TAB_APPEND, sTabName );
     }
-    DBG_ASSERT( nOrigCount == pTempDoc->GetTableCount(),
+    OSL_ENSURE( nOrigCount == pTempDoc->GetTableCount(),
         "XclExpChangeTrack::CreateTempChangeTrack - table count mismatch" );
     if( nOrigCount != pTempDoc->GetTableCount() )
         return false;
@@ -1629,7 +1629,7 @@ sal_Bool XclExpChangeTrack::WriteUserNamesStream()
 {
     sal_Bool bRet = false;
     SotStorageStreamRef xSvStrm = OpenStream( EXC_STREAM_USERNAMES );
-    DBG_ASSERT( xSvStrm.Is(), "XclExpChangeTrack::WriteUserNamesStream - no stream" );
+    OSL_ENSURE( xSvStrm.Is(), "XclExpChangeTrack::WriteUserNamesStream - no stream" );
     if( xSvStrm.Is() )
     {
         XclExpStream aXclStrm( *xSvStrm, GetRoot() );
@@ -1651,7 +1651,7 @@ void XclExpChangeTrack::Write()
     if( WriteUserNamesStream() )
     {
         SotStorageStreamRef xSvStrm = OpenStream( EXC_STREAM_REVLOG );
-        DBG_ASSERT( xSvStrm.Is(), "XclExpChangeTrack::Write - no stream" );
+        OSL_ENSURE( xSvStrm.Is(), "XclExpChangeTrack::Write - no stream" );
         if( xSvStrm.Is() )
         {
             XclExpStream aXclStrm( *xSvStrm, GetRoot(), EXC_MAXRECSIZE_BIFF8 + 8 );

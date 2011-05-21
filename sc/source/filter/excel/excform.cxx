@@ -1322,7 +1322,7 @@ ConvErr ExcelToSc::ConvertExternName( const ScTokenArray*& /*rpArray*/, XclImpSt
 
 sal_Bool ExcelToSc::GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Size nLen )
 {
-    DBG_ASSERT_BIFF( GetBiff() == EXC_BIFF5 );
+    OSL_ENSURE_BIFF( GetBiff() == EXC_BIFF5 );
     if( GetBiff() != EXC_BIFF5 )
         return false;
 
@@ -1823,13 +1823,13 @@ void ExcelToSc::ReadExtensionArray( unsigned int n, XclImpStream& aIn )
         pMatrix->GetDimensions( nC, nR);
         if( nC != nCols || nR != nRows )
         {
-            DBG_ERRORFILE( "ExcelToSc::ReadExtensionArray - matrix size mismatch" );
+            OSL_FAIL( "ExcelToSc::ReadExtensionArray - matrix size mismatch" );
             pMatrix = NULL;
         }
     }
     else
     {
-        DBG_ERRORFILE( "ExcelToSc::ReadExtensionArray - missing matrix" );
+        OSL_FAIL( "ExcelToSc::ReadExtensionArray - missing matrix" );
     }
 
     for( nR = 0 ; nR < nRows; nR++ )

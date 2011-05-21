@@ -174,7 +174,7 @@ ExcTable::~ExcTable()
 
 void ExcTable::Add( XclExpRecordBase* pRec )
 {
-    DBG_ASSERT( pRec, "-ExcTable::Add(): pRec ist NULL!" );
+    OSL_ENSURE( pRec, "-ExcTable::Add(): pRec ist NULL!" );
     aRecList.AppendNewRecord( pRec );
 }
 
@@ -421,8 +421,8 @@ void ExcTable::FillAsTable( SCTAB nCodeNameIdx )
     XclBiff eBiff = GetBiff();
     ScDocument& rDoc = GetDoc();
 
-    DBG_ASSERT( (mnScTab >= 0L) && (mnScTab <= MAXTAB), "-ExcTable::Table(): mnScTab - no ordinary table!" );
-    DBG_ASSERT( nExcTab <= static_cast<sal_uInt16>(MAXTAB), "-ExcTable::Table(): nExcTab - no ordinary table!" );
+    OSL_ENSURE( (mnScTab >= 0L) && (mnScTab <= MAXTAB), "-ExcTable::Table(): mnScTab - no ordinary table!" );
+    OSL_ENSURE( nExcTab <= static_cast<sal_uInt16>(MAXTAB), "-ExcTable::Table(): nExcTab - no ordinary table!" );
 
     // create a new OBJ list for this sheet (may be used by notes, autofilter, data validation)
     if( eBiff == EXC_BIFF8 )

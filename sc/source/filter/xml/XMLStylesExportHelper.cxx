@@ -462,7 +462,7 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
 
 const rtl::OUString& ScMyValidationsContainer::GetValidationName(const sal_Int32 nIndex)
 {
-    DBG_ASSERT( static_cast<size_t>(nIndex) < aValidationVec.size(), "out of range" );
+    OSL_ENSURE( static_cast<size_t>(nIndex) < aValidationVec.size(), "out of range" );
     return aValidationVec[nIndex].sName;
 }
 
@@ -679,8 +679,8 @@ void ScRowFormatRanges::AddRange(const sal_Int32 nPrevStartCol, const sal_Int32 
 void ScRowFormatRanges::AddRange(ScMyRowFormatRange& rFormatRange,
     const sal_Int32 nRow)
 {
-    DBG_ASSERT(pRowDefaults, "no row defaults");
-    DBG_ASSERT(pColDefaults, "no column defaults");
+    OSL_ENSURE(pRowDefaults, "no row defaults");
+    OSL_ENSURE(pColDefaults, "no column defaults");
     sal_uInt32 nEnd (rFormatRange.nRepeatRows + nRow - 1);
     sal_Int32 nPrevIndex((*pRowDefaults)[nRow].nIndex);
     sal_Bool bPrevAutoStyle((*pRowDefaults)[nRow].bIsAutoStyle);
@@ -707,7 +707,7 @@ void ScRowFormatRanges::AddRange(ScMyRowFormatRange& rFormatRange,
         nEnd = rFormatRange.nStartColumn + rFormatRange.nRepeatColumns;
         for(i = nPrevStartCol + nRepeat; i < nEnd; i += (*pColDefaults)[i].nRepeat)
         {
-            DBG_ASSERT(sal_uInt32(nPrevStartCol + nRepeat) <= nEnd, "something wents wrong");
+            OSL_ENSURE(sal_uInt32(nPrevStartCol + nRepeat) <= nEnd, "something wents wrong");
             if ((nPrevIndex != (*pColDefaults)[i].nIndex) ||
                 (bPrevAutoStyle != (*pColDefaults)[i].bIsAutoStyle))
             {
@@ -923,7 +923,7 @@ sal_Int32 ScFormatRangeStyles::GetIndexOfStyleName(const rtl::OUString& rString,
 sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int32 nTable,
     const sal_Int32 nColumn, const sal_Int32 nRow, sal_Bool& bIsAutoStyle) const
 {
-    DBG_ASSERT(static_cast<size_t>(nTable) < aTables.size(), "wrong table");
+    OSL_ENSURE(static_cast<size_t>(nTable) < aTables.size(), "wrong table");
     ScMyFormatRangeAddresses* pFormatRanges(aTables[nTable]);
     ScMyFormatRangeAddresses::iterator aItr(pFormatRanges->begin());
     ScMyFormatRangeAddresses::iterator aEndItr(pFormatRanges->end());
@@ -946,7 +946,7 @@ sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int32 nTable,
 sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32 nColumn, const sal_Int32 nRow,
     sal_Bool& bIsAutoStyle, sal_Int32& nValidationIndex, sal_Int32& nNumberFormat, const sal_Int32 nRemoveBeforeRow)
 {
-    DBG_ASSERT(static_cast<size_t>(nTable) < aTables.size(), "wrong table");
+    OSL_ENSURE(static_cast<size_t>(nTable) < aTables.size(), "wrong table");
     ScMyFormatRangeAddresses* pFormatRanges(aTables[nTable]);
     ScMyFormatRangeAddresses::iterator aItr(pFormatRanges->begin());
     ScMyFormatRangeAddresses::iterator aEndItr(pFormatRanges->end());
@@ -990,7 +990,7 @@ void ScFormatRangeStyles::GetFormatRanges(const sal_Int32 nStartColumn, const sa
                     const sal_Int32 nTable, ScRowFormatRanges* pRowFormatRanges)
 {
     sal_Int32 nTotalColumns(nEndColumn - nStartColumn + 1);
-    DBG_ASSERT(static_cast<size_t>(nTable) < aTables.size(), "wrong table");
+    OSL_ENSURE(static_cast<size_t>(nTable) < aTables.size(), "wrong table");
     ScMyFormatRangeAddresses* pFormatRanges(aTables[nTable]);
     ScMyFormatRangeAddresses::iterator aItr(pFormatRanges->begin());
     ScMyFormatRangeAddresses::iterator aEndItr(pFormatRanges->end());
@@ -1061,7 +1061,7 @@ void ScFormatRangeStyles::AddRangeStyleName(const table::CellRangeAddress aCellR
     aFormatRange.nValidationIndex = nValidationIndex;
     aFormatRange.nNumberFormat = nNumberFormat;
     aFormatRange.bIsAutoStyle = bIsAutoStyle;
-    DBG_ASSERT(static_cast<size_t>(aCellRangeAddress.Sheet) < aTables.size(), "wrong table");
+    OSL_ENSURE(static_cast<size_t>(aCellRangeAddress.Sheet) < aTables.size(), "wrong table");
     ScMyFormatRangeAddresses* pFormatRanges(aTables[aCellRangeAddress.Sheet]);
     pFormatRanges->push_back(aFormatRange);
 }
@@ -1136,7 +1136,7 @@ rtl::OUString* ScColumnRowStylesBase::GetStyleNameByIndex(const sal_Int32 nIndex
     if ( nIndex < 0 || nIndex >= sal::static_int_cast<sal_Int32>( aStyleNames.size() ) )
     {
         // should no longer happen, use first style then
-        DBG_ERRORFILE("GetStyleNameByIndex: invalid index");
+        OSL_FAIL("GetStyleNameByIndex: invalid index");
         return aStyleNames[0];
     }
 
@@ -1169,7 +1169,7 @@ void ScColumnStyles::AddNewTable(const sal_Int32 nTable, const sal_Int32 nFields
 sal_Int32 ScColumnStyles::GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32 nField,
     sal_Bool& bIsVisible)
 {
-    DBG_ASSERT(static_cast<size_t>(nTable) < aTables.size(), "wrong table");
+    OSL_ENSURE(static_cast<size_t>(nTable) < aTables.size(), "wrong table");
     if (static_cast<size_t>(nField) < aTables[nTable].size())
     {
         bIsVisible = aTables[nTable][nField].bIsVisible;
@@ -1185,8 +1185,8 @@ sal_Int32 ScColumnStyles::GetStyleNameIndex(const sal_Int32 nTable, const sal_In
 void ScColumnStyles::AddFieldStyleName(const sal_Int32 nTable, const sal_Int32 nField,
     const sal_Int32 nStringIndex, const sal_Bool bIsVisible)
 {
-    DBG_ASSERT(static_cast<size_t>(nTable) < aTables.size(), "wrong table");
-    DBG_ASSERT(aTables[nTable].size() >= static_cast<sal_uInt32>(nField), "wrong field");
+    OSL_ENSURE(static_cast<size_t>(nTable) < aTables.size(), "wrong table");
+    OSL_ENSURE(aTables[nTable].size() >= static_cast<sal_uInt32>(nField), "wrong field");
     ScColumnStyle aStyle;
     aStyle.nIndex = nStringIndex;
     aStyle.bIsVisible = bIsVisible;
@@ -1232,7 +1232,7 @@ void ScRowStyles::AddNewTable(const sal_Int32 nTable, const sal_Int32 nFields)
 
 sal_Int32 ScRowStyles::GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32 nField)
 {
-    DBG_ASSERT(static_cast<size_t>(nTable) < aTables.size(), "wrong table");
+    OSL_ENSURE(static_cast<size_t>(nTable) < aTables.size(), "wrong table");
     if (maCache.hasCache(nTable, nField))
         // Cache hit !
         return maCache.mnStyle;
@@ -1258,7 +1258,7 @@ sal_Int32 ScRowStyles::GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32
 void ScRowStyles::AddFieldStyleName(const sal_Int32 nTable, const sal_Int32 nField,
     const sal_Int32 nStringIndex)
 {
-    DBG_ASSERT(static_cast<size_t>(nTable) < aTables.size(), "wrong table");
+    OSL_ENSURE(static_cast<size_t>(nTable) < aTables.size(), "wrong table");
     StylesType& r = aTables[nTable];
     r.insert_back(nField, nField+1, nStringIndex);
 }
@@ -1266,8 +1266,8 @@ void ScRowStyles::AddFieldStyleName(const sal_Int32 nTable, const sal_Int32 nFie
 void ScRowStyles::AddFieldStyleName(const sal_Int32 nTable, const sal_Int32 nStartField,
         const sal_Int32 nStringIndex, const sal_Int32 nEndField)
 {
-    DBG_ASSERT( nStartField <= nEndField, "bad field range");
-    DBG_ASSERT(static_cast<size_t>(nTable) < aTables.size(), "wrong table");
+    OSL_ENSURE( nStartField <= nEndField, "bad field range");
+    OSL_ENSURE(static_cast<size_t>(nTable) < aTables.size(), "wrong table");
     StylesType& r = aTables[nTable];
     r.insert_back(nStartField, nEndField+1, nStringIndex);
 }

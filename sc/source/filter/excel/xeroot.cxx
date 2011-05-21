@@ -81,91 +81,91 @@ XclExpRoot::XclExpRoot( XclExpRootData& rExpRootData ) :
 
 XclExpTabInfo& XclExpRoot::GetTabInfo() const
 {
-    DBG_ASSERT( mrExpData.mxTabInfo, "XclExpRoot::GetTabInfo - missing object (wrong BIFF?)" );
+    OSL_ENSURE( mrExpData.mxTabInfo, "XclExpRoot::GetTabInfo - missing object (wrong BIFF?)" );
     return *mrExpData.mxTabInfo;
 }
 
 XclExpAddressConverter& XclExpRoot::GetAddressConverter() const
 {
-    DBG_ASSERT( mrExpData.mxAddrConv, "XclExpRoot::GetAddressConverter - missing object (wrong BIFF?)" );
+    OSL_ENSURE( mrExpData.mxAddrConv, "XclExpRoot::GetAddressConverter - missing object (wrong BIFF?)" );
     return *mrExpData.mxAddrConv;
 }
 
 XclExpFormulaCompiler& XclExpRoot::GetFormulaCompiler() const
 {
-    DBG_ASSERT( mrExpData.mxFmlaComp, "XclExpRoot::GetFormulaCompiler - missing object (wrong BIFF?)" );
+    OSL_ENSURE( mrExpData.mxFmlaComp, "XclExpRoot::GetFormulaCompiler - missing object (wrong BIFF?)" );
     return *mrExpData.mxFmlaComp;
 }
 
 XclExpProgressBar& XclExpRoot::GetProgressBar() const
 {
-    DBG_ASSERT( mrExpData.mxProgress, "XclExpRoot::GetProgressBar - missing object (wrong BIFF?)" );
+    OSL_ENSURE( mrExpData.mxProgress, "XclExpRoot::GetProgressBar - missing object (wrong BIFF?)" );
     return *mrExpData.mxProgress;
 }
 
 XclExpSst& XclExpRoot::GetSst() const
 {
-    DBG_ASSERT( mrExpData.mxSst, "XclExpRoot::GetSst - missing object (wrong BIFF?)" );
+    OSL_ENSURE( mrExpData.mxSst, "XclExpRoot::GetSst - missing object (wrong BIFF?)" );
     return *mrExpData.mxSst;
 }
 
 XclExpPalette& XclExpRoot::GetPalette() const
 {
-    DBG_ASSERT( mrExpData.mxPalette, "XclExpRoot::GetPalette - missing object (wrong BIFF?)" );
+    OSL_ENSURE( mrExpData.mxPalette, "XclExpRoot::GetPalette - missing object (wrong BIFF?)" );
     return *mrExpData.mxPalette;
 }
 
 XclExpFontBuffer& XclExpRoot::GetFontBuffer() const
 {
-    DBG_ASSERT( mrExpData.mxFontBfr, "XclExpRoot::GetFontBuffer - missing object (wrong BIFF?)" );
+    OSL_ENSURE( mrExpData.mxFontBfr, "XclExpRoot::GetFontBuffer - missing object (wrong BIFF?)" );
     return *mrExpData.mxFontBfr;
 }
 
 XclExpNumFmtBuffer& XclExpRoot::GetNumFmtBuffer() const
 {
-    DBG_ASSERT( mrExpData.mxNumFmtBfr, "XclExpRoot::GetNumFmtBuffer - missing object (wrong BIFF?)" );
+    OSL_ENSURE( mrExpData.mxNumFmtBfr, "XclExpRoot::GetNumFmtBuffer - missing object (wrong BIFF?)" );
     return *mrExpData.mxNumFmtBfr;
 }
 
 XclExpXFBuffer& XclExpRoot::GetXFBuffer() const
 {
-    DBG_ASSERT( mrExpData.mxXFBfr, "XclExpRoot::GetXFBuffer - missing object (wrong BIFF?)" );
+    OSL_ENSURE( mrExpData.mxXFBfr, "XclExpRoot::GetXFBuffer - missing object (wrong BIFF?)" );
     return *mrExpData.mxXFBfr;
 }
 
 XclExpLinkManager& XclExpRoot::GetGlobalLinkManager() const
 {
-    DBG_ASSERT( mrExpData.mxGlobLinkMgr, "XclExpRoot::GetGlobalLinkManager - missing object (wrong BIFF?)" );
+    OSL_ENSURE( mrExpData.mxGlobLinkMgr, "XclExpRoot::GetGlobalLinkManager - missing object (wrong BIFF?)" );
     return *mrExpData.mxGlobLinkMgr;
 }
 
 XclExpLinkManager& XclExpRoot::GetLocalLinkManager() const
 {
-    DBG_ASSERT( GetLocalLinkMgrRef(), "XclExpRoot::GetLocalLinkManager - missing object (wrong BIFF?)" );
+    OSL_ENSURE( GetLocalLinkMgrRef(), "XclExpRoot::GetLocalLinkManager - missing object (wrong BIFF?)" );
     return *GetLocalLinkMgrRef();
 }
 
 XclExpNameManager& XclExpRoot::GetNameManager() const
 {
-    DBG_ASSERT( mrExpData.mxNameMgr, "XclExpRoot::GetNameManager - missing object (wrong BIFF?)" );
+    OSL_ENSURE( mrExpData.mxNameMgr, "XclExpRoot::GetNameManager - missing object (wrong BIFF?)" );
     return *mrExpData.mxNameMgr;
 }
 
 XclExpObjectManager& XclExpRoot::GetObjectManager() const
 {
-    DBG_ASSERT( mrExpData.mxObjMgr, "XclExpRoot::GetObjectManager - missing object (wrong BIFF?)" );
+    OSL_ENSURE( mrExpData.mxObjMgr, "XclExpRoot::GetObjectManager - missing object (wrong BIFF?)" );
     return *mrExpData.mxObjMgr;
 }
 
 XclExpFilterManager& XclExpRoot::GetFilterManager() const
 {
-    DBG_ASSERT( mrExpData.mxFilterMgr, "XclExpRoot::GetFilterManager - missing object (wrong BIFF?)" );
+    OSL_ENSURE( mrExpData.mxFilterMgr, "XclExpRoot::GetFilterManager - missing object (wrong BIFF?)" );
     return *mrExpData.mxFilterMgr;
 }
 
 XclExpPivotTableManager& XclExpRoot::GetPivotTableManager() const
 {
-    DBG_ASSERT( mrExpData.mxPTableMgr, "XclExpRoot::GetPivotTableManager - missing object (wrong BIFF?)" );
+    OSL_ENSURE( mrExpData.mxPTableMgr, "XclExpRoot::GetPivotTableManager - missing object (wrong BIFF?)" );
     return *mrExpData.mxPTableMgr;
 }
 
@@ -236,7 +236,7 @@ XclExpRecordRef XclExpRoot::CreateRecord( sal_uInt16 nRecId ) const
         case EXC_ID_EXTERNSHEET:    xRec = GetLocalLinkMgrRef();    break;
         case EXC_ID_NAME:           xRec = mrExpData.mxNameMgr;     break;
     }
-    DBG_ASSERT( xRec, "XclExpRoot::CreateRecord - unknown record ID or missing object" );
+    OSL_ENSURE( xRec, "XclExpRoot::CreateRecord - unknown record ID or missing object" );
     return xRec;
 }
 

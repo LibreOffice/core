@@ -257,7 +257,7 @@ class TokenStack
 
 inline const TokenId TokenStack::Get( void )
 {
-    DBG_ASSERT( nPos > 0,
+    OSL_ENSURE( nPos > 0,
         "*TokenStack::Get(): Leer ist leer, ist leer, ist leer, ist..." );
 
     TokenId nRet;
@@ -276,7 +276,7 @@ inline const TokenId TokenStack::Get( void )
 
 inline TokenStack &TokenStack::operator <<( const TokenId nNewId )
 {// Element auf Stack
-    DBG_ASSERT( nPos < nSize, "*TokenStack::<<(): Stackueberlauf" );
+    OSL_ENSURE( nPos < nSize, "*TokenStack::<<(): Stackueberlauf" );
     if( nPos < nSize )
     {
         pStack[ nPos ] = nNewId;
@@ -289,7 +289,7 @@ inline TokenStack &TokenStack::operator <<( const TokenId nNewId )
 
 inline void TokenStack::operator >>( TokenId& rId )
 {// Element von Stack
-    DBG_ASSERT( nPos > 0,
+    OSL_ENSURE( nPos > 0,
         "*TokenStack::>>(): Leer ist leer, ist leer, ist leer, ..." );
     if( nPos > 0 )
     {
@@ -312,7 +312,7 @@ inline TokenPool& TokenPool::operator <<( const TokenId nId )
     // POST: nId's werden hintereinander im Pool unter einer neuen Id
     //       abgelegt. Vorgang wird mit >> oder Store() abgeschlossen
     // nId -> ( sal_uInt16 ) nId - 1;
-    DBG_ASSERT( ( sal_uInt16 ) nId < nScTokenOff,
+    OSL_ENSURE( ( sal_uInt16 ) nId < nScTokenOff,
         "-TokenPool::operator <<: TokenId im DefToken-Bereich!" );
 
     if( nP_IdAkt >= nP_Id )
@@ -327,7 +327,7 @@ inline TokenPool& TokenPool::operator <<( const TokenId nId )
 
 inline TokenPool& TokenPool::operator <<( const DefTokenId eId )
 {
-    DBG_ASSERT( ( sal_uInt32 ) eId + nScTokenOff < 0xFFFF,
+    OSL_ENSURE( ( sal_uInt32 ) eId + nScTokenOff < 0xFFFF,
         "-TokenPool::operator<<: enmum zu gross!" );
 
     if( nP_IdAkt >= nP_Id )

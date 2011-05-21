@@ -174,7 +174,7 @@ void XclImpPalette::ReadPalette( XclImpStream& rStrm )
 {
     sal_uInt16 nCount;
     rStrm >> nCount;
-    DBG_ASSERT( rStrm.GetRecLeft() == static_cast< sal_Size >( 4 * nCount ),
+    OSL_ENSURE( rStrm.GetRecLeft() == static_cast< sal_Size >( 4 * nCount ),
         "XclImpPalette::ReadPalette - size mismatch" );
 
     maColorTable.resize( nCount );
@@ -281,7 +281,7 @@ void XclImpFont::ReadEfont( XclImpStream& rStrm )
 
 void XclImpFont::ReadCFFontBlock( XclImpStream& rStrm )
 {
-    DBG_ASSERT_BIFF( GetBiff() == EXC_BIFF8 );
+    OSL_ENSURE_BIFF( GetBiff() == EXC_BIFF8 );
     if( GetBiff() != EXC_BIFF8 )
         return;
 
@@ -662,7 +662,7 @@ void XclImpNumFmtBuffer::ReadFormat( XclImpStream& rStrm )
 
 void XclImpNumFmtBuffer::CreateScFormats()
 {
-    DBG_ASSERT( maIndexMap.empty(), "XclImpNumFmtBuffer::CreateScFormats - already created" );
+    OSL_ENSURE( maIndexMap.empty(), "XclImpNumFmtBuffer::CreateScFormats - already created" );
 
     SvNumberFormatter& rFormatter = GetFormatter();
     for( XclNumFmtMap::const_iterator aIt = GetFormatMap().begin(), aEnd = GetFormatMap().end(); aIt != aEnd; ++aIt )
@@ -703,7 +703,7 @@ void XclImpNumFmtBuffer::FillToItemSet( SfxItemSet& rItemSet, sal_uInt16 nXclNum
 
 void XclImpNumFmtBuffer::FillScFmtToItemSet( SfxItemSet& rItemSet, sal_uLong nScNumFmt, bool bSkipPoolDefs ) const
 {
-    DBG_ASSERT( nScNumFmt != NUMBERFORMAT_ENTRY_NOT_FOUND, "XclImpNumFmtBuffer::FillScFmtToItemSet - invalid number format" );
+    OSL_ENSURE( nScNumFmt != NUMBERFORMAT_ENTRY_NOT_FOUND, "XclImpNumFmtBuffer::FillScFmtToItemSet - invalid number format" );
     ScfTools::PutItem( rItemSet, SfxUInt32Item( ATTR_VALUE_FORMAT, nScNumFmt ), bSkipPoolDefs );
     if( rItemSet.GetItemState( ATTR_VALUE_FORMAT, false ) == SFX_ITEM_SET )
         ScGlobal::AddLanguage( rItemSet, GetFormatter() );
@@ -1382,7 +1382,7 @@ XclImpStyle::XclImpStyle( const XclImpRoot& rRoot ) :
 
 void XclImpStyle::ReadStyle( XclImpStream& rStrm )
 {
-    DBG_ASSERT_BIFF( GetBiff() >= EXC_BIFF3 );
+    OSL_ENSURE_BIFF( GetBiff() >= EXC_BIFF3 );
 
     sal_uInt16 nXFIndex;
     rStrm >> nXFIndex;
@@ -1430,7 +1430,7 @@ ScStyleSheet* XclImpStyle::CreateStyleSheet()
             // use existing "Default" style sheet
             mpStyleSheet = static_cast< ScStyleSheet* >( GetStyleSheetPool().Find(
                 ScGlobal::GetRscString( STR_STYLENAME_STANDARD ), SFX_STYLE_FAMILY_PARA ) );
-            DBG_ASSERT( mpStyleSheet, "XclImpStyle::CreateStyleSheet - Default style not found" );
+            OSL_ENSURE( mpStyleSheet, "XclImpStyle::CreateStyleSheet - Default style not found" );
             bCreatePattern = true;
         }
         else
@@ -1487,7 +1487,7 @@ void XclImpXFBuffer::ReadStyle( XclImpStream& rStrm )
     XclImpStyle* pStyle = new XclImpStyle( GetRoot() );
     pStyle->ReadStyle( rStrm );
     (pStyle->IsBuiltin() ? maBuiltinStyles : maUserStyles).push_back( pStyle );
-    DBG_ASSERT( maStylesByXf.count( pStyle->GetXfId() ) == 0, "XclImpXFBuffer::ReadStyle - multiple styles with equal XF identifier" );
+    OSL_ENSURE( maStylesByXf.count( pStyle->GetXfId() ) == 0, "XclImpXFBuffer::ReadStyle - multiple styles with equal XF identifier" );
     maStylesByXf[ pStyle->GetXfId() ] = pStyle;
 }
 
@@ -1543,7 +1543,7 @@ void XclImpXFBuffer::CreateUserStyles()
     for( XclImpStyleList::iterator itStyle = maBuiltinStyles.begin(); itStyle != maBuiltinStyles.end(); ++itStyle )
     {
         String aStyleName = XclTools::GetBuiltInStyleName( itStyle->GetBuiltinId(), itStyle->GetName(), itStyle->GetLevel() );
-        DBG_ASSERT( bReserveAll || (aCellStyles.count( aStyleName ) == 0),
+        OSL_ENSURE( bReserveAll || (aCellStyles.count( aStyleName ) == 0),
             "XclImpXFBuffer::CreateUserStyles - multiple styles with equal built-in identifier" );
         if( aCellStyles.count( aStyleName ) > 0 )
             aConflictNameStyles.push_back( &(*itStyle) );
@@ -1616,7 +1616,7 @@ bool XclImpXFRange::Expand( SCROW nScRow, const XclImpXFIndex& rXFIndex )
 
 bool XclImpXFRange::Expand( const XclImpXFRange& rNextRange )
 {
-    DBG_ASSERT( mnScRow2 < rNextRange.mnScRow1, "XclImpXFRange::Expand - rows out of order" );
+    OSL_ENSURE( mnScRow2 < rNextRange.mnScRow1, "XclImpXFRange::Expand - rows out of order" );
     if( (maXFIndex == rNextRange.maXFIndex) && (mnScRow2 + 1 == rNextRange.mnScRow1) )
     {
         mnScRow2 = rNextRange.mnScRow2;
@@ -1631,7 +1631,7 @@ void XclImpXFRangeColumn::SetDefaultXF( const XclImpXFIndex& rXFIndex )
 {
     // List should be empty when inserting the default column format.
     // Later explicit SetXF() calls will break up this range.
-    DBG_ASSERT( maIndexList.empty(), "XclImpXFRangeColumn::SetDefaultXF - Setting Default Column XF is not empty" );
+    OSL_ENSURE( maIndexList.empty(), "XclImpXFRangeColumn::SetDefaultXF - Setting Default Column XF is not empty" );
 
     // insert a complete row range with one insert.
     maIndexList.push_back( new XclImpXFRange( 0, MAXROW, rXFIndex ) );
@@ -1756,7 +1756,7 @@ void XclImpXFRangeColumn::Find(
     {
         nMidIndex = (nPrevIndex + rnNextIndex) / 2;
         pMidRange = &maIndexList[nMidIndex];
-        DBG_ASSERT( pMidRange, "XclImpXFRangeColumn::Find - missing XF index range" );
+        OSL_ENSURE( pMidRange, "XclImpXFRangeColumn::Find - missing XF index range" );
         if( nScRow < pMidRange->mnScRow1 )      // row is really before pMidRange
         {
             rpNextRange = pMidRange;
@@ -1871,7 +1871,7 @@ void XclImpXFRangeBuffer::SetColumnDefXF( SCCOL nScCol, sal_uInt16 nXFIndex )
     size_t nIndex = static_cast< size_t >( nScCol );
     if( maColumns.size() <= nIndex )
         maColumns.resize( nIndex + 1 );
-    DBG_ASSERT( !maColumns[ nIndex ], "XclImpXFRangeBuffer::SetColumnDefXF - default column of XFs already has values" );
+    OSL_ENSURE( !maColumns[ nIndex ], "XclImpXFRangeBuffer::SetColumnDefXF - default column of XFs already has values" );
     maColumns[ nIndex ].reset( new XclImpXFRangeColumn );
     maColumns[ nIndex ]->SetDefaultXF( XclImpXFIndex( nXFIndex ) );
 }

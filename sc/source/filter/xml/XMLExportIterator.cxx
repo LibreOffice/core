@@ -497,7 +497,7 @@ void ScMyDetectiveObjContainer::AddObject( ScDetectiveObjType eObjType, const SC
         if (eObjType != SC_DETOBJ_FROMOTHERTAB)
         {
             // if the ObjType == SC_DETOBJ_FROMOTHERTAB then the SourceRange is not used and so it has not to be tested and changed
-            DBG_ASSERT(aDetObj.aPosition.Sheet == aDetObj.aSourceRange.Sheet, "It seems to be possible to have different sheets");
+            OSL_ENSURE(aDetObj.aPosition.Sheet == aDetObj.aSourceRange.Sheet, "It seems to be possible to have different sheets");
             aDetObj.aSourceRange.Sheet = nSheet;
         }
         aDetObj.aPosition.Sheet = nSheet;
@@ -774,7 +774,7 @@ void ScMyNotEmptyCellsIterator::HasAnnotation(ScMyCell& aCell)
 void ScMyNotEmptyCellsIterator::SetCurrentTable(const SCTAB nTable,
     uno::Reference<sheet::XSpreadsheet>& rxTable)
 {
-    DBG_ASSERT(aAnnotations.empty(), "not all Annotations saved");
+    OSL_ENSURE(aAnnotations.empty(), "not all Annotations saved");
     aLastAddress.Row = 0;
     aLastAddress.Column = 0;
     aLastAddress.Sheet = nTable;

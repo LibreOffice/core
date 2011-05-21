@@ -57,7 +57,7 @@ void XclImpString::Read( XclImpStream& rStrm, XclStrFlags nFlags )
     if( !::get_flag( nFlags, EXC_STR_SEPARATEFORMATS ) )
         maFormats.clear();
 
-    DBG_ASSERT( (nFlags & ~nAllowedFlags) == 0, "XclImpString::Read - unknown flag" );
+    OSL_ENSURE( (nFlags & ~nAllowedFlags) == 0, "XclImpString::Read - unknown flag" );
     bool b16BitLen = !::get_flag( nFlags, EXC_STR_8BITLENGTH );
 
     switch( rStrm.GetRoot().GetBiff() )
@@ -104,7 +104,7 @@ void XclImpString::Read( XclImpStream& rStrm, XclStrFlags nFlags )
 void XclImpString::AppendFormat( XclFormatRunVec& rFormats, sal_uInt16 nChar, sal_uInt16 nFontIdx )
 {
     // #i33341# real life -- same character index may occur several times
-    DBG_ASSERT( rFormats.empty() || (rFormats.back().mnChar <= nChar), "XclImpString::AppendFormat - wrong char order" );
+    OSL_ENSURE( rFormats.empty() || (rFormats.back().mnChar <= nChar), "XclImpString::AppendFormat - wrong char order" );
     if( rFormats.empty() || (rFormats.back().mnChar < nChar) )
         rFormats.push_back( XclFormatRun( nChar, nFontIdx ) );
     else

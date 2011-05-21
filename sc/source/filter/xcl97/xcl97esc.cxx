@@ -117,7 +117,7 @@ XclEscherEx::XclEscherEx( const XclExpRoot& rRoot, XclExpObjectManager& rObjMgr,
 
 XclEscherEx::~XclEscherEx()
 {
-    DBG_ASSERT( !aStack.Count(), "~XclEscherEx: stack not empty" );
+    OSL_ENSURE( !aStack.Count(), "~XclEscherEx: stack not empty" );
     DeleteCurrAppData();
     delete pTheClientData;
 }
@@ -329,7 +329,7 @@ void XclEscherEx::EndShape( sal_uInt16 nShapeType, sal_uInt32 nShapeID )
         if( nShapeID == 0 )
         {
             XclObj* pLastObj = mrObjMgr.RemoveLastObj();
-            DBG_ASSERT( pLastObj == pCurrXclObj, "XclEscherEx::EndShape - wrong object" );
+            OSL_ENSURE( pLastObj == pCurrXclObj, "XclEscherEx::EndShape - wrong object" );
             DELETEZ( pLastObj );
             pCurrXclObj = 0;
         }

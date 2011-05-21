@@ -343,7 +343,7 @@ void XclImpChangeTrack::ReadChTrCellContent()
         Read2DAddress( aPosition );
         sal_uInt16 nOldSize;
         *pStrm >> nOldSize;
-        DBG_ASSERT( (nOldSize == 0) == (nOldValueType == EXC_CHTR_TYPE_EMPTY),
+        OSL_ENSURE( (nOldSize == 0) == (nOldValueType == EXC_CHTR_TYPE_EMPTY),
             "XclImpChangeTrack::ReadChTrCellContent - old value mismatch" );
         pStrm->Ignore( 4 );
         switch( nValueType & EXC_CHTR_TYPE_FORMATMASK )
@@ -425,14 +425,14 @@ void XclImpChangeTrack::ReadChTrInsertTab()
 
 void XclImpChangeTrack::InitNestedMode()
 {
-    DBG_ASSERT( eNestedMode == nmBase, "XclImpChangeTrack::InitNestedMode - unexpected nested mode" );
+    OSL_ENSURE( eNestedMode == nmBase, "XclImpChangeTrack::InitNestedMode - unexpected nested mode" );
     if( eNestedMode == nmBase )
         eNestedMode = nmFound;
 }
 
 void XclImpChangeTrack::ReadNestedRecords()
 {
-    DBG_ASSERT( eNestedMode == nmFound, "XclImpChangeTrack::StartNestedMode - missing nested mode" );
+    OSL_ENSURE( eNestedMode == nmFound, "XclImpChangeTrack::StartNestedMode - missing nested mode" );
     if( eNestedMode == nmFound )
     {
         eNestedMode = nmNested;
@@ -442,7 +442,7 @@ void XclImpChangeTrack::ReadNestedRecords()
 
 sal_Bool XclImpChangeTrack::EndNestedMode()
 {
-    DBG_ASSERT( eNestedMode != nmBase, "XclImpChangeTrack::EndNestedMode - missing nested mode" );
+    OSL_ENSURE( eNestedMode != nmBase, "XclImpChangeTrack::EndNestedMode - missing nested mode" );
     sal_Bool bReturn = (eNestedMode == nmNested);
     eNestedMode = nmBase;
     return bReturn;

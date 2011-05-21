@@ -270,7 +270,7 @@ const XclImpName* XclImpNameManager::FindName( const String& rXclName, SCTAB nSc
 
 const XclImpName* XclImpNameManager::GetName( sal_uInt16 nXclNameIdx ) const
 {
-    DBG_ASSERT( nXclNameIdx > 0, "XclImpNameManager::GetName - index must be >0" );
+    OSL_ENSURE( nXclNameIdx > 0, "XclImpNameManager::GetName - index must be >0" );
     return &(maNameList.at( nXclNameIdx - 1 ));
 }
 

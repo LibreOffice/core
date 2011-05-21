@@ -312,7 +312,7 @@ void TokenPool::GrowMatrix( void )
 
 void TokenPool::GetElement( const sal_uInt16 nId )
 {
-    DBG_ASSERT( nId < nElementAkt, "*TokenPool::GetElement(): Id zu gross!?" );
+    OSL_ENSURE( nId < nElementAkt, "*TokenPool::GetElement(): Id zu gross!?" );
 
     if( pType[ nId ] == T_Id )
         GetElementRek( nId );
@@ -427,12 +427,12 @@ void TokenPool::GetElementRek( const sal_uInt16 nId )
 {
 #ifdef DBG_UTIL
     nRek++;
-    DBG_ASSERT( nRek <= nP_Id, "*TokenPool::GetElement(): Rekursion loopt!?" );
+    OSL_ENSURE( nRek <= nP_Id, "*TokenPool::GetElement(): Rekursion loopt!?" );
 #endif
 
-    DBG_ASSERT( nId < nElementAkt, "*TokenPool::GetElementRek(): Id zu gross!?" );
+    OSL_ENSURE( nId < nElementAkt, "*TokenPool::GetElementRek(): Id zu gross!?" );
 
-    DBG_ASSERT( pType[ nId ] == T_Id, "-TokenPool::GetElementRek(): nId nicht Id-Folge!" );
+    OSL_ENSURE( pType[ nId ] == T_Id, "-TokenPool::GetElementRek(): nId nicht Id-Folge!" );
 
 
     sal_uInt16      nAnz = pSize[ nId ];
@@ -613,7 +613,7 @@ const TokenId TokenPool::Store( const String& rString )
         //...ansonsten nur kopieren
         *ppP_Str[ nP_StrAkt ] = rString;
 
-    DBG_ASSERT( sizeof( xub_StrLen ) <= 2, "*TokenPool::Store(): StrLen doesn't match!" );
+    OSL_ENSURE( sizeof( xub_StrLen ) <= 2, "*TokenPool::Store(): StrLen doesn't match!" );
 
     pSize[ nElementAkt ] = ( sal_uInt16 ) ppP_Str[ nP_StrAkt ]->Len();
 

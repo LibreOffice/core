@@ -431,7 +431,7 @@ ExcBundlesheet::ExcBundlesheet( RootData& rRootData, SCTAB _nTab ) :
     ExcBundlesheetBase( rRootData, _nTab )
 {
     String sTabName = rRootData.pER->GetTabInfo().GetScTabName( _nTab );
-    DBG_ASSERT( sTabName.Len() < 256, "ExcBundlesheet::ExcBundlesheet - table name too long" );
+    OSL_ENSURE( sTabName.Len() < 256, "ExcBundlesheet::ExcBundlesheet - table name too long" );
     aName = ByteString( sTabName, rRootData.pER->GetTextEncoding() );
 }
 
@@ -610,7 +610,7 @@ void ExcFilterCondition::Save( XclExpStream& rStrm )
             rStrm << fVal;
         break;
         case EXC_AFTYPE_STRING:
-            DBG_ASSERT( pText, "ExcFilterCondition::Save() -- pText is NULL!" );
+            OSL_ENSURE( pText, "ExcFilterCondition::Save() -- pText is NULL!" );
             rStrm << (sal_uInt32)0 << (sal_uInt8) pText->Len() << (sal_uInt16)0 << (sal_uInt8)0;
         break;
         case EXC_AFTYPE_BOOLERR:
@@ -662,7 +662,7 @@ void ExcFilterCondition::SaveText( XclExpStream& rStrm )
 {
     if( nType == EXC_AFTYPE_STRING )
     {
-        DBG_ASSERT( pText, "ExcFilterCondition::SaveText() -- pText is NULL!" );
+        OSL_ENSURE( pText, "ExcFilterCondition::SaveText() -- pText is NULL!" );
         pText->WriteFlagField( rStrm );
         pText->WriteBuffer( rStrm );
     }

@@ -223,7 +223,7 @@ ScXMLChangeTrackingImportHelper::~ScXMLChangeTrackingImportHelper()
 
 void ScXMLChangeTrackingImportHelper::StartChangeAction(const ScChangeActionType nActionType)
 {
-    DBG_ASSERT(!pCurrentAction, "a not inserted action");
+    OSL_ENSURE(!pCurrentAction, "a not inserted action");
     switch (nActionType)
     {
         case SC_CAT_INSERT_COLS:
@@ -273,7 +273,7 @@ sal_uInt32 ScXMLChangeTrackingImportHelper::GetIDFromString(const rtl::OUString&
             rtl::OUString sValue(sID.copy(nPrefixLength, nLength - nPrefixLength));
             sal_Int32 nValue;
             SvXMLUnitConverter::convertNumber(nValue, sValue);
-            DBG_ASSERT(nValue > 0, "wrong change action ID");
+            OSL_ENSURE(nValue > 0, "wrong change action ID");
             nResult = nValue;
         }
         else
@@ -296,7 +296,7 @@ void ScXMLChangeTrackingImportHelper::SetActionInfo(const ScMyActionInfo& aInfo)
 void ScXMLChangeTrackingImportHelper::SetPreviousChange(const sal_uInt32 nPreviousAction,
                             ScMyCellInfo* pCellInfo)
 {
-    DBG_ASSERT(pCurrentAction->nActionType == SC_CAT_CONTENT, "wrong action type");
+    OSL_ENSURE(pCurrentAction->nActionType == SC_CAT_CONTENT, "wrong action type");
     ScMyContentAction* pAction = static_cast<ScMyContentAction*>(pCurrentAction);
     pAction->nPreviousAction = nPreviousAction;
     pAction->pCellInfo = pCellInfo;
@@ -304,10 +304,10 @@ void ScXMLChangeTrackingImportHelper::SetPreviousChange(const sal_uInt32 nPrevio
 
 void ScXMLChangeTrackingImportHelper::SetPosition(const sal_Int32 nPosition, const sal_Int32 nCount, const sal_Int32 nTable)
 {
-    DBG_ASSERT(((pCurrentAction->nActionType != SC_CAT_MOVE) &&
+    OSL_ENSURE(((pCurrentAction->nActionType != SC_CAT_MOVE) &&
                 (pCurrentAction->nActionType != SC_CAT_CONTENT) &&
                 (pCurrentAction->nActionType != SC_CAT_REJECT)), "wrong action type");
-    DBG_ASSERT(nCount > 0, "wrong count");
+    OSL_ENSURE(nCount > 0, "wrong count");
     switch(pCurrentAction->nActionType)
     {
         case SC_CAT_INSERT_COLS:
@@ -357,7 +357,7 @@ void ScXMLChangeTrackingImportHelper::SetMultiSpanned(const sal_Int16 nTempMulti
 {
     if (nTempMultiSpanned)
     {
-        DBG_ASSERT(((pCurrentAction->nActionType == SC_CAT_DELETE_COLS) ||
+        OSL_ENSURE(((pCurrentAction->nActionType == SC_CAT_DELETE_COLS) ||
                     (pCurrentAction->nActionType == SC_CAT_DELETE_ROWS)), "wrong action type");
         nMultiSpanned = nTempMultiSpanned;
         nMultiSpannedSlaveCount = 0;
@@ -509,7 +509,7 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateDeleteAction(ScMyDelActio
 
 ScChangeAction* ScXMLChangeTrackingImportHelper::CreateMoveAction(ScMyMoveAction* pAction)
 {
-    DBG_ASSERT(pAction->pMoveRanges, "no move ranges");
+    OSL_ENSURE(pAction->pMoveRanges, "no move ranges");
     if (pAction->pMoveRanges)
     {
         DateTime aDateTime( Date(0), Time(0) );
@@ -572,7 +572,7 @@ void ScXMLChangeTrackingImportHelper::CreateGeneratedActions(ScMyGeneratedList& 
                 if (pCell)
                 {
                     (*aItr)->nID = pTrack->AddLoadedGenerated(pCell, (*aItr)->aBigRange, (*aItr)->pCellInfo->sInputString );
-                    DBG_ASSERT((*aItr)->nID, "could not insert generated action");
+                    OSL_ENSURE((*aItr)->nID, "could not insert generated action");
                 }
             }
             ++aItr;
@@ -584,7 +584,7 @@ void ScXMLChangeTrackingImportHelper::SetDeletionDependencies(ScMyDelAction* pAc
 {
     if (!pAction->aGeneratedList.empty())
     {
-        DBG_ASSERT(((pAction->nActionType == SC_CAT_DELETE_COLS) ||
+        OSL_ENSURE(((pAction->nActionType == SC_CAT_DELETE_COLS) ||
             (pAction->nActionType == SC_CAT_DELETE_ROWS) ||
             (pAction->nActionType == SC_CAT_DELETE_TABS)), "wrong action type");
         if (pDelAct)
@@ -593,7 +593,7 @@ void ScXMLChangeTrackingImportHelper::SetDeletionDependencies(ScMyDelAction* pAc
             ScMyGeneratedList::iterator aEndItr(pAction->aGeneratedList.end());
             while (aItr != aEndItr)
             {
-                DBG_ASSERT((*aItr)->nID, "a not inserted generated action");
+                OSL_ENSURE((*aItr)->nID, "a not inserted generated action");
                 pDelAct->SetDeletedInThis((*aItr)->nID, pTrack);
                 if (*aItr)
                     delete *aItr;
@@ -603,7 +603,7 @@ void ScXMLChangeTrackingImportHelper::SetDeletionDependencies(ScMyDelAction* pAc
     }
     if (pAction->pInsCutOff)
     {
-        DBG_ASSERT(((pAction->nActionType == SC_CAT_DELETE_COLS) ||
+        OSL_ENSURE(((pAction->nActionType == SC_CAT_DELETE_COLS) ||
             (pAction->nActionType == SC_CAT_DELETE_ROWS) ||
             (pAction->nActionType == SC_CAT_DELETE_TABS)), "wrong action type");
         ScChangeAction* pChangeAction = pTrack->GetAction(pAction->pInsCutOff->nID);
@@ -620,7 +620,7 @@ void ScXMLChangeTrackingImportHelper::SetDeletionDependencies(ScMyDelAction* pAc
     }
     if (!pAction->aMoveCutOffs.empty())
     {
-        DBG_ASSERT(((pAction->nActionType == SC_CAT_DELETE_COLS) ||
+        OSL_ENSURE(((pAction->nActionType == SC_CAT_DELETE_COLS) ||
             (pAction->nActionType == SC_CAT_DELETE_ROWS) ||
             (pAction->nActionType == SC_CAT_DELETE_TABS)), "wrong action type");
         ScMyMoveCutOffs::iterator aItr(pAction->aMoveCutOffs.begin());
@@ -656,7 +656,7 @@ void ScXMLChangeTrackingImportHelper::SetMovementDependencies(ScMyMoveAction* pA
                 ScMyGeneratedList::iterator aEndItr(pAction->aGeneratedList.end());
                 while (aItr != aEndItr)
                 {
-                    DBG_ASSERT((*aItr)->nID, "a not inserted generated action");
+                    OSL_ENSURE((*aItr)->nID, "a not inserted generated action");
                     pMoveAct->SetDeletedInThis((*aItr)->nID, pTrack);
                     if (*aItr)
                         delete *aItr;
@@ -671,7 +671,7 @@ void ScXMLChangeTrackingImportHelper::SetContentDependencies(ScMyContentAction* 
 {
     if (pAction->nPreviousAction)
     {
-        DBG_ASSERT(pAction->nActionType == SC_CAT_CONTENT, "wrong action type");
+        OSL_ENSURE(pAction->nActionType == SC_CAT_CONTENT, "wrong action type");
         ScChangeAction* pPrevAct = pTrack->GetAction(pAction->nPreviousAction);
         if (pPrevAct)
         {
@@ -917,7 +917,7 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
         aEndItr = aActions.end();
         while (aItr != aEndItr)
         {
-            DBG_ASSERT((*aItr)->nActionType == SC_CAT_CONTENT, "wrong action type");
+            OSL_ENSURE((*aItr)->nActionType == SC_CAT_CONTENT, "wrong action type");
             SetNewCell(static_cast<ScMyContentAction*>(*aItr));
             if (*aItr)
                 delete (*aItr);

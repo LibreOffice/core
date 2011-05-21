@@ -59,7 +59,7 @@ void XMLTableMasterPageExport::exportHeaderFooterContent(
             const Reference< XText >& rText,
             sal_Bool bAutoStyles, sal_Bool bProgress )
 {
-    DBG_ASSERT( rText.is(), "There is the text" );
+    OSL_ENSURE( rText.is(), "There is the text" );
 
     if( bAutoStyles )
         GetExport().GetTextParagraphExport()

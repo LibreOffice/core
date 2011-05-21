@@ -263,7 +263,7 @@ void XclExpName::SetTokenArray( XclTokenArrayRef xTokArr )
 
 void XclExpName::SetLocalTab( SCTAB nScTab )
 {
-    DBG_ASSERT( GetTabInfo().IsExportTab( nScTab ), "XclExpName::SetLocalTab - invalid sheet index" );
+    OSL_ENSURE( GetTabInfo().IsExportTab( nScTab ), "XclExpName::SetLocalTab - invalid sheet index" );
     if( GetTabInfo().IsExportTab( nScTab ) )
     {
         mnScTab = nScTab;
@@ -322,8 +322,8 @@ bool XclExpName::IsMacroCall( bool bVBasic, bool bFunc ) const
 
 void XclExpName::Save( XclExpStream& rStrm )
 {
-    DBG_ASSERT( mxName && (mxName->Len() > 0), "XclExpName::Save - missing name" );
-    DBG_ASSERT( !(IsGlobal() && ::get_flag( mnFlags, EXC_NAME_BUILTIN )), "XclExpName::Save - global built-in name" );
+    OSL_ENSURE( mxName && (mxName->Len() > 0), "XclExpName::Save - missing name" );
+    OSL_ENSURE( !(IsGlobal() && ::get_flag( mnFlags, EXC_NAME_BUILTIN )), "XclExpName::Save - global built-in name" );
     SetRecSize( 11 + mxName->GetSize() + (mxTokArr ? mxTokArr->GetSize() : 2) );
     XclExpRecord::Save( rStrm );
 }
@@ -423,7 +423,7 @@ sal_uInt16 XclExpNameManagerImpl::InsertBuiltInName( sal_Unicode cBuiltIn, XclTo
 sal_uInt16 XclExpNameManagerImpl::InsertUniqueName(
         const String& rName, XclTokenArrayRef xTokArr, SCTAB nScTab )
 {
-    DBG_ASSERT( rName.Len(), "XclExpNameManagerImpl::InsertUniqueName - empty name" );
+    OSL_ENSURE( rName.Len(), "XclExpNameManagerImpl::InsertUniqueName - empty name" );
     XclExpNameRef xName( new XclExpName( GetRoot(), GetUnusedName( rName ) ) );
     xName->SetTokenArray( xTokArr );
     xName->SetLocalTab( nScTab );
@@ -477,7 +477,7 @@ sal_uInt16 XclExpNameManagerImpl::InsertMacroCall( const String& rMacroName, boo
 
 const XclExpName* XclExpNameManagerImpl::GetName( sal_uInt16 nNameIdx ) const
 {
-    DBG_ASSERT( maNameList.HasRecord( nNameIdx - 1 ), "XclExpNameManagerImpl::GetName - wrong record index" );
+    OSL_ENSURE( maNameList.HasRecord( nNameIdx - 1 ), "XclExpNameManagerImpl::GetName - wrong record index" );
     return maNameList.GetRecord( nNameIdx - 1 ).get();
 }
 

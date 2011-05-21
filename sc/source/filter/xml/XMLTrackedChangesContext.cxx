@@ -836,7 +836,7 @@ SvXMLImportContext *ScXMLCellContentDeletionContext::CreateChildContext( sal_uIn
         }
         else if (IsXMLToken(rLocalName, XML_CELL_ADDRESS))
         {
-            DBG_ASSERT(!nID, "a action with a ID should not contain a BigRange");
+            OSL_ENSURE(!nID, "a action with a ID should not contain a BigRange");
             bBigRange = sal_True;
             pContext = new ScXMLBigRangeContext(GetScImport(), nPrefix, rLocalName, xAttrList, aBigRange);
         }

@@ -93,7 +93,7 @@ FltError ImportExcel::Read( void )
     sal_uInt16      nOpcode;
     sal_uInt16      nBofLevel = 0;
 
-    DBG_ASSERT( &aIn != NULL, "-ImportExcel::Read(): Kein Stream - wie dass?!" );
+    OSL_ENSURE( &aIn != NULL, "-ImportExcel::Read(): Kein Stream - wie dass?!" );
 
     ::std::auto_ptr< ScfSimpleProgressBar > pProgress( new ScfSimpleProgressBar(
         aIn.GetSvStreamSize(), GetDocShell(), STR_LOAD_DOC ) );
@@ -723,7 +723,7 @@ FltError ImportExcel::Read( void )
                                 ePrev = eAkt;
                                 eAkt = Z_Biffn0;
                         }
-                        DBG_ASSERT( pExcRoot->eDateiTyp != Biff5W,
+                        OSL_ENSURE( pExcRoot->eDateiTyp != Biff5W,
                             "+ImportExcel::Read(): Doppel-Whopper-Workbook!" );
 
                         break;
@@ -885,11 +885,11 @@ FltError ImportExcel8::Read( void )
         switch( nRecId )
         {
             case EXC_ID_USERSVIEWBEGIN:
-                DBG_ASSERT( !bInUserView, "ImportExcel8::Read - nested user view settings" );
+                OSL_ENSURE( !bInUserView, "ImportExcel8::Read - nested user view settings" );
                 bInUserView = true;
             break;
             case EXC_ID_USERSVIEWEND:
-                DBG_ASSERT( bInUserView, "ImportExcel8::Read - not in user view settings" );
+                OSL_ENSURE( bInUserView, "ImportExcel8::Read - not in user view settings" );
                 bInUserView = false;
             break;
         }
@@ -902,7 +902,7 @@ FltError ImportExcel8::Read( void )
             {
                 if( nRecId == EXC_ID5_BOF )
                 {
-                    DBG_ASSERT( GetBiff() == EXC_BIFF8, "ImportExcel8::Read - wrong BIFF version" );
+                    OSL_ENSURE( GetBiff() == EXC_BIFF8, "ImportExcel8::Read - wrong BIFF version" );
                     Bof5();
                     if( pExcRoot->eDateiTyp == Biff8W )
                     {
@@ -1053,7 +1053,7 @@ FltError ImportExcel8::Read( void )
                                 GetTracer().TraceChartOnlySheet();
                             break;
                             case Biff8W:    // workbook
-                                DBG_ERRORFILE( "ImportExcel8::Read - double workbook globals" );
+                                OSL_FAIL( "ImportExcel8::Read - double workbook globals" );
                                 // run through
                             case Biff8V:    // VB module
                             default:

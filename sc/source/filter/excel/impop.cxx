@@ -472,7 +472,7 @@ void ImportExcel::Columndefault( void )
 
     aIn >> nColMic >> nColMac;
 
-    DBG_ASSERT( aIn.GetRecLeft() == (sal_Size)(nColMac - nColMic) * 3 + 2,
+    OSL_ENSURE( aIn.GetRecLeft() == (sal_Size)(nColMac - nColMic) * 3 + 2,
                 "ImportExcel::Columndefault - wrong record size" );
 
     nColMac--;
@@ -518,7 +518,7 @@ void ImportExcel::Array25( void )
                     static_cast<SCROW>(nFirstRow), GetCurrScTab() ) );
         pFormConv->Convert( pErgebnis, maStrm, nFormLen, true, FT_CellFormula);
 
-        DBG_ASSERT( pErgebnis, "*ImportExcel::Array25(): ScTokenArray ist NULL!" );
+        OSL_ENSURE( pErgebnis, "*ImportExcel::Array25(): ScTokenArray ist NULL!" );
 
         ScMarkData          aMarkData;
         aMarkData.SelectOneTable( GetCurrScTab() );
@@ -707,7 +707,7 @@ void ImportExcel::Boundsheet( void )
     SCTAB nScTab = static_cast< SCTAB >( nBdshtTab );
     if( nScTab > 0 )
     {
-        DBG_ASSERT( !pD->HasTable( nScTab ), "ImportExcel::Boundsheet - sheet exists already" );
+        OSL_ENSURE( !pD->HasTable( nScTab ), "ImportExcel::Boundsheet - sheet exists already" );
         pD->MakeTable( nScTab );
     }
 
@@ -817,7 +817,7 @@ void ImportExcel::Shrfmla( void )
     pFormConv->Convert( pErgebnis, maStrm, nLenExpr, true, FT_SharedFormula );
 
 
-    DBG_ASSERT( pErgebnis, "+ImportExcel::Shrfmla(): ScTokenArray ist NULL!" );
+    OSL_ENSURE( pErgebnis, "+ImportExcel::Shrfmla(): ScTokenArray ist NULL!" );
 
     pExcRoot->pShrfmlaBuff->Store( ScRange( static_cast<SCCOL>(nFirstCol),
                 static_cast<SCROW>(nFirstRow), GetCurrScTab(),
@@ -958,7 +958,7 @@ void ImportExcel::Bof3( void )
     maStrm.Ignore( 2 );
     maStrm >> nSubType;
 
-    DBG_ASSERT( nSubType != 0x0100, "*ImportExcel::Bof3(): Biff3 als Workbook?!" );
+    OSL_ENSURE( nSubType != 0x0100, "*ImportExcel::Bof3(): Biff3 als Workbook?!" );
     if( nSubType == 0x0100 )        // Book
         pExcRoot->eDateiTyp = Biff3W;
     else if( nSubType == 0x0020 )   // Chart
@@ -988,7 +988,7 @@ void ImportExcel::Array34( void )
                     static_cast<SCROW>(nFirstRow), GetCurrScTab() ) );
         pFormConv->Convert( pErgebnis, maStrm, nFormLen, true, FT_CellFormula);
 
-        DBG_ASSERT( pErgebnis, "+ImportExcel::Array34(): ScTokenArray ist NULL!" );
+        OSL_ENSURE( pErgebnis, "+ImportExcel::Array34(): ScTokenArray ist NULL!" );
 
         ScMarkData          aMarkData;
         aMarkData.SelectOneTable( GetCurrScTab() );

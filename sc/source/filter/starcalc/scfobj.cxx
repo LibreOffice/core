@@ -78,11 +78,11 @@ void Sc10InsertObject::InsertChart( ScDocument* pDoc, SCTAB nDestTab, const Rect
         {
             pDoc->InitDrawLayer();
             pModel = pDoc->GetDrawLayer();
-            DBG_ASSERT(pModel,"Draw Layer ?");
+            OSL_ENSURE(pModel,"Draw Layer ?");
         }
 
         SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nDestTab));
-        DBG_ASSERT(pPage,"Page ?");
+        OSL_ENSURE(pPage,"Page ?");
         pPage->InsertObject(pSdrOle2Obj);
 
         pSdrOle2Obj->SetLogicRect(rRect);               // erst nach InsertObject !!!

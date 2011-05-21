@@ -37,8 +37,8 @@ class SfxObjectShell;
 
 // BIFF versions ==============================================================
 
-#define DBG_ERROR_BIFF()        DBG_ERRORFILE( "Unknown BIFF type!" )
-#define DBG_ASSERT_BIFF( c )    DBG_ASSERT( c, "Unknown BIFF type!" )
+#define DBG_ERROR_BIFF()        OSL_FAIL( "Unknown BIFF type!" )
+#define OSL_ENSURE_BIFF( c )    OSL_ENSURE( c, "Unknown BIFF type!" )
 
 // Enumerations ===============================================================
 

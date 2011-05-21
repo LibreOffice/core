@@ -126,7 +126,7 @@ XclExpObjList::~XclExpObjList()
 
 sal_uInt16 XclExpObjList::Add( XclObj* pObj )
 {
-    DBG_ASSERT( Count() < 0xFFFF, "XclExpObjList::Add: too much for Xcl" );
+    OSL_ENSURE( Count() < 0xFFFF, "XclExpObjList::Add: too much for Xcl" );
     if ( Count() < 0xFFFF )
     {
         Insert( pObj, LIST_APPEND );
@@ -358,7 +358,7 @@ void XclObj::SetEscherShapeType( sal_uInt16 nType )
 
 void XclObj::SetText( const XclExpRoot& rRoot, const SdrTextObj& rObj )
 {
-    DBG_ASSERT( !pClientTextbox, "XclObj::SetText: already set" );
+    OSL_ENSURE( !pClientTextbox, "XclObj::SetText: already set" );
     if ( !pClientTextbox )
     {
         mrEscherEx.UpdateDffFragmentEnd();
@@ -371,7 +371,7 @@ void XclObj::SetText( const XclExpRoot& rRoot, const SdrTextObj& rObj )
 
 void XclObj::WriteBody( XclExpStream& rStrm )
 {
-    DBG_ASSERT( mnObjType != EXC_OBJTYPE_UNKNOWN, "XclObj::WriteBody - unknown type" );
+    OSL_ENSURE( mnObjType != EXC_OBJTYPE_UNKNOWN, "XclObj::WriteBody - unknown type" );
 
     // create a substream to be able to create subrecords
     SvMemoryStream aMemStrm;
@@ -761,7 +761,7 @@ XclTxo::XclTxo( const XclExpRoot& rRoot, const EditTextObject& rEditObj, SdrObje
 
 void XclTxo::SaveCont( XclExpStream& rStrm )
 {
-    DBG_ASSERT( mpString.get(), "XclTxo::SaveCont - missing string" );
+    OSL_ENSURE( mpString.get(), "XclTxo::SaveCont - missing string" );
 
     // #i96858# do not save existing string formatting if text is empty
     sal_uInt16 nRunLen = mpString->IsEmpty() ? 0 : (8 * mpString->GetFormatsCount());

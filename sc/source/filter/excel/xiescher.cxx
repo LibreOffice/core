@@ -330,7 +330,7 @@ XclImpDrawObjRef XclImpDrawObjBase::ReadObj8( const XclImpRoot& rRoot, XclImpStr
     {
         sal_uInt16 nSubRecId, nSubRecSize, nObjType;
         rStrm >> nSubRecId >> nSubRecSize >> nObjType;
-        DBG_ASSERT( nSubRecId == EXC_ID_OBJCMO, "XclImpDrawObjBase::ReadObj8 - OBJCMO subrecord expected" );
+        OSL_ENSURE( nSubRecId == EXC_ID_OBJCMO, "XclImpDrawObjBase::ReadObj8 - OBJCMO subrecord expected" );
         if( (nSubRecId == EXC_ID_OBJCMO) && (nSubRecSize >= 6) )
         {
             switch( nObjType )
@@ -541,13 +541,13 @@ void XclImpDrawObjBase::ReadMacro8( XclImpStream& rStrm )
         sal_uInt16 nFmlaSize;
         rStrm >> nFmlaSize;
         rStrm.Ignore( 4 );
-        DBG_ASSERT( nFmlaSize == 7, "XclImpDrawObjBase::ReadMacro - unexpected formula size" );
+        OSL_ENSURE( nFmlaSize == 7, "XclImpDrawObjBase::ReadMacro - unexpected formula size" );
         if( nFmlaSize == 7 )
         {
             sal_uInt8 nTokenId;
             sal_uInt16 nExtSheet, nExtName;
             rStrm >> nTokenId >> nExtSheet >> nExtName;
-            DBG_ASSERT( nTokenId == XclTokenArrayHelper::GetTokenId( EXC_TOKID_NAMEX, EXC_TOKCLASS_REF ),
+            OSL_ENSURE( nTokenId == XclTokenArrayHelper::GetTokenId( EXC_TOKID_NAMEX, EXC_TOKCLASS_REF ),
                 "XclImpDrawObjBase::ReadMacro - tNameXR token expected" );
             if( nTokenId == XclTokenArrayHelper::GetTokenId( EXC_TOKID_NAMEX, EXC_TOKCLASS_REF ) )
                 maMacroName = GetLinkManager().GetMacroName( nExtSheet, nExtName );
@@ -831,7 +831,7 @@ void XclImpDrawObjBase::ImplReadObj8( XclImpStream& rStrm )
         switch( nSubRecId )
         {
             case EXC_ID_OBJCMO:
-                DBG_ASSERT( rStrm.GetRecPos() == 4, "XclImpDrawObjBase::ImplReadObj8 - unexpected OBJCMO subrecord" );
+                OSL_ENSURE( rStrm.GetRecPos() == 4, "XclImpDrawObjBase::ImplReadObj8 - unexpected OBJCMO subrecord" );
                 if( (rStrm.GetRecPos() == 4) && (nSubRecSize >= 6) )
                 {
                     sal_uInt16 nObjFlags;
@@ -873,10 +873,10 @@ void XclImpDrawObjBase::ImplReadObj8( XclImpStream& rStrm )
         // skip following CONTINUE records until IMGDATA ends
         while( (nDataSize > 0) && (rStrm.GetNextRecId() == EXC_ID_CONT) && rStrm.StartNextRecord() )
         {
-            DBG_ASSERT( nDataSize >= rStrm.GetRecLeft(), "XclImpDrawObjBase::ImplReadObj8 - CONTINUE too long" );
+            OSL_ENSURE( nDataSize >= rStrm.GetRecLeft(), "XclImpDrawObjBase::ImplReadObj8 - CONTINUE too long" );
             nDataSize -= ::std::min< sal_uInt32 >( rStrm.GetRecLeft(), nDataSize );
         }
-        DBG_ASSERT( nDataSize == 0, "XclImpDrawObjBase::ImplReadObj8 - missing CONTINUE records" );
+        OSL_ENSURE( nDataSize == 0, "XclImpDrawObjBase::ImplReadObj8 - missing CONTINUE records" );
         // next record may be MSODRAWING or CONTINUE or anything else
     }
 }
@@ -1244,7 +1244,7 @@ void XclImpPolygonObj::ReadCoordList( XclImpStream& rStrm )
 {
     if( (rStrm.GetNextRecId() == EXC_ID_COORDLIST) && rStrm.StartNextRecord() )
     {
-        DBG_ASSERT( rStrm.GetRecLeft() / 4 == mnPointCount, "XclImpPolygonObj::ReadCoordList - wrong polygon point count" );
+        OSL_ENSURE( rStrm.GetRecLeft() / 4 == mnPointCount, "XclImpPolygonObj::ReadCoordList - wrong polygon point count" );
         while( rStrm.GetRecLeft() >= 4 )
         {
             sal_uInt16 nX, nY;
@@ -1550,7 +1550,7 @@ void XclImpChartObj::ReadChartSubStream( XclImpStream& rStrm )
         sal_uInt16 nBofType;
         rStrm.Seek( 2 );
         rStrm >> nBofType;
-        DBG_ASSERT( nBofType == EXC_BOF_CHART, "XclImpChartObj::ReadChartSubStream - no chart BOF record" );
+        OSL_ENSURE( nBofType == EXC_BOF_CHART, "XclImpChartObj::ReadChartSubStream - no chart BOF record" );
 
         // read chart, even if BOF record contains wrong substream identifier
         mxChart.reset( new XclImpChart( GetRoot(), mbOwnTab ) );
@@ -1560,7 +1560,7 @@ void XclImpChartObj::ReadChartSubStream( XclImpStream& rStrm )
     }
     else
     {
-        DBG_ERRORFILE( "XclImpChartObj::ReadChartSubStream - missing chart substream" );
+        OSL_FAIL( "XclImpChartObj::ReadChartSubStream - missing chart substream" );
     }
 }
 
@@ -1668,7 +1668,7 @@ void XclImpChartObj::FinalizeTabChart()
 {
     /*  #i44077# Calculate and store DFF anchor for sheet charts.
         Needed to get used area if this chart is inserted as OLE object. */
-    DBG_ASSERT( mbOwnTab, "XclImpChartObj::FinalizeTabChart - not allowed for embedded chart objects" );
+    OSL_ENSURE( mbOwnTab, "XclImpChartObj::FinalizeTabChart - not allowed for embedded chart objects" );
 
     // set uninitialized page to landscape
     if( !GetPageSettings().GetPageData().mbValid )
@@ -2576,7 +2576,7 @@ void XclImpListBoxObj::ReadFullLbsData( XclImpStream& rStrm, sal_Size nRecLeft )
 {
     sal_Size nRecEnd = rStrm.GetRecPos() + nRecLeft;
     ReadLbsData( rStrm );
-    DBG_ASSERT( (rStrm.GetRecPos() == nRecEnd) || (rStrm.GetRecPos() + mnEntryCount == nRecEnd),
+    OSL_ENSURE( (rStrm.GetRecPos() == nRecEnd) || (rStrm.GetRecPos() + mnEntryCount == nRecEnd),
         "XclImpListBoxObj::ReadFullLbsData - invalid size of OBJLBSDATA record" );
     while( rStrm.IsValid() && (rStrm.GetRecPos() < nRecEnd) )
         maSelection.push_back( rStrm.ReaduInt8() );
@@ -2929,7 +2929,7 @@ void XclImpPictureObj::ReadFlags8( XclImpStream& rStrm )
     mbSymbol      = ::get_flag( nFlags, EXC_OBJ_PIC_SYMBOL );
     mbControl     = ::get_flag( nFlags, EXC_OBJ_PIC_CONTROL );
     mbUseCtlsStrm = ::get_flag( nFlags, EXC_OBJ_PIC_CTLSSTREAM );
-    DBG_ASSERT( mbControl || !mbUseCtlsStrm, "XclImpPictureObj::ReadFlags8 - CTLS stream for controls only" );
+    OSL_ENSURE( mbControl || !mbUseCtlsStrm, "XclImpPictureObj::ReadFlags8 - CTLS stream for controls only" );
     SetProcessSdrObj( mbControl || !mbUseCtlsStrm );
 }
 
@@ -2940,7 +2940,7 @@ void XclImpPictureObj::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nLinkSize )
     {
         sal_uInt16 nFmlaSize;
         rStrm >> nFmlaSize;
-        DBG_ASSERT( nFmlaSize > 0, "XclImpPictureObj::ReadPictFmla - missing link formula" );
+        OSL_ENSURE( nFmlaSize > 0, "XclImpPictureObj::ReadPictFmla - missing link formula" );
         // BIFF3/BIFF4 do not support storages, nothing to do here
         if( (nFmlaSize > 0) && (GetBiff() >= EXC_BIFF5) )
         {
@@ -2983,7 +2983,7 @@ void XclImpPictureObj::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nLinkSize )
             else if( nToken == XclTokenArrayHelper::GetTokenId( EXC_TOKID_TBL, EXC_TOKCLASS_NONE ) )
             {
                 mbEmbedded = true;
-                DBG_ASSERT( nFmlaSize == 5, "XclImpPictureObj::ReadPictFmla - unexpected formula size" );
+                OSL_ENSURE( nFmlaSize == 5, "XclImpPictureObj::ReadPictFmla - unexpected formula size" );
                 rStrm.Ignore( nFmlaSize - 1 );      // token ID already read
                 if( nFmlaSize & 1 )
                     rStrm.Ignore( 1 );              // padding byte
@@ -3025,7 +3025,7 @@ void XclImpPictureObj::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nLinkSize )
         // additional string (16-bit characters), e.g. for progress bar control
         sal_uInt32 nAddStrSize;
         rStrm >> nAddStrSize;
-        DBG_ASSERT( rStrm.GetRecLeft() >= nAddStrSize + 4, "XclImpPictureObj::ReadPictFmla - missing data" );
+        OSL_ENSURE( rStrm.GetRecLeft() >= nAddStrSize + 4, "XclImpPictureObj::ReadPictFmla - missing data" );
         if( rStrm.GetRecLeft() >= nAddStrSize + 4 )
         {
             rStrm.Ignore( nAddStrSize );
@@ -3209,7 +3209,7 @@ void XclImpDffConverter::StartProgressBar( sal_Size nProgressSize )
 
 void XclImpDffConverter::Progress( sal_Size nDelta )
 {
-    DBG_ASSERT( mxProgress, "XclImpDffConverter::Progress - invalid call, no progress bar" );
+    OSL_ENSURE( mxProgress, "XclImpDffConverter::Progress - invalid call, no progress bar" );
     mxProgress->Progress( nDelta );
 }
 
@@ -3255,7 +3255,7 @@ void XclImpDffConverter::ProcessDrawing( SvStream& rDffStrm )
         rDffStrm.Seek( STREAM_SEEK_TO_BEGIN );
         DffRecordHeader aHeader;
         rDffStrm >> aHeader;
-        DBG_ASSERT( aHeader.nRecType == DFF_msofbtDgContainer, "XclImpDffConverter::ProcessDrawing - unexpected record" );
+        OSL_ENSURE( aHeader.nRecType == DFF_msofbtDgContainer, "XclImpDffConverter::ProcessDrawing - unexpected record" );
         if( aHeader.nRecType == DFF_msofbtDgContainer )
             ProcessDgContainer( rDffStrm, aHeader );
     }
@@ -3263,7 +3263,7 @@ void XclImpDffConverter::ProcessDrawing( SvStream& rDffStrm )
 
 void XclImpDffConverter::FinalizeDrawing()
 {
-    DBG_ASSERT( !maDataStack.empty(), "XclImpDffConverter::FinalizeDrawing - no drawing manager on stack" );
+    OSL_ENSURE( !maDataStack.empty(), "XclImpDffConverter::FinalizeDrawing - no drawing manager on stack" );
     maDataStack.pop_back();
     // restore previous model at core DFF converter
     if( !maDataStack.empty() )
@@ -3374,7 +3374,7 @@ void XclImpDffConverter::ProcessClientAnchor2( SvStream& rDffStrm,
     XclImpDffConvData& rConvData = GetConvData();
     if( XclImpDrawObjBase* pDrawObj = rConvData.mrDrawing.FindDrawObj( rObjData.rSpHd ).get() )
     {
-        DBG_ASSERT( rHeader.nRecType == DFF_msofbtClientAnchor, "XclImpDffConverter::ProcessClientAnchor2 - no client anchor record" );
+        OSL_ENSURE( rHeader.nRecType == DFF_msofbtClientAnchor, "XclImpDffConverter::ProcessClientAnchor2 - no client anchor record" );
         XclObjAnchor aAnchor;
         rHeader.SeekToContent( rDffStrm );
         rDffStrm.SeekRel( 2 );  // flags
@@ -3517,7 +3517,7 @@ sal_Bool XclImpDffConverter::InsertControl( const Reference< XFormComponent >& r
     }
     catch( Exception& )
     {
-        DBG_ERRORFILE( "XclImpDffConverter::InsertControl - cannot create form control" );
+        OSL_FAIL( "XclImpDffConverter::InsertControl - cannot create form control" );
     }
 
     return false;
@@ -3527,13 +3527,13 @@ sal_Bool XclImpDffConverter::InsertControl( const Reference< XFormComponent >& r
 
 XclImpDffConverter::XclImpDffConvData& XclImpDffConverter::GetConvData()
 {
-    DBG_ASSERT( !maDataStack.empty(), "XclImpDffConverter::GetConvData - no drawing manager on stack" );
+    OSL_ENSURE( !maDataStack.empty(), "XclImpDffConverter::GetConvData - no drawing manager on stack" );
     return *maDataStack.back();
 }
 
 const XclImpDffConverter::XclImpDffConvData& XclImpDffConverter::GetConvData() const
 {
-    DBG_ASSERT( !maDataStack.empty(), "XclImpDffConverter::GetConvData - no drawing manager on stack" );
+    OSL_ENSURE( !maDataStack.empty(), "XclImpDffConverter::GetConvData - no drawing manager on stack" );
     return *maDataStack.back();
 }
 
@@ -3716,7 +3716,7 @@ Graphic XclImpDrawing::ReadImgData( const XclImpRoot& rRoot, XclImpStream& rStrm
         {
             case EXC_IMGDATA_WMF:   ReadWmf( aGraphic, rRoot, rStrm );  break;
             case EXC_IMGDATA_BMP:   ReadBmp( aGraphic, rRoot, rStrm );  break;
-            default:    DBG_ERRORFILE( "XclImpDrawing::ReadImgData - unknown image format" );
+            default:    OSL_FAIL( "XclImpDrawing::ReadImgData - unknown image format" );
         }
     }
     return aGraphic;
@@ -3729,7 +3729,7 @@ void XclImpDrawing::ReadObj( XclImpStream& rStrm )
     /*  #i61786# In BIFF8 streams, OBJ records may occur without MSODRAWING
         records. In this case, the OBJ records are in BIFF5 format. Do a sanity
         check here that there is no DFF data loaded before. */
-    DBG_ASSERT( maDffStrm.Tell() == 0, "XclImpDrawing::ReadObj - unexpected DFF stream data, OBJ will be ignored" );
+    OSL_ENSURE( maDffStrm.Tell() == 0, "XclImpDrawing::ReadObj - unexpected DFF stream data, OBJ will be ignored" );
     if( maDffStrm.Tell() == 0 ) switch( GetBiff() )
     {
         case EXC_BIFF3:
@@ -3757,7 +3757,7 @@ void XclImpDrawing::ReadObj( XclImpStream& rStrm )
 
 void XclImpDrawing::ReadMsoDrawing( XclImpStream& rStrm )
 {
-    DBG_ASSERT_BIFF( GetBiff() == EXC_BIFF8 );
+    OSL_ENSURE_BIFF( GetBiff() == EXC_BIFF8 );
     // disable internal CONTINUE handling
     rStrm.ResetRecord( false );
     // read leading MSODRAWING record
@@ -3865,7 +3865,7 @@ void XclImpDrawing::ImplConvertObjects( XclImpDffConverter& rDffConv, SdrModel& 
 
 void XclImpDrawing::AppendRawObject( const XclImpDrawObjRef& rxDrawObj )
 {
-    DBG_ASSERT( rxDrawObj, "XclImpDrawing::AppendRawObject - unexpected empty reference" );
+    OSL_ENSURE( rxDrawObj, "XclImpDrawing::AppendRawObject - unexpected empty reference" );
     maRawObjs.push_back( rxDrawObj );
 }
 
@@ -3949,7 +3949,7 @@ void XclImpDrawing::ReadTxo( XclImpStream& rStrm )
     if( xTextData->maData.mnTextLen > 0 )
     {
         bValid = (rStrm.GetNextRecId() == EXC_ID_CONT) && rStrm.StartNextRecord();
-        DBG_ASSERT( bValid, "XclImpDrawing::ReadTxo - missing CONTINUE record" );
+        OSL_ENSURE( bValid, "XclImpDrawing::ReadTxo - missing CONTINUE record" );
         if( bValid )
             xTextData->mxString.reset( new XclImpString( rStrm.ReadUniString( xTextData->maData.mnTextLen ) ) );
     }
@@ -3958,7 +3958,7 @@ void XclImpDrawing::ReadTxo( XclImpStream& rStrm )
     if( xTextData->maData.mnFormatSize > 0 )
     {
         bValid = (rStrm.GetNextRecId() == EXC_ID_CONT) && rStrm.StartNextRecord();
-        DBG_ASSERT( bValid, "XclImpDrawing::ReadTxo - missing CONTINUE record" );
+        OSL_ENSURE( bValid, "XclImpDrawing::ReadTxo - missing CONTINUE record" );
         if( bValid )
             xTextData->ReadFormats( rStrm );
     }
@@ -3994,7 +3994,7 @@ void XclImpSheetDrawing::ReadNote( XclImpStream& rStrm )
 
 void XclImpSheetDrawing::ReadTabChart( XclImpStream& rStrm )
 {
-    DBG_ASSERT_BIFF( GetBiff() >= EXC_BIFF5 );
+    OSL_ENSURE_BIFF( GetBiff() >= EXC_BIFF5 );
     boost::shared_ptr< XclImpChartObj > xChartObj( new XclImpChartObj( GetRoot(), true ) );
     xChartObj->ReadChartSubStream( rStrm );
     // insert the chart as raw object without connected DFF data
@@ -4037,10 +4037,10 @@ void XclImpSheetDrawing::ReadNote3( XclImpStream& rStrm )
         while( (nTotalLen > 0) && (rStrm.GetNextRecId() == EXC_ID_NOTE) && rStrm.StartNextRecord() )
         {
             rStrm >> aXclPos >> nPartLen;
-            DBG_ASSERT( aXclPos.mnRow == 0xFFFF, "XclImpObjectManager::ReadNote3 - missing continuation NOTE record" );
+            OSL_ENSURE( aXclPos.mnRow == 0xFFFF, "XclImpObjectManager::ReadNote3 - missing continuation NOTE record" );
             if( aXclPos.mnRow == 0xFFFF )
             {
-                DBG_ASSERT( nPartLen <= nTotalLen, "XclImpObjectManager::ReadNote3 - string too long" );
+                OSL_ENSURE( nPartLen <= nTotalLen, "XclImpObjectManager::ReadNote3 - string too long" );
                 aNoteText.Append( rStrm.ReadRawByteString( nPartLen ) );
                 nTotalLen = nTotalLen - ::std::min( nTotalLen, nPartLen );
             }
@@ -4104,7 +4104,7 @@ XclImpObjectManager::~XclImpObjectManager()
 
 void XclImpObjectManager::ReadMsoDrawingGroup( XclImpStream& rStrm )
 {
-    DBG_ASSERT_BIFF( GetBiff() == EXC_BIFF8 );
+    OSL_ENSURE_BIFF( GetBiff() == EXC_BIFF8 );
     // Excel continues this record with MSODRAWINGGROUP and CONTINUE records, hmm.
     rStrm.ResetRecord( true, EXC_ID_MSODRAWINGGROUP );
     maDggStrm.Seek( STREAM_SEEK_TO_END );

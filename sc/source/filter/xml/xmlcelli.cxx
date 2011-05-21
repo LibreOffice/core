@@ -150,7 +150,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                 pStyleName = new rtl::OUString(sValue);
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_CONTENT_VALIDATION_NAME:
-                DBG_ASSERT(!pContentValidationName, "here should be only one Validation Name");
+                OSL_ENSURE(!pContentValidationName, "here should be only one Validation Name");
                 pContentValidationName = new rtl::OUString(sValue);
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_ROWS:
@@ -207,7 +207,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
             {
                 if (sValue.getLength())
                 {
-                    DBG_ASSERT(!pOUTextValue, "here should be only one string value");
+                    OSL_ENSURE(!pOUTextValue, "here should be only one string value");
                     pOUTextValue.reset(sValue);
                     bIsEmpty = false;
                 }
@@ -231,7 +231,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
             {
                 if (sValue.getLength())
                 {
-                    DBG_ASSERT(!pOUFormula, "here should be only one formula");
+                    OSL_ENSURE(!pOUFormula, "here should be only one formula");
                     rtl::OUString aFormula, aFormulaNmsp;
                     rXMLImport.ExtractFormulaNamespaceGrammar( aFormula, aFormulaNmsp, eGrammar, sValue );
                     pOUFormula.reset( FormulaWithNamespace( aFormula, aFormulaNmsp ) );
@@ -312,7 +312,7 @@ void ScXMLTableRowCellContext::SetCursorOnTextImport(const rtl::OUString& rOUTem
     }
     else
     {
-        DBG_ERRORFILE("this method should only be called for a existing cell");
+        OSL_FAIL("this method should only be called for a existing cell");
     }
 }
 
@@ -387,7 +387,7 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPr
                     bHasSubTable = IsXMLToken(xAttrList->getValueByIndex( i ), XML_TRUE);
                 }
             }
-            DBG_ASSERT(bHasSubTable, "it should be a subtable");
+            OSL_ENSURE(bHasSubTable, "it should be a subtable");
             pContext = new ScXMLTableContext( rXMLImport , nPrefix,
                                                         rLName, xAttrList,
                                                         sal_True, nMergedCols);
@@ -398,7 +398,7 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPr
     case XML_TOK_TABLE_ROW_CELL_ANNOTATION:
         {
             bIsEmpty = false;
-            DBG_ASSERT( !mxAnnotationData.get(), "ScXMLTableRowCellContext::CreateChildContext - multiple annotations in one cell" );
+            OSL_ENSURE( !mxAnnotationData.get(), "ScXMLTableRowCellContext::CreateChildContext - multiple annotations in one cell" );
             mxAnnotationData.reset( new ScXMLAnnotationData );
             pContext = new ScXMLAnnotationContext( rXMLImport, nPrefix, rLName,
                                                     xAttrList, *mxAnnotationData, this);
@@ -513,7 +513,7 @@ void ScXMLTableRowCellContext::DoMerge(const com::sun::star::table::CellAddress&
             }
             catch ( lang::IndexOutOfBoundsException & )
             {
-                DBG_ERRORFILE("ScXMLTableRowCellContext::DoMerge: range to be merged larger than what we support");
+                OSL_FAIL("ScXMLTableRowCellContext::DoMerge: range to be merged larger than what we support");
             }
         }
     }
@@ -614,13 +614,13 @@ void ScXMLTableRowCellContext::SetAnnotation(const table::CellAddress& aCellAddr
     uno::Reference< container::XIndexAccess > xShapesIA( xShapes, uno::UNO_QUERY );
     sal_Int32 nOldShapeCount = xShapesIA.is() ? xShapesIA->getCount() : 0;
 
-    DBG_ASSERT( !mxAnnotationData->mxShape.is() || mxAnnotationData->mxShapes.is(),
+    OSL_ENSURE( !mxAnnotationData->mxShape.is() || mxAnnotationData->mxShapes.is(),
         "ScXMLTableRowCellContext::SetAnnotation - shape without drawing page" );
     if( mxAnnotationData->mxShape.is() && mxAnnotationData->mxShapes.is() )
     {
-        DBG_ASSERT( mxAnnotationData->mxShapes.get() == xShapes.get(), "ScXMLTableRowCellContext::SetAnnotation - diffenet drawing pages" );
+        OSL_ENSURE( mxAnnotationData->mxShapes.get() == xShapes.get(), "ScXMLTableRowCellContext::SetAnnotation - diffenet drawing pages" );
         SdrObject* pObject = ::GetSdrObjectFromXShape( mxAnnotationData->mxShape );
-        DBG_ASSERT( pObject, "ScXMLTableRowCellContext::SetAnnotation - cannot get SdrObject from shape" );
+        OSL_ENSURE( pObject, "ScXMLTableRowCellContext::SetAnnotation - cannot get SdrObject from shape" );
 
         /*  Try to reuse the drawing object already created (but only if the
             note is visible, and the object is a caption object). */
@@ -811,7 +811,7 @@ void ScXMLTableRowCellContext::EndElement()
                             }
                             catch (lang::IndexOutOfBoundsException&)
                             {
-                                DBG_ERRORFILE("It seems here are to many columns or rows");
+                                OSL_FAIL("It seems here are to many columns or rows");
                             }
                         }
                         uno::Reference <text::XText> xTempText (xBaseCell, uno::UNO_QUERY);
@@ -862,7 +862,7 @@ void ScXMLTableRowCellContext::EndElement()
                                 //     }
                                 //     catch (lang::IndexOutOfBoundsException&)
                                 //     {
-                                //         DBG_ERRORFILE("It seems here are to many columns or rows");
+                                //         OSL_FAIL("It seems here are to many columns or rows");
                                 //     }
                                 // }
 
@@ -1071,12 +1071,12 @@ void ScXMLTableRowCellContext::EndElement()
                     }
                     catch (lang::IndexOutOfBoundsException&)
                     {
-                        DBG_ERRORFILE("It seems here are to many columns or rows");
+                        OSL_FAIL("It seems here are to many columns or rows");
                     }
                     if (xCell.is())
                     {
                         SetCellProperties(xCell); // set now only the validation
-                        DBG_ASSERT(((nCellsRepeated == 1) && (nRepeatedRows == 1)), "repeated cells with formula not possible now");
+                        OSL_ENSURE(((nCellsRepeated == 1) && (nRepeatedRows == 1)), "repeated cells with formula not possible now");
                         rXMLImport.GetStylesImportHelper()->AddCell(aCellPos);
                         if (!bIsMatrix)
                         {

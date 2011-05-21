@@ -135,7 +135,7 @@ XclExpSstImpl::XclExpSstImpl() :
 
 sal_uInt32 XclExpSstImpl::Insert( XclExpStringRef xString )
 {
-    DBG_ASSERT( xString.get(), "XclExpSstImpl::Insert - empty pointer not allowed" );
+    OSL_ENSURE( xString.get(), "XclExpSstImpl::Insert - empty pointer not allowed" );
     if( !xString.get() )
         xString.reset( new XclExpString );
 
@@ -206,7 +206,7 @@ void XclExpSstImpl::Save( XclExpStream& rStrm )
                 aStr.Append( '\t' ).APPENDINT( nStrings ).Append( '\n' );
             }
         }
-        DBG_ERRORFILE( aStr.GetBuffer() );
+        OSL_FAIL( aStr.GetBuffer() );
 #undef APPENDINT
     }
 #endif
@@ -332,7 +332,7 @@ void XclExpMergedcells::AppendRange( const ScRange& rRange, sal_uInt32 nBaseXFId
 
 sal_uInt32 XclExpMergedcells::GetBaseXFId( const ScAddress& rPos ) const
 {
-    DBG_ASSERT( maBaseXFIds.size() == maMergedRanges.size(), "XclExpMergedcells::GetBaseXFId - invalid lists" );
+    OSL_ENSURE( maBaseXFIds.size() == maMergedRanges.size(), "XclExpMergedcells::GetBaseXFId - invalid lists" );
     ScfUInt32Vec::const_iterator aIt = maBaseXFIds.begin();
     ScRangeList& rNCRanges = const_cast< ScRangeList& >( maMergedRanges );
     for ( size_t i = 0, nRanges = rNCRanges.size(); i < nRanges; ++i, ++aIt )
@@ -715,7 +715,7 @@ XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rF
         case SC_COND_EQLESS:        mnOperator = EXC_CF_CMP_LESS_EQUAL;                     break;
         case SC_COND_DIRECT:        mnType = EXC_CF_TYPE_FMLA;                              break;
         default:                    mnType = EXC_CF_TYPE_NONE;
-            DBG_ERRORFILE( "XclExpCF::WriteBody - unknown condition type" );
+            OSL_FAIL( "XclExpCF::WriteBody - unknown condition type" );
     }
 
     // *** formulas ***
@@ -880,8 +880,8 @@ void XclExpCondfmt::Save( XclExpStream& rStrm )
 
 void XclExpCondfmt::WriteBody( XclExpStream& rStrm )
 {
-    DBG_ASSERT( !maCFList.IsEmpty(), "XclExpCondfmt::WriteBody - no CF records to write" );
-    DBG_ASSERT( !maXclRanges.empty(), "XclExpCondfmt::WriteBody - no cell ranges found" );
+    OSL_ENSURE( !maCFList.IsEmpty(), "XclExpCondfmt::WriteBody - no CF records to write" );
+    OSL_ENSURE( !maXclRanges.empty(), "XclExpCondfmt::WriteBody - no cell ranges found" );
 
     rStrm   << static_cast< sal_uInt16 >( maCFList.GetSize() )
             << sal_uInt16( 1 )
@@ -1039,7 +1039,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
             case SC_VALID_TIME:     mnFlags |= EXC_DV_MODE_TIME;        break;
             case SC_VALID_TEXTLEN:  mnFlags |= EXC_DV_MODE_TEXTLEN;     break;
             case SC_VALID_CUSTOM:   mnFlags |= EXC_DV_MODE_CUSTOM;      break;
-            default:                DBG_ERRORFILE( "XclExpDV::XclExpDV - unknown mode" );
+            default:                OSL_FAIL( "XclExpDV::XclExpDV - unknown mode" );
         }
 
         switch( pValData->GetOperation() )
@@ -1053,7 +1053,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
             case SC_COND_NOTEQUAL:      mnFlags |= EXC_DV_COND_NOTEQUAL;    break;
             case SC_COND_BETWEEN:       mnFlags |= EXC_DV_COND_BETWEEN;     break;
             case SC_COND_NOTBETWEEN:    mnFlags |= EXC_DV_COND_NOTBETWEEN;  break;
-            default:                    DBG_ERRORFILE( "XclExpDV::XclExpDV - unknown condition" );
+            default:                    OSL_FAIL( "XclExpDV::XclExpDV - unknown condition" );
         }
         switch( eScErrorStyle )
         {
@@ -1065,7 +1065,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
                 mnFlags |= EXC_DV_ERROR_INFO;
                 maErrorTitle.Assign( '\0' );    // contains macro name
             break;
-            default:                    DBG_ERRORFILE( "XclExpDV::XclExpDV - unknown error style" );
+            default:                    OSL_FAIL( "XclExpDV::XclExpDV - unknown error style" );
         }
         ::set_flag( mnFlags, EXC_DV_IGNOREBLANK, pValData->IsIgnoreBlank() );
         ::set_flag( mnFlags, EXC_DV_SUPPRESSDROPDOWN, pValData->GetListType() == ValidListType::INVISIBLE );
@@ -1142,7 +1142,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
     }
     else
     {
-        DBG_ERRORFILE( "XclExpDV::XclExpDV - missing core data" );
+        OSL_FAIL( "XclExpDV::XclExpDV - missing core data" );
         mnScHandle = ULONG_MAX;
     }
 }
@@ -1355,7 +1355,7 @@ XclExpWebQuery::~XclExpWebQuery()
 
 void XclExpWebQuery::Save( XclExpStream& rStrm )
 {
-    DBG_ASSERT( !mbEntireDoc || !mxQryTables.get(), "XclExpWebQuery::Save - illegal mode" );
+    OSL_ENSURE( !mbEntireDoc || !mxQryTables.get(), "XclExpWebQuery::Save - illegal mode" );
     sal_uInt16 nFlags;
 
     // QSI record

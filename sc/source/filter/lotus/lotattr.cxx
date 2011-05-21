@@ -189,7 +189,7 @@ void LotAttrCache::LotusToScBorderLine( sal_uInt8 nLine, ::editeng::SvxBorderLin
 
 const SvxColorItem& LotAttrCache::GetColorItem( const sal_uInt8 nLotIndex ) const
 {
-    DBG_ASSERT( nLotIndex > 0 && nLotIndex < 7,
+    OSL_ENSURE( nLotIndex > 0 && nLotIndex < 7,
         "-LotAttrCache::GetColorItem(): so nicht!" );
 
     return *ppColorItems[ nLotIndex - 1 ];
@@ -198,14 +198,14 @@ const SvxColorItem& LotAttrCache::GetColorItem( const sal_uInt8 nLotIndex ) cons
 const Color& LotAttrCache::GetColor( const sal_uInt8 nLotIndex ) const
 {
     // Farbe <-> Index passt fuer Background, nicht aber fuer Fonts (0 <-> 7)!
-    DBG_ASSERT( nLotIndex < 8, "*LotAttrCache::GetColor(): Index > 7!" );
+    OSL_ENSURE( nLotIndex < 8, "*LotAttrCache::GetColor(): Index > 7!" );
 
     return pColTab[ nLotIndex ];
 }
 
 void LotAttrCol::SetAttr( const SCROW nRow, const ScPatternAttr& rAttr )
 {
-    DBG_ASSERT( ValidRow(nRow), "*LotAttrCol::SetAttr(): ... und rums?!" );
+    OSL_ENSURE( ValidRow(nRow), "*LotAttrCol::SetAttr(): ... und rums?!" );
 
     boost::ptr_vector<ENTRY>::reverse_iterator iterLast = aEntries.rbegin();
 
