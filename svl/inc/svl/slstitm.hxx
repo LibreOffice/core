@@ -28,6 +28,8 @@
 #ifndef _SFXSLSTITM_HXX
 #define _SFXSLSTITM_HXX
 
+#include <vector>
+
 #include "svl/svldllapi.h"
 #include <tools/rtti.hxx>
 #include <tools/list.hxx>
@@ -45,14 +47,14 @@ public:
     TYPEINFO();
 
     SfxStringListItem();
-    SfxStringListItem( sal_uInt16 nWhich, const List* pList=NULL );
+    SfxStringListItem( sal_uInt16 nWhich, const std::vector<String> *pList=NULL );
     SfxStringListItem( sal_uInt16 nWhich, SvStream& rStream );
     SfxStringListItem( const SfxStringListItem& rItem );
     ~SfxStringListItem();
 
-    List *                  GetList();
+    std::vector<String>&    GetList();
 
-    const List *            GetList() const;
+    const std::vector<String>& GetList() const;
 
 #ifndef TF_POOLABLE
     virtual int             IsPoolable() const;

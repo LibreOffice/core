@@ -47,7 +47,7 @@ class SfxImpStringList
 {
 public:
     sal_uInt16  nRefCount;
-    List    aList;
+    std::vector<String> aList;
 
             SfxImpStringList() { nRefCount = 1; }
             ~SfxImpStringList();
@@ -59,12 +59,6 @@ public:
 SfxImpStringList::~SfxImpStringList()
 {
     DBG_ASSERT(nRefCount!=0xffff,"ImpList already deleted");
-    String* pStr = (String*)aList.First();
-    while( pStr )
-    {
-        delete pStr;
-        pStr = (String*)aList.Next();
-    }
     nRefCount = 0xffff;
 }
 
@@ -72,7 +66,7 @@ SfxImpStringList::~SfxImpStringList()
 
 void SfxImpStringList::Sort( sal_Bool bAscending)
 {
-    sal_uLong nCount = aList.Count();
+    sal_uLong nCount = aList.size();
     if( nCount > 1 )
     {
         nCount -= 2;
@@ -83,10 +77,10 @@ void SfxImpStringList::Sort( sal_Bool bAscending)
             bSwapped = sal_False;
             for( sal_uLong nCur = 0; nCur <= nCount; nCur++ )
             {
-                String* pStr1 = (String*)aList.GetObject( nCur );
-                String* pStr2 = (String*)aList.GetObject( nCur+1 );
+                String aStr1 = aList[nCur];
+                String aStr2 = aList[nCur+1];
                 // COMPARE_GREATER => pStr2 ist groesser als pStr1
-                StringCompare eCompare = pStr1->CompareIgnoreCaseToAscii( *pStr2 ); //@@@
+                StringCompare eCompare = aStr1.CompareIgnoreCaseToAscii( aStr2 ); //@@@
                 sal_Bool bSwap = sal_False;
                 if( bAscending )
                 {
@@ -99,8 +93,8 @@ void SfxImpStringList::Sort( sal_Bool bAscending)
                 if( bSwap )
                 {
                     bSwapped = sal_True;
-                    aList.Replace( pStr1, nCur + 1 );
-                    aList.Replace( pStr2, nCur );
+                    aList[nCur+1] = aStr1;
+                    aList[nCur] = aStr2;
                 }
             }
         }
@@ -116,7 +110,7 @@ SfxStringListItem::SfxStringListItem() :
 
 //------------------------------------------------------------------------
 
-SfxStringListItem::SfxStringListItem( sal_uInt16 which, const List* pList ) :
+SfxStringListItem::SfxStringListItem( sal_uInt16 which, const std::vector<String>* pList ) :
     SfxPoolItem( which ),
     pImp(NULL)
 {
@@ -126,14 +120,8 @@ SfxStringListItem::SfxStringListItem( sal_uInt16 which, const List* pList ) :
     {
         pImp = new SfxImpStringList;
 
-        long i, nCount = pList->Count();
-        String  *pStr1, *pStr2;
-        for( i=0; i < nCount; i++ )
-        {
-            pStr1 = (String*)pList->GetObject(i);
-            pStr2 = new String( *pStr1 );
-            pImp->aList.Insert( pStr2, LIST_APPEND );
-        }
+        if (pImp)
+            pImp->aList = *pList;
     }
 }
 
@@ -149,13 +137,15 @@ SfxStringListItem::SfxStringListItem( sal_uInt16 which, SvStream& rStream ) :
     if( nEntryCount )
         pImp = new SfxImpStringList;
 
-    long   i;
-    String*  pStr;
-    for( i=0; i < nEntryCount; i++ )
+    if (pImp)
     {
-        pStr = new String;
-        readByteString(rStream, *pStr);
-        pImp->aList.Insert( pStr, LIST_APPEND );
+        long   i;
+        String  aStr;
+        for( i=0; i < nEntryCount; i++ )
+        {
+            readByteString(rStream, aStr);
+            pImp->aList.push_back(aStr);
+        }
     }
 }
 
@@ -163,10 +153,8 @@ SfxStringListItem::SfxStringListItem( sal_uInt16 which, SvStream& rStream ) :
 
 SfxStringListItem::SfxStringListItem( const SfxStringListItem& rItem ) :
     SfxPoolItem( rItem ),
-    pImp(NULL)
+    pImp(rItem.pImp)
 {
-    pImp = rItem.pImp;
-
     if( pImp )
     {
         DBG_ASSERT(pImp->nRefCount!=0xffff,"ImpList not valid");
@@ -190,15 +178,15 @@ SfxStringListItem::~SfxStringListItem()
 
 //------------------------------------------------------------------------
 
-List* SfxStringListItem::GetList()
+std::vector<String>& SfxStringListItem::GetList()
 {
     if( !pImp )
         pImp = new SfxImpStringList;
     DBG_ASSERT(pImp->nRefCount!=0xffff,"ImpList not valid");
-    return &(pImp->aList);
+    return pImp->aList;
 }
 
-const List* SfxStringListItem::GetList () const
+const std::vector<String>& SfxStringListItem::GetList () const
 {
     return SAL_CONST_CAST(SfxStringListItem *, this)->GetList();
 }
@@ -211,10 +199,7 @@ int SfxStringListItem::operator==( const SfxPoolItem& rItem ) const
 
     SfxStringListItem* pItem = (SfxStringListItem*)&rItem;
 
-    if( pImp == pItem->pImp )
-        return sal_True;
-    else
-        return sal_False;
+    return pImp == pItem->pImp;
 }
 
 //------------------------------------------------------------------------
@@ -265,16 +250,11 @@ SvStream& SfxStringListItem::Store( SvStream & rStream, sal_uInt16 ) const
 
     DBG_ASSERT(pImp->nRefCount!=0xffff,"ImpList not valid");
 
-    long nCount = pImp->aList.Count();
+    sal_uInt32 nCount = pImp->aList.size();
     rStream << nCount;
 
-    long i;
-    String* pStr;
-    for( i=0; i < nCount; i++ )
-    {
-        pStr = (String*)(pImp->aList.GetObject( i ));
-        writeByteString(rStream, *pStr);
-    }
+    for( sal_uInt32 i=0; i < nCount; i++ )
+        writeByteString(rStream, pImp->aList[i]);
 
     return rStream;
 }
@@ -305,17 +285,15 @@ void SfxStringListItem::SetString( const XubString& rStr )
         else
             nLen = nDelimPos - nStart;
 
-        XubString* pStr = new XubString(aStr.Copy(nStart, nLen));
         // String gehoert der Liste
-        pImp->aList.Insert( pStr, LIST_APPEND );
+        pImp->aList.push_back(aStr.Copy(nStart, nLen));
 
         nStart += nLen + 1 ;    // delimiter ueberspringen
     } while( nDelimPos != STRING_NOTFOUND );
 
     // Kein Leerstring am Ende
-    if( pImp->aList.Last() &&
-        !((XubString*)pImp->aList.Last())->Len() )
-        delete (XubString*)pImp->aList.Remove( pImp->aList.Count()-1 );
+    if (!pImp->aList.empty() && !(pImp->aList.rbegin())->Len())
+        pImp->aList.pop_back();
 }
 
 //------------------------------------------------------------------------
@@ -326,13 +304,17 @@ XubString SfxStringListItem::GetString()
     if ( pImp )
     {
         DBG_ASSERT(pImp->nRefCount!=0xffff,"ImpList not valid");
-        XubString* pStr = (XubString*)(pImp->aList.First());
-        while( pStr )
+
+        std::vector<String>::iterator iter;
+        for (iter = pImp->aList.begin();;)
         {
-            aStr += *pStr;
-            pStr = (XubString*)(pImp->aList.Next());
-            if ( pStr )
+            aStr += *iter;
+            ++iter;
+
+            if (iter != pImp->aList.end())
                 aStr += '\r';
+            else
+                break;
         }
     }
     aStr.ConvertLineEnd();
@@ -371,22 +353,22 @@ void SfxStringListItem::SetStringList( const com::sun::star::uno::Sequence< rtl:
         pImp->nRefCount--;
     pImp = new SfxImpStringList;
 
-    for ( sal_Int32 n = 0; n < rList.getLength(); n++ )
+    if (pImp)
     {
-        XubString* pStr = new XubString( rList[n] );
         // String gehoert der Liste
-        pImp->aList.Insert( pStr, LIST_APPEND );
+        for ( sal_Int32 n = 0; n < rList.getLength(); n++ )
+            pImp->aList.push_back(XubString(rList[n]));
     }
 }
 
 //----------------------------------------------------------------------------
 void SfxStringListItem::GetStringList( com::sun::star::uno::Sequence< rtl::OUString >& rList ) const
 {
-    long nCount = pImp->aList.Count();
+    long nCount = pImp->aList.size();
 
     rList.realloc( nCount );
     for( long i=0; i < nCount; i++ )
-        rList[i] = *(String*)(pImp->aList.GetObject( i ));
+        rList[i] = pImp->aList[i];
 }
 
 //----------------------------------------------------------------------------
