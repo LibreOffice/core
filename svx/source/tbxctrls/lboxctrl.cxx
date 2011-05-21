@@ -302,13 +302,10 @@ void SvxUndoRedoControl::StateChanged(
         if ( pState && pState->ISA( SfxStringListItem ) )
         {
             SfxStringListItem &rItem = *(SfxStringListItem *)pState;
-            const List* pLst = rItem.GetList();
-            DBG_ASSERT( pLst, "no undo actions available" );
-            if ( pLst )
-            {
-                for( long nI = 0, nEnd = pLst->Count(); nI < nEnd; ++nI )
-                    aUndoRedoList.push_back( rtl::OUString( *(String *)pLst->GetObject( nI )));
-            }
+
+            const std::vector<String> &aLst = rItem.GetList();
+            for( long nI = 0, nEnd = aLst.size(); nI < nEnd; ++nI )
+                aUndoRedoList.push_back( rtl::OUString( aLst[nI] ));
         }
     }
 }
