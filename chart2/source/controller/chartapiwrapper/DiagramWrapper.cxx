@@ -74,8 +74,6 @@
 #include <map>
 #include <algorithm>
 #include <rtl/ustrbuf.hxx>
-// header for define DBG_ERROR
-#include <tools/debug.hxx>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 

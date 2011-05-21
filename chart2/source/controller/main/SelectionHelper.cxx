@@ -251,7 +251,7 @@ void Selection::adaptSelectionToNewPos( const Point& rMousePos, DrawViewWrapper*
                     }
                 }
 
-                DBG_ASSERT( pNewObj && m_aSelectedOID.isValid(), "somehow lost selected object" );
+                OSL_ENSURE( pNewObj && m_aSelectedOID.isValid(), "somehow lost selected object" );
             }
             else
             {

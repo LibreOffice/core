@@ -34,9 +34,6 @@
 #include "RelativeSizeHelper.hxx"
 #include "ReferenceSizePropertyProvider.hxx"
 
-// header for define DBG_ASSERT
-#include <tools/debug.hxx>
-
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;

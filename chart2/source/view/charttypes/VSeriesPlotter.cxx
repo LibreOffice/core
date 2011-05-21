@@ -74,7 +74,6 @@
 // header for class OUStringBuffer
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
-#include <tools/debug.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
@@ -161,7 +160,7 @@ VSeriesPlotter::VSeriesPlotter( const uno::Reference<XChartType>& xChartTypeMode
         , m_pExplicitCategoriesProvider(0)
         , m_bPointsWereSkipped(false)
 {
-    DBG_ASSERT(m_xChartTypeModel.is(),"no XChartType available in view, fallback to default values may be wrong");
+    OSL_POSTCOND(m_xChartTypeModel.is(),"no XChartType available in view, fallback to default values may be wrong");
 }
 
 VSeriesPlotter::~VSeriesPlotter()
@@ -198,7 +197,7 @@ void VSeriesPlotter::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32
 {
     //take ownership of pSeries
 
-    DBG_ASSERT( pSeries, "series to add is NULL" );
+    OSL_PRECOND( pSeries, "series to add is NULL" );
     if(!pSeries)
         return;
 

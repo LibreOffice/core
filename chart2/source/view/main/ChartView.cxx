@@ -185,7 +185,7 @@ void ChartView::impl_setChartModel( const uno::Reference< frame::XModel >& xChar
 void SAL_CALL ChartView::initialize( const uno::Sequence< uno::Any >& aArguments )
                 throw ( uno::Exception, uno::RuntimeException)
 {
-    DBG_ASSERT(aArguments.getLength() >= 1,"need 1 argument to initialize the view: xModel");
+    OSL_PRECOND(aArguments.getLength() >= 1,"need 1 argument to initialize the view: xModel");
     if( !(aArguments.getLength() >= 1) )
         return;
 
@@ -1502,7 +1502,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
         else
         {
             xSeriesTarget = xSeriesTargetBehindAxis;
-            DBG_ASSERT( !bIsPieOrDonut, "not implemented yet! - during a complete recreation this shape is destroyed so no series can be created anymore" );
+            OSL_ENSURE( !bIsPieOrDonut, "not implemented yet! - during a complete recreation this shape is destroyed so no series can be created anymore" );
         }
         pSeriesPlotter->initPlotter( xSeriesTarget,xTextTargetShapes,m_xShapeFactory,aCID );
         pSeriesPlotter->setPageReferenceSize( rPageSize );

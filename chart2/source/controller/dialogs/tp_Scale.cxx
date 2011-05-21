@@ -419,7 +419,7 @@ SfxTabPage* ScaleTabPage::Create(Window* pWindow,const SfxItemSet& rOutAttrs)
 
 sal_Bool ScaleTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
-    DBG_ASSERT( pNumFormatter, "No NumberFormatter available" );
+    OSL_PRECOND( pNumFormatter, "No NumberFormatter available" );
 
     rOutAttrs.Put(SfxInt32Item(SCHATTR_AXISTYPE, m_nAxisType));
     if(m_bAllowDateAxis)
@@ -454,7 +454,7 @@ sal_Bool ScaleTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 
 void ScaleTabPage::Reset(const SfxItemSet& rInAttrs)
 {
-    DBG_ASSERT( pNumFormatter, "No NumberFormatter available" );
+    OSL_PRECOND( pNumFormatter, "No NumberFormatter available" );
     if(!pNumFormatter)
         return;
 

@@ -33,8 +33,6 @@
 #include "macros.hxx"
 #include "servicenames.hxx"
 
-// header for define DBG_ASSERT
-#include <tools/debug.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>

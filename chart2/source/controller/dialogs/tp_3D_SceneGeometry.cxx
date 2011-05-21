@@ -100,7 +100,7 @@ ThreeD_SceneGeometry_TabPage::ThreeD_SceneGeometry_TabPage( Window* pWindow
     fYAngle = BaseGFXHelper::Rad2Deg( fYAngle );
     fZAngle = BaseGFXHelper::Rad2Deg( fZAngle );
 
-    DBG_ASSERT( fZAngle>=-90 && fZAngle<=90, "z angle is out of valid range" );
+    OSL_ENSURE( fZAngle>=-90 && fZAngle<=90, "z angle is out of valid range" );
 
     lcl_SetMetricFieldLimits( m_aMFZRotation, 90 );
 

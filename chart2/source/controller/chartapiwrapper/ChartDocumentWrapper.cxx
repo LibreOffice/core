@@ -63,8 +63,6 @@
 #include <comphelper/InlineContainer.hxx>
 // header for function SvxShapeCollection_NewInstance
 #include <svx/unoshcol.hxx>
-// header for define DBG_ASSERT
-#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -1134,7 +1132,7 @@ Reference< drawing::XShapes > ChartDocumentWrapper::getAdditionalShapes() const
         // create a shape collection
         xFoundShapes = uno::Reference< drawing::XShapes >( SvxShapeCollection_NewInstance(), uno::UNO_QUERY );
 
-        DBG_ASSERT( xFoundShapes.is(), "Couldn't create a shape collection!" );
+        OSL_ENSURE( xFoundShapes.is(), "Couldn't create a shape collection!" );
         if( xFoundShapes.is())
         {
             ::std::vector< uno::Reference< drawing::XShape > >::iterator aIter;
@@ -1301,7 +1299,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
             case SERVICE_NAME_MARKER_TABLE:
                 {
                     uno::Reference< lang::XMultiServiceFactory > xTableFactory( xChartDoc, uno::UNO_QUERY );
-                    DBG_ASSERT( xTableFactory.get() != this, "new model is expected to implement service factory for gradient table etc" );
+                    OSL_ENSURE( xTableFactory.get() != this, "new model is expected to implement service factory for gradient table etc" );
                     if( xTableFactory.is() && xTableFactory.get() != this )
                         xResult.set( xTableFactory->createInstance( aIt->first ), uno::UNO_QUERY );
                 }

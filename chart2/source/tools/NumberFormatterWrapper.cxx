@@ -37,7 +37,6 @@
 #include <svl/zformat.hxx>
 #include <tools/color.hxx>
 #include <i18npool/mslangid.hxx>
-#include <tools/debug.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 
 //.............................................................................
@@ -80,7 +79,7 @@ NumberFormatterWrapper::NumberFormatterWrapper( const uno::Reference< util::XNum
     SvNumberFormatsSupplierObj* pSupplierObj = SvNumberFormatsSupplierObj::getImplementation( xSupplier );
     if( pSupplierObj )
         m_pNumberFormatter = pSupplierObj->GetNumberFormatter();
-    DBG_ASSERT(m_pNumberFormatter,"need a numberformatter");
+    OSL_POSTCOND(m_pNumberFormatter,"need a numberformatter");
 }
 
 NumberFormatterWrapper::~NumberFormatterWrapper()

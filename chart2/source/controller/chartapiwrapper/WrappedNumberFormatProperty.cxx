@@ -32,9 +32,6 @@
 #include "WrappedNumberFormatProperty.hxx"
 #include "macros.hxx"
 
-// header for define DBG_ERROR
-#include <tools/debug.hxx>
-
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;

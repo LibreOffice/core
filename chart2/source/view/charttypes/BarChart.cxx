@@ -44,7 +44,6 @@
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
-#include <tools/debug.hxx>
 #include <rtl/math.hxx>
 
 //.............................................................................
@@ -421,7 +420,7 @@ void BarChart::createShapes()
     if( m_aZSlots.begin() == m_aZSlots.end() ) //no series
         return;
 
-    DBG_ASSERT(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"BarChart is not proper initialized");
+    OSL_ENSURE(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"BarChart is not proper initialized");
     if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()))
         return;
 

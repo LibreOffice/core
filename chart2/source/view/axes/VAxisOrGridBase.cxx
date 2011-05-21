@@ -34,9 +34,6 @@
 #include "CommonConverters.hxx"
 #include "Tickmarks.hxx"
 
-// header for define DBG_ASSERT
-#include <tools/debug.hxx>
-
 //.............................................................................
 namespace chart
 {
