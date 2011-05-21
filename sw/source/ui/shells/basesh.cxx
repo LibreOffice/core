@@ -2693,12 +2693,12 @@ void SwBaseShell::GetGalleryState( SfxItemSet &rSet )
         {
             int nSel = rSh.GetSelectionType();
             SfxStringListItem aLst( nWhich );
-            List *pLst = aLst.GetList();
+            std::vector<String> &rLst = aLst.GetList();
             nParagraphPos = nGraphicPos = nOlePos = nFramePos = nTablePos =
             nTableRowPos  = nTableCellPos = nPagePos =
             nHeaderPos    = nFooterPos = 0;
             sal_uInt8 nPos = 1;
-            pLst->Insert( (void*) new SW_RESSTR( STR_SWBG_PAGE ), pLst->Count() );
+            rLst.push_back( SW_RESSTR( STR_SWBG_PAGE ) );
             nPagePos = nPos++;
             sal_uInt16 nHtmlMode = ::GetHtmlMode(GetView().GetDocShell());
             sal_Bool bHtmlMode = 0 != (nHtmlMode & HTMLMODE_ON);
@@ -2706,57 +2706,57 @@ void SwBaseShell::GetGalleryState( SfxItemSet &rSet )
             if ( (!bHtmlMode || (nHtmlMode & HTMLMODE_FULL_STYLES)) &&
                  (nSel & nsSelectionType::SEL_TXT) )
             {
-                pLst->Insert( (void*) new SW_RESSTR( STR_SWBG_PARAGRAPH ), pLst->Count() );
+                rLst.push_back( SW_RESSTR( STR_SWBG_PARAGRAPH ) );
                 nParagraphPos = nPos++;
             }
             if ( (!bHtmlMode || (nHtmlMode & HTMLMODE_SOME_STYLES)) &&
                     nSel & (nsSelectionType::SEL_TBL|nsSelectionType::SEL_TBL_CELLS) )
             {
-                pLst->Insert( (void*) new SW_RESSTR( STR_SWBG_TABLE ), pLst->Count() );
+                rLst.push_back( SW_RESSTR( STR_SWBG_TABLE ) );
                 nTablePos = nPos++;
 
                 if(!bHtmlMode)
                 {
-                    pLst->Insert( (void*) new SW_RESSTR( STR_SWBG_TABLE_ROW ), pLst->Count() );
+                    rLst.push_back( SW_RESSTR( STR_SWBG_TABLE_ROW ) );
                     nTableRowPos = nPos++;
                 }
 
-                pLst->Insert( (void*) new SW_RESSTR( STR_SWBG_TABLE_CELL), pLst->Count() );
+                rLst.push_back( SW_RESSTR( STR_SWBG_TABLE_CELL) );
                 nTableCellPos = nPos++;
             }
             if(!bHtmlMode)
             {
                 if ( nSel & nsSelectionType::SEL_FRM )
                 {
-                    pLst->Insert( (void*) new SW_RESSTR( STR_SWBG_FRAME ), pLst->Count() );
+                    rLst.push_back( SW_RESSTR( STR_SWBG_FRAME ) );
                     nFramePos = nPos++;
                 }
                 if ( nSel & nsSelectionType::SEL_GRF )
                 {
-                    pLst->Insert( (void*) new SW_RESSTR( STR_SWBG_GRAPHIC ), pLst->Count() );
+                    rLst.push_back( SW_RESSTR( STR_SWBG_GRAPHIC ) );
                     nGraphicPos = nPos++;
                 }
                 if ( nSel & nsSelectionType::SEL_OLE )
                 {
-                    pLst->Insert( (void*) new SW_RESSTR( STR_SWBG_OLE ), pLst->Count() );
+                    rLst.push_back( SW_RESSTR( STR_SWBG_OLE ) );
                     nOlePos = nPos++;
                 }
                 const sal_uInt16 nType = rSh.GetFrmType(0,sal_True);
                 if ( nType & FRMTYPE_HEADER )
                 {
-                    pLst->Insert( (void*) new SW_RESSTR( STR_SWBG_HEADER ), pLst->Count() );
+                    rLst.push_back( SW_RESSTR( STR_SWBG_HEADER ) );
                     nHeaderPos = nPos++;
                 }
                 if ( nType & FRMTYPE_FOOTER )
                 {
-                    pLst->Insert( (void*) new SW_RESSTR( STR_SWBG_FOOTER ), pLst->Count() );
+                    rLst.push_back( SW_RESSTR( STR_SWBG_FOOTER ) );
                     nFooterPos = nPos;
                 }
             }
-            if ( pLst->Count() )
-                rSet.Put( aLst );
-            else
+            if ( rLst.empty() )
                 rSet.DisableItem( nWhich );
+            else
+                rSet.Put( aLst );
             break;
         }
     }
