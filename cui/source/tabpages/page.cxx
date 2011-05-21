@@ -560,11 +560,6 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
 
     bool bOrientationSupport =
         pImpl->mpDefPrinter->HasSupport( SUPPORT_SET_ORIENTATION );
-#ifdef OS2
-    // unter OS/2 wird bei HasSupport() immer sal_True returned
-    // aber nur als Dummy, deshalb FALSE
-    bOrientationSupport = sal_False;
-#endif
 
     if ( !bOrientationSupport &&
          aPaperSize.Width() > aPaperSize.Height() )

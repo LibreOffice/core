@@ -29,11 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_automation.hxx"
 
-#ifdef OS2
-#define INCL_DOS
-#include <svpm.h>
-#endif
-
 #include "sysdir_win.hxx"
 #include "registry_win.hxx"
 #include "sttresid.hxx"
@@ -445,8 +440,6 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
     abGP.Append( "15" );  // Linux x86-64
 #elif defined LINUX && defined SPARC
     abGP.Append( "16" );  // Linux SPARC
-#elif defined OS2
-    abGP.Append( "17" );
 #elif defined LINUX && defined MIPS
     abGP.Append( "18" );  // Linux MIPS
 #elif defined LINUX && defined ARM
@@ -1142,9 +1135,6 @@ void TestToolObj::WaitForAnswer ()
         while ( !bReturnOK && aTimer.IsActive() && pCommunicationManager->IsCommunicationRunning()
                 && aRun.IsValid() && aRun.IsRun() )
         {
-            #ifdef OS2
-            DosSleep(100);
-            #endif
             GetpApp()->Yield();
             if ( BasicRuntimeAccess::HasRuntime() )
                 aRun = BasicRuntimeAccess::GetRuntime();
@@ -1296,9 +1286,6 @@ void TestToolObj::EndBlock()
             aTimer.Start();
             while ( aTimer.IsActive() && pCommunicationManager->IsCommunicationRunning() )
             {
-                #ifdef OS2
-                DosSleep(100);
-                #endif
                 GetpApp()->Yield();
             }
         }
@@ -2305,14 +2292,6 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                             OUString aPath;
                             osl::FileBase::getSystemPathFromFileURL( aUrl, aPath );
                             pVar->PutString( String( aPath ) );
-                        }
-#elif defined OS2
-                        {
-                            char* etc = getenv("ETC");
-                            if (etc)
-                               pVar->PutString( CUniString( etc ) );
-                            else
-                               pVar->PutString( CUniString( "/etc" ) );
                         }
 #else
 #if UNX

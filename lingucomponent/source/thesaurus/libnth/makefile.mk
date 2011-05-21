@@ -37,9 +37,6 @@ USE_DEFFILE=TRUE
 .IF "$(GUI)"=="UNX"
 MYTHESLIB=-lmythes
 .ENDIF # unx
-.IF "$(GUI)"=="OS2"
-MYTHESLIB=$(SLB)\libmythes.lib
-.ENDIF # os2
 .IF "$(GUI)"=="WNT"
 MYTHESLIB=libmythes.lib
 .ENDIF # wnt

@@ -48,11 +48,7 @@ using ::std::vector;
 #ifdef WNT
 int __cdecl IconcDlgCmpUS_Impl( const void* p1, const void* p2 )
 #else
-#if defined(OS2) && defined(ICC)
-int _Optlink IconcDlgCmpUS_Impl( const void* p1, const void* p2 )
-#else
 int IconcDlgCmpUS_Impl( const void* p1, const void* p2 )
-#endif
 #endif
 {
     return *(sal_uInt16*)p1 - *(sal_uInt16*)p2;

@@ -1268,15 +1268,6 @@ void DlgEditor::Print( Printer* pPrinter, const String& rTitle )    // not worki
         lcl_PrintHeader( pPrinter, rTitle );
 
         Bitmap aDlg;
-#ifdef OS2
-        Bitmap* pDlg = new Bitmap;
-        SvMemoryStream* pStrm = new SvMemoryStream;
-        *pStrm << *pDlg;
-        delete pDlg;
-        pStrm->Seek(0);
-        *pStrm >> aDlg;
-        delete pStrm;
-#endif
         Size aBmpSz( pPrinter->PixelToLogic( aDlg.GetSizePixel() ) );
         double nPaperSzWidth = aPaperSz.Width();
         double nPaperSzHeight = aPaperSz.Height();

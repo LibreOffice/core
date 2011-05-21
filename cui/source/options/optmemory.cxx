@@ -149,8 +149,8 @@ OfaMemoryOptionsPage::OfaMemoryOptionsPage(Window* pParent, const SfxItemSet& rS
 #endif
     FreeResource();
 
-    //quick launch only available in Win and OS/2
-#if !defined(WNT) && !defined(OS2) && !defined(ENABLE_GTK)
+    //quick launch only available in Win
+#if !defined(WNT) && !defined(ENABLE_GTK)
     aQuickLaunchFL.Hide();
     aQuickLaunchCB.Hide();
 #endif

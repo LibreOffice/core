@@ -93,7 +93,7 @@ $(MISC)$/xfilter.pl : filter.pl
 .IF "$(GUI)"=="UNX"
 INIFILESUFFIX=rc
 BRANDPATH=none
-.ELIF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.ELIF "$(GUI)"=="WNT"
 INIFILESUFFIX=.ini
 BRANDPATH=..
 .END
