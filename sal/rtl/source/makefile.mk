@@ -56,10 +56,6 @@ CXXFLAGS+= $(LFS_CFLAGS)
 
 # --- Files --------------------------------------------------------
 
-# safe that way: gen_makefile doesn't want it,
-# no other link target here
-UWINAPILIB:=
-
 .IF "$(header)" == ""
 
 .IF "$(OS)" != "AIX"
@@ -128,13 +124,6 @@ OBJFILES=   \
             $(OBJ)$/alloc_fini.obj
 
 
-.IF "$(CROSS_COMPILING)"==""
-APP1TARGET=gen_makefile
-APP1OBJS=$(SLO)$/gen_makefile.obj
-APP1LIBSALCPPRT=
-APP1RPATH=NONE
-.ENDIF
-
 .ENDIF
 
 # --- Makefile snippet  --------------------------------------------
@@ -171,14 +160,6 @@ $(ALWAYSDBGFILES):
 
 ALLTAR : $(BOOTSTRAPMK)
 
-.IF "$(CROSS_COMPILING)"==""
-
-$(BOOTSTRAPMK) : $(APP1TARGETN)
-    $(AUGMENT_LIBRARY_PATH) $< > $@
-
-.ELSE
-
 $(BOOTSTRAPMK) :
-    (echo '#include "macro.hxx"'; echo RTL_OS:=THIS_OS; echo RTL_ARCH:=THIS_ARCH) | $(CC) -E $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CDEFS) $(CFLAGSAPPEND) - | grep '^RTL_' | sed -e 's/"//g' >$@ 
-
-.ENDIF
+    (echo '#include "macro.hxx"'; echo RTL_OS:=THIS_OS; echo RTL_ARCH:=THIS_ARCH) >$(BOOTSTRAPMK).c
+    $(CC) -E $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(BOOTSTRAPMK).c | $(GREP) '^RTL_' | $(SED) -e 's/"//g' >$@
