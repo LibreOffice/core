@@ -62,10 +62,7 @@ OOO_PATCH_FILES= \
 PATCH_FILES=$(OOO_PATCH_FILES) \
 
 
-.IF "$(OS)"=="OS2"
-BUILD_ACTION=dmake
-BUILD_DIR=$(CONFIGURE_DIR)$/librdf
-.ELIF "$(OS)"=="WNT"
+.IF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
 redland_CC=$(CC) -mthreads
 .IF "$(MINGW_SHARED_GCCLIB)"=="YES"
@@ -159,8 +156,6 @@ OUT2BIN+=librdf$/.libs$/*.dll
 .ELSE
 # if we use dmake, this is done automagically
 .ENDIF
-.ELIF "$(OS)"=="OS2"
-# if we use dmake, this is done automagically
 .ELSE
 OUT2LIB+=librdf$/.libs$/librdf.so.$(REDLAND_MAJOR)
 .ENDIF

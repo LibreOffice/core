@@ -67,10 +67,7 @@ OOO_PATCH_FILES += \
 PATCH_FILES=$(OOO_PATCH_FILES)
 
 
-.IF "$(OS)"=="OS2"
-BUILD_ACTION=dmake
-BUILD_DIR=$(CONFIGURE_DIR)$/src
-.ELIF "$(OS)"=="WNT"
+.IF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
 OOO_PATCH_FILES+=$(TARFILE_NAME).patch.mingw
 raptor_CC=$(CC) -mthreads
@@ -171,8 +168,6 @@ OUT2BIN+=src/raptor-config
 .ELSE
 # if we use dmake, this is done automagically
 .ENDIF
-.ELIF "$(GUI)"=="OS2"
-# if we use dmake, this is done automagically
 .ELSE
 OUT2LIB+=src$/.libs$/libraptor.so.$(RAPTOR_MAJOR) src$/.libs$/libraptor.so
 OUT2BIN+=src/raptor-config

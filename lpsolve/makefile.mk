@@ -45,7 +45,7 @@ PATCH_FILES=lp_solve_5.5-windows.patch
 PATCH_FILES=\
     lp_solve_5.5.patch \
     lp_solve-aix.patch
-ADDITIONAL_FILES=lpsolve55$/ccc.solaris lpsolve55$/ccc.ios lpsolve55$/ccc.os2
+ADDITIONAL_FILES=lpsolve55$/ccc.solaris lpsolve55$/ccc.ios
 .ENDIF
 
 .IF "$(OS)"=="OPENBSD"
@@ -76,9 +76,6 @@ BUILD_ACTION=cmd /c cvc6.bat
 OUT2LIB=$(BUILD_DIR)$/lpsolve55.lib
 .ENDIF
 OUT2BIN=$(BUILD_DIR)$/lpsolve55.dll
-.ELIF "$(GUI)"=="OS2"
-BUILD_ACTION=sh ccc.os2
-OUT2LIB=$(BUILD_DIR)$/liblpsolve55.lib
 .ELSE
 .IF "$(OS)"=="MACOSX"
 .EXPORT: EXTRA_CDEFS EXTRA_LINKFLAGS

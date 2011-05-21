@@ -62,10 +62,7 @@ OOO_PATCH_FILES= \
 PATCH_FILES=$(OOO_PATCH_FILES)
 
 
-.IF "$(OS)"=="OS2"
-BUILD_ACTION=dmake
-BUILD_DIR=$(CONFIGURE_DIR)$/src
-.ELIF "$(OS)"=="WNT"
+.IF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
 rasqal_CC=$(CC) -mthreads
 .IF "$(MINGW_SHARED_GCCLIB)"=="YES"
@@ -158,8 +155,6 @@ OUT2BIN+=src/rasqal-config
 .ELSE
 # if we use dmake, this is done automagically
 .ENDIF
-.ELIF "$(OS)"=="OS2"
-# if we use dmake, this is done automagically
 .ELSE
 OUT2LIB+=src$/.libs$/librasqal.so.$(RASQAL_MAJOR) src$/.libs$/librasqal.so
 OUT2BIN+=src/rasqal-config

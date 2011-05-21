@@ -84,9 +84,9 @@ OUT2LIB=$(BUILD_DIR)$/src$/.libs$/libtextcat*$(DLLPOST)
 .ENDIF # "$(GUI)"=="UNX"
 
 
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.IF "$(GUI)"=="WNT"
 BUILD_ACTION=cd src && dmake $(MAKEMACROS)
-.ENDIF # "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.ENDIF # "$(GUI)"=="WNT"
 
 
 OUT2INC= \

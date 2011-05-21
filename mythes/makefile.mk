@@ -101,11 +101,6 @@ BUILD_ACTION=dmake
 OUT2INC += mythes.hxx
 .ENDIF # "$(GUI)"=="WNT"
 
-.IF "$(GUI)"=="OS2"
-BUILD_ACTION=dmake
-OUT2INC += mythes.hxx
-.ENDIF # "$(GUI)"=="OS2"
-
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : set_ext.mk
