@@ -334,9 +334,6 @@ DBG_NAME(OTextConnectionHelper)
         String sExtension = GetExtension();
         String aErrorText;
         Control* pErrorWin = NULL;
-        //  if (!m_aFieldSeparator.GetText().Len())
-            // if this line is compiled under OS2 (in a product environent)
-            // -> use a temporary variable
         String aDelText(m_aFieldSeparator.GetText());
         if(!aDelText.Len())
         {   // Kein FeldTrenner

@@ -48,10 +48,6 @@
 
 #ifdef HAVE_ODBC_SUPPORT
 
-#if defined(OS2)
-#define ODBC_LIBRARY    "ODBC.DLL"
-#define ODBC_UI_LIBRARY "ODBCINST.DLL"
-#endif
 #if defined WNT
 #define ODBC_LIBRARY    "ODBC32.DLL"
 #define ODBC_UI_LIBRARY "ODBCCP32.DLL"
@@ -82,11 +78,6 @@
 #endif
 #endif // defined(WNT)
 
-#if defined(OS2)
-#define ALLREADY_HAVE_OS2_TYPES
-#define DONT_TD_VOID
-#endif
-
 #ifdef SYSTEM_ODBC_HEADERS
 #include <sqlext.h>
 #else
@@ -101,10 +92,6 @@
 #define SQL_API __stdcall
 #endif // defined(WNT)
 // from here on you can do what you want to
-
-#if defined(OS2)
-#define SQL_API _System
-#endif // defined(OS2)
 
 #else
 
