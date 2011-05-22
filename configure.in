@@ -1511,7 +1511,6 @@ case "$host_os" in
         test_kde=no
         test_kde4=yes
         test_freetype=yes
-        PTHREAD_CFLAGS="-pthread"
         PTHREAD_LIBS="-pthread -lpthread"
         _os=NetBSD
         ;;
