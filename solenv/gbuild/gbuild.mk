@@ -148,7 +148,7 @@ include $(GBUILDDIR)/platform/linux-$(CPUNAME).mk
 else ifeq ($(OS),MACOSX)
 include $(GBUILDDIR)/platform/macosx.mk
 else ifeq ($(OS),WNT)
-ifneq ($(USE_MINGW),)
+ifeq ($(COM),GCC)
 include $(GBUILDDIR)/platform/winmingw.mk
 else
 include $(GBUILDDIR)/platform/windows.mk
