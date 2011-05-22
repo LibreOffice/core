@@ -301,13 +301,13 @@ ModelessDialog RID_SVXDLG_SEARCH
         TabStop = TRUE ;
         Hide = TRUE ;
     };
-    CheckBox CB_NOTES
+    CheckBox CB_COMMENTS
     {
-        HelpID = "svx:CheckBox:RID_SVXDLG_SEARCH:CB_NOTES";
+        HelpID = "svx:CheckBox:RID_SVXDLG_SEARCH:CB_COMMENTS";
         Pos = MAP_APPFONT ( 12 , 232 ) ;
         Size = MAP_APPFONT ( 126 , 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "Notes";
+        Text [ en-US ] = "Comments";
     };
     CheckBox CB_JAP_MATCH_FULL_HALF_WIDTH
     {

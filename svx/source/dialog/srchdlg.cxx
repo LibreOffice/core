@@ -324,7 +324,7 @@ void SearchAttrItemList::Remove( sal_uInt16 nPos, sal_uInt16 nLen )
     aSimilarityBox  ( this, SVX_RES( CB_SIMILARITY) ),                        \
     aSimilarityBtn  ( this, SVX_RES( PB_SIMILARITY) ),                        \
     aLayoutBtn      ( this, SVX_RES( CB_LAYOUTS ) ),                          \
-    aNotesBtn       ( this, SVX_RES( CB_NOTES ) ),                            \
+    aNotesBtn       ( this, SVX_RES( CB_COMMENTS ) ),                            \
     aJapMatchFullHalfWidthCB( this, SVX_RES( CB_JAP_MATCH_FULL_HALF_WIDTH ) ),\
     aJapOptionsCB   ( this, SVX_RES( CB_JAP_SOUNDS_LIKE ) ),                  \
     aJapOptionsBtn  ( this, SVX_RES( PB_JAP_OPTIONS ) ),                      \
