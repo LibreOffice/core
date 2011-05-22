@@ -145,11 +145,4 @@ SHL1STDLIBS+=\
 
 .ENDIF
 
-.IF "$(COM)"=="GCC"
-ALL: ALLTAR $(LB)$/libuwinapi.a
-
-$(LB)$/libuwinapi.a: $(MISC)$/uwinapi.def
-    $(DLLTOOL) --dllname uwinapi.dll --input-def=$(MISC)$/uwinapi.def --kill-at --output-lib=$(LB)$/libuwinapi.a
-.ENDIF
-
 .INCLUDE : target.mk
