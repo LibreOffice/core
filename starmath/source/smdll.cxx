@@ -50,59 +50,65 @@
 
 #include <svx/xmlsecctrl.hxx>
 
-
-
-bool SmDLL::bInitialized = false;
-
-
-// Initialization
-
-void SmDLL::Init()
+namespace
 {
-    if ( bInitialized )
-        return;
+    class SmDLL
+    {
+    public:
+        SmDLL();
+        ~SmDLL();
+    };
 
-    bInitialized = true;
+    SmDLL::SmDLL()
+    {
+        SmModule** ppShlPtr = (SmModule**) GetAppData(SHL_SM);
+        if ( *ppShlPtr )
+            return;
 
-    SfxObjectFactory& rFactory = SmDocShell::Factory();
+        SfxObjectFactory& rFactory = SmDocShell::Factory();
+        SmModule *pModule = new SmModule( &rFactory );
+        *ppShlPtr = pModule;
 
-    SmModule** ppShlPtr = (SmModule**) GetAppData(SHL_SM);
-    *ppShlPtr = new SmModule( &rFactory );
+        rFactory.SetDocumentServiceName( String::CreateFromAscii("com.sun.star.formula.FormulaProperties") );
 
-    SfxModule *p = SM_MOD();
-    SmModule *pp = (SmModule *) p;
+        SmModule::RegisterInterface(pModule);
+        SmDocShell::RegisterInterface(pModule);
+        SmViewShell::RegisterInterface(pModule);
 
-    rFactory.SetDocumentServiceName( String::CreateFromAscii("com.sun.star.formula.FormulaProperties") );
+        SmViewShell::RegisterFactory(1);
 
-    SmModule::RegisterInterface(pp);
-    SmDocShell::RegisterInterface(pp);
-    SmViewShell::RegisterInterface(pp);
+        SvxZoomStatusBarControl::RegisterControl(SID_ATTR_ZOOM, pModule);
+        SvxModifyControl::RegisterControl(SID_TEXTSTATUS, pModule);
+        SvxUndoRedoControl::RegisterControl(SID_UNDO, pModule);
+        SvxUndoRedoControl::RegisterControl(SID_REDO, pModule);
+        XmlSecStatusBarControl::RegisterControl(SID_SIGNATURE, pModule);
 
-    SmViewShell::RegisterFactory(1);
+        SmToolBoxWrapper::RegisterChildWindow(true);
+        SmCmdBoxWrapper::RegisterChildWindow(true);
 
-    SvxZoomStatusBarControl::RegisterControl( SID_ATTR_ZOOM, pp );
-    SvxModifyControl::RegisterControl( SID_TEXTSTATUS, pp );
-    SvxUndoRedoControl::RegisterControl( SID_UNDO, pp );
-    SvxUndoRedoControl::RegisterControl( SID_REDO, pp );
-    XmlSecStatusBarControl::RegisterControl( SID_SIGNATURE, pp );
+        ::sfx2::TaskPaneWrapper::RegisterChildWindow(false, pModule);
+    }
 
-    SmToolBoxWrapper::RegisterChildWindow(true);
-    SmCmdBoxWrapper::RegisterChildWindow(true);
+    SmDLL::~SmDLL()
+    {
+#if 0
+        // the SdModule must be destroyed
+        SmModule** ppShlPtr = (SmModule**) GetAppData(SHL_SM);
+        delete (*ppShlPtr);
+        (*ppShlPtr) = NULL;
+        *GetAppData(SHL_SM) = 0;
+#endif
+    }
 
-    ::sfx2::TaskPaneWrapper::RegisterChildWindow( false, pp );
+    struct theSmDLLInstance : public rtl::Static<SmDLL, theSmDLLInstance> {};
 }
 
-
-// Deinitialization
-
-void SmDLL::Exit()
+namespace SmGlobals
 {
-    // the SdModule must be destroyed
-    SmModule** ppShlPtr = (SmModule**) GetAppData(SHL_SM);
-    delete (*ppShlPtr);
-    (*ppShlPtr) = NULL;
-
-    *GetAppData(SHL_SM) = 0;
+    void ensure()
+    {
+        theSmDLLInstance::get();
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

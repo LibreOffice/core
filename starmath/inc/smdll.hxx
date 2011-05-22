@@ -28,21 +28,10 @@
 #ifndef SMDLL_HXX
 #define SMDLL_HXX
 
-#include <tools/resid.hxx>
-#include <sfx2/sfxdefs.hxx>
-#include "smmod.hxx"
-
-class SmData;
-class SfxMedium;
-class SfxFilter;
-
-class SmDLL
+namespace SmGlobals
 {
-    static bool bInitialized;
-public:
-    static void Init();
-    static void Exit();
-};
+    void ensure();
+}
 
 #endif
 

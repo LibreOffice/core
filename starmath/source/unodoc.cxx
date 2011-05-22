@@ -59,14 +59,9 @@ uno::Reference< uno::XInterface > SAL_CALL SmDocument_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & /*rSMgr*/, const sal_uInt64 _nCreationFlags ) throw( uno::Exception )
 {
     SolarMutexGuard aGuard;
-    if ( !SM_MOD() )
-        SmDLL::Init();
-
+    SmGlobals::ensure();
     SfxObjectShell* pShell = new SmDocShell( _nCreationFlags );
-    if( pShell )
-        return uno::Reference< uno::XInterface >( pShell->GetModel() );
-
-    return uno::Reference< uno::XInterface >();
+    return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }
 
 

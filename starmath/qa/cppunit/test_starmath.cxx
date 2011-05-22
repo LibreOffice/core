@@ -115,7 +115,7 @@ Test::Test()
 
     InitVCL(xSM);
 
-    SmDLL::Init();
+    SmGlobals::ensure();
 }
 
 void Test::setUp()
