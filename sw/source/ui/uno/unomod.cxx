@@ -748,6 +748,8 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
                 aOpt.setBrowseMode( bVal );
                 pView->GetWrtShell().ApplyViewOptions( aOpt );
                 pView->RecheckBrowseMode();
+                if(mpViewOption)
+                    mpViewOption->setBrowseMode(bVal);
             }
         }
         break;
