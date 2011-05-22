@@ -116,7 +116,7 @@ public:
     virtual void columnChanged() = 0;
 };
 
-#define GRID_COLUMN_NOT_FOUND   ((sal_uInt16)-1)
+#define GRID_COLUMN_NOT_FOUND   SAL_MAX_UINT16
 
 //==================================================================
 // InitWindowFacet, describing which aspect of a column's Window to (re-)initialize

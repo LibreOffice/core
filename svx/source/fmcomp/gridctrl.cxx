@@ -1722,13 +1722,13 @@ sal_uInt16 DbGridControl::AppendColumn(const XubString& rName, sal_uInt16 nWidth
 //------------------------------------------------------------------------------
 void DbGridControl::RemoveColumn(sal_uInt16 nId)
 {
-    sal_Int16 nIndex = GetModelColumnPos(nId);
-    DbGridControl_Base::RemoveColumn(nId);
-
-    delete m_aColumns[ nIndex ];
-    DbGridColumns::iterator it = m_aColumns.begin();
-    ::std::advance( it, nIndex );
-    m_aColumns.erase( it );
+    const sal_uInt16 nIndex = GetModelColumnPos(nId);
+    if(nIndex != GRID_COLUMN_NOT_FOUND)
+    {
+        DbGridControl_Base::RemoveColumn(nId);
+        delete m_aColumns[nIndex];
+        m_aColumns.erase( m_aColumns.begin()+nIndex );
+    }
 }
 
 //------------------------------------------------------------------------------
