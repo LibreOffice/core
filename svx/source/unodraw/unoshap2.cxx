@@ -101,13 +101,11 @@ SvxShapeGroup::SvxShapeGroup( SdrObject* pObj, SvxDrawPage* pDrawPage  )  throw(
     SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_GROUP), getSvxMapProvider().GetPropertySet(SVXMAP_GROUP, SdrObject::GetGlobalDrawObjectItemPool()) ),
     mxPage( pDrawPage )
 {
-    fprintf(stderr, "SvxShapeGroup::SvxShapeGroup ctor %p\n", this);
 }
 
 //----------------------------------------------------------------------
 SvxShapeGroup::~SvxShapeGroup() throw()
 {
-    fprintf(stderr, "SvxShapeGroup::SvxShapeGroup dtor %p\n", this);
 }
 
 //----------------------------------------------------------------------
