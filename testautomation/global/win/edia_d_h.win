@@ -351,7 +351,7 @@ SearchIn sym:svx:ListBox:RID_SVXDLG_SEARCH:LB_CALC_SEARCHIN
 Rows sym:svx:RadioButton:RID_SVXDLG_SEARCH:RB_CALC_ROWS
 Columns sym:svx:RadioButton:RID_SVXDLG_SEARCH:RB_CALC_COLUMNS
 SearchInAllSheets sym:svx:CheckBox:RID_SVXDLG_SEARCH:CB_ALL_SHEETS
-Notes sym:svx:CheckBox:RID_SVXDLG_SEARCH:CB_NOTES
+Notes sym:svx:CheckBox:RID_SVXDLG_SEARCH:CB_COMMENTS
 
 *FormFolderNameDialog sym:DBACCESS_HID_DLG_SAVE_AS
 FolderName sym:dbaccess:Edit:DLG_SAVE_AS:ET_TITLE
