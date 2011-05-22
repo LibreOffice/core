@@ -232,7 +232,6 @@ elsif ( $platform =~ m/netbsd/ )
 #Set platform specific values:
    if ($platform =~ m/^i[3456]86/)
    {  print "Setting NetBSD x86 specific values... ";
-      $outfile        = "NetBSDX86Env.Set.sh";
       $CPU            = "I";
       $CPUNAME        = "INTEL";
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386";
@@ -241,7 +240,6 @@ elsif ( $platform =~ m/netbsd/ )
    }
    elsif ($platform =~ m/^x86_64/)
    {  print "Setting NetBSD x86-64 specific values... ";
-      $outfile        = "NetBSDX86-64Env.Set.sh";
       $CPU            = "X";
       $CPUNAME        = "X86_64";
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64";
@@ -250,7 +248,6 @@ elsif ( $platform =~ m/netbsd/ )
    }
    elsif ($platform =~ m/^sparc/)
    {  print "Setting NetBSD Sparc specific values... ";
-      $outfile        = "NetBSDSparcEnv.Set.sh";
       $CPU            = "S";
       $CPUNAME        = "SPARC";
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc";
@@ -259,7 +256,6 @@ elsif ( $platform =~ m/netbsd/ )
    }
    elsif ($platform =~ m/powerpc/)
    {  print "Setting NetBSD PPC specific values... ";
-      $outfile        = "NetBSDPPCEnv.Set.sh";
       $CPU            = "P";
       $CPUNAME        = "POWERPC";
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc";
@@ -271,16 +267,16 @@ elsif ( $platform =~ m/netbsd/ )
      exit 1;
    }
    # General NetBSD settings:
-      $OUTPATH        = $OUTPATH."3";
       $COM            = "GCC";
       $COMPATH        = '@COMPATH@';
       $GUI            = "UNX";
       $GUIBASE        = "unx";
       $GVER           = "VCL";
-      $INPATH         = $OUTPATH.$PROEXT;
       $OS             = "NETBSD";
       $PATH_SEPERATOR = $ps;
       $OUTPATH        = "unxnbsd";
+      $outfile        = "NetBSDEnv.Set.sh";
+      $INPATH         = $OUTPATH.$PROEXT;
 }
 elsif ( $platform =~ m/kfreebsd/ )
 {
