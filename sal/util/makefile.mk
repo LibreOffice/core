@@ -66,15 +66,6 @@ LIB1FILES=	\
     $(SLB)$/cpprtl.lib	\
     $(SLB)$/textenc.lib 
 
-LIB3TARGET=$(LB)$/a$(TARGET).lib
-LIB3ARCHIV=$(LB)$/lib$(TARGET)$(DLLPOSTFIX).a
-LIB3FILES=	\
-    $(LB)$/oslall.lib	\
-    $(LB)$/cpposl.lib	\
-    $(LB)$/cpprtl.lib	\
-    $(LB)$/textenc.lib
-
-
 .IF "$(GUI)" == "WNT"
 SHL1TARGET= $(TARGET)
 .ELSE
