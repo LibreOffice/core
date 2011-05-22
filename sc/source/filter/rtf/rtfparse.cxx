@@ -299,7 +299,7 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
     {
         case RTF_TROWD:         // denotes table row defauls, before RTF_CELLX
         {
-            if ( (pD = &(pDefaultList->back())) != 0 )
+            if ( !pDefaultList->empty() && (pD = &(pDefaultList->back())) != 0 )
                 nLastWidth = pD->nTwips;
             nColCnt = 0;
             pDefaultList->clear();
