@@ -48,10 +48,6 @@ PATCH_FILES=\
 ADDITIONAL_FILES=lpsolve55$/ccc.solaris lpsolve55$/ccc.ios
 .ENDIF
 
-.IF "$(OS)"=="OPENBSD"
-PATCH_FILES+=lp_solve_5.5-openbsd.patch
-.ENDIF
-
 CONFIGURE_DIR=
 CONFIGURE_ACTION=
 CONFIGURE_FLAGS=
