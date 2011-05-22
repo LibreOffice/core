@@ -101,7 +101,7 @@ SwDLL::SwDLL()
     SfxObjectFactory* pWDocFact = &SwWebDocShell::Factory();
 
     SwModule* pModule = new SwModule( pWDocFact, pDocFact, pGlobDocFact );
-    (*ppShlPtr) = pModule;
+    *ppShlPtr = pModule;
 
     pWDocFact->SetDocumentServiceName(C2S("com.sun.star.text.WebDocument"));
 
