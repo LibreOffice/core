@@ -233,44 +233,6 @@ DEF10NAME=$(SHL1TARGET)
 DEF10EXPORTFILE=export.exp
 .ENDIF
 
-.IF "$(TESTAPP)" == "salstattest"
-
-    CFLAGS+= -DUSE_SAL_STATIC
-
-    OBJFILES+=$(OBJ)$/salstattest.obj
-
-    APP10TARGET=salstattest
-    APP10OBJS=$(OBJ)$/salstattest.obj
-    APP10STDLIBS=\
-                $(LB)$/asal.lib\
-                $(SHELL32LIB)\
-                $(USER32LIB)\
-                $(COMDLG32LIB)\
-                $(ADVAPI32LIB)
-
-    APP10DEPN=$(LB)$/asal.lib
-
-.ENDIF # salstattest
-
-.IF "$(TESTAPP)" == "saldyntest"
-
-    OBJFILES+=$(OBJ)$/saldyntest.obj
-
-    APP10TARGET=saldyntest
-    APP10OBJS=$(OBJ)$/saldyntest.obj
-    APP10STDLIBS=\
-                $(LB)$/isal.lib\
-                $(SHELL32LIB)\
-                $(USER32LIB)\
-                $(COMDLG32LIB)\
-                $(ADVAPI32LIB)
-
-    APP10DEPN=$(LB)$/isal.lib
-
-.ENDIF # salstattest
-
-
-
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
