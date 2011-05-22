@@ -478,6 +478,7 @@ gb_Library_PLAINLIBS_NONE += \
 	$(gb_MINGW_LIBGCC) \
 	advapi32 \
 	gdi32 \
+	gnu_getopt \
 	kernel32 \
 	msvcrt \
 	msvcprt \
