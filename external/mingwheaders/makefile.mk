@@ -33,6 +33,10 @@ TARGET=mingwheaders
 
 .IF "$(OS)$(COM)" == "WNTGCC"
 
+.IF "$(CROSS_COMPILING)" == ""
+# Don't do any of this weird and presumably obsolete crack when
+# cross-compiling
+
 # Cygwin and MinGW use different directories for the W32API headers
 .IF "$(USE_MINGW)" == "cygwin"
 MINGW_INCLUDE_DIR=$/usr$/include/mingw/
@@ -203,6 +207,8 @@ clean:
     -$(RM) $(MISC)$/mingw$/include$/*.h
     -$(RM) $(MISC)$/mingwheader_copy
     -$(RM) $(MISC)$/mingwheader_patch
+
+.ENDIF
 
 .ENDIF
 

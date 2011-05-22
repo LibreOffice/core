@@ -11,6 +11,10 @@ TARGET=gcc3_specific
 
 .IF "$(GUI)" == "WNT"
 
+.IF "$(CROSS_COMPILING)" == ""
+# Don't do any of this weird and presumably obsolete crack when
+# cross-compiling
+
 .IF "$(COM)" == "GCC"
 
 .IF "$(MINGW_SHARED_GCCLIB)" == "YES"
@@ -34,6 +38,8 @@ $(MINGWGCCDLL) :
 .IF "$(MINGW_SHARED_GXXLIB)" == "YES"
 $(MINGWGXXDLL) :
     $(COPY) -p $(COMPATH)$/bin$/$(MINGW_GXXDLL) $(BIN)$/
+.ENDIF
+
 .ENDIF
 
 .ENDIF
