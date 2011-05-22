@@ -47,7 +47,7 @@ $(eval $(call gb_Executable_add_linked_libs,mkunroll,\
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,mkunroll,\
-    tools/bootstrp/addexes2/mkfilt \
+    tools/bootstrp/mkunroll/mkunroll \
 ))
 
 $(eval $(call gb_Executable_add_linked_static_libs,rscdep,\
