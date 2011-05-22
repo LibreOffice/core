@@ -125,7 +125,7 @@ MkFilter::MkFilter( ByteString aInFile, ByteString aOutFile ) :
 
 MkFilter::~MkFilter()
 {
-    for ( size_t i = 0, n = pLst->size(); i < n; ++i ) {
+    for ( size_t i = 0, n = pTnrLst->size(); i < n; ++i ) {
         delete (*pTnrLst)[ i ];
     }
     delete pTnrLst;
