@@ -139,7 +139,6 @@ void LwpParaBorderOverride::Read(LwpObjectStream *pStrm)
         m_pMargins->Read(pStrm);
 
         m_eAboveType = static_cast<BorderWidthType>(pStrm->QuickReaduInt16());
-        m_eAboveType = static_cast<BorderWidthType>(pStrm->QuickReaduInt16());
         m_eBelowType = static_cast<BorderWidthType>(pStrm->QuickReaduInt16());
         m_eRightType = static_cast<BorderWidthType>(pStrm->QuickReaduInt16());
 
