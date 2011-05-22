@@ -357,10 +357,11 @@ void SfxModule::DestroyModules_Impl()
     {
         SfxModuleArr_Impl& rModules = *pModules;
         for( sal_uInt16 nPos = rModules.Count(); nPos--; )
-    {
-        SfxModule* pMod = rModules.GetObject(nPos);
-        delete pMod;
-    }
+        {
+            SfxModule* pMod = rModules.GetObject(nPos);
+            delete pMod;
+        }
+        delete pModules, pModules = 0;
     }
 }
 
