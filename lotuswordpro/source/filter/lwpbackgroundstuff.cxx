@@ -70,7 +70,7 @@
 
 void LwpBackgroundStuff::Read(LwpObjectStream* pStrm)
 {
-    pStrm->QuickRead(&m_nID, sizeof(m_nID));
+    m_nID = pStrm->QuickReaduInt16();
     m_aFillColor.Read(pStrm);
     m_aPatternColor.Read(pStrm);
     pStrm->SkipExtra();

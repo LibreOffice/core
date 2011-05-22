@@ -88,14 +88,14 @@ void LwpVirtualLayout::Read()
     LwpDLNFPVList::Read();
 
     LwpObjectStream* pStrm = m_pObjStrm;
-    pStrm->QuickRead(&m_nAttributes, sizeof(m_nAttributes));
-    pStrm->QuickRead(&m_nAttributes2, sizeof(m_nAttributes2));
-    pStrm->QuickRead(&m_nAttributes3, sizeof(m_nAttributes3));
-    pStrm->QuickRead(&m_nOverrideFlag, sizeof(m_nOverrideFlag));
-    pStrm->QuickRead(&m_nDirection, sizeof(m_nDirection));
+    m_nAttributes = pStrm->QuickReaduInt32();
+    m_nAttributes2 = pStrm->QuickReaduInt32();
+    m_nAttributes3 = pStrm->QuickReaduInt32();
+    m_nOverrideFlag = pStrm->QuickReaduInt32();
+    m_nDirection = pStrm->QuickReaduInt16();
 
     //Note that two bytes is read into m_nEditorID instead of one byte.
-    pStrm->QuickRead(&m_nEditorID, sizeof(m_nEditorID));
+    m_nEditorID = pStrm->QuickReaduInt16();
 
     m_NextEnumerated.ReadIndexed(pStrm);
     m_PreviousEnumerated.ReadIndexed(pStrm);
@@ -553,11 +553,11 @@ LwpLayoutStyle::~LwpLayoutStyle()
 
 void LwpLayoutStyle::Read(LwpObjectStream* pStrm)
 {
-    pStrm->QuickRead(&m_nStyleDefinition, sizeof(m_nStyleDefinition));
+    m_nStyleDefinition = pStrm->QuickReaduInt32();
     m_pDescription->Read(pStrm);
     if (pStrm->CheckExtra())
     {
-        pStrm->QuickRead(&m_nKey, 2);
+        m_nKey = pStrm->QuickReaduInt16();
         pStrm->SkipExtra();
     }
 }
@@ -578,8 +578,8 @@ LwpLayoutMisc::~LwpLayoutMisc()
 
 void LwpLayoutMisc::Read(LwpObjectStream* pStrm)
 {
-    pStrm->QuickRead(&m_nGridType, 2);
-    pStrm->QuickRead(&m_nGridDistance, 4);
+    m_nGridType = pStrm->QuickReaduInt16();
+    m_nGridDistance = pStrm->QuickReadInt32();
     m_pContentStyle->Read(pStrm);
     pStrm->SkipExtra();
 }
@@ -621,8 +621,7 @@ void LwpMiddleLayout::Read()
     m_BasedOnStyle.ReadIndexed(pStrm);
     m_TabPiece.ReadIndexed(pStrm);
 
-    sal_uInt8 nWhatsItGot = 0;
-    pStrm->QuickRead(&nWhatsItGot, 1);
+    sal_uInt8 nWhatsItGot = pStrm->QuickReaduInt8();
 
     if (nWhatsItGot & DISK_GOT_STYLE_STUFF)
     {
@@ -1522,19 +1521,15 @@ void LwpLayout::Read()
     }
     else
     {
-        sal_uInt16 nSimple;
-        pStrm->QuickRead(&nSimple, 2);
+        sal_uInt16 nSimple = pStrm->QuickReaduInt16();
 
         if (!nSimple)
         {
             m_pUseWhen->Read(pStrm);
 
-            sal_uInt8 nFlag;
-            pStrm->QuickRead(&nFlag, 1);
+            sal_uInt8 nFlag = pStrm->QuickReaduInt8();
             if (nFlag)
-            {
                 m_Positon.ReadIndexed(pStrm);
-            }
         }
 
         m_LayColumns.ReadIndexed(pStrm);
@@ -1994,13 +1989,12 @@ void LwpPlacableLayout::Read()
     }
     else
     {
-        sal_uInt16 simple;
-        pStrm->QuickRead(&simple, sizeof(simple));
+        sal_uInt16 simple = pStrm->QuickReaduInt16();
         if(!simple)
         {
-            pStrm->QuickRead(&m_nWrapType, sizeof(m_nWrapType));
-            pStrm->QuickRead(&m_nBuoyancy, sizeof(m_nBuoyancy));
-            pStrm->QuickRead(&m_nBaseLineOffset, sizeof(m_nBaseLineOffset));
+            m_nWrapType = pStrm->QuickReaduInt8();
+            m_nBuoyancy = pStrm->QuickReaduInt8();
+            m_nBaseLineOffset = pStrm->QuickReadInt32();
             m_Script.Read( pStrm);
         }
         else
@@ -2012,8 +2006,7 @@ void LwpPlacableLayout::Read()
         m_LayRelativity.ReadIndexed( pStrm);
         if(pStrm->CheckExtra())
         {
-            sal_uInt16 count;
-            pStrm->QuickRead(&count, sizeof(count));
+            sal_uInt16 count = pStrm->QuickReaduInt16();
             if(count)
             {
                 // temporily added by  to avoid assertion

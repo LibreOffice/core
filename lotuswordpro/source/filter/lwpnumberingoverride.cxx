@@ -85,13 +85,13 @@ void    LwpNumberingOverride::Read(LwpObjectStream *pStrm)
     {
         ReadCommon(pStrm);
 
-        pStrm->QuickRead(&m_nLevel, sizeof(m_nLevel));
-        pStrm->QuickRead(&m_nPosition, sizeof(m_nPosition));
+        m_nLevel = pStrm->QuickReaduInt16();
+        m_nPosition = pStrm->QuickReaduInt16();
     }
 
     pStrm->SkipExtra();
 }
-//add by , 02/03/2005
+
 void LwpNumberingOverride::Override(LwpNumberingOverride* pOther)
 {
     if (m_nApply & NO_LEVEL)
@@ -148,11 +148,13 @@ void LwpNumberingOverride::OverrideLevel(sal_uInt16 nNewLv)
     m_nLevel = nNewLv;
     LwpOverride::Override(NO_LEVEL, STATE_ON);
 }
+
 void LwpNumberingOverride::OverridePosition(sal_uInt16 nNewPos)
 {
     m_nPosition = nNewPos;
     LwpOverride::Override(NO_POSITION, STATE_ON);
 }
+
 void LwpNumberingOverride::OverrideHeading(sal_Bool bVal)
 {
     if (bVal)

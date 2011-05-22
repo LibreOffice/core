@@ -82,11 +82,11 @@ LwpBorderStuff::LwpBorderStuff()
 
 void    LwpBorderStuff::Read(LwpObjectStream *pStrm)
 {
-    pStrm->QuickRead(&m_nSides, sizeof(m_nSides) );
+    m_nSides = pStrm->QuickReaduInt16();
     if( m_nSides&LEFT )
     {
-        pStrm->QuickRead(&m_nBoderGroupIDLeft, sizeof(m_nBoderGroupIDLeft));
-        pStrm->QuickRead(&m_nWidthLeft, sizeof(m_nWidthLeft));
+        m_nBoderGroupIDLeft = pStrm->QuickReaduInt16();
+        m_nWidthLeft = pStrm->QuickReadInt32();
         m_aColorLeft.Read(pStrm);
 
         if( LwpFileHeader::m_nFileRevision < 0x000b )
@@ -97,8 +97,8 @@ void    LwpBorderStuff::Read(LwpObjectStream *pStrm)
 
     if( m_nSides&RIGHT )
     {
-        pStrm->QuickRead(&m_nBoderGroupIDRight, sizeof(m_nBoderGroupIDRight));
-        pStrm->QuickRead(&m_nWidthRight, sizeof(m_nWidthRight));
+        m_nBoderGroupIDRight = pStrm->QuickReaduInt16();
+        m_nWidthRight = pStrm->QuickReadInt32();
         m_aColorRight.Read(pStrm);
 
         if( LwpFileHeader::m_nFileRevision < 0x000b )
@@ -109,8 +109,8 @@ void    LwpBorderStuff::Read(LwpObjectStream *pStrm)
 
     if( m_nSides&TOP )
     {
-        pStrm->QuickRead(&m_nBoderGroupIDTop, sizeof(m_nBoderGroupIDTop));
-        pStrm->QuickRead(&m_nWidthTop, sizeof(m_nWidthTop));
+        m_nBoderGroupIDTop = pStrm->QuickReaduInt16();
+        m_nWidthTop = pStrm->QuickReadInt32();
         m_aColorTop.Read(pStrm);
 
         if( LwpFileHeader::m_nFileRevision < 0x000b )
@@ -121,8 +121,8 @@ void    LwpBorderStuff::Read(LwpObjectStream *pStrm)
 
     if( m_nSides&BOTTOM )
     {
-        pStrm->QuickRead(&m_nBoderGroupIDBottom, sizeof(m_nBoderGroupIDBottom));
-        pStrm->QuickRead(&m_nWidthBottom, sizeof(m_nWidthBottom));
+        m_nBoderGroupIDBottom = pStrm->QuickReaduInt16();
+        m_nWidthBottom = pStrm->QuickReadInt32();
         m_aColorBottom.Read(pStrm);
 
         if( LwpFileHeader::m_nFileRevision < 0x000b )
@@ -131,8 +131,8 @@ void    LwpBorderStuff::Read(LwpObjectStream *pStrm)
         }
     }
 
-    pStrm->QuickRead( &m_nGroupIndent, sizeof(m_nGroupIndent) );
-    pStrm->QuickRead( &m_nValid, sizeof(m_nValid) );
+    m_nGroupIndent = pStrm->QuickReadInt32();
+    m_nValid = pStrm->QuickReaduInt16();
     pStrm->SkipExtra();
 
     if( LwpFileHeader::m_nFileRevision < 0x0010 )

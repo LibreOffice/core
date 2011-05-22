@@ -72,12 +72,10 @@ void LwpPrinterInfo::Read(LwpObjectStream* pStrm)
   */
 void LwpPrinterInfo::Skip(LwpObjectStream *pStrm)
 {
-    sal_uInt16 platform;
-    pStrm->QuickRead(&platform, sizeof(platform));
+    /*sal_uInt16 platform =*/ pStrm->QuickReaduInt16();
 
     //Skip the size and the buffer
-    sal_uInt32 size;
-    pStrm->QuickRead(&size, sizeof(size));
+    sal_uInt32 size = pStrm->QuickReaduInt32();
     pStrm->SeekRel(static_cast<sal_uInt16>(size));
 
     //Skip others printer infor
@@ -93,8 +91,7 @@ void LwpPrinterInfo::Skip(LwpObjectStream *pStrm)
         toSkip.Skip(pStrm);
     }
 
-    sal_uInt16 count;
-    pStrm->QuickRead(&count, sizeof(count));
+    sal_uInt16 count = pStrm->QuickReaduInt16();
     //Skip each selected division
     LwpAtomHolder toSkip;
     while(count--)

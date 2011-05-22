@@ -123,14 +123,12 @@ public:
         sal_uInt32  GetType(void);
 
 private:
-//      LwpAlignmentPiece m_Alignment;
         LwpAlignmentOverride* m_pAlignment;
 };
 
 inline LwpAlignmentOverride* LwpParaAlignProperty::GetAlignment(void)
 {
-//  return static_cast<LwpAlignmentOverride*>(m_Alignment.m_pOverride);
-    return m_pAlignment; //add by  1-24
+    return m_pAlignment;
 }
 
 class LwpParaIndentProperty : public LwpParaProperty
@@ -140,14 +138,10 @@ public:
         virtual ~LwpParaIndentProperty(void);
         LwpIndentOverride* GetIndent(void);
         sal_uInt32 GetType(void);
-        //add by , 03/22/2005
         inline LwpObjectID GetIndentID();
-        //end add
 
 private:
-        //add by , 03/22/2005
         LwpObjectID m_aIndentID;
-        //end add
         LwpIndentOverride* m_pIndent;
 };
 inline LwpObjectID LwpParaIndentProperty::GetIndentID()
@@ -176,7 +170,6 @@ inline LwpSpacingOverride* LwpParaSpacingProperty::GetSpacing(void)
     return m_pSpacing;
 }
 
-//add by , 01/25/2005////////////////////////////////////////////
 class LwpParaBorderOverride;
 class LwpParaBorderProperty : public LwpParaProperty
 {
@@ -269,8 +262,6 @@ inline LwpNumberingOverride* LwpParaNumberingProperty::GetLocalNumbering() const
 {
     return m_pNumberingOverride;
 }
-//end add/////////////////////////////////////////////////////////////
-
 
 class LwpParaTabRackProperty : public LwpParaProperty
 {
@@ -279,7 +270,7 @@ public:
     ~LwpParaTabRackProperty(void);
     inline sal_uInt32 GetType();
 
-    inline LwpTabOverride* GetTab(); //should add by , note by  1/28
+    inline LwpTabOverride* GetTab();
 
 private:
     LwpTabOverride* m_pTabOverride;

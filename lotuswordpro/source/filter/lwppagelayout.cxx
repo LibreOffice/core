@@ -102,13 +102,11 @@ void LwpPageLayout::Read()
         // read PreRevBLayout...
     }
 
-    m_pObjStrm->QuickRead(&m_nPrinterBin, sizeof(m_nPrinterBin));
+    m_nPrinterBin = m_pObjStrm->QuickReaduInt16();
     m_pPrinterBinName->Read(m_pObjStrm);
 
     if (LwpFileHeader::m_nFileRevision >= 0x000B)
-    {
-        m_pObjStrm->QuickRead(&m_nBdroffset, sizeof(m_nBdroffset));
-    }
+        m_nBdroffset = m_pObjStrm->QuickReadInt32();
 
     if (m_pObjStrm->CheckExtra())
     {
@@ -742,9 +740,7 @@ void LwpHeaderLayout::Read()
     LwpPlacableLayout::Read();
 
     if(LwpFileHeader::m_nFileRevision >= 0x000E)
-    {
-        m_pObjStrm->QuickRead(&m_nBorderOffset, sizeof(m_nBorderOffset));
-    }
+        m_nBorderOffset = m_pObjStrm->QuickReadInt32();
     else
         m_nBorderOffset = 0;
     m_pObjStrm->SkipExtra();
@@ -910,9 +906,7 @@ void LwpFooterLayout::Read()
     LwpPlacableLayout::Read();
 
     if(LwpFileHeader::m_nFileRevision >= 0x000E)
-    {
-        m_pObjStrm->QuickRead(&m_nBorderOffset, sizeof(m_nBorderOffset));
-    }
+        m_nBorderOffset = m_pObjStrm->QuickReadInt32();
     else
         m_nBorderOffset = 0;
     m_pObjStrm->SkipExtra();

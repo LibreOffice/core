@@ -60,13 +60,13 @@
 
 void LwpFontAttrEntry::Read(LwpObjectStream *pStrm)
 {
-    pStrm->QuickRead(&m_nAttrBits, sizeof(m_nAttrBits));
-    pStrm->QuickRead(&m_nAttrOverrideBits, sizeof(m_nAttrOverrideBits));
-    pStrm->QuickRead(&m_nAttrApplyBits, sizeof(m_nAttrApplyBits));
-    pStrm->QuickRead(&m_nAttrOverrideBits2, sizeof(m_nAttrOverrideBits2));
-    pStrm->QuickRead(&m_nAttrApplyBits2, sizeof(m_nAttrApplyBits2));
-    pStrm->QuickRead(&m_nCase, sizeof(m_nCase));
-    pStrm->QuickRead(&m_nUnder, sizeof(m_nUnder));
+    m_nAttrBits = pStrm->QuickReaduInt16();
+    m_nAttrOverrideBits = pStrm->QuickReaduInt16();
+    m_nAttrApplyBits = pStrm->QuickReaduInt16();
+    m_nAttrOverrideBits2 = pStrm->QuickReaduInt8();
+    m_nAttrApplyBits2 = pStrm->QuickReaduInt8();
+    m_nCase = pStrm->QuickReaduInt8();
+    m_nUnder = pStrm->QuickReaduInt8();
     pStrm->SkipExtra();
 }
 
@@ -254,7 +254,7 @@ LwpFontTable::LwpFontTable()
 void LwpFontTable::Read(LwpObjectStream *pStrm)
 {
     m_pFontEntries = NULL;
-    pStrm->QuickRead(&m_nCount, sizeof(m_nCount));
+    m_nCount = pStrm->QuickReaduInt16();
     if(m_nCount>0)
     {
         m_pFontEntries = new LwpFontTableEntry[m_nCount];
@@ -284,18 +284,18 @@ LwpFontTable::~LwpFontTable()
 void LwpFontNameEntry::Read(LwpObjectStream *pStrm)
 {
     //Read CFontDescriptionOverrideBase
-    pStrm->QuickRead(&m_nOverrideBits, sizeof(m_nOverrideBits));
-    pStrm->QuickRead(&m_nApplyBits, sizeof(m_nApplyBits));
-    pStrm->QuickRead(&m_nPointSize, sizeof(m_nPointSize));
-    pStrm->QuickRead(&m_nOverstrike, sizeof(m_nOverstrike));
-    pStrm->QuickRead(&m_nTightness, sizeof(m_nTightness));
+    m_nOverrideBits = pStrm->QuickReaduInt8();
+    m_nApplyBits = pStrm->QuickReaduInt8();
+    m_nPointSize = pStrm->QuickReaduInt32();
+    m_nOverstrike = pStrm->QuickReaduInt16();
+    m_nTightness = pStrm->QuickReaduInt16();
     m_Color.Read(pStrm);
     m_BackColor.Read(pStrm);
     pStrm->SkipExtra();
 
     //Read data of LwpFontNameEntry
-    pStrm->QuickRead(&m_nFaceName, sizeof(m_nFaceName));
-    pStrm->QuickRead(&m_nAltFaceName, sizeof(m_nAltFaceName));
+    m_nFaceName = pStrm->QuickReaduInt16();
+    m_nAltFaceName = pStrm->QuickReaduInt16();
     pStrm->SkipExtra();
 }
 #include "xfilter/xfcolor.hxx"
@@ -381,7 +381,7 @@ LwpFontNameManager::~LwpFontNameManager()
 
 void LwpFontNameManager::Read(LwpObjectStream *pStrm)
 {
-    pStrm->QuickRead(&m_nCount, sizeof(m_nCount));
+    m_nCount = pStrm->QuickReaduInt16();
     if(m_nCount>0)
     {
         m_pFontNames = new LwpFontNameEntry[m_nCount];
@@ -412,19 +412,9 @@ OUString LwpFontNameManager::GetNameByIndex(sal_uInt16 index)
     return (m_FontTbl.GetFaceName(nameindex));
 }
 
-/*void LwpFontNameManager::Override(sal_uInt16 baseID, sal_uInt16 overID, XFFont* pFont)
+void LwpFontAttrManager::Read(LwpObjectStream *pStrm)
 {
-    //Override
-    m_pFontNames[overID-1]. Override(&m_pFontNames[baseID-1], pFont);
-}
-
-void LwpFontAttrManager::Override(sal_uInt16 baseID, sal_uInt16 overID, XFFont*pFont)
-{
-    m_pFontAttrs[overID-1]. Override(&m_pFontAttrs[baseID-1], pFont);
-}*/
-
-void LwpFontAttrManager::Read(LwpObjectStream *pStrm) {
-    pStrm->QuickRead(&m_nCount, sizeof(m_nCount));
+    m_nCount = pStrm->QuickReaduInt16();
     m_pFontAttrs = new LwpFontAttrEntry[m_nCount];
 
     for(sal_uInt16 i=0; i<m_nCount; i++)

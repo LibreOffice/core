@@ -111,8 +111,8 @@ private:
 
 inline void LwpUseWhen::Read(LwpObjectStream* pStrm)
 {
-    pStrm->QuickRead(&m_nFlags, 2);
-    pStrm->QuickRead(&m_nUsePage, 2);
+    m_nFlags = pStrm->QuickReaduInt16();
+    m_nUsePage = pStrm->QuickReaduInt16();
     pStrm->SkipExtra();
 }
 inline sal_Bool LwpUseWhen::IsUseOnAllPages()

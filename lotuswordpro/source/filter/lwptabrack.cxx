@@ -72,11 +72,11 @@ LwpTab::LwpTab()
 
 void    LwpTab::Read(LwpObjectStream *pStrm)
 {
-    pStrm->QuickRead(&m_nX, sizeof(m_nX));
-    pStrm->QuickRead(&m_nType, sizeof(m_nType));
-    pStrm->QuickRead(&m_nLeader, sizeof(m_nLeader));
-    pStrm->QuickRead(&m_nRelativeType, sizeof(m_nRelativeType));
-    pStrm->QuickRead(&m_nAlignChar, sizeof(m_nAlignChar));
+    m_nX = pStrm->QuickReaduInt32();
+    m_nType = pStrm->QuickReaduInt8();
+    m_nLeader = pStrm->QuickReaduInt8();
+    m_nRelativeType = pStrm->QuickReaduInt8();
+    m_nAlignChar = pStrm->QuickReaduInt16();
 }
 
 
@@ -90,7 +90,7 @@ void LwpTabRack::Read()
 //  LwpObjectID     m_NextID;
     m_NextID.ReadIndexed(m_pObjStrm);
 
-    m_pObjStrm->QuickRead(&m_nNumTabs, sizeof(m_nNumTabs));
+    m_nNumTabs = m_pObjStrm->QuickReaduInt16();
     for( int i=0; i<m_nNumTabs; i++ )
     {
         m_aTabs[i].Read(m_pObjStrm);

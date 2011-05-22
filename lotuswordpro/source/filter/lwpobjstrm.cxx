@@ -204,85 +204,116 @@ sal_Bool LwpObjectStream::Seek( sal_uInt16 pos)
 /**
  * @descr  Quick read sal_Bool
  */
-sal_Bool LwpObjectStream::QuickReadBool()
+sal_Bool LwpObjectStream::QuickReadBool(bool *pFailure)
 {
-    sal_uInt16 nValue;
-    QuickRead(&nValue, 2);
-    return (sal_Bool)(nValue != 0);
+    SVBT16 aValue = {0};
+    sal_uInt16 nRead = QuickRead(aValue, sizeof(aValue));
+    if (pFailure)
+        *pFailure = (nRead != sizeof(aValue));
+    return static_cast<sal_Bool>(SVBT16ToShort(aValue));
 }
 /**
  * @descr  Quick read sal_uInt32
  */
-sal_uInt32 LwpObjectStream::QuickReaduInt32()
+sal_uInt32 LwpObjectStream::QuickReaduInt32(bool *pFailure)
 {
-    sal_uInt32 nValue;
-    QuickRead(&nValue, sizeof(nValue));
-    return nValue;
+    SVBT32 aValue = {0};
+    sal_uInt16 nRead = QuickRead(aValue, sizeof(aValue));
+    if (pFailure)
+        *pFailure = (nRead != sizeof(aValue));
+    return SVBT32ToUInt32(aValue);
 }
 /**
  * @descr  Quick read sal_uInt32
  */
-sal_uInt16 LwpObjectStream::QuickReaduInt16()
+sal_uInt16 LwpObjectStream::QuickReaduInt16(bool *pFailure)
 {
-    sal_uInt16 nValue;
-    QuickRead(&nValue, sizeof(nValue));
-    return nValue;
+    SVBT16 aValue = {0};
+    sal_uInt16 nRead = QuickRead(aValue, sizeof(aValue));
+    if (pFailure)
+        *pFailure = (nRead != sizeof(aValue));
+    return SVBT16ToShort(aValue);
 }
 /**
  * @descr  Quick read sal_Int32
  */
-sal_Int32 LwpObjectStream::QuickReadInt32()
+sal_Int32 LwpObjectStream::QuickReadInt32(bool *pFailure)
 {
-    sal_Int32 nValue;
-    QuickRead(&nValue, sizeof(nValue));
-    return nValue;
+    SVBT32 aValue = {0};
+    sal_uInt16 nRead = QuickRead(aValue, sizeof(aValue));
+    if (pFailure)
+        *pFailure = (nRead != sizeof(aValue));
+    return static_cast<sal_Int32>(SVBT32ToUInt32(aValue));
 }
 /**
  * @descr  Quick read sal_Int16
  */
-sal_Int16 LwpObjectStream::QuickReadInt16()
+sal_Int16 LwpObjectStream::QuickReadInt16(bool *pFailure)
 {
-    sal_Int16 nValue;
-    QuickRead(&nValue, sizeof(nValue));
-    return nValue;
+    SVBT16 aValue = {0};
+    sal_uInt16 nRead = QuickRead(aValue, sizeof(aValue));
+    if (pFailure)
+        *pFailure = (nRead != sizeof(aValue));
+
+    return static_cast<sal_Int16>(SVBT16ToShort(aValue));
 }
 /**
  * @descr  Quick read sal_Int8
  */
-sal_Int8 LwpObjectStream::QuickReadInt8()
+sal_Int8 LwpObjectStream::QuickReadInt8(bool *pFailure)
 {
-    sal_Int8 nValue;
-    QuickRead(&nValue, sizeof(nValue));
-    return nValue;
+    SVBT8 aValue = {0};
+    sal_uInt16 nRead = QuickRead(aValue, sizeof(aValue));
+    if (pFailure)
+        *pFailure = (nRead != sizeof(aValue));
+    return static_cast<sal_Int8>(SVBT8ToByte(aValue));
 }
 /**
  * @descr  Quick read sal_uInt8
  */
-sal_uInt8 LwpObjectStream::QuickReaduInt8()
+sal_uInt8 LwpObjectStream::QuickReaduInt8(bool *pFailure)
 {
-    sal_uInt8 nValue;
-    QuickRead(&nValue, sizeof(nValue));
-    return nValue;
+    SVBT8 aValue = {0};
+    sal_uInt16 nRead = QuickRead(aValue, sizeof(aValue));
+    if (pFailure)
+        *pFailure = (nRead != sizeof(aValue));
+    return SVBT8ToByte(aValue);
+}
+/**
+ * @descr  Quick read double
+ */
+double LwpObjectStream::QuickReadDouble(bool *pFailure)
+{
+    union
+    {
+        double d;
+        sal_uInt8 c[8];
+    } s;
+    memset(s.c, 0, sizeof(s.c));
+    sal_uInt16 nRead = QuickRead(s.c, sizeof(s.c));
+    if (pFailure)
+        *pFailure = (nRead != sizeof(s.c));
+#if defined(OSL_BIGENDIAN)
+    for (size_t i = 0; i < 4; ++i)
+        std::swap(s.c[i], s.c[7-i]);
+#endif
+    return s.d;
 }
 /**
  * @descr  skip extra bytes
  */
 void LwpObjectStream::SkipExtra()
 {
-    sal_uInt16 extra(0);
-
-    QuickRead(&extra, sizeof(extra));
+    sal_uInt16 extra = QuickReaduInt16();
     while (extra != 0)
-        QuickRead(&extra, sizeof(extra));
+        extra = QuickReaduInt16();
 }
 /**
  * @descr  check if extra bytes
  */
 sal_uInt16 LwpObjectStream::CheckExtra()
 {
-    sal_uInt16 extra;
-    QuickRead(&extra, sizeof(extra));
-    return extra;
+    return QuickReaduInt16();
 }
 /**
  * @descr  decompress data buffer from pSrc to pDst

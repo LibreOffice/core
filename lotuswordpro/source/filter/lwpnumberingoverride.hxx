@@ -81,7 +81,6 @@ public:
 public:
     virtual void Read(LwpObjectStream *pStrm);
 
-    //add by , 02/03/2005
     void Override(LwpNumberingOverride* pOther);
 
     inline sal_uInt16 GetLevel() const;
@@ -126,7 +125,6 @@ inline sal_uInt16 LwpNumberingOverride::GetPosition() const
     return m_nPosition;
 }
 
-//add by , 02/03/2005
 inline sal_Bool LwpNumberingOverride::IsLevelOverridden()
 {
     return (sal_Bool)((m_nOverride & NO_LEVEL) != 0);

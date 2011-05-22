@@ -74,8 +74,7 @@ LwpUserDictFiles::LwpUserDictFiles(LwpObjectStream *pStrm)
  **/
 void LwpUserDictFiles::Read(LwpObjectStream *pStrm)
 {
-    sal_uInt16 cnt;
-    pStrm->QuickRead(&cnt, sizeof(cnt));
+    sal_uInt16 cnt = pStrm->QuickReaduInt16();
     LwpAtomHolder word;
     while(cnt--)
     {

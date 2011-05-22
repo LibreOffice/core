@@ -161,8 +161,8 @@ LwpFootnote::~LwpFootnote()
 void LwpFootnote::Read()
 {
     LwpOrderedObject::Read();
-    m_pObjStrm->QuickRead(&m_nType, sizeof(m_nType));
-    m_pObjStrm->QuickRead(&m_nRow, sizeof(m_nRow));
+    m_nType = m_pObjStrm->QuickReaduInt16();
+    m_nRow = m_pObjStrm->QuickReaduInt16();
     m_Content.ReadIndexed(m_pObjStrm);
     m_pObjStrm->SkipExtra();
 }
@@ -451,8 +451,8 @@ void LwpFootnoteTable::Read()
  */
 void LwpFootnoteNumberOptions::Read(LwpObjectStream *pObjStrm)
 {
-    pObjStrm->QuickRead(&m_nFlag, sizeof(m_nFlag));
-    pObjStrm->QuickRead(&m_nStartingNumber, sizeof(m_nStartingNumber));
+    m_nFlag = pObjStrm->QuickReaduInt16();
+    m_nStartingNumber = pObjStrm->QuickReaduInt16();
     m_LeadingText.Read(pObjStrm);
     m_TrailingText.Read(pObjStrm);
     pObjStrm->SkipExtra();
@@ -463,14 +463,13 @@ void LwpFootnoteNumberOptions::Read(LwpObjectStream *pObjStrm)
  */
 void LwpFootnoteSeparatorOptions::Read(LwpObjectStream *pObjStrm)
 {
-    pObjStrm->QuickRead(&m_nFlag, sizeof(m_nFlag));
-    pObjStrm->QuickRead(&m_nLength, sizeof(m_nLength));
-    pObjStrm->QuickRead(&m_nIndent, sizeof(m_nIndent));
-    pObjStrm->QuickRead(&m_nAbove, sizeof(m_nAbove));
-    pObjStrm->QuickRead(&m_nBelow, sizeof(m_nBelow));
+    m_nFlag = pObjStrm->QuickReaduInt16();
+    m_nLength = pObjStrm->QuickReaduInt32();
+    m_nIndent = pObjStrm->QuickReaduInt32();
+    m_nAbove = pObjStrm->QuickReaduInt32();
+    m_nBelow = pObjStrm->QuickReaduInt32();
     m_BorderStuff.Read(pObjStrm);
     pObjStrm->SkipExtra();
-
 }
 
 
@@ -489,7 +488,7 @@ LwpFootnoteOptions::~LwpFootnoteOptions()
  */
 void LwpFootnoteOptions::Read()
 {
-    m_pObjStrm->QuickRead(&m_nFlag, sizeof(m_nFlag));
+    m_nFlag = m_pObjStrm->QuickReaduInt16();
     m_FootnoteNumbering.Read(m_pObjStrm);
     m_EndnoteDivisionNumbering.Read(m_pObjStrm);
     m_EndnoteDivisionGroupNumbering.Read(m_pObjStrm);

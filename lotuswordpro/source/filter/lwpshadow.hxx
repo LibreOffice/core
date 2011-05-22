@@ -71,8 +71,8 @@ public:
     void Read(LwpObjectStream *pStrm)
     {
         m_aColor.Read(pStrm);
-        pStrm->QuickRead(&m_nDirX, sizeof(m_nDirX));
-        pStrm->QuickRead(&m_nDirY, sizeof(m_nDirY));
+        m_nDirX = pStrm->QuickReadInt32();
+        m_nDirY = pStrm->QuickReadInt32();
         pStrm->SkipExtra();
     }
 

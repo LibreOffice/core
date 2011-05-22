@@ -339,11 +339,11 @@ void LwpFrib::ReadModifiers(LwpObjectStream* pObjStrm,ModifierInfo* pModInfo)
 {
     for(;;)
     {
-        sal_uInt8 Modifier(0);
-        sal_uInt8 len(0);
+        bool bFailure;
 
         // Get the modifier type
-        if (pObjStrm->QuickRead(&Modifier, sizeof(Modifier)) != sizeof(Modifier))
+        sal_uInt8 Modifier = pObjStrm->QuickReaduInt8(&bFailure);
+        if (bFailure)
             break;
 
         // Stop when we hit the last modifier
@@ -351,19 +351,20 @@ void LwpFrib::ReadModifiers(LwpObjectStream* pObjStrm,ModifierInfo* pModInfo)
             break;
 
         // Get the modifier length
-        if (pObjStrm->QuickRead(&len, sizeof(len)) != sizeof(len))
+        sal_uInt8 len = pObjStrm->QuickReaduInt8(&bFailure);
+        if (bFailure)
             break;
 
         switch (Modifier)
         {
             case FRIB_MTAG_FONT:
-                if (len > sizeof(pModInfo->FontID))
+                if (len != sizeof(pModInfo->FontID))
                 {
                     OSL_FAIL("FRIB_MTAG_FONT entry wrong size\n");
                     pObjStrm->SeekRel(len);
                 }
                 else
-                    pObjStrm->QuickRead(&pModInfo->FontID,len);
+                    pModInfo->FontID = pObjStrm->QuickReaduInt32();
                 break;
             case FRIB_MTAG_CHARSTYLE:
                 pModInfo->HasCharStyle = sal_True;
@@ -374,13 +375,13 @@ void LwpFrib::ReadModifiers(LwpObjectStream* pObjStrm,ModifierInfo* pModInfo)
                 pModInfo->Language.Read(pObjStrm);
                 break;
             case FRIB_MTAG_CODEPAGE:
-                if (len > sizeof(pModInfo->CodePage))
+                if (len != sizeof(pModInfo->CodePage))
                 {
                     OSL_FAIL("FRIB_MTAG_CODEPAGE entry wrong size\n");
                     pObjStrm->SeekRel(len);
                 }
                 else
-                    pObjStrm->QuickRead(&pModInfo->CodePage,len);
+                    pModInfo->CodePage = pObjStrm->QuickReaduInt16();
                 break;
             case FRIB_MTAG_ATTRIBUTE:
                 pModInfo->aTxtAttrOverride.Read(pObjStrm);

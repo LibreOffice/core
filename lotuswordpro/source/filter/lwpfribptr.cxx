@@ -107,17 +107,13 @@ LwpFribPtr::~LwpFribPtr()
 
 void LwpFribPtr::ReadPara(LwpObjectStream* pObjStrm)
 {
-    sal_uInt8 FribTag=0;
-    sal_uInt8 FribType;
-    sal_uInt8 FribEditor;
-
     LwpFrib* pCurFrib = m_pFribs = NULL;
     for(;;)
     {
         // Get the frib type
-        pObjStrm->QuickRead(&FribTag, sizeof(FribTag));
+        sal_uInt8 FribTag = pObjStrm->QuickReaduInt8();
 
-        FribType = FribTag & ~FRIB_TAG_TYPEMASK;
+        sal_uInt8 FribType = FribTag & ~FRIB_TAG_TYPEMASK;
 
         // Stop when we hit Elvis
         if (FribType == FRIB_TAG_ELVIS)
@@ -125,7 +121,7 @@ void LwpFribPtr::ReadPara(LwpObjectStream* pObjStrm)
 
         // skip the editor ID
         //pObjStrm->SeekRel(sizeof(sal_uInt8));
-        pObjStrm->QuickRead(&FribEditor, sizeof(FribEditor));
+        sal_uInt8 FribEditor = pObjStrm->QuickReaduInt8();
         if( FribType != FT_MAXIMUM )
         {
             LwpFrib* pFrib = LwpFrib::CreateFrib( m_pPara, pObjStrm, FribTag,FribEditor);

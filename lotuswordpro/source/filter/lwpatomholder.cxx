@@ -72,9 +72,8 @@ void LwpAtomHolder::Read(LwpObjectStream *pStrm)
 {
     //Refered to lwp: file40.cpp, QuickReadAtomHolder()
 
-    sal_uInt16 len, diskSize;
-    pStrm->QuickRead(&diskSize, sizeof(diskSize));
-    pStrm->QuickRead(&len, sizeof(len));
+    sal_uInt16 diskSize = pStrm->QuickReaduInt16();
+    sal_uInt16 len = pStrm->QuickReaduInt16();
 
     if (len == 0 || diskSize == 0) {
         m_nAtom = BAD_ATOM;
@@ -92,8 +91,7 @@ void LwpAtomHolder::Read(LwpObjectStream *pStrm)
 */
 void LwpAtomHolder::Skip(LwpObjectStream *pStrm)
 {
-    sal_uInt16 holdersize;
-    pStrm->QuickRead(&holdersize, sizeof(holdersize));
+    sal_uInt16 holdersize = pStrm->QuickReaduInt16();
     pStrm->SeekRel(holdersize);
     m_nAtom = m_nAssocAtom = BAD_ATOM;
 }

@@ -85,8 +85,7 @@ void LwpUIDocument::Read(LwpObjectStream *pStrm)
     m_MergedOpts.Read(pStrm);
     m_SheetFullPath.ReadPathAtom(pStrm);
 
-    sal_uInt16 saved_flags;
-    pStrm->QuickRead(&saved_flags, sizeof(saved_flags));
+    sal_uInt16 saved_flags = pStrm->QuickReaduInt16();
     m_nFlags  |= saved_flags;
 
     if(pStrm->CheckExtra())
@@ -100,8 +99,7 @@ void LwpUIDocument::Read(LwpObjectStream *pStrm)
  **/
 void LwpNamedProperties::Read(LwpObjectStream *pStrm)
 {
-    sal_uInt16 numEntries;
-    pStrm->QuickRead(&numEntries, sizeof(numEntries));
+    sal_uInt16 numEntries = pStrm->QuickReaduInt16();
 
     for (sal_uInt16 k = 0 ; k < numEntries; k++)
     {
@@ -118,7 +116,7 @@ void LwpAutoRunMacroOptions::Read(LwpObjectStream *pStrm)
     m_OpenName.ReadPathAtom(pStrm);
     m_CloseName.ReadPathAtom(pStrm);
     m_NewName.ReadPathAtom(pStrm);
-    pStrm->QuickRead(&m_OptionFlag, sizeof(m_OptionFlag));
+    m_OptionFlag = pStrm->QuickReaduInt16();
     pStrm->SkipExtra();
 }
 /**
@@ -129,13 +127,13 @@ void LwpMergeOptions::Read(LwpObjectStream *pStrm)
     m_RecordFile.ReadPathAtom(pStrm);
     m_DescriptionFile.ReadPathAtom(pStrm);
     m_Filter.Read(pStrm);
-    pStrm->QuickRead(&m_nType, sizeof(m_nType));
+    m_nType = pStrm->QuickReaduInt16();
 
     //Does not process m_nType here. Assume m_nType is 0.
     // TODO: Read the CMergeDataFile
     assert(m_nType==0);
 
-    pStrm->QuickRead(&m_nLastActionFlag, sizeof(m_nLastActionFlag));
+    m_nLastActionFlag = pStrm->QuickReaduInt16();
     pStrm->SkipExtra();
 }
 

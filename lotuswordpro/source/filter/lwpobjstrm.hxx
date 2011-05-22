@@ -96,18 +96,16 @@ public:
     void SkipExtra();
     sal_uInt16 CheckExtra();
 
-    //01/14/2005
-    sal_Bool QuickReadBool();
-    sal_uInt32 QuickReaduInt32();
-    sal_uInt16 QuickReaduInt16();
-    sal_uInt8 QuickReaduInt8();
-    sal_Int32 QuickReadInt32();
-    sal_Int16 QuickReadInt16();
-    sal_Int8 QuickReadInt8();
-    //end
+    sal_Bool QuickReadBool(bool *pFailure=NULL);
+    sal_uInt32 QuickReaduInt32(bool *pFailure=NULL);
+    sal_uInt16 QuickReaduInt16(bool *pFailure=NULL);
+    sal_uInt8 QuickReaduInt8(bool *pFailure=NULL);
+    sal_Int32 QuickReadInt32(bool *pFailure=NULL);
+    sal_Int16 QuickReadInt16(bool *pFailure=NULL);
+    sal_Int8 QuickReadInt8(bool *pFailure=NULL);
+    double QuickReadDouble(bool *pFailure=NULL);
 
-    OUString QuickReadStringPtr(void);
-    //void QuickReadString(unsigned char *pString, sal_uInt16 len);
+    OUString QuickReadStringPtr();
     void QuickReadStringWithMax(unsigned char * pString, sal_uInt16 MaxLen);
 
 public:

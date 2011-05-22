@@ -90,7 +90,7 @@ void LwpDivInfo::Read()
     }
 
     m_LayoutID.ReadIndexed(m_pObjStrm);
-    m_pObjStrm->QuickRead(&m_nFlags, sizeof(m_nFlags));
+    m_nFlags = m_pObjStrm->QuickReaduInt16();
     if (LwpFileHeader::m_nFileRevision < 0x0010)  // In 98, graphic links count too
     {
         if ((m_nFlags & DI_ANYOLEDDELINKS) == 0)
@@ -102,15 +102,14 @@ void LwpDivInfo::Read()
     m_ClassName.Read(m_pObjStrm);
     m_InitialLayoutID.ReadIndexed(m_pObjStrm);
 
-    m_pObjStrm->QuickRead(&m_nPageNoStyle, sizeof(m_nPageNoStyle));
+    m_nPageNoStyle = m_pObjStrm->QuickReaduInt16();
     m_TabColor.Read(m_pObjStrm);
 
     // read filler page stuff
     m_FillerPageTextID.ReadIndexed(m_pObjStrm);
 
     // read external file object stuff
-    sal_uInt16 type;
-    m_pObjStrm->QuickRead(&type, sizeof(type));
+    /*sal_uInt16 type =*/ m_pObjStrm->QuickReaduInt16();
     //cpExternalFile = LNULL;
 
     assert(type==0);

@@ -65,11 +65,11 @@ LwpLineNumberOptions::LwpLineNumberOptions(LwpObjectStream* pStrm)
  */
 void LwpLineNumberOptions::Read(LwpObjectStream *pStrm)
 {
-    pStrm->QuickRead(&m_nType, sizeof(m_nType));
-    pStrm->QuickRead(&m_nFlags, sizeof(m_nFlags));
-    pStrm->QuickRead(&m_nSeparator, sizeof(m_nSeparator));
-    pStrm->QuickRead(&m_nSpacing, sizeof(m_nSpacing));
-    pStrm->QuickRead(&m_nDistance, sizeof(m_nDistance));
+    m_nType = pStrm->QuickReaduInt16();
+    m_nFlags = pStrm->QuickReaduInt16();
+    m_nSeparator = pStrm->QuickReaduInt16();
+    m_nSpacing = pStrm->QuickReaduInt32();
+    m_nDistance = pStrm->QuickReaduInt32();
     pStrm->SkipExtra();
 }
 /**

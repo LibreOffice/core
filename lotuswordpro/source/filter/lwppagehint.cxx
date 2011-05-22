@@ -95,20 +95,20 @@ void LwpPageHint::Read()
     m_PageLayout.ReadIndexed(m_pObjStrm);
     //m_ContentHints.ReadIndexed(m_pObjStrm);
     m_ContentHints.Read(m_pObjStrm);
-    m_pObjStrm->QuickRead(&m_nLastFootnoteSeen,sizeof(m_nLastFootnoteSeen));
-    m_pObjStrm->QuickRead(&m_nLastFootnoteProcessed,sizeof(m_nLastFootnoteProcessed));
-    m_pObjStrm->QuickRead(&m_nFlags,sizeof(m_nFlags));
-    m_pObjStrm->QuickRead(&m_nPageNumber,sizeof(m_nPageNumber));
-    m_pObjStrm->QuickRead(&m_nNumberStyle,sizeof(m_nNumberStyle));
+    m_nLastFootnoteSeen = m_pObjStrm->QuickReaduInt16();
+    m_nLastFootnoteProcessed = m_pObjStrm->QuickReaduInt16();
+    m_nFlags = m_pObjStrm->QuickReaduInt16();
+    m_nPageNumber = m_pObjStrm->QuickReaduInt16();
+    m_nNumberStyle = m_pObjStrm->QuickReaduInt16();
     m_BeforeText.Read(m_pObjStrm);
     m_AfterText.Read(m_pObjStrm);
-    m_pObjStrm->QuickRead(&m_nNumberFlags,sizeof(m_nNumberFlags));
-    m_pObjStrm->QuickRead(&m_nRenderedPageNumber,sizeof(m_nRenderedPageNumber));
+    m_nNumberFlags = m_pObjStrm->QuickReaduInt8();
+    m_nRenderedPageNumber = m_pObjStrm->QuickReaduInt16();
     m_CurrentSection.ReadIndexed(m_pObjStrm);
-    m_pObjStrm->QuickRead(&m_nCurrentSectionPage,sizeof(m_nCurrentSectionPage));
+    m_nCurrentSectionPage = m_pObjStrm->QuickReaduInt16();
     //m_FootnoteSeen.ReadIndexed(m_pObjStrm);
     m_FootnoteSeen.Read(m_pObjStrm);
-    m_pObjStrm->QuickRead(&m_nLayoutPageNumber,sizeof(m_nLayoutPageNumber));
+    m_nLayoutPageNumber = m_pObjStrm->QuickReaduInt16();
 
     m_pObjStrm->SkipExtra();
 }

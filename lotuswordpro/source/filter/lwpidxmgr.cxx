@@ -152,8 +152,7 @@ void LwpIndexManager::Read(LwpSvStream* pStrm)
 void LwpIndexManager::ReadRootData(LwpObjectStream* pObjStrm)
 {
 
-    sal_uInt16 KeyCount = 0;
-    pObjStrm->QuickRead(&KeyCount, sizeof(KeyCount));
+    sal_uInt16 KeyCount = pObjStrm->QuickReaduInt16();
     m_nLeafCount = KeyCount ? KeyCount + 1 : 0;
 
     if(KeyCount)
@@ -174,15 +173,11 @@ void LwpIndexManager::ReadRootData(LwpObjectStream* pObjStrm)
         }
 
         for (k = 0; k < KeyCount; k++)
-        {
-            pObjStrm->QuickRead(&(m_RootObjs[k]->offset), sizeof(sal_uInt32));
-        }
+            m_RootObjs[k]->offset = pObjStrm->QuickReaduInt32();
 
         //read leaf index offset
         for (k = 0; k < m_nLeafCount; k++)
-        {
-            pObjStrm->QuickRead(&(m_ChildIndex[k]), sizeof(sal_uInt32));
-        }
+            m_ChildIndex[k] = pObjStrm->QuickReaduInt32();
     }
 
     ReadTimeTable(pObjStrm);
@@ -196,10 +191,8 @@ void LwpIndexManager::ReadRootData(LwpObjectStream* pObjStrm)
  */
 void LwpIndexManager::ReadObjIndexData(LwpObjectStream* pObjStrm)
 {
-    sal_uInt16 KeyCount = 0;
-    sal_uInt16 LeafCount = 0;
-    pObjStrm->QuickRead(&KeyCount, sizeof(KeyCount));
-    LeafCount = KeyCount + 1;
+    sal_uInt16 KeyCount = pObjStrm->QuickReaduInt16();
+    sal_uInt16 LeafCount = KeyCount + 1;
 
     std::vector<LwpKey*> vObjIndexs;
 
@@ -219,12 +212,10 @@ void LwpIndexManager::ReadObjIndexData(LwpObjectStream* pObjStrm)
         }
 
         for (k = 0; k < KeyCount; k++)
-        {
-            pObjStrm->QuickRead(&(vObjIndexs[k]->offset), sizeof(sal_uInt32));
-        }
+            vObjIndexs[k]->offset = pObjStrm->QuickReaduInt32();
 
         for (k = 0; k < LeafCount; k++)
-            pObjStrm->QuickRead(&(m_TempVec[k]), sizeof(sal_uInt32));
+            m_TempVec[k] = pObjStrm->QuickReaduInt32();
     }
 
     for( sal_uInt16 j=0; j<LeafCount; j++ )
@@ -294,8 +285,7 @@ void LwpIndexManager::ReadLeafIndex( LwpSvStream *pStrm )
  */
 void LwpIndexManager::ReadLeafData( LwpObjectStream *pObjStrm )
 {
-    sal_uInt16 KeyCount=0;
-    pObjStrm->QuickRead(&KeyCount, sizeof(KeyCount));
+    sal_uInt16 KeyCount = pObjStrm->QuickReaduInt16();
 
     if(KeyCount)
     {
@@ -312,9 +302,7 @@ void LwpIndexManager::ReadLeafData( LwpObjectStream *pObjStrm )
         }
 
         for (sal_uInt8 j = 0; j < KeyCount; j++)
-        {
-            pObjStrm->QuickRead(&(m_ObjectKeys.at(m_nKeyCount+j)->offset), sizeof(sal_uInt32));
-        }
+            m_ObjectKeys.at(m_nKeyCount+j)->offset = pObjStrm->QuickReaduInt32();
     }
     m_nKeyCount += KeyCount;
 }
@@ -323,13 +311,11 @@ void LwpIndexManager::ReadLeafData( LwpObjectStream *pObjStrm )
  */
 void LwpIndexManager::ReadTimeTable(LwpObjectStream *pObjStrm)
 {
-    sal_uInt16 nTimeCount;
-    pObjStrm->QuickRead(&nTimeCount, sizeof(nTimeCount));
+    sal_uInt16 nTimeCount = pObjStrm->QuickReaduInt16();
 
-    sal_uInt32 atime;
-    for(sal_uInt16 i=0; i<nTimeCount; i++)
+    for(sal_uInt16 i=0; i<nTimeCount; ++i)
     {
-        pObjStrm->QuickRead( &atime, sizeof(atime) );
+        sal_uInt32 atime = pObjStrm->QuickReaduInt32();
         m_TimeTable.push_back(atime);
     }
 }

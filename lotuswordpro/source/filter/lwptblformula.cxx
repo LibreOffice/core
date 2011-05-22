@@ -102,8 +102,7 @@ LwpFormulaInfo::~LwpFormulaInfo()
 */
 sal_Bool LwpFormulaInfo::ReadConst()
 {
-    double Constant;
-    m_pObjStrm->QuickRead(&Constant, sizeof(Constant));
+    double Constant = m_pObjStrm->QuickReadDouble();
 
     m_aStack.push_back( new LwpFormulaConst(Constant) );
 
@@ -118,9 +117,8 @@ sal_Bool LwpFormulaInfo::ReadConst()
 */
 sal_Bool LwpFormulaInfo::ReadText()
 {
-    sal_uInt16 nStrLen;
     m_pObjStrm->QuickReadInt16(); //Disk Size
-    nStrLen = m_pObjStrm->QuickReadInt16();
+    sal_uInt16 nStrLen = m_pObjStrm->QuickReadInt16();
 
     boost::scoped_array<char> pBuf(new char[nStrLen+1]);
     m_pObjStrm->QuickRead( pBuf.get(), nStrLen );

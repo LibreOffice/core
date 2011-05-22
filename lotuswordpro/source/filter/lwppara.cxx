@@ -152,16 +152,13 @@ void LwpPara::Read()
 
     sal_Bool Simple;
     sal_Bool Notify = sal_False;
-//  m_Fribs.SetPara(this);
-//  LwpParaPropListProperty *PropList = NULL;
     if(LwpFileHeader::m_nFileRevision<0x0006)
         Simple = sal_False;
     else if(LwpFileHeader::m_nFileRevision<0x000B)
-        m_pObjStrm->QuickRead(&Simple, sizeof(Simple));
+        Simple = m_pObjStrm->QuickReaduInt8();
     else
     {
-        sal_uInt8 Flag;
-        m_pObjStrm->QuickRead(&Flag, sizeof(Flag));
+        sal_uInt8 Flag = m_pObjStrm->QuickReaduInt8();
 
         const int DISK_SIMPLE = 1;
         const int DISK_NOTIFY = 2;
@@ -172,7 +169,7 @@ void LwpPara::Read()
 
     if(!Simple)
     {
-        m_pObjStrm->QuickRead(&m_nOrdinal, sizeof(m_nOrdinal));
+        m_nOrdinal = m_pObjStrm->QuickReaduInt32();
         if(LwpFileHeader::m_nFileRevision<0x000B)
         {
             // TODO: to process
@@ -200,7 +197,7 @@ void LwpPara::Read()
     else
         m_nOrdinal = 0x0001;
 
-    m_pObjStrm->QuickRead(&m_nFlags, sizeof(m_nFlags));
+    m_nFlags = m_pObjStrm->QuickReaduInt16();
     m_ParaStyle.ReadIndexed(m_pObjStrm);
 
     if(!Simple)
@@ -228,7 +225,7 @@ void LwpPara::Read()
                 PropList = LNULL;
             }*/
         }
-        m_pObjStrm->QuickRead(&m_nLevel, sizeof(m_nLevel));
+        m_nLevel = m_pObjStrm->QuickReaduInt16();
 
         // test
         if (m_nLevel > 9)

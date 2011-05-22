@@ -125,9 +125,10 @@ sal_uInt16 LwpTools::QuickReadUnicode(LwpObjectStream* pObjStrm,
         {
             if(!flag)   //Not unicode string
             {
-                len = pObjStrm->QuickRead(&readbyte, sizeof(readbyte));
-                if(!len) break;
-                readLen+=len;
+                bool bFailure;
+                readbyte = pObjStrm->QuickReaduInt8(&bFailure);
+                if(bFailure) break;
+                readLen+=sizeof(readbyte);
 
                 if(readbyte == 0x00)
                 {
@@ -150,9 +151,10 @@ sal_uInt16 LwpTools::QuickReadUnicode(LwpObjectStream* pObjStrm,
             }
             else        //unicode string
             {
-                len = pObjStrm->QuickRead(&readword, sizeof(readword));
-                if(!len) break;
-                readLen+=len;
+                bool bFailure;
+                readword = pObjStrm->QuickReaduInt16(&bFailure);
+                if(bFailure) break;
+                readLen+=sizeof(readword);
 
                 if(readword == 0x0000)
                 {
@@ -176,12 +178,6 @@ sal_uInt16 LwpTools::QuickReadUnicode(LwpObjectStream* pObjStrm,
                 }
             }
         }
-//      if(sublen)
-//      {
-//          unibuf[sublen] = sal_Unicode('\0');
-//          strBuf.append( OUString(unibuf) );
-//          sublen = 0;
-//      }
         str = strBuf.makeStringAndClear();
         return readLen;
     }
@@ -197,7 +193,7 @@ sal_Bool LwpTools::IsUnicodePacked(LwpObjectStream* pObjStrm, sal_uInt16 len)
 
     for (sal_uInt16 i = 0; i < len; i++)
     {
-        pObjStrm->QuickRead(&byte, sizeof(byte));
+        byte = pObjStrm->QuickReaduInt8();
         if (byte == 0x00)
         {
             pObjStrm->Seek(oldpos);

@@ -66,9 +66,9 @@
 
 void LwpSortKey::Read(LwpObjectStream *pStrm)
 {
-    pStrm->QuickRead(&m_nField, sizeof(m_nField));
-    pStrm->QuickRead(&m_nFlag, sizeof(m_nFlag));
-    pStrm->QuickRead(&m_nWord, sizeof(m_nWord));
+    m_nField = pStrm->QuickReaduInt16();
+    m_nFlag = pStrm->QuickReaduInt16();
+    m_nWord = pStrm->QuickReaduInt16();
     pStrm->SkipExtra();
 }
 LwpSortOption::LwpSortOption(LwpObjectStream* pStrm)
@@ -80,9 +80,9 @@ LwpSortOption::LwpSortOption(LwpObjectStream* pStrm)
  **/
 void LwpSortOption::Read(LwpObjectStream *pStrm)
 {
-    pStrm->QuickRead(&m_nCount, sizeof(m_nCount));
-    pStrm->QuickRead(&m_nFlags, sizeof(m_nFlags));
-    pStrm->QuickRead(&m_nText, sizeof(m_nText));
+    m_nCount = pStrm->QuickReaduInt16();
+    m_nFlags = pStrm->QuickReaduInt16();
+    m_nText = pStrm->QuickReaduInt8();
     for(sal_uInt8 i=0; i<3; i++)
     {
         m_Keys[i].Read(pStrm);

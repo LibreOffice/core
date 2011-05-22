@@ -59,29 +59,31 @@
 */
 void LwpPanoseNumber::Read(LwpObjectStream *pStrm)
 {
-    pStrm->QuickRead(&m_nFamilyType, sizeof(m_nFamilyType));
-    pStrm->QuickRead(&m_nSerifStyle, sizeof(m_nSerifStyle));
-    pStrm->QuickRead(&m_nWeight, sizeof(m_nWeight));
-    pStrm->QuickRead(&m_nProportion, sizeof(m_nProportion));
-    pStrm->QuickRead(&m_nContrast, sizeof(m_nContrast));
-    pStrm->QuickRead(&m_nStrokeVariation, sizeof(m_nStrokeVariation));
-    pStrm->QuickRead(&m_nArmStyle, sizeof(m_nArmStyle));
-    pStrm->QuickRead(&m_nLetterform, sizeof(m_nLetterform));
-    pStrm->QuickRead(&m_nMidline, sizeof(m_nMidline));
-    pStrm->QuickRead(&m_nXHeight, sizeof(m_nXHeight));
+    m_nFamilyType = pStrm->QuickReaduInt8();
+    m_nSerifStyle = pStrm->QuickReaduInt8();
+    m_nWeight = pStrm->QuickReaduInt8();
+    m_nProportion = pStrm->QuickReaduInt8();
+    m_nContrast = pStrm->QuickReaduInt8();
+    m_nStrokeVariation = pStrm->QuickReaduInt8();
+    m_nArmStyle = pStrm->QuickReaduInt8();
+    m_nLetterform = pStrm->QuickReaduInt8();
+    m_nMidline = pStrm->QuickReaduInt8();
+    m_nXHeight = pStrm->QuickReaduInt8();
 
 }
+
 LwpPoint::LwpPoint()
 {
     Reset();
 }
+
 /**
  * @descr       read point from object stream
 */
 void LwpPoint::Read(LwpObjectStream *pStrm)
 {
-    pStrm->QuickRead(&m_nX, sizeof(m_nX));
-    pStrm->QuickRead(&m_nY, sizeof(m_nY));
+    m_nX = pStrm->QuickReadInt32();
+    m_nY = pStrm->QuickReadInt32();
 }
 /**
  * @descr       reset to zero

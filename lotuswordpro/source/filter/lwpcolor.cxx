@@ -68,10 +68,10 @@
 */
 void LwpColor::Read(LwpObjectStream *pStrm)
 {
-    pStrm->QuickRead(&m_nRed, sizeof(m_nRed));
-    pStrm->QuickRead(&m_nGreen, sizeof(m_nGreen));
-    pStrm->QuickRead(&m_nBlue, sizeof(m_nBlue));
-    pStrm->QuickRead(&m_nExtra, sizeof(m_nExtra));
+    m_nRed = pStrm->QuickReaduInt16();
+    m_nGreen = pStrm->QuickReaduInt16();
+    m_nBlue = pStrm->QuickReaduInt16();
+    m_nExtra = pStrm->QuickReaduInt16();
     ResolveRGB();
 }
 

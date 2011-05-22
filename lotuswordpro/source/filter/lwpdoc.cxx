@@ -94,7 +94,7 @@ void LwpDocument::Read()
 
     ReadPlug();
 
-    m_pObjStrm->QuickRead(&m_nPersistentFlags, sizeof(m_nPersistentFlags));
+    m_nPersistentFlags = m_pObjStrm->QuickReaduInt32();
 
     //Skip the SortOption and UIDocument
     {
@@ -143,7 +143,7 @@ void LwpDocument::Read()
 void LwpDocument::ReadPlug()
 {
     m_DocSockID.ReadIndexed(m_pObjStrm);
-    m_pObjStrm->QuickRead(&m_nFlags, sizeof(m_nFlags));
+    m_nFlags = m_pObjStrm->QuickReaduInt16();
     m_pObjStrm->SkipExtra();
 }
 

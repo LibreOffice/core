@@ -149,7 +149,7 @@ void LwpNoteLayout::Read()
 {
     LwpFrameLayout::Read();
 
-    m_pObjStrm->QuickRead(&m_nTime, sizeof(m_nTime));
+    m_nTime = m_pObjStrm->QuickReaduInt32();
     m_UserName.Read(m_pObjStrm);
 
     LwpAtomHolder aUserInitials;

@@ -122,7 +122,7 @@ LwpNumericValue::~LwpNumericValue()
 
 void LwpNumericValue::Read()
 {
-    m_pObjStrm->QuickRead(&cNumber, sizeof(cNumber));
+    cNumber = m_pObjStrm->QuickReadDouble();
     m_pObjStrm->SkipExtra();
 
 }

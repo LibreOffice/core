@@ -90,8 +90,8 @@ sal_uInt32 LwpObjectID::Read(LwpSvStream *pStrm)
 */
 sal_uInt32 LwpObjectID::Read(LwpObjectStream *pObj)
 {
-    pObj->QuickRead(&m_nLow, sizeof(m_nLow));
-    pObj->QuickRead(&m_nHigh, sizeof(m_nHigh));
+    m_nLow = pObj->QuickReaduInt32();
+    m_nHigh = pObj->QuickReaduInt16();
     return DiskSize();
 }
 /**
@@ -140,7 +140,7 @@ sal_uInt32 LwpObjectID::ReadIndexed(LwpObjectStream *pStrm)
         return Read(pStrm);
     }
 
-    pStrm->QuickRead(&m_nIndex, sizeof(m_nIndex));
+    m_nIndex = pStrm->QuickReaduInt8();
     if (m_nIndex)
     {
         m_bIsCompressed = sal_True;
@@ -151,10 +151,8 @@ sal_uInt32 LwpObjectID::ReadIndexed(LwpObjectStream *pStrm)
         m_nLow = pIdxMgr->GetObjTime( (sal_uInt16)m_nIndex);
     }
     else
-    {
-        pStrm->QuickRead(&m_nLow, sizeof(m_nLow));
-    }
-    pStrm->QuickRead(&m_nHigh, sizeof(m_nHigh));
+        m_nLow = pStrm->QuickReaduInt32();
+    m_nHigh = pStrm->QuickReaduInt16();
     return DiskSizeIndexed();
 }
 /**
@@ -188,11 +186,8 @@ sal_uInt32 LwpObjectID::ReadCompressed( LwpSvStream* pStrm, LwpObjectID &prev )
 */
 sal_uInt32 LwpObjectID::ReadCompressed( LwpObjectStream* pObj, LwpObjectID &prev )
 {
-
-    sal_uInt32 len=0;
-    sal_uInt8 diff;
-
-    len += pObj->QuickRead( &diff, sizeof(diff));
+    sal_uInt8 diff = pObj->QuickReaduInt8();
+    sal_uInt32 len=1;
 
     if (diff == 255)
     {

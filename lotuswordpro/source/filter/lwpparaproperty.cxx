@@ -67,25 +67,23 @@
 
 LwpParaProperty* LwpParaProperty::ReadPropertyList(LwpObjectStream* pFile,LwpObject* Whole)
 {
-    sal_uInt32 tag;
     LwpParaProperty* Prop= NULL;
     LwpParaProperty* NewProp= NULL;
-    sal_uInt16 Len;
 
     for(;;)
     {
-        sal_uInt16 nRead;
+        bool bFailure;
 
-        nRead = pFile->QuickRead(&tag,sizeof(sal_uInt32));
+        sal_uInt32 tag = pFile->QuickReaduInt32(&bFailure);
         // Keep reading properties until we hit the end tag or
         // the stream ends
-        if (tag == TAG_ENDSUBOBJ || nRead != sizeof(sal_uInt32))
+        if (bFailure || tag == TAG_ENDSUBOBJ)
             break;
 
         // Get the length of this property
-        nRead = pFile->QuickRead(&Len,sizeof(sal_uInt16));
+        sal_uInt16 Len = pFile->QuickReaduInt16(&bFailure);
 
-        if (nRead != sizeof(sal_uInt16))
+        if (bFailure)
             break;
 
         // Create whatever kind of tag we just found

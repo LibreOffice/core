@@ -80,6 +80,7 @@ void LwpHeadContent::Read()
 LwpContent::LwpContent(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpDLNFVList(objHdr, pStrm)
 {}
+
 void LwpContent::Read()
 {
     LwpDLNFVList::Read();
@@ -87,9 +88,7 @@ void LwpContent::Read()
     LwpObjectStream* pStrm = m_pObjStrm;
 
     m_LayoutsWithMe.Read(pStrm);
-    //sal_uInt16 nFlagsSkip;
-    //pStrm->QuickRead(&nFlagsSkip, sizeof(nFlagsSkip));
-    pStrm->QuickRead(&m_nFlags, sizeof(m_nFlags));
+    m_nFlags = pStrm->QuickReaduInt16();
     m_nFlags &= ~(CF_CHANGED | CF_DISABLEVALUECHECKING);
     //LwpAtomHolder ClassName;
     //ClassName.Read(pStrm);
@@ -113,8 +112,7 @@ void LwpContent::Read()
         }
         else
         {
-            sal_uInt8 HasNotify;
-            pStrm->QuickRead(&HasNotify, sizeof(HasNotify));
+            sal_uInt8 HasNotify = pStrm->QuickReaduInt8();
             if(HasNotify)
             {
                 SkipID.ReadIndexed(pStrm);

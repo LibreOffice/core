@@ -132,7 +132,7 @@ void LwpFoundry::Read(LwpObjectStream *pStrm)
     m_EnumLayoutTail.ReadIndexed(pStrm);
     m_NamedObjects.ReadIndexed(pStrm);
 
-    pStrm->QuickRead(&m_nLastClickHere, sizeof(m_nLastClickHere));
+    m_nLastClickHere = pStrm->QuickReaduInt32();
     m_SmartTextMgr.ReadIndexed(pStrm);
 
     m_ContentMgr.Read(pStrm);
@@ -358,30 +358,22 @@ void LwpVersionManager::Read(LwpObjectStream *pStrm)
 
 void LwpVersionManager::Skip(LwpObjectStream *pStrm)
 {
+    /*sal_uInt32 cNextUserVersionID =*/ pStrm->QuickReaduInt32();
+    sal_uInt16 Count = pStrm->QuickReaduInt16();
 
-    sal_uInt32 cNextUserVersionID;
-    pStrm->QuickRead(&cNextUserVersionID, sizeof(cNextUserVersionID));
-
-    sal_uInt16 Count;
-    pStrm->QuickRead(&Count, sizeof(Count));
-
-    sal_uInt32 tag;
     while(Count--)
     {
-        pStrm->QuickRead(&tag, sizeof(tag));
-        sal_uInt16 len;
+        sal_uInt32 tag = pStrm->QuickReaduInt32();
         switch(tag)
         {
             case TAG_USER_VERSION:
                 // TODO: skip the CUserVersionControl
-                pStrm->QuickRead(&len, sizeof(len));
-                pStrm->SeekRel(len);
+                pStrm->SeekRel(pStrm->QuickReaduInt16());
                 //pStrm->SkipExtra(); //The length has included the extra
                 break;
 
             default:
-                pStrm->QuickRead(&len, sizeof(sal_uInt16));
-                pStrm->SeekRel(len);
+                pStrm->SeekRel(pStrm->QuickReaduInt16());
                 pStrm->SkipExtra();
                 break;
         }

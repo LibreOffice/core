@@ -73,10 +73,10 @@ LwpHyphenOptions::~LwpHyphenOptions()
 
 void LwpHyphenOptions::Read(LwpObjectStream *pStrm)
 {
-    pStrm->QuickRead(&m_nFlags, sizeof(m_nFlags));
-    pStrm->QuickRead(&m_nZoneBefore, sizeof(m_nZoneBefore));
-    pStrm->QuickRead(&m_nZoneAfter, sizeof(m_nZoneAfter));
-    pStrm->QuickRead(&m_nMaxLines, sizeof(m_nMaxLines));
+    m_nFlags = pStrm->QuickReaduInt16();
+    m_nZoneBefore = pStrm->QuickReaduInt16();
+    m_nZoneAfter = pStrm->QuickReaduInt16();
+    m_nMaxLines = pStrm->QuickReaduInt16();
     pStrm->SkipExtra();
 }
 
@@ -87,7 +87,7 @@ LwpTextLanguage::~LwpTextLanguage(){}
 
 void LwpTextLanguage::Read(LwpObjectStream *pStrm)
 {
-    pStrm->QuickRead(&m_nLanguage, sizeof(m_nLanguage));
+    m_nLanguage = pStrm->QuickReaduInt16();
     pStrm->SkipExtra();
 
     if( LwpFileHeader::m_nFileRevision <= 0x0a)
@@ -128,7 +128,7 @@ LwpDivisionOptions::~LwpDivisionOptions()
 void LwpDivisionOptions::Read()
 {
     m_HyphOpts.Read(m_pObjStrm);
-    m_pObjStrm->QuickRead(&m_nOptionFlag, sizeof(m_nOptionFlag));
+    m_nOptionFlag = m_pObjStrm->QuickReaduInt16();
     m_Lang.Read(m_pObjStrm);
     m_pObjStrm->SkipExtra();
 }

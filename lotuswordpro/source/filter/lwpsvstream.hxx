@@ -71,10 +71,9 @@ public:
     sal_Int64 SeekRel( sal_Int64 pos );
     sal_Int64 Tell();
     sal_Int64 Seek( sal_Int64 pos );
-//  sal_Int64 GetLength();
+
     static const sal_uInt32 LWP_STREAM_BASE;
 
-    // added by  for small file feature
     LwpSvStream * GetCompressedStream()
     {
         return m_pCompressedStream;
@@ -83,19 +82,15 @@ public:
     {
         return m_pStream;
     }
-    // end of added by
 
 private:
     // when the file opened is small file, m_pStream is the decompressed stream
     // when not, m_pStream contains the normal stream
     SvStream* m_pStream;
 
-    // added by  for small file feature
-    // when the file opened is small file, this stream is
-    // for saving the compressed stream which is to be used for Chart/OLE as BENTO container
+    // when the file opened is small file, this stream is for saving the
+    // compressed stream which is to be used for Chart/OLE as BENTO container
     LwpSvStream * m_pCompressedStream;
-    // end of added by
-
 };
 #endif
 

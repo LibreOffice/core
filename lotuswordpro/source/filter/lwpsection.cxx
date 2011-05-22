@@ -103,7 +103,7 @@ LwpSection::~LwpSection()
 void LwpSection::Read()
 {
     LwpOrderedObject::Read();
-    m_pObjStrm->QuickRead(&m_Flags, sizeof(m_Flags));
+    m_Flags = m_pObjStrm->QuickReaduInt16();
     m_PageLayout.ReadIndexed(m_pObjStrm);
     m_Color.Read(m_pObjStrm);
     m_AtomHolder.Read(m_pObjStrm);
@@ -138,8 +138,8 @@ void LwpIndexSection::Read()
     m_ParentName.Read(m_pObjStrm);
     m_DivisionName.Read(m_pObjStrm);
     m_SectionName.Read(m_pObjStrm);
-    m_pObjStrm->QuickRead(&m_nForm, sizeof(m_nForm));
-    m_pObjStrm->QuickRead(&m_nFlags, sizeof(m_nFlags));
+    m_nForm = m_pObjStrm->QuickReaduInt16();
+    m_nFlags = m_pObjStrm->QuickReaduInt16();
     m_pObjStrm->SkipExtra();
 }
 

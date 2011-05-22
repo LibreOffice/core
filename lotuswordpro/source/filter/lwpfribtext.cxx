@@ -122,10 +122,10 @@ void LwpFribText::XFConvert(XFContentContainer* pXFPara,LwpStory* pStory)
  */
 void LwpFribParaNumber::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
 {
-    pObjStrm->QuickRead(&m_nStyleID, sizeof(m_nStyleID));
-    pObjStrm->QuickRead(&m_nNumberChar, sizeof(m_nNumberChar));
-    pObjStrm->QuickRead(&m_nLevel, sizeof(m_nLevel));
-    pObjStrm->QuickRead(&m_nStart, sizeof(m_nStart));
+    m_nStyleID = pObjStrm->QuickReaduInt16();
+    m_nNumberChar = pObjStrm->QuickReaduInt16();
+    m_nLevel = pObjStrm->QuickReaduInt16();
+    m_nStart = pObjStrm->QuickReaduInt16();
 }
 
 /**
@@ -153,7 +153,7 @@ LwpFribDocVar::~LwpFribDocVar()
  */
 void LwpFribDocVar::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
 {
-    pObjStrm->QuickRead(&m_nType, sizeof(m_nType));
+    m_nType = pObjStrm->QuickReaduInt16();
     m_pName->Read(pObjStrm);
 }
 
