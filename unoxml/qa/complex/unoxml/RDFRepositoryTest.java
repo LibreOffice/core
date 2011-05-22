@@ -361,8 +361,7 @@ public class RDFRepositoryTest
         }
     }
 
-    // fd#35667 disabling for now, because test fails
-    // @Test
+    @Test
     public void checkSPARQL()
     {
         try {
