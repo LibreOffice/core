@@ -29,7 +29,11 @@ GUI := WNT
 COM := GCC
 
 # set tmpdir to some mixed case path, suitable for native tools
+ifeq ($(OS_FOR_BUILD),WNT)
 gb_TMPDIR:=$(if $(TMPDIR),$(shell cygpath -m $(TMPDIR)),$(shell cygpath -m /tmp))
+else
+gb_TMPDIR:=/tmp
+endif
 gb_MKTEMP := mktemp --tmpdir=$(gb_TMPDIR) gbuild.XXXXXX
 
 gb_CC := $(CC)
@@ -179,10 +183,17 @@ gb_STDLIBS := \
 
 # Helper class
 
+ifeq ($(OS_FOR_BUILD),WNT)
 gb_Helper_SRCDIR_NATIVE := $(shell cygpath -m $(SRCDIR) | $(gb_AWK) -- '{ print tolower(substr($$0,1,1)) substr($$0,2) }')
 gb_Helper_WORKDIR_NATIVE := $(shell cygpath -m $(WORKDIR) | $(gb_AWK) -- '{ print tolower(substr($$0,1,1)) substr($$0,2) }')
 gb_Helper_OUTDIR_NATIVE := $(shell cygpath -m $(OUTDIR) | $(gb_AWK) -- '{ print tolower(substr($$0,1,1)) substr($$0,2) }')
 gb_Helper_REPODIR_NATIVE := $(shell cygpath -m $(REPODIR) | $(gb_AWK) -- '{ print tolower(substr($$0,1,1)) substr($$0,2) }')
+else
+gb_Helper_SRCDIR_NATIVE := $(SRCDIR)
+gb_Helper_WORKDIR_NATIVE := $(WORKDIR)
+gb_Helper_OUTDIR_NATIVE := $(OUTDIR)
+gb_Helper_REPODIR_NATIVE := $(REPODIR)
+endif
 
 define gb_Helper_abbreviate_dirs_native
 R=$(gb_Helper_REPODIR_NATIVE) && $(subst $(REPODIR)/,$$R/,$(subst $(gb_Helper_REPODIR_NATIVE)/,$$R/,O=$(gb_Helper_OUTDIR_NATIVE) && W=$(gb_Helper_WORKDIR_NATIVE) && S=$(gb_Helper_SRCDIR_NATIVE))) && \

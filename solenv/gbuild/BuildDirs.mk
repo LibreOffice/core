@@ -42,7 +42,7 @@ endif
 
 # HACK
 # unixify windoze paths
-ifeq ($(OS),WNT)
+ifeq ($(OS_FOR_BUILD),WNT)
 override WORKDIR := $(shell cygpath -u $(WORKDIR))
 override OUTDIR := $(shell cygpath -u $(OUTDIR))
 override gb_REPOS := $(shell cygpath -u $(gb_REPOS))
