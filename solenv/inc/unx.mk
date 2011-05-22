@@ -119,10 +119,6 @@
 .INCLUDE : unxlnga.mk
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)" == "GCCNETBSDA"
-.INCLUDE : unxbsda.mk
-.ENDIF
-
 .IF "$(COM)$(OS)$(CPU)" == "GCCNETBSDI"
 .INCLUDE : unxbsdi3.mk
 .ENDIF
