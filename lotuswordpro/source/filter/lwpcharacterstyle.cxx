@@ -115,10 +115,10 @@ LwpTextStyle::~LwpTextStyle()
 
 void LwpTextStyle::ReadCommon()
 {
-    m_pObjStrm->QuickRead(&m_nFontID, 4);
-    m_pObjStrm->QuickRead(&m_nFinalFontID, 4);
-    m_pObjStrm->QuickRead(&m_nCSFlags, 2);
-    m_pObjStrm->QuickRead(&m_nUseCount, 4);
+    m_nFontID = m_pObjStrm->QuickReaduInt32();
+    m_nFinalFontID = m_pObjStrm->QuickReaduInt32();
+    m_nCSFlags = m_pObjStrm->QuickReaduInt16();
+    m_nUseCount = m_pObjStrm->QuickReaduInt32();
 
     m_pDescription->Read(m_pObjStrm);
 
@@ -138,9 +138,7 @@ void LwpTextStyle::ReadCommon()
 //#endif
     sal_uInt16 nCount = 6;
     if (LwpFileHeader::m_nFileRevision > 0x0005)
-    {
-        m_pObjStrm->QuickRead(&nCount, 2);
-    }
+        nCount = m_pObjStrm->QuickReaduInt16();
 
     m_FaceStyle.ReadIndexed(m_pObjStrm);
 
@@ -155,11 +153,11 @@ void LwpTextStyle::ReadCommon()
 
     if (m_pObjStrm->CheckExtra())
     {
-        m_pObjStrm->QuickRead(&m_nStyleDefinition, 4);
+        m_nStyleDefinition = m_pObjStrm->QuickReaduInt32();
 
         if (m_pObjStrm->CheckExtra())
         {
-            m_pObjStrm->QuickRead(&m_nKey, 2);
+            m_nKey = m_pObjStrm->QuickReaduInt16();
             m_pObjStrm->SkipExtra();
         }
     }

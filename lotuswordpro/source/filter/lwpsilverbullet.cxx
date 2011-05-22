@@ -88,18 +88,15 @@ void LwpSilverBullet::Read()
 {
     LwpDLNFVList::Read();
 
-    m_pObjStrm->QuickRead(&m_nFlags, 2);
+    m_nFlags = m_pObjStrm->QuickReaduInt16();
     m_aStory.ReadIndexed(m_pObjStrm);
 
-    sal_uInt16 nNumPos;
-    m_pObjStrm->QuickRead(&nNumPos, 2);
+    sal_uInt16 nNumPos = m_pObjStrm->QuickReaduInt16();
 
     for (sal_uInt8 nC = 0; nC < nNumPos; nC++)
-    {
-        m_pObjStrm->QuickRead(&m_pResetPositionFlags[nC], 1);
-    }
+        m_pResetPositionFlags[nC] = m_pObjStrm->QuickReaduInt8();
 
-    m_pObjStrm->QuickRead(&m_nUseCount, 4);
+    m_nUseCount = m_pObjStrm->QuickReaduInt32();
 
     m_pAtomHolder->Read(m_pObjStrm);
 }

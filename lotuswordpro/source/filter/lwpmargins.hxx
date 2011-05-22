@@ -72,16 +72,14 @@ public:
 public:
     void    Read(LwpObjectStream *pStrm)
     {
-        pStrm->QuickRead(&m_nLeft, 4);
-        pStrm->QuickRead(&m_nTop, 4);
-        pStrm->QuickRead(&m_nRight, 4);
-        pStrm->QuickRead(&m_nBottom, 4);
+        m_nLeft = pStrm->QuickReadInt32();
+        m_nTop = pStrm->QuickReadInt32();
+        m_nRight = pStrm->QuickReadInt32();
+        m_nBottom = pStrm->QuickReadInt32();
         pStrm->SkipExtra();
     }
-    //add by , 01/26/2004
     inline void operator = (const LwpMargins& rOther);
     inline double GetMarginsValue(const sal_uInt8& nWhichSide);
-    //end add
 private:
     sal_Int32       m_nLeft;
     sal_Int32       m_nTop;

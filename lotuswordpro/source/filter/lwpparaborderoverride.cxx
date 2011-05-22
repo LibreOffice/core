@@ -138,22 +138,23 @@ void LwpParaBorderOverride::Read(LwpObjectStream *pStrm)
         m_pShadow->Read(pStrm);
         m_pMargins->Read(pStrm);
 
-        pStrm->QuickRead(&m_eAboveType,2);
-        pStrm->QuickRead(&m_eBelowType,2);
-        pStrm->QuickRead(&m_eRightType,2);
+        m_eAboveType = static_cast<BorderWidthType>(pStrm->QuickReaduInt16());
+        m_eAboveType = static_cast<BorderWidthType>(pStrm->QuickReaduInt16());
+        m_eBelowType = static_cast<BorderWidthType>(pStrm->QuickReaduInt16());
+        m_eRightType = static_cast<BorderWidthType>(pStrm->QuickReaduInt16());
 
         if( pStrm->CheckExtra() )
         {
             m_pBetweenStuff->Read(pStrm);
 
-            pStrm->QuickRead(&m_eBetweenType,2);
-            pStrm->QuickRead(&m_nBetweenWidth,4 );
-            pStrm->QuickRead(&m_nBetweenMargin,4 );
+            m_eBetweenType = static_cast<BorderWidthType>(pStrm->QuickReaduInt16());
+            m_nBetweenWidth = pStrm->QuickReaduInt32();
+            m_nBetweenMargin = pStrm->QuickReaduInt32();
 
             if( pStrm->CheckExtra() )
             {
-                pStrm->QuickRead( &m_eRightType, 2);
-                pStrm->QuickRead( &m_nRightWidth, 4);
+                m_eRightType = static_cast<BorderWidthType>(pStrm->QuickReaduInt16());
+                m_nRightWidth = pStrm->QuickReaduInt32();
             }
         }
     }

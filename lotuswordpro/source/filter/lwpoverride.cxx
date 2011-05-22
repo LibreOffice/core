@@ -82,9 +82,9 @@ LwpOverride::LwpOverride(LwpOverride const& rOther)
 
 void LwpOverride::ReadCommon(LwpObjectStream* pStrm)
 {
-    pStrm->QuickRead(&m_nValues, 2);
-    pStrm->QuickRead(&m_nOverride, 2);
-    pStrm->QuickRead(&m_nApply, 2);
+    m_nValues = pStrm->QuickReaduInt16();
+    m_nOverride = pStrm->QuickReaduInt16();
+    m_nApply = pStrm->QuickReaduInt16();
     pStrm->SkipExtra();
 }
 
@@ -134,7 +134,7 @@ void LwpTextLanguageOverride::Read(LwpObjectStream* pStrm)
     if (pStrm->QuickReadBool())
     {
         ReadCommon(pStrm);
-        pStrm->QuickRead(&m_nLanguage, 2);
+        m_nLanguage = pStrm->QuickReaduInt16();
     }
 
     pStrm->SkipExtra();
@@ -159,12 +159,10 @@ void LwpTextAttributeOverride::Read(LwpObjectStream* pStrm)
     if (pStrm->QuickReadBool())
     {
         ReadCommon(pStrm);
-        pStrm->QuickRead(&m_nHideLevels, 2);
+        m_nHideLevels = pStrm->QuickReaduInt16();
 
         if (LwpFileHeader::m_nFileRevision > 0x000A)
-        {
-            pStrm->QuickRead(&m_nBaseLineOffset, 4);
-        }
+            m_nBaseLineOffset = pStrm->QuickReaduInt32();
     }
 
     pStrm->SkipExtra();
@@ -192,7 +190,7 @@ void LwpKinsokuOptsOverride::Read(LwpObjectStream* pStrm)
     if (pStrm->QuickReadBool())
     {
         ReadCommon(pStrm);
-        pStrm->QuickRead(&m_nLevels, 2);
+        m_nLevels = pStrm->QuickReaduInt16();
     }
 
     pStrm->SkipExtra();
@@ -317,9 +315,9 @@ void LwpAlignmentOverride::Read(LwpObjectStream * pStrm)
     if (pStrm->QuickReadBool())
     {
         ReadCommon(pStrm);
-        pStrm->QuickRead(&m_nAlignType, 1);
-        pStrm->QuickRead(&m_nPosition, 4);
-        pStrm->QuickRead(&m_nAlignChar, 2);
+        m_nAlignType = static_cast<AlignType>(pStrm->QuickReaduInt8());
+        m_nPosition = pStrm->QuickReaduInt32();
+        m_nAlignChar = pStrm->QuickReaduInt16();
     }
 
     pStrm->SkipExtra();
@@ -344,9 +342,9 @@ void LwpSpacingCommonOverride::Read(LwpObjectStream* pStrm)
     if (pStrm->QuickReadBool())
     {
         ReadCommon(pStrm);
-        pStrm->QuickRead(&m_nSpacingType, 2);
-        pStrm->QuickRead(&m_nAmount, 4);
-        pStrm->QuickRead(&m_nMultiple, 4);
+        m_nSpacingType = static_cast<SpacingType>(pStrm->QuickReaduInt16());
+        m_nAmount = pStrm->QuickReadInt32();
+        m_nMultiple = pStrm->QuickReadInt32();
     }
 
     pStrm->SkipExtra();
@@ -441,10 +439,10 @@ void LwpIndentOverride::Read(LwpObjectStream* pStrm)
     {
         ReadCommon(pStrm);
 
-        pStrm->QuickRead(&m_nAll, 4);
-        pStrm->QuickRead(&m_nFirst, 4);
-        pStrm->QuickRead(&m_nRest, 4);
-        pStrm->QuickRead(&m_nRight, 4);
+        m_nAll = pStrm->QuickReadInt32();
+        m_nFirst = pStrm->QuickReadInt32();
+        m_nRest = pStrm->QuickReadInt32();
+        m_nRight = pStrm->QuickReadInt32();
     }
 
     pStrm->SkipExtra();
@@ -493,7 +491,7 @@ void LwpAmikakeOverride::Read(LwpObjectStream* pStrm)
 
     if (pStrm->CheckExtra())
     {
-        pStrm->QuickRead(&m_nType, 2);
+        m_nType = pStrm->QuickReaduInt16();
         pStrm->SkipExtra();
     }
     else

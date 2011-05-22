@@ -111,8 +111,8 @@ void LwpCharacterBorderOverride::Read(LwpObjectStream* pStrm)
         ReadCommon(pStrm);
         m_pBorderStuff->Read(pStrm);
         m_pMargins->Read(pStrm);
-        pStrm->QuickRead(&m_nAboveWidth, 4);
-        pStrm->QuickRead(&m_nBelowWidth, 4);
+        m_nAboveWidth = pStrm->QuickReaduInt32();
+        m_nBelowWidth = pStrm->QuickReaduInt32();
     }
 
     pStrm->SkipExtra();
