@@ -202,7 +202,9 @@ void  SvtHelpOptions_Impl::Load(const uno::Sequence< ::rtl::OUString>& rProperty
     {
         for ( int nProp = 0; nProp < rPropertyNames.getLength(); nProp++ )
         {
-            DBG_ASSERT( pValues[nProp].hasValue(), "property value missing" );
+#if OSL_DEBUG_LEVEL > 1
+            OSL_ASSERT( pValues[nProp].hasValue(), "property value missing" );
+#endif
             if ( pValues[nProp].hasValue() )
             {
                 sal_Bool bTmp = sal_Bool();
@@ -264,8 +266,8 @@ void  SvtHelpOptions_Impl::Load(const uno::Sequence< ::rtl::OUString>& rProperty
                 }
                 else
                 {
-            DBG_ERRORFILE( "Wrong Type!" );
-        }
+                    DBG_ERRORFILE( "Wrong Type!" );
+                }
             }
         }
         if ( IsHelpTips() != Help::IsQuickHelpEnabled() )
