@@ -271,6 +271,17 @@ void ChildAccess::setProperty(
     localModifications->add(getRelativePath());
 }
 
+namespace
+{
+    rtl::OUString lcl_StripSegment(const rtl::OUString &rLocale)
+    {
+        sal_Int32 i = rLocale.getLength() ? rLocale.getLength() - 1 : 0;
+        while (i > 0 && rLocale[i] != '-' && rLocale[i] != '_')
+            --i;
+        return rLocale.copy(0, i);
+    }
+}
+
 css::uno::Any ChildAccess::asValue() {
     if (changedValue_.get() != 0) {
         return *changedValue_;
@@ -281,43 +292,62 @@ css::uno::Any ChildAccess::asValue() {
             getComponents());
     case Node::KIND_LOCALIZED_PROPERTY:
         {
-            rtl::OUString locale(getRootAccess()->getLocale());
-            if (!Components::allLocales(locale)) {
+            rtl::OUString sLocale(getRootAccess()->getLocale());
+            if (!Components::allLocales(sLocale))
+            {
+                rtl::Reference< ChildAccess > child;
                 // Find best match using an adaption of RFC 4647 lookup matching
-                // rules, removing "-" or "_" delimited segments from the end;
+                // rules, removing "-" or "_" delimited segments from the end
+                while (1)
+                {
+                    child = getChild(sLocale);
+                    if (child.is())
+                        break;
+                    rtl::OUString sTmpLocale = lcl_StripSegment(sLocale);
+                    if (!sTmpLocale.getLength())
+                        break;
+                    sLocale = sTmpLocale;
+                }
+
+                //Resolves: fdo#33638 Look for the first entry with the same
+                //first segment as the requested language tag, before falling
+                //back to en-US, etc.
+                typedef std::vector< rtl::Reference< ChildAccess > > ChildVector;
+                if (!child.is())
+                {
+                    const ChildVector &rAllChildren = getAllChildren();
+                    for (ChildVector::const_iterator aI = rAllChildren.begin(),
+                         aEnd = rAllChildren.end(); aI != aEnd; ++aI)
+                    {
+                        rtl::OUString sLanguage = lcl_StripSegment((*aI)->getNameInternal());
+                        if (sLocale == sLanguage)
+                        {
+                            child = *aI;
+                            break;
+                        }
+                    }
+                }
+
                 // defaults are the "en-US" locale, the "en" locale, the empty
                 // string locale, the first child (if any), or a nil value (even
                 // though it may be illegal for the given property), in that
                 // order:
-                rtl::Reference< ChildAccess > child;
-                for (;;) {
-                    child = getChild(locale);
-                    if (child.is() || locale.getLength() == 0) {
-                        break;
-                    }
-                    sal_Int32 i = locale.getLength() - 1;
-                    while (i > 0 && locale[i] != '-' && locale[i] != '_') {
-                        --i;
-                    }
-                    if (i == 0) {
-                        break;
-                    }
-                    locale = locale.copy(0, i);
-                }
-                if (!child.is()) {
+                if (!child.is())
+                {
                     child = getChild(
                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en-US")));
-                    if (!child.is()) {
+                    if (!child.is())
+                    {
                         child = getChild(
                             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en")));
-                        if (!child.is()) {
+                        if (!child.is())
+                        {
                             child = getChild(rtl::OUString());
-                            if (!child.is()) {
-                                std::vector< rtl::Reference< ChildAccess > >
-                                    all(getAllChildren());
-                                if (!all.empty()) {
+                            if (!child.is())
+                            {
+                                ChildVector all(getAllChildren());
+                                if (!all.empty())
                                     child = all.front();
-                                }
                             }
                         }
                     }
