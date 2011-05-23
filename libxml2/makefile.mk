@@ -98,12 +98,20 @@ xml2_LDFLAGS+=-L$(SYSBASE)$/usr$/lib
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS=--enable-ipv6=no --without-python --without-zlib --enable-shared --disable-static --with-sax1=yes ADDCFLAGS="$(xml2_CFLAGS) $(EXTRA_CFLAGS)" LDFLAGS="$(xml2_LDFLAGS) $(EXTRA_LINKFLAGS)"
+.IF "$(OS)"=="IOS"
+CONFIGURE_FLAGS+=--disable-shared
+.ELSE
+CONFIGURE_FLAGS=--disable-static
+.ENDIF
+CONFIGURE_FLAGS+=--enable-ipv6=no --without-python --without-zlib --with-sax1=yes ADDCFLAGS="$(xml2_CFLAGS) $(EXTRA_CFLAGS)" LDFLAGS="$(xml2_LDFLAGS) $(EXTRA_LINKFLAGS)"
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
 .IF "$(debug)"!=""
 CONFIGURE_FLAGS+=--with-mem-debug --with-run-debug
+.ENDIF
+.IF "$(CROSS_COMPILING)"!=""
+CONFIGURE_FLAGS+= --build="$(BUILD_PLATFORM)" --host="$(HOST_PLATFORM)"
 .ENDIF
 .ENDIF
 
@@ -114,6 +122,9 @@ OUTDIR2INC=include$/libxml
 EXTRPATH=URELIB
 OUT2LIB+=.libs$/libxml2.*.dylib
 OUT2BIN+=.libs$/xmllint
+OUT2BIN+=xml2-config
+.ELIF "$(OS)"=="IOS"
+OUT2LIB+=.libs$/libxml2.a
 OUT2BIN+=xml2-config
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
