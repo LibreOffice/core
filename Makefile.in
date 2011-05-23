@@ -24,10 +24,11 @@ install:
 
 dev-install:
 	@. ./*Env.Set.sh && \
-        ooinstall -l @abs_builddir@/install && \
-        echo "" && \
+        cd smoketestoo_native && \
+		build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@ && \
+		echo "" && \
         echo "Developer installation finished, you can now execute:" && \
-        echo "@abs_builddir@/install/program/soffice"
+        echo "@abs_builddir@/installation/opt/program/soffice"
 
 distclean: dmake/dmake@EXEEXT_FOR_BUILD@
 	@. ./*Env.Set.sh && \
