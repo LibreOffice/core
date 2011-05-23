@@ -44,6 +44,7 @@
 #include <tools/wintypes.hxx>
 #include <svtools/svtools.hrc>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 
 #define NODE_BMP_TABDIST_NOTVALID   -2000000
 #define FIRST_ENTRY_TAB             1
@@ -64,7 +65,7 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvLBoxTreeList* pLBTree, WinBits n
     aFctSet( this, &aSelEng, pLBView ),
     nExtendedWinBits( 0 ),
     bAreChildrenTransient( sal_True ),
-    pIntlWrapper( NULL ) // #102891# -----------------------
+    m_pStringSorter(NULL)
 {
     osl_incrementInterlockedCount(&s_nImageRefCount);
     pView = pLBView;
@@ -126,9 +127,7 @@ SvImpLBox::~SvImpLBox()
     aEditTimer.Stop();
     StopUserEvent();
 
-    // #102891# ---------------------
-    if( pIntlWrapper )
-        delete pIntlWrapper;
+    delete m_pStringSorter;
     if ( osl_decrementInterlockedCount(&s_nImageRefCount) == 0 )
     {
         DELETEZ(s_pDefCollapsed);
@@ -136,22 +135,28 @@ SvImpLBox::~SvImpLBox()
     }
 }
 
-// #102891# --------------------
-void SvImpLBox::UpdateIntlWrapper()
+void SvImpLBox::UpdateStringSorter()
 {
-    const ::com::sun::star::lang::Locale & aNewLocale = Application::GetSettings().GetLocale();
-    if( !pIntlWrapper )
-        pIntlWrapper = new IntlWrapper( ::comphelper::getProcessServiceFactory(), aNewLocale );
-    else
+    const ::com::sun::star::lang::Locale& rNewLocale = Application::GetSettings().GetLocale();
+
+    if( m_pStringSorter )
     {
-        const ::com::sun::star::lang::Locale &aLocale = pIntlWrapper->getLocale();
-        if( aLocale.Language != aNewLocale.Language || // different Locale from the older one
-            aLocale.Country != aNewLocale.Country ||
-            aLocale.Variant != aNewLocale.Variant )
+        // different Locale from the older one, drop it and force recreate
+        const ::com::sun::star::lang::Locale &aLocale = m_pStringSorter->getLocale();
+        if( aLocale.Language != rNewLocale.Language ||
+            aLocale.Country != rNewLocale.Country ||
+            aLocale.Variant != rNewLocale.Variant )
         {
-            delete pIntlWrapper;
-            pIntlWrapper = new IntlWrapper( ::comphelper::getProcessServiceFactory(), aNewLocale );
+            delete m_pStringSorter;
+            m_pStringSorter = NULL;
         }
+    }
+
+    if( !m_pStringSorter )
+    {
+        m_pStringSorter = new comphelper::string::NaturalStringSorter(
+                              ::comphelper::getProcessComponentContext(),
+                              rNewLocale);
     }
 }
 

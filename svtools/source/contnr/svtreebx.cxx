@@ -37,6 +37,7 @@ class TabBar;
 #include <svtools/svlbitm.hxx>
 #include <svtools/svtreebx.hxx>
 #include <tools/diagnose_ex.h>
+#include <comphelper/string.hxx>
 #include <svimpbox.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -2265,8 +2266,8 @@ IMPL_LINK( SvTreeListBox, DefaultCompare, SvSortData*, pData )
     SvLBoxEntry* pRight = (SvLBoxEntry*)(pData->pRight );
     String aLeft( ((SvLBoxString*)(pLeft->GetFirstItem(SV_ITEM_ID_LBOXSTRING)))->GetText());
     String aRight( ((SvLBoxString*)(pRight->GetFirstItem(SV_ITEM_ID_LBOXSTRING)))->GetText());
-    pImp->UpdateIntlWrapper();
-    return pImp->pIntlWrapper->getCaseCollator()->compareString( aLeft, aRight );
+    pImp->UpdateStringSorter();
+    return pImp->m_pStringSorter->compare(aLeft, aRight);
 }
 
 void SvTreeListBox::ModelNotification( sal_uInt16 nActionId, SvListEntry* pEntry1,

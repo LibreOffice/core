@@ -47,6 +47,13 @@ class SvLBoxEntry;
 class SvLBoxItem;
 class SvLBoxTab;
 class TabBar;
+namespace comphelper
+{
+    namespace string
+    {
+        class NaturalStringSorter;
+    }
+}
 
 class ImpLBSelEng : public FunctionSet
 {
@@ -163,7 +170,7 @@ private:
     Timer               aEditTimer;
 
     // #102891# -------------------
-    IntlWrapper *       pIntlWrapper;
+    comphelper::string::NaturalStringSorter *m_pStringSorter;
 
     // #97680# --------------------
     std::vector< short > aContextBmpWidthVector;
@@ -239,8 +246,7 @@ private:
 
     static  void        implInitDefaultNodeImages();
 
-    // #102891# -------------------
-    void                UpdateIntlWrapper();
+    void UpdateStringSorter();
 
     // #97680# --------------------
     short               UpdateContextBmpWidthVector( SvLBoxEntry* pEntry, short nWidth );
