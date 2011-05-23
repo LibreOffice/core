@@ -47,6 +47,7 @@ enum ResourceType_t {
     RT_NoResource,
     RT_Table,
     RT_Stream,
+    RT_StreamProperties,
     RT_List,
     RT_Integer,
     RT_Properties,
