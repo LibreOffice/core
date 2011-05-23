@@ -179,12 +179,12 @@ SvListEntry* SvTreeEntryList::operator[]( size_t i )
 
 size_t SvTreeEntryList::GetPos( SvListEntry* pItem )
 {
-    for ( size_t i = 0, n = aTreeEntryList.size(); i < n; ++i ) {
-        if ( aTreeEntryList[ i ] == pItem ) {
+    for ( size_t i = 0, n = aTreeEntryList.size(); i < n; ++i )
+    {
+        if ( aTreeEntryList[ i ] == pItem )
             return i;
-        }
     }
-    return NULL;
+    return 0;
 }
 
 void SvTreeEntryList::push_back( SvListEntry* pItem )
@@ -586,7 +586,7 @@ SvTreeEntryList* SvTreeList::CloneChilds( SvTreeEntryList* pChilds,
                                       SvListEntry* pNewParent,
                                       sal_uLong& nCloneCount ) const
 {
-    DBG_ASSERT(pChilds->Count(),"Childs?");
+    DBG_ASSERT(!pChilds->empty(),"Childs?");
     SvTreeEntryList* pClonedChilds = new SvTreeEntryList;
     for ( size_t i = 0, n = pChilds->size(); i < n; ++i )
     {
