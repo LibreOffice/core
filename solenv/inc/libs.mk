@@ -100,7 +100,7 @@ XMLOFFLIB=-lxo$(DLLPOSTFIX)
 XMLOFFLLIB=-lxol
 .IF "$(GUI)$(COM)"=="WNTGCC"
 STORELIB=-lstore$(UDK_MAJOR)
-SALLIB=-lsal$(UDK_MAJOR)
+SALLIB=-luno_sal$(UDK_MAJOR)
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 STORELIB=-lstore
 SALLIB=-luno_sal
