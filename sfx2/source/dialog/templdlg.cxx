@@ -1336,11 +1336,9 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
                 aFmtLb.SetUpdateMode(sal_False);
                 aFmtLb.Clear();
 
-                nPos = 0;
                 for(nPos = 0 ;  nPos < nCount ; ++nPos )
-                {
                     aFmtLb.InsertEntry( *aStrings.GetObject( nPos ), 0, sal_False, nPos);
-                }
+
                 aFmtLb.SetUpdateMode(true);
             }
             // Selects the current style if any
