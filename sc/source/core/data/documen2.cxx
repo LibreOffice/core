@@ -593,7 +593,7 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, SCTAB nTab )
         InitClipPtrs(pSourceDoc);
         if (nTab >= static_cast<SCTAB>(pTab.size()))
         {
-            while( nTab > pTab.size() - 1 )
+            while( nTab > static_cast<SCTAB>(pTab.size()) )
             {
                 pTab.push_back( NULL );
             }
@@ -760,7 +760,7 @@ sal_Bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos )//TODO:REWORK
                 SetNoListening( sal_True );
                 ScProgress* pProgress = new ScProgress( GetDocumentShell(),
                     ScGlobal::GetRscString(STR_UNDO_MOVE_TAB), GetCodeCount() );
-                if (nNewPos = SC_TAB_APPEND || nNewPos >= static_cast<SCTAB>(pTab.size()))
+                if (nNewPos == SC_TAB_APPEND || nNewPos >= static_cast<SCTAB>(pTab.size()))
                     nNewPos = nTabCount-1;
 
                 //  Referenz-Updaterei
