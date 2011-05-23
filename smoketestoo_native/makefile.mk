@@ -58,6 +58,6 @@ CPPTEST_LIBRARY = $(SHL1TARGETN)
 localinstall :
     $(RM) -r $(installationtest_instpath)
     $(MKDIRHIER) $(installationtest_instpath)
-    ooinstall $(installationtest_instpath)/opt
+    ooinstall -l $(installationtest_instpath)/opt
 cpptest : localinstall
 .END
