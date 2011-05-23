@@ -84,7 +84,7 @@ uno::Reference< msforms::XNewFont > SAL_CALL ScVbaLabel::getFont() throw (uno::R
     return new VbaNewFont( this, mxContext, m_xProps );
 }
 
-ScVbaLabel::getServiceImplName()
+rtl::OUString& ScVbaLabel::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaLabel") );
     return sImplName;

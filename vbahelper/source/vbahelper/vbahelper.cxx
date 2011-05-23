@@ -505,7 +505,6 @@ sal_Int32 extractIntFromAny( const uno::Any& rAny ) throw (uno::RuntimeException
 sal_Int32 extractIntFromAny( const uno::Any& rAny, sal_Int32 nDefault ) throw (uno::RuntimeException)
 {
     return rAny.hasValue() ? extractIntFromAny( rAny ) : nDefault;
->>>>>>> ooo/DEV300_m106
 }
 
 bool extractBoolFromAny( const uno::Any& rAny ) throw (uno::RuntimeException)
@@ -1055,202 +1054,190 @@ void UserFormGeometryHelper::implSetSize( double fSize, bool bHeight, bool bOute
 
 // ============================================================================
 
-    double ConcreteXShapeGeometryAttributes::getLeft() const
-    {
-        return m_pShapeHelper->getLeft();
-    }
-    void ConcreteXShapeGeometryAttributes::setLeft( double nLeft )
-    {
-        m_pShapeHelper->setLeft( nLeft );
-    }
-    double ConcreteXShapeGeometryAttributes::getTop() const
-    {
-        return m_pShapeHelper->getTop();
-    }
-    void ConcreteXShapeGeometryAttributes::setTop( double nTop )
-    {
-        m_pShapeHelper->setTop( nTop );
+double ConcreteXShapeGeometryAttributes::getLeft() const
+{
+    return m_pShapeHelper->getLeft();
+}
+void ConcreteXShapeGeometryAttributes::setLeft( double nLeft )
+{
+    m_pShapeHelper->setLeft( nLeft );
+}
+double ConcreteXShapeGeometryAttributes::getTop() const
+{
+    return m_pShapeHelper->getTop();
+}
+void ConcreteXShapeGeometryAttributes::setTop( double nTop )
+{
+    m_pShapeHelper->setTop( nTop );
+}
+
+double ConcreteXShapeGeometryAttributes::getHeight() const
+{
+    return m_pShapeHelper->getHeight();
+}
+void ConcreteXShapeGeometryAttributes::setHeight( double nHeight )
+{
+    m_pShapeHelper->setHeight( nHeight );
+}
+double ConcreteXShapeGeometryAttributes::getWidth() const
+{
+    return m_pShapeHelper->getWidth();
+}
+void ConcreteXShapeGeometryAttributes::setWidth( double nWidth)
+{
+    m_pShapeHelper->setWidth( nWidth );
+}
+
+
+ShapeHelper::ShapeHelper( const css::uno::Reference< css::drawing::XShape >& _xShape) throw (css::script::BasicErrorException ) : xShape( _xShape )
+{
+    if( !xShape.is() )
+        throw css::uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No valid shape for helper")), css::uno::Reference< css::uno::XInterface >() );
+}
+
+double ShapeHelper::getHeight() const
+{
+        return  Millimeter::getInPoints(xShape->getSize().Height);
     }
 
-    double ConcreteXShapeGeometryAttributes::getHeight() const
-    {
-        return m_pShapeHelper->getHeight();
-    }
-    void ConcreteXShapeGeometryAttributes::setHeight( double nHeight )
-    {
-        m_pShapeHelper->setHeight( nHeight );
-    }
-    double ConcreteXShapeGeometryAttributes::getWidth() const
-    {
-        return m_pShapeHelper->getWidth();
-    }
-    void ConcreteXShapeGeometryAttributes::setWidth( double nWidth)
-    {
-        m_pShapeHelper->setWidth( nWidth );
-    }
 
-
-    ShapeHelper::ShapeHelper( const css::uno::Reference< css::drawing::XShape >& _xShape) throw (css::script::BasicErrorException ) : xShape( _xShape )
+    void ShapeHelper::setHeight(double _fheight) throw ( css::script::BasicErrorException )
+{
+    try
     {
-        if( !xShape.is() )
-            throw css::uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No valid shape for helper")), css::uno::Reference< css::uno::XInterface >() );
+        css::awt::Size aSize = xShape->getSize();
+        aSize.Height = Millimeter::getInHundredthsOfOneMillimeter(_fheight);
+        xShape->setSize(aSize);
     }
-
-    double ShapeHelper::getHeight() const
+    catch ( css::uno::Exception& /*e*/)
     {
-            return  Millimeter::getInPoints(xShape->getSize().Height);
+        throw css::script::BasicErrorException( rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
         }
-
-
-        void ShapeHelper::setHeight(double _fheight) throw ( css::script::BasicErrorException )
-    {
-        try
-        {
-            css::awt::Size aSize = xShape->getSize();
-            aSize.Height = Millimeter::getInHundredthsOfOneMillimeter(_fheight);
-            xShape->setSize(aSize);
-        }
-        catch ( css::uno::Exception& /*e*/)
-        {
-            throw css::script::BasicErrorException( rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
-            }
-    }
-    double ShapeHelper::getWidth() const
-    {
-        return Millimeter::getInPoints(xShape->getSize().Width);
-        }
-
-    void ShapeHelper::setWidth(double _fWidth) throw ( css::script::BasicErrorException )
-    {
-        try
-        {
-            css::awt::Size aSize = xShape->getSize();
-            aSize.Width = Millimeter::getInHundredthsOfOneMillimeter(_fWidth);
-            xShape->setSize(aSize);
-        }
-        catch (css::uno::Exception& /*e*/)
-        {
-            throw css::script::BasicErrorException( rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
-        }
+}
+double ShapeHelper::getWidth() const
+{
+    return Millimeter::getInPoints(xShape->getSize().Width);
     }
 
-
-    double ShapeHelper::getLeft() const
+void ShapeHelper::setWidth(double _fWidth) throw ( css::script::BasicErrorException )
+{
+    try
     {
-        return Millimeter::getInPoints(xShape->getPosition().X);
+        css::awt::Size aSize = xShape->getSize();
+        aSize.Width = Millimeter::getInHundredthsOfOneMillimeter(_fWidth);
+        xShape->setSize(aSize);
     }
-
-
-    void ShapeHelper::setLeft(double _fLeft)
+    catch (css::uno::Exception& /*e*/)
     {
-        css::awt::Point aPoint = xShape->getPosition();
-        aPoint.X = Millimeter::getInHundredthsOfOneMillimeter(_fLeft);
-        xShape->setPosition(aPoint);
+        throw css::script::BasicErrorException( rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
     }
+}
 
 
-    double ShapeHelper::getTop() const
-    {
-            return Millimeter::getInPoints(xShape->getPosition().Y);
-    }
+double ShapeHelper::getLeft() const
+{
+    return Millimeter::getInPoints(xShape->getPosition().X);
+}
 
 
-    void ShapeHelper::setTop(double _fTop)
-    {
-        css::awt::Point aPoint = xShape->getPosition();
-        aPoint.Y = Millimeter::getInHundredthsOfOneMillimeter(_fTop);
-        xShape->setPosition(aPoint);
-    }
+void ShapeHelper::setLeft(double _fLeft)
+{
+    css::awt::Point aPoint = xShape->getPosition();
+    aPoint.X = Millimeter::getInHundredthsOfOneMillimeter(_fLeft);
+    xShape->setPosition(aPoint);
+}
 
-    void DebugHelper::exception( const rtl::OUString&  DetailedMessage, const css::uno::Exception& ex,  int err, const rtl::OUString& /*additionalArgument*/ ) throw( css::script::BasicErrorException )
-    {
-        // #TODO #FIXME ( do we want to support additionalArg here )
-        throw css::script::BasicErrorException( DetailedMessage.concat( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ")) ).concat( ex.Message ), css::uno::Reference< css::uno::XInterface >(), err, rtl::OUString() );
-    }
 
-    void DebugHelper::exception( int err,  const rtl::OUString& additionalArgument ) throw( css::script::BasicErrorException )
-    {
-        exception( rtl::OUString(), css::uno::Exception(), err, additionalArgument );
-    }
-    void DebugHelper::exception( const css::uno::Exception& ex ) throw( css::script::BasicErrorException )
-    {
-        exception( rtl::OUString(), ex, SbERR_INTERNAL_ERROR, rtl::OUString() );
-    }
+double ShapeHelper::getTop() const
+{
+        return Millimeter::getInPoints(xShape->getPosition().Y);
+}
 
-    Millimeter::Millimeter():m_nMillimeter(0) {}
 
-    Millimeter::Millimeter(double mm):m_nMillimeter(mm) {}
+void ShapeHelper::setTop(double _fTop)
+{
+    css::awt::Point aPoint = xShape->getPosition();
+    aPoint.Y = Millimeter::getInHundredthsOfOneMillimeter(_fTop);
+    xShape->setPosition(aPoint);
+}
 
-    void Millimeter::set(double mm) { m_nMillimeter = mm; }
-    void Millimeter::setInPoints(double points)
-    {
-        m_nMillimeter = points * factor / 100.0;
-    }
+void DebugHelper::exception( const rtl::OUString&  DetailedMessage, const css::uno::Exception& ex,  int err, const rtl::OUString& /*additionalArgument*/ ) throw( css::script::BasicErrorException )
+{
+    // #TODO #FIXME ( do we want to support additionalArg here )
+    throw css::script::BasicErrorException( DetailedMessage.concat( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ")) ).concat( ex.Message ), css::uno::Reference< css::uno::XInterface >(), err, rtl::OUString() );
+}
 
-    void Millimeter::setInHundredthsOfOneMillimeter(double hmm)
-    {
-        m_nMillimeter = hmm / 100;
-    }
+void DebugHelper::exception( int err,  const rtl::OUString& additionalArgument ) throw( css::script::BasicErrorException )
+{
+    exception( rtl::OUString(), css::uno::Exception(), err, additionalArgument );
+}
+void DebugHelper::exception( const css::uno::Exception& ex ) throw( css::script::BasicErrorException )
+{
+    exception( rtl::OUString(), ex, SbERR_INTERNAL_ERROR, rtl::OUString() );
+}
 
-    double Millimeter::get()
-    {
-        return m_nMillimeter;
-    }
-    double Millimeter::getInHundredthsOfOneMillimeter()
-    {
-        return m_nMillimeter * 100;
-    }
-    double Millimeter::getInPoints()
-    {
-        return m_nMillimeter / factor * 100.0;
-    }
+Millimeter::Millimeter():m_nMillimeter(0) {}
 
-    sal_Int32 Millimeter::getInHundredthsOfOneMillimeter(double points)
-    {
-        sal_Int32 mm = static_cast<sal_Int32>(points * factor);
-        return mm;
-    }
+Millimeter::Millimeter(double mm):m_nMillimeter(mm) {}
 
-    double Millimeter::getInPoints(int _hmm)
-    {
-        double points = double( static_cast<double>(_hmm) / factor);
-        return points;
-    }
+void Millimeter::set(double mm) { m_nMillimeter = mm; }
+void Millimeter::setInPoints(double points)
+{
+    m_nMillimeter = points * factor / 100.0;
+}
 
-    // Listener for XNotifyingDispatch
-    VBADispatchListener::VBADispatchListener() : m_State( sal_False )
-    {
-    }
+void Millimeter::setInHundredthsOfOneMillimeter(double hmm)
+{
+    m_nMillimeter = hmm / 100;
+}
 
-    // Listener for XNotifyingDispatch
-    VBADispatchListener::~VBADispatchListener()
-    {
-    }
+double Millimeter::get()
+{
+    return m_nMillimeter;
+}
+double Millimeter::getInHundredthsOfOneMillimeter()
+{
+    return m_nMillimeter * 100;
+}
+double Millimeter::getInPoints()
+{
+    return m_nMillimeter / factor * 100.0;
+}
 
-    // Listener for XNotifyingDispatch
-    void SAL_CALL VBADispatchListener::dispatchFinished( const frame::DispatchResultEvent& aEvent ) throw ( uno::RuntimeException )
-    {
-        m_Result = aEvent.Result;
-        m_State = ( aEvent.State == frame::DispatchResultState::SUCCESS ) ? sal_True : sal_False;
-    }
+sal_Int32 Millimeter::getInHundredthsOfOneMillimeter(double points)
+{
+    sal_Int32 mm = static_cast<sal_Int32>(points * factor);
+    return mm;
+}
 
-    // Listener for XNotifyingDispatch
-    void SAL_CALL VBADispatchListener::disposing( const lang::EventObject& /*aEvent*/ ) throw( uno::RuntimeException )
-    {
-    }
+double Millimeter::getInPoints(int _hmm)
+{
+    double points = double( static_cast<double>(_hmm) / factor);
+    return points;
+}
 
-        SfxObjectShell* getSfxObjShell( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
-        {
-            SfxObjectShell* pFoundShell = NULL;
-            if ( xModel.is() )
-            {
-                uno::Reference< lang::XUnoTunnel >  xObjShellTunnel( xModel, uno::UNO_QUERY_THROW );
-                pFoundShell = reinterpret_cast<SfxObjectShell*>( xObjShellTunnel->getSomething(SfxObjectShell::getUnoTunnelId()));
-            }
-            if ( !pFoundShell )
-                throw uno::RuntimeException();
-            return pFoundShell;
-        }
+// Listener for XNotifyingDispatch
+VBADispatchListener::VBADispatchListener() : m_State( sal_False )
+{
+}
+
+// Listener for XNotifyingDispatch
+VBADispatchListener::~VBADispatchListener()
+{
+}
+
+// Listener for XNotifyingDispatch
+void SAL_CALL VBADispatchListener::dispatchFinished( const frame::DispatchResultEvent& aEvent ) throw ( uno::RuntimeException )
+{
+    m_Result = aEvent.Result;
+    m_State = ( aEvent.State == frame::DispatchResultState::SUCCESS ) ? sal_True : sal_False;
+}
+
+// Listener for XNotifyingDispatch
+void SAL_CALL VBADispatchListener::disposing( const lang::EventObject& /*aEvent*/ ) throw( uno::RuntimeException )
+{
+}
+
 uno::Reference< XHelperInterface > getVBADocument( const uno::Reference< frame::XModel >& xModel )
 {
     uno::Reference< XHelperInterface > xIf;

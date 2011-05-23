@@ -69,14 +69,6 @@ sal_Int32 SAL_CALL ScVbaFrame::getSpecialEffect() throw (uno::RuntimeException)
     return msforms::fmSpecialEffect::fmSpecialEffectEtched;
 }
 
-void SAL_CALL
-ScVbaFrame::setValue( const uno::Any& _value ) throw (::com::sun::star::uno::RuntimeException)
-{
-    rtl::OUString sCaption;
-    _value >>= sCaption;
-    setCaption( sCaption );
-}
-
 ::sal_Int32 SAL_CALL ScVbaFrame::getForeColor() throw (::com::sun::star::uno::RuntimeException)
 {
     return 0;

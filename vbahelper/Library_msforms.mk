@@ -56,7 +56,6 @@ $(eval $(call gb_Library_add_linked_libs,msforms,\
     svl \
     svt \
     svx \
-    stl \
     tk \
     tl \
     vbahelper \
