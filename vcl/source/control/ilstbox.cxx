@@ -186,8 +186,8 @@ sal_uInt16 ImplEntryList::InsertEntry( sal_uInt16 nPos, ImplEntryType* pNewEntry
         }
         else
         {
-            maEntries.push_back(pNewEntry);
             insPos = maEntries.size();
+            maEntries.push_back(pNewEntry);
         }
     }
     else
