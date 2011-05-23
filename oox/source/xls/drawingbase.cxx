@@ -168,8 +168,7 @@ void ShapeAnchor::setCellPos( sal_Int32 nElement, sal_Int32 nParentContext, cons
 
 void ShapeAnchor::importVmlAnchor( const OUString& rAnchor )
 {
-    meAnchorType = ANCHOR_TWOCELL;          /// VML uses two-cell anchors only
-    meCellAnchorType = CELLANCHOR_PIXEL;    /// VML uses screen pixels for offset values
+    meAnchorType = ANCHOR_VML;
 
     ::std::vector< OUString > aTokens;
     sal_Int32 nIndex = 0;

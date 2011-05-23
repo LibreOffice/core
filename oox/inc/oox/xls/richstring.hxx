@@ -81,7 +81,7 @@ public:
 
     void                writeFontProperties(
         const ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >& rxText,
-        sal_Int32 nXfId ) const;
+        const Font* pFont ) const;
 
 private:
     ::rtl::OUString     maText;         /// Portion text.

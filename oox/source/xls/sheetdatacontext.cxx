@@ -163,56 +163,8 @@ void SheetDataContext::onCharacters( const OUString& rChars )
             maCellValue = rChars;
         break;
         case XLS_TOKEN( f ):
-            if( maCurrCell.mxCell.is() ) try
-            {
-                switch( maCurrCell.mnFormulaType )
-                {
-                    case XML_normal:
-                        if( rChars.getLength() > 0 )
-                        {
-                            Reference< XFormulaTokens > xTokens( maCurrCell.mxCell, UNO_QUERY_THROW );
-                            CellFormulaContext aContext( xTokens, maCurrCell.maAddress );
-                            getFormulaParser().importFormula( aContext, rChars );
-                        }
-                    break;
-
-                    case XML_array:
-                        if( (maCurrCell.maFormulaRef.getLength() > 0) && (rChars.getLength() > 0) )
-                        {
-                            CellRangeAddress aArrayRange;
-                            Reference< XArrayFormulaTokens > xTokens( getCellRange( maCurrCell.maFormulaRef, &aArrayRange ), UNO_QUERY_THROW );
-                            ArrayFormulaContext aContext( xTokens, aArrayRange );
-                            getFormulaParser().importFormula( aContext, rChars );
-                        }
-                    break;
-
-                    case XML_shared:
-                        if( maCurrCell.mnSharedId >= 0 )
-                        {
-                            if( rChars.getLength() > 0 )
-                                getSharedFormulas().importSharedFmla( rChars, maCurrCell.maFormulaRef, maCurrCell.mnSharedId, maCurrCell.maAddress );
-                            Reference< XFormulaTokens > xTokens( maCurrCell.mxCell, UNO_QUERY_THROW );
-                            ExtCellFormulaContext aContext( *this, xTokens, maCurrCell.maAddress );
-                            getSharedFormulas().setSharedFormulaCell( aContext, maCurrCell.mnSharedId );
-                        }
-                    break;
-
-                    case XML_dataTable:
-                        if( maCurrCell.maFormulaRef.getLength() > 0 )
-                        {
-                            CellRangeAddress aTableRange;
-                            if( getAddressConverter().convertToCellRange( aTableRange, maCurrCell.maFormulaRef, getSheetIndex(), true, true ) )
-                                setTableOperation( aTableRange, maTableData );
-                        }
-                    break;
-
-                    default:
-                        OSL_FAIL( "SheetDataContext::onEndElement - unknown formula type" );
-                }
-            }
-            catch( Exception& )
-            {
-            }
+            if( maFmlaData.mnFormulaType != XML_TOKEN_INVALID )
+                maTokens = mrFormulaParser.importFormula( maCellData.maCellAddr, rChars );
         break;
     }
 }

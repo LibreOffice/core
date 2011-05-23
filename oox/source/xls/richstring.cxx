@@ -120,18 +120,15 @@ void RichStringPortion::convert( const Reference< XText >& rxText, const Font* p
     }
 }
 
-void RichStringPortion::writeFontProperties( const Reference<XText>& rxText, sal_Int32 nXfId ) const
+void RichStringPortion::writeFontProperties( const Reference<XText>& rxText, const Font* pFont ) const
 {
     PropertySet aPropSet(rxText);
 
     if (mxFont.get())
         mxFont->writeToPropertySet(aPropSet, FONT_PROPTYPE_TEXT);
 
-    if (const Font* pFont = getStyles().getFontFromCellXf(nXfId).get())
-    {
-        if (pFont->needsRichTextFormat())
-            pFont->writeToPropertySet(aPropSet, FONT_PROPTYPE_TEXT);
-    }
+    if (lclNeedsRichTextFormat(pFont))
+        pFont->writeToPropertySet(aPropSet, FONT_PROPTYPE_TEXT);
 }
 
 // ----------------------------------------------------------------------------
@@ -550,7 +547,7 @@ void RichString::convert( const Reference< XText >& rxText, const Font* pFirstPo
         // It's much faster this way.
         RichStringPortion& rPtn = *maTextPortions.front();
         rxText->setString(rPtn.getText());
-        rPtn.writeFontProperties(rxText, nXfId);
+        rPtn.writeFontProperties(rxText, pFirstPortionFont);
         return;
     }
 

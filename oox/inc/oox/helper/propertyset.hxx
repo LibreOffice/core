@@ -101,7 +101,8 @@ public:
 
     /** Gets the specified boolean property from the property set.
         @return  true = property contains true; false = property contains false or error occurred. */
-    bool                getBoolProperty( sal_Int32 nPropId ) const;
+    inline bool         getBoolProperty( sal_Int32 nPropId ) const
+                            { bool bValue = false; return getProperty( bValue, nPropId ) && bValue; }
 
     /** Gets the specified properties from the property set. Tries to use the XMultiPropertySet interface.
         @param orValues  (out-parameter) The related property values.
