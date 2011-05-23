@@ -158,8 +158,8 @@ const PolyPolygon *SwNoTxtNode::HasContour() const
                     }
                 }
             }
-            OSL_ASSERT( !bPixelGrf || aGrfMap == aContourMap,
-                    "scale factor for pixel unsupported" );
+            OSL_ENSURE( !bPixelGrf || aGrfMap == aContourMap,
+                        "scale factor for pixel unsupported" );
             OutputDevice* pOutDev =
                 (bPixelGrf || bPixelContour) ? Application::GetDefaultDevice()
                                              : 0;

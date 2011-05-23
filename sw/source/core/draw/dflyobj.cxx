@@ -474,8 +474,7 @@ namespace
                     if ( pMetaFile &&
                          pMetaFile->IsRecord() && !pMetaFile->IsPause() )
                     {
-                        ASSERT( false,
-                                "MapMode restoration during meta file creation is somehow suspect - using <SetRelativeMapMode(..)>, but not sure, if correct." )
+                        OSL_FAIL( "MapMode restoration during meta file creation is somehow suspect - using <SetRelativeMapMode(..)>, but not sure, if correct." );
                         mpOutDev->SetRelativeMapMode( pViewShell->getPrePostMapMode() );
                     }
                     else

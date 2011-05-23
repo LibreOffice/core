@@ -96,8 +96,8 @@ test_components = \
     component/framework/util/fwk \
     component/toolkit/util/tk \
     component/sfx2/util/sfx \
+    component/vcl/vcl.$(GUIBASE) \
     configmgr \
-    vcl \
     mcnttype \
     i18npool
 .IF "$(OS)" == "WNT"
