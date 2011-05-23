@@ -35,7 +35,7 @@
 #include "WinImplHelper.hxx"
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include <systools/win32/user9x.h>
+#include <windows.h>
 
 //------------------------------------------------------------
 // namespace directives
