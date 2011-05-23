@@ -122,7 +122,6 @@
 #define SvxCellVerJustifyEnumItem   SfxUInt16Item
 #define SvxCellOrientationEnumItem  SfxUInt16Item
 #define SvxLanguage                 SfxUInt16Item
-#define OfaStringListItem           SfxStringListItem
 #define avmedia_MediaItem           ::avmedia::MediaItem
 #include <sfx2/tplpitem.hxx>
 #include <svl/ptitem.hxx>
