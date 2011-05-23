@@ -239,15 +239,21 @@ void ScRTFParser::NewCellRow( ImportInfo* /*pInfo*/ )
         ScRTFCellDefault* pD;
         bNewDef = false;
         // rechts nicht buendig? => neue Tabelle
-        if (  nLastWidth
-           && ( (pD = &(pDefaultList->back())) != 0 )
-           && pD->nTwips != nLastWidth
-           )
+        if ( nLastWidth && !pDefaultList->empty() )
         {
-            SCCOL n1, n2;
-            if ( !( SeekTwips( nLastWidth, &n1 )
-                && SeekTwips( pD->nTwips, &n2 ) && n1 == n2) )
-                ColAdjust();
+            pD = &(pDefaultList->back());
+            if (pD->nTwips != nLastWidth )
+            {
+                SCCOL n1, n2;
+                if ( !(  SeekTwips( nLastWidth, &n1 )
+                      && SeekTwips( pD->nTwips, &n2 )
+                      && n1 == n2
+                      )
+                )
+                {
+                    ColAdjust();
+                }
+            }
         }
         // TwipCols aufbauen, erst nach nLastWidth Vergleich!
         for ( size_t i = 0, nListSize = pDefaultList->size(); i < nListSize; ++i )
