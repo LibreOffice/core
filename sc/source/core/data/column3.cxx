@@ -526,6 +526,11 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
         {
             SCSIZE nStartSegment(aIt->first);
             bool bMoveSegment(aIt->second);
+            // The indexes in aRemovedSegments denote cell positions in the
+            // original array. But as we are shifting it from the left, we have
+            // to compensate for already performed shifts for latter segments.
+            // TODO: use reverse iterators instead
+            SCSIZE nShift(0);
             ++aIt;
             do
             {
@@ -533,9 +538,12 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
                 if (bMoveSegment)
                 {
                     memmove(
-                            &pItems[nStartSegment], &pItems[nEndSegment],
+                            &pItems[nStartSegment - nShift],
+                            &pItems[nEndSegment - nShift],
                             (nCount - nEndSegment) * sizeof(ColEntry));
-                    nCount -= nEndSegment - nStartSegment;
+                    SCSIZE const nNewShift(nEndSegment - nStartSegment);
+                    nShift += nNewShift;
+                    nCount -= nNewShift;
                 }
                 nStartSegment = nEndSegment;
                 bMoveSegment = aIt->second;
