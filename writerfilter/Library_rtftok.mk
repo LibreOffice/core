@@ -49,15 +49,6 @@ $(eval $(call gb_Library_add_linked_libs,rtftok,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,rtftok,\
-    writerfilter/source/rtftok/RTFParseException \
 ))
-
-$(eval $(call gb_Library_add_generated_exception_objects,rtftok,\
-    writerfilter/source/rtftok/RTFScanner \
-))
-
-$(call gb_GenCxxObject_get_source,writerfilter/source/rtftok/RTFScanner) : $(SRCDIR)/writerfilter/source/rtftok/FlexLexer.h $(SRCDIR)/writerfilter/source/rtftok/RTFScanner.skl $(SRCDIR)/writerfilter/source/rtftok/RTFScanner.lex
-	mkdir -p $(dir $@) && \
-		flex -+ -S$(SRCDIR)/writerfilter/source/rtftok/RTFScanner.skl -o$@ $(SRCDIR)/writerfilter/source/rtftok/RTFScanner.lex
 
 # vim: set noet ts=4 sw=4:
