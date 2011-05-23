@@ -1469,10 +1469,13 @@ case "$host_os" in
         test_freetype=no
         test_fontconfig=no
         test_cairo=no
-        _os=Darwin
         if test "$host_cpu" = "arm"; then
-	    :
-        elif test "$enable_systray" = "yes" && test "$enable_gtk" != "no"; then
+	    _os=iOS
+            test_gtk=no
+        else
+            _os=Darwin
+        fi
+        if test "$_os" = "Darwin" -a "$enable_systray" = "yes" -a "$enable_gtk" != "no"; then
             AC_MSG_WARN([Disabling gtk-quickstarter - not supported on Mac. Use --disable-systray])
             echo "Disabling gtk-quickstarter - not supported on Mac. Use --disable-systray" >>warn
             enable_systray=no
@@ -1648,7 +1651,7 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGW" = "yes" \) -a "$GCC" = "yes"; then
    _gcc_major=`echo $_gcc_version | $AWK -F. '{ print \$1 }'`
    GCCVER=`echo $_gcc_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
 
-   if test "$_os" = "Darwin" -a "$host_cpu" != "arm" -a "$GCCVER" -ge "040100" ; then
+   if test "$_os" = "Darwin" -a "$GCCVER" -ge "040100" ; then
       if test -z "$save_CC" -a -x "$GCC_HOME/bin/gcc-4.0" ; then
          export CC=$GCC_HOME/bin/gcc-4.0
           dnl  export CC to have it available in set_soenv -> config.guess
@@ -2665,7 +2668,7 @@ if test "$GXX" = "yes"; then
    _gpp_version=`$CXX -dumpversion`
    _gpp_majmin=`echo $_gpp_version | $AWK -F. '{ print \$1*100+\$2 }'`
 
-   if test "$_os" = "Darwin" -a "$host_cpu" != "arm" -a "$_gpp_majmin" -ge "401" ; then
+   if test "$_os" = "Darwin" -a "$_gpp_majmin" -ge "401" ; then
       if test -z "$save_CXX" -a -x "$GCC_HOME/bin/g++-4.0" ; then
          CXX=$GCC_HOME/bin/g++-4.0
          _gpp_majmin_2=`"$CXX" -dumpversion | $AWK -F. '{ print \$1*100+\$2 }'`
@@ -4888,7 +4891,7 @@ fi
 dnl ===================================================================
 dnl Check for system curl
 dnl ===================================================================
-if test "$_os" = "Darwin" && test "$with_system_curl" != "no"; then
+if test "$_os" = "Darwin" -a "$with_system_curl" != "no"; then
    with_system_curl=yes
 fi
 AC_MSG_CHECKING([which curl to use])
@@ -5553,7 +5556,7 @@ if test "$_os" = "Darwin" -a "x$x_includes" = "xno_x_includes"; then
    echo "Do Nothing for _os = Darwin"
    dnl Mac OS X using Aqua graphics. Don't check for X11.
    :
-elif test "$_os" != "WINNT" -a "$_os" != "Android"; then
+elif test "$_os" != "WINNT" -a "$_os" != "Android" -a "$_os" != "iOS"; then
    AC_PATH_X
    AC_PATH_XTRA
    CPPFLAGS="$CPPFLAGS $X_CFLAGS"
@@ -5603,7 +5606,7 @@ fi
 AC_SUBST(XLIB)
 AC_SUBST(XAU_LIBS)
 
-if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$_os" != "Android"; then
+if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$_os" != "Android" -a "$_os" != "iOS"; then
    dnl ===================================================================
    dnl Check for Composite.h for Mozilla plugin
    dnl ===================================================================
@@ -6181,13 +6184,15 @@ if $GNUCP --version 2>/dev/null | grep "coreutils" >/dev/null 2>/dev/null; then
 elif $GNUCP --version 2>/dev/null | grep "GNU fileutils" >/dev/null 2>/dev/null; then
     AC_MSG_RESULT([yes])
 else
-    if test "$_os" = "Darwin" -o "$_os" = "NetBSD" -o "$_os" = "OpenBSD" \
-         -o "$_os" = "FreeBSD" -o "$_os" = "DragonFly"; then
-        GNUCP=''
-        AC_MSG_RESULT([no gnucp found - using the system's cp command])
-    else
-        AC_MSG_ERROR([no, GNU cp needed. install or specify with --with-gnu-cp=/path/to/it])
-    fi
+    case "$build_os" in
+        darwin*|netbsd*|openbsd*|freebsd*|dragonfly*)
+            GNUCP=''
+            AC_MSG_RESULT([no gnucp found - using the system's cp command])
+            ;;
+        *)
+            AC_MSG_ERROR([no, GNU cp needed. install or specify with --with-gnu-cp=/path/to/it])
+            ;;
+    esac
 fi
 
 AC_SUBST(GNUPATCH)
