@@ -3866,13 +3866,12 @@ void SbaTableQueryBrowser::impl_cleanupDataSourceEntry( const String& _rDataSour
     SvTreeEntryList* pList = m_pTreeModel->GetChildList( pDataSourceEntry );
     if ( pList )
     {
-        SvLBoxEntry* pEntryLoop = static_cast<SvLBoxEntry*>( pList->First() );
-        while ( pEntryLoop )
+        for ( size_t i = 0, n = pList->size(); i < n; ++i )
         {
+            SvLBoxEntry* pEntryLoop = static_cast<SvLBoxEntry*>((*pList)[ i ]);
             DBTreeListUserData* pData = static_cast< DBTreeListUserData* >( pEntryLoop->GetUserData() );
             pEntryLoop->SetUserData( NULL );
             delete pData;
-            pEntryLoop = static_cast< SvLBoxEntry* >( pList->Next() );
         }
     }
 
