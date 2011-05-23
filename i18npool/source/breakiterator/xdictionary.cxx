@@ -104,8 +104,8 @@ xdictionary::~xdictionary() {
         osl_unloadModule(hModule);
         for (sal_Int32 i = 0; i < CACHE_MAX; i++) {
             if (cache[i].size > 0) {
-                delete cache[i].contents;
-                delete cache[i].wordboundary;
+                delete [] cache[i].contents;
+                delete [] cache[i].wordboundary;
             }
         }
 }
@@ -233,70 +233,70 @@ static sal_Int16 JapaneseCharType(sal_Unicode c)
 
 WordBreakCache& xdictionary::getCache(const sal_Unicode *text, Boundary& wordBoundary)
 {
+    WordBreakCache& rCache = cache[text[0] & 0x1f];
 
-        WordBreakCache& aCache = cache[text[0] & 0x1f];
+    if (rCache.size != 0 && rCache.equals(text, wordBoundary))
+        return rCache;
 
-        if (aCache.size != 0 && aCache.equals(text, wordBoundary))
-            return aCache;
+    sal_Int32 len = wordBoundary.endPos - wordBoundary.startPos;
 
-        sal_Int32 len = wordBoundary.endPos - wordBoundary.startPos;
-
-        if (aCache.size == 0 || len > aCache.size) {
-            if (aCache.size != 0) {
-                delete aCache.contents;
-                delete aCache.wordboundary;
-                aCache.size = len;
-            }
-            else
-                aCache.size = len > DEFAULT_SIZE ? len : DEFAULT_SIZE;
-            aCache.contents = new sal_Unicode[aCache.size + 1];
-            aCache.wordboundary = new sal_Int32[aCache.size + 2];
+    if (rCache.size == 0 || len > rCache.size) {
+        if (rCache.size != 0) {
+            delete rCache.contents;
+            delete rCache.wordboundary;
+            rCache.size = len;
         }
-        aCache.length  = len;
-        memcpy(aCache.contents, text + wordBoundary.startPos, len * sizeof(sal_Unicode));
-        *(aCache.contents + len) = 0x0000;
-        // reset the wordboundary in cache
-        memset(aCache.wordboundary, '\0', sizeof(sal_Int32)*(len + 2));
+        else
+            rCache.size = len > DEFAULT_SIZE ? len : DEFAULT_SIZE;
+        rCache.contents = new sal_Unicode[rCache.size + 1];
+        rCache.wordboundary = new sal_Int32[rCache.size + 2];
+    }
+    rCache.length  = len;
+    memcpy(rCache.contents, text + wordBoundary.startPos, len * sizeof(sal_Unicode));
+    *(rCache.contents + len) = 0x0000;
+    // reset the wordboundary in cache
+    memset(rCache.wordboundary, '\0', sizeof(sal_Int32)*(len + 2));
 
-        sal_Int32 i = 0;        // loop variable
-        while (aCache.wordboundary[i] < aCache.length) {
-            len = 0;
-            // look the continuous white space as one word and cashe it
-            while (u_isWhitespace((sal_uInt32)text[wordBoundary.startPos + aCache.wordboundary[i] + len]))
-                len ++;
+    sal_Int32 i = 0;        // loop variable
+    while (rCache.wordboundary[i] < rCache.length) {
+        len = 0;
+        // look the continuous white space as one word and cashe it
+        while (u_isWhitespace((sal_uInt32)text[wordBoundary.startPos + rCache.wordboundary[i] + len]))
+            len ++;
 
-            if (len == 0) {
-                const sal_Unicode *str = text + wordBoundary.startPos + aCache.wordboundary[i];
-                sal_Int32 slen = aCache.length - aCache.wordboundary[i];
-                sal_Int16 type = 0, count = 0;
-                for (;len == 0 && slen > 0; str++, slen--) {
-                    len = getLongestMatch(str, slen);
-                    if (len == 0) {
-                        if (!japaneseWordBreak) {
-                            len = 1;
-                        } else {
-                            if (count == 0)
-                                type = JapaneseCharType(*str);
-                            else if (type != JapaneseCharType(*str))
-                                break;
-                            count++;
-                        }
+        if (len == 0) {
+            const sal_Unicode *str = text + wordBoundary.startPos + rCache.wordboundary[i];
+            sal_Int32 slen = rCache.length - rCache.wordboundary[i];
+            sal_Int16 type = 0, count = 0;
+            for (;len == 0 && slen > 0; str++, slen--) {
+                len = getLongestMatch(str, slen);
+                if (len == 0) {
+                    if (!japaneseWordBreak) {
+                        len = 1;
+                    } else {
+                        if (count == 0)
+                            type = JapaneseCharType(*str);
+                        else if (type != JapaneseCharType(*str))
+                            break;
+                        count++;
                     }
                 }
-                if (count) {
-                    aCache.wordboundary[i+1] = aCache.wordboundary[i] + count;
-                    i++;
-                }
             }
-
-            if (len) {
-                aCache.wordboundary[i+1] = aCache.wordboundary[i] + len;
+            if (count)
+            {
+                rCache.wordboundary[i+1] = rCache.wordboundary[i] + count;
                 i++;
             }
         }
-        aCache.wordboundary[i + 1] = aCache.length + 1;
 
-        return aCache;
+        if (len) {
+            rCache.wordboundary[i+1] = rCache.wordboundary[i] + len;
+            i++;
+        }
+    }
+    rCache.wordboundary[i + 1] = rCache.length + 1;
+
+    return rCache;
 }
 
 Boundary xdictionary::previousWord(const OUString& rText, sal_Int32 anyPos, sal_Int16 wordType)
