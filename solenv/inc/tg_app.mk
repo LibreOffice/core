@@ -111,7 +111,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @-$(RM) $(MISC)/$(@:b).strip
     @echo $(STDSLO) $(APP$(TNR)OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP$(TNR)LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)/$(@:b).list
-    @echo -n $(APP$(TNR)LINKER) $(APP$(TNR)LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) -o $@ \
+    @/bin/echo -n $(APP$(TNR)LINKER) $(APP$(TNR)LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) -o $@ \
     $(APP$(TNR)LINKTYPEFLAG) $(APP$(TNR)STDLIBS) $(APP$(TNR)STDLIB) $(STDLIB$(TNR)) -filelist $(MISC)/$(@:b).list > $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
     @$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
         `cat $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd` \
