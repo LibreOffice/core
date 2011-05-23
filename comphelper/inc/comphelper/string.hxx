@@ -190,6 +190,7 @@ public:
     {
         return compareNatural(rLHS, rRHS, m_xCollator, m_xBI, m_aLocale);
     }
+    const ::com::sun::star::lang::Locale& getLocale() const { return m_aLocale; }
 };
 
 } }
