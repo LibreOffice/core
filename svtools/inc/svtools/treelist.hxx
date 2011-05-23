@@ -66,7 +66,7 @@ typedef ::std::vector< SvListEntry* > SvTreeEntryList_impl;
 
 //=============================================================================
 
-class SvTreeEntryList
+class SVT_DLLPUBLIC SvTreeEntryList
 {
 private:
     SvTreeEntryList_impl    aTreeEntryList;
