@@ -1026,15 +1026,15 @@ sal_Bool SvLBox::CopySelection( SvLBox* pSource, SvLBoxEntry* pTarget )
     {
         // Childs werden automatisch mitkopiert
         pSource->SelectChilds( pSourceEntry, sal_False );
-        aList.Insert( pSourceEntry, LIST_APPEND );
+        aList.push_back( pSourceEntry );
         pSourceEntry = pSource->NextSelected( pSourceEntry );
     }
 
-    pSourceEntry = (SvLBoxEntry*)aList.First();
-    while ( pSourceEntry )
+    for ( size_t i = 0, n = aList.size(); i < n; ++i )
     {
+        pSourceEntry = (SvLBoxEntry*)aList[ i ];
         SvLBoxEntry* pNewParent = 0;
-        sal_uLong nInsertionPos = LIST_APPEND;
+        sal_uLong nInsertionPos = ULONG_MAX;
         sal_Bool bOk=NotifyCopying(pTarget,pSourceEntry,pNewParent,nInsertionPos);
         if ( bOk )
         {
@@ -1059,7 +1059,6 @@ sal_Bool SvLBox::CopySelection( SvLBox* pSource, SvLBoxEntry* pTarget )
         if( bOk == (sal_Bool)2 )  // !!!HACK  verschobenen Entry sichtbar machen?
             MakeVisible( pSourceEntry );
 
-        pSourceEntry = (SvLBoxEntry*)aList.Next();
     }
     pModel->SetCloneLink( aCloneLink );
     return bSuccess;
@@ -1087,20 +1086,20 @@ sal_Bool SvLBox::MoveSelectionCopyFallbackPossible( SvLBox* pSource, SvLBoxEntry
     {
         // Childs werden automatisch mitbewegt
         pSource->SelectChilds( pSourceEntry, sal_False );
-        aList.Insert( pSourceEntry, LIST_APPEND );
+        aList.push_back( pSourceEntry );
         pSourceEntry = pSource->NextSelected( pSourceEntry );
     }
 
-    pSourceEntry = (SvLBoxEntry*)aList.First();
-    while ( pSourceEntry )
+    for ( size_t i = 0, n = aList.size(); i < n; ++i )
     {
+        pSourceEntry = (SvLBoxEntry*)aList[ i ];
         SvLBoxEntry* pNewParent = 0;
         sal_uLong nInsertionPos = LIST_APPEND;
         sal_Bool bOk = NotifyMoving(pTarget,pSourceEntry,pNewParent,nInsertionPos);
         sal_Bool bCopyOk = bOk;
         if ( !bOk && bAllowCopyFallback )
         {
-            nInsertionPos = LIST_APPEND;
+            nInsertionPos = ULONG_MAX;
             bCopyOk = NotifyCopying(pTarget,pSourceEntry,pNewParent,nInsertionPos);
         }
 
@@ -1129,8 +1128,6 @@ sal_Bool SvLBox::MoveSelectionCopyFallbackPossible( SvLBox* pSource, SvLBoxEntry
 
         if( bOk == (sal_Bool)2 )  // !!!HACK  verschobenen Entry sichtbar machen?
             MakeVisible( pSourceEntry );
-
-        pSourceEntry = (SvLBoxEntry*)aList.Next();
     }
     pModel->SetCloneLink( aCloneLink );
     return bSuccess;
@@ -1145,17 +1142,16 @@ void SvLBox::RemoveSelection()
     SvLBoxEntry* pEntry = FirstSelected();
     while ( pEntry )
     {
-        aList.Insert( pEntry );
+        aList.push_back( pEntry );
         if ( pEntry->HasChilds() )
             // Remove loescht Childs automatisch
             SelectChilds( pEntry, sal_False );
         pEntry = NextSelected( pEntry );
     }
-    pEntry = (SvLBoxEntry*)aList.First();
-    while ( pEntry )
+    for ( size_t i = 0, n = aList.size(); i < n; ++i )
     {
+        pEntry = (SvLBoxEntry*)aList[ i ];
         pModel->Remove( pEntry );
-        pEntry = (SvLBoxEntry*)aList.Next();
     }
 }
 

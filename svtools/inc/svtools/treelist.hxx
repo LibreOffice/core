@@ -32,6 +32,7 @@
 #include "svtools/svtdllapi.h"
 #include <tools/solar.h>
 #include <tools/list.hxx>
+#include <vector>
 
 #include <tools/table.hxx>
 #include <tools/link.hxx>
@@ -61,19 +62,36 @@
 #define SVLISTENTRYFLAG_NOT_SELECTABLE  0x0010
 
 class SvListEntry;
+typedef ::std::vector< SvListEntry* > SvTreeEntryList_impl;
 
-class SvTreeEntryList : public List // SvEntryListStd
+//=============================================================================
+
+class SvTreeEntryList
 {
-public:
-    SvTreeEntryList(sal_uInt16 nInitPos=16, sal_uInt16 nResize=16 )
-            : List( nInitPos, nResize )
-    {}
-    SvTreeEntryList(sal_uInt16 BlockSize, sal_uInt16 InitSize, sal_uInt16 Resize )
-        : List(BlockSize, InitSize, Resize )
-    {}
+private:
+    SvTreeEntryList_impl    aTreeEntryList;
 
-    void DestroyAll();
+public:
+                    SvTreeEntryList() {};
+                    SvTreeEntryList( SvTreeEntryList& rList );
+
+    void            DestroyAll();
+    void            erase( size_t nItem );
+    void            erase( SvListEntry* pItem );
+    void            replace( SvListEntry* pOldItem, SvListEntry* pNewItem );
+
+    size_t          size() const { return aTreeEntryList.size(); }
+    size_t          GetPos( SvListEntry* pItem );
+
+    bool            empty() const { return aTreeEntryList.empty(); }
+
+    void            push_back( SvListEntry* pItem );
+    void            insert( size_t nPos, SvListEntry* pItem );
+    SvListEntry*    last();
+    SvListEntry*    operator[]( size_t i );
 };
+
+//=============================================================================
 
 class SVT_DLLPUBLIC SvListEntry
 {
@@ -110,6 +128,8 @@ public:
     }
     virtual void        Clone( SvListEntry* pSource );
 };
+
+//=============================================================================
 
 class SvListView;
 
@@ -157,6 +177,8 @@ public:
     bool IsSelectable() const { return (bool)(nFlags&SVLISTENTRYFLAG_NOT_SELECTABLE)==0; }
 };
 
+//=============================================================================
+
 enum SvSortMode { SortAscending, SortDescending, SortNone };
 
 // Rueckgabewerte Sortlink:
@@ -167,6 +189,8 @@ struct SvSortData
     SvListEntry* pLeft;
     SvListEntry* pRight;
 };
+
+//=============================================================================
 
 class SVT_DLLPUBLIC SvTreeList
 {
@@ -305,8 +329,12 @@ public:
     const Link&     GetCompareHdl() const { return aCompareLink; }
     void            Resort();
 
+#ifdef CHECK_INTEGRITY
     void            CheckIntegrity() const;
+#endif
 };
+
+//=============================================================================
 
 class SVT_DLLPUBLIC SvListView
 {
@@ -439,18 +467,18 @@ inline SvListEntry* SvTreeList::GetEntry( SvListEntry* pParent, sal_uLong nPos )
 {   if ( !pParent )
         pParent = pRootItem;
     SvListEntry* pRet = 0;
-    if ( pParent->pChilds )
-        pRet = (SvListEntry*)(pParent->pChilds->GetObject(nPos));
+    if ( pParent->pChilds
+    &&   nPos < pParent->pChilds->size()
+    )
+        pRet = (*pParent->pChilds)[ nPos ];
     return pRet;
 }
 
 inline SvListEntry* SvTreeList::GetEntry( sal_uLong nRootPos ) const
 {
-    SvListEntry* pRet;
+    SvListEntry* pRet = NULL;
     if ( nEntryCount )
-        pRet = (SvListEntry*)(pRootItem->pChilds->GetObject(nRootPos));
-    else
-        pRet = 0;
+        pRet = (*pRootItem->pChilds)[nRootPos];
     return pRet;
 }
 

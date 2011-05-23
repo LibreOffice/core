@@ -1713,7 +1713,7 @@ void SvImpLBox::RemovingEntry( SvLBoxEntry* pEntry )
 
     SvLBoxEntry* pParent = (SvLBoxEntry*)(pView->GetModel()->GetParent(pEntry));
 
-    if( pParent && pView->GetModel()->GetChildList(pParent)->Count() == 1 )
+    if( pParent && pView->GetModel()->GetChildList(pParent)->size() == 1 )
     {
         DBG_ASSERT( pView->IsExpanded( pParent ), "Parent not expanded");
         pParent->SetFlags( pParent->GetFlags() | SV_ENTRYFLAG_NO_NODEBMP);
@@ -1881,7 +1881,7 @@ void SvImpLBox::EntryInserted( SvLBoxEntry* pEntry )
     if( GetUpdateMode() )
     {
         SvLBoxEntry* pParent = (SvLBoxEntry*)pTree->GetParent(pEntry);
-        if( pParent && pTree->GetChildList(pParent)->Count() == 1 )
+        if( pParent && pTree->GetChildList(pParent)->size() == 1 )
             // Pluszeichen zeichnen
             pTree->InvalidateEntry( pParent );
 
@@ -2535,7 +2535,7 @@ sal_Bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                         // Sonderbehandlung Explorer: Befindet sich auf der
                         // Root nur ein Eintrag,dann den Root-Entry nicht
                         // einklappen
-                        if( pTree->GetChildList(0)->Count() < 2 )
+                        if( pTree->GetChildList(0)->size() < 2 )
                         {
                             nRefDepth = 1;
                             pParentToCollapse = pCursor;
@@ -3433,10 +3433,10 @@ void SvImpLBox::FindMostRight_Impl( SvLBoxEntry* pParent, SvLBoxEntry* pEntryToI
     if( !pList )
         return;
 
-    sal_uLong nCount = pList->Count();
+    sal_uLong nCount = pList->size();
     for( sal_uLong nCur = 0; nCur < nCount; nCur++ )
     {
-        SvLBoxEntry* pChild = (SvLBoxEntry*)pList->GetObject( nCur );
+        SvLBoxEntry* pChild = (SvLBoxEntry*)(*pList)[  nCur ];
         if( pChild != pEntryToIgnore )
         {
             SetMostRight( pChild );
