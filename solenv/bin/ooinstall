@@ -78,6 +78,7 @@ if ($langs eq 'ALL') {
     @larr = readdir(DIR);
     @larr = grep { $_ ne '.' } @larr;
     @larr = grep { $_ ne '..' } @larr;
+    @larr = (@larr,"en-US");
     closedir(DIR);
 }
 else {
