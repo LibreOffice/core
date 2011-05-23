@@ -118,7 +118,7 @@ CPPFLAGS+:=$(ARCH_FLAGS) -xc99=none
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
 .IF "$(OS)"=="IOS"
-CONFIGURE_FLAGS+=--disable-shared
+CONFIGURE_FLAGS=--disable-shared
 .ELSE
 CONFIGURE_FLAGS=--disable-static
 .ENDIF
