@@ -109,7 +109,10 @@ void LwpDivInfo::Read()
     m_FillerPageTextID.ReadIndexed(m_pObjStrm);
 
     // read external file object stuff
-    /*sal_uInt16 type =*/ m_pObjStrm->QuickReaduInt16();
+#if !defined(NDEBUG)
+    sal_uInt16 type =
+#endif
+    m_pObjStrm->QuickReaduInt16();
     //cpExternalFile = LNULL;
 
     assert(type==0);
