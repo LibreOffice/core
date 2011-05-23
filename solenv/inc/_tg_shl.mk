@@ -287,7 +287,7 @@ $(SHL1TARGETN) : \
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
 # GNU ld since 2.17 supports @cmdfile syntax
 .IF "$(USE_DEFFILE)"!=""
-    @$(COMMAND_ECHO)tmpfile=$(mktmp $(strip \
+    @$(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL1LINKFLAGS) \
         $(LINKFLAGSSHL) \
 	$(SOLARLIB) \
@@ -302,7 +302,7 @@ $(SHL1TARGETN) : \
         -Wl,--exclude-libs,ALL,--start-group $(SHL1STDLIBS) -Wl,--end-group \
         $(SHL1STDSHL) $(STDSHL1) \
         $(SHL1LINKRESO) \
-    )) && echo -n "$(LINK) " && cat $$tmpfile && $(LINK) @$$tmpfile && $(RM) $$tmpfile
+    ))
 .ELSE
     @noop $(assign ALL1OBJLIST:=$(STDOBJ) $(SHL1OBJS) $(SHL1LINKRESO) $(shell $(TYPE) /dev/null $(SHL1LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB1NAME)"!=""	# do not have to include objs
@@ -789,7 +789,7 @@ $(SHL2TARGETN) : \
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
 # GNU ld since 2.17 supports @cmdfile syntax
 .IF "$(USE_DEFFILE)"!=""
-    @$(COMMAND_ECHO)tmpfile=$(mktmp $(strip \
+    @$(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL2LINKFLAGS) \
         $(LINKFLAGSSHL) \
 	$(SOLARLIB) \
@@ -804,7 +804,7 @@ $(SHL2TARGETN) : \
         -Wl,--exclude-libs,ALL,--start-group $(SHL2STDLIBS) -Wl,--end-group \
         $(SHL2STDSHL) $(STDSHL2) \
         $(SHL2LINKRESO) \
-    )) && echo -n "$(LINK) " && cat $$tmpfile && $(LINK) @$$tmpfile && $(RM) $$tmpfile
+    ))
 .ELSE
     @noop $(assign ALL2OBJLIST:=$(STDOBJ) $(SHL2OBJS) $(SHL2LINKRESO) $(shell $(TYPE) /dev/null $(SHL2LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB2NAME)"!=""	# do not have to include objs
@@ -1291,7 +1291,7 @@ $(SHL3TARGETN) : \
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
 # GNU ld since 2.17 supports @cmdfile syntax
 .IF "$(USE_DEFFILE)"!=""
-    @$(COMMAND_ECHO)tmpfile=$(mktmp $(strip \
+    @$(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL3LINKFLAGS) \
         $(LINKFLAGSSHL) \
 	$(SOLARLIB) \
@@ -1306,7 +1306,7 @@ $(SHL3TARGETN) : \
         -Wl,--exclude-libs,ALL,--start-group $(SHL3STDLIBS) -Wl,--end-group \
         $(SHL3STDSHL) $(STDSHL3) \
         $(SHL3LINKRESO) \
-    )) && echo -n "$(LINK) " && cat $$tmpfile && $(LINK) @$$tmpfile && $(RM) $$tmpfile
+    ))
 .ELSE
     @noop $(assign ALL3OBJLIST:=$(STDOBJ) $(SHL3OBJS) $(SHL3LINKRESO) $(shell $(TYPE) /dev/null $(SHL3LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB3NAME)"!=""	# do not have to include objs
@@ -1793,7 +1793,7 @@ $(SHL4TARGETN) : \
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
 # GNU ld since 2.17 supports @cmdfile syntax
 .IF "$(USE_DEFFILE)"!=""
-    @$(COMMAND_ECHO)tmpfile=$(mktmp $(strip \
+    @$(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL4LINKFLAGS) \
         $(LINKFLAGSSHL) \
 	$(SOLARLIB) \
@@ -1808,7 +1808,7 @@ $(SHL4TARGETN) : \
         -Wl,--exclude-libs,ALL,--start-group $(SHL4STDLIBS) -Wl,--end-group \
         $(SHL4STDSHL) $(STDSHL4) \
         $(SHL4LINKRESO) \
-    )) && echo -n "$(LINK) " && cat $$tmpfile && $(LINK) @$$tmpfile && $(RM) $$tmpfile
+    ))
 .ELSE
     @noop $(assign ALL4OBJLIST:=$(STDOBJ) $(SHL4OBJS) $(SHL4LINKRESO) $(shell $(TYPE) /dev/null $(SHL4LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB4NAME)"!=""	# do not have to include objs
@@ -2295,7 +2295,7 @@ $(SHL5TARGETN) : \
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
 # GNU ld since 2.17 supports @cmdfile syntax
 .IF "$(USE_DEFFILE)"!=""
-    @$(COMMAND_ECHO)tmpfile=$(mktmp $(strip \
+    @$(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL5LINKFLAGS) \
         $(LINKFLAGSSHL) \
 	$(SOLARLIB) \
@@ -2310,7 +2310,7 @@ $(SHL5TARGETN) : \
         -Wl,--exclude-libs,ALL,--start-group $(SHL5STDLIBS) -Wl,--end-group \
         $(SHL5STDSHL) $(STDSHL5) \
         $(SHL5LINKRESO) \
-    )) && echo -n "$(LINK) " && cat $$tmpfile && $(LINK) @$$tmpfile && $(RM) $$tmpfile
+    ))
 .ELSE
     @noop $(assign ALL5OBJLIST:=$(STDOBJ) $(SHL5OBJS) $(SHL5LINKRESO) $(shell $(TYPE) /dev/null $(SHL5LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB5NAME)"!=""	# do not have to include objs
@@ -2797,7 +2797,7 @@ $(SHL6TARGETN) : \
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
 # GNU ld since 2.17 supports @cmdfile syntax
 .IF "$(USE_DEFFILE)"!=""
-    @$(COMMAND_ECHO)tmpfile=$(mktmp $(strip \
+    @$(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL6LINKFLAGS) \
         $(LINKFLAGSSHL) \
 	$(SOLARLIB) \
@@ -2812,7 +2812,7 @@ $(SHL6TARGETN) : \
         -Wl,--exclude-libs,ALL,--start-group $(SHL6STDLIBS) -Wl,--end-group \
         $(SHL6STDSHL) $(STDSHL6) \
         $(SHL6LINKRESO) \
-    )) && echo -n "$(LINK) " && cat $$tmpfile && $(LINK) @$$tmpfile && $(RM) $$tmpfile
+    ))
 .ELSE
     @noop $(assign ALL6OBJLIST:=$(STDOBJ) $(SHL6OBJS) $(SHL6LINKRESO) $(shell $(TYPE) /dev/null $(SHL6LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB6NAME)"!=""	# do not have to include objs
@@ -3299,7 +3299,7 @@ $(SHL7TARGETN) : \
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
 # GNU ld since 2.17 supports @cmdfile syntax
 .IF "$(USE_DEFFILE)"!=""
-    @$(COMMAND_ECHO)tmpfile=$(mktmp $(strip \
+    @$(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL7LINKFLAGS) \
         $(LINKFLAGSSHL) \
 	$(SOLARLIB) \
@@ -3314,7 +3314,7 @@ $(SHL7TARGETN) : \
         -Wl,--exclude-libs,ALL,--start-group $(SHL7STDLIBS) -Wl,--end-group \
         $(SHL7STDSHL) $(STDSHL7) \
         $(SHL7LINKRESO) \
-    )) && echo -n "$(LINK) " && cat $$tmpfile && $(LINK) @$$tmpfile && $(RM) $$tmpfile
+    ))
 .ELSE
     @noop $(assign ALL7OBJLIST:=$(STDOBJ) $(SHL7OBJS) $(SHL7LINKRESO) $(shell $(TYPE) /dev/null $(SHL7LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB7NAME)"!=""	# do not have to include objs
@@ -3801,7 +3801,7 @@ $(SHL8TARGETN) : \
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
 # GNU ld since 2.17 supports @cmdfile syntax
 .IF "$(USE_DEFFILE)"!=""
-    @$(COMMAND_ECHO)tmpfile=$(mktmp $(strip \
+    @$(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL8LINKFLAGS) \
         $(LINKFLAGSSHL) \
 	$(SOLARLIB) \
@@ -3816,7 +3816,7 @@ $(SHL8TARGETN) : \
         -Wl,--exclude-libs,ALL,--start-group $(SHL8STDLIBS) -Wl,--end-group \
         $(SHL8STDSHL) $(STDSHL8) \
         $(SHL8LINKRESO) \
-    )) && echo -n "$(LINK) " && cat $$tmpfile && $(LINK) @$$tmpfile && $(RM) $$tmpfile
+    ))
 .ELSE
     @noop $(assign ALL8OBJLIST:=$(STDOBJ) $(SHL8OBJS) $(SHL8LINKRESO) $(shell $(TYPE) /dev/null $(SHL8LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB8NAME)"!=""	# do not have to include objs
@@ -4303,7 +4303,7 @@ $(SHL9TARGETN) : \
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
 # GNU ld since 2.17 supports @cmdfile syntax
 .IF "$(USE_DEFFILE)"!=""
-    @$(COMMAND_ECHO)tmpfile=$(mktmp $(strip \
+    @$(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL9LINKFLAGS) \
         $(LINKFLAGSSHL) \
 	$(SOLARLIB) \
@@ -4318,7 +4318,7 @@ $(SHL9TARGETN) : \
         -Wl,--exclude-libs,ALL,--start-group $(SHL9STDLIBS) -Wl,--end-group \
         $(SHL9STDSHL) $(STDSHL9) \
         $(SHL9LINKRESO) \
-    )) && echo -n "$(LINK) " && cat $$tmpfile && $(LINK) @$$tmpfile && $(RM) $$tmpfile
+    ))
 .ELSE
     @noop $(assign ALL9OBJLIST:=$(STDOBJ) $(SHL9OBJS) $(SHL9LINKRESO) $(shell $(TYPE) /dev/null $(SHL9LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB9NAME)"!=""	# do not have to include objs
@@ -4805,7 +4805,7 @@ $(SHL10TARGETN) : \
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
 # GNU ld since 2.17 supports @cmdfile syntax
 .IF "$(USE_DEFFILE)"!=""
-    @$(COMMAND_ECHO)tmpfile=$(mktmp $(strip \
+    @$(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL10LINKFLAGS) \
         $(LINKFLAGSSHL) \
 	$(SOLARLIB) \
@@ -4820,7 +4820,7 @@ $(SHL10TARGETN) : \
         -Wl,--exclude-libs,ALL,--start-group $(SHL10STDLIBS) -Wl,--end-group \
         $(SHL10STDSHL) $(STDSHL10) \
         $(SHL10LINKRESO) \
-    )) && echo -n "$(LINK) " && cat $$tmpfile && $(LINK) @$$tmpfile && $(RM) $$tmpfile
+    ))
 .ELSE
     @noop $(assign ALL10OBJLIST:=$(STDOBJ) $(SHL10OBJS) $(SHL10LINKRESO) $(shell $(TYPE) /dev/null $(SHL10LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB10NAME)"!=""	# do not have to include objs
