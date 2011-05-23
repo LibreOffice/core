@@ -84,7 +84,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
      $USE_DIRECTX5, $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $TMPDIR,
      $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
      $WIN_GNUCOPY, $WIN_TOUCH, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB, $MOZILLABUILD,
-	 $PROEXT, $TARFILE_LOCATION,
+     $PROEXT, $TARFILE_LOCATION, $GNUMAKE,
      $PYTHON, $SYSTEM_PYTHON, $SYSTEM_MOZILLA, $EPM_FLAGS);
 #
 #-------------------------------------------
@@ -136,6 +136,7 @@ $GLIBC          = "";               # Whether the platform uses glibc
 $PROEXT         = "@PROEXT@";
 $EPM_FLAGS	= "";
 $CL_X64 = '@CL_X64@';
+$GNUMAKE        = "@GNUMAKE@";
 
 #
 #--------------------------------------------------------------------
@@ -2137,10 +2138,10 @@ if ( $Warning ne "" )
 print "*********************************************************".
       "******************* $newline";
 
-print "To build, issue:\nmake\n\n";
-print "To install when the build is finished, issue:\nmake install\n\n";
-print "If you want to develop LibreOffice, you might prefer:\nmake dev-install\n\n";
-print "If you want to run the smoketest, issue:\nmake check\n\n";
+print "To build, issue:\n$GNUMAKE\n\n";
+print "To install when the build is finished, issue:\n$GNUMAKE install\n\n";
+print "If you want to develop LibreOffice, you might prefer:\n$GNUMAKE dev-install\n\n";
+print "If you want to run the smoketest, issue:\n$GNUMAKE check\n\n";
 
 $bootfile = "bootstrap";
 open( OUT, ">$bootfile" ) ||
