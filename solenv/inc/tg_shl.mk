@@ -93,8 +93,11 @@ SHL$(TNR)IMPLIB=i$(TARGET)_t$(TNR)
 .ENDIF			# "$(SHL$(TNR)IMPLIB)" == ""
 .IF "$(COM)" != "GCC"
 USE_$(TNR)IMPLIB=-implib:$(LB)/$(SHL$(TNR)IMPLIB).lib
-.ENDIF			# "$(COM)" != "GCC"
 SHL$(TNR)IMPLIBN=$(LB)/$(SHL$(TNR)IMPLIB).lib
+.ELSE
+SHL$(TNR)IMPLIBN=$(LB)/lib$(SHL$(TNR)IMPLIB).dll.a
+USE_$(TNR)IMPLIB=-Wl,--out-implib=$(SHL$(TNR)IMPLIBN)
+.ENDIF			# "$(COM)" != "GCC"
 ALLTAR : $(SHL$(TNR)IMPLIBN)
 
 .IF "$(USE_DEFFILE)"==""
@@ -311,30 +314,54 @@ $(SHL$(TNR)TARGETN) : \
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL$(TNR)ALLRES)"!=""
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
-    @echo $(DLLTOOL) --dllname $(SHL$(TNR)TARGET)$(DLLPOST) \
-        --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
+# GNU ld since 2.17 supports @cmdfile syntax
+.IF "$(USE_DEFFILE)"!=""
+    @$(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+        $(SHL$(TNR)LINKFLAGS) \
+        $(LINKFLAGSSHL) \
+	$(SOLARLIB) \
+        $(MINGWSSTDOBJ) \
+        -o $@ \
+        -Wl,-Map,$(MISC)/$(@:b).map \
+        $(SHL$(TNR)DEF) \
+        $(USE_$(TNR)IMPLIB) \
+        $(STDOBJ) \
+        $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)OBJS) \
+        $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL$(TNR)LIBS))) \
+        -Wl,--exclude-libs,ALL,--start-group $(SHL$(TNR)STDLIBS) -Wl,--end-group \
+        $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) \
+        $(SHL$(TNR)LINKRESO) \
+    ))
+.ELSE
     @noop $(assign ALL$(TNR)OBJLIST:=$(STDOBJ) $(SHL$(TNR)OBJS) $(SHL$(TNR)LINKRESO) $(shell $(TYPE) /dev/null $(SHL$(TNR)LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB$(TNR)NAME)"!=""	# do not have to include objs
     @noop $(assign DEF$(TNR)OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB$(TNR)NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF$(TNR)OBJLIST) $(assign ALL$(TNR)OBJLIST:=$(ALL$(TNR)OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB$(TNR)NAME)"!=""
-    @echo	--output-exp $(MISC)/$(@:b)_exp.o \\ >> $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
-.IF "$(SHL$(TNR)DEF)"!=""
-    @echo	--input-def $(SHL$(TNR)DEF) \\ >> $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
-.ELSE
-    @echo	$(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ) \\ >> $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
-.ENDIF
-    @echo	$(ALL$(TNR)OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
-        $(STDOBJ) $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ) $(SHL$(TNR)OBJS) $(SHL$(TNR)LINKRESO) \
-        `$(TYPE) /dev/null $(SHL$(TNR)LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
+    $(COMMAND_ECHO)$(DLLTOOL) @@(mktmp \
+        --dllname $(SHL$(TNR)TARGET)$(DLLPOST) \
+        --kill-at \
+        --output-exp $(MISC)/$(@:b)_exp.o \
+        $(SHL$(TNR)VERSIONOBJ) \
+        @(ALL$(TNR)OBJLIST)
+    )
+    $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+        $(SHL$(TNR)LINKFLAGS) \
+        $(LINKFLAGSSHL) \
+	$(SOLARLIB) \
+        $(MINGWSSTDOBJ) \
+        -o $@ \
+        -Wl,-Map,$(MISC)/$(@:b).map \
+        $(MISC)/$(@:b)_exp.o \
+        $(USE_$(TNR)IMPLIB) \
+        $(STDOBJ) \
+        $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)OBJS) \
+        $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL$(TNR)LIBS))) \
         -Wl,--exclude-libs,ALL,--start-group $(SHL$(TNR)STDLIBS) -Wl,--end-group \
-        $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) $(MISC)/$(@:b)_exp.o $(MINGWSSTDENDOBJ) \
-        -Wl,-Map,$(MISC)/$(@:b).map >> $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
-  .IF "$(VERBOSE)" == "TRUE"
-    @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
-  .ENDIF
-    @+source $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
+        $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) \
+        $(SHL$(TNR)LINKRESO) \
+    ))
+.ENDIF
 .ELSE
 .IF "$(linkinc)"==""
 .IF "$(SHL$(TNR)USE_EXPORTS)"!="name"
@@ -522,6 +549,7 @@ USELIB$(TNR)DEPN+=$(SHL$(TNR)LIBS)
 USE_SHL$(TNR)TARGET=$(SHL$(TNR)TARGETN)
 .ENDIF
 
+.IF "$(GUI)$(COM)" != "WNTGCC"
 .IF "$(GUI)" != "UNX"
 $(SHL$(TNR)IMPLIBN):	\
                     $(SHL$(TNR)DEF) \
@@ -534,9 +562,6 @@ $(SHL$(TNR)IMPLIBN):	\
 .ENDIF
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
-.IF "$(COM)"=="GCC"
-    $(DLLTOOL) --output-lib=$(SHL$(TNR)IMPLIBN) --input-def=$(SHL$(TNR)DEF)
-.ELSE			# "$(COM)=="GCC"
 # bei use_deffile implib von linker erstellt
 .IF "$(USE_DEFFILE)"==""
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL$(TNR)IMPLIBN) \
@@ -545,12 +570,12 @@ $(SHL$(TNR)IMPLIBN):	\
     @echo build of $(SHL$(TNR)TARGETN) creates $@
     @$(TOUCH) $@
 .ENDIF			# "$(USE_DEFFILE)==""
-.ENDIF			# "$(COM)"=="GCC"
 
 .ELSE
     @echo no ImportLibs on Mac and *ix
     @-$(RM) $@
     @$(TOUCH) $@
+.ENDIF
 .ENDIF
 .ENDIF
 
