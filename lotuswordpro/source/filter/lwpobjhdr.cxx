@@ -87,11 +87,11 @@ bool LwpObjectHeader::Read(LwpSvStream &rStrm)
 
     if ( LwpFileHeader::m_nFileRevision < 0x000B)
     {
-        rStrm.Read(&m_nTag, sizeof(m_nTag));
+        rStrm >> m_nTag;
         m_ID.Read(&rStrm);
-        rStrm.Read(&nVersionID, sizeof(nVersionID));
-        rStrm.Read(&nRefCount, sizeof(nRefCount));
-        rStrm.Read(&nNextVersionOffset, sizeof(nNextVersionOffset));
+        rStrm >> nVersionID;
+        rStrm >> nRefCount;
+        rStrm >> nNextVersionOffset;
 
         nHeaderSize = sizeof(m_nTag) + m_ID.DiskSize()
             + sizeof(nVersionID)
@@ -101,16 +101,16 @@ bool LwpObjectHeader::Read(LwpSvStream &rStrm)
 
         if ((m_nTag == TAG_AMI) || ( LwpFileHeader::m_nFileRevision < 0x0006))
         {
-            rStrm.Read(&nNextVersionID, sizeof(nNextVersionID));
+            rStrm >> nNextVersionID;
             nHeaderSize += sizeof(nNextVersionID);
         }
-        rStrm.Read(&m_nSize, sizeof(m_nSize));
+        rStrm >> m_nSize;
     }
     else
     {
         sal_uInt16 VOType = 0;
-        rStrm.Read(&VOType, sizeof(VOType));
-        rStrm.Read(&nFlagBits, sizeof(nFlagBits));
+        rStrm >> VOType;
+        rStrm >> nFlagBits;
 
         m_nTag = static_cast<sal_uInt32>(VOType);
         m_ID.ReadIndexed(&rStrm);
@@ -121,19 +121,19 @@ bool LwpObjectHeader::Read(LwpSvStream &rStrm)
         switch (nFlagBits & VERSION_BITS)
         {
             case ONE_BYTE_VERSION:
-                rStrm.Read(&tmpByte, sizeof(tmpByte));
+                rStrm >> tmpByte;
                 nVersionID = static_cast<sal_uInt32>( tmpByte );
                 nHeaderSize++;
                 break;
 
             case TWO_BYTE_VERSION:
-                rStrm.Read(&tmpShort, sizeof(tmpShort));
+                rStrm >> tmpShort;
                 nVersionID = static_cast<sal_uInt32>( tmpShort );
                 nHeaderSize += 2;
                 break;
 
             case FOUR_BYTE_VERSION:
-                rStrm.Read(&nVersionID, sizeof(nVersionID));
+                rStrm >> nVersionID;
                 nHeaderSize += 4;
                 break;
             case DEFAULT_VERSION:   //fall through
@@ -145,27 +145,27 @@ bool LwpObjectHeader::Read(LwpSvStream &rStrm)
         switch (nFlagBits & REFCOUNT_BITS)
         {
             case ONE_BYTE_REFCOUNT:
-                rStrm.Read(&tmpByte, sizeof(tmpByte));
+                rStrm >> tmpByte;
                 nRefCount = static_cast<sal_uInt32>( tmpByte );
                 nHeaderSize++;
                 break;
 
             case TWO_BYTE_REFCOUNT:
-                rStrm.Read(&tmpShort, sizeof(tmpShort));
+                rStrm >> tmpShort;
                 nRefCount = static_cast<sal_uInt32>( tmpShort );
                 nHeaderSize += 2;
                 break;
 
             case FOUR_BYTE_REFCOUNT:    //through
             default:
-                rStrm.Read(&nRefCount, sizeof(nRefCount));
+                rStrm >> nRefCount;
                 nHeaderSize += 4;
                 break;
         }
 
         if (nFlagBits & HAS_PREVOFFSET)
         {
-            rStrm.Read(&nNextVersionOffset, sizeof(nNextVersionOffset));
+            rStrm >> nNextVersionOffset;
             nHeaderSize += 4;
         }
         else
@@ -174,20 +174,20 @@ bool LwpObjectHeader::Read(LwpSvStream &rStrm)
         switch (nFlagBits & SIZE_BITS)
         {
             case ONE_BYTE_SIZE:
-                rStrm.Read(&tmpByte, sizeof(tmpByte));
+                rStrm >> tmpByte;
                 m_nSize = static_cast<sal_uInt32>( tmpByte );
                 nHeaderSize++;
                 break;
 
             case TWO_BYTE_SIZE:
-                rStrm.Read(&tmpShort, sizeof(tmpShort));
+                rStrm >> tmpShort;
                 m_nSize = static_cast<sal_uInt32>(tmpShort);
                 nHeaderSize += 2;
                 break;
 
             case FOUR_BYTE_SIZE:    //go through
             default:
-                rStrm.Read(&m_nSize, sizeof(m_nSize));
+                rStrm >> m_nSize;
                 nHeaderSize += 4;
                 break;
         }

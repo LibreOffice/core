@@ -70,17 +70,25 @@ LwpFileHeader::LwpFileHeader()
 sal_uInt32 LwpFileHeader::Read(LwpSvStream *pStrm)
 {
     sal_uInt32 len = 0;
-    len += pStrm->Read(&m_nAppRevision, sizeof(m_nAppRevision));
-    len += pStrm->Read(&m_nFileRevision, sizeof(m_nFileRevision));
-    len += pStrm->Read(&m_nAppReleaseNo, sizeof(m_nAppReleaseNo));
-    len += pStrm->Read(&m_nRequiredAppRevision, sizeof(m_nRequiredAppRevision));
-    len += pStrm->Read(&m_nRequiredFileRevision, sizeof(m_nRequiredFileRevision));
+    *pStrm >> m_nAppRevision;
+    len += sizeof(m_nAppRevision);
+    *pStrm >> m_nFileRevision;
+    len += sizeof(m_nFileRevision);
+    *pStrm >> m_nAppReleaseNo;
+    len += sizeof(m_nAppReleaseNo);
+    *pStrm >> m_nRequiredAppRevision;
+    len += sizeof(m_nRequiredAppRevision);
+    *pStrm >> m_nRequiredFileRevision;
+    len += sizeof(m_nRequiredFileRevision);
     len += m_cDocumentID.Read(pStrm);
     if (m_nFileRevision < 0x000B)
         m_nRootIndexOffset = BAD_OFFSET;
     else
-        len += pStrm->Read(&m_nRootIndexOffset, sizeof(m_nRootIndexOffset));
-    return(len);
+    {
+        *pStrm >> m_nRootIndexOffset;
+        len += sizeof(m_nRootIndexOffset);
+    }
+    return len;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

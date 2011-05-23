@@ -81,8 +81,8 @@ LwpObjectID::LwpObjectID(sal_uInt32 low, sal_uInt16 high)
 */
 sal_uInt32 LwpObjectID::Read(LwpSvStream *pStrm)
 {
-    pStrm->Read(&m_nLow, sizeof(m_nLow));
-    pStrm->Read(&m_nHigh, sizeof(m_nHigh));
+    *pStrm >> m_nLow;
+    *pStrm >> m_nHigh;
     return DiskSize();
 }
 /**
@@ -108,7 +108,7 @@ sal_uInt32 LwpObjectID::ReadIndexed(LwpSvStream *pStrm)
         return Read(pStrm);
     }
 
-    pStrm->Read(&m_nIndex, sizeof(m_nIndex));
+    *pStrm >> m_nIndex;
 
     if (m_nIndex)
     {
@@ -121,9 +121,9 @@ sal_uInt32 LwpObjectID::ReadIndexed(LwpSvStream *pStrm)
     }
     else
     {
-        pStrm->Read(&m_nLow, sizeof(m_nLow));
+        *pStrm >> m_nLow;
     }
-    pStrm->Read(&m_nHigh, sizeof(m_nHigh));
+    *pStrm >> m_nHigh;
     return DiskSizeIndexed();
 }
 
