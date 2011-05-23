@@ -99,7 +99,7 @@ xml2_LDFLAGS+=-L$(SYSBASE)$/usr$/lib
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
 .IF "$(OS)"=="IOS"
-CONFIGURE_FLAGS+=--disable-shared
+CONFIGURE_FLAGS=--disable-shared
 .ELSE
 CONFIGURE_FLAGS=--disable-static
 .ENDIF
