@@ -4311,11 +4311,18 @@ else
    AC_MSG_RESULT([internal])
    SYSTEM_LIBXSLT=NO
    BUILD_TYPE="$BUILD_TYPE LIBXSLT"
+
+   if test "$cross_compiling" = "yes"; then
+      AC_PATH_PROG(XSLTPROC, xsltproc, no)
+      if test "$XSLTPROC" = "no"; then
+         AC_MSG_ERROR([xsltproc is required])
+      fi
+   fi
 fi
 AC_SUBST(SYSTEM_LIBXSLT)
 AC_SUBST(LIBXSLT_CFLAGS)
 AC_SUBST(LIBXSLT_LIBS)
-
+AC_SUBST(XSLTPROC)
 
 dnl ===================================================================
 dnl Check for system libxml
