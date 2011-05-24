@@ -225,9 +225,11 @@
         $deliver_env{'L10N_framework'}++;
     };
     my $workspace_path = get_workspace_path();   # This also sets $initial_module
+    my $build_error_log = Cwd::realpath(correct_path($workspace_path)) ."/build_error.log";
     my $source_config = SourceConfig -> new($workspace_path);
     check_partial_gnumake_build($initial_module);
 
+    system("rm -f $build_error_log");
     if ($html) {
         if (defined $html_path) {
             $html_file = correct_path($html_path . '/' . $ENV{INPATH}. '.build.html');
@@ -752,6 +754,7 @@ sub dmake_dir {
     my $job_name = shift;
     $jobs_hash{$job_name}->{START_TIME} = time();
     $jobs_hash{$job_name}->{STATUS} = 'building';
+
     if ($job_name =~ /(\s)/o && (!-d $job_name)) {
         $error_code = do_custom_job($job_name, \%local_deps_hash);
     } else {
@@ -1733,6 +1736,7 @@ sub store_error {
     }
 
     my $child_nick = $processes_hash{$pid};
+
     if ($ENV{GUI_FOR_BUILD} eq 'WNT') {
         if (!defined $had_error{$child_nick}) {
             $had_error{$child_nick}++;
@@ -2012,21 +2016,22 @@ sub run_job {
     chdir $path;
     getcwd();
 
-    if ($html || $verbose) {
-        my $log_file = $jobs_hash{$registered_name}->{LONG_LOG_PATH};
-        my $log_dir = File::Basename::dirname($log_file);
-        if (!-d $log_dir) {
-             system("$perl $mkout");
-        };
-        $error_code = system ("$job_to_do > $log_file 2>&1");
-        if ((!$grab_output || $verbose) && -f $log_file) {
-            open(LOGFILE, "< $log_file");
-            print while(<LOGFILE>);
-            close(LOGFILE);
-        };
-    } else {
-        $error_code = system ("$job_to_do");
+    my $log_file = $jobs_hash{$registered_name}->{LONG_LOG_PATH};
+    my $log_dir = File::Basename::dirname($log_file);
+    if (!-d $log_dir) {
+        system("$perl $mkout");
     };
+    $error_code = system ("$job_to_do > $log_file 2>&1");
+    if ( -f $log_file) {
+        open(LOGFILE, "< $log_file");
+        print while(<LOGFILE>);
+        close(LOGFILE);
+        if ( $error_code != 0)
+        {
+            system("cat $log_file >> $build_error_log");
+        }
+    }
+
     return $error_code;
 };
 
