@@ -549,15 +549,7 @@ static HTML_CharEntry aHTMLCharNameTab[] = {
 extern "C"
 {
 
-<<<<<<< HEAD
-static int
-#if defined( WNT )
- __cdecl
-#endif
-    HTMLCharNameCompare( const void *pFirst, const void *pSecond)
-=======
 static int SAL_CALL HTMLCharNameCompare( const void *pFirst, const void *pSecond)
->>>>>>> Use SAL_CALL / refurbish #include's (IWYU) / sal_Bool->bool
 {
     int nRet = 0;
     if( USHRT_MAX == ((HTML_CharEntry*)pFirst)->cChar )
@@ -1006,15 +998,7 @@ static HTML_ColorEntry aHTMLColorNameTab[] = {
 extern "C"
 {
 
-<<<<<<< HEAD
-static int
-#if defined( WNT )
- __cdecl
-#endif
-    HTMLColorNameCompare( const void *pFirst, const void *pSecond)
-=======
 static int SAL_CALL HTMLColorNameCompare( const void *pFirst, const void *pSecond)
->>>>>>> Use SAL_CALL / refurbish #include's (IWYU) / sal_Bool->bool
 {
     int nRet = 0;
     if( HTML_NO_COLOR == ((HTML_ColorEntry*)pFirst)->nColor )
