@@ -29,6 +29,7 @@ PRJ=..$/..
 
 PRJNAME=vcl
 TARGET=ctrl
+ENABLE_EXCEPTIONS = TRUE
 
 .INCLUDE :	$(PRJ)$/util$/makefile.pmk
 
@@ -37,22 +38,16 @@ TARGET=ctrl
 .INCLUDE :	settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile2.pmk
 
-.IF "$(COM)"=="ICC"
-CDEFS+=-D_STD_NO_NAMESPACE -D_VOS_NO_NAMESPACE -D_UNO_NO_NAMESPACE
-.ENDIF
-
 # --- Files --------------------------------------------------------
 
-EXCEPTIONSFILES=					\
+SLOFILES=\
             $(SLO)$/button.obj		\
             $(SLO)$/ctrl.obj		\
             $(SLO)$/edit.obj		\
             $(SLO)$/field2.obj		\
             $(SLO)$/ilstbox.obj		\
             $(SLO)$/tabctrl.obj		\
-            $(SLO)$/throbber.obj
-
-SLOFILES=	$(EXCEPTIONSFILES)      \
+            $(SLO)$/throbber.obj	\
             $(SLO)$/combobox.obj	\
             $(SLO)$/field.obj		\
             $(SLO)$/fixbrd.obj		\
