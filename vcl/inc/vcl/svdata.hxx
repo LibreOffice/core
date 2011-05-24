@@ -67,7 +67,6 @@ class Point;
 class Rectangle;
 class ImpResMgr;
 class ResMgr;
-class UniqueIndex;
 class ImplAccelManager;
 class ImplDevFontList;
 class ImplFontCache;
