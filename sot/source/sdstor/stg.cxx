@@ -35,7 +35,6 @@
 #include <tools/string.hxx>
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
-#include <tools/pstm.hxx>
 #include <tools/debug.hxx>
 
 #include "sot/stg.hxx"

@@ -29,7 +29,6 @@
 #ifndef _SOT_STORINFO_HXX
 #define _SOT_STORINFO_HXX
 
-#include <tools/pstm.hxx>
 #include <tools/globname.hxx>
 #include <vector>
 #include "sot/sotdllapi.h"
