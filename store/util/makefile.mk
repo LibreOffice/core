@@ -56,7 +56,11 @@ LIB1FILES=	$(LB)$/store.lib
 # --- Shared-Library ---
 
 SHL1TARGET= 	$(TARGET)
+.IF "$(COM)" == "MSC"
 SHL1IMPLIB= 	istore
+.ELSE
+SHL1IMPLIB= 	store$(UDK_MAJOR)
+.ENDIF
 
 SHL1VERSIONMAP=	$(TARGET).map
 
