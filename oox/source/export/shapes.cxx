@@ -1006,7 +1006,9 @@ void ShapeExport::WriteTable( Reference< XShape > rXShape  )
         for( sal_Int32 nRow = 0; nRow < nRowCount; nRow++ )
         {
             Reference< XPropertySet > xRowPropSet( xRows->getByIndex( nRow ), UNO_QUERY_THROW );
-            sal_Int32 nRowHeight = xRowPropSet->getPropertyValue( S("Height") ) >>= nRowHeight;
+            sal_Int32 nRowHeight(0);
+
+            xRowPropSet->getPropertyValue( S("Height") ) >>= nRowHeight;
 
             mpFS->startElementNS( XML_a, XML_tr, XML_h, I64S( MM100toEMU( nRowHeight ) ), FSEND );
 
