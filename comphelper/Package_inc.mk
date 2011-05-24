@@ -135,3 +135,4 @@ $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/namecontainer.hx
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/processfactory.hxx,comphelper/processfactory.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/sequenceashashmap.hxx,comphelper/sequenceashashmap.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/configurationhelper.hxx,comphelper/configurationhelper.hxx))
+$(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/linkhelper.hxx,comphelper/linkhelper.hxx))
