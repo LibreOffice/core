@@ -30,7 +30,10 @@ $(eval $(call gb_Library_Library,rtftok))
 
 $(eval $(call gb_Library_set_include,rtftok,\
     $$(INCLUDE) \
+	-I$(realpath $(SRCDIR)/writerfilter/inc) \
+	-I$(WORKDIR)/writerfilter/inc \
     -I$(OUTDIR)/inc \
+	-I$(OUTDIR)/inc/offuh \
 ))
 
 include $(realpath $(SRCDIR)/writerfilter/debug_setup.mk)
@@ -49,6 +52,8 @@ $(eval $(call gb_Library_add_linked_libs,rtftok,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,rtftok,\
+	writerfilter/source/rtftok/rtfdocumentfactory \
+	writerfilter/source/rtftok/rtfdocumentimpl \
 ))
 
 # vim: set noet ts=4 sw=4:
