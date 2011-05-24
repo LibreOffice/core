@@ -39,6 +39,7 @@
 #include "rtl/byteseq.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/instance.hxx"
+#include <comphelper/linkhelper.hxx>
 #include "boost/scoped_array.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include <utility>
@@ -59,6 +60,7 @@
 #include "sunjre.hxx"
 #include "vendorlist.hxx"
 #include "diagnostics.h"
+
 using namespace osl;
 using namespace std;
 
@@ -820,31 +822,19 @@ bool getJREInfoByPath(const rtl::OUString& path,
  */
 OUString resolveDirPath(const OUString & path)
 {
-    OUString ret;
-    OUString sResolved;
-    //getAbsoluteFileURL also resolves links
-    if (File::getAbsoluteFileURL(
-            OUSTR("file:///"), path, sResolved) != File::E_None)
+    OUString sResolved = path;
+
+    if (!comphelper::resolveLink(sResolved))
         return OUString();
 
-    //check if this is a valid path and if it is a directory
+    OUString ret;
+
+    //check if this is a directory
     DirectoryItem item;
     if (DirectoryItem::get(sResolved, item) == File::E_None)
     {
         FileStatus status(osl_FileStatus_Mask_Type |
-                          osl_FileStatus_Mask_LinkTargetURL |
                           osl_FileStatus_Mask_FileURL);
-
-        int nDepth = 0;
-        while (item.getFileStatus(status) == File::E_None &&
-               status.getFileType() == FileStatus::Link)
-        {
-            if (++nDepth == 128)
-                break;
-            sResolved = status.getLinkTargetURL();
-            if (DirectoryItem::get(sResolved, item) != File::E_None)
-                break;
-        }
 
         if (item.getFileStatus(status) == File::E_None
             && status.getFileType() == FileStatus::Directory)
@@ -856,8 +846,7 @@ OUString resolveDirPath(const OUString & path)
 #endif
         }
     }
-    else
-        return OUString();
+
     return ret;
 }
 /** Checks if the path is a file. If it is a link to a file than
@@ -865,20 +854,20 @@ OUString resolveDirPath(const OUString & path)
  */
 OUString resolveFilePath(const OUString & path)
 {
-    OUString ret;
-    OUString sResolved;
+    OUString sResolved = path;
 
-    if (File::getAbsoluteFileURL(
-            OUSTR("file:///"), path, sResolved) != File::E_None)
+    if (!comphelper::resolveLink(sResolved))
         return OUString();
+
+    OUString ret;
 
     //check if this is a valid path to a file or and if it is a link
     DirectoryItem item;
     if (DirectoryItem::get(sResolved, item) == File::E_None)
     {
         FileStatus status(osl_FileStatus_Mask_Type |
-                          osl_FileStatus_Mask_LinkTargetURL |
                           osl_FileStatus_Mask_FileURL);
+
         if (item.getFileStatus(status) == File::E_None
             && status.getFileType() == FileStatus::Regular)
         {
@@ -889,8 +878,6 @@ OUString resolveFilePath(const OUString & path)
 #endif
         }
     }
-    else
-        return OUString();
 
     return ret;
 }

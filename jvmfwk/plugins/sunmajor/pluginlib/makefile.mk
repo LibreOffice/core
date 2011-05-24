@@ -61,6 +61,7 @@ SHL1TARGET=	$(UNOCOMPONENT1)
 SHL1STDLIBS= \
         $(CPPULIB) \
         $(CPPUHELPER) \
+        $(COMPHELPERLIB) \
         $(SALLIB) \
         $(SALHELPERLIB)
         
