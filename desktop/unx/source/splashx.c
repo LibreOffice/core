@@ -574,6 +574,9 @@ static void process_events()
 // Draw the progress
 void splash_draw_progress( int progress )
 {
+    if (!display)
+        return;
+
     // sanity
     if ( progress < 0 )
         progress = 0;
@@ -604,7 +607,8 @@ void splash_draw_progress( int progress )
 // Close the window & cleanup
 void splash_close_window()
 {
-    XCloseDisplay( display );
+    if (display)
+        XCloseDisplay( display );
 #ifdef USE_LIBPNG
     png_destroy_read_struct( &png_ptr, &info_ptr, NULL );
 #else
