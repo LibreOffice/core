@@ -61,6 +61,8 @@ extern "C" {
 /* SAL_MATH_FINITE(d): test double d on INFINITY, NaN et al. */
 #if defined( WNT)
 #define SAL_MATH_FINITE(d) _finite(d)
+#elif defined IOS
+#define SAL_MATH_FINITE(d) isfinite(d)
 #elif defined LINUX || defined UNX
 #define SAL_MATH_FINITE(d) finite(d)
 #else /* WNT, LINUX, UNX */
