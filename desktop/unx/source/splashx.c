@@ -538,7 +538,7 @@ int splash_create_window( int argc, char** argv )
     size_hints.min_height = height;
     size_hints.max_height = height;
 
-    char *name = "OpenOffice.org";
+    char *name = "LibreOffice";
     char *icon = "icon"; // FIXME
 
     XSetStandardProperties( display, win, name, icon, None,
