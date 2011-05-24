@@ -994,7 +994,7 @@ void ShapeExport::WriteTable( Reference< XShape > rXShape  )
         for ( sal_Int32 x = 0; x < nColumnCount; x++ )
         {
             Reference< XPropertySet > xColPropSet( xColumns->getByIndex( x ), UNO_QUERY_THROW );
-            sal_Int32 nWidth;
+            sal_Int32 nWidth(0);
             xColPropSet->getPropertyValue( S("Width") ) >>= nWidth;
 
             mpFS->singleElementNS( XML_a, XML_gridCol, XML_w, I64S(MM100toEMU(nWidth)), FSEND );
