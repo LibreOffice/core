@@ -56,6 +56,7 @@ $(eval $(call gb_Library_add_linked_libs,writerfilter,\
     i18npaper \
     oox \
     ooxml \
+    rtftok \
     sal \
     sot \
     tl \

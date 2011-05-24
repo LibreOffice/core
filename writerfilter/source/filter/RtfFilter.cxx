@@ -32,10 +32,14 @@
 #include <osl/module.hxx>
 #include <tools/solar.h>
 #include <RtfFilter.hxx>
+#include <comphelper/mediadescriptor.hxx>
+#include <dmapper/DomainMapper.hxx>
+#include <rtftok/RTFDocument.hxx>
 
 using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
+using ::comphelper::MediaDescriptor;
 
 RtfFilter::RtfFilter( const uno::Reference< uno::XComponentContext >& rxContext)  :
     m_xContext( rxContext )
@@ -65,16 +69,18 @@ sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescri
     }
     else if ( m_xDstDoc.is() )
     {
-        uno::Reference< lang::XMultiServiceFactory > xMSF(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW);
-        uno::Reference< uno::XInterface > xIfc( xMSF->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.RtfImport" ))), uno::UNO_QUERY_THROW);
-        if (!xIfc.is())
-            return sal_False;
-        uno::Reference< document::XImporter > xImprtr(xIfc, uno::UNO_QUERY_THROW);
-        uno::Reference< document::XFilter > xFltr(xIfc, uno::UNO_QUERY_THROW);
-        if (!xImprtr.is() || !xFltr.is())
-            return sal_False;
-        xImprtr->setTargetDocument(m_xDstDoc);
-        return xFltr->filter(aDescriptor);
+        MediaDescriptor aMediaDesc( aDescriptor );
+        uno::Reference< io::XInputStream > xInputStream;
+
+        aMediaDesc.addInputStream();
+        aMediaDesc[ MediaDescriptor::PROP_INPUTSTREAM() ] >>= xInputStream;
+
+        writerfilter::Stream::Pointer_t pStream(
+                new writerfilter::dmapper::DomainMapper(m_xContext, xInputStream, m_xDstDoc, writerfilter::dmapper::DOCUMENT_RTF));
+        writerfilter::rtftok::RTFDocument::Pointer_t const pDocument(
+                writerfilter::rtftok::RTFDocumentFactory::createDocument(xInputStream) );
+        pDocument->resolve(*pStream);
+        return sal_True;
     }
     return sal_False;
 }
