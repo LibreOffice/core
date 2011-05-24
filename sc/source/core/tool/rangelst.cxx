@@ -315,6 +315,7 @@ void ScRangeList::Join( const ScRange& r, bool bIsInList )
             if ( bIsInList )
             {   // innerhalb der Liste Range loeschen
                 Remove(nOldPos);
+                i--;
                 delete pOver;
                 pOver = NULL;
                 if ( nOldPos )
@@ -804,7 +805,7 @@ void ScRangePairList::Join( const ScRangePair& r, bool bIsInList )
     }
     bool bJoinedInput = false;
 
-    for ( size_t i = 0, nPairs = maPairs.size(); i < nPairs && pOver; ++i )
+    for ( size_t i = 0; i < maPairs.size() && pOver; ++i )
     {
         ScRangePair* p = maPairs[ i ];
         if ( p == pOver )
@@ -878,6 +879,7 @@ void ScRangePairList::Join( const ScRangePair& r, bool bIsInList )
             if ( bIsInList )
             {   // innerhalb der Liste RangePair loeschen
                 Remove( nOldPos );
+                i--;
                 delete pOver;
                 pOver = NULL;
                 if ( nOldPos )
