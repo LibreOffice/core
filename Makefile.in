@@ -26,9 +26,13 @@ dev-install:
 	@. ./*Env.Set.sh && \
         cd smoketestoo_native && \
 		build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@ && \
+		cd @abs_builddir@ && ln -s $(SOLARVER)/$(INPATH)/installation/opt/ install && \
+		echo "$(SOLARVER)/$(INPATH)" && \
 		echo "" && \
         echo "Developer installation finished, you can now execute:" && \
-        echo "@abs_builddir@/installation/opt/program/soffice"
+        echo "cd @abs_builddir@/install/program" && \
+		echo ". ooenv" && \
+		echo "./soffice.bin"
 
 distclean: dmake/dmake@EXEEXT_FOR_BUILD@
 	@. ./*Env.Set.sh && \
