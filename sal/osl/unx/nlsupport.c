@@ -32,7 +32,7 @@
 #include <rtl/memory.h>
 
 #if defined(LINUX) || defined(SOLARIS) || defined(NETBSD) || \
-    defined(FREEBSD) || defined(MACOSX) || defined(OPENBSD) || \
+    defined(FREEBSD) || defined(MACOSX)  || defined(IOS) || defined(OPENBSD) || \
     defined(DRAGONFLY)
 #include <pthread.h>
 #ifndef MACOSX
@@ -42,7 +42,7 @@
 #include <osl/module.h>
 #include <osl/thread.h>
 #endif  /* !MACOSX */
-#endif  /* LINUX || SOLARIS || NETBSD || MACOSX */
+#endif  /* LINUX || SOLARIS || NETBSD || MACOSX || IOS */
 
 #include <string.h>
 
@@ -951,7 +951,7 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
     {
         /* only change env vars that exist already */
         if( getenv( "LC_ALL" ) ) {
-#if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX ) || \
+#if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX ) || defined( IOS ) || \
     defined( AIX ) || defined( OPENBSD ) || defined( DRAGONFLY )
             setenv( "LC_ALL", locale_buf, 1);
 #else
@@ -960,7 +960,7 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
         }
 
         if( getenv( "LC_CTYPE" ) ) {
-#if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX ) || \
+#if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX ) || defined( IOS ) || \
     defined( AIX ) || defined( OPENBSD ) || defined( DRAGONFLY )
             setenv("LC_CTYPE", locale_buf, 1 );
 #else
@@ -969,7 +969,7 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
         }
 
         if( getenv( "LANG" ) ) {
-#if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX ) || \
+#if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX ) || defined( IOS ) || \
     defined( AIX ) || defined( OPENBSD) || defined( DRAGONFLY )
             setenv("LC_CTYPE", locale_buf, 1 );
 #else
