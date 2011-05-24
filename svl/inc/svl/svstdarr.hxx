@@ -103,11 +103,6 @@ private:
 #define _SVSTDARR_USHORTSSORT_DECL
 #endif
 
-#ifndef _SVSTDARR_LONGSSORT_DECL
-SV_DECL_VARARR_SORT_VISIBILITY( SvLongsSort, long, 1, 1, SVL_DLLPUBLIC )
-#define _SVSTDARR_LONGSSORT_DECL
-#endif
-
 #include <tools/string.hxx>
 
 typedef String* StringPtr;

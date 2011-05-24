@@ -34,7 +34,6 @@
 #define _SVSTDARR_ULONGS
 #define _SVSTDARR_ULONGSSORT
 #define _SVSTDARR_sal_uInt16S
-#define _SVSTDARR_LONGSSORT
 #define _SVSTDARR_STRINGS
 #define _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_STRINGSSORT
@@ -69,7 +68,6 @@ SV_IMPL_VARARR( SvULongs, sal_uLong )
 SV_IMPL_VARARR( SvUShorts, sal_uInt16 )
 
 SV_IMPL_VARARR_SORT( SvULongsSort, sal_uLong )
-SV_IMPL_VARARR_SORT( SvLongsSort, long )
 
 SV_IMPL_PTRARR( SvStrings, StringPtr )
 SV_IMPL_PTRARR( SvStringsDtor, StringPtr )
