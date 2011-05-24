@@ -30,15 +30,12 @@
 #include "precompiled_svx.hxx"
 
 // include ---------------------------------------------------------------
-#include <tools/pstm.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/objsh.hxx>
 
 #include <svx/svxids.hrc>
 
 #define _SVX_SRCHDLG_CXX // so that private methods from SrchDlgare known
-
-
 
 #include "srchctrl.hxx"
 #include "svx/srchdlg.hxx"
