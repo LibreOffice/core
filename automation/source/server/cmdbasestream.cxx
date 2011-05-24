@@ -212,7 +212,7 @@ void CmdBaseStream::Read (comm_UINT16 &nNr)
     *pCommStream >> nId;
     if (pCommStream->IsEof()) return;
 #if OSL_DEBUG_LEVEL > 1
-    if (nId != BinUSHORT) OSL_TRACE( "Falscher Typ im Stream: Erwartet USHORT, gefunden :%hu", nId );
+    if (nId != BinUINT16) OSL_TRACE( "Falscher Typ im Stream: Erwartet USHORT, gefunden :%hu", nId );
 #endif
     *pCommStream >> nNr;
 }
@@ -223,7 +223,7 @@ void CmdBaseStream::Read (comm_UINT32 &nNr)
     *pCommStream >> nId;
     if (pCommStream->IsEof()) return;
 #if OSL_DEBUG_LEVEL > 1
-    if (nId != BinULONG) OSL_TRACE( "Falscher Typ im Stream: Erwartet ULONG, gefunden :%hu", nId );
+    if (nId != BinUINT32) OSL_TRACE( "Falscher Typ im Stream: Erwartet ULONG, gefunden :%hu", nId );
 #endif
     *pCommStream >> nNr;
 }
@@ -269,13 +269,13 @@ comm_UINT16 CmdBaseStream::GetNextType()
 
 void CmdBaseStream::Write( comm_UINT16 nNr )
 {
-    *pCommStream << comm_UINT16( BinUSHORT );
+    *pCommStream << comm_UINT16( BinUINT16 );
     *pCommStream << nNr;
 }
 
 void CmdBaseStream::Write( comm_UINT32 nNr )
 {
-    *pCommStream << comm_UINT16( BinULONG );
+    *pCommStream << comm_UINT16( BinUINT32 );
     *pCommStream << nNr;
 }
 

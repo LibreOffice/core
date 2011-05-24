@@ -349,7 +349,7 @@ StatementSlot::StatementSlot( SCmdStream *pCmdIn )
     {
         switch ( pCmdIn->GetNextType() )
         {
-            case BinUSHORT: // use old calling method
+            case BinUINT16: // use old calling method
                 {
                     nAnzahl++;
                     pItemArr = new SfxPoolItem*[nAnzahl];

@@ -54,8 +54,8 @@
 #define SIReturnError       13
 
 // Typisierung im Stream
-#define BinUSHORT           11
-#define BinULONG            14
+#define BinUINT16           11
+#define BinUINT32           14
 #define BinString           12
 #define BinBool             13
 #define BinSbxValue         15

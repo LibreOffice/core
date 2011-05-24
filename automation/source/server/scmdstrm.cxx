@@ -86,24 +86,24 @@ void SCmdStream::Read ( SfxPoolItem *&pItem )
     Read( nType );
     switch (nType)
     {
-        case BinUSHORT:
+        case BinUINT16:
             {
                 comm_UINT16 nNr;
                 Read (nNr );
                 pItem = new SfxUInt16Item(nId,nNr);
 #if OSL_DEBUG_LEVEL > 1
-                StatementList::m_pDbgWin->AddText( "USHORT:" );
+                StatementList::m_pDbgWin->AddText( "UINT16" );
                 StatementList::m_pDbgWin->AddText( String::CreateFromInt32( nNr ) );
 #endif
             }
             break;
-        case BinULONG:
+        case BinUINT32:
             {
                 comm_UINT32 nNr;
                 Read (nNr );
                 pItem = new SfxUInt32Item(nId,nNr);
 #if OSL_DEBUG_LEVEL > 1
-                StatementList::m_pDbgWin->AddText( "ULONG:" );
+                StatementList::m_pDbgWin->AddText( "UINT32" );
                 StatementList::m_pDbgWin->AddText( String::CreateFromInt64( nNr ) );
 #endif
             }
@@ -157,24 +157,24 @@ void SCmdStream::Read ( ::com::sun::star::beans::PropertyValue &rItem )
     nType = GetNextType();
     switch (nType)
     {
-        case BinUSHORT:
+        case BinUINT16:
             {
                 comm_UINT16 nNr;
                 Read (nNr );
                 rItem.Value <<= nNr;
 #if OSL_DEBUG_LEVEL > 1
-                StatementList::m_pDbgWin->AddText( "USHORT:" );
+                StatementList::m_pDbgWin->AddText( "UINT16" );
                 StatementList::m_pDbgWin->AddText( String::CreateFromInt32( nNr ) );
 #endif
             }
             break;
-        case BinULONG:
+        case BinUINT32:
             {
                 comm_UINT32 nNr;
                 Read (nNr );
                 rItem.Value <<= nNr;
 #if OSL_DEBUG_LEVEL > 1
-                StatementList::m_pDbgWin->AddText( "ULONG:" );
+                StatementList::m_pDbgWin->AddText( "UINT32" );
                 StatementList::m_pDbgWin->AddText( String::CreateFromInt64( nNr ) );
 #endif
             }

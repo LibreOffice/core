@@ -344,7 +344,7 @@ void CmdStream::GenCmdSlot( sal_uInt16 nNr, SbxArray* rPar )
                 case SbxUINT:
                 case SbxSINGLE:
                     if ( !bWriteUnoSlot )
-                        Write( (sal_uInt16)BinUSHORT );
+                        Write( (sal_uInt16)BinUINT16 );
                     Write(rPar->Get( 2*n )->GetUShort());
                     break;
                 case SbxLONG:
@@ -353,7 +353,7 @@ void CmdStream::GenCmdSlot( sal_uInt16 nNr, SbxArray* rPar )
                 case SbxSALUINT64:
                 case SbxDOUBLE:
                     if ( !bWriteUnoSlot )
-                        Write( (sal_uInt16)BinULONG );
+                        Write( (sal_uInt16)BinUINT32 );
                     Write(rPar->Get( 2*n )->GetULong());
                     break;
                 case SbxSTRING:
