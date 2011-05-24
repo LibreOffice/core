@@ -443,12 +443,12 @@
 // Beschreibt die Parametertypen als Bitfeld  Reihenfolge immer!
 // wie hier Aufgelistet
 #define PARAM_NONE              0x0000
-#define PARAM_USHORT_1          0x0001
-#define PARAM_USHORT_2          0x0002
-#define PARAM_USHORT_3          0x0100      // Nicht in der Reihe!!
-#define PARAM_USHORT_4          0x0200      // Nicht in der Reihe!!
-#define PARAM_ULONG_1           0x0004
-#define PARAM_ULONG_2           0x0008
+#define PARAM_UINT16_1          0x0001
+#define PARAM_UINT16_2          0x0002
+#define PARAM_UINT16_3          0x0100      // Nicht in der Reihe!!
+#define PARAM_UINT16_4          0x0200      // Nicht in der Reihe!!
+#define PARAM_UINT32_1          0x0004
+#define PARAM_UINT32_2          0x0008
 #define PARAM_STR_1             0x0010
 #define PARAM_STR_2             0x0020
 #define PARAM_BOOL_1            0x0040

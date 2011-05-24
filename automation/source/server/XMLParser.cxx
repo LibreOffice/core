@@ -524,7 +524,7 @@ void StatementCommand::HandleSAXParser()
                             break;
                         case RC_SAXGetAttributeName:
                             {
-                                if( (nParams & PARAM_USHORT_1) && ValueOK( rtl::OString(), RcString( nMethodId ), nNr1, xAttributeList.is()?xAttributeList->getLength():0 ) )
+                                if( (nParams & PARAM_UINT16_1) && ValueOK( rtl::OString(), RcString( nMethodId ), nNr1, xAttributeList.is()?xAttributeList->getLength():0 ) )
                                 {
                                     String aRet( xAttributeList->getNameByIndex( nNr1-1 ) );
                                     pRet->GenReturn ( RET_Value, nMethodId, aRet );
@@ -536,7 +536,7 @@ void StatementCommand::HandleSAXParser()
                         case RC_SAXGetAttributeValue:
                             // Number or String
                             {
-                                if( (nParams & PARAM_USHORT_1) && ValueOK( rtl::OString(), RcString( nMethodId ), nNr1, xAttributeList.is()?xAttributeList->getLength():0 ) )
+                                if( (nParams & PARAM_UINT16_1) && ValueOK( rtl::OString(), RcString( nMethodId ), nNr1, xAttributeList.is()?xAttributeList->getLength():0 ) )
                                 {
                                     String aRet( xAttributeList->getValueByIndex( nNr1-1 ) );
                                     pRet->GenReturn ( RET_Value, nMethodId, aRet );
@@ -578,7 +578,7 @@ void StatementCommand::HandleSAXParser()
             {
                 sal_Bool bCheckOnly = nMethodId == RC_SAXHasElement;
 
-                if( (nParams & PARAM_USHORT_1) && !(nParams & PARAM_STR_1) )
+                if( (nParams & PARAM_UINT16_1) && !(nParams & PARAM_STR_1) )
                 {
                     if ( nNr1 == 0 )
                     {
@@ -623,7 +623,7 @@ void StatementCommand::HandleSAXParser()
                     else if ( pElementNode )
                     {
                         sal_uInt16 nNthOccurrence;
-                        if( (nParams & PARAM_USHORT_1) )
+                        if( (nParams & PARAM_UINT16_1) )
                             nNthOccurrence = nNr1;
                         else
                             nNthOccurrence = 1;

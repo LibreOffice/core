@@ -193,24 +193,24 @@ void CmdStream::WriteSortedParams( SbxArray* rPar, sal_Bool IsKeyString )
                 case SbxINT:
                 case SbxUINT:
                 case SbxSINGLE:
-                    if ( (nParams & PARAM_USHORT_1) == 0 )
+                    if ( (nParams & PARAM_UINT16_1) == 0 )
                     {
-                        nParams |= PARAM_USHORT_1;
+                        nParams |= PARAM_UINT16_1;
                         nNr1 = rPar->Get( i )->GetUShort();
                     }
-                    else if ( (nParams & PARAM_USHORT_2) == 0 )
+                    else if ( (nParams & PARAM_UINT16_2) == 0 )
                     {
-                        nParams |= PARAM_USHORT_2;
+                        nParams |= PARAM_UINT16_2;
                         nNr2 = rPar->Get( i )->GetUShort();
                     }
-                    else if ( (nParams & PARAM_USHORT_3) == 0 )
+                    else if ( (nParams & PARAM_UINT16_3) == 0 )
                     {
-                        nParams |= PARAM_USHORT_3;
+                        nParams |= PARAM_UINT16_3;
                         nNr3 = rPar->Get( i )->GetUShort();
                     }
-                    else if ( (nParams & PARAM_USHORT_4) == 0 )
+                    else if ( (nParams & PARAM_UINT16_4) == 0 )
                     {
-                        nParams |= PARAM_USHORT_4;
+                        nParams |= PARAM_UINT16_4;
                         nNr4 = rPar->Get( i )->GetUShort();
                     }
                     else
@@ -242,11 +242,11 @@ void CmdStream::WriteSortedParams( SbxArray* rPar, sal_Bool IsKeyString )
                             }
                             else if ( pMember->GetType() == SbxULONG )
                             {
-                                if ( nParams & PARAM_ULONG_1 )
+                                if ( nParams & PARAM_UINT32_1 )
                                     SbxBase::SetError( SbxERR_WRONG_ARGS );
                                 else
                                 {
-                                    nParams |= PARAM_ULONG_1;
+                                    nParams |= PARAM_UINT32_1;
                                     nLNr1 = pMember->GetULong();
                                 }
                             }
@@ -297,11 +297,11 @@ void CmdStream::WriteSortedParams( SbxArray* rPar, sal_Bool IsKeyString )
         }
     }
     Write (nParams);
-    if( nParams & PARAM_USHORT_1 )  Write( nNr1 );
-    if( nParams & PARAM_USHORT_2 )  Write( nNr2 );
-    if( nParams & PARAM_USHORT_3 )  Write( nNr3 );
-    if( nParams & PARAM_USHORT_4 )  Write( nNr4 );
-    if( nParams & PARAM_ULONG_1 )   Write( nLNr1 );
+    if( nParams & PARAM_UINT16_1 )  Write( nNr1 );
+    if( nParams & PARAM_UINT16_2 )  Write( nNr2 );
+    if( nParams & PARAM_UINT16_3 )  Write( nNr3 );
+    if( nParams & PARAM_UINT16_4 )  Write( nNr4 );
+    if( nParams & PARAM_UINT32_1 )  Write( nLNr1 );
     if( nParams & PARAM_STR_1 )     Write( aString1, IsKeyString );
     if( nParams & PARAM_STR_2 )     Write( aString2, IsKeyString );
     if( nParams & PARAM_BOOL_1 )    Write( bBool1 );
@@ -426,7 +426,7 @@ void CmdStream::GenCmdFlow( sal_uInt16 nArt, sal_uInt16 nNr1 )
 {
     Write(sal_uInt16(SIFlow));
     Write(nArt);
-    Write(sal_uInt16(PARAM_USHORT_1));          // Typ der folgenden Parameter
+    Write(sal_uInt16(PARAM_UINT16_1));          // Typ der folgenden Parameter
     Write(nNr1);
 }
 
@@ -434,7 +434,7 @@ void CmdStream::GenCmdFlow( sal_uInt16 nArt, comm_UINT32 nNr1 )
 {
     Write(sal_uInt16(SIFlow));
     Write(nArt);
-    Write(sal_uInt16(PARAM_ULONG_1));           // Typ der folgenden Parameter
+    Write(sal_uInt16(PARAM_UINT32_1));          // Typ der folgenden Parameter
     Write(nNr1);
 }
 

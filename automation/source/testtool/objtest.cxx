@@ -3183,9 +3183,9 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
             sal_Bool bBool1 = sal_False;
             SbxValueRef xValue1 = new SbxValue;
 
-            if( nParams & PARAM_USHORT_1 )
+            if( nParams & PARAM_UINT16_1 )
                 pRetStream->Read( nNr1 );
-            if( nParams & PARAM_ULONG_1 )
+            if( nParams & PARAM_UINT32_1 )
                 pRetStream->Read( nLNr1 );
             if( nParams & PARAM_STR_1 )
             {
@@ -3222,14 +3222,14 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                     {
                         if ( aNextReturnId.equals( aUId ) )
                         {
-                            if( nParams & PARAM_ULONG_1 )   // FIXME this is to allow negative numbers, hoping that no large numbers are interpreted wrong. should have new PARAM_LONG_1 instead
+                            if( nParams & PARAM_UINT32_1 )   // FIXME this is to allow negative numbers, hoping that no large numbers are interpreted wrong. should have new PARAM_LONG_1 instead
                             {
                                 if ( nLNr1 > 0x7fffffff )
                                     pImpl->pNextReturn->PutLong( long(nLNr1 - 0xffffffff) -1 );
                                 else
                                     pImpl->pNextReturn->PutULong( nLNr1 );
                             }
-                            if( nParams & PARAM_USHORT_1 )      pImpl->pNextReturn->PutUShort( nNr1 );
+                            if( nParams & PARAM_UINT16_1 )      pImpl->pNextReturn->PutUShort( nNr1 );
                             if( nParams & PARAM_STR_1 )         pImpl->pNextReturn->PutString( aString1 );
                             if( nParams & PARAM_BOOL_1 )        pImpl->pNextReturn->PutBool( bBool1 );
                             if( nParams & PARAM_SBXVALUE_1 )    // FIXME: allow generic datatype
@@ -3368,7 +3368,7 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                                 aStrm.Close();
                             }
                         }
-                        if ( nParams & PARAM_ULONG_1 )
+                        if ( nParams & PARAM_UINT32_1 )
                         {
                             switch ( nUId )
                             {
@@ -3532,7 +3532,7 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                         }
 
                         aULongNames.Erase();
-                        if( (nParams & PARAM_ULONG_1) && (nNr1 & M_RET_NUM_CONTROL) )
+                        if( (nParams & PARAM_UINT32_1) && (nNr1 & M_RET_NUM_CONTROL) )
                         {
                             if ( m_pReverseControls )
                             {
@@ -3729,7 +3729,7 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                             }
                             aCommand.AppendAscii( "\"" );
                         }
-                        if( nParams & PARAM_ULONG_1 )
+                        if( nParams & PARAM_UINT32_1 )
                         {
                             if ( bWasParam )
                                 aCommand.AppendAscii( ", " );
