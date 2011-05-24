@@ -44,7 +44,7 @@ public:
 
     using CmdBaseStream::Read;
     void Read ( comm_UINT16 &nNr ){CmdBaseStream::Read ( nNr );}
-    void Read ( comm_ULONG &nNr ){CmdBaseStream::Read ( nNr );}
+    void Read ( comm_UINT32 &nNr ){CmdBaseStream::Read ( nNr );}
     virtual void Read ( rtl::OString* &pId ){CmdBaseStream::Read ( pId );}
     void Read ( comm_BOOL &bBool ){CmdBaseStream::Read ( bBool );}
     void Read( String &aString );

@@ -58,7 +58,7 @@ void CmdBaseStream::GenError (rtl::OString *pUId, comm_String *pString )
     Write(pString);
 }
 
-void CmdBaseStream::GenReturn (comm_UINT16 nRet, comm_ULONG nUId )
+void CmdBaseStream::GenReturn (comm_UINT16 nRet, comm_UINT32 nUId )
 {
     Write(comm_UINT16(SIReturn));
     Write(nRet);
@@ -66,12 +66,12 @@ void CmdBaseStream::GenReturn (comm_UINT16 nRet, comm_ULONG nUId )
     Write(comm_UINT16(PARAM_NONE));             // Typ der folgenden Parameter
 }
 
-void CmdBaseStream::GenReturn (comm_UINT16 nRet, rtl::OString *pUId, comm_ULONG nNr )
+void CmdBaseStream::GenReturn (comm_UINT16 nRet, rtl::OString *pUId, comm_UINT32 nNr )
 {
     Write(comm_UINT16(SIReturn));
     Write(nRet);
     if ( pUId->equals( rtl::OString( "UID_ACTIVE" ) ) )
-        Write(comm_ULONG(0));
+        Write(comm_UINT32(0));
     else
         Write(pUId);
     Write(comm_UINT16(PARAM_ULONG_1));          // Typ der folgenden Parameter
@@ -83,7 +83,7 @@ void CmdBaseStream::GenReturn (comm_UINT16 nRet, rtl::OString *pUId, comm_String
     Write(comm_UINT16(SIReturn));
     Write(nRet);
     if ( pUId->equals( rtl::OString( "UID_ACTIVE" ) ) )
-        Write(comm_ULONG(0));
+        Write(comm_UINT32(0));
     else
         Write(pUId);
     Write(comm_UINT16(PARAM_STR_1));                // Typ der folgenden Parameter
@@ -95,19 +95,19 @@ void CmdBaseStream::GenReturn (comm_UINT16 nRet, rtl::OString *pUId, comm_BOOL b
     Write(comm_UINT16(SIReturn));
     Write(nRet);
     if ( pUId->equals( rtl::OString( "UID_ACTIVE" ) ) )
-        Write(comm_ULONG(0));
+        Write(comm_UINT32(0));
     else
         Write(pUId);
     Write(comm_UINT16(PARAM_BOOL_1));           // Typ der folgenden Parameter
     Write(bBool);
 }
 
-void CmdBaseStream::GenReturn (comm_UINT16 nRet, rtl::OString *pUId, comm_ULONG nNr, comm_String *pString, comm_BOOL bBool )
+void CmdBaseStream::GenReturn (comm_UINT16 nRet, rtl::OString *pUId, comm_UINT32 nNr, comm_String *pString, comm_BOOL bBool )
 {
     Write(comm_UINT16(SIReturn));
     Write(nRet);
     if ( pUId->equals( rtl::OString( "UID_ACTIVE" ) ) )
-        Write(comm_ULONG(0));
+        Write(comm_UINT32(0));
     else
         Write(pUId);
     Write(comm_UINT16(PARAM_ULONG_1|PARAM_STR_1|PARAM_BOOL_1));     // Typ der folgenden Parameter
@@ -116,11 +116,11 @@ void CmdBaseStream::GenReturn (comm_UINT16 nRet, rtl::OString *pUId, comm_ULONG 
     Write(bBool);
 }
 
-void CmdBaseStream::GenReturn (comm_UINT16 nRet, comm_UINT16 nMethod, comm_ULONG nNr )
+void CmdBaseStream::GenReturn (comm_UINT16 nRet, comm_UINT16 nMethod, comm_UINT32 nNr )
 {
     Write(comm_UINT16(SIReturn));
     Write(nRet);
-    Write((comm_ULONG)nMethod); //HELPID BACKWARD (no sal_uLong needed)
+    Write((comm_UINT32)nMethod); //HELPID BACKWARD (no sal_uLong needed)
     Write(comm_UINT16(PARAM_ULONG_1));          // Typ der folgenden Parameter
     Write(nNr);
 }
@@ -129,7 +129,7 @@ void CmdBaseStream::GenReturn (comm_UINT16 nRet, comm_UINT16 nMethod, comm_Strin
 {
     Write(comm_UINT16(SIReturn));
     Write(nRet);
-    Write((comm_ULONG)nMethod); //HELPID BACKWARD (no sal_uLong needed)
+    Write((comm_UINT32)nMethod); //HELPID BACKWARD (no sal_uLong needed)
     Write(comm_UINT16(PARAM_STR_1));                // Typ der folgenden Parameter
     Write(pString);
 }
@@ -138,7 +138,7 @@ void CmdBaseStream::GenReturn (comm_UINT16 nRet, comm_UINT16 nMethod, comm_BOOL 
 {
     Write(comm_UINT16(SIReturn));
     Write(nRet);
-    Write((comm_ULONG)nMethod); //HELPID BACKWARD (no sal_uLong needed)
+    Write((comm_UINT32)nMethod); //HELPID BACKWARD (no sal_uLong needed)
     Write(comm_UINT16(PARAM_BOOL_1));           // Typ der folgenden Parameter
     Write(bBool);
 }
@@ -147,7 +147,7 @@ void CmdBaseStream::GenReturn (comm_UINT16 nRet, comm_UINT16 nMethod, comm_UINT1
 {
     Write(comm_UINT16(SIReturn));
     Write(nRet);
-    Write((comm_ULONG)nMethod); //HELPID BACKWARD (no sal_uLong needed)
+    Write((comm_UINT32)nMethod); //HELPID BACKWARD (no sal_uLong needed)
     Write(comm_UINT16(PARAM_USHORT_1));         // Typ der folgenden Parameter
     Write(nNr);
 }
@@ -194,7 +194,7 @@ void CmdBaseStream::GenReturn( comm_UINT16 nRet, rtl::OString *pUId, comm_UINT16
     Write(bBool);
 }
 
-void CmdBaseStream::GenReturn( comm_UINT16 nRet, rtl::OString *pUId, comm_UINT16 nMethod, comm_ULONG nNr )
+void CmdBaseStream::GenReturn( comm_UINT16 nRet, rtl::OString *pUId, comm_UINT16 nMethod, comm_UINT32 nNr )
 {
     Write(comm_UINT16(SIReturn));
     Write(nRet);
@@ -217,7 +217,7 @@ void CmdBaseStream::Read (comm_UINT16 &nNr)
     *pCommStream >> nNr;
 }
 
-void CmdBaseStream::Read (comm_ULONG &nNr)
+void CmdBaseStream::Read (comm_UINT32 &nNr)
 {
     comm_UINT16 nId;
     *pCommStream >> nId;
@@ -239,7 +239,7 @@ void CmdBaseStream::Read (comm_UniChar* &aString, comm_UINT16 &nLenInChars )
     *pCommStream >> nLenInChars;
 
     aString = new comm_UniChar [nLenInChars];
-    pCommStream->Read( aString, ((comm_ULONG)nLenInChars) * sizeof( comm_UniChar ) );
+    pCommStream->Read( aString, ((comm_UINT32)nLenInChars) * sizeof( comm_UniChar ) );
 #ifdef OSL_BIGENDIAN
     // we have to change the byteorder
     comm_UINT16 n;
@@ -273,7 +273,7 @@ void CmdBaseStream::Write( comm_UINT16 nNr )
     *pCommStream << nNr;
 }
 
-void CmdBaseStream::Write( comm_ULONG nNr )
+void CmdBaseStream::Write( comm_UINT32 nNr )
 {
     *pCommStream << comm_UINT16( BinULONG );
     *pCommStream << nNr;
@@ -313,10 +313,10 @@ void CmdBaseStream::Write( const comm_UniChar* aString, comm_UINT16 nLenInChars 
     aNewString = new comm_UniChar [nNewLenInChars];
     for ( n = 0 ; n < nNewLenInChars ; n++ )
         aNewString[ n ] = aNoBiDiString[ n ] >> 8 | aNoBiDiString[ n ] << 8;
-    pCommStream->Write( aNewString, ((comm_ULONG)nNewLenInChars) * sizeof( comm_UniChar ) );
+    pCommStream->Write( aNewString, ((comm_UINT32)nNewLenInChars) * sizeof( comm_UniChar ) );
     delete [] aNewString;
 #else
-    pCommStream->Write( aNoBiDiString, ((comm_ULONG)nNewLenInChars) * sizeof( comm_UniChar ) );
+    pCommStream->Write( aNoBiDiString, ((comm_UINT32)nNewLenInChars) * sizeof( comm_UniChar ) );
 #endif
 
     delete [] aNoBiDiString;

@@ -47,18 +47,18 @@ public:
     virtual ~ICommStream(){}
 
     virtual ICommStream&    operator>>( comm_UINT16& rUShort )=0;
-    virtual ICommStream&    operator>>( comm_ULONG& rULong )=0;
+    virtual ICommStream&    operator>>( comm_UINT32& rULong )=0;
     virtual ICommStream&    operator>>( comm_BOOL& rChar )=0;
 
     virtual ICommStream&    operator<<( comm_UINT16 nUShort )=0;
-    virtual ICommStream&    operator<<( comm_ULONG nULong )=0;
+    virtual ICommStream&    operator<<( comm_UINT32 nULong )=0;
     virtual ICommStream&    operator<<( comm_BOOL nChar )=0;
 
-    virtual comm_ULONG          Read( void* pData, comm_ULONG nSize )=0;
-    virtual comm_ULONG          Write( const void* pData, comm_ULONG nSize )=0;
+    virtual comm_UINT32         Read( void* pData, comm_UINT32 nSize )=0;
+    virtual comm_UINT32         Write( const void* pData, comm_UINT32 nSize )=0;
 
     virtual comm_BOOL       IsEof() const=0;
-    virtual comm_ULONG      SeekRel( long nPos )=0;
+    virtual comm_UINT32     SeekRel( long nPos )=0;
 
 };
 

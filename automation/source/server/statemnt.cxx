@@ -772,7 +772,7 @@ void StatementCommand::WriteControlData( Window *pBase, sal_uLong nConf, sal_Boo
         return;
 
     if ( bFirst )
-        pRet->GenReturn ( RET_WinInfo, rtl::OString(), (comm_ULONG)nConf | DH_MODE_DATA_VALID, UniString(), sal_True );
+        pRet->GenReturn ( RET_WinInfo, rtl::OString(), (comm_UINT32)nConf | DH_MODE_DATA_VALID, UniString(), sal_True );
 
     if ( bFirst )
     {
@@ -882,7 +882,7 @@ void StatementCommand::WriteControlData( Window *pBase, sal_uLong nConf, sal_Boo
             }
 
             rtl::OString aId = pBase->GetUniqueOrHelpId();
-            pRet->GenReturn ( RET_WinInfo, aId, (comm_ULONG)pBase->GetType(),
+            pRet->GenReturn ( RET_WinInfo, aId, (comm_UINT32)pBase->GetType(),
                 TypeString(pBase->GetType()).Append(aTypeSuffix).AppendAscii(": ").Append(aName), sal_False );
 
 
@@ -903,10 +903,10 @@ void StatementCommand::WriteControlData( Window *pBase, sal_uLong nConf, sal_Boo
                     if ( pTB->GetItemType( i ) == TOOLBOXITEM_BUTTON && ( !pItemWin || !pItemWin->IsVisible() ) )
                     {
                         if ( pTB->GetItemCommand(pTB->GetItemId( i )).Len() || ( nConf & DH_MODE_ALLWIN ) )
-                            pRet->GenReturn ( RET_WinInfo, Str2Id(pTB->GetItemCommand(pTB->GetItemId( i ))), (comm_ULONG)WINDOW_BUTTON,
+                            pRet->GenReturn ( RET_WinInfo, Str2Id(pTB->GetItemCommand(pTB->GetItemId( i ))), (comm_UINT32)WINDOW_BUTTON,
                                 TypeString(WINDOW_BUTTON).AppendAscii(": ").Append(aName), sal_False );
                         if ( !pTB->GetItemCommand(pTB->GetItemId( i )).Len() || ( nConf & DH_MODE_ALLWIN ) )
-                            pRet->GenReturn ( RET_WinInfo, pTB->GetHelpId(pTB->GetItemId( i )), (comm_ULONG)WINDOW_BUTTON,
+                            pRet->GenReturn ( RET_WinInfo, pTB->GetHelpId(pTB->GetItemId( i )), (comm_UINT32)WINDOW_BUTTON,
                                 TypeString(WINDOW_BUTTON).AppendAscii(": ").Append(aName), sal_False );
                     }
                     else
@@ -914,10 +914,10 @@ void StatementCommand::WriteControlData( Window *pBase, sal_uLong nConf, sal_Boo
                         if ( pItemWin )
                         {
                             if ( pTB->GetItemCommand(pTB->GetItemId( i )).Len() || ( nConf & DH_MODE_ALLWIN ) )
-                                pRet->GenReturn ( RET_WinInfo, Str2Id(pTB->GetItemCommand(pTB->GetItemId( i ))), (comm_ULONG)pItemWin->GetType(),
+                                pRet->GenReturn ( RET_WinInfo, Str2Id(pTB->GetItemCommand(pTB->GetItemId( i ))), (comm_UINT32)pItemWin->GetType(),
                                     TypeString(pItemWin->GetType()).AppendAscii(": ").Append(aName), sal_False );
                             if ( !pTB->GetItemCommand(pTB->GetItemId( i )).Len() || ( nConf & DH_MODE_ALLWIN ) )
-                                pRet->GenReturn ( RET_WinInfo, pTB->GetHelpId(pTB->GetItemId( i )), (comm_ULONG)pItemWin->GetType(),
+                                pRet->GenReturn ( RET_WinInfo, pTB->GetHelpId(pTB->GetItemId( i )), (comm_UINT32)pItemWin->GetType(),
                                     TypeString(pItemWin->GetType()).AppendAscii(": ").Append(aName), sal_False );
                             sal_uInt16 ii;
                             for( ii = 0 ; ii < pItemWin->GetChildCount(); ii++ )
@@ -949,10 +949,10 @@ void StatementCommand::WriteControlData( Window *pBase, sal_uLong nConf, sal_Boo
                                     OSL_TRACE( "Unknown TOOLBOXITEM %i", pTB->GetItemType( i ) );
                                 }
                                 if ( pTB->GetItemCommand(pTB->GetItemId( i )).Len() || ( nConf & DH_MODE_ALLWIN ) )
-                                    pRet->GenReturn ( RET_WinInfo, Str2Id( pTB->GetItemCommand(pTB->GetItemId( i )) ), (comm_ULONG)WINDOW_BASE,
+                                    pRet->GenReturn ( RET_WinInfo, Str2Id( pTB->GetItemCommand(pTB->GetItemId( i )) ), (comm_UINT32)WINDOW_BASE,
                                         aToolBoxItemType.AppendAscii(": ").Append(aName), sal_False );
                                 if ( !pTB->GetItemCommand(pTB->GetItemId( i )).Len() || ( nConf & DH_MODE_ALLWIN ) )
-                                    pRet->GenReturn ( RET_WinInfo, pTB->GetHelpId(pTB->GetItemId( i )), (comm_ULONG)WINDOW_BASE,
+                                    pRet->GenReturn ( RET_WinInfo, pTB->GetHelpId(pTB->GetItemId( i )), (comm_UINT32)WINDOW_BASE,
                                         aToolBoxItemType.AppendAscii(": ").Append(aName), sal_False );
                             }
                         }
@@ -1003,7 +1003,7 @@ void StatementCommand::WriteControlData( Window *pBase, sal_uLong nConf, sal_Boo
                             break;
                     }
 
-                    pRet->GenReturn ( RET_WinInfo, aID, (comm_ULONG)pBD->GetPushButton( pBD->GetButtonId(i) )->GetType(),   // So da� der Text angezeigt wird!
+                    pRet->GenReturn ( RET_WinInfo, aID, (comm_UINT32)pBD->GetPushButton( pBD->GetButtonId(i) )->GetType(),  // So da� der Text angezeigt wird!
                         TypeString(pBD->GetPushButton( pBD->GetButtonId(i) )->GetType()).AppendAscii(": ").Append(aName)
                         .AppendAscii(" ButtonId = ").AppendAscii( aID.GetBuffer() ), sal_False );
                 }
@@ -1052,10 +1052,10 @@ void StatementCommand::WriteControlData( Window *pBase, sal_uLong nConf, sal_Boo
                             OSL_TRACE( "Unknown MENUITEM %i", pMenu->GetItemType( i ) );
                         }
                         if ( pMenu->GetItemCommand(nID).Len() || ( nConf & DH_MODE_ALLWIN ) )
-                            pRet->GenReturn ( RET_WinInfo, Str2Id( pMenu->GetItemCommand(nID) ), (comm_ULONG)0,
+                            pRet->GenReturn ( RET_WinInfo, Str2Id( pMenu->GetItemCommand(nID) ), (comm_UINT32)0,
                                 aMenuItemType.AppendAscii(": ").Append(aName), sal_False );
                         if ( !pMenu->GetItemCommand(nID).Len() || ( nConf & DH_MODE_ALLWIN ) )
-                            pRet->GenReturn ( RET_WinInfo, rtl::OString::valueOf( (sal_Int32)nID ), (comm_ULONG)0,
+                            pRet->GenReturn ( RET_WinInfo, rtl::OString::valueOf( (sal_Int32)nID ), (comm_UINT32)0,
                                 aMenuItemType.AppendAscii(": ").Append(aName), sal_False );
                     }
                 }
@@ -2606,7 +2606,7 @@ sal_Bool StatementCommand::Execute()
                 }
                 else if ( nParams & PARAM_USHORT_1 )
                 {   // Partitioning initialisieren: Profile true [,nNr][,nNr][,nNr][,nNr]
-                    comm_ULONG nAnzahl=0;
+                    comm_UINT32 nAnzahl=0;
                     if ( nParams & PARAM_USHORT_1 ) { nAnzahl++; };
                     if ( nParams & PARAM_USHORT_2 ) { nAnzahl++; };
                     if ( nParams & PARAM_USHORT_3 ) { nAnzahl++; };
@@ -2618,10 +2618,10 @@ sal_Bool StatementCommand::Execute()
                     pRet->GenReturn( RET_ProfileInfo, S_ProfileReset, nAnzahl );
 
                     // Und die einzelnen Grenzen
-                    if ( nParams & PARAM_USHORT_1 ) { pRet->GenReturn( RET_ProfileInfo, S_ProfileBorder1, (comm_ULONG)nNr1 ); };
-                    if ( nParams & PARAM_USHORT_2 ) { pRet->GenReturn( RET_ProfileInfo, S_ProfileBorder2, (comm_ULONG)nNr2 ); };
-                    if ( nParams & PARAM_USHORT_3 ) { pRet->GenReturn( RET_ProfileInfo, S_ProfileBorder3, (comm_ULONG)nNr3 ); };
-                    if ( nParams & PARAM_USHORT_4 ) { pRet->GenReturn( RET_ProfileInfo, S_ProfileBorder4, (comm_ULONG)nNr4 ); };
+                    if ( nParams & PARAM_USHORT_1 ) { pRet->GenReturn( RET_ProfileInfo, S_ProfileBorder1, (comm_UINT32)nNr1 ); };
+                    if ( nParams & PARAM_USHORT_2 ) { pRet->GenReturn( RET_ProfileInfo, S_ProfileBorder2, (comm_UINT32)nNr2 ); };
+                    if ( nParams & PARAM_USHORT_3 ) { pRet->GenReturn( RET_ProfileInfo, S_ProfileBorder3, (comm_UINT32)nNr3 ); };
+                    if ( nParams & PARAM_USHORT_4 ) { pRet->GenReturn( RET_ProfileInfo, S_ProfileBorder4, (comm_UINT32)nNr4 ); };
 
                     pProfiler->StartPartitioning();
                 }
@@ -2657,7 +2657,7 @@ sal_Bool StatementCommand::Execute()
 
                     if ( pProfiler->IsPartitioning() )
                     {
-                        pRet->GenReturn( RET_ProfileInfo, S_ProfileDump, (comm_ULONG)0 );
+                        pRet->GenReturn( RET_ProfileInfo, S_ProfileDump, (comm_UINT32)0 );
                         pProfiler->StopPartitioning();
                     }
 
@@ -2755,13 +2755,13 @@ sal_Bool StatementCommand::Execute()
                 {
                     case RC_MenuGetItemCount:
                         {
-                            pRet->GenReturn ( RET_Value, nMethodId, (comm_ULONG)nItemCount );
+                            pRet->GenReturn ( RET_Value, nMethodId, (comm_UINT32)nItemCount );
                         }
                         break;
                     case RC_MenuGetItemId:
                         {
                             if ( ValueOK( rtl::OString(), RcString( nMethodId ),nNr1,nItemCount) )
-                                pRet->GenReturn ( RET_Value, nMethodId, (comm_ULONG)pMenu->GetItemId(nPhysicalIndex-1) );
+                                pRet->GenReturn ( RET_Value, nMethodId, (comm_UINT32)pMenu->GetItemId(nPhysicalIndex-1) );
                         }
                         break;
                     case RC_MenuGetItemPos:
@@ -2783,7 +2783,7 @@ sal_Bool StatementCommand::Execute()
                                     }
                                 }
                             }
-                            pRet->GenReturn ( RET_Value, nMethodId, (comm_ULONG)(nLogicalPos+1) );
+                            pRet->GenReturn ( RET_Value, nMethodId, (comm_UINT32)(nLogicalPos+1) );
                         }
                         break;
                     case RC_MenuIsSeperator:
@@ -2994,7 +2994,7 @@ sal_Bool StatementCommand::Execute()
                             if ( FSYS_ERR_OK == nErrorcode )
                             {
                                 FileStat aFS( aFile );
-                                pRet->GenReturn ( RET_Value, nMethodId, static_cast<comm_ULONG>(aFS.GetSize()) ); //GetSize() sal_uLong != comm_ULONG on 64bit
+                                pRet->GenReturn ( RET_Value, nMethodId, static_cast<comm_UINT32>(aFS.GetSize()) ); //GetSize() sal_uLong != comm_UINT32 on 64bit
                                 nErrorcode = aFS.GetError();
                             }
                         }
@@ -3132,7 +3132,7 @@ sal_Bool StatementCommand::Execute()
                     ReportError( GEN_RES_STR1( S_POINTER_OUTSIDE_APPWIN, RcString( nMethodId ) ) );
                     aPointer = Pointer( POINTER_NULL );
                 }
-                pRet->GenReturn ( RET_Value, nMethodId, (comm_ULONG)aPointer.GetStyle() );
+                pRet->GenReturn ( RET_Value, nMethodId, (comm_UINT32)aPointer.GetStyle() );
             }
             break;
         case RC_UnpackStorage:
@@ -3364,7 +3364,7 @@ StatementControl::StatementControl( SCmdStream *pCmdIn, sal_uInt16 nControlIdTyp
     //HELPID BACKWARD (SIControl is no longer needed)
     if ( nControlIdType == SIControl )
     {
-        comm_ULONG nId;
+        comm_UINT32 nId;
         pCmdIn->Read( nId );
         aUId = rtl::OString( nId );
         if ( nId == 0 )
@@ -3679,10 +3679,10 @@ sal_Bool StatementControl::HandleVisibleControls( Window *pControl )
             {
                 Point aPos = pControl->GetPosPixel();
                 aPos = pControl->GET_REAL_PARENT()->OutputToScreenPixel( aPos );
-                pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)aPos.X() );
+                pRet->GenReturn ( RET_Value, aUId, (comm_UINT32)aPos.X() );
             }
             else
-                pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)pControl->GetPosPixel().X() );
+                pRet->GenReturn ( RET_Value, aUId, (comm_UINT32)pControl->GetPosPixel().X() );
             break;
         case M_GetPosY:
             if ( pControl->GetType() == WINDOW_DOCKINGWINDOW && pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_FLOATINGWINDOW )
@@ -3698,10 +3698,10 @@ sal_Bool StatementControl::HandleVisibleControls( Window *pControl )
             {
                 Point aPos = pControl->GetPosPixel();
                 aPos = pControl->GET_REAL_PARENT()->OutputToScreenPixel( aPos );
-                pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)aPos.Y() );
+                pRet->GenReturn ( RET_Value, aUId, (comm_UINT32)aPos.Y() );
             }
             else
-                pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)pControl->GetPosPixel().Y() );
+                pRet->GenReturn ( RET_Value, aUId, (comm_UINT32)pControl->GetPosPixel().Y() );
             break;
         case M_GetSizeX:
             if ( pControl->GetType() == WINDOW_DOCKINGWINDOW && pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_FLOATINGWINDOW )
@@ -3713,7 +3713,7 @@ sal_Bool StatementControl::HandleVisibleControls( Window *pControl )
             if ( (nParams & PARAM_BOOL_1) && bBool1 )
                 pControl = pControl->GetWindow( WINDOW_OVERLAP );
 
-            pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)pControl->GetSizePixel().Width() );
+            pRet->GenReturn ( RET_Value, aUId, (comm_UINT32)pControl->GetSizePixel().Width() );
             break;
         case M_GetSizeY:
             if ( pControl->GetType() == WINDOW_DOCKINGWINDOW && pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_FLOATINGWINDOW )
@@ -3725,7 +3725,7 @@ sal_Bool StatementControl::HandleVisibleControls( Window *pControl )
             if ( (nParams & PARAM_BOOL_1) && bBool1 )
                 pControl = pControl->GetWindow( WINDOW_OVERLAP );
 
-            pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)pControl->GetSizePixel().Height() );
+            pRet->GenReturn ( RET_Value, aUId, (comm_UINT32)pControl->GetSizePixel().Height() );
             break;
         case M_SnapShot:
             {
@@ -3823,7 +3823,7 @@ sal_Bool StatementControl::HandleCommonMethods( Window *pControl )
             break;
         case M_GetRT:
             {
-                pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)pControl->GetType() );
+                pRet->GenReturn ( RET_Value, aUId, (comm_UINT32)pControl->GetType() );
             }
             break;
         case M_TypeKeys:
@@ -4251,13 +4251,13 @@ sal_Bool StatementControl::HandleCommonMethods( Window *pControl )
                         break;
                     case M_StatusGetItemCount:
                         if ( pStatus->AreItemsVisible() )
-                            pRet->GenReturn ( RET_Value, aUId, comm_ULONG(pStatus->GetItemCount()));
+                            pRet->GenReturn ( RET_Value, aUId, comm_UINT32(pStatus->GetItemCount()));
                         else
-                            pRet->GenReturn ( RET_Value, aUId, comm_ULONG(0));
+                            pRet->GenReturn ( RET_Value, aUId, comm_UINT32(0));
                         break;
                     case M_StatusGetItemId:
                         if ( ValueOK(aUId, MethodString( nMethodId ),nNr1,pStatus->GetItemCount()) )
-                            pRet->GenReturn ( RET_Value, aUId, comm_ULONG(pStatus->GetItemId(nNr1-1)));
+                            pRet->GenReturn ( RET_Value, aUId, comm_UINT32(pStatus->GetItemId(nNr1-1)));
                         break;
                 }
             }
@@ -4534,13 +4534,13 @@ sal_Bool StatementControl::Execute()
                             if ( (nParams & PARAM_USHORT_1) )
                             {
                                 if ( ValueOK(aUId, MethodString( nMethodId ),nNr1,((TabControl*)pControl)->GetPageCount() ) )
-                                    pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)((TabControl*)pControl)->GetPageId(nNr1-1));
+                                    pRet->GenReturn ( RET_Value, aUId, (comm_UINT32)((TabControl*)pControl)->GetPageId(nNr1-1));
                             }
                             else
-                                pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)((TabControl*)pControl)->GetCurPageId());
+                                pRet->GenReturn ( RET_Value, aUId, (comm_UINT32)((TabControl*)pControl)->GetCurPageId());
                             break;
                         case M_GetPageCount:
-                            pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)((TabControl*)pControl)->GetPageCount());
+                            pRet->GenReturn ( RET_Value, aUId, (comm_UINT32)((TabControl*)pControl)->GetPageCount());
                             break;
                         case M_SetPageId:
                             if (((TabControl*)pControl)->GetCurPageId())
@@ -4635,7 +4635,7 @@ sal_Bool StatementControl::Execute()
                             pRet->GenReturn ( RET_Value, aUId, comm_BOOL( ((TriStateBox*)pControl)->GetState() == STATE_DONTKNOW) );
                             break;
                         case M_GetState :
-                            pRet->GenReturn ( RET_Value, aUId, comm_ULONG(((TriStateBox*)pControl)->GetState()));
+                            pRet->GenReturn ( RET_Value, aUId, comm_UINT32(((TriStateBox*)pControl)->GetState()));
                             break;
                         case M_Check :
                             ((TriStateBox*)pControl)->SetState( STATE_CHECK );
@@ -4723,20 +4723,20 @@ sal_Bool StatementControl::Execute()
                             AnimateMouse( pControl, MitteOben);
                             break;
                         case M_GetSelCount :
-                            pRet->GenReturn ( RET_Value, aUId, comm_ULONG(((ListBox*)pControl)->GetSelectEntryCount()));
+                            pRet->GenReturn ( RET_Value, aUId, comm_UINT32(((ListBox*)pControl)->GetSelectEntryCount()));
                             break;
                         case M_GetSelIndex :
                             if ( ! (nParams & PARAM_USHORT_1) )
                             {
                                 if ( ((ListBox*)pControl)->GetSelectEntryCount() == 0 )
                                 {
-                                    pRet->GenReturn ( RET_Value, aUId, comm_ULONG(0));
+                                    pRet->GenReturn ( RET_Value, aUId, comm_UINT32(0));
                                     break;
                                 }
                                 nNr1 = 1;
                             }
                             ValueOK(aUId, MethodString( nMethodId ),nNr1,((ListBox*)pControl)->GetSelectEntryCount());
-                            pRet->GenReturn ( RET_Value, aUId, comm_ULONG(((ListBox*)pControl)->GetSelectEntryPos(nNr1-1)) +1);
+                            pRet->GenReturn ( RET_Value, aUId, comm_UINT32(((ListBox*)pControl)->GetSelectEntryPos(nNr1-1)) +1);
                             break;
                         case M_GetSelText :
                             if ( ! (nParams & PARAM_USHORT_1) )
@@ -4744,7 +4744,7 @@ sal_Bool StatementControl::Execute()
                             pRet->GenReturn ( RET_Value, aUId, ((ListBox*)pControl)->GetSelectEntry(nNr1-1));
                             break;
                         case M_GetItemCount :
-                            pRet->GenReturn ( RET_Value, aUId, comm_ULONG(((ListBox*)pControl)->GetEntryCount()));
+                            pRet->GenReturn ( RET_Value, aUId, comm_UINT32(((ListBox*)pControl)->GetEntryCount()));
                             break;
                         case M_GetItemText :
                             pRet->GenReturn ( RET_Value, aUId, ((ListBox*)pControl)->GetEntry(nNr1-1));
@@ -4834,11 +4834,11 @@ sal_Bool StatementControl::Execute()
                                     nPos = 0;
                                 else
                                     nPos++;
-                                pRet->GenReturn ( RET_Value, aUId, (comm_ULONG) nPos);
+                                pRet->GenReturn ( RET_Value, aUId, (comm_UINT32) nPos);
                             }
                             break;
                         case M_GetItemCount :
-                            pRet->GenReturn ( RET_Value, aUId, comm_ULONG(((ComboBox*)pControl)->GetEntryCount()));
+                            pRet->GenReturn ( RET_Value, aUId, comm_UINT32(((ComboBox*)pControl)->GetEntryCount()));
                             break;
                         case M_GetItemText :
                             pRet->GenReturn ( RET_Value, aUId, ((ComboBox*)pControl)->GetEntry(nNr1-1));
@@ -5210,17 +5210,17 @@ sal_Bool StatementControl::Execute()
                                                 pRet->GenReturn ( RET_Value, aUId, Id2Str( pTB->GetHelpId(pTB->GetItemId(nItemPos)) ) );
                                                 break;
                                             case 1:
-                                                pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)pTB->GetItemType(nItemPos));
+                                                pRet->GenReturn ( RET_Value, aUId, (comm_UINT32)pTB->GetItemType(nItemPos));
                                                 break;
                                             case 2:
-                                                pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)pTB->GetItemState(pTB->GetItemId(nItemPos)));
+                                                pRet->GenReturn ( RET_Value, aUId, (comm_UINT32)pTB->GetItemState(pTB->GetItemId(nItemPos)));
                                                 break;
                                             case 3:
-                                                pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)pTB->GetItemId(nItemPos));
+                                                pRet->GenReturn ( RET_Value, aUId, (comm_UINT32)pTB->GetItemId(nItemPos));
                                                 break;
                                             default:
                                                 ReportError( aUId, GEN_RES_STR1( S_INTERNAL_ERROR, MethodString( nMethodId ) ) );
-                                                pRet->GenReturn ( RET_Value, aUId, comm_ULONG(0));
+                                                pRet->GenReturn ( RET_Value, aUId, comm_UINT32(0));
                                                 break;
                                             }
                                     }
@@ -5233,7 +5233,7 @@ sal_Bool StatementControl::Execute()
                                 pRet->GenReturn ( RET_Value, aUId, (String)pTB->GetText());
                                 break;
                             case M_GetItemCount :
-                                pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)pTB->GetItemCount());
+                                pRet->GenReturn ( RET_Value, aUId, (comm_UINT32)pTB->GetItemCount());
                                 break;
                             case M_SetNextToolBox :
                                 if ( (nParams & PARAM_STR_1) )
@@ -5311,10 +5311,10 @@ sal_Bool StatementControl::Execute()
                             }
                             break;
                         case M_GetSelCount :
-                            pRet->GenReturn ( RET_Value, aUId, comm_ULONG(((SvLBox*)pControl)->GetSelectionCount()));
+                            pRet->GenReturn ( RET_Value, aUId, comm_UINT32(((SvLBox*)pControl)->GetSelectionCount()));
                             break;
                         case M_GetItemCount :
-                            pRet->GenReturn ( RET_Value, aUId, comm_ULONG(((SvLBox*)pControl)->GetVisibleCount()) );
+                            pRet->GenReturn ( RET_Value, aUId, comm_UINT32(((SvLBox*)pControl)->GetVisibleCount()) );
                             break;
                         case M_GetSelIndex :
                             if ( ! (nParams & PARAM_USHORT_1) )
@@ -5323,7 +5323,7 @@ sal_Bool StatementControl::Execute()
                             {
                                 nNr1--;
                                 GET_NTH_ENTRY_LBOX( FirstSelected, NextSelected, nNr1);
-                                pRet->GenReturn ( RET_Value, aUId, comm_ULONG( ((SvTreeListBox*)pControl)->GetVisiblePos( pThisEntry )) +1 );
+                                pRet->GenReturn ( RET_Value, aUId, comm_UINT32( ((SvTreeListBox*)pControl)->GetVisiblePos( pThisEntry )) +1 );
                             }
                             break;
                         case M_Select :
@@ -5447,7 +5447,7 @@ sal_Bool StatementControl::Execute()
                                                     pRet->GenReturn ( RET_Value, aUId, comm_BOOL( pItem->IsStateTristate() ) );
                                                     break;
                                                 case M_GetState :
-                                                    pRet->GenReturn ( RET_Value, aUId, comm_ULONG( pItem->GetButtonFlags() & ~SV_STATE_MASK ));
+                                                    pRet->GenReturn ( RET_Value, aUId, comm_UINT32( pItem->GetButtonFlags() & ~SV_STATE_MASK ));
                                                     break;
                                                 case M_Check :
                                                     if ( !pItem->IsStateChecked() )
@@ -5578,7 +5578,7 @@ sal_Bool StatementControl::Execute()
                                                 break;
                                             case M_GetRowCount :
                                                 {
-                                                    pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)pEBBox->GetRowCount() );
+                                                    pRet->GenReturn ( RET_Value, aUId, (comm_UINT32)pEBBox->GetRowCount() );
                                                 }
                                                 break;
                                             case M_IsEditing :
@@ -5618,7 +5618,7 @@ sal_Bool StatementControl::Execute()
                                         switch ( nMethodId )
                                         {
                                         case M_GetItemCount:
-                                            pRet->GenReturn ( RET_Value, aUId, comm_ULONG( pVS->GetItemCount()));
+                                            pRet->GenReturn ( RET_Value, aUId, comm_UINT32( pVS->GetItemCount()));
                                             break;
                                         case M_GetItemText:
                                             if ( ValueOK( aUId, MethodString( nMethodId ), nNr1, pVS->GetItemCount() ))
@@ -5630,9 +5630,9 @@ sal_Bool StatementControl::Execute()
                                             break;
                                         case M_GetSelIndex :
                                             if ( pVS->IsNoSelection() )
-                                                pRet->GenReturn ( RET_Value, aUId, comm_ULONG(0));
+                                                pRet->GenReturn ( RET_Value, aUId, comm_UINT32(0));
                                             else
-                                                pRet->GenReturn ( RET_Value, aUId, comm_ULONG( pVS->GetItemPos( pVS->GetSelectItemId() ) +1));
+                                                pRet->GenReturn ( RET_Value, aUId, comm_UINT32( pVS->GetItemPos( pVS->GetSelectItemId() ) +1));
                                             break;
                                         case M_GetSelText :
                                             if ( pVS->IsNoSelection() )
@@ -5655,7 +5655,7 @@ sal_Bool StatementControl::Execute()
                                         switch ( nMethodId )
                                         {
                                         case M_GetItemCount:
-                                            pRet->GenReturn ( RET_Value, aUId, comm_ULONG( pRM->GetItemCount()));
+                                            pRet->GenReturn ( RET_Value, aUId, comm_UINT32( pRM->GetItemCount()));
                                             break;
                                         case M_GetItemText:
                                             if ( ValueOK( aUId, MethodString( nMethodId ), nNr1, pRM->GetItemCount() ))
@@ -5671,7 +5671,7 @@ sal_Bool StatementControl::Execute()
                                             }
                                             break;
                                         case M_GetSelIndex :
-                                                pRet->GenReturn ( RET_Value, aUId, comm_ULONG( pRM->GetItemIndex( pRM->GetCurrentRoadmapItemID() ) +1));
+                                                pRet->GenReturn ( RET_Value, aUId, comm_UINT32( pRM->GetItemIndex( pRM->GetCurrentRoadmapItemID() ) +1));
                                             break;
                                         case M_GetSelText :
                                                 pRet->GenReturn ( RET_Value, aUId, pRM->GetRoadmapItemLabel( pRM->GetCurrentRoadmapItemID() ) );
@@ -5692,7 +5692,7 @@ sal_Bool StatementControl::Execute()
                                         switch ( nMethodId )
                                         {
                                         case M_GetItemCount:
-                                            pRet->GenReturn ( RET_Value, aUId, comm_ULONG( pELB->getItemCount()));
+                                            pRet->GenReturn ( RET_Value, aUId, comm_UINT32( pELB->getItemCount()));
                                             break;
                                         case M_GetItemText:
                                             if ( ValueOK( aUId, MethodString( nMethodId ), nNr1, pELB->getItemCount() ))
@@ -5742,15 +5742,15 @@ sal_Bool StatementControl::Execute()
                                             break;
                                         case M_GetSelCount :
                                             if ( pELB->getSelIndex() == EXTENSION_LISTBOX_ENTRY_NOTFOUND )
-                                                pRet->GenReturn ( RET_Value, aUId, comm_ULONG( 0 ));
+                                                pRet->GenReturn ( RET_Value, aUId, comm_UINT32( 0 ));
                                             else
-                                                pRet->GenReturn ( RET_Value, aUId, comm_ULONG( 1 ));
+                                                pRet->GenReturn ( RET_Value, aUId, comm_UINT32( 1 ));
                                             break;
                                         case M_GetSelIndex :
                                             if ( pELB->getSelIndex() == EXTENSION_LISTBOX_ENTRY_NOTFOUND )
-                                                pRet->GenReturn ( RET_Value, aUId, comm_ULONG( 0 ));
+                                                pRet->GenReturn ( RET_Value, aUId, comm_UINT32( 0 ));
                                             else
-                                                   pRet->GenReturn ( RET_Value, aUId, comm_ULONG( pELB->getSelIndex() +1));
+                                                   pRet->GenReturn ( RET_Value, aUId, comm_UINT32( pELB->getSelIndex() +1));
                                             break;
                                         default:
                                             ReportError( aUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "RoadMap" ) );
@@ -5812,7 +5812,7 @@ sal_Bool StatementControl::Execute()
                                                             case TypeClass_UNSIGNED_LONG:
                                                             case TypeClass_UNSIGNED_HYPER:
                                                                 {
-                                                                    comm_ULONG val = 0;
+                                                                    comm_UINT32 val = 0;
                                                                     aCell >>= val;
                                                                     pRet->GenReturn ( RET_Value, aUId, val );
                                                                 }
@@ -5833,12 +5833,12 @@ sal_Bool StatementControl::Execute()
                                                 break;
                                             case M_GetColumnCount :
                                                 {
-                                                    pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)pTC->GetColumnCount() );
+                                                    pRet->GenReturn ( RET_Value, aUId, (comm_UINT32)pTC->GetColumnCount() );
                                                 }
                                                 break;
                                             case M_GetRowCount :
                                                 {
-                                                    pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)pTC->GetRowCount() );
+                                                    pRet->GenReturn ( RET_Value, aUId, (comm_UINT32)pTC->GetRowCount() );
                                                 }
                                                 break;
                                             case M_Select :
@@ -6284,11 +6284,11 @@ sal_Bool StatementControl::Execute()
                                     ReportError( aUId, GEN_RES_STR1( S_BUTTONID_REQUIRED, MethodString( nMethodId ) ) );
                                 break;
                             case M_GetButtonCount :
-                                pRet->GenReturn ( RET_Value, aUId, comm_ULONG(pBD->GetButtonCount()));
+                                pRet->GenReturn ( RET_Value, aUId, comm_UINT32(pBD->GetButtonCount()));
                                 break;
                             case M_GetButtonId :
                                 if ( ValueOK(aUId, MethodString( nMethodId ),nNr1,pBD->GetButtonCount()) )
-                                    pRet->GenReturn ( RET_Value, aUId, comm_ULONG(pBD->GetButtonId(nNr1-1)));
+                                    pRet->GenReturn ( RET_Value, aUId, comm_UINT32(pBD->GetButtonId(nNr1-1)));
                                 break;
                             default:
                                 ReportError( aUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "MessageBox" ) );

@@ -273,7 +273,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                     case VCLEVENT_LISTBOX_SELECT:
                         if ( m_bRecord )
                         {
-                            StatementList::pRet->GenReturn( RET_MacroRecorder, pWin->GetUniqueOrHelpId(), (comm_UINT16)M_Select, comm_ULONG( ((ListBox*)pWin)->GetSelectEntryPos() +1 ) );
+                            StatementList::pRet->GenReturn( RET_MacroRecorder, pWin->GetUniqueOrHelpId(), (comm_UINT16)M_Select, comm_UINT32( ((ListBox*)pWin)->GetSelectEntryPos() +1 ) );
                             bSendData = sal_True;
                         }
                         if ( m_bLog )
@@ -308,7 +308,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                                     Sound::Beep();
                                 else
                                 {
-                                    StatementList::pRet->GenReturn( RET_MacroRecorder, pWin->GetUniqueOrHelpId(), (comm_UINT16)M_Select, (comm_ULONG) nPos+1 );
+                                    StatementList::pRet->GenReturn( RET_MacroRecorder, pWin->GetUniqueOrHelpId(), (comm_UINT16)M_Select, (comm_UINT32) nPos+1 );
                                     bSendData = sal_True;
                                 }
                             }
@@ -372,7 +372,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                                             if ( nMethod != M_Click )
                                                 StatementList::pRet->GenReturn( RET_MacroRecorder, UID_ACTIVE, nMethod );
                                             else
-                                                StatementList::pRet->GenReturn( RET_MacroRecorder, UID_ACTIVE, nMethod, (comm_ULONG)nCurrentButtonId );
+                                                StatementList::pRet->GenReturn( RET_MacroRecorder, UID_ACTIVE, nMethod, (comm_UINT32)nCurrentButtonId );
                                             bSendData = sal_True;
                                         }
                                         if ( m_bLog )

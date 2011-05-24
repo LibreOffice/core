@@ -172,7 +172,7 @@ void CmdStream::WriteSortedParams( SbxArray* rPar, sal_Bool IsKeyString )
 {
     sal_uInt16 nParams = PARAM_NONE;
     sal_uInt16 nNr1=0,nNr2=0,nNr3=0,nNr4=0;
-    comm_ULONG nLNr1=0;
+    comm_UINT32 nLNr1=0;
     String aString1,aString2;
     sal_Bool bBool1=sal_False,bBool2=sal_False;
 
@@ -399,7 +399,7 @@ void CmdStream::GenCmdUNOSlot( const String &aURL )
     Write( aURL );          // Die UNO URL eben
 }
 
-void CmdStream::GenCmdControl( comm_ULONG nUId, sal_uInt16 nMethodId, SbxArray* rPar )
+void CmdStream::GenCmdControl( comm_UINT32 nUId, sal_uInt16 nMethodId, SbxArray* rPar )
 {
     Write(sal_uInt16(SIControl));
     Write(nUId);
@@ -430,7 +430,7 @@ void CmdStream::GenCmdFlow( sal_uInt16 nArt, sal_uInt16 nNr1 )
     Write(nNr1);
 }
 
-void CmdStream::GenCmdFlow( sal_uInt16 nArt, comm_ULONG nNr1 )
+void CmdStream::GenCmdFlow( sal_uInt16 nArt, comm_UINT32 nNr1 )
 {
     Write(sal_uInt16(SIFlow));
     Write(nArt);
@@ -459,7 +459,7 @@ SvMemoryStream* CmdStream::GetStream()
     return pSammel;
 }
 
-void CmdStream::Reset( comm_ULONG nSequence )
+void CmdStream::Reset( comm_UINT32 nSequence )
 {
     delete pCommStream;
     delete pSammel;

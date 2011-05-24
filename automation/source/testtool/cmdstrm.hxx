@@ -46,16 +46,16 @@ public:
 
     void GenCmdUNOSlot( const String &aURL );
 
-    void GenCmdControl( comm_ULONG nUId, sal_uInt16 nMethodId, SbxArray* rPar );
+    void GenCmdControl( comm_UINT32 nUId, sal_uInt16 nMethodId, SbxArray* rPar );
     void GenCmdControl( String aUId, sal_uInt16 nMethodId, SbxArray* rPar );
 
 
     void GenCmdFlow( sal_uInt16 nArt );
     void GenCmdFlow( sal_uInt16 nArt, sal_uInt16 nNr1 );
-    void GenCmdFlow( sal_uInt16 nArt, comm_ULONG nNr1 );
+    void GenCmdFlow( sal_uInt16 nArt, comm_UINT32 nNr1 );
     void GenCmdFlow( sal_uInt16 nArt, String aString1 );
 
-    void Reset(comm_ULONG nSequence);
+    void Reset(comm_UINT32 nSequence);
 
     SvMemoryStream* GetStream();
 
@@ -67,7 +67,7 @@ private:
 
     using CmdBaseStream::Write;
     void Write( comm_UINT16 nNr ){CmdBaseStream::Write( nNr );}
-    void Write( comm_ULONG nNr ){CmdBaseStream::Write( nNr );}
+    void Write( comm_UINT32 nNr ){CmdBaseStream::Write( nNr );}
     void Write( const comm_UniChar* aString, comm_UINT16 nLenInChars ){CmdBaseStream::Write( aString, nLenInChars );}
     void Write( comm_BOOL bBool ){CmdBaseStream::Write( bBool );}
 //  new

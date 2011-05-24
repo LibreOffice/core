@@ -169,7 +169,7 @@ void ControlDef::Write( SvStream &aStream )
     if ( pData->aUId.HasString() )
         aStream.WriteByteString( pData->aUId.GetStr(), RTL_TEXTENCODING_UTF8 );
     else
-        aStream << static_cast<comm_ULONG>(pData->aUId.GetNum()); //GetNum() sal_uLong != comm_ULONG on 64bit
+        aStream << static_cast<comm_UINT32>(pData->aUId.GetNum()); //GetNum() sal_uLong != comm_UINT32 on 64bit
     if ( pSons )
         for ( sal_uInt16 i = 0 ; pSons->Count() > i ; i++ )
             ((ControlDef*)(*pSons)[i])->Write(aStream);
@@ -1401,7 +1401,7 @@ sal_Bool TestToolObj::ReadNamesBin( String Filename, CNames *&pSIds, CNames *&pC
         }
         else
         {
-            comm_ULONG nUId;
+            comm_UINT32 nUId;
             aStream >> nUId;
             aUId = rtl::OString();// nUId;
         }
@@ -3168,7 +3168,7 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
             }
             else
             {
-                comm_ULONG nUId;
+                comm_UINT32 nUId;
                 pRetStream->Read( nUId );         // bei Sequence einfach die Sequence
                 // FIXME: HELPID
                 #if 0
@@ -3178,7 +3178,7 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
             pRetStream->Read(nParams);
 
             sal_uInt16 nNr1 = 0;
-            comm_ULONG nLNr1 = 0;
+            comm_UINT32 nLNr1 = 0;
             String aString1;
             sal_Bool bBool1 = sal_False;
             SbxValueRef xValue1 = new SbxValue;
@@ -3785,7 +3785,7 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
             }
             else
             {
-                comm_ULONG nUId;
+                comm_UINT32 nUId;
                 pRetStream->Read( nUId );         // bei Sequence einfach die Sequence
                 // FIXME: HELPID
                 #if 0

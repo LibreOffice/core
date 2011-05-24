@@ -39,7 +39,6 @@
 /** defines:
     comm_BYTE
     comm_BOOL
-    comm_ULONG
     comm_UINT16
     comm_UINT32
     comm_UniChar
@@ -57,7 +56,6 @@ typedef sal_Unicode comm_UniChar;
 #include <tools/solar.h>
 typedef sal_uInt8 comm_BYTE;
 typedef sal_Bool comm_BOOL;
-typedef sal_uInt32 comm_ULONG;
 typedef sal_uInt16 comm_UINT16;
 typedef sal_uInt32 comm_UINT32;
 

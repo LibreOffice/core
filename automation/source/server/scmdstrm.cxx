@@ -99,7 +99,7 @@ void SCmdStream::Read ( SfxPoolItem *&pItem )
             break;
         case BinULONG:
             {
-                comm_ULONG nNr;
+                comm_UINT32 nNr;
                 Read (nNr );
                 pItem = new SfxUInt32Item(nId,nNr);
 #if OSL_DEBUG_LEVEL > 1
@@ -170,7 +170,7 @@ void SCmdStream::Read ( ::com::sun::star::beans::PropertyValue &rItem )
             break;
         case BinULONG:
             {
-                comm_ULONG nNr;
+                comm_UINT32 nNr;
                 Read (nNr );
                 rItem.Value <<= nNr;
 #if OSL_DEBUG_LEVEL > 1

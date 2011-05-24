@@ -496,7 +496,7 @@ void StatementCommand::HandleSAXParser()
             break;
         case RC_SAXGetNodeType:
             {
-                   pRet->GenReturn ( RET_Value, nMethodId, (comm_ULONG)pSAXParser->GetCurrentNode()->GetNodeType() );
+                   pRet->GenReturn ( RET_Value, nMethodId, (comm_UINT32)pSAXParser->GetCurrentNode()->GetNodeType() );
             }
             break;
         case RC_SAXGetAttributeCount:
@@ -514,13 +514,13 @@ void StatementCommand::HandleSAXParser()
                             pRet->GenReturn ( RET_Value, nMethodId, pElementNode->GetNodeName() );
                             break;
                         case RC_SAXGetChildCount:
-                            pRet->GenReturn ( RET_Value, nMethodId, (comm_ULONG)pElementNode->GetChildCount() );
+                            pRet->GenReturn ( RET_Value, nMethodId, (comm_UINT32)pElementNode->GetChildCount() );
                             break;
                         case RC_SAXGetAttributeCount:
                             if ( xAttributeList.is() )
-                                pRet->GenReturn ( RET_Value, nMethodId, (comm_ULONG)xAttributeList->getLength() );
+                                pRet->GenReturn ( RET_Value, nMethodId, (comm_UINT32)xAttributeList->getLength() );
                             else
-                                pRet->GenReturn ( RET_Value, nMethodId, (comm_ULONG)0 );
+                                pRet->GenReturn ( RET_Value, nMethodId, (comm_UINT32)0 );
                             break;
                         case RC_SAXGetAttributeName:
                             {

@@ -44,25 +44,25 @@
 class ITransmiter
 {
 protected:
-    comm_ULONG nLastSent;
+    comm_UINT32 nLastSent;
 public:
     ITransmiter() :nLastSent( 0 ){}
     virtual ~ITransmiter() {}
     virtual comm_UINT16 TransferBytes( const void* pBuffer, comm_UINT32 nLen ) = 0;
 
-    comm_ULONG GetLastSent() const { return nLastSent; }
+    comm_UINT32 GetLastSent() const { return nLastSent; }
 };
 
 class IReceiver
 {
 protected:
-    comm_ULONG nLastReceived;
+    comm_UINT32 nLastReceived;
 public:
     IReceiver() :nLastReceived( 0 ){}
     virtual ~IReceiver() {;}
     virtual comm_UINT16 ReceiveBytes( void* pBuffer, comm_UINT32 nLen ) = 0;
 
-    comm_ULONG GetLastReceived() const { return nLastReceived; }
+    comm_UINT32 GetLastReceived() const { return nLastReceived; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
