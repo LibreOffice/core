@@ -744,7 +744,7 @@ sal_Bool ScDocument::GetDataStart( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRo
     return false;
 }
 
-sal_Bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos )//TODO:REWORK
+sal_Bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos )
 {
     if (nOldPos == nNewPos) return false;
     sal_Bool bValid = false;
@@ -792,12 +792,6 @@ sal_Bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos )//TODO:REWORK
                 SCTAB i;
                 pTab.erase(pTab.begin()+nOldPos);
                 pTab.insert(pTab.begin()+nNewPos, pSaveTab);
-//                for (i = nOldPos + 1; i < nTabCount; i++)
-//                    pTab[i - 1] = pTab[i];
-//                pTab[i-1] = NULL;
-//                for (i = nTabCount - 1; i > nNewPos; i--)
-//                    pTab[i] = pTab[i - 1];
-//                pTab[nNewPos] = pSaveTab;
                 for (i = 0; i < static_cast<SCTAB>(pTab.size()); i++)
                     if (pTab[i])
                         pTab[i]->UpdateMoveTab( nOldPos, nNewPos, i, *pProgress );

@@ -62,14 +62,16 @@ using namespace formula;
 // -----------------------------------------------------------------------
 
 // Nach der Regula Falsi Methode
-sal_Bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,//TODO:REWORK
+sal_Bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
                         SCCOL nVCol, SCROW nVRow, SCTAB nVTab,
                         const String& sValStr, double& nX)
 {
     sal_Bool bRet = false;
     nX = 0.0;
     if (ValidColRow(nFCol, nFRow) && ValidColRow(nVCol, nVRow) &&
-        VALIDTAB(nFTab) && VALIDTAB(nVTab) && pTab[nFTab] && pTab[nVTab])
+        VALIDTAB(nFTab) && VALIDTAB(nVTab) &&
+        nFTab < static_cast<SCTAB>(pTab.size()) && pTab[nFTab] &&
+        nVTab < static_cast<SCTAB>(pTab.size()) && pTab[nVTab])
     {
         CellType eFType, eVType;
         GetCellType(nFCol, nFRow, nFTab, eFType);
@@ -962,7 +964,7 @@ void ScDocument::FindOrder( SCCOLROW* pOtherRows, SCCOLROW nThisEndRow, SCCOLROW
     }
 }
 
-void ScDocument::CompareDocument( ScDocument& rOtherDoc )//TODO:REWORK
+void ScDocument::CompareDocument( ScDocument& rOtherDoc )
 {
     if (!pChangeTrack)
         return;

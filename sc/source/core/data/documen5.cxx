@@ -208,7 +208,7 @@ sal_Bool ScDocument::HasChartAtPoint( SCTAB nTab, const Point& rPos, String* pNa
 {
     if (pDrawLayer && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
     {
-        SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));//TODO:REWORK
+        SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
         DBG_ASSERT(pPage,"Page ?");
 
         SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );

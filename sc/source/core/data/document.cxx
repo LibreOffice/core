@@ -361,7 +361,7 @@ sal_Bool ScDocument::InsertTab( SCTAB nPos, const String& rName,
         }
         else
         {
-            if (VALIDTAB(nPos) && (nPos < nTabCount))//TODO:REWORK
+            if (VALIDTAB(nPos) && (nPos < nTabCount))
             {
                 ScRange aRange( 0,0,nPos, MAXCOL,MAXROW,MAXTAB );
                 xColNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,1 );
@@ -1467,14 +1467,20 @@ void ScDocument::InitUndo( ScDocument* pSrcDoc, SCTAB nTab1, SCTAB nTab2,
 }
 
 
-void ScDocument::AddUndoTab( SCTAB nTab1, SCTAB nTab2, sal_Bool bColInfo, sal_Bool bRowInfo )//TODO:REWORK
+void ScDocument::AddUndoTab( SCTAB nTab1, SCTAB nTab2, sal_Bool bColInfo, sal_Bool bRowInfo )
 {
     if (bIsUndo)
     {
         String aString;
         for (SCTAB nTab = nTab1; nTab <= nTab2; nTab++)
-            if (!pTab[nTab])
+            if (nTab >= static_cast<SCTAB>(pTab.size()) || !pTab[nTab])
+            {
+                while(nTab >= static_cast<SCTAB>(pTab.size()))
+                {
+                    pTab.push_back(NULL);
+                }
                 pTab[nTab] = new ScTable(this, nTab, aString, bColInfo, bRowInfo);
+            }
 
         if ( nMaxTableNumber <= nTab2 )
             nMaxTableNumber = nTab2 + 1;
@@ -1535,7 +1541,7 @@ void ScDocument::CopyToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
 }
 
 
-void ScDocument::UndoToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,//TODO:REWORK
+void ScDocument::UndoToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                             sal_uInt16 nFlags, sal_Bool bOnlyMarked, ScDocument* pDestDoc,
                             const ScMarkData* pMarks)
@@ -1550,6 +1556,7 @@ void ScDocument::UndoToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,//TODO:REW
         if (nTab1 > 0)
             CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTab1-1, IDF_FORMULA, false, pDestDoc, pMarks );
 
+        OSL_ASSERT( nTab2 < static_cast<SCTAB>(pTab.size()) && nTab2 < static_cast<SCTAB>(pDestDoc->pTab.size()));
         for (SCTAB i = nTab1; i <= nTab2; i++)
         {
             if (pTab[i] && pDestDoc->pTab[i])
@@ -1564,7 +1571,7 @@ void ScDocument::UndoToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,//TODO:REW
 }
 
 
-void ScDocument::CopyToDocument(const ScRange& rRange,//TODO:REWORK
+void ScDocument::CopyToDocument(const ScRange& rRange,
                             sal_uInt16 nFlags, sal_Bool bOnlyMarked, ScDocument* pDestDoc,
                             const ScMarkData* pMarks, sal_Bool bColRowFlags)
 {
@@ -1658,7 +1665,7 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
 }
 
 // Copy the content of the Range into clipboard. Adding this method for VBA API: Range.Copy().
-void ScDocument::CopyToClip4VBA(const ScClipParam& rClipParam, ScDocument* pClipDoc, bool bKeepScenarioFlags, bool bIncludeObjects, bool bCloneNoteCaptions)//TODO:REWORK
+void ScDocument::CopyToClip4VBA(const ScClipParam& rClipParam, ScDocument* pClipDoc, bool bKeepScenarioFlags, bool bIncludeObjects, bool bCloneNoteCaptions)
 {
     if ( !bIsClip )
     {
@@ -1674,17 +1681,17 @@ void ScDocument::CopyToClip4VBA(const ScClipParam& rClipParam, ScDocument* pClip
         pClipDoc->ResetClip( this, nTab );
 
         CopyRangeNamesToClip( pClipDoc, aClipRange, nTab );
-
-        if ( pTab[nTab] && pClipDoc->pTab[nTab] )
-        {
-            pTab[nTab]->CopyToClip( rClipParam.maRanges, pClipDoc->pTab[nTab], bKeepScenarioFlags, bCloneNoteCaptions );
-            if ( pDrawLayer && bIncludeObjects )
+        if ( nTab < static_cast<SCTAB>(pTab.size()) && nTab < static_cast<SCTAB>(pCipDoc->pTab.size()) )
+            if ( pTab[nTab] && pClipDoc->pTab[nTab] )
             {
-                // Also copy drawing objects.
-                Rectangle aObjRect = GetMMRect( aClipRange.aStart.Col(), aClipRange.aStart.Row(), aClipRange.aEnd.Col(), aClipRange.aEnd.Row(), nTab );
-                pDrawLayer->CopyToClip( pClipDoc, nTab, aObjRect );
+                pTab[nTab]->CopyToClip( rClipParam.maRanges, pClipDoc->pTab[nTab], bKeepScenarioFlags, bCloneNoteCaptions );
+                if ( pDrawLayer && bIncludeObjects )
+                {
+                    // Also copy drawing objects.
+                    Rectangle aObjRect = GetMMRect( aClipRange.aStart.Col(), aClipRange.aStart.Row(), aClipRange.aEnd.Col(), aClipRange.aEnd.Row(), nTab );
+                    pDrawLayer->CopyToClip( pClipDoc, nTab, aObjRect );
+                }
             }
-        }
 
         // Make sure to mark overlapped cells.
         pClipDoc->ExtendMerge( aClipRange, true );
@@ -2030,7 +2037,7 @@ void ScDocument::BroadcastFromClip( SCCOL nCol1, SCROW nRow1,
     }
 }
 
-void ScDocument::CopyBlockFromClip( SCCOL nCol1, SCROW nRow1,//TODO:REWORK
+void ScDocument::CopyBlockFromClip( SCCOL nCol1, SCROW nRow1,
                                     SCCOL nCol2, SCROW nRow2,
                                     const ScMarkData& rMark,
                                     SCsCOL nDx, SCsROW nDy,
@@ -2039,11 +2046,11 @@ void ScDocument::CopyBlockFromClip( SCCOL nCol1, SCROW nRow1,//TODO:REWORK
     ::std::vector<ScTable*>& ppClipTab = pCBFCP->pClipDoc->pTab;
     SCTAB nTabEnd = pCBFCP->nTabEnd;
     SCTAB nClipTab = 0;
-    for (SCTAB i = pCBFCP->nTabStart; i <= nTabEnd; i++)
+    for (SCTAB i = pCBFCP->nTabStart; i <= nTabEnd && i < static_cast<SCTAB>(pTab.size()); i++)
     {
         if (pTab[i] && rMark.GetTableSelect(i) )
         {
-            while (!ppClipTab[nClipTab]) nClipTab = (nClipTab+1) % (MAXTAB+1);
+            while (!ppClipTab[nClipTab]) nClipTab = (nClipTab+1) % (static_cast<SCTAB>(pTab.size()));
 
             pTab[i]->CopyFromClip( nCol1, nRow1, nCol2, nRow2, nDx, nDy,
                 pCBFCP->nInsFlag, pCBFCP->bAsLink, pCBFCP->bSkipAttrForEmpty, ppClipTab[nClipTab] );
@@ -2069,17 +2076,17 @@ void ScDocument::CopyBlockFromClip( SCCOL nCol1, SCROW nRow1,//TODO:REWORK
                 }
             }
 
-            nClipTab = (nClipTab+1) % (MAXTAB+1);
+            nClipTab = (nClipTab+1) % (static_cast<SCTAB>(pTab.size()));
         }
     }
     if ( pCBFCP->nInsFlag & IDF_CONTENTS )
     {
         nClipTab = 0;
-        for (SCTAB i = pCBFCP->nTabStart; i <= nTabEnd; i++)
+        for (SCTAB i = pCBFCP->nTabStart && i < static_cast<SCTAB>(pTab.size()); i <= nTabEnd; i++)
         {
             if (pTab[i] && rMark.GetTableSelect(i) )
             {
-                while (!ppClipTab[nClipTab]) nClipTab = (nClipTab+1) % (MAXTAB+1);
+                while (!ppClipTab[nClipTab]) nClipTab = (nClipTab+1) % (static_cast<SCTAB>(pTab.size()));
                 SCsTAB nDz = ((SCsTAB)i) - nClipTab;
 
                 //  ranges of consecutive selected tables (in clipboard and dest. doc)
@@ -2105,7 +2112,7 @@ void ScDocument::CopyBlockFromClip( SCCOL nCol1, SCROW nRow1,//TODO:REWORK
                         nCol1, nRow1, i, nCol2, nRow2, i+nFollow,
                         nDx, nDy, nDz, pCBFCP->pRefUndoDoc, false );
 
-                nClipTab = (nClipTab+nFollow+1) % (MAXTAB+1);
+                nClipTab = (nClipTab+nFollow+1) % (static_cast<SCTAB>(pTab.size()));
                 i = sal::static_int_cast<SCTAB>( i + nFollow );
             }
         }
@@ -2113,7 +2120,7 @@ void ScDocument::CopyBlockFromClip( SCCOL nCol1, SCROW nRow1,//TODO:REWORK
 }
 
 
-void ScDocument::CopyNonFilteredFromClip( SCCOL nCol1, SCROW nRow1,//TODO:REWORK
+void ScDocument::CopyNonFilteredFromClip( SCCOL nCol1, SCROW nRow1,
                                     SCCOL nCol2, SCROW nRow2,
                                     const ScMarkData& rMark,
                                     SCsCOL nDx, SCsROW /* nDy */,
@@ -2126,7 +2133,7 @@ void ScDocument::CopyNonFilteredFromClip( SCCOL nCol1, SCROW nRow1,//TODO:REWORK
     //  filtered state is taken from first used table in clipboard (as in GetClipArea)
     SCTAB nFlagTab = 0;
     std::vector<ScTable*>& ppClipTab = pCBFCP->pClipDoc->pTab;
-    while ( nFlagTab < MAXTAB && !ppClipTab[nFlagTab] )
+    while ( nFlagTab < static_cast<SCTAB>(ppClipTab.size()) && !ppClipTab[nFlagTab] )
         ++nFlagTab;
 
     SCROW nSourceRow = rClipStartRow;
@@ -2602,13 +2609,13 @@ sal_Bool ScDocument::HasClipFilteredRows()
 }
 
 
-void ScDocument::MixDocument( const ScRange& rRange, sal_uInt16 nFunction, sal_Bool bSkipEmpty,//TODO:REWORK
+void ScDocument::MixDocument( const ScRange& rRange, sal_uInt16 nFunction, sal_Bool bSkipEmpty,
                                     ScDocument* pSrcDoc )
 {
     SCTAB nTab1 = rRange.aStart.Tab();
     SCTAB nTab2 = rRange.aEnd.Tab();
-    for (SCTAB i = nTab1; i <= nTab2; i++)
-        if (pTab[i] && pSrcDoc->pTab[i])
+    for (SCTAB i = nTab1; i <= nTab2 && i < static_cast<SCTAB>(pTab.size()); i++)
+        if (pTab[i] && i < static_cast<SCTAB>(pSrcDoc->pTab.size()) && pSrcDoc->pTab[i])
             pTab[i]->MixData( rRange.aStart.Col(), rRange.aStart.Row(),
                                 rRange.aEnd.Col(), rRange.aEnd.Row(),
                                 nFunction, bSkipEmpty, pSrcDoc->pTab[i] );
@@ -2732,18 +2739,19 @@ void ScDocument::FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
 }
 
 
-void ScDocument::PutCell( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell* pCell, sal_Bool bForceTab )//TODO:REWORK
+void ScDocument::PutCell( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell* pCell, sal_Bool bForceTab )
 {
     if (VALIDTAB(nTab))
     {
-        if ( bForceTab && !pTab[nTab] )
+        if ( bForceTab && ( nTab >= static_cast<SCTAB>(pTab.size()) || !pTab[nTab]) )
         {
             sal_Bool bExtras = !bIsUndo;        // Spaltenbreiten, Zeilenhoehen, Flags
 
+            while(nTab >= static_cast<SCTAB>(pTab.size()))
+                pTab.push_back(NULL);
             pTab[nTab] = new ScTable(this, nTab,
                             String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("temp")),
                             bExtras, bExtras);
-            ++nMaxTableNumber;
         }
 
         if (pTab[nTab])
@@ -2752,17 +2760,17 @@ void ScDocument::PutCell( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell* pCell,
 }
 
 
-void ScDocument::PutCell( const ScAddress& rPos, ScBaseCell* pCell, sal_Bool bForceTab )//TODO:REWORK
+void ScDocument::PutCell( const ScAddress& rPos, ScBaseCell* pCell, sal_Bool bForceTab )
 {
     SCTAB nTab = rPos.Tab();
-    if ( bForceTab && !pTab[nTab] )
+    if ( bForceTab && ( nTab >= static_cast<SCTAB>(pTab.size()) || !pTab[nTab]) )
     {
         sal_Bool bExtras = !bIsUndo;        // Spaltenbreiten, Zeilenhoehen, Flags
 
+        while(nTab >= static_cast<SCTAB>(pTab.size()))
         pTab[nTab] = new ScTable(this, nTab,
                         String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("temp")),
                         bExtras, bExtras);
-        ++nMaxTableNumber;
     }
 
     if (pTab[nTab])
