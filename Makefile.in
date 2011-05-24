@@ -58,6 +58,9 @@ check: Makefile dmake/dmake@EXEEXT_FOR_BUILD@ fetch
 	export SAL_USE_VCLPLUGIN="svp" && \
         build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
 
+test: Makefile dmake/dmake fetch
+	@. ./*Env.Set.sh && $$SOLARENV/bin/subsequenttests
+
 id:
 	@. ./*Env.Set.sh && \
 		create-ids
