@@ -357,7 +357,6 @@
 #include <vcl/metric.hxx>
 #include <sfx2/inimgr.hxx>
 #include <node.hxx>
-#include <tools/pstm.hxx>
 #include <tools/table.hxx>
 #include <sfx2/docfac.hxx>
 #include <svl/ownlist.hxx>
