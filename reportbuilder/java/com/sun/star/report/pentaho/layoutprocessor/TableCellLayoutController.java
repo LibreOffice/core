@@ -69,12 +69,12 @@ public class TableCellLayoutController extends SectionLayoutController
     {
         final AttributeMap attributeMap = new AttributeMap(super.computeAttributes(fc, element, target));
         final String definedStyle = (String) attributeMap.getAttribute(OfficeNamespaces.TABLE_NS, OfficeToken.STYLE_NAME);
-        final String valueType = (String) attributeMap.getAttribute(OfficeNamespaces.OFFICE_NS, FormatValueUtility.VALUE_TYPE);
         attributeMap.setAttribute(OfficeNamespaces.TABLE_NS, OfficeToken.STYLE_NAME, getDisplayStyleName((Section) element, definedStyle));
 
         try
         {
-            final DataFlags value = computeValue();
+            final DataFlags value = computeValue(attributeMap);
+            final String valueType = (String) attributeMap.getAttribute(OfficeNamespaces.OFFICE_NS, FormatValueUtility.VALUE_TYPE);
             if (value != null)
             {
                 FormatValueUtility.applyValueForCell(value.getValue(), attributeMap, valueType);
@@ -100,7 +100,7 @@ public class TableCellLayoutController extends SectionLayoutController
         return attributeMap;
     }
 
-    private DataFlags computeValue() throws DataSourceException
+    private DataFlags computeValue(final AttributeMap attributeMap) throws DataSourceException
     {
         // Search for the first FormattedTextElement
         final Section cell = (Section) getElement();
@@ -115,6 +115,8 @@ public class TableCellLayoutController extends SectionLayoutController
             final Object o = LayoutControllerUtil.evaluateExpression(getFlowController(), element, dc);
             if (Boolean.FALSE.equals(o))
             {
+                attributeMap.setAttribute(OfficeNamespaces.OFFICE_NS,
+                    FormatValueUtility.VALUE_TYPE, "string");
                 return null;
             }
         }
