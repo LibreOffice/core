@@ -117,7 +117,6 @@
 #include <vcl/field.hxx>
 #include <vcl/spinfld.hxx>
 #include <vcl/combobox.hxx>
-#include <tools/pstm.hxx>
 #include <svl/eitem.hxx>
 #include <svl/itempool.hxx>
 #include <sfx2/tabdlg.hxx>

@@ -84,7 +84,6 @@
 #include "postit.hxx"
 
 #include <vcl/lineinfo.hxx>
-#include <tools/pstm.hxx>
 
 #include <boost/scoped_ptr.hpp>
 

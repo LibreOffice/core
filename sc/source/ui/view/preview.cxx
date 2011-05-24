@@ -32,7 +32,6 @@
 
 
 // INCLUDE ---------------------------------------------------------------
-#include <tools/pstm.hxx>
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 

@@ -152,7 +152,6 @@
 #include <vcl/keycodes.hxx>
 #include <namebuff.hxx>
 #include <tools/shl.hxx>
-#include <tools/pstm.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <tools/unqid.hxx>
 #include <com/sun/star/uno/Sequence.h>

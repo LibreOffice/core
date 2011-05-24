@@ -115,7 +115,6 @@
 #include <vcl/accel.hxx>
 #include <patattr.hxx>
 #include <svl/zforlist.hxx>
-#include <tools/pstm.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/pointr.hxx>
