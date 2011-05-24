@@ -180,7 +180,6 @@ my_components = \
     utl \
     uui \
     vbaevents \
-    vbaobj \
     vclcanvas \
     wpft \
     wpgfilter \
