@@ -82,7 +82,7 @@ void printResultVariantArray( VARIANT & var);
 void printVariant( VARIANT & var);
 void printSequence( Sequence<Any>& val);
 
-extern "C" int __cdecl main( int , char **)
+extern "C" int SAL_CALL main( int , char **)
 {
     HRESULT hr;
     if( FAILED( hr=CoInitialize(NULL)))

@@ -61,7 +61,7 @@ bool incrementMultidimensionalIndex(
     const sal_Int32 * parDimensionLengths,
     sal_Int32 * parMultidimensionalIndex);
 
-int __cdecl _tmain( int /*argc*/, _TCHAR * /*argv[]*/ )
+int SAL_CALL _tmain( int /*argc*/, _TCHAR * /*argv[]*/ )
 {
     HRESULT hr;
     if( FAILED( hr=CoInitialize(NULL)))

@@ -45,11 +45,7 @@
 
 using ::std::vector;
 
-#ifdef WNT
-int __cdecl IconcDlgCmpUS_Impl( const void* p1, const void* p2 )
-#else
-int IconcDlgCmpUS_Impl( const void* p1, const void* p2 )
-#endif
+int SAL_CALL IconcDlgCmpUS_Impl( const void* p1, const void* p2 )
 {
     return *(sal_uInt16*)p1 - *(sal_uInt16*)p2;
 }
