@@ -2021,15 +2021,16 @@ sub run_job {
     if (!-d $log_dir) {
         system("$perl $mkout");
     };
-    $error_code = system ("$job_to_do > $log_file 2>&1");
-    if ( -f $log_file) {
-        open(LOGFILE, "< $log_file");
-        print while(<LOGFILE>);
-        close(LOGFILE);
-        if ( $error_code != 0)
-        {
-            system("cat $log_file >> $build_error_log");
-        }
+    open (MAKE, "$job_to_do 2>&1 |") or return 8;
+    open (LOGFILE, "> $log_file") or return 8;
+    while (<MAKE>) { print LOGFILE $_; print $_ }
+    close MAKE;
+    $error_code = $?;
+    close LOGFILE;
+    if ( $error_code != 0)
+    {
+        system("echo \"log for $path\" >> $build_error_log");
+        system("cat $log_file >> $build_error_log");
     }
 
     return $error_code;
