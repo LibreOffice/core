@@ -58,11 +58,7 @@ const ::comphelper::StringSequence& getColumnTypes()
 
 //------------------------------------------------------------------
 // Vergleichen von PropertyInfo
-extern "C" int
-#if defined( WNT )
- __cdecl
-#endif
-    NameCompare(const void* pFirst, const void* pSecond)
+extern "C" int SAL_CALL NameCompare(const void* pFirst, const void* pSecond)
 {
     return ((::rtl::OUString*)pFirst)->compareTo(*(::rtl::OUString*)pSecond);
 }

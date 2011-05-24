@@ -1590,11 +1590,7 @@ int SfxTabDialog::FillOutputItemSet()
 
 // -----------------------------------------------------------------------
 
-#ifdef WNT
-int __cdecl TabDlgCmpUS_Impl( const void* p1, const void* p2 )
-#else
-extern "C" int TabDlgCmpUS_Impl( const void* p1, const void* p2 )
-#endif
+extern "C" int SAL_CALL TabDlgCmpUS_Impl( const void* p1, const void* p2 )
 
 /*  [Description]
 

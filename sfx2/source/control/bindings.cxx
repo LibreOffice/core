@@ -1360,11 +1360,7 @@ void SfxBindings::UpdateSlotServer_Impl()
 
 //--------------------------------------------------------------------
 
-#ifdef WNT
-int __cdecl CmpUS_Impl(const void *p1, const void *p2)
-#else
-int CmpUS_Impl(const void *p1, const void *p2)
-#endif
+int SAL_CALL CmpUS_Impl(const void *p1, const void *p2)
 
 /*  [Description]
 

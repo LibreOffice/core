@@ -987,11 +987,7 @@ void SfxSingleTabDialog::SetInfoLink( const Link& rLink )
 //--------------------------------------------------------------------
 // Comparison function for qsort
 
-#ifdef WNT
-int __cdecl BaseDlgsCmpUS_Impl( const void* p1, const void* p2 )
-#else
-extern "C" int BaseDlgsCmpUS_Impl( const void* p1, const void* p2 )
-#endif
+extern "C" int SAL_CALL BaseDlgsCmpUS_Impl( const void* p1, const void* p2 )
 {
     return *(sal_uInt16*)p1 - *(sal_uInt16*)p2;
 }
