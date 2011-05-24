@@ -79,13 +79,26 @@ curl_LDFLAGS+:=$(LINKFLAGS) $(LINKFLAGSRUNPATH_OOO)
 CONFIGURE_DIR=.$/
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS= --without-ssl --without-libidn --enable-ftp --enable-ipv6 --enable-http --disable-gopher --disable-file --disable-ldap --disable-telnet --disable-dict --disable-static CPPFLAGS="$(curl_CFLAGS)"  LDFLAGS="$(curl_LDFLAGS)"
+.IF "$(OS)"=="IOS"
+CONFIGURE_FLAGS=--disable-shared
+.ELSE
+CONFIGURE_FLAGS=--disable-static
+.ENDIF
+CONFIGURE_FLAGS+= --without-ssl --without-libidn --enable-ftp --enable-ipv6 --enable-http --disable-gopher --disable-file --disable-ldap --disable-telnet --disable-dict CPPFLAGS="$(curl_CFLAGS)"  LDFLAGS="$(curl_LDFLAGS)"
+
+.IF "$(CROSS_COMPILING)"!=""
+CONFIGURE_FLAGS+= --build="$(BUILD_PLATFORM)" --host="$(HOST_PLATFORM)"
+.ENDIF
 
 BUILD_DIR=$(CONFIGURE_DIR)$/lib
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 
+.IF "$(OS)"=="IOS"
+OUT2LIB=$(BUILD_DIR)$/.libs$/libcurl.a
+.ELSE
 OUT2LIB=$(BUILD_DIR)$/.libs$/libcurl$(DLLPOST).4
+.ENDIF
 .ENDIF			# "$(GUI)"=="UNX"
 
 
