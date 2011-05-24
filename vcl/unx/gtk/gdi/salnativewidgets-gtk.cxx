@@ -3989,7 +3989,7 @@ static void NWEnsureGTKToolbar( int nScreen )
         gWidgetData[nScreen].gToolbarWidget = gtk_toolbar_new();
         NWAddWidgetToCacheWindow( gWidgetData[nScreen].gToolbarWidget, nScreen );
         gWidgetData[nScreen].gToolbarButtonWidget = GTK_WIDGET(gtk_button_new());
-        gWidgetData[nScreen].gToolbarToggleWidget = GTK_WIDGET(gtk_toggle_tool_button_new());
+        gWidgetData[nScreen].gToolbarToggleWidget = GTK_WIDGET(gtk_toggle_button_new());
         gWidgetData[nScreen].gVSeparator = GTK_WIDGET(gtk_separator_tool_item_new());
         NWAddWidgetToCacheWindow( gWidgetData[nScreen].gVSeparator, nScreen );
 
