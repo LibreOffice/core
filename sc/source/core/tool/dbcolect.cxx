@@ -827,7 +827,8 @@ ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCO
 
 ScDBData* ScDBCollection::GetFilterDBAtTable(SCTAB nTab) const
 {
-    ScDBData* pDataEmpty = NULL;
+    ScDBData* pAnonData = pDoc->GetAnonymousDBData(nTab);
+
     if (pItems)
     {
         for (sal_uInt16 i = 0; i < nCount; i++)
@@ -843,7 +844,13 @@ ScDBData* ScDBCollection::GetFilterDBAtTable(SCTAB nTab) const
         }
     }
 
-    return pDataEmpty;
+    if (pAnonData)
+    {
+        if ( pAnonData->HasAutoFilter() || pAnonData->HasQueryParam())
+            return pAnonData;
+    }
+
+    return NULL;
 }
 
 sal_Bool ScDBCollection::SearchName( const String& rName, sal_uInt16& rIndex ) const
