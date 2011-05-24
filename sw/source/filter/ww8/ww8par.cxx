@@ -340,7 +340,7 @@ SwMSDffManager::SwMSDffManager( SwWW8ImplReader& rRdr )
     : SvxMSDffManager(*rRdr.pTableStream, rRdr.GetBaseURL(), rRdr.pWwFib->fcDggInfo,
         rRdr.pDataStream, 0, 0, COL_WHITE, 12, rRdr.pStrm,
         rRdr.maTracer.GetTrace()),
-    rReader(rRdr), pFallbackStream(0), pOldEscherBlipCache(0)
+    rReader(rRdr), pFallbackStream(0)
 {
     SetSvxMSDffSettings( GetSvxMSDffSettings() );
     nSvxMSDffOLEConvFlags = SwMSDffManager::GetFilterFlags();
@@ -413,19 +413,19 @@ SdrObject* SwMSDffManager::ImportOLE( long nOLEId,
 
 void SwMSDffManager::DisableFallbackStream()
 {
-    OSL_ENSURE(!pFallbackStream || !pOldEscherBlipCache,
+    OSL_ENSURE(!pFallbackStream,
         "if you're recursive, you're broken");
     pFallbackStream = pStData2;
-    pOldEscherBlipCache = pEscherBlipCache;
-    pEscherBlipCache = 0;
+    aOldEscherBlipCache = aEscherBlipCache;
+    aEscherBlipCache.clear();
     pStData2 = 0;
 }
 
 void SwMSDffManager::EnableFallbackStream()
 {
     pStData2 = pFallbackStream;
-    pEscherBlipCache = pOldEscherBlipCache;
-    pOldEscherBlipCache = 0;
+    aEscherBlipCache = aOldEscherBlipCache;
+    aOldEscherBlipCache.clear();
     pFallbackStream = 0;
 }
 
