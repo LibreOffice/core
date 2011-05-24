@@ -123,8 +123,8 @@ typedef comm_UINT16 CMProtocol;
 #define CM_PROTOCOL_BROADCASTER     (CMProtocol)0x0002
 #define CM_PROTOCOL_USER_START      (CMProtocol)0x0100
 
-typedef comm_USHORT HandshakeType;
-typedef comm_USHORT CommunicationOption;
+typedef comm_UINT16 HandshakeType;
+typedef comm_UINT16 CommunicationOption;
 
 #define CH_NoHeader                 0x0000
 #define CH_SimpleMultiChannel       0x0001

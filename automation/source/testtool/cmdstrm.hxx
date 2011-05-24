@@ -66,9 +66,9 @@ private:
     String WandleKeyEventString( String aKeys );    // Nutzt pKeyCodes.  <RETURN> <SHIFT LEFT LEFT>
 
     using CmdBaseStream::Write;
-    void Write( comm_USHORT nNr ){CmdBaseStream::Write( nNr );}
+    void Write( comm_UINT16 nNr ){CmdBaseStream::Write( nNr );}
     void Write( comm_ULONG nNr ){CmdBaseStream::Write( nNr );}
-    void Write( const comm_UniChar* aString, comm_USHORT nLenInChars ){CmdBaseStream::Write( aString, nLenInChars );}
+    void Write( const comm_UniChar* aString, comm_UINT16 nLenInChars ){CmdBaseStream::Write( aString, nLenInChars );}
     void Write( comm_BOOL bBool ){CmdBaseStream::Write( bBool );}
 //  new
     void Write( String aString, sal_Bool IsKeyString = sal_False );

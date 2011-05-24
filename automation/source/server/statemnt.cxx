@@ -2474,12 +2474,12 @@ sal_Bool StatementCommand::Execute()
                 }
 
                 if ( !bIsSlotInExecute )
-                    pRet->GenReturn ( RET_Value, nMethodId, comm_USHORT(CONST_WSFinished) );
+                    pRet->GenReturn ( RET_Value, nMethodId, comm_UINT16(CONST_WSFinished) );
                 else
                 {
                     if ( Time().GetTime() < long(nLNr1) )   // Aktuelle Zeit kleiner Endzeit
                         return sal_False;
-                    pRet->GenReturn ( RET_Value, nMethodId, comm_USHORT(CONST_WSTimeout) );
+                    pRet->GenReturn ( RET_Value, nMethodId, comm_UINT16(CONST_WSTimeout) );
                 }
             }
             break;
@@ -3242,7 +3242,7 @@ sal_Bool StatementCommand::Execute()
             break;
         case RC_GetDocumentCount :
             {
-                pRet->GenReturn ( RET_Value, nMethodId, (comm_USHORT)GetDocWinCount() );
+                pRet->GenReturn ( RET_Value, nMethodId, (comm_UINT16)GetDocWinCount() );
             }
             break;
         case RC_ActivateDocument :
@@ -3265,7 +3265,7 @@ sal_Bool StatementCommand::Execute()
             break;
         case RC_GetSystemLanguage :
             {
-                pRet->GenReturn ( RET_Value, nMethodId, (comm_USHORT)Application::GetSettings().GetLanguage() );
+                pRet->GenReturn ( RET_Value, nMethodId, (comm_UINT16)Application::GetSettings().GetLanguage() );
             }
             break;
         case RC_CatchGPF :
@@ -5510,7 +5510,7 @@ sal_Bool StatementControl::Execute()
                                     if ( ValueOK( aUId, MethodString( nMethodId ),nNr2,pThisEntry->ItemCount() ) )
                                     {
                                         SvLBoxItem *pMyItem = pThisEntry->GetItem( nNr2-1 );
-                                        comm_USHORT nType;
+                                        comm_UINT16 nType;
                                         switch ( pMyItem->IsA() )
                                         {
                                             case SV_ITEM_ID_LBOXSTRING: nType = CONST_ItemTypeText ; break;
@@ -5566,7 +5566,7 @@ sal_Bool StatementControl::Execute()
                                             case M_GetColumnCount :
                                                 {
                                                     sal_uInt16 nColCount = pEBBox->GetColumnCount();
-                                                    comm_USHORT nUnfrozenColCount = 0;
+                                                    comm_UINT16 nUnfrozenColCount = 0;
                                                     sal_uInt16 i;
                                                     for ( i=0 ; i < nColCount ; i++ )
                                                     {
@@ -5593,7 +5593,7 @@ sal_Bool StatementControl::Execute()
                                                     if ( ValueOK(aUId, MethodString( nMethodId ),nNr1,pEBBox->GetRowCount() ) )
                                                     {
                                                         sal_uInt16 nColCount = pEBBox->GetColumnCount();
-                                                        comm_USHORT nUnfrozenColCount = 0;
+                                                        comm_UINT16 nUnfrozenColCount = 0;
                                                         sal_uInt16 i;
                                                         for ( i=0 ; i < nColCount ; i++ )
                                                         {
@@ -5819,13 +5819,13 @@ sal_Bool StatementControl::Execute()
                                                                 break;
                                                             case TypeClass_UNSIGNED_SHORT:
                                                                 {
-                                                                    comm_USHORT val = 0;
+                                                                    comm_UINT16 val = 0;
                                                                     aCell >>= val;
                                                                     pRet->GenReturn ( RET_Value, aUId, val );
                                                                 }
                                                                 break;
                                                             default:
-                                                                pRet->GenReturn ( RET_Value, aUId, comm_USHORT(0) );
+                                                                pRet->GenReturn ( RET_Value, aUId, comm_UINT16(0) );
                                                                 break;
                                                         }
                                                     }
@@ -5876,13 +5876,13 @@ sal_Bool StatementControl::Execute()
                                                 }
                                                 break;
                                             case M_GetSelCount :
-                                                pRet->GenReturn ( RET_Value, aUId, comm_USHORT( pTC->GetSelectedRowCount() ));
+                                                pRet->GenReturn ( RET_Value, aUId, comm_UINT16( pTC->GetSelectedRowCount() ));
                                                 break;
                                             case M_GetSelIndex :
                                                 if ( ! (nParams & PARAM_USHORT_1) )
                                                     nNr1 = 1;
                                                 if ( ValueOK( aUId, CUniString("GetSelIndex"), nNr1, pTC->GetSelectedRowCount() ) )
-                                                    pRet->GenReturn ( RET_Value, aUId, comm_USHORT( pTC->GetSelectedRowIndex( nNr1-1 ) +1 ) );
+                                                    pRet->GenReturn ( RET_Value, aUId, comm_UINT16( pTC->GetSelectedRowIndex( nNr1-1 ) +1 ) );
                                                 break;
                                         default:
                                             ReportError( aUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "TableControl" ) );

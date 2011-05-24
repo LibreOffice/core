@@ -44,14 +44,14 @@ public:
     void GenError( rtl::OString aUId, String aString );
 
     using CmdBaseStream::GenReturn;
-    void GenReturn( comm_USHORT nRet, comm_ULONG nNr ){CmdBaseStream::GenReturn( nRet, nNr );}
-    void GenReturn( comm_USHORT nRet, rtl::OString aUId, comm_ULONG nNr ){CmdBaseStream::GenReturn( nRet, &aUId, nNr );}
-    void GenReturn( comm_USHORT nRet, rtl::OString aUId, comm_BOOL bBool ){CmdBaseStream::GenReturn( nRet, &aUId, bBool );}
+    void GenReturn( comm_UINT16 nRet, comm_ULONG nNr ){CmdBaseStream::GenReturn( nRet, nNr );}
+    void GenReturn( comm_UINT16 nRet, rtl::OString aUId, comm_ULONG nNr ){CmdBaseStream::GenReturn( nRet, &aUId, nNr );}
+    void GenReturn( comm_UINT16 nRet, rtl::OString aUId, comm_BOOL bBool ){CmdBaseStream::GenReturn( nRet, &aUId, bBool );}
 
 // MacroRecorder
-    void GenReturn( comm_USHORT nRet, rtl::OString aUId, comm_USHORT nMethod ){CmdBaseStream::GenReturn( nRet, &aUId, nMethod );} // also used outside MacroRecorder
-    void GenReturn( comm_USHORT nRet, rtl::OString aUId, comm_USHORT nMethod, comm_BOOL bBool ){CmdBaseStream::GenReturn( nRet, &aUId, nMethod, bBool );}
-    void GenReturn( comm_USHORT nRet, rtl::OString aUId, comm_USHORT nMethod, comm_ULONG nNr ){CmdBaseStream::GenReturn( nRet, &aUId, nMethod, nNr );}
+    void GenReturn( comm_UINT16 nRet, rtl::OString aUId, comm_UINT16 nMethod ){CmdBaseStream::GenReturn( nRet, &aUId, nMethod );} // also used outside MacroRecorder
+    void GenReturn( comm_UINT16 nRet, rtl::OString aUId, comm_UINT16 nMethod, comm_BOOL bBool ){CmdBaseStream::GenReturn( nRet, &aUId, nMethod, bBool );}
+    void GenReturn( comm_UINT16 nRet, rtl::OString aUId, comm_UINT16 nMethod, comm_ULONG nNr ){CmdBaseStream::GenReturn( nRet, &aUId, nMethod, nNr );}
 
     void GenReturn( sal_uInt16 nRet, rtl::OString aUId, String aString );
     void GenReturn( sal_uInt16 nRet, rtl::OString aUId, comm_ULONG nNr, String aString, sal_Bool bBool );
@@ -61,8 +61,8 @@ public:
     void GenReturn( sal_uInt16 nRet, sal_uInt16 nMethod, String aString );
 
 // MacroRecorder
-    void GenReturn( sal_uInt16 nRet, rtl::OString aUId, comm_USHORT nMethod, String aString );
-    void GenReturn( sal_uInt16 nRet, rtl::OString aUId, comm_USHORT nMethod, String aString, sal_Bool bBool );
+    void GenReturn( sal_uInt16 nRet, rtl::OString aUId, comm_UINT16 nMethod, String aString );
+    void GenReturn( sal_uInt16 nRet, rtl::OString aUId, comm_UINT16 nMethod, String aString, sal_Bool bBool );
 
     void Reset();
     SvStream* GetStream();
@@ -70,7 +70,7 @@ public:
 
 
     using CmdBaseStream::Write;
-    void Write( comm_USHORT nNr ){CmdBaseStream::Write( nNr );}
+    void Write( comm_UINT16 nNr ){CmdBaseStream::Write( nNr );}
     void Write( comm_ULONG nNr ){CmdBaseStream::Write( nNr );}
     void Write( comm_BOOL bBool ){CmdBaseStream::Write( bBool );}
     void Write( SbxValue &aValue );

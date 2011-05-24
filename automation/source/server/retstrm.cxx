@@ -64,12 +64,12 @@ void RetStream::GenReturn ( sal_uInt16 nRet, rtl::OString aUId, comm_ULONG nNr, 
 }
 
 // MacroRecorder
-void RetStream::GenReturn( sal_uInt16 nRet, rtl::OString aUId, comm_USHORT nMethod, String aString )
+void RetStream::GenReturn( sal_uInt16 nRet, rtl::OString aUId, comm_UINT16 nMethod, String aString )
 {
     CmdBaseStream::GenReturn ( nRet, &aUId, nMethod, &aString );
 }
 
-void RetStream::GenReturn( sal_uInt16 nRet, rtl::OString aUId, comm_USHORT nMethod, String aString, sal_Bool bBool )
+void RetStream::GenReturn( sal_uInt16 nRet, rtl::OString aUId, comm_UINT16 nMethod, String aString, sal_Bool bBool )
 {
     CmdBaseStream::GenReturn ( nRet, &aUId, nMethod, &aString, bBool );
 }

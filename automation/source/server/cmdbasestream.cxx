@@ -53,162 +53,162 @@ CmdBaseStream::~CmdBaseStream()
 
 void CmdBaseStream::GenError (rtl::OString *pUId, comm_String *pString )
 {
-    Write(comm_USHORT(SIReturnError));
+    Write(comm_UINT16(SIReturnError));
     Write(pUId);
     Write(pString);
 }
 
-void CmdBaseStream::GenReturn (comm_USHORT nRet, comm_ULONG nUId )
+void CmdBaseStream::GenReturn (comm_UINT16 nRet, comm_ULONG nUId )
 {
-    Write(comm_USHORT(SIReturn));
+    Write(comm_UINT16(SIReturn));
     Write(nRet);
     Write(nUId);
-    Write(comm_USHORT(PARAM_NONE));             // Typ der folgenden Parameter
+    Write(comm_UINT16(PARAM_NONE));             // Typ der folgenden Parameter
 }
 
-void CmdBaseStream::GenReturn (comm_USHORT nRet, rtl::OString *pUId, comm_ULONG nNr )
+void CmdBaseStream::GenReturn (comm_UINT16 nRet, rtl::OString *pUId, comm_ULONG nNr )
 {
-    Write(comm_USHORT(SIReturn));
+    Write(comm_UINT16(SIReturn));
     Write(nRet);
     if ( pUId->equals( rtl::OString( "UID_ACTIVE" ) ) )
         Write(comm_ULONG(0));
     else
         Write(pUId);
-    Write(comm_USHORT(PARAM_ULONG_1));          // Typ der folgenden Parameter
+    Write(comm_UINT16(PARAM_ULONG_1));          // Typ der folgenden Parameter
     Write(nNr);
 }
 
-void CmdBaseStream::GenReturn (comm_USHORT nRet, rtl::OString *pUId, comm_String *pString )
+void CmdBaseStream::GenReturn (comm_UINT16 nRet, rtl::OString *pUId, comm_String *pString )
 {
-    Write(comm_USHORT(SIReturn));
+    Write(comm_UINT16(SIReturn));
     Write(nRet);
     if ( pUId->equals( rtl::OString( "UID_ACTIVE" ) ) )
         Write(comm_ULONG(0));
     else
         Write(pUId);
-    Write(comm_USHORT(PARAM_STR_1));                // Typ der folgenden Parameter
+    Write(comm_UINT16(PARAM_STR_1));                // Typ der folgenden Parameter
     Write(pString);
 }
 
-void CmdBaseStream::GenReturn (comm_USHORT nRet, rtl::OString *pUId, comm_BOOL bBool )
+void CmdBaseStream::GenReturn (comm_UINT16 nRet, rtl::OString *pUId, comm_BOOL bBool )
 {
-    Write(comm_USHORT(SIReturn));
+    Write(comm_UINT16(SIReturn));
     Write(nRet);
     if ( pUId->equals( rtl::OString( "UID_ACTIVE" ) ) )
         Write(comm_ULONG(0));
     else
         Write(pUId);
-    Write(comm_USHORT(PARAM_BOOL_1));           // Typ der folgenden Parameter
+    Write(comm_UINT16(PARAM_BOOL_1));           // Typ der folgenden Parameter
     Write(bBool);
 }
 
-void CmdBaseStream::GenReturn (comm_USHORT nRet, rtl::OString *pUId, comm_ULONG nNr, comm_String *pString, comm_BOOL bBool )
+void CmdBaseStream::GenReturn (comm_UINT16 nRet, rtl::OString *pUId, comm_ULONG nNr, comm_String *pString, comm_BOOL bBool )
 {
-    Write(comm_USHORT(SIReturn));
+    Write(comm_UINT16(SIReturn));
     Write(nRet);
     if ( pUId->equals( rtl::OString( "UID_ACTIVE" ) ) )
         Write(comm_ULONG(0));
     else
         Write(pUId);
-    Write(comm_USHORT(PARAM_ULONG_1|PARAM_STR_1|PARAM_BOOL_1));     // Typ der folgenden Parameter
+    Write(comm_UINT16(PARAM_ULONG_1|PARAM_STR_1|PARAM_BOOL_1));     // Typ der folgenden Parameter
     Write(nNr);
     Write(pString);
     Write(bBool);
 }
 
-void CmdBaseStream::GenReturn (comm_USHORT nRet, comm_USHORT nMethod, comm_ULONG nNr )
+void CmdBaseStream::GenReturn (comm_UINT16 nRet, comm_UINT16 nMethod, comm_ULONG nNr )
 {
-    Write(comm_USHORT(SIReturn));
+    Write(comm_UINT16(SIReturn));
     Write(nRet);
     Write((comm_ULONG)nMethod); //HELPID BACKWARD (no sal_uLong needed)
-    Write(comm_USHORT(PARAM_ULONG_1));          // Typ der folgenden Parameter
+    Write(comm_UINT16(PARAM_ULONG_1));          // Typ der folgenden Parameter
     Write(nNr);
 }
 
-void CmdBaseStream::GenReturn (comm_USHORT nRet, comm_USHORT nMethod, comm_String *pString )
+void CmdBaseStream::GenReturn (comm_UINT16 nRet, comm_UINT16 nMethod, comm_String *pString )
 {
-    Write(comm_USHORT(SIReturn));
+    Write(comm_UINT16(SIReturn));
     Write(nRet);
     Write((comm_ULONG)nMethod); //HELPID BACKWARD (no sal_uLong needed)
-    Write(comm_USHORT(PARAM_STR_1));                // Typ der folgenden Parameter
+    Write(comm_UINT16(PARAM_STR_1));                // Typ der folgenden Parameter
     Write(pString);
 }
 
-void CmdBaseStream::GenReturn (comm_USHORT nRet, comm_USHORT nMethod, comm_BOOL bBool )
+void CmdBaseStream::GenReturn (comm_UINT16 nRet, comm_UINT16 nMethod, comm_BOOL bBool )
 {
-    Write(comm_USHORT(SIReturn));
+    Write(comm_UINT16(SIReturn));
     Write(nRet);
     Write((comm_ULONG)nMethod); //HELPID BACKWARD (no sal_uLong needed)
-    Write(comm_USHORT(PARAM_BOOL_1));           // Typ der folgenden Parameter
+    Write(comm_UINT16(PARAM_BOOL_1));           // Typ der folgenden Parameter
     Write(bBool);
 }
 
-void CmdBaseStream::GenReturn (comm_USHORT nRet, comm_USHORT nMethod, comm_USHORT nNr )
+void CmdBaseStream::GenReturn (comm_UINT16 nRet, comm_UINT16 nMethod, comm_UINT16 nNr )
 {
-    Write(comm_USHORT(SIReturn));
+    Write(comm_UINT16(SIReturn));
     Write(nRet);
     Write((comm_ULONG)nMethod); //HELPID BACKWARD (no sal_uLong needed)
-    Write(comm_USHORT(PARAM_USHORT_1));         // Typ der folgenden Parameter
+    Write(comm_UINT16(PARAM_USHORT_1));         // Typ der folgenden Parameter
     Write(nNr);
 }
 
 
 // MacroRecorder
-void CmdBaseStream::GenReturn( comm_USHORT nRet, rtl::OString *pUId, comm_USHORT nMethod )
+void CmdBaseStream::GenReturn( comm_UINT16 nRet, rtl::OString *pUId, comm_UINT16 nMethod )
 {
-    Write(comm_USHORT(SIReturn));
+    Write(comm_UINT16(SIReturn));
     Write(nRet);
     Write(pUId);
-    Write(comm_USHORT(PARAM_USHORT_1));     // Typ der folgenden Parameter
+    Write(comm_UINT16(PARAM_USHORT_1));     // Typ der folgenden Parameter
     Write(nMethod);
 }
 
-void CmdBaseStream::GenReturn( comm_USHORT nRet, rtl::OString *pUId, comm_USHORT nMethod, comm_String *pString )
+void CmdBaseStream::GenReturn( comm_UINT16 nRet, rtl::OString *pUId, comm_UINT16 nMethod, comm_String *pString )
 {
-    Write(comm_USHORT(SIReturn));
+    Write(comm_UINT16(SIReturn));
     Write(nRet);
     Write(pUId);
-    Write(comm_USHORT(PARAM_USHORT_1|PARAM_STR_1));     // Typ der folgenden Parameter
+    Write(comm_UINT16(PARAM_USHORT_1|PARAM_STR_1));     // Typ der folgenden Parameter
     Write(nMethod);
     Write(pString);
 }
 
-void CmdBaseStream::GenReturn( comm_USHORT nRet, rtl::OString *pUId, comm_USHORT nMethod, comm_String *pString, comm_BOOL bBool )
+void CmdBaseStream::GenReturn( comm_UINT16 nRet, rtl::OString *pUId, comm_UINT16 nMethod, comm_String *pString, comm_BOOL bBool )
 {
-    Write(comm_USHORT(SIReturn));
+    Write(comm_UINT16(SIReturn));
     Write(nRet);
     Write(pUId);
-    Write(comm_USHORT(PARAM_USHORT_1|PARAM_STR_1|PARAM_BOOL_1));        // Typ der folgenden Parameter
+    Write(comm_UINT16(PARAM_USHORT_1|PARAM_STR_1|PARAM_BOOL_1));        // Typ der folgenden Parameter
     Write(nMethod);
     Write(pString);
     Write(bBool);
 }
 
-void CmdBaseStream::GenReturn( comm_USHORT nRet, rtl::OString *pUId, comm_USHORT nMethod, comm_BOOL bBool )
+void CmdBaseStream::GenReturn( comm_UINT16 nRet, rtl::OString *pUId, comm_UINT16 nMethod, comm_BOOL bBool )
 {
-    Write(comm_USHORT(SIReturn));
+    Write(comm_UINT16(SIReturn));
     Write(nRet);
     Write(pUId);
-    Write(comm_USHORT(PARAM_USHORT_1|PARAM_BOOL_1));        // Typ der folgenden Parameter
+    Write(comm_UINT16(PARAM_USHORT_1|PARAM_BOOL_1));        // Typ der folgenden Parameter
     Write(nMethod);
     Write(bBool);
 }
 
-void CmdBaseStream::GenReturn( comm_USHORT nRet, rtl::OString *pUId, comm_USHORT nMethod, comm_ULONG nNr )
+void CmdBaseStream::GenReturn( comm_UINT16 nRet, rtl::OString *pUId, comm_UINT16 nMethod, comm_ULONG nNr )
 {
-    Write(comm_USHORT(SIReturn));
+    Write(comm_UINT16(SIReturn));
     Write(nRet);
     Write(pUId);
-    Write(comm_USHORT(PARAM_USHORT_1|PARAM_ULONG_1));       // Typ der folgenden Parameter
+    Write(comm_UINT16(PARAM_USHORT_1|PARAM_ULONG_1));       // Typ der folgenden Parameter
     Write(nMethod);
     Write(nNr);
 }
 
 
 
-void CmdBaseStream::Read (comm_USHORT &nNr)
+void CmdBaseStream::Read (comm_UINT16 &nNr)
 {
-    comm_USHORT nId;
+    comm_UINT16 nId;
     *pCommStream >> nId;
     if (pCommStream->IsEof()) return;
 #if OSL_DEBUG_LEVEL > 1
@@ -219,7 +219,7 @@ void CmdBaseStream::Read (comm_USHORT &nNr)
 
 void CmdBaseStream::Read (comm_ULONG &nNr)
 {
-    comm_USHORT nId;
+    comm_UINT16 nId;
     *pCommStream >> nId;
     if (pCommStream->IsEof()) return;
 #if OSL_DEBUG_LEVEL > 1
@@ -228,9 +228,9 @@ void CmdBaseStream::Read (comm_ULONG &nNr)
     *pCommStream >> nNr;
 }
 
-void CmdBaseStream::Read (comm_UniChar* &aString, comm_USHORT &nLenInChars )
+void CmdBaseStream::Read (comm_UniChar* &aString, comm_UINT16 &nLenInChars )
 {
-    comm_USHORT nId;
+    comm_UINT16 nId;
     *pCommStream >> nId;
 #if OSL_DEBUG_LEVEL > 1
     if (nId != BinString) OSL_TRACE( "Falscher Typ im Stream: Erwartet String, gefunden :%hu", nId );
@@ -242,7 +242,7 @@ void CmdBaseStream::Read (comm_UniChar* &aString, comm_USHORT &nLenInChars )
     pCommStream->Read( aString, ((comm_ULONG)nLenInChars) * sizeof( comm_UniChar ) );
 #ifdef OSL_BIGENDIAN
     // we have to change the byteorder
-    comm_USHORT n;
+    comm_UINT16 n;
     for ( n = 0 ; n < nLenInChars ; n++ )
         aString[ n ] = aString[ n ] >> 8 | aString[ n ] << 8;
 #endif
@@ -250,7 +250,7 @@ void CmdBaseStream::Read (comm_UniChar* &aString, comm_USHORT &nLenInChars )
 
 void CmdBaseStream::Read (comm_BOOL &bBool)
 {
-    comm_USHORT nId;
+    comm_UINT16 nId;
     *pCommStream >> nId;
 #if OSL_DEBUG_LEVEL > 1
     if (nId != BinBool) OSL_TRACE( "Falscher Typ im Stream: Erwartet BOOL, gefunden :%hu", nId );
@@ -258,39 +258,39 @@ void CmdBaseStream::Read (comm_BOOL &bBool)
     *pCommStream >> bBool;
 }
 
-comm_USHORT CmdBaseStream::GetNextType()
+comm_UINT16 CmdBaseStream::GetNextType()
 {
-    comm_USHORT nId;
+    comm_UINT16 nId;
     *pCommStream >> nId;
     pCommStream->SeekRel(-2);
     return nId;
 }
 
 
-void CmdBaseStream::Write( comm_USHORT nNr )
+void CmdBaseStream::Write( comm_UINT16 nNr )
 {
-    *pCommStream << comm_USHORT( BinUSHORT );
+    *pCommStream << comm_UINT16( BinUSHORT );
     *pCommStream << nNr;
 }
 
 void CmdBaseStream::Write( comm_ULONG nNr )
 {
-    *pCommStream << comm_USHORT( BinULONG );
+    *pCommStream << comm_UINT16( BinULONG );
     *pCommStream << nNr;
 }
 
-void CmdBaseStream::Write( const comm_UniChar* aString, comm_USHORT nLenInChars )
+void CmdBaseStream::Write( const comm_UniChar* aString, comm_UINT16 nLenInChars )
 {
-    *pCommStream << comm_USHORT(BinString);
+    *pCommStream << comm_UINT16(BinString);
 
-    comm_USHORT n;
+    comm_UINT16 n;
 
     // remove BiDi and zero-width-markers    0x200B - 0x200F
     // remove BiDi and paragraph-markers     0x2028 - 0x202E
 
     comm_UniChar* aNoBiDiString;
     aNoBiDiString = new comm_UniChar [nLenInChars];
-    comm_USHORT nNewLenInChars = 0;
+    comm_UINT16 nNewLenInChars = 0;
     for ( n = 0 ; n < nLenInChars ; n++ )
     {
         comm_UniChar c = aString[ n ];
@@ -324,7 +324,7 @@ void CmdBaseStream::Write( const comm_UniChar* aString, comm_USHORT nLenInChars 
 
 void CmdBaseStream::Write( comm_BOOL bBool )
 {
-    *pCommStream << comm_USHORT( BinBool );
+    *pCommStream << comm_UINT16( BinBool );
     *pCommStream << bBool;
 }
 

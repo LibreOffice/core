@@ -49,10 +49,10 @@ public:
 
 
     /// implement ITransmiter
-    virtual comm_USHORT TransferBytes( const void* pBuffer, comm_UINT32 nLen );
+    virtual comm_UINT16 TransferBytes( const void* pBuffer, comm_UINT32 nLen );
 
     /// implement IReceiver
-    virtual comm_USHORT ReceiveBytes( void* pBuffer, comm_UINT32 nLen );
+    virtual comm_UINT16 ReceiveBytes( void* pBuffer, comm_UINT32 nLen );
 
     // helper
     void SetStreamSocket( osl::StreamSocket* pSocket );

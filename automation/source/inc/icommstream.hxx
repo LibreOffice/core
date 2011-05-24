@@ -46,11 +46,11 @@ public:
     ICommStream(){}
     virtual ~ICommStream(){}
 
-    virtual ICommStream&    operator>>( comm_USHORT& rUShort )=0;
+    virtual ICommStream&    operator>>( comm_UINT16& rUShort )=0;
     virtual ICommStream&    operator>>( comm_ULONG& rULong )=0;
     virtual ICommStream&    operator>>( comm_BOOL& rChar )=0;
 
-    virtual ICommStream&    operator<<( comm_USHORT nUShort )=0;
+    virtual ICommStream&    operator<<( comm_UINT16 nUShort )=0;
     virtual ICommStream&    operator<<( comm_ULONG nULong )=0;
     virtual ICommStream&    operator<<( comm_BOOL nChar )=0;
 

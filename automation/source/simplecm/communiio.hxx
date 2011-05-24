@@ -48,7 +48,7 @@ protected:
 public:
     ITransmiter() :nLastSent( 0 ){}
     virtual ~ITransmiter() {}
-    virtual comm_USHORT TransferBytes( const void* pBuffer, comm_UINT32 nLen ) = 0;
+    virtual comm_UINT16 TransferBytes( const void* pBuffer, comm_UINT32 nLen ) = 0;
 
     comm_ULONG GetLastSent() const { return nLastSent; }
 };
@@ -60,7 +60,7 @@ protected:
 public:
     IReceiver() :nLastReceived( 0 ){}
     virtual ~IReceiver() {;}
-    virtual comm_USHORT ReceiveBytes( void* pBuffer, comm_UINT32 nLen ) = 0;
+    virtual comm_UINT16 ReceiveBytes( void* pBuffer, comm_UINT32 nLen ) = 0;
 
     comm_ULONG GetLastReceived() const { return nLastReceived; }
 };

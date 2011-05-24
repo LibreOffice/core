@@ -41,11 +41,11 @@ public:
     SvCommStream( SvStream* pIO );
     ~SvCommStream();
 
-    ICommStream&        operator>>( comm_USHORT& rUShort );
+    ICommStream&        operator>>( comm_UINT16& rUShort );
     ICommStream&        operator>>( comm_ULONG& rULong );
     ICommStream&        operator>>( comm_BOOL& rChar );
 
-    ICommStream&        operator<<( comm_USHORT nUShort );
+    ICommStream&        operator<<( comm_UINT16 nUShort );
     ICommStream&        operator<<( comm_ULONG nULong );
     ICommStream&        operator<<( comm_BOOL nChar );
 

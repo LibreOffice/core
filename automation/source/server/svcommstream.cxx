@@ -34,11 +34,11 @@
 SvCommStream::SvCommStream( SvStream* pIO ) { pStream = pIO; }
 SvCommStream::~SvCommStream() {}
 
-ICommStream& SvCommStream::operator>>( comm_USHORT& rUShort ) { *pStream >> rUShort; return *this; }
+ICommStream& SvCommStream::operator>>( comm_UINT16& rUShort ) { *pStream >> rUShort; return *this; }
 ICommStream& SvCommStream::operator>>( comm_ULONG& rULong ) { *pStream >> rULong; return *this; }
 ICommStream& SvCommStream::operator>>( comm_BOOL& rChar ) { *pStream >> rChar; return *this; }
 
-ICommStream& SvCommStream::operator<<( comm_USHORT nUShort ) { *pStream << nUShort; return *this; }
+ICommStream& SvCommStream::operator<<( comm_UINT16 nUShort ) { *pStream << nUShort; return *this; }
 ICommStream& SvCommStream::operator<<( comm_ULONG nULong ) { *pStream << nULong; return *this; }
 ICommStream& SvCommStream::operator<<( comm_BOOL nChar ) { *pStream << nChar; return *this; }
 
