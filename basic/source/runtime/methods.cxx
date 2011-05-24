@@ -2443,39 +2443,6 @@ RTLFUNC(IsMissing)
         rPar.Get( 0 )->PutBool( rPar.Get(1)->IsErr() );
 }
 
-// Dir( [Maske] [,Attrs] )
-// ToDo: Library-globaler Datenbereich fuer Dir-Objekt und Flags
-
-
-String getDirectoryPath( String aPathStr )
-{
-    String aRetStr;
-
-    DirectoryItem aItem;
-    FileBase::RC nRet = DirectoryItem::get( aPathStr, aItem );
-    if( nRet == FileBase::E_None )
-    {
-        FileStatus aFileStatus( osl_FileStatus_Mask_Type );
-        nRet = aItem.getFileStatus( aFileStatus );
-        if( nRet == FileBase::E_None )
-        {
-            FileStatus::Type aType = aFileStatus.getFileType();
-            if( isFolder( aType ) )
-            {
-                aRetStr = aPathStr;
-            }
-            else if( aType == FileStatus::Link )
-            {
-                FileStatus aFileStatus2( osl_FileStatus_Mask_LinkTargetURL );
-                nRet = aItem.getFileStatus( aFileStatus2 );
-                if( nRet == FileBase::E_None )
-                    aRetStr = getDirectoryPath( aFileStatus2.getLinkTargetURL() );
-            }
-        }
-    }
-    return aRetStr;
-}
-
 // Function looks for wildcards, removes them and always returns the pure path
 String implSetupWildcard( const String& rFileParam, SbiRTLData* pRTLData )
 {
