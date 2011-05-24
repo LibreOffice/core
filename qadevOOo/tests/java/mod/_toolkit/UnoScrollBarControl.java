@@ -76,7 +76,7 @@ public class UnoScrollBarControl extends TestCase {
             XWindow xWin = xFrame.getContainerWindow();
 
             Toolkit tk = Toolkit.getDefaultToolkit();
-            Dimension dim = tk.getScreenSize();
+            Dimension dim = new Dimension(800, 600);
 
             Rectangle newPosSize = xWin.getPosSize();
             newPosSize.Width = new Double(dim.getWidth()).intValue();

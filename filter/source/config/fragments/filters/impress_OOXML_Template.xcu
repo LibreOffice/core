@@ -1,7 +1,7 @@
 <node oor:name="Impress Office Open XML Template" oor:op="replace">
     <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN 3RDPARTYFILTER TEMPLATE TEMPLATEPATH PREFERRED</value></prop>
     <prop oor:name="UIComponent"/>
-    <prop oor:name="FilterService"><value>com.sun.star.comp.Impress.oox.PowerPointImport</value></prop>
+    <prop oor:name="FilterService"><value>com.sun.star.comp.oox.ppt.PowerPointImport</value></prop>
     <prop oor:name="UserData"><value>OOXML</value></prop>
     <prop oor:name="UIName"><value xml:lang="x-default">Office Open XML Presentation Template</value></prop>
     <!-- ISO/IEC 29500:2008 -->

@@ -36,7 +36,9 @@ EXTENSIONNAME:=ScriptProviderForBeanShell
 EXTENSION_ZIPNAME:=script-provider-for-beanshell
 
 COMPONENT_JARFILES=$(EXTENSIONDIR)$/$(EXTENSIONNAME).jar
+.IF "$(SYSTEM_BSH)" != "YES"
 EXTENSION_PACKDEPS=$(SOLARBINDIR)$/bsh.jar
+.ENDIF
 
 .IF "$(ENABLE_SCRIPTING_BEANSHELL)" != "YES"
 @all:
@@ -47,11 +49,15 @@ EXTENSION_PACKDEPS=$(SOLARBINDIR)$/bsh.jar
 .INCLUDE : target.mk
 .INCLUDE : extension_post.mk
 
+.IF "$(SYSTEM_BSH)" != "YES"
+
 ALLTAR : $(EXTENSIONDIR)$/bsh.jar
 
 $(EXTENSIONDIR)$/bsh.jar : $(SOLARBINDIR)$/bsh.jar
     @@-$(MKDIRHIER) $(@:d)
     $(COMMAND_ECHO)$(COPY) $< $@
+
+.ENDIF
 
 .ELSE
 

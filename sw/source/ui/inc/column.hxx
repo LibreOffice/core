@@ -139,8 +139,6 @@ class SwColumnPage : public SfxTabPage
     FixedText       aLinePosLbl;
     ListBox         aLinePosDLB;
 
-    FixedLine       aVertFL;
-    FixedLine       aPropertiesFL;
     FixedText       aTextDirectionFT;
     ListBox         aTextDirectionLB;
 

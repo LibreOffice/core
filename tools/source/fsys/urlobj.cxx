@@ -2165,6 +2165,7 @@ INetURLObject::getPrefix(sal_Unicode const *& rBegin,
               INET_PROT_PRIV_SOFFICE, PrefixInfo::INTERNAL },
             { "private:trashcan:", "staroffice.trashcan:",
               INET_PROT_PRIV_SOFFICE, PrefixInfo::INTERNAL },
+            { "sftp:", 0, INET_PROT_SFTP, PrefixInfo::OFFICIAL },
             { "slot:", "staroffice.slot:", INET_PROT_SLOT,
               PrefixInfo::INTERNAL },
             { "smb:", 0, INET_PROT_SMB, PrefixInfo::OFFICIAL },
@@ -2217,8 +2218,7 @@ INetURLObject::getPrefix(sal_Unicode const *& rBegin,
             { "vnd.sun.star.tdoc:", 0, INET_PROT_VND_SUN_STAR_TDOC,
               PrefixInfo::OFFICIAL },
             { "vnd.sun.star.webdav:", 0, INET_PROT_VND_SUN_STAR_WEBDAV,
-              PrefixInfo::OFFICIAL },
-            { "sftp:", 0, INET_PROT_SFTP, PrefixInfo::OFFICIAL } };
+              PrefixInfo::OFFICIAL } };
 
     PrefixInfo const * pFirst = aMap + 1;
     PrefixInfo const * pLast = aMap + sizeof aMap / sizeof (PrefixInfo) - 1;

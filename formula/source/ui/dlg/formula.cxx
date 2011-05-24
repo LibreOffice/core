@@ -669,7 +669,11 @@ void FormulaDlg_Impl::MakeTree(IStructHelper* _pTree,SvLBoxEntry* pParent,Formul
         // #i101512# for output, the original token is needed
         FormulaToken* pOrigToken = (_pToken->GetType() == svFAP) ? _pToken->GetFAPOrigToken() : _pToken;
         uno::Sequence<sheet::FormulaToken> aArgs(1);
-        aArgs[0] = m_aTokenMap.find(pOrigToken)->second;
+        ::std::map<FormulaToken*,sheet::FormulaToken>::const_iterator itr = m_aTokenMap.find(pOrigToken);
+        if (itr == m_aTokenMap.end())
+            return;
+
+        aArgs[0] = itr->second;
         try
         {
             const table::CellAddress aRefPos(m_pHelper->getReferencePosition());

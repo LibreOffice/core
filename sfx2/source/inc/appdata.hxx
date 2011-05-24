@@ -110,6 +110,7 @@ public:
 
     // application members
     SfxFilterMatcher*                   pMatcher;
+    ResMgr*                             pBasicResMgr;
     ResMgr*                             pLabelResMgr;
     SfxStatusDispatcher*                pAppDispatch;
     SfxDocumentTemplates*               pTemplates;
