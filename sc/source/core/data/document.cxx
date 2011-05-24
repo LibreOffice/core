@@ -1681,7 +1681,7 @@ void ScDocument::CopyToClip4VBA(const ScClipParam& rClipParam, ScDocument* pClip
         pClipDoc->ResetClip( this, nTab );
 
         CopyRangeNamesToClip( pClipDoc, aClipRange, nTab );
-        if ( nTab < static_cast<SCTAB>(pTab.size()) && nTab < static_cast<SCTAB>(pCipDoc->pTab.size()) )
+        if ( nTab < static_cast<SCTAB>(pTab.size()) && nTab < static_cast<SCTAB>(pClipDoc->pTab.size()) )
             if ( pTab[nTab] && pClipDoc->pTab[nTab] )
             {
                 pTab[nTab]->CopyToClip( rClipParam.maRanges, pClipDoc->pTab[nTab], bKeepScenarioFlags, bCloneNoteCaptions );

@@ -472,7 +472,7 @@ public:
     SC_DLLPUBLIC ScRangeName* GetRangeName() const;
     void SetRangeName(SCTAB nTab, ScRangeName* pNew);
     void SetRangeName( ScRangeName* pNewRangeName );
-    SCTAB           GetMaxTableNumber() { return static_cast<SCTAB>(pTab.size()); }
+    SCTAB           GetMaxTableNumber() { return static_cast<SCTAB>(pTab.size()) - 1; }
     void            SetMaxTableNumber(SCTAB nNumber) { nMaxTableNumber = nNumber; }
 
     ScRangePairList*    GetColNameRanges() { return &xColNameRanges; }
