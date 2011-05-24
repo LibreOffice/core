@@ -333,11 +333,42 @@ int macxp_resolveAlias(char *path, int buflen);
 #endif
 #endif
 
+#ifdef IOS
+#   ifndef ETIME
+#       define  ETIME ETIMEDOUT
+#   endif
+#   include <pthread.h>
+#   include <sys/file.h>
+#   include <sys/ioctl.h>
+#   include <sys/uio.h>
+#   include <sys/un.h>
+#   include <netinet/tcp.h>
+#   include <machine/endian.h>
+#   include <sys/time.h>
+#   include <sys/semaphore.h>
+#   if BYTE_ORDER == LITTLE_ENDIAN
+#       ifndef _LITTLE_ENDIAN
+#       define _LITTLE_ENDIAN
+#       endif
+#   elif BYTE_ORDER == BIG_ENDIAN
+#       ifndef _BIG_ENDIAN
+#       define _BIG_ENDIAN
+#       endif
+#   elif BYTE_ORDER == PDP_ENDIAN
+#       ifndef _PDP_ENDIAN
+#       define _PDP_ENDIAN
+#       endif
+#   endif
+#   define  IOCHANNEL_TRANSFER_BSD_RENO
+#   define  NO_PTHREAD_RTL
+#endif
+
 #if !defined(_WIN32)  && \
     !defined(LINUX)   && !defined(NETBSD) && !defined(FREEBSD) && \
     !defined(AIX)     && \
     !defined(SOLARIS) && !defined(MACOSX) && \
-    !defined(OPENBSD) && !defined(DRAGONFLY)
+    !defined(OPENBSD) && !defined(DRAGONFLY) && \
+    !defined(IOS) && !defined(ANDROID)
 #   error "Target platform not specified!"
 #endif
 
