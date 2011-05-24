@@ -57,7 +57,6 @@
 #include <sfx2/linkmgr.hxx>
 #include <swserv.hxx>
 #include <swundo.hxx>
-#include <tools/pstm.hxx>
 #include <unocrsr.hxx>
 #include <viscrs.hxx>
 #include <stdio.h>

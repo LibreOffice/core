@@ -31,7 +31,6 @@
 
 #include <textapi.hxx>
 
-#include <tools/pstm.hxx>
 #include <hintids.hxx>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>

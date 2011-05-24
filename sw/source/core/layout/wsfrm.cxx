@@ -31,7 +31,6 @@
 
 #include <hintids.hxx>
 #include <hints.hxx>
-#include <tools/pstm.hxx>
 #include <vcl/outdev.hxx>
 #include <svl/itemiter.hxx>
 #include <editeng/brshitem.hxx>

@@ -853,7 +853,6 @@
 #include "tools/mempool.hxx"
 #include "tools/multisel.hxx"
 #include "tools/poly.hxx"
-#include "tools/pstm.hxx"
 #include "tools/rc.hxx"
 #include "tools/ref.hxx"
 #include "tools/resary.hxx"
