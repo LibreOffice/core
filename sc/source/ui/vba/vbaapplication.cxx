@@ -458,10 +458,10 @@ ScVbaApplication::Dialogs( const uno::Any &aIndex ) throw (uno::RuntimeException
 uno::Reference< excel::XWindow > SAL_CALL
 ScVbaApplication::getActiveWindow() throw (uno::RuntimeException)
 {
-    // #FIXME sofar can't determine Parent
     uno::Reference< frame::XModel > xModel = getCurrentDocument();
-    ScVbaWindow* pWin = new ScVbaWindow( uno::Reference< XHelperInterface >(), mxContext, xModel );
-    uno::Reference< excel::XWindow > xWin( pWin );
+    uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_SET_THROW );
+    uno::Reference< XHelperInterface > xParent( getActiveWorkbook(), uno::UNO_QUERY_THROW );
+    uno::Reference< excel::XWindow > xWin( new ScVbaWindow( xParent, mxContext, xModel, xController ) );
     return xWin;
 }
 
