@@ -38,8 +38,6 @@
 
 /** defines al least types
     comm_BYTE
-    comm_WORD;
-    comm_DWORD;
     comm_BOOL
     comm_ULONG
     comm_USHORT
@@ -64,9 +62,6 @@ typedef sal_uInt32 comm_ULONG;
 typedef sal_uInt16 comm_USHORT;
 typedef sal_uInt16 comm_UINT16;
 typedef sal_uInt32 comm_UINT32;
-
-typedef sal_uInt16      comm_WORD;
-typedef sal_uInt32      comm_DWORD;
 
 class String;
 #define comm_String String
