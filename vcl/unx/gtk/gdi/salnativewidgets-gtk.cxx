@@ -88,7 +88,6 @@ struct NWFWidgetData
     GtkWidget *  gScrolledWindowWidget;
     GtkWidget *  gToolbarWidget;
     GtkWidget *  gToolbarButtonWidget;
-    GtkWidget *  gToolbarToggleWidget;
     GtkWidget *  gHandleBoxWidget;
     GtkWidget *  gMenubarWidget;
     GtkWidget *  gMenuItemMenubarWidget;
@@ -128,7 +127,6 @@ struct NWFWidgetData
         gScrolledWindowWidget( NULL ),
         gToolbarWidget( NULL ),
         gToolbarButtonWidget( NULL ),
-        gToolbarToggleWidget( NULL ),
         gHandleBoxWidget( NULL ),
         gMenubarWidget( NULL ),
         gMenuItemMenubarWidget( NULL ),
@@ -1171,7 +1169,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKButtonReal(
     }
 
     // Grab some button style attributes
-    gtk_widget_style_get( button,    "focus-line-width",    &focusWidth,
+    gtk_widget_style_get( gWidgetData[m_nScreen].gBtnWidget,    "focus-line-width",    &focusWidth,
                                 "focus-padding",     &focusPad,
                                  "interior_focus",    &interiorFocus,
                                 (char *)NULL );
@@ -3989,7 +3987,6 @@ static void NWEnsureGTKToolbar( int nScreen )
         gWidgetData[nScreen].gToolbarWidget = gtk_toolbar_new();
         NWAddWidgetToCacheWindow( gWidgetData[nScreen].gToolbarWidget, nScreen );
         gWidgetData[nScreen].gToolbarButtonWidget = GTK_WIDGET(gtk_button_new());
-        gWidgetData[nScreen].gToolbarToggleWidget = GTK_WIDGET(gtk_toggle_button_new());
         gWidgetData[nScreen].gVSeparator = GTK_WIDGET(gtk_separator_tool_item_new());
         NWAddWidgetToCacheWindow( gWidgetData[nScreen].gVSeparator, nScreen );
 
@@ -4004,10 +4001,6 @@ static void NWEnsureGTKToolbar( int nScreen )
         GTK_WIDGET_UNSET_FLAGS( gWidgetData[nScreen].gToolbarButtonWidget, GTK_CAN_DEFAULT );
         NWAddWidgetToCacheWindow( gWidgetData[nScreen].gToolbarButtonWidget, nScreen );
 
-        gtk_button_set_relief( GTK_BUTTON(gWidgetData[nScreen].gToolbarToggleWidget), aRelief );
-        GTK_WIDGET_UNSET_FLAGS( gWidgetData[nScreen].gToolbarToggleWidget, GTK_CAN_FOCUS );
-        GTK_WIDGET_UNSET_FLAGS( gWidgetData[nScreen].gToolbarToggleWidget, GTK_CAN_DEFAULT );
-        NWAddWidgetToCacheWindow( gWidgetData[nScreen].gToolbarToggleWidget, nScreen );
     }
     if( ! gWidgetData[nScreen].gHandleBoxWidget )
     {
