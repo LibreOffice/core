@@ -927,6 +927,8 @@ STD_LIB_FILE(gid_File_Lib_Doctok,doctok)
 
 STD_LIB_FILE(gid_File_Lib_ooxml,ooxml)
 
+STD_LIB_FILE(gid_File_Lib_Rtftok,rtftok)
+
 #ifdef WNT
 #if defined(_gcc3)
 
