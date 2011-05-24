@@ -72,7 +72,7 @@
 #define MAX_ARGS        255
 #define MAX_ENVS        255
 
-#if defined(MACOSX) || defined(IORESOURCE_TRANSFER_BSD) || defined(AIX)
+#if defined(MACOSX) || defined(IOS) || defined(IORESOURCE_TRANSFER_BSD) || defined(AIX)
 #define CONTROLLEN (sizeof(struct cmsghdr) + sizeof(int))
 #endif
 
@@ -445,6 +445,9 @@ static void ChildStatusProc(void *pData)
        in our child process */
     memcpy(&data, pData, sizeof(data));
 
+#ifdef NO_CHILD_PROCESSES
+#define fork() (errno = EINVAL, -1)
+#endif
     if (socketpair(AF_UNIX, SOCK_STREAM, 0, channel) == -1)
         status = errno;
 
