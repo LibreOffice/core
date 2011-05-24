@@ -32,7 +32,6 @@
 
 #include "futhes.hxx"
 
-#include <tools/pstm.hxx>
 #include <editeng/outliner.hxx>
 #include <vcl/msgbox.hxx>
 #include <svx/svdobj.hxx>

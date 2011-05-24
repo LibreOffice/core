@@ -30,7 +30,6 @@
 #include "precompiled_sd.hxx"
 
 #include "DrawDocShell.hxx"
-#include <tools/pstm.hxx>
 #include <vcl/svapp.hxx>
 
 #include <sfx2/docfac.hxx>
