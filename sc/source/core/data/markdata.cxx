@@ -600,14 +600,24 @@ sal_Bool ScMarkData::HasAnyMultiMarks() const
     return false;       // nix
 }
 
-void ScMarkData::InsertTab( SCTAB nTab )//TODO:REWORK
+void ScMarkData::InsertTab( SCTAB nTab )
 {
-    maTabMarked.insert( nTab );
+    std::set<SCTAB> tabMarked(maTabMarked.begin(), maTabMarked.upper_bound(nTab));
+    tabMarked.insert( nTab );
+    std::set<SCTAB>::iterator it = maTabMarked.upper_bound(nTab);
+    for (; it != maTabMarked.end(); ++it)
+        tabMarked.insert(*it + 1);
+    maTabMarked.swap(tabMarked);
 }
 
-void ScMarkData::DeleteTab( SCTAB nTab )//TODO:REWORK
+void ScMarkData::DeleteTab( SCTAB nTab )
 {
-    maTabMarked.erase( nTab );
+    std::set<SCTAB> tabMarked(maTabMarked.begin(), maTabMarked.find(nTab));
+    tabMarked.erase( nTab );
+    std::set<SCTAB>::iterator it = maTabMarked.find(nTab);
+    for (; it != maTabMarked.end(); ++it)
+        tabMarked.insert(*it + 1);
+    maTabMarked.swap(tabMarked);
 }
 
 
