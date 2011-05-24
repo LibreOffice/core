@@ -38,8 +38,8 @@ end sub
 '-------------------------------------------------------------------------
 testcase tNewReport
 
-    qaerrorlog "#i92543# crash when closing report"
-    goto endsub
+   ' qaerrorlog "#i92543# crash when closing report"
+   ' goto endsub
 
     call fOpenDatabase(gOfficePath + ConvertPath("user/database/biblio.odb"))
         
@@ -85,34 +85,33 @@ testcase tNewReport
         FinishBtn.Click
     sleep(10)
 
-    Kontext "DocumentWriter"    	 
+    Kontext "DocumentWriter"
     	DocumentWriter.TypeKeys "<MOD1 SHIFT I>" ,  true ' EDIT / SELECT TEXT
-    	DocumentWriter.TypeKeys "<DOWN>" ,2,  true    	        
-        DocumentWriter.TypeKeys "<SHIFT DOWN>" , true
+    	DocumentWriter.TypeKeys "<DOWN>" ,  true
+        DocumentWriter.TypeKeys "<SHIFT END>" , true
         DocumentWriter.TypeKeys "<MOD1 C>" , true
 
-	dim s as String 
-	s = getClipboard	
+	dim s as String
+	s = getClipboard
 
-    if left(s,10) = "Identifier" then
-        printlog "Report Table Header contains " + left(s,10) + ". -> OK"
+    if s = "Identifier" then
+        printlog "Report Table Header contains " + s + ". -> OK"
     else
-        warnlog "Report Table Header contains " + left(s,10) + " instead of IDENTIFIER"
+        warnlog "Report Table Header contains " + s + " instead of IDENTIFIER"
     endif
 
-    'for windows a "new Line" are two characters
-    'so I need to start at char 13 and not on 12   
-    dim iFromCharacter as integer
-    if gPlatGroup = "w95" then
-        iFromCharacter = 13
-    else
-        iFromCharacter = 12
-    endif
+    ' select next line and check content
+    Kontext "DocumentWriter"
+        DocumentWriter.TypeKeys "<DOWN>" ,  true
+        DocumentWriter.TypeKeys "<SHIFT HOME>" , true
+        DocumentWriter.TypeKeys "<MOD1 C>" , true
 
-    if mid(s,iFromCharacter,5) = "GUR00" OR mid(s,iFromCharacter,5) = "BOR04" then
-        printlog "1. record is " + mid(s,iFromCharacter,5) + ". -> OK"
+    s = getClipboard
+
+    if s = "GUR00" OR s = "BOR04" then
+        printlog "1. record is " + s + ". -> OK"
     else
-        warnlog  "1. record is " + mid(s,iFromCharacter,5) + " instead of GUR00 OR BOR04"
+        warnlog  "1. record is " + s + " instead of GUR00 OR BOR04"
     endif
 
     call fCloseForm ' should be changed to a CloseReport

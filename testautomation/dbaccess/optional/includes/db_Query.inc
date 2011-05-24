@@ -47,6 +47,7 @@ function db_Query( sFileName , optional sType , optional sPassword)
             case "HSQLDB"
                 sType = "2"
             case "MYSQL_JDBC"
+            case "MYSQL_NATIVE"
                 sType = "3"
             case else
                 sType = "1"

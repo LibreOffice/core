@@ -173,88 +173,88 @@ testcase tContextSaveAsPicture
             Testsize = false
             SavedOrgPosition = Dateityp.GetSelIndex
             select case left(lcase(Dateityp.GetSelText),3) 'Filetype
-            case "png" : if (Filetype = "png") OR (Filetype = "psd") OR (Filetype = "pcx") OR (Filetype = "xbm") OR (Filetype = "ras") OR (Filetype = "pbm") OR (Filetype = "pcd") OR (Filetype = "pgm") OR (Filetype = "bmp") OR (Filetype = "ppm") OR (Filetype = "sgf") OR (Filetype = "xpm") OR (Filetype = "tga") then
-                printlog "   " + Filetype + " will be saved as png, correct."
-                CounterShouldBe = 17
-            else
-                warnlog "Png should not have been selected when we opened a '" + Filetype + "'-file."
-            endif
-        case "svm" : if (Filetype = "svm") OR (Filetype = "dxf") OR (Filetype = "eps") OR (Filetype = "sgv") then
-            printlog "   " + Filetype + " will be saved as Svm, correct."
-            CounterShouldBe = 17
-        else
-            warnlog "Svm should not have been selected when we opened a '" + Filetype + "'-file."
-        endif
-    case "wmf" : if (Filetype = "wmf") OR (Filetype = "emf") then
-        printlog "   " + Filetype + " will be saved as Wmf, correct."
-        CounterShouldBe = 17
-        if Filetype = "wmf" then Testsize = true
-        else
-            warnlog "Wmf should not have been selected when we opened a '" + Filetype + "'-file."
-        endif
-    case "jpe" : if (Filetype = "jpg") OR Filetype = "jif" OR Filetype = "peg" then
-        printlog "   " + Filetype + " will be saved as Jpg, correct."
-        CounterShouldBe = 17
-        if Filetype = "jpg" then Testsize = true
-        else
-            warnlog "Jpg should not have been selected when we opened a '" + Filetype + "'-file."
-        endif
-    case "tif" : if Filetype = "tif" OR Filetype = "iff" then
-        printlog "   " + Filetype + " will be saved as Tiff, correct."
-        CounterShouldBe = 17
-        if Filetype = "tif" then Testsize = true
-        else
-            warnlog "Tif should not have been selected when we opened a '" + Filetype + "'-file."
-        endif
-    case "sgf" : if (Filetype = "sgv") OR (Filetype = "sgf") then
-        printlog "   " + Filetype + " will be saved as Sgf, correct."
-        CounterShouldBe = 17
-        if Filetype = "sgf" then Testsize = true
-        else
-            warnlog "Sgf should not have been selected when we opened a '" + Filetype + "'-file."
-        endif
-    case "gif" : if (Filetype = "gif") then
-        printlog "   " + Filetype + " will be saved as Gif, correct."
-        CounterShouldBe = 17
-        if Filetype = "gif" then Testsize = true
-        else
-            warnlog "Gif should not have been selected when we opened a '" + Filetype + "'-file."
-        endif
-    case "met" : if (Filetype = "met") then
-        printlog "   " + Filetype + " will be saved as Met, correct."
-        CounterShouldBe = 17
-        if Filetype = "met" then Testsize = true
-        else
-            warnlog "Met should not have been selected when we opened a '" + Filetype + "'-file."
-        endif
-    case "pct" : if (Filetype = "pct") OR (Filetype = "ict") then
-        printlog "   " + Filetype + " will be saved as Pct, correct."
-        CounterShouldBe = 17
-        if Filetype = "pct" then Testsize = true
-        else
-            warnlog "Pct should not have been selected when we opened a '" + Filetype + "'-file."
-        endif
-    case else  : qaerrorlog "   The test has not yet been fitted for this format ( " + Filetype + "). Contact FHA."
-        printlog "   But will be saved as: " + left(lcase(Dateityp.GetSelText),3)
-        CounterShouldBe = 18
-        Testsize = true
-    end select
+                case "png" : if (Filetype = "png") OR (Filetype = "psd") OR (Filetype = "pcx") OR (Filetype = "xbm") OR (Filetype = "ras") OR (Filetype = "pbm") OR (Filetype = "pcd") OR (Filetype = "pgm") OR (Filetype = "bmp") OR (Filetype = "ppm") OR (Filetype = "sgf") OR (Filetype = "xpm") OR (Filetype = "tga") then
+                    printlog "   " + Filetype + " will be saved as png, correct."
+                    CounterShouldBe = 17
+                else
+                    warnlog "Png should not have been selected when we opened a '" + Filetype + "'-file."
+                endif
+                case "svm" : if (Filetype = "svm") OR (Filetype = "svg") OR (Filetype = "dxf") OR (Filetype = "eps") OR (Filetype = "sgv") then
+                    printlog "   " + Filetype + " will be saved as Svm, correct."
+                    CounterShouldBe = 17
+                else
+                    warnlog "Svm should not have been selected when we opened a '" + Filetype + "'-file."
+                endif
+                case "wmf" : if (Filetype = "wmf") OR (Filetype = "emf") then
+                    printlog "   " + Filetype + " will be saved as Wmf, correct."
+                    CounterShouldBe = 17
+                if Filetype = "wmf" then Testsize = true
+                else
+                    warnlog "Wmf should not have been selected when we opened a '" + Filetype + "'-file."
+                endif
+                case "jpe" : if (Filetype = "jpg") OR Filetype = "jif" OR Filetype = "peg" then
+                    printlog "   " + Filetype + " will be saved as Jpg, correct."
+                    CounterShouldBe = 17
+                    if Filetype = "jpg" then Testsize = true
+                else
+                    warnlog "Jpg should not have been selected when we opened a '" + Filetype + "'-file."
+                endif
+                case "tif" : if Filetype = "tif" OR Filetype = "iff" then
+                    printlog "   " + Filetype + " will be saved as Tiff, correct."
+                    CounterShouldBe = 17
+                if Filetype = "tif" then Testsize = true
+                else
+                    warnlog "Tif should not have been selected when we opened a '" + Filetype + "'-file."
+                endif
+                case "sgf" : if (Filetype = "sgv") OR (Filetype = "sgf") then
+                    printlog "   " + Filetype + " will be saved as Sgf, correct."
+                    CounterShouldBe = 17
+                if Filetype = "sgf" then Testsize = true
+                else
+                    warnlog "Sgf should not have been selected when we opened a '" + Filetype + "'-file."
+                endif
+                case "gif" : if (Filetype = "gif") then
+                    printlog "   " + Filetype + " will be saved as Gif, correct."
+                    CounterShouldBe = 17
+                if Filetype = "gif" then Testsize = true
+                else
+                    warnlog "Gif should not have been selected when we opened a '" + Filetype + "'-file."
+                endif
+                case "met" : if (Filetype = "met") then
+                    printlog "   " + Filetype + " will be saved as Met, correct."
+                    CounterShouldBe = 17
+                if Filetype = "met" then Testsize = true
+                else
+                    warnlog "Met should not have been selected when we opened a '" + Filetype + "'-file."
+                endif
+                case "pct" : if (Filetype = "pct") OR (Filetype = "ict") then
+                    printlog "   " + Filetype + " will be saved as Pct, correct."
+                    CounterShouldBe = 17
+                if Filetype = "pct" then Testsize = true
+                else
+                    warnlog "Pct should not have been selected when we opened a '" + Filetype + "'-file."
+                endif
+                case else  : qaerrorlog "   The test has not yet been fitted for this format ( " + Filetype + "). Contact FHA."
+                    printlog "   But will be saved as: " + left(lcase(Dateityp.GetSelText),3)
+                    CounterShouldBe = 18
+                    Testsize = true
+            end select
 
     '..........................................................................................................................'
 
-    Dateityp.TypeKeys "<HOME>"
-    if (Dateityp.GetItemCount) = CounterShouldBe then  'Counter - 10
-        for q = 1 to CounterShouldBe - 1
-            LastFilterName = Dateityp.GetSelIndex
-            Dateityp.TypeKeys "<DOWN>"
-            if Dateityp.GetSelIndex = LastFilterName then
-                warnlog "   Check the export-filters when trying to save a " + Filename + "-file. Exiting test."
-                goto endsub
+            Dateityp.TypeKeys "<HOME>"
+            if (Dateityp.GetItemCount) = CounterShouldBe then  'Counter - 10
+                for q = 1 to CounterShouldBe - 1
+                    LastFilterName = Dateityp.GetSelIndex
+                    Dateityp.TypeKeys "<DOWN>"
+                        if Dateityp.GetSelIndex = LastFilterName then
+                            warnlog "   Check the export-filters when trying to save a " + Filename + "-file. Exiting test."
+                            goto endsub
+                        endif
+                next q
+            else
+                warnlog "Dateityp.GetItemCount  = " + (Dateityp.GetItemCount) + "  CounterShouldBe =  " + CounterShouldBe
             endif
-        next q
-    else
-        warnlog "Dateityp.GetItemCount  = " + (Dateityp.GetItemCount) + "  CounterShouldBe =  " + CounterShouldBe
-    endif
 
     Dateityp.Select SavedOrgPosition
 
@@ -472,6 +472,16 @@ testcase tContextSavePictureLinkAsPicture
             Found = true
             SavedOrgPosition = Dateityp.GetSelIndex
             select case left(lcase(Dateityp.GetSelText),3) 'Filetype
+
+            case "svg" : if (filetype = "svg") then
+                printlog "   " + Filetype + " will be saved as svg, correct."
+                SavedFileType = "svg"
+                Testsize = true
+                CounterShouldBe = 17
+            else
+                warnlog "svg should not have been selected when we opened a '" + Filetype + "'-file."
+            endif
+            
             case "png" : if (Filetype = "png") then
                 printlog "   " + Filetype + " will be saved as png, correct."
                 SavedFileType = "png"
