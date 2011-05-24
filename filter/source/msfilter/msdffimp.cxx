@@ -1867,7 +1867,7 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
             {
                 Graphic aGraf;
                 // first try to get BLIP from cache
-                sal_Bool bOK = rManager.GetBLIP( GetPropertyValue( DFF_Prop_fillBlip ), aGraf, NULL );
+                sal_Bool bOK = const_cast<SvxMSDffManager&>(rManager).GetBLIP( GetPropertyValue( DFF_Prop_fillBlip ), aGraf, NULL );
                 // then try directly from stream (i.e. Excel chart hatches/bitmaps)
                 if ( !bOK )
                     bOK = SeekToContent( DFF_Prop_fillBlip, rIn ) && rManager.GetBLIPDirect( rIn, aGraf, NULL );
@@ -3400,16 +3400,6 @@ DffRecordHeader* DffRecordManager::GetRecordHeader( sal_uInt16 nRecId, DffSeekTo
 //  private Methoden
 //---------------------------------------------------------------------------
 
-struct EscherBlipCacheEntry
-{
-    ByteString  aUniqueID;
-    sal_uInt32  nBlip;
-
-    EscherBlipCacheEntry( sal_uInt32 nBlipId, const ByteString& rUniqueID ) :
-        aUniqueID( rUniqueID ),
-        nBlip( nBlipId ) {}
-};
-
 void SvxMSDffManager::Scale( sal_Int32& rVal ) const
 {
     if ( bNeedMap )
@@ -4334,7 +4324,7 @@ static void lcl_ApplyCropping( const DffPropSet& rPropSet, SfxItemSet* pSet, Gra
     }
 }
 
-SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, const DffObjData& rObjData ) const
+SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, const DffObjData& rObjData )
 {
     SdrObject*  pRet = NULL;
     String      aFilename;
@@ -6040,7 +6030,6 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
      pStData2( pStData2_ ),
      nSvxMSDffSettings( 0 ),
      nSvxMSDffOLEConvFlags( 0 ),
-     pEscherBlipCache( NULL ),
      mnDefaultColor( mnDefaultColor_),
      mpTracer( pTracer ),
      mbTracing( sal_False )
@@ -6092,7 +6081,6 @@ SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, const String& rBaseURL, MS
      pStData2( 0 ),
      nSvxMSDffSettings( 0 ),
      nSvxMSDffOLEConvFlags( 0 ),
-     pEscherBlipCache( NULL ),
      mnDefaultColor( COL_DEFAULT ),
      mpTracer( pTracer ),
      mbTracing( sal_False )
@@ -6107,13 +6095,6 @@ SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, const String& rBaseURL, MS
 
 SvxMSDffManager::~SvxMSDffManager()
 {
-    if ( pEscherBlipCache )
-    {
-        void* pPtr;
-        for ( pPtr = pEscherBlipCache->First(); pPtr; pPtr = pEscherBlipCache->Next() )
-            delete (EscherBlipCacheEntry*)pPtr;
-        delete pEscherBlipCache;
-    }
     delete pBLIPInfos;
     delete pShapeInfos;
     delete pShapeOrders;
@@ -6716,29 +6697,26 @@ sal_Bool SvxMSDffManager::GetShape(sal_uLong nId, SdrObject*&         rpShape,
 /*      Zugriff auf ein BLIP zur Laufzeit (bei bereits bekannter Blip-Nr)
     ---------------------------------
 ******************************************************************************/
-sal_Bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rData, Rectangle* pVisArea ) const
+sal_Bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rData, Rectangle* pVisArea )
 {
     sal_Bool bOk = sal_False;       // Ergebnisvariable initialisieren
     if ( pStData )
     {
         // check if a graphic for this blipId is already imported
-        if ( nIdx_ && pEscherBlipCache )
+        if ( nIdx_)
         {
-            EscherBlipCacheEntry* pEntry;
-            for ( pEntry = (EscherBlipCacheEntry*)pEscherBlipCache->First(); pEntry;
-                    pEntry = (EscherBlipCacheEntry*)pEscherBlipCache->Next() )
+            std::map<sal_uInt32,ByteString>::iterator iter = aEscherBlipCache.find(nIdx_);
+
+            if (iter != aEscherBlipCache.end())
             {
-                if ( pEntry->nBlip == nIdx_ )
-                {   /* if this entry is available, then it should be possible
-                    to get the Graphic via GraphicObject */
-                    GraphicObject aGraphicObject( pEntry->aUniqueID );
-                    rData = aGraphicObject.GetGraphic();
-                    if ( rData.GetType() != GRAPHIC_NONE )
-                        bOk = sal_True;
-                    else
-                        delete (EscherBlipCacheEntry*)pEscherBlipCache->Remove();
-                    break;
-                }
+                /* if this entry is available, then it should be possible
+                to get the Graphic via GraphicObject */
+                GraphicObject aGraphicObject( iter->second );
+                rData = aGraphicObject.GetGraphic();
+                if ( rData.GetType() != GRAPHIC_NONE )
+                    bOk = sal_True;
+                else
+                    aEscherBlipCache.erase(iter);
             }
         }
         if ( !bOk )
@@ -6793,10 +6771,7 @@ sal_Bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rData, Rectangle* p
             {
                 // create new BlipCacheEntry for this graphic
                 GraphicObject aGraphicObject( rData );
-                if ( !pEscherBlipCache )
-                    const_cast <SvxMSDffManager*> (this)->pEscherBlipCache = new List();
-                EscherBlipCacheEntry* pNewEntry = new EscherBlipCacheEntry( nIdx_, aGraphicObject.GetUniqueID() );
-                pEscherBlipCache->Insert( pNewEntry, LIST_APPEND );
+                aEscherBlipCache.insert(std::make_pair(nIdx_,aGraphicObject.GetUniqueID()));
             }
         }
     }
