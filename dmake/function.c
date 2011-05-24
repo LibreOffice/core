@@ -587,7 +587,7 @@ int expand;
       Do_profile_output( "s", M_TARGET, &cell );
 
    /* Print the shell escape command. */
-   if( !(rcp.st_attr & A_SILENT) ) {
+   if( Verbose & V_FORCEECHO ) {
       printf( "%s: Executing shell macro: %s\n", Pname, data );
       fflush(stdout);
    }
