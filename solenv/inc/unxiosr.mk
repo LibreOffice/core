@@ -37,7 +37,8 @@ LIBFLAGS=-r
 
 PROCESSOR_DEFINES=-DARM32
 
-DLLPOST=
+DLLPRE=lib
+DLLPOST=.a
 DLLPOSTFIX=
 
 # flags to enable build with symbols
