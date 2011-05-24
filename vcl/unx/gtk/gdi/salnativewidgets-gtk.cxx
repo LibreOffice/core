@@ -1082,12 +1082,11 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
     return( returnVal );
 }
 
+
 /************************************************************************
  * Individual control drawing functions
  ************************************************************************/
-
-sal_Bool GtkSalGraphics::NWPaintGTKButtonReal(
-            GtkWidget* button,
+sal_Bool GtkSalGraphics::NWPaintGTKButton(
             GdkDrawable* gdkDrawable,
             ControlType, ControlPart,
             const Rectangle& rControlRectangle,
@@ -1107,33 +1106,18 @@ sal_Bool GtkSalGraphics::NWPaintGTKButtonReal(
     GdkRectangle    clipRect;
 
     NWEnsureGTKButton( m_nScreen );
-    NWEnsureGTKToolbar( m_nScreen );
     NWConvertVCLStateToGTKState( nState, &stateType, &shadowType );
-    NWSetWidgetState( gWidgetData[m_nScreen].gBtnWidget, nState, stateType );
 
     x = rControlRectangle.Left();
     y = rControlRectangle.Top();
     w = rControlRectangle.GetWidth();
     h = rControlRectangle.GetHeight();
 
-    gint internal_padding = 0;
-    if(GTK_IS_TOOL_ITEM(button))
-    {
-        gtk_widget_style_get (GTK_WIDGET (gWidgetData[m_nScreen].gToolbarWidget),
-                "internal-padding", &internal_padding,
-                NULL);
-        x += internal_padding/2;
-        w -= internal_padding;
-        stateType = GTK_STATE_PRELIGHT;
-    }
-
     // Grab some button style attributes
-    gtk_widget_style_get( button,    "focus-line-width",    &focusWidth,
-                                "focus-padding",     &focusPad,
-                                 "interior_focus",    &interiorFocus,
-                                (char *)NULL );
-    gtk_widget_style_get( gWidgetData[m_nScreen].gBtnWidget,
-                                "default_border",    &pBorder,
+    gtk_widget_style_get( gWidgetData[m_nScreen].gBtnWidget,    "focus-line-width", &focusWidth,
+                                "focus-padding",    &focusPad,
+                                 "interior_focus",  &interiorFocus,
+                                "default_border",   &pBorder,
                                 (char *)NULL );
 
     // Make sure the border values exist, otherwise use some defaults
@@ -1147,6 +1131,8 @@ sal_Bool GtkSalGraphics::NWPaintGTKButtonReal(
     // If the button is too small, don't ever draw focus or grab more space
     if ( (w < 16) || (h < 16) )
         bDrawFocus = sal_False;
+
+    NWSetWidgetState( gWidgetData[m_nScreen].gBtnWidget, nState, stateType );
 
     gint xi = x, yi = y, wi = w, hi = h;
     if ( (nState & CTRL_STATE_DEFAULT) && bDrawFocus )
@@ -1164,6 +1150,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKButtonReal(
         wi -= 2 * (focusWidth + focusPad);
         hi -= 2 * (focusWidth + focusPad);
     }
+
     for( clipList::const_iterator it = rClipList.begin(); it != rClipList.end(); ++it)
     {
         clipRect.x = it->Left();
@@ -1172,48 +1159,25 @@ sal_Bool GtkSalGraphics::NWPaintGTKButtonReal(
         clipRect.height = it->GetHeight();
 
         // Buttons must paint opaque since some themes have alpha-channel enabled buttons
-        if(button == gWidgetData[m_nScreen].gToolbarButtonWidget)
+        gtk_paint_flat_box( m_pWindow->style, gdkDrawable, GTK_STATE_NORMAL, GTK_SHADOW_NONE,
+                            &clipRect, m_pWindow, "base", x, y, w, h );
+
+        if ( (nState & CTRL_STATE_DEFAULT) && (GTK_BUTTON(gWidgetData[m_nScreen].gBtnWidget)->relief == GTK_RELIEF_NORMAL) )
         {
-            gtk_paint_box( gWidgetData[m_nScreen].gToolbarWidget->style, gdkDrawable, GTK_STATE_NORMAL, GTK_SHADOW_NONE,
-                                &clipRect, gWidgetData[m_nScreen].gToolbarWidget, "toolbar", x, y, w, h );
-        }
-        else
-        {
-            gtk_paint_box( m_pWindow->style, gdkDrawable, GTK_STATE_NORMAL, GTK_SHADOW_NONE,
-                                &clipRect, m_pWindow, "base", x, y, w, h );
+            gtk_paint_box( gWidgetData[m_nScreen].gBtnWidget->style, gdkDrawable, GTK_STATE_NORMAL, GTK_SHADOW_IN,
+                           &clipRect, gWidgetData[m_nScreen].gBtnWidget, "buttondefault", x, y, w, h );
         }
 
-        if ( (nState & CTRL_STATE_DEFAULT) && GTK_IS_BUTTON(button) )
+        if ( (GTK_BUTTON(gWidgetData[m_nScreen].gBtnWidget)->relief != GTK_RELIEF_NONE)
+            || (nState & CTRL_STATE_PRESSED)
+            || (nState & CTRL_STATE_ROLLOVER) )
         {
-            gtk_paint_box( button->style, gdkDrawable, GTK_STATE_NORMAL, GTK_SHADOW_IN,
-                           &clipRect, button, "buttondefault", x, y, w, h );
+            gtk_paint_box( gWidgetData[m_nScreen].gBtnWidget->style, gdkDrawable, stateType, shadowType,
+                           &clipRect, gWidgetData[m_nScreen].gBtnWidget, "button", xi, yi, wi, hi );
         }
-        /* don't draw "button", because it can be a tool_button, and
-         * it causes some weird things, so, the default button is
-         * just fine */
-        gtk_paint_box( gWidgetData[m_nScreen].gBtnWidget->style, gdkDrawable, stateType, shadowType,
-                       &clipRect, gWidgetData[m_nScreen].gBtnWidget, "button", xi, yi, wi, hi );
     }
 
     return( sal_True );
-}
-
-sal_Bool GtkSalGraphics::NWPaintGTKButton(
-            GdkDrawable* gdkDrawable,
-            ControlType type, ControlPart part,
-            const Rectangle& rControlRectangle,
-            const clipList& rClipList,
-            ControlState nState, const ImplControlValue& value,
-            const OUString& string)
-{
-        return NWPaintGTKButtonReal(
-            gWidgetData[m_nScreen].gBtnWidget,
-            gdkDrawable,
-            type, part,
-            rControlRectangle,
-            rClipList,
-            nState, value,
-            string );
 }
 
 static Rectangle NWGetButtonArea( int nScreen,
@@ -1900,10 +1864,7 @@ static void NWPaintOneEditBox(  int nScreen,
     }
     NWSetWidgetState( widget, nState, stateType );
 
-    /* This doesn't seem to be necessary, and it causes some weird glitch in
-     * murrine (with the elementary theme for instance) but it fixes some issue
-     * with Orta, so... */
-    gtk_paint_flat_box( pBGWidget->style, gdkDrawable, stateType, GTK_SHADOW_NONE,
+    gtk_paint_box( pBGWidget->style, gdkDrawable, stateType, GTK_SHADOW_NONE,
                         gdkRect, pBGWidget, "entry_bg",
                         aEditBoxRect.Left(), aEditBoxRect.Top(),
                         aEditBoxRect.GetWidth(), aEditBoxRect.GetHeight() );
@@ -2471,7 +2432,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKToolbar(
             const Rectangle& rControlRectangle,
             const clipList& rClipList,
             ControlState nState, const ImplControlValue& aValue,
-            const OUString& string)
+            const OUString& )
 {
     GtkStateType    stateType;
     GtkShadowType   shadowType;
@@ -2529,12 +2490,22 @@ sal_Bool GtkSalGraphics::NWPaintGTKToolbar(
     // handle button
     else if( nPart == PART_BUTTON )
     {
-        bPaintButton = (nState & CTRL_STATE_PRESSED)
+        bPaintButton =
+            (GTK_BUTTON(pButtonWidget)->relief != GTK_RELIEF_NONE)
+            || (nState & CTRL_STATE_PRESSED)
             || (nState & CTRL_STATE_ROLLOVER);
         if( aValue.getTristateVal() == BUTTONVALUE_ON )
         {
-                if(!(nState & CTRL_STATE_ROLLOVER))
-            nState |= CTRL_STATE_PRESSED;
+            pButtonWidget = gWidgetData[m_nScreen].gToolbarToggleWidget;
+            shadowType = GTK_SHADOW_IN;
+            stateType = GTK_STATE_ACTIVE;
+            // special case stateType value for depressed toggle buttons
+            // cf. gtk+/gtk/gtktogglebutton.c (gtk_toggle_button_update_state)
+            if( (nState & (CTRL_STATE_ROLLOVER|CTRL_STATE_PRESSED)) )
+            {
+                stateType = GTK_STATE_PRELIGHT;
+                shadowType = GTK_SHADOW_OUT;
+            }
             bPaintButton = true;
         }
         else
@@ -2542,80 +2513,77 @@ sal_Bool GtkSalGraphics::NWPaintGTKToolbar(
 
         NWSetWidgetState( pButtonWidget, nState, stateType );
         gtk_widget_ensure_style( pButtonWidget );
-        if(bPaintButton)
-            NWPaintGTKButtonReal(pButtonWidget, gdkDrawable, 0, 0, rControlRectangle, rClipList, nState, aValue, string);
     }
 
-    if( nPart != PART_BUTTON )
+    for( clipList::const_iterator it = rClipList.begin(); it != rClipList.end(); ++it )
     {
-        for( clipList::const_iterator it = rClipList.begin(); it != rClipList.end(); ++it )
-        {
-            clipRect.x = it->Left();
-            clipRect.y = it->Top();
-            clipRect.width = it->GetWidth();
-            clipRect.height = it->GetHeight();
+        clipRect.x = it->Left();
+        clipRect.y = it->Top();
+        clipRect.width = it->GetWidth();
+        clipRect.height = it->GetHeight();
 
-            // draw toolbar
-            if( nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT )
+        // draw toolbar
+        if( nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT )
+        {
+            gtk_paint_flat_box( gWidgetData[m_nScreen].gToolbarWidget->style,
+                                gdkDrawable,
+                                (GtkStateType)GTK_STATE_NORMAL,
+                                GTK_SHADOW_NONE,
+                                &clipRect,
+                                gWidgetData[m_nScreen].gToolbarWidget,
+                                "base",
+                                x, y, w, h );
+            gtk_paint_box( gWidgetData[m_nScreen].gToolbarWidget->style,
+                           gdkDrawable,
+                           stateType,
+                           shadowType,
+                           &clipRect,
+                           gWidgetData[m_nScreen].gToolbarWidget,
+                           "toolbar",
+                           x, y, w, h );
+        }
+        // draw grip
+        else if( nPart == PART_THUMB_HORZ || nPart == PART_THUMB_VERT )
+        {
+            gtk_paint_handle( gWidgetData[m_nScreen].gHandleBoxWidget->style,
+                              gdkDrawable,
+                              GTK_STATE_NORMAL,
+                              GTK_SHADOW_OUT,
+                              &clipRect,
+                              gWidgetData[m_nScreen].gHandleBoxWidget,
+                              "handlebox",
+                              g_x, g_y, g_w, g_h,
+                              nPart == PART_THUMB_HORZ ?
+                              GTK_ORIENTATION_HORIZONTAL :
+                              GTK_ORIENTATION_VERTICAL
+                              );
+        }
+        // draw button
+        else if( nPart == PART_BUTTON )
+        {
+            if( bPaintButton )
             {
-                gtk_paint_flat_box( gWidgetData[m_nScreen].gToolbarWidget->style,
-                                    gdkDrawable,
-                                    (GtkStateType)GTK_STATE_NORMAL,
-                                    GTK_SHADOW_NONE,
-                                    &clipRect,
-                                    gWidgetData[m_nScreen].gToolbarWidget,
-                                    "base",
-                                    x, y, w, h );
-                gtk_paint_box( gWidgetData[m_nScreen].gToolbarWidget->style,
-                               gdkDrawable,
+                gtk_paint_box( pButtonWidget->style, gdkDrawable,
                                stateType,
                                shadowType,
                                &clipRect,
-                               gWidgetData[m_nScreen].gToolbarWidget,
-                               "toolbar",
-                               x, y, w, h );
+                               pButtonWidget, "button", x, y, w, h );
             }
-            // draw grip
-            else if( nPart == PART_THUMB_HORZ || nPart == PART_THUMB_VERT )
-            {
-                gtk_paint_handle( gWidgetData[m_nScreen].gHandleBoxWidget->style,
-                                  gdkDrawable,
-                                  GTK_STATE_NORMAL,
-                                  GTK_SHADOW_OUT,
-                                  &clipRect,
-                                  gWidgetData[m_nScreen].gHandleBoxWidget,
-                                  "handlebox",
-                                  g_x, g_y, g_w, g_h,
-                                  nPart == PART_THUMB_HORZ ?
-                                  GTK_ORIENTATION_HORIZONTAL :
-                                  GTK_ORIENTATION_VERTICAL
-                                  );
-            }
-            else if(nPart == PART_SEPARATOR )
-            {
-                gint separator_height, separator_width, wide_separators;
-
-                gtk_widget_style_get (gWidgetData[m_nScreen].gVSeparator,
-                                      "wide-separators",  &wide_separators,
-                                      "separator-width",  &separator_width,
-                                      "separator-height", &separator_height,
-                                      NULL);
-                if (wide_separators)
-                    gtk_paint_box (gWidgetData[m_nScreen].gVSeparator->style, gdkDrawable,
-                               GTK_STATE_NORMAL, GTK_SHADOW_ETCHED_OUT,
-                               &clipRect, gWidgetData[m_nScreen].gVSeparator, "vseparator",
-                               x + (w - separator_width) / 2,
-                               y + 7,
-                               separator_width,
-                               h - 14);
-                else
-                    gtk_paint_vline (gWidgetData[m_nScreen].gVSeparator->style, gdkDrawable,
-                                 GTK_STATE_NORMAL,
-                                 &clipRect, gWidgetData[m_nScreen].gVSeparator, "vseparator",
-                                 y + 7,
-                                 y + h - 7,
-                                 x + w/2 - 1);
-            }
+        }
+        else if(nPart == PART_SEPARATOR )
+        {
+            gtk_paint_vline( gWidgetData[m_nScreen].gVSeparator->style,
+                              gdkDrawable,
+                              GTK_STATE_NORMAL,
+                              &clipRect,
+                              gWidgetData[m_nScreen].gVSeparator,
+                              "vseparator",
+                              y + 4, y + h - 8 /* -2 and -4 is a dirty
+                                                * hack, to fit most gtk
+                                                * style, but it must be
+                                                * fixed, FIXME */,
+                              x
+                              );
         }
     }
 
@@ -3622,8 +3590,8 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 GdkPixmap* GtkSalGraphics::NWGetPixmapFromScreen( Rectangle srcRect )
 {
     // Create a new pixmap to hold the composite of the window background and the control
-    GdkPixmap * pPixmap        = gdk_pixmap_new( GDK_DRAWABLE(GetGdkWindow()), srcRect.GetWidth(), srcRect.GetHeight(), -1 );
-    GdkGC *     pPixmapGC      = gdk_gc_new( pPixmap );
+    GdkPixmap * pPixmap     = gdk_pixmap_new( GDK_DRAWABLE(GetGdkWindow()), srcRect.GetWidth(), srcRect.GetHeight(), -1 );
+    GdkGC *  pPixmapGC  = gdk_gc_new( pPixmap );
 
     if( !pPixmap || !pPixmapGC )
     {
@@ -3922,9 +3890,9 @@ static void NWEnsureGTKToolbar( int nScreen )
     {
         gWidgetData[nScreen].gToolbarWidget = gtk_toolbar_new();
         NWAddWidgetToCacheWindow( gWidgetData[nScreen].gToolbarWidget, nScreen );
-        gWidgetData[nScreen].gToolbarButtonWidget = GTK_WIDGET(gtk_button_new());
-        gWidgetData[nScreen].gToolbarToggleWidget = GTK_WIDGET(gtk_toggle_tool_button_new());
-        gWidgetData[nScreen].gVSeparator = GTK_WIDGET(gtk_separator_tool_item_new());
+        gWidgetData[nScreen].gToolbarButtonWidget = gtk_button_new();
+        gWidgetData[nScreen].gToolbarToggleWidget = gtk_toggle_button_new();
+        gWidgetData[nScreen].gVSeparator = gtk_vseparator_new();
         NWAddWidgetToCacheWindow( gWidgetData[nScreen].gVSeparator, nScreen );
 
         GtkReliefStyle aRelief = GTK_RELIEF_NORMAL;
