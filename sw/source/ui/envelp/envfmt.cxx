@@ -37,8 +37,6 @@
 
 #include <tools/pstm.hxx>
 
-#define _SVSTDARR_LONGSSORT
-#include <svl/svstdarr.hxx>
 #include <editeng/paperinf.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/lrspitem.hxx>
@@ -64,9 +62,72 @@
 #include <envfmt.hrc>
 
 #include <vector>
+#include <algorithm>
 
 #include "swabstdlg.hxx"
 #include "chrdlg.hrc"
+
+namespace {
+    /// Converts a ranges array to a list containing one entry for each
+    /// element covered by the ranges.
+    /// @param aRanges An array containing zero or more range specifications and
+    ///                terminated by one or more zero entries. A range
+    ///                specification is two consecutive entries that specify
+    ///                the start and end points of the range.
+    /// @returns A vector containing one element for each item covered by the
+    ///          ranges. This is not gauranteed to be sorted and may contain
+    ///          duplicates if the original ranges contained overlaps.
+    static std::vector<sal_uInt16> lcl_convertRangesToList(const sal_uInt16 aRanges[]) {
+        std::vector<sal_uInt16> aVec;
+        int i = 0;
+        while (aRanges[i])
+        {
+            for (sal_uInt16 n = aRanges[i]; n <= aRanges[i+1]; ++n)
+            {
+                aVec.push_back(n);
+            }
+            i += 2;
+        }
+        return aVec;
+    }
+
+    /// Converts a list of elements to a ranges array.
+    /// @param rElements Vector of the initial elements, this need not be sorted,
+    ///                  and may contain duplicate items. The vector is sorted
+    ///                  on exit from this function but may still contain duplicates.
+    /// @returns An array containing zero or more range specifications and
+    ///          terminated by one or more zero entries. A range specification
+    ///          is two consecutive entries that specify the start and end
+    ///          points of the range. This list will be sorted and will not
+    ///          contain any overlapping ranges.
+    static sal_uInt16* lcl_convertListToRanges(std::vector<sal_uInt16> &rElements) {
+        std::sort(rElements.begin(), rElements.end());
+        std::vector<sal_uInt16> aRanges;
+        size_t i;
+        for (i = 0; i < rElements.size(); ++i)
+        {
+            //Push the start of the this range.
+            aRanges.push_back(rElements[i]);
+            //Seek to the end of this range.
+            while (i + 1 < rElements.size() && rElements[i+1] - rElements[i] <= 1)
+            {
+                ++i;
+            }
+            //Push the end of this range (may be the same as the start).
+            aRanges.push_back( rElements[i] );
+        }
+
+        // Convert the vector to an array with terminating zero
+        sal_uInt16 *pNewRanges = new sal_uInt16[aRanges.size() + 1];
+        for (i = 0; i < aRanges.size(); ++i)
+        {
+            pNewRanges[i] = aRanges[i];
+        }
+        pNewRanges[i] = 0;
+        return pNewRanges;
+    }
+
+}
 
 namespace swui
 {
@@ -367,55 +428,13 @@ SfxItemSet *SwEnvFmtPage::GetCollItemSet(SwTxtFmtColl* pColl, sal_Bool bSender)
         };
 
         // BruteForce merge because MergeRange in SvTools is buggy:
-        sal_uInt16 i = 0;
-        SvLongsSort aMergedRanges( 0, 10 );
-
-        while (pRanges[i])
-        {
-            for (sal_uInt16 nPos = pRanges[i]; nPos <= pRanges[i+1]; nPos++)
-                aMergedRanges.Insert(nPos);
-            i += 2;
-        }
-
-        i = 0;
-
-        while (aRanges[i])
-        {
-            for (sal_uInt16 nPos = aRanges[i]; nPos <= aRanges[i+1]; nPos++)
-                aMergedRanges.Insert(nPos);
-            i += 2;
-        }
-
-        // compact ranges
-        std::vector<sal_uInt16> aCompactedRanges;
-
-        aCompactedRanges.push_back(aMergedRanges[0]);
-
-        for (i = 0; i < aMergedRanges.Count(); ++i)
-        {
-            while (i + 1 < aMergedRanges.Count() &&
-                aMergedRanges[i+1] - aMergedRanges[i] == 1)
-            {
-                i++;
-            }
-            aCompactedRanges.push_back( aMergedRanges[i] );
-
-            if (i + 1 < aMergedRanges.Count())
-            {
-                aCompactedRanges.push_back( aMergedRanges[i+1] );
-            }
-        }
-
-        // create new ranges
-        sal_uInt16 *pNewRanges = new sal_uInt16[aCompactedRanges.size() + 1];
-        for (i = 0; i < aCompactedRanges.size(); ++i)
-            pNewRanges[i] = aCompactedRanges[i];
-
-        pNewRanges[i] = 0;
+        std::vector<sal_uInt16> pVec = ::lcl_convertRangesToList(pRanges);
+        std::vector<sal_uInt16> aVec = ::lcl_convertRangesToList(aRanges);
+        pVec.insert(pVec.end(), aVec.begin(), aVec.end());
+        sal_uInt16 *pNewRanges = ::lcl_convertListToRanges(pVec);
 
         pAddrSet = new SfxItemSet(GetParent()->pSh->GetView().GetCurShell()->GetPool(),
                                 pNewRanges);
-
         pAddrSet->Put(pColl->GetAttrSet());
         delete[] pNewRanges;
     }
