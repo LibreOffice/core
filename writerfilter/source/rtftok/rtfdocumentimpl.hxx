@@ -4,6 +4,8 @@
 #include <memory>
 #include <rtftok/RTFDocument.hxx>
 
+class SvStream;
+
 namespace writerfilter {
     namespace rtftok {
         /// Implementation of the RTFDocument interface.
@@ -17,9 +19,10 @@ namespace writerfilter {
                 virtual ~RTFDocumentImpl();
                 virtual void resolve(Stream & rHandler);
                 virtual ::std::string getType() const;
+
+                SvStream& Strm();
             private:
-                class Impl;
-                ::std::auto_ptr<Impl> m_pImpl;
+                SvStream* m_pStream;
         };
     } // namespace rtftok
 } // namespace writerfilter
