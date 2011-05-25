@@ -492,7 +492,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 if (nDlgRet == RET_YES || nSet==LM_ALWAYS)
                 {
                     ReloadTabLinks();
-                    aDocument.UpdateExternalRefLinks();
+                    aDocument.UpdateExternalRefLinks(GetActiveDialogParent());
                     aDocument.UpdateDdeLinks();
                     aDocument.UpdateAreaLinks();
 

@@ -1014,8 +1014,10 @@
 
 #define SCSTR_SET_TAB_BG_COLOR  (STR_START + 403)
 #define SCSTR_NO_TAB_BG_COLOR   (STR_START + 404)
+#define SCSTR_EXTDOC_NOT_LOADED (STR_START + 405)
 
-#define STR_END                 (SCSTR_NO_TAB_BG_COLOR)
+
+#define STR_END                 (SCSTR_EXTDOC_NOT_LOADED)
 
 #define BMP_START               (STR_END)
 

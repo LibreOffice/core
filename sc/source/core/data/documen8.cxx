@@ -35,6 +35,7 @@
 #include <editeng/eeitem.hxx>
 
 #include <tools/string.hxx>
+#include <tools/urlobj.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/frmdiritem.hxx>
@@ -97,6 +98,7 @@
 #include "macromgr.hxx"
 #include "dpobject.hxx"
 #include "docuno.hxx"
+#include "scresid.hxx"
 
 #define GET_SCALEVALUE(set,id)  ((const SfxUInt16Item&)(set.Get( id ))).GetValue()
 
@@ -985,7 +987,7 @@ void ScDocument::LoadDdeLinks(SvStream& rStream)
     }
 }
 
-sal_Bool ScDocument::HasDdeLinks() const
+bool ScDocument::HasDdeLinks() const
 {
     if (GetLinkManager())           // Clipboard z.B. hat keinen LinkManager
     {
@@ -993,7 +995,7 @@ sal_Bool ScDocument::HasDdeLinks() const
         sal_uInt16 nCount = rLinks.Count();
         for (sal_uInt16 i=0; i<nCount; i++)
             if ((*rLinks[i])->ISA(ScDdeLink))
-                return sal_True;
+                return true;
     }
 
     return false;
@@ -1012,7 +1014,7 @@ sal_Bool ScDocument::IsInLinkUpdate() const
     return bInLinkUpdate || IsInDdeLinkUpdate();
 }
 
-void ScDocument::UpdateExternalRefLinks()
+void ScDocument::UpdateExternalRefLinks(Window* pWin)
 {
     if (!GetLinkManager())
         return;
@@ -1027,8 +1029,25 @@ void ScDocument::UpdateExternalRefLinks()
         ScExternalRefLink* pRefLink = dynamic_cast<ScExternalRefLink*>(pBase);
         if (pRefLink)
         {
-            pRefLink->Update();
-            bAny = true;
+            if (pRefLink->Update())
+                bAny = true;
+            else
+            {
+                // Update failed.  Notify the user.
+
+                String aFile;
+                pLinkManager->GetDisplayNames(pRefLink, NULL, &aFile, NULL, NULL);
+                // Decode encoded URL for display friendliness.
+                INetURLObject aUrl(aFile,INetURLObject::WAS_ENCODED);
+                aFile = aUrl.GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS);
+
+                rtl::OUStringBuffer aBuf;
+                aBuf.append(String(ScResId(SCSTR_EXTDOC_NOT_LOADED)));
+                aBuf.appendAscii("\n\n");
+                aBuf.append(aFile);
+                ErrorBox aBox(pWin, WB_OK, aBuf.makeStringAndClear());
+                aBox.Execute();
+            }
         }
     }
     if (bAny)
@@ -1315,7 +1334,7 @@ bool ScDocument::SetDdeLinkResultMatrix( sal_uInt16 nDdePos, ScMatrixRef pResult
 
 //------------------------------------------------------------------------
 
-sal_Bool ScDocument::HasAreaLinks() const
+bool ScDocument::HasAreaLinks() const
 {
     if (GetLinkManager())           // Clipboard z.B. hat keinen LinkManager
     {
@@ -1323,7 +1342,7 @@ sal_Bool ScDocument::HasAreaLinks() const
         sal_uInt16 nCount = rLinks.Count();
         for (sal_uInt16 i=0; i<nCount; i++)
             if ((*rLinks[i])->ISA(ScAreaLink))
-                return sal_True;
+                return true;
     }
 
     return false;

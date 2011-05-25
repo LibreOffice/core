@@ -636,9 +636,9 @@ public:
         on first call. */
     ScFormulaParserPool& GetFormulaParserPool() const;
 
-    sal_Bool            HasDdeLinks() const;
-    sal_Bool            HasAreaLinks() const;
-    void            UpdateExternalRefLinks();
+    bool            HasDdeLinks() const;
+    bool            HasAreaLinks() const;
+    void            UpdateExternalRefLinks(Window* pWin);
     void            UpdateDdeLinks();
     void            UpdateAreaLinks();
 
