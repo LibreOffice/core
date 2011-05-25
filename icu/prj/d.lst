@@ -25,6 +25,13 @@ mkdir: %_DEST%\inc%_EXT%\external\unicode
 ..\%__SRC%\lib\libicule.*.*.*       %_DEST%\lib%_EXT%\
 ..\%__SRC%\lib\libicuuc.*.*.*       %_DEST%\lib%_EXT%\
 ..\%__SRC%\lib\libicutu.*.*.*       %_DEST%\lib%_EXT%\
+
+..\%__SRC%\lib\libicudata.a     %_DEST%\lib%_EXT%\
+..\%__SRC%\lib\libicui18n.a     %_DEST%\lib%_EXT%\
+..\%__SRC%\lib\libicule.a       %_DEST%\lib%_EXT%\
+..\%__SRC%\lib\libicuuc.a       %_DEST%\lib%_EXT%\
+..\%__SRC%\lib\libicutu.a       %_DEST%\lib%_EXT%\
+
 ..\icuversion.mk %_DEST%\inc%_EXT%\icuversion.mk
 
 linklib: libicudata.*.*.*
