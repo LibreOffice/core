@@ -42,6 +42,24 @@ void RTFDocumentImpl::resolve(Stream & /*rStream*/)
     }
 }
 
+int RTFDocumentImpl::resolveChars(char ch)
+{
+    OSL_TRACE("%s", OSL_THIS_FUNC);
+    OStringBuffer aBuf;
+
+    while(!Strm().IsEof() && ch != '{' && ch != '}' && ch != '\\')
+    {
+        if (ch != 0x0d && ch != 0x0a)
+            aBuf.append(ch);
+        Strm() >> ch;
+    }
+    if (!Strm().IsEof())
+        Strm().SeekRel(-1);
+    OSL_TRACE("%s: TODO handle chars '%s'", OSL_THIS_FUNC,
+            aBuf.makeStringAndClear().getStr());
+    return 0;
+}
+
 int RTFDocumentImpl::resolveKeyword()
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
@@ -135,7 +153,8 @@ int RTFDocumentImpl::resolveParse()
                 default:
                     if (m_nInternalState == INTERNAL_NORMAL)
                     {
-                        OSL_TRACE("%s: TODO, parse character", OSL_THIS_FUNC);
+                        if ((ret = resolveChars(ch)))
+                            return ret;
                     }
                     else
                     {

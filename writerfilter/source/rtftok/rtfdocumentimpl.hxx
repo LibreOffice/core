@@ -39,6 +39,7 @@ namespace writerfilter {
             private:
                 int resolveParse();
                 int resolveKeyword();
+                int resolveChars(char ch);
 
                 SvStream* m_pStream;
                 int m_nGroup;
