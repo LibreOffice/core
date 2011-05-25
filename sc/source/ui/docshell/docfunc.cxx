@@ -4721,7 +4721,7 @@ sal_Bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, sal_Bool bApi )
     for (ScRangeName::iterator itr = itrBeg; itr != itrEnd; ++itr)
     {
         const ScRangeData& r = *itr;
-        if (r.HasType(RT_DATABASE && !r.HasType(RT_SHARED)))
+        if (!r.HasType(RT_DATABASE) && !r.HasType(RT_SHARED))
             ++nValidCount;
     }
 
