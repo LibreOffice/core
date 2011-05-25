@@ -517,10 +517,4 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 ))
 endif
 
-$(WORKDIR)/inc/sd/sduilib.hxx :
-	mkdir -p $(dir $@) && \
-		echo \#define DLL_NAME \"$(if $(filter UNX,$(GUI)),lib)sdui$(DLLPOSTFIX)$(DLLPOST)\" > $@
-
-$(call gb_CxxObject_get_target,sd/source/ui/dlg/sdabstdlg) : $(WORKDIR)/inc/sd/sduilib.hxx
-
 # vim: set noet ts=4 sw=4:

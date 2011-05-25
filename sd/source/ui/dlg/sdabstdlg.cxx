@@ -30,10 +30,10 @@
 #include "precompiled_sd.hxx"
 
 #include "sdabstdlg.hxx"
-#include "sduilib.hxx"
 
 #include <osl/module.hxx>
 #include <tools/string.hxx>
+#include <vcl/unohelp.hxx>
 
 typedef SdAbstractDialogFactory* (__LOADONCALLAPI *SdFuncPtrCreateDialogFactory)();
 
@@ -43,7 +43,8 @@ SdAbstractDialogFactory* SdAbstractDialogFactory::Create()
 {
     SdFuncPtrCreateDialogFactory fp = 0;
     static ::osl::Module aDialogLibrary;
-    if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, String( RTL_CONSTASCII_USTRINGPARAM( DLL_NAME ) ) ) )
+    static const ::rtl::OUString sLibName(::vcl::unohelper::CreateLibraryName("sdui", sal_True));
+    if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, sLibName ) )
         fp = ( SdAbstractDialogFactory* (__LOADONCALLAPI*)() )
             aDialogLibrary.getFunctionSymbol( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateDialogFactory")) );
     if ( fp )
