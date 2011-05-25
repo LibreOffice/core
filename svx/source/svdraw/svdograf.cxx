@@ -131,8 +131,9 @@ public:
     virtual             ~SdrGraphicLink();
 
     virtual void        Closed();
-    virtual void        DataChanged( const String& rMimeType,
-                                const ::com::sun::star::uno::Any & rValue );
+
+    virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
+        const String& rMimeType, const ::com::sun::star::uno::Any & rValue );
     void                DataChanged( const Graphic& rGraphic );
 
     sal_Bool                Connect() { return 0 != GetRealObject(); }
@@ -242,8 +243,8 @@ void SdrGraphicLink::RemoveGraphicUpdater()
 
 // -----------------------------------------------------------------------------
 
-void SdrGraphicLink::DataChanged( const String& rMimeType,
-                                const ::com::sun::star::uno::Any & rValue )
+::sfx2::SvBaseLink::UpdateResult SdrGraphicLink::DataChanged(
+    const String& rMimeType, const ::com::sun::star::uno::Any & rValue )
 {
     SdrModel*       pModel      = pGrafObj ? pGrafObj->GetModel() : 0;
     sfx2::LinkManager* pLinkManager= pModel  ? pModel->GetLinkManager() : 0;
@@ -264,6 +265,7 @@ void SdrGraphicLink::DataChanged( const String& rMimeType,
             pGrafObj->BroadcastObjectChange();
         }
     }
+    return SUCCESS;
 }
 
 // -----------------------------------------------------------------------------

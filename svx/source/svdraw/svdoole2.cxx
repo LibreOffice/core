@@ -612,8 +612,8 @@ public:
     virtual             ~SdrEmbedObjectLink();
 
     virtual void        Closed();
-    virtual void        DataChanged( const String& rMimeType,
-                                const ::com::sun::star::uno::Any & rValue );
+    virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
+        const String& rMimeType, const ::com::sun::star::uno::Any & rValue );
 
     sal_Bool            Connect() { return GetRealObject() != NULL; }
 };
@@ -635,8 +635,8 @@ SdrEmbedObjectLink::~SdrEmbedObjectLink()
 
 // -----------------------------------------------------------------------------
 
-void SdrEmbedObjectLink::DataChanged( const String& /*rMimeType*/,
-                                const ::com::sun::star::uno::Any & /*rValue*/ )
+::sfx2::SvBaseLink::UpdateResult SdrEmbedObjectLink::DataChanged(
+    const String& /*rMimeType*/, const ::com::sun::star::uno::Any & /*rValue*/ )
 {
     if ( !pObj->UpdateLinkURL_Impl() )
     {
@@ -666,6 +666,8 @@ void SdrEmbedObjectLink::DataChanged( const String& /*rMimeType*/,
 
     pObj->GetNewReplacement();
     pObj->SetChanged();
+
+    return SUCCESS;
 }
 
 // -----------------------------------------------------------------------------
