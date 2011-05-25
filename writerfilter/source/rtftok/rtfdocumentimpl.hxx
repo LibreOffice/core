@@ -8,6 +8,13 @@ class SvStream;
 
 namespace writerfilter {
     namespace rtftok {
+        enum RTFInternalState
+        {
+            INTERNAL_NORMAL,
+            INTERNAL_BIN,
+            INTERNAL_HEX
+        };
+
         /// Implementation of the RTFDocument interface.
         class RTFDocumentImpl
             : public RTFDocument
@@ -23,6 +30,8 @@ namespace writerfilter {
                 SvStream& Strm();
             private:
                 SvStream* m_pStream;
+                int m_nGroup;
+                RTFInternalState m_nInternalState;
         };
     } // namespace rtftok
 } // namespace writerfilter
