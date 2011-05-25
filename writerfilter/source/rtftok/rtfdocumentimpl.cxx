@@ -26,9 +26,9 @@ SvStream& RTFDocumentImpl::Strm()
     return *m_pStream;
 }
 
-void RTFDocumentImpl::resolve(Stream & rStream)
+void RTFDocumentImpl::resolve(Stream & /*rStream*/)
 {
-    switch (resolveParse(rStream))
+    switch (resolveParse())
     {
         case ERROR_GROUP_UNDER:
             OSL_TRACE("%s: unmatched '}'", OSL_THIS_FUNC);
@@ -98,7 +98,7 @@ int RTFDocumentImpl::resolveKeyword()
     return 0;
 }
 
-int RTFDocumentImpl::resolveParse(Stream & /*rStream*/)
+int RTFDocumentImpl::resolveParse()
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
     char ch;

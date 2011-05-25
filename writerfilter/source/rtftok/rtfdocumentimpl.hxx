@@ -37,7 +37,7 @@ namespace writerfilter {
 
                 SvStream& Strm();
             private:
-                int resolveParse(Stream & rHandler);
+                int resolveParse();
                 int resolveKeyword();
 
                 SvStream* m_pStream;
