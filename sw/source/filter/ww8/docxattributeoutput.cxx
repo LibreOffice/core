@@ -3406,6 +3406,8 @@ void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
     m_pSerializer->endElementNS( XML_w, XML_p );
     m_pSerializer->endElementNS( XML_w, nItem );
 
+    // if new special ones are added, update also WriteFootnoteEndnotePr()
+
     // footnotes/endnotes themselves
     for ( FootnotesVector::const_iterator i = rVector.begin(); i != rVector.end(); ++i, ++nIndex )
     {
@@ -3428,7 +3430,8 @@ void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
 
 }
 
-void DocxAttributeOutput::WriteFootnoteEndnotePr( ::sax_fastparser::FSHelperPtr fs, int tag, const SwEndNoteInfo& info )
+void DocxAttributeOutput::WriteFootnoteEndnotePr( ::sax_fastparser::FSHelperPtr fs, int tag,
+    const SwEndNoteInfo& info, int listtag )
 {
     fs->startElementNS( XML_w, tag, FSEND );
     const char* fmt = NULL;
@@ -3467,15 +3470,20 @@ void DocxAttributeOutput::WriteFootnoteEndnotePr( ::sax_fastparser::FSHelperPtr 
     if( info.nFtnOffset != 0 )
         fs->singleElementNS( XML_w, XML_numStart, FSNS( XML_w, XML_val ),
             rtl::OString::valueOf( info.nFtnOffset + 1 ).getStr(), FSEND );
+    if( listtag != 0 ) // we are writting to settings.xml, write also special footnote/endnote list
+    { // there are currently only two hardcoded ones ( see FootnotesEndnotes())
+        fs->singleElementNS( XML_w, listtag, FSNS( XML_w, XML_id ), "0", FSEND );
+        fs->singleElementNS( XML_w, listtag, FSNS( XML_w, XML_id ), "1", FSEND );
+    }
     fs->endElementNS( XML_w, tag );
 }
 
 void DocxAttributeOutput::SectFootnoteEndnotePr()
 {
     if( HasFootnotes())
-        WriteFootnoteEndnotePr( m_pSerializer, XML_footnotePr, m_rExport.pDoc->GetFtnInfo());
+        WriteFootnoteEndnotePr( m_pSerializer, XML_footnotePr, m_rExport.pDoc->GetFtnInfo(), 0 );
     if( HasEndnotes())
-        WriteFootnoteEndnotePr( m_pSerializer, XML_endnotePr, m_rExport.pDoc->GetEndNoteInfo());
+        WriteFootnoteEndnotePr( m_pSerializer, XML_endnotePr, m_rExport.pDoc->GetEndNoteInfo(), 0 );
 }
 
 void DocxAttributeOutput::ParaLineSpacing_Impl( short nSpace, short nMulti )

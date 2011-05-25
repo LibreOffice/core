@@ -608,7 +608,7 @@ public:
     void FootnotesEndnotes( bool bFootnotes );
 
     /// writes the footnotePr/endnotePr (depending on tag) section
-    void WriteFootnoteEndnotePr( ::sax_fastparser::FSHelperPtr fs, int tag, const SwEndNoteInfo& info );
+    void WriteFootnoteEndnotePr( ::sax_fastparser::FSHelperPtr fs, int tag, const SwEndNoteInfo& info, int listtag );
 };
 
 #endif // _DOCXATTRIBUTEOUTPUT_HXX_

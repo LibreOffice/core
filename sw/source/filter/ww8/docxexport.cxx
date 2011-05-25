@@ -669,9 +669,9 @@ void DocxExport::WriteSettings()
         pFS->singleElementNS( XML_w, XML_evenAndOddHeaders, FSEND );
 
     if( m_pAttrOutput->HasFootnotes())
-        m_pAttrOutput->WriteFootnoteEndnotePr( pFS, XML_footnotePr, pDoc->GetFtnInfo());
+        m_pAttrOutput->WriteFootnoteEndnotePr( pFS, XML_footnotePr, pDoc->GetFtnInfo(), XML_footnote );
     if( m_pAttrOutput->HasEndnotes())
-        m_pAttrOutput->WriteFootnoteEndnotePr( pFS, XML_endnotePr, pDoc->GetEndNoteInfo());
+        m_pAttrOutput->WriteFootnoteEndnotePr( pFS, XML_endnotePr, pDoc->GetEndNoteInfo(), XML_endnote );
 
     pFS->endElementNS( XML_w, XML_settings );
 }
