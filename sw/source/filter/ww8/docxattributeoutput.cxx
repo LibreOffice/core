@@ -3469,7 +3469,7 @@ void DocxAttributeOutput::WriteFootnoteEndnotePr( ::sax_fastparser::FSHelperPtr 
         fs->singleElementNS( XML_w, XML_numFmt, FSNS( XML_w, XML_val ), fmt, FSEND );
     if( info.nFtnOffset != 0 )
         fs->singleElementNS( XML_w, XML_numStart, FSNS( XML_w, XML_val ),
-            rtl::OString::valueOf( info.nFtnOffset + 1 ).getStr(), FSEND );
+            rtl::OString::valueOf( sal_Int32( info.nFtnOffset + 1 )).getStr(), FSEND );
     if( listtag != 0 ) // we are writting to settings.xml, write also special footnote/endnote list
     { // there are currently only two hardcoded ones ( see FootnotesEndnotes())
         fs->singleElementNS( XML_w, listtag, FSNS( XML_w, XML_id ), "0", FSEND );
