@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include "MenuItemStatusListener.hxx"
 #include "MenuItemInfo.hxx"
 
@@ -80,3 +81,5 @@ MenuItemStatusListener::statusChanged(const FeatureStateEvent& Event)
         info->setVisible (visible.bVisible);
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
