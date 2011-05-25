@@ -129,7 +129,6 @@
 #include <basic/sbxprop.hxx>
 #include <basic/sbxmeth.hxx>
 #include <tools/unqid.hxx>
-#include <tools/unqidx.hxx>
 #include <svl/poolitem.hxx>
 #include <svtools/args.hxx>
 #include <smmod.hxx>
