@@ -52,6 +52,7 @@
 #include <fmtpdsc.hxx>
 #include <frmfmt.hxx>
 #include <section.hxx>
+#include <ftninfo.hxx>
 
 #include <docary.hxx>
 #include <numrule.hxx>
@@ -647,10 +648,38 @@ void DocxExport::WriteProperties( )
     m_pFilter->exportDocumentProperties( xDocProps );
 }
 
+static const char* numberingTypeToNumFmt( int type )
+{
+    switch( type )
+    {
+        case SVX_NUM_CHARS_UPPER_LETTER_N: // fall through, map to upper letters
+        case SVX_NUM_CHARS_UPPER_LETTER:
+            return "upperLetter";
+        case SVX_NUM_CHARS_LOWER_LETTER_N: // fall through, map to lower letters
+        case SVX_NUM_CHARS_LOWER_LETTER:
+            return "lowerLetter";
+        case SVX_NUM_ROMAN_UPPER:
+            return "upperRoman";
+        case SVX_NUM_ROMAN_LOWER:
+            return "lowerRoman";
+        case SVX_NUM_ARABIC:
+            return "decimal";
+        case SVX_NUM_NUMBER_NONE:
+            return "none";
+        case SVX_NUM_CHAR_SPECIAL:
+            return "bullet";
+        case SVX_NUM_PAGEDESC:
+        case SVX_NUM_BITMAP:
+        default:
+            return NULL;
+    }
+}
+
 void DocxExport::WriteSettings()
 {
-    if( !settings.hasData())
+    if( !settings.hasData() && !m_pAttrOutput->HasFootnotes() && !m_pAttrOutput->HasEndnotes())
         return;
+
     m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
             S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings" ),
             S( "settings.xml" ) );
@@ -665,6 +694,25 @@ void DocxExport::WriteSettings()
 
     if( settings.evenAndOddHeaders )
         pFS->singleElementNS( XML_w, XML_evenAndOddHeaders, FSEND );
+
+    if( m_pAttrOutput->HasFootnotes())
+    {
+        if( const char* fmt = numberingTypeToNumFmt( pDoc->GetFtnInfo().aFmt.GetNumberingType()))
+        {
+            pFS->startElementNS( XML_w, XML_footnotePr, FSEND );
+            pFS->singleElementNS( XML_w, XML_numFmt, FSNS( XML_w, XML_val ), fmt, FSEND );
+            pFS->endElementNS( XML_w, XML_footnotePr );
+        }
+    }
+    if( m_pAttrOutput->HasEndnotes())
+    {
+        if( const char* fmt = numberingTypeToNumFmt( pDoc->GetEndNoteInfo().aFmt.GetNumberingType()))
+        {
+            pFS->startElementNS( XML_w, XML_endnotePr, FSEND );
+            pFS->singleElementNS( XML_w, XML_numFmt, FSNS( XML_w, XML_val ), fmt, FSEND );
+            pFS->endElementNS( XML_w, XML_endnotePr );
+        }
+    }
 
     pFS->endElementNS( XML_w, XML_settings );
 }
