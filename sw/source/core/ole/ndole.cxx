@@ -169,8 +169,8 @@ public:
     virtual             ~SwEmbedObjectLink();
 
     virtual void        Closed();
-    virtual void        DataChanged( const String& rMimeType,
-                                const uno::Any & rValue );
+    virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
+        const String& rMimeType, const ::com::sun::star::uno::Any & rValue );
 
     sal_Bool            Connect() { return GetRealObject() != NULL; }
 };
@@ -192,8 +192,8 @@ SwEmbedObjectLink::~SwEmbedObjectLink()
 
 // -----------------------------------------------------------------------------
 
-void SwEmbedObjectLink::DataChanged( const String& ,
-                                const uno::Any & )
+::sfx2::SvBaseLink::UpdateResult SwEmbedObjectLink::DataChanged(
+    const String&, const uno::Any& )
 {
     if ( !pOleNode->UpdateLinkURL_Impl() )
     {
@@ -222,6 +222,7 @@ void SwEmbedObjectLink::DataChanged( const String& ,
     }
 
     pOleNode->GetNewReplacement();
+    return SUCCESS;
 }
 
 // -----------------------------------------------------------------------------

@@ -94,20 +94,20 @@ void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
 }
 
 
-void SwBaseLink::DataChanged( const String& rMimeType,
-                            const uno::Any & rValue )
+::sfx2::SvBaseLink::UpdateResult SwBaseLink::DataChanged(
+    const String& rMimeType, const uno::Any & rValue )
 {
     if( !pCntntNode )
     {
         OSL_ENSURE(!this, "DataChanged ohne ContentNode" );
-        return ;
+        return ERROR_GENERAL;
     }
 
     SwDoc* pDoc = pCntntNode->GetDoc();
     if( pDoc->IsInDtor() || ChkNoDataFlag() || bIgnoreDataChanged )
     {
         bIgnoreDataChanged = sal_False;
-        return ;
+        return SUCCESS;
     }
 
     sal_uLong nFmt = SotExchange::GetFormatIdFromMimeType( rMimeType );
@@ -135,7 +135,7 @@ void SwBaseLink::DataChanged( const String& rMimeType,
                 pDoc->CallEvent( nEvent, aCallEvent );
             }
         }
-        return;         // das wars!
+        return SUCCESS;         // das wars!
     }
 
     sal_Bool bUpdate = sal_False;
@@ -297,6 +297,8 @@ void SwBaseLink::DataChanged( const String& rMimeType,
         if( pSh && !bLockView )
             pSh->LockView( sal_False );
     }
+
+    return SUCCESS;
 }
 
 sal_Bool SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfNd )
