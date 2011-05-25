@@ -51,6 +51,7 @@
 #include "rtl/ustrbuf.hxx"
 #include "rtl/instance.hxx"
 #include <sal/macros.h>
+#include <salhelper/linkhelper.hxx>
 
 #include "com/sun/star/lang/Locale.hpp"
 
@@ -396,29 +397,19 @@ void PPDDecompressStream::ReadLine( ByteString& o_rLine )
 
 static osl::FileBase::RC resolveLink( const rtl::OUString& i_rURL, rtl::OUString& o_rResolvedURL, rtl::OUString& o_rBaseName, osl::FileStatus::Type& o_rType, int nLinkLevel = 10 )
 {
-    osl::DirectoryItem aLinkItem;
-    osl::FileBase::RC aRet = osl::FileBase::E_None;
+    salhelper::LinkResolver aResolver(osl_FileStatus_Mask_FileName |
+                                      osl_FileStatus_Mask_Type |
+                                      osl_FileStatus_Mask_FileURL);
 
-    if( ( aRet = osl::DirectoryItem::get( i_rURL, aLinkItem ) ) == osl::FileBase::E_None )
+    osl::FileBase::RC aRet = aResolver.fetchFileStatus(i_rURL, nLinkLevel);
+
+    if (aRet  == osl::FileBase::E_None)
     {
-        osl::FileStatus aStatus( osl_FileStatus_Mask_FileName | osl_FileStatus_Mask_Type | osl_FileStatus_Mask_LinkTargetURL );
-        if( ( aRet = aLinkItem.getFileStatus( aStatus ) ) == osl::FileBase::E_None )
-        {
-            if( aStatus.getFileType() == osl::FileStatus::Link )
-            {
-                if( nLinkLevel > 0 )
-                    aRet = resolveLink( aStatus.getLinkTargetURL(), o_rResolvedURL, o_rBaseName, o_rType, nLinkLevel-1 );
-                else
-                    aRet = osl::FileBase::E_MULTIHOP;
-            }
-            else
-            {
-                o_rResolvedURL = i_rURL;
-                o_rBaseName = aStatus.getFileName();
-                o_rType = aStatus.getFileType();
-            }
-        }
+        o_rResolvedURL = aResolver.m_aStatus.getFileURL();
+        o_rBaseName = aResolver.m_aStatus.getFileName();
+        o_rType = aResolver.m_aStatus.getFileType();
     }
+
     return aRet;
 }
 
