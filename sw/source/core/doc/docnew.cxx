@@ -1048,6 +1048,7 @@ void SwDoc::InitTOXTypes()
 SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
 {
     SwDoc* pRet = new SwDoc;
+
     //copy settings
     sal_uInt16 aRangeOfDefaults[] = {
         RES_FRMATR_BEGIN, RES_FRMATR_END-1,
@@ -1058,22 +1059,24 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
         0
     };
 
-    SfxItemSet aNewDefaults( pRet->GetAttrPool(), aRangeOfDefaults );
-
-    sal_uInt16 nWhich;
-    sal_uInt16 nRange = 0;
-    while( aRangeOfDefaults[nRange] != 0)
     {
-        for( nWhich = aRangeOfDefaults[nRange]; nWhich < aRangeOfDefaults[nRange + 1]; ++nWhich )
+        SfxItemSet aNewDefaults( pRet->GetAttrPool(), aRangeOfDefaults );
+
+        sal_uInt16 nWhich;
+        sal_uInt16 nRange = 0;
+        while( aRangeOfDefaults[nRange] != 0)
         {
-            const SfxPoolItem& rSourceAttr = mpAttrPool->GetDefaultItem( nWhich );
-            if( rSourceAttr != pRet->mpAttrPool->GetDefaultItem( nWhich ) )
-                aNewDefaults.Put( rSourceAttr );
+            for( nWhich = aRangeOfDefaults[nRange]; nWhich < aRangeOfDefaults[nRange + 1]; ++nWhich )
+            {
+                const SfxPoolItem& rSourceAttr = mpAttrPool->GetDefaultItem( nWhich );
+                if( rSourceAttr != pRet->mpAttrPool->GetDefaultItem( nWhich ) )
+                    aNewDefaults.Put( rSourceAttr );
+            }
+            nRange += 2;
         }
-        nRange += 2;
+        if( aNewDefaults.Count() )
+            pRet->SetDefault( aNewDefaults );
     }
-    if( aNewDefaults.Count() )
-        pRet->SetDefault( aNewDefaults );
 
     pRet->n32DummyCompatabilityOptions1 = n32DummyCompatabilityOptions1;
     pRet->n32DummyCompatabilityOptions2 = n32DummyCompatabilityOptions2;
@@ -1117,11 +1120,15 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
         pRetShell->DoInitNew();
     }
 
+    pRet->acquire();
+
     //copy content
     pRet->Paste( *this );
 
     // remove the temporary shell if it is there as it was done before
     pRet->SetTmpDocShell( (SfxObjectShell*)NULL );
+
+    pRet->release();
 
     return pRetShell;
 }
