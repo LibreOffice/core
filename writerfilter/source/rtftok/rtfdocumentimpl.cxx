@@ -23,7 +23,20 @@ SvStream& RTFDocumentImpl::Strm()
     return *m_pStream;
 }
 
-void RTFDocumentImpl::resolve(Stream & /*rStream*/)
+void RTFDocumentImpl::resolve(Stream & rStream)
+{
+    switch (resolveParse(rStream))
+    {
+        case ERROR_GROUP_UNDER:
+            OSL_TRACE("%s: unmatched '}'", OSL_THIS_FUNC);
+            break;
+        case ERROR_GROUP_OVER:
+            OSL_TRACE("%s: unmatched '{'", OSL_THIS_FUNC);
+            break;
+    }
+}
+
+int RTFDocumentImpl::resolveParse(Stream & /*rStream*/)
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
     char ch;
@@ -34,10 +47,7 @@ void RTFDocumentImpl::resolve(Stream & /*rStream*/)
         OSL_TRACE("%s: parsing character '%c'", OSL_THIS_FUNC, ch);
 
         if (m_nGroup < 0)
-        {
-            OSL_TRACE("%s: unmatched '}'", OSL_THIS_FUNC);
-            return;
-        }
+            return ERROR_GROUP_UNDER;
         if (m_nInternalState == INTERNAL_BIN)
         {
             OSL_TRACE("%s: TODO, binary internal state", OSL_THIS_FUNC);
@@ -73,9 +83,10 @@ void RTFDocumentImpl::resolve(Stream & /*rStream*/)
     }
 
     if (m_nGroup < 0)
-        OSL_TRACE("%s: unmatched '}'", OSL_THIS_FUNC);
+        return ERROR_GROUP_UNDER;
     else if (m_nGroup > 0)
-        OSL_TRACE("%s: unmatched '{'", OSL_THIS_FUNC);
+        return ERROR_GROUP_OVER;
+    return 0;
 }
 
 ::std::string RTFDocumentImpl::getType() const

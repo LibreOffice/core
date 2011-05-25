@@ -15,6 +15,13 @@ namespace writerfilter {
             INTERNAL_HEX
         };
 
+        enum RTFErrors
+        {
+            ERROR_OK,
+            ERROR_GROUP_UNDER,
+            ERROR_GROUP_OVER
+        };
+
         /// Implementation of the RTFDocument interface.
         class RTFDocumentImpl
             : public RTFDocument
@@ -29,6 +36,8 @@ namespace writerfilter {
 
                 SvStream& Strm();
             private:
+                int resolveParse(Stream & rHandler);
+
                 SvStream* m_pStream;
                 int m_nGroup;
                 RTFInternalState m_nInternalState;
