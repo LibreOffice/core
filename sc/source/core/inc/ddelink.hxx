@@ -68,8 +68,8 @@ public:
     void            Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const;
 
                                             // von SvBaseLink ueberladen:
-    virtual void    DataChanged( const String& rMimeType,
-                                const ::com::sun::star::uno::Any & rValue );
+    virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
+        const String& rMimeType, const ::com::sun::star::uno::Any & rValue );
 
                                             // von SvtBroadcaster ueberladen:
     virtual void    ListenersGone();

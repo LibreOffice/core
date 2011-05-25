@@ -1264,21 +1264,21 @@ void ScExternalRefLink::Closed()
     pMgr->breakLink(mnFileId);
 }
 
-void ScExternalRefLink::DataChanged(const String& /*rMimeType*/, const Any& /*rValue*/)
+::sfx2::SvBaseLink::UpdateResult ScExternalRefLink::DataChanged(const String& /*rMimeType*/, const Any& /*rValue*/)
 {
     if (!mbDoRefresh)
-        return;
+        return SUCCESS;
 
     String aFile, aFilter;
     mpDoc->GetLinkManager()->GetDisplayNames(this, NULL, &aFile, NULL, &aFilter);
     ScExternalRefManager* pMgr = mpDoc->GetExternalRefManager();
 
     if (!pMgr->isFileLoadable(aFile))
-        return;
+        return ERROR_GENERAL;
 
     const String* pCurFile = pMgr->getExternalFileName(mnFileId);
     if (!pCurFile)
-        return;
+        return ERROR_GENERAL;
 
     if (pCurFile->Equals(aFile))
     {
@@ -1294,6 +1294,8 @@ void ScExternalRefLink::DataChanged(const String& /*rMimeType*/, const Any& /*rV
         maFilterName = aFilter;
         aMod.SetDocumentModified();
     }
+
+    return SUCCESS;
 }
 
 void ScExternalRefLink::Edit(Window* pParent, const Link& /*rEndEditHdl*/)

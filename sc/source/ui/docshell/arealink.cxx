@@ -118,14 +118,14 @@ void ScAreaLink::Edit(Window* pParent, const Link& /* rEndEditHdl */ )
     pDlg->StartExecuteModal( LINK( this, ScAreaLink, AreaEndEditHdl ) );
 }
 
-void ScAreaLink::DataChanged( const String&,
-                                       const ::com::sun::star::uno::Any& )
+::sfx2::SvBaseLink::UpdateResult ScAreaLink::DataChanged(
+    const String&, const ::com::sun::star::uno::Any& )
 {
     //  bei bInCreate nichts tun, damit Update gerufen werden kann, um den Status im
     //  LinkManager zu setzen, ohne die Daten im Dokument zu aendern
 
     if (bInCreate)
-        return;
+        return SUCCESS;
 
     sfx2::LinkManager* pLinkManager=pImpl->m_pDocSh->GetDocument()->GetLinkManager();
     if (pLinkManager!=NULL)
@@ -152,6 +152,8 @@ void ScAreaLink::DataChanged( const String&,
 
         Refresh( aFile, aFilter, aArea, GetRefreshDelay() );
     }
+
+    return SUCCESS;
 }
 
 void ScAreaLink::Closed()
