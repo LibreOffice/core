@@ -19,7 +19,8 @@ namespace writerfilter {
         {
             ERROR_OK,
             ERROR_GROUP_UNDER,
-            ERROR_GROUP_OVER
+            ERROR_GROUP_OVER,
+            ERROR_EOF
         };
 
         /// Implementation of the RTFDocument interface.
@@ -37,6 +38,7 @@ namespace writerfilter {
                 SvStream& Strm();
             private:
                 int resolveParse(Stream & rHandler);
+                int resolveKeyword();
 
                 SvStream* m_pStream;
                 int m_nGroup;
