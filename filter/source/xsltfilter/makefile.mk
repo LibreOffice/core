@@ -43,7 +43,7 @@ LIBXSLTINCDIR=external$/libxslt
 CFLAGS+= -I$(SOLARINCDIR)$/$(LIBXSLTINCDIR)
 .ENDIF
 
-SLOFILES=$(SLO)$/XSLTFilter.obj $(SLO)$/LibXSLTTransformer.obj $(SLO)$/fla.obj $(SLO)/OleHandler.obj
+SLOFILES=$(SLO)$/XSLTFilter.obj $(SLO)$/LibXSLTTransformer.obj $(SLO)/OleHandler.obj
 LIBNAME=xsltfilter
 SHL1TARGETDEPN=makefile.mk
 SHL1OBJS=$(SLOFILES)
