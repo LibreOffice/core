@@ -259,6 +259,7 @@ void VCLXWindowImpl::disposing()
     ::com::sun::star::lang::EventObject aEvent;
     aEvent.Source = mrAntiImpl;
 
+    maDockableWindowListeners.disposeAndClear( aEvent );
     maEventListeners.disposeAndClear( aEvent );
     maFocusListeners.disposeAndClear( aEvent );
     maWindowListeners.disposeAndClear( aEvent );
