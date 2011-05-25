@@ -139,7 +139,6 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/gdimtf.hxx>
-#include <tools/unqidx.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/animate.hxx>
 #include <vcl/graph.h>

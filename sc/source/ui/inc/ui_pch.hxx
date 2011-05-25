@@ -92,7 +92,6 @@
 #include <svl/poolitem.hxx>
 #include <vcl/image.hxx>
 #include <vcl/timer.hxx>
-#include <tools/unqidx.hxx>
 #include <vcl/symbol.hxx>
 #include <vcl/fixed.hxx>
 #include <svl/brdcst.hxx>
