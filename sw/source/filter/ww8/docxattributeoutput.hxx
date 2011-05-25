@@ -102,6 +102,8 @@ public:
 
     virtual void FootnoteEndnoteRefTag();
 
+    virtual void SectFootnoteEndnotePr();
+
     /// Output text (inside a run).
     virtual void RunText( const String& rText, rtl_TextEncoding eCharSet = RTL_TEXTENCODING_UTF8 );
 
@@ -604,6 +606,9 @@ public:
 
     /// Output the content of the footnotes.xml resp. endnotes.xml
     void FootnotesEndnotes( bool bFootnotes );
+
+    /// writes the footnotePr/endnotePr (depending on tag) section
+    void WriteFootnoteEndnotePr( ::sax_fastparser::FSHelperPtr fs, int tag, const SwEndNoteInfo& info );
 };
 
 #endif // _DOCXATTRIBUTEOUTPUT_HXX_

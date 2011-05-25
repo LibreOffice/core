@@ -3428,6 +3428,56 @@ void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
 
 }
 
+void DocxAttributeOutput::WriteFootnoteEndnotePr( ::sax_fastparser::FSHelperPtr fs, int tag, const SwEndNoteInfo& info )
+{
+    fs->startElementNS( XML_w, tag, FSEND );
+    const char* fmt = NULL;
+    switch( info.aFmt.GetNumberingType())
+    {
+        case SVX_NUM_CHARS_UPPER_LETTER_N: // fall through, map to upper letters
+        case SVX_NUM_CHARS_UPPER_LETTER:
+            fmt = "upperLetter";
+            break;
+        case SVX_NUM_CHARS_LOWER_LETTER_N: // fall through, map to lower letters
+        case SVX_NUM_CHARS_LOWER_LETTER:
+            fmt = "lowerLetter";
+            break;
+        case SVX_NUM_ROMAN_UPPER:
+            fmt = "upperRoman";
+            break;
+        case SVX_NUM_ROMAN_LOWER:
+            fmt = "lowerRoman";
+            break;
+        case SVX_NUM_ARABIC:
+            fmt = "decimal";
+            break;
+        case SVX_NUM_NUMBER_NONE:
+            fmt = "none";
+            break;
+        case SVX_NUM_CHAR_SPECIAL:
+            fmt = "bullet";
+            break;
+        case SVX_NUM_PAGEDESC:
+        case SVX_NUM_BITMAP:
+        default:
+            break; // no format
+    }
+    if( fmt != NULL )
+        fs->singleElementNS( XML_w, XML_numFmt, FSNS( XML_w, XML_val ), fmt, FSEND );
+    if( info.nFtnOffset != 0 )
+        fs->singleElementNS( XML_w, XML_numStart, FSNS( XML_w, XML_val ),
+            rtl::OString::valueOf( info.nFtnOffset + 1 ).getStr(), FSEND );
+    fs->endElementNS( XML_w, tag );
+}
+
+void DocxAttributeOutput::SectFootnoteEndnotePr()
+{
+    if( HasFootnotes())
+        WriteFootnoteEndnotePr( m_pSerializer, XML_footnotePr, m_rExport.pDoc->GetFtnInfo());
+    if( HasEndnotes())
+        WriteFootnoteEndnotePr( m_pSerializer, XML_endnotePr, m_rExport.pDoc->GetEndNoteInfo());
+}
+
 void DocxAttributeOutput::ParaLineSpacing_Impl( short nSpace, short nMulti )
 {
     if ( !m_pParagraphSpacingAttrList )

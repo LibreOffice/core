@@ -648,33 +648,6 @@ void DocxExport::WriteProperties( )
     m_pFilter->exportDocumentProperties( xDocProps );
 }
 
-static const char* numberingTypeToNumFmt( int type )
-{
-    switch( type )
-    {
-        case SVX_NUM_CHARS_UPPER_LETTER_N: // fall through, map to upper letters
-        case SVX_NUM_CHARS_UPPER_LETTER:
-            return "upperLetter";
-        case SVX_NUM_CHARS_LOWER_LETTER_N: // fall through, map to lower letters
-        case SVX_NUM_CHARS_LOWER_LETTER:
-            return "lowerLetter";
-        case SVX_NUM_ROMAN_UPPER:
-            return "upperRoman";
-        case SVX_NUM_ROMAN_LOWER:
-            return "lowerRoman";
-        case SVX_NUM_ARABIC:
-            return "decimal";
-        case SVX_NUM_NUMBER_NONE:
-            return "none";
-        case SVX_NUM_CHAR_SPECIAL:
-            return "bullet";
-        case SVX_NUM_PAGEDESC:
-        case SVX_NUM_BITMAP:
-        default:
-            return NULL;
-    }
-}
-
 void DocxExport::WriteSettings()
 {
     if( !settings.hasData() && !m_pAttrOutput->HasFootnotes() && !m_pAttrOutput->HasEndnotes())
@@ -696,27 +669,9 @@ void DocxExport::WriteSettings()
         pFS->singleElementNS( XML_w, XML_evenAndOddHeaders, FSEND );
 
     if( m_pAttrOutput->HasFootnotes())
-    {
-        const SwFtnInfo& ftnInfo = pDoc->GetFtnInfo();
-        pFS->startElementNS( XML_w, XML_footnotePr, FSEND );
-        if( const char* fmt = numberingTypeToNumFmt( ftnInfo.aFmt.GetNumberingType()))
-            pFS->singleElementNS( XML_w, XML_numFmt, FSNS( XML_w, XML_val ), fmt, FSEND );
-        if( ftnInfo.nFtnOffset != 0 )
-            pFS->singleElementNS( XML_w, XML_numStart, FSNS( XML_w, XML_val ),
-                rtl::OString::valueOf( ftnInfo.nFtnOffset + 1 ).getStr(), FSEND );
-        pFS->endElementNS( XML_w, XML_footnotePr );
-    }
+        m_pAttrOutput->WriteFootnoteEndnotePr( pFS, XML_footnotePr, pDoc->GetFtnInfo());
     if( m_pAttrOutput->HasEndnotes())
-    {
-        const SwEndNoteInfo& endnoteInfo = pDoc->GetEndNoteInfo();
-        pFS->startElementNS( XML_w, XML_endnotePr, FSEND );
-        if( const char* fmt = numberingTypeToNumFmt( endnoteInfo.aFmt.GetNumberingType()))
-            pFS->singleElementNS( XML_w, XML_numFmt, FSNS( XML_w, XML_val ), fmt, FSEND );
-        if( endnoteInfo.nFtnOffset != 0 )
-            pFS->singleElementNS( XML_w, XML_numStart, FSNS( XML_w, XML_val ),
-                rtl::OString::valueOf( endnoteInfo.nFtnOffset + 1 ).getStr(), FSEND );
-        pFS->endElementNS( XML_w, XML_endnotePr );
-    }
+        m_pAttrOutput->WriteFootnoteEndnotePr( pFS, XML_endnotePr, pDoc->GetEndNoteInfo());
 
     pFS->endElementNS( XML_w, XML_settings );
 }
