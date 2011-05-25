@@ -36,12 +36,14 @@ namespace writerfilter {
                 virtual ::std::string getType() const;
 
                 SvStream& Strm();
+                Stream& Mapper();
             private:
                 int resolveParse();
                 int resolveKeyword();
                 int resolveChars(char ch);
 
-                SvStream* m_pStream;
+                SvStream* m_pInStream;
+                Stream* m_pMapperStream;
                 int m_nGroup;
                 RTFInternalState m_nInternalState;
         };

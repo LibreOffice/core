@@ -1,8 +1,13 @@
 #include <rtfdocumentimpl.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <rtl/strbuf.hxx>
+#include <rtl/ustrbuf.hxx>
 
+using rtl::OString;
 using rtl::OStringBuffer;
+using rtl::OUString;
+using rtl::OUStringBuffer;
+using rtl::OUStringToOString;
 
 namespace writerfilter {
 namespace rtftok {
@@ -14,7 +19,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<io::XInputStream> const& xInputS
     OSL_ENSURE(xInputStream.is(), "no input stream");
     if (!xInputStream.is())
         throw uno::RuntimeException();
-    m_pStream = utl::UcbStreamHelper::CreateStream( xInputStream, sal_True );
+    m_pInStream = utl::UcbStreamHelper::CreateStream( xInputStream, sal_True );
 }
 
 RTFDocumentImpl::~RTFDocumentImpl()
@@ -23,11 +28,17 @@ RTFDocumentImpl::~RTFDocumentImpl()
 
 SvStream& RTFDocumentImpl::Strm()
 {
-    return *m_pStream;
+    return *m_pInStream;
 }
 
-void RTFDocumentImpl::resolve(Stream & /*rStream*/)
+Stream& RTFDocumentImpl::Mapper()
 {
+    return *m_pMapperStream;
+}
+
+void RTFDocumentImpl::resolve(Stream & rMapper)
+{
+    m_pMapperStream = &rMapper;
     switch (resolveParse())
     {
         case ERROR_GROUP_UNDER:
@@ -44,7 +55,7 @@ void RTFDocumentImpl::resolve(Stream & /*rStream*/)
 
 int RTFDocumentImpl::resolveChars(char ch)
 {
-    OSL_TRACE("%s", OSL_THIS_FUNC);
+    OSL_TRACE("%s start", OSL_THIS_FUNC);
     OStringBuffer aBuf;
 
     while(!Strm().IsEof() && ch != '{' && ch != '}' && ch != '\\')
@@ -55,8 +66,14 @@ int RTFDocumentImpl::resolveChars(char ch)
     }
     if (!Strm().IsEof())
         Strm().SeekRel(-1);
-    OSL_TRACE("%s: TODO handle chars '%s'", OSL_THIS_FUNC,
-            aBuf.makeStringAndClear().getStr());
+    OString aStr = aBuf.makeStringAndClear();
+    OSL_TRACE("%s: collected '%s'", OSL_THIS_FUNC, aStr.getStr());
+
+    // TODO encoding handling
+    OUString aOUStr(OStringToOUString(aStr, RTL_TEXTENCODING_UTF8));
+
+    Mapper().utext(reinterpret_cast<sal_uInt8 const*>(aOUStr.getStr()), aOUStr.getLength());
+
     return 0;
 }
 
