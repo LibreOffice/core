@@ -24,10 +24,12 @@ SvStream& RTFDocumentImpl::Strm()
 void RTFDocumentImpl::resolve(Stream & /*rStream*/)
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
-    int ch;
+    char ch;
 
-    Strm() >> ch;
-    OSL_TRACE("%c", ch);
+    while (!Strm().IsEof()) {
+        Strm() >> ch;
+        OSL_TRACE("%c", ch);
+    }
 }
 
 ::std::string RTFDocumentImpl::getType() const
