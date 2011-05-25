@@ -25,6 +25,7 @@ install:
 dev-install:
 	@. ./*Env.Set.sh && \
         cd smoketestoo_native && \
+		export SAL_USE_VCLPLUGIN="svp" && \
 		build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@ && \
 		cd @abs_builddir@ && ln -s $(SOLARVER)/$(INPATH)/installation/opt/ install && \
 		echo "$(SOLARVER)/$(INPATH)" && \
