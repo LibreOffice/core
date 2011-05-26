@@ -39,6 +39,13 @@ namespace writerfilter {
             CONTROL_VALUE // eg \fs (requires parameter)
         };
 
+        class RTFParserState
+        {
+            public:
+                RTFInternalState nInternalState;
+                RTFDesitnationState nDestinationState;
+        };
+
         /// Implementation of the RTFDocument interface.
         class RTFDocumentImpl
             : public RTFDocument
@@ -64,8 +71,7 @@ namespace writerfilter {
                 SvStream* m_pInStream;
                 Stream* m_pMapperStream;
                 int m_nGroup;
-                RTFInternalState m_nInternalState;
-                RTFDesitnationState m_nDestinationState;
+                RTFParserState m_aState;
         };
     } // namespace rtftok
 } // namespace writerfilter
