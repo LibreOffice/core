@@ -13,7 +13,7 @@ using rtl::OUStringToOString;
 namespace writerfilter {
 namespace rtftok {
 
-extern RTFSymbol* aRTFControlWords;
+extern RTFSymbol aRTFControlWords[];
 extern int nRTFControlWords;
 
 RTFDocumentImpl::RTFDocumentImpl(uno::Reference<io::XInputStream> const& xInputStream)
@@ -90,8 +90,10 @@ int RTFDocumentImpl::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
             rKeyword.getStr(), (bParam ? 1 : 0), (bParam ? nParam : 0));
     int i;
     for (i = 0; i < nRTFControlWords; i++)
+    {
         if (!strcmp(rKeyword.getStr(), aRTFControlWords[i].sKeyword))
             break;
+    }
     if (i == nRTFControlWords)
     {
         OSL_TRACE("%s: unknown keyword '\\%s'", OSL_THIS_FUNC, rKeyword.getStr());
