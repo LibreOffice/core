@@ -45,11 +45,7 @@ static char *pt (unsigned char *md, int length)
 /*
  * main.
  */
-#ifdef WIN32
-int __cdecl main (void)
-#else
-int main (void)
-#endif
+int SAL_CALL main (void)
 {
     rtlRandomPool pool;
     pool = rtl_random_createPool();

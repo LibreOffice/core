@@ -179,11 +179,7 @@ void testConnection( const OUString &sConnectionDescription  ,
 }
 
 
-#if (defined UNX)
-int main( int argc, char * argv[] )
-#else
-int __cdecl main( int argc, char * argv[] )
-#endif
+int SAL_CALL main( int argc, char * argv[] )
 {
     Reference< XMultiServiceFactory > xMgr(
         createRegistryServiceFactory( OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")) ) );
