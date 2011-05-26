@@ -311,36 +311,6 @@ String STR_ObjNamePluralTEXTLNK
 {
     Text [ en-US ] = "Linked text frames" ;
 };
- //String STR_ObjNameSingulXTXT {
- //    Text="Textfortsetzungsrahmen";
- //    Text[ENGLISH]="drawobject";
- //    Text[norwegian]="Tegneobjekt";
- //    Text[italian]="Disegna oggetto";
- //    Text[portuguese_brazilian]="Desenhar objeto";
- //    Text[portuguese]="Desenhar objecto";
- //    Text[finnish]="Piirto-objekti";
- //    Text[danish]="Tegneobjekt";
- //    Text[french]="Drawobject";
- //    Text[swedish]="Ritobjekt";
- //    Text[dutch]="Tekenobject";
- //    Text[spanish]="Objeto de dibujo";
- //    Text[english_us]="drawobject";
- //};
- //String STR_ObjNamePluralXTXT {
- //    Text="Textfortsetzungsrahmen";
- //    Text[ENGLISH]="drawobjects";
- //    Text[norwegian]="Tegneobjektr";
- //    Text[italian]="Disegna  oggetti";
- //    Text[portuguese_brazilian]="Desenhar objetos";
- //    Text[portuguese]="Desenhar objectos";
- //    Text[finnish]="Piirto-objektit";
- //    Text[danish]="Tegneobjekter";
- //    Text[french]="Drawobjects";
- //    Text[swedish]="Ritobjekt";
- //    Text[dutch]="Tekenobjecten";
- //    Text[spanish]="Objetos de dibujo";
- //    Text[english_us]="drawobjects";
- //};
 String STR_ObjNameSingulFITTEXT
 {
     Text [ en-US ] = "Fit-to-size text object" ;
@@ -2760,7 +2730,6 @@ Bitmap SIP_SA_FINE_MARKERS
     File = "markers2.png";
 };
 
-// #100499#
 Bitmap BMP_SVXOLEOBJ
 {
     File = "oleobj.png" ;

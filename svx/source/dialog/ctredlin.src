@@ -115,7 +115,6 @@ TabPage SID_REDLIN_FILTER_PAGE
             MASKCOLOR
         };
         // IAccessibility2 implementation 2009. ------
-        //QuickHelpText [ en-US ] = "Set Date/Time" ;
         QuickHelpText [ en-US ] = "Set Start Date/Time" ;
         // ------ IAccessibility2 implementation 2009.
     };
@@ -174,7 +173,6 @@ TabPage SID_REDLIN_FILTER_PAGE
             MASKCOLOR
         };
         // IAccessibility2 implementation 2009. ------
-        //QuickHelpText [ en-US ] = "Set Date/Time" ;
         QuickHelpText [ en-US ] = "Set End Date/Time" ;
         // ------ IAccessibility2 implementation 2009.
     };
