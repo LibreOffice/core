@@ -340,11 +340,7 @@ static ComponentInfo aComponentInfos [] =
 
 extern "C"
 {
-static int
-#if defined( WNT )
- __cdecl
-#endif
-     ComponentInfoCompare( const void* pFirst, const void* pSecond)
+static int SAL_CALL ComponentInfoCompare( const void* pFirst, const void* pSecond)
 {
     return( strcmp( ((ComponentInfo*)pFirst)->pName,
                     ((ComponentInfo*)pSecond)->pName ) );

@@ -1187,11 +1187,7 @@ static RTF_TokenEntry aRTFTokenTab[] = {
 
 
 extern "C" {
-static int
-#if defined( WNT )
- __cdecl
-#endif
-    RTFKeyCompare( const void *pFirst, const void *pSecond)
+static int SAL_CALL RTFKeyCompare( const void *pFirst, const void *pSecond)
 {
     int nRet = 0;
     if( -1 == ((RTF_TokenEntry*)pFirst)->nToken )

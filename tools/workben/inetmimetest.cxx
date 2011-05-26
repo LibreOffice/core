@@ -55,11 +55,7 @@ bool testDecode(char const * input, char const * expected) {
 
 }
 
-int
-#if defined WNT
-__cdecl
-#endif
-main() {
+int SAL_CALL main() {
     bool success = true;
     success &= testDecode("=?iso-8859-1?B?QQ==?=", "A");
     success &= testDecode("=?iso-8859-1?B?QUI=?=", "AB");

@@ -45,18 +45,11 @@
 /****************** C o d e **********************************************/
 /****************** keyword sort function ********************************/
 extern "C" {
-#if defined( WNT ) && !defined (ICC)
-    int _cdecl KeyCompare( const void * pFirst, const void * pSecond );
-#else
-    int KeyCompare( const void * pFirst, const void * pSecond );
-#endif
+    int SAL_CALL KeyCompare( const void * pFirst, const void * pSecond );
 }
 
-#if defined( WNT ) && !defined(ICC)
-int _cdecl KeyCompare( const void * pFirst, const void * pSecond ){
-#else
-int KeyCompare( const void * pFirst, const void * pSecond ){
-#endif
+int SAL_CALL KeyCompare( const void * pFirst, const void * pSecond )
+{
     if( ((KEY_STRUCT *)pFirst)->nName > ((KEY_STRUCT *)pSecond)->nName )
         return( 1 );
     else if( ((KEY_STRUCT *)pFirst)->nName < ((KEY_STRUCT *)pSecond)->nName )
