@@ -581,7 +581,14 @@ private:
 
     const sw::Frame *m_pParentFrame;
     // close of hyperlink needed
-    bool m_bCloseHyperlink;
+    enum HyperLinkCloseState
+    {
+        Undetected = 0,
+        Detected,
+        EndInPrevRun,
+        EndInThisRun
+    };
+    HyperLinkCloseState m_nCloseHyperlinkStatus;
 
 public:
     DocxAttributeOutput( DocxExport &rExport, ::sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML );

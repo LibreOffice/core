@@ -514,6 +514,8 @@ void DocxAttributeOutput::StartRun( const SwRedlineData* pRedlineData )
 
 void DocxAttributeOutput::EndRun()
 {
+    if ( m_nCloseHyperlinkStatus == Detected )
+        m_nCloseHyperlinkStatus = EndInThisRun;
     // Write field starts
     for ( std::vector<FieldInfos>::iterator pIt = m_Fields.begin(); pIt != m_Fields.end(); ++pIt )
     {
@@ -546,6 +548,11 @@ void DocxAttributeOutput::EndRun()
 
         m_pSerializer->startElementNS( XML_w, XML_hyperlink, xAttrList );
         m_pHyperlinkAttrList = NULL;
+    }
+    if ( m_nCloseHyperlinkStatus == EndInPrevRun)
+    {
+        m_pSerializer->endElementNS( XML_w, XML_hyperlink );
+        m_nCloseHyperlinkStatus = Undetected;
     }
 
     // Write the hyperlink and toc fields starts
@@ -580,11 +587,10 @@ void DocxAttributeOutput::EndRun()
         EndField_Impl( m_Fields.front( ) );
         m_Fields.erase( m_Fields.begin( ) );
     }
-
-    if ( m_bCloseHyperlink )
+    if ( m_nCloseHyperlinkStatus == EndInThisRun)
     {
         m_pSerializer->endElementNS( XML_w, XML_hyperlink );
-        m_bCloseHyperlink = false;
+        m_nCloseHyperlinkStatus = Undetected;
     }
 
     // if there is some redlining in the document, output it
@@ -1005,6 +1011,8 @@ static void impl_WriteRunText( FSHelperPtr pSerializer, sal_Int32 nTextToken,
 
 void DocxAttributeOutput::RunText( const String& rText, rtl_TextEncoding /*eCharSet*/ )
 {
+    if ( m_nCloseHyperlinkStatus == Detected )
+        m_nCloseHyperlinkStatus = EndInPrevRun;
     OUString aText( rText );
 
     // one text can be split into more <w:t>blah</w:t>'s by line breaks etc.
@@ -1192,7 +1200,7 @@ bool DocxAttributeOutput::StartURL( const String& rUrl, const String& rTarget )
 
 bool DocxAttributeOutput::EndURL()
 {
-    m_bCloseHyperlink = true;
+    m_nCloseHyperlinkStatus = Detected;
     return true;
 }
 
@@ -4211,7 +4219,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_bParagraphOpened( false ),
       m_nColBreakStatus( COLBRK_NONE ),
       m_pParentFrame( NULL ),
-      m_bCloseHyperlink( false )
+      m_nCloseHyperlinkStatus( Undetected )
 {
 }
 
