@@ -893,8 +893,12 @@ bool WW8AttributeOutput::StartURL( const String &rUrl, const String &rTarget )
     // now write the picture structur
     sURL = aURL.GetURLNoMark();
 
-    //all links end up in the data stream as absolute references.
-    bool bAbsolute = !bBookMarkOnly;
+    // Compare the URL written by AnalyzeURL with the original one to see if
+    // the output URL is absolute or relative.
+    String sRelativeURL;
+    if ( rUrl.Len() )
+        sRelativeURL = URIHelper::simpleNormalizedMakeRelative( m_rWW8Export.GetWriter().GetBaseURL(), rUrl );
+    bool bAbsolute = sRelativeURL.Equals( rUrl );
 
     static sal_uInt8 aURLData1[] = {
         0,0,0,0,        // len of struct
@@ -912,11 +916,14 @@ bool WW8AttributeOutput::StartURL( const String &rUrl, const String &rTarget )
     };
 
     m_rWW8Export.pDataStrm->Write( aURLData1, sizeof( aURLData1 ) );
+    /* Write HFD Structure */
     sal_uInt8 nAnchor = 0x00;
     if ( sMark.Len() )
         nAnchor = 0x08;
-    m_rWW8Export.pDataStrm->Write( &nAnchor, 1 );
-    m_rWW8Export.pDataStrm->Write( MAGIC_A, sizeof(MAGIC_A) );
+    m_rWW8Export.pDataStrm->Write( &nAnchor, 1 ); // HFDBits
+    m_rWW8Export.pDataStrm->Write( MAGIC_A, sizeof(MAGIC_A) ); //clsid
+
+    /* Write Hyperlink Object see [MS-OSHARED] spec*/
     SwWW8Writer::WriteLong( *m_rWW8Export.pDataStrm, 0x00000002);
     sal_uInt32 nFlag = bBookMarkOnly ? 0 : 0x01;
     if ( bAbsolute )
