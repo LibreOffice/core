@@ -469,8 +469,11 @@ void ScDPObject::CreateObjects()
         {
             DBG_ASSERT( !pServDesc, "DPSource could not be created" );
             ScDPTableData* pData = GetTableData();
-            ScDPSource* pSource = new ScDPSource( pData );
-            xSource = pSource;
+            if (pData)
+            {
+                ScDPSource* pSource = new ScDPSource( pData );
+                xSource = pSource;
+            }
         }
 
         if (pSaveData)
@@ -1848,6 +1851,9 @@ sal_Bool ScDPObject::FillOldParam(ScPivotParam& rParam) const
 {
     ((ScDPObject*)this)->CreateObjects();       // xSource is needed for field numbers
 
+    if (!xSource.is())
+        return false;
+
     rParam.nCol = aOutRange.aStart.Col();
     rParam.nRow = aOutRange.aStart.Row();
     rParam.nTab = aOutRange.aStart.Tab();
@@ -1941,6 +1947,8 @@ sal_Bool ScDPObject::FillLabelData(ScPivotParam& rParam)
     rParam.maLabelArray.clear();
 
     ((ScDPObject*)this)->CreateObjects();
+    if (!xSource.is())
+        return false;
 
     uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
     uno::Reference<container::XIndexAccess> xDims = new ScNameToIndexAccess( xDimsName );
