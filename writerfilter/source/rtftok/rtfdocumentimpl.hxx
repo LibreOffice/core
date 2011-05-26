@@ -15,6 +15,13 @@ namespace writerfilter {
             INTERNAL_HEX
         };
 
+        /// Are we skipping an unknown destination?
+        enum RTFDesitnationState
+        {
+            DESTINATION_NORMAL,
+            DESTINATION_SKIP
+        };
+
         enum RTFErrors
         {
             ERROR_OK,
@@ -58,6 +65,7 @@ namespace writerfilter {
                 Stream* m_pMapperStream;
                 int m_nGroup;
                 RTFInternalState m_nInternalState;
+                RTFDesitnationState m_nDestinationState;
         };
     } // namespace rtftok
 } // namespace writerfilter

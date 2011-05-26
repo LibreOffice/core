@@ -18,7 +18,8 @@ extern int nRTFControlWords;
 
 RTFDocumentImpl::RTFDocumentImpl(uno::Reference<io::XInputStream> const& xInputStream)
     : m_nGroup(0),
-    m_nInternalState(INTERNAL_NORMAL)
+    m_nInternalState(INTERNAL_NORMAL),
+    m_nDestinationState(DESTINATION_NORMAL)
 {
     OSL_ENSURE(xInputStream.is(), "no input stream");
     if (!xInputStream.is())
@@ -86,6 +87,8 @@ int RTFDocumentImpl::resolveChars(char ch)
 
 int RTFDocumentImpl::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
 {
+    if (m_nDestinationState == DESTINATION_SKIP)
+        return 0;
     OSL_TRACE("%s: keyword '\\%s' with param? %d param val: '%d'", OSL_THIS_FUNC,
             rKeyword.getStr(), (bParam ? 1 : 0), (bParam ? nParam : 0));
     int i;
@@ -97,7 +100,7 @@ int RTFDocumentImpl::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
     if (i == nRTFControlWords)
     {
         OSL_TRACE("%s: unknown keyword '\\%s'", OSL_THIS_FUNC, rKeyword.getStr());
-        // TODO handle when this was after a \*
+        // TODO when an unknown keyword starts with \*, then it's a destination
         return 0;
     }
 
@@ -108,6 +111,8 @@ int RTFDocumentImpl::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
             break;
         case CONTROL_DESTINATION:
             OSL_TRACE("%s: TODO handle destination '%s'", OSL_THIS_FUNC, rKeyword.getStr());
+            // Make sure we skip destinations till we don't handle them
+            m_nDestinationState = DESTINATION_SKIP;
             break;
         case CONTROL_SYMBOL:
             OSL_TRACE("%s: TODO handle symbol '%s'", OSL_THIS_FUNC, rKeyword.getStr());
