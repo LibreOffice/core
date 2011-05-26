@@ -4,7 +4,7 @@
 namespace writerfilter {
 namespace rtftok {
 
-RTFSymbol pRTFControlWords[] = {
+RTFSymbol aRTFControlWords[] = {
     // sKeyword  nControlType
     {"'", CONTROL_SYMBOL},
     {"-", CONTROL_SYMBOL},
@@ -1820,6 +1820,7 @@ RTFSymbol pRTFControlWords[] = {
     {"zwnbo", CONTROL_SYMBOL},
     {"zwnj", CONTROL_SYMBOL}
 };
+int nRTFControlWords = sizeof(aRTFControlWords) / sizeof(RTFSymbol);
 
 } // namespace rtftok
 } // namespace writerfilter

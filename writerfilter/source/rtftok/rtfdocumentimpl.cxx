@@ -13,7 +13,8 @@ using rtl::OUStringToOString;
 namespace writerfilter {
 namespace rtftok {
 
-extern RTFSymbol* pRTFControlWords;
+extern RTFSymbol* aRTFControlWords;
+extern int nRTFControlWords;
 
 RTFDocumentImpl::RTFDocumentImpl(uno::Reference<io::XInputStream> const& xInputStream)
     : m_nGroup(0),
@@ -87,6 +88,36 @@ int RTFDocumentImpl::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
 {
     OSL_TRACE("%s: keyword '\\%s' with param? %d param val: '%d'", OSL_THIS_FUNC,
             rKeyword.getStr(), (bParam ? 1 : 0), (bParam ? nParam : 0));
+    int i;
+    for (i = 0; i < nRTFControlWords; i++)
+        if (!strcmp(rKeyword.getStr(), aRTFControlWords[i].sKeyword))
+            break;
+    if (i == nRTFControlWords)
+    {
+        OSL_TRACE("%s: unknown keyword '\\%s'", OSL_THIS_FUNC, rKeyword.getStr());
+        // TODO handle when this was after a \*
+        return 0;
+    }
+
+    switch (aRTFControlWords[i].nControlType)
+    {
+        case CONTROL_FLAG:
+            OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, rKeyword.getStr());
+            break;
+        case CONTROL_DESTINATION:
+            OSL_TRACE("%s: TODO handle destination '%s'", OSL_THIS_FUNC, rKeyword.getStr());
+            break;
+        case CONTROL_SYMBOL:
+            OSL_TRACE("%s: TODO handle symbol '%s'", OSL_THIS_FUNC, rKeyword.getStr());
+            break;
+        case CONTROL_TOGGLE:
+            OSL_TRACE("%s: TODO handle toggle '%s'", OSL_THIS_FUNC, rKeyword.getStr());
+            break;
+        case CONTROL_VALUE:
+            OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, rKeyword.getStr());
+            break;
+    }
+
     return 0;
 }
 
