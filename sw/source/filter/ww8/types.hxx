@@ -31,12 +31,6 @@
 
 #include <vector>
 
-//if part of OOo
-#include "typessw.hxx"
-//else
-//include standalonetypes.hxx
-//endif
-
 namespace ww
 {
     typedef std::vector<sal_uInt8> bytes;
