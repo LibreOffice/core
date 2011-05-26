@@ -23,6 +23,15 @@ namespace writerfilter {
             ERROR_EOF
         };
 
+        enum RTFControlTypes
+        {
+            CONTROL_FLAG, // eg \sbknone takes no parameter
+            CONTROL_DESTINATION, // eg \fonttbl, if ignored, the whole group should be skipped
+            CONTROL_SYMBOL, // eg \tab
+            CONTROL_TOGGLE, // eg \b (between on and off)
+            CONTROL_VALUE // eg \fs (requires parameter)
+        };
+
         /// Implementation of the RTFDocument interface.
         class RTFDocumentImpl
             : public RTFDocument

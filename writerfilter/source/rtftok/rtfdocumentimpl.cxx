@@ -82,7 +82,7 @@ int RTFDocumentImpl::resolveChars(char ch)
 
 int RTFDocumentImpl::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
 {
-    OSL_TRACE("%s: TODO handle keyword '\\%s' with param? %d param val: '%d'", OSL_THIS_FUNC,
+    OSL_TRACE("%s: keyword '\\%s' with param? %d param val: '%d'", OSL_THIS_FUNC,
             rKeyword.getStr(), (bParam ? 1 : 0), (bParam ? nParam : 0));
     return 0;
 }
