@@ -64,6 +64,8 @@ int RTFDocumentImpl::resolveChars(char ch)
     OSL_TRACE("%s start", OSL_THIS_FUNC);
     OStringBuffer aBuf;
 
+    if (m_aStates.top().nDestinationState == DESTINATION_SKIP)
+        return 0;
     while(!Strm().IsEof() && ch != '{' && ch != '}' && ch != '\\')
     {
         if (ch != 0x0d && ch != 0x0a)
