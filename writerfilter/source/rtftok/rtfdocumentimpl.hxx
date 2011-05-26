@@ -40,6 +40,7 @@ namespace writerfilter {
             private:
                 int resolveParse();
                 int resolveKeyword();
+                int dispatchKeyword(rtl::OString& rKeyword, bool bParam, int nParam);
                 int resolveChars(char ch);
 
                 SvStream* m_pInStream;

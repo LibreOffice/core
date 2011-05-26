@@ -77,14 +77,21 @@ int RTFDocumentImpl::resolveChars(char ch)
     return 0;
 }
 
+int RTFDocumentImpl::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
+{
+    OSL_TRACE("%s: TODO handle keyword '\\%s' with param? %d param val: '%d'", OSL_THIS_FUNC,
+            rKeyword.getStr(), (bParam ? 1 : 0), (bParam ? nParam : 0));
+    return 0;
+}
+
 int RTFDocumentImpl::resolveKeyword()
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
     char ch;
-    OStringBuffer aKeyword;
+    OStringBuffer aBuf;
     bool bNeg = false;
     bool bParam = false;
-    int nParam;
+    int nParam = 0;
 
     Strm() >> ch;
     if (Strm().IsEof())
@@ -92,14 +99,15 @@ int RTFDocumentImpl::resolveKeyword()
 
     if (!isalpha(ch))
     {
-        aKeyword.append(ch);
-        // control symbols aren't followed by a space
-        OSL_TRACE("%s: TODO handle keyword '\\%c'", OSL_THIS_FUNC, ch);
-        return 0;
+        aBuf.append(ch);
+        OString aKeyword = aBuf.makeStringAndClear();
+        // control symbols aren't followed by a space, so we can return here
+        // without doing any SeekRel()
+        return dispatchKeyword(aKeyword, bParam, nParam);
     }
     while(isalpha(ch))
     {
-        aKeyword.append(ch);
+        aBuf.append(ch);
         Strm() >> ch;
     }
 
@@ -128,9 +136,8 @@ int RTFDocumentImpl::resolveKeyword()
     }
     if (ch != ' ')
         Strm().SeekRel(-1);
-    OSL_TRACE("%s: TODO handle keyword '%s' with param? %d param val: '%d'", OSL_THIS_FUNC,
-            aKeyword.makeStringAndClear().getStr(), (bParam ? 1 : 0), (bParam ? nParam : 0));
-    return 0;
+    OString aKeyword = aBuf.makeStringAndClear();
+    return dispatchKeyword(aKeyword, bParam, nParam);
 }
 
 int RTFDocumentImpl::resolveParse()
