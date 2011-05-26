@@ -53,9 +53,6 @@ namespace XmlSec
         if( !pResMgr )
         {
             ByteString  aName( "xmlsec" );
-//          pResMgr = ResMgr::CreateResMgr( aName.GetBuffer(), Application::GetSettings().GetUILanguage() );
-//          LanguageType    aLang( LANGUAGE_ENGLISH_US );
-//          pResMgr = ResMgr::CreateResMgr( aName.GetBuffer(), aLang );
 // MT: Change to Locale
             pResMgr = ResMgr::CreateResMgr( aName.GetBuffer() );
         }
