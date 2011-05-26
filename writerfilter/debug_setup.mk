@@ -8,5 +8,6 @@ $(if $(filter-out 0 1,$(strip $(gb_DEBUGLEVEL))),\
     -DDEBUG_PROPERTIES \
     -DDEBUG_CONTEXT_HANDLER \
     -DDEBUG_IMPORT \
+    -DDEBUG_LOGGING \
 )
 endef
