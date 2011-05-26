@@ -289,11 +289,12 @@ private:
     uno::Reference< uno::XComponentContext > m_xContext;
     ScDocument *m_pDoc;
     ScDocShellRef m_xDocShRef;
-    ::rtl::OUString m_aPWDURL;
+    ::rtl::OUString m_aSrcRoot;
 };
 
 Test::Test()
     : m_pDoc(0)
+    , m_aSrcRoot(RTL_CONSTASCII_USTRINGPARAM("file://"))
 {
     m_xContext = cppu::defaultBootstrap_InitialComponentContext();
 
@@ -333,8 +334,14 @@ Test::Test()
     InitVCL(xSM);
     ScDLL::Init();
 
-    oslProcessError err = osl_getProcessWorkingDir(&m_aPWDURL.pData);
-    CPPUNIT_ASSERT_MESSAGE("no PWD!", err == osl_Process_E_None);
+    const char* pSrcRoot = getenv( "SRC_ROOT" );
+    CPPUNIT_ASSERT_MESSAGE("SRC_ROOT env variable not set", pSrcRoot != NULL && pSrcRoot[0] != 0);
+
+#ifdef WNT
+    if (pSrcRoot[1] == ':')
+        m_aSrcRoot += rtl::OUString::createFromAscii( "/" );
+#endif
+    m_aSrcRoot += rtl::OUString::createFromAscii( pSrcRoot );
 }
 
 void Test::setUp()
@@ -577,10 +584,10 @@ void Test::recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL
 void Test::testCVEs()
 {
     recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
-        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/qa/unit/data/qpro/pass")), true);
+        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/calc/sc/qa/unit/data/qpro/pass")), true);
 
     recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
-        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/qa/unit/data/qpro/fail")), false);
+        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/calc/sc/qa/unit/data/qpro/fail")), false);
 }
 
 template<typename Evaluator>
