@@ -95,13 +95,7 @@ void XmlSecStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
 void XmlSecStatusBarControl::Command( const CommandEvent& rCEvt )
 {
     // can / has to be done when integrated in Office!
-//  if( rCEvt.GetCommand() == .... )
-    if( false )
-    {
-//      GetBindings().GetDispatcher()->Execute( SID_PSZ_FUNCTION, SFX_CALLMODE_RECORD, &aItem, 0L );
-    }
-    else
-        SfxStatusBarControl::Command( rCEvt );
+    SfxStatusBarControl::Command( rCEvt );
 }
 
 void XmlSecStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
