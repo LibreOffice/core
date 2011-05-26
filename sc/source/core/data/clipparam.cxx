@@ -175,7 +175,7 @@ void ScClipParam::transpose()
         SCCOL nColOrigin = p->aStart.Col();
         SCROW nRowOrigin = p->aStart.Row();
 
-        for ( size_t i = 1, n = maRanges.size(); i < n; ++i )
+        for ( size_t i = 0, n = maRanges.size(); i < n; ++i )
         {
             p = maRanges[ i ];
             SCCOL nColDelta = p->aStart.Col() - nColOrigin;
