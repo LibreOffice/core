@@ -70,6 +70,15 @@ sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescri
     else if ( m_xDstDoc.is() )
     {
         MediaDescriptor aMediaDesc( aDescriptor );
+#ifdef DEBUG_IMPORT
+        OUString sURL = aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_URL(), OUString() );
+        ::std::string sURLc = OUStringToOString(sURL, RTL_TEXTENCODING_ASCII_US).getStr();
+
+        writerfilter::TagLogger::Pointer_t dmapperLogger
+        (writerfilter::TagLogger::getInstance("DOMAINMAPPER"));
+        dmapperLogger->setFileName(sURLc);
+        dmapperLogger->startDocument();
+#endif
         uno::Reference< io::XInputStream > xInputStream;
 
         aMediaDesc.addInputStream();
@@ -80,6 +89,9 @@ sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescri
         writerfilter::rtftok::RTFDocument::Pointer_t const pDocument(
                 writerfilter::rtftok::RTFDocumentFactory::createDocument(xInputStream) );
         pDocument->resolve(*pStream);
+#ifdef DEBUG_IMPORT
+    dmapperLogger->endDocument();
+#endif
         return sal_True;
     }
     return sal_False;
