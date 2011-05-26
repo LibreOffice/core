@@ -90,7 +90,7 @@ sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescri
                 writerfilter::rtftok::RTFDocumentFactory::createDocument(xInputStream) );
         pDocument->resolve(*pStream);
 #ifdef DEBUG_IMPORT
-    dmapperLogger->endDocument();
+        dmapperLogger->endDocument();
 #endif
         return sal_True;
     }
