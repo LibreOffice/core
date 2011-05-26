@@ -1068,7 +1068,7 @@ if ($platform =~ m/cygwin/)
       }
       $ILIB       .= $wps.PathFormat("@MINGW_CLIB_DIR@").
                      $wps.$WINDOWS_SDK_HOME.$LIB;
-      if ( '@ENABLE_DIRETX@' )
+      if ( '@ENABLE_DIRECTX@' )
       {   $ILIB   .= $wps.PathFormat("@DIRECTXSDK_LIB@");
       }
    }
