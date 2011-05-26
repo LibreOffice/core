@@ -42,6 +42,8 @@ namespace writerfilter {
                 int resolveKeyword();
                 int dispatchKeyword(rtl::OString& rKeyword, bool bParam, int nParam);
                 int resolveChars(char ch);
+                int pushState();
+                int popState();
 
                 SvStream* m_pInStream;
                 Stream* m_pMapperStream;

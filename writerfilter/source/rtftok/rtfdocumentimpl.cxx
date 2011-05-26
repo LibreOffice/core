@@ -41,6 +41,9 @@ void RTFDocumentImpl::resolve(Stream & rMapper)
     m_pMapperStream = &rMapper;
     switch (resolveParse())
     {
+        case ERROR_OK:
+            OSL_TRACE("%s: finished without errors", OSL_THIS_FUNC);
+            break;
         case ERROR_GROUP_UNDER:
             OSL_TRACE("%s: unmatched '}'", OSL_THIS_FUNC);
             break;
@@ -140,15 +143,36 @@ int RTFDocumentImpl::resolveKeyword()
     return dispatchKeyword(aKeyword, bParam, nParam);
 }
 
+int RTFDocumentImpl::pushState()
+{
+    OSL_TRACE("%s before push: %d", OSL_THIS_FUNC, m_nGroup);
+
+    // TODO save character, paragraph properties etc
+
+    m_nGroup++;
+
+    return 0;
+}
+
+int RTFDocumentImpl::popState()
+{
+    OSL_TRACE("%s before pop: %d", OSL_THIS_FUNC, m_nGroup);
+
+    // TODO restore character, paragraph properties etc
+
+    m_nGroup--;
+
+    return 0;
+}
+
 int RTFDocumentImpl::resolveParse()
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
     char ch;
     int ret;
 
-    while (!Strm().IsEof())
+    while ((Strm() >> ch, !Strm().IsEof()))
     {
-        Strm() >> ch;
         OSL_TRACE("%s: parsing character '%c'", OSL_THIS_FUNC, ch);
 
         if (m_nGroup < 0)
@@ -162,10 +186,12 @@ int RTFDocumentImpl::resolveParse()
             switch (ch)
             {
                 case '{':
-                    OSL_TRACE("%s: TODO, push rtf state", OSL_THIS_FUNC);
+                    if ((ret = pushState()))
+                        return ret;
                     break;
                 case '}':
-                    OSL_TRACE("%s: TODO, pop rtf state", OSL_THIS_FUNC);
+                    if ((ret = popState()))
+                        return ret;
                     break;
                 case '\\':
                     if ((ret = resolveKeyword()))
