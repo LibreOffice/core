@@ -29,15 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 
-#ifndef EXTENSIONS_SOURCE_RESOURCE_OOORESOURCELOADER_CXX
-#define EXTENSIONS_SOURCE_RESOURCE_OOORESOURCELOADER_CXX
-#include "res_services.hxx"
-
-/** === begin UNO includes === **/
-#include <com/sun/star/resource/XResourceBundleLoader.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-/** === end UNO includes === **/
+#include <oooresourceloader.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/simplerm.hxx>
 #include <tools/rcid.h>
@@ -47,87 +39,14 @@
 #include <boost/shared_ptr.hpp>
 #include <map>
 
-//........................................................................
-namespace res
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::resource;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::lang;
+
+
+namespace extensions { namespace resource
 {
-//........................................................................
-
-    /** === begin UNO using === **/
-    using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::resource::XResourceBundleLoader;
-    using ::com::sun::star::resource::XResourceBundle;
-    using ::com::sun::star::resource::MissingResourceException;
-    using ::com::sun::star::uno::XComponentContext;
-    using ::com::sun::star::uno::Sequence;
-    using ::com::sun::star::uno::XInterface;
-    using ::com::sun::star::uno::RuntimeException;
-    using ::com::sun::star::lang::Locale;
-    using ::com::sun::star::uno::Any;
-    using ::com::sun::star::container::NoSuchElementException;
-    using ::com::sun::star::lang::WrappedTargetException;
-    using ::com::sun::star::uno::Type;
-    using ::com::sun::star::uno::WeakReference;
-    /** === end UNO using === **/
-
-    //====================================================================
-    //= helper
-    //====================================================================
-    typedef ::std::pair< ::rtl::OUString, Locale >  ResourceBundleDescriptor;
-
-    struct ResourceBundleDescriptorLess : public ::std::binary_function< ResourceBundleDescriptor, ResourceBundleDescriptor, bool >
-    {
-        bool operator()( const ResourceBundleDescriptor& _lhs, const ResourceBundleDescriptor& _rhs ) const
-        {
-            if ( _lhs.first < _rhs.first )
-                return true;
-            if ( _lhs.second.Language < _rhs.second.Language )
-                return true;
-            if ( _lhs.second.Country < _rhs.second.Country )
-                return true;
-            if ( _lhs.second.Variant < _rhs.second.Variant )
-                return true;
-            return false;
-        }
-    };
-
-    //====================================================================
-    //= OpenOfficeResourceLoader
-    //====================================================================
-    typedef ::cppu::WeakImplHelper1 <   XResourceBundleLoader
-                                    >   OpenOfficeResourceLoader_Base;
-    class OpenOfficeResourceLoader : public OpenOfficeResourceLoader_Base
-    {
-    private:
-        typedef ::std::map< ResourceBundleDescriptor, WeakReference< XResourceBundle >, ResourceBundleDescriptorLess >
-                                        ResourceBundleCache;
-
-    private:
-        Reference< XComponentContext >  m_xContext;
-        ::osl::Mutex                    m_aMutex;
-        ResourceBundleCache             m_aBundleCache;
-
-    protected:
-        OpenOfficeResourceLoader( const Reference< XComponentContext >& _rxContext );
-
-    public:
-        static Sequence< ::rtl::OUString > getSupportedServiceNames_static();
-        static ::rtl::OUString  getImplementationName_static();
-        static ::rtl::OUString  getSingletonName_static();
-        static Reference< XInterface > Create( const Reference< XComponentContext >& _rxContext );
-
-        // XResourceBundleLoader
-        virtual Reference< XResourceBundle > SAL_CALL loadBundle_Default( const ::rtl::OUString& aBaseName ) throw (MissingResourceException, RuntimeException);
-        virtual Reference< XResourceBundle > SAL_CALL loadBundle( const ::rtl::OUString& abaseName, const Locale& aLocale ) throw (MissingResourceException, RuntimeException);
-
-    private:
-        OpenOfficeResourceLoader();                                             // never implemented
-        OpenOfficeResourceLoader( const OpenOfficeResourceLoader& );            // never implemented
-        OpenOfficeResourceLoader& operator=( const OpenOfficeResourceLoader& ); // never implemented
-    };
-
-    //====================================================================
-    //= IResourceType
-    //====================================================================
     /** encapsulates access to a fixed resource type
     */
     class IResourceType
@@ -153,9 +72,6 @@ namespace res
         virtual ~IResourceType() { };
     };
 
-    //====================================================================
-    //= StringResourceAccess
-    //====================================================================
     class StringResourceAccess : public IResourceType
     {
     public:
@@ -166,18 +82,15 @@ namespace res
         virtual Any getResource( SimpleResMgr& _resourceManager, sal_Int32 _resourceId ) const;
     };
 
-    //--------------------------------------------------------------------
     StringResourceAccess::StringResourceAccess()
     {
     }
 
-    //--------------------------------------------------------------------
     RESOURCE_TYPE StringResourceAccess::getResourceType() const
     {
         return RSC_STRING;
     }
 
-    //--------------------------------------------------------------------
     Any StringResourceAccess::getResource( SimpleResMgr& _resourceManager, sal_Int32 _resourceId ) const
     {
         OSL_PRECOND( _resourceManager.IsAvailable( getResourceType(), _resourceId ), "StringResourceAccess::getResource: precondition not met!" );
@@ -186,9 +99,6 @@ namespace res
         return aResource;
     }
 
-    //====================================================================
-    //= OpenOfficeResourceBundle
-    //====================================================================
     typedef ::cppu::WeakImplHelper1 <   XResourceBundle
                                     >   OpenOfficeResourceBundle_Base;
     class OpenOfficeResourceBundle : public OpenOfficeResourceBundle_Base
@@ -257,39 +167,9 @@ namespace res
         bool    impl_getResourceTypeAndId_nothrow( const ::rtl::OUString& _key, ResourceTypePtr& _out_resourceType, sal_Int32& _out_resourceId ) const;
     };
 
-    //====================================================================
-    //= OpenOfficeResourceLoader
-    //====================================================================
-    //--------------------------------------------------------------------
-    OpenOfficeResourceLoader::OpenOfficeResourceLoader( const Reference< XComponentContext >& _rxContext )
+    OpenOfficeResourceLoader::OpenOfficeResourceLoader( Reference< XComponentContext > const& _rxContext )
         :m_xContext( _rxContext )
     {
-    }
-
-    //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > OpenOfficeResourceLoader::getSupportedServiceNames_static()
-    {
-        Sequence< ::rtl::OUString > aServices( 1 );
-        aServices[ 0 ] = getSingletonName_static();
-        return aServices;
-    }
-
-    //--------------------------------------------------------------------
-    ::rtl::OUString OpenOfficeResourceLoader::getImplementationName_static()
-    {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.resource.OpenOfficeResourceLoader" ) );
-    }
-
-    //--------------------------------------------------------------------
-    ::rtl::OUString OpenOfficeResourceLoader::getSingletonName_static()
-    {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.resource.OfficeResourceLoader" ) );
-    }
-
-    //--------------------------------------------------------------------
-    Reference< XInterface > OpenOfficeResourceLoader::Create( const Reference< XComponentContext >& _rxContext )
-    {
-        return *( new OpenOfficeResourceLoader( _rxContext ) );
     }
 
     //--------------------------------------------------------------------
@@ -319,21 +199,6 @@ namespace res
         return xBundle;
     }
 
-    //--------------------------------------------------------------------
-    ComponentInfo getComponentInfo_OpenOfficeResourceLoader()
-    {
-        ComponentInfo aInfo;
-        aInfo.aSupportedServices = OpenOfficeResourceLoader::getSupportedServiceNames_static();
-        aInfo.sImplementationName = OpenOfficeResourceLoader::getImplementationName_static();
-        aInfo.sSingletonName = OpenOfficeResourceLoader::getSingletonName_static();
-        aInfo.pFactory = &OpenOfficeResourceLoader::Create;
-        return aInfo;
-    }
-
-    //====================================================================
-    //= OpenOfficeResourceBundle
-    //====================================================================
-    //--------------------------------------------------------------------
     OpenOfficeResourceBundle::OpenOfficeResourceBundle( const Reference< XComponentContext >& /*_rxContext*/, const ::rtl::OUString& _rBaseName, const Locale& _rLocale )
         :m_aLocale( _rLocale )
         ,m_pResourceManager( NULL )
@@ -352,34 +217,29 @@ namespace res
             ResourceTypePtr( new StringResourceAccess );
     }
 
-    //--------------------------------------------------------------------
     OpenOfficeResourceBundle::~OpenOfficeResourceBundle()
     {
         delete m_pResourceManager;
     }
 
-    //--------------------------------------------------------------------
     Reference< XResourceBundle > SAL_CALL OpenOfficeResourceBundle::getParent() throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return m_xParent;
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL OpenOfficeResourceBundle::setParent( const Reference< XResourceBundle >& _parent ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         m_xParent = _parent;
     }
 
-    //--------------------------------------------------------------------
     Locale SAL_CALL OpenOfficeResourceBundle::getLocale(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return m_aLocale;
     }
 
-    //--------------------------------------------------------------------
     bool OpenOfficeResourceBundle::impl_getResourceTypeAndId_nothrow( const ::rtl::OUString& _key, ResourceTypePtr& _out_resourceType, sal_Int32& _out_resourceId ) const
     {
         sal_Int32 typeSeparatorPos = _key.indexOf( ':' );
@@ -399,7 +259,6 @@ namespace res
         return true;
     }
 
-    //--------------------------------------------------------------------
     bool OpenOfficeResourceBundle::impl_getDirectElement_nothrow( const ::rtl::OUString& _key, Any& _out_Element ) const
     {
         ResourceTypePtr resourceType;
@@ -415,7 +274,6 @@ namespace res
         return _out_Element.hasValue();
     }
 
-    //--------------------------------------------------------------------
     Any SAL_CALL OpenOfficeResourceBundle::getDirectElement( const ::rtl::OUString& _key ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -425,7 +283,6 @@ namespace res
         return aElement;
     }
 
-    //--------------------------------------------------------------------
     Any SAL_CALL OpenOfficeResourceBundle::getByName( const ::rtl::OUString& _key ) throw (NoSuchElementException, WrappedTargetException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -443,7 +300,6 @@ namespace res
         return aElement;
     }
 
-    //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL OpenOfficeResourceBundle::getElementNames(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -452,7 +308,6 @@ namespace res
         return Sequence< ::rtl::OUString >( );
     }
 
-    //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL OpenOfficeResourceBundle::hasByName( const ::rtl::OUString& _key ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -468,13 +323,11 @@ namespace res
         return sal_True;
     }
 
-    //--------------------------------------------------------------------
     Type SAL_CALL OpenOfficeResourceBundle::getElementType(  ) throw (RuntimeException)
     {
         return ::cppu::UnoType< Any >::get();
     }
 
-    //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL OpenOfficeResourceBundle::hasElements(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -483,10 +336,6 @@ namespace res
         return ::sal_Bool( );
     }
 
-//........................................................................
-} // namespace res
-//........................................................................
-
-#endif // EXTENSIONS_SOURCE_RESOURCE_OOORESOURCELOADER_CXX
+}}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

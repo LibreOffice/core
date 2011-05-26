@@ -39,9 +39,10 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-SLOFILES=	$(SLO)$/resource.obj \
-            $(SLO)$/oooresourceloader.obj \
-            $(SLO)$/res_services.obj
+SLOFILES= \
+    $(SLO)$/ResourceStringIndexAccess.obj \
+    $(SLO)$/oooresourceloader.obj \
+    $(SLO)$/resourceservices.obj
 
 LIB1TARGET= 	$(SLB)$/$(TARGET).lib
 LIB1OBJFILES=	$(SLOFILES)
@@ -49,6 +50,7 @@ LIB1OBJFILES=	$(SLOFILES)
 SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
 
 SHL1STDLIBS= \
+        $(COMPHELPERLIB) 	 \
         $(CPPULIB) 	 \
         $(CPPUHELPERLIB) 	 \
         $(SALLIB) 	 \
