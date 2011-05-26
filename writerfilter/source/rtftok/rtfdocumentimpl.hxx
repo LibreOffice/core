@@ -43,6 +43,7 @@ namespace writerfilter {
         class RTFParserState
         {
             public:
+                RTFParserState();
                 RTFInternalState nInternalState;
                 RTFDesitnationState nDestinationState;
         };

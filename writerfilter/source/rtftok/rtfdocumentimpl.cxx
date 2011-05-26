@@ -108,9 +108,16 @@ int RTFDocumentImpl::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
             OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, rKeyword.getStr());
             break;
         case CONTROL_DESTINATION:
-            OSL_TRACE("%s: TODO handle destination '%s'", OSL_THIS_FUNC, rKeyword.getStr());
-            // Make sure we skip destinations till we don't handle them
-            m_aStates.top().nDestinationState = DESTINATION_SKIP;
+            // TODO string comparion is not efficent here
+            if (!strcmp(rKeyword.getStr(), "rtf"))
+            {
+            }
+            else
+            {
+                OSL_TRACE("%s: TODO handle destination '%s'", OSL_THIS_FUNC, rKeyword.getStr());
+                // Make sure we skip destinations till we don't handle them
+                m_aStates.top().nDestinationState = DESTINATION_SKIP;
+            }
             break;
         case CONTROL_SYMBOL:
             OSL_TRACE("%s: TODO handle symbol '%s'", OSL_THIS_FUNC, rKeyword.getStr());
@@ -200,12 +207,13 @@ int RTFDocumentImpl::pushState()
 
 int RTFDocumentImpl::popState()
 {
-    OSL_TRACE("%s before pop: %d", OSL_THIS_FUNC, m_nGroup);
+    OSL_TRACE("%s before pop: m_nGroup %d, dest state: %d", OSL_THIS_FUNC, m_nGroup, m_aStates.top().nDestinationState);
 
     m_aStates.pop();
 
     m_nGroup--;
 
+    OSL_TRACE("%s after pop: m_nGroup %d, dest state: %d", OSL_THIS_FUNC, m_nGroup, m_aStates.top().nDestinationState);
     return 0;
 }
 
@@ -269,6 +277,12 @@ int RTFDocumentImpl::resolveParse()
 ::std::string RTFDocumentImpl::getType() const
 {
     return "RTFDocumentImpl";
+}
+
+RTFParserState::RTFParserState()
+    : nInternalState(INTERNAL_NORMAL),
+    nDestinationState(DESTINATION_NORMAL)
+{
 }
 
 } // namespace rtftok
