@@ -160,9 +160,6 @@ Reference< XInterface > SAL_CALL XMLSignatureTemplateImpl :: impl_createInstance
 }
 
 Reference< XSingleServiceFactory > XMLSignatureTemplateImpl :: impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager ) {
-    //Reference< XSingleServiceFactory > xFactory ;
-    //xFactory = ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName , impl_createInstance , impl_getSupportedServiceNames ) ;
-    //return xFactory ;
     return ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName() , impl_createInstance , impl_getSupportedServiceNames() ) ;
 }
 
