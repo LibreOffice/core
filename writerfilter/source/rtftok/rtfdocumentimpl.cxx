@@ -1,4 +1,5 @@
 #include <rtfdocumentimpl.hxx>
+#include <rtftypes.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -11,6 +12,8 @@ using rtl::OUStringToOString;
 
 namespace writerfilter {
 namespace rtftok {
+
+extern RTFSymbol* pRTFControlWords;
 
 RTFDocumentImpl::RTFDocumentImpl(uno::Reference<io::XInputStream> const& xInputStream)
     : m_nGroup(0),

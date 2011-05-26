@@ -57,6 +57,7 @@ $(eval $(call gb_Library_add_linked_libs,rtftok,\
 $(eval $(call gb_Library_add_exception_objects,rtftok,\
 	writerfilter/source/rtftok/rtfdocumentfactory \
 	writerfilter/source/rtftok/rtfdocumentimpl \
+	writerfilter/source/rtftok/rtfcontrolwords \
 ))
 
 # vim: set noet ts=4 sw=4:
