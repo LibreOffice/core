@@ -3,6 +3,7 @@
 
 namespace writerfilter {
     namespace rtftok {
+        /// Respresents an RTF Control Word
         typedef struct
         {
             const char *sKeyword;
