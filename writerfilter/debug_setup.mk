@@ -1,5 +1,5 @@
 define writerfilter_debug_flags
-$(if $(filter $(strip $(gb_DEBUG)),01),\
+$(if $(filter-out $(strip $(gb_DEBUGLEVEL)),01),\
     -DDEBUG_DOMAINMAPPER \
     -DDEBUG_ELEMENT \
     -DDEBUG_RESOLVE \
