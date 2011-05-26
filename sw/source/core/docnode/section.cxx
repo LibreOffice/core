@@ -906,14 +906,7 @@ sal_Bool SwSectionFmt::GetInfo( SfxPoolItem& rInfo ) const
 
 extern "C" {
 
-    int
-#if defined( WNT )
-     __cdecl
-#endif
-#if defined( ICC )
-     _Optlink
-#endif
-        lcl_SectionCmpPos( const void *pFirst, const void *pSecond)
+    int SAL_CALL lcl_SectionCmpPos( const void *pFirst, const void *pSecond)
     {
         const SwSectionFmt* pFSectFmt = (*(SwSectionPtr*)pFirst)->GetFmt();
         const SwSectionFmt* pSSectFmt = (*(SwSectionPtr*)pSecond)->GetFmt();
@@ -925,14 +918,7 @@ extern "C" {
                       pSSectFmt->GetCntnt(sal_False).GetCntntIdx()->GetIndex();
     }
 
-    int
-#if defined( WNT )
-     __cdecl
-#endif
-#if defined( ICC )
-     _Optlink
-#endif
-        lcl_SectionCmpNm( const void *pFirst, const void *pSecond)
+    int SAL_CALL lcl_SectionCmpNm( const void *pFirst, const void *pSecond)
     {
         const SwSectionPtr pFSect = *(SwSectionPtr*)pFirst;
         const SwSectionPtr pSSect = *(SwSectionPtr*)pSecond;

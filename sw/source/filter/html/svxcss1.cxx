@@ -3172,14 +3172,7 @@ static int bSortedPropFns = sal_False;
 
 extern "C"
 {
-static int
-#if defined( WNT )
- __cdecl
-#endif
-#if defined( ICC )
- _Optlink
-#endif
-    CSS1PropEntryCompare( const void *pFirst, const void *pSecond)
+static int SAL_CALL CSS1PropEntryCompare( const void *pFirst, const void *pSecond)
 {
     int nRet;
     if( ((CSS1PropEntry*)pFirst)->pFunc )

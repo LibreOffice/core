@@ -167,14 +167,7 @@ const sal_Int32 coContFlags =
 
 
 extern "C" {
-static int
-#if defined( WNT )
- __cdecl
-#endif
-#if defined( ICC )
- _Optlink
-#endif
-    OperatorCompare( const void *pFirst, const void *pSecond)
+static int SAL_CALL OperatorCompare( const void *pFirst, const void *pSecond)
 {
     int nRet = 0;
     if( CALC_NAME == ((_CalcOp*)pFirst)->eOp )
