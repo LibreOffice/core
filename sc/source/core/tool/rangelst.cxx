@@ -696,11 +696,8 @@ struct ScRangePairNameSort
 };
 
 //-----------------------------------------------------------------------------
-extern "C" int
-#ifdef WNT
-__cdecl
-#endif
-ScRangePairList_QsortNameCompare( const void* p1, const void* p2 )
+extern "C"
+int SAL_CALL ScRangePairList_QsortNameCompare( const void* p1, const void* p2 )
 {
     const ScRangePairNameSort* ps1 = (const ScRangePairNameSort*)p1;
     const ScRangePairNameSort* ps2 = (const ScRangePairNameSort*)p2;

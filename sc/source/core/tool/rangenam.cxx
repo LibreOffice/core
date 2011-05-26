@@ -646,11 +646,8 @@ void ScRangeData::ValidateTabRefs()
 }
 
 
-extern "C" int
-#ifdef WNT
-__cdecl
-#endif
-ScRangeData_QsortNameCompare( const void* p1, const void* p2 )
+extern "C"
+int SAL_CALL ScRangeData_QsortNameCompare( const void* p1, const void* p2 )
 {
     return (int) ScGlobal::GetCollator()->compareString(
             (*(const ScRangeData**)p1)->GetName(),

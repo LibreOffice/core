@@ -129,11 +129,8 @@ private:
 };
 SV_DECL_IMPL_REF( ScRangePairList );
 
-extern "C" int
-#ifdef WNT
-__cdecl
-#endif
-ScRangePairList_QsortNameCompare( const void*, const void* );
+extern "C"
+int SAL_CALL ScRangePairList_QsortNameCompare( const void*, const void* );
 
 
 #endif
