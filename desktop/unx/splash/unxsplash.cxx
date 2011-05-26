@@ -77,6 +77,8 @@ void SAL_CALL UnxSplashScreen::end()
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "UnxSplashScreen::end()\n" );
 #endif
+    if( !m_pOutFd )
+        return;
 
     fprintf( m_pOutFd, "end\n" );
     fflush( m_pOutFd );
@@ -88,6 +90,8 @@ void SAL_CALL UnxSplashScreen::reset()
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "UnxSplashScreen::reset()\n" );
 #endif
+    if( !m_pOutFd )
+        return;
 
     fprintf( m_pOutFd, "restart\n" );
     fflush( m_pOutFd );
