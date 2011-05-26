@@ -120,8 +120,6 @@ ModalDialog RID_PAGENUMBERS
             < "Left" ; Default ; > ;
             < "Center" ; Default ; > ;
             < "Right" ; Default ; > ;
-            //< "Inside" ; Default ; > ;
-            //< "Outside" ; Default ; > ;
         };
     };
     CheckBox CB_SHOWNUMBERONFIRSTPAGE

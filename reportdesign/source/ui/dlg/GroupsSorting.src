@@ -79,7 +79,6 @@ FloatingWindow RID_GROUPS_SORTING
             ToolBoxItem
             {
                 Identifier = SID_RPT_GROUPSORT_MOVE_UP ;
-                // Command = ".uno:ReportGroupMoveUp" ; // default_images/res/commandimages/sc_reportgroupmoveup.png
                 HelpID = HID_RPT_GROUPSORT_MOVE_UP ;
                 Text [ en-US ] = "Move up" ;
                 Checkable = TRUE;
@@ -87,7 +86,6 @@ FloatingWindow RID_GROUPS_SORTING
             ToolBoxItem
             {
                 Identifier = SID_RPT_GROUPSORT_MOVE_DOWN ;
-                // Command = ".uno:ReportGroupMoveDown" ;
                 HelpID = HID_RPT_GROUPSORT_MOVE_DOWN ;
                 Text [ en-US ] = "Move down" ;
                 Checkable = TRUE;
@@ -95,7 +93,6 @@ FloatingWindow RID_GROUPS_SORTING
             ToolBoxItem
             {
                 Identifier = SID_RPT_GROUPSORT_DELETE ;
-                // Command = ".uno:ReportGroupDelete" ;
                 HelpID = HID_RPT_GROUPSORT_DELETE ;
                 Text [ en-US ] = "~Delete" ;
                 Checkable = TRUE;
