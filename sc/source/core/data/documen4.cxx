@@ -402,17 +402,21 @@ sal_Bool ScDocument::ReplaceStyle(const SvxSearchItem& rSearchItem,
 
 void ScDocument::CompileDBFormula()
 {
-    for (SCTAB i=0; i< static_cast<SCTAB>(pTab.size()); i++)
+    TableContainer::iterator it = pTab.begin();
+    for (;it != pTab.end(); ++it)
     {
-        if (pTab[i]) pTab[i]->CompileDBFormula();
+        if (*it)
+            (*it)->CompileDBFormula();
     }
 }
 
 void ScDocument::CompileDBFormula( sal_Bool bCreateFormulaString )
 {
-    for (SCTAB i=0; i< static_cast<SCTAB>(pTab.size()); i++)
+    TableContainer::iterator it = pTab.begin();
+    for (;it != pTab.end(); ++it)
     {
-        if (pTab[i]) pTab[i]->CompileDBFormula( bCreateFormulaString );
+        if (*it)
+            (*it)->CompileDBFormula( bCreateFormulaString );
     }
 }
 
@@ -421,17 +425,21 @@ void ScDocument::CompileNameFormula( sal_Bool bCreateFormulaString )
     if ( pCondFormList )
         pCondFormList->CompileAll();    // nach ScNameDlg noetig
 
-    for (SCTAB i=0; i< static_cast<SCTAB>(pTab.size()); i++)
+    TableContainer::iterator it = pTab.begin();
+    for (;it != pTab.end(); ++it)
     {
-        if (pTab[i]) pTab[i]->CompileNameFormula( bCreateFormulaString );
+        if (*it)
+            (*it)->CompileNameFormula( bCreateFormulaString );
     }
 }
 
 void ScDocument::CompileColRowNameFormula()
 {
-    for (SCTAB i=0; i< static_cast<SCTAB>(pTab.size()); i++)
+    TableContainer::iterator it = pTab.begin();
+    for (;it != pTab.end(); ++it)
     {
-        if (pTab[i]) pTab[i]->CompileColRowNameFormula();
+        if (*it)
+            (*it)->CompileColRowNameFormula();
     }
 }
 
@@ -447,11 +455,12 @@ void ScDocument::DoColResize( SCTAB nTab, SCCOL nCol1, SCCOL nCol2, SCSIZE nAdd 
 
 void ScDocument::InvalidateTableArea()
 {
-    for (SCTAB nTab=0; nTab< static_cast<SCTAB>(pTab.size()) && pTab[nTab]; nTab++)
+    TableContainer::iterator it = pTab.begin();
+    for (;it != pTab.end() && *it; ++it)
     {
-        pTab[nTab]->InvalidateTableArea();
-        if ( pTab[nTab]->IsScenario() )
-            pTab[nTab]->InvalidateScenarioRanges();
+        (*it)->InvalidateTableArea();
+        if ( (*it)->IsScenario() )
+            (*it)->InvalidateScenarioRanges();
     }
 }
 

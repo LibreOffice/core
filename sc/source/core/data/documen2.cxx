@@ -177,7 +177,6 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         nInterpretLevel(0),
         nMacroInterpretLevel(0),
         nInterpreterTableOpLevel(0),
-        nMaxTableNumber( 0 ),
         nSrcVer( SC_CURRENT_VERSION ),
         nSrcMaxRow( MAXROW ),
         nFormulaTrackCount(0),
@@ -570,14 +569,13 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, const ScMarkData* pMarks )
                     }
                     else
                     {
-                        while( i > static_cast<SCTAB>(pTab.size()) )
+                        if( i > static_cast<SCTAB>(pTab.size()) )
                         {
-                            pTab.push_back( NULL );
+                            pTab.resize(i, NULL );
                         }
                         pTab.push_back(new ScTable(this, i, aString));
                     }
                     pTab[i]->SetLayoutRTL( pSourceDoc->pTab[i]->IsLayoutRTL() );
-                    nMaxTableNumber = i+1;
                 }
     }
     else
@@ -593,19 +591,15 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, SCTAB nTab )
         InitClipPtrs(pSourceDoc);
         if (nTab >= static_cast<SCTAB>(pTab.size()))
         {
-            while( nTab > static_cast<SCTAB>(pTab.size()) )
+            if( nTab > static_cast<SCTAB>(pTab.size()) )
             {
-                pTab.push_back( NULL );
+                pTab.resize(nTab+1, NULL );
             }
-            pTab.push_back(new ScTable(this, nTab,
-                                String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("baeh"))));
         }
-        else
-            pTab[nTab] = new ScTable(this, nTab,
-                                String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("baeh")));
+        pTab[nTab] = new ScTable(this, nTab,
+                            String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("baeh")));
         if (nTab < static_cast<SCTAB>(pSourceDoc->pTab.size()) && pSourceDoc->pTab[nTab])
             pTab[nTab]->SetLayoutRTL( pSourceDoc->pTab[nTab]->IsLayoutRTL() );
-        nMaxTableNumber = nTab+1;
     }
     else
     {
@@ -631,20 +625,11 @@ void ScDocument::PutCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
             sal_Bool bExtras = !bIsUndo;        // Spaltenbreiten, Zeilenhoehen, Flags
             if ( nTab >= static_cast<SCTAB>(pTab.size()) )
             {
-                while( nTab > static_cast<SCTAB>(pTab.size()) )
-                {
-                    pTab.push_back( NULL );
-                }
-                pTab.push_back(new ScTable(this, nTab,
-                                    String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("temp")),
-                                    bExtras, bExtras));
+                pTab.resize( nTab + 1, NULL );
             }
-            else
-            {
-                pTab.at(nTab) = new ScTable(this, nTab,
+            pTab.at(nTab) = new ScTable(this, nTab,
                                     String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("temp")),
                                     bExtras, bExtras);
-            }
         }
 
         if ( nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab] )
@@ -789,20 +774,22 @@ sal_Bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos )
                                     aSourceRange, 0,0,nDz ) );
 
                 ScTable* pSaveTab = pTab[nOldPos];
-                SCTAB i;
                 pTab.erase(pTab.begin()+nOldPos);
                 pTab.insert(pTab.begin()+nNewPos, pSaveTab);
-                for (i = 0; i < static_cast<SCTAB>(pTab.size()); i++)
+                TableContainer::iterator it = pTab.begin();
+                for (SCTAB i = 0; i < static_cast<SCTAB>(pTab.size()); i++)
                     if (pTab[i])
                         pTab[i]->UpdateMoveTab( nOldPos, nNewPos, i, *pProgress );
                 delete pProgress;   // freimachen fuer evtl. andere
-                for (i = 0; i < static_cast<SCTAB>(pTab.size()); i++)
-                    if (pTab[i])
-                        pTab[i]->UpdateCompile();
+                it = pTab.begin();
+                for (; it != pTab.end(); ++it)
+                    if (*it)
+                        (*it)->UpdateCompile();
                 SetNoListening( false );
-                for (i = 0; i < static_cast<SCTAB>(pTab.size()); i++)
-                    if (pTab[i])
-                        pTab[i]->StartAllListeners();
+                it = pTab.begin();
+                for (; it != pTab.end(); ++it)
+                    if (*it)
+                        (*it)->StartAllListeners();
                 // sheet names of references may not be valid until sheet is moved
                 pChartListenerCollection->UpdateScheduledSeriesRanges();
                 SetDirty();

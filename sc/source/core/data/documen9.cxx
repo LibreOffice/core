@@ -526,6 +526,9 @@ sal_Bool ScDocument::IsPrintEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
 
 void ScDocument::Clear( sal_Bool bFromDestructor )
 {
+    TableContainer::iterator it = pTab.begin();
+    for (;it != pTab.end(); ++it)
+        delete *it;
     pTab.clear();
     delete pSelectionAttr;
     pSelectionAttr = NULL;
@@ -674,12 +677,13 @@ bool ScDocument::IsLoadingMedium() const
 void ScDocument::SetLoadingMedium( bool bVal )
 {
     bLoadingMedium = bVal;
-    for (SCTAB nTab = 0; nTab < static_cast<SCTAB>(pTab.size()); ++nTab)
+    TableContainer::iterator it = pTab.begin();
+    for (; it != pTab.end(); ++it)
     {
-        if (!pTab[nTab])
+        if (!*it)
             return;
 
-        pTab[nTab]->SetLoadingMedium(bVal);
+        (*it)->SetLoadingMedium(bVal);
     }
 }
 
