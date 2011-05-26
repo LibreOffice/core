@@ -400,9 +400,9 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                     case EXC_BIFF3:
                     case EXC_BIFF4: aIn.Ignore( 10 );   break;
                     case EXC_BIFF5:
-                        DBG_WARNING( "-ExcelToSc::Convert(): 0x1A gibt's nicht in Biff5!" );
+                        DBG_WARNING( "-ExcelToSc::Convert(): 0x1A does not exist in Biff5!" );
                     default:
-                        DBG_WARNING( "-ExcelToSc::Convert(): Ein wenig vergesslich, was?" );
+                        DBG_WARNING( "-ExcelToSc::Convert(): A little oblivious?" );
                 }
                 break;
             case 0x1B: // End External Reference                [330    ]
@@ -412,9 +412,9 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                     case EXC_BIFF3:
                     case EXC_BIFF4: aIn.Ignore( 4 );    break;
                     case EXC_BIFF5:
-                        DBG_WARNING( "-ExcelToSc::Convert(): 0x1B gibt's nicht in Biff5!" );
+                        DBG_WARNING( "-ExcelToSc::Convert(): 0x1B does not exist in Biff5!" );
                     default:
-                        DBG_WARNING( "-ExcelToSc::Convert(): Ein wenig vergesslich, was?" );
+                        DBG_WARNING( "-ExcelToSc::Convert(): A little oblivious?" );
                 }
                 break;
             case 0x1C: // Error Value                           [314 266]
@@ -994,8 +994,8 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
                     case EXC_BIFF2: nIgnore = 7;    break;
                     case EXC_BIFF3:
                     case EXC_BIFF4: nIgnore = 10;   break;
-                    case EXC_BIFF5: DBG_WARNING( "-ExcelToSc::Convert(): 0x1A gibt's nicht in Biff5!" );
-                    default:        DBG_WARNING( "-ExcelToSc::Convert(): Ein wenig vergesslich, was?" );
+                    case EXC_BIFF5: DBG_WARNING( "-ExcelToSc::Convert(): 0x1A does not exist in Biff5!" );
+                    default:        DBG_WARNING( "-ExcelToSc::Convert(): A little oblivious?" );
                 }
                 break;
             case 0x1B: // End External Reference                [330    ]
@@ -1004,8 +1004,8 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
                     case EXC_BIFF2: nIgnore = 3;        break;
                     case EXC_BIFF3:
                     case EXC_BIFF4: nIgnore = 4;        break;
-                    case EXC_BIFF5: DBG_WARNING( "-ExcelToSc::Convert(): 0x1B gibt's nicht in Biff5!" );
-                    default:        DBG_WARNING( "-ExcelToSc::Convert(): Ein wenig vergesslich, was?" );
+                    case EXC_BIFF5: DBG_WARNING( "-ExcelToSc::Convert(): 0x1B does not exist in Biff5!" );
+                    default:        DBG_WARNING( "-ExcelToSc::Convert(): A little oblivious?" );
                 }
                 break;
             case 0x1C: // Error Value                           [314 266]
