@@ -85,7 +85,7 @@ int RTFDocumentImpl::resolveChars(char ch)
 
 int RTFDocumentImpl::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
 {
-    if (m_aState.nDestinationState == DESTINATION_SKIP)
+    if (m_aStates.top().nDestinationState == DESTINATION_SKIP)
         return 0;
     OSL_TRACE("%s: keyword '\\%s' with param? %d param val: '%d'", OSL_THIS_FUNC,
             rKeyword.getStr(), (bParam ? 1 : 0), (bParam ? nParam : 0));
@@ -110,7 +110,7 @@ int RTFDocumentImpl::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
         case CONTROL_DESTINATION:
             OSL_TRACE("%s: TODO handle destination '%s'", OSL_THIS_FUNC, rKeyword.getStr());
             // Make sure we skip destinations till we don't handle them
-            m_aState.nDestinationState = DESTINATION_SKIP;
+            m_aStates.top().nDestinationState = DESTINATION_SKIP;
             break;
         case CONTROL_SYMBOL:
             OSL_TRACE("%s: TODO handle symbol '%s'", OSL_THIS_FUNC, rKeyword.getStr());
@@ -186,7 +186,12 @@ int RTFDocumentImpl::pushState()
 {
     OSL_TRACE("%s before push: %d", OSL_THIS_FUNC, m_nGroup);
 
-    // TODO save character, paragraph properties etc
+    RTFParserState aState;
+    if (!m_aStates.empty())
+    {
+        aState = m_aStates.top();
+    }
+    m_aStates.push(aState);
 
     m_nGroup++;
 
@@ -197,7 +202,7 @@ int RTFDocumentImpl::popState()
 {
     OSL_TRACE("%s before pop: %d", OSL_THIS_FUNC, m_nGroup);
 
-    // TODO restore character, paragraph properties etc
+    m_aStates.pop();
 
     m_nGroup--;
 
@@ -216,7 +221,7 @@ int RTFDocumentImpl::resolveParse()
 
         if (m_nGroup < 0)
             return ERROR_GROUP_UNDER;
-        if (m_aState.nInternalState == INTERNAL_BIN)
+        if (m_aStates.top().nInternalState == INTERNAL_BIN)
         {
             OSL_TRACE("%s: TODO, binary internal state", OSL_THIS_FUNC);
         }
@@ -240,7 +245,7 @@ int RTFDocumentImpl::resolveParse()
                 case 0x0a:
                     break; // ignore these
                 default:
-                    if (m_aState.nInternalState == INTERNAL_NORMAL)
+                    if (m_aStates.top().nInternalState == INTERNAL_NORMAL)
                     {
                         if ((ret = resolveChars(ch)))
                             return ret;

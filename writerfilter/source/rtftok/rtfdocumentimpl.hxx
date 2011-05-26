@@ -2,6 +2,7 @@
 #define _RTFDOCUMENTIMPL_HXX_
 
 #include <memory>
+#include <stack>
 #include <rtftok/RTFDocument.hxx>
 
 class SvStream;
@@ -71,7 +72,7 @@ namespace writerfilter {
                 SvStream* m_pInStream;
                 Stream* m_pMapperStream;
                 int m_nGroup;
-                RTFParserState m_aState;
+                std::stack<RTFParserState> m_aStates;
         };
     } // namespace rtftok
 } // namespace writerfilter
