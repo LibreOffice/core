@@ -215,7 +215,8 @@ int RTFDocumentImpl::popState()
 
     m_nGroup--;
 
-    OSL_TRACE("%s after pop: m_nGroup %d, dest state: %d", OSL_THIS_FUNC, m_nGroup, m_aStates.top().nDestinationState);
+    if (!m_aStates.empty())
+        OSL_TRACE("%s after pop: m_nGroup %d, dest state: %d", OSL_THIS_FUNC, m_nGroup, m_aStates.top().nDestinationState);
     return 0;
 }
 

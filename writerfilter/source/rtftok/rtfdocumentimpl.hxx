@@ -72,7 +72,7 @@ namespace writerfilter {
 
                 SvStream* m_pInStream;
                 Stream* m_pMapperStream;
-                int m_nGroup;
+                int m_nGroup; // TODO use m_aStates.size() instead
                 std::stack<RTFParserState> m_aStates;
         };
     } // namespace rtftok
