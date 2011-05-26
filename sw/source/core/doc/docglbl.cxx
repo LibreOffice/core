@@ -71,23 +71,23 @@ enum SwSplitDocType
 sal_Bool SwDoc::GenerateGlobalDoc( const String& rPath,
                                    const SwTxtFmtColl* pSplitColl )
 {
-    return SplitDoc( SPLITDOC_TO_GLOBALDOC, rPath, sal_False, pSplitColl, 0 );
+    return SplitDoc( SPLITDOC_TO_GLOBALDOC, rPath, false, pSplitColl, 0 );
 }
 
 sal_Bool SwDoc::GenerateGlobalDoc( const String& rPath, int nOutlineLevel )
 {
-    return SplitDoc( SPLITDOC_TO_GLOBALDOC, rPath, sal_True, 0, nOutlineLevel );
+    return SplitDoc( SPLITDOC_TO_GLOBALDOC, rPath, true, 0, nOutlineLevel );
 }
 
 sal_Bool SwDoc::GenerateHTMLDoc( const String& rPath, int nOutlineLevel )
 {
-    return SplitDoc( SPLITDOC_TO_HTML, rPath, sal_True, 0, nOutlineLevel );
+    return SplitDoc( SPLITDOC_TO_HTML, rPath, true, 0, nOutlineLevel );
 }
 
 sal_Bool SwDoc::GenerateHTMLDoc( const String& rPath,
                                  const SwTxtFmtColl* pSplitColl )
 {
-    return SplitDoc( SPLITDOC_TO_HTML, rPath, sal_False, pSplitColl, 0 );
+    return SplitDoc( SPLITDOC_TO_HTML, rPath, false, pSplitColl, 0 );
 }
 
 // two helpers for outline mode
@@ -159,7 +159,7 @@ SwNodePtr GetEndNode( const SwOutlineNodes* pOutlNds, const SwTxtFmtColl* pSplit
     return 0;
 }
 
-sal_Bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, sal_Bool bOutline, const SwTxtFmtColl* pSplitColl, int nOutlineLevel )
+bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, bool bOutline, const SwTxtFmtColl* pSplitColl, int nOutlineLevel )
 {
     // ueber alle Node der Vorlage Iterieren und dafuer einzelne
     // Dokumente erzeugen und in diesem gegen
@@ -169,7 +169,7 @@ sal_Bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, sal_Bool bOu
     // Am Ende wird dieses Doc als GlobalDoc/HTML-Doc gespreichert.
     if( !pDocShell || !pDocShell->GetMedium() ||
         ( SPLITDOC_TO_GLOBALDOC == eDocType && get(IDocumentSettingAccess::GLOBAL_DOCUMENT) ) )
-        return sal_False;
+        return false;
 
     sal_uInt16 nOutl = 0;
     SwOutlineNodes* pOutlNds = (SwOutlineNodes*)&GetNodes().GetOutLineNds();
@@ -191,7 +191,7 @@ sal_Bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, sal_Bool bOu
             if( !pOutlNds->Count() )
             {
                 delete pOutlNds;
-                return sal_False;
+                return false;
             }
         }
     }
@@ -207,7 +207,7 @@ sal_Bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, sal_Bool bOu
             }
 
         if( !pSplitColl )
-            return sal_False;
+            return false;
     }
     }
 
@@ -227,7 +227,7 @@ sal_Bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, sal_Bool bOu
     }
 
     if( !pFilter )
-        return sal_False;
+        return false;
 
     // Undo/Redline aufjedenfall abschalten
     GetIDocumentUndoRedo().DoUndo(false);
@@ -444,7 +444,7 @@ sal_Bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, sal_Bool bOu
                             if( pSectNd->GetIndex() + 1 ==
                                     pStartNd->GetIndex() )
                             {
-                                sal_Bool bMvIdx = aEndIdx == *pSectEnd;
+                                bool bMvIdx = aEndIdx == *pSectEnd;
                                 DelSectionFmt( pSectNd->GetSection().GetFmt() );
                                 if( bMvIdx )
                                     aEndIdx--;
