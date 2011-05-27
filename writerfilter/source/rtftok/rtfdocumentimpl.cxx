@@ -1,6 +1,7 @@
 #include <rtfdocumentimpl.hxx>
 #include <rtftypes.hxx>
 #include <rtfcontrolwords.hxx>
+#include <rtfvalue.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
