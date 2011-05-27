@@ -30,20 +30,20 @@
 
 #include "precompiled_extensions.hxx"
 
-#include <ResourceStringIndexAccess.hxx>
+#include <ResourceIndexAccess.hxx>
 #include <oooresourceloader.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <uno/environment.h>
 
 namespace sdecl = ::comphelper::service_decl;
 
-sdecl::class_< ::extensions::resource::ResourceStringIndexAccess, sdecl::with_args<true> > ResourceStringIndexAccessServiceImpl;
+sdecl::class_< ::extensions::resource::ResourceIndexAccess, sdecl::with_args<true> > ResourceIndexAccessServiceImpl;
 sdecl::class_< ::extensions::resource::OpenOfficeResourceLoader> OpenOfficeResourceLoaderServiceImpl;
 
-const sdecl::ServiceDecl ResourceStringIndexAccessDecl(
-    ResourceStringIndexAccessServiceImpl,
-    "org.libreoffice.extensions.resource.ResourceStringIndexAccess",
-    "org.libreoffice.resource.ResourceStringIndexAccess");
+const sdecl::ServiceDecl ResourceIndexAccessDecl(
+    ResourceIndexAccessServiceImpl,
+    "org.libreoffice.extensions.resource.ResourceIndexAccess",
+    "org.libreoffice.resource.ResourceIndexAccess");
 
 const sdecl::ServiceDecl OpenOfficeResourceLoaderDecl(
     OpenOfficeResourceLoaderServiceImpl,
@@ -51,7 +51,7 @@ const sdecl::ServiceDecl OpenOfficeResourceLoaderDecl(
     "com.sun.star.resource.OfficeResourceLoader");
 
 COMPHELPER_SERVICEDECL_EXPORTS2(
-    ResourceStringIndexAccessDecl,
+    ResourceIndexAccessDecl,
     OpenOfficeResourceLoaderDecl
 );
 
