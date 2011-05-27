@@ -2,6 +2,7 @@
 #include <rtftypes.hxx>
 #include <rtfcontrolwords.hxx>
 #include <rtfvalue.hxx>
+#include <rtfsprm.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -375,6 +376,8 @@ RTFReferenceProperties::~RTFReferenceProperties()
 
 void RTFReferenceProperties::resolve(Properties& /*rHandler*/)
 {
+    /*RTFValue::Pointer_t pValue(new RTFValue(1));
+    RTFSprm aSprm(RTF_B, pValue);*/
 }
 
 std::string RTFReferenceProperties::getType() const
