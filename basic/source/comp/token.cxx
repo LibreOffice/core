@@ -399,7 +399,8 @@ SbiToken SbiTokenizer::Next()
     }
 special:
     // #i92642
-    if( eCurTok != NIL && eCurTok != REM && eCurTok != EOLN && (tp->t == NAME || tp->t == LINE) )
+    bool bStartOfLine = (eCurTok == NIL || eCurTok == REM || eCurTok == EOLN);
+    if( !bStartOfLine && (tp->t == NAME || tp->t == LINE) )
         return eCurTok = SYMBOL;
     else if( tp->t == TEXT )
         return eCurTok = SYMBOL;
@@ -465,6 +466,9 @@ special:
     {
         // #129904 Suppress system
         if( eTok == STOP && aSym.CompareIgnoreCaseToAscii( "system" ) == COMPARE_EQUAL )
+            eCurTok = SYMBOL;
+
+        if( eTok == GET && bStartOfLine )
             eCurTok = SYMBOL;
     }
     else

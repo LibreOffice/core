@@ -41,16 +41,16 @@ SLOFILES= \
     $(SLO)$/exprnode.obj	\
     $(SLO)$/io.obj		\
     $(SLO)$/loops.obj		\
-    $(SLO)$/sbcomp.obj		\
     $(SLO)$/symtbl.obj		\
     $(SLO)$/token.obj
 
 EXCEPTIONSFILES= \
-    $(SLO)$/codegen.obj		\
-    $(SLO)$/dim.obj		\
-    $(SLO)$/exprtree.obj	\
-    $(SLO)$/parser.obj		\
-    $(SLO)$/scanner.obj
+    $(SLO)$/codegen.obj     \
+    $(SLO)$/dim.obj         \
+    $(SLO)$/exprtree.obj    \
+    $(SLO)$/parser.obj      \
+    $(SLO)$/scanner.obj     \
+    $(SLO)$/sbcomp.obj
 
 # --- Targets --------------------------------------------------------------
 

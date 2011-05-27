@@ -81,6 +81,7 @@ $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/primitive2d/
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/primitive2d/polygonprimitive2d.hxx,drawinglayer/primitive2d/polygonprimitive2d.hxx))
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/primitive2d/polypolygonprimitive2d.hxx,drawinglayer/primitive2d/polypolygonprimitive2d.hxx))
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/primitive2d/primitivetools2d.hxx,drawinglayer/primitive2d/primitivetools2d.hxx))
+$(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/primitive2d/rendergraphicprimitive2d.hxx,drawinglayer/primitive2d/rendergraphicprimitive2d.hxx))
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/primitive2d/sceneprimitive2d.hxx,drawinglayer/primitive2d/sceneprimitive2d.hxx))
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/primitive2d/sdrdecompositiontools2d.hxx,drawinglayer/primitive2d/sdrdecompositiontools2d.hxx))
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/primitive2d/shadowprimitive2d.hxx,drawinglayer/primitive2d/shadowprimitive2d.hxx))

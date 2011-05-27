@@ -70,7 +70,7 @@ interface XApplication
     [attribute] any CutCopyMode;
     [attribute] any StatusBar;
     [attribute] long Cursor;
-        [attribute] boolean EnableEvents;
+    [attribute] boolean EnableEvents;
     [attribute] boolean Visible;
     [attribute] boolean Iteration;
     [attribute] long EnableCancelKey;
@@ -115,5 +115,3 @@ interface XApplication
 }; }; };
 
 #endif
-
-

@@ -133,6 +133,7 @@
 #define FT_SIGNED_VAL       77
 #define STR_MULTSIGNED      78
 #define BTN_SIGNATURE       79
+#define BTN_CHANGE_PASS     80
 
 #define WIN_PROPERTIES      90
 #define SB_VERTICAL         91

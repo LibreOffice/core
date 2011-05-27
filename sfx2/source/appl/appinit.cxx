@@ -259,10 +259,14 @@ bool SfxApplication::Initialize_Impl()
 #endif
     pAppData_Impl->m_pToolsErrorHdl = new SfxErrorHandler(
         RID_ERRHDL, ERRCODE_AREA_TOOLS, ERRCODE_AREA_LIB1);
+
+    pAppData_Impl->pBasicResMgr = CreateResManager("sb");
+    pAppData_Impl->pSvtResMgr = CreateResManager("svt");
+
     pAppData_Impl->m_pSoErrorHdl = new SfxErrorHandler(
-        RID_SO_ERROR_HANDLER, ERRCODE_AREA_SO, ERRCODE_AREA_SO_END);
+        RID_SO_ERROR_HANDLER, ERRCODE_AREA_SO, ERRCODE_AREA_SO_END, pAppData_Impl->pSvtResMgr );
     pAppData_Impl->m_pSbxErrorHdl = new SfxErrorHandler(
-        RID_BASIC_START, ERRCODE_AREA_SBX, ERRCODE_AREA_SBX_END );
+        RID_BASIC_START, ERRCODE_AREA_SBX, ERRCODE_AREA_SBX_END, pAppData_Impl->pBasicResMgr );
 
     DBG_ASSERT( !pAppData_Impl->pAppDispat, "AppDispatcher already exists" );
     pAppData_Impl->pAppDispat = new SfxDispatcher((SfxDispatcher*)0);

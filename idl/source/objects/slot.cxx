@@ -1592,9 +1592,9 @@ void SvMetaSlot::WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
 void WriteBool( sal_Bool bSet, SvStream& rStream )
 {
     if ( bSet )
-        rStream << "sal_True" << ',';
+        rStream << "TRUE" << ',';
     else
-        rStream << "sal_False" << ',';
+        rStream << "FALSE" << ',';
 }
 
 void SvMetaSlot::WriteCSV( SvIdlDataBase& rBase, SvStream& rStrm )

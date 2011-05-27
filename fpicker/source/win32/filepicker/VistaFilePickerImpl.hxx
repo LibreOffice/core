@@ -105,12 +105,14 @@ static const ::rtl::OUString PROP_TEMPLATE_DESCR(RTL_CONSTASCII_USTRINGPARAM("te
 static const ::rtl::OUString PROP_FILTER_TITLE(RTL_CONSTASCII_USTRINGPARAM("filter_title"       )); // [OUString]
 static const ::rtl::OUString PROP_FILTER_VALUE(RTL_CONSTASCII_USTRINGPARAM("filter_value"       )); // [OUString]
 static const ::rtl::OUString PROP_FORCE(RTL_CONSTASCII_USTRINGPARAM("force"              )); // [sal_Bool]
+static const ::rtl::OUString PROP_FILTER_GROUP(RTL_CONSTASCII_USTRINGPARAM("filter-group"       )); // [seq< css:beans::StringPair >] contains a group of filters
 
 static const ::rtl::OUString PROP_CONTROL_ID(RTL_CONSTASCII_USTRINGPARAM("control_id"         )); // [sal_Int16]
 static const ::rtl::OUString PROP_CONTROL_ACTION(RTL_CONSTASCII_USTRINGPARAM("control_action"     )); // [sal_Int16]
 static const ::rtl::OUString PROP_CONTROL_VALUE(RTL_CONSTASCII_USTRINGPARAM("control_value"      )); // [Any]
 static const ::rtl::OUString PROP_CONTROL_LABEL(RTL_CONSTASCII_USTRINGPARAM("control_label"      )); // [OUString]
 static const ::rtl::OUString PROP_CONTROL_ENABLE(RTL_CONSTASCII_USTRINGPARAM("control_enable"     )); // [sal_Bool] true=ON, false=OFF
+static const ::rtl::OUString STRING_SEPARATOR(RTL_CONSTASCII_USTRINGPARAM("------------------------------------------" ));
 
 //-----------------------------------------------------------------------------
 /** native implementation of the file picker on Vista and upcoming windows versions.
@@ -150,7 +152,8 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
             E_GET_CONTROL_VALUE,
             E_SET_CONTROL_LABEL,
             E_GET_CONTROL_LABEL,
-            E_ENABLE_CONTROL
+            E_ENABLE_CONTROL,
+            E_APPEND_FILTERGROUP
         };
 
     public:
@@ -170,7 +173,10 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
         virtual void after();
 
         //---------------------------------------------------------------------
+        // IVistaFilePickerInternalNotify
+        //---------------------------------------------------------------------
         virtual void onAutoExtensionChanged (bool bChecked);
+        virtual bool onFileTypeChanged( UINT nTypeIndex );
 
     private:
 
@@ -185,6 +191,10 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
         //---------------------------------------------------------------------
         /// implementation of request E_APPEND_FILTER
         void impl_sta_appendFilter(const RequestRef& rRequest);
+
+        //---------------------------------------------------------------------
+        /// implementation of request E_APPEND_FILTERGROUP
+        void impl_sta_appendFilterGroup(const RequestRef& rRequest);
 
         //---------------------------------------------------------------------
         /// implementation of request E_SET_CURRENT_FILTER

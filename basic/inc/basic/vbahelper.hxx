@@ -28,7 +28,9 @@
 #ifndef BASIC_VBAHELPR_HXX
 #define BASIC_VBAHELPR_HXX
 
+#include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <rtl/ustring.hxx>
 
 namespace basic {
 namespace vba {
@@ -36,6 +38,21 @@ namespace vba {
 /*  This header contains public helper functions for VBA used from this module
     and from other VBA implementation modules such as vbahelper.
  */
+
+// ============================================================================
+
+/** Creates and returns an enumeration of all open documents of the same type
+    as the specified document.
+
+    First, the global module manager (com.sun.star.frame.ModuleManager) is
+    asked for the type of the passed model, and all open documents with the
+    same type will be stored in an enumeration object.
+
+    @param rxModel
+        A document model determining the type of the documents.
+ */
+::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > createDocumentsEnumeration(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel );
 
 // ============================================================================
 
@@ -77,6 +94,38 @@ void lockControllersOfAllDocuments(
 void enableContainerWindowsOfAllDocuments(
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel,
     sal_Bool bEnableWindows );
+
+// ============================================================================
+
+/** Registers the passed path as working directory for the application the
+    passed document belongs to.
+
+    @param rxModel
+        A document model determining the type of the application whose working
+        directory has been changed.
+
+    @param rPath
+        The new working directory.
+ */
+void registerCurrentDirectory(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel,
+    const ::rtl::OUString& rPath );
+
+// ============================================================================
+
+/** Returns the working directory of the application the passed document
+    belongs to.
+
+    @param rxModel
+        A document model determining the type of the application whose working
+        directory is querried.
+
+    @return
+        The working directory of the specified application, or an empty string
+        on error (e.g. if the passed document reference is empty).
+ */
+::rtl::OUString getCurrentDirectory(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel );
 
 // ============================================================================
 

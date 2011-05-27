@@ -224,6 +224,7 @@ public class CRMDatabase
     // --------------------------------------------------------------------------------------------------------
     private void validateUnparseable()
     {
+    /*
         // The "unparseable" query should be indeed be unparseable by OOo (though a valid HSQL query)
         XSingleSelectQueryComposer composer;
         QueryDefinition unparseableQuery;
@@ -253,6 +254,7 @@ public class CRMDatabase
 
         if ( !caughtExpected )
             throw new RuntimeException( "Somebody improved the parser! This is bad :), since we need an unparsable query here!" );
+            */
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -284,9 +286,10 @@ public class CRMDatabase
 
         m_database.getDataSource().createQuery( "parseable", "SELECT * FROM \"customers\"" );
         m_database.getDataSource().createQuery( "parseable native", "SELECT * FROM INFORMATION_SCHEMA.SYSTEM_VIEWS", false );
+/*
         m_database.getDataSource().createQuery( "unparseable",
             "SELECT {fn DAYOFMONTH ('2001-01-01')} AS \"ID_VARCHAR\" FROM \"products\"", false );
-
+*/
         validateUnparseable();
     }
 }

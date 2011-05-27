@@ -85,6 +85,12 @@ void lcl_AddState(::std::vector< XMLPropertyState >& rPropState, sal_Int32 nInde
 
 struct XMLPropertyStateBuffer
 {
+    XMLPropertyState*       pPMMarginAll;
+    XMLPropertyState*       pPMMarginTop;
+    XMLPropertyState*       pPMMarginBottom;
+    XMLPropertyState*       pPMMarginLeft;
+    XMLPropertyState*       pPMMarginRight;
+
     XMLPropertyState*       pPMBorderAll;
     XMLPropertyState*       pPMBorderTop;
     XMLPropertyState*       pPMBorderBottom;
@@ -107,7 +113,13 @@ struct XMLPropertyStateBuffer
     void                    ContextFilter( ::std::vector< XMLPropertyState >& rPropState );
 };
 
-XMLPropertyStateBuffer::XMLPropertyStateBuffer() :
+XMLPropertyStateBuffer::XMLPropertyStateBuffer()
+    :   pPMMarginAll( NULL )
+    ,   pPMMarginTop( NULL )
+    ,   pPMMarginBottom( NULL )
+    ,   pPMMarginLeft( NULL )
+    ,   pPMMarginRight( NULL )
+    ,
         pPMBorderAll( NULL ),
         pPMBorderTop( NULL ),
         pPMBorderBottom( NULL ),
@@ -130,6 +142,31 @@ XMLPropertyStateBuffer::XMLPropertyStateBuffer() :
 
 void XMLPropertyStateBuffer::ContextFilter( ::std::vector< XMLPropertyState >& )
 {
+    if (pPMMarginAll)
+    {
+        if (pPMMarginTop && pPMMarginBottom && pPMMarginLeft && pPMMarginRight)
+        {
+            sal_Int32 nTop = 0, nBottom = 0, nLeft = 0, nRight = 0;
+
+            pPMMarginTop->maValue >>= nTop;
+            pPMMarginBottom->maValue >>= nBottom;
+            pPMMarginLeft->maValue >>= nLeft;
+            pPMMarginRight->maValue >>= nRight;
+
+            if ((nTop == nBottom) && (nBottom == nLeft) && (nLeft == nRight))
+            {
+                lcl_RemoveState( pPMMarginTop );
+                lcl_RemoveState( pPMMarginBottom );
+                lcl_RemoveState( pPMMarginLeft );
+                lcl_RemoveState( pPMMarginRight );
+            }
+            else
+                lcl_RemoveState( pPMMarginAll );
+        }
+        else
+            lcl_RemoveState( pPMMarginAll );
+    }
+
     if( pPMBorderAll )
     {
         if( pPMBorderTop && pPMBorderBottom && pPMBorderLeft && pPMBorderRight )
@@ -349,6 +386,11 @@ void XMLPageMasterExportPropMapper::ContextFilter(
 
         switch( nSimpleId )
         {
+            case CTF_PM_MARGINALL:          pBuffer->pPMMarginAll           = pProp;    break;
+            case CTF_PM_MARGINTOP:          pBuffer->pPMMarginTop           = pProp;    break;
+            case CTF_PM_MARGINBOTTOM:       pBuffer->pPMMarginBottom        = pProp;    break;
+            case CTF_PM_MARGINLEFT:         pBuffer->pPMMarginLeft          = pProp;    break;
+            case CTF_PM_MARGINRIGHT:        pBuffer->pPMMarginRight         = pProp;    break;
             case CTF_PM_BORDERALL:          pBuffer->pPMBorderAll           = pProp;    break;
             case CTF_PM_BORDERTOP:          pBuffer->pPMBorderTop           = pProp;    break;
             case CTF_PM_BORDERBOTTOM:       pBuffer->pPMBorderBottom        = pProp;    break;

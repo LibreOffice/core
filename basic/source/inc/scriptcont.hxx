@@ -36,10 +36,10 @@
 
 class BasicManager;
 
-//============================================================================
-
 namespace basic
 {
+
+//============================================================================
 
 class SfxScriptLibraryContainer : public SfxLibraryContainer, public OldBasicPassword
 {
@@ -145,13 +145,13 @@ public:
 //============================================================================
 typedef boost::unordered_map< ::rtl::OUString, ::com::sun::star::script::ModuleInfo, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > ModuleInfoMap;
 
-typedef ::cppu::ImplHelper1 <   ::com::sun::star::script::vba::XVBAModuleInfo
-                            >   SfxScriptLibrary_BASE;
+typedef ::cppu::ImplHelper1< ::com::sun::star::script::vba::XVBAModuleInfo > SfxScriptLibrary_BASE;
 
-class SfxScriptLibrary : public SfxLibrary
-                       , public SfxScriptLibrary_BASE
+class SfxScriptLibrary : public SfxLibrary, public SfxScriptLibrary_BASE
 {
     friend class SfxScriptLibraryContainer;
+
+    typedef boost::unordered_map< ::rtl::OUString, ::com::sun::star::script::ModuleInfo, ::rtl::OUStringHash > ModuleInfoMap;
 
     sal_Bool mbLoadedSource;
     sal_Bool mbLoadedBinary;
@@ -197,7 +197,9 @@ protected:
     virtual bool SAL_CALL isLibraryElementValid( ::com::sun::star::uno::Any aElement ) const;
 };
 
-}   // namespace base
+//============================================================================
+
+}   // namespace basic
 
 #endif
 

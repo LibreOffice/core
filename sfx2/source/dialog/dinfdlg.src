@@ -126,9 +126,17 @@ TabPage TP_DOCINFODOC
     Edit ED_FILE_NAME
     {
         HelpID = "sfx2:Edit:TP_DOCINFODOC:ED_FILE_NAME";
-        Pos = MAP_APPFONT ( 54 , 12 ) ;
-        Size = MAP_APPFONT ( 200 , RSC_CD_TEXTBOX_HEIGHT ) ;
+        Pos = MAP_APPFONT ( 36 , 12 ) ;
+        Size = MAP_APPFONT ( 140 , RSC_CD_TEXTBOX_HEIGHT ) ;
         Border = TRUE ;
+    };
+    PushButton BTN_CHANGE_PASS
+    {
+        HelpID = "sfx2:Edit:TP_DOCINFODOC:BTN_CHANGE_PASS";
+        Pos = MAP_APPFONT ( 189 , 11 ) ;
+        Size = MAP_APPFONT ( 65 , RSC_CD_PUSHBUTTON_HEIGHT ) ;
+        Hide = FALSE;
+        Text [ en-US ] = "Change ~Password...";
     };
     FixedLine FL_FILE_1
     {

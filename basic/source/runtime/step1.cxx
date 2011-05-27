@@ -39,8 +39,7 @@
 #include "sbunoobj.hxx"
 #include "errobject.hxx"
 
-bool checkUnoObjectType( SbUnoObject* refVal,
-    const ::rtl::OUString& aClass );
+bool checkUnoObjectType( SbUnoObject* refVal, const ::rtl::OUString& aClass );
 
 // Laden einer numerischen Konstanten (+ID)
 
@@ -441,11 +440,11 @@ bool SbiRuntime::implIsClass( SbxObject* pObj, const ::rtl::OUString& aClass )
 {
     bool bRet = true;
 
-    if( aClass.getLength() != 0 )
+    if( !aClass.isEmpty() )
     {
         bRet = pObj->IsClass( aClass );
         if( !bRet )
-            bRet = aClass.equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("object") ) );
+            bRet = aClass.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM("object") );
         if( !bRet )
         {
             String aObjClass = pObj->GetClassName();

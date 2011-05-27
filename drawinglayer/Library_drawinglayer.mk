@@ -112,6 +112,7 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/primitive2d/polygonprimitive2d \
     drawinglayer/source/primitive2d/polypolygonprimitive2d \
     drawinglayer/source/primitive2d/primitivetools2d \
+    drawinglayer/source/primitive2d/rendergraphicprimitive2d \
     drawinglayer/source/primitive2d/sceneprimitive2d \
     drawinglayer/source/primitive2d/sdrdecompositiontools2d \
     drawinglayer/source/primitive2d/shadowprimitive2d \

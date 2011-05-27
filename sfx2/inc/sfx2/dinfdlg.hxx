@@ -174,6 +174,7 @@ class SfxDocumentPage : public SfxTabPage
 private:
     FixedImage                  aBmp1;
     Edit                        aNameED;
+    PushButton                  aChangePassBtn;
 
     FixedLine                   aLine1FL;
     FixedText                   aTypeFT;
@@ -213,7 +214,9 @@ private:
 
     DECL_LINK(          DeleteHdl, PushButton * );
     DECL_LINK(          SignatureHdl, PushButton * );
+    DECL_LINK( ChangePassHdl, PushButton * );
     void                ImplUpdateSignatures();
+    void                ImplCheckPasswordState();
 
 protected:
     SfxDocumentPage( Window* pParent, const SfxItemSet& );

@@ -111,7 +111,8 @@ public:
 
     // application members
     SfxFilterMatcher*                   pMatcher;
-    ResMgr*                             pLabelResMgr;
+    ResMgr*                             pBasicResMgr;
+    ResMgr*                             pSvtResMgr;
 #ifdef DBG_UTIL
     SimpleErrorHandler *m_pSimpleErrorHdl;
 #endif

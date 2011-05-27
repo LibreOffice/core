@@ -39,7 +39,6 @@ $(eval $(call gb_Package_add_file,framework_inc,inc/framework/undomanagerhelper.
 $(eval $(call gb_Package_add_file,framework_inc,inc/framework/imutex.hxx,framework/imutex.hxx))
 $(eval $(call gb_Package_add_file,framework_inc,inc/framework/iguard.hxx,framework/iguard.hxx))
 $(eval $(call gb_Package_add_file,framework_inc,inc/framework/imageproducer.hxx,framework/imageproducer.hxx))
-$(eval $(call gb_Package_add_file,framework_inc,inc/framework/imagesconfiguration.hxx,framework/imagesconfiguration.hxx))
 $(eval $(call gb_Package_add_file,framework_inc,inc/framework/interaction.hxx,framework/interaction.hxx))
 $(eval $(call gb_Package_add_file,framework_inc,inc/framework/menuconfiguration.hxx,framework/menuconfiguration.hxx))
 $(eval $(call gb_Package_add_file,framework_inc,inc/framework/menuextensionsupplier.hxx,framework/menuextensionsupplier.hxx))

@@ -27,7 +27,7 @@
 #ifndef __ooo_vba_excel_XWorksheet_idl__
 #define __ooo_vba_excel_XWorksheet_idl__
 
-#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/XUnoTunnel.idl>
 #include <ooo/vba/XHelperInterface.idl>
 #include <com/sun/star/script/XInvocation.idl>
 #include <com/sun/star/container/XNamed.idl>
@@ -49,6 +49,7 @@ interface XWorksheet
     interface ::ooo::vba::XHelperInterface;
     interface ::com::sun::star::script::XInvocation;
     interface ::com::sun::star::container::XNamed;
+    interface ::com::sun::star::lang::XUnoTunnel;
 
     [attribute] long Visible;
     [attribute, readonly] long StandardHeight;

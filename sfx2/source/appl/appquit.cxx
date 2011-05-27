@@ -156,6 +156,9 @@ void SfxApplication::Deinitialize()
     pAppData_Impl->pPool = NULL;
     NoChaos::ReleaseItemPool();
 
+    DELETEZ(pAppData_Impl->pBasicResMgr);
+    DELETEZ(pAppData_Impl->pSvtResMgr);
+
     delete pAppData_Impl->m_pSbxErrorHdl;
     delete pAppData_Impl->m_pSoErrorHdl;
     delete pAppData_Impl->m_pToolsErrorHdl;

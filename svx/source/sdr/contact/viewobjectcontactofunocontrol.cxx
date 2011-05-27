@@ -58,8 +58,6 @@
 #include <com/sun/star/container/XContainer.hpp>
 /** === end UNO includes === **/
 
-#include <toolkit/helper/formpdfexport.hxx>
-#include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
@@ -70,7 +68,6 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/primitive2d/controlprimitive2d.hxx>
 
-#include <boost/shared_ptr.hpp>
 #include <boost/bind.hpp>
 
 /*

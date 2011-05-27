@@ -652,8 +652,12 @@ void SdrEditView::CheckPossibilities()
                     sal_Bool bGraf=HAS_BASE(SdrGrafObj,pObj);
                     sal_Bool bOle2=HAS_BASE(SdrOle2Obj,pObj);
 
-                    if( bGraf && ((SdrGrafObj*)pObj)->HasGDIMetaFile() && !((SdrGrafObj*)pObj)->IsEPS() )
+                    if( bGraf &&
+                        ((SdrGrafObj*)pObj)->HasGDIMetaFile() &&
+                        !( ((SdrGrafObj*)pObj)->IsEPS() || ((SdrGrafObj*)pObj)->IsRenderGraphic() ) )
+                    {
                         bImportMtfPossible = sal_True;
+                    }
 
                     if (bOle2)
                         bImportMtfPossible=((SdrOle2Obj*)pObj)->GetObjRef().is();

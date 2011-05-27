@@ -24,20 +24,25 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef __ooo_vba_msforms_XLabel_idl__
 #define __ooo_vba_msforms_XLabel_idl__
 
 #include <com/sun/star/uno/XInterface.idl>
+#include <ooo/vba/msforms/XNewFont.idl>
+
 //=============================================================================
 
 module ooo {  module vba {  module msforms {
 
 //=============================================================================
-interface XLabel: com::sun::star::uno::XInterface
+
+interface XLabel
 {
     [attribute] string Caption;
     [attribute] any Value;
     [attribute] string Accelerator;
+    [attribute, readonly] XNewFont Font;
 };
 
 //=============================================================================

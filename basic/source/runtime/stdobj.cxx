@@ -148,7 +148,7 @@ static Methods aMethods[] = {
 
 { "Chr",            SbxSTRING,    1 | _FUNCTION, RTLNAME(Chr),0             },
   { "string",       SbxINTEGER, 0,NULL,0 },
-{ "ChrW",           SbxSTRING,    1 | _FUNCTION | _COMPATONLY, RTLNAME(Chr),0},
+{ "ChrW",           SbxSTRING,    1 | _FUNCTION | _COMPATONLY, RTLNAME(ChrW),0},
   { "string",       SbxINTEGER, 0,NULL,0 },
 
 { "CInt",           SbxINTEGER,   1 | _FUNCTION, RTLNAME(CInt),0            },

@@ -141,6 +141,7 @@ protected:
     void DoAction(MetaISectRectClipRegionAction& rAct) { rAct.Execute(&aVD); }
     void DoAction(MetaISectRegionClipRegionAction& rAct) { rAct.Execute(&aVD); }
     void DoAction(MetaCommentAction& rAct, GDIMetaFile* pMtf);
+    void DoAction(MetaRenderGraphicAction& rAct);
 
     void ImportText( const Point& rPos, const XubString& rStr, const MetaAction& rAct );
     void SetAttributes(SdrObject* pObj, bool bForceTextAttr = false);

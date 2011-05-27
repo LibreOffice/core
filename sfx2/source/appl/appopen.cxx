@@ -288,8 +288,9 @@ private:
     }
     catch( const uno::Exception& )
     {
-        // unknown error, do not try to ask again
-        eResult = ::comphelper::DocPasswordVerifierResult_ABORT;
+        // unknown error, report it as wrong password
+        // TODO/LATER: we need an additional way to report unknown problems in this case
+        eResult = ::comphelper::DocPasswordVerifierResult_WRONG_PASSWORD;
     }
     return eResult;
 }

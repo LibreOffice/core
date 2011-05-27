@@ -57,9 +57,7 @@ ScVbaUserForm::ScVbaUserForm( uno::Sequence< uno::Any > const& aArgs, uno::Refer
     m_xDialog.set( m_xControl, uno::UNO_QUERY_THROW );
     uno::Reference< awt::XControl > xControl( m_xDialog, uno::UNO_QUERY_THROW );
     m_xProps.set( xControl->getModel(), uno::UNO_QUERY_THROW );
-    setGeometryHelper( new UserFormGeometryHelper( xContext, xControl ) );
-    if ( aArgs.getLength() >= 4 )
-        aArgs[ 3 ] >>= m_sLibName;
+    setGeometryHelper( new UserFormGeometryHelper( xContext, xControl, 0.0, 0.0 ) );
 }
 
 ScVbaUserForm::~ScVbaUserForm()
@@ -110,16 +108,36 @@ ScVbaUserForm::Show(  ) throw (uno::RuntimeException)
 }
 
 rtl::OUString SAL_CALL
-ScVbaUserForm::getCaption() throw (::com::sun::star::uno::RuntimeException)
+ScVbaUserForm::getCaption() throw (uno::RuntimeException)
 {
     rtl::OUString sCaption;
     m_xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Title") ) ) >>= sCaption;
     return sCaption;
 }
 void
-ScVbaUserForm::setCaption( const ::rtl::OUString& _caption ) throw (::com::sun::star::uno::RuntimeException)
+ScVbaUserForm::setCaption( const ::rtl::OUString& _caption ) throw (uno::RuntimeException)
 {
     m_xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Title") ), uno::makeAny( _caption ) );
+}
+
+double SAL_CALL ScVbaUserForm::getInnerWidth() throw (uno::RuntimeException)
+{
+    return mpGeometryHelper->getInnerWidth();
+}
+
+void SAL_CALL ScVbaUserForm::setInnerWidth( double fInnerWidth ) throw (uno::RuntimeException)
+{
+    mpGeometryHelper->setInnerWidth( fInnerWidth );
+}
+
+double SAL_CALL ScVbaUserForm::getInnerHeight() throw (uno::RuntimeException)
+{
+    return mpGeometryHelper->getInnerHeight();
+}
+
+void SAL_CALL ScVbaUserForm::setInnerHeight( double fInnerHeight ) throw (uno::RuntimeException)
+{
+    mpGeometryHelper->setInnerHeight( fInnerHeight );
 }
 
 void SAL_CALL
@@ -251,10 +269,8 @@ ScVbaUserForm::getValue( const ::rtl::OUString& aPropertyName ) throw (beans::Un
         xContainer->getControl( aPropertyName );
         if ( xControl.is() )
         {
-            ScVbaControlFactory aFac( mxContext, xControl, m_xModel );
-                uno::Reference< msforms::XControl > xVBAControl( aFac.createControl( xDialogControl->getModel() ) );
-                ScVbaControl* pControl  = dynamic_cast< ScVbaControl* >( xVBAControl.get() );
-                pControl->setGeometryHelper( new UserFormGeometryHelper( mxContext, xControl ) );
+            uno::Reference< msforms::XControl > xVBAControl = ScVbaControlFactory::createUserformControl( mxContext, xControl, xDialogControl, m_xModel, mpGeometryHelper->getOffsetX(), mpGeometryHelper->getOffsetY() );
+            ScVbaControl* pControl  = dynamic_cast< ScVbaControl* >( xVBAControl.get() );
             if ( m_sLibName.getLength() )
                 pControl->setLibraryAndCodeName( m_sLibName.concat( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "." ) ) ).concat( getName() ) );
             aResult = uno::makeAny( xVBAControl );
@@ -275,7 +291,7 @@ ScVbaUserForm::Controls( const uno::Any& index ) throw (uno::RuntimeException)
     // if the dialog already closed we should do nothing, but the VBA will call methods of the Controls objects
     // thus we have to provide a dummy object in this case
     uno::Reference< awt::XControl > xDialogControl( m_xDialog, uno::UNO_QUERY );
-    uno::Reference< XCollection > xControls( new ScVbaControls( this, mxContext, xDialogControl ) );
+    uno::Reference< XCollection > xControls( new ScVbaControls( this, mxContext, xDialogControl, m_xModel, mpGeometryHelper->getOffsetX(), mpGeometryHelper->getOffsetY() ) );
     if ( index.hasValue() )
         return uno::makeAny( xControls->Item( index, uno::Any() ) );
     return uno::makeAny( xControls );

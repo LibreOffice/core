@@ -1737,7 +1737,7 @@ void DbGridControl::ColumnMoved(sal_uInt16 nId)
     DbGridControl_Base::ColumnMoved(nId);
 
     // remove the col from the model
-    sal_Int16 nOldModelPos = GetModelColumnPos(nId);
+    sal_uInt16 nOldModelPos = GetModelColumnPos(nId);
 #ifdef DBG_UTIL
     DbGridColumn* pCol = m_aColumns[ (sal_uInt32)nOldModelPos ];
     DBG_ASSERT(!pCol->IsHidden(), "DbGridControl::ColumnMoved : moved a hidden col ? how this ?");
@@ -2011,6 +2011,18 @@ void DbGridControl::AdjustRows()
             RowRemoved(GetRowCount() - nDelta, nDelta, sal_False);
             // es sind Zeilen weggefallen, dann ab der aktuellen Position neu zeichen
             Invalidate();
+
+            sal_Int32 nNewPos = AlignSeekCursor();
+            if (m_bSynchDisplay)
+                DbGridControl_Base::GoToRow(nNewPos);
+
+            SetCurrent(nNewPos);
+            // there are rows so go to the selected current column
+            if (nRecordCount)
+                GoToRowColumnId(nNewPos, GetColumnId(GetCurColumnId()));
+            if (!IsResizing() && GetRowCount())
+                RecalcRows(GetTopRow(), GetVisibleRows(), sal_True);
+            m_aBar.InvalidateAll(m_nCurrentPos, sal_True);
         }
         else                                                    // zuwenig
             RowInserted(GetRowCount(), -nDelta, sal_True);

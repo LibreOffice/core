@@ -30,6 +30,7 @@
 #include "precompiled_sfx2.hxx"
 
 #include "arrdecl.hxx"
+#include <map>
 
 #include <cppuhelper/implbase1.hxx>
 
@@ -123,41 +124,36 @@ DBG_NAME(SfxObjectShell)
 #define DocumentInfo
 #include "sfxslots.hxx"
 
+namespace {
+
 static WeakReference< XInterface > s_xCurrentComponent;
 
-void lcl_UpdateAppBasicDocVars(  const Reference< XInterface >& _rxComponent, bool bClear = false )
-{
-    BasicManager* pAppMgr = SFX_APP()->GetBasicManager();
-    if ( pAppMgr )
-    {
-        uno::Reference< beans::XPropertySet > xProps( _rxComponent, uno::UNO_QUERY );
-        if ( xProps.is() )
-        {
-            try
-            {
-                // ThisVBADocObj contains a PropertyValue
-                // Name  is ( the name of the VBA global to insert )
-                // Value is the Object to insert.
-                // ( note: at the moment the Value is actually the model so
-                // it strictly is not necessary, however we do intend to store
-                // not the model in basic but a custom object, so we keep this
-                // level of indirection for future proofing )
-                beans::PropertyValue aProp;
-                xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ThisVBADocObj") ) ) >>= aProp;
-                rtl::OString sTmp( rtl::OUStringToOString( aProp.Name, RTL_TEXTENCODING_UTF8 ) );
-                const char* pAscii = sTmp.getStr();
-                if ( bClear )
-                    pAppMgr->SetGlobalUNOConstant( pAscii, uno::makeAny( uno::Reference< uno::XInterface >() ) );
-                else
-                    pAppMgr->SetGlobalUNOConstant( pAscii, aProp.Value );
+// remember all registered components for VBA compatibility, to be able to remove them on disposing the model
+typedef ::std::map< XInterface*, ::rtl::OString > VBAConstantNameMap;
+static VBAConstantNameMap s_aRegisteredVBAConstants;
 
-            }
-            catch( const uno::Exception& )
-            {
-            }
-        }
+::rtl::OString lclGetVBAGlobalConstName( const Reference< XInterface >& rxComponent )
+{
+    OSL_ENSURE( rxComponent.is(), "lclGetVBAGlobalConstName - missing component" );
+
+    VBAConstantNameMap::iterator aIt = s_aRegisteredVBAConstants.find( rxComponent.get() );
+    if( aIt != s_aRegisteredVBAConstants.end() )
+        return aIt->second;
+
+    uno::Reference< beans::XPropertySet > xProps( rxComponent, uno::UNO_QUERY );
+    if( xProps.is() ) try
+    {
+        ::rtl::OUString aConstName;
+        xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VBAGlobalConstantName" ) ) ) >>= aConstName;
+        return ::rtl::OUStringToOString( aConstName, RTL_TEXTENCODING_ASCII_US );
     }
+    catch( uno::Exception& ) // not supported
+    {
+    }
+    return ::rtl::OString();
 }
+
+} // namespace
 
 //=========================================================================
 
@@ -190,9 +186,22 @@ void SAL_CALL SfxModelListener_Impl::disposing( const com::sun::star::lang::Even
     SolarMutexGuard aSolarGuard;
     if ( SfxObjectShell::GetCurrentComponent() == _rEvent.Source )
     {
-        lcl_UpdateAppBasicDocVars( SfxObjectShell::GetCurrentComponent(), true );
         // remove ThisComponent reference from AppBasic
         SfxObjectShell::SetCurrentComponent( Reference< XInterface >() );
+    }
+
+    /*  Remove VBA component from AppBasic. As every application registers its
+        own current component, the disposed component may not be the "current
+        component" of the SfxObjectShell. */
+    if ( _rEvent.Source.is() )
+    {
+        VBAConstantNameMap::iterator aIt = s_aRegisteredVBAConstants.find( _rEvent.Source.get() );
+        if ( aIt != s_aRegisteredVBAConstants.end() )
+        {
+            if ( BasicManager* pAppMgr = SFX_APP()->GetBasicManager() )
+                pAppMgr->SetGlobalUNOConstant( aIt->second.getStr(), Any( Reference< XInterface >() ) );
+            s_aRegisteredVBAConstants.erase( aIt );
+        }
     }
 
     if ( mpDoc->Get_Impl()->bHiddenLockedByAPI )
@@ -922,8 +931,8 @@ sal_uInt16 SfxObjectShell::GetAutoStyleFilterIndex()
 
 void SfxObjectShell::SetCurrentComponent( const Reference< XInterface >& _rxComponent )
 {
-    Reference< XInterface > xTest(s_xCurrentComponent);
-    if ( _rxComponent == xTest )
+    Reference< XInterface > xOldCurrentComp(s_xCurrentComponent);
+    if ( _rxComponent == xOldCurrentComp )
         // nothing to do
         return;
     // note that "_rxComponent.get() == s_xCurrentComponent.get().get()" is /sufficient/, but not
@@ -935,8 +944,29 @@ void SfxObjectShell::SetCurrentComponent( const Reference< XInterface >& _rxComp
     s_xCurrentComponent = _rxComponent;
     if ( pAppMgr )
     {
-        lcl_UpdateAppBasicDocVars( _rxComponent );
-        pAppMgr->SetGlobalUNOConstant( "ThisComponent", makeAny( _rxComponent ) );
+        // set "ThisComponent" for Basic
+        pAppMgr->SetGlobalUNOConstant( "ThisComponent", Any( _rxComponent ) );
+
+        // set new current component for VBA compatibility
+        if ( _rxComponent.is() )
+        {
+            ::rtl::OString aVBAConstName = lclGetVBAGlobalConstName( _rxComponent );
+            if ( aVBAConstName.getLength() > 0 )
+            {
+                pAppMgr->SetGlobalUNOConstant( aVBAConstName.getStr(), Any( _rxComponent ) );
+                s_aRegisteredVBAConstants[ _rxComponent.get() ] = aVBAConstName;
+            }
+        }
+        // no new component passed -> remove last registered VBA component
+        else if ( xOldCurrentComp.is() )
+        {
+            ::rtl::OString aVBAConstName = lclGetVBAGlobalConstName( xOldCurrentComp );
+            if ( aVBAConstName.getLength() > 0 )
+            {
+                pAppMgr->SetGlobalUNOConstant( aVBAConstName.getStr(), Any( Reference< XInterface >() ) );
+                s_aRegisteredVBAConstants.erase( xOldCurrentComp.get() );
+            }
+        }
     }
 }
 
