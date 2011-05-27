@@ -1,5 +1,6 @@
 #include <rtfdocumentimpl.hxx>
 #include <rtftypes.hxx>
+#include <rtfcontrolwords.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -125,24 +126,27 @@ int RTFDocumentImpl::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
             OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, rKeyword.getStr());
             break;
         case CONTROL_DESTINATION:
-            // TODO string comparion is not efficent here
-            if (!strcmp(rKeyword.getStr(), "rtf"))
+            switch (aRTFControlWords[i].nIndex)
             {
-            }
-            else
-            {
-                OSL_TRACE("%s: TODO handle destination '%s'", OSL_THIS_FUNC, rKeyword.getStr());
-                // Make sure we skip destinations till we don't handle them
-                m_aStates.top().nDestinationState = DESTINATION_SKIP;
+                case RTF_RTF:
+                    break;
+                default:
+                    OSL_TRACE("%s: TODO handle destination '%s'", OSL_THIS_FUNC, rKeyword.getStr());
+                    // Make sure we skip destinations till we don't handle them
+                    m_aStates.top().nDestinationState = DESTINATION_SKIP;
+                    break;
             }
             break;
         case CONTROL_SYMBOL:
-            if (!strcmp(rKeyword.getStr(), "*"))
+            switch (aRTFControlWords[i].nIndex)
             {
-                m_bSkipUnknown = true;
+                case RTF_IGNORE:
+                    m_bSkipUnknown = true;
+                    break;
+                default:
+                    OSL_TRACE("%s: TODO handle symbol '%s'", OSL_THIS_FUNC, rKeyword.getStr());
+                    break;
             }
-            else
-                OSL_TRACE("%s: TODO handle symbol '%s'", OSL_THIS_FUNC, rKeyword.getStr());
             break;
         case CONTROL_TOGGLE:
             OSL_TRACE("%s: TODO handle toggle '%s'", OSL_THIS_FUNC, rKeyword.getStr());
