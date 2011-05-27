@@ -40,8 +40,6 @@
 
 #include "tools/debug.hxx"
 
-#include "vos/mutex.hxx"
-
 #include "vcl/svapp.hxx"
 #include "vcl/event.hxx"
 #include "vcl/lstbox.hxx"
@@ -1976,6 +1974,7 @@ void DbgAbort( char const * i_message )
 void ImplDbgTestSolarMutex()
 {
     bool bCheck = ImplGetSVData()->mpDefInst->CheckYieldMutex();
+    (void)bCheck;
     OSL_ENSURE( bCheck, "SolarMutex not locked" );
 }
 

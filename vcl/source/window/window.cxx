@@ -529,7 +529,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, sal_Bool bCallHdl
         rSettings.SetStyleSettings( aStyleSettings );
     }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     // Evt. AppFont auf Fett schalten, damit man feststellen kann,
     // ob fuer die Texte auf anderen Systemen genuegend Platz
     // vorhanden ist
@@ -4382,7 +4382,7 @@ Window::~Window()
     if ( pSVData->maWinData.mpDefDialogParent == this )
         pSVData->maWinData.mpDefDialogParent = NULL;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     if ( sal_True ) // always perform these tests in non-pro versions
     {
         ByteString  aErrorStr;
@@ -4525,7 +4525,7 @@ Window::~Window()
     {
         // #122232#, this must not happen and is an application bug ! but we try some cleanup to hopefully avoid crashes, see below
         bHasFocussedChild = sal_True;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
         ByteString aTempStr( "Window (" );
         aTempStr += ByteString( GetText(), RTL_TEXTENCODING_UTF8 );
         aTempStr += ") with focussed child window destroyed ! THIS WILL LEAD TO CRASHES AND MUST BE FIXED !";
@@ -6478,7 +6478,7 @@ void Window::Show( sal_Bool bVisible, sal_uInt16 nFlags )
         if( aDogTag.IsDelete() )
             return;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
         if ( IsDialog() || (GetType() == WINDOW_TABPAGE) || (GetType() == WINDOW_DOCKINGWINDOW) )
         {
             DBG_DIALOGTEST( this );
