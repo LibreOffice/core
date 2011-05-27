@@ -17,7 +17,8 @@ extern RTFSymbol aRTFControlWords[];
 extern int nRTFControlWords;
 
 RTFDocumentImpl::RTFDocumentImpl(uno::Reference<io::XInputStream> const& xInputStream)
-    : m_nGroup(0)
+    : m_nGroup(0),
+    m_bSkipUnknown(false)
 {
     OSL_ENSURE(xInputStream.is(), "no input stream");
     if (!xInputStream.is())
@@ -100,9 +101,16 @@ int RTFDocumentImpl::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
     if (i == nRTFControlWords)
     {
         OSL_TRACE("%s: unknown keyword '\\%s'", OSL_THIS_FUNC, rKeyword.getStr());
-        // TODO when an unknown keyword starts with \*, then it's a destination
+        if (m_bSkipUnknown)
+        {
+            m_aStates.top().nDestinationState = DESTINATION_SKIP;
+            m_bSkipUnknown = false;
+        }
         return 0;
     }
+
+    // known keyword, shoult not be skipped, even if starts with \*
+    m_bSkipUnknown = false;
 
     switch (aRTFControlWords[i].nControlType)
     {
@@ -122,7 +130,12 @@ int RTFDocumentImpl::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
             }
             break;
         case CONTROL_SYMBOL:
-            OSL_TRACE("%s: TODO handle symbol '%s'", OSL_THIS_FUNC, rKeyword.getStr());
+            if (!strcmp(rKeyword.getStr(), "*"))
+            {
+                m_bSkipUnknown = true;
+            }
+            else
+                OSL_TRACE("%s: TODO handle symbol '%s'", OSL_THIS_FUNC, rKeyword.getStr());
             break;
         case CONTROL_TOGGLE:
             OSL_TRACE("%s: TODO handle toggle '%s'", OSL_THIS_FUNC, rKeyword.getStr());

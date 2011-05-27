@@ -75,6 +75,7 @@ namespace writerfilter {
                 /// Same as m_aStates.size(), except that this can be negative for invalid input.
                 int m_nGroup;
                 std::stack<RTFParserState> m_aStates;
+                bool m_bSkipUnknown;
         };
     } // namespace rtftok
 } // namespace writerfilter
