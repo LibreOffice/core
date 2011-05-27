@@ -50,6 +50,11 @@ std::string RTFValue::toString() const
     return OString::valueOf(static_cast<sal_Int32>(m_nValue)).getStr();
 }
 
+RTFValue* RTFValue::Clone()
+{
+    return new RTFValue(m_nValue);
+}
+
 } // namespace rtftok
 } // namespace writerfilter
 

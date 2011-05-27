@@ -11,6 +11,7 @@ namespace writerfilter {
             : public Value
         {
             public:
+                typedef ::boost::shared_ptr<RTFValue> Pointer_t;
                 RTFValue(int nValue);
                 virtual int getInt() const;
                 virtual rtl::OUString getString() const;
@@ -19,6 +20,7 @@ namespace writerfilter {
                 virtual writerfilter::Reference<Stream>::Pointer_t getStream();
                 virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary();
                 virtual std::string toString() const;
+                virtual RTFValue* Clone();
             private:
                 int m_nValue;
         };
