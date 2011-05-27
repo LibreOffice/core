@@ -32,7 +32,7 @@
     <service name="com.sun.star.resource.OfficeResourceLoader"/>
     <singleton name="com.sun.star.resource.OfficeResourceLoader"/>
   </implementation>
-  <implementation name="org.libreoffice.extensions.resource.ResourceStringIndexAccess">
-    <service name="org.libreoffice.resource.ResourceStringIndexAccess"/>
+  <implementation name="org.libreoffice.extensions.resource.ResourceIndexAccess">
+    <service name="org.libreoffice.resource.ResourceIndexAccess"/>
   </implementation>
 </component>

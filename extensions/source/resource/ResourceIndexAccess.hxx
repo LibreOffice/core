@@ -33,39 +33,43 @@
 
 #include "precompiled_extensions.hxx"
 
-#include <com/sun/star/container/XIndexAccess.hpp>
+#include <boost/shared_ptr.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cppuhelper/implbase1.hxx>
-#include <memory>
 
 class ResMgr;
 
 namespace extensions { namespace resource
 {
-    class ResourceStringIndexAccess : public cppu::WeakImplHelper1< ::com::sun::star::container::XIndexAccess>
+    /** This class provides access to tools library text resources */
+    class ResourceIndexAccess : public cppu::WeakImplHelper1< ::com::sun::star::container::XNameAccess>
     {
         public:
-            ResourceStringIndexAccess(::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any> const& rArgs, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> const&);
-            // XIndexAccess
-            virtual ::sal_Int32 SAL_CALL getCount(  ) throw (::com::sun::star::uno::RuntimeException)
-                { return m_pResMgr.get() ? SAL_MAX_UINT16 : 0; };
-            virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+            /** The ctor takes a sequence with one element: the name of the resource, e.g. svt */
+            ResourceIndexAccess(::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any> const& rArgs, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> const&);
+            // XNameAccess
+            // The XNameAccess provides access to two named elements:
+            //    "String" returns a XIndexAccess to String resources
+            //    "StringList" returns a XIndexAccess to StringList/StringArray resources
+            virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw (::com::sun::star::uno::RuntimeException);
+            virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
             // XElementAccess
             virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException)
-                { return ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)); };
+                { return ::getCppuType(reinterpret_cast< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*>(NULL)); };
             virtual ::sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException)
                 { return static_cast<bool>(m_pResMgr.get()); };
 
         private:
-            // m_pResMgr should never be NULL, see initResourceStringIndexAccess
-            const ::std::auto_ptr<ResMgr> m_pResMgr;
+            // m_pResMgr should never be NULL
+            const ::boost::shared_ptr<ResMgr> m_pResMgr;
     };
-
 }}
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> initResourceStringIndexAccess(::extensions::resource::ResourceStringIndexAccess*);
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> initResourceIndexAccess(::extensions::resource::ResourceIndexAccess*);
 
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

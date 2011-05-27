@@ -40,7 +40,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES= \
-    $(SLO)$/ResourceStringIndexAccess.obj \
+    $(SLO)$/ResourceIndexAccess.obj \
     $(SLO)$/oooresourceloader.obj \
     $(SLO)$/resourceservices.obj
 
