@@ -45,11 +45,10 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <rtl/instance.hxx>
 
-#define _SVSTDARR_ULONGSSORT
-#include <svl/svstdarr.hxx>
-
 #include <svtools/svmedit.hxx>
 #include <svtools/svlbitm.hxx>
+
+#include <set>
 
 using namespace ::com::sun::star::accessibility;
 
@@ -1026,15 +1025,15 @@ sal_Bool SvLBox::CopySelection( SvLBox* pSource, SvLBoxEntry* pTarget )
     {
         // Childs werden automatisch mitkopiert
         pSource->SelectChilds( pSourceEntry, sal_False );
-        aList.push_back( pSourceEntry );
+        aList.Insert( pSourceEntry, LIST_APPEND );
         pSourceEntry = pSource->NextSelected( pSourceEntry );
     }
 
-    for ( size_t i = 0, n = aList.size(); i < n; ++i )
+    pSourceEntry = (SvLBoxEntry*)aList.First();
+    while ( pSourceEntry )
     {
-        pSourceEntry = (SvLBoxEntry*)aList[ i ];
         SvLBoxEntry* pNewParent = 0;
-        sal_uLong nInsertionPos = ULONG_MAX;
+        sal_uLong nInsertionPos = LIST_APPEND;
         sal_Bool bOk=NotifyCopying(pTarget,pSourceEntry,pNewParent,nInsertionPos);
         if ( bOk )
         {
@@ -1059,6 +1058,7 @@ sal_Bool SvLBox::CopySelection( SvLBox* pSource, SvLBoxEntry* pTarget )
         if( bOk == (sal_Bool)2 )  // !!!HACK  verschobenen Entry sichtbar machen?
             MakeVisible( pSourceEntry );
 
+        pSourceEntry = (SvLBoxEntry*)aList.Next();
     }
     pModel->SetCloneLink( aCloneLink );
     return bSuccess;
@@ -1086,20 +1086,20 @@ sal_Bool SvLBox::MoveSelectionCopyFallbackPossible( SvLBox* pSource, SvLBoxEntry
     {
         // Childs werden automatisch mitbewegt
         pSource->SelectChilds( pSourceEntry, sal_False );
-        aList.push_back( pSourceEntry );
+        aList.Insert( pSourceEntry, LIST_APPEND );
         pSourceEntry = pSource->NextSelected( pSourceEntry );
     }
 
-    for ( size_t i = 0, n = aList.size(); i < n; ++i )
+    pSourceEntry = (SvLBoxEntry*)aList.First();
+    while ( pSourceEntry )
     {
-        pSourceEntry = (SvLBoxEntry*)aList[ i ];
         SvLBoxEntry* pNewParent = 0;
         sal_uLong nInsertionPos = LIST_APPEND;
         sal_Bool bOk = NotifyMoving(pTarget,pSourceEntry,pNewParent,nInsertionPos);
         sal_Bool bCopyOk = bOk;
         if ( !bOk && bAllowCopyFallback )
         {
-            nInsertionPos = ULONG_MAX;
+            nInsertionPos = LIST_APPEND;
             bCopyOk = NotifyCopying(pTarget,pSourceEntry,pNewParent,nInsertionPos);
         }
 
@@ -1128,6 +1128,8 @@ sal_Bool SvLBox::MoveSelectionCopyFallbackPossible( SvLBox* pSource, SvLBoxEntry
 
         if( bOk == (sal_Bool)2 )  // !!!HACK  verschobenen Entry sichtbar machen?
             MakeVisible( pSourceEntry );
+
+        pSourceEntry = (SvLBoxEntry*)aList.Next();
     }
     pModel->SetCloneLink( aCloneLink );
     return bSuccess;
@@ -1142,16 +1144,17 @@ void SvLBox::RemoveSelection()
     SvLBoxEntry* pEntry = FirstSelected();
     while ( pEntry )
     {
-        aList.push_back( pEntry );
+        aList.Insert( pEntry );
         if ( pEntry->HasChilds() )
             // Remove loescht Childs automatisch
             SelectChilds( pEntry, sal_False );
         pEntry = NextSelected( pEntry );
     }
-    for ( size_t i = 0, n = aList.size(); i < n; ++i )
+    pEntry = (SvLBoxEntry*)aList.First();
+    while ( pEntry )
     {
-        pEntry = (SvLBoxEntry*)aList[ i ];
         pModel->Remove( pEntry );
+        pEntry = (SvLBoxEntry*)aList.Next();
     }
 }
 
@@ -1929,30 +1932,30 @@ sal_Bool SvLBox::NotifyAcceptDrop( SvLBoxEntry* )
 
 namespace
 {
-    struct SortLBoxes : public rtl::Static<SvULongsSort, SortLBoxes> {};
+    struct SortLBoxes : public rtl::Static<std::set<sal_uLong>, SortLBoxes> {};
 }
 
 void SvLBox::AddBoxToDDList_Impl( const SvLBox& rB )
 {
     sal_uLong nVal = (sal_uLong)&rB;
-    SortLBoxes::get().Insert( nVal );
+    SortLBoxes::get().insert( nVal );
 }
 
 void SvLBox::RemoveBoxFromDDList_Impl( const SvLBox& rB )
 {
     sal_uLong nVal = (sal_uLong)&rB;
-    SortLBoxes::get().Remove( nVal );
+    SortLBoxes::get().erase( nVal );
 }
 
 IMPL_STATIC_LINK( SvLBox, DragFinishHdl_Impl, sal_Int8*, pAction )
 {
     sal_uLong nVal = (sal_uLong)pThis;
-    sal_uInt16 nFnd;
-    SvULongsSort &rSortLBoxes = SortLBoxes::get();
-    if( rSortLBoxes.Seek_Entry( nVal, &nFnd ) )
+    std::set<sal_uLong> &rSortLBoxes = SortLBoxes::get();
+    std::set<sal_uLong>::const_iterator it = rSortLBoxes.find(nVal);
+    if( it != rSortLBoxes.end() )
     {
         pThis->DragFinished( *pAction );
-        rSortLBoxes.Remove( nFnd, 1 );
+        rSortLBoxes.erase( it );
     }
     return 0;
 }

@@ -36,6 +36,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(OS)"!="IOS"
+
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
 .IF "$(L10N_framework)"==""
@@ -67,6 +69,8 @@ SLOFILES=$(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
 .ENDIF 		# L10N_framework
+
+.ENDIF
 
 .INCLUDE : target.mk
 

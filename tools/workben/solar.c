@@ -154,11 +154,7 @@ va_dcl
 #ifndef USE_FORK_TO_CHECK
 static jmp_buf check_env;
 static int bSignal;
-#if defined (UNX)
-void SignalHandler( int sig )
-#else
-void __cdecl SignalHandler( int sig )
-#endif
+void SAL_CALL SignalHandler( int sig )
 {
   bSignal = 1;
   /*
@@ -354,11 +350,7 @@ void Description_Print( struct Description* pThis, char* name )
   fclose(f);
 }
 
-int
-#ifdef WNT
-__cdecl
-#endif
-main( int argc, char* argv[] )
+int SAL_CALL main( int argc, char* argv[] )
 {
   printTypeSign( char, "char" );
   printTypeSign( short, "short" );

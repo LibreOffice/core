@@ -290,11 +290,7 @@ bool test_removeSegment(
 
 }
 
-int
-#if defined WNT
-__cdecl
-#endif // WNT
-main()
+int SAL_CALL main()
 {
     bool bSuccess = true;
 

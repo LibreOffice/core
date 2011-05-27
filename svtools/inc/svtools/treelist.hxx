@@ -31,7 +31,7 @@
 
 #include "svtools/svtdllapi.h"
 #include <tools/solar.h>
-#include <vector>
+#include <tools/list.hxx>
 
 #include <tools/table.hxx>
 #include <tools/link.hxx>
@@ -61,33 +61,16 @@
 #define SVLISTENTRYFLAG_NOT_SELECTABLE  0x0010
 
 class SvListEntry;
-typedef ::std::vector< SvListEntry* > SvTreeEntryList_impl;
 
 //=============================================================================
 
-class SVT_DLLPUBLIC SvTreeEntryList
+class SVT_DLLPUBLIC SvTreeEntryList : public List
 {
-private:
-    SvTreeEntryList_impl    aTreeEntryList;
-
 public:
                     SvTreeEntryList() {};
                     SvTreeEntryList( SvTreeEntryList& rList );
 
     void            DestroyAll();
-    void            erase( size_t nItem );
-    void            erase( SvListEntry* pItem );
-    void            replace( SvListEntry* pOldItem, SvListEntry* pNewItem );
-
-    size_t          size() const { return aTreeEntryList.size(); }
-    size_t          GetPos( SvListEntry* pItem );
-
-    bool            empty() const { return aTreeEntryList.empty(); }
-
-    void            push_back( SvListEntry* pItem );
-    void            insert( size_t nPos, SvListEntry* pItem );
-    SvListEntry*    last();
-    SvListEntry*    operator[]( size_t i );
 };
 
 //=============================================================================
@@ -127,8 +110,6 @@ public:
     }
     virtual void        Clone( SvListEntry* pSource );
 };
-
-//=============================================================================
 
 class SvListView;
 
@@ -176,8 +157,6 @@ public:
     bool IsSelectable() const { return (bool)(nFlags&SVLISTENTRYFLAG_NOT_SELECTABLE)==0; }
 };
 
-//=============================================================================
-
 enum SvSortMode { SortAscending, SortDescending, SortNone };
 
 // Rueckgabewerte Sortlink:
@@ -189,24 +168,20 @@ struct SvSortData
     SvListEntry* pRight;
 };
 
-//=============================================================================
-
-typedef ::std::vector< SvListView* > SvViewList_impl;
-
 class SVT_DLLPUBLIC SvTreeList
 {
     friend class SvListView;
 
-    SvViewList_impl aViewList;
-    sal_uLong       nEntryCount;
+    List            aViewList;
+    sal_uLong           nEntryCount;
 
     Link            aCloneLink;
     Link            aCompareLink;
     SvSortMode      eSortMode;
 
-    sal_uInt16      nRefCount;
+    sal_uInt16          nRefCount;
 
-    sal_Bool        bAbsPositionsValid;
+    sal_Bool            bAbsPositionsValid;
 
     SvListEntry*    FirstVisible() const { return First(); }
     SvListEntry*    NextVisible( const SvListView*,SvListEntry* pEntry, sal_uInt16* pDepth=0 ) const;
@@ -215,39 +190,35 @@ class SVT_DLLPUBLIC SvTreeList
     SvListEntry*    NextVisible( const SvListView*,SvListEntry* pEntry, sal_uInt16& rDelta ) const;
     SvListEntry*    PrevVisible( const SvListView*,SvListEntry* pEntry, sal_uInt16& rDelta ) const;
 
-    sal_Bool        IsEntryVisible( const SvListView*,SvListEntry* pEntry ) const;
+    sal_Bool            IsEntryVisible( const SvListView*,SvListEntry* pEntry ) const;
     SvListEntry*    GetEntryAtVisPos( const SvListView*,sal_uLong nVisPos ) const;
-    sal_uLong       GetVisiblePos( const SvListView*,SvListEntry* pEntry ) const;
-    sal_uLong       GetVisibleCount( const SvListView* ) const;
-    sal_uLong       GetVisibleChildCount( const SvListView*,SvListEntry* pParent ) const;
+    sal_uLong           GetVisiblePos( const SvListView*,SvListEntry* pEntry ) const;
+    sal_uLong           GetVisibleCount( const SvListView* ) const;
+    sal_uLong           GetVisibleChildCount( const SvListView*,SvListEntry* pParent ) const;
 
     SvListEntry*    FirstSelected( const SvListView*) const;
     SvListEntry*    NextSelected( const SvListView*,SvListEntry* pEntry ) const;
     SvListEntry*    PrevSelected( const SvListView*,SvListEntry* pEntry ) const;
     SvListEntry*    LastSelected( const SvListView*) const;
 
-    sal_Bool        Select( SvListView*,SvListEntry* pEntry, sal_Bool bSelect=sal_True );
-    sal_uLong       SelectChilds( SvListView*,SvListEntry* pParent, sal_Bool bSelect );
+    sal_Bool            Select( SvListView*,SvListEntry* pEntry, sal_Bool bSelect=sal_True );
+    sal_uLong           SelectChilds( SvListView*,SvListEntry* pParent, sal_Bool bSelect );
     void            SelectAll( SvListView*,sal_Bool bSelect ); // ruft nicht Select-Hdl
-    sal_uLong       GetChildSelectionCount( const SvListView*,SvListEntry* pParent ) const;
+    sal_uLong           GetChildSelectionCount( const SvListView*,SvListEntry* pParent ) const;
 
     void            Expand( SvListView*,SvListEntry* pParent );
     void            Collapse( SvListView*,SvListEntry* pParent );
 
     SVT_DLLPRIVATE void             SetAbsolutePositions();
-    SVT_DLLPRIVATE SvTreeEntryList* CloneChilds( SvTreeEntryList* pChilds,
-                                        SvListEntry* pNewParent,
-                                        sal_uLong& nCloneCount
-                                    ) const;
-    SVT_DLLPRIVATE void             SetListPositions( SvTreeEntryList* );
+    SVT_DLLPRIVATE SvTreeEntryList*CloneChilds( SvTreeEntryList* pChilds,
+                                 SvListEntry* pNewParent,
+                                 sal_uLong& nCloneCount ) const;
+    SVT_DLLPRIVATE void         SetListPositions( SvTreeEntryList* );
 
     // rPos wird bei SortModeNone nicht geaendert
-    SVT_DLLPRIVATE void             GetInsertionPos(
-                                        SvListEntry* pEntry,
-                                        SvListEntry* pParent,
-                                        sal_uLong& rPos
-                                    );
-    SVT_DLLPRIVATE void             ResortChilds( SvListEntry* pParent );
+    SVT_DLLPRIVATE void         GetInsertionPos( SvListEntry* pEntry, SvListEntry* pParent,
+                        sal_uLong& rPos );
+    SVT_DLLPRIVATE void         ResortChilds( SvListEntry* pParent );
 
 protected:
 
@@ -255,26 +226,19 @@ protected:
 
 public:
 
-                    SvTreeList();
-    virtual         ~SvTreeList();
+    SvTreeList();
+    virtual ~SvTreeList();
 
     void            InsertView( SvListView* );
     void            RemoveView( SvListView* );
-    sal_uLong       GetViewCount() const { return aViewList.size(); }
-    SvListView*     GetView(sal_uLong nPos) const {
-                        return ( nPos < aViewList.size() ) ? aViewList[ nPos ] : NULL;
-                    }
-
-    void            Broadcast(
-                        sal_uInt16 nActionId,
-                        SvListEntry* pEntry1=0,
-                        SvListEntry* pEntry2=0,
-                        sal_uLong nPos=0
-                    );
+    sal_uLong           GetViewCount() const { return aViewList.Count(); }
+    SvListView*     GetView(sal_uLong nPos) const {return (SvListView*)aViewList.GetObject(nPos);}
+    void            Broadcast( sal_uInt16 nActionId, SvListEntry* pEntry1=0,
+                        SvListEntry* pEntry2=0, sal_uLong nPos=0 );
     // informiert alle Listener
     void            InvalidateEntry( SvListEntry* );
 
-    sal_uLong       GetEntryCount() const { return nEntryCount; }
+    sal_uLong           GetEntryCount() const { return nEntryCount; }
     SvListEntry*    First() const;
     SvListEntry*    Next( SvListEntry* pEntry, sal_uInt16* pDepth=0 ) const;
     SvListEntry*    Prev( SvListEntry* pEntry, sal_uInt16* pDepth=0 ) const;
@@ -285,42 +249,39 @@ public:
     SvListEntry*    PrevSibling( SvListEntry* pEntry ) const;
     SvListEntry*    LastSibling( SvListEntry* pEntry ) const;
 
-    sal_uLong       Insert( SvListEntry* pEntry,SvListEntry* pPar,sal_uLong nPos=ULONG_MAX);
-    sal_uLong       Insert( SvListEntry* pEntry,sal_uLong nRootPos = ULONG_MAX ) { return Insert(pEntry, pRootItem, nRootPos ); }
+    sal_uLong           Insert( SvListEntry* pEntry,SvListEntry* pPar,sal_uLong nPos=LIST_APPEND);
+    sal_uLong           Insert( SvListEntry* pEntry,sal_uLong nRootPos = LIST_APPEND ) { return Insert(pEntry, pRootItem, nRootPos ); }
     void            InsertTree( SvListEntry* pTree, SvListEntry* pTarget );
-    void            InsertTree(
-                        SvListEntry* pTree,
-                        SvListEntry* pTargetParent,
-                        sal_uLong nListPos
-                    );
+    void            InsertTree( SvListEntry* pTree, SvListEntry* pTargetParent,
+                                sal_uLong nListPos );
     // Entries muessen im gleichen Model stehen!
     void            Move( SvListEntry* pSource, SvListEntry* pTarget );
     // erzeugt ggf. Child-List
-    sal_uLong       Move( SvListEntry* pSource, SvListEntry* pTargetParent,
+    sal_uLong           Move( SvListEntry* pSource, SvListEntry* pTargetParent,
                           sal_uLong nListPos);
     void            Copy( SvListEntry* pSource, SvListEntry* pTarget );
-    sal_uLong       Copy( SvListEntry* pSource, SvListEntry* pTargetParent,
+    sal_uLong           Copy( SvListEntry* pSource, SvListEntry* pTargetParent,
                           sal_uLong nListPos);
 
-    sal_Bool        Remove( SvListEntry* pEntry );
+    sal_Bool            Remove( SvListEntry* pEntry );
     void            Clear();
 
-    sal_Bool        HasChilds( SvListEntry* pEntry ) const;
-    sal_Bool        HasParent( SvListEntry* pEntry ) const  { return (sal_Bool)(pEntry->pParent!=pRootItem); }
-    sal_Bool        IsChild( SvListEntry* pParent, SvListEntry* pChild ) const;
-    sal_Bool        IsInChildList( SvListEntry* pParent, SvListEntry* pChild) const;
+    sal_Bool            HasChilds( SvListEntry* pEntry ) const;
+    sal_Bool            HasParent( SvListEntry* pEntry ) const  { return (sal_Bool)(pEntry->pParent!=pRootItem); }
+    sal_Bool            IsChild( SvListEntry* pParent, SvListEntry* pChild ) const;
+    sal_Bool            IsInChildList( SvListEntry* pParent, SvListEntry* pChild) const;
     SvListEntry*    GetEntry( SvListEntry* pParent, sal_uLong nPos ) const;
     SvListEntry*    GetEntry( sal_uLong nRootPos ) const;
     SvListEntry*    GetEntryAtAbsPos( sal_uLong nAbsPos ) const;
     SvListEntry*    GetParent( SvListEntry* pEntry ) const;
     SvListEntry*    GetRootLevelParent( SvListEntry* pEntry ) const;
-    SvTreeEntryList*    GetChildList( SvListEntry* pParent ) const;
+    SvTreeEntryList* GetChildList( SvListEntry* pParent ) const;
 
-    sal_uLong       GetAbsPos( SvListEntry* pEntry ) const;
-    sal_uLong       GetRelPos( SvListEntry* pChild ) const { return pChild->GetChildListPos(); }
-    sal_uLong       GetChildCount( SvListEntry* pParent ) const;
-    sal_uInt16      GetDepth( SvListEntry* pEntry ) const;
-    sal_Bool        IsAtRootDepth( SvListEntry* pEntry ) const { return (sal_Bool)(pEntry->pParent==pRootItem); }
+    sal_uLong           GetAbsPos( SvListEntry* pEntry ) const;
+    sal_uLong           GetRelPos( SvListEntry* pChild ) const { return pChild->GetChildListPos(); }
+    sal_uLong           GetChildCount( SvListEntry* pParent ) const;
+    sal_uInt16          GetDepth( SvListEntry* pEntry ) const;
+    sal_Bool            IsAtRootDepth( SvListEntry* pEntry ) const { return (sal_Bool)(pEntry->pParent==pRootItem); }
 
     // das Model ruft zum Clonen von Entries den Clone-Link auf,
     // damit man sich nicht vom Model ableiten muss, wenn man
@@ -334,7 +295,7 @@ public:
     virtual SvListEntry* CloneEntry( SvListEntry* ) const; // ruft den Clone-Link
     virtual SvListEntry* CreateEntry() const; // zum 'new'en von Entries
 
-    sal_uInt16      GetRefCount() const { return nRefCount; }
+    sal_uInt16          GetRefCount() const { return nRefCount; }
     void            SetRefCount( sal_uInt16 nRef ) { nRefCount = nRef; }
 
     void            SetSortMode( SvSortMode eMode ) { eSortMode = eMode; }
@@ -344,12 +305,8 @@ public:
     const Link&     GetCompareHdl() const { return aCompareLink; }
     void            Resort();
 
-#ifdef CHECK_INTEGRITY
     void            CheckIntegrity() const;
-#endif
 };
-
-//=============================================================================
 
 class SVT_DLLPUBLIC SvListView
 {
@@ -482,18 +439,18 @@ inline SvListEntry* SvTreeList::GetEntry( SvListEntry* pParent, sal_uLong nPos )
 {   if ( !pParent )
         pParent = pRootItem;
     SvListEntry* pRet = 0;
-    if ( pParent->pChilds
-    &&   nPos < pParent->pChilds->size()
-    )
-        pRet = (*pParent->pChilds)[ nPos ];
+    if ( pParent->pChilds )
+        pRet = (SvListEntry*)(pParent->pChilds->GetObject(nPos));
     return pRet;
 }
 
 inline SvListEntry* SvTreeList::GetEntry( sal_uLong nRootPos ) const
 {
-    SvListEntry* pRet = NULL;
+    SvListEntry* pRet;
     if ( nEntryCount )
-        pRet = (*pRootItem->pChilds)[nRootPos];
+        pRet = (SvListEntry*)(pRootItem->pChilds->GetObject(nRootPos));
+    else
+        pRet = 0;
     return pRet;
 }
 

@@ -38,18 +38,8 @@ SV_IMPL_PTRARR( TextCharAttribs, TextCharAttribPtr );
 
 // Vergleichmethode wird von QuickSort gerufen...
 
-EXTERN_C
-#ifdef WNT
-#if _MSC_VER >= 1200
-int __cdecl
-#else
-int _cdecl
-#endif
-#else
-int
-#endif
-
-CompareStart( const void* pFirst, const void* pSecond )
+extern "C" {
+int SAL_CALL CompareStart( const void* pFirst, const void* pSecond )
 {
     if ( (*((TextCharAttrib**)pFirst))->GetStart() < (*((TextCharAttrib**)pSecond))->GetStart() )
         return (-1);
@@ -57,7 +47,7 @@ CompareStart( const void* pFirst, const void* pSecond )
         return (1);
     return 0;
 }
-
+}
 
 // -------------------------------------------------------------------------
 // (+) class TextCharAttrib

@@ -277,10 +277,10 @@ sal_uInt16 ImplEntryList::InsertEntry( sal_uInt16 nPos, ImplEntryType* pNewEntry
 
 void ImplEntryList::RemoveEntry( sal_uInt16 nPos )
 {
-    boost::ptr_vector<ImplEntryType>::iterator iter = maEntries.begin()+ nPos;
-
-    if (iter != maEntries.end())
+    if (nPos < maEntries.size())
     {
+        boost::ptr_vector<ImplEntryType>::iterator iter = maEntries.begin()+ nPos;
+
         if ( !!iter->maImage )
             mnImages--;
 
