@@ -126,10 +126,10 @@ SvLBoxEntry* DBTreeListBox::GetEntryPosByName( const String& aName, SvLBoxEntry*
     SvLBoxEntry* pEntry = NULL;
     if ( pChilds )
     {
-        size_t nCount = pChilds->size();
+        size_t nCount = pChilds->Count();
         for (size_t i = 0; i < nCount; ++i)
         {
-            pEntry = static_cast<SvLBoxEntry*>((*pChilds)[ i ]);
+            pEntry = static_cast<SvLBoxEntry*>(pChilds->GetObject( i ));
             SvLBoxString* pItem = (SvLBoxString*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
             if ( pItem->GetText().Equals(aName) )
             {

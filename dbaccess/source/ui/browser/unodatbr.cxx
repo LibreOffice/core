@@ -3866,9 +3866,9 @@ void SbaTableQueryBrowser::impl_cleanupDataSourceEntry( const String& _rDataSour
     SvTreeEntryList* pList = m_pTreeModel->GetChildList( pDataSourceEntry );
     if ( pList )
     {
-        for ( size_t i = 0, n = pList->size(); i < n; ++i )
+        for ( size_t i = 0, n = pList->Count(); i < n; ++i )
         {
-            SvLBoxEntry* pEntryLoop = static_cast<SvLBoxEntry*>((*pList)[ i ]);
+            SvLBoxEntry* pEntryLoop = static_cast<SvLBoxEntry*>(pList->GetObject( i ));
             DBTreeListUserData* pData = static_cast< DBTreeListUserData* >( pEntryLoop->GetUserData() );
             pEntryLoop->SetUserData( NULL );
             delete pData;
