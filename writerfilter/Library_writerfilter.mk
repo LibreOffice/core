@@ -37,7 +37,7 @@ $(eval $(call gb_Library_set_include,writerfilter,\
 
 $(eval $(call gb_Library_set_componentfile,writerfilter,writerfilter/util/writerfilter))
 
-include $(SRCDIR)/writerfilter/debug_setup.mk
+include $(realpath $(SRCDIR)/writerfilter/debug_setup.mk)
 
 $(eval $(call gb_Library_set_defs,writerfilter,\
 	$$(DEFS) \

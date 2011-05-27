@@ -39,7 +39,7 @@ $(eval $(call gb_Library_set_include,ooxml,\
     -I$(OUTDIR)/inc/offuh \
 ))
 
-include $(SRCDIR)/writerfilter/debug_setup.mk
+include $(realpath $(SRCDIR)/writerfilter/debug_setup.mk)
 
 $(eval $(call gb_Library_set_defs,ooxml,\
 	$$(DEFS) \
