@@ -33,7 +33,6 @@
 
 #include <hintids.hxx>
 
-#define _SVSTDARR_ULONGSSORT
 #define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
 #include <vcl/cvtgrf.hxx>
@@ -107,6 +106,53 @@ using namespace com::sun::star;
 using namespace sw::util;
 using namespace sw::types;
 using namespace nsFieldFlags;
+
+namespace
+{
+    /// Get the Z ordering number for a DrawObj in a WW8Export.
+    /// @param rWrt The containing WW8Export.
+    /// @param pObj pointer to the drawing object.
+    /// @returns The ordering number.
+    static sal_uLong lcl_getSdrOrderNumber(const WW8Export& rWrt, DrawObj *pObj)
+    {
+        return rWrt.GetSdrOrdNum(pObj->maCntnt.GetFrmFmt());
+    };
+
+    /// A function object to act as a predicate comparing the ordering numbers
+    /// of two drawing obejcts in a WW8Export.
+    class CompareDrawObjs
+    {
+    private:
+        const WW8Export& wrt;
+
+    public:
+        CompareDrawObjs(const WW8Export& rWrt) : wrt(rWrt) {};
+        bool operator()(DrawObj *a, DrawObj *b) const
+        {
+            sal_uLong aSort = ::lcl_getSdrOrderNumber(wrt, a);
+            sal_uLong bSort = ::lcl_getSdrOrderNumber(wrt, b);
+            return aSort < bSort;
+        }
+    };
+
+    /// Make a z-order sorted copy of a collection of DrawObj objects.
+    /// @param rWrt    The containing WW8Export.
+    /// @param rSrcArr The source array.
+    /// @param rDstArr The destination array.
+    static void lcl_makeZOrderArray(const WW8Export& rWrt,
+                                    std::vector<DrawObj> &rSrcArr,
+                                    std::vector<DrawObj*> &rDstArr)
+    {
+        rDstArr.clear();
+        rDstArr.reserve(rSrcArr.size());
+        for(size_t i = 0; i < rSrcArr.size(); ++i)
+        {
+            rDstArr.push_back( &rSrcArr[i] );
+        }
+        std::sort(rDstArr.begin(), rDstArr.end(), ::CompareDrawObjs(rWrt));
+    }
+
+}
 
 // get a part fix for this type of element
 bool WW8Export::MiserableFormFieldExportHack(const SwFrmFmt& rFrmFmt)
@@ -2668,25 +2714,13 @@ void SwEscherEx::WriteOCXControl( const SwFrmFmt& rFmt, sal_uInt32 nShapeId )
 void SwEscherEx::MakeZOrderArrAndFollowIds(
     std::vector<DrawObj>& rSrcArr, std::vector<DrawObj*>&rDstArr)
 {
-    sal_uInt16 n, nCnt = static_cast< sal_uInt16 >(rSrcArr.size());
-    SvULongsSort aSort( 255 < nCnt ? 255 : nCnt, 255 );
-    rDstArr.clear();
-    rDstArr.reserve(nCnt);
-    for (n = 0; n < nCnt; ++n)
-    {
-        const SwFrmFmt &rFmt = rSrcArr[n].maCntnt.GetFrmFmt();
-        sal_uLong nOrdNum = rWrt.GetSdrOrdNum(rFmt);
-        sal_uInt16 nPos;
-        //returns what will be the index in rDstArr of p as nPos
-        aSort.Insert(nOrdNum, nPos);
-        DrawObj &rObj = rSrcArr[n];
-        rDstArr.insert(rDstArr.begin() + nPos, &rObj);
-    }
+    ::lcl_makeZOrderArray(rWrt, rSrcArr, rDstArr);
 
+    //Now set up the follow IDs
     if (aFollowShpIds.Count())
         aFollowShpIds.Remove(0, aFollowShpIds.Count());
 
-    for (n = 0; n < nCnt; ++n)
+    for (size_t n = 0; n < rDstArr.size(); ++n)
     {
         const SwFrmFmt &rFmt = rDstArr[n]->maCntnt.GetFrmFmt();
         bool bNeedsShapeId = false;

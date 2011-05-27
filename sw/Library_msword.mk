@@ -66,7 +66,6 @@ $(eval $(call gb_Library_add_linked_libs,msword,\
     svl \
     svt \
     svx \
-    svx \
     svxcore \
     sw \
     tk \

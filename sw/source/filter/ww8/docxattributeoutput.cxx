@@ -514,6 +514,8 @@ void DocxAttributeOutput::StartRun( const SwRedlineData* pRedlineData )
 
 void DocxAttributeOutput::EndRun()
 {
+    if ( m_nCloseHyperlinkStatus == Detected )
+        m_nCloseHyperlinkStatus = EndInThisRun;
     // Write field starts
     for ( std::vector<FieldInfos>::iterator pIt = m_Fields.begin(); pIt != m_Fields.end(); ++pIt )
     {
@@ -546,6 +548,11 @@ void DocxAttributeOutput::EndRun()
 
         m_pSerializer->startElementNS( XML_w, XML_hyperlink, xAttrList );
         m_pHyperlinkAttrList = NULL;
+    }
+    if ( m_nCloseHyperlinkStatus == EndInPrevRun)
+    {
+        m_pSerializer->endElementNS( XML_w, XML_hyperlink );
+        m_nCloseHyperlinkStatus = Undetected;
     }
 
     // Write the hyperlink and toc fields starts
@@ -580,11 +587,10 @@ void DocxAttributeOutput::EndRun()
         EndField_Impl( m_Fields.front( ) );
         m_Fields.erase( m_Fields.begin( ) );
     }
-
-    if ( m_bCloseHyperlink )
+    if ( m_nCloseHyperlinkStatus == EndInThisRun)
     {
         m_pSerializer->endElementNS( XML_w, XML_hyperlink );
-        m_bCloseHyperlink = false;
+        m_nCloseHyperlinkStatus = Undetected;
     }
 
     // if there is some redlining in the document, output it
@@ -1005,6 +1011,8 @@ static void impl_WriteRunText( FSHelperPtr pSerializer, sal_Int32 nTextToken,
 
 void DocxAttributeOutput::RunText( const String& rText, rtl_TextEncoding /*eCharSet*/ )
 {
+    if ( m_nCloseHyperlinkStatus == Detected )
+        m_nCloseHyperlinkStatus = EndInPrevRun;
     OUString aText( rText );
 
     // one text can be split into more <w:t>blah</w:t>'s by line breaks etc.
@@ -1192,7 +1200,7 @@ bool DocxAttributeOutput::StartURL( const String& rUrl, const String& rTarget )
 
 bool DocxAttributeOutput::EndURL()
 {
-    m_bCloseHyperlink = true;
+    m_nCloseHyperlinkStatus = Detected;
     return true;
 }
 
@@ -3406,6 +3414,8 @@ void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
     m_pSerializer->endElementNS( XML_w, XML_p );
     m_pSerializer->endElementNS( XML_w, nItem );
 
+    // if new special ones are added, update also WriteFootnoteEndnotePr()
+
     // footnotes/endnotes themselves
     for ( FootnotesVector::const_iterator i = rVector.begin(); i != rVector.end(); ++i, ++nIndex )
     {
@@ -3426,6 +3436,62 @@ void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
 
     m_pSerializer->endElementNS( XML_w, nBody );
 
+}
+
+void DocxAttributeOutput::WriteFootnoteEndnotePr( ::sax_fastparser::FSHelperPtr fs, int tag,
+    const SwEndNoteInfo& info, int listtag )
+{
+    fs->startElementNS( XML_w, tag, FSEND );
+    const char* fmt = NULL;
+    switch( info.aFmt.GetNumberingType())
+    {
+        case SVX_NUM_CHARS_UPPER_LETTER_N: // fall through, map to upper letters
+        case SVX_NUM_CHARS_UPPER_LETTER:
+            fmt = "upperLetter";
+            break;
+        case SVX_NUM_CHARS_LOWER_LETTER_N: // fall through, map to lower letters
+        case SVX_NUM_CHARS_LOWER_LETTER:
+            fmt = "lowerLetter";
+            break;
+        case SVX_NUM_ROMAN_UPPER:
+            fmt = "upperRoman";
+            break;
+        case SVX_NUM_ROMAN_LOWER:
+            fmt = "lowerRoman";
+            break;
+        case SVX_NUM_ARABIC:
+            fmt = "decimal";
+            break;
+        case SVX_NUM_NUMBER_NONE:
+            fmt = "none";
+            break;
+        case SVX_NUM_CHAR_SPECIAL:
+            fmt = "bullet";
+            break;
+        case SVX_NUM_PAGEDESC:
+        case SVX_NUM_BITMAP:
+        default:
+            break; // no format
+    }
+    if( fmt != NULL )
+        fs->singleElementNS( XML_w, XML_numFmt, FSNS( XML_w, XML_val ), fmt, FSEND );
+    if( info.nFtnOffset != 0 )
+        fs->singleElementNS( XML_w, XML_numStart, FSNS( XML_w, XML_val ),
+            rtl::OString::valueOf( sal_Int32( info.nFtnOffset + 1 )).getStr(), FSEND );
+    if( listtag != 0 ) // we are writting to settings.xml, write also special footnote/endnote list
+    { // there are currently only two hardcoded ones ( see FootnotesEndnotes())
+        fs->singleElementNS( XML_w, listtag, FSNS( XML_w, XML_id ), "0", FSEND );
+        fs->singleElementNS( XML_w, listtag, FSNS( XML_w, XML_id ), "1", FSEND );
+    }
+    fs->endElementNS( XML_w, tag );
+}
+
+void DocxAttributeOutput::SectFootnoteEndnotePr()
+{
+    if( HasFootnotes())
+        WriteFootnoteEndnotePr( m_pSerializer, XML_footnotePr, m_rExport.pDoc->GetFtnInfo(), 0 );
+    if( HasEndnotes())
+        WriteFootnoteEndnotePr( m_pSerializer, XML_endnotePr, m_rExport.pDoc->GetEndNoteInfo(), 0 );
 }
 
 void DocxAttributeOutput::ParaLineSpacing_Impl( short nSpace, short nMulti )
@@ -4153,7 +4219,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_bParagraphOpened( false ),
       m_nColBreakStatus( COLBRK_NONE ),
       m_pParentFrame( NULL ),
-      m_bCloseHyperlink( false )
+      m_nCloseHyperlinkStatus( Undetected )
 {
 }
 

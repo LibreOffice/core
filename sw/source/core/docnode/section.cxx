@@ -86,8 +86,8 @@ public:
     {}
 
     virtual void Closed();
-    virtual void DataChanged( const String& rMimeType,
-                                const uno::Any & rValue );
+    virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
+        const String& rMimeType, const ::com::sun::star::uno::Any & rValue );
 
     virtual const SwNode* GetAnchor() const;
     virtual sal_Bool IsInRange( sal_uLong nSttNd, sal_uLong nEndNd, xub_StrLen nStt = 0,
@@ -1336,8 +1336,9 @@ int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
 }
 
 
-void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
-                                const uno::Any & rValue )
+
+::sfx2::SvBaseLink::UpdateResult SwIntrnlSectRefLink::DataChanged(
+    const String& rMimeType, const uno::Any & rValue )
 {
     SwSectionNode* pSectNd = rSectFmt.GetSectionNode( sal_False );
     SwDoc* pDoc = rSectFmt.GetDoc();
@@ -1348,7 +1349,7 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
         sfx2::LinkManager::RegisterStatusInfoId() == nDataFormat )
     {
         // sollten wir schon wieder im Undo stehen?
-        return ;
+        return SUCCESS;
     }
 
     //  #i38810# - Due to possible existing signatures, the
@@ -1609,6 +1610,8 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
     else if( pVSh )
         pVSh->EndAction();
     delete pPam;            // wurde am Anfang angelegt
+
+    return SUCCESS;
 }
 
 

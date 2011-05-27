@@ -173,6 +173,9 @@ public:
     /// docx requires footnoteRef/endnoteRef tag at the beginning of each of them
     virtual void FootnoteEndnoteRefTag() {};
 
+    /// for docx footnotePr/endnotePr inside sectPr
+    virtual void SectFootnoteEndnotePr() {};
+
     /// Output text (inside a run).
     virtual void RunText( const String& rText, rtl_TextEncoding eCharSet ) = 0;
 

@@ -65,8 +65,8 @@ public:
     {}
     virtual ~SwBaseLink();
 
-    virtual void DataChanged( const String& rMimeType,
-                                const ::com::sun::star::uno::Any & rValue );
+    virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
+        const String& rMimeType, const ::com::sun::star::uno::Any & rValue );
 
     virtual void Closed();
 

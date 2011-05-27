@@ -184,3 +184,6 @@ sw.SwAccessibleParagraphView::com::sun::star::accessibility::XAccessibleText
 
 ### i114889 ###
 sw.SwXTextViewCursor::com::sun::star::view::XScreenCursor
+
+### fd#35660 ###
+sw.DocumentSettings::com::sun::star::text::PrintSettings

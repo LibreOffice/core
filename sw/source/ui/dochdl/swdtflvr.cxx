@@ -175,8 +175,8 @@ protected:
 public:
     SwTrnsfrDdeLink( SwTransferable& rTrans, SwWrtShell& rSh );
 
-    virtual void DataChanged( const String& rMimeType,
-                              const uno::Any & rValue );
+    virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
+        const String& rMimeType, const ::com::sun::star::uno::Any & rValue );
     virtual void Closed();
 
     sal_Bool WriteData( SvStream& rStrm );
@@ -3488,7 +3488,7 @@ SwTrnsfrDdeLink::~SwTrnsfrDdeLink()
         Disconnect( sal_True );
 }
 
-void SwTrnsfrDdeLink::DataChanged( const String& ,
+::sfx2::SvBaseLink::UpdateResult SwTrnsfrDdeLink::DataChanged( const String& ,
                                     const uno::Any& )
 {
     // well, that's it with the link
@@ -3498,6 +3498,7 @@ void SwTrnsfrDdeLink::DataChanged( const String& ,
             rTrnsfr.RemoveDDELinkFormat( pDocShell->GetView()->GetEditWin() );
         Disconnect( sal_False );
     }
+    return SUCCESS;
 }
 
 sal_Bool SwTrnsfrDdeLink::WriteData( SvStream& rStrm )

@@ -102,6 +102,8 @@ public:
 
     virtual void FootnoteEndnoteRefTag();
 
+    virtual void SectFootnoteEndnotePr();
+
     /// Output text (inside a run).
     virtual void RunText( const String& rText, rtl_TextEncoding eCharSet = RTL_TEXTENCODING_UTF8 );
 
@@ -579,7 +581,14 @@ private:
 
     const sw::Frame *m_pParentFrame;
     // close of hyperlink needed
-    bool m_bCloseHyperlink;
+    enum HyperLinkCloseState
+    {
+        Undetected = 0,
+        Detected,
+        EndInPrevRun,
+        EndInThisRun
+    };
+    HyperLinkCloseState m_nCloseHyperlinkStatus;
 
 public:
     DocxAttributeOutput( DocxExport &rExport, ::sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML );
@@ -604,6 +613,9 @@ public:
 
     /// Output the content of the footnotes.xml resp. endnotes.xml
     void FootnotesEndnotes( bool bFootnotes );
+
+    /// writes the footnotePr/endnotePr (depending on tag) section
+    void WriteFootnoteEndnotePr( ::sax_fastparser::FSHelperPtr fs, int tag, const SwEndNoteInfo& info, int listtag );
 };
 
 #endif // _DOCXATTRIBUTEOUTPUT_HXX_

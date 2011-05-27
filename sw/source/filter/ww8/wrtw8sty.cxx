@@ -1521,6 +1521,8 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
 
     AttrOutput().StartSection();
 
+    AttrOutput().SectFootnoteEndnotePr();
+
     // forms
     AttrOutput().SectionFormProtection( rSepInfo.IsProtected() );
 

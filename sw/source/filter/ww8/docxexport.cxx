@@ -52,6 +52,7 @@
 #include <fmtpdsc.hxx>
 #include <frmfmt.hxx>
 #include <section.hxx>
+#include <ftninfo.hxx>
 
 #include <docary.hxx>
 #include <numrule.hxx>
@@ -649,8 +650,9 @@ void DocxExport::WriteProperties( )
 
 void DocxExport::WriteSettings()
 {
-    if( !settings.hasData())
+    if( !settings.hasData() && !m_pAttrOutput->HasFootnotes() && !m_pAttrOutput->HasEndnotes())
         return;
+
     m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
             S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings" ),
             S( "settings.xml" ) );
@@ -665,6 +667,11 @@ void DocxExport::WriteSettings()
 
     if( settings.evenAndOddHeaders )
         pFS->singleElementNS( XML_w, XML_evenAndOddHeaders, FSEND );
+
+    if( m_pAttrOutput->HasFootnotes())
+        m_pAttrOutput->WriteFootnoteEndnotePr( pFS, XML_footnotePr, pDoc->GetFtnInfo(), XML_footnote );
+    if( m_pAttrOutput->HasEndnotes())
+        m_pAttrOutput->WriteFootnoteEndnotePr( pFS, XML_endnotePr, pDoc->GetEndNoteInfo(), XML_endnote );
 
     pFS->endElementNS( XML_w, XML_settings );
 }

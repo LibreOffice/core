@@ -62,8 +62,8 @@ public:
     {}
 
     virtual void Closed();
-    virtual void DataChanged( const String& rMimeType,
-                                const uno::Any & rValue );
+    virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
+        const String& rMimeType, const ::com::sun::star::uno::Any & rValue );
 
     virtual const SwNode* GetAnchor() const;
     virtual sal_Bool IsInRange( sal_uLong nSttNd, sal_uLong nEndNd, xub_StrLen nStt = 0,
@@ -71,7 +71,7 @@ public:
 };
 
 
-void SwIntrnlRefLink::DataChanged( const String& rMimeType,
+::sfx2::SvBaseLink::UpdateResult SwIntrnlRefLink::DataChanged( const String& rMimeType,
                                 const uno::Any & rValue )
 {
     switch( SotExchange::GetFormatIdFromMimeType( rMimeType ) )
@@ -105,7 +105,7 @@ void SwIntrnlRefLink::DataChanged( const String& rMimeType,
 
     // weitere Formate ...
     default:
-        return;
+        return SUCCESS;
     }
 
     OSL_ENSURE( rFldType.GetDoc(), "Kein pDoc" );
@@ -155,6 +155,8 @@ void SwIntrnlRefLink::DataChanged( const String& rMimeType,
                 pSh->GetDoc()->SetModified();
         }
     }
+
+    return SUCCESS;
 }
 
 void SwIntrnlRefLink::Closed()
