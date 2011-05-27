@@ -889,7 +889,7 @@ namespace xmloff
                         if (!bRetrievedValues)
                         {
                             getValuePropertyNames(m_eElementType, nClassId, pCurrentValueProperty, pValueProperty);
-                            ENSURE_OR_BREAK( pCurrentValueProperty && pValueProperty, "OControlImport::StartElement: illegal value property names!" );
+                            ENSURE_OR_BREAK( pValueProperty, "OControlImport::StartElement: illegal value property names!" );
                             bRetrievedValues = sal_True;
                         }
                         OSL_ENSURE((PROPID_VALUE != aValueProps->Handle) || pValueProperty,
