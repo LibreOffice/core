@@ -376,12 +376,10 @@ void SAL_CALL osl_closePipe( oslPipe pPipe )
         len = sizeof(addr);
 
         nRet = connect( fd, (struct sockaddr *)&addr, len);
-#if OSL_DEBUG_LEVEL > 1
         if ( nRet < 0 )
         {
-            perror("connect in osl_destroyPipe");
+            OSL_TRACE("connect in osl_destroyPipe failed with error: %s", strerror(errno));
         }
-#endif /* OSL_DEBUG_LEVEL */
         close(fd);
     }
 #endif /* LINUX */

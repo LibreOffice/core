@@ -1705,12 +1705,10 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
         socklen_t nSockLen = sizeof(s.aSockAddr);
 
         nRet = getsockname(nFD, &s.aSockAddr, &nSockLen);
-#if OSL_DEBUG_LEVEL > 1
         if ( nRet < 0 )
         {
-            perror("getsockname");
+            OSL_TRACE("getsockname call failed with error: %s", strerror(errno));
         }
-#endif /* OSL_DEBUG_LEVEL */
 
         if ( s.aSockAddr.sa_family == AF_INET )
         {
@@ -1720,20 +1718,16 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
             }
 
             nConnFD = socket(AF_INET, SOCK_STREAM, 0);
-#if OSL_DEBUG_LEVEL > 1
             if ( nConnFD < 0 )
             {
-                perror("socket");
+                OSL_TRACE("socket call failed with error: %s", strerror(errno));
             }
-#endif /* OSL_DEBUG_LEVEL */
 
             nRet = connect(nConnFD, &s.aSockAddr, sizeof(s.aSockAddr));
-#if OSL_DEBUG_LEVEL > 1
             if ( nRet < 0 )
             {
-                perror("connect");
+                OSL_TRACE("connect call failed with error: %s", strerror(errno));
             }
-#endif /* OSL_DEBUG_LEVEL */
             close(nConnFD);
         }
         pSocket->m_bIsAccepting = sal_False;

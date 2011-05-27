@@ -34,8 +34,8 @@
 
 module com { module sun { module star { module drawing { module framework {
 
-interface XResource;
-interface XResourceId;
+published interface XResource;
+published interface XResourceId;
 
 /** Factory and possibly cache for creating and releasing resources.
     <p>A resource factory is created and used by the
@@ -43,7 +43,7 @@ interface XResourceId;
     <p>A factory may want to implement a cache to reuse previously released
     resources.</p>
 */
-interface XResourceFactory
+published interface XResourceFactory
 {
     /** Create a resource for the given <type>XResourceId</type> object.
         @param xResourceId

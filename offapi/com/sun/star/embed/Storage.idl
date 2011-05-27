@@ -333,7 +333,6 @@ published service Storage
         </p>
      */
     [property, optional, readonly] boolean HasNonEncryptedEntries;
-
 };
 
 //============================================================================

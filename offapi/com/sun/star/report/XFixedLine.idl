@@ -38,7 +38,7 @@
  module com {  module sun {  module star {  module report {
 
 //=============================================================================
-interface XFixedLine
+published interface XFixedLine
 {
     interface XReportControlModel;
 
@@ -86,7 +86,7 @@ interface XFixedLine
     //-------------------------------------------------------------------------
 };
 
-service FixedLine : XFixedLine;
+published service FixedLine : XFixedLine;
 //=============================================================================
 
 }; }; }; };

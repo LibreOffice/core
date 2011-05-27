@@ -91,7 +91,7 @@ final class Unmarshal {
 
     public ThreadId readThreadId() {
         int len = readCompressedNumber();
-        byte[] data = null;
+        byte[] data  ;
         ThreadId id = null;
         if (len != 0) {
             data = new byte[len];

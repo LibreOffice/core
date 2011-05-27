@@ -38,7 +38,7 @@ module com { module sun { module star { module awt {
 
     @see XRequestCallback
  */
-service AsyncCallback: XRequestCallback;
+published service AsyncCallback: XRequestCallback;
 
 }; }; }; };
 

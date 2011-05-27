@@ -47,7 +47,7 @@ module com { module sun { module star { module ui {
     @since OOo 2.0
 */
 
-enum DockingArea
+published enum DockingArea
 {
     /** the top docking area below the menu bar.
     */

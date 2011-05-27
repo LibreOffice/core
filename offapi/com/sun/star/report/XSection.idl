@@ -38,7 +38,7 @@
 //=============================================================================
 
  module com {  module sun {  module star {  module report {
- interface XGroup;
+ published interface XGroup;
 //=============================================================================
 
 /** identifies a <type>XSection</type> inside a report.
@@ -50,7 +50,7 @@
     @see XReportDefinition
     @see XGroup
  */
-interface XSection
+published interface XSection
 {
     /** allows to navigate to group or report definition.
     */

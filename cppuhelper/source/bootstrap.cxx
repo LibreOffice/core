@@ -352,14 +352,6 @@ Reference< registry::XSimpleRegistry > nestRegistries(
         }
         catch(registry::InvalidRegistryException & invalidRegistryException)
         {
-            if (! optional)
-            {
-                // if a registry was explicitly given, the exception shall fly
-                if( ! bFallenBack )
-                    throw;
-            }
-
-            (void) invalidRegistryException;
 #if OSL_DEBUG_LEVEL > 1
             OString rdb_name_tmp = OUStringToOString(
                 rdb_name, RTL_TEXTENCODING_ASCII_US );
@@ -369,6 +361,14 @@ Reference< registry::XSimpleRegistry > nestRegistries(
                 "warning: couldn't open %s cause of %s",
                 rdb_name_tmp.getStr(), message_dbg.getStr() );
 #endif
+            if (! optional)
+            {
+                // if a registry was explicitly given, the exception shall fly
+                if( ! bFallenBack )
+                    throw;
+            }
+
+            (void) invalidRegistryException;
         }
     }
     while(index != -1 && csl_rdbs.getLength()); // are there more rdbs in list?

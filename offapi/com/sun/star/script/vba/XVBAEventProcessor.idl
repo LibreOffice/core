@@ -30,7 +30,6 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#include <com/sun/star/script/provider/ScriptFrameworkErrorException.idl>
 #include <com/sun/star/util/VetoException.idl>
 
 //=============================================================================
@@ -75,23 +74,20 @@ interface XVBAEventProcessor
             The input arguments needed to create the argument list of the VBA
             event handler.
 
+        @return
+            <TRUE/>, if event handing is enabled, and the event handler macro
+            exists and has been invoked.
+
         @throws <type scope="::com::sun::star::lang">IllegalArgumentException</type>
             if the passed event identifier is not supported, or if the passed
             arguments do not conform to the arguments expected by the specified
             event.
 
-        @throws <type scope="::com::sun::star::script::provider">ScriptFrameworkErrorException</type>
-            if the VBA event handler could not be invoked. Reasons may be, that
-            handling of VBA events is not enabled, that the VBA event handler
-            macro has not been found, or that the execution of the macro has
-            been aborted with an error.
-
         @throws <type scope="::com::sun::star::util">VetoException</type>
             if the VBA event handler has indicated to veto the event.
     **/
-    void processVbaEvent( [in] long nEventId, [in] sequence< any > aArgs )
+    boolean processVbaEvent( [in] long nEventId, [in] sequence< any > aArgs )
         raises (::com::sun::star::lang::IllegalArgumentException,
-                ::com::sun::star::script::provider::ScriptFrameworkErrorException,
                 ::com::sun::star::util::VetoException);
 
     //-------------------------------------------------------------------------

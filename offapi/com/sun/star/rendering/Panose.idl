@@ -29,7 +29,7 @@
 
 module com { module sun { module star { module rendering {
 
-struct Panose
+published struct Panose
 {
     /// <type>PanoseFamilyTypes</type>
     byte    FamilyType;

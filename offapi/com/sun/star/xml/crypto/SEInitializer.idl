@@ -25,17 +25,12 @@
  *
  ************************************************************************/
 
-//i20156 - new file for XML security module
-
-/** -- idl definition -- **/
-
 #ifndef __com_sun_star_xml_crypto_seinitializer_idl_
 #define __com_sun_star_xml_crypto_seinitializer_idl_
 
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/uno/Exception.idl>
 #include <com/sun/star/xml/crypto/XSEInitializer.idl>
-#include <com/sun/star/lang/XServiceInfo.idl>
+#include <com/sun/star/xml/crypto/XCipherContextSupplier.idl>
+#include <com/sun/star/xml/crypto/XDigestContextSupplier.idl>
 
 module com { module sun { module star { module xml { module crypto {
 
@@ -43,8 +38,9 @@ module com { module sun { module star { module xml { module crypto {
  * Service of SEInitializer
  */
 service SEInitializer {
-    interface com::sun::star::xml::crypto::XSEInitializer ;
-    interface com::sun::star::lang::XServiceInfo ;
+    interface ::com::sun::star::xml::crypto::XSEInitializer;
+    interface ::com::sun::star::xml::crypto::XDigestContextSupplier;
+    interface ::com::sun::star::xml::crypto::XCipherContextSupplier;
 };
 
 } ; } ; } ; } ; } ;

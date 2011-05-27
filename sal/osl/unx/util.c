@@ -162,7 +162,7 @@ static int osl_getHWAddr(const char *ifname, char* hard_addr)
      *  And now, the real thing: the get address
      */
 
-#ifdef SIOCGIFHWADDR
+#if defined(SIOCGIFHWADDR) && !defined(SOLARIS)
     ret=ioctl(so, SIOCGIFHWADDR, &ifr);
 #else
     ret=ioctl(so, SIOCGIFADDR, &ifr);
@@ -177,7 +177,7 @@ static int osl_getHWAddr(const char *ifname, char* hard_addr)
 
     close(so);
 
-#ifdef SIOCGIFHWADDR
+#if defined(SIOCGIFHWADDR) && !defined(SOLARIS)
     memcpy(hard_addr,ifr.ifr_hwaddr.sa_data,8);
 #else
     memcpy(hard_addr,ifr.ifr_ifru.ifru_addr.sa_data,8);

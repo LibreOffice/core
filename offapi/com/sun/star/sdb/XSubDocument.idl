@@ -40,7 +40,7 @@ module com { module sun { module star { module sdb {
 
     @since OOo 3.1
  */
-interface XSubDocument
+published interface XSubDocument
 {
     /** opens the sub document
 
