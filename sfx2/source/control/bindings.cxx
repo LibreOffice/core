@@ -72,6 +72,7 @@
 #include <comphelper/uieventslogger.hxx>
 #include <com/sun/star/frame/XModuleManager.hpp>
 
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1144,14 +1145,14 @@ const SfxPoolItem* SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem*
     rDispatcher.GetFrame();  // -Wall is this required???
 
     // get SlotServer (Slot+ShellLevel) and Shell from cache
-    sal_Bool bDeleteCache = sal_False;
+    ::boost::scoped_ptr<SfxStateCache> xCache;
     if ( !pCache )
     {
         // Execution of non cached slots (Accelerators don't use Controllers)
         // slot is uncached, use SlotCache to handle external dispatch providers
-        pCache = new SfxStateCache( nId );
+        xCache.reset(new SfxStateCache(nId));
+        pCache = xCache.get();
         pCache->GetSlotServer( rDispatcher, pImp->xProv );
-        bDeleteCache = sal_True;
     }
 
     if ( pCache && pCache->GetDispatch().is() )
@@ -1167,14 +1168,10 @@ const SfxPoolItem* SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem*
 
         // cache binds to an external dispatch provider
         pCache->Dispatch( aReq.GetArgs(), nCallMode == SFX_CALLMODE_SYNCHRON );
-        if ( bDeleteCache )
-            DELETEZ( pCache );
         SfxPoolItem *pVoid = new SfxVoidItem( nId );
         DeleteItemOnIdle( pVoid );
         return pVoid;
     }
-    else if ( pCache && bDeleteCache )  // just in case it was created, but GetDispatch() is 0
-        DELETEZ( pCache );
 
     // slot is handled internally by SfxDispatcher
     if ( pImp->bMsgDirty )
@@ -1223,9 +1220,6 @@ const SfxPoolItem* SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem*
         DeleteItemOnIdle( pVoid );
         pRet = pVoid;
     }
-
-    if ( bDeleteCache )
-        delete pCache;
 
     return pRet;
 }

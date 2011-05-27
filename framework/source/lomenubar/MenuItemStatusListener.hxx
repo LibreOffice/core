@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef __MENU_ITEM_STATUS_LISTENER_HXX__
 #define __MENU_ITEM_STATUS_LISTENER_HXX__
 
@@ -33,3 +34,5 @@ class MenuItemStatusListener : public cppu::WeakImplHelper1 < XStatusListener >
       throw (RuntimeException) {}
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

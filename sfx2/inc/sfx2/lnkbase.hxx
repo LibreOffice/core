@@ -133,8 +133,13 @@ public:
     void            SetLinkSourceName( const String & rName );
     String          GetLinkSourceName() const;
 
-    virtual void    DataChanged( const String & rMimeType,
-                                const ::com::sun::star::uno::Any & rValue );
+    enum UpdateResult {
+        SUCCESS = 0,
+        ERROR_GENERAL = 1
+    };
+
+    virtual UpdateResult DataChanged(
+        const String & rMimeType, const ::com::sun::star::uno::Any & rValue );
 
     void            SetUpdateMode( sal_uInt16 );
     sal_uInt16          GetUpdateMode() const;

@@ -75,8 +75,8 @@ public:
     virtual ~ImpSdrObjTextLink();
 
     virtual void Closed();
-    virtual void DataChanged( const String& rMimeType,
-                                const ::com::sun::star::uno::Any & rValue );
+    virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
+        const String& rMimeType, const ::com::sun::star::uno::Any & rValue );
 
     sal_Bool Connect() { return 0 != SvBaseLink::GetRealObject(); }
 };
@@ -98,8 +98,8 @@ void ImpSdrObjTextLink::Closed()
 }
 
 
-void ImpSdrObjTextLink::DataChanged( const String& /*rMimeType*/,
-                                const ::com::sun::star::uno::Any & /*rValue */)
+::sfx2::SvBaseLink::UpdateResult ImpSdrObjTextLink::DataChanged(
+    const String& /*rMimeType*/, const ::com::sun::star::uno::Any & /*rValue */)
 {
     bool bForceReload = false;
     SdrModel* pModel = pSdrObj ? pSdrObj->GetModel() : 0;
@@ -125,6 +125,8 @@ void ImpSdrObjTextLink::DataChanged( const String& /*rMimeType*/,
     }
     if (pSdrObj )
         pSdrObj->ReloadLinkedText( bForceReload );
+
+    return SUCCESS;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -330,12 +330,13 @@ sal_Bool SvBaseLink::Update()
 
             if( xObj->GetData( aData, sMimeType ) )
             {
-                DataChanged( sMimeType, aData );
+                UpdateResult eRes = DataChanged(sMimeType, aData);
+                bool bSuccess = eRes == SUCCESS;
                 //for manual Updates there is no need to hold the ServerObject
                 if( OBJECT_CLIENT_DDE == nObjType &&
                     LINKUPDATE_ONCALL == GetUpdateMode() && xObj.Is() )
                     xObj->RemoveAllDataAdvise( this );
-                return sal_True;
+                return bSuccess;
             }
             if( xObj.Is() )
             {
@@ -439,7 +440,7 @@ void SvBaseLink::Disconnect()
     }
 }
 
-void SvBaseLink::DataChanged( const String &, const ::com::sun::star::uno::Any & )
+SvBaseLink::UpdateResult SvBaseLink::DataChanged( const String &, const ::com::sun::star::uno::Any & )
 {
     switch( nObjType )
     {
@@ -448,6 +449,7 @@ void SvBaseLink::DataChanged( const String &, const ::com::sun::star::uno::Any &
             pImplData->DDEType.pItem->Notify();
         break;
     }
+    return SUCCESS;
 }
 
 void SvBaseLink::Edit( Window* pParent, const Link& rEndEditHdl )

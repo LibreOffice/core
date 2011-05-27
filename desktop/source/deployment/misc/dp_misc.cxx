@@ -52,6 +52,7 @@
 #include "boost/scoped_array.hpp"
 #include "boost/shared_ptr.hpp"
 #include <comphelper/processfactory.hxx>
+#include <salhelper/linkhelper.hxx>
 
 #ifdef WNT
 #define UNICODE
@@ -145,18 +146,13 @@ bool existsOfficePipe()
 //get modification time
 static bool getModifyTimeTargetFile(const OUString &rFileURL, TimeValue &rTime)
 {
-    ::osl::DirectoryItem item;
-    if (::osl::DirectoryItem::get(rFileURL, item) != ::osl::File::E_None)
+    salhelper::LinkResolver aResolver(osl_FileStatus_Mask_ModifyTime);
+
+    if (aResolver.fetchFileStatus(rFileURL) != osl::FileBase::E_None)
         return false;
 
-    ::osl::FileStatus stat(osl_FileStatus_Mask_ModifyTime|osl_FileStatus_Mask_Type|osl_FileStatus_Mask_LinkTargetURL);
-    if (item.getFileStatus(stat) != ::osl::File::E_None)
-        return false;
+    rTime = aResolver.m_aStatus.getModifyTime();
 
-    if( stat.getFileType() == ::osl::FileStatus::Link )
-        return getModifyTimeTargetFile(stat.getLinkTargetURL(), rTime);
-
-    rTime = stat.getModifyTime();
     return true;
 }
 

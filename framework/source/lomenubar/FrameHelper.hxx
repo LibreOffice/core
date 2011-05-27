@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -152,3 +153,5 @@ class FrameHelper : public cppu::WeakImplHelper1 < XFrameActionListener >
     void populateWindowList  (DbusmenuMenuitem *);
 };
 #endif // __FRAME_HELPER_HXX__
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
