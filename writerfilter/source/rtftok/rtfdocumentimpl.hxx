@@ -67,7 +67,7 @@ namespace writerfilter {
                 int resolveParse();
                 int resolveKeyword();
                 int dispatchKeyword(rtl::OString& rKeyword, bool bParam, int nParam);
-                int dispatchDestination(RTFKeyword nKeyword, bool bParam, int nParam, rtl::OString& rKeyword);
+                int dispatchDestination(RTFKeyword nKeyword, bool bParam, int nParam);
                 int resolveChars(char ch);
                 int pushState();
                 int popState();
@@ -78,6 +78,8 @@ namespace writerfilter {
                 int m_nGroup;
                 std::stack<RTFParserState> m_aStates;
                 bool m_bSkipUnknown;
+                /// For debugging purposes, where int value would not be enough
+                rtl::OString* m_pCurrentKeyword;
         };
     } // namespace rtftok
 } // namespace writerfilter

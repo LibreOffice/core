@@ -19,7 +19,8 @@ extern int nRTFControlWords;
 
 RTFDocumentImpl::RTFDocumentImpl(uno::Reference<io::XInputStream> const& xInputStream)
     : m_nGroup(0),
-    m_bSkipUnknown(false)
+    m_bSkipUnknown(false),
+    m_pCurrentKeyword(0)
 {
     OSL_ENSURE(xInputStream.is(), "no input stream");
     if (!xInputStream.is())
@@ -94,14 +95,14 @@ int RTFDocumentImpl::resolveChars(char ch)
     return 0;
 }
 
-int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword, bool /*bParam*/, int /*nParam*/, OString& rKeyword)
+int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword, bool /*bParam*/, int /*nParam*/)
 {
     switch (nKeyword)
     {
         case RTF_RTF:
             break;
         default:
-            OSL_TRACE("%s: TODO handle destination '%s'", OSL_THIS_FUNC, rKeyword.getStr());
+            OSL_TRACE("%s: TODO handle destination '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             // Make sure we skip destinations till we don't handle them
             m_aStates.top().nDestinationState = DESTINATION_SKIP;
             break;
@@ -142,7 +143,8 @@ int RTFDocumentImpl::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
             OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, rKeyword.getStr());
             break;
         case CONTROL_DESTINATION:
-            if ((ret = dispatchDestination(aRTFControlWords[i].nIndex, bParam, nParam, rKeyword)))
+            m_pCurrentKeyword = &rKeyword;
+            if ((ret = dispatchDestination(aRTFControlWords[i].nIndex, bParam, nParam)))
                 return ret;
             break;
         case CONTROL_SYMBOL:
