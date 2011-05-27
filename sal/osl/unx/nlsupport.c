@@ -32,7 +32,7 @@
 #include <rtl/memory.h>
 
 #if defined(LINUX) || defined(SOLARIS) || defined(NETBSD) || \
-    defined(FREEBSD) || defined(MACOSX) || defined(OPENBSD) || \
+    defined(FREEBSD) || defined(MACOSX)  || defined(IOS) || defined(OPENBSD) || \
     defined(DRAGONFLY)
 #include <pthread.h>
 #ifndef MACOSX
@@ -42,7 +42,7 @@
 #include <osl/module.h>
 #include <osl/thread.h>
 #endif  /* !MACOSX */
-#endif  /* LINUX || SOLARIS || NETBSD || MACOSX */
+#endif  /* LINUX || SOLARIS || NETBSD || MACOSX || IOS */
 
 #include <string.h>
 

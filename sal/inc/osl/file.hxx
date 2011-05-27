@@ -466,7 +466,7 @@ public:
     /** Constructor.
 
         @param nMask
-        Set of flaggs decribing the demanded information.
+        Set of flags decribing the demanded information.
     */
 
     VolumeInfo( sal_uInt32 nMask ): _nMask( nMask )
@@ -714,7 +714,7 @@ public:
     /** Constructor.
 
         @param nMask
-        Set of flaggs decribing the demanded information.
+        Set of flags decribing the demanded information.
     */
 
     FileStatus( sal_uInt32 nMask ): _nMask( nMask )

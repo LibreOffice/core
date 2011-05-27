@@ -1114,11 +1114,11 @@ osl_isFloppyMounted (oslVolumeDeviceHandleImpl* pDevice)
 
 /******************************************************************************
  *
- *                  MAC OS X FLOPPY FUNCTIONS
+ *                  MAC OS X AND IOS FLOPPY FUNCTIONS: NO FLOPPIES
  *
  *****************************************************************************/
 
-#if (defined(MACOSX) || defined(NETBSD) || defined(FREEBSD) || \
+#if (defined(MACOSX) || defined(IOS) || defined(NETBSD) || defined(FREEBSD) || \
     defined(AIX) || defined(OPENBSD) || defined(DRAGONFLY))
 static oslVolumeDeviceHandle osl_isFloppyDrive(const sal_Char* pszPath)
 {
@@ -1127,7 +1127,7 @@ static oslVolumeDeviceHandle osl_isFloppyDrive(const sal_Char* pszPath)
 }
 #endif /* MACOSX */
 
-#if ( defined(MACOSX) || defined(NETBSD) || defined(FREEBSD) || \
+#if ( defined(MACOSX) || defined(IOS) || defined(NETBSD) || defined(FREEBSD) || \
     defined(AIX) || defined(OPENBSD) || defined(DRAGONFLY))
 static oslFileError osl_mountFloppy(oslVolumeDeviceHandle hFloppy)
 {
@@ -1136,7 +1136,7 @@ static oslFileError osl_mountFloppy(oslVolumeDeviceHandle hFloppy)
 }
 #endif /* MACOSX */
 
-#if ( defined(MACOSX) || defined(NETBSD) || defined(FREEBSD) || \
+#if ( defined(MACOSX) || defined(IOS) || defined(NETBSD) || defined(FREEBSD) || \
     defined(AIX) || defined(OPENBSD) || defined(DRAGONFLY))
 static oslFileError osl_unmountFloppy(oslVolumeDeviceHandle hFloppy)
 {
@@ -1145,14 +1145,14 @@ static oslFileError osl_unmountFloppy(oslVolumeDeviceHandle hFloppy)
 }
 #endif /* MACOSX */
 
-#if ( defined(NETBSD) || defined(FREEBSD) || defined(OPENBSD) || defined(DRAGONFLY) )
+#if ( defined(NETBSD) || defined(IOS) || defined(FREEBSD) || defined(OPENBSD) || defined(DRAGONFLY) )
 static sal_Bool osl_getFloppyMountEntry(const sal_Char* pszPath, oslVolumeDeviceHandleImpl* pItem)
 {
     return sal_False;
 }
 #endif /* NETBSD || FREEBSD || OPENBSD */
 
-#if ( defined(NETBSD) || defined(FREEBSD) || defined(OPENBSD) || defined(DRAGONFLY) )
+#if ( defined(NETBSD) || defined(IOS) || defined(FREEBSD) || defined(OPENBSD) || defined(DRAGONFLY) )
 static sal_Bool osl_isFloppyMounted(oslVolumeDeviceHandleImpl* pDevice)
 {
     return sal_False;

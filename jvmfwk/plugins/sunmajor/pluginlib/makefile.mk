@@ -59,10 +59,10 @@ SHL1TARGET=	$(UNOCOMPONENT1)
 
 
 SHL1STDLIBS= \
-        $(CPPULIB) \
         $(CPPUHELPER) \
-        $(SALLIB) \
-        $(SALHELPERLIB)
+        $(CPPULIB) \
+        $(SALHELPERLIB) \
+        $(SALLIB)
         
 
 .IF "$(GUI)" == "WNT"

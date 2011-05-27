@@ -112,7 +112,11 @@ sal_Bool SAL_CALL
 osl_getModuleHandle(rtl_uString *pModuleName, oslModule *pResult)
 {
     (void) pModuleName; /* avoid warning about unused parameter */
+#ifndef NO_DL_FUNCTIONS
     *pResult = (oslModule) RTLD_DEFAULT;
+#else
+    *pResult = NULL;
+#endif
     return sal_True;
 }
 
@@ -204,6 +208,7 @@ osl_getFunctionSymbol(oslModule module, rtl_uString *puFunctionSymbolName)
 sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibraryUrl)
 {
     sal_Bool result = sal_False;
+#ifndef NO_DL_FUNCTIONS
 #if defined(AIX)
     int i;
     int size = 4 * 1024;
@@ -294,6 +299,7 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
             result = sal_False;
         }
     }
+#endif
 #endif
     return result;
 }
