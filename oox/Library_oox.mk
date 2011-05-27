@@ -163,6 +163,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/drawingml/shape \
     oox/source/drawingml/shapegroupcontext \
     oox/source/drawingml/shapepropertiescontext \
+    oox/source/drawingml/shapepropertymap \
     oox/source/drawingml/shapestylecontext \
     oox/source/drawingml/spdefcontext \
     oox/source/drawingml/table/tablebackgroundstylecontext \
@@ -298,7 +299,9 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/xls/connectionsbuffer \
     oox/source/xls/connectionsfragment \
     oox/source/xls/defnamesbuffer \
+    oox/source/xls/drawingbase \
     oox/source/xls/drawingfragment \
+    oox/source/xls/drawingmanager \
     oox/source/xls/excelchartconverter \
     oox/source/xls/excelfilter \
     oox/source/xls/excelhandlers \
@@ -320,9 +323,9 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/xls/richstring \
     oox/source/xls/scenariobuffer \
     oox/source/xls/scenariocontext \
-    oox/source/xls/sharedformulabuffer \
     oox/source/xls/sharedstringsbuffer \
     oox/source/xls/sharedstringsfragment \
+    oox/source/xls/sheetdatabuffer \
     oox/source/xls/sheetdatacontext \
     oox/source/xls/stylesbuffer \
     oox/source/xls/stylesfragment \

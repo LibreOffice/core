@@ -20,6 +20,7 @@ AutoShowInfo
 Autocomplete
 BackGraphicLocation
 BackGraphicURL
+Background
 BackgroundColor
 BasicLibraries
 BlackDay
@@ -81,6 +82,9 @@ CharUnderlineHasColor
 CharWeight
 CharWeightAsian
 CharWeightComplex
+CircleEndAngle
+CircleKind
+CircleStartAngle
 CodeName
 Color
 ColumnGrand
@@ -317,6 +321,7 @@ PercentageNumberFormat
 PersistName
 Perspective
 PolyPolygon
+PolygonKind
 Position
 PositionBottom
 PositionLeft

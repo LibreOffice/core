@@ -369,7 +369,7 @@ void FormulaObject::implDump()
     if( mnSize < 0 ) return;
 
     sal_Int64 nStartPos = mxStrm->tell();
-    sal_Int64 nEndPos = ::std::min< sal_Int64 >( nStartPos + mnSize, mxStrm->getLength() );
+    sal_Int64 nEndPos = ::std::min< sal_Int64 >( nStartPos + mnSize, mxStrm->size() );
 
     bool bValid = mxTokens.get();
     mxStack.reset( new FormulaStack );
@@ -890,8 +890,8 @@ bool FormulaObject::dumpAttrToken()
 void FormulaObject::dumpAddTokenData()
 {
     mxOut->resetItemIndex();
-    sal_Int32 nAddDataSize = (mxStrm->getLength() - mxStrm->tell() >= 4) ? dumpDec< sal_Int32 >( "add-data-size" ) : 0;
-    sal_Int64 nEndPos = ::std::min< sal_Int64 >( mxStrm->tell() + nAddDataSize, mxStrm->getLength() );
+    sal_Int32 nAddDataSize = (mxStrm->size() - mxStrm->tell() >= 4) ? dumpDec< sal_Int32 >( "add-data-size" ) : 0;
+    sal_Int64 nEndPos = ::std::min< sal_Int64 >( mxStrm->tell() + nAddDataSize, mxStrm->size() );
     for( AddDataTypeVec::const_iterator aIt = maAddData.begin(), aEnd = maAddData.end(); (aIt != aEnd) && !mxStrm->isEof() && (mxStrm->tell() < nEndPos); ++aIt )
     {
         AddDataType eType = *aIt;
@@ -2232,10 +2232,9 @@ RootStorageObject::RootStorageObject( const DumperBase& rParent )
     StorageObjectBase::construct( rParent );
 }
 
-void RootStorageObject::implDumpStream( const BinaryInputStreamRef& rxStrm, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSysFileName )
+void RootStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSysFileName )
 {
     OUString aExt = InputOutputHelper::getFileNameExtension( rStrmName );
-    Reference< XInputStream > xInStrm = InputOutputHelper::getXInputStream( *rxStrm );
     if(
         aExt.equalsIgnoreAsciiCaseAscii( "xlsb" ) ||
         aExt.equalsIgnoreAsciiCaseAscii( "xlsm" ) ||
@@ -2243,7 +2242,7 @@ void RootStorageObject::implDumpStream( const BinaryInputStreamRef& rxStrm, cons
         aExt.equalsIgnoreAsciiCaseAscii( "xltm" ) ||
         aExt.equalsIgnoreAsciiCaseAscii( "xltx" ) )
     {
-        Dumper( getFactory(), xInStrm, rSysFileName ).dump();
+        Dumper( getContext(), rxStrm, rSysFileName ).dump();
     }
     else if(
         aExt.equalsIgnoreAsciiCaseAscii( "xla" ) ||
@@ -2253,13 +2252,13 @@ void RootStorageObject::implDumpStream( const BinaryInputStreamRef& rxStrm, cons
         aExt.equalsIgnoreAsciiCaseAscii( "xlt" ) ||
         aExt.equalsIgnoreAsciiCaseAscii( "xlw" ) )
     {
-        ::oox::dump::biff::Dumper( getFactory(), xInStrm, rSysFileName ).dump();
+        ::oox::dump::biff::Dumper( getContext(), rxStrm, rSysFileName ).dump();
     }
     else if(
         aExt.equalsIgnoreAsciiCaseAscii( "pptx" ) ||
         aExt.equalsIgnoreAsciiCaseAscii( "potx" ) )
     {
-        ::oox::dump::pptx::Dumper( getFactory(), xInStrm, rSysFileName ).dump();
+        ::oox::dump::pptx::Dumper( getContext(), rxStrm, rSysFileName ).dump();
     }
     else if(
         aExt.equalsIgnoreAsciiCaseAscii( "xml" ) ||
@@ -2272,12 +2271,12 @@ void RootStorageObject::implDumpStream( const BinaryInputStreamRef& rxStrm, cons
     {
         if( rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "xl" ) ) && rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "vbaProject.bin" ) ) )
         {
-            StorageRef xStrg( new ::oox::ole::OleStorage( getFactory(), xInStrm, false ) );
+            StorageRef xStrg( new ::oox::ole::OleStorage( getContext(), rxStrm, false ) );
             VbaProjectStorageObject( *this, xStrg, rSysFileName ).dump();
         }
         else if( rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "xl/embeddings" ) ) )
         {
-            StorageRef xStrg( new ::oox::ole::OleStorage( getFactory(), xInStrm, false ) );
+            StorageRef xStrg( new ::oox::ole::OleStorage( getContext(), rxStrm, false ) );
             OleStorageObject( *this, xStrg, rSysFileName ).dump();
         }
         else if(
@@ -2296,7 +2295,7 @@ void RootStorageObject::implDumpStream( const BinaryInputStreamRef& rxStrm, cons
         }
         else if( rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "xl/activeX" ) ) )
         {
-            StorageRef xStrg( new ::oox::ole::OleStorage( getFactory(), xInStrm, true ) );
+            StorageRef xStrg( new ::oox::ole::OleStorage( getContext(), rxStrm, true ) );
             ActiveXStorageObject( *this, xStrg, rSysFileName ).dump();
         }
         else
@@ -2316,13 +2315,13 @@ Dumper::Dumper( const FilterBase& rFilter )
     DumperBase::construct( xCfg );
 }
 
-Dumper::Dumper( const Reference< XMultiServiceFactory >& rxFactory, const Reference< XInputStream >& rxInStrm, const OUString& rSysFileName )
+Dumper::Dumper( const Reference< XComponentContext >& rxContext, const Reference< XInputStream >& rxInStrm, const OUString& rSysFileName )
 {
-    if( rxFactory.is() && rxInStrm.is() )
+    if( rxContext.is() && rxInStrm.is() )
     {
-        StorageRef xStrg( new ZipStorage( rxFactory, rxInStrm ) );
+        StorageRef xStrg( new ZipStorage( getContext(), rxInStrm ) );
         MediaDescriptor aMediaDesc;
-        ConfigRef xCfg( new Config( DUMP_XLSB_CONFIG_ENVVAR, rxFactory, xStrg, rSysFileName, aMediaDesc ) );
+        ConfigRef xCfg( new Config( DUMP_XLSB_CONFIG_ENVVAR, rxContext, xStrg, rSysFileName, aMediaDesc ) );
         DumperBase::construct( xCfg );
     }
 }

@@ -841,7 +841,7 @@ bool AutoFilterBuffer::finalizeImport( const Reference< XDatabaseRange >& rxData
 AutoFilter* AutoFilterBuffer::getActiveAutoFilter()
 {
     // Excel expects not more than one auto filter per sheet or table
-    OSL_ENSURE( maAutoFilters.size() == 1, "AutoFilterBuffer::getActiveAutoFilter - too many auto filters" );
+    OSL_ENSURE( maAutoFilters.size() <= 1, "AutoFilterBuffer::getActiveAutoFilter - too many auto filters" );
     // stick to the last imported auto filter
     return maAutoFilters.empty() ? 0 : maAutoFilters.back().get();
 }

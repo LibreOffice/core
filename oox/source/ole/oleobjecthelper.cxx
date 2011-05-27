@@ -45,6 +45,7 @@ namespace ole {
 
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::embed;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -62,12 +63,17 @@ OleObjectInfo::OleObjectInfo() :
 
 // ============================================================================
 
-OleObjectHelper::OleObjectHelper( const Reference< XMultiServiceFactory >& rxFactory ) :
+OleObjectHelper::OleObjectHelper( const Reference< XMultiServiceFactory >& rxModelFactory ) :
     maEmbeddedObjScheme( CREATE_OUSTRING( "vnd.sun.star.EmbeddedObject:" ) ),
     mnObjectId( 100 )
 {
-    if( rxFactory.is() )
-        mxResolver.set( rxFactory->createInstance( CREATE_OUSTRING( "com.sun.star.document.ImportEmbeddedObjectResolver" ) ), UNO_QUERY );
+    if( rxModelFactory.is() ) try
+    {
+        mxResolver.set( rxModelFactory->createInstance( CREATE_OUSTRING( "com.sun.star.document.ImportEmbeddedObjectResolver" ) ), UNO_QUERY );
+    }
+    catch( Exception& )
+    {
+    }
 }
 
 OleObjectHelper::~OleObjectHelper()
@@ -123,11 +129,7 @@ bool OleObjectHelper::importOleObject( PropertyMap& rPropMap, const OleObjectInf
 
     if( bRet )
     {
-        // aspect mode
-        using namespace ::com::sun::star::embed::Aspects;
-        sal_Int64 nAspect = rOleObject.mbShowAsIcon ? MSOLE_ICON : MSOLE_CONTENT;
-        rPropMap[ PROP_Aspect ] <<= nAspect;
-        // visual area
+        rPropMap[ PROP_Aspect ] <<= (rOleObject.mbShowAsIcon ? Aspects::MSOLE_ICON : Aspects::MSOLE_CONTENT);
         rPropMap[ PROP_VisualArea ] <<= Rectangle( 0, 0, rObjSize.Width, rObjSize.Height );
     }
     return bRet;

@@ -510,7 +510,8 @@ public:
         (FieldContextPtr pContext,
         PropertyNameSupplier& rPropNameSupplier,
         uno::Reference< uno::XInterface > & xFieldInterface,
-        uno::Reference< beans::XPropertySet > xFieldProperties);
+        uno::Reference< beans::XPropertySet > xFieldProperties,
+        FieldId eFieldId);
     void handleDocProperty
         (FieldContextPtr pContext,
         PropertyNameSupplier& rPropNameSupplier,

@@ -33,9 +33,9 @@
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/fillproperties.hxx"
 #include "oox/drawingml/lineproperties.hxx"
+#include "oox/drawingml/shapepropertymap.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/graphichelper.hxx"
-#include "oox/helper/propertymap.hxx"
 
 namespace oox {
 namespace vml {
@@ -48,6 +48,7 @@ using ::oox::drawingml::Color;
 using ::oox::drawingml::FillProperties;
 using ::oox::drawingml::LineArrowProperties;
 using ::oox::drawingml::LineProperties;
+using ::oox::drawingml::ShapePropertyMap;
 using ::rtl::OStringBuffer;
 using ::rtl::OUString;
 
@@ -110,7 +111,7 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
     return fDefValue;
 }
 
-/*static*/ sal_Int32 ConversionHelper::decodeMeasureToEmu( const GraphicHelper& rGraphicHelper,
+/*static*/ sal_Int64 ConversionHelper::decodeMeasureToEmu( const GraphicHelper& rGraphicHelper,
         const OUString& rValue, sal_Int32 nRefValue, bool bPixelX, bool bDefaultAsPixel )
 {
     // default for missing values is 0
@@ -153,10 +154,11 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
             fValue *= 12700.0;
         else if( (cChar1 == 'p') && (cChar2 == 'c') )   // 1 pica = 1/6 inch = 152,400 EMU
             fValue *= 152400.0;
-        else if( (cChar1 == 'p') && (cChar2 == 'x') )   // 1 pixel, dependent on output device, factor 360 to convert 1/100mm to EMU
-            fValue = bPixelX ?
-                rGraphicHelper.convertScreenPixelXToHmm( 360.0 * fValue ) :
-                rGraphicHelper.convertScreenPixelYToHmm( 360.0 * fValue );
+        else if( (cChar1 == 'p') && (cChar2 == 'x') )   // 1 pixel, dependent on output device
+            fValue = static_cast< double >( ::oox::drawingml::convertHmmToEmu(
+                bPixelX ?
+                    rGraphicHelper.convertScreenPixelXToHmm( fValue ) :
+                    rGraphicHelper.convertScreenPixelYToHmm( fValue ) ) );
     }
     else if( (aUnit.getLength() == 1) && (aUnit[ 0 ] == '%') )
     {
@@ -167,13 +169,13 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
         OSL_FAIL( "ConversionHelper::decodeMeasureToEmu - unknown measure unit" );
         fValue = nRefValue;
     }
-    return static_cast< sal_Int32 >( fValue + 0.5 );
+    return static_cast< sal_Int64 >( fValue + 0.5 );
 }
 
 /*static*/ sal_Int32 ConversionHelper::decodeMeasureToHmm( const GraphicHelper& rGraphicHelper,
         const OUString& rValue, sal_Int32 nRefValue, bool bPixelX, bool bDefaultAsPixel )
 {
-    return (decodeMeasureToEmu( rGraphicHelper, rValue, nRefValue, bPixelX, bDefaultAsPixel ) + 180) / 360;
+    return ::oox::drawingml::convertEmuToHmm( decodeMeasureToEmu( rGraphicHelper, rValue, nRefValue, bPixelX, bDefaultAsPixel ) );
 }
 
 /*static*/ Color ConversionHelper::decodeColor( const GraphicHelper& rGraphicHelper,
@@ -272,7 +274,7 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
 
 namespace {
 
-sal_Int32 lclGetEmu( const GraphicHelper& rGraphicHelper, const OptValue< OUString >& roValue, sal_Int32 nDefValue )
+sal_Int64 lclGetEmu( const GraphicHelper& rGraphicHelper, const OptValue< OUString >& roValue, sal_Int64 nDefValue )
 {
     return roValue.has() ? ConversionHelper::decodeMeasureToEmu( rGraphicHelper, roValue.get(), 0, false, false ) : nDefValue;
 }
@@ -416,8 +418,7 @@ void StrokeModel::assignUsed( const StrokeModel& rSource )
     moJoinStyle.assignIfUsed( rSource.moJoinStyle );
 }
 
-void StrokeModel::pushToPropMap( PropertyMap& rPropMap,
-        ModelObjectHelper& rModelObjectHelper, const GraphicHelper& rGraphicHelper ) const
+void StrokeModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper& rGraphicHelper ) const
 {
     /*  Convert VML line formatting to DrawingML line formatting and let the
         DrawingML code do the hard work. */
@@ -429,7 +430,7 @@ void StrokeModel::pushToPropMap( PropertyMap& rPropMap,
         lclConvertArrow( aLineProps.maStartArrow, maStartArrow );
         lclConvertArrow( aLineProps.maEndArrow, maEndArrow );
         aLineProps.maLineFill.maFillColor = ConversionHelper::decodeColor( rGraphicHelper, moColor, moOpacity, API_RGB_BLACK );
-        aLineProps.moLineWidth = lclGetEmu( rGraphicHelper, moWeight, 1 );
+        aLineProps.moLineWidth = getLimitedValue< sal_Int32, sal_Int64 >( lclGetEmu( rGraphicHelper, moWeight, 1 ), 0, SAL_MAX_INT32 );
         lclGetDmlLineDash( aLineProps.moPresetDash, aLineProps.maCustomDash, moDashStyle );
         aLineProps.moLineCompound = lclGetDmlLineCompound( moLineStyle );
         aLineProps.moLineCap = lclGetDmlLineCap( moEndCap );
@@ -440,7 +441,7 @@ void StrokeModel::pushToPropMap( PropertyMap& rPropMap,
         aLineProps.maLineFill.moFillType = XML_noFill;
     }
 
-    aLineProps.pushToPropMap( rPropMap, rModelObjectHelper, rGraphicHelper );
+    aLineProps.pushToPropMap( rPropMap, rGraphicHelper );
 }
 
 // ============================================================================
@@ -461,8 +462,7 @@ void FillModel::assignUsed( const FillModel& rSource )
     moRotate.assignIfUsed( rSource.moRotate );
 }
 
-void FillModel::pushToPropMap( PropertyMap& rPropMap,
-        ModelObjectHelper& rModelObjectHelper, const GraphicHelper& rGraphicHelper ) const
+void FillModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper& rGraphicHelper ) const
 {
     /*  Convert VML fill formatting to DrawingML fill formatting and let the
         DrawingML code do the hard work. */
@@ -579,7 +579,7 @@ void FillModel::pushToPropMap( PropertyMap& rPropMap,
         aFillProps.moFillType = XML_noFill;
     }
 
-    aFillProps.pushToPropMap( rPropMap, rModelObjectHelper, rGraphicHelper );
+    aFillProps.pushToPropMap( rPropMap, rGraphicHelper );
 }
 
 // ============================================================================

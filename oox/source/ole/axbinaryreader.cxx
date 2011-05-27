@@ -49,14 +49,22 @@ const sal_uInt32 AX_STRING_COMPRESSED       = 0x80000000;
 // ============================================================================
 
 AxAlignedInputStream::AxAlignedInputStream( BinaryInputStream& rInStrm ) :
-    mrInStrm( rInStrm ),
-    mnStrmPos( 0 )
+    BinaryStreamBase( false ),
+    mpInStrm( &rInStrm ),
+    mnStrmPos( 0 ),
+    mnStrmSize( rInStrm.getRemaining() )
 {
+    mbEof = mbEof || rInStrm.isEof();
+}
+
+sal_Int64 AxAlignedInputStream::size() const
+{
+    return mpInStrm ? mnStrmSize : -1;
 }
 
 sal_Int64 AxAlignedInputStream::tell() const
 {
-    return mnStrmPos;
+    return mpInStrm ? mnStrmPos : -1;
 }
 
 void AxAlignedInputStream::seek( sal_Int64 nPos )
@@ -66,24 +74,44 @@ void AxAlignedInputStream::seek( sal_Int64 nPos )
         skip( static_cast< sal_Int32 >( nPos - mnStrmPos ) );
 }
 
-sal_Int32 AxAlignedInputStream::readData( StreamDataSequence& orData, sal_Int32 nBytes )
+void AxAlignedInputStream::close()
 {
-    sal_Int32 nReadSize = mrInStrm.readData( orData, nBytes );
-    mnStrmPos += nReadSize;
+    mpInStrm = 0;
+    mbEof = true;
+}
+
+sal_Int32 AxAlignedInputStream::readData( StreamDataSequence& orData, sal_Int32 nBytes, size_t nAtomSize )
+{
+    sal_Int32 nReadSize = 0;
+    if( !mbEof )
+    {
+        nReadSize = mpInStrm->readData( orData, nBytes, nAtomSize );
+        mnStrmPos += nReadSize;
+        mbEof = mpInStrm->isEof();
+    }
     return nReadSize;
 }
 
-sal_Int32 AxAlignedInputStream::readMemory( void* opMem, sal_Int32 nBytes )
+sal_Int32 AxAlignedInputStream::readMemory( void* opMem, sal_Int32 nBytes, size_t nAtomSize )
 {
-    sal_Int32 nReadSize = mrInStrm.readMemory( opMem, nBytes );
-    mnStrmPos += nReadSize;
+    sal_Int32 nReadSize = 0;
+    if( !mbEof )
+    {
+        nReadSize = mpInStrm->readMemory( opMem, nBytes, nAtomSize );
+        mnStrmPos += nReadSize;
+        mbEof = mpInStrm->isEof();
+    }
     return nReadSize;
 }
 
-void AxAlignedInputStream::skip( sal_Int32 nBytes )
+void AxAlignedInputStream::skip( sal_Int32 nBytes, size_t nAtomSize )
 {
-    mrInStrm.skip( nBytes );
-    mnStrmPos += nBytes;
+    if( !mbEof )
+    {
+        mpInStrm->skip( nBytes, nAtomSize );
+        mnStrmPos += nBytes;
+        mbEof = mpInStrm->isEof();
+    }
 }
 
 void AxAlignedInputStream::align( size_t nSize )
@@ -175,10 +203,7 @@ bool lclReadString( AxAlignedInputStream& rInStrm, OUString& rValue, sal_uInt32 
     OSL_ENSURE( bValidChars, "lclReadString - string too long" );
     sal_Int64 nEndPos = rInStrm.tell() + nChars * (bCompressed ? 1 : 2);
     nChars = ::std::min< sal_Int32 >( nChars, 65536 );
-    rValue = bCompressed ?
-        // ISO-8859-1 maps all byte values xx to the same Unicode code point U+00xx
-        rInStrm.readCharArrayUC( nChars, RTL_TEXTENCODING_ISO_8859_1 ) :
-        rInStrm.readUnicodeArray( nChars );
+    rValue = rInStrm.readCompressedUnicodeArray( nChars, bCompressed );
     rInStrm.seek( nEndPos );
     return bValidChars;
 }

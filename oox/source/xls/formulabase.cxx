@@ -40,7 +40,6 @@
 #include <com/sun/star/sheet/FormulaMapGroupSpecialOffset.hpp>
 #include <com/sun/star/sheet/XFormulaOpCodeMapper.hpp>
 #include <com/sun/star/sheet/XFormulaParser.hpp>
-#include <com/sun/star/sheet/XFormulaTokens.hpp>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "oox/core/filterbase.hxx"
@@ -228,8 +227,10 @@ const sal_uInt16 FUNCFLAG_MACROCMD          = 0x0080;   /// Function is a macro-
 const sal_uInt16 FUNCFLAG_ALWAYSVAR         = 0x0100;   /// Function is always represented by a tFuncVar token.
 const sal_uInt16 FUNCFLAG_PARAMPAIRS        = 0x0200;   /// Optional parameters are expected to appear in pairs.
 
-const sal_uInt16 FUNCFLAG_FUNCLIBMASK       = 0xF000;   /// Mask for function library bits.
-const sal_uInt16 FUNCFLAG_EUROTOOL          = 0x1000;   /// Function is part of the EuroTool add-in.
+/// Converts a function library index (value of enum FunctionLibraryType) to function flags.
+#define FUNCLIB_TO_FUNCFLAGS( funclib_index ) static_cast< sal_uInt16 >( static_cast< sal_uInt8 >( funclib_index ) << 12 )
+/// Extracts a function library index (value of enum FunctionLibraryType) from function flags.
+#define FUNCFLAGS_TO_FUNCLIB( func_flags ) extractValue< FunctionLibraryType >( func_flags, 12, 4 )
 
 typedef ::boost::shared_ptr< FunctionInfo > FunctionInfoRef;
 
@@ -299,7 +300,9 @@ static const FunctionData saFuncTableBiff2[] =
     { "DOLLAR",                 "DOLLAR",               13,     13,     1,  2,  V, { VR }, 0 },
     { "FIXED",                  "FIXED",                14,     14,     1,  2,  V, { VR, VR, C }, 0 },
     { "SIN",                    "SIN",                  15,     15,     1,  1,  V, { VR }, 0 },
+    { "CSC",                    "SIN",                  15,     15,     1,  1,  V, { VR }, FUNCFLAG_EXPORTONLY },
     { "COS",                    "COS",                  16,     16,     1,  1,  V, { VR }, 0 },
+    { "SEC",                    "COS",                  16,     16,     1,  1,  V, { VR }, FUNCFLAG_EXPORTONLY },
     { "TAN",                    "TAN",                  17,     17,     1,  1,  V, { VR }, 0 },
     { "COT",                    "TAN",                  17,     17,     1,  1,  V, { VR }, FUNCFLAG_EXPORTONLY },
     { "ATAN",                   "ATAN",                 18,     18,     1,  1,  V, { VR }, 0 },
@@ -459,7 +462,9 @@ static const FunctionData saFuncTableBiff3[] =
     { "MEDIAN",                 "MEDIAN",               227,    227,    1,  MX, V, { RX }, 0 },
     { "SUMPRODUCT",             "SUMPRODUCT",           228,    228,    1,  MX, V, { VA }, 0 },
     { "SINH",                   "SINH",                 229,    229,    1,  1,  V, { VR }, 0 },
+    { "CSCH",                   "SINH",                 229,    229,    1,  1,  V, { VR }, FUNCFLAG_EXPORTONLY },
     { "COSH",                   "COSH",                 230,    230,    1,  1,  V, { VR }, 0 },
+    { "SECH",                   "COSH",                 230,    230,    1,  1,  V, { VR }, FUNCFLAG_EXPORTONLY },
     { "TANH",                   "TANH",                 231,    231,    1,  1,  V, { VR }, 0 },
     { "COTH",                   "TANH",                 231,    231,    1,  1,  V, { VR }, FUNCFLAG_EXPORTONLY },
     { "ASINH",                  "ASINH",                232,    232,    1,  1,  V, { VR }, 0 },
@@ -675,7 +680,7 @@ static const FunctionData saFuncTableBiff5[] =
 
     // *** EuroTool add-in ***
 
-    { "EUROCONVERT",            "EUROCONVERT",          NOID,   NOID,   3,  5,  V, { VR }, FUNCFLAG_EUROTOOL },
+    { "EUROCONVERT",            "EUROCONVERT",          NOID,   NOID,   3,  5,  V, { VR }, FUNCLIB_TO_FUNCFLAGS( FUNCLIB_EUROTOOL ) },
 
     // *** macro sheet commands ***
 
@@ -912,12 +917,7 @@ void FunctionProviderImpl::initFunc( const FunctionData& rFuncData, sal_uInt8 nM
         xFuncInfo->maBiffMacroName = CREATE_OUSTRING( "_xlfnodf." ) + xFuncInfo->maOdfFuncName;
     }
 
-    switch( rFuncData.mnFlags & FUNCFLAG_FUNCLIBMASK )
-    {
-        case FUNCFLAG_EUROTOOL: xFuncInfo->meFuncLibType = FUNCLIB_EUROTOOL;    break;
-        default:                xFuncInfo->meFuncLibType = FUNCLIB_UNKNOWN;
-    }
-
+    xFuncInfo->meFuncLibType = FUNCFLAGS_TO_FUNCLIB( rFuncData.mnFlags );
     xFuncInfo->mnApiOpCode = -1;
     xFuncInfo->mnBiff12FuncId = rFuncData.mnBiff12FuncId;
     xFuncInfo->mnBiffFuncId = rFuncData.mnBiffFuncId;
@@ -1025,7 +1025,7 @@ struct OpCodeProviderImpl : public ApiOpCodes
 
     explicit            OpCodeProviderImpl(
                             const FunctionInfoVector& rFuncInfos,
-                            const Reference< XMultiServiceFactory >& rxFactory );
+                            const Reference< XMultiServiceFactory >& rxModelFactory );
 
 private:
     typedef ::std::map< OUString, ApiToken >    ApiTokenMap;
@@ -1047,11 +1047,11 @@ private:
 // ----------------------------------------------------------------------------
 
 OpCodeProviderImpl::OpCodeProviderImpl( const FunctionInfoVector& rFuncInfos,
-        const Reference< XMultiServiceFactory >& rxFactory )
+        const Reference< XMultiServiceFactory >& rxModelFactory )
 {
-    if( rxFactory.is() ) try
+    if( rxModelFactory.is() ) try
     {
-        Reference< XFormulaOpCodeMapper > xMapper( rxFactory->createInstance(
+        Reference< XFormulaOpCodeMapper > xMapper( rxModelFactory->createInstance(
             CREATE_OUSTRING( "com.sun.star.sheet.FormulaOpCodeMapper" ) ), UNO_QUERY_THROW );
 
         // op-codes provided as attributes
@@ -1295,10 +1295,10 @@ bool OpCodeProviderImpl::initFuncOpCodes( const ApiTokenMap& rIntFuncTokenMap, c
 
 // ----------------------------------------------------------------------------
 
-OpCodeProvider::OpCodeProvider( const Reference< XMultiServiceFactory >& rxFactory,
+OpCodeProvider::OpCodeProvider( const Reference< XMultiServiceFactory >& rxModelFactory,
         FilterType eFilter, BiffType eBiff, bool bImportFilter ) :
     FunctionProvider( eFilter, eBiff, bImportFilter ),
-    mxOpCodeImpl( new OpCodeProviderImpl( getFuncs(), rxFactory ) )
+    mxOpCodeImpl( new OpCodeProviderImpl( getFuncs(), rxModelFactory ) )
 {
 }
 
@@ -1333,12 +1333,12 @@ Sequence< FormulaOpCodeMapEntry > OpCodeProvider::getOoxParserMap() const
 // API formula parser wrapper =================================================
 
 ApiParserWrapper::ApiParserWrapper(
-        const Reference< XMultiServiceFactory >& rxFactory, const OpCodeProvider& rOpCodeProv ) :
+        const Reference< XMultiServiceFactory >& rxModelFactory, const OpCodeProvider& rOpCodeProv ) :
     OpCodeProvider( rOpCodeProv )
 {
-    if( rxFactory.is() ) try
+    if( rxModelFactory.is() ) try
     {
-        mxParser.set( rxFactory->createInstance( CREATE_OUSTRING( "com.sun.star.sheet.FormulaParser" ) ), UNO_QUERY_THROW );
+        mxParser.set( rxModelFactory->createInstance( CREATE_OUSTRING( "com.sun.star.sheet.FormulaParser" ) ), UNO_QUERY_THROW );
     }
     catch( Exception& )
     {
@@ -1362,51 +1362,6 @@ ApiTokenSequence ApiParserWrapper::parseFormula( const OUString& rFormula, const
     {
     }
     return aTokenSeq;
-}
-
-// formula contexts ===========================================================
-
-FormulaContext::FormulaContext( bool bRelativeAsOffset, bool b2dRefsAs3dRefs, bool bAllowNulChars ) :
-    maBaseAddress( 0, 0, 0 ),
-    mbRelativeAsOffset( bRelativeAsOffset ),
-    mb2dRefsAs3dRefs( b2dRefsAs3dRefs ),
-    mbAllowNulChars( bAllowNulChars )
-{
-}
-
-FormulaContext::~FormulaContext()
-{
-}
-
-void FormulaContext::setSharedFormula( const CellAddress& )
-{
-}
-
-// ----------------------------------------------------------------------------
-
-TokensFormulaContext::TokensFormulaContext( bool bRelativeAsOffset, bool b2dRefsAs3dRefs, bool bAllowNulChars ) :
-    FormulaContext( bRelativeAsOffset, b2dRefsAs3dRefs, bAllowNulChars )
-{
-}
-
-void TokensFormulaContext::setTokens( const ApiTokenSequence& rTokens )
-{
-    maTokens = rTokens;
-}
-
-// ----------------------------------------------------------------------------
-
-SimpleFormulaContext::SimpleFormulaContext( const Reference< XFormulaTokens >& rxTokens,
-        bool bRelativeAsOffset, bool b2dRefsAs3dRefs, bool bAllowNulChars ) :
-    FormulaContext( bRelativeAsOffset, b2dRefsAs3dRefs, bAllowNulChars ),
-    mxTokens( rxTokens )
-{
-    OSL_ENSURE( mxTokens.is(), "SimpleFormulaContext::SimpleFormulaContext - missing XFormulaTokens interface" );
-}
-
-void SimpleFormulaContext::setTokens( const ApiTokenSequence& rTokens )
-{
-    mxTokens->setTokens( rTokens );
 }
 
 // formula parser/printer base class for filters ==============================
@@ -1481,7 +1436,7 @@ TokenToRangeListState lclProcessClose( sal_Int32& ornParenLevel )
 // ----------------------------------------------------------------------------
 
 FormulaProcessorBase::FormulaProcessorBase( const WorkbookHelper& rHelper ) :
-    OpCodeProvider( rHelper.getDocumentFactory(), rHelper.getFilterType(), rHelper.getBiff(), rHelper.getBaseFilter().isImportFilter() ),
+    OpCodeProvider( rHelper.getBaseFilter().getModelFactory(), rHelper.getFilterType(), rHelper.getBiff(), rHelper.getBaseFilter().isImportFilter() ),
     ApiOpCodes( getOpCodes() ),
     WorkbookHelper( rHelper )
 {
@@ -1704,6 +1659,12 @@ bool FormulaProcessorBase::extractString( OUString& orString, const ApiTokenSequ
 {
     ApiTokenIterator aTokenIt( rTokens, OPCODE_SPACES, true );
     return aTokenIt.is() && (aTokenIt->OpCode == OPCODE_PUSH) && (aTokenIt->Data >>= orString) && !(++aTokenIt).is();
+}
+
+bool FormulaProcessorBase::extractSpecialTokenInfo( ApiSpecialTokenInfo& orTokenInfo, const ApiTokenSequence& rTokens ) const
+{
+    ApiTokenIterator aTokenIt( rTokens, OPCODE_SPACES, true );
+    return aTokenIt.is() && (aTokenIt->OpCode == OPCODE_BAD) && (aTokenIt->Data >>= orTokenInfo);
 }
 
 void FormulaProcessorBase::convertStringToStringList(

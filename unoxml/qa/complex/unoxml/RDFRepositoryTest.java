@@ -172,14 +172,14 @@ public class RDFRepositoryTest
 
             try {
                 xRep.createGraph(foo);
-                assertFalse("creating duplicate graph was allowed", false);
+                fail("creating duplicate graph was allowed");
             } catch (ElementExistException e) {
                 // ignore
             }
 
             try {
                 xRep.createGraph(null);
-                assertFalse("invalid graph name was allowed", false);
+                fail("invalid graph name was allowed");
             } catch (IllegalArgumentException e) {
                 // ignore
             }
@@ -296,7 +296,7 @@ public class RDFRepositoryTest
             xFooIn = new StreamSimulator(tempDir + "foo.rdf", true, param);
             try {
                 xRep.importGraph(FileFormat.RDF_XML, xFooIn, bar, base);
-                assertFalse("importing existing graph did not fail", false);
+                fail("importing existing graph did not fail");
             } catch (ElementExistException e) {
                 // ignore
             }
@@ -328,28 +328,28 @@ public class RDFRepositoryTest
 
             try {
                 xBazGraph.clear();
-                assertFalse("deleted graph not invalid (clear)", false);
+                fail("deleted graph not invalid (clear)");
             } catch (NoSuchElementException e) {
                 // ignore
             }
 
             try {
                 xBazGraph.addStatement(foo, foo, foo);
-                assertFalse("deleted graph not invalid (add)", false);
+                fail("deleted graph not invalid (add)");
             } catch (NoSuchElementException e) {
                 // ignore
             }
 
             try {
                 xBazGraph.removeStatements(null, null, null);
-                assertFalse("deleted graph not invalid (remove)", false);
+                fail("deleted graph not invalid (remove)");
             } catch (NoSuchElementException e) {
                 // ignore
             }
 
             try {
                 xBazGraph.getStatements(null, null, null);
-                assertFalse("deleted graph not invalid (get)", false);
+                fail("deleted graph not invalid (get)");
             } catch (NoSuchElementException e) {
                 // ignore
             }
@@ -474,14 +474,14 @@ public class RDFRepositoryTest
 
             try {
                 xRep.setStatementRDFa(foo, new XURI[] {}, xM, "", null);
-                assertFalse("RDFa: set: no predicate", false);
+                fail("RDFa: set: no predicate");
             } catch (IllegalArgumentException e) {
                 // ignore
             }
 
             try {
                 xRep.setStatementRDFa(foo, new XURI[] {bar}, null, "", null);
-                assertFalse("RDFa: set: null", false);
+                fail("RDFa: set: null");
             } catch (IllegalArgumentException e) {
                 // ignore
             }

@@ -56,12 +56,12 @@ BinaryFilterBase::~BinaryFilterBase()
 
 StorageRef BinaryFilterBase::implCreateStorage( const Reference< XInputStream >& rxInStream ) const
 {
-    return StorageRef( new ::oox::ole::OleStorage( getServiceFactory(), rxInStream, true ) );
+    return StorageRef( new ::oox::ole::OleStorage( getComponentContext(), rxInStream, true ) );
 }
 
 StorageRef BinaryFilterBase::implCreateStorage( const Reference< XStream >& rxOutStream ) const
 {
-    return StorageRef( new ::oox::ole::OleStorage( getServiceFactory(), rxOutStream, true ) );
+    return StorageRef( new ::oox::ole::OleStorage( getComponentContext(), rxOutStream, true ) );
 }
 
 // ============================================================================

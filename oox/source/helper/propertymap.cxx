@@ -220,10 +220,6 @@ PropertyMap::PropertyMap() :
 {
 }
 
-PropertyMap::~PropertyMap()
-{
-}
-
 /*static*/ const OUString& PropertyMap::getPropertyName( sal_Int32 nPropId )
 {
     OSL_ENSURE( (0 <= nPropId) && (nPropId < PROP_COUNT), "PropertyMap::getPropertyName - invalid property identifier" );

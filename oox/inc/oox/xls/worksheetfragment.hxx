@@ -64,11 +64,8 @@ class WorksheetFragment : public WorksheetFragmentBase
 {
 public:
     explicit            WorksheetFragment(
-                            const WorkbookHelper& rHelper,
-                            const ::rtl::OUString& rFragmentPath,
-                            const ISegmentProgressBarRef& rxProgressBar,
-                            WorksheetType eSheetType,
-                            sal_Int16 nSheet );
+                            const WorksheetHelper& rHelper,
+                            const ::rtl::OUString& rFragmentPath );
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
@@ -135,10 +132,8 @@ class BiffWorksheetFragment : public BiffWorksheetFragmentBase
 {
 public:
     explicit            BiffWorksheetFragment(
-                            const BiffWorkbookFragmentBase& rParent,
-                            const ISegmentProgressBarRef& rxProgressBar,
-                            WorksheetType eSheetType,
-                            sal_Int16 nSheet );
+                            const WorksheetHelper& rHelper,
+                            const BiffWorkbookFragmentBase& rParent );
     virtual             ~BiffWorksheetFragment();
 
     /** Imports the entire worksheet fragment, returns true, if EOF record has been reached. */
@@ -169,6 +164,8 @@ private:
     void                importLabelRanges( BiffInputStream& rStrm );
     /** Imports the MEREDCELLS record and merges all cells in the document. */
     void                importMergedCells( BiffInputStream& rStrm );
+    /** Imports the NOTE record containing a cell note. */
+    void                importNote( BiffInputStream& rStrm );
     /** Imports the HORPAGEBREAKS or VERPAGEBREAKS record and inserts page breaks. */
     void                importPageBreaks( BiffInputStream& rStrm, bool bRowBreak );
     /** Imports a pivot table. */

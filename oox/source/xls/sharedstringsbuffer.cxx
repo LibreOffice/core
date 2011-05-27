@@ -74,11 +74,9 @@ void SharedStringsBuffer::finalizeImport()
     maStrings.forEachMem( &RichString::finalizeImport );
 }
 
-void SharedStringsBuffer::convertString( const Reference< XText >& rxText, sal_Int32 nStringId, sal_Int32 nXfId ) const
+RichStringRef SharedStringsBuffer::getString( sal_Int32 nStringId ) const
 {
-    if( rxText.is() )
-        if( const RichString* pString = maStrings.get( nStringId ).get() )
-            pString->convert( rxText, nXfId );
+    return maStrings.get( nStringId );
 }
 
 // ============================================================================

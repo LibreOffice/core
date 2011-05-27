@@ -167,7 +167,7 @@ void BiffCtlsStreamObject::implDump()
         {
             IndentGuard aIndGuard( mxOut );
             mxStrm->seek( mnStartPos );
-            RelativeInputStreamRef xRelStrm( new RelativeInputStream( *mxStrm, mnLength ) );
+            BinaryInputStreamRef xRelStrm( new RelativeInputStream( *mxStrm, mnLength ) );
             FormControlStreamObject( *this, xRelStrm ).dump();
         }
         writeEmptyItem( "CTLS-END" );
@@ -357,7 +357,7 @@ bool BiffObjectBase::implStartRecord( BinaryInputStream&, sal_Int64& ornRecPos, 
         break;
     }
 
-    ornRecSize = mxBiffStrm->getLength();
+    ornRecSize = mxBiffStrm->size();
     return bValid;
 }
 
@@ -811,7 +811,7 @@ void FormulaObject::implDump()
     if( mnSize == 0 ) return;
 
     sal_Int64 nStartPos = mxStrm->tell();
-    sal_Int64 nEndPos = ::std::min< sal_Int64 >( nStartPos + mnSize, mxStrm->getLength() );
+    sal_Int64 nEndPos = ::std::min< sal_Int64 >( nStartPos + mnSize, mxStrm->size() );
 
     bool bValid = mxTokens.get();
     mxStack.reset( new FormulaStack );
@@ -1604,7 +1604,7 @@ void WorkbookStreamObject::implDumpRecordBody()
 {
     BiffInputStream& rStrm = getBiffStream();
     sal_uInt16 nRecId = rStrm.getRecId();
-    sal_Int64 nRecSize = rStrm.getLength();
+    sal_Int64 nRecSize = rStrm.size();
     BiffType eBiff = getBiff();
 
     switch( nRecId )
@@ -1930,7 +1930,7 @@ void WorkbookStreamObject::implDumpRecordBody()
 
         case BIFF_ID_CHPICFORMAT:
             dumpDec< sal_uInt16 >( "bitmap-mode", "CHPICFORMAT-BITMAP-MODE" );
-            dumpDec< sal_uInt16 >( "image-format", "CHPICFORMAT-IMAGE-FORMAT" );
+            dumpUnused( 2 );
             dumpHex< sal_uInt16 >( "flags", "CHPICFORMAT-FLAGS" );
             dumpDec< double >( "scaling-factor" );
         break;
@@ -2573,6 +2573,12 @@ void WorkbookStreamObject::implDumpRecordBody()
             dumpDec< sal_Int32 >( "sst-idx" );
         break;
 
+        case BIFF_ID_MERGEDCELLS:
+            mxOut->resetItemIndex();
+            for( sal_uInt16 nIdx = 0, nCount = dumpDec< sal_uInt16 >( "count" ); !rStrm.isEof() && (nIdx < nCount); ++nIdx )
+                dumpRange( "#range" );
+        break;
+
         case BIFF_ID_MSODRAWING:
         case BIFF_ID_MSODRAWINGGROUP:
         case BIFF_ID_MSODRAWINGSEL:
@@ -2626,11 +2632,29 @@ void WorkbookStreamObject::implDumpRecordBody()
             {
                 dumpHex< sal_uInt16 >( "flags", "NOTE-FLAGS" );
                 dumpDec< sal_uInt16 >( "obj-id" );
+                dumpUniString( "author" );
+                dumpUnused( 1 );
             }
             else
             {
-                sal_uInt16 nTextLen = ::std::min( dumpDec< sal_uInt16 >( "text-len" ), static_cast< sal_uInt16 >( rStrm.getRemaining() ) );
+                sal_uInt16 nTextLen = dumpDec< sal_uInt16 >( "text-len" );
+                nTextLen = ::std::min( nTextLen, static_cast< sal_uInt16 >( rStrm.getRemaining() ) );
                 writeStringItem( "note-text", rStrm.readCharArrayUC( nTextLen, getBiffData().getTextEncoding(), true ) );
+            }
+        break;
+
+        case BIFF_ID_NOTESOUND:
+            dumpHex< sal_uInt32 >( "identifier" );
+            dumpDec< sal_uInt32 >( "total-data-size" );
+            dumpDec< sal_uInt32 >( "wave-data-size" );
+            if( dumpDec< sal_uInt32 >( "fmt-size" ) >= 16 )
+            {
+                dumpDec< sal_uInt16 >( "format", "NOTESOUND-FORMAT" );
+                dumpDec< sal_uInt16 >( "channels" );
+                dumpDec< sal_uInt32 >( "sampling-rate" );
+                dumpDec< sal_uInt32 >( "data-rate" );
+                dumpDec< sal_uInt16 >( "data-block-size" );
+                dumpDec< sal_uInt16 >( "bits-per-sample" );
             }
         break;
 
@@ -2669,6 +2693,16 @@ void WorkbookStreamObject::implDumpRecordBody()
                 dumpDec< double >( "header-margin", "CONV-INCH-TO-CM" );
                 dumpDec< double >( "footer-margin", "CONV-INCH-TO-CM" );
                 dumpDec< sal_uInt16 >( "copies" );
+            }
+        break;
+
+        case BIFF_ID_PALETTE:
+            mxOut->resetItemIndex( 8 );
+            for( sal_uInt16 nIdx = 0, nCount = dumpDec< sal_uInt16 >( "count" ); !rStrm.isEof() && (nIdx < nCount); ++nIdx )
+            {
+                OUStringBuffer aColorName;
+                StringHelper::appendHex( aColorName, dumpColorABGR( "#color" ) );
+                mxColors->setName( nIdx + 8, aColorName.makeStringAndClear() );
             }
         break;
 
@@ -4491,7 +4525,7 @@ RootStorageObject::RootStorageObject( const DumperBase& rParent )
     addPreferredStream( "Workbook" );
 }
 
-void RootStorageObject::implDumpStream( const BinaryInputStreamRef& rxStrm, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSysFileName )
+void RootStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSysFileName )
 {
     if( (rStrgPath.getLength() == 0) && (rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Book" ) ) || rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Workbook" ) )) )
         WorkbookStreamObject( *this, rxStrm, rSysFileName ).dump();
@@ -4529,13 +4563,13 @@ Dumper::Dumper( const FilterBase& rFilter )
     DumperBase::construct( xCfg );
 }
 
-Dumper::Dumper( const Reference< XMultiServiceFactory >& rxFactory, const Reference< XInputStream >& rxInStrm, const OUString& rSysFileName )
+Dumper::Dumper( const Reference< XComponentContext >& rxContext, const Reference< XInputStream >& rxInStrm, const OUString& rSysFileName )
 {
-    if( rxFactory.is() && rxInStrm.is() )
+    if( rxContext.is() && rxInStrm.is() )
     {
-        StorageRef xStrg( new ::oox::ole::OleStorage( rxFactory, rxInStrm, true ) );
+        StorageRef xStrg( new ::oox::ole::OleStorage( rxContext, rxInStrm, true ) );
         MediaDescriptor aMediaDesc;
-        ConfigRef xCfg( new Config( DUMP_BIFF_CONFIG_ENVVAR, rxFactory, xStrg, rSysFileName, aMediaDesc ) );
+        ConfigRef xCfg( new Config( DUMP_BIFF_CONFIG_ENVVAR, rxContext, xStrg, rSysFileName, aMediaDesc ) );
         DumperBase::construct( xCfg );
     }
 }

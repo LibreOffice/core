@@ -615,7 +615,7 @@ TabPage  RID_PDF_TAB_SECURITY
 
     String STR_USER_PWD_PDFA
     {
-        Text [en-US] = "PDF doument will not be encrypted due to PDF/A export.";
+        Text [en-US] = "PDF document will not be encrypted due to PDF/A export.";
     };
 
     FixedText FT_OWNER_PWD
@@ -646,7 +646,7 @@ TabPage  RID_PDF_TAB_SECURITY
 
     String STR_OWNER_PWD_PDFA
     {
-        Text [en-US] = "PDF doument will not be restricted due to PDF/A export.";
+        Text [en-US] = "PDF document will not be restricted due to PDF/A export.";
     };
 
 //////////////////////////////

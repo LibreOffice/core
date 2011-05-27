@@ -86,7 +86,7 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
         pFocusWindow->EnterWait();
 
     if( mxDstDoc.is() )
-        bRet = implImport( rDescriptor );
+        bRet = sal_False;//implImport( rDescriptor );
     else
     if( mxSrcDoc.is() )
     {
@@ -118,18 +118,18 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
             }
         }
 
-        Sequence< PropertyValue > aNewDescritor( rDescriptor );
+        Sequence< PropertyValue > aNewDescriptor( rDescriptor );
 
         if( nCurrentPageNumber > 0 )
         {
             const sal_uInt32    nOldLength = rDescriptor.getLength();
 
-            aNewDescritor.realloc( nOldLength + 1 );
-            aNewDescritor[ nOldLength ].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PagePos" ) );
-            aNewDescritor[ nOldLength ].Value <<= static_cast< sal_Int16 >( nCurrentPageNumber - 1 );
+            aNewDescriptor.realloc( nOldLength + 1 );
+            aNewDescriptor[ nOldLength ].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PagePos" ) );
+            aNewDescriptor[ nOldLength ].Value <<= static_cast< sal_Int16 >( nCurrentPageNumber - 1 );
         }
 
-        bRet = implExport( aNewDescritor );
+        bRet = implExport( aNewDescriptor );
     }
     else
         bRet = sal_False;

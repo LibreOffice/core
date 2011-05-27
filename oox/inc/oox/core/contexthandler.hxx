@@ -58,9 +58,9 @@ typedef ::rtl::Reference< ContextHandler > ContextHandlerRef;
 struct FragmentBaseData;
 typedef ::boost::shared_ptr< FragmentBaseData > FragmentBaseDataRef;
 
-typedef ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XFastContextHandler > ContextHandlerImplBase;
+typedef ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XFastContextHandler > ContextHandler_BASE;
 
-class ContextHandler : public ContextHandlerImplBase
+class ContextHandler : public ContextHandler_BASE
 {
 public:
     explicit            ContextHandler( ContextHandler& rParent );

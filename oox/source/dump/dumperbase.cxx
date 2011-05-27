@@ -30,14 +30,13 @@
 
 #include <algorithm>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/io/XTextInputStream.hpp>
 #include <com/sun/star/io/XTextOutputStream.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <comphelper/docpasswordhelper.hxx>
 #include <osl/file.hxx>
 #include <rtl/math.hxx>
+#include <rtl/tencinfo.h>
 #include "oox/core/filterbase.hxx"
 #include "oox/helper/binaryoutputstream.hxx"
 #include "oox/helper/textinputstream.hxx"
@@ -113,20 +112,14 @@ OUString InputOutputHelper::getFileNameExtension( const OUString& rFileUrl )
 
 // input streams --------------------------------------------------------------
 
-Reference< XInputStream > InputOutputHelper::getXInputStream( BinaryInputStream& rStrm )
-{
-    if( BinaryXInputStream* pXStrm = dynamic_cast< BinaryXInputStream* >( &rStrm ) )
-        return pXStrm->getXInputStream();
-    return 0;
-}
-
 Reference< XInputStream > InputOutputHelper::openInputStream(
-        const Reference< XMultiServiceFactory >& rxFactory, const OUString& rFileName )
+        const Reference< XComponentContext >& rxContext, const OUString& rFileName )
 {
     Reference< XInputStream > xInStrm;
-    if( rxFactory.is() ) try
+    if( rxContext.is() ) try
     {
-        Reference< XSimpleFileAccess > xFileAccess( rxFactory->createInstance( CREATE_OUSTRING( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY_THROW );
+        Reference< XMultiServiceFactory > xFactory( rxContext->getServiceManager(), UNO_QUERY_THROW );
+        Reference< XSimpleFileAccess > xFileAccess( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY_THROW );
         xInStrm = xFileAccess->openFileRead( rFileName );
     }
     catch( Exception& )
@@ -135,38 +128,16 @@ Reference< XInputStream > InputOutputHelper::openInputStream(
     return xInStrm;
 }
 
-Reference< XTextInputStream > InputOutputHelper::openTextInputStream(
-        const Reference< XMultiServiceFactory >& rxFactory, const Reference< XInputStream >& rxInStrm, const OUString& rEncoding )
-{
-    Reference< XTextInputStream > xTextInStrm;
-    if( rxFactory.is() && rxInStrm.is() ) try
-    {
-        Reference< XActiveDataSink > xDataSink( rxFactory->createInstance( CREATE_OUSTRING( "com.sun.star.io.TextInputStream" ) ), UNO_QUERY_THROW );
-        xDataSink->setInputStream( rxInStrm );
-        xTextInStrm.set( xDataSink, UNO_QUERY_THROW );
-        xTextInStrm->setEncoding( rEncoding );
-    }
-    catch( Exception& )
-    {
-    }
-    return xTextInStrm;
-}
-
-Reference< XTextInputStream > InputOutputHelper::openTextInputStream(
-        const Reference< XMultiServiceFactory >& rxFactory, const OUString& rFileName, const OUString& rEncoding )
-{
-    return openTextInputStream( rxFactory, openInputStream( rxFactory, rFileName ), rEncoding );
-}
-
 // output streams -------------------------------------------------------------
 
 Reference< XOutputStream > InputOutputHelper::openOutputStream(
-        const Reference< XMultiServiceFactory >& rxFactory, const OUString& rFileName )
+        const Reference< XComponentContext >& rxContext, const OUString& rFileName )
 {
     Reference< XOutputStream > xOutStrm;
-    if( rxFactory.is() ) try
+    if( rxContext.is() ) try
     {
-        Reference< XSimpleFileAccess > xFileAccess( rxFactory->createInstance( CREATE_OUSTRING( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY_THROW );
+        Reference< XMultiServiceFactory > xFactory( rxContext->getServiceManager(), UNO_QUERY_THROW );
+        Reference< XSimpleFileAccess > xFileAccess( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY_THROW );
         xOutStrm = xFileAccess->openFileWrite( rFileName );
     }
     catch( Exception& )
@@ -176,15 +147,17 @@ Reference< XOutputStream > InputOutputHelper::openOutputStream(
 }
 
 Reference< XTextOutputStream > InputOutputHelper::openTextOutputStream(
-        const Reference< XMultiServiceFactory >& rxFactory, const Reference< XOutputStream >& rxOutStrm, const OUString& rEncoding )
+        const Reference< XComponentContext >& rxContext, const Reference< XOutputStream >& rxOutStrm, rtl_TextEncoding eTextEnc )
 {
     Reference< XTextOutputStream > xTextOutStrm;
-    if( rxFactory.is() && rxOutStrm.is() ) try
+    const char* pcCharset = rtl_getMimeCharsetFromTextEncoding( eTextEnc );
+    if( rxContext.is() && rxOutStrm.is() && pcCharset ) try
     {
-        Reference< XActiveDataSource > xDataSource( rxFactory->createInstance( CREATE_OUSTRING( "com.sun.star.io.TextOutputStream" ) ), UNO_QUERY_THROW );
+        Reference< XMultiServiceFactory > xFactory( rxContext->getServiceManager(), UNO_QUERY_THROW );
+        Reference< XActiveDataSource > xDataSource( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.io.TextOutputStream" ) ), UNO_QUERY_THROW );
         xDataSource->setOutputStream( rxOutStrm );
         xTextOutStrm.set( xDataSource, UNO_QUERY_THROW );
-        xTextOutStrm->setEncoding( rEncoding );
+        xTextOutStrm->setEncoding( OUString::createFromAscii( pcCharset ) );
     }
     catch( Exception& )
     {
@@ -193,9 +166,9 @@ Reference< XTextOutputStream > InputOutputHelper::openTextOutputStream(
 }
 
 Reference< XTextOutputStream > InputOutputHelper::openTextOutputStream(
-        const Reference< XMultiServiceFactory >& rxFactory, const OUString& rFileName, const OUString& rEncoding )
+        const Reference< XComponentContext >& rxContext, const OUString& rFileName, rtl_TextEncoding eTextEnc )
 {
-    return openTextOutputStream( rxFactory, openOutputStream( rxFactory, rFileName ), rEncoding );
+    return openTextOutputStream( rxContext, openOutputStream( rxContext, rFileName ), eTextEnc );
 }
 
 // ============================================================================
@@ -1532,9 +1505,9 @@ NameListRef NameListWrapper::getNameList( const Config& rCfg ) const
 // ============================================================================
 
 SharedConfigData::SharedConfigData( const OUString& rFileName,
-        const Reference< XMultiServiceFactory >& rxFactory, const StorageRef& rxRootStrg,
+        const Reference< XComponentContext >& rxContext, const StorageRef& rxRootStrg,
         const OUString& rSysFileName, MediaDescriptor& rMediaDesc ) :
-    mxFactory( rxFactory ),
+    mxContext( rxContext ),
     mxRootStrg( rxRootStrg ),
     maSysFileName( rSysFileName ),
     mrMediaDesc( rMediaDesc ),
@@ -1601,7 +1574,7 @@ Sequence< NamedValue > SharedConfigData::requestEncryptionData( ::comphelper::ID
 
 bool SharedConfigData::implIsValid() const
 {
-    return mbLoaded && mxFactory.is() && mxRootStrg.get() && (maSysFileName.getLength() > 0);
+    return mbLoaded && mxContext.is() && mxRootStrg.get() && (maSysFileName.getLength() > 0);
 }
 
 void SharedConfigData::implProcessConfigItemStr(
@@ -1630,9 +1603,8 @@ bool SharedConfigData::readConfigFile( const OUString& rFileUrl )
     bool bLoaded = maConfigFiles.count( rFileUrl ) > 0;
     if( !bLoaded )
     {
-        Reference< XInputStream > xInStrm = InputOutputHelper::openInputStream( mxFactory, rFileUrl );
-        BinaryXInputStream aInStrm( xInStrm, true );
-        TextInputStream aTxtStrm( aInStrm, RTL_TEXTENCODING_UTF8 );
+        Reference< XInputStream > xInStrm = InputOutputHelper::openInputStream( mxContext, rFileUrl );
+        TextInputStream aTxtStrm( mxContext, xInStrm, RTL_TEXTENCODING_UTF8 );
         if( !aTxtStrm.isEof() )
         {
             maConfigFiles.insert( rFileUrl );
@@ -1699,9 +1671,9 @@ Config::Config( const sal_Char* pcEnvVar, const FilterBase& rFilter )
     construct( pcEnvVar, rFilter );
 }
 
-Config::Config( const sal_Char* pcEnvVar, const Reference< XMultiServiceFactory >& rxFactory, const StorageRef& rxRootStrg, const OUString& rSysFileName, MediaDescriptor& rMediaDesc )
+Config::Config( const sal_Char* pcEnvVar, const Reference< XComponentContext >& rxContext, const StorageRef& rxRootStrg, const OUString& rSysFileName, MediaDescriptor& rMediaDesc )
 {
-    construct( pcEnvVar, rxFactory, rxRootStrg, rSysFileName, rMediaDesc );
+    construct( pcEnvVar, rxContext, rxRootStrg, rSysFileName, rMediaDesc );
 }
 
 Config::~Config()
@@ -1716,14 +1688,14 @@ void Config::construct( const Config& rParent )
 void Config::construct( const sal_Char* pcEnvVar, const FilterBase& rFilter )
 {
     if( rFilter.getFileUrl().getLength() > 0 )
-        construct( pcEnvVar, rFilter.getServiceFactory(), rFilter.getStorage(), rFilter.getFileUrl(), rFilter.getMediaDescriptor() );
+        construct( pcEnvVar, rFilter.getComponentContext(), rFilter.getStorage(), rFilter.getFileUrl(), rFilter.getMediaDescriptor() );
 }
 
-void Config::construct( const sal_Char* pcEnvVar, const Reference< XMultiServiceFactory >& rxFactory, const StorageRef& rxRootStrg, const OUString& rSysFileName, MediaDescriptor& rMediaDesc )
+void Config::construct( const sal_Char* pcEnvVar, const Reference< XComponentContext >& rxContext, const StorageRef& rxRootStrg, const OUString& rSysFileName, MediaDescriptor& rMediaDesc )
 {
     if( pcEnvVar && rxRootStrg.get() && (rSysFileName.getLength() > 0) )
         if( const sal_Char* pcFileName = ::getenv( pcEnvVar ) )
-            mxCfgData.reset( new SharedConfigData( OUString::createFromAscii( pcFileName ), rxFactory, rxRootStrg, rSysFileName, rMediaDesc ) );
+            mxCfgData.reset( new SharedConfigData( OUString::createFromAscii( pcFileName ), rxContext, rxRootStrg, rSysFileName, rMediaDesc ) );
 }
 
 void Config::setStringOption( const String& rKey, const String& rData )
@@ -1796,14 +1768,16 @@ NameListRef Config::implGetNameList( const OUString& rListName ) const
 // ============================================================================
 // ============================================================================
 
-Output::Output( const Reference< XTextOutputStream >& rxStrm )
+Output::Output( const Reference< XComponentContext >& rxContext, const OUString& rFileName ) :
+    mxStrm( InputOutputHelper::openTextOutputStream( rxContext, rFileName, RTL_TEXTENCODING_UTF8 ) ),
+    mnCol( 0 ),
+    mnItemLevel( 0 ),
+    mnMultiLevel( 0 ),
+    mnItemIdx( 0 ),
+    mnLastItem( 0 )
 {
-    construct( rxStrm );
-}
-
-Output::Output( const Reference< XMultiServiceFactory >& rxFactory, const OUString& rFileName )
-{
-    construct( InputOutputHelper::openTextOutputStream( rxFactory, rFileName, CREATE_OUSTRING( "UTF-8" ) ) );
+    if( mxStrm.is() )
+        mxStrm->writeString( OUString( OOX_DUMP_BOM ) );
 }
 
 // ----------------------------------------------------------------------------
@@ -2085,19 +2059,6 @@ void Output::writeRangeList( const RangeList& rRanges )
 
 // ----------------------------------------------------------------------------
 
-void Output::construct( const Reference< XTextOutputStream >& rxStrm )
-{
-    mxStrm = rxStrm;
-    mnCol = mnItemLevel = mnMultiLevel = 0;
-    mnItemIdx = 0;
-    mnLastItem = 0;
-    if( mxStrm.is() )
-    {
-        writeChar( OOX_DUMP_BOM );
-        newLine();
-    }
-}
-
 bool Output::implIsValid() const
 {
     return mxStrm.is();
@@ -2241,7 +2202,8 @@ void StorageObjectBase::implDump()
     if( bIsRoot ) try
     {
         aSysOutPath += OOX_DUMP_DUMPEXT;
-        Reference< XSimpleFileAccess > xFileAccess( getFactory()->createInstance( CREATE_OUSTRING( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY_THROW );
+        Reference< XMultiServiceFactory > xFactory( getContext()->getServiceManager(), UNO_QUERY_THROW );
+        Reference< XSimpleFileAccess > xFileAccess( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY_THROW );
         xFileAccess->kill( aSysOutPath );
     }
     catch( Exception& )
@@ -2260,7 +2222,7 @@ void StorageObjectBase::implDump()
     }
 }
 
-void StorageObjectBase::implDumpStream( const BinaryInputStreamRef&, const OUString&, const OUString&, const OUString& )
+void StorageObjectBase::implDumpStream( const Reference< XInputStream >&, const OUString&, const OUString&, const OUString& )
 {
 }
 
@@ -2306,12 +2268,12 @@ void StorageObjectBase::extractStream( StorageBase& rStrg, const OUString& rStrg
     BinaryXInputStream aInStrm( rStrg.openInputStream( rStrmName ), true );
     if( !aInStrm.isEof() )
     {
-        BinaryXOutputStream aOutStrm( InputOutputHelper::openOutputStream( getFactory(), rSysFileName ), true );
+        BinaryXOutputStream aOutStrm( InputOutputHelper::openOutputStream( getContext(), rSysFileName ), true );
         if( !aOutStrm.isEof() )
             aInStrm.copyToStream( aOutStrm );
     }
-    BinaryXInputStreamRef xDumpStrm( new BinaryXInputStream( InputOutputHelper::openInputStream( getFactory(), rSysFileName ), true ) );
-    if( !xDumpStrm->isEof() )
+    Reference< XInputStream > xDumpStrm = InputOutputHelper::openInputStream( getContext(), rSysFileName );
+    if( xDumpStrm.is() )
         implDumpStream( xDumpStrm, rStrgPath, rStrmName, rSysFileName );
 }
 
@@ -2367,13 +2329,10 @@ void OutputObjectBase::construct( const ObjectBase& rParent, const OUString& rSy
 {
     ObjectBase::construct( rParent );
     if( ObjectBase::implIsValid() )
-        mxOut.reset( new Output( getFactory(), rSysFileName + OOX_DUMP_DUMPEXT ) );
-}
-
-void OutputObjectBase::construct( const ObjectBase& rParent, const OutputRef& rxOut )
-{
-    ObjectBase::construct( rParent );
-    mxOut = rxOut;
+    {
+        maSysFileName = rSysFileName;
+        mxOut.reset( new Output( getContext(), rSysFileName + OOX_DUMP_DUMPEXT ) );
+    }
 }
 
 void OutputObjectBase::construct( const OutputObjectBase& rParent )
@@ -2552,12 +2511,6 @@ void InputObjectBase::construct( const ObjectBase& rParent, const BinaryInputStr
     mxStrm = rxStrm;
 }
 
-void InputObjectBase::construct( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OutputRef& rxOut )
-{
-    OutputObjectBase::construct( rParent, rxOut );
-    mxStrm = rxStrm;
-}
-
 void InputObjectBase::construct( const OutputObjectBase& rParent, const BinaryInputStreamRef& rxStrm )
 {
     OutputObjectBase::construct( rParent );
@@ -2576,7 +2529,7 @@ bool InputObjectBase::implIsValid() const
 
 void InputObjectBase::skipBlock( sal_Int64 nBytes, bool bShowSize )
 {
-    sal_Int64 nEndPos = ::std::min< sal_Int64 >( mxStrm->tell() + nBytes, mxStrm->getLength() );
+    sal_Int64 nEndPos = ::std::min< sal_Int64 >( mxStrm->tell() + nBytes, mxStrm->size() );
     if( mxStrm->tell() < nEndPos )
     {
         if( bShowSize )
@@ -2596,8 +2549,8 @@ void InputObjectBase::dumpRawBinary( sal_Int64 nBytes, bool bShowOffset, bool bS
     sal_Int64 nMaxShowSize = cfg().getIntOption< sal_Int64 >(
         bStream ? "max-binary-stream-size" : "max-binary-data-size", SAL_MAX_INT64 );
 
-    bool bSeekable = mxStrm->getLength() >= 0;
-    sal_Int64 nEndPos = bSeekable ? ::std::min< sal_Int64 >( mxStrm->tell() + nBytes, mxStrm->getLength() ) : 0;
+    bool bSeekable = mxStrm->size() >= 0;
+    sal_Int64 nEndPos = bSeekable ? ::std::min< sal_Int64 >( mxStrm->tell() + nBytes, mxStrm->size() ) : 0;
     sal_Int64 nDumpEnd = bSeekable ? ::std::min< sal_Int64 >( mxStrm->tell() + nMaxShowSize, nEndPos ) : nMaxShowSize;
     sal_Int64 nPos = bSeekable ? mxStrm->tell() : 0;
     bool bLoop = true;
@@ -2672,12 +2625,12 @@ void InputObjectBase::dumpRemainingTo( sal_Int64 nPos )
 
 void InputObjectBase::dumpRemainingStream()
 {
-    dumpRemainingTo( mxStrm->getLength() );
+    dumpRemainingTo( mxStrm->size() );
 }
 
 void InputObjectBase::dumpArray( const String& rName, sal_Int32 nBytes, sal_Unicode cSep )
 {
-    sal_Int32 nDumpSize = getLimitedValue< sal_Int32, sal_Int64 >( mxStrm->getLength() - mxStrm->tell(), 0, nBytes );
+    sal_Int32 nDumpSize = getLimitedValue< sal_Int32, sal_Int64 >( mxStrm->size() - mxStrm->tell(), 0, nBytes );
     if( nDumpSize > OOX_DUMP_MAXARRAY )
     {
         dumpBinary( rName, nBytes, false );
@@ -2713,7 +2666,7 @@ sal_Unicode InputObjectBase::dumpUnicode( const String& rName )
 
 OUString InputObjectBase::dumpCharArray( const String& rName, sal_Int32 nLen, rtl_TextEncoding eTextEnc, bool bHideTrailingNul )
 {
-    sal_Int32 nDumpSize = getLimitedValue< sal_Int32, sal_Int64 >( mxStrm->getLength() - mxStrm->tell(), 0, nLen );
+    sal_Int32 nDumpSize = getLimitedValue< sal_Int32, sal_Int64 >( mxStrm->size() - mxStrm->tell(), 0, nLen );
     OUString aString;
     if( nDumpSize > 0 )
     {
@@ -2893,7 +2846,7 @@ BinaryStreamObject::BinaryStreamObject( const OutputObjectBase& rParent, const B
 void BinaryStreamObject::dumpBinaryStream( bool bShowOffset )
 {
     mxStrm->seekToStart();
-    dumpRawBinary( mxStrm->getLength(), bShowOffset, true );
+    dumpRawBinary( mxStrm->size(), bShowOffset, true );
     mxOut->emptyLine();
 }
 
@@ -2903,42 +2856,70 @@ void BinaryStreamObject::implDump()
 }
 
 // ============================================================================
+// ============================================================================
 
-TextStreamObject::TextStreamObject( const ObjectBase& rParent,
+void TextStreamObjectBase::construct( const ObjectBase& rParent,
         const BinaryInputStreamRef& rxStrm, rtl_TextEncoding eTextEnc, const OUString& rSysFileName )
 {
     InputObjectBase::construct( rParent, rxStrm, rSysFileName );
-    if( rxStrm.get() )
-        mxTextStrm.reset( new TextInputStream( *rxStrm, eTextEnc ) );
+    constructTextStrmObj( eTextEnc );
 }
 
-TextStreamObject::TextStreamObject( const OutputObjectBase& rParent,
+void TextStreamObjectBase::construct( const OutputObjectBase& rParent,
         const BinaryInputStreamRef& rxStrm, rtl_TextEncoding eTextEnc )
 {
     InputObjectBase::construct( rParent, rxStrm );
-    if( rxStrm.get() )
-        mxTextStrm.reset( new TextInputStream( *rxStrm, eTextEnc ) );
+    constructTextStrmObj( eTextEnc );
 }
 
-bool TextStreamObject::implIsValid() const
+void TextStreamObjectBase::construct( const InputObjectBase& rParent, rtl_TextEncoding eTextEnc )
+{
+    InputObjectBase::construct( rParent );
+    constructTextStrmObj( eTextEnc );
+}
+
+bool TextStreamObjectBase::implIsValid() const
 {
     return InputObjectBase::implIsValid() && mxTextStrm.get();
 }
 
-void TextStreamObject::implDump()
+void TextStreamObjectBase::implDump()
 {
-    OUString aLine;
-    sal_uInt32 nLine = 0;
-    while( !mxTextStrm->isEof() )
-    {
-        aLine = mxTextStrm->readLine();
-        if( !mxTextStrm->isEof() )
-            implDumpLine( aLine, ++nLine );
-    }
-    mxOut->emptyLine();
+    implDumpText( *mxTextStrm );
 }
 
-void TextStreamObject::implDumpLine( const OUString& rLine, sal_uInt32 nLine )
+void TextStreamObjectBase::constructTextStrmObj( rtl_TextEncoding eTextEnc )
+{
+    if( mxStrm.get() )
+        mxTextStrm.reset( new TextInputStream( getContext(), *mxStrm, eTextEnc ) );
+}
+
+// ============================================================================
+
+TextLineStreamObject::TextLineStreamObject( const ObjectBase& rParent,
+        const BinaryInputStreamRef& rxStrm, rtl_TextEncoding eTextEnc, const OUString& rSysFileName )
+{
+    TextStreamObjectBase::construct( rParent, rxStrm, eTextEnc, rSysFileName );
+}
+
+TextLineStreamObject::TextLineStreamObject( const OutputObjectBase& rParent,
+        const BinaryInputStreamRef& rxStrm, rtl_TextEncoding eTextEnc )
+{
+    TextStreamObjectBase::construct( rParent, rxStrm, eTextEnc );
+}
+
+void TextLineStreamObject::implDumpText( TextInputStream& rTextStrm )
+{
+    sal_uInt32 nLine = 0;
+    while( !rTextStrm.isEof() )
+    {
+        OUString aLine = rTextStrm.readLine();
+        if( !rTextStrm.isEof() || (aLine.getLength() > 0) )
+            implDumpLine( aLine, ++nLine );
+    }
+}
+
+void TextLineStreamObject::implDumpLine( const OUString& rLine, sal_uInt32 nLine )
 {
     TableGuard aTabGuard( mxOut, 8 );
     mxOut->writeDec( nLine, 6 );
@@ -2949,110 +2930,93 @@ void TextStreamObject::implDumpLine( const OUString& rLine, sal_uInt32 nLine )
 
 // ============================================================================
 
-XmlStreamObject::XmlStreamObject( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName ) :
-    TextStreamObject( rParent, rxStrm, RTL_TEXTENCODING_UTF8, rSysFileName )
+XmlStreamObject::XmlStreamObject( const ObjectBase& rParent,
+        const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName )
 {
+    TextStreamObjectBase::construct( rParent, rxStrm, RTL_TEXTENCODING_UTF8, rSysFileName );
 }
 
-void XmlStreamObject::implDump()
+XmlStreamObject::XmlStreamObject( const OutputObjectBase& rParent, const BinaryInputStreamRef& rxStrm )
 {
-    maIncompleteLine = OUString();
-    TextStreamObject::implDump();
-    if( maIncompleteLine.getLength() > 0 )
-    {
-        mxOut->resetIndent();
-        mxOut->writeString( maIncompleteLine );
-        mxOut->emptyLine();
-        writeInfoItem( "stream-state", OOX_DUMP_ERR_STREAM );
-    }
+    TextStreamObjectBase::construct( rParent, rxStrm, RTL_TEXTENCODING_UTF8 );
 }
 
-void XmlStreamObject::implDumpLine( const OUString& rLine, sal_uInt32 )
+void XmlStreamObject::implDumpText( TextInputStream& rTextStrm )
 {
-    // build input line from cached incomplete element and new text data
-    OUStringBuffer aLine;
-    if( maIncompleteLine.getLength() > 0 )
-        aLine.append( maIncompleteLine ).append( sal_Unicode( ' ' ) );
-    aLine.append( rLine );
-    maIncompleteLine = OUString();
+    /*  Buffers a start element and the following element text. Needed to dump
+        matching start/end elements and the element text on the same line. */
+    OUStringBuffer aOldStartElem;
+    // special handling for VML
+    bool bIsVml = InputOutputHelper::getFileNameExtension( maSysFileName ).equalsIgnoreAsciiCaseAscii( "vml" );
 
-    if( aLine.getLength() == 0 )
+    while( !rTextStrm.isEof() )
     {
-        mxOut->newLine();
-        return;
-    }
+        // get the next element and the following element text from text stream
+        OUString aElem = rTextStrm.readToChar( '>', true ).trim();
+        OUString aText = rTextStrm.readToChar( '<', false );
 
-    const sal_Unicode* pcPos = aLine.getStr();
-    const sal_Unicode* pcEnd = pcPos + aLine.getLength();
-    while( pcPos < pcEnd )
-    {
-        OUStringBuffer aOutLine;
-        bool bIsStartElement = false;
-        bool bIsComplElement = false;
-        bool bIsEndElement = false;
-
-        /*  check for start element at beginning of the line - pcEnd and thus (pcPos+1)
-            are dereferenceable, because OUStringBuffer::getStr is null-terminated. */
-        if( (*pcPos == '<') && (pcPos[ 1 ] != '/') )
+        // remove multiple whitespace from element
+        sal_Int32 nPos = 0;
+        while( nPos < aElem.getLength() )
         {
-            const sal_Unicode* pcElementEnd = ::std::find( pcPos, pcEnd, '>' );
-            if( pcElementEnd == pcEnd )
+            while( (nPos < aElem.getLength()) && (aElem[ nPos ] >= 32) ) ++nPos;
+            if( nPos < aElem.getLength() )
+                aElem = OUStringBuffer( aElem.copy( 0, nPos ) ).append( sal_Unicode( ' ' ) ).append( aElem.copy( nPos ).trim() ).makeStringAndClear();
+            ++nPos;
+        }
+
+        sal_Int32 nElemLen = aElem.getLength();
+        if( (nElemLen >= 2) && (aElem[ 0 ] == '<') && (aElem[ nElemLen - 1 ] == '>') )
+        {
+            // determine type of the element
+            bool bSimpleElem = (aElem[ 1 ] == '!') || (aElem[ 1 ] == '?') || (aElem[ nElemLen - 2 ] == '/') ||
+                (bIsVml && (nElemLen == 4) && (aElem[ 1 ] == 'b') && (aElem[ 2 ] == 'r'));
+            bool bStartElem = !bSimpleElem && (aElem[ 1 ] != '/');
+            bool bEndElem = !bSimpleElem && !bStartElem;
+
+            /*  Start element or simple element: flush old start element and
+                its text from previous iteration, and start a new indentation
+                level for the new element. Trim whitespace and line breaks from
+                the text of the old start element. */
+            if( (bSimpleElem || bStartElem) && (aOldStartElem.getLength() > 0) )
             {
-                // incomplete start element
-                maIncompleteLine = OUString( pcPos, static_cast< sal_Int32 >( pcEnd - pcPos ) );
-                pcPos = pcEnd;
+                mxOut->writeString( aOldStartElem.makeStringAndClear().trim() );
+                mxOut->newLine();
+                mxOut->incIndent();
+            }
+
+            /*  Start element: remember it and its text, to be able to print the
+                matching end element on the same line in the next iteration. */
+            if( bStartElem )
+            {
+                aOldStartElem.append( aElem ).append( aText );
             }
             else
             {
-                bIsComplElement = (pcPos[ 1 ] == '?') || (pcPos[ 1 ] == '!') || (pcElementEnd[ -1 ] == '/');
-                bIsStartElement = !bIsComplElement;
-                ++pcElementEnd;
-                aOutLine.append( pcPos, static_cast< sal_Int32 >( pcElementEnd - pcPos ) );
-                pcPos = pcElementEnd;
-            }
-        }
+                /*  End element: if a start element has been remembered in the
+                    previous iteration, write it out here untrimmed, to show
+                    all whitespace in the element text, and without trailing
+                    line break. Code below will add the end element right after
+                    it. Otherwise, return to previous indentation level. */
+                if( bEndElem )
+                {
+                    if( aOldStartElem.getLength() == 0 )
+                        mxOut->decIndent();
+                    else
+                        mxOut->writeString( aOldStartElem.makeStringAndClear() );
+                }
 
-        // check for following element text
-        if( !bIsComplElement && (pcPos < pcEnd) )
-        {
-            const sal_Unicode* pcElementStart = ::std::find( pcPos, pcEnd, '<' );
-            // append text between elements
-            if( pcPos < pcElementStart )
-            {
-                OUString aText( pcPos, static_cast< sal_Int32 >( pcElementStart - pcPos ) );
+                /*  Write the element. Write following element text in a new
+                    line, but only, if it does not contain of white space
+                    entirely. */
+                mxOut->writeString( aElem );
+                mxOut->newLine();
                 if( aText.trim().getLength() > 0 )
-                    aOutLine.append( aText );
-                pcPos = pcElementStart;
+                {
+                    mxOut->writeString( aText );
+                    mxOut->newLine();
+                }
             }
-        }
-
-        // check for stand-alone or following end element
-        if( !bIsComplElement && (pcPos < pcEnd) && (pcPos[ 1 ] == '/') )
-        {
-            const sal_Unicode* pcElementEnd = ::std::find( pcPos, pcEnd, '>' );
-            if( pcElementEnd == pcEnd )
-            {
-                // incomplete end element
-                aOutLine.append( pcPos, static_cast< sal_Int32 >( pcEnd - pcPos ) );
-                maIncompleteLine = aOutLine.makeStringAndClear();
-                pcPos = pcEnd;
-            }
-            else
-            {
-                bIsEndElement = true;
-                ++pcElementEnd;
-                aOutLine.append( pcPos, static_cast< sal_Int32 >( pcElementEnd - pcPos ) );
-                pcPos = pcElementEnd;
-            }
-        }
-
-        // flush output line
-        if( maIncompleteLine.getLength() == 0 )
-        {
-            if( !bIsStartElement && bIsEndElement ) mxOut->decIndent();
-            mxOut->writeString( aOutLine.makeStringAndClear() );
-            mxOut->newLine();
-            if( bIsStartElement && !bIsEndElement ) mxOut->incIndent();
         }
     }
 }
@@ -3168,7 +3132,7 @@ bool SequenceRecordObjectBase::implStartRecord( BinaryInputStream& rBaseStrm, sa
     {
         ornRecPos = rBaseStrm.tell();
         // do not try to overread seekable streams, may cause assertions
-        bValid = ornRecPos < rBaseStrm.getLength();
+        bValid = ornRecPos < rBaseStrm.size();
     }
 
     // read the record header
