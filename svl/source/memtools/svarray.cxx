@@ -49,7 +49,6 @@
 #define _SVSTDARR_BYTESTRINGSISORTDTOR
 
 #define _SVSTDARR_XUB_STRLEN
-#define _SVSTDARR_XUB_STRLENSORT
 
 #include <svl/svstdarr.hxx>
 #include <tools/string.hxx>
