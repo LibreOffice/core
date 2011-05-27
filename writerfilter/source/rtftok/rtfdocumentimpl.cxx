@@ -83,17 +83,9 @@ int RTFDocumentImpl::resolveChars(char ch)
     // TODO encoding handling
     OUString aOUStr(OStringToOUString(aStr, RTL_TEXTENCODING_UTF8));
 
-    // TODO handle runs
-    Mapper().startParagraphGroup();
-
     Mapper().startCharacterGroup();
     Mapper().utext(reinterpret_cast<sal_uInt8 const*>(aOUStr.getStr()), aOUStr.getLength());
     Mapper().endCharacterGroup();
-
-    Mapper().startCharacterGroup();
-    aOUStr = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\x0d"));
-    Mapper().utext(reinterpret_cast<sal_uInt8 const*>(aOUStr.getStr()), aOUStr.getLength());
-    Mapper().endParagraphGroup();
 
     return 0;
 }
@@ -167,6 +159,17 @@ int RTFDocumentImpl::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
             {
                 case RTF_IGNORE:
                     m_bSkipUnknown = true;
+                    break;
+                case RTF_PAR:
+                    {
+                        // end previous paragraph
+                        Mapper().startCharacterGroup();
+                        OUString aStr = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\x0d"));
+                        Mapper().utext(reinterpret_cast<sal_uInt8 const*>(aStr.getStr()), aStr.getLength());
+                        Mapper().endParagraphGroup();
+                        // start new one
+                        Mapper().startParagraphGroup();
+                    }
                     break;
                 default:
                     OSL_TRACE("%s: TODO handle symbol '%s'", OSL_THIS_FUNC, rKeyword.getStr());
@@ -275,6 +278,9 @@ int RTFDocumentImpl::resolveParse()
     OSL_TRACE("%s", OSL_THIS_FUNC);
     char ch;
     int ret;
+
+    // start initial paragraph
+    Mapper().startParagraphGroup();
 
     while ((Strm() >> ch, !Strm().IsEof()))
     {
