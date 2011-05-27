@@ -34,6 +34,8 @@ TARGET=icc
 
 .INCLUDE :	settings.mk
 
+.IF "$(OS)"!="IOS"
+
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=SampleICC-1.3.2
@@ -51,10 +53,13 @@ CONVERTFILES= \
 CONFIGURE_ACTION= $(GNUCOPY) -r $(BACK_PATH)..$/source$/create_sRGB_profile Contrib$/CmdLine && unzip -o $(BACK_PATH)..$/makefiles.zip
 BUILD_ACTION=dmake &&  cd Contrib$/CmdLine$/create_sRGB_profile && $(AUGMENT_LIBRARY_PATH) .$/create_sRGB_profile
 
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	set_ext.mk
+
+.ENDIF
 .INCLUDE :	target.mk
+.IF "$(OS)"!="IOS"
 .INCLUDE :	tg_ext.mk
-
-
+.ENDIF
