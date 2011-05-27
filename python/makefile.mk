@@ -33,6 +33,9 @@ TARGET=so_python
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
+
+.IF "$(DISABLE_PYTHON)"!="TRUE"
+
 .INCLUDE :      pyversion.mk
 
 .IF "$(SYSTEM_PYTHON)" == "YES"
@@ -146,7 +149,9 @@ PYVERSIONFILE=$(MISC)$/pyversion.mk
 
 
 .INCLUDE : set_ext.mk
+.ENDIF # DISABLE_PYTHON != TRUE
 .INCLUDE : target.mk
+.IF "$(DISABLE_PYTHON)"!="TRUE"
 .INCLUDE : tg_ext.mk
 
 .IF "$(L10N_framework)"==""
@@ -182,3 +187,4 @@ $(PYVERSIONFILE) : pyversion.mk $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
     -rm -f $@
     cat $? > $@
 
+.ENDIF # DISABLE_PYTHON != TRUE
