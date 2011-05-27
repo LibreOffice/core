@@ -127,6 +127,9 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
         case RTF_B:
             m_aStates.top().aSprms[NS_sprm::LN_CFBold] = bOn;
             break;
+        case RTF_AB:
+            m_aStates.top().aSprms[NS_sprm::LN_CFBoldBi] = bOn;
+            break;
         default:
             OSL_TRACE("%s: TODO handle toggle '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             break;
