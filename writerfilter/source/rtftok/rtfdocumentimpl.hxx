@@ -72,6 +72,7 @@ namespace writerfilter {
                 int resolveChars(char ch);
                 int pushState();
                 int popState();
+                void text(rtl::OUString& rString);
 
                 SvStream* m_pInStream;
                 Stream* m_pMapperStream;

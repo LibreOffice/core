@@ -83,11 +83,16 @@ int RTFDocumentImpl::resolveChars(char ch)
     // TODO encoding handling
     OUString aOUStr(OStringToOUString(aStr, RTL_TEXTENCODING_UTF8));
 
-    Mapper().startCharacterGroup();
-    Mapper().utext(reinterpret_cast<sal_uInt8 const*>(aOUStr.getStr()), aOUStr.getLength());
-    Mapper().endCharacterGroup();
+    text(aOUStr);
 
     return 0;
+}
+
+void RTFDocumentImpl::text(OUString& rString)
+{
+    Mapper().startCharacterGroup();
+    Mapper().utext(reinterpret_cast<sal_uInt8 const*>(rString.getStr()), rString.getLength());
+    Mapper().endCharacterGroup();
 }
 
 int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword, bool /*bParam*/, int /*nParam*/)
@@ -163,9 +168,8 @@ int RTFDocumentImpl::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
                 case RTF_PAR:
                     {
                         // end previous paragraph
-                        Mapper().startCharacterGroup();
                         OUString aStr = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\x0d"));
-                        Mapper().utext(reinterpret_cast<sal_uInt8 const*>(aStr.getStr()), aStr.getLength());
+                        text(aStr);
                         Mapper().endParagraphGroup();
                         // start new one
                         Mapper().startParagraphGroup();
