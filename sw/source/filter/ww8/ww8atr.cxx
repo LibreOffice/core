@@ -438,10 +438,19 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
     //section.
     bool bBreakSet = false;
 
+    const SwPageDesc * pPageDesc = rNd.FindPageDesc(sal_False);
+
+    if (pAktPageDesc != pPageDesc)
+    {
+        bBreakSet = true;
+        bNewPageDesc = true;
+        pAktPageDesc = pPageDesc;
+    }
+
     if ( pSet && pSet->Count() )
     {
-        if ( SFX_ITEM_SET == pSet->GetItemState( RES_PAGEDESC, false, &pItem )
-             && ( (SwFmtPageDesc*)pItem )->KnowsPageDesc() )
+        if ( SFX_ITEM_SET == pSet->GetItemState( RES_PAGEDESC, false, &pItem ) &&
+             dynamic_cast<const SwFmtPageDesc*>(pItem)->GetRegisteredIn() != NULL)
         {
             bBreakSet = true;
             bNewPageDesc = true;
@@ -2332,18 +2341,13 @@ bool MSWordExportBase::GetNumberFmt(const SwField& rFld, String& rStr)
     const SvNumberformat* pNumFmt = pNFmtr->GetEntry( nFmtIdx );
     if( pNumFmt )
     {
-        LocaleDataWrapper aLocDat( pNFmtr->GetServiceManager(),
-            MsLangId::convertLanguageToLocale( LANGUAGE_ENGLISH_US ) );
+        sal_uInt16 nLng = rFld.GetLanguage();
+        LocaleDataWrapper aLocDat(pNFmtr->GetServiceManager(),
+                                  MsLangId::convertLanguageToLocale(nLng));
 
-        if( !pKeyMap )
-        {
-            pKeyMap = new NfKeywordTable;
-            NfKeywordTable& rKeyMap = *(NfKeywordTable*)pKeyMap;
-            pNFmtr->FillKeywordTable( rKeyMap, LANGUAGE_ENGLISH_US );
-        }
-
-        String sFmt(pNumFmt->GetMappedFormatstring(*(NfKeywordTable*)pKeyMap,
+        String sFmt(pNumFmt->GetMappedFormatstring(GetNfKeywordTable(),
             aLocDat));
+
         if (sFmt.Len())
         {
             sw::ms::SwapQuotesInField(sFmt);
@@ -2624,7 +2628,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
     case RES_AUTHORFLD:
         {
             ww::eField eFld =
-                (AF_SHORTCUT & nSubType ? ww::eUSERINITIALS : ww::eUSERNAME);
+                (AF_SHORTCUT & pFld->GetFormat() ? ww::eUSERINITIALS : ww::eUSERNAME);
             GetExport().OutputField(pFld, eFld, FieldString(eFld));
         }
         break;

@@ -462,6 +462,7 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getCaretPosition()
 sal_Bool SAL_CALL SmGraphicAccessible::setCaretPosition( sal_Int32 nIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
+    SolarMutexGuard aGuard;
     xub_StrLen nIdx = (xub_StrLen) nIndex;
     String aTxt( GetAccessibleText_Impl() );
     if (!(nIdx < aTxt.Len()))

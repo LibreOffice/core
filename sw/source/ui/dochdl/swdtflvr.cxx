@@ -155,24 +155,6 @@ using namespace nsTransferBufferType;
 
 #define DDE_TXT_ENCODING    gsl_getSystemTextEncoding()
 
-//---------------------------------------------
-// this struct conforms to the Microsoft
-// OBJECTDESCRIPTOR -> see oleidl.h
-// (MS platform sdk)
-//---------------------------------------------
-
-struct OleObjectDescriptor
-{
-        sal_uInt32      cbSize;
-        ClsId           clsid;
-        sal_uInt32      dwDrawAspect;
-        Size            sizel;
-        Point           pointl;
-        sal_uInt32      dwStatus;
-        sal_uInt32      dwFullUserTypeName;
-        sal_uInt32      dwSrcOfCopy;
-};
-
 class SwTrnsfrDdeLink : public ::sfx2::SvBaseLink
 {
     String sName;
@@ -796,6 +778,10 @@ int SwTransferable::PrepareForCopy( sal_Bool bIsCut )
 
         AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
 
+        // --> OD #i98753#
+        // set size of embedded object at the object description structure
+        aObjDesc.maSize = OutputDevice::LogicToLogic( pWrtShell->GetObjSize(), MAP_TWIP, MAP_100TH_MM );
+        // <--
         PrepareOLE( aObjDesc );
         AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
 
@@ -1613,7 +1599,9 @@ int SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
         Link aOldLink( rSh.GetChgLnk() );
         rSh.SetChgLnk( Link() );
 
+        const SwPosition& rInsPos = *rSh.GetCrsr()->Start();
         SwReader aReader( *pStream, aEmptyStr, String(), *rSh.GetCrsr() );
+        rSh.SaveTblBoxCntnt( &rInsPos );
         if( IsError( aReader.Read( *pRead )) )
             nResId = ERR_CLPBRD_READ;
         else

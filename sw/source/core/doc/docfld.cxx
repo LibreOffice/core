@@ -2288,9 +2288,9 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
     }
 
     String sTrue( String::CreateFromAscii(
-                                    RTL_CONSTASCII_STRINGPARAM( "sal_True" ))),
+                                    RTL_CONSTASCII_STRINGPARAM( "TRUE" ))),
            sFalse( String::CreateFromAscii(
-                                       RTL_CONSTASCII_STRINGPARAM( "sal_False" )));
+                                       RTL_CONSTASCII_STRINGPARAM( "FALSE" )));
 
     sal_Bool bIsDBMgr = 0 != rDoc.GetNewDBMgr();
     sal_uInt16 nWhich, n;

@@ -282,6 +282,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
                     bInMailMerge : 1,
                     bInDtor : 1, //detect destructor to prevent creating of sub shells while closing
                     bOldShellWasPagePreView : 1,
+                    bIsPreviewDoubleClick : 1, // #i114045#
                     bMakeSelectionVisible : 1 // transport the bookmark selection
                     ;
 

@@ -470,7 +470,7 @@ public:
     WW8_WrtBookmarks* pBkmks;
     WW8_WrtRedlineAuthor* pRedlAuthors;
     BitmapPalette* pBmpPal;
-    void* pKeyMap;
+    boost::shared_ptr<NfKeywordTable> pKeyMap;
     SvxMSExportOLEObjects* pOLEExp;
     SwMSConvertControls* pOCXExp;
     WW8OleMaps* pOleMap;
@@ -829,6 +829,8 @@ protected:
 
     bool GetBookmarks( const SwTxtNode& rNd, xub_StrLen nStt, xub_StrLen nEnd,
             IMarkVector& rArr );
+
+    const NfKeywordTable & GetNfKeywordTable();
 
 public:
     MSWordExportBase( SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM *pOriginalPam );

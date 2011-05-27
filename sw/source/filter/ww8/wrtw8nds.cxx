@@ -437,9 +437,7 @@ void SwWW8AttrIter::OutAttr( xub_StrLen nSwPos, bool bRuby )
                         : nSwPos == *pHt->GetStart() )
             {
                 sal_uInt16 nWhich = pHt->GetAttr().Which();
-                if (nWhich == nFontId)
-                    pFont = &(item_cast<SvxFontItem>(pHt->GetAttr()));
-                else if( nWhich == RES_TXTATR_AUTOFMT )
+                if (nWhich == RES_TXTATR_AUTOFMT)
                 {
                     const SwFmtAutoFmt& rAutoFmt = static_cast<const SwFmtAutoFmt&>(pHt->GetAttr());
                     const boost::shared_ptr<SfxItemSet> pSet = rAutoFmt.GetStyleHandle();
@@ -1795,7 +1793,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
     String aStr( rNode.GetTxt() );
 
     xub_StrLen nAktPos = 0;
-    xub_StrLen nEnd = aStr.Len();
+    xub_StrLen const nEnd = aStr.Len();
     bool bRedlineAtEnd = false;
     int nOpenAttrWithRange = 0;
 
@@ -1939,6 +1937,15 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         if ( aAttrIter.IsDropCap( nNextAttr ) )
             AttrOutput().FormatDrop( rNode, aAttrIter.GetSwFmtDrop(), nStyle, pTextNodeInfo, pTextNodeInfoInner );
 
+        if (0 != nEnd)
+        {
+            // Output the character attributes
+            // #i51277# do this before writing flys at end of paragraph
+            AttrOutput().StartRunProperties();
+            aAttrIter.OutAttr( nAktPos );
+            AttrOutput().EndRunProperties( pRedlineData );
+        }
+
         // At the end of line, output the attributes until the CR.
         // Exception: footnotes at the end of line
         if ( nNextAttr == nEnd )
@@ -1964,10 +1971,15 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
             }
         }
 
-        // Output the character attributes
-        AttrOutput().StartRunProperties();
-        aAttrIter.OutAttr( nAktPos );   // nAktPos - 1 ??
-        AttrOutput().EndRunProperties( pRedlineData );
+        if (0 == nEnd)
+        {
+            // Output the character attributes
+            // do it after WriteCR for an empty paragraph (otherwise
+            // WW8_WrFkp::Append throws SPRMs away...)
+            AttrOutput().StartRunProperties();
+            aAttrIter.OutAttr( nAktPos );
+            AttrOutput().EndRunProperties( pRedlineData );
+        }
 
         // Exception: footnotes at the end of line
         if ( nNextAttr == nEnd )
