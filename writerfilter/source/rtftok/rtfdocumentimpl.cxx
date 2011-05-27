@@ -303,7 +303,7 @@ int RTFDocumentImpl::resolveParse()
 
         if (m_nGroup < 0)
             return ERROR_GROUP_UNDER;
-        if (m_aStates.top().nInternalState == INTERNAL_BIN)
+        if (!m_aStates.empty() && m_aStates.top().nInternalState == INTERNAL_BIN)
         {
             OSL_TRACE("%s: TODO, binary internal state", OSL_THIS_FUNC);
         }
