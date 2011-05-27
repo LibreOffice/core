@@ -13,7 +13,7 @@ namespace writerfilter {
             : public Sprm
         {
             public:
-                RTFSprm(RTFKeyword nKeyword, RTFValue::Pointer_t& pValue);
+                RTFSprm(int nKeyword, RTFValue::Pointer_t& pValue);
                 virtual sal_uInt32 getId() const;
                 virtual Value::Pointer_t getValue();
                 virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary();
@@ -23,7 +23,7 @@ namespace writerfilter {
                 virtual std::string getName() const;
                 virtual std::string toString() const;
             private:
-                RTFKeyword m_nKeyword;
+                int m_nKeyword;
                 RTFValue::Pointer_t& m_pValue;
         };
     } // namespace rtftok

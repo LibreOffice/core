@@ -368,10 +368,14 @@ RTFReferenceProperties::~RTFReferenceProperties()
 {
 }
 
-void RTFReferenceProperties::resolve(Properties& /*rHandler*/)
+void RTFReferenceProperties::resolve(Properties& rHandler)
 {
-    /*RTFValue::Pointer_t pValue(new RTFValue(1));
-    RTFSprm aSprm(RTF_B, pValue);*/
+    for (std::map<int, int>::const_iterator i = m_rSprms.begin(); i != m_rSprms.end(); ++i)
+    {
+        RTFValue::Pointer_t pValue(new RTFValue(i->second));
+        RTFSprm aSprm(i->first, pValue);
+        rHandler.sprm(aSprm);
+    }
 }
 
 std::string RTFReferenceProperties::getType() const
