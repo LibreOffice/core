@@ -27,47 +27,75 @@
 
 package com.sun.star.wizards.common;
 
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.container.XIndexAccess;
+import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.script.XInvocation;
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.uno.XInterface;
+import com.sun.star.uno.UnoRuntime;
 
 public class Resource
 {
 
-    XInvocation xInvocation;
     XMultiServiceFactory xMSF;
-    String Unit;
     String Module;
+    XIndexAccess xStringIndexAccess;
+    XIndexAccess xStringListIndexAccess;
 
     /** Creates a new instance of Resource
      * @param _xMSF
      * @param _Unit
      * @param _Module
      */
-    public Resource(XMultiServiceFactory _xMSF, String _Unit, String _Module)
+    public Resource(XMultiServiceFactory _xMSF, String _Unit /* unused */, String _Module)
     {
         this.xMSF = _xMSF;
-        this.Unit = _Unit;
         this.Module = _Module;
-        this.xInvocation = initResources();
+        try
+        {
+            Object[] aArgs = new Object[1];
+            aArgs[0] = this.Module;
+            XInterface xResource = (XInterface) xMSF.createInstanceWithArguments(
+                "org.libreoffice.resource.ResourceIndexAccess",
+                aArgs);
+            if (xResource == null)
+                throw new Exception("could not initialize ResourceIndexAccess");
+            XNameAccess xNameAccess = (XNameAccess)UnoRuntime.queryInterface(
+                XNameAccess.class,
+                xResource);
+            if (xNameAccess == null)
+                throw new Exception("ResourceIndexAccess is no XNameAccess");
+            this.xStringIndexAccess = (XIndexAccess)UnoRuntime.queryInterface(
+                XIndexAccess.class,
+                xNameAccess.getByName("String"));
+            this.xStringListIndexAccess = (XIndexAccess)UnoRuntime.queryInterface(
+                XIndexAccess.class,
+                xNameAccess.getByName("StringList"));
+            if(this.xStringListIndexAccess == null)
+                throw new Exception("could not initialize xStringListIndexAccess");
+            if(this.xStringIndexAccess == null)
+                throw new Exception("could not initialize xStringIndexAccess");
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            showCommonResourceError(xMSF);
+        }
     }
 
     public String getResText(int nID)
     {
         try
         {
-            short[][] PointerArray = new short[1][];
-            Object[][] DummyArray = new Object[1][];
-            Object[] nIDArray = new Object[1];
-            nIDArray[0] = new Integer(nID);
-            final String IDString = (String) xInvocation.invoke("getString", nIDArray, PointerArray, DummyArray);
-            return IDString;
+            return (String)this.xStringIndexAccess.getByIndex(nID);
         }
         catch (Exception exception)
         {
             exception.printStackTrace();
-            throw new java.lang.IllegalArgumentException("Resource with ID not" + String.valueOf(nID) + "not found");
+            throw new java.lang.IllegalArgumentException("Resource with ID not " + String.valueOf(nID) + "not found");
         }
     }
 
@@ -75,18 +103,12 @@ public class Resource
     {
         try
         {
-            short[][] PointerArray = new short[1][];
-            Object[][] DummyArray = new Object[1][];
-            Object[] nIDArray = new Object[1];
-            nIDArray[0] = new Integer(nID);
-            //Object bla = xInvocation.invoke("getStringList", nIDArray, PointerArray, DummyArray);
-            PropertyValue[] ResProp = (PropertyValue[]) xInvocation.invoke("getStringList", nIDArray, PointerArray, DummyArray);
-            return ResProp;
+            return (PropertyValue[])this.xStringListIndexAccess.getByIndex(nID);
         }
         catch (Exception exception)
         {
             exception.printStackTrace();
-            throw new java.lang.IllegalArgumentException("Resource with ID not" + String.valueOf(nID) + "not found");
+            throw new java.lang.IllegalArgumentException("Resource with ID not " + String.valueOf(nID) + "not found");
         }
     }
 
@@ -105,31 +127,6 @@ public class Resource
         {
             exception.printStackTrace(System.out);
             throw new java.lang.IllegalArgumentException("Resource with ID not" + String.valueOf(nID) + "not found");
-        }
-    }
-
-    public XInvocation initResources()
-    {
-        try
-        {
-            com.sun.star.uno.XInterface xResource = (com.sun.star.uno.XInterface) xMSF.createInstance("com.sun.star.resource.VclStringResourceLoader");
-            if (xResource == null)
-            {
-                showCommonResourceError(xMSF);
-                throw new IllegalArgumentException();
-            }
-            else
-            {
-                XInvocation xResInvoke = (XInvocation) com.sun.star.uno.UnoRuntime.queryInterface(XInvocation.class, xResource);
-                xResInvoke.setValue("FileName", Module);
-                return xResInvoke;
-            }
-        }
-        catch (Exception exception)
-        {
-            exception.printStackTrace(System.out);
-            showCommonResourceError(xMSF);
-            return null;
         }
     }
 
