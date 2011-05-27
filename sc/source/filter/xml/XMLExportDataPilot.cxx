@@ -555,7 +555,7 @@ void ScXMLExportDataPilot::WriteDatePart(sal_Int32 nPart)
 
 void ScXMLExportDataPilot::WriteNumGroupInfo(const ScDPNumGroupInfo& rGroupInfo)
 {
-    DBG_ASSERT(rGroupInfo.Enable, "group dimension should be enabled");
+    OSL_ENSURE(rGroupInfo.Enable, "group dimension should be enabled");
     if (rGroupInfo.DateValues)
     {
         if (rGroupInfo.AutoStart)
@@ -645,7 +645,7 @@ void ScXMLExportDataPilot::WriteGroupDimElements(ScDPSaveDimension* pDim, const 
         pNumGroupDim = pDimData->GetNumGroupDim(pDim->GetName());
         WriteNumGroupDim(pNumGroupDim);
 
-        DBG_ASSERT((!pGroupDim || !pNumGroupDim), "there should be no NumGroup and Group at the same field");
+        OSL_ENSURE((!pGroupDim || !pNumGroupDim), "there should be no NumGroup and Group at the same field");
     }
     if (pGroupDim || pNumGroupDim)
     {

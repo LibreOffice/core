@@ -85,14 +85,12 @@
 #include <vcl/window.hxx>
 #include <global.hxx>
 #include <vcl/syswin.hxx>
-#include <tools/debug.hxx>
 #include <svl/svarray.hxx>
 #include <vcl/ctrl.hxx>
 #include <svl/hint.hxx>
 #include <svl/poolitem.hxx>
 #include <vcl/image.hxx>
 #include <vcl/timer.hxx>
-#include <tools/unqidx.hxx>
 #include <vcl/symbol.hxx>
 #include <vcl/fixed.hxx>
 #include <svl/brdcst.hxx>

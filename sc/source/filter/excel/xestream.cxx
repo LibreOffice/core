@@ -121,7 +121,7 @@ XclExpStream::~XclExpStream()
 
 void XclExpStream::StartRecord( sal_uInt16 nRecId, sal_Size nRecSize )
 {
-    DBG_ASSERT( !mbInRec, "XclExpStream::StartRecord - another record still open" );
+    OSL_ENSURE( !mbInRec, "XclExpStream::StartRecord - another record still open" );
     DisableEncryption();
     mnMaxContSize = mnCurrMaxSize = mnMaxRecSize;
     mnPredictSize = nRecSize;
@@ -133,7 +133,7 @@ void XclExpStream::StartRecord( sal_uInt16 nRecId, sal_Size nRecSize )
 
 void XclExpStream::EndRecord()
 {
-    DBG_ASSERT( mbInRec, "XclExpStream::EndRecord - no record open" );
+    OSL_ENSURE( mbInRec, "XclExpStream::EndRecord - no record open" );
     DisableEncryption();
     UpdateRecSize();
     mrStrm.Seek( STREAM_SEEK_TO_END );
@@ -243,7 +243,7 @@ sal_Size XclExpStream::Write( const void* pData, sal_Size nBytes )
                 sal_Size nWriteRet = nWriteLen;
                 if (mbUseEncrypter && HasValidEncrypter())
                 {
-                    DBG_ASSERT(nWriteLen > 0, "XclExpStream::Write: write length is 0!");
+                    OSL_ENSURE(nWriteLen > 0, "XclExpStream::Write: write length is 0!");
                     vector<sal_uInt8> aBytes(nWriteLen);
                     memcpy(&aBytes[0], pBuffer, nWriteLen);
                     mxEncrypter->EncryptBytes(mrStrm, aBytes);
@@ -253,7 +253,7 @@ sal_Size XclExpStream::Write( const void* pData, sal_Size nBytes )
                 {
                     nWriteRet = mrStrm.Write( pBuffer, nWriteLen );
                 bValid = (nWriteLen == nWriteRet);
-                DBG_ASSERT( bValid, "XclExpStream::Write - stream write error" );
+                OSL_ENSURE( bValid, "XclExpStream::Write - stream write error" );
                 }
                 pBuffer += nWriteRet;
                 nRet += nWriteRet;
@@ -395,7 +395,7 @@ void XclExpStream::DisableEncryption()
 
 sal_Size XclExpStream::SetSvStreamPos( sal_Size nPos )
 {
-    DBG_ASSERT( !mbInRec, "XclExpStream::SetSvStreamPos - not allowed inside of a record" );
+    OSL_ENSURE( !mbInRec, "XclExpStream::SetSvStreamPos - not allowed inside of a record" );
     return mbInRec ? 0 : mrStrm.Seek( nPos );
 }
 
@@ -423,12 +423,12 @@ void XclExpStream::UpdateRecSize()
 
 void XclExpStream::UpdateSizeVars( sal_Size nSize )
 {
-    DBG_ASSERT( mnCurrSize + nSize <= mnCurrMaxSize, "XclExpStream::UpdateSizeVars - record overwritten" );
+    OSL_ENSURE( mnCurrSize + nSize <= mnCurrMaxSize, "XclExpStream::UpdateSizeVars - record overwritten" );
     mnCurrSize = mnCurrSize + static_cast< sal_uInt16 >( nSize );
 
     if( mnMaxSliceSize > 0 )
     {
-        DBG_ASSERT( mnSliceSize + nSize <= mnMaxSliceSize, "XclExpStream::UpdateSizeVars - slice overwritten" );
+        OSL_ENSURE( mnSliceSize + nSize <= mnMaxSliceSize, "XclExpStream::UpdateSizeVars - slice overwritten" );
         mnSliceSize = mnSliceSize + static_cast< sal_uInt16 >( nSize );
         if( mnSliceSize >= mnMaxSliceSize )
             mnSliceSize = 0;
@@ -660,11 +660,11 @@ void XclExpBiff8Encrypter::EncryptBytes( SvStream& rStrm, vector<sal_uInt8>& aBy
         sal_uInt16 nEncBytes = ::std::min(nBlockLeft, nBytesLeft);
 
         bool bRet = maCodec.Encode(&aBytes[nPos], nEncBytes, &aBytes[nPos], nEncBytes);
-        DBG_ASSERT(bRet, "XclExpBiff8Encrypter::EncryptBytes: encryption failed!!");
+        OSL_ENSURE(bRet, "XclExpBiff8Encrypter::EncryptBytes: encryption failed!!");
         bRet = bRet; // to remove a silly compiler warning.
 
         sal_Size nRet = rStrm.Write(&aBytes[nPos], nEncBytes);
-        DBG_ASSERT(nRet == nEncBytes, "XclExpBiff8Encrypter::EncryptBytes: fail to write to stream!!");
+        OSL_ENSURE(nRet == nEncBytes, "XclExpBiff8Encrypter::EncryptBytes: fail to write to stream!!");
         nRet = nRet; // to remove a silly compiler warning.
 
         nStrmPos = rStrm.Tell();
@@ -824,7 +824,7 @@ OString XclXmlUtils::ToOString( const XclAddress& rAddress )
 
 OString XclXmlUtils::ToOString( const XclExpString& s )
 {
-    DBG_ASSERT( !s.IsRich(), "XclXmlUtils::ToOString(XclExpString): rich text string found!" );
+    OSL_ENSURE( !s.IsRich(), "XclXmlUtils::ToOString(XclExpString): rich text string found!" );
     return ToOString( s.GetUnicodeBuffer() );
 }
 
@@ -883,7 +883,7 @@ OUString XclXmlUtils::ToOUString( ScDocument& rDocument, const ScAddress& rAddre
 
 OUString XclXmlUtils::ToOUString( const XclExpString& s )
 {
-    DBG_ASSERT( !s.IsRich(), "XclXmlUtils::ToOString(XclExpString): rich text string found!" );
+    OSL_ENSURE( !s.IsRich(), "XclXmlUtils::ToOString(XclExpString): rich text string found!" );
     return ToOUString( s.GetUnicodeBuffer() );
 }
 
@@ -1000,7 +1000,7 @@ XclExpXmlStream::~XclExpXmlStream()
 
 sax_fastparser::FSHelperPtr& XclExpXmlStream::GetCurrentStream()
 {
-    DBG_ASSERT( !maStreams.empty(), "XclExpXmlStream::GetCurrentStream - no current stream" );
+    OSL_ENSURE( !maStreams.empty(), "XclExpXmlStream::GetCurrentStream - no current stream" );
     return maStreams.top();
 }
 
@@ -1011,7 +1011,7 @@ void XclExpXmlStream::PushStream( sax_fastparser::FSHelperPtr aStream )
 
 void XclExpXmlStream::PopStream()
 {
-    DBG_ASSERT( !maStreams.empty(), "XclExpXmlStream::PopStream - stack is empty!" );
+    OSL_ENSURE( !maStreams.empty(), "XclExpXmlStream::PopStream - stack is empty!" );
     maStreams.pop();
 }
 

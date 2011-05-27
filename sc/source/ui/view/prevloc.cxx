@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-#include <tools/debug.hxx>
 #include <vcl/outdev.hxx>
 
 #include "prevloc.hxx"
@@ -194,7 +193,7 @@ void ScPreviewLocationData::AddCellRange( const Rectangle& rRect, const ScRange&
     Rectangle aPixelRect( pWindow->LogicToPixel( rRect ) );
     aEntries.push_front( new ScPreviewLocationEntry( SC_PLOC_CELLRANGE, aPixelRect, rRange, bRepCol, bRepRow ) );
 
-    DBG_ASSERT( nDrawRanges < SC_PREVIEW_MAXRANGES, "too many ranges" );
+    OSL_ENSURE( nDrawRanges < SC_PREVIEW_MAXRANGES, "too many ranges" );
 
     if ( nDrawRanges < SC_PREVIEW_MAXRANGES )
     {
@@ -268,7 +267,7 @@ void ScPreviewLocationData::AddNoteText( const Rectangle& rRect, const ScAddress
 
 void ScPreviewLocationData::GetDrawRange( sal_uInt16 nPos, Rectangle& rPixelRect, MapMode& rMapMode, sal_uInt8& rRangeId ) const
 {
-    DBG_ASSERT( nPos < nDrawRanges, "wrong position" );
+    OSL_ENSURE( nPos < nDrawRanges, "wrong position" );
     if ( nPos < nDrawRanges )
     {
         rPixelRect = aDrawRectangle[nPos];

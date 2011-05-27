@@ -35,9 +35,6 @@
 #include "Tickmarks.hxx"
 #include "macros.hxx"
 
-// header for define DBG_ASSERT
-#include <tools/debug.hxx>
-
 #include <memory>
 
 //.............................................................................
@@ -145,7 +142,7 @@ sal_Bool VAxisBase::isAnythingToDraw()
     if( !m_aAxisProperties.m_xAxisModel.is() )
         return false;
 
-    DBG_ASSERT(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"Axis is not proper initialized");
+    OSL_ENSURE(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"Axis is not proper initialized");
     if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()))
         return false;
 

@@ -151,7 +151,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
     String aFilterString( aFilterName );
 
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
     if ( !bExport && aFilterString == ScDocShell::GetAsciiFilterName() )
     {
@@ -171,7 +171,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
             pInStream = utl::UcbStreamHelper::CreateStream( xInputStream );
 
         AbstractScImportAsciiDlg* pDlg = pFact->CreateScImportAsciiDlg( NULL, aPrivDatName, pInStream, RID_SCDLG_ASCII, cAsciiDel);
-        DBG_ASSERT(pDlg, "Dialog create fail!");
+        OSL_ENSURE(pDlg, "Dialog create fail!");
         if ( pDlg->Execute() == RET_OK )
         {
             ScAsciiOptions aOptions;
@@ -235,7 +235,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
         else if ( aFilterString == ScDocShell::GetLotusFilterName() )
         {
             //  lotus is only imported
-            DBG_ASSERT( !bExport, "Filter Options for Lotus Export is not implemented" );
+            OSL_ENSURE( !bExport, "Filter Options for Lotus Export is not implemented" );
 
             aTitle = ScGlobal::GetRscString( STR_IMPORT_LOTUS );
             eEncoding = RTL_TEXTENCODING_IBM_437;
@@ -277,7 +277,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
         AbstractScImportOptionsDlg* pDlg = pFact->CreateScImportOptionsDlg( NULL, RID_SCDLG_IMPORTOPT,
                                                                             bAscii, &aOptions, &aTitle, bMultiByte, bDBEnc,
                                                                             !bExport);
-        DBG_ASSERT(pDlg, "Dialog create fail!");
+        OSL_ENSURE(pDlg, "Dialog create fail!");
         if ( pDlg->Execute() == RET_OK )
         {
             pDlg->GetImportOptions( aOptions );

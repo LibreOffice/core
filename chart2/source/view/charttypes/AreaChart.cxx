@@ -49,7 +49,6 @@
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 
-#include <tools/debug.hxx>
 #include <editeng/unoprnms.hxx>
 #include <rtl/math.hxx>
 
@@ -229,7 +228,7 @@ void AreaChart::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32 xSlo
     if( m_nDimension == 3 && !m_bCategoryXAxis )
     {
         //3D xy always deep
-        DBG_ASSERT( zSlot==-1,"3D xy charts should be deep stacked in model also" );
+        OSL_ENSURE( zSlot==-1,"3D xy charts should be deep stacked in model also" );
         zSlot=-1;
         xSlot=0;
         ySlot=0;
@@ -597,7 +596,7 @@ void AreaChart::createShapes()
     if( m_nDimension == 2 && ( m_bArea || !m_bCategoryXAxis ) )
         lcl_reorderSeries( m_aZSlots );
 
-    DBG_ASSERT(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"AreaChart is not proper initialized");
+    OSL_ENSURE(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"AreaChart is not proper initialized");
     if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()))
         return;
 

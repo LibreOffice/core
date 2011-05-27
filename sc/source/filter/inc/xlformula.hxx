@@ -553,14 +553,14 @@ public:
 
 inline sal_uInt8 XclTokenArrayHelper::GetTokenId( sal_uInt8 nBaseId, sal_uInt8 nTokenClass )
 {
-    DBG_ASSERT( !::get_flag( nBaseId, static_cast< sal_uInt8 >( ~EXC_TOKID_MASK ) ), "XclTokenArrayHelper::GetTokenId - invalid token ID" );
-    DBG_ASSERT( !::get_flag( nTokenClass, static_cast< sal_uInt8 >( ~EXC_TOKCLASS_MASK ) ), "XclTokenArrayHelper::GetTokenId - invalid token class" );
+    OSL_ENSURE( !::get_flag( nBaseId, static_cast< sal_uInt8 >( ~EXC_TOKID_MASK ) ), "XclTokenArrayHelper::GetTokenId - invalid token ID" );
+    OSL_ENSURE( !::get_flag( nTokenClass, static_cast< sal_uInt8 >( ~EXC_TOKCLASS_MASK ) ), "XclTokenArrayHelper::GetTokenId - invalid token class" );
     return nBaseId | nTokenClass;
 }
 
 inline void XclTokenArrayHelper::ChangeTokenClass( sal_uInt8& rnTokenId, sal_uInt8 nTokenClass )
 {
-    DBG_ASSERT( !::get_flag( nTokenClass, static_cast< sal_uInt8 >( ~EXC_TOKCLASS_MASK ) ), "XclTokenArrayHelper::ChangeTokenClass - invalid token class" );
+    OSL_ENSURE( !::get_flag( nTokenClass, static_cast< sal_uInt8 >( ~EXC_TOKCLASS_MASK ) ), "XclTokenArrayHelper::ChangeTokenClass - invalid token class" );
     ::set_flag( rnTokenId, EXC_TOKCLASS_MASK, false );
     ::set_flag( rnTokenId, nTokenClass );
 }

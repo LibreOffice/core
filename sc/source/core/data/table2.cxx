@@ -913,7 +913,7 @@ void ScTable::InvalidatePageBreaks()
 
 void ScTable::CopyScenarioTo( ScTable* pDestTab ) const
 {
-    DBG_ASSERT( bScenario, "bScenario == FALSE" );
+    OSL_ENSURE( bScenario, "bScenario == FALSE" );
 
     for (SCCOL i=0; i<=MAXCOL; i++)
         aCol[i].CopyScenarioTo( pDestTab->aCol[i] );
@@ -921,7 +921,7 @@ void ScTable::CopyScenarioTo( ScTable* pDestTab ) const
 
 void ScTable::CopyScenarioFrom( const ScTable* pSrcTab )
 {
-    DBG_ASSERT( bScenario, "bScenario == FALSE" );
+    OSL_ENSURE( bScenario, "bScenario == FALSE" );
 
     for (SCCOL i=0; i<=MAXCOL; i++)
         aCol[i].CopyScenarioFrom( pSrcTab->aCol[i] );
@@ -929,7 +929,7 @@ void ScTable::CopyScenarioFrom( const ScTable* pSrcTab )
 
 void ScTable::MarkScenarioIn( ScMarkData& rDestMark, sal_uInt16 nNeededBits ) const
 {
-    DBG_ASSERT( bScenario, "bScenario == FALSE" );
+    OSL_ENSURE( bScenario, "bScenario == FALSE" );
 
     if ( ( nScenarioFlags & nNeededBits ) != nNeededBits )  // alle Bits gesetzt?
         return;
@@ -940,7 +940,7 @@ void ScTable::MarkScenarioIn( ScMarkData& rDestMark, sal_uInt16 nNeededBits ) co
 
 sal_Bool ScTable::HasScenarioRange( const ScRange& rRange ) const
 {
-    DBG_ASSERT( bScenario, "bScenario == FALSE" );
+    OSL_ENSURE( bScenario, "bScenario == FALSE" );
 
     ScRange aTabRange = rRange;
     aTabRange.aStart.SetTab( nTab );
@@ -969,7 +969,7 @@ void ScTable::InvalidateScenarioRanges()
 
 const ScRangeList* ScTable::GetScenarioRanges() const
 {
-    DBG_ASSERT( bScenario, "bScenario == FALSE" );
+    OSL_ENSURE( bScenario, "bScenario == FALSE" );
 
     if (!pScenarioRanges)
     {
@@ -983,7 +983,7 @@ const ScRangeList* ScTable::GetScenarioRanges() const
 
 sal_Bool ScTable::TestCopyScenarioTo( const ScTable* pDestTab ) const
 {
-    DBG_ASSERT( bScenario, "bScenario == FALSE" );
+    OSL_ENSURE( bScenario, "bScenario == FALSE" );
 
     if (!pDestTab->IsProtected())
         return sal_True;
@@ -1386,7 +1386,7 @@ bool ScTable::ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
 {
     if (!(ValidCol(nStartCol) && ValidCol(rEndCol)))
     {
-        DBG_ERRORFILE("ScTable::ExtendMerge: invalid column number");
+        OSL_FAIL("ScTable::ExtendMerge: invalid column number");
         return false;
     }
     bool bFound = false;
@@ -1402,7 +1402,7 @@ sal_Bool ScTable::IsBlockEmpty( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRo
 {
     if (!(ValidCol(nCol1) && ValidCol(nCol2)))
     {
-        DBG_ERRORFILE("ScTable::IsBlockEmpty: invalid column number");
+        OSL_FAIL("ScTable::IsBlockEmpty: invalid column number");
         return false;
     }
     sal_Bool bEmpty = sal_True;
@@ -1455,7 +1455,7 @@ SCSIZE ScTable::FillMaxRot( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCO
 
                         SCCOL nTouchedCol = nCol;
                         long nWidth = static_cast<long>(mpRowHeights->getValue(nRow) * nFactor);
-                        DBG_ASSERT(nWidth <= 0, "Richtung falsch");
+                        OSL_ENSURE(nWidth <= 0, "Richtung falsch");
                         while ( nWidth < 0 && nTouchedCol > 0 )
                         {
                             --nTouchedCol;
@@ -1645,7 +1645,7 @@ sal_Bool ScTable::IsBlockEditable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
 {
     if ( !ValidColRow( nCol2, nRow2 ) )
     {
-        DBG_ERRORFILE("IsBlockEditable: invalid column or row");
+        OSL_FAIL("IsBlockEditable: invalid column or row");
         if (pOnlyNotBecauseOfMatrix)
             *pOnlyNotBecauseOfMatrix = false;
         return false;
@@ -2283,7 +2283,7 @@ void ScTable::SetManualHeight( SCROW nStartRow, SCROW nEndRow, sal_Bool bManual 
 
 sal_uInt16 ScTable::GetColWidth( SCCOL nCol ) const
 {
-    DBG_ASSERT(VALIDCOL(nCol),"Falsche Spaltennummer");
+    OSL_ENSURE(VALIDCOL(nCol),"Falsche Spaltennummer");
 
     if (VALIDCOL(nCol) && pColFlags && pColWidth)
     {
@@ -2299,7 +2299,7 @@ sal_uInt16 ScTable::GetColWidth( SCCOL nCol ) const
 
 sal_uInt16 ScTable::GetOriginalWidth( SCCOL nCol ) const        // immer die eingestellte
 {
-    DBG_ASSERT(VALIDCOL(nCol),"Falsche Spaltennummer");
+    OSL_ENSURE(VALIDCOL(nCol),"Falsche Spaltennummer");
 
     if (VALIDCOL(nCol) && pColWidth)
         return pColWidth[nCol];
@@ -2357,7 +2357,7 @@ sal_uInt16 ScTable::GetCommonWidth( SCCOL nEndCol )
 
 sal_uInt16 ScTable::GetRowHeight( SCROW nRow, SCROW* pStartRow, SCROW* pEndRow, bool bHiddenAsZero ) const
 {
-    DBG_ASSERT(VALIDROW(nRow),"Invalid row number");
+    OSL_ENSURE(VALIDROW(nRow),"Invalid row number");
 
     if (VALIDROW(nRow) && mpRowHeights)
     {
@@ -2400,7 +2400,7 @@ sal_uInt16 ScTable::GetRowHeight( SCROW nRow, SCROW* pStartRow, SCROW* pEndRow, 
 
 sal_uLong ScTable::GetRowHeight( SCROW nStartRow, SCROW nEndRow ) const
 {
-    DBG_ASSERT(VALIDROW(nStartRow) && VALIDROW(nEndRow),"Falsche Zeilennummer");
+    OSL_ENSURE(VALIDROW(nStartRow) && VALIDROW(nEndRow),"Falsche Zeilennummer");
 
     if (VALIDROW(nStartRow) && VALIDROW(nEndRow) && mpRowHeights)
     {
@@ -2426,7 +2426,7 @@ sal_uLong ScTable::GetRowHeight( SCROW nStartRow, SCROW nEndRow ) const
 
 sal_uLong ScTable::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fScale ) const
 {
-    DBG_ASSERT(VALIDROW(nStartRow) && VALIDROW(nEndRow),"Falsche Zeilennummer");
+    OSL_ENSURE(VALIDROW(nStartRow) && VALIDROW(nEndRow),"Falsche Zeilennummer");
 
     if (VALIDROW(nStartRow) && VALIDROW(nEndRow) && mpRowHeights)
     {
@@ -2453,7 +2453,7 @@ sal_uLong ScTable::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fS
 
 sal_uInt16 ScTable::GetOriginalHeight( SCROW nRow ) const       // non-0 even if hidden
 {
-    DBG_ASSERT(VALIDROW(nRow),"wrong row number");
+    OSL_ENSURE(VALIDROW(nRow),"wrong row number");
 
     if (VALIDROW(nRow) && mpRowHeights)
         return mpRowHeights->getValue(nRow);
@@ -3068,9 +3068,9 @@ sal_uLong ScTable::GetRowOffset( SCROW nRow ) const
             return GetRowHeight(0);
 
         n = GetTotalRowHeight(0, nRow-1);
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
         if (n == ::std::numeric_limits<unsigned long>::max())
-            DBG_ERRORFILE("ScTable::GetRowOffset: row heights overflow");
+            OSL_FAIL("ScTable::GetRowOffset: row heights overflow");
 #endif
     }
     else

@@ -97,7 +97,7 @@ ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const String& rBaseURL, const ScR
         aPageSize = ((const SvxSizeItem&) rSet.Get(ATTR_PAGE_SIZE)).GetSize();
         if ( !aPageSize.Width() || !aPageSize.Height() )
         {
-            DBG_ERRORFILE("PageSize Null ?!?!?");
+            OSL_FAIL("PageSize Null ?!?!?");
             aPageSize = SvxPaperInfo::GetPaperSize( PAPER_A4 );
         }
         aPageSize.Width() -= nLeftMargin + nRightMargin;
@@ -106,7 +106,7 @@ ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const String& rBaseURL, const ScR
     }
     else
     {
-        DBG_ERRORFILE("kein StyleSheet?!?");
+        OSL_FAIL("kein StyleSheet?!?");
         aPageSize = pDefaultDev->LogicToPixel(
             SvxPaperInfo::GetPaperSize( PAPER_A4 ), MapMode( MAP_TWIP ) );
     }
@@ -223,7 +223,7 @@ String ScFormatFilterPluginImpl::GetHTMLRangeNameList( ScDocument* pDoc, const S
 
 String ScHTMLImport::GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrigName )
 {
-    DBG_ASSERT( pDoc, "ScHTMLImport::GetHTMLRangeNameList - missing document" );
+    OSL_ENSURE( pDoc, "ScHTMLImport::GetHTMLRangeNameList - missing document" );
 
     String aNewName;
     ScRangeName* pRangeNames = pDoc->GetRangeName();

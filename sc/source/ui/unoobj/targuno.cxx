@@ -268,7 +268,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScLinkTargetTypeObj )
 ScLinkTargetsObj::ScLinkTargetsObj( const uno::Reference< container::XNameAccess > & rColl ) :
     xCollection( rColl )
 {
-    DBG_ASSERT( xCollection.is(), "ScLinkTargetsObj: NULL" );
+    OSL_ENSURE( xCollection.is(), "ScLinkTargetsObj: NULL" );
 }
 
 ScLinkTargetsObj::~ScLinkTargetsObj()

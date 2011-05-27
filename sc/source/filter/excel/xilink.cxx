@@ -257,12 +257,12 @@ SCTAB XclImpTabInfo::GetScTabFromXclName( const String& rXclTabName ) const
 
 void XclImpTabInfo::ReadTabid( XclImpStream& rStrm )
 {
-    DBG_ASSERT_BIFF( rStrm.GetRoot().GetBiff() == EXC_BIFF8 );
+    OSL_ENSURE_BIFF( rStrm.GetRoot().GetBiff() == EXC_BIFF8 );
     if( rStrm.GetRoot().GetBiff() == EXC_BIFF8 )
     {
         rStrm.EnableDecryption();
         sal_Size nReadCount = rStrm.GetRecLeft() / 2;
-        DBG_ASSERT( nReadCount <= 0xFFFF, "XclImpTabInfo::ReadTabid - record too long" );
+        OSL_ENSURE( nReadCount <= 0xFFFF, "XclImpTabInfo::ReadTabid - record too long" );
         maTabIdVec.clear();
         maTabIdVec.reserve( nReadCount );
         for( sal_Size nIndex = 0; rStrm.IsValid() && (nIndex < nReadCount); ++nIndex )
@@ -642,7 +642,7 @@ XclImpSupbook::XclImpSupbook( XclImpStream& rStrm ) :
         {
             case EXC_SUPB_SELF:     meType = EXC_SBTYPE_SELF;   break;
             case EXC_SUPB_ADDIN:    meType = EXC_SBTYPE_ADDIN;  break;
-            default:    DBG_ERRORFILE( "XclImpSupbook::XclImpSupbook - unknown special SUPBOOK type" );
+            default:    OSL_FAIL( "XclImpSupbook::XclImpSupbook - unknown special SUPBOOK type" );
         }
         return;
     }
@@ -699,7 +699,7 @@ void XclImpSupbook::ReadExternname( XclImpStream& rStrm, ExcelToSc* pFormulaConv
 
 const XclImpExtName* XclImpSupbook::GetExternName( sal_uInt16 nXclIndex ) const
 {
-    DBG_ASSERT( nXclIndex > 0, "XclImpSupbook::GetExternName - index must be >0" );
+    OSL_ENSURE( nXclIndex > 0, "XclImpSupbook::GetExternName - index must be >0" );
     if (meType == EXC_SBTYPE_SELF || nXclIndex > maExtNameList.size())
         return NULL;
     return &maExtNameList[nXclIndex-1];
@@ -712,7 +712,7 @@ bool XclImpSupbook::GetLinkData( String& rApplic, String& rTopic ) const
 
 const String& XclImpSupbook::GetMacroName( sal_uInt16 nXclNameIdx ) const
 {
-    DBG_ASSERT( nXclNameIdx > 0, "XclImpSupbook::GetMacroName - index must be >0" );
+    OSL_ENSURE( nXclNameIdx > 0, "XclImpSupbook::GetMacroName - index must be >0" );
     const XclImpName* pName = (meType == EXC_SBTYPE_SELF) ? GetNameManager().GetName( nXclNameIdx ) : 0;
     return (pName && pName->IsVBName()) ? pName->GetScName() : EMPTY_STRING;
 }
@@ -760,7 +760,7 @@ void XclImpLinkManagerImpl::ReadExternsheet( XclImpStream& rStrm )
 {
     sal_uInt16 nXtiCount;
     rStrm >> nXtiCount;
-    DBG_ASSERT( static_cast< sal_Size >( nXtiCount * 6 ) == rStrm.GetRecLeft(), "XclImpLinkManagerImpl::ReadExternsheet - invalid count" );
+    OSL_ENSURE( static_cast< sal_Size >( nXtiCount * 6 ) == rStrm.GetRecLeft(), "XclImpLinkManagerImpl::ReadExternsheet - invalid count" );
     nXtiCount = static_cast< sal_uInt16 >( ::std::min< sal_Size >( nXtiCount, rStrm.GetRecLeft() / 6 ) );
 
     /*  #i104057# A weird external XLS generator writes multiple EXTERNSHEET

@@ -986,7 +986,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
     // create and initialize solver
 
     uno::Reference<sheet::XSolver> xSolver = ScSolverUtil::GetSolver( maEngine );
-    DBG_ASSERT( xSolver.is(), "can't get solver component" );
+    OSL_ENSURE( xSolver.is(), "can't get solver component" );
     if ( !xSolver.is() )
         return false;
 
@@ -1010,7 +1010,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
             }
             catch ( uno::Exception & )
             {
-                DBG_ERRORFILE("Exception in solver option property");
+                OSL_FAIL("Exception in solver option property");
             }
         }
     }

@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <tools/debug.hxx>
 #include <svtools/libcall.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/window.hxx>
@@ -261,7 +260,7 @@ MyWindow::MyWindow( Window *pParent ) :
 XSpreadsheetDocumentRef lcl_GetDocument()
 {
     XServiceManagerRef xProv = getGlobalServiceManager();
-    DBG_ASSERT( xProv.is(), "Kein ServiceManager!" );
+    OSL_ENSURE( xProv.is(), "Kein ServiceManager!" );
 
     XServiceRegistryRef xReg = (XServiceRegistry*)xProv->queryInterface(XServiceRegistry::getSmartUik());
     if ( !xReg )

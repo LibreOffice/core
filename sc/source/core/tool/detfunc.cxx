@@ -330,7 +330,7 @@ sal_Bool ScDetectiveFunc::HasError( const ScRange& rRange, ScAddress& rErrPos )
 
 Point ScDetectiveFunc::GetDrawPos( SCCOL nCol, SCROW nRow, DrawPosMode eMode ) const
 {
-    DBG_ASSERT( ValidColRow( nCol, nRow ), "ScDetectiveFunc::GetDrawPos - invalid cell address" );
+    OSL_ENSURE( ValidColRow( nCol, nRow ), "ScDetectiveFunc::GetDrawPos - invalid cell address" );
     SanitizeCol( nCol );
     SanitizeRow( nRow );
 
@@ -430,7 +430,7 @@ sal_Bool ScDetectiveFunc::HasArrow( const ScAddress& rStart,
 
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));
-    DBG_ASSERT(pPage,"Page ?");
+    OSL_ENSURE(pPage,"Page ?");
 
     sal_Bool bFound = false;
     SdrObjListIter aIter( *pPage, IM_FLAT );
@@ -693,7 +693,7 @@ void ScDetectiveFunc::DeleteArrowsAt( SCCOL nCol, SCROW nRow, sal_Bool bDestPnt 
 
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));
-    DBG_ASSERT(pPage,"Page ?");
+    OSL_ENSURE(pPage,"Page ?");
 
     pPage->RecalcObjOrdNums();
 
@@ -757,7 +757,7 @@ void ScDetectiveFunc::DeleteBox( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nR
 
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));
-    DBG_ASSERT(pPage,"Page ?");
+    OSL_ENSURE(pPage,"Page ?");
 
     pPage->RecalcObjOrdNums();
 
@@ -923,7 +923,7 @@ sal_uInt16 ScDetectiveFunc::FindPredLevelArea( const ScRange& rRef,
 
 sal_uInt16 ScDetectiveFunc::FindPredLevel( SCCOL nCol, SCROW nRow, sal_uInt16 nLevel, sal_uInt16 nDeleteLevel )
 {
-    DBG_ASSERT( nLevel<1000, "Level" );
+    OSL_ENSURE( nLevel<1000, "Level" );
 
     ScBaseCell* pCell;
     pDoc->GetCell( nCol, nRow, nTab, pCell );
@@ -1131,7 +1131,7 @@ sal_uInt16 ScDetectiveFunc::InsertSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCo
 sal_uInt16 ScDetectiveFunc::FindSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                         sal_uInt16 nLevel, sal_uInt16 nDeleteLevel )
 {
-    DBG_ASSERT( nLevel<1000, "Level" );
+    OSL_ENSURE( nLevel<1000, "Level" );
 
     sal_uInt16 nResult = nLevel;
     sal_Bool bDelete = ( nDeleteLevel && nLevel == nDeleteLevel-1 );
@@ -1287,7 +1287,7 @@ sal_Bool ScDetectiveFunc::DeleteAll( ScDetectiveDelete eWhat )
         return false;
 
     SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));
-    DBG_ASSERT(pPage,"Page ?");
+    OSL_ENSURE(pPage,"Page ?");
 
     pPage->RecalcObjOrdNums();
 
@@ -1471,7 +1471,7 @@ void ScDetectiveFunc::UpdateAllComments( ScDocument& rDoc )
     {
         rDoc.InitializeNoteCaptions( nObjTab );
         SdrPage* pPage = pModel->GetPage( static_cast< sal_uInt16 >( nObjTab ) );
-        DBG_ASSERT( pPage, "Page ?" );
+        OSL_ENSURE( pPage, "Page ?" );
         if( pPage )
         {
             SdrObjListIter aIter( *pPage, IM_FLAT );
@@ -1481,7 +1481,7 @@ void ScDetectiveFunc::UpdateAllComments( ScDocument& rDoc )
                 {
                     ScPostIt* pNote = rDoc.GetNote( pData->maStart );
                     // caption should exist, we iterate over drawing objects...
-                    DBG_ASSERT( pNote && (pNote->GetCaption() == pObject), "ScDetectiveFunc::UpdateAllComments - invalid cell note" );
+                    OSL_ENSURE( pNote && (pNote->GetCaption() == pObject), "ScDetectiveFunc::UpdateAllComments - invalid cell note" );
                     if( pNote )
                     {
                         ScCommentData aData( rDoc, pModel );
@@ -1512,7 +1512,7 @@ void ScDetectiveFunc::UpdateAllArrowColors()
     for( SCTAB nObjTab = 0, nTabCount = pDoc->GetTableCount(); nObjTab < nTabCount; ++nObjTab )
     {
         SdrPage* pPage = pModel->GetPage( static_cast< sal_uInt16 >( nObjTab ) );
-        DBG_ASSERT( pPage, "Page ?" );
+        OSL_ENSURE( pPage, "Page ?" );
         if( pPage )
         {
             SdrObjListIter aIter( *pPage, IM_FLAT );
@@ -1588,7 +1588,7 @@ sal_Bool ScDetectiveFunc::FindFrameForObject( SdrObject* pObject, ScRange& rRang
     if (!pModel) return false;
 
     SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));
-    DBG_ASSERT(pPage,"Page ?");
+    OSL_ENSURE(pPage,"Page ?");
     if (!pPage) return false;
 
     // test if the object is a direct page member

@@ -60,7 +60,7 @@ XclExpStringRec::XclExpStringRec( const XclExpRoot& rRoot, const String& rResult
     XclExpRecord( EXC_ID3_STRING ),
     mxResult( XclExpStringHelper::CreateString( rRoot, rResult ) )
 {
-    DBG_ASSERT( (rRoot.GetBiff() <= EXC_BIFF5) || (mxResult->Len() > 0),
+    OSL_ENSURE( (rRoot.GetBiff() <= EXC_BIFF5) || (mxResult->Len() > 0),
         "XclExpStringRec::XclExpStringRec - empty result not allowed in BIFF8+" );
     SetRecSize( mxResult->GetSize() );
 }
@@ -154,7 +154,7 @@ XclExpArrayRef XclExpArrayBuffer::CreateArray( const ScTokenArray& rScTokArr, co
     const ScAddress& rScPos = rScRange.aStart;
     XclTokenArrayRef xTokArr = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_MATRIX, rScTokArr, &rScPos );
 
-    DBG_ASSERT( maRecMap.find( rScPos ) == maRecMap.end(), "XclExpArrayBuffer::CreateArray - array exists already" );
+    OSL_ENSURE( maRecMap.find( rScPos ) == maRecMap.end(), "XclExpArrayBuffer::CreateArray - array exists already" );
     XclExpArrayRef& rxRec = maRecMap[ rScPos ];
     rxRec.reset( new XclExpArray( xTokArr, rScRange ) );
     return rxRec;
@@ -234,7 +234,7 @@ XclExpShrfmlaRef XclExpShrfmlaBuffer::CreateOrExtendShrfmla(
         else
         {
             // extend existing record
-            DBG_ASSERT( aIt->second, "XclExpShrfmlaBuffer::CreateOrExtendShrfmla - missing record" );
+            OSL_ENSURE( aIt->second, "XclExpShrfmlaBuffer::CreateOrExtendShrfmla - missing record" );
             xRec = aIt->second;
             xRec->ExtendRange( rScPos );
         }
@@ -312,7 +312,7 @@ bool XclExpTableop::TryExtend( const ScAddress& rScPos, const XclMultipleOpRefs&
         if( bOk )
         {
             // extend the cell range
-            DBG_ASSERT( IsAppendable( nXclCol, nXclRow ), "XclExpTableop::TryExtend - wrong cell address" );
+            OSL_ENSURE( IsAppendable( nXclCol, nXclRow ), "XclExpTableop::TryExtend - wrong cell address" );
             Extend( rScPos );
             mnLastAppXclCol = nXclCol;
         }
@@ -559,7 +559,7 @@ void XclExpSingleCellBase::ConvertXFIndexes( const XclExpRoot& rRoot )
 
 void XclExpSingleCellBase::Save( XclExpStream& rStrm )
 {
-    DBG_ASSERT_BIFF( rStrm.GetRoot().GetBiff() >= EXC_BIFF3 );
+    OSL_ENSURE_BIFF( rStrm.GetRoot().GetBiff() >= EXC_BIFF3 );
     AddRecSize( mnContSize );
     XclExpCellBase::Save( rStrm );
 }
@@ -680,7 +680,7 @@ bool XclExpLabelCell::IsMultiLineText() const
 void XclExpLabelCell::Init( const XclExpRoot& rRoot,
         const ScPatternAttr* pPattern, XclExpStringRef xText )
 {
-    DBG_ASSERT( xText && xText->Len(), "XclExpLabelCell::XclExpLabelCell - empty string passed" );
+    OSL_ENSURE( xText && xText->Len(), "XclExpLabelCell::XclExpLabelCell - empty string passed" );
     mxText = xText;
     mnSstIndex = 0;
 
@@ -688,7 +688,7 @@ void XclExpLabelCell::Init( const XclExpRoot& rRoot,
     sal_uInt16 nXclFont = mxText->RemoveLeadingFont();
     if( GetXFId() == EXC_XFID_NOTFOUND )
     {
-        DBG_ASSERT( nXclFont != EXC_FONT_NOTFOUND, "XclExpLabelCell::Init - leading font not found" );
+        OSL_ENSURE( nXclFont != EXC_FONT_NOTFOUND, "XclExpLabelCell::Init - leading font not found" );
         bool bForceLineBreak = mxText->IsWrapped();
         SetXFId( rRoot.GetXFBuffer().InsertWithFont( pPattern, ApiScriptType::WEAK, nXclFont, bForceLineBreak ) );
     }
@@ -702,12 +702,12 @@ void XclExpLabelCell::Init( const XclExpRoot& rRoot,
     {
         case EXC_BIFF5:
             // BIFF5-BIFF7: create a LABEL or RSTRING record
-            DBG_ASSERT( mxText->Len() <= EXC_LABEL_MAXLEN, "XclExpLabelCell::XclExpLabelCell - string too long" );
+            OSL_ENSURE( mxText->Len() <= EXC_LABEL_MAXLEN, "XclExpLabelCell::XclExpLabelCell - string too long" );
             SetContSize( mxText->GetSize() );
             // formatted string is exported in an RSTRING record
             if( mxText->IsRich() )
             {
-                DBG_ASSERT( mxText->GetFormatsCount() <= EXC_LABEL_MAXLEN, "XclExpLabelCell::WriteContents - too many formats" );
+                OSL_ENSURE( mxText->GetFormatsCount() <= EXC_LABEL_MAXLEN, "XclExpLabelCell::WriteContents - too many formats" );
                 mxText->LimitFormatCount( EXC_LABEL_MAXLEN );
                 SetRecId( EXC_ID_RSTRING );
                 SetContSize( GetContSize() + 1 + 2 * mxText->GetFormatsCount() );
@@ -830,7 +830,7 @@ XclExpFormulaCell::XclExpFormulaCell(
             SCCOL nMatWidth;
             SCROW nMatHeight;
             mrScFmlaCell.GetMatColsRows( nMatWidth, nMatHeight );
-            DBG_ASSERT( nMatWidth && nMatHeight, "XclExpFormulaCell::XclExpFormulaCell - empty matrix" );
+            OSL_ENSURE( nMatWidth && nMatHeight, "XclExpFormulaCell::XclExpFormulaCell - empty matrix" );
             ScRange aMatScRange( aScPos );
             ScAddress& rMatEnd = aMatScRange.aEnd;
             rMatEnd.IncCol( static_cast< SCsCOL >( nMatWidth - 1 ) );
@@ -846,7 +846,7 @@ XclExpFormulaCell::XclExpFormulaCell(
             // other formula cell covered by a matrix - find the ARRAY record
             mxAddRec = rArrayBfr.FindArray( rScTokArr );
             // should always be found, if Calc document is not broken
-            DBG_ASSERT( mxAddRec, "XclExpFormulaCell::XclExpFormulaCell - no matrix found" );
+            OSL_ENSURE( mxAddRec, "XclExpFormulaCell::XclExpFormulaCell - no matrix found" );
         }
         break;
         default:;
@@ -868,7 +868,7 @@ void XclExpFormulaCell::Save( XclExpStream& rStrm )
         mxTokArr = mxAddRec->CreateCellTokenArray( rStrm.GetRoot() );
 
     // FORMULA record itself
-    DBG_ASSERT( mxTokArr, "XclExpFormulaCell::Save - missing token array" );
+    OSL_ENSURE( mxTokArr, "XclExpFormulaCell::Save - missing token array" );
     if( !mxTokArr )
         mxTokArr = rStrm.GetRoot().GetFormulaCompiler().CreateErrorFormula( EXC_ERR_NA );
     SetContSize( 16 + mxTokArr->GetSize() );
@@ -1017,7 +1017,7 @@ void XclExpMultiCellBase::ConvertXFIndexes( const XclExpRoot& rRoot )
 
 void XclExpMultiCellBase::Save( XclExpStream& rStrm )
 {
-    DBG_ASSERT_BIFF( rStrm.GetRoot().GetBiff() >= EXC_BIFF3 );
+    OSL_ENSURE_BIFF( rStrm.GetRoot().GetBiff() >= EXC_BIFF3 );
 
     XclExpMultiXFIdDeq::const_iterator aEnd = maXFIds.end();
     XclExpMultiXFIdDeq::const_iterator aRangeBeg = maXFIds.begin();
@@ -1157,7 +1157,7 @@ bool XclExpMultiCellBase::TryMergeXFIds( const XclExpMultiCellBase& rCell )
 
 void XclExpMultiCellBase::GetXFIndexes( ScfUInt16Vec& rXFIndexes ) const
 {
-    DBG_ASSERT( GetLastXclCol() < rXFIndexes.size(), "XclExpMultiCellBase::GetXFIndexes - vector too small" );
+    OSL_ENSURE( GetLastXclCol() < rXFIndexes.size(), "XclExpMultiCellBase::GetXFIndexes - vector too small" );
     ScfUInt16Vec::iterator aDestIt = rXFIndexes.begin() + GetXclCol();
     for( XclExpMultiXFIdDeq::const_iterator aIt = maXFIds.begin(), aEnd = maXFIds.end(); aIt != aEnd; ++aIt )
     {
@@ -1170,7 +1170,7 @@ void XclExpMultiCellBase::RemoveUnusedXFIndexes( const ScfUInt16Vec& rXFIndexes 
 {
     // save last column before calling maXFIds.clear()
     sal_uInt16 nLastXclCol = GetLastXclCol();
-    DBG_ASSERT( nLastXclCol < rXFIndexes.size(), "XclExpMultiCellBase::RemoveUnusedXFIndexes - XF index vector too small" );
+    OSL_ENSURE( nLastXclCol < rXFIndexes.size(), "XclExpMultiCellBase::RemoveUnusedXFIndexes - XF index vector too small" );
 
     // build new XF index vector, containing passed XF indexes
     maXFIds.clear();
@@ -1201,7 +1201,7 @@ IMPL_FIXEDMEMPOOL_NEWDEL( XclExpBlankCell, 256, 256 )
 XclExpBlankCell::XclExpBlankCell( const XclAddress& rXclPos, const XclExpMultiXFId& rXFId ) :
     XclExpMultiCellBase( EXC_ID3_BLANK, EXC_ID_MULBLANK, 0, rXclPos )
 {
-    DBG_ASSERT( rXFId.mnCount > 0, "XclExpBlankCell::XclExpBlankCell - invalid count" );
+    OSL_ENSURE( rXFId.mnCount > 0, "XclExpBlankCell::XclExpBlankCell - invalid count" );
     AppendXFId( rXFId );
 }
 
@@ -1210,7 +1210,7 @@ XclExpBlankCell::XclExpBlankCell(
         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId ) :
     XclExpMultiCellBase( EXC_ID3_BLANK, EXC_ID_MULBLANK, 0, rXclPos )
 {
-    DBG_ASSERT( rXclPos.mnCol <= nLastXclCol, "XclExpBlankCell::XclExpBlankCell - invalid column range" );
+    OSL_ENSURE( rXclPos.mnCol <= nLastXclCol, "XclExpBlankCell::XclExpBlankCell - invalid column range" );
     // #i46627# use default script type instead of ApiScriptType::WEAK
     AppendXFId( rRoot, pPattern, rRoot.GetDefApiScript(), nForcedXFId, nLastXclCol - rXclPos.mnCol + 1 );
 }
@@ -1286,7 +1286,7 @@ void XclExpRkCell::WriteXmlContents( XclExpXmlStream& rStrm, const XclAddress& r
 
 void XclExpRkCell::WriteContents( XclExpStream& rStrm, sal_uInt16 nRelCol )
 {
-    DBG_ASSERT( nRelCol < maRkValues.size(), "XclExpRkCell::WriteContents - overflow error" );
+    OSL_ENSURE( nRelCol < maRkValues.size(), "XclExpRkCell::WriteContents - overflow error" );
     rStrm << maRkValues[ nRelCol ];
 }
 
@@ -1703,7 +1703,7 @@ void XclExpDefrowheight::SetDefaultData( const XclExpDefaultRowData& rDefData )
 
 void XclExpDefrowheight::WriteBody( XclExpStream& rStrm )
 {
-    DBG_ASSERT_BIFF( rStrm.GetRoot().GetBiff() >= EXC_BIFF3 );
+    OSL_ENSURE_BIFF( rStrm.GetRoot().GetBiff() >= EXC_BIFF3 );
     rStrm << maDefData.mnFlags << maDefData.mnHeight;
 }
 
@@ -1755,7 +1755,7 @@ XclExpRow::XclExpRow( const XclExpRoot& rRoot, sal_uInt32 nXclRow,
 
 void XclExpRow::AppendCell( XclExpCellRef xCell, bool bIsMergedBase )
 {
-    DBG_ASSERT( !mbAlwaysEmpty, "XclExpRow::AppendCell - row is marked to be always empty" );
+    OSL_ENSURE( !mbAlwaysEmpty, "XclExpRow::AppendCell - row is marked to be always empty" );
     // try to merge with last existing cell
     InsertCell( xCell, maCellList.GetSize(), bIsMergedBase );
 }
@@ -1768,7 +1768,7 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes )
 
     // additionally collect the blank XF indexes
     size_t nColCount = GetMaxPos().Col() + 1;
-    DBG_ASSERT( rColXFIndexes.size() == nColCount, "XclExpRow::Finalize - wrong column XF index count" );
+    OSL_ENSURE( rColXFIndexes.size() == nColCount, "XclExpRow::Finalize - wrong column XF index count" );
 
     ScfUInt16Vec aXFIndexes( nColCount, EXC_XF_NOTFOUND );
     for( nPos = 0, nSize = maCellList.GetSize(); nPos < nSize; ++nPos )
@@ -1924,7 +1924,7 @@ void XclExpRow::DisableIfDefault( const XclExpDefaultRowData& rDefRowData )
 
 void XclExpRow::WriteCellList( XclExpStream& rStrm )
 {
-    DBG_ASSERT( mbEnabled || maCellList.IsEmpty(), "XclExpRow::WriteCellList - cells in disabled row" );
+    OSL_ENSURE( mbEnabled || maCellList.IsEmpty(), "XclExpRow::WriteCellList - cells in disabled row" );
     maCellList.Save( rStrm );
 }
 
@@ -1936,7 +1936,7 @@ void XclExpRow::Save( XclExpStream& rStrm )
 
 void XclExpRow::InsertCell( XclExpCellRef xCell, size_t nPos, bool bIsMergedBase )
 {
-    DBG_ASSERT( xCell, "XclExpRow::InsertCell - missing cell" );
+    OSL_ENSURE( xCell, "XclExpRow::InsertCell - missing cell" );
 
     /*  If we have a multi-line text in a merged cell, and the resulting
         row height has not been confirmed, we need to force the EXC_ROW_UNSYNCED
@@ -2005,7 +2005,7 @@ XclExpRowBuffer::XclExpRowBuffer( const XclExpRoot& rRoot ) :
 
 void XclExpRowBuffer::AppendCell( XclExpCellRef xCell, bool bIsMergedBase )
 {
-    DBG_ASSERT( xCell, "XclExpRowBuffer::AppendCell - missing cell" );
+    OSL_ENSURE( xCell, "XclExpRowBuffer::AppendCell - missing cell" );
     GetOrCreateRow( xCell->GetXclRow(), false ).AppendCell( xCell, bIsMergedBase );
 }
 
@@ -2326,7 +2326,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
             break;
 
             default:
-                DBG_ERRORFILE( "XclExpCellTable::XclExpCellTable - unknown cell type" );
+                OSL_FAIL( "XclExpCellTable::XclExpCellTable - unknown cell type" );
                 // run-through!
             case CELLTYPE_NONE:
             case CELLTYPE_NOTE:
@@ -2360,7 +2360,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
                 aScRange.aEnd.IncRow( rMergeItem.GetRowMerge() - 1 );
                 sal_uInt32 nXFId = xCell ? xCell->GetFirstXFId() : EXC_XFID_NOTFOUND;
                 // blank cells merged vertically may occur repeatedly
-                DBG_ASSERT( (aScRange.aStart.Col() == aScRange.aEnd.Col()) || (nScCol == nLastScCol),
+                OSL_ENSURE( (aScRange.aStart.Col() == aScRange.aEnd.Col()) || (nScCol == nLastScCol),
                     "XclExpCellTable::XclExpCellTable - invalid repeated blank merged cell" );
                 for( SCCOL nIndex = nScCol; nIndex <= nLastScCol; ++nIndex )
                 {
@@ -2419,7 +2419,7 @@ XclExpRecordRef XclExpCellTable::CreateRecord( sal_uInt16 nRecId ) const
         case EXC_ID_MERGEDCELLS:    xRec = mxMergedcells;   break;
         case EXC_ID_HLINK:          xRec = mxHyperlinkList; break;
         case EXC_ID_DVAL:           xRec = mxDval;          break;
-        default:    DBG_ERRORFILE( "XclExpCellTable::CreateRecord - unknown record id" );
+        default:    OSL_FAIL( "XclExpCellTable::CreateRecord - unknown record id" );
     }
     return xRec;
 }

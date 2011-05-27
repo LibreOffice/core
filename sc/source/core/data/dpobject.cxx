@@ -456,7 +456,7 @@ void ScDPObject::CreateObjects()
     {
         //! cache DPSource and/or Output?
 
-        DBG_ASSERT( bAlive, "CreateObjects on non-inserted DPObject" );
+        OSL_ENSURE( bAlive, "CreateObjects on non-inserted DPObject" );
 
         DELETEZ( pOutput );     // not valid when xSource is changed
 
@@ -467,10 +467,13 @@ void ScDPObject::CreateObjects()
 
         if ( !xSource.is() )    // database or sheet data, or error in CreateSource
         {
-            DBG_ASSERT( !pServDesc, "DPSource could not be created" );
+            OSL_ENSURE( !pServDesc, "DPSource could not be created" );
             ScDPTableData* pData = GetTableData();
-            ScDPSource* pSource = new ScDPSource( pData );
-            xSource = pSource;
+            if (pData)
+            {
+                ScDPSource* pSource = new ScDPSource( pData );
+                xSource = pSource;
+            }
         }
 
         if (pSaveData)
@@ -919,7 +922,7 @@ void ScDPObject::FillPageList( TypedScStrCollection& rStrings, long nField )
 
     //! convert field index to dimension index?
 
-    DBG_ASSERT( xSource.is(), "no source" );
+    OSL_ENSURE( xSource.is(), "no source" );
     if ( !xSource.is() ) return;
 
     uno::Reference<container::XNamed> xDim;
@@ -932,7 +935,7 @@ void ScDPObject::FillPageList( TypedScStrCollection& rStrings, long nField )
                                     xIntDims->getByIndex(nField) );
         xDim = uno::Reference<container::XNamed>( xIntDim, uno::UNO_QUERY );
     }
-    DBG_ASSERT( xDim.is(), "dimension not found" );
+    OSL_ENSURE( xDim.is(), "dimension not found" );
     if ( !xDim.is() ) return;
 
     uno::Reference<beans::XPropertySet> xDimProp( xDim, uno::UNO_QUERY );
@@ -952,7 +955,7 @@ void ScDPObject::FillPageList( TypedScStrCollection& rStrings, long nField )
     uno::Reference<uno::XInterface> xHier;
     if ( nHierarchy < nHierCount )
         xHier = ScUnoHelpFunctions::AnyToInterface( xHiers->getByIndex(nHierarchy) );
-    DBG_ASSERT( xHier.is(), "hierarchy not found" );
+    OSL_ENSURE( xHier.is(), "hierarchy not found" );
     if ( !xHier.is() ) return;
 
     long nLevCount = 0;
@@ -967,14 +970,14 @@ void ScDPObject::FillPageList( TypedScStrCollection& rStrings, long nField )
     uno::Reference<uno::XInterface> xLevel;
     if ( nLevel < nLevCount )
         xLevel = ScUnoHelpFunctions::AnyToInterface( xLevels->getByIndex(nLevel) );
-    DBG_ASSERT( xLevel.is(), "level not found" );
+    OSL_ENSURE( xLevel.is(), "level not found" );
     if ( !xLevel.is() ) return;
 
     uno::Reference<container::XNameAccess> xMembers;
     uno::Reference<sheet::XMembersSupplier> xMbrSupp( xLevel, uno::UNO_QUERY );
     if ( xMbrSupp.is() )
         xMembers = xMbrSupp->getMembers();
-    DBG_ASSERT( xMembers.is(), "members not found" );
+    OSL_ENSURE( xMembers.is(), "members not found" );
     if ( !xMembers.is() ) return;
 
     uno::Sequence<rtl::OUString> aNames = xMembers->getElementNames();
@@ -1369,7 +1372,7 @@ sal_Bool ScDPObject::ParseFilters( ScDPGetPivotDataField& rTarget,
 
     SCSIZE nDataFields = aDataNames.size();
     SCSIZE nFieldCount = aFieldNames.size();
-    DBG_ASSERT( aGivenNames.size() == nDataFields && aFieldValues.size() == nFieldCount, "wrong count" );
+    OSL_ENSURE( aGivenNames.size() == nDataFields && aFieldValues.size() == nFieldCount, "wrong count" );
 
     bool bError = false;
     bool bHasData = false;
@@ -1514,7 +1517,7 @@ void ScDPObject::ToggleDetails(const DataPilotTableHeaderData& rElemDesc, ScDPOb
                                     xIntDims->getByIndex(rElemDesc.Dimension) );
         xDim = uno::Reference<container::XNamed>( xIntDim, uno::UNO_QUERY );
     }
-    DBG_ASSERT( xDim.is(), "dimension not found" );
+    OSL_ENSURE( xDim.is(), "dimension not found" );
     if ( !xDim.is() ) return;
     String aDimName = xDim->getName();
 
@@ -1542,7 +1545,7 @@ void ScDPObject::ToggleDetails(const DataPilotTableHeaderData& rElemDesc, ScDPOb
     uno::Reference<uno::XInterface> xHier;
     if ( rElemDesc.Hierarchy < nHierCount )
         xHier = ScUnoHelpFunctions::AnyToInterface( xHiers->getByIndex(rElemDesc.Hierarchy) );
-    DBG_ASSERT( xHier.is(), "hierarchy not found" );
+    OSL_ENSURE( xHier.is(), "hierarchy not found" );
     if ( !xHier.is() ) return;
 
     long nLevCount = 0;
@@ -1557,7 +1560,7 @@ void ScDPObject::ToggleDetails(const DataPilotTableHeaderData& rElemDesc, ScDPOb
     uno::Reference<uno::XInterface> xLevel;
     if ( rElemDesc.Level < nLevCount )
         xLevel = ScUnoHelpFunctions::AnyToInterface( xLevels->getByIndex(rElemDesc.Level) );
-    DBG_ASSERT( xLevel.is(), "level not found" );
+    OSL_ENSURE( xLevel.is(), "level not found" );
     if ( !xLevel.is() ) return;
 
     uno::Reference<container::XNameAccess> xMembers;
@@ -1585,14 +1588,14 @@ void ScDPObject::ToggleDetails(const DataPilotTableHeaderData& rElemDesc, ScDPOb
         }
     }
 
-    DBG_ASSERT( bFound, "member not found" );
+    OSL_ENSURE( bFound, "member not found" );
     (void)bFound;
 
     //! use Hierarchy and Level in SaveData !!!!
 
     //  modify pDestObj if set, this object otherwise
     ScDPSaveData* pModifyData = pDestObj ? ( pDestObj->pSaveData ) : pSaveData;
-    DBG_ASSERT( pModifyData, "no data?" );
+    OSL_ENSURE( pModifyData, "no data?" );
     if ( pModifyData )
     {
         const String aName = rElemDesc.MemberName;
@@ -1848,6 +1851,9 @@ sal_Bool ScDPObject::FillOldParam(ScPivotParam& rParam) const
 {
     ((ScDPObject*)this)->CreateObjects();       // xSource is needed for field numbers
 
+    if (!xSource.is())
+        return false;
+
     rParam.nCol = aOutRange.aStart.Col();
     rParam.nRow = aOutRange.aStart.Row();
     rParam.nTab = aOutRange.aStart.Tab();
@@ -1941,6 +1947,8 @@ sal_Bool ScDPObject::FillLabelData(ScPivotParam& rParam)
     rParam.maLabelArray.clear();
 
     ((ScDPObject*)this)->CreateObjects();
+    if (!xSource.is())
+        return false;
 
     uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
     uno::Reference<container::XIndexAccess> xDims = new ScNameToIndexAccess( xDimsName );
@@ -2138,7 +2146,7 @@ void ScDPObject::ConvertOrientation(
     vector<PivotField>* pRefColFields, vector<PivotField>* pRefRowFields, vector<PivotField>* pRefPageFields )
 {
     //  xSource must be set
-    DBG_ASSERT( xSource.is(), "missing string source" );
+    OSL_ENSURE( xSource.is(), "missing string source" );
 
     vector<PivotField>::const_iterator itr, itrBeg = rFields.begin(), itrEnd = rFields.end();
     for (itr = itrBeg; itr != itrEnd; ++itr)
@@ -2468,7 +2476,7 @@ const ScDPCache* ScDPCollection::DBCaches::getCache(sal_Int32 nSdbType, const OU
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_SERVICE_ROWSET )) ),
             uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xRowProp( xRowSet, uno::UNO_QUERY );
-        DBG_ASSERT( xRowProp.is(), "can't get RowSet" );
+        OSL_ENSURE( xRowProp.is(), "can't get RowSet" );
         if ( xRowProp.is() )
         {
             //
@@ -2615,7 +2623,7 @@ void ScDPCollection::WriteRefsTo( ScDPCollection& r ) const
         // Matching objects are found by their names.
         size_t nSrcSize = maTables.size();
         size_t nDestSize = r.maTables.size();
-        DBG_ASSERT( nSrcSize >= nDestSize, "WriteRefsTo: missing entries in document" );
+        OSL_ENSURE( nSrcSize >= nDestSize, "WriteRefsTo: missing entries in document" );
         for (size_t nSrcPos = 0; nSrcPos < nSrcSize; ++nSrcPos)
         {
             const ScDPObject& rSrcObj = maTables[nSrcPos];
@@ -2640,7 +2648,7 @@ void ScDPCollection::WriteRefsTo( ScDPCollection& r ) const
                 r.InsertNewTable(pDestObj);
             }
         }
-        DBG_ASSERT( maTables.size() == r.maTables.size(), "WriteRefsTo: couldn't restore all entries" );
+        OSL_ENSURE( maTables.size() == r.maTables.size(), "WriteRefsTo: couldn't restore all entries" );
     }
 }
 

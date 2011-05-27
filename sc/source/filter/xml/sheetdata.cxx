@@ -35,7 +35,6 @@
 #include <xmloff/xmlaustp.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <tools/string.hxx>
-#include <tools/debug.hxx>
 
 #include "sheetdata.hxx"
 
@@ -130,7 +129,7 @@ void ScSheetSaveData::AddStreamPos( sal_Int32 nTab, sal_Int32 nStartOffset, sal_
 
 void ScSheetSaveData::StartStreamPos( sal_Int32 nTab, sal_Int32 nStartOffset )
 {
-    DBG_ASSERT( mnStartTab < 0, "StartStreamPos without EndStreamPos" );
+    OSL_ENSURE( mnStartTab < 0, "StartStreamPos without EndStreamPos" );
 
     mnStartTab = nTab;
     mnStartOffset = nStartOffset;

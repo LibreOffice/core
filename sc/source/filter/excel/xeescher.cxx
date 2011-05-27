@@ -1321,7 +1321,7 @@ void XclExpNote::Save( XclExpStream& rStrm )
 void XclExpNote::WriteBody( XclExpStream& rStrm )
 {
     // BIFF5/BIFF7 is written separately
-    DBG_ASSERT_BIFF( rStrm.GetRoot().GetBiff() == EXC_BIFF8 );
+    OSL_ENSURE_BIFF( rStrm.GetRoot().GetBiff() == EXC_BIFF8 );
 
     sal_uInt16 nFlags = 0;
     ::set_flag( nFlags, EXC_NOTE_VISIBLE, mbVisible );
@@ -1574,7 +1574,7 @@ boost::shared_ptr< XclExpRecordBase > XclExpObjectManager::ProcessDrawing( SdrPa
     if( pSdrPage )
         mxEscherEx->AddSdrPage( *pSdrPage );
     // the first dummy object may still be open
-    DBG_ASSERT( mxEscherEx->GetGroupLevel() <= 1, "XclExpObjectManager::ProcessDrawing - still groups open?" );
+    OSL_ENSURE( mxEscherEx->GetGroupLevel() <= 1, "XclExpObjectManager::ProcessDrawing - still groups open?" );
     while( mxEscherEx->GetGroupLevel() )
         mxEscherEx->LeaveGroup();
     mxObjList->EndSheet();
@@ -1586,7 +1586,7 @@ boost::shared_ptr< XclExpRecordBase > XclExpObjectManager::ProcessDrawing( const
     if( rxShapes.is() )
         mxEscherEx->AddUnoShapes( rxShapes );
     // the first dummy object may still be open
-    DBG_ASSERT( mxEscherEx->GetGroupLevel() <= 1, "XclExpObjectManager::ProcessDrawing - still groups open?" );
+    OSL_ENSURE( mxEscherEx->GetGroupLevel() <= 1, "XclExpObjectManager::ProcessDrawing - still groups open?" );
     while( mxEscherEx->GetGroupLevel() )
         mxEscherEx->LeaveGroup();
     mxObjList->EndSheet();

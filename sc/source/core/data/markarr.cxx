@@ -33,8 +33,6 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <tools/debug.hxx>
-
 #include "markarr.hxx"
 #include "global.hxx"
 #include "address.hxx"
@@ -351,7 +349,7 @@ SCROW ScMarkArray::GetMarkEnd( SCROW nRow, sal_Bool bUp ) const
     SCROW nRet;
     SCSIZE nIndex;
     Search(nRow, nIndex);
-    DBG_ASSERT( pData[nIndex].bMarked, "GetMarkEnd ohne bMarked" );
+    OSL_ENSURE( pData[nIndex].bMarked, "GetMarkEnd ohne bMarked" );
     if (bUp)
     {
         if (nIndex>0)

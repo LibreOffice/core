@@ -238,7 +238,7 @@ String XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
     const XclImpRoot& rRoot = rStrm.GetRoot();
     SfxObjectShell* pDocShell = rRoot.GetDocShell();
 
-    DBG_ASSERT_BIFF( rRoot.GetBiff() == EXC_BIFF8 );
+    OSL_ENSURE_BIFF( rRoot.GetBiff() == EXC_BIFF8 );
 
     sal_uInt32 nFlags;
     XclGuid aGuid;
@@ -246,7 +246,7 @@ String XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
     rStrm.Ignore( 4 );
     rStrm >> nFlags;
 
-    DBG_ASSERT( aGuid == XclTools::maGuidStdLink, "XclImpHyperlink::ReadEmbeddedData - unknown header GUID" );
+    OSL_ENSURE( aGuid == XclTools::maGuidStdLink, "XclImpHyperlink::ReadEmbeddedData - unknown header GUID" );
 
     ::std::auto_ptr< String > xLongName;    // link / file name
     ::std::auto_ptr< String > xShortName;   // 8.3-representation of file name
@@ -309,7 +309,7 @@ String XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
         }
         else
         {
-            DBG_ERRORFILE( "XclImpHyperlink::ReadEmbeddedData - unknown content GUID" );
+            OSL_FAIL( "XclImpHyperlink::ReadEmbeddedData - unknown content GUID" );
         }
     }
 
@@ -322,7 +322,7 @@ String XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
 
     rStrm.SetNulSubstChar();    // back to default
 
-    DBG_ASSERT( rStrm.GetRecLeft() == 0, "XclImpHyperlink::ReadEmbeddedData - record size mismatch" );
+    OSL_ENSURE( rStrm.GetRecLeft() == 0, "XclImpHyperlink::ReadEmbeddedData - record size mismatch" );
 
     if( !xLongName.get() && xShortName.get() )
         xLongName = xShortName;
@@ -423,7 +423,7 @@ void XclImpHyperlink::InsertUrl( const XclImpRoot& rRoot, const XclRange& rXclRa
 void XclImpLabelranges::ReadLabelranges( XclImpStream& rStrm )
 {
     const XclImpRoot& rRoot = rStrm.GetRoot();
-    DBG_ASSERT_BIFF( rRoot.GetBiff() == EXC_BIFF8 );
+    OSL_ENSURE_BIFF( rRoot.GetBiff() == EXC_BIFF8 );
 
     ScDocument& rDoc = rRoot.GetDoc();
     SCTAB nScTab = rRoot.GetCurrScTab();
@@ -494,7 +494,7 @@ XclImpCondFormat::~XclImpCondFormat()
 
 void XclImpCondFormat::ReadCondfmt( XclImpStream& rStrm )
 {
-    DBG_ASSERT( !mnCondCount, "XclImpCondFormat::ReadCondfmt - already initialized" );
+    OSL_ENSURE( !mnCondCount, "XclImpCondFormat::ReadCondfmt - already initialized" );
     XclRangeList aXclRanges;
     rStrm >> mnCondCount;
     rStrm.Ignore( 10 );
@@ -506,7 +506,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
 {
     if( mnCondIndex >= mnCondCount )
     {
-        DBG_ERRORFILE( "XclImpCondFormat::ReadCF - CF without leading CONDFMT" );
+        OSL_FAIL( "XclImpCondFormat::ReadCF - CF without leading CONDFMT" );
         return;
     }
 
@@ -673,7 +673,7 @@ void XclImpCondFormatManager::ReadCondfmt( XclImpStream& rStrm )
 
 void XclImpCondFormatManager::ReadCF( XclImpStream& rStrm )
 {
-    DBG_ASSERT( !maCondFmtList.empty(), "XclImpCondFormatManager::ReadCF - CF without leading CONDFMT" );
+    OSL_ENSURE( !maCondFmtList.empty(), "XclImpCondFormatManager::ReadCF - CF without leading CONDFMT" );
     if( !maCondFmtList.empty() )
         maCondFmtList.back().ReadCF( rStrm );
 }
@@ -698,14 +698,14 @@ XclImpValidationManager::XclImpValidationManager( const XclImpRoot& rRoot ) :
 void XclImpValidationManager::ReadDval( XclImpStream& rStrm )
 {
     const XclImpRoot& rRoot = rStrm.GetRoot();
-    DBG_ASSERT_BIFF( rRoot.GetBiff() == EXC_BIFF8 );
+    OSL_ENSURE_BIFF( rRoot.GetBiff() == EXC_BIFF8 );
 
     sal_uInt32 nObjId;
     rStrm.Ignore( 10 );
     rStrm >> nObjId;
     if( nObjId != EXC_DVAL_NOOBJ )
     {
-        DBG_ASSERT( nObjId <= 0xFFFF, "XclImpValidation::ReadDval - invalid object ID" );
+        OSL_ENSURE( nObjId <= 0xFFFF, "XclImpValidation::ReadDval - invalid object ID" );
         rRoot.GetCurrSheetDrawing().SetSkipObj( static_cast< sal_uInt16 >( nObjId ) );
     }
 }
@@ -713,7 +713,7 @@ void XclImpValidationManager::ReadDval( XclImpStream& rStrm )
 void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
 {
     const XclImpRoot& rRoot = rStrm.GetRoot();
-    DBG_ASSERT_BIFF( rRoot.GetBiff() == EXC_BIFF8 );
+    OSL_ENSURE_BIFF( rRoot.GetBiff() == EXC_BIFF8 );
 
     ScDocument& rDoc = rRoot.GetDoc();
     SCTAB nScTab = rRoot.GetCurrScTab();
@@ -1035,7 +1035,7 @@ namespace {
 XclImpDecrypterRef lclReadFilepass5( XclImpStream& rStrm )
 {
     XclImpDecrypterRef xDecr;
-    DBG_ASSERT( rStrm.GetRecLeft() == 4, "lclReadFilepass5 - wrong record size" );
+    OSL_ENSURE( rStrm.GetRecLeft() == 4, "lclReadFilepass5 - wrong record size" );
     if( rStrm.GetRecLeft() == 4 )
     {
         sal_uInt16 nKey, nHash;
@@ -1048,7 +1048,7 @@ XclImpDecrypterRef lclReadFilepass5( XclImpStream& rStrm )
 XclImpDecrypterRef lclReadFilepass8_Standard( XclImpStream& rStrm )
 {
     XclImpDecrypterRef xDecr;
-    DBG_ASSERT( rStrm.GetRecLeft() == 48, "lclReadFilepass8 - wrong record size" );
+    OSL_ENSURE( rStrm.GetRecLeft() == 48, "lclReadFilepass8 - wrong record size" );
     if( rStrm.GetRecLeft() == 48 )
     {
         sal_uInt8 pnSalt[ 16 ];
@@ -1094,13 +1094,13 @@ XclImpDecrypterRef lclReadFilepass8( XclImpStream& rStrm )
                     xDecr = lclReadFilepass8_Strong( rStrm );
                 break;
                 default:
-                    DBG_ERRORFILE( "lclReadFilepass8 - unknown BIFF8 encryption sub mode" );
+                    OSL_FAIL( "lclReadFilepass8 - unknown BIFF8 encryption sub mode" );
             }
         }
         break;
 
         default:
-            DBG_ERRORFILE( "lclReadFilepass8 - unknown encryption mode" );
+            OSL_FAIL( "lclReadFilepass8 - unknown encryption mode" );
     }
 
     return xDecr;

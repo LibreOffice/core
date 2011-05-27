@@ -33,8 +33,6 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <tools/debug.hxx>
-
 #include "consoli.hxx"
 #include "document.hxx"
 #include "olinetab.hxx"
@@ -510,12 +508,12 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
     PutInOrder(nRow1,nRow2);
     if ( nCol2 >= sal::static_int_cast<SCCOL>(nCol1 + nColCount) && !bColByName )
     {
-        DBG_ASSERT(0,"Bereich zu gross");
+        OSL_FAIL("Bereich zu gross");
         nCol2 = sal::static_int_cast<SCCOL>( nCol1 + nColCount - 1 );
     }
     if ( nRow2 >= sal::static_int_cast<SCROW>(nRow1 + nRowCount) && !bRowByName )
     {
-        DBG_ASSERT(0,"Bereich zu gross");
+        OSL_FAIL("Bereich zu gross");
         nRow2 = sal::static_int_cast<SCROW>( nRow1 + nRowCount - 1 );
     }
 
@@ -565,7 +563,7 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
                         nPos = static_cast<SCCOL>(i);
                         bFound = sal_True;
                     }
-                DBG_ASSERT(bFound, "Spalte nicht gefunden");
+                OSL_ENSURE(bFound, "Spalte nicht gefunden");
             }
             pDestCols[nCol-nStartCol] = nPos;
         }
@@ -586,7 +584,7 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
                         nPos = static_cast<SCROW>(i);
                         bFound = sal_True;
                     }
-                DBG_ASSERT(bFound, "Zeile nicht gefunden");
+                OSL_ENSURE(bFound, "Zeile nicht gefunden");
             }
             pDestRows[nRow-nStartRow] = nPos;
         }

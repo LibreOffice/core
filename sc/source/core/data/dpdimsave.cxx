@@ -37,7 +37,6 @@
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 
 #include <svl/zforlist.hxx>
-#include <tools/debug.hxx>
 #include <rtl/math.hxx>
 #include <algorithm>
 
@@ -377,7 +376,7 @@ bool ScDPDimensionSaveData::operator==( const ScDPDimensionSaveData& ) const
 
 void ScDPDimensionSaveData::AddGroupDimension( const ScDPSaveGroupDimension& rGroupDim )
 {
-    DBG_ASSERT( ::std::find_if( maGroupDims.begin(), maGroupDims.end(), ScDPSaveGroupDimNameFunc( rGroupDim.GetGroupDimName() ) ) == maGroupDims.end(),
+    OSL_ENSURE( ::std::find_if( maGroupDims.begin(), maGroupDims.end(), ScDPSaveGroupDimNameFunc( rGroupDim.GetGroupDimName() ) ) == maGroupDims.end(),
         "ScDPDimensionSaveData::AddGroupDimension - group dimension exists already" );
     // ReplaceGroupDimension() adds new or replaces existing
     ReplaceGroupDimension( rGroupDim );
@@ -403,7 +402,7 @@ void ScDPDimensionSaveData::RemoveGroupDimension( const String& rGroupDimName )
 
 void ScDPDimensionSaveData::AddNumGroupDimension( const ScDPSaveNumGroupDimension& rGroupDim )
 {
-    DBG_ASSERT( maNumGroupDims.count( rGroupDim.GetDimensionName() ) == 0,
+    OSL_ENSURE( maNumGroupDims.count( rGroupDim.GetDimensionName() ) == 0,
         "ScDPDimensionSaveData::AddNumGroupDimension - numeric group dimension exists already" );
     // ReplaceNumGroupDimension() adds new or replaces existing
     ReplaceNumGroupDimension( rGroupDim );
@@ -577,7 +576,7 @@ String ScDPDimensionSaveData::CreateDateGroupDimName( sal_Int32 nDatePart, const
         case QUARTERS: aPartName = String::CreateFromAscii( "Quarters" );   break;
         case YEARS:    aPartName = String::CreateFromAscii( "Years" );      break;
     }
-    DBG_ASSERT( aPartName.Len() > 0, "ScDPDimensionSaveData::CreateDateGroupDimName - invalid date part" );
+    OSL_ENSURE( aPartName.Len() > 0, "ScDPDimensionSaveData::CreateDateGroupDimName - invalid date part" );
     return CreateGroupDimName( aPartName, rObject, bAllowSource, pDeletedNames );
 }
 

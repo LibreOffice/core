@@ -159,7 +159,7 @@ bool ScBroadcastAreaSlot::CheckHardRecalcStateCondition() const
             pDoc->SetHardRecalcState( 1 );
 
             SfxObjectShell* pShell = pDoc->GetDocumentShell();
-            DBG_ASSERT( pShell, "Missing DocShell :-/" );
+            OSL_ENSURE( pShell, "Missing DocShell :-/" );
 
             if ( pShell )
                 pShell->SetError( SCWARN_CORE_HARD_RECALC, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
@@ -177,7 +177,7 @@ bool ScBroadcastAreaSlot::StartListeningArea( const ScRange& rRange,
         SvtListener* pListener, ScBroadcastArea*& rpArea )
 {
     bool bNewArea = false;
-    DBG_ASSERT(pListener, "StartListeningArea: pListener Null");
+    OSL_ENSURE(pListener, "StartListeningArea: pListener Null");
     if (CheckHardRecalcStateCondition())
         return false;
     if ( !rpArea )
@@ -199,7 +199,7 @@ bool ScBroadcastAreaSlot::StartListeningArea( const ScRange& rRange,
             }
             else
             {
-                DBG_ERRORFILE("StartListeningArea: area not found and not inserted in slot?!?");
+                OSL_FAIL("StartListeningArea: area not found and not inserted in slot?!?");
                 delete rpArea;
                 rpArea = 0;
             }
@@ -218,7 +218,7 @@ bool ScBroadcastAreaSlot::StartListeningArea( const ScRange& rRange,
 
 void ScBroadcastAreaSlot::InsertListeningArea( ScBroadcastArea* pArea )
 {
-    DBG_ASSERT( pArea, "InsertListeningArea: pArea NULL");
+    OSL_ENSURE( pArea, "InsertListeningArea: pArea NULL");
     if (CheckHardRecalcStateCondition())
         return;
     if (aBroadcastAreaTbl.insert( pArea).second)
@@ -231,7 +231,7 @@ void ScBroadcastAreaSlot::InsertListeningArea( ScBroadcastArea* pArea )
 void ScBroadcastAreaSlot::EndListeningArea( const ScRange& rRange,
         SvtListener* pListener, ScBroadcastArea*& rpArea )
 {
-    DBG_ASSERT(pListener, "EndListeningArea: pListener Null");
+    OSL_ENSURE(pListener, "EndListeningArea: pListener Null");
     if ( !rpArea )
     {
         ScBroadcastAreas::iterator aIter( FindBroadcastArea( rRange));
@@ -256,7 +256,7 @@ void ScBroadcastAreaSlot::EndListeningArea( const ScRange& rRange,
             ScBroadcastAreas::iterator aIter( FindBroadcastArea( rRange));
             if (aIter == aBroadcastAreaTbl.end())
                 return;
-            DBG_ASSERT( *aIter == rpArea, "EndListeningArea: area pointer mismatch");
+            OSL_ENSURE( *aIter == rpArea, "EndListeningArea: area pointer mismatch");
             aBroadcastAreaTbl.erase( aIter);
             if ( !rpArea->DecRef() )
             {
@@ -408,7 +408,7 @@ void ScBroadcastAreaSlot::UpdateRemoveArea( ScBroadcastArea* pArea )
     if (aIter == aBroadcastAreaTbl.end())
         return;
     if (*aIter != pArea)
-        DBG_ERRORFILE( "UpdateRemoveArea: area pointer mismatch");
+        OSL_FAIL( "UpdateRemoveArea: area pointer mismatch");
     else
     {
         aBroadcastAreaTbl.erase( aIter);
@@ -490,7 +490,7 @@ inline SCSIZE ScBroadcastAreaSlotMachine::ComputeSlotOffset(
     SCCOL nCol = rAddress.Col();
     if ( !ValidRow(nRow) || !ValidCol(nCol) )
     {
-        DBG_ERRORFILE( "Row/Col invalid, using first slot!" );
+        OSL_FAIL( "Row/Col invalid, using first slot!" );
         return 0;
     }
     for (size_t i=0; i < aSlotDistribution.size(); ++i)
@@ -503,7 +503,7 @@ inline SCSIZE ScBroadcastAreaSlotMachine::ComputeSlotOffset(
                 static_cast<SCSIZE>(nCol) / BCA_SLOT_COLS * nBcaSlotsRow;
         }
     }
-    DBG_ERRORFILE( "No slot found, using last!" );
+    OSL_FAIL( "No slot found, using last!" );
     return nBcaSlots - 1;
 }
 
@@ -590,7 +590,7 @@ void ScBroadcastAreaSlotMachine::EndListeningArea( const ScRange& rRange,
 {
     if ( rRange == BCA_LISTEN_ALWAYS  )
     {
-        DBG_ASSERT( pBCAlways, "ScBroadcastAreaSlotMachine::EndListeningArea: BCA_LISTEN_ALWAYS but none established");
+        OSL_ENSURE( pBCAlways, "ScBroadcastAreaSlotMachine::EndListeningArea: BCA_LISTEN_ALWAYS but none established");
         if ( pBCAlways )
         {
             pListener->EndListening( *pBCAlways);
@@ -781,7 +781,7 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
             TableSlotsMap::iterator iTab( aTableSlotsMap.find( nTab));
             if (iTab == aTableSlotsMap.end())
             {
-                DBG_ERRORFILE( "UpdateBroadcastAreas: Where's the TableSlot?!?");
+                OSL_FAIL( "UpdateBroadcastAreas: Where's the TableSlot?!?");
                 continue;   // for
             }
             ScBroadcastAreaSlot** ppSlots = (*iTab).second->getSlots();

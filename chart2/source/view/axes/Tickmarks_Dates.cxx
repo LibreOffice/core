@@ -30,7 +30,6 @@
 #include "Tickmarks_Dates.hxx"
 #include "DateScaling.hxx"
 #include <rtl/math.hxx>
-#include <tools/debug.hxx>
 #include "DateHelper.hxx"
 
 //.............................................................................
@@ -56,7 +55,7 @@ DateTickFactory::DateTickFactory(
     if( m_aScale.Scaling.is() )
     {
         m_xInverseScaling = m_aScale.Scaling->getInverseScaling();
-        DBG_ASSERT( m_xInverseScaling.is(), "each Scaling needs to return a inverse Scaling" );
+        OSL_ENSURE( m_xInverseScaling.is(), "each Scaling needs to return a inverse Scaling" );
     }
 
     m_fScaledVisibleMin = m_aScale.Minimum;

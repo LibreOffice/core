@@ -647,7 +647,7 @@ void OP_ApplyPatternArea123( SvStream& rStream )
                         std::map<sal_uInt16, ScPatternAttr>::iterator loc = aLotusPatternPool.find( nData );
 
                         // apparently, files with invalid index occur in the wild -> don't crash then
-                        DBG_ASSERT( loc != aLotusPatternPool.end(), "invalid format index" );
+                        OSL_ENSURE( loc != aLotusPatternPool.end(), "invalid format index" );
                         if ( loc != aLotusPatternPool.end() )
                             pDoc->ApplyPatternAreaTab( nCol, nRow, nCol +  nColCount - 1, nRow + nRowCount - 1, static_cast< SCTAB >( nTab + i ), loc->second );
                     }

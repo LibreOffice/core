@@ -224,7 +224,7 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
         nCurX = MAXCOL;
 
     ScMarkData& rMark = aViewData.GetMarkData();
-    DBG_ASSERT(rMark.IsMarked() || rMark.IsMultiMarked(), "MarkCursor, !IsMarked()");
+    OSL_ENSURE(rMark.IsMarked() || rMark.IsMultiMarked(), "MarkCursor, !IsMarked()");
     ScRange aMarkRange;
     rMark.GetMarkArea(aMarkRange);
     if (( aMarkRange.aStart.Col() != nBlockStartX && aMarkRange.aEnd.Col() != nBlockStartX ) ||
@@ -1094,7 +1094,7 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
                             else
                                 nMax = nTest-1;
                         }
-                        DBG_ASSERT( nMin == nMax, "Schachtelung ist falsch" );
+                        OSL_ENSURE( nMin == nMax, "Schachtelung ist falsch" );
                         nZoom = nMin;
 
                         if ( nZoom != nOldZoom )
@@ -1122,7 +1122,7 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
                                             pStylePool->Find( pDoc->GetPageStyle( nCurTab ),
                                                               SFX_STYLE_FAMILY_PAGE );
 
-                    DBG_ASSERT( pStyleSheet, "PageStyle not found :-/" );
+                    OSL_ENSURE( pStyleSheet, "PageStyle not found :-/" );
 
                     if ( pStyleSheet )
                     {
@@ -1227,7 +1227,7 @@ void ScTabView::MakeDrawLayer()
         aViewData.GetDocShell()->MakeDrawLayer();
 
         //  pDrawView wird per Notify gesetzt
-        DBG_ASSERT(pDrawView,"ScTabView::MakeDrawLayer funktioniert nicht");
+        OSL_ENSURE(pDrawView,"ScTabView::MakeDrawLayer funktioniert nicht");
 
         // #114409#
         for(sal_uInt16 a(0); a < 4; a++)

@@ -126,7 +126,7 @@ public:
 
     void        CloseRefDialog()
     {
-        DBG_ASSERT( false, "should not execute here!!!when the edit kill focus, should remove refhandler.\r\n" );
+        OSL_FAIL( "should not execute here!!!when the edit kill focus, should remove refhandler.\r\n" );
 
         if ( IsInExecute() )
             EndDialog( false );

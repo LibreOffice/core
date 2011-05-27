@@ -55,7 +55,6 @@
 
 #include <editeng/unoprnms.hxx>
 #include <tools/color.hxx>
-#include <tools/debug.hxx>
 #include <rtl/math.hxx>
 #include <svx/svdocirc.hxx>
 #include <svx/svdopath.hxx>
@@ -85,7 +84,7 @@ void ShapeFactory::setShapeName( const uno::Reference< drawing::XShape >& xShape
     if(!xShape.is())
         return;
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    DBG_ASSERT(xProp.is(), "shape offers no XPropertySet");
+    OSL_ENSURE(xProp.is(), "shape offers no XPropertySet");
     if( xProp.is())
     {
         try
@@ -107,7 +106,7 @@ rtl::OUString ShapeFactory::getShapeName( const uno::Reference< drawing::XShape 
     rtl::OUString aRet;
 
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    DBG_ASSERT(xProp.is(), "shape offers no XPropertySet");
+    OSL_ENSURE(xProp.is(), "shape offers no XPropertySet");
     if( xProp.is())
     {
         try
@@ -174,7 +173,7 @@ uno::Reference< drawing::XShapes > ShapeFactory::getOrCreateChartRootShape(
 uno::Any createPolyPolygon_Cube(
             const drawing::Direction3D& rSize, double fRoundedEdge, bool bRounded = true )
 {
-    DBG_ASSERT(fRoundedEdge>=0, "fRoundedEdge needs to be >= 0");
+    OSL_PRECOND(fRoundedEdge>=0, "fRoundedEdge needs to be >= 0");
 
     // always use extra points, so set percent diagonal to 0.4 which is 0% in the UI (old Chart comment)
     if( fRoundedEdge == 0.0  && bRounded)
@@ -267,7 +266,7 @@ uno::Any createPolyPolygon_Cylinder(
            , sal_Int32& nVerticalSegmentCount )
 {
     //fHeight may be negative
-    DBG_ASSERT(fRadius>0, "The radius of a cylinder needs to be > 0");
+    OSL_PRECOND(fRadius>0, "The radius of a cylinder needs to be > 0");
 
     //--------------------------------------
     drawing::PolyPolygonShape3D aPP;
@@ -353,7 +352,7 @@ uno::Any createPolyPolygon_Cylinder(
 uno::Any createPolyPolygon_Cone( double fHeight, double fRadius, double fTopHeight
             , sal_Int32& nVerticalSegmentCount )
 {
-    DBG_ASSERT(fRadius>0, "The radius of a cone needs to be > 0");
+    OSL_PRECOND(fRadius>0, "The radius of a cone needs to be > 0");
 
     //for stacked charts we need cones without top -> fTopHeight != 0 resp. bTopless == true
     //fTopHeight indicates the high of the cutted top only (not the full height)
@@ -490,7 +489,7 @@ uno::Reference<drawing::XShape>
 
     //set properties
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
+    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
     if( xProp.is())
     {
         try
@@ -733,7 +732,7 @@ uno::Reference<drawing::XShape>
 
     //set properties
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
+    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
     if( xProp.is())
     {
         try
@@ -979,7 +978,7 @@ uno::Reference< drawing::XShape >
 
     //set properties
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
+    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
     if( xProp.is())
     {
         try
@@ -1032,7 +1031,7 @@ uno::Reference< drawing::XShape >
 
     //set properties
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
+    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
     if( xProp.is())
     {
         try
@@ -1112,7 +1111,7 @@ uno::Reference< drawing::XShape >
 
     //set properties
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
+    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
     if( xProp.is())
     {
         try
@@ -1171,7 +1170,7 @@ uno::Reference< drawing::XShape >
 
     //set properties
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
+    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
     if( xProp.is())
     {
         try
@@ -1231,7 +1230,7 @@ uno::Reference< drawing::XShape >
 
     //set properties
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
+    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
     if( xProp.is())
     {
         try
@@ -1482,7 +1481,7 @@ uno::Reference< drawing::XShape >
 
     //set properties
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
+    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
     if( xProp.is())
     {
         try
@@ -1544,7 +1543,7 @@ uno::Reference< drawing::XShape >
         ASSERT_EXCEPTION( e );
     }
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
+    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
     if( xProp.is())
     {
         try
@@ -1615,7 +1614,7 @@ uno::Reference< drawing::XShapes >
         {
             //set properties
             uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-            DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
+            OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
             if( xProp.is())
             {
                 try
@@ -1677,7 +1676,7 @@ uno::Reference< drawing::XShape >
 
     //set properties
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
+    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
     if( xProp.is())
     {
         try
@@ -1713,7 +1712,7 @@ uno::Reference< drawing::XShape >
 
     //set properties
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
+    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
     if( xProp.is())
     {
         try
@@ -1774,7 +1773,7 @@ uno::Reference< drawing::XShape >
 
     //set properties
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
+    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
     if( xProp.is())
     {
         try
@@ -1834,7 +1833,7 @@ uno::Any ShapeFactory::makeTransformation( const awt::Point& rScreenPosition2D, 
 void ShapeFactory::makeShapeInvisible( const uno::Reference< drawing::XShape >& xShape )
 {
     uno::Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
-    DBG_ASSERT(xShapeProp.is(), "created shape offers no XPropertySet");
+    OSL_ENSURE(xShapeProp.is(), "created shape offers no XPropertySet");
     if( xShapeProp.is())
     {
         try
@@ -1957,7 +1956,7 @@ bool ShapeFactory::isPolygonEmptyOrSinglePoint( drawing::PolyPolygonShape3D& rPo
 
 void ShapeFactory::closePolygon( drawing::PolyPolygonShape3D& rPoly)
 {
-    DBG_ASSERT( rPoly.SequenceX.getLength() <= 1, "ShapeFactory::closePolygon - single polygon expected" );
+    OSL_ENSURE( rPoly.SequenceX.getLength() <= 1, "ShapeFactory::closePolygon - single polygon expected" );
     //add a last point == first point
     if(isPolygonEmptyOrSinglePoint(rPoly))
         return;

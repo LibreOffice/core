@@ -90,7 +90,7 @@ ScAreaLink::ScAreaLink( SfxObjectShell* pShell, const String& rFile,
     bInCreate       (false),
     bDoInsert       (true)
 {
-    DBG_ASSERT(pShell->ISA(ScDocShell), "ScAreaLink mit falscher ObjectShell");
+    OSL_ENSURE(pShell->ISA(ScDocShell), "ScAreaLink mit falscher ObjectShell");
     pImpl->m_pDocSh = static_cast< ScDocShell* >( pShell );
     SetRefreshHandler( LINK( this, ScAreaLink, RefreshHdl ) );
     SetRefreshControl( pImpl->m_pDocSh->GetDocument()->GetRefreshTimerControlAddress() );
@@ -109,23 +109,23 @@ void ScAreaLink::Edit(Window* pParent, const Link& /* rEndEditHdl */ )
     //  ein Optionen-Dialog kommt...
 
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
     AbstractScLinkedAreaDlg* pDlg = pFact->CreateScLinkedAreaDlg( pParent, RID_SCDLG_LINKAREA);
-    DBG_ASSERT(pDlg, "Dialog create fail!");
+    OSL_ENSURE(pDlg, "Dialog create fail!");
     pDlg->InitFromOldLink( aFileName, aFilterName, aOptions, aSourceArea, GetRefreshDelay() );
     pImpl->m_pDialog = pDlg;
     pDlg->StartExecuteModal( LINK( this, ScAreaLink, AreaEndEditHdl ) );
 }
 
-void ScAreaLink::DataChanged( const String&,
-                                       const ::com::sun::star::uno::Any& )
+::sfx2::SvBaseLink::UpdateResult ScAreaLink::DataChanged(
+    const String&, const ::com::sun::star::uno::Any& )
 {
     //  bei bInCreate nichts tun, damit Update gerufen werden kann, um den Status im
     //  LinkManager zu setzen, ohne die Daten im Dokument zu aendern
 
     if (bInCreate)
-        return;
+        return SUCCESS;
 
     sfx2::LinkManager* pLinkManager=pImpl->m_pDocSh->GetDocument()->GetLinkManager();
     if (pLinkManager!=NULL)
@@ -152,6 +152,8 @@ void ScAreaLink::DataChanged( const String&,
 
         Refresh( aFile, aFilter, aArea, GetRefreshDelay() );
     }
+
+    return SUCCESS;
 }
 
 void ScAreaLink::Closed()

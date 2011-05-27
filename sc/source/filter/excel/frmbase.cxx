@@ -55,7 +55,7 @@ void _ScRangeListTabs::Append( ScSingleRefData a, SCTAB nTab, const bool b )
     }
     else
     {
-        DBG_ASSERT( ValidTab(a.nTab), "-_ScRangeListTabs::Append(): Luegen haben kurze Abstuerze!" );
+        OSL_ENSURE( ValidTab(a.nTab), "-_ScRangeListTabs::Append(): Luegen haben kurze Abstuerze!" );
     }
 
     if( nTab == SCTAB_MAX)
@@ -122,9 +122,9 @@ void _ScRangeListTabs::Append( ScComplexRefData a, SCTAB nTab, bool b )
     }
     else
     {
-        DBG_ASSERT( ValidTab(a.Ref1.nTab),
+        OSL_ENSURE( ValidTab(a.Ref1.nTab),
             "-_ScRangeListTabs::Append(): Luegen haben kurze Abstuerze!" );
-        DBG_ASSERT( a.Ref1.nTab == a.Ref2.nTab,
+        OSL_ENSURE( a.Ref1.nTab == a.Ref2.nTab,
             "+_ScRangeListTabs::Append(): 3D-Ranges werden in SC nicht unterstuetzt!" );
     }
 
@@ -157,7 +157,7 @@ void _ScRangeListTabs::Append( ScComplexRefData a, SCTAB nTab, bool b )
 
 const ScRange* _ScRangeListTabs::First( SCTAB n )
 {
-    DBG_ASSERT( ValidTab(n), "-_ScRangeListTabs::First(): Und tschuessssssss!" );
+    OSL_ENSURE( ValidTab(n), "-_ScRangeListTabs::First(): Und tschuessssssss!" );
 
     TabRangeType::iterator itr = maTabRanges.find(n);
     if (itr == maTabRanges.end())
@@ -184,7 +184,7 @@ ConverterBase::ConverterBase( sal_uInt16 nNewBuffer ) :
     eStatus( ConvOK ),
     nBufferSize( nNewBuffer )
 {
-    DBG_ASSERT( nNewBuffer > 0, "ConverterBase::ConverterBase - nNewBuffer == 0!" );
+    OSL_ENSURE( nNewBuffer > 0, "ConverterBase::ConverterBase - nNewBuffer == 0!" );
     pBuffer = new sal_Char[ nNewBuffer ];
 }
 

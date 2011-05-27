@@ -28,7 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-#include <tools/debug.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <com/sun/star/text/XText.hpp>
@@ -59,7 +58,7 @@ void XMLTableMasterPageExport::exportHeaderFooterContent(
             const Reference< XText >& rText,
             sal_Bool bAutoStyles, sal_Bool bProgress )
 {
-    DBG_ASSERT( rText.is(), "There is the text" );
+    OSL_ENSURE( rText.is(), "There is the text" );
 
     if( bAutoStyles )
         GetExport().GetTextParagraphExport()

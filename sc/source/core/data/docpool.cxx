@@ -396,7 +396,7 @@ ScDocumentPool::~ScDocumentPool()
 
 void ScDocumentPool::InitVersionMaps()
 {
-    DBG_ASSERT( !pVersionMap1 && !pVersionMap2 &&
+    OSL_PRECOND( !pVersionMap1 && !pVersionMap2 &&
                 !pVersionMap3 && !pVersionMap4 &&
                 !pVersionMap5 && !pVersionMap6 &&
                 !pVersionMap7 && !pVersionMap8 &&
@@ -555,7 +555,7 @@ void ScDocumentPool::InitVersionMaps()
 
 void ScDocumentPool::DeleteVersionMaps()
 {
-    DBG_ASSERT( pVersionMap1 && pVersionMap2 &&
+    OSL_PRECOND( pVersionMap1 && pVersionMap2 &&
                 pVersionMap3 && pVersionMap4 &&
                 pVersionMap5 && pVersionMap6 &&
                 pVersionMap7 && pVersionMap8 &&
@@ -637,7 +637,7 @@ void ScDocumentPool::CheckRef( const SfxPoolItem& rItem )
     {
         // beim Apply vom Cache wird evtl. um 2 hochgezaehlt (auf MAX+1 oder SAFE+2),
         // heruntergezaehlt wird nur einzeln (in LoadCompleted)
-        DBG_ASSERT( nRef<=(sal_uLong)SC_MAX_POOLREF+1 || (nRef>=(sal_uLong)SC_SAFE_POOLREF-1 && nRef<=(sal_uLong)SC_SAFE_POOLREF+2),
+        OSL_ENSURE( nRef<=(sal_uLong)SC_MAX_POOLREF+1 || (nRef>=(sal_uLong)SC_SAFE_POOLREF-1 && nRef<=(sal_uLong)SC_SAFE_POOLREF+2),
                 "ScDocumentPool::CheckRef" );
         SetRefCount( (SfxPoolItem&)rItem, (sal_uLong) SC_SAFE_POOLREF );
     }

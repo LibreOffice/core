@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-#include <tools/debug.hxx>
 #include <sal/macros.h>
 #include <svtools/unoimap.hxx>
 #include <svx/unofill.hxx>
@@ -393,7 +392,7 @@ sal_uInt16 ScServiceProvider::GetProviderType(const String& rServiceName)
         sal_uInt16 i;
         for (i=0; i<SC_SERVICE_COUNT; i++)
         {
-            DBG_ASSERT( aOldNames[i], "ScServiceProvider::GetProviderType: no oldname => crash");
+            OSL_ENSURE( aOldNames[i], "ScServiceProvider::GetProviderType: no oldname => crash");
             if (rServiceName.EqualsAscii( aOldNames[i] ))
             {
                 OSL_FAIL("old service name used");

@@ -94,7 +94,7 @@ bool XclTabViewData::HasPane( sal_uInt8 nPaneId ) const
         case EXC_PANE_BOTTOMLEFT:   return mnSplitY > 0;
         case EXC_PANE_TOPLEFT:      return true;
     }
-    DBG_ERRORFILE( "XclExpPane::HasPane - wrong pane ID" );
+    OSL_FAIL( "XclExpPane::HasPane - wrong pane ID" );
     return false;
 }
 

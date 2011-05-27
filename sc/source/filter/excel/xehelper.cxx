@@ -118,10 +118,10 @@ void XclExpProgressBar::IncRowRecordCount()
 
 void XclExpProgressBar::ActivateCreateRowsSegment()
 {
-    DBG_ASSERT( (0 <= GetCurrScTab()) && (GetCurrScTab() < GetTabInfo().GetScTabCount()),
+    OSL_ENSURE( (0 <= GetCurrScTab()) && (GetCurrScTab() < GetTabInfo().GetScTabCount()),
         "XclExpProgressBar::ActivateCreateRowsSegment - invalid sheet" );
     sal_Int32 nSeg = maSubSegRowCreate[ GetCurrScTab() ];
-    DBG_ASSERT( nSeg != SCF_INV_SEGMENT, "XclExpProgressBar::ActivateCreateRowsSegment - invalid segment" );
+    OSL_ENSURE( nSeg != SCF_INV_SEGMENT, "XclExpProgressBar::ActivateCreateRowsSegment - invalid segment" );
     if( nSeg != SCF_INV_SEGMENT )
     {
         mpSubProgress = mpSubRowCreate;
@@ -492,7 +492,7 @@ XclExpStringRef lclCreateFormattedString(
                     }
                     else
                     {
-                        DBG_ERRORFILE( "lclCreateFormattedString - unknown text field" );
+                        OSL_FAIL( "lclCreateFormattedString - unknown text field" );
                         aXclPortionText.Erase();
                     }
                 }
@@ -637,7 +637,7 @@ XclExpStringRef XclExpStringHelper::CreateString(
     }
     else
     {
-        DBG_ERRORFILE( "XclExpStringHelper::CreateString - textbox without para object" );
+        OSL_FAIL( "XclExpStringHelper::CreateString - textbox without para object" );
         // create BIFF dependent empty Excel string
         xString = CreateString( rRoot, EMPTY_STRING, nFlags, nMaxLen );
     }
@@ -863,7 +863,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                                     aParaText.AppendAscii( "&Z&F" );
                                 break;
                                 default:
-                                    DBG_ERRORFILE( "XclExpHFConverter::AppendPortion - unknown file field" );
+                                    OSL_FAIL( "XclExpHFConverter::AppendPortion - unknown file field" );
                             }
                         }
                     }
@@ -1004,7 +1004,7 @@ void lclEncodeDosUrl( XclBiff eBiff, String& rUrl, const String* pTableName = 0 
                 rUrl = pTableName ? EXC_URLSTART_SELFENCODED : EXC_URLSTART_SELF;
             break;
             case EXC_BIFF8:
-                DBG_ASSERT( pTableName, "lclEncodeDosUrl - sheet name required for BIFF8" );
+                OSL_ENSURE( pTableName, "lclEncodeDosUrl - sheet name required for BIFF8" );
                 rUrl = EXC_URLSTART_SELF;
             break;
             default:
@@ -1052,8 +1052,8 @@ void XclExpCachedMatrix::GetDimensions( SCSIZE & nCols, SCSIZE & nRows ) const
 {
     mrMatrix.GetDimensions( nCols, nRows );
 
-    DBG_ASSERT( nCols && nRows, "XclExpCachedMatrix::GetDimensions - empty matrix" );
-    DBG_ASSERT( nCols <= 256, "XclExpCachedMatrix::GetDimensions - too many columns" );
+    OSL_ENSURE( nCols && nRows, "XclExpCachedMatrix::GetDimensions - empty matrix" );
+    OSL_ENSURE( nCols <= 256, "XclExpCachedMatrix::GetDimensions - too many columns" );
 }
 
 sal_Size XclExpCachedMatrix::GetSize() const

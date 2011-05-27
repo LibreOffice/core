@@ -66,7 +66,7 @@ void ScNavigatorControllerItem::StateChanged( sal_uInt16 /* nSID */, SfxItemStat
             {
                 const SfxStringItem* pCellPosItem = PTR_CAST(SfxStringItem, pItem);
 
-                DBG_ASSERT( pCellPosItem, "SfxStringItem expected!" );
+                OSL_ENSURE( pCellPosItem, "SfxStringItem expected!" );
 
                 if ( pCellPosItem )
                 {
@@ -89,7 +89,7 @@ void ScNavigatorControllerItem::StateChanged( sal_uInt16 /* nSID */, SfxItemStat
             {
                 const SfxUInt16Item* pTabItem = PTR_CAST(SfxUInt16Item, pItem);
 
-                DBG_ASSERT( pTabItem, "SfxUInt16Item expected!" );
+                OSL_ENSURE( pTabItem, "SfxUInt16Item expected!" );
 
                 //  Tabelle fuer Basic ist 1-basiert
                 if ( pTabItem && pTabItem->GetValue() )

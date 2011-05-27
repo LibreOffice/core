@@ -236,6 +236,7 @@ public:
     void testDataPilot();
     void testDataPilotFilters();
     void testSheetCopy();
+    void testSheetMove();
     void testExternalRef();
     void testDataArea();
 
@@ -276,14 +277,15 @@ public:
     CPPUNIT_TEST(testDataPilot);
     CPPUNIT_TEST(testDataPilotFilters);
     CPPUNIT_TEST(testSheetCopy);
+#if 0 // Disabled, first problem with ScProgress in ScDocument::MoveTab must be solved
+    CPPUNIT_TEST(testSheetMove);
+#endif
     CPPUNIT_TEST(testExternalRef);
     CPPUNIT_TEST(testDataArea);
     CPPUNIT_TEST(testGraphicsInGroup);
     CPPUNIT_TEST(testStreamValid);
     CPPUNIT_TEST(testFunctionLists);
-#if 0 // Disable because in some cases this test breaks
     CPPUNIT_TEST(testCVEs);
-#endif
     CPPUNIT_TEST(testToggleRefFlag);
     CPPUNIT_TEST_SUITE_END();
 
@@ -291,11 +293,12 @@ private:
     uno::Reference< uno::XComponentContext > m_xContext;
     ScDocument *m_pDoc;
     ScDocShellRef m_xDocShRef;
-    ::rtl::OUString m_aPWDURL;
+    ::rtl::OUString m_aSrcRoot;
 };
 
 Test::Test()
     : m_pDoc(0)
+    , m_aSrcRoot(RTL_CONSTASCII_USTRINGPARAM("file://"))
 {
     m_xContext = cppu::defaultBootstrap_InitialComponentContext();
 
@@ -335,8 +338,14 @@ Test::Test()
     InitVCL(xSM);
     ScDLL::Init();
 
-    oslProcessError err = osl_getProcessWorkingDir(&m_aPWDURL.pData);
-    CPPUNIT_ASSERT_MESSAGE("no PWD!", err == osl_Process_E_None);
+    const char* pSrcRoot = getenv( "SRC_ROOT" );
+    CPPUNIT_ASSERT_MESSAGE("SRC_ROOT env variable not set", pSrcRoot != NULL && pSrcRoot[0] != 0);
+
+#ifdef WNT
+    if (pSrcRoot[1] == ':')
+        m_aSrcRoot += rtl::OUString::createFromAscii( "/" );
+#endif
+    m_aSrcRoot += rtl::OUString::createFromAscii( pSrcRoot );
 }
 
 void Test::setUp()
@@ -579,10 +588,10 @@ void Test::recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL
 void Test::testCVEs()
 {
     recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
-        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/qa/unit/data/qpro/pass")), true);
+        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/calc/sc/qa/unit/data/qpro/pass")), true);
 
     recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
-        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/qa/unit/data/qpro/fail")), false);
+        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/calc/sc/qa/unit/data/qpro/fail")), false);
 }
 
 template<typename Evaluator>
@@ -1233,6 +1242,54 @@ void Test::testSheetCopy()
     CPPUNIT_ASSERT_MESSAGE("rows 5 - 10 should be hidden", bHidden && nRow1 == 5 && nRow2 == 10);
     bHidden = m_pDoc->RowHidden(11, 1, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("rows 11 - maxrow should be visible", !bHidden && nRow1 == 11 && nRow2 == MAXROW);
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testSheetMove()
+{
+    OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("TestTab1"));
+    m_pDoc->InsertTab(0, aTabName);
+    CPPUNIT_ASSERT_MESSAGE("document should have one sheet to begin with.", m_pDoc->GetTableCount() == 1);
+    SCROW nRow1, nRow2;
+    bool bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
+    CPPUNIT_ASSERT_MESSAGE("new sheet should have all rows visible", !bHidden && nRow1 == 0 && nRow2 == MAXROW);
+
+    //test if inserting before another sheet works
+    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("TestTab2")));
+    CPPUNIT_ASSERT_MESSAGE("document should have two sheets", m_pDoc->GetTableCount() == 2);
+    bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
+    CPPUNIT_ASSERT_MESSAGE("new sheet should have all rows visible", !bHidden && nRow1 == 0 && nRow2 == MAXROW);
+
+    // Move and test the result.
+    m_pDoc->MoveTab(0, 1);
+    CPPUNIT_ASSERT_MESSAGE("document now should have two sheets.", m_pDoc->GetTableCount() == 2);
+    bHidden = m_pDoc->RowHidden(0, 1, &nRow1, &nRow2);
+    CPPUNIT_ASSERT_MESSAGE("copied sheet should also have all rows visible as the original.", !bHidden && nRow1 == 0 && nRow2 == MAXROW);
+    String aName;
+    m_pDoc->GetName(0, aName);
+    CPPUNIT_ASSERT_MESSAGE("sheets should have changed places", aName.EqualsAscii("TestTab1"));
+
+    m_pDoc->SetRowHidden(5, 10, 0, true);
+    bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
+    CPPUNIT_ASSERT_MESSAGE("rows 0 - 4 should be visible", !bHidden && nRow1 == 0 && nRow2 == 4);
+    bHidden = m_pDoc->RowHidden(5, 0, &nRow1, &nRow2);
+    CPPUNIT_ASSERT_MESSAGE("rows 5 - 10 should be hidden", bHidden && nRow1 == 5 && nRow2 == 10);
+    bHidden = m_pDoc->RowHidden(11, 0, &nRow1, &nRow2);
+    CPPUNIT_ASSERT_MESSAGE("rows 11 - maxrow should be visible", !bHidden && nRow1 == 11 && nRow2 == MAXROW);
+
+    // Move the sheet once again.
+    m_pDoc->MoveTab(1, 0);
+    CPPUNIT_ASSERT_MESSAGE("document now should have two sheets.", m_pDoc->GetTableCount() == 2);
+    bHidden = m_pDoc->RowHidden(0, 1, &nRow1, &nRow2);
+    CPPUNIT_ASSERT_MESSAGE("rows 0 - 4 should be visible", !bHidden && nRow1 == 0 && nRow2 == 4);
+    bHidden = m_pDoc->RowHidden(5, 1, &nRow1, &nRow2);
+    CPPUNIT_ASSERT_MESSAGE("rows 5 - 10 should be hidden", bHidden && nRow1 == 5 && nRow2 == 10);
+    bHidden = m_pDoc->RowHidden(11, 1, &nRow1, &nRow2);
+    CPPUNIT_ASSERT_MESSAGE("rows 11 - maxrow should be visible", !bHidden && nRow1 == 11 && nRow2 == MAXROW);
+    m_pDoc->GetName(0, aName);
+    CPPUNIT_ASSERT_MESSAGE("sheets should have changed places", aName.EqualsAscii("TestTab2"));
+    m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
 }
 
@@ -1913,7 +1970,7 @@ void Test::testFunctionLists()
     for (sal_uInt32 i = 0; i < n; ++i)
     {
         const formula::IFunctionCategory* pCat = pFuncMgr->getCategory(i);
-//        CPPUNIT_ASSERT_MESSAGE("Unexpected category name", pCat->getName().equalsAscii(aTests[i].Category));
+        CPPUNIT_ASSERT_MESSAGE("Unexpected category name", pCat->getName().equalsAscii(aTests[i].Category));
         sal_uInt32 nFuncCount = pCat->getCount();
         for (sal_uInt32 j = 0; j < nFuncCount; ++j)
         {

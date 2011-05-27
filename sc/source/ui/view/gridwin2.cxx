@@ -207,7 +207,7 @@ void ScGridWindow::DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt
             ScQueryParam aQueryParam;
             SCTAB nSrcTab = 0;
             const ScSheetSourceDesc* pDesc = pDPObj->GetSheetDesc();
-            DBG_ASSERT(pDesc, "no sheet source for filter button");
+            OSL_ENSURE(pDesc, "no sheet source for filter button");
             if (pDesc)
             {
                 aQueryParam = pDesc->GetQueryParam();
@@ -219,12 +219,12 @@ void ScGridWindow::DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt
             aArgSet.Put( ScQueryItem( SCITEM_QUERYDATA, pViewData, &aQueryParam ) );
 
             ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+            OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
             AbstractScPivotFilterDlg* pDlg = pFact->CreateScPivotFilterDlg( pViewData->GetViewShell()->GetDialogParent(),
                                                                             aArgSet, nSrcTab,
                                                                             RID_SCDLG_PIVOTFILTER);
-            DBG_ASSERT(pDlg, "Dialog create fail!");
+            OSL_ENSURE(pDlg, "Dialog create fail!");
             if ( pDlg->Execute() == RET_OK )
             {
                 ScSheetSourceDesc aNewDesc(pDoc);
@@ -258,7 +258,7 @@ void ScGridWindow::DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt
 
 void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, sal_Bool bMove )
 {
-    DBG_ASSERT(pDragDPObj, "pDragDPObj missing");
+    OSL_ENSURE(pDragDPObj, "pDragDPObj missing");
 
     //  scroll window if at edges
     //! move this to separate method

@@ -993,7 +993,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScStyleFamilyObj::getElementNames()
         sal_uInt16 nPos = 0;
         while (pStyle)
         {
-            DBG_ASSERT( nPos<nCount, "Anzahl durcheinandergekommen" );
+            OSL_ENSURE( nPos<nCount, "Anzahl durcheinandergekommen" );
             if (nPos<nCount)
                 pAry[nPos++] = ScStyleNameConversion::DisplayToProgrammaticName(
                                     pStyle->GetName(), sal::static_int_cast<sal_uInt16>(eFamily) );

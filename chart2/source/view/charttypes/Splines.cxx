@@ -37,9 +37,6 @@
 #include <algorithm>
 #include <functional>
 
-// header for DBG_ASSERT
-#include <tools/debug.hxx>
-
 //.............................................................................
 namespace chart
 {
@@ -207,7 +204,7 @@ void lcl_SplineCalculation::Calculate()
 
 double lcl_SplineCalculation::GetInterpolatedValue( double x )
 {
-    DBG_ASSERT( ( m_aPoints[ 0 ].first <= x ) &&
+    OSL_PRECOND( ( m_aPoints[ 0 ].first <= x ) &&
                 ( x <= m_aPoints[ m_aPoints.size() - 1 ].first ),
                 "Trying to extrapolate" );
 
@@ -236,12 +233,12 @@ double lcl_SplineCalculation::GetInterpolatedValue( double x )
             ++m_nKHigh;
             ++m_nKLow;
         }
-        DBG_ASSERT( m_nKHigh <= n, "Out of Bounds" );
+        OSL_ENSURE( m_nKHigh <= n, "Out of Bounds" );
     }
     m_fLastInterpolatedValue = x;
 
     double h = m_aPoints[ m_nKHigh ].first - m_aPoints[ m_nKLow ].first;
-    DBG_ASSERT( h != 0, "Bad input to GetInterpolatedValue()" );
+    OSL_ENSURE( h != 0, "Bad input to GetInterpolatedValue()" );
 
     double a = ( m_aPoints[ m_nKHigh ].first - x ) / h;
     double b = ( x - m_aPoints[ m_nKLow ].first  ) / h;
@@ -313,7 +310,7 @@ void SplineCalculater::CalculateCubicSplines(
     , drawing::PolyPolygonShape3D& rResult
     , sal_Int32 nGranularity )
 {
-    DBG_ASSERT( nGranularity > 0, "Granularity is invalid" );
+    OSL_PRECOND( nGranularity > 0, "Granularity is invalid" );
 
     rResult.SequenceX.realloc(0);
     rResult.SequenceY.realloc(0);

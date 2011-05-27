@@ -336,7 +336,7 @@ void ScFuncDesc::initArgumentInfo()  const
 
         if ( bIncomplete )
         {
-            DBG_ERRORFILE( "couldn't initialize add-in function" );
+            OSL_FAIL( "couldn't initialize add-in function" );
             const_cast<ScFuncDesc*>(this)->bIncomplete = false;         // even if there was an error, don't try again
         }
     }
@@ -642,7 +642,7 @@ sal_uInt32 ScFunctionCategory::getNumber() const
 ScFunctionMgr::ScFunctionMgr() :
     pFuncList( ScGlobal::GetStarCalcFunctionList() )
 {
-    DBG_ASSERT( pFuncList, "Functionlist not found." );
+    OSL_ENSURE( pFuncList, "Functionlist not found." );
     sal_uInt32 catCount[MAX_FUNCCAT] = {0};
 
     aCatLists[0] = new ::std::vector<const ScFuncDesc*>();
@@ -652,7 +652,7 @@ ScFunctionMgr::ScFunctionMgr() :
     // number of functions in each category
     for(const ScFuncDesc* pDesc = pFuncList->First(); pDesc; pDesc = pFuncList->Next())
     {
-        DBG_ASSERT((pDesc->nCategory) < MAX_FUNCCAT, "Unknown category");
+        OSL_ENSURE((pDesc->nCategory) < MAX_FUNCCAT, "Unknown category");
         if ((pDesc->nCategory) < MAX_FUNCCAT)
             ++catCount[pDesc->nCategory];
         aCatLists[0]->push_back(pDesc);
@@ -714,7 +714,7 @@ const ScFuncDesc* ScFunctionMgr::Get( sal_uInt16 nFIndex ) const
 
 const ScFuncDesc* ScFunctionMgr::First( sal_uInt16 nCategory ) const
 {
-    DBG_ASSERT( nCategory < MAX_FUNCCAT, "Unbekannte Kategorie" );
+    OSL_ENSURE( nCategory < MAX_FUNCCAT, "Unbekannte Kategorie" );
     const ScFuncDesc* pDesc = NULL;
     if ( nCategory < MAX_FUNCCAT )
     {

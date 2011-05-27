@@ -150,7 +150,7 @@ ScPrintAreasDlg::ScPrintAreasDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* 
     ScTabViewShell* pScViewSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
     ScDocShell*     pScDocSh  = PTR_CAST( ScDocShell,     SfxObjectShell::Current() );
 
-    DBG_ASSERT( pScDocSh, "Current DocumentShell not found :-(" );
+    OSL_ENSURE( pScDocSh, "Current DocumentShell not found :-(" );
 
     pDoc = pScDocSh->GetDocument();
 

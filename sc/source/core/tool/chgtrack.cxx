@@ -30,7 +30,6 @@
 #include "precompiled_sc.hxx"
 
 
-#include <tools/debug.hxx>
 #include <tools/shl.hxx>        // SHL_CALC
 #include <tools/stack.hxx>
 #include <tools/rtti.hxx>
@@ -581,7 +580,7 @@ void ScChangeAction::RejectRestoreContents( ScChangeTrack* pTrack,
     }
     SetState( SC_CAS_REJECTED );        // vor UpdateReference fuer Move
     pTrack->UpdateReference( this, sal_True );      // LinkDeleted freigeben
-    DBG_ASSERT( !pLinkDeleted, "ScChangeAction::RejectRestoreContents: pLinkDeleted != NULL" );
+    OSL_ENSURE( !pLinkDeleted, "ScChangeAction::RejectRestoreContents: pLinkDeleted != NULL" );
     // Liste der Contents abarbeiten und loeschen
     ScDocument* pDoc = pTrack->GetDocument();
     ScChangeActionCellListEntry* pE = pListContents;
@@ -605,7 +604,7 @@ void ScChangeAction::SetDeletedInThis( sal_uLong nActionNumber,
     if ( nActionNumber )
     {
         ScChangeAction* pAct = pTrack->GetActionOrGenerated( nActionNumber );
-        DBG_ASSERT( pAct, "ScChangeAction::SetDeletedInThis: missing Action" );
+        OSL_ENSURE( pAct, "ScChangeAction::SetDeletedInThis: missing Action" );
         if ( pAct )
             pAct->SetDeletedIn( this );
     }
@@ -618,7 +617,7 @@ void ScChangeAction::AddDependent( sal_uLong nActionNumber,
     if ( nActionNumber )
     {
         ScChangeAction* pAct = pTrack->GetActionOrGenerated( nActionNumber );
-        DBG_ASSERT( pAct, "ScChangeAction::AddDependent: missing Action" );
+        OSL_ENSURE( pAct, "ScChangeAction::AddDependent: missing Action" );
         if ( pAct )
         {
             ScChangeActionLinkEntry* pLink = AddDependent( pAct );
@@ -1378,7 +1377,7 @@ void ScChangeActionContent::SetOldNewCells( ScBaseCell* pOldCellP,
 
 void ScChangeActionContent::SetNewCell( ScBaseCell* pCell, ScDocument* pDoc, const String& rFormatted )
 {
-    DBG_ASSERT( !pNewCell, "ScChangeActionContent::SetNewCell: overwriting existing cell" );
+    OSL_ENSURE( !pNewCell, "ScChangeActionContent::SetNewCell: overwriting existing cell" );
     pNewCell = pCell;
     ScChangeActionContent::SetCell( aNewValue, pNewCell, 0, pDoc );
 
@@ -1824,7 +1823,7 @@ void ScChangeActionContent::PutValueToDoc( ScBaseCell* pCell,
                             SCCOL nC;
                             SCROW nR;
                             ((const ScFormulaCell*)pCell)->GetMatColsRows( nC, nR );
-                            DBG_ASSERT( nC>0 && nR>0, "ScChangeActionContent::PutValueToDoc: MatColsRows?" );
+                            OSL_ENSURE( nC>0 && nR>0, "ScChangeActionContent::PutValueToDoc: MatColsRows?" );
                             ScRange aRange( aPos );
                             if ( nC > 1 )
                                 aRange.aEnd.IncCol( nC-1 );
@@ -2909,7 +2908,7 @@ void ScChangeTrack::Dependencies( ScChangeAction* pAct )
             }
             else
             {
-                DBG_ERRORFILE( "ScChangeTrack::Dependencies: MatOrg not found" );
+                OSL_FAIL( "ScChangeTrack::Dependencies: MatOrg not found" );
             }
         }
     }
@@ -3131,7 +3130,7 @@ void ScChangeTrack::Undo( sal_uLong nStartAction, sal_uLong nEndAction, bool bMe
                                 ScChangeAction* pCut = aPasteCutTable.Remove( nCut );
                                 if ( pCut )
                                 {
-                                    DBG_ASSERT( !aTable.Get( nCut ), "ScChangeTrack::Undo: nCut dup" );
+                                    OSL_ENSURE( !aTable.Get( nCut ), "ScChangeTrack::Undo: nCut dup" );
                                     Append( pCut, nCut );
                                 }
                                 else
@@ -4080,7 +4079,7 @@ sal_Bool ScChangeTrack::SelectContent( ScChangeAction* pAct, sal_Bool bOldest )
                 }
                 else
                 {
-                    DBG_ERRORFILE( "ScChangeTrack::SelectContent: content dependent no content" );
+                    OSL_FAIL( "ScChangeTrack::SelectContent: content dependent no content" );
                 }
             }
             pL = pL->GetNext();
@@ -4178,7 +4177,7 @@ sal_Bool ScChangeTrack::Reject( ScChangeAction* pAct, ScChangeActionTable* pTabl
     {
         if ( pAct->HasDependent() && !bRecursion )
         {
-            DBG_ASSERT( pTable, "ScChangeTrack::Reject: Insert ohne Table" );
+            OSL_ENSURE( pTable, "ScChangeTrack::Reject: Insert ohne Table" );
             for ( ScChangeAction* p = pTable->Last(); p && bOk; p = pTable->Prev() )
             {
                 // keine Contents restoren, die eh geloescht werden wuerden
@@ -4199,7 +4198,7 @@ sal_Bool ScChangeTrack::Reject( ScChangeAction* pAct, ScChangeActionTable* pTabl
     }
     else if ( pAct->IsDeleteType() )
     {
-        DBG_ASSERT( !pTable, "ScChangeTrack::Reject: Delete mit Table" );
+        OSL_ENSURE( !pTable, "ScChangeTrack::Reject: Delete mit Table" );
         ScBigRange aDelRange;
         sal_uLong nRejectAction = pAct->GetActionNumber();
         sal_Bool bTabDel, bTabDelOk;
@@ -4294,7 +4293,7 @@ sal_Bool ScChangeTrack::Reject( ScChangeAction* pAct, ScChangeActionTable* pTabl
     {
         if ( pAct->HasDependent() && !bRecursion )
         {
-            DBG_ASSERT( pTable, "ScChangeTrack::Reject: Move ohne Table" );
+            OSL_ENSURE( pTable, "ScChangeTrack::Reject: Move ohne Table" );
             for ( ScChangeAction* p = pTable->Last(); p && bOk; p = pTable->Prev() )
             {
                 bOk = Reject( p, NULL, sal_True );      //! rekursiv
@@ -4392,7 +4391,7 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
         pGenerated = aGeneratedStack.top();
         aGeneratedStack.pop();
         const ScChangeActionContent* pContent = dynamic_cast< const ScChangeActionContent* >( pGenerated );
-        DBG_ASSERT( pContent, "ScChangeTrack::Clone: pContent is null!" );
+        OSL_ENSURE( pContent, "ScChangeTrack::Clone: pContent is null!" );
         const ScBaseCell* pNewCell = pContent->GetNewCell();
         if ( pNewCell )
         {
@@ -4432,7 +4431,7 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
             case SC_CAT_DELETE_TABS:
                 {
                     const ScChangeActionDel* pDelete = dynamic_cast< const ScChangeActionDel* >( pAction );
-                    DBG_ASSERT( pDelete, "ScChangeTrack::Clone: pDelete is null!" );
+                    OSL_ENSURE( pDelete, "ScChangeTrack::Clone: pDelete is null!" );
 
                     SCsCOLROW nD = 0;
                     ScChangeActionType eType = pAction->GetType();
@@ -4461,7 +4460,7 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
             case SC_CAT_MOVE:
                 {
                     const ScChangeActionMove* pMove = dynamic_cast< const ScChangeActionMove* >( pAction );
-                    DBG_ASSERT( pMove, "ScChangeTrack::Clone: pMove is null!" );
+                    OSL_ENSURE( pMove, "ScChangeTrack::Clone: pMove is null!" );
 
                     pClonedAction = new ScChangeActionMove(
                         pAction->GetActionNumber(),
@@ -4478,7 +4477,7 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
             case SC_CAT_CONTENT:
                 {
                     const ScChangeActionContent* pContent = dynamic_cast< const ScChangeActionContent* >( pAction );
-                    DBG_ASSERT( pContent, "ScChangeTrack::Clone: pContent is null!" );
+                    OSL_ENSURE( pContent, "ScChangeTrack::Clone: pContent is null!" );
                     const ScBaseCell* pOldCell = pContent->GetOldCell();
                     ScBaseCell* pClonedOldCell = pOldCell ? pOldCell->CloneWithoutNote( *pDocument ) : 0;
                     String aOldValue;

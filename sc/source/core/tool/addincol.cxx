@@ -32,7 +32,6 @@
 
 
 #include <comphelper/processfactory.hxx>
-#include <tools/debug.hxx>
 #include <i18npool/mslangid.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/objsh.hxx>
@@ -159,7 +158,7 @@ const uno::Sequence<sheet::LocalizedName>& ScUnoAddInFuncData::GetCompNames() co
 
 void ScUnoAddInFuncData::SetCompNames( const uno::Sequence< sheet::LocalizedName>& rNew )
 {
-    DBG_ASSERT( !bCompInitialized, "SetCompNames after initializing" );
+    OSL_ENSURE( !bCompInitialized, "SetCompNames after initializing" );
 
     aCompNames = rNew;
 
@@ -303,7 +302,7 @@ uno::Reference<uno::XComponentContext> getContext(uno::Reference<lang::XMultiSer
 
 void ScUnoAddInCollection::Initialize()
 {
-    DBG_ASSERT( !bInitialized, "Initialize twice?" );
+    OSL_ENSURE( !bInitialized, "Initialize twice?" );
 
     uno::Reference<lang::XMultiServiceFactory> xManager = comphelper::getProcessServiceFactory();
     uno::Reference<container::XContentEnumerationAccess> xEnAc( xManager, uno::UNO_QUERY );
@@ -1007,7 +1006,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                                     pVisibleArgs[nDestPos++] = aDesc;
                                                 }
                                             }
-                                            DBG_ASSERT( nDestPos==nVisibleCount, "wrong count" );
+                                            OSL_ENSURE( nDestPos==nVisibleCount, "wrong count" );
                                         }
 
                                         ppFuncData[nFuncPos+nOld] = new ScUnoAddInFuncData(
@@ -1189,7 +1188,7 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
                                             pVisibleArgs[nDestPos++] = aDesc;
                                         }
                                     }
-                                    DBG_ASSERT( nDestPos==nVisibleCount, "wrong count" );
+                                    OSL_ENSURE( nDestPos==nVisibleCount, "wrong count" );
                                 }
 
                                 pOldData->SetFunction( xFunc, aObject );
@@ -1385,7 +1384,7 @@ ScUnoAddInCall::ScUnoAddInCall( ScUnoAddInCollection& rColl, const String& rName
     xMatrix( NULL )
 {
     pFuncData = rColl.GetFuncData( rName, true );           // need fully initialized data
-    DBG_ASSERT( pFuncData, "Function Data missing" );
+    OSL_ENSURE( pFuncData, "Function Data missing" );
     if ( pFuncData )
     {
         long nDescCount = pFuncData->GetArgumentCount();
@@ -1497,7 +1496,7 @@ void ScUnoAddInCall::ExecuteCall()
         //  insert aVarArg as last argument
         //! after inserting caller (to prevent copying twice)?
 
-        DBG_ASSERT( aArgs.getLength() == nCount, "wrong argument count" );
+        OSL_ENSURE( aArgs.getLength() == nCount, "wrong argument count" );
         aArgs.getArray()[nCount-1] <<= aVarArg;
     }
 

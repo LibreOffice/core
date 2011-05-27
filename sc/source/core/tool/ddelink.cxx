@@ -132,12 +132,12 @@ void ScDdeLink::Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
     rHdr.EndEntry();
 }
 
-void ScDdeLink::DataChanged( const String& rMimeType,
-                                const ::com::sun::star::uno::Any & rValue )
+sfx2::SvBaseLink::UpdateResult ScDdeLink::DataChanged(
+    const String& rMimeType, const ::com::sun::star::uno::Any & rValue )
 {
     //  wir koennen nur Strings...
     if ( FORMAT_STRING != SotExchange::GetFormatIdFromMimeType( rMimeType ))
-        return;
+        return SUCCESS;
 
     String aLinkStr;
     ScByteSequenceToString::GetString( aLinkStr, rValue, DDE_TXT_ENCODING );
@@ -225,6 +225,8 @@ void ScDdeLink::DataChanged( const String& rMimeType,
         aHint.SetDdeLink( aAppl, aTopic, aItem, nMode );
         pDoc->BroadcastUno( aHint );
     }
+
+    return SUCCESS;
 }
 
 void ScDdeLink::ResetValue()

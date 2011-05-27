@@ -31,7 +31,6 @@
 
 #include <boost/bind.hpp>
 
-#include <tools/debug.hxx>
 #include <rtl/uuid.h>
 #include <vcl/svapp.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -237,7 +236,7 @@ void ScTableConditionalFormat::FillFormat( ScConditionalFormat& rFormat,
 {
     //  ScConditionalFormat = Core-Struktur, muss leer sein
 
-    DBG_ASSERT( rFormat.IsEmpty(), "FillFormat: Format nicht leer" );
+    OSL_ENSURE( rFormat.IsEmpty(), "FillFormat: Format nicht leer" );
 
     std::vector<ScTableConditionalEntry*>::const_iterator iter;
     for (iter = aEntries.begin(); iter != aEntries.end(); ++iter)

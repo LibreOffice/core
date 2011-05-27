@@ -240,7 +240,7 @@ void ScHTMLLayoutParser::EntryEnd( ScEEParseEntry* pE, const ESelection& rSel )
     }
     else
     {
-        DBG_ERRORFILE( "EntryEnd: EditEngine ESelection End < Start" );
+        OSL_FAIL( "EntryEnd: EditEngine ESelection End < Start" );
     }
 }
 
@@ -260,7 +260,7 @@ void ScHTMLLayoutParser::NextRow( ImportInfo* pInfo )
 sal_Bool ScHTMLLayoutParser::SeekOffset( ScHTMLColOffset* pOffset, sal_uInt16 nOffset,
         SCCOL* pCol, sal_uInt16 nOffsetTol )
 {
-    DBG_ASSERT( pOffset, "ScHTMLLayoutParser::SeekOffset - illegal call" );
+    OSL_ENSURE( pOffset, "ScHTMLLayoutParser::SeekOffset - illegal call" );
     sal_uInt16 nPos;
     sal_Bool bFound = pOffset->Seek_Entry( nOffset, &nPos );
     *pCol = static_cast<SCCOL>(nPos);
@@ -285,7 +285,7 @@ sal_Bool ScHTMLLayoutParser::SeekOffset( ScHTMLColOffset* pOffset, sal_uInt16 nO
 void ScHTMLLayoutParser::MakeCol( ScHTMLColOffset* pOffset, sal_uInt16& nOffset,
         sal_uInt16& nWidth, sal_uInt16 nOffsetTol, sal_uInt16 nWidthTol )
 {
-    DBG_ASSERT( pOffset, "ScHTMLLayoutParser::MakeCol - illegal call" );
+    OSL_ENSURE( pOffset, "ScHTMLLayoutParser::MakeCol - illegal call" );
     SCCOL nPos;
     if ( SeekOffset( pOffset, nOffset, &nPos, nOffsetTol ) )
         nOffset = (sal_uInt16)(*pOffset)[nPos];
@@ -304,7 +304,7 @@ void ScHTMLLayoutParser::MakeCol( ScHTMLColOffset* pOffset, sal_uInt16& nOffset,
 void ScHTMLLayoutParser::MakeColNoRef( ScHTMLColOffset* pOffset, sal_uInt16 nOffset,
         sal_uInt16 nWidth, sal_uInt16 nOffsetTol, sal_uInt16 nWidthTol )
 {
-    DBG_ASSERT( pOffset, "ScHTMLLayoutParser::MakeColNoRef - illegal call" );
+    OSL_ENSURE( pOffset, "ScHTMLLayoutParser::MakeColNoRef - illegal call" );
     SCCOL nPos;
     if ( SeekOffset( pOffset, nOffset, &nPos, nOffsetTol ) )
         nOffset = (sal_uInt16)(*pOffset)[nPos];
@@ -321,7 +321,7 @@ void ScHTMLLayoutParser::MakeColNoRef( ScHTMLColOffset* pOffset, sal_uInt16 nOff
 void ScHTMLLayoutParser::ModifyOffset( ScHTMLColOffset* pOffset, sal_uInt16& nOldOffset,
             sal_uInt16& nNewOffset, sal_uInt16 nOffsetTol )
 {
-    DBG_ASSERT( pOffset, "ScHTMLLayoutParser::ModifyOffset - illegal call" );
+    OSL_ENSURE( pOffset, "ScHTMLLayoutParser::ModifyOffset - illegal call" );
     SCCOL nPos;
     if ( !SeekOffset( pOffset, nOldOffset, &nPos, nOffsetTol ) )
     {
@@ -646,7 +646,7 @@ void ScHTMLLayoutParser::SetWidths()
                 if ( pE->nTab == nTable )
                 {
                     nCol = pE->nCol - nColCntStart;
-                    DBG_ASSERT( nCol < nColsPerRow, "ScHTMLLayoutParser::SetWidths: column overflow" );
+                    OSL_ENSURE( nCol < nColsPerRow, "ScHTMLLayoutParser::SetWidths: column overflow" );
                     if ( nCol < nColsPerRow )
                     {
                         pE->nOffset = pOffsets[nCol];
@@ -676,7 +676,7 @@ void ScHTMLLayoutParser::SetWidths()
             if ( !pE->nWidth )
             {
                 pE->nWidth = GetWidth( pE );
-                DBG_ASSERT( pE->nWidth, "SetWidths: pE->nWidth == 0" );
+                OSL_ENSURE( pE->nWidth, "SetWidths: pE->nWidth == 0" );
             }
             MakeCol( pColOffset, pE->nOffset, pE->nWidth, nOffsetTolerance, nOffsetTolerance );
         }
@@ -755,7 +755,7 @@ void ScHTMLLayoutParser::CloseEntry( ImportInfo* pInfo )
     }
     if ( rSel.nStartPara > rSel.nEndPara )
     {   // gibt GPF in CreateTextObject
-        DBG_ERRORFILE( "CloseEntry: EditEngine ESelection Start > End" );
+        OSL_FAIL( "CloseEntry: EditEngine ESelection Start > End" );
         rSel.nEndPara = rSel.nStartPara;
     }
     if ( rSel.HasRange() )
@@ -806,7 +806,7 @@ IMPL_LINK( ScHTMLLayoutParser, HTMLImportHdl, ImportInfo*, pInfo )
         case HTMLIMP_INSERTFIELD:
             break;
         default:
-            DBG_ERRORFILE("HTMLImportHdl: unknown ImportInfo.eState");
+            OSL_FAIL("HTMLImportHdl: unknown ImportInfo.eState");
     }
     return 0;
 }
@@ -1279,7 +1279,7 @@ void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
     }
     if ( !pImage->aURL.Len() )
     {
-        DBG_ERRORFILE( "Image: Grafik ohne URL ?!?" );
+        OSL_FAIL( "Image: Grafik ohne URL ?!?" );
         return ;
     }
 
@@ -1703,7 +1703,7 @@ void ScHTMLEntry::AdjustStart( const ImportInfo& rInfo )
 
 void ScHTMLEntry::AdjustEnd( const ImportInfo& rInfo )
 {
-    DBG_ASSERT( (aSel.nEndPara < rInfo.aSelection.nEndPara) ||
+    OSL_ENSURE( (aSel.nEndPara < rInfo.aSelection.nEndPara) ||
                 ((aSel.nEndPara == rInfo.aSelection.nEndPara) && (aSel.nEndPos <= rInfo.aSelection.nEndPos)),
                 "ScHTMLQueryParser::AdjustEntryEnd - invalid end position" );
     // set end position
@@ -1954,14 +1954,14 @@ ScHTMLTable* ScHTMLTable::FindNestedTable( ScHTMLTableId nTableId ) const
 
 void ScHTMLTable::PutItem( const SfxPoolItem& rItem )
 {
-    DBG_ASSERT( mxCurrEntry.get(), "ScHTMLTable::PutItem - no current entry" );
+    OSL_ENSURE( mxCurrEntry.get(), "ScHTMLTable::PutItem - no current entry" );
     if( mxCurrEntry.get() && mxCurrEntry->IsEmpty() )
         mxCurrEntry->GetItemSet().Put( rItem );
 }
 
 void ScHTMLTable::PutText( const ImportInfo& rInfo )
 {
-    DBG_ASSERT( mxCurrEntry.get(), "ScHTMLTable::PutText - no current entry" );
+    OSL_ENSURE( mxCurrEntry.get(), "ScHTMLTable::PutText - no current entry" );
     if( mxCurrEntry.get() )
     {
         if( !mxCurrEntry->HasContents() && IsSpaceCharInfo( rInfo ) )
@@ -2000,7 +2000,7 @@ void ScHTMLTable::InsertLeadingEmptyLine()
 
 void ScHTMLTable::AnchorOn()
 {
-    DBG_ASSERT( mxCurrEntry.get(), "ScHTMLTable::AnchorOn - no current entry" );
+    OSL_ENSURE( mxCurrEntry.get(), "ScHTMLTable::AnchorOn - no current entry" );
     // don't skip entries with single hyperlinks
     if( mxCurrEntry.get() )
         mxCurrEntry->SetImportAlways();
@@ -2185,7 +2185,7 @@ void ScHTMLTable::GetDocRange( ScRange& rRange ) const
 
 void ScHTMLTable::ApplyCellBorders( ScDocument* pDoc, const ScAddress& rFirstPos ) const
 {
-    DBG_ASSERT( pDoc, "ScHTMLTable::ApplyCellBorders - no document" );
+    OSL_ENSURE( pDoc, "ScHTMLTable::ApplyCellBorders - no document" );
     if( pDoc && mbBorderOn )
     {
         const SCCOL nLastCol = maSize.mnCols - 1;
@@ -2246,7 +2246,7 @@ ScHTMLTable::ScHTMLEntryPtr ScHTMLTable::CreateEntry() const
 
 void ScHTMLTable::CreateNewEntry( const ImportInfo& rInfo )
 {
-    DBG_ASSERT( !mxCurrEntry.get(), "ScHTMLTable::CreateNewEntry - old entry still present" );
+    OSL_ENSURE( !mxCurrEntry.get(), "ScHTMLTable::CreateNewEntry - old entry still present" );
     mxCurrEntry = CreateEntry();
     mxCurrEntry->aSel = rInfo.aSelection;
 }
@@ -2281,7 +2281,7 @@ bool ScHTMLTable::PushEntry( ScHTMLEntryPtr& rxEntry )
         }
         else
         {
-            DBG_ERRORFILE( "ScHTMLTable::PushEntry - cannot push entry, no parent found" );
+            OSL_FAIL( "ScHTMLTable::PushEntry - cannot push entry, no parent found" );
         }
     }
     return bPushed;
@@ -2289,7 +2289,7 @@ bool ScHTMLTable::PushEntry( ScHTMLEntryPtr& rxEntry )
 
 bool ScHTMLTable::PushEntry( const ImportInfo& rInfo, bool bLastInCell )
 {
-    DBG_ASSERT( mxCurrEntry.get(), "ScHTMLTable::PushEntry - no current entry" );
+    OSL_ENSURE( mxCurrEntry.get(), "ScHTMLTable::PushEntry - no current entry" );
     bool bPushed = false;
     if( mxCurrEntry.get() )
     {
@@ -2313,7 +2313,7 @@ bool ScHTMLTable::PushEntry( const ImportInfo& rInfo, bool bLastInCell )
 
 bool ScHTMLTable::PushTableEntry( ScHTMLTableId nTableId )
 {
-    DBG_ASSERT( nTableId != SC_HTML_GLOBAL_TABLE, "ScHTMLTable::PushTableEntry - cannot push global table" );
+    OSL_ENSURE( nTableId != SC_HTML_GLOBAL_TABLE, "ScHTMLTable::PushTableEntry - cannot push global table" );
     bool bPushed = false;
     if( nTableId != SC_HTML_GLOBAL_TABLE )
     {
@@ -2327,7 +2327,7 @@ ScHTMLTable* ScHTMLTable::GetExistingTable( ScHTMLTableId nTableId ) const
 {
     ScHTMLTable* pTable = ((nTableId != SC_HTML_GLOBAL_TABLE) && mxNestedTables.get()) ?
         mxNestedTables->FindTable( nTableId, false ) : 0;
-    DBG_ASSERT( pTable || (nTableId == SC_HTML_GLOBAL_TABLE), "ScHTMLTable::GetExistingTable - table not found" );
+    OSL_ENSURE( pTable || (nTableId == SC_HTML_GLOBAL_TABLE), "ScHTMLTable::GetExistingTable - table not found" );
     return pTable;
 }
 
@@ -2483,7 +2483,7 @@ void ScHTMLTable::ProcessFormatOptions( SfxItemSet& rItemSet, const ImportInfo& 
 
 void ScHTMLTable::SetDocSize( ScHTMLOrient eOrient, SCCOLROW nCellPos, SCCOLROW nSize )
 {
-    DBG_ASSERT( nCellPos >= 0, "ScHTMLTable::SetDocSize - unexpected negative position" );
+    OSL_ENSURE( nCellPos >= 0, "ScHTMLTable::SetDocSize - unexpected negative position" );
     ScSizeVec& rSizes = maCumSizes[ eOrient ];
     size_t nIndex = static_cast< size_t >( nCellPos );
     // expand with height/width == 1
@@ -2988,7 +2988,7 @@ IMPL_LINK( ScHTMLQueryParser, HTMLImportHdl, const ImportInfo*, pInfo )
         break;
 
         default:
-            DBG_ERRORFILE( "ScHTMLQueryParser::HTMLImportHdl - unknown ImportInfo::eState" );
+            OSL_FAIL( "ScHTMLQueryParser::HTMLImportHdl - unknown ImportInfo::eState" );
     }
     return 0;
 }

@@ -329,7 +329,7 @@ Size ScTabViewShell::GetOptimalSizePixel() const
                                         pDoc->GetPageStyle( nCurTab ),
                                         SFX_STYLE_FAMILY_PAGE );
 
-    DBG_ASSERT( pStyleSheet, "PageStyle not found :-/" );
+    OSL_ENSURE( pStyleSheet, "PageStyle not found :-/" );
 
     if ( pStyleSheet )
     {
@@ -1100,7 +1100,7 @@ sal_uInt16 ScTabViewShell::SetPrinter( SfxPrinter *pNewPrinter, sal_uInt16 nDiff
 SfxTabPage* ScTabViewShell::CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions )
 {
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
     ::CreateTabPage ScTpPrintOptionsCreate =    pFact->GetTabPageCreatorFunc( RID_SCPAGE_PRINT );
     if ( ScTpPrintOptionsCreate )
         return  (*ScTpPrintOptionsCreate)( pParent, rOptions);

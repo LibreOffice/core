@@ -268,7 +268,7 @@ void ScTablePage::Reset( const SfxItemSet& rCoreSet )
     if( aLbScaleMode.GetSelectEntryCount() == 0 )
     {
         // fall back to 100%
-        DBG_ERRORFILE( "ScTablePage::Reset - missing scaling item" );
+        OSL_FAIL( "ScTablePage::Reset - missing scaling item" );
         aLbScaleMode.SelectEntryPos( SC_TPTABLE_SCALE_PERCENT );
         aEdScaleAll.SetValue( 100 );
     }

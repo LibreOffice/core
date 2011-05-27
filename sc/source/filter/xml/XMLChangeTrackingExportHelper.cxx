@@ -41,7 +41,6 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <com/sun/star/util/DateTime.hpp>
-#include <tools/debug.hxx>
 #include <tools/datetime.hxx>
 #include <svl/zforlist.hxx>
 
@@ -153,9 +152,9 @@ void ScChangeTrackingExportHelper::WriteChangeInfo(const ScChangeAction* pAction
 
 void ScChangeTrackingExportHelper::WriteGenerated(const ScChangeAction* pGeneratedAction)
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     sal_uInt32 nActionNumber(pGeneratedAction->GetActionNumber());
-    DBG_ASSERT(pChangeTrack->IsGenerated(nActionNumber), "a not generated action found");
+    OSL_ENSURE(pChangeTrack->IsGenerated(nActionNumber), "a not generated action found");
 #endif
     SvXMLElementExport aElemPrev(rExport, XML_NAMESPACE_TABLE, XML_CELL_CONTENT_DELETION, sal_True, sal_True);
     WriteBigRange(pGeneratedAction->GetBigRange(), XML_CELL_ADDRESS);
@@ -501,7 +500,7 @@ void ScChangeTrackingExportHelper::AddInsertionAttributes(const ScChangeAction* 
     rtl::OUStringBuffer sBuffer;
     SvXMLUnitConverter::convertNumber(sBuffer, nPosition);
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_POSITION, sBuffer.makeStringAndClear());
-    DBG_ASSERT(nCount > 0, "wrong insertion count");
+    OSL_ENSURE(nCount > 0, "wrong insertion count");
     if (nCount > 1)
     {
         SvXMLUnitConverter::convertNumber(sBuffer, nCount);

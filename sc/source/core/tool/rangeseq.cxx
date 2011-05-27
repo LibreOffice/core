@@ -33,7 +33,6 @@
 
 #include <svl/zforlist.hxx>
 #include <rtl/math.hxx>
-#include <tools/debug.hxx>
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -403,7 +402,7 @@ ScMatrixRef ScSequenceToMatrix::CreateMixedMatrix( const com::sun::star::uno::An
             xMatrix->GetDimensions( nCols, nRows);
             if (nCols != static_cast<SCSIZE>(nMaxColCount) || nRows != static_cast<SCSIZE>(nRowCount))
             {
-                DBG_ERRORFILE( "ScSequenceToMatrix::CreateMixedMatrix: matrix exceeded max size, returning NULL matrix");
+                OSL_FAIL( "ScSequenceToMatrix::CreateMixedMatrix: matrix exceeded max size, returning NULL matrix");
                 return NULL;
             }
             for (nRow=0; nRow<nRowCount; nRow++)

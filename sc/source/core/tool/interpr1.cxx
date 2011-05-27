@@ -358,7 +358,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
             aCode.Pop();    // pop what Jump() pushed
         else
         {
-            DBG_ERRORFILE( "ScInterpreter::JumpMatrix: pop goes the weasel" );
+            OSL_FAIL( "ScInterpreter::JumpMatrix: pop goes the weasel" );
         }
 
         if ( !pResMat )
@@ -717,7 +717,7 @@ double ScInterpreter::CompareFunc( const ScCompare& rComp, ScCompareOptions* pOp
             // is/must be identical to *rEntry.pStr, which is essential for
             // regex to work through GetSearchTextPtr().
             ScQueryEntry& rEntry = pOptions->aQueryEntry;
-            DBG_ASSERT( *rComp.pVal[1] == *rEntry.pStr, "ScInterpreter::CompareFunc: broken options");
+            OSL_ENSURE( *rComp.pVal[1] == *rEntry.pStr, "ScInterpreter::CompareFunc: broken options");
             if (pOptions->bRegEx)
             {
                 xub_StrLen nStart = 0;
@@ -4229,7 +4229,7 @@ static void lcl_GetLastMatch( SCSIZE& rIndex, const VectorMatrixAccessor& rMat,
     }
     else
     {
-        DBG_ERRORFILE("lcl_GetLastMatch: unhandled matrix type");
+        OSL_FAIL("lcl_GetLastMatch: unhandled matrix type");
     }
 }
 
@@ -5413,7 +5413,7 @@ void ScInterpreter::ScLookup()
                     PushCellResultToken( true, aResAdr, NULL, NULL);
                     break;
                 default:
-                    DBG_ERRORFILE( "ScInterpreter::ScLookup: unhandled eResArrayType, single value data");
+                    OSL_FAIL( "ScInterpreter::ScLookup: unhandled eResArrayType, single value data");
             }
         }
         else
@@ -5430,7 +5430,7 @@ void ScInterpreter::ScLookup()
                     PushCellResultToken( true, aDataAdr, NULL, NULL);
                     break;
                 default:
-                    DBG_ERRORFILE( "ScInterpreter::ScLookup: unhandled eDataArrayType, single value data");
+                    OSL_FAIL( "ScInterpreter::ScLookup: unhandled eDataArrayType, single value data");
             }
         }
         return;
@@ -5713,7 +5713,7 @@ void ScInterpreter::ScLookup()
             }
             break;
             default:
-                DBG_ERRORFILE( "ScInterpreter::ScLookup: unhandled eResArrayType, range search");
+                OSL_FAIL( "ScInterpreter::ScLookup: unhandled eResArrayType, range search");
         }
     }
     else
@@ -7725,7 +7725,7 @@ bool ScInterpreter::LookupQueryWithCache( ScAddress & o_rResultPos,
     bool bFound = false;
     const ScQueryEntry& rEntry = rParam.GetEntry(0);
     bool bColumnsMatch = (rParam.nCol1 == rEntry.nField);
-    DBG_ASSERT( bColumnsMatch, "ScInterpreter::LookupQueryWithCache: columns don't match");
+    OSL_ENSURE( bColumnsMatch, "ScInterpreter::LookupQueryWithCache: columns don't match");
     if (!bColumnsMatch)
         bFound = lcl_LookupQuery( o_rResultPos, pDok, rParam, rEntry);
     else

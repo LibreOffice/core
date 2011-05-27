@@ -418,7 +418,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
     }
     else
     {
-        DBG_ASSERT(false,"give object could not be identifed in createClassifiedIdentifierForObject");
+        OSL_FAIL("give object could not be identifed in createClassifiedIdentifierForObject");
     }
 
     return aRet;

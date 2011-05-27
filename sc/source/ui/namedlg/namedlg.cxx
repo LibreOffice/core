@@ -152,7 +152,7 @@ void ScNameDlg::Init()
     String  aAreaStr;
     ScRange aRange;
 
-    DBG_ASSERT( pViewData && pDoc, "ViewData oder Document nicht gefunden!" );
+    OSL_ENSURE( pViewData && pDoc, "ViewData oder Document nicht gefunden!" );
 
     maLbScope.SetSelectHdl( LINK(this, ScNameDlg, ScopeChangedHdl) );
     aBtnOk.SetClickHdl      ( LINK( this, ScNameDlg, OkBtnHdl ) );

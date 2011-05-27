@@ -553,7 +553,7 @@ void ScCellFieldObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 SvxFieldItem ScCellFieldObj::CreateFieldItem()
 {
-    DBG_ASSERT( !pEditSource, "CreateFieldItem mit eingefuegtem Feld" );
+    OSL_ENSURE( !pEditSource, "CreateFieldItem mit eingefuegtem Feld" );
 
     SvxURLField aField;
     aField.SetFormat(SVXURLFORMAT_APPDEFAULT);
@@ -595,7 +595,7 @@ rtl::OUString SAL_CALL ScCellFieldObj::getPresentation( sal_Bool bShowCommand )
 
         //  Typ egal (in Zellen gibts nur URLs)
         SvxFieldData* pField = aTempEngine.FindByPos( aSelection.nStartPara, aSelection.nStartPos, 0 );
-        DBG_ASSERT(pField,"getPresentation: Feld nicht gefunden");
+        OSL_ENSURE(pField,"getPresentation: Feld nicht gefunden");
         if (pField)
         {
             SvxURLField* pURL = (SvxURLField*)pField;
@@ -681,7 +681,7 @@ void SAL_CALL ScCellFieldObj::setPropertyValue(
 
         //  Typ egal (in Zellen gibts nur URLs)
         SvxFieldData* pField = aTempEngine.FindByPos( aSelection.nStartPara, aSelection.nStartPos, 0 );
-        DBG_ASSERT(pField,"setPropertyValue: Feld nicht gefunden");
+        OSL_ENSURE(pField,"setPropertyValue: Feld nicht gefunden");
         if (pField)
         {
             SvxURLField* pURL = (SvxURLField*)pField;   // ist eine Kopie in der ScUnoEditEngine
@@ -760,7 +760,7 @@ uno::Any SAL_CALL ScCellFieldObj::getPropertyValue( const rtl::OUString& aProper
 
         //  Typ egal (in Zellen gibts nur URLs)
         SvxFieldData* pField = aTempEngine.FindByPos( aSelection.nStartPara, aSelection.nStartPos, 0 );
-        DBG_ASSERT(pField,"getPropertyValue: Feld nicht gefunden");
+        OSL_ENSURE(pField,"getPropertyValue: Feld nicht gefunden");
         if (pField)
         {
             SvxURLField* pURL = (SvxURLField*)pField;
@@ -854,7 +854,7 @@ ScHeaderFieldsObj::ScHeaderFieldsObj(ScHeaderFooterContentObj* pContent, sal_uIn
     nType( nT ),
     mpRefreshListeners( NULL )
 {
-    DBG_ASSERT( pContentObj, "ScHeaderFieldsObj ohne Objekt?" );
+    OSL_ENSURE( pContentObj, "ScHeaderFieldsObj ohne Objekt?" );
 
     if (pContentObj)
     {
@@ -1174,7 +1174,7 @@ void ScHeaderFieldObj::InitDoc( ScHeaderFooterContentObj* pContent, sal_uInt16 n
 {
     if ( pContent && !pEditSource )
     {
-        DBG_ASSERT( !pContentObj, "ContentObj, aber kein EditSource?" );
+        OSL_ENSURE( !pContentObj, "ContentObj, aber kein EditSource?" );
 
         aSelection = rSel;
         nPart = nP;
@@ -1197,7 +1197,7 @@ ScHeaderFieldObj::~ScHeaderFieldObj()
 
 SvxFieldItem ScHeaderFieldObj::CreateFieldItem()
 {
-    DBG_ASSERT( !pEditSource, "CreateFieldItem mit eingefuegtem Feld" );
+    OSL_ENSURE( !pEditSource, "CreateFieldItem mit eingefuegtem Feld" );
 
     switch (nType)
     {
@@ -1370,7 +1370,7 @@ void SAL_CALL ScHeaderFieldObj::setPropertyValue(
                 ScUnoEditEngine aTempEngine(pEditEngine);
                 SvxFieldData* pField = aTempEngine.FindByPos(
                         aSelection.nStartPara, aSelection.nStartPos, TYPE(SvxExtFileField) );
-                DBG_ASSERT(pField,"setPropertyValue: Field not found");
+                OSL_ENSURE(pField,"setPropertyValue: Field not found");
                 if (pField)
                 {
                     SvxExtFileField* pExtFile = (SvxExtFileField*)pField;   // local to the ScUnoEditEngine
@@ -1416,7 +1416,7 @@ uno::Any SAL_CALL ScHeaderFieldObj::getPropertyValue( const rtl::OUString& aProp
             ScUnoEditEngine aTempEngine(pEditEngine);
             SvxFieldData* pField = aTempEngine.FindByPos(
                     aSelection.nStartPara, aSelection.nStartPos, TYPE(SvxExtFileField) );
-            DBG_ASSERT(pField,"setPropertyValue: Field not found");
+            OSL_ENSURE(pField,"setPropertyValue: Field not found");
             if (pField)
             {
                 const SvxExtFileField* pExtFile = (const SvxExtFileField*)pField;

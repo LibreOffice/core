@@ -152,7 +152,7 @@ void ScActionColorChanger::Update( const ScChangeAction& rAction )
             if (!rUsers.Search(&aData, nIndex))
             {
                 // empty string is possible if a name wasn't found while saving a 5.0 file
-                DBG_ASSERT( aLastUserName.Len() == 0, "Author not found" );
+                OSL_ENSURE( aLastUserName.Len() == 0, "Author not found" );
                 nIndex = 0;
             }
             nLastUserIndex = nIndex % SC_AUTHORCOLORCOUNT;

@@ -40,7 +40,6 @@
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <rtl/uuid.h>
-#include <tools/debug.hxx>
 #include <comphelper/sequence.hxx>
 #include <vcl/svapp.hxx>
 

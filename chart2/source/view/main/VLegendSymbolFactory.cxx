@@ -36,9 +36,6 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
 
-// header for define DBG_ASSERT
-#include <tools/debug.hxx>
-
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;

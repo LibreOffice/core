@@ -29,7 +29,6 @@
 #ifndef SC_NAMEBUFF_HXX
 #define SC_NAMEBUFF_HXX
 
-#include <tools/debug.hxx>
 #include <tools/string.hxx>
 #include "compiler.hxx"
 #include "root.hxx"
@@ -156,7 +155,7 @@ inline const String* NameBuffer::Get( sal_uInt16 n )
 
 inline sal_uInt16 NameBuffer::GetLastIndex( void )
 {
-    DBG_ASSERT( Count() + nBase <= 0xFFFF, "*NameBuffer::GetLastIndex(): Ich hab' die Nase voll!" );
+    OSL_ENSURE( Count() + nBase <= 0xFFFF, "*NameBuffer::GetLastIndex(): Ich hab' die Nase voll!" );
 
     return ( sal_uInt16 ) ( Count() + nBase );
 }

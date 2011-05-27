@@ -43,7 +43,7 @@
 Graphic GalleryGetGraphic()
 {
     GalleryExplorer* pGal = SVX_GALLERY();
-    DBG_ASSERT( pGal, "Wo ist die Gallery?" );
+    OSL_ENSURE( pGal, "Wo ist die Gallery?" );
     return pGal->GetGraphic();
 }
 
@@ -55,14 +55,14 @@ sal_uInt16 GallerySGA_FORMAT_GRAPHIC()
 sal_Bool GalleryIsLinkage()
 {
     GalleryExplorer* pGal = SVX_GALLERY();
-    DBG_ASSERT( pGal, "Wo ist die Gallery?" );
+    OSL_ENSURE( pGal, "Wo ist die Gallery?" );
     return pGal->IsLinkage();
 }
 
 String GalleryGetFullPath()
 {
     GalleryExplorer* pGal = SVX_GALLERY();
-    DBG_ASSERT( pGal, "Wo ist die Gallery?" );
+    OSL_ENSURE( pGal, "Wo ist die Gallery?" );
 
     return pGal->GetURL().GetMainURL(INetURLObject::NO_DECODE);
     // URL as stored in GraphicLink must be encoded
@@ -71,7 +71,7 @@ String GalleryGetFullPath()
 String GalleryGetFilterName()
 {
     GalleryExplorer* pGal = SVX_GALLERY();
-    DBG_ASSERT( pGal, "Wo ist die Gallery?" );
+    OSL_ENSURE( pGal, "Wo ist die Gallery?" );
     return pGal->GetFilterName();
 }
 

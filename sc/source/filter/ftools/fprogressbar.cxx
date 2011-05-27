@@ -142,7 +142,7 @@ void ScfProgressBar::IncreaseProgressBar( sal_Size nDelta )
     }
     else
     {
-        DBG_ERRORFILE( "ScfProgressBar::IncreaseProgressBar - no progress bar found" );
+        OSL_FAIL( "ScfProgressBar::IncreaseProgressBar - no progress bar found" );
     }
 
     mnTotalPos = nNewPos;
@@ -150,7 +150,7 @@ void ScfProgressBar::IncreaseProgressBar( sal_Size nDelta )
 
 sal_Int32 ScfProgressBar::AddSegment( sal_Size nSize )
 {
-    DBG_ASSERT( !mbInProgress, "ScfProgressBar::AddSegment - already in progress mode" );
+    OSL_ENSURE( !mbInProgress, "ScfProgressBar::AddSegment - already in progress mode" );
     if( nSize == 0 )
         return SCF_INV_SEGMENT;
 
@@ -162,7 +162,7 @@ sal_Int32 ScfProgressBar::AddSegment( sal_Size nSize )
 ScfProgressBar& ScfProgressBar::GetSegmentProgressBar( sal_Int32 nSegment )
 {
     ScfProgressSegment* pSegment = GetSegment( nSegment );
-    DBG_ASSERT( !pSegment || (pSegment->mnPos == 0), "ScfProgressBar::GetSegmentProgressBar - segment already started" );
+    OSL_ENSURE( !pSegment || (pSegment->mnPos == 0), "ScfProgressBar::GetSegmentProgressBar - segment already started" );
     if( pSegment && (pSegment->mnPos == 0) )
     {
         if( !pSegment->mxProgress.get() )
@@ -174,24 +174,24 @@ ScfProgressBar& ScfProgressBar::GetSegmentProgressBar( sal_Int32 nSegment )
 
 bool ScfProgressBar::IsFull() const
 {
-    DBG_ASSERT( mbInProgress && mpCurrSegment, "ScfProgressBar::IsFull - no segment started" );
+    OSL_ENSURE( mbInProgress && mpCurrSegment, "ScfProgressBar::IsFull - no segment started" );
     return mpCurrSegment && (mpCurrSegment->mnPos >= mpCurrSegment->mnSize);
 }
 
 void ScfProgressBar::ActivateSegment( sal_Int32 nSegment )
 {
-    DBG_ASSERT( mnTotalSize > 0, "ScfProgressBar::ActivateSegment - progress range is zero" );
+    OSL_ENSURE( mnTotalSize > 0, "ScfProgressBar::ActivateSegment - progress range is zero" );
     if( mnTotalSize > 0 )
         SetCurrSegment( GetSegment( nSegment ) );
 }
 
 void ScfProgressBar::ProgressAbs( sal_Size nPos )
 {
-    DBG_ASSERT( mbInProgress && mpCurrSegment, "ScfProgressBar::ProgressAbs - no segment started" );
+    OSL_ENSURE( mbInProgress && mpCurrSegment, "ScfProgressBar::ProgressAbs - no segment started" );
     if( mpCurrSegment )
     {
-        DBG_ASSERT( mpCurrSegment->mnPos <= nPos, "ScfProgressBar::ProgressAbs - delta pos < 0" );
-        DBG_ASSERT( nPos <= mpCurrSegment->mnSize, "ScfProgressBar::ProgressAbs - segment overflow" );
+        OSL_ENSURE( mpCurrSegment->mnPos <= nPos, "ScfProgressBar::ProgressAbs - delta pos < 0" );
+        OSL_ENSURE( nPos <= mpCurrSegment->mnSize, "ScfProgressBar::ProgressAbs - segment overflow" );
         if( (mpCurrSegment->mnPos < nPos) && (nPos <= mpCurrSegment->mnSize) )
         {
             IncreaseProgressBar( nPos - mpCurrSegment->mnPos );

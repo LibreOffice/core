@@ -277,7 +277,7 @@ String ScTpViewItem::GetValueText() const
 
 int ScTpViewItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
+    OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
     const ScTpViewItem& rPItem = (const ScTpViewItem&)rItem;
 
@@ -428,12 +428,12 @@ ScViewCfg::ScViewCfg() :
     Sequence<Any> aValues = aLayoutItem.GetProperties(aNames);
     aLayoutItem.EnableNotification(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
-            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing");
+            OSL_ENSURE(pValues[nProp].hasValue(), "property value missing");
             if(pValues[nProp].hasValue())
             {
                 switch(nProp)
@@ -483,12 +483,12 @@ ScViewCfg::ScViewCfg() :
     aValues = aDisplayItem.GetProperties(aNames);
     aDisplayItem.EnableNotification(aNames);
     pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
-            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing");
+            OSL_ENSURE(pValues[nProp].hasValue(), "property value missing");
             if(pValues[nProp].hasValue())
             {
                 switch(nProp)
@@ -549,12 +549,12 @@ ScViewCfg::ScViewCfg() :
     aValues = aGridItem.GetProperties(aNames);
     aGridItem.EnableNotification(aNames);
     pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
-            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing");
+            OSL_ENSURE(pValues[nProp].hasValue(), "property value missing");
             if(pValues[nProp].hasValue())
             {
                 switch(nProp)

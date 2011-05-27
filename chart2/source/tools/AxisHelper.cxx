@@ -42,7 +42,6 @@
 #include "ChartModelHelper.hxx"
 #include "DataSourceHelper.hxx"
 
-#include <tools/debug.hxx>
 #include <unotools/saveopt.hxx>
 
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
@@ -113,7 +112,7 @@ bool AxisHelper::isLogarithmic( const Reference< XScaling >& xScaling )
 
 chart2::ScaleData AxisHelper::getDateCheckedScale( const Reference< chart2::XAxis >& xAxis, const Reference< frame::XModel >& xChartModel )
 {
-    DBG_ASSERT(xChartModel.is(),"missing chart model");
+    OSL_ENSURE(xChartModel.is(),"missing chart model");
     ScaleData aScale = xAxis->getScaleData();
     Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( xChartModel ) );
     if( aScale.AutoDateAxis && aScale.AxisType == AxisType::CATEGORY )

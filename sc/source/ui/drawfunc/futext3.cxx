@@ -74,7 +74,7 @@ void FuText::StopEditMode(sal_Bool /*bTextDirection*/)
     ScViewData& rViewData = *pViewShell->GetViewData();
     ScDocument& rDoc = *rViewData.GetDocument();
     ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
-    DBG_ASSERT( pDrawLayer && (pDrawLayer == pDrDoc), "FuText::StopEditMode - missing or different drawing layers" );
+    OSL_ENSURE( pDrawLayer && (pDrawLayer == pDrDoc), "FuText::StopEditMode - missing or different drawing layers" );
 
     ScAddress aNotePos;
     ScPostIt* pNote = 0;
@@ -82,7 +82,7 @@ void FuText::StopEditMode(sal_Bool /*bTextDirection*/)
     {
         aNotePos = pCaptData->maStart;
         pNote = rDoc.GetNote( aNotePos );
-        DBG_ASSERT( pNote && (pNote->GetCaption() == pObject), "FuText::StopEditMode - missing or invalid cell note" );
+        OSL_ENSURE( pNote && (pNote->GetCaption() == pObject), "FuText::StopEditMode - missing or invalid cell note" );
     }
 
     ScDocShell* pDocShell = rViewData.GetDocShell();
@@ -179,7 +179,7 @@ void FuText::StopEditMode(sal_Bool /*bTextDirection*/)
             else if( bNewNote || bDeleteNote )
             {
                 SfxListUndoAction* pAction = dynamic_cast< SfxListUndoAction* >( pUndoMgr->GetUndoAction() );
-                DBG_ASSERT( pAction, "FuText::StopEditMode - list undo action expected" );
+                OSL_ENSURE( pAction, "FuText::StopEditMode - list undo action expected" );
                 if( pAction )
                     pAction->SetComment( ScGlobal::GetRscString( bNewNote ? STR_UNDO_INSERTNOTE : STR_UNDO_DELETENOTE ) );
             }

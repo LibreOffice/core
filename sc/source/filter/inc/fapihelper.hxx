@@ -112,7 +112,7 @@ public:
 template< typename Type >
 ::com::sun::star::uno::Sequence< Type > ScfApiHelper::VectorToSequence( const ::std::vector< Type >& rVector )
 {
-    DBG_ASSERT( !rVector.empty(), "ScfApiHelper::VectorToSequence - vector is empty" );
+    OSL_ENSURE( !rVector.empty(), "ScfApiHelper::VectorToSequence - vector is empty" );
     return ::com::sun::star::uno::Sequence< Type >( &rVector.front(), static_cast< sal_Int32 >( rVector.size() ) );
 }
 

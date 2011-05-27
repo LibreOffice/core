@@ -87,7 +87,7 @@ XclImpPCItem::XclImpPCItem( XclImpStream& rStrm )
         case EXC_ID_SXSTRING:   ReadSxstring( rStrm );      break;
         case EXC_ID_SXDATETIME: ReadSxdatetime( rStrm );    break;
         case EXC_ID_SXEMPTY:    ReadSxempty( rStrm );       break;
-        default:    DBG_ERRORFILE( "XclImpPCItem::XclImpPCItem - unknown record id" );
+        default:    OSL_FAIL( "XclImpPCItem::XclImpPCItem - unknown record id" );
     }
 }
 
@@ -138,37 +138,37 @@ void XclImpPCItem::WriteToSource( const XclImpRoot& rRoot, const ScAddress& rScP
 
 void XclImpPCItem::ReadSxdouble( XclImpStream& rStrm )
 {
-    DBG_ASSERT( rStrm.GetRecSize() == 8, "XclImpPCItem::ReadSxdouble - wrong record size" );
+    OSL_ENSURE( rStrm.GetRecSize() == 8, "XclImpPCItem::ReadSxdouble - wrong record size" );
     SetDouble( rStrm.ReadDouble() );
 }
 
 void XclImpPCItem::ReadSxboolean( XclImpStream& rStrm )
 {
-    DBG_ASSERT( rStrm.GetRecSize() == 2, "XclImpPCItem::ReadSxboolean - wrong record size" );
+    OSL_ENSURE( rStrm.GetRecSize() == 2, "XclImpPCItem::ReadSxboolean - wrong record size" );
     SetBool( rStrm.ReaduInt16() != 0 );
 }
 
 void XclImpPCItem::ReadSxerror( XclImpStream& rStrm )
 {
-    DBG_ASSERT( rStrm.GetRecSize() == 2, "XclImpPCItem::ReadSxerror - wrong record size" );
+    OSL_ENSURE( rStrm.GetRecSize() == 2, "XclImpPCItem::ReadSxerror - wrong record size" );
     SetError( rStrm.ReaduInt16() );
 }
 
 void XclImpPCItem::ReadSxinteger( XclImpStream& rStrm )
 {
-    DBG_ASSERT( rStrm.GetRecSize() == 2, "XclImpPCItem::ReadSxinteger - wrong record size" );
+    OSL_ENSURE( rStrm.GetRecSize() == 2, "XclImpPCItem::ReadSxinteger - wrong record size" );
     SetInteger( rStrm.ReadInt16() );
 }
 
 void XclImpPCItem::ReadSxstring( XclImpStream& rStrm )
 {
-    DBG_ASSERT( rStrm.GetRecSize() >= 3, "XclImpPCItem::ReadSxstring - wrong record size" );
+    OSL_ENSURE( rStrm.GetRecSize() >= 3, "XclImpPCItem::ReadSxstring - wrong record size" );
     SetText( rStrm.ReadUniString() );
 }
 
 void XclImpPCItem::ReadSxdatetime( XclImpStream& rStrm )
 {
-    DBG_ASSERT( rStrm.GetRecSize() == 8, "XclImpPCItem::ReadSxdatetime - wrong record size" );
+    OSL_ENSURE( rStrm.GetRecSize() == 8, "XclImpPCItem::ReadSxdatetime - wrong record size" );
     sal_uInt16 nYear, nMonth;
     sal_uInt8 nDay, nHour, nMin, nSec;
     rStrm >> nYear >> nMonth >> nDay >> nHour >> nMin >> nSec;
@@ -178,7 +178,7 @@ void XclImpPCItem::ReadSxdatetime( XclImpStream& rStrm )
 void XclImpPCItem::ReadSxempty( XclImpStream& rStrm )
 {
     (void)rStrm;    // avoid compiler warning
-    DBG_ASSERT( rStrm.GetRecSize() == 0, "XclImpPCItem::ReadSxempty - wrong record size" );
+    OSL_ENSURE( rStrm.GetRecSize() == 0, "XclImpPCItem::ReadSxempty - wrong record size" );
     SetEmpty();
 }
 
@@ -212,7 +212,7 @@ const String& XclImpPCField::GetFieldName( const ScfStringVec& rVisNames ) const
 
 const XclImpPCField* XclImpPCField::GetGroupBaseField() const
 {
-    DBG_ASSERT( IsGroupChildField(), "XclImpPCField::GetGroupBaseField - this field type does not have a base field" );
+    OSL_ENSURE( IsGroupChildField(), "XclImpPCField::GetGroupBaseField - this field type does not have a base field" );
     return IsGroupChildField() ? mrPCache.GetField( maFieldInfo.mnGroupBase ) : 0;
 }
 
@@ -223,14 +223,14 @@ const XclImpPCItem* XclImpPCField::GetItem( sal_uInt16 nItemIdx ) const
 
 const XclImpPCItem* XclImpPCField::GetLimitItem( sal_uInt16 nItemIdx ) const
 {
-    DBG_ASSERT( nItemIdx < 3, "XclImpPCField::GetLimitItem - invalid item index" );
-    DBG_ASSERT( nItemIdx < maNumGroupItems.size(), "XclImpPCField::GetLimitItem - no item found" );
+    OSL_ENSURE( nItemIdx < 3, "XclImpPCField::GetLimitItem - invalid item index" );
+    OSL_ENSURE( nItemIdx < maNumGroupItems.size(), "XclImpPCField::GetLimitItem - no item found" );
     return (nItemIdx < maNumGroupItems.size()) ? maNumGroupItems[ nItemIdx ].get() : 0;
 }
 
 void XclImpPCField::WriteFieldNameToSource( SCCOL nScCol, SCTAB nScTab ) const
 {
-    DBG_ASSERT( HasOrigItems(), "XclImpPCField::WriteFieldNameToSource - only for standard fields" );
+    OSL_ENSURE( HasOrigItems(), "XclImpPCField::WriteFieldNameToSource - only for standard fields" );
     GetDoc().SetString( nScCol, 0, nScTab, maFieldInfo.maName );
     mnSourceScCol = nScCol;
 }
@@ -267,7 +267,7 @@ void XclImpPCField::ReadSxfield( XclImpStream& rStrm )
     sal_uInt16 nGroupC = maFieldInfo.mnGroupItems;
     sal_uInt16 nBaseC  = maFieldInfo.mnBaseItems;
     sal_uInt16 nOrigC  = maFieldInfo.mnOrigItems;
-    DBG_ASSERT( nVisC > 0, "XclImpPCField::ReadSxfield - field without visible items" );
+    OSL_ENSURE( nVisC > 0, "XclImpPCField::ReadSxfield - field without visible items" );
 
     sal_uInt16 nType = maFieldInfo.mnFlags & EXC_SXFIELD_DATA_MASK;
     bool bType =
@@ -283,7 +283,7 @@ void XclImpPCField::ReadSxfield( XclImpStream& rStrm )
     bool bTypeNone =
         (nType == EXC_SXFIELD_DATA_NONE);
     // for now, ignore data type of calculated fields
-    DBG_ASSERT( bCalced || bType || bTypeNone, "XclImpPCField::ReadSxfield - unknown item data type" );
+    OSL_ENSURE( bCalced || bType || bTypeNone, "XclImpPCField::ReadSxfield - unknown item data type" );
 
     if( nVisC > 0 || bPostp )
     {
@@ -313,7 +313,7 @@ void XclImpPCField::ReadSxfield( XclImpStream& rStrm )
                             case EXC_SXFIELD_DATA_INT:
                             case EXC_SXFIELD_DATA_DBL:  meFieldType = EXC_PCFIELD_NUMGROUP;     break;
                             case EXC_SXFIELD_DATA_DATE: meFieldType = EXC_PCFIELD_DATEGROUP;    break;
-                            default:    DBG_ERRORFILE( "XclImpPCField::ReadSxfield - numeric group with wrong data type" );
+                            default:    OSL_FAIL( "XclImpPCField::ReadSxfield - numeric group with wrong data type" );
                         }
                     }
 
@@ -325,7 +325,7 @@ void XclImpPCField::ReadSxfield( XclImpStream& rStrm )
                     else if( bTypeNone && (nOrigC == 0) )
                         meFieldType = EXC_PCFIELD_DATECHILD;
                 }
-                DBG_ASSERT( meFieldType != EXC_PCFIELD_UNKNOWN, "XclImpPCField::ReadSxfield - invalid standard or grouped field" );
+                OSL_ENSURE( meFieldType != EXC_PCFIELD_UNKNOWN, "XclImpPCField::ReadSxfield - invalid standard or grouped field" );
             }
 
             // 3) calculated field
@@ -333,7 +333,7 @@ void XclImpPCField::ReadSxfield( XclImpStream& rStrm )
             {
                 if( !bChild && !bNum && (nGroupC == 0) && (nBaseC == 0) && (nOrigC == 0) )
                     meFieldType = EXC_PCFIELD_CALCED;
-                DBG_ASSERT( meFieldType == EXC_PCFIELD_CALCED, "XclImpPCField::ReadSxfield - invalid calculated field" );
+                OSL_ENSURE( meFieldType == EXC_PCFIELD_CALCED, "XclImpPCField::ReadSxfield - invalid calculated field" );
             }
         }
 
@@ -342,14 +342,14 @@ void XclImpPCField::ReadSxfield( XclImpStream& rStrm )
             // 4) standard field with postponed items
             if( !bCalced && !bChild && !bNum && bType && (nGroupC == 0) && (nBaseC == 0) && (nOrigC == 0) )
                 meFieldType = EXC_PCFIELD_STANDARD;
-            DBG_ASSERT( meFieldType == EXC_PCFIELD_STANDARD, "XclImpPCField::ReadSxfield - invalid postponed field" );
+            OSL_ENSURE( meFieldType == EXC_PCFIELD_STANDARD, "XclImpPCField::ReadSxfield - invalid postponed field" );
         }
     }
 }
 
 void XclImpPCField::ReadItem( XclImpStream& rStrm )
 {
-    DBG_ASSERT( HasInlineItems() || HasPostponedItems(), "XclImpPCField::ReadItem - field does not expect items" );
+    OSL_ENSURE( HasInlineItems() || HasPostponedItems(), "XclImpPCField::ReadItem - field does not expect items" );
 
     // read the item
     XclImpPCItemRef xItem( new XclImpPCItem( rStrm ) );
@@ -374,19 +374,19 @@ void XclImpPCField::ReadItem( XclImpStream& rStrm )
 
 void XclImpPCField::ReadSxnumgroup( XclImpStream& rStrm )
 {
-    DBG_ASSERT( IsNumGroupField() || IsDateGroupField(), "XclImpPCField::ReadSxnumgroup - SXNUMGROUP outside numeric grouping field" );
-    DBG_ASSERT( !mbNumGroupInfoRead, "XclImpPCField::ReadSxnumgroup - multiple SXNUMGROUP records" );
-    DBG_ASSERT( maItems.size() == maFieldInfo.mnGroupItems, "XclImpPCField::ReadSxnumgroup - SXNUMGROUP out of record order" );
+    OSL_ENSURE( IsNumGroupField() || IsDateGroupField(), "XclImpPCField::ReadSxnumgroup - SXNUMGROUP outside numeric grouping field" );
+    OSL_ENSURE( !mbNumGroupInfoRead, "XclImpPCField::ReadSxnumgroup - multiple SXNUMGROUP records" );
+    OSL_ENSURE( maItems.size() == maFieldInfo.mnGroupItems, "XclImpPCField::ReadSxnumgroup - SXNUMGROUP out of record order" );
     rStrm >> maNumGroupInfo;
     mbNumGroupInfoRead = IsNumGroupField() || IsDateGroupField();
 }
 
 void XclImpPCField::ReadSxgroupinfo( XclImpStream& rStrm )
 {
-    DBG_ASSERT( IsStdGroupField(), "XclImpPCField::ReadSxgroupinfo - SXGROUPINFO outside grouping field" );
-    DBG_ASSERT( maGroupOrder.empty(), "XclImpPCField::ReadSxgroupinfo - multiple SXGROUPINFO records" );
-    DBG_ASSERT( maItems.size() == maFieldInfo.mnGroupItems, "XclImpPCField::ReadSxgroupinfo - SXGROUPINFO out of record order" );
-    DBG_ASSERT( (rStrm.GetRecLeft() / 2) == maFieldInfo.mnBaseItems, "XclImpPCField::ReadSxgroupinfo - wrong SXGROUPINFO size" );
+    OSL_ENSURE( IsStdGroupField(), "XclImpPCField::ReadSxgroupinfo - SXGROUPINFO outside grouping field" );
+    OSL_ENSURE( maGroupOrder.empty(), "XclImpPCField::ReadSxgroupinfo - multiple SXGROUPINFO records" );
+    OSL_ENSURE( maItems.size() == maFieldInfo.mnGroupItems, "XclImpPCField::ReadSxgroupinfo - SXGROUPINFO out of record order" );
+    OSL_ENSURE( (rStrm.GetRecLeft() / 2) == maFieldInfo.mnBaseItems, "XclImpPCField::ReadSxgroupinfo - wrong SXGROUPINFO size" );
     maGroupOrder.clear();
     size_t nSize = rStrm.GetRecLeft() / 2;
     maGroupOrder.resize( nSize, 0 );
@@ -490,7 +490,7 @@ void XclImpPCField::ConvertDateGroupField( ScDPSaveData& rSaveData, const ScfStr
         break;
 
         default:
-            DBG_ERRORFILE( "XclImpPCField::ConvertDateGroupField - unknown date field type" );
+            OSL_FAIL( "XclImpPCField::ConvertDateGroupField - unknown date field type" );
     }
 }
 
@@ -548,10 +548,10 @@ ScDPNumGroupInfo XclImpPCField::GetScDateGroupInfo() const
 
 const double* XclImpPCField::GetNumGroupLimit( sal_uInt16 nLimitIdx ) const
 {
-    DBG_ASSERT( IsNumGroupField(), "XclImpPCField::GetNumGroupLimit - only for numeric grouping fields" );
+    OSL_ENSURE( IsNumGroupField(), "XclImpPCField::GetNumGroupLimit - only for numeric grouping fields" );
     if( const XclImpPCItem* pItem = GetLimitItem( nLimitIdx ) )
     {
-        DBG_ASSERT( pItem->GetDouble(), "XclImpPCField::GetNumGroupLimit - SXDOUBLE item expected" );
+        OSL_ENSURE( pItem->GetDouble(), "XclImpPCField::GetNumGroupLimit - SXDOUBLE item expected" );
         return pItem->GetDouble();
     }
     return 0;
@@ -559,10 +559,10 @@ const double* XclImpPCField::GetNumGroupLimit( sal_uInt16 nLimitIdx ) const
 
 const DateTime* XclImpPCField::GetDateGroupLimit( sal_uInt16 nLimitIdx ) const
 {
-    DBG_ASSERT( IsDateGroupField(), "XclImpPCField::GetDateGroupLimit - only for date grouping fields" );
+    OSL_ENSURE( IsDateGroupField(), "XclImpPCField::GetDateGroupLimit - only for date grouping fields" );
     if( const XclImpPCItem* pItem = GetLimitItem( nLimitIdx ) )
     {
-        DBG_ASSERT( pItem->GetDateTime(), "XclImpPCField::GetDateGroupLimit - SXDATETIME item expected" );
+        OSL_ENSURE( pItem->GetDateTime(), "XclImpPCField::GetDateGroupLimit - SXDATETIME item expected" );
         return pItem->GetDateTime();
     }
     return 0;
@@ -578,10 +578,10 @@ const sal_Int16* XclImpPCField::GetDateGroupStep() const
         {
             if( const XclImpPCItem* pItem = GetLimitItem( EXC_SXFIELD_INDEX_STEP ) )
             {
-                DBG_ASSERT( pItem->GetInteger(), "XclImpPCField::GetDateGroupStep - SXINTEGER item expected" );
+                OSL_ENSURE( pItem->GetInteger(), "XclImpPCField::GetDateGroupStep - SXINTEGER item expected" );
                 if( const sal_Int16* pnStep = pItem->GetInteger() )
                 {
-                    DBG_ASSERT( *pnStep > 0, "XclImpPCField::GetDateGroupStep - invalid step count" );
+                    OSL_ENSURE( *pnStep > 0, "XclImpPCField::GetDateGroupStep - invalid step count" );
                     // return nothing for step count 1 - this is also a standard date group in Excel
                     return (*pnStep > 1) ? pnStep : 0;
                 }
@@ -849,7 +849,7 @@ void XclImpPivotCache::ReadPivotCacheStream( XclImpStream& rStrm )
         }
     }
 
-    DBG_ASSERT( maPCInfo.mnTotalFields == maFields.size(),
+    OSL_ENSURE( maPCInfo.mnTotalFields == maFields.size(),
         "XclImpPivotCache::ReadPivotCacheStream - field count mismatch" );
 
     if (HasCacheRecords())
@@ -990,7 +990,7 @@ void XclImpPTField::ReadSxvi( XclImpStream& rStrm )
 
 void XclImpPTField::ConvertRowColField( ScDPSaveData& rSaveData ) const
 {
-    DBG_ASSERT( maFieldInfo.mnAxes & EXC_SXVD_AXIS_ROWCOL, "XclImpPTField::ConvertRowColField - no row/column field" );
+    OSL_ENSURE( maFieldInfo.mnAxes & EXC_SXVD_AXIS_ROWCOL, "XclImpPTField::ConvertRowColField - no row/column field" );
     // special data orientation field?
     if( maFieldInfo.mnCacheIdx == EXC_SXIVD_DATA )
         rSaveData.GetDataLayoutDimension()->SetOrientation( static_cast< sal_uInt16 >( maFieldInfo.GetApiOrient( EXC_SXVD_AXIS_ROWCOL ) ) );
@@ -1007,7 +1007,7 @@ void XclImpPTField::SetPageFieldInfo( const XclPTPageFieldInfo& rPageInfo )
 
 void XclImpPTField::ConvertPageField( ScDPSaveData& rSaveData ) const
 {
-    DBG_ASSERT( maFieldInfo.mnAxes & EXC_SXVD_AXIS_PAGE, "XclImpPTField::ConvertPageField - no page field" );
+    OSL_ENSURE( maFieldInfo.mnAxes & EXC_SXVD_AXIS_PAGE, "XclImpPTField::ConvertPageField - no page field" );
     if( ScDPSaveDimension* pSaveDim = ConvertRCPField( rSaveData ) )
     {
         const String* pName = GetItemName( maPageInfo.mnSelItem );
@@ -1023,7 +1023,7 @@ void XclImpPTField::ConvertPageField( ScDPSaveData& rSaveData ) const
 
 void XclImpPTField::ConvertHiddenField( ScDPSaveData& rSaveData ) const
 {
-    DBG_ASSERT( (maFieldInfo.mnAxes & EXC_SXVD_AXIS_ROWCOLPAGE) == 0, "XclImpPTField::ConvertHiddenField - field not hidden" );
+    OSL_ENSURE( (maFieldInfo.mnAxes & EXC_SXVD_AXIS_ROWCOLPAGE) == 0, "XclImpPTField::ConvertHiddenField - field not hidden" );
     ConvertRCPField( rSaveData );
 }
 
@@ -1036,14 +1036,14 @@ bool XclImpPTField::HasDataFieldInfo() const
 
 void XclImpPTField::AddDataFieldInfo( const XclPTDataFieldInfo& rDataInfo )
 {
-    DBG_ASSERT( maFieldInfo.mnAxes & EXC_SXVD_AXIS_DATA, "XclImpPTField::AddDataFieldInfo - no data field" );
+    OSL_ENSURE( maFieldInfo.mnAxes & EXC_SXVD_AXIS_DATA, "XclImpPTField::AddDataFieldInfo - no data field" );
     maDataInfoList.push_back( rDataInfo );
 }
 
 void XclImpPTField::ConvertDataField( ScDPSaveData& rSaveData ) const
 {
-    DBG_ASSERT( maFieldInfo.mnAxes & EXC_SXVD_AXIS_DATA, "XclImpPTField::ConvertDataField - no data field" );
-    DBG_ASSERT( !maDataInfoList.empty(), "XclImpPTField::ConvertDataField - no data field info" );
+    OSL_ENSURE( maFieldInfo.mnAxes & EXC_SXVD_AXIS_DATA, "XclImpPTField::ConvertDataField - no data field" );
+    OSL_ENSURE( !maDataInfoList.empty(), "XclImpPTField::ConvertDataField - no data field info" );
     if( !maDataInfoList.empty() )
     {
         const String& rFieldName = GetFieldName();
@@ -1273,7 +1273,7 @@ void XclImpPivotTable::ReadSxvd( XclImpStream& rStrm )
         mxCurrField->ReadSxvd( rStrm );
         // add visible name of new field to list of visible names
         maVisFieldNames.push_back( mxCurrField->GetVisFieldName() );
-        DBG_ASSERT( maFields.size() == maVisFieldNames.size(),
+        OSL_ENSURE( maFields.size() == maVisFieldNames.size(),
             "XclImpPivotTable::ReadSxvd - wrong size of visible name array" );
     }
     else

@@ -1054,7 +1054,7 @@ sal_Bool ScAttrArray::ApplyFrame( const SvxBoxItem*     pBoxItem,
                               SCROW nStartRow, SCROW nEndRow,
                               sal_Bool bLeft, SCCOL nDistRight, sal_Bool bTop, SCROW nDistBottom )
 {
-    DBG_ASSERT( pBoxItem && pBoxInfoItem, "Linienattribute fehlen!" );
+    OSL_ENSURE( pBoxItem && pBoxInfoItem, "Linienattribute fehlen!" );
 
     const ScPatternAttr* pPattern = GetPattern( nStartRow );
     const SvxBoxItem* pOldFrame = (const SvxBoxItem*)
@@ -1146,7 +1146,7 @@ long lcl_LineSize( const SvxBorderLine& rLine )
     sal_uInt16 nDist = rLine.GetDistance();
     if (nDist)
     {
-        DBG_ASSERT( rLine.GetOutWidth() && rLine.GetInWidth(),
+        OSL_ENSURE( rLine.GetOutWidth() && rLine.GetInWidth(),
                         "Line has a distance, but only a width?" );
 
         nTotal += ( nDist > 20 ) ? nDist : 20;
@@ -1441,7 +1441,7 @@ sal_Bool ScAttrArray::RemoveAreaMerge(SCROW nStartRow, SCROW nEndRow)
             const ScMergeFlagAttr* pFlagAttr = (const ScMergeFlagAttr*)
                                             &pDocument->GetPool()->GetDefaultItem( ATTR_MERGE_FLAG );
 
-            DBG_ASSERT( nCountY==1 || nThisStart==nThisEnd, "What's up?" );
+            OSL_ENSURE( nCountY==1 || nThisStart==nThisEnd, "What's up?" );
 
             SCCOL nThisCol = nCol;
             SCCOL nMergeEndCol = nThisCol + nCountX - 1;
@@ -1810,7 +1810,7 @@ sal_Bool ScAttrArray::IsEmpty() const
 
 sal_Bool ScAttrArray::GetFirstVisibleAttr( SCROW& rFirstRow ) const
 {
-    DBG_ASSERT( nCount, "nCount == 0" );
+    OSL_ENSURE( nCount, "nCount == 0" );
 
     sal_Bool bFound = false;
     SCSIZE nStart = 0;
@@ -2384,7 +2384,7 @@ SCsROW ScAttrArray::SearchStyle( SCsROW nRow, const ScStyleSheet* pSearchStyle,
         }
     }
 
-    DBG_ASSERT( bFound || !ValidRow(nRow), "Internal failure in in ScAttrArray::SearchStyle" );
+    OSL_ENSURE( bFound || !ValidRow(nRow), "Internal failure in in ScAttrArray::SearchStyle" );
 
     return nRow;
 }

@@ -140,7 +140,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
 
     if ( pStyleSet->GetItemState( ATTR_PAGE_SCALETOPAGES, false, &pItem ) == SFX_ITEM_SET )
     {
-        DBG_ASSERT( pItem->ISA(SfxUInt16Item), "falsches Item" );
+        OSL_ENSURE( pItem->ISA(SfxUInt16Item), "falsches Item" );
         bSkipColBreaks = bSkipRowBreaks = ( ((const SfxUInt16Item*)pItem)->GetValue() > 0 );
     }
 
@@ -260,9 +260,9 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
         {
             // subtract size of repeat rows from page size
             unsigned long nHeights = GetTotalRowHeight(nRepeatStartY, nRepeatEndY);
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
             if (nHeights == ::std::numeric_limits<unsigned long>::max())
-                DBG_ERRORFILE("ScTable::UpdatePageBreaks: row heights overflow");
+                OSL_FAIL("ScTable::UpdatePageBreaks: row heights overflow");
 #endif
             nPageSizeY -= nHeights;
             if (nY <= nRepeatEndY)

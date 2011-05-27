@@ -282,7 +282,7 @@ void XclExpChRootData::InitializeFutureRecBlock( XclExpStream& rStrm )
         // write all unwritten CHFRBLOCKBEGIN records
         for( XclChFrBlockVector::const_iterator aIt = maUnwrittenFrBlocks.begin(), aEnd = maUnwrittenFrBlocks.end(); aIt != aEnd; ++aIt )
         {
-            DBG_ASSERT( aIt->mnType != EXC_CHFRBLOCK_TYPE_UNKNOWN, "XclExpChRootData::InitializeFutureRecBlock - unknown future record block type" );
+            OSL_ENSURE( aIt->mnType != EXC_CHFRBLOCK_TYPE_UNKNOWN, "XclExpChRootData::InitializeFutureRecBlock - unknown future record block type" );
             lclWriteChFrBlockRecord( rStrm, *aIt, true );
         }
         // move all record infos to vector of written blocks
@@ -293,7 +293,7 @@ void XclExpChRootData::InitializeFutureRecBlock( XclExpStream& rStrm )
 
 void XclExpChRootData::FinalizeFutureRecBlock( XclExpStream& rStrm )
 {
-    DBG_ASSERT( !maUnwrittenFrBlocks.empty() || !maWrittenFrBlocks.empty(), "XclExpChRootData::FinalizeFutureRecBlock - no future record level found" );
+    OSL_ENSURE( !maUnwrittenFrBlocks.empty() || !maWrittenFrBlocks.empty(), "XclExpChRootData::FinalizeFutureRecBlock - no future record level found" );
     if( !maUnwrittenFrBlocks.empty() )
     {
         // no future record has been written, just forget the topmost level
@@ -362,7 +362,7 @@ bool XclExpChRoot::IsSystemColor( const Color& rColor, sal_uInt16 nSysColorIdx )
 
 void XclExpChRoot::SetSystemColor( Color& rColor, sal_uInt32& rnColorId, sal_uInt16 nSysColorIdx ) const
 {
-    DBG_ASSERT( GetPalette().IsSystemColor( nSysColorIdx ), "XclExpChRoot::SetSystemColor - invalid color index" );
+    OSL_ENSURE( GetPalette().IsSystemColor( nSysColorIdx ), "XclExpChRoot::SetSystemColor - invalid color index" );
     rColor = GetPalette().GetDefColor( nSysColorIdx );
     rnColorId = XclExpPalette::GetColorIdFromIndex( nSysColorIdx );
 }
@@ -532,7 +532,7 @@ void XclExpChLineFormat::SetDefault( XclChFrameType eDefFrameType )
             maData.mnPattern = EXC_CHLINEFORMAT_NONE;
         break;
         default:
-            DBG_ERRORFILE( "XclExpChLineFormat::SetDefault - unknown frame type" );
+            OSL_FAIL( "XclExpChLineFormat::SetDefault - unknown frame type" );
     }
 }
 
@@ -652,7 +652,7 @@ void XclExpChAreaFormat::SetDefault( XclChFrameType eDefFrameType )
             maData.mnPattern = EXC_PATT_NONE;
         break;
         default:
-            DBG_ERRORFILE( "XclExpChAreaFormat::SetDefault - unknown frame type" );
+            OSL_FAIL( "XclExpChAreaFormat::SetDefault - unknown frame type" );
     }
 }
 
@@ -680,7 +680,7 @@ XclExpChEscherFormat::XclExpChEscherFormat( const XclExpChRoot& rRoot ) :
     mnColor1Id( XclExpPalette::GetColorIdFromIndex( EXC_COLOR_CHWINDOWBACK ) ),
     mnColor2Id( XclExpPalette::GetColorIdFromIndex( EXC_COLOR_CHWINDOWBACK ) )
 {
-    DBG_ASSERT_BIFF( GetBiff() == EXC_BIFF8 );
+    OSL_ENSURE_BIFF( GetBiff() == EXC_BIFF8 );
 }
 
 void XclExpChEscherFormat::Convert( const ScfPropertySet& rPropSet, XclChObjectType eObjType )
@@ -741,7 +741,7 @@ sal_uInt32 XclExpChEscherFormat::RegisterColor( sal_uInt16 nPropId )
 
 void XclExpChEscherFormat::WriteBody( XclExpStream& rStrm )
 {
-    DBG_ASSERT( maData.mxEscherSet, "XclExpChEscherFormat::WriteBody - missing property container" );
+    OSL_ENSURE( maData.mxEscherSet, "XclExpChEscherFormat::WriteBody - missing property container" );
     // write Escher property container via temporary memory stream
     SvMemoryStream aMemStrm;
     maData.mxEscherSet->Commit( aMemStrm );
@@ -901,7 +901,7 @@ void lclAddDoubleRefData(
     if( orArray.GetLen() > 0 )
         orArray.AddOpCode( ocUnion );
 
-    DBG_ASSERT( (rToken.GetType() == ::formula::svDoubleRef) || (rToken.GetType() == ::formula::svExternalDoubleRef),
+    OSL_ENSURE( (rToken.GetType() == ::formula::svDoubleRef) || (rToken.GetType() == ::formula::svExternalDoubleRef),
         "lclAddDoubleRefData - double reference token expected");
     if( rToken.GetType() == ::formula::svExternalDoubleRef )
         orArray.AddExternalDoubleReference( rToken.GetIndex(), rToken.GetString(), aComplexRef );
@@ -1054,7 +1054,7 @@ sal_uInt16 XclExpChSourceLink::ConvertStringSequence( const Sequence< Reference<
         {
             // get leading font index
             const XclFormatRunVec& rFormats = mxString->GetFormats();
-            DBG_ASSERT( !rFormats.empty() && (rFormats.front().mnChar == 0),
+            OSL_ENSURE( !rFormats.empty() && (rFormats.front().mnChar == 0),
                 "XclExpChSourceLink::ConvertStringSequenc - missing leading format" );
             // remove leading format run, if entire string is equally formatted
             if( rFormats.size() == 1 )
@@ -1306,7 +1306,7 @@ bool XclExpChText::ConvertDataLabel( const ScfPropertySet& rPropSet,
     bool bIsPie = rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_PIE;
     // bubble sizes only allowed in bubble charts
     bool bIsBubble = rTypeInfo.meTypeId == EXC_CHTYPEID_BUBBLES;
-    DBG_ASSERT( (GetBiff() == EXC_BIFF8) || !bIsBubble, "XclExpChText::ConvertDataLabel - bubble charts only in BIFF8" );
+    OSL_ENSURE( (GetBiff() == EXC_BIFF8) || !bIsBubble, "XclExpChText::ConvertDataLabel - bubble charts only in BIFF8" );
 
     // raw show flags
     bool bShowValue   = !bIsBubble && aPointLabel.ShowNumber;       // Chart2 uses 'ShowNumber' for bubble size
@@ -1367,7 +1367,7 @@ bool XclExpChText::ConvertDataLabel( const ScfPropertySet& rPropSet,
                 case INSIDE:            nLabelPos = EXC_CHTEXT_POS_INSIDE;  break;
                 case OUTSIDE:           nLabelPos = EXC_CHTEXT_POS_OUTSIDE; break;
                 case NEAR_ORIGIN:       nLabelPos = EXC_CHTEXT_POS_AXIS;    break;
-                default:                DBG_ERRORFILE( "XclExpChText::ConvertDataLabel - unknown label placement type" );
+                default:                OSL_FAIL( "XclExpChText::ConvertDataLabel - unknown label placement type" );
             }
         }
         ::insert_value( maData.mnFlags2, nLabelPos, 0, 4 );
@@ -1588,7 +1588,7 @@ void XclExpCh3dDataFormat::Convert( const ScfPropertySet& rPropSet )
                 maData.mnTop = EXC_CH3DDATAFORMAT_SHARP;
             break;
             default:
-                DBG_ERRORFILE( "XclExpCh3dDataFormat::Convert - unknown 3D bar format" );
+                OSL_FAIL( "XclExpCh3dDataFormat::Convert - unknown 3D bar format" );
         }
     }
 }
@@ -1848,7 +1848,7 @@ ScfPropertySet lclGetPointPropSet( Reference< XDataSeries > xDataSeries, sal_Int
     }
     catch( Exception& )
     {
-        DBG_ERRORFILE( "lclGetPointPropSet - no data point property set" );
+        OSL_FAIL( "lclGetPointPropSet - no data point property set" );
     }
     return aPropSet;
 }
@@ -2239,7 +2239,7 @@ void XclExpChType::WriteBody( XclExpStream& rStrm )
         break;
 
         default:
-            DBG_ERRORFILE( "XclExpChType::WriteBody - unknown chart type" );
+            OSL_FAIL( "XclExpChType::WriteBody - unknown chart type" );
     }
 }
 
@@ -2664,7 +2664,7 @@ void XclExpChLabelRange::Convert( const ScaleData& rScaleData, const ScfProperty
         // ...but get the current base time unit from the property of the old chart API
         sal_Int32 nApiTimeUnit = 0;
         bool bValidBaseUnit = aTimeIncrement.TimeResolution >>= nApiTimeUnit;
-        DBG_ASSERT( bValidBaseUnit, "XclExpChLabelRange::Convert - cannot ghet base time unit" );
+        OSL_ENSURE( bValidBaseUnit, "XclExpChLabelRange::Convert - cannot ghet base time unit" );
         maDateData.mnBaseUnit = bValidBaseUnit ? lclGetTimeUnit( nApiTimeUnit ) : EXC_CHDATERANGE_DAYS;
 
         /*  Min/max values depend on base time unit, they specify the number of

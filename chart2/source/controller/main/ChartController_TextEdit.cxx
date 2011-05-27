@@ -178,7 +178,7 @@ void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
         this->StartTextEdit();
 
     SvxAbstractDialogFactory * pFact = SvxAbstractDialogFactory::Create();
-    DBG_ASSERT( pFact, "No dialog factory" );
+    OSL_ENSURE( pFact, "No dialog factory" );
 
     SfxAllItemSet aSet( m_pDrawModelWrapper->GetItemPool() );
     aSet.Put( SfxBoolItem( FN_PARAM_1, sal_False ) );
@@ -190,7 +190,7 @@ void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
     aSet.Put( SvxFontItem( aCurFont.GetFamily(), aCurFont.GetName(), aCurFont.GetStyleName(), aCurFont.GetPitch(), aCurFont.GetCharSet(), SID_ATTR_CHAR_FONT ) );
 
     SfxAbstractDialog * pDlg = pFact->CreateSfxDialog( m_pChartWindow, aSet, getFrame(), RID_SVXDLG_CHARMAP );
-    DBG_ASSERT( pDlg, "Couldn't create SvxCharacterMap dialog" );
+    OSL_ENSURE( pDlg, "Couldn't create SvxCharacterMap dialog" );
     if( pDlg->Execute() == RET_OK )
     {
         const SfxItemSet* pSet = pDlg->GetOutputItemSet();

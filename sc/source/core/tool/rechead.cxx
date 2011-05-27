@@ -33,8 +33,6 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <tools/debug.hxx>
-
 #include "rechead.hxx"
 #include "scerrors.hxx"
 
@@ -81,7 +79,7 @@ ScMultipleReadHeader::~ScMultipleReadHeader()
 {
     if ( pMemStream && pMemStream->Tell() != pMemStream->GetEndOfData() )
     {
-        DBG_ERRORFILE( "Sizes nicht vollstaendig gelesen" );
+        OSL_FAIL( "Sizes nicht vollstaendig gelesen" );
         if ( rStream.GetError() == SVSTREAM_OK )
             rStream.SetError( SCWARN_IMPORT_INFOLOST );
     }
@@ -94,7 +92,7 @@ ScMultipleReadHeader::~ScMultipleReadHeader()
 void ScMultipleReadHeader::EndEntry()
 {
     sal_uLong nPos = rStream.Tell();
-    DBG_ASSERT( nPos <= nEntryEnd, "zuviel gelesen" );
+    OSL_ENSURE( nPos <= nEntryEnd, "zuviel gelesen" );
     if ( nPos != nEntryEnd )
     {
         if ( rStream.GetError() == SVSTREAM_OK )
@@ -112,7 +110,7 @@ void ScMultipleReadHeader::StartEntry()
     (*pMemStream) >> nEntrySize;
 
     nEntryEnd = nPos + nEntrySize;
-    DBG_ASSERT( nEntryEnd <= nTotalEnd, "zuviele Eintraege gelesen" );
+    OSL_ENSURE( nEntryEnd <= nTotalEnd, "zuviele Eintraege gelesen" );
 }
 
 sal_uLong ScMultipleReadHeader::BytesLeft() const

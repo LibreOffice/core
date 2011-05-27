@@ -43,8 +43,6 @@
 #include <com/sun/star/chart2/XColorScheme.hpp>
 
 #include <com/sun/star/container/XChild.hpp>
-
-#include <tools/debug.hxx>
 #include <rtl/math.hxx>
 
 //.............................................................................
@@ -160,7 +158,7 @@ PieChart::~PieChart()
 
 void PieChart::setScales( const std::vector< ExplicitScaleData >& rScales, bool /* bSwapXAndYAxis */ )
 {
-    DBG_ASSERT(m_nDimension<=static_cast<sal_Int32>(rScales.size()),"Dimension of Plotter does not fit two dimension of given scale sequence");
+    OSL_ENSURE(m_nDimension<=static_cast<sal_Int32>(rScales.size()),"Dimension of Plotter does not fit two dimension of given scale sequence");
     m_pPosHelper->setScales( rScales, true );
 }
 
@@ -329,7 +327,7 @@ void PieChart::createShapes()
     if( m_aZSlots.begin() == m_aZSlots.end() ) //no series
         return;
 
-    DBG_ASSERT(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"PieChart is not proper initialized");
+    OSL_ENSURE(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"PieChart is not proper initialized");
     if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()))
         return;
 

@@ -290,7 +290,7 @@ bool ScViewUtil::FitToUnfilteredRows( ScRange & rRange, ScDocument * pDoc, size_
     SCTAB nTab = rRange.aStart.Tab();
     bool bOneTabOnly = (nTab == rRange.aEnd.Tab());
     // Always fit the range on its first sheet.
-    DBG_ASSERT( bOneTabOnly, "ScViewUtil::ExtendToUnfilteredRows: works only on one sheet");
+    OSL_ENSURE( bOneTabOnly, "ScViewUtil::ExtendToUnfilteredRows: works only on one sheet");
     SCROW nStartRow = rRange.aStart.Row();
     SCROW nLastRow = pDoc->LastNonFilteredRow(nStartRow, MAXROW, nTab);
     if (ValidRow(nLastRow))
@@ -340,7 +340,7 @@ void ScViewUtil::HideDisabledSlot( SfxItemSet& rSet, SfxBindings& rBindings, sal
         break;
 
         default:
-            DBG_ERRORFILE( "ScViewUtil::HideDisabledSlot - unknown slot ID" );
+            OSL_FAIL( "ScViewUtil::HideDisabledSlot - unknown slot ID" );
             return;
     }
 

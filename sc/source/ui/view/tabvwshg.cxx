@@ -80,7 +80,7 @@ void ScTabViewShell::InsertURLButton( const String& rName, const String& rURL,
     SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, pObj);
 
     uno::Reference<awt::XControlModel> xControlModel = pUnoCtrl->GetUnoControlModel();
-    DBG_ASSERT( xControlModel.is(), "UNO-Control ohne Model" );
+    OSL_ENSURE( xControlModel.is(), "UNO-Control ohne Model" );
     if( !xControlModel.is() )
         return;
 

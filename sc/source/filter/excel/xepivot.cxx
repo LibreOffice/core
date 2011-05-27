@@ -203,7 +203,7 @@ void XclExpPCItem::WriteBody( XclExpStream& rStrm )
     else
     {
         // nothing to do for SXEMPTY
-        DBG_ASSERT( IsEmpty(), "XclExpPCItem::WriteBody - no data found" );
+        OSL_ENSURE( IsEmpty(), "XclExpPCItem::WriteBody - no data found" );
     }
 }
 
@@ -230,7 +230,7 @@ XclExpPCField::XclExpPCField(
             {
                 const ScDPNumGroupInfo& rNumInfo = pNumGroupDim->GetInfo();
                 const ScDPNumGroupInfo& rDateInfo = pNumGroupDim->GetDateInfo();
-                DBG_ASSERT( !rNumInfo.Enable || !rDateInfo.Enable,
+                OSL_ENSURE( !rNumInfo.Enable || !rDateInfo.Enable,
                     "XclExpPCField::XclExpPCField - numeric and date grouping enabled" );
 
                 if( rNumInfo.Enable )
@@ -255,7 +255,7 @@ XclExpPCField::XclExpPCField(
     mnTypeFlags( 0 )
 {
     // add base field info (always using first base field, not predecessor of this field) ***
-    DBG_ASSERT( rBaseField.GetFieldName() == rGroupDim.GetSourceDimName(),
+    OSL_ENSURE( rBaseField.GetFieldName() == rGroupDim.GetSourceDimName(),
         "XclExpPCField::FillFromGroup - wrong base cache field" );
     maFieldInfo.maName = rGroupDim.GetGroupDimName();
     maFieldInfo.mnGroupBase = rBaseField.GetFieldIndex();
@@ -277,7 +277,7 @@ XclExpPCField::~XclExpPCField()
 
 void XclExpPCField::SetGroupChildField( const XclExpPCField& rChildField )
 {
-    DBG_ASSERT( !::get_flag( maFieldInfo.mnFlags, EXC_SXFIELD_HASCHILD ),
+    OSL_ENSURE( !::get_flag( maFieldInfo.mnFlags, EXC_SXFIELD_HASCHILD ),
         "XclExpPCField::SetGroupChildIndex - field already has a grouping child field" );
     ::set_flag( maFieldInfo.mnFlags, EXC_SXFIELD_HASCHILD );
     maFieldInfo.mnGroupChild = rChildField.GetFieldIndex();
@@ -322,7 +322,7 @@ void XclExpPCField::WriteIndex( XclExpStream& rStrm, sal_uInt32 nSrcRow ) const
 
 void XclExpPCField::Save( XclExpStream& rStrm )
 {
-    DBG_ASSERT( IsSupportedField(), "XclExpPCField::Save - unknown field type" );
+    OSL_ENSURE( IsSupportedField(), "XclExpPCField::Save - unknown field type" );
     // SXFIELD
     XclExpRecord::Save( rStrm );
     // SXFDBTYPE
@@ -341,15 +341,15 @@ void XclExpPCField::Save( XclExpStream& rStrm )
 
 const XclExpPCField::XclExpPCItemList& XclExpPCField::GetVisItemList() const
 {
-    DBG_ASSERT( IsStandardField() == maGroupItemList.IsEmpty(),
+    OSL_ENSURE( IsStandardField() == maGroupItemList.IsEmpty(),
         "XclExpPCField::GetVisItemList - unexpected additional items in standard field" );
     return IsStandardField() ? maOrigItemList : maGroupItemList;
 }
 
 void XclExpPCField::InitStandardField( const ScRange& rRange )
 {
-    DBG_ASSERT( IsStandardField(), "XclExpPCField::InitStandardField - only for standard fields" );
-    DBG_ASSERT( rRange.aStart.Col() == rRange.aEnd.Col(), "XclExpPCField::InitStandardField - cell range with multiple columns" );
+    OSL_ENSURE( IsStandardField(), "XclExpPCField::InitStandardField - only for standard fields" );
+    OSL_ENSURE( rRange.aStart.Col() == rRange.aEnd.Col(), "XclExpPCField::InitStandardField - cell range with multiple columns" );
 
     ScDocument& rDoc = GetDoc();
     SvNumberFormatter& rFormatter = GetFormatter();
@@ -385,7 +385,7 @@ void XclExpPCField::InitStandardField( const ScRange& rRange )
 
 void XclExpPCField::InitStdGroupField( const XclExpPCField& rBaseField, const ScDPSaveGroupDimension& rGroupDim )
 {
-    DBG_ASSERT( IsGroupField(), "XclExpPCField::InitStdGroupField - only for standard grouping fields" );
+    OSL_ENSURE( IsGroupField(), "XclExpPCField::InitStdGroupField - only for standard grouping fields" );
 
     maFieldInfo.mnBaseItems = rBaseField.GetItemCount();
     maGroupOrder.resize( maFieldInfo.mnBaseItems, EXC_PC_NOITEM );
@@ -428,8 +428,8 @@ void XclExpPCField::InitStdGroupField( const XclExpPCField& rBaseField, const Sc
 
 void XclExpPCField::InitNumGroupField( const ScDPObject& rDPObj, const ScDPNumGroupInfo& rNumInfo )
 {
-    DBG_ASSERT( IsStandardField(), "XclExpPCField::InitNumGroupField - only for standard fields" );
-    DBG_ASSERT( rNumInfo.Enable, "XclExpPCField::InitNumGroupField - numeric grouping not enabled" );
+    OSL_ENSURE( IsStandardField(), "XclExpPCField::InitNumGroupField - only for standard fields" );
+    OSL_ENSURE( rNumInfo.Enable, "XclExpPCField::InitNumGroupField - numeric grouping not enabled" );
 
     // new field type, date type, limit settings (min/max/step/auto)
     if( rNumInfo.DateValues )
@@ -452,8 +452,8 @@ void XclExpPCField::InitNumGroupField( const ScDPObject& rDPObj, const ScDPNumGr
 
 void XclExpPCField::InitDateGroupField( const ScDPObject& rDPObj, const ScDPNumGroupInfo& rDateInfo, sal_Int32 nDatePart )
 {
-    DBG_ASSERT( IsStandardField() || IsStdGroupField(), "XclExpPCField::InitDateGroupField - only for standard fields" );
-    DBG_ASSERT( rDateInfo.Enable, "XclExpPCField::InitDateGroupField - date grouping not enabled" );
+    OSL_ENSURE( IsStandardField() || IsStdGroupField(), "XclExpPCField::InitDateGroupField - only for standard fields" );
+    OSL_ENSURE( rDateInfo.Enable, "XclExpPCField::InitDateGroupField - date grouping not enabled" );
 
     // new field type
     meFieldType = IsStandardField() ? EXC_PCFIELD_DATEGROUP : EXC_PCFIELD_DATECHILD;
@@ -468,7 +468,7 @@ void XclExpPCField::InitDateGroupField( const ScDPObject& rDPObj, const ScDPNumG
 
 void XclExpPCField::InsertItemArrayIndex( size_t nListPos )
 {
-    DBG_ASSERT( IsStandardField(), "XclExpPCField::InsertItemArrayIndex - only for standard fields" );
+    OSL_ENSURE( IsStandardField(), "XclExpPCField::InsertItemArrayIndex - only for standard fields" );
     maIndexVec.push_back( static_cast< sal_uInt16 >( nListPos ) );
 }
 
@@ -534,7 +534,7 @@ sal_uInt16 XclExpPCField::InsertGroupItem( XclExpPCItem* pNewItem )
 
 void XclExpPCField::InsertNumDateGroupItems( const ScDPObject& rDPObj, const ScDPNumGroupInfo& rNumInfo, sal_Int32 nDatePart )
 {
-    DBG_ASSERT( rDPObj.GetSheetDesc(), "XclExpPCField::InsertNumDateGroupItems - cannot generate element list" );
+    OSL_ENSURE( rDPObj.GetSheetDesc(), "XclExpPCField::InsertNumDateGroupItems - cannot generate element list" );
     if( const ScSheetSourceDesc* pSrcDesc = rDPObj.GetSheetDesc() )
     {
         // get the string collection with original source elements
@@ -606,7 +606,7 @@ void XclExpPCField::WriteSxnumgroup( XclExpStream& rStrm )
         rStrm.EndRecord();
 
         // limits (min/max/step) for numeric grouping
-        DBG_ASSERT( maNumGroupLimits.GetSize() == 3,
+        OSL_ENSURE( maNumGroupLimits.GetSize() == 3,
             "XclExpPCField::WriteSxnumgroup - missing numeric grouping limits" );
         maNumGroupLimits.Save( rStrm );
     }
@@ -614,7 +614,7 @@ void XclExpPCField::WriteSxnumgroup( XclExpStream& rStrm )
 
 void XclExpPCField::WriteSxgroupinfo( XclExpStream& rStrm )
 {
-    DBG_ASSERT( IsStdGroupField() != maGroupOrder.empty(),
+    OSL_ENSURE( IsStdGroupField() != maGroupOrder.empty(),
         "XclExpPCField::WriteSxgroupinfo - missing grouping info" );
     if( IsStdGroupField() && !maGroupOrder.empty() )
     {
@@ -729,7 +729,7 @@ bool XclExpPivotCache::HasEqualDataSource( const ScDPObject& rDPObj ) const
 
 void XclExpPivotCache::Save( XclExpStream& rStrm )
 {
-    DBG_ASSERT( mbValid, "XclExpPivotCache::Save - invalid pivot cache" );
+    OSL_ENSURE( mbValid, "XclExpPivotCache::Save - invalid pivot cache" );
     // SXIDSTM
     XclExpUInt16Record( EXC_ID_SXIDSTM, maPCInfo.mnStrmId ).Save( rStrm );
     // SXVS
@@ -752,7 +752,7 @@ void XclExpPivotCache::SaveXml( XclExpXmlStream&
 #endif
 )
 {
-    DBG_ASSERT( mbValid, "XclExpPivotCache::Save - invalid pivot cache" );
+    OSL_ENSURE( mbValid, "XclExpPivotCache::Save - invalid pivot cache" );
 #ifdef XLSX_PIVOT_CACHE /* <pivotCache> without xl/pivotCaches/ cacheStream
                            results in a broken .xlsx */
     sax_fastparser::FSHelperPtr& rWorkbook = rStrm.GetCurrentStream();
@@ -1040,7 +1040,7 @@ sal_uInt16 XclExpPTField::GetFieldIndex() const
 
 sal_uInt16 XclExpPTField::GetLastDataInfoIndex() const
 {
-    DBG_ASSERT( !maDataInfoVec.empty(), "XclExpPTField::GetLastDataInfoIndex - no data info found" );
+    OSL_ENSURE( !maDataInfoVec.empty(), "XclExpPTField::GetLastDataInfoIndex - no data info found" );
     // will return 0xFFFF for empty vector -> ok
     return static_cast< sal_uInt16 >( maDataInfoVec.size() - 1 );
 }
@@ -1084,7 +1084,7 @@ void XclExpPTField::SetPropertiesFromDim( const ScDPSaveDimension& rSaveDim )
 {
     // orientation
     DataPilotFieldOrientation eOrient = static_cast< DataPilotFieldOrientation >( rSaveDim.GetOrientation() );
-    DBG_ASSERT( eOrient != DataPilotFieldOrientation_DATA, "XclExpPTField::SetPropertiesFromDim - called for data field" );
+    OSL_ENSURE( eOrient != DataPilotFieldOrientation_DATA, "XclExpPTField::SetPropertiesFromDim - called for data field" );
     maFieldInfo.AddApiOrient( eOrient );
 
     // show empty items
@@ -1212,7 +1212,7 @@ void XclExpPTField::WriteSxpiEntry( XclExpStream& rStrm ) const
 
 void XclExpPTField::WriteSxdi( XclExpStream& rStrm, sal_uInt16 nDataInfoIdx ) const
 {
-    DBG_ASSERT( nDataInfoIdx < maDataInfoVec.size(), "XclExpPTField::WriteSxdi - data field not found" );
+    OSL_ENSURE( nDataInfoIdx < maDataInfoVec.size(), "XclExpPTField::WriteSxdi - data field not found" );
     if( nDataInfoIdx < maDataInfoVec.size() )
     {
         rStrm.StartRecord( EXC_ID_SXDI, 12 );
@@ -1576,10 +1576,10 @@ void XclExpPivotTable::SetFieldPropertiesFromDim( const ScDPSaveDimension& rSave
             break;
             case DataPilotFieldOrientation_PAGE:
                 maPageFields.push_back( nFieldIdx );
-                DBG_ASSERT( !bDataLayout, "XclExpPivotTable::SetFieldPropertiesFromDim - wrong orientation for data fields" );
+                OSL_ENSURE( !bDataLayout, "XclExpPivotTable::SetFieldPropertiesFromDim - wrong orientation for data fields" );
             break;
             case DataPilotFieldOrientation_DATA:
-                DBG_ERRORFILE( "XclExpPivotTable::SetFieldPropertiesFromDim - called for data field" );
+                OSL_FAIL( "XclExpPivotTable::SetFieldPropertiesFromDim - called for data field" );
             break;
             default:;
         }

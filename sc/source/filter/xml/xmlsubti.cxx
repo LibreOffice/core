@@ -711,7 +711,7 @@ void ScMyTables::AddColCount(sal_Int32 nTempColCount)
 
 void ScMyTables::AddColStyle(const sal_Int32 nRepeat, const rtl::OUString& rCellStyleName)
 {
-    DBG_ASSERT(maTables.size() == 1, "not possible to use default styles on columns in subtables");
+    OSL_ENSURE(maTables.size() == 1, "not possible to use default styles on columns in subtables");
     rImport.GetStylesImportHelper()->AddColumnStyle(rCellStyleName, nCurrentColStylePos, nRepeat);
     nCurrentColStylePos += nRepeat;
 }
@@ -762,8 +762,8 @@ void ScMyTables::AddMatrixRange(
         sal_Int32 nStartColumn, sal_Int32 nStartRow, sal_Int32 nEndColumn, sal_Int32 nEndRow,
         const rtl::OUString& rFormula, const rtl::OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar)
 {
-    DBG_ASSERT(nEndRow >= nStartRow, "wrong row order");
-    DBG_ASSERT(nEndColumn >= nStartColumn, "wrong column order");
+    OSL_ENSURE(nEndRow >= nStartRow, "wrong row order");
+    OSL_ENSURE(nEndColumn >= nStartColumn, "wrong column order");
     table::CellRangeAddress aRange;
     aRange.StartColumn = nStartColumn;
     aRange.StartRow = nStartRow;

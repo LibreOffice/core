@@ -95,7 +95,7 @@ String ScInputStatusItem::GetValueText() const
 
 int ScInputStatusItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
+    OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
     return (    (aStartPos  == ((ScInputStatusItem&)rItem).aStartPos)
              && (aEndPos    == ((ScInputStatusItem&)rItem).aEndPos)
@@ -205,7 +205,7 @@ String ScSortItem::GetValueText() const
 
 int ScSortItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
+    OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
     const ScSortItem& rOther = (const ScSortItem&)rItem;
 
@@ -299,7 +299,7 @@ String ScQueryItem::GetValueText() const
 
 int ScQueryItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
+    OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
     const ScQueryItem& rQueryItem = (const ScQueryItem&)rItem;
 
@@ -363,7 +363,7 @@ String ScSubTotalItem::GetValueText() const
 
 int ScSubTotalItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
+    OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
     const ScSubTotalItem& rSTItem = (const ScSubTotalItem&)rItem;
 
@@ -424,7 +424,7 @@ String ScUserListItem::GetValueText() const
 
 int ScUserListItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
+    OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
     const ScUserListItem& r = (const ScUserListItem&)rItem;
     sal_Bool bEqual = false;
@@ -490,7 +490,7 @@ String ScConsolidateItem::GetValueText() const
 
 int ScConsolidateItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
+    OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
     const ScConsolidateItem& rCItem = (const ScConsolidateItem&)rItem;
 
@@ -529,7 +529,7 @@ ScPivotItem::ScPivotItem( const ScPivotItem& rItem ) :
         aDestRange  ( rItem.aDestRange ),
         bNewSheet   ( rItem.bNewSheet )
 {
-    DBG_ASSERT(rItem.pSaveData, "pSaveData");
+    OSL_ENSURE(rItem.pSaveData, "pSaveData");
     pSaveData = new ScDPSaveData(*rItem.pSaveData);
 }
 
@@ -551,10 +551,10 @@ String ScPivotItem::GetValueText() const
 
 int ScPivotItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
+    OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
     const ScPivotItem& rPItem = (const ScPivotItem&)rItem;
-    DBG_ASSERT( pSaveData && rPItem.pSaveData, "pSaveData" );
+    OSL_ENSURE( pSaveData && rPItem.pSaveData, "pSaveData" );
     return ( *pSaveData == *rPItem.pSaveData &&
              aDestRange == rPItem.aDestRange &&
              bNewSheet  == rPItem.bNewSheet );
@@ -604,7 +604,7 @@ String ScSolveItem::GetValueText() const
 
 int ScSolveItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
+    OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
     const ScSolveItem& rPItem = (const ScSolveItem&)rItem;
 
@@ -654,7 +654,7 @@ String ScTabOpItem::GetValueText() const
 
 int ScTabOpItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
+    OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
     const ScTabOpItem& rPItem = (const ScTabOpItem&)rItem;
 
@@ -707,7 +707,7 @@ String ScCondFrmtItem::GetValueText() const
 
 int ScCondFrmtItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
+    OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
     const ScCondFrmtItem& rPItem = (const ScCondFrmtItem&)rItem;
 

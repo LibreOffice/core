@@ -78,7 +78,7 @@ SdrOle2Obj* lcl_FindChartObj( ScDocShell* pDocShell, SCTAB nTab, const String& r
         if (pDrawLayer)
         {
             SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-            DBG_ASSERT(pPage, "Page nicht gefunden");
+            OSL_ENSURE(pPage, "Page nicht gefunden");
             if (pPage)
             {
                 SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
@@ -139,7 +139,7 @@ ScChartObj* ScChartsObj::GetObjectByIndex_Impl(long nIndex) const
         if (pDrawLayer)
         {
             SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-            DBG_ASSERT(pPage, "Page nicht gefunden");
+            OSL_ENSURE(pPage, "Page nicht gefunden");
             if (pPage)
             {
                 long nPos = 0;
@@ -192,7 +192,7 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
     ScDocument* pDoc = pDocShell->GetDocument();
     ScDrawLayer* pModel = pDocShell->MakeDrawLayer();
     SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));
-    DBG_ASSERT(pPage,"addChart: keine Page");
+    OSL_ENSURE(pPage,"addChart: keine Page");
     if (!pPage || !pDoc)
         return;
 
@@ -344,7 +344,7 @@ sal_Int32 SAL_CALL ScChartsObj::getCount() throw(uno::RuntimeException)
         if (pDrawLayer)
         {
             SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-            DBG_ASSERT(pPage, "Page nicht gefunden");
+            OSL_ENSURE(pPage, "Page nicht gefunden");
             if (pPage)
             {
                 SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
@@ -413,7 +413,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScChartsObj::getElementNames() throw(uno::
         if (pDrawLayer)
         {
             SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-            DBG_ASSERT(pPage, "Page nicht gefunden");
+            OSL_ENSURE(pPage, "Page nicht gefunden");
             if (pPage)
             {
                 SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
@@ -427,14 +427,14 @@ uno::Sequence<rtl::OUString> SAL_CALL ScChartsObj::getElementNames() throw(uno::
                         if ( xObj.is() )
                             aName = pDocShell->GetEmbeddedObjectContainer().GetEmbeddedObjectName( xObj );
 
-                        DBG_ASSERT(nPos<nCount, "huch, verzaehlt?");
+                        OSL_ENSURE(nPos<nCount, "huch, verzaehlt?");
                         pAry[nPos++] = aName;
                     }
                     pObject = aIter.Next();
                 }
             }
         }
-        DBG_ASSERT(nPos==nCount, "nanu, verzaehlt?");
+        OSL_ENSURE(nPos==nCount, "nanu, verzaehlt?");
 
         return aSeq;
     }

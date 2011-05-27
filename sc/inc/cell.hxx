@@ -192,7 +192,7 @@ public:
     /** Cell takes ownership of the passed note and broadcaster. */
     explicit        ScNoteCell( ScPostIt* pNote, SvtBroadcaster* pBC = 0 );
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
                     ~ScNoteCell();
 #endif
 
@@ -209,7 +209,7 @@ public:
                     ScValueCell();
     explicit        ScValueCell( double fValue );
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
                     ~ScValueCell();
 #endif
 
@@ -230,7 +230,7 @@ public:
                     ScStringCell();
     explicit        ScStringCell( const String& rString );
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
                     ~ScStringCell();
 #endif
 

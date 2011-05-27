@@ -79,14 +79,14 @@ NameBuffer::~NameBuffer()
 //void NameBuffer::operator <<( const SpString &rNewString )
 void NameBuffer::operator <<( const String &rNewString )
 {
-    DBG_ASSERT( Count() + nBase < 0xFFFF,
+    OSL_ENSURE( Count() + nBase < 0xFFFF,
         "*NameBuffer::GetLastIndex(): Ich hab' die Nase voll!" );
 
     List::Insert( new StringHashEntry( rNewString ), LIST_APPEND );
 }
 
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
 sal_uInt16  nShrCnt;
 #endif
 
@@ -102,7 +102,7 @@ ShrfmlaBuffer::ShrfmlaBuffer( RootData* pRD ) :
     ExcRoot( pRD ),
     mnCurrIdx (nBase)
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     nShrCnt = 0;
 #endif
 }
@@ -122,7 +122,7 @@ void ShrfmlaBuffer::Store( const ScRange& rRange, const ScTokenArray& rToken )
 {
     String          aName( CreateName( rRange.aStart ) );
 
-    DBG_ASSERT( mnCurrIdx <= 0xFFFF, "*ShrfmlaBuffer::Store(): Gleich wird mir schlecht...!" );
+    OSL_ENSURE( mnCurrIdx <= 0xFFFF, "*ShrfmlaBuffer::Store(): Gleich wird mir schlecht...!" );
 
     ScRangeData* pData = new ScRangeData( pExcRoot->pIR->GetDocPtr(), aName, rToken, rRange.aStart, RT_SHARED );
     const ScAddress& rMaxPos = pExcRoot->pIR->GetMaxPos();
@@ -191,7 +191,7 @@ sal_Int16 ExtSheetBuffer::Add( const String& rFPAN, const String& rTN, const sal
 
 sal_Bool ExtSheetBuffer::GetScTabIndex( sal_uInt16 nExcIndex, sal_uInt16& rScIndex )
 {
-    DBG_ASSERT( nExcIndex,
+    OSL_ENSURE( nExcIndex,
         "*ExtSheetBuffer::GetScTabIndex(): Sheet-Index == 0!" );
 
     nExcIndex--;
@@ -248,7 +248,7 @@ sal_Bool ExtSheetBuffer::GetScTabIndex( sal_uInt16 nExcIndex, sal_uInt16& rScInd
 
 sal_Bool ExtSheetBuffer::IsLink( const sal_uInt16 nExcIndex ) const
 {
-    DBG_ASSERT( nExcIndex > 0, "*ExtSheetBuffer::IsLink(): Index muss >0 sein!" );
+    OSL_ENSURE( nExcIndex > 0, "*ExtSheetBuffer::IsLink(): Index muss >0 sein!" );
     Cont*   pRet = ( Cont * ) List::GetObject( nExcIndex - 1 );
 
     if( pRet )
@@ -260,7 +260,7 @@ sal_Bool ExtSheetBuffer::IsLink( const sal_uInt16 nExcIndex ) const
 
 sal_Bool ExtSheetBuffer::GetLink( const sal_uInt16 nExcIndex, String& rAppl, String& rDoc ) const
 {
-    DBG_ASSERT( nExcIndex > 0, "*ExtSheetBuffer::GetLink(): Index muss >0 sein!" );
+    OSL_ENSURE( nExcIndex > 0, "*ExtSheetBuffer::GetLink(): Index muss >0 sein!" );
     Cont*   pRet = ( Cont * ) List::GetObject( nExcIndex - 1 );
 
     if( pRet )
@@ -331,7 +331,7 @@ void ExtNameBuff::AddName( const String& rName, sal_Int16 nRefIdx )
 
 const ExtName* ExtNameBuff::GetNameByIndex( sal_Int16 nRefIdx, sal_uInt16 nNameIdx ) const
 {
-    DBG_ASSERT( nNameIdx > 0, "ExtNameBuff::GetNameByIndex() - invalid name index" );
+    OSL_ENSURE( nNameIdx > 0, "ExtNameBuff::GetNameByIndex() - invalid name index" );
     ExtNameMap::const_iterator aIt = maExtNames.find( nRefIdx );
     return ((aIt != maExtNames.end()) && (0 < nNameIdx) && (nNameIdx <= aIt->second.size())) ? &aIt->second[ nNameIdx - 1 ] : 0;
 }

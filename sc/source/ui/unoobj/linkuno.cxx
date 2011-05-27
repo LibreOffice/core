@@ -590,7 +590,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScSheetLinksObj::getElementNames() throw(u
                     delete pData;
             }
         }
-        DBG_ASSERT( nPos==nLinkCount, "verzaehlt" );
+        OSL_ENSURE( nPos==nLinkCount, "verzaehlt" );
         return aSeq;
     }
     return uno::Sequence<rtl::OUString>();

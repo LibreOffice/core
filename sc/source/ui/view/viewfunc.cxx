@@ -816,7 +816,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const EditTextOb
                     ++nPos;
                 }
 
-            DBG_ASSERT( nPos==nSelCount, "nPos!=nSelCount" );
+            OSL_ENSURE( nPos==nSelCount, "nPos!=nSelCount" );
 
             pUndoData = pData->Clone();
         }
@@ -899,7 +899,7 @@ void ScViewFunc::EnterDataAtCursor( const String& rString )
     EnterData( nPosX, nPosY, nTab, rString );
 }
 
-void ScViewFunc::EnterMatrix( const String& rString )
+void ScViewFunc::EnterMatrix( const String& rString, ::formula::FormulaGrammar::Grammar eGram )
 {
     ScViewData* pData = GetViewData();
     const ScMarkData& rMark = pData->GetMarkData();
@@ -912,7 +912,7 @@ void ScViewFunc::EnterMatrix( const String& rString )
         SCCOL nCol = pData->GetCurX();
         SCROW nRow = pData->GetCurY();
         SCTAB nTab = pData->GetTabNo();
-        ScFormulaCell aFormCell( pDoc, ScAddress(nCol,nRow,nTab), rString,formula::FormulaGrammar::GRAM_DEFAULT, MM_FORMULA );
+        ScFormulaCell aFormCell( pDoc, ScAddress(nCol,nRow,nTab), rString, eGram, MM_FORMULA );
 
         SCSIZE nSizeX;
         SCSIZE nSizeY;
@@ -932,7 +932,8 @@ void ScViewFunc::EnterMatrix( const String& rString )
     if (pData->GetSimpleArea(aRange) == SC_MARK_SIMPLE)
     {
         ScDocShell* pDocSh = pData->GetDocShell();
-        sal_Bool bSuccess = pDocSh->GetDocFunc().EnterMatrix( aRange, &rMark, NULL, rString, false, false, EMPTY_STRING, formula::FormulaGrammar::GRAM_DEFAULT );
+        bool bSuccess = pDocSh->GetDocFunc().EnterMatrix(
+            aRange, &rMark, NULL, rString, false, false, EMPTY_STRING, eGram );
         if (bSuccess)
             pDocSh->UpdateOle(GetViewData());
     }
@@ -1963,7 +1964,7 @@ void ScViewFunc::DeleteContents( sal_uInt16 nFlags, sal_Bool bRecord )
     aFuncMark.SetMarking(false);        // for MarkToMulti
     aFuncMark.MarkToSimple();           // before bMulti test below
 
-    DBG_ASSERT( aFuncMark.IsMarked() || aFuncMark.IsMultiMarked() || bSimple, "delete what?" );
+    OSL_ENSURE( aFuncMark.IsMarked() || aFuncMark.IsMultiMarked() || bSimple, "delete what?" );
 
     ScDocument* pUndoDoc = NULL;
     sal_Bool bMulti = !bSimple && aFuncMark.IsMultiMarked();
@@ -2859,7 +2860,7 @@ void ScViewFunc::ChangeNumFmtDecimals( sal_Bool bIncrement )
             short nNewType = 0;
             sal_Bool bOk = pFormatter->PutEntry( aNewPicture, nErrPos,
                                                 nNewType, nNewFormat, eLanguage );
-            DBG_ASSERT( bOk, "falsches Zahlformat generiert" );
+            OSL_ENSURE( bOk, "falsches Zahlformat generiert" );
             if (!bOk)
                 bError = sal_True;
         }

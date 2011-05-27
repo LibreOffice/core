@@ -32,7 +32,6 @@
 
 // ============================================================================
 #include "csvtablebox.hxx"
-#include <tools/debug.hxx>
 #include <vcl/lstbox.hxx>
 
 // ause
@@ -250,7 +249,7 @@ void ScCsvTableBox::DataChanged( const DataChangedEvent& rDCEvt )
 
 IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl*, pCtrl )
 {
-    DBG_ASSERT( pCtrl, "ScCsvTableBox::CsvCmdHdl - missing sender" );
+    OSL_ENSURE( pCtrl, "ScCsvTableBox::CsvCmdHdl - missing sender" );
 
     const ScCsvCmd& rCmd = pCtrl->GetCmd();
     ScCsvCmdType eType = rCmd.GetType();
@@ -302,7 +301,7 @@ IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl*, pCtrl )
         break;
 
         case CSVCMD_INSERTSPLIT:
-            DBG_ASSERT( mbFixedMode, "ScCsvTableBox::CsvCmdHdl::InsertSplit - invalid call" );
+            OSL_ENSURE( mbFixedMode, "ScCsvTableBox::CsvCmdHdl::InsertSplit - invalid call" );
             if( maRuler.GetSplitCount() + 1 < sal::static_int_cast<sal_uInt32>(CSV_MAXCOLCOUNT) )
             {
                 maRuler.InsertSplit( nParam1 );
@@ -310,7 +309,7 @@ IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl*, pCtrl )
             }
         break;
         case CSVCMD_REMOVESPLIT:
-            DBG_ASSERT( mbFixedMode, "ScCsvTableBox::CsvCmdHdl::RemoveSplit - invalid call" );
+            OSL_ENSURE( mbFixedMode, "ScCsvTableBox::CsvCmdHdl::RemoveSplit - invalid call" );
             maRuler.RemoveSplit( nParam1 );
             maGrid.RemoveSplit( nParam1 );
         break;
@@ -318,12 +317,12 @@ IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl*, pCtrl )
             Execute( maRuler.HasSplit( nParam1 ) ? CSVCMD_REMOVESPLIT : CSVCMD_INSERTSPLIT, nParam1 );
         break;
         case CSVCMD_MOVESPLIT:
-            DBG_ASSERT( mbFixedMode, "ScCsvTableBox::CsvCmdHdl::MoveSplit - invalid call" );
+            OSL_ENSURE( mbFixedMode, "ScCsvTableBox::CsvCmdHdl::MoveSplit - invalid call" );
             maRuler.MoveSplit( nParam1, nParam2 );
             maGrid.MoveSplit( nParam1, nParam2 );
         break;
         case CSVCMD_REMOVEALLSPLITS:
-            DBG_ASSERT( mbFixedMode, "ScCsvTableBox::CsvCmdHdl::RemoveAllSplits - invalid call" );
+            OSL_ENSURE( mbFixedMode, "ScCsvTableBox::CsvCmdHdl::RemoveAllSplits - invalid call" );
             maRuler.RemoveAllSplits();
             maGrid.RemoveAllSplits();
         break;
@@ -391,7 +390,7 @@ IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl*, pCtrl )
 
 IMPL_LINK( ScCsvTableBox, ScrollHdl, ScrollBar*, pScrollBar )
 {
-    DBG_ASSERT( pScrollBar, "ScCsvTableBox::ScrollHdl - missing sender" );
+    OSL_ENSURE( pScrollBar, "ScCsvTableBox::ScrollHdl - missing sender" );
 
     if( pScrollBar == &maHScroll )
         Execute( CSVCMD_SETPOSOFFSET, pScrollBar->GetThumbPos() );
@@ -403,7 +402,7 @@ IMPL_LINK( ScCsvTableBox, ScrollHdl, ScrollBar*, pScrollBar )
 
 IMPL_LINK( ScCsvTableBox, ScrollEndHdl, ScrollBar*, pScrollBar )
 {
-    DBG_ASSERT( pScrollBar, "ScCsvTableBox::ScrollEndHdl - missing sender" );
+    OSL_ENSURE( pScrollBar, "ScCsvTableBox::ScrollEndHdl - missing sender" );
 
     if( pScrollBar == &maHScroll )
     {

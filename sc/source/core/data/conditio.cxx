@@ -449,7 +449,7 @@ void ScConditionEntry::CompileXML()
 void ScConditionEntry::SetSrcString( const String& rNew )
 {
     // aSrcString is only evaluated in CompileXML
-    DBG_ASSERT( pDoc->IsImportingXML(), "SetSrcString is only valid for XML import" );
+    OSL_ENSURE( pDoc->IsImportingXML(), "SetSrcString is only valid for XML import" );
 
     aSrcString = rNew;
 }
@@ -1294,7 +1294,7 @@ ScConditionalFormat* ScConditionalFormat::Clone(ScDocument* pNewDoc) const
         pNewDoc = pDoc;
 
     ScConditionalFormat* pNew = new ScConditionalFormat(nKey, pNewDoc);
-    DBG_ASSERT(!pNew->ppEntries, "wo kommen die Eintraege her?");
+    OSL_ENSURE(!pNew->ppEntries, "wo kommen die Eintraege her?");
 
     if (nEntryCount)
     {
@@ -1382,7 +1382,7 @@ const String& ScConditionalFormat::GetCellStyle( ScBaseCell* pCell, const ScAddr
 void lcl_Extend( ScRange& rRange, ScDocument* pDoc, sal_Bool bLines )
 {
     SCTAB nTab = rRange.aStart.Tab();
-    DBG_ASSERT(rRange.aEnd.Tab() == nTab, "lcl_Extend - mehrere Tabellen?");
+    OSL_ENSURE(rRange.aEnd.Tab() == nTab, "lcl_Extend - mehrere Tabellen?");
 
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();

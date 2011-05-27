@@ -62,7 +62,7 @@ void XclImpPageSettings::Initialize()
 
 void XclImpPageSettings::ReadSetup( XclImpStream& rStrm )
 {
-    DBG_ASSERT_BIFF( GetBiff() >= EXC_BIFF4 );
+    OSL_ENSURE_BIFF( GetBiff() >= EXC_BIFF4 );
     if( GetBiff() < EXC_BIFF4 )
         return;
 
@@ -97,19 +97,19 @@ void XclImpPageSettings::ReadMargin( XclImpStream& rStrm )
         case EXC_ID_RIGHTMARGIN:    rStrm >> maData.mfRightMargin;  break;
         case EXC_ID_TOPMARGIN:      rStrm >> maData.mfTopMargin;    break;
         case EXC_ID_BOTTOMMARGIN:   rStrm >> maData.mfBottomMargin; break;
-        default:    DBG_ERRORFILE( "XclImpPageSettings::ReadMargin - unknown record" );
+        default:    OSL_FAIL( "XclImpPageSettings::ReadMargin - unknown record" );
     }
 }
 
 void XclImpPageSettings::ReadCenter( XclImpStream& rStrm )
 {
-    DBG_ASSERT_BIFF( GetBiff() >= EXC_BIFF3 );  // read it anyway
+    OSL_ENSURE_BIFF( GetBiff() >= EXC_BIFF3 );  // read it anyway
     bool bCenter = (rStrm.ReaduInt16() != 0);
     switch( rStrm.GetRecId() )
     {
         case EXC_ID_HCENTER:    maData.mbHorCenter = bCenter;   break;
         case EXC_ID_VCENTER:    maData.mbVerCenter = bCenter;   break;
-        default:    DBG_ERRORFILE( "XclImpPageSettings::ReadCenter - unknown record" );
+        default:    OSL_FAIL( "XclImpPageSettings::ReadCenter - unknown record" );
     }
 }
 
@@ -123,7 +123,7 @@ void XclImpPageSettings::ReadHeaderFooter( XclImpStream& rStrm )
     {
         case EXC_ID_HEADER:     maData.maHeader = aString;  break;
         case EXC_ID_FOOTER:     maData.maFooter = aString;  break;
-        default:    DBG_ERRORFILE( "XclImpPageSettings::ReadHeaderFooter - unknown record" );
+        default:    OSL_FAIL( "XclImpPageSettings::ReadHeaderFooter - unknown record" );
     }
 }
 
@@ -134,7 +134,7 @@ void XclImpPageSettings::ReadPageBreaks( XclImpStream& rStrm )
     {
         case EXC_ID_HORPAGEBREAKS:  pVec = &maData.maHorPageBreaks;     break;
         case EXC_ID_VERPAGEBREAKS:  pVec = &maData.maVerPageBreaks;     break;
-        default:    DBG_ERRORFILE( "XclImpPageSettings::ReadPageBreaks - unknown record" );
+        default:    OSL_FAIL( "XclImpPageSettings::ReadPageBreaks - unknown record" );
     }
 
     if( pVec )
@@ -213,7 +213,7 @@ void lclPutMarginItem( SfxItemSet& rItemSet, sal_uInt16 nRecId, double fMarginIn
         }
         break;
         default:
-            DBG_ERRORFILE( "XclImpPageSettings::SetMarginItem - unknown record id" );
+            OSL_FAIL( "XclImpPageSettings::SetMarginItem - unknown record id" );
     }
 }
 

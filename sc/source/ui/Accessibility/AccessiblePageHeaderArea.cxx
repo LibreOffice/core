@@ -247,7 +247,7 @@ rtl::OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleDescription(v
         sDesc = String(ScResId(STR_ACC_CENTERAREA_DESCR));
         break;
     default:
-        DBG_ERRORFILE("wrong adjustment found");
+        OSL_FAIL("wrong adjustment found");
     }
 
     return sDesc;
@@ -269,7 +269,7 @@ rtl::OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleName(void)
         sName = String(ScResId(STR_ACC_CENTERAREA_NAME));
         break;
     default:
-        DBG_ERRORFILE("wrong adjustment found");
+        OSL_FAIL("wrong adjustment found");
     }
 
     return sName;

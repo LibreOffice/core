@@ -217,7 +217,7 @@ void ScSpellDialogChildWindow::Init()
 //        break;
 
         default:
-            DBG_ERRORFILE( "ScSpellDialogChildWindow::Init - unknown selection type" );
+            OSL_FAIL( "ScSpellDialogChildWindow::Init - unknown selection type" );
     }
 
     mbOldIdleDisabled = mpDoc->IsIdleDisabled();

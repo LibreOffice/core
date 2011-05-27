@@ -194,7 +194,7 @@ sal_uInt16 lclGetPosFromValMode( ScValidationMode eValMode )
         case SC_VALID_TEXTLEN:  nLbPos = SC_VALIDDLG_ALLOW_TEXTLEN; break;
         case SC_VALID_LIST:     nLbPos = SC_VALIDDLG_ALLOW_RANGE;   break;
         case SC_VALID_CUSTOM:   nLbPos = SC_VALIDDLG_ALLOW_ANY;     break;  // not supported
-        default:    DBG_ERRORFILE( "lclGetPosFromValMode - unknown validity mode" );
+        default:    OSL_FAIL( "lclGetPosFromValMode - unknown validity mode" );
     }
     return nLbPos;
 }
@@ -213,7 +213,7 @@ ScValidationMode lclGetValModeFromPos( sal_uInt16 nLbPos )
         case SC_VALIDDLG_ALLOW_RANGE:   eValMode = SC_VALID_LIST;       break;
         case SC_VALIDDLG_ALLOW_LIST:    eValMode = SC_VALID_LIST;       break;
         case SC_VALIDDLG_ALLOW_TEXTLEN: eValMode = SC_VALID_TEXTLEN;    break;
-        default:    DBG_ERRORFILE( "lclGetValModeFromPos - invalid list box position" );
+        default:    OSL_FAIL( "lclGetValModeFromPos - invalid list box position" );
     }
     return eValMode;
 }
@@ -233,7 +233,7 @@ sal_uInt16 lclGetPosFromCondMode( ScConditionMode eCondMode )
         case SC_COND_NOTEQUAL:      nLbPos = SC_VALIDDLG_DATA_NOTEQUAL;     break;
         case SC_COND_BETWEEN:       nLbPos = SC_VALIDDLG_DATA_BETWEEN;      break;
         case SC_COND_NOTBETWEEN:    nLbPos = SC_VALIDDLG_DATA_NOTBETWEEN;   break;
-        default:    DBG_ERRORFILE( "lclGetPosFromCondMode - unknown condition mode" );
+        default:    OSL_FAIL( "lclGetPosFromCondMode - unknown condition mode" );
     }
     return nLbPos;
 }
@@ -252,7 +252,7 @@ ScConditionMode lclGetCondModeFromPos( sal_uInt16 nLbPos )
         case SC_VALIDDLG_DATA_NOTEQUAL:     eCondMode = SC_COND_NOTEQUAL;   break;
         case SC_VALIDDLG_DATA_BETWEEN:      eCondMode = SC_COND_BETWEEN;    break;
         case SC_VALIDDLG_DATA_NOTBETWEEN:   eCondMode = SC_COND_NOTBETWEEN; break;
-        default:    DBG_ERRORFILE( "lclGetCondModeFromPos - invalid list box position" );
+        default:    OSL_FAIL( "lclGetCondModeFromPos - invalid list box position" );
     }
     return eCondMode;
 }
@@ -340,7 +340,7 @@ ScTPValidationValue::ScTPValidationValue( Window* pParent, const SfxItemSet& rAr
 
     // list separator in formulas
     String aListSep = ::ScCompiler::GetNativeSymbol( ocSep );
-    DBG_ASSERT( aListSep.Len() == 1, "ScTPValidationValue::ScTPValidationValue - list separator error" );
+    OSL_ENSURE( aListSep.Len() == 1, "ScTPValidationValue::ScTPValidationValue - list separator error" );
     mcFmlaSep = aListSep.Len() ? aListSep.GetChar( 0 ) : ';';
     m_btnRef.Hide(); // cell range picker
 }
@@ -644,7 +644,7 @@ IMPL_LINK( ScTPValidationValue, SelectHdl, ListBox*, EMPTYARG )
             case SC_VALIDDLG_DATA_EQGREATER:    maFtMin.SetText( maStrMin );    break;
 
             default:
-                DBG_ERRORFILE( "ScTPValidationValue::SelectHdl - unknown condition mode" );
+                OSL_FAIL( "ScTPValidationValue::SelectHdl - unknown condition mode" );
         }
     }
 

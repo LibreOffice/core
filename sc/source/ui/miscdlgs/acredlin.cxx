@@ -231,7 +231,7 @@ void ScAcceptChgDlg::Init()
     String  aAreaStr;
     ScRange aRange;
 
-    DBG_ASSERT( pViewData && pDoc, "ViewData oder Document nicht gefunden!" );
+    OSL_ENSURE( pViewData && pDoc, "ViewData oder Document nicht gefunden!" );
 
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
 

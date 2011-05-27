@@ -101,7 +101,7 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
         if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
         {
             uno::Reference<awt::XControlModel> xControlModel = pUnoCtrl->GetUnoControlModel();
-            DBG_ASSERT( xControlModel.is(), "UNO-Control ohne Model" );
+            OSL_ENSURE( xControlModel.is(), "UNO-Control ohne Model" );
             if( !xControlModel.is() )
                 return;
 
@@ -188,7 +188,7 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
                             {
                                 uno::Reference<awt::XControlModel> xControlModel =
                                                         pUnoCtrl->GetUnoControlModel();
-                                DBG_ASSERT( xControlModel.is(), "UNO-Control ohne Model" );
+                                OSL_ENSURE( xControlModel.is(), "UNO-Control ohne Model" );
                                 if( !xControlModel.is() )
                                     return;
 

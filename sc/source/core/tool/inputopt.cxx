@@ -33,8 +33,6 @@
 
 //------------------------------------------------------------------
 
-#include <tools/debug.hxx>
-
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -162,12 +160,12 @@ ScInputCfg::ScInputCfg() :
     Sequence<Any> aValues = GetProperties(aNames);
     EnableNotification(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
-            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing");
+            OSL_ENSURE(pValues[nProp].hasValue(), "property value missing");
             if(pValues[nProp].hasValue())
             {
                 sal_Int32 nIntVal = 0;

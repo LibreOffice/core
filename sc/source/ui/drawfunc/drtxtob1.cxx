@@ -60,11 +60,11 @@ sal_Bool ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
                                                 SfxItemSet& rOutSet )
 {
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
     SfxAbstractTabDialog* pDlg = pFact->CreateScCharDlg(  pViewData->GetDialogParent(), &rArgs,
                                                         pViewData->GetSfxDocShell(),RID_SCDLG_CHAR );
-    DBG_ASSERT(pDlg, "Dialog create fail!");
+    OSL_ENSURE(pDlg, "Dialog create fail!");
     sal_Bool bRet = ( pDlg->Execute() == RET_OK );
 
     if ( bRet )
@@ -103,10 +103,10 @@ sal_Bool ScDrawTextObjectBar::ExecuteParaDlg( const SfxItemSet& rArgs,
     aNewAttr.Put( SvxOrphansItem( 0, SID_ATTR_PARA_ORPHANS) );
 
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
     SfxAbstractTabDialog* pDlg = pFact->CreateScParagraphDlg( pViewData->GetDialogParent(), &aNewAttr, RID_SCDLG_PARAGRAPH);
-    DBG_ASSERT(pDlg, "Dialog create fail!");
+    OSL_ENSURE(pDlg, "Dialog create fail!");
     sal_Bool bRet = ( pDlg->Execute() == RET_OK );
 
     if ( bRet )

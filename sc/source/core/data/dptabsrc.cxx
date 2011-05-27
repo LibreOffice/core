@@ -40,7 +40,6 @@
 #include <boost/unordered_set.hpp>
 #include <boost/unordered_map.hpp>
 
-#include <tools/debug.hxx>
 #include <rtl/math.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/intitem.hxx>
@@ -340,7 +339,7 @@ void ScDPSource::SetDupCount( long nNew )
 
 ScDPDimension* ScDPSource::AddDuplicated(long /* nSource */, const String& rNewName)
 {
-    DBG_ASSERT( pDimensions, "AddDuplicated without dimensions?" );
+    OSL_ENSURE( pDimensions, "AddDuplicated without dimensions?" );
 
     //  re-use
 
@@ -1036,7 +1035,7 @@ void ScDPSource::FillLevelList( sal_uInt16 nOrientation, std::vector<ScDPLevel*>
     for (long nDim=0; nDim<nDimCount; nDim++)
     {
         ScDPDimension* pDim = pDims->getByIndex(pDimIndex[nDim]);
-        DBG_ASSERT( pDim->getOrientation() == nOrientation, "orientations are wrong" );
+        OSL_ENSURE( pDim->getOrientation() == nOrientation, "orientations are wrong" );
 
         ScDPHierarchies* pHiers = pDim->GetHierarchiesObject();
         long nHierarchy = pDim->getUsedHierarchy();
@@ -1452,7 +1451,7 @@ void ScDPDimension::setUsedHierarchy(long /* nNew */)
 
 ScDPDimension* ScDPDimension::CreateCloneObject()
 {
-    DBG_ASSERT( nSourceDim < 0, "recursive duplicate - not implemented" );
+    OSL_ENSURE( nSourceDim < 0, "recursive duplicate - not implemented" );
 
     //! set new name here, or temporary name ???
     String aNewName = aName;
@@ -2591,7 +2590,7 @@ ScDPMember* ScDPMembers::getByIndex(long nIndex) const
             ppMbrs[nIndex] = pNew;
         }
 
-        DBG_ASSERT( ppMbrs[nIndex] ," member is not initialized " );
+        OSL_ENSURE( ppMbrs[nIndex] ," member is not initialized " );
 
         return ppMbrs[nIndex];
     }
@@ -2646,7 +2645,7 @@ sal_Int32 ScDPMember::Compare( const ScDPMember& rOther ) const
     {
         if ( rOther.nPosition >= 0 )
         {
-            DBG_ASSERT( nPosition != rOther.nPosition, "same position for two members" );
+            OSL_ENSURE( nPosition != rOther.nPosition, "same position for two members" );
             return ( nPosition < rOther.nPosition ) ? -1 : 1;
         }
         else
@@ -2798,7 +2797,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDPMember )
 
 const ScDPCache* ScDPSource::GetCache()
 {
-    DBG_ASSERT( GetData() , "empty ScDPTableData pointer");
+    OSL_ENSURE( GetData() , "empty ScDPTableData pointer");
     return ( GetData()!=NULL) ? GetData()->GetCacheTable().getCache() : NULL ;
 }
 

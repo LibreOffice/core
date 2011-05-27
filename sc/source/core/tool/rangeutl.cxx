@@ -33,8 +33,6 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <tools/debug.hxx>
-
 #include "rangeutl.hxx"
 #include "document.hxx"
 #include "global.hxx"
@@ -116,7 +114,7 @@ sal_Bool ScRangeUtil::IsAbsTabArea( const String&   rAreaStr,
                                 sal_Bool            /* bAcceptCellRef */,
                                 ScAddress::Details const & rDetails ) const
 {
-    DBG_ASSERT( pDoc, "Kein Dokument uebergeben!" );
+    OSL_ENSURE( pDoc, "Kein Dokument uebergeben!" );
     if ( !pDoc )
         return false;
 
@@ -552,7 +550,7 @@ sal_Bool ScRangeStringConverter::GetRangeListFromString(
         sal_Unicode cQuote )
 {
     sal_Bool bRet = sal_True;
-    DBG_ASSERT( rRangeListStr.getLength(), "ScXMLConverter::GetRangeListFromString - empty string!" );
+    OSL_ENSURE( rRangeListStr.getLength(), "ScXMLConverter::GetRangeListFromString - empty string!" );
     sal_Int32 nOffset = 0;
     while( nOffset >= 0 )
     {
@@ -650,7 +648,7 @@ sal_Bool ScRangeStringConverter::GetRangeListFromString(
         sal_Unicode cQuote )
 {
     sal_Bool bRet = sal_True;
-    DBG_ASSERT( rRangeListStr.getLength(), "ScXMLConverter::GetRangeListFromString - empty string!" );
+    OSL_ENSURE( rRangeListStr.getLength(), "ScXMLConverter::GetRangeListFromString - empty string!" );
     table::CellRangeAddress aRange;
     sal_Int32 nOffset = 0;
     while( nOffset >= 0 )
@@ -833,8 +831,8 @@ static void lcl_appendCellRangeAddress(
 {
     if (rExtInfo1.mbExternal)
     {
-        DBG_ASSERT(rExtInfo2.mbExternal, "2nd address is not external!?");
-        DBG_ASSERT(rExtInfo1.mnFileId == rExtInfo2.mnFileId, "File IDs do not match between 1st and 2nd addresses.");
+        OSL_ENSURE(rExtInfo2.mbExternal, "2nd address is not external!?");
+        OSL_ENSURE(rExtInfo1.mnFileId == rExtInfo2.mnFileId, "File IDs do not match between 1st and 2nd addresses.");
 
         ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
         const String* pFilePath = pRefMgr->getExternalFileName(rExtInfo1.mnFileId, true);

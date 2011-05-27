@@ -174,10 +174,10 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 else
                 {
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+                    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                     AbstractScShowTabDlg* pDlg = pFact->CreateScShowTabDlg( GetDialogParent(), RID_SCDLG_SHOW_TAB);
-                    DBG_ASSERT(pDlg, "Dialog create fail!");
+                    OSL_ENSURE(pDlg, "Dialog create fail!");
 
                     String aTabName;
                     sal_Bool bFirst = sal_True;
@@ -242,12 +242,12 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 else                                // Dialog
                 {
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+                    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                     AbstractScInsertTableDlg* pDlg = pFact->CreateScInsertTableDlg( GetDialogParent(), *pViewData,
                                                                                     nTabSelCount, nSlot == FID_INS_TABLE_EXT,
                                                                                     RID_SCDLG_INSERT_TABLE);
-                    DBG_ASSERT(pDlg, "Dialog create fail!");
+                    OSL_ENSURE(pDlg, "Dialog create fail!");
                     if ( RET_OK == pDlg->Execute() )
                     {
                         if (pDlg->GetTablesFromFile())
@@ -422,14 +422,14 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     }
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+                    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                     AbstractScStringInputDlg* pDlg = pFact->CreateScStringInputDlg(
                         GetDialogParent(), aDlgTitle, String(ScResId(SCSTR_NAME)),
                         aName, GetStaticInterface()->GetSlot(nSlot)->GetCommand(),
                         pHelpId, RID_SCDLG_STRINPUT);
 
-                    DBG_ASSERT(pDlg, "Dialog create fail!");
+                    OSL_ENSURE(pDlg, "Dialog create fail!");
 
                     while ( !bDone && nRet == RET_OK )
                     {
@@ -548,12 +548,12 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     pDoc->GetName( pViewData->GetTabNo(), aDefaultName );
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+                    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                     AbstractScMoveTableDlg* pDlg = pFact->CreateScMoveTableDlg( GetDialogParent(),
                                                                                 aDefaultName,
                                                                                 RID_SCDLG_MOVETAB );
-                    DBG_ASSERT(pDlg, "Dialog create fail!");
+                    OSL_ENSURE(pDlg, "Dialog create fail!");
 
                     SCTAB nTableCount = pDoc->GetTableCount();
                     ScMarkData& rMark       = GetViewData()->GetMarkData();
@@ -757,7 +757,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                     aTabBgColor = pDoc->GetTabBgColor( nCurrentTab );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+                    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
                     AbstractScTabBgColorDlg* pDlg = pFact->CreateScTabBgColorDlg(
                                                                 GetDialogParent(),
                                                                 String(ScResId(SCSTR_SET_TAB_BG_COLOR)),

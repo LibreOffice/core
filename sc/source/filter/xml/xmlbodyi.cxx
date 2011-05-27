@@ -61,7 +61,6 @@
 #include <xmloff/xmluconv.hxx>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <sal/types.h>
-#include <tools/debug.hxx>
 
 #include <memory>
 

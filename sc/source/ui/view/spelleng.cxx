@@ -332,7 +332,7 @@ void ScSpellingEngine::ConvertAll( EditView& rEditView )
     if( FindNextConversionCell() )
         eState = rEditView.StartSpeller( static_cast< sal_Bool >( sal_True ) );
 
-    DBG_ASSERT( eState != EE_SPELL_NOSPELLER, "ScSpellingEngine::Convert - no spell checker" );
+    OSL_ENSURE( eState != EE_SPELL_NOSPELLER, "ScSpellingEngine::Convert - no spell checker" );
     if( eState == EE_SPELL_NOLANGUAGE )
     {
         Window* pParent = GetDialogParent();

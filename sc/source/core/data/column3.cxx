@@ -619,7 +619,7 @@ void ScColumn::DeleteArea(SCROW nStartRow, SCROW nEndRow, sal_uInt16 nDelFlag)
 
     if ( nDelFlag & IDF_EDITATTR )
     {
-        DBG_ASSERT( nContFlag == 0, "DeleteArea: falsche Flags" );
+        OSL_ENSURE( nContFlag == 0, "DeleteArea: falsche Flags" );
         RemoveEditAttribs( nStartRow, nEndRow );
     }
 
@@ -816,7 +816,7 @@ void ScColumn::CopyFromClip(SCROW nRow1, SCROW nRow2, long nDy,
                 const ScPostIt* pSourceNote = pSourceCell ? pSourceCell->GetNote() : 0;
                 if (pSourceNote)
                 {
-                    DBG_ASSERT( !pAddNoteCell->HasNote(), "ScColumn::CopyFromClip - unexpected note at destination cell" );
+                    OSL_ENSURE( !pAddNoteCell->HasNote(), "ScColumn::CopyFromClip - unexpected note at destination cell" );
                     bool bCloneCaption = (nInsFlag & IDF_NOCAPTIONS) == 0;
                     // #i52342# if caption is cloned, the note must be constructed with the destination document
                     ScAddress aSourcePos( rColumn.nCol, rColumn.pItems[i].nRow, rColumn.nTab );
@@ -948,7 +948,7 @@ ScBaseCell* ScColumn::CloneCell(SCSIZE nIndex, sal_uInt16 nFlags, ScDocument& rD
             }
         break;
 
-        default: DBG_ERRORFILE( "ScColumn::CloneCell - unknown cell type" );
+        default: OSL_FAIL( "ScColumn::CloneCell - unknown cell type" );
     }
 
     // clone the cell note
@@ -1064,7 +1064,7 @@ void ScColumn::MixData( SCROW nRow1, SCROW nRow2,
         if ( nIndex < nCount && nNextThis == nRow )
             pDest = pItems[nIndex].pCell;
 
-        DBG_ASSERT( pSrc || pDest, "Nanu ?" );
+        OSL_ENSURE( pSrc || pDest, "Nanu ?" );
 
         CellType eSrcType  = pSrc  ? pSrc->GetCellType()  : CELLTYPE_NONE;
         CellType eDestType = pDest ? pDest->GetCellType() : CELLTYPE_NONE;

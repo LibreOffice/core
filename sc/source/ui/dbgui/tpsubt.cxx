@@ -100,7 +100,7 @@ ScTpSubTotalGroup::~ScTpSubTotalGroup()
         for ( sal_uInt16 i=0; i<nCount; i++ )
         {
             pData = (sal_uInt16*)(aLbColumns.GetEntryData( i ));
-            DBG_ASSERT( pData, "EntryData not found" );
+            OSL_ENSURE( pData, "EntryData not found" );
 
             delete pData;
         }
@@ -117,7 +117,7 @@ void ScTpSubTotalGroup::Init()
     pViewData   = rSubTotalItem.GetViewData();
     pDoc        = ( pViewData ) ? pViewData->GetDocument() : NULL;
 
-    DBG_ASSERT( pViewData && pDoc, "ViewData or Document not found :-(" );
+    OSL_ENSURE( pViewData && pDoc, "ViewData or Document not found :-(" );
 
     aLbGroup.SetSelectHdl       ( LINK( this, ScTpSubTotalGroup, SelectHdl ) );
     aLbColumns.SetSelectHdl     ( LINK( this, ScTpSubTotalGroup, SelectHdl ) );
@@ -142,7 +142,7 @@ bool ScTpSubTotalGroup::DoReset( sal_uInt16             nGroupNo,
 {
     sal_uInt16 nGroupIdx = 0;
 
-    DBG_ASSERT( (nGroupNo<=3) && (nGroupNo>0), "Invalid group" );
+    OSL_ENSURE( (nGroupNo<=3) && (nGroupNo>0), "Invalid group" );
 
     if ( (nGroupNo > 3) || (nGroupNo == 0) )
         return false;
@@ -204,8 +204,8 @@ bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
 {
     sal_uInt16 nGroupIdx = 0;
 
-    DBG_ASSERT( (nGroupNo<=3) && (nGroupNo>0), "Invalid group" );
-    DBG_ASSERT(    (aLbGroup.GetEntryCount() > 0)
+    OSL_ENSURE( (nGroupNo<=3) && (nGroupNo>0), "Invalid group" );
+    OSL_ENSURE(    (aLbGroup.GetEntryCount() > 0)
                 && (aLbColumns.GetEntryCount() > 0)
                 && (aLbFunctions.GetEntryCount() > 0),
                 "Non-initialized Lists" );
@@ -258,7 +258,7 @@ bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
         {
             if ( aLbColumns.IsChecked( i ) )
             {
-                DBG_ASSERT( nCheck <= nCheckCount,
+                OSL_ENSURE( nCheck <= nCheckCount,
                             "Range error :-(" );
                 nFunction = *((sal_uInt16*)aLbColumns.GetEntryData( i ));
                 pSubTotals[nCheck] = nFieldArr[i];
@@ -285,7 +285,7 @@ bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
 
 void ScTpSubTotalGroup::FillListBoxes()
 {
-    DBG_ASSERT( pViewData && pDoc, "ViewData or Document not found :-/" );
+    OSL_ENSURE( pViewData && pDoc, "ViewData or Document not found :-/" );
 
     if ( pViewData && pDoc )
     {
@@ -402,7 +402,7 @@ IMPL_LINK( ScTpSubTotalGroup, SelectHdl, ListBox *, pLb )
         sal_uInt16      nColumn     = aLbColumns.GetSelectEntryPos();
         sal_uInt16*     pFunction   = (sal_uInt16*)aLbColumns.GetEntryData( nColumn );
 
-        DBG_ASSERT( pFunction, "EntryData nicht gefunden!" );
+        OSL_ENSURE( pFunction, "EntryData nicht gefunden!" );
         if ( !pFunction )
             return 0;
 
@@ -535,7 +535,7 @@ void ScTpSubTotalOptions::Init()
     pViewData   = rSubTotalItem.GetViewData();
     pDoc        = ( pViewData ) ? pViewData->GetDocument() : NULL;
 
-    DBG_ASSERT( pViewData && pDoc, "ViewData oder Document nicht gefunden!" );
+    OSL_ENSURE( pViewData && pDoc, "ViewData oder Document nicht gefunden!" );
 
     aBtnSort.SetClickHdl    ( LINK( this, ScTpSubTotalOptions, CheckHdl ) );
     aBtnUserDef.SetClickHdl ( LINK( this, ScTpSubTotalOptions, CheckHdl ) );

@@ -987,7 +987,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
             nSizeXPix = aPixRect.GetWidth();    // Papersize -> kein H-Scrolling
         else
         {
-            DBG_ASSERT(pView,"keine View fuer EditView");
+            OSL_ENSURE(pView,"keine View fuer EditView");
 
             if ( bGrowCentered )
             {
@@ -1005,7 +1005,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
             if ( nSizeXPix <= 0 )
                 nSizeXPix = aPixRect.GetWidth();    // editing outside to the right of the window -> keep cell width
         }
-        DBG_ASSERT(pView,"keine View fuer EditView");
+        OSL_ENSURE(pView,"keine View fuer EditView");
         long nSizeYPix = pView->GetGridHeight(WhichV(eWhich)) - aPixRect.Top();
         if ( nSizeYPix <= 0 )
             nSizeYPix = aPixRect.GetHeight();   // editing outside below the window -> keep cell height
@@ -1452,14 +1452,14 @@ void ScViewData::SetActivePart( ScSplitPos eNewActive )
 
 Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScHSplitPos eWhich ) const
 {
-    DBG_ASSERT( eWhich==SC_SPLIT_LEFT || eWhich==SC_SPLIT_RIGHT, "Falsche Position" );
+    OSL_ENSURE( eWhich==SC_SPLIT_LEFT || eWhich==SC_SPLIT_RIGHT, "Falsche Position" );
     ScSplitPos ePos = ( eWhich == SC_SPLIT_LEFT ) ? SC_SPLIT_BOTTOMLEFT : SC_SPLIT_BOTTOMRIGHT;
     return GetScrPos( nWhereX, nWhereY, ePos );
 }
 
 Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScVSplitPos eWhich ) const
 {
-    DBG_ASSERT( eWhich==SC_SPLIT_TOP || eWhich==SC_SPLIT_BOTTOM, "Falsche Position" );
+    OSL_ENSURE( eWhich==SC_SPLIT_TOP || eWhich==SC_SPLIT_BOTTOM, "Falsche Position" );
     ScSplitPos ePos = ( eWhich == SC_SPLIT_TOP ) ? SC_SPLIT_TOPLEFT : SC_SPLIT_BOTTOMLEFT;
     return GetScrPos( nWhereX, nWhereY, ePos );
 }
@@ -1585,7 +1585,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
 
 SCCOL ScViewData::CellsAtX( SCsCOL nPosX, SCsCOL nDir, ScHSplitPos eWhichX, sal_uInt16 nScrSizeX ) const
 {
-    DBG_ASSERT( nDir==1 || nDir==-1, "falscher CellsAt Aufruf" );
+    OSL_ENSURE( nDir==1 || nDir==-1, "falscher CellsAt Aufruf" );
 
     if (pView)
         ((ScViewData*)this)->aScrSize.Width()  = pView->GetGridWidth(eWhichX);
@@ -1627,7 +1627,7 @@ SCCOL ScViewData::CellsAtX( SCsCOL nPosX, SCsCOL nDir, ScHSplitPos eWhichX, sal_
 
 SCROW ScViewData::CellsAtY( SCsROW nPosY, SCsROW nDir, ScVSplitPos eWhichY, sal_uInt16 nScrSizeY ) const
 {
-    DBG_ASSERT( nDir==1 || nDir==-1, "falscher CellsAt Aufruf" );
+    OSL_ENSURE( nDir==1 || nDir==-1, "falscher CellsAt Aufruf" );
 
     if (pView)
         ((ScViewData*)this)->aScrSize.Height() = pView->GetGridHeight(eWhichY);
@@ -2054,37 +2054,37 @@ SfxObjectShell* ScViewData::GetSfxDocShell() const
 
 SfxBindings& ScViewData::GetBindings()
 {
-    DBG_ASSERT( pViewShell, "GetBindings() without ViewShell" );
+    OSL_ENSURE( pViewShell, "GetBindings() without ViewShell" );
     return pViewShell->GetViewFrame()->GetBindings();
 }
 
 SfxDispatcher& ScViewData::GetDispatcher()
 {
-    DBG_ASSERT( pViewShell, "GetDispatcher() without ViewShell" );
+    OSL_ENSURE( pViewShell, "GetDispatcher() without ViewShell" );
     return *pViewShell->GetViewFrame()->GetDispatcher();
 }
 
 Window* ScViewData::GetDialogParent()
 {
-    DBG_ASSERT( pViewShell, "GetDialogParent() ohne ViewShell" );
+    OSL_ENSURE( pViewShell, "GetDialogParent() ohne ViewShell" );
     return pViewShell->GetDialogParent();
 }
 
 Window* ScViewData::GetActiveWin()
 {
-    DBG_ASSERT( pView, "GetActiveWin() ohne View" );
+    OSL_ENSURE( pView, "GetActiveWin() ohne View" );
     return pView->GetActiveWin();
 }
 
 ScDrawView* ScViewData::GetScDrawView()
 {
-    DBG_ASSERT( pView, "GetScDrawView() ohne View" );
+    OSL_ENSURE( pView, "GetScDrawView() ohne View" );
     return pView->GetScDrawView();
 }
 
 sal_Bool ScViewData::IsMinimized()
 {
-    DBG_ASSERT( pView, "IsMinimized() ohne View" );
+    OSL_ENSURE( pView, "IsMinimized() ohne View" );
     return pView->IsMinimized();
 }
 
@@ -2369,7 +2369,7 @@ void ScViewData::WriteExtOptions( ScExtDocOptions& rDocOpt ) const
             bool bVSplit = eVSplit != SC_SPLIT_NONE;
             bool bRealSplit = (eHSplit == SC_SPLIT_NORMAL) || (eVSplit == SC_SPLIT_NORMAL);
             bool bFrozen    = (eHSplit == SC_SPLIT_FIX)    || (eVSplit == SC_SPLIT_FIX);
-            DBG_ASSERT( !bRealSplit || !bFrozen, "ScViewData::WriteExtOptions - split and freeze in same sheet" );
+            OSL_ENSURE( !bRealSplit || !bFrozen, "ScViewData::WriteExtOptions - split and freeze in same sheet" );
             rTabSett.mbFrozenPanes = !bRealSplit && bFrozen;
 
             // split and freeze position
@@ -2608,7 +2608,7 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
         SCTAB nTabCount (pDoc->GetTableCount());
         uno::Reference<lang::XMultiServiceFactory> xServiceFactory =
                                         comphelper::getProcessServiceFactory();
-        DBG_ASSERT( xServiceFactory.is(), "got no service manager" );
+        OSL_ENSURE( xServiceFactory.is(), "got no service manager" );
         if( xServiceFactory.is() )
         {
             rtl::OUString sName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.NamedPropertyValues"));
@@ -2633,11 +2633,11 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
                         //#101739#; two tables with the same name are possible
                         catch ( container::ElementExistException& )
                         {
-                            DBG_ERRORFILE("seems there are two tables with the same name");
+                            OSL_FAIL("seems there are two tables with the same name");
                         }
                         catch ( uno::RuntimeException& )
                         {
-                            DBG_ERRORFILE("something went wrong");
+                            OSL_FAIL("something went wrong");
                         }
                     }
                 }
@@ -2883,7 +2883,7 @@ void ScViewData::SetOptions( const ScViewOptions& rOpt )
                                    rOpt.GetObjMode(VOBJ_TYPE_OLE) );
 
     *pOptions = rOpt;
-    DBG_ASSERT( pView, "No View" );
+    OSL_ENSURE( pView, "No View" );
 
     if( pView )
     {
@@ -2893,7 +2893,7 @@ void ScViewData::SetOptions( const ScViewOptions& rOpt )
 
 Point ScViewData::GetMousePosPixel()
 {
-    DBG_ASSERT( pView, "GetMousePosPixel() ohne View" );
+    OSL_ENSURE( pView, "GetMousePosPixel() ohne View" );
     return pView->GetMousePosPixel();
 }
 

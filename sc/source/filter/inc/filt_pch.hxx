@@ -57,7 +57,6 @@
 #include <tools/errcode.hxx>
 #include <tools/ref.hxx>
 #include <tools/link.hxx>
-#include <tools/debug.hxx>
 #include <tools/time.hxx>
 #include <tools/date.hxx>
 #include <svl/svarray.hxx>
@@ -139,7 +138,6 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/gdimtf.hxx>
-#include <tools/unqidx.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/animate.hxx>
 #include <vcl/graph.h>

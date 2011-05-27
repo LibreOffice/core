@@ -131,7 +131,7 @@ ScUndoObjData::~ScUndoObjData()
 void ScUndoObjData::Undo()
 {
     ScDrawObjData* pData = ScDrawLayer::GetObjData( pObj );
-    DBG_ASSERT(pData,"ScUndoObjData: Daten nicht da");
+    OSL_ENSURE(pData,"ScUndoObjData: Daten nicht da");
     if (pData)
     {
         pData->maStart = aOldStt;
@@ -142,7 +142,7 @@ void ScUndoObjData::Undo()
 void ScUndoObjData::Redo()
 {
     ScDrawObjData* pData = ScDrawLayer::GetObjData( pObj );
-    DBG_ASSERT(pData,"ScUndoObjData: Daten nicht da");
+    OSL_ENSURE(pData,"ScUndoObjData: Daten nicht da");
     if (pData)
     {
         pData->maStart = aNewStt;
@@ -369,7 +369,7 @@ SdrModel* ScDrawLayer::AllocModel() const
 
 Window* ScDrawLayer::GetCurDocViewWin()
 {
-    DBG_ASSERT( pDoc, "ScDrawLayer::GetCurDocViewWin without document" );
+    OSL_ENSURE( pDoc, "ScDrawLayer::GetCurDocViewWin without document" );
     if ( !pDoc )
         return NULL;
 
@@ -468,7 +468,7 @@ void ScDrawLayer::MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SC
                                 SCsCOL nDx,SCsROW nDy, bool bUpdateNoteCaptionPos )
 {
     SdrPage* pPage = GetPage(static_cast<sal_uInt16>(nTab));
-    DBG_ASSERT(pPage,"Page nicht gefunden");
+    OSL_ENSURE(pPage,"Page nicht gefunden");
     if (!pPage)
         return;
 
@@ -571,13 +571,13 @@ namespace
 
 void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegativePage, bool bUpdateNoteCaptionPos )
 {
-    DBG_ASSERT( pDoc, "ScDrawLayer::RecalcPos - missing document" );
+    OSL_ENSURE( pDoc, "ScDrawLayer::RecalcPos - missing document" );
     if( !pDoc )
         return;
 
     if( rData.mbNote )
     {
-        DBG_ASSERT( rData.maStart.IsValid(), "ScDrawLayer::RecalcPos - invalid position for cell note" );
+        OSL_ENSURE( rData.maStart.IsValid(), "ScDrawLayer::RecalcPos - invalid position for cell note" );
         /*  #i109372# On insert/remove rows/columns/cells: Updating the caption
             position must not be done, if the cell containing the note has not
             been moved yet in the document. The calling code now passes an
@@ -733,7 +733,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
         if (rData.maLastRect.IsEmpty())
             rData.maLastRect = pObj->GetLogicRect();
 
-        DBG_ASSERT( bValid1, "ScDrawLayer::RecalcPos - invalid start position" );
+        OSL_ENSURE( bValid1, "ScDrawLayer::RecalcPos - invalid start position" );
         Point aPos( pDoc->GetColOffset( nCol1, nTab1 ), pDoc->GetRowOffset( nRow1, nTab1 ) );
         TwipsToMM( aPos.X() );
         TwipsToMM( aPos.Y() );
@@ -785,12 +785,12 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
 
 sal_Bool ScDrawLayer::GetPrintArea( ScRange& rRange, sal_Bool bSetHor, sal_Bool bSetVer ) const
 {
-    DBG_ASSERT( pDoc, "ScDrawLayer::GetPrintArea without document" );
+    OSL_ENSURE( pDoc, "ScDrawLayer::GetPrintArea without document" );
     if ( !pDoc )
         return false;
 
     SCTAB nTab = rRange.aStart.Tab();
-    DBG_ASSERT( rRange.aEnd.Tab() == nTab, "GetPrintArea: Tab unterschiedlich" );
+    OSL_ENSURE( rRange.aEnd.Tab() == nTab, "GetPrintArea: Tab unterschiedlich" );
 
     sal_Bool bNegativePage = pDoc->IsNegativePage( nTab );
 
@@ -833,7 +833,7 @@ sal_Bool ScDrawLayer::GetPrintArea( ScRange& rRange, sal_Bool bSetHor, sal_Bool 
     }
 
     const SdrPage* pPage = GetPage(static_cast<sal_uInt16>(nTab));
-    DBG_ASSERT(pPage,"Page nicht gefunden");
+    OSL_ENSURE(pPage,"Page nicht gefunden");
     if (pPage)
     {
         SdrObjListIter aIter( *pPage, IM_FLAT );
@@ -876,7 +876,7 @@ sal_Bool ScDrawLayer::GetPrintArea( ScRange& rRange, sal_Bool bSetHor, sal_Bool 
 
     if (bAny)
     {
-        DBG_ASSERT( nStartX<=nEndX && nStartY<=nEndY, "Start/End falsch in ScDrawLayer::GetPrintArea" );
+        OSL_ENSURE( nStartX<=nEndX && nStartY<=nEndY, "Start/End falsch in ScDrawLayer::GetPrintArea" );
 
         if (bSetHor)
         {
@@ -953,7 +953,7 @@ SdrUndoGroup* ScDrawLayer::GetCalcUndo()
 void ScDrawLayer::MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCROW nRow2,
                             SCsCOL nDx,SCsROW nDy, sal_Bool bInsDel, bool bUpdateNoteCaptionPos )
 {
-    DBG_ASSERT( pDoc, "ScDrawLayer::MoveArea without document" );
+    OSL_ENSURE( pDoc, "ScDrawLayer::MoveArea without document" );
     if ( !pDoc )
         return;
 
@@ -1000,7 +1000,7 @@ void ScDrawLayer::MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCR
 
 sal_Bool ScDrawLayer::HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow )
 {
-    DBG_ASSERT( pDoc, "ScDrawLayer::HasObjectsInRows without document" );
+    OSL_ENSURE( pDoc, "ScDrawLayer::HasObjectsInRows without document" );
     if ( !pDoc )
         return false;
 
@@ -1027,7 +1027,7 @@ sal_Bool ScDrawLayer::HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndR
         MirrorRectRTL( aTestRect );
 
     SdrPage* pPage = GetPage(static_cast<sal_uInt16>(nTab));
-    DBG_ASSERT(pPage,"Page nicht gefunden");
+    OSL_ENSURE(pPage,"Page nicht gefunden");
     if (!pPage)
         return false;
 
@@ -1051,12 +1051,12 @@ sal_Bool ScDrawLayer::HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndR
 void ScDrawLayer::DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
                                             SCCOL nCol2,SCROW nRow2 )
 {
-    DBG_ASSERT( pDoc, "ScDrawLayer::DeleteObjectsInArea without document" );
+    OSL_ENSURE( pDoc, "ScDrawLayer::DeleteObjectsInArea without document" );
     if ( !pDoc )
         return;
 
     SdrPage* pPage = GetPage(static_cast<sal_uInt16>(nTab));
-    DBG_ASSERT(pPage,"Page ?");
+    OSL_ENSURE(pPage,"Page ?");
     if (!pPage)
         return;
 
@@ -1100,7 +1100,7 @@ void ScDrawLayer::DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
 
 void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
 {
-    DBG_ASSERT( pDoc, "ScDrawLayer::DeleteObjectsInSelection without document" );
+    OSL_ENSURE( pDoc, "ScDrawLayer::DeleteObjectsInSelection without document" );
     if ( !pDoc )
         return;
 
@@ -1201,7 +1201,7 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const Rectangle&
                         pDestPage = pDestModel->GetPage( static_cast<sal_uInt16>(nTab) );
                 }
 
-                DBG_ASSERT( pDestPage, "no page" );
+                OSL_ENSURE( pDestPage, "no page" );
                 if (pDestPage)
                 {
                     SdrObject* pNewObject = pOldObject->Clone();
@@ -1272,7 +1272,7 @@ sal_Bool lcl_MoveRanges( ::std::vector< ScRangeList >& rRangesVector, const ScRa
 void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const Rectangle& rSourceRange,
                                     const ScAddress& rDestPos, const Rectangle& rDestRange )
 {
-    DBG_ASSERT( pDoc, "ScDrawLayer::CopyFromClip without document" );
+    OSL_ENSURE( pDoc, "ScDrawLayer::CopyFromClip without document" );
     if ( !pDoc )
         return;
 
@@ -1297,7 +1297,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
 
     SdrPage* pSrcPage = pClipModel->GetPage(static_cast<sal_uInt16>(nSourceTab));
     SdrPage* pDestPage = GetPage(static_cast<sal_uInt16>(nDestTab));
-    DBG_ASSERT( pSrcPage && pDestPage, "draw page missing" );
+    OSL_ENSURE( pSrcPage && pDestPage, "draw page missing" );
     if ( !pSrcPage || !pDestPage )
         return;
 
@@ -1516,7 +1516,7 @@ void ScDrawLayer::MirrorRectRTL( Rectangle& rRect )
 Rectangle ScDrawLayer::GetCellRect( ScDocument& rDoc, const ScAddress& rPos, bool bMergedCell )
 {
     Rectangle aCellRect;
-    DBG_ASSERT( ValidColRowTab( rPos.Col(), rPos.Row(), rPos.Tab() ), "ScDrawLayer::GetCellRect - invalid cell address" );
+    OSL_ENSURE( ValidColRowTab( rPos.Col(), rPos.Row(), rPos.Tab() ), "ScDrawLayer::GetCellRect - invalid cell address" );
     if( ValidColRowTab( rPos.Col(), rPos.Row(), rPos.Tab() ) )
     {
         // find top left position of passed cell address
@@ -1586,7 +1586,7 @@ SdrObject* ScDrawLayer::GetNamedObject( const String& rName, sal_uInt16 nId, SCT
     for (sal_uInt16 nTab=0; nTab<nTabCount; nTab++)
     {
         const SdrPage* pPage = GetPage(nTab);
-        DBG_ASSERT(pPage,"Page ?");
+        OSL_ENSURE(pPage,"Page ?");
         if (pPage)
         {
             SdrObjListIter aIter( *pPage, IM_DEEPWITHGROUPS );
@@ -1639,7 +1639,7 @@ void ScDrawLayer::EnsureGraphicNames()
     for (sal_uInt16 nTab=0; nTab<nTabCount; nTab++)
     {
         SdrPage* pPage = GetPage(nTab);
-        DBG_ASSERT(pPage,"Page ?");
+        OSL_ENSURE(pPage,"Page ?");
         if (pPage)
         {
             SdrObjListIter aIter( *pPage, IM_DEEPWITHGROUPS );
@@ -1880,7 +1880,7 @@ ScMacroInfo* ScDrawLayer::GetMacroInfo( SdrObject* pObj, sal_Bool bCreate )
 
 void ScDrawLayer::SetGlobalDrawPersist(SfxObjectShell* pPersist)
 {
-    DBG_ASSERT(!pGlobalDrawPersist,"SetGlobalDrawPersist mehrfach");
+    OSL_ENSURE(!pGlobalDrawPersist,"SetGlobalDrawPersist mehrfach");
     pGlobalDrawPersist = pPersist;
 }
 
@@ -1893,7 +1893,7 @@ void ScDrawLayer::SetChanged( sal_Bool bFlg /* = sal_True */ )
 
 SvStream* ScDrawLayer::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const
 {
-    DBG_ASSERT( pDoc, "ScDrawLayer::GetDocumentStream without document" );
+    OSL_ENSURE( pDoc, "ScDrawLayer::GetDocumentStream without document" );
     if ( !pDoc )
         return NULL;
 

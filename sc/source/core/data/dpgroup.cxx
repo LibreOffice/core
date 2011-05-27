@@ -35,7 +35,6 @@
 
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 
-#include <tools/debug.hxx>
 #include <rtl/math.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <svl/zforlist.hxx>
@@ -164,7 +163,7 @@ namespace
     String lcl_GetNumGroupName( double fStartValue, const ScDPNumGroupInfo& rInfo,
         bool bHasNonInteger, sal_Unicode cDecSeparator, SvNumberFormatter* pFormatter )
     {
-        DBG_ASSERT( cDecSeparator != 0, "cDecSeparator not initialized" );
+        OSL_ENSURE( cDecSeparator != 0, "cDecSeparator not initialized" );
 
         double fStep = rInfo.Step;
         double fEndValue = fStartValue + fStep;
@@ -208,7 +207,7 @@ namespace
     String lcl_GetSpecialNumGroupName( double fValue, bool bFirst, sal_Unicode cDecSeparator,
         bool bDateValues, SvNumberFormatter* pFormatter )
     {
-        DBG_ASSERT( cDecSeparator != 0, "cDecSeparator not initialized" );
+        OSL_ENSURE( cDecSeparator != 0, "cDecSeparator not initialized" );
 
         rtl::OUStringBuffer aBuffer;
         aBuffer.append((sal_Unicode)( bFirst ? '<' : '>' ));
@@ -1013,7 +1012,7 @@ ScDPGroupTableData::ScDPGroupTableData( const shared_ptr<ScDPTableData>& pSource
     pSourceData( pSource ),
     pDoc( pDocument )
 {
-    DBG_ASSERT( pSource, "ScDPGroupTableData: pSource can't be NULL" );
+    OSL_ENSURE( pSource, "ScDPGroupTableData: pSource can't be NULL" );
 
     CreateCacheTable();
     nSourceCount = pSource->GetColumnCount();               // real columns, excluding data layout

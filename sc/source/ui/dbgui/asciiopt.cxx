@@ -36,7 +36,6 @@
 #include "impex.hxx"
 #include "asciiopt.hxx"
 #include "asciiopt.hrc"
-#include <tools/debug.hxx>
 #include <rtl/tencinfo.h>
 #include <unotools/transliterationwrapper.hxx>
 // ause
@@ -181,7 +180,7 @@ sal_Bool ScAsciiOptions::operator==( const ScAsciiOptions& rCmp ) const
          nStartRow       == rCmp.nStartRow &&
          nInfoCount      == rCmp.nInfoCount )
     {
-        DBG_ASSERT( !nInfoCount || (pColStart && pColFormat && rCmp.pColStart && rCmp.pColFormat),
+        OSL_ENSURE( !nInfoCount || (pColStart && pColFormat && rCmp.pColStart && rCmp.pColFormat),
                      "0-Zeiger in ScAsciiOptions" );
         for (sal_uInt16 i=0; i<nInfoCount; i++)
             if ( pColStart[i] != rCmp.pColStart[i] ||
@@ -378,7 +377,7 @@ String ScAsciiOptions::WriteToString() const
         //  Spalten-Infos
         //
 
-    DBG_ASSERT( !nInfoCount || (pColStart && pColFormat), "0-Zeiger in ScAsciiOptions" );
+    OSL_ENSURE( !nInfoCount || (pColStart && pColFormat), "0-Zeiger in ScAsciiOptions" );
     for (sal_uInt16 nInfo=0; nInfo<nInfoCount; nInfo++)
     {
         if (nInfo)

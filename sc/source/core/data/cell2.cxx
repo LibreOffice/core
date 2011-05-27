@@ -88,7 +88,7 @@ ScEditCell::ScEditCell( const String& rString, ScDocument* pDocP )  :
         pString( NULL ),
         pDoc( pDocP )
 {
-    DBG_ASSERT( rString.Search('\n') != STRING_NOTFOUND ||
+    OSL_ENSURE( rString.Search('\n') != STRING_NOTFOUND ||
                 rString.Search(CHAR_CR) != STRING_NOTFOUND,
                 "EditCell mit einfachem Text !?!?" );
 
@@ -102,7 +102,7 @@ ScEditCell::~ScEditCell()
     delete pData;
     delete pString;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     eCellType = CELLTYPE_DESTROYED;
 #endif
 }
@@ -651,7 +651,7 @@ sal_uInt16 ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos )
                 }
                 else
                 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
                     String aTmp;
                     ByteString aMsg( "broken Matrix, no MatFormula at origin, Pos: " );
                     aPos.Format( aTmp, SCA_VALID_COL | SCA_VALID_ROW, pDocument );
@@ -659,7 +659,7 @@ sal_uInt16 ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos )
                     aMsg += ", MatOrg: ";
                     aOrg.Format( aTmp, SCA_VALID_COL | SCA_VALID_ROW, pDocument );
                     aMsg += ByteString( aTmp, RTL_TEXTENCODING_ASCII_US );
-                    DBG_ERRORFILE( aMsg.GetBuffer() );
+                    OSL_FAIL( aMsg.GetBuffer() );
 #endif
                     return 0;           // bad luck ...
                 }
@@ -681,7 +681,7 @@ sal_uInt16 ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos )
                 if ( !nEdges )
                     nEdges = 1;             // mittendrin
             }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
             else
             {
                 String aTmp;
@@ -699,7 +699,7 @@ sal_uInt16 ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos )
                 aMsg += ByteString::CreateFromInt32( dC );
                 aMsg += ", DiffRows: ";
                 aMsg += ByteString::CreateFromInt32( dR );
-                DBG_ERRORFILE( aMsg.GetBuffer() );
+                OSL_FAIL( aMsg.GetBuffer() );
             }
 #endif
             return nEdges;

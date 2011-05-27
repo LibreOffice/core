@@ -84,7 +84,7 @@ using namespace com::sun::star;
 
 bool lcl_GetTextToColumnsRange( const ScViewData* pData, ScRange& rRange )
 {
-    DBG_ASSERT( pData, "lcl_GetTextToColumnsRange: pData is null!" );
+    OSL_ENSURE( pData, "lcl_GetTextToColumnsRange: pData is null!" );
 
     bool bRet = false;
     const ScMarkData& rMark = pData->GetMarkData();
@@ -110,7 +110,7 @@ bool lcl_GetTextToColumnsRange( const ScViewData* pData, ScRange& rRange )
     }
 
     const ScDocument* pDoc = pData->GetDocument();
-    DBG_ASSERT( pDoc, "lcl_GetTextToColumnsRange: pDoc is null!" );
+    OSL_ENSURE( pDoc, "lcl_GetTextToColumnsRange: pDoc is null!" );
 
     if ( bRet && pDoc->IsBlockEmpty( rRange.aStart.Tab(), rRange.aStart.Col(),
                                      rRange.aStart.Row(), rRange.aEnd.Col(),
@@ -168,10 +168,10 @@ sal_Bool lcl_GetSortParam( const ScViewData* pData, ScSortParam& rSortParam )
         rCurrentRange.Format( aCurrentStr, nFmt, pDoc );
 
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+        OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
         VclAbstractDialog* pWarningDlg = pFact->CreateScSortWarningDlg( pTabViewShell->GetDialogParent(),aExtendStr,aCurrentStr,RID_SCDLG_SORT_WARNING );
-        DBG_ASSERT(pWarningDlg, "Dialog create fail!");
+        OSL_ENSURE(pWarningDlg, "Dialog create fail!");
         short bResult = pWarningDlg->Execute();
         if( bResult == BTN_EXTEND_RANGE || bResult == BTN_CURRENT_SELECTION )
         {
@@ -333,10 +333,10 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
         case SID_DATA_FORM:
             {
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+                OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                 AbstractScDataFormDlg* pDlg = pFact->CreateScDataFormDlg( pTabViewShell->GetDialogParent(),RID_SCDLG_DATAFORM, pTabViewShell);
-                DBG_ASSERT(pDlg, "Dialog create fail!");
+                OSL_ENSURE(pDlg, "Dialog create fail!");
 
                 pDlg->Execute();
 
@@ -490,10 +490,10 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         aArgSet.Put( ScSortItem( SCITEM_SORTDATA, GetViewData(), &aSortParam ) );
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+                        OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                         pDlg = pFact->CreateScSortDlg( pTabViewShell->GetDialogParent(),  &aArgSet, RID_SCDLG_SORT );
-                        DBG_ASSERT(pDlg, "Dialog create fail!");
+                        OSL_ENSURE(pDlg, "Dialog create fail!");
                     pDlg->SetCurPageId(1);  // 1=sort field tab  2=sort options tab
 
                         if ( pDlg->Execute() == RET_OK )
@@ -730,7 +730,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             aList.Insert(new String(itr->GetName()));
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+                        OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                         AbstractScSelEntryDlg* pDlg = pFact->CreateScSelEntryDlg( pTabViewShell->GetDialogParent(),
                                                                                 RID_SCDLG_SELECTDB,
@@ -738,7 +738,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                                                                                 String(ScResId(SCSTR_AREAS)),
                                                                                 aList,
                                                                                 RID_SCDLG_SELECTDB);
-                        DBG_ASSERT(pDlg, "Dialog create fail!");
+                        OSL_ENSURE(pDlg, "Dialog create fail!");
                         if ( pDlg->Execute() == RET_OK )
                         {
                             String aName = pDlg->GetSelectEntry();
@@ -771,9 +771,9 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 else
                 {
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+                    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
                     ::GetTabPageRanges ScTPValidationValueGetRanges = pFact->GetTabPageRangesFunc(TP_VALIDATION_VALUES);
-                    DBG_ASSERT(ScTPValidationValueGetRanges, "TabPage create fail!");
+                    OSL_ENSURE(ScTPValidationValueGetRanges, "TabPage create fail!");
                     SfxItemSet aArgSet( GetPool(), (*ScTPValidationValueGetRanges)() );
                     ScValidationMode eMode = SC_VALID_ANY;
                     ScConditionMode eOper = SC_COND_EQUAL;
@@ -834,7 +834,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                     // cell range picker
                     SfxAbstractTabDialog* pDlg = pFact->CreateScValidationDlg( NULL, &aArgSet, TAB_DLG_VALIDATION, pTabViewShell );
-                    DBG_ASSERT(pDlg, "Dialog create fail!");
+                    OSL_ENSURE(pDlg, "Dialog create fail!");
 
                     short nResult = pDlg->Execute();
                     //When picking Cell Range, other Tab may be switched. Need restore the correct tab
@@ -928,13 +928,13 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
         case SID_TEXT_TO_COLUMNS:
             {
                 ScViewData* pData = GetViewData();
-                DBG_ASSERT( pData, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pData is null!" );
+                OSL_ENSURE( pData, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pData is null!" );
                 ScRange aRange;
 
                 if ( lcl_GetTextToColumnsRange( pData, aRange ) )
                 {
                     ScDocument* pDoc = pData->GetDocument();
-                    DBG_ASSERT( pDoc, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pDoc is null!" );
+                    OSL_ENSURE( pDoc, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pDoc is null!" );
 
                     ScImportExport aExport( pDoc, aRange );
                     aExport.SetExportTextOptions( ScExportTextOptions( ScExportTextOptions::None, 0, false ) );
@@ -948,16 +948,16 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     aExport.ExportStream( aStream, String(), FORMAT_STRING );
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    DBG_ASSERT( pFact, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pFact is null!" );
+                    OSL_ENSURE( pFact, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pFact is null!" );
                     AbstractScImportAsciiDlg *pDlg = pFact->CreateScImportAsciiDlg(
                         NULL, String(), &aStream, RID_SCDLG_ASCII );
-                    DBG_ASSERT( pDlg, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pDlg is null!" );
+                    OSL_ENSURE( pDlg, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pDlg is null!" );
                     pDlg->SetTextToColumnsMode();
 
                     if ( pDlg->Execute() == RET_OK )
                     {
                         ScDocShell* pDocSh = pData->GetDocShell();
-                        DBG_ASSERT( pDocSh, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pDocSh is null!" );
+                        OSL_ENSURE( pDocSh, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pDocSh is null!" );
 
                         String aUndo = ScGlobal::GetRscString( STR_UNDO_TEXTTOCOLUMNS );
                         pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );

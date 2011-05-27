@@ -194,7 +194,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             double& rInc, sal_uInt16& rMinDigits,
                             ScUserListData*& rListData, sal_uInt16& rListIndex)
 {
-    DBG_ASSERT( nCol1==nCol2 || nRow1==nRow2, "FillAnalyse: falscher Bereich" );
+    OSL_ENSURE( nCol1==nCol2 || nRow1==nRow2, "FillAnalyse: falscher Bereich" );
 
     rInc = 0.0;
     rMinDigits = 0;
@@ -443,17 +443,17 @@ void ScTable::FillFormula(sal_uLong& /* nFormulaCounter */, sal_Bool /* bFirst *
                 }
                 else
                 {
-                    DBG_ERRORFILE( "FillFormula: MatrixOrigin keine Formelzelle mit MM_FORMULA" );
+                    OSL_FAIL( "FillFormula: MatrixOrigin keine Formelzelle mit MM_FORMULA" );
                 }
             }
             else
             {
-                DBG_ERRORFILE( "FillFormula: MatrixOrigin rechts unten" );
+                OSL_FAIL( "FillFormula: MatrixOrigin rechts unten" );
             }
         }
         else
         {
-            DBG_ERRORFILE( "FillFormula: kein MatrixOrigin" );
+            OSL_FAIL( "FillFormula: kein MatrixOrigin" );
         }
     }
     pDocument->SetNoListening( false );

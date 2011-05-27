@@ -35,7 +35,6 @@
 
 #include <stdio.h>
 #include <rtl/math.hxx>
-#include <tools/debug.hxx>
 #include <tools/date.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/collatorwrapper.hxx>

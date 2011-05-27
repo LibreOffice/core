@@ -40,7 +40,6 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <rtl/uuid.h>
-#include <tools/debug.hxx>
 #include <svx/AccessibleTextHelper.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/editeng.hxx>
@@ -244,7 +243,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     ScAccessibleEditObject::createAccessibleDescription(void)
     throw (uno::RuntimeException)
 {
-//    DBG_ERRORFILE("Should never be called, because is set in the constructor.")
+//    OSL_FAIL("Should never be called, because is set in the constructor.")
     return rtl::OUString();
 }
 
@@ -252,7 +251,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     ScAccessibleEditObject::createAccessibleName(void)
     throw (uno::RuntimeException)
 {
-    DBG_ERRORFILE("Should never be called, because is set in the constructor.");
+    OSL_FAIL("Should never be called, because is set in the constructor.");
     return rtl::OUString();
 }
 

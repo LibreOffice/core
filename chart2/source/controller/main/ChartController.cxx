@@ -1306,7 +1306,7 @@ void SAL_CALL ChartController::executeDispatch_SourceData()
     //-------------------------------------------------------------
     //convert properties to ItemSet
     uno::Reference< XChartDocument >   xChartDoc( getModel(), uno::UNO_QUERY );
-    DBG_ASSERT( xChartDoc.is(), "Invalid XChartDocument" );
+    OSL_ENSURE( xChartDoc.is(), "Invalid XChartDocument" );
     if( !xChartDoc.is())
         return;
 

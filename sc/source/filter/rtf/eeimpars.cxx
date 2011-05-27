@@ -373,7 +373,7 @@ void ScEEImport::WriteToDocument( sal_Bool bSizeColsRows, double nOutputFactor, 
                             sal_uInt32 nNewIndex =
                                 pFormatter->GetFormatForLanguageIfBuiltIn(
                                         nIndex, LANGUAGE_SYSTEM);
-                            DBG_ASSERT( nNewIndex != nIndex, "ScEEImport::WriteToDocument: NumbersEnglishUS not a built-in format?");
+                            OSL_ENSURE( nNewIndex != nIndex, "ScEEImport::WriteToDocument: NumbersEnglishUS not a built-in format?");
                             pFormatter->GetInputLineString( fEnVal, nNewIndex, aStr);
                         }
                         pFormatter->ChangeIntl( LANGUAGE_SYSTEM);

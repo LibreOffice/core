@@ -497,7 +497,7 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, const ScBaseCel
                 fValue = 0.0;       // empty or broadcaster cell
             break;
             case CELLTYPE_SYMBOLS:
-#if DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
             case CELLTYPE_DESTROYED:
 #endif
                 SetError(errCellNoValue);
@@ -1636,14 +1636,14 @@ bool ScInterpreter::ConvertMatrixParameters()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ConvertMatrixParameters" );
     sal_uInt16 nParams = pCur->GetParamCount();
-    DBG_ASSERT( nParams <= sp, "ConvertMatrixParameters: stack/param count mismatch");
+    OSL_ENSURE( nParams <= sp, "ConvertMatrixParameters: stack/param count mismatch");
     SCSIZE nJumpCols = 0, nJumpRows = 0;
     for ( sal_uInt16 i=1; i <= nParams && i <= sp; ++i )
     {
         FormulaToken* p = pStack[ sp - i ];
         if ( p->GetOpCode() != ocPush && p->GetOpCode() != ocMissing)
         {
-            DBG_ERRORFILE( "ConvertMatrixParameters: not a push");
+            OSL_FAIL( "ConvertMatrixParameters: not a push");
         }
         else
         {
@@ -1752,7 +1752,7 @@ bool ScInterpreter::ConvertMatrixParameters()
                 }
                 break;
                 default:
-                    DBG_ERRORFILE( "ConvertMatrixParameters: unknown parameter type");
+                    OSL_FAIL( "ConvertMatrixParameters: unknown parameter type");
             }
         }
     }
@@ -3122,7 +3122,7 @@ void ScInterpreter::ScMacro()
     SbModule* pModule = pMethod->GetModule();
     bool bUseVBAObjects = pModule->IsVBACompat();
     SbxObject* pObject = pModule->GetParent();
-    DBG_ASSERT(pObject->IsA(TYPE(StarBASIC)), "Kein Basic gefunden!");
+    OSL_ENSURE(pObject->IsA(TYPE(StarBASIC)), "Kein Basic gefunden!");
     String aMacroStr = pObject->GetName();
     aMacroStr += '.';
     aMacroStr += pModule->GetName();
@@ -3658,7 +3658,7 @@ ScInterpreter::~ScInterpreter()
 void ScInterpreter::GlobalExit()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GlobalExit" );
-    DBG_ASSERT(!bGlobalStackInUse, "wer benutzt noch den TokenStack?");
+    OSL_ENSURE(!bGlobalStackInUse, "wer benutzt noch den TokenStack?");
     DELETEZ(pGlobalStack);
 }
 

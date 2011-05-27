@@ -37,7 +37,6 @@
 #include <ucbhelper/content.hxx>
 #include <unotools/localfilehelper.hxx>
 
-#include <tools/debug.hxx>
 #include <unotools/pathoptions.hxx>
 
 #include <com/sun/star/sdbc/XResultSet.hpp>
@@ -115,18 +114,18 @@ void ScGlobal::InitAddIns()
                         }
                         catch ( Exception& )
                         {
-                            DBG_ERRORFILE( "ResultSetException catched!" );
+                            OSL_FAIL( "ResultSetException catched!" );
                         }
                     }
                 }
                 catch ( Exception& )
                 {
-                    DBG_ERRORFILE( "Exception catched!" );
+                    OSL_FAIL( "Exception catched!" );
                 }
                 catch ( ... )
                 {
 
-                    DBG_ERRORFILE( "unexpected exception caught!" );
+                    OSL_FAIL( "unexpected exception caught!" );
                 }
             }
         }
@@ -150,10 +149,10 @@ String ScGlobal::GetOrdinalSuffix( sal_Int32 nNumber)
         }
         catch ( Exception& )
         {
-            DBG_ERRORFILE( "GetOrdinalSuffix: exception caught during init" );
+            OSL_FAIL( "GetOrdinalSuffix: exception caught during init" );
         }
     }
-    DBG_ASSERT( xOrdinalSuffix.is(), "GetOrdinalSuffix: createInstance failed");
+    OSL_ENSURE( xOrdinalSuffix.is(), "GetOrdinalSuffix: createInstance failed");
     if (xOrdinalSuffix.is())
     {
         try
@@ -167,7 +166,7 @@ String ScGlobal::GetOrdinalSuffix( sal_Int32 nNumber)
         }
         catch ( Exception& )
         {
-            DBG_ERRORFILE( "GetOrdinalSuffix: exception caught during getOrdinalSuffix" );
+            OSL_FAIL( "GetOrdinalSuffix: exception caught during getOrdinalSuffix" );
         }
     }
     return String();

@@ -133,7 +133,7 @@ void XclImpOutlineBuffer::MakeScOutline()
         if (nPos >= mnEndPos)
         {
             // Don't go beyond the max allowed position.
-            DBG_ASSERT(aOutlineStack.empty(), "XclImpOutlineBuffer::MakeScOutline: outline stack not empty but expected to be.");
+            OSL_ENSURE(aOutlineStack.empty(), "XclImpOutlineBuffer::MakeScOutline: outline stack not empty but expected to be.");
             break;
         }
         sal_uInt8 nLevel = itr->second;
@@ -145,7 +145,7 @@ void XclImpOutlineBuffer::MakeScOutline()
         }
         else
         {
-            DBG_ASSERT(nLevel < nCurLevel, "XclImpOutlineBuffer::MakeScOutline: unexpected level!");
+            OSL_ENSURE(nLevel < nCurLevel, "XclImpOutlineBuffer::MakeScOutline: unexpected level!");
             for (sal_uInt8 i = 0; i < nCurLevel - nLevel; ++i)
             {
                 if (aOutlineStack.empty())

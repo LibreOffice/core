@@ -153,7 +153,7 @@ ScConsolidateDlg::~ScConsolidateDlg()
 
 void ScConsolidateDlg::Init()
 {
-    DBG_ASSERT( pViewData && pDoc && pRangeUtil, "Error in Ctor" );
+    OSL_ENSURE( pViewData && pDoc && pRangeUtil, "Error in Ctor" );
 
     String aStr;
     sal_uInt16 i=0;

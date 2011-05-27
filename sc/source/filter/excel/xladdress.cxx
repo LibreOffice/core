@@ -121,7 +121,7 @@ void XclRangeList::Write( XclExpStream& rStrm, bool bCol16Bit ) const
 
 void XclRangeList::WriteSubList( XclExpStream& rStrm, size_t nBegin, size_t nCount, bool bCol16Bit ) const
 {
-    DBG_ASSERT( nBegin <= size(), "XclRangeList::WriteSubList - invalid start position" );
+    OSL_ENSURE( nBegin <= size(), "XclRangeList::WriteSubList - invalid start position" );
     size_t nEnd = ::std::min< size_t >( nBegin + nCount, size() );
     sal_uInt16 nXclCount = ulimit_cast< sal_uInt16 >( nEnd - nBegin );
     rStrm << nXclCount;
@@ -141,8 +141,8 @@ XclAddressConverterBase::XclAddressConverterBase( XclTracer& rTracer, const ScAd
     mbRowTrunc( false ),
     mbTabTrunc( false )
 {
-    DBG_ASSERT( static_cast< size_t >( rMaxPos.Col() ) <= SAL_MAX_UINT16, "XclAddressConverterBase::XclAddressConverterBase - invalid max column" );
-    DBG_ASSERT( static_cast< size_t >( rMaxPos.Row() ) <= SAL_MAX_UINT32, "XclAddressConverterBase::XclAddressConverterBase - invalid max row" );
+    OSL_ENSURE( static_cast< size_t >( rMaxPos.Col() ) <= SAL_MAX_UINT16, "XclAddressConverterBase::XclAddressConverterBase - invalid max column" );
+    OSL_ENSURE( static_cast< size_t >( rMaxPos.Row() ) <= SAL_MAX_UINT32, "XclAddressConverterBase::XclAddressConverterBase - invalid max row" );
 }
 
 XclAddressConverterBase::~XclAddressConverterBase()

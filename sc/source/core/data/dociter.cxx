@@ -1223,7 +1223,7 @@ void ScQueryCellIterator::AdvanceQueryParamEntryField()
                 rEntry.nField++;
             else
             {
-                DBG_ERRORFILE( "AdvanceQueryParamEntryField: ++rEntry.nField > MAXCOL" );
+                OSL_FAIL( "AdvanceQueryParamEntryField: ++rEntry.nField > MAXCOL" );
             }
         }
         else
@@ -1676,7 +1676,7 @@ ScBaseCell* ScHorizontalCellIterator::GetNext( SCCOL& rCol, SCROW& rRow )
 
         ScColumn* pCol = &pDoc->pTab[nTab]->aCol[nCol];
         SCSIZE nIndex = pNextIndices[nCol-nStartCol];
-        DBG_ASSERT( nIndex < pCol->nCount, "ScHorizontalCellIterator::GetNext: nIndex out of range" );
+        OSL_ENSURE( nIndex < pCol->nCount, "ScHorizontalCellIterator::GetNext: nIndex out of range" );
         ScBaseCell* pCell = pCol->pItems[nIndex].pCell;
         if ( ++nIndex < pCol->nCount )
         {
@@ -1747,7 +1747,7 @@ ScHorizontalAttrIterator::ScHorizontalAttrIterator( ScDocument* pDocument, SCTAB
     nEndCol( nCol2 ),
     nEndRow( nRow2 )
 {
-    DBG_ASSERT( pDoc->pTab[nTab], "Tabelle nicht da" );
+    OSL_ENSURE( pDoc->pTab[nTab], "Tabelle nicht da" );
 
     SCCOL i;
 
@@ -1765,7 +1765,7 @@ ScHorizontalAttrIterator::ScHorizontalAttrIterator( ScDocument* pDocument, SCTAB
     {
         SCCOL nPos = i - nStartCol;
         ScAttrArray* pArray = pDoc->pTab[nTab]->aCol[i].pAttrArray;
-        DBG_ASSERT( pArray, "pArray == 0" );
+        OSL_ENSURE( pArray, "pArray == 0" );
 
         SCSIZE nIndex;
         pArray->Search( nStartRow, nIndex );
@@ -1851,7 +1851,7 @@ const ScPatternAttr* ScHorizontalAttrIterator::GetNext( SCCOL& rCol1, SCCOL& rCo
                     pNextEnd[nPos] = nThisEnd;
                     ppPatterns[nPos] = pPattern;
 
-                    DBG_ASSERT( pNextEnd[nPos] >= nRow, "Reihenfolge durcheinander" );
+                    OSL_ENSURE( pNextEnd[nPos] >= nRow, "Reihenfolge durcheinander" );
                 }
                 else
                 {

@@ -473,7 +473,7 @@ OUString XclChartHelper::GetErrorBarValuesRole( sal_uInt8 nBarType )
         case EXC_CHSERERR_XMINUS:   return EXC_CHPROP_ROLE_ERRORBARS_NEGX;
         case EXC_CHSERERR_YPLUS:    return EXC_CHPROP_ROLE_ERRORBARS_POSY;
         case EXC_CHSERERR_YMINUS:   return EXC_CHPROP_ROLE_ERRORBARS_NEGY;
-        default:    DBG_ERRORFILE( "XclChartHelper::GetErrorBarValuesRole - unknown bar type" );
+        default:    OSL_FAIL( "XclChartHelper::GetErrorBarValuesRole - unknown bar type" );
     }
     return OUString();
 }
@@ -517,7 +517,7 @@ XclChFormatInfoProvider::XclChFormatInfoProvider()
 const XclChFormatInfo& XclChFormatInfoProvider::GetFormatInfo( XclChObjectType eObjType ) const
 {
     XclFmtInfoMap::const_iterator aIt = maInfoMap.find( eObjType );
-    DBG_ASSERT( aIt != maInfoMap.end(), "XclChFormatInfoProvider::GetFormatInfo - unknown object type" );
+    OSL_ENSURE( aIt != maInfoMap.end(), "XclChFormatInfoProvider::GetFormatInfo - unknown object type" );
     return (aIt == maInfoMap.end()) ? *spFmtInfos : *aIt->second;
 }
 
@@ -586,7 +586,7 @@ XclChTypeInfoProvider::XclChTypeInfoProvider()
 const XclChTypeInfo& XclChTypeInfoProvider::GetTypeInfo( XclChTypeId eTypeId ) const
 {
     XclChTypeInfoMap::const_iterator aIt = maInfoMap.find( eTypeId );
-    DBG_ASSERT( aIt != maInfoMap.end(), "XclChTypeInfoProvider::GetTypeInfo - unknown chart type" );
+    OSL_ENSURE( aIt != maInfoMap.end(), "XclChTypeInfoProvider::GetTypeInfo - unknown chart type" );
     return (aIt == maInfoMap.end()) ? *maInfoMap.rbegin()->second : *aIt->second;
 }
 
@@ -596,7 +596,7 @@ const XclChTypeInfo& XclChTypeInfoProvider::GetTypeInfoFromRecId( sal_uInt16 nRe
     for( const XclChTypeInfo* pIt = spTypeInfos; pIt != pEnd; ++pIt )
         if( pIt->mnRecId == nRecId )
             return *pIt;
-    DBG_ERRORFILE( "XclChTypeInfoProvider::GetTypeInfoFromRecId - unknown record id" );
+    OSL_FAIL( "XclChTypeInfoProvider::GetTypeInfoFromRecId - unknown record id" );
     return GetTypeInfo( EXC_CHTYPEID_UNKNOWN );
 }
 
@@ -606,7 +606,7 @@ const XclChTypeInfo& XclChTypeInfoProvider::GetTypeInfoFromService( const OUStri
     for( const XclChTypeInfo* pIt = spTypeInfos; pIt != pEnd; ++pIt )
         if( rServiceName.equalsAscii( pIt->mpcServiceName ) )
             return *pIt;
-    DBG_ERRORFILE( "XclChTypeInfoProvider::GetTypeInfoFromService - unknown service name" );
+    OSL_FAIL( "XclChTypeInfoProvider::GetTypeInfoFromService - unknown service name" );
     return GetTypeInfo( EXC_CHTYPEID_UNKNOWN );
 }
 
@@ -626,7 +626,7 @@ Any XclChObjectTable::GetObject( const OUString& rObjName )
     // get object table
     if( !mxContainer.is() )
         mxContainer.set( ScfApiHelper::CreateInstance( mxFactory, maServiceName ), UNO_QUERY );
-    DBG_ASSERT( mxContainer.is(), "XclChObjectTable::GetObject - container not found" );
+    OSL_ENSURE( mxContainer.is(), "XclChObjectTable::GetObject - container not found" );
 
     Any aObj;
     if( mxContainer.is() )
@@ -638,7 +638,7 @@ Any XclChObjectTable::GetObject( const OUString& rObjName )
         }
         catch( Exception& )
         {
-            DBG_ERRORFILE( "XclChObjectTable::GetObject - object not found" );
+            OSL_FAIL( "XclChObjectTable::GetObject - object not found" );
         }
     }
     return aObj;
@@ -650,7 +650,7 @@ OUString XclChObjectTable::InsertObject( const Any& rObj )
     // create object table
     if( !mxContainer.is() )
         mxContainer.set( ScfApiHelper::CreateInstance( mxFactory, maServiceName ), UNO_QUERY );
-    DBG_ASSERT( mxContainer.is(), "XclChObjectTable::InsertObject - container not found" );
+    OSL_ENSURE( mxContainer.is(), "XclChObjectTable::InsertObject - container not found" );
 
     OUString aObjName;
     if( mxContainer.is() )
@@ -669,7 +669,7 @@ OUString XclChObjectTable::InsertObject( const Any& rObj )
         }
         catch( Exception& )
         {
-            DBG_ERRORFILE( "XclChObjectTable::InsertObject - cannot insert object" );
+            OSL_FAIL( "XclChObjectTable::InsertObject - cannot insert object" );
             aObjName = OUString();
         }
     }
@@ -795,7 +795,7 @@ void XclChPropSetHelper::ReadLineProperties(
         }
         break;
         default:
-            DBG_ERRORFILE( "XclChPropSetHelper::ReadLineProperties - unknown line style" );
+            OSL_FAIL( "XclChPropSetHelper::ReadLineProperties - unknown line style" );
             rLineFmt.mnPattern = EXC_CHLINEFORMAT_SOLID;
     }
 }
@@ -844,7 +844,7 @@ void XclChPropSetHelper::ReadEscherProperties(
     {
         case cssd::FillStyle_SOLID:
         {
-            DBG_ASSERT( nTransparency > 0, "XclChPropSetHelper::ReadEscherProperties - unexpected solid area without transparency" );
+            OSL_ENSURE( nTransparency > 0, "XclChPropSetHelper::ReadEscherProperties - unexpected solid area without transparency" );
             if( (0 < nTransparency) && (nTransparency <= 100) )
             {
                 // convert to Escher properties
@@ -916,7 +916,7 @@ void XclChPropSetHelper::ReadEscherProperties(
         }
         break;
         default:
-            DBG_ERRORFILE( "XclChPropSetHelper::ReadEscherProperties - unknown fill style" );
+            OSL_FAIL( "XclChPropSetHelper::ReadEscherProperties - unknown fill style" );
     }
 }
 
@@ -1132,7 +1132,7 @@ void XclChPropSetHelper::WriteEscherProperties( ScfPropertySet& rPropSet,
                     }
                 break;
                 default:
-                    DBG_ERRORFILE( "XclChPropSetHelper::WriteEscherProperties - unknown fill mode" );
+                    OSL_FAIL( "XclChPropSetHelper::WriteEscherProperties - unknown fill mode" );
             }
         }
     }
@@ -1196,7 +1196,7 @@ ScfPropSetHelper& XclChPropSetHelper::GetLineHelper( XclChPropertyMode ePropMode
         case EXC_CHPROPMODE_COMMON:         return maLineHlpCommon;
         case EXC_CHPROPMODE_LINEARSERIES:   return maLineHlpLinear;
         case EXC_CHPROPMODE_FILLEDSERIES:   return maLineHlpFilled;
-        default: DBG_ERRORFILE( "XclChPropSetHelper::GetLineHelper - unknown property mode" );
+        default: OSL_FAIL( "XclChPropSetHelper::GetLineHelper - unknown property mode" );
     }
     return maLineHlpCommon;
 }
@@ -1207,7 +1207,7 @@ ScfPropSetHelper& XclChPropSetHelper::GetAreaHelper( XclChPropertyMode ePropMode
     {
         case EXC_CHPROPMODE_COMMON:         return maAreaHlpCommon;
         case EXC_CHPROPMODE_FILLEDSERIES:   return maAreaHlpFilled;
-        default:    DBG_ERRORFILE( "XclChPropSetHelper::GetAreaHelper - unknown property mode" );
+        default:    OSL_FAIL( "XclChPropSetHelper::GetAreaHelper - unknown property mode" );
     }
     return maAreaHlpCommon;
 }
@@ -1218,7 +1218,7 @@ ScfPropSetHelper& XclChPropSetHelper::GetGradientHelper( XclChPropertyMode eProp
     {
         case EXC_CHPROPMODE_COMMON:         return maGradHlpCommon;
         case EXC_CHPROPMODE_FILLEDSERIES:   return maGradHlpFilled;
-        default:    DBG_ERRORFILE( "XclChPropSetHelper::GetGradientHelper - unknown property mode" );
+        default:    OSL_FAIL( "XclChPropSetHelper::GetGradientHelper - unknown property mode" );
     }
     return maGradHlpCommon;
 }
@@ -1229,7 +1229,7 @@ ScfPropSetHelper& XclChPropSetHelper::GetHatchHelper( XclChPropertyMode ePropMod
     {
         case EXC_CHPROPMODE_COMMON:         return maHatchHlpCommon;
         case EXC_CHPROPMODE_FILLEDSERIES:   return maHatchHlpFilled;
-        default:    DBG_ERRORFILE( "XclChPropSetHelper::GetHatchHelper - unknown property mode" );
+        default:    OSL_FAIL( "XclChPropSetHelper::GetHatchHelper - unknown property mode" );
     }
     return maHatchHlpCommon;
 }
@@ -1300,7 +1300,7 @@ XclChRootData::~XclChRootData()
 void XclChRootData::InitConversion( const XclRoot& rRoot, const Reference< XChartDocument >& rxChartDoc, const Rectangle& rChartRect )
 {
     // remember chart document reference and chart shape position/size
-    DBG_ASSERT( rxChartDoc.is(), "XclChRootData::InitConversion - missing chart document" );
+    OSL_ENSURE( rxChartDoc.is(), "XclChRootData::InitConversion - missing chart document" );
     mxChartDoc = rxChartDoc;
     maChartRect = rChartRect;
 

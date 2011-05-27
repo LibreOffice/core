@@ -854,3 +854,8 @@ String SCSTR_WARN_ME_IN_FUTURE_CHECK
 {
     Text [ en-US ] = "Warn me about this in the future.";
 };
+
+String SCSTR_EXTDOC_NOT_LOADED
+{
+    Text [ en-US ] = "The following external file could not be loaded.  Data linked from this file did not get updated." ;
+};

@@ -521,15 +521,15 @@ ScAutoFormatData::~ScAutoFormatData()
 
 ScAutoFormatDataField& ScAutoFormatData::GetField( sal_uInt16 nIndex )
 {
-    DBG_ASSERT( nIndex < 16, "ScAutoFormatData::GetField - illegal index" );
-    DBG_ASSERT( ppDataField && ppDataField[ nIndex ], "ScAutoFormatData::GetField - no data" );
+    OSL_ENSURE( nIndex < 16, "ScAutoFormatData::GetField - illegal index" );
+    OSL_ENSURE( ppDataField && ppDataField[ nIndex ], "ScAutoFormatData::GetField - no data" );
     return *ppDataField[ nIndex ];
 }
 
 const ScAutoFormatDataField& ScAutoFormatData::GetField( sal_uInt16 nIndex ) const
 {
-    DBG_ASSERT( nIndex < 16, "ScAutoFormatData::GetField - illegal index" );
-    DBG_ASSERT( ppDataField && ppDataField[ nIndex ], "ScAutoFormatData::GetField - no data" );
+    OSL_ENSURE( nIndex < 16, "ScAutoFormatData::GetField - illegal index" );
+    OSL_ENSURE( ppDataField && ppDataField[ nIndex ], "ScAutoFormatData::GetField - no data" );
     return *ppDataField[ nIndex ];
 }
 
@@ -1037,7 +1037,7 @@ sal_Bool ScAutoFormat::Load()
                 rStream >> nCnt >> nChrSet;
                 if( rStream.Tell() != sal_uLong(nPos + nCnt) )
                 {
-                    DBG_ERRORFILE( "Der Header enthaelt mehr/neuere Daten" );
+                    OSL_FAIL( "Der Header enthaelt mehr/neuere Daten" );
                     rStream.Seek( nPos + nCnt );
                 }
                 rStream.SetStreamCharSet( GetSOLoadTextEncoding( nChrSet, nFileVers ) );

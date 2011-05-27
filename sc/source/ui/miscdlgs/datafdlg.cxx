@@ -62,7 +62,7 @@ ScDataFormDlg::ScDataFormDlg( Window* pParent, ScTabViewShell*  pTabViewShellOri
     pTabViewShell = pTabViewShellOri;
     FreeResource();
     //read header form current document, and add new controls
-    DBG_ASSERT( pTabViewShell, "pTabViewShell is NULL! :-/" );
+    OSL_ENSURE( pTabViewShell, "pTabViewShell is NULL! :-/" );
     ScViewData* pViewData = pTabViewShell->GetViewData();
 
     pDoc = pViewData->GetDocument();

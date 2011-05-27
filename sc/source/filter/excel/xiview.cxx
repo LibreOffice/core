@@ -109,7 +109,7 @@ void XclImpTabViewSettings::Initialize()
 
 void XclImpTabViewSettings::ReadTabBgColor( XclImpStream& rStrm, XclImpPalette& rPal )
 {
-    DBG_ASSERT_BIFF( GetBiff() >= EXC_BIFF8 );
+    OSL_ENSURE_BIFF( GetBiff() >= EXC_BIFF8 );
     if( GetBiff() < EXC_BIFF8 )
         return;
 
@@ -191,7 +191,7 @@ void XclImpTabViewSettings::ReadScl( XclImpStream& rStrm )
 {
     sal_uInt16 nNum, nDenom;
     rStrm >> nNum >> nDenom;
-    DBG_ASSERT( nDenom > 0, "XclImpPageSettings::ReadScl - invalid denominator" );
+    OSL_ENSURE( nDenom > 0, "XclImpPageSettings::ReadScl - invalid denominator" );
     if( nDenom > 0 )
         maData.mnCurrentZoom = limit_cast< sal_uInt16 >( (nNum * 100) / nDenom );
 }

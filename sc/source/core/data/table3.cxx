@@ -371,7 +371,7 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress& rProgress )
             ::std::swap(p, aTable[nDest-nStart]);
             p->nOrg = nOrg;
             ::std::swap(p, aTable[nOrg-nStart]);
-            DBG_ASSERT( p == ppInfo[nPos], "SortReorder: nOrg MisMatch" );
+            OSL_ENSURE( p == ppInfo[nPos], "SortReorder: nOrg MisMatch" );
         }
         rProgress.SetStateOnPercent( nPos );
     }
@@ -1521,7 +1521,7 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
                     }
                     else
                     {
-                        DBG_ERRORFILE( "TopTenQuery: pCell kein ValueData" );
+                        OSL_FAIL( "TopTenQuery: pCell kein ValueData" );
                         rEntry.eOp = SC_GREATER_EQUAL;
                         rEntry.nVal = 0;
                     }
@@ -1734,7 +1734,7 @@ sal_Bool ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW 
     SCCOL* pFields = new SCCOL[nCol2-nCol1+1];
     String  aCellStr;
     SCCOL   nCol = nCol1;
-    DBG_ASSERT( rQueryParam.nTab != SCTAB_MAX, "rQueryParam.nTab no value, not bad but no good" );
+    OSL_ENSURE( rQueryParam.nTab != SCTAB_MAX, "rQueryParam.nTab no value, not bad but no good" );
     SCTAB   nDBTab = (rQueryParam.nTab == SCTAB_MAX ? nTab : rQueryParam.nTab);
     SCROW   nDBRow1 = rQueryParam.nRow1;
     SCCOL   nDBCol2 = rQueryParam.nCol2;
@@ -1826,7 +1826,7 @@ sal_Bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
     String aCellStr;
     SCSIZE nIndex = 0;
     SCROW nRow = nRow1;
-    DBG_ASSERT( rQueryParam.nTab != SCTAB_MAX, "rQueryParam.nTab no value, not bad but no good" );
+    OSL_ENSURE( rQueryParam.nTab != SCTAB_MAX, "rQueryParam.nTab no value, not bad but no good" );
     SCTAB   nDBTab = (rQueryParam.nTab == SCTAB_MAX ? nTab : rQueryParam.nTab);
     SCROW   nDBRow1 = rQueryParam.nRow1;
     SCCOL   nDBCol2 = rQueryParam.nCol2;

@@ -59,7 +59,6 @@
 #include <com/sun/star/sheet/XDatabaseRanges.hpp>
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
 #include <com/sun/star/table/TableOrientation.hpp>
-#include <tools/debug.hxx>
 #include <comphelper/extract.hxx>
 
 #include <map>
@@ -449,11 +448,11 @@ void ScXMLExportDatabaseRanges::WriteSortDescriptor(const uno::Sequence <beans::
 
         if (aSortFields[0].IsCaseSensitive)
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
         sal_Bool bCaseSensitive(aSortFields[0].IsCaseSensitive);
         for (i = 1; i < nSortFields; ++i)
         {
-            DBG_ASSERT(bCaseSensitive == aSortFields[i].IsCaseSensitive, "seems that it is now possible to have every field case sensitive");
+            OSL_ENSURE(bCaseSensitive == aSortFields[i].IsCaseSensitive, "seems that it is now possible to have every field case sensitive");
         }
 #endif
         if (aSortFields[0].CollatorLocale.Language.getLength())
@@ -462,15 +461,15 @@ void ScXMLExportDatabaseRanges::WriteSortDescriptor(const uno::Sequence <beans::
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_COUNTRY, aSortFields[0].CollatorLocale.Country);
         if (aSortFields[0].CollatorAlgorithm.getLength())
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ALGORITHM, aSortFields[0].CollatorAlgorithm);
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
         rtl::OUString sLanguage(aSortFields[0].CollatorLocale.Language);
         rtl::OUString sCountry(aSortFields[0].CollatorLocale.Country);
         rtl::OUString sAlgorithm(aSortFields[0].CollatorAlgorithm);
         for (i = 1; i < nSortFields; ++i)
         {
-            DBG_ASSERT(sLanguage == aSortFields[i].CollatorLocale.Language, "seems that it is now possible to have every field localized");
-            DBG_ASSERT(sCountry == aSortFields[i].CollatorLocale.Country, "seems that it is now possible to have every field localized");
-            DBG_ASSERT(sAlgorithm == aSortFields[i].CollatorAlgorithm, "seems that it is now possible to have every field localized");
+            OSL_ENSURE(sLanguage == aSortFields[i].CollatorLocale.Language, "seems that it is now possible to have every field localized");
+            OSL_ENSURE(sCountry == aSortFields[i].CollatorLocale.Country, "seems that it is now possible to have every field localized");
+            OSL_ENSURE(sAlgorithm == aSortFields[i].CollatorAlgorithm, "seems that it is now possible to have every field localized");
         }
 #endif
         SvXMLElementExport aElemS(rExport, XML_NAMESPACE_TABLE, XML_SORT, sal_True, sal_True);

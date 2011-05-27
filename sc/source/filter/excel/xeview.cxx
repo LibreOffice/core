@@ -165,7 +165,7 @@ void XclExpScl::Shorten( sal_uInt16 nFactor )
 
 void XclExpScl::WriteBody( XclExpStream& rStrm )
 {
-    DBG_ASSERT_BIFF( rStrm.GetRoot().GetBiff() >= EXC_BIFF4 );
+    OSL_ENSURE_BIFF( rStrm.GetRoot().GetBiff() >= EXC_BIFF4 );
     rStrm << mnNum << mnDenom;
 }
 
@@ -178,7 +178,7 @@ XclExpPane::XclExpPane( const XclTabViewData& rData ) :
     maSecondXclPos( rData.maSecondXclPos ),
     mnActivePane( rData.mnActivePane )
 {
-    DBG_ASSERT( rData.IsSplit(), "XclExpPane::XclExpPane - no PANE record for unsplit view" );
+    OSL_ENSURE( rData.IsSplit(), "XclExpPane::XclExpPane - no PANE record for unsplit view" );
 }
 
 static const char* lcl_GetActivePane( sal_uInt8 nActivePane )

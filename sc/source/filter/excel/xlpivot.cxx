@@ -123,7 +123,7 @@ bool XclPCItem::IsEqual( const XclPCItem& rItem ) const
         case EXC_PCITEM_INTEGER:    return mnValue    == rItem.mnValue;
         case EXC_PCITEM_BOOL:       return mbValue    == rItem.mbValue;
         case EXC_PCITEM_ERROR:      return mnError    == rItem.mnError;
-        default:    DBG_ERRORFILE( "XclPCItem::IsEqual - unknown pivot cache item type" );
+        default:    OSL_FAIL( "XclPCItem::IsEqual - unknown pivot cache item type" );
     }
     return false;
 }

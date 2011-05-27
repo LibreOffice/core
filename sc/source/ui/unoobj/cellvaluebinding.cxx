@@ -167,7 +167,7 @@ namespace calc
     void SAL_CALL OCellValueBinding::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
     {
         DBG_CHKTHIS( OCellValueBinding, checkConsistency_static );
-        DBG_ASSERT( _nHandle == PROP_HANDLE_BOUND_CELL, "OCellValueBinding::getFastPropertyValue: invalid handle!" );
+        OSL_ENSURE( _nHandle == PROP_HANDLE_BOUND_CELL, "OCellValueBinding::getFastPropertyValue: invalid handle!" );
             // we only have this one property ....
         (void)_nHandle;     // avoid warning in product version
 
@@ -239,7 +239,7 @@ namespace calc
         switch ( aType.getTypeClass() )
         {
         case TypeClass_STRING:
-            DBG_ASSERT( m_xCellText.is(), "OCellValueBinding::getValue: don't have a text!" );
+            OSL_ENSURE( m_xCellText.is(), "OCellValueBinding::getValue: don't have a text!" );
             if ( m_xCellText.is() )
                 aReturn <<= m_xCellText->getString();
             else
@@ -247,7 +247,7 @@ namespace calc
             break;
 
         case TypeClass_BOOLEAN:
-            DBG_ASSERT( m_xCell.is(), "OCellValueBinding::getValue: don't have a double value supplier!" );
+            OSL_ENSURE( m_xCell.is(), "OCellValueBinding::getValue: don't have a double value supplier!" );
             if ( m_xCell.is() )
             {
                 // check if the cell has a numeric value (this might go into a helper function):
@@ -283,7 +283,7 @@ namespace calc
             break;
 
         case TypeClass_DOUBLE:
-            DBG_ASSERT( m_xCell.is(), "OCellValueBinding::getValue: don't have a double value supplier!" );
+            OSL_ENSURE( m_xCell.is(), "OCellValueBinding::getValue: don't have a double value supplier!" );
             if ( m_xCell.is() )
                 aReturn <<= m_xCell->getValue();
             else
@@ -291,7 +291,7 @@ namespace calc
             break;
 
         case TypeClass_LONG:
-            DBG_ASSERT( m_xCell.is(), "OCellValueBinding::getValue: don't have a double value supplier!" );
+            OSL_ENSURE( m_xCell.is(), "OCellValueBinding::getValue: don't have a double value supplier!" );
             if ( m_xCell.is() )
             {
                 // The list position value in the cell is 1-based.
@@ -327,7 +327,7 @@ namespace calc
         {
         case TypeClass_STRING:
             {
-                DBG_ASSERT( m_xCellText.is(), "OCellValueBinding::setValue: don't have a text!" );
+                OSL_ENSURE( m_xCellText.is(), "OCellValueBinding::setValue: don't have a text!" );
 
                 ::rtl::OUString sText;
                 aValue >>= sText;
@@ -338,7 +338,7 @@ namespace calc
 
         case TypeClass_BOOLEAN:
             {
-                DBG_ASSERT( m_xCell.is(), "OCellValueBinding::setValue: don't have a double value supplier!" );
+                OSL_ENSURE( m_xCell.is(), "OCellValueBinding::setValue: don't have a double value supplier!" );
 
                 // boolean is stored as values 0 or 1
                 // TODO: set the number format to boolean if no format is set?
@@ -356,7 +356,7 @@ namespace calc
 
         case TypeClass_DOUBLE:
             {
-                DBG_ASSERT( m_xCell.is(), "OCellValueBinding::setValue: don't have a double value supplier!" );
+                OSL_ENSURE( m_xCell.is(), "OCellValueBinding::setValue: don't have a double value supplier!" );
 
                 double nValue = 0;
                 aValue >>= nValue;
@@ -367,7 +367,7 @@ namespace calc
 
         case TypeClass_LONG:
             {
-                DBG_ASSERT( m_xCell.is(), "OCellValueBinding::setValue: don't have a double value supplier!" );
+                OSL_ENSURE( m_xCell.is(), "OCellValueBinding::setValue: don't have a double value supplier!" );
 
                 sal_Int32 nValue = 0;
                 aValue >>= nValue;      // list index from control layer (0-based)
@@ -382,7 +382,7 @@ namespace calc
                 // #N/A error value can only be set using XCellRangeData
 
                 Reference<XCellRangeData> xData( m_xCell, UNO_QUERY );
-                DBG_ASSERT( xData.is(), "OCellValueBinding::setValue: don't have XCellRangeData!" );
+                OSL_ENSURE( xData.is(), "OCellValueBinding::setValue: don't have XCellRangeData!" );
                 if ( xData.is() )
                 {
                     Sequence<Any> aInner(1);                            // one empty element
@@ -610,20 +610,20 @@ namespace calc
             Reference< XIndexAccess > xSheets;
             if ( m_xDocument.is() )
                 xSheets.set(xSheets.query( m_xDocument->getSheets( ) ));
-            DBG_ASSERT( xSheets.is(), "OCellValueBinding::initialize: could not retrieve the sheets!" );
+            OSL_ENSURE( xSheets.is(), "OCellValueBinding::initialize: could not retrieve the sheets!" );
 
             if ( xSheets.is() )
             {
                 // the concrete sheet
                 Reference< XCellRange > xSheet(xSheets->getByIndex( aAddress.Sheet ), UNO_QUERY);
-                DBG_ASSERT( xSheet.is(), "OCellValueBinding::initialize: NULL sheet, but no exception!" );
+                OSL_ENSURE( xSheet.is(), "OCellValueBinding::initialize: NULL sheet, but no exception!" );
 
                 // the concrete cell
                 if ( xSheet.is() )
                 {
                     m_xCell.set(xSheet->getCellByPosition( aAddress.Column, aAddress.Row ));
                     Reference< XCellAddressable > xAddressAccess( m_xCell, UNO_QUERY );
-                    DBG_ASSERT( xAddressAccess.is(), "OCellValueBinding::initialize: either NULL cell, or cell without address access!" );
+                    OSL_ENSURE( xAddressAccess.is(), "OCellValueBinding::initialize: either NULL cell, or cell without address access!" );
                 }
             }
         }

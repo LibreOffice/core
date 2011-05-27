@@ -277,7 +277,7 @@ sfx2::LinkManager*  ScDocument::GetLinkManager()  const
 
 void ScDocument::SetStorageGrammar( formula::FormulaGrammar::Grammar eGram )
 {
-    DBG_ASSERT(
+    OSL_PRECOND(
         eGram == formula::FormulaGrammar::GRAM_ODFF ||
             eGram == formula::FormulaGrammar::GRAM_PODF,
             "ScDocument::SetStorageGrammar: wrong storage grammar");
@@ -325,7 +325,7 @@ void ScDocument::EndChangeTracking()
 
 void ScDocument::SetChangeTrack( ScChangeTrack* pTrack )
 {
-    DBG_ASSERT( pTrack->GetDocument() == this, "SetChangeTrack: different documents" );
+    OSL_ENSURE( pTrack->GetDocument() == this, "SetChangeTrack: different documents" );
     if ( !pTrack || pTrack == pChangeTrack || pTrack->GetDocument() != this )
         return ;
     EndChangeTracking();
@@ -370,7 +370,7 @@ void ScDocument::StartTrackTimer()
 
 ScDocument::~ScDocument()
 {
-    DBG_ASSERT( !bInLinkUpdate, "bInLinkUpdate in dtor" );
+    OSL_PRECOND( !bInLinkUpdate, "bInLinkUpdate in dtor" );
 
     bInDtorClear = sal_True;
 
@@ -463,12 +463,12 @@ ScDocument::~ScDocument()
     delete pOtherObjects;
     delete pRecursionHelper;
 
-    DBG_ASSERT( !pAutoNameCache, "AutoNameCache still set in dtor" );
+    OSL_POSTCOND( !pAutoNameCache, "AutoNameCache still set in dtor" );
 }
 
 void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
 {
-    DBG_ASSERT(bIsClip, "InitClipPtrs und nicht bIsClip");
+    OSL_ENSURE(bIsClip, "InitClipPtrs und nicht bIsClip");
 
     if (pCondFormList)
     {
@@ -803,7 +803,7 @@ sal_Bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pO
     //  vorneweg testen, ob der Prefix als gueltig erkannt wird
     //  wenn nicht, nur doppelte vermeiden
     sal_Bool bPrefix = ValidTabName( aName );
-    DBG_ASSERT(bPrefix, "ungueltiger Tabellenname");
+    OSL_ENSURE(bPrefix, "ungueltiger Tabellenname");
     SCTAB nDummy;
 
     CreateValidTabName(aName);
@@ -1147,7 +1147,7 @@ void ScDocument::SetChangeViewSettings(const ScChangeViewSettings& rNew)
     if (pChangeViewSettings==NULL)
         pChangeViewSettings = new ScChangeViewSettings;
 
-    DBG_ASSERT( pChangeViewSettings, "Oops. No ChangeViewSettings :-( by!" );
+    OSL_ENSURE( pChangeViewSettings, "Oops. No ChangeViewSettings :-( by!" );
 
     *pChangeViewSettings=rNew;
 }
@@ -1220,7 +1220,7 @@ void ScDocument::AddLookupCache( ScLookupCache & rCache )
     if (!pLookupCacheMapImpl->aCacheMap.insert( ::std::pair< const ScRange,
                 ScLookupCache*>( rCache.getRange(), &rCache)).second)
     {
-        DBG_ERRORFILE( "ScDocument::AddLookupCache: couldn't add to hash map");
+        OSL_FAIL( "ScDocument::AddLookupCache: couldn't add to hash map");
     }
     else
         StartListeningArea( rCache.getRange(), &rCache);
@@ -1232,7 +1232,7 @@ void ScDocument::RemoveLookupCache( ScLookupCache & rCache )
                 rCache.getRange()));
     if (it == pLookupCacheMapImpl->aCacheMap.end())
     {
-        DBG_ERRORFILE( "ScDocument::RemoveLookupCache: range not found in hash map");
+        OSL_FAIL( "ScDocument::RemoveLookupCache: range not found in hash map");
     }
     else
     {

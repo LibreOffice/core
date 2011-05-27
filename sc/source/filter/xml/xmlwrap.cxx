@@ -33,7 +33,6 @@
 #include <rsc/rscsfx.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
-#include <tools/debug.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
@@ -95,7 +94,7 @@ ScXMLImportWrapper::ScXMLImportWrapper(ScDocument& rD, SfxMedium* pM, const uno:
     pMedium(pM),
     xStorage(xStor)
 {
-    DBG_ASSERT( pMedium || xStorage.is(), "ScXMLImportWrapper: Medium or Storage must be set" );
+    OSL_ENSURE( pMedium || xStorage.is(), "ScXMLImportWrapper: Medium or Storage must be set" );
 }
 
 uno::Reference <task::XStatusIndicator> ScXMLImportWrapper::GetStatusIndicator()
@@ -168,7 +167,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
     uno::Reference< beans::XPropertySet > xInfoSet;
     if( aArgs.getLength() > 0 )
         aArgs.getConstArray()[0] >>= xInfoSet;
-    DBG_ASSERT( xInfoSet.is(), "missing property set" );
+    OSL_ENSURE( xInfoSet.is(), "missing property set" );
     if( xInfoSet.is() )
     {
         rtl::OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("StreamName") );
@@ -182,7 +181,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
         xServiceFactory->createInstanceWithArguments(
             sComponentName, aArgs ),
         uno::UNO_QUERY );
-    DBG_ASSERT( xDocHandler.is(), "can't get Calc importer" );
+    OSL_ENSURE( xDocHandler.is(), "can't get Calc importer" );
     uno::Reference<document::XImporter> xImporter( xDocHandler, uno::UNO_QUERY );
     uno::Reference<lang::XComponent> xComponent( xModel, uno::UNO_QUERY );
     if (xImporter.is())
@@ -220,7 +219,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
         else
         {
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
             ByteString aError( "SAX parse exception catched while importing:\n" );
             aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
             OSL_FAIL( aError.GetBuffer() );
@@ -240,7 +239,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
             }
             else
             {
-                DBG_ASSERT( bMustBeSuccessfull, "Warnings are not supported" );
+                OSL_ENSURE( bMustBeSuccessfull, "Warnings are not supported" );
                 nReturn = *new StringErrorInfo( SCERR_IMPORT_FORMAT_ROWCOL, sErr,
                                  ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
             }
@@ -256,7 +255,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
         else
         {
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
             ByteString aError( "SAX exception catched while importing:\n" );
             aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
             OSL_FAIL( aError.GetBuffer() );
@@ -268,7 +267,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
     }
     catch( packages::zip::ZipIOException& r )
     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
         ByteString aError( "Zip exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
         OSL_FAIL( aError.GetBuffer() );
@@ -279,7 +278,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
     }
     catch( io::IOException& r )
     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
         ByteString aError( "IO exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
         OSL_FAIL( aError.GetBuffer() );
@@ -290,7 +289,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
     }
     catch( uno::Exception& r )
     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
         ByteString aError( "uno exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
         OSL_FAIL( aError.GetBuffer() );
@@ -321,7 +320,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
 
     uno::Reference<lang::XMultiServiceFactory> xServiceFactory =
                                         comphelper::getProcessServiceFactory();
-    DBG_ASSERT( xServiceFactory.is(), "got no service manager" );
+    OSL_ENSURE( xServiceFactory.is(), "got no service manager" );
     if( !xServiceFactory.is() )
         return false;
 
@@ -336,7 +335,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
     uno::Reference<uno::XInterface> xXMLParser(
         xServiceFactory->createInstance(
             OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Parser" )) ));
-    DBG_ASSERT( xXMLParser.is(), "com.sun.star.xml.sax.Parser service missing" );
+    OSL_ENSURE( xXMLParser.is(), "com.sun.star.xml.sax.Parser service missing" );
     if( !xXMLParser.is() )
         return false;
 
@@ -661,7 +660,7 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
     uno::Reference< beans::XPropertySet > xInfoSet;
     if( aArgs.getLength() > 0 )
         aArgs.getConstArray()[0] >>= xInfoSet;
-    DBG_ASSERT( xInfoSet.is(), "missing property set" );
+    OSL_ENSURE( xInfoSet.is(), "missing property set" );
     if( xInfoSet.is() )
     {
         rtl::OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("StreamName") );
@@ -674,7 +673,7 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
     uno::Reference<document::XFilter> xFilter(
         xServiceFactory->createInstanceWithArguments( sComponentName , aArgs ),
             uno::UNO_QUERY );
-    DBG_ASSERT( xFilter.is(), "can't get exporter" );
+    OSL_ENSURE( xFilter.is(), "can't get exporter" );
     uno::Reference<document::XExporter> xExporter( xFilter, uno::UNO_QUERY );
     uno::Reference<lang::XComponent> xComponent( xModel, uno::UNO_QUERY );
     if (xExporter.is())
@@ -744,13 +743,13 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "sb99857", "ScXMLImportWrapper::Export" );
 
     uno::Reference<lang::XMultiServiceFactory> xServiceFactory(comphelper::getProcessServiceFactory());
-    DBG_ASSERT( xServiceFactory.is(), "got no service manager" );
+    OSL_ENSURE( xServiceFactory.is(), "got no service manager" );
     if( !xServiceFactory.is() )
         return false;
 
     uno::Reference<uno::XInterface> xWriter(xServiceFactory->createInstance(
             OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" )) ));
-    DBG_ASSERT( xWriter.is(), "com.sun.star.xml.sax.Writer service missing" );
+    OSL_ENSURE( xWriter.is(), "com.sun.star.xml.sax.Writer service missing" );
     if(!xWriter.is())
         return false;
 

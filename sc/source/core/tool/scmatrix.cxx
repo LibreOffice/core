@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-#include <tools/debug.hxx>
-
 #include "scmatrix.hxx"
 #include "global.hxx"
 #include "address.hxx"
@@ -350,7 +348,7 @@ void ScMatrixImpl::PutDouble(double fVal, SCSIZE nC, SCSIZE nR)
         maMat.set_numeric(nR, nC, fVal);
     else
     {
-        DBG_ERRORFILE("ScMatrixImpl::PutDouble: dimension error");
+        OSL_FAIL("ScMatrixImpl::PutDouble: dimension error");
     }
 }
 
@@ -367,7 +365,7 @@ void ScMatrixImpl::PutString(const String& rStr, SCSIZE nC, SCSIZE nR)
         maMat.set_string(nR, nC, new String(rStr));
     else
     {
-        DBG_ERRORFILE("ScMatrixImpl::PutString: dimension error");
+        OSL_FAIL("ScMatrixImpl::PutString: dimension error");
     }
 }
 
@@ -387,7 +385,7 @@ void ScMatrixImpl::PutEmpty(SCSIZE nC, SCSIZE nR)
     }
     else
     {
-        DBG_ERRORFILE("ScMatrixImpl::PutEmpty: dimension error");
+        OSL_FAIL("ScMatrixImpl::PutEmpty: dimension error");
     }
 }
 
@@ -400,7 +398,7 @@ void ScMatrixImpl::PutEmptyPath(SCSIZE nC, SCSIZE nR)
     }
     else
     {
-        DBG_ERRORFILE("ScMatrixImpl::PutEmptyPath: dimension error");
+        OSL_FAIL("ScMatrixImpl::PutEmptyPath: dimension error");
     }
 }
 
@@ -415,7 +413,7 @@ void ScMatrixImpl::PutBoolean(bool bVal, SCSIZE nC, SCSIZE nR)
         maMat.set_boolean(nR, nC, bVal);
     else
     {
-        DBG_ERRORFILE("ScMatrixImpl::PutBoolean: dimension error");
+        OSL_FAIL("ScMatrixImpl::PutBoolean: dimension error");
     }
 }
 
@@ -428,7 +426,7 @@ sal_uInt16 ScMatrixImpl::GetError( SCSIZE nC, SCSIZE nR) const
     }
     else
     {
-        DBG_ERRORFILE("ScMatrixImpl::GetError: dimension error");
+        OSL_FAIL("ScMatrixImpl::GetError: dimension error");
         return errNoValue;
     }
 }
@@ -448,7 +446,7 @@ double ScMatrixImpl::GetDouble(SCSIZE nC, SCSIZE nR) const
     }
     else
     {
-        DBG_ERRORFILE("ScMatrixImpl::GetDouble: dimension error");
+        OSL_FAIL("ScMatrixImpl::GetDouble: dimension error");
         return CreateDoubleError( errNoValue);
     }
 }
@@ -469,12 +467,12 @@ const String& ScMatrixImpl::GetString(SCSIZE nC, SCSIZE nR) const
         else
         {
             SetErrorAtInterpreter( GetError(nC, nR));
-            DBG_ERRORFILE("ScMatrixImpl::GetString: access error, no string");
+            OSL_FAIL("ScMatrixImpl::GetString: access error, no string");
         }
     }
     else
     {
-        DBG_ERRORFILE("ScMatrixImpl::GetString: dimension error");
+        OSL_FAIL("ScMatrixImpl::GetString: dimension error");
     }
     return ScGlobal::GetEmptyString();
 }
@@ -490,7 +488,7 @@ String ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE
 {
     if (!ValidColRowOrReplicated( nC, nR ))
     {
-        DBG_ERRORFILE("ScMatrixImpl::GetString: dimension error");
+        OSL_FAIL("ScMatrixImpl::GetString: dimension error");
         return String();
     }
 
@@ -553,7 +551,7 @@ ScMatrixValue ScMatrixImpl::Get(SCSIZE nC, SCSIZE nR) const
     }
     else
     {
-        DBG_ERRORFILE("ScMatrixImpl::Get: dimension error");
+        OSL_FAIL("ScMatrixImpl::Get: dimension error");
     }
     return aVal;
 }
@@ -647,7 +645,7 @@ void ScMatrixImpl::MatCopy(ScMatrixImpl& mRes) const
     if (s1.first > s2.first || s1.second > s2.second)
     {
         // destination matrix is not large enough.
-        DBG_ERRORFILE("ScMatrixImpl::MatCopy: dimension error");
+        OSL_FAIL("ScMatrixImpl::MatCopy: dimension error");
         return;
     }
 
@@ -670,7 +668,7 @@ void ScMatrixImpl::FillDouble( double fVal, SCSIZE nC1, SCSIZE nR1, SCSIZE nC2, 
     }
     else
     {
-        DBG_ERRORFILE("ScMatrixImpl::FillDouble: dimension error");
+        OSL_FAIL("ScMatrixImpl::FillDouble: dimension error");
     }
 }
 

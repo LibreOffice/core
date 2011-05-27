@@ -267,7 +267,7 @@ void ImportExcel8::Boundsheet( void )
     SCTAB nScTab = static_cast< SCTAB >( nBdshtTab );
     if( nScTab > 0 )
     {
-        DBG_ASSERT( !pD->HasTable( nScTab ), "ImportExcel8::Boundsheet - sheet exists already" );
+        OSL_ENSURE( !pD->HasTable( nScTab ), "ImportExcel8::Boundsheet - sheet exists already" );
         pD->MakeTable( nScTab );
     }
 

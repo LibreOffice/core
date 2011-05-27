@@ -201,13 +201,13 @@ void ScSubTotalParam::SetSubTotals( sal_uInt16 nGroup,
                                     const ScSubTotalFunc* ptrFunctions,
                                     sal_uInt16 nCount )
 {
-    DBG_ASSERT( (nGroup <= MAXSUBTOTAL),
+    OSL_ENSURE( (nGroup <= MAXSUBTOTAL),
                 "ScSubTotalParam::SetSubTotals(): nGroup > MAXSUBTOTAL!" );
-    DBG_ASSERT( ptrSubTotals,
+    OSL_ENSURE( ptrSubTotals,
                 "ScSubTotalParam::SetSubTotals(): ptrSubTotals == NULL!" );
-    DBG_ASSERT( ptrFunctions,
+    OSL_ENSURE( ptrFunctions,
                 "ScSubTotalParam::SetSubTotals(): ptrFunctions == NULL!" );
-    DBG_ASSERT( (nCount > 0),
+    OSL_ENSURE( (nCount > 0),
                 "ScSubTotalParam::SetSubTotals(): nCount <= 0!" );
 
     if ( ptrSubTotals && ptrFunctions && (nCount > 0) && (nGroup <= MAXSUBTOTAL) )

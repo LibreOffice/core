@@ -79,10 +79,10 @@ ExportBiff5::~ExportBiff5()
 FltError ExportBiff5::Write()
 {
     SfxObjectShell* pDocShell = GetDocShell();
-    DBG_ASSERT( pDocShell, "ExportBiff5::Write - no document shell" );
+    OSL_ENSURE( pDocShell, "ExportBiff5::Write - no document shell" );
 
     SotStorageRef xRootStrg = GetRootStorage();
-    DBG_ASSERT( xRootStrg.Is(), "ExportBiff5::Write - no root storage" );
+    OSL_ENSURE( xRootStrg.Is(), "ExportBiff5::Write - no root storage" );
 
     bool bWriteBasicCode = false;
     bool bWriteBasicStrg = false;

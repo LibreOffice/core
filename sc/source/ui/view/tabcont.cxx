@@ -586,7 +586,7 @@ long ScTabControl::StartRenaming()
 long ScTabControl::AllowRenaming()
 {
     ScTabViewShell* pViewSh = pViewData->GetViewShell();
-    DBG_ASSERT( pViewSh, "pViewData->GetViewShell()" );
+    OSL_ENSURE( pViewSh, "pViewData->GetViewShell()" );
 
     long nRet = TABBAR_RENAMING_CANCEL;
     sal_uInt16 nId = GetEditPageId();

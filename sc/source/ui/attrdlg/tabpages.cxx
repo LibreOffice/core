@@ -215,7 +215,7 @@ IMPL_LINK( ScTabPageProtection, ButtonClickHdl, TriStateBox*, pBox )
             bHidePrint = bOn;
         else
         {
-            DBG_ERRORFILE("falscher Button");
+            OSL_FAIL("falscher Button");
         }
     }
 

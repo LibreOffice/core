@@ -32,7 +32,6 @@
 
 
 #include <vcl/window.hxx>
-#include <tools/debug.hxx>
 
 #include "invmerge.hxx"
 
@@ -62,7 +61,7 @@ void ScInvertMerger::Flush()
     FlushLine();
     FlushTotal();
 
-    DBG_ASSERT( aLineRect.IsEmpty() && aTotalRect.IsEmpty(), "Flush: not empty" );
+    OSL_ENSURE( aLineRect.IsEmpty() && aTotalRect.IsEmpty(), "Flush: not empty" );
 
     if ( pRects )
     {

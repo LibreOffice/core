@@ -115,7 +115,7 @@ void ScAutoStyleList::AddEntry( sal_uLong nTimeout, const ScRange& rRange, const
 
     if (!aEntries.empty() && nNow != nTimerStart)
     {
-        DBG_ASSERT(nNow>nTimerStart, "Zeit laeuft rueckwaerts?");
+        OSL_ENSURE(nNow>nTimerStart, "Zeit laeuft rueckwaerts?");
         AdjustEntries((nNow-nTimerStart)*1000);
     }
 

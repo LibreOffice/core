@@ -141,7 +141,7 @@ void ScDocument::UpdateAllCharts()
         if (pTab[nTab])
         {
             SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-            DBG_ASSERT(pPage,"Page ?");
+            OSL_ENSURE(pPage,"Page ?");
 
             ScRange aRange;
             SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
@@ -209,7 +209,7 @@ sal_Bool ScDocument::HasChartAtPoint( SCTAB nTab, const Point& rPos, String* pNa
     if (pDrawLayer && pTab[nTab])
     {
         SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-        DBG_ASSERT(pPage,"Page ?");
+        OSL_ENSURE(pPage,"Page ?");
 
         SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
         SdrObject* pObject = aIter.Next();
@@ -255,7 +255,7 @@ uno::Reference< chart2::XChartDocument > ScDocument::GetChartByName( const Strin
         for (sal_uInt16 nTab=0; nTab<nCount; nTab++)
         {
             SdrPage* pPage = pDrawLayer->GetPage(nTab);
-            DBG_ASSERT(pPage,"Page ?");
+            OSL_ENSURE(pPage,"Page ?");
 
             SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
             SdrObject* pObject = aIter.Next();
@@ -320,7 +320,7 @@ void ScDocument::GetOldChartParameters( const String& rName,
     for (sal_uInt16 nTab=0; nTab<nCount; nTab++)
     {
         SdrPage* pPage = pDrawLayer->GetPage(nTab);
-        DBG_ASSERT(pPage,"Page ?");
+        OSL_ENSURE(pPage,"Page ?");
 
         SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
         SdrObject* pObject = aIter.Next();
@@ -367,7 +367,7 @@ void ScDocument::UpdateChartArea( const String& rChartName,
     for (SCTAB nTab=0; nTab<=MAXTAB && pTab[nTab]; nTab++)
     {
         SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-        DBG_ASSERT(pPage,"Page ?");
+        OSL_ENSURE(pPage,"Page ?");
 
         SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
         SdrObject* pObject = aIter.Next();
@@ -602,7 +602,7 @@ void ScDocument::SetChartRangeList( const String& rChartName,
     for (SCTAB nTab=0; nTab<=MAXTAB && pTab[nTab]; nTab++)
     {
         SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-        DBG_ASSERT(pPage,"Page ?");
+        OSL_ENSURE(pPage,"Page ?");
 
         SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
         SdrObject* pObject = aIter.Next();
@@ -659,7 +659,7 @@ uno::Reference< embed::XEmbeddedObject >
     for (sal_uInt16 nTab=0; nTab<nCount; nTab++)
     {
         SdrPage* pPage = pDrawLayer->GetPage(nTab);
-        DBG_ASSERT(pPage,"Page ?");
+        OSL_ENSURE(pPage,"Page ?");
 
         SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
         SdrObject* pObject = aIter.Next();
@@ -706,7 +706,7 @@ void ScDocument::UpdateChartListenerCollection()
             if (pTab[nTab])
             {
                 SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-                DBG_ASSERT(pPage,"Page ?");
+                OSL_ENSURE(pPage,"Page ?");
 
                 if (!pPage)
                     continue;
@@ -734,7 +734,7 @@ void ScDocument::UpdateChartListenerCollection()
                             bool bIsChart = false;
 
                             uno::Reference< embed::XEmbeddedObject > xIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
-                            DBG_ASSERT( xIPObj.is(), "No embedded object is given!");
+                            OSL_ENSURE( xIPObj.is(), "No embedded object is given!");
                             uno::Reference< ::com::sun::star::chart2::data::XDataReceiver > xReceiver;
                             uno::Reference< embed::XComponentSupplier > xCompSupp( xIPObj, uno::UNO_QUERY );
                             if( xCompSupp.is())

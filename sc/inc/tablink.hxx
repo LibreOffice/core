@@ -58,8 +58,8 @@ public:
                     const String& rFilter, const String& rOpt, sal_uLong nRefresh );
     virtual ~ScTableLink();
     virtual void Closed();
-    virtual void DataChanged( const String& rMimeType,
-                              const ::com::sun::star::uno::Any & rValue );
+    virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
+        const String& rMimeType, const ::com::sun::star::uno::Any & rValue );
 
     virtual void    Edit( Window*, const Link& rEndEditHdl );
 

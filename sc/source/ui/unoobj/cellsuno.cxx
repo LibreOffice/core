@@ -877,7 +877,7 @@ void lcl_CopyProperties( beans::XPropertySet& rDest, beans::XPropertySet& rSourc
 
 SCTAB lcl_FirstTab( const ScRangeList& rRanges )
 {
-    DBG_ASSERT(rRanges.size() >= 1, "was fuer Ranges ?!?!");
+    OSL_ENSURE(rRanges.size() >= 1, "was fuer Ranges ?!?!");
     const ScRange* pFirst = rRanges[ 0 ];
     if (pFirst)
         return pFirst->aStart.Tab();
@@ -4753,7 +4753,7 @@ void ScCellRangeObj::RefChanged()
     ScCellRangesBase::RefChanged();
 
     const ScRangeList& rRanges = GetRangeList();
-    DBG_ASSERT(rRanges.size() == 1, "was fuer Ranges ?!?!");
+    OSL_ENSURE(rRanges.size() == 1, "was fuer Ranges ?!?!");
     if ( !rRanges.empty() )
     {
         const ScRange* pFirst = rRanges[0];
@@ -6080,7 +6080,7 @@ void ScCellObj::RefChanged()
     ScCellRangeObj::RefChanged();
 
     const ScRangeList& rRanges = GetRangeList();
-    DBG_ASSERT(rRanges.size() == 1, "was fuer Ranges ?!?!");
+    OSL_ENSURE(rRanges.size() == 1, "was fuer Ranges ?!?!");
     if ( !rRanges.empty() )
     {
         const ScRange* pFirst = rRanges[ 0 ];
@@ -6950,7 +6950,7 @@ uno::Sequence<sal_Int8> SAL_CALL ScTableSheetObj::getImplementationId() throw(un
 SCTAB ScTableSheetObj::GetTab_Impl() const
 {
     const ScRangeList& rRanges = GetRangeList();
-    DBG_ASSERT(rRanges.size() == 1, "was fuer Ranges ?!?!");
+    OSL_ENSURE(rRanges.size() == 1, "was fuer Ranges ?!?!");
     if ( !rRanges.empty() )
     {
         const ScRange* pFirst = rRanges[ 0 ];
@@ -7042,7 +7042,7 @@ uno::Reference<sheet::XSheetCellCursor> SAL_CALL ScTableSheetObj::createCursorBy
         if (pRangesImp)
         {
             const ScRangeList& rRanges = pRangesImp->GetRangeList();
-            DBG_ASSERT( rRanges.size() == 1, "Range? Ranges?" );
+            OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
             return new ScCellCursorObj( pDocSh, *rRanges[ 0 ] );
         }
     }
@@ -7211,11 +7211,11 @@ uno::Reference<drawing::XDrawPage> SAL_CALL ScTableSheetObj::getDrawPage()
     if ( pDocSh )
     {
         ScDrawLayer* pDrawLayer = pDocSh->MakeDrawLayer();
-        DBG_ASSERT(pDrawLayer,"kann Draw-Layer nicht anlegen");
+        OSL_ENSURE(pDrawLayer,"kann Draw-Layer nicht anlegen");
 
         SCTAB nTab = GetTab_Impl();
         SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-        DBG_ASSERT(pPage,"Draw-Page nicht gefunden");
+        OSL_ENSURE(pPage,"Draw-Page nicht gefunden");
         if (pPage)
             return uno::Reference<drawing::XDrawPage> (pPage->getUnoPage(), uno::UNO_QUERY);
 
@@ -7250,7 +7250,7 @@ void SAL_CALL ScTableSheetObj::insertCells( const table::CellRangeAddress& rRang
 
         if (bDo)
         {
-            DBG_ASSERT( rRangeAddress.Sheet == GetTab_Impl(), "falsche Tabelle in CellRangeAddress" );
+            OSL_ENSURE( rRangeAddress.Sheet == GetTab_Impl(), "falsche Tabelle in CellRangeAddress" );
             ScRange aScRange;
             ScUnoConversion::FillScRange( aScRange, rRangeAddress );
             ScDocFunc aFunc(*pDocSh);
@@ -7282,7 +7282,7 @@ void SAL_CALL ScTableSheetObj::removeRange( const table::CellRangeAddress& rRang
 
         if (bDo)
         {
-            DBG_ASSERT( rRangeAddress.Sheet == GetTab_Impl(), "falsche Tabelle in CellRangeAddress" );
+            OSL_ENSURE( rRangeAddress.Sheet == GetTab_Impl(), "falsche Tabelle in CellRangeAddress" );
             ScRange aScRange;
             ScUnoConversion::FillScRange( aScRange, rRangeAddress );
             ScDocFunc aFunc(*pDocSh);
@@ -7299,7 +7299,7 @@ void SAL_CALL ScTableSheetObj::moveRange( const table::CellAddress& aDestination
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
     {
-        DBG_ASSERT( aSource.Sheet == GetTab_Impl(), "falsche Tabelle in CellRangeAddress" );
+        OSL_ENSURE( aSource.Sheet == GetTab_Impl(), "falsche Tabelle in CellRangeAddress" );
         ScRange aSourceRange;
         ScUnoConversion::FillScRange( aSourceRange, aSource );
         ScAddress aDestPos( (SCCOL)aDestination.Column, (SCROW)aDestination.Row, aDestination.Sheet );
@@ -7316,7 +7316,7 @@ void SAL_CALL ScTableSheetObj::copyRange( const table::CellAddress& aDestination
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
     {
-        DBG_ASSERT( aSource.Sheet == GetTab_Impl(), "falsche Tabelle in CellRangeAddress" );
+        OSL_ENSURE( aSource.Sheet == GetTab_Impl(), "falsche Tabelle in CellRangeAddress" );
         ScRange aSourceRange;
         ScUnoConversion::FillScRange( aSourceRange, aSource );
         ScAddress aDestPos( (SCCOL)aDestination.Column, (SCROW)aDestination.Row, aDestination.Sheet );
@@ -7374,7 +7374,7 @@ uno::Sequence<table::CellRangeAddress> SAL_CALL ScTableSheetObj::getPrintAreas()
         for (sal_uInt16 i=0; i<nCount; i++)
         {
             const ScRange* pRange = pDoc->GetPrintRange( nTab, i );
-            DBG_ASSERT(pRange,"wo ist der Druckbereich");
+            OSL_ENSURE(pRange,"wo ist der Druckbereich");
             if (pRange)
             {
                 ScUnoConversion::FillApiRange( aRangeAddress, *pRange );
@@ -7734,7 +7734,7 @@ sal_Bool SAL_CALL ScTableSheetObj::hideDependents( const table::CellAddress& aPo
     if ( pDocSh )
     {
         SCTAB nTab = GetTab_Impl();
-        DBG_ASSERT( aPosition.Sheet == nTab, "falsche Tabelle in CellAddress" );
+        OSL_ENSURE( aPosition.Sheet == nTab, "falsche Tabelle in CellAddress" );
         ScAddress aPos( (SCCOL)aPosition.Column, (SCROW)aPosition.Row, nTab );
         ScDocFunc aFunc(*pDocSh);
         return aFunc.DetectiveDelSucc( aPos );
@@ -7750,7 +7750,7 @@ sal_Bool SAL_CALL ScTableSheetObj::hidePrecedents( const table::CellAddress& aPo
     if ( pDocSh )
     {
         SCTAB nTab = GetTab_Impl();
-        DBG_ASSERT( aPosition.Sheet == nTab, "falsche Tabelle in CellAddress" );
+        OSL_ENSURE( aPosition.Sheet == nTab, "falsche Tabelle in CellAddress" );
         ScAddress aPos( (SCCOL)aPosition.Column, (SCROW)aPosition.Row, nTab );
         ScDocFunc aFunc(*pDocSh);
         return aFunc.DetectiveDelPred( aPos );
@@ -7766,7 +7766,7 @@ sal_Bool SAL_CALL ScTableSheetObj::showDependents( const table::CellAddress& aPo
     if ( pDocSh )
     {
         SCTAB nTab = GetTab_Impl();
-        DBG_ASSERT( aPosition.Sheet == nTab, "falsche Tabelle in CellAddress" );
+        OSL_ENSURE( aPosition.Sheet == nTab, "falsche Tabelle in CellAddress" );
         ScAddress aPos( (SCCOL)aPosition.Column, (SCROW)aPosition.Row, nTab );
         ScDocFunc aFunc(*pDocSh);
         return aFunc.DetectiveAddSucc( aPos );
@@ -7782,7 +7782,7 @@ sal_Bool SAL_CALL ScTableSheetObj::showPrecedents( const table::CellAddress& aPo
     if ( pDocSh )
     {
         SCTAB nTab = GetTab_Impl();
-        DBG_ASSERT( aPosition.Sheet == nTab, "falsche Tabelle in CellAddress" );
+        OSL_ENSURE( aPosition.Sheet == nTab, "falsche Tabelle in CellAddress" );
         ScAddress aPos( (SCCOL)aPosition.Column, (SCROW)aPosition.Row, nTab );
         ScDocFunc aFunc(*pDocSh);
         return aFunc.DetectiveAddPred( aPos );
@@ -7798,7 +7798,7 @@ sal_Bool SAL_CALL ScTableSheetObj::showErrors( const table::CellAddress& aPositi
     if ( pDocSh )
     {
         SCTAB nTab = GetTab_Impl();
-        DBG_ASSERT( aPosition.Sheet == nTab, "falsche Tabelle in CellAddress" );
+        OSL_ENSURE( aPosition.Sheet == nTab, "falsche Tabelle in CellAddress" );
         ScAddress aPos( (SCCOL)aPosition.Column, (SCROW)aPosition.Row, nTab );
         ScDocFunc aFunc(*pDocSh);
         return aFunc.DetectiveAddError( aPos );
@@ -8044,7 +8044,7 @@ void SAL_CALL ScTableSheetObj::addRanges( const uno::Sequence<table::CellRangeAd
                 const table::CellRangeAddress* pAry = rScenRanges.getConstArray();
                 for (sal_uInt16 i=0; i<nRangeCount; i++)
                 {
-                    DBG_ASSERT( pAry[i].Sheet == nTab, "addRanges mit falscher Tab" );
+                    OSL_ENSURE( pAry[i].Sheet == nTab, "addRanges mit falscher Tab" );
                     ScRange aOneRange( (SCCOL)pAry[i].StartColumn, (SCROW)pAry[i].StartRow, nTab,
                                        (SCCOL)pAry[i].EndColumn,   (SCROW)pAry[i].EndRow,   nTab );
 
@@ -8774,7 +8774,7 @@ rtl::OUString SAL_CALL ScTableColumnObj::getName() throw(uno::RuntimeException)
     SolarMutexGuard aGuard;
 
     const ScRange& rRange = GetRange();
-    DBG_ASSERT(rRange.aStart.Col() == rRange.aEnd.Col(), "too many columns");
+    OSL_ENSURE(rRange.aStart.Col() == rRange.aEnd.Col(), "too many columns");
     SCCOL nCol = rRange.aStart.Col();
 
     return ScColToAlpha( nCol );        // from global.hxx
@@ -8816,7 +8816,7 @@ void ScTableColumnObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
         if (!pDocSh)
             return;                                                 //! Exception oder so?
         const ScRange& rRange = GetRange();
-        DBG_ASSERT(rRange.aStart.Col() == rRange.aEnd.Col(), "zuviele Spalten");
+        OSL_ENSURE(rRange.aStart.Col() == rRange.aEnd.Col(), "zuviele Spalten");
         SCCOL nCol = rRange.aStart.Col();
         SCTAB nTab = rRange.aStart.Tab();
         ScDocFunc aFunc(*pDocSh);
@@ -8875,7 +8875,7 @@ void ScTableColumnObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
 
         ScDocument* pDoc = pDocSh->GetDocument();
         const ScRange& rRange = GetRange();
-        DBG_ASSERT(rRange.aStart.Col() == rRange.aEnd.Col(), "zuviele Spalten");
+        OSL_ENSURE(rRange.aStart.Col() == rRange.aEnd.Col(), "zuviele Spalten");
         SCCOL nCol = rRange.aStart.Col();
         SCTAB nTab = rRange.aStart.Tab();
 
@@ -8960,7 +8960,7 @@ void ScTableRowObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntr
             return;                                                 //! Exception oder so?
         ScDocument* pDoc = pDocSh->GetDocument();
         const ScRange& rRange = GetRange();
-        DBG_ASSERT(rRange.aStart.Row() == rRange.aEnd.Row(), "zuviele Zeilen");
+        OSL_ENSURE(rRange.aStart.Row() == rRange.aEnd.Row(), "zuviele Zeilen");
         SCROW nRow = rRange.aStart.Row();
         SCTAB nTab = rRange.aStart.Tab();
         ScDocFunc aFunc(*pDocSh);
@@ -9028,7 +9028,7 @@ void ScTableRowObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntr
             throw uno::RuntimeException();
         ScDocument* pDoc = pDocSh->GetDocument();
         const ScRange& rRange = GetRange();
-        DBG_ASSERT(rRange.aStart.Row() == rRange.aEnd.Row(), "zuviele Zeilen");
+        OSL_ENSURE(rRange.aStart.Row() == rRange.aEnd.Row(), "zuviele Zeilen");
         SCROW nRow = rRange.aStart.Row();
         SCTAB nTab = rRange.aStart.Tab();
 
@@ -9191,7 +9191,7 @@ ScCellsEnumeration::~ScCellsEnumeration()
 
 void ScCellsEnumeration::Advance_Impl()
 {
-    DBG_ASSERT(!bAtEnd,"zuviel Advance_Impl");
+    OSL_ENSURE(!bAtEnd,"zuviel Advance_Impl");
     if (!pMark)
     {
         pMark = new ScMarkData;
@@ -9276,7 +9276,7 @@ ScCellFormatsObj::ScCellFormatsObj(ScDocShell* pDocSh, const ScRange& rRange) :
     ScDocument* pDoc = pDocShell->GetDocument();
     pDoc->AddUnoObject(*this);
 
-    DBG_ASSERT( aTotalRange.aStart.Tab() == aTotalRange.aEnd.Tab(), "unterschiedliche Tabellen" );
+    OSL_ENSURE( aTotalRange.aStart.Tab() == aTotalRange.aEnd.Tab(), "unterschiedliche Tabellen" );
 }
 
 ScCellFormatsObj::~ScCellFormatsObj()
@@ -9401,7 +9401,7 @@ ScCellFormatsEnumeration::ScCellFormatsEnumeration(ScDocShell* pDocSh, const ScR
     ScDocument* pDoc = pDocShell->GetDocument();
     pDoc->AddUnoObject(*this);
 
-    DBG_ASSERT( rRange.aStart.Tab() == rRange.aEnd.Tab(),
+    OSL_ENSURE( rRange.aStart.Tab() == rRange.aEnd.Tab(),
                 "CellFormatsEnumeration: unterschiedliche Tabellen" );
 
     pIter = new ScAttrRectIterator( pDoc, nTab,
@@ -9419,7 +9419,7 @@ ScCellFormatsEnumeration::~ScCellFormatsEnumeration()
 
 void ScCellFormatsEnumeration::Advance_Impl()
 {
-    DBG_ASSERT(!bAtEnd,"zuviel Advance_Impl");
+    OSL_ENSURE(!bAtEnd,"zuviel Advance_Impl");
 
     if ( pIter )
     {
@@ -9506,7 +9506,7 @@ ScUniqueCellFormatsObj::ScUniqueCellFormatsObj(ScDocShell* pDocSh, const ScRange
 {
     pDocShell->GetDocument()->AddUnoObject(*this);
 
-    DBG_ASSERT( aTotalRange.aStart.Tab() == aTotalRange.aEnd.Tab(), "unterschiedliche Tabellen" );
+    OSL_ENSURE( aTotalRange.aStart.Tab() == aTotalRange.aEnd.Tab(), "unterschiedliche Tabellen" );
 
     GetObjects_Impl();
 }
@@ -9672,7 +9672,7 @@ struct ScUniqueFormatsOrder
     bool operator()( const ScRangeList& rList1, const ScRangeList& rList2 ) const
     {
         // all range lists have at least one entry
-        DBG_ASSERT( rList1.size() > 0 && rList2.size() > 0, "ScUniqueFormatsOrder: empty list" );
+        OSL_ENSURE( rList1.size() > 0 && rList2.size() > 0, "ScUniqueFormatsOrder: empty list" );
 
         // compare start positions using ScAddress comparison operator
         return ( rList1[ 0 ]->aStart < rList2[ 0 ]->aStart );

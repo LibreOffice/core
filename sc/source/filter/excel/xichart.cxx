@@ -435,7 +435,7 @@ void XclImpChGroupBase::ReadRecordGroup( XclImpStream& rStrm )
 
 void XclImpChGroupBase::SkipBlock( XclImpStream& rStrm )
 {
-    DBG_ASSERT( rStrm.GetRecId() == EXC_ID_CHBEGIN, "XclImpChGroupBase::SkipBlock - no CHBEGIN record" );
+    OSL_ENSURE( rStrm.GetRecId() == EXC_ID_CHBEGIN, "XclImpChGroupBase::SkipBlock - no CHBEGIN record" );
     // do nothing if current record is not CHBEGIN
     bool bLoop = rStrm.GetRecId() == EXC_ID_CHBEGIN;
     while( bLoop && rStrm.StartNextRecord() )
@@ -593,7 +593,7 @@ XclImpChFrameBase::XclImpChFrameBase( const XclChFormatInfo& rFmtInfo )
         }
         break;
         default:
-            DBG_ERRORFILE( "XclImpChFrameBase::XclImpChFrameBase - unknown frame type" );
+            OSL_FAIL( "XclImpChFrameBase::XclImpChFrameBase - unknown frame type" );
     }
 }
 
@@ -859,7 +859,7 @@ Reference< XDataSequence > XclImpChSourceLink::CreateDataSequence( const OUStrin
         }
         catch( Exception& )
         {
-//            DBG_ERRORFILE( "XclImpChSourceLink::CreateDataSequence - cannot create data sequence" );
+//            OSL_FAIL( "XclImpChSourceLink::CreateDataSequence - cannot create data sequence" );
         }
     }
     return xDataSeq;
@@ -1840,7 +1840,7 @@ void XclImpChSeries::SetDataLabel( XclImpChTextRef xLabel )
 
 void XclImpChSeries::AddChildSeries( const XclImpChSeries& rSeries )
 {
-    DBG_ASSERT( !HasParentSeries(), "XclImpChSeries::AddChildSeries - not allowed for child series" );
+    OSL_ENSURE( !HasParentSeries(), "XclImpChSeries::AddChildSeries - not allowed for child series" );
 
     /*  In Excel, trend lines and error bars are stored as own series. In Calc,
         these are properties of the parent series. This function adds the
@@ -1922,7 +1922,7 @@ ScfPropertySet lclGetPointPropSet( Reference< XDataSeries > xDataSeries, sal_uIn
     }
     catch( Exception& )
     {
-        DBG_ERRORFILE( "lclGetPointPropSet - no data point property set" );
+        OSL_FAIL( "lclGetPointPropSet - no data point property set" );
     }
     return aPropSet;
 }
@@ -2137,7 +2137,7 @@ void XclImpChSeries::ConvertTrendLines( Reference< XDataSeries > xDataSeries ) c
             }
             catch( Exception& )
             {
-                DBG_ERRORFILE( "XclImpChSeries::ConvertTrendLines - cannot add regression curve" );
+                OSL_FAIL( "XclImpChSeries::ConvertTrendLines - cannot add regression curve" );
             }
         }
     }
@@ -2386,7 +2386,7 @@ void XclImpChChart3d::Convert( ScfPropertySet& rPropSet, bool b3dWallChart ) con
     namespace cssd = ::com::sun::star::drawing;
 
 //    #i104057# do not assert this, written by broken external generators
-//    DBG_ASSERT( ::get_flag( maData.mnFlags, EXC_CHCHART3D_HASWALLS ) == b3dWallChart, "XclImpChChart3d::Convert - wrong wall flag" );
+//    OSL_ENSURE( ::get_flag( maData.mnFlags, EXC_CHCHART3D_HASWALLS ) == b3dWallChart, "XclImpChChart3d::Convert - wrong wall flag" );
 
     sal_Int32 nRotationY = 0;
     sal_Int32 nRotationX = 0;
@@ -2696,7 +2696,7 @@ void XclImpChTypeGroup::SetUsedFormatIndex( sal_uInt16 nFormatIdx )
 
 sal_uInt16 XclImpChTypeGroup::PopUnusedFormatIndex()
 {
-    DBG_ASSERT( !maUnusedFormats.empty(), "XclImpChTypeGroup::PopUnusedFormatIndex - no more format indexes available" );
+    OSL_ENSURE( !maUnusedFormats.empty(), "XclImpChTypeGroup::PopUnusedFormatIndex - no more format indexes available" );
     sal_uInt16 nFormatIdx = maUnusedFormats.empty() ? 0 : *maUnusedFormats.begin();
     SetUsedFormatIndex( nFormatIdx );
     return nFormatIdx;
@@ -2740,7 +2740,7 @@ Reference< XCoordinateSystem > XclImpChTypeGroup::CreateCoordSystem() const
 
 Reference< XChartType > XclImpChTypeGroup::CreateChartType( Reference< XDiagram > xDiagram, sal_Int32 nApiAxesSetIdx ) const
 {
-    DBG_ASSERT( IsValidGroup(), "XclImpChTypeGroup::CreateChartType - type group without series" );
+    OSL_ENSURE( IsValidGroup(), "XclImpChTypeGroup::CreateChartType - type group without series" );
 
     // create the chart type object
     Reference< XChartType > xChartType = maType.CreateChartType( xDiagram, Is3dChart() );
@@ -2836,7 +2836,7 @@ void XclImpChTypeGroup::InsertDataSeries( Reference< XChartType > xChartType,
         }
         catch( Exception& )
         {
-            DBG_ERRORFILE( "XclImpChTypeGroup::InsertDataSeries - cannot add data series" );
+            OSL_FAIL( "XclImpChTypeGroup::InsertDataSeries - cannot add data series" );
         }
     }
 }
@@ -2867,7 +2867,7 @@ void XclImpChTypeGroup::CreateStockSeries( Reference< XChartType > xChartType, s
     {
         // create a list of data sequences from all series
         ::std::vector< Reference< XLabeledDataSequence > > aLabeledSeqVec;
-        DBG_ASSERT( maSeries.size() >= 3, "XclImpChTypeGroup::CreateChartType - missing stock series" );
+        OSL_ENSURE( maSeries.size() >= 3, "XclImpChTypeGroup::CreateChartType - missing stock series" );
         int nRoleIdx = (maSeries.size() == 3) ? 1 : 0;
         for( XclImpChSeriesVec::const_iterator aIt = maSeries.begin(), aEnd = maSeries.end();
                 (nRoleIdx < 4) && (aIt != aEnd); ++nRoleIdx, ++aIt )
@@ -3339,7 +3339,7 @@ Reference< XAxis > XclImpChAxis::CreateAxis( const XclImpChTypeGroup& rTypeGroup
                 mxValueRange->Convert( aScaleData, rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_PIE );
             break;
             default:
-                DBG_ERRORFILE( "XclImpChAxis::CreateAxis - unknown axis type" );
+                OSL_FAIL( "XclImpChAxis::CreateAxis - unknown axis type" );
         }
 
         /*  Do not set a value to the Origin member anymore (will be done via
@@ -3571,7 +3571,7 @@ void XclImpChAxesSet::Convert( Reference< XDiagram > xDiagram ) const
             }
             catch( Exception& )
             {
-                DBG_ERRORFILE( "XclImpChAxesSet::Convert - cannot insert coordinate system" );
+                OSL_FAIL( "XclImpChAxesSet::Convert - cannot insert coordinate system" );
             }
 
             // create the axes with grids and axis titles and insert them into the diagram
@@ -3652,7 +3652,7 @@ Reference< XCoordinateSystem > XclImpChAxesSet::CreateCoordSystem( Reference< XD
     if( xCoordSystemCont.is() )
     {
         Sequence< Reference< XCoordinateSystem > > aCoordSystems = xCoordSystemCont->getCoordinateSystems();
-        DBG_ASSERT( aCoordSystems.getLength() <= 1, "XclImpChAxesSet::CreateCoordSystem - too many existing coordinate systems" );
+        OSL_ENSURE( aCoordSystems.getLength() <= 1, "XclImpChAxesSet::CreateCoordSystem - too many existing coordinate systems" );
         if( aCoordSystems.getLength() > 0 )
             xCoordSystem = aCoordSystems[ 0 ];
     }
@@ -3686,7 +3686,7 @@ Reference< XCoordinateSystem > XclImpChAxesSet::CreateCoordSystem( Reference< XD
             }
             catch( Exception& )
             {
-                DBG_ERRORFILE( "XclImpChAxesSet::CreateCoordSystem - cannot add chart type" );
+                OSL_FAIL( "XclImpChAxesSet::CreateCoordSystem - cannot add chart type" );
             }
         }
     }
@@ -3713,7 +3713,7 @@ void XclImpChAxesSet::ConvertAxis(
             }
             catch( Exception& )
             {
-                DBG_ERRORFILE( "XclImpChAxesSet::ConvertAxis - cannot set axis title" );
+                OSL_FAIL( "XclImpChAxesSet::ConvertAxis - cannot set axis title" );
             }
 
             // insert axis into coordinate system
@@ -3725,7 +3725,7 @@ void XclImpChAxesSet::ConvertAxis(
             }
             catch( Exception& )
             {
-                DBG_ERRORFILE( "XclImpChAxesSet::ConvertAxis - cannot set axis" );
+                OSL_FAIL( "XclImpChAxesSet::ConvertAxis - cannot set axis" );
             }
         }
     }

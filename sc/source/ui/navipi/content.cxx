@@ -749,7 +749,7 @@ void ScContentTree::GetDrawNames( sal_uInt16 nType )
         for (SCTAB nTab=0; nTab<nTabCount; nTab++)
         {
             SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-            DBG_ASSERT(pPage,"Page ?");
+            OSL_ENSURE(pPage,"Page ?");
             if (pPage)
             {
                 SdrObjListIter aIter( *pPage, eIter );
@@ -795,7 +795,7 @@ void ScContentTree::GetLinkNames()
         return;
 
     sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
-    DBG_ASSERT(pLinkManager, "kein LinkManager am Dokument?");
+    OSL_ENSURE(pLinkManager, "kein LinkManager am Dokument?");
     const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
     sal_uInt16 nCount = rLinks.Count();
     for (sal_uInt16 i=0; i<nCount; i++)
@@ -816,7 +816,7 @@ const ScAreaLink* ScContentTree::GetLink( sal_uLong nIndex )
 
     sal_uLong nFound = 0;
     sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
-    DBG_ASSERT(pLinkManager, "kein LinkManager am Dokument?");
+    OSL_ENSURE(pLinkManager, "kein LinkManager am Dokument?");
     const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
     sal_uInt16 nCount = rLinks.Count();
     for (sal_uInt16 i=0; i<nCount; i++)
@@ -956,7 +956,7 @@ sal_Bool ScContentTree::DrawNamesChanged( sal_uInt16 nType )
         for (SCTAB nTab=0; nTab<nTabCount && bEqual; nTab++)
         {
             SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-            DBG_ASSERT(pPage,"Page ?");
+            OSL_ENSURE(pPage,"Page ?");
             if (pPage)
             {
                 SdrObjListIter aIter( *pPage, eIter );

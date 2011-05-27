@@ -65,7 +65,7 @@ const uno::Reference< i18n::XBreakIterator >& ScDocument::GetBreakIterator()
         uno::Reference< uno::XInterface > xInterface = xServiceManager->createInstance(
                             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_BREAKITER_SERVICE )) );
         pScriptTypeData->xBreakIter = uno::Reference< i18n::XBreakIterator >( xInterface, uno::UNO_QUERY );
-        DBG_ASSERT( pScriptTypeData->xBreakIter.is(), "can't get BreakIterator" );
+        OSL_ENSURE( pScriptTypeData->xBreakIter.is(), "can't get BreakIterator" );
     }
     return pScriptTypeData->xBreakIter;
 }

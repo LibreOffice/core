@@ -113,7 +113,7 @@ String ScTpPrintItem::GetValueText() const
 
 int ScTpPrintItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
+    OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
     const ScTpPrintItem& rPItem = (const ScTpPrintItem&)rItem;
     return ( theOptions == rPItem.theOptions );
@@ -153,12 +153,12 @@ ScPrintCfg::ScPrintCfg() :
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
-            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing");
+            OSL_ENSURE(pValues[nProp].hasValue(), "property value missing");
             if(pValues[nProp].hasValue())
             {
                 switch(nProp)

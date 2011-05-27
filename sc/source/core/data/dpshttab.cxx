@@ -33,7 +33,6 @@
 
 // INCLUDE --------------------------------------------------------------
 
-#include <tools/debug.hxx>
 #include <svl/zforlist.hxx>
 
 #include "dpshttab.hxx"

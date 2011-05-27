@@ -39,7 +39,6 @@
 #include <rtl/uuid.h>
 #include <tools/gen.hxx>
 #include <toolkit/helper/convert.hxx>
-#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
@@ -214,7 +213,7 @@ void ScAccessibleDataPilotControl::AddField(sal_Int32 nNewIndex)
     }
     else
     {
-        DBG_ERRORFILE("did not recognize a child count change");
+        OSL_FAIL("did not recognize a child count change");
     }
 
     if (bAdded)
@@ -255,7 +254,7 @@ void ScAccessibleDataPilotControl::RemoveField(sal_Int32 nOldIndex)
     }
     else
     {
-        DBG_ERRORFILE("did not recognize a child count change");
+        OSL_FAIL("did not recognize a child count change");
     }
 
     if (bRemoved)
@@ -274,7 +273,7 @@ void ScAccessibleDataPilotControl::RemoveField(sal_Int32 nOldIndex)
 
 void ScAccessibleDataPilotControl::FieldFocusChange(sal_Int32 nOldIndex, sal_Int32 nNewIndex)
 {
-    DBG_ASSERT(static_cast<sal_uInt32>(nOldIndex) < maChildren.size() &&
+    OSL_ENSURE(static_cast<sal_uInt32>(nOldIndex) < maChildren.size() &&
                 static_cast<sal_uInt32>(nNewIndex) < maChildren.size(), "did not recognize a child count change");
 
     uno::Reference < XAccessible > xTempAcc = maChildren[nOldIndex].xWeakAcc;
@@ -288,7 +287,7 @@ void ScAccessibleDataPilotControl::FieldFocusChange(sal_Int32 nOldIndex, sal_Int
 
 void ScAccessibleDataPilotControl::FieldNameChange(sal_Int32 nIndex)
 {
-    DBG_ASSERT(static_cast<sal_uInt32>(nIndex) < maChildren.size(), "did not recognize a child count change");
+    OSL_ENSURE(static_cast<sal_uInt32>(nIndex) < maChildren.size(), "did not recognize a child count change");
 
     uno::Reference < XAccessible > xTempAcc = maChildren[nIndex].xWeakAcc;
     if (xTempAcc.is() && maChildren[nIndex].pAcc)
@@ -299,7 +298,7 @@ void ScAccessibleDataPilotControl::GotFocus()
 {
     if (mpDPFieldWindow)
     {
-        DBG_ASSERT(static_cast<sal_uInt32>(mpDPFieldWindow->GetFieldCount()) == maChildren.size(), "did not recognize a child count change");
+        OSL_ENSURE(static_cast<sal_uInt32>(mpDPFieldWindow->GetFieldCount()) == maChildren.size(), "did not recognize a child count change");
 
         sal_Int32 nIndex(mpDPFieldWindow->GetSelectedField());
         uno::Reference < XAccessible > xTempAcc = maChildren[nIndex].xWeakAcc;
@@ -312,7 +311,7 @@ void ScAccessibleDataPilotControl::LostFocus()
 {
     if (mpDPFieldWindow)
     {
-        DBG_ASSERT(static_cast<sal_uInt32>(mpDPFieldWindow->GetFieldCount()) == maChildren.size(), "did not recognize a child count change");
+        OSL_ENSURE(static_cast<sal_uInt32>(mpDPFieldWindow->GetFieldCount()) == maChildren.size(), "did not recognize a child count change");
 
         sal_Int32 nIndex(mpDPFieldWindow->GetSelectedField());
         uno::Reference < XAccessible > xTempAcc = maChildren[nIndex].xWeakAcc;
@@ -417,7 +416,7 @@ uno::Reference< XAccessible> SAL_CALL ScAccessibleDataPilotControl::getAccessibl
         if (nIndex < 0 || static_cast< size_t >( nIndex ) >= mpDPFieldWindow->GetFieldCount())
             throw lang::IndexOutOfBoundsException();
 
-        DBG_ASSERT(static_cast<sal_uInt32>(mpDPFieldWindow->GetFieldCount()) == maChildren.size(), "did not recognize a child count change");
+        OSL_ENSURE(static_cast<sal_uInt32>(mpDPFieldWindow->GetFieldCount()) == maChildren.size(), "did not recognize a child count change");
 
         uno::Reference < XAccessible > xTempAcc = maChildren[nIndex].xWeakAcc;
         if (!xTempAcc.is())

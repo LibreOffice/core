@@ -2153,7 +2153,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
         SfxDispatcher* pDisp = pViewData->GetViewShell()->GetDispatcher();
         sal_Bool bFormulaMode = pScMod->IsFormulaMode();
-        DBG_ASSERT( pDisp || bFormulaMode, "Cursor auf nicht aktiver View bewegen ?" );
+        OSL_ENSURE( pDisp || bFormulaMode, "Cursor auf nicht aktiver View bewegen ?" );
 
         //  #i14927# execute SID_CURRENTCELL (for macro recording) only if there is no
         //  multiple selection, so the argument string completely describes the selection,
@@ -2616,7 +2616,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
     }
 
     ScModule* pScMod = SC_MOD();
-    DBG_ASSERT( nCmd != COMMAND_STARTDRAG, "ScGridWindow::Command called with COMMAND_STARTDRAG" );
+    OSL_ENSURE( nCmd != COMMAND_STARTDRAG, "ScGridWindow::Command called with COMMAND_STARTDRAG" );
 
     if ( nCmd == COMMAND_STARTEXTTEXTINPUT ||
          nCmd == COMMAND_ENDEXTTEXTINPUT ||
@@ -2786,7 +2786,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
                 pScMod->SetInputMode( SC_INPUT_TABLE );
                 bEdit = pViewData->HasEditView(eWhich);     // hat's geklappt ?
 
-                DBG_ASSERT( bEdit, "kann nicht in Edit-Modus schalten" );
+                OSL_ENSURE( bEdit, "kann nicht in Edit-Modus schalten" );
             }
         }
         if ( bEdit )
@@ -3984,7 +3984,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
             //  (external references might be used instead?)
 
             SfxObjectShell* pSourceSh = pSourceDoc->GetDocumentShell();
-            DBG_ASSERT(pSourceSh, "drag document has no shell");
+            OSL_ENSURE(pSourceSh, "drag document has no shell");
             if (pSourceSh)
             {
                 String aUndo = ScGlobal::GetRscString( STR_UNDO_COPY );
@@ -4033,7 +4033,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                     pView->MarkCursor( nDestPosX + nSizeX - 1,
                                        nDestPosY + nSizeY - 1, nThisTab );
 
-                    pView->EnterMatrix( aFormula );
+                    pView->EnterMatrix( aFormula, ::formula::FormulaGrammar::GRAM_NATIVE );
 
                     pView->MarkRange( aDest, false, false );
                     pView->SetCursor( aDest.aStart.Col(), aDest.aStart.Row() );

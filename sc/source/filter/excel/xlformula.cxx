@@ -431,7 +431,7 @@ XclFunctionProvider::XclFunctionProvider( const XclRoot& rRoot )
 const XclFunctionInfo* XclFunctionProvider::GetFuncInfoFromXclFunc( sal_uInt16 nXclFunc ) const
 {
     // only in import filter allowed
-    DBG_ASSERT( !maXclFuncMap.empty(), "XclFunctionProvider::GetFuncInfoFromXclFunc - wrong filter" );
+    OSL_ENSURE( !maXclFuncMap.empty(), "XclFunctionProvider::GetFuncInfoFromXclFunc - wrong filter" );
     XclFuncMap::const_iterator aIt = maXclFuncMap.find( nXclFunc );
     return (aIt == maXclFuncMap.end()) ? 0 : aIt->second;
 }
@@ -439,7 +439,7 @@ const XclFunctionInfo* XclFunctionProvider::GetFuncInfoFromXclFunc( sal_uInt16 n
 const XclFunctionInfo* XclFunctionProvider::GetFuncInfoFromXclMacroName( const String& rXclMacroName ) const
 {
     // only in import filter allowed, but do not test maXclMacroNameMap, it may be empty for old BIFF versions
-    DBG_ASSERT( !maXclFuncMap.empty(), "XclFunctionProvider::GetFuncInfoFromXclMacroName - wrong filter" );
+    OSL_ENSURE( !maXclFuncMap.empty(), "XclFunctionProvider::GetFuncInfoFromXclMacroName - wrong filter" );
     XclMacroNameMap::const_iterator aIt = maXclMacroNameMap.find( rXclMacroName );
     return (aIt == maXclMacroNameMap.end()) ? 0 : aIt->second;
 }
@@ -447,7 +447,7 @@ const XclFunctionInfo* XclFunctionProvider::GetFuncInfoFromXclMacroName( const S
 const XclFunctionInfo* XclFunctionProvider::GetFuncInfoFromOpCode( OpCode eOpCode ) const
 {
     // only in export filter allowed
-    DBG_ASSERT( !maScFuncMap.empty(), "XclFunctionProvider::GetFuncInfoFromOpCode - wrong filter" );
+    OSL_ENSURE( !maScFuncMap.empty(), "XclFunctionProvider::GetFuncInfoFromOpCode - wrong filter" );
     ScFuncMap::const_iterator aIt = maScFuncMap.find( eOpCode );
     return (aIt == maScFuncMap.end()) ? 0 : aIt->second;
 }
@@ -494,7 +494,7 @@ XclTokenArray::XclTokenArray( ScfUInt8Vec& rTokVec, ScfUInt8Vec& rExtDataVec, bo
 
 sal_uInt16 XclTokenArray::GetSize() const
 {
-    DBG_ASSERT( maTokVec.size() <= 0xFFFF, "XclTokenArray::GetSize - array too long" );
+    OSL_ENSURE( maTokVec.size() <= 0xFFFF, "XclTokenArray::GetSize - array too long" );
     return limit_cast< sal_uInt16 >( maTokVec.size() );
 }
 

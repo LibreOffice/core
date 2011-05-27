@@ -3152,7 +3152,7 @@ void ScDocument::CompileXML()
                 STR_PROGRESS_CALCULATING ), GetXMLImportedFormulaCount() );
 
     // set AutoNameCache to speed up automatic name lookup
-    DBG_ASSERT( !pAutoNameCache, "AutoNameCache already set" );
+    OSL_ENSURE( !pAutoNameCache, "AutoNameCache already set" );
     pAutoNameCache = new ScAutoNameCache( this );
 
     for (SCTAB i=0; i<=MAXTAB; i++)
@@ -4236,7 +4236,7 @@ ScPatternAttr* ScDocument::CreateSelectionPattern( const ScMarkData& rMark, sal_
                                 aRange.aEnd.Col(), aRange.aEnd.Row(), bDeep );
     }
 
-    DBG_ASSERT( aState.pItemSet, "SelectionPattern Null" );
+    OSL_ENSURE( aState.pItemSet, "SelectionPattern Null" );
     if (aState.pItemSet)
         return new ScPatternAttr( aState.pItemSet );
     else
@@ -4390,7 +4390,7 @@ void ScDocument::FindMaxRotCol( SCTAB nTab, RowInfo* pRowInfo, SCSIZE nArrCount,
         pTab[nTab]->FindMaxRotCol( pRowInfo, nArrCount, nX1, nX2 );
     else
     {
-        DBG_ERRORFILE("FindMaxRotCol: falsche Tabelle");
+        OSL_FAIL("FindMaxRotCol: falsche Tabelle");
     }
 }
 
@@ -4401,7 +4401,7 @@ void ScDocument::GetBorderLines( SCCOL nCol, SCROW nRow, SCTAB nTab,
     //! Seitengrenzen fuer Druck beruecksichtigen !!!!!
 
     const SvxBoxItem* pThisAttr = (const SvxBoxItem*) GetEffItem( nCol, nRow, nTab, ATTR_BORDER );
-    DBG_ASSERT(pThisAttr,"wo ist das Attribut?");
+    OSL_ENSURE(pThisAttr,"wo ist das Attribut?");
 
     const SvxBorderLine* pLeftLine   = pThisAttr->GetLeft();
     const SvxBorderLine* pTopLine    = pThisAttr->GetTop();
@@ -4648,7 +4648,7 @@ sal_Bool ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
             SCROW nAttrPos = nOldRow;
             while (nAttrPos<=nEndRow)
             {
-                DBG_ASSERT( nIndex < pAttrArray->nCount, "Falscher Index im AttrArray" );
+                OSL_ENSURE( nIndex < pAttrArray->nCount, "Falscher Index im AttrArray" );
 
                 if (((ScMergeFlagAttr&)pAttrArray->pData[nIndex].pPattern->
                         GetItem(ATTR_MERGE_FLAG)).IsHorOverlapped())
@@ -5060,7 +5060,7 @@ void ScDocument::FindAreaPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, SCsCOL nMovX
 void ScDocument::GetNextPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, SCsCOL nMovX, SCsROW nMovY,
                                 sal_Bool bMarked, sal_Bool bUnprotected, const ScMarkData& rMark )
 {
-    DBG_ASSERT( !nMovX || !nMovY, "GetNextPos: nur X oder Y" );
+    OSL_ENSURE( !nMovX || !nMovY, "GetNextPos: nur X oder Y" );
 
     ScMarkData aCopyMark = rMark;
     aCopyMark.SetMarking(false);

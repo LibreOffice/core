@@ -312,7 +312,7 @@ sal_Bool ScDocument::HasOLEObjectsInArea( const ScRange& rRange, const ScMarkDat
                                             rRange.aEnd.Col(), rRange.aEnd.Row(), nTab );
 
             SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-            DBG_ASSERT(pPage,"Page ?");
+            OSL_ENSURE(pPage,"Page ?");
             if (pPage)
             {
                 SdrObjListIter aIter( *pPage, IM_FLAT );
@@ -338,7 +338,7 @@ void ScDocument::StartAnimations( SCTAB nTab, Window* pWin )
     if (!pDrawLayer)
         return;
     SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-    DBG_ASSERT(pPage,"Page ?");
+    OSL_ENSURE(pPage,"Page ?");
     if (!pPage)
         return;
 
@@ -370,7 +370,7 @@ sal_Bool ScDocument::HasBackgroundDraw( SCTAB nTab, const Rectangle& rMMRect )
     if (!pDrawLayer)
         return false;
     SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-    DBG_ASSERT(pPage,"Page ?");
+    OSL_ENSURE(pPage,"Page ?");
     if (!pPage)
         return false;
 
@@ -397,7 +397,7 @@ sal_Bool ScDocument::HasAnyDraw( SCTAB nTab, const Rectangle& rMMRect )
     if (!pDrawLayer)
         return false;
     SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-    DBG_ASSERT(pPage,"Page ?");
+    OSL_ENSURE(pPage,"Page ?");
     if (!pPage)
         return false;
 
@@ -429,7 +429,7 @@ SdrObject* ScDocument::GetObjectAtPoint( SCTAB nTab, const Point& rPos )
     if (pDrawLayer && pTab[nTab])
     {
         SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-        DBG_ASSERT(pPage,"Page ?");
+        OSL_ENSURE(pPage,"Page ?");
         if (pPage)
         {
             SdrObjListIter aIter( *pPage, IM_FLAT );
@@ -548,7 +548,7 @@ sal_Bool ScDocument::HasControl( SCTAB nTab, const Rectangle& rMMRect )
     if (pDrawLayer)
     {
         SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-        DBG_ASSERT(pPage,"Page ?");
+        OSL_ENSURE(pPage,"Page ?");
         if (pPage)
         {
             SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
@@ -575,7 +575,7 @@ void ScDocument::InvalidateControls( Window* pWin, SCTAB nTab, const Rectangle& 
     if (pDrawLayer)
     {
         SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-        DBG_ASSERT(pPage,"Page ?");
+        OSL_ENSURE(pPage,"Page ?");
         if (pPage)
         {
             SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
@@ -611,7 +611,7 @@ sal_Bool ScDocument::HasDetectiveObjects(SCTAB nTab) const
     if (pDrawLayer)
     {
         SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-        DBG_ASSERT(pPage,"Page ?");
+        OSL_ENSURE(pPage,"Page ?");
         if (pPage)
         {
             SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );

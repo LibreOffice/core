@@ -799,7 +799,7 @@ void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const OUString& aProp
     if (pDPObject)
     {
         ScDPSaveData* pOldData = pDPObject->GetSaveData();
-        DBG_ASSERT(pOldData, "Here should be a SaveData");
+        OSL_ENSURE(pOldData, "Here should be a SaveData");
         if ( pOldData )
         {
             ScDPSaveData aNewData( *pOldData );
@@ -942,7 +942,7 @@ Any SAL_CALL ScDataPilotDescriptorBase::getPropertyValue( const OUString& aPrope
     if (pDPObject)
     {
         ScDPSaveData* pOldData = pDPObject->GetSaveData();
-        DBG_ASSERT(pOldData, "Here should be a SaveData");
+        OSL_ENSURE(pOldData, "Here should be a SaveData");
         if ( pOldData )
         {
             ScDPSaveData aNewData( *pOldData );
@@ -2711,7 +2711,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
         if (xFields.is())
         {
             xRet.set(xFields->getByName(sNewDim), UNO_QUERY);
-            DBG_ASSERT(xRet.is(), "there is a name, so there should be also a field");
+            OSL_ENSURE(xRet.is(), "there is a name, so there should be also a field");
         }
     }
     return xRet;

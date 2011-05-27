@@ -176,7 +176,7 @@ void XclExpRecord::WriteBody( XclExpStream& /*rStrm*/ )
 
 void XclExpRecord::Save( XclExpStream& rStrm )
 {
-    DBG_ASSERT( mnRecId != EXC_ID_UNKNOWN, "XclExpRecord::Save - record ID uninitialized" );
+    OSL_ENSURE( mnRecId != EXC_ID_UNKNOWN, "XclExpRecord::Save - record ID uninitialized" );
     rStrm.StartRecord( mnRecId, mnRecSize );
     WriteBody( rStrm );
     rStrm.EndRecord();

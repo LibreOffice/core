@@ -58,20 +58,20 @@
 FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPFORMAT eFormat )
 {
     // check the passed Calc document
-    DBG_ASSERT( pDocument, "::ScImportExcel - no document" );
+    OSL_ENSURE( pDocument, "::ScImportExcel - no document" );
     if( !pDocument ) return eERR_INTERN;        // should not happen
 
     /*  Import all BIFF versions regardless on eFormat, needed for import of
         external cells (file type detection returns Excel4.0). */
     if( (eFormat != EIF_AUTO) && (eFormat != EIF_BIFF_LE4) && (eFormat != EIF_BIFF5) && (eFormat != EIF_BIFF8) )
     {
-        DBG_ERRORFILE( "::ScImportExcel - wrong file format specification" );
+        OSL_FAIL( "::ScImportExcel - wrong file format specification" );
         return eERR_FORMAT;
     }
 
     // check the input stream from medium
     SvStream* pMedStrm = rMedium.GetInStream();
-    DBG_ASSERT( pMedStrm, "::ScImportExcel - medium without input stream" );
+    OSL_ENSURE( pMedStrm, "::ScImportExcel - medium without input stream" );
     if( !pMedStrm ) return eERR_OPEN;           // should not happen
 
 #if OSL_DEBUG_LEVEL > 0
@@ -278,12 +278,12 @@ FltError ScFormatFilterPluginImpl::ScExportExcel5( SfxMedium& rMedium, ScDocumen
         return eERR_NI;
 
     // check the passed Calc document
-    DBG_ASSERT( pDocument, "::ScImportExcel - no document" );
+    OSL_ENSURE( pDocument, "::ScImportExcel - no document" );
     if( !pDocument ) return eERR_INTERN;        // should not happen
 
     // check the output stream from medium
     SvStream* pMedStrm = rMedium.GetOutStream();
-    DBG_ASSERT( pMedStrm, "::ScExportExcel5 - medium without output stream" );
+    OSL_ENSURE( pMedStrm, "::ScExportExcel5 - medium without output stream" );
     if( !pMedStrm ) return eERR_OPEN;           // should not happen
 
     FltError eRet = eERR_UNKN_BIFF;

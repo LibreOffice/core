@@ -81,7 +81,7 @@ sal_uInt32 lclGetWeighting( XclExpColorType eType )
         case EXC_COLOR_TABBG:
         case EXC_COLOR_CELLAREA:    return 20;
         case EXC_COLOR_GRID:        return 50;
-        default:    DBG_ERRORFILE( "lclGetWeighting - unknown color type" );
+        default:    OSL_FAIL( "lclGetWeighting - unknown color type" );
     }
     return 1;
 }
@@ -409,7 +409,7 @@ void XclExpPaletteImpl::Finalize()
                 nFound = nIndex;
         // replace default color with list color
         sal_uInt32 nNearest = aNearestVec[ nFound ].mnPalIndex;
-        DBG_ASSERT( nNearest < maPalette.size(), "XclExpPaletteImpl::Finalize - algorithm error" );
+        OSL_ENSURE( nNearest < maPalette.size(), "XclExpPaletteImpl::Finalize - algorithm error" );
         maPalette[ nNearest ].SetColor( mxColorList->at( nFound ).GetColor() );
         aRemapVec[ nFound ].SetIndex( nNearest );
     }
@@ -601,7 +601,7 @@ void XclExpPaletteImpl::RawReducePalette( sal_uInt32 nPass )
     sal_uInt8 nR, nG, nB;
     sal_uInt8& rnComp = ((nPass % 3 == 0) ? nB : ((nPass % 3 == 1) ? nR : nG));
     nPass /= 3;
-    DBG_ASSERT( nPass < 7, "XclExpPaletteImpl::RawReducePalette - reduction not terminated" );
+    OSL_ENSURE( nPass < 7, "XclExpPaletteImpl::RawReducePalette - reduction not terminated" );
 
     static const sal_uInt8 spnFactor2[] = { 0x81, 0x82, 0x84, 0x88, 0x92, 0xAA, 0xFF };
     sal_uInt8 nFactor1 = static_cast< sal_uInt8 >( 0x02 << nPass );
@@ -884,7 +884,7 @@ sal_Int16 XclExpFontHelper::GetFirstUsedScript( const XclExpRoot& rRoot, const S
                 nScript = lclCheckFontItems( *pCurrSet, WAS_CMPLX, WAS_ASIAN, WAS_LATIN );
             break;
             default:
-                DBG_ERRORFILE( "XclExpFontHelper::GetFirstUsedScript - unknown script type" );
+                OSL_FAIL( "XclExpFontHelper::GetFirstUsedScript - unknown script type" );
                 nScript = ApiScriptType::LATIN;
         };
         pCurrSet = pCurrSet->GetParent();
@@ -908,7 +908,7 @@ Font XclExpFontHelper::GetFontFromItemSet( const XclExpRoot& rRoot, const SfxIte
         case ApiScriptType::LATIN:      nScScript = SCRIPTTYPE_LATIN;   break;
         case ApiScriptType::ASIAN:      nScScript = SCRIPTTYPE_ASIAN;   break;
         case ApiScriptType::COMPLEX:    nScScript = SCRIPTTYPE_COMPLEX; break;
-        default:    DBG_ERRORFILE( "XclExpFontHelper::GetFontFromItemSet - unknown script type" );
+        default:    OSL_FAIL( "XclExpFontHelper::GetFontFromItemSet - unknown script type" );
     }
 
     // fill the font object
@@ -942,7 +942,7 @@ bool XclExpFontHelper::CheckItems( const XclExpRoot& rRoot, const SfxItemSet& rI
             case ApiScriptType::LATIN:      bUsed = ScfTools::CheckItems( rItemSet, pnLatinIds, bDeep );    break;
             case ApiScriptType::ASIAN:      bUsed = ScfTools::CheckItems( rItemSet, pnAsianIds, bDeep );    break;
             case ApiScriptType::COMPLEX:    bUsed = ScfTools::CheckItems( rItemSet, pnComplexIds, bDeep );  break;
-            default:    DBG_ERRORFILE( "XclExpFontHelper::CheckItems - unknown script type" );
+            default:    OSL_FAIL( "XclExpFontHelper::CheckItems - unknown script type" );
         }
     }
     return bUsed;
@@ -1012,7 +1012,7 @@ void XclExpFont::WriteBody( XclExpStream& rStrm )
     ::set_flag( nAttr, EXC_FONTATTR_OUTLINE, maData.mbOutline );
     ::set_flag( nAttr, EXC_FONTATTR_SHADOW, maData.mbShadow );
 
-    DBG_ASSERT( maData.maName.Len() < 256, "XclExpFont::WriteBody - font name too long" );
+    OSL_ENSURE( maData.maName.Len() < 256, "XclExpFont::WriteBody - font name too long" );
     XclExpString aFontName;
     if( GetBiff() <= EXC_BIFF5 )
         aFontName.AssignByte( maData.maName, GetTextEncoding(), EXC_STR_8BITLENGTH );
@@ -1340,7 +1340,7 @@ String XclExpNumFmtBuffer::GetFormatCode( const XclExpNumFmt& rFormat )
                 sal_uInt32 nKey;
                 String aTemp( pEntry->GetFormatstring() );
                 mxFormatter->PutandConvertEntry( aTemp, nCheckPos, nType, nKey, eLang, LANGUAGE_ENGLISH_US );
-                DBG_ASSERT( nCheckPos == 0, "XclExpNumFmtBuffer::WriteFormatRecord - format code not convertible" );
+                OSL_ENSURE( nCheckPos == 0, "XclExpNumFmtBuffer::WriteFormatRecord - format code not convertible" );
                 pEntry = mxFormatter->GetEntry( nKey );
             }
 
@@ -1351,7 +1351,7 @@ String XclExpNumFmtBuffer::GetFormatCode( const XclExpNumFmt& rFormat )
     }
     else
     {
-        DBG_ERRORFILE( "XclExpNumFmtBuffer::WriteFormatRecord - format not found" );
+        OSL_FAIL( "XclExpNumFmtBuffer::WriteFormatRecord - format not found" );
         aFormatStr.AssignAscii( "General" );
     }
 
@@ -2130,10 +2130,10 @@ XclExpStyle::XclExpStyle( sal_uInt32 nXFId, const String& rStyleName ) :
     mnStyleId( EXC_STYLE_USERDEF ),
     mnLevel( EXC_STYLE_NOLEVEL )
 {
-    DBG_ASSERT( maName.Len(), "XclExpStyle::XclExpStyle - empty style name" );
-#ifdef DBG_UTIL
+    OSL_ENSURE( maName.Len(), "XclExpStyle::XclExpStyle - empty style name" );
+#if OSL_DEBUG_LEVEL > 0
     sal_uInt8 nStyleId, nLevel; // do not use members for debug tests
-    DBG_ASSERT( !XclTools::GetBuiltInStyleId( nStyleId, nLevel, maName ),
+    OSL_ENSURE( !XclTools::GetBuiltInStyleId( nStyleId, nLevel, maName ),
         "XclExpStyle::XclExpStyle - this is a built-in style" );
 #endif
 }
@@ -2439,7 +2439,7 @@ sal_uInt16 XclExpXFBuffer::GetXFIndex( sal_uInt32 nXFId ) const
 
 sal_Int32 XclExpXFBuffer::GetXmlStyleIndex( sal_uInt32 nXFIndex ) const
 {
-    DBG_ASSERT( nXFIndex < maStyleIndexes.size(), "XclExpXFBuffer::GetXmlStyleIndex - invalid index!" );
+    OSL_ENSURE( nXFIndex < maStyleIndexes.size(), "XclExpXFBuffer::GetXmlStyleIndex - invalid index!" );
     if( nXFIndex > maStyleIndexes.size() )
         return 0;   // should be caught/debugged via above assert; return "valid" index.
     return maStyleIndexes[ nXFIndex ];
@@ -2447,7 +2447,7 @@ sal_Int32 XclExpXFBuffer::GetXmlStyleIndex( sal_uInt32 nXFIndex ) const
 
 sal_Int32 XclExpXFBuffer::GetXmlCellIndex( sal_uInt32 nXFIndex ) const
 {
-    DBG_ASSERT( nXFIndex < maCellIndexes.size(), "XclExpXFBuffer::GetXmlStyleIndex - invalid index!" );
+    OSL_ENSURE( nXFIndex < maCellIndexes.size(), "XclExpXFBuffer::GetXmlStyleIndex - invalid index!" );
     if( nXFIndex > maCellIndexes.size() )
         return 0;   // should be caught/debugged via above assert; return "valid" index.
     return maCellIndexes[ nXFIndex ];
@@ -2548,10 +2548,10 @@ void XclExpXFBuffer::SaveXFXml( XclExpXmlStream& rStrm, XclExpXF& rXF )
 {
     XclExpBorderList::iterator aBorderPos =
         std::find_if( maBorders.begin(), maBorders.end(), XclExpBorderPred( rXF.GetBorderData() ) );
-    DBG_ASSERT( aBorderPos != maBorders.end(), "XclExpXFBuffer::SaveXml - Invalid @borderId!" );
+    OSL_ENSURE( aBorderPos != maBorders.end(), "XclExpXFBuffer::SaveXml - Invalid @borderId!" );
     XclExpFillList::iterator aFillPos =
         std::find_if( maFills.begin(), maFills.end(), XclExpFillPred( rXF.GetAreaData() ) );
-    DBG_ASSERT( aFillPos != maFills.end(), "XclExpXFBuffer::SaveXml - Invalid @fillId!" );
+    OSL_ENSURE( aFillPos != maFills.end(), "XclExpXFBuffer::SaveXml - Invalid @fillId!" );
 
     sal_Int32 nBorderId = 0, nFillId = 0;
     if( aBorderPos != maBorders.end() )
@@ -2651,7 +2651,7 @@ sal_uInt32 XclExpXFBuffer::InsertStyleXF( const SfxStyleSheetBase& rStyleSheet )
         }
         else
         {
-            DBG_ASSERT( maXFList.HasRecord( nXFId ), "XclExpXFBuffer::InsertStyleXF - built-in XF not found" );
+            OSL_ENSURE( maXFList.HasRecord( nXFId ), "XclExpXFBuffer::InsertStyleXF - built-in XF not found" );
             // XF record still predefined? -> Replace with real XF
             bool& rbPredefined = maBuiltInMap[ nXFId ].mbPredefined;
             if( rbPredefined )
@@ -2752,7 +2752,7 @@ void XclExpXFBuffer::InsertDefaultRecords()
     }
     else
     {
-        DBG_ERRORFILE( "XclExpXFBuffer::InsertDefaultRecords - default style not found" );
+        OSL_FAIL( "XclExpXFBuffer::InsertDefaultRecords - default style not found" );
         XclExpXFRef xDefStyle( new XclExpDefaultXF( GetRoot(), false ) );
         xDefStyle->SetAllUsedFlags( true );
         AppendBuiltInXFWithStyle( xDefStyle, EXC_STYLE_NORMAL );
@@ -2803,12 +2803,12 @@ void XclExpXFBuffer::InsertDefaultRecords()
 
 void XclExpXFBuffer::AppendXFIndex( sal_uInt32 nXFId )
 {
-    DBG_ASSERT( nXFId < maXFIndexVec.size(), "XclExpXFBuffer::AppendXFIndex - XF ID out of range" );
+    OSL_ENSURE( nXFId < maXFIndexVec.size(), "XclExpXFBuffer::AppendXFIndex - XF ID out of range" );
     maXFIndexVec[ nXFId ] = static_cast< sal_uInt16 >( maSortedXFList.GetSize() );
     XclExpXFRef xXF = maXFList.GetRecord( nXFId );
     AddBorderAndFill( *xXF );
     maSortedXFList.AppendRecord( xXF );
-    DBG_ASSERT( maXFList.HasRecord( nXFId ), "XclExpXFBuffer::AppendXFIndex - XF not found" );
+    OSL_ENSURE( maXFList.HasRecord( nXFId ), "XclExpXFBuffer::AppendXFIndex - XF not found" );
 }
 
 void XclExpXFBuffer::AddBorderAndFill( const XclExpXF& rXF )

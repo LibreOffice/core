@@ -285,7 +285,7 @@ ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const String& rBaseURL, ScDocument
         if( pItem )
         {
             aCId = ((const SfxStringItem *)pItem)->GetValue();
-            DBG_ASSERT( aCId.Len(), "CID ohne Laenge!" );
+            OSL_ENSURE( aCId.Len(), "CID ohne Laenge!" );
         }
     }
 }
@@ -470,7 +470,7 @@ const SfxItemSet& ScHTMLExport::PageDefaults( SCTAB nTab )
 {
     SfxStyleSheetBasePool*  pStylePool  = pDoc->GetStyleSheetPool();
     SfxStyleSheetBase*      pStyleSheet = NULL;
-    DBG_ASSERT( pStylePool, "StylePool not found! :-(" );
+    OSL_ENSURE( pStylePool, "StylePool not found! :-(" );
 
     // remember defaults for compare in WriteCell
     if ( !aHTMLStyle.bInitialized )
@@ -479,7 +479,7 @@ const SfxItemSet& ScHTMLExport::PageDefaults( SCTAB nTab )
         pStyleSheet = pStylePool->Find(
                 ScGlobal::GetRscString(STR_STYLENAME_STANDARD),
                 SFX_STYLE_FAMILY_PARA );
-        DBG_ASSERT( pStyleSheet, "ParaStyle not found! :-(" );
+        OSL_ENSURE( pStyleSheet, "ParaStyle not found! :-(" );
         if (!pStyleSheet)
             pStyleSheet = pStylePool->First();
         const SfxItemSet& rSetPara = pStyleSheet->GetItemSet();
@@ -500,7 +500,7 @@ const SfxItemSet& ScHTMLExport::PageDefaults( SCTAB nTab )
     // There's only one background graphic in HTML!
     pStylePool->SetSearchMask( SFX_STYLE_FAMILY_PAGE, SFXSTYLEBIT_ALL );
     pStyleSheet = pStylePool->Find( pDoc->GetPageStyle( nTab ), SFX_STYLE_FAMILY_PAGE );
-    DBG_ASSERT( pStyleSheet, "PageStyle not found! :-(" );
+    OSL_ENSURE( pStyleSheet, "PageStyle not found! :-(" );
     if (!pStyleSheet)
         pStyleSheet = pStylePool->First();
     const SfxItemSet& rSet = pStyleSheet->GetItemSet();
@@ -1070,7 +1070,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
                             nFormat, ((ScFormulaCell*)pCell)->GetFormatType() );
                     break;
                 default:
-                    DBG_ERRORFILE( "value data with unsupported cell type" );
+                    OSL_FAIL( "value data with unsupported cell type" );
             }
         }
     }
@@ -1347,7 +1347,7 @@ void ScHTMLExport::MakeCIdURL( String& rURL )
         return;
 
     String aLastName( aURLObj.GetLastName() );
-    DBG_ASSERT( aLastName.Len(), "Dateiname ohne Laenge!" );
+    OSL_ENSURE( aLastName.Len(), "Dateiname ohne Laenge!" );
     aLastName.ToLowerAscii();
 
     rURL.AssignAscii( "cid:" );

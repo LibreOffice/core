@@ -33,7 +33,6 @@
 #include "ShapeFactory.hxx"
 #include <rtl/math.hxx>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
-#include <tools/debug.hxx>
 
 //.............................................................................
 namespace chart
@@ -63,7 +62,7 @@ void PlotterBase::initPlotter(  const uno::Reference< drawing::XShapes >& xLogic
        , const rtl::OUString& rCID )
             throw (uno::RuntimeException)
 {
-    DBG_ASSERT(xLogicTarget.is()&&xFinalTarget.is()&&xShapeFactory.is(),"no proper initialization parameters");
+    OSL_PRECOND(xLogicTarget.is()&&xFinalTarget.is()&&xShapeFactory.is(),"no proper initialization parameters");
     //is only allowed to be called once
     m_xLogicTarget  = xLogicTarget;
     m_xFinalTarget  = xFinalTarget;
@@ -79,14 +78,14 @@ PlotterBase::~PlotterBase()
 
 void PlotterBase::setScales( const std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis )
 {
-    DBG_ASSERT(m_nDimension<=static_cast<sal_Int32>(rScales.size()),"Dimension of Plotter does not fit two dimension of given scale sequence");
+    OSL_PRECOND(m_nDimension<=static_cast<sal_Int32>(rScales.size()),"Dimension of Plotter does not fit two dimension of given scale sequence");
     m_pPosHelper->setScales( rScales, bSwapXAndYAxis );
 }
 
 
 void PlotterBase::setTransformationSceneToScreen( const drawing::HomogenMatrix& rMatrix)
 {
-    DBG_ASSERT(m_nDimension==2,"Set this transformation only in case of 2D");
+    OSL_PRECOND(m_nDimension==2,"Set this transformation only in case of 2D");
     if(m_nDimension!=2)
         return;
     m_pPosHelper->setTransformationSceneToScreen( rMatrix );

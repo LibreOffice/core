@@ -340,7 +340,7 @@ void ScXMLConverter::ParseFormula(OUString& sFormula, const sal_Bool bIsFormula)
         chPrevious = sFormula[i];
     }
 
-    DBG_ASSERT(nCountBraces == 0, "there are some braces still open");
+    OSL_ENSURE(nCountBraces == 0, "there are some braces still open");
     sFormula = sBuffer.makeStringAndClear();
 }
 

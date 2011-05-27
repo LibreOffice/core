@@ -45,7 +45,6 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/XMLEventsImportContext.hxx>
 #include <com/sun/star/sheet/TableValidationVisibility.hpp>
-#include <tools/debug.hxx>
 
 using namespace com::sun::star;
 using namespace xmloff::token;

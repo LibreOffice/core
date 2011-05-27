@@ -155,7 +155,7 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const String& rName,
     {
         // find old style to modify
         pStyle = pStlPool->Find( rName, eStyleFamily );
-        DBG_ASSERT( pStyle, "style not found" );
+        OSL_ENSURE( pStyle, "style not found" );
 
         if ( pStyle && !bDelete )
         {
@@ -194,7 +194,7 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const String& rName,
 
             SfxItemSet& rStyleSet = pStyle->GetItemSet();
             const SfxItemSet* pNewSet = rData.GetItems();
-            DBG_ASSERT( pNewSet, "no ItemSet for style" );
+            OSL_ENSURE( pNewSet, "no ItemSet for style" );
             if (pNewSet)
                 rStyleSet.Set( *pNewSet, false );
 

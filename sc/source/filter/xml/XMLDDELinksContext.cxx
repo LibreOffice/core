@@ -40,7 +40,6 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <tools/debug.hxx>
 
 using namespace com::sun::star;
 using namespace xmloff::token;
@@ -143,7 +142,7 @@ void ScXMLDDELinkContext::CreateDDELink()
             nPosition = nPos;
         else
             nPosition = -1;
-        DBG_ASSERT(nPosition > -1, "DDE Link not inserted");
+        OSL_ENSURE(nPosition > -1, "DDE Link not inserted");
     }
 }
 
@@ -164,7 +163,7 @@ void ScXMLDDELinkContext::EndElement()
     if (nPosition > -1 && nColumns && nRows && GetScImport().GetDocument())
     {
         bool bSizeMatch = (static_cast<size_t>(nColumns * nRows) == aDDELinkTable.size());
-        DBG_ASSERT( bSizeMatch, "ScXMLDDELinkContext::EndElement: matrix dimension doesn't match cells count");
+        OSL_ENSURE( bSizeMatch, "ScXMLDDELinkContext::EndElement: matrix dimension doesn't match cells count");
         // Excel writes bad ODF in that it does not write the
         // table:number-columns-repeated attribute of the
         // <table:table-column> element, but apparently uses the number of
@@ -173,7 +172,7 @@ void ScXMLDDELinkContext::EndElement()
         if (!bSizeMatch && nColumns == 1)
         {
             nColumns = aDDELinkTable.size() / nRows;
-            DBG_ASSERT( static_cast<size_t>(nColumns * nRows) == aDDELinkTable.size(),
+            OSL_ENSURE( static_cast<size_t>(nColumns * nRows) == aDDELinkTable.size(),
                     "ScXMLDDELinkContext::EndElement: adapted matrix dimension doesn't match either");
         }
         ScMatrixRef pMatrix = new ScMatrix( static_cast<SCSIZE>(nColumns), static_cast<SCSIZE>(nRows) );
@@ -482,7 +481,7 @@ SvXMLImportContext *ScXMLDDECellContext::CreateChildContext( sal_uInt16 nPrefix,
 
 void ScXMLDDECellContext::EndElement()
 {
-    DBG_ASSERT(bString == bString2, "something wrong with this type");
+    OSL_ENSURE(bString == bString2, "something wrong with this type");
     ScDDELinkCell aCell;
     aCell.sValue = sValue;
     aCell.fValue = fValue;

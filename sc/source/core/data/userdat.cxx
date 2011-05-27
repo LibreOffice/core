@@ -32,7 +32,6 @@
 // -----------------------------------------------------------------------
 
 #include "userdat.hxx"
-#include <tools/debug.hxx>
 #include "drwlayer.hxx"
 #include "rechead.hxx"
 

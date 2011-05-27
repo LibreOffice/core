@@ -174,7 +174,7 @@ sal_Int32 XclTools::GetScRotation( sal_uInt16 nXclRot, sal_Int32 nRotForStacked 
 {
     if( nXclRot == EXC_ROT_STACKED )
         return nRotForStacked;
-    DBG_ASSERT( nXclRot <= 180, "XclTools::GetScRotation - illegal rotation angle" );
+    OSL_ENSURE( nXclRot <= 180, "XclTools::GetScRotation - illegal rotation angle" );
     return static_cast< sal_Int32 >( (nXclRot <= 180) ? (100 * ((nXclRot > 90) ? (450 - nXclRot) : nXclRot)) : 0 );
 }
 
@@ -200,7 +200,7 @@ sal_uInt8 XclTools::GetXclRotFromOrient( sal_uInt8 nXclOrient )
         case EXC_ORIENT_STACKED:    return EXC_ROT_STACKED;
         case EXC_ORIENT_90CCW:      return EXC_ROT_90CCW;
         case EXC_ORIENT_90CW:       return EXC_ROT_90CW;
-        default:    DBG_ERRORFILE( "XclTools::GetXclRotFromOrient - unknown text orientation" );
+        default:    OSL_FAIL( "XclTools::GetXclRotFromOrient - unknown text orientation" );
     }
     return EXC_ROT_NONE;
 }
@@ -209,7 +209,7 @@ sal_uInt8 XclTools::GetXclOrientFromRot( sal_uInt16 nXclRot )
 {
     if( nXclRot == EXC_ROT_STACKED )
         return EXC_ORIENT_STACKED;
-    DBG_ASSERT( nXclRot <= 180, "XclTools::GetXclOrientFromRot - unknown text rotation" );
+    OSL_ENSURE( nXclRot <= 180, "XclTools::GetXclOrientFromRot - unknown text rotation" );
     if( (45 < nXclRot) && (nXclRot <= 90) )
         return EXC_ORIENT_90CCW;
     if( (135 < nXclRot) && (nXclRot <= 180) )
@@ -254,7 +254,7 @@ sal_uInt16 XclTools::GetScErrorCode( sal_uInt8 nXclError )
         case EXC_ERR_NAME:  return errNoName;
         case EXC_ERR_NUM:   return errIllegalFPOperation;
         case EXC_ERR_NA:    return NOTAVAILABLE;
-        default:            DBG_ERRORFILE( "XclTools::GetScErrorCode - unknown error code" );
+        default:            OSL_FAIL( "XclTools::GetScErrorCode - unknown error code" );
     }
     return NOTAVAILABLE;
 }
@@ -491,7 +491,7 @@ static const sal_Char* const ppcDefNames[] =
 
 String XclTools::GetXclBuiltInDefName( sal_Unicode cBuiltIn )
 {
-    DBG_ASSERT( SAL_N_ELEMENTS( ppcDefNames ) == EXC_BUILTIN_UNKNOWN,
+    OSL_ENSURE( SAL_N_ELEMENTS( ppcDefNames ) == EXC_BUILTIN_UNKNOWN,
         "XclTools::GetXclBuiltInDefName - built-in defined name list modified" );
     String aDefName;
     if( cBuiltIn < SAL_N_ELEMENTS( ppcDefNames ) )

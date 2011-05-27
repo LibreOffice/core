@@ -193,7 +193,7 @@ void ScPreview::TestLastPage()
             nTab = nTabCount - 1;
             while (nTab > 0 && !nPages[nTab])       // letzte nicht leere Tabelle
                 --nTab;
-            DBG_ASSERT(nPages[nTab],"alle Tabellen leer?");
+            OSL_ENSURE(nPages[nTab],"alle Tabellen leer?");
             nTabPage = nPages[nTab] - 1;
             nTabStart = 0;
             for (sal_uInt16 i=0; i<nTab; i++)
@@ -393,7 +393,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
         aPage.Select( aPageRange );
 
         long nPrinted = pPrintFunc->DoPrint( aPage, nTabStart, nDisplayStart, bDoPrint, NULL, pFillLocation );
-        DBG_ASSERT(nPrinted<=1, "was'n nu los?");
+        OSL_ENSURE(nPrinted<=1, "was'n nu los?");
 
         SetMapMode(aMMMode);
 
@@ -544,7 +544,7 @@ void ScPreview::Paint( const Rectangle& /* rRect */ )
         aPage.Select( aPageRange );
 
         long nPrinted = pPrintFunc->DoPrint( aPage, nTabStart, nDisplayStart );
-        DBG_ASSERT(nPrinted<=1, "was'n nu los?");
+        OSL_ENSURE(nPrinted<=1, "was'n nu los?");
 
         SetMapMode(aMMMode);
 
@@ -1202,7 +1202,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                 sal_Bool  bUndo( pDoc->IsUndoEnabled() );
                 ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
                 SfxStyleSheetBase* pStyleSheet = pStylePool->Find( pDoc->GetPageStyle( nTab ), SFX_STYLE_FAMILY_PAGE );
-                DBG_ASSERT( pStyleSheet, "PageStyle not found" );
+                OSL_ENSURE( pStyleSheet, "PageStyle not found" );
                 if ( pStyleSheet )
                 {
                     ScStyleSaveData aOldData;

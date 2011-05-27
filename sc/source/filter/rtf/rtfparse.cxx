@@ -224,7 +224,7 @@ IMPL_LINK( ScRTFParser, RTFImportHdl, ImportInfo*, pInfo )
         case RTFIMP_INSERTPARA:
             break;
         default:
-            DBG_ERRORFILE("unknown ImportInfo.eState");
+            OSL_FAIL("unknown ImportInfo.eState");
     }
     return 0;
 }
@@ -266,7 +266,7 @@ void ScRTFParser::NewCellRow( ImportInfo* /*pInfo*/ )
     }
     pDefMerge = NULL;
     pActDefault = &(pDefaultList->front());
-    DBG_ASSERT( pActDefault, "NewCellRow: pActDefault==0" );
+    OSL_ENSURE( pActDefault, "NewCellRow: pActDefault==0" );
 }
 
 
@@ -325,7 +325,7 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
                && !(pDefaultList->empty())
                )
                 pDefMerge = &( pDefaultList->back() );
-            DBG_ASSERT( pDefMerge, "RTF_CLMRG: pDefMerge==0" );
+            OSL_ENSURE( pDefMerge, "RTF_CLMRG: pDefMerge==0" );
             if ( pDefMerge )        // sonst rottes RTF
                 pDefMerge->nColOverlap++;   // mehrere nacheinander moeglich
             pInsDefault->nColOverlap = 0;   // Flag: ignoriere diese
@@ -358,7 +358,7 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
         break;
         case RTF_CELL:          // denotes the end of a cell.
         {
-            DBG_ASSERT( pActDefault, "RTF_CELL: pActDefault==0" );
+            OSL_ENSURE( pActDefault, "RTF_CELL: pActDefault==0" );
             if ( bNewDef || !pActDefault )
                 NewCellRow( pInfo );    // davor war kein \intbl, bad behavior
             // rottes RTF? retten was zu retten ist

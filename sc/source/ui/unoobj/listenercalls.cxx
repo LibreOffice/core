@@ -32,7 +32,6 @@
 
 
 #include <com/sun/star/util/XModifyListener.hpp>
-#include <tools/debug.hxx>
 
 #include "listenercalls.hxx"
 
@@ -46,7 +45,7 @@ ScUnoListenerCalls::ScUnoListenerCalls()
 
 ScUnoListenerCalls::~ScUnoListenerCalls()
 {
-    DBG_ASSERT( aEntries.empty(), "unhandled listener calls remaining" );
+    OSL_ENSURE( aEntries.empty(), "unhandled listener calls remaining" );
 }
 
 void ScUnoListenerCalls::Add( const uno::Reference<util::XModifyListener>& rListener,

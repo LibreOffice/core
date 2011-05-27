@@ -35,8 +35,6 @@
 
 //------------------------------------------------------------------
 
-#include <tools/debug.hxx>
-
 #include "strindlg.hxx"
 #include "scresid.hxx"
 #include "miscdlgs.hrc"

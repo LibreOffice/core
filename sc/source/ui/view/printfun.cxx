@@ -805,7 +805,7 @@ long ScPrintFunc::TextHeight( const EditTextObject* pObject )
 
 void ScPrintFunc::UpdateHFHeight( ScPrintHFParam& rParam )
 {
-    DBG_ASSERT( aPageSize.Width(), "UpdateHFHeight ohne aPageSize");
+    OSL_ENSURE( aPageSize.Width(), "UpdateHFHeight ohne aPageSize");
 
     if (rParam.bEnable && rParam.bDynamic)
     {
@@ -950,7 +950,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
         pScaleToPagesItem = (const SfxUInt16Item*)
                     &pParamSet->GetPool()->GetDefaultItem( ATTR_PAGE_SCALETOPAGES );
 
-    DBG_ASSERT( pScaleItem && pScaleToItem && pScaleToPagesItem, "Missing ScaleItem! :-/" );
+    OSL_ENSURE( pScaleItem && pScaleToItem && pScaleToPagesItem, "Missing ScaleItem! :-/" );
 
     aTableParam.bCellContent    = sal_True;
     aTableParam.bNotes          = GET_BOOL(pParamSet,ATTR_PAGE_NOTES);
@@ -1267,7 +1267,7 @@ void lcl_DrawGraphic( const SvxBrushItem &rBrush, OutputDevice *pOut, OutputDevi
                       bDraw = false;
                       break;
 
-        default: DBG_ASSERT( !pOut, "new Graphic position?" );
+        default: OSL_ENSURE( !pOut, "new Graphic position?" );
     }
     Rectangle aGrf( aPos,aDrawSize );
     if ( bDraw && aGrf.IsOver( rOut ) )
@@ -1404,7 +1404,7 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
         ScTableInfo aTabInfo;
         pBorderDoc->FillInfo( aTabInfo, 0,0, 0,0, 0,
                                             nScaleX, nScaleY, false, false );
-        DBG_ASSERT(aTabInfo.mnArrCount,"nArrCount == 0");
+        OSL_ENSURE(aTabInfo.mnArrCount,"nArrCount == 0");
 
         aTabInfo.mpRowInfo[1].nHeight = (sal_uInt16) nEffHeight;
         aTabInfo.mpRowInfo[0].pCellInfo[1].nWidth =
@@ -2677,7 +2677,7 @@ long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
                                 long nStartPage, long nDisplayStart, sal_Bool bDoPrint,
                                 SfxProgress* pProgress, ScPreviewLocationData* pLocationData )
 {
-    DBG_ASSERT(pDev,"Device == NULL");
+    OSL_ENSURE(pDev,"Device == NULL");
     if (!pParamSet)
         return 0;
 
@@ -2937,7 +2937,7 @@ void ScPrintFunc::CalcZoom( sal_uInt16 nRangeNo )                       // Zoom 
     }
     else
     {
-        DBG_ASSERT( aTableParam.bScaleNone, "kein Scale-Flag gesetzt" );
+        OSL_ENSURE( aTableParam.bScaleNone, "kein Scale-Flag gesetzt" );
         nZoom = 100;
         CalcPages();
     }

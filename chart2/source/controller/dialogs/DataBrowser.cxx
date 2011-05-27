@@ -1162,7 +1162,7 @@ sal_Bool DataBrowser::SaveModified()
     const sal_Int32 nRow = lcl_getRowInData( GetCurRow());
     const sal_Int32 nCol = lcl_getColumnInData( GetCurColumnId());
 
-    DBG_ASSERT( nRow >= 0 || nCol >= 0, "This cell should not be modified!" );
+    OSL_ENSURE( nRow >= 0 || nCol >= 0, "This cell should not be modified!" );
 
     SvNumberFormatter* pSvNumberFormatter = m_spNumberFormatterWrapper.get() ? m_spNumberFormatterWrapper->getSvNumberFormatter() : 0;
     switch( m_apDataBrowserModel->getCellType( nCol, nRow ))

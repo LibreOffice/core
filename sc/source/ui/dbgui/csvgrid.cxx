@@ -500,7 +500,7 @@ void ScCsvGrid::SetSelColumnType( sal_Int32 nType )
 
 void ScCsvGrid::SetTypeNames( const StringVec& rTypeNames )
 {
-    DBG_ASSERT( !rTypeNames.empty(), "ScCsvGrid::SetTypeNames - vector is empty" );
+    OSL_ENSURE( !rTypeNames.empty(), "ScCsvGrid::SetTypeNames - vector is empty" );
     maTypeNames = rTypeNames;
     Repaint( true );
 

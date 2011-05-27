@@ -941,7 +941,7 @@ sal_Bool ScOutputData::GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
 
 inline sal_Bool StringDiffer( const ScPatternAttr*& rpOldPattern, const ScPatternAttr*& rpNewPattern )
 {
-    DBG_ASSERT( rpNewPattern, "pNewPattern" );
+    OSL_ENSURE( rpNewPattern, "pNewPattern" );
 
     if ( rpNewPattern == rpOldPattern )
         return false;
@@ -1337,7 +1337,7 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
 
 void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
 {
-    DBG_ASSERT( pDev == pRefDevice ||
+    OSL_ENSURE( pDev == pRefDevice ||
                 pDev->GetMapMode().GetMapUnit() == pRefDevice->GetMapMode().GetMapUnit(),
                 "DrawStrings: unterschiedliche MapUnits ?!?!" );
 
@@ -4667,7 +4667,7 @@ void ScOutputData::DrawRotated(sal_Bool bPixelToLogic)
                                 }
 
                                 // TOPBOTTON and BOTTOMTOP are handled in DrawStrings/DrawEdit
-                                DBG_ASSERT( eOrient == SVX_ORIENTATION_STANDARD && nAttrRotate,
+                                OSL_ENSURE( eOrient == SVX_ORIENTATION_STANDARD && nAttrRotate,
                                             "DrawRotated: no rotation" );
 
                                 long nOriVal = 0;

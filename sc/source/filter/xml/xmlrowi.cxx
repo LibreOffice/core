@@ -167,7 +167,7 @@ void ScXMLTableRowContext::EndElement()
     {
         for (sal_Int32 i = 0; i < nRepeatedRows - 1; ++i) //one row is always added
             GetScImport().GetTables().AddRow();
-        DBG_ERRORFILE("it seems here is a nonvalid file; possible missing of table:table-cell element");
+        OSL_FAIL("it seems here is a nonvalid file; possible missing of table:table-cell element");
     }
     sal_Int32 nSheet = rXMLImport.GetTables().GetCurrentSheet();
     sal_Int32 nCurrentRow(rXMLImport.GetTables().GetCurrentRow());

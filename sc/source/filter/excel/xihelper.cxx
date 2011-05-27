@@ -756,7 +756,7 @@ void XclImpUrlHelper::DecodeUrl(
 {
     String aTabName;
     DecodeUrl( rUrl, aTabName, rbSameWb, rRoot, rEncodedUrl );
-    DBG_ASSERT( !aTabName.Len(), "XclImpUrlHelper::DecodeUrl - sheet name ignored" );
+    OSL_ENSURE( !aTabName.Len(), "XclImpUrlHelper::DecodeUrl - sheet name ignored" );
 }
 
 bool XclImpUrlHelper::DecodeLink( String& rApplic, String& rTopic, const String rEncUrl )
@@ -803,7 +803,7 @@ XclImpCachedValue::XclImpCachedValue( XclImpStream& rStrm ) :
         }
         break;
         default:
-            DBG_ERRORFILE( "XclImpCachedValue::XclImpCachedValue - unknown data type" );
+            OSL_FAIL( "XclImpCachedValue::XclImpCachedValue - unknown data type" );
     }
 }
 
@@ -850,7 +850,7 @@ XclImpCachedMatrix::~XclImpCachedMatrix()
 ScMatrixRef XclImpCachedMatrix::CreateScMatrix() const
 {
     ScMatrixRef xScMatrix;
-    DBG_ASSERT( mnScCols * mnScRows == maValueList.size(), "XclImpCachedMatrix::CreateScMatrix - element count mismatch" );
+    OSL_ENSURE( mnScCols * mnScRows == maValueList.size(), "XclImpCachedMatrix::CreateScMatrix - element count mismatch" );
     if( mnScCols && mnScRows && static_cast< sal_uLong >( mnScCols * mnScRows ) <= maValueList.size() )
     {
         xScMatrix = new ScMatrix( mnScCols, mnScRows );
@@ -878,7 +878,7 @@ ScMatrixRef XclImpCachedMatrix::CreateScMatrix() const
                         xScMatrix->PutError( itValue->GetScError(), nScCol, nScRow );
                     break;
                     default:
-                        DBG_ERRORFILE( "XclImpCachedMatrix::CreateScMatrix - unknown value type" );
+                        OSL_FAIL( "XclImpCachedMatrix::CreateScMatrix - unknown value type" );
                         xScMatrix->PutEmpty( nScCol, nScRow );
                 }
                 ++itValue;

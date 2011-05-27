@@ -677,7 +677,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                     if (bRowFieldHasMember)
                                         mbHasDataLayout = true;
 
-                                    DBG_ASSERT( nLevCount == 1, "data layout: multiple levels?" );
+                                    OSL_ENSURE( nLevCount == 1, "data layout: multiple levels?" );
                                     if ( eDimOrient == sheet::DataPilotFieldOrientation_COLUMN )
                                         lcl_FillNumberFormats( pColNumFmt, nColFmtCount, xLevRes, xDims );
                                     else if ( eDimOrient == sheet::DataPilotFieldOrientation_ROW )
@@ -760,7 +760,7 @@ void ScDPOutput::DataCell( SCCOL nCol, SCROW nRow, SCTAB nTab, const sheet::Data
 
         //  use number formats from source
 
-        DBG_ASSERT( bSizesValid, "DataCell: !bSizesValid" );
+        OSL_ENSURE( bSizesValid, "DataCell: !bSizesValid" );
         sal_uInt32 nFormat = 0;
         if ( pColNumFmt )
         {
@@ -971,7 +971,7 @@ void ScDPOutput::Output()
         SCROW nRowPos = nDataStartRow + (SCROW)nRow;                    //! check for overflow
         const sheet::DataResult* pColAry = pRowAry[nRow].getConstArray();
         long nThisColCount = pRowAry[nRow].getLength();
-        DBG_ASSERT( nThisColCount == nColCount, "count mismatch" );     //! ???
+        OSL_ENSURE( nThisColCount == nColCount, "count mismatch" );     //! ???
         for (long nCol=0; nCol<nThisColCount; nCol++)
         {
             SCCOL nColPos = nDataStartCol + (SCCOL)nCol;                //! check for overflow
@@ -1032,7 +1032,7 @@ void ScDPOutput::Output()
         const uno::Sequence<sheet::MemberResult> rSequence = pColFields[nField].aResult;
         const sheet::MemberResult* pArray = rSequence.getConstArray();
         long nThisColCount = rSequence.getLength();
-        DBG_ASSERT( nThisColCount == nColCount, "count mismatch" );     //! ???
+        OSL_ENSURE( nThisColCount == nColCount, "count mismatch" );     //! ???
         for (long nCol=0; nCol<nThisColCount; nCol++)
         {
             SCCOL nColPos = nDataStartCol + (SCCOL)nCol;                //! check for overflow
@@ -1083,7 +1083,7 @@ void ScDPOutput::Output()
         const uno::Sequence<sheet::MemberResult> rSequence = pRowFields[nField].aResult;
         const sheet::MemberResult* pArray = rSequence.getConstArray();
         long nThisRowCount = rSequence.getLength();
-        DBG_ASSERT( nThisRowCount == nRowCount, "count mismatch" );     //! ???
+        OSL_ENSURE( nThisRowCount == nRowCount, "count mismatch" );     //! ???
         for (long nRow=0; nRow<nThisRowCount; nRow++)
         {
             SCROW nRowPos = nDataStartRow + (SCROW)nRow;                //! check for overflow
@@ -1135,7 +1135,7 @@ ScRange ScDPOutput::GetOutputRange( sal_Int32 nRegionType )
         case DataPilotOutputRangeType::TABLE:
             return ScRange(aStartPos.Col(), nTabStartRow, nTab, nTabEndCol, nTabEndRow, nTab);
         default:
-            DBG_ASSERT(nRegionType == DataPilotOutputRangeType::WHOLE, "ScDPOutput::GetOutputRange: unknown region type");
+            OSL_ENSURE(nRegionType == DataPilotOutputRangeType::WHOLE, "ScDPOutput::GetOutputRange: unknown region type");
         break;
     }
     return ScRange(aStartPos.Col(), aStartPos.Row(), nTab, nTabEndCol, nTabEndRow, nTab);
@@ -1437,7 +1437,7 @@ bool ScDPOutput::GetDataResultPositionData(vector<sheet::DataPilotFieldFilter>& 
         const uno::Sequence<sheet::MemberResult> rSequence = pColFields[nColField].aResult;
         const sheet::MemberResult* pArray = rSequence.getConstArray();
 
-        DBG_ASSERT(nDataStartCol + rSequence.getLength() - 1 == nTabEndCol, "ScDPOutput::GetDataFieldCellData: error in geometric assumption");
+        OSL_ENSURE(nDataStartCol + rSequence.getLength() - 1 == nTabEndCol, "ScDPOutput::GetDataFieldCellData: error in geometric assumption");
 
         long nItem = nCol - nDataStartCol;
                 //  get origin of "continue" fields
@@ -1461,7 +1461,7 @@ bool ScDPOutput::GetDataResultPositionData(vector<sheet::DataPilotFieldFilter>& 
         const uno::Sequence<sheet::MemberResult> rSequence = pRowFields[nRowField].aResult;
         const sheet::MemberResult* pArray = rSequence.getConstArray();
 
-        DBG_ASSERT(nDataStartRow + rSequence.getLength() - 1 == nTabEndRow, "ScDPOutput::GetDataFieldCellData: error in geometric assumption");
+        OSL_ENSURE(nDataStartRow + rSequence.getLength() - 1 == nTabEndRow, "ScDPOutput::GetDataFieldCellData: error in geometric assumption");
 
         long nItem = nRow - nDataStartRow;
             //  get origin of "continue" fields
@@ -1538,7 +1538,7 @@ uno::Sequence<sheet::GeneralFunction> lcl_GetSubTotals(
                                     xIntDims->getByIndex( rField.nDim ) );
         xHierSupp = uno::Reference<sheet::XHierarchiesSupplier>( xIntDim, uno::UNO_QUERY );
     }
-    DBG_ASSERT( xHierSupp.is(), "dimension not found" );
+    OSL_ENSURE( xHierSupp.is(), "dimension not found" );
 
     sal_Int32 nHierCount = 0;
     uno::Reference<container::XIndexAccess> xHiers;
@@ -1551,7 +1551,7 @@ uno::Sequence<sheet::GeneralFunction> lcl_GetSubTotals(
     uno::Reference<uno::XInterface> xHier;
     if ( rField.nHier < nHierCount )
         xHier = ScUnoHelpFunctions::AnyToInterface( xHiers->getByIndex( rField.nHier ) );
-    DBG_ASSERT( xHier.is(), "hierarchy not found" );
+    OSL_ENSURE( xHier.is(), "hierarchy not found" );
 
     sal_Int32 nLevCount = 0;
     uno::Reference<container::XIndexAccess> xLevels;
@@ -1565,7 +1565,7 @@ uno::Sequence<sheet::GeneralFunction> lcl_GetSubTotals(
     uno::Reference<uno::XInterface> xLevel;
     if ( rField.nLevel < nLevCount )
         xLevel = ScUnoHelpFunctions::AnyToInterface( xLevels->getByIndex( rField.nLevel ) );
-    DBG_ASSERT( xLevel.is(), "level not found" );
+    OSL_ENSURE( xLevel.is(), "level not found" );
 
     uno::Reference<beans::XPropertySet> xLevelProp( xLevel, uno::UNO_QUERY );
     if ( xLevelProp.is() )
@@ -1594,7 +1594,7 @@ void lcl_FilterInclude( std::vector< sal_Bool >& rResult, std::vector< sal_Int32
 {
     // returns true if a filter was given for the field
 
-    DBG_ASSERT( rFilters.size() == rFilterUsed.size(), "wrong size" );
+    OSL_ENSURE( rFilters.size() == rFilterUsed.size(), "wrong size" );
 
     const bool bIsDataLayout = ( rField.nDim == nDataLayoutIndex );
     if (bIsDataLayout)
@@ -1626,7 +1626,7 @@ void lcl_FilterInclude( std::vector< sal_Bool >& rResult, std::vector< sal_Int32
     const sheet::MemberResult* pArray = rSequence.getConstArray();
     sal_Int32 nSize = rSequence.getLength();
 
-    DBG_ASSERT( (sal_Int32)rResult.size() == nSize, "Number of fields do not match result count" );
+    OSL_ENSURE( (sal_Int32)rResult.size() == nSize, "Number of fields do not match result count" );
 
     sal_Int32 nContCount = 0;
     sal_Int32 nSubTotalCount = 0;
@@ -1656,7 +1656,7 @@ void lcl_FilterInclude( std::vector< sal_Bool >& rResult, std::vector< sal_Int32
                 {
                     // grand total is always automatic
                     sal_Int32 nDataPos = j - ( nSize - nGrandTotals );
-                    DBG_ASSERT( nDataPos < (sal_Int32)rDataNames.size(), "wrong data count" );
+                    OSL_ENSURE( nDataPos < (sal_Int32)rDataNames.size(), "wrong data count" );
                     String aSourceName( rDataNames[nDataPos] );     // vector contains source names
                     String aGivenName( rGivenNames[nDataPos] );
 
@@ -1667,7 +1667,7 @@ void lcl_FilterInclude( std::vector< sal_Bool >& rResult, std::vector< sal_Int32
             // treat "grand total" columns/rows as empty description, as if they were marked
             // in a previous field
 
-            DBG_ASSERT( ( aResultEntry.Flags &
+            OSL_ENSURE( ( aResultEntry.Flags &
                             ( sheet::MemberResultFlags::HASMEMBER | sheet::MemberResultFlags::SUBTOTAL ) ) == 0 ||
                         ( aResultEntry.Flags &
                             ( sheet::MemberResultFlags::HASMEMBER | sheet::MemberResultFlags::SUBTOTAL ) ) ==
@@ -1696,7 +1696,7 @@ void lcl_FilterInclude( std::vector< sal_Bool >& rResult, std::vector< sal_Int32
                         String aSourceName( rDataNames[nDataPos] );             // vector contains source names
                         String aGivenName( rGivenNames[nDataPos] );
 
-                        DBG_ASSERT( nFuncPos < aSubTotals.getLength(), "wrong subtotal count" );
+                        OSL_ENSURE( nFuncPos < aSubTotals.getLength(), "wrong subtotal count" );
                         rResult[j] = lcl_IsNamedDataField( rTarget, aSourceName, aGivenName ) &&
                                      aSubTotals[nFuncPos] == aFilter.meFunction;
                     }
@@ -1704,7 +1704,7 @@ void lcl_FilterInclude( std::vector< sal_Bool >& rResult, std::vector< sal_Int32
                     {
                         // manual subtotals for a single data field
 
-                        DBG_ASSERT( nSubTotalCount < aSubTotals.getLength(), "wrong subtotal count" );
+                        OSL_ENSURE( nSubTotalCount < aSubTotals.getLength(), "wrong subtotal count" );
                         rResult[j] = ( aSubTotals[nSubTotalCount] == aFilter.meFunction );
                     }
                 }
@@ -1712,7 +1712,7 @@ void lcl_FilterInclude( std::vector< sal_Bool >& rResult, std::vector< sal_Int32
                 {
                     if ( rBeforeDataLayout )
                     {
-                        DBG_ASSERT( nSubTotalCount < (sal_Int32)rDataNames.size(), "wrong data count" );
+                        OSL_ENSURE( nSubTotalCount < (sal_Int32)rDataNames.size(), "wrong data count" );
                         String aSourceName( rDataNames[nSubTotalCount] );       // vector contains source names
                         String aGivenName( rGivenNames[nSubTotalCount] );
 
@@ -1766,14 +1766,14 @@ void lcl_FilterInclude( std::vector< sal_Bool >& rResult, std::vector< sal_Int32
 void lcl_StripSubTotals( std::vector< sal_Bool >& rResult, const std::vector< sal_Int32 >& rSubtotal )
 {
     sal_Int32 nSize = rResult.size();
-    DBG_ASSERT( (sal_Int32)rSubtotal.size() == nSize, "sizes don't match" );
+    OSL_ENSURE( (sal_Int32)rSubtotal.size() == nSize, "sizes don't match" );
 
     for (sal_Int32 nPos=0; nPos<nSize; nPos++)
         if ( rResult[nPos] && rSubtotal[nPos] )
         {
             // if a subtotal is included, clear the result flag for the columns/rows that the subtotal includes
             sal_Int32 nStart = nPos - rSubtotal[nPos];
-            DBG_ASSERT( nStart >= 0, "invalid subtotal count" );
+            OSL_ENSURE( nStart >= 0, "invalid subtotal count" );
 
             for (sal_Int32 nPrev = nStart; nPrev < nPos; nPrev++)
                 rResult[nPrev] = false;
@@ -1800,7 +1800,7 @@ String lcl_GetDataFieldName( const String& rSourceName, sheet::GeneralFunction e
         case sheet::GeneralFunction_AUTO:
         default:
         {
-            DBG_ERRORFILE("wrong function");
+            OSL_FAIL("wrong function");
         }
     }
     if ( !nStrId )
@@ -1857,7 +1857,7 @@ sal_Bool ScDPOutput::GetPivotData( ScDPGetPivotDataField& rTarget,
     {
         // no data layout field -> single data field -> must match the selected field in rTarget
 
-        DBG_ASSERT( aDataNames.size() == 1, "several data fields but no data layout field" );
+        OSL_ENSURE( aDataNames.size() == 1, "several data fields but no data layout field" );
         if ( !lcl_IsNamedDataField( rTarget, aDataNames[0], aGivenNames[0] ) )
             return false;
     }

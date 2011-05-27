@@ -36,7 +36,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
 #include <vcl/msgbox.hxx>
-#include <tools/debug.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <sfx2/viewfrm.hxx>
 
@@ -191,7 +190,7 @@ bool ScDBDocFunc::DoImportUno( const ScAddress& rPos,
         //! merge this with SID_SBA_IMPORT execute in docsh4.cxx
 
         ScDBData* pDBData = rDocShell.GetDBData( ScRange(rPos), SC_DB_IMPORT, SC_DBSEL_KEEP );
-        DBG_ASSERT(pDBData, "can't create DB data");
+        OSL_ENSURE(pDBData, "can't create DB data");
         String sTarget = pDBData->GetName();
 
         //! change UpdateImport to use only one of rTableName, rStatement
@@ -291,7 +290,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_SERVICE_ROWSET )) ),
                     uno::UNO_QUERY);
             uno::Reference<beans::XPropertySet> xRowProp( xRowSet, uno::UNO_QUERY );
-            DBG_ASSERT( xRowProp.is(), "can't get RowSet" );
+            OSL_ENSURE( xRowProp.is(), "can't get RowSet" );
             if ( xRowProp.is() )
             {
                 //

@@ -106,7 +106,7 @@ ScBaseCell::~ScBaseCell()
 {
     delete mpNote;
     delete mpBroadcaster;
-    DBG_ASSERT( eCellType == CELLTYPE_DESTROYED, "BaseCell Destructor" );
+    OSL_ENSURE( eCellType == CELLTYPE_DESTROYED, "BaseCell Destructor" );
 }
 
 namespace {
@@ -573,7 +573,7 @@ ScNoteCell::ScNoteCell( ScPostIt* pNote, SvtBroadcaster* pBC ) :
     TakeBroadcaster( pBC );
 }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
 ScNoteCell::~ScNoteCell()
 {
     eCellType = CELLTYPE_DESTROYED;
@@ -594,7 +594,7 @@ ScValueCell::ScValueCell( double fValue ) :
 {
 }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
 ScValueCell::~ScValueCell()
 {
     eCellType = CELLTYPE_DESTROYED;
@@ -614,7 +614,7 @@ ScStringCell::ScStringCell( const String& rString ) :
 {
 }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
 ScStringCell::~ScStringCell()
 {
     eCellType = CELLTYPE_DESTROYED;
@@ -834,7 +834,7 @@ ScFormulaCell::~ScFormulaCell()
         pDocument->GetExternalRefManager()->removeRefCell(this);
 
     delete pCode;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     eCellType = CELLTYPE_DESTROYED;
 #endif
 }
@@ -1092,7 +1092,7 @@ void ScFormulaCell::CalcAfterLoad()
     // hier fuer alle Systeme ausbuegeln, damit da auch Err503 steht
     if ( aResult.IsValue() && !::rtl::math::isFinite( aResult.GetDouble() ) )
     {
-        DBG_ERRORFILE("Formelzelle INFINITY !!! Woher kommt das Dokument?");
+        OSL_FAIL("Formelzelle INFINITY !!! Woher kommt das Dokument?");
         aResult.SetResultError( errIllegalFPOperation );
         bDirty = sal_True;
     }
@@ -1400,7 +1400,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
             pCode->SetCodeError( errNoCode );
             // This is worth an assertion; if encountered in daily work
             // documents we might need another solution. Or just confirm correctness.
-            DBG_ERRORFILE( "ScFormulaCell::Interpret: no UPN, no error, no token, but string" );
+            OSL_FAIL( "ScFormulaCell::Interpret: no UPN, no error, no token, but string" );
             return;
         }
         CompileTokenArray();
@@ -1668,7 +1668,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
     else
     {
         //  Zelle bei Compiler-Fehlern nicht ewig auf dirty stehenlassen
-        DBG_ASSERT( pCode->GetCodeError(), "kein UPN-Code und kein Fehler ?!?!" );
+        OSL_ENSURE( pCode->GetCodeError(), "kein UPN-Code und kein Fehler ?!?!" );
         bDirty = false;
         bTableOpDirty = false;
     }

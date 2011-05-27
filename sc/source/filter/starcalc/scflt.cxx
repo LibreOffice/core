@@ -969,7 +969,7 @@ Sc10Import::~Sc10Import()
     delete pPatternCollection;
     delete pDataBaseCollection;
 
-    DBG_ASSERT( pPrgrsBar == NULL,
+    OSL_ENSURE( pPrgrsBar == NULL,
         "*Sc10Import::Sc10Import(): Progressbar lebt noch!?" );
 }
 
@@ -1000,7 +1000,7 @@ sal_uLong Sc10Import::Import()
     if (!nError) { ImportNameCollection();      pPrgrsBar->Progress(); }
     pDoc->SetViewOptions( aSc30ViewOpt );
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     if (nError)
     {
         OSL_FAIL( ByteString::CreateFromInt32( nError ).GetBuffer() );
@@ -1008,7 +1008,7 @@ sal_uLong Sc10Import::Import()
 #endif
 
     delete pPrgrsBar;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     pPrgrsBar = NULL;
 #endif
 
@@ -1585,7 +1585,7 @@ void Sc10Import::LoadTables()
             if ((Count != 0) && (nError == 0))
                 LoadCol(Col, static_cast<SCTAB> (TabNo));
         }
-        DBG_ASSERT( nError == 0, "Stream" );
+        OSL_ENSURE( nError == 0, "Stream" );
     }
     pPrgrsBar->Progress();
 

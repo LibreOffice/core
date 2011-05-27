@@ -50,7 +50,6 @@
 #include <global.hxx>
 #include <tools/color.hxx>
 #include <i18npool/lang.h>
-#include <tools/debug.hxx>
 #include <tools/gen.hxx>
 #include <svl/svarray.hxx>
 #include <markarr.hxx>
@@ -77,7 +76,6 @@
 #include <stdarg.h>
 #include <tools/rc.hxx>
 #include <tools/resmgr.hxx>
-#include <tools/unqidx.hxx>
 #include <rsc/rscsfx.hxx>
 #include <basic/sbxdef.hxx>
 #include <svl/itemset.hxx>

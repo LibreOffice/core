@@ -567,8 +567,8 @@ bool ScDPCache::InitFromDataBase (const Reference<sdbc::XRowSet>& xRowSet, const
 
 sal_uLong ScDPCache::GetDimNumType( SCCOL nDim) const
 {
-    DBG_ASSERT( IsValid(), "  IsValid() == false " );
-    DBG_ASSERT( nDim < mnColumnCount && nDim >=0, " dimention out of bound " );
+    OSL_ENSURE( IsValid(), "  IsValid() == false " );
+    OSL_ENSURE( nDim < mnColumnCount && nDim >=0, " dimention out of bound " );
     if ( maTableDataValues[nDim].size()==0 )
         return NUMBERFORMAT_UNDEFINED;
     else
@@ -736,7 +736,7 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, bool *pSpeci
                             bOk = (nCompare >= 0);
                             break;
                         case SC_NOT_EQUAL:
-                            DBG_ASSERT( false , "SC_NOT_EQUAL");
+                            OSL_FAIL("SC_NOT_EQUAL");
                             break;
                         case SC_TOPVAL:
                         case SC_BOTVAL:
@@ -799,8 +799,8 @@ bool ScDPCache::IsEmptyMember( SCROW nRow, sal_uInt16 nColumn ) const
 
 bool ScDPCache::AddData(long nDim, ScDPItemData* pData)
 {
-    DBG_ASSERT( IsValid(), "  IsValid() == false " );
-    DBG_ASSERT( nDim < mnColumnCount && nDim >=0 , "dimension out of bound" );
+    OSL_ENSURE( IsValid(), "  IsValid() == false " );
+    OSL_ENSURE( nDim < mnColumnCount && nDim >=0 , "dimension out of bound" );
 
     // Wrap this instance with scoped pointer to ensure proper deletion.
     auto_ptr<ScDPItemData> p(pData);
@@ -812,7 +812,7 @@ bool ScDPCache::AddData(long nDim, ScDPItemData* pData)
         // This item doesn't exist in the dimension array yet.
         maTableDataValues[nDim].push_back(p);
         maGlobalOrder[nDim].insert( maGlobalOrder[nDim].begin()+nIndex, maTableDataValues[nDim].size()-1  );
-        DBG_ASSERT( (size_t) maGlobalOrder[nDim][nIndex] == maTableDataValues[nDim].size()-1 ,"ScDPTableDataCache::AddData ");
+        OSL_ENSURE( (size_t) maGlobalOrder[nDim][nIndex] == maTableDataValues[nDim].size()-1 ,"ScDPTableDataCache::AddData ");
         maSourceData[nDim].push_back( maTableDataValues[nDim].size()-1 );
     }
     else
@@ -832,8 +832,8 @@ bool ScDPCache::AddData(long nDim, ScDPItemData* pData)
 
 String ScDPCache::GetDimensionName( sal_uInt16 nColumn ) const
 {
-    DBG_ASSERT(nColumn < maLabelNames.size()-1 , "ScDPTableDataCache::GetDimensionName");
-    DBG_ASSERT(maLabelNames.size() == static_cast <sal_uInt16> (mnColumnCount+1), "ScDPTableDataCache::GetDimensionName");
+    OSL_ENSURE(nColumn < maLabelNames.size()-1 , "ScDPTableDataCache::GetDimensionName");
+    OSL_ENSURE(maLabelNames.size() == static_cast <sal_uInt16> (mnColumnCount+1), "ScDPTableDataCache::GetDimensionName");
 
     if ( static_cast<size_t>(nColumn+1) < maLabelNames.size() )
     {
@@ -845,7 +845,7 @@ String ScDPCache::GetDimensionName( sal_uInt16 nColumn ) const
 
 void ScDPCache::AddLabel(ScDPItemData *pData)
 {
-    DBG_ASSERT( IsValid(), "  IsValid() == false " );
+    OSL_ENSURE( IsValid(), "  IsValid() == false " );
 
     if ( maLabelNames.size() == 0 )
         maLabelNames.push_back( new ScDPItemData(ScGlobal::GetRscString(STR_PIVOT_DATA)) );
@@ -876,8 +876,8 @@ void ScDPCache::AddLabel(ScDPItemData *pData)
 
 SCROW ScDPCache::GetItemDataId(sal_uInt16 nDim, SCROW nRow, bool bRepeatIfEmpty) const
 {
-    DBG_ASSERT( IsValid(), "  IsValid() == false " );
-    DBG_ASSERT( /* nDim >= 0 && */ nDim < mnColumnCount, "ScDPTableDataCache::GetItemDataId " );
+    OSL_ENSURE( IsValid(), "  IsValid() == false " );
+    OSL_ENSURE( /* nDim >= 0 && */ nDim < mnColumnCount, "ScDPTableDataCache::GetItemDataId " );
 
     if ( bRepeatIfEmpty )
     {
@@ -909,15 +909,15 @@ SCROW ScDPCache::GetRowCount() const
 
 const ScDPCache::DataListType& ScDPCache::GetDimMemberValues(SCCOL nDim) const
 {
-    DBG_ASSERT( nDim>=0 && nDim < mnColumnCount ," nDim < mnColumnCount ");
+    OSL_ENSURE( nDim>=0 && nDim < mnColumnCount ," nDim < mnColumnCount ");
     return maTableDataValues[nDim];
 }
 
 SCROW ScDPCache::GetSortedItemDataId(SCCOL nDim, SCROW nOrder) const
 {
-    DBG_ASSERT ( IsValid(), "IsValid");
-    DBG_ASSERT( nDim>=0 && nDim < mnColumnCount,  "nDim < mnColumnCount");
-    DBG_ASSERT( nOrder >= 0 && (size_t) nOrder < maGlobalOrder[nDim].size(), "nOrder < mpGlobalOrder[nDim].size()" );
+    OSL_ENSURE ( IsValid(), "IsValid");
+    OSL_ENSURE( nDim>=0 && nDim < mnColumnCount,  "nDim < mnColumnCount");
+    OSL_ENSURE( nOrder >= 0 && (size_t) nOrder < maGlobalOrder[nDim].size(), "nOrder < mpGlobalOrder[nDim].size()" );
 
     return maGlobalOrder[nDim][nOrder];
 }
@@ -970,7 +970,7 @@ bool ScDPCache::IsDateDimension( long nDim ) const
 
 SCROW ScDPCache::GetDimMemberCount( SCCOL nDim ) const
 {
-    DBG_ASSERT( nDim>=0 && nDim < mnColumnCount ," ScDPTableDataCache::GetDimMemberCount : out of bound ");
+    OSL_ENSURE( nDim>=0 && nDim < mnColumnCount ," ScDPTableDataCache::GetDimMemberCount : out of bound ");
     return maTableDataValues[nDim].size();
 }
 
@@ -1032,8 +1032,8 @@ SCROW ScDPCache::GetAdditionalItemID( const ScDPItemData& rData ) const
 
 SCROW ScDPCache::GetOrder(long nDim, SCROW nIndex) const
 {
-    DBG_ASSERT( IsValid(), "  IsValid() == false " );
-    DBG_ASSERT( nDim >=0 && nDim < mnColumnCount, "ScDPTableDataCache::GetOrder : out of bound" );
+    OSL_ENSURE( IsValid(), "  IsValid() == false " );
+    OSL_ENSURE( nDim >=0 && nDim < mnColumnCount, "ScDPTableDataCache::GetOrder : out of bound" );
 
     if ( maIndexOrder[nDim].size() !=  maGlobalOrder[nDim].size() )
     { //not inited
@@ -1046,7 +1046,7 @@ SCROW ScDPCache::GetOrder(long nDim, SCROW nIndex) const
         }
     }
 
-    DBG_ASSERT( nIndex>=0 && (size_t)nIndex < maIndexOrder[nDim].size() , "ScDPTableDataCache::GetOrder");
+    OSL_ENSURE( nIndex>=0 && (size_t)nIndex < maIndexOrder[nDim].size() , "ScDPTableDataCache::GetOrder");
     return maIndexOrder[nDim][nIndex];
 }
 

@@ -229,7 +229,7 @@ sal_Bool ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, sal_Bool bKey
             Window* pRight = bHSplit ? pViewData->GetView()->GetWindowByPos( bVSplit ? SC_SPLIT_TOPRIGHT : SC_SPLIT_BOTTOMRIGHT ) : 0;
             Window* pBottom = bVSplit ? pViewData->GetView()->GetWindowByPos( SC_SPLIT_BOTTOMLEFT ) : 0;
             Window* pDiagonal = (bHSplit && bVSplit) ? pViewData->GetView()->GetWindowByPos( SC_SPLIT_BOTTOMRIGHT ) : 0;
-            DBG_ASSERT( pLeft, "ScGridWindow::ShowNoteMarker - missing top-left grid window" );
+            OSL_ENSURE( pLeft, "ScGridWindow::ShowNoteMarker - missing top-left grid window" );
 
             /*  If caption is shown from right or bottom windows, adjust
                 mapmode to include size of top-left window. */
@@ -397,7 +397,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
     if ( pDrView && bHelpEnabled && !bDone )
     {
         SdrPageView* pPV = pDrView->GetSdrPageView();
-        DBG_ASSERT( pPV, "SdrPageView* ist NULL" );
+        OSL_ENSURE( pPV, "SdrPageView* ist NULL" );
         if (pPV)
             bDone = ((ScDrawPage*)pPV->GetPage())->RequestHelp( this, pDrView, rHEvt );
     }

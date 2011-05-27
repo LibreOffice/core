@@ -362,7 +362,7 @@ OUString SAL_CALL
     if (!msName.getLength())
     {
         OUString sName(createAccessibleName());
-        DBG_ASSERT(sName.getLength(), "We should give always a name.");
+        OSL_ENSURE(sName.getLength(), "We should give always a name.");
 
         if (msName != sName)
         {

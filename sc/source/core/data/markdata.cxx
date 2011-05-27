@@ -33,8 +33,6 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <tools/debug.hxx>
-
 #include "markdata.hxx"
 #include "markarr.hxx"
 #include "rangelst.hxx"
@@ -240,7 +238,7 @@ void ScMarkData::MarkToSimple()
 
     if ( bMultiMarked )
     {
-        DBG_ASSERT(pMultiSel, "bMultiMarked, aber pMultiSel == 0");
+        OSL_ENSURE(pMultiSel, "bMultiMarked, aber pMultiSel == 0");
 
         ScRange aNew = aMultiRange;
 
@@ -291,7 +289,7 @@ sal_Bool ScMarkData::IsCellMarked( SCCOL nCol, SCROW nRow, sal_Bool bNoSimple ) 
     {
         //! hier auf negative Markierung testen ?
 
-        DBG_ASSERT(pMultiSel, "bMultiMarked, aber pMultiSel == 0");
+        OSL_ENSURE(pMultiSel, "bMultiMarked, aber pMultiSel == 0");
         return pMultiSel[nCol].GetMark( nRow );
     }
 
@@ -326,7 +324,7 @@ sal_Bool ScMarkData::IsRowMarked( SCROW nRow ) const
 
     if ( bMultiMarked )
     {
-        DBG_ASSERT(pMultiSel, "bMultiMarked, aber pMultiSel == 0");
+        OSL_ENSURE(pMultiSel, "bMultiMarked, aber pMultiSel == 0");
         for (SCCOL nCol=0; nCol<=MAXCOL; nCol++)
             if (!pMultiSel[nCol].GetMark(nRow))
                 return false;
@@ -375,7 +373,7 @@ void ScMarkData::FillRangeListWithMarks( ScRangeList* pList, sal_Bool bClear ) c
 
     if ( bMultiMarked )
     {
-        DBG_ASSERT(pMultiSel, "bMultiMarked, aber pMultiSel == 0");
+        OSL_ENSURE(pMultiSel, "bMultiMarked, aber pMultiSel == 0");
 
         SCTAB nTab = aMultiRange.aStart.Tab();
 
@@ -429,7 +427,7 @@ SCCOLROW ScMarkData::GetMarkColumnRanges( SCCOLROW* pRanges )
     if (!bMultiMarked)
         return 0;
 
-    DBG_ASSERT(pMultiSel, "bMultiMarked, but pMultiSel == 0");
+    OSL_ENSURE(pMultiSel, "bMultiMarked, but pMultiSel == 0");
 
     const SCCOLROW nMultiStart = aMultiRange.aStart.Col();
     const SCCOLROW nMultiEnd = aMultiRange.aEnd.Col();
@@ -474,7 +472,7 @@ SCCOLROW ScMarkData::GetMarkRowRanges( SCCOLROW* pRanges )
     if (!bMultiMarked)
         return 0;
 
-    DBG_ASSERT(pMultiSel, "bMultiMarked, but pMultiSel == 0");
+    OSL_ENSURE(pMultiSel, "bMultiMarked, but pMultiSel == 0");
 
     // Which rows are marked?
 
@@ -540,7 +538,7 @@ sal_Bool ScMarkData::IsAllMarked( const ScRange& rRange ) const
     if ( !bMultiMarked )
         return false;
 
-    DBG_ASSERT(pMultiSel, "bMultiMarked, aber pMultiSel == 0");
+    OSL_ENSURE(pMultiSel, "bMultiMarked, aber pMultiSel == 0");
 
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
@@ -559,7 +557,7 @@ SCsROW ScMarkData::GetNextMarked( SCCOL nCol, SCsROW nRow, sal_Bool bUp ) const
     if ( !bMultiMarked )
         return nRow;
 
-    DBG_ASSERT(pMultiSel, "bMultiMarked, aber pMultiSel == 0");
+    OSL_ENSURE(pMultiSel, "bMultiMarked, aber pMultiSel == 0");
 
     return pMultiSel[nCol].GetNextMarked( nRow, bUp );
 }
@@ -569,7 +567,7 @@ sal_Bool ScMarkData::HasMultiMarks( SCCOL nCol ) const
     if ( !bMultiMarked )
         return false;
 
-    DBG_ASSERT(pMultiSel, "bMultiMarked, aber pMultiSel == 0");
+    OSL_ENSURE(pMultiSel, "bMultiMarked, aber pMultiSel == 0");
 
     return pMultiSel[nCol].HasMarks();
 }
@@ -579,7 +577,7 @@ sal_Bool ScMarkData::HasAnyMultiMarks() const
     if ( !bMultiMarked )
         return false;
 
-    DBG_ASSERT(pMultiSel, "bMultiMarked, aber pMultiSel == 0");
+    OSL_ENSURE(pMultiSel, "bMultiMarked, aber pMultiSel == 0");
 
     for (SCCOL nCol=0; nCol<=MAXCOL; nCol++)
         if ( pMultiSel[nCol].HasMarks() )

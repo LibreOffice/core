@@ -171,7 +171,7 @@ ScDPLayoutDlg::~ScDPLayoutDlg()
 
 void ScDPLayoutDlg::Init(bool bNewOutput)
 {
-    DBG_ASSERT( pViewData && pDoc,
+    OSL_ENSURE( pViewData && pDoc,
                 "Ctor-Initialisierung fehlgeschlagen!" );
 
     aBtnRemove.SetClickHdl( LINK( this, ScDPLayoutDlg, ClickHdl ) );
@@ -391,7 +391,7 @@ void ScDPLayoutDlg::InitFieldWindow( const vector<PivotField>& rFields, ScDPFiel
         {
             // data field - we need to concatenate function name with the field name.
             ScDPLabelData* pData = GetLabelData(nCol);
-            DBG_ASSERT( pData, "ScDPLabelData not found" );
+            OSL_ENSURE( pData, "ScDPLabelData not found" );
             if (pData)
             {
                 OUString aStr = pData->maLayoutName;
@@ -1000,7 +1000,7 @@ void ScDPLayoutDlg::NotifyDoubleClick( ScDPFieldType eType, size_t nFieldIndex )
         if( ScDPLabelData* pData = GetLabelData( (*pArr)[nFieldIndex]->mnCol, &nArrPos ) )
         {
             ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+            OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
             switch ( eType )
             {
@@ -1214,7 +1214,7 @@ ScDPLabelData* ScDPLayoutDlg::GetLabelData( SCsCOL nCol, size_t* pnPos )
 String ScDPLayoutDlg::GetLabelString( SCsCOL nCol )
 {
     ScDPLabelData* pData = GetLabelData( nCol );
-    DBG_ASSERT( pData, "LabelData not found" );
+    OSL_ENSURE( pData, "LabelData not found" );
     if (pData)
         return pData->getDisplayName();
     return String();
@@ -1226,7 +1226,7 @@ bool ScDPLayoutDlg::IsOrientationAllowed( SCsCOL nCol, ScDPFieldType eType )
 {
     bool bAllowed = true;
     ScDPLabelData* pData = GetLabelData( nCol );
-    DBG_ASSERT( pData, "LabelData not found" );
+    OSL_ENSURE( pData, "LabelData not found" );
     if (pData)
     {
         sheet::DataPilotFieldOrientation eOrient = sheet::DataPilotFieldOrientation_HIDDEN;

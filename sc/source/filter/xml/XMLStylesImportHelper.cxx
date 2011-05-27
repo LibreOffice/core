@@ -34,7 +34,6 @@
 // INCLUDE ---------------------------------------------------------------
 #include "XMLStylesImportHelper.hxx"
 #include "xmlimprt.hxx"
-#include <tools/debug.hxx>
 #include <com/sun/star/util/NumberFormat.hpp>
 
 using namespace com::sun::star;
@@ -366,7 +365,7 @@ ScMyStylesSet::iterator ScMyStylesImportHelper::GetIterator(const rtl::OUString*
 
 void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
 {
-    DBG_ASSERT(aRowDefaultStyle != aCellStyles.end(), "no row default style");
+    OSL_ENSURE(aRowDefaultStyle != aCellStyles.end(), "no row default style");
     if (!aRowDefaultStyle->sStyleName.getLength())
     {
         SCCOL nStartCol(rRange.aStart.Col());
@@ -374,12 +373,12 @@ void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
         if (aColDefaultStyles.size() > sal::static_int_cast<sal_uInt32>(nStartCol))
         {
             ScMyStylesSet::iterator aPrevItr(aColDefaultStyles[nStartCol]);
-            DBG_ASSERT(aColDefaultStyles.size() > sal::static_int_cast<sal_uInt32>(nEndCol), "to much columns");
+            OSL_ENSURE(aColDefaultStyles.size() > sal::static_int_cast<sal_uInt32>(nEndCol), "to much columns");
             for (SCCOL i = nStartCol + 1; (i <= nEndCol) && (i < sal::static_int_cast<SCCOL>(aColDefaultStyles.size())); ++i)
             {
                 if (aPrevItr != aColDefaultStyles[i])
                 {
-                    DBG_ASSERT(aPrevItr != aCellStyles.end(), "no column default style");
+                    OSL_ENSURE(aPrevItr != aCellStyles.end(), "no column default style");
                     ScRange aRange(rRange);
                     aRange.aStart.SetCol(nStartCol);
                     aRange.aEnd.SetCol(i - 1);
@@ -402,12 +401,12 @@ void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
             }
             else
             {
-                DBG_ERRORFILE("no column default style");
+                OSL_FAIL("no column default style");
             }
         }
         else
         {
-            DBG_ERRORFILE("to much columns");
+            OSL_FAIL("to much columns");
         }
     }
     else
@@ -447,9 +446,9 @@ void ScMyStylesImportHelper::AddRange()
 void ScMyStylesImportHelper::AddColumnStyle(const rtl::OUString& sStyleName, const sal_Int32 nColumn, const sal_Int32 nRepeat)
 {
     (void)nColumn;  // avoid warning in product version
-    DBG_ASSERT(static_cast<sal_uInt32>(nColumn) == aColDefaultStyles.size(), "some columns are absent");
+    OSL_ENSURE(static_cast<sal_uInt32>(nColumn) == aColDefaultStyles.size(), "some columns are absent");
     ScMyStylesSet::iterator aItr(GetIterator(&sStyleName));
-    DBG_ASSERT(aItr != aCellStyles.end(), "no column default style");
+    OSL_ENSURE(aItr != aCellStyles.end(), "no column default style");
     aColDefaultStyles.reserve(aColDefaultStyles.size() + nRepeat);
     for (sal_Int32 i = 0; i < nRepeat; ++i)
         aColDefaultStyles.push_back(aItr);
@@ -485,7 +484,7 @@ void ScMyStylesImportHelper::AddRange(const ScRange& rRange)
             {
                 if (rRange.aEnd.Row() == aPrevRange.aEnd.Row())
                 {
-                    DBG_ASSERT(aPrevRange.aEnd.Col() + 1 == rRange.aStart.Col(), "something wents wrong");
+                    OSL_ENSURE(aPrevRange.aEnd.Col() + 1 == rRange.aStart.Col(), "something wents wrong");
                     aPrevRange.aEnd.SetCol(rRange.aEnd.Col());
                 }
                 else
@@ -496,7 +495,7 @@ void ScMyStylesImportHelper::AddRange(const ScRange& rRange)
                 if (rRange.aStart.Col() == aPrevRange.aStart.Col() &&
                     rRange.aEnd.Col() == aPrevRange.aEnd.Col())
                 {
-                    DBG_ASSERT(aPrevRange.aEnd.Row() + 1 == rRange.aStart.Row(), "something wents wrong");
+                    OSL_ENSURE(aPrevRange.aEnd.Row() + 1 == rRange.aStart.Row(), "something wents wrong");
                     aPrevRange.aEnd.SetRow(rRange.aEnd.Row());
                 }
                 else

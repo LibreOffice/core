@@ -62,7 +62,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
     sal_Bool                        bAddIn = false;
     sal_Bool                        bNeg = false;
 
-    DBG_ASSERT( nAnz < 128, "-LotusToSc::DoFunc(): Neee! -so viel kann ich nicht!" );
+    OSL_ENSURE( nAnz < 128, "-LotusToSc::DoFunc(): Neee! -so viel kann ich nicht!" );
 
     if( eOc == ocNoName )
     {
@@ -103,7 +103,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
     switch( eOc )
     {
         case ocIndex:
-            DBG_ASSERT( nAnz > 2, "+LotusToSc::DoFunc(): ocIndex braucht mind. 2 Parameter!" );
+            OSL_ENSURE( nAnz > 2, "+LotusToSc::DoFunc(): ocIndex braucht mind. 2 Parameter!" );
             nMerk0 = eParam[ 0 ];
             eParam[ 0 ] = eParam[ 1 ];
             eParam[ 1 ] = nMerk0;
@@ -112,7 +112,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
             break;
         case ocIRR:
         {
-            DBG_ASSERT( nAnz == 2, "+LotusToSc::DoFunc(): ocIRR hat nur 2 Parameter!" );
+            OSL_ENSURE( nAnz == 2, "+LotusToSc::DoFunc(): ocIRR hat nur 2 Parameter!" );
             nMerk0 = eParam[ 0 ];
             eParam[ 0 ] = eParam[ 1 ];
             eParam[ 1 ] = nMerk0;
@@ -145,7 +145,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
         case ocZins:
         {
             // neue Anzahl = 4!
-            DBG_ASSERT( nAnz == 3,
+            OSL_ENSURE( nAnz == 3,
                 "*LotusToSc::DoFunc(): ZINS() hat 3 Parameter!" );
             nAnz = 4;
             eParam[ 3 ] = eParam[ 0 ];  // 3. -> 1.
@@ -173,7 +173,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
         if( eOc == ocRMZ )
         {   // Extrawurst ocRMZ letzter Parameter negiert!
             // zusaetzlich: 1. -> 3., 3. -> 2., 2. -> 1.
-            DBG_ASSERT( nAnz == 3,
+            OSL_ENSURE( nAnz == 3,
                 "+LotusToSc::DoFunc(): ocRMZ hat genau 3 Parameter!" );
             aPool << eParam[ 1 ] << ocSep << eParam[ 0 ] << ocSep
                 << ocNegSub << eParam[ 2 ];
@@ -654,8 +654,8 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest,
 
     rpErg = aPool[ aStack.Get() ];
 
-    DBG_ASSERT( nBytesLeft >= 0, "*LotusToSc::Convert(): zuviel verarbeitet!");
-    DBG_ASSERT( nBytesLeft <= 0, "*LotusToSc::Convert(): wat is mit'm Rest?" );
+    OSL_ENSURE( nBytesLeft >= 0, "*LotusToSc::Convert(): zuviel verarbeitet!");
+    OSL_ENSURE( nBytesLeft <= 0, "*LotusToSc::Convert(): wat is mit'm Rest?" );
 
     if( rRest )
         aIn.SeekRel( nBytesLeft );  // eventuellen Rest/Ueberlauf korrigieren

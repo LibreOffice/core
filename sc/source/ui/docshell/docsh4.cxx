@@ -260,7 +260,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             }
 
                             ScDBData* pDBData = GetDBData( ScRange(aPos), SC_DB_IMPORT, SC_DBSEL_KEEP );
-                            DBG_ASSERT(pDBData, "kann DB-Daten nicht anlegen");
+                            OSL_ENSURE(pDBData, "kann DB-Daten nicht anlegen");
                             sTarget = pDBData->GetName();
                         }
                     }
@@ -378,10 +378,10 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             bRowHeaders = aChartPositioner.HasRowHeaders();
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+                        OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                         AbstractScColRowLabelDlg* pDlg = pFact->CreateScColRowLabelDlg( pParent, RID_SCDLG_CHARTCOLROW, bRowHeaders, bColHeaders);
-                        DBG_ASSERT(pDlg, "Dialog create fail!");
+                        OSL_ENSURE(pDlg, "Dialog create fail!");
                         if ( pDlg->Execute() == RET_OK )
                         {
                             bColHeaders = pDlg->IsRow();
@@ -492,7 +492,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 if (nDlgRet == RET_YES || nSet==LM_ALWAYS)
                 {
                     ReloadTabLinks();
-                    aDocument.UpdateExternalRefLinks();
+                    aDocument.UpdateExternalRefLinks(GetActiveDialogParent());
                     aDocument.UpdateDdeLinks();
                     aDocument.UpdateAreaLinks();
 
@@ -517,7 +517,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 {
                     ScRange aRange;
                     ScTabViewShell* pViewSh = GetBestViewShell();
-                    DBG_ASSERT(pViewSh,"SID_REIMPORT_AFTER_LOAD: keine View");
+                    OSL_ENSURE(pViewSh,"SID_REIMPORT_AFTER_LOAD: keine View");
                     if (pViewSh && pDBColl)
                     {
                         QueryBox aBox( GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
@@ -900,10 +900,10 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                 sal_Bool bSheetProtected = aDocument.IsTabProtected(nActualTab);
 
                                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                                DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+                                OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                                 AbstractScNewScenarioDlg* pNewDlg = pFact->CreateScNewScenarioDlg( GetActiveDialogParent(), aName, RID_SCDLG_NEWSCENARIO, true,bSheetProtected);
-                                DBG_ASSERT(pNewDlg, "Dialog create fail!");
+                                OSL_ENSURE(pNewDlg, "Dialog create fail!");
                                 pNewDlg->SetScenarioData( aName, aComment, aColor, nFlags );
                                 if ( pNewDlg->Execute() == RET_OK )
                                 {
@@ -1306,7 +1306,7 @@ void ScDocShell::DoAutoStyle( const ScRange& rRange, const String& rStyle )
             pStylePool->Find( ScGlobal::GetRscString(STR_STYLENAME_STANDARD), SFX_STYLE_FAMILY_PARA );
     if (pStyleSheet)
     {
-        DBG_ASSERT(rRange.aStart.Tab() == rRange.aEnd.Tab(),
+        OSL_ENSURE(rRange.aStart.Tab() == rRange.aEnd.Tab(),
                         "DoAutoStyle mit mehreren Tabellen");
         SCTAB nTab = rRange.aStart.Tab();
         SCCOL nStartCol = rRange.aStart.Col();
@@ -1398,7 +1398,7 @@ void ScDocShell::SetPrintZoom( SCTAB nTab, sal_uInt16 nScale, sal_uInt16 nPages 
     String aStyleName = aDocument.GetPageStyle( nTab );
     ScStyleSheetPool* pStylePool = aDocument.GetStyleSheetPool();
     SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyleName, SFX_STYLE_FAMILY_PAGE );
-    DBG_ASSERT( pStyleSheet, "PageStyle not found" );
+    OSL_ENSURE( pStyleSheet, "PageStyle not found" );
     if ( pStyleSheet )
     {
         ScDocShellModificator aModificator( *this );
@@ -1433,7 +1433,7 @@ sal_Bool ScDocShell::AdjustPrintZoom( const ScRange& rRange )
     String aStyleName = aDocument.GetPageStyle( nTab );
     ScStyleSheetPool* pStylePool = aDocument.GetStyleSheetPool();
     SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyleName, SFX_STYLE_FAMILY_PAGE );
-    DBG_ASSERT( pStyleSheet, "PageStyle not found" );
+    OSL_ENSURE( pStyleSheet, "PageStyle not found" );
     if ( pStyleSheet )
     {
         SfxItemSet& rSet = pStyleSheet->GetItemSet();
@@ -1566,7 +1566,7 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
                     SfxStyleSheetBase* pStyleSheet
                         = pStylePool->Find( aOldName, SFX_STYLE_FAMILY_PAGE );
 
-                    DBG_ASSERT( pStyleSheet, "PageStyle not found! :-/" );
+                    OSL_ENSURE( pStyleSheet, "PageStyle not found! :-/" );
 
                     if ( pStyleSheet )
                     {
@@ -1577,10 +1577,10 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
                         SfxItemSet&     rStyleSet = pStyleSheet->GetItemSet();
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+                        OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                         SfxAbstractTabDialog* pDlg = pFact->CreateScStyleDlg( GetActiveDialogParent(), *pStyleSheet, RID_SCDLG_STYLES_PAGE, RID_SCDLG_STYLES_PAGE );
-                        DBG_ASSERT(pDlg, "Dialog create fail!");
+                        OSL_ENSURE(pDlg, "Dialog create fail!");
 
                         if ( pDlg->Execute() == RET_OK )
                         {
@@ -1642,7 +1642,7 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
                     SfxStyleSheetBase* pStyleSheet
                         = pStylePool->Find( aStr, SFX_STYLE_FAMILY_PAGE );
 
-                    DBG_ASSERT( pStyleSheet, "PageStyle not found! :-/" );
+                    OSL_ENSURE( pStyleSheet, "PageStyle not found! :-/" );
 
                     if ( pStyleSheet )
                     {
@@ -1732,14 +1732,14 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
                         }
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+                        OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                         SfxAbstractTabDialog* pDlg = pFact->CreateScHFEditDlg( SfxViewFrame::Current(),
                                                                                 GetActiveDialogParent(),
                                                                                 rStyleSet,
                                                                                 aStr,
                                                                                 RID_SCDLG_HFEDIT, nResId);
-                        DBG_ASSERT(pDlg, "Dialog create fail!");
+                        OSL_ENSURE(pDlg, "Dialog create fail!");
                         if ( pDlg->Execute() == RET_OK )
                         {
                             const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
@@ -1781,7 +1781,7 @@ void ScDocShell::GetStatePageStyle( SfxViewShell&   /* rCaller */,
                     ScStyleSheetPool*   pStylePool  = aDocument.GetStyleSheetPool();
                     SfxStyleSheetBase*  pStyleSheet = pStylePool->Find( aStr, SFX_STYLE_FAMILY_PAGE );
 
-                    DBG_ASSERT( pStyleSheet, "PageStyle not found! :-/" );
+                    OSL_ENSURE( pStyleSheet, "PageStyle not found! :-/" );
 
                     if ( pStyleSheet )
                     {
@@ -1986,7 +1986,7 @@ void ScDocShell::GetPageOnFromPageStyleSet( const SfxItemSet* pStyleSet,
                                             Find( aDocument.GetPageStyle( nCurTab ),
                                                   SFX_STYLE_FAMILY_PAGE );
 
-        DBG_ASSERT( pStyleSheet, "PageStyle not found! :-/" );
+        OSL_ENSURE( pStyleSheet, "PageStyle not found! :-/" );
 
         if ( pStyleSheet )
             pStyleSet = &pStyleSheet->GetItemSet();
@@ -1994,7 +1994,7 @@ void ScDocShell::GetPageOnFromPageStyleSet( const SfxItemSet* pStyleSet,
             rbHeader = rbFooter = false;
     }
 
-    DBG_ASSERT( pStyleSet, "PageStyle-Set not found! :-(" );
+    OSL_ENSURE( pStyleSet, "PageStyle-Set not found! :-(" );
 
     //--------------------------------------------------------------------
 
@@ -2211,8 +2211,8 @@ ScDocShell* ScDocShell::GetShellByNum( sal_uInt16 nDocNo )      // static
 
 IMPL_LINK( ScDocShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
 {
-    DBG_ASSERT( _pFileDlg, "ScDocShell::DialogClosedHdl(): no file dialog" );
-    DBG_ASSERT( pImpl->pDocInserter, "ScDocShell::DialogClosedHdl(): no document inserter" );
+    OSL_ENSURE( _pFileDlg, "ScDocShell::DialogClosedHdl(): no file dialog" );
+    OSL_ENSURE( pImpl->pDocInserter, "ScDocShell::DialogClosedHdl(): no document inserter" );
 
     if ( ERRCODE_NONE == _pFileDlg->GetError() )
     {

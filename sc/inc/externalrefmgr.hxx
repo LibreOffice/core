@@ -70,7 +70,8 @@ public:
     virtual ~ScExternalRefLink();
 
     virtual void Closed();
-    virtual void DataChanged(const String& rMimeType, const ::com::sun::star::uno::Any & rValue);
+    virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
+        const String& rMimeType, const ::com::sun::star::uno::Any & rValue);
     virtual void Edit(Window* pParent, const Link& rEndEditHdl);
 
     void SetDoReferesh(bool b);
@@ -672,6 +673,12 @@ public:
      */
     void notifyAllLinkListeners(sal_uInt16 nFileId, LinkUpdateType eType);
 
+    /**
+     * Check if the file specified by the path is a legitimate file that
+     * exists & can be loaded.
+     */
+    bool isFileLoadable(const String& rFile) const;
+
 private:
     ScExternalRefManager();
     ScExternalRefManager(const ScExternalRefManager&);
@@ -722,7 +729,6 @@ private:
     const ScDocument* getInMemorySrcDocument(sal_uInt16 nFileId);
     const ScDocument* getSrcDocument(sal_uInt16 nFileId);
     SfxObjectShellRef loadSrcDocument(sal_uInt16 nFileId, String& rFilter);
-    bool isFileLoadable(const String& rFile) const;
 
     void maybeLinkExternalFile(sal_uInt16 nFileId);
 

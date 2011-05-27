@@ -2382,7 +2382,7 @@ void ScXMLImport::SetType(uno::Reference <beans::XPropertySet>& rProperties,
     {
         if (rNumberFormat == -1)
             rProperties->getPropertyValue( sNumberFormat ) >>= rNumberFormat;
-        DBG_ASSERT(rNumberFormat != -1, "no NumberFormat");
+        OSL_ENSURE(rNumberFormat != -1, "no NumberFormat");
         sal_Bool bIsStandard;
         // sCurrentCurrency may be the ISO code abbreviation if the currency
         // symbol matches such, or if no match found the symbol itself!
@@ -2450,7 +2450,7 @@ void ScXMLImport::AddStyleRange(const table::CellRangeAddress& rCellRange)
         uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetModel(), uno::UNO_QUERY);
         if (xMultiServiceFactory.is())
             xSheetCellRanges.set(uno::Reference <sheet::XSheetCellRangeContainer>(xMultiServiceFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SheetCellRanges"))), uno::UNO_QUERY));
-        DBG_ASSERT(xSheetCellRanges.is(), "didn't get SheetCellRanges");
+        OSL_ENSURE(xSheetCellRanges.is(), "didn't get SheetCellRanges");
 
     }
     xSheetCellRanges->addRangeAddress(rCellRange, false);
@@ -2506,7 +2506,7 @@ void ScXMLImport::SetStyleToRanges()
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SheetCellRanges"))),
             uno::UNO_QUERY));
     }
-    DBG_ASSERT(xSheetCellRanges.is(), "didn't get SheetCellRanges");
+    OSL_ENSURE(xSheetCellRanges.is(), "didn't get SheetCellRanges");
 }
 
 void ScXMLImport::SetStyleToRange(const ScRange& rRange, const rtl::OUString* pStyleName,
@@ -2552,7 +2552,7 @@ sal_Bool ScXMLImport::SetNullDateOnUnitConverter()
 {
     if (!bNullDateSetted)
         bNullDateSetted = GetMM100UnitConverter().setNullDate(GetModel());
-    DBG_ASSERT(bNullDateSetted, "could not set the null date");
+    OSL_ENSURE(bNullDateSetted, "could not set the null date");
     return bNullDateSetted;
 }
 
@@ -2585,7 +2585,7 @@ throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::R
 
     uno::Reference<frame::XModel> xModel(xDoc, uno::UNO_QUERY);
     pDoc = ScXMLConverter::GetScDocument( xModel );
-    DBG_ASSERT( pDoc, "ScXMLImport::setTargetDocument - no ScDocument!" );
+    OSL_ENSURE( pDoc, "ScXMLImport::setTargetDocument - no ScDocument!" );
     if (!pDoc)
         throw lang::IllegalArgumentException();
 
@@ -2955,7 +2955,7 @@ void ScXMLImport::LockSolarMutex()
 
     if (nSolarMutexLocked == 0)
     {
-        DBG_ASSERT(!pSolarMutexGuard, "Solar Mutex is locked");
+        OSL_ENSURE(!pSolarMutexGuard, "Solar Mutex is locked");
         pSolarMutexGuard = new SolarMutexGuard();
     }
     ++nSolarMutexLocked;
@@ -2969,7 +2969,7 @@ void ScXMLImport::UnlockSolarMutex()
         nSolarMutexLocked--;
         if (nSolarMutexLocked == 0)
         {
-            DBG_ASSERT(pSolarMutexGuard, "Solar Mutex is always unlocked");
+            OSL_ENSURE(pSolarMutexGuard, "Solar Mutex is always unlocked");
             delete pSolarMutexGuard;
             pSolarMutexGuard = NULL;
         }

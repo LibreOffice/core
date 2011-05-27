@@ -137,7 +137,7 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
     bUsedForLink( false ),
     bUseInApi( false )
 {
-    DBG_ASSERT(pDoc->IsClipboard(), "wrong document");
+    OSL_ENSURE(pDoc->IsClipboard(), "wrong document");
 
     //
     // get aBlock from clipboard doc
@@ -168,7 +168,7 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
             nTab2 = i;
             bFirst = false;
         }
-    DBG_ASSERT(!bFirst, "no sheet selected");
+    OSL_ENSURE(!bFirst, "no sheet selected");
 
     //  only limit to used cells if whole sheet was marked
     //  (so empty cell areas can be copied)
@@ -304,7 +304,7 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
             //  if this transfer object was used to create a DDE link, filtered rows
             //  have to be included for subsequent calls (to be consistent with link data)
             if ( nFormat == SOT_FORMATSTR_ID_LINK )
-                bUsedForLink = sal_True;
+                bUsedForLink = true;
 
             sal_Bool bIncludeFiltered = pDoc->IsCutMode() || bUsedForLink;
 
@@ -395,7 +395,7 @@ sal_Bool ScTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObj
 {
     // called from SetObject, put data into stream
 
-    sal_Bool bRet = false;
+    bool bRet = false;
     switch (nUserObjectId)
     {
         case SCTRANS_TYPE_IMPEX:
@@ -760,7 +760,7 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
     if (!pDestDoc)
     {
         pDestDoc = pDoc;
-        DBG_ASSERT(nSubX==0&&nSubY==0, "can't move within the document");
+        OSL_ENSURE(nSubX==0&&nSubY==0, "can't move within the document");
     }
 
     //  In a clipboard doc the data don't have to be on the first sheet

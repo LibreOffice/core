@@ -37,7 +37,6 @@
 #include "scresid.hxx"
 #include "miscdlgs.hrc"
 
-#include <tools/debug.hxx>
 #include <tools/color.hxx>
 #include <sfx2/objsh.hxx>
 #include <svx/xtable.hxx>
@@ -100,7 +99,7 @@ void ScTabBgColorDlg::FillColorValueSets_Impl()
     const Size aSize15x15 = Size( 15, 15 );
     sal_uInt16 nSelectedItem = 0;
 
-    DBG_ASSERT( pDocSh, "DocShell not found!" );
+    OSL_ENSURE( pDocSh, "DocShell not found!" );
 
     if ( pDocSh && ( 0 != ( pItem = pDocSh->GetItem(SID_COLOR_TABLE) ) ) )
         pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();

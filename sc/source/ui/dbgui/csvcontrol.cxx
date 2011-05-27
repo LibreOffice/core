@@ -32,7 +32,6 @@
 
 // ============================================================================
 #include "csvcontrol.hxx"
-#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include "AccessibleCsvControl.hxx"
 
@@ -181,7 +180,7 @@ void ScCsvControl::DisableRepaint()
 
 void ScCsvControl::EnableRepaint( bool bInvalidate )
 {
-    DBG_ASSERT( IsNoRepaint(), "ScCsvControl::EnableRepaint - invalid call" );
+    OSL_ENSURE( IsNoRepaint(), "ScCsvControl::EnableRepaint - invalid call" );
     --mrData.mnNoRepaint;
     Repaint( bInvalidate );
 }

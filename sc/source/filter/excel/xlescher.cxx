@@ -88,7 +88,7 @@ double lclGetTwipsScale( MapUnit eMapUnit )
     {
         case MAP_TWIP:      fScale = 72 / POINTS_PER_INCH;  break;  // Calc twips <-> real twips
         case MAP_100TH_MM:  fScale = HMM_PER_TWIPS;         break;  // Calc twips <-> 1/100mm
-        default:            DBG_ERRORFILE( "lclGetTwipsScale - map unit not implemented" );
+        default:            OSL_FAIL( "lclGetTwipsScale - map unit not implemented" );
     }
     return fScale;
 }
@@ -223,7 +223,7 @@ void XclObjAnchor::SetRect( const Size& rPageSize, sal_Int32 nScaleX, sal_Int32 
     {
         case MAP_TWIP:      fScale = HMM_PER_TWIPS; break;  // Calc twips -> 1/100mm
         case MAP_100TH_MM:  fScale = 1.0;           break;  // Calc 1/100mm -> 1/100mm
-        default:            DBG_ERRORFILE( "XclObjAnchor::SetRect - map unit not implemented" );
+        default:            OSL_FAIL( "XclObjAnchor::SetRect - map unit not implemented" );
     }
 
     /*  In objects with DFF client anchor, the position of the shape is stored

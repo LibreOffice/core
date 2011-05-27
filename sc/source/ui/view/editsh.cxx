@@ -179,12 +179,12 @@ void ScEditShell::Execute( SfxRequest& rReq )
     SfxBindings&        rBindings   = pViewData->GetBindings();
 
     ScInputHandler* pHdl = GetMyInputHdl();
-    DBG_ASSERT(pHdl,"kein ScInputHandler");
+    OSL_ENSURE(pHdl,"kein ScInputHandler");
 
     EditView* pTopView   = pHdl->GetTopView();      // hat Eingabezeile den Focus?
     EditView* pTableView = pHdl->GetTableView();
 
-    DBG_ASSERT(pTableView,"no EditView :-(");
+    OSL_ENSURE(pTableView,"no EditView :-(");
     /* #i91683# No EditView if spell-check dialog is active and positioned on
      * an error and user immediately (without double click or F2) selected a
      * text portion of that cell with the mouse and wanted to modify it. */
@@ -421,10 +421,10 @@ void ScEditShell::Execute( SfxRequest& rReq )
             {
                 ScDocument*     pDoc = pViewData->GetDocument();
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+                OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                 AbstractScNamePasteDlg* pDlg = pFact->CreateScNamePasteDlg( pViewData->GetDialogParent(), pDoc->GetRangeName(), RID_SCDLG_NAMES_PASTE, false );
-                DBG_ASSERT(pDlg, "Dialog create fail!");
+                OSL_ENSURE(pDlg, "Dialog create fail!");
                 short nRet = pDlg->Execute();
                 // pDlg is needed below
 
@@ -457,11 +457,11 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 SfxObjectShell* pObjSh = pViewData->GetSfxDocShell();
 
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+                OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                 SfxAbstractTabDialog* pDlg = pFact->CreateScCharDlg( pViewData->GetDialogParent(), &aAttrs,
                                                                      pObjSh, RID_SCDLG_CHAR );
-                DBG_ASSERT(pDlg, "Dialog create fail!");
+                OSL_ENSURE(pDlg, "Dialog create fail!");
                 short nRet = pDlg->Execute();
                 // pDlg is needed below
 
@@ -1103,10 +1103,10 @@ void ScEditShell::ExecuteUndo(SfxRequest& rReq)
     //  Undo must be handled here because it's called for both EditViews
 
     ScInputHandler* pHdl = GetMyInputHdl();
-    DBG_ASSERT(pHdl,"no ScInputHandler");
+    OSL_ENSURE(pHdl,"no ScInputHandler");
     EditView* pTopView   = pHdl->GetTopView();
     EditView* pTableView = pHdl->GetTableView();
-    DBG_ASSERT(pTableView,"no EditView");
+    OSL_ENSURE(pTableView,"no EditView");
 
     pHdl->DataChanging();
 
@@ -1166,7 +1166,7 @@ void ScEditShell::GetUndoState(SfxItemSet &rSet)
     //  disable if no action in input line EditView
 
     ScInputHandler* pHdl = GetMyInputHdl();
-    DBG_ASSERT(pHdl,"no ScInputHandler");
+    OSL_ENSURE(pHdl,"no ScInputHandler");
     EditView* pTopView = pHdl->GetTopView();
     if (pTopView)
     {
@@ -1184,11 +1184,11 @@ void ScEditShell::ExecuteTrans( SfxRequest& rReq )
     if ( nType )
     {
         ScInputHandler* pHdl = GetMyInputHdl();
-        DBG_ASSERT( pHdl, "no ScInputHandler" );
+        OSL_ENSURE( pHdl, "no ScInputHandler" );
 
         EditView* pTopView   = pHdl->GetTopView();
         EditView* pTableView = pHdl->GetTableView();
-        DBG_ASSERT( pTableView, "no EditView" );
+        OSL_ENSURE( pTableView, "no EditView" );
 
         pHdl->DataChanging();
 

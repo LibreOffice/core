@@ -141,8 +141,8 @@ void ScTableLink::Edit( Window* pParent, const Link& rEndEditHdl )
     SvBaseLink::Edit( pParent, LINK( this, ScTableLink, TableEndEditHdl ) );
 }
 
-void ScTableLink::DataChanged( const String&,
-                                        const ::com::sun::star::uno::Any& )
+::sfx2::SvBaseLink::UpdateResult ScTableLink::DataChanged(
+    const String&, const ::com::sun::star::uno::Any& )
 {
     sfx2::LinkManager* pLinkManager=pImpl->m_pDocSh->GetDocument()->GetLinkManager();
     if (pLinkManager!=NULL)
@@ -158,6 +158,7 @@ void ScTableLink::DataChanged( const String&,
         if (!bInCreate)
             Refresh( aFile, aFilter, NULL, GetRefreshDelay() ); // don't load twice
     }
+    return SUCCESS;
 }
 
 void ScTableLink::Closed()

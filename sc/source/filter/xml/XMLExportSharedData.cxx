@@ -34,7 +34,6 @@
 // INCLUDE ---------------------------------------------------------------
 #include "XMLExportSharedData.hxx"
 #include "XMLExportIterator.hxx"
-#include <tools/debug.hxx>
 
 using namespace com::sun::star;
 
@@ -93,14 +92,14 @@ void ScMySharedData::AddDrawPage(const ScMyDrawPage& aDrawPage, const sal_Int32 
 
 void ScMySharedData::SetDrawPageHasForms(const sal_Int32 nTable, sal_Bool bHasForms)
 {
-    DBG_ASSERT(pDrawPages, "DrawPages not collected");
+    OSL_ENSURE(pDrawPages, "DrawPages not collected");
     if (pDrawPages)
         (*pDrawPages)[nTable].bHasForms = bHasForms;
 }
 
 uno::Reference<drawing::XDrawPage> ScMySharedData::GetDrawPage(const sal_Int32 nTable)
 {
-    DBG_ASSERT(pDrawPages, "DrawPages not collected");
+    OSL_ENSURE(pDrawPages, "DrawPages not collected");
     if (pDrawPages)
         return (*pDrawPages)[nTable].xDrawPage;
     else

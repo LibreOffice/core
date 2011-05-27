@@ -84,7 +84,7 @@ void ScScenarioListBox::UpdateEntries( const std::vector<String> &aNewEntryList 
         default:
         {
             // sheet contains scenarios
-            DBG_ASSERT( aNewEntryList.size() % 3 == 0, "ScScenarioListBox::UpdateEntries - wrong list size" );
+            OSL_ENSURE( aNewEntryList.size() % 3 == 0, "ScScenarioListBox::UpdateEntries - wrong list size" );
             SetUpdateMode( false );
 
             std::vector<String>::const_iterator iter;

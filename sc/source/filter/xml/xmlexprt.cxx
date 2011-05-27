@@ -85,7 +85,6 @@
 
 #include <rtl/ustring.hxx>
 
-#include <tools/debug.hxx>
 #include "tools/color.hxx"
 #include <rtl/math.hxx>
 #include <svl/zforlist.hxx>
@@ -1111,7 +1110,7 @@ void ScXMLExport::WriteRowContent()
 {
     ScMyRowFormatRange aRange;
     sal_Int32 nIndex(-1);
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     sal_Int32 nPrevCol(0);
 #endif
     sal_Int32 nCols(0);
@@ -1120,8 +1119,8 @@ void ScXMLExport::WriteRowContent()
     sal_Bool bIsFirst(sal_True);
     while (pRowFormatRanges->GetNext(aRange))
     {
-#ifdef DBG_UTIL
-        DBG_ASSERT(bIsFirst || (!bIsFirst && (nPrevCol + nCols == aRange.nStartColumn)), "here are some columns missing");
+#if OSL_DEBUG_LEVEL > 0
+        OSL_ENSURE(bIsFirst || (!bIsFirst && (nPrevCol + nCols == aRange.nStartColumn)), "here are some columns missing");
 #endif
         if (bIsFirst)
         {
@@ -1130,7 +1129,7 @@ void ScXMLExport::WriteRowContent()
             bIsAutoStyle = aRange.bIsAutoStyle;
             nCols = aRange.nRepeatColumns;
             bIsFirst = false;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
             nPrevCol = aRange.nStartColumn;
 #endif
         }
@@ -1157,7 +1156,7 @@ void ScXMLExport::WriteRowContent()
                 bIsAutoStyle = aRange.bIsAutoStyle;
                 nCols = aRange.nRepeatColumns;
                 nPrevValidationIndex = aRange.nValidationIndex;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
                 nPrevCol = aRange.nStartColumn;
 #endif
             }
@@ -1203,7 +1202,7 @@ void ScXMLExport::WriteRowStartTag(
     if ( nRow >= sal::static_int_cast<sal_Int32>( rRowDefaults.size() ) )
     {
         // used to happen with detective operations - if there are more cases, use the last row's style
-        DBG_ERRORFILE("WriteRowStartTag: not enough defaults");
+        OSL_FAIL("WriteRowStartTag: not enough defaults");
         nRow = rRowDefaults.size() - 1;
     }
     sal_Int32 nCellStyleIndex(rRowDefaults[nRow].nIndex);
@@ -1390,7 +1389,7 @@ void ScXMLExport::ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 
                 pRowFormatRanges->Clear();
                 pCellStyles->GetFormatRanges(0, pSharedData->GetLastColumn(nSheet), nStartRow + nRows, nSheet, pRowFormatRanges);
                 sal_Int32 nMaxRows = pRowFormatRanges->GetMaxRows();
-                DBG_ASSERT(nMaxRows, "something wents wrong");
+                OSL_ENSURE(nMaxRows, "something wents wrong");
                 if (nMaxRows >= nTotalRows - nRows)
                 {
                     OpenRow(nSheet, nStartRow + nRows, nTotalRows - nRows, aRowAttr);
@@ -2175,7 +2174,7 @@ void ScXMLExport::_ExportAutoStyles()
                     //! separate method AddStyleFromNote needed?
 
                     ScPostIt* pNote = pDoc->GetNote( aPos );
-                    DBG_ASSERT( pNote, "note not found" );
+                    OSL_ENSURE( pNote, "note not found" );
                     if (pNote)
                     {
                         SdrCaptionObj* pDrawObj = pNote->GetOrCreateCaption( aPos );
@@ -2221,7 +2220,7 @@ void ScXMLExport::_ExportAutoStyles()
                 if (bCopySheet)
                 {
                     ScPostIt* pNote = pDoc->GetNote( aPos );
-                    DBG_ASSERT( pNote, "note not found" );
+                    OSL_ENSURE( pNote, "note not found" );
                     if (pNote)
                     {
                         SdrCaptionObj* pDrawObj = pNote->GetOrCreateCaption( aPos );
@@ -2256,7 +2255,7 @@ void ScXMLExport::_ExportAutoStyles()
                 if (bCopySheet)
                 {
                     ScPostIt* pNote = pDoc->GetNote( aPos );
-                    DBG_ASSERT( pNote, "note not found" );
+                    OSL_ENSURE( pNote, "note not found" );
                     if (pNote)
                     {
                         SdrCaptionObj* pDrawObj = pNote->GetOrCreateCaption( aPos );
@@ -2547,7 +2546,7 @@ void ScXMLExport::CollectInternalShape( uno::Reference< drawing::XShape > xShape
 
                 // #i60851# When the file is saved while editing a new note,
                 // the cell is still empty -> last column/row must be updated
-                DBG_ASSERT( pCaptData->maStart.Tab() == nCurrentTable, "invalid table in object data" );
+                OSL_ENSURE( pCaptData->maStart.Tab() == nCurrentTable, "invalid table in object data" );
                 pSharedData->SetLastColumn( nCurrentTable, pCaptData->maStart.Col() );
                 pSharedData->SetLastRow( nCurrentTable, pCaptData->maStart.Row() );
             }
@@ -2607,7 +2606,7 @@ sal_Bool ScXMLExport::GetMerged (const table::CellRangeAddress* pCellAddress,
                 ++nCol;
         }
     }
-    DBG_ASSERT(!(!bReady && nEndRow > nRow && nEndCol > nCol), "should not be possible");
+    OSL_ENSURE(!(!bReady && nEndRow > nRow && nEndCol > nCol), "should not be possible");
     return !bReady;
 }
 
@@ -2751,7 +2750,7 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const Reference<sheet::XSpreadshe
         ::xmloff::OOfficeFormsExport aForms(*this);
         GetFormExport()->exportForms( xDrawPage );
         sal_Bool bRet(GetFormExport()->seekPage( xDrawPage ));
-        DBG_ASSERT( bRet, "OFormLayerXMLExport::seekPage failed!" );
+        OSL_ENSURE( bRet, "OFormLayerXMLExport::seekPage failed!" );
         (void)bRet;     // avoid warning in product version
     }
     if (pSharedData->HasDrawPage())
@@ -3190,7 +3189,7 @@ void ScXMLExport::WriteTableShapes()
     ScMyTableShapes* pTableShapes(pSharedData->GetTableShapes());
     if (pTableShapes && !(*pTableShapes)[nCurrentTable].empty())
     {
-        DBG_ASSERT(pTableShapes->size() > static_cast<size_t>(nCurrentTable), "wrong Table");
+        OSL_ENSURE(pTableShapes->size() > static_cast<size_t>(nCurrentTable), "wrong Table");
         SvXMLElementExport aShapesElem(*this, XML_NAMESPACE_TABLE, XML_SHAPES, sal_True, false);
         ScMyTableXShapes::iterator aItr((*pTableShapes)[nCurrentTable].begin());
         ScMyTableXShapes::iterator aEndItr((*pTableShapes)[nCurrentTable].end());
@@ -4175,7 +4174,7 @@ void ScXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& 
 
             bool bVBACompat = false;
             uno::Reference <container::XNameAccess> xCodeNameAccess;
-            DBG_ASSERT( pDoc, "ScXMLExport::GetConfigurationSettings - no ScDocument!" );
+            OSL_ENSURE( pDoc, "ScXMLExport::GetConfigurationSettings - no ScDocument!" );
             if( pDoc && pDoc->IsInVBAMode() )
             {
                 // VBA compatibility mode
@@ -4326,7 +4325,7 @@ void SAL_CALL ScXMLExport::setSourceDocument( const uno::Reference<lang::XCompon
     SvXMLExport::setSourceDocument( xComponent );
 
     pDoc = ScXMLConverter::GetScDocument( GetModel() );
-    DBG_ASSERT( pDoc, "ScXMLExport::setSourceDocument - no ScDocument!" );
+    OSL_ENSURE( pDoc, "ScXMLExport::setSourceDocument - no ScDocument!" );
     if (!pDoc)
         throw lang::IllegalArgumentException();
 

@@ -76,10 +76,10 @@ using namespace ::com::sun::star;
 
 // Global data ================================================================
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
 XclDebugObjCounter::~XclDebugObjCounter()
 {
-    DBG_ASSERT( mnObjCnt == 0, "XclDebugObjCounter::~XclDebugObjCounter - wrong root object count" );
+    OSL_ENSURE( mnObjCnt == 0, "XclDebugObjCounter::~XclDebugObjCounter - wrong root object count" );
 }
 #endif
 
@@ -119,7 +119,7 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
         case SCRIPTTYPE_LATIN:      mnDefApiScript = ApiScriptType::LATIN;      break;
         case SCRIPTTYPE_ASIAN:      mnDefApiScript = ApiScriptType::ASIAN;      break;
         case SCRIPTTYPE_COMPLEX:    mnDefApiScript = ApiScriptType::COMPLEX;    break;
-        default:    DBG_ERRORFILE( "XclRootData::XclRootData - unknown script type" );
+        default:    OSL_FAIL( "XclRootData::XclRootData - unknown script type" );
     }
 
     // maximum cell position
@@ -174,7 +174,7 @@ XclRootData::~XclRootData()
 XclRoot::XclRoot( XclRootData& rRootData ) :
     mrData( rRootData )
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     ++mrData.mnObjCnt;
 #endif
 
@@ -188,14 +188,14 @@ XclRoot::XclRoot( XclRootData& rRootData ) :
 XclRoot::XclRoot( const XclRoot& rRoot ) :
     mrData( rRoot.mrData )
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     ++mrData.mnObjCnt;
 #endif
 }
 
 XclRoot::~XclRoot()
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     --mrData.mnObjCnt;
 #endif
 }
@@ -204,7 +204,7 @@ XclRoot& XclRoot::operator=( const XclRoot& rRoot )
 {
     (void)rRoot;    // avoid compiler warning
     // allowed for assignment in derived classes - but test if the same root data is used
-    DBG_ASSERT( &mrData == &rRoot.mrData, "XclRoot::operator= - incompatible root data" );
+    OSL_ENSURE( &mrData == &rRoot.mrData, "XclRoot::operator= - incompatible root data" );
     return *this;
 }
 
@@ -229,7 +229,7 @@ void XclRoot::SetCharWidth( const XclFontData& rFontData )
     if( mrData.mnCharWidth <= 0 )
     {
         // #i48717# Win98 with HP LaserJet returns 0
-        DBG_ERRORFILE( "XclRoot::SetCharWidth - invalid character width (no printer?)" );
+        OSL_FAIL( "XclRoot::SetCharWidth - invalid character width (no printer?)" );
         mrData.mnCharWidth = 11 * rFontData.mnHeight / 20;
     }
 }

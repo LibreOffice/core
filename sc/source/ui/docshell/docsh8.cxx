@@ -132,7 +132,7 @@ namespace
         _rDrvMgr.set( xFactory->createInstance(
                             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_SERVICE_DRVMAN )) ),
                             uno::UNO_QUERY);
-        DBG_ASSERT( _rDrvMgr.is(), "can't get DriverManager" );
+        OSL_ENSURE( _rDrvMgr.is(), "can't get DriverManager" );
         if (!_rDrvMgr.is()) return SCERR_EXPORT_CONNECT;
 
         // get connection
@@ -146,7 +146,7 @@ namespace
         ::std::vector< rtl_TextEncoding >::iterator aIter = ::std::find(aEncodings.begin(),aEncodings.end(),(rtl_TextEncoding) eCharSet);
         if ( aIter == aEncodings.end() )
         {
-            DBG_ERRORFILE( "DBaseImport: dbtools::OCharsetMap doesn't know text encoding" );
+            OSL_FAIL( "DBaseImport: dbtools::OCharsetMap doesn't know text encoding" );
             return SCERR_IMPORT_CONNECT;
         } // if ( aIter == aMap.end() )
         rtl::OUString aCharSetStr;
@@ -199,7 +199,7 @@ sal_Bool ScDocShell::MoveFile( const INetURLObject& rSourceObj, const INetURLObj
         }
         else
         {
-            DBG_ERRORFILE( "transfer command not available" );
+            OSL_FAIL( "transfer command not available" );
         }
     }
     catch( uno::Exception& )
@@ -246,7 +246,7 @@ sal_Bool ScDocShell::IsDocument( const INetURLObject& rURL )
     catch( uno::Exception& )
     {
         // ucb may throw different exceptions on failure now - warning only
-        DBG_WARNING( "Any other exception" );
+        OSL_FAIL( "Any other exception" );
     }
 
     return bRet;
@@ -333,7 +333,7 @@ sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet
                             uno::UNO_QUERY);
         ::utl::DisposableComponent aRowSetHelper(xRowSet);
         uno::Reference<beans::XPropertySet> xRowProp( xRowSet, uno::UNO_QUERY );
-        DBG_ASSERT( xRowProp.is(), "can't get RowSet" );
+        OSL_ENSURE( xRowProp.is(), "can't get RowSet" );
         if (!xRowProp.is()) return SCERR_IMPORT_CONNECT;
 
         sal_Int32 nType = sdb::CommandType::TABLE;
@@ -376,7 +376,7 @@ sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet
                     static_cast<SCSIZE>(nRowCount) + 1 );
 
         uno::Reference<sdbc::XRow> xRow( xRowSet, uno::UNO_QUERY );
-        DBG_ASSERT( xRow.is(), "can't get Row" );
+        OSL_ENSURE( xRow.is(), "can't get Row" );
         if (!xRow.is()) return SCERR_IMPORT_CONNECT;
 
         // currency flag is not needed for dBase
@@ -853,23 +853,23 @@ sal_uLong ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet
 
         // create table
         uno::Reference<sdbcx::XTablesSupplier> xTablesSupp =xDDSup->getDataDefinitionByConnection( xConnection );
-        DBG_ASSERT( xTablesSupp.is(), "can't get Data Definition" );
+        OSL_ENSURE( xTablesSupp.is(), "can't get Data Definition" );
         if (!xTablesSupp.is()) return SCERR_EXPORT_CONNECT;
 
         uno::Reference<container::XNameAccess> xTables = xTablesSupp->getTables();
-        DBG_ASSERT( xTables.is(), "can't get Tables" );
+        OSL_ENSURE( xTables.is(), "can't get Tables" );
         if (!xTables.is()) return SCERR_EXPORT_CONNECT;
 
         uno::Reference<sdbcx::XDataDescriptorFactory> xTablesFact( xTables, uno::UNO_QUERY );
-        DBG_ASSERT( xTablesFact.is(), "can't get tables factory" );
+        OSL_ENSURE( xTablesFact.is(), "can't get tables factory" );
         if (!xTablesFact.is()) return SCERR_EXPORT_CONNECT;
 
         uno::Reference<sdbcx::XAppend> xTablesAppend( xTables, uno::UNO_QUERY );
-        DBG_ASSERT( xTablesAppend.is(), "can't get tables XAppend" );
+        OSL_ENSURE( xTablesAppend.is(), "can't get tables XAppend" );
         if (!xTablesAppend.is()) return SCERR_EXPORT_CONNECT;
 
         uno::Reference<beans::XPropertySet> xTableDesc = xTablesFact->createDataDescriptor();
-        DBG_ASSERT( xTableDesc.is(), "can't get table descriptor" );
+        OSL_ENSURE( xTableDesc.is(), "can't get table descriptor" );
         if (!xTableDesc.is()) return SCERR_EXPORT_CONNECT;
 
         aAny <<= rtl::OUString( aTabName );
@@ -878,19 +878,19 @@ sal_uLong ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet
         // create columns
 
         uno::Reference<sdbcx::XColumnsSupplier> xColumnsSupp( xTableDesc, uno::UNO_QUERY );
-        DBG_ASSERT( xColumnsSupp.is(), "can't get columns supplier" );
+        OSL_ENSURE( xColumnsSupp.is(), "can't get columns supplier" );
         if (!xColumnsSupp.is()) return SCERR_EXPORT_CONNECT;
 
         uno::Reference<container::XNameAccess> xColumns = xColumnsSupp->getColumns();
-        DBG_ASSERT( xColumns.is(), "can't get columns" );
+        OSL_ENSURE( xColumns.is(), "can't get columns" );
         if (!xColumns.is()) return SCERR_EXPORT_CONNECT;
 
         uno::Reference<sdbcx::XDataDescriptorFactory> xColumnsFact( xColumns, uno::UNO_QUERY );
-        DBG_ASSERT( xColumnsFact.is(), "can't get columns factory" );
+        OSL_ENSURE( xColumnsFact.is(), "can't get columns factory" );
         if (!xColumnsFact.is()) return SCERR_EXPORT_CONNECT;
 
         uno::Reference<sdbcx::XAppend> xColumnsAppend( xColumns, uno::UNO_QUERY );
-        DBG_ASSERT( xColumnsAppend.is(), "can't get columns XAppend" );
+        OSL_ENSURE( xColumnsAppend.is(), "can't get columns XAppend" );
         if (!xColumnsAppend.is()) return SCERR_EXPORT_CONNECT;
 
         const rtl::OUString* pColNames = aColNames.getConstArray();
@@ -902,7 +902,7 @@ sal_uLong ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet
         for (nCol=0; nCol<nColCount; nCol++)
         {
             uno::Reference<beans::XPropertySet> xColumnDesc = xColumnsFact->createDataDescriptor();
-            DBG_ASSERT( xColumnDesc.is(), "can't get column descriptor" );
+            OSL_ENSURE( xColumnDesc.is(), "can't get column descriptor" );
             if (!xColumnDesc.is()) return SCERR_EXPORT_CONNECT;
 
             aAny <<= pColNames[nCol];
@@ -929,7 +929,7 @@ sal_uLong ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet
                             uno::UNO_QUERY);
         ::utl::DisposableComponent aRowSetHelper(xRowSet);
         uno::Reference<beans::XPropertySet> xRowProp( xRowSet, uno::UNO_QUERY );
-        DBG_ASSERT( xRowProp.is(), "can't get RowSet" );
+        OSL_ENSURE( xRowProp.is(), "can't get RowSet" );
         if (!xRowProp.is()) return SCERR_EXPORT_CONNECT;
 
         aAny <<= xConnection;
@@ -949,11 +949,11 @@ sal_uLong ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet
         // write data rows
 
         uno::Reference<sdbc::XResultSetUpdate> xResultUpdate( xRowSet, uno::UNO_QUERY );
-        DBG_ASSERT( xResultUpdate.is(), "can't get XResultSetUpdate" );
+        OSL_ENSURE( xResultUpdate.is(), "can't get XResultSetUpdate" );
         if (!xResultUpdate.is()) return SCERR_EXPORT_CONNECT;
 
         uno::Reference<sdbc::XRowUpdate> xRowUpdate( xRowSet, uno::UNO_QUERY );
-        DBG_ASSERT( xRowUpdate.is(), "can't get XRowUpdate" );
+        OSL_ENSURE( xRowUpdate.is(), "can't get XRowUpdate" );
         if (!xRowUpdate.is()) return SCERR_EXPORT_CONNECT;
 
         SCROW nFirstDataRow = ( bHasFieldNames ? nFirstRow + 1 : nFirstRow );
@@ -1075,7 +1075,7 @@ sal_uLong ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet
             // SQL error 22001: String length exceeds field width (after encoding).
             bool bEncErr = (nError == 22018);
             bool bIsOctetTextEncoding = rtl_isOctetTextEncoding( eCharSet);
-            DBG_ASSERT( !bEncErr || bIsOctetTextEncoding, "ScDocShell::DBaseExport: encoding error and not an octect textencoding");
+            OSL_ENSURE( !bEncErr || bIsOctetTextEncoding, "ScDocShell::DBaseExport: encoding error and not an octect textencoding");
             SCCOL nDocCol = nFirstCol;
             const sal_Int32* pColTypes = aColTypes.getConstArray();
             const sal_Int32* pColLengths = aColLengths.getConstArray();

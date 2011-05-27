@@ -191,7 +191,7 @@ void ScDocument::DelBroadcastAreasInRange( const ScRange& rRange )
 void ScDocument::StartListeningCell( const ScAddress& rAddress,
                                             SvtListener* pListener )
 {
-    DBG_ASSERT(pListener, "StartListeningCell: pListener Null");
+    OSL_ENSURE(pListener, "StartListeningCell: pListener Null");
     SCTAB nTab = rAddress.Tab();
     if (pTab[nTab])
         pTab[nTab]->StartListening( rAddress, pListener );
@@ -200,7 +200,7 @@ void ScDocument::StartListeningCell( const ScAddress& rAddress,
 void ScDocument::EndListeningCell( const ScAddress& rAddress,
                                             SvtListener* pListener )
 {
-    DBG_ASSERT(pListener, "EndListeningCell: pListener Null");
+    OSL_ENSURE(pListener, "EndListeningCell: pListener Null");
     SCTAB nTab = rAddress.Tab();
     if (pTab[nTab])
         pTab[nTab]->EndListening( rAddress, pListener );
@@ -209,7 +209,7 @@ void ScDocument::EndListeningCell( const ScAddress& rAddress,
 
 void ScDocument::PutInFormulaTree( ScFormulaCell* pCell )
 {
-    DBG_ASSERT( pCell, "PutInFormulaTree: pCell Null" );
+    OSL_ENSURE( pCell, "PutInFormulaTree: pCell Null" );
     RemoveFromFormulaTree( pCell );
     // anhaengen
     if ( pEOFormulaTree )
@@ -225,7 +225,7 @@ void ScDocument::PutInFormulaTree( ScFormulaCell* pCell )
 
 void ScDocument::RemoveFromFormulaTree( ScFormulaCell* pCell )
 {
-    DBG_ASSERT( pCell, "RemoveFromFormulaTree: pCell Null" );
+    OSL_ENSURE( pCell, "RemoveFromFormulaTree: pCell Null" );
     ScFormulaCell* pPrev = pCell->GetPrevious();
     // wenn die Zelle die erste oder sonstwo ist
     if ( pPrev || pFormulaTree == pCell )
@@ -246,13 +246,13 @@ void ScDocument::RemoveFromFormulaTree( ScFormulaCell* pCell )
             nFormulaCodeInTree -= nRPN;
         else
         {
-            DBG_ERRORFILE( "RemoveFromFormulaTree: nFormulaCodeInTree < nRPN" );
+            OSL_FAIL( "RemoveFromFormulaTree: nFormulaCodeInTree < nRPN" );
             nFormulaCodeInTree = 0;
         }
     }
     else if ( !pFormulaTree && nFormulaCodeInTree )
     {
-        DBG_ERRORFILE( "!pFormulaTree && nFormulaCodeInTree != 0" );
+        OSL_FAIL( "!pFormulaTree && nFormulaCodeInTree != 0" );
         nFormulaCodeInTree = 0;
     }
 }
@@ -266,7 +266,7 @@ sal_Bool ScDocument::IsInFormulaTree( ScFormulaCell* pCell ) const
 
 void ScDocument::CalcFormulaTree( sal_Bool bOnlyForced, sal_Bool bNoProgress )
 {
-    DBG_ASSERT( !IsCalculatingFormulaTree(), "CalcFormulaTree recursion" );
+    OSL_ENSURE( !IsCalculatingFormulaTree(), "CalcFormulaTree recursion" );
     // never ever recurse into this, might end up lost in infinity
     if ( IsCalculatingFormulaTree() )
         return ;
@@ -386,7 +386,7 @@ void ScDocument::ClearFormulaTree()
 
 void ScDocument::AppendToFormulaTrack( ScFormulaCell* pCell )
 {
-    DBG_ASSERT( pCell, "AppendToFormulaTrack: pCell Null" );
+    OSL_ENSURE( pCell, "AppendToFormulaTrack: pCell Null" );
     // Zelle kann nicht in beiden Listen gleichzeitig sein
     RemoveFromFormulaTrack( pCell );
     RemoveFromFormulaTree( pCell );
@@ -403,7 +403,7 @@ void ScDocument::AppendToFormulaTrack( ScFormulaCell* pCell )
 
 void ScDocument::RemoveFromFormulaTrack( ScFormulaCell* pCell )
 {
-    DBG_ASSERT( pCell, "RemoveFromFormulaTrack: pCell Null" );
+    OSL_ENSURE( pCell, "RemoveFromFormulaTrack: pCell Null" );
     ScFormulaCell* pPrev = pCell->GetPreviousTrack();
     // wenn die Zelle die erste oder sonstwo ist
     if ( pPrev || pFormulaTrack == pCell )
@@ -482,7 +482,7 @@ void ScDocument::TrackFormulas( sal_uLong nHintId )
                 SetForcedFormulaPending( sal_True );
         }
     }
-    DBG_ASSERT( nFormulaTrackCount==0, "TrackFormulas: nFormulaTrackCount!=0" );
+    OSL_ENSURE( nFormulaTrackCount==0, "TrackFormulas: nFormulaTrackCount!=0" );
 }
 
 

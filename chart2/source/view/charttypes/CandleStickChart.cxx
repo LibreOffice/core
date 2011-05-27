@@ -40,7 +40,6 @@
 #include "FormattedStringHelper.hxx"
 #include "DataSeriesHelper.hxx"
 #include "DateHelper.hxx"
-#include <tools/debug.hxx>
 #include <rtl/math.hxx>
 #include <editeng/unoprnms.hxx>
 
@@ -124,7 +123,7 @@ void CandleStickChart::createShapes()
     if( m_nDimension!=2 )
         return;
 
-    DBG_ASSERT(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"CandleStickChart is not proper initialized");
+    OSL_ENSURE(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"CandleStickChart is not proper initialized");
     if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()))
         return;
 

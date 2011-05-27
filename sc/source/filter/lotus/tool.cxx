@@ -87,7 +87,7 @@ SCROW                       LotusRangeList::nEingRow;
 void PutFormString( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Char* pString )
 {
     // Label-Format-Auswertung
-    DBG_ASSERT( pString != NULL, "PutFormString(): pString == NULL" );
+    OSL_ENSURE( pString != NULL, "PutFormString(): pString == NULL" );
 
     sal_Char            cForm;
     SvxHorJustifyItem*  pJustify = NULL;
@@ -490,7 +490,7 @@ LR_ID LotusRangeList::GetIndex( const LotusRange &rRef )
 
 void LotusRangeList::Append( LotusRange* pLR, const String& rName )
 {
-    DBG_ASSERT( pLR, "*LotusRangeList::Append(): das wird nichts!" );
+    OSL_ENSURE( pLR, "*LotusRangeList::Append(): das wird nichts!" );
     List::Insert( pLR, CONTAINER_APPEND );
 
     ScTokenArray    aTokArray;

@@ -34,7 +34,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/help.hxx>
-#include <tools/debug.hxx>
 
 #include "fieldwnd.hxx"
 #include "pvlaydlg.hxx"
@@ -114,7 +113,7 @@ bool ScDPFieldControlBase::IsExistingIndex( size_t nIndex ) const
 
 void ScDPFieldControlBase::AddField( const String& rText, size_t nNewIndex )
 {
-    DBG_ASSERT( nNewIndex == maFieldNames.size(), "ScDPFieldWindow::AddField - invalid index" );
+    OSL_ENSURE( nNewIndex == maFieldNames.size(), "ScDPFieldWindow::AddField - invalid index" );
     if( IsValidIndex( nNewIndex ) )
     {
         maFieldNames.push_back( FieldName( rText, true ) );

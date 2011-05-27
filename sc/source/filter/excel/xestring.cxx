@@ -187,15 +187,15 @@ void XclExpString::AppendByte( sal_Unicode cChar, rtl_TextEncoding eTextEnc )
 void XclExpString::SetFormats( const XclFormatRunVec& rFormats )
 {
     maFormats = rFormats;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     if( IsRich() )
     {
         XclFormatRunVec::const_iterator aCurr = maFormats.begin();
         XclFormatRunVec::const_iterator aPrev = aCurr;
         XclFormatRunVec::const_iterator aEnd = maFormats.end();
         for( ++aCurr; aCurr != aEnd; ++aCurr, ++aPrev )
-            DBG_ASSERT( aPrev->mnChar < aCurr->mnChar, "XclExpString::SetFormats - invalid char order" );
-        DBG_ASSERT( aPrev->mnChar <= mnLen, "XclExpString::SetFormats - invalid char index" );
+            OSL_ENSURE( aPrev->mnChar < aCurr->mnChar, "XclExpString::SetFormats - invalid char order" );
+        OSL_ENSURE( aPrev->mnChar <= mnLen, "XclExpString::SetFormats - invalid char index" );
     }
 #endif
     LimitFormatCount( mbIsBiff8 ? EXC_STR_MAXLEN : EXC_STR_MAXLEN_8BIT );
@@ -203,7 +203,7 @@ void XclExpString::SetFormats( const XclFormatRunVec& rFormats )
 
 void XclExpString::AppendFormat( sal_uInt16 nChar, sal_uInt16 nFontIdx, bool bDropDuplicate )
 {
-    DBG_ASSERT( maFormats.empty() || (maFormats.back().mnChar < nChar), "XclExpString::AppendFormat - invalid char index" );
+    OSL_ENSURE( maFormats.empty() || (maFormats.back().mnChar < nChar), "XclExpString::AppendFormat - invalid char index" );
     size_t nMaxSize = static_cast< size_t >( mbIsBiff8 ? EXC_STR_MAXLEN : EXC_STR_MAXLEN_8BIT );
     if( maFormats.empty() || ((maFormats.size() < nMaxSize) && (!bDropDuplicate || (maFormats.back().mnFontIdx != nFontIdx))) )
         maFormats.push_back( XclFormatRun( nChar, nFontIdx ) );
@@ -288,7 +288,7 @@ sal_Size XclExpString::GetSize() const
 
 sal_uInt16 XclExpString::GetChar( sal_uInt16 nCharIdx ) const
 {
-    DBG_ASSERT( nCharIdx < Len(), "XclExpString::GetChar - invalid character index" );
+    OSL_ENSURE( nCharIdx < Len(), "XclExpString::GetChar - invalid character index" );
     return static_cast< sal_uInt16 >( mbIsBiff8 ? maUniBuffer[ nCharIdx ] : maCharBuffer[ nCharIdx ] );
 }
 
@@ -321,7 +321,7 @@ void XclExpString::WriteFlagField( XclExpStream& rStrm ) const
 
 void XclExpString::WriteHeader( XclExpStream& rStrm ) const
 {
-    DBG_ASSERT( !mb8BitLen || (mnLen < 256), "XclExpString::WriteHeader - string too long" );
+    OSL_ENSURE( !mb8BitLen || (mnLen < 256), "XclExpString::WriteHeader - string too long" );
     PrepareWrite( rStrm, GetHeaderSize() );
     // length
     WriteLenField( rStrm );
@@ -378,9 +378,9 @@ void XclExpString::Write( XclExpStream& rStrm ) const
 
 void XclExpString::WriteHeaderToMem( sal_uInt8* pnMem ) const
 {
-    DBG_ASSERT( pnMem, "XclExpString::WriteHeaderToMem - no memory to write to" );
-    DBG_ASSERT( !mb8BitLen || (mnLen < 256), "XclExpString::WriteHeaderToMem - string too long" );
-    DBG_ASSERT( !IsWriteFormats(), "XclExpString::WriteHeaderToMem - formatted strings not supported" );
+    OSL_ENSURE( pnMem, "XclExpString::WriteHeaderToMem - no memory to write to" );
+    OSL_ENSURE( !mb8BitLen || (mnLen < 256), "XclExpString::WriteHeaderToMem - string too long" );
+    OSL_ENSURE( !IsWriteFormats(), "XclExpString::WriteHeaderToMem - formatted strings not supported" );
     // length
     if( mb8BitLen )
     {
@@ -399,7 +399,7 @@ void XclExpString::WriteHeaderToMem( sal_uInt8* pnMem ) const
 
 void XclExpString::WriteBufferToMem( sal_uInt8* pnMem ) const
 {
-    DBG_ASSERT( pnMem, "XclExpString::WriteBufferToMem - no memory to write to" );
+    OSL_ENSURE( pnMem, "XclExpString::WriteBufferToMem - no memory to write to" );
     if( !IsEmpty() )
     {
         if( mbIsBiff8 )
@@ -499,7 +499,7 @@ void XclExpString::SetStrLen( sal_Int32 nNewLen )
 
 void XclExpString::CharsToBuffer( const sal_Unicode* pcSource, sal_Int32 nBegin, sal_Int32 nLen )
 {
-    DBG_ASSERT( maUniBuffer.size() >= static_cast< size_t >( nBegin + nLen ),
+    OSL_ENSURE( maUniBuffer.size() >= static_cast< size_t >( nBegin + nLen ),
         "XclExpString::CharsToBuffer - char buffer invalid" );
     ScfUInt16Vec::iterator aBeg = maUniBuffer.begin() + nBegin;
     ScfUInt16Vec::iterator aEnd = aBeg + nLen;
@@ -516,7 +516,7 @@ void XclExpString::CharsToBuffer( const sal_Unicode* pcSource, sal_Int32 nBegin,
 
 void XclExpString::CharsToBuffer( const sal_Char* pcSource, sal_Int32 nBegin, sal_Int32 nLen )
 {
-    DBG_ASSERT( maCharBuffer.size() >= static_cast< size_t >( nBegin + nLen ),
+    OSL_ENSURE( maCharBuffer.size() >= static_cast< size_t >( nBegin + nLen ),
         "XclExpString::CharsToBuffer - char buffer invalid" );
     ScfUInt8Vec::iterator aBeg = maCharBuffer.begin() + nBegin;
     ScfUInt8Vec::iterator aEnd = aBeg + nLen;
@@ -576,7 +576,7 @@ void XclExpString::InitAppend( sal_Int32 nAddLen )
 
 void XclExpString::BuildAppend( const sal_Unicode* pcSource, sal_Int32 nAddLen )
 {
-    DBG_ASSERT( mbIsBiff8, "XclExpString::BuildAppend - must not be called at byte strings" );
+    OSL_ENSURE( mbIsBiff8, "XclExpString::BuildAppend - must not be called at byte strings" );
     if( mbIsBiff8 )
     {
         sal_uInt16 nOldLen = mnLen;
@@ -587,7 +587,7 @@ void XclExpString::BuildAppend( const sal_Unicode* pcSource, sal_Int32 nAddLen )
 
 void XclExpString::BuildAppend( const sal_Char* pcSource, sal_Int32 nAddLen )
 {
-    DBG_ASSERT( !mbIsBiff8, "XclExpString::BuildAppend - must not be called at unicode strings" );
+    OSL_ENSURE( !mbIsBiff8, "XclExpString::BuildAppend - must not be called at unicode strings" );
     if( !mbIsBiff8 )
     {
         sal_uInt16 nOldLen = mnLen;

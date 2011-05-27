@@ -34,7 +34,6 @@
 
 #define SC_RANGELST_CXX         //fuer ICC
 
-#include <tools/debug.hxx>
 #include <stdlib.h>             // qsort
 #include <unotools/collatorwrapper.hxx>
 
@@ -260,7 +259,9 @@ void ScRangeList::Join( const ScRange& r, bool bIsInList )
     }
     bool bJoinedInput = false;
 
-    for ( size_t i = 0, nRanges = maRanges.size(); i < nRanges && pOver; ++i )
+    // We need to query the size of the container dynamically since its size
+    // may change during the loop.
+    for ( size_t i = 0; i < maRanges.size() && pOver; ++i )
     {
         ScRange* p = maRanges[i];
         if ( p == pOver )
@@ -315,6 +316,7 @@ void ScRangeList::Join( const ScRange& r, bool bIsInList )
             if ( bIsInList )
             {   // innerhalb der Liste Range loeschen
                 Remove(nOldPos);
+                i--;
                 delete pOver;
                 pOver = NULL;
                 if ( nOldPos )
@@ -804,7 +806,7 @@ void ScRangePairList::Join( const ScRangePair& r, bool bIsInList )
     }
     bool bJoinedInput = false;
 
-    for ( size_t i = 0, nPairs = maPairs.size(); i < nPairs && pOver; ++i )
+    for ( size_t i = 0; i < maPairs.size() && pOver; ++i )
     {
         ScRangePair* p = maPairs[ i ];
         if ( p == pOver )
@@ -878,6 +880,7 @@ void ScRangePairList::Join( const ScRangePair& r, bool bIsInList )
             if ( bIsInList )
             {   // innerhalb der Liste RangePair loeschen
                 Remove( nOldPos );
+                i--;
                 delete pOver;
                 pOver = NULL;
                 if ( nOldPos )
@@ -896,7 +899,7 @@ ScRangePair** ScRangePairList::CreateNameSortedArray( size_t& nListCount,
         ScDocument* pDoc ) const
 {
     nListCount = maPairs.size();
-    DBG_ASSERT( nListCount * sizeof(ScRangePairNameSort) <= (size_t)~0x1F,
+    OSL_ENSURE( nListCount * sizeof(ScRangePairNameSort) <= (size_t)~0x1F,
         "ScRangePairList::CreateNameSortedArray nListCount * sizeof(ScRangePairNameSort) > (size_t)~0x1F" );
     ScRangePairNameSort* pSortArray = (ScRangePairNameSort*)
         new sal_uInt8 [ nListCount * sizeof(ScRangePairNameSort) ];

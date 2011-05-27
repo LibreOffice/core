@@ -93,7 +93,7 @@ void XclImpColRowSettings::SetDefWidth( sal_uInt16 nDefWidth, bool bStdWidthRec 
 
 void XclImpColRowSettings::SetWidthRange( SCCOL nScCol1, SCCOL nScCol2, sal_uInt16 nWidth )
 {
-    DBG_ASSERT( (nScCol1 <= nScCol2) && ValidCol( nScCol2 ), "XclImpColRowSettings::SetColWidthRange - invalid column range" );
+    OSL_ENSURE( (nScCol1 <= nScCol2) && ValidCol( nScCol2 ), "XclImpColRowSettings::SetColWidthRange - invalid column range" );
     nScCol2 = ::std::min( nScCol2, MAXCOL );
     if (nScCol2 == 256)
         // In BIFF8, the column range is 0-255, and the use of 256 probably
@@ -115,7 +115,7 @@ void XclImpColRowSettings::HideCol( SCCOL nScCol )
 
 void XclImpColRowSettings::HideColRange( SCCOL nScCol1, SCCOL nScCol2 )
 {
-    DBG_ASSERT( (nScCol1 <= nScCol2) && ValidCol( nScCol2 ), "XclImpColRowSettings::HideColRange - invalid column range" );
+    OSL_ENSURE( (nScCol1 <= nScCol2) && ValidCol( nScCol2 ), "XclImpColRowSettings::HideColRange - invalid column range" );
     nScCol2 = ::std::min( nScCol2, MAXCOL );
     nScCol1 = ::std::min( nScCol1, nScCol2 );
     for( ScfUInt8Vec::iterator aIt = maColFlags.begin() + nScCol1, aEnd = maColFlags.begin() + nScCol2 + 1; aIt != aEnd; ++aIt )
@@ -195,7 +195,7 @@ void XclImpColRowSettings::SetDefaultXF( SCCOL nScCol1, SCCOL nScCol2, sal_uInt1
 {
     /*  assign the default column formatting here to ensure that
         explicit cell formatting is not overwritten. */
-    DBG_ASSERT( (nScCol1 <= nScCol2) && ValidCol( nScCol2 ), "XclImpColRowSettings::SetDefaultXF - invalid column index" );
+    OSL_ENSURE( (nScCol1 <= nScCol2) && ValidCol( nScCol2 ), "XclImpColRowSettings::SetDefaultXF - invalid column index" );
     nScCol2 = ::std::min( nScCol2, MAXCOL );
     nScCol1 = ::std::min( nScCol1, nScCol2 );
     XclImpXFRangeBuffer& rXFRangeBuffer = GetXFRangeBuffer();
