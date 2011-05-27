@@ -58,6 +58,10 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/table/XTable.hpp>
+#include <com/sun/star/table/XColumnRowRange.hpp>
+#include <com/sun/star/table/XCellRange.hpp>
+#include <com/sun/star/table/XMergeableCell.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <tools/stream.hxx>
@@ -81,6 +85,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::i18n;
+using namespace ::com::sun::star::table;
 using ::com::sun::star::beans::PropertyState;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::beans::XPropertySet;
@@ -408,9 +413,9 @@ awt::Size ShapeExport::MapSize( const awt::Size& rSize ) const
     return awt::Size( aRetSize.Width(), aRetSize.Height() );
 }
 
-sal_Bool ShapeExport::NonEmptyText( Reference< XShape > xShape )
+sal_Bool ShapeExport::NonEmptyText( Reference< XInterface > xIface )
 {
-    Reference< XPropertySet > xPropSet( xShape, UNO_QUERY );
+    Reference< XPropertySet > xPropSet( xIface, UNO_QUERY );
 
     if( xPropSet.is() )
     {
@@ -441,7 +446,7 @@ sal_Bool ShapeExport::NonEmptyText( Reference< XShape > xShape )
         }
     }
 
-    Reference< XSimpleText > xText( xShape, UNO_QUERY );
+    Reference< XSimpleText > xText( xIface, UNO_QUERY );
 
     if( xText.is() )
         return xText->getString().getLength();
@@ -488,7 +493,7 @@ ShapeExport& ShapeExport::WriteBezierShape( Reference< XShape > xShape, sal_Bool
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
 
     // write text
-    WriteTextBox( xShape );
+    WriteTextBox( xShape, mnXmlNamespace );
 
     pFS->endElementNS( mnXmlNamespace, XML_sp );
 
@@ -571,7 +576,7 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
 
     // write text
-    WriteTextBox( xShape );
+    WriteTextBox( xShape, mnXmlNamespace );
 
     pFS->endElementNS( mnXmlNamespace, XML_sp );
 
@@ -611,7 +616,7 @@ ShapeExport& ShapeExport::WriteEllipseShape( Reference< XShape > xShape )
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
 
     // write text
-    WriteTextBox( xShape );
+    WriteTextBox( xShape, mnXmlNamespace );
 
     pFS->endElementNS( mnXmlNamespace, XML_sp );
 
@@ -775,7 +780,7 @@ ShapeExport& ShapeExport::WriteConnectorShape( Reference< XShape > xShape )
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
 
     // write text
-    WriteTextBox( xShape );
+    WriteTextBox( xShape, mnXmlNamespace );
 
     pFS->endElementNS( mnXmlNamespace, XML_cxnSp );
 
@@ -822,7 +827,7 @@ ShapeExport& ShapeExport::WriteLineShape( Reference< XShape > xShape )
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
 
     // write text
-    WriteTextBox( xShape );
+    WriteTextBox( xShape, mnXmlNamespace );
 
     pFS->endElementNS( mnXmlNamespace, XML_sp );
 
@@ -889,7 +894,7 @@ ShapeExport& ShapeExport::WriteRectangleShape( Reference< XShape > xShape )
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
 
     // write text
-    WriteTextBox( xShape );
+    WriteTextBox( xShape, mnXmlNamespace );
 
     pFS->endElementNS( mnXmlNamespace, XML_sp );
 
@@ -917,6 +922,7 @@ static const NameToConvertMapType& lcl_GetConverters()
     shape_converters[ "com.sun.star.drawing.OpenBezierShape" ]          = &ShapeExport::WriteOpenBezierShape;
     shape_converters[ "com.sun.star.drawing.RectangleShape" ]           = &ShapeExport::WriteRectangleShape;
     shape_converters[ "com.sun.star.drawing.OLE2Shape" ]                = &ShapeExport::WriteOLE2Shape;
+    shape_converters[ "com.sun.star.drawing.TableShape" ]               = &ShapeExport::WriteTableShape;
     shape_converters[ "com.sun.star.drawing.TextShape" ]                = &ShapeExport::WriteTextShape;
     shape_converters[ "com.sun.star.presentation.DateTimeShape" ]       = &ShapeExport::WriteTextShape;
     shape_converters[ "com.sun.star.presentation.FooterShape" ]         = &ShapeExport::WriteTextShape;
@@ -945,16 +951,118 @@ ShapeExport& ShapeExport::WriteShape( Reference< XShape > xShape )
     return *this;
 }
 
-ShapeExport& ShapeExport::WriteTextBox( Reference< XShape > xShape )
+ShapeExport& ShapeExport::WriteTextBox( Reference< XInterface > xIface, sal_Int32 nXmlNamespace )
 {
-    if( NonEmptyText( xShape ) )
+    if( NonEmptyText( xIface ) )
     {
         FSHelperPtr pFS = GetFS();
 
-        pFS->startElementNS( mnXmlNamespace, XML_txBody, FSEND );
-        WriteText( xShape );
-        pFS->endElementNS( mnXmlNamespace, XML_txBody );
+        pFS->startElementNS( nXmlNamespace, XML_txBody, FSEND );
+        WriteText( xIface );
+        pFS->endElementNS( nXmlNamespace, XML_txBody );
     }
+
+    return *this;
+}
+
+void ShapeExport::WriteTable( Reference< XShape > rXShape  )
+{
+    OSL_TRACE("write table");
+
+    Reference< XTable > xTable;
+    Reference< XPropertySet > xPropSet( rXShape, UNO_QUERY );
+
+    mpFS->startElementNS( XML_a, XML_graphic, FSEND );
+    mpFS->startElementNS( XML_a, XML_graphicData, XML_uri, "http://schemas.openxmlformats.org/drawingml/2006/table", FSEND );
+
+    if ( xPropSet.is() && ( xPropSet->getPropertyValue( S("Model") ) >>= xTable ) )
+    {
+        mpFS->startElementNS( XML_a, XML_tbl, FSEND );
+        mpFS->singleElementNS( XML_a, XML_tblPr, FSEND );
+
+        Reference< XColumnRowRange > xColumnRowRange( xTable, UNO_QUERY_THROW );
+        Reference< container::XIndexAccess > xColumns( xColumnRowRange->getColumns(), UNO_QUERY_THROW );
+        Reference< container::XIndexAccess > xRows( xColumnRowRange->getRows(), UNO_QUERY_THROW );
+        sal_uInt16 nRowCount = static_cast< sal_uInt16 >( xRows->getCount() );
+        sal_uInt16 nColumnCount = static_cast< sal_uInt16 >( xColumns->getCount() );
+
+        std::vector< std::pair< sal_Int32, sal_Int32 > > aColumns;
+        std::vector< std::pair< sal_Int32, sal_Int32 > > aRows;
+
+        mpFS->startElementNS( XML_a, XML_tblGrid, FSEND );
+
+        for ( sal_Int32 x = 0; x < nColumnCount; x++ )
+        {
+            Reference< XPropertySet > xColPropSet( xColumns->getByIndex( x ), UNO_QUERY_THROW );
+            sal_Int32 nWidth(0);
+            xColPropSet->getPropertyValue( S("Width") ) >>= nWidth;
+
+            mpFS->singleElementNS( XML_a, XML_gridCol, XML_w, I64S(MM100toEMU(nWidth)), FSEND );
+        }
+
+        mpFS->endElementNS( XML_a, XML_tblGrid );
+
+        Reference< XCellRange > xCellRange( xTable, UNO_QUERY_THROW );
+        for( sal_Int32 nRow = 0; nRow < nRowCount; nRow++ )
+        {
+            Reference< XPropertySet > xRowPropSet( xRows->getByIndex( nRow ), UNO_QUERY_THROW );
+            sal_Int32 nRowHeight(0);
+
+            xRowPropSet->getPropertyValue( S("Height") ) >>= nRowHeight;
+
+            mpFS->startElementNS( XML_a, XML_tr, XML_h, I64S( MM100toEMU( nRowHeight ) ), FSEND );
+
+            for( sal_Int32 nColumn = 0; nColumn < nColumnCount; nColumn++ )
+            {
+                Reference< XMergeableCell > xCell( xCellRange->getCellByPosition( nColumn, nRow ), UNO_QUERY_THROW );
+                if ( !xCell->isMerged() )
+                {
+                    mpFS->startElementNS( XML_a, XML_tc, FSEND );
+
+                    WriteTextBox( xCell, XML_a );
+
+                    mpFS->singleElementNS( XML_a, XML_tcPr, FSEND );
+                    mpFS->endElementNS( XML_a, XML_tc );
+                }
+            }
+
+            mpFS->endElementNS( XML_a, XML_tr );
+        }
+
+        mpFS->endElementNS( XML_a, XML_tbl );
+    }
+
+    mpFS->endElementNS( XML_a, XML_graphicData );
+    mpFS->endElementNS( XML_a, XML_graphic );
+}
+
+ShapeExport& ShapeExport::WriteTableShape( Reference< XShape > xShape )
+{
+    FSHelperPtr pFS = GetFS();
+
+    OSL_TRACE("write table shape");
+
+    pFS->startElementNS( mnXmlNamespace, XML_graphicFrame, FSEND );
+
+    pFS->startElementNS( mnXmlNamespace, XML_nvGraphicFramePr, FSEND );
+
+    pFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
+                          XML_id,     I32S( GetNewShapeID( xShape ) ),
+                          XML_name,   IDS(Table),
+                          FSEND );
+
+    pFS->singleElementNS( mnXmlNamespace, XML_cNvGraphicFramePr,
+                          FSEND );
+
+    if( GetDocumentType() == DOCUMENT_PPTX )
+        pFS->singleElementNS( mnXmlNamespace, XML_nvPr,
+                          FSEND );
+    pFS->endElementNS( mnXmlNamespace, XML_nvGraphicFramePr );
+
+    WriteShapeTransformation( xShape, mnXmlNamespace );
+    WriteTable( xShape );
+
+    pFS->endElementNS( mnXmlNamespace, XML_graphicFrame );
 
     return *this;
 }
@@ -979,7 +1087,7 @@ ShapeExport& ShapeExport::WriteTextShape( Reference< XShape > xShape )
     WriteBlipFill( Reference< XPropertySet >(xShape, UNO_QUERY ), S( "GraphicURL" ) );
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
 
-    WriteTextBox( xShape );
+    WriteTextBox( xShape, mnXmlNamespace );
 
     pFS->endElementNS( mnXmlNamespace, XML_sp );
 
@@ -1011,7 +1119,7 @@ ShapeExport& ShapeExport::WriteUnknownShape( Reference< XShape > )
     return *this;
 }
 
-size_t ShapeExport::ShapeHash::operator()( const ::com::sun::star::uno::Reference < ::com::sun::star::drawing::XShape > rXShape ) const
+size_t ShapeExport::ShapeHash::operator()( const Reference < XShape > rXShape ) const
 {
     return rXShape->getShapeType().hashCode();
 }

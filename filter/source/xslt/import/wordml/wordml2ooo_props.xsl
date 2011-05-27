@@ -9,30 +9,79 @@
 
 <xsl:template name="page-layout-properties">
 
-<xsl:attribute name="fo:margin-top.value">
-  <xsl:value-of select="concat('(.(twips2cm(?[',name(w:hdr),'](?(>=($0[',w:pgMar/@w:top,'])($1(|[',w:pgMar/@w:header,'][720])))($1)($0))[',w:pgMar/@w:top,']))[cm])')"/>
+<!-- NOTE: "div 567.0" converts from twips to cm -->
+<xsl:attribute name="fo:margin-top">
+  <xsl:variable name="header-margin">
+      <xsl:choose>
+          <xsl:when test="w:pgMar/@w:header">
+              <xsl:value-of select="w:pgMar/@w:header"/>
+          </xsl:when>
+          <xsl:otherwise>720</xsl:otherwise>
+      </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="margin-top">
+      <xsl:choose>
+          <xsl:when test="w:hdr">
+              <xsl:choose>
+                 <xsl:when test="w:pgMar/@w:top &gt;= $header-margin">
+                     <xsl:value-of select="$header-margin"/>
+                 </xsl:when>
+                 <xsl:otherwise>
+                     <xsl:value-of select="w:pgMar/@w:top"/>
+                 </xsl:otherwise>
+              </xsl:choose>
+          </xsl:when>
+          <xsl:otherwise>
+              <xsl:value-of select="w:pgMar/@w:top"/>
+          </xsl:otherwise>
+      </xsl:choose>
+  </xsl:variable>
+  <xsl:value-of select="concat($margin-top div 567.0, 'cm')"/>
 </xsl:attribute>
-<xsl:attribute name="fo:margin-bottom.value">
-  <xsl:value-of select="concat('(.(twips2cm(?[',name(w:ftr),'](|[',w:pgMar/@w:footer,'][720])[',w:pgMar/@w:bottom,']))[cm])')"/>
+<xsl:attribute name="fo:margin-bottom">
+  <xsl:variable name="footer-margin">
+      <xsl:choose>
+          <xsl:when test="w:pgMar/@w:footer">
+              <xsl:value-of select="w:pgMar/@w:footer"/>
+          </xsl:when>
+          <xsl:otherwise>720</xsl:otherwise>
+      </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="margin-bottom">
+      <xsl:choose>
+          <xsl:when test="w:ftr">
+              <xsl:value-of select="$footer-margin"/>
+          </xsl:when>
+          <xsl:otherwise>
+              <xsl:value-of select="w:pgMar/@w:bottom"/>
+          </xsl:otherwise>
+      </xsl:choose>
+  </xsl:variable>
+  <xsl:value-of select="concat($margin-bottom div 567.0, 'cm')"/>
 </xsl:attribute>
-<xsl:attribute name="fo:margin-left.value">
-  <xsl:value-of select="concat('(.(twips2cm[',w:pgMar/@w:left,'])[cm])')"/>
+<xsl:attribute name="fo:margin-left">
+  <xsl:value-of select="concat(w:pgMar/@w:left div 567.0, 'cm')"/>
 </xsl:attribute>
-<xsl:attribute name="fo:margin-right.value">
-  <xsl:value-of select="concat('(.(twips2cm[',w:pgMar/@w:right,'])[cm])')"/>
+<xsl:attribute name="fo:margin-right">
+  <xsl:value-of select="concat(w:pgMar/@w:right div 567.0, 'cm')"/>
 </xsl:attribute>
 
-<xsl:attribute name="fo:page-width.value">
-  <xsl:value-of select="concat('(.(twips2cm[',w:pgSz/@w:w,'])[cm])')"/>
+<xsl:attribute name="fo:page-width">
+  <xsl:value-of select="concat(w:pgSz/@w:w div 567.0, 'cm')"/>
 </xsl:attribute>
-<xsl:attribute name="fo:page-height.value">
-  <xsl:value-of select="concat('(.(twips2cm[',w:pgSz/@w:h,'])[cm])')"/>
+<xsl:attribute name="fo:page-height">
+  <xsl:value-of select="concat(w:pgSz/@w:h div 567.0, 'cm')"/>
 </xsl:attribute>
-<xsl:attribute name="style:footnote-max-height.value">  
-  <xsl:value-of select="'[0cm]'"/>
+<xsl:attribute name="style:footnote-max-height">
+  <xsl:value-of select="'0cm'"/>
 </xsl:attribute>
-<xsl:attribute name="style:print-orientation.value">
-  <xsl:value-of select="concat('(|[',w:pgSz/@w:orient,'][portrait])')"/>
+<xsl:attribute name="style:print-orientation">
+  <xsl:choose>
+      <xsl:when test="w:pgSz/@w:orient">
+          <xsl:value-of select="w:pgSz/@w:orient"/>
+      </xsl:when>
+      <xsl:otherwise>portrait</xsl:otherwise>
+  </xsl:choose>
 </xsl:attribute>
 <xsl:apply-templates select="//w:bgPict"/>
 <xsl:call-template name="column-properties"/>
@@ -46,27 +95,37 @@
 </an:column-properties>
 <xsl:template name="column-properties">
 <style:columns>
-<xsl:attribute name="fo:column-count.value">
-  <xsl:value-of select="concat('(|[',w:cols/@w:num,'][1])')"/>
+<xsl:attribute name="fo:column-count">
+  <xsl:choose>
+      <xsl:when test="w:cols/@w:num">
+          <xsl:value-of select="w:cols/@w:num"/>
+      </xsl:when>
+      <xsl:otherwise>1</xsl:otherwise>
+  </xsl:choose>
 </xsl:attribute>
 
 <xsl:if test="not(w:cols/w:col)"> 
 <!-- bug in the OASIS spec resp. bug in xmloff  -->
-<xsl:attribute name="fo:column-gap.value">
-  <xsl:value-of select="concat('(.(twips2cm[',w:cols/@w:space,'])[cm])')"/>
+<xsl:attribute name="fo:column-gap">
+  <xsl:value-of select="concat(w:cols/@w:space div 567.0, 'cm')"/>
 </xsl:attribute>
 </xsl:if>
 
 <xsl:for-each select="w:cols/w:col">
   <style:column> 
-     <xsl:attribute name="style:rel-width.value">
-       <xsl:value-of select="concat('(.[',@w:w,'][*])')"/>
+     <xsl:attribute name="style:rel-width">
+       <xsl:value-of select="concat(@w:w, '*')"/>
      </xsl:attribute>
-     <xsl:attribute name="fo:start-indent.value">
-       <xsl:value-of select="'[0cm]'"/>
+     <xsl:attribute name="fo:start-indent">
+       <xsl:value-of select="'0cm'"/>
      </xsl:attribute>
-     <xsl:attribute name="fo:end-indent.value">
-       <xsl:value-of select="concat('(.(twips2cm(|[',@w:space,'][0]))[cm])')"/>
+     <xsl:attribute name="fo:end-indent">
+       <xsl:choose>
+          <xsl:when test="@w:space">
+              <xsl:value-of select="concat(@w:space div 567.0, 'cm')"/>
+          </xsl:when>
+          <xsl:otherwise>0cm</xsl:otherwise>
+       </xsl:choose>
      </xsl:attribute>
   </style:column> 
 </xsl:for-each>
@@ -78,29 +137,131 @@
      context-node-output="style:text-properties">
 </an:text-properties >
 <xsl:template name="text-properties">
-<xsl:attribute name="fo:font-weight.value">
- <xsl:value-of select="concat('(switch(|[',w:b/@val,'][',local-name(w:b),'])[on][bold][off][normal][b][bold][])')"/>
+<xsl:variable name="b-value">
+  <xsl:choose>
+      <xsl:when test="w:b/@val">
+          <xsl:value-of select="w:b/@val"/>
+      </xsl:when>
+      <xsl:otherwise>
+          <xsl:value-of select="local-name(w:b)"/>
+      </xsl:otherwise>
+  </xsl:choose>
+</xsl:variable>
+<!-- could be simplified: is "b" actually a valid value of w:b/@val ? -->
+<xsl:variable name="font-weight">
+  <xsl:choose>
+      <xsl:when test="$b-value = 'on'">bold</xsl:when>
+      <xsl:when test="$b-value = 'off'">normal</xsl:when>
+      <xsl:when test="$b-value = 'b'">bold</xsl:when>
+      <xsl:otherwise></xsl:otherwise>
+  </xsl:choose>
+</xsl:variable>
+<xsl:attribute name="fo:font-weight">
+  <xsl:value-of select="$font-weight"/>
 </xsl:attribute>
-<xsl:attribute name="style:font-weight-asian.value">
- <xsl:value-of select="concat('(switch(|[',w:b/@val,'][',local-name(w:b),'])[on][bold][off][normal][b][bold][])')"/>
+<xsl:attribute name="style:font-weight-asian">
+  <xsl:value-of select="$font-weight"/>
 </xsl:attribute>
-<xsl:attribute name="style:font-weight-complex.value">
- <xsl:value-of select="concat('(switch(|[',w:b-cs/@val,'][',local-name(w:b-cs),'])[on][bold][off][normal][b-cs][bold][])')"/>
+<xsl:attribute name="style:font-weight-complex">
+  <xsl:variable name="b-cs-value">
+    <xsl:choose>
+      <xsl:when test="w:b-cs/@val">
+          <xsl:value-of select="w:b-cs/@val"/>
+      </xsl:when>
+      <xsl:otherwise>
+          <xsl:value-of select="local-name(w:b-cs)"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <!-- could be simplified: is "b-cs" actually a valid value of w:b-cs/@val -->
+  <xsl:choose>
+      <xsl:when test="$b-cs-value = 'on'">bold</xsl:when>
+      <xsl:when test="$b-cs-value = 'off'">normal</xsl:when>
+      <xsl:when test="$b-cs-value = 'b-cs'">bold</xsl:when>
+      <xsl:otherwise></xsl:otherwise>
+  </xsl:choose>
 </xsl:attribute>
-<xsl:attribute name="fo:font-style.value">
- <xsl:value-of select="concat('(switch(|[',w:i/@val,'][',local-name(w:i),'])[on][italic][off][normal][i][italic][])')"/>
+<xsl:variable name="i-value">
+  <xsl:choose>
+      <xsl:when test="w:i/@val">
+          <xsl:value-of select="w:i/@val"/>
+      </xsl:when>
+      <xsl:otherwise>
+          <xsl:value-of select="local-name(w:i)"/>
+      </xsl:otherwise>
+  </xsl:choose>
+</xsl:variable>
+<!-- could be simplified: is "i" actually a valid value of w:i/@val ? -->
+<xsl:variable name="font-style">
+  <xsl:choose>
+      <xsl:when test="$i-value = 'on'">italic</xsl:when>
+      <xsl:when test="$i-value = 'off'">normal</xsl:when>
+      <xsl:when test="$i-value = 'i'">italic</xsl:when>
+      <xsl:otherwise></xsl:otherwise>
+  </xsl:choose>
+</xsl:variable>
+<xsl:attribute name="fo:font-style">
+  <xsl:value-of select="$font-style"/>
 </xsl:attribute>
-<xsl:attribute name="style:font-style-asian.value">
- <xsl:value-of select="concat('(switch(|[',w:i/@val,'][',local-name(w:i),'])[on][italic][off][normal][i][italic][])')"/>
+<xsl:attribute name="style:font-style-asian">
+  <xsl:value-of select="$font-style"/>
 </xsl:attribute>
-<xsl:attribute name="style:font-style-complex.value">
- <xsl:value-of select="concat('(switch(|[',w:i-cs/@val,'][',local-name(w:i-cs),'])[on][italic][off][normal][i-cs][italic][])')"/>
+<xsl:attribute name="style:font-style-complex">
+  <xsl:variable name="i-cs-value">
+      <xsl:choose>
+          <xsl:when test="w:i-cs/@val">
+              <xsl:value-of select="w:i-cs/@val"/>
+          </xsl:when>
+          <xsl:otherwise>
+              <xsl:value-of select="local-name(w:i-cs)"/>
+          </xsl:otherwise>
+      </xsl:choose>
+  </xsl:variable>
+  <!-- could be simplified: is "i-cs" actually a valid value of w:i-cs/@val -->
+  <xsl:choose>
+      <xsl:when test="$i-cs-value = 'on'">italic</xsl:when>
+      <xsl:when test="$i-cs-value = 'off'">normal</xsl:when>
+      <xsl:when test="$i-cs-value = 'i-cs'">italic</xsl:when>
+      <xsl:otherwise></xsl:otherwise>
+  </xsl:choose>
 </xsl:attribute>
-<xsl:attribute name="fo:text-transform.value">
- <xsl:value-of select="concat('(switch(|[',w:caps/@val,'][',local-name(w:caps),'])[on][uppercase][off][normal][caps][uppercase][])')"/>
+<xsl:attribute name="fo:text-transform">
+  <xsl:variable name="caps-value">
+      <xsl:choose>
+          <xsl:when test="w:caps/@val">
+              <xsl:value-of select="w:caps/@val"/>
+          </xsl:when>
+          <xsl:otherwise>
+              <xsl:value-of select="local-name(w:caps)"/>
+          </xsl:otherwise>
+      </xsl:choose>
+  </xsl:variable>
+  <!-- could be simplified: is "caps" actually a valid value of w:caps/@val -->
+  <xsl:choose>
+      <xsl:when test="$caps-value = 'on'">uppercase</xsl:when>
+      <xsl:when test="$caps-value = 'off'">normal</xsl:when>
+      <xsl:when test="$caps-value = 'caps'">uppercase</xsl:when>
+      <xsl:otherwise></xsl:otherwise>
+  </xsl:choose>
 </xsl:attribute>
-<xsl:attribute name="fo:font-variant.value">
- <xsl:value-of select="concat('(switch(|[',w:smallCaps/@val,'][',local-name(w:smallCaps),'])[on][small-caps][off][normal][smallCaps][small-caps][])')"/>
+<xsl:attribute name="fo:font-variant">
+  <xsl:variable name="small-caps-value">
+      <xsl:choose>
+          <xsl:when test="w:smallCaps/@val">
+              <xsl:value-of select="w:smallCaps/@val"/>
+          </xsl:when>
+          <xsl:otherwise>
+              <xsl:value-of select="local-name(w:smallCaps)"/>
+          </xsl:otherwise>
+      </xsl:choose>
+  </xsl:variable>
+  <!-- could be simplified: is "smallCaps" actually a valid value of w:smallCaps/@val -->
+  <xsl:choose>
+      <xsl:when test="$small-caps-value = 'on'">small-caps</xsl:when>
+      <xsl:when test="$small-caps-value = 'off'">normal</xsl:when>
+      <xsl:when test="$small-caps-value = 'smallCaps'">small-caps</xsl:when>
+      <xsl:otherwise></xsl:otherwise>
+  </xsl:choose>
 </xsl:attribute>
 </xsl:template>
 

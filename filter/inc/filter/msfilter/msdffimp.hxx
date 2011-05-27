@@ -503,7 +503,7 @@ protected :
 
     bool ReadGraphic( SvStream& rSt, sal_uLong nIndex, Graphic& rGraphic ) const;
     SdrObject* ImportFontWork( SvStream&, SfxItemSet&, Rectangle& rBoundRect ) const;
-    SdrObject* ImportGraphic( SvStream&, SfxItemSet&, const DffObjData& ) const;
+    SdrObject* ImportGraphic( SvStream&, SfxItemSet&, const DffObjData& );
     // #i32596# - pass <nCalledByGroup> to method
     // Needed in the Writer Microsoft Word import to avoid import of OLE objects
     // inside groups. Instead a graphic object is created.
@@ -560,7 +560,7 @@ public:
     void*               pSvxMSDffDummy1;
     void*               pSvxMSDffDummy2;
     void*               pSvxMSDffDummy3;
-    List*               pEscherBlipCache;
+    std::map<sal_uInt32,ByteString> aEscherBlipCache;
 
     DffRecordManager    maShapeRecords;
     ColorData           mnDefaultColor;
@@ -650,7 +650,7 @@ public:
 
     Rueckgabewert: sal_True, im Erfolgsfalls, sal_False bei Fehler
 */
-    sal_Bool GetBLIP( sal_uLong nIdx, Graphic& rData, Rectangle* pVisArea = NULL ) const;
+    sal_Bool GetBLIP( sal_uLong nIdx, Graphic& rData, Rectangle* pVisArea = NULL );
 
 /*
     GetBLIPDirect()     -Einlesen eines BLIP aus schon positioniertem Stream

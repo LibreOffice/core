@@ -33,9 +33,6 @@
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/servicefactory.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase.hxx>
 
@@ -79,7 +76,6 @@
 
 #include <xmloff/attrlist.hxx>
 
-#include <fla.hxx>
 #include <LibXSLTTransformer.hxx>
 
 #define TRANSFORMATION_TIMEOUT_SEC 60
@@ -100,89 +96,6 @@ using namespace ::com::sun::star::task;
 
 namespace XSLT
 {
-    /*
-     * FLABridge provides some obscure attribute mangling to wordml2003 import/export filters.
-     * In the long run, you might want to replace this with an XSLT extension function.
-     */
-    class FLABridge : public WeakImplHelper1< DocumentHandlerAdapter >
-    {
-    private:
-        const sal_Unicode *
-        eval(const sal_Unicode *expr, sal_Int32 exprLen);
-        FLA::Evaluator ev;
-        bool active;
-
-    public:
-        FLABridge(const Reference<XDocumentHandler>& m_rDocumentHandler);
-
-        virtual void SAL_CALL
-        startElement(const OUString& str,
-                const Reference<XAttributeList>& attriblist)
-                throw (SAXException, RuntimeException);
-
-    };
-
-    FLABridge::FLABridge(const Reference<XDocumentHandler>& _rDocumentHandler) : active(false)
-    {
-        DocumentHandlerAdapter::setDelegate(_rDocumentHandler);
-    }
-
-    void
-    FLABridge::startElement(const OUString& str,
-            const Reference<XAttributeList>& attriblist) throw (SAXException,
-            RuntimeException)
-    {
-        if (active)
-            {
-                //      SvXMLAttributeList* _attriblist=SvXMLAttributeList::getImplementation(attriblist);
-                const int len = attriblist->getLength();
-                SvXMLAttributeList *_newattriblist = new SvXMLAttributeList();
-                for (int i = 0; i < len; i++)
-                    {
-                        const OUString& name = attriblist->getNameByIndex(
-                                sal::static_int_cast<sal_Int16>(i));
-                        sal_Int32 pos;
-                        static const OUString _value_(".value", 6,
-                                RTL_TEXTENCODING_ASCII_US);
-                        if ((pos = name.lastIndexOf(L'.')) != -1 && name.match(
-                                _value_, pos))
-                            {
-                                const OUString newName(name, pos);
-                                const OUString
-                                        & value =
-                                                attriblist->getValueByIndex(
-                                                        sal::static_int_cast<
-                                                                sal_Int16>(i));
-                                const OUString newValue(ev.eval(value.getStr(),
-                                        value.getLength()));
-                                if (newValue.getLength() > 0)
-                                    {
-                                        _newattriblist->AddAttribute(newName,
-                                                newValue);
-                                    }
-                            }
-                        else
-                            {
-                                _newattriblist->AddAttribute(
-                                        name,
-                                        attriblist->getValueByIndex(
-                                                sal::static_int_cast<sal_Int16>(
-                                                        i)));
-                            }
-                    };
-                const Reference<XAttributeList> newattriblist(_newattriblist);
-                DocumentHandlerAdapter::startElement(str, newattriblist);
-            }
-        else
-            {
-                if (str.compareToAscii("fla:fla.activate") == 0)
-                    {
-                        active = 1;
-                    }
-                DocumentHandlerAdapter::startElement(str, attriblist);
-            }
-    }
-
     /*
      * XSLTFilter reads flat XML streams from the XML filter framework and passes
      * them to an XSLT transformation service. XSLT transformation errors are
@@ -452,7 +365,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
                         aInput.aInputStream = pipein;
 
                         // set doc handler
-                        xSaxParser->setDocumentHandler(new FLABridge(xHandler));
+                        xSaxParser->setDocumentHandler(xHandler);
 
                         // transform
                         m_tcontrol->start();

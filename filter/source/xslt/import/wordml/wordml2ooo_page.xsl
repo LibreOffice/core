@@ -179,7 +179,28 @@
             </style:page-layout-properties>
         <style:header-style>
         <style:header-footer-properties style:dynamic-spacing="true" fo:margin-bottom="0">
-           <xsl:attribute name="fo:min-height.value"><xsl:value-of select="concat('(.(twips2cm(?(>($0(-[', w:pgMar/@w:top, '](|[', w:pgMar/@w:header, '][720])))[0])($0)[0]))[cm])')"/></xsl:attribute>
+           <xsl:variable name="header-margin">
+               <xsl:choose>
+                   <xsl:when test="w:pgMar/@w:header">
+                       <xsl:value-of select="w:pgMar/@w:header"/>
+                   </xsl:when>
+                   <xsl:otherwise>720</xsl:otherwise>
+               </xsl:choose>
+           </xsl:variable>
+           <xsl:variable name="header-margin-diff">
+               <xsl:value-of select="w:pgMar/@w:top - $header-margin"/>
+           </xsl:variable>
+           <xsl:variable name="min-height">
+               <xsl:choose>
+                   <xsl:when test="$header-margin-diff &gt; 0">
+                       <xsl:value-of select="$header-margin-diff div 567.0"/>
+                   </xsl:when>
+                   <xsl:otherwise>0</xsl:otherwise>
+               </xsl:choose>
+           </xsl:variable>
+           <xsl:attribute name="fo:min-height">
+               <xsl:value-of select="concat($min-height, 'cm')"/>
+           </xsl:attribute>
         </style:header-footer-properties>
         </style:header-style>
         </style:page-layout>

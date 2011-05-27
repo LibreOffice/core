@@ -33,7 +33,7 @@ $(eval $(call gb_Library_set_include,rtftok,\
     -I$(OUTDIR)/inc \
 ))
 
-include debug_setup.mk
+include $(realpath $(SRCDIR)/writerfilter/debug_setup.mk)
 
 $(eval $(call gb_Library_set_defs,rtftok,\
 	$$(DEFS) \

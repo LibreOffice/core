@@ -1232,10 +1232,10 @@ void DrawingML::WriteParagraph( Reference< XTextContent > rParagraph )
     mpFS->endElementNS( XML_a, XML_p );
 }
 
-void DrawingML::WriteText( Reference< XShape > rXShape  )
+void DrawingML::WriteText( Reference< XInterface > rXIface  )
 {
-    Reference< XText > xXText( rXShape, UNO_QUERY );
-    Reference< XPropertySet > rXPropSet( rXShape, UNO_QUERY );
+    Reference< XText > xXText( rXIface, UNO_QUERY );
+    Reference< XPropertySet > rXPropSet( rXIface, UNO_QUERY );
 
     if( !xXText.is() )
         return;

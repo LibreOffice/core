@@ -88,7 +88,7 @@ public:
     sal_Int32           GetXmlNamespace() const;
     ShapeExport&        SetXmlNamespace( sal_Int32 nXmlNamespace );
 
-    static sal_Bool     NonEmptyText( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+    static sal_Bool     NonEmptyText( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xIface );
 
     virtual ShapeExport&
                         WriteBezierShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape, sal_Bool bClosed );
@@ -133,6 +133,7 @@ public:
      *   <tr><td><tt>com.sun.star.drawing.LineShape</tt></td>            <td>ShapeExport::WriteLineShape</td></tr>
      *   <tr><td><tt>com.sun.star.drawing.OpenBezierShape</tt></td>      <td>ShapeExport::WriteOpenBezierShape</td></tr>
      *   <tr><td><tt>com.sun.star.drawing.RectangleShape</tt></td>       <td>ShapeExport::WriteRectangleShape</td></tr>
+     *   <tr><td><tt>com.sun.star.drawing.TableShape</tt></td>           <td>ShapeExport::WriteTableShape</td></tr>
      *   <tr><td><tt>com.sun.star.drawing.TextShape</tt></td>            <td>ShapeExport::WriteTextShape</td></tr>
      *   <tr><td><tt>com.sun.star.presentation.DateTimeShape</tt></td>   <td>ShapeExport::WriteTextShape</td></tr>
      *   <tr><td><tt>com.sun.star.presentation.FooterShape</tt></td>     <td>ShapeExport::WriteTextShape</td></tr>
@@ -152,13 +153,18 @@ public:
     virtual ShapeExport&
                         WriteShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
     virtual ShapeExport&
-                        WriteTextBox( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+        WriteTextBox( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xIface, sal_Int32 nXmlNamespace );
     virtual ShapeExport&
                         WriteTextShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+    virtual ShapeExport&
+                        WriteTableShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
     virtual ShapeExport&
                         WriteOLE2Shape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
     virtual ShapeExport&
                         WriteUnknownShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+
+    void WriteTable( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > rXShape );
+
 
     sal_Int32 GetNewShapeID( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > rShape );
     sal_Int32 GetNewShapeID( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > rShape, ::oox::core::XmlFilterBase* pFB );
