@@ -51,18 +51,6 @@ namespace writerfilter {
                 std::map<int, int> aSprms;
         };
 
-        class RTFReferenceProperties
-            : public writerfilter::Reference<Properties>
-        {
-            public:
-                RTFReferenceProperties(std::map<int, int> rSprms);
-                virtual ~RTFReferenceProperties();
-                virtual void resolve(Properties & rHandler);
-                virtual std::string getType() const;
-            private:
-                std::map<int, int> m_rSprms;
-        };
-
         /// Implementation of the RTFDocument interface.
         class RTFDocumentImpl
             : public RTFDocument
