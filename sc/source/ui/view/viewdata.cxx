@@ -460,13 +460,30 @@ void ScViewData::UpdateThis()
 
 void ScViewData::InsertTab( SCTAB nTab )
 {
-    while( nTab >= static_cast<SCTAB>(pTabData.size()))
-        pTabData.push_back(NULL);
-    pTabData.insert( pTabData.begin() + nTab, NULL );
+    if( nTab >= static_cast<SCTAB>(pTabData.size()))
+        pTabData.resize(nTab+1, NULL);
+    else
+        pTabData.insert( pTabData.begin() + nTab, NULL );
     CreateTabData( nTab );
 
     UpdateThis();
     aMarkData.InsertTab( nTab );
+}
+
+void ScViewData::InsertTabs( SCTAB nTab, SCTAB nNewSheets )
+{
+    if( nTab+nNewSheets >= static_cast<SCTAB>(pTabData.size()))
+        pTabData.resize(nTab+nNewSheets, NULL);
+    else
+    {
+        pTabData.insert( pTabData.begin() + nTab, nNewSheets, NULL );
+    }
+    for (SCTAB aTab = nTab; aTab < nTab + nNewSheets; ++aTab)
+    {
+        CreateTabData( aTab );
+        aMarkData.InsertTab( aTab );
+    }
+    UpdateThis();
 }
 
 void ScViewData::DeleteTab( SCTAB nTab )

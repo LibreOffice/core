@@ -2012,10 +2012,7 @@ sal_Bool ScViewFunc::InsertTables(std::vector<rtl::OUString>& aNames, SCTAB nTab
     }
     if (pDoc->InsertTabs(nTab, aNames, false))
     {
-        for (SCTAB i=0;i<nCount; i++)
-        {
-            pDocSh->Broadcast( ScTablesHint( SC_TAB_INSERTED, nTab+i ) );
-        }
+        pDocSh->Broadcast( ScTablesHint( SC_TABS_INSERTED, nTab, nCount ) );
         bFlag = true;
     }
 

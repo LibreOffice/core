@@ -92,6 +92,7 @@ public:
 #define SC_TAB_MOVED        3
 #define SC_TAB_COPIED       4
 #define SC_TAB_HIDDEN       5
+#define SC_TABS_INSERTED    6
 
 class ScTablesHint : public SfxHint
 {

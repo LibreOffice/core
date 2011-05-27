@@ -207,7 +207,6 @@ ScUndoInsertTables::ScUndoInsertTables( ScDocShell* pNewDocShell,
 
 ScUndoInsertTables::~ScUndoInsertTables()
 {
-    String *pStr=NULL;
     DeleteSdrUndoAction( pDrawUndo );
 }
 
@@ -224,7 +223,7 @@ void ScUndoInsertTables::SetChangeTrack()
         nStartChangeAction = pChangeTrack->GetActionMax() + 1;
         nEndChangeAction = 0;
         ScRange aRange( 0, 0, nTab, MAXCOL, MAXROW, nTab );
-        for( int i = 0; i < aNameList.size(); i++ )
+        for( size_t i = 0; i < aNameList.size(); i++ )
         {
             aRange.aStart.SetTab( sal::static_int_cast<SCTAB>( nTab + i ) );
             aRange.aEnd.SetTab( sal::static_int_cast<SCTAB>( nTab + i ) );
@@ -245,7 +244,7 @@ void ScUndoInsertTables::Undo()
     bDrawIsInUndo = sal_True;
 
     vector<SCTAB> TheTabs;
-    for(int i=0; i< aNameList.size(); ++i)
+    for(SCTAB i=0; i< static_cast<SCTAB>(aNameList.size()); ++i)
     {
         TheTabs.push_back(nTab+i);
     }

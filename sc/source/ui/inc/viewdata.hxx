@@ -277,6 +277,7 @@ public:
     void            UpdateThis();
 
     void            InsertTab( SCTAB nTab );
+    void            InsertTabs( SCTAB nTab, SCTAB nNewSheets );
     void            DeleteTab( SCTAB nTab );
     void            CopyTab( SCTAB nSrcTab, SCTAB nDestTab );
     void            MoveTab( SCTAB nSrcTab, SCTAB nDestTab );
