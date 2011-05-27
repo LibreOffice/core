@@ -96,14 +96,29 @@ LDFLAGSADD+=$(LINKFLAGS) $(LINKFLAGSRUNPATH_OOO)
 LDFLAGSADD += -Wl,--hash-style=both
 .ENDIF
 
+.IF "$(OS)"=="IOS"
+# Let's try this...
+icu_CFLAGS+=-DUCONFIG_NO_FILE_IO
+.ENDIF
+
 .IF "$(HAVE_LD_BSYMBOLIC_FUNCTIONS)"  == "TRUE"
 LDFLAGSADD += -Wl,-Bsymbolic-functions -Wl,--dynamic-list-cpp-new -Wl,--dynamic-list-cpp-typeinfo
 .ENDIF
 
 CONFIGURE_DIR=source
 
+.IF "$(OS)"=="IOS"
+STATIC_OR_SHARED=--enable-static --disable-shared
+.ELSE
+STATIC_OR_SHARED==--disable-static --enable-shared
+.ENDIF
+
+.IF "$(CROSS_COMPILING)"!=""
+BUILD_AND_HOST=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) --with-cross-build=$(ICU_NATIVE_BUILD_ROOT)
+.ENDIF
+
 CONFIGURE_ACTION+=sh -c 'CFLAGS="$(icu_CFLAGS)" CXXFLAGS="$(icu_CXXFLAGS)" LDFLAGS="$(icu_LDFLAGS) $(LDFLAGSADD)" \
-./configure --enable-layout --disable-static --enable-shared $(DISABLE_64BIT)'
+./configure --enable-layout $(STATIC_OR_SHARED) $(BUILD_AND_HOST) $(DISABLE_64BIT)'
 
 CONFIGURE_FLAGS=
 
@@ -116,6 +131,14 @@ CONFIGURE_FLAGS=
 
 BUILD_DIR=$(CONFIGURE_DIR)
 BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE) -j$(EXTMAXPROCESS)
+.IF "$(OS)"=="IOS"
+OUT2LIB= \
+    $(BUILD_DIR)$/lib$/libicudata.a \
+    $(BUILD_DIR)$/lib$/libicuuc.a \
+    $(BUILD_DIR)$/lib$/libicui18n.a \
+    $(BUILD_DIR)$/lib$/libicule.a \
+    $(BUILD_DIR)$/lib$/libicutu.a
+.ELSE
 OUT2LIB= \
     $(BUILD_DIR)$/lib$/libicudata$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR).$(ICU_MICRO) \
     $(BUILD_DIR)$/lib$/libicudata$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR) \
@@ -137,6 +160,7 @@ OUT2BIN= \
     $(BUILD_DIR)$/bin$/genccode \
     $(BUILD_DIR)$/bin$/genbrk \
     $(BUILD_DIR)$/bin$/gencmn
+.ENDIF
 
 .ENDIF
 
