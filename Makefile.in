@@ -28,10 +28,14 @@ install:
 dev-install:
 	@. ./*Env.Set.sh && \
         cd smoketestoo_native && \
+		export SAL_USE_VCLPLUGIN="svp" && \
 		build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@ && \
+		cd @abs_builddir@ && ln -s $$SOLARVER/$$INPATH/installation/opt/ install && \
 		echo "" && \
         echo "Developer installation finished, you can now execute:" && \
-        echo "@abs_builddir@/installation/opt/program/soffice"
+        echo "cd @abs_builddir@/install/program" && \
+		echo ". ooenv" && \
+		echo "./soffice.bin"
 
 distclean: dmake/dmake@EXEEXT_FOR_BUILD@
 	@. ./*Env.Set.sh && \
@@ -60,6 +64,7 @@ check: Makefile dmake/dmake@EXEEXT_FOR_BUILD@ fetch
 	cd smoketestoo_native && \
 	export SAL_USE_VCLPLUGIN="svp" && \
         build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
+	@. ./*Env.Set.sh && $$SOLARENV/bin/subsequenttests
 
 id:
 	@. ./*Env.Set.sh && \

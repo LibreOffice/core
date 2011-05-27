@@ -1065,7 +1065,7 @@ if ($platform =~ m/cygwin/)
       }
       $ILIB       .= $wps.PathFormat("@MINGW_CLIB_DIR@").
                      $wps.$WINDOWS_SDK_HOME.$LIB;
-      if ( '@ENABLE_DIRETX@' )
+      if ( '@ENABLE_DIRECTX@' )
       {   $ILIB   .= $wps.PathFormat("@DIRECTXSDK_LIB@");
       }
    }
@@ -1771,6 +1771,7 @@ if ( '@CROSS_COMPILING@' ne '' )
    ToFile( "CXX_FOR_BUILD",     "@CXX_FOR_BUILD@",  "e" );
    ToFile( "GXX_INCLUDE_PATH_FOR_BUILD", "@GXX_INCLUDE_PATH_FOR_BUILD@", "e" );
    ToFile( "MACOSX_DEPLOYMENT_TARGET_FOR_BUILD", "@MACOSX_DEPLOYMENT_TARGET_FOR_BUILD@", "e" );
+   ToFile( "ICU_NATIVE_BUILD_ROOT", "@ICU_NATIVE_BUILD_ROOT@", "e");
 }
 else
 {

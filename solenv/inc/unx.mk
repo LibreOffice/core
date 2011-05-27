@@ -182,7 +182,9 @@ SOLARSHAREDBIN=$(SOLARLIBDIR)
 SONAME_SWITCH*=-h
 
 .IF "$(UNIXVERSIONNAMES)"!=""
+.IF "$(OS)"!="IOS"
 DLLPOST!:=$(DLLPOST).$($(UNIXVERSIONNAMES)_MAJOR)
+.ENDIF
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 
 # enable building/linking KDE-dependent code in both OOo and SO build environment

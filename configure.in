@@ -1286,6 +1286,19 @@ AC_ARG_WITH(mingw-cross-compiler,
     ],
 ,)
 
+AC_ARG_WITH(icu-native-build-root,
+    AS_HELP_STRING([--with-icu-native-build-root],
+        [Specify the the 'source' directory of a native build of ICU.])
+    [
+                          Usage:     --with-icu-native-build-root=<path>>
+
+                          When cross-compiling and not using a "system" ICU,
+                          specify the path to the "source" directory of the
+                          ICU build in a native LibreOffice build tree. For example
+                          --with-icu-native-build-root=/Users/tml/lo-macosx/icu/unxmacxi.pro/misc/build/icu/source  
+    ],
+,)
+
 AC_ARG_WITH(build-version,
     AS_HELP_STRING([--with-build-version],
         [Allows the builder to add a custom version tag that will appear in the
@@ -5540,6 +5553,12 @@ else
     AC_MSG_RESULT([internal])
     SYSTEM_ICU=NO
     BUILD_TYPE="$BUILD_TYPE ICU"
+    if test "$cross_compiling" = "yes"; then
+        if test "$with_icu_native_build_root" = "" ; then
+            AC_MSG_ERROR([when cross-compiling ICU you must use --with-icu-native-build-root])
+        fi
+        ICU_NATIVE_BUILD_ROOT="$with_icu_native_build_root"
+    fi
 fi
 AC_SUBST(SYSTEM_ICU)
 AC_SUBST(SYSTEM_GENBRK)
@@ -5548,6 +5567,7 @@ AC_SUBST(SYSTEM_GENCMN)
 AC_SUBST(ICU_MAJOR)
 AC_SUBST(ICU_MINOR)
 AC_SUBST(ICU_MICRO)
+AC_SUBST(ICU_NATIVE_BUILD_ROOT)
 
 dnl ===================================================================
 dnl Graphite
@@ -5775,12 +5795,23 @@ AC_MSG_CHECKING([which libssl to use])
 if test -n "$with_system_openssl" -o -n "$with_system_libs" && \
         test "$with_system_openssl" != "no"; then
     AC_MSG_RESULT([external])
-    # Mac OS builds should get out without extra stuff is the Mac porters'
-    # wish. And pkg-config is although Xcode ships a .pc for openssl
-    if test "$_os" = "Darwin" -o "$_os" = "NetBSD" -o "$_os" = "OpenBSD" -o \
+
+    dnl Mac OS (and BSD, apparently) builds should get out without
+    dnl extra stuff is the Mac porters' wish. And pkg-config is
+    dnl although Xcode ships a .pc for OpenSSL
+
+    dnl For iOS we don't want to even try compiling bundled (outdated
+    dnl version of) OpenSSL with its ultra-weird configury. But on the
+    dnl other hand there is no system OpenSSL either. But let's just
+    dnl build a current OpenSSL separately using some of the ways
+    dnl found on the net and pretend it is a "system" OpenSSL.
+
+    dnl In either case pass OPENSSL_CFLAGS and OPENSSL_LIBS if
+    dnl necessary in the environment.
+
+    if test "$_os" = "Darwin" -o "$_os" = "iOS" -o "$_os" = "NetBSD" -o "$_os" = "OpenBSD" -o \
             "$_os" = "DragonFly"; then
-        OPENSSL_CFLAGS=
-        OPENSSL_LIBS="-lssl -lcrypto"
+        OPENSSL_LIBS=${OPENSSL_LIBS:--lssl -lcrypto}
     else
         PKG_CHECK_MODULES( OPENSSL, openssl )
     fi

@@ -217,7 +217,7 @@ $(USE_SHL$(TNR)VERSIONMAP) .ERRREMOVE: $(SHL$(TNR)VERSIONMAP)
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="AIX"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="AIX"
 .IF "$(GUI)"=="UNX"
 SHL$(TNR)SONAME=\"$(SONAME_SWITCH)$(SHL$(TNR)TARGETN:f)\"
 .ENDIF			# "$(GUI)"!="UNX"
@@ -496,6 +496,9 @@ $(SHL$(TNR)TARGETN) : \
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS$(TNR)) $(SHL$(TNR)TARGETN)
 .ENDIF				# "$(SHL$(TNR)NOCHECK)"!=""
 .ENDIF
+.ELIF "$(OS)"=="IOS"
+    $(COMMAND_ECHO)$(AR) $(LIB$(TNR)FLAGS) $(LIBFLAGS) $@ $(SHL$(TNR)OBJS) $(shell cat /dev/null $(LIB$(TNR)TARGET) $(SHL$(TNR)LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
+    $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
     @echo $(SHL$(TNR)LINKER) $(SHL$(TNR)LINKFLAGS) $(SHL$(TNR)SONAME) $(LINKFLAGSSHL) $(SHL$(TNR)VERSIONMAPPARA) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) $(STDSLO) $(SHL$(TNR)OBJS:s/.obj/.o/) \
@@ -518,7 +521,7 @@ $(SHL$(TNR)TARGETN) : \
 .ENDIF				# "$(SHL$(TNR)NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
-.IF "$(UNIXVERSIONNAMES)"!=""
+.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL$(TNR)TARGETN:b)
     $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL$(TNR)TARGETN:f) $(SHL$(TNR)TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""

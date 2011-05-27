@@ -188,7 +188,7 @@ $(USE_SHL1VERSIONMAP) .ERRREMOVE: $(SHL1VERSIONMAP)
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="AIX"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="AIX"
 .IF "$(GUI)"=="UNX"
 SHL1SONAME=\"$(SONAME_SWITCH)$(SHL1TARGETN:f)\"
 .ENDIF			# "$(GUI)"!="UNX"
@@ -467,6 +467,9 @@ $(SHL1TARGETN) : \
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS1) $(SHL1TARGETN)
 .ENDIF				# "$(SHL1NOCHECK)"!=""
 .ENDIF
+.ELIF "$(OS)"=="IOS"
+    $(COMMAND_ECHO)$(AR) $(LIB1FLAGS) $(LIBFLAGS) $@ $(SHL1OBJS) $(shell cat /dev/null $(LIB1TARGET) $(SHL1LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
+    $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_1.cmd
     @echo $(SHL1LINKER) $(SHL1LINKFLAGS) $(SHL1SONAME) $(LINKFLAGSSHL) $(SHL1VERSIONMAPPARA) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) $(STDSLO) $(SHL1OBJS:s/.obj/.o/) \
@@ -489,7 +492,7 @@ $(SHL1TARGETN) : \
 .ENDIF				# "$(SHL1NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
-.IF "$(UNIXVERSIONNAMES)"!=""
+.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL1TARGETN:b)
     $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL1TARGETN:f) $(SHL1TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -690,7 +693,7 @@ $(USE_SHL2VERSIONMAP) .ERRREMOVE: $(SHL2VERSIONMAP)
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="AIX"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="AIX"
 .IF "$(GUI)"=="UNX"
 SHL2SONAME=\"$(SONAME_SWITCH)$(SHL2TARGETN:f)\"
 .ENDIF			# "$(GUI)"!="UNX"
@@ -969,6 +972,9 @@ $(SHL2TARGETN) : \
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS2) $(SHL2TARGETN)
 .ENDIF				# "$(SHL2NOCHECK)"!=""
 .ENDIF
+.ELIF "$(OS)"=="IOS"
+    $(COMMAND_ECHO)$(AR) $(LIB2FLAGS) $(LIBFLAGS) $@ $(SHL2OBJS) $(shell cat /dev/null $(LIB2TARGET) $(SHL2LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
+    $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_2.cmd
     @echo $(SHL2LINKER) $(SHL2LINKFLAGS) $(SHL2SONAME) $(LINKFLAGSSHL) $(SHL2VERSIONMAPPARA) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) $(STDSLO) $(SHL2OBJS:s/.obj/.o/) \
@@ -991,7 +997,7 @@ $(SHL2TARGETN) : \
 .ENDIF				# "$(SHL2NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
-.IF "$(UNIXVERSIONNAMES)"!=""
+.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL2TARGETN:b)
     $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL2TARGETN:f) $(SHL2TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -1192,7 +1198,7 @@ $(USE_SHL3VERSIONMAP) .ERRREMOVE: $(SHL3VERSIONMAP)
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="AIX"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="AIX"
 .IF "$(GUI)"=="UNX"
 SHL3SONAME=\"$(SONAME_SWITCH)$(SHL3TARGETN:f)\"
 .ENDIF			# "$(GUI)"!="UNX"
@@ -1471,6 +1477,9 @@ $(SHL3TARGETN) : \
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS3) $(SHL3TARGETN)
 .ENDIF				# "$(SHL3NOCHECK)"!=""
 .ENDIF
+.ELIF "$(OS)"=="IOS"
+    $(COMMAND_ECHO)$(AR) $(LIB3FLAGS) $(LIBFLAGS) $@ $(SHL3OBJS) $(shell cat /dev/null $(LIB3TARGET) $(SHL3LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
+    $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_3.cmd
     @echo $(SHL3LINKER) $(SHL3LINKFLAGS) $(SHL3SONAME) $(LINKFLAGSSHL) $(SHL3VERSIONMAPPARA) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) $(STDSLO) $(SHL3OBJS:s/.obj/.o/) \
@@ -1493,7 +1502,7 @@ $(SHL3TARGETN) : \
 .ENDIF				# "$(SHL3NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
-.IF "$(UNIXVERSIONNAMES)"!=""
+.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL3TARGETN:b)
     $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL3TARGETN:f) $(SHL3TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -1694,7 +1703,7 @@ $(USE_SHL4VERSIONMAP) .ERRREMOVE: $(SHL4VERSIONMAP)
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="AIX"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="AIX"
 .IF "$(GUI)"=="UNX"
 SHL4SONAME=\"$(SONAME_SWITCH)$(SHL4TARGETN:f)\"
 .ENDIF			# "$(GUI)"!="UNX"
@@ -1973,6 +1982,9 @@ $(SHL4TARGETN) : \
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS4) $(SHL4TARGETN)
 .ENDIF				# "$(SHL4NOCHECK)"!=""
 .ENDIF
+.ELIF "$(OS)"=="IOS"
+    $(COMMAND_ECHO)$(AR) $(LIB4FLAGS) $(LIBFLAGS) $@ $(SHL4OBJS) $(shell cat /dev/null $(LIB4TARGET) $(SHL4LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
+    $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_4.cmd
     @echo $(SHL4LINKER) $(SHL4LINKFLAGS) $(SHL4SONAME) $(LINKFLAGSSHL) $(SHL4VERSIONMAPPARA) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) $(STDSLO) $(SHL4OBJS:s/.obj/.o/) \
@@ -1995,7 +2007,7 @@ $(SHL4TARGETN) : \
 .ENDIF				# "$(SHL4NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
-.IF "$(UNIXVERSIONNAMES)"!=""
+.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL4TARGETN:b)
     $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL4TARGETN:f) $(SHL4TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -2196,7 +2208,7 @@ $(USE_SHL5VERSIONMAP) .ERRREMOVE: $(SHL5VERSIONMAP)
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="AIX"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="AIX"
 .IF "$(GUI)"=="UNX"
 SHL5SONAME=\"$(SONAME_SWITCH)$(SHL5TARGETN:f)\"
 .ENDIF			# "$(GUI)"!="UNX"
@@ -2475,6 +2487,9 @@ $(SHL5TARGETN) : \
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS5) $(SHL5TARGETN)
 .ENDIF				# "$(SHL5NOCHECK)"!=""
 .ENDIF
+.ELIF "$(OS)"=="IOS"
+    $(COMMAND_ECHO)$(AR) $(LIB5FLAGS) $(LIBFLAGS) $@ $(SHL5OBJS) $(shell cat /dev/null $(LIB5TARGET) $(SHL5LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
+    $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_5.cmd
     @echo $(SHL5LINKER) $(SHL5LINKFLAGS) $(SHL5SONAME) $(LINKFLAGSSHL) $(SHL5VERSIONMAPPARA) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) $(STDSLO) $(SHL5OBJS:s/.obj/.o/) \
@@ -2497,7 +2512,7 @@ $(SHL5TARGETN) : \
 .ENDIF				# "$(SHL5NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
-.IF "$(UNIXVERSIONNAMES)"!=""
+.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL5TARGETN:b)
     $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL5TARGETN:f) $(SHL5TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -2698,7 +2713,7 @@ $(USE_SHL6VERSIONMAP) .ERRREMOVE: $(SHL6VERSIONMAP)
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="AIX"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="AIX"
 .IF "$(GUI)"=="UNX"
 SHL6SONAME=\"$(SONAME_SWITCH)$(SHL6TARGETN:f)\"
 .ENDIF			# "$(GUI)"!="UNX"
@@ -2977,6 +2992,9 @@ $(SHL6TARGETN) : \
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS6) $(SHL6TARGETN)
 .ENDIF				# "$(SHL6NOCHECK)"!=""
 .ENDIF
+.ELIF "$(OS)"=="IOS"
+    $(COMMAND_ECHO)$(AR) $(LIB6FLAGS) $(LIBFLAGS) $@ $(SHL6OBJS) $(shell cat /dev/null $(LIB6TARGET) $(SHL6LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
+    $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_6.cmd
     @echo $(SHL6LINKER) $(SHL6LINKFLAGS) $(SHL6SONAME) $(LINKFLAGSSHL) $(SHL6VERSIONMAPPARA) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) $(STDSLO) $(SHL6OBJS:s/.obj/.o/) \
@@ -2999,7 +3017,7 @@ $(SHL6TARGETN) : \
 .ENDIF				# "$(SHL6NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
-.IF "$(UNIXVERSIONNAMES)"!=""
+.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL6TARGETN:b)
     $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL6TARGETN:f) $(SHL6TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -3200,7 +3218,7 @@ $(USE_SHL7VERSIONMAP) .ERRREMOVE: $(SHL7VERSIONMAP)
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="AIX"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="AIX"
 .IF "$(GUI)"=="UNX"
 SHL7SONAME=\"$(SONAME_SWITCH)$(SHL7TARGETN:f)\"
 .ENDIF			# "$(GUI)"!="UNX"
@@ -3479,6 +3497,9 @@ $(SHL7TARGETN) : \
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS7) $(SHL7TARGETN)
 .ENDIF				# "$(SHL7NOCHECK)"!=""
 .ENDIF
+.ELIF "$(OS)"=="IOS"
+    $(COMMAND_ECHO)$(AR) $(LIB7FLAGS) $(LIBFLAGS) $@ $(SHL7OBJS) $(shell cat /dev/null $(LIB7TARGET) $(SHL7LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
+    $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_7.cmd
     @echo $(SHL7LINKER) $(SHL7LINKFLAGS) $(SHL7SONAME) $(LINKFLAGSSHL) $(SHL7VERSIONMAPPARA) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) $(STDSLO) $(SHL7OBJS:s/.obj/.o/) \
@@ -3501,7 +3522,7 @@ $(SHL7TARGETN) : \
 .ENDIF				# "$(SHL7NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
-.IF "$(UNIXVERSIONNAMES)"!=""
+.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL7TARGETN:b)
     $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL7TARGETN:f) $(SHL7TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -3702,7 +3723,7 @@ $(USE_SHL8VERSIONMAP) .ERRREMOVE: $(SHL8VERSIONMAP)
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="AIX"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="AIX"
 .IF "$(GUI)"=="UNX"
 SHL8SONAME=\"$(SONAME_SWITCH)$(SHL8TARGETN:f)\"
 .ENDIF			# "$(GUI)"!="UNX"
@@ -3981,6 +4002,9 @@ $(SHL8TARGETN) : \
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS8) $(SHL8TARGETN)
 .ENDIF				# "$(SHL8NOCHECK)"!=""
 .ENDIF
+.ELIF "$(OS)"=="IOS"
+    $(COMMAND_ECHO)$(AR) $(LIB8FLAGS) $(LIBFLAGS) $@ $(SHL8OBJS) $(shell cat /dev/null $(LIB8TARGET) $(SHL8LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
+    $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_8.cmd
     @echo $(SHL8LINKER) $(SHL8LINKFLAGS) $(SHL8SONAME) $(LINKFLAGSSHL) $(SHL8VERSIONMAPPARA) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) $(STDSLO) $(SHL8OBJS:s/.obj/.o/) \
@@ -4003,7 +4027,7 @@ $(SHL8TARGETN) : \
 .ENDIF				# "$(SHL8NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
-.IF "$(UNIXVERSIONNAMES)"!=""
+.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL8TARGETN:b)
     $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL8TARGETN:f) $(SHL8TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -4204,7 +4228,7 @@ $(USE_SHL9VERSIONMAP) .ERRREMOVE: $(SHL9VERSIONMAP)
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="AIX"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="AIX"
 .IF "$(GUI)"=="UNX"
 SHL9SONAME=\"$(SONAME_SWITCH)$(SHL9TARGETN:f)\"
 .ENDIF			# "$(GUI)"!="UNX"
@@ -4483,6 +4507,9 @@ $(SHL9TARGETN) : \
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS9) $(SHL9TARGETN)
 .ENDIF				# "$(SHL9NOCHECK)"!=""
 .ENDIF
+.ELIF "$(OS)"=="IOS"
+    $(COMMAND_ECHO)$(AR) $(LIB9FLAGS) $(LIBFLAGS) $@ $(SHL9OBJS) $(shell cat /dev/null $(LIB9TARGET) $(SHL9LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
+    $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_9.cmd
     @echo $(SHL9LINKER) $(SHL9LINKFLAGS) $(SHL9SONAME) $(LINKFLAGSSHL) $(SHL9VERSIONMAPPARA) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) $(STDSLO) $(SHL9OBJS:s/.obj/.o/) \
@@ -4505,7 +4532,7 @@ $(SHL9TARGETN) : \
 .ENDIF				# "$(SHL9NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
-.IF "$(UNIXVERSIONNAMES)"!=""
+.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL9TARGETN:b)
     $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL9TARGETN:f) $(SHL9TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -4706,7 +4733,7 @@ $(USE_SHL10VERSIONMAP) .ERRREMOVE: $(SHL10VERSIONMAP)
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="AIX"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="AIX"
 .IF "$(GUI)"=="UNX"
 SHL10SONAME=\"$(SONAME_SWITCH)$(SHL10TARGETN:f)\"
 .ENDIF			# "$(GUI)"!="UNX"
@@ -4985,6 +5012,9 @@ $(SHL10TARGETN) : \
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS10) $(SHL10TARGETN)
 .ENDIF				# "$(SHL10NOCHECK)"!=""
 .ENDIF
+.ELIF "$(OS)"=="IOS"
+    $(COMMAND_ECHO)$(AR) $(LIB10FLAGS) $(LIBFLAGS) $@ $(SHL10OBJS) $(shell cat /dev/null $(LIB10TARGET) $(SHL10LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
+    $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_10.cmd
     @echo $(SHL10LINKER) $(SHL10LINKFLAGS) $(SHL10SONAME) $(LINKFLAGSSHL) $(SHL10VERSIONMAPPARA) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) $(STDSLO) $(SHL10OBJS:s/.obj/.o/) \
@@ -5007,7 +5037,7 @@ $(SHL10TARGETN) : \
 .ENDIF				# "$(SHL10NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
-.IF "$(UNIXVERSIONNAMES)"!=""
+.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL10TARGETN:b)
     $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL10TARGETN:f) $(SHL10TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
