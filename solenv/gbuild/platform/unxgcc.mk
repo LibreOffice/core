@@ -298,12 +298,16 @@ gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
 
 gb_Library_PLAINLIBS_NONE += \
 	dl \
+	freetype \
 	GL \
 	GLU \
+	ICE \
 	jpeg \
 	m \
 	pthread \
+	SM \
 	X11 \
+	Xext \
 	z
 
 gb_Library_FILENAMES := \

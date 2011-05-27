@@ -271,10 +271,16 @@ en-US = "Lao"
 [STR_DESC_MODULE_LANGPACK_LO]
 en-US = "Installs the Lao user interface"
 
-[STR_NAME_MODULE_LANGPACK_NS]
+[STR_NAME_MODULE_LANGPACK_MY]
+en-US = "Burmese"
+
+[STR_DESC_MODULE_LANGPACK_MY]
+en-US = "Installs the Burmese (Myanmar) user interface"
+
+[STR_NAME_MODULE_LANGPACK_NSO]
 en-US = "Northern Sotho"
 
-[STR_DESC_MODULE_LANGPACK_NS]
+[STR_DESC_MODULE_LANGPACK_NSO]
 en-US = "Installs the Northern Sotho user interface"
 
 [STR_NAME_MODULE_LANGPACK_BN]
@@ -421,10 +427,10 @@ en-US = "Ukrainian"
 [STR_DESC_MODULE_LANGPACK_UK]
 en-US = "Installs the Ukrainian user interface"
 
-[STR_NAME_MODULE_LANGPACK_BE_BY]
+[STR_NAME_MODULE_LANGPACK_BE]
 en-US = "Belarusian"
 
-[STR_DESC_MODULE_LANGPACK_BE_BY]
+[STR_DESC_MODULE_LANGPACK_BE]
 en-US = "Installs the Belarusian user interface"
 
 [STR_NAME_MODULE_LANGPACK_SL]

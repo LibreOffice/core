@@ -60,6 +60,7 @@ $$(eval $$(call gb_Output_error,Library $(1) must be registered in Repository.mk
 endif
 $(call gb_Library_get_target,$(1)) : AUXTARGETS :=
 $(call gb_Library__Library_impl,$(1),$(call gb_Library_get_linktargetname,$(1)))
+$(call gb_Library_add_default_nativeres,$(1),default)
 
 endef
 
@@ -79,9 +80,9 @@ $(call gb_Deliver_add_deliverable,$(call gb_Library_get_target,$(1)),$(call gb_L
 endef
 
 define gb_Library_set_componentfile
-$(call gb_ComponentTarget_ComponentTarget,$(2),$(call gb_Library__get_componentprefix,$(1)),$(call gb_Library_get_runtime_filename,$(1)))
-$(call gb_Library_get_target,$(1)) : $(call gb_ComponentTarget_get_outdir_target,$(2))
-$(call gb_Library_get_clean_target,$(1)) : $(call gb_ComponentTarget_get_clean_target,$(2))
+$(call gb_ComponentTarget_ComponentTarget,$(or $(strip $(3)),$(strip $(2))),$(call gb_Library__get_componentprefix,$(1)),$(call gb_Library_get_runtime_filename,$(1)),$(2))
+$(call gb_Library_get_target,$(1)) : $(call gb_ComponentTarget_get_outdir_target,$(or $(strip $(3)),$(strip $(2))))
+$(call gb_Library_get_clean_target,$(1)) : $(call gb_ComponentTarget_get_clean_target,$(or $(strip $(3)),$(strip $(2))))
 
 endef
 

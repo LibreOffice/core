@@ -50,7 +50,6 @@
 /bin/repo-list
 /src.downloaded
 /ooo.lst
-/instsetoo_native/*
 
 # misc
 /set_soenv.last
@@ -131,6 +130,9 @@
 /formula
 /fpicker
 /framework
+/gdk-pixbuf
+/gettext
+/glib
 /graphite
 /helpcontent2
 /hsqldb
@@ -154,7 +156,11 @@
 /l10n
 /l10ntools
 /languagetool
+/libcroco
 /libegg
+/libgsf
+/libpng
+/librsvg
 /libtextcat
 /libvisio
 /libwpd
@@ -191,6 +197,7 @@
 /package
 /packimages
 /padmin
+/pango
 /postprocess
 /psprint_config
 /python

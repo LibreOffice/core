@@ -44,20 +44,19 @@ sub read_args($)
 sub invalid_distro($$)
 {
     my ($config, $distro) = @_;
-    print STDERR "can't find distro option set: $config\n";
-    print STDERR "valid values are:\n";
+    print STDERR "Can't find distro option set: $config\nThis is not necessarily a problem.\n";
+    print STDERR "Distros with distro option sets are:\n";
     my $dirh;
     opendir ($dirh, "distro-configs");
-    while (readdir ($dirh)) {
+    while (($_ = readdir ($dirh))) {
     /(.*)\.conf$/ || next;
     print STDERR "\t$1\n";
     }
     closedir ($dirh);
-    exit (1);
 }
 
 my @cmdline_args = ();
-if (@ARGV == 0) {
+if (!@ARGV) {
     my $lastrun = "autogen.lastrun";
     @cmdline_args = read_args ($lastrun) if (-f $lastrun);
 } else {
@@ -72,8 +71,9 @@ for my $arg (@cmdline_args) {
     my $config = "distro-configs/$1.conf";
     if (! -f $config) {
         invalid_distro ($config, $1);
-    }
-    push @args, read_args ($config);
+        } else {
+            push @args, read_args ($config);
+        }
     } else {
     push @args, $arg;
     }
@@ -98,8 +98,8 @@ die "failed to generate configure" if (! -x "configure");
 if (defined $ENV{NOCONFIGURE}) {
     print "Skipping configure process.";
 } else {
-    if (@ARGV > 0) {
-    print "writing args to autogen.lastrun\n";
+    if ($#cmdline_args > 0) {
+#   print "writing args to autogen.lastrun\n";
     my $fh;
     open ($fh, ">autogen.lastrun") || die "can't open autogen.lastrun: $!";
     for my $arg (@cmdline_args) {

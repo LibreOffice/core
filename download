@@ -140,7 +140,7 @@ downloaditem()
                 failed="$failed $2"
                 wret=0
             fi
-            if [ -f $2 -a -n "$md5sum" ]; then
+            if [ -f $2 -a -n "$3" -a -n "$md5sum" ]; then
                 sum=`$md5sum $md5special $2 | sed "s/ .*//"`
                 if [ "$sum" != "$3" ]; then
                     echo checksum failure for $2 2>&1 | tee -a $logfile
@@ -187,6 +187,27 @@ if [ "$COM" = "MSC" ]; then
         ;;
     esac
 
+fi
+
+if [ -f $start_dir/bootstrap.ver -a ! -d $start_dir/.git ] ; then
+    # bootstrap is from sources, so get the other source tarballs
+    . $start_dir/bootstrap.ver
+    lo_src_dir="$start_dir/src"
+    mkdir -p "$lo_src_dir"
+    for piece in `cat $start_dir/bin/repo-list` ; do
+        tarname="libreoffice-$piece-$lo_bootstrap_ver"
+        if [ ! -f "$TARFILE_LOCATION/$tarname.tar.bz2" ] ; then
+	    downloaditem "http://download.documentfoundation.org/libreoffice/src/" "$tarname.tar.bz2" ""
+	fi
+	if [ ! -d $lo_src_dir/$tarname ] ; then
+	    echo "Unpacking $tarname.tar.bz2..."
+	    tar -xf "$TARFILE_LOCATION/$tarname.tar.bz2" -C "$lo_src_dir"
+	fi
+	# create symlinks
+	for dir in `find "$lo_src_dir/$tarname" -mindepth 1 -maxdepth 1 -type d` ; do
+	    ln -sf "$dir" "$start_dir"
+	done
+    done
 fi
 
 rm $TARFILE_LOCATION/tmp/*-*

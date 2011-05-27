@@ -13,7 +13,13 @@ use Cwd;
 
 $path = '';
 $do_link = 0;
+$is_windows = 0;
 my $tmp_dir;
+
+if ($ENV{GUI} eq 'WNT') {
+    $is_windows = 1;
+}
+
 if( defined($ENV{TMPDIR}) ) {
     $tmp_dir = $ENV{TMPDIR};
 } elsif( defined($ENV{TMP}) ) {
@@ -87,9 +93,9 @@ else {
 $langs = join (",", @larr);
 
 $destdir='';
-if ( defined $ENV{OODESTDIR} &&
-     $ENV{OODESTDIR} ne "" ) {
-    $destdir = "-destdir \"$ENV{OODESTDIR}\"";
+if ( defined $ENV{DESTDIR} &&
+     $ENV{DESTDIR} ne "" ) {
+    $destdir = "-destdir \"$ENV{DESTDIR}\"";
 }
 
 $strip='';
@@ -98,12 +104,18 @@ if ( defined $ENV{DISABLE_STRIP} &&
     $strip = "-dontstrip";
 }
 
-print "Running OOo installer\n";
+$msi='';
+if ($is_windows) {
+    $msi = "-msitemplate $ENV{SRC_ROOT}/instsetoo_native/$ENV{INPATH}/misc/openoffice/msi_templates " .
+           "-msilanguage $ENV{SRC_ROOT}/instsetoo_native/$ENV{INPATH}/misc/win_ulffiles";
+}
+
+print "Running LibreOffice installer\n";
 system ("cd $ENV{SRC_ROOT}/instsetoo_native/util ; " .
 	"perl -w $ENV{SOLARENV}/bin/make_installer.pl " .
 	"-f openoffice.lst -l $langs -p LibreOffice " .
 	"-u $tmp_dir " .
-	"-buildid $BUILD $destdir $strip " .
+	"-buildid $BUILD $destdir $strip $msi " .
 	"-simple $path") && die "Failed to install: $!";
 
 if ($ENV{BUILD_TYPE} =~ m/ODK/) {
@@ -112,11 +124,11 @@ if ($ENV{BUILD_TYPE} =~ m/ODK/) {
 	"perl -w $ENV{SOLARENV}/bin/make_installer.pl " .
 	"-f openoffice.lst -l en-US -p LibreOffice_SDK " .
 	"-u $tmp_dir " .
-	"-buildid $BUILD $destdir $strip " .
+	"-buildid $BUILD $destdir $strip $msi" .
 	"-simple $path") && die "Failed to install: $!";
 }
 print "Installer finished\n";
 
-if ($do_link) {
+if ($do_link && !$is_windows) {
     `$ENV{SOLARENV}/bin/linkoo $path $ENV{SRC_ROOT}`;
 }

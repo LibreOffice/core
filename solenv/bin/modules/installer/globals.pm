@@ -94,7 +94,8 @@ BEGIN
         "fur",
         "ny",
         "so",
-        "kab"
+        "kab",
+        "tk"
     );
     @items_at_modules = ("Files", "Dirs", "Unixlinks");
     @asianlanguages = ("ja", "ko", "zh-CN", "zh-TW");
@@ -385,6 +386,10 @@ BEGIN
     %allcomponents_in_this_database = ();
     %allshortcomponents = ();
     %alluniquedirectorynames = ();
+    %allregistrycomponents_ = ();
+    %allregistrycomponents_in_this_database_ = ();
+    %allshortregistrycomponents = ();
+    %allregistryidentifier = ();
 
     $installlocationdirectory = "";
     $installlocationdirectoryset = 0;

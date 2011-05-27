@@ -826,6 +826,10 @@ SOLARCOMMONSDFDIR=$(SOLARSDFDIR)
 
 .EXPORT : SOLARBINDIR
 
+.IF "$(GUI)" == "WNT" 
+L10N_MODULE*=$(shell cygpath -m $(SRC_ROOT)/translations)
+.ELSE
+.ENDIF
 .IF "$(WITH_LANG)"!=""
 .INCLUDE .IGNORE: $(L10N_MODULE)/$(COMMON_OUTDIR)$(PROEXT)/inc/localization_present.mk
 
