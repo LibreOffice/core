@@ -532,7 +532,7 @@ Sub SetGlobalOptionsDialog ()
     REM create dialog control
     gOptionsDialog = CreateUnoDialog( oInputStreamProvider )
 
-    if Environ(&quot;WITH_BINFILTER&quot;) = &quot;NO&quot; then
+    if Environ(&quot;WITH_BINFILTER&quot;) &lt;&gt; &quot;YES&quot; then
         oControl = gOptionsDialog.getControl(&quot;cbOpen50Test&quot;)
         oControl.Model.setPropertyValue(&quot;Enabled&quot;, FALSE)
     End If
@@ -593,10 +593,10 @@ Sub GetOptions
     gOptionsDialog.getControl(&quot;cbDatabaseTest&quot;).setState( -( GetUserFieldState (cUserFieldTestDatabase, gOutputDoc)))
     gOptionsDialog.getControl(&quot;cbExtensionTest&quot;).setState( -( GetUserFieldState (cUserFieldTestExtension, gOutputDoc)))
     gOptionsDialog.getControl(&quot;cbSaveOpenXMLTest&quot;).setState( -( GetUserFieldState (cUserFieldTestOpenSaveXML, gOutputDoc)))
-    if Environ(&quot;WITH_BINFILTER&quot;) = &quot;NO&quot; then
-        gOptionsDialog.getControl(&quot;cbOpen50Test&quot;).setState(0)
-    else
+    if Environ(&quot;WITH_BINFILTER&quot;) = &quot;YES&quot; then
         gOptionsDialog.getControl(&quot;cbOpen50Test&quot;).setState( -( GetUserFieldState (cUserFieldTestOpen50, gOutPutDoc)))
+    else
+        gOptionsDialog.getControl(&quot;cbOpen50Test&quot;).setState(0)
     End If
     gOptionsDialog.getControl(&quot;cbSaveOpen8Test&quot;).setState( -( GetUserFieldState (cUserFieldTestOpenSave8, gOutputDoc)))
     gOptionsDialog.getControl(&quot;cbTerminateAfterTest&quot;).setState( -( GetUserFieldState (cUserFieldTestTerminateAfterTest, gOutputDoc)))
@@ -615,10 +615,10 @@ Sub ReadOptions
     bMakeDBTest = GetUserFieldState (cUserFieldTestDatabase, gOutputDoc)
     bMakeExtensionTest = GetUserFieldState (cUserFieldTestExtension, gOutputDoc)
     bMakeSaveOpenXMLTest = GetUserFieldState (cUserFieldTestOpenSaveXML, gOutputDoc)
-    if Environ(&quot;WITH_BINFILTER&quot;) = &quot;NO&quot; then
-        bMakeOpen50Test = false
-    else
+    if Environ(&quot;WITH_BINFILTER&quot;) = &quot;YES&quot; then
         bMakeOpen50Test = GetUserFieldState (cUserFieldTestOpen50, gOutPutDoc)
+    else
+        bMakeOpen50Test = false
     End If
     bMakeSaveOpen8Test = GetUserFieldState (cUserFieldTestOpenSave8, gOutputDoc)
     bMakeTerminateAfterTest = GetUserFieldState (cUserFieldTestTerminateAfterTest, gOutputDoc)
@@ -643,10 +643,10 @@ Sub SetDefaultOptions
     End If
     bMakeSaveOpenXMLTest = true
     REM Disable StarOffice 5.0 tests in case binfilter has not been included
-    if Environ(&quot;WITH_BINFILTER&quot;) = &quot;NO&quot; then
-        bMakeOpen50Test = false
-    else
+    if Environ(&quot;WITH_BINFILTER&quot;) = &quot;YES&quot; then
         bMakeOpen50Test = true
+    else
+        bMakeOpen50Test = false
     End If
     bMakeSaveOpen8Test = true
     bMakeTerminateAfterTest = false
