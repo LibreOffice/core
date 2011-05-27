@@ -193,13 +193,13 @@ sal_Bool ScUndoInsertTab::CanRepeat(SfxRepeatTarget& rTarget) const
 
 ScUndoInsertTables::ScUndoInsertTables( ScDocShell* pNewDocShell,
                                         SCTAB nTabNum,
-                                        sal_Bool bApp,SvStrings *pNewNameList) :
+                                        sal_Bool bApp,std::vector<rtl::OUString>& newNameList) :
     ScSimpleUndo( pNewDocShell ),
     pDrawUndo( NULL ),
+    aNameList( newNameList ),
     nTab( nTabNum ),
     bAppend( bApp )
 {
-    pNameList = pNewNameList;
     pDrawUndo = GetSdrUndoAction( pDocShell->GetDocument() );
 
     SetChangeTrack();
@@ -208,16 +208,6 @@ ScUndoInsertTables::ScUndoInsertTables( ScDocShell* pNewDocShell,
 ScUndoInsertTables::~ScUndoInsertTables()
 {
     String *pStr=NULL;
-    if(pNameList!=NULL)
-    {
-        for(int i=0;i<pNameList->Count();i++)
-        {
-            pStr=pNameList->GetObject(sal::static_int_cast<sal_uInt16>(i));
-            delete pStr;
-        }
-        pNameList->Remove(0,pNameList->Count());
-        delete pNameList;
-    }
     DeleteSdrUndoAction( pDrawUndo );
 }
 
@@ -234,7 +224,7 @@ void ScUndoInsertTables::SetChangeTrack()
         nStartChangeAction = pChangeTrack->GetActionMax() + 1;
         nEndChangeAction = 0;
         ScRange aRange( 0, 0, nTab, MAXCOL, MAXROW, nTab );
-        for( int i = 0; i < pNameList->Count(); i++ )
+        for( int i = 0; i < aNameList.size(); i++ )
         {
             aRange.aStart.SetTab( sal::static_int_cast<SCTAB>( nTab + i ) );
             aRange.aEnd.SetTab( sal::static_int_cast<SCTAB>( nTab + i ) );
@@ -255,7 +245,7 @@ void ScUndoInsertTables::Undo()
     bDrawIsInUndo = sal_True;
 
     vector<SCTAB> TheTabs;
-    for(int i=0; i<pNameList->Count(); ++i)
+    for(int i=0; i< aNameList.size(); ++i)
     {
         TheTabs.push_back(nTab+i);
     }
@@ -284,7 +274,7 @@ void ScUndoInsertTables::Redo()
     pDocShell->SetInUndo( sal_True );               //! BeginRedo
     bDrawIsInUndo = sal_True;
     pViewShell->SetTabNo(nTab);
-    pViewShell->InsertTables( pNameList, nTab, static_cast<SCTAB>(pNameList->Count()),false );
+    pViewShell->InsertTables( aNameList, nTab, static_cast<SCTAB>(aNameList.size()),false );
 
     bDrawIsInUndo = false;
     pDocShell->SetInUndo( false );              //! EndRedo

@@ -391,7 +391,7 @@ sal_Bool ScRangeData::IsValidReference( ScRange& rRange ) const
     return false;
 }
 
-void ScRangeData::UpdateTabRef(SCTAB nOldTable, sal_uInt16 nFlag, SCTAB nNewTable)
+void ScRangeData::UpdateTabRef(SCTAB nOldTable, sal_uInt16 nFlag, SCTAB nNewTable, SCTAB nNewSheets)
 {
     pCode->Reset();
     if( pCode->GetNextReference() )
@@ -403,7 +403,7 @@ void ScRangeData::UpdateTabRef(SCTAB nOldTable, sal_uInt16 nFlag, SCTAB nNewTabl
         switch (nFlag)
         {
             case 1:                                     // einfache InsertTab (doc.cxx)
-                pRangeData = aComp.UpdateInsertTab(nOldTable, sal_True );   // und CopyTab (doc2.cxx)
+                pRangeData = aComp.UpdateInsertTab(nOldTable, sal_True, nNewSheets );   // und CopyTab (doc2.cxx)
                 break;
             case 2:                                     // einfaches delete (doc.cxx)
                 pRangeData = aComp.UpdateDeleteTab(nOldTable, false, sal_True, bChanged);
@@ -784,11 +784,11 @@ void ScRangeName::UpdateReference(
         itr->UpdateReference(eUpdateRefMode, rRange, nDx, nDy, nDz);
 }
 
-void ScRangeName::UpdateTabRef(SCTAB nTable, sal_uInt16 nFlag, SCTAB nNewTable)
+void ScRangeName::UpdateTabRef(SCTAB nTable, sal_uInt16 nFlag, SCTAB nNewTable, SCTAB nNewSheets)
 {
     DataType::iterator itr = maData.begin(), itrEnd = maData.end();
     for (; itr != itrEnd; ++itr)
-        itr->UpdateTabRef(nTable, nFlag, nNewTable);
+        itr->UpdateTabRef(nTable, nFlag, nNewTable, nNewSheets);
 }
 
 void ScRangeName::UpdateTranspose(const ScRange& rSource, const ScAddress& rDest)

@@ -1129,7 +1129,7 @@ bool ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
     return bCellStateChanged;
 }
 
-void ScFormulaCell::UpdateInsertTab(SCTAB nTable)
+void ScFormulaCell::UpdateInsertTab(SCTAB nTable, SCTAB nNewSheets)
 {
     sal_Bool bPosChanged = ( aPos.Tab() >= nTable ? sal_True : false );
     pCode->Reset();

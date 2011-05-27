@@ -300,7 +300,10 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                     InsertTable( *pDlg->GetFirstTable(), nTabNr );
                                 }
                                 else
-                                    InsertTables( NULL, nTabNr,nCount );
+                                {
+                                    std::vector<rtl::OUString> aNames(0);
+                                    InsertTables( aNames, nTabNr,nCount );
+                                }
                             }
                             else
                             {
@@ -336,7 +339,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                 }
                                 else
                                 {
-                                    InsertTables( NULL, nTabAfter,nCount);
+                                    std::vector<rtl::OUString> aNames(0);
+                                    InsertTables( aNames, nTabAfter,nCount);
                                 }
                             }
                         }

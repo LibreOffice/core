@@ -146,7 +146,7 @@ public:
     SC_DLLPUBLIC sal_Bool           IsValidReference( ScRange& rRef ) const;
     sal_Bool            IsRangeAtBlock( const ScRange& ) const;
 
-    void            UpdateTabRef(SCTAB nOldTable, sal_uInt16 nFlag, SCTAB nNewTable);
+    void            UpdateTabRef(SCTAB nOldTable, sal_uInt16 nFlag, SCTAB nNewTable, SCTAB nNewSheets);
     void            TransferTabRef( SCTAB nOldTab, SCTAB nNewTab );
 
     void            ValidateTabRefs();
@@ -199,7 +199,7 @@ public:
     SC_DLLPUBLIC ScRangeData* findByIndex(sal_uInt16 i);
     void UpdateReference(UpdateRefMode eUpdateRefMode, const ScRange& rRange,
                          SCsCOL nDx, SCsROW nDy, SCsTAB nDz);
-    void UpdateTabRef(SCTAB nTable, sal_uInt16 nFlag, SCTAB nNewTable = 0);
+    void UpdateTabRef(SCTAB nTable, sal_uInt16 nFlag, SCTAB nNewTable = 0, SCTAB nNewSheets = 1);
     void UpdateTranspose(const ScRange& rSource, const ScAddress& rDest);
     void UpdateGrow(const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY);
 

@@ -1398,9 +1398,10 @@ void ScTable::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
         aCol[i].UpdateGrow( rArea, nGrowX, nGrowY );
 }
 
-void ScTable::UpdateInsertTab(SCTAB nTable)
+void ScTable::UpdateInsertTab(SCTAB nTable, SCTAB nNewSheets)
 {
-    if (nTab >= nTable) nTab++;
+    if (nTab >= nTable)
+        nTab += nNewSheets;
     for (SCCOL i=0; i <= MAXCOL; i++) aCol[i].UpdateInsertTab(nTable);
 
     if (IsStreamValid())

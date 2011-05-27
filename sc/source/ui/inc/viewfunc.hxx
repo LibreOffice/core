@@ -260,7 +260,7 @@ public:
     void            TabOp( const ScTabOpParam& rParam,  sal_Bool bRecord = sal_True );
 
     sal_Bool            InsertTable( const String& rName, SCTAB nTabNr, sal_Bool bRecord = sal_True );
-    sal_Bool            InsertTables(SvStrings *pNames, SCTAB nTab, SCTAB nCount, sal_Bool bRecord = sal_True);
+    sal_Bool            InsertTables(std::vector<rtl::OUString>& aNames, SCTAB nTab, SCTAB nCount, sal_Bool bRecord = sal_True);
 
 
     sal_Bool            AppendTable( const String& rName, sal_Bool bRecord = sal_True );

@@ -94,7 +94,7 @@ public:
                             ScDocShell* pNewDocShell,
                             SCTAB nTabNum,
                             sal_Bool bApp,
-                            SvStrings *pNewNameList);
+                            std::vector<rtl::OUString>& newNameList);
     virtual         ~ScUndoInsertTables();
 
     virtual void    Undo();
@@ -107,7 +107,7 @@ public:
 private:
 
     SdrUndoAction*  pDrawUndo;
-    SvStrings*      pNameList;
+    std::vector<rtl::OUString>      aNameList;
     sal_uLong           nStartChangeAction;
     sal_uLong           nEndChangeAction;
     SCTAB           nTab;

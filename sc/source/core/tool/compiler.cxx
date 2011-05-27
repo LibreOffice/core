@@ -4480,7 +4480,7 @@ void ScCompiler::UpdateSharedFormulaReference( UpdateRefMode eUpdateRefMode,
 }
 
 
-ScRangeData* ScCompiler::UpdateInsertTab( SCTAB nTable, sal_Bool bIsName )
+ScRangeData* ScCompiler::UpdateInsertTab( SCTAB nTable, sal_Bool bIsName , SCTAB nNewSheets)
 {
     ScRangeData* pRangeData = NULL;
     SCTAB nPosTab = aPos.Tab();     // _after_ incremented!
