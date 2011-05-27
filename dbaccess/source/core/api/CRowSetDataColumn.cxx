@@ -203,7 +203,7 @@ Sequence< sal_Int8 > ORowSetDataColumn::getImplementationId() throw (RuntimeExce
 
 void ORowSetDataColumn::fireValueChange(const ORowSetValue& _rOldValue)
 {
-    if ( !m_aColumnValue.isNull() && m_aColumnValue->is() && (!(((*m_aColumnValue)->get())[m_nPos] == _rOldValue)) )
+    if ( !m_aColumnValue.isNull() && m_aColumnValue->is() && (((*m_aColumnValue)->get())[m_nPos] != _rOldValue) )
     {
         sal_Int32 nHandle = PROPERTY_ID_VALUE;
         m_aOldValue = _rOldValue.makeAny();
