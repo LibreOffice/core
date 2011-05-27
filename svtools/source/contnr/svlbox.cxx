@@ -45,11 +45,10 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <rtl/instance.hxx>
 
-#define _SVSTDARR_ULONGSSORT
-#include <svl/svstdarr.hxx>
-
 #include <svtools/svmedit.hxx>
 #include <svtools/svlbitm.hxx>
+
+#include <set>
 
 using namespace ::com::sun::star::accessibility;
 
@@ -1933,30 +1932,30 @@ sal_Bool SvLBox::NotifyAcceptDrop( SvLBoxEntry* )
 
 namespace
 {
-    struct SortLBoxes : public rtl::Static<SvULongsSort, SortLBoxes> {};
+    struct SortLBoxes : public rtl::Static<std::set<sal_uLong>, SortLBoxes> {};
 }
 
 void SvLBox::AddBoxToDDList_Impl( const SvLBox& rB )
 {
     sal_uLong nVal = (sal_uLong)&rB;
-    SortLBoxes::get().Insert( nVal );
+    SortLBoxes::get().insert( nVal );
 }
 
 void SvLBox::RemoveBoxFromDDList_Impl( const SvLBox& rB )
 {
     sal_uLong nVal = (sal_uLong)&rB;
-    SortLBoxes::get().Remove( nVal );
+    SortLBoxes::get().erase( nVal );
 }
 
 IMPL_STATIC_LINK( SvLBox, DragFinishHdl_Impl, sal_Int8*, pAction )
 {
     sal_uLong nVal = (sal_uLong)pThis;
-    sal_uInt16 nFnd;
-    SvULongsSort &rSortLBoxes = SortLBoxes::get();
-    if( rSortLBoxes.Seek_Entry( nVal, &nFnd ) )
+    std::set<sal_uLong> &rSortLBoxes = SortLBoxes::get();
+    std::set<sal_uLong>::const_iterator it = rSortLBoxes.find(nVal);
+    if( it != rSortLBoxes.end() )
     {
         pThis->DragFinished( *pAction );
-        rSortLBoxes.Remove( nFnd, 1 );
+        rSortLBoxes.erase( it );
     }
     return 0;
 }
