@@ -72,7 +72,8 @@ namespace writerfilter {
 
                 SvStream* m_pInStream;
                 Stream* m_pMapperStream;
-                int m_nGroup; // TODO use m_aStates.size() instead
+                /// Same as m_aStates.size(), except that this can be negative for invalid input.
+                int m_nGroup;
                 std::stack<RTFParserState> m_aStates;
         };
     } // namespace rtftok
