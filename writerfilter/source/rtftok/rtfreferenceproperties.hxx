@@ -8,6 +8,7 @@ class SvStream;
 
 namespace writerfilter {
     namespace rtftok {
+        /// Sends RTFSprm instances to DomainMapper.
         class RTFReferenceProperties
             : public writerfilter::Reference<Properties>
         {

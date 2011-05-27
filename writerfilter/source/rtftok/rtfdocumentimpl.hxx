@@ -42,6 +42,7 @@ namespace writerfilter {
             CONTROL_VALUE // eg \fs (requires parameter)
         };
 
+        /// State of the parser, which gets saved / restored when changing groups.
         class RTFParserState
         {
             public:
