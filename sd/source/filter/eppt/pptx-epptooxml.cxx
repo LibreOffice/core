@@ -1709,7 +1709,7 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape( Reference< XShape > x
     WriteBlipFill( xProps, S( "GraphicURL" ) );
     mpFS->endElementNS( XML_p, XML_spPr );
 
-    WriteTextBox( xShape );
+    WriteTextBox( xShape, XML_p );
 
     END_SHAPE;
 
