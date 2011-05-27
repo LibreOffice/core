@@ -47,8 +47,8 @@ public:
     ~SCmdStream();
 
     using CmdBaseStream::Read;
-    void Read ( comm_USHORT &nNr ){CmdBaseStream::Read ( nNr );}
-    void Read ( comm_ULONG &nNr ){CmdBaseStream::Read ( nNr );}
+    void Read ( comm_UINT16 &nNr ){CmdBaseStream::Read ( nNr );}
+    void Read ( comm_UINT32 &nNr ){CmdBaseStream::Read ( nNr );}
     void Read ( comm_BOOL &bBool ){CmdBaseStream::Read ( bBool );}
     void Read ( String &aString );
     void Read ( SfxPoolItem *&pItem );

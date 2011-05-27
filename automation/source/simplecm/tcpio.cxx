@@ -32,7 +32,7 @@
 #include "tcpio.hxx"
 
 /// implement ITransmiter
-comm_USHORT TCPIO::TransferBytes( const void* pBuffer, comm_UINT32 nLen )
+comm_UINT16 TCPIO::TransferBytes( const void* pBuffer, comm_UINT32 nLen )
 {
     osl::MutexGuard aGuard( aMSocketWriteAccess );
     if ( !pStreamSocket )
@@ -48,7 +48,7 @@ comm_USHORT TCPIO::TransferBytes( const void* pBuffer, comm_UINT32 nLen )
 
 
 /// implement IReceiver
-comm_USHORT TCPIO::ReceiveBytes( void* pBuffer, comm_UINT32 nLen )
+comm_UINT16 TCPIO::ReceiveBytes( void* pBuffer, comm_UINT32 nLen )
 {
     osl::MutexGuard aGuard( aMSocketReadAccess );
     if ( !pStreamSocket )

@@ -167,7 +167,7 @@ void StatementList::SendProfile( String aText )
 
             if ( pProfiler->IsPartitioning() )
                                 // FIXME: HELPID
-                pRet->GenReturn( RET_ProfileInfo, S_ProfileTime, static_cast<comm_ULONG>(pProfiler->GetPartitioningTime()) ); // GetPartitioningTime() sal_uLong != comm_ULONG on 64bit
+                pRet->GenReturn( RET_ProfileInfo, S_ProfileTime, static_cast<comm_UINT32>(pProfiler->GetPartitioningTime()) ); // GetPartitioningTime() sal_uLong != comm_UINT32 on 64bit
         }
 
         if ( pProfiler->IsAutoProfiling() )

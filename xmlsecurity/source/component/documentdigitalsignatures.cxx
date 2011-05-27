@@ -440,8 +440,6 @@ void DocumentDigitalSignatures::showCertificate(
     ::ucbhelper::ContentBroker* pBroker = NULL;
 
     //warning free code
-    //if ( aLocObj.GetProtocol() == INET_PROT_FILE && ( pBroker = ::ucbhelper::ContentBroker::get() ) )
-    //  xContentProvider = pBroker->getContentProviderInterface();
     if ( aLocObj.GetProtocol() == INET_PROT_FILE)
     {
         pBroker = ::ucbhelper::ContentBroker::get();

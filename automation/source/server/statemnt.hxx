@@ -336,8 +336,8 @@ class StatementCommand : public StatementList   // Befehl ausf�hren (wintree, 
 protected:
     sal_uInt16 nMethodId;
     sal_uInt16 nParams;
-    comm_USHORT nNr1,nNr2,nNr3,nNr4;
-    comm_ULONG nLNr1;
+    comm_UINT16 nNr1,nNr2,nNr3,nNr4;
+    comm_UINT32 nLNr1;
     String aString1,aString2;
     sal_Bool bBool1,bBool2;
 
@@ -372,8 +372,8 @@ protected:
     rtl::OString aUId;
     sal_uInt16 nMethodId;
     sal_uInt16 nParams;
-    comm_USHORT nNr1,nNr2,nNr3,nNr4;
-    comm_ULONG nLNr1;
+    comm_UINT16 nNr1,nNr2,nNr3,nNr4;
+    comm_UINT32 nLNr1;
     String aString1,aString2;
     sal_Bool bBool1,bBool2;
     sal_Bool ControlOK( Window *pControl, const sal_Char* aBezeichnung );
@@ -396,8 +396,8 @@ class StatementFlow : public StatementList      // Kommunikation mit Sequence
     sal_uInt16 nArt;
 
     sal_uInt16 nParams;
-    comm_USHORT nSNr1;
-    comm_ULONG nLNr1;
+    comm_UINT16 nSNr1;
+    comm_UINT32 nLNr1;
     String aString1;
     sal_Bool bBool1;
 

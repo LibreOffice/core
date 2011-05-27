@@ -77,7 +77,6 @@ MacroWarning::MacroWarning( Window* _pParent, uno::Reference< dcss::xml::crypto:
 
     maViewSignsBtn.SetClickHdl( LINK( this, MacroWarning, ViewSignsBtnHdl ) );
     maEnableBtn.SetClickHdl( LINK( this, MacroWarning, EnableBtnHdl ) );
-//  maDisableBtn.SetClickHdl( LINK( this, MacroWarning, DisableBtnHdl ) );
 
     if( mxCert.is() )
         maSignsFI.SetText( XmlSec::GetContentPart( mxCert->getSubjectName() ) );
@@ -138,10 +137,5 @@ IMPL_LINK( MacroWarning, EnableBtnHdl, void*, EMPTYARG )
     EndDialog( RET_OK );
     return 0;
 }
-
-/*IMPL_LINK( MacroWarning, DisableBtnHdl, void*, EMPTYARG )
-{
-    return 0;
-}*/
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
