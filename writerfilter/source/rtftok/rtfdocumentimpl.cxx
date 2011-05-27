@@ -3,6 +3,7 @@
 #include <rtfcontrolwords.hxx>
 #include <rtfvalue.hxx>
 #include <rtfsprm.hxx>
+#include <doctok/sprmids.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -122,15 +123,8 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
 
     switch (nKeyword)
     {
-        case RTF_B: // NS_sprm::LN_CFBold
-            if (bOn)
-            {
-                // on
-            }
-            else
-            {
-                // off
-            }
+        case RTF_B:
+            m_aSprms[NS_sprm::LN_CFBold] = bOn;
             break;
         default:
             OSL_TRACE("%s: TODO handle toggle '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
@@ -365,7 +359,7 @@ RTFParserState::RTFParserState()
 {
 }
 
-RTFReferenceProperties::RTFReferenceProperties(std::map<RTFKeyword, int> rSprms)
+RTFReferenceProperties::RTFReferenceProperties(std::map<int, int> rSprms)
     : m_rSprms(rSprms)
 {
 }
