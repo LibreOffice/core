@@ -102,6 +102,7 @@ my_components = \
     component/unoxml/source/rdf/unordf \
     component/unoxml/source/service/unoxml \
     component/vbahelper/util/msforms \
+    component/vcl/vcl \
     component/writerfilter/util/writerfilter \
     component/xmloff/source/transform/xof \
     component/xmloff/util/xo \
@@ -177,7 +178,6 @@ my_components = \
     updchk.uno \
     uui \
     vbaevents \
-    vcl \
     vclcanvas \
     wpft \
     wpgfilter \
@@ -196,7 +196,7 @@ my_components += pythonloader
 .IF "$(OS)" != "WNT" && "$(OS)" != "MACOSX"
 my_components += splash
 .ENDIF
-
+    
 .IF "$(BUILD_SPECIAL)" != ""
 my_components += oooimprovement
 .END
