@@ -87,7 +87,7 @@ bool lcl_getNewRectSize(const Rectangle& _aObjRect,long& _nXMov, long& _nYMov,Sd
                     aNewRect.Move(_nXMov,_nYMov);
                     break;
             }
-            if ( dynamic_cast<OUnoObject*>(_pObj) )
+            if (dynamic_cast<OUnoObject*>(_pObj) != NULL || dynamic_cast<OOle2Obj*>(_pObj) != NULL)
             {
                 pOverlappedObj = isOver(aNewRect,*_pObj->GetPage(),*_pView,true,_pObj);
                 if ( pOverlappedObj && _pObj != pOverlappedObj )
@@ -246,8 +246,9 @@ void OViewsWindow::resize(const OSectionWindow& _rSectionWindow)
         if ( bSet )
         {
             impl_resizeSectionWindow(*pSectionWindow.get(),aStartPoint,bSet);
-            pSectionWindow->Invalidate(INVALIDATE_NOERASE | INVALIDATE_NOCHILDREN | INVALIDATE_TRANSPARENT);
-            pSectionWindow->getStartMarker().Invalidate(INVALIDATE_NOERASE | INVALIDATE_NOCHILDREN | INVALIDATE_TRANSPARENT );
+            static sal_Int32 nIn = INVALIDATE_UPDATE | INVALIDATE_TRANSPARENT;
+            pSectionWindow->getStartMarker().Invalidate( nIn ); // INVALIDATE_NOERASE |INVALIDATE_NOCHILDREN| INVALIDATE_TRANSPARENT
+            pSectionWindow->getEndMarker().Invalidate( nIn );
         }
     }
     Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH));
@@ -258,7 +259,6 @@ void OViewsWindow::resize(const OSectionWindow& _rSectionWindow)
     m_pParent->notifySizeChanged();
 
     Rectangle aRect(PixelToLogic(Point(0,0)),aOut);
-    Invalidate(aRect,INVALIDATE_NOERASE | INVALIDATE_NOCHILDREN | INVALIDATE_TRANSPARENT);
 }
 //------------------------------------------------------------------------------
 void OViewsWindow::Resize()
@@ -296,6 +296,7 @@ void OViewsWindow::Paint( const Rectangle& rRect )
 //------------------------------------------------------------------------------
 void OViewsWindow::ImplInitSettings()
 {
+    EnableChildTransparentMode( sal_True );
     SetBackground( );
     SetFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
     SetTextFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
@@ -318,7 +319,6 @@ void OViewsWindow::addSection(const uno::Reference< report::XSection >& _xSectio
     ::boost::shared_ptr<OSectionWindow> pSectionWindow( new OSectionWindow(this,_xSection,_sColorEntry) );
     m_aSections.insert(getIteratorAtPos(_nPosition) , TSectionsMap::value_type(pSectionWindow));
     m_pParent->setMarked(&pSectionWindow->getReportSection().getSectionView(),m_aSections.size() == 1);
-
     Resize();
 }
 //----------------------------------------------------------------------------
@@ -544,8 +544,8 @@ void OViewsWindow::unmarkAllObjects(OSectionView* _pSectionView)
 // -----------------------------------------------------------------------
 void OViewsWindow::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32)
 {
-        ImplInitSettings();
-        Invalidate();
+    ImplInitSettings();
+    Invalidate();
 }
 // -----------------------------------------------------------------------------
 void OViewsWindow::MouseButtonDown( const MouseEvent& rMEvt )
@@ -845,7 +845,7 @@ void OViewsWindow::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAli
                 TRectangleMap::iterator aInterSectRectIter = aSortRectangles.begin();
                 for (; aInterSectRectIter != aRectIter; ++aInterSectRectIter)
                 {
-                    if ( pView == aInterSectRectIter->second.second && dynamic_cast<OUnoObject*>(aInterSectRectIter->second.first) )
+                    if ( pView == aInterSectRectIter->second.second && (dynamic_cast<OUnoObject*>(aInterSectRectIter->second.first) || dynamic_cast<OOle2Obj*>(aInterSectRectIter->second.first)))
                     {
                         SdrObject* pPreviousObj = aInterSectRectIter->second.first;
                         Rectangle aIntersectRect = aTest.GetIntersection(_bBoundRects ? pPreviousObj->GetCurrentBoundRect() : pPreviousObj->GetSnapRect());
@@ -921,7 +921,8 @@ void OViewsWindow::setGridSnap(sal_Bool bOn)
     for (; aIter != aEnd ; ++aIter)
     {
         (*aIter)->getReportSection().getSectionView().SetGridSnap(bOn);
-        (*aIter)->getReportSection().Invalidate();
+        static sal_Int32 nIn = 0;
+        (*aIter)->getReportSection().Invalidate(nIn);
     }
 }
 // -----------------------------------------------------------------------------
@@ -1517,6 +1518,7 @@ void OViewsWindow::handleKey(const KeyCode& _rCode)
                 {
                     // restrict movement to work area
                     Rectangle rWorkArea = rView.GetWorkArea();
+                    rWorkArea.Right()++;
 
                     if ( !rWorkArea.IsEmpty() )
                     {
@@ -1544,11 +1546,56 @@ void OViewsWindow::handleKey(const KeyCode& _rCode)
                         for (sal_uInt32 i =  0; !bCheck && i < rMarkList.GetMarkCount();++i )
                         {
                             SdrMark* pMark = rMarkList.GetMark(i);
-                            bCheck = dynamic_cast<OUnoObject*>(pMark->GetMarkedSdrObj()) != NULL;
+                            bCheck = dynamic_cast<OUnoObject*>(pMark->GetMarkedSdrObj()) != NULL|| dynamic_cast<OOle2Obj*>(pMark->GetMarkedSdrObj());
                         }
 
-                        if ( bCheck && isOver(aMarkRect,*rReportSection.getPage(),rView) )
-                            break;
+
+                        if ( bCheck )
+                        {
+                            SdrObject* pOverlapped = isOver(aMarkRect,*rReportSection.getPage(),rView);
+                            if ( pOverlapped )
+                            {
+                                do
+                                {
+                                    Rectangle aOver = pOverlapped->GetLastBoundRect();
+                                    Point aPos;
+                                    if ( nCode == KEY_UP )
+                                    {
+                                        aPos.X() = aMarkRect.Left();
+                                        aPos.Y() = aOver.Top() - aMarkRect.getHeight();
+                                        nY += (aPos.Y() - aMarkRect.Top());
+                                    }
+                                    else if ( nCode == KEY_DOWN )
+                                    {
+                                        aPos.X() = aMarkRect.Left();
+                                        aPos.Y() = aOver.Bottom();
+                                        nY += (aPos.Y() - aMarkRect.Top());
+                                    }
+                                    else if ( nCode == KEY_LEFT )
+                                    {
+                                        aPos.X() = aOver.Left() - aMarkRect.getWidth();
+                                        aPos.Y() = aMarkRect.Top();
+                                        nX += (aPos.X() - aMarkRect.Left());
+                                    }
+                                    else if ( nCode == KEY_RIGHT )
+                                    {
+                                        aPos.X() = aOver.Right();
+                                        aPos.Y() = aMarkRect.Top();
+                                        nX += (aPos.X() - aMarkRect.Left());
+                                    }
+
+                                    aMarkRect.SetPos(aPos);
+                                    if ( !rWorkArea.IsInside( aMarkRect ) )
+                                    {
+                                        break;
+                                    }
+                                    pOverlapped = isOver(aMarkRect,*rReportSection.getPage(),rView);
+                                }
+                                while(pOverlapped != NULL);
+                                if (pOverlapped != NULL)
+                                    break;
+                            }
+                        }
                     }
 
                     if ( nX != 0 || nY != 0 )
@@ -1587,7 +1634,7 @@ void OViewsWindow::handleKey(const KeyCode& _rCode)
                         for (sal_uInt32 i =  0; !bCheck && i < rMarkList.GetMarkCount();++i )
                         {
                             SdrMark* pMark = rMarkList.GetMark(i);
-                            bCheck = dynamic_cast<OUnoObject*>(pMark->GetMarkedSdrObj()) != NULL;
+                            bCheck = dynamic_cast<OUnoObject*>(pMark->GetMarkedSdrObj()) != NULL || dynamic_cast<OOle2Obj*>(pMark->GetMarkedSdrObj()) != NULL;
                             if ( bCheck )
                                 aNewRect.Union(pMark->GetMarkedSdrObj()->GetLastBoundRect());
                         }
@@ -1689,7 +1736,8 @@ void OViewsWindow::zoom(const Fraction& _aZoom)
     aOut = PixelToLogic(aOut);
 
     Rectangle aRect(PixelToLogic(Point(0,0)),aOut);
-    Invalidate(aRect,INVALIDATE_NOCHILDREN);
+    static sal_Int32 nIn = INVALIDATE_NOCHILDREN;
+    Invalidate(aRect,nIn);
 }
 //----------------------------------------------------------------------------
 void OViewsWindow::scrollChildren(const Point& _aThumbPos)
@@ -1705,8 +1753,6 @@ void OViewsWindow::scrollChildren(const Point& _aThumbPos)
         aMapMode.SetOrigin( Point(aOld.X() , - aPosY.Y()));
         SetMapMode( aMapMode );
         Scroll(0, -( aOld.Y() + aPosY.Y()),SCROLL_CHILDREN);
-        Resize();
-        Invalidate(INVALIDATE_NOCHILDREN|INVALIDATE_TRANSPARENT);
     }
 
     TSectionsMap::iterator aIter = m_aSections.begin();

@@ -55,11 +55,12 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
 {
 
     private XSingleSelectQueryComposer m_composer = null;
-    private final static String COMPLEXFILTER = "( \"ID\" = 1 AND \"Postal\" = '4' )" +
-            " OR ( \"ID\" = 2 AND \"Postal\" = '5' )" +
-            " OR ( \"ID\" = '3' AND \"Postal\" = '6' AND \"Address\" = '7' )" +
-            " OR ( \"Address\" = '8' )" +
-            " OR ( \"Postal\" = '9' )";
+    private final static String COMPLEXFILTER = "( \"ID\" = 1 AND \"Postal\" = '4' )"
+            + " OR ( \"ID\" = 2 AND \"Postal\" = '5' )"
+            + " OR ( \"ID\" = 3 AND \"Postal\" = '6' AND \"Address\" = '7' )"
+            + " OR ( \"Address\" = '8' )"
+            + " OR ( \"Postal\" = '9' )"
+            + " OR ( NOW( ) = {D '2010-01-01' } )";
     private final static String INNERPRODUCTSQUERY = "products (inner)";
 
     // --------------------------------------------------------------------------------------------------------
@@ -135,15 +136,15 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
         try
         {
             final String table = "SELECT * FROM \"customers\"";
-            m_composer.setCommand("customers",CommandType.TABLE);
+            m_composer.setCommand("customers", CommandType.TABLE);
             assertTrue("setCommand/getQuery TABLE inconsistent", m_composer.getQuery().equals(table));
 
             m_database.getDatabase().getDataSource().createQuery("set command test", "SELECT * FROM \"orders for customer\" \"a\", \"customers\" \"b\" WHERE \"a\".\"Product Name\" = \"b\".\"Name\"");
-            m_composer.setCommand("set command test",CommandType.QUERY);
+            m_composer.setCommand("set command test", CommandType.QUERY);
             assertTrue("setCommand/getQuery QUERY inconsistent", m_composer.getQuery().equals(m_database.getDatabase().getDataSource().getQueryDefinition("set command test").getCommand()));
 
             final String sql = "SELECT * FROM \"orders for customer\" WHERE \"Product Name\" = 'test'";
-            m_composer.setCommand(sql,CommandType.COMMAND);
+            m_composer.setCommand(sql, CommandType.COMMAND);
             assertTrue("setCommand/getQuery COMMAND inconsistent", m_composer.getQuery().equals(sql));
         }
         catch (Exception e)
@@ -151,6 +152,7 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
             fail("Exception caught: " + e);
         }
     }
+
     /** tests accessing attributes of the composer (order, filter, group by, having)
      */
     @Test
@@ -161,6 +163,7 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
         try
         {
             System.out.println("check setElementaryQuery");
+
             final String simpleQuery2 = "SELECT * FROM \"customers\" WHERE \"Name\" = 'oranges'";
             m_composer.setElementaryQuery(simpleQuery2);
             assertTrue("setElementaryQuery/getQuery inconsistent", m_composer.getQuery().equals(simpleQuery2));
@@ -177,16 +180,16 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
 
             final XIndexAccess orderColumns = m_composer.getOrderColumns();
             assertTrue("Order columns doesn't exist: \"Address\"",
-                    orderColumns != null && orderColumns.getCount() == 1 && orderColumns.getByIndex(0) != null);
+            orderColumns != null && orderColumns.getCount() == 1 && orderColumns.getByIndex(0) != null);
 
             final XIndexAccess groupColumns = m_composer.getGroupColumns();
             assertTrue("Group columns doesn't exist: \"City\"",
-                    groupColumns != null && groupColumns.getCount() == 1 && groupColumns.getByIndex(0) != null);
+            groupColumns != null && groupColumns.getCount() == 1 && groupColumns.getByIndex(0) != null);
 
             // XColumnsSupplier
             final XColumnsSupplier xSelectColumns = UnoRuntime.queryInterface(XColumnsSupplier.class, m_composer);
             assertTrue("no select columns, or wrong number of select columns",
-                    xSelectColumns != null && xSelectColumns.getColumns() != null && xSelectColumns.getColumns().getElementNames().length == 6);
+            xSelectColumns != null && xSelectColumns.getColumns() != null && xSelectColumns.getColumns().getElementNames().length == 6);
 
             // structured filter
             m_composer.setQuery("SELECT \"ID\", \"Postal\", \"Address\" FROM \"customers\"");
@@ -194,6 +197,11 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
             final PropertyValue[][] aStructuredFilter = m_composer.getStructuredFilter();
             m_composer.setFilter("");
             m_composer.setStructuredFilter(aStructuredFilter);
+            if (!m_composer.getFilter().equals(COMPLEXFILTER))
+            {
+                System.out.println(COMPLEXFILTER);
+                System.out.println(m_composer.getFilter());
+            }
             assertTrue("Structured Filter not identical", m_composer.getFilter().equals(COMPLEXFILTER));
 
             // structured having clause
@@ -244,6 +252,7 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
             final XIndexAccess parameters = suppParams.getParameters();
 
             final String expectedParamNames[] =
+
             {
                 "cname",
                 "Product Name"
@@ -276,6 +285,7 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
             m_composer.setQuery("SELECT * FROM \"customers\"");
 
             final Object initArgs[] =
+
             {
                 new NamedValue("AutomaticAddition", Boolean.valueOf(true))
             };
@@ -288,8 +298,8 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
             filter.addProperty("Type", PropertyAttribute.MAYBEVOID, Integer.valueOf(DataType.LONGVARCHAR));
             final XPropertySet column = UnoRuntime.queryInterface(XPropertySet.class, filter);
 
-            m_composer.appendFilterByColumn(column, true,SQLFilterOperator.LIKE);
-            assertTrue("At least one row should exist",m_database.getConnection().createStatement().executeQuery(m_composer.getQuery()).next());
+            m_composer.appendFilterByColumn(column, true, SQLFilterOperator.LIKE);
+            assertTrue("At least one row should exist", m_database.getConnection().createStatement().executeQuery(m_composer.getQuery()).next());
 
         }
         catch (Exception e)
@@ -333,16 +343,16 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
     {
         // a simple case: WHERE clause simply is a combination of predicates knitted with AND
         String query =
-                "SELECT \"customers\".\"Name\", " +
-                "\"customers\".\"Address\", " +
-                "\"customers\".\"City\", " +
-                "\"customers\".\"Postal\", " +
-                "\"products\".\"Name\" " +
-                "FROM \"orders\", \"customers\", \"orders_details\", \"products\" " +
-                "WHERE (   \"orders\".\"CustomerID\" = \"customers\".\"ID\" " +
-                "AND \"orders_details\".\"OrderID\" = \"orders\".\"ID\" " +
-                "AND \"orders_details\".\"ProductID\" = \"products\".\"ID\" " +
-                ") ";
+                "SELECT \"customers\".\"Name\", "
+                + "\"customers\".\"Address\", "
+                + "\"customers\".\"City\", "
+                + "\"customers\".\"Postal\", "
+                + "\"products\".\"Name\" "
+                + "FROM \"orders\", \"customers\", \"orders_details\", \"products\" "
+                + "WHERE (   \"orders\".\"CustomerID\" = \"customers\".\"ID\" "
+                + "AND \"orders_details\".\"OrderID\" = \"orders\".\"ID\" "
+                + "AND \"orders_details\".\"ProductID\" = \"products\".\"ID\" "
+                + ") ";
 
         impl_testDisjunctiveNormalForm(query, new PropertyValue[][]
                 {
@@ -356,20 +366,20 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
 
         // somewhat more challenging: One of the conjunction terms is a disjunction itself
         query =
-                "SELECT \"customers\".\"Name\", " +
-                "\"customers\".\"Address\", " +
-                "\"customers\".\"City\", " +
-                "\"customers\".\"Postal\", " +
-                "\"products\".\"Name\" " +
-                "FROM \"orders\", \"customers\", \"orders_details\", \"products\" " +
-                "WHERE (   \"orders\".\"CustomerID\" = \"customers\".\"ID\" " +
-                "AND \"orders_details\".\"OrderID\" = \"orders\".\"ID\" " +
-                "AND \"orders_details\".\"ProductID\" = \"products\".\"ID\" " +
-                ") " +
-                "AND " +
-                "(  \"products\".\"Name\" = 'Apples' " +
-                "OR \"products\".\"ID\" = 2 " +
-                ")";
+                "SELECT \"customers\".\"Name\", "
+                + "\"customers\".\"Address\", "
+                + "\"customers\".\"City\", "
+                + "\"customers\".\"Postal\", "
+                + "\"products\".\"Name\" "
+                + "FROM \"orders\", \"customers\", \"orders_details\", \"products\" "
+                + "WHERE (   \"orders\".\"CustomerID\" = \"customers\".\"ID\" "
+                + "AND \"orders_details\".\"OrderID\" = \"orders\".\"ID\" "
+                + "AND \"orders_details\".\"ProductID\" = \"products\".\"ID\" "
+                + ") "
+                + "AND "
+                + "(  \"products\".\"Name\" = 'Apples' "
+                + "OR \"products\".\"ID\" = 2 "
+                + ")";
 
         impl_testDisjunctiveNormalForm(query, new PropertyValue[][]
                 {

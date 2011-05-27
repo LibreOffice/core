@@ -640,6 +640,21 @@ sal_Bool SAL_CALL OCacheSet::previous(  ) throw(SQLException, RuntimeException)
     return m_xDriverSet->previous();
 }
 
+sal_Bool OCacheSet::last_checked( sal_Bool /*i_bFetchRow*/)
+{
+    return last();
+}
+
+sal_Bool OCacheSet::previous_checked( sal_Bool /*i_bFetchRow*/ )
+{
+    return previous();
+}
+
+sal_Bool OCacheSet::absolute_checked( sal_Int32 row,sal_Bool /*i_bFetchRow*/ )
+{
+    return absolute(row);
+}
+
 void SAL_CALL OCacheSet::refreshRow(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::refreshRow" );

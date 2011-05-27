@@ -1680,35 +1680,7 @@ void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )
     }
 
     if ( sDefault.getLength() )
-    {
-        sal_uInt32 nFormatKey;
-        try
-        {
-            if ( isTextFormat(pFieldDescr,nFormatKey) || pBoolDefault )
-            {
-                pFieldDescr->SetControlDefault(makeAny(sDefault));
-            }
-            else
-            {
-                try
-                {
-                    double nValue = GetFormatter()->convertStringToNumber(nFormatKey,sDefault);
-                    nValue = checkDoubleForDateFormat(nValue,nFormatKey,GetFormatter());
-                    pFieldDescr->SetControlDefault(makeAny(nValue));
-                }
-                catch(const Exception&)
-                {
-                    if ( sDefault.getLength() )
-                        pFieldDescr->SetControlDefault(makeAny(sDefault));
-                    else
-                        pFieldDescr->SetControlDefault(Any());
-                }
-            }
-        }
-        catch(const Exception&)
-        {
-        }
-    }
+        pFieldDescr->SetControlDefault(makeAny(sDefault));
     else
         pFieldDescr->SetControlDefault(Any());
 
