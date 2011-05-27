@@ -48,6 +48,7 @@ namespace writerfilter {
                 RTFParserState();
                 RTFInternalState nInternalState;
                 RTFDesitnationState nDestinationState;
+                std::map<int, int> aSprms;
         };
 
         class RTFReferenceProperties
@@ -95,7 +96,6 @@ namespace writerfilter {
                 bool m_bSkipUnknown;
                 /// For debugging purposes, where int value would not be enough
                 rtl::OString* m_pCurrentKeyword;
-                std::map<int, int> m_aSprms;
         };
     } // namespace rtftok
 } // namespace writerfilter

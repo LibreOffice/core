@@ -93,7 +93,7 @@ int RTFDocumentImpl::resolveChars(char ch)
 
 void RTFDocumentImpl::text(OUString& rString)
 {
-    writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(m_aSprms));
+    writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(m_aStates.top().aSprms));
 
     Mapper().startCharacterGroup();
     Mapper().props(pProperties);
@@ -124,7 +124,7 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
     switch (nKeyword)
     {
         case RTF_B:
-            m_aSprms[NS_sprm::LN_CFBold] = bOn;
+            m_aStates.top().aSprms[NS_sprm::LN_CFBold] = bOn;
             break;
         default:
             OSL_TRACE("%s: TODO handle toggle '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
@@ -355,7 +355,8 @@ int RTFDocumentImpl::resolveParse()
 
 RTFParserState::RTFParserState()
     : nInternalState(INTERNAL_NORMAL),
-    nDestinationState(DESTINATION_NORMAL)
+    nDestinationState(DESTINATION_NORMAL),
+    aSprms()
 {
 }
 
