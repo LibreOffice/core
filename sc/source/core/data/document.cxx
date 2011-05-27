@@ -294,6 +294,29 @@ sal_Bool ScDocument::ValidNewTabName( const String& rName ) const
 }
 
 
+bool ScDocument::ValidNewTabName( const std::vector<String>& rNames ) const//TODO:FIXME what is if there are duplicates in rNames
+{
+    bool bValid = true;
+    std::vector<String>::const_iterator nameIter = rNames.begin();
+    for (;nameIter != rNames.end() && bValid; ++nameIter)
+    {
+        bValid = ValidTabName(*nameIter);
+    }
+    TableContainer::const_iterator it = pTab.begin();
+    for (; it != pTab.end() && bValid; ++it)
+        if ( *it )
+        {
+            for (nameIter = rNames.begin(); nameIter != rNames.end(); ++nameIter)
+            {
+                String aOldName;
+                (*it)->GetName(aOldName);
+                bValid = !ScGlobal::GetpTransliteration()->isEqual( *nameIter, aOldName );
+            }
+        }
+    return bValid;
+}
+
+
 void ScDocument::CreateValidTabName(String& rName) const
 {
     if ( !ValidTabName(rName) )
@@ -308,7 +331,7 @@ void ScDocument::CreateValidTabName(String& rName) const
         OSL_ENSURE(bPrefix, "Invalid Table Name");
         SCTAB nDummy;
 
-        for ( SCTAB i = pTab.size()+1; !bOk ; i++ )
+        for ( SCTAB i = static_cast<SCTAB>(pTab.size())+1; !bOk ; i++ )
         {
             rName  = aStrTable;
             rName += String::CreateFromInt32(i);
@@ -318,9 +341,6 @@ void ScDocument::CreateValidTabName(String& rName) const
                 bOk = !GetTable( rName, nDummy );
         }
 
-        OSL_ENSURE(bOk, "No Valid Table name found.");
-        if ( !bOk )
-            rName = aStrTable;
     }
     else
     {
@@ -340,6 +360,38 @@ void ScDocument::CreateValidTabName(String& rName) const
             while (!ValidNewTabName(aName) && (i < MAXTAB+1));
             rName = aName;
         }
+    }
+}
+
+
+void ScDocument::CreateValidTabNames(std::vector<rtl::OUString>& aNames, SCTAB nCount) const
+{
+    aNames.clear();//ensure that the vector is empty
+
+    const String aStrTable( ScResId(SCSTR_TABLE) );
+    String rName;
+    bool         bOk   = false;
+
+    // First test if the prefix is valid, if so only avoid doubles
+    sal_Bool bPrefix = ValidTabName( aStrTable );
+    OSL_ENSURE(bPrefix, "Invalid Table Name");
+    SCTAB nDummy;
+    SCTAB i = static_cast<SCTAB>(pTab.size())+1;
+
+    for (SCTAB j = 0; j < nCount; ++j)
+    {
+        bOk = false;
+        while(!bOk)
+        {
+            rName = aStrTable;
+            rName += String::CreateFromInt32(i);
+            if (bPrefix)
+                bOk = ValidNewTabName( rName );
+            else
+                bOk = !GetTable( rName, nDummy );
+            i++;
+        }
+        aNames.push_back(rtl::OUString(rName));
     }
 }
 
@@ -418,6 +470,90 @@ sal_Bool ScDocument::InsertTab( SCTAB nPos, const String& rName,
 
                 SetDirty();
                 bValid = sal_True;
+            }
+            else
+                bValid = false;
+        }
+    }
+    return bValid;
+}
+
+
+bool ScDocument::InsertTabs( SCTAB nPos, const std::vector<rtl::OUString>& rNames,
+            bool bExternalDocument, bool bNamesValid )
+{
+    SCTAB   nNewSheets = static_cast<SCTAB>(rNames.size());
+    SCTAB    nTabCount = static_cast<SCTAB>(pTab.size());
+    bool    bValid = bNamesValid || ValidTab(nTabCount+nNewSheets);
+//    if ( !bExternalDocument )    // else test rName == "'Doc'!Tab" first
+//        bValid = (bValid && ValidNewTabName(rNames));
+    if (bValid)
+    {
+        if (nPos == SC_TAB_APPEND || nPos >= nTabCount)
+        {
+            for ( SCTAB i = 0; i < nNewSheets; ++i )
+            {
+                pTab.push_back( new ScTable(this, nTabCount + i, rNames.at(i)) );
+                pTab[nTabCount+i]->SetCodeName( rNames.at(i) );
+                if ( bExternalDocument )
+                    pTab[nTabCount+i]->SetVisible( false );
+            }
+        }
+        else
+        {
+            if (VALIDTAB(nPos) && (nPos < nTabCount))
+            {
+                ScRange aRange( 0,0,nPos, MAXCOL,MAXROW,MAXTAB );
+                xColNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,nNewSheets );
+                xRowNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,nNewSheets );
+                if (pRangeName)
+                    pRangeName->UpdateTabRef( nPos, 1, 0, nNewSheets);
+                pDBCollection->UpdateReference(
+                                    URM_INSDEL, 0,0,nPos, MAXCOL,MAXROW,MAXTAB, 0,0,nNewSheets );
+                if (pDPCollection)
+                    pDPCollection->UpdateReference( URM_INSDEL, aRange, 0,0,nNewSheets );
+                if (pDetOpList)
+                    pDetOpList->UpdateReference( this, URM_INSDEL, aRange, 0,0,nNewSheets );
+                UpdateChartRef( URM_INSDEL, 0,0,nPos, MAXCOL,MAXROW,MAXTAB, 0,0,nNewSheets );
+                UpdateRefAreaLinks( URM_INSDEL, aRange, 0,0, nNewSheets );
+                if ( pUnoBroadcaster )
+                    pUnoBroadcaster->Broadcast( ScUpdateRefHint( URM_INSDEL, aRange, 0,0,nNewSheets ) );
+
+                TableContainer::iterator it = pTab.begin();
+                for (; it != pTab.end(); ++it)
+                    if ( *it )
+                        (*it)->UpdateInsertTab(nPos, nNewSheets);
+                pTab.resize(nTabCount + nNewSheets, NULL);
+                for (SCTAB i = 0; i < nNewSheets; ++i)
+                {
+                    pTab[nPos + i] = new ScTable(this, nPos + i, rNames.at(i));
+                    pTab[nPos + i]->SetCodeName( rNames.at(i) );
+                }
+
+                // UpdateBroadcastAreas must be called between UpdateInsertTab,
+                // which ends listening, and StartAllListeners, to not modify
+                // areas that are to be inserted by starting listeners.
+                UpdateBroadcastAreas( URM_INSDEL, aRange, 0,0,nNewSheets);
+                it = pTab.begin();
+                for (; it != pTab.end(); ++it)
+                    if ( *it )
+                        (*it)->UpdateCompile();
+                it = pTab.begin();
+                for (; it != pTab.end(); ++it)
+                    if ( *it )
+                        (*it)->StartAllListeners();
+
+                //    update conditional formats after table is inserted
+                if ( pCondFormList )
+                    pCondFormList->UpdateReference( URM_INSDEL, aRange, 0,0,nNewSheets);
+                if ( pValidationList )
+                    pValidationList->UpdateReference( URM_INSDEL, aRange, 0,0,nNewSheets );
+                // sheet names of references are not valid until sheet is inserted
+                if ( pChartListenerCollection )
+                    pChartListenerCollection->UpdateScheduledSeriesRanges();
+
+                SetDirty();
+                bValid = true;
             }
             else
                 bValid = false;
