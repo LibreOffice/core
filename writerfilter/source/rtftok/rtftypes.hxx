@@ -1,6 +1,8 @@
 #ifndef _RTFTYPES_HXX_
 #define _RTFTYPES_HXX_
 
+#include <rtfcontrolwords.hxx>
+
 namespace writerfilter {
     namespace rtftok {
         /// Respresents an RTF Control Word
@@ -8,7 +10,7 @@ namespace writerfilter {
         {
             const char *sKeyword;
             int nControlType;
-            int nIndex;
+            RTFKeyword nIndex;
         } RTFSymbol;
     } // namespace rtftok
 } // namespace writerfilter

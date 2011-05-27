@@ -4,6 +4,7 @@
 #include <memory>
 #include <stack>
 #include <rtftok/RTFDocument.hxx>
+#include <rtfcontrolwords.hxx>
 
 class SvStream;
 
@@ -66,6 +67,7 @@ namespace writerfilter {
                 int resolveParse();
                 int resolveKeyword();
                 int dispatchKeyword(rtl::OString& rKeyword, bool bParam, int nParam);
+                int dispatchDestination(RTFKeyword nKeyword, bool bParam, int nParam, rtl::OString& rKeyword);
                 int resolveChars(char ch);
                 int pushState();
                 int popState();
