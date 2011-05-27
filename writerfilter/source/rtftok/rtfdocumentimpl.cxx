@@ -85,11 +85,14 @@ int RTFDocumentImpl::resolveChars(char ch)
 
     // TODO handle runs
     Mapper().startParagraphGroup();
+
     Mapper().startCharacterGroup();
     Mapper().utext(reinterpret_cast<sal_uInt8 const*>(aOUStr.getStr()), aOUStr.getLength());
+    Mapper().endCharacterGroup();
+
+    Mapper().startCharacterGroup();
     aOUStr = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\x0d"));
     Mapper().utext(reinterpret_cast<sal_uInt8 const*>(aOUStr.getStr()), aOUStr.getLength());
-    Mapper().endCharacterGroup();
     Mapper().endParagraphGroup();
 
     return 0;
