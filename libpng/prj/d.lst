@@ -1,0 +1,11 @@
+mkdir: %_DEST%\inc%_EXT%\external
+mkdir: %_DEST%\inc%_EXT%\external\libpng
+
+..\%__SRC%\slb\libpng.lib %_DEST%\lib%_EXT%\libpng.lib
+..\%__SRC%\lib\libpng.a %_DEST%\lib%_EXT%\libpng.a
+
+..\%__SRC%\inc\png.h %_DEST%\inc%_EXT%\external\libpng\png.h
+..\%__SRC%\inc\pnglibconf.h %_DEST%\inc%_EXT%\external\libpng\pnglibconf.h
+..\%__SRC%\inc\pngconf.h %_DEST%\inc%_EXT%\external\libpng\pngconf.h
+..\%__SRC%\inc\pngstruct.h %_DEST%\inc%_EXT%\external\libpng\pngstruct.h
+

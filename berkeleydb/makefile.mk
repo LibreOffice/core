@@ -94,7 +94,7 @@ CONFIGURE_DIR=out
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION= \
     ..$/dist$/configure
-CONFIGURE_FLAGS=--disable-cxx --enable-dynamic --enable-compat185
+CONFIGURE_FLAGS=--disable-cxx --enable-dynamic --enable-compat185 CC='$(CC) $(SOLARLIB)'
 .IF "$(OS)"=="IOS"
 CONFIGURE_FLAGS+= --disable-shared
 .ELSE

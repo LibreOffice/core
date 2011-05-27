@@ -1,0 +1,3 @@
+rg	librsvg	: libxml2 pango libcroco libgsf cairo gdk-pixbuf glib gettext soltools NULL
+rg	librsvg			    usr1	-	all	rg_mkout NULL
+rg	librsvg			    nmake	-	all	rg_librsvg NULL
