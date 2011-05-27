@@ -27,9 +27,7 @@
 
 #define _SV_HELPTEXT_SRC
 
-#ifndef _SV_SVIDS_HRC
-#include <vcl/svids.hrc>
-#endif
+#include <svids.hrc>
 
 String SV_HELPTEXT_CLOSE
 {

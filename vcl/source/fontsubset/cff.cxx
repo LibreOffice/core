@@ -33,7 +33,8 @@
 #include <cstring>
 #include <assert.h>
 
-#include <vcl/fontsubset.hxx>
+#include <fontsubset.hxx>
+
 #include <vcl/strhelper.hxx>
 
 //#define IGNORE_HINTS

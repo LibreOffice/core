@@ -55,7 +55,7 @@
 // Platform
 #include <svsys.h>
 
-#include <vcl/salgdi.hxx>
+#include <salgdi.hxx>
 
 #include <unicode/uchar.h>
 #include <unicode/ubidi.h>
@@ -64,8 +64,8 @@
 // Graphite Libraries (must be after vcl headers on windows)
 #include <graphite2/Segment.h>
 
-#include "vcl/graphite_layout.hxx"
-#include "vcl/graphite_features.hxx"
+#include <graphite_layout.hxx>
+#include <graphite_features.hxx>
 
 // Module private type definitions and forward declarations.
 //

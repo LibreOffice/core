@@ -29,7 +29,7 @@
 #ifndef SVP_SVBMP_HXX
 #define SVP_SVBMP_HXX
 
-#include <vcl/salbmp.hxx>
+#include <salbmp.hxx>
 #include "svpelement.hxx"
 
 class SvpSalBitmap : public SalBitmap, public SvpElement

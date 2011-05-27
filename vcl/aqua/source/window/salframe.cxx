@@ -31,17 +31,24 @@
 
 #include <string>
 
-#include "saldata.hxx"
-#include "salgdi.h"
-#include "salframe.h"
-#include "salmenu.h"
-#include "saltimer.h"
-#include "salinst.h"
-#include "salframeview.h"
-#include "aqua11yfactory.h"
-#include "vcl/salwtype.hxx"
+#include "rtl/ustrbuf.hxx"
+
+#include "osl/file.h"
+
+#include "vcl/svapp.hxx"
 #include "vcl/window.hxx"
 #include "vcl/timer.hxx"
+
+#include "aqua/saldata.hxx"
+#include "aqua/salgdi.h"
+#include "aqua/salframe.h"
+#include "aqua/salmenu.h"
+#include "aqua/saltimer.h"
+#include "aqua/salinst.h"
+#include "aqua/salframeview.h"
+#include "aqua/aqua11yfactory.h"
+
+#include "salwtype.hxx"
 
 #include "premac.h"
 // needed for theming
@@ -49,10 +56,6 @@
 #include <Carbon/Carbon.h>
 #include "postmac.h"
 
-#include "boost/assert.hpp"
-#include "vcl/svapp.hxx"
-#include "rtl/ustrbuf.hxx"
-#include "osl/file.h"
 
 using namespace std;
 
@@ -286,6 +289,7 @@ SalGraphics* AquaSalFrame::GetGraphics()
 
 void AquaSalFrame::ReleaseGraphics( SalGraphics *pGraphics )
 {
+    (void)pGraphics;
     DBG_ASSERT( pGraphics == mpGraphics, "graphics released on wrong frame" );
     mbGraphics = FALSE;
 }
@@ -479,7 +483,7 @@ void AquaSalFrame::Show(sal_Bool bVisible, sal_Bool bNoActivate)
 
 // -----------------------------------------------------------------------
 
-void AquaSalFrame::Enable( sal_Bool bEnable )
+void AquaSalFrame::Enable( sal_Bool )
 {
 }
 
@@ -862,7 +866,7 @@ void AquaSalFrame::StartPresentation( sal_Bool bStart )
 
 // -----------------------------------------------------------------------
 
-void AquaSalFrame::SetAlwaysOnTop( sal_Bool bOnTop )
+void AquaSalFrame::SetAlwaysOnTop( sal_Bool )
 {
 }
 
@@ -1034,7 +1038,7 @@ void AquaSalFrame::SetInputContext( SalInputContext* pContext )
 
 // -----------------------------------------------------------------------
 
-void AquaSalFrame::EndExtTextInput( sal_uInt16 nFlags )
+void AquaSalFrame::EndExtTextInput( sal_uInt16 )
 {
 }
 
@@ -1557,7 +1561,7 @@ void AquaSalFrame::SimulateKeyPress( sal_uInt16 /*nKeyCode*/ )
 {
 }
 
-bool AquaSalFrame::SetPluginParent( SystemParentData* pNewParent )
+bool AquaSalFrame::SetPluginParent( SystemParentData* )
 {
     // plugin parent may be killed unexpectedly by
     // plugging process;

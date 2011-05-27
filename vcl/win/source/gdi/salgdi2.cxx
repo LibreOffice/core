@@ -31,14 +31,16 @@
 
 #include <string.h>
 #include <stdlib.h>
+
 #include <svsys.h>
 #include <tools/debug.hxx>
-#include <wincomp.hxx>
-#include <salbmp.h>
-#include <saldata.hxx>
-#include <salids.hrc>
-#include <salgdi.h>
-#include <salframe.h>
+
+#include <win/wincomp.hxx>
+#include <win/salbmp.h>
+#include <win/saldata.hxx>
+#include <win/salids.hrc>
+#include <win/salgdi.h>
+#include <win/salframe.h>
 
 #include "vcl/salbtype.hxx"
 #include "vcl/bmpacc.hxx"

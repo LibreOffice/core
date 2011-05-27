@@ -37,11 +37,11 @@
 #include "gcach_ftyp.hxx"
 
 #include "vcl/svapp.hxx"
-#include "vcl/outfont.hxx"
-#include "vcl/impfont.hxx"
+#include <outfont.hxx>
+#include <impfont.hxx>
 #ifdef ENABLE_GRAPHITE
 #include <graphite2/Font.h>
-#include "vcl/graphite_layout.hxx"
+#include <graphite_layout.hxx>
 #endif
 
 #include "tools/poly.hxx"

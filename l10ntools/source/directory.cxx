@@ -194,20 +194,33 @@ void Directory::readDirectory( const rtl::OUString& sFullpath )
     if( sFullpath.getLength() < 1 ) return;
 
     rtl::OString   sFullpathext = rtl::OUStringToOString( sFullpath , RTL_TEXTENCODING_UTF8 );
-    const char*    path         = sFullpathext.getStr();
 
     // stat
-    if( stat( path  , &statbuf ) < 0 ){   printf("warning: Can not stat %s" , path ); return; }
+    if( stat( sFullpathext.getStr(), &statbuf ) < 0 )
+    {
+        printf("warning: Can not stat %s" , sFullpathext.getStr() );
+        return;
+    }
 
-    if( S_ISDIR(statbuf.st_mode ) == 0 ) {  return; }
+    if( S_ISDIR(statbuf.st_mode ) == 0 )
+        return;
 
-    if( (dir = opendir( path ) ) == NULL  ) {printf("readerror 2 in %s \n",path); return; }
+    if( (dir = opendir( sFullpathext.getStr() ) ) == NULL  )
+    {
+        printf("readerror 2 in %s \n",sFullpathext.getStr());
+        return;
+    }
+
     dirholder aHolder(dir);
 
     const rtl::OString sDot ( "." ) ;
     const rtl::OString sDDot( ".." );
 
-    if ( chdir( path ) == -1 ) { printf("chdir error in %s \n",path); return; }
+    if ( chdir( sFullpathext.getStr() ) == -1 )
+    {
+        printf("chdir error in %s \n",sFullpathext.getStr());
+        return;
+    }
 
     sFullpathext += rtl::OString( "/" );
 
@@ -261,8 +274,14 @@ void Directory::readDirectory( const rtl::OUString& sFullpath )
                          }
         }
     }
-    if ( chdir( ".." ) == -1 ) { printf("chdir error in .. \n"); return; }
-    if( aHolder.close() < 0 )   return ;
+    if ( chdir( ".." ) == -1 )
+    {
+        printf("chdir error in .. \n");
+        return;
+    }
+
+    if ( aHolder.close() < 0 )
+        return;
 
     std::sort( aFileVec.begin() , aFileVec.end() , File::lessFile );
     std::sort( aDirVec.begin()  , aDirVec.end()  , Directory::lessDir  );

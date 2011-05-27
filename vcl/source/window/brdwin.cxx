@@ -28,8 +28,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-#include <vcl/svids.hrc>
-#include <vcl/svdata.hxx>
+#include <svids.hrc>
+#include <svdata.hxx>
+#include <brdwin.hxx>
+#include <window.h>
+
 #include <vcl/event.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/syswin.hxx>
@@ -41,9 +44,8 @@
 #include <vcl/virdev.hxx>
 #include <vcl/help.hxx>
 #include <vcl/edit.hxx>
-#include <vcl/brdwin.hxx>
-#include <vcl/window.h>
 #include <vcl/metric.hxx>
+
 #include <tools/debug.hxx>
 
 using namespace ::com::sun::star::uno;

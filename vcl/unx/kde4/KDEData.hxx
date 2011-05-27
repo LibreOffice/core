@@ -28,8 +28,8 @@
 
 #pragma once
 
-#include <saldisp.hxx>
-#include <saldata.hxx>
+#include <unx/saldisp.hxx>
+#include <unx/saldata.hxx>
 
 class KDEData : public X11SalData
 {

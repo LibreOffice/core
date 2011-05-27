@@ -37,10 +37,10 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/bitmap.hxx>
-#include <vcl/outfont.hxx>
+#include <outfont.hxx>
 
 #ifdef ENABLE_GRAPHITE
-#include <vcl/graphite_features.hxx>
+#include <graphite_features.hxx>
 #endif
 
 #include <rtl/ustring.hxx>      // used only for string=>hashvalue

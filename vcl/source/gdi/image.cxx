@@ -32,6 +32,7 @@
 #include <boost/scoped_array.hpp>
 
 #include <rtl/logfile.hxx>
+
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <tools/rc.h>
@@ -41,10 +42,10 @@
 #include <vcl/outdev.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/impimagetree.hxx>
-#include <vcl/image.h>
 #include <vcl/image.hxx>
 #include <vcl/imagerepository.hxx>
+#include <impimagetree.hxx>
+#include <image.h>
 
 #if OSL_DEBUG_LEVEL > 0
 #include <rtl/strbuf.hxx>

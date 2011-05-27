@@ -26,9 +26,7 @@
  ************************************************************************/
 #define _SV_UNITS_SRC
 
-#ifndef _SV_SVIDS_HRC
-#include <vcl/svids.hrc>
-#endif
+#include <svids.hrc>
 
 // Amelia : adds two units , 'ch' and 'line'
 StringArray SV_FUNIT_STRINGS

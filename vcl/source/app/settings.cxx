@@ -30,25 +30,29 @@
 #include "precompiled_vcl.hxx"
 #include <svsys.h>
 #include "tools/debug.hxx"
+
 #include "i18npool/mslangid.hxx"
+
 #include "vcl/svapp.hxx"
-#include "vcl/svdata.hxx"
 #include "vcl/event.hxx"
 #include "vcl/settings.hxx"
 #include "vcl/i18nhelp.hxx"
-#include "unotools/fontcfg.hxx"
 #include "vcl/configsettings.hxx"
 #include "vcl/gradient.hxx"
 #include "vcl/unohelp.hxx"
 #include "vcl/bitmapex.hxx"
-#include "vcl/impimagetree.hxx"
+
+#include "unotools/fontcfg.hxx"
 #include "unotools/localedatawrapper.hxx"
 #include "unotools/collatorwrapper.hxx"
 #include "unotools/configmgr.hxx"
 #include "unotools/confignode.hxx"
-#include <unotools/syslocaleoptions.hxx>
+#include "unotools/syslocaleoptions.hxx"
 
 using ::rtl::OUString;
+
+#include "svdata.hxx"
+#include "impimagetree.hxx"
 // =======================================================================
 
 DBG_NAME( AllSettings )

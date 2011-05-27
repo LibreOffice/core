@@ -34,7 +34,7 @@
 #include "vcl/window.hxx"
 #include "vcl/menu.hxx"
 #include "vcl/lazydelete.hxx"
-#include "vcl/svdata.hxx"
+#include "svdata.hxx"
 
 namespace vcl {
 

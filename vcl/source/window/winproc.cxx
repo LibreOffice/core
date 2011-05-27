@@ -29,35 +29,37 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include <svsys.h>
-#include <vcl/salwtype.hxx>
-#include <vcl/salframe.hxx>
 #include <tools/debug.hxx>
+
+#include <unotools/localedatawrapper.hxx>
+
 #include <vcl/i18nhelp.hxx>
 #include <vcl/unohelp.hxx>
-#include <unotools/localedatawrapper.hxx>
-#include <vcl/svdata.hxx>
-#include <vcl/dbggui.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/event.hxx>
 #include <vcl/sound.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/cursor.hxx>
-#include <vcl/accmgr.hxx>
-#include <vcl/print.h>
-#include <vcl/window.h>
 #include <vcl/wrkwin.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/help.hxx>
-#include <vcl/helpwin.hxx>
-#include <vcl/brdwin.hxx>
 #include <vcl/dockwin.hxx>
-#include <vcl/salgdi.hxx>
 #include <vcl/menu.hxx>
 
-#include <vcl/dndlcon.hxx>
+#include <svdata.hxx>
+#include <dbggui.hxx>
+#include <salwtype.hxx>
+#include <salframe.hxx>
+#include <accmgr.hxx>
+#include <print.h>
+#include <window.h>
+#include <helpwin.hxx>
+#include <brdwin.hxx>
+#include <salgdi.hxx>
+#include <dndlcon.hxx>
+
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/awt/MouseEvent.hpp>
 
@@ -1642,7 +1644,13 @@ void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight )
                         // #i42750# presentation wants to be informed about resize
                         // as early as possible
                         WorkWindow* pWorkWindow = dynamic_cast<WorkWindow*>(pWindow->ImplGetWindowImpl()->mpClientWindow);
-                        if( pWorkWindow && pWorkWindow->IsPresentationMode() )
+                        if( ! pWorkWindow || pWorkWindow->IsPresentationMode() )
+                            bStartTimer = false;
+                    }
+                    else
+                    {
+                        WorkWindow* pWorkWindow = dynamic_cast<WorkWindow*>(pWindow);
+                        if( ! pWorkWindow || pWorkWindow->IsPresentationMode() )
                             bStartTimer = false;
                     }
                 }

@@ -29,30 +29,28 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
+#include <tools/tempfile.hxx>
 
+#include <osl/file.hxx>
 
+#include <cppuhelper/servicefactory.hxx>
+
+#include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>
+
+#include <svdata.hxx>
+
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
-
 #include <com/sun/star/awt/XExtendedToolkit.hpp>
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-
-
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
 
-#include <cppuhelper/servicefactory.hxx>
-
-#include <tools/tempfile.hxx>
-#include <osl/file.hxx>
-
-#include <vcl/svdata.hxx>
-#include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::rtl;

@@ -30,18 +30,17 @@
 #include "precompiled_vcl.hxx"
 
 #include <tools/ref.hxx>
-
 #include <tools/rc.h>
-#include <vcl/svdata.hxx>
+
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/bitmapex.hxx>
+
+#include <svdata.hxx>
+
 #include <com/sun/star/accessibility/XAccessible.hpp>
-
-
-
 
 // =======================================================================
 

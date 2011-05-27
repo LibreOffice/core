@@ -30,9 +30,10 @@
 #include "precompiled_vcl.hxx"
 
 #include <tools/debug.hxx>
-#include <vcl/accel.h>
+
+#include <accel.h>
 #include <vcl/accel.hxx>
-#include <vcl/accmgr.hxx>
+#include <accmgr.hxx>
 
 // =======================================================================
 

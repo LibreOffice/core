@@ -30,12 +30,14 @@
 #include "precompiled_vcl.hxx"
 
 #include "tools/rc.h"
+
 #include "vcl/event.hxx"
 #include "vcl/decoview.hxx"
 #include "vcl/spin.h"
 #include "vcl/spinfld.hxx"
-#include "vcl/controldata.hxx"
-#include "vcl/svdata.hxx"
+
+#include "controldata.hxx"
+#include "svdata.hxx"
 
 // =======================================================================
 

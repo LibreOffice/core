@@ -28,21 +28,24 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
+
 #include <tools/debug.hxx>
-#include <vcl/svdata.hxx>
+
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/event.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/help.hxx>
 #include <vcl/lstbox.h>
-#include <vcl/ilstbox.hxx>
-#include <vcl/i18nhelp.hxx>
-#include <vcl/controldata.hxx>
 #include <vcl/unohelp.hxx>
+#include <vcl/i18nhelp.hxx>
 
+#include <ilstbox.hxx>
+#include <controldata.hxx>
+#include <svdata.hxx>
+
+#include <com/sun/star/i18n/XCollator.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
-
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 
 #include <rtl/instance.hxx>

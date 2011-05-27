@@ -30,7 +30,8 @@
 #include "vcl/wpropset.hxx"
 #include "vcl/window.hxx"
 #include "vcl/vclevent.hxx"
-#include "vcl/svdata.hxx"
+
+#include "svdata.hxx"
 
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/beans/PropertyValue.hpp"

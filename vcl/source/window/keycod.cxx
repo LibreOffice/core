@@ -29,15 +29,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include <svsys.h>
-#include <vcl/salinst.hxx>
-#include <vcl/salframe.hxx>
-#include <vcl/svdata.hxx>
+#include <salinst.hxx>
+#include <salframe.hxx>
+#include <svdata.hxx>
+
 #include <vcl/window.hxx>
 #include <vcl/keycod.hxx>
 
 #include <tools/rc.h>
-
 
 
 // =======================================================================

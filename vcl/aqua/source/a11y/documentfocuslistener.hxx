@@ -33,7 +33,8 @@
 
 #include <cppuhelper/implbase1.hxx>
 
-#include "aqua11yfocustracker.hxx"
+#include "aqua/aqua11yfocustracker.hxx"
+
 #include <set>
 
 // -------------------------

@@ -69,6 +69,8 @@
 
 #include <sal/types.h>
 
+#include "vcl/dllapi.h"
+
 #include <vector>
 
 #include "vcl/fontcapabilities.hxx"
@@ -287,7 +289,7 @@ namespace vcl
  * @return value of SFErrCodes enum
  * @ingroup sft
  */
-    int OpenTTFontBuffer(void* pBuffer, sal_uInt32 nLen, sal_uInt32 facenum, TrueTypeFont** ttf); /*FOLD01*/
+    int VCL_DLLPUBLIC OpenTTFontBuffer(void* pBuffer, sal_uInt32 nLen, sal_uInt32 facenum, TrueTypeFont** ttf); /*FOLD01*/
 #if !defined(WIN32)
 /**
  * TrueTypeFont constructor.
@@ -298,7 +300,7 @@ namespace vcl
  * @return value of SFErrCodes enum
  * @ingroup sft
  */
-    int OpenTTFontFile(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf);
+    int VCL_DLLPUBLIC OpenTTFontFile(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf);
 #endif
 
     void getTTScripts(std::vector< sal_uInt32 > &rScriptTags, const unsigned char* pTable, size_t nLength);
@@ -311,7 +313,7 @@ namespace vcl
  * TrueTypeFont destructor. Deallocates the memory.
  * @ingroup sft
  */
-    void CloseTTFont(TrueTypeFont *);
+    void VCL_DLLPUBLIC CloseTTFont(TrueTypeFont *);
 
 /**
  * Extracts TrueType control points, and stores them in an allocated array pointed to
@@ -512,7 +514,7 @@ namespace vcl
  * MapString() replaces the UCS-2 characters in str with glyphIDs.
  * @ingroup sft
  */
-    int MapString(TrueTypeFont *ttf, sal_uInt16 *str, int nchars, sal_uInt16 *glyphArray, int bvertical);
+    int VCL_DLLPUBLIC MapString(TrueTypeFont *ttf, sal_uInt16 *str, int nchars, sal_uInt16 *glyphArray, int bvertical);
 
 /**
  * Maps a Unicode (UCS-2) character to a glyph ID and returns it. Missing glyph has

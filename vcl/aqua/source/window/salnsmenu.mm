@@ -28,11 +28,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "salinst.h"
-#include "saldata.hxx"
-#include "salframe.h"
-#include "salmenu.h"
-#include "salnsmenu.h"
+#include "aqua/salinst.h"
+#include "aqua/saldata.hxx"
+#include "aqua/salframe.h"
+#include "aqua/salmenu.h"
+#include "aqua/salnsmenu.h"
 
 #include "vcl/window.hxx"
  
@@ -45,6 +45,7 @@
 
 -(void)menuNeedsUpdate: (NSMenu*)pMenu
 {
+    (void)pMenu;
     YIELD_GUARD;
     
     if( mpMenu )
@@ -84,6 +85,7 @@
 }
 -(void)menuItemTriggered: (id)aSender
 {
+    (void)aSender;
     YIELD_GUARD;
     
     const AquaSalFrame* pFrame = mpMenuItem->mpParentMenu ? mpMenuItem->mpParentMenu->getFrame() : NULL;

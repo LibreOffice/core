@@ -28,18 +28,19 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "aquaprintview.h"
-#include "salinst.h"
+#include "tools/resary.hxx"
+
 #include "vcl/print.hxx"
 #include "vcl/image.hxx"
 #include "vcl/virdev.hxx"
-#include "vcl/svdata.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/unohelp.hxx"
 
-#include "vcl/svids.hrc"
+#include "aqua/aquaprintview.h"
+#include "aqua/salinst.h"
 
-#include "tools/resary.hxx"
+#include "svdata.hxx"
+#include "svids.hrc"
 
 #include "com/sun/star/i18n/XBreakIterator.hpp"
 #include "com/sun/star/i18n/WordType.hpp"
@@ -918,7 +919,7 @@ static void addRadio( NSView* pCurParent, long& rCurX, long& rCurY, long nAttach
     [pProto release];
 }
 
-static void addList( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachOffset,
+static void addList( NSView* pCurParent, long& rCurX, long& rCurY, long /*nAttachOffset*/,
                     const rtl::OUString& rText,
                     const rtl::OUString& rProperty, const Sequence< rtl::OUString > rChoices, sal_Int32 nSelectValue,
                     std::vector<ColumnItem >& rLeftColumn,

@@ -31,8 +31,9 @@
 
 #include "vcl/ctrl.hxx"
 #include "vcl/outdev.hxx"
-#include "vcl/outfont.hxx"
-#include "vcl/textlayout.hxx"
+
+#include "outfont.hxx"
+#include "textlayout.hxx"
 
 #include <com/sun/star/i18n/ScriptDirection.hpp>
 

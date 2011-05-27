@@ -40,7 +40,7 @@ enum type {
 };
 }
 
-struct JobData
+struct VCL_DLLPUBLIC JobData
 {
     int                     m_nCopies;
     int                     m_nLeftMarginAdjust;

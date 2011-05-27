@@ -28,21 +28,26 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
+
 #include <ctype.h>
+
 #include <rtl/crc.h>
-#include <vcl/salbtype.hxx>
+
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
+#include <tools/rc.h>
+
+#include <vcl/salbtype.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/alpha.hxx>
-#include <vcl/image.h>
 #include <vcl/bitmapex.hxx>
 #include <vcl/pngread.hxx>
-#include <vcl/impimagetree.hxx>
-#include <tools/rc.h>
 #include <vcl/svapp.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/virdev.hxx>
+
+#include <image.h>
+#include <impimagetree.hxx>
 
 // ------------
 // - BitmapEx -

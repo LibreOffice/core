@@ -39,9 +39,9 @@
 
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/svdata.hxx>
 #include <vcl/longcurr.hxx>
 
+#include <svdata.hxx>
 
 #include <unotools/localedatawrapper.hxx>
 

@@ -32,13 +32,16 @@
 #include <string.h>
 
 #include <svsys.h>
-#include <wincomp.hxx>
-#include <saldata.hxx>
-#include <salinst.h>
-#include <salframe.h>
-#include <salobj.h>
 #include <tools/debug.hxx>
+#include <tools/svwin.h>
+
 #include <vcl/svapp.hxx>
+
+#include <win/wincomp.hxx>
+#include <win/saldata.hxx>
+#include <win/salinst.h>
+#include <win/salframe.h>
+#include <win/salobj.h>
 
 // =======================================================================
 

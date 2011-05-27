@@ -35,10 +35,10 @@
 #undef _LINUX_SOURCE_COMPAT
 #endif
 
-#include <plugins/gtk/gtkobject.hxx>
-#include <plugins/gtk/gtkframe.hxx>
-#include <plugins/gtk/gtkdata.hxx>
-#include <plugins/gtk/gtkinst.hxx>
+#include <unx/gtk/gtkobject.hxx>
+#include <unx/gtk/gtkframe.hxx>
+#include <unx/gtk/gtkdata.hxx>
+#include <unx/gtk/gtkinst.hxx>
 
 GtkSalObject::GtkSalObject( GtkSalFrame* pParent, sal_Bool bShow )
         : m_pSocket( NULL ),

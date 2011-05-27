@@ -35,10 +35,11 @@
 #undef _LINUX_SOURCE_COMPAT
 #endif
 
-#include <svunx.h>
-#include <vcl/svdata.hxx>
+#include <unx/svunx.h>
+#include <svdata.hxx>
+
 #include <vcl/window.hxx>
-#include <plugins/gtk/gtkinst.hxx>
+#include <unx/gtk/gtkinst.hxx>
 #include <cstdio>
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>

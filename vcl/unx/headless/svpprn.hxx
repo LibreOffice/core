@@ -30,10 +30,12 @@
 #define _SVP_SVPPRN_HXX
 
 #include "vcl/jobdata.hxx"
-#include "vcl/printergfx.hxx"
-#include "vcl/printerjob.hxx"
-#include "vcl/salprn.hxx"
-#include "salprn.h"
+
+#include "printergfx.hxx"
+#include "printerjob.hxx"
+#include <unx/salprn.h>
+
+#include "vclpluginapi.h"
 
 class PspGraphics;
 

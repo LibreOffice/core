@@ -31,9 +31,9 @@
 
 #include <string.h>
 
-#include "saldata.hxx"
-#include "salobj.h"
-#include "salframe.h"
+#include "aqua/saldata.hxx"
+#include "aqua/salobj.h"
+#include "aqua/salframe.h"
 
 // =======================================================================
 
@@ -115,7 +115,7 @@ sal_uInt16 AquaSalObject::GetClipRegionType()
 
 // -----------------------------------------------------------------------
 
-void AquaSalObject::BeginSetClipRegion( sal_uLong nRectCount )
+void AquaSalObject::BeginSetClipRegion( sal_uLong )
 {
     mbClip = false;
 }
@@ -209,7 +209,7 @@ void AquaSalObject::Show( sal_Bool bVisible )
 
 // -----------------------------------------------------------------------
 
-void AquaSalObject::Enable( sal_Bool bEnable )
+void AquaSalObject::Enable( sal_Bool )
 {
 }
 
@@ -227,7 +227,7 @@ void AquaSalObject::SetBackground()
 
 // -----------------------------------------------------------------------
 
-void AquaSalObject::SetBackground( SalColor nSalColor )
+void AquaSalObject::SetBackground( SalColor )
 {
 }
 

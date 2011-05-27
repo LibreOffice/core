@@ -35,6 +35,8 @@
 #include "tools/string.hxx"
 #include "tools/stream.hxx"
 
+#include "vcl/dllapi.h"
+
 #include "com/sun/star/lang/Locale.hpp"
 
 #define PRINTER_PPDDIR "driver"
@@ -46,7 +48,7 @@ class PPDTranslator;
 
 enum PPDValueType { eInvocation, eQuoted, eSymbol, eString, eNo };
 
-struct PPDValue
+struct VCL_DLLPUBLIC PPDValue
 {
     PPDValueType    m_eType;
     String          m_aOption;
@@ -59,7 +61,7 @@ struct PPDValue
  * PPDKey - a container for the available options (=values) of a PPD keyword
  */
 
-class PPDKey
+class VCL_DLLPUBLIC PPDKey
 {
     friend class PPDParser;
 
@@ -121,7 +123,7 @@ struct PPDKeyhash
 class PPDContext;
 class CUPSManager;
 
-class PPDParser
+class VCL_DLLPUBLIC PPDParser
 {
     friend class PPDContext;
     friend class CUPSManager;
@@ -293,7 +295,7 @@ public:
  * contents of a PPDParser.
  */
 
-class PPDContext
+class VCL_DLLPUBLIC PPDContext
 {
     typedef ::boost::unordered_map< const PPDKey*, const PPDValue*, PPDKeyhash > hash_type;
     hash_type m_aCurrentValues;

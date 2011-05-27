@@ -157,15 +157,10 @@ void GraphicObject::ImplAssignGraphicData()
     mbTransparent = maGraphic.IsTransparent();
     mbAlpha = maGraphic.IsAlpha();
     mbAnimated = maGraphic.IsAnimated();
+    mbEPS = maGraphic.IsEPS();
+    mbIsRenderGraphic = maGraphic.IsRenderGraphic();
+    mbHasRenderGraphic = maGraphic.HasRenderGraphic();
     mnAnimationLoopCount = ( mbAnimated ? maGraphic.GetAnimationLoopCount() : 0 );
-
-    if( maGraphic.GetType() == GRAPHIC_GDIMETAFILE )
-    {
-        const GDIMetaFile& rMtf = GetGraphic().GetGDIMetaFile();
-        mbEPS = ( rMtf.GetActionSize() >= 1 ) && ( META_EPS_ACTION == rMtf.GetAction( 0 )->GetType() );
-    }
-    else
-        mbEPS = sal_False;
 }
 
 void GraphicObject::ImplSetGraphicManager( const GraphicManager* pMgr, const ByteString* pID, const GraphicObject* pCopyObj )
@@ -387,7 +382,7 @@ void GraphicObject::Assign( const SvDataCopyStream& rCopyStream )
 
 ByteString GraphicObject::GetUniqueID() const
 {
-    if ( !IsInSwapIn() && IsEPS() )
+    if ( !IsInSwapIn() && ( IsEPS() || IsRenderGraphic() ) )
         const_cast<GraphicObject*>(this)->FireSwapInRequest();
 
     ByteString aRet;
@@ -643,7 +638,7 @@ sal_Bool GraphicObject::DrawWithPDFHandling( OutputDevice& rOutDev,
     const GraphicAttr aGrfAttr( pGrfAttr ? *pGrfAttr : GetAttr() );
 
     // Notify PDF writer about linked graphic (if any)
-    bool bWritingPdfLinkedGraphic( false );
+    sal_Bool bWritingPdfLinkedGraphic( sal_False );
     Point aPt( rPt );
     Size aSz( rSz );
     Rectangle aCropRect;

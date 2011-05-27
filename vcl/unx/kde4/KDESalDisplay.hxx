@@ -28,7 +28,7 @@
 
 #pragma once
 
-#include <saldisp.hxx>
+#include <unx/saldisp.hxx>
 
 class SalKDEDisplay : public SalX11Display
 {

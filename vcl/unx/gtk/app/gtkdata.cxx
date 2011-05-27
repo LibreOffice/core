@@ -47,20 +47,20 @@
 #include <sys/time.h>
 #include <unistd.h>
 #endif
-#include <plugins/gtk/gtkdata.hxx>
-#include <plugins/gtk/gtkinst.hxx>
-#include <plugins/gtk/gtkframe.hxx>
-#include <salobj.h>
+#include <unx/gtk/gtkdata.hxx>
+#include <unx/gtk/gtkinst.hxx>
+#include <unx/gtk/gtkframe.hxx>
+#include <unx/salobj.h>
 #include <osl/thread.h>
 #include <osl/process.h>
 
 #include <osl/conditn.h>
 #include <tools/debug.hxx>
-#include "i18n_im.hxx"
-#include "i18n_xkb.hxx"
-#include <wmadaptor.hxx>
+#include "unx/i18n_im.hxx"
+#include "unx/i18n_xkb.hxx"
+#include <unx/wmadaptor.hxx>
 
-#include "../../unx/source/inc/salcursors.h"
+#include "unx/x11_cursors/salcursors.h"
 
 #include <vcl/svapp.hxx>
 
@@ -570,6 +570,7 @@ GtkXLib::~GtkXLib()
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "GtkXLib::~GtkXLib()\n" );
 #endif
+    Yield( true, true );
     StopTimer();
      // sanity check: at this point nobody should be yielding, but wake them
      // up anyway before the condition they're waiting on gets destroyed.

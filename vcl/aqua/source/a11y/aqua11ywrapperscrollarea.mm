@@ -28,7 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "salinst.h"
+#include "aqua/salinst.h"
+
 #include "aqua11ywrapperscrollarea.h"
 #include "aqua11ywrapperscrollbar.h"
 #include "aqua11yrolehelper.h"

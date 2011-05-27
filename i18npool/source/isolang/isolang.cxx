@@ -470,6 +470,15 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_KABYLE,                "kab", "DZ" },
     { LANGUAGE_USER_HAITIAN,                "ht", "HT" },
     { LANGUAGE_FRENCH_HAITI,                "fr", "HT" },
+    { LANGUAGE_USER_BEEMBE,                "beq", "CG" },
+    { LANGUAGE_USER_BEKWEL,                "bkw", "CG" },
+    { LANGUAGE_USER_KITUBA,                "mkw", "CG" },
+    { LANGUAGE_USER_LARI,                  "ldi", "CG" },
+    { LANGUAGE_USER_MBOCHI,                "mdw", "CG" },
+    { LANGUAGE_USER_TEKE_IBALI,            "tek", "CG" },
+    { LANGUAGE_USER_TEKE_TYEE,             "tyx", "CG" },
+    { LANGUAGE_USER_VILI,                  "vif", "CG" },
+    { LANGUAGE_USER_PORTUGUESE_ANGOLA,      "pt", "AO" },
     { LANGUAGE_USER_MANX,                   "gv", "GB" },
     { LANGUAGE_NONE,                       "zxx", ""   },   // added to ISO 639-2 on 2006-01-11: Used to declare the absence of linguistic information
     { LANGUAGE_DONTKNOW,                    "",   ""   }    // marks end of table

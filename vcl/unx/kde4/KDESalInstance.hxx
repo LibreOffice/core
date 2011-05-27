@@ -28,7 +28,7 @@
 
 #pragma once
 
-#include <salinst.h>
+#include <unx/salinst.h>
 
 class SalYieldMutex;
 class SalFrame;

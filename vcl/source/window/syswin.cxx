@@ -30,14 +30,8 @@
 #include "precompiled_vcl.hxx"
 #include <tools/debug.hxx>
 
-#include <svsys.h>
-#include <vcl/salframe.hxx>
-#include <vcl/svdata.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/brdwin.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/window.h>
-#include <vcl/brdwin.hxx>
 #include <vcl/sound.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
@@ -45,6 +39,10 @@
 #include <vcl/taskpanelist.hxx>
 #include <vcl/unowrap.hxx>
 
+#include <salframe.hxx>
+#include <svdata.hxx>
+#include <brdwin.hxx>
+#include <window.h>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

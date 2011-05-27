@@ -951,10 +951,10 @@ void SvNumberFormatter::FillKeywordTable( NfKeywordTable& rKeywords,
         LanguageType eLang )
 {
     ChangeIntl( eLang );
-    const String* pTable = pFormatScanner->GetKeywords();
+    const NfKeywordTable & rTable = pFormatScanner->GetKeywords();
     for ( sal_uInt16 i = 0; i < NF_KEYWORD_ENTRIES_COUNT; ++i )
     {
-        rKeywords[i] = pTable[i];
+        rKeywords[i] = rTable[i];
     }
 }
 
@@ -962,9 +962,9 @@ void SvNumberFormatter::FillKeywordTable( NfKeywordTable& rKeywords,
 String SvNumberFormatter::GetKeyword( LanguageType eLnge, sal_uInt16 nIndex )
 {
     ChangeIntl(eLnge);
-    const String* pTable = pFormatScanner->GetKeywords();
-    if ( pTable && nIndex < NF_KEYWORD_ENTRIES_COUNT )
-        return pTable[nIndex];
+    const NfKeywordTable & rTable = pFormatScanner->GetKeywords();
+    if ( nIndex < NF_KEYWORD_ENTRIES_COUNT )
+        return rTable[nIndex];
 
     OSL_FAIL("GetKeyword: invalid index");
     return String();
@@ -2613,8 +2613,8 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, sal_Bool bLoadi
         CLOffset + SetIndexTable( NF_FRACTION_4, ZF_STANDARD_FRACTION+3 ));
 
     // Week of year   must be appended here because of nNewExtended
-    const String* pKeyword = pFormatScanner->GetKeywords();
-    aSingleFormatCode.Code = pKeyword[NF_KEY_WW];
+    const NfKeywordTable & rKeyword = pFormatScanner->GetKeywords();
+    aSingleFormatCode.Code = rKeyword[NF_KEY_WW];
     ImpInsertNewStandardFormat( aSingleFormatCode,
         CLOffset + SetIndexTable( NF_DATE_WW, nNewExtended++ ),
         SV_NUMBERFORMATTER_VERSION_NF_DATE_WW );

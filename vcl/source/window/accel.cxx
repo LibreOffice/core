@@ -31,10 +31,11 @@
 
 #include <tools/table.hxx>
 #include <tools/debug.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/accel.h>
-#include <vcl/accel.hxx>
 #include <tools/rc.h>
+
+#include <vcl/svapp.hxx>
+#include <accel.h>
+#include <vcl/accel.hxx>
 #include <vector>
 
 // =======================================================================

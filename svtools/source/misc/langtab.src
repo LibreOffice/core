@@ -148,6 +148,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Norwegian, Nynorsk" ; LANGUAGE_NORWEGIAN_NYNORSK ; > ;
         < "Oriya" ; LANGUAGE_ORIYA ; > ;
         < "Polish" ; LANGUAGE_POLISH ; > ;
+        < "Portuguese (Angola)" ; LANGUAGE_USER_PORTUGUESE_ANGOLA ; > ;
         < "Portuguese (Portugal)" ; LANGUAGE_PORTUGUESE ; > ;
         < "Portuguese (Brazil)" ; LANGUAGE_PORTUGUESE_BRAZILIAN ; > ;
         < "Punjabi" ; LANGUAGE_PUNJABI ; > ;
@@ -330,6 +331,14 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Lojban" ; LANGUAGE_USER_LOJBAN ; > ;
         < "Kabyle" ; LANGUAGE_USER_KABYLE ; > ;
         < "Haitian" ; LANGUAGE_USER_HAITIAN ; > ;
+        < "Beembe" ; LANGUAGE_USER_BEEMBE ; > ;
+        < "Bekwel" ; LANGUAGE_USER_BEKWEL ; > ;
+        < "Kituba" ; LANGUAGE_USER_KITUBA ; > ;
+        < "Lari" ; LANGUAGE_USER_LARI ; > ;
+        < "Mbochi" ; LANGUAGE_USER_MBOCHI ; > ;
+        < "Teke-Ibali" ; LANGUAGE_USER_TEKE_IBALI ; > ;
+        < "Teke-Tyee" ; LANGUAGE_USER_TEKE_TYEE ; > ;
+        < "Vili" ; LANGUAGE_USER_VILI ; > ;
     };
 };
 
