@@ -8,6 +8,7 @@ namespace writerfilter {
         {
             const char *sKeyword;
             int nControlType;
+            int nIndex;
         } RTFSymbol;
     } // namespace rtftok
 } // namespace writerfilter
