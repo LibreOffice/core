@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <stack>
+#include <map>
 #include <rtftok/RTFDocument.hxx>
 #include <rtfcontrolwords.hxx>
 
@@ -49,6 +50,18 @@ namespace writerfilter {
                 RTFDesitnationState nDestinationState;
         };
 
+        class RTFReferenceProperties
+            : public writerfilter::Reference<Properties>
+        {
+            public:
+                RTFReferenceProperties(std::map<RTFKeyword, int> rSprms);
+                virtual ~RTFReferenceProperties();
+                virtual void resolve(Properties & rHandler);
+                virtual std::string getType() const;
+            private:
+                std::map<RTFKeyword, int> m_rSprms;
+        };
+
         /// Implementation of the RTFDocument interface.
         class RTFDocumentImpl
             : public RTFDocument
@@ -82,6 +95,7 @@ namespace writerfilter {
                 bool m_bSkipUnknown;
                 /// For debugging purposes, where int value would not be enough
                 rtl::OString* m_pCurrentKeyword;
+                std::map<RTFKeyword, int> m_aSprms;
         };
     } // namespace rtftok
 } // namespace writerfilter

@@ -90,7 +90,10 @@ int RTFDocumentImpl::resolveChars(char ch)
 
 void RTFDocumentImpl::text(OUString& rString)
 {
+    writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(m_aSprms));
+
     Mapper().startCharacterGroup();
+    Mapper().props(pProperties);
     Mapper().utext(reinterpret_cast<sal_uInt8 const*>(rString.getStr()), rString.getLength());
     Mapper().endCharacterGroup();
 }
@@ -111,10 +114,22 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword, bool /*bParam*/, i
     return 0;
 }
 
-int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool /*bParam*/, int /*nParam*/)
+int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam)
 {
+    bool bOn = !bParam || nParam != 0;
+
     switch (nKeyword)
     {
+        case RTF_B: // NS_sprm::LN_CFBold
+            if (bOn)
+            {
+                // on
+            }
+            else
+            {
+                // off
+            }
+            break;
         default:
             OSL_TRACE("%s: TODO handle toggle '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             break;
@@ -346,6 +361,24 @@ RTFParserState::RTFParserState()
     : nInternalState(INTERNAL_NORMAL),
     nDestinationState(DESTINATION_NORMAL)
 {
+}
+
+RTFReferenceProperties::RTFReferenceProperties(std::map<RTFKeyword, int> rSprms)
+    : m_rSprms(rSprms)
+{
+}
+
+RTFReferenceProperties::~RTFReferenceProperties()
+{
+}
+
+void RTFReferenceProperties::resolve(Properties& /*rHandler*/)
+{
+}
+
+std::string RTFReferenceProperties::getType() const
+{
+    return "RTFReferenceProperties";
 }
 
 } // namespace rtftok
