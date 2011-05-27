@@ -51,8 +51,7 @@ public class ColumnarThreeColumns extends ColumnarTwoColumns
 
     public String getLocalizedName()
     {
-        final String sLocalizedName = getResource().getResText(UIConsts.RID_REPORT + 83);
-        return sLocalizedName;
+        return getResource().getResText(UIConsts.RID_REPORT + 83);
     }
 
     protected void insertDetailFields()

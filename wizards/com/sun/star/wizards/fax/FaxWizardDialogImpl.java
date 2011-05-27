@@ -162,13 +162,13 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
             //update the dialog UI according to the loaded Configuration
             updateUI();
 
-            if (myPathSelection.xSaveTextBox.getText().equalsIgnoreCase(""))
+            if (myPathSelection.xSaveTextBox.getText().equalsIgnoreCase(PropertyNames.EMPTY_STRING))
             {
                 myPathSelection.initializePath();
             }
 
             XWindow xContainerWindow = myFaxDoc.xFrame.getContainerWindow();
-            XWindowPeer xWindowPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, xContainerWindow);
+            XWindowPeer xWindowPeer = UnoRuntime.queryInterface(XWindowPeer.class, xContainerWindow);
             createWindowPeer(xWindowPeer);
 
             //add the Roadmap to the dialog:
@@ -198,8 +198,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
             removeTerminateListener();
             exception.printStackTrace(System.out);
             running = false;
-            return;
-        }
+            }
     }
 
     public void cancelWizard()
@@ -217,7 +216,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
             //myFaxDoc.xTextDocument.lockControllers();
             FileAccess fileAccess = new FileAccess(xMSF);
             sPath = myPathSelection.getSelectedPath();
-            if (sPath.equals(""))
+            if (sPath.equals(PropertyNames.EMPTY_STRING))
             {
                 myPathSelection.triggerPathPicker();
                 sPath = myPathSelection.getSelectedPath();
@@ -250,7 +249,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
             if (bSaveSuccess)
             {
                 saveConfiguration();
-                XInteractionHandler xIH = (XInteractionHandler) UnoRuntime.queryInterface(XInteractionHandler.class, xMSF.createInstance("com.sun.star.comp.uui.UUIInteractionHandler"));
+                XInteractionHandler xIH = UnoRuntime.queryInterface(XInteractionHandler.class, xMSF.createInstance("com.sun.star.comp.uui.UUIInteractionHandler"));
                 PropertyValue loadValues[] = new PropertyValue[4];
                 loadValues[0] = new PropertyValue();
                 loadValues[0].Name = "AsTemplate";
@@ -275,7 +274,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
                 }
                 Object oDoc = OfficeDocument.load(Desktop.getDesktop(xMSF), sPath, "_default", loadValues);
                 XTextDocument xTextDocument = (com.sun.star.text.XTextDocument) oDoc;
-                XMultiServiceFactory xDocMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
+                XMultiServiceFactory xDocMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
                 ViewHandler myViewHandler = new ViewHandler(xDocMSF, xTextDocument);
                 myViewHandler.setViewSetting("ZoomType", new Short(com.sun.star.view.DocumentZoomType.OPTIMAL));
             }
@@ -301,7 +300,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
         try
         {
             //xComponent.dispose();
-            XCloseable xCloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, myFaxDoc.xFrame);
+            XCloseable xCloseable = UnoRuntime.queryInterface(XCloseable.class, myFaxDoc.xFrame);
             xCloseable.close(false);
         }
         catch (CloseVetoException e)
@@ -352,11 +351,11 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
         try
         {
             Object oGS = xMSF.createInstance("com.sun.star.graphic.GraphicProvider");
-            XGraphicProvider xGraphicProvider = (XGraphicProvider) UnoRuntime.queryInterface(XGraphicProvider.class, oGS);
+            XGraphicProvider xGraphicProvider = UnoRuntime.queryInterface(XGraphicProvider.class, oGS);
 
             PropertyValue GraphicValues[] = new PropertyValue[1];
             GraphicValues[0] = new PropertyValue();
-            GraphicValues[0].Name = "URL";
+            GraphicValues[0].Name = PropertyNames.URL;
             GraphicValues[0].Value = "private:resource/svx/imagelist/18000/18022";
             XGraphic xGraphic = xGraphicProvider.queryGraphic(GraphicValues);
 
@@ -380,7 +379,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
         try
         {
             sTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share", "/wizard");
-            sUserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user", "");
+            sUserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user", PropertyNames.EMPTY_STRING);
             sBitmapPath = FileAccess.combinePaths(xMSF, sTemplatePath, "/../wizard/bitmap");
         }
         catch (NoValidPathException e)
@@ -395,19 +394,19 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
         {
             String sFaxSubPath = "/wizard/fax";
             sFaxPath = FileAccess.combinePaths(xMSF, sTemplatePath, sFaxSubPath);
-            sWorkPath = FileAccess.getOfficePath(xMSF, "Work", "", "");
+            sWorkPath = FileAccess.getOfficePath(xMSF, "Work", PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING);
 
             BusinessFiles = FileAccess.getFolderTitles(xMSF, "bus", sFaxPath);
             PrivateFiles = FileAccess.getFolderTitles(xMSF, "pri", sFaxPath);
 
-            setControlProperty("lstBusinessStyle", "StringItemList", BusinessFiles[0]);
-            setControlProperty("lstPrivateStyle", "StringItemList", PrivateFiles[0]);
+            setControlProperty("lstBusinessStyle", PropertyNames.STRING_ITEM_LIST, BusinessFiles[0]);
+            setControlProperty("lstPrivateStyle", PropertyNames.STRING_ITEM_LIST, PrivateFiles[0]);
 
-            setControlProperty("lstBusinessStyle", "SelectedItems", new short[]
+            setControlProperty("lstBusinessStyle", PropertyNames.SELECTED_ITEMS, new short[]
                     {
                         0
                     });
-            setControlProperty("lstPrivateStyle", "SelectedItems", new short[]
+            setControlProperty("lstPrivateStyle", PropertyNames.SELECTED_ITEMS, new short[]
                     {
                         0
                     });
@@ -424,42 +423,42 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
 
     public void initializeElements()
     {
-        setControlProperty("chkUseLogo", PropertyNames.PROPERTY_ENABLED, new Boolean(myFaxDoc.hasElement("Company Logo")));
-        setControlProperty("chkUseSubject", PropertyNames.PROPERTY_ENABLED, new Boolean(myFaxDoc.hasElement("Subject Line")));
-        setControlProperty("chkUseDate", PropertyNames.PROPERTY_ENABLED, new Boolean(myFaxDoc.hasElement("Date")));
+        setControlProperty("chkUseLogo", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(myFaxDoc.hasElement("Company Logo")));
+        setControlProperty("chkUseSubject", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(myFaxDoc.hasElement("Subject Line")));
+        setControlProperty("chkUseDate", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(myFaxDoc.hasElement("Date")));
         myFaxDoc.updateDateFields();
     }
 
     public void initializeSalutation()
     {
-        setControlProperty("lstSalutation", "StringItemList", resources.SalutationLabels);
+        setControlProperty("lstSalutation", PropertyNames.STRING_ITEM_LIST, resources.SalutationLabels);
     }
 
     public void initializeGreeting()
     {
-        setControlProperty("lstGreeting", "StringItemList", resources.GreetingLabels);
+        setControlProperty("lstGreeting", PropertyNames.STRING_ITEM_LIST, resources.GreetingLabels);
     }
 
     public void initializeCommunication()
     {
-        setControlProperty("lstCommunicationType", "StringItemList", resources.CommunicationLabels);
+        setControlProperty("lstCommunicationType", PropertyNames.STRING_ITEM_LIST, resources.CommunicationLabels);
     }
 
     private void setDefaultForGreetingAndSalutationAndCommunication()
     {
         XTextComponent xTextComponent;
-        xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstSalutation);
-        if (xTextComponent.getText().equals(""))
+        xTextComponent = UnoRuntime.queryInterface(XTextComponent.class, lstSalutation);
+        if (xTextComponent.getText().equals(PropertyNames.EMPTY_STRING))
         {
             xTextComponent.setText(resources.SalutationLabels[0]);
         }
-        xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstGreeting);
-        if (xTextComponent.getText().equals(""))
+        xTextComponent = UnoRuntime.queryInterface(XTextComponent.class, lstGreeting);
+        if (xTextComponent.getText().equals(PropertyNames.EMPTY_STRING))
         {
             xTextComponent.setText(resources.GreetingLabels[0]);
         }
-        xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstCommunicationType);
-        if (xTextComponent.getText().equals(""))
+        xTextComponent = UnoRuntime.queryInterface(XTextComponent.class, lstCommunicationType);
+        if (xTextComponent.getText().equals(PropertyNames.EMPTY_STRING))
         {
             xTextComponent.setText(resources.CommunicationLabels[0]);
         }
@@ -590,7 +589,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
 
     public void txtTemplateNameTextChanged()
     {
-        XDocumentPropertiesSupplier xDocPropsSuppl = (XDocumentPropertiesSupplier) UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xTextDocument);
+        XDocumentPropertiesSupplier xDocPropsSuppl = UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xTextDocument);
         XDocumentProperties xDocProps = xDocPropsSuppl.getDocumentProperties();
         String TitleName = txtTemplateName.getText();
         xDocProps.setTitle(TitleName);
@@ -769,7 +768,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
 
             //enable/disable roadmap item for footer page
             XInterface BPaperItem = getRoadmapItemByID(RM_FOOTER);
-            Helper.setUnoPropertyValue(BPaperItem, PropertyNames.PROPERTY_ENABLED, new Boolean(bFooterPossible));
+            Helper.setUnoPropertyValue(BPaperItem, PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bFooterPossible));
 
         }
         catch (Exception exception)
@@ -795,14 +794,14 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
 
     public void chkUseSalutationItemChanged()
     {
-        XTextComponent xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstSalutation);
+        XTextComponent xTextComponent = UnoRuntime.queryInterface(XTextComponent.class, lstSalutation);
         myFaxDoc.switchUserField("Salutation", xTextComponent.getText(), (chkUseSalutation.getState() != 0));
-        setControlProperty("lstSalutation", PropertyNames.PROPERTY_ENABLED, new Boolean(chkUseSalutation.getState() != 0));
+        setControlProperty("lstSalutation", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(chkUseSalutation.getState() != 0));
     }
 
     public void lstSalutationItemChanged()
     {
-        XTextComponent xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstSalutation);
+        XTextComponent xTextComponent = UnoRuntime.queryInterface(XTextComponent.class, lstSalutation);
         myFaxDoc.switchUserField("Salutation", xTextComponent.getText(), (chkUseSalutation.getState() != 0));
     }
 
@@ -812,14 +811,14 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
 
     public void chkUseCommunicationItemChanged()
     {
-        XTextComponent xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstCommunicationType);
+        XTextComponent xTextComponent = UnoRuntime.queryInterface(XTextComponent.class, lstCommunicationType);
         myFaxDoc.switchUserField("CommunicationType", xTextComponent.getText(), (chkUseCommunicationType.getState() != 0));
-        setControlProperty("lstCommunicationType", PropertyNames.PROPERTY_ENABLED, new Boolean(chkUseCommunicationType.getState() != 0));
+        setControlProperty("lstCommunicationType", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(chkUseCommunicationType.getState() != 0));
     }
 
     public void lstCommunicationItemChanged()
     {
-        XTextComponent xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstCommunicationType);
+        XTextComponent xTextComponent = UnoRuntime.queryInterface(XTextComponent.class, lstCommunicationType);
         myFaxDoc.switchUserField("CommunicationType", xTextComponent.getText(), (chkUseCommunicationType.getState() != 0));
     }
 
@@ -829,14 +828,14 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
 
     public void chkUseGreetingItemChanged()
     {
-        XTextComponent xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstGreeting);
+        XTextComponent xTextComponent = UnoRuntime.queryInterface(XTextComponent.class, lstGreeting);
         myFaxDoc.switchUserField("Greeting", xTextComponent.getText(), (chkUseGreeting.getState() != 0));
-        setControlProperty("lstGreeting", PropertyNames.PROPERTY_ENABLED, new Boolean(chkUseGreeting.getState() != 0));
+        setControlProperty("lstGreeting", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(chkUseGreeting.getState() != 0));
     }
 
     public void lstGreetingItemChanged()
     {
-        XTextComponent xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstGreeting);
+        XTextComponent xTextComponent = UnoRuntime.queryInterface(XTextComponent.class, lstGreeting);
         myFaxDoc.switchUserField("Greeting", xTextComponent.getText(), (chkUseGreeting.getState() != 0));
     }
 
@@ -846,7 +845,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
 
     private void setPossibleFooter(boolean bState)
     {
-        setControlProperty("chkUseFooter", PropertyNames.PROPERTY_ENABLED, new Boolean(bState));
+        setControlProperty("chkUseFooter", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bState));
         if (!bState)
         {
             chkUseFooter.setState((short) 0);

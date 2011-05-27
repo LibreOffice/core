@@ -46,6 +46,9 @@
 
 #include "certificateextension_xmlsecimpl.hxx"
 
+#ifndef _SANEXTENSION_NSSIMPL_HXX_
+#include "sanextension_nssimpl.hxx"
+#endif
 
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::security ;
@@ -120,13 +123,13 @@ sal_Int16 SAL_CALL X509Certificate_NssImpl :: getVersion() throw ( ::com::sun::s
         //Convert the time to readable local time
         PR_ExplodeTime( notBefore, PR_LocalTimeParameters, &explTime ) ;
 
-        dateTime.HundredthSeconds = explTime.tm_usec / 1000 ;
-        dateTime.Seconds = explTime.tm_sec ;
-        dateTime.Minutes = explTime.tm_min ;
-        dateTime.Hours = explTime.tm_hour ;
-        dateTime.Day = explTime.tm_mday ;
-        dateTime.Month = explTime.tm_month+1 ;
-        dateTime.Year = explTime.tm_year ;
+        dateTime.HundredthSeconds = static_cast< sal_Int16 >( explTime.tm_usec / 1000  );
+        dateTime.Seconds = static_cast< sal_Int16 >( explTime.tm_sec  );
+        dateTime.Minutes = static_cast< sal_Int16 >( explTime.tm_min  );
+        dateTime.Hours = static_cast< sal_Int16 >( explTime.tm_hour  );
+        dateTime.Day = static_cast< sal_Int16 >( explTime.tm_mday  );
+        dateTime.Month = static_cast< sal_Int16 >( explTime.tm_month+1  );
+        dateTime.Year = static_cast< sal_Int16 >( explTime.tm_year  );
 
         return dateTime ;
     } else {
@@ -149,13 +152,13 @@ sal_Int16 SAL_CALL X509Certificate_NssImpl :: getVersion() throw ( ::com::sun::s
         //Convert the time to readable local time
         PR_ExplodeTime( notAfter, PR_LocalTimeParameters, &explTime ) ;
 
-        dateTime.HundredthSeconds = explTime.tm_usec / 1000 ;
-        dateTime.Seconds = explTime.tm_sec ;
-        dateTime.Minutes = explTime.tm_min ;
-        dateTime.Hours = explTime.tm_hour ;
-        dateTime.Day = explTime.tm_mday ;
-        dateTime.Month = explTime.tm_month+1 ;
-        dateTime.Year = explTime.tm_year ;
+        dateTime.HundredthSeconds = static_cast< sal_Int16 >( explTime.tm_usec / 1000  );
+        dateTime.Seconds = static_cast< sal_Int16 >( explTime.tm_sec  );
+        dateTime.Minutes = static_cast< sal_Int16 >( explTime.tm_min  );
+        dateTime.Hours = static_cast< sal_Int16 >( explTime.tm_hour  );
+        dateTime.Day = static_cast< sal_Int16 >( explTime.tm_mday  );
+        dateTime.Month = static_cast< sal_Int16 >( explTime.tm_month+1  );
+        dateTime.Year = static_cast< sal_Int16 >( explTime.tm_year  );
 
         return dateTime ;
     } else {
@@ -198,12 +201,27 @@ sal_Int16 SAL_CALL X509Certificate_NssImpl :: getVersion() throw ( ::com::sun::s
         Sequence< Reference< XCertificateExtension > > xExtns( len ) ;
 
         for( extns = m_pCert->extensions, len = 0; *extns != NULL; extns ++, len ++ ) {
-            pExtn = new CertificateExtension_XmlSecImpl() ;
+            const SECItem id = (*extns)->id;
+            ::rtl::OString oidString(CERT_GetOidString(&id));
+
+            // remove "OID." prefix if existing
+            ::rtl::OString objID;
+            ::rtl::OString oid("OID.");
+            if (oidString.match(oid))
+                objID = oidString.copy(oid.getLength());
+            else
+                objID = oidString;
+
+            if ( objID.equals("2.5.29.17") )
+                pExtn = (CertificateExtension_XmlSecImpl*) new SanExtensionImpl() ;
+            else
+                pExtn = new CertificateExtension_XmlSecImpl() ;
+
             if( (*extns)->critical.data == NULL )
                 crit = sal_False ;
             else
                 crit = ( (*extns)->critical.data[0] == 0xFF ) ? sal_True : sal_False ;
-            pExtn->setCertExtn( (*extns)->value.data, (*extns)->value.len, (*extns)->id.data, (*extns)->id.len, crit ) ;
+            pExtn->setCertExtn( (*extns)->value.data, (*extns)->value.len, (unsigned char*)objID.getStr(), objID.getLength(), crit ) ;
 
             xExtns[len] = pExtn ;
         }
@@ -227,7 +245,12 @@ sal_Int16 SAL_CALL X509Certificate_NssImpl :: getVersion() throw ( ::com::sun::s
         pExtn = NULL ;
         for( extns = m_pCert->extensions; *extns != NULL; extns ++ ) {
             if( SECITEM_CompareItem( &idItem, &(*extns)->id ) == SECEqual ) {
-                pExtn = new CertificateExtension_XmlSecImpl() ;
+                const SECItem id = (*extns)->id;
+                ::rtl::OString objId(CERT_GetOidString(&id));
+                if ( objId.equals("OID.2.5.29.17") )
+                    pExtn = (CertificateExtension_XmlSecImpl*) new SanExtensionImpl() ;
+                else
+                    pExtn = new CertificateExtension_XmlSecImpl() ;
                 if( (*extns)->critical.data == NULL )
                     crit = sal_False ;
                 else

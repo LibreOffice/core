@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -25,52 +25,10 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..$/..
-PRJNAME=setup_native
-TARGET=relnotes
+UDK_3_0_0 {
+    global:
+        cppunitTestPlugIn;
 
-
-# --- Settings -----------------------------------------------------
-
-ENABLE_EXCEPTIONS=TRUE
-NO_DEFAULT_STL=TRUE
-DYNAMIC_CRT=
-USE_DEFFILE=TRUE
-
-.INCLUDE : settings.mk
-
-CDEFS+=-DUNICODE
-
-UWINAPILIB=
-
-# --- Files --------------------------------------------------------
-
-.IF "$(GUI)"=="WNT"
-
-SLOFILES =	$(SLO)$/relnotes.obj
-
-STDSHL+=	\
-    $(ADVAPI32LIB)\
-    $(SHELL32LIB)\
-    $(MSILIB)
-
-SHL1LIBS = $(SLB)$/$(TARGET).lib 
-
-SHL1TARGET = $(TARGET)
-SHL1IMPLIB = i$(TARGET)
-
-SHL1DEF = $(MISC)$/$(SHL1TARGET).def
-SHL1DEPN = $(SLB)$/$(TARGET).lib
-SHL1BASE = 0x1c000000
-DEF1NAME=$(SHL1TARGET)
-DEF1EXPORTFILE=exports.dxp
-
-.ENDIF
-
-# --- Targets --------------------------------------------------------------
-
-.INCLUDE : target.mk
-
-# -------------------------------------------------------------------------
-
-
+    local:
+        *;
+};

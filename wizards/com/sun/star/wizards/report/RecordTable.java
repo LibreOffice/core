@@ -69,21 +69,21 @@ public class RecordTable
                 {
                     oTable = xAllTextTables.getByName(ReportTextDocument.TBLRECORDSECTION);
                 }
-                xTextTable = (XTextTable) UnoRuntime.queryInterface(XTextTable.class, oTable);
-                xTableName = (XNamed) UnoRuntime.queryInterface(XNamed.class, xTextTable);
+                xTextTable = UnoRuntime.queryInterface(XTextTable.class, oTable);
+                xTableName = UnoRuntime.queryInterface(XNamed.class, xTextTable);
             }
             else
             {
-                XIndexAccess xTableIndex = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, xAllTextTables);
+                XIndexAccess xTableIndex = UnoRuntime.queryInterface(XIndexAccess.class, xAllTextTables);
                 int n = xTableIndex.getCount() - 1;
                 Object x = xTableIndex.getByIndex(n);
-                xTextTable = (XTextTable) UnoRuntime.queryInterface(XTextTable.class, x);
-                xTableName = (XNamed) UnoRuntime.queryInterface(XNamed.class, xTextTable);
+                xTextTable = UnoRuntime.queryInterface(XTextTable.class, x);
+                xTableName = UnoRuntime.queryInterface(XNamed.class, xTextTable);
                 xTableName.setName(ReportTextDocument.TBLRECORDSECTION);
             }
             xTableRows = xTextTable.getRows();
             xTableColumns = xTextTable.getColumns();
-            xCellRange = (XCellRange) UnoRuntime.queryInterface(XCellRange.class, xTextTable);
+            xCellRange = UnoRuntime.queryInterface(XCellRange.class, xTextTable);
         }
         catch (Exception exception)
         {

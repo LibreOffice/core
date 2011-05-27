@@ -28,6 +28,7 @@
 package com.sun.star.wizards.reportbuilder.layout;
 
 import com.sun.star.awt.Rectangle;
+import com.sun.star.report.XGroup;
 import com.sun.star.report.XSection;
 import com.sun.star.wizards.common.Resource;
 import com.sun.star.wizards.report.IReportDefinitionReadAccess;
@@ -52,8 +53,7 @@ public class ColumnarTwoColumns extends ReportBuilderLayouter
 
     public String getLocalizedName()
     {
-        final String sLocalizedName = getResource().getResText(UIConsts.RID_REPORT + 82);
-        return sLocalizedName;
+        return getResource().getResText(UIConsts.RID_REPORT + 82);
     }
 
     protected void insertDetailFields()
@@ -130,7 +130,7 @@ public class ColumnarTwoColumns extends ReportBuilderLayouter
         doNotBreakInTable(xSection);
     }
 
-    protected void insertDetailFieldTitles()
+    protected void insertDetailFieldTitles(int lastGroupPostion)
     {
         // we won't extra field titles
     }

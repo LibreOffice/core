@@ -73,7 +73,7 @@ public abstract class AbstractExporter implements Exporter
         {
             props.put("FilterData", filterData);
         }
-        XStorable xs = ((XStorable) UnoRuntime.queryInterface(XStorable.class, officeDocument));
+        XStorable xs = UnoRuntime.queryInterface(XStorable.class, officeDocument);
         PropertyValue[] o = props.getProperties();
         xs.storeToURL(targetUrl, o);
     }
@@ -110,7 +110,7 @@ public abstract class AbstractExporter implements Exporter
             props.put("Hidden", Boolean.TRUE);
             props.put("MacroExecutionMode", new Short(MacroExecMode.NEVER_EXECUTE));
             props.put("UpdateDocMode", new Short(UpdateDocMode.NO_UPDATE));
-            document = ((XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, desktop)).loadComponentFromURL(doc.cp_URL, "_blank", 0, props.getProperties());
+            document = UnoRuntime.queryInterface(XComponentLoader.class, desktop).loadComponentFromURL(doc.cp_URL, "_blank", 0, props.getProperties());
         }
         catch (com.sun.star.lang.IllegalArgumentException iaex)
         {
@@ -134,7 +134,7 @@ public abstract class AbstractExporter implements Exporter
         (XComponent) UnoRuntime.queryInterface(XComponent.class, doc));*/
         try
         {
-            XCloseable xc = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, doc);
+            XCloseable xc = UnoRuntime.queryInterface(XCloseable.class, doc);
             xc.close(false);
         }
         catch (Exception ex)

@@ -75,9 +75,8 @@ public class CGCategory
     {
         try
         {
-            xNameAccessTablesNode = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xNameAccessCurBusinessNode.getByName("Tables"));
-            String[] sTableNames = Configuration.getNodeDisplayNames(xNameAccessTablesNode);
-            return sTableNames;
+            xNameAccessTablesNode = UnoRuntime.queryInterface(XNameAccess.class, xNameAccessCurBusinessNode.getByName("Tables"));
+            return Configuration.getNodeDisplayNames(xNameAccessTablesNode);
         }
         catch (Exception e)
         {

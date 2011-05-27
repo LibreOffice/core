@@ -63,7 +63,8 @@ SLOFILES = \
     $(SLO)$/xmlsignature_mscryptimpl.obj \
     $(SLO)$/x509certificate_mscryptimpl.obj \
     $(SLO)$/seinitializer_mscryptimpl.obj \
-    $(SLO)$/xsec_mscrypt.obj
+    $(SLO)$/xsec_mscrypt.obj  \
+    $(SLO)$/sanextension_mscryptimpl.obj
 
 .ENDIF
 

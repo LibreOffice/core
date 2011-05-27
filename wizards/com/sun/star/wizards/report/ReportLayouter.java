@@ -96,7 +96,7 @@ public class ReportLayouter
                     },
                     new Object[]
                     {
-                        new Integer(8), slblDataStructure, new Integer(95), new Integer(27), new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), new Integer(99)
+                        8, slblDataStructure, 95, 27, new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), 99
                     });
 
             short iSelPos = 0;
@@ -111,14 +111,14 @@ public class ReportLayouter
             xContentListBox = CurUnoDialog.insertListBox("lstContent", SOCONTENTLST, new ActionListenerImpl(), new ItemListenerImpl(),
                     new String[]
                     {
-                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "SelectedItems", PropertyNames.PROPERTY_STEP, "StringItemList", PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.SELECTED_ITEMS, PropertyNames.PROPERTY_STEP, PropertyNames.STRING_ITEM_LIST, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
-                        new Integer(108), "HID:WIZARDS_HID_DLGREPORT_4_DATALAYOUT", new Integer(95), new Integer(37), new short[]
+                        108, "HID:WIZARDS_HID_DLGREPORT_4_DATALAYOUT", 95, 37, new short[]
                         {
                             iSelPos
-                        }, new Integer(ReportWizard.SOTEMPLATEPAGE), ContentFiles[0], new Short(curtabindex++), new Integer(99)
+                        }, new Integer(ReportWizard.SOTEMPLATEPAGE), ContentFiles[0], new Short(curtabindex++), 99
                     });
 
             CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblLayout",
@@ -128,7 +128,7 @@ public class ReportLayouter
                     },
                     new Object[]
                     {
-                        new Integer(8), slblPageLayout, new Integer(205), new Integer(27), new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), new Integer(99)
+                        8, slblPageLayout, 205, 27, new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), 99
                     });
 
             short iSelLayoutPos = 0;
@@ -146,14 +146,14 @@ public class ReportLayouter
             xLayoutListBox = CurUnoDialog.insertListBox("lstLayout", SOLAYOUTLST, new ActionListenerImpl(), new ItemListenerImpl(),
                     new String[]
                     {
-                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "SelectedItems", PropertyNames.PROPERTY_STEP, "StringItemList", PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.SELECTED_ITEMS, PropertyNames.PROPERTY_STEP, PropertyNames.STRING_ITEM_LIST, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
-                        new Integer(108), "HID:WIZARDS_HID_DLGREPORT_4_PAGELAYOUT", new Integer(205), new Integer(37), new short[]
+                        108, "HID:WIZARDS_HID_DLGREPORT_4_PAGELAYOUT", 205, 37, new short[]
                         {
                             iSelLayoutPos
-                        }, new Integer(ReportWizard.SOTEMPLATEPAGE), LayoutFiles[0], new Short(curtabindex++), new Integer(99)
+                        }, new Integer(ReportWizard.SOTEMPLATEPAGE), LayoutFiles[0], new Short(curtabindex++), 99
                     });
             iOldLayoutPos = (int) iSelPos;
             CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblOrientation",
@@ -163,7 +163,7 @@ public class ReportLayouter
                     },
                     new Object[]
                     {
-                        new Integer(8), sOrientationHeader, new Integer(95), new Integer(148), new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), new Integer(74)
+                        8, sOrientationHeader, 95, 148, new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), 74
                     });
 
             short m_nLandscapeState = CurReportDocument.getDefaultPageOrientation() == SOOPTLANDSCAPE ? (short) 1 : 0;
@@ -174,7 +174,7 @@ public class ReportLayouter
                     },
                     new Object[]
                     {
-                        new Integer(10), "HID:WIZARDS_HID_DLGREPORT_4_LANDSCAPE", sOrientHorizontal, new Integer(101), new Integer(158), new Short(m_nLandscapeState), new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), new Integer(60)
+                        10, "HID:WIZARDS_HID_DLGREPORT_4_LANDSCAPE", sOrientHorizontal, 101, 158, new Short(m_nLandscapeState), new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), 60
                     });
 
             short m_nPortraitState = CurReportDocument.getDefaultPageOrientation() == SOOPTPORTRAIT ? (short) 1 : (short) 0;
@@ -185,17 +185,17 @@ public class ReportLayouter
                     },
                     new Object[]
                     {
-                        new Integer(10), "HID:WIZARDS_HID_DLGREPORT_4_PORTRAIT", sOrientVertical, new Integer(101), new Integer(171), new Short(m_nPortraitState), new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), new Integer(60)
+                        10, "HID:WIZARDS_HID_DLGREPORT_4_PORTRAIT", sOrientVertical, 101, 171, new Short(m_nPortraitState), new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), 60
                     });
 
             aOrientationImage = CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlImageControlModel", "imgOrientation",
                     new String[]
                     {
-                        "Border", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "ScaleImage", PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
+                        PropertyNames.PROPERTY_BORDER, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "ScaleImage", PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
-                        new Short("0"), new Integer(23), new Integer(164), new Integer(158), new Boolean(false), new Integer(ReportWizard.SOTEMPLATEPAGE), new Integer(30)
+                        new Short("0"), 23, 164, 158, Boolean.FALSE, new Integer(ReportWizard.SOTEMPLATEPAGE), 30
                     });
 
             String sNote = ReportWizard.getBlindTextNote(CurReportDocument, CurUnoDialog.m_oResource);
@@ -206,7 +206,7 @@ public class ReportLayouter
                     },
                     new Object[]
                     {
-                        new Integer(34), sNote, new Boolean(true), new Integer(205), new Integer(148), new Integer(ReportWizard.SOTEMPLATEPAGE), new Integer(99)
+                        34, sNote, Boolean.TRUE, 205, 148, new Integer(ReportWizard.SOTEMPLATEPAGE), 99
                     });
             if (m_nLandscapeState == 1)
             {
@@ -227,7 +227,7 @@ public class ReportLayouter
     {
 //             CurReportDocument.getDoc().xTextDocument.lockControllers();
         CurReportDocument.layout_setupRecordSection(_defaultTemplatePath);
-        if (CurUnoDialog.getControlProperty("txtTitle", "Text").equals(""))
+        if (CurUnoDialog.getControlProperty("txtTitle", "Text").equals(PropertyNames.EMPTY_STRING))
         {
             String[] sCommandNames = CurReportDocument.getRecordParser().getIncludedCommandNames();
             CurUnoDialog.setControlProperty("txtTitle", "Text", sCommandNames[0]);
@@ -246,7 +246,7 @@ public class ReportLayouter
             try
             {
                 int iPos;
-                Helper.setUnoPropertyValue(CurUnoDialog.xDialogModel, PropertyNames.PROPERTY_ENABLED, new Boolean(false));
+                Helper.setUnoPropertyValue(CurUnoDialog.xDialogModel, PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
                 // LLA: should we lock controllers here?
                 //                    CurReportDocument.getDoc().xTextDocument.lockControllers();
                 int iKey = CurUnoDialog.getControlKey(EventObject.Source, CurUnoDialog.ControlList);
@@ -306,7 +306,7 @@ public class ReportLayouter
                 e.printStackTrace();
             }
             // CurReportDocument.getDoc().unlockallControllers();
-            Helper.setUnoPropertyValue(CurUnoDialog.xDialogModel, PropertyNames.PROPERTY_ENABLED, new Boolean(true));
+            Helper.setUnoPropertyValue(CurUnoDialog.xDialogModel, PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
         }
 
         public void disposing(EventObject eventObject)
@@ -325,17 +325,17 @@ public class ReportLayouter
         {
             try
             {
-                Helper.setUnoPropertyValue(CurUnoDialog.xDialogModel, PropertyNames.PROPERTY_ENABLED, new Boolean(false));
+                Helper.setUnoPropertyValue(CurUnoDialog.xDialogModel, PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
 //                     CurReportDocument.getDoc().xTextDocument.lockControllers();
                 boolean blandscape = (((Short) CurUnoDialog.getControlProperty("optLandscape", PropertyNames.PROPERTY_STATE)).shortValue() == 1);
-                CurReportDocument.setPageOrientation((blandscape == true) ? SOOPTLANDSCAPE : SOOPTPORTRAIT);
+                CurReportDocument.setPageOrientation((blandscape) ? SOOPTLANDSCAPE : SOOPTPORTRAIT);
             }
             catch (Exception exception)
             {
                 exception.printStackTrace(System.out);
             }
 //                CurReportDocument.getDoc().unlockallControllers();
-            Helper.setUnoPropertyValue(CurUnoDialog.xDialogModel, PropertyNames.PROPERTY_ENABLED, new Boolean(true));
+            Helper.setUnoPropertyValue(CurUnoDialog.xDialogModel, PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
         }
     }
 }

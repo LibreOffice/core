@@ -95,7 +95,7 @@ sal_Int32 Deflater::doDeflateBytes (uno::Sequence < sal_Int8 > &rBuffer, sal_Int
         pStream->avail_in  = nLength;
         pStream->avail_out = nNewLength;
 
-#ifdef SYSTEM_ZLIB
+#if defined SYSTEM_ZLIB || !defined ZLIB_PREFIX
         nResult = deflateParams(pStream, nLevel, nStrategy);
 #else
         nResult = z_deflateParams(pStream, nLevel, nStrategy);
@@ -121,7 +121,7 @@ sal_Int32 Deflater::doDeflateBytes (uno::Sequence < sal_Int8 > &rBuffer, sal_Int
         pStream->avail_in  = nLength;
         pStream->avail_out = nNewLength;
 
-#ifdef SYSTEM_ZLIB
+#if defined SYSTEM_ZLIB || !defined ZLIB_PREFIX
         nResult = deflate(pStream, bFinish ? Z_FINISH : Z_NO_FLUSH);
 #else
         nResult = z_deflate(pStream, bFinish ? Z_FINISH : Z_NO_FLUSH);
@@ -190,7 +190,7 @@ sal_Int32 SAL_CALL Deflater::getTotalOut(  )
 }
 void SAL_CALL Deflater::reset(  )
 {
-#ifdef SYSTEM_ZLIB
+#if defined SYSTEM_ZLIB || !defined ZLIB_PREFIXB
     deflateReset(pStream);
 #else
     z_deflateReset(pStream);
@@ -203,7 +203,7 @@ void SAL_CALL Deflater::end(  )
 {
     if (pStream != NULL)
     {
-#ifdef SYSTEM_ZLIB
+#if defined SYSTEM_ZLIB || !defined ZLIB_PREFIX
         deflateEnd(pStream);
 #else
         z_deflateEnd(pStream);

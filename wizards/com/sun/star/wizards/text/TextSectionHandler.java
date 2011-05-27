@@ -43,6 +43,7 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.PropertyNames;
 
 public class TextSectionHandler
 {
@@ -58,7 +59,7 @@ public class TextSectionHandler
         this.xMSFDoc = xMSF;
         this.xTextDocument = xTextDocument;
         xText = xTextDocument.getText();
-        xTextSectionsSupplier = (XTextSectionsSupplier) UnoRuntime.queryInterface(XTextSectionsSupplier.class, xTextDocument);
+        xTextSectionsSupplier = UnoRuntime.queryInterface(XTextSectionsSupplier.class, xTextDocument);
     }
 
     public void removeTextSectionbyName(String SectionName)
@@ -66,7 +67,7 @@ public class TextSectionHandler
         try
         {
             XNameAccess xAllTextSections = xTextSectionsSupplier.getTextSections();
-            if (xAllTextSections.hasByName(SectionName) == true)
+            if (xAllTextSections.hasByName(SectionName))
             {
                 Object oTextSection = xTextSectionsSupplier.getTextSections().getByName(SectionName);
                 removeTextSection(oTextSection);
@@ -88,7 +89,7 @@ public class TextSectionHandler
     {
         try
         {
-            XIndexAccess xAllTextSections = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, xTextSectionsSupplier.getTextSections());
+            XIndexAccess xAllTextSections = UnoRuntime.queryInterface(XIndexAccess.class, xTextSectionsSupplier.getTextSections());
             Object oTextSection = xAllTextSections.getByIndex(xAllTextSections.getCount() - 1);
             removeTextSection(oTextSection);
         }
@@ -102,7 +103,7 @@ public class TextSectionHandler
     {
         try
         {
-            XTextContent xTextContentTextSection = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, _oTextSection);
+            XTextContent xTextContentTextSection = UnoRuntime.queryInterface(XTextContent.class, _oTextSection);
             xText.removeTextContent(xTextContentTextSection);
         }
         catch (Exception exception)
@@ -115,12 +116,12 @@ public class TextSectionHandler
     {
         try
         {
-            XIndexAccess xAllTextSections = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, xTextSectionsSupplier.getTextSections());
+            XIndexAccess xAllTextSections = UnoRuntime.queryInterface(XIndexAccess.class, xTextSectionsSupplier.getTextSections());
             int TextSectionCount = xAllTextSections.getCount();
             for (int i = TextSectionCount - 1; i >= 0; i--)
             {
-                XTextContent xTextContentTextSection = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, xAllTextSections.getByIndex(i));
-                XPropertySet xTextSectionPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xTextContentTextSection);
+                XTextContent xTextContentTextSection = UnoRuntime.queryInterface(XTextContent.class, xAllTextSections.getByIndex(i));
+                XPropertySet xTextSectionPropertySet = UnoRuntime.queryInterface(XPropertySet.class, xTextContentTextSection);
                 boolean bRemoveTextSection = (!AnyConverter.toBoolean(xTextSectionPropertySet.getPropertyValue("IsVisible")));
                 if (bRemoveTextSection)
                 {
@@ -138,12 +139,12 @@ public class TextSectionHandler
     {
         try
         {
-            XIndexAccess xAllTextSections = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, xTextSectionsSupplier.getTextSections());
+            XIndexAccess xAllTextSections = UnoRuntime.queryInterface(XIndexAccess.class, xTextSectionsSupplier.getTextSections());
             int TextSectionCount = xAllTextSections.getCount();
             for (int i = TextSectionCount - 1; i >= 0; i--)
             {
-                XTextContent xTextContentTextSection = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, xAllTextSections.getByIndex(i));
-                XPropertySet xTextSectionPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xTextContentTextSection);
+                XTextContent xTextContentTextSection = UnoRuntime.queryInterface(XTextContent.class, xAllTextSections.getByIndex(i));
+                XPropertySet xTextSectionPropertySet = UnoRuntime.queryInterface(XPropertySet.class, xTextContentTextSection);
                 xText.removeTextContent(xTextContentTextSection);
             }
         }
@@ -158,10 +159,10 @@ public class TextSectionHandler
         try
         {
             Object oTextSection;
-            XIndexAccess xAllTextSections = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, xTextSectionsSupplier.getTextSections());
+            XIndexAccess xAllTextSections = UnoRuntime.queryInterface(XIndexAccess.class, xTextSectionsSupplier.getTextSections());
             int iSectionCount = xAllTextSections.getCount();
             SectionFileLink oSectionLink = new SectionFileLink();
-            oSectionLink.FileURL = "";
+            oSectionLink.FileURL = PropertyNames.EMPTY_STRING;
             for (int i = 0; i < iSectionCount; i++)
             {
                 oTextSection = xAllTextSections.getByIndex(i);
@@ -170,7 +171,7 @@ public class TextSectionHandler
                             "FileLink", "LinkRegion"
                         }, new Object[]
                         {
-                            oSectionLink, ""
+                            oSectionLink, PropertyNames.EMPTY_STRING
                         });
             }
         }
@@ -183,13 +184,13 @@ public class TextSectionHandler
     public void breakLinkOfTextSection(Object oTextSection)
     {
         SectionFileLink oSectionLink = new SectionFileLink();
-        oSectionLink.FileURL = "";
+        oSectionLink.FileURL = PropertyNames.EMPTY_STRING;
         Helper.setUnoPropertyValues(oTextSection, new String[]
                 {
                     "FileLink", "LinkRegion"
                 }, new Object[]
                 {
-                    oSectionLink, ""
+                    oSectionLink, PropertyNames.EMPTY_STRING
                 });
     }
 
@@ -217,7 +218,7 @@ public class TextSectionHandler
                 {
                     oSectionLink, SectionName
                 });
-        XNamed xSectionName = (XNamed) UnoRuntime.queryInterface(XNamed.class, oTextSection);
+        XNamed xSectionName = UnoRuntime.queryInterface(XNamed.class, oTextSection);
         String NewSectionName = xSectionName.getName();
         if (NewSectionName.compareTo(SectionName) != 0)
         {
@@ -251,14 +252,14 @@ public class TextSectionHandler
         try
         {
             Object xTextSection;
-            if (xTextSectionsSupplier.getTextSections().hasByName(sectionName) == true)
+            if (xTextSectionsSupplier.getTextSections().hasByName(sectionName))
             {
                 xTextSection = xTextSectionsSupplier.getTextSections().getByName(sectionName);
             }
             else
             {
                 xTextSection = xMSFDoc.createInstance("com.sun.star.text.TextSection");
-                XTextContent xTextContentSection = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, xTextSection);
+                XTextContent xTextContentSection = UnoRuntime.queryInterface(XTextContent.class, xTextSection);
                 position.getText().insertTextContent(position, xTextContentSection, false);
             }
             linkSectiontoTemplate(xTextSection, templateName, sectionName);

@@ -67,10 +67,10 @@ public abstract class WWD_Events extends WWD_Startup
     private static final short[] EMPTY_SHORT_ARRAY = new short[0];
     /**
      * Tracks the current loaded session.
-     * If "" - it means the current session is the default one (empty)
+     * If PropertyNames.EMPTY_STRING - it means the current session is the default one (empty)
      * If a session is loaded, this will be the name of the loaded session.
      */
-    protected String currentSession = "";
+    protected String currentSession = PropertyNames.EMPTY_STRING;
 
     /**
      * He - my constructor !
@@ -81,11 +81,11 @@ public abstract class WWD_Events extends WWD_Startup
     {
         super(xmsf);
         Create c = new Create();
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, chkFTP);
+        XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, chkFTP);
         xWindow.addKeyListener(c);
-        xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, chkLocalDir);
+        xWindow = UnoRuntime.queryInterface(XWindow.class, chkLocalDir);
         xWindow.addKeyListener(c);
-        xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, chkZip);
+        xWindow = UnoRuntime.queryInterface(XWindow.class, chkZip);
         xWindow.addKeyListener(c);
     }
 
@@ -106,11 +106,11 @@ public abstract class WWD_Events extends WWD_Startup
     {
         if ((old == 1))
         {
-            String sessionToLoad = "";
-            short[] s = (short[]) Helper.getUnoPropertyValue(getModel(lstLoadSettings), "SelectedItems");
+            String sessionToLoad = PropertyNames.EMPTY_STRING;
+            short[] s = (short[]) Helper.getUnoPropertyValue(getModel(lstLoadSettings), PropertyNames.SELECTED_ITEMS);
             if (s.length == 0 || s[0] == 0)
             {
-                sessionToLoad = "";
+                sessionToLoad = PropertyNames.EMPTY_STRING;
             }
             else
             {
@@ -135,7 +135,7 @@ public abstract class WWD_Events extends WWD_Startup
      */
     public void sessionSelected()
     {
-        short[] s = (short[]) Helper.getUnoPropertyValue(getModel(lstLoadSettings), "SelectedItems");
+        short[] s = (short[]) Helper.getUnoPropertyValue(getModel(lstLoadSettings), PropertyNames.SELECTED_ITEMS);
         setEnabled(btnDelSession, s.length > 0 && s[0] > 0);
     }
 
@@ -148,18 +148,18 @@ public abstract class WWD_Events extends WWD_Startup
         {
             final StatusDialog sd = getStatusDialog();
 
-            final Task task = new Task("LoadDocs", "", 10);
+            final Task task = new Task("LoadDocs", PropertyNames.EMPTY_STRING, 10);
 
             sd.execute(this, task, resources.resLoadingSession);
             task.start();
 
             setSelectedDoc(EMPTY_SHORT_ARRAY);
-            Helper.setUnoPropertyValue(getModel(lstDocuments), "SelectedItems", EMPTY_SHORT_ARRAY);
-            Helper.setUnoPropertyValue(getModel(lstDocuments), "StringItemList", EMPTY_STRING_ARRAY);
+            Helper.setUnoPropertyValue(getModel(lstDocuments), PropertyNames.SELECTED_ITEMS, EMPTY_SHORT_ARRAY);
+            Helper.setUnoPropertyValue(getModel(lstDocuments), PropertyNames.STRING_ITEM_LIST, EMPTY_STRING_ARRAY);
 
             Object view = null;
 
-            if (sessionToLoad.equals(""))
+            if (sessionToLoad.equals(PropertyNames.EMPTY_STRING))
             {
                 view = Configuration.getConfigurationRoot(xMSF, CONFIG_PATH + "/DefaultSession", false);
             }
@@ -175,7 +175,7 @@ public abstract class WWD_Events extends WWD_Startup
             task.setMax(session.cp_Content.cp_Documents.getSize() * 5 + 7);
             task.advance(true);
 
-            if (sessionToLoad.equals(""))
+            if (sessionToLoad.equals(PropertyNames.EMPTY_STRING))
             {
                 setSaveSessionName(session);
             }
@@ -212,7 +212,7 @@ public abstract class WWD_Events extends WWD_Startup
      */
     public void delSession()
     {
-        short[] selected = (short[]) Helper.getUnoPropertyValue(getModel(lstLoadSettings), "SelectedItems");
+        short[] selected = (short[]) Helper.getUnoPropertyValue(getModel(lstLoadSettings), PropertyNames.SELECTED_ITEMS);
         if (selected.length == 0)
         {
             return;
@@ -254,7 +254,7 @@ public abstract class WWD_Events extends WWD_Startup
                 {
                     Helper.setUnoPropertyValue(getModel(btnDelSession), PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);                // select...
                 }
-                Helper.setUnoPropertyValue(getModel(lstLoadSettings), "SelectedItems", nextSelected);
+                Helper.setUnoPropertyValue(getModel(lstLoadSettings), PropertyNames.SELECTED_ITEMS, nextSelected);
 
             //ListModelBinder.fillComboBox(cbSaveSettings, settings.savedSessions.items(), null);
 
@@ -310,7 +310,7 @@ public abstract class WWD_Events extends WWD_Startup
         {
             fillExportList(settings.getExporters(doc.appType));
         }
-        else; // do nothing
+
 
         selectedDoc = s;
 
@@ -332,7 +332,7 @@ public abstract class WWD_Events extends WWD_Startup
         {
             return;
         }
-        final Task task = new Task("", "", files.length * 5);
+        final Task task = new Task(PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING, files.length * 5);
 
         /*
          * If more than a certain number
@@ -455,7 +455,7 @@ public abstract class WWD_Events extends WWD_Startup
     {
         if (background == null)
         {
-            background = "";
+            background = PropertyNames.EMPTY_STRING;
         }
         settings.cp_DefaultSession.cp_Design.cp_BackgroundImage = (String) background;
         refreshStylePreview();
@@ -543,7 +543,7 @@ public abstract class WWD_Events extends WWD_Startup
      */
     public void setPublishLocalDir()
     {
-        String dir = showFolderDialog("Local destination directory", "", settings.cp_DefaultSession.cp_OutDirectory);
+        String dir = showFolderDialog("Local destination directory", PropertyNames.EMPTY_STRING, settings.cp_DefaultSession.cp_OutDirectory);
         //if ok was pressed...
         setPublishUrl(LOCAL_PUBLISHER, dir, 0);
 
@@ -898,7 +898,7 @@ public abstract class WWD_Events extends WWD_Startup
         }
         else
         {
-            return "";
+            return PropertyNames.EMPTY_STRING;
         }
     }
 
@@ -965,7 +965,7 @@ public abstract class WWD_Events extends WWD_Startup
          */
         final CGPublish p = getPublisher(FTP_PUBLISHER);
         // if ftp is checked, and no proxies are set, and password is empty...
-        if (p.cp_Publish && (!proxies) && (p.password == null || p.password.equals("")))
+        if (p.cp_Publish && (!proxies) && (p.password == null || p.password.equals(PropertyNames.EMPTY_STRING)))
         {
             if (showFTPDialog(p))
             {
@@ -1036,7 +1036,7 @@ public abstract class WWD_Events extends WWD_Startup
         }
         else
         {
-            settings.cp_LastSavedSession = "";
+            settings.cp_LastSavedSession = PropertyNames.EMPTY_STRING;
         }
         try
         {
@@ -1204,7 +1204,7 @@ public abstract class WWD_Events extends WWD_Startup
             //if (xCloseable != null)
             //    xCloseable.close(false);
 
-            XCloseable xCloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, myFrame);
+            XCloseable xCloseable = UnoRuntime.queryInterface(XCloseable.class, myFrame);
             if (xCloseable != null)
             {
                 xCloseable.close(false);
@@ -1301,6 +1301,6 @@ public abstract class WWD_Events extends WWD_Startup
                 task.advance(false);
             }
         }
-    };
+    }
 }
 

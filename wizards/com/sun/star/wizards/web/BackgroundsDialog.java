@@ -33,6 +33,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.ConfigSet;
 import com.sun.star.wizards.common.Configuration;
 import com.sun.star.wizards.common.FileAccess;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.SystemDialog;
 import com.sun.star.wizards.ui.ImageList;
 import com.sun.star.wizards.web.data.CGImage;
@@ -127,7 +128,7 @@ public class BackgroundsDialog extends ImageListDialog
         {
             Object configView = Configuration.getConfigurationRoot(xMSF, FileAccess.connectURLs(WebWizardConst.CONFIG_PATH, "BackgroundImages"), true);
             int i = Configuration.getChildrenNames(configView).length + 1;
-            Object o = Configuration.addConfigNode(configView, "" + i);
+            Object o = Configuration.addConfigNode(configView, PropertyNames.EMPTY_STRING + i);
             Configuration.set(s, "Href", o);
             Configuration.commit(configView);
         }
@@ -172,7 +173,7 @@ public class BackgroundsDialog extends ImageListDialog
 
         public String render(Object object)
         {
-            return object == null ? "" : FileAccess.getPathFilename(fileAccess.getPath((String) object, null));
+            return object == null ? PropertyNames.EMPTY_STRING : FileAccess.getPathFilename(fileAccess.getPath((String) object, null));
         }
     }
 

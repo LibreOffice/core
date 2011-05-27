@@ -324,11 +324,6 @@ ImageButton RID_IMGBTN_REMOVEWATCH
     };
     QuickHelpText [ en-US ] = "Remove Watch" ;
 };
-ImageButton RID_IMGBTN_GOTOCALL
-{
-    HelpId = HID_BASICIDE_GOTOALL ;
-    SmallStyle = TRUE ;
-};
 
 String RID_STR_REMOVEWATCH
 {

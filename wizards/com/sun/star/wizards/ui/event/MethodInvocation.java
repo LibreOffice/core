@@ -28,7 +28,6 @@ package com.sun.star.wizards.ui.event;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import com.sun.star.wizards.common.PropertyNames;
 
 /**
  * Encapsulate a Method invocation.
@@ -87,10 +86,8 @@ public class MethodInvocation
     {
         if (mWithParam)
         {
-            return mMethod.invoke(mObject, new Object[]
-                    {
-                        (Object) param
-                    });
+            return mMethod.invoke(mObject, (Object) param
+                    );
         }
         else
         {
