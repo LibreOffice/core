@@ -64,6 +64,8 @@
 #include "dociter.hxx"
 #include "formula/opcode.hxx"
 
+using ::rtl::OUString;
+
 struct TableLink_Impl
 {
     ScDocShell* m_pDocSh;
@@ -520,6 +522,17 @@ sal_Bool ScDocumentLoader::GetFilterName( const String& rFileName,
 
     delete pMedium;
     return bOK;
+}
+
+bool ScDocumentLoader::GetFilterName(
+    const OUString& rFilterName, OUString& rFilter, OUString& rOptions,
+    bool bWithContent, bool bWithInteraction)
+{
+    String aTmp1, aTmp2;
+    bool bRet = GetFilterName(rFilterName, aTmp1, aTmp2, bWithContent, bWithInteraction);
+    rFilter = aTmp1;
+    rOptions = aTmp2;
+    return bRet;
 }
 
 void ScDocumentLoader::RemoveAppPrefix( String& rFilterName )

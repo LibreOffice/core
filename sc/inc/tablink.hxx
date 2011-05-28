@@ -112,6 +112,10 @@ public:
                                         String& rFilter, String& rOptions,
                                         sal_Bool bWithContent, sal_Bool bWithInteraction );
 
+    static bool         GetFilterName( const ::rtl::OUString& rFileName,
+                                       ::rtl::OUString& rFilter, ::rtl::OUString& rOptions,
+                                       bool bWithContent, bool bWithInteraction );
+
     static void         RemoveAppPrefix( String& rFilterName );
 };
 

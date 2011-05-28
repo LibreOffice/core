@@ -280,7 +280,7 @@ public:
 
     struct ExternalInfo
     {
-        String      maTabName;
+        ::rtl::OUString maTabName;
         sal_uInt16  mnFileId;
         bool        mbExternal;
 

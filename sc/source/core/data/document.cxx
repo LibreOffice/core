@@ -105,6 +105,7 @@ namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::sheet::TablePageBreakData;
 using ::std::set;
+using ::rtl::OUString;
 
 // The constant parameters to CopyBlockFromClip
 struct ScCopyBlockFromClipParams
@@ -161,17 +162,24 @@ sal_Bool ScDocument::HasTable( SCTAB nTab ) const
     return false;
 }
 
-
-sal_Bool ScDocument::GetName( SCTAB nTab, String& rName ) const
+bool ScDocument::GetName( SCTAB nTab, String& rName ) const
 {
     if (VALIDTAB(nTab))
         if (pTab[nTab])
         {
             pTab[nTab]->GetName( rName );
-            return sal_True;
+            return true;
         }
     rName.Erase();
     return false;
+}
+
+bool ScDocument::GetName( SCTAB nTab, OUString& rName ) const
+{
+    String aTmp;
+    bool bRet = GetName(nTab, aTmp);
+    rName = aTmp;
+    return bRet;
 }
 
 sal_Bool ScDocument::SetCodeName( SCTAB nTab, const String& rName )

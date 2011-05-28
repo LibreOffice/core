@@ -121,7 +121,7 @@ void ScXMLTableSourceContext::EndElement()
             if (pDoc->RenameTab( static_cast<SCTAB>(GetScImport().GetTables().GetCurrentSheet()),
                 GetScImport().GetTables().GetCurrentSheetName(), false, sal_True))
             {
-                 String aFileString(sLink);
+                String aFileString(sLink);
                 String aFilterString(sFilterName);
                 String aOptString(sFilterOptions);
                 String aSheetString(sTableName);

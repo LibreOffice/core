@@ -1662,7 +1662,7 @@ private:
 void XclExpSupbookBuffer::StoreCell( sal_uInt16 nFileId, const String& rTabName, const ScAddress& rCell )
 {
     ScExternalRefManager* pRefMgr = GetDoc().GetExternalRefManager();
-    const String* pUrl = pRefMgr->getExternalFileName(nFileId);
+    const OUString* pUrl = pRefMgr->getExternalFileName(nFileId);
     if (!pUrl)
         return;
 
@@ -1700,7 +1700,7 @@ void XclExpSupbookBuffer::StoreCell( sal_uInt16 nFileId, const String& rTabName,
 void XclExpSupbookBuffer::StoreCellRange( sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange )
 {
     ScExternalRefManager* pRefMgr = GetDoc().GetExternalRefManager();
-    const String* pUrl = pRefMgr->getExternalFileName(nFileId);
+    const OUString* pUrl = pRefMgr->getExternalFileName(nFileId);
     if (!pUrl)
         return;
 
@@ -1828,7 +1828,7 @@ XclExpXti XclExpSupbookBuffer::GetXti( sal_uInt16 nFileId, const String& rTabNam
 {
     XclExpXti aXti(0, EXC_NOTAB, EXC_NOTAB);
     ScExternalRefManager* pRefMgr = GetDoc().GetExternalRefManager();
-    const String* pUrl = pRefMgr->getExternalFileName(nFileId);
+    const OUString* pUrl = pRefMgr->getExternalFileName(nFileId);
     if (!pUrl)
         return aXti;
 

@@ -2123,7 +2123,7 @@ void XclExpFmlaCompImpl::ProcessExternalName( const XclExpScToken& rTokData )
 
             // insert the new external name and create the tNameX token
             sal_uInt16 nExtSheet, nExtName;
-            const String* pFile = rExtRefMgr.getExternalFileName( nFileId );
+            const ::rtl::OUString* pFile = rExtRefMgr.getExternalFileName( nFileId );
             if( pFile && mxData->mpLinkMgr->InsertExtName( nExtSheet, nExtName, *pFile, rName, xArray ) )
             {
                 AppendNameXToken( nExtSheet, nExtName, rTokData.mnSpaces );

@@ -85,6 +85,7 @@ sal_Bool ScInterpreter::bGlobalStackInUse = false;
 
 using namespace formula;
 using ::std::auto_ptr;
+using ::rtl::OUString;
 
 //-----------------------------------------------------------------------------
 // Functions
@@ -6505,7 +6506,7 @@ ScTokenArray* lcl_CreateExternalRefTokenArray( const ScAddress& rPos, ScDocument
 {
     ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
     size_t nSheets = 1;
-    const String* pRealTab = pRefMgr->getRealTableName( rExtInfo.mnFileId, rExtInfo.maTabName);
+    const OUString* pRealTab = pRefMgr->getRealTableName( rExtInfo.mnFileId, rExtInfo.maTabName);
     ScTokenArray* pTokenArray = new ScTokenArray;
     if (pRefAd2)
     {

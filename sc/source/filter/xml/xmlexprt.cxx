@@ -3818,7 +3818,7 @@ void ScXMLExport::WriteExternalRefCaches()
     sal_uInt16 nCount = pRefMgr->getExternalFileCount();
     for (sal_uInt16 nFileId = 0; nFileId < nCount; ++nFileId)
     {
-        const String* pUrl = pRefMgr->getExternalFileName(nFileId);
+        const OUString* pUrl = pRefMgr->getExternalFileName(nFileId);
         if (!pUrl)
             continue;
 
@@ -3848,17 +3848,17 @@ void ScXMLExport::WriteExternalRefCaches()
                 const ScExternalRefManager::SrcFileData* pExtFileData = pRefMgr->getExternalFileData(nFileId);
                 if (pExtFileData)
                 {
-                    String aRelUrl;
-                    if (pExtFileData->maRelativeName.Len())
+                    OUString aRelUrl;
+                    if (!pExtFileData->maRelativeName.isEmpty())
                         aRelUrl = pExtFileData->maRelativeName;
                     else
                         aRelUrl = GetRelativeReference(pExtFileData->maRelativeName);
                     AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE);
                     AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, aRelUrl);
                     AddAttribute(XML_NAMESPACE_TABLE, XML_TABLE_NAME, *itr);
-                    if (pExtFileData->maFilterName.Len())
+                    if (!pExtFileData->maFilterName.isEmpty())
                         AddAttribute(XML_NAMESPACE_TABLE, XML_FILTER_NAME, pExtFileData->maFilterName);
-                    if (pExtFileData->maFilterOptions.Len())
+                    if (!pExtFileData->maFilterOptions.isEmpty())
                         AddAttribute(XML_NAMESPACE_TABLE, XML_FILTER_OPTIONS, pExtFileData->maFilterOptions);
                     AddAttribute(XML_NAMESPACE_TABLE, XML_MODE, XML_COPY_RESULTS_ONLY);
                 }

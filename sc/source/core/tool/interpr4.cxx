@@ -1450,7 +1450,7 @@ void ScInterpreter::PopExternalSingleRef(ScExternalRefCache::TokenRef& rToken, S
         return;
 
     ScExternalRefManager* pRefMgr = pDok->GetExternalRefManager();
-    const String* pFile = pRefMgr->getExternalFileName(nFileId);
+    const OUString* pFile = pRefMgr->getExternalFileName(nFileId);
     if (!pFile)
     {
         SetError(errNoName);
@@ -1542,7 +1542,7 @@ void ScInterpreter::GetExternalDoubleRef(
     sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rData, ScExternalRefCache::TokenArrayRef& rArray)
 {
     ScExternalRefManager* pRefMgr = pDok->GetExternalRefManager();
-    const String* pFile = pRefMgr->getExternalFileName(nFileId);
+    const OUString* pFile = pRefMgr->getExternalFileName(nFileId);
     if (!pFile)
     {
         SetError(errNoName);

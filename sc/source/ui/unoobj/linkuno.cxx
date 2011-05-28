@@ -1753,8 +1753,8 @@ Sequence< OUString > SAL_CALL ScExternalDocLinksObj::getElementNames()
     Sequence<OUString> aSeq(n);
     for (sal_uInt16 i = 0; i < n; ++i)
     {
-        const String* pName = mpRefMgr->getExternalFileName(i);
-        aSeq[i] = pName ? *pName : EMPTY_STRING;
+        const OUString* pName = mpRefMgr->getExternalFileName(i);
+        aSeq[i] = pName ? *pName : OUString();
     }
 
     return aSeq;

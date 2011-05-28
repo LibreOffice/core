@@ -490,7 +490,9 @@ const sal_Unicode* ScRange::Parse_XL_Header(
     if (rExternDocName.Len())
     {
         ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
-        pRefMgr->convertToAbsName( rExternDocName);
+        OUString aTmp = rExternDocName;
+        pRefMgr->convertToAbsName(aTmp);
+        rExternDocName = aTmp;
     }
     else
     {
@@ -948,7 +950,7 @@ lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDoc, ScAddress& rAdd
                          ScAddress::ExternalInfo* pExtInfo = NULL, ScRange* pRange = NULL )
 {
     sal_uInt16  nRes = 0;
-    String  aDocName;       // der pure Dokumentenname
+    OUString aDocName;       // der pure Dokumentenname
     String  aTab;
     bool    bExtDoc = false;
     bool    bExtDocInherited = false;
@@ -959,7 +961,9 @@ lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDoc, ScAddress& rAdd
     if (*p == '\'')
     {
         const sal_Unicode* pStart = p;
-        p = lcl_ParseQuotedName(p, aDocName);
+        String aTmp;
+        p = lcl_ParseQuotedName(p, aTmp);
+        aDocName = aTmp;
         if (*p++ == SC_COMPILER_FILE_TAB_SEP)
             bExtDoc = true;
         else
@@ -1094,7 +1098,7 @@ lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDoc, ScAddress& rAdd
             // Need document name if inherited.
             if (bExtDocInherited)
             {
-                const String* pFileName = pRefMgr->getExternalFileName( pExtInfo->mnFileId);
+                const OUString* pFileName = pRefMgr->getExternalFileName( pExtInfo->mnFileId);
                 if (pFileName)
                     aDocName = *pFileName;
                 else

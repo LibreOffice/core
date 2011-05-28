@@ -759,6 +759,16 @@ void XclImpUrlHelper::DecodeUrl(
     OSL_ENSURE( !aTabName.Len(), "XclImpUrlHelper::DecodeUrl - sheet name ignored" );
 }
 
+void XclImpUrlHelper::DecodeUrl(
+    ::rtl::OUString& rUrl, bool& rbSameWb, const XclImpRoot& rRoot, const ::rtl::OUString& rEncodedUrl )
+{
+    String aTabName;
+    String aUrl;
+    DecodeUrl( aUrl, aTabName, rbSameWb, rRoot, rEncodedUrl );
+    rUrl = aUrl;
+    OSL_ENSURE( !aTabName.Len(), "XclImpUrlHelper::DecodeUrl - sheet name ignored" );
+}
+
 bool XclImpUrlHelper::DecodeLink( String& rApplic, String& rTopic, const String rEncUrl )
 {
     xub_StrLen nPos = rEncUrl.Search( EXC_DDE_DELIM );

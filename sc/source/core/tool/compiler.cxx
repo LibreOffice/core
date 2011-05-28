@@ -931,7 +931,7 @@ struct ConventionOOO_A1 : public Convention_A1
         if (bDisplayTabName)
         {
             String aFile;
-            const String* p = pRefMgr->getExternalFileName(nFileId);
+            const OUString* p = pRefMgr->getExternalFileName(nFileId);
             if (p)
             {
                 if (bEncodeUrl)
@@ -1440,7 +1440,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         // whole file path with [] because the file name can contain any
         // characters.
 
-        const String* pFullName = pRefMgr->getExternalFileName(nFileId);
+        const OUString* pFullName = pRefMgr->getExternalFileName(nFileId);
         if (!pFullName)
             return;
 
@@ -1459,7 +1459,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
                                      sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef,
                                      ScExternalRefManager* pRefMgr ) const
     {
-        const String* pFullName = pRefMgr->getExternalFileName(nFileId);
+        const OUString* pFullName = pRefMgr->getExternalFileName(nFileId);
         if (!pFullName)
             return;
 
@@ -1646,7 +1646,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         // whole file path with [] because the file name can contain any
         // characters.
 
-        const String* pFullName = pRefMgr->getExternalFileName(nFileId);
+        const OUString* pFullName = pRefMgr->getExternalFileName(nFileId);
         if (!pFullName)
             return;
 
@@ -1666,7 +1666,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
                                      sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef,
                                      ScExternalRefManager* pRefMgr ) const
     {
-        const String* pFullName = pRefMgr->getExternalFileName(nFileId);
+        const OUString* pFullName = pRefMgr->getExternalFileName(nFileId);
         if (!pFullName)
             return;
 
@@ -2696,7 +2696,7 @@ sal_Bool ScCompiler::IsDoubleReference( const String& rName )
         if (aExtInfo.mbExternal)
         {
             ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
-            const String* pRealTab = pRefMgr->getRealTableName(aExtInfo.mnFileId, aExtInfo.maTabName);
+            const OUString* pRealTab = pRefMgr->getRealTableName(aExtInfo.mnFileId, aExtInfo.maTabName);
             aToken.SetExternalDoubleRef(
                 aExtInfo.mnFileId, pRealTab ? *pRealTab : aExtInfo.maTabName, aRef);
         }
@@ -2744,7 +2744,7 @@ sal_Bool ScCompiler::IsSingleReference( const String& rName )
         if (aExtInfo.mbExternal)
         {
             ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
-            const String* pRealTab = pRefMgr->getRealTableName(aExtInfo.mnFileId, aExtInfo.maTabName);
+            const OUString* pRealTab = pRefMgr->getRealTableName(aExtInfo.mnFileId, aExtInfo.maTabName);
             aToken.SetExternalSingleRef(
                 aExtInfo.mnFileId, pRealTab ? *pRealTab : aExtInfo.maTabName, aRef);
         }
@@ -2937,14 +2937,16 @@ bool ScCompiler::IsExternalNamedRange( const String& rSymbol )
         return false;
 
     ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
-    pRefMgr->convertToAbsName(aFile);
+    OUString aTmp = aFile;
+    pRefMgr->convertToAbsName(aTmp);
+    aFile = aTmp;
     sal_uInt16 nFileId = pRefMgr->getExternalFileId(aFile);
     if (!pRefMgr->getRangeNameTokens(nFileId, aName).get())
         // range name doesn't exist in the source document.
         return false;
 
-    const String* pRealName = pRefMgr->getRealRangeName(nFileId, aName);
-    aToken.SetExternalName(nFileId, pRealName ? *pRealName : aName);
+    const OUString* pRealName = pRefMgr->getRealRangeName(nFileId, aName);
+    aToken.SetExternalName(nFileId, pRealName ? *pRealName : OUString(aTmp));
     pRawToken = aToken.Clone();
     return true;
 }
@@ -3970,7 +3972,7 @@ sal_Bool ScCompiler::HandleExternalReference(const FormulaToken& _aToken)
         case svExternalName:
         {
             ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
-            const String* pFile = pRefMgr->getExternalFileName(_aToken.GetIndex());
+            const OUString* pFile = pRefMgr->getExternalFileName(_aToken.GetIndex());
             if (!pFile)
             {
                 SetError(errNoName);
@@ -4969,8 +4971,8 @@ void ScCompiler::CreateStringFromExternal(rtl::OUStringBuffer& rBuffer, FormulaT
     {
         case svExternalName:
         {
-            const String *pStr = pRefMgr->getExternalFileName(t->GetIndex());
-            String aFileName = pStr ? *pStr : ScGlobal::GetRscString(STR_NO_NAME_REF);
+            const OUString *pStr = pRefMgr->getExternalFileName(t->GetIndex());
+            OUString aFileName = pStr ? *pStr : OUString(ScGlobal::GetRscString(STR_NO_NAME_REF));
             rBuffer.append(pConv->makeExternalNameStr( aFileName, t->GetString()));
         }
         break;

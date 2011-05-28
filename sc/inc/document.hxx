@@ -524,7 +524,8 @@ public:
     SC_DLLPUBLIC void           SetVisibleTab(SCTAB nTab)   { nVisibleTab = nTab; }
 
     SC_DLLPUBLIC sal_Bool           HasTable( SCTAB nTab ) const;
-    SC_DLLPUBLIC sal_Bool           GetName( SCTAB nTab, String& rName ) const;
+    SC_DLLPUBLIC bool           GetName( SCTAB nTab, String& rName ) const;
+    SC_DLLPUBLIC bool           GetName( SCTAB nTab, ::rtl::OUString& rName ) const;
     SC_DLLPUBLIC sal_Bool           GetCodeName( SCTAB nTab, String& rName ) const;
     SC_DLLPUBLIC sal_Bool                   SetCodeName( SCTAB nTab, const String& rName );
     SC_DLLPUBLIC sal_Bool           GetTable( const String& rName, SCTAB& rTab ) const;

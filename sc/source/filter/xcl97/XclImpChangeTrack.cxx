@@ -168,7 +168,7 @@ sal_Bool XclImpChangeTrack::Read3DTabRefInfo( SCTAB& rFirstTab, SCTAB& rLastTab,
         // external ref - read doc and tab name and find sc tab num
         // - URL
         String aEncUrl( pStrm->ReadUniString() );
-        String aUrl;
+        ::rtl::OUString aUrl;
         bool bSelf;
         XclImpUrlHelper::DecodeUrl( aUrl, bSelf, GetRoot(), aEncUrl );
         pStrm->Ignore( 1 );

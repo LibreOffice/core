@@ -224,7 +224,7 @@ void ScViewFunc::DetectiveMarkPred()
 
         sal_uInt16 nFileId = p->GetIndex();
         ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
-        const String* pPath = pRefMgr->getExternalFileName(nFileId);
+        const OUString* pPath = pRefMgr->getExternalFileName(nFileId);
 
         ScRange aRange;
         if (pPath && ScRefTokenHelper::getRangeFromToken(aRange, p, true))
