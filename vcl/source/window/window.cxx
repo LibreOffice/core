@@ -529,7 +529,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, sal_Bool bCallHdl
         rSettings.SetStyleSettings( aStyleSettings );
     }
 
-#if OSL_DEBUG_LEVEL > 0
+#if defined(DBG_UTIL)
     // Evt. AppFont auf Fett schalten, damit man feststellen kann,
     // ob fuer die Texte auf anderen Systemen genuegend Platz
     // vorhanden ist
