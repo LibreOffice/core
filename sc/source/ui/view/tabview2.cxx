@@ -154,6 +154,231 @@ void expandSelectionByMergedCell(
     rBlockEndY = nCurY + nCurYOffset > MAXROW ? MAXROW : nCurY + nCurYOffset;
 }
 
+bool isCellQualified(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, bool bSelectLocked, bool bSelectUnlocked)
+{
+    bool bCellProtected = pDoc->HasAttrib(
+        nCol, nRow, nTab, nCol, nRow, nTab, HASATTR_PROTECTED);
+
+    if (bCellProtected && !bSelectLocked)
+        return false;
+
+    if (!bCellProtected && !bSelectUnlocked)
+        return false;
+
+    return true;
+}
+
+void moveCursorByProtRule(
+    SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY, SCTAB nTab, ScDocument* pDoc)
+{
+    bool bSelectLocked = true;
+    bool bSelectUnlocked = true;
+    ScTableProtection* pTabProtection = pDoc->GetTabProtection(nTab);
+    if (pTabProtection && pTabProtection->isProtected())
+    {
+        bSelectLocked   = pTabProtection->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
+        bSelectUnlocked = pTabProtection->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS);
+    }
+
+    if (nMovX > 0)
+    {
+        if (rCol < MAXCOL)
+        {
+            for (SCCOL i = 0; i < nMovX; ++i)
+            {
+                if (!isCellQualified(pDoc, rCol+1, rRow, nTab, bSelectLocked, bSelectUnlocked))
+                    break;
+                ++rCol;
+            }
+        }
+    }
+    else if (nMovX < 0)
+    {
+        if (rCol > 0)
+        {
+            nMovX = -nMovX;
+            for (SCCOL i = 0; i < nMovX; ++i)
+            {
+                if (!isCellQualified(pDoc, rCol-1, rRow, nTab, bSelectLocked, bSelectUnlocked))
+                    break;
+                --rCol;
+            }
+        }
+    }
+
+    if (nMovY > 0)
+    {
+        if (rRow < MAXROW)
+        {
+            for (SCROW i = 0; i < nMovY; ++i)
+            {
+                if (!isCellQualified(pDoc, rCol, rRow+1, nTab, bSelectLocked, bSelectUnlocked))
+                    break;
+                ++rRow;
+            }
+        }
+    }
+    else if (nMovY < 0)
+    {
+        if (rRow > 0)
+        {
+            nMovY = -nMovY;
+            for (SCROW i = 0; i < nMovY; ++i)
+            {
+                if (!isCellQualified(pDoc, rCol, rRow-1, nTab, bSelectLocked, bSelectUnlocked))
+                    break;
+                --rRow;
+            }
+        }
+    }
+}
+
+bool checkBoundary(SCCOL& rCol, SCROW& rRow)
+{
+    bool bGood = true;
+    if (rCol < 0)
+    {
+        rCol = 0;
+        bGood = false;
+    }
+    else if (rCol > MAXCOL)
+    {
+        rCol = MAXCOL;
+        bGood = false;
+    }
+
+    if (rRow < 0)
+    {
+        rRow = 0;
+        bGood = false;
+    }
+    else if (rRow > MAXROW)
+    {
+        rRow = MAXROW;
+        bGood = false;
+    }
+    return bGood;
+}
+
+void moveCursorByMergedCell(
+    SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY, SCTAB nTab,
+    ScDocument* pDoc, const ScViewData& rViewData)
+{
+    SCCOL nOrigX = rViewData.GetCurX();
+    SCROW nOrigY = rViewData.GetCurY();
+
+    ScTableProtection* pTabProtection = pDoc->GetTabProtection(nTab);
+    bool bSelectLocked = true;
+    bool bSelectUnlocked = true;
+    if (pTabProtection && pTabProtection->isProtected())
+    {
+        bSelectLocked   = pTabProtection->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
+        bSelectUnlocked = pTabProtection->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS);
+    }
+
+    const ScMergeAttr* pMergeAttr = static_cast<const ScMergeAttr*>(
+        pDoc->GetAttr(nOrigX, nOrigY, nTab, ATTR_MERGE));
+
+    bool bOriginMerged = false;
+    SCsCOL nColSpan = 1;
+    SCsROW nRowSpan = 1;
+    if (pMergeAttr && pMergeAttr->IsMerged())
+    {
+        nColSpan = pMergeAttr->GetColMerge();
+        nRowSpan = pMergeAttr->GetRowMerge();
+        bOriginMerged = true;
+    }
+
+    if (nMovX > 0)
+    {
+        SCCOL nOld = rCol;
+        if (bOriginMerged)
+        {
+            // Original cell is merged.  Push the block end outside the merged region.
+            if (nOrigX < MAXCOL && nOrigX < rCol && rCol <= nOrigX + nColSpan - 1)
+                rCol = nOrigX + nColSpan;
+        }
+        else
+        {
+            pDoc->SkipOverlapped(rCol, rRow, nTab);
+        }
+
+        if (nOld < rCol)
+        {
+            // The block end has moved.  Check the protection setting and move back if needed.
+            checkBoundary(rCol, rRow);
+            if (!isCellQualified(pDoc, rCol, rRow, nTab, bSelectLocked, bSelectUnlocked))
+                --rCol;
+        }
+    }
+    if (nMovX < 0)
+    {
+        SCCOL nOld = rCol;
+        if (bOriginMerged)
+        {
+            if (nOrigX > 0 && nOrigX <= rCol && rCol < nOrigX + nColSpan - 1)
+                // Block end is still within the merged region.  Push it outside.
+                rCol = nOrigX - 1;
+        }
+        else
+        {
+            pDoc->SkipOverlapped(rCol, rRow, nTab);
+        }
+
+        if (nOld > rCol)
+        {
+            // The block end has moved.  Check the protection setting and move back if needed.
+            checkBoundary(rCol, rRow);
+            if (!isCellQualified(pDoc, rCol, rRow, nTab, bSelectLocked, bSelectUnlocked))
+                ++rCol;
+        }
+    }
+    if (nMovY > 0)
+    {
+        SCROW nOld = rRow;
+        if (bOriginMerged)
+        {
+            // Original cell is merged.  Push the block end outside the merged region.
+            if (nOrigY < MAXROW && nOrigY < rRow && rRow <= nOrigY + nRowSpan - 1)
+                rRow = nOrigY + nRowSpan;
+        }
+        else
+        {
+            pDoc->SkipOverlapped(rCol, rRow, nTab);
+        }
+
+        if (nOld < rRow)
+        {
+            // The block end has moved.  Check the protection setting and move back if needed.
+            checkBoundary(rCol, rRow);
+            if (!isCellQualified(pDoc, rCol, rRow, nTab, bSelectLocked, bSelectUnlocked))
+                --rRow;
+        }
+    }
+    if (nMovY < 0)
+    {
+        SCROW nOld = rRow;
+        if (bOriginMerged)
+        {
+            if (nOrigY > 0 && nOrigY <= rRow && rRow < nOrigY + nRowSpan - 1)
+                // Block end is still within the merged region.  Push it outside.
+                rRow = nOrigY - 1;
+        }
+        else
+        {
+            pDoc->SkipOverlapped(rCol, rRow, nTab);
+        }
+
+        if (nOld > rRow)
+        {
+            // The block end has moved.  Check the protection setting and move back if needed.
+            checkBoundary(rCol, rRow);
+            if (!isCellQualified(pDoc, rCol, rRow, nTab, bSelectLocked, bSelectUnlocked))
+                ++rRow;
+        }
+    }
+}
+
 }
 
 void ScTabView::PaintMarks(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow )
@@ -606,235 +831,6 @@ void ScTabView::SkipCursorVertical(SCsCOL& rCurX, SCsROW& rCurY, SCsROW nOldY, S
         while (pDoc->IsHorOverlapped(rCurX, rCurY, nTab))
             --rCurX;
     }
-}
-
-namespace {
-
-bool isCellQualified(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, bool bSelectLocked, bool bSelectUnlocked)
-{
-    bool bCellProtected = pDoc->HasAttrib(
-        nCol, nRow, nTab, nCol, nRow, nTab, HASATTR_PROTECTED);
-
-    if (bCellProtected && !bSelectLocked)
-        return false;
-
-    if (!bCellProtected && !bSelectUnlocked)
-        return false;
-
-    return true;
-}
-
-void moveCursorByProtRule(
-    SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY, SCTAB nTab, ScDocument* pDoc)
-{
-    bool bSelectLocked = true;
-    bool bSelectUnlocked = true;
-    ScTableProtection* pTabProtection = pDoc->GetTabProtection(nTab);
-    if (pTabProtection && pTabProtection->isProtected())
-    {
-        bSelectLocked   = pTabProtection->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
-        bSelectUnlocked = pTabProtection->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS);
-    }
-
-    if (nMovX > 0)
-    {
-        if (rCol < MAXCOL)
-        {
-            for (SCCOL i = 0; i < nMovX; ++i)
-            {
-                if (!isCellQualified(pDoc, rCol+1, rRow, nTab, bSelectLocked, bSelectUnlocked))
-                    break;
-                ++rCol;
-            }
-        }
-    }
-    else if (nMovX < 0)
-    {
-        if (rCol > 0)
-        {
-            nMovX = -nMovX;
-            for (SCCOL i = 0; i < nMovX; ++i)
-            {
-                if (!isCellQualified(pDoc, rCol-1, rRow, nTab, bSelectLocked, bSelectUnlocked))
-                    break;
-                --rCol;
-            }
-        }
-    }
-
-    if (nMovY > 0)
-    {
-        if (rRow < MAXROW)
-        {
-            for (SCROW i = 0; i < nMovY; ++i)
-            {
-                if (!isCellQualified(pDoc, rCol, rRow+1, nTab, bSelectLocked, bSelectUnlocked))
-                    break;
-                ++rRow;
-            }
-        }
-    }
-    else if (nMovY < 0)
-    {
-        if (rRow > 0)
-        {
-            nMovY = -nMovY;
-            for (SCROW i = 0; i < nMovY; ++i)
-            {
-                if (!isCellQualified(pDoc, rCol, rRow-1, nTab, bSelectLocked, bSelectUnlocked))
-                    break;
-                --rRow;
-            }
-        }
-    }
-}
-
-bool checkBoundary(SCCOL& rCol, SCROW& rRow)
-{
-    bool bGood = true;
-    if (rCol < 0)
-    {
-        rCol = 0;
-        bGood = false;
-    }
-    else if (rCol > MAXCOL)
-    {
-        rCol = MAXCOL;
-        bGood = false;
-    }
-
-    if (rRow < 0)
-    {
-        rRow = 0;
-        bGood = false;
-    }
-    else if (rRow > MAXROW)
-    {
-        rRow = MAXROW;
-        bGood = false;
-    }
-    return bGood;
-}
-
-void moveCursorByMergedCell(
-    SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY, SCTAB nTab,
-    ScDocument* pDoc, const ScViewData& rViewData)
-{
-    SCCOL nOrigX = rViewData.GetCurX();
-    SCROW nOrigY = rViewData.GetCurY();
-
-    ScTableProtection* pTabProtection = pDoc->GetTabProtection(nTab);
-    bool bSelectLocked = true;
-    bool bSelectUnlocked = true;
-    if (pTabProtection && pTabProtection->isProtected())
-    {
-        bSelectLocked   = pTabProtection->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
-        bSelectUnlocked = pTabProtection->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS);
-    }
-
-    const ScMergeAttr* pMergeAttr = static_cast<const ScMergeAttr*>(
-        pDoc->GetAttr(nOrigX, nOrigY, nTab, ATTR_MERGE));
-
-    bool bOriginMerged = false;
-    SCsCOL nColSpan = 1;
-    SCsROW nRowSpan = 1;
-    if (pMergeAttr && pMergeAttr->IsMerged())
-    {
-        nColSpan = pMergeAttr->GetColMerge();
-        nRowSpan = pMergeAttr->GetRowMerge();
-        bOriginMerged = true;
-    }
-
-    if (nMovX > 0)
-    {
-        SCCOL nOld = rCol;
-        if (bOriginMerged)
-        {
-            // Original cell is merged.  Push the block end outside the merged region.
-            if (nOrigX < MAXCOL && nOrigX < rCol && rCol <= nOrigX + nColSpan - 1)
-                rCol = nOrigX + nColSpan;
-        }
-        else
-        {
-            pDoc->SkipOverlapped(rCol, rRow, nTab);
-        }
-
-        if (nOld < rCol)
-        {
-            // The block end has moved.  Check the protection setting and move back if needed.
-            checkBoundary(rCol, rRow);
-            if (!isCellQualified(pDoc, rCol, rRow, nTab, bSelectLocked, bSelectUnlocked))
-                --rCol;
-        }
-    }
-    if (nMovX < 0)
-    {
-        SCCOL nOld = rCol;
-        if (bOriginMerged)
-        {
-            if (nOrigX > 0 && nOrigX <= rCol && rCol < nOrigX + nColSpan - 1)
-                // Block end is still within the merged region.  Push it outside.
-                rCol = nOrigX - 1;
-        }
-        else
-        {
-            pDoc->SkipOverlapped(rCol, rRow, nTab);
-        }
-
-        if (nOld > rCol)
-        {
-            // The block end has moved.  Check the protection setting and move back if needed.
-            checkBoundary(rCol, rRow);
-            if (!isCellQualified(pDoc, rCol, rRow, nTab, bSelectLocked, bSelectUnlocked))
-                ++rCol;
-        }
-    }
-    if (nMovY > 0)
-    {
-        SCROW nOld = rRow;
-        if (bOriginMerged)
-        {
-            // Original cell is merged.  Push the block end outside the merged region.
-            if (nOrigY < MAXROW && nOrigY < rRow && rRow <= nOrigY + nRowSpan - 1)
-                rRow = nOrigY + nRowSpan;
-        }
-        else
-        {
-            pDoc->SkipOverlapped(rCol, rRow, nTab);
-        }
-
-        if (nOld < rRow)
-        {
-            // The block end has moved.  Check the protection setting and move back if needed.
-            checkBoundary(rCol, rRow);
-            if (!isCellQualified(pDoc, rCol, rRow, nTab, bSelectLocked, bSelectUnlocked))
-                --rRow;
-        }
-    }
-    if (nMovY < 0)
-    {
-        SCROW nOld = rRow;
-        if (bOriginMerged)
-        {
-            if (nOrigY > 0 && nOrigY <= rRow && rRow < nOrigY + nRowSpan - 1)
-                // Block end is still within the merged region.  Push it outside.
-                rRow = nOrigY - 1;
-        }
-        else
-        {
-            pDoc->SkipOverlapped(rCol, rRow, nTab);
-        }
-
-        if (nOld > rRow)
-        {
-            // The block end has moved.  Check the protection setting and move back if needed.
-            checkBoundary(rCol, rRow);
-            if (!isCellQualified(pDoc, rCol, rRow, nTab, bSelectLocked, bSelectUnlocked))
-                ++rRow;
-        }
-    }
-}
-
 }
 
 void ScTabView::ExpandBlock(SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode)
