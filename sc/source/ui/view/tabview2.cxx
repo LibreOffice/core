@@ -388,8 +388,8 @@ void ScTabView::PaintMarks(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
     if (!ValidCol(nEndCol)) nEndCol = MAXCOL;
     if (!ValidRow(nEndRow)) nEndRow = MAXROW;
 
-    sal_Bool bLeft = (nStartCol==0 && nEndCol==MAXCOL);
-    sal_Bool bTop = (nStartRow==0 && nEndRow==MAXROW);
+    bool bLeft = (nStartCol==0 && nEndCol==MAXCOL);
+    bool bTop = (nStartRow==0 && nEndRow==MAXROW);
 
     if (bLeft)
         PaintLeftArea( nStartRow, nEndRow );
@@ -493,7 +493,7 @@ void ScTabView::DoneBlockMode( bool bContinue )
     if (IsBlockMode() && !bMoveIsShift)
     {
         ScMarkData& rMark = aViewData.GetMarkData();
-        sal_Bool bFlag = rMark.GetMarkingFlag();
+        bool bFlag = rMark.GetMarkingFlag();
         rMark.SetMarking(false);
 
         if (bBlockNeg && !bContinue)
@@ -510,7 +510,7 @@ void ScTabView::DoneBlockMode( bool bContinue )
             SCTAB nTab = aViewData.GetTabNo();
             ScDocument* pDoc = aViewData.GetDocument();
             if ( pDoc->HasTable(nTab) )
-                PaintBlock( sal_True );                             // sal_True -> Block loeschen
+                PaintBlock( true );                             // true -> Block loeschen
             else
                 rMark.ResetMark();
         }
@@ -996,7 +996,7 @@ void ScTabView::PaintBlock( bool bReset )
         HideAllCursors();
         if (bMulti)
         {
-            sal_Bool bFlag = rMark.GetMarkingFlag();
+            bool bFlag = rMark.GetMarkingFlag();
             rMark.SetMarking(false);
             rMark.MarkToMulti();
             rMark.GetMultiMarkArea(aMarkRange);
@@ -1069,7 +1069,7 @@ void ScTabView::SelectAllTables()
     if (nCount>1)
     {
         for (SCTAB i=0; i<nCount; i++)
-            rMark.SelectTable( i, sal_True );
+            rMark.SelectTable( i, true );
 
         aViewData.GetDocShell()->PostPaintExtras();
         SfxBindings& rBind = aViewData.GetBindings();
@@ -1094,7 +1094,7 @@ void ScTabView::DeselectAllTables()
     rBind.Invalidate( FID_TAB_DESELECTALL );
 }
 
-sal_Bool lcl_FitsInWindow( double fScaleX, double fScaleY, sal_uInt16 nZoom,
+bool lcl_FitsInWindow( double fScaleX, double fScaleY, sal_uInt16 nZoom,
                         long nWindowX, long nWindowY, ScDocument* pDoc, SCTAB nTab,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                         SCCOL nFixPosX, SCROW nFixPosY )
@@ -1153,7 +1153,7 @@ sal_Bool lcl_FitsInWindow( double fScaleX, double fScaleY, sal_uInt16 nZoom,
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
@@ -1275,7 +1275,7 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
                     if ( pStyleSheet )
                     {
                         ScPrintFunc aPrintFunc( aViewData.GetDocShell(),
-                                                aViewData.GetViewShell()->GetPrinter(sal_True),
+                                                aViewData.GetViewShell()->GetPrinter(true),
                                                 nCurTab );
 
                         Size aPageSize = aPrintFunc.GetDataSize();
@@ -1400,7 +1400,7 @@ void ScTabView::ErrorMessage( sal_uInt16 nGlobStrId )
 
     Window* pParent = aViewData.GetDialogParent();
     ScWaitCursorOff aWaitOff( pParent );
-    sal_Bool bFocus = pParent && pParent->HasFocus();
+    bool bFocus = pParent && pParent->HasFocus();
 
     if(nGlobStrId==STR_PROTECTIONERR)
     {
