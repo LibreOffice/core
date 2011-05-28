@@ -35,8 +35,6 @@
 #include "osl/module.h"
 #include "osl/file.h"
 
-#include "tools/svwin.h"
-
 #include "vcl/svapp.hxx"
 
 #include "win/salgdi.h"

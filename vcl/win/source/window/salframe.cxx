@@ -70,6 +70,7 @@
 // Warning in SDK header
 #if defined(_MSC_VER) && (_MSC_VER > 1400)
 #pragma warning( disable: 4242 4244 )
+#endif
 #include <win/wincomp.hxx>
 #include <win/salids.hrc>
 #include <win/saldata.hxx>

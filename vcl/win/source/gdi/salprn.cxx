@@ -38,7 +38,7 @@
 #include <osl/module.h>
 
 #include <tools/urlobj.hxx>
-#include <tools/svwin.h>
+
 #ifdef __MINGW32__
 #include <excpt.h>
 #endif

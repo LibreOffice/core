@@ -44,7 +44,7 @@
 
 #include "vcl/salbtype.hxx"
 #include "vcl/bmpacc.hxx"
-#include "vcl/outdata.hxx"
+#include "outdata.hxx"
 
 bool WinSalGraphics::supportsOperation( OutDevSupportType eType ) const
 {

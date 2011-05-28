@@ -59,10 +59,6 @@
 #include "tools/debug.hxx"
 #include "tools/stream.hxx"
 
-#include <tools/prewin.h>
-#include <windows.h>
-#include <tools/postwin.h>
-
 #include <vcl/sysdata.hxx>
 
 #include "win/wincomp.hxx"
