@@ -323,7 +323,12 @@
  
  local_sources = \
  	glocaldirectorymonitor.c \
-@@ -228,7 +293,7 @@
+@@ -228,11 +293,11 @@
+ 	gio-marshal.c \
+ 	gioenumtypes.h		\
+ 	gioenumtypes.c		\
+-	libgio-$(PKG_VER)-0.dll
++	gio-$(PKG_VER).dll
  
  
  $(PRJ_TOP)\config.h: $(PRJ_TOP)\config.h.win32
@@ -340,15 +345,16 @@
 +	rc -DBUILDNUMBER=0 -r -i $(SOLARINC) -fo $(PACKAGE).res $(PACKAGE).rc
  
 -libgio-$(PKG_VER)-0.dll : $(OBJECTS) win32\giowin32.lib $(PACKAGE).def $(RESOURCE)
-+libgio-$(PKG_VER)-0.dll : $(OBJECTS) win32\giowin32.lib gvdb\giogvdb.lib $(PACKAGE).def $(RESOURCE)
- 	$(CC) $(CFLAGS) -LD -Felibgio-$(PKG_VER)-0.dll $(OBJECTS) $(RESOURCE) \
+-	$(CC) $(CFLAGS) -LD -Felibgio-$(PKG_VER)-0.dll $(OBJECTS) $(RESOURCE) \
++gio-$(PKG_VER).dll : $(OBJECTS) win32\giowin32.lib gvdb\giogvdb.lib $(PACKAGE).def $(RESOURCE) 
++	$(CC) $(CFLAGS) -LD -Fe$@ $(OBJECTS) $(RESOURCE) \
  	..\glib\glib-2.0.lib ..\gobject\gobject-2.0.lib ..\gmodule\gmodule-2.0.lib \
 -	win32\giowin32.lib \
 -	$(INTL_LIBS) \
 -	kernel32.lib user32.lib advapi32.lib shell32.lib wsock32.lib ws2_32.lib dnsapi.lib mpr.lib $(LDFLAGS) \
 +	win32\giowin32.lib gvdb\giogvdb.lib \
 +	$(INTL_LIBS) $(ZLIB_LIBS) \
-+	kernel32.lib user32.lib advapi32.lib shell32.lib wsock32.lib Shlwapi.lib ws2_32.lib dnsapi.lib mpr.lib $(LDFLAGS) \
++	kernel32.lib user32.lib advapi32.lib shell32.lib wsock32.lib shlwapi.lib ws2_32.lib dnsapi.lib mpr.lib $(LDFLAGS) \
  	/implib:gio-2.0.lib /def:$(PACKAGE).def
  
  .c.obj :
@@ -392,7 +398,8 @@
 +	glibconfig.h	\
  	gnulib\gnulib.lib	\
  	pcre\pcre.lib		\
- 	libglib-2.0-0.dll \
+-	libglib-2.0-0.dll \
++	glib-2.0.dll \
 -	glib-2.28s.lib \
 -	gspawn-win32-helper.exe	\
 -	gspawn-win32-helper-console.exe	\
@@ -501,7 +508,7 @@
  	lib /out:glib-2.28s.lib $(glib_OBJECTS) gnulib\gnulib.lib pcre\pcre.lib
  
 -libglib-2.0-0.dll : $(glib_OBJECTS) gnulib\gnulib.lib pcre\pcre.lib glib.def glib.res
-+libglib-2.0-0.dll : $(glib_OBJECTS) gnulib\gnulib.lib pcre\pcre.lib glib.def glib.res 
++glib-2.0.dll : $(glib_OBJECTS) gnulib\gnulib.lib pcre\pcre.lib glib.def glib.res 
  	$(CC) $(CFLAGS) -LD -Fe$@ $(glib_OBJECTS) glib.res $(INTL_LIBS) \
  	gnulib\gnulib.lib pcre\pcre.lib $(DIRENT_LIBS) user32.lib advapi32.lib shell32.lib wsock32.lib ole32.lib ws2_32.lib \
  	$(LDFLAGS) /implib:glib-2.0.lib /def:glib.def
@@ -560,7 +567,7 @@
  all : pcre.lib
 --- misc/glib-2.28.1/gmodule/makefile.msc	2011-02-18 16:34:58.000000000 +0100
 +++ misc/build/glib-2.28.1/gmodule/makefile.msc	2011-03-04 08:43:06.896355600 +0100
-@@ -7,7 +7,7 @@
+@@ -7,12 +7,12 @@
  
  ################################################################
  
@@ -569,6 +576,12 @@
  DEFINES = -DHAVE_CONFIG_H -DG_LOG_DOMAIN=\"GModule\"
  
  all : \
+ 	gmoduleconf.h \
+-	libgmodule-2.0-0.dll
++	gmodule-2.0.dll
+ 
+ gmodule_OBJECTS = \
+ 	gmodule.obj
 @@ -16,22 +16,22 @@
  
  gmodule_OBJECTS = \
@@ -594,7 +607,8 @@
 -	rc -DBUILDNUMBER=0 -r -fo gmodule.res gmodule.rc
 +	rc -DBUILDNUMBER=0 -r -i $(SOLARINC) -fo gmodule.res gmodule.rc
  
- libgmodule-2.0-0.dll : $(gmodule_OBJECTS) gmodule.def gmodule.res
+-libgmodule-2.0-0.dll : $(gmodule_OBJECTS) gmodule.def gmodule.res
++gmodule-2.0.dll : $(gmodule_OBJECTS) gmodule.def gmodule.res
  	$(CC) $(CFLAGS) -LD -Fe$@ $(gmodule_OBJECTS) gmodule.res \
  	..\glib\glib-2.0.lib $(LDFLAGS) /implib:gmodule-2.0.lib /def:gmodule.def
  
@@ -605,7 +619,7 @@
 +++ misc/build/glib-2.28.1/gobject/makefile.msc	2011-03-04 12:33:52.399273100 +0100
 --- misc/glib-2.28.1/gobject/makefile.msc	2011-02-18 16:35:05.000000000 +0100
 +++ misc/build/glib-2.28.1/gobject/makefile.msc	2011-03-09 09:29:52.712284300 +0100
-@@ -7,7 +7,7 @@
+@@ -7,23 +7,22 @@
  
  ################################################################
  
@@ -614,16 +628,18 @@
  DEFINES = -DHAVE_CONFIG_H -DGOBJECT_COMPILATION -DG_LOG_DOMAIN=\"GLib-GObject\" \
  		-DG_ENABLE_DEBUG
  #		-DG_DISABLE_ASSERT -DG_DISABLE_CHECKS -DG_DISABLE_CAST_CHECKS
-@@ -16,7 +16,6 @@
+ #		-DG_DISABLE_CAST_CHECKS
+ 
  all :				\
  	glib-genmarshal.exe     \
  	gmarshal.h              \
 -	gmarshal.c              \
  	gmarshal.strings \
- 	gobject-query.exe \
- 	libgobject-2.0-0.dll	\
-@@ -24,8 +23,10 @@
- 	testgobject.exe
+-	gobject-query.exe \
+-	libgobject-2.0-0.dll	\
++	gobject-2.0.dll	\
+ 	gobject-2.28s.lib \
+-	testgobject.exe
  
  gobject_OBJECTS =		\
 +	gatomicarray.obj \
@@ -631,8 +647,6 @@
  	gboxed.obj		\
  	gclosure.obj		\
  	genums.obj		\
- 	gobject.obj		\
- 	gparam.obj		\
 @@ -47,21 +49,18 @@
  		-DG_GNUC_PRINTF=;G_GNUC_PRINTF gobject.symbols >> gobject.def
  
@@ -651,25 +665,17 @@
 -	glib-genmarshal --nostdinc --prefix=g_cclosure_marshal gmarshal.list --body > gmarshal.c
 +	cp xgen-gmh gmarshal.h
  
- libgobject-2.0-0.dll : $(gobject_OBJECTS) gobject.def gobject.res
+-libgobject-2.0-0.dll : $(gobject_OBJECTS) gobject.def gobject.res
++gobject-2.0.dll : $(gobject_OBJECTS) gobject.def gobject.res
  	$(CC) $(CFLAGS) -Fm -LD -Fe$@ $(gobject_OBJECTS) gobject.res \
 -	..\glib\glib-2.0.lib $(LDFLAGS) /implib:gobject-2.0.lib /def:gobject.def || del $@
 +	..\glib\glib-2.0.lib ..\gthread\gthread-2.0.lib $(LDFLAGS) /implib:gobject-2.0.lib /def:gobject.def || rm $@
  
  gobject-2.28s.lib : $(gobject_OBJECTS) 
  	lib /out:$@ $(gobject_OBJECTS)
-@@ -69,7 +68,7 @@
- # link glib's static version to avoid installing 
- glib-genmarshal.exe : glib-genmarshal.c gmarshal.strings
- 	$(CC) -Fe$@ $(CFLAGS) -UGOBJECT_COMPILATION glib-genmarshal.c \
--	..\glib\glib-2.28s.lib user32.lib advapi32.lib ole32.lib shell32.lib $(INTL_LIBS) 
-+	..\glib\glib-2.28s.lib user32.lib advapi32.lib ole32.lib shell32.lib $(INTL_LIBS)
- 
- gobject-query.exe : gobject-query.c libgobject-2.0-0.dll
- 	$(CC) -Fe$@ $(CFLAGS) -UGOBJECT_COMPILATION gobject-query.c \
 --- misc/glib-2.28.1/gthread/makefile.msc	2011-02-18 16:35:00.000000000 +0100
 +++ misc/build/glib-2.28.1/gthread/makefile.msc	2011-03-04 08:43:06.900355800 +0100
-@@ -7,7 +7,7 @@
+@@ -7,10 +7,10 @@
  
  ################################################################
  
@@ -677,16 +683,22 @@
 +INCLUDES = -FImsvc_recommended_pragmas.h -I .. -I . -I ..\glib $(SOLARINC)
  DEFINES = -DHAVE_CONFIG_H -DG_LOG_DOMAIN=\"GThread\"
  all : \
- 	libgthread-2.0-0.dll
-@@ -19,7 +19,7 @@
+-	libgthread-2.0-0.dll
++	gthread-2.0.dll
+ 
+ gthread_OBJECTS = \
+ 	gthread-impl.obj
+@@ -19,8 +19,8 @@
  	$(CC) -c $(CFLAGS) gthread-impl.c
  
  gthread.res : gthread.rc
 -	rc -DBUILDNUMBER=0 -r -fo gthread.res gthread.rc
 +	rc -DBUILDNUMBER=0 -r -i $(SOLARINC) -fo gthread.res gthread.rc
  
- libgthread-2.0-0.dll : $(gthread_OBJECTS) gthread.def gthread.res
+-libgthread-2.0-0.dll : $(gthread_OBJECTS) gthread.def gthread.res
++gthread-2.0.dll : $(gthread_OBJECTS) gthread.def gthread.res
  	$(CC) $(CFLAGS) -LD -Fe$@ $(gthread_OBJECTS) gthread.res \
+ 	..\glib\glib-2.0.lib $(DEPCLIBS) user32.lib $(LDFLAGS) /implib:gthread-2.0.lib /def:gthread.def
 --- misc/glib-2.28.1/makefile.msc	2009-04-01 01:04:20.000000000 +0200
 +++ misc/build/glib-2.28.1/makefile.msc	2011-03-04 09:11:06.663432800 +0100
 @@ -1,7 +1,7 @@

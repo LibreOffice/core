@@ -300,11 +300,11 @@ ADDITIONAL_FILES= config.h \
 
 BUILD_ACTION=nmake -f makefile.msc
 
-OUT2BIN+=gio$/libgio-2.0-0.dll
-OUT2BIN+=glib$/libglib-2.0-0.dll
-OUT2BIN+=gmodule$/libgmodule-2.0-0.dll
-OUT2BIN+=gobject$/libgobject-2.0-0.dll
-OUT2BIN+=gthread$/libgthread-2.0-0.dll
+OUT2BIN+=gio$/gio-2.0.dll
+OUT2BIN+=glib$/glib-2.0.dll
+OUT2BIN+=gmodule$/gmodule-2.0.dll
+OUT2BIN+=gobject$/gobject-2.0.dll
+OUT2BIN+=gthread$/gthread-2.0.dll
 OUT2BIN+=gobject$/glib-mkenums
 OUT2BIN+=gobject$/glib-genmarshal.exe
 
