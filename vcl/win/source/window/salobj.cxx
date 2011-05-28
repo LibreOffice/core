@@ -543,58 +543,27 @@ SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent )
 
     if ( !pSalData->mbObjClassInit )
     {
-        // #95301# shockwave plugin has bug; expects ASCII functions to be used
-        if ( false )//aSalShlData.mbWNT )
+        WNDCLASSEXA aWndClassEx;
+        aWndClassEx.cbSize          = sizeof( aWndClassEx );
+        aWndClassEx.style           = 0;
+        aWndClassEx.lpfnWndProc     = SalSysObjWndProcA;
+        aWndClassEx.cbClsExtra      = 0;
+        aWndClassEx.cbWndExtra      = SAL_OBJECT_WNDEXTRA;
+        aWndClassEx.hInstance       = pSalData->mhInst;
+        aWndClassEx.hIcon           = 0;
+        aWndClassEx.hIconSm         = 0;
+        aWndClassEx.hCursor         = LoadCursor( 0, IDC_ARROW );
+        aWndClassEx.hbrBackground   = 0;
+        aWndClassEx.lpszMenuName    = 0;
+        aWndClassEx.lpszClassName   = SAL_OBJECT_CLASSNAMEA;
+        if ( RegisterClassExA( &aWndClassEx ) )
         {
-            WNDCLASSEXW aWndClassEx;
-            aWndClassEx.cbSize          = sizeof( aWndClassEx );
-            aWndClassEx.style           = 0;
-            aWndClassEx.lpfnWndProc     = SalSysObjWndProcW;
-            aWndClassEx.cbClsExtra      = 0;
-            aWndClassEx.cbWndExtra      = SAL_OBJECT_WNDEXTRA;
-            aWndClassEx.hInstance       = pSalData->mhInst;
-            aWndClassEx.hIcon           = 0;
-            aWndClassEx.hIconSm         = 0;
-            aWndClassEx.hCursor         = LoadCursor( 0, IDC_ARROW );
-            aWndClassEx.hbrBackground   = 0;
-            aWndClassEx.lpszMenuName    = 0;
-            aWndClassEx.lpszClassName   = SAL_OBJECT_CLASSNAMEW;
-            if ( RegisterClassExW( &aWndClassEx ) )
-            {
-                // Wegen PlugIn's loeschen wir erstmal den Hintergrund
-                aWndClassEx.cbWndExtra      = 0;
-                aWndClassEx.hbrBackground   = (HBRUSH)(COLOR_WINDOW+1);
-                aWndClassEx.lpfnWndProc     = SalSysObjChildWndProcW;
-                aWndClassEx.lpszClassName   = SAL_OBJECT_CHILDCLASSNAMEW;
-                if ( RegisterClassExW( &aWndClassEx ) )
-                    pSalData->mbObjClassInit = TRUE;
-            }
-        }
-        else
-        {
-            WNDCLASSEXA aWndClassEx;
-            aWndClassEx.cbSize          = sizeof( aWndClassEx );
-            aWndClassEx.style           = 0;
-            aWndClassEx.lpfnWndProc     = SalSysObjWndProcA;
-            aWndClassEx.cbClsExtra      = 0;
-            aWndClassEx.cbWndExtra      = SAL_OBJECT_WNDEXTRA;
-            aWndClassEx.hInstance       = pSalData->mhInst;
-            aWndClassEx.hIcon           = 0;
-            aWndClassEx.hIconSm         = 0;
-            aWndClassEx.hCursor         = LoadCursor( 0, IDC_ARROW );
-            aWndClassEx.hbrBackground   = 0;
-            aWndClassEx.lpszMenuName    = 0;
-            aWndClassEx.lpszClassName   = SAL_OBJECT_CLASSNAMEA;
-            if ( RegisterClassExA( &aWndClassEx ) )
-            {
-                // Wegen PlugIn's loeschen wir erstmal den Hintergrund
-                aWndClassEx.cbWndExtra      = 0;
-                aWndClassEx.hbrBackground   = (HBRUSH)(COLOR_WINDOW+1);
-                aWndClassEx.lpfnWndProc     = SalSysObjChildWndProcA;
-                aWndClassEx.lpszClassName   = SAL_OBJECT_CHILDCLASSNAMEA;
-                if ( RegisterClassExA( &aWndClassEx ) )
-                    pSalData->mbObjClassInit = TRUE;
-            }
+            // Clean background first because of plugins.
+            aWndClassEx.cbWndExtra      = 0;
+            aWndClassEx.hbrBackground   = (HBRUSH)(COLOR_WINDOW+1);
+            aWndClassEx.lpfnWndProc     = SalSysObjChildWndProcA;
+            aWndClassEx.lpszClassName   = SAL_OBJECT_CHILDCLASSNAMEA;
+            pSalData->mbObjClassInit = TRUE;
         }
     }
 
