@@ -363,8 +363,8 @@ void ScTabView::InitBlockMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
         meBlockMode = Normal;
         bBlockCols = bCols;
         bBlockRows = bRows;
-        nBlockStartX = nCurX;
-        nBlockStartY = nCurY;
+        nBlockStartX = nBlockStartXOrig = nCurX;
+        nBlockStartY = nBlockStartYOrig = nCurY;
         nBlockStartZ = nCurZ;
         nBlockEndX = nOldCurX = nBlockStartX;
         nBlockEndY = nOldCurY = nBlockStartY;
@@ -372,13 +372,13 @@ void ScTabView::InitBlockMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
 
         if (bBlockCols)
         {
-            nBlockStartY = 0;
+            nBlockStartY = nBlockStartYOrig = 0;
             nBlockEndY = MAXROW;
         }
 
         if (bBlockRows)
         {
-            nBlockStartX = 0;
+            nBlockStartX = nBlockStartXOrig = 0;
             nBlockEndX = MAXCOL;
         }
 
@@ -478,8 +478,6 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
         {
             // Expand selection area accordingly when the current selection ends
             // with a merged cell.
-            SCsCOL nBlockStartXOld = nBlockStartX;
-            SCsROW nBlockStartYOld = nBlockStartY;
             SCsCOL nCurXOffset = 0;
             SCsCOL nBlockStartXOffset = 0;
             SCsROW nCurYOffset = 0;
@@ -496,20 +494,20 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
             // move to the lower-right corner of the merged anchor cell, and so on.
 
             pMergeAttr = static_cast<const ScMergeAttr*>(
-                pDocument->GetAttr( nBlockStartX, nBlockStartY, nTab, ATTR_MERGE ) );
+                pDocument->GetAttr( nBlockStartXOrig, nBlockStartYOrig, nTab, ATTR_MERGE ) );
             if ( pMergeAttr->IsMerged() )
             {
                 SCsCOL nColSpan = pMergeAttr->GetColMerge();
                 SCsROW nRowSpan = pMergeAttr->GetRowMerge();
 
-                if ( !( nCurX >= nBlockStartXOld + nColSpan - 1 && nCurY >= nBlockStartYOld + nRowSpan - 1 ) )
+                if ( !( nCurX >= nBlockStartXOrig + nColSpan - 1 && nCurY >= nBlockStartYOrig + nRowSpan - 1 ) )
                 {
-                    nBlockStartX = nCurX >= nBlockStartXOld ? nBlockStartXOld : nBlockStartXOld + nColSpan - 1;
-                    nBlockStartY = nCurY >= nBlockStartYOld ? nBlockStartYOld : nBlockStartYOld + nRowSpan - 1;
-                    nCurXOffset  = nCurX >= nBlockStartXOld && nCurX < nBlockStartXOld + nColSpan - 1 ?
-                        nBlockStartXOld - nCurX + nColSpan - 1 : 0;
-                    nCurYOffset  = nCurY >= nBlockStartYOld && nCurY < nBlockStartYOld + nRowSpan - 1 ?
-                        nBlockStartYOld - nCurY + nRowSpan - 1 : 0;
+                    nBlockStartX = nCurX >= nBlockStartXOrig ? nBlockStartXOrig : nBlockStartXOrig + nColSpan - 1;
+                    nBlockStartY = nCurY >= nBlockStartYOrig ? nBlockStartYOrig : nBlockStartYOrig + nRowSpan - 1;
+                    nCurXOffset  = nCurX >= nBlockStartXOrig && nCurX < nBlockStartXOrig + nColSpan - 1 ?
+                        nBlockStartXOrig - nCurX + nColSpan - 1 : 0;
+                    nCurYOffset  = nCurY >= nBlockStartYOrig && nCurY < nBlockStartYOrig + nRowSpan - 1 ?
+                        nBlockStartYOrig - nCurY + nRowSpan - 1 : 0;
                     bBlockStartMerged = sal_True;
                 }
             }
@@ -554,8 +552,8 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
                 // original position.
                 if ( !bBlockStartMerged )
                 {
-                    nBlockStartX = nBlockStartXOld;
-                    nBlockStartY = nBlockStartYOld;
+                    nBlockStartX = nBlockStartXOrig;
+                    nBlockStartY = nBlockStartYOrig;
                 }
             }
 

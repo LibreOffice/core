@@ -147,9 +147,11 @@ private:
     BlockMode           meBlockMode;           // Block markieren
 
     SCCOL               nBlockStartX;
+    SCCOL               nBlockStartXOrig;
     SCCOL               nBlockEndX;
 
     SCROW               nBlockStartY;
+    SCROW               nBlockStartYOrig;
     SCROW               nBlockEndY;
 
     SCTAB               nBlockStartZ;
