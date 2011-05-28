@@ -116,13 +116,13 @@ using namespace com::sun::star;
 // ---  Public-Funktionen
 //
 
-void ScTabView::ClickCursor( SCCOL nPosX, SCROW nPosY, sal_Bool bControl )
+void ScTabView::ClickCursor( SCCOL nPosX, SCROW nPosY, bool bControl )
 {
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB nTab = aViewData.GetTabNo();
     pDoc->SkipOverlapped(nPosX, nPosY, nTab);
 
-    sal_Bool bRefMode = SC_MOD()->IsFormulaMode();
+    bool bRefMode = SC_MOD()->IsFormulaMode();
 
     if ( bRefMode )
     {
@@ -279,7 +279,7 @@ void ScTabView::InvalidateAttribs()
 #pragma optimize ( "", off )
 #endif
 
-void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, sal_Bool bNew )
+void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
 {
     SCCOL nOldX = aViewData.GetCurX();
     SCROW nOldY = aViewData.GetCurY();
@@ -859,12 +859,12 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
         }
 }
 
-sal_Bool ScTabView::SelMouseButtonDown( const MouseEvent& rMEvt )
+bool ScTabView::SelMouseButtonDown( const MouseEvent& rMEvt )
 {
-    sal_Bool bRet = false;
+    bool bRet = false;
 
     // #i3875# *Hack*
-    sal_Bool bMod1Locked = aViewData.GetViewShell()->GetLockedModifiers() & KEY_MOD1 ? sal_True : false;
+    bool bMod1Locked = aViewData.GetViewShell()->GetLockedModifiers() & KEY_MOD1 ? true : false;
     aViewData.SetSelCtrlMouseClick( rMEvt.IsMod1() || bMod1Locked );
 
     if ( pSelEngine )
@@ -884,7 +884,7 @@ sal_Bool ScTabView::SelMouseButtonDown( const MouseEvent& rMEvt )
     //
 
 void ScTabView::MoveCursorAbs( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
-                                sal_Bool bShift, sal_Bool bControl, sal_Bool bKeepOld, sal_Bool bKeepSel )
+                               bool bShift, bool bControl, bool bKeepOld, bool bKeepSel )
 {
     if (!bKeepOld)
         aViewData.ResetOldCursor();
@@ -926,7 +926,7 @@ void ScTabView::MoveCursorAbs( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
             SetMarkData(aData);
         }
 
-        sal_Bool bSame = ( nCurX == aViewData.GetCurX() && nCurY == aViewData.GetCurY() );
+        bool bSame = ( nCurX == aViewData.GetCurX() && nCurY == aViewData.GetCurY() );
         bMoveIsShift = bShift;
         pSelEngine->CursorPosChanging( bShift, bControl );
         bMoveIsShift = false;
@@ -942,7 +942,7 @@ void ScTabView::MoveCursorAbs( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
 }
 
 void ScTabView::MoveCursorRel( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
-                                    sal_Bool bShift, sal_Bool bKeepSel )
+                               bool bShift, bool bKeepSel )
 {
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB nTab = aViewData.GetTabNo();
@@ -988,7 +988,7 @@ void ScTabView::MoveCursorRel( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
     MoveCursorAbs( nCurX, nCurY, eMode, bShift, false, sal_True, bKeepSel );
 }
 
-void ScTabView::MoveCursorPage( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode, sal_Bool bShift, sal_Bool bKeepSel )
+void ScTabView::MoveCursorPage( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode, bool bShift, bool bKeepSel )
 {
     SCsCOL nPageX;
     SCsROW nPageY;
@@ -996,7 +996,7 @@ void ScTabView::MoveCursorPage( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode, 
     MoveCursorRel( nPageX, nPageY, eMode, bShift, bKeepSel );
 }
 
-void ScTabView::MoveCursorArea( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode, sal_Bool bShift, sal_Bool bKeepSel )
+void ScTabView::MoveCursorArea( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode, bool bShift, bool bKeepSel )
 {
     SCsCOL nNewX;
     SCsROW nNewY;
@@ -1004,7 +1004,7 @@ void ScTabView::MoveCursorArea( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode, 
     MoveCursorRel(nNewX, nNewY, eMode, bShift, bKeepSel);
 }
 
-void ScTabView::MoveCursorEnd( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode, sal_Bool bShift, sal_Bool bKeepSel )
+void ScTabView::MoveCursorEnd( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode, bool bShift, bool bKeepSel )
 {
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB nTab = aViewData.GetTabNo();
@@ -1034,7 +1034,7 @@ void ScTabView::MoveCursorEnd( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode, s
     MoveCursorRel( ((SCsCOL)nNewX)-(SCsCOL)nCurX, ((SCsROW)nNewY)-(SCsROW)nCurY, eMode, bShift, bKeepSel );
 }
 
-void ScTabView::MoveCursorScreen( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode, sal_Bool bShift )
+void ScTabView::MoveCursorScreen( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode, bool bShift )
 {
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB nTab = aViewData.GetTabNo();
@@ -1071,12 +1071,12 @@ void ScTabView::MoveCursorScreen( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode
     MoveCursorAbs( nNewX, nNewY, eMode, bShift, false, true );
 }
 
-void ScTabView::MoveCursorEnter( sal_Bool bShift )          // bShift -> hoch/runter
+void ScTabView::MoveCursorEnter( bool bShift )          // bShift -> hoch/runter
 {
     const ScInputOptions& rOpt = SC_MOD()->GetInputOptions();
     if (!rOpt.GetMoveSelection())
     {
-        aViewData.UpdateInputHandler(sal_True);
+        aViewData.UpdateInputHandler(true);
         return;
     }
 
@@ -1109,14 +1109,14 @@ void ScTabView::MoveCursorEnter( sal_Bool bShift )          // bShift -> hoch/ru
         SCTAB nTab = aViewData.GetTabNo();
 
         ScDocument* pDoc = aViewData.GetDocument();
-        pDoc->GetNextPos( nNewX,nNewY, nTab, nMoveX,nMoveY, sal_True,false, rMark );
+        pDoc->GetNextPos( nNewX,nNewY, nTab, nMoveX,nMoveY, true, false, rMark );
 
         MoveCursorRel( ((SCsCOL)nNewX)-(SCsCOL)nCurX, ((SCsROW)nNewY)-(SCsROW)nCurY,
-                            SC_FOLLOW_LINE, false, sal_True );
+                            SC_FOLLOW_LINE, false, true );
 
         //  update input line even if cursor was not moved
         if ( nNewX == nCurX && nNewY == nCurY )
-            aViewData.UpdateInputHandler(sal_True);
+            aViewData.UpdateInputHandler(true);
     }
     else
     {
@@ -1138,7 +1138,7 @@ void ScTabView::MoveCursorEnter( sal_Bool bShift )          // bShift -> hoch/ru
 }
 
 
-sal_Bool ScTabView::MoveCursorKeyInput( const KeyEvent& rKeyEvent )
+bool ScTabView::MoveCursorKeyInput( const KeyEvent& rKeyEvent )
 {
     const KeyCode& rKCode = rKeyEvent.GetKeyCode();
 
@@ -1147,7 +1147,7 @@ sal_Bool ScTabView::MoveCursorKeyInput( const KeyEvent& rKeyEvent )
             (rKCode.IsMod2() ? MOD_BOTH : MOD_CTRL) :
             (rKCode.IsMod2() ? MOD_ALT : MOD_NONE);
 
-    sal_Bool bSel = rKCode.IsShift();
+    bool bSel = rKCode.IsShift();
     sal_uInt16 nCode = rKCode.GetCode();
 
     // CURSOR keys
@@ -1171,8 +1171,8 @@ sal_Bool ScTabView::MoveCursorKeyInput( const KeyEvent& rKeyEvent )
                 // added to avoid warnings
             }
         }
-        // always sal_True to suppress changes of col/row size (ALT+CURSOR)
-        return sal_True;
+        // always true to suppress changes of col/row size (ALT+CURSOR)
+        return true;
     }
 
     // PAGEUP/PAGEDOWN
@@ -1189,7 +1189,7 @@ sal_Bool ScTabView::MoveCursorKeyInput( const KeyEvent& rKeyEvent )
                 // added to avoid warnings
             }
         }
-        return sal_True;
+        return true;
     }
 
     // HOME/END
@@ -1206,7 +1206,7 @@ sal_Bool ScTabView::MoveCursorKeyInput( const KeyEvent& rKeyEvent )
                 // added to avoid warnings
             }
         }
-        return sal_True;
+        return true;
     }
 
     return false;
@@ -1214,7 +1214,7 @@ sal_Bool ScTabView::MoveCursorKeyInput( const KeyEvent& rKeyEvent )
 
 
         // naechste/vorherige nicht geschuetzte Zelle
-void ScTabView::FindNextUnprot( sal_Bool bShift, sal_Bool bInSelection )
+void ScTabView::FindNextUnprot( bool bShift, bool bInSelection )
 {
     short nMove = bShift ? -1 : 1;
 
@@ -1229,14 +1229,14 @@ void ScTabView::FindNextUnprot( sal_Bool bShift, sal_Bool bInSelection )
     SCTAB nTab = aViewData.GetTabNo();
 
     ScDocument* pDoc = aViewData.GetDocument();
-    pDoc->GetNextPos( nNewX,nNewY, nTab, nMove,0, bMarked,sal_True, rMark );
+    pDoc->GetNextPos( nNewX,nNewY, nTab, nMove,0, bMarked, true, rMark );
 
     SCCOL nTabCol = aViewData.GetTabStartCol();
     if ( nTabCol == SC_TABSTART_NONE )
         nTabCol = nCurX;                    // auf diese Spalte zurueck bei Enter
 
     MoveCursorRel( ((SCsCOL)nNewX)-(SCsCOL)nCurX, ((SCsROW)nNewY)-(SCsROW)nCurY,
-                        SC_FOLLOW_LINE, false, sal_True );
+                   SC_FOLLOW_LINE, false, true );
 
     //  in MoveCursorRel wird die TabCol zurueckgesetzt...
     aViewData.SetTabStartCol( nTabCol );
@@ -1296,7 +1296,7 @@ void ScTabView::MarkRows()
     SelectionChanged();
 }
 
-void ScTabView::MarkDataArea( sal_Bool bIncludeCursor )
+void ScTabView::MarkDataArea( bool bIncludeCursor )
 {
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB nTab = aViewData.GetTabNo();
@@ -1327,7 +1327,7 @@ void ScTabView::MarkMatrixFormula()
     }
 }
 
-void ScTabView::MarkRange( const ScRange& rRange, sal_Bool bSetCursor, sal_Bool bContinue )
+void ScTabView::MarkRange( const ScRange& rRange, bool bSetCursor, bool bContinue )
 {
     SCTAB nTab = rRange.aStart.Tab();
     SetTabNo( nTab );
@@ -1393,7 +1393,7 @@ void ScTabView::MarkDataChanged()
     UpdateSelectionOverlay();
 }
 
-void ScTabView::SelectNextTab( short nDir, sal_Bool bExtendSelection )
+void ScTabView::SelectNextTab( short nDir, bool bExtendSelection )
 {
     if (!nDir) return;
     OSL_ENSURE( nDir==-1 || nDir==1, "SelectNextTab: falscher Wert");
@@ -1730,7 +1730,7 @@ void ScTabView::UpdateEditView()
         }
 }
 
-void ScTabView::KillEditView( sal_Bool bNoPaint )
+void ScTabView::KillEditView( bool bNoPaint )
 {
     sal_uInt16 i;
     SCCOL nCol1 = aViewData.GetEditStartCol();
@@ -2221,16 +2221,16 @@ void ScTabView::PaintLeftArea( SCROW nStartRow, SCROW nEndRow )
     }
 }
 
-sal_Bool ScTabView::PaintExtras()
+bool ScTabView::PaintExtras()
 {
-    sal_Bool bRet = false;
+    bool bRet = false;
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB nTab = aViewData.GetTabNo();
     if (!pDoc->HasTable(nTab))                  // Tabelle geloescht ?
     {
         SCTAB nCount = pDoc->GetTableCount();
         aViewData.SetTabNo(nCount-1);
-        bRet = sal_True;
+        bRet = true;
     }
     pTabControl->UpdateStatus();                        // sal_True = active
     return bRet;
@@ -2265,7 +2265,7 @@ void ScTabView::RecalcPPT()
     }
 }
 
-void ScTabView::ActivateView( sal_Bool bActivate, sal_Bool bFirst )
+void ScTabView::ActivateView( bool bActivate, bool bFirst )
 {
     if ( bActivate == aViewData.IsActive() && !bFirst )
     {
@@ -2347,7 +2347,7 @@ void ScTabView::ActivatePart( ScSplitPos eWhich )
     ScSplitPos eOld = aViewData.GetActivePart();
     if ( eOld != eWhich )
     {
-        bInActivatePart = sal_True;
+        bInActivatePart = true;
 
         sal_Bool bRefMode = SC_MOD()->IsFormulaMode();
 

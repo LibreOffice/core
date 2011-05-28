@@ -56,16 +56,6 @@
 #include "scmod.hxx"
 #include "tabprotection.hxx"
 
-#define SC_BLOCKMODE_NONE       0
-#define SC_BLOCKMODE_NORMAL     1
-#define SC_BLOCKMODE_OWN        2
-
-
-
-//
-//          Markier - Funktionen
-//
-
 void ScTabView::PaintMarks(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow )
 {
     if (!ValidCol(nStartCol)) nStartCol = MAXCOL;
@@ -86,9 +76,9 @@ void ScTabView::PaintMarks(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
     PaintArea( nStartCol, nStartRow, nEndCol, nEndRow, SC_UPDATE_MARKS );
 }
 
-sal_Bool ScTabView::IsMarking( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
+bool ScTabView::IsMarking( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
-    return bIsBlockMode
+    return IsBlockMode()
         && nBlockStartX == nCol
         && nBlockStartY == nRow
         && nBlockStartZ == nTab;
@@ -96,7 +86,7 @@ sal_Bool ScTabView::IsMarking( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 
 void ScTabView::InitOwnBlockMode()
 {
-    if (!bIsBlockMode)
+    if (!IsBlockMode())
     {
         //  Wenn keine (alte) Markierung mehr da ist, Anker in SelectionEngine loeschen:
 
@@ -104,7 +94,7 @@ void ScTabView::InitOwnBlockMode()
         if (!rMark.IsMarked() && !rMark.IsMultiMarked())
             GetSelEngine()->CursorPosChanging( false, false );
 
-        bIsBlockMode = SC_BLOCKMODE_OWN;            //! Variable umbenennen!
+        meBlockMode = Own;
         nBlockStartX = 0;
         nBlockStartY = 0;
         nBlockStartZ = 0;
@@ -117,9 +107,9 @@ void ScTabView::InitOwnBlockMode()
 }
 
 void ScTabView::InitBlockMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
-                                sal_Bool bTestNeg, sal_Bool bCols, sal_Bool bRows )
+                               bool bTestNeg, bool bCols, bool bRows )
 {
-    if (!bIsBlockMode)
+    if (!IsBlockMode())
     {
         if (!ValidCol(nCurX)) nCurX = MAXCOL;
         if (!ValidRow(nCurY)) nCurY = MAXROW;
@@ -141,7 +131,7 @@ void ScTabView::InitBlockMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
             bBlockNeg = false;
         rMark.SetMarkNegative(bBlockNeg);
 
-        bIsBlockMode = SC_BLOCKMODE_NORMAL;         //! Variable umbenennen!
+        meBlockMode = Normal;
         bBlockCols = bCols;
         bBlockRows = bRows;
         nBlockStartX = nCurX;
@@ -169,13 +159,13 @@ void ScTabView::InitBlockMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
     }
 }
 
-void ScTabView::DoneBlockMode( sal_Bool bContinue )            // Default FALSE
+void ScTabView::DoneBlockMode( bool bContinue )
 {
     //  Wenn zwischen Tabellen- und Header SelectionEngine gewechselt wird,
     //  wird evtl. DeselectAll gerufen, weil die andere Engine keinen Anker hat.
     //  Mit bMoveIsShift wird verhindert, dass dann die Selektion aufgehoben wird.
 
-    if (bIsBlockMode && !bMoveIsShift)
+    if (IsBlockMode() && !bMoveIsShift)
     {
         ScMarkData& rMark = aViewData.GetMarkData();
         sal_Bool bFlag = rMark.GetMarkingFlag();
@@ -199,20 +189,25 @@ void ScTabView::DoneBlockMode( sal_Bool bContinue )            // Default FALSE
             else
                 rMark.ResetMark();
         }
-        bIsBlockMode = SC_BLOCKMODE_NONE;           //! Variable umbenennen!
+        meBlockMode = None;
 
         rMark.SetMarking(bFlag);
         rMark.SetMarkNegative(false);
     }
 }
 
+bool ScTabView::IsBlockMode() const
+{
+    return meBlockMode != None;
+}
+
 void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
-                            sal_Bool bCols, sal_Bool bRows, sal_Bool bCellSelection )
+                            bool bCols, bool bRows, bool bCellSelection )
 {
     if (!ValidCol(nCurX)) nCurX = MAXCOL;
     if (!ValidRow(nCurY)) nCurY = MAXROW;
 
-    if (!bIsBlockMode)
+    if (!IsBlockMode())
     {
         OSL_FAIL( "MarkCursor nicht im BlockMode" );
         InitBlockMode( nCurX, nCurY, nCurZ, false, bCols, bRows );
@@ -229,13 +224,13 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
     rMark.GetMarkArea(aMarkRange);
     if (( aMarkRange.aStart.Col() != nBlockStartX && aMarkRange.aEnd.Col() != nBlockStartX ) ||
         ( aMarkRange.aStart.Row() != nBlockStartY && aMarkRange.aEnd.Row() != nBlockStartY ) ||
-        ( bIsBlockMode == SC_BLOCKMODE_OWN ))
+        ( meBlockMode == Own ))
     {
         //  Markierung ist veraendert worden
         //  (z.B. MarkToSimple, wenn per negativ alles bis auf ein Rechteck geloescht wurde)
         //  oder nach InitOwnBlockMode wird mit Shift-Klick weitermarkiert...
 
-        sal_Bool bOldShift = bMoveIsShift;
+        bool bOldShift = bMoveIsShift;
         bMoveIsShift = false;               //  wirklich umsetzen
         DoneBlockMode(false);               //! direkt Variablen setzen? (-> kein Geflacker)
         bMoveIsShift = bOldShift;
@@ -977,12 +972,12 @@ void ScTabView::UpdateAllOverlays()
 //! PaintBlock in zwei Methoden aufteilen: RepaintBlock und RemoveBlock o.ae.
 //!
 
-void ScTabView::PaintBlock( sal_Bool bReset )
+void ScTabView::PaintBlock( bool bReset )
 {
     ScMarkData& rMark = aViewData.GetMarkData();
     SCTAB nTab = aViewData.GetTabNo();
-    sal_Bool bMark = rMark.IsMarked();
-    sal_Bool bMulti = rMark.IsMultiMarked();
+    bool bMark = rMark.IsMarked();
+    bool bMulti = rMark.IsMultiMarked();
     if (bMark || bMulti)
     {
         ScRange aMarkRange;
@@ -1008,7 +1003,7 @@ void ScTabView::PaintBlock( sal_Bool bReset )
         nBlockEndY = aMarkRange.aEnd.Row();
         nBlockEndZ = aMarkRange.aEnd.Tab();
 
-        sal_Bool bDidReset = false;
+        bool bDidReset = false;
 
         if ( nTab>=nBlockStartZ && nTab<=nBlockEndZ )
         {
@@ -1033,7 +1028,7 @@ void ScTabView::PaintBlock( sal_Bool bReset )
     }
 }
 
-void ScTabView::SelectAll( sal_Bool bContinue )
+void ScTabView::SelectAll( bool bContinue )
 {
     ScMarkData& rMark = aViewData.GetMarkData();
     SCTAB nTab = aViewData.GetTabNo();
@@ -1427,7 +1422,7 @@ Window* ScTabView::GetParentOrChild( sal_uInt16 nChildId )
     return aViewData.GetDialogParent();
 }
 
-void ScTabView::UpdatePageBreakData( sal_Bool bForcePaint )
+void ScTabView::UpdatePageBreakData( bool bForcePaint )
 {
     ScPageBreakData* pNewData = NULL;
 

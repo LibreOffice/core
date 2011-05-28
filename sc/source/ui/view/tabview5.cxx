@@ -373,7 +373,7 @@ void ScTabView::DrawDeselectAll()
     }
 }
 
-sal_Bool ScTabView::IsDrawTextEdit() const
+bool ScTabView::IsDrawTextEdit() const
 {
     if (pDrawView)
         return pDrawView->IsTextEdit();
@@ -386,12 +386,12 @@ SvxZoomType ScTabView::GetZoomType() const
     return aViewData.GetZoomType();
 }
 
-void ScTabView::SetZoomType( SvxZoomType eNew, sal_Bool bAll )
+void ScTabView::SetZoomType( SvxZoomType eNew, bool bAll )
 {
     aViewData.SetZoomType( eNew, bAll );
 }
 
-void ScTabView::SetZoom( const Fraction& rNewX, const Fraction& rNewY, sal_Bool bAll )
+void ScTabView::SetZoom( const Fraction& rNewX, const Fraction& rNewY, bool bAll )
 {
     aViewData.SetZoom( rNewX, rNewY, bAll );
     if (pDrawView)
@@ -407,7 +407,7 @@ void ScTabView::RefreshZoom()
     ZoomChanged();
 }
 
-void ScTabView::SetPagebreakMode( sal_Bool bSet )
+void ScTabView::SetPagebreakMode( bool bSet )
 {
     aViewData.SetPagebreakMode(bSet);
     if (pDrawView)
@@ -421,7 +421,7 @@ void ScTabView::ResetDrawDragMode()
         pDrawView->SetDragMode( SDRDRAG_MOVE );
 }
 
-void ScTabView::ViewOptionsHasChanged( sal_Bool bHScrollChanged, sal_Bool bGraphicsChanged )
+void ScTabView::ViewOptionsHasChanged( bool bHScrollChanged, bool bGraphicsChanged )
 {
     //  DrawView erzeugen, wenn Gitter angezeigt werden soll
     if ( !pDrawView && aViewData.GetOptions().GetGridOptions().GetGridVisible() )
@@ -434,11 +434,11 @@ void ScTabView::ViewOptionsHasChanged( sal_Bool bHScrollChanged, sal_Bool bGraph
         DrawEnableAnim(sal_True);   // DrawEnableAnim checks the options state
 
     // if TabBar is set to visible, make sure its size is not 0
-    sal_Bool bGrow = ( aViewData.IsTabMode() && pTabControl->GetSizePixel().Width() <= 0 );
+    bool bGrow = ( aViewData.IsTabMode() && pTabControl->GetSizePixel().Width() <= 0 );
 
     // if ScrollBar is set to visible, TabBar must make room
-    sal_Bool bShrink = ( bHScrollChanged && aViewData.IsTabMode() && aViewData.IsHScrollMode() &&
-                        pTabControl->GetSizePixel().Width() > SC_TABBAR_DEFWIDTH );
+    bool bShrink = ( bHScrollChanged && aViewData.IsTabMode() && aViewData.IsHScrollMode() &&
+                     pTabControl->GetSizePixel().Width() > SC_TABBAR_DEFWIDTH );
 
     if ( bGrow || bShrink )
     {
@@ -506,7 +506,7 @@ void ScTabView::DrawMarkRect( const Rectangle& rRect )
     }
 }
 
-void ScTabView::DrawEnableAnim(sal_Bool bSet)
+void ScTabView::DrawEnableAnim(bool bSet)
 {
     sal_uInt16 i;
     if ( pDrawView )
@@ -517,7 +517,7 @@ void ScTabView::DrawEnableAnim(sal_Bool bSet)
         {
             if ( !pDrawView->IsAnimationEnabled() )
             {
-                pDrawView->SetAnimationEnabled(sal_True);
+                pDrawView->SetAnimationEnabled(true);
 
                 //  Animierte GIFs muessen wieder gestartet werden:
                 ScDocument* pDoc = aViewData.GetDocument();
@@ -637,7 +637,7 @@ void ScTabView::MakeVisible( const Rectangle& rHMMRect )
 
 //---------------------------------------------------------------
 
-void ScTabView::SetBrushDocument( ScDocument* pNew, sal_Bool bLock )
+void ScTabView::SetBrushDocument( ScDocument* pNew, bool bLock )
 {
     delete pBrushDocument;
     delete pDrawBrushSet;
@@ -650,7 +650,7 @@ void ScTabView::SetBrushDocument( ScDocument* pNew, sal_Bool bLock )
     aViewData.GetBindings().Invalidate(SID_FORMATPAINTBRUSH);
 }
 
-void ScTabView::SetDrawBrushSet( SfxItemSet* pNew, sal_Bool bLock )
+void ScTabView::SetDrawBrushSet( SfxItemSet* pNew, bool bLock )
 {
     delete pBrushDocument;
     delete pDrawBrushSet;

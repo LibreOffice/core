@@ -172,7 +172,7 @@ void ScTabView::StopRefMode()
     AlignToCursor( aViewData.GetCurX(), aViewData.GetCurY(), SC_FOLLOW_NONE );
 }
 
-void ScTabView::DoneRefMode( sal_Bool bContinue )
+void ScTabView::DoneRefMode( bool bContinue )
 {
     ScDocument* pDoc = aViewData.GetDocument();
     if ( aViewData.GetRefType() == SC_REFTYPE_REF && bContinue )
@@ -306,7 +306,7 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
     }
 }
 
-void ScTabView::InitRefMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScRefType eType, sal_Bool bPaint )
+void ScTabView::InitRefMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScRefType eType, bool bPaint )
 {
     ScDocument* pDoc = aViewData.GetDocument();
     ScMarkData& rMark = aViewData.GetMarkData();
@@ -334,7 +334,7 @@ void ScTabView::InitRefMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScRefType eT
     }
 }
 
-void ScTabView::SetScrollBar( ScrollBar& rScroll, long nRangeMax, long nVisible, long nPos, sal_Bool bLayoutRTL )
+void ScTabView::SetScrollBar( ScrollBar& rScroll, long nRangeMax, long nVisible, long nPos, bool bLayoutRTL )
 {
     if ( nVisible == 0 )
         nVisible = 1;       // #i59893# don't use visible size 0
@@ -357,7 +357,7 @@ void ScTabView::SetScrollBar( ScrollBar& rScroll, long nRangeMax, long nVisible,
     }
 }
 
-long ScTabView::GetScrollBarPos( ScrollBar& rScroll, sal_Bool bLayoutRTL )
+long ScTabView::GetScrollBarPos( ScrollBar& rScroll, bool bLayoutRTL )
 {
     if ( bLayoutRTL )
         return -rScroll.GetThumbPos() - rScroll.GetVisibleSize();

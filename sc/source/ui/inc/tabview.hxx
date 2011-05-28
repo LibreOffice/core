@@ -71,14 +71,14 @@ class ScCornerButton : public Window
 {
 private:
     ScViewData*     pViewData;
-    sal_Bool            bAdd;
+    bool            bAdd;
 
 protected:
     virtual void    Paint( const Rectangle& rRect );
     virtual void    Resize();
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
 public:
-                    ScCornerButton( Window* pParent, ScViewData* pData, sal_Bool bAdditional );
+                    ScCornerButton( Window* pParent, ScViewData* pData, bool bAdditional );
                     ~ScCornerButton();
 
     virtual void    StateChanged( StateChangedType nType );
@@ -91,6 +91,8 @@ public:
 class ScTabView
 {
 private:
+    enum BlockMode { None = 0, Normal = 1, Own = 2 };
+
     Window*             pFrameWin;              // als erstes !!!
     ScViewData          aViewData;              // muss ganz vorne stehen !
 
@@ -106,8 +108,6 @@ private:
 
     Size                aFrameSize;             // wie bei DoResize uebergeben
     Point               aBorderPos;
-
-    sal_Bool                bDrawSelMode;           // nur Zeichenobjekte selektieren ?
 
     FuPoor*             pDrawActual;
     FuPoor*             pDrawOld;
@@ -135,7 +135,6 @@ private:
 
     ScDocument*         pBrushDocument;         // cell formats for format paint brush
     SfxItemSet*         pDrawBrushSet;          // drawing object attributes for paint brush
-    sal_Bool                bLockPaintBrush;        // keep for more than one use?
 
     Timer               aScrollTimer;
     ScGridWindow*       pTimerWindow;
@@ -143,13 +142,9 @@ private:
 
     sal_uLong               nTipVisible;
 
-    sal_Bool                bDragging;              // fuer Scrollbars
     long                nPrevDragPos;
 
-    sal_Bool                bIsBlockMode;           // Block markieren
-    sal_Bool                bBlockNeg;              // wird Markierung aufgehoben?
-    sal_Bool                bBlockCols;             // werden ganze Spalten markiert?
-    sal_Bool                bBlockRows;             // werden ganze Zeilen markiert?
+    BlockMode           meBlockMode;           // Block markieren
 
     SCCOL               nBlockStartX;
     SCCOL               nBlockEndX;
@@ -165,11 +160,17 @@ private:
 
     double              mfPendingTabBarWidth;       // Tab bar width relative to frame window width.
 
-    sal_Bool                bMinimized;
-    sal_Bool                bInUpdateHeader;
-    sal_Bool                bInActivatePart;
-    sal_Bool                bInZoomUpdate;
-    sal_Bool                bMoveIsShift;
+    bool                bMinimized:1;
+    bool                bInUpdateHeader:1;
+    bool                bInActivatePart:1;
+    bool                bInZoomUpdate:1;
+    bool                bMoveIsShift:1;
+    bool                bDrawSelMode:1;           // nur Zeichenobjekte selektieren ?
+    bool                bLockPaintBrush:1;        // keep for more than one use?
+    bool                bDragging:1;              // fuer Scrollbars
+    bool                bBlockNeg:1;              // wird Markierung aufgehoben?
+    bool                bBlockCols:1;             // werden ganze Spalten markiert?
+    bool                bBlockRows:1;             // werden ganze Zeilen markiert?
 
     void            Init();
 
@@ -187,8 +188,8 @@ private:
 
     void            UpdateVarZoom();
 
-    static void     SetScrollBar( ScrollBar& rScroll, long nRangeMax, long nVisible, long nPos, sal_Bool bLayoutRTL );
-    static long     GetScrollBarPos( ScrollBar& rScroll, sal_Bool bLayoutRTL );
+    static void     SetScrollBar( ScrollBar& rScroll, long nRangeMax, long nVisible, long nPos, bool bLayoutRTL );
+    static long     GetScrollBarPos( ScrollBar& rScroll, bool bLayoutRTL );
 
     void            GetPageMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, SCsCOL& rPageX, SCsROW& rPageY);
     void            GetAreaMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
@@ -210,9 +211,8 @@ protected:
     void            GetBorderSize( SvBorder& rBorder, const Size& rSize );
 
     void            ResetDrawDragMode();
-    sal_Bool            IsDrawTextEdit() const;
-    void            DrawEnableAnim(sal_Bool bSet);
-    //HMHvoid           DrawShowMarkHdl(sal_Bool bShow);
+    bool            IsDrawTextEdit() const;
+    void            DrawEnableAnim(bool bSet);
 
     void            MakeDrawView( sal_uInt8 nForceDesignMode = SC_FORCEMODE_NONE );
 
@@ -228,7 +228,7 @@ public:
 
     void            HideListBox();
 
-    sal_Bool            HasHintWindow() const   { return pInputHintWindow != NULL; }
+    bool            HasHintWindow() const   { return pInputHintWindow != NULL; }
     void            RemoveHintWindow();
     void            TestHintWindow();
 
@@ -249,13 +249,13 @@ public:
     /** Returns the pending tab bar width relative to the frame window width (0.0 ... 1.0). */
     double          GetPendingRelTabBarWidth() const;
 
-    void            DoResize( const Point& rOffset, const Size& rSize, sal_Bool bInner = false );
-    void            RepeatResize( sal_Bool bUpdateFix = sal_True );
+    void            DoResize( const Point& rOffset, const Size& rSize, bool bInner = false );
+    void            RepeatResize( bool bUpdateFix = true );
     void            UpdateFixPos();
     Point           GetGridOffset() const;
 
-    sal_Bool            IsDrawSelMode() const       { return bDrawSelMode; }
-    void            SetDrawSelMode(sal_Bool bNew)   { bDrawSelMode = bNew; }
+    bool            IsDrawSelMode() const       { return bDrawSelMode; }
+    void            SetDrawSelMode(bool bNew)   { bDrawSelMode = bNew; }
 
     void            SetDrawFuncPtr(FuPoor* pFuncPtr)    { pDrawActual = pFuncPtr; }
     void            SetDrawFuncOldPtr(FuPoor* pFuncPtr) { pDrawOld = pFuncPtr; }
@@ -269,7 +269,7 @@ public:
     ScPageBreakData* GetPageBreakData()     { return pPageBreakData; }
     ScHighlightRanges* GetHighlightRanges() { return pHighlightRanges; }
 
-    void            UpdatePageBreakData( sal_Bool bForcePaint = false );
+    void            UpdatePageBreakData( bool bForcePaint = false );
 
     void            DrawMarkRect( const Rectangle& rRect );
 
@@ -279,18 +279,22 @@ public:
     ScViewFunctionSet*      GetFunctionSet()    { return &aFunctionSet; }
     ScViewSelectionEngine*  GetSelEngine()      { return pSelEngine; }
 
-    sal_Bool            SelMouseButtonDown( const MouseEvent& rMEvt );
+    bool            SelMouseButtonDown( const MouseEvent& rMEvt );
 
     ScDrawView*     GetScDrawView()         { return pDrawView; }
     SdrView*        GetSdrView();           // gegen CLOKs
 
-    sal_Bool            IsMinimized() const     { return bMinimized; }
+    bool            IsMinimized() const     { return bMinimized; }
 
-    // bSameTabButMoved = true if the same sheet as before is activated, used after moving/copying/inserting/deleting a sheet
+    /**
+     * Called after moving, copying, inserting or deleting a sheet.
+     *
+     * @param bSameTabButMoved true if the same sheet as before is activated.
+     */
     void            TabChanged( bool bSameTabButMoved = false );
-    void            SetZoom( const Fraction& rNewX, const Fraction& rNewY, sal_Bool bAll );
+    void            SetZoom( const Fraction& rNewX, const Fraction& rNewY, bool bAll );
     SC_DLLPUBLIC void            RefreshZoom();
-    void            SetPagebreakMode( sal_Bool bSet );
+    void            SetPagebreakMode( bool bSet );
 
     void            UpdateLayerLocks();
 
@@ -300,8 +304,8 @@ public:
     void            UpdateInputLine();
 
     void            InitRefMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScRefType eType,
-                                    sal_Bool bPaint = sal_True );
-    void            DoneRefMode( sal_Bool bContinue = false );
+                                 bool bPaint = true );
+    void            DoneRefMode( bool bContinue = false );
     void            UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ );
     void            StopRefMode();
 
@@ -317,9 +321,9 @@ public:
 
     void            ActiveGrabFocus();
 
-    void            ClickCursor( SCCOL nPosX, SCROW nPosY, sal_Bool bControl );
+    void            ClickCursor( SCCOL nPosX, SCROW nPosY, bool bControl );
 
-    SC_DLLPUBLIC void           SetCursor( SCCOL nPosX, SCROW nPosY, sal_Bool bNew = false );
+    SC_DLLPUBLIC void SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew = false );
 
     SC_DLLPUBLIC void           CellContentChanged();
     void            SelectionChanged();
@@ -347,12 +351,10 @@ public:
                                     const ScSplitPos* pWhich = NULL );
 
     SvxZoomType     GetZoomType() const;
-    void            SetZoomType( SvxZoomType eNew, sal_Bool bAll );
+    void            SetZoomType( SvxZoomType eNew, bool bAll );
     sal_uInt16          CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom );
 
-//  void            CalcZoom( SvxZoomType eType, sal_uInt16& rZoom, SCCOL& rCol, SCROW& rRow );
-
-    sal_Bool        HasPageFieldDataAtCursor() const;
+    bool            HasPageFieldDataAtCursor() const;
     void            StartDataSelect();
 
                     //  MoveCursorAbs       - absolut
@@ -361,40 +363,40 @@ public:
                     //  MoveCursorArea      - Datenblock
                     //  MoveCursorEnd       - links oben / benutzter Bereich
 
-    SC_DLLPUBLIC void           MoveCursorAbs( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
-                                    sal_Bool bShift, sal_Bool bControl,
-                                    sal_Bool bKeepOld = false, sal_Bool bKeepSel = false );
+    SC_DLLPUBLIC void MoveCursorAbs( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
+                                     bool bShift, bool bControl,
+                                     bool bKeepOld = false, bool bKeepSel = false );
     void            MoveCursorRel( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
-                                    sal_Bool bShift, sal_Bool bKeepSel = false );
+                                   bool bShift, bool bKeepSel = false );
     void            MoveCursorPage( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
-                                    sal_Bool bShift, sal_Bool bKeepSel = false );
+                                    bool bShift, bool bKeepSel = false );
     void            MoveCursorArea( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
-                                    sal_Bool bShift, sal_Bool bKeepSel = false );
+                                    bool bShift, bool bKeepSel = false );
     void            MoveCursorEnd( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
-                                    sal_Bool bShift, sal_Bool bKeepSel = false );
-    void            MoveCursorScreen( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode, sal_Bool bShift );
+                                   bool bShift, bool bKeepSel = false );
+    void            MoveCursorScreen( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode, bool bShift );
 
-    void            MoveCursorEnter( sal_Bool bShift );     // Shift fuer Richtung (kein Markieren)
+    void            MoveCursorEnter( bool bShift );     // Shift fuer Richtung (kein Markieren)
 
-    sal_Bool            MoveCursorKeyInput( const KeyEvent& rKeyEvent );
+    bool            MoveCursorKeyInput( const KeyEvent& rKeyEvent );
 
-    void            FindNextUnprot( sal_Bool bShift, sal_Bool bInSelection = sal_True );
+    void            FindNextUnprot( bool bShift, bool bInSelection = true );
 
     SC_DLLPUBLIC void SetTabNo( SCTAB nTab, bool bNew = false, bool bExtendSelection = false, bool bSameTabButMoved = false );
-    void            SelectNextTab( short nDir, sal_Bool bExtendSelection = false );
+    void            SelectNextTab( short nDir, bool bExtendSelection = false );
 
-    void            ActivateView( sal_Bool bActivate, sal_Bool bFirst );
+    void            ActivateView( bool bActivate, bool bFirst );
     void            ActivatePart( ScSplitPos eWhich );
-    sal_Bool            IsInActivatePart() const    { return bInActivatePart; }
+    bool            IsInActivatePart() const    { return bInActivatePart; }
 
     void            SetTimer( ScGridWindow* pWin, const MouseEvent& rMEvt );
     void            ResetTimer();
 
-    void            ScrollX( long nDeltaX, ScHSplitPos eWhich, sal_Bool bUpdBars = sal_True );
-    void            ScrollY( long nDeltaY, ScVSplitPos eWhich, sal_Bool bUpdBars = sal_True );
+    void            ScrollX( long nDeltaX, ScHSplitPos eWhich, bool bUpdBars = true );
+    void            ScrollY( long nDeltaY, ScVSplitPos eWhich, bool bUpdBars = true );
     SC_DLLPUBLIC void           ScrollLines( long nDeltaX, long nDeltaY );              // aktives
 
-    sal_Bool            ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos );
+    bool            ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos );
 
     void            ScrollToObject( SdrObject* pDrawObj );
     void            MakeVisible( const Rectangle& rHMMRect );
@@ -412,7 +414,7 @@ public:
     void            PaintLeftArea( SCROW nStartRow, SCROW nEndRow );
     void            PaintLeft();
 
-    sal_Bool            PaintExtras();
+    bool            PaintExtras();
 
     void            RecalcPPT();
 
@@ -443,25 +445,25 @@ public:
     void            InvalidateAttribs();
 
     void            MakeEditView( ScEditEngineDefaulter* pEngine, SCCOL nCol, SCROW nRow );
-    void            KillEditView( sal_Bool bNoPaint );
+    void            KillEditView( bool bNoPaint );
     void            UpdateEditView();
 
 
                                     //  Bloecke
 
-    void            SelectAll( sal_Bool bContinue = false );
+    void            SelectAll( bool bContinue = false );
     void            SelectAllTables();
     void            DeselectAllTables();
 
     void            MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
-                                sal_Bool bCols = false, sal_Bool bRows = false, sal_Bool bCellSelection = false );
+                                bool bCols = false, bool bRows = false, bool bCellSelection = false );
     void            InitBlockMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
-                                    sal_Bool bTestNeg = false,
-                                    sal_Bool bCols = false, sal_Bool bRows = false );
+                                   bool bTestNeg = false,
+                                   bool bCols = false, bool bRows = false );
     void            InitOwnBlockMode();
-    void            DoneBlockMode( sal_Bool bContinue = false );
+    void            DoneBlockMode( bool bContinue = false );
 
-    sal_Bool            IsBlockMode() const     { return bIsBlockMode; }
+    bool            IsBlockMode() const;
 
     void            ExpandBlock(SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode);
     void            ExpandBlockPage(SCsCOL nMovX, SCsROW nMovY);
@@ -469,47 +471,47 @@ public:
 
     void            MarkColumns();
     void            MarkRows();
-    void            MarkDataArea( sal_Bool bIncludeCursor = sal_True );
+    void            MarkDataArea( bool bIncludeCursor = true );
     void            MarkMatrixFormula();
     void            Unmark();
 
-    void            MarkRange( const ScRange& rRange, sal_Bool bSetCursor = sal_True, sal_Bool bContinue = false );
+    void            MarkRange( const ScRange& rRange, bool bSetCursor = true, bool bContinue = false );
 
-    sal_Bool            IsMarking( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
+    bool            IsMarking( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
 
     void            PaintMarks( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow );
-    void            PaintBlock( sal_Bool bReset = false );
+    void            PaintBlock( bool bReset = false );
 
     void            SetMarkData( const ScMarkData& rNew );
     void            MarkDataChanged();
 
     void            LockModifiers( sal_uInt16 nModifiers );
     sal_uInt16          GetLockedModifiers() const;
-    void            ViewOptionsHasChanged( sal_Bool bHScrollChanged,
-                                            sal_Bool bGraphicsChanged = false);
+    void            ViewOptionsHasChanged( bool bHScrollChanged,
+                                           bool bGraphicsChanged = false);
 
     Point           GetMousePosPixel();
 
     void            SnapSplitPos( Point& rScreenPosPixel );
-    void            FreezeSplitters( sal_Bool bFreeze );
+    void            FreezeSplitters( bool bFreeze );
     void            RemoveSplit();
     void            SplitAtCursor();
-    void            SplitAtPixel( const Point& rPixel, sal_Bool bHor, sal_Bool bVer );
+    void            SplitAtPixel( const Point& rPixel, bool bHor, bool bVer );
     void            InvalidateSplit();
 
     void            ErrorMessage( sal_uInt16 nGlobStrId );
     Window*         GetParentOrChild( sal_uInt16 nChildId );
 
-    void            EnableRefInput(sal_Bool bFlag=sal_True);
+    void            EnableRefInput(bool bFlag = true);
 
     Window*         GetFrameWin() const { return pFrameWin; }
 
-    sal_Bool            HasPaintBrush() const           { return pBrushDocument || pDrawBrushSet; }
+    bool            HasPaintBrush() const           { return pBrushDocument || pDrawBrushSet; }
     ScDocument*     GetBrushDocument() const        { return pBrushDocument; }
     SfxItemSet*     GetDrawBrushSet() const         { return pDrawBrushSet; }
-    sal_Bool            IsPaintBrushLocked() const      { return bLockPaintBrush; }
-    void            SetBrushDocument( ScDocument* pNew, sal_Bool bLock );
-    void            SetDrawBrushSet( SfxItemSet* pNew, sal_Bool bLock );
+    bool            IsPaintBrushLocked() const      { return bLockPaintBrush; }
+    void            SetBrushDocument( ScDocument* pNew, bool bLock );
+    void            SetDrawBrushSet( SfxItemSet* pNew, bool bLock );
     void            ResetBrushDocument();
 };
 
