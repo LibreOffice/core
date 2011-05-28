@@ -152,11 +152,9 @@ private:
     sal_Bool                bBlockRows;             // werden ganze Zeilen markiert?
 
     SCCOL               nBlockStartX;
-    SCCOL               nBlockStartXOrig;
     SCCOL               nBlockEndX;
 
     SCROW               nBlockStartY;
-    SCROW               nBlockStartYOrig;
     SCROW               nBlockEndY;
 
     SCTAB               nBlockStartZ;
