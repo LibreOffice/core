@@ -244,17 +244,11 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
                         nBlockStartZ, rMark.IsMarkNegative(), bCols, bRows );
     }
 
-    SCCOL nOldBlockEndX = nBlockEndX;
-    SCROW nOldBlockEndY = nBlockEndY;
-
     if ( nCurX != nOldCurX || nCurY != nOldCurY )
     {
         // Current cursor has moved
 
-        SCTAB       nTab = nCurZ;
-
-        // Set old selection area
-        ScUpdateRect aRect( nBlockStartX, nBlockStartY, nOldBlockEndX, nOldBlockEndY );
+        SCTAB nTab = nCurZ;
 
         if ( bCellSelection )
         {
@@ -266,7 +260,7 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
             SCsCOL nBlockStartXOffset = 0;
             SCsROW nCurYOffset = 0;
             SCsROW nBlockStartYOffset = 0;
-            sal_Bool bBlockStartMerged = false;
+            bool bBlockStartMerged = false;
             const ScMergeAttr* pMergeAttr = NULL;
             ScDocument* pDocument = aViewData.GetDocument();
 
@@ -351,10 +345,8 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
             nBlockEndX = nCurX;
             nBlockEndY = nCurY;
         }
-        // end of "if ( bCellSelection )"
 
         // Set new selection area
-        aRect.SetNew( nBlockStartX, nBlockStartY, nBlockEndX, nBlockEndY );
         rMark.SetMarkArea( ScRange( nBlockStartX, nBlockStartY, nTab, nBlockEndX, nBlockEndY, nTab ) );
 
         UpdateSelectionOverlay();
