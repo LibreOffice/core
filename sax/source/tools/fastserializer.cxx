@@ -39,7 +39,7 @@
 #include <string.h>
 
 #if DEBUG
-#include <cstdio>
+#include <iostream>
 #endif
 
 using ::comphelper::SequenceAsVector;
@@ -354,12 +354,9 @@ namespace sax_fastparser {
         int i = 0;
         while ( !aCopy.empty() )
         {
-            fprintf( stderr, "%d\n", nSize - i );
-
+            std::cerr << nSize - i << "\n";
             aCopy.top( )->print( );
-
-            fprintf( stderr, "\n" );
-
+            std::cerr << "\n";
             aCopy.pop( );
             i++;
         }
@@ -408,19 +405,19 @@ namespace sax_fastparser {
 #if DEBUG
     void FastSaxSerializer::ForMerge::print( )
     {
-        fprintf( stderr, "Data: " );
+        std::cerr << "Data: ";
         for ( sal_Int32 i=0, len=maData.getLength(); i < len; i++ )
         {
-            fprintf( stderr, "%c", maData[i] );
+            std::cerr << maData[i];
         }
 
-        fprintf( stderr, "\nPostponed: " );
+        std::cerr << "\nPostponed: ";
         for ( sal_Int32 i=0, len=maPostponed.getLength(); i < len; i++ )
         {
-            fprintf( stderr, "%c", maPostponed[i] );
+            std::cerr << maPostponed[i];
         }
 
-        fprintf( stderr, "\n" );
+        std::cerr << "\n";
     }
 #endif
 
@@ -514,10 +511,10 @@ namespace sax_fastparser {
         std::map< sal_Int32, Int8Sequence >::iterator iter = maData.begin();
         while ( iter != maData.end( ) )
         {
-            fprintf( stderr, "pair: %d, ", iter->first );
+            std::cerr << "pair: " << iter->first;
             for ( sal_Int32 i=0, len=iter->second.getLength(); i < len; ++i )
-                fprintf( stderr, "%c", iter->second[i] );
-            fprintf( stderr, "\n" );
+                std::cerr << iter->second[i];
+            std::cerr << "\n";
             ++iter;
         }
 
