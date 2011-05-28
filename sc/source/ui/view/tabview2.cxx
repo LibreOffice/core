@@ -56,6 +56,106 @@
 #include "scmod.hxx"
 #include "tabprotection.hxx"
 
+namespace {
+
+/**
+ * Expand selection area accordingly when the current selection ends with a
+ * merged cell.
+ */
+void expandSelectionByMergedCell(
+    SCsCOL& rBlockStartX, SCsROW& rBlockStartY, SCsCOL& rBlockEndX, SCsROW& rBlockEndY,
+    SCCOL nCurX, SCROW nCurY, SCTAB nTab, ScDocument* pDoc)
+{
+    SCsCOL nBlockStartXOld = rBlockStartX;
+    SCsROW nBlockStartYOld = rBlockStartY;
+
+    SCsCOL nCurXOffset = 0;
+    SCsCOL nBlockStartXOffset = 0;
+    SCsROW nCurYOffset = 0;
+    SCsROW nBlockStartYOffset = 0;
+    bool bBlockStartMerged = false;
+    const ScMergeAttr* pMergeAttr = NULL;
+
+    // The following block checks whether or not the "BlockStart" (anchor)
+    // cell is merged.  If it's merged, it'll then move the position of the
+    // anchor cell to the corner that's diagonally opposite of the
+    // direction of a current selection area.  For instance, if a current
+    // selection is moving in the upperleft direction, the anchor cell will
+    // move to the lower-right corner of the merged anchor cell, and so on.
+
+    pMergeAttr = static_cast<const ScMergeAttr*>(
+        pDoc->GetAttr(rBlockStartX, rBlockStartY, nTab, ATTR_MERGE));
+
+    if (pMergeAttr->IsMerged())
+    {
+        SCsCOL nColSpan = pMergeAttr->GetColMerge();
+        SCsROW nRowSpan = pMergeAttr->GetRowMerge();
+
+        if ( !(nCurX >= nBlockStartXOld + nColSpan - 1 && nCurY >= nBlockStartYOld + nRowSpan - 1) )
+        {
+            rBlockStartX = nCurX >= nBlockStartXOld ? nBlockStartXOld : nBlockStartXOld + nColSpan - 1;
+            rBlockStartY = nCurY >= nBlockStartYOld ? nBlockStartYOld : nBlockStartYOld + nRowSpan - 1;
+            nCurXOffset  = nCurX >= nBlockStartXOld && nCurX < nBlockStartXOld + nColSpan - 1 ?
+                nBlockStartXOld - nCurX + nColSpan - 1 : 0;
+            nCurYOffset  = nCurY >= nBlockStartYOld && nCurY < nBlockStartYOld + nRowSpan - 1 ?
+                nBlockStartYOld - nCurY + nRowSpan - 1 : 0;
+            bBlockStartMerged = true;
+        }
+    }
+
+    // The following block checks whether or not the current cell is
+    // merged.  If it is, it'll then set the appropriate X & Y offset
+    // values (nCurXOffset & nCurYOffset) such that the selection area will
+    // grow by those specified offset amounts.  Note that the values of
+    // nCurXOffset/nCurYOffset may also be specified in the previous code
+    // block, in which case whichever value is greater will take on.
+
+    pMergeAttr = static_cast<const ScMergeAttr*>(
+        pDoc->GetAttr(nCurX, nCurY, nTab, ATTR_MERGE));
+    if ( pMergeAttr->IsMerged() )
+    {
+        SCsCOL nColSpan = pMergeAttr->GetColMerge();
+        SCsROW nRowSpan = pMergeAttr->GetRowMerge();
+
+        if ( !(rBlockStartX >= nCurX + nColSpan - 1 && rBlockStartY >= nCurY + nRowSpan - 1) )
+        {
+            if ( rBlockStartX <= nCurX + nColSpan - 1 )
+            {
+                SCsCOL nCurXOffsetTemp = nCurX < nCurX + nColSpan - 1 ? nColSpan - 1 : 0;
+                nCurXOffset = nCurXOffset > nCurXOffsetTemp ? nCurXOffset : nCurXOffsetTemp;
+            }
+            if ( rBlockStartY <= nCurY + nRowSpan - 1 )
+            {
+                SCsROW nCurYOffsetTemp = nCurY < nCurY + nRowSpan - 1 ? nRowSpan - 1 : 0;
+                nCurYOffset = nCurYOffset > nCurYOffsetTemp ? nCurYOffset : nCurYOffsetTemp;
+            }
+            if ( !( rBlockStartX <= nCurX && rBlockStartY <= nCurY ) &&
+                 !( rBlockStartX > nCurX + nColSpan - 1 && rBlockStartY > nCurY + nRowSpan - 1 ) )
+            {
+                nBlockStartXOffset = rBlockStartX > nCurX && rBlockStartX <= nCurX + nColSpan - 1 ? nCurX - rBlockStartX : 0;
+                nBlockStartYOffset = rBlockStartY > nCurY && rBlockStartY <= nCurY + nRowSpan - 1 ? nCurY - rBlockStartY : 0;
+            }
+        }
+    }
+    else
+    {
+        // The current cell is not merged.  Move the anchor cell to its
+        // original position.
+        if (!bBlockStartMerged)
+        {
+            rBlockStartX = nBlockStartXOld;
+            rBlockStartY = nBlockStartYOld;
+        }
+    }
+
+    rBlockStartX = rBlockStartX + nBlockStartXOffset >= 0 ? rBlockStartX + nBlockStartXOffset : 0;
+    rBlockStartY = rBlockStartY + nBlockStartYOffset >= 0 ? rBlockStartY + nBlockStartYOffset : 0;
+    rBlockEndX = nCurX + nCurXOffset > MAXCOL ? MAXCOL : nCurX + nCurXOffset;
+    rBlockEndY = nCurY + nCurYOffset > MAXROW ? MAXROW : nCurY + nCurYOffset;
+}
+
+}
+
 void ScTabView::PaintMarks(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow )
 {
     if (!ValidCol(nStartCol)) nStartCol = MAXCOL;
@@ -247,93 +347,9 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
 
         if ( bCellSelection )
         {
-            // Expand selection area accordingly when the current selection ends
-            // with a merged cell.
-            SCsCOL nBlockStartXOld = nBlockStartX;
-            SCsROW nBlockStartYOld = nBlockStartY;
-            SCsCOL nCurXOffset = 0;
-            SCsCOL nBlockStartXOffset = 0;
-            SCsROW nCurYOffset = 0;
-            SCsROW nBlockStartYOffset = 0;
-            bool bBlockStartMerged = false;
-            const ScMergeAttr* pMergeAttr = NULL;
-            ScDocument* pDocument = aViewData.GetDocument();
-
-            // The following block checks whether or not the "BlockStart" (anchor)
-            // cell is merged.  If it's merged, it'll then move the position of the
-            // anchor cell to the corner that's diagonally opposite of the
-            // direction of a current selection area.  For instance, if a current
-            // selection is moving in the upperleft direction, the anchor cell will
-            // move to the lower-right corner of the merged anchor cell, and so on.
-
-            pMergeAttr = static_cast<const ScMergeAttr*>(
-                pDocument->GetAttr( nBlockStartX, nBlockStartY, nTab, ATTR_MERGE ) );
-            if ( pMergeAttr->IsMerged() )
-            {
-                SCsCOL nColSpan = pMergeAttr->GetColMerge();
-                SCsROW nRowSpan = pMergeAttr->GetRowMerge();
-
-                if ( !( nCurX >= nBlockStartXOld + nColSpan - 1 && nCurY >= nBlockStartYOld + nRowSpan - 1 ) )
-                {
-                    nBlockStartX = nCurX >= nBlockStartXOld ? nBlockStartXOld : nBlockStartXOld + nColSpan - 1;
-                    nBlockStartY = nCurY >= nBlockStartYOld ? nBlockStartYOld : nBlockStartYOld + nRowSpan - 1;
-                    nCurXOffset  = nCurX >= nBlockStartXOld && nCurX < nBlockStartXOld + nColSpan - 1 ?
-                        nBlockStartXOld - nCurX + nColSpan - 1 : 0;
-                    nCurYOffset  = nCurY >= nBlockStartYOld && nCurY < nBlockStartYOld + nRowSpan - 1 ?
-                        nBlockStartYOld - nCurY + nRowSpan - 1 : 0;
-                    bBlockStartMerged = sal_True;
-                }
-            }
-
-            // The following block checks whether or not the current cell is
-            // merged.  If it is, it'll then set the appropriate X & Y offset
-            // values (nCurXOffset & nCurYOffset) such that the selection area will
-            // grow by those specified offset amounts.  Note that the values of
-            // nCurXOffset/nCurYOffset may also be specified in the previous code
-            // block, in which case whichever value is greater will take on.
-
-            pMergeAttr = static_cast<const ScMergeAttr*>(
-                pDocument->GetAttr( nCurX, nCurY, nTab, ATTR_MERGE ) );
-            if ( pMergeAttr->IsMerged() )
-            {
-                SCsCOL nColSpan = pMergeAttr->GetColMerge();
-                SCsROW nRowSpan = pMergeAttr->GetRowMerge();
-
-                if ( !( nBlockStartX >= nCurX + nColSpan - 1 && nBlockStartY >= nCurY + nRowSpan - 1 ) )
-                {
-                    if ( nBlockStartX <= nCurX + nColSpan - 1 )
-                    {
-                        SCsCOL nCurXOffsetTemp = nCurX < nCurX + nColSpan - 1 ? nColSpan - 1 : 0;
-                        nCurXOffset = nCurXOffset > nCurXOffsetTemp ? nCurXOffset : nCurXOffsetTemp;
-                    }
-                    if ( nBlockStartY <= nCurY + nRowSpan - 1 )
-                    {
-                        SCsROW nCurYOffsetTemp = nCurY < nCurY + nRowSpan - 1 ? nRowSpan - 1 : 0;
-                        nCurYOffset = nCurYOffset > nCurYOffsetTemp ? nCurYOffset : nCurYOffsetTemp;
-                    }
-                    if ( !( nBlockStartX <= nCurX && nBlockStartY <= nCurY ) &&
-                         !( nBlockStartX > nCurX + nColSpan - 1 && nBlockStartY > nCurY + nRowSpan - 1 ) )
-                    {
-                        nBlockStartXOffset = nBlockStartX > nCurX && nBlockStartX <= nCurX + nColSpan - 1 ? nCurX - nBlockStartX : 0;
-                        nBlockStartYOffset = nBlockStartY > nCurY && nBlockStartY <= nCurY + nRowSpan - 1 ? nCurY - nBlockStartY : 0;
-                    }
-                }
-            }
-            else
-            {
-                // The current cell is not merged.  Move the anchor cell to its
-                // original position.
-                if ( !bBlockStartMerged )
-                {
-                    nBlockStartX = nBlockStartXOld;
-                    nBlockStartY = nBlockStartYOld;
-                }
-            }
-
-            nBlockStartX = nBlockStartX + nBlockStartXOffset >= 0 ? nBlockStartX + nBlockStartXOffset : 0;
-            nBlockStartY = nBlockStartY + nBlockStartYOffset >= 0 ? nBlockStartY + nBlockStartYOffset : 0;
-            nBlockEndX = nCurX + nCurXOffset > MAXCOL ? MAXCOL : nCurX + nCurXOffset;
-            nBlockEndY = nCurY + nCurYOffset > MAXROW ? MAXROW : nCurY + nCurYOffset;
+            expandSelectionByMergedCell(
+                nBlockStartX, nBlockStartY, nBlockEndX, nBlockEndY,
+                nCurX, nCurY, nTab, aViewData.GetDocument());
         }
         else
         {
