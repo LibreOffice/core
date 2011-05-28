@@ -33,8 +33,8 @@ $(eval $(call gb_Library_add_precompiled_header,desktop_detector,$(SRCDIR)/vcl/i
 
 $(eval $(call gb_Library_set_include,desktop_detector,\
     $$(INCLUDE) \
-    -I$(SRCDIR)/vcl/inc \
-    -I$(SRCDIR)/vcl/inc/pch \
+    -I$(realpath $(SRCDIR)/vcl/inc) \
+    -I$(realpath $(SRCDIR)/vcl/inc/pch) \
     -I$(SRCDIR)/solenv/inc \
     -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \

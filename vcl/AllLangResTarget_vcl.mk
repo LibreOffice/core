@@ -37,7 +37,7 @@ $(eval $(call gb_SrsTarget_SrsTarget,vcl/source/src))
 
 $(eval $(call gb_SrsTarget_set_include,vcl/source/src,\
         $$(INCLUDE) \
-        -I$(SRCDIR)/vcl/inc \
+        -I$(realpath $(SRCDIR)/vcl/inc) \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,vcl/source/src,\

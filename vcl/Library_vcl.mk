@@ -40,12 +40,12 @@ $(eval $(call gb_Library_add_package_headers,vcl,vcl_afmhash))
 
 $(eval $(call gb_Library_set_include,vcl,\
     $$(INCLUDE) \
-    -I$(SRCDIR)/vcl/inc \
-    -I$(SRCDIR)/vcl/inc/pch \
+    -I$(realpath $(SRCDIR)/vcl/inc) \
+    -I$(realpath $(SRCDIR)/vcl/inc/pch) \
     -I$(SRCDIR)/solenv/inc \
     -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
-	-I$(WORKDIR)/CustomTarget/vcl/unx/generic/fontmanager \
+    -I$(WORKDIR)/CustomTarget/vcl/unx/generic/fontmanager \
 ))
 ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_set_cxxflags,vcl,\
@@ -80,13 +80,6 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
     $(gb_STDLIBS) \
 ))
 
-ifneq ($(ENABLE_GRAPHITE),)
-ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_linked_libs,vcl,\
-    graphite_dll \
-))
-endif
-endif
 ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_add_linked_libs,vcl,\
     freetype \
