@@ -48,6 +48,10 @@ $(eval $(call gb_Library_set_defs,vclplug_gtk,\
 ))
 
 ifneq ($(ENABLE_DBUS),)
+$(eval $(call gb_Library_set_include,vclplug_gtk,\
+	$$(INCLUDE) \
+	$(filter -I%,$(shell pkg-config --cflags dbus-glib-1)) \
+))
 $(eval $(call gb_Library_set_defs,vclplug_gtk,\
     $$(DEFS) \
     -DENABLE_DBUS \
