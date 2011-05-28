@@ -51,18 +51,23 @@ PATCH_FILES=
 CONFIGURE_DIR=
 
 .IF "$(OS)"=="MACOSX"
+.IF "$(SYSTEM_LIBXML)"=="YES"
+LIBXML2_INCLUDE=-I/usr/include/libxml2
+.ELSE
+LIBXML2_INCLUDE=
+.ENDIF
 CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) \
                  .$/configure \
                  --prefix=$(SRC_ROOT)$/$(PRJNAME)$/$(MISC) \
-                 CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) -I$(SOLARINCDIR)$/external -I$(SOLARINCDIR)$/external$/glib-2.0" \
+                 CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) -I$(SOLARINCDIR)$/external -I$(SOLARINCDIR)$/external$/glib-2.0 $(LIBXML2_INCLUDE)" \
                  LDFLAGS="-L$(SOLARLIBDIR)" \
                  GLIB2_CFLAGS="-I$(SOLARINCDIR)$/external$/glib-2.0" \
                  GLIB2_LIBS="-lgio-2.0 -lgobject-2.0 -lgthread-2.0 -lglib-2.0 -lintl" \
                  LIBXML2_CFLAGS=" " \
                  LIBXML2_LIBS="-lxml2"
-                 
+
 CONFIGURE_FLAGS=$(eq,$(OS),MACOSX CPPFLAGS="$(EXTRA_CDEFS)" $(NULL))
-                
+
 BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) \
              $(GNUMAKE)
 BUILD_DIR=$(CONFIGURE_DIR)
