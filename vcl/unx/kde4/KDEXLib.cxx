@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-#include <vos/process.hxx>
-
 #include "VCLKDEApplication.hxx"
 
 #define Region QtXRegion
