@@ -310,7 +310,7 @@
  	$(GLIB_GEN_MARSHAL) --prefix=_gio_marshal gio-marshal.list --header >> xgen-gwmh \
 -	&& copy /y xgen-gwmh gio-marshal.h \
 -	&& del xgen-gwmh xgen-gwmh~
-+	&& $(GNUCOPY) /y xgen-gwmh gio-marshal.h \
++	&& cp xgen-gwmh gio-marshal.h \
 +	&& rm xgen-gwmh xgen-gwmh~
  
  gio-marshal.c: gio-marshal.h
@@ -318,7 +318,7 @@
  	&& $(GLIB_GEN_MARSHAL) --prefix=_gio_marshal gio-marshal.list --body >> xgen-gwmc \
 -	&& copy xgen-gwmc gio-marshal.c \
 -	&& del xgen-gwmc xgen-gwmc~
-+	&& $(GNUCOPY) xgen-gwmc gio-marshal.c \
++	&& cp xgen-gwmc gio-marshal.c \
 +	&& rm xgen-gwmc xgen-gwmc~
  
  local_sources = \
@@ -328,7 +328,7 @@
  
  $(PRJ_TOP)\config.h: $(PRJ_TOP)\config.h.win32
 -	copy $(PRJ_TOP)\config.h.win32 $(PRJ_TOP)\config.h
-+	$(GNUCOPY) $(PRJ_TOP)\config.h.win32 $(PRJ_TOP)\config.h
++	cp $(PRJ_TOP)\config.h.win32 $(PRJ_TOP)\config.h
  
  gioenumtypes.h: $(gio_headers) gioenumtypes.h.template
  	$(PERL) ..\gobject\glib-mkenums --template gioenumtypes.h.template $(gio_headers) > gioenumtypes.h
@@ -479,11 +479,11 @@
 -..\glibconfig.h: ..\glibconfig.h.win32
 -	copy ..\glibconfig.h.win32 ..\glibconfig.h
 +glibconfig.h: glibconfig.h.win32
-+	$(GNUCOPY) glibconfig.h.win32 glibconfig.h
++	cp glibconfig.h.win32 glibconfig.h
  
  ..\config.h: ..\config.h.win32
 -	copy ..\config.h.win32 ..\config.h
-+	$(GNUCOPY) ..\config.h.win32 ..\config.h
++	cp ..\config.h.win32 ..\config.h
  
  localcharset.obj : libcharset\localcharset.c
  	$(CC) $(CFLAGS) -DLIBDIR=\".\" -c libcharset\localcharset.c
@@ -588,7 +588,7 @@
  
  gmoduleconf.h: gmoduleconf.h.win32
 -	copy gmoduleconf.h.win32 gmoduleconf.h
-+	$(GNUCOPY) gmoduleconf.h.win32 gmoduleconf.h
++	cp gmoduleconf.h.win32 gmoduleconf.h
  
  gmodule.res : gmodule.rc
 -	rc -DBUILDNUMBER=0 -r -fo gmodule.res gmodule.rc
@@ -649,7 +649,7 @@
 -
 -gmarshal.c: gmarshal.list gmarshal.h glib-genmarshal.exe
 -	glib-genmarshal --nostdinc --prefix=g_cclosure_marshal gmarshal.list --body > gmarshal.c
-+	$(GNUCOPY) xgen-gmh gmarshal.h
++	cp xgen-gmh gmarshal.h
  
  libgobject-2.0-0.dll : $(gobject_OBJECTS) gobject.def gobject.res
  	$(CC) $(CFLAGS) -Fm -LD -Fe$@ $(gobject_OBJECTS) gobject.res \
@@ -703,12 +703,12 @@
  
  config.h: config.h.win32
 -	copy config.h.win32 config.h
-+	$(GNUCOPY) config.h.win32 config.h
++	cp config.h.win32 config.h
  
 -glibconfig.h: glibconfig.h.win32
 -	copy glibconfig.h.win32 glibconfig.h
 +glibconfig.h: glib/glibconfig.h.win32
-+	$(GNUCOPY) glib/glibconfig.h.win32 glib/glibconfig.h
++	cp glib/glibconfig.h.win32 glib/glibconfig.h
 --- misc/glib-2.28.1/tests/makefile.msc	2011-02-18 16:35:43.000000000 +0100
 +++ misc/build/glib-2.28.1/tests/makefile.msc	2011-03-04 08:33:02.079762100 +0100
 @@ -7,7 +7,7 @@
