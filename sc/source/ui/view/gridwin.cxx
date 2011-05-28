@@ -138,6 +138,7 @@
 using namespace com::sun::star;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
+using ::rtl::OUString;
 
 const sal_uInt8 SC_NESTEDBUTTON_NONE = 0;
 const sal_uInt8 SC_NESTEDBUTTON_DOWN = 1;
@@ -556,8 +557,8 @@ void ScGridWindow::ExecPageFieldSelect( SCCOL nCol, SCROW nRow, sal_Bool bHasSel
         {
             ScDPSaveData aSaveData( *pDPObj->GetSaveData() );
 
-            sal_Bool bIsDataLayout;
-            String aDimName = pDPObj->GetDimName( nField, bIsDataLayout );
+            bool bIsDataLayout;
+            OUString aDimName = pDPObj->GetDimName( nField, bIsDataLayout );
             if ( !bIsDataLayout )
             {
                 ScDPSaveDimension* pDim = aSaveData.GetDimensionByName(aDimName);
@@ -644,8 +645,8 @@ void ScGridWindow::LaunchPageFieldMenu( SCCOL nCol, SCROW nRow )
             // get current page from SaveData
 
             ScDPSaveData* pSaveData = pDPObj->GetSaveData();
-            sal_Bool bIsDataLayout;
-            String aDimName = pDPObj->GetDimName( nField, bIsDataLayout );
+            bool bIsDataLayout;
+            OUString aDimName = pDPObj->GetDimName( nField, bIsDataLayout );
             if ( pSaveData && !bIsDataLayout )
             {
                 ScDPSaveDimension* pDim = pSaveData->GetExistingDimensionByName(aDimName);
@@ -3360,8 +3361,8 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
 
                 if ( bValid )
                 {
-                    sal_Bool bIsDataLayout;
-                    String aDimName = pDPObj->GetDimName( aDestData.Dimension, bIsDataLayout );
+                    bool bIsDataLayout;
+                    OUString aDimName = pDPObj->GetDimName( aDestData.Dimension, bIsDataLayout );
                     const ScDPSaveDimension* pDim = pDPObj->GetSaveData()->GetExistingDimensionByName( aDimName );
                     if ( pDim )
                     {

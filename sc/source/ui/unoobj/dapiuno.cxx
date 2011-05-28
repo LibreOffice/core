@@ -258,7 +258,7 @@ void ScDataPilotConversion::FillGroupInfo( DataPilotFieldGroupInfo& rInfo, const
 
 //------------------------------------------------------------------------
 
-ScDPObject* lcl_GetDPObject( ScDocShell* pDocShell, SCTAB nTab, const String& rName )
+ScDPObject* lcl_GetDPObject( ScDocShell* pDocShell, SCTAB nTab, const OUString& rName )
 {
     if (pDocShell)
     {
@@ -299,7 +299,7 @@ sal_Int32 lcl_GetObjectIndex( ScDPObject* pDPObj, const ScFieldIdentifier& rFiel
         sal_Int32 nCount = pDPObj->GetDimCount();
         for ( sal_Int32 nDim = 0; nDim < nCount; ++nDim )
         {
-            sal_Bool bIsDataLayout = false;
+            bool bIsDataLayout = false;
             OUString aDimName( pDPObj->GetDimName( nDim, bIsDataLayout ) );
             if ( rFieldId.mbDataLayout ? bIsDataLayout : (aDimName == rFieldId.maFieldName) )
                 return nDim;
@@ -598,7 +598,6 @@ sal_Bool SAL_CALL ScDataPilotTablesObj::hasByName( const OUString& aName )
         ScDPCollection* pColl = pDoc->GetDPCollection();
         if ( pColl )
         {
-            String aNamStr(aName);
             size_t nCount = pColl->GetCount();
             for (size_t i=0; i<nCount; ++i)
             {
@@ -607,8 +606,8 @@ sal_Bool SAL_CALL ScDataPilotTablesObj::hasByName( const OUString& aName )
 
                 ScDPObject* pDPObj = (*pColl)[i];
                 if ( pDPObj->GetOutRange().aStart.Tab() == nTab &&
-                     pDPObj->GetName() == aNamStr )
-                    return sal_True;
+                     pDPObj->GetName() == aName )
+                    return true;
             }
         }
     }

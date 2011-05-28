@@ -89,8 +89,8 @@ private:
     ScDocument*             pDoc;
                                             // settings
     ScDPSaveData*           pSaveData;
-    String                  aTableName;
-    String                  aTableTag;
+    ::rtl::OUString aTableName;
+    ::rtl::OUString aTableTag;
     ScRange                 aOutRange;
     ScSheetSourceDesc*      pSheetDesc;     //  for sheet data
     ScImportSourceDesc*     pImpDesc;       //  for database data
@@ -157,10 +157,10 @@ public:
     sal_Bool                IsImportData() const { return(pImpDesc != NULL); }
     sal_Bool                IsServiceData() const { return(pServDesc != NULL); }
 
-    void                SetName(const String& rNew);
-    const String&       GetName() const                 { return aTableName; }
-    void                SetTag(const String& rNew);
-    const String&       GetTag() const                  { return aTableTag; }
+    void SetName(const ::rtl::OUString& rNew);
+    const ::rtl::OUString& GetName() const { return aTableName; }
+    void SetTag(const ::rtl::OUString& rNew);
+    const ::rtl::OUString& GetTag() const { return aTableTag; }
 
     /**
      *  Data description cell displays the description of a data dimension if
@@ -170,7 +170,7 @@ public:
     bool                IsDataDescriptionCell(const ScAddress& rPos);
 
     bool                IsDimNameInUse(const ::rtl::OUString& rName) const;
-    String              GetDimName( long nDim, sal_Bool& rIsDataLayout, sal_Int32* pFlags = NULL );
+    ::rtl::OUString GetDimName( long nDim, bool& rIsDataLayout, sal_Int32* pFlags = NULL );
     sal_Bool                IsDuplicated( long nDim );
     long                GetDimCount();
     void                GetHeaderPositionData(const ScAddress& rPos, ::com::sun::star::sheet::DataPilotTableHeaderData& rData);
@@ -317,7 +317,7 @@ public:
     SC_DLLPUBLIC ScDPObject* operator[](size_t nIndex);
     SC_DLLPUBLIC const ScDPObject* operator[](size_t nIndex) const;
 
-    const ScDPObject* GetByName(const String& rName) const;
+    const ScDPObject* GetByName(const ::rtl::OUString& rName) const;
 
     void DeleteOnTab( SCTAB nTab );
     void UpdateReference( UpdateRefMode eUpdateRefMode,
@@ -335,7 +335,7 @@ public:
      *
      * @return new name for data pilot object.
      */
-    String CreateNewName( sal_uInt16 nMin = 1 ) const;
+    ::rtl::OUString CreateNewName( sal_uInt16 nMin = 1 ) const;
 
     void FreeTable(ScDPObject* pDPObj);
     SC_DLLPUBLIC bool InsertNewTable(ScDPObject* pDPObj);

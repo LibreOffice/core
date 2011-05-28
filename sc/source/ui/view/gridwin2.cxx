@@ -94,9 +94,9 @@ DataPilotFieldOrientation ScGridWindow::GetDPFieldOrientation( SCCOL nCol, SCROW
         long nField = pDPObj->GetHeaderDim( ScAddress( nCol-1, nRow, nTab ), nOrient );
         if ( nField >= 0 && nOrient == DataPilotFieldOrientation_PAGE )
         {
-            sal_Bool bIsDataLayout = false;
-            String aFieldName = pDPObj->GetDimName( nField, bIsDataLayout );
-            if ( aFieldName.Len() && !bIsDataLayout )
+            bool bIsDataLayout = false;
+            OUString aFieldName = pDPObj->GetDimName( nField, bIsDataLayout );
+            if ( !aFieldName.isEmpty() && !bIsDataLayout )
                 return DataPilotFieldOrientation_PAGE;
         }
     }
@@ -107,9 +107,9 @@ DataPilotFieldOrientation ScGridWindow::GetDPFieldOrientation( SCCOL nCol, SCROW
     long nField = pDPObj->GetHeaderDim(ScAddress(nCol, nRow, nTab), nOrient);
     if (nField >= 0 && (nOrient == DataPilotFieldOrientation_COLUMN || nOrient == DataPilotFieldOrientation_ROW) )
     {
-        sal_Bool bIsDataLayout = false;
-        String aFieldName = pDPObj->GetDimName(nField, bIsDataLayout);
-        if (aFieldName.Len() && !bIsDataLayout)
+        bool bIsDataLayout = false;
+        OUString aFieldName = pDPObj->GetDimName(nField, bIsDataLayout);
+        if (!aFieldName.isEmpty() && !bIsDataLayout)
             return static_cast<DataPilotFieldOrientation>(nOrient);
     }
 
@@ -307,9 +307,9 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, sal_Bool bMove )
                                                 aPosRect, nOrient, nDimPos );
     UpdateDragRect( bHasRange && bMove, aPosRect );
 
-    sal_Bool bIsDataLayout;
+    bool bIsDataLayout;
     sal_Int32 nDimFlags = 0;
-    String aDimName = pDragDPObj->GetDimName( nDPField, bIsDataLayout, &nDimFlags );
+    OUString aDimName = pDragDPObj->GetDimName( nDPField, bIsDataLayout, &nDimFlags );
     bool bAllowed = !bHasRange || ScDPObject::IsOrientationAllowed( nOrient, nDimFlags );
 
     if (bMove)          // set mouse pointer
@@ -558,8 +558,8 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
     aNewDPObj.BuildAllDimensionMembers();
     ScDPSaveData* pSaveData = aNewDPObj.GetSaveData();
 
-    sal_Bool bIsDataLayout;
-    String aDimName = pDPObj->GetDimName(pDPData->mnDim, bIsDataLayout);
+    bool bIsDataLayout;
+    OUString aDimName = pDPObj->GetDimName(pDPData->mnDim, bIsDataLayout);
     ScDPSaveDimension* pDim = pSaveData->GetDimensionByName(aDimName);
     if (!pDim)
         return;

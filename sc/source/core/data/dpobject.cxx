@@ -358,12 +358,12 @@ sal_Bool ScDPObject::IsSheetData() const
     return ( pSheetDesc != NULL );
 }
 
-void ScDPObject::SetName(const String& rNew)
+void ScDPObject::SetName(const OUString& rNew)
 {
     aTableName = rNew;
 }
 
-void ScDPObject::SetTag(const String& rNew)
+void ScDPObject::SetTag(const OUString& rNew)
 {
     aTableTag = rNew;
 }
@@ -837,10 +837,10 @@ bool ScDPObject::IsDimNameInUse(const OUString& rName) const
     return false;
 }
 
-String ScDPObject::GetDimName( long nDim, sal_Bool& rIsDataLayout, sal_Int32* pFlags )
+OUString ScDPObject::GetDimName( long nDim, bool& rIsDataLayout, sal_Int32* pFlags )
 {
     rIsDataLayout = false;
-    String aRet;
+    OUString aRet;
 
     if ( xSource.is() )
     {
@@ -868,9 +868,9 @@ String ScDPObject::GetDimName( long nDim, sal_Bool& rIsDataLayout, sal_Int32* pF
                 {
                 }
                 if ( bData )
-                    rIsDataLayout = sal_True;
+                    rIsDataLayout = true;
                 else
-                    aRet = String( aName );
+                    aRet = aName;
 
                 if (pFlags)
                     *pFlags = ScUnoHelpFunctions::GetLongProperty( xDimProp,
@@ -2643,7 +2643,7 @@ void ScDPCollection::WriteRefsTo( ScDPCollection& r ) const
         for (size_t nSrcPos = 0; nSrcPos < nSrcSize; ++nSrcPos)
         {
             const ScDPObject& rSrcObj = maTables[nSrcPos];
-            String aName = rSrcObj.GetName();
+            const OUString& aName = rSrcObj.GetName();
             bool bFound = false;
             for (size_t nDestPos = 0; nDestPos < nDestSize && !bFound; ++nDestPos)
             {
@@ -2683,7 +2683,7 @@ const ScDPObject* ScDPCollection::operator [](size_t nIndex) const
     return &maTables[nIndex];
 }
 
-const ScDPObject* ScDPCollection::GetByName(const String& rName) const
+const ScDPObject* ScDPCollection::GetByName(const OUString& rName) const
 {
     TablesType::const_iterator itr = maTables.begin(), itrEnd = maTables.end();
     for (; itr != itrEnd; ++itr)
@@ -2693,16 +2693,17 @@ const ScDPObject* ScDPCollection::GetByName(const String& rName) const
     return NULL;
 }
 
-String ScDPCollection::CreateNewName( sal_uInt16 nMin ) const
+OUString ScDPCollection::CreateNewName( sal_uInt16 nMin ) const
 {
-    String aBase = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("DataPilot"));
-    //! from Resource?
+    OUString aBase(RTL_CONSTASCII_USTRINGPARAM("DataPilot"));
 
     size_t n = maTables.size();
     for (size_t nAdd = 0; nAdd <= n; ++nAdd)   //  nCount+1 tries
     {
-        String aNewName = aBase;
-        aNewName += String::CreateFromInt32( nMin + nAdd );
+        ::rtl::OUStringBuffer aBuf;
+        aBuf.append(aBase);
+        aBuf.append(static_cast<sal_Int32>(nMin + nAdd));
+        OUString aNewName = aBuf.makeStringAndClear();
         bool bFound = false;
         TablesType::const_iterator itr = maTables.begin(), itrEnd = maTables.end();
         for (; itr != itrEnd; ++itr)
@@ -2716,7 +2717,7 @@ String ScDPCollection::CreateNewName( sal_uInt16 nMin ) const
         if (!bFound)
             return aNewName;            // found unused Name
     }
-    return String();                    // should not happen
+    return OUString();                    // should not happen
 }
 
 void ScDPCollection::FreeTable(ScDPObject* pDPObj)

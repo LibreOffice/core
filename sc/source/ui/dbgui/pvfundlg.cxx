@@ -802,9 +802,9 @@ ScDPShowDetailDlg::ScDPShowDetailDlg( Window* pParent, ScDPObject& rDPObj, sal_u
     long nDimCount = rDPObj.GetDimCount();
     for (long nDim=0; nDim<nDimCount; nDim++)
     {
-        sal_Bool bIsDataLayout;
+        bool bIsDataLayout;
         sal_Int32 nDimFlags = 0;
-        String aName = rDPObj.GetDimName( nDim, bIsDataLayout, &nDimFlags );
+        OUString aName = rDPObj.GetDimName( nDim, bIsDataLayout, &nDimFlags );
         if ( !bIsDataLayout && !rDPObj.IsDuplicated( nDim ) && ScDPObject::IsOrientationAllowed( nOrient, nDimFlags ) )
         {
             const ScDPSaveDimension* pDimension = pSaveData ? pSaveData->GetExistingDimensionByName(aName) : 0;
@@ -832,7 +832,7 @@ short ScDPShowDetailDlg::Execute()
     return maLbDims.GetEntryCount() ? ModalDialog::Execute() : RET_CANCEL;
 }
 
-String ScDPShowDetailDlg::GetDimensionName() const
+OUString ScDPShowDetailDlg::GetDimensionName() const
 {
     // Look up the internal dimension name which may be different from the
     // displayed field name.
@@ -843,7 +843,7 @@ String ScDPShowDetailDlg::GetDimensionName() const
         return aSelectedName;
 
     long nDim = itr->second;
-    sal_Bool bIsDataLayout = false;
+    bool bIsDataLayout = false;
     return mrDPObj.GetDimName(nDim, bIsDataLayout);
 }
 

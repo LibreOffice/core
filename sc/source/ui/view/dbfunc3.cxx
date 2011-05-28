@@ -834,8 +834,8 @@ sal_Bool ScDBFunc::HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int
 
         if ( aEntries.GetCount() > 0 )
         {
-            sal_Bool bIsDataLayout;
-            String aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
+            bool bIsDataLayout;
+            OUString aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
             String aBaseDimName( aDimName );
 
             sal_Bool bInGroupDim = false;
@@ -947,8 +947,8 @@ sal_Bool ScDBFunc::HasSelectionForNumGroup( ScDPNumGroupInfo& rOldInfo )
 
         if ( aEntries.GetCount() > 0 )
         {
-            sal_Bool bIsDataLayout;
-            String aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
+            bool bIsDataLayout;
+            OUString aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
 
             sal_Bool bInGroupDim = false;
 
@@ -1007,8 +1007,8 @@ void ScDBFunc::DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nPar
 
         if ( aEntries.GetCount() > 0 )
         {
-            sal_Bool bIsDataLayout;
-            String aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
+            bool bIsDataLayout;
+            OUString aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
 
             ScDPSaveData aData( *pDPObj->GetSaveData() );
             ScDPDimensionSaveData* pDimData = aData.GetDimensionData();     // created if not there
@@ -1137,8 +1137,8 @@ void ScDBFunc::NumGroupDataPilot( const ScDPNumGroupInfo& rInfo )
 
         if ( aEntries.GetCount() > 0 )
         {
-            sal_Bool bIsDataLayout;
-            String aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
+            bool bIsDataLayout;
+            OUString aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
 
             ScDPSaveData aData( *pDPObj->GetSaveData() );
             ScDPDimensionSaveData* pDimData = aData.GetDimensionData();     // created if not there
@@ -1181,8 +1181,8 @@ void ScDBFunc::GroupDataPilot()
 
         if ( aEntries.GetCount() > 0 )
         {
-            sal_Bool bIsDataLayout;
-            String aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
+            bool bIsDataLayout;
+            OUString aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
 
             ScDPSaveData aData( *pDPObj->GetSaveData() );
             ScDPDimensionSaveData* pDimData = aData.GetDimensionData();     // created if not there
@@ -1325,8 +1325,8 @@ void ScDBFunc::UngroupDataPilot()
 
         if ( aEntries.GetCount() > 0 )
         {
-            sal_Bool bIsDataLayout;
-            String aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
+            bool bIsDataLayout;
+            OUString aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
 
             ScDPSaveData aData( *pDPObj->GetSaveData() );
             ScDPDimensionSaveData* pDimData = aData.GetDimensionData();     // created if not there
@@ -1498,14 +1498,14 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const String& rString )
         }
         else if (nOrient == DataPilotFieldOrientation_COLUMN || nOrient == DataPilotFieldOrientation_ROW)
         {
-            sal_Bool bDataLayout = false;
-            String aDimName = pDPObj->GetDimName(nField, bDataLayout);
+            bool bDataLayout = false;
+            OUString aDimName = pDPObj->GetDimName(nField, bDataLayout);
             ScDPSaveDimension* pDim = bDataLayout ? aData.GetDataLayoutDimension() : aData.GetDimensionByName(aDimName);
             if (pDim)
             {
                 if (rString.Len())
                 {
-                    if (rString.EqualsIgnoreCaseAscii(aDimName))
+                    if (rString.EqualsIgnoreCaseAscii(String(aDimName)))
                     {
                         pDim->RemoveLayoutName();
                         bChange = true;
@@ -1558,8 +1558,8 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const String& rString )
         {
             if ( aData.GetExistingDimensionData() && !(aPosData.Flags & MemberResultFlags::SUBTOTAL))
             {
-                sal_Bool bIsDataLayout;
-                String aDimName = pDPObj->GetDimName( aPosData.Dimension, bIsDataLayout );
+                bool bIsDataLayout;
+                OUString aDimName = pDPObj->GetDimName( aPosData.Dimension, bIsDataLayout );
 
                 ScDPDimensionSaveData* pDimData = aData.GetDimensionData();
                 ScDPSaveGroupDimension* pGroupDim = pDimData->GetNamedGroupDimAcc( aDimName );
@@ -1599,8 +1599,8 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const String& rString )
             }
             else if (aPosData.Dimension >= 0 && aPosData.MemberName.getLength() > 0)
             {
-                sal_Bool bDataLayout = false;
-                String aDimName = pDPObj->GetDimName(static_cast<long>(aPosData.Dimension), bDataLayout);
+                bool bDataLayout = false;
+                OUString aDimName = pDPObj->GetDimName(static_cast<long>(aPosData.Dimension), bDataLayout);
                 if (bDataLayout)
                 {
                     // data dimension
@@ -1759,13 +1759,13 @@ bool ScDBFunc::DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16
         // Invalid dimension index.  Bail out.
         return false;
 
-    sal_Bool bDataLayout;
     ScDPSaveData* pSaveData = pDPObj->GetSaveData();
     if (!pSaveData)
         return false;
 
     ScDPSaveData aNewSaveData(*pSaveData);
-    String aDimName = pDPObj->GetDimName(nDimIndex, bDataLayout);
+    bool bDataLayout;
+    OUString aDimName = pDPObj->GetDimName(nDimIndex, bDataLayout);
     ScDPSaveDimension* pSaveDim = aNewSaveData.GetDimensionByName(aDimName);
     if (!pSaveDim)
         return false;
@@ -1921,8 +1921,8 @@ sal_Bool ScDBFunc::DataPilotMove( const ScRange& rSource, const ScAddress& rDest
 
         if ( bValid )
         {
-            sal_Bool bIsDataLayout;
-            String aDimName = pDPObj->GetDimName( aDestData.Dimension, bIsDataLayout );
+            bool bIsDataLayout;
+            OUString aDimName = pDPObj->GetDimName( aDestData.Dimension, bIsDataLayout );
             if ( !bIsDataLayout )
             {
                 ScDPSaveData aData( *pDPObj->GetSaveData() );
@@ -1995,8 +1995,8 @@ sal_Bool ScDBFunc::HasSelectionForDrillDown( sal_uInt16& rOrientation )
 
         if ( aEntries.GetCount() > 0 )
         {
-            sal_Bool bIsDataLayout;
-            String aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
+            bool bIsDataLayout;
+            OUString aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
             if ( !bIsDataLayout )
             {
                 ScDPSaveData* pSaveData = pDPObj->GetSaveData();
@@ -2030,8 +2030,8 @@ void ScDBFunc::SetDataPilotDetails( sal_Bool bShow, const String* pNewDimensionN
 
         if ( aEntries.GetCount() > 0 )
         {
-            sal_Bool bIsDataLayout;
-            String aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
+            bool bIsDataLayout;
+            OUString aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
             if ( !bIsDataLayout )
             {
                 ScDPSaveData aData( *pDPObj->GetSaveData() );

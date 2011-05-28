@@ -1324,7 +1324,7 @@ sal_Bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pN
                 pDestObj->InvalidateData();             // before getting the new output area
 
                 //  make sure the table has a name (not set by dialog)
-                if ( !pDestObj->GetName().Len() )
+                if (pDestObj->GetName().isEmpty())
                     pDestObj->SetName( pDoc->GetDPCollection()->CreateNewName() );
 
                 bool bOverflow = false;

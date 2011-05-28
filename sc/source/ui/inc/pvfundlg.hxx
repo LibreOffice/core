@@ -230,7 +230,7 @@ public:
      *         be different from the name displayed in the dialog if the field
      *         has a layout name.
      */
-    String              GetDimensionName() const;
+    ::rtl::OUString GetDimensionName() const;
 
 private:
     DECL_LINK( DblClickHdl, ListBox* );
