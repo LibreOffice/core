@@ -6571,6 +6571,7 @@ if test  "$test_librsvg" = "yes"; then
         PKG_CHECK_MODULES( LIBRSVG, librsvg-2.0 >= 2.14,,AC_MSG_ERROR([requirements to build with librsvg support not met. Use --disable-librsvg or install the missing packages]))
         ENABLE_LIBRSVG="TRUE"
         AC_MSG_RESULT([yes])
+        BUILD_TYPE="$BUILD_TYPE LIBRSVG"
     else
         AC_MSG_RESULT([no])
     fi

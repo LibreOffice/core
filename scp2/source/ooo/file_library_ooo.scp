@@ -1785,6 +1785,8 @@ File gid_File_Lib_Gmodule
 End
 #endif
 
+#if ENABLE_LIBRSVG
+
 #if ! defined SYSTEM_GDKPIXBUF
 File gid_File_Lib_Gdkpixbuf
     TXT_FILE_BODY;
@@ -1864,6 +1866,8 @@ File gid_File_Lib_Librsvg
     Name = "librsvg-2-2.dll";
     #endif
 End
+#endif
+
 #endif
 
 #ifdef WNT
