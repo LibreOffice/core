@@ -48,6 +48,7 @@
 #include <vector>
 
 using ::std::vector;
+using ::rtl::OUString;
 
 // -----------------------------------------------------------------------
 
@@ -66,8 +67,8 @@ ScMemChart::ScMemChart(short nCols, short nRows)
                 *(pFill ++) = 0.0;
     }
 
-    pColText = new String[nColCnt];
-    pRowText = new String[nRowCnt];
+    pColText = new OUString[nColCnt];
+    pRowText = new OUString[nRowCnt];
 }
 
 ScMemChart::~ScMemChart()
@@ -81,20 +82,20 @@ ScMemChart::~ScMemChart()
 
 ScChartArray::ScChartArray( ScDocument* pDoc, SCTAB nTab,
                     SCCOL nStartColP, SCROW nStartRowP, SCCOL nEndColP, SCROW nEndRowP,
-                    const String& rChartName ) :
+                    const OUString& rChartName ) :
         aName( rChartName ),
         pDocument( pDoc ),
         aPositioner(pDoc, nTab, nStartColP, nStartRowP, nEndColP, nEndRowP),
-        bValid( sal_True )
+        bValid( true )
 {
 }
 
 ScChartArray::ScChartArray( ScDocument* pDoc, const ScRangeListRef& rRangeList,
-                    const String& rChartName ) :
+                    const OUString& rChartName ) :
         aName( rChartName ),
         pDocument( pDoc ),
         aPositioner(pDoc, rRangeList),
-        bValid( sal_True )
+        bValid( true )
 {
 }
 
@@ -116,7 +117,7 @@ ScDataObject* ScChartArray::Clone() const
     return new ScChartArray(*this);
 }
 
-sal_Bool ScChartArray::operator==(const ScChartArray& rCmp) const
+bool ScChartArray::operator==(const ScChartArray& rCmp) const
 {
     return aPositioner == rCmp.aPositioner
         && aName == rCmp.aName;
@@ -226,7 +227,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
         nRowCount = 0;
     }
 
-    sal_Bool bValidData = sal_True;
+    bool bValidData = true;
     if ( !nColCount )
     {
         bValidData = false;
@@ -250,7 +251,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
     {
         if ( bValidData )
         {
-            sal_Bool bCalcAsShown = pDocument->GetDocOptions().IsCalcAsShown();
+            bool bCalcAsShown = pDocument->GetDocOptions().IsCalcAsShown();
             ScBaseCell* pCell;
             for (nCol=0; nCol<nColCount; nCol++)
             {
@@ -350,7 +351,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
         nRowCount = 0;
     }
 
-    sal_Bool bValidData = sal_True;
+    bool bValidData = true;
     if ( !nColCount )
     {
         bValidData = false;
@@ -372,7 +373,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
     {
         SCSIZE nCol = 0;
         SCSIZE nRow = 0;
-        sal_Bool bCalcAsShown = pDocument->GetDocOptions().IsCalcAsShown();
+        bool bCalcAsShown = pDocument->GetDocOptions().IsCalcAsShown();
         sal_uLong nIndex = 0;
         if (bValidData)
         {
@@ -516,7 +517,7 @@ ScDataObject*   ScChartCollection::Clone() const
     return new ScChartCollection(*this);
 }
 
-sal_Bool ScChartCollection::operator==(const ScChartCollection& rCmp) const
+bool ScChartCollection::operator==(const ScChartCollection& rCmp) const
 {
     if (nCount != rCmp.nCount)
         return false;
@@ -525,7 +526,7 @@ sal_Bool ScChartCollection::operator==(const ScChartCollection& rCmp) const
         if (!((*(const ScChartArray*)pItems[i]) == (*(const ScChartArray*)rCmp.pItems[i])))
             return false;
 
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

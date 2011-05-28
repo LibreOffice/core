@@ -153,7 +153,7 @@ void ScDocument::UpdateAllCharts()
                     uno::Reference< embed::XEmbeddedObject > xIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
                     if ( xIPObj.is() )
                     {
-                        String aIPName = ((SdrOle2Obj*)pObject)->GetPersistName();
+                        ::rtl::OUString aIPName = ((SdrOle2Obj*)pObject)->GetPersistName();
 
                         for (nPos=0; nPos<nDataCount; nPos++)
                         {
