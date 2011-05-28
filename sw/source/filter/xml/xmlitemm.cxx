@@ -42,13 +42,13 @@
 using namespace ::xmloff::token;
 
 #define MAP_ENTRY( p, l, w, m ) \
-    { XML_NAMESPACE_##p, XML_##l, w, m }
+    { XML_NAMESPACE_##p, XML_##l, static_cast<sal_uInt16>(w), m }
 #define M_E_SI( p, l, w, m ) \
-    { XML_NAMESPACE_##p, XML_##l, w, MID_SW_FLAG_SPECIAL_ITEM_IMPORT|m }
+    { XML_NAMESPACE_##p, XML_##l, static_cast<sal_uInt16>(w), MID_SW_FLAG_SPECIAL_ITEM_IMPORT|m }
 #define M_E_SE( p, l, w, m ) \
-    { XML_NAMESPACE_##p, XML_##l, w, MID_SW_FLAG_SPECIAL_ITEM_EXPORT|m }
+    { XML_NAMESPACE_##p, XML_##l, static_cast<sal_uInt16>(w), MID_SW_FLAG_SPECIAL_ITEM_EXPORT|m }
 #define M_E_SIE( p, l, w, m ) \
-    { XML_NAMESPACE_##p, XML_##l, w, MID_SW_FLAG_SPECIAL_ITEM_EXPORT|MID_SW_FLAG_SPECIAL_ITEM_IMPORT|m }
+    { XML_NAMESPACE_##p, XML_##l, static_cast<sal_uInt16>(w), MID_SW_FLAG_SPECIAL_ITEM_EXPORT|MID_SW_FLAG_SPECIAL_ITEM_IMPORT|m }
 
 #define M_END { 0, XML_TOKEN_INVALID, 0, 0 }
 
