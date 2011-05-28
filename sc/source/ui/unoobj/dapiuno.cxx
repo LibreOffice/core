@@ -1013,13 +1013,13 @@ Any SAL_CALL ScDataPilotDescriptorBase::getPropertyValue( const OUString& aPrope
                     uno::Sequence<beans::PropertyValue> aSeq( 4 );
                     beans::PropertyValue* pArray = aSeq.getArray();
                     pArray[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_SOURCENAME ));
-                    pArray[0].Value <<= rtl::OUString( pServiceDesc->aParSource );
+                    pArray[0].Value <<= pServiceDesc->aParSource;
                     pArray[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_OBJECTNAME ));
-                    pArray[1].Value <<= rtl::OUString( pServiceDesc->aParName );
+                    pArray[1].Value <<= pServiceDesc->aParName;
                     pArray[2].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_USERNAME ));
-                    pArray[2].Value <<= rtl::OUString( pServiceDesc->aParUser );
+                    pArray[2].Value <<= pServiceDesc->aParUser;
                     pArray[3].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_PASSWORD ));
-                    pArray[3].Value <<= rtl::OUString( pServiceDesc->aParPass );
+                    pArray[3].Value <<= pServiceDesc->aParPass;
                     aRet <<= aSeq;
                 }
                 else

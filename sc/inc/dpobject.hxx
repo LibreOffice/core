@@ -70,23 +70,16 @@ class ScDPTableData;
 
 struct ScDPServiceDesc
 {
-    String  aServiceName;
-    String  aParSource;
-    String  aParName;
-    String  aParUser;
-    String  aParPass;
+    ::rtl::OUString aServiceName;
+    ::rtl::OUString aParSource;
+    ::rtl::OUString aParName;
+    ::rtl::OUString aParUser;
+    ::rtl::OUString aParPass;
 
-    ScDPServiceDesc( const String& rServ, const String& rSrc, const String& rNam,
-                        const String& rUser, const String& rPass ) :
-        aServiceName( rServ ), aParSource( rSrc ), aParName( rNam ),
-        aParUser( rUser ), aParPass( rPass ) {  }
+    ScDPServiceDesc( const ::rtl::OUString& rServ, const ::rtl::OUString& rSrc, const ::rtl::OUString& rNam,
+                     const ::rtl::OUString& rUser, const ::rtl::OUString& rPass );
 
-    sal_Bool operator== ( const ScDPServiceDesc& rOther ) const
-        { return aServiceName == rOther.aServiceName &&
-                 aParSource   == rOther.aParSource &&
-                 aParName     == rOther.aParName &&
-                 aParUser     == rOther.aParUser &&
-                 aParPass     == rOther.aParPass; }
+    bool operator== ( const ScDPServiceDesc& rOther ) const;
 };
 
 
@@ -113,11 +106,9 @@ private:
     long                    nHeaderRows;    // page fields plus filter button
     bool                    mbHeaderLayout;  // sal_True : grid, sal_False : standard
 
-
     SC_DLLPRIVATE ScDPTableData*    GetTableData();
     SC_DLLPRIVATE void              CreateObjects();
     SC_DLLPRIVATE void              CreateOutput();
-    sal_Bool                    bRefresh;
 
 public:
     ScDPObject(ScDocument* pD);

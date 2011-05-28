@@ -167,7 +167,23 @@ sal_uInt16 lcl_GetDataGetOrientation( const uno::Reference<sheet::XDimensionsSup
     return static_cast< sal_uInt16 >( nRet );
 }
 
-// -----------------------------------------------------------------------
+ScDPServiceDesc::ScDPServiceDesc(
+    const OUString& rServ, const OUString& rSrc, const OUString& rNam,
+    const OUString& rUser, const OUString& rPass ) :
+    aServiceName( rServ ),
+    aParSource( rSrc ),
+    aParName( rNam ),
+    aParUser( rUser ),
+    aParPass( rPass ) {}
+
+bool ScDPServiceDesc::operator== ( const ScDPServiceDesc& rOther ) const
+{
+    return aServiceName == rOther.aServiceName &&
+        aParSource == rOther.aParSource &&
+        aParName == rOther.aParName &&
+        aParUser == rOther.aParUser &&
+        aParPass == rOther.aParPass;
+}
 
 ScDPObject::ScDPObject( ScDocument* pD ) :
     pDoc( pD ),
