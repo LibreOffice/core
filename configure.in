@@ -292,6 +292,7 @@ AC_ARG_ENABLE(librsvg,
                           The intention of defaulting this flag to yes is to
                           indicate this fact to the build maintainer)
 ],,enable_librsvg=yes)
+
 AC_ARG_ENABLE(opengl,
     AS_HELP_STRING([--disable-opengl],
         [Determines whether to build the OpenGL 3D slide transitions component.]),
@@ -992,6 +993,18 @@ AC_ARG_WITH(system-mozilla,
     WITH_SYSTEM_MOZILLA=$withval ,
 WITH_SYSTEM_MOZILLA=no)
 
+AC_ARG_WITH(system-librsvg,
+    AS_HELP_STRING([--with-system-librsvg],
+        [Use librsvg already on system.]))
+
+AC_ARG_WITH(system-gettext,
+    AS_HELP_STRING([--with-system-gettext],
+        [Use gettext runtime library already on system.]))
+
+AC_ARG_WITH(system-libpng,
+    AS_HELP_STRING([--with-system-libpng],
+        [Use libpng already on system.]))
+
 AC_ARG_WITH(linker-hash-style,
     AS_HELP_STRING([--with-linker-hash-style],
         [Use linker with --hash-style=<style> when linking shared objects.
@@ -1468,7 +1481,7 @@ case "$host_os" in
         test_cups=no
         _os=GNU
         ;;
-    cygwin*|interix*|mingw32*) # Windows
+    cygwin*|interix*|mingw32*)
 
         # When building on Windows normally with MSVC under Cygwin,
         # configure thinks that the host platform (the platform the
@@ -7948,165 +7961,241 @@ AC_SUBST(XINERAMA_LINK)
 dnl ===================================================================
 dnl Test whether to build librsvg or rely on the system version
 dnl ===================================================================
-AC_MSG_CHECKING([whether to build own version of librsvg])
 
-case "$_os" in
-	WINNT*) # Windows
-	    SYSTEM_LIBRSVG=NO
-	    AC_MSG_RESULT([yes])
-		;;
-	Darwin*)
-	    SYSTEM_LIBRSVG=NO
-	    AC_MSG_RESULT([yes])
-	    ;;
-   *)
-   SYSTEM_LIBRSVG=YES
-   AC_MSG_RESULT([no])
-   ;;
-esac
+dnl FIXME: Overlaps and conflicts with librsvg checks above. Needs to
+dnl        be unified.
+
+AC_MSG_CHECKING([whether to use the system librsvg])
+
+if test "$with_system_librsvg" = yes -o \( "$with_system_libs" = yes -a "$with_system_librsvg" != no \); then
+    SYSTEM_LIBRSVG=YES
+    AC_MSG_RESULT([yes])
+else
+    case "$_os" in
+        WINNT*)
+            SYSTEM_LIBRSVG=NO
+            AC_MSG_RESULT([no])
+                ;;
+        Darwin*)
+            SYSTEM_LIBRSVG=NO
+            AC_MSG_RESULT([no])
+            ;;
+         *)
+            SYSTEM_LIBRSVG=YES
+            AC_MSG_RESULT([yes])
+            ;;
+    esac
+fi
 AC_SUBST(SYSTEM_LIBRSVG)
 
 dnl ===================================================================
 dnl Test whether to build gdk-pixbuf or rely on the system version
 dnl ===================================================================
-AC_MSG_CHECKING([whether to build own version of gdk-pixbuf])
 
-case "$_os" in
-	WINNT*) # Windows
-	    SYSTEM_GDKPIXBUF=NO
-	    AC_MSG_RESULT([yes])
-		;;
-	Darwin*)
-	    SYSTEM_GDKPIXBUF=NO
-	    AC_MSG_RESULT([yes])
-	    ;;
-   *)
-   SYSTEM_GDKPIXBUF=YES
-   AC_MSG_RESULT([no])
-   ;;
-esac
+AC_MSG_CHECKING([whether to use the system gdk-pixbuf])
+
+dnl As long as the only thing we need gdk-pxbuf for is below
+dnl librsvg, use the same --with-system-librsvg (possibly implied
+dnl by --with-system-libs) to override this.
+
+if test $SYSTEM_LIBRSVG = YES; then
+    SYSTEM_GDKPIXBUF=YES
+    AC_MSG_RESULT([yes])
+else
+    case "$_os" in
+        WINNT*)
+            SYSTEM_GDKPIXBUF=NO
+            AC_MSG_RESULT([no])
+                ;;
+        Darwin*)
+            SYSTEM_GDKPIXBUF=NO
+            AC_MSG_RESULT([no])
+            ;;
+        *)
+            SYSTEM_GDKPIXBUF=YES
+            AC_MSG_RESULT([yes])
+            ;;
+    esac
+fi
 AC_SUBST(SYSTEM_GDKPIXBUF)
 
 dnl ===================================================================
-dnl Test whether to build glib or rely on the system version
+dnl Test whether to build GLib or rely on the system version
 dnl ===================================================================
-AC_MSG_CHECKING([whether to build own version of glib])
 
-case "$_os" in
-	WINNT*) # Windows
-	    SYSTEM_GLIB=NO
-	    AC_MSG_RESULT([yes])
-		;;
-	Darwin*)
-	    SYSTEM_GLIB=NO
-	    AC_MSG_RESULT([yes])
-	    ;;
-   *)
-   SYSTEM_GLIB=YES
-   AC_MSG_RESULT([no])
-   ;;
-esac
+AC_MSG_CHECKING([whether to use the system GLib])
+
+dnl As long as the only thing we need GLib for is below
+dnl librsvg, use the same --with-system-librsvg (possibly implied
+dnl by --with-system-libs) to override this.
+
+if test $SYSTEM_LIBRSVG = YES; then
+    SYSTEM_GLIB=YES
+    AC_MSG_RESULT([yes])
+else
+    case "$_os" in
+        WINNT*)
+            SYSTEM_GLIB=NO
+            AC_MSG_RESULT([no])
+                ;;
+        Darwin*)
+            SYSTEM_GLIB=NO
+            AC_MSG_RESULT([no])
+            ;;
+        *)
+            SYSTEM_GLIB=YES
+            AC_MSG_RESULT([yes])
+            ;;
+    esac
+fi
 AC_SUBST(SYSTEM_GLIB)
 
 dnl ===================================================================
-dnl Test whether to build gettext or rely on the system version
+dnl Test whether to build gettext runtime (libintl) or rely on the
+dnl system version
 dnl ===================================================================
-AC_MSG_CHECKING([whether to build own version of gettext])
 
-case "$_os" in
-	WINNT*) # Windows
-	    SYSTEM_GETTEXT=NO
-	    AC_MSG_RESULT([yes])
-		;;
-	Darwin*)
-	    SYSTEM_GETTEXT=NO
-	    AC_MSG_RESULT([yes])
-	    ;;
-   *)
-   SYSTEM_GETTEXT=YES
-   AC_MSG_RESULT([no])
-   ;;
-esac
+AC_MSG_CHECKING([whether to use the system gettext runtime])
+
+if test "$with_system_gettext" = yes -o \( "$with_system_libs" = yes -a "$with_system_gettext" != no \); then
+    SYSTEM_GETTEXT=YES
+    AC_MSG_RESULT([yes])
+else
+    case "$_os" in
+        WINNT*)
+            SYSTEM_GETTEXT=NO
+            AC_MSG_RESULT([no])
+                ;;
+        Darwin*)
+            SYSTEM_GETTEXT=NO
+            AC_MSG_RESULT([no])
+            ;;
+        *)
+            SYSTEM_GETTEXT=YES
+            AC_MSG_RESULT([yes])
+            ;;
+    esac
+fi
 AC_SUBST(SYSTEM_GETTEXT)
 
 dnl ===================================================================
 dnl Test whether to build libcroco or rely on the system version
 dnl ===================================================================
-AC_MSG_CHECKING([whether to build own version of libcroco])
 
-case "$_os" in
-	WINNT*) # Windows
-	    SYSTEM_LIBCROCO=NO
-	    AC_MSG_RESULT([yes])
-		;;
-	Darwin*)
-	    SYSTEM_LIBCROCO=NO
-	    AC_MSG_RESULT([yes])
-	    ;;
-   *)
-   SYSTEM_LIBCROCO=YES
-   AC_MSG_RESULT([no])
-   ;;
-esac
+AC_MSG_CHECKING([whether to use the system libcroco])
+
+dnl As long as the only thing we need libcroco for is below
+dnl librsvg, use the same --with-system-librsvg (possibly implied
+dnl by --with-system-libs) to override this.
+
+if test $SYSTEM_LIBRSVG = YES; then
+    SYSTEM_LIBCROCO=YES
+    AC_MSG_RESULT([yes])
+else
+    case "$_os" in
+        WINNT*)
+            SYSTEM_LIBCROCO=NO
+            AC_MSG_RESULT([no])
+            ;;
+        Darwin*)
+            SYSTEM_LIBCROCO=NO
+            AC_MSG_RESULT([no])
+            ;;
+        *)
+            SYSTEM_LIBCROCO=YES
+            AC_MSG_RESULT([yes])
+            ;;
+    esac
+fi
 AC_SUBST(SYSTEM_LIBCROCO)
 
 dnl ===================================================================
-dnl Test whether to build pango or rely on the system version
+dnl Test whether to build Pango or rely on the system version
 dnl ===================================================================
-AC_MSG_CHECKING([whether to build own version of pango])
 
-case "$_os" in
-	WINNT*) # Windows
-	    SYSTEM_PANGO=NO
-	    AC_MSG_RESULT([yes])
-		;;
-	Darwin*)
-	    SYSTEM_PANGO=NO
-	    AC_MSG_RESULT([yes])
-	    ;;
-   *)
-   SYSTEM_PANGO=YES
-   AC_MSG_RESULT([no])
-   ;;
-esac
+AC_MSG_CHECKING([whether to use the system pango])
+
+dnl As long as the only thing we need Pango for is below
+dnl librsvg, use the same --with-system-librsvg (possibly implied
+dnl by --with-system-libs) to override this.
+
+if test $SYSTEM_LIBRSVG = YES; then
+    SYSTEM_PANGO=YES
+    AC_MSG_RESULT([yes])
+else
+    case "$_os" in
+        WINNT*)
+            SYSTEM_PANGO=NO
+            AC_MSG_RESULT([no])
+            ;;
+        Darwin*)
+            SYSTEM_PANGO=NO
+            AC_MSG_RESULT([no])
+            ;;
+        *)
+            SYSTEM_PANGO=YES
+            AC_MSG_RESULT([yes])
+            ;;
+    esac
+fi
 AC_SUBST(SYSTEM_PANGO)
 
 dnl ===================================================================
 dnl Test whether to build libgsf or rely on the system version
 dnl ===================================================================
-AC_MSG_CHECKING([whether to build own version of libgsf])
 
-case "$_os" in
-	WINNT*) # Windows
-	    SYSTEM_LIBGSF=NO
-	    AC_MSG_RESULT([yes])
-		;;
-   *)
-   SYSTEM_LIBGSF=YES
-   AC_MSG_RESULT([no])
-   ;;
-esac
+AC_MSG_CHECKING([whether to use the system libgsf])
+
+dnl As long as the only thing we need libgsf for is below librsvg (is
+dnl it?), use the same --with-system-librsvg (possibly implied by
+dnl --with-system-libs) to override this.
+
+if test $SYSTEM_LIBRSVG = YES; then
+    SYSTEM_LIBGSF=YES
+    AC_MSG_RESULT([yes])
+else
+    case "$_os" in
+        WINNT*)
+            SYSTEM_LIBGSF=NO
+            AC_MSG_RESULT([no])
+            ;;
+        *)
+            SYSTEM_LIBGSF=YES
+            AC_MSG_RESULT([yes])
+            ;;
+    esac
+fi
 AC_SUBST(SYSTEM_LIBGSF)
 
 dnl ===================================================================
 dnl Test whether to build libpng or rely on the system version
 dnl ===================================================================
-AC_MSG_CHECKING([whether to build own version of libpng])
 
-case "$_os" in
-	WINNT*) # Windows
-	    SYSTEM_LIBPNG=NO
-	    AC_MSG_RESULT([yes])
-		;;
-	Darwin*)
-	    SYSTEM_LIBPNG=NO
-	    AC_MSG_RESULT([yes])
-	    ;;
-   *)
-   SYSTEM_LIBPNG=YES
-   AC_MSG_RESULT([no])
-   ;;
-esac
+AC_MSG_CHECKING([whether to use the system libpng])
+
+dnl How should and does this interact with the checks for libpng
+dnl related to use of libpng in the quickstarter above? This needs to
+dnl be unified.
+
+if test "$with_system_libpng" = yes -o \( "$with_system_libs" = yes -a "$with_system_libpng" != no \); then
+    SYSTEM_LIBPNG=YES
+    AC_MSG_RESULT([yes])
+else
+    case "$_os" in
+        WINNT*)
+            SYSTEM_LIBPNG=NO
+            AC_MSG_RESULT([no])
+            ;;
+        Darwin*)
+            SYSTEM_LIBPNG=NO
+            AC_MSG_RESULT([no])
+            ;;
+        *)
+            SYSTEM_LIBPNG=YES
+            AC_MSG_RESULT([no])
+            ;;
+    esac
+fi
 AC_SUBST(SYSTEM_LIBPNG)
 
 dnl ===================================================================
@@ -8116,31 +8205,26 @@ dnl FIXME: this is currently because we have jpeg-6b for our filters
 dnl        and jpeg-8 as dependency for librsvg
 dnl        this should be unified into using only one version for both
 
-AC_MSG_CHECKING([whether to build own version of libjpeg])
+AC_MSG_CHECKING([whether to use the system libjpeg])
 
 if test "$SYSTEM_JPEG" == "YES"; then
-SYSTEM_LIBJPEG=YES
+    SYSTEM_LIBJPEG=YES
+    AC_MSG_RESULT([yes])
 else
-case "$_os" in
-	WINNT*) # Windows
-	    SYSTEM_LIBJPEG=NO
-	    AC_MSG_RESULT([yes])
-		;;
-	Darwin*)
-	    SYSTEM_LIBJPEG=NO
-	    AC_MSG_RESULT([yes])
-	    ;;
-   *)
-   SYSTEM_LIBJPEG=YES
-   AC_MSG_RESULT([no])
-   ;;
-esac
-fi
-
-if test "$SYSTEM_LIBJPEG" == "YES"; then
-   AC_MSG_RESULT([no])
-else
-   AC_MSG_RESULT([yes])
+    case "$_os" in
+        WINNT*)
+            SYSTEM_LIBJPEG=NO
+            AC_MSG_RESULT([no])
+            ;;
+        Darwin*)
+            SYSTEM_LIBJPEG=NO
+            AC_MSG_RESULT([no])
+            ;;
+        *)
+            SYSTEM_LIBJPEG=YES
+            AC_MSG_RESULT([yes])
+            ;;
+    esac
 fi
 AC_SUBST(SYSTEM_LIBJPEG)
 
