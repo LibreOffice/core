@@ -49,6 +49,7 @@
 
 using ::std::vector;
 using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 // -----------------------------------------------------------------------
 
@@ -300,16 +301,20 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
 
         for (nCol=0; nCol<nColCount; nCol++)
         {
-            String aString, aColStr;
+            OUString aString, aColStr;
             if (HasColHeaders())
                 pDocument->GetString( aCols[nCol], nStrRow, nTab1, aString );
-            if ( !aString.Len() )
+            if (aString.isEmpty())
             {
-                aString = ScGlobal::GetRscString(STR_COLUMN);
-                aString += ' ';
+                OUStringBuffer aBuf;
+                aBuf.append(ScGlobal::GetRscString(STR_COLUMN));
+                aBuf.append(sal_Unicode(' '));
+
                 ScAddress aPos( aCols[ nCol ], 0, 0 );
                 aPos.Format( aColStr, SCA_VALID_COL, NULL );
-                aString += aColStr;
+                aBuf.append(aColStr);
+
+                aString = aBuf.makeStringAndClear();
             }
             pMemChart->SetColText( static_cast<short>(nCol), aString);
         }
@@ -320,17 +325,19 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
 
         for (nRow=0; nRow<nRowCount; nRow++)
         {
-            String aString;
+            OUString aString;
             if (HasRowHeaders())
             {
                 ScAddress aAddr( nStrCol, aRows[nRow], nTab1 );
                 pDocument->GetString( nStrCol, aRows[nRow], nTab1, aString );
             }
-            if ( !aString.Len() )
+            if (aString.isEmpty())
             {
-                aString = ScGlobal::GetRscString(STR_ROW);
-                aString += ' ';
-                aString += String::CreateFromInt32( aRows[nRow]+1 );
+                OUStringBuffer aBuf;
+                aBuf.append(ScGlobal::GetRscString(STR_ROW));
+                aBuf.append(sal_Unicode(' '));
+                aBuf.append(static_cast<sal_Int32>(aRows[nRow]+1));
+                aString = aBuf.makeStringAndClear();
             }
             pMemChart->SetRowText( static_cast<short>(nRow), aString);
         }
@@ -452,22 +459,24 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
         SCCOL nPosCol = 0;
         for ( nCol = 0; nCol < nColCount; nCol++ )
         {
-            String aString, aColStr;
+            OUString aString, aColStr;
             const ScAddress* pPos = GetPositionMap()->GetColHeaderPosition( static_cast<SCCOL>(nCol) );
             if ( HasColHeaders() && pPos )
                 pDocument->GetString(
                     pPos->Col(), pPos->Row(), pPos->Tab(), aString );
-            if ( !aString.Len() )
+
+            if (aString.isEmpty())
             {
-                aString = ScGlobal::GetRscString(STR_COLUMN);
-                aString += ' ';
+                OUStringBuffer aBuf(ScGlobal::GetRscString(STR_COLUMN));
+                aBuf.append(sal_Unicode(' '));
                 if ( pPos )
                     nPosCol = pPos->Col() + 1;
                 else
                     nPosCol++;
                 ScAddress aPos( nPosCol - 1, 0, 0 );
                 aPos.Format( aColStr, SCA_VALID_COL, NULL );
-                aString += aColStr;
+                aBuf.append(aColStr);
+                aString = aBuf.makeStringAndClear();
             }
             pMemChart->SetColText( static_cast<short>(nCol), aString);
         }
@@ -479,22 +488,23 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
         SCROW nPosRow = 0;
         for ( nRow = 0; nRow < nRowCount; nRow++ )
         {
-            String aString;
+            OUString aString;
             const ScAddress* pPos = GetPositionMap()->GetRowHeaderPosition( nRow );
             if ( HasRowHeaders() && pPos )
             {
                 pDocument->GetString(
                     pPos->Col(), pPos->Row(), pPos->Tab(), aString );
             }
-            if ( !aString.Len() )
+            if (aString.isEmpty())
             {
-                aString = ScGlobal::GetRscString(STR_ROW);
-                aString += ' ';
+                OUStringBuffer aBuf(ScGlobal::GetRscString(STR_ROW));
+                aBuf.append(sal_Unicode(' '));
                 if ( pPos )
                     nPosRow = pPos->Row() + 1;
                 else
                     nPosRow++;
-                aString += String::CreateFromInt32( nPosRow );
+                aBuf.append(static_cast<sal_Int32>(nPosRow));
+                aString = aBuf.makeStringAndClear();
             }
             pMemChart->SetRowText( static_cast<short>(nRow), aString);
         }
