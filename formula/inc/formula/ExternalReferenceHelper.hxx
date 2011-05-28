@@ -37,7 +37,7 @@ namespace formula
     class FORMULA_DLLPUBLIC SAL_NO_VTABLE ExternalReferenceHelper
     {
         public:
-            virtual String getCacheTableName(sal_uInt16 nFileId, size_t nTabIndex) const = 0;
+            virtual ::rtl::OUString getCacheTableName(sal_uInt16 nFileId, size_t nTabIndex) const = 0;
     };
 // =============================================================================
 } // formula
