@@ -222,7 +222,7 @@ gb_COMPILERNOOPTFLAGS := -Od
 ifeq ($(gb_FULLDEPS),$(true))
 gb_COMPILERDEPFLAGS := -showIncludes
 define gb_create_deps
-| $(GBUILDDIR)/filter-showIncludes.pl $(2) $(1) $(3)
+| $(GBUILDDIR)/filter-showIncludes.pl $(2) $(1) $(3); exit $${PIPESTATUS[0]}
 endef
 else
 gb_COMPILERDEPFLAGS :=
