@@ -98,14 +98,17 @@ die "failed to generate configure" if (! -x "configure");
 if (defined $ENV{NOCONFIGURE}) {
     print "Skipping configure process.";
 } else {
-    if ($#cmdline_args > 0) {
-#   print "writing args to autogen.lastrun\n";
-    my $fh;
-    open ($fh, ">autogen.lastrun") || die "can't open autogen.lastrun: $!";
-    for my $arg (@cmdline_args) {
-        print $fh "$arg\n";
-    }
-    close ($fh);
+    # Save autogen.lastrun only if we did get some arguments on the command-line
+    if (@ARGV) {
+        if ($#cmdline_args > 0) {
+            # print "writing args to autogen.lastrun\n";
+            my $fh;
+            open ($fh, ">autogen.lastrun") || die "can't open autogen.lastrun: $!";
+            for my $arg (@cmdline_args) {
+                print $fh "$arg\n";
+            }
+            close ($fh);
+        }
     }
     print "running ./configure with '" . join ("' '", @args), "'\n";
     system ("./configure", @args);
