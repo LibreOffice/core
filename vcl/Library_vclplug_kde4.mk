@@ -27,6 +27,8 @@
 
 $(eval $(call gb_Library_Library,vclplug_kde4))
 
+$(eval $(call gb_Library_add_package_headers,vcl,vcl_kde4moc))
+
 $(eval $(call gb_Library_set_include,vclplug_kde4,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
@@ -34,6 +36,7 @@ $(eval $(call gb_Library_set_include,vclplug_kde4,\
     -I$(SRCDIR)/solenv/inc \
     -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
+    -I$(WORKDIR)/CustomTarget/vcl/unx/kde4 \
 ))
 
 $(eval $(call gb_Library_set_cxxflags,vclplug_kde4,\
@@ -82,6 +85,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_kde4,\
     vcl/unx/kde4/KDESalGraphics \
     vcl/unx/kde4/KDESalInstance \
     vcl/unx/kde4/KDEXLib \
+    vcl/unx/kde4/KDEXLib.moc \
     vcl/unx/kde4/main \
     vcl/unx/kde4/VCLKDEApplication \
 ))

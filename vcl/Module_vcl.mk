@@ -56,6 +56,7 @@ endif
 ifneq ($(ENABLE_KDE4),)
 $(eval $(call gb_Module_add_targets,vcl,\
     Library_vclplug_kde4 \
+    Package_kde4moc \
 ))
 endif
 endif
