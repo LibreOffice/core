@@ -468,7 +468,7 @@ $(SHL1TARGETN) : \
 .ENDIF				# "$(SHL1NOCHECK)"!=""
 .ENDIF
 .ELIF "$(OS)"=="IOS"
-    $(COMMAND_ECHO)$(AR) $(LIB1FLAGS) $(LIBFLAGS) $@ $(SHL1OBJS) $(shell cat /dev/null $(LIB1TARGET) $(SHL1LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
+    $(COMMAND_ECHO)$(AR) $(LIB1FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL1OBJS)) $(shell cat /dev/null $(LIB1TARGET) $(SHL1LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_1.cmd
@@ -973,7 +973,7 @@ $(SHL2TARGETN) : \
 .ENDIF				# "$(SHL2NOCHECK)"!=""
 .ENDIF
 .ELIF "$(OS)"=="IOS"
-    $(COMMAND_ECHO)$(AR) $(LIB2FLAGS) $(LIBFLAGS) $@ $(SHL2OBJS) $(shell cat /dev/null $(LIB2TARGET) $(SHL2LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
+    $(COMMAND_ECHO)$(AR) $(LIB2FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL2OBJS)) $(shell cat /dev/null $(LIB2TARGET) $(SHL2LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_2.cmd
@@ -1478,7 +1478,7 @@ $(SHL3TARGETN) : \
 .ENDIF				# "$(SHL3NOCHECK)"!=""
 .ENDIF
 .ELIF "$(OS)"=="IOS"
-    $(COMMAND_ECHO)$(AR) $(LIB3FLAGS) $(LIBFLAGS) $@ $(SHL3OBJS) $(shell cat /dev/null $(LIB3TARGET) $(SHL3LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
+    $(COMMAND_ECHO)$(AR) $(LIB3FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL3OBJS)) $(shell cat /dev/null $(LIB3TARGET) $(SHL3LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_3.cmd
@@ -1983,7 +1983,7 @@ $(SHL4TARGETN) : \
 .ENDIF				# "$(SHL4NOCHECK)"!=""
 .ENDIF
 .ELIF "$(OS)"=="IOS"
-    $(COMMAND_ECHO)$(AR) $(LIB4FLAGS) $(LIBFLAGS) $@ $(SHL4OBJS) $(shell cat /dev/null $(LIB4TARGET) $(SHL4LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
+    $(COMMAND_ECHO)$(AR) $(LIB4FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL4OBJS)) $(shell cat /dev/null $(LIB4TARGET) $(SHL4LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_4.cmd
@@ -2488,7 +2488,7 @@ $(SHL5TARGETN) : \
 .ENDIF				# "$(SHL5NOCHECK)"!=""
 .ENDIF
 .ELIF "$(OS)"=="IOS"
-    $(COMMAND_ECHO)$(AR) $(LIB5FLAGS) $(LIBFLAGS) $@ $(SHL5OBJS) $(shell cat /dev/null $(LIB5TARGET) $(SHL5LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
+    $(COMMAND_ECHO)$(AR) $(LIB5FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL5OBJS)) $(shell cat /dev/null $(LIB5TARGET) $(SHL5LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_5.cmd
@@ -2993,7 +2993,7 @@ $(SHL6TARGETN) : \
 .ENDIF				# "$(SHL6NOCHECK)"!=""
 .ENDIF
 .ELIF "$(OS)"=="IOS"
-    $(COMMAND_ECHO)$(AR) $(LIB6FLAGS) $(LIBFLAGS) $@ $(SHL6OBJS) $(shell cat /dev/null $(LIB6TARGET) $(SHL6LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
+    $(COMMAND_ECHO)$(AR) $(LIB6FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL6OBJS)) $(shell cat /dev/null $(LIB6TARGET) $(SHL6LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_6.cmd
@@ -3498,7 +3498,7 @@ $(SHL7TARGETN) : \
 .ENDIF				# "$(SHL7NOCHECK)"!=""
 .ENDIF
 .ELIF "$(OS)"=="IOS"
-    $(COMMAND_ECHO)$(AR) $(LIB7FLAGS) $(LIBFLAGS) $@ $(SHL7OBJS) $(shell cat /dev/null $(LIB7TARGET) $(SHL7LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
+    $(COMMAND_ECHO)$(AR) $(LIB7FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL7OBJS)) $(shell cat /dev/null $(LIB7TARGET) $(SHL7LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_7.cmd
@@ -4003,7 +4003,7 @@ $(SHL8TARGETN) : \
 .ENDIF				# "$(SHL8NOCHECK)"!=""
 .ENDIF
 .ELIF "$(OS)"=="IOS"
-    $(COMMAND_ECHO)$(AR) $(LIB8FLAGS) $(LIBFLAGS) $@ $(SHL8OBJS) $(shell cat /dev/null $(LIB8TARGET) $(SHL8LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
+    $(COMMAND_ECHO)$(AR) $(LIB8FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL8OBJS)) $(shell cat /dev/null $(LIB8TARGET) $(SHL8LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_8.cmd
@@ -4508,7 +4508,7 @@ $(SHL9TARGETN) : \
 .ENDIF				# "$(SHL9NOCHECK)"!=""
 .ENDIF
 .ELIF "$(OS)"=="IOS"
-    $(COMMAND_ECHO)$(AR) $(LIB9FLAGS) $(LIBFLAGS) $@ $(SHL9OBJS) $(shell cat /dev/null $(LIB9TARGET) $(SHL9LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
+    $(COMMAND_ECHO)$(AR) $(LIB9FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL9OBJS)) $(shell cat /dev/null $(LIB9TARGET) $(SHL9LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_9.cmd
@@ -5013,7 +5013,7 @@ $(SHL10TARGETN) : \
 .ENDIF				# "$(SHL10NOCHECK)"!=""
 .ENDIF
 .ELIF "$(OS)"=="IOS"
-    $(COMMAND_ECHO)$(AR) $(LIB10FLAGS) $(LIBFLAGS) $@ $(SHL10OBJS) $(shell cat /dev/null $(LIB10TARGET) $(SHL10LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
+    $(COMMAND_ECHO)$(AR) $(LIB10FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL10OBJS)) $(shell cat /dev/null $(LIB10TARGET) $(SHL10LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_10.cmd

@@ -497,7 +497,7 @@ $(SHL$(TNR)TARGETN) : \
 .ENDIF				# "$(SHL$(TNR)NOCHECK)"!=""
 .ENDIF
 .ELIF "$(OS)"=="IOS"
-    $(COMMAND_ECHO)$(AR) $(LIB$(TNR)FLAGS) $(LIBFLAGS) $@ $(SHL$(TNR)OBJS) $(shell cat /dev/null $(LIB$(TNR)TARGET) $(SHL$(TNR)LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
+    $(COMMAND_ECHO)$(AR) $(LIB$(TNR)FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL$(TNR)OBJS)) $(shell cat /dev/null $(LIB$(TNR)TARGET) $(SHL$(TNR)LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
