@@ -130,11 +130,10 @@ void ScDocument::UpdateAllCharts()
     if ( !pDrawLayer || !pShell )
         return;
 
-    sal_uInt16 nDataCount = pChartCollection->GetCount();
-    if ( !nDataCount )
+    if (pChartCollection->empty())
         return ;        // nothing to do
 
-    sal_uInt16 nPos;
+    size_t nDataCount = pChartCollection->size();
 
     for (SCTAB nTab=0; nTab<=MAXTAB; nTab++)
     {
@@ -155,7 +154,7 @@ void ScDocument::UpdateAllCharts()
                     {
                         ::rtl::OUString aIPName = ((SdrOle2Obj*)pObject)->GetPersistName();
 
-                        for (nPos=0; nPos<nDataCount; nPos++)
+                        for (size_t nPos = 0; nPos < nDataCount; ++nPos)
                         {
                             ScChartArray* pChartObj = (*pChartCollection)[nPos];
                             if (pChartObj->GetName() == aIPName)
@@ -201,7 +200,7 @@ void ScDocument::UpdateAllCharts()
         }
     }
 
-    pChartCollection->FreeAll();
+    pChartCollection->clear();
 }
 
 sal_Bool ScDocument::HasChartAtPoint( SCTAB nTab, const Point& rPos, String* pName )

@@ -35,6 +35,8 @@
 #include "rangelst.hxx"
 #include "chartpos.hxx"
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 class ScAddress;
 class Table;
 class ScDocument;
@@ -69,7 +71,7 @@ public:
 };
 
 
-class SC_DLLPUBLIC ScChartArray : public ScDataObject               // only parameter-struct
+class SC_DLLPUBLIC ScChartArray             // only parameter-struct
 {
     ::rtl::OUString aName;
     ScDocument* pDocument;
@@ -81,15 +83,13 @@ private:
     ScMemChart* CreateMemChartMulti();
 public:
     ScChartArray( ScDocument* pDoc, SCTAB nTab,
-                    SCCOL nStartColP, SCROW nStartRowP,
-                    SCCOL nEndColP, SCROW nEndRowP,
-                    const ::rtl::OUString& rChartName );
+                  SCCOL nStartColP, SCROW nStartRowP,
+                  SCCOL nEndColP, SCROW nEndRowP,
+                  const ::rtl::OUString& rChartName );
     ScChartArray( ScDocument* pDoc, const ScRangeListRef& rRangeList,
-                    const ::rtl::OUString& rChartName );
+                  const ::rtl::OUString& rChartName );
     ScChartArray( const ScChartArray& rArr );
-
-    virtual ~ScChartArray();
-    virtual ScDataObject* Clone() const;
+    ~ScChartArray();
 
     const ScRangeListRef&   GetRangeList() const { return aPositioner.GetRangeList(); }
     void    SetRangeList( const ScRangeListRef& rNew ) { aPositioner.SetRangeList(rNew); }
@@ -108,16 +108,20 @@ public:
     ScMemChart* CreateMemChart();
 };
 
-class ScChartCollection : public ScCollection
+class ScChartCollection
 {
+    typedef ::boost::ptr_vector<ScChartArray> DataType;
+    DataType maData;
 public:
-    ScChartCollection() : ScCollection( 4,4 ) {}
-    ScChartCollection( const ScChartCollection& rColl ):
-            ScCollection( rColl ) {}
+    ScChartCollection();
+    ScChartCollection(const ScChartCollection& rColl);
 
-    virtual ScDataObject*   Clone() const;
-    ScChartArray*       operator[](sal_uInt16 nIndex) const
-                        { return (ScChartArray*)At(nIndex); }
+    SC_DLLPUBLIC void push_back(ScChartArray* p);
+    void clear();
+    size_t size() const;
+    bool empty() const;
+    ScChartArray* operator[](size_t nIndex);
+    const ScChartArray* operator[](size_t nIndex) const;
 
     bool operator==(const ScChartCollection& rCmp) const;
 };

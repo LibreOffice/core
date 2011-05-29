@@ -91,32 +91,20 @@ ScChartArray::ScChartArray( ScDocument* pDoc, SCTAB nTab,
 {
 }
 
-ScChartArray::ScChartArray( ScDocument* pDoc, const ScRangeListRef& rRangeList,
-                    const OUString& rChartName ) :
-        aName( rChartName ),
-        pDocument( pDoc ),
-        aPositioner(pDoc, rRangeList),
-        bValid( true )
-{
-}
+ScChartArray::ScChartArray(
+    ScDocument* pDoc, const ScRangeListRef& rRangeList, const OUString& rChartName ) :
+    aName( rChartName ),
+    pDocument( pDoc ),
+    aPositioner(pDoc, rRangeList),
+    bValid( true ) {}
 
 ScChartArray::ScChartArray( const ScChartArray& rArr ) :
-        ScDataObject(),
-        aName(rArr.aName),
-        pDocument(rArr.pDocument),
-        aPositioner(rArr.aPositioner),
-        bValid(rArr.bValid)
-{
-}
+    aName(rArr.aName),
+    pDocument(rArr.pDocument),
+    aPositioner(rArr.aPositioner),
+    bValid(rArr.bValid) {}
 
-ScChartArray::~ScChartArray()
-{
-}
-
-ScDataObject* ScChartArray::Clone() const
-{
-    return new ScChartArray(*this);
-}
+ScChartArray::~ScChartArray() {}
 
 bool ScChartArray::operator==(const ScChartArray& rCmp) const
 {
@@ -517,26 +505,47 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
 #pragma optimize("",on)
 #endif
 
+ScChartCollection::ScChartCollection() {}
+ScChartCollection::ScChartCollection(const ScChartCollection& r) :
+    maData(r.maData) {}
 
-//
-//              Collection
-//
-
-ScDataObject*   ScChartCollection::Clone() const
+void ScChartCollection::push_back(ScChartArray* p)
 {
-    return new ScChartCollection(*this);
+    maData.push_back(p);
+}
+
+void ScChartCollection::clear()
+{
+    maData.clear();
+}
+
+size_t ScChartCollection::size() const
+{
+    return maData.size();
+}
+
+bool ScChartCollection::empty() const
+{
+    return maData.empty();
+}
+
+ScChartArray* ScChartCollection::operator[](size_t nIndex)
+{
+    if (maData.size() <= nIndex)
+        return NULL;
+    return &maData[nIndex];
+}
+
+const ScChartArray* ScChartCollection::operator[](size_t nIndex) const
+{
+    if (maData.size() <= nIndex)
+        return NULL;
+    return &maData[nIndex];
 }
 
 bool ScChartCollection::operator==(const ScChartCollection& rCmp) const
 {
-    if (nCount != rCmp.nCount)
-        return false;
-
-    for (sal_uInt16 i=0; i<nCount; i++)
-        if (!((*(const ScChartArray*)pItems[i]) == (*(const ScChartArray*)rCmp.pItems[i])))
-            return false;
-
-    return true;
+    return maData == rCmp.maData;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
