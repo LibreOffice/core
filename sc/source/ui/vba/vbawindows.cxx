@@ -178,7 +178,7 @@ public:
 
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException)
     {
-        return (m_windows.size() > 0);
+        return ( !m_windows.empty() );
     }
 
     //XNameAccess

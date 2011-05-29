@@ -166,7 +166,7 @@ public:
 
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException)
     {
-        return (sheets.size() > 0);
+        return ( !sheets.empty() );
     }
 
     //XNameAccess
