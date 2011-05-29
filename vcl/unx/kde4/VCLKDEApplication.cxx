@@ -43,7 +43,7 @@ bool VCLKDEApplication::x11EventFilter(XEvent* ev)
 {
     //if we have a display and the display consumes the event
     //do not process the event in qt
-    if (SalKDEDisplay::self() && SalKDEDisplay::self()->Dispatch(event) > 0)
+    if (SalKDEDisplay::self() && SalKDEDisplay::self()->Dispatch(ev) > 0)
     {
         return true;
     }
