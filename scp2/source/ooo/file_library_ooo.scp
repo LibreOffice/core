@@ -602,7 +602,7 @@ File gid_File_Lib_Pixman
     Dir = gid_Dir_Program;
   #ifdef UNX
     #ifdef MACOSX
-       Name = STRING(CONCAT3(libpixman-1,.0,UNXSUFFIX));
+       Name = "libpixman-1.a";
     #else
        Name = STRING(CONCAT3(libpixman-1,UNXSUFFIX,.0));
     #endif
