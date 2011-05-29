@@ -51,6 +51,7 @@ PATCH_FILES=
 
 
 .IF "$(OS)"=="MACOSX"
+
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure --prefix=$(SRC_ROOT)$/$(PRJNAME)$/$(MISC) CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS)" CXXFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS)"
 CONFIGURE_FLAGS=$(eq,$(OS),MACOSX CPPFLAGS="$(EXTRA_CDEFS)" $(NULL)) --disable-curses --without-emacs --without-git --disable-java
@@ -85,7 +86,24 @@ OUT2BIN+=gettext-tools$/src$/.libs$/msgunfmt
 OUT2BIN+=gettext-tools$/src$/.libs$/msguniq
 OUT2BIN+=gettext-tools$/src$/.libs$/urlget
 OUT2BIN+=gettext-tools$/src$/.libs$/xgettext
+
+.ELIF "$(OS)"=="IOS"
+
+BUILD_DIR=gettext-runtime$/intl
+BUILD_ACTION=dmake
+.IF "$(VERBOSE)"!=""
+BUILD_ACTION+=VERBOSE=t
+.ENDIF
+PATCH_FILES=gettext-0.18.1.1.patch
+ADDITIONAL_FILES=\
+    gettext-runtime/intl/makefile.mk \
+    gettext-runtime/intl/libgnuintl.h \
+    gettext-runtime/intl/libintl.h \
+    gettext-runtime/config.h
+OUT2INC+=gettext-runtime$/intl$/libintl.h
+
 .ELIF "$(OS)"=="WNT"
+
 BUILD_DIR=gettext-runtime$/intl
 BUILD_ACTION=dmake
 PATCH_FILES=gettext-0.18.1.1.patch
