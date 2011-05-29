@@ -87,7 +87,7 @@ CONFIGURE_FLAGS=--disable-static
 CONFIGURE_FLAGS+= --without-ssl --without-libidn --enable-ftp --enable-ipv6 --enable-http --disable-gopher --disable-file --disable-ldap --disable-telnet --disable-dict CPPFLAGS="$(curl_CFLAGS)"  LDFLAGS="$(curl_LDFLAGS)"
 
 .IF "$(CROSS_COMPILING)"!=""
-CONFIGURE_FLAGS+= --build="$(BUILD_PLATFORM)" --host="$(HOST_PLATFORM)"
+CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 .ENDIF
 
 BUILD_DIR=$(CONFIGURE_DIR)$/lib

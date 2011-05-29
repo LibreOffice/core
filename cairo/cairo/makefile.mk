@@ -152,7 +152,7 @@ CONFIGURE_FLAGS=--disable-static --enable-xlib
 .ENDIF
 CONFIGURE_FLAGS+=--enable-ft --disable-svg --enable-gtk-doc=no --enable-test-surfaces=no ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS)
 .IF "$(CROSS_COMPILING)"!=""
-CONFIGURE_FLAGS+= --build="$(BUILD_PLATFORM)" --host="$(HOST_PLATFORM)"
+CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 .ENDIF
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
