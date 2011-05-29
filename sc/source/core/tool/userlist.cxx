@@ -34,7 +34,6 @@
 //------------------------------------------------------------------------
 
 #include <unotools/charclass.hxx>
-#include <string.h>
 
 #include "global.hxx"
 #include "userlist.hxx"
@@ -42,30 +41,64 @@
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/transliterationwrapper.hxx>
 
-// STATIC DATA -----------------------------------------------------------
+using ::rtl::OUString;
 
+namespace {
 
-//------------------------------------------------------------------------
+class FindByName : public ::std::unary_function<ScUserListData::SubStr, bool>
+{
+    const OUString& mrName;
+    bool mbUpper;
+public:
+    FindByName(const OUString& rName, bool bUpper) : mrName(rName), mbUpper(bUpper) {}
+    bool operator() (const ScUserListData::SubStr& r) const
+    {
+        return mbUpper ? r.maUpper.equals(mrName) : r.maReal.equals(mrName);
+    }
+};
+
+}
+
+ScUserListData::SubStr::SubStr(const OUString& rReal, const OUString& rUpper) :
+    maReal(rReal), maUpper(rUpper) {}
 
 void ScUserListData::InitTokens()
 {
     sal_Unicode cSep = ScGlobal::cListDelimiter;
-    nTokenCount = (sal_uInt16) aStr.GetTokenCount(cSep);
-    if (nTokenCount)
+    maSubStrings.clear();
+    const sal_Unicode* p = aStr.getStr();
+    const sal_Unicode* p0 = p;
+    sal_Int32 nLen = 0;
+    bool bFirst = true;
+    for (sal_Int32 i = 0, n = aStr.getLength(); i < n; ++i, ++p, ++nLen)
     {
-        pSubStrings = new String[nTokenCount];
-        pUpperSub   = new String[nTokenCount];
-        for (sal_uInt16 i=0; i<nTokenCount; i++)
+        if (bFirst)
         {
-            pUpperSub[i] = pSubStrings[i] = aStr.GetToken((xub_StrLen)i,cSep);
-            ScGlobal::pCharClass->toUpper(pUpperSub[i]);
+            // very first character, or the first character after a separator.
+            p0 = p;
+            nLen = 0;
+            bFirst = false;
+        }
+        if (*p == cSep && nLen)
+        {
+            OUString aSub(p0, nLen);
+            String aUpStr = aSub;
+            ScGlobal::pCharClass->toUpper(aUpStr);
+            maSubStrings.push_back(new SubStr(aSub, aUpStr));
+            bFirst = true;
         }
     }
-    else
-        pSubStrings = pUpperSub = NULL;
+
+    if (nLen)
+    {
+        OUString aSub(p0, nLen);
+        String aUpStr = aSub;
+        ScGlobal::pCharClass->toUpper(aUpStr);
+        maSubStrings.push_back(new SubStr(aSub, aUpStr));
+    }
 }
 
-ScUserListData::ScUserListData(const String& rStr) :
+ScUserListData::ScUserListData(const OUString& rStr) :
     aStr(rStr)
 {
     InitTokens();
@@ -80,60 +113,57 @@ ScUserListData::ScUserListData(const ScUserListData& rData) :
 
 ScUserListData::~ScUserListData()
 {
-    delete[] pSubStrings;
-    delete[] pUpperSub;
 }
 
-void ScUserListData::SetString( const String& rStr )
+void ScUserListData::SetString( const OUString& rStr )
 {
-    delete[] pSubStrings;
-    delete[] pUpperSub;
-
     aStr = rStr;
     InitTokens();
 }
 
-sal_uInt16 ScUserListData::GetSubCount() const
+size_t ScUserListData::GetSubCount() const
 {
-    return nTokenCount;
+    return maSubStrings.size();
 }
 
-sal_Bool ScUserListData::GetSubIndex(const String& rSubStr, sal_uInt16& rIndex) const
+bool ScUserListData::GetSubIndex(const OUString& rSubStr, sal_uInt16& rIndex) const
 {
-    sal_uInt16 i;
-    for (i=0; i<nTokenCount; i++)
-        if (rSubStr == pSubStrings[i])
-        {
-            rIndex = i;
-            return sal_True;
-        }
+    // First, case sensitive search.
+    SubStringsType::const_iterator itr = ::std::find_if(
+        maSubStrings.begin(), maSubStrings.end(), FindByName(rSubStr, false));
+    if (itr != maSubStrings.end())
+    {
+        rIndex = ::std::distance(maSubStrings.begin(), itr);
+        return true;
+    }
 
-    String aUpStr = rSubStr;
-    ScGlobal::pCharClass->toUpper(aUpStr);
-    for (i=0; i<nTokenCount; i++)
-        if (aUpStr == pUpperSub[i])
-        {
-            rIndex = i;
-            return sal_True;
-        }
-
+    // When that fails, do a case insensitive search.
+    String aTmp = rSubStr;
+    ScGlobal::pCharClass->toUpper(aTmp);
+    OUString aUpStr = aTmp;
+    itr = ::std::find_if(
+        maSubStrings.begin(), maSubStrings.end(), FindByName(aUpStr, true));
+    if (itr != maSubStrings.end())
+    {
+        rIndex = ::std::distance(maSubStrings.begin(), itr);
+        return true;
+    }
     return false;
 }
 
-String ScUserListData::GetSubStr(sal_uInt16 nIndex) const
+OUString ScUserListData::GetSubStr(sal_uInt16 nIndex) const
 {
-    if (nIndex < nTokenCount)
-        return pSubStrings[nIndex];
+    if (nIndex < maSubStrings.size())
+        return maSubStrings[nIndex].maReal;
     else
-        return EMPTY_STRING;
+        return OUString();
 }
 
-StringCompare ScUserListData::Compare(const String& rSubStr1, const String& rSubStr2) const
+StringCompare ScUserListData::Compare(const OUString& rSubStr1, const OUString& rSubStr2) const
 {
-    sal_uInt16 nIndex1;
-    sal_uInt16 nIndex2;
-    sal_Bool bFound1 = GetSubIndex(rSubStr1, nIndex1);
-    sal_Bool bFound2 = GetSubIndex(rSubStr2, nIndex2);
+    sal_uInt16 nIndex1, nIndex2;
+    bool bFound1 = GetSubIndex(rSubStr1, nIndex1);
+    bool bFound2 = GetSubIndex(rSubStr2, nIndex2);
     if (bFound1)
     {
         if (bFound2)
@@ -154,12 +184,11 @@ StringCompare ScUserListData::Compare(const String& rSubStr1, const String& rSub
         return (StringCompare) ScGlobal::GetCaseTransliteration()->compareString( rSubStr1, rSubStr2 );
 }
 
-StringCompare ScUserListData::ICompare(const String& rSubStr1, const String& rSubStr2) const
+StringCompare ScUserListData::ICompare(const OUString& rSubStr1, const OUString& rSubStr2) const
 {
-    sal_uInt16 nIndex1;
-    sal_uInt16 nIndex2;
-    sal_Bool bFound1 = GetSubIndex(rSubStr1, nIndex1);
-    sal_Bool bFound2 = GetSubIndex(rSubStr2, nIndex2);
+    sal_uInt16 nIndex1, nIndex2;
+    bool bFound1 = GetSubIndex(rSubStr1, nIndex1);
+    bool bFound2 = GetSubIndex(rSubStr2, nIndex2);
     if (bFound1)
     {
         if (bFound2)
@@ -252,7 +281,7 @@ ScDataObject* ScUserList::Clone() const
     return ( new ScUserList( *this ) );
 }
 
-ScUserListData* ScUserList::GetData(const String& rSubStr) const
+ScUserListData* ScUserList::GetData(const OUString& rSubStr) const
 {
     sal_uInt16  nIndex;
     sal_uInt16  i = 0;
@@ -262,9 +291,19 @@ ScUserListData* ScUserList::GetData(const String& rSubStr) const
     return NULL;
 }
 
-sal_Bool ScUserList::operator==( const ScUserList& r ) const
+ScUserListData* ScUserList::operator[]( const sal_uInt16 nIndex) const
 {
-    sal_Bool bEqual = (nCount == r.nCount);
+    return (ScUserListData*)At(nIndex);
+}
+
+ScUserList& ScUserList::operator=( const ScUserList& r )
+{
+    return (ScUserList&)ScCollection::operator=( r );
+}
+
+bool ScUserList::operator==( const ScUserList& r ) const
+{
+    bool bEqual = (nCount == r.nCount);
 
     if ( bEqual )
     {
@@ -276,22 +315,27 @@ sal_Bool ScUserList::operator==( const ScUserList& r ) const
             pMyData    = (ScUserListData*)At(i);
             pOtherData = (ScUserListData*)r.At(i);
 
-            bEqual =(   (pMyData->nTokenCount == pOtherData->nTokenCount)
-                     && (pMyData->aStr        == pOtherData->aStr) );
+            bEqual = ((pMyData->GetSubCount() == pOtherData->GetSubCount())
+                     && (pMyData->GetString() == pOtherData->GetString()) );
         }
     }
 
     return bEqual;
 }
 
+bool ScUserList::operator!=( const ScUserList& r ) const
+{
+    return !operator==( r );
+}
 
-sal_Bool ScUserList::HasEntry( const String& rStr ) const
+
+bool ScUserList::HasEntry( const OUString& rStr ) const
 {
     for ( sal_uInt16 i=0; i<nCount; i++)
     {
         const ScUserListData* pMyData = (ScUserListData*) At(i);
-        if ( pMyData->aStr == rStr )
-            return sal_True;
+        if ( pMyData->GetString() == rStr )
+            return true;
     }
     return false;
 }

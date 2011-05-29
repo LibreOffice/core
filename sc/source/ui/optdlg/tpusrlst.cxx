@@ -323,7 +323,7 @@ void ScTpUserLists::UpdateEntries( sal_uInt16 nList )
         {
             if ( i!=0 )
                 aEntryListStr += CR;
-            aEntryListStr += pList->GetSubStr( i );
+            aEntryListStr += String(pList->GetSubStr(i));
         }
 
         aEntryListStr.ConvertLineEnd();

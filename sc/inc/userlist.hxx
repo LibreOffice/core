@@ -33,34 +33,46 @@
 #include "scdllapi.h"
 #include "collect.hxx"
 
-//------------------------------------------------------------------------
+#include <boost/ptr_container/ptr_vector.hpp>
+
+/**
+ * Stores individual user-defined sort list.
+ */
 class SC_DLLPUBLIC ScUserListData : public ScDataObject
 {
-friend class ScUserList;
-    String  aStr;
-    sal_uInt16  nTokenCount;
-    String* pSubStrings;
-    String* pUpperSub;
+public:
+    struct SubStr
+    {
+        ::rtl::OUString maReal;
+        ::rtl::OUString maUpper;
+        SubStr(const ::rtl::OUString& rReal, const ::rtl::OUString& rUpper);
+    };
+private:
+    typedef ::boost::ptr_vector<SubStr> SubStringsType;
+    SubStringsType maSubStrings;
+    ::rtl::OUString aStr;
 
     SC_DLLPRIVATE void  InitTokens();
 
 public:
-                    ScUserListData(const String& rStr);
-                    ScUserListData(const ScUserListData& rData);
-    virtual         ~ScUserListData();
+    ScUserListData(const ::rtl::OUString& rStr);
+    ScUserListData(const ScUserListData& rData);
+    virtual ~ScUserListData();
 
-    virtual ScDataObject*       Clone() const { return new ScUserListData(*this); }
+    virtual ScDataObject* Clone() const { return new ScUserListData(*this); }
 
-    const   String&         GetString() const { return aStr; }
-            void            SetString( const String& rStr);
-            sal_uInt16          GetSubCount() const;
-            sal_Bool            GetSubIndex(const String& rSubStr, sal_uInt16& rIndex) const;
-            String          GetSubStr(sal_uInt16 nIndex) const;
-            StringCompare   Compare(const String& rSubStr1, const String& rSubStr2) const;
-            StringCompare   ICompare(const String& rSubStr1, const String& rSubStr2) const;
+    const ::rtl::OUString& GetString() const { return aStr; }
+    void SetString(const ::rtl::OUString& rStr);
+    size_t GetSubCount() const;
+    bool GetSubIndex(const ::rtl::OUString& rSubStr, sal_uInt16& rIndex) const;
+    ::rtl::OUString GetSubStr(sal_uInt16 nIndex) const;
+    StringCompare Compare(const ::rtl::OUString& rSubStr1, const ::rtl::OUString& rSubStr2) const;
+    StringCompare ICompare(const ::rtl::OUString& rSubStr1, const ::rtl::OUString& rSubStr2) const;
 };
 
-//------------------------------------------------------------------------
+/**
+ * Collection of user-defined sort lists.
+ */
 class SC_DLLPUBLIC ScUserList : public ScCollection
 {
 public:
@@ -69,24 +81,15 @@ public:
 
     virtual ScDataObject*       Clone() const;
 
-            ScUserListData* GetData( const String& rSubStr ) const;
-            /// If the list in rStr is already inserted
-            sal_Bool            HasEntry( const String& rStr ) const;
+    ScUserListData* GetData( const ::rtl::OUString& rSubStr ) const;
+    /// If the list in rStr is already inserted
+    bool HasEntry( const ::rtl::OUString& rStr ) const;
 
-    inline  ScUserListData* operator[]( const sal_uInt16 nIndex) const;
-    inline  ScUserList&     operator= ( const ScUserList& r );
-            sal_Bool            operator==( const ScUserList& r ) const;
-    inline  sal_Bool            operator!=( const ScUserList& r ) const;
+    ScUserListData*  operator[]( const sal_uInt16 nIndex) const;
+    ScUserList&     operator= ( const ScUserList& r );
+    bool            operator==( const ScUserList& r ) const;
+    bool            operator!=( const ScUserList& r ) const;
 };
-
-inline  ScUserList& ScUserList::operator=( const ScUserList& r )
-    { return (ScUserList&)ScCollection::operator=( r ); }
-
-inline ScUserListData* ScUserList::operator[]( const sal_uInt16 nIndex) const
-    { return (ScUserListData*)At(nIndex); }
-
-inline sal_Bool ScUserList::operator!=( const ScUserList& r ) const
-    { return !operator==( r ); }
 
 #endif
 
