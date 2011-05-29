@@ -360,17 +360,36 @@ sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDire
 
 #ifndef MACOSX
 
+#define DOT_CONFIG "/.config"
+
 static sal_Bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax)
 {
     sal_Char *pStr = getenv("XDG_CONFIG_HOME");
 
     if ((pStr == NULL) || (strlen(pStr) == 0) ||
         (access(pStr, 0) != 0))
-        return (osl_psz_getHomeDir(Security, pszDirectory, nMax));
+    {
+        // a default equal to $HOME/.config should be used.
+        if (!osl_psz_getHomeDir(Security, pszDirectory, nMax))
+            return sal_False;
+        size_t n = strlen(pszDirectory);
+        if (n + sizeof(DOT_CONFIG) < nMax)
+        {
+            strncpy(pszDirectory+n, DOT_CONFIG, sizeof(DOT_CONFIG));
+            if (access(pszDirectory, 0) != 0)
+            {
+                // resort to HOME
+                pszDirectory[n] = '\0';
+            }
+        }
+    }
+    else
+        strncpy(pszDirectory, pStr, nMax);
 
-    strncpy(pszDirectory, pStr, nMax);
     return sal_True;
 }
+
+#undef DOT_CONFIG
 
 #else
 
