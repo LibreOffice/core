@@ -6558,30 +6558,6 @@ fi
 AC_SUBST(ENABLE_GSTREAMER)
 
 dnl ===================================================================
-dnl Check whether the librsvg libraries are available.
-dnl ===================================================================
-
-ENABLE_LIBRSVG=""
-LIBRSVG_CFLAGS=""
-LIBRSVG_LIBS=""
-
-if test  "$test_librsvg" = "yes"; then
-    AC_MSG_CHECKING([whether to use librsvg])
-    if test "x$enable_librsvg" != "xno" ; then
-        PKG_CHECK_MODULES( LIBRSVG, librsvg-2.0 >= 2.14,,AC_MSG_ERROR([requirements to build with librsvg support not met. Use --disable-librsvg or install the missing packages]))
-        ENABLE_LIBRSVG="TRUE"
-        AC_MSG_RESULT([yes])
-        BUILD_TYPE="$BUILD_TYPE LIBRSVG"
-    else
-        AC_MSG_RESULT([no])
-    fi
-fi
-
-AC_SUBST(ENABLE_LIBRSVG)
-AC_SUBST(LIBRSVG_CFLAGS)
-AC_SUBST(LIBRSVG_LIBS)
-
-dnl ===================================================================
 dnl Check whether the OpenGL libraries are available
 dnl ===================================================================
 
@@ -7945,34 +7921,40 @@ fi
 AC_SUBST(USE_XINERAMA)
 AC_SUBST(XINERAMA_LINK)
 
-dnl ===================================================================
-dnl Test whether to build librsvg or rely on the system version
-dnl ===================================================================
+# ===================================================================
+# Check whether to enable librsvg
+# ===================================================================
 
-dnl FIXME: Overlaps and conflicts with librsvg checks above. Needs to
-dnl        be unified.
+ENABLE_LIBRSVG=""
+LIBRSVG_CFLAGS=""
+LIBRSVG_LIBS=""
 
-AC_MSG_CHECKING([whether to use the system librsvg])
-
-if test "$with_system_librsvg" = yes -o \( "$with_system_libs" = yes -a "$with_system_librsvg" != no \); then
-    SYSTEM_LIBRSVG=YES
-    AC_MSG_RESULT([yes])
-else
-    case "$_os" in
-        WINNT*)
-            SYSTEM_LIBRSVG=NO
-            AC_MSG_RESULT([no])
-                ;;
-        Darwin*)
-            SYSTEM_LIBRSVG=NO
-            AC_MSG_RESULT([no])
-            ;;
-        *)
+if test  "$test_librsvg" = "yes"; then
+    AC_MSG_CHECKING([whether to use librsvg])
+    if test "x$enable_librsvg" != "xno" ; then
+        ENABLE_LIBRSVG="TRUE"
+        AC_MSG_RESULT([yes])
+        # ===================================================================
+        # Test whether to build librsvg or rely on the system version
+        # ===================================================================
+        AC_MSG_CHECKING([whether to use the system librsvg])
+        if test "$with_system_librsvg" = yes -o \( "$with_system_libs" = yes -a "$with_system_librsvg" != no \); then
             SYSTEM_LIBRSVG=YES
             AC_MSG_RESULT([yes])
-            ;;
-    esac
+            PKG_CHECK_MODULES( LIBRSVG, librsvg-2.0 >= 2.14,,AC_MSG_ERROR([requirements to build with system librsvg support not met. Use shipped version or use --disable-librsvg or install the missing packages]))
+        else
+            SYSTEM_LIBRSVG=NO
+            AC_MSG_RESULT([no])
+            BUILD_TYPE="$BUILD_TYPE LIBRSVG"
+        fi
+    else
+        AC_MSG_RESULT([no])
+    fi
 fi
+
+AC_SUBST(ENABLE_LIBRSVG)
+AC_SUBST(LIBRSVG_CFLAGS)
+AC_SUBST(LIBRSVG_LIBS)
 AC_SUBST(SYSTEM_LIBRSVG)
 
 dnl ===================================================================
