@@ -1549,7 +1549,7 @@ void StackWindow::Resize()
 
 
 
-IMPL_LINK_INLINE_START( StackWindow, ButtonHdl, ImageButton *, pButton )
+IMPL_LINK_INLINE_START( StackWindow, ButtonHdl, ImageButton *, /*pButton*/ )
 {
     return 0;
 }
