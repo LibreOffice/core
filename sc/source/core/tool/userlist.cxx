@@ -79,12 +79,15 @@ void ScUserListData::InitTokens()
             nLen = 0;
             bFirst = false;
         }
-        if (*p == cSep && nLen)
+        if (*p == cSep)
         {
-            OUString aSub(p0, nLen);
-            String aUpStr = aSub;
-            ScGlobal::pCharClass->toUpper(aUpStr);
-            maSubStrings.push_back(new SubStr(aSub, aUpStr));
+            if (nLen)
+            {
+                OUString aSub(p0, nLen);
+                String aUpStr = aSub;
+                ScGlobal::pCharClass->toUpper(aUpStr);
+                maSubStrings.push_back(new SubStr(aSub, aUpStr));
+            }
             bFirst = true;
         }
     }
