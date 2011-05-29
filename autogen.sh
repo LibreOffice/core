@@ -113,3 +113,10 @@ if (defined $ENV{NOCONFIGURE}) {
     print "running ./configure with '" . join ("' '", @args), "'\n";
     system ("./configure", @args);
 }
+
+# Local Variables:
+# tab-width: 4
+# indent-tabs-mode: nil
+# End:
+
+# vim:set shiftwidth=4 softtabstop=4 expandtab: #
