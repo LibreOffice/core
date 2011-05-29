@@ -7972,11 +7972,7 @@ if test $SYSTEM_LIBRSVG = YES; then
     AC_MSG_RESULT([yes])
 else
     case "$_os" in
-        WINNT*)
-            SYSTEM_GDKPIXBUF=NO
-            AC_MSG_RESULT([no])
-                ;;
-        Darwin*)
+        WINNT|Darwin|iOS)
             SYSTEM_GDKPIXBUF=NO
             AC_MSG_RESULT([no])
             ;;
@@ -8003,11 +7999,7 @@ if test $SYSTEM_LIBRSVG = YES; then
     AC_MSG_RESULT([yes])
 else
     case "$_os" in
-        WINNT*)
-            SYSTEM_GLIB=NO
-            AC_MSG_RESULT([no])
-                ;;
-        Darwin*)
+        WINNT|Darwin|iOS)
             SYSTEM_GLIB=NO
             AC_MSG_RESULT([no])
             ;;
@@ -8031,11 +8023,7 @@ if test "$with_system_gettext" = yes -o \( "$with_system_libs" = yes -a "$with_s
     AC_MSG_RESULT([yes])
 else
     case "$_os" in
-        WINNT*)
-            SYSTEM_GETTEXT=NO
-            AC_MSG_RESULT([no])
-                ;;
-        Darwin*)
+        WINNT|Darwin|iOS)
             SYSTEM_GETTEXT=NO
             AC_MSG_RESULT([no])
             ;;
@@ -8062,11 +8050,7 @@ if test $SYSTEM_LIBRSVG = YES; then
     AC_MSG_RESULT([yes])
 else
     case "$_os" in
-        WINNT*)
-            SYSTEM_LIBCROCO=NO
-            AC_MSG_RESULT([no])
-            ;;
-        Darwin*)
+        WINNT|Darwin|iOS)
             SYSTEM_LIBCROCO=NO
             AC_MSG_RESULT([no])
             ;;
@@ -8093,11 +8077,7 @@ if test $SYSTEM_LIBRSVG = YES; then
     AC_MSG_RESULT([yes])
 else
     case "$_os" in
-        WINNT*)
-            SYSTEM_PANGO=NO
-            AC_MSG_RESULT([no])
-            ;;
-        Darwin*)
+        WINNT|Darwin|iOS)
             SYSTEM_PANGO=NO
             AC_MSG_RESULT([no])
             ;;
@@ -8124,7 +8104,7 @@ if test $SYSTEM_LIBRSVG = YES; then
     AC_MSG_RESULT([yes])
 else
     case "$_os" in
-        WINNT*)
+        WINNT|Darwin|iOS)
             SYSTEM_LIBGSF=NO
             AC_MSG_RESULT([no])
             ;;
@@ -8151,11 +8131,7 @@ if test "$with_system_libpng" = yes -o \( "$with_system_libs" = yes -a "$with_sy
     AC_MSG_RESULT([yes])
 else
     case "$_os" in
-        WINNT*)
-            SYSTEM_LIBPNG=NO
-            AC_MSG_RESULT([no])
-            ;;
-        Darwin*)
+        WINNT|Darwin|iOS)
             SYSTEM_LIBPNG=NO
             AC_MSG_RESULT([no])
             ;;
@@ -8181,11 +8157,7 @@ if test "$SYSTEM_JPEG" == "YES"; then
     AC_MSG_RESULT([yes])
 else
     case "$_os" in
-        WINNT*)
-            SYSTEM_LIBJPEG=NO
-            AC_MSG_RESULT([no])
-            ;;
-        Darwin*)
+        WINNT|Darwin|iOS)
             SYSTEM_LIBJPEG=NO
             AC_MSG_RESULT([no])
             ;;
