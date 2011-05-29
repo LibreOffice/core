@@ -1356,7 +1356,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::INVALIDATE_ALL_CHILDREN;
             aEvent.Source = uno::Reference< XAccessibleContext >(this);
-            CommitChange(aEvent); // all childs changed
+            CommitChange(aEvent); // all children changed
         }
         else if (rRef.GetId() == SC_HINT_ACC_MAKEDRAWLAYER)
         {

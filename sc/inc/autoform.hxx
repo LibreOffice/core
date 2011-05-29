@@ -32,7 +32,6 @@
 /*************************************************************************
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-JP 20.07.95:
 
     Die akt. Struktur der Autoformatierung darf nicht mehr veraendert werden.
     Diese wird durch unterschiedlichen Code vom StartWriter und vom StarCalc

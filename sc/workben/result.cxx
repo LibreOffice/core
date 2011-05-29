@@ -40,8 +40,6 @@ using namespace com::sun::star;
 
 SV_IMPL_PTRARR( XResultListenerArr_Impl, XResultListenerPtr );
 
-//SMART_UNO_IMPLEMENTATION( ScAddInResult, UsrObject );
-
 //------------------------------------------------------------------------
 
 ScAddInResult::ScAddInResult(const String& rStr) :
@@ -58,16 +56,11 @@ void ScAddInResult::NewValue()
     ++nTickCount;
 
     uno::Any aAny;
-    if ( true /* nTickCount % 4 */ )
-    {
-        String aRet = aArg;
-        aRet += nTickCount;
-        rtl::OUString aUStr = StringToOUString( aRet, CHARSET_SYSTEM );
-        aAny <<= aUStr;
-    }
-    // else void
+    String aRet = aArg;
+    aRet += nTickCount;
+    rtl::OUString aUStr = StringToOUString( aRet, CHARSET_SYSTEM );
+    aAny <<= aUStr;
 
-//  sheet::ResultEvent aEvent( (UsrObject*)this, aAny );
     sheet::ResultEvent aEvent( (cppu::OWeakObject*)this, aAny );
 
     for ( sal_uInt16 n=0; n<aListeners.Count(); n++ )

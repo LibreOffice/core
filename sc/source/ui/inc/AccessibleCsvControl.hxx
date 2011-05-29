@@ -175,7 +175,7 @@ public:
     virtual sal_Int32 SAL_CALL getAccessibleChildCount()
         throw( ::com::sun::star::uno::RuntimeException );
 
-    /** Throws an exception (the ruler does not have childern). */
+    /** Throws an exception (the ruler does not have children). */
     virtual XAccessibleRef SAL_CALL getAccessibleChild( sal_Int32 nIndex )
         throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException );
 
