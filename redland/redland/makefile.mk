@@ -131,7 +131,7 @@ CONFIGURE_ACTION=.$/configure PATH="..$/..$/..$/bin:$$PATH"
 .IF "$(OS)"=="IOS"
 CONFIGURE_FLAGS=--disable-shared
 .ELSE
-CONFIGURE_FKAGS=--disable-static
+CONFIGURE_FLAGS=--disable-static
 .ENDIF
 CONFIGURE_FLAGS+= --disable-gtk-doc --with-threads --with-openssl-digests --with-xml-parser=libxml --with-raptor=system --with-rasqual=system --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml
 .IF "$(CROSS_COMPILING)"!=""
