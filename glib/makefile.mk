@@ -36,8 +36,8 @@ TARGET=so_glib
 
 .IF "$(SYSTEM_GLIB)" == "YES"
 all:
-    @echo "An already available installation of glib should exist on your system."
-    @echo "Therefore the version provided here does not need to be built in addition."
+	@echo "An already available installation of glib should exist on your system."
+	@echo "Therefore the version provided here does not need to be built in addition."
 .ENDIF
 
 # --- Files --------------------------------------------------------
@@ -50,20 +50,15 @@ TARFILE_MD5=9f6e85e1e38490c3956f4415bcd33e6e
 
 .IF "$(OS)"=="MACOSX"
 PATCH_FILES=glib-2.28.1.patch
-CONFIGURE_LDFLAGS="-L$(SOLARLIBDIR)"
-CONFIGURE_DIR=
-CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) \
-                 .$/configure --prefix=$(SRC_ROOT)$/$(PRJNAME)$/$(MISC) \
-                 CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) -I$(SOLARINCDIR)$/external" \
-                 LDFLAGS="$(CONFIGURE_LDFLAGS)"
-CONFIGURE_FLAGS=--disable-fam
-.IF "$(OS)" == "MACOSX"
-CONFIGURE_FLAGS+= CPPFLAGS="$(ARCH_FLAGS) $(EXTRA_CDEFS)"
-.ENDIF
 
+CONFIGURE_FLAGS=--prefix=$(SRC_ROOT)$/$(PRJNAME)$/$(MISC)
+CONFIGURE_FLAGS+=--disable-fam
+CONFIGURE_FLAGS+=CPPFLAGS="$(ARCH_FLAGS) $(EXTRA_CDEFS) -DBUILD_OS_APPLEOSX"
+CONFIGURE_FLAGS+=CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) -I$(SOLARINCDIR)$/external"
+CONFIGURE_FLAGS+=LDFLAGS="-L$(SOLARLIBDIR) $(EXTRA_LINKFLAGS)"
+
+CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) ./configure
 BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE)
-BUILD_DIR=$(CONFIGURE_DIR)
-
 
 EXTRPATH=LOADER
 OUT2LIB+=gio/.libs/libgio-2.0.0.dylib
@@ -72,8 +67,8 @@ OUT2LIB+=gmodule/.libs/libgmodule-2.0.0.dylib
 OUT2LIB+=gobject/.libs/libgobject-2.0.0.dylib
 OUT2LIB+=gthread/.libs/libgthread-2.0.0.dylib
 
-OUT2BIN+=gobject$/glib-mkenums
-OUT2BIN+=gobject$/.libs$/glib-genmarshal
+OUT2BIN+=gobject/glib-mkenums
+OUT2BIN+=gobject/.libs/glib-genmarshal
 
 OUT2INC+=glib/glib.h
 OUT2INC+=glib/glib-object.h
