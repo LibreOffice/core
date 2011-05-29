@@ -31,7 +31,6 @@
 
 // -----------------------------------------------------------------------
 
-#include "collect.hxx"
 #include "rangelst.hxx"
 #include "chartpos.hxx"
 
