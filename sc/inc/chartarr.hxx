@@ -36,10 +36,7 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
-class ScAddress;
-class Table;
 class ScDocument;
-
 
 // ScMemChart is a stripped-down SchMemChart from old chart,
 // used only to transport a rectangular data array for the UNO API,
@@ -68,7 +65,6 @@ public:
     void SetColText(short nCol, const ::rtl::OUString& rText) { pColText[nCol] = rText; }
     void SetRowText(short nRow, const ::rtl::OUString& rText) { pRowText[nRow] = rText; }
 };
-
 
 class SC_DLLPUBLIC ScChartArray             // only parameter-struct
 {
@@ -124,8 +120,6 @@ public:
 
     bool operator==(const ScChartCollection& rCmp) const;
 };
-
-
 
 #endif
 
