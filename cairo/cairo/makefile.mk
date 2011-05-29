@@ -145,7 +145,15 @@ cairo_CFLAGS+=-march=i486
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS=--enable-xlib --enable-ft --disable-svg --enable-gtk-doc=no --enable-test-surfaces=no --enable-static=no ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS)
+.IF "$(OS)"=="IOS"
+CONFIGURE_FLAGS=--disable-shared
+.ELSE
+CONFIGURE_FLAGS=--disable-static --enable-xlib
+.ENDIF
+CONFIGURE_FLAGS+=--enable-ft --disable-svg --enable-gtk-doc=no --enable-test-surfaces=no ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS)
+.IF "$(CROSS_COMPILING)"!=""
+CONFIGURE_FLAGS+= --build="$(BUILD_PLATFORM)" --host="$(HOST_PLATFORM)"
+.ENDIF
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
@@ -201,6 +209,8 @@ OUT2BIN+=src$/.libs$/*.dll
 OUT2LIB+=src$/release$/*.lib
 OUT2BIN+=src$/release$/*.dll
 .ENDIF
+.ELIF "$(OS)"=="IOS"
+OUT2LIB+=src$/.libs$/libcairo-1.a
 .ELSE
 OUT2LIB+=src$/.libs$/libcairo.so*
 .ENDIF

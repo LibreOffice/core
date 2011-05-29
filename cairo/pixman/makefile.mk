@@ -120,8 +120,15 @@ pixman_CFLAGS+=-fPIC
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS=--enable-static=no --enable-shared=yes
+.IF "$(OS)"=="IOS"
+CONFIGURE_FLAGS=--disable-shared
+.ELSE
+CONFIGURE_FLAGS=--disable-static
+.ENDIF
 CONFIGURE_FLAGS+=CFLAGS="$(pixman_CFLAGS)"
+.IF "$(CROSS_COMPILING)"!=""
+CONFIGURE_FLAGS+= --build="$(BUILD_PLATFORM)" --host="$(HOST_PLATFORM)"
+.ENDIF
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
@@ -142,6 +149,8 @@ OUT2LIB+=pixman$/.libs$/*.a
 .ELSE
 OUT2LIB+=pixman$/release$/*.lib
 .ENDIF
+.ELIF "$(OS)"=="IOS"
+OUT2LIB+=pixman$/.libs$/libpixman-1.a
 .ELSE
 OUT2LIB+=pixman$/.libs$/libpixman-1.so*
 .ENDIF
