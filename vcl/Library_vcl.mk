@@ -442,6 +442,7 @@ endif
 else
 $(eval $(call gb_Library_add_linked_libs,vcl,\
     graphite2_off \
+    version \
 ))
 endif
 endif
