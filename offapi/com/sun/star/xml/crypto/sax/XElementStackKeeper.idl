@@ -35,29 +35,9 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/uno/Exception.idl>
 #include <com/sun/star/xml/sax/XDocumentHandler.idl>
+#include <com/sun/star/xml/crypto/sax/ElementStackItem.idl>
 
 module com { module sun { module star { module xml { module crypto { module sax {
-
-/**
- * A struct to keep a startElement/endElement SAX event.
- */
-struct ElementStackItem
-{
-    /**
-     * whether it is a startElement event
-     */
-    boolean isStartElementEvent;
-
-    /**
-     * the name of the element
-     */
-    string elementName;
-
-    /**
-     * attribute list for a startElement event
-     */
-    com::sun::star::xml::sax::XAttributeList xAttributes;
-};
 
 /**
  * Manipulate the "key SAX events" in a SAX event stream.

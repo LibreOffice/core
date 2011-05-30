@@ -77,7 +77,6 @@ published interface XShape
     [attribute,bound] boolean Opaque;
 };
 
-service Shape : XShape;
 //=============================================================================
 
 }; }; }; };

@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_setup_InstallResponse_idl__
 #define __com_sun_star_setup_InstallResponse_idl__
 
+#include <com/sun/star/setup/ResponseErrorCode.idl>
+
 module com {  module sun {  module star {  module setup {
-
-/// @deprecated
-published enum ResponseErrorCode
-{
-    // DocMerge: empty anyway
-    NOERROR,
-
-    // DocMerge: empty anyway
-    NOT_ENOUGH_SPACE
-    };
 
 // DocMerge: empty anyway
 published struct InstallResponse

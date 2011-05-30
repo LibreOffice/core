@@ -1,0 +1,140 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_lang_SearchFlags_idl__
+#define __com_sun_star_lang_SearchFlags_idl__
+
+
+//=============================================================================
+
+module com { module sun { module star { module util {
+
+//=============================================================================
+
+/// Flags for search methods
+published constants SearchFlags
+{
+    /**
+        @deprecated The constant ALL_IGNORE_CASE is never supported - use
+                    <const scope="com::sun::star::i18n">TransliterationModules::IGNORE_CASE</const>
+                    with
+                    <member>SearchOptions::transliterateFlags</member>
+                    instead.
+
+        @see <type scope="com::sun::star::i18n">TransliterationModules</type>
+    */
+    const long  ALL_IGNORE_CASE     = 0x00000001;
+
+    /** Flag for normal (Boyer-Moore) search / Search for word only. */
+    const long  NORM_WORD_ONLY      = 0x00000010;
+
+    /** Flag for "regular expression" search / Interpret as extended
+        regular expression.
+
+        @deprecated The flag is currently not supported by OOo.
+    */
+    const long  REG_EXTENDED        = 0x00000100;
+
+    /** Flag for "regular expression" search / No register information
+        or backreferences, i.e., avoid sub expressions. Return only
+        true/false if matched or not.
+
+        @deprecated The flag is currently not supported by OOo.
+    */
+    const long  REG_NOSUB           = 0x00000200;
+
+    /** Flag for "regular expression" search / Special new line
+        treatment.
+
+        @deprecated The flag is currently not supported by OOo.
+
+        <p> A NEWLINE character in string will not be matched by a
+        period outside bracket expression or by any form of a non
+        matching list. </p>
+
+        <p> A circumflex (^) in pattern when used to specify expression
+        anchoring will match the zero length string immediately after a
+        newline in string, regardless of the setting of
+        REG_NOT_BEGINOFLINE. </p>
+
+        <p> A dollar-sign ($) in pattern when used to specify expression
+        anchoring, will match zero-length string immediately before a
+        new line in string, regardless of the setting of
+        REG_NOT_ENDOFLINE. </p>
+    */
+    const long  REG_NEWLINE         = 0x00000400;
+
+    /** The first character in the string is not the beginning of the
+        line therefore ^ will not match with first character of the
+        string.
+    */
+    const long  REG_NOT_BEGINOFLINE = 0x00000800;
+
+    /** The last character in the string is not the end of the line
+        therefore $ will not match with last character of the string.
+    */
+    const long  REG_NOT_ENDOFLINE   = 0x00001000;
+
+    /** Flag for "Weighted Levenshtein Distance" search / Relaxed
+        checking of limit, split weigh pools.
+
+        <p> If not specified (<b>strict</b>), the search is sucessful if
+        the WLD is within a calculated limit where each insertion,
+        deletion and replacement adds a weight to a common pool of
+        weights. This is the mathematically correct WLD. </p>
+
+        <p> From a user's point of view the strict WLD is an
+        exclusive-OR of the arguments given, for example if allowed
+        insertions=2 and allowed replacements=2, the search fails if 2
+        characters had been inserted and an additional operation would
+        be needed to match. Depending on the weights it may also fail if
+        1 character was inserted and 1 character replaced and an
+        additional operation would be needed to match. The strict
+        algorithm may match less than expected from a first glance of
+        the specified arguments, but does not return false positives. </p>
+
+        <p> If specified (<b>relaxed</b>), the search is also successful
+        if the combined pool for insertions and deletions is below a
+        doubled calculated limit and replacements are treated
+        differently. Additionally, swapped characters are counted as one
+        replacement. </p>
+
+        <p> From a user's point of view the relaxed WLD is an
+        inclusive-OR of the arguments given, for example if allowed
+        insertions=2 and allowed replacements=2, the search succeeds if
+        2 characters had been inserted and an additional replacement is
+        needed to match. The relaxed algorithm may return false
+        positives, but meets user expectation better. </p>
+    */
+    const long  LEV_RELAXED     = 0x00010000;
+};
+
+//=============================================================================
+}; }; }; };
+
+#endif
+

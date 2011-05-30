@@ -34,11 +34,6 @@
 
  module com {  module sun {  module star {  module frame {
 
-constants UntitledNumbersConst
-{
-    const long INVALID_NUMBER = 0;
-};
-
 //=============================================================================
 /** knows all currently used and all free numbers for using with untitled
     but counted objects.

@@ -1,0 +1,75 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef com_sun_star_style_XStyleSupplier_idl
+#define com_sun_star_style_XStyleSupplier_idl
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+#ifndef __com_sun_star_style_XStyle_idl__
+#include <com/sun/star/style/XStyle.idl>
+#endif
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+module com
+{
+module sun
+{
+module star
+{
+module style
+{
+
+interface XStyleSupplier : ::com::sun::star::uno::XInterface
+{
+    /** get the currently set style.
+
+        @return the style.  If no style was set, the returned object
+                may be empty (null).  Otherwise, the returned object
+                must support the service
+                <type>PropertyTemplate</type>.
+     */
+    ::com::sun::star::style::XStyle getStyle();
+
+    /** @param xStyle If you want to remove an existing style, you can
+               set an empty (null) object.  Otherwise, the object
+               given must support the service
+               <type>PropertyTemplate</type>.
+     */
+    void setStyle( [in] ::com::sun::star::style::XStyle xStyle )
+        raises( com::sun::star::lang::IllegalArgumentException );
+};
+
+} ; // style
+} ; // com
+} ; // sun
+} ; // star
+
+
+#endif

@@ -31,7 +31,6 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/geometry/RealRectangle2D.idl>
 #include <com/sun/star/rendering/RenderState.idl>
-#include <com/sun/star/rendering/XBitmap.idl>
 #include <com/sun/star/rendering/XCanvas.idl>
 #include <com/sun/star/rendering/VolatileContentDestroyedException.idl>
 
@@ -113,23 +112,6 @@ published interface XBitmapCanvas : XCanvas
         raises (com::sun::star::lang::IllegalArgumentException,
                 VolatileContentDestroyedException);
 
-};
-
-//=============================================================================
-
-// TODO: Multiple-inheritance interfaces
-
-/** This service provides the interfaces for a <type>XBitmapCanvas</type>
- */
-service BitmapCanvas
-{
-    /** Canvas interface, to issue rendering operations.
-     */
-    interface XBitmapCanvas;
-
-    /** Bitmap interface, to directly manipulate the pixel.
-     */
-    interface XBitmap;
 };
 
 }; }; }; };
