@@ -62,6 +62,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,oovbaapi,\
 	oovbaapi/ooo/vba/XApplicationBase \
 	oovbaapi/ooo/vba/XAssistant \
 	oovbaapi/ooo/vba/XCollection \
+	oovbaapi/ooo/vba/XCollectionBase \
 	oovbaapi/ooo/vba/XCommandBar \
 	oovbaapi/ooo/vba/XCommandBarButton \
 	oovbaapi/ooo/vba/XCommandBarControl \
@@ -76,6 +77,10 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,oovbaapi,\
 	oovbaapi/ooo/vba/XDocumentProperty \
 	oovbaapi/ooo/vba/XDocumentsBase \
 	oovbaapi/ooo/vba/XErrObject \
+	oovbaapi/ooo/vba/XFileDialog \
+	oovbaapi/ooo/vba/XFileDialogSelectedItems \
+	oovbaapi/ooo/vba/XFileSearch \
+	oovbaapi/ooo/vba/XFoundFiles \
 	oovbaapi/ooo/vba/XFontBase \
 	oovbaapi/ooo/vba/XGlobalsBase \
 	oovbaapi/ooo/vba/XHelperInterface \
@@ -111,6 +116,12 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,oovbaapi,\
 	oovbaapi/ooo/vba/excel/XHyperlink \
 	oovbaapi/ooo/vba/excel/XHyperlinks \
 	oovbaapi/ooo/vba/excel/XInterior \
+	oovbaapi/ooo/vba/excel/XMenu \
+	oovbaapi/ooo/vba/excel/XMenuBar \
+	oovbaapi/ooo/vba/excel/XMenuBars \
+	oovbaapi/ooo/vba/excel/XMenuItem \
+	oovbaapi/ooo/vba/excel/XMenuItems \
+	oovbaapi/ooo/vba/excel/XMenus \
 	oovbaapi/ooo/vba/excel/XName \
 	oovbaapi/ooo/vba/excel/XNames \
 	oovbaapi/ooo/vba/excel/XOLEObject \
@@ -122,6 +133,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,oovbaapi,\
 	oovbaapi/ooo/vba/excel/XPivotCache \
 	oovbaapi/ooo/vba/excel/XPivotTable \
 	oovbaapi/ooo/vba/excel/XPivotTables \
+	oovbaapi/ooo/vba/excel/XQueryTable \
 	oovbaapi/ooo/vba/excel/XRange \
 	oovbaapi/ooo/vba/excel/XSeries \
 	oovbaapi/ooo/vba/excel/XSeriesCollection \
@@ -141,17 +153,21 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,oovbaapi,\
 	oovbaapi/ooo/vba/excel/XWorksheets \
 	oovbaapi/ooo/vba/excel/XlBuildInDialog \
 	oovbaapi/ooo/vba/msforms/XButton \
+	oovbaapi/ooo/vba/msforms/XCheckBox \
 	oovbaapi/ooo/vba/msforms/XColorFormat \
 	oovbaapi/ooo/vba/msforms/XComboBox \
+	oovbaapi/ooo/vba/msforms/XCommandButton \
 	oovbaapi/ooo/vba/msforms/XControl \
 	oovbaapi/ooo/vba/msforms/XControls \
 	oovbaapi/ooo/vba/msforms/XFillFormat \
+	oovbaapi/ooo/vba/msforms/XFrame \
 	oovbaapi/ooo/vba/msforms/XGroupBox \
 	oovbaapi/ooo/vba/msforms/XImage \
 	oovbaapi/ooo/vba/msforms/XLabel \
 	oovbaapi/ooo/vba/msforms/XLineFormat \
 	oovbaapi/ooo/vba/msforms/XListBox \
 	oovbaapi/ooo/vba/msforms/XMultiPage \
+	oovbaapi/ooo/vba/msforms/XNewFont \
 	oovbaapi/ooo/vba/msforms/XPages \
 	oovbaapi/ooo/vba/msforms/XPictureFormat \
 	oovbaapi/ooo/vba/msforms/XProgressBar \
@@ -175,6 +191,10 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,oovbaapi,\
 	oovbaapi/ooo/vba/word/XBookmarks \
 	oovbaapi/ooo/vba/word/XBorder \
 	oovbaapi/ooo/vba/word/XBorders \
+	oovbaapi/ooo/vba/word/XCell \
+	oovbaapi/ooo/vba/word/XCells \
+	oovbaapi/ooo/vba/word/XColumn \
+	oovbaapi/ooo/vba/word/XColumns \
 	oovbaapi/ooo/vba/word/XDialog \
 	oovbaapi/ooo/vba/word/XDialogs \
 	oovbaapi/ooo/vba/word/XDocument \
@@ -183,8 +203,20 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,oovbaapi,\
 	oovbaapi/ooo/vba/word/XFields \
 	oovbaapi/ooo/vba/word/XFind \
 	oovbaapi/ooo/vba/word/XFont \
+	oovbaapi/ooo/vba/word/XFormField \
+	oovbaapi/ooo/vba/word/XFormFields \
+	oovbaapi/ooo/vba/word/XFrame \
+	oovbaapi/ooo/vba/word/XFrames \
 	oovbaapi/ooo/vba/word/XGlobals \
 	oovbaapi/ooo/vba/word/XHeaderFooter \
+	oovbaapi/ooo/vba/word/XHeadersFooters \
+	oovbaapi/ooo/vba/word/XListFormat \
+	oovbaapi/ooo/vba/word/XListGallery \
+	oovbaapi/ooo/vba/word/XListGalleries \
+	oovbaapi/ooo/vba/word/XListLevel \
+	oovbaapi/ooo/vba/word/XListLevels \
+	oovbaapi/ooo/vba/word/XListTemplate \
+	oovbaapi/ooo/vba/word/XListTemplates \
 	oovbaapi/ooo/vba/word/XOptions \
 	oovbaapi/ooo/vba/word/XPageSetup \
 	oovbaapi/ooo/vba/word/XPane \
@@ -194,6 +226,10 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,oovbaapi,\
 	oovbaapi/ooo/vba/word/XParagraphs \
 	oovbaapi/ooo/vba/word/XRange \
 	oovbaapi/ooo/vba/word/XReplacement \
+	oovbaapi/ooo/vba/word/XRevision \
+	oovbaapi/ooo/vba/word/XRevisions \
+	oovbaapi/ooo/vba/word/XRow \
+	oovbaapi/ooo/vba/word/XRows \
 	oovbaapi/ooo/vba/word/XSection \
 	oovbaapi/ooo/vba/word/XSections \
 	oovbaapi/ooo/vba/word/XSelection \
@@ -201,7 +237,11 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,oovbaapi,\
 	oovbaapi/ooo/vba/word/XStyles \
 	oovbaapi/ooo/vba/word/XSystem \
 	oovbaapi/ooo/vba/word/XTable \
+	oovbaapi/ooo/vba/word/XTableOfContents \
 	oovbaapi/ooo/vba/word/XTables \
+	oovbaapi/ooo/vba/word/XTablesOfContents \
+	oovbaapi/ooo/vba/word/XTabStop \
+	oovbaapi/ooo/vba/word/XTabStops \
 	oovbaapi/ooo/vba/word/XTemplate \
 	oovbaapi/ooo/vba/word/XVariable \
 	oovbaapi/ooo/vba/word/XVariables \
