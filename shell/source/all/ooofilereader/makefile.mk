@@ -78,7 +78,7 @@ LIB1FILES_X64=$(SLB_X64)$/zipfile.lib\
 .INCLUDE :	target.mk
 .IF "$(OS)" == "WNT" 
 INCLUDE!:=$(subst,/stl, $(INCLUDE))
-.EXPORT : INCLUDE 
+ 
 .ENDIF
 .INCLUDE :	tg_wntx64.mk
 

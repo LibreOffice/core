@@ -60,6 +60,6 @@ SLOFILES_X64=$(SLO_X64)$/fileextensions.obj\
 .INCLUDE :	set_wntx64.mk
 .INCLUDE :	target.mk
 INCLUDE!:=$(subst,/stl, $(INCLUDE))
-.EXPORT : INCLUDE
+
 .INCLUDE :	tg_wntx64.mk
 
