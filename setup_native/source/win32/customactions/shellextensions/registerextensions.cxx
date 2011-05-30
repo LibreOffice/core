@@ -215,7 +215,7 @@ extern "C" UINT __stdcall RegisterExtensions(MSIHANDLE handle)
         std::_tstring sCommand = sUnoPkgFile + " sync";
 
         DWORD exitCode = 0;
-        ExecuteCommand( sCommand.c_str(), & exitCode);
+        bool fSuccess = ExecuteCommand( sCommand.c_str(), & exitCode);
         if ( ! fSuccess )
         {
             mystr = "ERROR: An error occured during registration of extensions!";
