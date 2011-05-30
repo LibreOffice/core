@@ -27,7 +27,8 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<io::XInputStream> const& xInputS
     m_bSkipUnknown(false),
     m_pCurrentKeyword(0),
     m_aFontEncodings(),
-    m_aColorTable()
+    m_aColorTable(),
+    m_bFirstRun(true)
 {
     OSL_ENSURE(xInputStream.is(), "no input stream");
     if (!xInputStream.is())
@@ -133,6 +134,14 @@ void RTFDocumentImpl::text(OUString& rString)
     writerfilter::Reference<Properties>::Pointer_t const pProperties(
             new RTFReferenceProperties(m_aStates.top().aAttributes, m_aStates.top().aSprms)
             );
+
+    if (m_bFirstRun)
+    {
+        // start initial paragraph after the optional font/color/stylesheet tables
+        Mapper().startSectionGroup();
+        Mapper().startParagraphGroup();
+        m_bFirstRun = false;
+    }
 
     Mapper().startCharacterGroup();
     Mapper().props(pProperties);
@@ -507,10 +516,6 @@ int RTFDocumentImpl::resolveParse()
     OSL_TRACE("%s", OSL_THIS_FUNC);
     char ch;
     int ret;
-
-    // start initial paragraph
-    Mapper().startSectionGroup();
-    Mapper().startParagraphGroup();
 
     while ((Strm() >> ch, !Strm().IsEof()))
     {

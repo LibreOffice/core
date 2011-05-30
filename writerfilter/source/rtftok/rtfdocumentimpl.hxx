@@ -118,6 +118,7 @@ namespace writerfilter {
                 std::map<int, rtl_TextEncoding> m_aFontEncodings;
                 /// Color index <-> RGB color value map
                 std::vector<sal_uInt32> m_aColorTable;
+                bool m_bFirstRun;
         };
     } // namespace rtftok
 } // namespace writerfilter
