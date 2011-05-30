@@ -98,7 +98,9 @@ int RTFDocumentImpl::resolveChars(char ch)
 
 void RTFDocumentImpl::text(OUString& rString)
 {
-    writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(m_aStates.top().aSprms));
+    writerfilter::Reference<Properties>::Pointer_t const pProperties(
+            new RTFReferenceProperties(m_aStates.top().aAttributes, m_aStates.top().aSprms)
+            );
 
     Mapper().startCharacterGroup();
     Mapper().props(pProperties);
@@ -385,7 +387,9 @@ int RTFDocumentImpl::popState()
     else if (m_aStates.top().nDestinationState == DESTINATION_FONTENTRY)
     {
         bFontEntryEnd = true;
-        writerfilter::Reference<Properties>::Pointer_t const pProp(new RTFReferenceProperties(m_aStates.top().aSprms));
+        writerfilter::Reference<Properties>::Pointer_t const pProp(
+                new RTFReferenceProperties(m_aStates.top().aAttributes, m_aStates.top().aSprms)
+                );
         aEntry.first = m_aStates.top().nCurrentFontIndex;
         aEntry.second = pProp;
     }

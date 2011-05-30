@@ -4,8 +4,9 @@
 namespace writerfilter {
 namespace rtftok {
 
-RTFReferenceProperties::RTFReferenceProperties(std::map<Id, RTFValue::Pointer_t> rSprms)
-    : m_rSprms(rSprms)
+RTFReferenceProperties::RTFReferenceProperties(std::map<Id, RTFValue::Pointer_t> rAttributes, std::map<Id, RTFValue::Pointer_t> rSprms)
+    : m_rAttributes(rAttributes),
+    m_rSprms(rSprms)
 {
 }
 
@@ -15,6 +16,8 @@ RTFReferenceProperties::~RTFReferenceProperties()
 
 void RTFReferenceProperties::resolve(Properties& rHandler)
 {
+    for (std::map<Id, RTFValue::Pointer_t>::iterator i = m_rAttributes.begin(); i != m_rAttributes.end(); ++i)
+        rHandler.attribute(i->first, *i->second.get());
     for (std::map<Id, RTFValue::Pointer_t>::iterator i = m_rSprms.begin(); i != m_rSprms.end(); ++i)
     {
         RTFSprm aSprm(i->first, i->second);

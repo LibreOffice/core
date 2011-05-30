@@ -14,11 +14,12 @@ namespace writerfilter {
             : public writerfilter::Reference<Properties>
         {
             public:
-                RTFReferenceProperties(std::map<Id, RTFValue::Pointer_t> rSprms);
+                RTFReferenceProperties(std::map<Id, RTFValue::Pointer_t> rAttributes, std::map<Id, RTFValue::Pointer_t> rSprms);
                 virtual ~RTFReferenceProperties();
                 virtual void resolve(Properties & rHandler);
                 virtual std::string getType() const;
             private:
+                std::map<Id, RTFValue::Pointer_t> m_rAttributes;
                 std::map<Id, RTFValue::Pointer_t> m_rSprms;
         };
     } // namespace rtftok
