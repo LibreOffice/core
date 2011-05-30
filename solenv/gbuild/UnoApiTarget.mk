@@ -43,7 +43,7 @@ $(foreach onefile,$(gb_UnoApiTarget_IDLFILES_$(1)), \
 endef
 
 $(call gb_UnoApiTarget_get_header_target,$(1))/% : $(call gb_UnoApiTarget_get_target,$(1))
-	mkdir -p $$(dir $$@) && echo lala $$@
+	mkdir -p $$(dir $$@)
 
 define gb_UnoApiTarget_UnoApiTarget
 $$(eval $$(call gb_Module_register_target,$(call gb_UnoApiOutTarget_get_target,$(1)),$(call gb_UnoApiOutTarget_get_clean_target,$(1))))
@@ -192,7 +192,6 @@ endef
 # TODO:
 # - get idlc switch "-P" (generate .urd into package dir)
 # - generate dependencies for included idls
-# - check idlc defines
 # - empty $? in headertarget?
 
 $(call gb_UnoApiTarget_get_target,%):
