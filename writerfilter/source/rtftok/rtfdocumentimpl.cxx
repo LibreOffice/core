@@ -121,6 +121,26 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword, bool /*bParam*/, i
     return 0;
 }
 
+int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, bool bParam, int /*nParam*/)
+{
+    switch (nKeyword)
+    {
+        case RTF_F:
+            if (bParam && m_aStates.top().nDestinationState == DESTINATION_FONTENTRY)
+            {
+            }
+            else
+            {
+                OSL_TRACE("%s: TODO handle value '\\f' outside font table", OSL_THIS_FUNC);
+            }
+            break;
+        default:
+            OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
+            break;
+    }
+    return 0;
+}
+
 int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam)
 {
     int nSprm = 0;
@@ -211,7 +231,8 @@ int RTFDocumentImpl::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
                 return ret;
             break;
         case CONTROL_VALUE:
-            OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, rKeyword.getStr());
+            if ((ret = dispatchValue(aRTFControlWords[i].nIndex, bParam, nParam)))
+                return ret;
             break;
     }
 
