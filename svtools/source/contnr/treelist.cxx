@@ -173,35 +173,40 @@ SvTreeList::~SvTreeList()
 |*
 *************************************************************************/
 
-void SvTreeList::Broadcast( sal_uInt16 nActionId, SvListEntry* pEntry1,
-    SvListEntry* pEntry2, sal_uLong nPos )
-{
-    sal_uLong nViewCount = aViewList.Count();
+void SvTreeList::Broadcast(
+    sal_uInt16 nActionId,
+    SvListEntry* pEntry1,
+    SvListEntry* pEntry2,
+    sal_uLong nPos
+) {
+    sal_uLong nViewCount = aViewList.size();
     for( sal_uLong nCurView = 0; nCurView < nViewCount; nCurView++ )
     {
-        SvListView* pView = (SvListView*)aViewList.GetObject( nCurView );
+        SvListView* pView = aViewList[ nCurView ];
         if( pView )
             pView->ModelNotification( nActionId, pEntry1, pEntry2, nPos );
     }
 }
 
-void SvTreeList::InsertView( SvListView* pView)
+void SvTreeList::InsertView( SvListView* pView )
 {
-    sal_uLong nPos = aViewList.GetPos( pView );
-    if ( nPos == LIST_ENTRY_NOTFOUND )
-    {
-        aViewList.Insert( pView, LIST_APPEND );
-        nRefCount++;
+    for ( sal_uLong i = 0, n = aViewList.size(); i < n; ++i ) {
+        if ( aViewList[ i ] == pView ) {
+            return;
+        }
     }
+    aViewList.push_back( pView );
+    nRefCount++;
 }
 
 void SvTreeList::RemoveView( SvListView* pView )
 {
-    sal_uLong nPos = aViewList.GetPos( pView );
-    if ( nPos != LIST_ENTRY_NOTFOUND )
-    {
-        aViewList.Remove( pView );
-        nRefCount--;
+    for ( SvListView_impl::iterator it = aViewList.begin(); it < aViewList.end(); ++it ) {
+        if ( *it == pView ) {
+            aViewList.erase( it );
+            nRefCount--;
+            break;
+        }
     }
 }
 

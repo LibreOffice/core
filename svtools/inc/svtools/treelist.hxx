@@ -32,6 +32,7 @@
 #include "svtools/svtdllapi.h"
 #include <tools/solar.h>
 #include <tools/list.hxx>
+#include <vector>
 
 #include <tools/table.hxx>
 #include <tools/link.hxx>
@@ -183,11 +184,13 @@ struct SvSortData
     SvListEntry* pRight;
 };
 
+typedef ::std::vector< SvListView* > SvListView_impl;
+
 class SVT_DLLPUBLIC SvTreeList
 {
     friend class        SvListView;
 
-    List                aViewList;
+    SvListView_impl     aViewList;
     sal_uLong           nEntryCount;
 
     Link                aCloneLink;
@@ -253,10 +256,10 @@ public:
     void                InsertView( SvListView* );
     void                RemoveView( SvListView* );
     sal_uLong           GetViewCount() const
-    { return aViewList.Count(); }
+    { return aViewList.size(); }
 
-    SvListView*         GetView(sal_uLong nPos) const
-    { return (SvListView*)aViewList.GetObject(nPos); }
+    SvListView*         GetView( sal_uLong nPos ) const
+    { return ( nPos < aViewList.size() ) ? aViewList[ nPos ] : NULL; }
 
     void                Broadcast(
                             sal_uInt16 nActionId,
