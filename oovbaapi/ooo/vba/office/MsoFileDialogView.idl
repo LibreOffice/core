@@ -1,0 +1,13 @@
+module ooo { module vba { module office {
+    constants MsoFileDialogView {
+        const long msoFileDialogViewDetails = 2;
+        const long msoFileDialogViewLargeIcons = 6;
+        const long msoFileDialogViewList = 1;
+        const long msoFileDialogViewPreview = 4;
+        const long msoFileDialogViewProperties = 3;
+        const long msoFileDialogViewSmallIcons = 7;
+        const long msoFileDialogViewThumbnail = 5;
+        const long msoFileDialogViewTiles = 9;
+        const long msoFileDialogViewWebView = 8;
+    };
+}; }; };

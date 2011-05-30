@@ -1,0 +1,10 @@
+module ooo { module vba { module powerpoint {
+    constants PpChartUnitEffect {
+        const long ppAnimateByCategory = 2;
+        const long ppAnimateByCategoryElements = 4;
+        const long ppAnimateBySeries = 1;
+        const long ppAnimateBySeriesElements = 3;
+        const long ppAnimateChartAllAtOnce = 5;
+        const long ppAnimateChartMixed = -2;
+    };
+}; }; };

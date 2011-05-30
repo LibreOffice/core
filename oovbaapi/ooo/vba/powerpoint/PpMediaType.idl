@@ -1,0 +1,8 @@
+module ooo { module vba { module powerpoint {
+    constants PpMediaType {
+        const long ppMediaTypeMixed = -2;
+        const long ppMediaTypeMovie = 3;
+        const long ppMediaTypeOther = 1;
+        const long ppMediaTypeSound = 2;
+    };
+}; }; };

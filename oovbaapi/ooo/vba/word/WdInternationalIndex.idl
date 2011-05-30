@@ -1,0 +1,14 @@
+module ooo { module vba { module word {
+    constants WdInternationalIndex {
+        const long wd24HourClock = 21;
+        const long wdCurrencyCode = 20;
+        const long wdDateSeparator = 25;
+        const long wdDecimalSeparator = 18;
+        const long wdInternationalAM = 22;
+        const long wdInternationalPM = 23;
+        const long wdListSeparator = 17;
+        const long wdProductLanguageID = 26;
+        const long wdThousandsSeparator = 19;
+        const long wdTimeSeparator = 24;
+    };
+}; }; };

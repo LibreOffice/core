@@ -1,0 +1,14 @@
+module ooo { module vba { module office {
+    constants MsoPresetLightingDirection {
+        const long msoLightingBottom = 8;
+        const long msoLightingBottomLeft = 7;
+        const long msoLightingBottomRight = 9;
+        const long msoLightingLeft = 4;
+        const long msoLightingNone = 5;
+        const long msoLightingRight = 6;
+        const long msoLightingTop = 2;
+        const long msoLightingTopLeft = 1;
+        const long msoLightingTopRight = 3;
+        const long msoPresetLightingDirectionMixed = -2;
+    };
+}; }; };

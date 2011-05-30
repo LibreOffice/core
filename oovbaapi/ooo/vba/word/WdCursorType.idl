@@ -1,0 +1,8 @@
+module ooo { module vba { module word {
+    constants WdCursorType {
+        const long wdCursorIBeam = 1;
+        const long wdCursorNormal = 2;
+        const long wdCursorNorthwestArrow = 3;
+        const long wdCursorWait = 0;
+    };
+}; }; };

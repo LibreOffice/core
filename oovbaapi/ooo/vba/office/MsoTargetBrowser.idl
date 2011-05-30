@@ -1,0 +1,9 @@
+module ooo { module vba { module office {
+    constants MsoTargetBrowser {
+        const long msoTargetBrowserIE4 = 2;
+        const long msoTargetBrowserIE5 = 3;
+        const long msoTargetBrowserIE6 = 4;
+        const long msoTargetBrowserV3 = 0;
+        const long msoTargetBrowserV4 = 1;
+    };
+}; }; };

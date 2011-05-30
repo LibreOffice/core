@@ -1,0 +1,8 @@
+module ooo { module vba { module excel {
+    constants XlDirection {
+        const long xlDown = -4121;
+        const long xlToLeft = -4159;
+        const long xlToRight = -4161;
+        const long xlUp = -4162;
+    };
+}; }; };

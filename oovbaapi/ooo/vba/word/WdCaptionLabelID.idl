@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdCaptionLabelID {
+        const long wdCaptionEquation = -3;
+        const long wdCaptionFigure = -1;
+        const long wdCaptionTable = -2;
+    };
+}; }; };

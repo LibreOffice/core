@@ -1,0 +1,8 @@
+module ooo { module vba { module adodb {
+    constants AffectEnum {
+        const long adAffectAll = 3;
+        const long adAffectAllChapters = 4;
+        const long adAffectCurrent = 1;
+        const long adAffectGroup = 2;
+    };
+}; }; };

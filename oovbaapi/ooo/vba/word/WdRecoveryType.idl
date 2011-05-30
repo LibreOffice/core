@@ -1,0 +1,21 @@
+module ooo { module vba { module word {
+    constants WdRecoveryType {
+        const long wdChart = 14;
+        const long wdChartLinked = 15;
+        const long wdChartPicture = 13;
+        const long wdFormatOriginalFormatting = 16;
+        const long wdFormatPlainText = 22;
+        const long wdFormatSurroundingFormattingWithEmphasis = 20;
+        const long wdListCombineWithExistingList = 24;
+        const long wdListContinueNumbering = 7;
+        const long wdListDontMerge = 25;
+        const long wdListRestartNumbering = 8;
+        const long wdPasteDefault = 0;
+        const long wdSingleCellTable = 6;
+        const long wdSingleCellText = 5;
+        const long wdTableAppendTable = 10;
+        const long wdTableInsertAsRows = 11;
+        const long wdTableOriginalFormatting = 12;
+        const long wdTableOverwriteCells = 23;
+    };
+}; }; };

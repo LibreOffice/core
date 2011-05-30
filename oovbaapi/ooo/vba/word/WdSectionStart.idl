@@ -1,0 +1,9 @@
+module ooo { module vba { module word {
+    constants WdSectionStart {
+        const long wdSectionContinuous = 0;
+        const long wdSectionEvenPage = 3;
+        const long wdSectionNewColumn = 1;
+        const long wdSectionNewPage = 2;
+        const long wdSectionOddPage = 4;
+    };
+}; }; };

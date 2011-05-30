@@ -1,0 +1,6 @@
+module ooo { module vba { module excel {
+    constants XlXmlExportResult {
+        const long xlXmlExportSuccess = 0;
+        const long xlXmlExportValidationFailed = 1;
+    };
+}; }; };

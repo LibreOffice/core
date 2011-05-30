@@ -1,0 +1,11 @@
+module ooo { module vba { module office {
+    constants MsoArrowheadStyle {
+        const long msoArrowheadDiamond = 5;
+        const long msoArrowheadNone = 1;
+        const long msoArrowheadOpen = 3;
+        const long msoArrowheadOval = 6;
+        const long msoArrowheadStealth = 4;
+        const long msoArrowheadStyleMixed = -2;
+        const long msoArrowheadTriangle = 2;
+    };
+}; }; };

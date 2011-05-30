@@ -1,0 +1,19 @@
+module ooo { module vba { module office {
+    constants MsoButtonSetType {
+        const long msoButtonSetAbortRetryIgnore = 10;
+        const long msoButtonSetBackClose = 6;
+        const long msoButtonSetBackNextClose = 8;
+        const long msoButtonSetBackNextSnooze = 12;
+        const long msoButtonSetCancel = 2;
+        const long msoButtonSetNextClose = 7;
+        const long msoButtonSetNone = 0;
+        const long msoButtonSetOK = 1;
+        const long msoButtonSetOkCancel = 3;
+        const long msoButtonSetRetryCancel = 9;
+        const long msoButtonSetSearchClose = 11;
+        const long msoButtonSetTipsOptionsClose = 13;
+        const long msoButtonSetYesAllNoCancel = 14;
+        const long msoButtonSetYesNo = 4;
+        const long msoButtonSetYesNoCancel = 5;
+    };
+}; }; };

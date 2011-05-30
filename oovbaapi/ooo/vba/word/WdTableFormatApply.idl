@@ -1,0 +1,13 @@
+module ooo { module vba { module word {
+    constants WdTableFormatApply {
+        const long wdTableFormatApplyAutoFit = 16;
+        const long wdTableFormatApplyBorders = 1;
+        const long wdTableFormatApplyColor = 8;
+        const long wdTableFormatApplyFirstColumn = 128;
+        const long wdTableFormatApplyFont = 4;
+        const long wdTableFormatApplyHeadingRows = 32;
+        const long wdTableFormatApplyLastColumn = 256;
+        const long wdTableFormatApplyLastRow = 64;
+        const long wdTableFormatApplyShading = 2;
+    };
+}; }; };

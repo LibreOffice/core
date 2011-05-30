@@ -1,0 +1,7 @@
+module ooo { module vba { module office {
+    constants MsoSyncConflictResolutionType {
+        const long msoSyncConflictClientWins = 0;
+        const long msoSyncConflictMerge = 2;
+        const long msoSyncConflictServerWins = 1;
+    };
+}; }; };

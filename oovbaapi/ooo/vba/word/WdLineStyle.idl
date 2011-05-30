@@ -1,0 +1,29 @@
+module ooo { module vba { module word {
+    constants WdLineStyle {
+        const long wdLineStyleDashDot = 5;
+        const long wdLineStyleDashDotDot = 6;
+        const long wdLineStyleDashDotStroked = 20;
+        const long wdLineStyleDashLargeGap = 4;
+        const long wdLineStyleDashSmallGap = 3;
+        const long wdLineStyleDot = 2;
+        const long wdLineStyleDouble = 7;
+        const long wdLineStyleDoubleWavy = 19;
+        const long wdLineStyleEmboss3D = 21;
+        const long wdLineStyleEngrave3D = 22;
+        const long wdLineStyleInset = 24;
+        const long wdLineStyleNone = 0;
+        const long wdLineStyleOutset = 23;
+        const long wdLineStyleSingle = 1;
+        const long wdLineStyleSingleWavy = 18;
+        const long wdLineStyleThickThinLargeGap = 16;
+        const long wdLineStyleThickThinMedGap = 13;
+        const long wdLineStyleThickThinSmallGap = 10;
+        const long wdLineStyleThinThickLargeGap = 15;
+        const long wdLineStyleThinThickMedGap = 12;
+        const long wdLineStyleThinThickSmallGap = 9;
+        const long wdLineStyleThinThickThinLargeGap = 17;
+        const long wdLineStyleThinThickThinMedGap = 14;
+        const long wdLineStyleThinThickThinSmallGap = 11;
+        const long wdLineStyleTriple = 8;
+    };
+}; }; };

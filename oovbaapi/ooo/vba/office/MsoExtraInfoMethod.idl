@@ -1,0 +1,6 @@
+module ooo { module vba { module office {
+    constants MsoExtraInfoMethod {
+        const long msoMethodGet = 0;
+        const long msoMethodPost = 1;
+    };
+}; }; };

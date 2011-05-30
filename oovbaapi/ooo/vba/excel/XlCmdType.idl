@@ -1,0 +1,9 @@
+module ooo { module vba { module excel {
+    constants XlCmdType {
+        const long xlCmdCube = 1;
+        const long xlCmdDefault = 4;
+        const long xlCmdList = 5;
+        const long xlCmdSql = 2;
+        const long xlCmdTable = 3;
+    };
+}; }; };

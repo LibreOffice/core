@@ -1,0 +1,9 @@
+module ooo { module vba { module powerpoint {
+    constants PpFrameColors {
+        const long ppFrameColorsBlackTextOnWhite = 5;
+        const long ppFrameColorsBrowserColors = 1;
+        const long ppFrameColorsPresentationSchemeAccentColor = 3;
+        const long ppFrameColorsPresentationSchemeTextColor = 2;
+        const long ppFrameColorsWhiteTextOnBlack = 4;
+    };
+}; }; };

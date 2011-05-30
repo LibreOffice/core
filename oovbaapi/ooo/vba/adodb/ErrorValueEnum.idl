@@ -1,0 +1,25 @@
+module ooo { module vba { module adodb {
+    constants ErrorValueEnum {
+        const long adErrBoundToCommand = 3707;
+        const long adErrDataConversion = 3421;
+        const long adErrFeatureNotAvailable = 3251;
+        const long adErrIllegalOperation = 3219;
+        const long adErrInTransaction = 3246;
+        const long adErrInvalidArgument = 3001;
+        const long adErrInvalidConnection = 3709;
+        const long adErrInvalidParamInfo = 3708;
+        const long adErrItemNotFound = 3265;
+        const long adErrNoCurrentRecord = 3021;
+        const long adErrNotExecuting = 3715;
+        const long adErrNotReentrant = 3710;
+        const long adErrObjectClosed = 3704;
+        const long adErrObjectInCollection = 3367;
+        const long adErrObjectNotSet = 3420;
+        const long adErrObjectOpen = 3705;
+        const long adErrOperationCancelled = 3712;
+        const long adErrProviderNotFound = 3706;
+        const long adErrStillConnecting = 3713;
+        const long adErrStillExecuting = 3711;
+        const long adErrUnsafeOperation = 3716;
+    };
+}; }; };

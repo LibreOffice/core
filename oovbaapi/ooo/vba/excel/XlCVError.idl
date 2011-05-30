@@ -1,0 +1,11 @@
+module ooo { module vba { module excel {
+    constants XlCVError {
+        const long xlErrDiv0 = 2007;
+        const long xlErrNA = 2042;
+        const long xlErrName = 2029;
+        const long xlErrNull = 2000;
+        const long xlErrNum = 2036;
+        const long xlErrRef = 2023;
+        const long xlErrValue = 2015;
+    };
+}; }; };

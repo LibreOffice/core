@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlBackground {
+        const long xlBackgroundAutomatic = -4105;
+        const long xlBackgroundOpaque = 3;
+        const long xlBackgroundTransparent = 2;
+    };
+}; }; };

@@ -1,0 +1,10 @@
+module ooo { module vba { module powerpoint {
+    constants MsoAnimTriggerType {
+        const long msoAnimTriggerAfterPrevious = 3;
+        const long msoAnimTriggerMixed = -1;
+        const long msoAnimTriggerNone = 0;
+        const long msoAnimTriggerOnPageClick = 1;
+        const long msoAnimTriggerOnShapeClick = 4;
+        const long msoAnimTriggerWithPrevious = 2;
+    };
+}; }; };

@@ -1,0 +1,8 @@
+module ooo { module vba { module msforms {
+    constants fmTabOrientation {
+        const long fmTabOrientationBottom = 1;
+        const long fmTabOrientationLeft = 2;
+        const long fmTabOrientationRight = 3;
+        const long fmTabOrientationTop = 0;
+    };
+}; }; };

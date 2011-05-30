@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlCommentDisplayMode {
+        const long xlCommentAndIndicator = 1;
+        const long xlCommentIndicatorOnly = -1;
+        const long xlNoIndicator = 0;
+    };
+}; }; };

@@ -1,0 +1,7 @@
+module ooo { module vba { module stdole {
+    constants OLE_TRISTATE {
+        const long Checked = 1;
+        const long Gray = 2;
+        const long Unchecked = 0;
+    };
+}; }; };

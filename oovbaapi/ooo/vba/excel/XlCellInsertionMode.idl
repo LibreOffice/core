@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlCellInsertionMode {
+        const long xlInsertDeleteCells = 1;
+        const long xlInsertEntireRows = 2;
+        const long xlOverwriteCells = 0;
+    };
+}; }; };

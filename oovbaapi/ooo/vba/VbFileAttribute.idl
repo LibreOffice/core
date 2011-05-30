@@ -1,0 +1,12 @@
+module ooo { module vba {
+    constants VbFileAttribute {
+        const long vbAlias = 64;
+        const long vbArchive = 32;
+        const long vbDirectory = 16;
+        const long vbHidden = 2;
+        const long vbNormal = 0;
+        const long vbReadOnly = 1;
+        const long vbSystem = 4;
+        const long vbVolume = 8;
+    };
+}; };

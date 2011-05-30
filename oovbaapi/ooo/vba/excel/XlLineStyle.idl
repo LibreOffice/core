@@ -1,0 +1,12 @@
+module ooo { module vba { module excel {
+    constants XlLineStyle {
+        const long xlContinuous = 1;
+        const long xlDash = -4115;
+        const long xlDashDot = 4;
+        const long xlDashDotDot = 5;
+        const long xlDot = -4118;
+        const long xlDouble = -4119;
+        const long xlLineStyleNone = -4142;
+        const long xlSlantDashDot = 13;
+    };
+}; }; };

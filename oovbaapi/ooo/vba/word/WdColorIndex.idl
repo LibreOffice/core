@@ -1,0 +1,23 @@
+module ooo { module vba { module word {
+    constants WdColorIndex {
+        const long wdAuto = 0;
+        const long wdBlack = 1;
+        const long wdBlue = 2;
+        const long wdBrightGreen = 4;
+        const long wdByAuthor = -1;
+        const long wdDarkBlue = 9;
+        const long wdDarkRed = 13;
+        const long wdDarkYellow = 14;
+        const long wdGray25 = 16;
+        const long wdGray50 = 15;
+        const long wdGreen = 11;
+        const long wdNoHighlight = 0;
+        const long wdPink = 5;
+        const long wdRed = 6;
+        const long wdTeal = 10;
+        const long wdTurquoise = 3;
+        const long wdViolet = 12;
+        const long wdWhite = 8;
+        const long wdYellow = 7;
+    };
+}; }; };

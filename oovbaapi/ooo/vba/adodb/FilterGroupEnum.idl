@@ -1,0 +1,10 @@
+module ooo { module vba { module adodb {
+    constants FilterGroupEnum {
+        const long adFilterAffectedRecords = 2;
+        const long adFilterConflictingRecords = 5;
+        const long adFilterFetchedRecords = 3;
+        const long adFilterNone = 0;
+        const long adFilterPendingRecords = 1;
+        const long adFilterPredicate = 4;
+    };
+}; }; };

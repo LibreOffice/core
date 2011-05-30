@@ -1,0 +1,31 @@
+module ooo { module vba { module powerpoint {
+    constants MsoAnimFilterEffectSubtype {
+        const long msoAnimFilterEffectSubtypeAcross = 9;
+        const long msoAnimFilterEffectSubtypeDown = 25;
+        const long msoAnimFilterEffectSubtypeDownLeft = 14;
+        const long msoAnimFilterEffectSubtypeDownRight = 16;
+        const long msoAnimFilterEffectSubtypeFromBottom = 13;
+        const long msoAnimFilterEffectSubtypeFromLeft = 10;
+        const long msoAnimFilterEffectSubtypeFromRight = 11;
+        const long msoAnimFilterEffectSubtypeFromTop = 12;
+        const long msoAnimFilterEffectSubtypeHorizontal = 5;
+        const long msoAnimFilterEffectSubtypeIn = 7;
+        const long msoAnimFilterEffectSubtypeInHorizontal = 3;
+        const long msoAnimFilterEffectSubtypeInVertical = 1;
+        const long msoAnimFilterEffectSubtypeLeft = 23;
+        const long msoAnimFilterEffectSubtypeNone = 0;
+        const long msoAnimFilterEffectSubtypeOut = 8;
+        const long msoAnimFilterEffectSubtypeOutHorizontal = 4;
+        const long msoAnimFilterEffectSubtypeOutVertical = 2;
+        const long msoAnimFilterEffectSubtypeRight = 24;
+        const long msoAnimFilterEffectSubtypeSpokes1 = 18;
+        const long msoAnimFilterEffectSubtypeSpokes2 = 19;
+        const long msoAnimFilterEffectSubtypeSpokes3 = 20;
+        const long msoAnimFilterEffectSubtypeSpokes4 = 21;
+        const long msoAnimFilterEffectSubtypeSpokes8 = 22;
+        const long msoAnimFilterEffectSubtypeUp = 26;
+        const long msoAnimFilterEffectSubtypeUpLeft = 15;
+        const long msoAnimFilterEffectSubtypeUpRight = 17;
+        const long msoAnimFilterEffectSubtypeVertical = 6;
+    };
+}; }; };

@@ -1,0 +1,9 @@
+module ooo { module vba { module excel {
+    constants XlPivotTableSourceType {
+        const long xlConsolidation = 3;
+        const long xlDatabase = 1;
+        const long xlExternal = 2;
+        const long xlPivotTable = -4148;
+        const long xlScenario = 4;
+    };
+}; }; };

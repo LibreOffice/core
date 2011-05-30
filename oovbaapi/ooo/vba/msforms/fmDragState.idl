@@ -1,0 +1,7 @@
+module ooo { module vba { module msforms {
+    constants fmDragState {
+        const long fmDragStateEnter = 0;
+        const long fmDragStateLeave = 1;
+        const long fmDragStateOver = 2;
+    };
+}; }; };

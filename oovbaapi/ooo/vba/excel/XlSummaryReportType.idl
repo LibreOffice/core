@@ -1,0 +1,6 @@
+module ooo { module vba { module excel {
+    constants XlSummaryReportType {
+        const long xlStandardSummary = 1;
+        const long xlSummaryPivotTable = -4148;
+    };
+}; }; };

@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdPrintOutPages {
+        const long wdPrintAllPages = 0;
+        const long wdPrintEvenPagesOnly = 2;
+        const long wdPrintOddPagesOnly = 1;
+    };
+}; }; };

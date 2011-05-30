@@ -1,0 +1,6 @@
+module ooo { module vba { module access {
+    constants AcFindField {
+        const long acAll = 0;
+        const long acCurrent = -1;
+    };
+}; }; };

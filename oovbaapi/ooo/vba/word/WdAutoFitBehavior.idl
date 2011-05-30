@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdAutoFitBehavior {
+        const long wdAutoFitContent = 1;
+        const long wdAutoFitFixed = 0;
+        const long wdAutoFitWindow = 2;
+    };
+}; }; };

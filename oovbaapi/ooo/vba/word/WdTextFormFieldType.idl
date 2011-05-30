@@ -1,0 +1,10 @@
+module ooo { module vba { module word {
+    constants WdTextFormFieldType {
+        const long wdCalculationText = 5;
+        const long wdCurrentDateText = 3;
+        const long wdCurrentTimeText = 4;
+        const long wdDateText = 2;
+        const long wdNumberText = 1;
+        const long wdRegularText = 0;
+    };
+}; }; };

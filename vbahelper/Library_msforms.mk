@@ -41,7 +41,12 @@ $(eval $(call gb_Library_set_componentfile,msforms,vbahelper/util/msforms))
 # add any additional include paths for this library here
 $(eval $(call gb_Library_set_include,msforms,\
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc/offuh \
+))
+
+$(eval $(call gb_Library_add_api,msforms,\
+	udkapi \
+	offapi \
+	oovbaapi \
 ))
 
 # add libraries to be linked to LIB; again these names need to be given as

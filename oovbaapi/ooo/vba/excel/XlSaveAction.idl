@@ -1,0 +1,6 @@
+module ooo { module vba { module excel {
+    constants XlSaveAction {
+        const long xlDoNotSaveChanges = 2;
+        const long xlSaveChanges = 1;
+    };
+}; }; };

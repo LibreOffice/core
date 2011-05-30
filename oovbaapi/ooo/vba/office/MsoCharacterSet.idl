@@ -1,0 +1,16 @@
+module ooo { module vba { module office {
+    constants MsoCharacterSet {
+        const long msoCharacterSetArabic = 1;
+        const long msoCharacterSetCyrillic = 2;
+        const long msoCharacterSetEnglishWesternEuropeanOtherLatinScript = 3;
+        const long msoCharacterSetGreek = 4;
+        const long msoCharacterSetHebrew = 5;
+        const long msoCharacterSetJapanese = 6;
+        const long msoCharacterSetKorean = 7;
+        const long msoCharacterSetMultilingualUnicode = 8;
+        const long msoCharacterSetSimplifiedChinese = 9;
+        const long msoCharacterSetThai = 10;
+        const long msoCharacterSetTraditionalChinese = 11;
+        const long msoCharacterSetVietnamese = 12;
+    };
+}; }; };

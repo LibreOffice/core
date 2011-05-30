@@ -1,0 +1,12 @@
+module ooo { module vba { module office {
+    constants MsoButtonStyle {
+        const long msoButtonAutomatic = 0;
+        const long msoButtonCaption = 2;
+        const long msoButtonIcon = 1;
+        const long msoButtonIconAndCaption = 3;
+        const long msoButtonIconAndCaptionBelow = 11;
+        const long msoButtonIconAndWrapCaption = 7;
+        const long msoButtonIconAndWrapCaptionBelow = 15;
+        const long msoButtonWrapCaption = 14;
+    };
+}; }; };

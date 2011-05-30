@@ -1,0 +1,9 @@
+module ooo { module vba { module word {
+    constants WdReferenceType {
+        const long wdRefTypeBookmark = 2;
+        const long wdRefTypeEndnote = 4;
+        const long wdRefTypeFootnote = 3;
+        const long wdRefTypeHeading = 1;
+        const long wdRefTypeNumberedItem = 0;
+    };
+}; }; };

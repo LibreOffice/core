@@ -1,0 +1,14 @@
+module ooo { module vba { module word {
+    constants WdIMEMode {
+        const long wdIMEModeAlpha = 8;
+        const long wdIMEModeAlphaFull = 7;
+        const long wdIMEModeHangul = 10;
+        const long wdIMEModeHangulFull = 9;
+        const long wdIMEModeHiragana = 4;
+        const long wdIMEModeKatakana = 5;
+        const long wdIMEModeKatakanaHalf = 6;
+        const long wdIMEModeNoControl = 0;
+        const long wdIMEModeOff = 2;
+        const long wdIMEModeOn = 1;
+    };
+}; }; };

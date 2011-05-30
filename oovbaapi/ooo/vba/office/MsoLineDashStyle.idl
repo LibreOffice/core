@@ -1,0 +1,13 @@
+module ooo { module vba { module office {
+    constants MsoLineDashStyle {
+        const long msoLineDash = 4;
+        const long msoLineDashDot = 5;
+        const long msoLineDashDotDot = 6;
+        const long msoLineDashStyleMixed = -2;
+        const long msoLineLongDash = 7;
+        const long msoLineLongDashDot = 8;
+        const long msoLineRoundDot = 3;
+        const long msoLineSolid = 1;
+        const long msoLineSquareDot = 2;
+    };
+}; }; };

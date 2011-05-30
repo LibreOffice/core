@@ -1,0 +1,18 @@
+module ooo { module vba { module word {
+    constants WdTaskPanes {
+        const long wdTaskPaneDocumentActions = 7;
+        const long wdTaskPaneDocumentProtection = 6;
+        const long wdTaskPaneDocumentUpdates = 13;
+        const long wdTaskPaneFaxService = 11;
+        const long wdTaskPaneFormatting = 0;
+        const long wdTaskPaneHelp = 9;
+        const long wdTaskPaneMailMerge = 2;
+        const long wdTaskPaneResearch = 10;
+        const long wdTaskPaneRevealFormatting = 1;
+        const long wdTaskPaneSearch = 4;
+        const long wdTaskPaneSharedWorkspace = 8;
+        const long wdTaskPaneTranslate = 3;
+        const long wdTaskPaneXMLDocument = 12;
+        const long wdTaskPaneXMLStructure = 5;
+    };
+}; }; };

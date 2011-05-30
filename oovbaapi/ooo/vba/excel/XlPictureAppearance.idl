@@ -1,0 +1,6 @@
+module ooo { module vba { module excel {
+    constants XlPictureAppearance {
+        const long xlPrinter = 2;
+        const long xlScreen = 1;
+    };
+}; }; };

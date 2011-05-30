@@ -1,0 +1,17 @@
+module ooo { module vba { module msforms {
+    constants fmTransitionEffect {
+        const long fmTransitionEffectCoverDown = 5;
+        const long fmTransitionEffectCoverLeft = 7;
+        const long fmTransitionEffectCoverLeftDown = 6;
+        const long fmTransitionEffectCoverLeftUp = 8;
+        const long fmTransitionEffectCoverRight = 3;
+        const long fmTransitionEffectCoverRightDown = 4;
+        const long fmTransitionEffectCoverRightUp = 2;
+        const long fmTransitionEffectCoverUp = 1;
+        const long fmTransitionEffectNone = 0;
+        const long fmTransitionEffectPushDown = 11;
+        const long fmTransitionEffectPushLeft = 12;
+        const long fmTransitionEffectPushRight = 10;
+        const long fmTransitionEffectPushUp = 9;
+    };
+}; }; };

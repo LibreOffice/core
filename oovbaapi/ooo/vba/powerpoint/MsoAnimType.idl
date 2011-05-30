@@ -1,0 +1,14 @@
+module ooo { module vba { module powerpoint {
+    constants MsoAnimType {
+        const long msoAnimTypeColor = 2;
+        const long msoAnimTypeCommand = 6;
+        const long msoAnimTypeFilter = 7;
+        const long msoAnimTypeMixed = -2;
+        const long msoAnimTypeMotion = 1;
+        const long msoAnimTypeNone = 0;
+        const long msoAnimTypeProperty = 5;
+        const long msoAnimTypeRotation = 4;
+        const long msoAnimTypeScale = 3;
+        const long msoAnimTypeSet = 8;
+    };
+}; }; };

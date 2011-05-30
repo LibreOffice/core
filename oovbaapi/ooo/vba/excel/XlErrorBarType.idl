@@ -1,0 +1,9 @@
+module ooo { module vba { module excel {
+    constants XlErrorBarType {
+        const long xlErrorBarTypeCustom = -4114;
+        const long xlErrorBarTypeFixedValue = 1;
+        const long xlErrorBarTypePercent = 2;
+        const long xlErrorBarTypeStDev = -4155;
+        const long xlErrorBarTypeStError = 4;
+    };
+}; }; };

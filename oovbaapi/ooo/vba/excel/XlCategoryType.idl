@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlCategoryType {
+        const long xlAutomaticScale = -4105;
+        const long xlCategoryScale = 2;
+        const long xlTimeScale = 3;
+    };
+}; }; };

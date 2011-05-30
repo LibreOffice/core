@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdAlertLevel {
+        const long wdAlertsAll = -1;
+        const long wdAlertsMessageBox = -2;
+        const long wdAlertsNone = 0;
+    };
+}; }; };

@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdCellVerticalAlignment {
+        const long wdCellAlignVerticalBottom = 3;
+        const long wdCellAlignVerticalCenter = 1;
+        const long wdCellAlignVerticalTop = 0;
+    };
+}; }; };

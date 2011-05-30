@@ -1,0 +1,7 @@
+module ooo { module vba { module office {
+    constants MsoCommandBarButtonHyperlinkType {
+        const long msoCommandBarButtonHyperlinkInsertPicture = 2;
+        const long msoCommandBarButtonHyperlinkNone = 0;
+        const long msoCommandBarButtonHyperlinkOpen = 1;
+    };
+}; }; };

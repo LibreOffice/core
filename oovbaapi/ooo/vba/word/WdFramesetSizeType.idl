@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdFramesetSizeType {
+        const long wdFramesetSizeTypeFixed = 1;
+        const long wdFramesetSizeTypePercent = 0;
+        const long wdFramesetSizeTypeRelative = 2;
+    };
+}; }; };

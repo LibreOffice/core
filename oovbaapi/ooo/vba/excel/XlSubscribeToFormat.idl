@@ -1,0 +1,6 @@
+module ooo { module vba { module excel {
+    constants XlSubscribeToFormat {
+        const long xlSubscribeToPicture = -4147;
+        const long xlSubscribeToText = -4158;
+    };
+}; }; };

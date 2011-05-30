@@ -1,0 +1,8 @@
+module ooo { module vba { module word {
+    constants WdRevisedLinesMark {
+        const long wdRevisedLinesMarkLeftBorder = 1;
+        const long wdRevisedLinesMarkNone = 0;
+        const long wdRevisedLinesMarkOutsideBorder = 3;
+        const long wdRevisedLinesMarkRightBorder = 2;
+    };
+}; }; };

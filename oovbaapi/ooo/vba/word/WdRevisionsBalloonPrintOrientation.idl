@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdRevisionsBalloonPrintOrientation {
+        const long wdBalloonPrintOrientationAuto = 0;
+        const long wdBalloonPrintOrientationForceLandscape = 2;
+        const long wdBalloonPrintOrientationPreserve = 1;
+    };
+}; }; };

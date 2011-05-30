@@ -1,0 +1,20 @@
+module ooo { module vba { module office {
+    constants MsoBalloonButtonType {
+        const long msoBalloonButtonAbort = -8;
+        const long msoBalloonButtonBack = -5;
+        const long msoBalloonButtonCancel = -2;
+        const long msoBalloonButtonClose = -12;
+        const long msoBalloonButtonIgnore = -9;
+        const long msoBalloonButtonNext = -6;
+        const long msoBalloonButtonNo = -4;
+        const long msoBalloonButtonNull = 0;
+        const long msoBalloonButtonOK = -1;
+        const long msoBalloonButtonOptions = -14;
+        const long msoBalloonButtonRetry = -7;
+        const long msoBalloonButtonSearch = -10;
+        const long msoBalloonButtonSnooze = -11;
+        const long msoBalloonButtonTips = -13;
+        const long msoBalloonButtonYes = -3;
+        const long msoBalloonButtonYesToAll = -15;
+    };
+}; }; };

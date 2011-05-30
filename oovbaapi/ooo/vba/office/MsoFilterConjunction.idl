@@ -1,0 +1,6 @@
+module ooo { module vba { module office {
+    constants MsoFilterConjunction {
+        const long msoFilterConjunctionAnd = 0;
+        const long msoFilterConjunctionOr = 1;
+    };
+}; }; };

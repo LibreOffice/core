@@ -1,0 +1,15 @@
+module ooo { module vba { module access {
+    constants AcImeMode {
+        const long acImeModeAlpha = 8;
+        const long acImeModeAlphaFull = 7;
+        const long acImeModeDisable = 3;
+        const long acImeModeHangul = 10;
+        const long acImeModeHangulFull = 9;
+        const long acImeModeHiragana = 4;
+        const long acImeModeKatakana = 5;
+        const long acImeModeKatakanaHalf = 6;
+        const long acImeModeNoControl = 0;
+        const long acImeModeOff = 2;
+        const long acImeModeOn = 1;
+    };
+}; }; };

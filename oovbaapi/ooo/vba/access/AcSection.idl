@@ -1,0 +1,13 @@
+module ooo { module vba { module access {
+    constants AcSection {
+        const long acDetail = 0;
+        const long acFooter = 2;
+        const long acGroupLevel1Footer = 6;
+        const long acGroupLevel1Header = 5;
+        const long acGroupLevel2Footer = 8;
+        const long acGroupLevel2Header = 7;
+        const long acHeader = 1;
+        const long acPageFooter = 4;
+        const long acPageHeader = 3;
+    };
+}; }; };

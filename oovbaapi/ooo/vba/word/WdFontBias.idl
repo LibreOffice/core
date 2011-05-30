@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdFontBias {
+        const long wdFontBiasDefault = 0;
+        const long wdFontBiasDontCare = 255;
+        const long wdFontBiasFareast = 1;
+    };
+}; }; };

@@ -1,0 +1,10 @@
+module ooo { module vba { module office {
+    constants MsoAlertCancelType {
+        const long msoAlertCancelDefault = -1;
+        const long msoAlertCancelFifth = 4;
+        const long msoAlertCancelFirst = 0;
+        const long msoAlertCancelFourth = 3;
+        const long msoAlertCancelSecond = 1;
+        const long msoAlertCancelThird = 2;
+    };
+}; }; };

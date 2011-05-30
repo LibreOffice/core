@@ -1,0 +1,6 @@
+module ooo { module vba { module office {
+    constants MsoFlipCmd {
+        const long msoFlipHorizontal = 0;
+        const long msoFlipVertical = 1;
+    };
+}; }; };

@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlXmlImportResult {
+        const long xlXmlImportElementsTruncated = 1;
+        const long xlXmlImportSuccess = 0;
+        const long xlXmlImportValidationFailed = 2;
+    };
+}; }; };

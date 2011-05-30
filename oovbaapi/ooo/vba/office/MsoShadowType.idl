@@ -1,0 +1,25 @@
+module ooo { module vba { module office {
+    constants MsoShadowType {
+        const long msoShadow1 = 1;
+        const long msoShadow10 = 10;
+        const long msoShadow11 = 11;
+        const long msoShadow12 = 12;
+        const long msoShadow13 = 13;
+        const long msoShadow14 = 14;
+        const long msoShadow15 = 15;
+        const long msoShadow16 = 16;
+        const long msoShadow17 = 17;
+        const long msoShadow18 = 18;
+        const long msoShadow19 = 19;
+        const long msoShadow2 = 2;
+        const long msoShadow20 = 20;
+        const long msoShadow3 = 3;
+        const long msoShadow4 = 4;
+        const long msoShadow5 = 5;
+        const long msoShadow6 = 6;
+        const long msoShadow7 = 7;
+        const long msoShadow8 = 8;
+        const long msoShadow9 = 9;
+        const long msoShadowMixed = -2;
+    };
+}; }; };

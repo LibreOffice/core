@@ -1,0 +1,8 @@
+module ooo { module vba { module office {
+    constants MsoEditingType {
+        const long msoEditingAuto = 0;
+        const long msoEditingCorner = 1;
+        const long msoEditingSmooth = 2;
+        const long msoEditingSymmetric = 3;
+    };
+}; }; };

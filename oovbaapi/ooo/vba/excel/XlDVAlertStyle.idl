@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlDVAlertStyle {
+        const long xlValidAlertInformation = 3;
+        const long xlValidAlertStop = 1;
+        const long xlValidAlertWarning = 2;
+    };
+}; }; };

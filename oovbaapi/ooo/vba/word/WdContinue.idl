@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdContinue {
+        const long wdContinueDisabled = 0;
+        const long wdContinueList = 2;
+        const long wdResetList = 1;
+    };
+}; }; };

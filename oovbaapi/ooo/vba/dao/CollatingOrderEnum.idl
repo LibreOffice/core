@@ -1,0 +1,29 @@
+module ooo { module vba { module dao {
+    constants CollatingOrderEnum {
+        const long dbSortArabic = 1025;
+        const long dbSortChineseSimplified = 2052;
+        const long dbSortChineseTraditional = 1028;
+        const long dbSortCyrillic = 1049;
+        const long dbSortCzech = 1029;
+        const long dbSortDutch = 1043;
+        const long dbSortGeneral = 1033;
+        const long dbSortGreek = 1032;
+        const long dbSortHebrew = 1037;
+        const long dbSortHungarian = 1038;
+        const long dbSortIcelandic = 1039;
+        const long dbSortJapanese = 1041;
+        const long dbSortKorean = 1042;
+        const long dbSortNeutral = 1024;
+        const long dbSortNorwdan = 1030;
+        const long dbSortPDXIntl = 1033;
+        const long dbSortPDXNor = 1030;
+        const long dbSortPDXSwe = 1053;
+        const long dbSortPolish = 1045;
+        const long dbSortSlovenian = 1060;
+        const long dbSortSpanish = 1034;
+        const long dbSortSwedFin = 1053;
+        const long dbSortThai = 1054;
+        const long dbSortTurkish = 1055;
+        const long dbSortUndefined = -1;
+    };
+}; }; };

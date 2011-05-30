@@ -1,0 +1,14 @@
+module ooo { module vba { module word {
+    constants WdCharacterCase {
+        const long wdFullWidth = 7;
+        const long wdHalfWidth = 6;
+        const long wdHiragana = 9;
+        const long wdKatakana = 8;
+        const long wdLowerCase = 0;
+        const long wdNextCase = -1;
+        const long wdTitleSentence = 4;
+        const long wdTitleWord = 2;
+        const long wdToggleCase = 5;
+        const long wdUpperCase = 1;
+    };
+}; }; };

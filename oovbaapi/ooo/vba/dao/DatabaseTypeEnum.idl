@@ -1,0 +1,11 @@
+module ooo { module vba { module dao {
+    constants DatabaseTypeEnum {
+        const long dbDecrypt = 4;
+        const long dbEncrypt = 2;
+        const long dbVersion10 = 1;
+        const long dbVersion11 = 8;
+        const long dbVersion20 = 16;
+        const long dbVersion30 = 32;
+        const long dbVersion40 = 64;
+    };
+}; }; };

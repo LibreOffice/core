@@ -1,0 +1,5 @@
+module ooo { module vba { module dao {
+    constants CommitTransOptionsEnum {
+        const long dbForceOSFlush = 1;
+    };
+}; }; };

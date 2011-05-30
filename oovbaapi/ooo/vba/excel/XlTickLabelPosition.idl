@@ -1,0 +1,8 @@
+module ooo { module vba { module excel {
+    constants XlTickLabelPosition {
+        const long xlTickLabelPositionHigh = -4127;
+        const long xlTickLabelPositionLow = -4134;
+        const long xlTickLabelPositionNextToAxis = 4;
+        const long xlTickLabelPositionNone = -4142;
+    };
+}; }; };

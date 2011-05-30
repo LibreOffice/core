@@ -1,0 +1,7 @@
+module ooo { module vba { module powerpoint {
+    constants PpPrintColorType {
+        const long ppPrintBlackAndWhite = 2;
+        const long ppPrintColor = 1;
+        const long ppPrintPureBlackAndWhite = 3;
+    };
+}; }; };

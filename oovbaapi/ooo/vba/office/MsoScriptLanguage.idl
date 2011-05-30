@@ -1,0 +1,8 @@
+module ooo { module vba { module office {
+    constants MsoScriptLanguage {
+        const long msoScriptLanguageASP = 3;
+        const long msoScriptLanguageJava = 1;
+        const long msoScriptLanguageOther = 4;
+        const long msoScriptLanguageVisualBasic = 2;
+    };
+}; }; };

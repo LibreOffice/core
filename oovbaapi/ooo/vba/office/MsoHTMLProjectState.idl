@@ -1,0 +1,7 @@
+module ooo { module vba { module office {
+    constants MsoHTMLProjectState {
+        const long msoHTMLProjectStateDocumentLocked = 1;
+        const long msoHTMLProjectStateDocumentProjectUnlocked = 3;
+        const long msoHTMLProjectStateProjectLocked = 2;
+    };
+}; }; };

@@ -1,0 +1,6 @@
+module ooo { module vba { module access {
+    constants AcModuleType {
+        const long acClassModule = 1;
+        const long acStandardModule = 0;
+    };
+}; }; };

@@ -1,0 +1,7 @@
+module ooo { module vba { module office {
+    constants MsoSyncAvailableType {
+        const long msoSyncAvailableAnywhere = 2;
+        const long msoSyncAvailableNone = 0;
+        const long msoSyncAvailableOffline = 1;
+    };
+}; }; };

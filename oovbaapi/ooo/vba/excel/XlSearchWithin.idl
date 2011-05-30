@@ -1,0 +1,6 @@
+module ooo { module vba { module excel {
+    constants XlSearchWithin {
+        const long xlWithinSheet = 1;
+        const long xlWithinWorkbook = 2;
+    };
+}; }; };

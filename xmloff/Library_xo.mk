@@ -37,12 +37,16 @@ $(eval $(call gb_Library_set_include,xo,\
     $$(SOLARINC) \
     -I$(realpath $(SRCDIR)/xmloff/inc) \
     -I$(realpath $(SRCDIR)/xmloff/inc/pch) \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
 $(eval $(call gb_Library_set_defs,xo,\
     $$(DEFS) \
     -DXMLOFF_DLLIMPLEMENTATION \
+))
+
+$(eval $(call gb_Library_add_api,xo,\
+	udkapi \
+	offapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,xo,\

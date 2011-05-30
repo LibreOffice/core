@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdLetterStyle {
+        const long wdFullBlock = 0;
+        const long wdModifiedBlock = 1;
+        const long wdSemiBlock = 2;
+    };
+}; }; };

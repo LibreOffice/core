@@ -1,0 +1,10 @@
+module ooo { module vba { module adodb {
+    constants SeekEnum {
+        const long adSeekAfter = 8;
+        const long adSeekAfterEQ = 4;
+        const long adSeekBefore = 32;
+        const long adSeekBeforeEQ = 16;
+        const long adSeekFirstEQ = 1;
+        const long adSeekLastEQ = 2;
+    };
+}; }; };

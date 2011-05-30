@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdJustificationMode {
+        const long wdJustificationModeCompress = 1;
+        const long wdJustificationModeCompressKana = 2;
+        const long wdJustificationModeExpand = 0;
+    };
+}; }; };

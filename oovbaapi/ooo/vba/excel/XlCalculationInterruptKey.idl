@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlCalculationInterruptKey {
+        const long xlAnyKey = 2;
+        const long xlEscKey = 1;
+        const long xlNoKey = 0;
+    };
+}; }; };

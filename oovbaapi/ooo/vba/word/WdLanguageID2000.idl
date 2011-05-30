@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdLanguageID2000 {
+        const long wdChineseHongKong = 3076;
+        const long wdChineseMacao = 5124;
+        const long wdEnglishTrinidad = 11273;
+    };
+}; }; };

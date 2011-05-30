@@ -1,0 +1,8 @@
+module ooo { module vba { module excel {
+    constants XlChartSplitType {
+        const long xlSplitByCustomSplit = 4;
+        const long xlSplitByPercentValue = 3;
+        const long xlSplitByPosition = 1;
+        const long xlSplitByValue = 2;
+    };
+}; }; };

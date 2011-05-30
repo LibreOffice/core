@@ -1,0 +1,13 @@
+module ooo { module vba { module word {
+    constants WdMailMergeActiveRecord {
+        const long wdFirstDataSourceRecord = -6;
+        const long wdFirstRecord = -4;
+        const long wdLastDataSourceRecord = -7;
+        const long wdLastRecord = -5;
+        const long wdNextDataSourceRecord = -8;
+        const long wdNextRecord = -2;
+        const long wdNoActiveRecord = -1;
+        const long wdPreviousDataSourceRecord = -9;
+        const long wdPreviousRecord = -3;
+    };
+}; }; };

@@ -1,0 +1,6 @@
+module ooo { module vba { module dao {
+    constants ReplicaTypeEnum {
+        const long dbRepMakePartial = 1;
+        const long dbRepMakeReadOnly = 2;
+    };
+}; }; };

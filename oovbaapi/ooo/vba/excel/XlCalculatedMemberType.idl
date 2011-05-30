@@ -1,0 +1,6 @@
+module ooo { module vba { module excel {
+    constants XlCalculatedMemberType {
+        const long xlCalculatedMember = 0;
+        const long xlCalculatedSet = 1;
+    };
+}; }; };

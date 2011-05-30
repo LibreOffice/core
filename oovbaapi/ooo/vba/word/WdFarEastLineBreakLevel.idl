@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdFarEastLineBreakLevel {
+        const long wdFarEastLineBreakLevelCustom = 2;
+        const long wdFarEastLineBreakLevelNormal = 0;
+        const long wdFarEastLineBreakLevelStrict = 1;
+    };
+}; }; };

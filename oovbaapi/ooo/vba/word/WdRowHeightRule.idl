@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdRowHeightRule {
+        const long wdRowHeightAtLeast = 1;
+        const long wdRowHeightAuto = 0;
+        const long wdRowHeightExactly = 2;
+    };
+}; }; };

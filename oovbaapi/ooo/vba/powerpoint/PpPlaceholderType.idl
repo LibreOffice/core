@@ -1,0 +1,21 @@
+module ooo { module vba { module powerpoint {
+    constants PpPlaceholderType {
+        const long ppPlaceholderBitmap = 9;
+        const long ppPlaceholderBody = 2;
+        const long ppPlaceholderCenterTitle = 3;
+        const long ppPlaceholderChart = 8;
+        const long ppPlaceholderDate = 16;
+        const long ppPlaceholderFooter = 15;
+        const long ppPlaceholderHeader = 14;
+        const long ppPlaceholderMediaClip = 10;
+        const long ppPlaceholderMixed = -2;
+        const long ppPlaceholderObject = 7;
+        const long ppPlaceholderOrgChart = 11;
+        const long ppPlaceholderSlideNumber = 13;
+        const long ppPlaceholderSubtitle = 4;
+        const long ppPlaceholderTable = 12;
+        const long ppPlaceholderTitle = 1;
+        const long ppPlaceholderVerticalBody = 6;
+        const long ppPlaceholderVerticalTitle = 5;
+    };
+}; }; };

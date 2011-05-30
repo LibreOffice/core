@@ -1,0 +1,10 @@
+module ooo { module vba { module excel {
+    constants XlTrendlineType {
+        const long xlExponential = 5;
+        const long xlLinear = -4132;
+        const long xlLogarithmic = -4133;
+        const long xlMovingAvg = 6;
+        const long xlPolynomial = 3;
+        const long xlPower = 4;
+    };
+}; }; };

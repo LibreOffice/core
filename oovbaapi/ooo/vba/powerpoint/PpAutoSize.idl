@@ -1,0 +1,7 @@
+module ooo { module vba { module powerpoint {
+    constants PpAutoSize {
+        const long ppAutoSizeMixed = -2;
+        const long ppAutoSizeNone = 0;
+        const long ppAutoSizeShapeToFitText = 1;
+    };
+}; }; };

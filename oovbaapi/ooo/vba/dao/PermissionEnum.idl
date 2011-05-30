@@ -1,0 +1,21 @@
+module ooo { module vba { module dao {
+    constants PermissionEnum {
+        const long dbSecCreate = 1;
+        const long dbSecDBAdmin = 8;
+        const long dbSecDBCreate = 1;
+        const long dbSecDBExclusive = 4;
+        const long dbSecDBOpen = 2;
+        const long dbSecDelete = 65536;
+        const long dbSecDeleteData = 128;
+        const long dbSecFullAccess = 1048575;
+        const long dbSecInsertData = 32;
+        const long dbSecNoAccess = 0;
+        const long dbSecReadDef = 4;
+        const long dbSecReadSec = 131072;
+        const long dbSecReplaceData = 64;
+        const long dbSecRetrieveData = 20;
+        const long dbSecWriteDef = 65548;
+        const long dbSecWriteOwner = 524288;
+        const long dbSecWriteSec = 262144;
+    };
+}; }; };

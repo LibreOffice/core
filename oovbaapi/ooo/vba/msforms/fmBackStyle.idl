@@ -1,0 +1,6 @@
+module ooo { module vba { module msforms {
+    constants fmBackStyle {
+        const long fmBackStyleOpaque = 1;
+        const long fmBackStyleTransparent = 0;
+    };
+}; }; };

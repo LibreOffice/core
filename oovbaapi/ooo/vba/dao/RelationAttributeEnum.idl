@@ -1,0 +1,11 @@
+module ooo { module vba { module dao {
+    constants RelationAttributeEnum {
+        const long dbRelationDeleteCascade = 4096;
+        const long dbRelationDontEnforce = 2;
+        const long dbRelationInherited = 4;
+        const long dbRelationLeft = 16777216;
+        const long dbRelationRight = 33554432;
+        const long dbRelationUnique = 1;
+        const long dbRelationUpdateCascade = 256;
+    };
+}; }; };

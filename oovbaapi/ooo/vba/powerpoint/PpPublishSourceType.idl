@@ -1,0 +1,7 @@
+module ooo { module vba { module powerpoint {
+    constants PpPublishSourceType {
+        const long ppPublishAll = 1;
+        const long ppPublishNamedSlideShow = 3;
+        const long ppPublishSlideRange = 2;
+    };
+}; }; };

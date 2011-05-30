@@ -1,0 +1,10 @@
+module ooo { module vba { module adodb {
+    constants CEResyncEnum {
+        const long adResyncAll = 15;
+        const long adResyncAutoIncrement = 1;
+        const long adResyncConflicts = 2;
+        const long adResyncInserts = 8;
+        const long adResyncNone = 0;
+        const long adResyncUpdates = 4;
+    };
+}; }; };

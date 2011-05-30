@@ -1,0 +1,12 @@
+module ooo { module vba { module excel {
+    constants XlFormatConditionOperator {
+        const long xlBetween = 1;
+        const long xlEqual = 3;
+        const long xlGreater = 5;
+        const long xlGreaterEqual = 7;
+        const long xlLess = 6;
+        const long xlLessEqual = 8;
+        const long xlNotBetween = 2;
+        const long xlNotEqual = 4;
+    };
+}; }; };

@@ -1,0 +1,12 @@
+module ooo { module vba { module excel {
+    constants XlSourceType {
+        const long xlSourceAutoFilter = 3;
+        const long xlSourceChart = 5;
+        const long xlSourcePivotTable = 6;
+        const long xlSourcePrintArea = 2;
+        const long xlSourceQuery = 7;
+        const long xlSourceRange = 4;
+        const long xlSourceSheet = 1;
+        const long xlSourceWorkbook = 0;
+    };
+}; }; };

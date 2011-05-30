@@ -1,0 +1,11 @@
+module ooo { module vba { module word {
+    constants WdConstants {
+        const long wdAutoPosition = 0;
+        const long wdBackward = -1073741823;
+        const long wdCreatorCode = 1297307460;
+        const long wdFirst = 1;
+        const long wdForward = 1073741823;
+        const long wdToggle = 9999998;
+        const long wdUndefined = 9999999;
+    };
+}; }; };

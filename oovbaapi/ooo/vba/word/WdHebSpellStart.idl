@@ -1,0 +1,8 @@
+module ooo { module vba { module word {
+    constants WdHebSpellStart {
+        const long wdFullScript = 0;
+        const long wdMixedAuthorizedScript = 3;
+        const long wdMixedScript = 2;
+        const long wdPartialScript = 1;
+    };
+}; }; };

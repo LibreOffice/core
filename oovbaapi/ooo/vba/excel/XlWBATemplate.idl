@@ -1,0 +1,8 @@
+module ooo { module vba { module excel {
+    constants XlWBATemplate {
+        const long xlWBATChart = -4109;
+        const long xlWBATExcel4IntlMacroSheet = 4;
+        const long xlWBATExcel4MacroSheet = 3;
+        const long xlWBATWorksheet = -4167;
+    };
+}; }; };

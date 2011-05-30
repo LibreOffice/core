@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlChartPictureType {
+        const long xlStack = 2;
+        const long xlStackScale = 3;
+        const long xlStretch = 1;
+    };
+}; }; };

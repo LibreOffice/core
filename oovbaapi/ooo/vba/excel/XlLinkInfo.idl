@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlLinkInfo {
+        const long xlEditionDate = 2;
+        const long xlLinkInfoStatus = 3;
+        const long xlUpdateState = 1;
+    };
+}; }; };

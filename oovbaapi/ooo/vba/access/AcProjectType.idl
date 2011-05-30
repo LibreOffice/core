@@ -1,0 +1,7 @@
+module ooo { module vba { module access {
+    constants AcProjectType {
+        const long acADP = 1;
+        const long acMDB = 2;
+        const long acNull = 0;
+    };
+}; }; };

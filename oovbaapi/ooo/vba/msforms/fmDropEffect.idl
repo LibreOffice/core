@@ -1,0 +1,8 @@
+module ooo { module vba { module msforms {
+    constants fmDropEffect {
+        const long fmDropEffectCopy = 1;
+        const long fmDropEffectCopyOrMove = 3;
+        const long fmDropEffectMove = 2;
+        const long fmDropEffectNone = 0;
+    };
+}; }; };

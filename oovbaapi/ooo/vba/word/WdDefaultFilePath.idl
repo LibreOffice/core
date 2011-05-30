@@ -1,0 +1,21 @@
+module ooo { module vba { module word {
+    constants WdDefaultFilePath {
+        const long wdAutoRecoverPath = 5;
+        const long wdBorderArtPath = 19;
+        const long wdCurrentFolderPath = 14;
+        const long wdDocumentsPath = 0;
+        const long wdGraphicsFiltersPath = 10;
+        const long wdPicturesPath = 1;
+        const long wdProgramPath = 9;
+        const long wdProofingToolsPath = 12;
+        const long wdStartupPath = 8;
+        const long wdStyleGalleryPath = 15;
+        const long wdTempFilePath = 13;
+        const long wdTextConvertersPath = 11;
+        const long wdToolsPath = 6;
+        const long wdTutorialPath = 7;
+        const long wdUserOptionsPath = 4;
+        const long wdUserTemplatesPath = 2;
+        const long wdWorkgroupTemplatesPath = 3;
+    };
+}; }; };

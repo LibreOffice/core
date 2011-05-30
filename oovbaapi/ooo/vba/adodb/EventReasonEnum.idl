@@ -1,0 +1,19 @@
+module ooo { module vba { module adodb {
+    constants EventReasonEnum {
+        const long adRsnAddNew = 1;
+        const long adRsnClose = 9;
+        const long adRsnDelete = 2;
+        const long adRsnFirstChange = 11;
+        const long adRsnMove = 10;
+        const long adRsnMoveFirst = 12;
+        const long adRsnMoveLast = 15;
+        const long adRsnMoveNext = 13;
+        const long adRsnMovePrevious = 14;
+        const long adRsnRequery = 7;
+        const long adRsnResynch = 8;
+        const long adRsnUndoAddNew = 5;
+        const long adRsnUndoDelete = 6;
+        const long adRsnUndoUpdate = 4;
+        const long adRsnUpdate = 3;
+    };
+}; }; };

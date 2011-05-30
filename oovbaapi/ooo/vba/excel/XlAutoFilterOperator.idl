@@ -1,0 +1,10 @@
+module ooo { module vba { module excel {
+    constants XlAutoFilterOperator {
+        const long xlAnd = 1;
+        const long xlBottom10Items = 4;
+        const long xlBottom10Percent = 6;
+        const long xlOr = 2;
+        const long xlTop10Items = 3;
+        const long xlTop10Percent = 5;
+    };
+}; }; };

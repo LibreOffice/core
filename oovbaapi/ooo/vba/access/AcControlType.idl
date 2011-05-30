@@ -1,0 +1,23 @@
+module ooo { module vba { module access {
+    constants AcControlType {
+        const long acBoundObjectFrame = 108;
+        const long acCheckBox = 106;
+        const long acComboBox = 111;
+        const long acCommandButton = 104;
+        const long acCustomControl = 119;
+        const long acImage = 103;
+        const long acLabel = 100;
+        const long acLine = 102;
+        const long acListBox = 110;
+        const long acObjectFrame = 114;
+        const long acOptionButton = 105;
+        const long acOptionGroup = 107;
+        const long acPage = 124;
+        const long acPageBreak = 118;
+        const long acRectangle = 101;
+        const long acSubform = 112;
+        const long acTabCtl = 123;
+        const long acTextBox = 109;
+        const long acToggleButton = 122;
+    };
+}; }; };

@@ -1,0 +1,9 @@
+module ooo { module vba { module adodb {
+    constants CursorTypeEnum {
+        const long adOpenDynamic = 2;
+        const long adOpenForwardOnly = 0;
+        const long adOpenKeyset = 1;
+        const long adOpenStatic = 3;
+        const long adOpenUnspecified = -1;
+    };
+}; }; };

@@ -1,0 +1,13 @@
+module ooo { module vba { module msforms {
+    constants fmPicPosition {
+        const long fmPicPositionBottomCenter = 7;
+        const long fmPicPositionBottomLeft = 6;
+        const long fmPicPositionBottomRight = 8;
+        const long fmPicPositionCenter = 0;
+        const long fmPicPositionCenterLeft = 4;
+        const long fmPicPositionCenterRight = 5;
+        const long fmPicPositionTopCenter = 2;
+        const long fmPicPositionTopLeft = 1;
+        const long fmPicPositionTopRight = 3;
+    };
+}; }; };

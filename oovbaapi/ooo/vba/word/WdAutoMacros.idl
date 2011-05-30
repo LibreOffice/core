@@ -1,0 +1,10 @@
+module ooo { module vba { module word {
+    constants WdAutoMacros {
+        const long wdAutoClose = 3;
+        const long wdAutoExec = 0;
+        const long wdAutoExit = 4;
+        const long wdAutoNew = 1;
+        const long wdAutoOpen = 2;
+        const long wdAutoSync = 5;
+    };
+}; }; };

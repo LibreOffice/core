@@ -1,0 +1,9 @@
+module ooo { module vba { module dao {
+    constants RecordsetTypeEnum {
+        const long dbOpenDynamic = 16;
+        const long dbOpenDynaset = 2;
+        const long dbOpenForwardOnly = 8;
+        const long dbOpenSnapshot = 4;
+        const long dbOpenTable = 1;
+    };
+}; }; };

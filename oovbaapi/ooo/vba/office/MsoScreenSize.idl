@@ -1,0 +1,15 @@
+module ooo { module vba { module office {
+    constants MsoScreenSize {
+        const long msoScreenSize1024x768 = 4;
+        const long msoScreenSize1152x882 = 5;
+        const long msoScreenSize1152x900 = 6;
+        const long msoScreenSize1280x1024 = 7;
+        const long msoScreenSize1600x1200 = 8;
+        const long msoScreenSize1800x1440 = 9;
+        const long msoScreenSize1920x1200 = 10;
+        const long msoScreenSize544x376 = 0;
+        const long msoScreenSize640x480 = 1;
+        const long msoScreenSize720x512 = 2;
+        const long msoScreenSize800x600 = 3;
+    };
+}; }; };

@@ -1,0 +1,15 @@
+module ooo { module vba { module excel {
+    constants XlIMEMode {
+        const long xlIMEModeAlpha = 8;
+        const long xlIMEModeAlphaFull = 7;
+        const long xlIMEModeDisable = 3;
+        const long xlIMEModeHangul = 10;
+        const long xlIMEModeHangulFull = 9;
+        const long xlIMEModeHiragana = 4;
+        const long xlIMEModeKatakana = 5;
+        const long xlIMEModeKatakanaHalf = 6;
+        const long xlIMEModeNoControl = 0;
+        const long xlIMEModeOff = 2;
+        const long xlIMEModeOn = 1;
+    };
+}; }; };

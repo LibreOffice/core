@@ -1,0 +1,8 @@
+module ooo { module vba { module excel {
+    constants XlEditionFormat {
+        const long xlBIFF = 2;
+        const long xlPICT = 1;
+        const long xlRTF = 4;
+        const long xlVALU = 8;
+    };
+}; }; };

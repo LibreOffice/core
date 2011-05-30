@@ -1,0 +1,8 @@
+module ooo { module vba { module word {
+    constants WdFarEastLineBreakLanguageID {
+        const long wdLineBreakJapanese = 1041;
+        const long wdLineBreakKorean = 1042;
+        const long wdLineBreakSimplifiedChinese = 2052;
+        const long wdLineBreakTraditionalChinese = 1028;
+    };
+}; }; };

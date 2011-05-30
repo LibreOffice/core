@@ -34,7 +34,11 @@ $(eval $(call gb_Library_set_include,svx,\
     -I$(realpath $(SRCDIR)/svx/source/inc) \
     -I$(realpath $(SRCDIR)/svx/inc/pch) \
     $$(SOLARINC) \
-    -I$(OUTDIR)/inc/offuh \
+))
+
+$(eval $(call gb_Library_add_api,svx,\
+	udkapi \
+	offapi \
 ))
 
 $(eval $(call gb_Library_set_defs,svx,\

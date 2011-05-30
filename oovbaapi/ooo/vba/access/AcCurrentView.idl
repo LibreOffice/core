@@ -1,0 +1,10 @@
+module ooo { module vba { module access {
+    constants AcCurrentView {
+        const long acCurViewDatasheet = 2;
+        const long acCurViewDesign = 0;
+        const long acCurViewFormBrowse = 1;
+        const long acCurViewPivotChart = 4;
+        const long acCurViewPivotTable = 3;
+        const long acCurViewPreview = 5;
+    };
+}; }; };

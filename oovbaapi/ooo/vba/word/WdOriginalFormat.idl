@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdOriginalFormat {
+        const long wdOriginalDocumentFormat = 1;
+        const long wdPromptUser = 2;
+        const long wdWordDocument = 0;
+    };
+}; }; };

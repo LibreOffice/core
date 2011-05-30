@@ -1,0 +1,9 @@
+module ooo { module vba { module powerpoint {
+    constants PpChangeCase {
+        const long ppCaseLower = 2;
+        const long ppCaseSentence = 1;
+        const long ppCaseTitle = 4;
+        const long ppCaseToggle = 5;
+        const long ppCaseUpper = 3;
+    };
+}; }; };

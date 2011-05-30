@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlPageBreak {
+        const long xlPageBreakAutomatic = -4105;
+        const long xlPageBreakManual = -4135;
+        const long xlPageBreakNone = -4142;
+    };
+}; }; };

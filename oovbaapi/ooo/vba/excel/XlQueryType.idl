@@ -1,0 +1,10 @@
+module ooo { module vba { module excel {
+    constants XlQueryType {
+        const long xlADORecordset = 7;
+        const long xlDAORecordset = 2;
+        const long xlODBCQuery = 1;
+        const long xlOLEDBQuery = 5;
+        const long xlTextImport = 6;
+        const long xlWebQuery = 4;
+    };
+}; }; };

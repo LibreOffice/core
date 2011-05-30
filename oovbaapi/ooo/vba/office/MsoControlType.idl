@@ -1,0 +1,31 @@
+module ooo { module vba { module office {
+    constants MsoControlType {
+        const long msoControlActiveX = 22;
+        const long msoControlAutoCompleteCombo = 26;
+        const long msoControlButton = 1;
+        const long msoControlButtonDropdown = 5;
+        const long msoControlButtonPopup = 12;
+        const long msoControlComboBox = 4;
+        const long msoControlCustom = 0;
+        const long msoControlDropdown = 3;
+        const long msoControlEdit = 2;
+        const long msoControlExpandingGrid = 16;
+        const long msoControlGauge = 19;
+        const long msoControlGenericDropdown = 8;
+        const long msoControlGraphicCombo = 20;
+        const long msoControlGraphicDropdown = 9;
+        const long msoControlGraphicPopup = 11;
+        const long msoControlGrid = 18;
+        const long msoControlLabel = 15;
+        const long msoControlLabelEx = 24;
+        const long msoControlOCXDropdown = 7;
+        const long msoControlPane = 21;
+        const long msoControlPopup = 10;
+        const long msoControlSpinner = 23;
+        const long msoControlSplitButtonMRUPopup = 14;
+        const long msoControlSplitButtonPopup = 13;
+        const long msoControlSplitDropdown = 6;
+        const long msoControlSplitExpandingGrid = 17;
+        const long msoControlWorkPane = 25;
+    };
+}; }; };

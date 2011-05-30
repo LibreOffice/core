@@ -1,0 +1,8 @@
+module ooo { module vba { module excel {
+    constants XlReferenceType {
+        const long xlAbsolute = 1;
+        const long xlAbsRowRelColumn = 2;
+        const long xlRelative = 4;
+        const long xlRelRowAbsColumn = 3;
+    };
+}; }; };

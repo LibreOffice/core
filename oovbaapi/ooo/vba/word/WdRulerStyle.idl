@@ -1,0 +1,8 @@
+module ooo { module vba { module word {
+    constants WdRulerStyle {
+        const long wdAdjustFirstColumn = 2;
+        const long wdAdjustNone = 0;
+        const long wdAdjustProportional = 1;
+        const long wdAdjustSameWidth = 3;
+    };
+}; }; };

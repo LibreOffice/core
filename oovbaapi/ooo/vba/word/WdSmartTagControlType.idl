@@ -1,0 +1,20 @@
+module ooo { module vba { module word {
+    constants WdSmartTagControlType {
+        const long wdControlActiveX = 13;
+        const long wdControlButton = 6;
+        const long wdControlCheckbox = 9;
+        const long wdControlCombo = 12;
+        const long wdControlDocumentFragment = 14;
+        const long wdControlDocumentFragmentURL = 15;
+        const long wdControlHelp = 3;
+        const long wdControlHelpURL = 4;
+        const long wdControlImage = 8;
+        const long wdControlLabel = 7;
+        const long wdControlLink = 2;
+        const long wdControlListbox = 11;
+        const long wdControlRadioGroup = 16;
+        const long wdControlSeparator = 5;
+        const long wdControlSmartTag = 1;
+        const long wdControlTextbox = 10;
+    };
+}; }; };

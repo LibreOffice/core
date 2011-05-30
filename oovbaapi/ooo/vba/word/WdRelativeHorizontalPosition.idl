@@ -1,0 +1,8 @@
+module ooo { module vba { module word {
+    constants WdRelativeHorizontalPosition {
+        const long wdRelativeHorizontalPositionCharacter = 3;
+        const long wdRelativeHorizontalPositionColumn = 2;
+        const long wdRelativeHorizontalPositionMargin = 0;
+        const long wdRelativeHorizontalPositionPage = 1;
+    };
+}; }; };

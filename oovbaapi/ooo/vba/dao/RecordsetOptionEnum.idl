@@ -1,0 +1,16 @@
+module ooo { module vba { module dao {
+    constants RecordsetOptionEnum {
+        const long dbAppendOnly = 8;
+        const long dbConsistent = 32;
+        const long dbDenyRead = 2;
+        const long dbDenyWrite = 1;
+        const long dbExecDirect = 2048;
+        const long dbFailOnError = 128;
+        const long dbForwardOnly = 256;
+        const long dbInconsistent = 16;
+        const long dbReadOnly = 4;
+        const long dbRunAsync = 1024;
+        const long dbSeeChanges = 512;
+        const long dbSQLPassThrough = 64;
+    };
+}; }; };

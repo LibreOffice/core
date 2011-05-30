@@ -1,0 +1,8 @@
+module ooo { module vba { module word {
+    constants WdInsertCells {
+        const long wdInsertCellsEntireColumn = 3;
+        const long wdInsertCellsEntireRow = 2;
+        const long wdInsertCellsShiftDown = 1;
+        const long wdInsertCellsShiftRight = 0;
+    };
+}; }; };

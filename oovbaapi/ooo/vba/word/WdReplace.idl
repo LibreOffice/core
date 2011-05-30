@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdReplace {
+        const long wdReplaceAll = 2;
+        const long wdReplaceNone = 0;
+        const long wdReplaceOne = 1;
+    };
+}; }; };

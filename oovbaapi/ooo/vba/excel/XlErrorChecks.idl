@@ -1,0 +1,12 @@
+module ooo { module vba { module excel {
+    constants XlErrorChecks {
+        const long xlEmptyCellReferences = 7;
+        const long xlEvaluateToError = 1;
+        const long xlInconsistentFormula = 4;
+        const long xlListDataValidation = 8;
+        const long xlNumberAsText = 3;
+        const long xlOmittedCells = 5;
+        const long xlTextDate = 2;
+        const long xlUnlockedFormulaCells = 6;
+    };
+}; }; };

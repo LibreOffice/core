@@ -1,0 +1,10 @@
+module ooo { module vba { module powerpoint {
+    constants PpBorderType {
+        const long ppBorderBottom = 3;
+        const long ppBorderDiagonalDown = 5;
+        const long ppBorderDiagonalUp = 6;
+        const long ppBorderLeft = 2;
+        const long ppBorderRight = 4;
+        const long ppBorderTop = 1;
+    };
+}; }; };

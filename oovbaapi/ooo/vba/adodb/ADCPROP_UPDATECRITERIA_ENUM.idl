@@ -1,0 +1,8 @@
+module ooo { module vba { module adodb {
+    constants ADCPROP_UPDATECRITERIA_ENUM {
+        const long adCriteriaAllCols = 1;
+        const long adCriteriaKey = 0;
+        const long adCriteriaTimeStamp = 3;
+        const long adCriteriaUpdCols = 2;
+    };
+}; }; };

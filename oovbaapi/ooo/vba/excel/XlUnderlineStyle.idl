@@ -1,0 +1,9 @@
+module ooo { module vba { module excel {
+    constants XlUnderlineStyle {
+        const long xlUnderlineStyleDouble = -4119;
+        const long xlUnderlineStyleDoubleAccounting = 5;
+        const long xlUnderlineStyleNone = -4142;
+        const long xlUnderlineStyleSingle = 2;
+        const long xlUnderlineStyleSingleAccounting = 4;
+    };
+}; }; };

@@ -1,0 +1,7 @@
+module ooo { module vba { module office {
+    constants MailFormat {
+        const long mfHTML = 2;
+        const long mfPlainText = 1;
+        const long mfRTF = 3;
+    };
+}; }; };

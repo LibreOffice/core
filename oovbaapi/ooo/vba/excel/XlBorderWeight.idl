@@ -1,0 +1,8 @@
+module ooo { module vba { module excel {
+    constants XlBorderWeight {
+        const long xlHairline = 1;
+        const long xlMedium = -4138;
+        const long xlThick = 4;
+        const long xlThin = 2;
+    };
+}; }; };

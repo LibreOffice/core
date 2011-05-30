@@ -1,0 +1,7 @@
+module ooo { module vba { module office {
+    constants MsoExtrusionColorType {
+        const long msoExtrusionColorAutomatic = 1;
+        const long msoExtrusionColorCustom = 2;
+        const long msoExtrusionColorTypeMixed = -2;
+    };
+}; }; };

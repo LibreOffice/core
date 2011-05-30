@@ -1,0 +1,7 @@
+module ooo { module vba { module access {
+    constants AcCloseSave {
+        const long acSaveNo = 2;
+        const long acSavePrompt = 0;
+        const long acSaveYes = 1;
+    };
+}; }; };

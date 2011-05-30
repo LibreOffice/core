@@ -1,0 +1,6 @@
+module ooo { module vba { module office {
+    constants MsoSyncCompareType {
+        const long msoSyncCompareAndMerge = 0;
+        const long msoSyncCompareSideBySide = 1;
+    };
+}; }; };

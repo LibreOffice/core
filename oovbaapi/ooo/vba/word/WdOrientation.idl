@@ -1,0 +1,6 @@
+module ooo { module vba { module word {
+    constants WdOrientation {
+        const long wdOrientLandscape = 1;
+        const long wdOrientPortrait = 0;
+    };
+}; }; };

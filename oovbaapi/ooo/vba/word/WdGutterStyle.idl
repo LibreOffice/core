@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdGutterStyle {
+        const long wdGutterPosLeft = 0;
+        const long wdGutterPosRight = 2;
+        const long wdGutterPosTop = 1;
+    };
+}; }; };

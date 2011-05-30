@@ -1,0 +1,6 @@
+module ooo { module vba { module excel {
+    constants XlDeleteShiftDirection {
+        const long xlShiftToLeft = -4159;
+        const long xlShiftUp = -4162;
+    };
+}; }; };

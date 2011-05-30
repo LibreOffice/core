@@ -1,0 +1,8 @@
+module ooo { module vba { module powerpoint {
+    constants PpSelectionType {
+        const long ppSelectionNone = 0;
+        const long ppSelectionShapes = 2;
+        const long ppSelectionSlides = 1;
+        const long ppSelectionText = 3;
+    };
+}; }; };

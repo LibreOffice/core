@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdOLEType {
+        const long wdOLEControl = 2;
+        const long wdOLEEmbed = 1;
+        const long wdOLELink = 0;
+    };
+}; }; };

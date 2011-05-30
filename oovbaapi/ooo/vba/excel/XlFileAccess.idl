@@ -1,0 +1,6 @@
+module ooo { module vba { module excel {
+    constants XlFileAccess {
+        const long xlReadOnly = 3;
+        const long xlReadWrite = 2;
+    };
+}; }; };

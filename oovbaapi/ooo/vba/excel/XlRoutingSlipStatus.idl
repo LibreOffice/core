@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlRoutingSlipStatus {
+        const long xlNotYetRouted = 0;
+        const long xlRoutingComplete = 2;
+        const long xlRoutingInProgress = 1;
+    };
+}; }; };

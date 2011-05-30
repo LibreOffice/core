@@ -1,0 +1,9 @@
+module ooo { module vba { module word {
+    constants WdNewDocumentType {
+        const long wdNewBlankDocument = 0;
+        const long wdNewEmailMessage = 2;
+        const long wdNewFrameset = 3;
+        const long wdNewWebPage = 1;
+        const long wdNewXMLDocument = 4;
+    };
+}; }; };

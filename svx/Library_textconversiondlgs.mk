@@ -33,7 +33,11 @@ $(eval $(call gb_Library_set_include,textconversiondlgs,\
     -I$(realpath $(SRCDIR)/svx/inc) \
     -I$(realpath $(SRCDIR)/svx/inc/pch) \
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc/offuh \
+))
+
+$(eval $(call gb_Library_add_api,textconversiondlgs,\
+	udkapi \
+	offapi \
 ))
 
 $(eval $(call gb_Library_set_defs,textconversiondlgs,\

@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlAxisType {
+        const long xlCategory = 1;
+        const long xlSeriesAxis = 3;
+        const long xlValue = 2;
+    };
+}; }; };

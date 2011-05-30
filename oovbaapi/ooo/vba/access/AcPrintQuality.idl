@@ -1,0 +1,8 @@
+module ooo { module vba { module access {
+    constants AcPrintQuality {
+        const long acDraft = 3;
+        const long acHigh = 0;
+        const long acLow = 2;
+        const long acMedium = 1;
+    };
+}; }; };

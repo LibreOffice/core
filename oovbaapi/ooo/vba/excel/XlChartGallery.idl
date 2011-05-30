@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlChartGallery {
+        const long xlAnyGallery = 23;
+        const long xlBuiltIn = 21;
+        const long xlUserDefined = 22;
+    };
+}; }; };

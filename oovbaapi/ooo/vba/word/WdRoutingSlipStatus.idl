@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdRoutingSlipStatus {
+        const long wdNotYetRouted = 0;
+        const long wdRouteComplete = 2;
+        const long wdRouteInProgress = 1;
+    };
+}; }; };

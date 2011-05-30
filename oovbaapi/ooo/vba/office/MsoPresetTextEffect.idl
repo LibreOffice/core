@@ -1,0 +1,35 @@
+module ooo { module vba { module office {
+    constants MsoPresetTextEffect {
+        const long msoTextEffect1 = 0;
+        const long msoTextEffect10 = 9;
+        const long msoTextEffect11 = 10;
+        const long msoTextEffect12 = 11;
+        const long msoTextEffect13 = 12;
+        const long msoTextEffect14 = 13;
+        const long msoTextEffect15 = 14;
+        const long msoTextEffect16 = 15;
+        const long msoTextEffect17 = 16;
+        const long msoTextEffect18 = 17;
+        const long msoTextEffect19 = 18;
+        const long msoTextEffect2 = 1;
+        const long msoTextEffect20 = 19;
+        const long msoTextEffect21 = 20;
+        const long msoTextEffect22 = 21;
+        const long msoTextEffect23 = 22;
+        const long msoTextEffect24 = 23;
+        const long msoTextEffect25 = 24;
+        const long msoTextEffect26 = 25;
+        const long msoTextEffect27 = 26;
+        const long msoTextEffect28 = 27;
+        const long msoTextEffect29 = 28;
+        const long msoTextEffect3 = 2;
+        const long msoTextEffect30 = 29;
+        const long msoTextEffect4 = 3;
+        const long msoTextEffect5 = 4;
+        const long msoTextEffect6 = 5;
+        const long msoTextEffect7 = 6;
+        const long msoTextEffect8 = 7;
+        const long msoTextEffect9 = 8;
+        const long msoTextEffectMixed = -2;
+    };
+}; }; };

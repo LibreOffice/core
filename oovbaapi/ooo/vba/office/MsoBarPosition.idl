@@ -1,0 +1,11 @@
+module ooo { module vba { module office {
+    constants MsoBarPosition {
+        const long msoBarBottom = 3;
+        const long msoBarFloating = 4;
+        const long msoBarLeft = 0;
+        const long msoBarMenuBar = 6;
+        const long msoBarPopup = 5;
+        const long msoBarRight = 2;
+        const long msoBarTop = 1;
+    };
+}; }; };

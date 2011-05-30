@@ -1,0 +1,11 @@
+module ooo { module vba { module word {
+    constants WdAnimation {
+        const long wdAnimationBlinkingBackground = 2;
+        const long wdAnimationLasVegasLights = 1;
+        const long wdAnimationMarchingBlackAnts = 4;
+        const long wdAnimationMarchingRedAnts = 5;
+        const long wdAnimationNone = 0;
+        const long wdAnimationShimmer = 6;
+        const long wdAnimationSparkleText = 3;
+    };
+}; }; };

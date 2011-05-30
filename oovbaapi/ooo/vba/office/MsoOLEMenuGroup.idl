@@ -1,0 +1,11 @@
+module ooo { module vba { module office {
+    constants MsoOLEMenuGroup {
+        const long msoOLEMenuGroupContainer = 2;
+        const long msoOLEMenuGroupEdit = 1;
+        const long msoOLEMenuGroupFile = 0;
+        const long msoOLEMenuGroupHelp = 5;
+        const long msoOLEMenuGroupNone = -1;
+        const long msoOLEMenuGroupObject = 3;
+        const long msoOLEMenuGroupWindow = 4;
+    };
+}; }; };

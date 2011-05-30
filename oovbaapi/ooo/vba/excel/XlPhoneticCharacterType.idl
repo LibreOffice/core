@@ -1,0 +1,8 @@
+module ooo { module vba { module excel {
+    constants XlPhoneticCharacterType {
+        const long xlHiragana = 2;
+        const long xlKatakana = 1;
+        const long xlKatakanaHalf = 0;
+        const long xlNoConversion = 3;
+    };
+}; }; };

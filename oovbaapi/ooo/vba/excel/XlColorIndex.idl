@@ -1,0 +1,6 @@
+module ooo { module vba { module excel {
+    constants XlColorIndex {
+        const long xlColorIndexAutomatic = -4105;
+        const long xlColorIndexNone = -4142;
+    };
+}; }; };

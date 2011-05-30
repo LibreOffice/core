@@ -1,0 +1,25 @@
+module ooo { module vba { module office {
+    constants MsoPresetThreeDFormat {
+        const long msoPresetThreeDFormatMixed = -2;
+        const long msoThreeD1 = 1;
+        const long msoThreeD10 = 10;
+        const long msoThreeD11 = 11;
+        const long msoThreeD12 = 12;
+        const long msoThreeD13 = 13;
+        const long msoThreeD14 = 14;
+        const long msoThreeD15 = 15;
+        const long msoThreeD16 = 16;
+        const long msoThreeD17 = 17;
+        const long msoThreeD18 = 18;
+        const long msoThreeD19 = 19;
+        const long msoThreeD2 = 2;
+        const long msoThreeD20 = 20;
+        const long msoThreeD3 = 3;
+        const long msoThreeD4 = 4;
+        const long msoThreeD5 = 5;
+        const long msoThreeD6 = 6;
+        const long msoThreeD7 = 7;
+        const long msoThreeD8 = 8;
+        const long msoThreeD9 = 9;
+    };
+}; }; };

@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlOLEType {
+        const long xlOLEControl = 2;
+        const long xlOLEEmbed = 1;
+        const long xlOLELink = 0;
+    };
+}; }; };

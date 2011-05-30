@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdPictureLinkType {
+        const long wdLinkDataInDoc = 1;
+        const long wdLinkDataOnDisk = 2;
+        const long wdLinkNone = 0;
+    };
+}; }; };

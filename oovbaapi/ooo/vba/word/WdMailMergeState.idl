@@ -1,0 +1,10 @@
+module ooo { module vba { module word {
+    constants WdMailMergeState {
+        const long wdDataSource = 5;
+        const long wdMainAndDataSource = 2;
+        const long wdMainAndHeader = 3;
+        const long wdMainAndSourceAndHeader = 4;
+        const long wdMainDocumentOnly = 1;
+        const long wdNormalDocument = 0;
+    };
+}; }; };

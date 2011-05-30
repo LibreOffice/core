@@ -1,0 +1,14 @@
+module ooo { module vba { module excel {
+    constants XlCellType {
+        const long xlCellTypeAllFormatConditions = -4172;
+        const long xlCellTypeAllValidation = -4174;
+        const long xlCellTypeBlanks = 4;
+        const long xlCellTypeComments = -4144;
+        const long xlCellTypeConstants = 2;
+        const long xlCellTypeFormulas = -4123;
+        const long xlCellTypeLastCell = 11;
+        const long xlCellTypeSameFormatConditions = -4173;
+        const long xlCellTypeSameValidation = -4175;
+        const long xlCellTypeVisible = 12;
+    };
+}; }; };

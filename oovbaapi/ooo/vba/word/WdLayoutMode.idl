@@ -1,0 +1,8 @@
+module ooo { module vba { module word {
+    constants WdLayoutMode {
+        const long wdLayoutModeDefault = 0;
+        const long wdLayoutModeGenko = 3;
+        const long wdLayoutModeGrid = 1;
+        const long wdLayoutModeLineGrid = 2;
+    };
+}; }; };

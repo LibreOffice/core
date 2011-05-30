@@ -1,0 +1,9 @@
+module ooo { module vba { module office {
+    constants MsoPictureColorType {
+        const long msoPictureAutomatic = 1;
+        const long msoPictureBlackAndWhite = 3;
+        const long msoPictureGrayscale = 2;
+        const long msoPictureMixed = -2;
+        const long msoPictureWatermark = 4;
+    };
+}; }; };

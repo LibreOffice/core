@@ -1,0 +1,14 @@
+module ooo { module vba { module word {
+    constants WdPartOfSpeech {
+        const long wdAdjective = 0;
+        const long wdAdverb = 2;
+        const long wdConjunction = 5;
+        const long wdIdiom = 8;
+        const long wdInterjection = 7;
+        const long wdNoun = 1;
+        const long wdOther = 9;
+        const long wdPreposition = 6;
+        const long wdPronoun = 4;
+        const long wdVerb = 3;
+    };
+}; }; };

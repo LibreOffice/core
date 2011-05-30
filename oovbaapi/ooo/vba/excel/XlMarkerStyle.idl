@@ -1,0 +1,16 @@
+module ooo { module vba { module excel {
+    constants XlMarkerStyle {
+        const long xlMarkerStyleAutomatic = -4105;
+        const long xlMarkerStyleCircle = 8;
+        const long xlMarkerStyleDash = -4115;
+        const long xlMarkerStyleDiamond = 2;
+        const long xlMarkerStyleDot = -4118;
+        const long xlMarkerStyleNone = -4142;
+        const long xlMarkerStylePicture = -4147;
+        const long xlMarkerStylePlus = 9;
+        const long xlMarkerStyleSquare = 1;
+        const long xlMarkerStyleStar = 5;
+        const long xlMarkerStyleTriangle = 3;
+        const long xlMarkerStyleX = -4168;
+    };
+}; }; };

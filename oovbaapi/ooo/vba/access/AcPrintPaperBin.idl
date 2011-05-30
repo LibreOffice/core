@@ -1,0 +1,17 @@
+module ooo { module vba { module access {
+    constants AcPrintPaperBin {
+        const long acPRBNAuto = 7;
+        const long acPRBNCassette = 14;
+        const long acPRBNEnvelope = 5;
+        const long acPRBNEnvManual = 6;
+        const long acPRBNFormSource = 15;
+        const long acPRBNLargeCapacity = 11;
+        const long acPRBNLargeFmt = 10;
+        const long acPRBNLower = 2;
+        const long acPRBNManual = 4;
+        const long acPRBNMiddle = 3;
+        const long acPRBNSmallFmt = 9;
+        const long acPRBNTractor = 8;
+        const long acPRBNUpper = 1;
+    };
+}; }; };

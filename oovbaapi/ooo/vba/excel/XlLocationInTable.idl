@@ -1,0 +1,13 @@
+module ooo { module vba { module excel {
+    constants XlLocationInTable {
+        const long xlColumnHeader = -4110;
+        const long xlColumnItem = 5;
+        const long xlDataHeader = 3;
+        const long xlDataItem = 7;
+        const long xlPageHeader = 2;
+        const long xlPageItem = 6;
+        const long xlRowHeader = -4153;
+        const long xlRowItem = 4;
+        const long xlTableBody = 8;
+    };
+}; }; };

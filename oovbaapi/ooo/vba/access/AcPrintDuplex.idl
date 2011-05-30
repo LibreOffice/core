@@ -1,0 +1,7 @@
+module ooo { module vba { module access {
+    constants AcPrintDuplex {
+        const long acPRDPHorizontal = 2;
+        const long acPRDPSimplex = 1;
+        const long acPRDPVertical = 3;
+    };
+}; }; };

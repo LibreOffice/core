@@ -1,0 +1,6 @@
+module ooo { module vba { module office {
+    constants MsoConnector {
+        const long msoConnectorAnd = 1;
+        const long msoConnectorOr = 2;
+    };
+}; }; };

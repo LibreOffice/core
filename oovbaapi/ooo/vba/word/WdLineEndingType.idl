@@ -1,0 +1,9 @@
+module ooo { module vba { module word {
+    constants WdLineEndingType {
+        const long wdCRLF = 0;
+        const long wdCROnly = 1;
+        const long wdLFCR = 3;
+        const long wdLFOnly = 2;
+        const long wdLSPS = 4;
+    };
+}; }; };

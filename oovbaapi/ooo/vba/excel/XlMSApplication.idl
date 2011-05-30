@@ -1,0 +1,11 @@
+module ooo { module vba { module excel {
+    constants XlMSApplication {
+        const long xlMicrosoftAccess = 4;
+        const long xlMicrosoftFoxPro = 5;
+        const long xlMicrosoftMail = 3;
+        const long xlMicrosoftPowerPoint = 2;
+        const long xlMicrosoftProject = 6;
+        const long xlMicrosoftSchedulePlus = 7;
+        const long xlMicrosoftWord = 1;
+    };
+}; }; };

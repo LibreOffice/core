@@ -1,0 +1,9 @@
+module ooo { module vba { module word {
+    constants WdPrintOutRange {
+        const long wdPrintAllDocument = 0;
+        const long wdPrintCurrentPage = 2;
+        const long wdPrintFromTo = 3;
+        const long wdPrintRangeOfPages = 4;
+        const long wdPrintSelection = 1;
+    };
+}; }; };

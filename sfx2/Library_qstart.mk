@@ -33,9 +33,13 @@ $(eval $(call gb_Library_set_include,qstart_gtk,\
     -I$(SRCDIR)/sfx2/inc \
     -I$(SRCDIR)/sfx2/inc/sfx2 \
     -I$(SRCDIR)/sfx2/inc/pch \
-    -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
     $(filter -I%,$(GTK_CFLAGS)) \
+))
+
+$(eval $(call gb_Library_add_api,qstart_gtk,\
+	udkapi \
+	offapi \
 ))
 
 $(eval $(call gb_Library_set_defs,qstart_gtk,\

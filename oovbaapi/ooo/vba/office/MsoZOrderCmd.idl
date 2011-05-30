@@ -1,0 +1,10 @@
+module ooo { module vba { module office {
+    constants MsoZOrderCmd {
+        const long msoBringForward = 2;
+        const long msoBringInFrontOfText = 4;
+        const long msoBringToFront = 0;
+        const long msoSendBackward = 3;
+        const long msoSendBehindText = 5;
+        const long msoSendToBack = 1;
+    };
+}; }; };

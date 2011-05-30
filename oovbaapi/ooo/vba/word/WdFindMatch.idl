@@ -1,0 +1,25 @@
+module ooo { module vba { module word {
+    constants WdFindMatch {
+        const long wdMatchAnyCharacter = 65599;
+        const long wdMatchAnyDigit = 65567;
+        const long wdMatchAnyLetter = 65583;
+        const long wdMatchCaretCharacter = 11;
+        const long wdMatchColumnBreak = 14;
+        const long wdMatchCommentMark = 5;
+        const long wdMatchEmDash = 8212;
+        const long wdMatchEnDash = 8211;
+        const long wdMatchEndnoteMark = 65555;
+        const long wdMatchField = 19;
+        const long wdMatchFootnoteMark = 65554;
+        const long wdMatchGraphic = 1;
+        const long wdMatchManualLineBreak = 65551;
+        const long wdMatchManualPageBreak = 65564;
+        const long wdMatchNonbreakingHyphen = 30;
+        const long wdMatchNonbreakingSpace = 160;
+        const long wdMatchOptionalHyphen = 31;
+        const long wdMatchParagraphMark = 65551;
+        const long wdMatchSectionBreak = 65580;
+        const long wdMatchTabCharacter = 9;
+        const long wdMatchWhiteSpace = 65655;
+    };
+}; }; };

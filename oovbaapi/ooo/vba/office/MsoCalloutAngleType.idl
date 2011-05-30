@@ -1,0 +1,10 @@
+module ooo { module vba { module office {
+    constants MsoCalloutAngleType {
+        const long msoCalloutAngle30 = 2;
+        const long msoCalloutAngle45 = 3;
+        const long msoCalloutAngle60 = 4;
+        const long msoCalloutAngle90 = 5;
+        const long msoCalloutAngleAutomatic = 1;
+        const long msoCalloutAngleMixed = -2;
+    };
+}; }; };

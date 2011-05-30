@@ -1,0 +1,9 @@
+module ooo { module vba { module excel {
+    constants XlLegendPosition {
+        const long xlLegendPositionBottom = -4107;
+        const long xlLegendPositionCorner = 2;
+        const long xlLegendPositionLeft = -4131;
+        const long xlLegendPositionRight = -4152;
+        const long xlLegendPositionTop = -4160;
+    };
+}; }; };

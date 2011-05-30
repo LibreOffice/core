@@ -1,0 +1,7 @@
+module ooo { module vba { module adodb {
+    constants ParameterAttributesEnum {
+        const long adParamLong = 128;
+        const long adParamNullable = 64;
+        const long adParamSigned = 16;
+    };
+}; }; };

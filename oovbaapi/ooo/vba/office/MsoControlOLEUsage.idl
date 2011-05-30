@@ -1,0 +1,8 @@
+module ooo { module vba { module office {
+    constants MsoControlOLEUsage {
+        const long msoControlOLEUsageBoth = 3;
+        const long msoControlOLEUsageClient = 2;
+        const long msoControlOLEUsageNeither = 0;
+        const long msoControlOLEUsageServer = 1;
+    };
+}; }; };

@@ -1,0 +1,21 @@
+module ooo { module vba { module word {
+    constants WdGoToItem {
+        const long wdGoToBookmark = -1;
+        const long wdGoToComment = 6;
+        const long wdGoToEndnote = 5;
+        const long wdGoToEquation = 10;
+        const long wdGoToField = 7;
+        const long wdGoToFootnote = 4;
+        const long wdGoToGrammaticalError = 14;
+        const long wdGoToGraphic = 8;
+        const long wdGoToHeading = 11;
+        const long wdGoToLine = 3;
+        const long wdGoToObject = 9;
+        const long wdGoToPage = 1;
+        const long wdGoToPercent = 12;
+        const long wdGoToProofreadingError = 15;
+        const long wdGoToSection = 0;
+        const long wdGoToSpellingError = 13;
+        const long wdGoToTable = 2;
+    };
+}; }; };

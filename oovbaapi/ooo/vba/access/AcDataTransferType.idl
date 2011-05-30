@@ -1,0 +1,7 @@
+module ooo { module vba { module access {
+    constants AcDataTransferType {
+        const long acExport = 1;
+        const long acImport = 0;
+        const long acLink = 2;
+    };
+}; }; };

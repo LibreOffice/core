@@ -1,0 +1,11 @@
+module ooo { module vba {
+    constants VbMsgBoxResult {
+        const long vbAbort = 3;
+        const long vbCancel = 2;
+        const long vbIgnore = 5;
+        const long vbNo = 7;
+        const long vbOK = 1;
+        const long vbRetry = 4;
+        const long vbYes = 6;
+    };
+}; };

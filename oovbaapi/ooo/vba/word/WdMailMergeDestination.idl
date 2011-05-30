@@ -1,0 +1,8 @@
+module ooo { module vba { module word {
+    constants WdMailMergeDestination {
+        const long wdSendToEmail = 2;
+        const long wdSendToFax = 3;
+        const long wdSendToNewDocument = 0;
+        const long wdSendToPrinter = 1;
+    };
+}; }; };

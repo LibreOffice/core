@@ -1,0 +1,9 @@
+module ooo { module vba { module adodb {
+    constants ADCPROP_ASYNCTHREADPRIORITY_ENUM {
+        const long adPriorityAboveNormal = 4;
+        const long adPriorityBelowNormal = 2;
+        const long adPriorityHighest = 5;
+        const long adPriorityLowest = 1;
+        const long adPriorityNormal = 3;
+    };
+}; }; };

@@ -1,0 +1,8 @@
+module ooo { module vba { module adodb {
+    constants CursorLocationEnum {
+        const long adUseClient = 3;
+        const long adUseClientBatch = 3;
+        const long adUseNone = 1;
+        const long adUseServer = 2;
+    };
+}; }; };

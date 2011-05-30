@@ -1,0 +1,17 @@
+module ooo { module vba { module excel {
+    constants XlListDataType {
+        const long xlListDataTypeCheckbox = 9;
+        const long xlListDataTypeChoice = 6;
+        const long xlListDataTypeChoiceMulti = 7;
+        const long xlListDataTypeCounter = 11;
+        const long xlListDataTypeCurrency = 4;
+        const long xlListDataTypeDateTime = 5;
+        const long xlListDataTypeHyperLink = 10;
+        const long xlListDataTypeListLookup = 8;
+        const long xlListDataTypeMultiLineRichText = 12;
+        const long xlListDataTypeMultiLineText = 2;
+        const long xlListDataTypeNone = 0;
+        const long xlListDataTypeNumber = 3;
+        const long xlListDataTypeText = 1;
+    };
+}; }; };

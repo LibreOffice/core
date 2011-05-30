@@ -1,0 +1,6 @@
+module ooo { module vba { module word {
+    constants WdTableDirection {
+        const long wdTableDirectionLtr = 1;
+        const long wdTableDirectionRtl = 0;
+    };
+}; }; };

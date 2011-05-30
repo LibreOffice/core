@@ -1,0 +1,12 @@
+module ooo { module vba { module word {
+    constants WdCalendarType {
+        const long wdCalendarArabic = 1;
+        const long wdCalendarChina = 3;
+        const long wdCalendarHebrew = 2;
+        const long wdCalendarJapan = 4;
+        const long wdCalendarKorean = 6;
+        const long wdCalendarSakaEra = 7;
+        const long wdCalendarThai = 5;
+        const long wdCalendarWestern = 0;
+    };
+}; }; };

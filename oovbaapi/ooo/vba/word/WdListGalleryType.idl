@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdListGalleryType {
+        const long wdBulletGallery = 1;
+        const long wdNumberGallery = 2;
+        const long wdOutlineNumberGallery = 3;
+    };
+}; }; };

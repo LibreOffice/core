@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlDisplayDrawingObjects {
+        const long xlDisplayShapes = -4104;
+        const long xlHide = 3;
+        const long xlPlaceholders = 2;
+    };
+}; }; };

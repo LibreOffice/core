@@ -1,0 +1,10 @@
+module ooo { module vba { module word {
+    constants WdTabLeader {
+        const long wdTabLeaderDashes = 2;
+        const long wdTabLeaderDots = 1;
+        const long wdTabLeaderHeavy = 4;
+        const long wdTabLeaderLines = 3;
+        const long wdTabLeaderMiddleDot = 5;
+        const long wdTabLeaderSpaces = 0;
+    };
+}; }; };

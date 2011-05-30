@@ -1,0 +1,6 @@
+module ooo { module vba { module excel {
+    constants XlLookAt {
+        const long xlPart = 2;
+        const long xlWhole = 1;
+    };
+}; }; };

@@ -1,0 +1,8 @@
+module ooo { module vba { module msforms {
+    constants fmAction {
+        const long fmActionCopy = 1;
+        const long fmActionCut = 0;
+        const long fmActionDragDrop = 3;
+        const long fmActionPaste = 2;
+    };
+}; }; };

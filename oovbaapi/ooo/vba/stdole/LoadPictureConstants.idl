@@ -1,0 +1,8 @@
+module ooo { module vba { module stdole {
+    constants LoadPictureConstants {
+        const long Color = 4;
+        const long Default = 0;
+        const long Monochrome = 1;
+        const long VgaColor = 2;
+    };
+}; }; };

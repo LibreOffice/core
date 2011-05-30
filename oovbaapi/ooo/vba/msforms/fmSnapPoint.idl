@@ -1,0 +1,13 @@
+module ooo { module vba { module msforms {
+    constants fmSnapPoint {
+        const long fmSnapPointBottomCenter = 7;
+        const long fmSnapPointBottomLeft = 6;
+        const long fmSnapPointBottomRight = 8;
+        const long fmSnapPointCenter = 4;
+        const long fmSnapPointCenterLeft = 3;
+        const long fmSnapPointCenterRight = 5;
+        const long fmSnapPointTopCenter = 1;
+        const long fmSnapPointTopLeft = 0;
+        const long fmSnapPointTopRight = 2;
+    };
+}; }; };

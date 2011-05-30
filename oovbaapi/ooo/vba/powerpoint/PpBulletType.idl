@@ -1,0 +1,9 @@
+module ooo { module vba { module powerpoint {
+    constants PpBulletType {
+        const long ppBulletMixed = -2;
+        const long ppBulletNone = 0;
+        const long ppBulletNumbered = 2;
+        const long ppBulletPicture = 3;
+        const long ppBulletUnnumbered = 1;
+    };
+}; }; };

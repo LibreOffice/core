@@ -1,0 +1,8 @@
+module ooo { module vba { module dao {
+    constants DriverPromptEnum {
+        const long dbDriverComplete = 0;
+        const long dbDriverCompleteRequired = 3;
+        const long dbDriverNoPrompt = 1;
+        const long dbDriverPrompt = 2;
+    };
+}; }; };

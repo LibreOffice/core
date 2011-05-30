@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlEnableSelection {
+        const long xlNoRestrictions = 0;
+        const long xlNoSelection = -4142;
+        const long xlUnlockedCells = 1;
+    };
+}; }; };

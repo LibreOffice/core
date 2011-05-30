@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlSaveConflictResolution {
+        const long xlLocalSessionChanges = 2;
+        const long xlOtherSessionChanges = 3;
+        const long xlUserResolution = 1;
+    };
+}; }; };

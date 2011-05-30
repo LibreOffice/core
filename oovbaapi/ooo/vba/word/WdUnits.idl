@@ -1,0 +1,20 @@
+module ooo { module vba { module word {
+    constants WdUnits {
+        const long wdCell = 12;
+        const long wdCharacter = 1;
+        const long wdCharacterFormatting = 13;
+        const long wdColumn = 9;
+        const long wdItem = 16;
+        const long wdLine = 5;
+        const long wdParagraph = 4;
+        const long wdParagraphFormatting = 14;
+        const long wdRow = 10;
+        const long wdScreen = 7;
+        const long wdSection = 8;
+        const long wdSentence = 3;
+        const long wdStory = 6;
+        const long wdTable = 15;
+        const long wdWindow = 11;
+        const long wdWord = 2;
+    };
+}; }; };

@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdNumberingRule {
+        const long wdRestartContinuous = 0;
+        const long wdRestartPage = 2;
+        const long wdRestartSection = 1;
+    };
+}; }; };

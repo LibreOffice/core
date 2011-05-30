@@ -1,0 +1,7 @@
+module ooo { module vba { module msforms {
+    constants fmMode {
+        const long fmModeInherit = -2;
+        const long fmModeOff = 0;
+        const long fmModeOn = -1;
+    };
+}; }; };

@@ -1,0 +1,6 @@
+module ooo { module vba { module access {
+    constants AcDataAccessPageView {
+        const long acDataAccessPageBrowse = 0;
+        const long acDataAccessPageDesign = 1;
+    };
+}; }; };

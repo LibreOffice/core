@@ -1,0 +1,8 @@
+module ooo { module vba { module office {
+    constants MsoWizardActType {
+        const long msoWizardActActive = 1;
+        const long msoWizardActInactive = 0;
+        const long msoWizardActResume = 3;
+        const long msoWizardActSuspend = 2;
+    };
+}; }; };

@@ -1,0 +1,6 @@
+module ooo { module vba { module excel {
+    constants XlSearchDirection {
+        const long xlNext = 1;
+        const long xlPrevious = 2;
+    };
+}; }; };

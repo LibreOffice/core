@@ -1,0 +1,6 @@
+module ooo { module vba { module word {
+    constants WdKana {
+        const long wdKanaHiragana = 9;
+        const long wdKanaKatakana = 8;
+    };
+}; }; };

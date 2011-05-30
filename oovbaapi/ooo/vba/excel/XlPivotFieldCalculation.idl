@@ -1,0 +1,13 @@
+module ooo { module vba { module excel {
+    constants XlPivotFieldCalculation {
+        const long xlDifferenceFrom = 2;
+        const long xlIndex = 9;
+        const long xlNoAdditionalCalculation = -4143;
+        const long xlPercentDifferenceFrom = 4;
+        const long xlPercentOf = 3;
+        const long xlPercentOfColumn = 7;
+        const long xlPercentOfRow = 6;
+        const long xlPercentOfTotal = 8;
+        const long xlRunningTotal = 5;
+    };
+}; }; };

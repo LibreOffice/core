@@ -1,0 +1,6 @@
+module ooo { module vba { module word {
+    constants WdXMLValidationStatus {
+        const long wdXMLValidationStatusCustom = -1072898048;
+        const long wdXMLValidationStatusOK = 0;
+    };
+}; }; };

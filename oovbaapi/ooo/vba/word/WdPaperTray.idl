@@ -1,0 +1,19 @@
+module ooo { module vba { module word {
+    constants WdPaperTray {
+        const long wdPrinterAutomaticSheetFeed = 7;
+        const long wdPrinterDefaultBin = 0;
+        const long wdPrinterEnvelopeFeed = 5;
+        const long wdPrinterFormSource = 15;
+        const long wdPrinterLargeCapacityBin = 11;
+        const long wdPrinterLargeFormatBin = 10;
+        const long wdPrinterLowerBin = 2;
+        const long wdPrinterManualEnvelopeFeed = 6;
+        const long wdPrinterManualFeed = 4;
+        const long wdPrinterMiddleBin = 3;
+        const long wdPrinterOnlyBin = 1;
+        const long wdPrinterPaperCassette = 14;
+        const long wdPrinterSmallFormatBin = 9;
+        const long wdPrinterTractorFeed = 8;
+        const long wdPrinterUpperBin = 1;
+    };
+}; }; };

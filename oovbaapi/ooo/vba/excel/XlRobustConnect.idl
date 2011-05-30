@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlRobustConnect {
+        const long xlAlways = 1;
+        const long xlAsRequired = 0;
+        const long xlNever = 2;
+    };
+}; }; };

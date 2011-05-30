@@ -1,0 +1,6 @@
+module ooo { module vba { module excel {
+    constants XlSummaryRow {
+        const long xlSummaryAbove = 0;
+        const long xlSummaryBelow = 1;
+    };
+}; }; };

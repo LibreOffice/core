@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlCalculation {
+        const long xlCalculationAutomatic = -4105;
+        const long xlCalculationManual = -4135;
+        const long xlCalculationSemiautomatic = 2;
+    };
+}; }; };

@@ -1,0 +1,8 @@
+module ooo { module vba { module excel {
+    constants XlRunAutoMacro {
+        const long xlAutoActivate = 3;
+        const long xlAutoClose = 2;
+        const long xlAutoDeactivate = 4;
+        const long xlAutoOpen = 1;
+    };
+}; }; };

@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdEncloseStyle {
+        const long wdEncloseStyleLarge = 2;
+        const long wdEncloseStyleNone = 0;
+        const long wdEncloseStyleSmall = 1;
+    };
+}; }; };

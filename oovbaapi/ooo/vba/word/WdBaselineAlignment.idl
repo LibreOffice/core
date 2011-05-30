@@ -1,0 +1,9 @@
+module ooo { module vba { module word {
+    constants WdBaselineAlignment {
+        const long wdBaselineAlignAuto = 4;
+        const long wdBaselineAlignBaseline = 2;
+        const long wdBaselineAlignCenter = 1;
+        const long wdBaselineAlignFarEast50 = 3;
+        const long wdBaselineAlignTop = 0;
+    };
+}; }; };

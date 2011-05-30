@@ -1,0 +1,6 @@
+module ooo { module vba { module access {
+    constants AcExportXMLSchemaFormat {
+        const long acSchemaNone = 0;
+        const long acSchemaXSD = 1;
+    };
+}; }; };

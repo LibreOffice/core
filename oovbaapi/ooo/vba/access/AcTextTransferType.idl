@@ -1,0 +1,14 @@
+module ooo { module vba { module access {
+    constants AcTextTransferType {
+        const long acExportDelim = 2;
+        const long acExportFixed = 3;
+        const long acExportHTML = 8;
+        const long acExportMerge = 4;
+        const long acImportDelim = 0;
+        const long acImportFixed = 1;
+        const long acImportHTML = 7;
+        const long acLinkDelim = 5;
+        const long acLinkFixed = 6;
+        const long acLinkHTML = 9;
+    };
+}; }; };

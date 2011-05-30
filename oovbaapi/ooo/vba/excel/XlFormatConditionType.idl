@@ -1,0 +1,6 @@
+module ooo { module vba { module excel {
+    constants XlFormatConditionType {
+        const long xlCellValue = 1;
+        const long xlExpression = 2;
+    };
+}; }; };

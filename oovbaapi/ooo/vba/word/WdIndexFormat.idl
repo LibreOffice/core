@@ -1,0 +1,11 @@
+module ooo { module vba { module word {
+    constants WdIndexFormat {
+        const long wdIndexBulleted = 4;
+        const long wdIndexClassic = 1;
+        const long wdIndexFancy = 2;
+        const long wdIndexFormal = 5;
+        const long wdIndexModern = 3;
+        const long wdIndexSimple = 6;
+        const long wdIndexTemplate = 0;
+    };
+}; }; };

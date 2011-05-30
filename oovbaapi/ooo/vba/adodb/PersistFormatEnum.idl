@@ -1,0 +1,6 @@
+module ooo { module vba { module adodb {
+    constants PersistFormatEnum {
+        const long adPersistADTG = 0;
+        const long adPersistXML = 1;
+    };
+}; }; };

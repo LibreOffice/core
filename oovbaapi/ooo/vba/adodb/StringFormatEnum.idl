@@ -1,0 +1,5 @@
+module ooo { module vba { module adodb {
+    constants StringFormatEnum {
+        const long adClipString = 2;
+    };
+}; }; };

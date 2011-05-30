@@ -1,0 +1,16 @@
+module ooo { module vba { module powerpoint {
+    constants PpViewType {
+        const long ppViewHandoutMaster = 4;
+        const long ppViewMasterThumbnails = 12;
+        const long ppViewNormal = 9;
+        const long ppViewNotesMaster = 5;
+        const long ppViewNotesPage = 3;
+        const long ppViewOutline = 6;
+        const long ppViewPrintPreview = 10;
+        const long ppViewSlide = 1;
+        const long ppViewSlideMaster = 2;
+        const long ppViewSlideSorter = 7;
+        const long ppViewThumbnails = 11;
+        const long ppViewTitleMaster = 8;
+    };
+}; }; };

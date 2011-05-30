@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlPlacement {
+        const long xlFreeFloating = 3;
+        const long xlMove = 2;
+        const long xlMoveAndSize = 1;
+    };
+}; }; };

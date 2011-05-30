@@ -1,0 +1,13 @@
+module ooo { module vba { module excel {
+    constants XlDisplayUnit {
+        const long xlHundredMillions = -8;
+        const long xlHundreds = -2;
+        const long xlHundredThousands = -5;
+        const long xlMillionMillions = -10;
+        const long xlMillions = -6;
+        const long xlTenMillions = -7;
+        const long xlTenThousands = -4;
+        const long xlThousandMillions = -9;
+        const long xlThousands = -3;
+    };
+}; }; };

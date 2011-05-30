@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlSaveAsAccessMode {
+        const long xlExclusive = 3;
+        const long xlNoChange = 1;
+        const long xlShared = 2;
+    };
+}; }; };

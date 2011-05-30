@@ -1,0 +1,8 @@
+module ooo { module vba { module excel {
+    constants XlTickMark {
+        const long xlTickMarkCross = 4;
+        const long xlTickMarkInside = 2;
+        const long xlTickMarkNone = -4142;
+        const long xlTickMarkOutside = 3;
+    };
+}; }; };

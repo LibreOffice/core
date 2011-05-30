@@ -1,0 +1,10 @@
+module ooo { module vba { module dao {
+    constants TableDefAttributeEnum {
+        const long dbAttachedODBC = 536870912;
+        const long dbAttachedTable = 1073741824;
+        const long dbAttachExclusive = 65536;
+        const long dbAttachSavePWD = 131072;
+        const long dbHiddenObject = 1;
+        const long dbSystemObject = -2147483646;
+    };
+}; }; };

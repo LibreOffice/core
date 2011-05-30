@@ -1,0 +1,8 @@
+module ooo { module vba { module excel {
+    constants XlFormulaLabel {
+        const long xlColumnLabels = 2;
+        const long xlMixedLabels = 3;
+        const long xlNoLabels = -4142;
+        const long xlRowLabels = 1;
+    };
+}; }; };

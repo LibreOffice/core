@@ -1,0 +1,7 @@
+module ooo { module vba { module powerpoint {
+    constants PpUpdateOption {
+        const long ppUpdateOptionAutomatic = 2;
+        const long ppUpdateOptionManual = 1;
+        const long ppUpdateOptionMixed = -2;
+    };
+}; }; };

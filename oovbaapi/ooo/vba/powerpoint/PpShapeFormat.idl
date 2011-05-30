@@ -1,0 +1,10 @@
+module ooo { module vba { module powerpoint {
+    constants PpShapeFormat {
+        const long ppShapeFormatBMP = 3;
+        const long ppShapeFormatEMF = 5;
+        const long ppShapeFormatGIF = 0;
+        const long ppShapeFormatJPG = 1;
+        const long ppShapeFormatPNG = 2;
+        const long ppShapeFormatWMF = 4;
+    };
+}; }; };

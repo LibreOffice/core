@@ -1,0 +1,8 @@
+module ooo { module vba { module excel {
+    constants XlPrintErrors {
+        const long xlPrintErrorsBlank = 1;
+        const long xlPrintErrorsDash = 2;
+        const long xlPrintErrorsDisplayed = 0;
+        const long xlPrintErrorsNA = 3;
+    };
+}; }; };

@@ -1,0 +1,6 @@
+module ooo { module vba { module office {
+    constants MsoSortOrder {
+        const long msoSortOrderAscending = 1;
+        const long msoSortOrderDescending = 2;
+    };
+}; }; };

@@ -1,0 +1,10 @@
+module ooo { module vba { module powerpoint {
+    constants PpSlideShowPointerType {
+        const long ppSlideShowPointerAlwaysHidden = 3;
+        const long ppSlideShowPointerArrow = 1;
+        const long ppSlideShowPointerAutoArrow = 4;
+        const long ppSlideShowPointerEraser = 5;
+        const long ppSlideShowPointerNone = 0;
+        const long ppSlideShowPointerPen = 2;
+    };
+}; }; };

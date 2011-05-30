@@ -1,0 +1,14 @@
+module ooo { module vba { module powerpoint {
+    constants PpColorSchemeIndex {
+        const long ppAccent1 = 6;
+        const long ppAccent2 = 7;
+        const long ppAccent3 = 8;
+        const long ppBackground = 1;
+        const long ppFill = 5;
+        const long ppForeground = 2;
+        const long ppNotSchemeColor = 0;
+        const long ppSchemeColorMixed = -2;
+        const long ppShadow = 3;
+        const long ppTitle = 4;
+    };
+}; }; };

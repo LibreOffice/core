@@ -1,0 +1,7 @@
+module ooo { module vba { module powerpoint {
+    constants PpDirection {
+        const long ppDirectionLeftToRight = 1;
+        const long ppDirectionMixed = -2;
+        const long ppDirectionRightToLeft = 2;
+    };
+}; }; };

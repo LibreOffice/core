@@ -1,0 +1,6 @@
+module ooo { module vba { module access {
+    constants AcExportXMLEncoding {
+        const long acUTF16 = 1;
+        const long acUTF8 = 0;
+    };
+}; }; };

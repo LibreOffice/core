@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlChartLocation {
+        const long xlLocationAsNewSheet = 1;
+        const long xlLocationAsObject = 2;
+        const long xlLocationAutomatic = 3;
+    };
+}; }; };

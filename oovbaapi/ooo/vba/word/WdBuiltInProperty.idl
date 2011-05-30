@@ -1,0 +1,34 @@
+module ooo { module vba { module word {
+    constants WdBuiltInProperty {
+        const long wdPropertyAppName = 9;
+        const long wdPropertyAuthor = 3;
+        const long wdPropertyBytes = 22;
+        const long wdPropertyCategory = 18;
+        const long wdPropertyCharacters = 16;
+        const long wdPropertyCharsWSpaces = 30;
+        const long wdPropertyComments = 5;
+        const long wdPropertyCompany = 21;
+        const long wdPropertyFormat = 19;
+        const long wdPropertyHiddenSlides = 27;
+        const long wdPropertyHyperlinkBase = 29;
+        const long wdPropertyKeywords = 4;
+        const long wdPropertyLastAuthor = 7;
+        const long wdPropertyLines = 23;
+        const long wdPropertyManager = 20;
+        const long wdPropertyMMClips = 28;
+        const long wdPropertyNotes = 26;
+        const long wdPropertyPages = 14;
+        const long wdPropertyParas = 24;
+        const long wdPropertyRevision = 8;
+        const long wdPropertySecurity = 17;
+        const long wdPropertySlides = 25;
+        const long wdPropertySubject = 2;
+        const long wdPropertyTemplate = 6;
+        const long wdPropertyTimeCreated = 11;
+        const long wdPropertyTimeLastPrinted = 10;
+        const long wdPropertyTimeLastSaved = 12;
+        const long wdPropertyTitle = 1;
+        const long wdPropertyVBATotalEdit = 13;
+        const long wdPropertyWords = 15;
+    };
+}; }; };

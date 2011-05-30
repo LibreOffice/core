@@ -1,0 +1,14 @@
+module ooo { module vba { module word {
+    constants WdOutlineLevel {
+        const long wdOutlineLevel1 = 1;
+        const long wdOutlineLevel2 = 2;
+        const long wdOutlineLevel3 = 3;
+        const long wdOutlineLevel4 = 4;
+        const long wdOutlineLevel5 = 5;
+        const long wdOutlineLevel6 = 6;
+        const long wdOutlineLevel7 = 7;
+        const long wdOutlineLevel8 = 8;
+        const long wdOutlineLevel9 = 9;
+        const long wdOutlineLevelBodyText = 10;
+    };
+}; }; };

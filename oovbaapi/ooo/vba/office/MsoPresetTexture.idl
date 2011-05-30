@@ -1,0 +1,29 @@
+module ooo { module vba { module office {
+    constants MsoPresetTexture {
+        const long msoPresetTextureMixed = -2;
+        const long msoTextureBlueTissuePaper = 17;
+        const long msoTextureBouquet = 20;
+        const long msoTextureBrownMarble = 11;
+        const long msoTextureCanvas = 2;
+        const long msoTextureCork = 21;
+        const long msoTextureDenim = 3;
+        const long msoTextureFishFossil = 7;
+        const long msoTextureGranite = 12;
+        const long msoTextureGreenMarble = 9;
+        const long msoTextureMediumWood = 24;
+        const long msoTextureNewsprint = 13;
+        const long msoTextureOak = 23;
+        const long msoTexturePaperBag = 6;
+        const long msoTexturePapyrus = 1;
+        const long msoTextureParchment = 15;
+        const long msoTexturePinkTissuePaper = 18;
+        const long msoTexturePurpleMesh = 19;
+        const long msoTextureRecycledPaper = 14;
+        const long msoTextureSand = 8;
+        const long msoTextureStationery = 16;
+        const long msoTextureWalnut = 22;
+        const long msoTextureWaterDroplets = 5;
+        const long msoTextureWhiteMarble = 10;
+        const long msoTextureWovenMat = 4;
+    };
+}; }; };

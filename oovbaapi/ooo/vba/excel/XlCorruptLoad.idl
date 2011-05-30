@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlCorruptLoad {
+        const long xlExtractData = 2;
+        const long xlNormalLoad = 0;
+        const long xlRepairFile = 1;
+    };
+}; }; };

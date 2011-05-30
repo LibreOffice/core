@@ -1,0 +1,36 @@
+module ooo { module vba { module excel {
+    constants XlChartItem {
+        const long xlAxis = 21;
+        const long xlAxisTitle = 17;
+        const long xlChartArea = 2;
+        const long xlChartTitle = 4;
+        const long xlCorners = 6;
+        const long xlDataLabel = 0;
+        const long xlDataTable = 7;
+        const long xlDisplayUnitLabel = 30;
+        const long xlDownBars = 20;
+        const long xlDropLines = 26;
+        const long xlErrorBars = 9;
+        const long xlFloor = 23;
+        const long xlHiLoLines = 25;
+        const long xlLeaderLines = 29;
+        const long xlLegend = 24;
+        const long xlLegendEntry = 12;
+        const long xlLegendKey = 13;
+        const long xlMajorGridlines = 15;
+        const long xlMinorGridlines = 16;
+        const long xlNothing = 28;
+        const long xlPivotChartDropZone = 32;
+        const long xlPivotChartFieldButton = 31;
+        const long xlPlotArea = 19;
+        const long xlRadarAxisLabels = 27;
+        const long xlSeries = 3;
+        const long xlSeriesLines = 22;
+        const long xlShape = 14;
+        const long xlTrendline = 8;
+        const long xlUpBars = 18;
+        const long xlWalls = 5;
+        const long xlXErrorBars = 10;
+        const long xlYErrorBars = 11;
+    };
+}; }; };

@@ -1,0 +1,8 @@
+module ooo { module vba { module word {
+    constants WdLetterheadLocation {
+        const long wdLetterBottom = 1;
+        const long wdLetterLeft = 2;
+        const long wdLetterRight = 3;
+        const long wdLetterTop = 0;
+    };
+}; }; };

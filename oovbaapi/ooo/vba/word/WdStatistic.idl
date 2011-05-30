@@ -1,0 +1,11 @@
+module ooo { module vba { module word {
+    constants WdStatistic {
+        const long wdStatisticCharacters = 3;
+        const long wdStatisticCharactersWithSpaces = 5;
+        const long wdStatisticFarEastCharacters = 6;
+        const long wdStatisticLines = 1;
+        const long wdStatisticPages = 2;
+        const long wdStatisticParagraphs = 4;
+        const long wdStatisticWords = 0;
+    };
+}; }; };

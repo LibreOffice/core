@@ -1,0 +1,12 @@
+module ooo { module vba { module word {
+    constants WdMailMergeComparison {
+        const long wdMergeIfEqual = 0;
+        const long wdMergeIfGreaterThan = 3;
+        const long wdMergeIfGreaterThanOrEqual = 5;
+        const long wdMergeIfIsBlank = 6;
+        const long wdMergeIfIsNotBlank = 7;
+        const long wdMergeIfLessThan = 2;
+        const long wdMergeIfLessThanOrEqual = 4;
+        const long wdMergeIfNotEqual = 1;
+    };
+}; }; };

@@ -1,0 +1,8 @@
+module ooo { module vba { module excel {
+    constants XlErrorBarInclude {
+        const long xlErrorBarIncludeBoth = 1;
+        const long xlErrorBarIncludeMinusValues = 3;
+        const long xlErrorBarIncludeNone = -4142;
+        const long xlErrorBarIncludePlusValues = 2;
+    };
+}; }; };

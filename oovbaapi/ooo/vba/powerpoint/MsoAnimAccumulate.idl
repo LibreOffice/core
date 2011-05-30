@@ -1,0 +1,6 @@
+module ooo { module vba { module powerpoint {
+    constants MsoAnimAccumulate {
+        const long msoAnimAccumulateAlways = 2;
+        const long msoAnimAccumulateNone = 1;
+    };
+}; }; };

@@ -1,0 +1,8 @@
+module ooo { module vba { module word {
+    constants WdSubscriberFormats {
+        const long wdSubscriberBestFormat = 0;
+        const long wdSubscriberPict = 4;
+        const long wdSubscriberRTF = 1;
+        const long wdSubscriberText = 2;
+    };
+}; }; };

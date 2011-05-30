@@ -1,0 +1,6 @@
+module ooo { module vba { module excel {
+    constants XlCutCopyMode {
+        const long xlCopy = 1;
+        const long xlCut = 2;
+    };
+}; }; };

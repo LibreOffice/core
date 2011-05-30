@@ -1,0 +1,8 @@
+module ooo { module vba { module word {
+    constants WdMailSystem {
+        const long wdMAPI = 1;
+        const long wdMAPIandPowerTalk = 3;
+        const long wdNoMailSystem = 0;
+        const long wdPowerTalk = 2;
+    };
+}; }; };

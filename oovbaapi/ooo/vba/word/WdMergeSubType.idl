@@ -1,0 +1,13 @@
+module ooo { module vba { module word {
+    constants WdMergeSubType {
+        const long wdMergeSubTypeAccess = 1;
+        const long wdMergeSubTypeOAL = 2;
+        const long wdMergeSubTypeOLEDBText = 5;
+        const long wdMergeSubTypeOLEDBWord = 3;
+        const long wdMergeSubTypeOther = 0;
+        const long wdMergeSubTypeOutlook = 6;
+        const long wdMergeSubTypeWord = 7;
+        const long wdMergeSubTypeWord2000 = 8;
+        const long wdMergeSubTypeWorks = 4;
+    };
+}; }; };

@@ -1,0 +1,13 @@
+module ooo { module vba { module excel {
+    constants XlTotalsCalculation {
+        const long xlTotalsCalculationAverage = 2;
+        const long xlTotalsCalculationCount = 3;
+        const long xlTotalsCalculationCountNums = 4;
+        const long xlTotalsCalculationMax = 6;
+        const long xlTotalsCalculationMin = 5;
+        const long xlTotalsCalculationNone = 0;
+        const long xlTotalsCalculationStdDev = 7;
+        const long xlTotalsCalculationSum = 1;
+        const long xlTotalsCalculationVar = 8;
+    };
+}; }; };

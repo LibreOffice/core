@@ -1,0 +1,14 @@
+module ooo { module vba { module word {
+    constants WdDeletedTextMark {
+        const long wdDeletedTextMarkBold = 5;
+        const long wdDeletedTextMarkCaret = 2;
+        const long wdDeletedTextMarkColorOnly = 9;
+        const long wdDeletedTextMarkDoubleUnderline = 8;
+        const long wdDeletedTextMarkHidden = 0;
+        const long wdDeletedTextMarkItalic = 6;
+        const long wdDeletedTextMarkNone = 4;
+        const long wdDeletedTextMarkPound = 3;
+        const long wdDeletedTextMarkStrikeThrough = 1;
+        const long wdDeletedTextMarkUnderline = 7;
+    };
+}; }; };

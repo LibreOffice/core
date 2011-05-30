@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlPivotTableVersionList {
+        const long xlPivotTableVersion10 = 1;
+        const long xlPivotTableVersion2000 = 0;
+        const long xlPivotTableVersionCurrent = -1;
+    };
+}; }; };

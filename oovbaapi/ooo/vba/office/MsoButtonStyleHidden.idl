@@ -1,0 +1,6 @@
+module ooo { module vba { module office {
+    constants MsoButtonStyleHidden {
+        const long msoButtonTextBelow = 8;
+        const long msoButtonWrapText = 4;
+    };
+}; }; };

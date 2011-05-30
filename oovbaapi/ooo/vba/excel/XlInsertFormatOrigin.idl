@@ -1,0 +1,6 @@
+module ooo { module vba { module excel {
+    constants XlInsertFormatOrigin {
+        const long xlFormatFromLeftOrAbove = 0;
+        const long xlFormatFromRightOrBelow = 1;
+    };
+}; }; };

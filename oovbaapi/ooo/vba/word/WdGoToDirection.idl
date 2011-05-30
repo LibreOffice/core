@@ -1,0 +1,10 @@
+module ooo { module vba { module word {
+    constants WdGoToDirection {
+        const long wdGoToAbsolute = 1;
+        const long wdGoToFirst = 1;
+        const long wdGoToLast = -1;
+        const long wdGoToNext = 2;
+        const long wdGoToPrevious = 3;
+        const long wdGoToRelative = 2;
+    };
+}; }; };

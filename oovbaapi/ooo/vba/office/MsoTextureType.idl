@@ -1,0 +1,7 @@
+module ooo { module vba { module office {
+    constants MsoTextureType {
+        const long msoTexturePreset = 1;
+        const long msoTextureTypeMixed = -2;
+        const long msoTextureUserDefined = 2;
+    };
+}; }; };

@@ -1,0 +1,8 @@
+module ooo { module vba {
+    constants VbCallType {
+        const long VbGet = 2;
+        const long VbLet = 4;
+        const long VbMethod = 1;
+        const long VbSet = 8;
+    };
+}; };

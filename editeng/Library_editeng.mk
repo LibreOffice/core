@@ -35,7 +35,6 @@ $(eval $(call gb_Library_set_include,editeng,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/editeng/inc/pch) \
     -I$(realpath $(SRCDIR)/editeng/inc) \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
 $(eval $(call gb_Library_set_defs,editeng,\
@@ -49,6 +48,11 @@ $(eval $(call gb_Library_set_defs,editeng,\
     -DEDITDEBUG \
 ))
 endif
+
+$(eval $(call gb_Library_add_api,editeng,\
+	udkapi \
+	offapi \
+))
 
 $(eval $(call gb_Library_add_exception_objects,editeng,\
     editeng/inc/pch/precompiled_editeng \

@@ -1,0 +1,12 @@
+module ooo { module vba { module powerpoint {
+    constants PpTextLevelEffect {
+        const long ppAnimateByAllLevels = 16;
+        const long ppAnimateByFifthLevel = 5;
+        const long ppAnimateByFirstLevel = 1;
+        const long ppAnimateByFourthLevel = 4;
+        const long ppAnimateBySecondLevel = 2;
+        const long ppAnimateByThirdLevel = 3;
+        const long ppAnimateLevelMixed = -2;
+        const long ppAnimateLevelNone = 0;
+    };
+}; }; };

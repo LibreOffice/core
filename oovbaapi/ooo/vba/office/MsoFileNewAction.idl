@@ -1,0 +1,7 @@
+module ooo { module vba { module office {
+    constants MsoFileNewAction {
+        const long msoCreateNewFile = 1;
+        const long msoEditFile = 0;
+        const long msoOpenFile = 2;
+    };
+}; }; };

@@ -1,0 +1,12 @@
+module ooo { module vba { module word {
+    constants WdLinkType {
+        const long wdLinkTypeDDE = 6;
+        const long wdLinkTypeDDEAuto = 7;
+        const long wdLinkTypeImport = 5;
+        const long wdLinkTypeInclude = 4;
+        const long wdLinkTypeOLE = 0;
+        const long wdLinkTypePicture = 1;
+        const long wdLinkTypeReference = 3;
+        const long wdLinkTypeText = 2;
+    };
+}; }; };

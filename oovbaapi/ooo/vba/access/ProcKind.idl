@@ -1,0 +1,8 @@
+module ooo { module vba { module access {
+    constants ProcKind {
+        const long Get = 3;
+        const long Let = 1;
+        const long Proc = 0;
+        const long Set = 2;
+    };
+}; }; };

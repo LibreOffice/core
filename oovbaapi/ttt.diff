@@ -1,0 +1,410 @@
+diff --git a/oovbaapi/Makefile b/oovbaapi/Makefile
+new file mode 100644
+--- /dev/null
++++ b/oovbaapi/Makefile
+@@ -0,0 +1,38 @@
++#*************************************************************************
++#
++# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
++# 
++# Copyright 2000, 2010 Oracle and/or its affiliates.
++#
++# OpenOffice.org - a multi-platform office productivity suite
++#
++# This file is part of OpenOffice.org.
++#
++# OpenOffice.org is free software: you can redistribute it and/or modify
++# it under the terms of the GNU Lesser General Public License version 3
++# only, as published by the Free Software Foundation.
++#
++# OpenOffice.org is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++# GNU Lesser General Public License version 3 for more details
++# (a copy is included in the LICENSE file that accompanied this code).
++#
++# You should have received a copy of the GNU Lesser General Public License
++# version 3 along with OpenOffice.org.  If not, see
++# <http://www.openoffice.org/license.html>
++# for a copy of the LGPLv3 License.
++#
++#*************************************************************************
++
++ifeq ($(strip $(SOLARENV)),)
++$(error No environment set!)
++endif
++
++gb_PARTIALBUILD := T
++GBUILDDIR := $(SOLARENV)/gbuild
++include $(GBUILDDIR)/gbuild.mk
++
++$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
++
++# vim: set noet sw=4 ts=4:
+diff --git a/oovbaapi/Module_oovbaapi.mk b/oovbaapi/Module_oovbaapi.mk
+new file mode 100644
+--- /dev/null
++++ b/oovbaapi/Module_oovbaapi.mk
+@@ -0,0 +1,37 @@
++#*************************************************************************
++#
++# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
++# 
++# Copyright 2000, 2010 Oracle and/or its affiliates.
++#
++# OpenOffice.org - a multi-platform office productivity suite
++#
++# This file is part of OpenOffice.org.
++#
++# OpenOffice.org is free software: you can redistribute it and/or modify
++# it under the terms of the GNU Lesser General Public License version 3
++# only, as published by the Free Software Foundation.
++#
++# OpenOffice.org is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++# GNU Lesser General Public License version 3 for more details
++# (a copy is included in the LICENSE file that accompanied this code).
++#
++# You should have received a copy of the GNU Lesser General Public License
++# version 3 along with OpenOffice.org.  If not, see
++# <http://www.openoffice.org/license.html>
++# for a copy of the LGPLv3 License.
++#
++#*************************************************************************
++
++
++$(eval $(call gb_Module_Module,oovbaapi))
++
++$(eval $(call gb_Module_add_targets,oovbaapi,\
++	UnoApi_oovbaapi \
++	Package_oovbaapi_inc \
++	Package_oovbaapi_idl \
++))
++
++# vim: set noet sw=4 ts=4:
+diff --git a/oovbaapi/Package_oovbaapi_idl.mk b/oovbaapi/Package_oovbaapi_idl.mk
+new file mode 100644
+--- /dev/null
++++ b/oovbaapi/Package_oovbaapi_idl.mk
+@@ -0,0 +1,29 @@
++#*************************************************************************
++#
++# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
++# 
++# Copyright 2000, 2010 Oracle and/or its affiliates.
++#
++# OpenOffice.org - a multi-platform office productivity suite
++#
++# This file is part of OpenOffice.org.
++#
++# OpenOffice.org is free software: you can redistribute it and/or modify
++# it under the terms of the GNU Lesser General Public License version 3
++# only, as published by the Free Software Foundation.
++#
++# OpenOffice.org is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
++# GNU Lesser General Public License version 3 for more details
++# (a copy is included in the LICENSE file that accompanied this code).
++#
++# You should have received a copy of the GNU Lesser General Public License
++# version 3 along with OpenOffice.org.	If not, see
++# <http://www.openoffice.org/license.html>
++# for a copy of the LGPLv3 License.
++#
++#*************************************************************************
++
++$(eval $(call gb_UnoApiTarget_autopackage_idl,oovbaapi))
++
+diff --git a/oovbaapi/Package_oovbaapi_inc.mk b/oovbaapi/Package_oovbaapi_inc.mk
+new file mode 100644
+--- /dev/null
++++ b/oovbaapi/Package_oovbaapi_inc.mk
+@@ -0,0 +1,29 @@
++#*************************************************************************
++#
++# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
++# 
++# Copyright 2000, 2010 Oracle and/or its affiliates.
++#
++# OpenOffice.org - a multi-platform office productivity suite
++#
++# This file is part of OpenOffice.org.
++#
++# OpenOffice.org is free software: you can redistribute it and/or modify
++# it under the terms of the GNU Lesser General Public License version 3
++# only, as published by the Free Software Foundation.
++#
++# OpenOffice.org is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
++# GNU Lesser General Public License version 3 for more details
++# (a copy is included in the LICENSE file that accompanied this code).
++#
++# You should have received a copy of the GNU Lesser General Public License
++# version 3 along with OpenOffice.org.	If not, see
++# <http://www.openoffice.org/license.html>
++# for a copy of the LGPLv3 License.
++#
++#*************************************************************************
++
++$(eval $(call gb_UnoApiTarget_autopackage_inc,oovbaapi))
++
+diff --git a/oovbaapi/UnoApi_oovbaapi.mk b/oovbaapi/UnoApi_oovbaapi.mk
+new file mode 100644
+--- /dev/null
++++ b/oovbaapi/UnoApi_oovbaapi.mk
+@@ -0,0 +1,207 @@
++#*************************************************************************
++#
++# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
++# 
++# Copyright 2000, 2010 Oracle and/or its affiliates.
++#
++# OpenOffice.org - a multi-platform office productivity suite
++#
++# This file is part of OpenOffice.org.
++#
++# OpenOffice.org is free software: you can redistribute it and/or modify
++# it under the terms of the GNU Lesser General Public License version 3
++# only, as published by the Free Software Foundation.
++#
++# OpenOffice.org is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
++# GNU Lesser General Public License version 3 for more details
++# (a copy is included in the LICENSE file that accompanied this code).
++#
++# You should have received a copy of the GNU Lesser General Public License
++# version 3 along with OpenOffice.org.	If not, see
++# <http://www.openoffice.org/license.html>
++# for a copy of the LGPLv3 License.
++#
++#*************************************************************************
++
++$(eval $(call gb_UnoApiTarget_UnoApiTarget,oovbaapi))
++
++$(eval $(call gb_UnoApiTarget_add_rdbfiles,oovbaapi,\
++    udkapi \
++    offapi \
++))
++
++$(eval $(call gb_UnoApiTarget_set_include,oovbaapi,\
++	$$(INCLUDE) \
++	-I$(OUTDIR)/idl \
++))
++
++#$(eval $(call gb_UnoApiTarget_set_defs,oovbaapi,\
++#))
++
++$(eval $(call gb_UnoApiTarget_add_idlfiles,oovbaapi,\
++	oovbaapi/ooo/vba/ControlProvider.idl \
++	oovbaapi/ooo/vba/XWindowBase.idl \
++	oovbaapi/ooo/vba/XCommandBars.idl \
++	oovbaapi/ooo/vba/msforms/XPages.idl \
++	oovbaapi/ooo/vba/msforms/XTextFrame.idl \
++	oovbaapi/ooo/vba/msforms/XControl.idl \
++	oovbaapi/ooo/vba/msforms/XToggleButton.idl \
++	oovbaapi/ooo/vba/msforms/XButton.idl \
++	oovbaapi/ooo/vba/msforms/XRadioButton.idl \
++	oovbaapi/ooo/vba/msforms/XGroupBox.idl \
++	oovbaapi/ooo/vba/msforms/XShapeRange.idl \
++	oovbaapi/ooo/vba/msforms/XScrollBar.idl \
++	oovbaapi/ooo/vba/msforms/XListBox.idl \
++	oovbaapi/ooo/vba/msforms/XShapes.idl \
++	oovbaapi/ooo/vba/msforms/XTextBox.idl \
++	oovbaapi/ooo/vba/msforms/XSpinButton.idl \
++	oovbaapi/ooo/vba/msforms/XLineFormat.idl \
++	oovbaapi/ooo/vba/msforms/XFillFormat.idl \
++	oovbaapi/ooo/vba/msforms/XTextBoxShape.idl \
++	oovbaapi/ooo/vba/msforms/XMultiPage.idl \
++	oovbaapi/ooo/vba/msforms/XProgressBar.idl \
++	oovbaapi/ooo/vba/msforms/XLabel.idl \
++	oovbaapi/ooo/vba/msforms/XUserForm.idl \
++	oovbaapi/ooo/vba/msforms/XControls.idl \
++	oovbaapi/ooo/vba/msforms/XImage.idl \
++	oovbaapi/ooo/vba/msforms/MSFormReturnTypes.idl \
++	oovbaapi/ooo/vba/msforms/XShape.idl \
++	oovbaapi/ooo/vba/msforms/XComboBox.idl \
++	oovbaapi/ooo/vba/msforms/XColorFormat.idl \
++	oovbaapi/ooo/vba/msforms/XPictureFormat.idl \
++	oovbaapi/ooo/vba/XDialogBase.idl \
++	oovbaapi/ooo/vba/word/XTable.idl \
++	oovbaapi/ooo/vba/word/XTables.idl \
++	oovbaapi/ooo/vba/word/XWindow.idl \
++	oovbaapi/ooo/vba/word/XBorder.idl \
++	oovbaapi/ooo/vba/word/XWrapFormat.idl \
++	oovbaapi/ooo/vba/word/XDialogs.idl \
++	oovbaapi/ooo/vba/word/XAddins.idl \
++	oovbaapi/ooo/vba/word/XDialog.idl \
++	oovbaapi/ooo/vba/word/XBookmarks.idl \
++	oovbaapi/ooo/vba/word/XSelection.idl \
++	oovbaapi/ooo/vba/word/XAddin.idl \
++	oovbaapi/ooo/vba/word/XApplication.idl \
++	oovbaapi/ooo/vba/word/XSections.idl \
++	oovbaapi/ooo/vba/word/XParagraph.idl \
++	oovbaapi/ooo/vba/word/XHeaderFooter.idl \
++	oovbaapi/ooo/vba/word/XTemplate.idl \
++	oovbaapi/ooo/vba/word/XRange.idl \
++	oovbaapi/ooo/vba/word/XReplacement.idl \
++	oovbaapi/ooo/vba/word/XPageSetup.idl \
++	oovbaapi/ooo/vba/word/XBookmark.idl \
++	oovbaapi/ooo/vba/word/XBorders.idl \
++	oovbaapi/ooo/vba/word/XField.idl \
++	oovbaapi/ooo/vba/word/XAutoTextEntry.idl \
++	oovbaapi/ooo/vba/word/XStyle.idl \
++	oovbaapi/ooo/vba/word/XFields.idl \
++	oovbaapi/ooo/vba/word/XDocuments.idl \
++	oovbaapi/ooo/vba/word/XVariable.idl \
++	oovbaapi/ooo/vba/word/XOptions.idl \
++	oovbaapi/ooo/vba/word/XView.idl \
++	oovbaapi/ooo/vba/word/XAutoTextEntries.idl \
++	oovbaapi/ooo/vba/word/XFont.idl \
++	oovbaapi/ooo/vba/word/XFind.idl \
++	oovbaapi/ooo/vba/word/XSection.idl \
++	oovbaapi/ooo/vba/word/XSystem.idl \
++	oovbaapi/ooo/vba/word/XStyles.idl \
++	oovbaapi/ooo/vba/word/XPanes.idl \
++	oovbaapi/ooo/vba/word/XPane.idl \
++	oovbaapi/ooo/vba/word/XParagraphs.idl \
++	oovbaapi/ooo/vba/word/XVariables.idl \
++	oovbaapi/ooo/vba/word/XParagraphFormat.idl \
++	oovbaapi/ooo/vba/word/XDocument.idl \
++	oovbaapi/ooo/vba/word/XGlobals.idl \
++	oovbaapi/ooo/vba/XPropValue.idl \
++	oovbaapi/ooo/vba/XCommandBarControl.idl \
++	oovbaapi/ooo/vba/XCommandBarButton.idl \
++	oovbaapi/ooo/vba/XVBAToOOEventDescGen.idl \
++	oovbaapi/ooo/vba/XCommandBarPopup.idl \
++	oovbaapi/ooo/vba/XApplicationBase.idl \
++	oovbaapi/ooo/vba/XErrObject.idl \
++	oovbaapi/ooo/vba/XCommandBar.idl \
++	oovbaapi/ooo/vba/excel/SheetObject.idl \
++	oovbaapi/ooo/vba/excel/Range.idl \
++	oovbaapi/ooo/vba/excel/XTextFrame.idl \
++	oovbaapi/ooo/vba/excel/XOLEObject.idl \
++	oovbaapi/ooo/vba/excel/XWindow.idl \
++	oovbaapi/ooo/vba/excel/XWorkbook.idl \
++	oovbaapi/ooo/vba/excel/XInterior.idl \
++	oovbaapi/ooo/vba/excel/XBorder.idl \
++	oovbaapi/ooo/vba/excel/XHPageBreaks.idl \
++	oovbaapi/ooo/vba/excel/SheetObjects.idl \
++	oovbaapi/ooo/vba/excel/XSeries.idl \
++	oovbaapi/ooo/vba/excel/XComment.idl \
++	oovbaapi/ooo/vba/excel/XDialogs.idl \
++	oovbaapi/ooo/vba/excel/XVPageBreak.idl \
++	oovbaapi/ooo/vba/excel/XVPageBreaks.idl \
++	oovbaapi/ooo/vba/excel/XWorkbooks.idl \
++	oovbaapi/ooo/vba/excel/Hyperlink.idl \
++	oovbaapi/ooo/vba/excel/XDialog.idl \
++	oovbaapi/ooo/vba/excel/XName.idl \
++	oovbaapi/ooo/vba/excel/XChartObject.idl \
++	oovbaapi/ooo/vba/excel/XCharts.idl \
++	oovbaapi/ooo/vba/excel/TextFrame.idl \
++	oovbaapi/ooo/vba/excel/XOLEObjects.idl \
++	oovbaapi/ooo/vba/excel/XDataLabels.idl \
++	oovbaapi/ooo/vba/excel/XFormatConditions.idl \
++	oovbaapi/ooo/vba/excel/XPageBreak.idl \
++	oovbaapi/ooo/vba/excel/Worksheet.idl \
++	oovbaapi/ooo/vba/excel/XChartObjects.idl \
++	oovbaapi/ooo/vba/excel/XApplication.idl \
++	oovbaapi/ooo/vba/excel/XCharacters.idl \
++	oovbaapi/ooo/vba/excel/XOutline.idl \
++	oovbaapi/ooo/vba/excel/XChartTitle.idl \
++	oovbaapi/ooo/vba/excel/XWorksheets.idl \
++	oovbaapi/ooo/vba/excel/XChart.idl \
++	oovbaapi/ooo/vba/excel/XlBuildInDialog.idl \
++	oovbaapi/ooo/vba/excel/XHPageBreak.idl \
++	oovbaapi/ooo/vba/excel/XHyperlinks.idl \
++	oovbaapi/ooo/vba/excel/XComments.idl \
++	oovbaapi/ooo/vba/excel/XRange.idl \
++	oovbaapi/ooo/vba/excel/Globals.idl \
++	oovbaapi/ooo/vba/excel/XWindows.idl \
++	oovbaapi/ooo/vba/excel/XWorksheet.idl \
++	oovbaapi/ooo/vba/excel/XPageSetup.idl \
++	oovbaapi/ooo/vba/excel/XPivotTables.idl \
++	oovbaapi/ooo/vba/excel/XBorders.idl \
++	oovbaapi/ooo/vba/excel/XWorksheetFunction.idl \
++	oovbaapi/ooo/vba/excel/XStyle.idl \
++	oovbaapi/ooo/vba/excel/XPivotCache.idl \
++	oovbaapi/ooo/vba/excel/Window.idl \
++	oovbaapi/ooo/vba/excel/XPivotTable.idl \
++	oovbaapi/ooo/vba/excel/XNames.idl \
++	oovbaapi/ooo/vba/excel/XFormatCondition.idl \
++	oovbaapi/ooo/vba/excel/XFont.idl \
++	oovbaapi/ooo/vba/excel/Workbook.idl \
++	oovbaapi/ooo/vba/excel/XValidation.idl \
++	oovbaapi/ooo/vba/excel/XHyperlink.idl \
++	oovbaapi/ooo/vba/excel/XAxisTitle.idl \
++	oovbaapi/ooo/vba/excel/XFormat.idl \
++	oovbaapi/ooo/vba/excel/XStyles.idl \
++	oovbaapi/ooo/vba/excel/XDataLabel.idl \
++	oovbaapi/ooo/vba/excel/XAxes.idl \
++	oovbaapi/ooo/vba/excel/XSeriesCollection.idl \
++	oovbaapi/ooo/vba/excel/XPane.idl \
++	oovbaapi/ooo/vba/excel/XTitle.idl \
++	oovbaapi/ooo/vba/excel/XAxis.idl \
++	oovbaapi/ooo/vba/excel/XGlobals.idl \
++	oovbaapi/ooo/vba/XDocumentsBase.idl \
++	oovbaapi/ooo/vba/XDialogsBase.idl \
++	oovbaapi/ooo/vba/XDocumentProperties.idl \
++	oovbaapi/ooo/vba/XGlobalsBase.idl \
++	oovbaapi/ooo/vba/XCommandBarControls.idl \
++	oovbaapi/ooo/vba/XCollection.idl \
++	oovbaapi/ooo/vba/XPageSetupBase.idl \
++	oovbaapi/ooo/vba/XDocumentProperty.idl \
++	oovbaapi/ooo/vba/XAssistant.idl \
++	oovbaapi/ooo/vba/XControlProvider.idl \
++	oovbaapi/ooo/vba/XDocumentBase.idl \
++	oovbaapi/ooo/vba/XFontBase.idl \
++	oovbaapi/ooo/vba/XHelperInterface.idl \
++))
++
++
++# vim: set noet sw=4 ts=4:
+diff --git a/oovbaapi/prj/makefile.mk b/oovbaapi/prj/makefile.mk
+new file mode 100644
+--- /dev/null
++++ b/oovbaapi/prj/makefile.mk
+@@ -0,0 +1,40 @@
++#*************************************************************************
++#
++# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
++# 
++# Copyright 2000, 2010 Oracle and/or its affiliates.
++#
++# OpenOffice.org - a multi-platform office productivity suite
++#
++# This file is part of OpenOffice.org.
++#
++# OpenOffice.org is free software: you can redistribute it and/or modify
++# it under the terms of the GNU Lesser General Public License version 3
++# only, as published by the Free Software Foundation.
++#
++# OpenOffice.org is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++# GNU Lesser General Public License version 3 for more details
++# (a copy is included in the LICENSE file that accompanied this code).
++#
++# You should have received a copy of the GNU Lesser General Public License
++# version 3 along with OpenOffice.org.  If not, see
++# <http://www.openoffice.org/license.html>
++# for a copy of the LGPLv3 License.
++#
++#*************************************************************************
++
++PRJ=..
++TARGET=prj
++
++.INCLUDE : settings.mk
++
++.IF "$(VERBOSE)"!=""
++VERBOSEFLAG :=
++.ELSE
++VERBOSEFLAG := -s
++.ENDIF
++
++all:
++	cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET)

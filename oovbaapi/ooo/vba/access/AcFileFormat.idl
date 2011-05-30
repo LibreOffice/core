@@ -1,0 +1,9 @@
+module ooo { module vba { module access {
+    constants AcFileFormat {
+        const long acFileFormatAccess2 = 2;
+        const long acFileFormatAccess2000 = 9;
+        const long acFileFormatAccess2002 = 10;
+        const long acFileFormatAccess95 = 7;
+        const long acFileFormatAccess97 = 8;
+    };
+}; }; };

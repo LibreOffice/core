@@ -1,0 +1,6 @@
+module ooo { module vba { module word {
+    constants WdArrangeStyle {
+        const long wdIcons = 1;
+        const long wdTiled = 0;
+    };
+}; }; };

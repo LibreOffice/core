@@ -1,0 +1,7 @@
+module ooo { module vba { module powerpoint {
+    constants MsoAnimCommandType {
+        const long msoAnimCommandTypeCall = 1;
+        const long msoAnimCommandTypeEvent = 0;
+        const long msoAnimCommandTypeVerb = 2;
+    };
+}; }; };

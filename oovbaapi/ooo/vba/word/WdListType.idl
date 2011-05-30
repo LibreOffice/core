@@ -1,0 +1,11 @@
+module ooo { module vba { module word {
+    constants WdListType {
+        const long wdListBullet = 2;
+        const long wdListListNumOnly = 1;
+        const long wdListMixedNumbering = 5;
+        const long wdListNoNumbering = 0;
+        const long wdListOutlineNumbering = 4;
+        const long wdListPictureBullet = 6;
+        const long wdListSimpleNumbering = 3;
+    };
+}; }; };

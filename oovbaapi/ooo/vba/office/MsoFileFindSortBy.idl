@@ -1,0 +1,11 @@
+module ooo { module vba { module office {
+    constants MsoFileFindSortBy {
+        const long msoFileFindSortbyAuthor = 1;
+        const long msoFileFindSortbyDateCreated = 2;
+        const long msoFileFindSortbyDateSaved = 4;
+        const long msoFileFindSortbyFileName = 5;
+        const long msoFileFindSortbyLastSavedBy = 3;
+        const long msoFileFindSortbySize = 6;
+        const long msoFileFindSortbyTitle = 7;
+    };
+}; }; };

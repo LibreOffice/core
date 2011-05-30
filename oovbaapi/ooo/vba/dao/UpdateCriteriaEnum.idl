@@ -1,0 +1,10 @@
+module ooo { module vba { module dao {
+    constants UpdateCriteriaEnum {
+        const long dbCriteriaAllCols = 4;
+        const long dbCriteriaDeleteInsert = 16;
+        const long dbCriteriaKey = 1;
+        const long dbCriteriaModValues = 2;
+        const long dbCriteriaTimestamp = 8;
+        const long dbCriteriaUpdate = 32;
+    };
+}; }; };

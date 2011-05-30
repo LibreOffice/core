@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlObjectSize {
+        const long xlFitToPage = 2;
+        const long xlFullPage = 3;
+        const long xlScreenSize = 1;
+    };
+}; }; };

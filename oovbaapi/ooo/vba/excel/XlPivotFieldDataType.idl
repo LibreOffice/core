@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlPivotFieldDataType {
+        const long xlDate = 2;
+        const long xlNumber = -4145;
+        const long xlText = -4158;
+    };
+}; }; };

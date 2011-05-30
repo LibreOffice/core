@@ -1,0 +1,7 @@
+module ooo { module vba { module powerpoint {
+    constants MsoAnimEffectRestart {
+        const long msoAnimEffectRestartAlways = 1;
+        const long msoAnimEffectRestartNever = 3;
+        const long msoAnimEffectRestartWhenOff = 2;
+    };
+}; }; };

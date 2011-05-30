@@ -1,0 +1,10 @@
+module ooo { module vba { module office {
+    constants MsoColorType {
+        const long msoColorTypeCMS = 4;
+        const long msoColorTypeCMYK = 3;
+        const long msoColorTypeInk = 5;
+        const long msoColorTypeMixed = -2;
+        const long msoColorTypeRGB = 1;
+        const long msoColorTypeScheme = 2;
+    };
+}; }; };

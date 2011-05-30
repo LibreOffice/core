@@ -1,0 +1,10 @@
+module ooo { module vba { module access {
+    constants AcRecord {
+        const long acFirst = 2;
+        const long acGoTo = 4;
+        const long acLast = 3;
+        const long acNewRec = 5;
+        const long acNext = 1;
+        const long acPrevious = 0;
+    };
+}; }; };

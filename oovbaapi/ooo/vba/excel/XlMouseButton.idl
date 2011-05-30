@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlMouseButton {
+        const long xlNoButton = 0;
+        const long xlPrimaryButton = 1;
+        const long xlSecondaryButton = 2;
+    };
+}; }; };

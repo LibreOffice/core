@@ -1,0 +1,7 @@
+module ooo { module vba { module msforms {
+    constants fmPictureSizeMode {
+        const long fmPictureSizeModeClip = 0;
+        const long fmPictureSizeModeStretch = 1;
+        const long fmPictureSizeModeZoom = 3;
+    };
+}; }; };

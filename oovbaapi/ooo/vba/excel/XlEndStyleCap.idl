@@ -1,0 +1,6 @@
+module ooo { module vba { module excel {
+    constants XlEndStyleCap {
+        const long xlCap = 1;
+        const long xlNoCap = 2;
+    };
+}; }; };

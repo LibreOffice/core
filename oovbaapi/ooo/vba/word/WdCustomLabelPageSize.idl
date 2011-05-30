@@ -1,0 +1,18 @@
+module ooo { module vba { module word {
+    constants WdCustomLabelPageSize {
+        const long wdCustomLabelA4 = 2;
+        const long wdCustomLabelA4LS = 3;
+        const long wdCustomLabelA5 = 4;
+        const long wdCustomLabelA5LS = 5;
+        const long wdCustomLabelB4JIS = 13;
+        const long wdCustomLabelB5 = 6;
+        const long wdCustomLabelFanfold = 8;
+        const long wdCustomLabelHigaki = 11;
+        const long wdCustomLabelHigakiLS = 12;
+        const long wdCustomLabelLetter = 0;
+        const long wdCustomLabelLetterLS = 1;
+        const long wdCustomLabelMini = 7;
+        const long wdCustomLabelVertHalfSheet = 9;
+        const long wdCustomLabelVertHalfSheetLS = 10;
+    };
+}; }; };

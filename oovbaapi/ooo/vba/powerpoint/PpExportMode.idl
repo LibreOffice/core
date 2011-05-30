@@ -1,0 +1,8 @@
+module ooo { module vba { module powerpoint {
+    constants PpExportMode {
+        const long ppClipRelativeToSlide = 2;
+        const long ppRelativeToSlide = 1;
+        const long ppScaleToFit = 3;
+        const long ppScaleXY = 4;
+    };
+}; }; };

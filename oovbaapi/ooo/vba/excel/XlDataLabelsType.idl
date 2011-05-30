@@ -1,0 +1,10 @@
+module ooo { module vba { module excel {
+    constants XlDataLabelsType {
+        const long xlDataLabelsShowBubbleSizes = 6;
+        const long xlDataLabelsShowLabel = 4;
+        const long xlDataLabelsShowLabelAndPercent = 5;
+        const long xlDataLabelsShowNone = -4142;
+        const long xlDataLabelsShowPercent = 3;
+        const long xlDataLabelsShowValue = 2;
+    };
+}; }; };

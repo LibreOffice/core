@@ -1,0 +1,9 @@
+module ooo { module vba { module adodb {
+    constants PropertyAttributesEnum {
+        const long adPropNotSupported = 0;
+        const long adPropOptional = 2;
+        const long adPropRead = 512;
+        const long adPropRequired = 1;
+        const long adPropWrite = 1024;
+    };
+}; }; };

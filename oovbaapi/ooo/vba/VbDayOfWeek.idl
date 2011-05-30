@@ -1,0 +1,12 @@
+module ooo { module vba {
+    constants VbDayOfWeek {
+        const long vbFriday = 6;
+        const long vbMonday = 2;
+        const long vbSaturday = 7;
+        const long vbSunday = 1;
+        const long vbThursday = 5;
+        const long vbTuesday = 3;
+        const long vbUseSystemDayOfWeek = 0;
+        const long vbWednesday = 4;
+    };
+}; };

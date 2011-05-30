@@ -1,0 +1,21 @@
+module ooo { module vba { module office {
+    constants MsoSyncErrorType {
+        const long msoSyncErrorCouldNotCompare = 13;
+        const long msoSyncErrorCouldNotConnect = 2;
+        const long msoSyncErrorCouldNotOpen = 11;
+        const long msoSyncErrorCouldNotResolve = 14;
+        const long msoSyncErrorCouldNotUpdate = 12;
+        const long msoSyncErrorFileInUse = 6;
+        const long msoSyncErrorFileNotFound = 4;
+        const long msoSyncErrorFileTooLarge = 5;
+        const long msoSyncErrorNone = 0;
+        const long msoSyncErrorNoNetwork = 15;
+        const long msoSyncErrorOutOfSpace = 3;
+        const long msoSyncErrorUnauthorizedUser = 1;
+        const long msoSyncErrorUnknown = 16;
+        const long msoSyncErrorUnknownDownload = 10;
+        const long msoSyncErrorUnknownUpload = 9;
+        const long msoSyncErrorVirusDownload = 8;
+        const long msoSyncErrorVirusUpload = 7;
+    };
+}; }; };

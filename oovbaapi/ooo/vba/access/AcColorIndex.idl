@@ -1,0 +1,20 @@
+module ooo { module vba { module access {
+    constants AcColorIndex {
+        const long acColorIndexAqua = 14;
+        const long acColorIndexBlack = 0;
+        const long acColorIndexBlue = 12;
+        const long acColorIndexBrightGreen = 10;
+        const long acColorIndexDarkBlue = 4;
+        const long acColorIndexFuschia = 13;
+        const long acColorIndexGray = 7;
+        const long acColorIndexGreen = 2;
+        const long acColorIndexMaroon = 1;
+        const long acColorIndexOlive = 3;
+        const long acColorIndexRed = 9;
+        const long acColorIndexSilver = 8;
+        const long acColorIndexTeal = 6;
+        const long acColorIndexViolet = 5;
+        const long acColorIndexWhite = 15;
+        const long acColorIndexYellow = 11;
+    };
+}; }; };

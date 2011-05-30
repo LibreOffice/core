@@ -1,0 +1,6 @@
+module ooo { module vba { module office {
+    constants MsoHTMLProjectOpen {
+        const long msoHTMLProjectOpenSourceView = 1;
+        const long msoHTMLProjectOpenTextView = 2;
+    };
+}; }; };

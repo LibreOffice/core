@@ -1,0 +1,13 @@
+module ooo { module vba { module adodb {
+    constants IsolationLevelEnum {
+        const long adXactBrowse = 256;
+        const long adXactChaos = 16;
+        const long adXactCursorStability = 4096;
+        const long adXactIsolated = 1048576;
+        const long adXactReadCommitted = 4096;
+        const long adXactReadUncommitted = 256;
+        const long adXactRepeatableRead = 65536;
+        const long adXactSerializable = 1048576;
+        const long adXactUnspecified = -1;
+    };
+}; }; };

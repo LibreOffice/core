@@ -1,0 +1,8 @@
+module ooo { module vba { module word {
+    constants WdSummaryMode {
+        const long wdSummaryModeCreateNew = 3;
+        const long wdSummaryModeHideAllButSummary = 1;
+        const long wdSummaryModeHighlight = 0;
+        const long wdSummaryModeInsert = 2;
+    };
+}; }; };

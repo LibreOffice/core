@@ -1,0 +1,7 @@
+module ooo { module vba { module adodb {
+    constants BookmarkEnum {
+        const long adBookmarkCurrent = 0;
+        const long adBookmarkFirst = 1;
+        const long adBookmarkLast = 2;
+    };
+}; }; };

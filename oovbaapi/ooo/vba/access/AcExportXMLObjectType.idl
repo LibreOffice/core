@@ -1,0 +1,11 @@
+module ooo { module vba { module access {
+    constants AcExportXMLObjectType {
+        const long acExportForm = 2;
+        const long acExportFunction = 10;
+        const long acExportQuery = 1;
+        const long acExportReport = 3;
+        const long acExportServerView = 7;
+        const long acExportStoredProcedure = 9;
+        const long acExportTable = 0;
+    };
+}; }; };

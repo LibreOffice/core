@@ -1,0 +1,18 @@
+module ooo { module vba { module powerpoint {
+    constants PpActionType {
+        const long ppActionEndShow = 6;
+        const long ppActionFirstSlide = 3;
+        const long ppActionHyperlink = 7;
+        const long ppActionLastSlide = 4;
+        const long ppActionLastSlideViewed = 5;
+        const long ppActionMixed = -2;
+        const long ppActionNamedSlideShow = 10;
+        const long ppActionNextSlide = 1;
+        const long ppActionNone = 0;
+        const long ppActionOLEVerb = 11;
+        const long ppActionPlay = 12;
+        const long ppActionPreviousSlide = 2;
+        const long ppActionRunMacro = 8;
+        const long ppActionRunProgram = 9;
+    };
+}; }; };

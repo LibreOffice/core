@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlPlatform {
+        const long xlMacintosh = 1;
+        const long xlMSDOS = 3;
+        const long xlWindows = 2;
+    };
+}; }; };

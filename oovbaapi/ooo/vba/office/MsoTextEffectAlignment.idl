@@ -1,0 +1,11 @@
+module ooo { module vba { module office {
+    constants MsoTextEffectAlignment {
+        const long msoTextEffectAlignmentCentered = 2;
+        const long msoTextEffectAlignmentLeft = 1;
+        const long msoTextEffectAlignmentLetterJustify = 4;
+        const long msoTextEffectAlignmentMixed = -2;
+        const long msoTextEffectAlignmentRight = 3;
+        const long msoTextEffectAlignmentStretchJustify = 6;
+        const long msoTextEffectAlignmentWordJustify = 5;
+    };
+}; }; };

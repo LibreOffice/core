@@ -1,0 +1,9 @@
+module ooo { module vba { module word {
+    constants WdProtectionType {
+        const long wdAllowOnlyComments = 1;
+        const long wdAllowOnlyFormFields = 2;
+        const long wdAllowOnlyReading = 3;
+        const long wdAllowOnlyRevisions = 0;
+        const long wdNoProtection = -1;
+    };
+}; }; };

@@ -1,0 +1,17 @@
+module ooo { module vba { module adodb {
+    constants CursorOptionEnum {
+        const long adAddNew = 16778240;
+        const long adApproxPosition = 16384;
+        const long adBookmark = 8192;
+        const long adDelete = 16779264;
+        const long adFind = 524288;
+        const long adHoldRecords = 256;
+        const long adIndex = 8388608;
+        const long adMovePrevious = 512;
+        const long adNotify = 262144;
+        const long adResync = 131072;
+        const long adSeek = 4194304;
+        const long adUpdate = 16809984;
+        const long adUpdateBatch = 65536;
+    };
+}; }; };

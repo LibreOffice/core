@@ -1,0 +1,6 @@
+module ooo { module vba { module word {
+    constants WdBookmarkSortBy {
+        const long wdSortByLocation = 1;
+        const long wdSortByName = 0;
+    };
+}; }; };

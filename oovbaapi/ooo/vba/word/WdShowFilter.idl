@@ -1,0 +1,9 @@
+module ooo { module vba { module word {
+    constants WdShowFilter {
+        const long wdShowFilterFormattingAvailable = 4;
+        const long wdShowFilterFormattingInUse = 3;
+        const long wdShowFilterStylesAll = 2;
+        const long wdShowFilterStylesAvailable = 0;
+        const long wdShowFilterStylesInUse = 1;
+    };
+}; }; };

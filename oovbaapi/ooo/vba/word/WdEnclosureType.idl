@@ -1,0 +1,8 @@
+module ooo { module vba { module word {
+    constants WdEnclosureType {
+        const long wdEnclosureCircle = 0;
+        const long wdEnclosureDiamond = 3;
+        const long wdEnclosureSquare = 1;
+        const long wdEnclosureTriangle = 2;
+    };
+}; }; };

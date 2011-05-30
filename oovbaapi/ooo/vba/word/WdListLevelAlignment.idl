@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdListLevelAlignment {
+        const long wdListLevelAlignCenter = 1;
+        const long wdListLevelAlignLeft = 0;
+        const long wdListLevelAlignRight = 2;
+    };
+}; }; };

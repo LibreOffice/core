@@ -1,0 +1,6 @@
+module ooo { module vba { module word {
+    constants WdCharacterWidth {
+        const long wdWidthFullWidth = 7;
+        const long wdWidthHalfWidth = 6;
+    };
+}; }; };

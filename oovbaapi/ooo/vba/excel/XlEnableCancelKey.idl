@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlEnableCancelKey {
+        const long xlDisabled = 0;
+        const long xlErrorHandler = 2;
+        const long xlInterrupt = 1;
+    };
+}; }; };

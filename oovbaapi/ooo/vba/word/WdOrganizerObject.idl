@@ -1,0 +1,8 @@
+module ooo { module vba { module word {
+    constants WdOrganizerObject {
+        const long wdOrganizerObjectAutoText = 1;
+        const long wdOrganizerObjectCommandBars = 2;
+        const long wdOrganizerObjectProjectItems = 3;
+        const long wdOrganizerObjectStyles = 0;
+    };
+}; }; };

@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdBrowserLevel {
+        const long wdBrowserLevelMicrosoftInternetExplorer5 = 1;
+        const long wdBrowserLevelMicrosoftInternetExplorer6 = 2;
+        const long wdBrowserLevelV4 = 0;
+    };
+}; }; };

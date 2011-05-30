@@ -1,0 +1,11 @@
+module ooo { module vba { module word {
+    constants WdTocFormat {
+        const long wdTOCClassic = 1;
+        const long wdTOCDistinctive = 2;
+        const long wdTOCFancy = 3;
+        const long wdTOCFormal = 5;
+        const long wdTOCModern = 4;
+        const long wdTOCSimple = 6;
+        const long wdTOCTemplate = 0;
+    };
+}; }; };

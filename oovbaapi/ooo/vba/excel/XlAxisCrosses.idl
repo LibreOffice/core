@@ -1,0 +1,8 @@
+module ooo { module vba { module excel {
+    constants XlAxisCrosses {
+        const long xlAxisCrossesAutomatic = -4105;
+        const long xlAxisCrossesCustom = -4114;
+        const long xlAxisCrossesMaximum = 2;
+        const long xlAxisCrossesMinimum = 4;
+    };
+}; }; };

@@ -1,0 +1,8 @@
+module ooo { module vba { module word {
+    constants WdStyleType {
+        const long wdStyleTypeCharacter = 2;
+        const long wdStyleTypeList = 4;
+        const long wdStyleTypeParagraph = 1;
+        const long wdStyleTypeTable = 3;
+    };
+}; }; };

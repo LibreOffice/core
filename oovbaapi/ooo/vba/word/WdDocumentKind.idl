@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdDocumentKind {
+        const long wdDocumentEmail = 2;
+        const long wdDocumentLetter = 1;
+        const long wdDocumentNotSpecified = 0;
+    };
+}; }; };

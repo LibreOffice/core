@@ -1,0 +1,11 @@
+module ooo { module vba { module word {
+    constants WdWrapTypeMerged {
+        const long wdWrapMergeBehind = 3;
+        const long wdWrapMergeFront = 4;
+        const long wdWrapMergeInline = 0;
+        const long wdWrapMergeSquare = 1;
+        const long wdWrapMergeThrough = 5;
+        const long wdWrapMergeTight = 2;
+        const long wdWrapMergeTopBottom = 6;
+    };
+}; }; };

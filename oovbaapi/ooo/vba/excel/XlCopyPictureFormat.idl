@@ -1,0 +1,6 @@
+module ooo { module vba { module excel {
+    constants XlCopyPictureFormat {
+        const long xlBitmap = 2;
+        const long xlPicture = -4147;
+    };
+}; }; };

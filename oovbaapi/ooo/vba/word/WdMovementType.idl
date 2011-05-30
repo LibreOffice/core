@@ -1,0 +1,6 @@
+module ooo { module vba { module word {
+    constants WdMovementType {
+        const long wdExtend = 1;
+        const long wdMove = 0;
+    };
+}; }; };

@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdNumberType {
+        const long wdNumberAllNumbers = 3;
+        const long wdNumberListNum = 2;
+        const long wdNumberParagraph = 1;
+    };
+}; }; };

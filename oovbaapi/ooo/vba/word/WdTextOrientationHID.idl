@@ -1,0 +1,5 @@
+module ooo { module vba { module word {
+    constants WdTextOrientationHID {
+        const long emptyenum = 0;
+    };
+}; }; };

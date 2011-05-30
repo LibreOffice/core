@@ -1,0 +1,9 @@
+module ooo { module vba { module powerpoint {
+    constants PpPrintRangeType {
+        const long ppPrintAll = 1;
+        const long ppPrintCurrent = 3;
+        const long ppPrintNamedSlideShow = 5;
+        const long ppPrintSelection = 2;
+        const long ppPrintSlideRange = 4;
+    };
+}; }; };

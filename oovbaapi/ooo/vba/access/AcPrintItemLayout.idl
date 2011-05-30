@@ -1,0 +1,6 @@
+module ooo { module vba { module access {
+    constants AcPrintItemLayout {
+        const long acPRHorizontalColumnLayout = 1953;
+        const long acPRVerticalColumnLayout = 1954;
+    };
+}; }; };

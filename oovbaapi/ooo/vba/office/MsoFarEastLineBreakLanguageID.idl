@@ -1,0 +1,8 @@
+module ooo { module vba { module office {
+    constants MsoFarEastLineBreakLanguageID {
+        const long MsoFarEastLineBreakLanguageJapanese = 1041;
+        const long MsoFarEastLineBreakLanguageKorean = 1042;
+        const long MsoFarEastLineBreakLanguageSimplifiedChinese = 2052;
+        const long MsoFarEastLineBreakLanguageTraditionalChinese = 1028;
+    };
+}; }; };

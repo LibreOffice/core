@@ -1,0 +1,10 @@
+module ooo { module vba { module access {
+    constants AcHyperlinkPart {
+        const long acAddress = 2;
+        const long acDisplayedValue = 0;
+        const long acDisplayText = 1;
+        const long acFullAddress = 5;
+        const long acScreenTip = 4;
+        const long acSubAddress = 3;
+    };
+}; }; };

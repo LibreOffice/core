@@ -1,0 +1,6 @@
+module ooo { module vba { module excel {
+    constants XlLayoutFormType {
+        const long xlOutline = 1;
+        const long xlTabular = 0;
+    };
+}; }; };

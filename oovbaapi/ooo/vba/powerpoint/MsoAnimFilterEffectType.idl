@@ -1,0 +1,23 @@
+module ooo { module vba { module powerpoint {
+    constants MsoAnimFilterEffectType {
+        const long msoAnimFilterEffectTypeBarn = 1;
+        const long msoAnimFilterEffectTypeBlinds = 2;
+        const long msoAnimFilterEffectTypeBox = 3;
+        const long msoAnimFilterEffectTypeCheckerboard = 4;
+        const long msoAnimFilterEffectTypeCircle = 5;
+        const long msoAnimFilterEffectTypeDiamond = 6;
+        const long msoAnimFilterEffectTypeDissolve = 7;
+        const long msoAnimFilterEffectTypeFade = 8;
+        const long msoAnimFilterEffectTypeImage = 9;
+        const long msoAnimFilterEffectTypeNone = 0;
+        const long msoAnimFilterEffectTypePixelate = 10;
+        const long msoAnimFilterEffectTypePlus = 11;
+        const long msoAnimFilterEffectTypeRandomBar = 12;
+        const long msoAnimFilterEffectTypeSlide = 13;
+        const long msoAnimFilterEffectTypeStretch = 14;
+        const long msoAnimFilterEffectTypeStrips = 15;
+        const long msoAnimFilterEffectTypeWedge = 16;
+        const long msoAnimFilterEffectTypeWheel = 17;
+        const long msoAnimFilterEffectTypeWipe = 18;
+    };
+}; }; };

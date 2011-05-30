@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlTimeUnit {
+        const long xlDays = 0;
+        const long xlMonths = 1;
+        const long xlYears = 2;
+    };
+}; }; };

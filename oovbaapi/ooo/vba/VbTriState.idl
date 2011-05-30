@@ -1,0 +1,7 @@
+module ooo { module vba {
+    constants VbTriState {
+        const long vbFalse = 0;
+        const long vbTrue = -1;
+        const long vbUseDefault = -2;
+    };
+}; };
