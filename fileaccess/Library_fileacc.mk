@@ -30,8 +30,12 @@ $(eval $(call gb_Library_Library,fileacc))
 
 $(eval $(call gb_Library_set_include,fileacc,\
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
+))
+
+$(eval $(call gb_Library_add_api,fileacc,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,fileacc,\

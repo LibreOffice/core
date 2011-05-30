@@ -33,8 +33,12 @@ $(eval $(call gb_Library_set_componentfile,lomenubar,framework/util/lomenubar))
 
 $(eval $(call gb_Library_set_include,lomenubar,\
 	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/offuh \
 	$(shell pkg-config --cflags-only-I dbusmenu-gtk-0.4) \
+))
+
+$(eval $(call gb_Library_add_api,lomenubar,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_set_ldflags,lomenubar,\

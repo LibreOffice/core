@@ -35,12 +35,16 @@ $(eval $(call gb_Library_set_include,drawinglayer,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/drawinglayer/inc/pch) \
     -I$(OUTDIR)/inc \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
 $(eval $(call gb_Library_set_defs,drawinglayer,\
 	$$(DEFS) \
 	-DDRAWINGLAYER_DLLIMPLEMENTATION \
+))
+
+$(eval $(call gb_Library_add_api,drawinglayer,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,drawinglayer,\
