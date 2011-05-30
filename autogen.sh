@@ -11,6 +11,38 @@ sub clean()
     print "cleaned the build tree\n";
 }
 
+# check we have various vital tools
+sub sanity_checks($)
+{
+    my $system = shift;
+    my @path = split (':', $ENV{'PATH'});
+    my %required = (
+    'pkg-config' => "pkg-config is required to be installed",
+    'autoconf'   => "autoconf is required",
+    'aclocal'    => "aclocal is required",
+#   'knurdle'    => 'please knurdle me test'
+    );
+    my $exe_ext = '';
+    $exe_ext = ".exe" if ($system =~ m/CYGWIN/);
+
+    for my $elem (@path) {
+#   print "check $elem\n";
+    for my $app (keys %required) {
+        if (-f "$elem/$app$exe_ext") {
+#       print "removing $app - found in $elem/$app\n";
+        delete $required{$app};
+        }
+    }
+    }
+    if ((keys %required) > 0) {
+    print ("Various low-level dependencies are missing, please install them:\n");
+    for my $app (keys %required) {
+        print "\t $app$exe_ext: " . $required{$app} . "\n";
+    }
+    exit (1);
+    }
+}
+
 # one argument per line
 sub read_args($)
 {
@@ -83,6 +115,8 @@ system ("touch ChangeLog");
 
 my $system = `uname -s`;
 chomp $system;
+
+sanity_checks ($system);
 
 my $aclocal_flags = $ENV{ACLOCAL_FLAGS};
 
