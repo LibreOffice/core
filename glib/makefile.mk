@@ -48,15 +48,32 @@ TARFILE_NAME=$(PRJNAME)-$(GLIBVERSION)
 TARFILE_MD5=9f6e85e1e38490c3956f4415bcd33e6e
 
 
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)"=="MACOSX" || "$(OS)"=="IOS"
 PATCH_FILES=glib-2.28.1.patch
 
-CONFIGURE_FLAGS=--prefix=$(SRC_ROOT)$/$(PRJNAME)$/$(MISC)
+.IF "$(OS)"=="IOS"
+CONFIGURE_FLAGS= \
+    glib_cv_stack_grows=no \
+    glib_cv_uscore=yes \
+    ac_cv_func_posix_getpwuid_r=yes \
+    ac_cv_func_posix_getgrgid_r=yes \
+    ac_cv_func__NSGetEnviron=no \
+    --disable-shared
+FRAMEWORK=-framework CoreFoundation
+.ELSE
+CONFIGURE_FLAGS=--disable-static
+.ENDIF
+
+CONFIGURE_FLAGS+=--prefix=$(SRC_ROOT)$/$(PRJNAME)$/$(MISC)
 CONFIGURE_FLAGS+=--disable-fam
 CONFIGURE_FLAGS+=CPPFLAGS="$(ARCH_FLAGS) $(EXTRA_CDEFS) -DBUILD_OS_APPLEOSX"
 CONFIGURE_FLAGS+=CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) -I$(SOLARINCDIR)$/external"
-CONFIGURE_FLAGS+=LDFLAGS="-L$(SOLARLIBDIR) $(EXTRA_LINKFLAGS)"
+CONFIGURE_FLAGS+=LDFLAGS="-L$(SOLARLIBDIR) $(EXTRA_LINKFLAGS) $(FRAMEWORK)"
 
+.IF "$(CROSS_COMPILING)"!=""
+CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
+.ENDIF
+ 
 CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) ./configure
 
 .IF "$(VERBOSE)"!=""
@@ -66,6 +83,9 @@ VFLAG=V=1
 BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE) $(VFLAG)
 
 EXTRPATH=LOADER
+
+.IF "$(OS)"=="MACOSX"
+
 OUT2LIB+=gio/.libs/libgio-2.0.0.dylib
 OUT2LIB+=glib/.libs/libglib-2.0.0.dylib
 OUT2LIB+=gmodule/.libs/libgmodule-2.0.0.dylib
@@ -75,6 +95,16 @@ OUT2LIB+=gthread/.libs/libgthread-2.0.0.dylib
 OUT2BIN+=gobject/glib-mkenums
 OUT2BIN+=gobject/.libs/glib-genmarshal
 OUT2BIN+=gio/.libs/glib-compile-schemas
+
+.ELIF "$(OS)"=="IOS"
+
+OUT2LIB+=gio/.libs/libgio-2.0.a
+OUT2LIB+=glib/.libs/libglib-2.0.a
+OUT2LIB+=gmodule/.libs/libgmodule-2.0.a
+OUT2LIB+=gobject/.libs/libgobject-2.0.a
+OUT2LIB+=gthread/.libs/libgthread-2.0.a
+
+.ENDIF
 
 OUT2INC+=glib/glib.h
 OUT2INC+=glib/glib-object.h
