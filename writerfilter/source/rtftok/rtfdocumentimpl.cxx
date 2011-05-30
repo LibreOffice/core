@@ -108,6 +108,9 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword, bool /*bParam*/, i
     {
         case RTF_RTF:
             break;
+        case RTF_FONTTBL:
+            m_aStates.top().nDestinationState = DESTINATION_FONTTABLE;
+            break;
         default:
             OSL_TRACE("%s: TODO handle destination '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             // Make sure we skip destinations till we don't handle them
@@ -283,6 +286,9 @@ int RTFDocumentImpl::pushState()
     m_aStates.push(aState);
 
     m_nGroup++;
+
+    if (m_aStates.top().nDestinationState == DESTINATION_FONTTABLE)
+        m_aStates.top().nDestinationState = DESTINATION_FONTENTRY;
 
     return 0;
 }

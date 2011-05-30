@@ -18,11 +18,12 @@ namespace writerfilter {
             INTERNAL_HEX
         };
 
-        /// Are we skipping an unknown destination?
         enum RTFDesitnationState
         {
             DESTINATION_NORMAL,
-            DESTINATION_SKIP
+            DESTINATION_SKIP,
+            DESTINATION_FONTTABLE,
+            DESTINATION_FONTENTRY
         };
 
         enum RTFErrors
