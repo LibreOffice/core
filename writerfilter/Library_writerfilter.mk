@@ -32,7 +32,11 @@ $(eval $(call gb_Library_set_include,writerfilter,\
     -I$(realpath $(SRCDIR)/writerfilter/inc) \
 	$(if $(filter YES,$(SYSTEM_LIBXML)),$(filter -I%,$(LIBXML_CFLAGS))) \
     -I$(OUTDIR)/inc \
-    -I$(OUTDIR)/inc/offuh \
+))
+
+$(eval $(call gb_Library_add_api,writerfilter,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_set_componentfile,writerfilter,writerfilter/util/writerfilter))

@@ -34,7 +34,6 @@ $(eval $(call gb_Library_add_package_headers,oox,\
 $(eval $(call gb_Library_set_include,oox,\
     $$(INCLUDE) \
     -I$(OUTDIR)/inc \
-    -I$(OUTDIR)/inc/offuh \
     -I$(realpath $(SRCDIR)/oox/inc) \
     $(if $(filter YES,$(SYSTEM_OPENSSL)),$(filter -I%,$(OPENSSL_CFLAGS))) \
 ))
@@ -43,6 +42,11 @@ $(eval $(call gb_Library_set_defs,oox,\
     $$(DEFS) \
     -DOOX_DLLIMPLEMENTATION \
     $(if $(filter YES,$(SYSTEM_OPENSSL)),$(filter-out -I%,$(OPENSSL_CFLAGS))) \
+))
+
+$(eval $(call gb_Library_add_api,oox,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,oox,\

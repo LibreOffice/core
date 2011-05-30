@@ -32,13 +32,17 @@ $(eval $(call gb_Library_set_include,writerfilter_uno,\
     -I$(realpath $(SRCDIR)/writerfilter/inc) \
 	$(if $(filter YES,$(SYSTEM_LIBXML)),$(filter -I%,$(LIBXML_CFLAGS))) \
     -I$(OUTDIR)/inc \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
 $(eval $(call gb_Library_set_defs,writerfilter_uno,\
 	$$(DEFS) \
 	-DWRITERFILTER_WRITERFILTER_UNO_DLLIMPLEMENTATION \
 	$(if $(filter YES,$(SYSTEM_LIBXML)),$(filter-out -I%,$(LIBXML_CFLAGS))) \
+))
+
+$(eval $(call gb_Library_add_api,writerfilter_uno,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,writerfilter_uno,\

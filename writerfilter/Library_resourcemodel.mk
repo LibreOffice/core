@@ -33,7 +33,6 @@ $(eval $(call gb_Library_set_include,resourcemodel,\
     -I$(WORKDIR)/writerfilter/inc \
     $(if $(filter YES,$(SYSTEM_LIBXML)),$(filter -I%,$(LIBXML_CFLAGS))) \
     -I$(OUTDIR)/inc \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
 include $(SRCDIR)/writerfilter/debug_setup.mk
@@ -43,6 +42,11 @@ $(eval $(call gb_Library_set_defs,resourcemodel,\
 	-DWRITERFILTER_RESOURCEMODEL_DLLIMPLEMENTATION \
 	$(writerfilter_debug_flags) \
     $(if $(filter YES,$(SYSTEM_LIBXML)),$(filter-out -I%,$(LIBXML_CFLAGS))) \
+))
+
+$(eval $(call gb_Library_add_api,resourcemodel,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,resourcemodel,\
