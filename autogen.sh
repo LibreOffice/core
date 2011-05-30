@@ -116,7 +116,7 @@ system ("touch ChangeLog");
 my $system = `uname -s`;
 chomp $system;
 
-sanity_checks ($system);
+sanity_checks ($system) unless($system eq 'Darwin');
 
 my $aclocal_flags = $ENV{ACLOCAL_FLAGS};
 
