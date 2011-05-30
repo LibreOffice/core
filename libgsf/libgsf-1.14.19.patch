@@ -18,3 +18,12 @@
  
  
  
+@@ -11963,7 +11963,7 @@
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $IT_PERL_VERSION" >&5
+ $as_echo "$IT_PERL_VERSION" >&6; }
+ fi
+-if test "x" != "xno-xml"; then
++if test "xno-xml" != "xno-xml"; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for XML::Parser" >&5
+ $as_echo_n "checking for XML::Parser... " >&6; }
+    if `$INTLTOOL_PERL -e "require XML::Parser" 2>/dev/null`; then

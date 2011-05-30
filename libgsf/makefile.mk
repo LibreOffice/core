@@ -37,8 +37,8 @@ TARGET=so_libgsf
 
 .IF "$(SYSTEM_LIBGSF)" == "YES"
 all:
-    @echo "An already available installation of gdk-pixbuf should exist on your system."
-    @echo "Therefore the version provided here does not need to be built in addition."
+	@echo "An already available installation of gdk-pixbuf should exist on your system."
+	@echo "Therefore the version provided here does not need to be built in addition."
 .ENDIF
 
 # --- Files --------------------------------------------------------
@@ -67,7 +67,7 @@ CONFIGURE_DIR=
 CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) \
                  .$/configure \
                  --prefix=$(SRC_ROOT)$/$(PRJNAME)$/$(MISC) \
-                 CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) -I$(SOLARINCDIR)$/external -I$(SOLARINCDIR)$/external$/glib-2.0" \
+                 CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) $(LIBXML_CFLAGS) -I$(SOLARINCDIR)$/external -I$(SOLARINCDIR)$/external$/glib-2.0" \
                  LDFLAGS="-L$(SOLARLIBDIR)" \
                  --without-python \
                  --without-bonobo \
