@@ -26,7 +26,8 @@ namespace writerfilter {
             DESTINATION_SKIP,
             DESTINATION_FONTTABLE,
             DESTINATION_FONTENTRY,
-            DESTINATION_COLORTABLE
+            DESTINATION_COLORTABLE,
+            DESTINATION_STYLESHEET
         };
 
         enum RTFErrors

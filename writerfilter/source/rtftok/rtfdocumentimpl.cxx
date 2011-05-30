@@ -140,6 +140,9 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_COLORTBL:
             m_aStates.top().nDestinationState = DESTINATION_COLORTABLE;
             break;
+        case RTF_STYLESHEET:
+            m_aStates.top().nDestinationState = DESTINATION_STYLESHEET;
+            break;
         default:
             OSL_TRACE("%s: TODO handle destination '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             // Make sure we skip destinations till we don't handle them
