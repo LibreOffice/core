@@ -51,8 +51,8 @@ namespace writerfilter {
                 RTFParserState();
                 RTFInternalState nInternalState;
                 RTFDesitnationState nDestinationState;
-                std::map<int, int> aSprms;
-                std::map<int, rtl::OUString> aAttributes;
+                std::map<Id, int> aSprms;
+                std::map<Id, rtl::OUString> aAttributes;
                 RTFReferenceTable::Entries_t aFontTableEntries;
                 int nCurrentFontIndex;
         };

@@ -13,12 +13,12 @@ namespace writerfilter {
             : public writerfilter::Reference<Properties>
         {
             public:
-                RTFReferenceProperties(std::map<int, int> rSprms);
+                RTFReferenceProperties(std::map<Id, int> rSprms);
                 virtual ~RTFReferenceProperties();
                 virtual void resolve(Properties & rHandler);
                 virtual std::string getType() const;
             private:
-                std::map<int, int> m_rSprms;
+                std::map<Id, int> m_rSprms;
         };
     } // namespace rtftok
 } // namespace writerfilter
