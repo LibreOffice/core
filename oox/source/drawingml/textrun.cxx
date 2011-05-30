@@ -36,6 +36,7 @@
 #include "oox/helper/helper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/core/xmlfilterbase.hxx"
+#include "oox/token/tokens.hxx"
 
 using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
@@ -149,6 +150,16 @@ sal_Int32 TextRun::insertAt(
                 xText->insertTextContent( xStart, xContent, sal_False );
 
                 xTextFieldCursor->gotoEnd( sal_True );
+
+                if ( !maTextCharacterProperties.maCharColor.isUsed() )
+                    aTextCharacterProps.maCharColor.setSchemeClr( XML_hlink );
+                if ( !maTextCharacterProperties.moUnderline.has() )
+                    aTextCharacterProps.moUnderline.set( XML_sng );
+
+                Reference< XTextRange > xFieldRange( xTextFieldCursor, UNO_QUERY );
+                PropertySet aFieldTextPropSet( xFieldRange );
+                aTextCharacterProps.pushToPropSet( aFieldTextPropSet, rFilterBase );
+
                 oox::core::TextField aTextField;
                 aTextField.xText = xText;
                 aTextField.xTextCursor = xTextFieldCursor;
