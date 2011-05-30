@@ -143,12 +143,12 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     return 0;
 }
 
-int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, bool bParam, int nParam)
+int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
 {
     switch (nKeyword)
     {
         case RTF_F:
-            if (bParam && m_aStates.top().nDestinationState == DESTINATION_FONTENTRY)
+            if (m_aStates.top().nDestinationState == DESTINATION_FONTENTRY)
             {
                 m_aStates.top().nCurrentFontIndex = nParam;
             }
@@ -156,6 +156,9 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, bool bParam, int nParam)
             {
                 OSL_TRACE("%s: TODO handle value '\\f' outside font table", OSL_THIS_FUNC);
             }
+            break;
+        case RTF_FPRQ:
+            m_aStates.top().aSprms[NS_rtf::LN_PRQ] = nParam;
             break;
         default:
             OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
@@ -256,7 +259,8 @@ int RTFDocumentImpl::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
                 return ret;
             break;
         case CONTROL_VALUE:
-            if ((ret = dispatchValue(aRTFControlWords[i].nIndex, bParam, nParam)))
+            // values require a parameter by definition
+            if (bParam && (ret = dispatchValue(aRTFControlWords[i].nIndex, nParam)))
                 return ret;
             break;
     }
