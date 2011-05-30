@@ -38,9 +38,6 @@ $(eval $(call gb_UnoApiTarget_set_include,oovbaapi,\
 	-I$(OUTDIR)/idl \
 ))
 
-#$(eval $(call gb_UnoApiTarget_set_defs,oovbaapi,\
-#))
-
 $(eval $(call gb_UnoApiTarget_add_idlfiles_nohdl,oovbaapi,\
 	oovbaapi/ooo/vba/excel/Globals \
 	oovbaapi/ooo/vba/excel/Hyperlink \
