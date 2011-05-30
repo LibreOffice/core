@@ -5,7 +5,9 @@
 #include <rtfsprm.hxx>
 #include <rtfreferenceproperties.hxx>
 #include <doctok/sprmids.hxx> // NS_sprm
+// TODO: get rid of rtf and ooxml namespaces
 #include <doctok/resourceids.hxx> // NS_rtf
+#include <ooxml/resourceids.hxx> // NS_ooxml
 #include <unotools/ucbstreamhelper.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -45,6 +47,13 @@ SvStream& RTFDocumentImpl::Strm()
 Stream& RTFDocumentImpl::Mapper()
 {
     return *m_pMapperStream;
+}
+
+sal_uInt32 RTFDocumentImpl::getColorTable(sal_uInt32 nIndex)
+{
+    if (nIndex < m_aColorTable.size())
+        return m_aColorTable[nIndex];
+    return 0;
 }
 
 void RTFDocumentImpl::resolve(Stream & rMapper)
@@ -204,6 +213,13 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     // not found
                     return 0;
                 m_aFontEncodings[m_aStates.top().nCurrentFontIndex] = rtl_getTextEncodingFromWindowsCodePage(aRTFEncodings[i].charset);
+            }
+            break;
+        case RTF_CF:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(getColorTable(nParam)));
+                // NS_sprm::LN_CIco won't work, that would be an index in a static table
+                m_aStates.top().aAttributes[NS_ooxml::LN_CT_Color_val] = pValue;
             }
             break;
         default:

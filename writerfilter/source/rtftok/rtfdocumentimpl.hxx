@@ -85,6 +85,7 @@ namespace writerfilter {
 
                 SvStream& Strm();
                 Stream& Mapper();
+                sal_uInt32 getColorTable(sal_uInt32 nIndex);
             private:
                 int resolveParse();
                 int resolveKeyword();
