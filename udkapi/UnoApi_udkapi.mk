@@ -390,12 +390,14 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,udkapi,\
 	udkapi/com/sun/star/script/ScriptEventDescriptor \
 	udkapi/com/sun/star/script/XAllListener \
 	udkapi/com/sun/star/script/XAllListenerAdapterService \
+    udkapi/com/sun/star/script/XAutomationInvocation \
 	udkapi/com/sun/star/script/XDebugging \
 	udkapi/com/sun/star/script/XDefaultMethod \
 	udkapi/com/sun/star/script/XDefaultProperty \
 	udkapi/com/sun/star/script/XDirectInvocation \
 	udkapi/com/sun/star/script/XEngine \
 	udkapi/com/sun/star/script/XEngineListener \
+	udkapi/com/sun/star/script/XErrorQuery \
 	udkapi/com/sun/star/script/XEventAttacher \
 	udkapi/com/sun/star/script/XEventAttacherManager \
 	udkapi/com/sun/star/script/XInvocation \

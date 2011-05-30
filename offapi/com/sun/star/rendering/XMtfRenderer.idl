@@ -25,14 +25,16 @@
  *
  ************************************************************************/
 
-#ifndef __com_sun_star_rendering_MtfRenderer_idl__
-#define __com_sun_star_rendering_MtfRenderer_idl__
-
-#include <com/sun/star/rendering/XMtfRenderer.idl>
+#ifndef __com_sun_star_rendering_XMtfRenderer_idl__
+#define __com_sun_star_rendering_XMtfRenderer_idl__
 
 module com { module sun { module star { module rendering {
 
-    service MtfRenderer : XMtfRenderer;
+    interface XMtfRenderer : ::com::sun::star::uno::XInterface
+    {
+        void setMetafile( [in] sequence< byte > aMtf );
+        void draw( [in] double fScaleX, [in] double fScaleY );
+    };
 
 }; }; }; };
 

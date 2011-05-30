@@ -105,6 +105,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles_nohdl,offapi,\
     offapi/com/sun/star/rdf/URI \
     offapi/com/sun/star/rendering/Canvas \
     offapi/com/sun/star/rendering/CanvasFactory \
+    offapi/com/sun/star/rendering/MtfRenderer \
     offapi/com/sun/star/report/FixedLine \
     offapi/com/sun/star/report/FixedText \
     offapi/com/sun/star/report/FormatCondition \
@@ -1795,6 +1796,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,\
     offapi/com/sun/star/document/XActionLockable \
     offapi/com/sun/star/document/XBinaryStreamResolver \
     offapi/com/sun/star/document/XCodeNameQuery \
+    offapi/com/sun/star/document/XCompatWriterDocProperties \
     offapi/com/sun/star/document/XDocumentEventBroadcaster \
     offapi/com/sun/star/document/XDocumentEventListener \
     offapi/com/sun/star/document/XDocumentInfo \
@@ -1834,6 +1836,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,\
     offapi/com/sun/star/document/XUndoManager \
     offapi/com/sun/star/document/XUndoManagerListener \
     offapi/com/sun/star/document/XUndoManagerSupplier \
+    offapi/com/sun/star/document/XVbaMethodParameter \
     offapi/com/sun/star/document/XViewDataSupplier \
     offapi/com/sun/star/drawing/Alignment \
     offapi/com/sun/star/drawing/Arrangement \
@@ -2010,6 +2013,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,\
     offapi/com/sun/star/embed/XEmbeddedObject \
     offapi/com/sun/star/embed/XEncryptionProtectedSource \
     offapi/com/sun/star/embed/XEncryptionProtectedSource2 \
+    offapi/com/sun/star/embed/XEncryptionProtectedStorage \
     offapi/com/sun/star/embed/XExtendedStorageStream \
     offapi/com/sun/star/embed/XHatchWindow \
     offapi/com/sun/star/embed/XHatchWindowController \
@@ -2236,6 +2240,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,\
     offapi/com/sun/star/graphic/XGraphic \
     offapi/com/sun/star/graphic/XGraphicObject \
     offapi/com/sun/star/graphic/XGraphicProvider \
+    offapi/com/sun/star/graphic/XGraphicRasterizer \
     offapi/com/sun/star/graphic/XGraphicRenderer \
     offapi/com/sun/star/graphic/XGraphicTransformer \
     offapi/com/sun/star/graphic/XPrimitive2D \
@@ -2554,6 +2559,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,\
     offapi/com/sun/star/rendering/XIntegerBitmapColorSpace \
     offapi/com/sun/star/rendering/XIntegerReadOnlyBitmap \
     offapi/com/sun/star/rendering/XLinePolyPolygon2D \
+    offapi/com/sun/star/rendering/XMtfRenderer \
     offapi/com/sun/star/rendering/XParametricPolyPolygon2D \
     offapi/com/sun/star/rendering/XPolyPolygon2D \
     offapi/com/sun/star/rendering/XSimpleCanvas \
@@ -2611,6 +2617,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,\
     offapi/com/sun/star/script/XLibraryContainer3 \
     offapi/com/sun/star/script/XLibraryContainerExport \
     offapi/com/sun/star/script/XLibraryContainerPassword \
+    offapi/com/sun/star/script/XLibraryQueryExecutable \
     offapi/com/sun/star/script/XPersistentLibraryContainer \
     offapi/com/sun/star/script/XStorageBasedLibraryContainer \
     offapi/com/sun/star/script/browse/BrowseNodeFactoryViewTypes \
@@ -2628,10 +2635,13 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,\
     offapi/com/sun/star/script/provider/XScriptProviderSupplier \
     offapi/com/sun/star/script/provider/XScriptURIHelper \
     offapi/com/sun/star/script/vba/VBAEventId \
+    offapi/com/sun/star/script/vba/VBAScriptEvent \
+    offapi/com/sun/star/script/vba/VBAScriptEventId \
     offapi/com/sun/star/script/vba/XVBACompatibility \
     offapi/com/sun/star/script/vba/XVBAEventProcessor \
     offapi/com/sun/star/script/vba/XVBAMacroResolver \
     offapi/com/sun/star/script/vba/XVBAModuleInfo \
+    offapi/com/sun/star/script/vba/XVBAScriptListener \
     offapi/com/sun/star/sdb/BooleanComparisonMode \
     offapi/com/sun/star/sdb/CommandType \
     offapi/com/sun/star/sdb/DatabaseRegistrationEvent \
@@ -2786,6 +2796,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,\
     offapi/com/sun/star/sdbcx/XUser \
     offapi/com/sun/star/sdbcx/XUsersSupplier \
     offapi/com/sun/star/sdbcx/XViewsSupplier \
+    offapi/com/sun/star/security/CertAltNameEntry \
     offapi/com/sun/star/security/CertificateCharacters \
     offapi/com/sun/star/security/CertificateContainerStatus \
     offapi/com/sun/star/security/CertificateException \
@@ -2793,6 +2804,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,\
     offapi/com/sun/star/security/CryptographyException \
     offapi/com/sun/star/security/DocumentSignatureInformation \
     offapi/com/sun/star/security/EncryptionException \
+    offapi/com/sun/star/security/ExtAltNameType \
     offapi/com/sun/star/security/KeyException \
     offapi/com/sun/star/security/KeyUsage \
     offapi/com/sun/star/security/NoPasswordException \
@@ -2802,6 +2814,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,\
     offapi/com/sun/star/security/XCertificateContainer \
     offapi/com/sun/star/security/XCertificateExtension \
     offapi/com/sun/star/security/XDocumentDigitalSignatures \
+    offapi/com/sun/star/security/XSanExtension \
     offapi/com/sun/star/security/XSerialNumberAdapter \
     offapi/com/sun/star/setup/ActionType \
     offapi/com/sun/star/setup/BaseAction \
@@ -2839,6 +2852,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,\
     offapi/com/sun/star/sheet/CellInsertMode \
     offapi/com/sun/star/sheet/ComplexReference \
     offapi/com/sun/star/sheet/ConditionOperator \
+    offapi/com/sun/star/sheet/ConditionOperator2 \
     offapi/com/sun/star/sheet/DDEItemInfo \
     offapi/com/sun/star/sheet/DDELinkInfo \
     offapi/com/sun/star/sheet/DDELinkMode \
@@ -2991,6 +3005,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,\
     offapi/com/sun/star/sheet/XSheetCellRangeContainer \
     offapi/com/sun/star/sheet/XSheetCellRanges \
     offapi/com/sun/star/sheet/XSheetCondition \
+    offapi/com/sun/star/sheet/XSheetCondition2 \
     offapi/com/sun/star/sheet/XSheetConditionalEntries \
     offapi/com/sun/star/sheet/XSheetConditionalEntry \
     offapi/com/sun/star/sheet/XSheetFilterDescriptor \
@@ -3012,6 +3027,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,\
     offapi/com/sun/star/sheet/XSubTotalDescriptor \
     offapi/com/sun/star/sheet/XSubTotalField \
     offapi/com/sun/star/sheet/XUniqueCellFormatRangesSupplier \
+    offapi/com/sun/star/sheet/XUnnamedDatabaseRanges \
     offapi/com/sun/star/sheet/XUsedAreaCursor \
     offapi/com/sun/star/sheet/XViewFreezable \
     offapi/com/sun/star/sheet/XViewPane \
@@ -3070,12 +3086,16 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,\
     offapi/com/sun/star/system/XSimpleMailMessage \
     offapi/com/sun/star/system/XSystemShellExecute \
     offapi/com/sun/star/table/BorderLine \
+    offapi/com/sun/star/table/BorderLine2 \
+    offapi/com/sun/star/table/BorderLineStyle \
     offapi/com/sun/star/table/CellAddress \
     offapi/com/sun/star/table/CellContentType \
     offapi/com/sun/star/table/CellHoriJustify \
+    offapi/com/sun/star/table/CellJustifyMethod \
     offapi/com/sun/star/table/CellOrientation \
     offapi/com/sun/star/table/CellRangeAddress \
     offapi/com/sun/star/table/CellVertJustify \
+    offapi/com/sun/star/table/CellVertJustify2 \
     offapi/com/sun/star/table/ShadowFormat \
     offapi/com/sun/star/table/ShadowLocation \
     offapi/com/sun/star/table/TableBorder \
@@ -3636,6 +3656,12 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,\
     offapi/com/sun/star/xml/crypto/sax/XBlockerMonitor \
     offapi/com/sun/star/xml/crypto/sax/XDecryptionResultBroadcaster \
     offapi/com/sun/star/xml/crypto/sax/XDecryptionResultListener \
+    offapi/com/sun/star/xml/crypto/CipherID \
+    offapi/com/sun/star/xml/crypto/DigestID \
+    offapi/com/sun/star/xml/crypto/XCipherContext \
+    offapi/com/sun/star/xml/crypto/XCipherContextSupplier \
+    offapi/com/sun/star/xml/crypto/XDigestContext \
+    offapi/com/sun/star/xml/crypto/XDigestContextSupplier \
     offapi/com/sun/star/xml/crypto/sax/XElementStackKeeper \
     offapi/com/sun/star/xml/crypto/sax/XEncryptionResultBroadcaster \
     offapi/com/sun/star/xml/crypto/sax/XEncryptionResultListener \
