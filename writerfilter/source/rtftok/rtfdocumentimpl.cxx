@@ -25,8 +25,7 @@ extern int nRTFControlWords;
 RTFDocumentImpl::RTFDocumentImpl(uno::Reference<io::XInputStream> const& xInputStream)
     : m_nGroup(0),
     m_bSkipUnknown(false),
-    m_pCurrentKeyword(0),
-    m_aFontTableEntries()
+    m_pCurrentKeyword(0)
 {
     OSL_ENSURE(xInputStream.is(), "no input stream");
     if (!xInputStream.is())
@@ -73,7 +72,7 @@ int RTFDocumentImpl::resolveChars(char ch)
     OSL_TRACE("%s start", OSL_THIS_FUNC);
     OStringBuffer aBuf;
 
-    if (m_aStates.top().nDestinationState == DESTINATION_SKIP)
+    if (m_aStates.top().nDestinationState != DESTINATION_NORMAL)
         return 0;
     while(!Strm().IsEof() && ch != '{' && ch != '}' && ch != '\\')
     {
@@ -123,13 +122,14 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword, bool /*bParam*/, i
     return 0;
 }
 
-int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, bool bParam, int /*nParam*/)
+int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, bool bParam, int nParam)
 {
     switch (nKeyword)
     {
         case RTF_F:
             if (bParam && m_aStates.top().nDestinationState == DESTINATION_FONTENTRY)
             {
+                m_aStates.top().nCurrentFontIndex = nParam;
             }
             else
             {
@@ -311,7 +311,9 @@ int RTFDocumentImpl::pushState()
     m_nGroup++;
 
     if (m_aStates.top().nDestinationState == DESTINATION_FONTTABLE)
+    {
         m_aStates.top().nDestinationState = DESTINATION_FONTENTRY;
+    }
 
     return 0;
 }
@@ -320,15 +322,28 @@ int RTFDocumentImpl::popState()
 {
     OSL_TRACE("%s before pop: m_nGroup %d, dest state: %d", OSL_THIS_FUNC, m_nGroup, m_aStates.top().nDestinationState);
 
+    RTFReferenceTable::Entry_t aEntry;
+    bool bFontEntryEnd = false;
+
     if (m_aStates.top().nDestinationState == DESTINATION_FONTTABLE)
     {
-        writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(m_aFontTableEntries));
+        writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(m_aStates.top().aFontTableEntries));
         Mapper().table(NS_rtf::LN_FONTTABLE, pTable);
+    }
+    else if (m_aStates.top().nDestinationState == DESTINATION_FONTENTRY)
+    {
+        bFontEntryEnd = true;
+        writerfilter::Reference<Properties>::Pointer_t const pProp(new RTFReferenceProperties(m_aStates.top().aSprms));
+        aEntry.first = m_aStates.top().nCurrentFontIndex;
+        aEntry.second = pProp;
     }
 
     m_aStates.pop();
 
     m_nGroup--;
+
+    if (bFontEntryEnd)
+        m_aStates.top().aFontTableEntries[aEntry.first] = aEntry.second;
 
     if (!m_aStates.empty())
         OSL_TRACE("%s after pop: m_nGroup %d, dest state: %d", OSL_THIS_FUNC, m_nGroup, m_aStates.top().nDestinationState);
@@ -403,7 +418,9 @@ int RTFDocumentImpl::resolveParse()
 RTFParserState::RTFParserState()
     : nInternalState(INTERNAL_NORMAL),
     nDestinationState(DESTINATION_NORMAL),
-    aSprms()
+    aSprms(),
+    aFontTableEntries(),
+    nCurrentFontIndex(0)
 {
 }
 

@@ -52,6 +52,8 @@ namespace writerfilter {
                 RTFInternalState nInternalState;
                 RTFDesitnationState nDestinationState;
                 std::map<int, int> aSprms;
+                RTFReferenceTable::Entries_t aFontTableEntries;
+                int nCurrentFontIndex;
         };
 
         /// Implementation of the RTFDocument interface.
@@ -88,7 +90,6 @@ namespace writerfilter {
                 bool m_bSkipUnknown;
                 /// For debugging purposes, where int value would not be enough
                 rtl::OString* m_pCurrentKeyword;
-                RTFReferenceTable::Entries_t m_aFontTableEntries;
         };
     } // namespace rtftok
 } // namespace writerfilter

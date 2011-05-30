@@ -13,6 +13,7 @@ namespace writerfilter {
         {
             public:
                 typedef std::map<int, writerfilter::Reference<Properties>::Pointer_t> Entries_t;
+                typedef std::pair<int, writerfilter::Reference<Properties>::Pointer_t> Entry_t;
                 RTFReferenceTable(Entries_t const& rEntries);
                 virtual ~RTFReferenceTable();
                 virtual void resolve(Table & rHandler);
