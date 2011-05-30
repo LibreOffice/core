@@ -112,6 +112,14 @@ int RTFDocumentImpl::resolveChars(char ch)
         // set components back to zero
         m_aStates.top().aCurrentColor = RTFColorTableEntry();
     }
+    else if (m_aStates.top().nDestinationState == DESTINATION_STYLEENTRY)
+    {
+        // this is a style name
+        RTFValue::Pointer_t pValue(new RTFValue(aOUStr));
+        // TODO which one is needed?
+        m_aStates.top().aAttributes[NS_rtf::LN_XSTZNAME] = pValue;
+        m_aStates.top().aAttributes[NS_rtf::LN_XSTZNAME1] = pValue;
+    }
 
     return 0;
 }
@@ -226,7 +234,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
             break;
         case RTF_S:
-            if (m_aStates.top().nDestinationState == DESTINATION_STYLESHEET)
+            if (m_aStates.top().nDestinationState == DESTINATION_STYLEENTRY)
                 m_aStates.top().nCurrentStyleIndex = nParam;
             else
             {
@@ -418,6 +426,10 @@ int RTFDocumentImpl::pushState()
     if (m_aStates.top().nDestinationState == DESTINATION_FONTTABLE)
     {
         m_aStates.top().nDestinationState = DESTINATION_FONTENTRY;
+    }
+    else if (m_aStates.top().nDestinationState == DESTINATION_STYLESHEET)
+    {
+        m_aStates.top().nDestinationState = DESTINATION_STYLEENTRY;
     }
 
     return 0;
