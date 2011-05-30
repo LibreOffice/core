@@ -86,7 +86,7 @@ public class Convert implements Cloneable {
     /**
      *  Adds an <code>InputStream</code> to be used as input by the
      *  <code>Convert</code> class.  It is possible that many files
-     *  need to be converted into a single output <code>Documetn</code>,
+     *  need to be converted into a single output <code>Document</code>,
      *  so this function may be called more than one time.  It is the
      *  plug-in's responsibility to know how to handle the input.
      *
@@ -111,7 +111,7 @@ public class Convert implements Cloneable {
      /**
      *  Adds an <code>InputStream</code> to be used as input by the
      *  <code>Convert</code> class.  It is possible that many files
-     *  need to be converted into a single output <code>Documetn</code>,
+     *  need to be converted into a single output <code>Document</code>,
      *  so this function may be called more than one time.  It is the
      *  plug-in's responsibility to know how to handle the input.
      *

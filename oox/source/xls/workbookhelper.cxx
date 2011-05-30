@@ -253,7 +253,7 @@ private:
     FilterType          meFilterType;           /// File type of the filter.
     ProgressBarPtr      mxProgressBar;          /// The progress bar.
     StorageRef          mxVbaPrjStrg;           /// Storage containing the VBA project.
-    sal_Int16           mnCurrSheet;            /// Current sheet index in Calc dcument.
+    sal_Int16           mnCurrSheet;            /// Current sheet index in Calc document.
     bool                mbWorkbook;             /// True = multi-sheet file.
 
     // buffers

@@ -38,7 +38,7 @@ import org.openoffice.xmerge.Document;
 
 /**
  *  <p> A <code>PalmDocument</code> is palm implementaion of the
- *  <code>Docuemnt</code> interface.</p>
+ *  <code>Document</code> interface.</p>
  *
  *  <p>This implementation allows the Palm device format to be
  *  read via an <code>InputStream</code> and written via an

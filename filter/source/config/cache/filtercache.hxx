@@ -161,7 +161,7 @@ class FilterCache : public BaseLock
          */
         enum EItemFlushState
         {
-            /// indicates an unchanged item (can occure e.g. if an item was added and(!) removed before it was flushed ...
+            /// indicates an unchanged item (can occur e.g. if an item was added and(!) removed before it was flushed ...
             E_ITEM_UNCHANGED = 0,
             /// indicates an item, which exists inside config layer but not inside our own cache
             E_ITEM_REMOVED = 1,
@@ -848,7 +848,7 @@ class FilterCache : public BaseLock
                     points to the cache member, which should be filled or updated.
 
             @throw  [css::uno::Exception]
-                    if an unrecoverable error occure inside this operation.
+                    if an unrecoverable error occurs inside this operation.
          */
         void impl_loadSet(const css::uno::Reference< css::container::XNameAccess >& xConfig,
                                 EItemType                                           eType  ,
@@ -870,15 +870,15 @@ class FilterCache : public BaseLock
                     specify, which container item type must be readed.
 
             @param  sItem
-                    means the internal name, which can be used to adress the item
-                    properties relativ to the given configuration set.
+                    means the internal name, which can be used to address the item
+                    properties relative to the given configuration set.
 
             @param  eOption
                     regulate, which properties of the requested item should be read.
                     See defintion of EReadOption for further informations.
 
             @throw  [css::uno::Exception]
-                    if an unrecoverable error occure inside this operation.
+                    if an unrecoverable error occurs inside this operation.
          */
         CacheItem impl_loadItem(const css::uno::Reference< css::container::XNameAccess >& xSet   ,
                                       EItemType                                           eType  ,
@@ -911,7 +911,7 @@ class FilterCache : public BaseLock
                     if the item does not exists inside the configuration layer too!
 
             @throw  [css::uno::Exception]
-                    if an unrecoverable error occure inside this operation.
+                    if an unrecoverable error occurs inside this operation.
          */
         CacheItemList::iterator impl_loadItemOnDemand(      EItemType        eType,
                                                       const ::rtl::OUString& sItem)

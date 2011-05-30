@@ -101,7 +101,7 @@ extern rtl::OUString pFilterStrings[];
 #define  CFGSET_FRAMELOADERS        _FILTER_CONFIG_FROM_ASCII_("FrameLoaders"   )
 #define  CFGSET_CONTENTHANDLERS     _FILTER_CONFIG_FROM_ASCII_("ContentHandlers")
 
-/** @short  used to adress some configuration keys directly.
+/** @short  used to address some configuration keys directly.
 
     @descr  Such direct keys should be used with function
             FilterCache::impl_getDirectCFGValue() only!
