@@ -61,6 +61,7 @@ public:
     void addRtlUstrbufHxx() { m_includeRtlUstrbufHxx = true; }
     void addRtlUstringH() { m_includeRtlUstringH = true; }
     void addRtlUstringHxx() { m_includeRtlUstringHxx = true; }
+    void addRtlInstanceHxx() { m_includeRtlInstanceHxx = true; }
     void addSalTypesH() { m_includeSalTypesH = true; }
     void addTypelibTypeclassH() { m_includeTypelibTypeclassH = true; }
     void addTypelibTypedescriptionH()
@@ -94,6 +95,7 @@ private:
     bool m_includeRtlUstrbufHxx;
     bool m_includeRtlUstringH;
     bool m_includeRtlUstringHxx;
+    bool m_includeRtlInstanceHxx;
     bool m_includeSalTypesH;
     bool m_includeTypelibTypeclassH;
     bool m_includeTypelibTypedescriptionH;

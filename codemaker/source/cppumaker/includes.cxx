@@ -60,6 +60,7 @@ Includes::Includes(
     m_includeRtlTextencH(false), m_includeRtlUstrbufHxx(false),
     m_includeRtlUstringH(false),
     m_includeRtlUstringHxx(dependencies.hasStringDependency()),
+    m_includeRtlInstanceHxx(false),
     m_includeSalTypesH(
         dependencies.hasBooleanDependency() || dependencies.hasByteDependency()
         || dependencies.hasShortDependency()
@@ -249,6 +250,10 @@ void Includes::dump(FileStream & out, rtl::OString const * companionHdl) {
     if (m_includeRtlUstringHxx) {
         dumpEmptyLineBeforeFirst(out, &first);
         out << ("#include \"rtl/ustring.hxx\"\n");
+    }
+    if (m_includeRtlInstanceHxx) {
+        dumpEmptyLineBeforeFirst(out, &first);
+        out << "#include \"rtl/instance.hxx\"\n";
     }
     if (m_includeSalTypesH) {
         dumpEmptyLineBeforeFirst(out, &first);
