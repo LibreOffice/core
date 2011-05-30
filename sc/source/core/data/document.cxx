@@ -523,7 +523,8 @@ bool ScDocument::InsertTabs( SCTAB nPos, const std::vector<rtl::OUString>& rName
                 for (; it != pTab.end(); ++it)
                     if ( *it )
                         (*it)->UpdateInsertTab(nPos, nNewSheets);
-                pTab.resize(nTabCount + nNewSheets, NULL);
+                it = pTab.begin();
+                pTab.insert(it+nPos,nNewSheets, NULL);
                 for (SCTAB i = 0; i < nNewSheets; ++i)
                 {
                     pTab[nPos + i] = new ScTable(this, nPos + i, rNames.at(i));
@@ -536,8 +537,10 @@ bool ScDocument::InsertTabs( SCTAB nPos, const std::vector<rtl::OUString>& rName
                 UpdateBroadcastAreas( URM_INSDEL, aRange, 0,0,nNewSheets);
                 it = pTab.begin();
                 for (; it != pTab.end(); ++it)
+                {
                     if ( *it )
                         (*it)->UpdateCompile();
+                }
                 it = pTab.begin();
                 for (; it != pTab.end(); ++it)
                     if ( *it )
