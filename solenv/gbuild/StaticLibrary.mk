@@ -80,6 +80,7 @@ gb_StaticLibrary_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_StaticLibrary_get_
 endef
 
 $(eval $(foreach method,\
+	add_api \
 	add_cobject \
 	add_cobjects \
 	add_cxxobject \
