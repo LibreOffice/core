@@ -123,12 +123,13 @@ private:
     typedef void FileParser(
         rtl::OUString const &, int, Data &, Partial const *, Modifications *,
         Additions *);
-
+public:
     Components(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
             const & context);
 
     ~Components();
+private:
 
     void parseFileLeniently(
         FileParser * parseFile, rtl::OUString const & url, int layer,

@@ -130,7 +130,8 @@ bool RootAccess::isUpdate() const {
     return update_;
 }
 
-RootAccess::~RootAccess() {
+RootAccess::~RootAccess()
+{
     osl::MutexGuard g(*lock_);
     getComponents().removeRootAccess(this);
 }

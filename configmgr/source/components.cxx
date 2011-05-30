@@ -57,6 +57,7 @@
 #include "rtl/textenc.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
+#include "rtl/instance.hxx"
 #include "sal/types.h"
 #include "salhelper/simplereferenceobject.hxx"
 
@@ -150,9 +151,6 @@ bool canRemoveFromLayer(int layer, rtl::Reference< Node > const & node) {
     }
 }
 
-static bool singletonCreated = false;
-static Components * singleton = 0;
-
 }
 
 class Components::WriteThread:
@@ -217,23 +215,19 @@ void Components::WriteThread::run() {
     reference_->clear();
 }
 
+class theComponentsSingleton :
+    public rtl::StaticWithArg<
+        Components,
+        css::uno::Reference< css::uno::XComponentContext >,
+        theComponentsSingleton>
+{
+};
+
 Components & Components::getSingleton(
     css::uno::Reference< css::uno::XComponentContext > const & context)
 {
     OSL_ASSERT(context.is());
-    if (!singletonCreated) {
-        static Components theSingleton(context);
-        singleton = &theSingleton;
-        singletonCreated = true;
-    }
-    if (singleton == 0) {
-        throw css::uno::RuntimeException(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "configmgr no Components singleton")),
-            css::uno::Reference< css::uno::XInterface >());
-    }
-    return *singleton;
+    return theComponentsSingleton::get(context);
 }
 
 bool Components::allLocales(rtl::OUString const & locale) {
