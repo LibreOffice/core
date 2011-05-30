@@ -195,11 +195,12 @@ endef
 # - generate dependencies for included idls
 # - empty $? in headertarget?
 
+# TODO: reenable the check
 $(call gb_UnoApiTarget_get_target,%):
 	$(call gb_Output_announce,$*,$(true),RDB,3)
 	$(if $(gb_UnoApiTarget_IDLFILES_$*),$(call gb_UnoApiTarget__command,$@,$*,$<,UCR,$(addprefix $(call gb_UnoApiPartTarget_get_target,),$(patsubst %.idl,%.urd,$(gb_UnoApiTarget_IDLFILES_$*)))))
 	$(if $(UNOAPI_MERGE),$(call gb_UnoApiTarget__command,$@,$*,$<,/,$(UNOAPI_MERGE)))
-	$(if $(UNOAPI_REFERENCE), \
+	$(if $(and $(false),$(UNOAPI_REFERENCE)), \
 		$(call gb_Output_announce,$*,$(true),RDBCHEK,4) \
 	    $(gb_UnoApiTarget_REGCOMPARECOMMAND) -f -t -r1 $(call gb_Helper_convert_native,$(UNOAPI_REFERENCE)) -r2 $(call gb_Helper_convert_native,$@))
 	$(if $(gb_UnoApiTarget_IDLFILES_$*), \
