@@ -120,20 +120,28 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword, bool /*bParam*/, i
 
 int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam)
 {
-    bool bOn = !bParam || nParam != 0;
+    int nSprm = 0;
 
     switch (nKeyword)
     {
         case RTF_B:
-            m_aStates.top().aSprms[NS_sprm::LN_CFBold] = bOn;
+            nSprm = NS_sprm::LN_CFBold;
             break;
         case RTF_AB:
-            m_aStates.top().aSprms[NS_sprm::LN_CFBoldBi] = bOn;
+            nSprm = NS_sprm::LN_CFBoldBi;
+            break;
+        case RTF_I:
+            nSprm = NS_sprm::LN_CFItalic;
+            break;
+        case RTF_UL:
+            nSprm = NS_sprm::LN_CKul;
             break;
         default:
             OSL_TRACE("%s: TODO handle toggle '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             break;
     }
+    if (nSprm > 0)
+        m_aStates.top().aSprms[nSprm] = !bParam || nParam != 0;
 
     return 0;
 }
