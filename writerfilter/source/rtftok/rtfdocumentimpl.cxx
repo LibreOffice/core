@@ -125,8 +125,6 @@ int RTFDocumentImpl::resolveChars(char ch)
             aOUStr = aOUStr.copy(0, aOUStr.getLength() - 1);
         }
         RTFValue::Pointer_t pValue(new RTFValue(aOUStr));
-        // TODO which one is needed?
-        m_aStates.top().aAttributes[NS_rtf::LN_XSTZNAME] = pValue;
         m_aStates.top().aAttributes[NS_rtf::LN_XSTZNAME1] = pValue;
     }
 
