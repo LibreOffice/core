@@ -885,6 +885,7 @@ void OStatement_Base::setFetchSize(sal_Int32 _par0)
         delete m_pRowStatusArray;
         m_pRowStatusArray = new SQLUSMALLINT[_par0];
         nRetCode = N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_STATUS_PTR,m_pRowStatusArray,SQL_IS_POINTER);
+        OSL_UNUSED( nRetCode );
     }
 }
 //------------------------------------------------------------------------------
