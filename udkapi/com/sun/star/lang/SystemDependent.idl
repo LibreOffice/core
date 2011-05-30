@@ -94,6 +94,11 @@ published constants SystemDependent
 
     //-------------------------------------------------------------------------
 
+    // DocMerge from idl: value com::sun::star::lang::SystemDependent::SYSTEM_OS2
+    /** The called interface method returns a value specified for the <em>OS/2</em> system.
+     */
+    const short SYSTEM_OS2 = 4;
+
     // DocMerge from idl: value com::sun::star::lang::SystemDependent::SYSTEM_MAC
     /** The called interface method returns a value specified for the <em>MAC-OS</em> system.
      */
