@@ -4,7 +4,8 @@
 #include <rtfvalue.hxx>
 #include <rtfsprm.hxx>
 #include <rtfreferenceproperties.hxx>
-#include <doctok/sprmids.hxx>
+#include <doctok/sprmids.hxx> // NS_sprm
+#include <doctok/resourceids.hxx> // NS_rtf
 #include <unotools/ucbstreamhelper.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -24,7 +25,8 @@ extern int nRTFControlWords;
 RTFDocumentImpl::RTFDocumentImpl(uno::Reference<io::XInputStream> const& xInputStream)
     : m_nGroup(0),
     m_bSkipUnknown(false),
-    m_pCurrentKeyword(0)
+    m_pCurrentKeyword(0),
+    m_aFontTableEntries()
 {
     OSL_ENSURE(xInputStream.is(), "no input stream");
     if (!xInputStream.is())
@@ -317,6 +319,12 @@ int RTFDocumentImpl::pushState()
 int RTFDocumentImpl::popState()
 {
     OSL_TRACE("%s before pop: m_nGroup %d, dest state: %d", OSL_THIS_FUNC, m_nGroup, m_aStates.top().nDestinationState);
+
+    if (m_aStates.top().nDestinationState == DESTINATION_FONTTABLE)
+    {
+        writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(m_aFontTableEntries));
+        Mapper().table(NS_rtf::LN_FONTTABLE, pTable);
+    }
 
     m_aStates.pop();
 

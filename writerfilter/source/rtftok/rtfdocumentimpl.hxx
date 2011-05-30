@@ -6,6 +6,7 @@
 #include <map>
 #include <rtftok/RTFDocument.hxx>
 #include <rtfcontrolwords.hxx>
+#include <rtfreferencetable.hxx>
 
 class SvStream;
 
@@ -87,6 +88,7 @@ namespace writerfilter {
                 bool m_bSkipUnknown;
                 /// For debugging purposes, where int value would not be enough
                 rtl::OString* m_pCurrentKeyword;
+                RTFReferenceTable::Entries_t m_aFontTableEntries;
         };
     } // namespace rtftok
 } // namespace writerfilter
