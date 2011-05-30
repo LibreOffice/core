@@ -30,6 +30,8 @@
 #define _CAIROCANVAS_WIN32_CAIRO_HXX
 
 #include "cairo_cairo.hxx"
+#include <prewin.h>
+#include <postwin.h>
 
 namespace cairo {
 
