@@ -114,7 +114,11 @@ int RTFDocumentImpl::resolveChars(char ch)
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_STYLEENTRY)
     {
-        // this is a style name
+        // this is a style name, drop the ; at the end if it's there
+        if (aOUStr.endsWithAsciiL(";", 1))
+        {
+            aOUStr = aOUStr.copy(0, aOUStr.getLength() - 1);
+        }
         RTFValue::Pointer_t pValue(new RTFValue(aOUStr));
         // TODO which one is needed?
         m_aStates.top().aAttributes[NS_rtf::LN_XSTZNAME] = pValue;
