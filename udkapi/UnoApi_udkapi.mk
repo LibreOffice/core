@@ -27,12 +27,6 @@
 
 $(eval $(call gb_UnoApiTarget_UnoApiTarget,udkapi))
 
-#$(eval $(call gb_UnoApiTarget_set_defs,udkapi,\
-#	$$(DEFS) \
-#	-DTOOLS_DLLIMPLEMENTATION \
-#	-DVCL \
-#))
-
 $(eval $(call gb_UnoApiTarget_set_include,udkapi,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/udkapi \
