@@ -154,12 +154,11 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     {
         case RTF_F:
             if (m_aStates.top().nDestinationState == DESTINATION_FONTENTRY)
-            {
                 m_aStates.top().nCurrentFontIndex = nParam;
-            }
             else
             {
-                OSL_TRACE("%s: TODO handle value '\\f' outside font table", OSL_THIS_FUNC);
+                RTFValue::Pointer_t pValue(new RTFValue(nParam));
+                m_aStates.top().aSprms[NS_sprm::LN_CRgFtc0] = pValue;
             }
             break;
         case RTF_FPRQ:
