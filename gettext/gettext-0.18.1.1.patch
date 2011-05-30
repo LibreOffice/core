@@ -2721,7 +2721,7 @@
 +#endif
 +
 +#include <locale.h>
-+#if (defined __APPLE__ && defined __MACH__) && HAVE_NEWLOCALE
++#if (defined __APPLE__ && defined __MACH__)
 +# include <xlocale.h>
 +#endif
 +
@@ -3016,7 +3016,7 @@
 +   or gettext() but for which the format string could be the return value
 +   of _() or gettext() need to add this #include.  Oh well.  */
 +
-+#if !0
++#if !(defined __APPLE__ && defined __MACH__)
 +
 +#include <stdio.h>
 +#include <stddef.h>
@@ -3138,7 +3138,7 @@
 +#define setlocale libintl_setlocale
 +extern LIBINTL_DLL_EXPORTED char *setlocale (int, const char *);
 +
-+#if HAVE_NEWLOCALE
++#if (defined __APPLE__ && defined __MACH__)
 +
 +#undef newlocale
 +#define newlocale libintl_newlocale
@@ -3194,7 +3194,7 @@
 +#define _LIBINTL_H 1
 +
 +#include <locale.h>
-+#if (defined __APPLE__ && defined __MACH__) && 0
++#if (defined __APPLE__ && defined __MACH__)
 +# include <xlocale.h>
 +#endif
 +
@@ -3485,7 +3485,7 @@
 +   or gettext() but for which the format string could be the return value
 +   of _() or gettext() need to add this #include.  Oh well.  */
 +
-+#if !0
++#if !(defined __APPLE__ && defined __MACH__)
 +
 +#include <stdio.h>
 +#include <stddef.h>
@@ -3607,7 +3607,7 @@
 +#define setlocale libintl_setlocale
 +extern char *setlocale (int, const char *);
 +
-+#if 0
++#if (defined __APPLE__ && defined __MACH__)
 +
 +#undef newlocale
 +#define newlocale libintl_newlocale
