@@ -31,11 +31,15 @@ $(eval $(call gb_Library_set_componentfile,unoxml,unoxml/source/service/unoxml))
 
 $(eval $(call gb_Library_set_include,unoxml,\
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
 $(eval $(call gb_Library_set_defs,unoxml,\
     $$(DEFS) \
+))
+
+$(eval $(call gb_Library_add_api,unoxml,\
+	udkapi \
+	offapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,unoxml,\
