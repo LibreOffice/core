@@ -412,6 +412,7 @@ int RTFDocumentImpl::resolveParse()
     int ret;
 
     // start initial paragraph
+    Mapper().startSectionGroup();
     Mapper().startParagraphGroup();
 
     while ((Strm() >> ch, !Strm().IsEof()))
