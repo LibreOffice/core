@@ -37,7 +37,11 @@ $(eval $(call gb_Library_set_include,dbu,\
     -I$(realpath $(SRCDIR)/dbaccess/source/ui/inc) \
     -I$(WORKDIR)/inc/dbaccess \
     -I$(OUTDIR)/inc \
-    -I$(OUTDIR)/inc/offuh \
+))
+
+$(eval $(call gb_Library_add_api,dbu,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_set_defs,dbu,\

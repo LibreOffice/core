@@ -36,12 +36,16 @@ $(eval $(call gb_Library_set_include,rpt,\
     -I$(realpath $(SRCDIR)/reportdesign/source/inc) \
     -I$(realpath $(SRCDIR)/reportdesign/source/core/inc) \
     -I$(OUTDIR)/inc \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
 $(eval $(call gb_Library_set_defs,rpt,\
     $$(DEFS) \
     -DREPORTDESIGN_DLLIMPLEMENTATION \
+))
+
+$(eval $(call gb_Library_add_api,rpt,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,rpt,\

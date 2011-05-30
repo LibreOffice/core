@@ -34,7 +34,11 @@ $(eval $(call gb_Executable_set_include,odbcconfig,\
 	-I$(realpath $(SRCDIR)/dbaccess/inc) \
 	-I$(realpath $(SRCDIR)/dbaccess/inc/pch) \
     -I$(OUTDIR)/inc \
-    -I$(OUTDIR)/inc/offuh \
+))
+
+$(eval $(call gb_Library_add_api,odbcconfig,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Executable_add_linked_libs,odbcconfig,\

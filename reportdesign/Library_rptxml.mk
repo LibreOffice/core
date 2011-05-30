@@ -35,11 +35,15 @@ $(eval $(call gb_Library_set_include,rptxml,\
     -I$(realpath $(SRCDIR)/reportdesign/inc/pch) \
     -I$(realpath $(SRCDIR)/reportdesign/source/inc) \
     -I$(OUTDIR)/inc \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
 $(eval $(call gb_Library_set_defs,rptxml,\
     $$(DEFS) \
+))
+
+$(eval $(call gb_Library_add_api,rptxml,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,rptxml,\

@@ -33,12 +33,16 @@ $(eval $(call gb_Library_set_include,adabasui,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/dbaccess/inc/pch) \
     -I$(OUTDIR)/inc \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
 $(eval $(call gb_Library_set_defs,adabasui,\
     $$(DEFS) \
     -DCOMPMOD_NAMESPACE=adabasui \
+))
+
+$(eval $(call gb_Library_add_api,adabasui,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,adabasui,\
