@@ -12,12 +12,17 @@ namespace writerfilter {
             int nControlType;
             RTFKeyword nIndex;
         } RTFSymbol;
+        extern RTFSymbol aRTFControlWords[];
+        extern int nRTFControlWords;
+
         /// RTF legacy charsets
         typedef struct
         {
             int charset;
             int codepage;
         } RTFEncoding;
+        extern RTFEncoding aRTFEncodingss[];
+        extern int nRTFEncodings;
     } // namespace rtftok
 } // namespace writerfilter
 

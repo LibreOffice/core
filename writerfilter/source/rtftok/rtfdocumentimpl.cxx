@@ -19,9 +19,6 @@ using rtl::OUStringToOString;
 namespace writerfilter {
 namespace rtftok {
 
-extern RTFSymbol aRTFControlWords[];
-extern int nRTFControlWords;
-
 RTFDocumentImpl::RTFDocumentImpl(uno::Reference<io::XInputStream> const& xInputStream)
     : m_nGroup(0),
     m_bSkipUnknown(false),
