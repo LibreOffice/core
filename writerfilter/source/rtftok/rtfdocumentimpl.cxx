@@ -122,6 +122,17 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword, bool /*bParam*/, i
     return 0;
 }
 
+int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
+{
+    switch (nKeyword)
+    {
+        default:
+            OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
+            break;
+    }
+    return 0;
+}
+
 int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, bool bParam, int nParam)
 {
     switch (nKeyword)
@@ -201,7 +212,9 @@ int RTFDocumentImpl::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
     switch (aRTFControlWords[i].nControlType)
     {
         case CONTROL_FLAG:
-            OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, rKeyword.getStr());
+            // flags ignore any parameter by definition
+            if ((ret = dispatchFlag(aRTFControlWords[i].nIndex)))
+                return ret;
             break;
         case CONTROL_DESTINATION:
             if ((ret = dispatchDestination(aRTFControlWords[i].nIndex, bParam, nParam)))
