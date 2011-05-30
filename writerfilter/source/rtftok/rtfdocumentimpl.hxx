@@ -52,6 +52,7 @@ namespace writerfilter {
                 RTFInternalState nInternalState;
                 RTFDesitnationState nDestinationState;
                 std::map<int, int> aSprms;
+                std::map<int, rtl::OUString> aAttributes;
                 RTFReferenceTable::Entries_t aFontTableEntries;
                 int nCurrentFontIndex;
         };
@@ -61,12 +62,10 @@ namespace writerfilter {
             : public RTFDocument
         {
             public:
-                RTFDocumentImpl(
-                        ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
-                        const& xInputStream);
+                RTFDocumentImpl(com::sun::star::uno::Reference<com::sun::star::io::XInputStream> const& xInputStream);
                 virtual ~RTFDocumentImpl();
                 virtual void resolve(Stream & rHandler);
-                virtual ::std::string getType() const;
+                virtual std::string getType() const;
 
                 SvStream& Strm();
                 Stream& Mapper();

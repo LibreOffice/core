@@ -71,8 +71,6 @@ int RTFDocumentImpl::resolveChars(char ch)
     OSL_TRACE("%s start", OSL_THIS_FUNC);
     OStringBuffer aBuf;
 
-    if (m_aStates.top().nDestinationState != DESTINATION_NORMAL)
-        return 0;
     while(!Strm().IsEof() && ch != '{' && ch != '}' && ch != '\\')
     {
         if (ch != 0x0d && ch != 0x0a)
@@ -87,7 +85,12 @@ int RTFDocumentImpl::resolveChars(char ch)
     // TODO encoding handling
     OUString aOUStr(OStringToOUString(aStr, RTL_TEXTENCODING_UTF8));
 
-    text(aOUStr);
+    if (m_aStates.top().nDestinationState == DESTINATION_NORMAL)
+        text(aOUStr);
+    else if (m_aStates.top().nDestinationState == DESTINATION_FONTENTRY)
+    {
+        m_aStates.top().aAttributes[NS_rtf::LN_XSZFFN] = aOUStr;
+    }
 
     return 0;
 }
@@ -461,6 +464,7 @@ RTFParserState::RTFParserState()
     : nInternalState(INTERNAL_NORMAL),
     nDestinationState(DESTINATION_NORMAL),
     aSprms(),
+    aAttributes(),
     aFontTableEntries(),
     nCurrentFontIndex(0)
 {
