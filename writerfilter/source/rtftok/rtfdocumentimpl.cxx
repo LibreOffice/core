@@ -548,6 +548,7 @@ RTFParserState::RTFParserState()
     aFontTableEntries(),
     nCurrentFontIndex(0),
     aCurrentColor(),
+    aStyleTableEntries(),
     nCurrentStyleIndex(0)
 {
 }
