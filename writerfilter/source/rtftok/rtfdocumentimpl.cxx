@@ -140,6 +140,7 @@ void RTFDocumentImpl::text(OUString& rString)
         // start initial paragraph after the optional font/color/stylesheet tables
         Mapper().startSectionGroup();
         Mapper().startParagraphGroup();
+        Mapper().props(pProperties);
         m_bFirstRun = false;
     }
 
@@ -362,6 +363,10 @@ int RTFDocumentImpl::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
                         Mapper().endParagraphGroup();
                         // start new one
                         Mapper().startParagraphGroup();
+                        writerfilter::Reference<Properties>::Pointer_t const pProperties(
+                                new RTFReferenceProperties(m_aStates.top().aAttributes, m_aStates.top().aSprms)
+                                );
+                        Mapper().props(pProperties);
                     }
                     break;
                 default:
