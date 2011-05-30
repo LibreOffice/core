@@ -130,6 +130,7 @@ gb_Library_NOILIBFILENAMES:=\
     user32 \
     uuid \
     uwinapi \
+    version \
     winspool \
 
 gb_Library_FILENAMES := $(filter-out $(foreach lib,$(gb_Library_NOILIBFILENAMES),$(lib):%),$(gb_Library_FILENAMES))
