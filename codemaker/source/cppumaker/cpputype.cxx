@@ -594,9 +594,11 @@ void CppuType::dumpNormalGetCppuType(FileStream& o)
 
 void CppuType::dumpComprehensiveGetCppuType(FileStream& o)
 {
-    if (codemaker::cppumaker::dumpNamespaceOpen(o, m_typeName, false)) {
-        o << " namespace detail {\n\n";
-    }
+    if (!isPolymorphic())
+        codemaker::cppumaker::dumpNamespaceOpen(o, m_typeName, false);
+    else
+        o << "namespace cppu { ";
+    o << " namespace detail {\n\n";
 
     OString sType = m_typeName.copy(m_typeName.lastIndexOf('/') + 1);
     OString sStaticTypeClass = "the" + sType + "Type";
@@ -701,9 +703,12 @@ void CppuType::dumpComprehensiveGetCppuType(FileStream& o)
     dec();
     o << indent() << "};\n\n";
 
-    if (codemaker::cppumaker::dumpNamespaceClose(o, m_typeName, false)) {
-        o << " }\n\n";
-    }
+    if (!isPolymorphic())
+        codemaker::cppumaker::dumpNamespaceClose(o, m_typeName, false);
+    else
+        o << " }";
+
+    o << " }\n\n";
 
     dumpGetCppuTypePreamble(o);
     o  << indent() << "return detail::" << sStaticTypeClass << "::get();\n";
@@ -1529,9 +1534,11 @@ void InterfaceType::dumpNormalGetCppuType(FileStream& o)
 
 void InterfaceType::dumpComprehensiveGetCppuType(FileStream& o)
 {
-    if (codemaker::cppumaker::dumpNamespaceOpen(o, m_typeName, false)) {
-        o << " namespace detail {\n\n";
-    }
+    if (!isPolymorphic())
+        codemaker::cppumaker::dumpNamespaceOpen(o, m_typeName, false);
+    else
+        o << "namespace cppu { ";
+    o << " namespace detail {\n\n";
 
     OString sType = m_typeName.copy(m_typeName.lastIndexOf('/') + 1);
     OString sStaticTypeClass = "the" + sType + "Type";
@@ -1641,9 +1648,11 @@ void InterfaceType::dumpComprehensiveGetCppuType(FileStream& o)
     dec();
     o << indent() << "};\n\n";
 
-    if (codemaker::cppumaker::dumpNamespaceClose(o, m_typeName, false)) {
-        o << " }\n\n";
-    }
+    if (!isPolymorphic())
+        codemaker::cppumaker::dumpNamespaceClose(o, m_typeName, false);
+    else
+        o << " }";
+    o << " }\n\n";
 
     dumpGetCppuTypePreamble(o);
     o  << indent() << "return detail::" << sStaticTypeClass << "::get();\n";
@@ -2803,13 +2812,23 @@ void StructureType::dumpNormalGetCppuType(FileStream & out) {
 
 void StructureType::dumpComprehensiveGetCppuType(FileStream & out)
 {
-    if (codemaker::cppumaker::dumpNamespaceOpen(out, m_typeName, false)) {
-        out << " namespace detail {\n\n";
-    }
+    if (!isPolymorphic())
+        codemaker::cppumaker::dumpNamespaceOpen(out, m_typeName, false);
+    else
+        out << "namespace cppu { ";
+    out << " namespace detail {\n\n";
 
     OString sType = m_typeName.copy(m_typeName.lastIndexOf('/') + 1);
     OString sStaticTypeClass = "the" + sType + "Type";
-    out << indent() << "struct " << sStaticTypeClass << " : public rtl::StaticWithInit< ::com::sun::star::uno::Type, " << sStaticTypeClass << " >\n";
+    out << indent();
+    if (isPolymorphic())
+        dumpTemplateHead(out);
+    out << "struct " << sStaticTypeClass << " : public rtl::StaticWithInit< ::com::sun::star::uno::Type, ";
+    out << sStaticTypeClass;
+    if (isPolymorphic())
+        dumpTemplateParameters(out);
+    out << " >\n";
+
     out << indent() << "{\n";
     inc();
     out << indent() << "::com::sun::star::uno::Type operator()() const\n";
@@ -2947,12 +2966,17 @@ void StructureType::dumpComprehensiveGetCppuType(FileStream & out)
     dec();
     out << indent() << "};\n";
 
-    if (codemaker::cppumaker::dumpNamespaceClose(out, m_typeName, false)) {
-        out << " }\n\n";
-    }
+    if (!isPolymorphic())
+        codemaker::cppumaker::dumpNamespaceClose(out, m_typeName, false);
+    else
+        out << " }";
+    out << " }\n\n";
 
     dumpGetCppuTypePreamble(out);
-    out  << indent() << "return detail::" << sStaticTypeClass << "::get();\n";
+    out  << indent() << "return detail::" << sStaticTypeClass;
+    if (isPolymorphic())
+        dumpTemplateParameters(out);
+    out  << "::get();\n";
     dumpGetCppuTypePostamble(out);
 }
 
@@ -3046,7 +3070,7 @@ void StructureType::addComprehensiveGetCppuTypeIncludes(
 {
     includes.addType();
     includes.addCppuUnotypeHxx();
-    includes.addOslDoublecheckedlockingH();
+    includes.addRtlInstanceHxx();
     includes.addOslMutexHxx();
     includes.addRtlUstringH();
     includes.addRtlUstringHxx();
@@ -3613,9 +3637,11 @@ void EnumType::dumpNormalGetCppuType(FileStream& o)
 
 void EnumType::dumpComprehensiveGetCppuType(FileStream& o)
 {
-    if (codemaker::cppumaker::dumpNamespaceOpen(o, m_typeName, false)) {
-        o << " namespace detail {\n\n";
-    }
+    if (!isPolymorphic())
+        codemaker::cppumaker::dumpNamespaceOpen(o, m_typeName, false);
+    else
+        o << "namespace cppu { ";
+    o << " namespace detail {\n\n";
 
     OString sType = m_typeName.copy(m_typeName.lastIndexOf('/') + 1);
     OString sStaticTypeClass = "the" + sType + "Type";
@@ -3685,9 +3711,11 @@ void EnumType::dumpComprehensiveGetCppuType(FileStream& o)
     dec();
     o << indent() << "};\n\n";
 
-    if (codemaker::cppumaker::dumpNamespaceClose(o, m_typeName, false)) {
-        o << " }\n\n";
-    }
+    if (!isPolymorphic())
+        codemaker::cppumaker::dumpNamespaceClose(o, m_typeName, false);
+    else
+        o << " }";
+    o << " }\n\n";
 
     dumpGetCppuTypePreamble(o);
     o  << indent() << "return detail::" << sStaticTypeClass << "::get();\n";
