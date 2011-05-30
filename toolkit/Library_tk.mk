@@ -38,12 +38,16 @@ $(eval $(call gb_Library_set_include,tk,\
     -I$(realpath $(SRCDIR)/toolkit/inc) \
     -I$(realpath $(SRCDIR)/toolkit/inc/pch) \
     -I$(realpath $(SRCDIR)/toolkit/source) \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
 $(eval $(call gb_Library_set_defs,tk,\
     $$(DEFS) \
     -DTOOLKIT_DLLIMPLEMENTATION \
+))
+
+$(eval $(call gb_Library_add_api,tk,\
+	udkapi \
+	offapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,tk,\

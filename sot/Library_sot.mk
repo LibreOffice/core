@@ -36,7 +36,11 @@ $(eval $(call gb_Library_set_componentfile,sot,sot/util/sot))
 $(eval $(call gb_Library_set_include,sot,\
     -I$(realpath $(SRCDIR)/sot/inc/pch) \
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc/offuh \
+))
+
+$(eval $(call gb_Library_add_api,sot,\
+	udkapi \
+	offapi \
 ))
 
 $(eval $(call gb_Library_set_defs,sot,\

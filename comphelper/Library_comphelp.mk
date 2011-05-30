@@ -37,7 +37,6 @@ $(eval $(call gb_Library_set_include,comphelper,\
     -I$(realpath $(SRCDIR)/comphelper/inc/pch) \
     -I$(realpath $(SRCDIR)/comphelper/source/inc) \
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
 $(eval $(call gb_Library_set_defs,comphelper,\
@@ -51,6 +50,11 @@ $(eval $(call gb_Library_add_linked_libs,comphelper,\
     cppu \
     ucbhelper \
     $(gb_STDLIBS) \
+))
+
+$(eval $(call gb_Library_add_api,comphelper,\
+	udkapi \
+	offapi \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,comphelper,\

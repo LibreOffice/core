@@ -38,7 +38,6 @@ $(eval $(call gb_Library_set_include,tl,\
     -I$(realpath $(SRCDIR)/tools/inc/pch) \
     -I$(SRCDIR)/solenv/inc \
     -I$(SRCDIR)/solenv/inc/Xp31 \
-    -I$(OUTDIR)/inc/offuh \
     -I$(WORKDIR)/CustomTarget/tools/source/reversemap \
 ))
 
@@ -46,6 +45,11 @@ $(eval $(call gb_Library_set_defs,tl,\
     $$(DEFS) \
     -DTOOLS_DLLIMPLEMENTATION \
     -DVCL \
+))
+
+$(eval $(call gb_Library_add_api,tl,\
+	udkapi \
+	offapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,tl,\

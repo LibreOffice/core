@@ -36,8 +36,12 @@ $(eval $(call gb_Library_set_include,productregistration,\
     -I$(realpath $(SRCDIR)/svtools/inc/pch) \
     -I$(OUTDIR)/inc/ \
     -I$(realpath $(SRCDIR)/svtools/inc) \
-    -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
+))
+
+$(eval $(call gb_Library_add_api,productregistration,\
+	udkapi \
+	offapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,productregistration,\

@@ -1,4 +1,4 @@
-uh	ucbhelper   :   offuh sal cppu cppuhelper salhelper NULL
+uh	ucbhelper   :   offapi sal cppu cppuhelper salhelper NULL
 uh	ucbhelper                   usr1    -   all uh_mkout NULL
 uh	ucbhelper\inc               nmake   -   all uh_inc NULL
 uh	ucbhelper\source\client     nmake   -   all uh_client uh_inc NULL

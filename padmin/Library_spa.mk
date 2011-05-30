@@ -27,14 +27,14 @@
 
 $(eval $(call gb_Library_Library,spa))
 
-$(eval $(call gb_Library_set_include,spa,\
-    $$(INCLUDE) \
-    -I$(OUTDIR)/inc/offuh \
-))
-
 $(eval $(call gb_Library_set_defs,spa,\
     $$(DEFS) \
     -DSPA_DLLIMPLEMENTATION \
+))
+
+$(eval $(call gb_Library_add_api,spa,\
+	udkapi \
+	offapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,spa,\

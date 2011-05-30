@@ -30,7 +30,6 @@ $(eval $(call gb_Executable_Executable,spadmin.bin))
 $(eval $(call gb_Executable_set_include,spadmin.bin,\
     $$(INCLUDE) \
     -I$(OUTDIR)/inc \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
 $(eval $(call gb_Executable_set_cxxflags,spadmin.bin,\
@@ -39,6 +38,11 @@ $(eval $(call gb_Executable_set_cxxflags,spadmin.bin,\
 
 $(eval $(call gb_Executable_add_linked_static_libs,spadmin.bin,\
     vclmain \
+))
+
+$(eval $(call gb_Executable_add_api,spadmin.bin,\
+	udkapi \
+	offapi \
 ))
 
 $(eval $(call gb_Executable_add_linked_libs,spadmin.bin,\

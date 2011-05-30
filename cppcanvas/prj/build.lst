@@ -1,4 +1,4 @@
-cx	cppcanvas	:	comphelper cppuhelper offuh tools vcl basegfx canvas NULL
+cx	cppcanvas	:	comphelper cppuhelper offapi tools vcl basegfx canvas NULL
 cx	cppcanvas							usr1	-	all	cx_mkout NULL
 cx	cppcanvas\inc						nmake	-	all	cx_inc NULL
 cx	cppcanvas\source\tools				nmake	-	all	cx_tools cx_inc NULL

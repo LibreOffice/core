@@ -1,4 +1,4 @@
-fx	basegfx	:	o3tl sal offuh cppuhelper cppu CPPUNIT:cppunit NULL
+fx	basegfx	:	o3tl sal offapi cppuhelper cppu CPPUNIT:cppunit NULL
 fx	basegfx									usr1	-	all	fx_mkout NULL
 fx	basegfx\inc								nmake	-	all	fx_inc NULL
 fx	basegfx\prj								get		-	all	fx_prj NULL

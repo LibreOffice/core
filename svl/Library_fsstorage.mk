@@ -37,8 +37,12 @@ $(eval $(call gb_Library_set_include,fsstorage,\
     -I$(realpath $(SRCDIR)/svl/inc/svl) \
     -I$(realpath $(SRCDIR)/svl/source/inc) \
     -I$(realpath $(SRCDIR)/svl/inc/pch) \
-    -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
+))
+
+$(eval $(call gb_Library_add_api,fsstorage,\
+	udkapi \
+	offapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,fsstorage,\
