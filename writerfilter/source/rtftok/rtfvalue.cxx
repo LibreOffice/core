@@ -9,7 +9,14 @@ using rtl::OString;
 using rtl::OUString;
 
 RTFValue::RTFValue(int nValue)
-    : m_nValue(nValue)
+    : m_nValue(nValue),
+    m_sValue()
+{
+}
+
+RTFValue::RTFValue(OUString sValue)
+    : m_nValue(),
+    m_sValue(sValue)
 {
 }
 
@@ -20,13 +27,16 @@ int RTFValue::getInt() const
 
 OUString RTFValue::getString() const
 {
-    return ::rtl::OUString();
+    return m_sValue;
 }
 
 uno::Any RTFValue::getAny() const
 {
     uno::Any ret;
-    ret <<= static_cast<sal_Int32>(m_nValue);
+    if (m_sValue.getLength() > 0)
+        ret <<= m_sValue;
+    else
+        ret <<= static_cast<sal_Int32>(m_nValue);
     return ret;
 }
 

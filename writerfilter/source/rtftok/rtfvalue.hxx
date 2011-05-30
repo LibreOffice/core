@@ -2,6 +2,7 @@
 #define _RTFVALUE_HXX_
 
 #include <string>
+#include <rtl/ustrbuf.hxx>
 #include <resourcemodel/WW8ResourceModel.hxx>
 
 namespace writerfilter {
@@ -13,6 +14,7 @@ namespace writerfilter {
             public:
                 typedef ::boost::shared_ptr<RTFValue> Pointer_t;
                 RTFValue(int nValue);
+                RTFValue(rtl::OUString sValue);
                 virtual int getInt() const;
                 virtual rtl::OUString getString() const;
                 virtual uno::Any getAny() const;
@@ -23,6 +25,7 @@ namespace writerfilter {
                 virtual RTFValue* Clone();
             private:
                 int m_nValue;
+                rtl::OUString m_sValue;
         };
     } // namespace rtftok
 } // namespace writerfilter
