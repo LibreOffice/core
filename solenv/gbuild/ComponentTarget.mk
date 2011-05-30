@@ -62,7 +62,7 @@ define gb_ComponentTarget_ComponentTarget
 $(call gb_ComponentTarget_get_target,$(4)) : LIBFILENAME := $(3)
 $(call gb_ComponentTarget_get_target,$(4)) : COMPONENTPREFIX := $(2)
 $(call gb_ComponentTarget_get_outdir_target,$(1)) : $(call gb_ComponentTarget_get_target,$(4))
-$(call gb_Deliver_add_deliverable,$(call gb_ComponentTarget_get_outdir_target,$(1)),$(call gb_ComponentTarget_get_target,$(4)))
+$(call gb_Deliver_add_deliverable,$(call gb_ComponentTarget_get_outdir_target,$(1)),$(call gb_ComponentTarget_get_target,$(4)),$(4))
 
 endef
 

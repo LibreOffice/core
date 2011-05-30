@@ -553,6 +553,17 @@ define gb_LinkTarget_set_ldflags
 $(call gb_LinkTarget_get_target,$(1)) : LDFLAGS := $(2)
 endef
 
+define gb_LinkTarget_add_api
+$(call gb_LinkTarget_get_external_headers_target,$(1)) :| \
+	$$(foreach api,$(2),$$(call gb_Package_get_target,$$(api)_inc))
+$(call gb_LinkTarget_get_headers_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : INCLUDE += $$(foreach api,$(2),-I$(OUTDIR)/inc/$$(api))
+ifeq ($(gb_FULLDEPS),$(true))
+$(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE += $$(foreach api,$(2),-I$(OUTDIR)/inc/$$(api))
+endif
+
+endef
+
 define gb_LinkTarget_add_linked_libs
 ifneq (,$$(filter-out $(gb_Library_KNOWNLIBS),$(2)))
 $$(eval $$(call gb_Output_info,currently known libraries are: $(sort $(gb_Library_KNOWNLIBS)),ALL))

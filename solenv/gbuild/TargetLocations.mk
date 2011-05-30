@@ -34,6 +34,7 @@ gb_PackagePart_get_destinations = \
 	$(OUTDIR)/xml \
 	$(OUTDIR)/pck \
 	$(OUTDIR)/inc \
+	$(OUTDIR)/idl \
 	$(OUTDIR)/bin \
 
 gb_PackagePart_get_target = $(OUTDIR)/$(1)
@@ -93,6 +94,10 @@ gb_SrsPartTarget_get_target = $(WORKDIR)/SrsPartTarget/$(1)
 gb_SrsTarget_get_target = $(WORKDIR)/SrsTarget/$(1).srs
 gb_SrsTemplatePartTarget_get_target = $(WORKDIR)/inc/$(firstword $(subst /, ,$(1)))/$(subst _tmpl,,$(notdir $(1)))
 gb_SrsTemplateTarget_get_target = $(WORKDIR)/SrsTemplateTarget/$(1)
+gb_UnoApiTarget_get_target = $(WORKDIR)/UnoApiTarget/$(1).rdb
+gb_UnoApiOutTarget_get_target = $(OUTDIR)/bin/$(1).rdb
+gb_UnoApiPartTarget_get_target = $(WORKDIR)/UnoApiPartTarget/$(1)
+gb_UnoApiTarget_get_header_target = $(WORKDIR)/UnoApiHeaders/$(1)
 gb_WinResTarget_get_target = $(WORKDIR)/WinResTarget/$(1)$(gb_WinResTarget_POSTFIX)
 
 define gb_Library_get_external_headers_target
@@ -129,6 +134,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	SrsTemplateTarget \
 	CppunitTest \
 	CustomTarget \
+	UnoApiTarget \
 ))
 
 $(eval $(call gb_Helper_make_outdir_clean_targets,\
@@ -136,6 +142,7 @@ $(eval $(call gb_Helper_make_outdir_clean_targets,\
 	Library \
 	Package \
 	StaticLibrary \
+	UnoApiOutTarget \
 ))
 
 $(eval $(call gb_Helper_make_dep_targets,\
@@ -146,6 +153,7 @@ $(eval $(call gb_Helper_make_dep_targets,\
 	LinkTarget \
 	SrsPartTarget \
 	SrsTarget \
+	UnoApiTarget \
 ))
 # needs to use same dep target because we use gb_CxxObject__command
 gb_GenCxxObject_get_dep_target = $(gb_CxxObject_get_dep_target)
