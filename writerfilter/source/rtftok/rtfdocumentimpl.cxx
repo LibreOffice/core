@@ -160,7 +160,10 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
             break;
         case RTF_FPRQ:
-            m_aStates.top().aSprms[NS_rtf::LN_PRQ] = nParam;
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(nParam));
+                m_aStates.top().aSprms[NS_rtf::LN_PRQ] = pValue;
+            }
             break;
         case RTF_FCHARSET:
             {
@@ -208,7 +211,10 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
             break;
     }
     if (nSprm > 0)
-        m_aStates.top().aSprms[nSprm] = !bParam || nParam != 0;
+    {
+        RTFValue::Pointer_t pValue(new RTFValue(!bParam || nParam != 0));
+        m_aStates.top().aSprms[nSprm] = pValue;
+    }
 
     return 0;
 }

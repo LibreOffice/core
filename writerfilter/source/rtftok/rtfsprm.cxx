@@ -6,7 +6,7 @@ using rtl::OStringBuffer;
 namespace writerfilter {
 namespace rtftok {
 
-RTFSprm::RTFSprm(int nKeyword, RTFValue::Pointer_t& pValue)
+RTFSprm::RTFSprm(Id nKeyword, RTFValue::Pointer_t& pValue)
     : m_nKeyword(nKeyword),
     m_pValue(pValue)
 {

@@ -3,6 +3,7 @@
 
 #include <map>
 #include <resourcemodel/WW8ResourceModel.hxx>
+#include <rtfvalue.hxx>
 
 class SvStream;
 
@@ -13,12 +14,12 @@ namespace writerfilter {
             : public writerfilter::Reference<Properties>
         {
             public:
-                RTFReferenceProperties(std::map<Id, int> rSprms);
+                RTFReferenceProperties(std::map<Id, RTFValue::Pointer_t> rSprms);
                 virtual ~RTFReferenceProperties();
                 virtual void resolve(Properties & rHandler);
                 virtual std::string getType() const;
             private:
-                std::map<Id, int> m_rSprms;
+                std::map<Id, RTFValue::Pointer_t> m_rSprms;
         };
     } // namespace rtftok
 } // namespace writerfilter
