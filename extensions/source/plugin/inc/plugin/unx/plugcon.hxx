@@ -94,7 +94,7 @@ extern "C" {
 #  endif
 #endif
 
-#ifndef _NPAPI_H_
+#if ! defined ( _NPAPI_H_) && ! defined (npapi_h_)
 extern "C" {
 #include <npsdk/npupp.h>
 }

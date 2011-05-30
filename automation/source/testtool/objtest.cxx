@@ -472,6 +472,68 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
     GetHostConfig();
     GetTTPortConfig();
     GetUnoPortConfig();
+
+    aConf.SetGroup("Crashreporter");
+
+    String aUP;
+    GETSET( aUP, "UseProxy", "false" );
+    String aPS;
+    GETSET( aPS, "ProxyServer", "" );
+    String aPP;
+    GETSET( aPP, "ProxyPort", "" );
+    String aAC;
+    GETSET( aAC, "AllowContact", "false" );
+    String aRA;
+    GETSET( aRA, "ReturnAddress", "" );
+
+    OUString sPath;
+    if( osl_getExecutableFile( (rtl_uString**)&sPath ) == osl_Process_E_None)
+    {
+        sPath = sPath.copy(7); // strip file://
+
+        int i = sPath.lastIndexOf('/');
+        if (i >= 0)
+            i = sPath.lastIndexOf('/', i-1 );
+
+        if (i >= 0)
+        {
+            sPath = sPath.copy(0, i);
+            ByteString bsPath( sPath.getStr(), sPath.getLength(),
+                               RTL_TEXTENCODING_UTF8 );
+
+            aConf.SetGroup( "OOoProgramDir" );
+            String aOPD;
+            // testtool is installed in Basis3.x/program/ dir nowadays
+            bsPath += "/../program";
+            GETSET( aOPD, "Current", bsPath);
+
+            ByteString aSrcRoot(getenv("SRC_ROOT"));
+            aConf.SetGroup( "_profile_Default" );
+            if (aSrcRoot.Len())
+            {
+                String aPBD;
+                aSrcRoot += "/testautomation";
+                GETSET( aPBD, "BaseDir", aSrcRoot );
+
+                String aPHD;
+                aSrcRoot += "/global/hid";
+                GETSET( aPHD, "HIDDir", aSrcRoot );
+            }
+            else
+            {
+                String aPBD;
+                bsPath += "/qatesttool";
+                GETSET( aPBD, "BaseDir", bsPath );
+
+                String aPHD;
+                bsPath += "/global/hid";
+                GETSET( aPHD, "HIDDir", bsPath );
+            }
+
+            String aLD;
+            GETSET( aLD, "LogBaseDir", ByteString( "/tmp" ) );
+        }
+    }
 }
 
 #define MAKE_TT_KEYWORD( cName, aType, aResultType, nID )                       \
@@ -2620,7 +2682,8 @@ void TestToolObj::DebugFindNoErrors( sal_Bool bDebugFindNoErrors )
 
 SbxVariable* TestToolObj::Find( const String& aStr, SbxClassType aType)
 {
-    if ( BasicRuntimeAccess::IsRunInit() )            // wegen Find im "Global" Befehl des Basic
+    if ( BasicRuntimeAccess::IsRunInit()
+    || ( aStr == String( RTL_CONSTASCII_USTRINGPARAM( "ThisComponent" ) ) ) )            // wegen Find im "Global" Befehl des Basic
         return NULL;
 
     SbxVariableRef Old = SbxObject::Find(aStr, aType );
