@@ -200,6 +200,7 @@ void TestBreakIterator::setUp()
 
 TestBreakIterator::~TestBreakIterator()
 {
+    uno::Reference< lang::XComponent >(m_xContext, uno::UNO_QUERY_THROW)->dispose();
 }
 
 void TestBreakIterator::tearDown()
