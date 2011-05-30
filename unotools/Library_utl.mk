@@ -35,12 +35,16 @@ $(eval $(call gb_Library_set_include,utl,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/unotools/inc/pch) \
     -I$(OUTDIR)/inc \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
 $(eval $(call gb_Library_set_defs,utl,\
     $$(DEFS) \
     -DUNOTOOLS_DLLIMPLEMENTATION \
+))
+
+$(eval $(call gb_Library_add_api,utl,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,utl,\

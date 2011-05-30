@@ -43,7 +43,6 @@ $(eval $(call gb_Library_set_include,vcl,\
     -I$(realpath $(SRCDIR)/vcl/inc) \
     -I$(realpath $(SRCDIR)/vcl/inc/pch) \
     -I$(SRCDIR)/solenv/inc \
-    -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
     -I$(WORKDIR)/CustomTarget/vcl/unx/generic/fontmanager \
 ))
@@ -59,6 +58,11 @@ $(eval $(call gb_Library_set_defs,vcl,\
     -DVCL_DLLIMPLEMENTATION \
     -DCUI_DLL_NAME=\"$(call gb_Library_get_runtime_filename,cui)\" \
     -DDLLPOSTFIX=$(subst $(or $(gb_Library_DLLEXT),$(gb_Library_PLAINEXT)),,$(gb_Library_OOOEXT)) \
+))
+
+$(eval $(call gb_Library_add_api,vcl,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,vcl,\

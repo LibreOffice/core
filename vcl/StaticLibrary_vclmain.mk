@@ -32,8 +32,11 @@ $(eval $(call gb_StaticLibrary_set_include,vclmain,\
     -I$(realpath $(SRCDIR)/vcl/inc) \
     -I$(realpath $(SRCDIR)/vcl/inc/pch) \
     -I$(SRCDIR)/solenv/inc \
-    -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
+))
+
+$(eval $(call gb_StaticLibrary_add_api,vclmain,\
+    udkapi \
 ))
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,vclmain,\

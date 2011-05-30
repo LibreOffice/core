@@ -34,7 +34,6 @@ $(eval $(call gb_Library_set_include,vclplug_kde4,\
     -I$(SRCDIR)/vcl/inc \
     -I$(SRCDIR)/vcl/inc/pch \
     -I$(SRCDIR)/solenv/inc \
-    -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
     -I$(WORKDIR)/CustomTarget/vcl/unx/kde4 \
 ))
@@ -47,6 +46,11 @@ $(eval $(call gb_Library_set_cxxflags,vclplug_kde4,\
 $(eval $(call gb_Library_set_defs,vclplug_kde4,\
     $$(DEFS) \
     -DVCLPLUG_KDE4_IMPLEMENTATION \
+))
+
+$(eval $(call gb_Library_add_api,vclplug_kde4,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_set_ldflags,vclplug_kde4,\

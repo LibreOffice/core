@@ -32,7 +32,6 @@ $(eval $(call gb_Library_set_include,vclplug_gtk,\
     -I$(SRCDIR)/vcl/inc \
     -I$(SRCDIR)/vcl/inc/pch \
     -I$(SRCDIR)/solenv/inc \
-    -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
 ))
 
@@ -61,6 +60,11 @@ $(eval $(call gb_Library_set_ldflags,vclplug_gtk,\
     $(shell pkg-config --libs dbus-glib-1)\
 ))
 endif
+
+$(eval $(call gb_Library_add_api,vclplug_gtk,\
+    offapi \
+    udkapi \
+))
 
 $(eval $(call gb_Library_set_ldflags,vclplug_gtk,\
     $$(LDFLAGS) \
