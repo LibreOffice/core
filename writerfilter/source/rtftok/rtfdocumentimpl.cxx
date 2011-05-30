@@ -89,7 +89,8 @@ int RTFDocumentImpl::resolveChars(char ch)
         text(aOUStr);
     else if (m_aStates.top().nDestinationState == DESTINATION_FONTENTRY)
     {
-        m_aStates.top().aAttributes[NS_rtf::LN_XSZFFN] = aOUStr;
+        RTFValue::Pointer_t pValue(new RTFValue(aOUStr));
+        m_aStates.top().aAttributes[NS_rtf::LN_XSZFFN] = pValue;
     }
 
     return 0;

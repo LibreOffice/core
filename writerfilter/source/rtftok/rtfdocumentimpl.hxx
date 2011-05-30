@@ -53,7 +53,7 @@ namespace writerfilter {
                 RTFInternalState nInternalState;
                 RTFDesitnationState nDestinationState;
                 std::map<Id, RTFValue::Pointer_t> aSprms;
-                std::map<Id, rtl::OUString> aAttributes;
+                std::map<Id, RTFValue::Pointer_t> aAttributes;
                 RTFReferenceTable::Entries_t aFontTableEntries;
                 int nCurrentFontIndex;
         };
