@@ -8,6 +8,7 @@ class SvStream;
 
 namespace writerfilter {
     namespace rtftok {
+        /// Sends tables (e.g. font table) to the domain mapper.
         class RTFReferenceTable
             : public writerfilter::Reference<Table>
         {
