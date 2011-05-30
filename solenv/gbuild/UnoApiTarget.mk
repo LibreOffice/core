@@ -126,8 +126,9 @@ $(call gb_UnoApiTarget_get_target,$(1)) : $(call gb_UnoApiOutTarget_get_target,$
 
 endef
 
+#UNOAPI_REFERENCE_$(1) := $(foreach repo,$(gb_REPOS),$(realpath $(repo)/$(strip $(2)).rdb))
 define gb_UnoApiTarget_add_reference_rdbfile
-UNOAPI_REFERENCE_$(1) := $(foreach repo,$(gb_REPOS),$(realpath $(repo)/$(strip $(2)).rdb))
+$(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_REFERENCE := $(foreach repo,$(gb_REPOS),$(realpath $(repo)/$(strip $(2)).rdb))
 
 endef
 
@@ -200,7 +201,7 @@ $(call gb_UnoApiTarget_get_target,%):
 	$(if $(UNOAPI_MERGE),$(call gb_UnoApiTarget__command,$@,$*,$<,/,$(UNOAPI_MERGE)))
 	$(if $(UNOAPI_REFERENCE), \
 		$(call gb_Output_announce,$*,$(true),RDBCHEK,4) \
-	    $(gb_UnoApiTarget_REGCOMPARECOMMAND) -f -t -r1 $(UNOAPI_REFERENCE) -r2 $@)
+	    $(gb_UnoApiTarget_REGCOMPARECOMMAND) -f -t -r1 $(call gb_Helper_convert_native,$(UNOAPI_REFERENCE)) -r2 $(call gb_Helper_convert_native,$@))
 	$(if $(gb_UnoApiTarget_IDLFILES_$*), \
 		$(call gb_Output_announce,$*,$(true),HPP,4) \
 		$(call gb_UnoApiHeaderTarget__command,$@,$*,$<,$?,$(INCLUDE),$(DEFS),$(UNOAPI_DEPS)))
