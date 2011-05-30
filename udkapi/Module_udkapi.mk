@@ -30,6 +30,7 @@ $(eval $(call gb_Module_Module,udkapi))
 
 $(eval $(call gb_Module_add_targets,udkapi,\
 	UnoApi_udkapi \
+	UnoApi_uretypes \
 	Package_udkapi_inc \
 	Package_udkapi_idl \
 ))
