@@ -39,8 +39,12 @@ $(eval $(call gb_Library_set_include,msword,\
     -I$(WORKDIR)/Misc/sw/ \
     $$(INCLUDE) \
 	$(if $(filter YES,$(SYSTEM_LIBXML)),$(LIBXML_CFLAGS)) \
-    -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc/sw \
+))
+
+$(eval $(call gb_Library_add_api,msword,\
+	udkapi \
+	offapi \
 ))
 
 $(eval $(call gb_Library_set_defs,msword,\
