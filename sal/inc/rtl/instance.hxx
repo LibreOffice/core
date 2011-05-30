@@ -323,6 +323,31 @@ public:
         return p;
     }
 
+    static inline Inst * create(InstCtor aInstCtor, GuardCtor aGuardCtor,
+                                const Data &rData)
+    {
+#if defined _MSC_VER
+        static Inst * m_pInstance = 0;
+#endif // _MSC_VER
+        Inst * p = m_pInstance;
+        if (!p)
+        {
+            Guard aGuard(aGuardCtor());
+            p = m_pInstance;
+            if (!p)
+            {
+                p = aInstCtor(rData);
+                OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+                m_pInstance = p;
+            }
+        }
+        else
+        {
+            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+        }
+        return p;
+    }
+
 private:
 #if !defined _MSC_VER
     static Inst * m_pInstance;
@@ -398,6 +423,99 @@ private:
             static T instance;
             return &instance;
         }
+    };
+};
+#endif
+
+/** Helper base class for a late-initialized (default-constructed)
+    static variable, implementing the double-checked locking pattern correctly.
+
+    @derive
+    Derive from this class (common practice), e.g.
+    <pre>
+    struct MyStatic : public rtl::Static<MyType, MyStatic> {};
+    ...
+    MyType & rStatic = MyStatic::get();
+    ...
+    </pre>
+
+    @tplparam T
+              variable's type
+    @tplparam Unique
+              Implementation trick to make the inner static holder unique,
+              using the outer class
+              (the one that derives from this base class)
+*/
+#if (__GNUC__ >= 4)
+template<typename T, typename Data, typename Unique>
+class StaticWithArg {
+public:
+    /** Gets the static.  Mutual exclusion is implied by a functional
+        -fthreadsafe-statics
+
+        @return
+                static variable
+    */
+    static T & get(const Data& rData) {
+        static T instance(rData);
+        return instance;
+    }
+
+    /** Gets the static.  Mutual exclusion is implied by a functional
+        -fthreadsafe-statics
+
+        @return
+                static variable
+    */
+    static T & get(Data& rData) {
+        static T instance(rData);
+        return instance;
+    }
+};
+#else
+template<typename T, typename Data, typename Unique>
+class StaticWithArg {
+public:
+    /** Gets the static.  Mutual exclusion is performed using the
+        osl global mutex.
+
+        @return
+                static variable
+    */
+    static T & get(const Data& rData) {
+        return *rtl_Instance<
+            T, StaticInstanceWithArg,
+            ::osl::MutexGuard, ::osl::GetGlobalMutex,
+            Data >::create( StaticInstanceWithArg(),
+                                      ::osl::GetGlobalMutex(),
+                                      rData );
+    }
+
+    /** Gets the static.  Mutual exclusion is performed using the
+        osl global mutex.
+
+        @return
+                static variable
+    */
+    static T & get(Data& rData) {
+        return *rtl_Instance<
+            T, StaticInstanceWithArg,
+            ::osl::MutexGuard, ::osl::GetGlobalMutex,
+            Data >::create( StaticInstanceWithArg(),
+                                      ::osl::GetGlobalMutex(),
+                                      rData );
+    }
+private:
+    struct StaticInstanceWithArg {
+        T * operator () (const Data& rData) {
+            static T instance(rData);
+            return &instance;
+        }
+
+        T * operator () (Data& rData) {
+            static T instance(rData);
+            return &instance;
+         }
     };
 };
 #endif
