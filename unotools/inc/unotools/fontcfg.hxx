@@ -93,8 +93,8 @@ class UNOTOOLS_DLLPUBLIC DefaultFontConfiguration
 
     rtl::OUString tryLocale( const com::sun::star::lang::Locale& rLocale, const rtl::OUString& rType ) const;
 
-    DefaultFontConfiguration();
     public:
+    DefaultFontConfiguration();
     ~DefaultFontConfiguration();
 
     static DefaultFontConfiguration& get();
@@ -207,8 +207,8 @@ private:
     unsigned long getSubstType( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xFont,
                                 const rtl::OUString& rType ) const;
     void readLocaleSubst( const com::sun::star::lang::Locale& rLocale ) const;
-    FontSubstConfiguration();
 public:
+    FontSubstConfiguration();
     ~FontSubstConfiguration();
 
     static FontSubstConfiguration& get();
