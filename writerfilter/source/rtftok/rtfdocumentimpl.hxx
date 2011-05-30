@@ -93,6 +93,8 @@ namespace writerfilter {
                 bool m_bSkipUnknown;
                 /// For debugging purposes, where int value would not be enough
                 rtl::OString* m_pCurrentKeyword;
+                /// Font index <-> encoding map, *not* part of the parser state
+                std::map<int, rtl_TextEncoding> m_aFontEncodings;
         };
     } // namespace rtftok
 } // namespace writerfilter

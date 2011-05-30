@@ -21,7 +21,7 @@ namespace writerfilter {
             int charset;
             int codepage;
         } RTFEncoding;
-        extern RTFEncoding aRTFEncodingss[];
+        extern RTFEncoding aRTFEncodings[];
         extern int nRTFEncodings;
     } // namespace rtftok
 } // namespace writerfilter

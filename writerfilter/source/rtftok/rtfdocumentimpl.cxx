@@ -9,6 +9,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/tencinfo.h>
 
 using rtl::OString;
 using rtl::OStringBuffer;
@@ -22,7 +23,8 @@ namespace rtftok {
 RTFDocumentImpl::RTFDocumentImpl(uno::Reference<io::XInputStream> const& xInputStream)
     : m_nGroup(0),
     m_bSkipUnknown(false),
-    m_pCurrentKeyword(0)
+    m_pCurrentKeyword(0),
+    m_aFontEncodings()
 {
     OSL_ENSURE(xInputStream.is(), "no input stream");
     if (!xInputStream.is())
@@ -156,6 +158,22 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTF_FPRQ:
             m_aStates.top().aSprms[NS_rtf::LN_PRQ] = nParam;
+            break;
+        case RTF_FCHARSET:
+            {
+                // we always send text to the domain mapper in OUString, so no
+                // need to send encoding info
+                int i;
+                for (i = 0; i < nRTFEncodings; i++)
+                {
+                    if (aRTFEncodings[i].charset == nParam)
+                        break;
+                }
+                if (i == nRTFEncodings)
+                    // not found
+                    return 0;
+                m_aFontEncodings[m_aStates.top().nCurrentFontIndex] = rtl_getTextEncodingFromWindowsCodePage(aRTFEncodings[i].charset);
+            }
             break;
         default:
             OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
