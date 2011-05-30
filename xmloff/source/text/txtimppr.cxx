@@ -434,7 +434,7 @@ void XMLTextImportPropertyMapper::finished(
     {
         if (pAllParaMargin && !pParaMargins[i])
         {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
             sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
                                         pAllParaMargin->mnIndex + (2*i) + 2 );
             OSL_ENSURE( nTmp >= CTF_PARALEFTMARGIN &&
@@ -446,7 +446,7 @@ void XMLTextImportPropertyMapper::finished(
         }
         if (pAllMargin && !pMargins[i])
         {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
             sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
                                         pAllMargin->mnIndex + i + 1 );
             OSL_ENSURE( nTmp >= CTF_MARGINLEFT && nTmp <= CTF_MARGINBOTTOM,
