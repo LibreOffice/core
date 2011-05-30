@@ -30,11 +30,15 @@ $(eval $(call gb_Library_set_include,scd,\
         -I$(realpath $(SRCDIR)/sc/inc) \
         -I$(WORKDIR)/Misc/sc/ \
         $$(INCLUDE) \
-        -I$(OUTDIR)/inc/offuh \
 ))
 
 $(eval $(call gb_Library_set_defs,scd,\
         $$(DEFS) \
+))
+
+$(eval $(call gb_Library_add_api,scd,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,scd,\

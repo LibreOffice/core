@@ -71,8 +71,12 @@ $(eval $(call gb_CppunitTest_set_include,sc_ucalc,\
     -I$(realpath $(SRCDIR)/sc/source/ui/inc) \
     -I$(realpath $(SRCDIR)/sc/inc) \
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
+))
+
+$(eval $(call gb_CppunitTest_add_api,sc_ucalc,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_CppunitTest_uses_ure,sc_ucalc))

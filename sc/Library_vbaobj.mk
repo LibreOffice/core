@@ -29,7 +29,6 @@ $(eval $(call gb_Library_set_include,vbaobj,\
 	-I$(realpath $(SRCDIR)/sc/inc) \
 	-I$(WORKDIR)/Misc/sc/ \
 	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/offuh \
 	-I$(OUTDIR)/inc/ \
 ))
 
@@ -38,6 +37,11 @@ $(eval $(call gb_Library_set_componentfile,vbaobj,sc/util/vbaobj))
 $(eval $(call gb_Library_set_defs,vbaobj,\
 	$$(DEFS) \
 	-DVBA_OOBUILD_HACK \
+))
+
+$(eval $(call gb_Library_add_api,vbaobj,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,vbaobj,\

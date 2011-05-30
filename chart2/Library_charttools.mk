@@ -34,12 +34,16 @@ $(eval $(call gb_Library_set_include,charttools,\
     -I$(realpath $(SRCDIR)/chart2/inc/pch) \
     -I$(realpath $(SRCDIR)/chart2/source/inc) \
     -I$(OUTDIR)/inc \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
 $(eval $(call gb_Library_set_defs,charttools,\
     $$(DEFS) \
     -DOOO_DLLIMPLEMENTATION_CHARTTOOLS \
+))
+
+$(eval $(call gb_Library_add_api,charttools,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,charttools,\

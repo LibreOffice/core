@@ -35,12 +35,16 @@ $(eval $(call gb_Library_set_include,chartview,\
     -I$(realpath $(SRCDIR)/chart2/source/view/inc) \
     -I$(realpath $(SRCDIR)/chart2/source/inc) \
     -I$(OUTDIR)/inc \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
 $(eval $(call gb_Library_set_defs,chartview,\
     $$(DEFS) \
     -DOOO_DLLIMPLEMENTATION_CHARTVIEW \
+))
+
+$(eval $(call gb_Library_add_api,chartview,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,chartview,\

@@ -35,7 +35,11 @@ $(eval $(call gb_Library_set_include,chartcontroller,\
     -I$(realpath $(SRCDIR)/chart2/source/controller/inc) \
     -I$(realpath $(SRCDIR)/chart2/source/inc) \
     -I$(OUTDIR)/inc \
-    -I$(OUTDIR)/inc/offuh \
+))
+
+$(eval $(call gb_Library_add_api,chartcontroller,\
+    offapi \
+    udkapi \
 ))
 
 # TODO: is this still necessary?
