@@ -90,8 +90,18 @@ int RTFDocumentImpl::resolveChars(char ch)
         text(aOUStr);
     else if (m_aStates.top().nDestinationState == DESTINATION_FONTENTRY)
     {
+        // this is a font name
         RTFValue::Pointer_t pValue(new RTFValue(aOUStr));
         m_aStates.top().aAttributes[NS_rtf::LN_XSZFFN] = pValue;
+    }
+    else if (m_aStates.top().nDestinationState == DESTINATION_COLORTABLE)
+    {
+        // we hit a ';' at the end of each color entry
+        sal_uInt32 color = m_aStates.top().aCurrentColor.nRed | ( m_aStates.top().aCurrentColor.nGreen << 8)
+            | (m_aStates.top().aCurrentColor.nBlue << 16);
+        m_aColorTable.push_back(color);
+        // set components back to zero
+        m_aStates.top().aCurrentColor = RTFColorTableEntry();
     }
 
     return 0;
@@ -170,6 +180,15 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 RTFValue::Pointer_t pValue(new RTFValue(nParam));
                 m_aStates.top().aSprms[NS_rtf::LN_PRQ] = pValue;
             }
+            break;
+        case RTF_RED:
+            m_aStates.top().aCurrentColor.nRed = nParam;
+            break;
+        case RTF_GREEN:
+            m_aStates.top().aCurrentColor.nGreen = nParam;
+            break;
+        case RTF_BLUE:
+            m_aStates.top().aCurrentColor.nBlue = nParam;
             break;
         case RTF_FCHARSET:
             {
@@ -481,7 +500,8 @@ RTFParserState::RTFParserState()
     aSprms(),
     aAttributes(),
     aFontTableEntries(),
-    nCurrentFontIndex(0)
+    nCurrentFontIndex(0),
+    aCurrentColor()
 {
 }
 

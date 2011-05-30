@@ -69,6 +69,8 @@ namespace writerfilter {
 
                 RTFReferenceTable::Entries_t aFontTableEntries;
                 int nCurrentFontIndex;
+
+                RTFColorTableEntry aCurrentColor;
         };
 
         /// Implementation of the RTFDocument interface.
