@@ -242,6 +242,18 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().aSprms[NS_sprm::LN_CRgFtc0] = pValue;*/
             }
             break;
+        case RTF_SBASEDON:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(getColorTable(nParam)));
+                m_aStates.top().aAttributes[NS_rtf::LN_ISTDBASE] = pValue;
+            }
+            break;
+        case RTF_SNEXT:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(getColorTable(nParam)));
+                m_aStates.top().aAttributes[NS_rtf::LN_ISTDNEXT] = pValue;
+            }
+            break;
         default:
             OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             break;
