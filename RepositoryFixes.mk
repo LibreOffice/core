@@ -110,7 +110,7 @@ gb_Library_NOILIBFILENAMES:=\
     advapi32 \
     gdi32 \
     gdiplus \
-    graphite_dll \
+    graphite2_off \
     gnu_getopt \
     icuuc \
     icule \
