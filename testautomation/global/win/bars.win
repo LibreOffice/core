@@ -1231,7 +1231,7 @@ DruckLayout .uno:PrintLayout
 Effekt .uno:EffectWindow
 Edit .uno:EditDoc
 Einfuegen .uno:InsertCtrl
-Ellipsen .uno:Ellipse
+Ellipsen .uno:BasicShapes.ellipse
 ExecuteBtn .uno:SbaExecuteSql
 Feldbefehle .uno:InsertFieldCtrl
 Filter .uno:DataFilterStandardFilter
@@ -1271,7 +1271,7 @@ OnlineLayout .uno:BrowseView
 Paste .uno:Paste
 Praesentation .uno:Presentation
 PrintDefault .uno:PrintDefault
-Rechteck .uno:Rect
+Rechteck .uno:BasicShapes.rectangle
 Rechtschreibung .uno:Spelling
 RecSearch .uno:RecSearch
 RecSave .uno:RecSave

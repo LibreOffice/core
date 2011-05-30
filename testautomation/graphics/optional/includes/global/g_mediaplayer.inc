@@ -39,13 +39,9 @@ testcase g_mediaplayer
     dim timevalue2
     dim timevalue3
     dim timecounter, iWaitIndex, timefound as integer
-   
+
     if iSprache <> 39 then
         Printlog "- MediaPlayer"
-        if gPlatgroup = "unx" then
-           QaErrorLog "Solaris / Linux: Soundcard + Java Media Framework (JMF) Media-Libraries is needed."
-           goto endsub
-        endif
         Datei$ = ConvertPath (convertPath (gTesttoolPath + "graphics\required\input\29secsound.wav"))
         printlog "Open New Document"
         Call hNewDocument
@@ -53,12 +49,12 @@ testcase g_mediaplayer
         printlog "Check if the Media Player already exists - if so - close it"
         kontext "mPlayer"
         printlog "Close the MediaPlayer if it is open already"
-        if mPlayer.exists then 
+        if mPlayer.exists then
            warnlog "The MediaPlayer was visible since some earlier test."
            ToolsMediaPlayer
            printlog "Closed the Media Player"
         endif
-        
+
         printlog "Tools - MediaPlayer"
         ToolsMediaPlayer
         sleep 2
@@ -76,11 +72,11 @@ testcase g_mediaplayer
         kontext "OeffnenDlg"
         Pfad.SetText Datei$
         Oeffnen.Click
-        
+
         printlog "This test wont work correctly under Solaris and Linux,"
         printlog "unless some optional Media-libraries are installed."
         printlog "Therefore we warn the tester about it if we cannot open the file."
-        
+
         iWaitIndex = 0
         do while OeffnenDlg.Exists AND iWaitIndex < 10
            sleep (1)
@@ -93,15 +89,15 @@ testcase g_mediaplayer
            kontext "Mplayer"
            ToolsMediaPlayer
            printlog "close document"
-           Call hCloseDocument   
+           Call hCloseDocument
            goto endsub
         else
            kontext "Mplayer"
            if Mplayer.exists then printlog "Media Player was opened."
         endif
-        
+
         timevalue1 = mTimeedit.GetText
-        
+
         printlog "Stop"
         sleep 2
         mStop.Click
@@ -144,7 +140,7 @@ testcase g_mediaplayer
         else
            Printlog "the play-button seemed to work. Good."
         endif
-        
+
         printlog "Pause"
         mPlay.Click
         sleep 10
@@ -159,10 +155,10 @@ testcase g_mediaplayer
         else
            Printlog "the pause-button seemed to work. Good."
         endif
-        
+
         printlog "Time"
         printlog " Click Stop to get to the beginning."
-        mStop.Click  
+        mStop.Click
         sleep 1
         printlog "And make sure it's really the beginning."
         timevalue1 = mTimeedit.GetText
@@ -173,13 +169,13 @@ testcase g_mediaplayer
         else
            printlog "Sound stopped, time-value set to 00:00:00."
         endif
-        
+
         printlog "We press 'Play'"
         printlog "Click play to get it running"
-        mPlay.Click 
+        mPlay.Click
         sleep 5
         timefound = 0
-        
+
         for timecounter = 1 to 50000
             timevalue1 = mTimeedit.GetText
             if timevalue1 = "00:00:20 / 00:00:29" then
@@ -191,7 +187,7 @@ testcase g_mediaplayer
                timefound = 2
             endif
         next timecounter
-        
+
         if timefound = 1 then
            Printlog "the time-counter seemed to work. Good."
         elseif timefound = 2 then
@@ -199,34 +195,34 @@ testcase g_mediaplayer
         elseif timefound = 0 then
            warnlog "Either the time didnt change, or the test-computer is too fast."
         endif
-        
+
         printlog "Loop"
         mLoop.Click
-        
+
         printlog "Volume"
-        
+
         printlog "Mute"
         mMute.Click
         sleep 1
         mMute.Click
-        
+
         printlog "Time-slider"
         ' mTimeslider. 'Click
          '-Position slider
           'Moves to a different position in the file.
-        
+
         printlog "Scroll-whatever"
         'mZoomlistbox.
         '-Zoom
          'Adjusts the size of the movie playback.
-        
+
         printlog "Apply"
         mInsert.Click
         sleep 10
-        
+
         printlog "Close the MediaPlayer via Tools - MediaPlayer"
         ToolsMediaPlayer
-        
+
         printlog "Check if there is an object available."
         if (gApplication = "IMPRESS") then
            kontext "DocumentImpress"
@@ -236,7 +232,7 @@ testcase g_mediaplayer
         hTypeKeys ("<escape><tab><tab><tab>")
         hOpenContextMenu()
         hMenuSelectNr(1)
-        
+
         Kontext "TabPositionAndSize"
         Kontext
         Active.SetPage TabPositionAndSize
@@ -250,7 +246,7 @@ testcase g_mediaplayer
         endif
         sleep 2
         printlog "close document"
-        Call  hCloseDocument	
+        Call  hCloseDocument
     else
         qaerrorLog "#74350# - Different strings in g_mediaplayer under Italian."
     endif
