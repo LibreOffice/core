@@ -35,12 +35,16 @@ $(eval $(call gb_Library_set_include,sdui,\
     -I$(realpath $(SRCDIR)/sd/inc/pch) \
     -I$(realpath $(SRCDIR)/sd/source/ui/inc) \
     -I$(OUTDIR)/inc \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
 $(eval $(call gb_Library_set_defs,sdui,\
     $$(DEFS) \
     -DSD_DLLIMPLEMENTATION \
+))
+
+$(eval $(call gb_Library_add_api,sdui,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,sdui,\

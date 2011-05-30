@@ -32,12 +32,16 @@ $(eval $(call gb_CppunitTest_set_include,sd_uimpress,\
     -I$(realpath $(SRCDIR)/sd/inc) \
     -I$(realpath $(SRCDIR)/sd/inc/pch) \
     -I$(OUTDIR)/inc \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
 $(eval $(call gb_CppunitTest_set_defs,sd_uimpress,\
     $$(DEFS) \
     -DSD_DLLIMPLEMENTATION \
+))
+
+$(eval $(call gb_CppunitTest_add_api,sd_uimpress,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_CppunitTest_add_library_objects,sd_uimpress,sd))

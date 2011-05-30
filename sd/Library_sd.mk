@@ -44,7 +44,6 @@ $(eval $(call gb_Library_set_include,sd,\
     -I$(WORKDIR)/inc/sd \
     -I$(WORKDIR)/SdiTarget/sd/sdi \
     -I$(OUTDIR)/inc \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
 $(eval $(call gb_Library_set_defs,sd,\
@@ -58,6 +57,11 @@ $(eval $(call gb_Library_set_defs,sd,\
     -DDBG_ANIM_LOG \
 ))
 endif
+
+$(eval $(call gb_Library_add_api,sd,\
+    offapi \
+    udkapi \
+))
 
 $(eval $(call gb_Library_add_linked_libs,sd,\
     avmedia \

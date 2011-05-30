@@ -33,7 +33,6 @@ $(eval $(call gb_Library_set_include,OGLTrans,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/slideshow/inc/pch) \
     -I$(OUTDIR)/inc \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
 ifeq ($(strip $(VERBOSE)),TRUE)
@@ -49,6 +48,11 @@ $(eval $(call gb_Library_set_defs,OGLTrans,\
     -DBOOST_SP_ENABLE_DEBUG_HOOKS \
 ))
 endif
+
+$(eval $(call gb_Library_add_api,OGLTrans,\
+    offapi \
+    udkapi \
+))
 
 $(eval $(call gb_Library_add_linked_libs,OGLTrans,\
     canvastools \

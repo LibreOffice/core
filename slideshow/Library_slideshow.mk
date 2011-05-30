@@ -34,7 +34,6 @@ $(eval $(call gb_Library_set_include,slideshow,\
     -I$(realpath $(SRCDIR)/slideshow/inc/pch) \
     -I$(realpath $(SRCDIR)/slideshow/source/inc) \
     -I$(OUTDIR)/inc \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
 $(eval $(call gb_Library_set_defs,slideshow,\
@@ -49,6 +48,11 @@ $(eval $(call gb_Library_set_defs,slideshow,\
     -DBOOST_SP_ENABLE_DEBUG_HOOKS \
 ))
 endif
+
+$(eval $(call gb_Library_add_api,slideshow,\
+    offapi \
+    udkapi \
+))
 
 $(eval $(call gb_Library_add_linked_libs,slideshow,\
     avmedia \

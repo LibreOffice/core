@@ -34,7 +34,6 @@ $(eval $(call gb_Library_set_include,sdfilt,\
     -I$(realpath $(SRCDIR)/sd/inc) \
     -I$(realpath $(SRCDIR)/sd/inc/pch) \
     -I$(OUTDIR)/inc \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
 $(eval $(call gb_Library_set_defs,sdfilt,\
@@ -48,6 +47,11 @@ $(eval $(call gb_Library_set_defs,sdfilt,\
     -DDBG_ANIM_LOG \
 ))
 endif
+
+$(eval $(call gb_Library_add_api,sdfilt,\
+    offapi \
+    udkapi \
+))
 
 $(eval $(call gb_Library_add_linked_libs,sdfilt,\
     comphelper \
