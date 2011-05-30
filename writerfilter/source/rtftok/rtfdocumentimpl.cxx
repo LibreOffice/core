@@ -126,6 +126,16 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
 {
     switch (nKeyword)
     {
+        case RTF_FNIL:
+        case RTF_FROMAN:
+        case RTF_FSWISS:
+        case RTF_FMODERN:
+        case RTF_FSCRIPT:
+        case RTF_FDECOR:
+        case RTF_FTECH:
+        case RTF_FBIDI:
+            // TODO ooxml:CT_Font_family seems to be ignored by the domain mapper
+            break;
         default:
             OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             break;
