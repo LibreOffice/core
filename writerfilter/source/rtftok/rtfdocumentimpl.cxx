@@ -248,7 +248,11 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTF_S:
             if (m_aStates.top().nDestinationState == DESTINATION_STYLEENTRY)
+            {
                 m_aStates.top().nCurrentStyleIndex = nParam;
+                RTFValue::Pointer_t pValue(new RTFValue(nParam));
+                m_aStates.top().aAttributes[NS_rtf::LN_ISTD] = pValue;
+            }
             else
             {
                 RTFValue::Pointer_t pValue(new RTFValue(nParam));
