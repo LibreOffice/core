@@ -57,7 +57,10 @@ writerfilter::Reference<BinaryObj>::Pointer_t RTFValue::getBinary()
 
 std::string RTFValue::toString() const
 {
-    return OString::valueOf(static_cast<sal_Int32>(m_nValue)).getStr();
+    if (m_sValue.getLength() > 0)
+        return OUStringToOString(m_sValue, RTL_TEXTENCODING_UTF8).getStr();
+    else
+        return OString::valueOf(static_cast<sal_Int32>(m_nValue)).getStr();
 }
 
 RTFValue* RTFValue::Clone()
