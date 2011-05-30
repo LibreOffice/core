@@ -95,102 +95,44 @@ namespace stoc_bootstrap
 {
 Sequence< OUString > smgr_wrapper_getSupportedServiceNames()
 {
-    static Sequence < OUString > *pNames = 0;
-    if( ! pNames )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( !pNames )
-        {
-            static Sequence< OUString > seqNames(1);
-            seqNames.getArray()[0] = OUString(
-                RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.MultiServiceFactory") );
-            pNames = &seqNames;
-        }
-    }
-    return *pNames;
+    Sequence< OUString > seqNames(1);
+    seqNames.getArray()[0] = OUString(
+        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.MultiServiceFactory") );
+    return seqNames;
 }
 
 OUString smgr_wrapper_getImplementationName()
 {
-    static OUString *pImplName = 0;
-    if( ! pImplName )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( ! pImplName )
-        {
-            static OUString implName(
-                RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.stoc.OServiceManagerWrapper" ) );
-            pImplName = &implName;
-        }
-    }
-    return *pImplName;
+    return OUString(
+        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.OServiceManagerWrapper"));
 }
 
 Sequence< OUString > smgr_getSupportedServiceNames()
 {
-    static Sequence < OUString > *pNames = 0;
-    if( ! pNames )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( !pNames )
-        {
-            static Sequence< OUString > seqNames(2);
-            seqNames.getArray()[0] = OUString(
-                RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.MultiServiceFactory") );
-            seqNames.getArray()[1] = OUString(
-                RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.ServiceManager") );
-            pNames = &seqNames;
-        }
-    }
-    return *pNames;
+    Sequence< OUString > seqNames(2);
+    seqNames.getArray()[0] = OUString(
+        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.MultiServiceFactory") );
+    seqNames.getArray()[1] = OUString(
+        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.ServiceManager") );
+    return seqNames;
 }
 
 OUString smgr_getImplementationName()
 {
-    static OUString *pImplName = 0;
-    if( ! pImplName )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( ! pImplName )
-        {
-            static OUString implName(
-                RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.stoc.OServiceManager" ) );
-            pImplName = &implName;
-        }
-    }
-    return *pImplName;
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.OServiceManager"));
 }
 
 Sequence< OUString > regsmgr_getSupportedServiceNames()
 {
-    static Sequence < OUString > *pNames = 0;
-    if( ! pNames )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( !pNames )
-        {
-            static Sequence< OUString > seqNames(2);
-            seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.MultiServiceFactory"));
-            seqNames.getArray()[1] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.RegistryServiceManager"));
-            pNames = &seqNames;
-        }
-    }
-    return *pNames;
+    Sequence< OUString > seqNames(2);
+    seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.MultiServiceFactory"));
+    seqNames.getArray()[1] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.RegistryServiceManager"));
+    return seqNames;
 }
 
 OUString regsmgr_getImplementationName()
 {
-    static OUString *pImplName = 0;
-    if( ! pImplName )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( ! pImplName )
-        {
-            static OUString implName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.stoc.ORegistryServiceManager" ) );
-            pImplName = &implName;
-        }
-    }
-    return *pImplName;
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.stoc.ORegistryServiceManager" ) );
 }
 }
 
