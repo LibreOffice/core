@@ -128,7 +128,7 @@ void RTFDocumentImpl::text(OUString& rString)
     Mapper().endCharacterGroup();
 }
 
-int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword, bool /*bParam*/, int /*nParam*/)
+int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
 {
     switch (nKeyword)
     {
@@ -295,7 +295,8 @@ int RTFDocumentImpl::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
                 return ret;
             break;
         case CONTROL_DESTINATION:
-            if ((ret = dispatchDestination(aRTFControlWords[i].nIndex, bParam, nParam)))
+            // same for destinations
+            if ((ret = dispatchDestination(aRTFControlWords[i].nIndex)))
                 return ret;
             break;
         case CONTROL_SYMBOL:
