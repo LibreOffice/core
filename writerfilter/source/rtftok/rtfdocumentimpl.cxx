@@ -238,8 +238,8 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().nCurrentStyleIndex = nParam;
             else
             {
-                /*RTFValue::Pointer_t pValue(new RTFValue(nParam));
-                m_aStates.top().aSprms[NS_sprm::LN_CRgFtc0] = pValue;*/
+                RTFValue::Pointer_t pValue(new RTFValue(nParam));
+                m_aStates.top().aAttributes[NS_rtf::LN_ISTD] = pValue;
             }
             break;
         case RTF_SBASEDON:
