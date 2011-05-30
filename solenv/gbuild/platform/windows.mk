@@ -512,7 +512,7 @@ endef
 # Executable class
 
 gb_Executable_EXT := .exe
-gb_Executable_TARGETTYPEFLAGS := -RELEASE -BASE:0x1b000000 -OPT:NOREF -INCREMENTAL:NO -DEBUG
+gb_Executable_TARGETTYPEFLAGS := -RELEASE -OPT:NOREF -INCREMENTAL:NO -DEBUG
 gb_Executable_get_rpath :=
 
 define gb_Executable_Executable_platform
