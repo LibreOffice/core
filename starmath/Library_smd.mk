@@ -30,12 +30,16 @@ $(eval $(call gb_Library_set_include,smd,\
         -I$(realpath $(SRCDIR)/starmath/inc) \
         -I$(WORKDIR)/Misc/sm/ \
         $$(INCLUDE) \
-        -I$(OUTDIR)/inc/offuh \
         -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_set_defs,smd,\
         $$(DEFS) \
+))
+
+$(eval $(call gb_Library_add_api,smd,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,smd,\

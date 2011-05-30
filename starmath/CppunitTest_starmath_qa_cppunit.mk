@@ -32,7 +32,11 @@ $(eval $(call gb_CppunitTest_set_include,starmath_qa_cppunit,\
     -I$(realpath $(SRCDIR)/starmath/inc) \
     -I$(realpath $(SRCDIR)/starmath/inc/pch) \
     -I$(OUTDIR)/inc \
-    -I$(OUTDIR)/inc/offuh \
+))
+
+$(eval $(call gb_CppunitTest_add_api,starmath_qa_cppunit,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_CppunitTest_set_defs,starmath_qa_cppunit,\

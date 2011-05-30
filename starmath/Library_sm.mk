@@ -33,7 +33,6 @@ $(eval $(call gb_Library_set_include,sm,\
         -I$(WORKDIR)/SdiTarget/starmath/sdi \
         -I$(WORKDIR)/Misc/starmath/ \
         $$(INCLUDE) \
-        -I$(OUTDIR)/inc/offuh \
         -I$(OUTDIR)/inc \
 ))
 
@@ -41,6 +40,11 @@ $(eval $(call gb_Library_set_defs,sm,\
         $$(DEFS) \
         -DSMDLL \
         -DSC_INFO_OSVERSION=\"$(OS)\" \
+))
+
+$(eval $(call gb_Library_add_api,sm,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,sm,\
