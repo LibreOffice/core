@@ -39,11 +39,20 @@ gb_CppunitTest_GDBTRACE := $(GDBCPPUNITTRACE)
 gb_CppunitTest__interactive := $(true)
 endif
 
+ifneq ($(strip $(VALGRIND)),)
+gb_CppunitTest_VALGRINDTOOL := valgrind --tool=$(VALGRIND) --num-callers=50
+ifeq ($(strip $(VALGRIND)),memcheck)
+gb_CppunitTest_VALGRINDTOOL += --leak-check=yes
+G_SLICE := always-malloc
+export G_SLICE
+endif
+endif
+
 # defined by platform
 #  gb_CppunitTest_TARGETTYPE
 #  gb_CppunitTest_get_filename
 gb_CppunitTest_CPPTESTTARGET := $(call gb_Executable_get_target,cppunit/cppunittester)
-gb_CppunitTest_CPPTESTCOMMAND := $(gb_CppunitTest_CPPTESTPRECOMMAND) STAR_RESOURCEPATH=$(dir $(call gb_ResTarget_get_outdir_target,example)) $(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_CPPTESTTARGET)
+gb_CppunitTest_CPPTESTCOMMAND := $(gb_CppunitTest_CPPTESTPRECOMMAND) STAR_RESOURCEPATH=$(dir $(call gb_ResTarget_get_outdir_target,example)) $(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_CppunitTest_CPPTESTTARGET)
 gb_CppunitTest__get_linktargetname = CppunitTest/$(call gb_CppunitTest_get_filename,$(1))
 
 # TODO: move this to platform under suitable name
