@@ -225,6 +225,15 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().aAttributes[NS_ooxml::LN_CT_Color_val] = pValue;
             }
             break;
+        case RTF_S:
+            if (m_aStates.top().nDestinationState == DESTINATION_STYLESHEET)
+                m_aStates.top().nCurrentStyleIndex = nParam;
+            else
+            {
+                /*RTFValue::Pointer_t pValue(new RTFValue(nParam));
+                m_aStates.top().aSprms[NS_sprm::LN_CRgFtc0] = pValue;*/
+            }
+            break;
         default:
             OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             break;
@@ -420,11 +429,17 @@ int RTFDocumentImpl::popState()
 
     RTFReferenceTable::Entry_t aEntry;
     bool bFontEntryEnd = false;
+    bool bStyleEntryEnd = false;
 
     if (m_aStates.top().nDestinationState == DESTINATION_FONTTABLE)
     {
         writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(m_aStates.top().aFontTableEntries));
         Mapper().table(NS_rtf::LN_FONTTABLE, pTable);
+    }
+    else if (m_aStates.top().nDestinationState == DESTINATION_STYLESHEET)
+    {
+        writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(m_aStates.top().aStyleTableEntries));
+        Mapper().table(NS_rtf::LN_STYLESHEET, pTable);
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_FONTENTRY)
     {
@@ -435,6 +450,15 @@ int RTFDocumentImpl::popState()
         aEntry.first = m_aStates.top().nCurrentFontIndex;
         aEntry.second = pProp;
     }
+    else if (m_aStates.top().nDestinationState == DESTINATION_STYLEENTRY)
+    {
+        bStyleEntryEnd = true;
+        writerfilter::Reference<Properties>::Pointer_t const pProp(
+                new RTFReferenceProperties(m_aStates.top().aAttributes, m_aStates.top().aSprms)
+                );
+        aEntry.first = m_aStates.top().nCurrentStyleIndex;
+        aEntry.second = pProp;
+    }
 
     m_aStates.pop();
 
@@ -442,6 +466,8 @@ int RTFDocumentImpl::popState()
 
     if (bFontEntryEnd)
         m_aStates.top().aFontTableEntries[aEntry.first] = aEntry.second;
+    else if (bStyleEntryEnd)
+        m_aStates.top().aStyleTableEntries[aEntry.first] = aEntry.second;
 
     if (!m_aStates.empty())
         OSL_TRACE("%s after pop: m_nGroup %d, dest state: %d", OSL_THIS_FUNC, m_nGroup, m_aStates.top().nDestinationState);
@@ -521,7 +547,8 @@ RTFParserState::RTFParserState()
     aAttributes(),
     aFontTableEntries(),
     nCurrentFontIndex(0),
-    aCurrentColor()
+    aCurrentColor(),
+    nCurrentStyleIndex(0)
 {
 }
 

@@ -27,7 +27,8 @@ namespace writerfilter {
             DESTINATION_FONTTABLE,
             DESTINATION_FONTENTRY,
             DESTINATION_COLORTABLE,
-            DESTINATION_STYLESHEET
+            DESTINATION_STYLESHEET,
+            DESTINATION_STYLEENTRY
         };
 
         enum RTFErrors
@@ -72,6 +73,9 @@ namespace writerfilter {
                 int nCurrentFontIndex;
 
                 RTFColorTableEntry aCurrentColor;
+
+                RTFReferenceTable::Entries_t aStyleTableEntries;
+                int nCurrentStyleIndex;
         };
 
         /// Implementation of the RTFDocument interface.
