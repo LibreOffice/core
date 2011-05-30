@@ -25,7 +25,8 @@ namespace writerfilter {
             DESTINATION_NORMAL,
             DESTINATION_SKIP,
             DESTINATION_FONTTABLE,
-            DESTINATION_FONTENTRY
+            DESTINATION_FONTENTRY,
+            DESTINATION_COLORTABLE
         };
 
         enum RTFErrors
@@ -45,6 +46,16 @@ namespace writerfilter {
             CONTROL_VALUE // eg \fs (requires parameter)
         };
 
+        /// An entry in the color table.
+        class RTFColorTableEntry
+        {
+            public:
+                RTFColorTableEntry();
+                sal_uInt8 nRed;
+                sal_uInt8 nGreen;
+                sal_uInt8 nBlue;
+        };
+
         /// State of the parser, which gets saved / restored when changing groups.
         class RTFParserState
         {
@@ -55,6 +66,7 @@ namespace writerfilter {
                 std::map<Id, RTFValue::Pointer_t> aSprms;
                 // HACK: dmapper requires to store some of the properties here, should not be necessary
                 std::map<Id, RTFValue::Pointer_t> aAttributes;
+
                 RTFReferenceTable::Entries_t aFontTableEntries;
                 int nCurrentFontIndex;
         };
@@ -96,6 +108,8 @@ namespace writerfilter {
                 rtl::OString* m_pCurrentKeyword;
                 /// Font index <-> encoding map, *not* part of the parser state
                 std::map<int, rtl_TextEncoding> m_aFontEncodings;
+                /// Color index <-> RGB color value map
+                std::vector<sal_uInt32> m_aColorTable;
         };
     } // namespace rtftok
 } // namespace writerfilter

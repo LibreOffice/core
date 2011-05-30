@@ -24,7 +24,8 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<io::XInputStream> const& xInputS
     : m_nGroup(0),
     m_bSkipUnknown(false),
     m_pCurrentKeyword(0),
-    m_aFontEncodings()
+    m_aFontEncodings(),
+    m_aColorTable()
 {
     OSL_ENSURE(xInputStream.is(), "no input stream");
     if (!xInputStream.is())
@@ -116,6 +117,9 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword, bool /*bParam*/, i
             break;
         case RTF_FONTTBL:
             m_aStates.top().nDestinationState = DESTINATION_FONTTABLE;
+            break;
+        case RTF_COLORTBL:
+            m_aStates.top().nDestinationState = DESTINATION_COLORTABLE;
             break;
         default:
             OSL_TRACE("%s: TODO handle destination '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
@@ -478,6 +482,13 @@ RTFParserState::RTFParserState()
     aAttributes(),
     aFontTableEntries(),
     nCurrentFontIndex(0)
+{
+}
+
+RTFColorTableEntry::RTFColorTableEntry()
+    : nRed(0),
+    nGreen(0),
+    nBlue(0)
 {
 }
 
