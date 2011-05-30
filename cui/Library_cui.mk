@@ -35,7 +35,6 @@ $(eval $(call gb_Library_set_include,cui,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/cui/source/inc) \
     -I$(OUTDIR)/inc \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
 $(eval $(call gb_Library_set_defs,cui,\
@@ -43,6 +42,11 @@ $(eval $(call gb_Library_set_defs,cui,\
     $(if $(filter TRUE,$(ENABLE_GTK)),-DENABLE_GTK) \
     $(if $(filter TRUE,$(ENABLE_KDE)),-DENABLE_KDE) \
     $(if $(filter TRUE,$(ENABLE_KDE4)),-DENABLE_KDE4) \
+))
+
+$(eval $(call gb_Library_add_api,cui,\
+    offapi \
+    udkapi \
 ))
 
 # .IF "$(ENABLE_LAYOUT)" == "TRUE"
