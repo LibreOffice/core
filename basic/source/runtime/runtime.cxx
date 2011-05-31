@@ -1244,7 +1244,7 @@ SbiForStack* SbiRuntime::FindForStackItemForCollection( class BasicCollection* p
     {
         SbxVariable* pVar = p->refEnd.Is() ? (SbxVariable*)p->refEnd : NULL;
         if( p->eForType == FOR_EACH_COLLECTION && pVar != NULL &&
-            (pCollection = PTR_CAST(BasicCollection,pVar)) == pCollection )
+            PTR_CAST(BasicCollection,pVar) == pCollection )
         {
             pRet = p;
             break;
