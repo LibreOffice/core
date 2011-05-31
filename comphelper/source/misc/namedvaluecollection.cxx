@@ -30,14 +30,13 @@
 #include "precompiled_comphelper.hxx"
 #include <comphelper/namedvaluecollection.hxx>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
-/** === end UNO includes === **/
 
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
+#include <rtl/instance.hxx>
 #include <osl/diagnose.h>
 
 #include <boost/unordered_map.hpp>
@@ -277,6 +276,11 @@ namespace comphelper
         return false;
     }
 
+    namespace
+    {
+        class theEmptyDefault : public rtl::Static<Any, theEmptyDefault> {};
+    }
+
     //--------------------------------------------------------------------
     const Any& NamedValueCollection::impl_get( const ::rtl::OUString& _rValueName ) const
     {
@@ -284,8 +288,7 @@ namespace comphelper
         if ( pos != m_pImpl->aValues.end() )
             return pos->second;
 
-        static Any aEmptyDefault;
-        return aEmptyDefault;
+        return theEmptyDefault::get();
     }
 
     //--------------------------------------------------------------------
