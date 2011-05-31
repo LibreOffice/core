@@ -29,7 +29,7 @@
 #ifndef _TOOLKIT_HELPER_MACROS_HXX_
 #define _TOOLKIT_HELPER_MACROS_HXX_
 
-// -------------------------------------------------------------------------------------
+#include <comphelper/servicehelper.hxx>
 
 #define IMPL_XUNOTUNNEL( ClassName ) \
 sal_Int64 ClassName::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException) \
@@ -40,20 +40,13 @@ sal_Int64 ClassName::getSomething( const ::com::sun::star::uno::Sequence< sal_In
     } \
     return 0; \
 } \
+namespace \
+{ \
+    class the##ClassName##UnoTunnelId : public rtl::Static< UnoTunnelIdInit, the##ClassName##UnoTunnelId> {}; \
+} \
 const ::com::sun::star::uno::Sequence< sal_Int8 >& ClassName::GetUnoTunnelId() throw() \
 { \
-    static ::com::sun::star::uno::Sequence< sal_Int8 > * pSeq = NULL; \
-    if( !pSeq ) \
-    { \
-        ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ); \
-        if( !pSeq ) \
-        { \
-            static ::com::sun::star::uno::Sequence< sal_Int8 > aSeq( 16 ); \
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True ); \
-            pSeq = &aSeq; \
-        } \
-    } \
-    return *pSeq; \
+    return the##ClassName##UnoTunnelId::get().getSeq(); \
 } \
 ClassName* ClassName::GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw() \
 { \
@@ -70,20 +63,13 @@ sal_Int64 ClassName::getSomething( const ::com::sun::star::uno::Sequence< sal_In
     } \
     return BaseClass::getSomething( rIdentifier ); \
 } \
+namespace \
+{ \
+    class the##ClassName##UnoTunnelId : public rtl::Static< UnoTunnelIdInit, the##ClassName##UnoTunnelId> {}; \
+} \
 const ::com::sun::star::uno::Sequence< sal_Int8 >& ClassName::GetUnoTunnelId() throw() \
 { \
-    static ::com::sun::star::uno::Sequence< sal_Int8 > * pSeq = NULL; \
-    if( !pSeq ) \
-    { \
-        ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ); \
-        if( !pSeq ) \
-        { \
-            static ::com::sun::star::uno::Sequence< sal_Int8 > aSeq( 16 ); \
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True ); \
-            pSeq = &aSeq; \
-        } \
-    } \
-    return *pSeq; \
+    return the##ClassName##UnoTunnelId::get().getSeq(); \
 } \
 ClassName* ClassName::GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw() \
 { \
