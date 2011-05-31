@@ -475,6 +475,9 @@ namespace canvas
             typedef ::std::numeric_limits< Source > SourceLimits;
             typedef ::std::numeric_limits< Target > TargetLimits;
 
+#undef min
+#undef max
+
             if( ( arg<0 && !TargetLimits::is_signed) ||                     // loosing the sign here
                 ( SourceLimits::is_signed && arg<TargetLimits::min()) ||    // underflow will happen
                 ( arg>TargetLimits::max() ) )                               // overflow will happen
