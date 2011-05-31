@@ -406,9 +406,9 @@ sal_Bool DrawDocShell::LoadFrom( SfxMedium& rMedium )
 |*
 \************************************************************************/
 
-sal_Bool DrawDocShell::ImportFrom( SfxMedium &rMedium )
+sal_Bool DrawDocShell::ImportFrom( SfxMedium &rMedium, bool bInsert )
 {
-    const sal_Bool bRet=SfxObjectShell::ImportFrom(rMedium);
+    const sal_Bool bRet=SfxObjectShell::ImportFrom(rMedium, bInsert);
 
     SfxItemSet* pSet = rMedium.GetItemSet();
     if( pSet )
