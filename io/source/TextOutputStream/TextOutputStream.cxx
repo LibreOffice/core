@@ -255,18 +255,9 @@ OUString TextOutputStream_getImplementationName() SAL_THROW(  () )
 
 Sequence< OUString > TextOutputStream_getSupportedServiceNames()
 {
-    static Sequence < OUString > *pNames = 0;
-    if( ! pNames )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( !pNames )
-        {
-            static Sequence< OUString > seqNames(1);
-            seqNames.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ) );
-            pNames = &seqNames;
-        }
-    }
-    return *pNames;
+    Sequence< OUString > seqNames(1);
+    seqNames.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ) );
+    return seqNames;
 }
 
 OUString OTextOutputStream::getImplementationName() throw()

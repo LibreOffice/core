@@ -458,18 +458,9 @@ OUString TextInputStream_getImplementationName()
 
 Sequence< OUString > TextInputStream_getSupportedServiceNames()
 {
-    static Sequence < OUString > *pNames = 0;
-    if( ! pNames )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( !pNames )
-        {
-            static Sequence< OUString > seqNames(1);
-            seqNames.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ) );
-            pNames = &seqNames;
-        }
-    }
-    return *pNames;
+    Sequence< OUString > seqNames(1);
+    seqNames.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ) );
+    return seqNames;
 }
 
 OUString OTextInputStream::getImplementationName() throw()
