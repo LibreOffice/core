@@ -87,8 +87,8 @@
 
 #define RUNTIME_X64_NAME    TEXT( "redist\\vcredist_x64.exe" )
 #define RUNTIME_X86_NAME    TEXT( "redist\\vcredist_x86.exe" )
-#define PRODUCTCODE_X86     TEXT( "{E503B4BF-F7BB-3D5F-8BC8-F694B1CFF942}" )
-#define PRODUCTCODE_X64     TEXT( "{350AA351-21FA-3270-8B7A-835434E766AD}" )
+#define PRODUCTCODE_X86     TEXT( "{1F1C2DFC-2D24-3E06-BCB8-725134ADF989}" )
+#define PRODUCTCODE_X64     TEXT( "{4B6C7001-C7D6-3710-913E-5BC23FCE91E6}" )
 
 #define MSIAPI_DllGetVersion     "DllGetVersion"
 #define ADVAPI32API_CheckTokenMembership "CheckTokenMembership"
@@ -835,10 +835,10 @@ boolean SetupAppX::LaunchInstaller( LPCTSTR pParam )
     PROCESS_INFORMATION aPI;
 
     Log( TEXT( " Will install using <%s>\r\n" ), sMsiPath );
-    Log( TEXT( "   Prameters are: %s\r\n" ), pParam );
+    Log( TEXT( "   Parameters are: %s\r\n" ), pParam );
 
     OutputDebugStringFormat( TEXT( " Will install using <%s>\r\n" ), sMsiPath );
-    OutputDebugStringFormat( TEXT( "   Prameters are: %s\r\n" ), pParam );
+    OutputDebugStringFormat( TEXT( "   Parameters are: %s\r\n" ), pParam );
 
     ZeroMemory( (void*)&aPI, sizeof( PROCESS_INFORMATION ) );
     ZeroMemory( (void*)&aSUI, sizeof( STARTUPINFO ) );

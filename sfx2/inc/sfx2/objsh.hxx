@@ -230,6 +230,9 @@ protected:
     /// template method, called by FlushDocInfo; this implementation is empty
     virtual void                DoFlushDocInfo();
 
+    // helper method
+    void AddToRecentlyUsedList();
+
 public:
                                 TYPEINFO();
                                 SFX_DECL_INTERFACE(SFX_INTERFACE_SFXDOCSH)

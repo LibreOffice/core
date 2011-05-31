@@ -570,7 +570,6 @@ void    UCBStream::SetSize( sal_uIntPtr nSize )
     SetError( ERRCODE_IO_GENERAL );
 }
 
-
 // Oeffnen eines Streams
 SbError SbiStream::Open
 ( short nCh, const ByteString& rName, short nStrmMode, short nFlags, short nL )

@@ -243,8 +243,8 @@ int BasicApp::Main( )
 
     try
     {
+    // this line is not ( afaics ) necessary  ( remove from master )
     uno::Reference< XContentProviderManager > xUcb = InitializeUCB();
-
     {
         DirEntry aIniPath( Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ) );
         if ( !aIniPath.Exists() )

@@ -2113,7 +2113,8 @@ namespace xmloff { namespace token {
         TOKEN( "default-page-layout",             XML_DEFAULT_PAGE_LAYOUT ),
         TOKEN( "layout-grid-standard-mode",       XML_LAYOUT_GRID_STANDARD_MODE ),
         TOKEN( "layout-grid-base-width",          XML_LAYOUT_GRID_BASE_WIDTH ),
-        TOKEN( "layout-grid-snap-to-characters",       XML_LAYOUT_GRID_SNAP_TO_CHARS ),
+        TOKEN( "layout-grid-snap-to-characters",  XML_LAYOUT_GRID_SNAP_TO_CHARS ),
+        TOKEN( "layout-grid-snap-to",             XML_LAYOUT_GRID_SNAP_TO ),
 
         TOKEN( "snap-to-layout-grid",             XML_SNAP_TO_LAYOUT_GRID ),
 

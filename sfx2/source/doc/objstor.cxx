@@ -821,15 +821,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             && !( pPreviewItem && pPreviewItem->GetValue() )
             && !( pHiddenItem && pHiddenItem->GetValue() ) )
             {
-                INetURLObject aUrl( pMedium->GetOrigURL() );
-
-                if ( aUrl.GetProtocol() == INET_PROT_FILE )
-                {
-                    const SfxFilter* pOrgFilter = pMedium->GetOrigFilter();
-                    Application::AddToRecentDocumentList(
-                        aUrl.GetURLNoPass( INetURLObject::NO_DECODE ),
-                        (pOrgFilter) ? pOrgFilter->GetMimeType() : String() );
-                }
+                AddToRecentlyUsedList();
             }
         }
 
@@ -2085,7 +2077,21 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
     pMedium->ClearBackup_Impl();
     pMedium->LockOrigFileOnDemand( sal_True, sal_False );
 
+    AddToRecentlyUsedList();
+
     return bOk;
+}
+
+void SfxObjectShell::AddToRecentlyUsedList()
+{
+    INetURLObject aUrl( pMedium->GetOrigURL() );
+
+    if ( aUrl.GetProtocol() == INET_PROT_FILE )
+    {
+        const SfxFilter* pOrgFilter = pMedium->GetOrigFilter();
+        Application::AddToRecentDocumentList( aUrl.GetURLNoPass( INetURLObject::NO_DECODE ),
+                                              (pOrgFilter) ? pOrgFilter->GetMimeType() : String() );
+    }
 }
 
 //-------------------------------------------------------------------------

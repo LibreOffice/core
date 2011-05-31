@@ -62,7 +62,7 @@ PRODUCTNAME.libreoffice = LibreOffice
 PRODUCTVERSION.libreoffice = $(PRODUCTVERSION)
 PRODUCTVERSIONSHORT.libreoffice = $(PRODUCTVERSIONSHORT)
 PKGVERSION.libreoffice = $(PKGVERSION)
-UNIXFILENAME.libreoffice = $(PRODUCTNAME.libreoffice:l)
+UNIXFILENAME.libreoffice = $(PRODUCTNAME.libreoffice:l)$(PRODUCTVERSION.libreoffice)
 ICONPREFIX.libreoffice = $(UNIXFILENAME.libreoffice:s/.//g)
 
 PRODUCTNAME.oxygenoffice = OxygenOffice

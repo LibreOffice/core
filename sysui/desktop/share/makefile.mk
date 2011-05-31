@@ -150,7 +150,7 @@ $(LAUNCHERFLAGFILE) : $(LAUNCHERDEPN)
     @@-$(MKDIRHIER) $(@:db).$(INPATH).$(@:f)
     @echo Creating desktop entries for $(@:f) ..
     @echo ---------------------------------
-    @$(PERL) brand.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -u $(UNIXWRAPPERNAME) --iconprefix '$${{WITHOUTDOTUNIXPRODUCTNAME}}-' $< $(@:db).$(INPATH).$(@:f)
+    @$(PERL) brand.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -u $(UNIXWRAPPERNAME) --iconprefix '$(ICONPREFIX.libreoffice)-' $< $(@:db).$(INPATH).$(@:f)
     @$(PERL) translate.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -d $(@:db).$(INPATH).$(@:f) --ext "desktop" --key "Name" $(ULFDIR)$/launcher_name.ulf
     @$(PERL) translate.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -d $(@:db).$(INPATH).$(@:f) --ext "desktop" --key "Comment" $(ULFDIR)$/launcher_comment.ulf
     @$(PERL) translate.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -d $(@:db).$(INPATH).$(@:f) --ext "desktop" --key "GenericName" $(ULFDIR)$/launcher_genericname.ulf
@@ -224,6 +224,7 @@ $(COMMONMISC)$/{$(PRODUCTLIST)}$/create_tree.sh : $$(@:f)
     @echo "PREFIX=$(UNIXFILENAME.$(@:d:d:f))" >> $@.$(INPATH)
     @echo "ICON_PREFIX=$(ICONPREFIX.$(@:d:d:f))" >> $@.$(INPATH)
     @echo "ICON_SOURCE_DIR=../../../desktop/icons" >> $@.$(INPATH)
+    @echo "PRODUCTVERSION=$(PRODUCTVERSION.$(@:d:d:f))" >> $@.$(INPATH)
     @cat $< >> $@.$(INPATH)
     @chmod 774 $@.$(INPATH)
     @mv -f $@.$(INPATH) $@

@@ -2678,7 +2678,8 @@ void XMLTextImportHelper::pushFieldCtx( ::rtl::OUString name, ::rtl::OUString ty
 
 void XMLTextImportHelper::popFieldCtx()
 {
-    m_pImpl->m_FieldStack.pop();
+    if ( !m_pImpl->m_FieldStack.empty() )
+        m_pImpl->m_FieldStack.pop();
 }
 
 void XMLTextImportHelper::addFieldParam( ::rtl::OUString name, ::rtl::OUString value )
