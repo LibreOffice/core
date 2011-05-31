@@ -132,7 +132,7 @@ private:
     Selection               theCurSel;
     SvxTPFilter*            pTPFilter;
     SvxTPView*              pTPView;
-    SvxRedlinTable*         pTheView; // PB 2006/02/02 #i48648 now SvHeaderTabListBox
+    SvxRedlinTable*         pTheView; // #i48648 now SvHeaderTabListBox
     Size                    MinSize;
     ScRangeList             aRangeList;
     ScChangeViewSettings    aChangeViewSet;

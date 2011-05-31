@@ -90,26 +90,26 @@ public:
     //@todo define this for debug only, except URL
     sal_Bool            AsTemplate; //document is a template.
     sal_Bool            ISSET_AsTemplate;
-    ::rtl::OUString     Author; //
+    ::rtl::OUString     Author;
     sal_Bool            ISSET_Author;
     ::rtl::OUString     CharacterSet; //identifier of used character set.
     sal_Bool            ISSET_CharacterSet;
-    ::rtl::OUString     Comment;//
+    ::rtl::OUString     Comment;
     sal_Bool            ISSET_Comment;
 
     ::com::sun::star::uno::Any
-                        ComponentData;//
+                        ComponentData;
     sal_Bool            ISSET_ComponentData;
     ::rtl::OUString     FileName; //deprecated, same as url
     sal_Bool            ISSET_FileName;
     ::com::sun::star::uno::Any
-                        FilterData;//
+                        FilterData;
     sal_Bool            ISSET_FilterData;
     ::rtl::OUString     FilterName; //internal filter name.
     sal_Bool            ISSET_FilterName;
     ::rtl::OUString     FilterFlags;//deprecated,
     sal_Bool            ISSET_FilterFlags;
-    ::rtl::OUString     FilterOptions;//
+    ::rtl::OUString     FilterOptions;
     sal_Bool            ISSET_FilterOptions;
             //not documented ... @todo remove?
     ::rtl::OUString     FrameName; //name of target frame.
@@ -128,7 +128,7 @@ public:
                         InputStream; //content of document.
     sal_Bool            ISSET_InputStream;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                        InteractionHandler; //  //::com::sun::star::task::XInteractionHandler
+                        InteractionHandler; //::com::sun::star::task::XInteractionHandler
     sal_Bool            ISSET_InteractionHandler;
 
     ::rtl::OUString     JumpMark;   //specifies the name of a mark within the document where the first view is to position itself.
@@ -141,7 +141,7 @@ public:
     sal_Bool            ISSET_OpenNewView;
     sal_Bool            Overwrite; //opens a new view for an already loaded document.
     sal_Bool            ISSET_Overwrite;
-    ::rtl::OUString     Password; //
+    ::rtl::OUString     Password;
     sal_Bool            ISSET_Password;
 
         //not documented ... @todo remove?
@@ -162,7 +162,7 @@ public:
     sal_Bool            ISSET_Referer;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                        StatusIndicator; //  //::com::sun::star::task::XStatusIndicator
+                        StatusIndicator; //::com::sun::star::task::XStatusIndicator
     sal_Bool            ISSET_StatusIndicator;
         //not documented ... @todo remove?
     sal_Bool            Silent; //prevents dialogs to query for more information.
@@ -179,7 +179,7 @@ public:
     sal_Bool            ISSET_Version;
 
     ::com::sun::star::uno::Any
-                        ViewData;//
+                        ViewData;
     sal_Bool            ISSET_ViewData;
     sal_Int16           ViewId; //id of the initial view.
     sal_Bool            ISSET_ViewId;

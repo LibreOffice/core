@@ -75,7 +75,6 @@ protected:
     sal_Bool volatile       m_bDisposed;
     sal_Bool volatile       m_bInDispose;
 
-    //
     sal_Bool                m_bLongLastingCallsCancelable;
     ::osl::Condition        m_aNoLongLastingCallCountCondition;
     sal_Int32 volatile      m_nLongLastingCallCount;

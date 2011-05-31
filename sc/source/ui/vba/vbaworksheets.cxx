@@ -115,7 +115,7 @@ public:
     SheetCollectionHelper( const SheetMap& sMap ) : mSheetMap( sMap ), cachePos(mSheetMap.begin()) {}
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  sheet::XSpreadsheet::static_type(0); }
-    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException) { return ( mSheetMap.size() > 0 ); }
+    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException) { return ( !mSheetMap.empty() ); }
     // XNameAcess
     virtual uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {

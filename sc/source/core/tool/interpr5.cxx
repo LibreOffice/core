@@ -1897,7 +1897,7 @@ namespace {
 // -----------------------------------------------------------------------------
 // Helper methods for LINEST/LOGEST and TREND/GROWTH
 // All matrices must already exist and have the needed size, no control tests
-// done. Those methodes, which names start with lcl_T, are adapted to case 3,
+// done. Those methods, which names start with lcl_T, are adapted to case 3,
 // where Y (=observed values) is given as row.
 // Remember, ScMatrix matrices are zero based, index access (column,row).
 // -----------------------------------------------------------------------------

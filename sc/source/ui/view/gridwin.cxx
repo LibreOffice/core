@@ -5277,7 +5277,7 @@ void ScGridWindow::UpdateCursorOverlay()
         }
     }
 
-    if ( aPixelRects.size() )
+    if ( !aPixelRects.empty() )
     {
         // #i70788# get the OverlayManager safely
         ::sdr::overlay::OverlayManager* pOverlayManager = getOverlayManager();

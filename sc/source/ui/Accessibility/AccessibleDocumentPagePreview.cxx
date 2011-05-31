@@ -371,7 +371,7 @@ sal_Int32 ScNotesChilds::CheckChanges(const ScPreviewLocationData& rData,
                         aNote.maNoteText = pNote->GetText();
                 }
 
-                sal_Int8 nCompare(-1); // if there are no more old childs it is always a new one
+                sal_Int8 nCompare(-1); // if there are no more old children it is always a new one
                 if (aItr != aEndItr)
                     nCompare = CompareCell(aNote.maNoteCell, aItr->maNoteCell);
                 if (nCompare == 0)
@@ -392,10 +392,10 @@ sal_Int32 ScNotesChilds::CheckChanges(const ScPreviewLocationData& rData,
                         aNote.mpTextHelper = CreateTextHelper(aNote.maNoteText, aNote.maRect, aNote.maNoteCell, aNote.mbMarkNote, nParagraphs + mnOffset);
                         if (aNote.mpTextHelper)
                             aNote.mnParaCount = aNote.mpTextHelper->GetChildCount();
-                        // collect removed childs
+                        // collect removed children
                         CollectChilds(*aItr, rOldParas);
                         DELETEZ(aItr->mpTextHelper);
-                        // collect new childs
+                        // collect new children
                         CollectChilds(aNote, rNewParas);
                     }
                     bAddNote = sal_True;
@@ -408,13 +408,13 @@ sal_Int32 ScNotesChilds::CheckChanges(const ScPreviewLocationData& rData,
                     aNote.mpTextHelper = CreateTextHelper(aNote.maNoteText, aNote.maRect, aNote.maNoteCell, aNote.mbMarkNote, nParagraphs + mnOffset);
                     if (aNote.mpTextHelper)
                         aNote.mnParaCount = aNote.mpTextHelper->GetChildCount();
-                    // collect new childs
+                    // collect new children
                     CollectChilds(aNote, rNewParas);
                     bAddNote = sal_True;
                 }
                 else
                 {
-                    // collect removed childs
+                    // collect removed children
                     CollectChilds(*aItr, rOldParas);
                     DELETEZ(aItr->mpTextHelper);
 

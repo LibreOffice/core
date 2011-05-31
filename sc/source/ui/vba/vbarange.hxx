@@ -306,7 +306,7 @@ public:
 // #TODO completely rewrite ScVbaRange, its become a hackfest
 // it needs to be closer to ScCellRangeBase in that the underlying
 // object model should probably be a ScRangelst.
-//     * would be nice to be able to construct a range from an addres only
+//     * would be nice to be able to construct a range from an address only
 //     * or a list of address ( multi-area )
 //     * object should be a lightweight as possible
 //     * we shouldn't need hacks like this below
