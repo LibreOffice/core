@@ -54,7 +54,7 @@
 #include <svtools/imagemgr.hrc>
 #include <svtools/svtdata.hxx>
 #include <osl/mutex.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <vcl/lazydelete.hxx>
 
 // globals *******************************************************************
 
@@ -509,8 +509,8 @@ static Image GetImageFromList_Impl( sal_uInt16 nImageId, sal_Bool bBig )
 
     ImageList* pList = NULL;
 
-    static boost::scoped_ptr<ImageList> xSmallImageList;
-    static boost::scoped_ptr<ImageList> xBigImageList;
+    static vcl::DeleteOnDeinit< ImageList > xSmallImageList( NULL );
+    static vcl::DeleteOnDeinit< ImageList > xBigImageList( NULL );
     static sal_uLong nStyle = Application::GetSettings().GetStyleSettings().GetSymbolsStyle();
 
     // If the style has been changed, throw away our cache of the older images
@@ -523,13 +523,13 @@ static Image GetImageFromList_Impl( sal_uInt16 nImageId, sal_Bool bBig )
 
     if ( bBig )
     {
-        if ( !xBigImageList )
+        if ( !xBigImageList.get() )
             xBigImageList.reset(new ImageList(SvtResId(RID_SVTOOLS_IMAGELIST_BIG)));
         pList = xBigImageList.get();
     }
     else
     {
-        if ( !xSmallImageList )
+        if ( !xSmallImageList.get() )
             xSmallImageList.reset(new ImageList(SvtResId(RID_SVTOOLS_IMAGELIST_SMALL)));
         pList = xSmallImageList.get();
     }
