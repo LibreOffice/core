@@ -110,7 +110,7 @@ CONFIGURE_DIR=source
 .IF "$(OS)"=="IOS"
 STATIC_OR_SHARED=--enable-static --disable-shared
 .ELSE
-STATIC_OR_SHARED==--disable-static --enable-shared
+STATIC_OR_SHARED=--disable-static --enable-shared
 .ENDIF
 
 .IF "$(CROSS_COMPILING)"!=""

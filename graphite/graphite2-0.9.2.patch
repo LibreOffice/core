@@ -371,15 +371,13 @@ diff -r 5369cdd12120 src/gr_slot.cpp
 diff current src/List.h
 --- misc/build/graphite2-0.9.2/src/List.h	Sat Feb 12 22:54:16 2011 +0700
 +++ misc/build/graphite2-0.9.2/src/List.h	Fri Feb 18 16:05:40 2011 +0700
-@@ -51,6 +51,6 @@
+@@ -51,5 +51,5 @@
      template <typename I> 
      Vector(I first, const I last)               : m_first(0), m_last(0), m_end(0) { insert(begin(), first, last); }
 -    ~Vector() { free(m_first); }
 +    ~Vector() { clear(); free(m_first); }
      
      iterator            begin()         { return m_first; }
-     const_iterator      begin() const   { return m_first; }
-
 --- misc/graphite2-0.9.2/src/Code.cpp	2011-02-12 16:54:16.000000000 +0100
 +++ misc/build/graphite2-0.9.2/src/Code.cpp	2011-03-11 11:28:11.700215286 +0100
 @@ -168,7 +168,7 @@
@@ -393,15 +391,27 @@ diff current src/List.h
           0,0,0,0,0,0,0,0, 
 --- misc/graphite2-0.9.2/include/graphite2/Types.h	2011-02-12 16:54:16.000000000 +0100
 +++ misc/build/graphite2-0.9.2/include/graphite2/Types.h	2011-03-15 21:38:06.264788098 +0100
-@@ -36,7 +36,7 @@
- };
+@@ -36,19 +36,7 @@
  
  // Definitions for library publicly exported symbols
--#if defined _WIN32 || defined __CYGWIN__
-+#if ( defined _WIN32 || defined __CYGWIN__ ) && !defined GR2_STATIC
-   #ifdef GR2_EXPORTING
-     #ifdef __GNUC__
-       #define GR2_API    __attribute__((dllexport))
+ #if defined _WIN32 || defined __CYGWIN__
+-  #ifdef GR2_EXPORTING
+-    #ifdef __GNUC__
+-      #define GR2_API    __attribute__((dllexport))
+-    #else
+-      #define GR2_API    __declspec(dllexport)
+-    #endif
+-  #else
+-    #ifdef __GNUC__
+-      #define GR2_API    __attribute__((dllimport))
+-    #else
+-      #define GR2_API    __declspec(dllimport)
+-    #endif
+-  #endif
++  #define GR2_API
+   #define GR2_LOCAL
+ #else
+   #if __GNUC__ >= 4
 diff -r b3a86877ec68 src/Pass.cpp
 --- misc/build/graphite2-0.9.2/src/Pass.cpp	Wed May 11 09:34:52 2011 +0700
 +++ misc/build/graphite2-0.9.2/src/Pass.cpp	Mon May 16 13:54:00 2011 +0700
