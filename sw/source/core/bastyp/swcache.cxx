@@ -128,34 +128,34 @@ SwCache::~SwCache()
 {
     {
         ByteString sOut( aName ); sOut += '\n';
-        (( sOut += "Anzahl neuer Eintraege:             " )
+        (( sOut += "Number of new entries:                 " )
                     += ByteString::CreateFromInt32( nAppend ))+= '\n';
-        (( sOut += "Anzahl Insert auf freie Plaetze:    " )
+        (( sOut += "Number of insert on free places:       " )
                     += ByteString::CreateFromInt32( nInsertFree ))+= '\n';
-        (( sOut += "Anzahl Ersetzungen:                 " )
+        (( sOut += "Number of replacements:                " )
                     += ByteString::CreateFromInt32( nReplace ))+= '\n';
-        (( sOut += "Anzahl Erfolgreicher Get's:         " )
+        (( sOut += "Number of successful Get's:            " )
                     += ByteString::CreateFromInt32( nGetSuccess ))+= '\n';
-        (( sOut += "Anzahl Fehlgeschlagener Get's:      " )
+        (( sOut += "Number of failed Get's:                " )
                     += ByteString::CreateFromInt32( nGetFail ))+= '\n';
-        (( sOut += "Anzahl Umsortierungen (LRU):        " )
+        (( sOut += "Number or reordering (LRU):            " )
                     += ByteString::CreateFromInt32( nToTop ))+= '\n';
-        (( sOut += "Anzahl Loeschungen:                 " )
+        (( sOut += "Number of suppressions:                " )
                     += ByteString::CreateFromInt32( nDelete ))+= '\n';
-        (( sOut += "Anzahl Get's ohne Index:            " )
+        (( sOut += "Number of Get's without Index:         " )
                     += ByteString::CreateFromInt32( nGetSeek ))+= '\n';
-        (( sOut += "Anzahl Seek fuer Get ohne Index:    " )
+        (( sOut += "Number of Seek for Get without Index:  " )
                     += ByteString::CreateFromInt32( nAverageSeekCnt ))+= '\n';
-        (( sOut += "Anzahl Flush-Aufrufe:               " )
+        (( sOut += "Number of Flush calls:                 " )
                     += ByteString::CreateFromInt32( nFlushCnt ))+= '\n';
-        (( sOut += "Anzahl geflush'ter Objekte:         " )
+        (( sOut += "Number of flushed objects:             " )
                     += ByteString::CreateFromInt32( nFlushedObjects ))+= '\n';
-        (( sOut += "Anzahl Cache-Erweiterungen:         " )
+        (( sOut += "Number of Cache expansions:            " )
                     += ByteString::CreateFromInt32( nIncreaseMax ))+= '\n';
-        (( sOut += "Anzahl Cache-Verkleinerungen:       " )
+        (( sOut += "Number of Cache reductions:            " )
                     += ByteString::CreateFromInt32( nDecreaseMax ))+= '\n';
 
-        OSL_FAIL( sOut.GetBuffer() );
+        OSL_TRACE( sOut.GetBuffer() );
     }
     Check();
 }
