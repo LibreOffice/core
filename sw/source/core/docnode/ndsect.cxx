@@ -1065,7 +1065,8 @@ SwFrm* SwClearDummies( SwFrm* pFrm )
 SwSectionNode::~SwSectionNode()
 {
     // mba: test if iteration works as clients will be removed in callback
-    m_pSection->GetFmt()->CallSwClientNotify( SfxSimpleHint( SFX_HINT_DYING ) );
+    // use hint which allows to specify, if the content shall be saved or not
+    m_pSection->GetFmt()->CallSwClientNotify( SwSectionFrmMoveAndDeleteHint( sal_True ) );
     SwSectionFmt* pFmt = m_pSection->GetFmt();
     if( pFmt )
     {

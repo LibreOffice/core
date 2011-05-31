@@ -2677,24 +2677,24 @@ void RtfAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
 
             HdFtDistanceGlue aDistances( *m_rExport.GetCurItemSet() );
 
+            if( aDistances.dyaTop )
+            {
+                m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_MARGTSXN);
+                m_aSectionBreaks.append((sal_Int32)aDistances.dyaTop);
+            }
             if ( aDistances.HasHeader() )
             {
-                if( aDistances.dyaTop )
-                {
-                    m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_MARGTSXN);
-                    m_aSectionBreaks.append((sal_Int32)aDistances.dyaTop);
-                }
                 m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_HEADERY);
                 m_aSectionBreaks.append((sal_Int32)aDistances.dyaHdrTop);
             }
 
+            if( aDistances.dyaBottom )
+            {
+                m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_MARGBSXN);
+                m_aSectionBreaks.append((sal_Int32)aDistances.dyaBottom);
+            }
             if( aDistances.HasFooter() )
             {
-                if( aDistances.dyaBottom )
-                {
-                    m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_MARGBSXN);
-                    m_aSectionBreaks.append((sal_Int32)aDistances.dyaBottom);
-                }
                 m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_FOOTERY);
                 m_aSectionBreaks.append((sal_Int32)aDistances.dyaHdrBottom);
             }

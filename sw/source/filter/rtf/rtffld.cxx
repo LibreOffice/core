@@ -1089,6 +1089,9 @@ void SwRTFParser::ReadField()
                                             nsSetAttrMode::SETATTR_DONTEXPAND );
                             pPam->DeleteMark();
 
+                            // #i117947#: insert result only once in case
+                            // field result is followed by invalid tokens
+                            sFieldStr.Erase();
                         }
                         break;
                     }

@@ -190,17 +190,17 @@ void SwViewImp::SetFirstVisPage()
         const bool bBookMode = pSwViewOption->IsViewLayoutBookMode();
 
         SwPageFrm *pPage = (SwPageFrm*)pSh->GetLayout()->Lower();
-        SwRect aPageRect = pPage->Frm();
+        SwRect aPageRect = pPage->GetBoundRect();
         while ( pPage && !aPageRect.IsOver( pSh->VisArea() ) )
         {
             pPage = (SwPageFrm*)pPage->GetNext();
             if ( pPage )
             {
-                aPageRect = pPage->Frm();
+                aPageRect = pPage->GetBoundRect();
                 if ( bBookMode && pPage->IsEmptyPage() )
                 {
                     const SwPageFrm& rFormatPage = pPage->GetFormatPage();
-                    aPageRect.SSize() = rFormatPage.Frm().SSize();
+                    aPageRect.SSize() = rFormatPage.GetBoundRect().SSize();
                 }
             }
         }

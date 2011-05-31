@@ -1744,7 +1744,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
 
     AttrOutput().StartParagraph( pTextNodeInfo );
 
-    bool bFlyInTable = mpParentFrame && bIsInTable;
+    bool bFlyInTable = mpParentFrame && IsInTable();
 
     if ( !bFlyInTable )
         nStyleBeforeFly = GetId( lcl_getFormatCollection( *this, &rNode ) );
@@ -2031,7 +2031,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
 
     AttrOutput().ParagraphStyle( nStyle );
 
-    if ( mpParentFrame && !bIsInTable )    // Fly-Attrs
+    if ( mpParentFrame && IsInTable() )    // Fly-Attrs
         OutputFormat( mpParentFrame->GetFrmFmt(), false, false, true );
 
     if ( pTextNodeInfo.get() != NULL )
@@ -2425,7 +2425,7 @@ void MSWordExportBase::OutputSectionNode( const SwSectionNode& rSectionNode )
 
     SwNodeIndex aIdx( rSectionNode, 1 );
     const SwNode& rNd = aIdx.GetNode();
-    if ( !rNd.IsSectionNode() && !bIsInTable ) //No sections in table
+    if ( !rNd.IsSectionNode() && !IsInTable() ) //No sections in table
     {
         // Bug 74245 - if the first Node inside the section has an own
         //              PageDesc or PageBreak attribut, then dont write
@@ -2575,7 +2575,7 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFmt, const Point
         if( nStt >= nEnd )      // kein Bereich, also kein gueltiger Node
             return;
 
-        if ( !m_rWW8Export.bIsInTable && rFmt.IsInline() )
+        if ( !m_rWW8Export.IsInTable() && rFmt.IsInline() )
         {
             //Test to see if this textbox contains only a single graphic/ole
             SwTxtNode* pParTxtNode = rAnch.GetCntntAnchor()->nNode.GetNode().GetTxtNode();
@@ -2603,7 +2603,7 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFmt, const Point
 
             m_rWW8Export.mpParentFrame = &rFmt;
             if (
-                 m_rWW8Export.bIsInTable &&
+                m_rWW8Export.IsInTable() &&
                  (FLY_AT_PAGE != rAnch.GetAnchorId()) &&
                  !m_rWW8Export.pDoc->GetNodes()[ nStt ]->IsNoTxtNode()
                )

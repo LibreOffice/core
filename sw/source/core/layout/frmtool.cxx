@@ -872,6 +872,10 @@ SwCntntNotify::~SwCntntNotify()
                  (pNd->GetOLEObj().IsOleRef() ||
                   pNd->IsOLESizeInvalid()) )
             {
+                const bool bNoTxtFrmPrtAreaChanged =
+                        ( aPrt.SSize().Width() != 0 &&
+                          aPrt.SSize().Height() != 0 ) &&
+                        aPrt.SSize() != pCnt->Prt().SSize();
                 OSL_ENSURE( pCnt->IsInFly(), "OLE not in FlyFrm" );
                 SwFlyFrm *pFly = pCnt->FindFlyFrm();
                 svt::EmbeddedObjectRef& xObj = pNd->GetOLEObj().GetObject();
@@ -898,7 +902,9 @@ SwCntntNotify::~SwCntntNotify()
                         // uiview/view.cxx.
                         if ( !pNd->IsOLESizeInvalid() &&
                              !pSh->GetDoc()->IsUpdateExpFld() )
-                            pFESh->CalcAndSetScale( xObj, &pFly->Prt(), &pFly->Frm());
+                            pFESh->CalcAndSetScale( xObj,
+                                                    &pFly->Prt(), &pFly->Frm(),
+                                                    bNoTxtFrmPrtAreaChanged );
                     }
                     pTmp = (ViewShell*)pTmp->GetNext();
                 } while ( pTmp != pSh );

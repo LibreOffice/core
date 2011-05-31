@@ -72,7 +72,7 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *, OutputDevice *,
 
 // - method to align rectangle
 // Created declaration here to avoid <extern> declarations
-void MA_FASTCALL SwAlignRect( SwRect &rRect, ViewShell *pSh );
+void MA_FASTCALL SwAlignRect( SwRect &rRect, const ViewShell *pSh );
 
 // - method to align graphic rectangle
 // Created declaration here to avoid <extern> declarations

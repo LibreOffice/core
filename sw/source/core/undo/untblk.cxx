@@ -34,6 +34,7 @@
 #include <frmfmt.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IShellCursorSupplier.hxx>
 #include <docary.hxx>
 #include <swundo.hxx>           // fuer die UndoIds
 #include <pam.hxx>
@@ -270,7 +271,7 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
 void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     // setze noch den Cursor auf den Redo-Bereich
-    SwPaM *const pPam = & AddUndoRedoPaM(rContext);
+    SwPaM *const pPam(& rContext.GetCursorSupplier().CreateNewShellCursor());
     SwDoc* pDoc = pPam->GetDoc();
     pPam->DeleteMark();
     pPam->GetPoint()->nNode = nSttNode - nNdDiff;

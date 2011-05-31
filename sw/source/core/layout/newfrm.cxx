@@ -605,7 +605,8 @@ SwRootFrm::~SwRootFrm()
     pTurbo = 0;
     if(pBlink)
         pBlink->FrmDelete( this );
-    static_cast<SwFrmFmt*>(GetRegisteredInNonConst())->GetDoc()->DelFrmFmt( static_cast<SwFrmFmt*>(GetRegisteredInNonConst()) );
+    if ( static_cast<SwFrmFmt*>(GetRegisteredInNonConst()) )
+        static_cast<SwFrmFmt*>(GetRegisteredInNonConst())->GetDoc()->DelFrmFmt( static_cast<SwFrmFmt*>(GetRegisteredInNonConst()) );
     delete pDestroy;
     pDestroy = 0;
 

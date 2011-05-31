@@ -685,7 +685,8 @@ SwSectionFmt::~SwSectionFmt()
                 }
             }
             // mba: test iteration; objects are removed while iterating
-            CallSwClientNotify( SfxSimpleHint(SFX_HINT_DYING) );
+            // use hint which allows to specify, if the content shall be saved or not
+            CallSwClientNotify( SwSectionFrmMoveAndDeleteHint( sal_True ) );
 
             // hebe die Section doch mal auf
             SwNodeRange aRg( *pSectNd, 0, *pSectNd->EndOfSectionNode() );
@@ -715,7 +716,8 @@ void SwSectionFmt::DelFrms()
     {
         // First delete the <SwSectionFrm> of the <SwSectionFmt> instance
         // mba: test iteration as objects are removed in iteration
-        CallSwClientNotify( SfxSimpleHint(SFX_HINT_DYING) );
+        // use hint which allows to specify, if the content shall be saved or not
+        CallSwClientNotify( SwSectionFrmMoveAndDeleteHint( sal_False ) );
 
         // Then delete frames of the nested <SwSectionFmt> instances
         SwIterator<SwSectionFmt,SwSectionFmt> aIter( *this );

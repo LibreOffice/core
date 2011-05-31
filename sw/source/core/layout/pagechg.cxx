@@ -296,7 +296,7 @@ SwPageFrm::~SwPageFrm()
     //Damit der Zugriff auf zerstoerte Seiten verhindert werden kann.
     if ( !IsEmptyPage() ) //#59184# sollte fuer Leerseiten unnoetig sein.
     {
-        SwDoc *pDoc = GetFmt()->GetDoc();
+        SwDoc *pDoc = GetFmt() ? GetFmt()->GetDoc() : NULL;
         if( pDoc && !pDoc->IsInDtor() )
         {
             ViewShell *pSh = getRootFrm()->GetCurrShell();
@@ -310,7 +310,7 @@ SwPageFrm::~SwPageFrm()
                 // including border and shadow area.
                 const bool bRightSidebar = (SidebarPosition() == sw::sidebarwindows::SIDEBAR_RIGHT);
                 SwRect aRetoucheRect;
-                SwPageFrm::GetBorderAndShadowBoundRect( Frm(), pSh, aRetoucheRect, bRightSidebar );
+                SwPageFrm::GetBorderAndShadowBoundRect( Frm(), pSh, aRetoucheRect, IsLeftShadowNeeded(), IsRightShadowNeeded(), bRightSidebar );
                 pSh->AddPaintRect( aRetoucheRect );
             }
         }
@@ -673,7 +673,8 @@ void SwPageFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 // page frame for determine 'old' rectangle - it's used for invalidating.
                 const bool bRightSidebar = (SidebarPosition() == sw::sidebarwindows::SIDEBAR_RIGHT);
                 SwRect aOldRectWithBorderAndShadow;
-                SwPageFrm::GetBorderAndShadowBoundRect( aOldPageFrmRect, pSh, aOldRectWithBorderAndShadow, bRightSidebar );
+                SwPageFrm::GetBorderAndShadowBoundRect( aOldPageFrmRect, pSh, aOldRectWithBorderAndShadow,
+                    IsLeftShadowNeeded(), IsRightShadowNeeded(), bRightSidebar );
                 pSh->InvalidateWindows( aOldRectWithBorderAndShadow );
             }
             rInvFlags |= 0x03;
@@ -862,7 +863,8 @@ void AdjustSizeChgNotify( SwRootFrm *pRoot )
             if( pRoot == pSh->GetLayout() )
             {
                 pSh->SizeChgNotify();
-                pSh->Imp()->NotifySizeChg( pRoot->Frm().SSize() );
+                if ( pSh->Imp() )
+                    pSh->Imp()->NotifySizeChg( pRoot->Frm().SSize() );
             }
             pSh = (ViewShell*)pSh->GetNext();
         } while ( pSh != pRoot->GetCurrShell() );

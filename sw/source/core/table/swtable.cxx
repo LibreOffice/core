@@ -2557,6 +2557,7 @@ sal_uLong SwTableBox::IsValidNumTxtNd( sal_Bool bCheckAttr ) const
                 // Flys/Felder/..
                 if( pHts )
                 {
+                    xub_StrLen nNextSetField = 0;
                     for( sal_uInt16 n = 0; n < pHts->Count(); ++n )
                     {
                         const SwTxtAttr* pAttr = (*pHts)[ n ];
@@ -2564,11 +2565,21 @@ sal_uLong SwTableBox::IsValidNumTxtNd( sal_Bool bCheckAttr ) const
                             *pAttr->GetStart() ||
                             *pAttr->GetAnyEnd() < rTxt.Len() )
                         {
-                            if ( pAttr->Which() == RES_TXTATR_FIELD )
+                            if ((*pAttr->GetStart() == nNextSetField) &&
+                                (pAttr->Which() == RES_TXTATR_FIELD))
                             {
+                                // #i104949# hideous hack for report builder:
+                                // it inserts hidden variable-set fields at
+                                // the beginning of para in cell, but they
+                                // should not turn cell into text cell
                                 const SwField* pField = pAttr->GetFld().GetFld();
-                                if ( pField && pField->GetTypeId() == TYP_SETFLD )
+                                if (pField &&
+                                    (pField->GetTypeId() == TYP_SETFLD) &&
+                                    (0 != (static_cast<SwSetExpField const*>
+                                           (pField)->GetSubType() &
+                                        nsSwExtendedSubType::SUB_INVISIBLE)))
                                 {
+                                    nNextSetField = *pAttr->GetStart() + 1;
                                     continue;
                                 }
                             }

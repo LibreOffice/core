@@ -342,7 +342,8 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     virtual void MoveObjectIfActive( svt::EmbeddedObjectRef& xObj, const Point& rOffset );
     virtual void CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                                   const SwRect *pFlyPrtRect = 0,
-                                  const SwRect *pFlyFrmRect = 0 );
+                                  const SwRect *pFlyFrmRect = 0,
+                                  const bool bNoTxtFrmPrtAreaChanged = false );
     virtual void ConnectObj( svt::EmbeddedObjectRef&  xIPObj, const SwRect &rPrt,
                              const SwRect &rFrm );
 

@@ -1776,7 +1776,6 @@ void MSWordExportBase::SaveData( sal_uLong nStt, sal_uLong nEnd )
     aData.eOldAnchorType = eNewAnchorType;
 
     aData.bOldOutTable = bOutTable;
-    aData.bOldIsInTable = bIsInTable;
     aData.bOldFlyFrmAttrs = bOutFlyFrmAttrs;
     aData.bOldStartTOX = bStartTOX;
     aData.bOldInWriteTOX = bInWriteTOX;
@@ -1811,7 +1810,6 @@ void MSWordExportBase::RestoreData()
     pOrigPam = rData.pOldEnd;
 
     bOutTable = rData.bOldOutTable;
-    bIsInTable = rData.bOldIsInTable;
     bOutFlyFrmAttrs = rData.bOldFlyFrmAttrs;
     bStartTOX = rData.bOldStartTOX;
     bInWriteTOX = rData.bOldInWriteTOX;
@@ -2434,7 +2432,7 @@ void WW8Export::SectionBreaksAndFrames( const SwTxtNode& rNode )
     OutputSectionBreaks( rNode.GetpSwAttrSet(), rNode );
 
     // all textframes anchored as character for the winword 7- format
-    if ( !bWrtWW8 && !bIsInTable )
+    if ( !bWrtWW8 && !IsInTable() )
         OutWW6FlyFrmsInCntnt( rNode );
 }
 
@@ -2490,7 +2488,7 @@ void MSWordExportBase::WriteText()
                 ;
             else if ( aIdx.GetNode().IsSectionNode() )
                 ;
-            else if ( !bIsInTable ) //No sections in table
+            else if ( !IsInTable() ) //No sections in table
             {
                 ReplaceCr( (char)0xc ); // Indikator fuer Page/Section-Break
 
@@ -2567,6 +2565,28 @@ void WW8Export::WriteMainText()
 #if OSL_DEBUG_LEVEL > 1
     ::std::clog << "</WriteMainText>" << ::std::endl;
 #endif
+}
+
+bool MSWordExportBase::IsInTable() const
+{
+    bool bResult = false;
+
+    if (pCurPam != NULL)
+    {
+        SwNode * pNode = pCurPam->GetNode();
+
+        if (pNode != NULL && mpTableInfo.get() != NULL)
+        {
+            ww8::WW8TableNodeInfo::Pointer_t pTableNodeInfo = mpTableInfo->getTableNodeInfo(pNode);
+
+            if (pTableNodeInfo.get() != NULL && pTableNodeInfo->getDepth() > 0)
+            {
+                bResult = true;
+            }
+        }
+    }
+
+    return bResult;
 }
 
 typedef ww8::WW8Sttb< ww8::WW8Struct >  WW8SttbAssoc;
@@ -2873,7 +2893,7 @@ void MSWordExportBase::ExportDocument( bool bWriteAll )
 
     bStyDef = bBreakBefore = bOutKF =
         bOutFlyFrmAttrs = bOutPageDescs = bOutTable = bOutFirstPage =
-        bIsInTable = bOutGrf = bInWriteEscher = bStartTOX =
+        bOutGrf = bInWriteEscher = bStartTOX =
         bInWriteTOX = false;
 
     bFtnAtTxtEnd = bEndAtTxtEnd = true;

@@ -918,7 +918,9 @@ void ViewShell::SetFirstVisPageInvalid()
 {
     ViewShell *pSh = this;
     do
-    {   pSh->Imp()->SetFirstVisPageInvalid();
+    {
+        if ( pSh->Imp() )
+            pSh->Imp()->SetFirstVisPageInvalid();
         pSh = (ViewShell*)pSh->GetNext();
 
     } while ( pSh != this );
@@ -1005,45 +1007,29 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
             SwTwips nMinLeft = LONG_MAX;
             SwTwips nMaxRight= 0;
 
-            const SwTwips nSidebarWidth = pPostItMgr && pPostItMgr->ShowNotes() && pPostItMgr->HasNotes() ?
-                                          pPostItMgr->GetSidebarWidth() + pPostItMgr->GetSidebarBorderWidth() :
-                                          0;
             const bool bBookMode = GetViewOptions()->IsViewLayoutBookMode();
 
             while ( pPage && pPage->Frm().Top() <= nBottom )
             {
-                SwRect aPageRect( pPage->Frm() );
+                SwRect aPageRect( pPage->GetBoundRect() );
                 if ( bBookMode )
                 {
                     const SwPageFrm& rFormatPage = static_cast<const SwPageFrm*>(pPage)->GetFormatPage();
-                    aPageRect.SSize() = rFormatPage.Frm().SSize();
+                    aPageRect.SSize() = rFormatPage.GetBoundRect().SSize();
                 }
 
                 if ( aPageRect.IsOver( aBoth ) )
                 {
-                    const SwTwips nShadowWidth =
-                            GetOut()->PixelToLogic( Size( pPage->ShadowPxWidth(), 0 ) ).Width();
-
                     SwTwips nPageLeft = 0;
                     SwTwips nPageRight = 0;
-                    switch ( pPage->SidebarPosition() )
+                    const sw::sidebarwindows::SidebarPosition aSidebarPos = pPage->SidebarPosition();
+
+                    if( aSidebarPos != sw::sidebarwindows::SIDEBAR_NONE )
                     {
-                        case sw::sidebarwindows::SIDEBAR_LEFT:
-                        {
-                            nPageLeft =  aPageRect.Left() - nSidebarWidth;
-                            nPageRight = aPageRect.Right() + nShadowWidth;
-                        }
-                        break;
-                        case sw::sidebarwindows::SIDEBAR_RIGHT:
-                        {
-                            nPageLeft =  aPageRect.Left();
-                            nPageRight = aPageRect.Right() + nShadowWidth + nSidebarWidth;
-                        }
-                        break;
-                        case sw::sidebarwindows::SIDEBAR_NONE:
-                            // nothing to do
-                        break;
+                        nPageLeft = aPageRect.Left();
+                        nPageRight = aPageRect.Right();
                     }
+
                     if( nPageLeft < nMinLeft )
                         nMinLeft = nPageLeft;
                     if( nPageRight > nMaxRight )

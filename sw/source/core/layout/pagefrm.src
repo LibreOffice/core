@@ -1,17 +1,7 @@
 #include "pagefrm.hrc"
 
-Bitmap BMP_PAGE_RIGHT_SHADOW_MASK
+Bitmap BMP_PAGE_SHADOW_MASK
 {
-    File = "page-right-shadow-mask.png";
-};
-
-Bitmap BMP_PAGE_BOTTOM_RIGHT_SHADOW_MASK
-{
-    File = "page-bottomright-shadow-mask.png";
-};
-
-Bitmap BMP_PAGE_BOTTOM_SHADOW_MASK
-{
-    File = "page-bottom-shadow-mask.png";
+    File = "page-shadow-mask.png";
 };
 

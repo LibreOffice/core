@@ -95,29 +95,7 @@ class SwPageFrm: public SwFtnBossFrm
     // Anpassen der max. Fussnotenhoehen in den einzelnen Spalten
     void SetColMaxFtnHeight();
 
-    /** determine rectangle for right page shadow
-
-        #i9719#
-
-        @param _rPageRect
-        input parameter - constant instance reference of the page rectangle.
-        Generally, it's the frame area of the page, but for empty pages in print
-        preview, this parameter is useful.
-
-        @param _pViewShell
-        input parameter - instance of the view shell, for which the rectangle
-        has to be generated.
-
-        @param _orRightShadowRect
-        output parameter - instance reference of the right shadow rectangle for
-        the given page rectangle
-    */
-    static void GetRightShadowRect( const SwRect& _rPageRect,
-                                    ViewShell*    _pViewShell,
-                                    SwRect&       _orRightShadowRect,
-                                    bool bRightSidebar );
-
-    /** determine rectangle for bottom page shadow
+    /** determine rectangle for horizontal page shadow
 
         #i9719#
 
@@ -135,10 +113,11 @@ class SwPageFrm: public SwFtnBossFrm
         the given page rectangle
     */
 
-    static void GetBottomShadowRect( const SwRect& _rPageRect,
-                                     ViewShell*    _pViewShell,
+    static void GetHorizontalShadowRect( const SwRect& _rPageRect,
+                                     const ViewShell*    _pViewShell,
                                      SwRect&       _orBottomShadowRect,
-                                     bool bFullBottomShadow,
+                                     bool bPaintLeftShadow,
+                                     bool bPaintRightShadow,
                                      bool bRightSidebar );
 
     /** adds the sidebar used for notes to right and left border
@@ -192,6 +171,8 @@ public:
     inline       SwCntntFrm  *FindFirstBodyCntnt();
     inline const SwCntntFrm  *FindFirstBodyCntnt() const;
     inline const SwCntntFrm  *FindLastBodyCntnt() const;
+
+    SwRect GetBoundRect() const;
 
     //Spezialisiertes GetCntntPos() fuer Felder in Rahmen.
     void GetCntntPosition( const Point &rPt, SwPosition &rPos ) const;
@@ -267,6 +248,8 @@ public:
     inline void ValidateWordCount() const;
     inline sal_Bool IsInvalid() const;
     inline sal_Bool IsInvalidFly() const;
+    sal_Bool IsRightShadowNeeded() const;
+    sal_Bool IsLeftShadowNeeded() const;
     sal_Bool IsInvalidFlyLayout() const { return bInvalidFlyLayout; }
     sal_Bool IsInvalidFlyCntnt() const { return bInvalidFlyCntnt; }
     sal_Bool IsInvalidFlyInCnt() const { return bInvalidFlyInCnt; }
@@ -328,9 +311,9 @@ public:
         shadow with & position).
     */
     static void PaintBorderAndShadow( const SwRect& _rPageRect,
-                                      ViewShell*    _pViewShell,
+                                      const ViewShell*    _pViewShell,
+                                      bool bPaintLeftShadow,
                                       bool bPaintRightShadow,
-                                      bool bFullBottomShadow,
                                       bool bRightSidebar );
 
     /** get bound rectangle of border and shadow for repaints
@@ -351,9 +334,12 @@ public:
         rectangle for the given page rectangle
     */
     static void GetBorderAndShadowBoundRect( const SwRect& _rPageRect,
-                                             ViewShell*    _pViewShell,
+                                             const ViewShell*    _pViewShell,
                                              SwRect& _orBorderAndShadowBoundRect,
-                                             const bool bRightSidebar );
+                                             const bool bLeftShadow,
+                                             const bool bRightShadow,
+                                             const bool bRightSidebar
+                                            );
 
     static void PaintNotesSidebar(const SwRect& _rPageRect, ViewShell* _pViewShell, sal_uInt16 nPageNum, bool bRight);
     static void PaintNotesSidebarArrows(const Point &aMiddleFirst, const Point &aMiddleSecond, ViewShell* _pViewShell, const Color aColorUp, const Color aColorDown);
