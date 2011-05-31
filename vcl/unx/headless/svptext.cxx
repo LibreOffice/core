@@ -77,19 +77,49 @@ protected:
 class SvpGlyphCache : public GlyphCache
 {
 public:
-    SvpGlyphPeer&       GetPeer() { return reinterpret_cast<SvpGlyphPeer&>( mrPeer ); }
-static SvpGlyphCache&   GetInstance();
-private:
     SvpGlyphCache( SvpGlyphPeer& rPeer ) : GlyphCache( rPeer) {}
+    SvpGlyphPeer& GetPeer() { return reinterpret_cast<SvpGlyphPeer&>( mrPeer ); }
+    static SvpGlyphCache& GetInstance();
 };
 
-//--------------------------------------------------------------------------
+namespace
+{
+    struct GlyphCacheHolder
+    {
+    private:
+        SvpGlyphPeer* m_pSvpGlyphPeer;
+        SvpGlyphCache* m_pSvpGlyphCache;
+    public:
+        GlyphCacheHolder()
+        {
+            m_pSvpGlyphPeer = new SvpGlyphPeer();
+            m_pSvpGlyphCache = new SvpGlyphCache( *m_pSvpGlyphPeer );
+        }
+        void release()
+        {
+            delete m_pSvpGlyphCache;
+            delete m_pSvpGlyphPeer;
+            m_pSvpGlyphCache = NULL;
+            m_pSvpGlyphPeer = NULL;
+        }
+        SvpGlyphCache& getGlyphCache()
+        {
+            return *m_pSvpGlyphCache;
+        }
+        ~GlyphCacheHolder()
+        {
+            release();
+        }
+    };
+
+    struct theGlyphCacheHolder :
+        public rtl::Static<GlyphCacheHolder, theGlyphCacheHolder>
+    {};
+}
 
 SvpGlyphCache& SvpGlyphCache::GetInstance()
 {
-    static SvpGlyphPeer aSvpGlyphPeer;
-    static SvpGlyphCache aGC( aSvpGlyphPeer );
-    return aGC;
+    return theGlyphCacheHolder::get().getGlyphCache();
 }
 
 // ===========================================================================

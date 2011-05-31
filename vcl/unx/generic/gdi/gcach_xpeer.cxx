@@ -679,11 +679,11 @@ namespace
             release();
         }
     };
-}
 
-struct theGlyphCacheHolder :
-    public rtl::Static<GlyphCacheHolder, theGlyphCacheHolder>
-{};
+    struct theGlyphCacheHolder :
+        public rtl::Static<GlyphCacheHolder, theGlyphCacheHolder>
+    {};
+}
 
 X11GlyphCache& X11GlyphCache::GetInstance()
 {
