@@ -32,6 +32,11 @@ CFLAGS=-c $(EXTRA_CFLAGS)
 LINKC*=$(CC)
 LINK*=$(CXX)
 
+STDLIBCUIMT=-framework CoreFoundation
+STDLIBGUIMT=-framework CoreFoundation
+STDSHLCUIMT=-framework CoreFoundation
+STDSHLGUIMT=-framework CoreFoundation
+
 LIBMGR*=ar
 LIBFLAGS=-r
 
