@@ -32,7 +32,7 @@
 #include "VCLKDEApplication.hxx"
 
 #include <assert.h>
-#include "unx/saldata.hxx"
+#include <unx/saldata.hxx>
 
 SalKDEDisplay* SalKDEDisplay::selfptr = NULL;
 

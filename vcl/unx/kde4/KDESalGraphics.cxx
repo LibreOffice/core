@@ -46,9 +46,9 @@
 
 #include "KDESalGraphics.hxx"
 
-#include "vcl/settings.hxx"
-#include "vcl/decoview.hxx"
-#include "rtl/ustrbuf.hxx"
+#include <vcl/settings.hxx>
+#include <vcl/decoview.hxx>
+#include <rtl/ustrbuf.hxx>
 
 using namespace ::rtl;
 

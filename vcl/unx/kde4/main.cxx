@@ -36,7 +36,7 @@
 #include "KDEData.hxx"
 #include "KDESalInstance.hxx"
 
-#include "vclpluginapi.h"
+#include <vclpluginapi.h>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
