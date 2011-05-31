@@ -1664,6 +1664,35 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
     // Write the table properties
     m_pSerializer->startElementNS( XML_w, XML_tblPr, FSEND );
 
+    static const sal_Int32 aOrder[] =
+    {
+        FSNS( XML_w, XML_tblStyle ),
+        FSNS( XML_w, XML_tblpPr ),
+        FSNS( XML_w, XML_tblOverlap ),
+        FSNS( XML_w, XML_bidiVisual ),
+        FSNS( XML_w, XML_tblStyleRowBandSize ),
+        FSNS( XML_w, XML_tblStyleColBandSize ),
+        FSNS( XML_w, XML_tblW ),
+        FSNS( XML_w, XML_jc ),
+        FSNS( XML_w, XML_tblCellSpacing ),
+        FSNS( XML_w, XML_tblInd ),
+        FSNS( XML_w, XML_tblBorders ),
+        FSNS( XML_w, XML_shd ),
+        FSNS( XML_w, XML_tblLayout ),
+        FSNS( XML_w, XML_tblCellMar ),
+        FSNS( XML_w, XML_tblLook ),
+        FSNS( XML_w, XML_tblPrChange )
+    };
+
+    // postpone the output so that we can later []
+    // prepend the properties before the run
+    sal_Int32 len = sizeof ( aOrder ) / sizeof( sal_Int32 );
+    uno::Sequence< sal_Int32 > aSeqOrder( len );
+    for ( sal_Int32 i = 0; i < len; i++ )
+        aSeqOrder[i] = aOrder[i];
+
+    m_pSerializer->mark( aSeqOrder );
+
     sal_uInt32 nPageSize = 0;
     bool bRelBoxSize = false;
 
@@ -1719,6 +1748,9 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
                 FSNS( XML_w, XML_w ), OString::valueOf( nIndent ).getStr( ),
                 FSNS( XML_w, XML_type ), "dxa",
                 FSEND );
+
+    // Merge the marks for the ordered elements
+    m_pSerializer->mergeTopMarks( );
 
     m_pSerializer->endElementNS( XML_w, XML_tblPr );
 
