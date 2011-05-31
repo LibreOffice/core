@@ -33,7 +33,6 @@
 #include <tools/fsys.hxx>
 #include "export.hxx"
 #include "tokens.h"
-#include "utf8conv.hxx"
 #include <iostream>
 #include <vector>
 

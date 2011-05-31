@@ -35,7 +35,6 @@
 // local includes
 #include "export.hxx"
 #include "xrmmerge.hxx"
-#include "utf8conv.hxx"
 #include "tokens.h"
 #include <iostream>
 #include <vector>

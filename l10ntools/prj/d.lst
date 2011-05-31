@@ -36,43 +36,19 @@ mkdir: %_DEST%\bin%_EXT%\help\com\sun\star\help
 ..\%__SRC%\bin\HelpLinker.exe %_DEST%\bin%_EXT%\HelpLinker.exe
 ..\%__SRC%\bin\HelpLinker* %_DEST%\bin%_EXT%
 
-..\%__SRC%\class\converter\converter.jar %_DEST%\bin%_EXT%\converter.jar
-..\%__SRC%\doc\converter_javadoc.zip %_DEST%\bin%_EXT%\converter_javadoc.zip
-
-..\%__SRC%\class\receditor\receditor.jar %_DEST%\bin%_EXT%\receditor.jar
-
-..\java\jpropex\jpropex %_DEST%\bin%_EXT%\jpropex
-..\java\jpropex\jpropex.bat %_DEST%\bin%_EXT%\jpropex.bat
 ..\scripts\localize.pl %_DEST%\bin%_EXT%\localize.pl
-..\scripts\localize_old.pl %_DEST%\bin%_EXT%\localize_old.pl
 ..\scripts\localize %_DEST%\bin%_EXT%\localize
 ..\scripts\fast_merge.pl %_DEST%\bin%_EXT%\fast_merge.pl
 ..\scripts\keyidGen.pl %_DEST%\bin%_EXT%\keyidGen.pl
-..\scripts\xtxex %_DEST%\bin%_EXT%\xtxex
-..\scripts\xhtex %_DEST%\bin%_EXT%\xhtex
-..\%__SRC%\bin\const.py %_DEST%\bin%_EXT%\const.py
-..\%__SRC%\bin\l10ntool.py %_DEST%\bin%_EXT%\l10ntool.py
-..\%__SRC%\bin\pseudo.py %_DEST%\bin%_EXT%\pseudo.py
-..\%__SRC%\bin\sdf.py %_DEST%\bin%_EXT%\sdf.py
-..\%__SRC%\bin\const.pyc %_DEST%\bin%_EXT%\const.pyc
-..\%__SRC%\bin\l10ntool.pyc %_DEST%\bin%_EXT%\l10ntool.pyc
-..\%__SRC%\bin\pseudo.pyc %_DEST%\bin%_EXT%\pseudo.pyc
-..\%__SRC%\bin\sdf.pyc %_DEST%\bin%_EXT%\sdf.pyc
-..\%__SRC%\bin\xhtex.py %_DEST%\bin%_EXT%\xhtex.py
-..\%__SRC%\bin\xtxex.py %_DEST%\bin%_EXT%\xtxex.py
-..\%__SRC%\bin\xhtex.pyc %_DEST%\bin%_EXT%\xhtex.pyc
-..\%__SRC%\bin\xtxex.pyc %_DEST%\bin%_EXT%\xtxex.pyc
 ..\inc\export.hxx %_DEST%\inc%_EXT%\l10ntools\export.hxx
 ..\inc\l10ntools\directory.hxx %_DEST%\inc%_EXT%\l10ntools\directory.hxx
 ..\inc\l10ntools\file.hxx %_DEST%\inc%_EXT%\l10ntools\file.hxx
 ..\inc\l10ntools\vosapp.hxx %_DEST%\inc%_EXT%\l10ntools\vosapp.hxx
 ..\source\filter\merge\FCFGMerge.cfg  %_DEST%\inc%_EXT%\l10ntools\FCFGMerge.cfg
 
-..\inc\utf8conv.hxx %_DEST%\inc%_EXT%\l10ntools\utf8conv.hxx
 ..\%__SRC%\lib\transex.lib %_DEST%\lib%_EXT%\transex.lib
 ..\%__SRC%\lib\libtransex.a %_DEST%\lib%_EXT%\libtransex.a
 
 ..\source\help\compilehelp.hxx %_DEST%\inc%_EXT%\l10ntools\compilehelp.hxx
-#..\source\help\helplinkerdllapi.h  %_DEST%\inc%_EXT%\l10ntools\helplinkerdllapi.h
 ..\%__SRC%\lib\* %_DEST%\lib%_EXT%\*
 ..\%__SRC%\class\com\sun\star\help\* %_DEST%\bin%_EXT%\help\com\sun\star\help\*

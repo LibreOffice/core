@@ -32,7 +32,6 @@
 
 // local includes
 #include "lngmerge.hxx"
-#include "utf8conv.hxx"
 #include <iostream>
 using namespace std;
 //

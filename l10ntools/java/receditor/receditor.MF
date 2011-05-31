@@ -1,1 +1,0 @@
-Main-Class: transex3.controller.Main

@@ -34,7 +34,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "helpmerge.hxx"
-#include "utf8conv.hxx"
 #include <algorithm>
 #include <sys/types.h>
 #include <sys/stat.h>

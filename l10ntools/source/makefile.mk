@@ -54,7 +54,6 @@ OBJFILES=   			\
     $(OBJ)$/export2.obj	\
     $(OBJ)$/merge.obj   \
     $(OBJ)$/srciter.obj		\
-    $(OBJ)$/utf8conv.obj	\
     $(OBJ)$/xmlparse.obj    \
     $(OBJ)$/helpmerge.obj   \
     $(OBJ)$/helpex.obj      \
@@ -69,9 +68,7 @@ LIB1OBJFILES=        $(OBJ)$/export.obj      \
         $(OBJ)$/merge.obj   \
         $(OBJ)$/srciter.obj             \
         $(OBJ)$/file.obj \
-        $(OBJ)$/directory.obj     \
-        $(OBJ)$/utf8conv.obj    
-   
+        $(OBJ)$/directory.obj
 
 APP1VERSIONMAP=exports.map
 
@@ -85,22 +82,15 @@ APP1LIBS+=	$(LB)$/$(TARGET).lib
 APP1DEPN=   $(OBJ)$/src_yy_wrapper.obj $(LB)$/$(TARGET).lib
 
 APP2TARGET= helpex
-APP2OBJS= $(OBJ)$/helpmerge.obj  $(OBJ)$/xmlparse.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj $(OBJ)$/merge.obj $(OBJ)$/helpex.obj 
+APP2OBJS= $(OBJ)$/helpmerge.obj  $(OBJ)$/xmlparse.obj $(OBJ)$/export2.obj $(OBJ)$/merge.obj $(OBJ)$/helpex.obj 
 APP2RPATH= NONE
 APP2STDLIBS+=$(SALLIB) $(EXPATASCII3RDLIB) $(TOOLSLIB)
 
 # extractor and merger for *.lng and *.lng
 APP3TARGET= ulfex
-APP3OBJS=   $(OBJ)$/lngmerge.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/lngex.obj $(OBJ)$/utf8conv.obj
+APP3OBJS=   $(OBJ)$/lngmerge.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/lngex.obj
 APP3RPATH=  NONE
 APP3STDLIBS+= \
-            $(TOOLSLIB) \
-            $(SALLIB)
-
-# encoding converter for *.gsi
-APP4TARGET= gsiconv
-APP4OBJS=   $(OBJ)$/utf8conv.obj $(OBJ)$/gsiconv.obj
-APP4STDLIBS+= \
             $(TOOLSLIB) \
             $(SALLIB)
 
@@ -113,14 +103,14 @@ APP5STDLIBS+= \
 
 # extractor and merger for *.cfg
 APP6TARGET= cfgex
-APP6OBJS=   $(OBJ)$/cfgmerge.obj $(OBJ)$/cfg_yy_wrapper.obj  $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
+APP6OBJS=   $(OBJ)$/cfgmerge.obj $(OBJ)$/cfg_yy_wrapper.obj  $(OBJ)$/merge.obj $(OBJ)$/export2.obj
 APP6STDLIBS+= \
             $(TOOLSLIB) \
             $(SALLIB)
 
 # extractor and merger for *.xrm
 APP7TARGET= xrmex
-APP7OBJS=   $(OBJ)$/xrmmerge.obj $(OBJ)$/xrm_yy_wrapper.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
+APP7OBJS=   $(OBJ)$/xrmmerge.obj $(OBJ)$/xrm_yy_wrapper.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj
 APP7RPATH=  NONE
 APP7STDLIBS+= \
             $(TOOLSLIB) \
@@ -130,7 +120,7 @@ APP7STDLIBS+= \
 APP9TARGET= localize_sl
 EXCEPTIONSFILES=                            \
                     $(OBJ)$/localize.obj
-APP9OBJS=   $(OBJ)$/localize.obj $(OBJ)$/utf8conv.obj $(OBJ)$/srciter.obj $(OBJ)$/export2.obj $(OBJ)$/file.obj $(OBJ)$/directory.obj
+APP9OBJS=   $(OBJ)$/localize.obj $(OBJ)$/srciter.obj $(OBJ)$/export2.obj $(OBJ)$/file.obj $(OBJ)$/directory.obj
 
 APP9STDLIBS+= \
             $(TOOLSLIB) \

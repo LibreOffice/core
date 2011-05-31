@@ -36,7 +36,6 @@
 #include "export.hxx"
 #include "cfgmerge.hxx"
 #include "tokens.h"
-#include "utf8conv.hxx"
 
 extern "C" { int yyerror( char * ); }
 extern "C" { int YYWarning( char * ); }
