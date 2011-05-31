@@ -258,6 +258,11 @@ namespace vcl
         // set contents, returning old contents
         // ownership is transfered !
         T* set( T* i_pNew ) { T* pOld = m_pT; m_pT = i_pNew; return pOld; }
+
+        // set contents, deleting old contents
+        // ownership is transfered !
+        void reset( T* i_pNew = NULL )
+            { OSL_ASSERT( i_pNew != m_pT || i_pNew == NULL ); T* pOld = m_pT; m_pT = i_pNew; delete pOld; }
     };
 
     /** Similar to DeleteOnDeinit, the DeleteUnoReferenceOnDeinit
