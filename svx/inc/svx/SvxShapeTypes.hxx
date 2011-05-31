@@ -77,11 +77,6 @@ enum SvxShapeTypes
     DRAWING_END = DRAWING_MEDIA
 };
 
-/** List of shape type descriptors corresponding to the
-    <type>SvxShapeTypes</type> enum.
-*/
-extern ShapeTypeDescriptor aSvxShapeTypeList[];
-
 } // end of namespace accessibility
 
 #endif
