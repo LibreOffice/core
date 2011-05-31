@@ -30,6 +30,8 @@
 /*/unxand?
 /*/unxand?.pro
 /solver/*
+/instsetoo_native/util/LibreOffice
+/instsetoo_native/util/LibreOffice_SDK
 
 # autoconf generated stuff
 /aclocal.m4
