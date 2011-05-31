@@ -430,12 +430,9 @@ void SmParser::NextToken()
         // (note that #i11752# remains fixed)
         if ((aRes.TokenType & KParseType::IDENTNAME) && IsDigit( cFirstChar ))
         {
-            //! locale where '.' is decimal seperator!
-            static lang::Locale aDotLoc( SvxCreateLocale( LANGUAGE_ENGLISH_US ) );
-
             ParseResult aTmpRes;
             lang::Locale aOldLoc( aCC.getLocale() );
-            aCC.setLocale( aDotLoc );
+            aCC.setLocale( m_aDotLoc );
             aTmpRes = aCC.parsePredefinedToken(
                             KParseType::ASC_NUMBER,
                             m_aBufferString, m_nBufferIndex,
@@ -2396,6 +2393,7 @@ void SmParser::Error(SmParseError eError)
 
 
 SmParser::SmParser()
+    : m_aDotLoc( SvxCreateLocale( LANGUAGE_ENGLISH_US ) )
 {
     m_eConversion = CONVERT_NONE;
     bImportSymNames = m_bExportSymNames = false;
