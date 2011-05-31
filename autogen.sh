@@ -16,30 +16,28 @@ sub sanity_checks($)
 {
     my $system = shift;
     my @path = split (':', $ENV{'PATH'});
-    my %required = (
-    'pkg-config' => "pkg-config is required to be installed",
-    'autoconf'   => "autoconf is required",
-    'aclocal'    => "aclocal is required",
-#   'knurdle'    => 'please knurdle me test'
-    );
+    my %required =
+      (
+       'pkg-config' => "pkg-config is required to be installed",
+       'autoconf'   => "autoconf is required",
+       'aclocal'    => "aclocal is required",
+      );
     my $exe_ext = '';
     $exe_ext = ".exe" if ($system =~ m/CYGWIN/);
 
     for my $elem (@path) {
-#   print "check $elem\n";
-    for my $app (keys %required) {
-        if (-f "$elem/$app$exe_ext") {
-#       print "removing $app - found in $elem/$app\n";
-        delete $required{$app};
+        for my $app (keys %required) {
+            if (-f "$elem/$app$exe_ext") {
+                delete $required{$app};
+            }
         }
     }
-    }
     if ((keys %required) > 0) {
-    print ("Various low-level dependencies are missing, please install them:\n");
-    for my $app (keys %required) {
-        print "\t $app$exe_ext: " . $required{$app} . "\n";
-    }
-    exit (1);
+        print ("Various low-level dependencies are missing, please install them:\n");
+        for my $app (keys %required) {
+            print "\t $app$exe_ext: " . $required{$app} . "\n";
+        }
+        exit (1);
     }
 }
 
@@ -51,25 +49,24 @@ sub read_args($)
     my @lst;
     open ($fh, $file) || die "can't open file: $file";
     while (<$fh>) {
-    chomp();
-    # migrate from the old system
-    if ( substr($_, 0, 1) eq "'" ) {
-        print "Migrating options from the old autogen.lastrun format, using:\n";
-        my @opts;
-        @opts = split(/'/);
-        foreach my $opt (@opts) {
-        if ( substr($opt, 0, 1) eq "-" ) {
-            push @lst, $opt;
-            print "  $opt\n";
+        chomp();
+        # migrate from the old system
+        if ( substr($_, 0, 1) eq "'" ) {
+            print "Migrating options from the old autogen.lastrun format, using:\n";
+            my @opts;
+            @opts = split(/'/);
+            foreach my $opt (@opts) {
+                if ( substr($opt, 0, 1) eq "-" ) {
+                    push @lst, $opt;
+                    print "  $opt\n";
+                }
+            }
+        } else {
+            push @lst, $_;
         }
-        }
-    }
-    else {
-        push @lst, $_;
-    }
     }
     close ($fh);
-#    print "read args from file '$file': @lst\n";
+    # print "read args from file '$file': @lst\n";
     return @lst;
 }
 
@@ -81,8 +78,8 @@ sub invalid_distro($$)
     my $dirh;
     opendir ($dirh, "distro-configs");
     while (($_ = readdir ($dirh))) {
-    /(.*)\.conf$/ || next;
-    print STDERR "\t$1\n";
+        /(.*)\.conf$/ || next;
+        print STDERR "\t$1\n";
     }
     closedir ($dirh);
 }
@@ -98,16 +95,16 @@ if (!@ARGV) {
 my @args;
 for my $arg (@cmdline_args) {
     if ($arg eq '--clean') {
-    clean();
+        clean();
     } elsif ($arg =~ m/--with-distro=(.*)$/) {
-    my $config = "distro-configs/$1.conf";
-    if (! -f $config) {
-        invalid_distro ($config, $1);
+        my $config = "distro-configs/$1.conf";
+        if (! -f $config) {
+            invalid_distro ($config, $1);
+            } else {
+                push @args, read_args ($config);
+            }
         } else {
-            push @args, read_args ($config);
-        }
-    } else {
-    push @args, $arg;
+        push @args, $arg;
     }
 }
 
@@ -149,6 +146,8 @@ if (defined $ENV{NOCONFIGURE}) {
 }
 
 # Local Variables:
+# mode: perl
+# cperl-indent-level: 4
 # tab-width: 4
 # indent-tabs-mode: nil
 # End:
