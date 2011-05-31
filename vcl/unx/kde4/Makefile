@@ -23,9 +23,9 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-all : KDEXLib.moc.hxx
+KDEXLib.cxx : KDEXLib.moc
 
-KDEXLib.moc.hxx : $(realpath $(dir $(firstword $(MAKEFILE_LIST))))/KDEXLib.hxx
+KDEXLib.moc : $(realpath $(dir $(firstword $(MAKEFILE_LIST))))/KDEXLib.hxx
 	$(MOC4) $< -o $@
 
 .PHONY : all

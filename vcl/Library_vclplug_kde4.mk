@@ -85,7 +85,6 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_kde4,\
     vcl/unx/kde4/KDESalGraphics \
     vcl/unx/kde4/KDESalInstance \
     vcl/unx/kde4/KDEXLib \
-    vcl/unx/kde4/KDEXLib.moc \
     vcl/unx/kde4/main \
     vcl/unx/kde4/VCLKDEApplication \
 ))

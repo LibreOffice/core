@@ -419,4 +419,6 @@ void KDEXLib::doStartup()
     }
 }
 
+#include "KDEXLib.moc"
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
