@@ -1,5 +1,5 @@
 dnl -*- Mode: Autoconf; tab-width: 8; indent-tabs-mode: nil -*-
-dnl configure.in serves as input for the GNU autoconf package 
+dnl configure.in serves as input for the GNU autoconf package
 dnl in order to create a configure script.
 
 AC_INIT([LibreOffice], [3.5],,, [http://documentfoundation.org/])
@@ -246,7 +246,7 @@ AC_ARG_ENABLE(debug,
     AS_HELP_STRING([--enable-debug],
         [Include debugging symbols from --enable-symbols plus extra debugging
          code. Extra large build! (enables -g compiler flag and dmake debug=true)
-         If you need even more verbose output, build a module with 
+         If you need even more verbose output, build a module with
          "build -- debug=true dbglevel=2".]))
 
 AC_ARG_ENABLE(dbgutil,
@@ -513,7 +513,7 @@ AC_ARG_WITH(external-tar,
 
 AC_ARG_WITH(linked-git,
     AS_HELP_STRING([--with-linked-git=<OTHER_CLONE_DIR>],
-        [Specify another checkout's clonedir to re-use. This makes use of 
+        [Specify another checkout's clonedir to re-use. This makes use of
 		 git-new-workdir, and saves a lot of diskspace when having multiple
 		 trees side-by-side.]),
     GIT_LINK_SRC=$withval ,
@@ -1293,7 +1293,7 @@ AC_ARG_WITH(icu-native-build-root,
                           When cross-compiling and not using a "system" ICU,
                           specify the path to the "source" directory of the
                           ICU build in a native LibreOffice build tree. For example
-                          --with-icu-native-build-root=/Users/tml/lo-macosx/icu/unxmacxi.pro/misc/build/icu/source  
+                          --with-icu-native-build-root=/Users/tml/lo-macosx/icu/unxmacxi.pro/misc/build/icu/source
     ],
 ,)
 
@@ -2180,14 +2180,14 @@ if test "$GCC" = "yes" ; then
 	],[
 	  printf ("");
 	])],
-	[ if ./conftest$EXEEXT; then 
+	[ if ./conftest$EXEEXT; then
 	    HAVE_LD_HASH_STYLE=TRUE
 	    WITH_LINKER_HASH_STYLE=$hash_style
-          fi], 
+          fi],
 	[HAVE_LD_HASH_STYLE=FALSE])
        LDFLAGS=$hash_style_ldflags_save
    done
-   
+
    if test "$HAVE_LD_HASH_STYLE" = "TRUE"; then
      AC_MSG_RESULT( $WITH_LINKER_HASH_STYLE )
    else
@@ -2373,7 +2373,7 @@ if test "$_os" = "WINNT"; then
         else
             AC_MSG_RESULT(["$SHOWINCLUDES_PREFIX"])
         fi
-            
+
 	# Check for 64-bit (cross-)compiler to use to build the 64-bit
 	# version of the Explorer extension (and maybe other small
 	# bits, too) needed when installing a 32-bit LibreOffice on a
@@ -2414,7 +2414,7 @@ if test "$_os" = "WINNT"; then
 	fi
 	AC_SUBST(BUILD_X64)
 
-	# These are passed to the environment through set_soenv.in as usual, and then 
+	# These are passed to the environment through set_soenv.in as usual, and then
 	# used in set_wntx64.mk
 	AC_SUBST(CC_X64_BINARY)
 	AC_SUBST(CXX_X64_BINARY)
@@ -2608,7 +2608,7 @@ if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
    m4_pattern_allow([AC_CHECK_ALIGNOF])
    m4_ifdef([AC_CHECK_ALIGNOF],
       ,
-      [ 
+      [
          dnl We know that the ALIGNOF_ variables are used only when cross-compiling
          dnl in sal/typesconfig/makefile.mk...
          if test "$cross_compiling" = "yes"; then
@@ -2675,7 +2675,7 @@ AC_SUBST(ALIGNOF_LONG)
 AC_SUBST(ALIGNOF_DOUBLE)
 
 dnl ===================================================================
-dnl Check if valgrind.h is available 
+dnl Check if valgrind.h is available
 dnl ===================================================================
 if test "$cross_compiling" != "yes" -a "$enable_dbgutil" != "no"; then
    dnl Test $prefix (currently only testing for /usr and /usr/local)
@@ -4092,7 +4092,7 @@ if test "z$enable_odk" = "z" -o "$enable_odk" != "no"; then
          if test -z "$with_mingw_cross_compiler"; then
             dnl Guess...
             AC_CHECK_PROGS(MINGWCXX,i386-mingw32msvc-g++ i586-pc-mingw32-g++ i686-pc-mingw32-g++ i686-w64-mingw32-g++,false)
-         elif test -x "$with_mingw_cross_compiler"; then 
+         elif test -x "$with_mingw_cross_compiler"; then
              MINGWCXX="$with_mingw_cross_compiler"
          else
             AC_CHECK_TOOL(MINGWCXX, "$with_mingw_cross_compiler", false)
@@ -4478,8 +4478,6 @@ fi
 AC_SUBST(SYSTEM_PYTHON)
 AC_SUBST(PYTHON_CFLAGS)
 AC_SUBST(PYTHON_LIBS)
-HOME=`echo $HOME | $SED 's:\\\\:/:g'`
-AC_SUBST(HOME)
 
 dnl ===================================================================
 dnl Check for system translate-toolkit
@@ -4550,20 +4548,20 @@ if test -n "$with_system_db" -o -n "$with_system_libs" && \
     DB_LIB=
     for dbver in 5.1 5.0 5 4.8 4.7 4 ''; do
         for dash in - ''; do
-            AC_CHECK_LIB(db$dash$dbver, dbopen, 
+            AC_CHECK_LIB(db$dash$dbver, dbopen,
                 [ DB_LIB="db$dash$dbver"; DB_CPPLIB="db_cxx$dash$dbver"; break ])
-            AC_CHECK_LIB(db$dash$dbver, __db185_open, 
+            AC_CHECK_LIB(db$dash$dbver, __db185_open,
                 [ DB_LIB="db$dash$dbver"; DB_CPPLIB="db_cxx$dash$dbver"; break ])
          done
         test -n "$DB_LIB" && break
     done
 
     if test -z "$DB_LIB"; then
-        AC_CHECK_LIB(db, dbopen, 
+        AC_CHECK_LIB(db, dbopen,
             [ DB_LIB="db"; DB_CPPLIB="db_cxx" ])
     fi
 
-    if test -z "$DB_LIB" ; then 
+    if test -z "$DB_LIB" ; then
         AC_MSG_ERROR([db library not found. Use the correct -L flag,
 or install the Berkeley db development package.])
     fi
@@ -6476,7 +6474,7 @@ dnl ===================================================================
 
 dnl Now with librsvg we always need cairo (?), so hardcode ENABLE_CAIRO to TRUE
 dnl Eventually should bin conditionals on ENABLE_CAIRO.
-ENABLE_CAIRO="TRUE" 
+ENABLE_CAIRO="TRUE"
 
 BUILD_PIXMAN=""
 SYSTEM_CAIRO=""
@@ -6506,7 +6504,7 @@ int main(int argc, char **argv) {
 #endif
 }
         ],
-        [AC_MSG_RESULT([yes])], 
+        [AC_MSG_RESULT([yes])],
         [AC_MSG_ERROR([no, X headers too old.])]
         )
     fi
@@ -7747,7 +7745,7 @@ else
   WITH_EXTRA_GALLERY=YES
   BUILD_TYPE="$BUILD_TYPE EXTRA_GALLERY"
   SCPDEFS="$SCPDEFS -DWITH_EXTRA_GALLERY"
-  OOOP_GALLERY_PACK="af9314c5972d95a5d6da23ffad818f68-OOOP-gallery-pack-2.8.0.0.zip"  
+  OOOP_GALLERY_PACK="af9314c5972d95a5d6da23ffad818f68-OOOP-gallery-pack-2.8.0.0.zip"
 fi
 AC_SUBST(WITH_EXTRA_GALLERY)
 AC_SUBST(OOOP_GALLERY_PACK)
@@ -7952,7 +7950,7 @@ dnl As long as the only thing we need gdk-pxbuf for is below
 dnl librsvg, use the same --with-system-librsvg (possibly implied
 dnl by --with-system-libs) to override this.
 
-if test $SYSTEM_LIBRSVG = YES; then
+if test "$SYSTEM_LIBRSVG" = YES; then
     SYSTEM_GDKPIXBUF=YES
     AC_MSG_RESULT([yes])
 else
@@ -7979,7 +7977,7 @@ dnl As long as the only thing we need GLib for is below
 dnl librsvg, use the same --with-system-librsvg (possibly implied
 dnl by --with-system-libs) to override this.
 
-if test $SYSTEM_LIBRSVG = YES; then
+if test "$SYSTEM_LIBRSVG" = YES; then
     SYSTEM_GLIB=YES
     AC_MSG_RESULT([yes])
 else
@@ -8030,7 +8028,7 @@ dnl As long as the only thing we need libcroco for is below
 dnl librsvg, use the same --with-system-librsvg (possibly implied
 dnl by --with-system-libs) to override this.
 
-if test $SYSTEM_LIBRSVG = YES; then
+if test "$SYSTEM_LIBRSVG" = YES; then
     SYSTEM_LIBCROCO=YES
     AC_MSG_RESULT([yes])
 else
@@ -8057,7 +8055,7 @@ dnl As long as the only thing we need Pango for is below
 dnl librsvg, use the same --with-system-librsvg (possibly implied
 dnl by --with-system-libs) to override this.
 
-if test $SYSTEM_LIBRSVG = YES; then
+if test "$SYSTEM_LIBRSVG" = YES; then
     SYSTEM_PANGO=YES
     AC_MSG_RESULT([yes])
 else
@@ -8084,7 +8082,7 @@ dnl As long as the only thing we need libgsf for is below librsvg (is
 dnl it?), use the same --with-system-librsvg (possibly implied by
 dnl --with-system-libs) to override this.
 
-if test $SYSTEM_LIBRSVG = YES; then
+if test "$SYSTEM_LIBRSVG" = YES; then
     SYSTEM_LIBGSF=YES
     AC_MSG_RESULT([yes])
 else
@@ -8280,7 +8278,7 @@ if test "$ANT_HOME" != "NO_ANT_HOME"; then
                    else
                        AC_MSG_ERROR([Ant libraries not found!])
                    fi
-                fi  
+                fi
              fi
           fi
       fi

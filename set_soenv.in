@@ -1901,9 +1901,6 @@ ToFile( "SYSTEM_PYTHON",     "@SYSTEM_PYTHON@",    "e" );
 ToFile( "PYTHON",            "@PYTHON@",           "e" );
 ToFile( "PYTHON_CFLAGS",     "@PYTHON_CFLAGS@",    "e" );
 ToFile( "PYTHON_LIBS",       "@PYTHON_LIBS@",      "e" );
-if ($SYSTEM_PYTHON eq "NO") {
-ToFile( "HOME",              "@HOME@",             "e" );
-}
 ToFile( "SYSTEM_ICU",        "@SYSTEM_ICU@",       "e" );
 ToFile( "ICU_MAJOR",         "@ICU_MAJOR@",        "e" );
 ToFile( "ICU_MINOR",         "@ICU_MINOR@",        "e" );

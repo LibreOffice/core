@@ -110,7 +110,7 @@ gb_Library_NOILIBFILENAMES:=\
     advapi32 \
     gdi32 \
     gdiplus \
-    graphite_dll \
+    graphite2_off \
     gnu_getopt \
     icuuc \
     icule \
@@ -130,6 +130,7 @@ gb_Library_NOILIBFILENAMES:=\
     user32 \
     uuid \
     uwinapi \
+    version \
     winspool \
 
 gb_Library_FILENAMES := $(filter-out $(foreach lib,$(gb_Library_NOILIBFILENAMES),$(lib):%),$(gb_Library_FILENAMES))

@@ -138,7 +138,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     icule \
     icuuc \
     icule \
-    graphite_dll \
+    graphite2_off \
     cppunit \
     rdf \
     ssl \
