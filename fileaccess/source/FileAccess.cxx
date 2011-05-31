@@ -852,18 +852,9 @@ Reference< XInterface > SAL_CALL FileAccess_CreateInstance( const Reference< XMu
 
 Sequence< rtl::OUString > FileAccess_getSupportedServiceNames()
 {
-    static Sequence < rtl::OUString > *pNames = 0;
-    if( ! pNames )
-    {
-        osl::MutexGuard guard( osl::Mutex::getGlobalMutex() );
-        if( !pNames )
-        {
-            static Sequence< rtl::OUString > seqNames(1);
-            seqNames.getArray()[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ));
-            pNames = &seqNames;
-        }
-    }
-    return *pNames;
+    Sequence< rtl::OUString > seqNames(1);
+    seqNames.getArray()[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ));
+    return seqNames;
 }
 
 
