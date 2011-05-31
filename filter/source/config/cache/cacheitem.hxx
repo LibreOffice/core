@@ -163,7 +163,7 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
 
             @param  sActLocale
                     must specify the current office locale.
-                    Its needed to adress the UIName property inside
+                    Its needed to address the UIName property inside
                     the list of possible ones.
          */
         void validateUINames(const ::rtl::OUString& sActLocale);

@@ -3622,8 +3622,6 @@ void HwpReader::makeTextBox(TxtBox * hbox)
             case PAGE_ANCHOR:
             case PAPER_ANCHOR:
             {
-                // os unused
-                // HWPInfo *hwpinfo = hwpfile.GetHWPInfo();
                 padd(ascii("text:anchor-type"), sXML_CDATA, ascii("page"));
                 padd(ascii("text:anchor-page-number"), sXML_CDATA,
                     ascii(Int2Str(hbox->pgno +1, "%d", buf)));
@@ -3656,8 +3654,6 @@ void HwpReader::makeTextBox(TxtBox * hbox)
               ascii(Int2Str(hbox->zorder, "%d", buf)));
      }
 
-    // os unused
-    // static int draw_name_id = 0;
     padd(ascii("draw:style-name"), sXML_CDATA,
         ascii(Int2Str(hbox->style.boxnum, "Txtbox%d", buf)));
     padd(ascii("draw:name"), sXML_CDATA,
@@ -3678,8 +3674,6 @@ void HwpReader::makeTextBox(TxtBox * hbox)
             case PAGE_ANCHOR:
             case PAPER_ANCHOR:
             {
-                // os unused
-                // HWPInfo *hwpinfo = hwpfile.GetHWPInfo();
                 padd(ascii("text:anchor-type"), sXML_CDATA, ascii("page"));
                 padd(ascii("text:anchor-page-number"), sXML_CDATA,
                     ascii(Int2Str(hbox->pgno +1, "%d", buf)));
@@ -3889,8 +3883,6 @@ void HwpReader::makePicture(Picture * hbox)
                     case PAGE_ANCHOR:
                     case PAPER_ANCHOR:
                     {
-                        // os unused
-                        // HWPInfo *hwpinfo = hwpfile.GetHWPInfo();
                         padd(ascii("text:anchor-type"), sXML_CDATA, ascii("page"));
                         padd(ascii("text:anchor-page-number"), sXML_CDATA,
                             ascii(Int2Str(hbox->pgno +1, "%d", buf)));
@@ -3942,10 +3934,6 @@ void HwpReader::makePicture(Picture * hbox)
             padd(ascii("draw:name"), sXML_CDATA,
                 ascii(Int2Str(hbox->style.boxnum, "Image%d", buf)));
 
-            // os unused
-            // int x = 0;
-            // int y = 0;
-
             if( hbox->style.cap_len <= 0 )
             {
                      padd(ascii("draw:z-index"), sXML_CDATA,
@@ -3961,8 +3949,6 @@ void HwpReader::makePicture(Picture * hbox)
                     case PAGE_ANCHOR:
                     case PAPER_ANCHOR:
                     {
-                        // os unused
-                        // HWPInfo *hwpinfo = hwpfile.GetHWPInfo();
                         padd(ascii("text:anchor-type"), sXML_CDATA, ascii("page"));
                         padd(ascii("text:anchor-page-number"), sXML_CDATA,
                             ascii(Int2Str(hbox->pgno +1, "%d", buf)));
@@ -4438,12 +4424,10 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                 }
                      case HWPDO_CURVE: /* ???? : ?????????? ????. */
                 {
-                         sal_Bool bIsNatural = sal_True;
-                         // os unused
-                         // int nCount = drawobj->u.freeform.npt;
-                   if( drawobj->property.flag >> 5 & 0x01){
-                             bIsNatural = sal_False;
-                         }
+                    sal_Bool bIsNatural = sal_True;
+                    if( drawobj->property.flag >> 5 & 0x01){
+                        bIsNatural = sal_False;
+                    }
                     if( !bIsRotate )
                     {
                         padd(ascii("svg:x"), sXML_CDATA,

@@ -418,8 +418,6 @@ ColumnDef *HWPFile::GetColumnDef(int num)
 int HWPFile::GetPageMasterNum(int page)
 {
     LinkedListIterator<ColumnInfo> it(&columnlist);
-    //os: unused
-    //ColumnInfo *prev = 0;
     ColumnInfo *now = 0;
     int i;
 
