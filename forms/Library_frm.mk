@@ -45,6 +45,7 @@ $(eval $(call gb_Library_set_defs,frm,\
 
 $(eval $(call gb_Library_add_api,frm,\
     offapi \
+    oovbaapi \
     udkapi \
 ))
 
