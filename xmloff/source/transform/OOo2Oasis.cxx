@@ -28,9 +28,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-#include <rtl/uuid.h>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <xmloff/nmspmap.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
@@ -1996,20 +1996,14 @@ void SAL_CALL OOo2OasisTransformer::Initialize(
     }
 }
 
-
-Sequence< sal_Int8 >  static CreateUnoTunnelId()
+namespace
 {
-    static osl::Mutex aCreateMutex;
-    ::osl::Guard<osl::Mutex> aGuard( aCreateMutex );
-    Sequence< sal_Int8 > aSeq( 16 );
-    rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-    return aSeq;
+    class theOOo2OasisTransformerUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theOOo2OasisTransformerUnoTunnelId> {};
 }
 
 const Sequence< sal_Int8 > & OOo2OasisTransformer::getUnoTunnelId() throw()
 {
-    static Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theOOo2OasisTransformerUnoTunnelId::get().getSeq();
 }
 
 // XUnoTunnel

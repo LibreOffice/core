@@ -31,8 +31,8 @@
 #include <tools/debug.hxx>
 #include <com/sun/star/xml/AttributeData.hpp>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/uuid.h>
 #include <rtl/memory.h>
+#include <comphelper/servicehelper.hxx>
 
 #include <xmloff/xmlcnimp.hxx>
 
@@ -109,20 +109,14 @@ sal_uInt16 SvUnoAttributeContainer::getIndexByName(const OUString& aName ) const
     return USHRT_MAX;
 }
 
+namespace
+{
+    class theSvUnoAttributeContainerUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSvUnoAttributeContainerUnoTunnelId> {};
+}
+
 const ::com::sun::star::uno::Sequence< sal_Int8 > & SvUnoAttributeContainer::getUnoTunnelId() throw()
 {
-    static ::com::sun::star::uno::Sequence< sal_Int8 > * pSeq = 0;
-    if( !pSeq )
-    {
-        ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static ::com::sun::star::uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theSvUnoAttributeContainerUnoTunnelId::get().getSeq();
 }
 
 SvUnoAttributeContainer* SvUnoAttributeContainer::getImplementation( uno::Reference< uno::XInterface > xInt ) throw()

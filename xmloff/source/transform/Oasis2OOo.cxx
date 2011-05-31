@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <rtl/uuid.h>
 #include <rtl/ustrbuf.hxx>
 #include <xmloff/nmspmap.hxx>
 #include "xmloff/xmlnmspe.hxx"
@@ -52,6 +51,7 @@
 #include "TransformerActions.hxx"
 #include "FamilyType.hxx"
 #include <xmloff/xmluconv.hxx>
+#include <comphelper/servicehelper.hxx>
 #include "Oasis2OOo.hxx"
 
 using ::rtl::OUString;
@@ -2005,19 +2005,14 @@ Oasis2OOoTransformer::~Oasis2OOoTransformer() throw()
     XMLEventOASISTransformerContext::FlushEventMap( m_pFormEventMap );
 }
 
-::com::sun::star::uno::Sequence< sal_Int8 >  static CreateUnoTunnelId()
+namespace
 {
-    static osl::Mutex aCreateMutex;
-    Guard<osl::Mutex> aGuard( aCreateMutex );
-    Sequence< sal_Int8 > aSeq( 16 );
-    rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-    return aSeq;
+    class theOasis2OOoTransformerUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theOasis2OOoTransformerUnoTunnelId> {};
 }
 
 const Sequence< sal_Int8 > & Oasis2OOoTransformer::getUnoTunnelId() throw()
 {
-    static Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theOasis2OOoTransformerUnoTunnelId::get().getSeq();
 }
 
 // XUnoTunnel

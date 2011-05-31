@@ -32,7 +32,6 @@
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/mutex.hxx>
-#include <rtl/uuid.h>
 #include <rtl/memory.h>
 #include <svl/svarray.hxx>
 #include "unointerfacetouniqueidentifiermapper.hxx"
@@ -59,6 +58,7 @@
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <comphelper/namecontainer.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <rtl/logfile.hxx>
 #include <tools/string.hxx> // used in StartElement for logging
 #include <cppuhelper/implbase1.hxx>
@@ -464,21 +464,15 @@ SvXMLImport::~SvXMLImport() throw ()
         mxModel->removeEventListener(mxEventListener);
 }
 
+namespace
+{
+    class theSvXMLImportUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSvXMLImportUnoTunnelId> {};
+}
+
 // XUnoTunnel & co
 const uno::Sequence< sal_Int8 > & SvXMLImport::getUnoTunnelId() throw()
 {
-    static uno::Sequence< sal_Int8 > * pSeq = 0;
-    if( !pSeq )
-    {
-        Guard< Mutex > aGuard( Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theSvXMLImportUnoTunnelId::get().getSeq();
 }
 
 SvXMLImport* SvXMLImport::getImplementation( uno::Reference< uno::XInterface > xInt ) throw()

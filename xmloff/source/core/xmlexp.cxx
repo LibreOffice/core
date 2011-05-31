@@ -34,7 +34,6 @@
 #endif
 #include "unointerfacetouniqueidentifiermapper.hxx"
 #include <osl/mutex.hxx>
-#include <rtl/uuid.h>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/genericpropertyset.hxx>
@@ -83,6 +82,7 @@
 #include <rtl/logfile.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/extract.hxx>
+#include <comphelper/servicehelper.hxx>
 #include "PropertySetMerger.hxx"
 
 #include "svl/urihelper.hxx"
@@ -2089,21 +2089,15 @@ XMLImageMapExport& SvXMLExport::GetImageMapExport()
     return *mpImageMapExport;
 }
 
+namespace
+{
+    class theSvXMLExportUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSvXMLExportUnoTunnelId> {};
+}
+
 // XUnoTunnel & co
 const uno::Sequence< sal_Int8 > & SvXMLExport::getUnoTunnelId() throw()
 {
-    static uno::Sequence< sal_Int8 > * pSeq = 0;
-    if( !pSeq )
-    {
-        Guard< Mutex > aGuard( Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theSvXMLExportUnoTunnelId::get().getSeq();
 }
 
 SvXMLExport* SvXMLExport::getImplementation( uno::Reference< uno::XInterface > xInt ) throw()
