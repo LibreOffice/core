@@ -91,7 +91,7 @@ const SCSIZE   SCSIZE_MAX   = ::std::numeric_limits<SCSIZE>::max();
 // Count values
 const SCROW       MAXROWCOUNT    = MAXROWCOUNT_DEFINE;
 const SCCOL       MAXCOLCOUNT    = MAXCOLCOUNT_DEFINE;
-const SCTAB       MAXTABCOUNT    = 10000;
+const SCTAB       MAXTABCOUNT    = 32000;
 const SCCOLROW    MAXCOLROWCOUNT = MAXROWCOUNT;
 // Maximum values
 const SCROW       MAXROW         = MAXROWCOUNT - 1;
