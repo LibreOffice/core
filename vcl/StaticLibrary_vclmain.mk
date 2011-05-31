@@ -48,7 +48,7 @@ $(eval $(call gb_StaticLibrary_add_exception_objects,vclmain,\
 # Instead of this evil linking of an object from $(OUTDIR)
 define StaticLibrary_salmain_hack
 $(call gb_StaticLibrary_get_target,vclmain) : $(OUTDIR)/lib/$(1)
-$$(eval $$(call gb_Deliver_add_deliverable,$(OUTDIR)/lib/$(1),$(call gb_CxxObject_get_target,vcl/source/salmain/salmain)))
+$$(eval $$(call gb_Deliver_add_deliverable,$(OUTDIR)/lib/$(1),$(call gb_CxxObject_get_target,vcl/source/salmain/salmain),$(OUTDIR)/lib/$(1)))
 
 $(OUTDIR)/lib/$(1) : $(call gb_CxxObject_get_target,vcl/source/salmain/salmain)
 	$$(call gb_Deliver_deliver,$$<,$$@)
