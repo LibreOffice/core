@@ -58,6 +58,7 @@ CONFIGURE_DIR=
 CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) \
                  .$/configure --prefix=$(SRC_ROOT)$/$(PRJNAME)$/$(MISC) \
                  CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) $(EXTRA_CDEFS) -I$(SOLARINCDIR) -I$(SOLARINCDIR)$/external -I$(SOLARINCDIR)$/external$/glib-2.0" \
+                 CXXFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) $(EXTRA_CDEFS) -I$(SOLARINCDIR) -I$(SOLARINCDIR)$/external -I$(SOLARINCDIR)$/external$/glib-2.0" \
                  LDFLAGS="$(CONFIGURE_LDFLAGS)" \
                  CAIRO_CFLAGS="-I$(SOLARINCDIR) -I$(SOLARINCDIR)$/cairo" \
                  CAIRO_LIBS="-lcairo" \
