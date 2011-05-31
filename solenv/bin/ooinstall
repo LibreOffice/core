@@ -43,9 +43,13 @@ for $arg (@ARGV) {
     } elsif ($arg eq '-h' || $arg eq '--help') {
 	$help = 1;
     } else {
-	# Cwd::realpath does not work if the path does not exist
-	mkpath($arg) unless -d $arg;
-	$path = Cwd::realpath( $arg );
+		# Cwd::realpath does not work if the path does not exist
+		mkpath($ENV{DESTDIR} . $arg) unless -d $ENV{DESTDIR} . $arg;
+		$path = Cwd::realpath( $ENV{DESTDIR} . $arg );
+		if (!$do_link) {
+			my $destdir = Cwd::realpath( $ENV{DESTDIR} );
+			$path =~ s|$destdir||;
+	    }
     }
 }
 

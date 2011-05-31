@@ -416,15 +416,6 @@ AC_ARG_ENABLE(check-only,
     ],
 ,)
 
-AC_ARG_ENABLE(ccache-skip,
-    AS_HELP_STRING([--enable-ccache-skip],
-        [Allow the use of --ccache-skip to escape compiler flags that would
-         otherwise prevent caching of the result (currently used on Mac only)
-         NOTE: requires patched version because of a bug in ccache (see issue
-         104567 for details and patch) explicitly enable if your version of
-         ccache doesn't identify as version 2.4_OOo. (default=auto)]),
-,enable_ccache_skip=auto)
-
 AC_ARG_ENABLE(build-unowinreg,
     AS_HELP_STRING([--enable-build-unowinreg],
         [Do not use the prebuilt unowinreg.dll. Build it instead. The MinGW C++
@@ -1240,7 +1231,7 @@ AC_ARG_WITH(install-dirname,
         [Specify the directory name of the core LibO install dir. The final
          installation path is defined by <libdir>/<install-dirname>.
          The default value is "libreoffice" and the default installation
-         patch is /usr/lib/libreoffice.
+         path is /usr/lib/libreoffice.
 
          FIXME: It affects only the installation by "make install" and not the
          generated installation sets.])
@@ -3152,19 +3143,14 @@ fi
 AC_SUBST(HAVE_CXX0X)
 
 # ===================================================================
-# use --ccache-skip?
+# use ccache?
 # ===================================================================
-dnl used to escape compiler options for ccache that otherwise prevent
+dnl need to check for ccache version: otherwise prevents
 dnl caching of the results (like "-x objective-c++" for Mac)
-AC_MSG_CHECKING([whether we are allowed and able to use --ccache-skip])
+AC_MSG_CHECKING([whether we are able to use --ccache-skip])
 if test "$_os" != "Darwin" ; then
    AC_MSG_RESULT([only used on Mac currently, skipping])
-elif test "$enable_ccache_skip" = "no" ; then
-   AC_MSG_RESULT([no - diabled explicitly])
-elif test "$enable_ccache_skip" = "yes" ; then
-   AC_MSG_RESULT([yes - enabled explicitly, skipping checks])
-   AC_SUBST([USE_CCACHE], [YES])
-elif test "$enable_ccache_skip" = "auto" ; then
+else
    # checking for ccache presence/version
    AC_MSG_RESULT([probing...])
    AC_PATH_PROG([CCACHE],[ccache],[not_found])
@@ -3174,7 +3160,8 @@ elif test "$enable_ccache_skip" = "auto" ; then
       # check ccache version
       AC_MSG_CHECKING([whether version of ccache is suitable])
       CCACHE_VERSION=`"$CCACHE" -V | "$AWK" '/^ccache version/{print $3}'`
-      if test "$CCACHE_VERSION" = "2.4_OOo"; then
+      CCACHE_NUMVER=`echo $CCACHE_VERSION | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+      if test "$CCACHE_VERSION" = "2.4_OOo" -o "$CCACHE_NUMVER" -ge "030100"; then
          AC_MSG_RESULT([yes])
          AC_MSG_CHECKING([whether ccache is actually used for the build])
          AC_LANG_PUSH([C++])
@@ -3193,11 +3180,9 @@ elif test "$enable_ccache_skip" = "auto" ; then
          AC_LANG_POP([C++])
       else
          AC_MSG_RESULT([no])
-         AC_MSG_NOTICE([ccache version $CCACHE_VERSION not accepted. See description for --enable-ccache-skip])
+         AC_MSG_NOTICE([ccache version $CCACHE_VERSION not accepted. ccache will not be used.])
       fi
    fi
-else
-   AC_MSG_ERROR([invalid option to --enable-ccache-skip. Valid values are "auto", "yes" and "no"])
 fi
 
 dnl ===================================================================
@@ -8416,14 +8401,14 @@ dnl ===================================================================
 GIT_REPO_NAMES="artwork base calc components extensions extras filters help impress libs-core libs-extern libs-extern-sys libs-gui postprocess sdk testing ure writer"
 AC_MSG_CHECKING([which languages to be built])
 # get list of all languages
-# generate shell variable from completelangiso= from solenv/inc/postset.mk
+# generate shell variable from completelangiso= from solenv/inc/langlist.mk
 # the sed command does the following:
 #   + if a line ends with a backslash, append the next line to it
 #   + adds " on the beginning of the value (after =)
 #   + adds " at the end of the value
 #   + removes en-US; we want to put it on the beginning
 #   + prints just the section starting with 'completelangiso=' and ending with the " at the end of line
-[eval $(sed -e :a -e '/\\$/N; s/\\\n//; ta' -n -e 's/=/="/;s/\([^\\]\)$/\1"/;s/en-US//;/^completelangiso/p' solenv/inc/postset.mk)]
+[eval $(sed -e :a -e '/\\$/N; s/\\\n//; ta' -n -e 's/=/="/;s/\([^\\]\)$/\1"/;s/en-US//;/^completelangiso/p' solenv/inc/langlist.mk)]
 ALL_LANGS="en-US $completelangiso"
 # check the configured localizations
 WITH_LANG="$with_lang"

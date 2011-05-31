@@ -345,6 +345,7 @@ my $log_suffix;
 my $log;
 my $branch_name;
 my $git_command = "git log";
+my $branch_name;
 my @git_args;
 my %data;
 my %print_filters = ();
