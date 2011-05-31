@@ -347,8 +347,7 @@ public:
                                     sal_Bool bForceNonModified = sal_False );
     sal_Bool                    SaveCompletedChildren( sal_Bool bSuccess );
 
-    sal_Bool                    InsertFrom( SfxMedium &rMedium );
-    virtual sal_Bool            ImportFrom( SfxMedium &rMedium );
+    virtual sal_Bool            ImportFrom( SfxMedium &rMedium, bool bInsert );
     sal_Bool                    ExportTo( SfxMedium &rMedium );
 
     // xmlsec05, check with SFX team

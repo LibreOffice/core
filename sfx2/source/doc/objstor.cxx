@@ -733,7 +733,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                 {
                     bSetProperty = false;
                 }
-                bOk = ImportFrom(*pMedium);
+                bOk = ImportFrom( *pMedium, false );
                 if(bSetProperty)
                 {
                     try
@@ -2150,7 +2150,7 @@ sal_Bool SfxObjectShell::ConvertFrom
     return sal_False;
 }
 
-sal_Bool SfxObjectShell::InsertFrom( SfxMedium& rMedium )
+sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium, bool bInsert )
 {
     ::rtl::OUString aTypeName( rMedium.GetFilter()->GetTypeName() );
     ::rtl::OUString aFilterName( rMedium.GetFilter()->GetFilterName() );
@@ -2233,99 +2233,10 @@ sal_Bool SfxObjectShell::InsertFrom( SfxMedium& rMedium )
             aArgs[nEnd-1].Value <<= rMedium.GetBaseURL();
         }
 
-        aArgs.realloc( ++nEnd );
-        aArgs[nEnd-1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "InsertMode" ) );
-        aArgs[nEnd-1].Value <<= (sal_Bool) sal_True;
-
-        return xLoader->filter( aArgs );
-        }catch(const uno::Exception&)
-        {}
-    }
-
-    return sal_False;
-}
-
-sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium )
-{
-    ::rtl::OUString aTypeName( rMedium.GetFilter()->GetTypeName() );
-    ::rtl::OUString aFilterName( rMedium.GetFilter()->GetFilterName() );
-
-    uno::Reference< lang::XMultiServiceFactory >  xMan = ::comphelper::getProcessServiceFactory();
-    uno::Reference < lang::XMultiServiceFactory > xFilterFact (
-                xMan->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.document.FilterFactory" ) ), uno::UNO_QUERY );
-
-    uno::Sequence < beans::PropertyValue > aProps;
-    uno::Reference < container::XNameAccess > xFilters ( xFilterFact, uno::UNO_QUERY );
-    if ( xFilters->hasByName( aFilterName ) )
-    {
-        xFilters->getByName( aFilterName ) >>= aProps;
-        rMedium.GetItemSet()->Put( SfxStringItem( SID_FILTER_NAME, aFilterName ) );
-    }
-
-    ::rtl::OUString aFilterImplName;
-    sal_Int32 nFilterProps = aProps.getLength();
-    for ( sal_Int32 nFilterProp = 0; nFilterProp<nFilterProps; nFilterProp++ )
-    {
-        const beans::PropertyValue& rFilterProp = aProps[nFilterProp];
-        if ( rFilterProp.Name.compareToAscii("FilterService") == COMPARE_EQUAL )
-        {
-            rFilterProp.Value >>= aFilterImplName;
-            break;
-        }
-    }
-
-    uno::Reference< document::XFilter > xLoader;
-    if ( aFilterImplName.getLength() )
-    {
-        try{
-        xLoader = uno::Reference< document::XFilter >
-            ( xFilterFact->createInstanceWithArguments( aFilterName, uno::Sequence < uno::Any >() ), uno::UNO_QUERY );
-        }catch(const uno::Exception&)
-            { xLoader.clear(); }
-    }
-    if ( xLoader.is() )
-    {
-        // it happens that xLoader does not support xImporter!
-        try{
-        uno::Reference< lang::XComponent >  xComp( GetModel(), uno::UNO_QUERY_THROW );
-        uno::Reference< document::XImporter > xImporter( xLoader, uno::UNO_QUERY_THROW );
-        xImporter->setTargetDocument( xComp );
-
-        uno::Sequence < beans::PropertyValue > lDescriptor;
-        rMedium.GetItemSet()->Put( SfxStringItem( SID_FILE_NAME, rMedium.GetName() ) );
-        TransformItems( SID_OPENDOC, *rMedium.GetItemSet(), lDescriptor );
-
-        com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aArgs ( lDescriptor.getLength() );
-        com::sun::star::beans::PropertyValue * pNewValue = aArgs.getArray();
-        const com::sun::star::beans::PropertyValue * pOldValue = lDescriptor.getConstArray();
-        const OUString sInputStream ( RTL_CONSTASCII_USTRINGPARAM ( "InputStream" ) );
-
-        sal_Bool bHasInputStream = sal_False;
-        sal_Bool bHasBaseURL = sal_False;
-        sal_Int32 i;
-        sal_Int32 nEnd = lDescriptor.getLength();
-
-        for ( i = 0; i < nEnd; i++ )
-        {
-            pNewValue[i] = pOldValue[i];
-            if ( pOldValue [i].Name == sInputStream )
-                bHasInputStream = sal_True;
-            else if ( pOldValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "DocumentBaseURL" ) ) )
-                bHasBaseURL = sal_True;
-        }
-
-        if ( !bHasInputStream )
-        {
-            aArgs.realloc ( ++nEnd );
-            aArgs[nEnd-1].Name = sInputStream;
-            aArgs[nEnd-1].Value <<= com::sun::star::uno::Reference < com::sun::star::io::XInputStream > ( new utl::OSeekableInputStreamWrapper ( *rMedium.GetInStream() ) );
-        }
-
-        if ( !bHasBaseURL )
-        {
-            aArgs.realloc ( ++nEnd );
-            aArgs[nEnd-1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "DocumentBaseURL" ) );
-            aArgs[nEnd-1].Value <<= rMedium.GetBaseURL();
+        if ( bInsert ) {
+            aArgs.realloc( ++nEnd );
+            aArgs[nEnd-1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "InsertMode" ) );
+            aArgs[nEnd-1].Value <<= (sal_Bool) sal_True;
         }
 
         return xLoader->filter( aArgs );
