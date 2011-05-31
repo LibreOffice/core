@@ -31,6 +31,7 @@
 
 #include <rtl/uuid.h>
 #include <rtl/instance.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 
 class UnoTunnelIdInit
 {
