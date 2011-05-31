@@ -20,11 +20,11 @@
 #include <malloc.h>
 #include <time.h>
 #include <string>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 const DWORD PE_Signature = 0x00004550;
 typedef std::pair< std::string, bool > StringPair;
-typedef std::hash_map< std::string, bool > ExcludeLibsMap;
+typedef boost::unordered_map< std::string, bool > ExcludeLibsMap;
 
 #ifdef DEBUG
 static void OutputDebugStringFormat( LPCSTR pFormat, ... )
