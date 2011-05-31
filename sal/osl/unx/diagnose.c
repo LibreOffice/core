@@ -255,7 +255,7 @@ sal_Bool SAL_CALL osl_assertFailedLine (
     /* output message buffer */
     OSL_DIAGNOSE_OUTPUTMESSAGE(f, szMessage);
 
-    /* output backtrace */
+    /* should we output backtrace? */
     char const * envBacktrace = getenv( "SAL_DIAGNOSE_BACKTRACE" );
     if( envBacktrace != NULL && *envBacktrace != '\0' )
         osl_diagnose_backtrace_Impl(f);
