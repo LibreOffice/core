@@ -400,10 +400,10 @@ BoundFrameSets::BoundFrameSets(const Reference<XInterface> xModel)
 
 void FieldParamExporter::Export()
 {
-    static const Type aStringType = ::getCppuType((OUString*)0);
-    static const Type aBoolType = ::getCppuType((sal_Bool*)0);
-    static const Type aSeqType = ::getCppuType((Sequence<OUString>*)0);
-    static const Type aIntType = ::getCppuType((sal_Int32*)0);
+    const Type aStringType = ::getCppuType((OUString*)0);
+    const Type aBoolType = ::getCppuType((sal_Bool*)0);
+    const Type aSeqType = ::getCppuType((Sequence<OUString>*)0);
+    const Type aIntType = ::getCppuType((sal_Int32*)0);
     Sequence<OUString> vParameters(m_xFieldParams->getElementNames());
     for(const OUString* pCurrent=::comphelper::stl_begin(vParameters); pCurrent!=::comphelper::stl_end(vParameters); ++pCurrent)
     {
