@@ -22,12 +22,10 @@ sub sanity_checks($)
        'autoconf'   => "autoconf is required",
        'aclocal'    => "aclocal is required",
       );
-    my $exe_ext = '';
-    $exe_ext = ".exe" if ($system =~ m/CYGWIN/);
 
     for my $elem (@path) {
         for my $app (keys %required) {
-            if (-f "$elem/$app$exe_ext") {
+            if (-f "$elem/$app") {
                 delete $required{$app};
             }
         }
@@ -35,7 +33,7 @@ sub sanity_checks($)
     if ((keys %required) > 0) {
         print ("Various low-level dependencies are missing, please install them:\n");
         for my $app (keys %required) {
-            print "\t $app$exe_ext: " . $required{$app} . "\n";
+            print "\t $app: " . $required{$app} . "\n";
         }
         exit (1);
     }
