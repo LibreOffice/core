@@ -36,6 +36,7 @@
 
 #include "salinst.hxx"
 #include "unx/saldata.hxx"
+#include "unx/desktops.hxx"
 #include "vcl/printerinfomanager.hxx"
 
 #include <cstdio>
@@ -48,17 +49,6 @@ typedef SalInstance*(*salFactoryProc)( oslModule pModule);
 }
 
 static oslModule pCloseModule = NULL;
-
-enum {
-    DESKTOP_NONE = 0,
-    DESKTOP_UNKNOWN,
-    DESKTOP_GNOME,
-    DESKTOP_KDE,
-    DESKTOP_KDE4,
-    DESKTOP_CDE
-};
-
-static const char * desktop_strings[] = { "none", "unknown", "GNOME", "KDE", "KDE4", "CDE" };
 
 static SalInstance* tryInstance( const OUString& rModuleBase )
 {
@@ -131,29 +121,26 @@ static SalInstance* tryInstance( const OUString& rModuleBase )
     return pInst;
 }
 
-static const rtl::OUString& get_desktop_environment()
+static DesktopType get_desktop_environment()
 {
-    static rtl::OUString aRet;
-    if( ! aRet.getLength() )
-    {
-        OUStringBuffer aModName( 128 );
-        aModName.appendAscii( SAL_DLLPREFIX"desktop_detector" );
-        aModName.appendAscii( SAL_DLLPOSTFIX );
-        OUString aModule = aModName.makeStringAndClear();
+    OUStringBuffer aModName( 128 );
+    aModName.appendAscii( SAL_DLLPREFIX"desktop_detector" );
+    aModName.appendAscii( SAL_DLLPOSTFIX );
+    OUString aModule = aModName.makeStringAndClear();
 
-        oslModule aMod = osl_loadModuleRelative(
-            reinterpret_cast< oslGenericFunction >( &tryInstance ), aModule.pData,
-            SAL_LOADMODULE_DEFAULT );
-        if( aMod )
-        {
-            rtl::OUString (*pSym)() = (rtl::OUString(*)())
-                osl_getAsciiFunctionSymbol( aMod, "get_desktop_environment" );
-            if( pSym )
-                aRet = pSym();
-        }
-        osl_unloadModule( aMod );
+    oslModule aMod = osl_loadModuleRelative(
+        reinterpret_cast< oslGenericFunction >( &tryInstance ), aModule.pData,
+        SAL_LOADMODULE_DEFAULT );
+    DesktopType ret = DESKTOP_UNKNOWN;
+    if( aMod )
+    {
+        DesktopType (*pSym)() = (DesktopType(*)())
+            osl_getAsciiFunctionSymbol( aMod, "get_desktop_environment" );
+        if( pSym )
+            ret = pSym();
     }
-    return aRet;
+    osl_unloadModule( aMod );
+    return ret;
 }
 
 static SalInstance* autodetect_plugin()
@@ -173,21 +160,21 @@ static SalInstance* autodetect_plugin()
         "svp", 0
     };
 
-    const rtl::OUString& desktop( get_desktop_environment() );
+    DesktopType desktop = get_desktop_environment();
     const char ** pList = pStandardFallbackList;
     int nListEntry = 0;
 
     // no server at all: dummy plugin
-    if ( desktop.equalsAscii( desktop_strings[DESKTOP_NONE] ) )
+    if ( desktop == DESKTOP_NONE )
         pList = pHeadlessFallbackList;
-    else if ( desktop.equalsAscii( desktop_strings[DESKTOP_GNOME] ) )
+    else if ( desktop == DESKTOP_GNOME )
         pList = pStandardFallbackList;
-    else if( desktop.equalsAscii( desktop_strings[DESKTOP_KDE] ) )
+    else if( desktop == DESKTOP_KDE )
     {
         pList = pKDEFallbackList;
         nListEntry = 1;
     }
-    else if( desktop.equalsAscii( desktop_strings[DESKTOP_KDE4] ) )
+    else if( desktop == DESKTOP_KDE4 )
         pList = pKDEFallbackList;
 
     SalInstance* pInst = NULL;
@@ -195,10 +182,10 @@ static SalInstance* autodetect_plugin()
     {
         rtl::OUString aTry( rtl::OUString::createFromAscii( pList[nListEntry] ) );
         pInst = tryInstance( aTry );
-        #if OSL_DEBUG_LEVEL > 1
+//        #if OSL_DEBUG_LEVEL > 1
         if( pInst )
             std::fprintf( stderr, "plugin autodetection: %s\n", pList[nListEntry] );
-        #endif
+//        #endif
         nListEntry++;
     }
 
@@ -288,9 +275,18 @@ void SalAbort( const XubString& rErrorText )
     exit(-1);
 }
 
+static const char * desktop_strings[] = { "none", "unknown", "GNOME", "KDE", "KDE4", "CDE" };
+
 const OUString& SalGetDesktopEnvironment()
 {
-    return get_desktop_environment();
+    static rtl::OUString aRet;
+    if( aRet.isEmpty())
+    {
+        rtl::OUStringBuffer buf( 8 );
+        buf.appendAscii( desktop_strings[ get_desktop_environment() ] );
+        aRet = buf.makeStringAndClear();
+    }
+    return aRet;
 }
 
 SalData::SalData() :

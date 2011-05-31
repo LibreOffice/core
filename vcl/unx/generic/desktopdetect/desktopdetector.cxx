@@ -30,6 +30,7 @@
 #include "precompiled_vcl.hxx"
 
 #include <unx/svunx.h>
+#include <unx/desktops.hxx>
 #include <tools/prex.h>
 #include <X11/Xatom.h>
 #include <tools/postx.h>
@@ -46,16 +47,6 @@
 
 using ::rtl::OUString;
 using ::rtl::OString;
-enum {
-    DESKTOP_NONE = 0,
-    DESKTOP_UNKNOWN,
-    DESKTOP_GNOME,
-    DESKTOP_KDE,
-    DESKTOP_KDE4,
-    DESKTOP_CDE
-};
-
-static const char * desktop_strings[] = { "none", "unknown", "GNOME", "KDE", "KDE4", "CDE" };
 
 static bool is_gnome_desktop( Display* pDisplay )
 {
@@ -255,9 +246,8 @@ static bool is_cde_desktop( Display* pDisplay )
 extern "C"
 {
 
-DESKTOP_DETECTOR_PUBLIC rtl::OUString get_desktop_environment()
+DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
 {
-    rtl::OUStringBuffer aRet( 8 );
     static const char *pOverride = getenv( "OOO_FORCE_DESKTOP" );
 
     if ( pOverride && *pOverride )
@@ -265,90 +255,87 @@ DESKTOP_DETECTOR_PUBLIC rtl::OUString get_desktop_environment()
         OString aOver( pOverride );
 
         if ( aOver.equalsIgnoreAsciiCase( "cde" ) )
-            aRet.appendAscii( desktop_strings[DESKTOP_CDE] );
+            return DESKTOP_CDE;
         if ( aOver.equalsIgnoreAsciiCase( "kde4" ) )
-            aRet.appendAscii( desktop_strings[DESKTOP_KDE4] );
+            return DESKTOP_KDE4;
         if ( aOver.equalsIgnoreAsciiCase( "gnome" ) )
-            aRet.appendAscii( desktop_strings[DESKTOP_GNOME] );
+            return DESKTOP_GNOME;
         if ( aOver.equalsIgnoreAsciiCase( "kde" ) )
-            aRet.appendAscii( desktop_strings[DESKTOP_KDE] );
+            return DESKTOP_KDE;
         if ( aOver.equalsIgnoreAsciiCase( "none" ) )
-            aRet.appendAscii( desktop_strings[DESKTOP_UNKNOWN] );
+            return DESKTOP_UNKNOWN;
     }
 
-    if( aRet.getLength() == 0 )
+    // get display to connect to
+    const char* pDisplayStr = getenv( "DISPLAY" );
+
+    const char* pUsePlugin = getenv( "SAL_USE_VCLPLUGIN" );
+
+    if (pUsePlugin && (strcmp(pUsePlugin, "svp") == 0))
+        pDisplayStr = NULL;
+    else
     {
-        // get display to connect to
-        const char* pDisplayStr = getenv( "DISPLAY" );
-
-        const char* pUsePlugin = getenv( "SAL_USE_VCLPLUGIN" );
-
-        if (pUsePlugin && (strcmp(pUsePlugin, "svp") == 0))
-            pDisplayStr = NULL;
-        else
+        int nParams = osl_getCommandArgCount();
+        OUString aParam;
+        OString aBParm;
+        for( int i = 0; i < nParams; i++ )
         {
-            int nParams = osl_getCommandArgCount();
-            OUString aParam;
-            OString aBParm;
-            for( int i = 0; i < nParams; i++ )
+            osl_getCommandArg( i, &aParam.pData );
+            if( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-headless" ) ) ||
+                aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--headless" ) ) )
             {
-                osl_getCommandArg( i, &aParam.pData );
-                if( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-headless" ) ) ||
-                    aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--headless" ) ) )
-                {
-                    pDisplayStr = NULL;
-                    break;
-                }
-                if( i < nParams-1 && (aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-display" ) ) || aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--display" ) )) )
-                {
-                    osl_getCommandArg( i+1, &aParam.pData );
-                    aBParm = OUStringToOString( aParam, osl_getThreadTextEncoding() );
-                    pDisplayStr = aBParm.getStr();
-                    break;
-                }
+                pDisplayStr = NULL;
+                break;
             }
-        }
-
-        // no server at all
-        if( ! pDisplayStr || !*pDisplayStr )
-            aRet.appendAscii( desktop_strings[DESKTOP_NONE] );
-        else
-        {
-            /* #i92121# workaround deadlocks in the X11 implementation
-            */
-            static const char* pNoXInitThreads = getenv( "SAL_NO_XINITTHREADS" );
-            /* #i90094#
-               from now on we know that an X connection will be
-               established, so protect X against itself
-            */
-            if( ! ( pNoXInitThreads && *pNoXInitThreads ) )
-                XInitThreads();
-
-            Display* pDisplay = XOpenDisplay( pDisplayStr );
-            if( pDisplay )
+            if( i < nParams-1 && (aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-display" ) ) || aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--display" ) )) )
             {
-                XErrorHandler pOldHdl = XSetErrorHandler( autodect_error_handler );
-
-                if ( is_kde4_desktop( pDisplay ) )
-                    aRet.appendAscii( desktop_strings[DESKTOP_KDE4] );
-                else if ( is_gnome_desktop( pDisplay ) )
-                    aRet.appendAscii( desktop_strings[DESKTOP_GNOME] );
-                else if ( is_cde_desktop( pDisplay ) )
-                    aRet.appendAscii( desktop_strings[DESKTOP_CDE] );
-                else if ( is_kde_desktop( pDisplay ) )
-                    aRet.appendAscii( desktop_strings[DESKTOP_KDE] );
-                else
-                    aRet.appendAscii( desktop_strings[DESKTOP_UNKNOWN] );
-
-                // set the default handler again
-                XSetErrorHandler( pOldHdl );
-
-                XCloseDisplay( pDisplay );
+                osl_getCommandArg( i+1, &aParam.pData );
+                aBParm = OUStringToOString( aParam, osl_getThreadTextEncoding() );
+                pDisplayStr = aBParm.getStr();
+                break;
             }
         }
     }
 
-    return aRet.makeStringAndClear();
+    // no server at all
+    if( ! pDisplayStr || !*pDisplayStr )
+        return DESKTOP_NONE;
+
+    /* #i92121# workaround deadlocks in the X11 implementation
+    */
+    static const char* pNoXInitThreads = getenv( "SAL_NO_XINITTHREADS" );
+    /* #i90094#
+       from now on we know that an X connection will be
+       established, so protect X against itself
+    */
+    if( ! ( pNoXInitThreads && *pNoXInitThreads ) )
+        XInitThreads();
+
+    Display* pDisplay = XOpenDisplay( pDisplayStr );
+    if( pDisplay == NULL )
+        return DESKTOP_NONE;
+
+    DesktopType ret;
+
+    XErrorHandler pOldHdl = XSetErrorHandler( autodect_error_handler );
+
+    if ( is_kde4_desktop( pDisplay ) )
+        ret = DESKTOP_KDE4;
+    else if ( is_gnome_desktop( pDisplay ) )
+        ret = DESKTOP_GNOME;
+    else if ( is_cde_desktop( pDisplay ) )
+        ret = DESKTOP_CDE;
+    else if ( is_kde_desktop( pDisplay ) )
+        ret = DESKTOP_KDE;
+    else
+        ret = DESKTOP_UNKNOWN;
+
+    // set the default handler again
+    XSetErrorHandler( pOldHdl );
+
+    XCloseDisplay( pDisplay );
+
+    return ret;
 }
 
 }
