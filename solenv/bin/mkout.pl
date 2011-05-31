@@ -40,12 +40,6 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.8 $ ';
-$id_str =~ /Revision:\s+(\S+)\s+\$/
-  ? ($script_rev = $1) : ($script_rev = "-");
-
-print "$script_name -- version: $script_rev\n";
-
 #### globals ####
 
 $is_debug   = 0;
