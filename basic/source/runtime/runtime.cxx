@@ -1237,22 +1237,17 @@ void SbiRuntime::ClearForStack()
 
 SbiForStack* SbiRuntime::FindForStackItemForCollection( class BasicCollection* pCollection )
 {
-    SbiForStack* pRet = NULL;
-
-    SbiForStack* p = pForStk;
-    while( p )
+    for (SbiForStack *p = pForStk; p; p = p->pNext)
     {
         SbxVariable* pVar = p->refEnd.Is() ? (SbxVariable*)p->refEnd : NULL;
         if( p->eForType == FOR_EACH_COLLECTION && pVar != NULL &&
             PTR_CAST(BasicCollection,pVar) == pCollection )
         {
-            pRet = p;
-            break;
+            return p;
         }
-        p = p->pNext;
     }
 
-    return pRet;
+    return NULL;
 }
 
 
