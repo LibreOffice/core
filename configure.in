@@ -4493,8 +4493,6 @@ fi
 AC_SUBST(SYSTEM_PYTHON)
 AC_SUBST(PYTHON_CFLAGS)
 AC_SUBST(PYTHON_LIBS)
-HOME=`echo $HOME | $SED 's:\\\\:/:g'`
-AC_SUBST(HOME)
 
 dnl ===================================================================
 dnl Check for system translate-toolkit
