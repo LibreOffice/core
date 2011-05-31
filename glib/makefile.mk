@@ -82,9 +82,9 @@ VFLAG=V=1
 
 BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE) $(VFLAG) -j$(MAXPROCESS)
 
-EXTRPATH=LOADER
-
 .IF "$(OS)"=="MACOSX"
+
+EXTRPATH=LOADER
 
 OUT2LIB+=gio/.libs/libgio-2.0.0.dylib
 OUT2LIB+=glib/.libs/libglib-2.0.0.dylib
