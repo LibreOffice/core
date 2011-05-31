@@ -5,8 +5,8 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Line" toolbar:helpid="helpid:10102" toolbar:style="radio" />
  <toolbar:toolbaritem xlink:href=".uno:LineArrowEnd" toolbar:helpid="helpid:27173" toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:Rect" toolbar:helpid="helpid:10104" toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:Ellipse" toolbar:helpid="helpid:10110" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.rectangle" toolbar:helpid="helpid:10104" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.ellipse" toolbar:helpid="helpid:10110" toolbar:style="radio" />
  <toolbar:toolbaritem xlink:href=".uno:Text" toolbar:helpid="helpid:10398" toolbar:style="radio" />
  <toolbar:toolbaritem xlink:href=".uno:VerticalText" toolbar:helpid="helpid:10398" toolbar:style="radio" />
  <toolbar:toolbarseparator/>

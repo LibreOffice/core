@@ -1936,7 +1936,9 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                     // if necessary, the master page interactions will be exported first
                                     sal_Bool bIsBackgroundObjectsVisible = sal_False;   // #i39428# IsBackgroundObjectsVisible not available for Draw
                                     const rtl::OUString sIsBackgroundObjectsVisible( RTL_CONSTASCII_USTRINGPARAM( "IsBackgroundObjectsVisible" ) );
-                                    if ( mbImpressDoc && ( xPagePropSet->getPropertyValue( sIsBackgroundObjectsVisible ) >>= bIsBackgroundObjectsVisible ) && bIsBackgroundObjectsVisible )
+                                    if ( xPagePropSet->getPropertySetInfo( )->hasPropertyByName( sIsBackgroundObjectsVisible ) )
+                                        xPagePropSet->getPropertyValue( sIsBackgroundObjectsVisible ) >>= bIsBackgroundObjectsVisible;
+                                    if ( mbImpressDoc && bIsBackgroundObjectsVisible )
                                     {
                                         uno::Reference< drawing::XMasterPageTarget > xMasterPageTarget( xPage, uno::UNO_QUERY );
                                         if ( xMasterPageTarget.is() )
@@ -1975,82 +1977,93 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                         const rtl::OUString sSpeed ( RTL_CONSTASCII_USTRINGPARAM( "Speed" ) );
                                         sal_Int32 nTime = 800;
                                         presentation::AnimationSpeed aAs;
-                                        aAny = xPagePropSet->getPropertyValue( sSpeed );
-                                        if ( aAny >>= aAs )
+                                        if ( xPagePropSet->getPropertySetInfo( )->hasPropertyByName( sSpeed ) )
                                         {
-                                            switch( aAs )
+                                            aAny = xPagePropSet->getPropertyValue( sSpeed );
+                                            if ( aAny >>= aAs )
                                             {
-                                                case presentation::AnimationSpeed_SLOW : nTime = 1500; break;
-                                                case presentation::AnimationSpeed_FAST : nTime = 300; break;
-                                                default:
-                                                case presentation::AnimationSpeed_MEDIUM : nTime = 800;
+                                                switch( aAs )
+                                                {
+                                                    case presentation::AnimationSpeed_SLOW : nTime = 1500; break;
+                                                    case presentation::AnimationSpeed_FAST : nTime = 300; break;
+                                                    default:
+                                                    case presentation::AnimationSpeed_MEDIUM : nTime = 800;
+                                                }
                                             }
                                         }
                                         presentation::FadeEffect eFe;
-                                        aAny = xPagePropSet->getPropertyValue( sEffect );
                                         vcl::PDFWriter::PageTransition eType = vcl::PDFWriter::Regular;
-                                        if ( aAny >>= eFe )
+                                        if ( xPagePropSet->getPropertySetInfo( )->hasPropertyByName( sEffect ) )
                                         {
-                                            switch( eFe )
+                                            aAny = xPagePropSet->getPropertyValue( sEffect );
+                                            if ( aAny >>= eFe )
                                             {
-                                                case presentation::FadeEffect_HORIZONTAL_LINES :
-                                                case presentation::FadeEffect_HORIZONTAL_CHECKERBOARD :
-                                                case presentation::FadeEffect_HORIZONTAL_STRIPES : eType = vcl::PDFWriter::BlindsHorizontal; break;
+                                                switch( eFe )
+                                                {
+                                                    case presentation::FadeEffect_HORIZONTAL_LINES :
+                                                    case presentation::FadeEffect_HORIZONTAL_CHECKERBOARD :
+                                                    case presentation::FadeEffect_HORIZONTAL_STRIPES : eType = vcl::PDFWriter::BlindsHorizontal; break;
 
-                                                case presentation::FadeEffect_VERTICAL_LINES :
-                                                case presentation::FadeEffect_VERTICAL_CHECKERBOARD :
-                                                case presentation::FadeEffect_VERTICAL_STRIPES : eType = vcl::PDFWriter::BlindsVertical; break;
+                                                    case presentation::FadeEffect_VERTICAL_LINES :
+                                                    case presentation::FadeEffect_VERTICAL_CHECKERBOARD :
+                                                    case presentation::FadeEffect_VERTICAL_STRIPES : eType = vcl::PDFWriter::BlindsVertical; break;
 
-                                                case presentation::FadeEffect_UNCOVER_TO_RIGHT :
-                                                case presentation::FadeEffect_UNCOVER_TO_UPPERRIGHT :
-                                                case presentation::FadeEffect_ROLL_FROM_LEFT :
-                                                case presentation::FadeEffect_FADE_FROM_UPPERLEFT :
-                                                case presentation::FadeEffect_MOVE_FROM_UPPERLEFT :
-                                                case presentation::FadeEffect_FADE_FROM_LEFT :
-                                                case presentation::FadeEffect_MOVE_FROM_LEFT : eType = vcl::PDFWriter::WipeLeftToRight; break;
+                                                    case presentation::FadeEffect_UNCOVER_TO_RIGHT :
+                                                    case presentation::FadeEffect_UNCOVER_TO_UPPERRIGHT :
+                                                    case presentation::FadeEffect_ROLL_FROM_LEFT :
+                                                    case presentation::FadeEffect_FADE_FROM_UPPERLEFT :
+                                                    case presentation::FadeEffect_MOVE_FROM_UPPERLEFT :
+                                                    case presentation::FadeEffect_FADE_FROM_LEFT :
+                                                    case presentation::FadeEffect_MOVE_FROM_LEFT : eType = vcl::PDFWriter::WipeLeftToRight; break;
 
-                                                case presentation::FadeEffect_UNCOVER_TO_BOTTOM :
-                                                case presentation::FadeEffect_UNCOVER_TO_LOWERRIGHT :
-                                                case presentation::FadeEffect_ROLL_FROM_TOP :
-                                                case presentation::FadeEffect_FADE_FROM_UPPERRIGHT :
-                                                case presentation::FadeEffect_MOVE_FROM_UPPERRIGHT :
-                                                case presentation::FadeEffect_FADE_FROM_TOP :
-                                                case presentation::FadeEffect_MOVE_FROM_TOP : eType = vcl::PDFWriter::WipeTopToBottom; break;
+                                                    case presentation::FadeEffect_UNCOVER_TO_BOTTOM :
+                                                    case presentation::FadeEffect_UNCOVER_TO_LOWERRIGHT :
+                                                    case presentation::FadeEffect_ROLL_FROM_TOP :
+                                                    case presentation::FadeEffect_FADE_FROM_UPPERRIGHT :
+                                                    case presentation::FadeEffect_MOVE_FROM_UPPERRIGHT :
+                                                    case presentation::FadeEffect_FADE_FROM_TOP :
+                                                    case presentation::FadeEffect_MOVE_FROM_TOP : eType = vcl::PDFWriter::WipeTopToBottom; break;
 
-                                                case presentation::FadeEffect_UNCOVER_TO_LEFT :
-                                                case presentation::FadeEffect_UNCOVER_TO_LOWERLEFT :
-                                                case presentation::FadeEffect_ROLL_FROM_RIGHT :
+                                                    case presentation::FadeEffect_UNCOVER_TO_LEFT :
+                                                    case presentation::FadeEffect_UNCOVER_TO_LOWERLEFT :
+                                                    case presentation::FadeEffect_ROLL_FROM_RIGHT :
 
-                                                case presentation::FadeEffect_FADE_FROM_LOWERRIGHT :
-                                                case presentation::FadeEffect_MOVE_FROM_LOWERRIGHT :
-                                                case presentation::FadeEffect_FADE_FROM_RIGHT :
-                                                case presentation::FadeEffect_MOVE_FROM_RIGHT : eType = vcl::PDFWriter::WipeRightToLeft; break;
+                                                    case presentation::FadeEffect_FADE_FROM_LOWERRIGHT :
+                                                    case presentation::FadeEffect_MOVE_FROM_LOWERRIGHT :
+                                                    case presentation::FadeEffect_FADE_FROM_RIGHT :
+                                                    case presentation::FadeEffect_MOVE_FROM_RIGHT : eType = vcl::PDFWriter::WipeRightToLeft; break;
 
-                                                case presentation::FadeEffect_UNCOVER_TO_TOP :
-                                                case presentation::FadeEffect_UNCOVER_TO_UPPERLEFT :
-                                                case presentation::FadeEffect_ROLL_FROM_BOTTOM :
-                                                case presentation::FadeEffect_FADE_FROM_LOWERLEFT :
-                                                case presentation::FadeEffect_MOVE_FROM_LOWERLEFT :
-                                                case presentation::FadeEffect_FADE_FROM_BOTTOM :
-                                                case presentation::FadeEffect_MOVE_FROM_BOTTOM : eType = vcl::PDFWriter::WipeBottomToTop; break;
+                                                    case presentation::FadeEffect_UNCOVER_TO_TOP :
+                                                    case presentation::FadeEffect_UNCOVER_TO_UPPERLEFT :
+                                                    case presentation::FadeEffect_ROLL_FROM_BOTTOM :
+                                                    case presentation::FadeEffect_FADE_FROM_LOWERLEFT :
+                                                    case presentation::FadeEffect_MOVE_FROM_LOWERLEFT :
+                                                    case presentation::FadeEffect_FADE_FROM_BOTTOM :
+                                                    case presentation::FadeEffect_MOVE_FROM_BOTTOM : eType = vcl::PDFWriter::WipeBottomToTop; break;
 
-                                                case presentation::FadeEffect_OPEN_VERTICAL : eType = vcl::PDFWriter::SplitHorizontalInward; break;
-                                                case presentation::FadeEffect_CLOSE_HORIZONTAL : eType = vcl::PDFWriter::SplitHorizontalOutward; break;
+                                                    case presentation::FadeEffect_OPEN_VERTICAL : eType = vcl::PDFWriter::SplitHorizontalInward; break;
+                                                    case presentation::FadeEffect_CLOSE_HORIZONTAL : eType = vcl::PDFWriter::SplitHorizontalOutward; break;
 
-                                                case presentation::FadeEffect_OPEN_HORIZONTAL : eType = vcl::PDFWriter::SplitVerticalInward; break;
-                                                case presentation::FadeEffect_CLOSE_VERTICAL : eType = vcl::PDFWriter::SplitVerticalOutward; break;
+                                                    case presentation::FadeEffect_OPEN_HORIZONTAL : eType = vcl::PDFWriter::SplitVerticalInward; break;
+                                                    case presentation::FadeEffect_CLOSE_VERTICAL : eType = vcl::PDFWriter::SplitVerticalOutward; break;
 
-                                                case presentation::FadeEffect_FADE_TO_CENTER : eType = vcl::PDFWriter::BoxInward; break;
-                                                case presentation::FadeEffect_FADE_FROM_CENTER : eType = vcl::PDFWriter::BoxOutward; break;
+                                                    case presentation::FadeEffect_FADE_TO_CENTER : eType = vcl::PDFWriter::BoxInward; break;
+                                                    case presentation::FadeEffect_FADE_FROM_CENTER : eType = vcl::PDFWriter::BoxOutward; break;
 
-                                                case presentation::FadeEffect_NONE : eType = vcl::PDFWriter::Regular; break;
+                                                    case presentation::FadeEffect_NONE : eType = vcl::PDFWriter::Regular; break;
 
-                                                case presentation::FadeEffect_RANDOM :
-                                                case presentation::FadeEffect_DISSOLVE :
-                                                default: eType = vcl::PDFWriter::Dissolve; break;
+                                                    case presentation::FadeEffect_RANDOM :
+                                                    case presentation::FadeEffect_DISSOLVE :
+                                                    default: eType = vcl::PDFWriter::Dissolve; break;
+                                                }
                                             }
                                         }
-                                        pPDFExtOutDevData->SetPageTransition( eType, nTime, -1 );
+
+                                        if ( xPagePropSet->getPropertySetInfo( )->hasPropertyByName( sEffect ) ||
+                                             xPagePropSet->getPropertySetInfo( )->hasPropertyByName( sSpeed ) )
+                                        {
+                                             pPDFExtOutDevData->SetPageTransition( eType, nTime, -1 );
+                                        }
                                     }
                                 }
                             }
@@ -2102,7 +2115,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                             }
                             //<--- #i56629, #i40318
                         }
-                        catch( uno::Exception& )
+                        catch( uno::Exception& e )
                         {
                         }
 

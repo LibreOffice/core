@@ -1118,11 +1118,15 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider& rBuProv, sal_Boo
             = *( (::com::sun::star::style::LineSpacing*)mAny.getValue() );
         switch ( aLineSpacing.Mode )
         {
-            case ::com::sun::star::style::LineSpacingMode::MINIMUM :
-            case ::com::sun::star::style::LineSpacingMode::LEADING :
             case ::com::sun::star::style::LineSpacingMode::FIX :
                 mnLineSpacing = (sal_Int16)(-( aLineSpacing.Height ) );
-            break;
+                mbFixedLineSpacing = sal_True;
+                break;
+            case ::com::sun::star::style::LineSpacingMode::MINIMUM :
+            case ::com::sun::star::style::LineSpacingMode::LEADING :
+                mnLineSpacing = (sal_Int16)(-( aLineSpacing.Height ) );
+                mbFixedLineSpacing = sal_False;
+           break;
 
             case ::com::sun::star::style::LineSpacingMode::PROP :
             default:

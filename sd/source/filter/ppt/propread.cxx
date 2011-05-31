@@ -411,8 +411,12 @@ void Section::Read( SvStorageStream *pStrm )
                     break;
 
                     case VT_LPWSTR :
+                        {
                         *pStrm >> nTemp;
-                        nPropSize += ( nTemp << 1 ) + 4;
+                        // looks like these are aligned to 4 bytes
+                        sal_uInt32 nLength = nPropOfs + nSecOfs + nPropSize + ( nTemp << 1 ) + 4;
+                        nPropSize += ( nTemp << 1 ) + 4 + (nLength % 4);
+                        }
                     break;
 
                     case VT_BLOB_OBJECT :
@@ -448,6 +452,9 @@ void Section::Read( SvStorageStream *pStrm )
                     break;
                 }
                 pStrm->Seek( nPropOfs + nSecOfs );
+                // make sure we don't overflow the section size
+                if( nPropSize > nSecSize - nSecOfs )
+                    nPropSize = nSecSize - nSecOfs;
                 sal_uInt8* pBuf = new sal_uInt8[ nPropSize ];
                 pStrm->Read( pBuf, nPropSize );
                 AddProperty( nPropId, pBuf, nPropSize );

@@ -93,7 +93,8 @@ extern "C" { static void SAL_CALL thisModule() {} }
 ::osl::Module* SdFilter::OpenLibrary( const ::rtl::OUString& rLibraryName ) const
 {
     std::auto_ptr< osl::Module > mod(new osl::Module);
-    return mod->loadRelative(&thisModule, ImplGetFullLibraryName(rLibraryName))
+    return mod->loadRelative(&thisModule, ImplGetFullLibraryName(rLibraryName),
+                             SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY)
         ? mod.release() : 0;
 }
 
