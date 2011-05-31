@@ -241,6 +241,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 break;
             case SC_TABS_INSERTED:
                 GetViewData()->InsertTabs( nTab1, nTab2 );
+                break;
             default:
                 OSL_FAIL("unbekannter ScTablesHint");
         }

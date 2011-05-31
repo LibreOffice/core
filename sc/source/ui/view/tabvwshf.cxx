@@ -308,15 +308,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                             else
                             {
                                 SCTAB   nTabAfter    = nTabNr+1;
-                                SCTAB nSelHigh=0;
-
-                                for(SCTAB i=0;i<nTabCount;i++)
-                                {
-                                    if(rMark.GetTableSelect(i))
-                                    {
-                                        nSelHigh=i;
-                                    }
-                                }
+                                SCTAB nSelHigh = rMark.GetLastSelected();
 
                                 for(SCTAB j=nSelHigh+1;j<nTabCount;j++)
                                 {
