@@ -1622,6 +1622,36 @@ void InterfaceType::dumpComprehensiveGetCppuType(FileStream& o)
     o << indent() << "::com::sun::star::uno::Type the_staticType( "
       << getTypeClass(m_typeName) << ", sTypeName );\n";
 
+    o << indent() << "return the_staticType;\n";
+
+    dec();
+
+    o << indent() << "}\n";
+    dec();
+    o << indent() << "};\n\n";
+
+    if (!isPolymorphic())
+        codemaker::cppumaker::dumpNamespaceClose(o, m_typeName, false);
+    else
+        o << " }";
+    o << " }\n\n";
+
+    dumpGetCppuTypePreamble(o);
+    o  << indent() << "const ::com::sun::star::uno::Type &rRet = detail::" << sStaticTypeClass << "::get();\n";
+
+    o << indent() << "// End inline typedescription generation\n";
+
+    o  << indent() << "static bool bInitStarted = false;\n";
+    o  << indent() << "if (!bInitStarted)\n";
+    o  << indent() << "{\n";
+    inc();
+    o  << indent() << "::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );\n";
+    o  << indent() << "if (!bInitStarted)\n";
+    o  << indent() << "{\n";
+    inc();
+    o  << indent() << "OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();\n";
+    o  << indent() << "bInitStarted = true;\n";
+
     StringSet   aTypes;
     // type for RuntimeException is always needed
     OString     sRunTimeExceptionType("com/sun/star/uno/RuntimeException");
@@ -1638,24 +1668,18 @@ void InterfaceType::dumpComprehensiveGetCppuType(FileStream& o)
         dumpCppuMethods(o, index);
     }
 
-    o << indent() << "// End inline typedescription generation\n";
-
-    o << indent() << "return the_staticType;\n";
-
     dec();
-
-    o << indent() << "}\n";
+    o  << indent() << "}\n";
     dec();
-    o << indent() << "};\n\n";
+    o  << indent() << "}\n";
+    o  << indent() << "else\n";
+    o  << indent() << "{\n";
+    inc();
+    o  << indent() << "OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();\n";
+    dec();
+    o  << indent() << "}\n";
 
-    if (!isPolymorphic())
-        codemaker::cppumaker::dumpNamespaceClose(o, m_typeName, false);
-    else
-        o << " }";
-    o << " }\n\n";
-
-    dumpGetCppuTypePreamble(o);
-    o  << indent() << "return detail::" << sStaticTypeClass << "::get();\n";
+    o  << indent() << "return rRet;\n";
     dumpGetCppuTypePostamble(o);
 }
 
@@ -1864,6 +1888,10 @@ void InterfaceType::dumpCppuAttributes(FileStream& o, sal_uInt32& index)
             inc();
             o << indent() << "::rtl::OUString sAttributeType" << i << "( RTL_CONSTASCII_USTRINGPARAM(\""
               << fieldType.replace('/', '.') << "\") );\n";
+
+            o << indent() << "::rtl::OUString sAttributeName" << i << "( RTL_CONSTASCII_USTRINGPARAM(\""
+              << scope.replace('/', '.') << "::" << fieldName << "\") );\n";
+
             sal_Int32 getExceptions = dumpAttributeExceptionTypeNames(
                 o, "get", name, RT_MODE_ATTRIBUTE_GET);
             sal_Int32 setExceptions = dumpAttributeExceptionTypeNames(
@@ -1906,6 +1934,7 @@ void InterfaceType::dumpCppuMethods(FileStream& o, sal_uInt32& index)
     if (m_hasMethods)
     {
         o << "\n" << indent() << "typelib_InterfaceMethodTypeDescription * pMethod = 0;\n";
+        OString             scope = m_typeName.replace('/', '.');
 
         for (sal_uInt16 i=0; i < methodCount; i++)
         {
@@ -1975,6 +2004,9 @@ void InterfaceType::dumpCppuMethods(FileStream& o, sal_uInt32& index)
 
             o << indent() << "::rtl::OUString sReturnType" << i << "( RTL_CONSTASCII_USTRINGPARAM(\""
               << returnType.replace('/', '.') << "\") );\n";
+            o << indent() << "::rtl::OUString sMethodName" << i <<
+                "( RTL_CONSTASCII_USTRINGPARAM(\""
+              << scope.replace('/', '.') << "::" << methodName << "\") );\n";
             o << indent() << "typelib_typedescription_newInterfaceMethod( &pMethod,\n";
             inc();
             o << indent() << absoluteIndex++ << ", ";
@@ -1982,6 +2014,7 @@ void InterfaceType::dumpCppuMethods(FileStream& o, sal_uInt32& index)
                 o << "sal_True,\n";
             else
                 o << "sal_False,\n";
+
             o << indent() << "sMethodName" << i << ".pData,\n";
             o << indent() << "(typelib_TypeClass)" << getTypeClass(returnType)
               << ", sReturnType" << i << ".pData,\n";
