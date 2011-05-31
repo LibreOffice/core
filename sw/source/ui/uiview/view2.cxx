@@ -2035,7 +2035,7 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
                     else
                     {
                         ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
-                        nErrno = pDocSh->InsertFrom( *pMedium ) ? 0 : ERR_SWG_READ_ERROR;
+                        nErrno = pDocSh->ImportFrom( *pMedium, true ) ? 0 : ERR_SWG_READ_ERROR;
                     }
 
                 }
