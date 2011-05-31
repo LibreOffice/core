@@ -1249,6 +1249,7 @@ SbiForStack* SbiRuntime::FindForStackItemForCollection( class BasicCollection* p
             pRet = p;
             break;
         }
+        p = p->pNext;
     }
 
     return pRet;
