@@ -94,11 +94,6 @@ AC_ARG_ENABLE(ext-scripting-javascript,
         [Enables support for scripts in JavaScript.]),
 ,)
 
-AC_ARG_ENABLE(ext-scripting-python,
-    AS_HELP_STRING([--enable-ext-scripting-python],
-        [Enables support for scripts in Python.]),
-,)
-
 AC_ARG_ENABLE(ext-typo,
     AS_HELP_STRING([--enable-ext-typo],
         [Enables the Typography Toolbar extension.]),
@@ -259,8 +254,12 @@ AC_ARG_ENABLE(crashdump,
         [Enable the crashdump feature.]))
 
 AC_ARG_ENABLE(python,
-    AS_HELP_STRING([--disable-python],
-        [Disable build of Python 2.x UNO API.]))
+    AS_HELP_STRING([--enable-python=<no/auto/system/internal>],
+        [Enables or disables Python support at run-time and build-time.
+         Also specifies what Python to use. 'auto' is the
+         default. Note that Python can be disabled with
+         --disable-python or --enable-python=no only if no
+         translations are required.]))
 
 AC_ARG_ENABLE(gtk,
     AS_HELP_STRING([--disable-gtk],
@@ -722,11 +721,6 @@ AC_ARG_WITH(system-libxml,
     AS_HELP_STRING([--with-system-libxml],
         [Use libxml already on system.]),
 ,)
-
-AC_ARG_WITH(system-python,
-    AS_HELP_STRING([--with-system-python],
-        [Use Python already on system.]),
-,with_system_python=yes)
 
 AC_ARG_WITH(system-translate-toolkit,
     AS_HELP_STRING([--with-system-translate-toolkit],
@@ -4390,54 +4384,89 @@ AC_SUBST(LIBXML_CFLAGS)
 AC_SUBST(LIBXML_LIBS)
 
 dnl ===================================================================
-dnl Check for python
+dnl Checks for Python
 dnl ===================================================================
-AC_MSG_CHECKING([whether to enable Python 2.x UNO API])
-if test "$enable_python" != "no"; then
-   AC_MSG_RESULT([yes])
-   BUILD_TYPE="$BUILD_TYPE PYUNO"
-else
-   AC_MSG_RESULT([no])
-   DISABLE_PYTHON=TRUE
-   AC_SUBST(DISABLE_PYTHON)
-fi
 
 AC_MSG_CHECKING([which Python to use])
-if test "$build_os" = "cygwin"; then
-   dnl When building on Windows we don't attempt to use any installed
-   dnl "system"  Python.
-   dnl
-   dnl (When cross-compiling to Windows from Linux using the mingw32-cross
-   dnl compiler from OBS, use mingw32-python from OBS, and ditto for other
-   dnl MinGW cross-compilation setups.)
-   with_system_python=no
+
+case "$enable_python" in
+no|disable)
+   enable_python=no
+   AC_MSG_RESULT([none])
+   DISABLE_PYTHON=TRUE
+   ;;
+""|yes|auto)
+   if test $build_os = cygwin; then
+      dnl When building on Windows we don't attempt to use any installed
+      dnl "system"  Python.
+      dnl
+      dnl (When cross-compiling to Windows from Linux using the mingw32-cross
+      dnl compiler from OBS, use mingw32-python from OBS, and ditto for other
+      dnl MinGW cross-compilation setups.)
+      AC_MSG_RESULT([internal])
+      enable_python=internal
+   elif test $_os = Darwin; then
+      AC_MSG_RESULT([system, MacOSX10.4u.SDK (Python 2.3)])
+      enable_python=system
+      PYTHON_CFLAGS="-I/Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/Python.framework/Versions/2.3/include/python2.3"
+      PYTHON_LIBS="-framework Python"
+   else
+      AC_MSG_RESULT([checking below])
+      enable_python=auto       
+   fi
+   ;;
+internal)
+   AC_MSG_RESULT([internal])
+   ;;
+system)
+   AC_MSG_RESULT([system])
+   ;;
+*)
+   AC_MSG_ERROR([Incorrect --enable-python option])
+   ;;
+esac
+
+AC_SUBST(DISABLE_PYTHON)
+
+if test $_os = WINNT -a "$WITH_MINGW" != yes -a $enable_python = system; then
+   AC_MSG_ERROR([Must use internal Python when building with MSVC])
 fi
-if test "$_os" = "Darwin" && test "$with_system_python" != "no"; then
-   with_system_python=yes
-   AC_MSG_RESULT([compiling against MacOSX10.4u.sdk (python version 2.3)])
-   PYTHON_CFLAGS="-I/Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/Python.framework/Versions/2.3/include/python2.3"
-   PYTHON_LIBS="-framework Python"
-elif test -n "$with_system_python" -o -n "$with_system_libs" && \
-    test "$with_system_python" != "no"; then
-   with_system_python=yes
-   AC_MSG_RESULT([external])
 
-   dnl This searches for a *build* platform Python
-   AM_PATH_PYTHON([2.2])
+if test $enable_python != no; then
+   BUILD_TYPE="$BUILD_TYPE PYUNO"
+fi
 
+if test "$cross_compiling" != yes; then
+   if test $enable_python = system; then
+      dnl This causes an error if no Python found
+      AM_PATH_PYTHON([2.2])
+   elif test $enable_python = auto; then
+      dnl This allows lack of system Python
+      AM_PATH_PYTHON([2.2],, [:])
+
+      if test "$PYTHON" = :; then
+         enable_python=internal
+      else
+         enable_python=system
+      fi
+   fi
+fi
+
+if test $enable_python = system; then
    if test -n "$PYTHON_CFLAGS" -a -n "$PYTHON_LIBS"; then
       dnl Fallback: Accept these in the environment.
       :
-   elif test "$cross_compiling" != "yes"; then
+   elif test "$cross_compiling" != yes; then
       python_include=`$PYTHON -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('INCLUDEPY'));"`
       python_version=`$PYTHON -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('VERSION'));"`
       python_libs=`$PYTHON -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('LIBS'));"`
       python_libdir=`$PYTHON -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('LIBDIR'));"`
       PYTHON_CFLAGS="-I$python_include"
       PYTHON_LIBS="-L$python_libdir -lpython$python_version $python_libs"
-   else
+   elif test "$cross_compiling" = yes; then
       dnl How to find out the cross-compilation Python installation path?
       dnl Let's hardocode what we know for different distributions for now...
+
       for python_sysroot in /usr/i686-w64-mingw32/sys-root/mingw ; do
          for python_version in 2.6 ; do
             if test -f ${python_sysroot}/include/python${python_version}/Python.h; then
@@ -4450,31 +4479,46 @@ elif test -n "$with_system_python" -o -n "$with_system_libs" && \
       done
    fi
 fi
-if test "$with_system_python" = "yes" ; then
+
+dnl By now enable_python should be "system", "internal" or "no"
+case $enable_python in
+system)
    SYSTEM_PYTHON=YES
-   dnl check if the headers really work:
+
+   dnl Check if the headers really work
    save_CPPFLAGS="$CPPFLAGS"
    CPPFLAGS="$CPPFLAGS $PYTHON_CFLAGS"
    AC_CHECK_HEADER(Python.h, [],
        [AC_MSG_ERROR([Python headers not found. You probably want to set both the PYTHON_CFLAGS and PYTHON_LIBS environment variables.])],
        [])
    CPPFLAGS="$save_CPPFLAGS"
-else
+
+   dnl FIXME Check if the Python library can be linked with, too?
+   ;;
+
+internal)
    SYSTEM_PYTHON=NO
    BUILD_TYPE="$BUILD_TYPE PYTHON"
-   AC_MSG_RESULT([internal])
-   # Embedded python dies without Home set
+   # Embedded Python dies without Home set
    if test "z$HOME" = "z"; then
       export HOME="";
    fi
    # bz2 tarball and bzip2 is not standard
    if test -z "$BZIP2"; then
-    AC_PATH_PROG( BZIP2, bzip2)
-    if test -z "$BZIP2"; then
-           AC_MSG_ERROR([the internal Python module has a .tar.bz2. You need bzip2])
-       fi
+      AC_PATH_PROG( BZIP2, bzip2)
+      if test -z "$BZIP2"; then
+         AC_MSG_ERROR([the internal Python module has a .tar.bz2. You need bzip2])
+      fi
    fi
-fi
+   ;;
+no)
+   SYSTEM_PYTHON=NO
+   ;;
+*)
+   AC_MSG_ERROR([Internal configure script error, invalid enable_python value "$enable_python"])
+   ;;
+esac
+
 AC_SUBST(SYSTEM_PYTHON)
 AC_SUBST(PYTHON_CFLAGS)
 AC_SUBST(PYTHON_LIBS)
@@ -6988,16 +7032,13 @@ AS_IF([test "x$enable_ext_scripting_javascript" = "xyes"], [
 ])
 AC_SUBST(ENABLE_SCRIPTING_JAVASCRIPT)
 
-# scripting provider for Python extension?
-AC_MSG_CHECKING([whether to build extension for support of scripts in Python])
-AS_IF([test "x$enable_ext_scripting_python" = "xyes"], [
-   AC_MSG_RESULT([yes])
-   ENABLE_SCRIPTING_PYTHON=YES
-],[
-   AC_MSG_RESULT([no])
+dnl Scripting provider for Python extension?
+dnl We always provide this unless we have disabled Python completely
+if test $enable_python = no; then
    ENABLE_SCRIPTING_PYTHON=NO
-   SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_SCRIPTING_PYTHON"
-])
+else
+   ENABLE_SCRIPTING_PYTHON=YES
+fi
 AC_SUBST(ENABLE_SCRIPTING_PYTHON)
 
 supports_multilib=
