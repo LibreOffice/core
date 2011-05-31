@@ -76,7 +76,7 @@ void OfficeConnection::setUp() {
             RTL_CONSTASCII_USTRINGPARAM("--nofirststartwizard"));
         rtl::OUString norestoreArg(RTL_CONSTASCII_USTRINGPARAM("--norestore"));
         //Disable use of the unix standalone splash screen app for the tests
-        rtl::OUString noSplashArg(RTL_CONSTASCII_USTRINGPARAM("--no-oosplash"));
+        rtl::OUString noSplashArg(RTL_CONSTASCII_USTRINGPARAM("--nologo"));
         rtl::OUString acceptArg(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("--accept=")) + desc +
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";urp")));
