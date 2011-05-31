@@ -22,3 +22,35 @@
  
  # See if it's safe to turn G_DISABLE_DEPRECATED on.
  GLIB_VERSION_MAJOR_MINOR=`$PKG_CONFIG --modversion glib-2.0 | sed "s/\.[^.]*\$//"`
+--- misc/gdk-pixbuf-2.23.0/gdk-pixbuf/gdk-pixbuf-util.c
++++ misc/build/gdk-pixbuf-2.23.0/gdk-pixbuf/gdk-pixbuf-util.c
+@@ -23,7 +23,9 @@
+ 
+ #include "config.h"
+ #include <string.h>
++#ifdef ENABLE_NLS
+ #include <libintl.h>
++#endif
+ 
+ #include "gdk-pixbuf-transform.h"
+ #include "gdk-pixbuf-private.h"
+@@ -336,15 +336,19 @@
+ const gchar *
+ gdk_pixbuf_gettext (const gchar *msgid)
+ {
++#ifdef ENABLE_NLS
+         static gsize gettext_initialized = FALSE;
+ 
+         if (G_UNLIKELY (g_once_init_enter (&gettext_initialized))) {
+                 bindtextdomain (GETTEXT_PACKAGE, GDK_PIXBUF_LOCALEDIR);
+ #ifdef HAVE_BIND_TEXTDOMAIN_CODESET
+                 bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+ #endif
+                 g_once_init_leave (&gettext_initialized, TRUE);
+         }
+ 
+         return g_dgettext (GETTEXT_PACKAGE, msgid);
++#else
++        return msgid;
++#endif
+ }
