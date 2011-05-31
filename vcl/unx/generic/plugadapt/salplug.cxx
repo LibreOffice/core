@@ -182,10 +182,10 @@ static SalInstance* autodetect_plugin()
     {
         rtl::OUString aTry( rtl::OUString::createFromAscii( pList[nListEntry] ) );
         pInst = tryInstance( aTry );
-//        #if OSL_DEBUG_LEVEL > 1
+        #if OSL_DEBUG_LEVEL > 1
         if( pInst )
             std::fprintf( stderr, "plugin autodetection: %s\n", pList[nListEntry] );
-//        #endif
+        #endif
         nListEntry++;
     }
 
