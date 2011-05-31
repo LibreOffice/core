@@ -32,7 +32,6 @@ $(eval $(call gb_Library_set_include,vclplug_kde,\
     -I$(SRCDIR)/vcl/inc \
     -I$(SRCDIR)/vcl/inc/pch \
     -I$(SRCDIR)/solenv/inc \
-    -I$(SRCDIR)/vcl/unx/inc \
     -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
 ))
