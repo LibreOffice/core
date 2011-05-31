@@ -56,3 +56,785 @@
  /**
   * SECTION:conversions
 
+--- misc/glib-2.28.1/configure
++++ misc/build/glib-2.28.1/configure
+@@ -7988,719 +7988,6 @@
+ CONFIG_STATUS_DEPENDENCIES='$(top_srcdir)/po/LINGUAS'
+ 
+ 
+-   for ac_header in locale.h
+-do :
+-  ac_fn_c_check_header_mongrel "$LINENO" "locale.h" "ac_cv_header_locale_h" "$ac_includes_default"
+-if test "x$ac_cv_header_locale_h" = xyes; then :
+-  cat >>confdefs.h <<_ACEOF
+-#define HAVE_LOCALE_H 1
+-_ACEOF
+-
+-fi
+-
+-done
+-
+-    if test $ac_cv_header_locale_h = yes; then
+-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for LC_MESSAGES" >&5
+-$as_echo_n "checking for LC_MESSAGES... " >&6; }
+-if ${am_cv_val_LC_MESSAGES+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-#include <locale.h>
+-int
+-main ()
+-{
+-return LC_MESSAGES
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-if ac_fn_c_try_link "$LINENO"; then :
+-  am_cv_val_LC_MESSAGES=yes
+-else
+-  am_cv_val_LC_MESSAGES=no
+-fi
+-rm -f core conftest.err conftest.$ac_objext \
+-    conftest$ac_exeext conftest.$ac_ext
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $am_cv_val_LC_MESSAGES" >&5
+-$as_echo "$am_cv_val_LC_MESSAGES" >&6; }
+-    if test $am_cv_val_LC_MESSAGES = yes; then
+-
+-$as_echo "#define HAVE_LC_MESSAGES 1" >>confdefs.h
+-
+-    fi
+-  fi
+-     USE_NLS=yes
+-
+-
+-    gt_cv_have_gettext=no
+-
+-    CATOBJEXT=NONE
+-    XGETTEXT=:
+-    INTLLIBS=
+-
+-    ac_fn_c_check_header_mongrel "$LINENO" "libintl.h" "ac_cv_header_libintl_h" "$ac_includes_default"
+-if test "x$ac_cv_header_libintl_h" = xyes; then :
+-  gt_cv_func_dgettext_libintl="no"
+-      libintl_extra_libs=""
+-
+-      #
+-      # First check in libc
+-      #
+-      { $as_echo "$as_me:${as_lineno-$LINENO}: checking for ngettext in libc" >&5
+-$as_echo_n "checking for ngettext in libc... " >&6; }
+-if ${gt_cv_func_ngettext_libc+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-#include <libintl.h>
+-
+-int
+-main ()
+-{
+-return !ngettext ("","", 1)
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-if ac_fn_c_try_link "$LINENO"; then :
+-  gt_cv_func_ngettext_libc=yes
+-else
+-  gt_cv_func_ngettext_libc=no
+-fi
+-rm -f core conftest.err conftest.$ac_objext \
+-    conftest$ac_exeext conftest.$ac_ext
+-
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $gt_cv_func_ngettext_libc" >&5
+-$as_echo "$gt_cv_func_ngettext_libc" >&6; }
+-
+-      if test "$gt_cv_func_ngettext_libc" = "yes" ; then
+-	      { $as_echo "$as_me:${as_lineno-$LINENO}: checking for dgettext in libc" >&5
+-$as_echo_n "checking for dgettext in libc... " >&6; }
+-if ${gt_cv_func_dgettext_libc+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-#include <libintl.h>
+-
+-int
+-main ()
+-{
+-return !dgettext ("","")
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-if ac_fn_c_try_link "$LINENO"; then :
+-  gt_cv_func_dgettext_libc=yes
+-else
+-  gt_cv_func_dgettext_libc=no
+-fi
+-rm -f core conftest.err conftest.$ac_objext \
+-    conftest$ac_exeext conftest.$ac_ext
+-
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $gt_cv_func_dgettext_libc" >&5
+-$as_echo "$gt_cv_func_dgettext_libc" >&6; }
+-      fi
+-
+-      if test "$gt_cv_func_ngettext_libc" = "yes" ; then
+-        for ac_func in bind_textdomain_codeset
+-do :
+-  ac_fn_c_check_func "$LINENO" "bind_textdomain_codeset" "ac_cv_func_bind_textdomain_codeset"
+-if test "x$ac_cv_func_bind_textdomain_codeset" = xyes; then :
+-  cat >>confdefs.h <<_ACEOF
+-#define HAVE_BIND_TEXTDOMAIN_CODESET 1
+-_ACEOF
+-
+-fi
+-done
+-
+-      fi
+-
+-      #
+-      # If we don't have everything we want, check in libintl
+-      #
+-      if test "$gt_cv_func_dgettext_libc" != "yes" \
+-	 || test "$gt_cv_func_ngettext_libc" != "yes" \
+-         || test "$ac_cv_func_bind_textdomain_codeset" != "yes" ; then
+-
+-        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for bindtextdomain in -lintl" >&5
+-$as_echo_n "checking for bindtextdomain in -lintl... " >&6; }
+-if ${ac_cv_lib_intl_bindtextdomain+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lintl  $LIBS"
+-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-/* Override any GCC internal prototype to avoid an error.
+-   Use char because int might match the return type of a GCC
+-   builtin and then its argument prototype would still apply.  */
+-#ifdef __cplusplus
+-extern "C"
+-#endif
+-char bindtextdomain ();
+-int
+-main ()
+-{
+-return bindtextdomain ();
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-if ac_fn_c_try_link "$LINENO"; then :
+-  ac_cv_lib_intl_bindtextdomain=yes
+-else
+-  ac_cv_lib_intl_bindtextdomain=no
+-fi
+-rm -f core conftest.err conftest.$ac_objext \
+-    conftest$ac_exeext conftest.$ac_ext
+-LIBS=$ac_check_lib_save_LIBS
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_intl_bindtextdomain" >&5
+-$as_echo "$ac_cv_lib_intl_bindtextdomain" >&6; }
+-if test "x$ac_cv_lib_intl_bindtextdomain" = xyes; then :
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for ngettext in -lintl" >&5
+-$as_echo_n "checking for ngettext in -lintl... " >&6; }
+-if ${ac_cv_lib_intl_ngettext+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lintl  $LIBS"
+-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-/* Override any GCC internal prototype to avoid an error.
+-   Use char because int might match the return type of a GCC
+-   builtin and then its argument prototype would still apply.  */
+-#ifdef __cplusplus
+-extern "C"
+-#endif
+-char ngettext ();
+-int
+-main ()
+-{
+-return ngettext ();
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-if ac_fn_c_try_link "$LINENO"; then :
+-  ac_cv_lib_intl_ngettext=yes
+-else
+-  ac_cv_lib_intl_ngettext=no
+-fi
+-rm -f core conftest.err conftest.$ac_objext \
+-    conftest$ac_exeext conftest.$ac_ext
+-LIBS=$ac_check_lib_save_LIBS
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_intl_ngettext" >&5
+-$as_echo "$ac_cv_lib_intl_ngettext" >&6; }
+-if test "x$ac_cv_lib_intl_ngettext" = xyes; then :
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for dgettext in -lintl" >&5
+-$as_echo_n "checking for dgettext in -lintl... " >&6; }
+-if ${ac_cv_lib_intl_dgettext+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lintl  $LIBS"
+-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-/* Override any GCC internal prototype to avoid an error.
+-   Use char because int might match the return type of a GCC
+-   builtin and then its argument prototype would still apply.  */
+-#ifdef __cplusplus
+-extern "C"
+-#endif
+-char dgettext ();
+-int
+-main ()
+-{
+-return dgettext ();
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-if ac_fn_c_try_link "$LINENO"; then :
+-  ac_cv_lib_intl_dgettext=yes
+-else
+-  ac_cv_lib_intl_dgettext=no
+-fi
+-rm -f core conftest.err conftest.$ac_objext \
+-    conftest$ac_exeext conftest.$ac_ext
+-LIBS=$ac_check_lib_save_LIBS
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_intl_dgettext" >&5
+-$as_echo "$ac_cv_lib_intl_dgettext" >&6; }
+-if test "x$ac_cv_lib_intl_dgettext" = xyes; then :
+-  gt_cv_func_dgettext_libintl=yes
+-fi
+-
+-fi
+-
+-fi
+-
+-
+-	if test "$gt_cv_func_dgettext_libintl" != "yes" ; then
+-	  { $as_echo "$as_me:${as_lineno-$LINENO}: checking if -liconv is needed to use gettext" >&5
+-$as_echo_n "checking if -liconv is needed to use gettext... " >&6; }
+-	  { $as_echo "$as_me:${as_lineno-$LINENO}: result: " >&5
+-$as_echo "" >&6; }
+-  	  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for ngettext in -lintl" >&5
+-$as_echo_n "checking for ngettext in -lintl... " >&6; }
+-if ${ac_cv_lib_intl_ngettext+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lintl -liconv $LIBS"
+-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-/* Override any GCC internal prototype to avoid an error.
+-   Use char because int might match the return type of a GCC
+-   builtin and then its argument prototype would still apply.  */
+-#ifdef __cplusplus
+-extern "C"
+-#endif
+-char ngettext ();
+-int
+-main ()
+-{
+-return ngettext ();
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-if ac_fn_c_try_link "$LINENO"; then :
+-  ac_cv_lib_intl_ngettext=yes
+-else
+-  ac_cv_lib_intl_ngettext=no
+-fi
+-rm -f core conftest.err conftest.$ac_objext \
+-    conftest$ac_exeext conftest.$ac_ext
+-LIBS=$ac_check_lib_save_LIBS
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_intl_ngettext" >&5
+-$as_echo "$ac_cv_lib_intl_ngettext" >&6; }
+-if test "x$ac_cv_lib_intl_ngettext" = xyes; then :
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for dcgettext in -lintl" >&5
+-$as_echo_n "checking for dcgettext in -lintl... " >&6; }
+-if ${ac_cv_lib_intl_dcgettext+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lintl -liconv $LIBS"
+-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-/* Override any GCC internal prototype to avoid an error.
+-   Use char because int might match the return type of a GCC
+-   builtin and then its argument prototype would still apply.  */
+-#ifdef __cplusplus
+-extern "C"
+-#endif
+-char dcgettext ();
+-int
+-main ()
+-{
+-return dcgettext ();
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-if ac_fn_c_try_link "$LINENO"; then :
+-  ac_cv_lib_intl_dcgettext=yes
+-else
+-  ac_cv_lib_intl_dcgettext=no
+-fi
+-rm -f core conftest.err conftest.$ac_objext \
+-    conftest$ac_exeext conftest.$ac_ext
+-LIBS=$ac_check_lib_save_LIBS
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_intl_dcgettext" >&5
+-$as_echo "$ac_cv_lib_intl_dcgettext" >&6; }
+-if test "x$ac_cv_lib_intl_dcgettext" = xyes; then :
+-  gt_cv_func_dgettext_libintl=yes
+-			libintl_extra_libs=-liconv
+-else
+-  :
+-fi
+-
+-else
+-  :
+-fi
+-
+-        fi
+-
+-        #
+-        # If we found libintl, then check in it for bind_textdomain_codeset();
+-        # we'll prefer libc if neither have bind_textdomain_codeset(),
+-        # and both have dgettext and ngettext
+-        #
+-        if test "$gt_cv_func_dgettext_libintl" = "yes" ; then
+-          glib_save_LIBS="$LIBS"
+-          LIBS="$LIBS -lintl $libintl_extra_libs"
+-          unset ac_cv_func_bind_textdomain_codeset
+-          for ac_func in bind_textdomain_codeset
+-do :
+-  ac_fn_c_check_func "$LINENO" "bind_textdomain_codeset" "ac_cv_func_bind_textdomain_codeset"
+-if test "x$ac_cv_func_bind_textdomain_codeset" = xyes; then :
+-  cat >>confdefs.h <<_ACEOF
+-#define HAVE_BIND_TEXTDOMAIN_CODESET 1
+-_ACEOF
+-
+-fi
+-done
+-
+-          LIBS="$glib_save_LIBS"
+-
+-          if test "$ac_cv_func_bind_textdomain_codeset" = "yes" ; then
+-            gt_cv_func_dgettext_libc=no
+-          else
+-            if test "$gt_cv_func_dgettext_libc" = "yes" \
+-		&& test "$gt_cv_func_ngettext_libc" = "yes"; then
+-              gt_cv_func_dgettext_libintl=no
+-            fi
+-          fi
+-        fi
+-      fi
+-
+-      if test "$gt_cv_func_dgettext_libc" = "yes" \
+-	|| test "$gt_cv_func_dgettext_libintl" = "yes"; then
+-        gt_cv_have_gettext=yes
+-      fi
+-
+-      if test "$gt_cv_func_dgettext_libintl" = "yes"; then
+-        INTLLIBS="-lintl $libintl_extra_libs"
+-      fi
+-
+-      if test "$gt_cv_have_gettext" = "yes"; then
+-
+-$as_echo "#define HAVE_GETTEXT 1" >>confdefs.h
+-
+-	# Extract the first word of "msgfmt", so it can be a program name with args.
+-set dummy msgfmt; ac_word=$2
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+-$as_echo_n "checking for $ac_word... " >&6; }
+-if ${ac_cv_path_MSGFMT+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  case "$MSGFMT" in
+-  /*)
+-  ac_cv_path_MSGFMT="$MSGFMT" # Let the user override the test with a path.
+-  ;;
+-  *)
+-  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+-  for ac_dir in $PATH; do
+-    test -z "$ac_dir" && ac_dir=.
+-    if test -f $ac_dir/$ac_word; then
+-      if test -z "`$ac_dir/$ac_word -h 2>&1 | grep 'dv '`"; then
+-	ac_cv_path_MSGFMT="$ac_dir/$ac_word"
+-	break
+-      fi
+-    fi
+-  done
+-  IFS="$ac_save_ifs"
+-  test -z "$ac_cv_path_MSGFMT" && ac_cv_path_MSGFMT="no"
+-  ;;
+-esac
+-fi
+-MSGFMT="$ac_cv_path_MSGFMT"
+-if test "$MSGFMT" != "no"; then
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $MSGFMT" >&5
+-$as_echo "$MSGFMT" >&6; }
+-else
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
+-fi
+-	if test "$MSGFMT" != "no"; then
+-          glib_save_LIBS="$LIBS"
+-          LIBS="$LIBS $INTLLIBS"
+-	  for ac_func in dcgettext
+-do :
+-  ac_fn_c_check_func "$LINENO" "dcgettext" "ac_cv_func_dcgettext"
+-if test "x$ac_cv_func_dcgettext" = xyes; then :
+-  cat >>confdefs.h <<_ACEOF
+-#define HAVE_DCGETTEXT 1
+-_ACEOF
+-
+-fi
+-done
+-
+-	  MSGFMT_OPTS=
+-	  { $as_echo "$as_me:${as_lineno-$LINENO}: checking if msgfmt accepts -c" >&5
+-$as_echo_n "checking if msgfmt accepts -c... " >&6; }
+-	  cat >conftest.foo <<_ACEOF
+-
+-msgid ""
+-msgstr ""
+-"Content-Type: text/plain; charset=UTF-8\n"
+-"Project-Id-Version: test 1.0\n"
+-"PO-Revision-Date: 2007-02-15 12:01+0100\n"
+-"Last-Translator: test <foo@bar.xx>\n"
+-"Language-Team: C <LL@li.org>\n"
+-"MIME-Version: 1.0\n"
+-"Content-Transfer-Encoding: 8bit\n"
+-
+-_ACEOF
+-if { { $as_echo "$as_me:${as_lineno-$LINENO}: \$MSGFMT -c -o /dev/null conftest.foo"; } >&5
+-  ($MSGFMT -c -o /dev/null conftest.foo) 2>&5
+-  ac_status=$?
+-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+-  test $ac_status = 0; }; then
+-  MSGFMT_OPTS=-c; { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+-$as_echo "yes" >&6; }
+-else { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
+-echo "$as_me: failed input was:" >&5
+-sed 's/^/| /' conftest.foo >&5
+-fi
+-
+-	  # Extract the first word of "gmsgfmt", so it can be a program name with args.
+-set dummy gmsgfmt; ac_word=$2
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+-$as_echo_n "checking for $ac_word... " >&6; }
+-if ${ac_cv_path_GMSGFMT+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  case $GMSGFMT in
+-  [\\/]* | ?:[\\/]*)
+-  ac_cv_path_GMSGFMT="$GMSGFMT" # Let the user override the test with a path.
+-  ;;
+-  *)
+-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+-for as_dir in $PATH
+-do
+-  IFS=$as_save_IFS
+-  test -z "$as_dir" && as_dir=.
+-    for ac_exec_ext in '' $ac_executable_extensions; do
+-  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+-    ac_cv_path_GMSGFMT="$as_dir/$ac_word$ac_exec_ext"
+-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+-    break 2
+-  fi
+-done
+-  done
+-IFS=$as_save_IFS
+-
+-  test -z "$ac_cv_path_GMSGFMT" && ac_cv_path_GMSGFMT="$MSGFMT"
+-  ;;
+-esac
+-fi
+-GMSGFMT=$ac_cv_path_GMSGFMT
+-if test -n "$GMSGFMT"; then
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $GMSGFMT" >&5
+-$as_echo "$GMSGFMT" >&6; }
+-else
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
+-fi
+-
+-
+-	  # Extract the first word of "xgettext", so it can be a program name with args.
+-set dummy xgettext; ac_word=$2
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+-$as_echo_n "checking for $ac_word... " >&6; }
+-if ${ac_cv_path_XGETTEXT+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  case "$XGETTEXT" in
+-  /*)
+-  ac_cv_path_XGETTEXT="$XGETTEXT" # Let the user override the test with a path.
+-  ;;
+-  *)
+-  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+-  for ac_dir in $PATH; do
+-    test -z "$ac_dir" && ac_dir=.
+-    if test -f $ac_dir/$ac_word; then
+-      if test -z "`$ac_dir/$ac_word -h 2>&1 | grep '(HELP)'`"; then
+-	ac_cv_path_XGETTEXT="$ac_dir/$ac_word"
+-	break
+-      fi
+-    fi
+-  done
+-  IFS="$ac_save_ifs"
+-  test -z "$ac_cv_path_XGETTEXT" && ac_cv_path_XGETTEXT=":"
+-  ;;
+-esac
+-fi
+-XGETTEXT="$ac_cv_path_XGETTEXT"
+-if test "$XGETTEXT" != ":"; then
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $XGETTEXT" >&5
+-$as_echo "$XGETTEXT" >&6; }
+-else
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
+-fi
+-
+-	  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-int
+-main ()
+-{
+-extern int _nl_msg_cat_cntr;
+-			 return _nl_msg_cat_cntr
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-if ac_fn_c_try_link "$LINENO"; then :
+-  CATOBJEXT=.gmo
+-             DATADIRNAME=share
+-else
+-  case $host in
+-	    *-*-solaris*)
+-	    	                	    	                ac_fn_c_check_func "$LINENO" "bind_textdomain_codeset" "ac_cv_func_bind_textdomain_codeset"
+-if test "x$ac_cv_func_bind_textdomain_codeset" = xyes; then :
+-  CATOBJEXT=.gmo
+-               DATADIRNAME=share
+-else
+-  CATOBJEXT=.mo
+-               DATADIRNAME=lib
+-fi
+-
+-	    ;;
+-	    *)
+-	    CATOBJEXT=.mo
+-            DATADIRNAME=lib
+-	    ;;
+-	    esac
+-fi
+-rm -f core conftest.err conftest.$ac_objext \
+-    conftest$ac_exeext conftest.$ac_ext
+-          LIBS="$glib_save_LIBS"
+-	  INSTOBJEXT=.mo
+-	else
+-	  gt_cv_have_gettext=no
+-	fi
+-      fi
+-
+-fi
+-
+-
+-
+-    if test "$gt_cv_have_gettext" = "yes" ; then
+-
+-$as_echo "#define ENABLE_NLS 1" >>confdefs.h
+-
+-    fi
+-
+-        if test "$XGETTEXT" != ":"; then
+-                  if $XGETTEXT --omit-header /dev/null 2> /dev/null; then
+-        : ;
+-      else
+-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: found xgettext program is not GNU xgettext; ignore it" >&5
+-$as_echo "found xgettext program is not GNU xgettext; ignore it" >&6; }
+-        XGETTEXT=":"
+-      fi
+-    fi
+-
+-    # We need to process the po/ directory.
+-    POSUB=po
+-
+-    ac_config_commands="$ac_config_commands default-1"
+-
+-
+-                for lang in $ALL_LINGUAS; do
+-      GMOFILES="$GMOFILES $lang.gmo"
+-      POFILES="$POFILES $lang.po"
+-    done
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-   if test "$gt_cv_have_gettext" = "yes"; then
+-     if test "x$ALL_LINGUAS" = "x"; then
+-       LINGUAS=
+-     else
+-       { $as_echo "$as_me:${as_lineno-$LINENO}: checking for catalogs to be installed" >&5
+-$as_echo_n "checking for catalogs to be installed... " >&6; }
+-       NEW_LINGUAS=
+-       for presentlang in $ALL_LINGUAS; do
+-         useit=no
+-         if test "%UNSET%" != "${LINGUAS-%UNSET%}"; then
+-           desiredlanguages="$LINGUAS"
+-         else
+-           desiredlanguages="$ALL_LINGUAS"
+-         fi
+-         for desiredlang in $desiredlanguages; do
+- 	   # Use the presentlang catalog if desiredlang is
+-           #   a. equal to presentlang, or
+-           #   b. a variant of presentlang (because in this case,
+-           #      presentlang can be used as a fallback for messages
+-           #      which are not translated in the desiredlang catalog).
+-           case "$desiredlang" in
+-             "$presentlang"*) useit=yes;;
+-           esac
+-         done
+-         if test $useit = yes; then
+-           NEW_LINGUAS="$NEW_LINGUAS $presentlang"
+-         fi
+-       done
+-       LINGUAS=$NEW_LINGUAS
+-       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $LINGUAS" >&5
+-$as_echo "$LINGUAS" >&6; }
+-     fi
+-
+-          if test -n "$LINGUAS"; then
+-       for lang in $LINGUAS; do CATALOGS="$CATALOGS $lang$CATOBJEXT"; done
+-     fi
+-   fi
+-
+-            MKINSTALLDIRS=
+-   if test -n "$ac_aux_dir"; then
+-     MKINSTALLDIRS="$ac_aux_dir/mkinstalldirs"
+-   fi
+-   if test -z "$MKINSTALLDIRS"; then
+-     MKINSTALLDIRS="\$(top_srcdir)/mkinstalldirs"
+-   fi
+-
+-
+-         test -d po || mkdir po
+-   if test "x$srcdir" != "x."; then
+-     if test "x`echo $srcdir | sed 's@/.*@@'`" = "x"; then
+-       posrcprefix="$srcdir/"
+-     else
+-       posrcprefix="../$srcdir/"
+-     fi
+-   else
+-     posrcprefix="../"
+-   fi
+-   rm -f po/POTFILES
+-   sed -e "/^#/d" -e "/^\$/d" -e "s,.*,	$posrcprefix& \\\\," -e "\$s/\(.*\) \\\\/\1/" \
+-	< $srcdir/po/POTFILES.in > po/POTFILES
+-
+-
+-if test "$gt_cv_have_gettext" != "yes" ; then
+-  as_fn_error $? "
+-*** You must have either have gettext support in your C library, or use the
+-*** GNU gettext library. (http://www.gnu.org/software/gettext/gettext.html
+-" "$LINENO" 5
+-fi
+-
+-LIBS="$INTLLIBS $LIBS"
+-
+ GETTEXT_PACKAGE=glib20
+ 
+ 
+--- misc/glib-2.28.1/Makefile.in
++++ misc/build/glib-2.28.1/Makefile.in
+@@ -422,7 +422,7 @@
+ 	gio-2.0-uninstalled.pc.in gio-unix-2.0-uninstalled.pc.in
+ TEST_PROGS = 
+ ACLOCAL_AMFLAGS = -I m4macros ${ACLOCAL_FLAGS}
+-SUBDIRS = . m4macros glib gmodule gthread gobject gio tests po docs
++SUBDIRS = . m4macros glib gmodule gthread gobject gio tests
+ DIST_SUBDIRS = $(SUBDIRS) build
+ bin_SCRIPTS = glib-gettextize
+ AM_CPPFLAGS = \
+--- misc/glib-2.28.1/glib/gi18n.h
++++ misc/build/glib-2.28.1/glib/gi18n.h
+@@ -20,15 +20,10 @@
+ #ifndef __G_I18N_H__
+ #define __G_I18N_H__
+ 
+-#include <glib.h>
+-
+-#include <libintl.h>
+-#include <string.h>
+-
+-#define  _(String) gettext (String)
+-#define Q_(String) g_dpgettext (NULL, String, 0)
+-#define N_(String) (String)
+-#define C_(Context,String) g_dpgettext (NULL, Context "\004" String, strlen (Context) + 1)
++#define _(String) (String)
++#define Q_(String) (String)
++#define N_(String) (String)
++#define C_(Context,String) (String)
+ #define NC_(Context, String) (String)
+ 
+ #endif  /* __G_I18N_H__ */
+--- misc/glib-2.28.1/gio/tests/gsettings.c
++++ misc/build/glib-2.28.1/gio/tests/gsettings.c
+@@ -1,7 +1,9 @@
++#include "config.h"
++
+ #include <stdlib.h>
+ #include <locale.h>
+-#include <libintl.h>
+ #include <gio/gio.h>
++#include "glibintl.h"
+ #include <gstdio.h>
+ #define G_SETTINGS_ENABLE_BACKEND
+ #include <gio/gsettingsbackend.h>
+--- misc/glib-2.28.1/gio/tests/gschema-compile.c
++++ misc/build/glib-2.28.1/gio/tests/gschema-compile.c
+@@ -1,8 +1,10 @@
++#include "config.h"
++
+ #include <stdlib.h>
+ #include <unistd.h>
+ #include <locale.h>
+-#include <libintl.h>
+ #include <gio/gio.h>
++#include "glibintl.h"
+ #include <gstdio.h>
+ 
+ typedef struct {
