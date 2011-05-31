@@ -111,7 +111,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
     CheckBox CB_QUOTEALL
     {
         HelpID = "sc:CheckBox:RID_SCDLG_IMPORTOPT:CB_QUOTEALL";
-        Pos = MAP_APPFONT( 20, 64 );
+        Pos = MAP_APPFONT( 12, 79 );
         Size = MAP_APPFONT( 164, 10 );
         Hide = TRUE;
         Text [ en-US ] = "~Quote all text cells";

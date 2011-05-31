@@ -483,11 +483,11 @@ void ScXMLDatabaseRangeContext::EndElement()
 
         if (pData.get())
         {
-            // Infer sheet index from the name.
-            OUString aStrNum = sDatabaseRangeName.copy(aName.getLength());
-            SCTAB nTab = static_cast<SCTAB>(aStrNum.toInt32());
+            ScRange aRange;
+            pData->GetArea(aRange);
+
             setAutoFilterFlags(*pDoc, *pData);
-            pDoc->SetAnonymousDBData(nTab, pData.release());
+            pDoc->SetAnonymousDBData(aRange.aStart.Tab(), pData.release());
         }
         return;
     }

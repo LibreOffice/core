@@ -67,19 +67,13 @@ struct ScMatrixValue
     /// Only valid if ScMatrix methods indicate that this is a boolean
     bool GetBoolean() const         { return fVal != 0.0; }
 
-    ScMatrixValue() : pS(NULL), nType(SC_MATVAL_EMPTY) {}
+    ScMatrixValue() : fVal(0.0), nType(SC_MATVAL_EMPTY) {}
 
-    ScMatrixValue(const ScMatrixValue& r) : nType(r.nType)
+    ScMatrixValue(const ScMatrixValue& r) : fVal(r.fVal), nType(r.nType)
     {
-        switch (nType)
-        {
-            case SC_MATVAL_VALUE:
-            case SC_MATVAL_BOOLEAN:
-                fVal = r.fVal;
-            break;
-            default:
-                pS = r.pS;
-        }
+        if (nType == SC_MATVAL_STRING)
+            // This is probably not necessary but just in case...
+            pS = r.pS;
     }
 
     bool operator== (const ScMatrixValue& r) const
@@ -110,15 +104,12 @@ struct ScMatrixValue
     ScMatrixValue& operator= (const ScMatrixValue& r)
     {
         nType = r.nType;
-        switch (nType)
-        {
-            case SC_MATVAL_VALUE:
-            case SC_MATVAL_BOOLEAN:
-                fVal = r.fVal;
-            break;
-            default:
-                pS = r.pS;
-        }
+        fVal = r.fVal;
+
+        if (nType == SC_MATVAL_STRING)
+            // This is probably not necessary but just in case...
+            pS = r.pS;
+
         return *this;
     }
 };
