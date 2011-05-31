@@ -139,7 +139,6 @@ static const rtl::OUString& get_desktop_environment()
         OUStringBuffer aModName( 128 );
         aModName.appendAscii( SAL_DLLPREFIX"desktop_detector" );
         aModName.appendAscii( SAL_DLLPOSTFIX );
-        aModName.appendAscii( SAL_DLLEXTENSION );
         OUString aModule = aModName.makeStringAndClear();
 
         oslModule aMod = osl_loadModuleRelative(
