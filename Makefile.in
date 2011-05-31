@@ -32,10 +32,14 @@ dev-install:
 		build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@ && \
 		cd @abs_builddir@ && ln -s $$SOLARVER/$$INPATH/installation/opt/ install && \
 		echo "" && \
-        echo "Developer installation finished, you can now execute:" && \
-        echo "cd @abs_builddir@/install/program" && \
+        echo "Developer installation finished, you can now execute:"
+	@if test `uname -s` = Darwin; then \
+		echo open install/LibreOffice.app; \
+	else \
+	        echo "cd @abs_builddir@/install/program" && \
 		echo ". ooenv" && \
-		echo "./soffice.bin"
+		echo "./soffice.bin"; \
+	fi
 
 distclean: dmake/dmake@EXEEXT_FOR_BUILD@
 	@. ./*Env.Set.sh && \
