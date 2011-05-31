@@ -38,7 +38,6 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <osl/diagnose.h>
-#include <i18npool/mslangid.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/instance.hxx>
 #if OSL_DEBUG_LEVEL > 0
@@ -379,12 +378,10 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
 
     Any aRet;
 
-    ::rtl::OUString sBrandName;
-    sBrandName = BrandName::get();
-
-    if ( eProp == PRODUCTNAME && sBrandName.getLength() )
+    ::rtl::OUString &rBrandName = BrandName::get();
+    if ( eProp == PRODUCTNAME && rBrandName.getLength() )
     {
-        aRet <<= sBrandName;
+        aRet <<= rBrandName;
         return aRet;
     }
 
@@ -532,7 +529,7 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
     }
 
     if ( eProp == PRODUCTNAME )
-        aRet >>= sBrandName;
+        aRet >>= rBrandName;
 
     if ( eProp == PRODUCTXMLFILEFORMATNAME )
         aRet >>= rXMLFileFormatName;

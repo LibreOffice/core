@@ -2594,7 +2594,6 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, sal_Bool bLoadi
 
      // # ?/?
     aSingleFormatCode.Code = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "# ?/?" ) );
-    String s25( RTL_CONSTASCII_USTRINGPARAM( "# ?/?" ) );           // # ?/?
     ImpInsertFormat( aSingleFormatCode,
         CLOffset + SetIndexTable( NF_FRACTION_1, ZF_STANDARD_FRACTION ));
 
@@ -2603,14 +2602,6 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, sal_Bool bLoadi
     aSingleFormatCode.Code = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "# ?\?/?\?" ) );
     ImpInsertFormat( aSingleFormatCode,
         CLOffset + SetIndexTable( NF_FRACTION_2, ZF_STANDARD_FRACTION+1 ));
-
-    aSingleFormatCode.Code = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "# ?/4" ) );
-    ImpInsertFormat( aSingleFormatCode,
-        CLOffset + SetIndexTable( NF_FRACTION_3, ZF_STANDARD_FRACTION+2 ));
-
-    aSingleFormatCode.Code = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "# ?\?/100" ) );
-    ImpInsertFormat( aSingleFormatCode,
-        CLOffset + SetIndexTable( NF_FRACTION_4, ZF_STANDARD_FRACTION+3 ));
 
     // Week of year   must be appended here because of nNewExtended
     const NfKeywordTable & rKeyword = pFormatScanner->GetKeywords();
@@ -2629,6 +2620,18 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, sal_Bool bLoadi
     // loading from old SO5 file format, then they are appended last.
     if ( !bLoadingSO5 )
         ImpGenerateAdditionalFormats( CLOffset, aNumberFormatCode, sal_False );
+
+    sal_uInt32 nPos = CLOffset + pStdFormat->GetLastInsertKey();
+
+    aSingleFormatCode.Code = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "# ?/4" ) );
+    ImpInsertNewStandardFormat( aSingleFormatCode, nPos+1, SV_NUMBERFORMATTER_VERSION_ADDITIONAL_I18N_FORMATS );
+    nPos++;
+
+    aSingleFormatCode.Code = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "# ?\?/100" ) );
+    ImpInsertNewStandardFormat( aSingleFormatCode, nPos+1, SV_NUMBERFORMATTER_VERSION_ADDITIONAL_I18N_FORMATS );
+    nPos++;
+
+    pStdFormat->SetLastInsertKey( (sal_uInt16)(nPos - CLOffset) );
 
     if (bOldConvertMode)
         pFormatScanner->SetConvertMode(sal_True);

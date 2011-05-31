@@ -501,7 +501,7 @@ void PPDParser::initPPDFiles()
             INetURLObject aDir( aExe );
             aDir.removeSegment();
 #ifdef DEBUG
-            fprintf( stderr, "scanning last chance dir: %s\n", OUStringToOString( aDir.GetMainURL( INetURLObject::NO_DECODE ), osl_getThreadTextEncoding() ).getStr() );
+            fprintf( stderr, "scanning last chance dir: %s\n", rtl::OUStringToOString( aDir.GetMainURL( INetURLObject::NO_DECODE ), osl_getThreadTextEncoding() ).getStr() );
 #endif
             scanPPDDir( aDir.GetMainURL( INetURLObject::NO_DECODE ) );
 #ifdef DEBUG

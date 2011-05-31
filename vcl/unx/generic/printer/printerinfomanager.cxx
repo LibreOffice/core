@@ -269,7 +269,7 @@ void PrinterInfoManager::initialize()
         if( aConfig.HasGroup( GLOBAL_DEFAULTS_GROUP ) )
         {
             #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "found global defaults in %s\n", OUStringToOString( aFile.PathToFileName(), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+            fprintf( stderr, "found global defaults in %s\n", rtl::OUStringToOString( aFile.PathToFileName(), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
             #endif
             aConfig.SetGroup( GLOBAL_DEFAULTS_GROUP );
 
@@ -818,8 +818,8 @@ bool PrinterInfoManager::writePrinterConfig()
             subst != it->second.m_aInfo.m_aFontSubstitutes.end(); ++subst )
             {
                 ByteString aKey( "SubstFont_" );
-                aKey.Append( OUStringToOString( subst->first, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
-                pConfig->WriteKey( aKey, OUStringToOString( subst->second, RTL_TEXTENCODING_ISO_8859_1 ) );
+                aKey.Append( rtl::OUStringToOString( subst->first, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+                pConfig->WriteKey( aKey, rtl::OUStringToOString( subst->second, RTL_TEXTENCODING_ISO_8859_1 ) );
             }
         }
     }
@@ -874,7 +874,7 @@ bool PrinterInfoManager::addPrinter( const OUString& rPrinterName, const OUStrin
         bSuccess = true;
         #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "new printer %s, level = %d, pdfdevice = %d, colordevice = %d, depth = %d\n",
-        OUStringToOString( rPrinterName, osl_getThreadTextEncoding() ).getStr(),
+                 rtl::OUStringToOString( rPrinterName, osl_getThreadTextEncoding() ).getStr(),
         m_aPrinters[rPrinterName].m_aInfo.m_nPSLevel,
         m_aPrinters[rPrinterName].m_aInfo.m_nPDFDevice,
         m_aPrinters[rPrinterName].m_aInfo.m_nColorDevice,
@@ -1047,12 +1047,12 @@ void PrinterInfoManager::fillFontSubstitutions( PrinterInfo& rInfo ) const
                     fprintf( stderr,
                     "substitute %s %s %d %d\n"
                     " ->        %s %s %d %d\n",
-                    OUStringToOString( it->m_aFamilyName, RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
+                             rtl::OUStringToOString( it->m_aFamilyName, RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
                     it->m_eItalic == italic::Upright ? "r" : it->m_eItalic == italic::Oblique ? "o" : it->m_eItalic == italic::Italic ? "i" : "u",
                     it->m_eWeight,
                     it->m_eWidth,
 
-                    OUStringToOString( aInfo.m_aFamilyName, RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
+                             rtl::OUStringToOString( aInfo.m_aFamilyName, RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
                     aInfo.m_eItalic == italic::Upright ? "r" : aInfo.m_eItalic == italic::Oblique ? "o" : aInfo.m_eItalic == italic::Italic ? "i" : "u",
                     aInfo.m_eWeight,
                     aInfo.m_eWidth
@@ -1118,7 +1118,7 @@ FILE* PrinterInfoManager::startSpool( const OUString& rPrintername, bool bQuickC
     const PrinterInfo&   rPrinterInfo   = getPrinterInfo (rPrintername);
     const rtl::OUString& rCommand       = (bQuickCommand && rPrinterInfo.m_aQuickCommand.getLength() ) ?
                                           rPrinterInfo.m_aQuickCommand : rPrinterInfo.m_aCommand;
-    rtl::OString aShellCommand  = OUStringToOString (rCommand, RTL_TEXTENCODING_ISO_8859_1);
+    rtl::OString aShellCommand  = rtl::OUStringToOString (rCommand, RTL_TEXTENCODING_ISO_8859_1);
     aShellCommand += rtl::OString( " 2>/dev/null" );
 
     return popen (aShellCommand.getStr(), "w");

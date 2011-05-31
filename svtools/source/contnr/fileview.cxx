@@ -98,6 +98,8 @@ using ::rtl::OUString;
 #define COLUMN_SIZE         3
 #define COLUMN_DATE         4
 
+#define aSeparatorStr  "----------------------------------"
+
 #define ROW_HEIGHT                17    // the height of a row has to be a little higher than the bitmap
 #define QUICK_SEARCH_TIMEOUT    1500    // time in mSec before the quicksearch string will be reseted
 
@@ -724,6 +726,7 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParentWin,
     mbEnableRename      ( sal_True )
 
 {
+    sal_Bool bViewHeader = true;
     Size aBoxSize = pParentWin->GetSizePixel();
     mpHeaderBar = new HeaderBar( pParentWin, WB_BUTTONSTYLE | WB_BOTTOMBORDER );
     mpHeaderBar->SetPosSizePixel( Point( 0, 0 ), mpHeaderBar->CalcWindowSizePixel() );
@@ -736,6 +739,8 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParentWin,
         mpHeaderBar->InsertItem( COLUMN_SIZE, String( SvtResId( STR_SVT_FILEVIEW_COLUMN_SIZE ) ), 80, nBits );
         mpHeaderBar->InsertItem( COLUMN_DATE, String( SvtResId( STR_SVT_FILEVIEW_COLUMN_DATE ) ), 500, nBits );
     }
+    if( ( nFlags & FILEVIEW_SHOW_NONE ) == FILEVIEW_SHOW_NONE )
+        bViewHeader = false;
     else
         mpHeaderBar->InsertItem( COLUMN_TITLE, String( SvtResId( STR_SVT_FILEVIEW_COLUMN_TITLE ) ), 600, nBits );
 
@@ -747,7 +752,8 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParentWin,
     SetEntryHeight( ROW_HEIGHT );
 
     Show();
-    mpHeaderBar->Show();
+    if( bViewHeader )
+        mpHeaderBar->Show();
 
     maResetQuickSearch.SetTimeout( QUICK_SEARCH_TIMEOUT );
     maResetQuickSearch.SetTimeoutHdl( LINK( this, ViewTabListBox_Impl, ResetQuickSearch_Impl ) );
@@ -1219,6 +1225,7 @@ SvtFileView::SvtFileView( Window* pParent, const ResId& rResId,
 
     mpImp = new SvtFileView_Impl( this, xCmdEnv, nFlags, bOnlyFolder );
     mpImp->mpView->ForbidEmptyText();
+    SetSortColumn( true );
 
     long pTabs[] = { 5, 20, 180, 320, 400, 600 };
     mpImp->mpView->SetTabs( &pTabs[0], MAP_PIXEL );
@@ -1241,6 +1248,7 @@ SvtFileView::SvtFileView( Window* pParent, const ResId& rResId, sal_Int8 nFlags 
     Reference < XCommandEnvironment > xCmdEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
     mpImp = new SvtFileView_Impl( this, xCmdEnv, nFlags,
                                   ( nFlags & FILEVIEW_ONLYFOLDER ) == FILEVIEW_ONLYFOLDER );
+    SetSortColumn( true );
 
     if ( ( nFlags & FILEVIEW_SHOW_ALL ) == FILEVIEW_SHOW_ALL )
     {
@@ -1254,7 +1262,8 @@ SvtFileView::SvtFileView( Window* pParent, const ResId& rResId, sal_Int8 nFlags 
         long pTabs[] = { 2, 20, 600 };
         mpImp->mpView->SetTabs( &pTabs[0], MAP_PIXEL );
     }
-
+    if ( ( nFlags & FILEVIEW_SHOW_NONE ) == FILEVIEW_SHOW_NONE )
+        SetSortColumn( false );
     if ( ( nFlags & FILEVIEW_MULTISELECTION ) == FILEVIEW_MULTISELECTION )
         mpImp->mpView->SetSelectionMode( MULTIPLE_SELECTION );
 
@@ -1512,7 +1521,8 @@ sal_Bool SvtFileView::Initialize( const Sequence< OUString >& aContents )
 
     mpImp->Clear();
     mpImp->CreateVector_Impl( aContents );
-    mpImp->SortFolderContent_Impl();
+    if( GetSortColumn() )
+        mpImp->SortFolderContent_Impl();
 
     mpImp->OpenFolder_Impl();
 
@@ -2416,9 +2426,11 @@ void SvtFileView_Impl::CreateVector_Impl( const Sequence < OUString > &rList )
         pEntry->maDisplayText = aDisplayText;
 
         // detect the image
-        INetURLObject aObj( pEntry->maImageURL.getLength() ? pEntry->maImageURL : pEntry->maTargetURL );
-        pEntry->maImage = SvFileInformationManager::GetImage( aObj, sal_False );
-
+        if( aValue != rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(aSeparatorStr) ) )
+        {
+            INetURLObject aObj( pEntry->maImageURL.getLength() ? pEntry->maImageURL : pEntry->maTargetURL );
+            pEntry->maImage = SvFileInformationManager::GetImage( aObj, sal_False );
+        }
         maContent.push_back( pEntry );
     }
 }

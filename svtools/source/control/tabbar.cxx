@@ -1838,6 +1838,7 @@ void TabBar::InsertPage( sal_uInt16 nPageId, const XubString& rText,
     } else {
         mpItemList->push_back( pItem );
     }
+    mbSizeFormat = sal_True;
 
     // CurPageId gegebenenfalls setzen
     if ( !mnCurPageId )
