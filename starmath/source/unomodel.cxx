@@ -49,6 +49,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/propertysetinfo.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <unotools/moduleoptions.hxx>
 
 #include <unomodel.hxx>
@@ -369,18 +370,14 @@ uno::Sequence< uno::Type > SAL_CALL SmModel::getTypes(  ) throw(uno::RuntimeExce
     return aTypes;
 }
 
+namespace
+{
+    class theSmModelUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSmModelUnoTunnelId> {};
+}
+
 const uno::Sequence< sal_Int8 > & SmModel::getUnoTunnelId()
 {
-    static osl::Mutex aCreateMutex;
-    osl::Guard<osl::Mutex> aGuard( aCreateMutex );
-
-    static uno::Sequence< sal_Int8 > aSeq;
-    if(!aSeq.getLength())
-    {
-        aSeq.realloc( 16 );
-        rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-    }
-    return aSeq;
+    return theSmModelUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL SmModel::getSomething( const uno::Sequence< sal_Int8 >& rId )
