@@ -232,7 +232,7 @@ namespace connectivity
         // returns the type for a parameter in a given function name
         static sal_Int32 getFunctionParameterType(sal_uInt32 _nTokenId,sal_uInt32 _nPos);
 
-        void error(sal_Char *fmt);
+        void error(const sal_Char *fmt);
         int SQLlex();
 #ifdef YYBISON
         void setParseTree(OSQLParseNode * pNewParseTree);
