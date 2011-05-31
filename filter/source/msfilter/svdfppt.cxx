@@ -4499,6 +4499,10 @@ PPTTextRulerInterpreter::PPTTextRulerInterpreter( sal_uInt32 nFileOfs, SdrPowerP
             sal_Int16   nTCount;
             sal_Int32   i;
             rIn >> mpImplRuler->nFlags;
+
+            // number of indent levels, unused now
+            if ( mpImplRuler->nFlags & 2 )
+                rIn >> nTCount;
             if ( mpImplRuler->nFlags & 1 )
                 rIn >> mpImplRuler->nDefaultTab;
             if ( mpImplRuler->nFlags & 4 )
@@ -4521,6 +4525,17 @@ PPTTextRulerInterpreter::PPTTextRulerInterpreter( sal_uInt32 nFileOfs, SdrPowerP
                     rIn >> mpImplRuler->nTextOfs[ i ];
                 if ( mpImplRuler->nFlags & ( 256 << i ) )
                     rIn >> mpImplRuler->nBulletOfs[ i ];
+                if( mpImplRuler->nBulletOfs[ i ] > 0x7fff) {
+                    // workaround
+                    // when bullet offset is > 0x7fff, the paragraph should look like
+                    // *    first line text
+                    // second line text
+                    //
+                    // we add to bullet para indent 0xffff - bullet offset. it looks like
+                    // best we can do for now
+                    mpImplRuler->nTextOfs[ i ] += 0xffff - mpImplRuler->nBulletOfs[ i ];
+                    mpImplRuler->nBulletOfs[ i ] = 0;
+                }
             }
         }
         rIn.Seek( nOldPos );
@@ -4827,7 +4842,7 @@ void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, SdrPowerPointImport& 
             {
                 rIn >> aSet.mpArry[ PPT_ParaAttr_BulletHeight ];
                 if ( ! ( ( nMask & ( 1 << PPT_ParaAttr_BuHardHeight ) )
-                         && ( nBulFlg && ( 1 << PPT_ParaAttr_BuHardHeight ) ) ) )
+                         && ( nBulFlg & ( 1 << PPT_ParaAttr_BuHardHeight ) ) ) )
                     aSet.mnAttrSet ^= 0x40;
             }
             if ( nMask & 0x0020 )   // buColor
@@ -6094,9 +6109,11 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
         }
         rSet.Put( SdrTextFixedCellHeightItem( sal_True ), SDRATTR_TEXT_USEFIXEDCELLHEIGHT );
         SvxLineSpacingItem aItem( 200, EE_PARA_SBL );
-        if ( nVal2 <= 0 )
+        if ( nVal2 <= 0 ) {
             aItem.SetLineHeight( (sal_uInt16)( rManager.ScalePoint( -nVal2 ) / 8 ) );
-        else
+            aItem.GetLineSpaceRule() = SVX_LINE_SPACE_FIX;
+            aItem.GetInterLineSpaceRule() = SVX_INTER_LINE_SPACE_OFF;
+        } else
         {
             sal_uInt8 nPropLineSpace = (sal_uInt8)nVal2;
             aItem.SetPropLineSpace( nPropLineSpace );
