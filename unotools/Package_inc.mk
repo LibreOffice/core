@@ -108,7 +108,6 @@ $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/ucblockbytes.hxx,uno
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/ucbstreamhelper.hxx,unotools/ucbstreamhelper.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/undoopt.hxx,unotools/undoopt.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/unotoolsdllapi.h,unotools/unotoolsdllapi.h))
-$(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/unotunnelhelper.hxx,unotools/unotunnelhelper.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/useroptions_const.hxx,unotools/useroptions_const.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/useroptions.hxx,unotools/useroptions.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/viewoptions.hxx,unotools/viewoptions.hxx))
