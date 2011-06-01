@@ -380,15 +380,14 @@ void GenericDragSource::initialize( const Sequence< Any >& ) throw( Exception )
 Sequence< OUString > SAL_CALL DragSource_getSupportedServiceNames()
 {
     #if defined UNX
-    static OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM(
+    OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM(
     #if ! defined QUARTZ
     "com.sun.star.datatransfer.dnd.X11DragSource"
     #else
     "com.sun.star.datatransfer.dnd.OleDragSource"
     #endif
                                                               ) );
-    static Sequence< OUString > aServiceNames( &aServiceName, 1 );
-    return aServiceNames;
+    return Sequence< OUString >(&aServiceName, 1);
     #else
     return GenericDragSource::getSupportedServiceNames_static();
     #endif
@@ -495,15 +494,14 @@ void GenericDropTarget::setDefaultActions( sal_Int8) throw()
 Sequence< OUString > SAL_CALL DropTarget_getSupportedServiceNames()
 {
     #if defined UNX
-    static OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM(
+    OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM(
     #if ! defined QUARTZ
     "com.sun.star.datatransfer.dnd.X11DropTarget"
     #else
     "com.sun.star.datatransfer.dnd.OleDropTarget"
     #endif
                                                               ) );
-    static Sequence< OUString > aServiceNames( &aServiceName, 1 );
-    return aServiceNames;
+    return Sequence< OUString >(&aServiceName, 1);
     #else
     return GenericDropTarget::getSupportedServiceNames_static();
     #endif
