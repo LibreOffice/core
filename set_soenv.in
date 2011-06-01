@@ -1166,12 +1166,6 @@ elsif ($platform =~ m/cygwin/)
    if ( $ASM_PATH ne "ASM_IN_PATH" )
    {   $PATH          .= $ps.CygFormat($ASM_PATH);
    }
-   # zip.exe / unzip.exe path for Windows users.
-   my $zip_home_path = PathFormat('@ZIP_HOME@');
-   $tmppath = CygFormat($zip_home_path);
-   if ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
-       $PATH          .= $ps.$tmppath;
-   }
 
    # Possible cygwin paths must follow behind the OOo and MS paths
 

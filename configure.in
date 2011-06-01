@@ -1245,14 +1245,6 @@ AC_ARG_WITH(os-version,
     ],
 ,)
 
-AC_ARG_WITH(zip-home,
-    AS_HELP_STRING([--with-zip-home],
-        [If you use a non standard zip, for example Windows please supply the path for zip.])
-    [
-                          Usage:     --with-zip-home=<path to zip executable>
-    ],
-,)
-
 AC_ARG_WITH(mingw-cross-compiler,
     AS_HELP_STRING([--with-mingw-cross-compiler],
         [Specify the MinGW cross-compiler to use.])
@@ -6333,36 +6325,21 @@ ASM_HOME="$with_asm_home"
 AC_SUBST(ASM_HOME)
 
 dnl ===================================================================
-dnl Zip will be found where you tell me to find it
+dnl We need zip and unzip
 dnl ===================================================================
-if test -n "$with_zip_home" ; then
-    if test "$_os" = "WINNT"; then
-        with_zip_home=`cygpath -u "$with_zip_home"`
-    fi
-    ZIP="$with_zip_home/zip"
-    UNZIP="$with_zip_home/unzip"
-    ZIP_HOME="$with_zip_home"
-else
-    AC_PATH_PROG(ZIP, zip)
-    AC_PATH_PROG(UNZIP, unzip)
-    ZIP_HOME=`dirname "$ZIP"`
-fi
-dnl ===================================================================
-dnl Zip must be available or else it is an error, all platforms
-dnl ===================================================================
-if test -z "$ZIP" -o -z "$UNZIP"; then
-    AC_MSG_ERROR([Zip/Unzip are required to build, please install or use --with-zip-home],,)
-fi
+AC_PATH_PROG(ZIP, zip)
+test -z "$ZIP" && AC_MSG_ERROR([zip is required])
+AC_PATH_PROG(UNZIP, unzip)
+test -z "$ZIP" && AC_MSG_ERROR([unzip is required])
 
 dnl ===================================================================
 dnl Zip must be a specific type for different build types.
 dnl ===================================================================
-if test "$_os" = "WINNT"; then
+if test $build_os = cygwin; then
     if test -n "`$ZIP -h | grep -i WinNT`" ; then
-AC_MSG_ERROR([$ZIP found in the path is not the required Cygwin version of Info-ZIPs zip.exe.])
+        AC_MSG_ERROR([$ZIP is not the required Cygwin version of Info-ZIP's zip.exe.])
     fi
 fi
-AC_SUBST(ZIP_HOME)
 
 dnl ===================================================================
 dnl Test which vclplugs have to be built.
