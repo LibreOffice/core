@@ -41,6 +41,7 @@
 #include <fldbas.hxx>
 
 #include <vector>
+#include <boost/scoped_ptr.hpp>
 
 class SwGrfNode;
 class SdrObject;
@@ -541,7 +542,7 @@ private:
     ::docx::FootnotesList *m_pEndnotesList;
     int m_footnoteEndnoteRefTag;
 
-    const WW8_SepInfo *m_pSectionInfo;
+    boost::scoped_ptr< const WW8_SepInfo > m_pSectionInfo;
 
     /// Redline data to remember in the text run.
     const SwRedlineData *m_pRedlineData;

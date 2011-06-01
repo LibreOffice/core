@@ -288,7 +288,7 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
     m_pSerializer->mark();
 
     // no section break in this paragraph yet; can be set in SectionBreak()
-    m_pSectionInfo = NULL;
+    m_pSectionInfo.reset();
 
     m_bParagraphOpened = true;
 }
@@ -393,7 +393,7 @@ void DocxAttributeOutput::StartParagraphProperties( const SwTxtNode& rNode )
     if ( m_pSectionInfo )
     {
         m_rExport.SectionProperties( *m_pSectionInfo );
-        m_pSectionInfo = NULL;
+        m_pSectionInfo.reset();
     }
 
     InitCollectedParagraphProperties();
@@ -2426,7 +2426,7 @@ void DocxAttributeOutput::SectionBreak( sal_uInt8 nC, const WW8_SepInfo* pSectio
                 {
                     // postpone the output of this; it has to be done inside the
                     // paragraph properties, so remember it until then
-                    m_pSectionInfo = pSectionInfo;
+                    m_pSectionInfo.reset( new WW8_SepInfo( *pSectionInfo ));
                 }
             }
             else
