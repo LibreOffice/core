@@ -67,8 +67,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 
 namespace {
-static const ::com::sun::star::uno::Type saComponentTypeIdentifier (
-    ::getCppuType( (Reference<lang::XEventListener > *)0 ));
 static const ::com::sun::star::uno::Type saSelectionTypeIdentifier (
     ::getCppuType( (Reference<view::XSelectionChangeListener > *)0 ));
 
