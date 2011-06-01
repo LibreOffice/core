@@ -48,6 +48,7 @@
 #include <SwRewriter.hxx>
 #include <docsh.hxx>
 #include <xmloff/odffields.hxx>
+#include <comphelper/servicehelper.hxx>
 
 using namespace ::sw::mark;
 using namespace ::com::sun::star;
@@ -196,10 +197,14 @@ SwXBookmark::CreateXBookmark(SwDoc & rDoc, ::sw::mark::IMark & rBookmark)
     return 0;
 }
 
+namespace
+{
+    class theSwXBookmarkUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXBookmarkUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SwXBookmark::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXBookmarkUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL

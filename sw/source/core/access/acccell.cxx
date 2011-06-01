@@ -35,7 +35,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
-#include <rtl/uuid.h>
+#include <comphelper/servicehelper.hxx>
 #include <vcl/svapp.hxx>
 #include <cellfrm.hxx>
 #include <tabfrm.hxx>
@@ -49,10 +49,7 @@
 #include "accmap.hxx"
 #include <acccell.hxx>
 
-#ifndef _STLP_CFLOAT
 #include <cfloat>
-#endif
-
 #include <limits.h>
 
 using namespace ::com::sun::star;
@@ -306,18 +303,15 @@ uno::Sequence< uno::Type > SAL_CALL SwAccessibleCell::getTypes()
     return aTypes;
 }
 
+namespace
+{
+    class theSwAccessibleCellImplementationId : public rtl::Static< UnoTunnelIdInit, theSwAccessibleCellImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleCell::getImplementationId()
         throw(uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    static uno::Sequence< sal_Int8 > aId( 16 );
-    static sal_Bool bInit = sal_False;
-    if(!bInit)
-    {
-        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
-        bInit = sal_True;
-    }
-    return aId;
+    return theSwAccessibleCellImplementationId::get().getSeq();
 }
 
 // =====  XAccessibleValue  ===============================================

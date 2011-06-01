@@ -30,7 +30,7 @@
 #include "precompiled_sw.hxx"
 
 #include <vcl/svapp.hxx>
-#include <rtl/uuid.h>
+#include <comphelper/servicehelper.hxx>
 #include "access.hrc"
 #include <accpreview.hxx>
 
@@ -80,18 +80,15 @@ Sequence<OUString> SwAccessiblePreview::getSupportedServiceNames( )
     return aSeq;
 }
 
+namespace
+{
+    class theSwAccessiblePreviewImplementationId : public rtl::Static< UnoTunnelIdInit, theSwAccessiblePreviewImplementationId > {};
+}
+
 Sequence< sal_Int8 > SAL_CALL SwAccessiblePreview::getImplementationId()
         throw(RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    static Sequence< sal_Int8 > aId( 16 );
-    static sal_Bool bInit = sal_False;
-    if(!bInit)
-    {
-        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
-        bInit = sal_True;
-    }
-    return aId;
+    return theSwAccessiblePreviewImplementationId::get().getSeq();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

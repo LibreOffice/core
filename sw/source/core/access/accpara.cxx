@@ -82,6 +82,7 @@
 #include <parachangetrackinginfo.hxx>
 #include <com/sun/star/text/TextMarkupType.hpp>
 #include <comphelper/stlunosequence.hxx> // #i92233#
+#include <comphelper/servicehelper.hxx>
 
 #include <algorithm>
 
@@ -1085,18 +1086,15 @@ uno::Sequence< uno::Type > SAL_CALL SwAccessibleParagraph::getTypes() throw(uno:
     return aTypes;
 }
 
+namespace
+{
+    class theSwAccessibleParagraphImplementationId : public rtl::Static< UnoTunnelIdInit, theSwAccessibleParagraphImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleParagraph::getImplementationId()
         throw(uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    static uno::Sequence< sal_Int8 > aId( 16 );
-    static sal_Bool bInit = sal_False;
-    if(!bInit)
-    {
-        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
-        bInit = sal_True;
-    }
-    return aId;
+    return theSwAccessibleParagraphImplementationId::get().getSeq();
 }
 
 

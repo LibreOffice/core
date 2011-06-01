@@ -44,6 +44,7 @@
 #include <unotools/tempfile.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <sot/filelist.hxx>
 #include <svx/svxdlg.hxx>
@@ -3387,17 +3388,14 @@ void SwTransferable::ClearSelection( SwWrtShell& rSh,
     }
 }
 
+namespace
+{
+    class theSwTransferableUnoTunnelId : public rtl::Static< UnoTunnelIdInit, SwTransferable > {};
+}
+
 const Sequence< sal_Int8 >& SwTransferable::getUnoTunnelId()
 {
-    static Sequence< sal_Int8 > aSeq;
-    if( !aSeq.getLength() )
-    {
-        static osl::Mutex           aCreateMutex;
-        osl::Guard< osl::Mutex >    aGuard( aCreateMutex );
-        aSeq.realloc( 16 );
-        rtl_createUuid( reinterpret_cast< sal_uInt8* >( aSeq.getArray() ), 0, sal_True );
-    }
-    return aSeq;
+    return theSwTransferableUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SwTransferable::getSomething( const Sequence< sal_Int8 >& rId ) throw( RuntimeException )

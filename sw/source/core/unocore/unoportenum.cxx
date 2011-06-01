@@ -59,8 +59,8 @@
 #include <crsskip.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <set>
-
 #include <boost/shared_ptr.hpp>
 #include <boost/bind.hpp>
 #include <algorithm>
@@ -198,13 +198,14 @@ namespace
     }
 }
 
-/******************************************************************
- *  SwXTextPortionEnumeration
- ******************************************************************/
+namespace
+{
+    class theSwXTextPortionEnumerationUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXTextPortionEnumerationUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SwXTextPortionEnumeration::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXTextPortionEnumerationUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL SwXTextPortionEnumeration::getSomething(

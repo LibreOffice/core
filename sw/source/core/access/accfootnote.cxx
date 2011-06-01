@@ -34,7 +34,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
-#include <rtl/uuid.h>
+#include <comphelper/servicehelper.hxx>
 #include <vcl/svapp.hxx>
 #include <ftnfrm.hxx>
 #include <fmtftn.hxx>
@@ -135,18 +135,15 @@ Sequence< OUString > SAL_CALL SwAccessibleFootnote::getSupportedServiceNames()
     return aRet;
 }
 
+namespace
+{
+    class theSwAccessibleFootnoteImplementationId : public rtl::Static< UnoTunnelIdInit, theSwAccessibleFootnoteImplementationId > {};
+}
+
 Sequence< sal_Int8 > SAL_CALL SwAccessibleFootnote::getImplementationId()
         throw(RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    static Sequence< sal_Int8 > aId( 16 );
-    static sal_Bool bInit = sal_False;
-    if(!bInit)
-    {
-        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
-        bInit = sal_True;
-    }
-    return aId;
+    return theSwAccessibleFootnoteImplementationId::get().getSeq();
 }
 
 sal_Bool SwAccessibleFootnote::IsEndnote( const SwFtnFrm *pFtnFrm )

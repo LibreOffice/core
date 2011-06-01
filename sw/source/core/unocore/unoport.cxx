@@ -54,6 +54,7 @@
 #include <com/sun/star/beans/SetPropertyTolerantFailed.hpp>
 #include <com/sun/star/beans/GetPropertyTolerantResult.hpp>
 #include <com/sun/star/beans/TolerantPropertySetResultType.hpp>
+#include <comphelper/servicehelper.hxx>
 
 
 using namespace ::com::sun::star;
@@ -891,10 +892,14 @@ uno::Reference< container::XEnumeration >  SwXTextPortion::createContentEnumerat
 
 }
 
+namespace
+{
+    class theSwXTextPortionUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXTextPortionUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SwXTextPortion::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXTextPortionUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SwXTextPortion::getSomething( const uno::Sequence< sal_Int8 >& rId )

@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 #include <osl/mutex.hxx>
-#include <rtl/uuid.h>
 #include <rtl/ustrbuf.hxx>
 
 #include <list>
@@ -56,6 +55,7 @@
 #include <acctable.hxx>
 
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
+#include <comphelper/servicehelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -827,18 +827,15 @@ uno::Sequence< uno::Type > SAL_CALL SwAccessibleTable::getTypes()
     return aTypes;
 }
 
+namespace
+{
+    class theSwAccessibleTableImplementationId : public rtl::Static< UnoTunnelIdInit, theSwAccessibleTableImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleTable::getImplementationId()
         throw(uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    static uno::Sequence< sal_Int8 > aId( 16 );
-    static sal_Bool bInit = sal_False;
-    if(!bInit)
-    {
-        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
-        bInit = sal_True;
-    }
-    return aId;
+    return theSwAccessibleTableImplementationId::get().getSeq();
 }
 
 // #i77106#

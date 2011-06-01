@@ -72,6 +72,7 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/makesequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <svx/scene3d.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -882,10 +883,14 @@ void SwXDrawPage::InvalidateSwDoc()
 
 TYPEINIT1(SwXShape, SwClient);
 
+namespace
+{
+    class theSwXShapeUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXShapeUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SwXShape::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXShapeUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL SwXShape::getSomething( const uno::Sequence< sal_Int8 >& rId )

@@ -56,6 +56,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <comphelper/servicehelper.hxx>
 
 
 using namespace ::com::sun::star;
@@ -272,10 +273,14 @@ bool SwXParagraph::SelectPaM(SwPaM & rPaM)
     return true;
 }
 
+namespace
+{
+    class theSwXParagraphUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXParagraphUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SwXParagraph::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXParagraphUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL

@@ -38,11 +38,10 @@
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 
-#include <rtl/uuid.h>
-
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include <cmdid.h>
 #include <unotextbodyhf.hxx>
@@ -1230,10 +1229,14 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     OSL_FAIL("SwXText::removeVetoableChangeListener(): not implemented");
 }
 
+namespace
+{
+    class theSwXTextUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXTextUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SwXText::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXTextUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL
@@ -2384,18 +2387,15 @@ SwXBodyText::getTypes() throw (uno::RuntimeException)
     return ::comphelper::concatSequences(aTypes, aTextTypes);
 }
 
+namespace
+{
+    class theSwXBodyTextImplementationId : public rtl::Static< UnoTunnelIdInit, theSwXBodyTextImplementationId> {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL
 SwXBodyText::getImplementationId() throw (uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    static uno::Sequence< sal_Int8 > aId( 16 );
-    static sal_Bool bInit = sal_False;
-    if(!bInit)
-    {
-        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
-        bInit = sal_True;
-    }
-    return aId;
+    return theSwXBodyTextImplementationId::get().getSeq();
 }
 
 uno::Any SAL_CALL
@@ -2670,18 +2670,15 @@ SwXHeadFootText::getTypes() throw (uno::RuntimeException)
     return ::comphelper::concatSequences(aTypes, aTextTypes);
 }
 
+namespace
+{
+    class theSwXHeadFootTextImplementationId : public rtl::Static< UnoTunnelIdInit, theSwXHeadFootTextImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL
 SwXHeadFootText::getImplementationId() throw (uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    static uno::Sequence< sal_Int8 > aId( 16 );
-    static sal_Bool bInit = sal_False;
-    if(!bInit)
-    {
-        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
-        bInit = sal_True;
-    }
-    return aId;
+    return theSwXHeadFootTextImplementationId::get().getSeq();
 }
 
 uno::Any SAL_CALL

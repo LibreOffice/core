@@ -56,8 +56,8 @@
 #include <ndole.hxx>
 #include <swtypes.hxx>
 #include <unocore.hrc>
-
 #include <docary.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #define SN_DATA_PROVIDER            "com.sun.star.chart2.data.DataProvider"
 #define SN_DATA_SOURCE              "com.sun.star.chart2.data.DataSource"
@@ -2035,10 +2035,14 @@ SwChartDataSequence::~SwChartDataSequence()
     delete pTblCrsr;
 }
 
+namespace
+{
+    class theSwChartDataSequenceUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwChartDataSequenceUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SwChartDataSequence::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwChartDataSequenceUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL SwChartDataSequence::getSomething( const uno::Sequence< sal_Int8 > &rId )

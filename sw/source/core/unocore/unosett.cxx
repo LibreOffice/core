@@ -75,6 +75,7 @@
 #include <com/sun/star/text/PositionAndSpaceMode.hpp>
 #include <com/sun/star/text/LabelFollow.hpp>
 #include <numrule.hxx>
+#include <comphelper/servicehelper.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -1132,10 +1133,14 @@ const String&   SwXNumberingRules::GetInvalidStyle()
     return sInvalidStyle;
 }
 
+namespace
+{
+    class theSwXNumberingRulesUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXNumberingRulesUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SwXNumberingRules::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXNumberingRulesUnoTunnelId::get().getSeq();
 }
 
 // return implementation specific data
@@ -2614,10 +2619,14 @@ void SwXTextColumns::removeVetoableChangeListener(
 {
 }
 
+namespace
+{
+    class theSwXTextColumnsUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXTextColumnsUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SwXTextColumns::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXTextColumnsUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL SwXTextColumns::getSomething( const uno::Sequence< sal_Int8 >& rId )

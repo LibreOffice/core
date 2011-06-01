@@ -64,6 +64,7 @@
 #include <editeng/unolingu.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <ForbiddenCharactersEnum.hxx>
+#include <comphelper/servicehelper.hxx>
 
 // for locking SolarMutex: svapp + mutex
 #include <vcl/svapp.hxx>
@@ -879,10 +880,14 @@ Reference< XInterface > SAL_CALL SwXMLExportSettings_createInstance(
     return (cppu::OWeakObject*)new SwXMLExport(rSMgr, EXPORT_SETTINGS|EXPORT_OASIS);
 }
 
+namespace
+{
+    class theSwXMLExportUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXMLExportUnoTunnelId > {};
+}
+
 const Sequence< sal_Int8 > & SwXMLExport::getUnoTunnelId() throw()
 {
-    static Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXMLExportUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL SwXMLExport::getSomething( const Sequence< sal_Int8 >& rId )

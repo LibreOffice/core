@@ -142,6 +142,8 @@
 #include <svx/svdoutl.hxx>
 #include <svl/languageoptions.hxx>
 #include <svx/svdview.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -162,8 +164,6 @@ using ::osl::FileBase;
 #define SW_CREATE_TRANSGRADIENT_TABLE   0x05
 #define SW_CREATE_MARKER_TABLE          0x06
 #define SW_CREATE_DRAW_DEFAULTS         0x07
-
-#include <comphelper/processfactory.hxx>
 
 /******************************************************************************
  *
@@ -220,10 +220,14 @@ void lcl_DisposeView( SfxViewFrame* pToClose, SwDocShell* pDocShell )
     }
 }
 
+namespace
+{
+    class theSwXTextDocumentUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXTextDocumentUnoTunnelId > {};
+}
+
 const Sequence< sal_Int8 > & SwXTextDocument::getUnoTunnelId()
 {
-    static Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXTextDocumentUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL SwXTextDocument::getSomething( const Sequence< sal_Int8 >& rId )

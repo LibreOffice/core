@@ -105,6 +105,7 @@
 #include <rtl/math.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <switerator.hxx>
+#include <comphelper/servicehelper.hxx>
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -787,13 +788,16 @@ SwXCell::SwXCell(SwFrmFmt* pTblFmt, const SwStartNode& rStartNode) :
 
 SwXCell::~SwXCell()
 {
+}
 
+namespace
+{
+    class theSwXCellUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXCellUnoTunnelId > {};
 }
 
 const uno::Sequence< sal_Int8 > & SwXCell::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXCellUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL SwXCell::getSomething( const uno::Sequence< sal_Int8 >& rId )
@@ -831,17 +835,14 @@ uno::Sequence< uno::Type > SAL_CALL SwXCell::getTypes(  ) throw(uno::RuntimeExce
     return aRetTypes;
 }
 
+namespace
+{
+    class theSwXCellImplementationId : public rtl::Static< UnoTunnelIdInit, theSwXCellImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL SwXCell::getImplementationId(  ) throw(uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    static uno::Sequence< sal_Int8 > aId( 16 );
-    static sal_Bool bInit = sal_False;
-    if(!bInit)
-    {
-        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
-        bInit = sal_True;
-    }
-    return aId;
+    return theSwXCellImplementationId::get().getSeq();
 }
 
 void SAL_CALL SwXCell::acquire(  ) throw()
@@ -2114,10 +2115,15 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
         rDoc.SetAttr( aSet, *rTbl.GetFrmFmt() );
     }
 }
+
+namespace
+{
+    class theSwXTextTableUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXTextTableUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SwXTextTable::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXTextTableUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL SwXTextTable::getSomething( const uno::Sequence< sal_Int8 >& rId )
@@ -3591,10 +3597,14 @@ uno::Sequence< OUString > SwXTextTable::getSupportedServiceNames(void) throw( un
     return aRet;
 }
 
+namespace
+{
+    class theSwXCellRangeUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXCellRangeUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SwXCellRange::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXCellRangeUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL SwXCellRange::getSomething( const uno::Sequence< sal_Int8 >& rId )

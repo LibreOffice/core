@@ -30,7 +30,7 @@
 #include "precompiled_sw.hxx"
 
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
-#include <rtl/uuid.h>
+#include <comphelper/servicehelper.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -205,18 +205,15 @@ uno::Sequence< OUString > SAL_CALL SwAccessibleTextFrame::getSupportedServiceNam
     return aRet;
 }
 
+namespace
+{
+    class theSwAccessibleTextFrameImplementationId : public rtl::Static< UnoTunnelIdInit, theSwAccessibleTextFrameImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleTextFrame::getImplementationId()
         throw(uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    static uno::Sequence< sal_Int8 > aId( 16 );
-    static sal_Bool bInit = sal_False;
-    if(!bInit)
-    {
-        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
-        bInit = sal_True;
-    }
-    return aId;
+    return theSwAccessibleTextFrameImplementationId::get().getSeq();
 }
 
 

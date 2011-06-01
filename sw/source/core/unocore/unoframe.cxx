@@ -118,6 +118,7 @@
 #include <fmtwrapinfluenceonobjpos.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <switerator.hxx>
+#include <comphelper/servicehelper.hxx>
 
 // from fefly1.cxx
 extern sal_Bool lcl_ChkAndSetNewAnchor( const SwFlyFrm& rFly, SfxItemSet& rSet );
@@ -701,13 +702,14 @@ bool SwOLEProperties_Impl::AnyToItemSet(
     return sal_True;
 }
 
-/******************************************************************
- *  SwXFrame
- ******************************************************************/
+namespace
+{
+    class theSwXFrameUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXFrameUnoTunnelId > {};
+}
+
 const :: uno::Sequence< sal_Int8 > & SwXFrame::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXFrameUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL SwXFrame::getSomething( const :: uno::Sequence< sal_Int8 >& rId )
@@ -2442,17 +2444,14 @@ uno::Sequence< uno::Type > SAL_CALL SwXTextFrame::getTypes(  ) throw(uno::Runtim
     return aTextFrameTypes;
 }
 
+namespace
+{
+    class theSwXTextFrameImplementationId : public rtl::Static< UnoTunnelIdInit, theSwXTextFrameImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL SwXTextFrame::getImplementationId(  ) throw(uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    static uno::Sequence< sal_Int8 > aId( 16 );
-    static bool bInit = false;
-    if(!bInit)
-    {
-        rtl_createUuid((sal_uInt8 *)(aId.getArray() ), 0, true);
-        bInit = true;
-    }
-    return aId;
+    return theSwXTextFrameImplementationId::get().getSeq();
 }
 
 uno::Reference< text::XText >  SwXTextFrame::getText(void) throw( uno::RuntimeException )
@@ -2737,17 +2736,14 @@ uno::Sequence< uno::Type > SAL_CALL
     return aGraphicTypes;
 }
 
+namespace
+{
+    class theSwXTextGraphicObjectImplementationId : public rtl::Static< UnoTunnelIdInit, theSwXTextGraphicObjectImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL SwXTextGraphicObject::getImplementationId(  ) throw(uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    static uno::Sequence< sal_Int8 > aId( 16 );
-    static bool bInit = false;
-    if(!bInit)
-    {
-        rtl_createUuid((sal_uInt8 *)(aId.getArray() ), 0, true);
-        bInit = true;
-    }
-    return aId;
+    return theSwXTextGraphicObjectImplementationId::get().getSeq();
 }
 
 void SwXTextGraphicObject::attach(const uno::Reference< text::XTextRange > & xTextRange) throw( lang::IllegalArgumentException, uno::RuntimeException )
@@ -2871,17 +2867,14 @@ uno::Sequence< uno::Type > SAL_CALL SwXTextEmbeddedObject::getTypes(  ) throw(un
     return aTextEmbeddedTypes;
 }
 
+namespace
+{
+    class theSwXTextEmbeddedObjectImplementationId : public rtl::Static< UnoTunnelIdInit, theSwXTextEmbeddedObjectImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL SwXTextEmbeddedObject::getImplementationId(  ) throw(uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    static uno::Sequence< sal_Int8 > aId( 16 );
-    static bool bInit = false;
-    if(!bInit)
-    {
-        rtl_createUuid((sal_uInt8 *)(aId.getArray() ), 0, true);
-        bInit = true;
-    }
-    return aId;
+    return theSwXTextEmbeddedObjectImplementationId::get().getSeq();
 }
 
 void SwXTextEmbeddedObject::attach(const uno::Reference< text::XTextRange > & xTextRange) throw( lang::IllegalArgumentException, uno::RuntimeException )

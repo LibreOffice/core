@@ -45,6 +45,7 @@
 #include <fmtrfmrk.hxx>
 #include <txtrfmrk.hxx>
 #include <hints.hxx>
+#include <comphelper/servicehelper.hxx>
 
 
 using namespace ::com::sun::star;
@@ -153,10 +154,14 @@ SwXReferenceMark::CreateXReferenceMark(
         :   new SwXReferenceMark(&rDoc, &rMarkFmt);
 }
 
+namespace
+{
+    class theSwXReferenceMarkUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXReferenceMarkUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SwXReferenceMark::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXReferenceMarkUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL
@@ -882,10 +887,14 @@ bool SwXMeta::CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
     return bForceExpandHints;
 }
 
+namespace
+{
+    class theSwXMetaUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXMetaUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SwXMeta::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq( ::CreateUnoTunnelId() );
-    return aSeq;
+    return theSwXMetaUnoTunnelId::get().getSeq();
 }
 
 // XUnoTunnel

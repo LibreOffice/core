@@ -33,7 +33,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/dataaccessdescriptor.hxx>
-
+#include <comphelper/servicehelper.hxx>
 #include <unodispatch.hxx>
 #include <unobaseclass.hxx>
 #include <view.hxx>
@@ -160,10 +160,14 @@ void SwXDispatchProviderInterceptor::disposing( const lang::EventObject& )
     m_xIntercepted = NULL;
 }
 
+namespace
+{
+    class theSwXDispatchProviderInterceptorUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXDispatchProviderInterceptorUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SwXDispatchProviderInterceptor::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXDispatchProviderInterceptorUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SwXDispatchProviderInterceptor::getSomething(

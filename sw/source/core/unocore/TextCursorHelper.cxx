@@ -31,14 +31,18 @@
 
 #include "TextCursorHelper.hxx"
 #include "unobaseclass.hxx"
-
+#include <comphelper/servicehelper.hxx>
 
 using namespace ::com::sun::star;
 
+namespace
+{
+    class theOTextCursorHelperUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theOTextCursorHelperUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & OTextCursorHelper::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theOTextCursorHelperUnoTunnelId::get().getSeq();
 }
 
 //XUnoTunnel

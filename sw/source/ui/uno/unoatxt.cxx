@@ -61,9 +61,8 @@
 #include <swmodule.hxx>
 #include <svl/smplhint.hxx>
 #include <svl/macitem.hxx>
-
 #include <editeng/acorrcfg.hxx>
-
+#include <comphelper/servicehelper.hxx>
 #include <memory>
 
 
@@ -256,10 +255,14 @@ uno::Sequence< OUString > SwXAutoTextContainer::getSupportedServiceNames(void) t
     return SwXAutoTextContainer_getSupportedServiceNames();
 }
 
+namespace
+{
+    class theSwXAutoTextGroupUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXAutoTextGroupUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SwXAutoTextGroup::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXAutoTextGroupUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL SwXAutoTextGroup::getSomething( const uno::Sequence< sal_Int8 >& rId )
@@ -747,10 +750,14 @@ uno::Sequence< OUString > SwXAutoTextGroup::getSupportedServiceNames(void) throw
     return aRet;
 }
 
+namespace
+{
+    class theSwXAutoTextEntryUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXAutoTextEntryUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SwXAutoTextEntry::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXAutoTextEntryUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL SwXAutoTextEntry::getSomething( const uno::Sequence< sal_Int8 >& rId )

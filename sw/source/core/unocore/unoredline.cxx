@@ -35,6 +35,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include <pagedesc.hxx>
 #include "poolfmt.hxx"
@@ -105,18 +106,15 @@ uno::Sequence<uno::Type> SwXRedlineText::getTypes()
     return aTypes;
 }
 
+namespace
+{
+    class theSwXRedlineTextImplementationId : public rtl::Static< UnoTunnelIdInit, theSwXRedlineTextImplementationId> {};
+}
+
 uno::Sequence<sal_Int8> SwXRedlineText::getImplementationId()
     throw(uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    static uno::Sequence< sal_Int8 > aId( 16 );
-    static sal_Bool bInit = sal_False;
-    if(!bInit)
-    {
-        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
-        bInit = sal_True;
-    }
-    return aId;
+    return theSwXRedlineTextImplementationId::get().getSeq();
 }
 
 uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursor(void)
@@ -302,17 +300,14 @@ void SwXRedlinePortion::Validate() throw( uno::RuntimeException )
         throw uno::RuntimeException();
 }
 
+namespace
+{
+    class theSwXRedlinePortionImplementationId : public rtl::Static< UnoTunnelIdInit, theSwXRedlinePortionImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL SwXRedlinePortion::getImplementationId(  ) throw(uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    static uno::Sequence< sal_Int8 > aId( 16 );
-    static sal_Bool bInit = sal_False;
-    if(!bInit)
-    {
-        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
-        bInit = sal_True;
-    }
-    return aId;
+    return theSwXRedlinePortionImplementationId::get().getSeq();
 }
 
 uno::Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, const SwRedline& rRedline ) throw()
@@ -670,18 +665,15 @@ uno::Sequence<uno::Type> SwXRedline::getTypes()
     return aTypes;
 }
 
+namespace
+{
+    class theSwXRedlineImplementationId : public rtl::Static< UnoTunnelIdInit, theSwXRedlineImplementationId > {};
+}
+
 uno::Sequence<sal_Int8> SwXRedline::getImplementationId()
     throw(uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    static uno::Sequence< sal_Int8 > aId( 16 );
-    static sal_Bool bInit = sal_False;
-    if(!bInit)
-    {
-        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
-        bInit = sal_True;
-    }
-    return aId;
+    return theSwXRedlineImplementationId::get().getSeq();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -124,23 +124,12 @@
 #include <memory>
 #include <unoparaframeenum.hxx>
 #include <unoparagraph.hxx>
+#include <comphelper/servicehelper.hxx>
 
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
-
-/****************************************************************************
-    static methods
-****************************************************************************/
-uno::Sequence< sal_Int8 >  CreateUnoTunnelId()
-{
-    static osl::Mutex aCreateMutex;
-    osl::Guard<osl::Mutex> aGuard( aCreateMutex );
-    uno::Sequence< sal_Int8 > aSeq( 16 );
-    rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-    return aSeq;
-}
 
 /****************************************************************************
     Hilfsklassen
@@ -1009,10 +998,14 @@ SwXTextCursor::getSupportedServiceNames() throw (uno::RuntimeException)
             g_nServicesTextCursor, g_ServicesTextCursor);
 }
 
+namespace
+{
+    class theSwXTextCursorUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXTextCursorUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SwXTextCursor::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXTextCursorUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL

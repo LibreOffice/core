@@ -30,12 +30,12 @@
 #include "precompiled_sw.hxx"
 
 
-#include <rtl/uuid.h>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <comphelper/servicehelper.hxx>
 #include "accpage.hxx"
 
 #include "access.hrc"
@@ -175,18 +175,15 @@ Sequence<OUString> SwAccessiblePage::getSupportedServiceNames( )
     return aRet;
 }
 
+namespace
+{
+    class theSwAccessiblePageImplementationId : public rtl::Static< UnoTunnelIdInit, theSwAccessiblePageImplementationId > {};
+}
+
 Sequence< sal_Int8 > SAL_CALL SwAccessiblePage::getImplementationId()
         throw(RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    static Sequence< sal_Int8 > aId( 16 );
-    static sal_Bool bInit = sal_False;
-    if(!bInit)
-    {
-        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
-        bInit = sal_True;
-    }
-    return aId;
+    return theSwAccessiblePageImplementationId::get().getSeq();
 }
 
 OUString SwAccessiblePage::getAccessibleDescription( )

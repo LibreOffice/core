@@ -29,11 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#include <rtl/uuid.h>
-
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include <unomid.h>
 #include <unofootnote.hxx>
@@ -177,10 +176,14 @@ SwXFootnote::CreateXFootnote(SwDoc & rDoc, SwFmtFtn const& rFootnoteFmt)
         :   new SwXFootnote(rDoc, rFootnoteFmt);
 }
 
+namespace
+{
+    class theSwXFootnoteUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXFootnoteUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SwXFootnote::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXFootnoteUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL
@@ -236,18 +239,15 @@ SwXFootnote::getTypes() throw (uno::RuntimeException)
     return ::comphelper::concatSequences(aTypes, aTextTypes);
 }
 
+namespace
+{
+    class theSwXFootnoteImplementationId : public rtl::Static< UnoTunnelIdInit, theSwXFootnoteImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL
 SwXFootnote::getImplementationId() throw (uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    static uno::Sequence< sal_Int8 > aId( 16 );
-    static sal_Bool bInit = sal_False;
-    if(!bInit)
-    {
-        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
-        bInit = sal_True;
-    }
-    return aId;
+    return theSwXFootnoteImplementationId::get().getSeq();
 }
 
 uno::Any SAL_CALL

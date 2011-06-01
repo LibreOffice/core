@@ -43,6 +43,7 @@
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <comphelper/servicehelper.hxx>
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -498,10 +499,14 @@ SwXTextSearch::~SwXTextSearch()
     delete pReplaceProperties;
 }
 
+namespace
+{
+    class theSwXTextSearchUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXTextSearchUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SwXTextSearch::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXTextSearchUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL SwXTextSearch::getSomething( const uno::Sequence< sal_Int8 >& rId )

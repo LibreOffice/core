@@ -125,6 +125,7 @@
 #include <iterator>
 #include <boost/bind.hpp>
 #include <switerator.hxx>
+#include <comphelper/servicehelper.hxx>
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -898,10 +899,14 @@ throw (uno::RuntimeException)
     }
 }
 
+namespace
+{
+    class theSwXTextRangeUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXTextRangeUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SwXTextRange::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXTextRangeUnoTunnelId::get().getSeq();
 }
 
 // XUnoTunnel
@@ -1621,10 +1626,14 @@ SwXTextRanges::~SwXTextRanges()
 {
 }
 
+namespace
+{
+    class theSwXTextRangesUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXTextRangesUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SwXTextRanges::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXTextRangesUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL

@@ -74,6 +74,7 @@
 
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/xformsimport.hxx>
+#include <comphelper/servicehelper.hxx>
 
 using ::rtl::OUString;
 
@@ -528,10 +529,14 @@ void SwXMLImport::setOrganizerMode( )
     bOrganizerMode = sal_True;
 }
 
+namespace
+{
+    class theSwXMLImportUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXMLImportUnoTunnelId > {};
+}
+
 const Sequence< sal_Int8 > & SwXMLImport::getUnoTunnelId() throw()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXMLImportUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL SwXMLImport::getSomething( const Sequence< sal_Int8 >& rId )

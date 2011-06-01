@@ -48,6 +48,7 @@
 #include <viewsh.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTimeRange.hpp>
 #include <com/sun/star/util/DateTime.hpp>
@@ -396,10 +397,14 @@ sal_uInt16 lcl_GetPropertyMapOfService( sal_uInt16 nServiceId )
  ******************************************************************/
 TYPEINIT1(SwXFieldMaster, SwClient);
 
+namespace
+{
+    class theSwXFieldMasterUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXFieldMasterUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SwXFieldMaster::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXFieldMasterUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL SwXFieldMaster::getSomething( const uno::Sequence< sal_Int8 >& rId )
@@ -1066,10 +1071,14 @@ struct SwFieldProperties_Impl
 
 TYPEINIT1(SwXTextField, SwClient);
 
+namespace
+{
+    class theSwXTextFieldUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXTextFieldUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SwXTextField::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXTextFieldUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL SwXTextField::getSomething( const uno::Sequence< sal_Int8 >& rId )

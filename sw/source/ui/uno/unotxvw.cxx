@@ -85,6 +85,7 @@
 #include <switerator.hxx>
 #include "swdtflvr.hxx"
 #include <vcl/svapp.hxx>
+#include <comphelper/servicehelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -186,17 +187,14 @@ Sequence< uno::Type > SAL_CALL SwXTextView::getTypes(  ) throw(uno::RuntimeExcep
     return aBaseTypes;
 }
 
+namespace
+{
+    class theSwXTextViewImplementationId : public rtl::Static< UnoTunnelIdInit, theSwXTextViewImplementationId > {};
+}
+
 Sequence< sal_Int8 > SAL_CALL SwXTextView::getImplementationId(  ) throw(uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    static Sequence< sal_Int8 > aId( 16 );
-    static sal_Bool bInit = sal_False;
-    if(!bInit)
-    {
-        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
-        bInit = sal_True;
-    }
-    return aId;
+    return theSwXTextViewImplementationId::get().getSeq();
 }
 
 void SAL_CALL SwXTextView::acquire(  )throw()
@@ -1924,10 +1922,14 @@ Sequence< OUString > SwXTextViewCursor::getSupportedServiceNames(void) throw( Ru
     return aRet;
 }
 
+namespace
+{
+    class theSwXTextViewCursorUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXTextViewCursorUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SwXTextViewCursor::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXTextViewCursorUnoTunnelId::get().getSeq();
 }
 
 //XUnoTunnel

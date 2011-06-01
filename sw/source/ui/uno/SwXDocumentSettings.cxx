@@ -49,6 +49,7 @@
 #include <svx/zoomitem.hxx>
 #include <unomod.hxx>
 #include <vcl/svapp.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include "swmodule.hxx"
 #include "cfgitems.hxx"
@@ -273,18 +274,15 @@ uno::Sequence< uno::Type > SAL_CALL SwXDocumentSettings::getTypes(  )
     return aBaseTypes;
 }
 
+namespace
+{
+    class theSwXDocumentSettingsImplementationId : public rtl::Static< UnoTunnelIdInit, theSwXDocumentSettingsImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL SwXDocumentSettings::getImplementationId(  )
     throw (RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    static Sequence< sal_Int8 > aId( 16 );
-    static sal_Bool bInit = sal_False;
-    if(!bInit)
-    {
-        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
-        bInit = sal_True;
-    }
-    return aId;
+    return theSwXDocumentSettingsImplementationId::get().getSeq();
 }
 
 void SwXDocumentSettings::_preSetValues ()

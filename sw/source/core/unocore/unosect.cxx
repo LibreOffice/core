@@ -65,6 +65,7 @@
 #include <editeng/frmdiritem.hxx>
 #include <fmtcntnt.hxx>
 #include <editeng/lrspitem.hxx>
+#include <comphelper/servicehelper.hxx>
 
 
 using namespace ::com::sun::star;
@@ -212,10 +213,14 @@ SwXTextSection::~SwXTextSection()
 {
 }
 
+namespace
+{
+    class theSwXTextSectionUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXTextSectionUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SwXTextSection::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXTextSectionUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL

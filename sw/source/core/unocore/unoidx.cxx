@@ -65,6 +65,7 @@
 #include <chpfld.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <unoevtlstnr.hxx>
+#include <comphelper/servicehelper.hxx>
 
 
 using namespace ::com::sun::star;
@@ -434,10 +435,14 @@ SwXDocumentIndex::CreateXDocumentIndex(
     return xIndex;
 }
 
+namespace
+{
+    class theSwXDocumentIndexUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXDocumentIndexUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SwXDocumentIndex::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXDocumentIndexUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL
@@ -1635,10 +1640,14 @@ SwXDocumentIndexMark::CreateXDocumentIndexMark(
     return xTOXMark;
 }
 
+namespace
+{
+    class theSwXDocumentIndexMarkUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXDocumentIndexMarkUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SwXDocumentIndexMark::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXDocumentIndexMarkUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL

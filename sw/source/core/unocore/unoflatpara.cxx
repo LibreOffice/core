@@ -53,6 +53,7 @@
 #include <pagedesc.hxx>
 #include <IGrammarContact.hxx>
 #include <viewopt.hxx>
+#include <comphelper/servicehelper.hxx>
 
 using namespace ::com::sun::star;
 
@@ -78,17 +79,14 @@ uno::Sequence< uno::Type > SwXFlatParagraph::getTypes(  ) throw(uno::RuntimeExce
     return aTypes;
 }
 
+namespace
+{
+    class theSwXFlatParagraphImplementationId : public rtl::Static< UnoTunnelIdInit, theSwXFlatParagraphImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SwXFlatParagraph::getImplementationId(  ) throw(uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    static uno::Sequence< sal_Int8 > aId( 16 );
-    static sal_Bool bInit = sal_False;
-    if(!bInit)
-    {
-        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
-        bInit = sal_True;
-    }
-    return aId;
+    return theSwXFlatParagraphImplementationId::get().getSeq();
 }
 
 uno::Any SAL_CALL SwXFlatParagraph::queryInterface( const uno::Type& rType ) throw(uno::RuntimeException)
@@ -266,14 +264,16 @@ css::uno::Sequence< ::sal_Int32 > SAL_CALL SwXFlatParagraph::getLanguagePortions
     return css::uno::Sequence< ::sal_Int32>();
 }
 
+namespace
+{
+    class theSwXFlatParagraphUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXFlatParagraphUnoTunnelId > {};
+}
 
 const uno::Sequence< sal_Int8 >&
 SwXFlatParagraph::getUnoTunnelId()
 {
-    static uno::Sequence<sal_Int8> aSeq(CreateUnoTunnelId());
-    return aSeq;
+    return theSwXFlatParagraphUnoTunnelId::get().getSeq();
 }
-
 
 sal_Int64 SAL_CALL
 SwXFlatParagraph::getSomething(

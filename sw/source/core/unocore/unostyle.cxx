@@ -79,6 +79,8 @@
 #include <fmtfsize.hxx>
 #include <numrule.hxx>
 
+#include <comphelper/servicehelper.hxx>
+
 #include <boost/shared_ptr.hpp>
 
 #include "ccoll.hxx"
@@ -1170,10 +1172,14 @@ void SwStyleProperties_Impl::GetProperty( const OUString &rPropertyName, const u
     rAny = rxPropertySet->getPropertyValue( rPropertyName );
 }
 
+namespace
+{
+    class theSwXStyleUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXStyleUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SwXStyle::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXStyleUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL SwXStyle::getSomething( const uno::Sequence< sal_Int8 >& rId )
