@@ -146,7 +146,7 @@ SvXMLImportContext *ScXMLTableScenarioContext::CreateChildContext(
 
 void ScXMLTableScenarioContext::EndElement()
 {
-    SCTAB nCurrTable( sal::static_int_cast<SCTAB>( GetScImport().GetTables().GetCurrentSheet() ) );
+    SCTAB nCurrTable( GetScImport().GetTables().GetCurrentSheet() );
     ScDocument* pDoc(GetScImport().GetDocument());
     if (pDoc)
     {

@@ -118,7 +118,7 @@ void ScXMLTableSourceContext::EndElement()
         if (xLinkable.is() && pDoc)
         {
             ScXMLImport::MutexGuard aGuard(GetScImport());
-            if (pDoc->RenameTab( static_cast<SCTAB>(GetScImport().GetTables().GetCurrentSheet()),
+            if (pDoc->RenameTab( GetScImport().GetTables().GetCurrentSheet(),
                 GetScImport().GetTables().GetCurrentSheetName(), false, sal_True))
             {
                  String aFileString(sLink);
@@ -136,7 +136,7 @@ void ScXMLTableSourceContext::EndElement()
                 else if ( nMode == sheet::SheetLinkMode_VALUE )
                     nLinkMode = SC_LINK_VALUE;
 
-                pDoc->SetLink( static_cast<SCTAB>(GetScImport().GetTables().GetCurrentSheet()),
+                pDoc->SetLink( GetScImport().GetTables().GetCurrentSheet(),
                     nLinkMode, aFileString, aFilterString, aOptString,
                     aSheetString, nRefresh );
             }

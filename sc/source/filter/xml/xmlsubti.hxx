@@ -67,7 +67,7 @@ private:
     sal_Int32                           nSubTableSpanned;
     ScMysalIntList                      nChangedCols;
 public:
-                                        ScMyTableData(sal_Int32 nSheet = -1, sal_Int32 nCol = -1, sal_Int32 nRow = -1);
+                                        ScMyTableData(SCTAB nSheet = -1, sal_Int32 nCol = -1, sal_Int32 nRow = -1);
                                         ~ScMyTableData();
     com::sun::star::table::CellAddress  GetCellPos() const { return aTableCellPos; }
     sal_Int32                           GetRow() const { return aTableCellPos.Row; }
@@ -142,7 +142,7 @@ private:
     sal_Int32                           nCurrentColStylePos;
     sal_Int16                           nCurrentDrawPage;
     sal_Int16                           nCurrentXShapes;
-    sal_Int32                           nCurrentSheet;
+    SCTAB                               nCurrentSheet;
 
     sal_Bool                            IsMerged (const com::sun::star::uno::Reference <com::sun::star::table::XCellRange>& xCellRange,
                                                 const sal_Int32 nCol, const sal_Int32 nRow,
@@ -172,7 +172,7 @@ public:
     void                                AddColStyle(const sal_Int32 nRepeat, const rtl::OUString& rCellStyleName);
     ScXMLTabProtectionData&             GetCurrentProtectionData() { return maProtectionData; }
     rtl::OUString                       GetCurrentSheetName() const { return sCurrentSheetName; }
-    sal_Int32                           GetCurrentSheet() const { return nCurrentSheet; }
+    SCTAB                               GetCurrentSheet() const { return nCurrentSheet; }
     sal_Int32                           GetCurrentColumn() const { return maTables.back().GetColCount(); }
     sal_Int32                           GetCurrentRow() const { return maTables.back().GetRow(); }
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet >

@@ -67,14 +67,14 @@ using ::std::auto_ptr;
 
 using namespace com::sun::star;
 
-ScMyTableData::ScMyTableData(sal_Int32 nSheet, sal_Int32 nCol, sal_Int32 nRow)
+ScMyTableData::ScMyTableData(SCTAB nSheet, sal_Int32 nCol, sal_Int32 nRow)
     :   nColsPerCol(nDefaultColCount, 1),
         nRealCols(nDefaultColCount + 1, 0),
         nRowsPerRow(nDefaultRowCount, 1),
         nRealRows(nDefaultRowCount + 1, 0),
         nChangedCols()
 {
-    aTableCellPos.Sheet = sal::static_int_cast<sal_Int16>( nSheet );
+    aTableCellPos.Sheet = nSheet;
     aTableCellPos.Column = nCol;
     aTableCellPos.Row = nRow;
 
@@ -192,7 +192,7 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
                 {
                     try
                     {
-                        xSheets->insertNewByName(sTableName, sal::static_int_cast<sal_Int16>(nCurrentSheet));
+                        xSheets->insertNewByName(sTableName, nCurrentSheet);
                     }
                     catch ( uno::RuntimeException& )
                     {
@@ -203,7 +203,7 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
                             String sTabName(String::CreateFromAscii("Table"));
                             pDoc->CreateValidTabName(sTabName);
                             rtl::OUString sOUTabName(sTabName);
-                            xSheets->insertNewByName(sOUTabName, sal::static_int_cast<sal_Int16>(nCurrentSheet));
+                            xSheets->insertNewByName(sOUTabName, nCurrentSheet);
                         }
                     }
                 }
@@ -260,7 +260,7 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
                                         pStyle->FillPropertySet(xProperties);
 
                                         ScSheetSaveData* pSheetData = ScModelObj::getImplementation(rImport.GetModel())->GetSheetSaveData();
-                                        pSheetData->AddTableStyle( sStyleName, ScAddress( 0, 0, (SCTAB)nCurrentSheet ) );
+                                        pSheetData->AddTableStyle( sStyleName, ScAddress( 0, 0, nCurrentSheet ) );
                                     }
                                 }
                             }
@@ -608,7 +608,7 @@ void ScMyTables::UpdateRowHeights()
             SCTAB nCount = pDoc->GetTableCount();
             ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
 
-            SCTAB nVisible = static_cast<SCTAB>( rImport.GetVisibleSheet() );
+            SCTAB nVisible = rImport.GetVisibleSheet();
 
             ScMarkData aUpdateSheets;
             for (SCTAB nTab=0; nTab<nCount; ++nTab)
@@ -667,7 +667,7 @@ void ScMyTables::DeleteTable()
         pProtect->setPasswordHash(aHash, maProtectionData.meHash1, maProtectionData.meHash2);
         pProtect->setOption(ScTableProtection::SELECT_LOCKED_CELLS,   maProtectionData.mbSelectProtectedCells);
         pProtect->setOption(ScTableProtection::SELECT_UNLOCKED_CELLS, maProtectionData.mbSelectUnprotectedCells);
-        rImport.GetDocument()->SetTabProtection(static_cast<SCTAB>(nCurrentSheet), pProtect.get());
+        rImport.GetDocument()->SetTabProtection(nCurrentSheet, pProtect.get());
     }
 
     //#95582#; find out whether it was possible to set the sheet name
@@ -679,7 +679,7 @@ void ScMyTables::DeleteTable()
         rtl::OUString sCurrentName(xNamed->getName());
         if (sCurrentName != sCurrentSheetName && rImport.GetDocument())
         {
-            rImport.GetDocument()->RenameTab( static_cast<SCTAB>(nCurrentSheet),
+            rImport.GetDocument()->RenameTab( nCurrentSheet,
                 sCurrentSheetName, false, sal_True);
         }
     }
@@ -699,7 +699,7 @@ table::CellAddress ScMyTables::GetRealCellPos()
 
     aRealCellPos.Row = nRow;
     aRealCellPos.Column = nCol;
-    aRealCellPos.Sheet = sal::static_int_cast<sal_Int16>(nCurrentSheet);
+    aRealCellPos.Sheet = nCurrentSheet;
     return aRealCellPos;
 }
 
@@ -769,7 +769,7 @@ void ScMyTables::AddMatrixRange(
     aRange.StartRow = nStartRow;
     aRange.EndColumn = nEndColumn;
     aRange.EndRow = nEndRow;
-    aRange.Sheet = sal::static_int_cast<sal_Int16>(nCurrentSheet);
+    aRange.Sheet = nCurrentSheet;
     ScMatrixRange aMRange(aRange, rFormula, rFormulaNmsp, eGrammar);
     aMatrixRangeList.push_back(aMRange);
 }

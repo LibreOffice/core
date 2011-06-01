@@ -104,31 +104,31 @@ void ScSheetSaveData::AddTextStyle( const rtl::OUString& rName, const ScAddress&
     maTextStyles.push_back( ScTextStyleEntry( rName, rCellPos, rSelection ) );
 }
 
-void ScSheetSaveData::BlockSheet( sal_Int32 nTab )
+void ScSheetSaveData::BlockSheet( SCTAB nTab )
 {
-    if ( nTab >= (sal_Int32)maBlocked.size() )
+    if ( nTab >= static_cast<SCTAB>(maBlocked.size()) )
         maBlocked.resize( nTab + 1, false );        // fill vector with "false" entries
 
     maBlocked[nTab] = true;
 }
 
-bool ScSheetSaveData::IsSheetBlocked( sal_Int32 nTab ) const
+bool ScSheetSaveData::IsSheetBlocked( SCTAB nTab ) const
 {
-    if ( nTab < (sal_Int32)maBlocked.size() )
+    if ( nTab < static_cast<SCTAB>(maBlocked.size()) )
         return maBlocked[nTab];
     else
         return false;
 }
 
-void ScSheetSaveData::AddStreamPos( sal_Int32 nTab, sal_Int32 nStartOffset, sal_Int32 nEndOffset )
+void ScSheetSaveData::AddStreamPos( SCTAB nTab, sal_Int32 nStartOffset, sal_Int32 nEndOffset )
 {
-    if ( nTab >= (sal_Int32)maStreamEntries.size() )
+    if ( nTab >= static_cast<SCTAB>(maStreamEntries.size()) )
         maStreamEntries.resize( nTab + 1 );
 
     maStreamEntries[nTab] = ScStreamEntry( nStartOffset, nEndOffset );
 }
 
-void ScSheetSaveData::StartStreamPos( sal_Int32 nTab, sal_Int32 nStartOffset )
+void ScSheetSaveData::StartStreamPos( SCTAB nTab, sal_Int32 nStartOffset )
 {
     DBG_ASSERT( mnStartTab < 0, "StartStreamPos without EndStreamPos" );
 
@@ -146,9 +146,9 @@ void ScSheetSaveData::EndStreamPos( sal_Int32 nEndOffset )
     }
 }
 
-void ScSheetSaveData::GetStreamPos( sal_Int32 nTab, sal_Int32& rStartOffset, sal_Int32& rEndOffset ) const
+void ScSheetSaveData::GetStreamPos( SCTAB nTab, sal_Int32& rStartOffset, sal_Int32& rEndOffset ) const
 {
-    if ( nTab < (sal_Int32)maStreamEntries.size() )
+    if ( nTab < static_cast<SCTAB>(maStreamEntries.size()) )
     {
         const ScStreamEntry& rEntry = maStreamEntries[nTab];
         rStartOffset = rEntry.mnStartOffset;
@@ -158,7 +158,7 @@ void ScSheetSaveData::GetStreamPos( sal_Int32 nTab, sal_Int32& rStartOffset, sal
         rStartOffset = rEndOffset = -1;
 }
 
-bool ScSheetSaveData::HasStreamPos( sal_Int32 nTab ) const
+bool ScSheetSaveData::HasStreamPos( SCTAB nTab ) const
 {
     sal_Int32 nStartOffset = -1;
     sal_Int32 nEndOffset = -1;
@@ -171,9 +171,9 @@ void ScSheetSaveData::ResetSaveEntries()
     maSaveEntries.clear();
 }
 
-void ScSheetSaveData::AddSavePos( sal_Int32 nTab, sal_Int32 nStartOffset, sal_Int32 nEndOffset )
+void ScSheetSaveData::AddSavePos( SCTAB nTab, sal_Int32 nStartOffset, sal_Int32 nEndOffset )
 {
-    if ( nTab >= (sal_Int32)maSaveEntries.size() )
+    if ( nTab >= static_cast<SCTAB>(maSaveEntries.size()) )
         maSaveEntries.resize( nTab + 1 );
 
     maSaveEntries[nTab] = ScStreamEntry( nStartOffset, nEndOffset );
