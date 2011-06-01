@@ -34,6 +34,7 @@
 #include <uielement/itemcontainer.hxx>
 #include <uielement/constitemcontainer.hxx>
 #include <threadhelp/resetableguard.hxx>
+#include <comphelper/servicehelper.hxx>
 
 //_________________________________________________________________________________________________________________
 //  other includes
@@ -159,20 +160,14 @@ sal_Int64 ItemContainer::getSomething( const ::com::sun::star::uno::Sequence< sa
     return 0;
 }
 
+namespace
+{
+    class theItemContainerUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theItemContainerUnoTunnelId > {};
+}
+
 const Sequence< sal_Int8 >& ItemContainer::GetUnoTunnelId() throw()
 {
-    static ::com::sun::star::uno::Sequence< sal_Int8 > * pSeq = NULL;
-    if( !pSeq )
-    {
-        ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static ::com::sun::star::uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theItemContainerUnoTunnelId::get().getSeq();
 }
 
 ItemContainer* ItemContainer::GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw()

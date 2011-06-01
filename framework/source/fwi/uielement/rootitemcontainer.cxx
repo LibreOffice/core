@@ -28,21 +28,14 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
+#include <comphelper/servicehelper.hxx>
 #include <uielement/rootitemcontainer.hxx>
-
 #include <uielement/itemcontainer.hxx>
-
 #include <uielement/constitemcontainer.hxx>
 #include <threadhelp/resetableguard.hxx>
 #include <general.h>
 #include <properties.h>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 //_________________________________________________________________________________________________________________
@@ -222,20 +215,14 @@ sal_Int64 RootItemContainer::getSomething( const ::com::sun::star::uno::Sequence
     return 0;
 }
 
+namespace
+{
+    class theRootItemContainerUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theRootItemContainerUnoTunnelId > {};
+}
+
 const Sequence< sal_Int8 >& RootItemContainer::GetUnoTunnelId() throw()
 {
-    static ::com::sun::star::uno::Sequence< sal_Int8 > * pSeq = NULL;
-    if( !pSeq )
-    {
-        ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static ::com::sun::star::uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theRootItemContainerUnoTunnelId::get().getSeq();
 }
 
 RootItemContainer* RootItemContainer::GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw()
