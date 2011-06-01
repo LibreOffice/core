@@ -43,6 +43,7 @@
 #include <tools/urlobj.hxx>
 
 #include <rtl/logfile.hxx>
+#include <rtl/instance.hxx>
 #include "itemholder2.hxx"
 
 #include <svtools/imgdef.hxx>
@@ -760,8 +761,8 @@ void SvtMiscOptions_Impl::Commit()
 //*****************************************************************************************************************
 Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
 {
-    // Build static list of configuration key names.
-    static const OUString pProperties[] =
+    // Build list of configuration key names.
+    const OUString pProperties[] =
     {
         PROPERTYNAME_PLUGINSENABLED,
         PROPERTYNAME_SYMBOLSET,
@@ -777,7 +778,7 @@ Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
     };
 
     // Initialize return sequence with these list ...
-    static const Sequence< OUString > seqPropertyNames( pProperties, SAL_N_ELEMENTS( pProperties ) );
+    const Sequence< OUString > seqPropertyNames( pProperties, SAL_N_ELEMENTS( pProperties ) );
     // ... and return it.
     return seqPropertyNames;
 }
@@ -999,29 +1000,15 @@ sal_Bool SvtMiscOptions::IsExperimentalMode() const
     return m_pDataContainer->IsExperimentalMode();
 }
 
-//*****************************************************************************************************************
-//  private method
-//*****************************************************************************************************************
+namespace
+{
+    class theSvtMiscOptionsMutex :
+        public rtl::Static< osl::Mutex, theSvtMiscOptionsMutex > {};
+}
+
 Mutex & SvtMiscOptions::GetInitMutex()
 {
-    // Initialize static mutex only for one time!
-    static Mutex* pMutex = NULL;
-    // If these method first called (Mutex not already exist!) ...
-    if( pMutex == NULL )
-    {
-        // ... we must create a new one. Protect follow code with the global mutex -
-        // It must be - we create a static variable!
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        // We must check our pointer again - because it can be that another instance of ouer class will be fastr then these!
-        if( pMutex == NULL )
-        {
-            // Create the new mutex and set it for return on static variable.
-            static Mutex aMutex;
-            pMutex = &aMutex;
-        }
-    }
-    // Return new created or already existing mutex object.
-    return *pMutex;
+    return theSvtMiscOptionsMutex::get();
 }
 
 void SvtMiscOptions::AddListenerLink( const Link& rLink )
