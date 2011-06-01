@@ -340,6 +340,7 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
         case RTF_UL: nSprm = NS_sprm::LN_CKul; break;
         case RTF_OUTL: nSprm = NS_sprm::LN_CFOutline; break;
         case RTF_SHAD: nSprm = NS_sprm::LN_CFShadow; break;
+        case RTF_V: nSprm = NS_sprm::LN_CFVanish; break;
         default:
             OSL_TRACE("%s: TODO handle toggle '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             break;
