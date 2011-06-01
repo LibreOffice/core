@@ -31,8 +31,8 @@
 
 
 #include "unotools/accessiblestatesethelper.hxx"
-#include <rtl/uuid.h>
 #include <tools/debug.hxx>
+#include <comphelper/servicehelper.hxx>
 
 // defines how many states the bitfield can contain
 // it has the size of 64 because I use a uInt64
@@ -310,18 +310,16 @@ uno::Sequence< ::com::sun::star::uno::Type>
     return aTypeSequence;
 }
 
+namespace
+{
+    class theAccessibleStateSetHelperUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theAccessibleStateSetHelperUnoTunnelId > {};
+}
+
 uno::Sequence<sal_Int8> SAL_CALL
     AccessibleStateSetHelper::getImplementationId (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    osl::MutexGuard aGuard (maMutex);
-    static uno::Sequence<sal_Int8> aId;
-    if (aId.getLength() == 0)
-    {
-        aId.realloc (16);
-        rtl_createUuid ((sal_uInt8 *)aId.getArray(), 0, sal_True);
-    }
-    return aId;
+    return theAccessibleStateSetHelperUnoTunnelId::get().getSeq();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

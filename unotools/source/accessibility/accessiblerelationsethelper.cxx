@@ -31,9 +31,9 @@
 
 
 #include "unotools/accessiblerelationsethelper.hxx"
-#include <rtl/uuid.h>
 #include <vector>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 
 using namespace ::utl;
 using namespace ::rtl;
@@ -258,18 +258,16 @@ uno::Sequence< ::com::sun::star::uno::Type>
     return aTypeSequence;
 }
 
+namespace
+{
+    class theAccessibleRelationSetHelperUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theAccessibleRelationSetHelperUnoTunnelId > {};
+}
+
 uno::Sequence<sal_Int8> SAL_CALL
     AccessibleRelationSetHelper::getImplementationId (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    osl::MutexGuard aGuard (maMutex);
-    static uno::Sequence<sal_Int8> aId;
-    if (aId.getLength() == 0)
-    {
-        aId.realloc (16);
-        rtl_createUuid ((sal_uInt8 *)aId.getArray(), 0, sal_True);
-    }
-    return aId;
+    return theAccessibleRelationSetHelperUnoTunnelId::get().getSeq();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
