@@ -1803,12 +1803,12 @@ bool ScDBFunc::DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16
                 return false;
 
             {
-                sal_uInt16 n = pUserList->GetCount();
-                if (!n || *pUserListId >= n)
+                size_t n = pUserList->size();
+                if (!n || *pUserListId >= static_cast<sal_uInt16>(n))
                     return false;
             }
 
-            ScUserListData* pData = static_cast<ScUserListData*>((*pUserList)[*pUserListId]);
+            const ScUserListData* pData = (*pUserList)[*pUserListId];
             if (pData)
             {
                 sal_uInt16 n = pData->GetSubCount();

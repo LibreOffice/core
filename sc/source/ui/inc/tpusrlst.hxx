@@ -96,10 +96,10 @@ private:
 private:
     void    Init                ();
     sal_uInt16  UpdateUserListBox   ();
-    void    UpdateEntries       ( sal_uInt16 nList );
+    void    UpdateEntries       ( size_t nList );
     void    MakeListStr         ( String& rListStr );
     void    AddNewList          ( const String& rEntriesStr );
-    void    RemoveList          ( sal_uInt16 nList );
+    void    RemoveList          ( size_t nList );
     void    ModifyList          ( sal_uInt16        nSelList,
                                   const String& rEntriesStr );
     void    CopyListFromArea    ( const ScRefAddress& rStartPos,

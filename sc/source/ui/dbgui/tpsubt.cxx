@@ -617,10 +617,9 @@ void ScTpSubTotalOptions::FillUserSortListBox()
     aLbUserDef.Clear();
     if ( pUserLists )
     {
-        sal_uInt16 nCount = pUserLists->GetCount();
-        if ( nCount > 0 )
-            for ( sal_uInt16 i=0; i<nCount; i++ )
-                aLbUserDef.InsertEntry( (*pUserLists)[i]->GetString() );
+        size_t nCount = pUserLists->size();
+        for ( size_t i=0; i<nCount; ++i )
+            aLbUserDef.InsertEntry( (*pUserLists)[i]->GetString() );
     }
 }
 

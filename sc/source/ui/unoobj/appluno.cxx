@@ -522,15 +522,14 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
             //  es wird direkt die "lebende" Liste veraendert,
             //  mehr tut ScGlobal::SetUserList auch nicht
 
-            pUserList->FreeAll();                   // alle Eintraege raus
+            pUserList->clear();                 // alle Eintraege raus
             sal_uInt16 nCount = (sal_uInt16)aSeq.getLength();
             const rtl::OUString* pAry = aSeq.getConstArray();
             for (sal_uInt16 i=0; i<nCount; i++)
             {
                 String aEntry = pAry[i];
                 ScUserListData* pData = new ScUserListData(aEntry);
-                if (!pUserList->Insert(pData))      // hinten anhaengen
-                    delete pData;                   // sollte nicht vorkommen
+                pUserList->push_back(pData);
             }
             bSaveApp = sal_True;    // Liste wird mit den App-Optionen gespeichert
         }
@@ -603,10 +602,10 @@ uno::Any SAL_CALL ScSpreadsheetSettings::getPropertyValue( const rtl::OUString& 
         ScUserList* pUserList = ScGlobal::GetUserList();
         if (pUserList)
         {
-            sal_uInt16 nCount = pUserList->GetCount();
+            size_t nCount = pUserList->size();
             uno::Sequence<rtl::OUString> aSeq(nCount);
             rtl::OUString* pAry = aSeq.getArray();
-            for (sal_uInt16 i=0; i<nCount; i++)
+            for (size_t i=0; i<nCount; ++i)
             {
                 String aEntry((*pUserList)[i]->GetString());
                 pAry[i] = aEntry;

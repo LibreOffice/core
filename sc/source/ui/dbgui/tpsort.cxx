@@ -935,9 +935,9 @@ void ScTabPageSortOptions::FillUserSortListBox()
     aLbSortUser.Clear();
     if ( pUserLists )
     {
-        sal_uInt16 nCount = pUserLists->GetCount();
+        size_t nCount = pUserLists->size();
         if ( nCount > 0 )
-            for ( sal_uInt16 i=0; i<nCount; i++ )
+            for ( size_t i=0; i<nCount; ++i )
                 aLbSortUser.InsertEntry( (*pUserLists)[i]->GetString() );
     }
 }

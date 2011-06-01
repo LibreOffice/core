@@ -31,14 +31,13 @@
 
 #include <tools/stream.hxx>
 #include "scdllapi.h"
-#include "collect.hxx"
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
 /**
  * Stores individual user-defined sort list.
  */
-class SC_DLLPUBLIC ScUserListData : public ScDataObject
+class SC_DLLPUBLIC ScUserListData
 {
 public:
     struct SubStr
@@ -57,9 +56,7 @@ private:
 public:
     ScUserListData(const ::rtl::OUString& rStr);
     ScUserListData(const ScUserListData& rData);
-    virtual ~ScUserListData();
-
-    virtual ScDataObject* Clone() const { return new ScUserListData(*this); }
+    ~ScUserListData();
 
     const ::rtl::OUString& GetString() const { return aStr; }
     void SetString(const ::rtl::OUString& rStr);
@@ -73,22 +70,35 @@ public:
 /**
  * Collection of user-defined sort lists.
  */
-class SC_DLLPUBLIC ScUserList : public ScCollection
+class SC_DLLPUBLIC ScUserList
 {
+    typedef ::boost::ptr_vector<ScUserListData> DataType;
+    DataType maData;
 public:
-                    ScUserList( sal_uInt16 nLim = 4, sal_uInt16 nDel = 4);
-                    ScUserList( const ScUserList& rUserList ) : ScCollection ( rUserList ) {}
+    typedef DataType::iterator iterator;
+    typedef DataType::const_iterator const_iterator;
 
-    virtual ScDataObject*       Clone() const;
+    ScUserList();
+    ScUserList(const ScUserList& r);
 
-    ScUserListData* GetData( const ::rtl::OUString& rSubStr ) const;
+    const ScUserListData* GetData( const ::rtl::OUString& rSubStr ) const;
     /// If the list in rStr is already inserted
     bool HasEntry( const ::rtl::OUString& rStr ) const;
 
-    ScUserListData*  operator[]( const sal_uInt16 nIndex) const;
+    const ScUserListData*  operator[](size_t nIndex) const;
+    ScUserListData*  operator[](size_t nIndex);
     ScUserList&     operator= ( const ScUserList& r );
     bool            operator==( const ScUserList& r ) const;
     bool            operator!=( const ScUserList& r ) const;
+
+    iterator begin();
+    iterator end();
+    const_iterator begin() const;
+    const_iterator end() const;
+    void clear();
+    size_t size() const;
+    void push_back(ScUserListData* p);
+    void erase(iterator itr);
 };
 
 #endif

@@ -41,6 +41,8 @@
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/transliterationwrapper.hxx>
 
+#include <boost/bind.hpp>
+
 using ::rtl::OUString;
 
 namespace {
@@ -108,7 +110,6 @@ ScUserListData::ScUserListData(const OUString& rStr) :
 }
 
 ScUserListData::ScUserListData(const ScUserListData& rData) :
-    ScDataObject(),
     aStr(rData.aStr)
 {
     InitTokens();
@@ -212,8 +213,7 @@ StringCompare ScUserListData::ICompare(const OUString& rSubStr1, const OUString&
         return (StringCompare) ScGlobal::GetpTransliteration()->compareString( rSubStr1, rSubStr2 );
 }
 
-ScUserList::ScUserList(sal_uInt16 nLim, sal_uInt16 nDel) :
-    ScCollection    ( nLim, nDel )
+ScUserList::ScUserList()
 {
     using namespace ::com::sun::star;
 
@@ -250,9 +250,9 @@ ScUserList::ScUserList(sal_uInt16 nLim, sal_uInt16 nDel) :
             sDayLong  += String( xCal[i].FullName );
 
             if ( !HasEntry( sDayShort ) )
-                Insert( new ScUserListData( sDayShort ));
+                maData.push_back( new ScUserListData( sDayShort ));
             if ( !HasEntry( sDayLong ) )
-                Insert( new ScUserListData( sDayLong ));
+                maData.push_back( new ScUserListData( sDayLong ));
         }
 
         xCal = xCalendars[j].Months;
@@ -272,58 +272,58 @@ ScUserList::ScUserList(sal_uInt16 nLim, sal_uInt16 nDel) :
             sMonthLong  += String( xCal[i].FullName );
 
             if ( !HasEntry( sMonthShort ) )
-                Insert( new ScUserListData( sMonthShort ));
+                maData.push_back( new ScUserListData( sMonthShort ));
             if ( !HasEntry( sMonthLong ) )
-                Insert( new ScUserListData( sMonthLong ));
+                maData.push_back( new ScUserListData( sMonthLong ));
         }
     }
 }
 
-ScDataObject* ScUserList::Clone() const
-{
-    return ( new ScUserList( *this ) );
-}
+ScUserList::ScUserList(const ScUserList& r) :
+    maData(r.maData) {}
 
-ScUserListData* ScUserList::GetData(const OUString& rSubStr) const
+const ScUserListData* ScUserList::GetData(const OUString& rSubStr) const
 {
-    sal_uInt16  nIndex;
-    sal_uInt16  i = 0;
-    for (i=0; i < nCount; i++)
-        if (((ScUserListData*)pItems[i])->GetSubIndex(rSubStr, nIndex))
-            return (ScUserListData*)pItems[i];
+    DataType::const_iterator itr = maData.begin(), itrEnd = maData.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        sal_uInt16 nIndex;
+        if (itr->GetSubIndex(rSubStr, nIndex))
+            return &(*itr);
+    }
     return NULL;
 }
 
-ScUserListData* ScUserList::operator[]( const sal_uInt16 nIndex) const
+const ScUserListData* ScUserList::operator[](size_t nIndex) const
 {
-    return (ScUserListData*)At(nIndex);
+    return &maData[nIndex];
+}
+
+ScUserListData* ScUserList::operator[](size_t nIndex)
+{
+    return &maData[nIndex];
 }
 
 ScUserList& ScUserList::operator=( const ScUserList& r )
 {
-    return (ScUserList&)ScCollection::operator=( r );
+    maData = r.maData;
+    return *this;
 }
 
 bool ScUserList::operator==( const ScUserList& r ) const
 {
-    bool bEqual = (nCount == r.nCount);
+    if (size() != r.size())
+        return false;
 
-    if ( bEqual )
+    DataType::const_iterator itr1 = maData.begin(), itr2 = r.maData.begin(), itrEnd = maData.end();
+    for (; itr1 != itrEnd; ++itr1, ++itr2)
     {
-        ScUserListData* pMyData    = NULL;
-        ScUserListData* pOtherData = NULL;
-
-        for ( sal_uInt16 i=0; i<nCount && bEqual; i++)
-        {
-            pMyData    = (ScUserListData*)At(i);
-            pOtherData = (ScUserListData*)r.At(i);
-
-            bEqual = ((pMyData->GetSubCount() == pOtherData->GetSubCount())
-                     && (pMyData->GetString() == pOtherData->GetString()) );
-        }
+        const ScUserListData& v1 = *itr1;
+        const ScUserListData& v2 = *itr2;
+        if (v1.GetString() != v2.GetString() || v1.GetSubCount() != v2.GetSubCount())
+            return false;
     }
-
-    return bEqual;
+    return true;
 }
 
 bool ScUserList::operator!=( const ScUserList& r ) const
@@ -334,13 +334,49 @@ bool ScUserList::operator!=( const ScUserList& r ) const
 
 bool ScUserList::HasEntry( const OUString& rStr ) const
 {
-    for ( sal_uInt16 i=0; i<nCount; i++)
-    {
-        const ScUserListData* pMyData = (ScUserListData*) At(i);
-        if ( pMyData->GetString() == rStr )
-            return true;
-    }
-    return false;
+    DataType::const_iterator itr = ::std::find_if(
+        maData.begin(), maData.end(), ::boost::bind(&ScUserListData::GetString, _1) == rStr);
+    return itr != maData.end();
+}
+
+ScUserList::iterator ScUserList::begin()
+{
+    return maData.begin();
+}
+
+ScUserList::iterator ScUserList::end()
+{
+    return maData.end();
+}
+
+ScUserList::const_iterator ScUserList::begin() const
+{
+    return maData.begin();
+}
+
+ScUserList::const_iterator ScUserList::end() const
+{
+    return maData.end();
+}
+
+void ScUserList::clear()
+{
+    maData.clear();
+}
+
+size_t ScUserList::size() const
+{
+    return maData.size();
+}
+
+void ScUserList::push_back(ScUserListData* p)
+{
+    maData.push_back(p);
+}
+
+void ScUserList::erase(iterator itr)
+{
+    maData.erase(itr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

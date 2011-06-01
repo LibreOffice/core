@@ -490,11 +490,11 @@ void ScGridWindow::DPLaunchFieldPopupMenu(
     ScUserList* pUserList = ScGlobal::GetUserList();
     if (pUserList)
     {
-        sal_uInt16 n = pUserList->GetCount();
+        size_t n = pUserList->size();
         aUserSortNames.reserve(n);
-        for (sal_uInt16 i = 0; i < n; ++i)
+        for (size_t i = 0; i < n; ++i)
         {
-            ScUserListData* pData = static_cast<ScUserListData*>((*pUserList)[i]);
+            const ScUserListData* pData = (*pUserList)[i];
             aUserSortNames.push_back(pData->GetString());
         }
     }

@@ -289,17 +289,14 @@ sal_uInt16 ScTpUserLists::UpdateUserListBox()
 
     //----------------------------------------------------------
 
-    sal_uInt16  nCount = pUserLists->GetCount();
+    size_t nCount = pUserLists->size();
     String  aEntry;
 
-    if ( nCount > 0 )
+    for ( size_t i=0; i<nCount; ++i )
     {
-        for ( sal_uInt16 i=0; i<nCount; i++ )
-        {
-            aEntry = (*pUserLists)[i]->GetString();
-            OSL_ENSURE( aEntry.Len() > 0, "Empty UserList-entry :-/" );
-            aLbLists.InsertEntry( aEntry );
-        }
+        aEntry = (*pUserLists)[i]->GetString();
+        OSL_ENSURE( aEntry.Len() > 0, "Empty UserList-entry :-/" );
+        aLbLists.InsertEntry( aEntry );
     }
 
     return nCount;
@@ -307,15 +304,15 @@ sal_uInt16 ScTpUserLists::UpdateUserListBox()
 
 // -----------------------------------------------------------------------
 
-void ScTpUserLists::UpdateEntries( sal_uInt16 nList )
+void ScTpUserLists::UpdateEntries( size_t nList )
 {
     if ( !pUserLists ) return;
 
     //----------------------------------------------------------
 
-    if ( nList < pUserLists->GetCount() )
+    if ( nList < pUserLists->size() )
     {
-        ScUserListData* pList     = (*pUserLists)[nList];
+        const ScUserListData* pList = (*pUserLists)[nList];
         sal_uInt16          nSubCount = pList->GetSubCount();
         String          aEntryListStr;
 
@@ -393,10 +390,7 @@ void ScTpUserLists::AddNewList( const String& rEntriesStr )
 
     MakeListStr( theEntriesStr );
 
-    if ( !pUserLists->Insert( new ScUserListData( theEntriesStr ) ) )
-    {
-        OSL_FAIL( "Entry could not be inserted :-/" );
-    }
+    pUserLists->push_back(new ScUserListData(theEntriesStr));
 }
 
 // -----------------------------------------------------------------------
@@ -509,9 +503,14 @@ void ScTpUserLists::ModifyList( sal_uInt16          nSelList,
 
 // -----------------------------------------------------------------------
 
-void ScTpUserLists::RemoveList( sal_uInt16 nList )
+void ScTpUserLists::RemoveList( size_t nList )
 {
-    if ( pUserLists ) pUserLists->AtFree( nList );
+    if (pUserLists && nList < pUserLists->size())
+    {
+        ScUserList::iterator itr = pUserLists->begin();
+        ::std::advance(itr, nList);
+        pUserLists->erase(itr);
+    }
 }
 
 //-----------------------------------------------------------------------

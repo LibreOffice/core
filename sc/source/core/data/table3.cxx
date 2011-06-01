@@ -427,9 +427,8 @@ short ScTable::CompareCell( sal_uInt16 nSort,
 
                 if (bUserDef)
                 {
-                    ScUserListData* pData =
-                        static_cast<ScUserListData*>( (ScGlobal::GetUserList()->At(
-                        aSortParam.nUserIndex)) );
+                    ScUserList* pList = ScGlobal::GetUserList();
+                    const ScUserListData* pData = (*pList)[aSortParam.nUserIndex];
 
                     if (pData)
                     {
