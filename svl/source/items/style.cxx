@@ -36,7 +36,6 @@
 #define _SVSTDARR_BYTESTRINGS
 #define _SVSTDARR_BYTESTRINGSSORTDTOR
 
-#include <rtl/uuid.h>
 #include <tools/tenccvt.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/intlwrapper.hxx>
@@ -51,6 +50,7 @@
 #include <svl/svstdarr.hxx>
 #include <unotools/syslocale.hxx>
 #include <algorithm>
+#include <comphelper/servicehelper.hxx>
 
 #define STYLESTREAM             "SfxStyleSheets"
 #define STYLESTREAM_VERSION     sal_uInt16(50)
@@ -1379,20 +1379,14 @@ SfxUnoStyleSheet* SfxUnoStyleSheet::getUnoStyleSheet( const ::com::sun::star::un
 
 // --------------------------------------------------------------------
 
+namespace
+{
+    class theSfxUnoStyleSheetIdentifier : public rtl::Static< UnoTunnelIdInit, theSfxUnoStyleSheetIdentifier > {};
+}
+
 const ::com::sun::star::uno::Sequence< ::sal_Int8 >& SfxUnoStyleSheet::getIdentifier()
 {
-    static ::com::sun::star::uno::Sequence< sal_Int8 > * pSeq = 0;
-    if( !pSeq )
-    {
-        ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static ::com::sun::star::uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theSfxUnoStyleSheetIdentifier::get().getSeq();
 }
 
 // --------------------------------------------------------------------

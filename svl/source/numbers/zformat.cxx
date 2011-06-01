@@ -1321,8 +1321,8 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                     break;
                     default:
                     {
-                        static const String aNatNum( RTL_CONSTASCII_USTRINGPARAM( "NATNUM" ) );
-                        static const String aDBNum( RTL_CONSTASCII_USTRINGPARAM( "DBNUM" ) );
+                        const String aNatNum(RTL_CONSTASCII_USTRINGPARAM("NATNUM"));
+                        const String aDBNum(RTL_CONSTASCII_USTRINGPARAM("DBNUM"));
                         String aUpperNatNum( rChrCls().toUpper( rString, nPos-1, aNatNum.Len() ) );
                         String aUpperDBNum( rChrCls().toUpper( rString, nPos-1, aDBNum.Len() ) );
                         sal_Unicode cUpper = aUpperNatNum.GetChar(0);
