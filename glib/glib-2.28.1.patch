@@ -58,6 +58,22 @@
 
 --- misc/glib-2.28.1/configure
 +++ misc/build/glib-2.28.1/configure
+@@ -7097,6 +7097,7 @@
+ fi
+ 
+ 
++if false; then
+ # Need suitable python path for greport
+ 
+ 
+@@ -7325,6 +7326,7 @@
+ 
+ 
+ 
++fi
+ 
+ 
+ 
 @@ -7988,6 +7988,7 @@
  CONFIG_STATUS_DEPENDENCIES='$(top_srcdir)/po/LINGUAS'
  
