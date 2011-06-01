@@ -7938,6 +7938,10 @@ LIBRSVG_LIBS=""
 
 AC_MSG_CHECKING([what librsvg to use])
 
+if test -z "$enable_librsvg" -a "$with_system_libs" = yes; then
+   enable_librsvg=system
+fi
+
 case "$enable_librsvg" in
 no|disable)
    AC_MSG_RESULT([none])
