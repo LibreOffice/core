@@ -7973,6 +7973,7 @@ system)
       AC_MSG_ERROR([Must use internal librsvg when building with MSVC])
    fi
    AC_MSG_RESULT([system])
+   PKG_CHECK_MODULES(LIBRSVG, librsvg-2.0 >= 2.14)
    ;;
 
 *)
