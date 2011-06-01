@@ -30,7 +30,6 @@
 #include <tools/color.hxx>
 #include <tools/string.hxx>
 #include <vcl/image.hxx>
-#include <rtl/uuid.h>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/compbase6.hxx>
 #include <comphelper/broadcasthelper.hxx>

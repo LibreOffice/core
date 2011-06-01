@@ -31,11 +31,11 @@
 
 #include "descriptor.hxx"
 
-#include <rtl/uuid.h>
 #include <osl/mutex.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svtools/filter.hxx>
 #include <svl/itemprop.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -305,21 +305,15 @@ uno::Sequence< uno::Type > SAL_CALL GraphicDescriptor::getTypes()
     return aTypes;
 }
 
-// ------------------------------------------------------------------------------
+namespace
+{
+    class theGraphicDescriptorUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theGraphicDescriptorUnoTunnelId > {};
+}
 
 uno::Sequence< sal_Int8 > SAL_CALL GraphicDescriptor::getImplementationId()
     throw( uno::RuntimeException )
 {
-    SolarMutexGuard aGuard;
-    static uno::Sequence< sal_Int8 >    aId;
-
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( reinterpret_cast< sal_uInt8* >( aId.getArray() ), 0, sal_True );
-    }
-
-    return aId;
+    return theGraphicDescriptorUnoTunnelId::get().getSeq();
 }
 
 // ------------------------------------------------------------------------------

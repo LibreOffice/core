@@ -35,7 +35,6 @@
 #endif
 #include <osl/mutex.hxx>
 #include <rtl/memory.h>
-#include <rtl/uuid.h>
 #include <rtl/uri.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
@@ -49,6 +48,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <sot/filelist.hxx>
 #include <cppuhelper/implbase1.hxx>
 
@@ -1207,23 +1207,14 @@ Reference< XClipboard> TransferableHelper::GetSystemClipboard()
     return  Reference< XClipboard > ();
 }
 
-// -----------------------------------------------------------------------------
+namespace
+{
+    class theTransferableHelperUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theTransferableHelperUnoTunnelId > {};
+}
 
 const Sequence< sal_Int8 >& TransferableHelper::getUnoTunnelId()
 {
-    static Sequence< sal_Int8 > aSeq;
-
-    if( !aSeq.getLength() )
-    {
-        static osl::Mutex           aCreateMutex;
-        osl::Guard< osl::Mutex >    aGuard( aCreateMutex );
-
-        aSeq.realloc( 16 );
-        rtl_createUuid( reinterpret_cast< sal_uInt8* >( aSeq.getArray() ), 0, sal_True );
-    }
-
-
-    return aSeq;
+    return theTransferableHelperUnoTunnelId::get().getSeq();
 }
 
 // ---------------------------------

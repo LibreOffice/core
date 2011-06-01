@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include <rtl/uuid.h>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/image.hxx>

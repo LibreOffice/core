@@ -29,13 +29,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include <rtl/uuid.h>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/graphic/XGraphicTransformer.hpp>
 #include <vcl/graph.hxx>
 #include "graphic.hxx"
+#include <comphelper/servicehelper.hxx>
 
 using namespace com::sun::star;
 
@@ -114,19 +114,15 @@ void SAL_CALL Graphic::release() throw()
 
 // ------------------------------------------------------------------------------
 
+namespace
+{
+    class theGraphicUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theGraphicUnoTunnelId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL Graphic::getImplementationId_Static()
     throw(uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    static uno::Sequence< sal_Int8 >    aId;
-
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( reinterpret_cast< sal_uInt8* >( aId.getArray() ), 0, sal_True );
-    }
-
-    return aId;
+    return theGraphicUnoTunnelId::get().getSeq();
 }
 
 // ------------------------------------------------------------------------------

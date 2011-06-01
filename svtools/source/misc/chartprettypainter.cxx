@@ -33,10 +33,8 @@
 
 #include <tools/globname.hxx>
 #include <sot/clsids.hxx>
-// header for function rtl_createUuid
-#include <rtl/uuid.h>
 #include <vcl/pdfextoutdevdata.hxx>
-
+#include <comphelper/servicehelper.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <svtools/embedhlp.hxx>
@@ -56,21 +54,14 @@ bool ChartPrettyPainter::DoPaint(OutputDevice* /*pOutDev*/, const Rectangle& /*r
     return false;
 }
 
-//static
+namespace
+{
+    class theChartPrettyPainterUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theChartPrettyPainterUnoTunnelId > {};
+}
+
 const uno::Sequence<sal_Int8>& ChartPrettyPainter::getUnoTunnelId()
 {
-    static uno::Sequence<sal_Int8> * pSeq = 0;
-    if( !pSeq )
-    {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theChartPrettyPainterUnoTunnelId::get().getSeq();
 }
 
 bool ChartPrettyPainter::IsChart( const svt::EmbeddedObjectRef& xObjRef )

@@ -35,6 +35,7 @@
 #include <vcl/svapp.hxx>
 #include <svtools/valueset.hxx>
 #include "valueimp.hxx"
+#include <comphelper/servicehelper.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -133,22 +134,14 @@ void ValueSetAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue
     }
 }
 
-// -----------------------------------------------------------------------------
+namespace
+{
+    class theValueSetAccUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theValueSetAccUnoTunnelId > {};
+}
 
 const uno::Sequence< sal_Int8 >& ValueSetAcc::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq;
-
-    if( !aSeq.getLength() )
-    {
-        static osl::Mutex           aCreateMutex;
-        osl::Guard< osl::Mutex >    aGuard( aCreateMutex );
-
-        aSeq.realloc( 16 );
-        rtl_createUuid( reinterpret_cast< sal_uInt8* >( aSeq.getArray() ), 0, sal_True );
-    }
-
-    return aSeq;
+    return theValueSetAccUnoTunnelId::get().getSeq();
 }
 
 // -----------------------------------------------------------------------------
@@ -851,22 +844,14 @@ void ValueItemAcc::ParentDestroyed()
     mpParent = NULL;
 }
 
-// -----------------------------------------------------------------------------
+namespace
+{
+    class theValueItemAccUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theValueItemAccUnoTunnelId > {};
+}
 
 const uno::Sequence< sal_Int8 >& ValueItemAcc::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq;
-
-    if( !aSeq.getLength() )
-    {
-        static osl::Mutex           aCreateMutex;
-        osl::Guard< osl::Mutex >    aGuard( aCreateMutex );
-
-        aSeq.realloc( 16 );
-        rtl_createUuid( reinterpret_cast< sal_uInt8* >( aSeq.getArray() ), 0, sal_True );
-    }
-
-    return aSeq;
+    return theValueItemAccUnoTunnelId::get().getSeq();
 }
 
 // -----------------------------------------------------------------------------

@@ -43,7 +43,6 @@
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <list>
-#include <rtl/uuid.h>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/unoevent.hxx>
@@ -383,18 +382,15 @@ uno::Sequence< uno::Type > SAL_CALL SvUnoImageMapObject::getTypes()
     return aTypes;
 }
 
+namespace
+{
+    class theSvUnoImageMapObjectImplementationId : public rtl::Static< UnoTunnelIdInit, theSvUnoImageMapObjectImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL SvUnoImageMapObject::getImplementationId()
     throw (uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-
-    static uno::Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-    }
-    return aId;
+    return theSvUnoImageMapObjectImplementationId::get().getSeq();
 }
 
 // XServiceInfo

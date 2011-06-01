@@ -32,13 +32,13 @@
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
-#include <rtl/uuid.h>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <svl/itemprop.hxx>
 #include <svtools/grfmgr.hxx>
+#include <comphelper/servicehelper.hxx>
 #include "graphic.hxx"
 #include "renderer.hxx"
 
@@ -192,21 +192,15 @@ uno::Sequence< uno::Type > SAL_CALL GraphicRendererVCL::getTypes()
     return aTypes;
 }
 
-// ------------------------------------------------------------------------------
+namespace
+{
+    class theGraphicRendererVCLUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theGraphicRendererVCLUnoTunnelId > {};
+}
 
 uno::Sequence< sal_Int8 > SAL_CALL GraphicRendererVCL::getImplementationId()
     throw( uno::RuntimeException )
 {
-    SolarMutexGuard aGuard;
-    static uno::Sequence< sal_Int8 >    aId;
-
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( reinterpret_cast< sal_uInt8* >( aId.getArray() ), 0, sal_True );
-    }
-
-    return aId;
+    return theGraphicRendererVCLUnoTunnelId::get().getSeq();
 }
 
 // ------------------------------------------------------------------------------
