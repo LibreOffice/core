@@ -14,6 +14,7 @@ namespace writerfilter {
         {
             public:
                 typedef ::boost::shared_ptr<RTFValue> Pointer_t;
+                RTFValue(int nValue, rtl::OUString sValue, std::map<Id, RTFValue::Pointer_t> rAttributes);
                 RTFValue(int nValue);
                 RTFValue(rtl::OUString sValue);
                 RTFValue(std::map<Id, RTFValue::Pointer_t> rAttributes);

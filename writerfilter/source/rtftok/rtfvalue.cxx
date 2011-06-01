@@ -9,6 +9,13 @@ namespace rtftok {
 using rtl::OString;
 using rtl::OUString;
 
+RTFValue::RTFValue(int nValue, rtl::OUString sValue, std::map<Id, RTFValue::Pointer_t> rAttributes)
+    : m_nValue(nValue),
+    m_sValue(sValue),
+    m_rAttributes(rAttributes)
+{
+}
+
 RTFValue::RTFValue(int nValue)
     : m_nValue(nValue),
     m_sValue(),
@@ -79,7 +86,7 @@ std::string RTFValue::toString() const
 
 RTFValue* RTFValue::Clone()
 {
-    return new RTFValue(m_nValue);
+    return new RTFValue(m_nValue, m_sValue, m_rAttributes);
 }
 
 } // namespace rtftok
