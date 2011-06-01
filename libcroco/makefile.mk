@@ -36,8 +36,8 @@ TARGET=so_libcroco
 
 .IF "$(SYSTEM_LIBCROCO)" == "YES"
 all:
-    @echo "An already available installation of libcroco should exist on your system."
-    @echo "Therefore the version provided here does not need to be built in addition."
+	@echo "An already available installation of libcroco should exist on your system."
+	@echo "Therefore the version provided here does not need to be built in addition."
 .ENDIF
 
 # --- Files --------------------------------------------------------
@@ -57,11 +57,11 @@ LIBXML2_INCLUDE=-I/usr/include/libxml2
 LIBXML2_INCLUDE=
 .ENDIF
 CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) \
-                 .$/configure \
-                 --prefix=$(SRC_ROOT)$/$(PRJNAME)$/$(MISC) \
-                 CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) -I$(SOLARINCDIR)$/external -I$(SOLARINCDIR)$/external$/glib-2.0 $(LIBXML2_INCLUDE)" \
-                 LDFLAGS="-L$(SOLARLIBDIR)" \
-                 GLIB2_CFLAGS="-I$(SOLARINCDIR)$/external$/glib-2.0" \
+                 ./configure \
+                 --prefix=$(SRC_ROOT)/$(PRJNAME)/$(MISC) \
+                 CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) -I$(SOLARINCDIR)/external -I$(SOLARINCDIR)/external/glib-2.0 $(LIBXML2_INCLUDE)" \
+                 LDFLAGS="-L$(SOLARLIBDIR) $(eq,$(OS),MACOSX $(EXTRA_LINKFLAGS) $(NULL))" \
+                 GLIB2_CFLAGS="-I$(SOLARINCDIR)/external/glib-2.0" \
                  GLIB2_LIBS="-lgio-2.0 -lgobject-2.0 -lgthread-2.0 -lglib-2.0 -lintl" \
                  LIBXML2_CFLAGS=" " \
                  LIBXML2_LIBS="-lxml2"
@@ -73,36 +73,36 @@ BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) \
 BUILD_DIR=$(CONFIGURE_DIR)
 
 EXTRPATH=LOADER
-OUT2LIB+=src$/.libs$/libcroco-0.6.3.0.1.dylib
+OUT2LIB+=src/.libs/libcroco-0.6.3.0.1.dylib
 
-OUT2INC+=src$/cr-additional-sel.h
-OUT2INC+=src$/cr-input.h
-OUT2INC+=src$/cr-rgb.h
-OUT2INC+=src$/cr-stylesheet.h
-OUT2INC+=src$/cr-attr-sel.h
-OUT2INC+=src$/cr-num.h
-OUT2INC+=src$/cr-sel-eng.h
-OUT2INC+=src$/cr-term.h
-OUT2INC+=src$/cr-cascade.h
-OUT2INC+=src$/cr-om-parser.h
-OUT2INC+=src$/cr-selector.h
-OUT2INC+=src$/cr-tknzr.h
-OUT2INC+=src$/cr-declaration.h
-OUT2INC+=src$/cr-parser.h
-OUT2INC+=src$/cr-simple-sel.h
-OUT2INC+=src$/cr-token.h
-OUT2INC+=src$/cr-doc-handler.h
-OUT2INC+=src$/cr-parsing-location.h
-OUT2INC+=src$/cr-statement.h
-OUT2INC+=src$/cr-utils.h
-OUT2INC+=src$/cr-enc-handler.h
-OUT2INC+=src$/cr-prop-list.h
-OUT2INC+=src$/cr-string.h
-OUT2INC+=src$/libcroco-config.h
-OUT2INC+=src$/cr-fonts.h
-OUT2INC+=src$/cr-pseudo.h
-OUT2INC+=src$/cr-style.h
-OUT2INC+=src$/libcroco.h
+OUT2INC+=src/cr-additional-sel.h
+OUT2INC+=src/cr-input.h
+OUT2INC+=src/cr-rgb.h
+OUT2INC+=src/cr-stylesheet.h
+OUT2INC+=src/cr-attr-sel.h
+OUT2INC+=src/cr-num.h
+OUT2INC+=src/cr-sel-eng.h
+OUT2INC+=src/cr-term.h
+OUT2INC+=src/cr-cascade.h
+OUT2INC+=src/cr-om-parser.h
+OUT2INC+=src/cr-selector.h
+OUT2INC+=src/cr-tknzr.h
+OUT2INC+=src/cr-declaration.h
+OUT2INC+=src/cr-parser.h
+OUT2INC+=src/cr-simple-sel.h
+OUT2INC+=src/cr-token.h
+OUT2INC+=src/cr-doc-handler.h
+OUT2INC+=src/cr-parsing-location.h
+OUT2INC+=src/cr-statement.h
+OUT2INC+=src/cr-utils.h
+OUT2INC+=src/cr-enc-handler.h
+OUT2INC+=src/cr-prop-list.h
+OUT2INC+=src/cr-string.h
+OUT2INC+=src/libcroco-config.h
+OUT2INC+=src/cr-fonts.h
+OUT2INC+=src/cr-pseudo.h
+OUT2INC+=src/cr-style.h
+OUT2INC+=src/libcroco.h
 .ELIF "$(OS)"=="WNT"
 
 BUILD_ACTION=dmake
