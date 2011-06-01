@@ -37,6 +37,7 @@
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/stl_types.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/uuid.h>
 
@@ -251,18 +252,15 @@ uno::Sequence< uno::Type > SAL_CALL GenericPropertySet::getTypes()
     return aTypes;
 }
 
+namespace
+{
+    class theGenericPropertySetImplmentationId : public rtl::Static< UnoTunnelIdInit, theGenericPropertySetImplmentationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL GenericPropertySet::getImplementationId()
     throw (uno::RuntimeException)
 {
-    MutexGuard aGuard( maMutex );
-
-    static uno::Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-    }
-    return aId;
+    return theGenericPropertySetImplmentationId::get().getSeq();
 }
 
 // XServiceInfo
