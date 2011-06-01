@@ -100,7 +100,7 @@ namespace dp_gui {
 #define PROGRESS_HEIGHT     14
 
 //------------------------------------------------------------------------------
-struct StrAllFiles : public rtl::StaticWithInit< const OUString, StrAllFiles >
+struct StrAllFiles : public rtl::StaticWithInit< OUString, StrAllFiles >
 {
     const OUString operator () () {
         const SolarMutexGuard guard;

@@ -91,7 +91,7 @@ namespace dp_misc
 namespace
 {
     struct StrOperatingSystem :
-        public rtl::StaticWithInit<const OUString, StrOperatingSystem> {
+        public rtl::StaticWithInit<OUString, StrOperatingSystem> {
             const OUString operator () () {
                 OUString os( RTL_CONSTASCII_USTRINGPARAM("$_OS") );
                 ::rtl::Bootstrap::expandMacros( os );
@@ -100,7 +100,7 @@ namespace
     };
 
     struct StrCPU :
-        public rtl::StaticWithInit<const OUString, StrCPU> {
+        public rtl::StaticWithInit<OUString, StrCPU> {
             const OUString operator () () {
                 OUString arch( RTL_CONSTASCII_USTRINGPARAM("$_ARCH") );
                 ::rtl::Bootstrap::expandMacros( arch );
@@ -110,7 +110,7 @@ namespace
 
 
     struct StrPlatform : public rtl::StaticWithInit<
-        const OUString, StrPlatform> {
+        OUString, StrPlatform> {
             const OUString operator () () {
                 ::rtl::OUStringBuffer buf;
                 buf.append( StrOperatingSystem::get() );

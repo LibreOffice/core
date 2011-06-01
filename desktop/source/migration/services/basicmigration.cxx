@@ -43,9 +43,8 @@ namespace migration
 //.........................................................................
 
 
-    static ::rtl::OUString sSourceUserBasic = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/user/basic" ) );
-    static ::rtl::OUString sTargetUserBasic = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/user/__basic_80" ) );
-
+    #define sSourceUserBasic ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/user/basic"))
+    #define sTargetUserBasic ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/user/__basic_80"))
 
     // =============================================================================
     // component operations
@@ -53,35 +52,16 @@ namespace migration
 
     ::rtl::OUString BasicMigration_getImplementationName()
     {
-        static ::rtl::OUString* pImplName = 0;
-        if ( !pImplName )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !pImplName )
-            {
-                static ::rtl::OUString aImplName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.desktop.migration.Basic" ) );
-                pImplName = &aImplName;
-            }
-        }
-        return *pImplName;
+        return ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.desktop.migration.Basic"));
     }
 
     // -----------------------------------------------------------------------------
 
     Sequence< ::rtl::OUString > BasicMigration_getSupportedServiceNames()
     {
-        static Sequence< ::rtl::OUString >* pNames = 0;
-        if ( !pNames )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !pNames )
-            {
-                static Sequence< ::rtl::OUString > aNames(1);
-                aNames.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.migration.Basic" ) );
-                pNames = &aNames;
-            }
-        }
-        return *pNames;
+        Sequence< ::rtl::OUString > aNames(1);
+        aNames.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.migration.Basic" ) );
+        return aNames;
     }
 
     // =============================================================================

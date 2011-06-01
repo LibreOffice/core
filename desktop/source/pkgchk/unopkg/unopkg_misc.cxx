@@ -180,7 +180,7 @@ bool readArgument(
 
 namespace {
 struct ExecutableDir : public rtl::StaticWithInit<
-    const OUString, ExecutableDir> {
+    OUString, ExecutableDir> {
     const OUString operator () () {
         OUString path;
         if (osl_getExecutableFile( &path.pData ) != osl_Process_E_None) {
@@ -191,7 +191,7 @@ struct ExecutableDir : public rtl::StaticWithInit<
     }
 };
 struct ProcessWorkingDir : public rtl::StaticWithInit<
-    const OUString, ProcessWorkingDir> {
+    OUString, ProcessWorkingDir> {
     const OUString operator () () {
         OUString workingDir;
         tools::getProcessWorkingDir(workingDir);

@@ -46,7 +46,7 @@ namespace dp_misc {
 namespace {
 
 struct OfficeLocale :
-        public rtl::StaticWithInit<const OUString, OfficeLocale> {
+        public rtl::StaticWithInit<OUString, OfficeLocale> {
     const OUString operator () () {
         OUString slang;
         if (! (::utl::ConfigManager::GetDirectConfigProperty(

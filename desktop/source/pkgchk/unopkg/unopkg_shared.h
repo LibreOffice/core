@@ -56,7 +56,7 @@ namespace unopkg {
 
 
     struct OfficeLocale :
-        public rtl::StaticWithInit<const css::lang::Locale, OfficeLocale> {
+        public rtl::StaticWithInit<css::lang::Locale, OfficeLocale> {
             const css::lang::Locale operator () () {
                 ::rtl::OUString slang;
         if (! (::utl::ConfigManager::GetDirectConfigProperty(

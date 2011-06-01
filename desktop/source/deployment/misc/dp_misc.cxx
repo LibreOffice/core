@@ -79,7 +79,7 @@ namespace dp_misc {
 namespace {
 
 struct UnoRc : public rtl::StaticWithInit<
-    const boost::shared_ptr<rtl::Bootstrap>, UnoRc> {
+    boost::shared_ptr<rtl::Bootstrap>, UnoRc> {
     const boost::shared_ptr<rtl::Bootstrap> operator () () {
         OUString unorc( RTL_CONSTASCII_USTRINGPARAM(
                             "$OOO_BASE_DIR/program/" SAL_CONFIGFILE("uno")) );
@@ -91,7 +91,7 @@ struct UnoRc : public rtl::StaticWithInit<
     }
 };
 
-struct OfficePipeId : public rtl::StaticWithInit<const OUString, OfficePipeId> {
+struct OfficePipeId : public rtl::StaticWithInit<OUString, OfficePipeId> {
     const OUString operator () ();
 };
 

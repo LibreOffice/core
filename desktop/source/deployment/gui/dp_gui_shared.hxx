@@ -45,7 +45,7 @@ struct DeploymentGuiResMgr :
     }
 };
 
-struct BrandName : public ::rtl::StaticWithInit<const ::rtl::OUString, BrandName> {
+struct BrandName : public ::rtl::StaticWithInit< ::rtl::OUString, BrandName > {
     const ::rtl::OUString operator () () {
         return ::utl::ConfigManager::GetDirectConfigProperty(
             ::utl::ConfigManager::PRODUCTNAME ).get< ::rtl::OUString >();

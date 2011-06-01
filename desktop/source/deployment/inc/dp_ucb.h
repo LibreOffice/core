@@ -45,7 +45,7 @@ namespace css = ::com::sun::star;
 namespace dp_misc {
 
 struct DESKTOP_DEPLOYMENTMISC_DLLPUBLIC StrTitle :
-    public rtl::StaticWithInit<const rtl::OUString, StrTitle>
+    public rtl::StaticWithInit<rtl::OUString, StrTitle>
 {
     const rtl::OUString operator () ();
 };

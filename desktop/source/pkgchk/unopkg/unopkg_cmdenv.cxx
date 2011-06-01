@@ -67,7 +67,7 @@ namespace {
 
 //==============================================================================
 struct OfficeLocale :
-        public rtl::StaticWithInit<const lang::Locale, OfficeLocale> {
+        public rtl::StaticWithInit<lang::Locale, OfficeLocale> {
     const lang::Locale operator () () {
         OUString slang;
         if (! (::utl::ConfigManager::GetDirectConfigProperty(
