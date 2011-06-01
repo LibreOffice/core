@@ -1,4 +1,5 @@
 #include <rtfvalue.hxx>
+#include <rtfreferenceproperties.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -10,13 +11,22 @@ using rtl::OUString;
 
 RTFValue::RTFValue(int nValue)
     : m_nValue(nValue),
-    m_sValue()
+    m_sValue(),
+    m_rAttributes()
 {
 }
 
 RTFValue::RTFValue(OUString sValue)
     : m_nValue(),
-    m_sValue(sValue)
+    m_sValue(sValue),
+    m_rAttributes()
+{
+}
+
+RTFValue::RTFValue(std::map<Id, RTFValue::Pointer_t> rAttributes)
+    : m_nValue(),
+    m_sValue(),
+    m_rAttributes(rAttributes)
 {
 }
 
@@ -42,7 +52,11 @@ uno::Any RTFValue::getAny() const
 
 writerfilter::Reference<Properties>::Pointer_t RTFValue::getProperties()
 {
-    return writerfilter::Reference<Properties>::Pointer_t();
+    std::map<Id, RTFValue::Pointer_t> aSprms;
+    writerfilter::Reference<Properties>::Pointer_t const pProperties(
+            new RTFReferenceProperties(m_rAttributes, aSprms)
+            );
+    return pProperties;
 }
 
 writerfilter::Reference<Stream>::Pointer_t RTFValue::getStream()
