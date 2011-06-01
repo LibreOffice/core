@@ -2247,7 +2247,7 @@ sal_Bool StatementCommand::Execute()
                 nLNr1 = Time().GetTime() + nNr1/10;
                 bBool1 = sal_True;
             }
-            if ( Time().GetTime() < long(nLNr1) )   // Aktuelle Zeit kleiner Endzeit
+            if ( Time().GetTime() < sal_Int32(nLNr1) )  // Aktuelle Zeit kleiner Endzeit
                 return sal_False;
             break;
         case RC_DisplayHid:
@@ -2457,7 +2457,7 @@ sal_Bool StatementCommand::Execute()
                     nLNr1 = Time().GetTime() + 100; // 100 = 1 Second
                     bBool2 = sal_True;
                 }
-                if ( Time().GetTime() < long(nLNr1) )   // Aktuelle Zeit kleiner Endzeit
+                if ( Time().GetTime() < sal_Int32(nLNr1) )  // Aktuelle Zeit kleiner Endzeit
                     return sal_False;
                 else
                     pRet->GenReturn ( RET_Value, nMethodId, aString1);
@@ -2477,7 +2477,7 @@ sal_Bool StatementCommand::Execute()
                     pRet->GenReturn ( RET_Value, nMethodId, comm_UINT16(CONST_WSFinished) );
                 else
                 {
-                    if ( Time().GetTime() < long(nLNr1) )   // Aktuelle Zeit kleiner Endzeit
+                    if ( Time().GetTime() < sal_Int32(nLNr1) )  // Aktuelle Zeit kleiner Endzeit
                         return sal_False;
                     pRet->GenReturn ( RET_Value, nMethodId, comm_UINT16(CONST_WSTimeout) );
                 }
