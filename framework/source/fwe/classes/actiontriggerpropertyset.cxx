@@ -351,7 +351,7 @@ throw ( RuntimeException )
 
 const Sequence< Property > ActionTriggerPropertySet::impl_getStaticPropertyDescriptor()
 {
-    static const Property pActionTriggerPropertys[] =
+    const Property pActionTriggerPropertys[] =
     {
         Property( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CommandURL"    )), HANDLE_COMMANDURL   , ::getCppuType((::rtl::OUString*)0)                , PropertyAttribute::TRANSIENT  ),
         Property( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HelpURL"       )), HANDLE_HELPURL      , ::getCppuType((::rtl::OUString*)0)                , PropertyAttribute::TRANSIENT  ),
@@ -361,9 +361,9 @@ const Sequence< Property > ActionTriggerPropertySet::impl_getStaticPropertyDescr
     };
 
     // Use it to initialize sequence!
-    static const Sequence< Property > seqActionTriggerPropertyDescriptor( pActionTriggerPropertys, PROPERTYCOUNT );
+    const Sequence< Property > seqActionTriggerPropertyDescriptor( pActionTriggerPropertys, PROPERTYCOUNT );
 
-    // Return static "PropertyDescriptor"
+    // Return "PropertyDescriptor"
     return seqActionTriggerPropertyDescriptor ;
 }
 

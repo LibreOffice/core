@@ -295,15 +295,15 @@ throw ( RuntimeException )
 
 const Sequence< Property > ActionTriggerSeparatorPropertySet::impl_getStaticPropertyDescriptor()
 {
-    static const Property pActionTriggerPropertys[] =
+    const Property pActionTriggerPropertys[] =
     {
         Property( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SeparatorType" )), HANDLE_TYPE, ::getCppuType((sal_Int16*)0), PropertyAttribute::TRANSIENT )
     };
 
     // Use it to initialize sequence!
-    static const Sequence< Property > seqActionTriggerPropertyDescriptor( pActionTriggerPropertys, PROPERTYCOUNT );
+    const Sequence< Property > seqActionTriggerPropertyDescriptor( pActionTriggerPropertys, PROPERTYCOUNT );
 
-    // Return static "PropertyDescriptor"
+    // Return "PropertyDescriptor"
     return seqActionTriggerPropertyDescriptor ;
 }
 

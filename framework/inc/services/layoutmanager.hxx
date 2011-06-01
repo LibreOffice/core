@@ -97,6 +97,10 @@ namespace framework
     class ToolbarLayoutManager;
     class PanelManager;
     class GlobalSettings;
+    namespace detail
+    {
+        class InfoHelperBuilder;
+    }
     typedef ::cppu::WeakImplHelper8 <   ::com::sun::star::lang::XServiceInfo
                                     ,   ::com::sun::star::frame::XLayoutManager
                                     ,   ::com::sun::star::awt::XWindowListener
@@ -370,6 +374,8 @@ namespace framework
             PanelManager*                                                               m_pPanelManager;
             ToolbarLayoutManager*                                                       m_pToolbarManager;
             css::uno::Reference< ::com::sun::star::ui::XUIConfigurationListener >       m_xToolbarManager;
+
+        friend class detail::InfoHelperBuilder;
     };
 
 } // namespace framework

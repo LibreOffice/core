@@ -1781,14 +1781,14 @@ css::uno::Reference< css::lang::XComponent > Desktop::impl_getFrameComponent( co
 *//*-*************************************************************************************************************/
 const css::uno::Sequence< css::beans::Property > Desktop::impl_getStaticPropertyDescriptor()
 {
-    // Create a new static property array to initialize sequence!
+    // Create a property array to initialize sequence!
     // Table of all predefined properties of this class. Its used from OPropertySetHelper-class!
     // Don't forget to change the defines (see begin of this file), if you add, change or delete a property in this list!!!
     // It's necessary for methods of OPropertySetHelper.
     // ATTENTION:
     //      YOU MUST SORT FOLLOW TABLE BY NAME ALPHABETICAL !!!
 
-    static const css::beans::Property pProperties[] =
+    const css::beans::Property pProperties[] =
     {
         css::beans::Property( DESKTOP_PROPNAME_ACTIVEFRAME              , DESKTOP_PROPHANDLE_ACTIVEFRAME             , ::getCppuType((const css::uno::Reference< css::lang::XComponent >*)NULL)                , css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
         css::beans::Property( DESKTOP_PROPNAME_DISPATCHRECORDERSUPPLIER , DESKTOP_PROPHANDLE_DISPATCHRECORDERSUPPLIER, ::getCppuType((const css::uno::Reference< css::frame::XDispatchRecorderSupplier >*)NULL), css::beans::PropertyAttribute::TRANSIENT ),
@@ -1797,8 +1797,8 @@ const css::uno::Sequence< css::beans::Property > Desktop::impl_getStaticProperty
         css::beans::Property( DESKTOP_PROPNAME_TITLE                    , DESKTOP_PROPHANDLE_TITLE                   , ::getCppuType((const ::rtl::OUString*)NULL)                                             , css::beans::PropertyAttribute::TRANSIENT ),
     };
     // Use it to initialize sequence!
-    static const css::uno::Sequence< css::beans::Property > lPropertyDescriptor( pProperties, DESKTOP_PROPCOUNT );
-    // Return static "PropertyDescriptor"
+    const css::uno::Sequence< css::beans::Property > lPropertyDescriptor( pProperties, DESKTOP_PROPCOUNT );
+    // Return "PropertyDescriptor"
     return lPropertyDescriptor;
 }
 

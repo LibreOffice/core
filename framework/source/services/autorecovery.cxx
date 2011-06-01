@@ -3307,13 +3307,13 @@ void SAL_CALL AutoRecovery::getFastPropertyValue(css::uno::Any& aValue ,
 //-----------------------------------------------
 const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor()
 {
-    static const css::beans::Property pPropertys[] =
+    const css::beans::Property pPropertys[] =
     {
         css::beans::Property( AUTORECOVERY_PROPNAME_CRASHED            , AUTORECOVERY_PROPHANDLE_CRASHED            , ::getBooleanCppuType() , css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
         css::beans::Property( AUTORECOVERY_PROPNAME_EXISTS_RECOVERYDATA, AUTORECOVERY_PROPHANDLE_EXISTS_RECOVERYDATA, ::getBooleanCppuType() , css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
         css::beans::Property( AUTORECOVERY_PROPNAME_EXISTS_SESSIONDATA , AUTORECOVERY_PROPHANDLE_EXISTS_SESSIONDATA , ::getBooleanCppuType() , css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
     };
-    static const css::uno::Sequence< css::beans::Property > lPropertyDescriptor(pPropertys, AUTORECOVERY_PROPCOUNT);
+    const css::uno::Sequence< css::beans::Property > lPropertyDescriptor(pPropertys, AUTORECOVERY_PROPCOUNT);
     return lPropertyDescriptor;
 }
 

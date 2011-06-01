@@ -90,6 +90,7 @@
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/uno3.hxx>
 #include <rtl/logfile.hxx>
+#include <rtl/instance.hxx>
 #include <unotools/cmdoptions.hxx>
 
 #include <algorithm>
@@ -3212,24 +3213,39 @@ void SAL_CALL LayoutManager::getFastPropertyValue( uno::Any& aValue, sal_Int32 n
     LayoutManager_PBase::getFastPropertyValue( aValue, nHandle );
 }
 
-::cppu::IPropertyArrayHelper& SAL_CALL LayoutManager::getInfoHelper()
+namespace detail
 {
-    static ::cppu::OPropertyArrayHelper* pInfoHelper = NULL;
-
-    if( pInfoHelper == NULL )
+    class InfoHelperBuilder : private ::boost::noncopyable
     {
-        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
-
-        if( pInfoHelper == NULL )
+    private:
+        ::cppu::OPropertyArrayHelper *m_pInfoHelper;
+    public:
+        InfoHelperBuilder(const LayoutManager &rManager)
         {
             uno::Sequence< beans::Property > aProperties;
-            describeProperties( aProperties );
-            static ::cppu::OPropertyArrayHelper aInfoHelper( aProperties, sal_True );
-            pInfoHelper = &aInfoHelper;
+            rManager.describeProperties(aProperties);
+            m_pInfoHelper = new ::cppu::OPropertyArrayHelper(aProperties, sal_True);
         }
-    }
+        ~InfoHelperBuilder()
+        {
+            delete m_pInfoHelper;
+        }
 
-    return(*pInfoHelper);
+        ::cppu::OPropertyArrayHelper& getHelper() { return *m_pInfoHelper; }
+    };
+}
+namespace
+{
+    struct theInfoHelper :
+        public rtl::StaticWithArg< detail::InfoHelperBuilder, LayoutManager,
+        theInfoHelper >
+    {
+    };
+}
+
+::cppu::IPropertyArrayHelper& SAL_CALL LayoutManager::getInfoHelper()
+{
+    return theInfoHelper::get(*this).getHelper();
 }
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL LayoutManager::getPropertySetInfo() throw (uno::RuntimeException)
