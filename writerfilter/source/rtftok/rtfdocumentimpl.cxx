@@ -226,6 +226,12 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().nCurrentEncoding = getEncodingTable(nParam);
             }
             break;
+        case RTF_AF:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(nParam));
+                m_aStates.top().aSprms[NS_sprm::LN_CRgFtc1] = pValue;
+                break;
+            }
         case RTF_FPRQ:
             {
                 RTFValue::Pointer_t pValue(new RTFValue(nParam));
