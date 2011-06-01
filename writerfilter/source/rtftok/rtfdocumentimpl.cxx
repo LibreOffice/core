@@ -57,6 +57,13 @@ sal_uInt32 RTFDocumentImpl::getColorTable(sal_uInt32 nIndex)
     return 0;
 }
 
+sal_uInt32 RTFDocumentImpl::getEncodingTable(sal_uInt32 nFontIndex)
+{
+    if (nFontIndex < m_aFontEncodings.size())
+        return m_aFontEncodings[nFontIndex];
+    return 0;
+}
+
 void RTFDocumentImpl::resolve(Stream & rMapper)
 {
     m_pMapperStream = &rMapper;
@@ -212,6 +219,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             {
                 RTFValue::Pointer_t pValue(new RTFValue(nParam));
                 m_aStates.top().aSprms[NS_sprm::LN_CRgFtc0] = pValue;
+                m_aStates.top().nCurrentEncoding = getEncodingTable(nParam);
             }
             break;
         case RTF_FPRQ:
