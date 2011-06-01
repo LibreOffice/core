@@ -71,12 +71,6 @@ AccessibleShape*
         );
 
 
-/** List of shape type descriptors corresponding to the
-    <type>SdShapeTypes</type> enum.
-*/
-extern ShapeTypeDescriptor aSdShapeTypeList[];
-
-
 } // end of namespace accessibility
 
 #endif

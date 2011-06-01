@@ -31,6 +31,7 @@
 
 #include "SlsCacheConfiguration.hxx"
 #include <osl/mutex.hxx>
+#include <rtl/instance.hxx>
 #include <vcl/svapp.hxx>
 
 #include <comphelper/processfactory.hxx>
@@ -43,33 +44,38 @@ using namespace ::com::sun::star::uno;
 
 namespace sd { namespace slidesorter { namespace cache {
 
-::boost::shared_ptr<CacheConfiguration> CacheConfiguration::mpInstance;
+namespace
+{
+    typedef ::boost::shared_ptr<CacheConfiguration> CacheConfigSharedPtr;
+    class theInstance :
+        public rtl::Static<CacheConfigSharedPtr, theInstance> {};
+}
+
 ::boost::weak_ptr<CacheConfiguration> CacheConfiguration::mpWeakInstance;
 Timer CacheConfiguration::maReleaseTimer;
-
-
 
 ::boost::shared_ptr<CacheConfiguration> CacheConfiguration::Instance (void)
 {
     SolarMutexGuard aSolarGuard;
-    if (mpInstance.get() == NULL)
+    CacheConfigSharedPtr &rInstancePtr = theInstance::get();
+    if (rInstancePtr.get() == NULL)
     {
         // Maybe somebody else kept a previously created instance alive.
         if ( ! mpWeakInstance.expired())
-            mpInstance = ::boost::shared_ptr<CacheConfiguration>(mpWeakInstance);
-        if (mpInstance.get() == NULL)
+            rInstancePtr = ::boost::shared_ptr<CacheConfiguration>(mpWeakInstance);
+        if (rInstancePtr.get() == NULL)
         {
             // We have to create a new instance.
-            mpInstance.reset(new CacheConfiguration());
-            mpWeakInstance = mpInstance;
+            rInstancePtr.reset(new CacheConfiguration());
+            mpWeakInstance = rInstancePtr;
             // Prepare to release this instance in the near future.
             maReleaseTimer.SetTimeoutHdl(
-                LINK(mpInstance.get(),CacheConfiguration,TimerCallback));
+                LINK(rInstancePtr.get(),CacheConfiguration,TimerCallback));
             maReleaseTimer.SetTimeout(5000 /* 5s */);
             maReleaseTimer.Start();
         }
     }
-    return mpInstance;
+    return rInstancePtr;
 }
 
 
@@ -167,8 +173,9 @@ Any CacheConfiguration::GetValue (const ::rtl::OUString& rName)
 
 IMPL_LINK(CacheConfiguration,TimerCallback, Timer*,EMPTYARG)
 {
+    CacheConfigSharedPtr &rInstancePtr = theInstance::get();
     // Release out reference to the instance.
-    mpInstance.reset();
+    rInstancePtr.reset();
     return 0;
 }
 

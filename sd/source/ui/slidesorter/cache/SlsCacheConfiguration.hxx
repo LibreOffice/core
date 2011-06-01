@@ -56,7 +56,6 @@ public:
     ::com::sun::star::uno::Any GetValue (const ::rtl::OUString& rName);
 
 private:
-    static ::boost::shared_ptr<CacheConfiguration> mpInstance;
     /** When a caller holds a reference after we have released ours we use
         this weak pointer to avoid creating a new instance.
     */
