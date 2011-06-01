@@ -295,6 +295,8 @@ protected:
     using cppu::OPropertySetHelper::getFastPropertyValue;
 
 private:
+    const ::com::sun::star::uno::Type m_aSelectionTypeIdentifier;
+
     /** This pointer to the ViewShellBase can be NULL (after a call to
         ReleaseViewShellBase()).
     */

@@ -66,12 +66,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 
-namespace {
-static const ::com::sun::star::uno::Type saSelectionTypeIdentifier (
-    ::getCppuType( (Reference<view::XSelectionChangeListener > *)0 ));
-
-} // end of anonymous namespace
-
 namespace sd {
 
 DrawController::DrawController (ViewShellBase& rBase) throw()
@@ -81,6 +75,8 @@ DrawController::DrawController (ViewShellBase& rBase) throw()
           OMultiTypeInterfaceContainerHelper,
           OMultiTypeInterfaceContainerHelper::keyType>& >(
               BroadcastHelperOwner::maBroadcastHelper)),
+      m_aSelectionTypeIdentifier(
+        ::getCppuType( (Reference<view::XSelectionChangeListener > *)0 )),
       mpBase(&rBase),
       maLastVisArea(),
       mpCurrentPage(NULL),
@@ -316,7 +312,7 @@ void SAL_CALL DrawController::addSelectionChangeListener(
     if( mbDisposing )
         throw lang::DisposedException();
 
-    BroadcastHelperOwner::maBroadcastHelper.addListener (saSelectionTypeIdentifier, xListener);
+    BroadcastHelperOwner::maBroadcastHelper.addListener (m_aSelectionTypeIdentifier, xListener);
 }
 
 
@@ -329,7 +325,7 @@ void SAL_CALL DrawController::removeSelectionChangeListener(
     if (rBHelper.bDisposed)
         throw lang::DisposedException();
 
-    BroadcastHelperOwner::maBroadcastHelper.removeListener (saSelectionTypeIdentifier, xListener);
+    BroadcastHelperOwner::maBroadcastHelper.removeListener (m_aSelectionTypeIdentifier, xListener);
 }
 
 
@@ -448,7 +444,7 @@ void DrawController::FireVisAreaChanged (const Rectangle& rVisArea) throw()
 void DrawController::FireSelectionChangeListener() throw()
 {
     OInterfaceContainerHelper * pLC = BroadcastHelperOwner::maBroadcastHelper.getContainer(
-        saSelectionTypeIdentifier);
+        m_aSelectionTypeIdentifier);
     if( pLC )
     {
         Reference< XInterface > xSource( (XWeak*)this );
