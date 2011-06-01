@@ -2161,14 +2161,9 @@ void SAL_CALL OReportDefinition::setMimeType( const ::rtl::OUString& _mimetype )
 // -----------------------------------------------------------------------------
 uno::Sequence< ::rtl::OUString > SAL_CALL OReportDefinition::getAvailableMimeTypes(  ) throw (lang::DisposedException, uno::Exception, uno::RuntimeException)
 {
-    static uno::Sequence< ::rtl::OUString > s_aList;
-    if ( !s_aList.hasElements() )
-    {
-        s_aList.realloc(2);
-        s_aList[0] = MIMETYPE_OASIS_OPENDOCUMENT_TEXT;
-        s_aList[1] = MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET;
-    }
-
+    uno::Sequence< ::rtl::OUString > s_aList(2);
+    s_aList[0] = MIMETYPE_OASIS_OPENDOCUMENT_TEXT;
+    s_aList[1] = MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET;
     return s_aList;
 }
 // -----------------------------------------------------------------------------
