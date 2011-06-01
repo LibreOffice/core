@@ -330,6 +330,15 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().aSprms[NS_ooxml::LN_EG_RPrBase_vertAlign] = pValue;
             }
             break;
+        case RTF_HORZVERT:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(true));
+                m_aStates.top().aAttributes[NS_ooxml::LN_CT_EastAsianLayout_vert] = pValue;
+                if (nParam)
+                    // rotate fits to a single line
+                    m_aStates.top().aAttributes[NS_ooxml::LN_CT_EastAsianLayout_vertCompress] = pValue;
+            }
+            break;
         case RTF_AF:
         case RTF_FS:
         case RTF_AFS:
