@@ -63,33 +63,14 @@ static rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
 
 static Sequence< OUString > ns_getSupportedServiceNames()
 {
-    static Sequence < OUString > *pNames = 0;
-    if( ! pNames )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( !pNames )
-        {
-            static Sequence< OUString > seqNames(1);
-            seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME));
-            pNames = &seqNames;
-        }
-    }
-    return *pNames;
+    Sequence< OUString > seqNames(1);
+    seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME));
+    return seqNames;
 }
 
 static OUString ns_getImplementationName()
 {
-    static OUString *pImplName = 0;
-    if( ! pImplName )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( ! pImplName )
-        {
-            static OUString implName( RTL_CONSTASCII_USTRINGPARAM( IMPLNAME ) );
-            pImplName = &implName;
-        }
-    }
-    return *pImplName;
+    return OUString(RTL_CONSTASCII_USTRINGPARAM(IMPLNAME));
 }
 
 struct equalOWString_Impl

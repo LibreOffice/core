@@ -86,37 +86,18 @@ static Mutex & getInitMutex();
 
 static Sequence< OUString > loader_getSupportedServiceNames()
 {
-    static Sequence < OUString > *pNames = 0;
-    if( ! pNames )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( !pNames )
-        {
-            static Sequence< OUString > seqNames(2);
-            seqNames.getArray()[0] = OUString(
-                RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.loader.Java") );
-            seqNames.getArray()[1] = OUString(
-                RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.loader.Java2") );
-            pNames = &seqNames;
-        }
-    }
-    return *pNames;
+    Sequence< OUString > seqNames(2);
+    seqNames.getArray()[0] = OUString(
+        RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.loader.Java") );
+    seqNames.getArray()[1] = OUString(
+        RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.loader.Java2") );
+    return seqNames;
 }
 
 static OUString loader_getImplementationName()
 {
-    static OUString *pImplName = 0;
-    if( ! pImplName )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( ! pImplName )
-        {
-            static OUString implName(
-                RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.stoc.JavaComponentLoader" ) );
-            pImplName = &implName;
-        }
-    }
-    return *pImplName;
+    return OUString(
+        RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.stoc.JavaComponentLoader" ) );
 }
 
 class JavaComponentLoader : public WeakImplHelper2<XImplementationLoader, XServiceInfo>

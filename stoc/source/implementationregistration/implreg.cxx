@@ -141,18 +141,9 @@ namespace stoc_bootstrap
 {
 Sequence< OUString > impreg_getSupportedServiceNames()
 {
-    static Sequence < OUString > *pNames = 0;
-    if( ! pNames )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( !pNames )
-        {
-            static Sequence< OUString > seqNames(1);
-            seqNames.getArray()[0] = stoc_impreg::spool().sServiceName;
-            pNames = &seqNames;
-        }
-    }
-    return *pNames;
+    Sequence< OUString > seqNames(1);
+    seqNames.getArray()[0] = stoc_impreg::spool().sServiceName;
+    return seqNames;
 }
 
 OUString impreg_getImplementationName()

@@ -1043,9 +1043,9 @@ Reference< XInterface > SAL_CALL ac_create(
 //--------------------------------------------------------------------------------------------------
 Sequence< OUString > ac_getSupportedServiceNames() SAL_THROW( () )
 {
-    static OUString s_serviceName = OUSTR(SERVICE_NAME);
-    static Sequence< OUString > s_serviceNames = Sequence< OUString >( &s_serviceName, 1 );
-    return s_serviceNames;
+    Sequence< OUString > aSNS( 1 );
+    aSNS.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICE_NAME));
+    return aSNS;
 }
 //--------------------------------------------------------------------------------------------------
 OUString ac_getImplementationName() SAL_THROW( () )

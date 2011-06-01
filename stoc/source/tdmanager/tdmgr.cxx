@@ -86,33 +86,14 @@ namespace stoc_bootstrap
 {
 Sequence< OUString > SAL_CALL tdmgr_getSupportedServiceNames()
 {
-    static Sequence < OUString > *pNames = 0;
-    if( ! pNames )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( !pNames )
-        {
-            static Sequence< OUString > seqNames(1);
-            seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME));
-            pNames = &seqNames;
-        }
-    }
-    return *pNames;
+    Sequence< OUString > seqNames(1);
+    seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME));
+    return seqNames;
 }
 
 OUString SAL_CALL tdmgr_getImplementationName()
 {
-    static OUString *pImplName = 0;
-    if( ! pImplName )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( ! pImplName )
-        {
-            static OUString implName( RTL_CONSTASCII_USTRINGPARAM( IMPLNAME ) );
-            pImplName = &implName;
-        }
-    }
-    return *pImplName;
+    return OUString(RTL_CONSTASCII_USTRINGPARAM(IMPLNAME));
 }
 }
 
