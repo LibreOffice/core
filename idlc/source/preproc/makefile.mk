@@ -30,6 +30,7 @@ PRJ=..$/..
 PRJNAME=idlc
 TARGET=idlcpp
 TARGETTYPE=CUI
+TARGETPLATFORM=BUILD
 
 # --- Settings -----------------------------------------------------
 
