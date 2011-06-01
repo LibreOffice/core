@@ -295,6 +295,18 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aDefaultState.aSprms[NS_sprm::LN_CRgFtc0] = pValue;
             }
             break;
+        case RTF_DEFLANG:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(nParam));
+                m_aDefaultState.aSprms[NS_sprm::LN_CRgLid0] = pValue;
+            }
+            break;
+        case RTF_ADEFLANG:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(nParam));
+                m_aDefaultState.aSprms[NS_sprm::LN_CLidBi] = pValue;
+            }
+            break;
         default:
             OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             break;
