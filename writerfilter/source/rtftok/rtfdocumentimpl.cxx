@@ -264,13 +264,13 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTF_SBASEDON:
             {
-                RTFValue::Pointer_t pValue(new RTFValue(getColorTable(nParam)));
+                RTFValue::Pointer_t pValue(new RTFValue(nParam));
                 m_aStates.top().aAttributes[NS_rtf::LN_ISTDBASE] = pValue;
             }
             break;
         case RTF_SNEXT:
             {
-                RTFValue::Pointer_t pValue(new RTFValue(getColorTable(nParam)));
+                RTFValue::Pointer_t pValue(new RTFValue(nParam));
                 m_aStates.top().aAttributes[NS_rtf::LN_ISTDNEXT] = pValue;
             }
             break;
