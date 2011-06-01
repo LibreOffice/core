@@ -17,6 +17,9 @@ AutoReqProv: no
 %define _binary_filedigest_algorithm 1
 %define _binary_payload w9.gzdio
 
+%define gnome_dir /usr
+%define gnome_mime_theme hicolor
+
 %description
 %productname desktop integration for desktop-environments that implement 
 the menu- and mime-related specifications from http://www.freedesktop.org
@@ -39,7 +42,7 @@ umask 0000
 # set parameters for the create_tree script 
 export DESTDIR=$RPM_BUILD_ROOT
 export KDEMAINDIR=/usr
-export GNOMEDIR=/usr
+export GNOMEDIR=%{gnome_dir}
 
 ./create_tree.sh
 
@@ -108,49 +111,49 @@ fi
 # not strictly freedesktop-stuff but there is no common naming scheme yet.
 # One proposal is "mime-application:vnd.oasis.opendocument.spreadsheet.png"
 # for e.g. application/vnd.oasis.opendocument.spreadsheet
-link_target_root="/opt/gnome/share/icons/hicolor"
+link_target_root="%{gnome_dir}/share/icons/%{gnome_mime_theme}"
 
 if [ ! -d "${link_target_root}" ]
 then
-  link_target_root="/opt/gnome/share/icons/gnome"
+  link_target_root="%{gnome_dir}/share/icons/gnome"
 fi
 
 for subdir in `cd ${link_target_root}; ls -d *`
 do
-  link_dir="/opt/gnome/share/icons/hicolor/$subdir/mimetypes"
-  link_target_dir="../../../gnome/$subdir/mimetypes"
-
-  test -d ${link_dir}/${link_target_dir} || continue;
+  link_dir="%{gnome_dir}/share/icons/%{gnome_mime_theme}/$subdir/mimetypes"
 
   if [ ! -d "${link_dir}" ]
   then
     mkdir -p "${link_dir}"
+    link_target_dir="../../../gnome/$subdir/mimetypes/"
   fi
 
-  icon=%iconprefix-drawing.png;                     test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.draw.png
-  icon=%iconprefix-drawing-template.png;            test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.draw.template.png
-  icon=%iconprefix-formula.png;                     test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.math.png
-  icon=%iconprefix-master-document.png;             test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.writer.global.png
-  icon=%iconprefix-oasis-database.png;              test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.base.png
-  icon=%iconprefix-oasis-database.png;              test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.database.png
-  icon=%iconprefix-oasis-drawing.png;               test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.graphics.png
-  icon=%iconprefix-oasis-drawing-template.png;      test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.graphics-template.png
-  icon=%iconprefix-oasis-formula.png;               test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.formula.png
-  icon=%iconprefix-oasis-master-document.png;       test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.text-master.png
-  icon=%iconprefix-oasis-presentation.png;          test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.presentation.png
-  icon=%iconprefix-oasis-presentation-template.png; test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.presentation-template.png
-  icon=%iconprefix-oasis-spreadsheet.png;           test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.spreadsheet.png
-  icon=%iconprefix-oasis-spreadsheet-template.png;  test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.spreadsheet-template.png
-  icon=%iconprefix-oasis-text.png;                  test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.text.png
-  icon=%iconprefix-oasis-text-template.png;         test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.text-template.png
-  icon=%iconprefix-oasis-web-template.png;          test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.text-web.png
-  icon=%iconprefix-presentation.png;                test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.impress.png
-  icon=%iconprefix-presentation-template.png;       test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.impress.template.png
-  icon=%iconprefix-spreadsheet.png;                 test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.calc.png
-  icon=%iconprefix-spreadsheet-template.png;        test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.calc.template.png
-  icon=%iconprefix-text.png;                        test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.writer.png
-  icon=%iconprefix-text-template.png;               test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.writer.template.png
-  icon=%iconprefix-extension.png;                   test -f ${link_dir}/${link_target_dir}/$icon && ln -sf ${link_target_dir}/${icon} ${link_dir}/gnome-mime-application-vnd.openofficeorg.extension.png
+  test -d ${link_dir}/${link_target_dir} || continue
+
+  icon=${link_target_dir}%iconprefix-drawing.png;                     test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.draw.png
+  icon=${link_target_dir}%iconprefix-drawing-template.png;            test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.draw.template.png
+  icon=${link_target_dir}%iconprefix-formula.png;                     test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.math.png
+  icon=${link_target_dir}%iconprefix-master-document.png;             test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.writer.global.png
+  icon=${link_target_dir}%iconprefix-oasis-database.png;              test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.base.png
+  icon=${link_target_dir}%iconprefix-oasis-database.png;              test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.database.png
+  icon=${link_target_dir}%iconprefix-oasis-drawing.png;               test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.graphics.png
+  icon=${link_target_dir}%iconprefix-oasis-drawing-template.png;      test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.graphics-template.png
+  icon=${link_target_dir}%iconprefix-oasis-formula.png;               test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.formula.png
+  icon=${link_target_dir}%iconprefix-oasis-master-document.png;       test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.text-master.png
+  icon=${link_target_dir}%iconprefix-oasis-presentation.png;          test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.presentation.png
+  icon=${link_target_dir}%iconprefix-oasis-presentation-template.png; test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.presentation-template.png
+  icon=${link_target_dir}%iconprefix-oasis-spreadsheet.png;           test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.spreadsheet.png
+  icon=${link_target_dir}%iconprefix-oasis-spreadsheet-template.png;  test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.spreadsheet-template.png
+  icon=${link_target_dir}%iconprefix-oasis-text.png;                  test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.text.png
+  icon=${link_target_dir}%iconprefix-oasis-text-template.png;         test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.text-template.png
+  icon=${link_target_dir}%iconprefix-oasis-web-template.png;          test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.text-web.png
+  icon=${link_target_dir}%iconprefix-presentation.png;                test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.impress.png
+  icon=${link_target_dir}%iconprefix-presentation-template.png;       test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.impress.template.png
+  icon=${link_target_dir}%iconprefix-spreadsheet.png;                 test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.calc.png
+  icon=${link_target_dir}%iconprefix-spreadsheet-template.png;        test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.calc.template.png
+  icon=${link_target_dir}%iconprefix-text.png;                        test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.writer.png
+  icon=${link_target_dir}%iconprefix-text-template.png;               test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.writer.template.png
+  icon=${link_target_dir}%iconprefix-extension.png;                   test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.openofficeorg.extension.png
 done
 
 #run always
