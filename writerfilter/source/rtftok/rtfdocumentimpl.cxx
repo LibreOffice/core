@@ -230,8 +230,20 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             {
                 RTFValue::Pointer_t pValue(new RTFValue(nParam));
                 m_aStates.top().aSprms[NS_sprm::LN_CRgFtc1] = pValue;
-                break;
             }
+            break;
+        case RTF_FS:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(nParam));
+                m_aStates.top().aSprms[NS_sprm::LN_CHps] = pValue;
+            }
+            break;
+        case RTF_AFS:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(nParam));
+                m_aStates.top().aSprms[NS_sprm::LN_CHpsBi] = pValue;
+            }
+            break;
         case RTF_FPRQ:
             {
                 RTFValue::Pointer_t pValue(new RTFValue(nParam));
