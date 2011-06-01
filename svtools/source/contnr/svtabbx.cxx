@@ -1126,8 +1126,8 @@ sal_Bool SvHeaderTabListBox::ConvertPointToColumnHeader( sal_uInt16&, const Poin
 
     if( _eType == ::svt::BBTYPE_TABLECELL && _nPos != -1 )
     {
-        static const String sVar1( RTL_CONSTASCII_USTRINGPARAM( "%1" ) );
-        static const String sVar2( RTL_CONSTASCII_USTRINGPARAM( "%2" ) );
+        const String sVar1( RTL_CONSTASCII_USTRINGPARAM( "%1" ) );
+        const String sVar2( RTL_CONSTASCII_USTRINGPARAM( "%2" ) );
 
         sal_uInt16 nColumnCount = GetColumnCount();
         if (nColumnCount > 0)

@@ -1164,8 +1164,8 @@ sal_Bool ViewTabListBox_Impl::DoubleClickHdl()
             SvtContentEntry* pData = (SvtContentEntry*)pEntry->GetUserData();
             if ( pData )
             {
-                static const String sVar1( RTL_CONSTASCII_USTRINGPARAM( "%1" ) );
-                static const String sVar2( RTL_CONSTASCII_USTRINGPARAM( "%2" ) );
+                const String sVar1( RTL_CONSTASCII_USTRINGPARAM( "%1" ) );
+                const String sVar2( RTL_CONSTASCII_USTRINGPARAM( "%2" ) );
                 String aText( msAccessibleDescText );
                 aText.SearchAndReplace( sVar1, pData->mbIsFolder ? msFolder : msFile );
                 aText.SearchAndReplace( sVar2, pData->maURL );
