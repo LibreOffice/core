@@ -178,17 +178,12 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
 uno::Sequence< ::rtl::OUString > SAL_CALL BubbleChartType::getSupportedMandatoryRoles()
     throw (uno::RuntimeException)
 {
-    static uno::Sequence< ::rtl::OUString > aMandRolesSeq;
-
-    if( aMandRolesSeq.getLength() == 0 )
-    {
-        aMandRolesSeq.realloc( 4 );
-        aMandRolesSeq[0] = C2U( "label" );
-        aMandRolesSeq[1] = C2U( "values-x" );
-        aMandRolesSeq[2] = C2U( "values-y" );
-        aMandRolesSeq[3] = C2U( "values-size" );
-    }
-
+    uno::Sequence< ::rtl::OUString > aMandRolesSeq(4);
+    aMandRolesSeq.realloc( 4 );
+    aMandRolesSeq[0] = C2U( "label" );
+    aMandRolesSeq[1] = C2U( "values-x" );
+    aMandRolesSeq[2] = C2U( "values-y" );
+    aMandRolesSeq[3] = C2U( "values-size" );
     return aMandRolesSeq;
 }
 

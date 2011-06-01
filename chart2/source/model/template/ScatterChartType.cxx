@@ -228,25 +228,17 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
 uno::Sequence< ::rtl::OUString > SAL_CALL ScatterChartType::getSupportedMandatoryRoles()
     throw (uno::RuntimeException)
 {
-    static uno::Sequence< ::rtl::OUString > aMandRolesSeq;
-
-    if( aMandRolesSeq.getLength() == 0 )
-    {
-        aMandRolesSeq.realloc( 3 );
-        aMandRolesSeq[0] = C2U( "label" );
-        aMandRolesSeq[1] = C2U( "values-x" );
-        aMandRolesSeq[2] = C2U( "values-y" );
-    }
-
+    uno::Sequence< ::rtl::OUString > aMandRolesSeq(3);
+    aMandRolesSeq[0] = C2U( "label" );
+    aMandRolesSeq[1] = C2U( "values-x" );
+    aMandRolesSeq[2] = C2U( "values-y" );
     return aMandRolesSeq;
 }
 
 uno::Sequence< ::rtl::OUString > SAL_CALL ScatterChartType::getSupportedOptionalRoles()
     throw (uno::RuntimeException)
 {
-    static uno::Sequence< ::rtl::OUString > aOptRolesSeq;
-
-    return aOptRolesSeq;
+    return uno::Sequence< ::rtl::OUString >();
 }
 
 

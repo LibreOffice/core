@@ -233,8 +233,7 @@ Sequence< OUString > SAL_CALL UncachedDataSequence::generateLabel( chart2::data:
     throw (uno::RuntimeException)
 {
     // auto-generated label is an empty string
-    static const Sequence< OUString > aOneEmptyString( 1 );
-    return aOneEmptyString;
+    return Sequence< OUString >(1);
 }
 
 ::sal_Int32 SAL_CALL UncachedDataSequence::getNumberFormatKeyByIndex( ::sal_Int32 )

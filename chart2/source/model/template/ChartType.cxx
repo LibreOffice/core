@@ -122,24 +122,16 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
 Sequence< OUString > SAL_CALL ChartType::getSupportedMandatoryRoles()
     throw (uno::RuntimeException)
 {
-    static Sequence< OUString > aDefaultSeq;
-
-    if( aDefaultSeq.getLength() == 0 )
-    {
-        aDefaultSeq.realloc( 2 );
-        aDefaultSeq[0] = C2U( "label" );
-        aDefaultSeq[1] = C2U( "values-y" );
-    }
-
+    Sequence< OUString > aDefaultSeq(2);
+    aDefaultSeq[0] = C2U( "label" );
+    aDefaultSeq[1] = C2U( "values-y" );
     return aDefaultSeq;
 }
 
 Sequence< OUString > SAL_CALL ChartType::getSupportedOptionalRoles()
     throw (uno::RuntimeException)
 {
-    static Sequence< OUString > aDefaultOptRolesSeq;
-
-    return aDefaultOptRolesSeq;
+    return Sequence< OUString >();
 }
 
 OUString SAL_CALL ChartType::getRoleOfSequenceForSeriesLabel()
