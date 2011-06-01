@@ -235,7 +235,7 @@ sal_Bool SwWrtShell::_BwdSentence()
         Pop();
         return 1;
     }
-    if( !GoPrevSentence()  && !IsSttPara() )
+    if( !GoStartSentence()  && !IsSttPara() )
             // nicht gefunden --> an den Absatz Anfang
         SwCrsrShell::MovePara( fnParaCurr, fnParaStart );
     ClearMark();
