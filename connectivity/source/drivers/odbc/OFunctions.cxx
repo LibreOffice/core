@@ -52,17 +52,11 @@ T3SQLSetEnvAttr pODBC3SQLSetEnvAttr;
 T3SQLGetEnvAttr pODBC3SQLGetEnvAttr;
 T3SQLSetStmtAttr pODBC3SQLSetStmtAttr;
 T3SQLGetStmtAttr pODBC3SQLGetStmtAttr;
-//T3SQLSetDescField pODBC3SQLSetDescField;
-//T3SQLGetDescField pODBC3SQLGetDescField;
-//T3SQLGetDescRec pODBC3SQLGetDescRec;
-//T3SQLSetDescRec pODBC3SQLSetDescRec;
 T3SQLPrepare pODBC3SQLPrepare;
 T3SQLBindParameter pODBC3SQLBindParameter;
-//T3SQLGetCursorName pODBC3SQLGetCursorName;
 T3SQLSetCursorName pODBC3SQLSetCursorName;
 T3SQLExecute pODBC3SQLExecute;
 T3SQLExecDirect pODBC3SQLExecDirect;
-//T3SQLNativeSql pODBC3SQLNativeSql;
 T3SQLDescribeParam pODBC3SQLDescribeParam;
 T3SQLNumParams pODBC3SQLNumParams;
 T3SQLParamData pODBC3SQLParamData;
@@ -78,7 +72,6 @@ T3SQLGetData pODBC3SQLGetData;
 T3SQLSetPos pODBC3SQLSetPos;
 T3SQLBulkOperations pODBC3SQLBulkOperations;
 T3SQLMoreResults pODBC3SQLMoreResults;
-//T3SQLGetDiagField pODBC3SQLGetDiagField;
 T3SQLGetDiagRec pODBC3SQLGetDiagRec;
 T3SQLColumnPrivileges pODBC3SQLColumnPrivileges;
 T3SQLColumns pODBC3SQLColumns;
@@ -166,28 +159,16 @@ sal_Bool LoadFunctions(oslModule pODBCso)
         return sal_False;
     if( ( pODBC3SQLGetStmtAttr  =   (T3SQLGetStmtAttr)osl_getFunctionSymbol(pODBCso, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQLGetStmtAttr")).pData )) == NULL )
         return sal_False;
-    /*if( ( pODBC3SQLSetDescField   =   (T3SQLSetDescField)osl_getFunctionSymbol(pODBCso, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQLSetDescField")).pData )) == NULL )
-        return sal_False;
-    if( ( pODBC3SQLGetDescField =   (T3SQLGetDescField)osl_getFunctionSymbol(pODBCso, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQLGetDescField")).pData )) == NULL )
-        return sal_False;*/
-    /*if( ( pODBC3SQLGetDescRec =   (T3SQLGetDescRec)osl_getFunctionSymbol(pODBCso, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQLGetDescRec")).pData )) == NULL )
-        return sal_False;
-    if( ( pODBC3SQLSetDescRec   =   (T3SQLSetDescRec)osl_getFunctionSymbol(pODBCso, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQLSetDescRec")).pData )) == NULL )
-        return sal_False;*/
     if( ( pODBC3SQLPrepare      =   (T3SQLPrepare)osl_getFunctionSymbol(pODBCso, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQLPrepare")).pData )) == NULL )
         return sal_False;
     if( ( pODBC3SQLBindParameter =  (T3SQLBindParameter)osl_getFunctionSymbol(pODBCso, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQLBindParameter")).pData )) == NULL )
         return sal_False;
-//  if( ( pODBC3SQLGetCursorName =  (T3SQLGetCursorName)osl_getFunctionSymbol(pODBCso, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQLGetCursorName")).pData )) == NULL )
-//      return sal_False;
     if( ( pODBC3SQLSetCursorName =  (T3SQLSetCursorName)osl_getFunctionSymbol(pODBCso, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQLSetCursorName")).pData )) == NULL )
         return sal_False;
     if( ( pODBC3SQLExecute      =   (T3SQLExecute)osl_getFunctionSymbol(pODBCso, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQLExecute")).pData )) == NULL )
         return sal_False;
     if( ( pODBC3SQLExecDirect   =   (T3SQLExecDirect)osl_getFunctionSymbol(pODBCso, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQLExecDirect")).pData )) == NULL )
         return sal_False;
-    /*if( ( pODBC3SQLNativeSql      =   (T3SQLNativeSql)osl_getFunctionSymbol(pODBCso, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQLNativeSql")).pData )) == NULL )
-        return sal_False;*/
     if( ( pODBC3SQLDescribeParam =   (T3SQLDescribeParam)osl_getFunctionSymbol(pODBCso, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQLDescribeParam")).pData )) == NULL )
         return sal_False;
     if( ( pODBC3SQLNumParams        =   (T3SQLNumParams)osl_getFunctionSymbol(pODBCso, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQLNumParams")).pData )) == NULL )
@@ -218,8 +199,6 @@ sal_Bool LoadFunctions(oslModule pODBCso)
         return sal_False;
     if( ( pODBC3SQLMoreResults  =   (T3SQLMoreResults)osl_getFunctionSymbol(pODBCso, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQLMoreResults")).pData )) == NULL )
         return sal_False;
-    /*if( ( pODBC3SQLGetDiagField   =   (T3SQLGetDiagField)osl_getFunctionSymbol(pODBCso, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQLGetDiagField")).pData )) == NULL )
-        return sal_False;*/
     if( ( pODBC3SQLGetDiagRec   =   (T3SQLGetDiagRec)osl_getFunctionSymbol(pODBCso, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQLGetDiagRec")).pData )) == NULL )
         return sal_False;
     if( ( pODBC3SQLColumnPrivileges = (T3SQLColumnPrivileges)osl_getFunctionSymbol(pODBCso, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQLColumnPrivileges")).pData )) == NULL )

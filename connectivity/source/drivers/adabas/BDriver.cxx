@@ -94,17 +94,11 @@ namespace connectivity
     extern T3SQLGetEnvAttr pODBC3SQLGetEnvAttr;
     extern T3SQLSetStmtAttr pODBC3SQLSetStmtAttr;
     extern T3SQLGetStmtAttr pODBC3SQLGetStmtAttr;
-    //extern T3SQLSetDescField pODBC3SQLSetDescField;
-    //extern T3SQLGetDescField pODBC3SQLGetDescField;
-    //extern T3SQLGetDescRec pODBC3SQLGetDescRec;
-    //extern T3SQLSetDescRec pODBC3SQLSetDescRec;
     extern T3SQLPrepare pODBC3SQLPrepare;
     extern T3SQLBindParameter pODBC3SQLBindParameter;
-    //extern T3SQLGetCursorName pODBC3SQLGetCursorName;
     extern T3SQLSetCursorName pODBC3SQLSetCursorName;
     extern T3SQLExecute pODBC3SQLExecute;
     extern T3SQLExecDirect pODBC3SQLExecDirect;
-    //extern T3SQLNativeSql pODBC3SQLNativeSql;
     extern T3SQLDescribeParam pODBC3SQLDescribeParam;
     extern T3SQLNumParams pODBC3SQLNumParams;
     extern T3SQLParamData pODBC3SQLParamData;
@@ -120,7 +114,6 @@ namespace connectivity
     extern T3SQLSetPos pODBC3SQLSetPos;
     extern T3SQLBulkOperations pODBC3SQLBulkOperations;
     extern T3SQLMoreResults pODBC3SQLMoreResults;
-    //extern T3SQLGetDiagField pODBC3SQLGetDiagField;
     extern T3SQLGetDiagRec pODBC3SQLGetDiagRec;
     extern T3SQLColumnPrivileges pODBC3SQLColumnPrivileges;
     extern T3SQLColumns pODBC3SQLColumns;
@@ -945,12 +938,6 @@ void ODriver::createDb( const TDatabaseStruct& _aInfo)
     //  %m_sDbRoot%\bin\xutil -d %_aInfo.sDBName% -u %CONUSR%,%CONPWD% -b %INITCMD%
     ::rtl::OUString aBatch2 =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-b "));
 
-//  if(!bBsp && INITCMD.Len() >= 40)
-//  {
-//      DirEntry aTmp(INITCMD);
-//      aTmp.CopyTo(aInitFile, FSYS_ACTION_COPYFILE);
-//      INITCMD = aInitFile.GetFull();
-//  }
     // generate the init file for the database
     String sInitFile = getDatabaseInitFile(_aInfo);
 
