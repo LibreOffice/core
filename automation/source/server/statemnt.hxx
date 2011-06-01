@@ -330,6 +330,12 @@ public:
     StatementUnoSlot(SCmdStream *pIn);
 };
 
+union munge
+{
+    comm_UINT32 nLNr1;
+    Window *pWindow;
+};
+
 class StatementCommand : public StatementList   // Befehl ausf�hren (wintree, resetaplication ...)
 {
     friend class ImplRemoteControl;
@@ -337,7 +343,7 @@ protected:
     sal_uInt16 nMethodId;
     sal_uInt16 nParams;
     comm_UINT16 nNr1,nNr2,nNr3,nNr4;
-    comm_UINT32 nLNr1;
+    munge nLNr1_and_Pointer;
     String aString1,aString2;
     sal_Bool bBool1,bBool2;
 

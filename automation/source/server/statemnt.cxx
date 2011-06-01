@@ -674,12 +674,13 @@ StatementCommand::StatementCommand( StatementList *pAfterThis, sal_uInt16 Method
 , nNr2(0)
 , nNr3(0)
 , nNr4(0)
-, nLNr1(0)
 , aString1()
 , aString2()
 , bBool1(sal_False)
 , bBool2(sal_False)
 {
+    nLNr1_and_Pointer.pWindow = 0;
+
     QueStatement( pAfterThis );
 
 #if OSL_DEBUG_LEVEL > 1
@@ -708,12 +709,13 @@ StatementCommand::StatementCommand( SCmdStream *pCmdIn )
 , nNr2(0)
 , nNr3(0)
 , nNr4(0)
-, nLNr1(0)
 , aString1()
 , aString2()
 , bBool1(sal_False)
 , bBool2(sal_False)
 {
+    nLNr1_and_Pointer.pWindow = 0;
+
     QueStatement( NULL );
     pCmdIn->Read( nMethodId );
     pCmdIn->Read( nParams );
@@ -722,7 +724,7 @@ StatementCommand::StatementCommand( SCmdStream *pCmdIn )
     if( nParams & PARAM_UINT16_2 )  pCmdIn->Read( nNr2 );
     if( nParams & PARAM_UINT16_3 )  pCmdIn->Read( nNr3 );
     if( nParams & PARAM_UINT16_4 )  pCmdIn->Read( nNr4 );
-    if( nParams & PARAM_UINT32_1 )  pCmdIn->Read( nLNr1 );
+    if( nParams & PARAM_UINT32_1 )  pCmdIn->Read( nLNr1_and_Pointer.nLNr1 );
     if( nParams & PARAM_STR_1 )     pCmdIn->Read( aString1 );
     if( nParams & PARAM_STR_2 )     pCmdIn->Read( aString2 );
     if( nParams & PARAM_BOOL_1 )    pCmdIn->Read( bBool1 );
@@ -1368,18 +1370,18 @@ sal_Bool StatementCommand::DisplayHID()
         if ( !(nParams & PARAM_UINT32_1) )
         {
             if( GetTTSettings()->pDisplayHidWin )   // Nichts ver�ndern
-                nLNr1 = GetTTSettings()->pDisplayHidWin->GetConfig();
+                nLNr1_and_Pointer.nLNr1 = GetTTSettings()->pDisplayHidWin->GetConfig();
             else    // Beim ersten Aufruf wollen wir alles richtig einstellen
-                nLNr1 = DH_MODE_KURZNAME | DH_MODE_LANGNAME;
+                nLNr1_and_Pointer.nLNr1 = DH_MODE_KURZNAME | DH_MODE_LANGNAME;
 
             if( ((nParams & PARAM_BOOL_1) && bBool1) )
-                nLNr1 |= DH_MODE_SEND_DATA;
+                nLNr1_and_Pointer.nLNr1 |= DH_MODE_SEND_DATA;
             else
-                nLNr1 &= ( ~DH_MODE_SEND_DATA );
+                nLNr1_and_Pointer.nLNr1 &= ( ~DH_MODE_SEND_DATA );
         }
 
         if ( GetTTSettings()->pDisplayHidWin )
-            GetTTSettings()->pDisplayHidWin->SetConfig( nLNr1 );
+            GetTTSettings()->pDisplayHidWin->SetConfig( nLNr1_and_Pointer.nLNr1 );
     }
 
     if ( GetTTSettings()->pDisplayInstance && GetTTSettings()->pDisplayInstance != this )
@@ -1394,8 +1396,8 @@ sal_Bool StatementCommand::DisplayHID()
         GetTTSettings()->aOriginalCaption = GetTTSettings()->pDisplayHidWin->GetText();
         GetTTSettings()->pDisplayHidWin->Show();
         if ( bBool1 )
-            nLNr1 |= DH_MODE_SEND_DATA;
-        GetTTSettings()->pDisplayHidWin->SetConfig( nLNr1 );
+            nLNr1_and_Pointer.nLNr1 |= DH_MODE_SEND_DATA;
+        GetTTSettings()->pDisplayHidWin->SetConfig( nLNr1_and_Pointer.nLNr1 );
 
         GetTTSettings()->Old = NULL;
         GetTTSettings()->Act = NULL;
@@ -1996,7 +1998,7 @@ void TranslateWin::EnableTranslation()
 void StatementCommand::Translate()
 {
     // Es wurde eine initale UniqueId mitgegeben. Dann nur die dopelten Shortcuts liefern
-    if( (nParams & PARAM_STR_1) && nLNr1 )
+    if( (nParams & PARAM_STR_1) && nLNr1_and_Pointer.nLNr1 )
     {
         String aDouble;
         Window *pWin = SearchTree( Str2Id( aString1 ) ,sal_False );
@@ -2244,10 +2246,10 @@ sal_Bool StatementCommand::Execute()
         case RC_AppDelay:
             if ( !bBool1 )
             {
-                nLNr1 = Time().GetTime() + nNr1/10;
+                nLNr1_and_Pointer.nLNr1 = Time().GetTime() + nNr1/10;
                 bBool1 = sal_True;
             }
-            if ( Time().GetTime() < sal_Int32(nLNr1) )  // Aktuelle Zeit kleiner Endzeit
+            if ( Time().GetTime() < sal_Int32(nLNr1_and_Pointer.nLNr1) )    // Aktuelle Zeit kleiner Endzeit
                 return sal_False;
             break;
         case RC_DisplayHid:
@@ -2261,7 +2263,7 @@ sal_Bool StatementCommand::Execute()
                     nRetryCount = 150;      // das sollte reichen.
                     bBool1 = sal_True;          // Nur beim ersten mal!
                     nNr1 = 1;               // Welcher Button ist dran?
-                    nLNr1 = 0;              // Speichern des AppWin
+                    nLNr1_and_Pointer.pWindow = 0;              // Speichern des AppWin
                     aString1 = UniString(); // Liste der geschlossenen Fenster
 
                     // So da� nacher auch wieder alles auf Default steht
@@ -2396,9 +2398,9 @@ sal_Bool StatementCommand::Execute()
                                 ((DockingWindow*)pControl)->Close();
 
                                 // Eigentlich nur bei TaskWindows! Hoffen wir mal, da� keine anderen DockingWindows dazwischen hauen.
-                                if ( (Window*)nLNr1 != pControl )
+                                if ( nLNr1_and_Pointer.pWindow != pControl )
                                     nNr1 = 1;       // Zum durchprobieren der Buttons beim Schlie�en
-                                nLNr1 = (sal_uLong)pControl;
+                                nLNr1_and_Pointer.pWindow = pControl;
 
                                 return sal_False;
                             }
@@ -2425,9 +2427,9 @@ sal_Bool StatementCommand::Execute()
                                             pMenu->GetCloserHdl().Call( pMenu );
 
                                             // nur bei TaskWindows!
-                                            if ( (Window*)nLNr1 != pControl )
+                                            if ( nLNr1_and_Pointer.pWindow != pControl )
                                                 nNr1 = 1;       // Zum durchprobieren der Buttons beim Schlie�en
-                                            nLNr1 = (sal_uLong)pControl;
+                                            nLNr1_and_Pointer.pWindow = pControl;
 
                                             return sal_False;
                                         }
@@ -2441,9 +2443,9 @@ sal_Bool StatementCommand::Execute()
                                 ((SystemWindow*)pControl)->Close();
 
                                 // Eigentlich nur bei TaskWindows!
-                                if ( (Window*)nLNr1 != pControl )
+                                if ( nLNr1_and_Pointer.pWindow != pControl )
                                     nNr1 = 1;       // Zum durchprobieren der Buttons beim Schlie�en
-                                nLNr1 = (sal_uLong)pControl;
+                                nLNr1_and_Pointer.pWindow = pControl;
 
                                 return sal_False;
                             }
@@ -2454,10 +2456,10 @@ sal_Bool StatementCommand::Execute()
                 // E.g.: Floating toolbars on a Task which was hidden by another Task before
                 if ( !bBool2 )
                 {
-                    nLNr1 = Time().GetTime() + 100; // 100 = 1 Second
+                    nLNr1_and_Pointer.nLNr1 = Time().GetTime() + 100; // 100 = 1 Second
                     bBool2 = sal_True;
                 }
-                if ( Time().GetTime() < sal_Int32(nLNr1) )  // Aktuelle Zeit kleiner Endzeit
+                if ( Time().GetTime() < sal_Int32(nLNr1_and_Pointer.nLNr1) )    // Aktuelle Zeit kleiner Endzeit
                     return sal_False;
                 else
                     pRet->GenReturn ( RET_Value, nMethodId, aString1);
@@ -2469,7 +2471,7 @@ sal_Bool StatementCommand::Execute()
                     nNr1 = 1000;    // defaults to 1000 = 1 Sec.
                 if ( !bBool1 )
                 {
-                    nLNr1 = Time().GetTime() + nNr1/10;
+                    nLNr1_and_Pointer.nLNr1 = Time().GetTime() + nNr1/10;
                     bBool1 = sal_True;
                 }
 
@@ -2477,7 +2479,7 @@ sal_Bool StatementCommand::Execute()
                     pRet->GenReturn ( RET_Value, nMethodId, comm_UINT16(CONST_WSFinished) );
                 else
                 {
-                    if ( Time().GetTime() < sal_Int32(nLNr1) )  // Aktuelle Zeit kleiner Endzeit
+                    if ( Time().GetTime() < sal_Int32(nLNr1_and_Pointer.nLNr1) )    // Aktuelle Zeit kleiner Endzeit
                         return sal_False;
                     pRet->GenReturn ( RET_Value, nMethodId, comm_UINT16(CONST_WSTimeout) );
                 }
