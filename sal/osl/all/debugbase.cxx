@@ -51,8 +51,8 @@ namespace {
 typedef std::vector<rtl::OString, rtl::Allocator<rtl::OString> > OStringVec;
 
 struct StaticDebugBaseAddressFilter
-    : rtl::StaticWithInit<OStringVec const, StaticDebugBaseAddressFilter> {
-    OStringVec const operator()() const {
+    : rtl::StaticWithInit<OStringVec, StaticDebugBaseAddressFilter> {
+    OStringVec operator()() const {
         OStringVec vec;
         rtl_uString * pStr = 0;
         rtl::OUString const name(
