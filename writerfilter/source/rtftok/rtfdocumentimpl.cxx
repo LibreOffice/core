@@ -226,30 +226,6 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().nCurrentEncoding = getEncodingTable(nParam);
             }
             break;
-        case RTF_AF:
-            {
-                RTFValue::Pointer_t pValue(new RTFValue(nParam));
-                m_aStates.top().aSprms[NS_sprm::LN_CRgFtc1] = pValue;
-            }
-            break;
-        case RTF_FS:
-            {
-                RTFValue::Pointer_t pValue(new RTFValue(nParam));
-                m_aStates.top().aSprms[NS_sprm::LN_CHps] = pValue;
-            }
-            break;
-        case RTF_AFS:
-            {
-                RTFValue::Pointer_t pValue(new RTFValue(nParam));
-                m_aStates.top().aSprms[NS_sprm::LN_CHpsBi] = pValue;
-            }
-            break;
-        case RTF_FPRQ:
-            {
-                RTFValue::Pointer_t pValue(new RTFValue(nParam));
-                m_aStates.top().aSprms[NS_rtf::LN_PRQ] = pValue;
-            }
-            break;
         case RTF_RED:
             m_aStates.top().aCurrentColor.nRed = nParam;
             break;
@@ -325,11 +301,24 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aDefaultState.aSprms[NS_sprm::LN_CLidBi] = pValue;
             }
             break;
+        case RTF_AF:
+        case RTF_FS:
+        case RTF_AFS:
+        case RTF_FPRQ:
         case RTF_ANIMTEXT:
             {
-                OSL_TRACE("setting animtext to %d", nParam);
                 RTFValue::Pointer_t pValue(new RTFValue(nParam));
-                m_aStates.top().aSprms[NS_sprm::LN_CSfxText] = pValue;
+                int nSprm = 0;
+                switch (nKeyword)
+                {
+                    case RTF_AF: nSprm = NS_sprm::LN_CRgFtc1; break;
+                    case RTF_FS: nSprm = NS_sprm::LN_CHps; break;
+                    case RTF_AFS: nSprm = NS_sprm::LN_CHpsBi; break;
+                    case RTF_FPRQ: nSprm = NS_rtf::LN_PRQ; break;
+                    case RTF_ANIMTEXT: nSprm = NS_sprm::LN_CSfxText; break;
+                    default: OSL_FAIL("unhandled value"); break;
+                }
+                m_aStates.top().aSprms[nSprm] = pValue;
             }
             break;
         default:
