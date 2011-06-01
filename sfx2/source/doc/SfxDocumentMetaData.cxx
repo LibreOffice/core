@@ -2399,12 +2399,8 @@ namespace comp_CompatWriterDocProps {
 
    css::uno::Sequence< ::rtl::OUString > SAL_CALL _getSupportedServiceNames()
    {
-        static css::uno::Sequence< rtl::OUString > aServiceNames;
-        if ( aServiceNames.getLength() == 0 )
-        {
-            aServiceNames.realloc( 1 );
-            aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.writer.DocumentProperties" ) );
-        }
+        css::uno::Sequence< rtl::OUString > aServiceNames(1);
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.writer.DocumentProperties" ) );
         return aServiceNames;
    }
     css::uno::Reference< css::uno::XInterface > SAL_CALL _create(
