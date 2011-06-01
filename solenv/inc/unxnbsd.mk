@@ -23,6 +23,3 @@ LINKFLAGSRUNPATH_BRAND=
 
 LINKFLAGSDEFS=-Wl,--ignore-unresolved-symbol,environ
 LINKFLAGS=-Wl,-z,combreloc $(LINKFLAGSDEFS)
-
-# platform specific identifier for shared libs
-DLLPOSTFIX=nb

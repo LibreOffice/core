@@ -31,4 +31,3 @@ CDEFAULTOPT=-Os
 .INCLUDE : unxgcc.mk
 CDEFS+=-DARM32
 CFLAGS+=-fno-omit-frame-pointer
-DLLPOSTFIX=ar

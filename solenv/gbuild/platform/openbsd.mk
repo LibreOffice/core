@@ -35,7 +35,6 @@ else
 gb_CPUDEFS := -D$(CPUNAME)
 endif
 
-gb_Library_DLLPOSTFIX := ob
 gb_COMPILERDEFAULTOPTFLAGS := -O2
 gb_STDLIBS := pthread
 

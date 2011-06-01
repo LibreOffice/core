@@ -29,5 +29,4 @@
 
 .INCLUDE : unxlng.mk
 CDEFS+=-DX86_64
-DLLPOSTFIX=lx
 BUILD64=1

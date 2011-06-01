@@ -143,6 +143,8 @@ $(eval $(call gb_Helper_init_registries))
 $(eval $(call gb_Helper_add_repositories,$(gb_REPOS)))
 $(eval $(call gb_Helper_collect_libtargets))
 
+gb_Library_DLLPOSTFIX := lo
+
 ifeq ($(OS),LINUX)
 include $(GBUILDDIR)/platform/linux-$(CPUNAME).mk
 else ifeq ($(OS),MACOSX)

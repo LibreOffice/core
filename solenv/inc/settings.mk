@@ -1023,6 +1023,8 @@ LNTFLAGSOUTOBJ=-os
 .INCLUDE : unx.mk
 .ENDIF
 
+DLLPOSTFIX=lo
+
 .IF "$(OOO_LIBRARY_PATH_VAR)" != ""
 # Add SOLARLIBDIR at the begin of a (potentially previously undefined) library
 # path (LD_LIBRARY_PATH, PATH, etc.; prepending avoids fetching libraries from

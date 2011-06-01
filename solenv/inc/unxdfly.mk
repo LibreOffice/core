@@ -43,6 +43,3 @@ CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 # default linker flags
 LINKFLAGSDEFS:=
-
-# platform specific identifier for shared libs
-DLLPOSTFIX=df

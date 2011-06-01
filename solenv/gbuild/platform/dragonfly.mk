@@ -35,7 +35,6 @@ else
 gb_CPUDEFS := -D$(CPUNAME)
 endif
 
-gb_Library_DLLPOSTFIX := df
 gb_COMPILERDEFAULTOPTFLAGS := -O -g
 
 include $(GBUILDDIR)/platform/unxgcc.mk

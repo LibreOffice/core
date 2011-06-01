@@ -33,4 +33,3 @@ CDEFS+=-DS390
 CFLAGS+=-fsigned-char -fno-omit-frame-pointer
 CFLAGSCC+=-fsigned-char
 CFLAGSCXX+=-fsigned-char
-DLLPOSTFIX=l3

@@ -31,7 +31,5 @@
 
 PROCESSOR_DEFINES=-DPOWERPC -DPPC
 
-DLLPOSTFIX=mxp
-
 # Include generic Mac OS X makefile
 .INCLUDE : unxmacx.mk
