@@ -41,6 +41,7 @@ $(eval $(call gb_Library_set_defs,vbaobj,\
 
 $(eval $(call gb_Library_add_api,vbaobj,\
     offapi \
+    oovbaapi \
     udkapi \
 ))
 
