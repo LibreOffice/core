@@ -54,9 +54,9 @@
 #define CONST_TEST_STRING "gregorian"
 
 namespace {
-struct Gregorian : public ::rtl::StaticWithInit<const ::rtl::OUString, Gregorian> {
-    const ::rtl::OUString operator () () {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CONST_TEST_STRING ));
+struct Gregorian : public rtl::StaticWithInit<rtl::OUString, Gregorian> {
+    const rtl::OUString operator () () {
+        return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CONST_TEST_STRING ));
     }
 };
 }
