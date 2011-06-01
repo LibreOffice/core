@@ -91,9 +91,9 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <rtl/uuid.h>
 #include <rtl/memory.h>
 #include <comphelper/extract.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <vcl/msgbox.hxx>
@@ -589,24 +589,16 @@ void SAL_CALL SbaXGridPeer::removeStatusListener(const Reference< ::com::sun::st
         pCont->removeInterface(xControl);
 }
 
-//---------------------------------------------------------------------------------------
-const Sequence< sal_Int8 > & SbaXGridPeer::getUnoTunnelId()
+namespace
 {
-    static Sequence< sal_Int8 > * pSeq = 0;
-    if( !pSeq )
-    {
-        ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static Sequence< sal_Int8 > aSeq( 16 );
-                rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0,sal_True );
-                pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    class theSbaXGridPeerUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSbaXGridPeerUnoTunnelId > {};
 }
 
-//---------------------------------------------------------------------------------------
+const Sequence< sal_Int8 > & SbaXGridPeer::getUnoTunnelId()
+{
+    return theSbaXGridPeerUnoTunnelId::get().getSeq();
+}
+
 Sequence< Type > SAL_CALL SbaXGridPeer::getTypes() throw (RuntimeException)
 {
     Sequence< Type > aTypes = FmXGridPeer::getTypes();
