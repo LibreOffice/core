@@ -47,6 +47,7 @@
 #include <tools/link.hxx>
 #include <svtools/miscopt.hxx>
 #include <osl/mutex.hxx>
+#include <rtl/instance.hxx>
 
 #include <comphelper/processfactory.hxx>
 
@@ -80,27 +81,38 @@ public:
     ~SfxImageManager_Impl();
 };
 
+namespace
+{
+    typedef boost::unordered_map< SfxModule*, boost::shared_ptr<SfxImageManager_Impl> > SfxImageManagerImplMap;
+
+    class theImageManagerImplMap :
+        public rtl::Static<SfxImageManagerImplMap, theImageManagerImplMap> {};
+
+    class theGlobalImageManager :
+        public rtl::StaticWithArg<SfxImageManager_Impl, SfxModule*,
+            theGlobalImageManager> {};
+}
+
 static SfxImageManager_Impl* GetImageManager( SfxModule* pModule )
 {
     SolarMutexGuard aGuard;
 
     if ( pModule == 0 )
     {
-        static SfxImageManager_Impl aGlobalImageManager(0);
-        return &aGlobalImageManager;
+        return &theGlobalImageManager::get(NULL);
     }
     else
     {
-        typedef boost::unordered_map< SfxModule*, boost::shared_ptr<SfxImageManager_Impl> > SfxImageManagerImplMap;
-        static SfxImageManagerImplMap  m_ImageManager_ImplMap;
+        SfxImageManagerImplMap &rImageManager_ImplMap =
+            theImageManagerImplMap::get();
         SfxImageManager_Impl* pImpl( 0 );
-        SfxImageManagerImplMap::const_iterator pIter = m_ImageManager_ImplMap.find(pModule);
-        if ( pIter != m_ImageManager_ImplMap.end() )
+        SfxImageManagerImplMap::const_iterator pIter = rImageManager_ImplMap.find(pModule);
+        if ( pIter != rImageManager_ImplMap.end() )
             pImpl = pIter->second.get();
         else
         {
-            m_ImageManager_ImplMap[pModule].reset(new SfxImageManager_Impl(pModule));
-            pImpl = m_ImageManager_ImplMap[pModule].get();
+            rImageManager_ImplMap[pModule].reset(new SfxImageManager_Impl(pModule));
+            pImpl = rImageManager_ImplMap[pModule].get();
         }
         return pImpl;
     }
@@ -290,21 +302,28 @@ SfxImageManager::~SfxImageManager()
 
 //-------------------------------------------------------------------------
 
+namespace
+{
+    typedef boost::unordered_map< SfxModule*, boost::shared_ptr<SfxImageManager> > SfxImageManagerMap;
+
+    class theImageManagerMap :
+        public rtl::Static<SfxImageManagerMap, theImageManagerMap> {};
+}
+
 SfxImageManager* SfxImageManager::GetImageManager( SfxModule* pModule )
 {
     SolarMutexGuard aGuard;
     SfxImageManager* pSfxImageManager(0);
 
-    typedef boost::unordered_map< SfxModule*, boost::shared_ptr<SfxImageManager> > SfxImageManagerMap;
-    static SfxImageManagerMap m_ImageManagerMap;
+    SfxImageManagerMap &rImageManagerMap = theImageManagerMap::get();
 
-    SfxImageManagerMap::const_iterator pIter = m_ImageManagerMap.find(pModule);
-    if ( pIter != m_ImageManagerMap.end() )
+    SfxImageManagerMap::const_iterator pIter = rImageManagerMap.find(pModule);
+    if ( pIter != rImageManagerMap.end() )
         pSfxImageManager = pIter->second.get();
     else
     {
-        m_ImageManagerMap[pModule].reset(new SfxImageManager(pModule));
-        pSfxImageManager = m_ImageManagerMap[pModule].get();
+        rImageManagerMap[pModule].reset(new SfxImageManager(pModule));
+        pSfxImageManager = rImageManagerMap[pModule].get();
     }
     return pSfxImageManager;
 }
