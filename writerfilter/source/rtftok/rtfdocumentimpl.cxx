@@ -312,9 +312,22 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTF_ULC:
             {
-                OSL_TRACE("ulc: color is index is %d, value is %d", nParam, getColorTable(nParam));
                 RTFValue::Pointer_t pValue(new RTFValue(getColorTable(nParam)));
                 m_aStates.top().aSprms[0x6877] = pValue;
+            }
+            break;
+        case RTF_UP:
+            {
+                OUString aValue(RTL_CONSTASCII_USTRINGPARAM("superscript"));
+                RTFValue::Pointer_t pValue(new RTFValue(aValue));
+                m_aStates.top().aSprms[NS_ooxml::LN_EG_RPrBase_vertAlign] = pValue;
+            }
+            break;
+        case RTF_DN:
+            {
+                OUString aValue(RTL_CONSTASCII_USTRINGPARAM("subscript"));
+                RTFValue::Pointer_t pValue(new RTFValue(aValue));
+                m_aStates.top().aSprms[NS_ooxml::LN_EG_RPrBase_vertAlign] = pValue;
             }
             break;
         case RTF_AF:
