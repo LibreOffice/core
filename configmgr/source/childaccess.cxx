@@ -43,6 +43,7 @@
 #include "cppu/unotype.hxx"
 #include "cppuhelper/queryinterface.hxx"
 #include "cppuhelper/weak.hxx"
+#include "comphelper/servicehelper.hxx"
 #include "osl/diagnose.h"
 #include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
@@ -50,7 +51,6 @@
 #include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
-#include "rtl/uuid.h"
 #include "sal/types.h"
 
 #include "access.hxx"
@@ -77,15 +77,14 @@ namespace css = com::sun::star;
 
 }
 
-css::uno::Sequence< sal_Int8 > ChildAccess::getTunnelId() {
-    static css::uno::Sequence< sal_Int8 > id;
-    if (id.getLength() == 0) {
-        css::uno::Sequence< sal_Int8 > uuid(16);
-        rtl_createUuid(
-            reinterpret_cast< sal_uInt8 * >(uuid.getArray()), 0, false);
-        id = uuid;
-    }
-    return id;
+namespace
+{
+    class theChildAccessUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theChildAccessUnoTunnelId > {};
+}
+
+css::uno::Sequence< sal_Int8 > ChildAccess::getTunnelId()
+{
+    return theChildAccessUnoTunnelId::get().getSeq();
 }
 
 ChildAccess::ChildAccess(
