@@ -325,6 +325,13 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aDefaultState.aSprms[NS_sprm::LN_CLidBi] = pValue;
             }
             break;
+        case RTF_ANIMTEXT:
+            {
+                OSL_TRACE("setting animtext to %d", nParam);
+                RTFValue::Pointer_t pValue(new RTFValue(nParam));
+                m_aStates.top().aSprms[NS_sprm::LN_CSfxText] = pValue;
+            }
+            break;
         default:
             OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             break;
