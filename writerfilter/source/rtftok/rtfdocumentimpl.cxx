@@ -571,8 +571,6 @@ int RTFDocumentImpl::resolveParse()
 
     while ((Strm() >> ch, !Strm().IsEof()))
     {
-        OSL_TRACE("%s: parsing character '%c'", OSL_THIS_FUNC, ch);
-
         if (m_nGroup < 0)
             return ERROR_GROUP_UNDER;
         if (!m_aStates.empty() && m_aStates.top().nInternalState == INTERNAL_BIN)
