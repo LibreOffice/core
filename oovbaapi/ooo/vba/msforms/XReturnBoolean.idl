@@ -32,6 +32,10 @@
 #include <com/sun/star/script/XDefaultProperty.idl>
 //=============================================================================
 
+module ooo
+{
+module vba
+{
 module msforms
 {
 
@@ -42,6 +46,8 @@ interface XReturnBoolean: com::sun::star::script::XDefaultProperty
 };
 //=============================================================================
 
+};
+};
 };
 
 #endif

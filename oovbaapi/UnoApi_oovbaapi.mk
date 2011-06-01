@@ -172,6 +172,8 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,oovbaapi,\
 	oovbaapi/ooo/vba/msforms/XPictureFormat \
 	oovbaapi/ooo/vba/msforms/XProgressBar \
 	oovbaapi/ooo/vba/msforms/XRadioButton \
+	oovbaapi/ooo/vba/msforms/XReturnBoolean \
+	oovbaapi/ooo/vba/msforms/XReturnInteger \
 	oovbaapi/ooo/vba/msforms/XScrollBar \
 	oovbaapi/ooo/vba/msforms/XShape \
 	oovbaapi/ooo/vba/msforms/XShapeRange \
