@@ -29,7 +29,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <set>
-#include <rtl/uuid.h>
+#include <comphelper/servicehelper.hxx>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <resourcemodel/QNameToString.hxx>
 #include <resourcemodel/XPathLogger.hxx>
@@ -66,15 +66,6 @@ namespace ooxml
 using ::com::sun::star::lang::XMultiComponentFactory;
 using namespace ::com::sun::star;
 using namespace ::std;
-
-static uno::Sequence< sal_Int8 >  CreateUnoTunnelId()
-{
-    static osl::Mutex aCreateMutex;
-    osl::Guard<osl::Mutex> aGuard( aCreateMutex );
-    uno::Sequence< sal_Int8 > aSeq( 16 );
-    rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-    return aSeq;
-}
 
 static string resourceToString
 (OOXMLFastContextHandler::ResourceEnum_t eResource)
@@ -340,10 +331,14 @@ throw (uno::RuntimeException, xml::sax::SAXException)
     OOXMLFactory::getInstance()->characters(this, rString);
 }
 
+namespace
+{
+    class theOOXMLFastContextHandlerUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theOOXMLFastContextHandlerUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & OOXMLFastContextHandler::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = CreateUnoTunnelId();
-    return aSeq;
+    return theOOXMLFastContextHandlerUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL OOXMLFastContextHandler::getSomething( const uno::Sequence< sal_Int8 >& rId )
