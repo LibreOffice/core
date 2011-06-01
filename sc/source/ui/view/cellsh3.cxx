@@ -458,7 +458,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                                 bValid = !pDoc->GetTable( aName, nDummy );
                             ++i;
                         }
-                        while ( !bValid && i <= 2*MAXTAB );
+                        while ( !bValid && i <= MAXTAB + 2 );
 
                         if ( pReqArgs != NULL )
                         {
