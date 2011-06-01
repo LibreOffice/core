@@ -119,8 +119,8 @@ int RTFDocumentImpl::resolveChars(char ch)
     else if (m_aStates.top().nDestinationState == DESTINATION_COLORTABLE)
     {
         // we hit a ';' at the end of each color entry
-        sal_uInt32 color = m_aStates.top().aCurrentColor.nRed | ( m_aStates.top().aCurrentColor.nGreen << 8)
-            | (m_aStates.top().aCurrentColor.nBlue << 16);
+        sal_uInt32 color = (m_aStates.top().aCurrentColor.nRed << 16) | ( m_aStates.top().aCurrentColor.nGreen << 8)
+            | m_aStates.top().aCurrentColor.nBlue;
         m_aColorTable.push_back(color);
         // set components back to zero
         m_aStates.top().aCurrentColor = RTFColorTableEntry();
