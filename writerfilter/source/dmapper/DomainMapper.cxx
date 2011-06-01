@@ -2684,9 +2684,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         break;
     case 0x6877: //underlining color
         {
-            sal_Int32 nColor = ConversionHelper::ConvertColor(nIntValue);
             rContext->Insert(PROP_CHAR_UNDERLINE_HAS_COLOR, true, uno::makeAny( true ) );
-            rContext->Insert(PROP_CHAR_UNDERLINE_COLOR, true, uno::makeAny( nColor ) );
+            rContext->Insert(PROP_CHAR_UNDERLINE_COLOR, true, uno::makeAny( nIntValue ) );
         }
         break;
     case 0x6815:
