@@ -41,6 +41,7 @@
 #include <outfont.hxx>
 #include <glyphcache.hxx>
 #include <impfont.hxx>
+#include <rtl/instance.hxx>
 
 #include "svpgdi.hxx"
 #include "svpbmp.hxx"
