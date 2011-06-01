@@ -36,8 +36,8 @@ TARGET=so_gdk-pixbuf
 
 .IF "$(SYSTEM_GDKPIXBUF)" == "YES"
 all:
-    @echo "An already available installation of gdk-pixbuf should exist on your system."
-    @echo "Therefore the version provided here does not need to be built in addition."
+	@echo "An already available installation of gdk-pixbuf should exist on your system."
+	@echo "Therefore the version provided here does not need to be built in addition."
 .ENDIF
 
 # --- Files --------------------------------------------------------
@@ -57,29 +57,30 @@ CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) \
                  .$/configure \
                  --prefix=$(SRC_ROOT)$/$(PRJNAME)$/$(MISC) \
                  --disable-nls \
+                 CPPFLAGS="$(EXTRA_CDEFS)" \
                  CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) -I$(SOLARINCDIR)$/external -I$(SOLARINCDIR)$/external$/glib-2.0 -I$(SOLARINCDIR)$/external$/libpng -I$(SOLARINCDIR)$/external$/libjpeg" \
-                 LDFLAGS="-L$(SOLARLIBDIR) -lgobject-2.0 -lgio-2.0 -lgthread-2.0 -lgmodule-2.0 -lglib-2.0" \
+                 LDFLAGS="$(EXTRA_LINKFLAGS) -L$(SOLARLIBDIR) -lgobject-2.0 -lgio-2.0 -lgthread-2.0 -lgmodule-2.0 -lglib-2.0" \
                  --disable-glibtest --without-libtiff --without-libjpeg
 
 BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE)
 BUILD_DIR=$(CONFIGURE_DIR)
                 
 EXTRPATH=LOADER
-OUT2LIB+=gdk-pixbuf$/.libs/libgdk_pixbuf-2.0.0.dylib
+OUT2LIB+=gdk-pixbuf/.libs/libgdk_pixbuf-2.0.0.dylib
 
-OUT2BIN+=gdk-pixbuf$/.libs/gdk-pixbuf-query-loaders
+OUT2BIN+=gdk-pixbuf/.libs/gdk-pixbuf-query-loaders
 
-OUT2INC+=gdk-pixbuf$/gdk-pixbuf-animation.h
-OUT2INC+=gdk-pixbuf$/gdk-pixbuf-features.h
-OUT2INC+=gdk-pixbuf$/gdk-pixbuf-marshal.h
-OUT2INC+=gdk-pixbuf$/gdk-pixbuf.h
-OUT2INC+=gdk-pixbuf$/gdk-pixbuf-core.h
-OUT2INC+=gdk-pixbuf$/gdk-pixbuf-io.h
-OUT2INC+=gdk-pixbuf$/gdk-pixbuf-simple-anim.h
-OUT2INC+=gdk-pixbuf$/gdk-pixdata.h
-OUT2INC+=gdk-pixbuf$/gdk-pixbuf-enum-types.h
-OUT2INC+=gdk-pixbuf$/gdk-pixbuf-loader.h
-OUT2INC+=gdk-pixbuf$/gdk-pixbuf-transform.h
+OUT2INC+=gdk-pixbuf/gdk-pixbuf-animation.h
+OUT2INC+=gdk-pixbuf/gdk-pixbuf-features.h
+OUT2INC+=gdk-pixbuf/gdk-pixbuf-marshal.h
+OUT2INC+=gdk-pixbuf/gdk-pixbuf.h
+OUT2INC+=gdk-pixbuf/gdk-pixbuf-core.h
+OUT2INC+=gdk-pixbuf/gdk-pixbuf-io.h
+OUT2INC+=gdk-pixbuf/gdk-pixbuf-simple-anim.h
+OUT2INC+=gdk-pixbuf/gdk-pixdata.h
+OUT2INC+=gdk-pixbuf/gdk-pixbuf-enum-types.h
+OUT2INC+=gdk-pixbuf/gdk-pixbuf-loader.h
+OUT2INC+=gdk-pixbuf/gdk-pixbuf-transform.h
 
 .ELIF "$(OS)"=="WNT"
 
