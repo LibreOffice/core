@@ -310,6 +310,13 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().aSprms[NS_sprm::LN_CShd] = pValue;
             }
             break;
+        case RTF_ULC:
+            {
+                OSL_TRACE("ulc: color is index is %d, value is %d", nParam, getColorTable(nParam));
+                RTFValue::Pointer_t pValue(new RTFValue(getColorTable(nParam)));
+                m_aStates.top().aSprms[0x6877] = pValue;
+            }
+            break;
         case RTF_AF:
         case RTF_FS:
         case RTF_AFS:
@@ -340,6 +347,36 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
 int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam)
 {
     int nSprm = 0;
+
+    // Map all underline keywords to a single sprm.
+    switch (nKeyword)
+    {
+        case RTF_UL: nSprm = 1; break;
+        case RTF_ULD: nSprm = 4; break;
+        case RTF_ULDASH: nSprm = 7; break;
+        case RTF_ULDASHD: nSprm = 9; break;
+        case RTF_ULDASHDD: nSprm = 10; break;
+        case RTF_ULDB: nSprm = 3; break;
+        case RTF_ULHWAVE: nSprm = 27; break;
+        case RTF_ULLDASH: nSprm = 39; break;
+        case RTF_ULNONE: nSprm = 0; break;
+        case RTF_ULTH: nSprm = 6; break;
+        case RTF_ULTHD: nSprm = 20; break;
+        case RTF_ULTHDASH: nSprm = 23; break;
+        case RTF_ULTHDASHD: nSprm = 25; break;
+        case RTF_ULTHDASHDD: nSprm = 26; break;
+        case RTF_ULTHLDASH: nSprm = 55; break;
+        case RTF_ULULDBWAVE: nSprm = 43; break;
+        case RTF_ULW: nSprm = 2; break;
+        case RTF_ULWAVE: nSprm = 11; break;
+        default: break;
+    }
+    if (nSprm > 0)
+    {
+        RTFValue::Pointer_t pValue(new RTFValue((!bParam || nParam != 0) ? nSprm : 0));
+        m_aStates.top().aSprms[NS_sprm::LN_CKul] = pValue;
+        return 0;
+    }
 
     switch (nKeyword)
     {
