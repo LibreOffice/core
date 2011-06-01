@@ -76,6 +76,8 @@ namespace writerfilter {
 
                 RTFReferenceTable::Entries_t aStyleTableEntries;
                 int nCurrentStyleIndex;
+
+                rtl_TextEncoding nCurrentEncoding;
         };
 
         /// Implementation of the RTFDocument interface.

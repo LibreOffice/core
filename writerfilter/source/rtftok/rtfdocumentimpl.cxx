@@ -191,6 +191,9 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_FBIDI:
             // TODO ooxml:CT_Font_family seems to be ignored by the domain mapper
             break;
+        case RTF_ANSI:
+            m_aStates.top().nCurrentEncoding = RTL_TEXTENCODING_MS_1252;
+            break;
         default:
             OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             break;
@@ -593,7 +596,8 @@ RTFParserState::RTFParserState()
     nCurrentFontIndex(0),
     aCurrentColor(),
     aStyleTableEntries(),
-    nCurrentStyleIndex(0)
+    nCurrentStyleIndex(0),
+    nCurrentEncoding(0)
 {
 }
 
