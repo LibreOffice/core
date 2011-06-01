@@ -114,6 +114,8 @@ namespace writerfilter {
                 /// Same as m_aStates.size(), except that this can be negative for invalid input.
                 int m_nGroup;
                 std::stack<RTFParserState> m_aStates;
+                /// Read by RTF_PARD.
+                RTFParserState m_aDefaultState;
                 bool m_bSkipUnknown;
                 /// For debugging purposes, where int value would not be enough
                 rtl::OString* m_pCurrentKeyword;

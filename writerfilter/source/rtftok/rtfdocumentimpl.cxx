@@ -24,6 +24,7 @@ namespace rtftok {
 
 RTFDocumentImpl::RTFDocumentImpl(uno::Reference<io::XInputStream> const& xInputStream)
     : m_nGroup(0),
+    m_aDefaultState(),
     m_bSkipUnknown(false),
     m_pCurrentKeyword(0),
     m_aFontEncodings(),
@@ -201,6 +202,9 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_ANSI:
             m_aStates.top().nCurrentEncoding = RTL_TEXTENCODING_MS_1252;
             break;
+        case RTF_PARD:
+            m_aStates.top() = m_aDefaultState;
+            break;
         default:
             OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             break;
@@ -283,6 +287,12 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             {
                 RTFValue::Pointer_t pValue(new RTFValue(nParam));
                 m_aStates.top().aAttributes[NS_rtf::LN_ISTDNEXT] = pValue;
+            }
+            break;
+        case RTF_DEFF:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(nParam));
+                m_aDefaultState.aSprms[NS_sprm::LN_CRgFtc0] = pValue;
             }
             break;
         default:
