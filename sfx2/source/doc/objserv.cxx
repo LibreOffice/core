@@ -47,6 +47,7 @@
 #include <com/sun/star/frame/XDocumentTemplates.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <com/sun/star/security/CertificateValidity.hpp>
 
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
@@ -1466,20 +1467,14 @@ void SfxObjectShell::SignScriptingContent()
     ImplSign( sal_True );
 }
 
+namespace
+{
+    class theSfxObjectShellUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSfxObjectShellUnoTunnelId > {};
+}
+
 const uno::Sequence<sal_Int8>& SfxObjectShell::getUnoTunnelId()
 {
-    static uno::Sequence<sal_Int8> * pSeq = 0;
-    if( !pSeq )
-    {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theSfxObjectShellUnoTunnelId::get().getSeq();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

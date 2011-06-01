@@ -44,7 +44,6 @@
 #include <com/sun/star/rdf/URI.hpp>
 #include <com/sun/star/rdf/Repository.hpp>
 
-#include <rtl/uuid.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/bootstrap.hxx>
