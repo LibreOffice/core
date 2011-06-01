@@ -35,22 +35,6 @@
 
 # --- Compiler ---
 
-.IF "$(COM)$(OS)$(CPU)" == "C50SOLARISS"
-.INCLUDE : unxsols2.mk
-.ENDIF
-
-.IF "$(COM)$(OS)$(CPU)" == "C50SOLARISI"
-.INCLUDE : unxsoli2.mk
-.ENDIF
-
-.IF "$(OS)$(CPU)$(COMEX)" == "SOLARISS3"
-.INCLUDE : unxsols3.mk
-.ENDIF
-
-.IF "$(OS)$(CPU)$(COMEX)" == "SOLARISI3"
-.INCLUDE : unxsoli3.mk
-.ENDIF
-
 .IF "$(OS)$(CPU)$(COMEX)" == "SOLARISS4"
 .INCLUDE : unxsols4.mk
 .ENDIF
@@ -61,10 +45,6 @@
 
 .IF "$(OS)$(CPU)$(COMEX)" == "SOLARISU4"
 .INCLUDE : unxsolu4.mk
-.ENDIF
-
-.IF "$(OS)$(CPU)$(COMEX)" == "SOLARISX4"
-.INCLUDE : unxsolx4.mk
 .ENDIF
 
 .IF "$(COM)$(OS)$(CPU)" == "GCCSOLARISS"
