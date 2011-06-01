@@ -330,13 +330,10 @@ void SvtCacheOptions_Impl::SetGraphicManagerObjectReleaseTime( sal_Int32 nGrfMgr
     SetModified();
 }
 
-//*****************************************************************************************************************
-//  private method
-//*****************************************************************************************************************
 Sequence< OUString > SvtCacheOptions_Impl::impl_GetPropertyNames()
 {
-    // Build static list of configuration key names.
-    static const OUString pProperties[] =
+    // Build list of configuration key names.
+    const OUString pProperties[] =
     {
         PROPERTYNAME_WRITEROLE,
         PROPERTYNAME_DRAWINGOLE,
@@ -345,7 +342,7 @@ Sequence< OUString > SvtCacheOptions_Impl::impl_GetPropertyNames()
         PROPERTYNAME_GRFMGR_OBJECTRELEASE
     };
     // Initialize return sequence with these list ...
-    static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
+    const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
     // ... and return it.
     return seqPropertyNames;
 }

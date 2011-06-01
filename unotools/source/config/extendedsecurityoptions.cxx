@@ -412,13 +412,13 @@ void SvtExtendedSecurityOptions_Impl::FillExtensionHashMap( ExtensionHashMap& aH
 //*****************************************************************************************************************
 Sequence< OUString > SvtExtendedSecurityOptions_Impl::GetPropertyNames()
 {
-    // Build static list of configuration key names.
-    static const OUString pProperties[] =
+    // Build list of configuration key names.
+    const OUString pProperties[] =
     {
         PROPERTYNAME_HYPERLINKS_OPEN
     };
     // Initialize return sequence with these list ...
-    static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
+    const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
     // ... and return it.
     return seqPropertyNames;
 }

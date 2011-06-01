@@ -171,7 +171,7 @@ class SvtLinguConfigItem : public utl::ConfigItem
     SvtLinguConfigItem & operator = ( const SvtLinguConfigItem & );
 
     static sal_Bool GetHdlByName( sal_Int32 &rnHdl, const OUString &rPropertyName, sal_Bool bFullPropName = sal_False );
-    static const uno::Sequence< OUString > & GetPropertyNames();
+    static const uno::Sequence< OUString > GetPropertyNames();
     sal_Bool                LoadOptions( const uno::Sequence< OUString > &rProperyNames );
     sal_Bool                SaveOptions( const uno::Sequence< OUString > &rProperyNames );
 
@@ -213,11 +213,12 @@ public:
 SvtLinguConfigItem::SvtLinguConfigItem() :
     utl::ConfigItem( String::CreateFromAscii( "Office.Linguistic" ) )
 {
-    LoadOptions( GetPropertyNames() );
+    const uno::Sequence< OUString > &rPropertyNames = GetPropertyNames();
+    LoadOptions( rPropertyNames );
     ClearModified();
 
     // request notify events when properties change
-    EnableNotification( GetPropertyNames() );
+    EnableNotification( rPropertyNames );
 }
 
 
@@ -289,30 +290,25 @@ static struct NamesToHdl
 };
 
 
-const uno::Sequence< OUString > & SvtLinguConfigItem::GetPropertyNames()
+const uno::Sequence< OUString > SvtLinguConfigItem::GetPropertyNames()
 {
-    static uno::Sequence< OUString > aNames;
-    static sal_Bool bInitialized = sal_False;
+    uno::Sequence< OUString > aNames;
 
-    if (!bInitialized)
+    sal_Int32 nMax = SAL_N_ELEMENTS(aNamesToHdl);
+
+    aNames.realloc( nMax );
+    OUString *pNames = aNames.getArray();
+    sal_Int32 nIdx = 0;
+    for (sal_Int32 i = 0; i < nMax;  ++i)
     {
-        sal_Int32 nMax = SAL_N_ELEMENTS(aNamesToHdl);
-
-        aNames.realloc( nMax );
-        OUString *pNames = aNames.getArray();
-        sal_Int32 nIdx = 0;
-        for (sal_Int32 i = 0; i < nMax;  ++i)
-        {
-            const sal_Char *pFullPropName = aNamesToHdl[i].pFullPropName;
-            if (pFullPropName)
-                pNames[ nIdx++ ] = ::rtl::OUString::createFromAscii( pFullPropName );
-        }
-        aNames.realloc( nIdx );
-        bInitialized = sal_True;
+        const sal_Char *pFullPropName = aNamesToHdl[i].pFullPropName;
+        if (pFullPropName)
+            pNames[ nIdx++ ] = ::rtl::OUString::createFromAscii( pFullPropName );
     }
+    aNames.realloc( nIdx );
+
     return aNames;
 }
-
 
 sal_Bool SvtLinguConfigItem::GetHdlByName(
     sal_Int32 &rnHdl,

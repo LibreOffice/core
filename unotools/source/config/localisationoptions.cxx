@@ -329,19 +329,16 @@ void SvtLocalisationOptions_Impl::SetDialogScale( sal_Int32 nScale )
     SetModified();
 }
 
-//*****************************************************************************************************************
-//  private method
-//*****************************************************************************************************************
 Sequence< OUString > SvtLocalisationOptions_Impl::GetPropertyNames()
 {
     // Build static list of configuration key names.
-    static const OUString pProperties[] =
+    const OUString aProperties[] =
     {
         PROPERTYNAME_AUTOMNEMONIC   ,
         PROPERTYNAME_DIALOGSCALE    ,
     };
     // Initialize return sequence with these list ...
-    static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
+    Sequence< OUString > seqPropertyNames(aProperties, PROPERTYCOUNT);
     // ... and return it.
     return seqPropertyNames;
 }

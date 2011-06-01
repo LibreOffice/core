@@ -1024,7 +1024,7 @@ sal_Bool SvtSecurityOptions_Impl::IsOptionEnabled( SvtSecurityOptions::EOption e
 Sequence< OUString > SvtSecurityOptions_Impl::GetPropertyNames()
 {
     // Build static list of configuration key names.
-    static const OUString pProperties[] =
+    const OUString pProperties[] =
     {
         PROPERTYNAME_SECUREURL,
         PROPERTYNAME_STAROFFICEBASIC,
@@ -1043,7 +1043,7 @@ Sequence< OUString > SvtSecurityOptions_Impl::GetPropertyNames()
         PROPERTYNAME_MACRO_DISABLE
     };
     // Initialize return sequence with these list ...
-    static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
+    const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
     // ... and return it.
     return seqPropertyNames;
 }

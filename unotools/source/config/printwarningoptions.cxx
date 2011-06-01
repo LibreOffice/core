@@ -244,8 +244,8 @@ void SvtPrintWarningOptions_Impl::Notify( const Sequence< rtl::OUString >&  )
 //*****************************************************************************************************************
 Sequence< OUString > SvtPrintWarningOptions_Impl::impl_GetPropertyNames()
 {
-    // Build static list of configuration key names.
-    static const OUString pProperties[] =
+    // Build list of configuration key names.
+    const OUString pProperties[] =
     {
         PROPERTYNAME_PAPERSIZE,
         PROPERTYNAME_PAPERORIENTATION,
@@ -255,7 +255,7 @@ Sequence< OUString > SvtPrintWarningOptions_Impl::impl_GetPropertyNames()
     };
 
     // Initialize return sequence with these list ...
-    static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
+    const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
 
     return seqPropertyNames;
 }

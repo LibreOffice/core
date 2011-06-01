@@ -147,14 +147,14 @@ public:
 
 const Sequence< OUString > SvtSysLocaleOptions_Impl::GetPropertyNames()
 {
-    static const OUString pProperties[] =
+    const OUString pProperties[] =
     {
         PROPERTYNAME_LOCALE,
         PROPERTYNAME_UILOCALE,
         PROPERTYNAME_CURRENCY,
         PROPERTYNAME_DECIMALSEPARATOR
     };
-    static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
+    const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
     return seqPropertyNames;
 }
 
