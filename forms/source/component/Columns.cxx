@@ -47,10 +47,10 @@
 #include <comphelper/property.hxx>
 #include <comphelper/basicio.hxx>
 #include <comphelper/types.hxx>
+#include <comphelper/servicehelper.hxx>
 #include "services.hxx"
 #include "frm_resource.hrc"
 #include <tools/debug.hxx>
-#include <rtl/uuid.h>
 #include <rtl/memory.h>
 
 //.........................................................................
@@ -124,21 +124,14 @@ sal_Int32 getColumnTypeByModelName(const ::rtl::OUString& aModelName)
 
 /*************************************************************************/
 
-//------------------------------------------------------------------
+namespace
+{
+    class theOGridColumnImplementationId : public rtl::Static< UnoTunnelIdInit, theOGridColumnImplementationId > {};
+}
+
 const Sequence<sal_Int8>& OGridColumn::getUnoTunnelImplementationId()
 {
-    static Sequence< sal_Int8 > * pSeq = 0;
-    if( !pSeq )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theOGridColumnImplementationId::get().getSeq();
 }
 
 //------------------------------------------------------------------
