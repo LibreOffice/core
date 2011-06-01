@@ -1984,6 +1984,7 @@ ToFile( "MDDS_CPPFLAGS",     "@MDDS_CPPFLAGS@",     "e" );
 ToFile( "SYSTEM_MDDS",       "@SYSTEM_MDDS@",      "e" );
 ToFile( "SYSTEM_VIGRA",      "@SYSTEM_VIGRA@",     "e" );
 ToFile( "SYSTEM_NEON",       "@SYSTEM_NEON@",      "e" );
+ToFile( "ENABLE_LIBRSVG",    "@ENABLE_LIBRSVG@",   "e" );
 ToFile( "SYSTEM_LIBRSVG",    "@SYSTEM_LIBRSVG@",   "e" );
 ToFile( "SYSTEM_GDKPIXBUF",  "@SYSTEM_GDKPIXBUF@",   "e" );
 ToFile( "SYSTEM_GLIB",       "@SYSTEM_GLIB@",   "e" );

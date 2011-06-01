@@ -272,19 +272,9 @@ AC_ARG_ENABLE(systray,
 ,enable_systray=yes)
 
 AC_ARG_ENABLE(librsvg,
-[  --enable-librsvg        Determines whether to use librsvg library on
-                          platforms where librsvg is available.
-                          (actually, it is possible to build with
-                          --disable-librsvg and to still have SVG support
-                          within a running soffice instance, since this
-                          dependency is a runtime only dependency.
-                          To have SVG suppport at runtime, the librsvg, the cairo
-                          and the gobject library - and all depending libraries
-                          as well - need to be accessible by the running soffice
-                          instance.
-                          The intention of defaulting this flag to yes is to
-                          indicate this fact to the build maintainer)
-],,enable_librsvg=yes)
+    AS_HELP_STRING([--enable-librsvg=<no/auto/system/internal>],
+        [Enables or disables use of librsvg to render SVG at run-time.
+         Also specificed what librsvg to use. 'auto' is the default.]))
 
 AC_ARG_ENABLE(opengl,
     AS_HELP_STRING([--disable-opengl],
@@ -972,10 +962,6 @@ AC_ARG_WITH(system-mozilla,
     WITH_SYSTEM_MOZILLA=$withval ,
 WITH_SYSTEM_MOZILLA=no)
 
-AC_ARG_WITH(system-librsvg,
-    AS_HELP_STRING([--with-system-librsvg],
-        [Use librsvg already on system.]))
-
 AC_ARG_WITH(system-gettext,
     AS_HELP_STRING([--with-system-gettext],
         [Use gettext runtime library already on system.]))
@@ -1413,7 +1399,6 @@ case "$host_os" in
     solaris*)
         test_gtk=yes
         build_gstreamer=yes
-        test_librsvg=yes
         test_kde=yes
         test_freetype=yes
         test_gstreamer=yes
@@ -1446,7 +1431,6 @@ case "$host_os" in
     linux-gnu*|k*bsd*-gnu*)
         test_gtk=yes
         build_gstreamer=yes
-        test_librsvg=yes
         test_kde=yes
         test_kde4=yes
         test_freetype=yes
@@ -1477,7 +1461,6 @@ case "$host_os" in
 
         test_cups=no
         test_randr=no
-        test_librsvg=no
         test_freetype=no
         test_fontconfig=no
         _os=WINNT
@@ -1493,7 +1476,6 @@ case "$host_os" in
         ;;
     darwin*) # Mac OS X or iOS
         test_gtk=yes
-        test_librsvg=yes
         test_randr=no
         test_freetype=no
         test_fontconfig=no
@@ -1512,7 +1494,6 @@ case "$host_os" in
     freebsd*)
         test_gtk=yes
         build_gstreamer=yes
-        test_librsvg=yes
         test_kde=yes
         test_kde4=yes
         test_freetype=yes
@@ -1540,7 +1521,6 @@ case "$host_os" in
     *netbsd*)
         test_gtk=yes
         build_gstreamer=yes
-        test_librsvg=yes
         test_kde=no
         test_kde4=yes
         test_freetype=yes
@@ -7945,36 +7925,83 @@ fi
 AC_SUBST(USE_XINERAMA)
 AC_SUBST(XINERAMA_LINK)
 
-# ===================================================================
-# Check whether to enable librsvg
-# ===================================================================
+dnl ===================================================================
+dnl Checks for librsvg
+dnl ===================================================================
+
+dnl ENABLE_LIBRSVG is set to "" (for NO), SYSTEM or INTERNAL. The
+dnl SYSTEM_LIBRSVG, SYSTEM_GDKPIXBUF etc are redundant.
 
 ENABLE_LIBRSVG=""
 LIBRSVG_CFLAGS=""
 LIBRSVG_LIBS=""
 
-if test  "$test_librsvg" = "yes"; then
-    AC_MSG_CHECKING([whether to use librsvg])
-    if test "x$enable_librsvg" != "xno" ; then
-        ENABLE_LIBRSVG="TRUE"
-        AC_MSG_RESULT([yes])
-        # ===================================================================
-        # Test whether to build librsvg or rely on the system version
-        # ===================================================================
-        AC_MSG_CHECKING([whether to use the system librsvg])
-        if test "$with_system_librsvg" = yes -o \( "$with_system_libs" = yes -a "$with_system_librsvg" != no \); then
-            SYSTEM_LIBRSVG=YES
-            AC_MSG_RESULT([yes])
-            PKG_CHECK_MODULES( LIBRSVG, librsvg-2.0 >= 2.14,,AC_MSG_ERROR([requirements to build with system librsvg support not met. Use shipped version or use --disable-librsvg or install the missing packages]))
-        else
-            SYSTEM_LIBRSVG=NO
-            AC_MSG_RESULT([no])
-            BUILD_TYPE="$BUILD_TYPE LIBRSVG"
-        fi
-    else
-        AC_MSG_RESULT([no])
-    fi
-fi
+AC_MSG_CHECKING([what librsvg to use])
+
+case "$enable_librsvg" in
+no|disable)
+   AC_MSG_RESULT([none])
+   enable_librsvg=no
+   ;;
+
+""|yes|auto)
+   if test $build_os = cygwin; then
+      dnl When building on Windows always use the internal one
+      AC_MSG_RESULT([internal])
+      enable_librsvg=internal
+   elif test $_os = Darwin -o $_os = iOS; then
+      dnl Ditto when building for these OSes. Add more OSes above as needed.
+      AC_MSG_RESULT([internal])
+      enable_librsvg=internal
+   else
+      AC_MSG_RESULT([checking further])
+      PKG_CHECK_MODULES(LIBRSVG, librsvg-2.0 >= 2.14,, [:])
+      if test -z "$LIBRSVG_PKG_ERRORS"; then
+         enable_librsvg=system
+      else
+         enable_librsvg=internal
+      fi
+   fi
+   ;;
+
+internal)
+   AC_MSG_RESULT([internal])
+   ;;
+
+system)
+   if test $_os = WINNT -a "$WITH_MINGW" != yes; then
+      AC_MSG_ERROR([Must use internal librsvg when building with MSVC])
+   fi
+   AC_MSG_RESULT([system])
+   ;;
+
+*)
+   AC_MSG_ERROR([Incorrect --enable-librsvg option])
+   ;;
+esac
+
+dnl By now enable_librsvg should be "system", "internal" or "no"
+case $enable_librsvg in
+system)
+   ENABLE_LIBRSVG=SYSTEM
+   SYSTEM_LIBRSVG=YES
+   ;;
+
+internal)
+   ENABLE_LIBRSVG=INTERNAL
+   SYSTEM_LIBRSVG=NO
+   BUILD_TYPE="$BUILD_TYPE LIBRSVG"
+   ;;
+
+no)
+   ENABLE_LIBRSVG=NO
+   SYSTEM_LIBRSVG=NO
+   ;;
+
+*)
+   AC_MSG_ERROR([Internal configure script error, invalid enable_librsvg value "$enable_librsvg"])
+   ;;
+esac
 
 AC_SUBST(ENABLE_LIBRSVG)
 AC_SUBST(LIBRSVG_CFLAGS)
@@ -7988,7 +8015,7 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether to use the system gdk-pixbuf])
 
 dnl As long as the only thing we need gdk-pxbuf for is below
-dnl librsvg, use the same --with-system-librsvg (possibly implied
+dnl librsvg, use the same --enable-librsvg (possibly implied
 dnl by --with-system-libs) to override this.
 
 if test "$SYSTEM_LIBRSVG" = YES; then
@@ -8015,7 +8042,7 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether to use the system GLib])
 
 dnl As long as the only thing we need GLib for is below
-dnl librsvg, use the same --with-system-librsvg (possibly implied
+dnl librsvg, use the same --enable-librsvg (possibly implied
 dnl by --with-system-libs) to override this.
 
 if test "$SYSTEM_LIBRSVG" = YES; then
@@ -8066,7 +8093,7 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether to use the system libcroco])
 
 dnl As long as the only thing we need libcroco for is below
-dnl librsvg, use the same --with-system-librsvg (possibly implied
+dnl librsvg, use the same --enable-librsvg (possibly implied
 dnl by --with-system-libs) to override this.
 
 if test "$SYSTEM_LIBRSVG" = YES; then
@@ -8093,7 +8120,7 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether to use the system pango])
 
 dnl As long as the only thing we need Pango for is below
-dnl librsvg, use the same --with-system-librsvg (possibly implied
+dnl librsvg, use the same --enable-librsvg (possibly implied
 dnl by --with-system-libs) to override this.
 
 if test "$SYSTEM_LIBRSVG" = YES; then
@@ -8120,7 +8147,7 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether to use the system libgsf])
 
 dnl As long as the only thing we need libgsf for is below librsvg (is
-dnl it?), use the same --with-system-librsvg (possibly implied by
+dnl it?), use the same --enable-librsvg (possibly implied by
 dnl --with-system-libs) to override this.
 
 if test "$SYSTEM_LIBRSVG" = YES; then
