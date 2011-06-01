@@ -68,18 +68,14 @@ namespace comphelper
     //---------------------------------------------------------------------
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> OPropertyStateHelper::getTypes() throw( ::com::sun::star::uno::RuntimeException)
     {
-        static  ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> aTypes;
-        if (!aTypes.getLength())
-        {
-            aTypes.realloc(4);
-            ::com::sun::star::uno::Type* pTypes = aTypes.getArray();
-            // base class types
-            pTypes[0] = getCppuType(( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>*)NULL);
-            pTypes[1] = getCppuType(( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet>*)NULL);
-            pTypes[2] = getCppuType(( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet>*)NULL);
-            // my own type
-            pTypes[3] = getCppuType(( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState>*)NULL);
-        }
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> aTypes(4);
+        ::com::sun::star::uno::Type* pTypes = aTypes.getArray();
+        // base class types
+        pTypes[0] = getCppuType(( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>*)NULL);
+        pTypes[1] = getCppuType(( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet>*)NULL);
+        pTypes[2] = getCppuType(( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet>*)NULL);
+        // my own type
+        pTypes[3] = getCppuType(( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState>*)NULL);
         return aTypes;
     }
 
