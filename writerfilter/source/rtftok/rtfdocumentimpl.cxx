@@ -88,7 +88,6 @@ void RTFDocumentImpl::resolve(Stream & rMapper)
 
 int RTFDocumentImpl::resolveChars(char ch)
 {
-    OSL_TRACE("%s start", OSL_THIS_FUNC);
     OStringBuffer aBuf;
 
     while(!Strm().IsEof() && ch != '{' && ch != '}' && ch != '\\')
@@ -595,8 +594,8 @@ int RTFDocumentImpl::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
 {
     if (m_aStates.top().nDestinationState == DESTINATION_SKIP)
         return 0;
-    OSL_TRACE("%s: keyword '\\%s' with param? %d param val: '%d'", OSL_THIS_FUNC,
-            rKeyword.getStr(), (bParam ? 1 : 0), (bParam ? nParam : 0));
+    //OSL_TRACE("%s: keyword '\\%s' with param? %d param val: '%d'", OSL_THIS_FUNC,
+    //        rKeyword.getStr(), (bParam ? 1 : 0), (bParam ? nParam : 0));
     int i, ret;
     for (i = 0; i < nRTFControlWords; i++)
     {
@@ -644,7 +643,6 @@ int RTFDocumentImpl::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
 
 int RTFDocumentImpl::resolveKeyword()
 {
-    OSL_TRACE("%s", OSL_THIS_FUNC);
     char ch;
     OStringBuffer aBuf;
     bool bNeg = false;
@@ -700,7 +698,7 @@ int RTFDocumentImpl::resolveKeyword()
 
 int RTFDocumentImpl::pushState()
 {
-    OSL_TRACE("%s before push: %d", OSL_THIS_FUNC, m_nGroup);
+    //OSL_TRACE("%s before push: %d", OSL_THIS_FUNC, m_nGroup);
 
     RTFParserState aState;
     if (!m_aStates.empty())
@@ -725,7 +723,7 @@ int RTFDocumentImpl::pushState()
 
 int RTFDocumentImpl::popState()
 {
-    OSL_TRACE("%s before pop: m_nGroup %d, dest state: %d", OSL_THIS_FUNC, m_nGroup, m_aStates.top().nDestinationState);
+    //OSL_TRACE("%s before pop: m_nGroup %d, dest state: %d", OSL_THIS_FUNC, m_nGroup, m_aStates.top().nDestinationState);
 
     RTFReferenceTable::Entry_t aEntry;
     bool bFontEntryEnd = false;
@@ -774,8 +772,6 @@ int RTFDocumentImpl::popState()
     else if (bStyleEntryEnd)
         m_aStates.top().aStyleTableEntries[aEntry.first] = aEntry.second;
 
-    if (!m_aStates.empty())
-        OSL_TRACE("%s after pop: m_nGroup %d, dest state: %d", OSL_THIS_FUNC, m_nGroup, m_aStates.top().nDestinationState);
     return 0;
 }
 
