@@ -378,6 +378,17 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().aSprms[NS_sprm::LN_CDxaSpace] = pValue;
             }
             break;
+        case RTF_TWOINONE:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(true));
+                m_aStates.top().aAttributes[NS_ooxml::LN_CT_EastAsianLayout_combine] = pValue;
+                if (nParam > 0)
+                {
+                    RTFValue::Pointer_t pBValue(new RTFValue(nParam));
+                    m_aStates.top().aAttributes[NS_ooxml::LN_CT_EastAsianLayout_combineBrackets] = pBValue;
+                }
+            }
+            break;
         case RTF_AF:
         case RTF_FS:
         case RTF_AFS:
