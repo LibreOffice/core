@@ -2407,6 +2407,13 @@ AC_SUBST(MSPDB_PATH)
 AC_SUBST(USE_MINGW)
 AC_SUBST(SHOWINCLUDES_PREFIX)
 
+dnl ===================================================================
+dnl Check for pkg-config
+dnl ===================================================================
+if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
+    PKG_PROG_PKG_CONFIG
+fi
+
 if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
 
    # If you use CC=/path/to/compiler/foo-gcc or even CC="ccache
@@ -2416,7 +2423,6 @@ if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
    AC_CHECK_TOOL(AR,ar)
    AC_CHECK_TOOL(NM,nm)
    AC_CHECK_TOOL(OBJDUMP,objdump)
-   AC_PATH_TOOL(PKG_CONFIG,pkg-config)
    AC_CHECK_TOOL(RANLIB,ranlib)
    AC_CHECK_TOOL(STRIP,strip)
    if test "$_os" = "WINNT"; then
@@ -4029,16 +4035,6 @@ else
     AC_MSG_ERROR([too old, you need at least 3.0.0])
 fi
 AC_SUBST(GPERF)
-
-dnl ===================================================================
-dnl Check for pkg-config
-dnl # Note that if there is a possibility the first call to
-dnl # PKG_CHECK_MODULES might not happen, you should be sure to include an
-dnl # explicit call to PKG_PROG_PKG_CONFIG in your configure.ac
-dnl ===================================================================
-if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
-    PKG_PROG_PKG_CONFIG
-fi
 
 dnl ===================================================================
 dnl Check for building stax
