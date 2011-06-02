@@ -384,6 +384,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_FPRQ:
         case RTF_ANIMTEXT:
         case RTF_EXPNDTW:
+        case RTF_KERNING:
             {
                 RTFValue::Pointer_t pValue(new RTFValue(nParam));
                 int nSprm = 0;
@@ -395,6 +396,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     case RTF_FPRQ: nSprm = NS_rtf::LN_PRQ; break;
                     case RTF_ANIMTEXT: nSprm = NS_sprm::LN_CSfxText; break;
                     case RTF_EXPNDTW: nSprm = NS_sprm::LN_CDxaSpace; break;
+                    case RTF_KERNING: nSprm = NS_sprm::LN_CHpsKern; break;
                     default: OSL_FAIL("unhandled value"); break;
                 }
                 m_aStates.top().aSprms[nSprm] = pValue;
