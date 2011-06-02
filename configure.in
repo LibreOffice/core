@@ -1477,11 +1477,7 @@ case "$host_os" in
         else
             _os=Darwin
         fi
-        if test "$_os" = "Darwin" -a "$enable_systray" = "yes" -a "$enable_gtk" != "no"; then
-            AC_MSG_WARN([Disabling gtk-quickstarter - not supported on Mac. Use --disable-systray])
-            echo "Disabling gtk-quickstarter - not supported on Mac. Use --disable-systray" >>warn
-            enable_systray=no
-        fi
+        enable_systray=no
         ;;
     freebsd*)
         test_gtk=yes
