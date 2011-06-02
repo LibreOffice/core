@@ -55,12 +55,14 @@ CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) \
                 BASE_DEPENDENCIES_CFLAGS="-I$(SOLARINCDIR)$/external -I$(SOLARINCDIR)$/external/glib-2.0" \
                 BASE_DEPENDENCIES_LIBS=" " \
                  .$/configure \
+                 CPPFLAGS="$(EXTRA_CDEFS) -I$(SOLARINCDIR)$/external -I$(SOLARINCDIR)$/external$/glib-2.0 -I$(SOLARINCDIR)$/external$/libpng -I$(SOLARINCDIR)$/external$/jpeg" \
+                 CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS)" \
+                 LDFLAGS="$(EXTRA_LINKFLAGS) -L$(SOLARLIBDIR) -lgobject-2.0 -lgio-2.0 -lgthread-2.0 -lgmodule-2.0 -lglib-2.0" \
                  --prefix=$(SRC_ROOT)$/$(PRJNAME)$/$(MISC) \
                  --disable-nls \
-                 CPPFLAGS="$(EXTRA_CDEFS)" \
-                 CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) -I$(SOLARINCDIR)$/external -I$(SOLARINCDIR)$/external$/glib-2.0 -I$(SOLARINCDIR)$/external$/libpng -I$(SOLARINCDIR)$/external$/libjpeg" \
-                 LDFLAGS="$(EXTRA_LINKFLAGS) -L$(SOLARLIBDIR) -lgobject-2.0 -lgio-2.0 -lgthread-2.0 -lgmodule-2.0 -lglib-2.0" \
-                 --disable-glibtest --without-libtiff --without-libjpeg
+                 --disable-modules \
+                 --with-included-loaders=ani,icns,pcx,ras,tga,png,pnm,wbmp,xbm,xpm,qtif,bmp,gif,ico,jpeg \
+                 --disable-glibtest --without-libtiff --without-libjasper
 
 BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE)
 BUILD_DIR=$(CONFIGURE_DIR)
