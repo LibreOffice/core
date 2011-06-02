@@ -44,6 +44,7 @@
 #include <boost/bind.hpp>
 
 using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 namespace {
 
@@ -228,53 +229,58 @@ ScUserList::ScUserList()
         xCal = xCalendars[j].Days;
         if ( xCal.getLength() )
         {
-            String sDayShort, sDayLong;
+            OUStringBuffer aDayShortBuf, aDayLongBuf;
             sal_Int32 i;
             sal_Int32 nLen = xCal.getLength();
-            rtl::OUString sStart = xCalendars[j].StartOfWeek;
             sal_Int16 nStart = sal::static_int_cast<sal_Int16>(nLen);
             while (nStart > 0)
             {
-                if (xCal[--nStart].ID == sStart)
+                if (xCal[--nStart].ID == xCalendars[j].StartOfWeek)
                     break;
             }
             sal_Int16 nLast = sal::static_int_cast<sal_Int16>( (nStart + nLen - 1) % nLen );
             for (i = nStart; i != nLast; i = (i+1) % nLen)
             {
-                sDayShort += String( xCal[i].AbbrevName );
-                sDayShort += cDelimiter;
-                sDayLong  += String( xCal[i].FullName );
-                sDayLong  += cDelimiter;
+                aDayShortBuf.append(xCal[i].AbbrevName);
+                aDayShortBuf.append(cDelimiter);
+                aDayLongBuf.append(xCal[i].FullName);
+                aDayLongBuf.append(cDelimiter);
             }
-            sDayShort += String( xCal[i].AbbrevName );
-            sDayLong  += String( xCal[i].FullName );
+            aDayShortBuf.append(xCal[i].AbbrevName);
+            aDayLongBuf.append(xCal[i].FullName);
 
-            if ( !HasEntry( sDayShort ) )
-                maData.push_back( new ScUserListData( sDayShort ));
-            if ( !HasEntry( sDayLong ) )
-                maData.push_back( new ScUserListData( sDayLong ));
+            OUString aDayShort = aDayShortBuf.makeStringAndClear();
+            OUString aDayLong = aDayLongBuf.makeStringAndClear();
+
+            if ( !HasEntry( aDayShort ) )
+                maData.push_back( new ScUserListData( aDayShort ));
+            if ( !HasEntry( aDayLong ) )
+                maData.push_back( new ScUserListData( aDayLong ));
         }
 
         xCal = xCalendars[j].Months;
         if ( xCal.getLength() )
         {
-            String sMonthShort, sMonthLong;
+            OUStringBuffer aMonthShortBuf, aMonthLongBuf;
             sal_Int32 i;
             sal_Int32 nLen = xCal.getLength() - 1;
             for (i = 0; i < nLen; i++)
             {
-                sMonthShort += String( xCal[i].AbbrevName );
-                sMonthShort += cDelimiter;
-                sMonthLong  += String( xCal[i].FullName );
-                sMonthLong  += cDelimiter;
+                aMonthShortBuf.append(xCal[i].AbbrevName);
+                aMonthShortBuf.append(cDelimiter);
+                aMonthLongBuf.append(xCal[i].FullName);
+                aMonthLongBuf.append(cDelimiter);
             }
-            sMonthShort += String( xCal[i].AbbrevName );
-            sMonthLong  += String( xCal[i].FullName );
+            aMonthShortBuf.append(xCal[i].AbbrevName);
+            aMonthLongBuf.append(xCal[i].FullName);
 
-            if ( !HasEntry( sMonthShort ) )
-                maData.push_back( new ScUserListData( sMonthShort ));
-            if ( !HasEntry( sMonthLong ) )
-                maData.push_back( new ScUserListData( sMonthLong ));
+            OUString aMonthShort = aMonthShortBuf.makeStringAndClear();
+            OUString aMonthLong = aMonthLongBuf.makeStringAndClear();
+
+            if ( !HasEntry( aMonthShort ) )
+                maData.push_back( new ScUserListData( aMonthShort ));
+            if ( !HasEntry( aMonthLong ) )
+                maData.push_back( new ScUserListData( aMonthLong ));
         }
     }
 }
