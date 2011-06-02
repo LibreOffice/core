@@ -75,9 +75,9 @@ CC:=gcc $(EXTRA_CFLAGS)
 .ENDIF # "$(EXTRA_CFLAGS)"!=""
 .ENDIF # "$(OS)"=="MACOSX"
 
-icu_CFLAGS+=-O $(ARCH_FLAGS) $(EXTRA_CDEFS)
+icu_CFLAGS+=-O $(ARCH_FLAGS)
 icu_LDFLAGS+=$(EXTRA_LINKFLAGS)
-icu_CXXFLAGS+=-O $(ARCH_FLAGS) $(EXTRA_CDEFS)
+icu_CXXFLAGS+=-O $(ARCH_FLAGS)
 
 # remove conversion and transliteration data to reduce binary size.
 CONFIGURE_ACTION=rm data/mappings/ucm*.mk data/translit/trn*.mk ;
@@ -117,7 +117,7 @@ STATIC_OR_SHARED=--disable-static --enable-shared
 BUILD_AND_HOST=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) --with-cross-build=$(ICU_NATIVE_BUILD_ROOT)
 .ENDIF
 
-CONFIGURE_ACTION+=sh -c 'CFLAGS="$(icu_CFLAGS)" CXXFLAGS="$(icu_CXXFLAGS)" LDFLAGS="$(icu_LDFLAGS) $(LDFLAGSADD)" \
+CONFIGURE_ACTION+=sh -c 'CPPFLAGS="$(EXTRA_CDEFS)" CFLAGS="$(icu_CFLAGS)" CXXFLAGS="$(icu_CXXFLAGS)" LDFLAGS="$(icu_LDFLAGS) $(LDFLAGSADD)" \
 ./configure --enable-layout $(STATIC_OR_SHARED) $(BUILD_AND_HOST) $(DISABLE_64BIT)'
 
 CONFIGURE_FLAGS=
