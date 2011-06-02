@@ -131,6 +131,11 @@ void IncomingRequest::execute() const {
     }
 }
 
+static size_t size_t_round(size_t val)
+{
+    return (val + (sizeof(size_t)-1)) & ~(sizeof(size_t)-1);
+}
+
 bool IncomingRequest::execute_throw(
     BinaryAny * returnValue, std::vector< BinaryAny > * outArguments) const
 {
@@ -246,7 +251,10 @@ bool IncomingRequest::execute_throw(
                 OSL_ASSERT(false); // this cannot happen
                 break;
             }
-            std::vector< char > retBuf(retType.is() ? retType.get()->nSize : 0);
+            size_t nSize = 0;
+            if (retType.is())
+                nSize = size_t_round(retType.get()->nSize);
+            std::vector< char > retBuf(nSize);
             uno_Any exc;
             uno_Any * pexc = &exc;
             (*object_.get()->pDispatcher)(
