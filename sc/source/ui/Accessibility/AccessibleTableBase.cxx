@@ -39,8 +39,8 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include <rtl/uuid.h>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <vcl/svapp.hxx>
 
 
@@ -453,19 +453,16 @@ uno::Sequence< uno::Type > SAL_CALL ScAccessibleTableBase::getTypes()
     return comphelper::concatSequences(ScAccessibleTableBaseImpl::getTypes(), ScAccessibleContextBase::getTypes());
 }
 
+namespace
+{
+    class theScAccessibleTableBaseImplementationId : public rtl::Static< UnoTunnelIdInit, theScAccessibleTableBaseImplementationId > {};
+}
+
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleTableBase::getImplementationId(void)
     throw (uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    IsObjectValid();
-    static uno::Sequence<sal_Int8> aId;
-    if (aId.getLength() == 0)
-    {
-        aId.realloc (16);
-        rtl_createUuid (reinterpret_cast<sal_uInt8 *>(aId.getArray()), 0, sal_True);
-    }
-    return aId;
+    return theScAccessibleTableBaseImplementationId::get().getSeq();
 }
 
 void ScAccessibleTableBase::CommitTableModelChange(sal_Int32 nStartRow, sal_Int32 nStartCol, sal_Int32 nEndRow, sal_Int32 nEndCol, sal_uInt16 nId)

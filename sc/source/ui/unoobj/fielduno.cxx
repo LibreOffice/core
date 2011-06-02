@@ -37,7 +37,7 @@
 #include <editeng/editeng.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/flditem.hxx>
-#include <rtl/uuid.h>
+#include <comphelper/servicehelper.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
@@ -482,16 +482,15 @@ uno::Sequence<uno::Type> SAL_CALL ScCellFieldObj::getTypes() throw(uno::RuntimeE
     return aTypes;
 }
 
+namespace
+{
+    class theScCellFieldObjImplementationId : public rtl::Static< UnoTunnelIdInit, theScCellFieldObjImplementationId > {};
+}
+
 uno::Sequence<sal_Int8> SAL_CALL ScCellFieldObj::getImplementationId()
                                                     throw(uno::RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-    }
-    return aId;
+    return theScCellFieldObjImplementationId::get().getSeq();
 }
 
 uno::Any SAL_CALL ScCellFieldObj::queryInterface( const uno::Type& rType )
@@ -1141,16 +1140,15 @@ uno::Sequence<uno::Type> SAL_CALL ScHeaderFieldObj::getTypes() throw(uno::Runtim
     return aTypes;
 }
 
+namespace
+{
+    class theScHeaderFieldObjImplementationId : public rtl::Static< UnoTunnelIdInit, theScHeaderFieldObjImplementationId > {};
+}
+
 uno::Sequence<sal_Int8> SAL_CALL ScHeaderFieldObj::getImplementationId()
                                                     throw(uno::RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-    }
-    return aId;
+    return theScHeaderFieldObjImplementationId::get().getSeq();
 }
 
 uno::Any SAL_CALL ScHeaderFieldObj::queryInterface( const uno::Type& rType )

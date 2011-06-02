@@ -28,6 +28,7 @@
 #include <vbahelper/helperdecl.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/unwrapargs.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XProtectable.hpp>
@@ -233,21 +234,15 @@ ScVbaWorkbook::ScVbaWorkbook( uno::Sequence< uno::Any> const & args,
     init();
 }
 
+namespace
+{
+    class theScVbaWorkbookUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScVbaWorkbookUnoTunnelId > {};
+}
+
 const uno::Sequence<sal_Int8>&
 ScVbaWorkbook::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq;
-
-    if( !aSeq.getLength() )
-    {
-        static osl::Mutex           aCreateMutex;
-        osl::Guard< osl::Mutex >    aGuard( aCreateMutex );
-
-        aSeq.realloc( 16 );
-        rtl_createUuid( reinterpret_cast< sal_uInt8* >( aSeq.getArray() ), 0, sal_True );
-    }
-
-    return aSeq;
+    return theScVbaWorkbookUnoTunnelId::get().getSeq();
 }
 
 uno::Reference< excel::XWorksheet >

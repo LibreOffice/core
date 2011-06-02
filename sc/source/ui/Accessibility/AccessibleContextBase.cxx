@@ -35,13 +35,13 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
-#include <rtl/uuid.h>
 #include <tools/debug.hxx>
 #include <tools/gen.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <svl/smplhint.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <vcl/unohelp.hxx>
 #include <tools/color.hxx>
@@ -523,19 +523,16 @@ uno::Sequence< uno::Type > SAL_CALL ScAccessibleContextBase::getTypes()
     return comphelper::concatSequences(ScAccessibleContextBaseWeakImpl::getTypes(), ScAccessibleContextBaseImplEvent::getTypes());
 }
 
+namespace
+{
+    class theScAccessibleContextBaseImplementationId : public rtl::Static< UnoTunnelIdInit, theScAccessibleContextBaseImplementationId > {};
+}
+
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleContextBase::getImplementationId(void)
     throw (uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    IsObjectValid();
-    static uno::Sequence<sal_Int8> aId;
-    if (aId.getLength() == 0)
-    {
-        aId.realloc (16);
-        rtl_createUuid (reinterpret_cast<sal_uInt8 *>(aId.getArray()), 0, sal_True);
-    }
-    return aId;
+    return theScAccessibleContextBaseImplementationId::get().getSeq();
 }
 
 //=====  internal  ============================================================

@@ -66,6 +66,7 @@
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/reflection/XIdlClassProvider.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include "docuno.hxx"
 #include "cellsuno.hxx"
@@ -544,16 +545,15 @@ uno::Sequence<uno::Type> SAL_CALL ScModelObj::getTypes() throw(uno::RuntimeExcep
     return aTypes;
 }
 
+namespace
+{
+    class theScModelObjImplementationId : public rtl::Static< UnoTunnelIdInit, theScModelObjImplementationId > {};
+}
+
 uno::Sequence<sal_Int8> SAL_CALL ScModelObj::getImplementationId()
                                                     throw(uno::RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-    }
-    return aId;
+    return theScModelObjImplementationId::get().getSeq();
 }
 
 void ScModelObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )

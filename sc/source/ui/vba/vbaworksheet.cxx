@@ -70,6 +70,7 @@
 #include <ooo/vba/excel/XlSheetVisibility.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <vbahelper/vbashapes.hxx>
 
 #include <com/sun/star/script/vba/VBAEventId.hpp>
@@ -222,20 +223,14 @@ ScVbaWorksheet::~ScVbaWorksheet()
 {
 }
 
+namespace
+{
+    class theScVbaWorksheetUnoTunnelId  : public rtl::Static< UnoTunnelIdInit, theScVbaWorksheetUnoTunnelId > {};
+}
+
 const uno::Sequence<sal_Int8>& ScVbaWorksheet::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq;
-
-    if( !aSeq.getLength() )
-    {
-        static osl::Mutex           aCreateMutex;
-        osl::Guard< osl::Mutex >    aGuard( aCreateMutex );
-
-        aSeq.realloc( 16 );
-        rtl_createUuid( reinterpret_cast< sal_uInt8* >( aSeq.getArray() ), 0, sal_True );
-    }
-
-    return aSeq;
+    return theScVbaWorksheetUnoTunnelId::get().getSeq();
 }
 
 uno::Reference< ov::excel::XWorksheet >

@@ -113,9 +113,6 @@ protected:
     /** Returns this object's current bounding box relative to the parent object. */
     virtual Rectangle GetBoundingBox() const throw( ::com::sun::star::uno::RuntimeException );
 
-    /** Creates a new UUID in rSeq, if it is empty. Locks mutex internally. */
-    void getUuid( ::com::sun::star::uno::Sequence< sal_Int8 >& rSeq );
-
     /** Returns whether the object is alive. Must be called with locked mutex. */
     inline bool implIsAlive() const { return !rBHelper.bDisposed && !rBHelper.bInDispose && mpControl; }
     /** Throws an exception, if the object is disposed/disposing or any pointer

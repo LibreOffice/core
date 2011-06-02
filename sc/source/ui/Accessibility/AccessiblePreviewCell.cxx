@@ -44,7 +44,7 @@
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/convert.hxx>
-
+#include <comphelper/servicehelper.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
 using namespace ::com::sun::star;
@@ -211,19 +211,16 @@ uno::Sequence<rtl::OUString> SAL_CALL ScAccessiblePreviewCell::getSupportedServi
 
 //=====  XTypeProvider  =======================================================
 
+namespace
+{
+    class theScAccessiblePreviewCellImplementationId : public rtl::Static< UnoTunnelIdInit, theScAccessiblePreviewCellImplementationId > {};
+}
+
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessiblePreviewCell::getImplementationId(void)
     throw (uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    IsObjectValid();
-    static uno::Sequence<sal_Int8> aId;
-    if (aId.getLength() == 0)
-    {
-        aId.realloc (16);
-        rtl_createUuid (reinterpret_cast<sal_uInt8 *>(aId.getArray()), 0, sal_True);
-    }
-    return aId;
+    return theScAccessiblePreviewCellImplementationId::get().getSeq();
 }
 
 //====  internal  =========================================================

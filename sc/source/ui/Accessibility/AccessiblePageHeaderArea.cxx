@@ -43,7 +43,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <editeng/editobj.hxx>
 #include <svx/AccessibleTextHelper.hxx>
-#include <rtl/uuid.h>
+#include <comphelper/servicehelper.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <toolkit/helper/convert.hxx>
@@ -215,19 +215,16 @@ uno::Sequence< ::rtl::OUString> SAL_CALL
 
 //=====  XTypeProvider  =======================================================
 
+namespace
+{
+    class theScAccessiblePageHeaderAreaImplementationId : public rtl::Static< UnoTunnelIdInit, theScAccessiblePageHeaderAreaImplementationId > {};
+}
+
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessiblePageHeaderArea::getImplementationId(void)
     throw (uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    IsObjectValid();
-    static uno::Sequence<sal_Int8> aId;
-    if (aId.getLength() == 0)
-    {
-        aId.realloc (16);
-        rtl_createUuid (reinterpret_cast<sal_uInt8 *>(aId.getArray()), 0, sal_True);
-    }
-    return aId;
+    return theScAccessiblePageHeaderAreaImplementationId::get().getSeq();
 }
 
 //===== internal ==============================================================

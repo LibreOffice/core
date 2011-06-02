@@ -60,6 +60,7 @@
 #include <svx/AccessibleShapeTreeInfo.hxx>
 #include <svx/AccessibleShapeInfo.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/unoshcol.hxx>
 #include <svx/unoshape.hxx>
@@ -1820,19 +1821,16 @@ uno::Sequence< uno::Type > SAL_CALL ScAccessibleDocument::getTypes()
     return comphelper::concatSequences(ScAccessibleDocumentImpl::getTypes(), ScAccessibleContextBase::getTypes());
 }
 
+namespace
+{
+    class theScAccessibleDocumentImplementationId : public rtl::Static< UnoTunnelIdInit, theScAccessibleDocumentImplementationId > {};
+}
+
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleDocument::getImplementationId(void)
     throw (uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    IsObjectValid();
-    static uno::Sequence<sal_Int8> aId;
-    if (aId.getLength() == 0)
-    {
-        aId.realloc (16);
-        rtl_createUuid (reinterpret_cast<sal_uInt8 *>(aId.getArray()), 0, sal_True);
-    }
-    return aId;
+    return theScAccessibleDocumentImplementationId::get().getSeq();
 }
 
 ///=====  IAccessibleViewForwarder  ========================================

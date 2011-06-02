@@ -35,7 +35,7 @@
 #include <svl/intitem.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/svapp.hxx>
-#include <rtl/uuid.h>
+#include <comphelper/servicehelper.hxx>
 
 #include "cursuno.hxx"
 #include "cellsuno.hxx"
@@ -103,15 +103,14 @@ uno::Sequence<uno::Type> SAL_CALL ScCellCursorObj::getTypes() throw(uno::Runtime
     return aTypes;
 }
 
+namespace
+{
+    class theScCellCursorObjImplementationId : public rtl::Static< UnoTunnelIdInit, theScCellCursorObjImplementationId > {};
+}
+
 uno::Sequence<sal_Int8> SAL_CALL ScCellCursorObj::getImplementationId() throw(uno::RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-    }
-    return aId;
+    return theScCellCursorObjImplementationId::get().getSeq();
 }
 
 // XSheetCellCursor

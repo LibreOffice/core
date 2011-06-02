@@ -36,7 +36,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 
 #include <unotools/accessiblestatesethelper.hxx>
-#include <rtl/uuid.h>
+#include <comphelper/servicehelper.hxx>
 #include <tools/gen.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <vcl/svapp.hxx>
@@ -464,18 +464,15 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessibleDataPilotControl::getAc
 
     ///=====  XTypeProvider  ===================================================
 
+namespace
+{
+    class theScAccessibleDataPilotControlImplementationId : public rtl::Static< UnoTunnelIdInit, theScAccessibleDataPilotControlImplementationId > {};
+}
+
 uno::Sequence<sal_Int8> SAL_CALL ScAccessibleDataPilotControl::getImplementationId(void)
         throw (uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    IsObjectValid();
-    static uno::Sequence<sal_Int8> aId;
-    if (aId.getLength() == 0)
-    {
-        aId.realloc (16);
-        rtl_createUuid (reinterpret_cast<sal_uInt8 *>(aId.getArray()), 0, sal_True);
-    }
-    return aId;
+    return theScAccessibleDataPilotControlImplementationId::get().getSeq();
 }
 
     //=====  internal  ========================================================
@@ -678,18 +675,15 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessibleDataPilotButton::getAcc
 
     ///=====  XTypeProvider  ===================================================
 
+namespace
+{
+    class theScAccessibleDataPilotButtonImplementationId : public rtl::Static< UnoTunnelIdInit, theScAccessibleDataPilotButtonImplementationId > {};
+}
+
 uno::Sequence<sal_Int8> SAL_CALL ScAccessibleDataPilotButton::getImplementationId(void)
         throw (::com::sun::star::uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    IsObjectValid();
-    static uno::Sequence<sal_Int8> aId;
-    if (aId.getLength() == 0)
-    {
-        aId.realloc (16);
-        rtl_createUuid (reinterpret_cast<sal_uInt8 *>(aId.getArray()), 0, sal_True);
-    }
-    return aId;
+    return theScAccessibleDataPilotButtonImplementationId::get().getSeq();
 }
 
 ::rtl::OUString SAL_CALL ScAccessibleDataPilotButton::createAccessibleDescription(void)

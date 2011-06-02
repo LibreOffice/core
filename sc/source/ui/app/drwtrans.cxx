@@ -46,6 +46,7 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include <svtools/embedtransfer.hxx>
 #include <sot/storage.hxx>
@@ -783,17 +784,14 @@ void ScDrawTransferObj::InitDocShell()
     }
 }
 
+namespace
+{
+    class theScDrawTransferObjUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScDrawTransferObjUnoTunnelId > {};
+}
+
 const com::sun::star::uno::Sequence< sal_Int8 >& ScDrawTransferObj::getUnoTunnelId()
 {
-    static com::sun::star::uno::Sequence< sal_Int8 > aSeq;
-    if( !aSeq.getLength() )
-    {
-        static osl::Mutex           aCreateMutex;
-        osl::Guard< osl::Mutex >    aGuard( aCreateMutex );
-        aSeq.realloc( 16 );
-        rtl_createUuid( reinterpret_cast< sal_uInt8* >( aSeq.getArray() ), 0, sal_True );
-    }
-    return aSeq;
+    return theScDrawTransferObjUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL ScDrawTransferObj::getSomething( const com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( com::sun::star::uno::RuntimeException )

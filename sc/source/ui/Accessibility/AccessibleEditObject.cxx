@@ -39,7 +39,7 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <rtl/uuid.h>
+#include <comphelper/servicehelper.hxx>
 #include <svx/AccessibleTextHelper.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/editeng.hxx>
@@ -291,19 +291,16 @@ void SAL_CALL
 
 //=====  XTypeProvider  =======================================================
 
+namespace
+{
+    class theScAccessibleEditObjectImplementationId : public rtl::Static< UnoTunnelIdInit, theScAccessibleEditObjectImplementationId > {};
+}
+
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleEditObject::getImplementationId(void)
     throw (uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    IsObjectValid();
-    static uno::Sequence<sal_Int8> aId;
-    if (aId.getLength() == 0)
-    {
-        aId.realloc (16);
-        rtl_createUuid (reinterpret_cast<sal_uInt8 *>(aId.getArray()), 0, sal_True);
-    }
-    return aId;
+    return theScAccessibleEditObjectImplementationId::get().getSeq();
 }
 
     //====  internal  =========================================================

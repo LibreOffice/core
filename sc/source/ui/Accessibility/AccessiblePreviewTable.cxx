@@ -51,6 +51,7 @@
 #include <svl/smplhint.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -602,16 +603,15 @@ uno::Sequence< uno::Type > SAL_CALL ScAccessiblePreviewTable::getTypes()
     return comphelper::concatSequences(ScAccessiblePreviewTableImpl::getTypes(), ScAccessibleContextBase::getTypes());
 }
 
+namespace
+{
+    class theScAccessiblePreviewTableImplementationId : public rtl::Static< UnoTunnelIdInit, theScAccessiblePreviewTableImplementationId > {};
+}
+
 uno::Sequence<sal_Int8> SAL_CALL ScAccessiblePreviewTable::getImplementationId()
                                                     throw(uno::RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid (reinterpret_cast<sal_uInt8 *>(aId.getArray()), 0, sal_True);
-    }
-    return aId;
+    return theScAccessiblePreviewTableImplementationId::get().getSeq();
 }
 
 //====  internal  =========================================================

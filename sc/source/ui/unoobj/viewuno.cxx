@@ -50,7 +50,7 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <rtl/uuid.h>
+#include <comphelper/servicehelper.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <vcl/svapp.hxx>
 
@@ -187,16 +187,15 @@ uno::Sequence<uno::Type> SAL_CALL ScViewPaneBase::getTypes() throw(uno::RuntimeE
     return aTypes;
 }
 
+namespace
+{
+    class theScViewPaneBaseImplementationId : public rtl::Static< UnoTunnelIdInit, theScViewPaneBaseImplementationId > {};
+}
+
 uno::Sequence<sal_Int8> SAL_CALL ScViewPaneBase::getImplementationId()
                                                     throw(uno::RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-    }
-    return aId;
+    return theScViewPaneBaseImplementationId::get().getSeq();
 }
 
 // XViewPane
@@ -746,16 +745,15 @@ uno::Sequence<uno::Type> SAL_CALL ScTabViewObj::getTypes() throw(uno::RuntimeExc
     return aTypes;
 }
 
+namespace
+{
+    class theScTabViewObjImplementationId : public rtl::Static< UnoTunnelIdInit, theScTabViewObjImplementationId > {};
+}
+
 uno::Sequence<sal_Int8> SAL_CALL ScTabViewObj::getImplementationId()
                                                 throw(uno::RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-    }
-    return aId;
+    return theScTabViewObjImplementationId::get().getSeq();
 }
 
 // XDocumentView

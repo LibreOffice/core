@@ -39,11 +39,11 @@
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
 #include <tools/debug.hxx>
-#include <rtl/uuid.h>
 #include <toolkit/helper/convert.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include "scitems.hxx"
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
@@ -210,17 +210,6 @@ Rectangle ScAccessibleCsvControl::GetBoundingBox() const throw( RuntimeException
     SolarMutexGuard aGuard;
     ensureAlive();
     return implGetControl().GetWindowExtentsRelative( implGetControl().GetAccessibleParentWindow() );
-}
-
-void ScAccessibleCsvControl::getUuid( Sequence< sal_Int8 >& rSeq )
-{
-    SolarMutexGuard aGuard;
-    ensureAlive();
-    if( !rSeq.hasElements() )
-    {
-        rSeq.realloc( 16 );
-        rtl_createUuid( reinterpret_cast< sal_uInt8* >( rSeq.getArray() ), NULL, sal_True );
-    }
 }
 
 void ScAccessibleCsvControl::ensureAlive() const throw( DisposedException )
@@ -785,11 +774,14 @@ Sequence< ::com::sun::star::uno::Type > SAL_CALL ScAccessibleCsvRuler::getTypes(
     return ::comphelper::concatSequences( ScAccessibleCsvControl::getTypes(), aSeq );
 }
 
+namespace
+{
+    class theScAccessibleCsvRulerImplementationId : public rtl::Static< UnoTunnelIdInit, theScAccessibleCsvRulerImplementationId > {};
+}
+
 Sequence< sal_Int8 > SAL_CALL ScAccessibleCsvRuler::getImplementationId() throw( RuntimeException )
 {
-    static Sequence< sal_Int8 > aSeq;
-    getUuid( aSeq );
-    return aSeq;
+    return theScAccessibleCsvRulerImplementationId::get().getSeq();
 }
 
 
@@ -1293,11 +1285,14 @@ Sequence< ::com::sun::star::uno::Type > SAL_CALL ScAccessibleCsvGrid::getTypes()
     return ::comphelper::concatSequences( ScAccessibleCsvControl::getTypes(), aSeq );
 }
 
+namespace
+{
+    class theScAccessibleCsvGridImplementationId  : public rtl::Static< UnoTunnelIdInit, theScAccessibleCsvGridImplementationId > {};
+}
+
 Sequence< sal_Int8 > SAL_CALL ScAccessibleCsvGrid::getImplementationId() throw( RuntimeException )
 {
-    static Sequence< sal_Int8 > aSeq;
-    getUuid( aSeq );
-    return aSeq;
+    return theScAccessibleCsvGridImplementationId::get().getSeq();
 }
 
 

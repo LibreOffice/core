@@ -62,6 +62,7 @@
 #include <svx/unoshape.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <vcl/svapp.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include <vector>
 #include <list>
@@ -1620,19 +1621,16 @@ uno::Sequence< ::rtl::OUString> SAL_CALL ScAccessibleDocumentPagePreview::getSup
 
 //=====  XTypeProvider  =======================================================
 
+namespace
+{
+    class theScAccessibleDocumentPagePreviewImplementationId : public rtl::Static< UnoTunnelIdInit, theScAccessibleDocumentPagePreviewImplementationId > {};
+}
+
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleDocumentPagePreview::getImplementationId(void)
     throw (uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    IsObjectValid();
-    static uno::Sequence<sal_Int8> aId;
-    if (aId.getLength() == 0)
-    {
-        aId.realloc (16);
-        rtl_createUuid (reinterpret_cast<sal_uInt8 *>(aId.getArray()), 0, sal_True);
-    }
-    return aId;
+    return theScAccessibleDocumentPagePreviewImplementationId::get().getSeq();
 }
 
 //=====  internal  ========================================================

@@ -32,7 +32,6 @@
 #include <algorithm>
 #include <svl/smplhint.hxx>
 #include <vcl/svapp.hxx>
-#include <rtl/uuid.h>
 
 #include "dapiuno.hxx"
 #include "datauno.hxx"
@@ -671,16 +670,15 @@ Sequence< uno::Type > SAL_CALL ScDataPilotDescriptorBase::getTypes()
     return aTypes;
 }
 
+namespace
+{
+    class theScDataPilotDescriptorBaseImplementationId : public rtl::Static< UnoTunnelIdInit, theScDataPilotDescriptorBaseImplementationId > {};
+}
+
 Sequence<sal_Int8> SAL_CALL ScDataPilotDescriptorBase::getImplementationId()
                                                     throw(RuntimeException)
 {
-    static Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-    }
-    return aId;
+    return theScDataPilotDescriptorBaseImplementationId::get().getSeq();
 }
 
 void ScDataPilotDescriptorBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -1169,16 +1167,15 @@ Sequence< uno::Type > SAL_CALL ScDataPilotTableObj::getTypes() throw(RuntimeExce
     return aTypes;
 }
 
+namespace
+{
+    class theScDataPilotTableObjImplementationId : public rtl::Static< UnoTunnelIdInit, theScDataPilotTableObjImplementationId > {};
+}
+
 Sequence<sal_Int8> SAL_CALL ScDataPilotTableObj::getImplementationId()
                                                     throw(RuntimeException)
 {
-    static Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-    }
-    return aId;
+    return theScDataPilotTableObjImplementationId::get().getSeq();
 }
 
 // ---

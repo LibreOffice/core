@@ -46,8 +46,8 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <editeng/brshitem.hxx>
-#include <rtl/uuid.h>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <sfx2/objsh.hxx>
 #include <vcl/svapp.hxx>
 
@@ -314,19 +314,16 @@ uno::Sequence< uno::Type > SAL_CALL ScAccessibleCellBase::getTypes()
     return comphelper::concatSequences(ScAccessibleCellBaseImpl::getTypes(), ScAccessibleContextBase::getTypes());
 }
 
+namespace
+{
+    class theScAccessibleCellBaseImplementationId : public rtl::Static< UnoTunnelIdInit, theScAccessibleCellBaseImplementationId > {};
+}
+
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleCellBase::getImplementationId(void)
     throw (uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    IsObjectValid();
-    static uno::Sequence<sal_Int8> aId;
-    if (aId.getLength() == 0)
-    {
-        aId.realloc (16);
-        rtl_createUuid (reinterpret_cast<sal_uInt8 *>(aId.getArray()), 0, sal_True);
-    }
-    return aId;
+    return theScAccessibleCellBaseImplementationId::get().getSeq();
 }
 
 sal_Bool ScAccessibleCellBase::IsEditable(

@@ -44,7 +44,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
-#include <rtl/uuid.h>
+#include <comphelper/servicehelper.hxx>
 #include <tools/gen.hxx>
 #include <svtools/colorcfg.hxx>
 #include <vcl/svapp.hxx>
@@ -827,19 +827,16 @@ uno::Sequence< ::rtl::OUString> SAL_CALL
 
 //=====  XTypeProvider  =======================================================
 
+namespace
+{
+    class theScAccessibleSpreadsheetImplementationId : public rtl::Static< UnoTunnelIdInit, theScAccessibleSpreadsheetImplementationId > {};
+}
+
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleSpreadsheet::getImplementationId(void)
     throw (uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    IsObjectValid();
-    static uno::Sequence<sal_Int8> aId;
-    if (aId.getLength() == 0)
-    {
-        aId.realloc (16);
-        rtl_createUuid (reinterpret_cast<sal_uInt8 *>(aId.getArray()), 0, sal_True);
-    }
-    return aId;
+    return theScAccessibleSpreadsheetImplementationId::get().getSeq();
 }
 
 ///=====  XAccessibleEventBroadcaster  =====================================

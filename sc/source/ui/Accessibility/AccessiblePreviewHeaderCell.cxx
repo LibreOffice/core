@@ -50,6 +50,7 @@
 #include <svl/smplhint.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <toolkit/helper/convert.hxx>
 
 using namespace ::com::sun::star;
@@ -302,19 +303,16 @@ uno::Sequence< uno::Type > SAL_CALL ScAccessiblePreviewHeaderCell::getTypes()
     return comphelper::concatSequences(ScAccessiblePreviewHeaderCellImpl::getTypes(), ScAccessibleContextBase::getTypes());
 }
 
+namespace
+{
+    class theScAccessiblePreviewHeaderCellImplementationId : public rtl::Static< UnoTunnelIdInit, theScAccessiblePreviewHeaderCellImplementationId > {};
+}
+
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessiblePreviewHeaderCell::getImplementationId(void)
     throw (uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    IsObjectValid();
-    static uno::Sequence<sal_Int8> aId;
-    if (aId.getLength() == 0)
-    {
-        aId.realloc (16);
-        rtl_createUuid (reinterpret_cast<sal_uInt8 *>(aId.getArray()), 0, sal_True);
-    }
-    return aId;
+    return theScAccessiblePreviewHeaderCellImplementationId::get().getSeq();
 }
 
 //====  internal  =========================================================
