@@ -194,14 +194,6 @@ ScDbNameDlg::ScDbNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 ScDbNameDlg::~ScDbNameDlg()
 {
     DELETEZ( pSaveObj );
-
-    ScRange* pEntry = (ScRange*)aRemoveList.First();
-    while ( pEntry )
-    {
-        aRemoveList.Remove( pEntry );
-        delete pEntry;
-        pEntry = (ScRange*)aRemoveList.Next();
-    }
 }
 
 
@@ -590,9 +582,9 @@ IMPL_LINK( ScDbNameDlg, RemoveBtnHdl, void *, EMPTYARG )
             SCCOL nColStart, nColEnd;
             SCROW nRowStart, nRowEnd;
             itr->GetArea( nTab, nColStart, nRowStart, nColEnd, nRowEnd );
-            aRemoveList.Insert(
-                new ScRange( ScAddress( nColStart, nRowStart, nTab ),
-                             ScAddress( nColEnd,   nRowEnd,   nTab ) ) );
+            aRemoveList.push_back(
+                ScRange( ScAddress( nColStart, nRowStart, nTab ),
+                         ScAddress( nColEnd,   nRowEnd,   nTab ) ) );
 
             rDBs.erase(itr);
 

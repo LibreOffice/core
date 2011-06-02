@@ -29,6 +29,8 @@
 #ifndef SC_DBNAMDLG_HXX
 #define SC_DBNAMDLG_HXX
 
+#include <vector>
+
 #include <vcl/combobox.hxx>
 
 #include <vcl/fixed.hxx>
@@ -97,7 +99,7 @@ private:
 
     ScDBCollection  aLocalDbCol;
     ScRange         theCurArea;
-    List            aRemoveList;
+    std::vector<ScRange> aRemoveList;
 
 #ifdef _DBNAMDLG_CXX
 private:
