@@ -1328,7 +1328,7 @@ uno::Sequence<sal_Int8> SAL_CALL ScShapeObj::getImplementationId()
             if( aIter == aImplementationIdMap.end() )
             {
                 // we need to create a new implementation id for this
-                // note: this memory is not free'd until application exists
+                // note: this memory is not free'd until application exits
                 //       but since we have a fixed set of shapetypes and the
                 //       memory will be reused this is ok.
                 pImplementationId = new uno::Sequence< sal_Int8 >( 16 );
