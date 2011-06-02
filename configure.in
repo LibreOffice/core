@@ -7930,10 +7930,6 @@ LIBRSVG_LIBS=""
 
 AC_MSG_CHECKING([what librsvg to use])
 
-if test -z "$enable_librsvg" -a "$with_system_libs" = yes; then
-   enable_librsvg=system
-fi
-
 case "$enable_librsvg" in
 no|disable)
    AC_MSG_RESULT([none])
@@ -7941,21 +7937,28 @@ no|disable)
    ;;
 
 ""|yes|auto)
-   if test $build_os = cygwin; then
-      dnl When building on Windows always use the internal one
-      AC_MSG_RESULT([internal])
-      enable_librsvg=internal
-   elif test $_os = Darwin -o $_os = iOS; then
-      dnl Ditto when building for these OSes. Add more OSes above as needed.
+   if test $build_os = cygwin -o \
+           $_os = Darwin -o $_os = iOS; then
+      dnl When building on/for these OSes always use the internal one,
+      dnl if at all. Add more OSes above as needed.
       AC_MSG_RESULT([internal])
       enable_librsvg=internal
    else
-      AC_MSG_RESULT([checking further])
-      PKG_CHECK_MODULES(LIBRSVG, librsvg-2.0 >= 2.14,, [:])
-      if test -z "$LIBRSVG_PKG_ERRORS"; then
+      if test "$with_system_libs" = yes; then
+         AC_MSG_RESULT([system])
+         PKG_CHECK_MODULES(LIBRSVG, librsvg-2.0 >= 2.14)
          enable_librsvg=system
-      else
+      elif test "$with_system_libs" = no; then
+         AC_MSG_RESULT([internal])
          enable_librsvg=internal
+      else
+         AC_MSG_RESULT([checking further])
+         PKG_CHECK_MODULES(LIBRSVG, librsvg-2.0 >= 2.14,, [:])
+         if test -z "$LIBRSVG_PKG_ERRORS"; then
+            enable_librsvg=system
+         else
+            enable_librsvg=internal
+         fi
       fi
    fi
    ;;
