@@ -12,6 +12,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/tencinfo.h>
+#include <svl/lngmisc.hxx>
 
 using rtl::OString;
 using rtl::OStringBuffer;
@@ -251,19 +252,19 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             break;
         case RTF_NOBREAK:
             {
-                OUString aStr((sal_Unicode)0x00A0);
+                OUString aStr(SVT_HARD_SPACE);
                 text(aStr);
             }
             break;
         case RTF_NOBRKHYPH:
             {
-                OUString aStr((sal_Unicode)0x2011);
+                OUString aStr(SVT_HARD_HYPHEN);
                 text(aStr);
             }
             break;
         case RTF_OPTHYPH:
             {
-                OUString aStr((sal_Unicode)0x00AD);
+                OUString aStr(SVT_SOFT_HYPHEN);
                 text(aStr);
             }
             break;
