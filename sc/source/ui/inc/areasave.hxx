@@ -40,12 +40,12 @@ class ScAreaLink;
 class ScAreaLinkSaver : public ScDataObject
 {
 private:
-    String      aFileName;
-    String      aFilterName;
-    String      aOptions;
-    String      aSourceArea;
-    ScRange     aDestArea;
-    sal_uLong       nRefresh;
+    ::rtl::OUString aFileName;
+    ::rtl::OUString aFilterName;
+    ::rtl::OUString aOptions;
+    ::rtl::OUString aSourceArea;
+    ScRange aDestArea;
+    sal_uLong nRefresh;
 
 public:
                 ScAreaLinkSaver( const ScAreaLink& rSource );
@@ -54,8 +54,8 @@ public:
 
     virtual ScDataObject*   Clone() const;
 
-    sal_Bool        IsEqual( const ScAreaLink& rCompare ) const;
-    sal_Bool        IsEqualSource( const ScAreaLink& rCompare ) const;
+    bool        IsEqual( const ScAreaLink& rCompare ) const;
+    bool        IsEqualSource( const ScAreaLink& rCompare ) const;
 
     void        WriteToLink( ScAreaLink& rLink ) const;
     void        InsertNewLink( ScDocument* pDoc ) const;
@@ -73,7 +73,7 @@ public:
 
     ScAreaLinkSaver*    operator[](sal_uInt16 nIndex) const {return (ScAreaLinkSaver*)At(nIndex);}
 
-    sal_Bool        IsEqual( const ScDocument* pDoc ) const;
+    bool        IsEqual( const ScDocument* pDoc ) const;
     void        Restore( ScDocument* pDoc ) const;
 
     // returns NULL if empty

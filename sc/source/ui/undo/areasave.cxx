@@ -73,16 +73,16 @@ ScDataObject*   ScAreaLinkSaver::Clone() const
     return new ScAreaLinkSaver( *this );
 }
 
-sal_Bool ScAreaLinkSaver::IsEqualSource( const ScAreaLink& rCompare ) const
+bool ScAreaLinkSaver::IsEqualSource( const ScAreaLink& rCompare ) const
 {
-    return ( aFileName   == rCompare.GetFile() &&
-             aFilterName == rCompare.GetFilter() &&
-             aOptions    == rCompare.GetOptions() &&
-             aSourceArea == rCompare.GetSource() &&
-             nRefresh    == rCompare.GetRefreshDelay() );
+    return ( aFileName.equals(rCompare.GetFile()) &&
+             aFilterName.equals(rCompare.GetFilter()) &&
+             aOptions.equals(rCompare.GetOptions()) &&
+             aSourceArea.equals(rCompare.GetSource()) &&
+             nRefresh == rCompare.GetRefreshDelay() );
 }
 
-sal_Bool ScAreaLinkSaver::IsEqual( const ScAreaLink& rCompare ) const
+bool ScAreaLinkSaver::IsEqual( const ScAreaLink& rCompare ) const
 {
     return ( IsEqualSource( rCompare ) &&
              aDestArea == rCompare.GetDestArea() );
@@ -106,7 +106,8 @@ void ScAreaLinkSaver::InsertNewLink( ScDocument* pDoc ) const
                                             aSourceArea, aDestArea.aStart, nRefresh );
         pLink->SetInCreate( sal_True );
         pLink->SetDestArea( aDestArea );
-        pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aFileName, &aFilterName, &aSourceArea );
+        String aTmp1(aFilterName), aTmp2(aSourceArea);
+        pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aFileName, &aTmp1, &aTmp2 );
         pLink->Update();
         pLink->SetInCreate( false );
     }
@@ -132,7 +133,7 @@ ScDataObject*   ScAreaLinkSaveCollection::Clone() const
     return new ScAreaLinkSaveCollection( *this );
 }
 
-sal_Bool ScAreaLinkSaveCollection::IsEqual( const ScDocument* pDoc ) const
+bool ScAreaLinkSaveCollection::IsEqual( const ScDocument* pDoc ) const
 {
     // IsEqual can be checked in sequence.
     // Neither ref-update nor removing links will change the order.
@@ -158,7 +159,7 @@ sal_Bool ScAreaLinkSaveCollection::IsEqual( const ScDocument* pDoc ) const
             return false;           // fewer links in the document than in the save collection
     }
 
-    return sal_True;
+    return true;
 }
 
 ScAreaLink* lcl_FindLink( const ::sfx2::SvBaseLinks& rLinks, const ScAreaLinkSaver& rSaver )
