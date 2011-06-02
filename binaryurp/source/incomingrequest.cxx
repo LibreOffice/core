@@ -234,10 +234,10 @@ bool IncomingRequest::execute_throw(
                                     mtd->pParams[j].pTypeRef));
                         } else {
                             outBufs.push_back(
-                                std::vector< char >(
+                                std::vector< char >(size_t_round(
                                     css::uno::TypeDescription(
                                         mtd->pParams[j].pTypeRef).
-                                    get()->nSize));
+                                    get()->nSize)));
                             p = &outBufs.back()[0];
                         }
                         args.push_back(p);
