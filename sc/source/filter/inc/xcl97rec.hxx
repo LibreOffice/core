@@ -363,13 +363,13 @@ protected:
 public:
                                 ExcEScenarioCell( sal_uInt16 nC, sal_uInt16 nR, const String& rTxt );
 
-    inline sal_Size             GetStringBytes()
+    inline sal_Size             GetStringBytes() const
                                     { return sText.GetSize(); }
 
-    void                        WriteAddress( XclExpStream& rStrm );
-    void                        WriteText( XclExpStream& rStrm );
+    void                        WriteAddress( XclExpStream& rStrm ) const ;
+    void                        WriteText( XclExpStream& rStrm ) const;
 
-    void                        SaveXml( XclExpXmlStream& rStrm );
+    void                        SaveXml( XclExpXmlStream& rStrm ) const;
 };
 
 

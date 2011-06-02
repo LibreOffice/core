@@ -1164,17 +1164,17 @@ ExcEScenarioCell::ExcEScenarioCell( sal_uInt16 nC, sal_uInt16 nR, const String& 
 {
 }
 
-void ExcEScenarioCell::WriteAddress( XclExpStream& rStrm )
+void ExcEScenarioCell::WriteAddress( XclExpStream& rStrm ) const
 {
     rStrm << nRow << nCol;
 }
 
-void ExcEScenarioCell::WriteText( XclExpStream& rStrm )
+void ExcEScenarioCell::WriteText( XclExpStream& rStrm ) const
 {
     rStrm << sText;
 }
 
-void ExcEScenarioCell::SaveXml( XclExpXmlStream& rStrm )
+void ExcEScenarioCell::SaveXml( XclExpXmlStream& rStrm ) const
 {
     rStrm.GetCurrentStream()->singleElement( XML_inputCells,
             // OOXTODO: XML_deleted,
