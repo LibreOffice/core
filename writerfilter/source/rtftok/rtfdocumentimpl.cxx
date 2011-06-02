@@ -240,6 +240,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             break;
         default:
             OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
+            skipDestination();
             break;
     }
     return 0;
@@ -413,6 +414,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         default:
             OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
+            skipDestination();
             break;
     }
     return 0;
@@ -484,6 +486,7 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
         case RTF_IMPR: nSprm = NS_sprm::LN_CFImprint; break;
         default:
             OSL_TRACE("%s: TODO handle toggle '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
+            skipDestination();
             break;
     }
     if (nSprm > 0)
@@ -493,6 +496,15 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
     }
 
     return 0;
+}
+
+void RTFDocumentImpl::skipDestination()
+{
+    if (m_bSkipUnknown)
+    {
+        m_aStates.top().nDestinationState = DESTINATION_SKIP;
+        m_bSkipUnknown = false;
+    }
 }
 
 int RTFDocumentImpl::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
@@ -510,16 +522,9 @@ int RTFDocumentImpl::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
     if (i == nRTFControlWords)
     {
         OSL_TRACE("%s: unknown keyword '\\%s'", OSL_THIS_FUNC, rKeyword.getStr());
-        if (m_bSkipUnknown)
-        {
-            m_aStates.top().nDestinationState = DESTINATION_SKIP;
-            m_bSkipUnknown = false;
-        }
+        skipDestination();
         return 0;
     }
-
-    // known keyword, shoult not be skipped, even if starts with \*
-    m_bSkipUnknown = false;
 
     m_pCurrentKeyword = &rKeyword;
     switch (aRTFControlWords[i].nControlType)
@@ -562,6 +567,7 @@ int RTFDocumentImpl::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
                     break;
                 default:
                     OSL_TRACE("%s: TODO handle symbol '%s'", OSL_THIS_FUNC, rKeyword.getStr());
+                    skipDestination();
                     break;
             }
             break;
