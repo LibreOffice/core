@@ -2416,7 +2416,7 @@ if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
    AC_CHECK_TOOL(AR,ar)
    AC_CHECK_TOOL(NM,nm)
    AC_CHECK_TOOL(OBJDUMP,objdump)
-   AC_CHECK_TOOL(PKG_CONFIG,pkg-config)
+   AC_PATH_TOOL(PKG_CONFIG,pkg-config)
    AC_CHECK_TOOL(RANLIB,ranlib)
    AC_CHECK_TOOL(STRIP,strip)
    if test "$_os" = "WINNT"; then
@@ -2432,6 +2432,25 @@ AC_SUBST(PKG_CONFIG)
 AC_SUBST(RANLIB)
 AC_SUBST(STRIP)
 AC_SUBST(WINDRES)
+
+dnl ===================================================================
+dnl pkg-config checks on Mac OS X
+dnl ===================================================================
+
+if test $_os = Darwin; then
+   AC_MSG_CHECKING([for bogus pkg-config])
+   if test -n "$PKG_CONFIG"; then
+      if test "$PKG_CONFIG" = /usr/bin/pkg-config && ls -l /usr/bin/pkg-config | grep -q Mono.framework; then
+         AC_MSG_RESULT([yes, from Mono, ignoring])
+         PKG_CONFIG=""
+      else
+         AC_MSG_RESULT([yes, from unknown origin, ignoring])
+         PKG_CONFIG=""
+      fi
+   else
+      AC_MSG_RESULT([no])
+   fi
+fi
 
 dnl ===================================================================
 dnl  .NET needs special treatment
