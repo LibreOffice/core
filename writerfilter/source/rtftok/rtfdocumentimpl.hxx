@@ -131,6 +131,7 @@ namespace writerfilter {
                 /// Color index <-> RGB color value map
                 std::vector<sal_uInt32> m_aColorTable;
                 bool m_bFirstRun;
+                bool m_bNeedPap;
         };
     } // namespace rtftok
 } // namespace writerfilter

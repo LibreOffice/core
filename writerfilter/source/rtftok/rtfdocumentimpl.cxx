@@ -30,7 +30,8 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<io::XInputStream> const& xInputS
     m_pCurrentKeyword(0),
     m_aFontEncodings(),
     m_aColorTable(),
-    m_bFirstRun(true)
+    m_bFirstRun(true),
+    m_bNeedPap(false)
 {
     OSL_ENSURE(xInputStream.is(), "no input stream");
     if (!xInputStream.is())
@@ -155,6 +156,14 @@ void RTFDocumentImpl::text(OUString& rString)
         Mapper().props(pProperties);
         m_bFirstRun = false;
     }
+    if (m_bNeedPap)
+    {
+        writerfilter::Reference<Properties>::Pointer_t const pPaProperties(
+                new RTFReferenceProperties(m_aStates.top().aAttributes, m_aStates.top().aSprms)
+                );
+        Mapper().props(pPaProperties);
+        m_bNeedPap = false;
+    }
 
     if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
     {
@@ -238,10 +247,8 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 Mapper().endParagraphGroup();
                 // start new one
                 Mapper().startParagraphGroup();
-                writerfilter::Reference<Properties>::Pointer_t const pProperties(
-                        new RTFReferenceProperties(m_aStates.top().aAttributes, m_aStates.top().aSprms)
-                        );
-                Mapper().props(pProperties);
+                // but don't emit properties yet, since they may change till the first text token pops up
+                m_bNeedPap = true;
             }
             break;
         case RTF_BACKSLASH:
