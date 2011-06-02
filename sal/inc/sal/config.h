@@ -41,7 +41,6 @@
 #define SAL_PATHSEPARATOR ';'
 #define SAL_PATHDELIMITER '\\'
 #define SAL_CONFIGFILE( name ) name ".ini"
-#define SAL_SYSCONFIGFILE( name ) name ".ini"
 
 #ifdef _MSC_VER
 
@@ -84,7 +83,6 @@
 #define SAL_PATHSEPARATOR ':'
 #define SAL_PATHDELIMITER '/'
 #define SAL_CONFIGFILE( name ) name "rc"
-#define SAL_SYSCONFIGFILE( name ) "." name "rc"
 #endif
 
 #ifdef MACOSX
@@ -95,7 +93,6 @@
 #define SAL_PATHSEPARATOR ':'
 #define SAL_PATHDELIMITER '/'
 #define SAL_CONFIGFILE( name ) name "rc"
-#define SAL_SYSCONFIGFILE( name ) "." name "rc"
 #endif
 
 #ifdef IOS
@@ -106,7 +103,6 @@
 #define SAL_PATHSEPARATOR ':'
 #define SAL_PATHDELIMITER '/'
 #define SAL_CONFIGFILE( name ) name "rc"
-#define SAL_SYSCONFIGFILE( name ) "." name "rc"
 #endif
 
 #ifdef sun
