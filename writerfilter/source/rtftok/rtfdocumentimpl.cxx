@@ -228,6 +228,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
     {
         case RTF_IGNORE:
             m_bSkipUnknown = true;
+            return 0; // don't reset m_bSkipUnknown after this keyword
             break;
         case RTF_PAR:
             {
