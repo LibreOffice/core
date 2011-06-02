@@ -331,6 +331,21 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().aAttributes[NS_rtf::LN_ISTD] = pValue;
             }
             break;
+        case RTF_CS:
+            if (m_aStates.top().nDestinationState == DESTINATION_STYLEENTRY)
+            {
+                m_aStates.top().nCurrentStyleIndex = nParam;
+                RTFValue::Pointer_t pValue(new RTFValue(nParam));
+                m_aStates.top().aAttributes[NS_rtf::LN_ISTD] = pValue;
+                RTFValue::Pointer_t pTValue(new RTFValue(2));
+                m_aStates.top().aAttributes[NS_rtf::LN_SGC] = pTValue; // character style
+            }
+            else
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(nParam));
+                m_aStates.top().aAttributes[NS_rtf::LN_ISTD] = pValue;
+            }
+            break;
         case RTF_SBASEDON:
             {
                 RTFValue::Pointer_t pValue(new RTFValue(nParam));
