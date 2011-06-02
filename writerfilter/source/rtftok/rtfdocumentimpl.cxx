@@ -220,6 +220,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
 
 int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
 {
+    bool bParsed = true;
     switch (nKeyword)
     {
         case RTF_FNIL:
@@ -240,14 +241,16 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             break;
         default:
             OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
-            skipDestination();
+            bParsed = false;
             break;
     }
+    skipDestination(bParsed);
     return 0;
 }
 
 int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
 {
+    bool bParsed = true;
     int nSprm = 0;
     // First check the trivial cases.
     switch (nKeyword)
@@ -266,6 +269,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     {
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
         m_aStates.top().aSprms[nSprm] = pValue;
+        skipDestination(bParsed);
         return 0;
     }
 
@@ -414,14 +418,16 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         default:
             OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
-            skipDestination();
+            bParsed = false;
             break;
     }
+    skipDestination(bParsed);
     return 0;
 }
 
 int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam)
 {
+    bool bParsed = true;
     int nSprm = 0;
 
     // Map all underline keywords to a single sprm.
@@ -451,6 +457,7 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
     {
         RTFValue::Pointer_t pValue(new RTFValue((!bParam || nParam != 0) ? nSprm : 0));
         m_aStates.top().aSprms[NS_sprm::LN_CKul] = pValue;
+        skipDestination(bParsed);
         return 0;
     }
 
@@ -468,6 +475,7 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
     {
         RTFValue::Pointer_t pValue(new RTFValue((!bParam || nParam != 0) ? nSprm : 0));
         m_aStates.top().aSprms[NS_sprm::LN_CKcd] = pValue;
+        skipDestination(bParsed);
         return 0;
     }
 
@@ -486,7 +494,7 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
         case RTF_IMPR: nSprm = NS_sprm::LN_CFImprint; break;
         default:
             OSL_TRACE("%s: TODO handle toggle '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
-            skipDestination();
+            bParsed = false;
             break;
     }
     if (nSprm > 0)
@@ -495,14 +503,16 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
         m_aStates.top().aSprms[nSprm] = pValue;
     }
 
+    skipDestination(bParsed);
     return 0;
 }
 
-void RTFDocumentImpl::skipDestination()
+void RTFDocumentImpl::skipDestination(bool bParsed)
 {
     if (m_bSkipUnknown)
     {
-        m_aStates.top().nDestinationState = DESTINATION_SKIP;
+        if (!bParsed)
+            m_aStates.top().nDestinationState = DESTINATION_SKIP;
         m_bSkipUnknown = false;
     }
 }
@@ -522,7 +532,7 @@ int RTFDocumentImpl::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
     if (i == nRTFControlWords)
     {
         OSL_TRACE("%s: unknown keyword '\\%s'", OSL_THIS_FUNC, rKeyword.getStr());
-        skipDestination();
+        skipDestination(false);
         return 0;
     }
 
@@ -540,6 +550,8 @@ int RTFDocumentImpl::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
                 return ret;
             break;
         case CONTROL_SYMBOL:
+            {
+            bool bParsed = true;
             switch (aRTFControlWords[i].nIndex)
             {
                 case RTF_IGNORE:
@@ -567,8 +579,10 @@ int RTFDocumentImpl::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
                     break;
                 default:
                     OSL_TRACE("%s: TODO handle symbol '%s'", OSL_THIS_FUNC, rKeyword.getStr());
-                    skipDestination();
+                    bParsed = false;
                     break;
+            }
+            skipDestination(bParsed);
             }
             break;
         case CONTROL_TOGGLE:
