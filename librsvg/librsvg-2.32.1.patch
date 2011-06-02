@@ -15,7 +15,7 @@
  
  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether gio 2.24 is available" >&5
  $as_echo_n "checking whether gio 2.24 is available... " >&6; }
-+if 0 ; then
++if false; then
  if test -n "$PKG_CONFIG" && \
      { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gio-2.0 >= 2.24.0\""; } >&5
    ($PKG_CONFIG --exists --print-errors "gio-2.0 >= 2.24.0") 2>&5
