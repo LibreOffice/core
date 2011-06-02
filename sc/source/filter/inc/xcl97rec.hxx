@@ -374,17 +374,16 @@ public:
 
 
 
-class ExcEScenario : public ExcRecord, private List
+class ExcEScenario : public ExcRecord
 {
 private:
     sal_Size                    nRecLen;
     XclExpString                sName;
     XclExpString                sComment;
     XclExpString                sUserName;
-    sal_uInt8                       nProtected;
+    sal_uInt8                   nProtected;
 
-    inline ExcEScenarioCell*    _First()    { return (ExcEScenarioCell*) List::First(); }
-    inline ExcEScenarioCell*    _Next()     { return (ExcEScenarioCell*) List::Next(); }
+    std::vector<ExcEScenarioCell> aCells;
 
     sal_Bool                        Append( sal_uInt16 nCol, sal_uInt16 nRow, const String& rTxt );
 

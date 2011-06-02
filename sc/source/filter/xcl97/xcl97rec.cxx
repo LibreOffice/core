@@ -1244,25 +1244,25 @@ ExcEScenario::ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab )
 
 ExcEScenario::~ExcEScenario()
 {
-    for( ExcEScenarioCell* pCell = _First(); pCell; pCell = _Next() )
-        delete pCell;
 }
 
 sal_Bool ExcEScenario::Append( sal_uInt16 nCol, sal_uInt16 nRow, const String& rTxt )
 {
-    if( List::Count() == EXC_SCEN_MAXCELL )
+    if( aCells.size() == EXC_SCEN_MAXCELL )
         return false;
 
-    ExcEScenarioCell* pCell = new ExcEScenarioCell( nCol, nRow, rTxt );
-    List::Insert( pCell, LIST_APPEND );
-    nRecLen += 6 + pCell->GetStringBytes();        // 4 bytes address, 2 bytes ifmt
+    ExcEScenarioCell aCell(nCol, nRow, rTxt);
+    aCells.push_back(aCell);
+    nRecLen += 6 + aCell.GetStringBytes();        // 4 bytes address, 2 bytes ifmt
     return sal_True;
 }
 
 void ExcEScenario::SaveCont( XclExpStream& rStrm )
 {
-    rStrm   << (sal_uInt16) List::Count()       // number of cells
-            << nProtected                   // fProtection
+    sal_uInt16 count = aCells.size();
+
+    rStrm   << (sal_uInt16) count               // number of cells
+            << nProtected                       // fProtection
             << (sal_uInt8) 0                    // fHidden
             << (sal_uInt8) sName.Len()          // length of scen name
             << (sal_uInt8) sComment.Len()       // length of comment
@@ -1275,13 +1275,13 @@ void ExcEScenario::SaveCont( XclExpStream& rStrm )
     if( sComment.Len() )
         rStrm << sComment;
 
-    ExcEScenarioCell* pCell;
-    for( pCell = _First(); pCell; pCell = _Next() )
-        pCell->WriteAddress( rStrm );           // pos of cell
-    for( pCell = _First(); pCell; pCell = _Next() )
-        pCell->WriteText( rStrm );              // string content
+    std::vector<ExcEScenarioCell>::iterator pIter;
+    for( pIter = aCells.begin(); pIter != aCells.end(); ++pIter )
+        pIter->WriteAddress( rStrm );           // pos of cell
+    for( pIter = aCells.begin(); pIter != aCells.end(); ++pIter )
+        pIter->WriteText( rStrm );              // string content
     rStrm.SetSliceSize( 2 );
-    rStrm.WriteZeroBytes( 2 * List::Count() );  // date format
+    rStrm.WriteZeroBytes( 2 * count );  // date format
 }
 
 sal_uInt16 ExcEScenario::GetNum() const
@@ -1301,13 +1301,14 @@ void ExcEScenario::SaveXml( XclExpXmlStream& rStrm )
             XML_name,       XclXmlUtils::ToOString( sName ).getStr(),
             XML_locked,     XclXmlUtils::ToPsz( nProtected ),
             // OOXTODO: XML_hidden,
-            XML_count,      OString::valueOf( (sal_Int32) List::Count() ).getStr(),
+            XML_count,      OString::valueOf( (sal_Int32) aCells.size() ).getStr(),
             XML_user,       XESTRING_TO_PSZ( sUserName ),
             XML_comment,    XESTRING_TO_PSZ( sComment ),
             FSEND );
 
-    for( ExcEScenarioCell* pCell = _First(); pCell; pCell = _Next() )
-        pCell->SaveXml( rStrm );
+    std::vector<ExcEScenarioCell>::iterator pIter;
+    for( pIter = aCells.begin(); pIter != aCells.end(); ++pIter )
+        pIter->SaveXml( rStrm );
 
     rWorkbook->endElement( XML_scenario );
 }
