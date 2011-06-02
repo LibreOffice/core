@@ -118,28 +118,38 @@ XclExpObjList::XclExpObjList( const XclExpRoot& rRoot, XclEscherEx& rEscherEx ) 
 
 XclExpObjList::~XclExpObjList()
 {
-    for ( XclObj* p = First(); p; p = Next() )
-        delete p;
+    std::vector<XclObj*>::iterator pIter;
+    for ( pIter = maObjs.begin(); pIter != maObjs.end(); ++pIter )
+        delete *pIter;
     delete pMsodrawingPerSheet;
     delete pSolverContainer;
 }
 
 sal_uInt16 XclExpObjList::Add( XclObj* pObj )
 {
-    OSL_ENSURE( Count() < 0xFFFF, "XclExpObjList::Add: too much for Xcl" );
-    if ( Count() < 0xFFFF )
+    OSL_ENSURE( maObjs.size() < 0xFFFF, "XclExpObjList::Add: too much for Xcl" );
+
+    size_t nSize = maObjs.size();
+
+    if ( nSize < 0xFFFF )
     {
-        Insert( pObj, LIST_APPEND );
-        sal_uInt16 nCnt = (sal_uInt16) Count();
-        pObj->SetId( nCnt );
+        maObjs.push_back(pObj);
+        ++nSize;
+        pObj->SetId( nSize );
         pObj->SetTab( mnScTab );
-        return nCnt;
     }
     else
     {
         delete pObj;
-        return 0;
+        nSize = 0;
     }
+
+    return nSize;
+}
+
+void XclExpObjList::pop_back ()
+{
+    maObjs.pop_back();
 }
 
 void XclExpObjList::EndSheet()
@@ -157,16 +167,17 @@ void XclExpObjList::Save( XclExpStream& rStrm )
     //! Escher must be written, even if there are no objects
     pMsodrawingPerSheet->Save( rStrm );
 
-    for ( XclObj* p = First(); p; p = Next() )
-        p->Save( rStrm );
+    std::vector<XclObj*>::iterator pIter;
+    for ( pIter = maObjs.begin(); pIter != maObjs.end(); ++pIter )
+        (*pIter)->Save( rStrm );
 
     if( pSolverContainer )
         pSolverContainer->Save( rStrm );
 }
 
-static bool IsVmlObject( const XclObj& rObj )
+static bool IsVmlObject( const XclObj *rObj )
 {
-    switch( rObj.GetObjType() )
+    switch( rObj->GetObjType() )
     {
         case EXC_OBJTYPE_NOTE:
             return true;
@@ -180,8 +191,9 @@ static sal_Int32 GetVmlObjectCount( XclExpObjList& rList )
 {
     sal_Int32 nNumVml = 0;
 
-    for ( XclObj* p = rList.First(); p; p = rList.Next() )
-        if( IsVmlObject( *p ) )
+    std::vector<XclObj*>::iterator pIter;
+    for ( pIter = rList.begin(); pIter != rList.end(); ++pIter )
+        if( IsVmlObject( *pIter ) )
             ++nNumVml;
 
     return nNumVml;
@@ -191,7 +203,7 @@ static sal_Int32 GetVmlObjectCount( XclExpObjList& rList )
 static void SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_Int32& nDrawingMLCount )
 {
     sal_Int32 nVmlObjects = GetVmlObjectCount( rList );
-    if( (rList.Count() - nVmlObjects) == 0 )
+    if( (rList.size() - nVmlObjects) == 0 )
         return;
 
     sal_Int32 nDrawing = ++nDrawingMLCount;
@@ -215,11 +227,12 @@ static void SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, 
             FSNS( XML_xmlns, XML_r ),   "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
             FSEND );
 
-    for ( XclObj* p = rList.First(); p; p = rList.Next() )
+    std::vector<XclObj*>::iterator pIter;
+    for ( pIter = rList.begin(); pIter != rList.end(); ++pIter )
     {
-        if( IsVmlObject( *p ) )
+        if( IsVmlObject( *pIter ) )
             continue;
-        p->SaveXml( rStrm );
+        (*pIter)->SaveXml( rStrm );
     }
 
     pDrawing->endElement( FSNS( XML_xdr, XML_wsDr ) );
@@ -254,11 +267,12 @@ static void SaveVmlObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_In
             FSNS( XML_xmlns, XML_x ),   "urn:schemas-microsoft-com:office:excel",
             FSEND );
 
-    for ( XclObj* p = rList.First(); p; p = rList.Next() )
+    std::vector<XclObj*>::iterator pIter;
+    for ( pIter = rList.begin(); pIter != rList.end(); ++pIter )
     {
-        if( !IsVmlObject( *p ) )
+        if( !IsVmlObject( *pIter ) )
             continue;
-        p->SaveXml( rStrm );
+        (*pIter)->SaveXml( rStrm );
     }
 
     pVmlDrawing->endElement( XML_xml );
@@ -272,7 +286,7 @@ void XclExpObjList::SaveXml( XclExpXmlStream& rStrm )
     if( pSolverContainer )
         pSolverContainer->SaveXml( rStrm );
 
-    if( Count() == 0 )
+    if( maObjs.empty())
         return;
 
     SaveDrawingMLObjects( *this, rStrm, mnDrawingMLCount );

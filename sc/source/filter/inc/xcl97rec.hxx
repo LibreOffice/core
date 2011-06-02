@@ -39,18 +39,36 @@ class XclObj;
 class XclExpMsoDrawing;
 class SdrCaptionObj;
 
-class XclExpObjList : public List, public ExcEmptyRec, protected XclExpRoot
+class XclExpObjList : public ExcEmptyRec, protected XclExpRoot
 {
 public:
+
+    typedef std::vector<XclObj*>::iterator iterator;
+
     explicit            XclExpObjList( const XclExpRoot& rRoot, XclEscherEx& rEscherEx );
     virtual             ~XclExpObjList();
-
-    XclObj*             First() { return (XclObj*) List::First(); }
-    XclObj*             Next() { return (XclObj*) List::Next(); }
 
     /// return: 1-based ObjId
     ///! count>=0xFFFF: Obj will be deleted, return 0
     sal_uInt16              Add( XclObj* );
+
+    XclObj* back () { return maObjs.empty() ? NULL : maObjs.back(); }
+
+    /**
+     *
+     * @brief Remove last element in the list.
+     *
+     */
+
+    void pop_back ();
+
+    inline bool empty () const { return maObjs.empty(); }
+
+    inline size_t size () const { return maObjs.size(); }
+
+    inline iterator begin () { return maObjs.begin(); }
+
+    inline iterator end () { return maObjs.end(); }
 
     inline XclExpMsoDrawing* GetMsodrawingPerSheet() { return pMsodrawingPerSheet; }
 
@@ -69,6 +87,8 @@ private:
     XclEscherEx&        mrEscherEx;
     XclExpMsoDrawing*   pMsodrawingPerSheet;
     XclExpMsoDrawing*   pSolverContainer;
+
+    std::vector<XclObj*> maObjs;
 };
 
 

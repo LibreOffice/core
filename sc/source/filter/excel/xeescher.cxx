@@ -1605,7 +1605,7 @@ XclExpMsoDrawing* XclExpObjectManager::GetMsodrawingPerSheet()
 
 bool XclExpObjectManager::HasObj() const
 {
-    return mxObjList->Count() > 0;
+    return !mxObjList->empty();
 }
 
 sal_uInt16 XclExpObjectManager::AddObj( XclObj* pObjRec )
@@ -1615,8 +1615,8 @@ sal_uInt16 XclExpObjectManager::AddObj( XclObj* pObjRec )
 
 XclObj* XclExpObjectManager::RemoveLastObj()
 {
-    XclObj* pLastObj = static_cast< XclObj* >( mxObjList->Last() );
-    mxObjList->Remove();    // remove current, which is the Last()
+    XclObj* pLastObj = mxObjList->back();
+    mxObjList->pop_back();
     return pLastObj;
 }
 
