@@ -247,6 +247,28 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
 
 int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
 {
+    int nSprm = 0;
+    // First check the trivial cases.
+    switch (nKeyword)
+    {
+        case RTF_AF: nSprm = NS_sprm::LN_CRgFtc1; break;
+        case RTF_FS: nSprm = NS_sprm::LN_CHps; break;
+        case RTF_AFS: nSprm = NS_sprm::LN_CHpsBi; break;
+        case RTF_FPRQ: nSprm = NS_rtf::LN_PRQ; break;
+        case RTF_ANIMTEXT: nSprm = NS_sprm::LN_CSfxText; break;
+        case RTF_EXPNDTW: nSprm = NS_sprm::LN_CDxaSpace; break;
+        case RTF_KERNING: nSprm = NS_sprm::LN_CHpsKern; break;
+        case RTF_CHARSCALEX: nSprm = NS_sprm::LN_CCharScale; break;
+        default: break;
+    }
+    if (nSprm > 0)
+    {
+        RTFValue::Pointer_t pValue(new RTFValue(nParam));
+        m_aStates.top().aSprms[nSprm] = pValue;
+        return 0;
+    }
+
+    // Then check for the more complex ones.
     switch (nKeyword)
     {
         case RTF_F:
@@ -387,32 +409,6 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     RTFValue::Pointer_t pBValue(new RTFValue(nParam));
                     m_aStates.top().aAttributes[NS_ooxml::LN_CT_EastAsianLayout_combineBrackets] = pBValue;
                 }
-            }
-            break;
-        case RTF_AF:
-        case RTF_FS:
-        case RTF_AFS:
-        case RTF_FPRQ:
-        case RTF_ANIMTEXT:
-        case RTF_EXPNDTW:
-        case RTF_KERNING:
-        case RTF_CHARSCALEX:
-            {
-                RTFValue::Pointer_t pValue(new RTFValue(nParam));
-                int nSprm = 0;
-                switch (nKeyword)
-                {
-                    case RTF_AF: nSprm = NS_sprm::LN_CRgFtc1; break;
-                    case RTF_FS: nSprm = NS_sprm::LN_CHps; break;
-                    case RTF_AFS: nSprm = NS_sprm::LN_CHpsBi; break;
-                    case RTF_FPRQ: nSprm = NS_rtf::LN_PRQ; break;
-                    case RTF_ANIMTEXT: nSprm = NS_sprm::LN_CSfxText; break;
-                    case RTF_EXPNDTW: nSprm = NS_sprm::LN_CDxaSpace; break;
-                    case RTF_KERNING: nSprm = NS_sprm::LN_CHpsKern; break;
-                    case RTF_CHARSCALEX: nSprm = NS_sprm::LN_CCharScale; break;
-                    default: OSL_FAIL("unhandled value"); break;
-                }
-                m_aStates.top().aSprms[nSprm] = pValue;
             }
             break;
         default:
