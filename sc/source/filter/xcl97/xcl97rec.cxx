@@ -1328,7 +1328,7 @@ ExcEScenarioManager::ExcEScenarioManager( const XclExpRoot& rRoot, SCTAB nTab ) 
 
     while( rDoc.IsScenario( nNewTab ) )
     {
-        Append( new ExcEScenario( rRoot, nNewTab ) );
+        aScenes.push_back( new ExcEScenario( rRoot, nNewTab ) );
 
         if( rDoc.IsActiveScenario( nNewTab ) )
             nActive = static_cast<sal_uInt16>(nNewTab - nFirstTab);
@@ -1338,30 +1338,32 @@ ExcEScenarioManager::ExcEScenarioManager( const XclExpRoot& rRoot, SCTAB nTab ) 
 
 ExcEScenarioManager::~ExcEScenarioManager()
 {
-    for( ExcEScenario* pScen = _First(); pScen; pScen = _Next() )
-        delete pScen;
+    std::vector<ExcEScenario*>::iterator pIter;
+    for( pIter = aScenes.begin(); pIter != aScenes.end(); ++pIter )
+        delete *pIter;
 }
 
 void ExcEScenarioManager::SaveCont( XclExpStream& rStrm )
 {
-    rStrm   << (sal_uInt16) List::Count()       // number of scenarios
+    rStrm   << (sal_uInt16) aScenes.size()  // number of scenarios
             << nActive                      // active scen
             << nActive                      // last displayed
-            << (sal_uInt16) 0;                  // reference areas
+            << (sal_uInt16) 0;              // reference areas
 }
 
 void ExcEScenarioManager::Save( XclExpStream& rStrm )
 {
-    if( List::Count() )
+    if( !aScenes.empty() )
         ExcRecord::Save( rStrm );
 
-    for( ExcEScenario* pScen = _First(); pScen; pScen = _Next() )
-        pScen->Save( rStrm );
+    std::vector<ExcEScenario*>::iterator pIter;
+    for( pIter = aScenes.begin(); pIter != aScenes.end(); ++pIter )
+        (*pIter)->Save( rStrm );
 }
 
 void ExcEScenarioManager::SaveXml( XclExpXmlStream& rStrm )
 {
-    if( ! List::Count() )
+    if( aScenes.empty() )
         return;
 
     sax_fastparser::FSHelperPtr& rWorkbook = rStrm.GetCurrentStream();
@@ -1371,8 +1373,9 @@ void ExcEScenarioManager::SaveXml( XclExpXmlStream& rStrm )
             // OOXTODO: XML_sqref,
             FSEND );
 
-    for( ExcEScenario* pScen = _First(); pScen; pScen = _Next() )
-        pScen->SaveXml( rStrm );
+    std::vector<ExcEScenario*>::iterator pIter;
+    for( pIter = aScenes.begin(); pIter != aScenes.end(); ++pIter )
+        (*pIter)->SaveXml( rStrm );
 
     rWorkbook->endElement( XML_scenarios );
 }

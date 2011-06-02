@@ -402,16 +402,11 @@ public:
 
 
 
-class ExcEScenarioManager : public ExcRecord, private List
+class ExcEScenarioManager : public ExcRecord
 {
 private:
     sal_uInt16                      nActive;
-
-    inline ExcEScenario*        _First()    { return (ExcEScenario*) List::First(); }
-    inline ExcEScenario*        _Next()     { return (ExcEScenario*) List::Next(); }
-
-    inline void                 Append( ExcEScenario* pScen )
-                                    { List::Insert( pScen, LIST_APPEND ); }
+    std::vector<ExcEScenario*> aScenes;
 
     virtual void                SaveCont( XclExpStream& rStrm );
 
