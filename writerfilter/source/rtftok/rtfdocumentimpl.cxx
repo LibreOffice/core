@@ -586,7 +586,10 @@ void RTFDocumentImpl::skipDestination(bool bParsed)
     if (m_bSkipUnknown)
     {
         if (!bParsed)
+        {
+            OSL_TRACE("%s: skipping destination", OSL_THIS_FUNC);
             m_aStates.top().nDestinationState = DESTINATION_SKIP;
+        }
         m_bSkipUnknown = false;
     }
 }
