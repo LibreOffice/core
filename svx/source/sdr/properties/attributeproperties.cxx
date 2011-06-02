@@ -353,7 +353,7 @@ namespace sdr
                         if(pOldPool && pNewPool)
                         {
                             // build a list of to-be-copied Styles
-                            List aList;
+                            std::vector<SfxStyleSheetBase*> aStyleList;
                             SfxStyleSheetBase* pAnchor = 0L;
 
                             while(pSheet)
@@ -362,7 +362,7 @@ namespace sdr
 
                                 if(!pAnchor)
                                 {
-                                    aList.Insert(pSheet, LIST_APPEND);
+                                    aStyleList.push_back(pSheet);
                                     pSheet = pOldPool->Find(pSheet->GetParent(), pSheet->GetFamily());
                                 }
                                 else
@@ -373,15 +373,15 @@ namespace sdr
                             }
 
                             // copy and set the parents
-                            pSheet = (SfxStyleSheetBase*)aList.First();
                             SfxStyleSheetBase* pNewSheet = 0L;
                             SfxStyleSheetBase* pLastSheet = 0L;
                             SfxStyleSheetBase* pForThisObject = 0L;
 
-                            while(pSheet)
+                            std::vector<SfxStyleSheetBase*>::iterator iter;
+                            for (iter = aStyleList.begin(); iter != aStyleList.end(); ++iter)
                             {
-                                pNewSheet = &pNewPool->Make(pSheet->GetName(), pSheet->GetFamily(), pSheet->GetMask());
-                                pNewSheet->GetItemSet().Put(pSheet->GetItemSet(), sal_False);
+                                pNewSheet = &pNewPool->Make((*iter)->GetName(), (*iter)->GetFamily(), (*iter)->GetMask());
+                                pNewSheet->GetItemSet().Put((*iter)->GetItemSet(), sal_False);
 
                                 if(bScaleUnitChanged)
                                 {
@@ -399,7 +399,6 @@ namespace sdr
                                 }
 
                                 pLastSheet = pNewSheet;
-                                pSheet = (SfxStyleSheetBase*)aList.Next();
                             }
 
                             // Set link to the Style found in the Pool
