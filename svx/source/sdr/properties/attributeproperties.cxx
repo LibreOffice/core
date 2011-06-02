@@ -425,23 +425,20 @@ namespace sdr
                         {
                             // there is no StyleSheetPool in the new model, thus set
                             // all items as hard items in the object
-                            List aList;
+                            std::vector<const SfxItemSet*> aSetList;
                             const SfxItemSet* pItemSet = &pOldStyleSheet->GetItemSet();
 
                             while(pItemSet)
                             {
-                                aList.Insert((void*)pItemSet, CONTAINER_APPEND);
+                                aSetList.push_back(pItemSet);
                                 pItemSet = pItemSet->GetParent();
                             }
 
                             SfxItemSet* pNewSet = &CreateObjectSpecificItemSet(pNewModel->GetItemPool());
-                            pItemSet = (SfxItemSet*)aList.Last();
 
-                            while(pItemSet)
-                            {
-                                pNewSet->Put(*pItemSet);
-                                pItemSet = (SfxItemSet*)aList.Prev();
-                            }
+                            std::vector<const SfxItemSet*>::const_reverse_iterator riter;
+                            for (riter = aSetList.rbegin(); riter != aSetList.rend(); ++riter)
+                                pNewSet->Put(*(*riter));
 
                             // Items which were hard attributes before need to stay
                             if(mpItemSet)
