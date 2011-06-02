@@ -249,6 +249,24 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             else
                 OSL_TRACE("%s: TODO handle symbol '%s' outside fields", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             break;
+        case RTF_NOBREAK:
+            {
+                OUString aStr((sal_Unicode)0x00A0);
+                text(aStr);
+            }
+            break;
+        case RTF_NOBRKHYPH:
+            {
+                OUString aStr((sal_Unicode)0x2011);
+                text(aStr);
+            }
+            break;
+        case RTF_OPTHYPH:
+            {
+                OUString aStr((sal_Unicode)0x00AD);
+                text(aStr);
+            }
+            break;
         default:
             OSL_TRACE("%s: TODO handle symbol '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             bParsed = false;
