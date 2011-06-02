@@ -4,6 +4,7 @@
 #include <memory>
 #include <stack>
 #include <map>
+#include <rtl/strbuf.hxx>
 #include <rtftok/RTFDocument.hxx>
 #include <rtfcontrolwords.hxx>
 #include <rtfreferencetable.hxx>
@@ -28,7 +29,9 @@ namespace writerfilter {
             DESTINATION_FONTENTRY,
             DESTINATION_COLORTABLE,
             DESTINATION_STYLESHEET,
-            DESTINATION_STYLEENTRY
+            DESTINATION_STYLEENTRY,
+            DESTINATION_FIELDINSTRUCTION,
+            DESTINATION_FIELDRESULT
         };
 
         enum RTFErrors
@@ -78,6 +81,8 @@ namespace writerfilter {
                 int nCurrentStyleIndex;
 
                 rtl_TextEncoding nCurrentEncoding;
+
+                rtl::OStringBuffer aFieldInstruction;
         };
 
         /// Implementation of the RTFDocument interface.

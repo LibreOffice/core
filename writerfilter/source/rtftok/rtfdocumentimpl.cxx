@@ -104,7 +104,7 @@ int RTFDocumentImpl::resolveChars(char ch)
     // TODO encoding handling
     OUString aOUStr(OStringToOUString(aStr, RTL_TEXTENCODING_UTF8));
 
-    if (m_aStates.top().nDestinationState == DESTINATION_NORMAL)
+    if (m_aStates.top().nDestinationState == DESTINATION_NORMAL || m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT)
         text(aOUStr);
     else if (m_aStates.top().nDestinationState == DESTINATION_FONTENTRY)
     {
@@ -135,6 +135,8 @@ int RTFDocumentImpl::resolveChars(char ch)
         RTFValue::Pointer_t pValue(new RTFValue(aOUStr));
         m_aStates.top().aAttributes[NS_rtf::LN_XSTZNAME1] = pValue;
     }
+    else if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
+        m_aStates.top().aFieldInstruction.append(aStr);
 
     return 0;
 }
@@ -154,10 +156,32 @@ void RTFDocumentImpl::text(OUString& rString)
         m_bFirstRun = false;
     }
 
+    if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
+    {
+        sal_uInt8 sFieldStart[] = { 0x13 };
+        Mapper().startCharacterGroup();
+        Mapper().text(sFieldStart, 1);
+        Mapper().endCharacterGroup();
+    }
     Mapper().startCharacterGroup();
-    Mapper().props(pProperties);
+    if (m_aStates.top().nDestinationState == DESTINATION_NORMAL || m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT)
+        Mapper().props(pProperties);
     Mapper().utext(reinterpret_cast<sal_uInt8 const*>(rString.getStr()), rString.getLength());
     Mapper().endCharacterGroup();
+    if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
+    {
+        sal_uInt8 sFieldSep[] = { 0x14 };
+        Mapper().startCharacterGroup();
+        Mapper().text(sFieldSep, 1);
+        Mapper().endCharacterGroup();
+    }
+    else if (m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT)
+    {
+        sal_uInt8 sFieldEnd[] = { 0x15 };
+        Mapper().startCharacterGroup();
+        Mapper().text(sFieldEnd, 1);
+        Mapper().endCharacterGroup();
+    }
 }
 
 int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
@@ -174,6 +198,15 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             break;
         case RTF_STYLESHEET:
             m_aStates.top().nDestinationState = DESTINATION_STYLESHEET;
+            break;
+        case RTF_FIELD:
+            // A field consists of an fldinst and an fldrslt group.
+            break;
+        case RTF_FLDINST:
+            m_aStates.top().nDestinationState = DESTINATION_FIELDINSTRUCTION;
+            break;
+        case RTF_FLDRSLT:
+            m_aStates.top().nDestinationState = DESTINATION_FIELDRESULT;
             break;
         default:
             OSL_TRACE("%s: TODO handle destination '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
@@ -483,6 +516,12 @@ int RTFDocumentImpl::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
                         Mapper().props(pProperties);
                     }
                     break;
+                case RTF_BACKSLASH:
+                    if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
+                        m_aStates.top().aFieldInstruction.append('\\');
+                    else
+                        OSL_TRACE("%s: TODO handle symbol '%s' outside fields", OSL_THIS_FUNC, rKeyword.getStr());
+                    break;
                 default:
                     OSL_TRACE("%s: TODO handle symbol '%s'", OSL_THIS_FUNC, rKeyword.getStr());
                     break;
@@ -619,6 +658,11 @@ int RTFDocumentImpl::popState()
         aEntry.first = m_aStates.top().nCurrentStyleIndex;
         aEntry.second = pProp;
     }
+    else if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
+    {
+        OUString aOUStr(OStringToOUString(m_aStates.top().aFieldInstruction.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
+        text(aOUStr);
+    }
 
     m_aStates.pop();
 
@@ -704,7 +748,8 @@ RTFParserState::RTFParserState()
     aCurrentColor(),
     aStyleTableEntries(),
     nCurrentStyleIndex(0),
-    nCurrentEncoding(0)
+    nCurrentEncoding(0),
+    aFieldInstruction()
 {
 }
 
