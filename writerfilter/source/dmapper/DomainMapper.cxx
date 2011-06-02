@@ -2085,7 +2085,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         rContext->Insert(PROP_CHAR_CHAR_KERNING, true, uno::makeAny( sal_Int16(ConversionHelper::convertTwipToMM100(sal_Int16(nIntValue))) ) );
         break;
     case NS_sprm::LN_CHpsKern:  // sprmCHpsKern    auto kerning is bound to a minimum font size in Word - but not in Writer :-(
-        rContext->Insert(PROP_CHAR_AUTO_KERNING, true, uno::makeAny( true ) );
+        rContext->Insert(PROP_CHAR_AUTO_KERNING, true, uno::makeAny( sal_Bool(nIntValue) ) );
         break;
     case NS_sprm::LN_CMajority50:
         break;  // sprmCMajority50
