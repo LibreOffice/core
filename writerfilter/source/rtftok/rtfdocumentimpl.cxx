@@ -218,6 +218,43 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
     return 0;
 }
 
+int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
+{
+    bool bParsed = true;
+    switch (nKeyword)
+    {
+        case RTF_IGNORE:
+            m_bSkipUnknown = true;
+            break;
+        case RTF_PAR:
+            {
+                // end previous paragraph
+                OUString aStr = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\x0d"));
+                text(aStr);
+                Mapper().endParagraphGroup();
+                // start new one
+                Mapper().startParagraphGroup();
+                writerfilter::Reference<Properties>::Pointer_t const pProperties(
+                        new RTFReferenceProperties(m_aStates.top().aAttributes, m_aStates.top().aSprms)
+                        );
+                Mapper().props(pProperties);
+            }
+            break;
+        case RTF_BACKSLASH:
+            if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
+                m_aStates.top().aFieldInstruction.append('\\');
+            else
+                OSL_TRACE("%s: TODO handle symbol '%s' outside fields", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
+            break;
+        default:
+            OSL_TRACE("%s: TODO handle symbol '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
+            bParsed = false;
+            break;
+    }
+    skipDestination(bParsed);
+    return 0;
+}
+
 int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
 {
     bool bParsed = true;
@@ -565,40 +602,9 @@ int RTFDocumentImpl::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
                 return ret;
             break;
         case CONTROL_SYMBOL:
-            {
-            bool bParsed = true;
-            switch (aRTFControlWords[i].nIndex)
-            {
-                case RTF_IGNORE:
-                    m_bSkipUnknown = true;
-                    break;
-                case RTF_PAR:
-                    {
-                        // end previous paragraph
-                        OUString aStr = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\x0d"));
-                        text(aStr);
-                        Mapper().endParagraphGroup();
-                        // start new one
-                        Mapper().startParagraphGroup();
-                        writerfilter::Reference<Properties>::Pointer_t const pProperties(
-                                new RTFReferenceProperties(m_aStates.top().aAttributes, m_aStates.top().aSprms)
-                                );
-                        Mapper().props(pProperties);
-                    }
-                    break;
-                case RTF_BACKSLASH:
-                    if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
-                        m_aStates.top().aFieldInstruction.append('\\');
-                    else
-                        OSL_TRACE("%s: TODO handle symbol '%s' outside fields", OSL_THIS_FUNC, rKeyword.getStr());
-                    break;
-                default:
-                    OSL_TRACE("%s: TODO handle symbol '%s'", OSL_THIS_FUNC, rKeyword.getStr());
-                    bParsed = false;
-                    break;
-            }
-            skipDestination(bParsed);
-            }
+            // and symbols
+            if ((ret = dispatchSymbol(aRTFControlWords[i].nIndex)))
+                return ret;
             break;
         case CONTROL_TOGGLE:
             if ((ret = dispatchToggle(aRTFControlWords[i].nIndex, bParam, nParam)))
