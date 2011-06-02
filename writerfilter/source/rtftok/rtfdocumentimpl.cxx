@@ -372,11 +372,18 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     m_aStates.top().aAttributes[NS_ooxml::LN_CT_EastAsianLayout_vertCompress] = pValue;
             }
             break;
+        case RTF_EXPND:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(nParam/5));
+                m_aStates.top().aSprms[NS_sprm::LN_CDxaSpace] = pValue;
+            }
+            break;
         case RTF_AF:
         case RTF_FS:
         case RTF_AFS:
         case RTF_FPRQ:
         case RTF_ANIMTEXT:
+        case RTF_EXPNDTW:
             {
                 RTFValue::Pointer_t pValue(new RTFValue(nParam));
                 int nSprm = 0;
@@ -387,6 +394,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     case RTF_AFS: nSprm = NS_sprm::LN_CHpsBi; break;
                     case RTF_FPRQ: nSprm = NS_rtf::LN_PRQ; break;
                     case RTF_ANIMTEXT: nSprm = NS_sprm::LN_CSfxText; break;
+                    case RTF_EXPNDTW: nSprm = NS_sprm::LN_CDxaSpace; break;
                     default: OSL_FAIL("unhandled value"); break;
                 }
                 m_aStates.top().aSprms[nSprm] = pValue;
