@@ -186,6 +186,7 @@ void RTFDocumentImpl::text(OUString& rString)
 
 int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
 {
+    bool bParsed = true;
     switch (nKeyword)
     {
         case RTF_RTF:
@@ -210,11 +211,13 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             break;
         default:
             OSL_TRACE("%s: TODO handle destination '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
-            // Make sure we skip destinations till we don't handle them
+            // Make sure we skip destinations (even without \*) till we don't handle them
             m_aStates.top().nDestinationState = DESTINATION_SKIP;
+            bParsed = false;
             break;
     }
 
+    skipDestination(bParsed);
     return 0;
 }
 
