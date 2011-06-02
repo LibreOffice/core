@@ -207,7 +207,7 @@ void CmdImageList::impl_fillCommandToImageNameMap()
                 if ( xCmdDesc.is() )
                     xCmdDesc->getByName( aCommandImageList ) >>= aCmdImageSeq;
             }
-            catch ( NoSuchElementException& )
+            catch ( const NoSuchElementException& )
             {
                 // Module unknown we will work with an empty command image list!
                 return;
@@ -220,10 +220,10 @@ void CmdImageList::impl_fillCommandToImageNameMap()
             {
                 xCmdDesc->getByName( aCommandImageList ) >>= aCmdImageSeq;
             }
-            catch ( NoSuchElementException& )
+            catch ( const NoSuchElementException& )
             {
             }
-            catch ( WrappedTargetException& )
+            catch ( const WrappedTargetException& )
             {
             }
         }
@@ -468,19 +468,19 @@ void ImageManagerImpl::implts_initialize()
                                                                                  nModes );
             }
         }
-        catch ( com::sun::star::container::NoSuchElementException& )
+        catch ( const ::com::sun::star::container::NoSuchElementException& )
         {
         }
-        catch ( ::com::sun::star::embed::InvalidStorageException& )
+        catch ( const ::com::sun::star::embed::InvalidStorageException& )
         {
         }
-        catch ( ::com::sun::star::lang::IllegalArgumentException& )
+        catch ( const ::com::sun::star::lang::IllegalArgumentException& )
         {
         }
-        catch ( ::com::sun::star::io::IOException& )
+        catch ( const ::com::sun::star::io::IOException& )
         {
         }
-        catch ( ::com::sun::star::embed::StorageWrappedTargetException& )
+        catch ( const ::com::sun::star::embed::StorageWrappedTargetException& )
         {
         }
     }
@@ -542,19 +542,19 @@ sal_Bool ImageManagerImpl::implts_loadUserImages(
                 }
             }
         }
-        catch ( com::sun::star::container::NoSuchElementException& )
+        catch ( const ::com::sun::star::container::NoSuchElementException& )
         {
         }
-        catch ( ::com::sun::star::embed::InvalidStorageException& )
+        catch ( const ::com::sun::star::embed::InvalidStorageException& )
         {
         }
-        catch ( ::com::sun::star::lang::IllegalArgumentException& )
+        catch ( const ::com::sun::star::lang::IllegalArgumentException& )
         {
         }
-        catch ( ::com::sun::star::io::IOException& )
+        catch ( const ::com::sun::star::io::IOException& )
         {
         }
-        catch ( ::com::sun::star::embed::StorageWrappedTargetException& )
+        catch ( const ::com::sun::star::embed::StorageWrappedTargetException& )
         {
         }
     }
@@ -641,7 +641,7 @@ sal_Bool ImageManagerImpl::implts_storeUserImages(
             {
                 xUserImageStorage->removeElement( rtl::OUString::createFromAscii( IMAGELIST_XML_FILE[nImageType] ));
             }
-            catch ( ::com::sun::star::container::NoSuchElementException& )
+            catch ( const ::com::sun::star::container::NoSuchElementException& )
             {
             }
 
@@ -649,7 +649,7 @@ sal_Bool ImageManagerImpl::implts_storeUserImages(
             {
                 xUserBitmapsStorage->removeElement( rtl::OUString::createFromAscii( BITMAP_FILE_NAMES[nImageType] ));
             }
-            catch ( ::com::sun::star::container::NoSuchElementException& )
+            catch ( const ::com::sun::star::container::NoSuchElementException& )
             {
             }
 
@@ -1436,7 +1436,7 @@ void ImageManagerImpl::implts_notifyContainerListener( const ConfigurationEvent&
                         break;
                 }
             }
-            catch( css::uno::RuntimeException& )
+            catch( const css::uno::RuntimeException& )
             {
                 pIterator.remove();
             }
