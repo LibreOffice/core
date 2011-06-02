@@ -443,6 +443,23 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
         return 0;
     }
 
+    // Accent characters (over dot / over coma).
+    switch (nKeyword)
+    {
+        case RTF_ACCNONE: nSprm = 0; break;
+        case RTF_ACCDOT: nSprm = 1; break;
+        case RTF_ACCCOMMA: nSprm = 2; break;
+        case RTF_ACCCIRCLE: nSprm = 3; break;
+        case RTF_ACCUNDERDOT: nSprm = 4; break;
+        default: break;
+    }
+    if (nSprm > 0)
+    {
+        RTFValue::Pointer_t pValue(new RTFValue((!bParam || nParam != 0) ? nSprm : 0));
+        m_aStates.top().aSprms[NS_sprm::LN_CKcd] = pValue;
+        return 0;
+    }
+
     switch (nKeyword)
     {
         case RTF_B: nSprm = NS_sprm::LN_CFBold; break;
