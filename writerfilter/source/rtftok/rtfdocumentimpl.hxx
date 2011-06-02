@@ -105,10 +105,10 @@ namespace writerfilter {
                 int resolveKeyword();
 
                 int dispatchKeyword(rtl::OString& rKeyword, bool bParam, int nParam);
+                int dispatchFlag(RTFKeyword nKeyword);
                 int dispatchDestination(RTFKeyword nKeyword);
                 int dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam);
                 int dispatchValue(RTFKeyword nKeyword, int nParam);
-                int dispatchFlag(RTFKeyword nKeyword);
 
                 int resolveChars(char ch);
                 int pushState();
