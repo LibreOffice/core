@@ -287,6 +287,25 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
 int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
 {
     bool bParsed = true;
+    int nParam = 0;
+
+    switch (nKeyword)
+    {
+        case RTF_QC: nParam = 1; break;
+        case RTF_QJ: nParam = 3; break;
+        case RTF_QL: nParam = 0; break;
+        case RTF_QR: nParam = 2; break;
+        case RTF_QD: nParam = 4; break;
+        default: break;
+    }
+    if (nParam > 0)
+    {
+        RTFValue::Pointer_t pValue(new RTFValue(nParam));
+        m_aStates.top().aSprms[NS_sprm::LN_PJc] = pValue;
+        skipDestination(bParsed);
+        return 0;
+    }
+
     switch (nKeyword)
     {
         case RTF_FNIL:
