@@ -1740,7 +1740,7 @@ File gid_File_Lib_Glib
     #ifdef MACOSX
     Name = "libglib-2.0.0.dylib";
     #elif defined WNT
-    Name = "libglib-2.0-0.dll";
+    Name = "gliblo.dll";
     #endif
 End
 File gid_File_Lib_Gthread
@@ -1750,7 +1750,7 @@ File gid_File_Lib_Gthread
     #ifdef MACOSX
     Name = "libgthread-2.0.0.dylib";
     #elif defined WNT
-    Name = "libgthread-2.0-0.dll";
+    Name = "gthreadlo.dll";
     #endif
 End
 File gid_File_Lib_Gobject
@@ -1760,7 +1760,7 @@ File gid_File_Lib_Gobject
     #ifdef MACOSX
     Name = "libgobject-2.0.0.dylib";
     #elif defined WNT
-    Name = "libgobject-2.0-0.dll";
+    Name = "gobjectlo.dll";
     #endif
 End
 File gid_File_Lib_Gio
@@ -1770,7 +1770,7 @@ File gid_File_Lib_Gio
     #ifdef MACOSX
     Name = "libgio-2.0.0.dylib";
     #elif defined WNT
-    Name = "libgio-2.0-0.dll";
+    Name = "giolo.dll";
     #endif
 End
 File gid_File_Lib_Gmodule
@@ -1780,7 +1780,7 @@ File gid_File_Lib_Gmodule
     #ifdef MACOSX
     Name = "libgmodule-2.0.0.dylib";
     #elif defined WNT
-    Name = "libgmodule-2.0-0.dll";
+    Name = "gmodulelo.dll";
     #endif
 End
 #endif
