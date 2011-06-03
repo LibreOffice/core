@@ -36,6 +36,7 @@
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
 #include <rtl/uuid.h>
+#include <rtl/instance.hpp>
 #include <cppuhelper/factory.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -172,24 +173,34 @@ Sequence< Type > MyService1Impl::getTypes()
     seq[ 2 ] = ::cppu::UnoType< Reference< ::my_module::XSomething > >::get();
     return seq;
 }
+namespace
+{
+    // class to create an unique id
+    class UniqueIdInit
+    {
+    private:
+        ::com::sun::star::uno::Sequence< sal_Int8 > m_aSeq;
+    public:
+        UniqueIdInitIdInit() : m_aSeq(16)
+        {
+            rtl_createUuid( (sal_uInt8*)m_aSeq.getArray(), 0, sal_True );
+        }
+        const ::com::sun::star::uno::Sequence< sal_Int8 >& getSeq() const { return m_aSeq; }
+    };
+    //A multi-thread safe UniqueIdInitIdInit singleton wrapper
+    class theService1ImplImplementationId
+        : public rtl::Static< UniqueIdInitIdInit,
+          theService1ImplImplementationId >
+    {
+    };
+}
 Sequence< sal_Int8 > MyService1Impl::getImplementationId()
     throw (RuntimeException)
 {
-    static Sequence< sal_Int8 > * s_pId = 0;
-    if (! s_pId)
-    {
-        // create unique id
-        Sequence< sal_Int8 > id( 16 );
-        ::rtl_createUuid( (sal_uInt8 *)id.getArray(), 0, sal_True );
-        // guard initialization with some mutex
-        ::osl::MutexGuard guard( ::osl::Mutex::getGlobalMutex() );
-        if (! s_pId)
-        {
-            static Sequence< sal_Int8 > s_id( id );
-            s_pId = &s_id;
-        }
-    }
-    return *s_pId;
+    //create a singleton that generates a unique id on
+    //first initialization and returns the same one
+    //on subsequent calls.
+    return theService1ImplImplementationId::get().getSeq();
 }
 
 // XSomething implementation
