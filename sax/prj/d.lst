@@ -1,17 +1,17 @@
-..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
-..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
-..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
-..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%\*.lib
-..\%__SRC%\misc\fastsax.component %_DEST%\xml%_EXT%\fastsax.component
-..\%__SRC%\misc\sax.component %_DEST%\xml%_EXT%\sax.component
-..\%__SRC%\misc\sax.inbuild.component %_DEST%\xml%_EXT%\sax.inbuild.component
+..\%__SRC%\bin\*.dll %_DEST%\bin\*.dll
+..\%__SRC%\lib\*.so %_DEST%\lib\*.so
+..\%__SRC%\lib\*.dylib %_DEST%\lib\*.dylib
+..\%__SRC%\lib\*.lib %_DEST%\lib\*.lib
+..\%__SRC%\misc\fastsax.component %_DEST%\xml\fastsax.component
+..\%__SRC%\misc\sax.component %_DEST%\xml\sax.component
+..\%__SRC%\misc\sax.inbuild.component %_DEST%\xml\sax.inbuild.component
 
-mkdir: %_DEST%\inc%_EXT%\sax
-mkdir: %_DEST%\inc%_EXT%\sax\tools
-..\inc\sax\dllapi.h %_DEST%\inc%_EXT%\sax\dllapi.h
-..\inc\sax\fshelper.hxx %_DEST%\inc%_EXT%\sax\fshelper.hxx
-..\inc\sax\fastattribs.hxx %_DEST%\inc%_EXT%\sax\fastattribs.hxx
-..\inc\sax\tools\converter.hxx %_DEST%\inc%_EXT%\sax\tools\converter.hxx
-..\inc\sax\tools\documenthandleradapter.hxx %_DEST%\inc%_EXT%\sax\tools\documenthandleradapter.hxx
+mkdir: %_DEST%\inc\sax
+mkdir: %_DEST%\inc\sax\tools
+..\inc\sax\dllapi.h %_DEST%\inc\sax\dllapi.h
+..\inc\sax\fshelper.hxx %_DEST%\inc\sax\fshelper.hxx
+..\inc\sax\fastattribs.hxx %_DEST%\inc\sax\fastattribs.hxx
+..\inc\sax\tools\converter.hxx %_DEST%\inc\sax\tools\converter.hxx
+..\inc\sax\tools\documenthandleradapter.hxx %_DEST%\inc\sax\tools\documenthandleradapter.hxx
 
-dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
+dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib\*.dylib; fi"
