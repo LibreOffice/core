@@ -54,7 +54,6 @@ ScAreaLinkSaver::ScAreaLinkSaver( const ScAreaLink& rSource ) :
 }
 
 ScAreaLinkSaver::ScAreaLinkSaver( const ScAreaLinkSaver& rCopy ) :
-    ScDataObject(),
     aFileName   ( rCopy.aFileName ),
     aFilterName ( rCopy.aFilterName ),
     aOptions    ( rCopy.aOptions ),
@@ -64,14 +63,7 @@ ScAreaLinkSaver::ScAreaLinkSaver( const ScAreaLinkSaver& rCopy ) :
 {
 }
 
-ScAreaLinkSaver::~ScAreaLinkSaver()
-{
-}
-
-ScDataObject*   ScAreaLinkSaver::Clone() const
-{
-    return new ScAreaLinkSaver( *this );
-}
+ScAreaLinkSaver::~ScAreaLinkSaver() {}
 
 bool ScAreaLinkSaver::IsEqualSource( const ScAreaLink& rCompare ) const
 {
@@ -113,25 +105,12 @@ void ScAreaLinkSaver::InsertNewLink( ScDocument* pDoc ) const
     }
 }
 
-// -----------------------------------------------------------------------
+ScAreaLinkSaveCollection::ScAreaLinkSaveCollection() {}
 
-ScAreaLinkSaveCollection::ScAreaLinkSaveCollection()
-{
-}
+ScAreaLinkSaveCollection::ScAreaLinkSaveCollection( const ScAreaLinkSaveCollection& r ) :
+    maData(r.maData) {}
 
-ScAreaLinkSaveCollection::ScAreaLinkSaveCollection( const ScAreaLinkSaveCollection& rCopy ) :
-    ScCollection( rCopy )
-{
-}
-
-ScAreaLinkSaveCollection::~ScAreaLinkSaveCollection()
-{
-}
-
-ScDataObject*   ScAreaLinkSaveCollection::Clone() const
-{
-    return new ScAreaLinkSaveCollection( *this );
-}
+ScAreaLinkSaveCollection::~ScAreaLinkSaveCollection() {}
 
 bool ScAreaLinkSaveCollection::IsEqual( const ScDocument* pDoc ) const
 {
@@ -141,7 +120,7 @@ bool ScAreaLinkSaveCollection::IsEqual( const ScDocument* pDoc ) const
     sfx2::LinkManager* pLinkManager = const_cast<ScDocument*>(pDoc)->GetLinkManager();
     if (pLinkManager)
     {
-        sal_uInt16 nPos = 0;
+        size_t nPos = 0;
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         sal_uInt16 nLinkCount = rLinks.Count();
         for (sal_uInt16 i=0; i<nLinkCount; i++)
@@ -149,13 +128,13 @@ bool ScAreaLinkSaveCollection::IsEqual( const ScDocument* pDoc ) const
             ::sfx2::SvBaseLink* pBase = *rLinks[i];
             if (pBase->ISA(ScAreaLink))
             {
-                if ( nPos >= GetCount() || !(*this)[nPos]->IsEqual( *(ScAreaLink*)pBase ) )
+                if ( nPos >= size() || !(*this)[nPos]->IsEqual( *(ScAreaLink*)pBase ) )
                     return false;
 
                 ++nPos;
             }
         }
-        if ( nPos < GetCount() )
+        if ( nPos < size() )
             return false;           // fewer links in the document than in the save collection
     }
 
@@ -188,10 +167,10 @@ void ScAreaLinkSaveCollection::Restore( ScDocument* pDoc ) const
     if (pLinkManager)
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nSaveCount = GetCount();
-        for (sal_uInt16 nPos=0; nPos<nSaveCount; nPos++)
+        size_t nSaveCount = size();
+        for (size_t nPos=0; nPos<nSaveCount; ++nPos)
         {
-            ScAreaLinkSaver* pSaver = (*this)[nPos];
+            const ScAreaLinkSaver* pSaver = (*this)[nPos];
             ScAreaLink* pLink = lcl_FindLink( rLinks, *pSaver );
             if ( pLink )
                 pSaver->WriteToLink( *pLink );          // restore output position
@@ -219,13 +198,32 @@ ScAreaLinkSaveCollection* ScAreaLinkSaveCollection::CreateFromDoc( const ScDocum
                     pColl = new ScAreaLinkSaveCollection;
 
                 ScAreaLinkSaver* pSaver = new ScAreaLinkSaver( *(ScAreaLink*)pBase );
-                if (!pColl->Insert(pSaver))
-                    delete pSaver;
+                pColl->push_back(pSaver);
             }
         }
     }
 
     return pColl;
+}
+
+const ScAreaLinkSaver* ScAreaLinkSaveCollection::operator [](size_t nIndex) const
+{
+    return &maData[nIndex];
+}
+
+size_t ScAreaLinkSaveCollection::size() const
+{
+    return maData.size();
+}
+
+void ScAreaLinkSaveCollection::clear()
+{
+    maData.clear();
+}
+
+void ScAreaLinkSaveCollection::push_back(ScAreaLinkSaver* p)
+{
+    maData.push_back(p);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

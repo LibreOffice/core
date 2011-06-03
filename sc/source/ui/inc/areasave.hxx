@@ -29,15 +29,15 @@
 #ifndef SC_AREASAVE_HXX
 #define SC_AREASAVE_HXX
 
-#include "collect.hxx"
-#include "global.hxx"
 #include "address.hxx"
+
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class ScDocument;
 class ScAreaLink;
 
 
-class ScAreaLinkSaver : public ScDataObject
+class ScAreaLinkSaver
 {
 private:
     ::rtl::OUString aFileName;
@@ -48,11 +48,9 @@ private:
     sal_uLong nRefresh;
 
 public:
-                ScAreaLinkSaver( const ScAreaLink& rSource );
-                ScAreaLinkSaver( const ScAreaLinkSaver& rCopy );
-    virtual     ~ScAreaLinkSaver();
-
-    virtual ScDataObject*   Clone() const;
+    ScAreaLinkSaver( const ScAreaLink& rSource );
+    ScAreaLinkSaver( const ScAreaLinkSaver& rCopy );
+    ~ScAreaLinkSaver();
 
     bool        IsEqual( const ScAreaLink& rCompare ) const;
     bool        IsEqualSource( const ScAreaLink& rCompare ) const;
@@ -62,22 +60,26 @@ public:
 };
 
 
-class ScAreaLinkSaveCollection : public ScCollection
+class ScAreaLinkSaveCollection
 {
+    typedef ::boost::ptr_vector<ScAreaLinkSaver> DataType;
+    DataType maData;
 public:
-                ScAreaLinkSaveCollection();
-                ScAreaLinkSaveCollection( const ScAreaLinkSaveCollection& rCopy );
-    virtual     ~ScAreaLinkSaveCollection();
+    ScAreaLinkSaveCollection();
+    ScAreaLinkSaveCollection( const ScAreaLinkSaveCollection& r );
+    ~ScAreaLinkSaveCollection();
 
-    virtual ScDataObject*   Clone() const;
-
-    ScAreaLinkSaver*    operator[](sal_uInt16 nIndex) const {return (ScAreaLinkSaver*)At(nIndex);}
 
     bool        IsEqual( const ScDocument* pDoc ) const;
     void        Restore( ScDocument* pDoc ) const;
 
     // returns NULL if empty
     static ScAreaLinkSaveCollection* CreateFromDoc( const ScDocument* pDoc );
+
+    const ScAreaLinkSaver* operator[](size_t nIndex) const;
+    size_t size() const;
+    void clear();
+    void push_back(ScAreaLinkSaver* p);
 };
 
 
