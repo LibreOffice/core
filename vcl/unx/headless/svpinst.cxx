@@ -185,9 +185,8 @@ void SvpSalInstance::deregisterFrame( SalFrame* pFrame )
 
 void SvpSalInstance::Wakeup()
 {
-    write (m_pTimeoutFDS[1], "", 1);
+    OSL_VERIFY(write (m_pTimeoutFDS[1], "", 1) == 1);
 }
-
 
 // -=-= timeval =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 inline int operator >= ( const timeval &t1, const timeval &t2 )
