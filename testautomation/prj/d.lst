@@ -1,4 +1,4 @@
-mkdir: %COMMON_DEST%\bin%_EXT%\win
+mkdir: %COMMON_DEST%\bin\win
 
-..\global\win\*.win %COMMON_DEST%\bin%_EXT%\win\*.win
+..\global\win\*.win %COMMON_DEST%\bin\win\*.win
 
