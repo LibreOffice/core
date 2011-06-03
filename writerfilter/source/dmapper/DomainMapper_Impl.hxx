@@ -561,6 +561,8 @@ public:
 
     bool IsOOXMLImport() const { return m_eDocumentType == DOCUMENT_OOXML; }
 
+    bool IsRTFImport() const { return m_eDocumentType == DOCUMENT_RTF; }
+
     void InitPageMargins() { m_aPageMargins = _PageMar(); }
     void SetPageMarginTwip( PageMarElement eElement, sal_Int32 nValue );
     const _PageMar& GetPageMargins() const {return m_aPageMargins;}

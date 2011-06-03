@@ -3676,6 +3676,11 @@ bool DomainMapper::IsOOXMLImport() const
     return m_pImpl->IsOOXMLImport();
 }
 
+bool DomainMapper::IsRTFImport() const
+{
+    return m_pImpl->IsRTFImport();
+}
+
 uno::Reference < lang::XMultiServiceFactory > DomainMapper::GetTextFactory() const
 {
     return m_pImpl->GetTextFactory();
