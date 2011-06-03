@@ -60,6 +60,16 @@ sal_uInt32 RTFDocumentImpl::getColorTable(sal_uInt32 nIndex)
     return 0;
 }
 
+Id RTFDocumentImpl::getBorderTable(sal_uInt32 nIndex)
+{
+    static const Id aBorderIds[] =
+    {
+        NS_sprm::LN_PBrcTop, NS_sprm::LN_PBrcLeft, NS_sprm::LN_PBrcBottom, NS_sprm::LN_PBrcRight
+    };
+
+    return aBorderIds[nIndex];
+}
+
 sal_uInt32 RTFDocumentImpl::getEncodingTable(sal_uInt32 nFontIndex)
 {
     if (nFontIndex < m_aFontEncodings.size())
