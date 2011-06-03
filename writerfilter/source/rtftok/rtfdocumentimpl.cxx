@@ -324,6 +324,12 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_PARD:
             m_aStates.top() = m_aDefaultState;
             break;
+        case RTF_KEEP:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(1));
+                m_aStates.top().aSprms[NS_sprm::LN_PFKeep] = pValue;
+            }
+            break;
         default:
             OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             bParsed = false;
