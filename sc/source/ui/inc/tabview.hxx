@@ -32,6 +32,7 @@
 
 #include <sfx2/ipclient.hxx>
 
+#include "hiranges.hxx"
 #include "viewutil.hxx"
 #include "select.hxx"
 
@@ -52,7 +53,6 @@ class SdrView;
 class SdrObject;
 class ScHintWindow;
 class ScPageBreakData;
-class ScHighlightRanges;
 struct ChartSelectionInfo;
 class SdrHdlList;
 
@@ -131,7 +131,7 @@ private:
     ScHintWindow*       pInputHintWindow;       // Eingabemeldung bei Gueltigkeit
 
     ScPageBreakData*    pPageBreakData;         // fuer Seitenumbruch-Modus
-    ScHighlightRanges*  pHighlightRanges;
+    std::vector<ScHighlightEntry>   maHighlightRanges;
 
     ScDocument*         pBrushDocument;         // cell formats for format paint brush
     SfxItemSet*         pDrawBrushSet;          // drawing object attributes for paint brush
@@ -269,7 +269,7 @@ public:
     void            UpdateAnchorHandles();
 
     ScPageBreakData* GetPageBreakData()     { return pPageBreakData; }
-    ScHighlightRanges* GetHighlightRanges() { return pHighlightRanges; }
+    const std::vector<ScHighlightEntry>& GetHighlightRanges()   { return maHighlightRanges; }
 
     void            UpdatePageBreakData( bool bForcePaint = false );
 

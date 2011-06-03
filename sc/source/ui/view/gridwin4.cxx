@@ -265,23 +265,19 @@ void lcl_DrawScenarioFrames( OutputDevice* pDev, ScViewData* pViewData, ScSplitP
 //------------------------------------------------------------------------
 
 void lcl_DrawHighlight( ScOutputData& rOutputData, ScViewData* pViewData,
-                        ScHighlightRanges& rHighlightRanges )
+                        const std::vector<ScHighlightEntry>& rHighlightRanges )
 {
     SCTAB nTab = pViewData->GetTabNo();
-    sal_uLong nCount = rHighlightRanges.Count();
-    for (sal_uLong i=0; i<nCount; i++)
+    std::vector<ScHighlightEntry>::const_iterator pIter;
+    for ( pIter = rHighlightRanges.begin(); pIter != rHighlightRanges.end(); ++pIter)
     {
-        ScHighlightEntry* pEntry = rHighlightRanges.GetObject( i );
-        if (pEntry)
+        ScRange aRange = pIter->aRef;
+        if ( nTab >= aRange.aStart.Tab() && nTab <= aRange.aEnd.Tab() )
         {
-            ScRange aRange = pEntry->aRef;
-            if ( nTab >= aRange.aStart.Tab() && nTab <= aRange.aEnd.Tab() )
-            {
-                rOutputData.DrawRefMark(
-                                    aRange.aStart.Col(), aRange.aStart.Row(),
-                                    aRange.aEnd.Col(), aRange.aEnd.Row(),
-                                    pEntry->aColor, false );
-            }
+            rOutputData.DrawRefMark(
+                                aRange.aStart.Col(), aRange.aStart.Row(),
+                                aRange.aEnd.Col(), aRange.aEnd.Row(),
+                                pIter->aColor, false );
         }
     }
 }
@@ -742,11 +738,11 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     //! Szenario-Rahmen per View-Optionen abschaltbar?
 
     SCTAB nTabCount = pDoc->GetTableCount();
-    ScHighlightRanges* pHigh = pViewData->GetView()->GetHighlightRanges();
+    const std::vector<ScHighlightEntry> &rHigh = pViewData->GetView()->GetHighlightRanges();
     sal_Bool bHasScenario = ( nTab+1<nTabCount && pDoc->IsScenario(nTab+1) && !pDoc->IsScenario(nTab) );
     sal_Bool bHasChange = ( pDoc->GetChangeTrack() != NULL );
 
-    if ( bHasChange || bHasScenario || pHigh != NULL )
+    if ( bHasChange || bHasScenario || !rHigh.empty() )
     {
 
         //! SetChangedClip() mit DrawMarks() zusammenfassen?? (anderer MapMode!)
@@ -762,8 +758,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
             if ( bHasScenario )
                 lcl_DrawScenarioFrames( pContentDev, pViewData, eWhich, nX1,nY1,nX2,nY2 );
 
-            if ( pHigh )
-                lcl_DrawHighlight( aOutputData, pViewData, *pHigh );
+            lcl_DrawHighlight( aOutputData, pViewData, rHigh );
 
             if (eMode == SC_UPDATE_CHANGED)
                 pContentDev->SetClipRegion();

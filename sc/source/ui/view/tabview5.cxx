@@ -166,7 +166,6 @@ ScTabView::~ScTabView()
     DELETEZ(pDrawBrushSet);
 
     DELETEZ(pPageBreakData);
-    DELETEZ(pHighlightRanges);
 
     DELETEZ(pDrawOld);
     DELETEZ(pDrawActual);

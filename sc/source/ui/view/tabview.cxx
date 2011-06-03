@@ -311,7 +311,6 @@ ScTabView::ScTabView( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pView
     aScrollBarBox( pFrameWin, WB_SIZEABLE ),
     pInputHintWindow( NULL ),
     pPageBreakData( NULL ),
-    pHighlightRanges( NULL ),
     pBrushDocument( NULL ),
     pDrawBrushSet( NULL ),
     pTimerWindow( NULL ),

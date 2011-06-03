@@ -44,21 +44,6 @@ struct ScHighlightEntry
         aRef(rR), aColor(rC) {}
 };
 
-class ScHighlightRanges
-{
-    List        aEntries;
-
-public:
-            ScHighlightRanges();
-            ~ScHighlightRanges();
-
-    sal_uLong   Count() const                       { return aEntries.Count(); }
-    void    Insert( ScHighlightEntry* pNew )    { aEntries.Insert(pNew, LIST_APPEND); }
-    ScHighlightEntry* GetObject( sal_uLong nIndex ) const
-                        { return (ScHighlightEntry*)aEntries.GetObject(nIndex); }
-};
-
-
 
 #endif
 

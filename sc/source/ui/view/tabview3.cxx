@@ -2023,9 +2023,7 @@ void ScTabView::PaintRangeFinder( long nNumber )
 
 void ScTabView::AddHighlightRange( const ScRange& rRange, const Color& rColor )
 {
-    if (!pHighlightRanges)
-        pHighlightRanges = new ScHighlightRanges;
-    pHighlightRanges->Insert( new ScHighlightEntry( rRange, rColor ) );
+    maHighlightRanges.push_back( ScHighlightEntry( rRange, rColor ) );
 
     SCTAB nTab = aViewData.GetTabNo();
     if ( nTab >= rRange.aStart.Tab() && nTab <= rRange.aEnd.Tab() )
@@ -2035,26 +2033,17 @@ void ScTabView::AddHighlightRange( const ScRange& rRange, const Color& rColor )
 
 void ScTabView::ClearHighlightRanges()
 {
-    if (pHighlightRanges)
+    SCTAB nTab = aViewData.GetTabNo();
+    std::vector<ScHighlightEntry>::const_iterator pIter;
+    for ( pIter = maHighlightRanges.begin(); pIter != maHighlightRanges.end(); ++pIter)
     {
-        ScHighlightRanges* pTemp = pHighlightRanges;
-        pHighlightRanges = NULL;    // Repaint ohne Highlight
-
-        SCTAB nTab = aViewData.GetTabNo();
-        sal_uLong nCount = pTemp->Count();
-        for (sal_uLong i=0; i<nCount; i++)
-        {
-            ScHighlightEntry* pEntry = pTemp->GetObject( i );
-            if (pEntry)
-            {
-                ScRange aRange = pEntry->aRef;
-                if ( nTab >= aRange.aStart.Tab() && nTab <= aRange.aEnd.Tab() )
-                    PaintArea( aRange.aStart.Col(), aRange.aStart.Row(),
-                               aRange.aEnd.Col(), aRange.aEnd.Row(), SC_UPDATE_MARKS );
-            }
-        }
-        delete pTemp;
+        ScRange aRange = pIter->aRef;
+        if ( nTab >= aRange.aStart.Tab() && nTab <= aRange.aEnd.Tab() )
+            PaintArea( aRange.aStart.Col(), aRange.aStart.Row(),
+                       aRange.aEnd.Col(), aRange.aEnd.Row(), SC_UPDATE_MARKS );
     }
+
+    maHighlightRanges.clear();
 }
 
 void ScTabView::DoChartSelection(

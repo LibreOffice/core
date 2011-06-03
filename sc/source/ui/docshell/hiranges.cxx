@@ -35,21 +35,5 @@
 
 //==================================================================
 
-ScHighlightRanges::ScHighlightRanges()
-{
-}
-
-ScHighlightRanges::~ScHighlightRanges()
-{
-    void* pEntry = aEntries.First();
-    while ( pEntry )
-    {
-        delete (ScHighlightEntry*) aEntries.Remove( pEntry );
-        pEntry = aEntries.Next();
-    }
-}
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
