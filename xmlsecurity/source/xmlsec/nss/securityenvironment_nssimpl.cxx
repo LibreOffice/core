@@ -40,7 +40,7 @@
 #include <sal/macros.h>
 #include "securityenvironment_nssimpl.hxx"
 #include "x509certificate_nssimpl.hxx"
-#include <rtl/uuid.h>
+#include <comphelper/servicehelper.hxx>
 #include "../diagnose.hxx"
 
 #include <sal/types.h>
@@ -242,17 +242,14 @@ sal_Int64 SAL_CALL SecurityEnvironment_NssImpl :: getSomething( const Sequence< 
 }
 
 /* XUnoTunnel extension */
+
+namespace
+{
+    class theSecurityEnvironment_NssImplUnoTunnelId  : public rtl::Static< UnoTunnelIdInit, theSecurityEnvironment_NssImplUnoTunnelId > {};
+}
+
 const Sequence< sal_Int8>& SecurityEnvironment_NssImpl :: getUnoTunnelId() {
-    static Sequence< sal_Int8 >* pSeq = 0 ;
-    if( !pSeq ) {
-        ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
-        if( !pSeq ) {
-            static Sequence< sal_Int8> aSeq( 16 ) ;
-            rtl_createUuid( ( sal_uInt8* )aSeq.getArray() , 0 , sal_True ) ;
-            pSeq = &aSeq ;
-        }
-    }
-    return *pSeq ;
+    return theSecurityEnvironment_NssImplUnoTunnelId::get().getSeq();
 }
 
 /* XUnoTunnel extension */

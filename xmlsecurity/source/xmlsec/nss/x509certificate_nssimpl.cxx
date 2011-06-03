@@ -41,14 +41,12 @@
 #include "pk11func.h"
 
 #include <sal/config.h>
-#include <rtl/uuid.h>
+#include <comphelper/servicehelper.hxx>
 #include "x509certificate_nssimpl.hxx"
 
 #include "certificateextension_xmlsecimpl.hxx"
 
-#ifndef _SANEXTENSION_NSSIMPL_HXX_
 #include "sanextension_nssimpl.hxx"
-#endif
 
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::security ;
@@ -327,17 +325,14 @@ sal_Int64 SAL_CALL X509Certificate_NssImpl :: getSomething( const Sequence< sal_
 }
 
 /* XUnoTunnel extension */
+
+namespace
+{
+    class theX509Certificate_NssImplUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theX509Certificate_NssImplUnoTunnelId > {};
+}
+
 const Sequence< sal_Int8>& X509Certificate_NssImpl :: getUnoTunnelId() {
-    static Sequence< sal_Int8 >* pSeq = 0 ;
-    if( !pSeq ) {
-        ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
-        if( !pSeq ) {
-            static Sequence< sal_Int8> aSeq( 16 ) ;
-            rtl_createUuid( ( sal_uInt8* )aSeq.getArray() , 0 , sal_True ) ;
-            pSeq = &aSeq ;
-        }
-    }
-    return *pSeq ;
+    return theX509Certificate_NssImplUnoTunnelId::get().getSeq();
 }
 
 /* XUnoTunnel extension */
