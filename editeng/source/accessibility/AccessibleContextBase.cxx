@@ -41,7 +41,7 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
-#include <rtl/uuid.h>
+#include <comphelper/servicehelper.hxx>
 #include <osl/mutex.hxx>
 
 #include <utility>
@@ -545,26 +545,17 @@ uno::Sequence< ::com::sun::star::uno::Type>
     return BaseClass::getTypes();
 }
 
-
-
+namespace
+{
+    class theAccessibleContextBaseImplementationId : public rtl::Static< UnoTunnelIdInit, theAccessibleContextBaseImplementationId > {};
+}
 
 uno::Sequence<sal_Int8> SAL_CALL
     AccessibleContextBase::getImplementationId (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    ThrowIfDisposed ();
-    static uno::Sequence<sal_Int8> aId;
-    if (aId.getLength() == 0)
-    {
-        ::osl::MutexGuard aGuard (maMutex);
-        aId.realloc (16);
-        rtl_createUuid ((sal_uInt8 *)aId.getArray(), 0, sal_True);
-    }
-    return aId;
+    return theAccessibleContextBaseImplementationId::get().getSeq();
 }
-
-
-
 
 //=====  internal  ============================================================
 

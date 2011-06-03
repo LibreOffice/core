@@ -38,8 +38,6 @@
 #include <svl/itempool.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
-#include <rtl/uuid.h>
-#include <rtl/memory.h>
 #include <rtl/instance.hxx>
 
 #include <editeng/fontitem.hxx>
@@ -56,6 +54,7 @@
 #include <editeng/outliner.hxx>
 #include <editeng/unoipset.hxx>
 #include <comphelper/serviceinfohelper.hxx>
+#include <comphelper/servicehelper.hxx>
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -1618,16 +1617,15 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextRange::getTypes()
     return theSvxUnoTextRangeTypes::get();
 }
 
+namespace
+{
+    class theSvxUnoTextRangeImplementationId : public rtl::Static< UnoTunnelIdInit, theSvxUnoTextRangeImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL SvxUnoTextRange::getImplementationId()
     throw (uno::RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-    }
-    return aId;
+    return theSvxUnoTextRangeImplementationId::get().getSeq();
 }
 
 // XTextRange
@@ -1782,16 +1780,15 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextBase::getTypes()
     return getStaticTypes();
 }
 
+namespace
+{
+    class theSvxUnoTextBaseImplementationId : public rtl::Static< UnoTunnelIdInit, theSvxUnoTextBaseImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL SvxUnoTextBase::getImplementationId()
     throw (uno::RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-    }
-    return aId;
+    return theSvxUnoTextBaseImplementationId::get().getSeq();
 }
 
 uno::Reference< text::XTextCursor > SvxUnoTextBase::createTextCursorBySelection( const ESelection& rSel )
@@ -2296,20 +2293,14 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextBase::getSupportedServiceNames_Stat
     return aSeq;
 }
 
+namespace
+{
+    class theSvxUnoTextBaseUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSvxUnoTextBaseUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SvxUnoTextBase::getUnoTunnelId() throw()
 {
-    static uno::Sequence< sal_Int8 > * pSeq = 0;
-    if( !pSeq )
-    {
-        ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theSvxUnoTextBaseUnoTunnelId::get().getSeq();
 }
 
 SvxUnoTextBase* SvxUnoTextBase::getImplementation( const uno::Reference< uno::XInterface >& xInt )
@@ -2396,15 +2387,14 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoText::getTypes(  ) throw( uno::Runtime
     return SvxUnoTextBase::getTypes();
 }
 
+namespace
+{
+    class theSvxUnoTextImplementationId : public rtl::Static< UnoTunnelIdInit, theSvxUnoTextImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL SvxUnoText::getImplementationId(  ) throw( uno::RuntimeException )
 {
-    static uno::Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-    }
-    return aId;
+    return theSvxUnoTextImplementationId::get().getSeq();
 }
 
 SvxUnoText* SvxUnoText::getImplementation( const uno::Reference< uno::XInterface >& xInt )
@@ -2416,20 +2406,14 @@ SvxUnoText* SvxUnoText::getImplementation( const uno::Reference< uno::XInterface
         return NULL;
 }
 
+namespace
+{
+    class theSvxUnoTextUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSvxUnoTextUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SvxUnoText::getUnoTunnelId() throw()
 {
-    static uno::Sequence< sal_Int8 > * pSeq = 0;
-    if( !pSeq )
-    {
-        ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theSvxUnoTextUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL SvxUnoText::getSomething( const uno::Sequence< sal_Int8 >& rId ) throw(uno::RuntimeException) \

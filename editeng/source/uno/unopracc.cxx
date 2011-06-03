@@ -40,6 +40,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <cppuhelper/typeprovider.hxx>
+#include <comphelper/servicehelper.hxx>
 
 
 //------------------------------------------------------------------------
@@ -127,16 +128,15 @@ uno::Sequence< uno::Type > SAL_CALL SvxAccessibleTextPropertySet::getTypes() thr
     return pTypeCollection->getTypes() ;
 }
 
+namespace
+{
+    class theSvxAccessibleTextPropertySetImplementationId : public rtl::Static< UnoTunnelIdInit, theSvxAccessibleTextPropertySetImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL SvxAccessibleTextPropertySet::getImplementationId()
     throw (uno::RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( reinterpret_cast< sal_uInt8* > (aId.getArray()), 0, sal_True );
-    }
-    return aId;
+    return theSvxAccessibleTextPropertySetImplementationId::get().getSeq();
 }
 
 // XServiceInfo

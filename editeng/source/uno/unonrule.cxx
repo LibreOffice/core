@@ -39,8 +39,6 @@
 #include <vcl/graph.hxx>
 #include <svtools/grfmgr.hxx>
 #include <toolkit/unohlp.hxx>
-#include <rtl/uuid.h>
-#include <rtl/memory.h>
 
 #include <editeng/brshitem.hxx>
 #include <editeng/unoprnms.hxx>

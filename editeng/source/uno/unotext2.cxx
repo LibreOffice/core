@@ -30,19 +30,17 @@
 #include "precompiled_editeng.hxx"
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
+#include <rtl/instance.hxx>
 
 #define _SVSTDARR_sal_uIt16S
 #include <svl/svstdarr.hxx>
-
-#include <rtl/uuid.h>
-#include <rtl/memory.h>
-#include <rtl/instance.hxx>
 
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/unofield.hxx>
 #include <editeng/unotext.hxx>
 #include <comphelper/serviceinfohelper.hxx>
+#include <comphelper/servicehelper.hxx>
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -235,16 +233,15 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextContent::getTypes()
     return theSvxUnoTextContentTypes::get();
 }
 
+namespace
+{
+    class theSvxUnoTextContentImplementationId : public rtl::Static< UnoTunnelIdInit, theSvxUnoTextContentImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL SvxUnoTextContent::getImplementationId()
     throw (uno::RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-    }
-    return aId;
+    return theSvxUnoTextContentImplementationId::get().getSeq();
 }
 
 // text::XTextRange
@@ -598,16 +595,15 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextCursor::getTypes()
     return theSvxUnoTextCursorTypes::get();
 }
 
+namespace
+{
+    class theSvxUnoTextCursorImplementationId : public rtl::Static< UnoTunnelIdInit, theSvxUnoTextCursorImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL SvxUnoTextCursor::getImplementationId()
     throw (uno::RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-    }
-    return aId;
+    return theSvxUnoTextCursorImplementationId::get().getSeq();
 }
 
 // text::XTextCursor
