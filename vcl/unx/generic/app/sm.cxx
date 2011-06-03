@@ -657,7 +657,7 @@ void ICEConnectionObserver::deactivate()
 void ICEConnectionObserver::wakeup()
 {
     char cChar = 'w';
-    write( nWakeupFiles[1], &cChar, 1 );
+    OSL_VERIFY(write( nWakeupFiles[1], &cChar, 1 ) == 1);
 }
 
 void ICEConnectionWorker( void* )

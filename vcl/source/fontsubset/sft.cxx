@@ -112,7 +112,7 @@ typedef struct {
 typedef struct {
     FILE *o;
     char buffer[HFORMAT_LINELEN];
-    int bufpos;
+    size_t bufpos;
     int total;
 } HexFmt;
 
@@ -435,14 +435,16 @@ static HexFmt *HexFmtNew(FILE *outf)
     return res;
 }
 
-static void HexFmtFlush(HexFmt *_this)
+static bool HexFmtFlush(HexFmt *_this)
 {
+    bool bRet = true;
     if (_this->bufpos) {
-        fwrite(_this->buffer, 1, _this->bufpos, _this->o);
+        size_t nWritten = fwrite(_this->buffer, 1, _this->bufpos, _this->o);
+        bRet = nWritten == _this->bufpos;
         _this->bufpos = 0;
     }
+    return bRet;
 }
-
 
 _inline void HexFmtOpenString(HexFmt *_this)
 {

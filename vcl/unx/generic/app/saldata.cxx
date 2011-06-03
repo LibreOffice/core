@@ -801,7 +801,7 @@ void SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
 
 void SalXLib::Wakeup()
 {
-    write (m_pTimeoutFDS[1], "", 1);
+    OSL_VERIFY(write (m_pTimeoutFDS[1], "", 1) == 1);
 }
 
 void SalXLib::PostUserEvent()
