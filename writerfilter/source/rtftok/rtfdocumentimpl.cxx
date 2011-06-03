@@ -24,7 +24,7 @@ using rtl::OUStringToOString;
 namespace writerfilter {
 namespace rtftok {
 
-std::map<Id, RTFValue::Pointer_t>& lcl_insertTabsTab(std::stack<RTFParserState>& aStates)
+std::map<Id, RTFValue::Pointer_t>& lcl_getTabsTab(std::stack<RTFParserState>& aStates)
 {
     // insert the tabs sprm if necessary
     std::map<Id, RTFValue::Pointer_t>::iterator itTabs = aStates.top().aSprms.find(NS_ooxml::LN_CT_PPrBase_tabs);
@@ -350,6 +350,23 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         return 0;
     }
 
+    // Tabs
+    switch (nKeyword)
+    {
+        case RTF_TQR: nParam = 2; break;
+        case RTF_TQC: nParam = 1; break;
+        case RTF_TQDEC: nParam = 3; break;
+        default: break;
+    }
+    if (nParam > 0)
+    {
+        std::map<Id, RTFValue::Pointer_t>& rAttributes = lcl_getTabsTab(m_aStates);
+        RTFValue::Pointer_t pValue(new RTFValue(nParam));
+        rAttributes[NS_ooxml::LN_CT_TabStop_val] = pValue;
+        skipDestination(bParsed);
+        return 0;
+    }
+
     // Border types
     switch (nKeyword)
     {
@@ -435,13 +452,6 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 m_aStates.top().aSprms[NS_sprm::LN_PBrcLeft] = pValue;
                 m_aStates.top().aSprms[NS_sprm::LN_PBrcBottom] = pValue;
                 m_aStates.top().aSprms[NS_sprm::LN_PBrcRight] = pValue;
-            }
-            break;
-        case RTF_TQR:
-            {
-                std::map<Id, RTFValue::Pointer_t>& rAttributes = lcl_insertTabsTab(m_aStates);
-                RTFValue::Pointer_t pTabposValue(new RTFValue(2));
-                rAttributes[NS_ooxml::LN_CT_TabStop_val] = pTabposValue;
             }
             break;
         default:
@@ -713,7 +723,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTF_TX:
             {
-                std::map<Id, RTFValue::Pointer_t>& rAttributes = lcl_insertTabsTab(m_aStates);
+                std::map<Id, RTFValue::Pointer_t>& rAttributes = lcl_getTabsTab(m_aStates);
                 RTFValue::Pointer_t pTabposValue(new RTFValue(nParam));
                 rAttributes[NS_ooxml::LN_CT_TabStop_pos] = pTabposValue;
             }
