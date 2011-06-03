@@ -337,7 +337,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
 {
     bool bParsed = true;
     int nSprm = 0;
-    // First check the trivial cases.
+    // First check the trivial sprms.
     switch (nKeyword)
     {
         case RTF_AF: nSprm = NS_sprm::LN_CRgFtc1; break;
@@ -521,6 +521,20 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     RTFValue::Pointer_t pBValue(new RTFValue(nParam));
                     m_aStates.top().aAttributes[NS_ooxml::LN_CT_EastAsianLayout_combineBrackets] = pBValue;
                 }
+            }
+            break;
+        case RTF_SL:
+            // NS_sprm::LN_PDyaLine could be used, but that won't work with slmult
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(nParam));
+                m_aStates.top().aAttributes[NS_ooxml::LN_CT_Spacing_line] = pValue;
+            }
+            break;
+        case RTF_SLMULT:
+            if (nParam > 0)
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(NS_ooxml::LN_Value_wordprocessingml_ST_LineSpacingRule_auto));
+                m_aStates.top().aAttributes[NS_ooxml::LN_CT_Spacing_lineRule] = pValue;
             }
             break;
         default:
