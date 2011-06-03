@@ -353,6 +353,8 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_LIN: nSprm = 0x845e; break;
         case RTF_RI: nSprm = NS_sprm::LN_PDxaRight; break;
         case RTF_RIN: nSprm = 0x845d; break;
+        case RTF_SB: nSprm = NS_sprm::LN_PDyaBefore; break;
+        case RTF_SA: nSprm = NS_sprm::LN_PDyaAfter; break;
         default: break;
     }
     if (nSprm > 0)
