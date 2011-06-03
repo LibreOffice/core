@@ -31,8 +31,8 @@
 #include "OPropertySet.hxx"
 #include "ImplOPropertySet.hxx"
 #include "ContainerHelper.hxx"
-#include <rtl/uuid.h>
 #include <cppuhelper/queryinterface.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include <vector>
 #include <algorithm>
@@ -133,19 +133,17 @@ Sequence< uno::Type > SAL_CALL
     return aTypeList;
 }
 
+namespace
+{
+    class theOPropertySetImplementationId : public rtl::Static< UnoTunnelIdInit, theOPropertySetImplementationId > {};
+}
+
 Sequence< sal_Int8 > SAL_CALL
     OPropertySet::getImplementationId()
     throw (uno::RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-    }
-    return aId;
+    return theOPropertySetImplementationId::get().getSeq();
 }
-
 
 // ____ XPropertyState ____
 beans::PropertyState SAL_CALL

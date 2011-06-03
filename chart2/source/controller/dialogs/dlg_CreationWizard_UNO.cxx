@@ -44,6 +44,7 @@
 #include <vcl/msgbox.hxx>
 // header for class OImplementationId
 #include <cppuhelper/typeprovider.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -162,15 +163,15 @@ uno::Sequence< uno::Type > CreationWizardUnoDlg::getTypes() throw(uno::RuntimeEx
 
     return aTypeList;
 }
+
+namespace
+{
+    class theCreationWizardUnoDlgImplementationId : public rtl::Static< UnoTunnelIdInit, theCreationWizardUnoDlgImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL CreationWizardUnoDlg::getImplementationId( void ) throw( uno::RuntimeException )
 {
-    static uno::Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-    }
-    return aId;
+    return theCreationWizardUnoDlgImplementationId::get().getSeq();
 }
 
 //-------------------------------------------------------------------------

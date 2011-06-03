@@ -61,6 +61,7 @@
 #include "DateHelper.hxx"
 
 #include <comphelper/scopeguard.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <boost/bind.hpp>
 #include <unotools/streamwrap.hxx>
 // header for class LocaleDataWrapper
@@ -119,20 +120,14 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 using rtl::OUString;
 
+namespace
+{
+    class theExplicitValueProviderUnoTunnelId  : public rtl::Static< UnoTunnelIdInit, theExplicitValueProviderUnoTunnelId > {};
+}
+
 const uno::Sequence<sal_Int8>& ExplicitValueProvider::getUnoTunnelId()
 {
-    static uno::Sequence<sal_Int8> * pSeq = 0;
-    if( !pSeq )
-    {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theExplicitValueProviderUnoTunnelId::get().getSeq();
 }
 
 ExplicitValueProvider* ExplicitValueProvider::getExplicitValueProvider(
