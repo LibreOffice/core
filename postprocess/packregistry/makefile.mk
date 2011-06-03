@@ -39,6 +39,7 @@ MY_XCDS = \
     $(MISC)/calc.xcd \
     $(MISC)/cjk.xcd \
     $(MISC)/ctl.xcd \
+    $(MISC)/ctlseqcheck.xcd \
     $(MISC)/draw.xcd \
     $(MISC)/graphicfilter.xcd \
     $(MISC)/impress.xcd \
