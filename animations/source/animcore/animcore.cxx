@@ -53,8 +53,8 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
-
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/uuid.h>
 
@@ -2041,22 +2041,14 @@ void SAL_CALL AnimationNode::removeChangesListener( const Reference< XChangesLis
     }
 }
 
-// --------------------------------------------------------------------
+namespace
+{
+    class theAnimationNodeUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theAnimationNodeUnoTunnelId > {};
+}
 
 const ::com::sun::star::uno::Sequence< sal_Int8 > & AnimationNode::getUnoTunnelId()
 {
-    static ::com::sun::star::uno::Sequence< sal_Int8 > * pSeq = 0;
-    if( !pSeq )
-    {
-        ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static ::com::sun::star::uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theAnimationNodeUnoTunnelId::get().getSeq();
 }
 
 // --------------------------------------------------------------------
