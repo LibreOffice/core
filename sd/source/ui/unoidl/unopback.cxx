@@ -34,7 +34,6 @@
 #include <svl/itemset.hxx>
 #include <svx/svdpool.hxx>
 #include <comphelper/extract.hxx>
-#include <rtl/uuid.h>
 #include <rtl/memory.h>
 #include <svx/xflbstit.hxx>
 #include <svx/xflbmtit.hxx>

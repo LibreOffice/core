@@ -56,6 +56,7 @@
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <svtools/embedtransfer.hxx>
 #include <tools/diagnose_ex.h>
+#include <comphelper/servicehelper.hxx>
 #include <ViewShell.hxx>
 
 using namespace com::sun::star;
@@ -177,22 +178,14 @@ sal_Int64 SAL_CALL SdPageObjsTLB::SdPageObjsTransferable::getSomething( const ::
     return nRet;
 }
 
-// -----------------------------------------------------------------------------
+namespace
+{
+    class theSdPageObjsTLBUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSdPageObjsTLBUnoTunnelId > {};
+}
 
 const ::com::sun::star::uno::Sequence< sal_Int8 >& SdPageObjsTLB::SdPageObjsTransferable::getUnoTunnelId()
 {
-    static ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
-
-    if( !aSeq.getLength() )
-    {
-        static osl::Mutex   aCreateMutex;
-        osl::MutexGuard     aGuard( aCreateMutex );
-
-        aSeq.realloc( 16 );
-        rtl_createUuid( reinterpret_cast< sal_uInt8* >( aSeq.getArray() ), 0, sal_True );
-    }
-
-    return aSeq;
+    return theSdPageObjsTLBUnoTunnelId::get().getSeq();
 }
 
 // -----------------------------------------------------------------------------

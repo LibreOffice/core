@@ -55,6 +55,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
@@ -389,24 +390,15 @@ sal_Bool SAL_CALL ViewTabBar::isAnchorOnly (void)
 
 //----- XUnoTunnel ------------------------------------------------------------
 
-const Sequence<sal_Int8>& ViewTabBar::getUnoTunnelId (void)
+namespace
 {
-    static Sequence<sal_Int8>* pSequence = NULL;
-    if (pSequence == NULL)
-    {
-        const SolarMutexGuard aSolarGuard;
-        if (pSequence == NULL)
-        {
-            static ::com::sun::star::uno::Sequence<sal_Int8> aSequence (16);
-            rtl_createUuid((sal_uInt8*)aSequence.getArray(), 0, sal_True);
-            pSequence = &aSequence;
-        }
-    }
-    return *pSequence;
+    class theViewTabBarUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theViewTabBarUnoTunnelId > {};
 }
 
-
-
+const Sequence<sal_Int8>& ViewTabBar::getUnoTunnelId (void)
+{
+    return theViewTabBarUnoTunnelId::get().getSeq();
+}
 
 sal_Int64 SAL_CALL ViewTabBar::getSomething (const Sequence<sal_Int8>& rId)
     throw (RuntimeException)

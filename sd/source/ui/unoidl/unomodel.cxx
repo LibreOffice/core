@@ -41,11 +41,10 @@
 #include <com/sun/star/presentation/XPresentation2.hpp>
 
 #include <osl/mutex.hxx>
+#include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/serviceinfohelper.hxx>
 
-#include <comphelper/sequence.hxx>
-
-#include <rtl/uuid.h>
 #include <rtl/memory.h>
 #include <editeng/unofield.hxx>
 #include <unomodel.hxx>
@@ -388,17 +387,14 @@ uno::Sequence< uno::Type > SAL_CALL SdXImpressDocument::getTypes(  ) throw(uno::
     return maTypeSequence;
 }
 
+namespace
+{
+    class theSdXImpressDocumentImplementationId : public rtl::Static< UnoTunnelIdInit, theSdXImpressDocumentImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL SdXImpressDocument::getImplementationId(  ) throw(uno::RuntimeException)
 {
-    ::SolarMutexGuard aGuard;
-
-    static uno::Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-    }
-    return aId;
+    return theSdXImpressDocumentImplementationId::get().getSeq();
 }
 
 /***********************************************************************

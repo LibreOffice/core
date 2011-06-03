@@ -39,6 +39,7 @@
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/metaact.hxx>
@@ -61,7 +62,6 @@
 #include <svx/svdorect.hxx>
 #include <osl/mutex.hxx>
 #include <svl/style.hxx>
-#include <rtl/uuid.h>
 #include <rtl/memory.h>
 #include <comphelper/serviceinfohelper.hxx>
 
@@ -2122,19 +2122,14 @@ Sequence< uno::Type > SAL_CALL SdDrawPage::getTypes() throw(uno::RuntimeExceptio
     return maTypeSequence;
 }
 
+namespace
+{
+    class theSdDrawPageImplementationId : public rtl::Static< UnoTunnelIdInit, theSdDrawPageImplementationId > {};
+}
+
 Sequence< sal_Int8 > SAL_CALL SdDrawPage::getImplementationId() throw(uno::RuntimeException)
 {
-    ::SolarMutexGuard aGuard;
-
-    throwIfDisposed();
-
-    static Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-    }
-    return aId;
+    return theSdDrawPageImplementationId::get().getSeq();
 }
 
 OUString SdDrawPage::getPageApiName( SdPage* pPage )
@@ -2781,19 +2776,14 @@ Sequence< uno::Type > SAL_CALL SdMasterPage::getTypes() throw(uno::RuntimeExcept
     return maTypeSequence;
 }
 
+namespace
+{
+    class theSdMasterPageImplementationId : public rtl::Static< UnoTunnelIdInit, theSdMasterPageImplementationId > {};
+}
+
 Sequence< sal_Int8 > SAL_CALL SdMasterPage::getImplementationId() throw(uno::RuntimeException)
 {
-    ::SolarMutexGuard aGuard;
-
-    throwIfDisposed();
-
-    static Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-    }
-    return aId;
+    return theSdMasterPageImplementationId::get().getSeq();
 }
 
 // XServiceInfo

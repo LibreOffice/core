@@ -30,12 +30,12 @@
 
 #include "framework/Pane.hxx"
 
-#include <rtl/uuid.h>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
 #include <cppcanvas/vclfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -195,24 +195,15 @@ sal_Bool SAL_CALL Pane::isAnchorOnly (void)
 
 //----- XUnoTunnel ------------------------------------------------------------
 
-const Sequence<sal_Int8>& Pane::getUnoTunnelId (void)
+namespace
 {
-    static Sequence<sal_Int8>* pSequence = NULL;
-    if (pSequence == NULL)
-    {
-        const SolarMutexGuard aSolarGuard;
-        if (pSequence == NULL)
-        {
-            static ::com::sun::star::uno::Sequence<sal_Int8> aSequence (16);
-            rtl_createUuid((sal_uInt8*)aSequence.getArray(), 0, sal_True);
-            pSequence = &aSequence;
-        }
-    }
-    return *pSequence;
+    class thePaneUnoTunnelId : public rtl::Static< UnoTunnelIdInit, thePaneUnoTunnelId > {};
 }
 
-
-
+const Sequence<sal_Int8>& Pane::getUnoTunnelId (void)
+{
+    return thePaneUnoTunnelId::get().getSeq();
+}
 
 sal_Int64 SAL_CALL Pane::getSomething (const Sequence<sal_Int8>& rId)
     throw (RuntimeException)

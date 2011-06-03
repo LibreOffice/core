@@ -63,6 +63,7 @@
 #include <svx/svditer.hxx>
 #include <sfx2/docfile.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <svtools/embedtransfer.hxx>
 #include "DrawDocShell.hxx"
 #include "View.hxx"
@@ -777,22 +778,14 @@ sal_Int64 SAL_CALL SdTransferable::getSomething( const ::com::sun::star::uno::Se
     return nRet;
 }
 
-// -----------------------------------------------------------------------------
+namespace
+{
+    class theSdTransferableUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSdTransferableUnoTunnelId > {};
+}
 
 const ::com::sun::star::uno::Sequence< sal_Int8 >& SdTransferable::getUnoTunnelId()
 {
-    static ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
-
-    if( !aSeq.getLength() )
-    {
-        static osl::Mutex   aCreateMutex;
-        osl::MutexGuard     aGuard( aCreateMutex );
-
-        aSeq.realloc( 16 );
-        rtl_createUuid( reinterpret_cast< sal_uInt8* >( aSeq.getArray() ), 0, sal_True );
-    }
-
-    return aSeq;
+    return theSdTransferableUnoTunnelId::get().getSeq();
 }
 
 // -----------------------------------------------------------------------------
