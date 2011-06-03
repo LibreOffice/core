@@ -53,7 +53,6 @@
 
 class SvStream;
 class Font;
-class List;
 class ScPatternAttr;
 class ScTokenArray;
 class ScRangeData;
@@ -101,20 +100,18 @@ public:
 
 //------------------------------------------------------- class ExcRecordList -
 
-class ExcRecordList : protected List, public ExcEmptyRec
+class ExcRecordList : public ExcEmptyRec
 {
 private:
-protected:
+    std::vector<ExcRecord*> maRecords;
+
 public:
+
+    typedef std::vector<ExcRecord*>::iterator iterator;
+
     virtual                 ~ExcRecordList();
 
-    using                   List::Count;
-
-    inline ExcRecord*       First( void )               { return ( ExcRecord* ) List::First(); }
-    inline ExcRecord*       Next( void )                { return ( ExcRecord* ) List::Next(); }
-
-    inline void             Append( ExcRecord* pNew )   { if( pNew ) List::Insert( pNew, LIST_APPEND ); }
-    inline const ExcRecord* Get( sal_uInt32 nNum ) const    { return ( ExcRecord* ) List::GetObject( nNum ); }
+    inline void             Append( ExcRecord* pNew )   { if( pNew ) maRecords.push_back( pNew ); }
 
     virtual void            Save( XclExpStream& rStrm );
 };

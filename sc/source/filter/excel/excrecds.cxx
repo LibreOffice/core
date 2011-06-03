@@ -182,15 +182,15 @@ sal_Size ExcEmptyRec::GetLen() const
 
 ExcRecordList::~ExcRecordList()
 {
-    for( ExcRecord* pRec = First(); pRec; pRec = Next() )
-        delete pRec;
+    for (iterator pIter = maRecords.begin(); pIter != maRecords.end(); ++pIter)
+        delete (*pIter);
 }
 
 
 void ExcRecordList::Save( XclExpStream& rStrm )
 {
-    for( ExcRecord* pRec = First(); pRec; pRec = Next() )
-        pRec->Save( rStrm );
+    for (iterator pIter = maRecords.begin(); pIter != maRecords.end(); ++pIter)
+        (*pIter)->Save( rStrm );
 }
 
 
