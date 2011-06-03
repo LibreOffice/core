@@ -83,6 +83,7 @@ MODULEFILES= \
     Scripting-python.xcu   \
     Common-cjk.xcu   \
     Common-ctl.xcu   \
+    Common-ctlseqcheck.xcu   \
     Common-korea.xcu   \
     Paths-macosx.xcu    \
     Paths-unxwnt.xcu    \

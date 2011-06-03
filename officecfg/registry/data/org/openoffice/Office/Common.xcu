@@ -168,17 +168,17 @@
     </prop>
   </node>
   <node oor:name="I18N">
-    <node oor:name="CTL" install:module="ctl">
-      <prop oor:name="CTLFont">
+    <node oor:name="CTL">
+      <prop oor:name="CTLFont" install:module="ctl">
         <value >true</value>
       </prop>
-      <prop oor:name="CTLSequenceChecking" >
+      <prop oor:name="CTLSequenceChecking" install:module="ctlseqcheck">
         <value >true</value>
       </prop>
-      <prop oor:name="CTLSequenceCheckingRestricted" >
+      <prop oor:name="CTLSequenceCheckingRestricted" install:module="ctlseqcheck">
         <value >true</value>
       </prop>
-      <prop oor:name="CTLSequenceCheckingTypeAndReplace">
+      <prop oor:name="CTLSequenceCheckingTypeAndReplace" install:module="ctlseqcheck">
         <value >true</value>
       </prop>
     </node>
