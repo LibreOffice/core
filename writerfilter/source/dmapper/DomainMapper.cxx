@@ -1634,7 +1634,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_sprm::LN_PBrcBetween:   // sprmPBrcBetween
         {
             //in binary format the borders are directly provided in OOXML they are inside of properties
-            if( IsOOXMLImport() )
+            if( IsOOXMLImport() || IsRTFImport() )
             {
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                 if( pProperties.get())
