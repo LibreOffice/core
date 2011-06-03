@@ -5628,7 +5628,6 @@ dnl ***************************************
 dnl testing for X libraries and includes...
 dnl ***************************************
 if test "$_os" = "Darwin" -a "x$x_includes" = "xno_x_includes"; then
-   echo "Do Nothing for _os = Darwin"
    dnl Mac OS X using Aqua graphics. Don't check for X11.
    :
 elif test "$_os" != "WINNT" -a "$_os" != "Android" -a "$_os" != "iOS"; then
