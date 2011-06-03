@@ -89,6 +89,11 @@ RTFValue* RTFValue::Clone()
     return new RTFValue(m_nValue, m_sValue, m_rAttributes);
 }
 
+std::map<Id, RTFValue::Pointer_t>* RTFValue::getAttributes()
+{
+    return &m_rAttributes;
+}
+
 } // namespace rtftok
 } // namespace writerfilter
 

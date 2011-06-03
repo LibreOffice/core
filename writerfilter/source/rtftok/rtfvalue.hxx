@@ -26,6 +26,7 @@ namespace writerfilter {
                 virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary();
                 virtual std::string toString() const;
                 virtual RTFValue* Clone();
+                std::map<Id, RTFValue::Pointer_t>* getAttributes();
             private:
                 int m_nValue;
                 rtl::OUString m_sValue;
