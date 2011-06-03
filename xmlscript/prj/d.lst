@@ -1,14 +1,14 @@
-mkdir: %_DEST%\inc%_EXT%\xmlscript
-..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
-..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%\*.lib
-..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%\lib*.so
-..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
+mkdir: %_DEST%\inc\xmlscript
+..\%__SRC%\bin\*.dll %_DEST%\bin\*.dll
+..\%__SRC%\lib\*.lib %_DEST%\lib\*.lib
+..\%__SRC%\lib\lib*.so %_DEST%\lib\lib*.so
+..\%__SRC%\lib\*.dylib %_DEST%\lib\*.dylib
 
-..\inc\xmlscript\xml_helper.hxx %_DEST%\inc%_EXT%\xmlscript\xml_helper.hxx
-..\inc\xmlscript\xmldlg_imexp.hxx %_DEST%\inc%_EXT%\xmlscript\xmldlg_imexp.hxx
-..\inc\xmlscript\xmllib_imexp.hxx %_DEST%\inc%_EXT%\xmlscript\xmllib_imexp.hxx
-..\inc\xmlscript\xmlmod_imexp.hxx %_DEST%\inc%_EXT%\xmlscript\xmlmod_imexp.hxx
-..\inc\xmlscript\xmlns.h %_DEST%\inc%_EXT%\xmlscript\xmlns.h
+..\inc\xmlscript\xml_helper.hxx %_DEST%\inc\xmlscript\xml_helper.hxx
+..\inc\xmlscript\xmldlg_imexp.hxx %_DEST%\inc\xmlscript\xmldlg_imexp.hxx
+..\inc\xmlscript\xmllib_imexp.hxx %_DEST%\inc\xmlscript\xmllib_imexp.hxx
+..\inc\xmlscript\xmlmod_imexp.hxx %_DEST%\inc\xmlscript\xmlmod_imexp.hxx
+..\inc\xmlscript\xmlns.h %_DEST%\inc\xmlscript\xmlns.h
 
-..\dtd\*.dtd %_DEST%\bin%_EXT%\*.dtd
-..\%__SRC%\misc\xcr.component %_DEST%\xml%_EXT%\xcr.component
+..\dtd\*.dtd %_DEST%\bin\*.dtd
+..\%__SRC%\misc\xcr.component %_DEST%\xml\xcr.component

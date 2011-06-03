@@ -1,29 +1,29 @@
-mkdir: %_DEST%\inc%_EXT%\scripting
-mkdir: %_DEST%\lib%_EXT%\pyuno
-mkdir: %_DEST%\bin%_EXT%\pyuno
+mkdir: %_DEST%\inc\scripting
+mkdir: %_DEST%\lib\pyuno
+mkdir: %_DEST%\bin\pyuno
 
-..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*
-..\%__SRC%\bin\*.zip %COMMON_DEST%\pck%_EXT%\*
-..\%__SRC%\class\*.jar %_DEST%\bin%_EXT%\*
-..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*
-..\%__SRC%\bin\*.py %_DEST%\bin%_EXT%\pyuno\*
-..\%__SRC%\lib\*.py %_DEST%\lib%_EXT%\pyuno\*
-..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
+..\%__SRC%\bin\*.dll %_DEST%\bin\*
+..\%__SRC%\bin\*.zip %COMMON_DEST%\pck\*
+..\%__SRC%\class\*.jar %_DEST%\bin\*
+..\%__SRC%\lib\*.so %_DEST%\lib\*
+..\%__SRC%\bin\*.py %_DEST%\bin\pyuno\*
+..\%__SRC%\lib\*.py %_DEST%\lib\pyuno\*
+..\%__SRC%\lib\*.dylib %_DEST%\lib\*.dylib
 
-..\%__SRC%\bin\*.rdb %_DEST%\rdb%_EXT%\*
+..\%__SRC%\bin\*.rdb %_DEST%\rdb\*
 
-..\source\storage\storage.xml %_DEST%\xml%_EXT%\storage.xml
+..\source\storage\storage.xml %_DEST%\xml\storage.xml
 
-..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
-..\%__SRC%\misc\mailmerge.component %_DEST%\xml%_EXT%\mailmerge.component
-..\%__SRC%\misc\ScriptFramework.component %_DEST%\xml%_EXT%\ScriptFramework.component
-..\%__SRC%\misc\ScriptProviderForJava.component %_DEST%\xml%_EXT%\ScriptProviderForJava.component
-..\%__SRC%\misc\basprov.component %_DEST%\xml%_EXT%\basprov.component
-..\%__SRC%\misc\dlgprov.component %_DEST%\xml%_EXT%\dlgprov.component
-..\%__SRC%\misc\protocolhandler.component %_DEST%\xml%_EXT%\protocolhandler.component
-..\%__SRC%\misc\scriptframe.component %_DEST%\xml%_EXT%\scriptframe.component
-..\%__SRC%\misc\stringresource.component %_DEST%\xml%_EXT%\stringresource.component
-..\%__SRC%\misc\vbaevents.component %_DEST%\xml%_EXT%\vbaevents.component
+..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib\lib*static*.dylib
+..\%__SRC%\misc\mailmerge.component %_DEST%\xml\mailmerge.component
+..\%__SRC%\misc\ScriptFramework.component %_DEST%\xml\ScriptFramework.component
+..\%__SRC%\misc\ScriptProviderForJava.component %_DEST%\xml\ScriptProviderForJava.component
+..\%__SRC%\misc\basprov.component %_DEST%\xml\basprov.component
+..\%__SRC%\misc\dlgprov.component %_DEST%\xml\dlgprov.component
+..\%__SRC%\misc\protocolhandler.component %_DEST%\xml\protocolhandler.component
+..\%__SRC%\misc\scriptframe.component %_DEST%\xml\scriptframe.component
+..\%__SRC%\misc\stringresource.component %_DEST%\xml\stringresource.component
+..\%__SRC%\misc\vbaevents.component %_DEST%\xml\vbaevents.component
 
 # Extensions
-..\%__SRC%\bin\*.oxt %_DEST%\bin%_EXT%\*.oxt
+..\%__SRC%\bin\*.oxt %_DEST%\bin\*.oxt

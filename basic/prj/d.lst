@@ -1,29 +1,29 @@
-mkdir: %COMMON_DEST%\bin%_EXT%\hid
-mkdir: %COMMON_DEST%\res%_EXT%
+mkdir: %COMMON_DEST%\bin\hid
+mkdir: %COMMON_DEST%\res
 
-..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
-..\%__SRC%\lib\basic.lib %_DEST%\lib%_EXT%\basic.lib
-..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%
-..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
-..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
-..\%__SRC%\slb\sb.lib %_DEST%\lib%_EXT%\xsb.lib
-..\%__SRC%\srs\classes.srs %_DEST%\res%_EXT%\basic.srs
-..\%COMMON_OUTDIR%\srs\classes_srs.hid %COMMON_DEST%\res%_EXT%\basic_srs.hid
-..\%__SRC%\bin\sb?????.dll %_DEST%\bin%_EXT%\sb?????.dll
-..\%__SRC%\bin\sb?????.sym %_DEST%\bin%_EXT%\sb?????.sym
-..\%__SRC%\misc\sb?????.map %_DEST%\bin%_EXT%\sb?????.map
-..\%__SRC%\bin\stt*.res %_DEST%\bin%_EXT%\stt*.res
-..\%__SRC%\bin\sb*.res %_DEST%\bin%_EXT%\sb*.res
-..\%__SRC%\lib\app.lib %_DEST%\lib%_EXT%\app.lib
-..\%__SRC%\lib\libapp.a %_DEST%\lib%_EXT%\libapp.a
-..\%__SRC%\lib\sample.lib %_DEST%\lib%_EXT%\sample.lib
-..\%__SRC%\lib\libsample.a %_DEST%\lib%_EXT%\libsample.a
+..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin\hid\*.hid
+..\%__SRC%\lib\basic.lib %_DEST%\lib\basic.lib
+..\%__SRC%\lib\lib*.so %_DEST%\lib
+..\%__SRC%\lib\*.dylib %_DEST%\lib\*.dylib
+..\%__SRC%\lib\*.a %_DEST%\lib\*.a
+..\%__SRC%\slb\sb.lib %_DEST%\lib\xsb.lib
+..\%__SRC%\srs\classes.srs %_DEST%\res\basic.srs
+..\%COMMON_OUTDIR%\srs\classes_srs.hid %COMMON_DEST%\res\basic_srs.hid
+..\%__SRC%\bin\sb?????.dll %_DEST%\bin\sb?????.dll
+..\%__SRC%\bin\sb?????.sym %_DEST%\bin\sb?????.sym
+..\%__SRC%\misc\sb?????.map %_DEST%\bin\sb?????.map
+..\%__SRC%\bin\stt*.res %_DEST%\bin\stt*.res
+..\%__SRC%\bin\sb*.res %_DEST%\bin\sb*.res
+..\%__SRC%\lib\app.lib %_DEST%\lib\app.lib
+..\%__SRC%\lib\libapp.a %_DEST%\lib\libapp.a
+..\%__SRC%\lib\sample.lib %_DEST%\lib\sample.lib
+..\%__SRC%\lib\libsample.a %_DEST%\lib\libsample.a
 
-mkdir: %_DEST%\inc%_EXT%\basic
-..\inc\basic\*.hxx %_DEST%\inc%_EXT%\basic\*.hxx
-..\inc\basic\*.hrc %_DEST%\inc%_EXT%\basic\*.hrc
-..\inc\basic\*.h %_DEST%\inc%_EXT%\basic\*.h
+mkdir: %_DEST%\inc\basic
+..\inc\basic\*.hxx %_DEST%\inc\basic\*.hxx
+..\inc\basic\*.hrc %_DEST%\inc\basic\*.hrc
+..\inc\basic\*.h %_DEST%\inc\basic\*.h
 
-..\inc\modsizeexceeded.hxx %_DEST%\inc%_EXT%\basic\modsizeexceeded.hxx
-..\%__SRC%\misc\sb.component %_DEST%\xml%_EXT%\sb.component
+..\inc\modsizeexceeded.hxx %_DEST%\inc\basic\modsizeexceeded.hxx
+..\%__SRC%\misc\sb.component %_DEST%\xml\sb.component
 
