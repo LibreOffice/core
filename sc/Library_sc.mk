@@ -338,7 +338,6 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/ui/docshell/docsh8 \
 	sc/source/ui/docshell/editable \
 	sc/source/ui/docshell/externalrefmgr \
-	sc/source/ui/docshell/hiranges \
 	sc/source/ui/docshell/impex \
 	sc/source/ui/docshell/macromgr \
 	sc/source/ui/docshell/olinefun \
