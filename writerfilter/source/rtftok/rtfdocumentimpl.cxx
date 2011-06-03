@@ -505,6 +505,15 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().aSprms[NS_sprm::LN_CShd] = pValue;
             }
             break;
+        case RTF_CBPAT:
+            {
+                std::map<Id, RTFValue::Pointer_t> aAttributes;
+                RTFValue::Pointer_t pInnerValue(new RTFValue(getColorTable(nParam)));
+                aAttributes[NS_ooxml::LN_CT_Shd_fill] = pInnerValue;
+                RTFValue::Pointer_t pValue(new RTFValue(aAttributes));
+                m_aStates.top().aSprms[NS_sprm::LN_PShd] = pValue;
+            }
+            break;
         case RTF_ULC:
             {
                 RTFValue::Pointer_t pValue(new RTFValue(getColorTable(nParam)));
