@@ -101,14 +101,14 @@ RTFValue* RTFValue::Clone()
     return new RTFValue(m_nValue, m_sValue, m_rAttributes, m_rSprms);
 }
 
-std::map<Id, RTFValue::Pointer_t>* RTFValue::getAttributes()
+std::map<Id, RTFValue::Pointer_t>& RTFValue::getAttributes()
 {
-    return &m_rAttributes;
+    return m_rAttributes;
 }
 
-std::map<Id, RTFValue::Pointer_t>* RTFValue::getSprms()
+std::map<Id, RTFValue::Pointer_t>& RTFValue::getSprms()
 {
-    return &m_rSprms;
+    return m_rSprms;
 }
 
 } // namespace rtftok

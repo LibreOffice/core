@@ -28,8 +28,8 @@ namespace writerfilter {
                 virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary();
                 virtual std::string toString() const;
                 virtual RTFValue* Clone();
-                std::map<Id, RTFValue::Pointer_t>* getAttributes();
-                std::map<Id, RTFValue::Pointer_t>* getSprms();
+                std::map<Id, RTFValue::Pointer_t>& getAttributes();
+                std::map<Id, RTFValue::Pointer_t>& getSprms();
             private:
                 int m_nValue;
                 rtl::OUString m_sValue;

@@ -24,7 +24,7 @@ using rtl::OUStringToOString;
 namespace writerfilter {
 namespace rtftok {
 
-std::map<Id, RTFValue::Pointer_t>* lcl_insertTabsTab(std::stack<RTFParserState>& aStates)
+std::map<Id, RTFValue::Pointer_t>& lcl_insertTabsTab(std::stack<RTFParserState>& aStates)
 {
     // insert the tabs sprm if necessary
     std::map<Id, RTFValue::Pointer_t>::iterator itTabs = aStates.top().aSprms.find(NS_ooxml::LN_CT_PPrBase_tabs);
@@ -36,16 +36,16 @@ std::map<Id, RTFValue::Pointer_t>* lcl_insertTabsTab(std::stack<RTFParserState>&
         aStates.top().aSprms[NS_ooxml::LN_CT_PPrBase_tabs] = pTabsValue;
         itTabs = aStates.top().aSprms.find(NS_ooxml::LN_CT_PPrBase_tabs);
     }
-    std::map<Id, RTFValue::Pointer_t>* pSprms = itTabs->second->getSprms();
+    std::map<Id, RTFValue::Pointer_t>& rSprms = itTabs->second->getSprms();
 
     // insert the tab sprm if necessary
-    std::map<Id, RTFValue::Pointer_t>::iterator itTab = pSprms->find(NS_ooxml::LN_CT_Tabs_tab);
-    if (itTab == pSprms->end())
+    std::map<Id, RTFValue::Pointer_t>::iterator itTab = rSprms.find(NS_ooxml::LN_CT_Tabs_tab);
+    if (itTab == rSprms.end())
     {
         std::map<Id, RTFValue::Pointer_t> aTabAttributes;
         RTFValue::Pointer_t pTabValue(new RTFValue(aTabAttributes));
-        pSprms->insert(std::make_pair(NS_ooxml::LN_CT_Tabs_tab, pTabValue));
-        itTab = pSprms->find(NS_ooxml::LN_CT_Tabs_tab);
+        rSprms[NS_ooxml::LN_CT_Tabs_tab] = pTabValue;
+        itTab = rSprms.find(NS_ooxml::LN_CT_Tabs_tab);
     }
     return itTab->second->getAttributes();
 }
@@ -372,7 +372,6 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     }
     if (nParam > 0)
     {
-        std::map<Id, RTFValue::Pointer_t>* pAttributes;
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
 
         for (int i = 0; i < 4; i++)
@@ -380,8 +379,8 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             std::map<Id, RTFValue::Pointer_t>::iterator it = m_aStates.top().aSprms.find(getBorderTable(i));
             if (it != m_aStates.top().aSprms.end())
             {
-                pAttributes = it->second->getAttributes();
-                pAttributes->insert(std::make_pair(NS_rtf::LN_BRCTYPE, pValue));
+                std::map<Id, RTFValue::Pointer_t>& rAttributes = it->second->getAttributes();
+                rAttributes[NS_rtf::LN_BRCTYPE] = pValue;
             }
         }
         skipDestination(bParsed);
@@ -440,9 +439,9 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             break;
         case RTF_TQR:
             {
-                std::map<Id, RTFValue::Pointer_t>* pAttributes = lcl_insertTabsTab(m_aStates);
+                std::map<Id, RTFValue::Pointer_t>& rAttributes = lcl_insertTabsTab(m_aStates);
                 RTFValue::Pointer_t pTabposValue(new RTFValue(2));
-                pAttributes->insert(std::make_pair(NS_ooxml::LN_CT_TabStop_val, pTabposValue));
+                rAttributes[NS_ooxml::LN_CT_TabStop_val] = pTabposValue;
             }
             break;
         default:
@@ -667,7 +666,6 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTF_BRDRW:
             {
-                std::map<Id, RTFValue::Pointer_t>* pAttributes;
                 // dmapper expects it in 1/8 pt, we have it in twip
                 RTFValue::Pointer_t pValue(new RTFValue(nParam * 2 / 5));
 
@@ -676,15 +674,14 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     std::map<Id, RTFValue::Pointer_t>::iterator it = m_aStates.top().aSprms.find(getBorderTable(i));
                     if (it != m_aStates.top().aSprms.end())
                     {
-                        pAttributes = it->second->getAttributes();
-                        pAttributes->insert(std::make_pair(NS_rtf::LN_DPTLINEWIDTH, pValue));
+                        std::map<Id, RTFValue::Pointer_t>& rAttributes = it->second->getAttributes();
+                        rAttributes[NS_rtf::LN_DPTLINEWIDTH] = pValue;
                     }
                 }
             }
             break;
         case RTF_BRDRCF:
             {
-                std::map<Id, RTFValue::Pointer_t>* pAttributes;
                 RTFValue::Pointer_t pValue(new RTFValue(getColorTable(nParam)));
 
                 for (int i = 0; i < 4; i++)
@@ -692,15 +689,14 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     std::map<Id, RTFValue::Pointer_t>::iterator it = m_aStates.top().aSprms.find(getBorderTable(i));
                     if (it != m_aStates.top().aSprms.end())
                     {
-                        pAttributes = it->second->getAttributes();
-                        pAttributes->insert(std::make_pair(NS_ooxml::LN_CT_Border_color, pValue));
+                        std::map<Id, RTFValue::Pointer_t>& rAttributes = it->second->getAttributes();
+                        rAttributes[NS_ooxml::LN_CT_Border_color] = pValue;
                     }
                 }
             }
             break;
         case RTF_BRSP:
             {
-                std::map<Id, RTFValue::Pointer_t>* pAttributes;
                 // dmapper expects it in points, we have it in twip
                 RTFValue::Pointer_t pValue(new RTFValue(nParam / 20));
 
@@ -709,17 +705,17 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     std::map<Id, RTFValue::Pointer_t>::iterator it = m_aStates.top().aSprms.find(getBorderTable(i));
                     if (it != m_aStates.top().aSprms.end())
                     {
-                        pAttributes = it->second->getAttributes();
-                        pAttributes->insert(std::make_pair(NS_rtf::LN_DPTSPACE, pValue));
+                        std::map<Id, RTFValue::Pointer_t>& rAttributes = it->second->getAttributes();
+                        rAttributes[NS_rtf::LN_DPTSPACE] = pValue;
                     }
                 }
             }
             break;
         case RTF_TX:
             {
-                std::map<Id, RTFValue::Pointer_t>* pAttributes = lcl_insertTabsTab(m_aStates);
+                std::map<Id, RTFValue::Pointer_t>& rAttributes = lcl_insertTabsTab(m_aStates);
                 RTFValue::Pointer_t pTabposValue(new RTFValue(nParam));
-                pAttributes->insert(std::make_pair(NS_ooxml::LN_CT_TabStop_pos, pTabposValue));
+                rAttributes[NS_ooxml::LN_CT_TabStop_pos] = pTabposValue;
             }
             break;
         default:
