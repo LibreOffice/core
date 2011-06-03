@@ -9,31 +9,44 @@ namespace rtftok {
 using rtl::OString;
 using rtl::OUString;
 
-RTFValue::RTFValue(int nValue, rtl::OUString sValue, std::map<Id, RTFValue::Pointer_t> rAttributes)
+RTFValue::RTFValue(int nValue, rtl::OUString sValue, std::map<Id, RTFValue::Pointer_t> rAttributes,
+        std::map<Id, RTFValue::Pointer_t> rSprms)
     : m_nValue(nValue),
     m_sValue(sValue),
-    m_rAttributes(rAttributes)
+    m_rAttributes(rAttributes),
+    m_rSprms(rSprms)
 {
 }
 
 RTFValue::RTFValue(int nValue)
     : m_nValue(nValue),
     m_sValue(),
-    m_rAttributes()
+    m_rAttributes(),
+    m_rSprms()
 {
 }
 
 RTFValue::RTFValue(OUString sValue)
     : m_nValue(),
     m_sValue(sValue),
-    m_rAttributes()
+    m_rAttributes(),
+    m_rSprms()
 {
 }
 
 RTFValue::RTFValue(std::map<Id, RTFValue::Pointer_t> rAttributes)
     : m_nValue(),
     m_sValue(),
-    m_rAttributes(rAttributes)
+    m_rAttributes(rAttributes),
+    m_rSprms()
+{
+}
+
+RTFValue::RTFValue(std::map<Id, RTFValue::Pointer_t> rAttributes, std::map<Id, RTFValue::Pointer_t> rSprms)
+    : m_nValue(),
+    m_sValue(),
+    m_rAttributes(rAttributes),
+    m_rSprms(rSprms)
 {
 }
 
@@ -59,9 +72,8 @@ uno::Any RTFValue::getAny() const
 
 writerfilter::Reference<Properties>::Pointer_t RTFValue::getProperties()
 {
-    std::map<Id, RTFValue::Pointer_t> aSprms;
     writerfilter::Reference<Properties>::Pointer_t const pProperties(
-            new RTFReferenceProperties(m_rAttributes, aSprms)
+            new RTFReferenceProperties(m_rAttributes, m_rSprms)
             );
     return pProperties;
 }
@@ -86,12 +98,17 @@ std::string RTFValue::toString() const
 
 RTFValue* RTFValue::Clone()
 {
-    return new RTFValue(m_nValue, m_sValue, m_rAttributes);
+    return new RTFValue(m_nValue, m_sValue, m_rAttributes, m_rSprms);
 }
 
 std::map<Id, RTFValue::Pointer_t>* RTFValue::getAttributes()
 {
     return &m_rAttributes;
+}
+
+std::map<Id, RTFValue::Pointer_t>* RTFValue::getSprms()
+{
+    return &m_rSprms;
 }
 
 } // namespace rtftok
