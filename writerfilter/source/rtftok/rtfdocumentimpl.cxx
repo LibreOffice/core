@@ -121,6 +121,9 @@ void RTFDocumentImpl::resolve(Stream & rMapper)
         case ERROR_EOF:
             OSL_TRACE("%s: unexpected end of file", OSL_THIS_FUNC);
             break;
+        case ERROR_HEX_INVALID:
+            OSL_TRACE("%s: invalid hex char", OSL_THIS_FUNC);
+            break;
     }
 }
 
@@ -132,9 +135,12 @@ int RTFDocumentImpl::resolveChars(char ch)
     {
         if (ch != 0x0d && ch != 0x0a)
             aBuf.append(ch);
+        // read a single char if we're in hex mode
+        if (m_aStates.top().nInternalState == INTERNAL_HEX)
+            break;
         Strm() >> ch;
     }
-    if (!Strm().IsEof())
+    if (m_aStates.top().nInternalState != INTERNAL_HEX && !Strm().IsEof())
         Strm().SeekRel(-1);
     OString aStr = aBuf.makeStringAndClear();
     OSL_TRACE("%s: collected '%s'", OSL_THIS_FUNC, aStr.getStr());
@@ -317,6 +323,9 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 OUString aStr('\t');
                 text(aStr);
             }
+            break;
+        case RTF_HEXCHAR:
+            m_aStates.top().nInternalState = INTERNAL_HEX;
             break;
         default:
             OSL_TRACE("%s: TODO handle symbol '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
@@ -1022,6 +1031,8 @@ int RTFDocumentImpl::resolveParse()
     OSL_TRACE("%s", OSL_THIS_FUNC);
     char ch;
     int ret;
+    // for hex chars
+    int b = 0, count = 2;
 
     while ((Strm() >> ch, !Strm().IsEof()))
     {
@@ -1058,7 +1069,34 @@ int RTFDocumentImpl::resolveParse()
                     }
                     else
                     {
-                        OSL_TRACE("%s: TODO, hex internal state", OSL_THIS_FUNC);
+                        OSL_TRACE("%s: hex internal state", OSL_THIS_FUNC);
+                        b = b << 4;
+                        if (isdigit(ch))
+                            b += (char) ch - '0';
+                        else
+                        {
+                            if (islower(ch))
+                            {
+                                if (ch < 'a' || ch > 'f')
+                                    return ERROR_HEX_INVALID;
+                                b += (char) ch - 'a';
+                            }
+                            else
+                            {
+                                if (ch < 'A' || ch > 'F')
+                                    return ERROR_HEX_INVALID;
+                                b += (char) ch - 'A';
+                            }
+                        }
+                        count--;
+                        if (!count)
+                        {
+                            if ((ret = resolveChars(b)))
+                                return ret;
+                            count = 2;
+                            b = 0;
+                            m_aStates.top().nInternalState = INTERNAL_NORMAL;
+                        }
                     }
                     break;
             }

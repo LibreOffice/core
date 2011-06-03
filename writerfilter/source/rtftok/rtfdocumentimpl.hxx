@@ -39,7 +39,8 @@ namespace writerfilter {
             ERROR_OK,
             ERROR_GROUP_UNDER,
             ERROR_GROUP_OVER,
-            ERROR_EOF
+            ERROR_EOF,
+            ERROR_HEX_INVALID
         };
 
         enum RTFControlTypes
