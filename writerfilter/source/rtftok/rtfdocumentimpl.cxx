@@ -145,8 +145,7 @@ int RTFDocumentImpl::resolveChars(char ch)
     OString aStr = aBuf.makeStringAndClear();
     OSL_TRACE("%s: collected '%s'", OSL_THIS_FUNC, aStr.getStr());
 
-    // TODO encoding handling
-    OUString aOUStr(OStringToOUString(aStr, RTL_TEXTENCODING_UTF8));
+    OUString aOUStr(OStringToOUString(aStr, m_aStates.top().nCurrentEncoding));
 
     if (m_aStates.top().nDestinationState == DESTINATION_NORMAL || m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT)
         text(aOUStr);
