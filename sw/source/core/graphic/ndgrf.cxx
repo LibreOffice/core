@@ -806,8 +806,7 @@ SvStream* SwGrfNode::_GetStreamForEmbedGrf(
         {
             xub_StrLen nExtPos = _aStrmName.Search( '.' );
             String aExtStr = _aStrmName.Copy( nExtPos );
-            Graphic aGraphic( GetGrfObj().GetGraphic() );
-            if ( aGraphic.GetType() != GRAPHIC_NONE )
+            if ( GetGrfObj().GetType() != GRAPHIC_NONE )
             {
                 _aStrmName = String( GetGrfObj().GetUniqueID(), RTL_TEXTENCODING_ASCII_US );
                 _aStrmName += aExtStr;
