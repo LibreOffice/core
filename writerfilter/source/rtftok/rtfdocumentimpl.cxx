@@ -358,7 +358,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         return 0;
     }
 
-    // Tabs
+    // Tab kind.
     switch (nKeyword)
     {
         case RTF_TQR: nParam = 2; break;
@@ -371,6 +371,26 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         std::map<Id, RTFValue::Pointer_t>& rAttributes = lcl_getTabsTab(m_aStates);
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
         rAttributes[NS_ooxml::LN_CT_TabStop_val] = pValue;
+        skipDestination(bParsed);
+        return 0;
+    }
+
+    // Tab lead.
+    switch (nKeyword)
+    {
+        case RTF_TLDOT: nParam = 1; break;
+        case RTF_TLMDOT: nParam = NS_ooxml::LN_Value_ST_TabTlc_middleDot; break;
+        case RTF_TLHYPH: nParam = 2; break;
+        case RTF_TLUL: nParam = 3; break;
+        case RTF_TLTH: nParam = 2; break; // thick line is not supported by dmapper, this is just a hack
+        case RTF_TLEQ: nParam = 0; break; // equal sign isn't, either
+        default: break;
+    }
+    if (nParam > 0)
+    {
+        std::map<Id, RTFValue::Pointer_t>& rAttributes = lcl_getTabsTab(m_aStates);
+        RTFValue::Pointer_t pValue(new RTFValue(nParam));
+        rAttributes[NS_ooxml::LN_CT_TabStop_leader] = pValue;
         skipDestination(bParsed);
         return 0;
     }
