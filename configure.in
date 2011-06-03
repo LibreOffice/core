@@ -4320,7 +4320,7 @@ if test -n "$with_system_libxslt" -o -n "$with_system_libs" -o \
         dnl omit -L/usr/lib
         LIBXSLT_LIBS="-lxslt -lxml2 -lz -lpthread -liconv -lm"
     else
-        PKG_CHECK_MODULES(LIBXSLT, xslt-config, libxslt)
+        PKG_CHECK_MODULES(LIBXSLT, libxslt)
     fi
 
     dnl Check for xsltproc
