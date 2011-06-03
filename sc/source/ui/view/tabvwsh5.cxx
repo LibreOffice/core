@@ -242,6 +242,9 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             case SC_TABS_INSERTED:
                 GetViewData()->InsertTabs( nTab1, nTab2 );
                 break;
+            case SC_TABS_DELETED:
+                GetViewData()->DeleteTabs( nTab1, nTab2 );
+                break;
             default:
                 OSL_FAIL("unbekannter ScTablesHint");
         }
@@ -288,6 +291,10 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             case SC_TABS_INSERTED:
                 if ( nTab1 <= nNewTab )
                     nNewTab += nTab2;
+                break;
+            case SC_TABS_DELETED:
+                if ( nTab1 < nNewTab )
+                    nNewTab -= nTab2;
                 break;
         }
 

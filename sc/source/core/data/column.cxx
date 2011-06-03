@@ -1769,10 +1769,13 @@ void ScColumn::UpdateInsertTabAbs(SCTAB nTable)
 }
 
 
-void ScColumn::UpdateDeleteTab( SCTAB nTable, bool bIsMove, ScColumn* pRefUndo )
+void ScColumn::UpdateDeleteTab( SCTAB nTable, bool bIsMove, ScColumn* pRefUndo, SCTAB nSheets )
 {
     if (nTab > nTable)
-        pAttrArray->SetTab(--nTab);
+    {
+        nTab -= nSheets;
+        pAttrArray->SetTab(nTab);
+    }
 
     if (pItems)
         for (SCSIZE i = 0; i < nCount; i++)
@@ -1785,7 +1788,7 @@ void ScColumn::UpdateDeleteTab( SCTAB nTable, bool bIsMove, ScColumn* pRefUndo )
                     back the formula cell while keeping the original note. */
                 ScBaseCell* pSave = pRefUndo ? pOld->CloneWithoutNote( *pDocument ) : 0;
 
-                bool bChanged = pOld->UpdateDeleteTab(nTable, bIsMove);
+                bool bChanged = pOld->UpdateDeleteTab(nTable, bIsMove, nSheets);
                 if ( nRow != pItems[i].nRow )
                     Search( nRow, i );      // Listener geloescht/eingefuegt?
 

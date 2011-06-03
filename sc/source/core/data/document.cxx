@@ -595,7 +595,7 @@ sal_Bool ScDocument::DeleteTab( SCTAB nTab, ScDocument* pRefUndoDoc )
 
                 // normal reference update
 
-                aRange.aEnd.SetTab( static_cast<SCTAB>(pTab.size()) );
+                aRange.aEnd.SetTab( static_cast<SCTAB>(pTab.size())-1 );
                 xColNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,-1 );
                 xRowNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,-1 );
                 if (pRangeName)
@@ -644,6 +644,93 @@ sal_Bool ScDocument::DeleteTab( SCTAB nTab, ScDocument* pRefUndoDoc )
 
                 SetAutoCalc( bOldAutoCalc );
                 bValid = sal_True;
+            }
+        }
+    }
+    return bValid;
+}
+
+
+bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets, ScDocument* pRefUndoDoc )
+{
+    bool bValid = false;
+    if (VALIDTAB(nTab) && (nTab + nSheets) < static_cast<SCTAB>(pTab.size()))
+    {
+        if (pTab[nTab])
+        {
+            SCTAB nTabCount = static_cast<SCTAB>(pTab.size());
+            if (nTabCount > nSheets)
+            {
+                bool bOldAutoCalc = GetAutoCalc();
+                SetAutoCalc( false );   // avoid multiple calculations
+                for (SCTAB aTab = 0; aTab < nSheets; ++aTab)
+                {
+                    ScRange aRange( 0, 0, nTab, MAXCOL, MAXROW, nTab + aTab );
+                    DelBroadcastAreasInRange( aRange );
+
+                    // #i8180# remove database ranges etc. that are on the deleted tab
+                    // (restored in undo with ScRefUndoData)
+
+                    xColNameRanges->DeleteOnTab( nTab + aTab );
+                    xRowNameRanges->DeleteOnTab( nTab + aTab );
+                    pDBCollection->DeleteOnTab( nTab + aTab );
+                    if (pDPCollection)
+                        pDPCollection->DeleteOnTab( nTab + aTab );
+                    if (pDetOpList)
+                        pDetOpList->DeleteOnTab( nTab + aTab );
+                    DeleteAreaLinksOnTab( nTab + aTab );
+                    if (pRangeName)
+                        pRangeName->UpdateTabRef( nTab + aTab, 2 );
+                }
+                // normal reference update
+
+                ScRange aRange( 0, 0, nTab, MAXCOL, MAXROW, nTabCount - 1 );
+                xColNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,-1*nSheets );
+                xRowNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,-1*nSheets );
+                pDBCollection->UpdateReference(
+                                    URM_INSDEL, 0,0,nTab, MAXCOL,MAXROW,MAXTAB, 0,0,-1*nSheets );
+                if (pDPCollection)
+                    pDPCollection->UpdateReference( URM_INSDEL, aRange, 0,0,-1*nSheets );
+                if (pDetOpList)
+                    pDetOpList->UpdateReference( this, URM_INSDEL, aRange, 0,0,-1*nSheets );
+                UpdateChartRef( URM_INSDEL, 0,0,nTab, MAXCOL,MAXROW,MAXTAB, 0,0,-1*nSheets );
+                UpdateRefAreaLinks( URM_INSDEL, aRange, 0,0,-1*nSheets );
+                if ( pCondFormList )
+                    pCondFormList->UpdateReference( URM_INSDEL, aRange, 0,0,-1*nSheets );
+                if ( pValidationList )
+                    pValidationList->UpdateReference( URM_INSDEL, aRange, 0,0,-1*nSheets );
+                if ( pUnoBroadcaster )
+                    pUnoBroadcaster->Broadcast( ScUpdateRefHint( URM_INSDEL, aRange, 0,0,-1*nSheets ) );
+
+                SCTAB i;
+                for (i=0; i< static_cast<SCTAB>(pTab.size()); i++)
+                    if (pTab[i])
+                        pTab[i]->UpdateDeleteTab(nTab,false,
+                                    pRefUndoDoc ? pRefUndoDoc->pTab[i] : 0,nSheets);
+                pTab.erase(pTab.begin()+ nTab, pTab.begin() + nTab + nSheets);
+                // UpdateBroadcastAreas must be called between UpdateDeleteTab,
+                // which ends listening, and StartAllListeners, to not modify
+                // areas that are to be inserted by starting listeners.
+                UpdateBroadcastAreas( URM_INSDEL, aRange, 0,0,-1*nSheets);
+                TableContainer::iterator it = pTab.begin();
+                for (; it != pTab.end(); ++it)
+                    if ( *it )
+                        (*it)->UpdateCompile();
+                // Excel-Filter deletes some Tables while loading, Listeners will
+                // only be triggered after the loading is done.
+                if ( !bInsertingFromOtherDoc )
+                {
+                    it = pTab.begin();
+                    for (; it != pTab.end(); ++it)
+                        if ( *it )
+                            (*it)->StartAllListeners();
+                    SetDirty();
+                }
+                // sheet names of references are not valid until sheet is deleted
+                pChartListenerCollection->UpdateScheduledSeriesRanges();
+
+                SetAutoCalc( bOldAutoCalc );
+                bValid = true;
             }
         }
     }

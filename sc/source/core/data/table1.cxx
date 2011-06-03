@@ -1402,21 +1402,22 @@ void ScTable::UpdateInsertTab(SCTAB nTable, SCTAB nNewSheets)
 {
     if (nTab >= nTable)
         nTab += nNewSheets;
-    for (SCCOL i=0; i <= MAXCOL; i++) aCol[i].UpdateInsertTab(nTable);
+    for (SCCOL i=0; i <= MAXCOL; i++) aCol[i].UpdateInsertTab(nTable, nNewSheets);
 
     if (IsStreamValid())
         SetStreamValid(false);
 }
 
-void ScTable::UpdateDeleteTab( SCTAB nTable, sal_Bool bIsMove, ScTable* pRefUndo )
+void ScTable::UpdateDeleteTab( SCTAB nTable, sal_Bool bIsMove, ScTable* pRefUndo, SCTAB nSheets )
 {
-    if (nTab > nTable) nTab--;
+    if (nTab > nTable)
+        nTab -= nSheets;
 
     SCCOL i;
     if (pRefUndo)
-        for (i=0; i <= MAXCOL; i++) aCol[i].UpdateDeleteTab(nTable, bIsMove, &pRefUndo->aCol[i]);
+        for (i=0; i <= MAXCOL; i++) aCol[i].UpdateDeleteTab(nTable, bIsMove, &pRefUndo->aCol[i], nSheets);
     else
-        for (i=0; i <= MAXCOL; i++) aCol[i].UpdateDeleteTab(nTable, bIsMove, NULL);
+        for (i=0; i <= MAXCOL; i++) aCol[i].UpdateDeleteTab(nTable, bIsMove, NULL, nSheets);
 
     if (IsStreamValid())
         SetStreamValid(false);

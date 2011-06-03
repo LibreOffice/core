@@ -243,13 +243,7 @@ void ScUndoInsertTables::Undo()
     pDocShell->SetInUndo( sal_True );               //! BeginUndo
     bDrawIsInUndo = sal_True;
 
-    vector<SCTAB> TheTabs;
-    for(SCTAB i=0; i< static_cast<SCTAB>(aNameList.size()); ++i)
-    {
-        TheTabs.push_back(nTab+i);
-    }
-    pViewShell->DeleteTables( TheTabs, false );
-    TheTabs.clear();
+    pViewShell->DeleteTables( nTab, static_cast<SCTAB>(aNameList.size()) );
 
     bDrawIsInUndo = false;
     pDocShell->SetInUndo( false );              //! EndUndo

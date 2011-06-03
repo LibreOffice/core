@@ -495,6 +495,19 @@ void ScViewData::DeleteTab( SCTAB nTab )
     aMarkData.DeleteTab( nTab );
 }
 
+void ScViewData::DeleteTabs( SCTAB nTab, SCTAB nSheets )
+{
+    for (SCTAB aTab = 0; aTab < nSheets; ++aTab)
+    {
+        aMarkData.DeleteTab( nTab + aTab );
+        delete pTabData[nTab + aTab];
+    }
+
+    pTabData.erase(pTabData.begin() + nTab, pTabData.begin()+ nTab+nSheets);
+    UpdateThis();
+
+}
+
 void ScViewData::CopyTab( SCTAB nSrcTab, SCTAB nDestTab )
 {
     if (nDestTab==SC_TAB_APPEND)

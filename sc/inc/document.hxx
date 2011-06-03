@@ -579,6 +579,7 @@ public:
                                 sal_Bool bExternalDocument = false );
     SC_DLLPUBLIC bool           InsertTabs( SCTAB nPos, const std::vector<rtl::OUString>& rNames,
                                 bool bExternalDocument = false, bool bNamesValid = false );
+    SC_DLLPUBLIC bool           DeleteTabs( SCTAB nTab, SCTAB nSheets, ScDocument* pRefUndoDoc = NULL );
     SC_DLLPUBLIC sal_Bool            DeleteTab( SCTAB nTab, ScDocument* pRefUndoDoc = NULL );
     SC_DLLPUBLIC sal_Bool           RenameTab( SCTAB nTab, const String& rName,
                                 sal_Bool bUpdateRef = sal_True,

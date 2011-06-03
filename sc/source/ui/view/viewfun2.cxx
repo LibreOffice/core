@@ -2089,11 +2089,54 @@ sal_Bool ScViewFunc::DeleteTable( SCTAB nTab, sal_Bool bRecord )
     return bSuccess;
 }
 
+//only use this method for undo for now, all sheets must be connected
+//this method doesn't support undo for now, merge it when it with the other method later
+bool ScViewFunc::DeleteTables( const SCTAB nTab, SCTAB nSheets )
+{
+    ScDocShell* pDocSh = GetViewData()->GetDocShell();
+    ScDocument* pDoc    = pDocSh->GetDocument();
+    bool bVbaEnabled = pDoc->IsInVBAMode();
+    SCTAB       nNewTab = nTab;
+    WaitObject aWait( GetFrameWin() );
+
+    while ( nNewTab > 0 && !pDoc->IsVisible( nNewTab ) )
+        --nNewTab;
+
+    if (pDoc->DeleteTabs(nTab, nSheets, NULL))
+    {
+        if( bVbaEnabled )
+        {
+            for (SCTAB aTab = 0; aTab < nSheets; ++aTab)
+            {
+                String sCodeName;
+                bool bHasCodeName = pDoc->GetCodeName( nTab + aTab, sCodeName );
+                if ( bHasCodeName )
+                    VBA_DeleteModule( *pDocSh, sCodeName );
+            }
+        }
+
+        pDocSh->Broadcast( ScTablesHint( SC_TABS_DELETED, nTab, nSheets ) );
+        if ( nNewTab >= pDoc->GetTableCount() )
+            nNewTab = pDoc->GetTableCount() - 1;
+        SetTabNo( nNewTab, sal_True );
+
+        pDocSh->PostPaintExtras();
+        pDocSh->SetDocumentModified();
+
+        SfxApplication* pSfxApp = SFX_APP();                                // Navigator
+        pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
+        pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
+        pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
+        return true;
+    }
+    return false;
+}
+
 sal_Bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, sal_Bool bRecord )
 {
     ScDocShell* pDocSh  = GetViewData()->GetDocShell();
     ScDocument* pDoc    = pDocSh->GetDocument();
-    sal_Bool bVbaEnabled = pDoc ? pDoc->IsInVBAMode() : false;
+    sal_Bool bVbaEnabled = pDoc->IsInVBAMode();
     SCTAB       nNewTab = TheTabs[0];
     WaitObject aWait( GetFrameWin() );
     if (bRecord && !pDoc->IsUndoEnabled())

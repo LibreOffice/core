@@ -267,6 +267,7 @@ public:
 
     sal_Bool            DeleteTable( SCTAB nTabNr, sal_Bool bRecord = true );
     sal_Bool            DeleteTables(const std::vector<SCTAB>& TheTabs, sal_Bool bRecord = true );
+    bool                DeleteTables(SCTAB nTab, SCTAB nSheets);
 
     sal_Bool            RenameTable( const String& rName, SCTAB nTabNr );
     void            MoveTable( sal_uInt16 nDestDocNo, SCTAB nDestTab, sal_Bool bCopy, const String* pNewTabName = NULL );
