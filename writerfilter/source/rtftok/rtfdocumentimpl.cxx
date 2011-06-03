@@ -357,6 +357,32 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 m_aStates.top().aSprms[NS_sprm::LN_PFWidowControl] = pValue;
             }
             break;
+        case RTF_BOX:
+            {
+                std::map<Id, RTFValue::Pointer_t> aAttributes;
+                RTFValue::Pointer_t pValue(new RTFValue(aAttributes));
+                m_aStates.top().aSprms[NS_sprm::LN_PBrcTop] = pValue;
+                m_aStates.top().aSprms[NS_sprm::LN_PBrcLeft] = pValue;
+                m_aStates.top().aSprms[NS_sprm::LN_PBrcBottom] = pValue;
+                m_aStates.top().aSprms[NS_sprm::LN_PBrcRight] = pValue;
+            }
+            break;
+        case RTF_BRDRS:
+            {
+                std::map<Id, RTFValue::Pointer_t>* pAttributes;
+                RTFValue::Pointer_t pValue(new RTFValue(1));
+
+                for (int i = 0; i < 4; i++)
+                {
+                    std::map<Id, RTFValue::Pointer_t>::iterator it = m_aStates.top().aSprms.find(getBorderTable(i));
+                    if (it != m_aStates.top().aSprms.end())
+                    {
+                        pAttributes = it->second->getAttributes();
+                        pAttributes->insert(std::make_pair(NS_rtf::LN_BRCTYPE, pValue));
+                    }
+                }
+            }
+            break;
         default:
             OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             bParsed = false;
@@ -575,6 +601,56 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             {
                 RTFValue::Pointer_t pValue(new RTFValue(NS_ooxml::LN_Value_wordprocessingml_ST_LineSpacingRule_auto));
                 m_aStates.top().aAttributes[NS_ooxml::LN_CT_Spacing_lineRule] = pValue;
+            }
+            break;
+        case RTF_BRDRW:
+            {
+                std::map<Id, RTFValue::Pointer_t>* pAttributes;
+                // dmapper expects it in 1/8 pt, we have it in twip
+                RTFValue::Pointer_t pValue(new RTFValue(nParam * 2 / 5));
+
+                for (int i = 0; i < 4; i++)
+                {
+                    std::map<Id, RTFValue::Pointer_t>::iterator it = m_aStates.top().aSprms.find(getBorderTable(i));
+                    if (it != m_aStates.top().aSprms.end())
+                    {
+                        pAttributes = it->second->getAttributes();
+                        pAttributes->insert(std::make_pair(NS_rtf::LN_DPTLINEWIDTH, pValue));
+                    }
+                }
+            }
+            break;
+        case RTF_BRDRCF:
+            {
+                std::map<Id, RTFValue::Pointer_t>* pAttributes;
+                RTFValue::Pointer_t pValue(new RTFValue(getColorTable(nParam)));
+
+                for (int i = 0; i < 4; i++)
+                {
+                    std::map<Id, RTFValue::Pointer_t>::iterator it = m_aStates.top().aSprms.find(getBorderTable(i));
+                    if (it != m_aStates.top().aSprms.end())
+                    {
+                        pAttributes = it->second->getAttributes();
+                        pAttributes->insert(std::make_pair(NS_ooxml::LN_CT_Border_color, pValue));
+                    }
+                }
+            }
+            break;
+        case RTF_BRSP:
+            {
+                std::map<Id, RTFValue::Pointer_t>* pAttributes;
+                // dmapper expects it in points, we have it in twip
+                RTFValue::Pointer_t pValue(new RTFValue(nParam / 20));
+
+                for (int i = 0; i < 4; i++)
+                {
+                    std::map<Id, RTFValue::Pointer_t>::iterator it = m_aStates.top().aSprms.find(getBorderTable(i));
+                    if (it != m_aStates.top().aSprms.end())
+                    {
+                        pAttributes = it->second->getAttributes();
+                        pAttributes->insert(std::make_pair(NS_rtf::LN_DPTSPACE, pValue));
+                    }
+                }
             }
             break;
         default:
