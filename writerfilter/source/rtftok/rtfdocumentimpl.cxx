@@ -4,8 +4,8 @@
 #include <rtfvalue.hxx>
 #include <rtfsprm.hxx>
 #include <rtfreferenceproperties.hxx>
+// TODO having 3 separate namespaces for the same purpose is... ugly.
 #include <doctok/sprmids.hxx> // NS_sprm
-// TODO: get rid of rtf and ooxml namespaces
 #include <doctok/resourceids.hxx> // NS_rtf
 #include <ooxml/resourceids.hxx> // NS_ooxml
 #include <unotools/ucbstreamhelper.hxx>
@@ -13,6 +13,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/tencinfo.h>
 #include <svl/lngmisc.hxx>
+#include <editeng/borderline.hxx>
 
 using rtl::OString;
 using rtl::OStringBuffer;
@@ -317,6 +318,44 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         return 0;
     }
 
+    // Border types
+    switch (nKeyword)
+    {
+        case RTF_BRDRS: nParam = editeng::SOLID; break;
+        case RTF_BRDRDOT: nParam = editeng::DOTTED; break;
+        case RTF_BRDRDASH: nParam = editeng::DASHED; break;
+        case RTF_BRDRDB: nParam = editeng::DOUBLE; break;
+        case RTF_BRDRTNTHSG: nParam = editeng::THINTHICK_SMALLGAP; break;
+        case RTF_BRDRTNTHMG: nParam = editeng::THINTHICK_MEDIUMGAP; break;
+        case RTF_BRDRTNTHLG: nParam = editeng::THINTHICK_LARGEGAP; break;
+        case RTF_BRDRTHTNSG: nParam = editeng::THICKTHIN_SMALLGAP; break;
+        case RTF_BRDRTHTNMG: nParam = editeng::THICKTHIN_MEDIUMGAP; break;
+        case RTF_BRDRTHTNLG: nParam = editeng::THICKTHIN_LARGEGAP; break;
+        case RTF_BRDREMBOSS: nParam = editeng::EMBOSSED; break;
+        case RTF_BRDRENGRAVE: nParam = editeng::ENGRAVED; break;
+        case RTF_BRDROUTSET: nParam = editeng::OUTSET; break;
+        case RTF_BRDRINSET: nParam = editeng::INSET; break;
+        case RTF_BRDRNONE: nParam = editeng::NO_STYLE; break;
+        default: break;
+    }
+    if (nParam > 0)
+    {
+        std::map<Id, RTFValue::Pointer_t>* pAttributes;
+        RTFValue::Pointer_t pValue(new RTFValue(nParam));
+
+        for (int i = 0; i < 4; i++)
+        {
+            std::map<Id, RTFValue::Pointer_t>::iterator it = m_aStates.top().aSprms.find(getBorderTable(i));
+            if (it != m_aStates.top().aSprms.end())
+            {
+                pAttributes = it->second->getAttributes();
+                pAttributes->insert(std::make_pair(NS_rtf::LN_BRCTYPE, pValue));
+            }
+        }
+        skipDestination(bParsed);
+        return 0;
+    }
+
     // Trivial flags
     switch (nKeyword)
     {
@@ -365,22 +404,6 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 m_aStates.top().aSprms[NS_sprm::LN_PBrcLeft] = pValue;
                 m_aStates.top().aSprms[NS_sprm::LN_PBrcBottom] = pValue;
                 m_aStates.top().aSprms[NS_sprm::LN_PBrcRight] = pValue;
-            }
-            break;
-        case RTF_BRDRS:
-            {
-                std::map<Id, RTFValue::Pointer_t>* pAttributes;
-                RTFValue::Pointer_t pValue(new RTFValue(1));
-
-                for (int i = 0; i < 4; i++)
-                {
-                    std::map<Id, RTFValue::Pointer_t>::iterator it = m_aStates.top().aSprms.find(getBorderTable(i));
-                    if (it != m_aStates.top().aSprms.end())
-                    {
-                        pAttributes = it->second->getAttributes();
-                        pAttributes->insert(std::make_pair(NS_rtf::LN_BRCTYPE, pValue));
-                    }
-                }
             }
             break;
         default:
