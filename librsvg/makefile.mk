@@ -77,7 +77,7 @@ CONFIGURE_FLAGS=--disable-gtk-theme --disable-tools --with-croco --with-svgz \
 CONFIGURE_FLAGS+= CPPFLAGS="$(ARCH_FLAGS) $(EXTRA_CDEFS)"
 
 BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) \
-             $(GNUMAKE)
+             $(GNUMAKE) $(!eq,$(VERBOSE),$(NULL) V=1) -j$(MAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
 
 EXTRPATH=LOADER
