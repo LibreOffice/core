@@ -33,7 +33,6 @@
 
 #include <svl/smplhint.hxx>
 #include <svl/zforlist.hxx>
-#include <rtl/uuid.h>
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/awt/XBitmap.hpp>
@@ -2294,8 +2293,7 @@ uno::Any SAL_CALL ScDatabaseRangesObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    sal_Int32 nUpper = ::std::numeric_limits<size_t>::max();
-    if (nIndex < 0 || nIndex > nUpper)
+    if (nIndex < 0)
         throw lang::IndexOutOfBoundsException();
 
     uno::Reference<sheet::XDatabaseRange> xRange(GetObjectByIndex_Impl(static_cast<size_t>(nIndex)));

@@ -31,7 +31,6 @@
 
 #include <boost/bind.hpp>
 
-#include <rtl/uuid.h>
 #include <vcl/svapp.hxx>
 #include <comphelper/servicehelper.hxx>
 

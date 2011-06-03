@@ -49,7 +49,6 @@
 #include <svl/itemset.hxx>
 #include <svl/intitem.hxx>
 #include <svl/zformat.hxx>
-#include <rtl/uuid.h>
 
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/table/CellVertJustify2.hpp>

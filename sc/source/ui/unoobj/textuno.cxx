@@ -41,7 +41,6 @@
 #include <svx/unomid.hxx>
 #include <editeng/unoprnms.hxx>
 #include <editeng/unofored.hxx>
-#include <rtl/uuid.h>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/awt/FontSlant.hpp>

@@ -50,7 +50,6 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
-#include <rtl/uuid.h>
 #include <editeng/brshitem.hxx>
 #include <comphelper/sequence.hxx>
 #include <float.h>
