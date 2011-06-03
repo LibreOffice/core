@@ -337,7 +337,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
 {
     bool bParsed = true;
     int nSprm = 0;
-    // First check the trivial sprms.
+    // Trivial sprms.
     switch (nKeyword)
     {
         case RTF_AF: nSprm = NS_sprm::LN_CRgFtc1; break;
@@ -361,6 +361,23 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     {
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
         m_aStates.top().aSprms[nSprm] = pValue;
+        skipDestination(bParsed);
+        return 0;
+    }
+
+    // Trivial attributes.
+    switch (nKeyword)
+    {
+        case RTF_SBASEDON: nSprm = NS_rtf::LN_ISTDBASE; break;
+        case RTF_SNEXT: nSprm = NS_rtf::LN_ISTDNEXT; break;
+        // NS_sprm::LN_PDyaLine could be used, but that won't work with slmult
+        case RTF_SL: nSprm = NS_ooxml::LN_CT_Spacing_line; break;
+        default: break;
+    }
+    if (nSprm > 0)
+    {
+        RTFValue::Pointer_t pValue(new RTFValue(nParam));
+        m_aStates.top().aAttributes[nSprm] = pValue;
         skipDestination(bParsed);
         return 0;
     }
@@ -438,18 +455,6 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().aAttributes[NS_rtf::LN_ISTD] = pValue;
             }
             break;
-        case RTF_SBASEDON:
-            {
-                RTFValue::Pointer_t pValue(new RTFValue(nParam));
-                m_aStates.top().aAttributes[NS_rtf::LN_ISTDBASE] = pValue;
-            }
-            break;
-        case RTF_SNEXT:
-            {
-                RTFValue::Pointer_t pValue(new RTFValue(nParam));
-                m_aStates.top().aAttributes[NS_rtf::LN_ISTDNEXT] = pValue;
-            }
-            break;
         case RTF_DEFF:
             {
                 RTFValue::Pointer_t pValue(new RTFValue(nParam));
@@ -521,13 +526,6 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     RTFValue::Pointer_t pBValue(new RTFValue(nParam));
                     m_aStates.top().aAttributes[NS_ooxml::LN_CT_EastAsianLayout_combineBrackets] = pBValue;
                 }
-            }
-            break;
-        case RTF_SL:
-            // NS_sprm::LN_PDyaLine could be used, but that won't work with slmult
-            {
-                RTFValue::Pointer_t pValue(new RTFValue(nParam));
-                m_aStates.top().aAttributes[NS_ooxml::LN_CT_Spacing_line] = pValue;
             }
             break;
         case RTF_SLMULT:
