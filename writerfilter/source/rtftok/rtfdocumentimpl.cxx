@@ -312,6 +312,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     {
         case RTF_KEEP: nParam = NS_sprm::LN_PFKeep; break;
         case RTF_KEEPN: nParam = NS_sprm::LN_PFKeepFollow; break;
+        case RTF_WIDCTLPAR: nParam = NS_sprm::LN_PFWidowControl; break;
         default: break;
     }
     if (nParam > 0)
@@ -339,6 +340,12 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             break;
         case RTF_PARD:
             m_aStates.top() = m_aDefaultState;
+            break;
+        case RTF_NOWIDCTLPAR:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(0));
+                m_aStates.top().aSprms[NS_sprm::LN_PFWidowControl] = pValue;
+            }
             break;
         default:
             OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
