@@ -460,28 +460,20 @@ LotusRangeList::LotusRangeList( void )
     pSingRef->SetFlag3D( false );
 }
 
-
-LotusRangeList::~LotusRangeList( void )
-    {
-    LotusRange *pDel = ( LotusRange * ) List::First();
-
-    while( pDel )
-        {
-        delete pDel;
-        pDel = ( LotusRange * ) List::Next();
-        }
-    }
-
+LotusRangeList::~LotusRangeList ()
+{
+    std::vector<LotusRange*>::iterator pIter;
+    for (pIter = maRanges.begin(); pIter != maRanges.end(); ++pIter)
+        delete (*pIter);
+}
 
 LR_ID LotusRangeList::GetIndex( const LotusRange &rRef )
 {
-    LotusRange*     pComp = ( LotusRange* ) List::First();
-
-    while( pComp )
+    std::vector<LotusRange*>::iterator pIter;
+    for (pIter = maRanges.begin(); pIter != maRanges.end(); ++pIter)
     {
-        if( *pComp == rRef )
-            return pComp->nId;
-        pComp = ( LotusRange* ) List::Next();
+        if (rRef == *(*pIter))
+            return (*pIter)->nId;
     }
 
     return ID_FAIL;
@@ -491,7 +483,7 @@ LR_ID LotusRangeList::GetIndex( const LotusRange &rRef )
 void LotusRangeList::Append( LotusRange* pLR, const String& rName )
 {
     OSL_ENSURE( pLR, "*LotusRangeList::Append(): das wird nichts!" );
-    List::Insert( pLR, CONTAINER_APPEND );
+    maRanges.push_back(pLR);
 
     ScTokenArray    aTokArray;
 

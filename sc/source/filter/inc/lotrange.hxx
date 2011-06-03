@@ -110,13 +110,15 @@ inline sal_Bool LotusRange::IsSingle( void ) const
 
 // ----------------------------------------------------- class LotusRangeList -
 
-class LotusRangeList : private List
+class LotusRangeList
 {
 private:
     LR_ID               nIdCnt;
     ScComplexRefData        aComplRef;
     static SCCOL        nEingCol;
     static SCROW        nEingRow;
+    std::vector<LotusRange*> maRanges;
+
 public:
                         LotusRangeList( void );
                         ~LotusRangeList( void );
