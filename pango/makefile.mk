@@ -122,9 +122,9 @@ OUT2LIB+=pango/pango-1.0.lib
 OUT2LIB+=pango/pangocairo-1.0.lib
 OUT2LIB+=pango/pangowin32-1.0.lib
 
-OUT2BIN+=pango/libpango-1.0-0.dll
-OUT2BIN+=pango/libpangocairo-1.0-0.dll
-OUT2BIN+=pango/libpangowin32-1.0-0.dll
+OUT2BIN+=pango/pangolo.dll
+OUT2BIN+=pango/pangocairolo.dll
+OUT2BIN+=pango/pangowin32lo.dll
 OUT2BIN+=pango/querymodules.exe
 
 OUT2INC+=pango/pango.h

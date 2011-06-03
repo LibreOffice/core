@@ -64,6 +64,15 @@
  EXES = querymodules testfonts
  #? test1 test2 test3 test4 test5
  
+@@ -30,7 +30,7 @@
+ 	nmake -nologo -f makefile.msc $(THIS)-$(PANGO_VER)s.lib PACKAGE=$(THIS) OBJS_$(THIS)=1
+ 
+ sub-one-dll:
+-	nmake -nologo -f makefile.msc lib$(THIS)-$(PANGO_VER)-0.dll PACKAGE=$(THIS) OBJS_$(THIS)=1
++	nmake -nologo -f makefile.msc $(THIS)lo.dll PACKAGE=$(THIS) OBJS_$(THIS)=1
+ 
+ sub-one-exe:
+ 	nmake -nologo -f makefile.msc $(THIS).exe PACKAGE=$(THIS) OBJS_$(THIS)=1
 @@ -40,28 +50,28 @@
  
  !ELSE
@@ -185,7 +194,15 @@
  		--fhead "#include <pango.h>" \
  		--fprod "\n/* enumerations from \"@filename@\" */" \
  		--vhead "GType\n@enum_name@_get_type (void)\n{\n  static GType etype = 0;\n  if (etype == 0) {\n    static const G@Type@Value values[] = {" 	\
-@@ -275,15 +277,6 @@
+@@ -275,22 +277,13 @@
+ $(PACKAGE)-$(PKG_VER)s.lib : $(OBJECTS) $(PRJ_TOP)\config.h
+ 	lib /out:$(PACKAGE)-$(PKG_VER)s.lib $(OBJECTS)
+ 
+-lib$(PACKAGE)-$(PKG_VER)-0.dll : $(OBJECTS) $(PKG_DEF) $(PRJ_TOP)\config.h
++$(PACKAGE)lo.dll : $(OBJECTS) $(PKG_DEF) $(PRJ_TOP)\config.h
+ 	$(CC) $(CFLAGS) -LD -Fe$@ $(OBJECTS) $(PKG_LINK) \
+ 	user32.lib gdi32.lib advapi32.lib $(LDFLAGS) /implib:$(PACKAGE)-$(PKG_VER).lib /def:$(PKG_DEF)
+ 
  $(PACKAGE).exe : $(PKG_LINK) $(OBJECTS)
  	$(CC) $(CFLAGS) -Fe$(PACKAGE).exe $(OBJECTS) $(PKG_LINK) gdi32.lib user32.lib
  
