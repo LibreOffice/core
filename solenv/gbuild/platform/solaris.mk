@@ -238,13 +238,8 @@ gb_Library_UNOVERPRE := $(gb_Library_SYSPRE)uno_
 gb_Library_PLAINEXT := .so
 gb_Library_RTEXT := C52$(gb_Library_PLAINEXT)
 
-ifeq ($(CPUNAME),INTEL)
-gb_Library_OOOEXT := si$(gb_Library_PLAINEXT)
+gb_Library_OOOEXT := $(gb_Library_DLLPOSTFIX)$(gb_Library_PLAINEXT)
 gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
-else # ifeq ($(CPUNAME),SPARC)
-gb_Library_OOOEXT := ss$(gb_Library_PLAINEXT)
-gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
-endif
 
 gb_STDLIBS := \
 	Crun \

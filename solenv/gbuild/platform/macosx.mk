@@ -332,13 +332,8 @@ gb_Library_UNOVERPRE := $(gb_Library_SYSPRE)uno_
 gb_Library_PLAINEXT := .dylib
 gb_Library_RTEXT := gcc3$(gb_Library_PLAINEXT)
 
-ifeq ($(CPUNAME),INTEL)
-gb_Library_OOOEXT := mxi$(gb_Library_PLAINEXT)
+gb_Library_OOOEXT := $(gb_Library_DLLPOSTFIX)$(gb_Library_PLAINEXT)
 gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
-else # ifeq ($(CPUNAME),POWERPC)
-gb_Library_OOOEXT := mxp$(gb_Library_PLAINEXT)
-gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
-endif
 
 gb_Library__FRAMEWORKS := \
 	Cocoa \
