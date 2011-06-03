@@ -39,7 +39,6 @@
 #undef _SOLAR__PRIVATE
 #endif
 #define _SOLAR__PRIVATE 1
-#define __REFERENCED    0
 
 /************************************************************
  Intermediate type to solve type clash with Windows headers.
@@ -73,7 +72,6 @@ typedef int             FASTBOOL;
 
 /*** solar binary types **********************************************/
 
-#ifndef _SOLAR_NOSVBT
 /* Solar (portable) Binary (exchange) Type; OSI 6 subset
    always little endian;
    not necessarily aligned */
@@ -143,7 +141,6 @@ inline void     DoubleToSVBT64( double n, SVBT64 p ) { p[0] = ((sal_uInt8*)&n)[7
                                                        p[7] = ((sal_uInt8*)&n)[0]; }
 #endif
 #endif
-#endif
 
 /*** standard macros *****************************************/
 
@@ -174,12 +171,8 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
 /*** C / C++ - macros **************************************************/
 
 #ifdef __cplusplus
-#define BEGIN_C     extern "C" {
-#define END_C       }
 #define EXTERN_C    extern "C"
 #else
-#define BEGIN_C
-#define END_C
 #define EXTERN_C
 #endif
 
@@ -191,9 +184,6 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
 #else
 #define HACK( comment )
 #endif
-
-#define _MAKE_NUMSTR( n )           # n
-#define MAKE_NUMSTR( n )            _MAKE_NUMSTR( n )
 
 #define _LF     ((char)0x0A)
 #define _CR     ((char)0x0D)
@@ -225,26 +215,13 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
 
 // -----------------------------------------------------------------------
 
-#ifndef NOREPLACESTRING
 #define UniString       String
 #define XubString       String
-#else
-#define XubString       UniString
-#endif
 #define xub_Unicode     sal_Unicode
-#define xub_uUnicode    sal_Unicode
-#ifdef STRING32
-#define xub_StrLen      sal_uInt32
-#else
 #define xub_StrLen      sal_uInt16
-#endif
 
 // -- moved here from libcall.hxx ----------------------------------------
 
-#define LIBRARY_STR(s)      # s
-#define LIBRARY_STRING(s)   LIBRARY_STR(s)
-
-#define GETFUNCTION( s ) GetFunction( s )
 #define LIBRARY_CONCAT3( s1, s2, s3 ) \
     s1 s2 s3
 #define LIBRARY_CONCAT4( s1, s2, s3, s4 ) \
@@ -253,29 +230,12 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
 #if defined WNT
 #define SVLIBRARY( Base ) \
     LIBRARY_CONCAT3( Base, __DLLEXTENSION, ".DLL" )
-#define SVLIBRARYLANG( Base, Lang ) \
-    LIBRARY_CONCAT3( Base, Lang, ".DLL" )
 #elif defined UNX
 #define SVLIBRARY( Base ) \
     LIBRARY_CONCAT3( "lib", Base, __DLLEXTENSION )
-#define SVLIBRARYLANG( Base, Lang ) \
-    LIBRARY_CONCAT3( "lib", Base, Lang )
 #else
 #define SVLIBRARY( Base ) \
     LIBRARY_CONCAT2( Base, __DLLEXTENSION )
-#define SVLIBRARYLANG( Base, Lang ) \
-    LIBRARY_CONCAT2( Base, Lang )
-#endif
-
-#if defined MACOSX
-#define SV_LIBFILENAME(str) \
-    LIBRARYFILENAME_CONCAT2( str, __DLLEXTENSION )
-#elif defined UNX
-#define SV_LIBFILENAME(str) \
-    LIBRARYFILENAME_CONCAT2( str, __DLLEXTENSION )
-#else
-#define SV_LIBFILENAME(str) \
-    LIBRARYFILENAME_CONCAT3( str, __DLLEXTENSION, ".dll" )
 #endif
 
 #endif  /* _SOLAR_H */
