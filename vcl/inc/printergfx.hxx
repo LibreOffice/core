@@ -33,6 +33,7 @@
 #include "sallayout.hxx"
 #include "osl/file.hxx"
 #include "tools/gen.hxx"
+#include "vclpluginapi.h"
 
 #include <list>
 #include <boost/unordered_map.hpp>
@@ -139,7 +140,7 @@ struct CharacterMetric;
  *      vcl/unx/source/gdi/salgdi2.cxx
  */
 
-class PrinterBmp
+class VCLPLUG_GEN_PUBLIC PrinterBmp
 {
 public:
 
@@ -182,7 +183,7 @@ struct GraphicsStatus
 
 class Font3;
 
-class PrinterGfx
+class VCLPLUG_GEN_PUBLIC PrinterGfx
 {
 private:
 

@@ -68,12 +68,6 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_svp,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_svp,\
-    vcl/unx/generic/printergfx/bitmap_gfx \
-    vcl/unx/generic/printergfx/common_gfx \
-    vcl/unx/generic/printergfx/glyphset \
-    vcl/unx/generic/printergfx/printerjob \
-    vcl/unx/generic/printergfx/psputil \
-    vcl/unx/generic/printergfx/text_gfx \
     vcl/unx/headless/svpbmp \
     vcl/unx/headless/svpdummies \
     vcl/unx/headless/svpelement \
