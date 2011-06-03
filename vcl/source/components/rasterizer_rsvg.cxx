@@ -48,7 +48,7 @@
     #define VCL_RSVG_CAIRO_LIBNAME      "libcairo.so"
     #define VCL_RSVG_LIBRSVG_LIBNAME    "librsvg-2.so"
 #elif defined WNT
-    #define VCL_RSVG_GOBJECT_LIBNAME    "gobject-2.0.dll"
+    #define VCL_RSVG_GOBJECT_LIBNAME    "gobjectlo.dll"
     #define VCL_RSVG_CAIRO_LIBNAME      "cairo.dll"
     #define VCL_RSVG_LIBRSVG_LIBNAME    "librsvg-2-2.dll"
 #else
