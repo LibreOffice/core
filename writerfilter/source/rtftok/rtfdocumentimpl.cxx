@@ -286,6 +286,12 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 text(aStr);
             }
             break;
+        case RTF_TAB:
+            {
+                OUString aStr('\t');
+                text(aStr);
+            }
+            break;
         default:
             OSL_TRACE("%s: TODO handle symbol '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             bParsed = false;
