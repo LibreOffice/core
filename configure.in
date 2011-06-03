@@ -2762,14 +2762,16 @@ if test "$GXX" = "yes"; then
          with_gxx_include_path=`cd $with_gxx_include_path && pwd`
       fi
    fi
-fi
-dnl This is the original code...
-dnl with_gxx_include_path=`$CXX -print-search-dirs | grep instal |$AWK '{ print \$2 }'`/include
-if test -z "$with_gxx_include_path"; then
-   with_gxx_include_path="NO_GXX_INCLUDE"
-   AC_MSG_RESULT([no g++ includes])
+   dnl This is the original code...
+   dnl with_gxx_include_path=`$CXX -print-search-dirs | grep instal |$AWK '{ print \$2 }'`/include
+   if test -z "$with_gxx_include_path"; then
+      with_gxx_include_path="NO_GXX_INCLUDE"
+      AC_MSG_RESULT([none])
+   else
+      AC_MSG_RESULT([$with_gxx_include_path])
+   fi
 else
-   AC_MSG_RESULT([$with_gxx_include_path])
+   with_gxx_include_path="NO_GXX_INCLUDE"
 fi
 GXX_INCLUDE_PATH="$with_gxx_include_path"
 AC_SUBST(GXX_INCLUDE_PATH)
