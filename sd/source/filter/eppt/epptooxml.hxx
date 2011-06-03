@@ -33,6 +33,7 @@
 #include <oox/helper/zipstorage.hxx>
 #include <oox/vml/vmldrawing.hxx>
 #include <oox/export/shapes.hxx>
+#include <comphelper/stl_types.hxx>
 #include "epptbase.hxx"
 
 namespace com { namespace sun { namespace star {
@@ -124,6 +125,7 @@ protected:
     void WriteAnimationNodeCommonPropsEnd( ::sax_fastparser::FSHelperPtr pFS );
     void WriteAnimationProperty( ::sax_fastparser::FSHelperPtr pFS, const ::com::sun::star::uno::Any& rAny );
     void WriteAnimationTarget( ::sax_fastparser::FSHelperPtr pFS, ::com::sun::star::uno::Any aTarget );
+    bool WriteComments( sal_uInt32 nPageNum );
     void WriteTextStyles( ::sax_fastparser::FSHelperPtr pFS );
     void WriteTextStyle( ::sax_fastparser::FSHelperPtr pFS, int nInstance, sal_Int32 xmlToken );
     void WriteTextStyleLevel( ::sax_fastparser::FSHelperPtr pFS, int nInstance, int nLevel );
@@ -137,6 +139,7 @@ protected:
 
     sal_uInt32 GetNewSlideId() { return mnSlideIdMax ++; }
     sal_uInt32 GetNewSlideMasterId() { return mnSlideMasterIdMax ++; }
+    sal_Int32 GetAuthorIdAndLastIndex( ::rtl::OUString sAuthor, sal_Int32& nLastIndex );
 
 private:
     void AddLayoutIdAndRelation( ::sax_fastparser::FSHelperPtr pFS, sal_Int32 nLayoutFileId );
@@ -161,6 +164,15 @@ private:
     static sal_Int32 nStyleLevelToken[5];
 
     ::oox::drawingml::ShapeExport::ShapeHashMap maShapeMap;
+
+    struct AuthorComments {
+        sal_Int32 nId;
+        sal_Int32 nLastIndex;
+    };
+    typedef ::boost::unordered_map< ::rtl::OUString, struct AuthorComments, comphelper::UStringHash, comphelper::UStringEqual > AuthorsMap;
+    AuthorsMap maAuthors;
+
+    void WriteAuthors();
 };
 
 }

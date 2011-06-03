@@ -27,6 +27,7 @@
  ************************************************************************/
 
 #include <boost/unordered_map.hpp>
+#include <boost/foreach.hpp>
 #include <stdio.h>
 #include <oox/drawingml/chart/chartconverter.hxx>
 #include <oox/token/tokens.hxx>
@@ -61,9 +62,13 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/RectanglePoint.hpp>
+#include <com/sun/star/geometry/RealPoint2D.hpp>
+#include <com/sun/star/office/XAnnotationEnumeration.hpp>
+#include <com/sun/star/office/XAnnotationAccess.hpp>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include <com/sun/star/text/XSimpleText.hpp>
+#include <com/sun/star/util/DateTime.hpp>
 
 #include <oox/export/utils.hxx>
 
@@ -82,8 +87,12 @@ using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::geometry;
 using namespace ::com::sun::star::presentation;
+using namespace ::com::sun::star::office;
+using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
 using namespace ::ppt;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::XPropertySetInfo;
@@ -360,12 +369,15 @@ bool PowerPointExport::exportDocument() throw()
                                       XML_cy, IS( PPTtoEMU( maNotesPageSize.Height ) ),
                                       FSEND );
 
+    WriteAuthors();
+
     mPresentationFS->endElementNS( XML_p, XML_presentation );
     mPresentationFS.reset();
 
     commitStorage();
 
-    maShapeMap.clear ();
+    maShapeMap.clear();
+    maAuthors.clear();
 
     return true;
 }
@@ -1232,6 +1244,129 @@ void PowerPointExport::WriteAnimations( FSHelperPtr pFS )
     }
 }
 
+
+static OUString lcl_GetInitials( OUString sName )
+{
+    OUStringBuffer sRet;
+
+    if ( sName.getLength() > 0 ) {
+        sRet.append ( sName[0] );
+        sal_Int32 nStart = 0, nOffset;
+
+        while ( ( nOffset = sName.indexOf ( ' ', nStart ) ) != -1 ) {
+            if ( nOffset + 1 < sName.getLength() )
+                sRet.append ( sName[ nOffset + 1 ] );
+            nStart = nOffset + 1;
+        }
+    }
+
+    return sRet.makeStringAndClear();
+}
+
+void PowerPointExport::WriteAuthors()
+{
+    if ( maAuthors.size() <= 0 )
+        return;
+
+    FSHelperPtr pFS = openFragmentStreamWithSerializer( US( "ppt/commentAuthors.xml" ),
+                                                        US( "application/vnd.openxmlformats-officedocument.presentationml.commentAuthors+xml" ) );
+    addRelation( mPresentationFS->getOutputStream(),
+                 US( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/commentAuthors" ),
+                 US( "commentAuthors.xml" ) );
+
+    pFS->startElementNS( XML_p, XML_cmAuthorLst,
+                         FSNS( XML_xmlns, XML_p ), "http://schemas.openxmlformats.org/presentationml/2006/main",
+                         FSEND );
+
+    BOOST_FOREACH( AuthorsMap::value_type i, maAuthors ) {
+        pFS->singleElementNS( XML_p, XML_cmAuthor,
+                              XML_id, I32S( i.second.nId ),
+                              XML_name, USS( i.first ),
+                              XML_initials, USS( lcl_GetInitials( i.first ) ),
+                              XML_lastIdx, I32S( i.second.nLastIndex ),
+                              XML_clrIdx, I32S( i.second.nId ),
+                              FSEND );
+    }
+
+    pFS->endElementNS( XML_p, XML_cmAuthorLst );
+}
+
+sal_Int32 PowerPointExport::GetAuthorIdAndLastIndex( OUString sAuthor, sal_Int32& nLastIndex )
+{
+    if ( maAuthors.count( sAuthor ) <= 0 ) {
+        struct AuthorComments aAuthorComments;
+
+        aAuthorComments.nId = maAuthors.size();
+        aAuthorComments.nLastIndex = 0;
+
+        maAuthors[ sAuthor ] = aAuthorComments;
+    }
+
+    nLastIndex = ++maAuthors[ sAuthor ].nLastIndex;
+
+    return maAuthors[ sAuthor ].nId;
+}
+
+bool PowerPointExport::WriteComments( sal_uInt32 nPageNum )
+{
+    Reference< XAnnotationAccess > xAnnotationAccess( mXDrawPage, uno::UNO_QUERY );
+    if ( xAnnotationAccess.is() )
+    {
+        Reference< XAnnotationEnumeration > xAnnotationEnumeration( xAnnotationAccess->createAnnotationEnumeration() );
+
+        if ( xAnnotationEnumeration->hasMoreElements() )
+        {
+            FSHelperPtr pFS = openFragmentStreamWithSerializer( OUStringBuffer()
+                                                                .appendAscii( "ppt/comments/comment" )
+                                                                .append( (sal_Int32) nPageNum + 1 )
+                                                                .appendAscii( ".xml" )
+                                                                .makeStringAndClear(),
+                                                                US( "application/vnd.openxmlformats-officedocument.presentationml.comments+xml" ) );
+
+            pFS->startElementNS( XML_p, XML_cmLst,
+                                 FSNS( XML_xmlns, XML_p ), "http://schemas.openxmlformats.org/presentationml/2006/main",
+                                 FSEND );
+
+            do {
+                Reference< XAnnotation > xAnnotation( xAnnotationEnumeration->nextElement() );
+                DateTime aDateTime( xAnnotation->getDateTime() );
+                RealPoint2D aRealPoint2D( xAnnotation->getPosition() );
+                Reference< XText > xText( xAnnotation->getTextRange() );
+                sal_Int32 nLastIndex;
+                sal_Int32 nId = GetAuthorIdAndLastIndex ( xAnnotation->getAuthor(), nLastIndex );
+                char cDateTime[32];
+
+                snprintf(cDateTime, 31, "%02d-%02d-%02dT%02d:%02d:%02d.%03d", aDateTime.Year, aDateTime.Month, aDateTime.Day, aDateTime.Hours, aDateTime.Minutes, aDateTime.Seconds, aDateTime.HundredthSeconds);
+
+                pFS->startElementNS( XML_p, XML_cm,
+                                     XML_authorId, I32S( nId ),
+                                     XML_dt, cDateTime,
+                                     XML_idx, I32S( nLastIndex ),
+                                     FSEND );
+
+                pFS->singleElementNS( XML_p, XML_pos,
+                                      XML_x, I64S( ( (sal_Int64) ( 57600*aRealPoint2D.X + 1270 )/2540.0 ) ),
+                                      XML_y, I64S( ( (sal_Int64) ( 57600*aRealPoint2D.Y + 1270 )/2540.0 ) ),
+                                      FSEND );
+
+                pFS->startElementNS( XML_p, XML_text,
+                                     FSEND );
+                pFS->write( xText->getString() );
+                pFS->endElementNS( XML_p, XML_text );
+
+                pFS->endElementNS( XML_p, XML_cm );
+
+            } while ( xAnnotationEnumeration->hasMoreElements() );
+
+            pFS->endElementNS( XML_p, XML_cmLst );
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void PowerPointExport::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_uInt16 /* nMode */,
                                        sal_Bool bHasBackground, Reference< XPropertySet > aXBackgroundPropSet )
 {
@@ -1305,6 +1440,16 @@ void PowerPointExport::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNu
                  .append( GetLayoutFileId( GetPPTXLayoutId( GetLayoutOffset( mXPagePropSet ) ), nMasterNum ) )
                  .appendAscii( ".xml" )
                  .makeStringAndClear() );
+
+    if ( WriteComments( nPageNum ) )
+        // add implicit relation to slide comments
+        addRelation( pFS->getOutputStream(),
+                     US( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments" ),
+                     OUStringBuffer()
+                     .appendAscii( "../comments/comment" )
+                     .append( (sal_Int32) nPageNum + 1 )
+                     .appendAscii( ".xml" )
+                     .makeStringAndClear() );
 
     DBG(printf("----------------\n"));
 }
