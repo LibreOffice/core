@@ -1821,7 +1821,7 @@ File gid_File_Lib_Libpango
     #ifdef MACOSX
     Name = "libpango-1.0.0.dylib";
     #elif defined WNT
-    Name = "libpango-1.0-0.dll";
+    Name = "pangolo.dll";
     #endif
 End
 File gid_File_Lib_Libpangocairo
@@ -1831,7 +1831,7 @@ File gid_File_Lib_Libpangocairo
     #ifdef MACOSX
     Name = "libpangocairo-1.0.0.dylib";
     #elif defined WNT
-    Name = "libpangocairo-1.0-0.dll";
+    Name = "pangocairolo.dll";
     #endif
 End
 #if defined WNT
@@ -1839,7 +1839,7 @@ File gid_File_Lib_Libpangowin32
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
-    Name = "libpangowin32-1.0-0.dll";
+    Name = "pangowin32lo.dll";
 End
 #endif
 #endif
