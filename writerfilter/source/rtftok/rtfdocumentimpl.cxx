@@ -289,6 +289,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     bool bParsed = true;
     int nParam = 0;
 
+    // Indentation
     switch (nKeyword)
     {
         case RTF_QC: nParam = 1; break;
@@ -302,6 +303,21 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     {
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
         m_aStates.top().aSprms[NS_sprm::LN_PJc] = pValue;
+        skipDestination(bParsed);
+        return 0;
+    }
+
+    // Trivial flags
+    switch (nKeyword)
+    {
+        case RTF_KEEP: nParam = NS_sprm::LN_PFKeep; break;
+        case RTF_KEEPN: nParam = NS_sprm::LN_PFKeepFollow; break;
+        default: break;
+    }
+    if (nParam > 0)
+    {
+        RTFValue::Pointer_t pValue(new RTFValue(1));
+        m_aStates.top().aSprms[nParam] = pValue;
         skipDestination(bParsed);
         return 0;
     }
@@ -323,12 +339,6 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             break;
         case RTF_PARD:
             m_aStates.top() = m_aDefaultState;
-            break;
-        case RTF_KEEP:
-            {
-                RTFValue::Pointer_t pValue(new RTFValue(1));
-                m_aStates.top().aSprms[NS_sprm::LN_PFKeep] = pValue;
-            }
             break;
         default:
             OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
