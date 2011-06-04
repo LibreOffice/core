@@ -4544,7 +4544,7 @@ sal_Bool ScGridWindow::HitRangeFinder( const Point& rMouse, sal_Bool& rCorner,
                 //  rueckwaerts suchen, damit der zuletzt gepaintete Rahmen gefunden wird
                 --i;
                 ScRangeFindData* pData = pRangeFinder->GetObject(i);
-                if ( pData && pData->aRef.In(aAddr) )
+                if ( pData->aRef.In(aAddr) )
                 {
                     if (pIndex) *pIndex = i;
                     if (pAddX)  *pAddX = nPosX - pData->aRef.aStart.Col();
@@ -4708,8 +4708,6 @@ void ScGridWindow::RFMouseMove( const MouseEvent& rMEvt, sal_Bool bUp )
     if (!pRangeFinder || nRFIndex >= pRangeFinder->Count())
         return;
     ScRangeFindData* pData = pRangeFinder->GetObject( nRFIndex );
-    if (!pData)
-        return;
 
     //  Mauszeiger
 
