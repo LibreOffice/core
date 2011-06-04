@@ -36,6 +36,11 @@ CAPTURE_OUTPUT = > $(MISC)$/testhxx.output && $(TOUCH) $(SLO)$/testhxx.obj
 .INCLUDE: $(PRJ)$/util$/makefile.pmk
 .INCLUDE: settings.mk
 
+.IF "$(CROSS_COMPILING)"=="YES"
+all:
+    @echo Nothing done when cross-compiling
+.ENDIF
+
 SLOFILES = $(SLO)$/testhxx.obj
 
 .INCLUDE: target.mk

@@ -30,13 +30,17 @@ PRJ=..
 PRJNAME=soltools
 TARGET=soltools_giparser
 TARGETTYPE=CUI
-TARGETPLATFORM=BUILD
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 .INCLUDE :  settings.mk
+
+.IF "$(CROSS_COMPILING)"=="YES"
+all:
+    @echo Nothing done when cross-compiling
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
