@@ -227,7 +227,6 @@ private:
     sal_Bool IsSmallCapsOverridden();
     sal_Bool IsSuperOverridden();
     sal_Bool IsSubOverridden();
-    sal_Bool IsSuperSubOverridden();
     sal_Bool IsUnderlineOverridden();
     sal_Bool IsCaseOverridden();
 

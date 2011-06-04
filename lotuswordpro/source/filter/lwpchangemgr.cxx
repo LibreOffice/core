@@ -140,7 +140,7 @@ void LwpChangeMgr::ConvertAllChange(IXFStream* pStream)
 
     std::vector<XFChangeRegion*>::iterator iter1;
     pStream->GetAttrList()->Clear();
-    if (m_ChangeList.size() == 0)
+    if (m_ChangeList.empty())
             return;
     // Add for disable change tracking
     pStream->GetAttrList()->AddAttribute( A2OUSTR("text:track-changes"),A2OUSTR("false"));
