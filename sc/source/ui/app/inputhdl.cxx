@@ -204,8 +204,7 @@ handle_r1c1:
                     pRangeFindList = new ScRangeFindList( pDocSh->GetTitle() );
                 }
 
-                ScRangeFindData* pNew = new ScRangeFindData( aRange, nFlags, nStart, nPos );
-                pRangeFindList->Insert( pNew );
+                pRangeFindList->Insert( ScRangeFindData( aRange, nFlags, nStart, nPos ) );
 
                 ESelection aSel( 0, nStart, 0, nPos );
                 SfxItemSet aSet( pEngine->GetEmptyItemSet() );

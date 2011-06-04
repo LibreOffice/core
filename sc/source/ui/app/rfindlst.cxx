@@ -49,16 +49,6 @@ ScRangeFindList::ScRangeFindList(const String& rName) :
 {
 }
 
-ScRangeFindList::~ScRangeFindList()
-{
-    void* pEntry = aEntries.First();
-    while ( pEntry )
-    {
-        delete (ScRangeFindData*) aEntries.Remove( pEntry );
-        pEntry = aEntries.Next();
-    }
-}
-
 ColorData ScRangeFindList::GetColorName( size_t nIndex )
 {
     return aColNames[nIndex % SC_RANGECOLORS];
