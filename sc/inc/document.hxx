@@ -81,7 +81,6 @@ class SvxSearchItem;
 class SvxShadowItem;
 class Window;
 class XColorTable;
-class List;
 
 struct ScAttrEntry;
 class ScAutoFormatData;
