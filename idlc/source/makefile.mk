@@ -30,7 +30,6 @@ PRJ=..
 PRJNAME=idlc
 TARGET=idlc
 TARGETTYPE=CUI
-TARGETPLATFORM=BUILD
 LIBTARGET=NO
 
 ENABLE_EXCEPTIONS=TRUE
@@ -38,6 +37,11 @@ INCPRE=$(MISC)
 
 # --- Settings -----------------------------------------------------
 
+
+.IF "$(CROSS_COMPILING)"=="YES"
+all:
+    @echo Nothing done when cross-compiling
+.ENDIF
 
 .INCLUDE :  settings.mk
 

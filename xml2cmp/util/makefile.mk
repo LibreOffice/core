@@ -30,12 +30,16 @@ PRJ=..
 PRJNAME=xml2cmp
 TARGET=xml2cmp
 TARGETTYPE=CUI
-TARGETPLATFORM=BUILD
 
 # --- Settings -----------------------------------------------------
 ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
+
+.IF "$(CROSS_COMPILING)"=="YES"
+all:
+    @echo Nothing done when cross-compiling
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
