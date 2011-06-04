@@ -172,7 +172,6 @@ CC_FOR_BUILD=ccache /Xcode3/usr/bin/gcc-4.0
 CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0
 --with-distro=LibreOfficeiOS
 --with-external-tar=/Volumes/ooo/git/master/src
---with-icu-native-build-root=/Users/tml/lo-macosx/icu/unxmacxi.pro/misc/build/icu/source
 --with-num-cpus=1
 --with-max-jobs=1
 
@@ -227,7 +226,6 @@ CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0
 --disable-mozilla
 --disable-build-mozilla
 --with-external-tar=/Volumes/ooo/git/master/src
---with-icu-native-build-root=/Users/tml/lo-macosx/icu/unxmacxi.pro/misc/build/icu/source
 
 
 
