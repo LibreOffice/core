@@ -43,6 +43,7 @@ class ScRowBar;
 class ScColBar;
 class ScTabControl;
 class ScTabViewShell;
+class ScRangeFindData;
 class SfxPrinter;
 class ScDrawView;
 class SvBorder;
@@ -199,6 +200,18 @@ private:
 
     void            SkipCursorHorizontal(SCsCOL& rCurX, SCsROW& rCurY, SCsCOL nOldX, SCsROW nMovX);
     void            SkipCursorVertical(SCsCOL& rCurX, SCsROW& rCurY, SCsROW nOldY, SCsROW nMovY);
+
+    /**
+     *
+     *  @brief Update marks for a selected Range. This is a helper function
+     *  for PaintRangeFinder.
+     *
+     *  @param pData: Range to update for painting.
+     *  @param nTab: Current tab.
+     *
+     **/
+
+    void            PaintRangeFinderEntry (ScRangeFindData* pData, SCTAB nTab);
 
 protected:
     void            UpdateHeaderWidth( const ScVSplitPos* pWhich = NULL,

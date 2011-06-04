@@ -1940,6 +1940,67 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
     // is set (width or height changed).
 }
 
+void ScTabView::PaintRangeFinderEntry (ScRangeFindData* pData, const SCTAB nTab)
+{
+    ScRange aRef = pData->aRef;
+    aRef.Justify();                 // Justify fuer die Abfragen unten
+
+    if ( aRef.aStart == aRef.aEnd )     //! Tab ignorieren?
+        aViewData.GetDocument()->ExtendMerge(aRef);
+
+    if ( aRef.aStart.Tab() >= nTab && aRef.aEnd.Tab() <= nTab )
+    {
+        SCCOL nCol1 = aRef.aStart.Col();
+        SCROW nRow1 = aRef.aStart.Row();
+        SCCOL nCol2 = aRef.aEnd.Col();
+        SCROW nRow2 = aRef.aEnd.Row();
+
+        //  wegnehmen -> Repaint
+        //  SC_UPDATE_MARKS: Invalidate, nicht bis zum Zeilenende
+
+        bool bHiddenEdge = false;
+        SCROW nTmp;
+        ScDocument* pDoc = aViewData.GetDocument();
+        while ( nCol1 > 0 && pDoc->ColHidden(nCol1, nTab) )
+        {
+            --nCol1;
+            bHiddenEdge = true;
+        }
+        while ( nCol2 < MAXCOL && pDoc->ColHidden(nCol2, nTab) )
+        {
+            ++nCol2;
+            bHiddenEdge = true;
+        }
+        nTmp = pDoc->LastVisibleRow(0, nRow1, nTab);
+        if (!ValidRow(nTmp))
+            nTmp = 0;
+        if (nTmp < nRow1)
+        {
+            nRow1 = nTmp;
+            bHiddenEdge = true;
+        }
+        nTmp = pDoc->FirstVisibleRow(nRow2, MAXROW, nTab);
+        if (!ValidRow(nTmp))
+            nTmp = MAXROW;
+        if (nTmp > nRow2)
+        {
+            nRow2 = nTmp;
+            bHiddenEdge = true;
+        }
+
+        if ( nCol2 - nCol1 > 1 && nRow2 - nRow1 > 1 && !bHiddenEdge )
+        {
+            //  nur an den Raendern entlang
+            PaintArea( nCol1, nRow1, nCol2, nRow1, SC_UPDATE_MARKS );
+            PaintArea( nCol1, nRow1+1, nCol1, nRow2-1, SC_UPDATE_MARKS );
+            PaintArea( nCol2, nRow1+1, nCol2, nRow2-1, SC_UPDATE_MARKS );
+            PaintArea( nCol1, nRow2, nCol2, nRow2, SC_UPDATE_MARKS );
+        }
+        else    // alles am Stueck
+            PaintArea( nCol1, nRow1, nCol2, nRow2, SC_UPDATE_MARKS );
+    }
+}
+
 void ScTabView::PaintRangeFinder( long nNumber )
 {
     ScInputHandler* pHdl = SC_MOD()->GetInputHdl( aViewData.GetViewShell() );
@@ -1950,71 +2011,18 @@ void ScTabView::PaintRangeFinder( long nNumber )
         {
             SCTAB nTab = aViewData.GetTabNo();
             sal_uInt16 nCount = (sal_uInt16)pRangeFinder->Count();
-            for (sal_uInt16 i=0; i<nCount; i++)
-                if ( nNumber < 0 || nNumber == i )
-                {
-                    ScRangeFindData* pData = pRangeFinder->GetObject(i);
-                    if (pData)
-                    {
-                        ScRange aRef = pData->aRef;
-                        aRef.Justify();                 // Justify fuer die Abfragen unten
 
-                        if ( aRef.aStart == aRef.aEnd )     //! Tab ignorieren?
-                            aViewData.GetDocument()->ExtendMerge(aRef);
-
-                        if ( aRef.aStart.Tab() >= nTab && aRef.aEnd.Tab() <= nTab )
-                        {
-                            SCCOL nCol1 = aRef.aStart.Col();
-                            SCROW nRow1 = aRef.aStart.Row();
-                            SCCOL nCol2 = aRef.aEnd.Col();
-                            SCROW nRow2 = aRef.aEnd.Row();
-
-                            //  wegnehmen -> Repaint
-                            //  SC_UPDATE_MARKS: Invalidate, nicht bis zum Zeilenende
-
-                            bool bHiddenEdge = false;
-                            SCROW nTmp;
-                            ScDocument* pDoc = aViewData.GetDocument();
-                            while ( nCol1 > 0 && pDoc->ColHidden(nCol1, nTab) )
-                            {
-                                --nCol1;
-                                bHiddenEdge = true;
-                            }
-                            while ( nCol2 < MAXCOL && pDoc->ColHidden(nCol2, nTab) )
-                            {
-                                ++nCol2;
-                                bHiddenEdge = true;
-                            }
-                            nTmp = pDoc->LastVisibleRow(0, nRow1, nTab);
-                            if (!ValidRow(nTmp))
-                                nTmp = 0;
-                            if (nTmp < nRow1)
-                            {
-                                nRow1 = nTmp;
-                                bHiddenEdge = true;
-                            }
-                            nTmp = pDoc->FirstVisibleRow(nRow2, MAXROW, nTab);
-                            if (!ValidRow(nTmp))
-                                nTmp = MAXROW;
-                            if (nTmp > nRow2)
-                            {
-                                nRow2 = nTmp;
-                                bHiddenEdge = true;
-                            }
-
-                            if ( nCol2 - nCol1 > 1 && nRow2 - nRow1 > 1 && !bHiddenEdge )
-                            {
-                                //  nur an den Raendern entlang
-                                PaintArea( nCol1, nRow1, nCol2, nRow1, SC_UPDATE_MARKS );
-                                PaintArea( nCol1, nRow1+1, nCol1, nRow2-1, SC_UPDATE_MARKS );
-                                PaintArea( nCol2, nRow1+1, nCol2, nRow2-1, SC_UPDATE_MARKS );
-                                PaintArea( nCol1, nRow2, nCol2, nRow2, SC_UPDATE_MARKS );
-                            }
-                            else    // alles am Stueck
-                                PaintArea( nCol1, nRow1, nCol2, nRow2, SC_UPDATE_MARKS );
-                        }
-                    }
-                }
+            if (nNumber < 0)
+            {
+                for (sal_uInt16 i=0; i<nCount; i++)
+                    PaintRangeFinderEntry(pRangeFinder->GetObject(i),nTab);
+            }
+            else
+            {
+                sal_uInt16 idx = nNumber;
+                if (idx < nCount)
+                    PaintRangeFinderEntry(pRangeFinder->GetObject(idx),nTab);
+            }
         }
     }
 }
