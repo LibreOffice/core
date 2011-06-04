@@ -111,7 +111,8 @@ STATIC_OR_SHARED=--disable-static --enable-shared
 .ENDIF
 
 .IF "$(CROSS_COMPILING)"!=""
-BUILD_AND_HOST=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) --with-cross-build=$(ICU_NATIVE_BUILD_ROOT)
+# We require that the cross-build-toolset target from the top Makefile(.in) has bee built
+BUILD_AND_HOST=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) --with-cross-build=$(posix_PWD)/$(INPATH_FOR_BUILD)/misc/build/icu/source
 .ENDIF
 
 CONFIGURE_ACTION+=sh -c 'CPPFLAGS="$(EXTRA_CDEFS)" CFLAGS="$(icu_CFLAGS)" CXXFLAGS="$(icu_CXXFLAGS)" LDFLAGS="$(icu_LDFLAGS) $(LDFLAGSADD)" \
