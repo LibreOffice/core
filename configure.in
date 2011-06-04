@@ -1197,20 +1197,6 @@ AC_ARG_WITH(vendor,
     ],
 ,)
 
-AC_ARG_WITH(install-dirname,
-    AS_HELP_STRING([--with-install-dirname],
-        [Specify the directory name of the core LibO install dir. The final
-         installation path is defined by <libdir>/<install-dirname>.
-         The default value is "libreoffice" and the default installation
-         path is /usr/lib/libreoffice.
-
-         FIXME: It affects only the installation by "make install" and not the
-         generated installation sets.])
-    [
-                          Usage:     --with-install-dirname=lo-3.4.2
-    ],
-,)
-
 AC_ARG_WITH(unix-wrapper,
     AS_HELP_STRING([--with-unix-wrapper],
         [Redefines the name of the UNIX wrapper that will be used in the desktop
@@ -8567,14 +8553,6 @@ else
    AC_MSG_RESULT([$UNIXWRAPPERNAME])
 fi
 AC_SUBST(UNIXWRAPPERNAME)
-
-INSTALL_DIRNAME=`echo AC_PACKAGE_NAME | tr [[:upper:]] [[:lower:]]`
-AC_MSG_CHECKING([for install dirname])
-if test -n "$with_install_dirname" -a "$with_install_dirname" != "no" -a "$with_install_dirname" != "yes" ; then
-   INSTALL_DIRNAME="$with_install_dirname"
-fi
-AC_MSG_RESULT([$INSTALL_DIRNAME])
-AC_SUBST(INSTALL_DIRNAME)
 
 AC_MSG_CHECKING([whether to statically link to Gtk])
 if test -n "$enable_static_gtk" && test "$enable_static_gtk" != "no"; then
