@@ -1770,7 +1770,6 @@ if ( '@CROSS_COMPILING@' ne '' )
    ToFile( "SOLARINC_FOR_BUILD", "@SOLARINC_FOR_BUILD@", "e");
    ToFile( "SOLARLIB_FOR_BUILD", "@SOLARLIB_FOR_BUILD@", "e");
    ToFile( "WORKDIR_FOR_BUILD", "@WORKDIR_FOR_BUILD@", "e");
-   ToFile( "ICU_NATIVE_BUILD_ROOT", "@ICU_NATIVE_BUILD_ROOT@", "e");
 }
 else
 {
