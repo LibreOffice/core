@@ -106,7 +106,7 @@ XFRect  XFDrawPolyline::CalcViewBox()
     XFPoint aPoint;
     std::vector<XFPoint>::iterator it = m_aPoints.begin();
 
-    assert(m_aPoints.size()>0);
+    assert(!m_aPoints.empty());
 
     aPoint = *it;
     x1 = aPoint.GetX();
