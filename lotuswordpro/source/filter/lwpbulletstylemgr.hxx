@@ -110,7 +110,6 @@ public:
 
 private:
 //  void CreateNewListStyle(XFListStyle*& pListStyle, XFStyleManager* pXFStyleMgr);
-    rtl::OUString GetDivisionName();
     rtl::OUString GetSectionName(LwpPara* pPara);
 
 private:

@@ -218,7 +218,7 @@ private:
 
     void writeXML()
     {
-        if ( m_vStringChunks.size() )
+        if ( !m_vStringChunks.empty() )
         {
             m_xDocHandler->startDocument();
             SvXMLAttributeList *pAttrList = new SvXMLAttributeList();
