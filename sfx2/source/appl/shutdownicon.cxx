@@ -424,7 +424,7 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
 {
     DBG_ASSERT( pThis->m_pFileDlg, "ShutdownIcon, DialogClosedHdl_Impl(): no file dialog" );
 
-    // use ctor for filling up filters automatically!
+    // use constructor for filling up filters automatically!
     if ( ERRCODE_NONE == pThis->m_pFileDlg->GetError() )
     {
         Reference< XFilePicker >    xPicker = pThis->m_pFileDlg->GetFilePicker();

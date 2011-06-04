@@ -886,7 +886,7 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
             case SFX_STYLE_FAMILY_FRAME:nSlot = SID_STYLE_FAMILY3; break;
             case SFX_STYLE_FAMILY_PAGE: nSlot = SID_STYLE_FAMILY4; break;
             case SFX_STYLE_FAMILY_PSEUDO: nSlot = SID_STYLE_FAMILY5; break;
-            default: OSL_FAIL("unbekannte StyleFamily"); break;
+            default: OSL_FAIL("unknown StyleFamily"); break;
         }
         pBoundItems[i] =
             new SfxTemplateControllerItem(nSlot, *this, *pBindings);

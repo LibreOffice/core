@@ -70,7 +70,7 @@ public:
     static sal_Bool         SaveDir( /*SfxTemplateDir &rEntry */ ) ;
     const SfxDocumentTemplates &operator=(const SfxDocumentTemplates &);
 
-    sal_Bool                Rescan( );      // Aktualisieren
+    sal_Bool                           Rescan( );
     void                ReInitFromComponent();
 
     sal_Bool                IsRegionLoaded( sal_uInt16 nIdx ) const;
