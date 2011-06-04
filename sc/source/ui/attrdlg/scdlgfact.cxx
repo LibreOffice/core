@@ -1062,14 +1062,14 @@ AbstractScSelEntryDlg * ScAbstractDialogFactory_Impl::CreateScSelEntryDlg ( Wind
                                                             sal_uInt16  nResId,
                                                         const String& aTitle,
                                                         const String& aLbTitle,
-                                                                List&   aEntryList,
+                                                        const std::vector<String> &rEntryList,
                                                             int nId )
 {
     ScSelEntryDlg * pDlg=NULL;
     switch ( nId )
     {
         case RID_SCDLG_SELECTDB :
-            pDlg = new ScSelEntryDlg( pParent, nResId,aTitle, aLbTitle, aEntryList );
+            pDlg = new ScSelEntryDlg( pParent, nResId,aTitle, aLbTitle, rEntryList );
             break;
         default:
             break;

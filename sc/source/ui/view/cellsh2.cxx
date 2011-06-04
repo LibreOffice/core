@@ -723,11 +723,11 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                     if ( pDBCol )
                     {
-                        List aList;
+                        std::vector<String> aList;
                         const ScDBCollection::NamedDBs& rDBs = pDBCol->getNamedDBs();
                         ScDBCollection::NamedDBs::const_iterator itr = rDBs.begin(), itrEnd = rDBs.end();
                         for (; itr != itrEnd; ++itr)
-                            aList.Insert(new String(itr->GetName()));
+                            aList.push_back(itr->GetName());
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
@@ -748,13 +748,6 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         }
 
                         delete pDlg;
-
-                        void* pEntry = aList.First();
-                        while ( pEntry )
-                        {
-                            delete (String*) aList.Remove( pEntry );
-                            pEntry = aList.Next();
-                        }
                     }
                 }
             }

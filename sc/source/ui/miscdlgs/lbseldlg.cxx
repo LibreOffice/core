@@ -48,7 +48,7 @@ ScSelEntryDlg::ScSelEntryDlg(      Window*  pParent,
                                    sal_uInt16   nResId,
                              const String&  aTitle,
                              const String&  aLbTitle,
-                                   List&    aEntryList ) :
+                             const std::vector<String> &rEntryList ) :
     ModalDialog     ( pParent, ScResId( nResId ) ),
     //
     aFlLbTitle      ( this, ScResId( FL_ENTRYLIST ) ),
@@ -62,12 +62,9 @@ ScSelEntryDlg::ScSelEntryDlg(      Window*  pParent,
     aLb.Clear();
     aLb.SetDoubleClickHdl( LINK( this, ScSelEntryDlg, DblClkHdl ) );
 
-    void*   pListEntry = aEntryList.First();
-    while ( pListEntry )
-    {
-        aLb.InsertEntry( *((String*)pListEntry ) );
-        pListEntry = aEntryList.Next();
-    }
+    std::vector<String>::const_iterator pIter;
+    for ( pIter = rEntryList.begin(); pIter != rEntryList.end(); ++pIter )
+        aLb.InsertEntry(*pIter);
 
     if ( aLb.GetEntryCount() > 0 )
         aLb.SelectEntryPos( 0 );

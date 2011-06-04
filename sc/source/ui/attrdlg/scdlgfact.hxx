@@ -476,7 +476,7 @@ public:
                                                             sal_uInt16  nResId,
                                                         const String& aTitle,
                                                         const String& aLbTitle,
-                                                                List&   aEntryList,
+                                                        const std::vector<String> &rEntryList,
                                                             int nId );
 
     virtual AbstractScLinkedAreaDlg * CreateScLinkedAreaDlg (  Window* pParent, //add for ScLinkedAreaDlg
