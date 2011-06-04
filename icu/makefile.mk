@@ -79,9 +79,6 @@ icu_CFLAGS+=-O $(ARCH_FLAGS)
 icu_LDFLAGS+=$(EXTRA_LINKFLAGS)
 icu_CXXFLAGS+=-O $(ARCH_FLAGS)
 
-# remove conversion and transliteration data to reduce binary size.
-CONFIGURE_ACTION=rm data/mappings/ucm*.mk data/translit/trn*.mk ;
-
 # until someone introduces SOLARIS 64-bit builds
 .IF "$(OS)"=="SOLARIS"
 DISABLE_64BIT=--enable-64bit-libs=no
@@ -167,7 +164,6 @@ OUT2BIN= \
 .IF "$(GUI)"=="WNT"
 CONFIGURE_DIR=source
 .IF "$(COM)"=="GCC"
-CONFIGURE_ACTION=rm data/mappings/ucm*.mk data/translit/trn*.mk ;
 .IF "$(MINGW_SHARED_GCCLIB)"=="YES"
 icu_LDFLAGS+=-shared-libgcc
 .ENDIF
