@@ -571,7 +571,7 @@ sub parse_dlst
             if ( /\.res\s/ ) {
                 my $imagelist = $_;
                 $imagelist =~ s/\.res/\.$ilst_ext/g;
-                $imagelist =~ s/\\bin\\/\\res\\img\\/;
+                $imagelist =~ s/DEST%\\bin\\/DEST%\\res\\img\\/;
                 push(@action_data, ['copy', $imagelist]);
             }
         }
