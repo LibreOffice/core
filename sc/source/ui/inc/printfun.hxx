@@ -224,7 +224,7 @@ private:
 
     ScHeaderFieldData   aFieldData;
 
-    List                aNotePosList;       //  Reihenfolge der Notizen
+    std::vector<ScAddress> aNotePosList;        //  Reihenfolge der Notizen
 
     ScPageBreakData*    pPageData;          // zum Eintragen der Umbrueche etc.
 

@@ -410,14 +410,6 @@ void ScPrintFunc::FillPageData()
 
 ScPrintFunc::~ScPrintFunc()
 {
-    ScAddress* pTripel = (ScAddress*) aNotePosList.First();
-    while (pTripel)
-    {
-        delete pTripel;
-        pTripel = (ScAddress*) aNotePosList.Next();
-    }
-    aNotePosList.Clear();
-
     delete[] pPageEndX;
     delete[] pPageEndY;
     delete[] pPageRows;
@@ -1927,14 +1919,16 @@ long ScPrintFunc::DoNotes( long nNoteStart, sal_Bool bDoPrint, ScPreviewLocation
     long nPosY = aPageRect.Top();
 
     long nCount = 0;
+    long nSize = aNotePosList.size();
     sal_Bool bOk;
     do
     {
         bOk = false;
-        ScAddress* pPos = (ScAddress*) aNotePosList.GetObject( nNoteStart+nCount );
-        if (pPos)
+        if ( nNoteStart + nCount < nSize)
         {
-            ScBaseCell* pCell = pDoc->GetCell( *pPos);
+            ScAddress &rPos = aNotePosList[ nNoteStart + nCount ];
+
+            ScBaseCell* pCell = pDoc->GetCell( rPos);
             if( const ScPostIt* pNote = pCell->GetNote() )
             {
                 if(const EditTextObject *pEditText = pNote->GetEditTextObject())
@@ -1947,7 +1941,7 @@ long ScPrintFunc::DoNotes( long nNoteStart, sal_Bool bDoPrint, ScPreviewLocation
                         pEditEngine->Draw( pDev, Point( nPosX, nPosY ), 0 );
 
                         String aMarkStr;
-                        pPos->Format( aMarkStr, SCA_VALID, pDoc, pDoc->GetAddressConvention() );
+                        rPos.Format( aMarkStr, SCA_VALID, pDoc, pDoc->GetAddressConvention() );
                         aMarkStr += ':';
 
                         //  Zellposition auch per EditEngine, damit die Position stimmt
@@ -1958,9 +1952,9 @@ long ScPrintFunc::DoNotes( long nNoteStart, sal_Bool bDoPrint, ScPreviewLocation
                     if ( pLocationData )
                     {
                         Rectangle aTextRect( Point( nPosX, nPosY ), Size( aDataSize.Width(), nTextHeight ) );
-                        pLocationData->AddNoteText( aTextRect, *pPos );
+                        pLocationData->AddNoteText( aTextRect, rPos );
                         Rectangle aMarkRect( Point( aPageRect.Left(), nPosY ), Size( nMarkLen, nTextHeight ) );
-                        pLocationData->AddNoteMark( aMarkRect, *pPos );
+                        pLocationData->AddNoteMark( aMarkRect, rPos );
                     }
 
                     nPosY += nTextHeight;
@@ -1978,7 +1972,7 @@ long ScPrintFunc::DoNotes( long nNoteStart, sal_Bool bDoPrint, ScPreviewLocation
 
 long ScPrintFunc::PrintNotes( long nPageNo, long nNoteStart, sal_Bool bDoPrint, ScPreviewLocationData* pLocationData )
 {
-    if ( nNoteStart >= (long) aNotePosList.Count() || !aTableParam.bNotes )
+    if ( nNoteStart >= (long) aNotePosList.size() || !aTableParam.bNotes )
         return 0;
 
     if ( bDoPrint && bClearWin )
@@ -2577,7 +2571,7 @@ long ScPrintFunc::CountNotePages()
             {
                 if (pCell->HasNote())
                 {
-                    aNotePosList.Insert( new ScAddress( nCol,nRow,nPrintTab ), LIST_APPEND );
+                    aNotePosList.push_back( ScAddress( nCol,nRow,nPrintTab ) );
                     ++nCount;
                 }
 
