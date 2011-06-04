@@ -128,7 +128,7 @@ private:
     sal_Bool                        mbDocImported;
     String                      maDropFileName;
     NavigatorDragType           meDragType;
-    List*                       mpDocList;
+    std::vector<NavDocInfo>     maDocList;
     SfxBindings*                mpBindings;
     SdNavigatorControllerItem*  mpNavigatorCtrlItem;
     SdPageNameControllerItem*   mpPageNameCtrlItem;

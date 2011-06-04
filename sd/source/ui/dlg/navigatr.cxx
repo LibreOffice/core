@@ -97,7 +97,6 @@ SdNavigatorWin::SdNavigatorWin(
 
     mpNavigatorCtrlItem = new SdNavigatorControllerItem( SID_NAVIGATOR_STATE, this, mpBindings );
     mpPageNameCtrlItem = new SdPageNameControllerItem( SID_NAVIGATOR_PAGENAME, this, mpBindings );
-    mpDocList = new List();
 
     ApplyImageList(); // load images *before* calculating sizes to get something useful !!!
 
@@ -156,13 +155,6 @@ SdNavigatorWin::~SdNavigatorWin()
 {
     delete mpNavigatorCtrlItem;
     delete mpPageNameCtrlItem;
-
-    // Liste der DocInfos loeschen
-    long nCount = mpDocList->Count();
-    while( nCount-- )
-        delete (NavDocInfo*) mpDocList->Remove( (sal_uLong)0 );
-
-    delete mpDocList;
 }
 
 // -----------------------------------------------------------------------
@@ -695,9 +687,7 @@ void SdNavigatorWin::RefreshDocumentLB( const String* pDocName )
         maLbDocs.Clear();
 
         // Liste der DocInfos loeschen
-        long nCount = mpDocList->Count();
-        while( nCount-- )
-            delete (NavDocInfo*) mpDocList->Remove( (sal_uLong)0 );
+         maDocList.clear();
 
         if( mbDocImported )
             maLbDocs.InsertEntry( aStr, 0 );
@@ -710,15 +700,15 @@ void SdNavigatorWin::RefreshDocumentLB( const String* pDocName )
             ::sd::DrawDocShell* pDocShell = PTR_CAST(::sd::DrawDocShell, pSfxDocShell );
             if( pDocShell  && !pDocShell->IsInDestruction() && ( pDocShell->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED ) )
             {
-                NavDocInfo* pInfo = new NavDocInfo();
-                pInfo->mpDocShell = pDocShell;
+                NavDocInfo aInfo ;
+                aInfo.mpDocShell = pDocShell;
 
                 SfxMedium *pMedium = pDocShell->GetMedium();
                 aStr = pMedium ? pMedium->GetName() : String();
                 if( aStr.Len() )
-                    pInfo->SetName();
+                    aInfo.SetName();
                 else
-                    pInfo->SetName( sal_False );
+                    aInfo.SetName( sal_False );
                 // z.Z. wird wieder der Name der Shell genommen (also ohne Pfad)
                 // da Koose es als Fehler ansieht, wenn er Pfad in URL-Notation
                 // angezeigt wird!
@@ -727,11 +717,11 @@ void SdNavigatorWin::RefreshDocumentLB( const String* pDocName )
                 maLbDocs.InsertEntry( aStr, LISTBOX_APPEND );
 
                 if( pDocShell == pCurrentDocShell )
-                    pInfo->SetActive();
+                    aInfo.SetActive();
                 else
-                    pInfo->SetActive( sal_False );
+                    aInfo.SetActive( sal_False );
 
-                mpDocList->Insert( pInfo, LIST_APPEND );
+                maDocList.push_back( aInfo );
             }
             pSfxDocShell = SfxObjectShell::GetNext( *pSfxDocShell, 0 , sal_False );
         }
@@ -762,7 +752,7 @@ sal_uInt16 SdNavigatorWin::GetDragTypeSdResId( NavigatorDragType eDT, sal_Bool b
 
 NavDocInfo* SdNavigatorWin::GetDocInfo()
 {
-    long nPos = maLbDocs.GetSelectEntryPos();
+    sal_uInt32 nPos = maLbDocs.GetSelectEntryPos();
 
     if( mbDocImported )
     {
@@ -773,9 +763,7 @@ NavDocInfo* SdNavigatorWin::GetDocInfo()
         nPos--;
     }
 
-    NavDocInfo* pInfo = (NavDocInfo*)mpDocList->GetObject( nPos );
-
-    return( pInfo );
+    return nPos < maDocList.size() ? &(maDocList[ nPos ]) : NULL;
 }
 
 /*************************************************************************
