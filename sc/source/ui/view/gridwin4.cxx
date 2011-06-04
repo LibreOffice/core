@@ -804,16 +804,14 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
             for (sal_uInt16 i=0; i<nCount; i++)
             {
                 ScRangeFindData* pData = pRangeFinder->GetObject(i);
-                if (pData)
-                {
-                    ScRange aRef = pData->aRef;
-                    aRef.Justify();
-                    if ( aRef.aStart.Tab() >= nTab && aRef.aEnd.Tab() <= nTab )
-                        aOutputData.DrawRefMark( aRef.aStart.Col(), aRef.aStart.Row(),
-                                                aRef.aEnd.Col(), aRef.aEnd.Row(),
-                                                Color( ScRangeFindList::GetColorName( i ) ),
-                                                sal_True );
-                }
+
+                ScRange aRef = pData->aRef;
+                aRef.Justify();
+                if ( aRef.aStart.Tab() >= nTab && aRef.aEnd.Tab() <= nTab )
+                    aOutputData.DrawRefMark( aRef.aStart.Col(), aRef.aStart.Row(),
+                                            aRef.aEnd.Col(), aRef.aEnd.Row(),
+                                            Color( ScRangeFindList::GetColorName( i ) ),
+                                            sal_True );
             }
         }
     }
