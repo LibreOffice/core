@@ -5475,7 +5475,7 @@ if test "$BUILD_MOZAB" = "TRUE"; then
    fi
    if test "$HAVE_MOZILLA_TARBALL" != "y"; then
       AC_MSG_ERROR([Mozilla/SeaMonkey source archive not found.
-Use "./fetch_tarballs.sh ooo.lst" to download.])
+Use "./download" to download.])
    fi
    if test "$_os" = "WINNT"; then
       AC_MSG_CHECKING([for moztools binaries])
