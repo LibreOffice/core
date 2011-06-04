@@ -14,11 +14,11 @@ Searching for information about cross-compilation of OpenOffice.org
 (the predecessor of LibreOffice) you will find information about what
 actually was not cross-compilation, but using QEMU.
 
-The cross-compilation experimentation is going on for three platforms:
-Windows, iOS and Android. This work is being done on the master branch
-of LibreOffice. Some other people have talked about setting up a
-separate branch for Android work, or even separate clones at github. I
-am not interested in that.
+My cross-compilation experimentation is going on for four platforms:
+Windows, iOS, Android and PowerPC Mac OS X. I work on the master
+branch of LibreOffice. Some other people have talked about setting up
+a separate branch for Android work, or even separate clones at
+github. I am not interested in that.
 
 
 General
@@ -209,8 +209,30 @@ CXX_FOR_BUILD=ccache g++
 --with-external-tar=/mnt/hemulen/ooo/git/master/src
 
 
+PowerPC Mac OS X
+----------------
+
+Cross-compiling for PowerPC Mac OS X from Intel Mac OS X will probably
+be easy. The APIs available should after all be closely identical to
+those on Intel Mac OS X, and LibreOffice builds fine natively on
+PowerPC Mac already. I have just started experimenting with it. My
+autogen.lastrun looks like this:
+
+CC=ccache /Xcode3/usr/bin/gcc-4.0 -arch ppc
+CXX=ccache /Xcode3/usr/bin/g++-4.0 -arch ppc
+CC_FOR_BUILD=ccache /Xcode3/usr/bin/gcc-4.0
+CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0
+--build=i386-apple-darwin10.7.0
+--host=powerpc-apple-darwin10
+--disable-mozilla
+--disable-build-mozilla
+--with-external-tar=/Volumes/ooo/git/master/src
+--with-icu-native-build-root=/Users/tml/lo-macosx/icu/unxmacxi.pro/misc/build/icu/source
+
+
+
 That's all, thank you, and have a nice day. People with commit access,
-feel free to edit this document and add yourself below. Sorry for
+feel free to edit this document, and add yourself below. Sorry for
 writing now initially from such a personal point of view.
 
 --Tor Lillqvist <tlillqvist@novell.com>, <tml@iki.fi>
