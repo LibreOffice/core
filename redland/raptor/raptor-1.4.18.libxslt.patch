@@ -1,0 +1,13 @@
+--- misc/raptor-1.4.18/configure	2011-06-04 01:34:34.000000000 +0200
++++ misc/build/raptor-1.4.18/configure	2011-06-04 01:34:08.000000000 +0200
+@@ -26474,8 +26474,8 @@
+ fi
+ 
+ if test $need_libxslt = 1; then
+-  LIBS="$LIBS `$XSLT_CONFIG --libs`"
+-  CPPFLAGS="`$XSLT_CONFIG --cflags` $CPPFLAGS"
++  LIBS="$LIBS $LIBXSLT_LIBS"
++  CPPFLAGS="$LIBXSLT_CFLAGS $CPPFLAGS"
+ fi
+ 
+ RAPTOR_LIBTOOLLIBS=libraptor.la

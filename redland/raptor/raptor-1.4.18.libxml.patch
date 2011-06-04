@@ -1,0 +1,13 @@
+--- misc/raptor-1.4.18/configure	2011-06-04 01:25:04.000000000 +0200
++++ misc/build/raptor-1.4.18/configure	2011-06-04 01:24:57.000000000 +0200
+@@ -26447,8 +26447,8 @@
+     CPPFLAGS="-I$srcdir/libxml $CPPFLAGS"
+     LIBS="$LIBS -Llibxml -llibxml"
+   else
+-    LIBS="$LIBS `$XML_CONFIG --libs`"
+-    CPPFLAGS="`$XML_CONFIG --cflags` $CPPFLAGS"
++    LIBS="$LIBS $LIBXML_LIBS"
++    CPPFLAGS="$LIBXML_CFLAGS $CPPFLAGS"
+   fi
+   RAPTOR_XML_PARSER=libxml
+ fi

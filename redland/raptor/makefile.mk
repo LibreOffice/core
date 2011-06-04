@@ -36,8 +36,8 @@ TARGET=so_raptor
 
 .IF "$(SYSTEM_REDLAND)" == "YES"
 all:
-    @echo "An already available installation of Redland RDF should exist on your system."
-    @echo "Therefore the version provided here does not need to be built in addition."
+	@echo "An already available installation of Redland RDF should exist on your system."
+	@echo "Therefore the version provided here does not need to be built in addition."
 .ENDIF
 
 # --- Files --------------------------------------------------------
@@ -66,6 +66,12 @@ OOO_PATCH_FILES += \
 
 PATCH_FILES=$(OOO_PATCH_FILES)
 
+.IF "$(SYSTEM_LIBXML)" == "YES"
+PATCH_FILES+=raptor-1.4.18.libxml.patch
+.ENDIF
+.IF "$(SYSTEM_LIBXSLT)" == "YES"
+PATCH_FILES+=raptor-1.4.18.libxslt.patch
+.ENDIF
 
 .IF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
