@@ -1456,7 +1456,7 @@ void ScDBDocFunc::UpdateImport( const String& rTarget, const String& rDBName,
         const String& rTableName, const String& rStatement, bool bNative,
         sal_uInt8 nType, const ::com::sun::star::uno::Reference<
         ::com::sun::star::sdbc::XResultSet >& xResultSet,
-        const SbaSelectionList* pSelection )
+        const std::vector<sal_Int32> *pSelection )
 {
     //  Target ist jetzt einfach der Bereichsname
 

@@ -229,7 +229,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 if ( sTabFlag.EqualsAscii("0") )        // "0" = Query, "1" = Table (Default)
                     nType = ScDbQuery;
 
-                SbaSelectionListRef pSelectionList = new SbaSelectionList;
+                std::vector<sal_Int32> aSelectionList;
                 xub_StrLen nCount = sSbaData.GetTokenCount(cSbaSep);
 
                 for (xub_StrLen i = 4; i < nCount; i++)
@@ -237,8 +237,8 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     String aSelItem = sSbaData.GetToken(i,cSbaSep);
                     if (aSelItem.Len())
                     {
-                        sal_uIntPtr nValue = aSelItem.ToInt32();
-                        pSelectionList->Insert( (void*)nValue, LIST_APPEND );
+                        sal_uInt32 nValue = aSelItem.ToInt32();
+                        aSelectionList.push_back(nValue);
                     }
                 }
 
@@ -283,7 +283,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 {
                     ScDBDocFunc(*this).UpdateImport( sTarget, sDBName,
                             sDBTable, sDBSql, true, nType, xResultSet,
-                            pSelectionList );
+                            &aSelectionList );
                     rReq.Done();
 
                     //  UpdateImport aktualisiert auch die internen Operationen

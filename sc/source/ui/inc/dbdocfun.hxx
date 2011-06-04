@@ -57,18 +57,6 @@ namespace com { namespace sun { namespace star {
     }
 } } }
 
-// ---------------------------------------------------------------------------
-// -----------------------------------------------------------------
-class SbaSelectionList: public List , public SvRefBase
-{
-public:
-    SbaSelectionList():
-        List(CONTAINER_MAXBLOCKSIZE,100,100){}
-};
-
-SV_DECL_IMPL_REF(SbaSelectionList)
-
-
 class ScDBDocFunc
 {
 friend class ScDBFunc;
@@ -85,11 +73,11 @@ public:
                         bool bNative, sal_uInt8 nType,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::sdbc::XResultSet >& xResultSet,
-                        const SbaSelectionList* pSelection );
+                        const std::vector<sal_Int32> *pSelection );
 
     bool DoImport( SCTAB nTab, const ScImportParam& rParam,
                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& xResultSet,
-                   const SbaSelectionList* pSelection, bool bRecord,
+                   const std::vector<sal_Int32> *pSelection, bool bRecord,
                    bool bAddrInsert = false );
 
     bool DoImportUno( const ScAddress& rPos,

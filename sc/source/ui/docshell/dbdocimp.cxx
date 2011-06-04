@@ -170,13 +170,13 @@ bool ScDBDocFunc::DoImportUno( const ScAddress& rPos,
         }
     }
 
-    SbaSelectionList aList;
+    std::vector<sal_Int32> aList;
     long nSelLen = aSelection.getLength();
     for (i = 0; i < nSelLen; i++)
     {
         sal_Int32 nEntry = 0;
         if ( aSelection[i] >>= nEntry )
-            aList.Insert( (void*)(sal_IntPtr)nEntry, LIST_APPEND );
+            aList.push_back( nEntry );
     }
 
     bool bAddrInsert = false;       //!???
@@ -213,7 +213,7 @@ bool ScDBDocFunc::DoImportUno( const ScAddress& rPos,
 
 bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         const uno::Reference< sdbc::XResultSet >& xResultSet,
-        const SbaSelectionList* pSelection, bool bRecord, bool bAddrInsert )
+        const std::vector<sal_Int32> *pSelection, bool bRecord, bool bAddrInsert )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
     ScChangeTrack *pChangeTrack = NULL;
@@ -258,10 +258,10 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
     sal_uLong nListCount = 0;
 
     //  -1 is special
-    if ( pSelection && pSelection->Count() && (long)pSelection->GetObject(0) != -1L )
+    if ( !pSelection->empty() && (*pSelection)[0] != -1 )
     {
         bDoSelection = sal_True;
-        nListCount = pSelection->Count();
+        nListCount = pSelection->size();
     }
 
     // ImportDoc - also used for Redo
@@ -390,7 +390,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                     {
                         if (nListPos < nListCount)
                         {
-                            sal_uLong nNextRow = (sal_uLong) pSelection->GetObject(nListPos);
+                            sal_uInt32 nNextRow = (*pSelection)[nListPos];
                             if ( nRowsRead+1 < nNextRow )
                                 bRealSelection = sal_True;
                             bEnd = !xRowSet->absolute(nRowsRead = nNextRow);
